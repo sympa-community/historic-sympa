@@ -81,7 +81,28 @@ sympa.pdf: sympa.tex
 	$(PDFLATEX) sympa.tex
 
 sympa.tex: sympa.tex.tpl
-	$(PERL) ./parse_tex.pl sympa.tex.tpl sympa.tex
+	(SH='${SH}'; export SH; \
+	CC='${CC}'; export CC; \
+	CFLAGS='${CFLAGS}'; export CFLAGS; \
+	PERL='${PERL}'; export PERL; \
+	DIR='${DIR}'; export DIR; \
+	BINDIR='${BINDIR}'; export BINDIR; \
+	SBINDIR='${SBINDIR}'; export SBINDIR; \
+	LIBDIR='${LIBDIR}'; export LIBDIR; \
+	WWSBINDIR='${WWSBINDIR}'; export WWSBINDIR; \
+	MAILERPROGDIR='${MAILERPROGDIR}'; export MAILERPROGDIR; \
+	ETCBINDIR='${ETCBINDIR}'; export ETCBINDIR; \
+	ETCDIR='${ETCDIR}'; export ETCDIR; \
+	PIDDIR='${PIDDIR}'; export PIDDIR; \
+	CONFIG='${CONFIG}'; export CONFIG; \
+	WWSCONFIG='${WWSCONFIG}'; export WWSCONFIG; \
+	EXPL_DIR='${EXPL_DIR}'; export EXPL_DIR; \
+	NLSDIR='${NLSDIR}'; export NLSDIR; \
+	SPOOLDIR='${SPOOLDIR}'; export SPOOLDIR; \
+	SCRIPTDIR='${SCRIPTDIR}', export SCRIPTDIR; \
+	USER='${USER}'; export USER; \
+	GROUP='${GROUP}'; export GROUP; \
+	$(PERL) ./parse_tex.pl sympa.tex.tpl sympa.tex)
 
 sympa.dvi: sympa.tex $(EPS)
 	cp /dev/null sympa.ind

@@ -3637,7 +3637,7 @@ Escaping sensitive JavaScript functions :
 <!-- for other browsers
   function toggle_selection(myfield) {
     for (i = 0; i < myfield.length; i++) {
-    [STOPPARSE]
+    [escaped_stop]
        if (myfield[i].checked) {
             myfield[i].checked = false;
        }else {
