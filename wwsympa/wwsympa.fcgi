@@ -358,7 +358,6 @@ $wwsconf->{'log_facility'}||= $Conf{'syslog'};
 
 ## Set locale configuration
 $Language::default_lang = $Conf{'lang'};
-&Language::LoadLang($Conf{'msgcat'});
 
 unless ($List::use_db = &List::probe_db()) {
     &error_message('no_database');
@@ -678,9 +677,9 @@ if ($wwsconf->{'use_fast_cgi'}) {
      my $saved_lang = &Language::GetLang();
      foreach my $l (@wwslib::languages) {
 	 &Language::SetLang($l) || next;
-	 $param->{'languages'}{$l}{'complete'} = sprintf gettext("english");
-	 if (($param->{'languages'}{$l}{'complete'} eq 'english') &&
-	     ($l !~ /^en/)) {
+	 $param->{'languages'}{$l}{'complete'} = gettext("english");
+	 if (($param->{'languages'}{$l}{'complete'} eq 'english')) {
+	     #&& ($l !~ /^en/)) {
 	     $param->{'languages'}{$l}{'complete'} = $l;
 	 }
 

@@ -161,7 +161,6 @@ if (&tools::cookie_changed($Conf{'cookie'})) {
 ## Set locale configuration
 $main::options{'lang'} =~ s/\.cat$//; ## Compatibility with version < 2.3.3
 $Language::default_lang = $main::options{'lang'} || $Conf{'lang'};
-&Language::LoadLang($Conf{'msgcat'});
 
 ## Main program
 if (!chdir($Conf{'home'})) {
