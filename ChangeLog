@@ -1,3 +1,168 @@
+2004-11-22 10:59  sympa-authors
+
+	* src/Commands.pm: Fix: 'SIG *' failed ; only unsubscribed from the
+	  first list
+
+2004-11-09 16:03  sympa-authors
+
+	* src/: List.pm, etc/script/create_db.Pg,
+	  etc/script/create_db.Sybase, etc/script/create_db.mysql: Fix:
+	  replace attributes_user type from 'text' to 'varchar(255)'; could
+	  make an "out of memory problem"
+
+2004-10-11 15:00  sympa-authors
+
+	* wwsympa/wwsympa.fcgi: Fix: prevent upload if no file was selected
+
+2004-10-11 10:39  sympa-authors
+
+	* soap/sympasoap.pm: [reported by F.Fareneau] Fix: CAS login failed
+	  on the SOAP interface if robot was not the default one
+
+2004-10-04 16:57  sympa-authors
+
+	* Makefile.in, config.guess, config.sub: [BugID 336] Fix:
+	  regenerated config.sub and config.guess files
+
+2004-09-22 11:59  sympa-authors
+
+	* src/List.pm: Fix: ldap include removed previous data about the
+	  user (overwritten with defaults)
+
+2004-09-17 09:26  sympa-authors
+
+	* wwsympa/wwsympa.fcgi: Change: when data-source related parameters
+	  have been edited, sync_include is run (not delegated to the
+	  task_manager)
+
+2004-09-16 10:57  sympa-authors
+
+	* src/: List.pm, task_manager.pl: Fix: do not create sync_include
+	  tasks for lists that have no include data sources
+
+2004-09-10 16:16  sympa-authors
+
+	* doc/: sympa.pdf, sympa.ps, sympa.tex, sympa.tex.tpl,
+	  html/index.html, html/node1.html, html/node10.html,
+	  html/node11.html, html/node12.html, html/node13.html,
+	  html/node14.html, html/node15.html, html/node16.html,
+	  html/node17.html, html/node18.html, html/node19.html,
+	  html/node2.html, html/node20.html, html/node21.html,
+	  html/node22.html, html/node23.html, html/node24.html,
+	  html/node3.html, html/node4.html, html/node5.html,
+	  html/node6.html, html/node7.html, html/node8.html,
+	  html/node9.html, html/sympa.html, html/sympa.ps: update
+
+2004-09-09 15:47  sympa-authors
+
+	* wwsympa/wwsympa.fcgi: Add [user_attributes] param
+
+2004-09-09 15:06  sympa-authors
+
+	* src/List.pm, wwsympa/wwsympa.fcgi: [reported by E.Tinturier] Fix:
+	  SSO-related user attributes were not available in web template.
+	  There are now available in [% user.attributes %] hash. Also made
+	  environment variables in both web templates and scenarios.
+
+2004-09-02 17:05  sympa-authors
+
+	* wwsympa/Marc/Search.pm: [BugID 330] Fix: errors "Insecure
+	  dependency in chdir while running setuid at
+	  /usr/lib/perl5/5.8.1/File/Find.pm" while running a search in web
+	  archives
+
+2004-08-31 17:24  sympa-authors
+
+	* src/etc/templates/us/invite.us.tpl: [BugID 329] Fix: orphan
+	  [ELSE] removed
+
+2004-08-05 14:14  sympa-authors
+
+	* src/etc/auth.conf: [reported by D.Lamballais] Fix
+
+2004-08-05 11:16  sympa-authors
+
+	* src/Conf.pm, wwsympa/Auth.pm: [reported by D.Lamballais Fix:
+	  'password_case' wwsympa.conf parameter was not used
+
+2004-08-03 17:26  sympa-authors
+
+	* src/etc/mhonarc-ressources: [reported by Jeg] Fix: the viewmod
+	  page would propose a "reply to" and "send it back to..." buttons
+
+2004-08-03 11:20  sympa-authors
+
+	* wwsympa/wws_templates/us/d_read.us.tpl: [reported by M.Daulie]
+	  Fix: incorrect template structure ; most features were missing
+	  from the shared page
+
+2004-08-02 17:07  sympa-authors
+
+	* src/etc/templates/it/moderate.it.tpl: [reported by M.Gaiarin]
+	  Remove '\n'
+
+2004-08-02 16:44  sympa-authors
+
+	* src/etc/templates/us/stats_report.us.tpl: [reported by S.Rouanet]
+	  Fix: incorrect label for received Mb
+
+2004-08-02 15:25  sympa-authors
+
+	* wwsympa/wwsympa.fcgi: [reported by Chaosmedia] Fix: while editing
+	  a template, the template name could be altered (lang element
+	  lost)
+
+2004-07-09 14:15  sympa-authors
+
+	* wwsympa/wwsympa.fcgi: [reported by J.Koret] Fix an XSS
+	  vulnerability
+
+2004-07-07 16:20  sympa-authors
+
+	* src/tools.pl: [reported by J.Beretta] Fix: sympa would
+	  incorrectly change the MIME structure of multipart/alternative
+	  messages composed with Outlook.
+
+2004-07-07 11:56  sympa-authors
+
+	* src/tools.pl: [BugID 305] Fix: Missing <> around Message-id when
+	  messages are posted from the web
+
+2004-07-06 11:27  sympa-authors
+
+	* src/List.pm: Fix: rfc2369_header_fields parameter edition
+	  incorrectly handled
+
+2004-06-30 17:41  sympa-authors
+
+	* src/etc/script/p12topem.pl: Fix: script would fail on list object
+	  creation
+
+2004-06-30 16:43  sympa-authors
+
+	* src/List.pm, wwsympa/wwsympa.fcgi: Fix: load-cert() failed with
+	  Mozilla because the content-type was forced to
+	  application/pkix-cert and the certificate was in PEM format. Now
+	  convert it to DER.  Also used an unknown find_smime_keys()
+	  subroutine before.
+
+2004-06-30 14:43  sympa-authors
+
+	* src/List.pm, wwsympa/wwsympa.fcgi: Fix the load_cert() subroutine
+
+2004-06-23 09:45  sympa-authors
+
+	* doc/sympa.tex.tpl: Add a note on virtual robots
+
+2004-06-22 10:48  sympa-authors
+
+	* wwsympa/wwsympa.fcgi: [BugID 301] Fix: do_arc_delete() subroutine
+	  was inadvertently removed (while introducing SOAP features)
+
+2004-06-21 09:47  sympa-authors
+
+	* .version, ChangeLog, NEWS: preparing sympa 4.1.2
+
 2004-06-21 09:04  sympa-authors
 
 	* wwsympa/wwsympa.fcgi:
