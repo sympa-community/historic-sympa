@@ -9,12 +9,10 @@ archives, list management and so on.[%END%]
 <br /><br />
 
 <div style="text-align: center;">
+
+   <h1 class="block">[%|loc%]Mailing lists categories[%END%]</h1>
+
 <table border="0" style="margin-left: auto; margin-right: auto;">
- <tr>
-  <th style="background: [% selected_color %];">
-   <h1>[%|loc%]Mailing lists[%END%]</h1>
-  </th>
- </tr>
  <tr>
   <td>
    <table border="0" cellpadding="3"><tr valign="top">

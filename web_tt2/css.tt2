@@ -26,7 +26,7 @@ body {
 	border: 1px solid [% color_2 %];
 	font-size: 10px;
 	text-align: left;
-	vertical-align: top;
+	vertical-align: top; 
 }
 #ActionHeader {
 	background: [% color_4 %];
@@ -37,6 +37,10 @@ body {
         padding: 3px;
 	margin-bottom : 10px;
 }
+#col-left { width: 30%; }
+#col-middle { width: 34.99%; }
+#col-right  { width: 35%; }
+
 #Clock {float: right; padding-right: 3px; vertical-align:top; font-family: Arial, sans-serif;}
 #Login {text-align: left; padding-left: 5px; vertical-align:top; font-family: Arial, sans-serif;}
 #Search input.textbox {width: 90%;}
@@ -152,7 +156,8 @@ a.ArcMenuLinksInactive { border-bottom: 1px solid [% color_2 %]; border-right:  
 a.ArcMenuLinksInactive:hover { border-bottom: 1px solid [% color_2 %]; border-right:  1px solid [% color_10 %]; border-top: 1px solid [% color_10 %]; border-left: 1px solid [% color_10 %]; background: transparent; color: [% color_10 %]; text-decoration: none; padding: 0px 10px 0px 10px;}
 #ArcMenuLinksInactive {border: 0px solid [% color_2 %]; text-decoration: none; padding: 0px 0px 0px 3px;}
 
-.block {border: 1px dotted [% color_2 %]; background: transparent; padding : 10px;}
+.block {border: 1px dotted [% color_2 %]; padding: 10px;}
+h1.block {text-align: center;}
 .blockerror {border: 3px dashed [% error_color %]; background: transparent; padding : 10px;}
 
 ul.menuLinks {list-style-type: none;}
