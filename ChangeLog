@@ -1,3 +1,12 @@
+2003-04-18 10:28  salaun
+
+	* wwsympa/wwsympa.fcgi: [G. Paressant] [BugID 116] The patch had
+	not been applied to stable CVS branch
+
+2003-04-16 17:46  salaun
+
+	* ChangeLog, NEWS: Add patch to 3.4.4
+
 2003-04-16 17:39  salaun
 
 	* src/List.pm: {BugID 144] [R. Marchand] FIx: When upgrading to

@@ -3,7 +3,7 @@
 
 (See Changelog file for the full changes log)
 
-3.4.4		16 April 2003
+3.4.4		18 April 2003
 
   New features :
 
@@ -32,6 +32,9 @@
 	doc/Makefile: Change: rename sympa/ directory to html/
 
   Bug fixes :
+
+	wwsympa/wwsympa.fcgi: [G. Paressant] [BugID 116] The patch had not been applied to stable CVS branch.
+	LDAP was performed twice.
 
 	src/List.pm: [BugID 144] [R. Marchand] When upgrading to Sympa 3.4.3.1 from 3.3.5.  
 	Sympa adds the two fields 'subscribed_subscriber' and 'include_sources_subscriber' when
