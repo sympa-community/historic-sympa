@@ -678,7 +678,7 @@ if ($wwsconf->{'use_fast_cgi'}) {
      ## Available languages
      my $saved_lang = &Language::GetLang();
      foreach my $l (@wwslib::languages) {
-	 &Language::SetLang($l);
+	 &Language::SetLang($l) || next;
 	 $param->{'languages'}{$l}{'complete'} = sprintf Msg(14, 2, $l);
 	 if ($param->{'lang'} eq $l) {
 	     $param->{'languages'}{$l}{'selected'} = 'SELECTED';

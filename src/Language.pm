@@ -35,7 +35,12 @@ my %set_comment; #sets-of-messages comment
 my $current_lang;
 my $default_lang;
 
-
+## This was the old style locale naming, used for templates, nls, scenario
+my %language_equiv = ( 'zh_CN' => 'cn',
+		       'zh_TW' => 'tw',
+		       'cs'    => 'cz',
+		       'en_us' => 'us',
+		       );
 
 sub GetHash { return %msghash;}
 
@@ -130,6 +135,14 @@ sub SetLang {
 ###########
     my $lang = shift;
     do_log('debug3', 'Language::SetLang(%s)', $lang);
+
+    ## Get the NLS equivalent for the lang
+    if (defined $language_equiv{$lang}) {
+	$lang = $language_equiv{$lang};
+    }else {
+	## remove the country part 
+	$lang =~ s/_\w{2}$//;
+    }
    
     unless (defined ($msghash{$lang})) {
 	do_log('err','unknown Locale %s', $lang);
