@@ -1,3 +1,60 @@
+2003-02-24 17:46  salaun
+
+	* src/List.pm: [G. Bittencourt] Fix: incorrect Sybase (DBD::Sybase
+	0.95) connect string ; replaced dbname with database
+
+2003-02-24 17:32  salaun
+
+	* Makefile.am, Makefile.in: [reported by J. Douglas] Fix: make
+	install failed on Solaris : "sh: test: argument expected" Changed
+	test condition in Makefile
+
+2003-02-24 17:16  salaun
+
+	* Makefile.am, Makefile.in, src/Makefile: Missing var NLSDIR while
+	installing sbin_SRC
+
+2003-02-14 12:44  salaun
+
+	* src/tools.pl: Fix: Sympa.pl could die with error "Can't call
+	method "decode" on an undefined value" while decoding malformed
+	multipart messages
+
+2003-02-13 11:45  salaun
+
+	* Makefile.in: Updated
+
+2003-02-13 11:44  salaun
+
+	* important_changes.pl: Fix it
+
+2003-02-13 11:33  salaun
+
+	* Makefile.am, src/etc/sample/Makefile: [G. Paressant] Fix: small
+	fixes, samplelist could not be installed
+
+2003-02-12 10:25  salaun
+
+	* NEWS: [reported by Fil] Fix
+
+2003-02-10 13:07  salaun
+
+	* src/: List.pm, etc/templates/fr/listmaster_notification.fr.tpl,
+	etc/templates/us/listmaster_notification.us.tpl: [BugID 108]
+	[reported by G. Paressant] Fix:  include2 lists subscribers are
+	deleted when a problem occur with the datasource LDAP server. Now
+	interrupt the database update if _load_users_include2() failed ;
+	also notify listmaster.
+
+2003-02-06 10:18  salaun
+
+	* src/List.pm: Fix: if a list param does not exist, scenario
+	verification failed.  Also fixed some 'return -1'
+
+2003-02-05 17:22  salaun
+
+	* .version, ChangeLog, NEWS: preparing 3.4.3.1
+
 2003-02-05 17:05  salaun
 
 	* src/List.pm: [galibert AT pobox.com] Fix:  The 28 jan. patch lost
