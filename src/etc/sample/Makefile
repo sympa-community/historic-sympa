@@ -19,7 +19,7 @@
 # along with this program; if not, write to the Free Software
 # Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
 
-SRC	=	README config.* topics.conf
+SRC	=	README config.* topics.*.conf
 
 SUBSTSRC	=	sympa.conf wwsympa.conf
 
@@ -65,15 +65,15 @@ installsrc:
 	done
 
 installsamplelist:
-	@if [ ! -d $(DESTDIR)$(EXPL_DIR) ]; then \
+	@if [ ! -d $(DESTDIR)$(SAMPLEDIR)/sample-list ]; then \
 		echo "Installing sample list ..."; \
-		mkdir -p $(DESTDIR)$(EXPL_DIR); \
-		mkdir -p $(DESTDIR)$(EXPL_DIR)/test; \
-		cp test/* $(DESTDIR)$(EXPL_DIR)/test/; \
-		chown -R $(USER) $(DESTDIR)$(EXPL_DIR); \
-		chgrp -R $(GROUP) $(DESTDIR)$(EXPL_DIR); \
+		mkdir -p $(DESTDIR)$(SAMPLEDIR)/sample-list; \
+		cd test; \
+		for f in * ; do \
+			cp $$f $(DESTDIR)$(SAMPLEDIR)/sample-list/; \
+			chown $(USER) $(DESTDIR)$(SAMPLEDIR)/sample-list/$$f; \
+			chgrp $(GROUP) $(DESTDIR)$(SAMPLEDIR)/sample-list/$$f; \
+		done; \
+		cd ..; \
 	fi
-
-
-
 

@@ -61,7 +61,7 @@ map { $valid_options{$_}++; } @valid_options;
 
 my %Default_Conf = 
     ('home'    => '--EXPL_DIR--',
-     'etc'     => '--DIR--/etc',
+     'etc'     => '--ETCDIR--',
      'key_passwd' => '',
      'ssl_cert_dir' => '--EXPL_DIR--/X509-user-certs',
      'crl_dir' => '--EXPL_DIR--/crl',
@@ -78,9 +78,9 @@ my %Default_Conf =
      'domain'  => undef,
      'email'   => 'sympa',
      'pidfile' => '--PIDDIR--/sympa.pid',
-     'msgcat'  => '--DIR--/nls',
+     'msgcat'  => '--NLSDIR--',
      'sort'    => 'fr,ca,be,ch,uk,edu,*,com',
-     'spool'   => '--DIR--/spool',
+     'spool'   => '--SPOOLDIR--',
      'queue'   => undef,
      'queuedigest'=> undef,
      'queuemod'   => undef,
@@ -358,7 +358,7 @@ sub load_robots {
 				  list_check_smtp => 1,
 				  list_check_suffixes => 1,
 				  spam_protection => 1,
-				  web_archive_spam_protection =>
+				  web_archive_spam_protection => 1
 				  );
 
     ## Load wwsympa.conf
@@ -383,7 +383,8 @@ sub load_robots {
 	    next if (/^\s*$/o || /^[\#\;]/o);
 	    if (/^\s*(\S+)\s+(.+)\s*$/io) {
 		my($keyword, $value) = ($1, $2);
-		
+		$value =~ s/\s*$//;
+
 		$keyword = lc($keyword);
 		$value = lc($value) unless ($keyword eq 'title');
 		if ($valid_robot_key_words{$keyword}) {

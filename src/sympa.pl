@@ -284,6 +284,8 @@ if ($main::options{'dump'}) {
 	%{$u} = %{$defaults};
 	$u->{'email'} = $email;
 	$u->{'gecos'} = $gecos;
+	$u->{'date'} = $u->{'update_date'} = time;
+	$u->{'subscribed'} = 1 if ($list->{'admin'}{'user_data_source'} eq 'include2');
 
 	unless ($list->add_user($u)) {
 	    printf STDERR "\nCould not add %s\n", $email;
@@ -427,9 +429,9 @@ while (!$signal) {
 	}
 
 	# (sa) le terme "(\@$Conf{'host'})?" est inutile
-	unless ($t_listname =~ /^(sympa|listmaster|$Conf{'email'})(\@$Conf{'host'})?$/i) {
-	    $list = new List ($t_listname);
-	}
+	#unless ($t_listname =~ /^(sympa|listmaster|$Conf{'email'})(\@$Conf{'host'})?$/i) {
+	#    $list = new List ($t_listname);
+	#}
 	
 	if ($t_listname eq 'listmaster') {
 	    ## highest priority
@@ -441,6 +443,7 @@ while (!$signal) {
 	}elsif ($t_listname =~ /^(sympa|$Conf{'email'})(\@$Conf{'host'})?$/i) {	
 	    $priority = $Conf{'sympa_priority'};
 	}else {
+	    my $list =  new List ($t_listname);
 	    if ($list) {
 		$priority = $list->{'admin'}{'priority'};
 	    }else {
@@ -578,6 +581,12 @@ sub DoFile {
     $listname = lc($listname);
     $robot ||= $Conf{'host'};
     
+    my $type;
+    my $list_check_regexp = &Conf::get_robot_conf($robot,'list_check_regexp');
+    if ($listname =~ /^(\S+)-($list_check_regexp)$/) {
+	($listname, $type) = ($1, $2);
+    }
+
     # setting log_level using conf unless it is set by calling option
     unless ($main::options{'log_level'}) {
 	$log_level = $Conf{'robots'}{$robot}{'log_level'};
@@ -678,22 +687,22 @@ sub DoFile {
 
 	## Mail adressed to the robot and mail 
 	## to <list>-subscribe or <list>-unsubscribe are commands
-    }elsif (($rcpt =~ /^(sympa|$conf_email)(\@\S+)?$/i) || ($rcpt =~ /^(\S+)-(subscribe|unsubscribe)(\@(\S+))?$/o)) {
+    }elsif (($rcpt =~ /^(sympa|$conf_email)(\@\S+)?$/i) || ($type =~ /^(subscribe|unsubscribe)$/o)) {
 	$status = &DoCommand($rcpt, $robot, $msg, $file);
 	
 	## forward mails to <list>-request <list>-owner etc
-    }elsif ($rcpt =~ /^(\S+)-(request|owner|editor)(\@(\S+))?$/o) {
-	my ($name, $function) = ($1, $2);
+#    }elsif ($rcpt =~ /^(\S+)-(request|owner|editor)(\@(\S+))?$/o) {
+    }elsif ($type =~ /^(request|owner|editor)$/o) {
+#	my ($name, $function) = ($1, $2);
 	
 	## Simulate Smartlist behaviour with command in subject
-        ## xxxxxxxxxxx  étendre le jeu de command reconnue sous cette forme ?
-        ## 
-	if (($function eq 'request') and ($subject_field =~ /^\s*(subscribe|unsubscribe)(\s*$name)?\s*$/i) ) {
+         ## 
+	if (($type eq 'request') and ($subject_field =~ /^\s*(subscribe|unsubscribe)(\s*$listname)?\s*$/i) ) {
 	    my $command = $1;
 	    
-	    $status = &DoCommand("$name-$command", $robot, $msg, $file);
+	    $status = &DoCommand("$listname-$command", $robot, $msg, $file);
 	}else {
-	    $status = &DoForward($name, $function, $robot, $msg, $file, $sender);
+	    $status = &DoForward($listname, $type, $robot, $msg, $file, $sender);
 	}       
     }else {
 	$status =  &DoMessage($rcpt, $message, $robot);
@@ -985,10 +994,12 @@ sub DoMessage{
     my $rc;
    
     if ($rc= &tools::virus_infected($msg, $file)) {
-	printf "do message, virus= $rc \n";
-	$list->send_file('your_infected_msg', $sender, $robot, {'virus_name' => $rc,
-							'recipient' => $name.'@'.$host,
-							'lang' => $list->{'admin'}{'lang'}});
+	if ($Conf{'antivirus_notify'} eq 'sender') {
+	    #printf "do message, virus= $rc \n";
+	    $list->send_file('your_infected_msg', $sender, $robot, {'virus_name' => $rc,
+								    'recipient' => $name.'@'.$host,
+								    'lang' => $list->{'admin'}{'lang'}});
+	}
 	&do_log('notice', "Message for %s\@%s from %s ignored, virus %s found", $name, $host, $sender, $rc);
 	return undef;
     }
@@ -1143,7 +1154,7 @@ sub DoCommand {
 
     ## Process the body of the message
     ## unless subject contained commands or message has no body
-    unless (($success == 1) || (! defined $msg->bodyhandle)) { 
+    unless (defined($success) || (! defined $msg->bodyhandle)) { 
 #	foreach $i (@{$msg->body}) {
 	my @body = $msg->bodyhandle->as_lines();
 	foreach $i (@body) {
