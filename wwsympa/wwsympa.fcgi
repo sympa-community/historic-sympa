@@ -3809,6 +3809,8 @@ sub do_redirect {
 	 ## Add list lang to tpl filename
 	 my $file = $in{'file'};
 	 $file =~ s/\.tpl$/\.$list->{'admin'}{'lang'}\.tpl/;
+	 my @path = split /\//,$param->{'filepath'};
+	 $param->{'file'} = $path[$#path];
 
 	 ## Look for the template
 	 $param->{'filepath'} = &tools::get_filename('etc','templates/'.$file,$robot, $list);
@@ -3833,6 +3835,8 @@ sub do_redirect {
 	 }else {
 	     my $lang = &Conf::get_robot_conf($robot, 'lang');
 	     $file =~ s/\.tpl$/\.$lang\.tpl/;
+	     my @path = split /\//,$file;
+	     $param->{'file'} = $path[$#path];
 
 	     $param->{'filepath'} = &tools::get_filename('etc','templates/'.$file,$robot);
 	 }
