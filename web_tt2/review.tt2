@@ -1,16 +1,16 @@
 <!-- $Id$ -->
 
-  [% IF action != 'search' %]
+[% IF action != 'search' %]
 <div style="float: right;">
-	<input type="hidden" name="sortby" value="[% sortby %]" />
-	<input type="submit" name="action_review" value="[%|loc%]Page size[%END%]" />
-	        <select name="size">
+  <input type="hidden" name="sortby" value="[% sortby %]" />
+  <input type="submit" name="action_review" value="[%|loc%]Page size[%END%]" />
+  <select name="size">
                   <option value="[% size %]" selected="selected">[% size %]</option>
 		  <option value="25">25</option>
 		  <option value="50">50</option>
 		  <option value="100">100</option>
 		   <option value="500">500</option>
-		</select>
+  </select>
    [% IF prev_page %]
     <a href="[% path_cgi %]/review/[% list %]/[% prev_page %]/[% size %]/[% sortby %]"><img src="[% icons_url %]/left.png" style="border: 0px;" alt="[%|loc%]Previous page[%END%]" /></a>
    [% END %]
@@ -21,18 +21,18 @@
      <a href="[% path_cgi %]/review/[% list %]/[% next_page %]/[% size %]/[% sortby %]"><img src="[% icons_url %]/right.png" style="border: 0px;" alt="[%|loc%]Next page[%END%]" /></a>
    [% END %]
   </div>
-  [% END %]
+[% END %]
 
 
 [% IF is_owner %]
-<ul id="MainMenuLinks">	
+
   [% IF may_sync %]
-  <li><a class="MainMenuLinks" href="[% path_cgi %]/sync_include/[% list %]" >[%|loc%]Synchronize members with data sources[%END%]</a></li>
+  <a class="actionMenuLinks" href="[% path_cgi %]/sync_include/[% list %]" >[%|loc%]Synchronize members with data sources[%END%]</a>
   [% END %]
-  <li><a class="MainMenuLinks" href="[% path_cgi %]/subindex/[% list %]">[%|loc%]Pending subscriptions[%END%]</a> </li>
-  <li><a class="MainMenuLinks" href="[% path_cgi %]/add_request/[% list %]">[%|loc%]Multiple add[%END%]</a> </li>
-  <li><a class="MainMenuLinks" href="[% path_cgi %]/remind/[% list %]" onclick="request_confirm_link('[% path_cgi %]/remind/[% list %]', '[%|loc(total)%]Do you really want to send a subscription remind message to the %1 subscribers ?[%END%]'); return false;">[%|loc%]Remind all subscribers[%END%]</a></li>
-</ul>
+  <a class="actionMenuLinks" href="[% path_cgi %]/subindex/[% list %]">[%|loc%]Pending subscriptions[%END%]</a> 
+  <a class="actionMenuLinks" href="[% path_cgi %]/add_request/[% list %]">[%|loc%]Multiple add[%END%]</a> 
+  <a class="actionMenuLinks" href="[% path_cgi %]/remind/[% list %]" onclick="request_confirm_link('[% path_cgi %]/remind/[% list %]', '[%|loc(total)%]Do you really want to send a subscription remind message to the %1 subscribers ?[%END%]'); return false;">[%|loc%]Remind all subscribers[%END%]</a>
+
 <br /><br />
 [% END %]
 
@@ -70,63 +70,63 @@
   [% END %]
 
     <table style="border: solid 1px; width: 95%; margin: 10px">
-      <tr style="background-color: [% color_3 %];">
+      <tr style="background-color: [% color_4 %];">
 	[% IF is_owner %]
-	   <th style="border: solid 1px;"><span style="font-size: smaller; text-align: center;">X</span></th>
+	   <th style="padding: 3px; border: solid 1px;"><span style="text-align: center;">X</span></th>
 	[% END %]
 
         [% IF sortby == 'email' %]
-  	    <th style="white-space: nowrap; background-color: [% color_6 %]; border: solid 1px;" colspan="2">
-	    <span style="font-size: smaller; text-align: center;">[%|loc%]Email[%END%]</span>
+  	    <th style="padding: 3px; white-space: nowrap; background-color: [% color_6 %]; border: solid 1px;" colspan="2">
+	    <span style="text-align: center;">[%|loc%]Email[%END%]</span>
 	[% ELSE %]
-	    <th style="white-space: nowrap; border: solid 1px;" colspan="2">	    
-	    <span style="font-size: smaller; text-align: center;"><a href="[% path_cgi %]/review/[% list %]/1/[% size %]/email">[%|loc%]Email[%END%]</a></span>
+	    <th style="padding: 3px; white-space: nowrap; border: solid 1px;" colspan="2">	    
+	    <span style="text-align: center;"><a href="[% path_cgi %]/review/[% list %]/1/[% size %]/email">[%|loc%]Email[%END%]</a></span>
 	[% END %]
 	</th>
         [% IF sortby == 'domain' %]
-  	    <th style="white-space: nowrap; background-color: [% color_6 %]; border: solid 1px;">
-	    <span style="font-size: smaller;text-align: center;">[%|loc%]Domain[%END%]</span>
+  	    <th style="padding: 3px; white-space: nowrap; background-color: [% color_6 %]; border: solid 1px;">
+	    <span style="text-align: center;">[%|loc%]Domain[%END%]</span>
 	[% ELSE %]
-	    <th style="white-space: nowrap; border: solid 1px;">
-	    <span style="font-size: smaller; text-align: center;">
+	    <th style="padding: 3px; white-space: nowrap; border: solid 1px;">
+	    <span style="text-align: center;">
                <a href="[% path_cgi %]/review/[% list %]/1/[% size %]/domain">[%|loc%]Domain[%END%]</a>
             </span>
 	[% END %]
 	</th>
 	[% IF sortby == 'name' %]
-	<th style="white-space: nowrap; background-color: [% color_6 %]; border: solid 1px;">
-	  <span style="font-size: smaller; text-align: center;">[%|loc%]Name[%END%]</span>
+	<th style="padding: 3px; white-space: nowrap; background-color: [% color_6 %]; border: solid 1px;">
+	  <span style="text-align: center;">[%|loc%]Name[%END%]</span>
 	[% ELSE %]
-	<th style="white-space: nowrap; border: solid 1px;">
-        <span style="font-size: smaller; text-align: center;">
+	<th style="padding: 3px;white-space: nowrap; border: solid 1px;">
+        <span style="text-align: center;">
           <a href="[% path_cgi %]/review/[% list %]/1/[% size %]/name">[%|loc%]Name[%END%]</a>
         </span>
 	[% END %] 
 	</th>
         [% IF is_owner %]
-	  <th style="border: solid 1px;"><span style="font-size: smaller; text-align: center;">[%|loc%]Reception[%END%]</span>
+	  <th style="padding: 3px; border: solid 1px;"><span style="text-align: center;">[%|loc%]Reception[%END%]</span>
 	  </th>
 	  [% IF list_conf.user_data_source == 'include2' %]
          [% IF sortby == 'sources' %]
-  	    <th style="white-space: nowrap; background-color: [% color_6 %]; border: solid 1px;">
-	    <span style="font-size: smaller; text-align: center;">[%|loc%]Sources[%END%]</span>
+  	    <th style="padding: 3px; white-space: nowrap; background-color: [% color_6 %]; border: solid 1px;">
+	    <span style="text-align: center;">[%|loc%]Sources[%END%]</span>
 	[% ELSE %]
-	    <th style="white-space: nowrap; border: solid 1px;">
-	    <span style="font-size: smaller; text-align: center;"><a href="[% path_cgi %]/review/[% list %]/1/[% size %]/sources" >[%|loc%]Sources[%END%]</a></span>
+	    <th style="padding: 3px; white-space: nowrap; border: solid 1px;">
+	    <span style="text-align: center;"><a href="[% path_cgi %]/review/[% list %]/1/[% size %]/sources" >[%|loc%]Sources[%END%]</a></span>
 	[% END %]
 	</th>
           [% END %]
 	  [% IF sortby == 'date' %]
-  	    <th style="white-space: nowrap; background-color: [% color_6 %]; border: solid 1px;">
-	    <span style="font-size: smaller; text-align: center;">[%|loc%]Sub date[%END%]</span>
+  	    <th style="padding: 3px; white-space: nowrap; background-color: [% color_6 %]; border: solid 1px;">
+	    <span style="text-align: center;">[%|loc%]Sub date[%END%]</span>
 	  [% ELSE %]
-	    <th style="white-space: nowrap; border: solid 1px;">
-            <span style="font-size: smaller; text-align: center;"><a href="[% path_cgi %]/review/[% list %]/1/[% size %]/date" >[%|loc%]Sub date[%END%]</a></span>
+	    <th style="padding: 3px; white-space: nowrap; border: solid 1px;">
+            <span style="text-align: center;"><a href="[% path_cgi %]/review/[% list %]/1/[% size %]/date" >[%|loc%]Sub date[%END%]</a></span>
 	  [% END %]
           </th>
-	  <th style="border: solid 1px;"><span style="font-size: smaller; text-align: center;">Last update</span></th>
+	  <th style="padding: 3px; border: solid 1px;"><span style="text-align: center;">Last update</span></th>
 	  [% IF additional_fields %]
-	  <th style="border: solid 1px;"><span style="font-size: smaller;text-align: center; ">[% additional_fields %]</span></th>
+	  <th style="padding: 3px; border: solid 1px;"><span style="text-align: center; ">[% additional_fields %]</span></th>
 	  [% END %]
         [% END %]
       </tr>
