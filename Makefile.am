@@ -235,7 +235,7 @@ clean:
 	$(MAKE) PERL='${PERL}' clean) || exit 1; \
 	done;
 
-install: importantchanges installsrc installnls installwws installlocale installman installscript installsample installdir installconfig installdoc
+install: importantchanges installsrc installwws installlocale installman installscript installsample installdir installconfig installdoc
 
 importantchanges:
 	@( 	PERL=$(PERL); export PERL; \
@@ -269,15 +269,6 @@ installdoc:
 	SENDMAIL_ALIASES='${SENDMAIL_ALIASES}' \
 	VIRTUAL_ALIASES='${VIRTUAL_ALIASES}' \
 	USER='${USER}' GROUP='${GROUP}' install) || exit 1;
-
-installnls:
-	@(cd nls && echo "making in nls..." && \
-	$(MAKE) SH='${SH}' CC='${CC}' CFLAGS='${CFLAGS}' PERL='${PERL}' \
-	DIR='${DIR}' NLSDIR='${NLSDIR}' ETCBINDIR='${ETCBINDIR}' \
-	DESTDIR='${DESTDIR}' CONFIG='${CONFIG}' WWSCONFIG='${WWSCONFIG}' \
-	SENDMAIL_ALIASES='${SENDMAIL_ALIASES}' \
-	VIRTUAL_ALIASES='${VIRTUAL_ALIASES}' \
-	USER='${USER}' GROUP='${GROUP}' newinstall) || exit 1;
 
 installwws:
 	@(cd wwsympa && echo "making in wwsympa..." && \
