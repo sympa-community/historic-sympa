@@ -1,3 +1,9 @@
+package wwslib;
+
+use Exporter;
+@ISA = ('Exporter');
+@EXPORT = ('wwslog','message');
+
 @languages = ('fr','us','es','it');
 
 %reception_mode = ('mail' => 'normal',
@@ -204,7 +210,7 @@ sub get_email_from_cookie {
 	&wwslog('info', ' ENV{HTTP_COOKIE} undefined, authentication failure');
     }
 
-    unless ( $email = &check_cookie ($ENV{'HTTP_COOKIE'}, $secret)) {
+    unless ( $email = &cookielib::check_cookie ($ENV{'HTTP_COOKIE'}, $secret)) {
 	&message('auth failed');
 	&wwslog('info', 'get_email_from_cookie: auth failed for user %s', $email);
 	return undef;
@@ -240,7 +246,7 @@ sub wwslog {
     $msg = "[client $remote] ".$msg
 	if $remote;
     
-    return &do_log($facility, $msg, @_);
+    return &Log::do_log($facility, $msg, @_);
 }
 
 ## Basic check of an email address

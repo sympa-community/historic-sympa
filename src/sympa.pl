@@ -6,7 +6,8 @@
 use strict;
 
 use lib '--DIR--/bin';
-use Getopt::Std;
+#use Getopt::Std;
+use Getopt::Long;
 
 use Mail::Address;
 use Mail::Internet;
@@ -46,15 +47,26 @@ my $digestsleep = 5;
 ##            m		-> log invocations to sendmail.
 ##            l		-> language
 ##            F		-> Foreground and log to stderr also.
+##            s         -> Dump subscribers list (listname or 'ALL' required)
 
-Getopt::Std::getopts('DdFf:ml:');
-$Getopt::Std::opt_d = 1 if ($Getopt::Std::opt_D);
+#Getopt::Std::getopts('DdFf:ml:s:');
+
+## Check --dump option
+my %options;
+&GetOptions(\%main::options, 'dump|s:s', 'debug|d', 'foreground|f', 'config|f=s', 'lang|l=s', 'messages|m');
+
+## Trace options
+#foreach my $k (keys %main::options) {
+#    printf "%s = %s\n", $k, $main::options{$k};
+#}
+
+$main::options{'debug2'} = 1 if ($main::options{'debug'});
 
 my @parser_param = ($*, $/);
 my %loop_info;
 my %msgid_table;
 
-my $config_file = $Getopt::Std::opt_f || '--CONFIG--';
+my $config_file = $main::options{'config'} || '--CONFIG--';
 ## Load configuration file
 unless (Conf::load($config_file)) {
    print Msg(1, 1, "Configuration file $config_file has errors.\n");
@@ -76,8 +88,8 @@ if ($Conf{'db_name'} and $Conf{'db_type'}) {
 &List::_apply_defaults();
 
 ## Set locale configuration
-$Getopt::Std::opt_l =~ s/\.cat$//; ## Compatibility with version < 2.3.3
-$Language::default_lang = $Getopt::Std::opt_l || $Conf{'lang'};
+$main::options{'lang'} =~ s/\.cat$//; ## Compatibility with version < 2.3.3
+$Language::default_lang = $main::options{'lang'} || $Conf{'lang'};
 &Language::LoadLang($Conf{'msgcat'});
 
 ## Check locale version
@@ -99,16 +111,31 @@ $< = $> = (getpwnam('--USER--'))[2];
 $( = $) = (getpwnam('--GROUP--'))[2];
 
 ## Check for several files.
-unless (Conf::checkfiles()) {
+unless (&Conf::checkfiles()) {
    fatal_err("Missing files. Aborting.");
    ## No return.
+}
+
+## Daemon called for dumping subscribers list
+if ($main::options{'dump'}) {
+    
+    my @listnames;
+    if ($main::options{'dump'} eq 'ALL') {
+	@listnames = &List::get_lists();
+    }else {
+	@listnames = ($main::options{'dump'});
+    }
+
+    &List::dump(@listnames);
+
+    exit 0;
 }
 
 ## Put ourselves in background if we're not in debug mode. That method
 ## works on many systems, although, it seems that Unix conceptors have
 ## decided that there won't be a single and easy way to detach a process
 ## from its controlling tty.
-unless ($Getopt::Std::opt_d || $Getopt::Std::opt_F) {
+unless ($main::options{'debug'} || $main::options{'foreground'}) {
    if (open(TTY, "/dev/tty")) {
        ioctl(TTY, 0x20007471, 0);         # XXX s/b &TIOCNOTTY
 #       ioctl(TTY, &TIOCNOTTY, 0);
@@ -163,6 +190,8 @@ my @qfile;
 while (!$end) {
 
     &Language::SetLang($Language::default_lang);
+
+    &List::init_list_cache();
 
     if (!opendir(DIR, $Conf{'queue'})) {
 	fatal_err("Can't open dir %s: %m", $Conf{'queue'}); ## No return.
@@ -254,12 +283,12 @@ while (!$end) {
     }
 
     do_log('debug', "Processing %s with priority %s", "$Conf{'queue'}/$filename", $highest_priority) 
-	if ($Getopt::Std::opt_d);
+	if ($main::options{'debug'});
 
     my $status = &DoFile($listname, "$Conf{'queue'}/$filename");
     
     if (defined($status)) {
-	do_log('debug', "Finished %s", "$Conf{'queue'}/$filename") if ($Getopt::Std::opt_d);
+	do_log('debug', "Finished %s", "$Conf{'queue'}/$filename") if ($main::options{'debug'});
 	unlink("$Conf{'queue'}/$filename");
     }else {
 	rename("$Conf{'queue'}/$filename", "$Conf{'queue'}/BAD-$filename");
@@ -269,7 +298,7 @@ while (!$end) {
 } ## END of infinite loop
 
 ## Dump of User files in DB
-List::dump();
+#List::dump();
 
 ## Disconnect from Database
 List::db_disconnect if ($List::dbh);
@@ -593,8 +622,13 @@ sub DoForward {
 	    next if ($i->{'reception'} eq 'nomail');
 	    push(@rcpt, $i->{'email'}) if ($i->{'email'});
 	}
-	do_log('notice', 'Warning : no editor defined or  all of them use nomail option in list %s', $name ) unless (@rcpt);
-
+	unless (@rcpt) {
+	    do_log('notice', 'No editor defined in list %s (unless they use NOMAIL), use owners', $name ) ;
+	    foreach my $i (@{$admin->{'owner'}}) {
+		next if ($i->{'reception'} eq 'nomail');
+		push(@rcpt, $i->{'email'}) if ($i->{'email'});
+	    }
+	}
     }
     
     if ($#rcpt < 0) {
