@@ -1372,7 +1372,7 @@ sub get_dir_size {
 sub valid_email {
     my $email = shift;
     
-    $email =~ /^([\w\-\_\.\/\+\=]+|\".*\")\@[\w\-]+(\.[\w\-]+)+$/;
+    $email =~ /^([\w\-\_\.\/\+\=\']+|\".*\")\@[\w\-]+(\.[\w\-]+)+$/;
 }
 
 ## Return canonical email address (lower-cased + space cleanup)
