@@ -3,6 +3,32 @@
 
 (See Changelog file for the full changes log)
 
+3.4		15 October 2002
+
+   Changes :
+
+
+
+   Bug fixes :
+
+	[reported by O. Lacroix & V. Mathieu] Better syntaxical checks on email addresses ; 
+	also lowercase
+
+	src/List.pm: 'db_env' no more a multiple parameter ; variables/values pairs should be 
+	separated by ';' Fixes the problem with 'ARRAYxxxx' appearing in the 'db_env' entry of 
+	edit_list web form
+
+	src/etc/list_aliases.tpl: Fix: incorrect alias parameters
+	
+	[BugID 50] allow (privileged) listowner to close/restore list.  
+	Also allow shared opening/closure
+
+	wwsympa/wwsympa.fcgi: [BugID 52] Fix : Moderated messages were not accessible from the web 
+	interface. WWSympa runs as user	'sympa' and the mhonarc process that generates HTML version of
+	moderated messages also requires to run as user 'sympa'. Obviously Perl refused to allow this 
+	script to run as SetUID 'sympa' because	mhonarc had double quotes (") in its argument.
+
+
 3.3.6b.6	03 October 2002
 
    Changes :
@@ -80,7 +106,7 @@
 
 *****	wwsympa.conf parameter 'alias_manager' no more used
 *****	Sympa now always uses alias_manager.pl script ; installed aliases can be customized 
-*****	via the 'list_aliases.tpl' file
+*****	via the 'list_aliases.tpl' file (can be done via sympa admin web interface)
 
 	New Message.pm module that provide a complex message object including S/MIME information.  
 	This should fix the bug	related to moderation of crypted messages
@@ -127,9 +153,12 @@
 	separated list of recipient.  (exim). Reported by Stefan Hornburg
 	<racke AT linuxia.de>
   
-	Introduce a 2 new parameters in sympa;conf : spam_protection and
-	web_archive_spam_protection. They are use to define the way that 
-	sympa protect email adrersses from spambot. "cookie" "at" "javascript" "none"
+*****	Introduce a 2 new parameters in sympa;conf : spam_protection and
+*****	web_archive_spam_protection. They are use to define the way that 
+*****	sympa protect email adrersses from spambot. "cookie" "at" "javascript" "none"
+*****	Because mhonarc ressources as changed, you MUST rebuild all archives
+*****   otherwise old archive are unprotected. (Use rebuild button in sympa
+*****   admin page).
 
 	New [SETOPTION ignore_undef] in parser
 
