@@ -65,7 +65,7 @@
 <br />
 	
 <a class="actionMenuLinks" href="[% path_cgi %]/view_translations">[%|loc%]Customize templates[%END%]</a>
-
+<a class="actionMenuLinks" href="http://jigsaw.w3.org/css-validator/check?uri=referer">Valid CSS</a>
 <br /><br />
 
 <h2>[%|loc%]Colors[%END%]</h2>
@@ -109,11 +109,9 @@ listname : <input type="text" name="list" size="20" /> <input type="submit" name
 or  <input type="submit" name="action_rebuildallarc" value="[%|loc%]Rebuild all[%END%]" />([%|loc%]  May take a lot of CPU time,  be careful ![%END%])<br />
 </form>
 
-<br /><br />
 
 
-
-<br />
+<br /><br /><br />
 
 [% IF loop_count %]
 [%|loc(process_id,loop_count,start_time)%]This FastCGI process (%1) has served %2 since %3.[%END%]

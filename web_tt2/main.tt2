@@ -40,6 +40,7 @@
   <div id="Menus"><!-- Start Menus -->&nbsp;
     [% PROCESS login_menu.tt2 %]
     [% PROCESS list_menu.tt2 IF list %]
+    [% PROCESS setlang.tt2 %]
   </div><!-- End div Menus -->
   <div id="Stretcher">  <!-- <span id="toggleMenu" title="A javascript could hidde or show the meneu" class="smalltext info printNone toggleNone">toggle menu</span><br /> --> &nbsp;<br />
      <div id="Paint">

@@ -1,6 +1,6 @@
 <!-- begin footer.tt2 (distrib) -->
 <div id="Footer">
-     <a style="border: 0px; padding: 0px; margin: 0px;" href="http://www.sympa.org">Powered by Sympa [% version %]</a> / <a style="border: 0px; padding: 0px; margin: 0px;" href="http://jigsaw.w3.org/css-validator/check?uri=referer">Valid CSS</a>
+     <a style="border: 0px; padding: 0px; margin: 0px;" href="http://www.sympa.org">Powered by Sympa [% version %]</a>
 </div>
 
 </div>
