@@ -131,8 +131,10 @@ install: makedir
 		echo "Installing documentation...$(DESTDIR)$(DOCDIR)/$$f"; \
 		cp -f $$f $(DESTDIR)$(DOCDIR); \
 	done
-	rm -rf $(DESTDIR)$(DOCDIR)/sympa
-	cp -Rf sympa/ $(DESTDIR)$(DOCDIR)
+	@if [  -d $(DESTDIR)$(DOCDIR)/sympa ]; then \
+		rm -rf $(DESTDIR)$(DOCDIR)/sympa; \
+	fi
+	cp -R sympa/ $(DESTDIR)$(DOCDIR)
 
 
 
