@@ -5,7 +5,6 @@ Mime-version: 1.0
 Content-Type: text/plain; charset=iso-8859-1
 Content-transfer-encoding: 8bit
 
-[ELSE]
 Hi,
 
 This list is about [list->subject], so you are probably concerned.
