@@ -3,9 +3,18 @@
 
 (See Changelog file for the full changes log)
 
-3.4.3		16 January 2003
+3.4.3		24 January 2003
 
    CHanges :
+
+	List.pm, etc/script/create_db.Pg: [E. Dreyfus] [reported by pamelant AT nerim.net] :	
+	Postgresql 7.3 has no support for not SQL standard type 'datetime'.  
+*****	If you are upgrading from	a previous Sympa version, you should update 
+*****	your sympa DB as follows : 
+*****	ALTER TABLE subscriber_table CHANGE date_subscriber timestamp with time zone NOT NULL; 
+*****	ALTER TABLE subscriber_table CHANGE update_subscriber timestamp with time zone;
+
+	src/task_manager.pl: Fix problems with REMIND task, it has been	reactivated
 
 	Makefile.am, Makefile.in, wwsympa/archived.pl: Create 'arc_path' directory if not created ; 
 	also check access
@@ -28,6 +37,11 @@
 	problem with 0xB0 char not escaped in document repository
 
    Bug fixes :
+
+	src/List.pm: [reported by A. Delvaux] Fix: incorrect format of List-ID header field
+	
+	src/Makefile: Fix: Aliaswraper was installed with wrong	attributes (sympa instead of root). 
+	Could not run newaliases
 
 	src/sympa_wizard.pl: [reported by cm AT coretec.at] : sympa_wizard created sympa.conf 
 	with old parameter 'trusted_ca_options'
