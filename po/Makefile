@@ -5,7 +5,7 @@ MOFILES = $(addsuffix .mo, $(LINGUAS))
 
 MSGMERGE = msgmerge
 MSGFMT   = msgfmt
-XGETTEXT = xgettext
+XGETTEXT = $(SCRIPTDIR)/xgettext.pl
 
 ## Available catalogues (languages)
 .SUFFIXES: .po .mo
