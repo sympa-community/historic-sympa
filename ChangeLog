@@ -1,3 +1,12 @@
+2003-01-28 11:26  salaun
+
+	* src/sympa.pl: Fix: 'antivirus_notify' was only used in message
+	forarding context
+
+2003-01-28 10:35  salaun
+
+	* ChangeLog, NEWS: Update
+
 2003-01-28 10:34  salaun
 
 	* doc/: sympa.pdf, sympa.ps, sympa.tex, sympa/index.html,
