@@ -51,6 +51,22 @@ my @supported_languages = ('cs_CZ','de_DE','en_US','es_ES','et_EE',
 			   'fi_FI','fr_FR','hu_HU','it_IT','nl_NL',
 			   'pl_PL','pt_PT','ro_RO','zh_CN','zh_TW');
 
+my %lang2locale = ('cz' => 'cs_CZ',
+		   'de' => 'de_DE',
+		   'us' => 'en_US',
+		   'es' => 'es_ES',
+		   'et' => 'et_EE',
+		   'fi' => 'fi_FI',
+		   'fr' => 'fr_FR',
+		   'hu' => 'hu_HU',
+		   'it' => 'it_IT',
+		   'nl' => 'nl_NL',
+		   'pl' => 'pl_PL',
+		   'pt' => 'pt_PT',
+		   'ro' => 'ro_RO',
+		   'cn' => 'zh_CN',
+		   'tw' => 'zh_TW');
+
 sub GetSupportedLanguages {
     return @supported_languages;
 }
@@ -62,12 +78,16 @@ sub SetLang {
 
     my $lang = $locale;
 
-    ## Get the NLS equivalent for the lang
-    if (defined $language_equiv{$lang}) {
-	$lang = $language_equiv{$lang};
+    if (length($locale) == 2) {
+	$locale = $lang2locale{$lang};
     }else {
-	## remove the country part 
-	$lang =~ s/_\w{2}$//;
+	## Get the NLS equivalent for the lang
+	if (defined $language_equiv{$lang}) {
+	    $lang = $language_equiv{$lang};
+	}else {
+	    ## remove the country part 
+	    $lang =~ s/_\w{2}$//;
+	}
     }
    
     ## Set Locale::Messages context
@@ -81,7 +101,8 @@ sub SetLang {
 
     $current_lang = $lang;
     $current_locale = $locale;
-    return 1;
+
+    return $locale;
 }#SetLang
 
 sub GetLang {

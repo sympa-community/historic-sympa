@@ -356,9 +356,6 @@ $wwsconf->{'log_facility'}||= $Conf{'syslog'};
 &Log::do_openlog($wwsconf->{'log_facility'}, $Conf{'log_socket_type'}, 'wwsympa');
 &do_log('info', 'WWSympa started');
 
-## Set locale configuration
-$Language::default_lang = $Conf{'lang'};
-
 unless ($List::use_db = &List::probe_db()) {
     &error_message('no_database');
     &do_log('info','WWSympa requires a RDBMS to run');
@@ -400,8 +397,6 @@ if ($wwsconf->{'use_fast_cgi'}) {
      undef $log_level;
      $log_level = $Conf{'log_level'} if ($Conf{'log_level'}); 
      $log_level |= 0;
-
-     &Language::SetLang($Language::default_lang);
 
      ## Get params in a hash
  #    foreach ($query->param) {
@@ -550,7 +545,6 @@ if ($wwsconf->{'use_fast_cgi'}) {
      $action ||= $Conf{'robots'}{$robot}{'default_home'}
      if ($Conf{'robots'}{$robot});
      $action ||= $wwsconf->{'default_home'} ;
- #    $param->{'lang'} = $param->{'user'}{'lang'} || $Conf{'lang'};
      $param->{'remote_addr'} = $ENV{'REMOTE_ADDR'} ;
      $param->{'remote_host'} = $ENV{'REMOTE_HOST'};
 
@@ -573,8 +567,7 @@ if ($wwsconf->{'use_fast_cgi'}) {
 	 ## language ( $ENV{'HTTP_ACCEPT_LANGUAGE'} not used !)
 
 	 $param->{'lang'} = $param->{'cookie_lang'} || $param->{'user'}{'lang'} || $list->{'admin'}{'lang'} || &Conf::get_robot_conf($robot, 'lang');
-	 &Language::SetLang($param->{'lang'});
-	 &POSIX::setlocale(&POSIX::LC_ALL, gettext("en_US"));
+	 $param->{'locale'} = &Language::SetLang($param->{'lang'});
 
 	 ## use default_home parameter
 	 if ($action eq 'home') {
@@ -683,7 +676,7 @@ if ($wwsconf->{'use_fast_cgi'}) {
 	     $param->{'languages'}{$l}{'complete'} = $l;
 	 }
 
-	 if ($param->{'lang'} eq $l) {
+	 if ($param->{'locale'} eq $l) {
 	     $param->{'languages'}{$l}{'selected'} = 'SELECTED';
 	 }else {
 	     $param->{'languages'}{$l}{'selected'} = '';
