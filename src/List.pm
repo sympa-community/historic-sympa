@@ -2725,8 +2725,12 @@ sub get_default_user_options {
 sub get_total {
     my $self = shift;
     my $name = $self->{'name'};
+    my $option = shift;
     &do_log('debug3','List::get_total(%s)', $name);
 
+    if ($option eq 'nocache') {
+	$self->{'total'} = _load_total_db($self->{'name'});
+    }
 #    if ($self->{'admin'}{'user_data_source'} eq 'database') {
 	## If stats file was updated
 #	my $time = (stat("$name/stats"))[9];
@@ -2745,12 +2749,8 @@ sub get_user_db {
 
     my $statement;
  
-    my $option = shift;
     unless ($List::use_db) {
 	&do_log('info', 'Sympa not setup to use DBI');
-    if ($option eq 'nocache') {
-	$self->{'total'} = _load_total_db($self->{'name'});
-    }
 	return undef;
     }
 
