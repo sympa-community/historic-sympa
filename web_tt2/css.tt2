@@ -147,9 +147,11 @@ a.ArcMenuLinks:visited {border: 1px solid [% color_2 %]; background: [% color_1 
 a.ArcMenuLinks:hover {border: 1px solid [% color_2 %]; background: [% color_6 %]; color: [% color_11 %]; text-decoration: none; padding: 0px 10px 0px 10px;}
 a.ArcMenuLinks:active {border: 1px solid [% color_2 %]; background: [% color_6 %]; color: [% color_11 %]; text-decoration: none; padding: 0px 10px 0px 10px;}
 a.ArcMenuLinksCurrentPage {border: 1px solid [% color_2 %]; background: [% color_6 %]; color: [% color_11 %] text-decoration: none; padding: 0px 10px 0px 10px;}
-ul li.ArcMenuLinksInactive {border: 1px solid [% color_2 %]; background: [% color_1 %]; color: [% color_4 %]; text-decoration: none; padding: 0px 10px 0px 10px;}
-#ArcMenuLinksInactive {border: 0px solid [% color_2 %]; text-decoration: none; padding: 0px 0px 0px 3px;}
 a.ArcMenuLinksCurrentPage:hover {border: 1px solid [% color_2 %]; background: [% color_6 %]; text-decoration: none; padding: 0px 10px 0px 10px;}
+a.ArcMenuLinksInactive {border: 1px solid [% color_2 %]; background: [% color_1 %]; color: [% color_4 %]; text-decoration: none; padding: 0px 10px 0px 10px;}
+
+#ArcMenuLinksInactive {border: 0px solid [% color_2 %]; text-decoration: none; padding: 0px 0px 0px 3px;}
+
 
 a.menuLinks {padding: 0px 10px 0px 0px; text-decoration: none;}
 a.menuLinks:link {text-decoration: none;}
@@ -158,7 +160,6 @@ a.menuLinks:hover {border: 1px solid [% color_9 %]; background: [% color_6 %]; t
 a.menuLinks:active {border: 1px solid [% color_6 %]; background: [% color_9 %]; text-decoration: none;}
 a.menuLinksCurrentPage {border: 1px solid [% color_9 %]; background: [% color_6 %]; padding: 0px 10px 0px 20px; text-decoration: none;}
 a.menuLinksCurrentPage:hover  {border: 1px solid [% color_9 %]; background: [% color_6 %]; padding: 0px 10px 0px 20px; text-decoration: none;}
-
 
 strong a.menuLinks {font-size: 14px;}
 strong a.menuLinksCurrentPage {font-size: 14px; border: 1px solid [% color_9 %]; background: [% color_6 %];}

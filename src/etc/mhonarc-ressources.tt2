@@ -184,9 +184,9 @@ $TOP_PANEL$
     <a class="ArcMenuLinksCurrentPage" href="mail$PAGENUM$.html">($tag$%|loc%$tag$)chronological($tag$%END%$tag$)</a>
     <a class="ArcMenuLinks" href="thrd$PAGENUM$.html">($tag$%|loc%$tag$)Thread($tag$%END%$tag$)</a>
   </span>
-  <ul id="MainMenuLinks">
-  $PREVPGLINK$ ($tag$%|loc($PAGENUM$,$NUMOFPAGES$)%$tag$)page # %1/%2($tag$%END%$tag$)</span> $NEXTPGLINK$ 
-   </ul>
+  
+  $PREVPGLINK$ ($tag$%|loc($PAGENUM$,$NUMOFPAGES$)%$tag$)page # %1/%2($tag$%END%$tag$) $NEXTPGLINK$ 
+  
 <div class="spacer"></div>
 <!-- end header -->
 </IDXPGBEGIN>
@@ -215,21 +215,21 @@ $POWERED_BY$
 
 <!-- links definition -->
 <PrevPgLink chop>
-<li><a class="ArcMenuLinks" href="$FIRSTPG$">($tag$%|loc%$tag$)First($tag$%END%$tag$)</a></li>
-<li><a class="ArcMenuLinks" href="$PREVPG$">($tag$%|loc%$tag$)Previous($tag$%END%$tag$)</a></li>
+<a class="ArcMenuLinks" href="$FIRSTPG$">($tag$%|loc%$tag$)First($tag$%END%$tag$)</a>
+<a class="ArcMenuLinks" href="$PREVPG$">($tag$%|loc%$tag$)Previous($tag$%END%$tag$)</a>
 </PrevPgLink>
 
 <PrevPgLinkIA chop>
-<li class="ArcMenuLinksInactive">First</li><li class="ArcMenuLinksInactive">Previous</li>
+<a class="ArcMenuLinksInactive">First</a><a class="ArcMenuLinksInactive">Previous</a>
 </PrevPgLinkIA>
 
 <NextPgLink chop>
-<li><a class="ArcMenuLinks" href="$NEXTPG$">($tag$%|loc%$tag$)Next($tag$%END%$tag$)</a></li>
-<li><a class="ArcMenuLinks" href="$LASTPG$">($tag$%|loc%$tag$)Last($tag$%END%$tag$)</a></li>
+<a class="ArcMenuLinks" href="$NEXTPG$">($tag$%|loc%$tag$)Next($tag$%END%$tag$)</a>
+<a class="ArcMenuLinks" href="$LASTPG$">($tag$%|loc%$tag$)Last($tag$%END%$tag$)</a>
 </NextPgLink>
 
 <NextPgLinkIA chop>
-<li class="ArcMenuLinksInactive">Next</li><li class="ArcMenuLinksInactive">Last</li>
+<a class="ArcMenuLinksInactive">Next</a><a class="ArcMenuLinksInactive">Last</a>
 </NextPgLinkIA>
 
 <!-- ============================================================== -->
@@ -277,10 +277,8 @@ $TOP_PANEL$
      <a class="ArcMenuLinks" href="mail$PAGENUM$.html">($tag$%|loc%$tag$)chronological($tag$%END%$tag$)</a>
      <a class="ArcMenuLinksCurrentPage" href="thrd$PAGENUM$.html">($tag$%|loc%$tag$)Thread($tag$%END%$tag$)</a>
    </span>
-  <ul id="MainMenuLinks">
-<!--   $TPREVPGLINK$ ($tag$%|loc($PAGENUM$,$NUMOFPAGES$)%$tag$)page # %1/%2($tag$%END%$tag$)</span> $TNEXTPGLINK$    -->
-   $PREVPGLINK$ ($tag$%|loc($PAGENUM$,$NUMOFPAGES$)%$tag$)page # %1/%2($tag$%END%$tag$)</span> $NEXTPGLINK$ 
-  </ul>
+  
+   $PREVPGLINK$ ($tag$%|loc($PAGENUM$,$NUMOFPAGES$)%$tag$)page # %1/%2($tag$%END%$tag$) $NEXTPGLINK$ 
 <div class="spacer"></div>
 <!-- end header -->
 
