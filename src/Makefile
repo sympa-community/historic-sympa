@@ -58,6 +58,7 @@ installtemplates:
 	rm -f $(DESTDIR)$(ETCBINDIR)/tt2/*.tt2
 	@echo "Installing default templates..."
 	cp etc/tt2/*.tt2 $(DESTDIR)$(ETCBINDIR)/tt2/
+	$(PERL) ../set_symlinks.pl tt2 $(DESTDIR)$(ETCBINDIR)/tt2
 
 installtask_models:
 	@echo "Installing default task models ..."

@@ -1335,8 +1335,8 @@ sub get_filename {
 	
 	## template refers to a language
 	## => extend search to default tpls
-	if ($name =~ /^(\S+)\.(\S+)\.tpl$/) {
-	    $default_name = $1.'.tpl';
+	if ($name =~ /^(\S+)\.([^\s\/]+)\.tt2$/) {
+	    $default_name = $1.'.tt2';
 	    
 	    @try = ("$Conf{'etc'}/$robot".'/'.$name,
 		    "$Conf{'etc'}/$robot".'/'.$default_name,
@@ -1349,27 +1349,16 @@ sub get_filename {
 		    $Conf{'etc'}.'/'.$name,
 		    '--ETCBINDIR--'.'/'.$name);
 	}
-	if ($list) {
+	if ($list->{'name'}) {
 	    ## Default tpl
 	    if ($default_name) {
-		## No 'templates' subdir in list directory
-		if ($default_name =~ /^templates\/(.*)$/) {
-		    unshift @try, $list->{'dir'}.'/'.$1;
-		}else {
-		    unshift @try, $list->{'dir'}.'/'.$default_name;
-		}
+		unshift @try, $list->{'dir'}.'/'.$default_name;
 	    }
 
-	    ## Also look for templates in the list's directory
-	    if ($name =~ /^templates\/(.*)$/) {
-		unshift @try, $list->{'dir'}.'/'.$name;
-		unshift @try, $list->{'dir'}.'/'.$1;
-	    }else {
-		unshift @try, $list->{'dir'}.'/'.$name;
-	    }
+	    unshift @try, $list->{'dir'}.'/'.$name;
 	}	
 	foreach my $f (@try) {
-	    &do_log('debug3','get_filname : NAME: %s ; DIR %s', $name, $dir);
+	    &do_log('notice','get_filname : %s', $f);
 	    if (-r $f) {
 		return $f;
 	    }

@@ -120,6 +120,7 @@ installtemplates:
 		COL234=110; export COL234; \
 		$(PERL) ../../subst.pl *.tt2; \
 		); \
+	$(PERL) ../set_symlinks.pl wws.tt2 $(DESTDIR)$(ETCBINDIR)/wws.tt2
 	chmod -R 644 $(DESTDIR)$(ETCBINDIR)/wws.tt2
 
 installicons:
