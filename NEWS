@@ -3,6 +3,12 @@
 
 (See Changelog file for the full changes log)
 
+4.1.4		09 february 2005
+
+   Bug fix :
+
+	src/List.pm: [G.Bouteille] check if $user is defined first. Otherwise wwsympa would create loops on the web interface
+
 4.1.3		27 january 2005
 
    Bug fixes :

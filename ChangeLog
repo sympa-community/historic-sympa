@@ -1,6 +1,19 @@
+2005-02-03 17:14  sympa-authors
+
+	* src/List.pm: [G.Bouteille] Fix: check if $user is defined first.
+	  Otherwise wwsympa would create loops
+
+2005-02-03 17:12  sympa-authors
+
+	* wwsympa/wwsympa.fcgi: Fix: prevent loops in wwsympa
+
+2005-01-27 11:05  sympa-authors
+
+	* .version, ChangeLog, NEWS: preparing 4.1.3
+
 2005-01-27 11:01  sympa-authors
 
-	* src/tools.pl: Fix: command detection in messages failed
+	* src/: tools.pl: Fix: command detection in messages failed
 
 2005-01-27 09:54  sympa-authors
 
