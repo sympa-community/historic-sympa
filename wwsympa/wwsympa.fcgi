@@ -798,7 +798,8 @@ if ($wwsconf->{'use_fast_cgi'}) {
 	     $param->{'list_conf'} = $list->{'admin'};
 	 }
 
-	 &parser::parse_tpl($param,'main.tt2' , \*STDOUT);
+	 #&parser::parse_tpl($param,'main.tt2' , \*STDOUT);
+	 &parser::parse_tpl($param,$main , \*STDOUT);
      }    
 
      # exit if wwsympa.fcgi itself has changed
