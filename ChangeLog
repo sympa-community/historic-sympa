@@ -1,3 +1,55 @@
+2002-11-27 15:56  salaun
+
+	* src/tools.pl: Change: extend escaped characters in URLs.  JC
+	Delepine has reported a problem with 0xB0 char not escaped in
+	document repository
+
+2002-11-26 11:10  salaun
+
+	* src/List.pm: Bug Fix: missing trailing boundary to the confirm
+	message
+
+2002-11-21 11:23  salaun
+
+	* src/List.pm: Change: ignore topics if no topics.conf was found
+
+2002-11-20 14:44  salaun
+
+	* src/etc/scenari/: info.private, review.intranet,
+	visibility.intranet: [O. Lacroix] Fix: Owners and editors were not
+	accepted
+
+2002-11-18 12:56  salaun
+
+	* wwsympa/: wwsympa.fcgi, wws_templates/cn/editsubscriber.cn.tpl,
+	wws_templates/cz/editsubscriber.cz.tpl,
+	wws_templates/de/editsubscriber.de.tpl,
+	wws_templates/es/editsubscriber.es.tpl,
+	wws_templates/et/editsubscriber.et.tpl,
+	wws_templates/fi/editsubscriber.fi.tpl,
+	wws_templates/fr/editsubscriber.fr.tpl,
+	wws_templates/hu/editsubscriber.hu.tpl,
+	wws_templates/it/editsubscriber.it.tpl,
+	wws_templates/nl/editsubscriber.nl.tpl,
+	wws_templates/ro/editsubscriber.ro.tpl,
+	wws_templates/us/editsubscriber.us.tpl: Bug fix: editsubscriber
+	failed if the owner was subscriber of the list. do_editsubscriber()
+	was using 'subscriber' variable already used.
+
+2002-11-14 14:44  salaun
+
+	* ChangeLog, doc/sympa.pdf, doc/sympa.ps, doc/sympa.tex,
+	doc/sympa.tex.tpl, doc/sympa/index.html, doc/sympa/node1.html,
+	doc/sympa/node10.html, doc/sympa/node11.html,
+	doc/sympa/node12.html, doc/sympa/node13.html,
+	doc/sympa/node14.html, doc/sympa/node15.html,
+	doc/sympa/node16.html, doc/sympa/node17.html,
+	doc/sympa/node18.html, doc/sympa/node19.html, doc/sympa/node2.html,
+	doc/sympa/node20.html, doc/sympa/node3.html, doc/sympa/node4.html,
+	doc/sympa/node5.html, doc/sympa/node6.html, doc/sympa/node7.html,
+	doc/sympa/node8.html, doc/sympa/node9.html, doc/sympa/sympa.html,
+	doc/sympa/sympa.ps: complete mail aliases doc
+
 2002-11-14 10:37  salaun
 
 	* src/etc/templates/fr/list_rejected.fr.tpl,
@@ -9473,7 +9525,7 @@
 	doc/latex2htmlicons/whiteball.png,
 	doc/latex2htmlicons/yellowball.png, nls/README, src/.core.swp,
 	src/etc/create_list.conf, src/etc/sample/config.include,
-	src/etc/sample/topics.conf, src/etc/sample/test/info,
+	src/etc/sample/topics.fr.conf, src/etc/sample/test/info,
 	src/etc/sample/test/message.footer,
 	src/etc/sample/test/welcome.tpl, wwsympa/INSTALL, wwsympa/Marc.pm,
 	wwsympa/mime.types: [no log message]
