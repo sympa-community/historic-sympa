@@ -5452,41 +5452,18 @@ sub do_set_pending_list_request {
 
      my $escaped_email = &tools::escape_chars($in{'email'});
 
-     $param->{'lastbounce_path'} = "$wwsconf->{'bounce_path'}/$param->{'list'}/$escaped_email");
-		 next;
-	     }
-	 }
-
-
-	 &wwslog('info','do_del: subscriber %s deleted from list %s', $email, $param->{'list'});
-
-	 unless ($in{'quiet'}) {
-	     my %context;
-	     $context{'subject'} = sprintf(gettext("Your subscription to list %s has been removed."), $list->{'name'});
-	     $context{'body'} = sprintf(gettext("You have been removed from list %s.\n"), $list->{'name'});
-
-	     $list->send_file('removed', $email, $robot, \%context);
-	 }
-     }
-
-     $total = $list->delete_user(@removed_users);
-
-     unless( defined $total) {
-	 &error_message('failed');
-	 &wwslog('info','do_del: failed');
-	 # &List::db_log('wwsympa',$param->{'user'}{'email'},$param->{'auth_method'},$ip,'del',$param->{'list'},$robot,join('.',@removed_users),'failed');
+     $param->{'lastbounce_path'} = "$wwsconf->{'bounce_path'}/$param->{'list'}/$escaped_email";
+     
+     unless (-r $param->{'lastbounce_path'}) {
+	 &error_message('no_bounce', {'email' => $in{'email'}});
+	 &wwslog('info','do_viewbounce: no bounce %s', $param->{'lastbounce_path'});
 	 return undef;
      }
-     # &List::db_log('wwsympa',$param->{'user'}{'email'},$param->{'auth_method'},$ip,'del',$param->{'list'},$robot,join(',',@removed_users),'done',$total) if (@removed_users) ;
-     $list->save();
-
-     &message('performed');
-     $param->{'is_subscriber'} = 1;
-     $param->{'may_signoff'} = 1;
-
-     return $in{'previous_action'} || 'review';
+     
+     &tt2::allow_absolute_path();
+     
+     return 1;     
  }
-
 
  ## some help for listmaster and developpers
  sub do_scenario_test {
@@ -6949,7 +6926,7 @@ sub _restrict_values {
 	     my $newfile = $file;
 	     if ($file =~ /^$param->{'list'}\_/) {
 		 $newfile =~ s/^$param->{'list'}\_/$in{'new_listname'}\_/;
-	     elsif ($file =~ /^$param->{'list'}\@$robot\_/) {
+	     }elsif ($file =~ /^$param->{'list'}\@$robot\_/) {
 		 $newfile =~ s/^$param->{'list'}\@$robot\_/$in{'new_listname'}\@$in{'new_robot'}\_/;
 	     }elsif ($file =~ /^$param->{'list'}\./) {
 		 $newfile =~ s/^$param->{'list'}\./$in{'new_listname'}\./;
@@ -6957,7 +6934,10 @@ sub _restrict_values {
 		 $newfile =~ s/^$param->{'list'}\@$robot\./$in{'new_listname'}\@$in{'new_robot'}\./;
 	     }elsif ($file =~ /\.$param->{'list'}$/) {
 		 $newfile =~ s/\.$param->{'list'}$/\.$in{'new_listname'}/;
+	     }elsif ($file =~ /\.$param->{'list'}\@$robot$/) {
+		 $newfile =~ s/\.$param->{'list'}\@$robot$/\.$in{'new_listname'}\@$in{'new_robot'}/;
 	     }
+
  
 	     ## Rename file
 	     unless (rename "$Conf{$spool}/$file", "$Conf{$spool}/$newfile") {

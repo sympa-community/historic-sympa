@@ -1643,10 +1643,22 @@ sub distribute {
     my $name = $list->{'name'};
     my $host = $list->{'admin'}{'host'};
     my $file = "$modqueue\/$name\_$key";
+
+    ## Rename old-style directories
+    ## Add @domain
+    foreach my $d ($file, $file, "$modqueue\/.$name\_$key") {
+	my $new_d = $d;
+	$new_d =~ s/$name\_$key/$name\@$robot\_$key/;
+	unless (rename $d, $new_d) {
+	    &do_log('err','Cannot rename file/directory %s to %s : %s', $d, $new_d, $!); 
+	}
+    }
     
+    my $file = "$modqueue\/$name\@$robot\_$key";
+
     ## if the file has been accepted by WWSympa, it's name is different.
     unless (-r $file) {
-        $file= "$modqueue\/$name\_$key.distribute";
+        $file= $file.".distribute";
     }
 
     ## Open and parse the file
@@ -1816,6 +1828,18 @@ sub reject {
     my $name = "$list->{'name'}";
     my $file= "$modqueue\/$name\_$key";
 
+
+    ## Rename old-style directories
+    ## Add @domain
+    foreach my $d ($file, $file, "$modqueue\/.$name\_$key") {
+	my $new_d = $d;
+	$new_d =~ s/$name\_$key/$name\@$robot\_$key/;
+	unless (rename $d, $new_d) {
+	    &do_log('err','Cannot rename file/directory %s to %s : %s', $d, $new_d, $!); 
+	}
+    }
+ 
+    my $file= "$modqueue\/$name\@$robot\_$key";
 
     my $msg;
     my $parser = new MIME::Parser;
@@ -2302,7 +2326,7 @@ sub modindex {
 
     opendir(DIR, $modqueue);
 
-    my @files = ( sort grep (/^$name\_/,readdir(DIR)));
+    my @files = ( sort grep (/^$name(\@$robot)?\_/,readdir(DIR)));
     closedir(DIR);
     my $n;
     my @now = localtime(time);

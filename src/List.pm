@@ -2435,8 +2435,11 @@ sub send_to_editor {
    
    ## Keeps a copy of the message
    if ($method eq 'md5'){  
-       unless (open(OUT, ">$modqueue\/$name\_$modkey")) {
-	   do_log('notice', 'Could Not open %s', "$modqueue\/$name\_$modkey");
+       
+       my $modfile = "$modqueue\/$name\@$robot\_$modkey";
+
+       unless (open(OUT, ">$modfile")) {
+	   do_log('notice', 'Could Not open %s', $modfile);
 	   return undef;
        }
 
@@ -2449,7 +2452,7 @@ sub send_to_editor {
        close MSG ;
        close(OUT);
 
-       my $tmp_dir = "$modqueue\/.$name\_$modkey";
+       my $tmp_dir = "$modqueue\/.$name\@$robot\_$modkey";
        unless (-d $tmp_dir) {
 	   unless (mkdir ($tmp_dir, 0777)) {
 	       &do_log('err','Unable to create %s', $tmp_dir);
@@ -2464,9 +2467,9 @@ sub send_to_editor {
 	   ## generate HTML
 	   chdir $tmp_dir;
 	   my $mhonarc = &Conf::get_robot_conf($robot, 'mhonarc');
-	   open ARCMOD, "$mhonarc  -single -rcfile $mhonarc_ressources -definevars listname=$name -definevars hostname=$host $modqueue/$name\_$modkey|";
+	   open ARCMOD, "$mhonarc  -single -rcfile $mhonarc_ressources -definevars listname=$name -definevars hostname=$host $modfile|";
 	   open MSG, ">msg00000.html";
-	   &do_log('debug4', "$mhonarc  -single -rcfile $mhonarc_ressources -definevars listname=$name -definevars hostname=$host $modqueue/$name\_$modkey");
+	   &do_log('debug4', "$mhonarc  -single -rcfile $mhonarc_ressources -definevars listname=$name -definevars hostname=$host $modfile");
 	   print MSG <ARCMOD>;
 	   close MSG;
 	   close ARCMOD;
@@ -8922,7 +8925,7 @@ sub get_mod_spool_size {
 	return undef;
     }
 
-    @msg = sort grep(/^$self->{'name'}\_\w+$/, readdir SPOOL);
+    @msg = sort grep(/^$self->{'name'}(\@$self->{'domain'})?\_\w+$/, readdir SPOOL);
 
     closedir SPOOL;
     return ($#msg + 1);
@@ -10436,7 +10439,7 @@ sub get_subscription_requests {
     my %subscriptions;
 
     unless (opendir SPOOL, $Conf{'queuesubscribe'}) {
-	&do_log('info', 'Unable to read spool %s', $Conf{'queuemod'});
+	&do_log('info', 'Unable to read spool %s', $Conf{'queuesubscribe'});
 	return undef;
     }
 
@@ -10473,7 +10476,7 @@ sub delete_subscription_request {
     do_log('debug2', 'List::delete_subscription_request(%s, %s)', $self->{'name'}, $email);
 
     unless (opendir SPOOL, $Conf{'queuesubscribe'}) {
-	&do_log('info', 'Unable to read spool %s', $Conf{'queuemod'});
+	&do_log('info', 'Unable to read spool %s', $Conf{'queuesubscribe'});
 	return undef;
     }
 
