@@ -73,6 +73,8 @@ ul#MainMenuLinks li {list-style: none; display: inline;}
 	padding-right: 8px;
 	text-align: center;
 }
+
+
 .MenuBlock {
 	background: [% color_5 %];
 	padding: 10px;
@@ -157,7 +159,7 @@ a.ArcMenuLinksInactive:hover { border-bottom: 1px solid [% color_2 %]; border-ri
 #ArcMenuLinksInactive {border: 0px solid [% color_2 %]; text-decoration: none; padding: 0px 0px 0px 3px;}
 
 .block {border: 1px dotted [% color_2 %]; padding: 10px;}
-h1.block {text-align: center;}
+h1.block {text-align: center; background: [% color_4 %];}
 .blockerror {border: 3px dashed [% error_color %]; background: transparent; padding : 10px;}
 
 ul.menuLinks {list-style-type: none;}

@@ -19,11 +19,12 @@
     <li><a class="[% class %]" href="[% path_cgi %]/which" >[%|loc%]Your subscriptions[%END%]</a></li>
 [% END %]
 
- [% IF action == 'home' %][% SET class = 'MainMenuLinksCurrentPage' %][% ELSE %][% SET class = 'MainMenuLinks' %][% END %]
-<li><a class="[% class %]" href="[% path_cgi %]/">[%|loc%]Home[%END%]</a></li>
-
  [% IF action == 'lists' %][% SET class = 'MainMenuLinksCurrentPage' %][% ELSE %][% SET class = 'MainMenuLinks' %][% END %]
 <li><a class="[% class %]" href="[% path_cgi %]/lists">[%|loc%]list of lists[%END%]</a></li>
+
+
+ [% IF action == 'home' %][% SET class = 'MainMenuLinksCurrentPage' %][% ELSE %][% SET class = 'MainMenuLinks' %][% END %]
+<li><a class="[% class %]" href="[% path_cgi %]/">[%|loc%]Home[%END%]</a></li>
 
 [% IF action == 'help' %][% SET class = 'MainMenuLinksCurrentPage' %][% ELSE %][% SET class = 'MainMenuLinks' %][% END %]
   <li> <a class="[% class %]" href="[% path_cgi %]/help" >[%|loc%]Help[%END%]</a></li>
