@@ -40,9 +40,12 @@
 
    Bug fixes :
 
+	new variable [previous_email] for scenario subscribe used only for change_email
+	action. It allows to accept change email by subscriber without request to
+	list owner even if new subscribtion need owner control.
+
 	wwsympa/wwsympa.fcgi: Fix: looking for subscribers.closed.dump in the wrong directory. 
 	Could not restore subscribers for lists in a Virtual Robot.
-
 
 	src/List.pm: [reported by A. Delvaux] Fix: incorrect format of List-ID header field
 	
