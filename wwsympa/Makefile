@@ -53,7 +53,7 @@ installmod:
 	@echo "Setting SetUID bit on wwsympa.fcgi..."
 	chmod u+s $(DESTDIR)$(CGIDIR)/wwsympa.fcgi
 	chmod g+s $(DESTDIR)$(CGIDIR)/wwsympa.fcgi
-	chmod 755 $(DESTDIR)$(ETCBINDIR)/wws_templates
+	chmod 755 $(DESTDIR)$(ETCBINDIR)/wws.tt2
 	chmod 755 $(DESTDIR)$(ICONSDIR)
 	chmod 755 $(DESTDIR)$(LIBDIR)/Marc
 	@for i in $(lib_SUBST) Marc/Search.pm; do \
@@ -79,9 +79,9 @@ makedir:
 		echo "Creating required directory $(DESTDIR)$(ETCBINDIR)"; \
 		mkdir -p $(DESTDIR)$(ETCBINDIR); \
 	fi
-	@if [ ! -d $(DESTDIR)$(ETCBINDIR)/wws_templates ]; then \
-		echo "Creating required directory $(DESTDIR)$(ETCBINDIR)/wws_templates"; \
-		mkdir $(DESTDIR)$(ETCBINDIR)/wws_templates; \
+	@if [ ! -d $(DESTDIR)$(ETCBINDIR)/wws.tt2 ]; then \
+		echo "Creating required directory $(DESTDIR)$(ETCBINDIR)/wws.tt2"; \
+		mkdir $(DESTDIR)$(ETCBINDIR)/wws.tt2; \
 	fi
 	@if [ ! -d $(DESTDIR)$(ICONSDIR) ]; then \
 		echo "Creating required directory $(DESTDIR)$(ICONSDIR)"; \
@@ -101,12 +101,10 @@ installsrc:
 installtemplates:
 	@echo
 	@echo "Installing templates..."
-	@for lang in wws_templates/* ; do \
-		echo $$lang; \
 		( \
-		cd $$lang; \
+		cd tt2; \
 		PERL=$(PERL); export PERL; \
-		INSTALLDIR=$(ETCBINDIR)/wws_templates; export INSTALLDIR; \
+		INSTALLDIR=$(ETCBINDIR)/wws.tt2; export INSTALLDIR; \
 		SBINDIR=$(SBINDIR); export SBINDIR; \
 		CGIDIR=$(CGIDIR); export CGIDIR; \
 		LIBDIR=$(LIBDIR); export LIBDIR; \
@@ -120,11 +118,9 @@ installtemplates:
 		COL23=70; export COL23; \
 		COL34=70; export COL34; \
 		COL234=110; export COL234; \
-		$(PERL) ../../../subst.pl *.tpl; \
+		$(PERL) ../../subst.pl *.tt2; \
 		); \
-	done
-	$(PERL) ../set_symlinks.pl wws_templates $(DESTDIR)$(ETCBINDIR)/wws_templates
-	chmod -R 644 $(DESTDIR)$(ETCBINDIR)/wws_templates
+	chmod -R 644 $(DESTDIR)$(ETCBINDIR)/wws.tt2
 
 installicons:
 	@echo "Installing icons..."

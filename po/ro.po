@@ -1,0 +1,3268 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"POT-Creation-Date: 2002-07-16 17:27+0800\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=iso_8859-1\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+#: src/etc/tt2/sendpasswd.tt2:5
+#. (conf.title,list)
+msgid "%1 / subscribing to %2"
+msgstr "%1 / abonare pe lista %2"
+
+#: src/etc/tt2/sendpasswd.tt2:7
+#. (conf.title,list)
+msgid "%1 / unsubscribing from %2"
+msgstr "%1 / dezabonare from %2"
+
+#: src/etc/tt2/sendpasswd.tt2:9
+#. (conf.title)
+msgid "%1 / your environment"
+msgstr "%1 / zona ta"
+
+#: wwsympa/tt2/error.tt2:104
+#. (error.path)
+msgid "%1 : No such file"
+msgstr "%1 : Fisier inexistent"
+
+#: wwsympa/tt2/error.tt2:101
+#. (error.path)
+msgid "%1 : No such file or directory"
+msgstr "%1 : Acest fisier sau director nu exista"
+
+#: wwsympa/tt2/notice.tt2:11
+#. (notice.action)
+msgid "%1 : action succeeded"
+msgstr "%1 : operatie reusita"
+
+#: wwsympa/tt2/error.tt2:61
+#. (error.file)
+msgid "%1 : file not editable"
+msgstr ""
+"%1 : fisier 
+\n"
+"needitabil\n"
+
+#: wwsympa/tt2/error.tt2:119
+#. (error.name)
+msgid "%1 : incorrect name"
+msgstr "%1 : nume incorect"
+
+#: wwsympa/tt2/error.tt2:7
+#. (error.action)
+msgid "%1 : unknown action"
+msgstr ""
+"%1 : actiune 
+\n"
+"necunoscuta\n"
+
+#: wwsympa/tt2/error.tt2:10
+#. (error.list)
+msgid "%1 : unknown list"
+msgstr "%1 : lista necunoscuta"
+
+#: wwsympa/tt2/error.tt2:43
+#. (error.action)
+msgid "%1 : you are not allowed to perform this action"
+msgstr "%1 : aceasta actiune este interzisa"
+
+#: src/etc/tt2/list_created.tt2:9
+#. (list.name)
+msgid "%1 admin page"
+msgstr "%1 pagina administratorului"
+
+#: src/etc/tt2/listowner_notification.tt2:8
+#. (list.name,list.host,size,conf.host)
+msgid ""
+"%1 archive quota exceeded. \n"
+"Total size used for %1@%2 archive is %3 Bytes. Messages\n"
+"are no more web-archived. Please contact listmaster@%4. \n"
+msgstr ""
+
+#: wwsympa/tt2/error.tt2:67
+#. (error.email,error.list)
+msgid "%1 is already subscribed to the list %2"
+msgstr ""
+"%1 este abonat la lista 
+\n"
+"%2\n"
+
+#: src/etc/tt2/list_created.tt2:2
+#. (list.name)
+msgid "%1 mailing list creation"
+msgstr "%1 creare de lista"
+
+#: wwsympa/tt2/arcsearch.tt2:54
+#. (searched,num)
+msgid "%1 messages selected out of %2"
+msgstr "%1 mesaje selectate dintr-un numar de %2"
+
+#: wwsympa/tt2/review.tt2:60
+#. (occurrence)
+msgid "%1 occurrence(s) found"
+msgstr "%1 aparitii (s) gasite"
+
+#: wwsympa/tt2/lists.tt2:4
+#. (occurrence)
+msgid "%1 occurrences found"
+msgstr "%1 potrivire gasita"
+
+#: wwsympa/tt2/notice.tt2:8
+#. (notice.total)
+msgid "%1 subscribers added"
+msgstr ""
+"%1 
+\n"
+"abonati adaugati\n"
+
+#: wwsympa/tt2/notice.tt2:17
+#. (notice.path)
+msgid "%1 successfully uploaded!"
+msgstr "Fisierul %1 a fost incarcat!"
+
+#: wwsympa/tt2/error.tt2:73
+#. (error.action)
+msgid "%1: action failed"
+msgstr "%1: actiune esuata"
+
+#: src/etc/tt2/list_created.tt2:4
+#. (list.name,list.host)
+msgid "%1@%2 mailing list has been activated by listmaster."
+msgstr "%1@%2 lista a fost activata."
+
+#: src/etc/tt2/list_rejected.tt2:4
+#. (list.name,list.host)
+msgid "%1@%2 mailing list has been rejected by listmaster."
+msgstr ""
+
+#: wwsympa/tt2/arcsearch.tt2:19
+msgid "(All of this words,"
+msgstr "(Toate cuvintele,"
+
+#: wwsympa/tt2/arcsearch.tt2:21
+msgid "(Each of this words,"
+msgstr "(Fiecare din aceste cuvinte,"
+
+#: src/etc/tt2/reject.tt2:7
+#. (subject)
+msgid "(Subject of your mail : %1)"
+msgstr "(Subiectul mesajului : %1)"
+
+#: wwsympa/tt2/arcsearch.tt2:17
+msgid "(This sentence,"
+msgstr "(Propozitie,"
+
+#: wwsympa/tt2/help.tt2:28
+msgid "), provide your email address and associated password."
+msgstr ""
+"), 
+\n"
+"scrie adresa email si parola asociata.\n"
+
+#: src/etc/tt2/your_infected_msg.tt2:4
+msgid "***** V I R U S    A L E R T *****"
+msgstr "***** A L E R TA    V I R U S *****"
+
+#: wwsympa/tt2/loginbanner.tt2:43
+msgid ", is your password."
+msgstr ", este parola."
+
+#: wwsympa/tt2/loginbanner.tt2:42
+msgid ", is your subscriber email address"
+msgstr ""
+", este adresa cu care te-ai inscris<B><br>
+\n"
+"  password\n"
+
+#: wwsympa/tt2/remove_arc.tt2:14
+msgid ""
+", please refer to listmaster with\n"
+"complete URL of the incriminated message.\n"
+msgstr ""
+
+#: wwsympa/tt2/remove_arc.tt2:8
+msgid ""
+", probably this message\n"
+"was received without\n"
+msgstr ""
+
+#: wwsympa/tt2/create_list_request.tt2:48
+msgid "--Select a topic--"
+msgstr "--Select a topic--"
+
+#: wwsympa/tt2/remove_arc.tt2:5
+msgid ""
+". The message will be deleted as soon\n"
+"as possible. This task may be down in a few minutes.\n"
+msgstr ""
+
+#: wwsympa/tt2/help.tt2:22
+msgid ": Login / Logout from WWSympa."
+msgstr ": Login / Logout din WWSympa."
+
+#: wwsympa/tt2/error.tt2:22
+msgid ": bad listname"
+msgstr ""
+": nume 
+\n"
+"gresit de lista\n"
+
+#: wwsympa/tt2/help.tt2:18
+msgid ": directory of lists available on the server"
+msgstr ""
+": director cu liste disponibile 
+\n"
+"    pe server\n"
+
+#: wwsympa/tt2/help_admin.tt2:12
+#. (dark_color)
+msgid ""
+": editing of various files and messages attached to your list.\n"
+"          <LI><FONT COLOR=\"%1\"><b>Manage Archives</b></FONT> : Allow you to download and delete list archives.\n"
+msgstr ""
+
+#: wwsympa/tt2/help_admin.tt2:10
+msgid ": reject and accept messages for distribution."
+msgstr ""
+": operare de comenzi 
+\n"
+"  legate de abonati, adaugare, stergere, cautare, bounces, etc...\n"
+
+#: wwsympa/tt2/help_admin.tt2:9
+msgid ": subscribers management, add, del, search, bounces, etc..."
+msgstr ""
+": operare de comenzi 
+\n"
+"  legate de abonati, adaugare, stergere, cautare, bounces, etc...\n"
+
+#: wwsympa/tt2/help.tt2:16
+msgid ": user preferences. This proposed to identified users only."
+msgstr ""
+": user preferences. This proposed 
+\n"
+"    to identified users only.\n"
+
+#: wwsympa/tt2/error.tt2:28
+msgid ": user unknown"
+msgstr ": utilizator necunoscut"
+
+#: wwsympa/tt2/help.tt2:20
+msgid ": your environment as a subscriber or as owner"
+msgstr ""
+": mediul tau ca si abonat 
+\n"
+"    sau proprietar de lista\n"
+
+#: wwsympa/tt2/lists.tt2:6
+#. (email)
+msgid "<B>%1</B> is subscribed to the following mailing lists"
+msgstr "<B>%1</B> este inscris la urmatoarele liste"
+
+#: src/etc/tt2/helpfile.tt2:45
+msgid "<list> archive file list"
+msgstr "Lista fisierelor arhiva apartinand la <list>"
+
+#: src/etc/tt2/helpfile.tt2:40
+msgid "<list> reception in normal mode"
+msgstr "Receptionarea <list> in mod normal"
+
+#: wwsympa/tt2/create_list_request.tt2:72
+msgid "A few lines describing the list"
+msgstr "A few lines describing the list"
+
+#: src/etc/tt2/your_infected_msg.tt2:2
+msgid "A virus in your email"
+msgstr "Mesajul tau contine virus"
+
+#: wwsympa/tt2/serveradmin.tt2:159
+msgid "ALL"
+msgstr "TOTUL\">"
+
+#: wwsympa/tt2/d_read.tt2:89
+msgid "Access"
+msgstr "Acces"
+
+#: wwsympa/tt2/d_control.tt2:3
+#. (path)
+msgid "Access rights for the document %1"
+msgstr "Drepturi de acces pentru documetul %1"
+
+#: wwsympa/tt2/d_read.tt2:266
+msgid "Add"
+msgstr "Adauga"
+
+#: wwsympa/tt2/d_read.tt2:259
+msgid "Add a bookmark"
+msgstr "Adauga un bookmark"
+
+#: wwsympa/tt2/subindex.tt2:53
+msgid "Add selected addresses"
+msgstr "value=\"Adauga adresele selectate\">"
+
+#: wwsympa/tt2/add_request.tt2:12
+msgid "Add subscribers"
+msgstr "Adauga abonati noi"
+
+#: wwsympa/tt2/error.tt2:19
+#. (error.email)
+msgid "Address \"%1\" is incorrect"
+msgstr ""
+"Adresa\"%1\" 
+\n"
+"in lista gresita\n"
+
+#: wwsympa/tt2/arc.tt2:20
+msgid "Advanced search"
+msgstr "Cautare avansata"
+
+#: wwsympa/tt2/create_list.tt2:8 wwsympa/tt2/install_pending_list.tt2:26
+msgid "Aliases have been installed."
+msgstr "Aliasurile au fost instalate."
+
+#: wwsympa/tt2/install_pending_list.tt2:29
+msgid "Aliases you should install in your mailer"
+msgstr "Aliasurile pe care trebuie sa le instalezi in mailer"
+
+#: src/etc/tt2/helpfile.tt2:11
+#. (conf.sympa)
+msgid "All commands must be sent to the electronic address %1"
+msgstr "Toate comenzile de sistem trebuiesc trimise la adresa electronica %1"
+
+#: src/etc/tt2/x509-user-cert-missing.tt2:8
+#. (mail.sender,mail.subject)
+msgid ""
+"An encrypted message from %1 has been distributed to\n"
+"Subject : %1\n"
+msgstr ""
+
+#: src/etc/tt2/listmaster_notification.tt2:13
+msgid "Antivirus scan failed"
+msgstr ""
+
+#: src/etc/tt2/x509-user-cert-missing.tt2:15
+msgid "Any information about this list :"
+msgstr "Alte informatii despre lista :"
+
+#: wwsympa/tt2/d_editfile.tt2:58
+msgid "Apply"
+msgstr "Modifica\">"
+
+#: wwsympa/tt2/list_menu.tt2:309 wwsympa/tt2/list_menu.tt2:312
+msgid "Archive"
+msgstr "Arhive"
+
+#: src/etc/mhonarc-ressources:111 src/etc/mhonarc-ressources:76
+msgid "Archive powered by"
+msgstr ""
+
+#: wwsympa/tt2/admin_menu.tt2:144 wwsympa/tt2/edit_list_request.tt2:8 wwsympa/tt2/serveradmin.tt2:143
+msgid "Archives"
+msgstr "Arhive"
+
+#: wwsympa/tt2/admin_menu.tt2:122 wwsympa/tt2/admin_menu.tt2:124
+#. (list)
+msgid "Are you sure you wish to close %1 list ?"
+msgstr ""
+
+#: src/etc/tt2/moderate.tt2:3
+#. (list.name)
+msgid "Article to be approved for %1"
+msgstr "Articol pentru aprobat %1"
+
+#: wwsympa/tt2/scenario_test.tt2:61
+msgid "Auth method"
+msgstr "Metoda de autentificare"
+
+#: wwsympa/tt2/d_read.tt2:42 wwsympa/tt2/modindex.tt2:15
+msgid "Author"
+msgstr "Autor"
+
+#: src/etc/tt2/helpfile.tt2:19
+msgid "Available commands are:"
+msgstr "Comenzile disponibile sunt:"
+
+#: wwsympa/tt2/arcsearch_form.tt2:66
+msgid "Body"
+msgstr "Continut"
+
+#: wwsympa/tt2/d_editfile.tt2:22
+msgid "Bookmark URL"
+msgstr "Bookmark URL"
+
+#: wwsympa/tt2/admin_menu.tt2:148
+msgid "Bounce Settings"
+msgstr ""
+
+#: wwsympa/tt2/list_menu.tt2:107
+msgid "Bounced email rate:"
+msgstr ""
+
+#: wwsympa/tt2/editsubscriber.tt2:52
+#. (current_subscriber.bounce_count)
+msgid "Bounces count : %1"
+msgstr "Contor adrese bumerang: %1"
+
+#: wwsympa/tt2/edit_list_request.tt2:9
+msgid "Bounces management"
+msgstr ""
+"Managementul mesajelor 
+\n"
+"    bumerang\n"
+
+#: wwsympa/tt2/editsubscriber.tt2:48
+msgid "Bouncing address"
+msgstr "Adresa bumerang"
+
+#: wwsympa/tt2/error.tt2:134
+#. (error.path)
+msgid "Cannot create directory %1"
+msgstr "Directorul nu poate fi incarcat %1"
+
+#: wwsympa/tt2/error.tt2:128
+#. (error.path)
+msgid "Cannot overwrite file %1"
+msgstr "Fisierul nu poate fi scris peste cel original %1"
+
+#: wwsympa/tt2/error.tt2:131
+#. (error.path)
+msgid "Cannot upload file %1"
+msgstr ""
+"Fisierul nu poate fi incarcat 
+\n"
+"%1\n"
+
+#: wwsympa/tt2/arcsearch_form.tt2:36
+msgid "Case"
+msgstr "Majuscule/minuscule"
+
+#: wwsympa/tt2/show_cert.tt2:9
+msgid "Certificate expiration date"
+msgstr "Data de expirare a certificatului"
+
+#: wwsympa/tt2/show_cert.tt2:10
+msgid "Certificate issuer"
+msgstr "Utilizatorul certificatului"
+
+#: wwsympa/tt2/change_email.tt2:11
+msgid "Change my email address"
+msgstr "Schimba adresa email\">"
+
+#: wwsympa/tt2/pref.tt2:52
+msgid "Changing your email address"
+msgstr "Schimbarea adresei email"
+
+#: src/etc/tt2/sendpasswd.tt2:32 wwsympa/tt2/pref.tt2:56
+msgid "Changing your password"
+msgstr ""
+
+#: wwsympa/tt2/arcsearch_form.tt2:42
+msgid "Check"
+msgstr "Verifica"
+
+#: src/etc/tt2/reject.tt2:10
+#. (list.name)
+msgid "Check %1 list usage :"
+msgstr "(Subiectul mesajului : [% subject %])"
+
+#: src/etc/tt2/listmaster_notification.tt2:34
+msgid "Check Sympa log files for more precise information"
+msgstr ""
+
+#: wwsympa/tt2/sigrequest.tt2:32
+#. (list)
+msgid ""
+"Check your mailbox for new messages and enter below the\n"
+"	password given in the message Sympa sent you. This will\n"
+"	confirm your unsubscription from list %1.\n"
+msgstr ""
+
+#: wwsympa/tt2/subrequest.tt2:24
+#. (list)
+msgid ""
+"Check your mailbox for new messages and enter below the\n"
+"	password. This will confirm your subscription to list %1\n"
+msgstr ""
+
+#: src/etc/mhonarc-ressources:134 src/etc/mhonarc-ressources:298 src/etc/mhonarc-ressources:58
+msgid "Chronological"
+msgstr ""
+
+#: wwsympa/tt2/show_cert.tt2:11
+msgid "Cipher key size used"
+msgstr "Marime cheii de cifru utilizata"
+
+#: wwsympa/tt2/set_pending_list_request.tt2:34
+msgid "Close it &nbsp;&nbsp;"
+msgstr "Inchide&nbsp;&nbsp;"
+
+#: wwsympa/tt2/get_closed_lists.tt2:6 wwsympa/tt2/serveradmin.tt2:63
+msgid "Closed lists"
+msgstr ""
+"Liste 
+\n"
+"      inchise\n"
+
+#: wwsympa/tt2/error.tt2:95
+#. (error.email)
+msgid "Config file has been modified by %1. Cannot apply your changes"
+msgstr "Fisierul Config a fost modificat de catre %1. Modificarile nu pot fi operate"
+
+#: wwsympa/tt2/set_pending_list_request.tt2:67
+msgid "Configuration file"
+msgstr "Fisier de configurare"
+
+#: wwsympa/tt2/notice.tt2:14
+msgid "Configuration file has been updated"
+msgstr "Fisierul de actualizare a fost actualizat"
+
+#: src/etc/tt2/helpfile.tt2:50
+msgid ""
+"Confirmation for sending a message (depending\n"
+"                               on the list's configuration)\n"
+msgstr ""
+
+#: wwsympa/tt2/pref.tt2:32
+msgid "Connexion expiration period"
+msgstr "Perioada de expirare a conexiunii"
+
+#:
+msgid "Content-Type: text/plain"
+msgstr "Content-Type: text/plain; charset=iso-8859-2"
+
+#:
+msgid "Content-transfer-encoding: 7bit"
+msgstr "Content-transfer-encoding: 8bit"
+
+#: wwsympa/tt2/arcsearch.tt2:111
+msgid "Continue search"
+msgstr "Continua cautarea\">"
+
+#: wwsympa/tt2/error.tt2:143
+#. (error.list)
+msgid "Could not change email for list %1"
+msgstr "Modificarea emailului pentru lista nu a putut fi operata %1"
+
+#: wwsympa/tt2/error.tt2:151
+#. (error.list)
+msgid ""
+"Could not change your subscription address for the list '%1%'\n"
+"because you are not allowed to unsubscribe.\n"
+msgstr ""
+
+#: wwsympa/tt2/error.tt2:147
+#. (error.list)
+msgid ""
+"Could not change your subscription address for the list '%1'\n"
+"because your new address is not allowed to subscribe.\n"
+msgstr ""
+
+#: wwsympa/tt2/admin_menu.tt2:97
+msgid "Create Shared"
+msgstr ""
+
+#: wwsympa/tt2/d_read.tt2:241 wwsympa/tt2/d_read.tt2:246
+msgid "Create a new file"
+msgstr "Creaza un fisier nou"
+
+#: wwsympa/tt2/d_read.tt2:220
+#. (path)
+msgid "Create a new folder inside the folder %1"
+msgstr ""
+"Creaza un folder nou in 
+\n"
+"        folderul%1\n"
+
+#: wwsympa/tt2/d_read.tt2:222
+msgid "Create a new folder inside the folder SHARED"
+msgstr "Creaza un folder nou in folderul SHARED"
+
+#: wwsympa/tt2/d_read.tt2:228
+msgid "Create a new subdirectory"
+msgstr "Creaza un nou subdirector"
+
+#: wwsympa/tt2/menu.tt2:57 wwsympa/tt2/menu.tt2:61
+msgid "Create list"
+msgstr ""
+"Creaza 
+\n"
+"                  lista\n"
+
+#: wwsympa/tt2/help_admin.tt2:5
+msgid "Create shared"
+msgstr "Create shared"
+
+#: wwsympa/tt2/get_latest_lists.tt2:6
+msgid "Creation date"
+msgstr "Data crearii"
+
+#: wwsympa/tt2/choosepasswd.tt2:13
+msgid "Current password :"
+msgstr "Parola actuala:"
+
+#: wwsympa/tt2/serveradmin.tt2:132
+msgid "Customize templates"
+msgstr ""
+"Customizeaza 
+\n"
+"      template-uri\n"
+
+#: wwsympa/tt2/admin_menu.tt2:53 wwsympa/tt2/admin_menu.tt2:59 wwsympa/tt2/help_admin.tt2:11
+msgid "Customizing"
+msgstr "Moderate"
+
+#: wwsympa/tt2/admin_menu.tt2:158
+msgid "Data Source"
+msgstr ""
+
+#: wwsympa/tt2/error.tt2:125
+msgid "Data have changed on disk. Cannot apply your changes"
+msgstr "Informatiile de pe hard au fost modificate. Modificarile nu pot fi operate"
+
+#: wwsympa/tt2/edit_list_request.tt2:10
+msgid "Data sources setup"
+msgstr ""
+"Configurarea 
+\n"
+"    surselor informatiilor\n"
+
+#: wwsympa/tt2/arcsearch.tt2:69 wwsympa/tt2/arcsearch_form.tt2:64 wwsympa/tt2/modindex.tt2:14 wwsympa/tt2/subindex.tt2:11
+msgid "Date"
+msgstr "Data"
+
+#: wwsympa/tt2/d_read.tt2:88
+msgid "Delete"
+msgstr "Sterge"
+
+#: wwsympa/tt2/admin_menu.tt2:106
+msgid "Delete Shared"
+msgstr ""
+
+#: wwsympa/tt2/review.tt2:78 wwsympa/tt2/review.tt2:80
+msgid "Delete selected email addresses"
+msgstr "Sterge adresele email selectate\">"
+
+#: wwsympa/tt2/reviewbouncing.tt2:115
+msgid "Delete selected subscribers"
+msgstr "Sterge utilizatorii selectati\">"
+
+#: wwsympa/tt2/reviewbouncing.tt2:30
+msgid "Delete selected users"
+msgstr "Sterge utilizatorii selectati\">"
+
+#: wwsympa/tt2/help_admin.tt2:6
+msgid "Delete shared"
+msgstr ""
+"Delete 
+\n"
+"  shared\n"
+
+#: wwsympa/tt2/help_editfile.tt2:11
+msgid ""
+"Deletion message : This message is sent to users when you\n"
+"remove them from the list using the DEL command (unless you hit the\n"
+msgstr ""
+
+#: wwsympa/tt2/d_editfile.tt2:47
+#. (path)
+msgid "Describe the directory %1"
+msgstr ""
+"Descrie directorul 
+\n"
+"        %1\n"
+
+#: wwsympa/tt2/d_editfile.tt2:49
+#. (path)
+msgid "Describe the file %1"
+msgstr "Descrie fisierul %1"
+
+#: wwsympa/tt2/d_control.tt2:6 wwsympa/tt2/d_editfile.tt2:12 wwsympa/tt2/d_read.tt2:16
+#. (doc_title)
+#. (desc)
+msgid "Description : %1"
+msgstr "Descriere : %1"
+
+#: wwsympa/tt2/create_list_request.tt2:70
+msgid "Description:"
+msgstr "Descriere:"
+
+#: wwsympa/tt2/help_user_options.tt2:10
+msgid "Digest"
+msgstr "Digest"
+
+#: src/etc/tt2/digest.tt2:4
+#. (list.name)
+msgid "Digest for list %1"
+msgstr "Mesaje compilate pentru lista %1"
+
+#: src/etc/tt2/helpfile.tt2:23
+msgid "Directory of lists managed on this node"
+msgstr "Directorul listelor administrate pe acest nod"
+
+#: src/etc/tt2/helpfile.tt2:66
+msgid ""
+"Displays the current expiration process\n"
+"                                   state for <list>\n"
+msgstr ""
+
+#: src/etc/tt2/helpfile.tt2:24
+msgid "Displays the subscribers to <list>"
+msgstr "Afisarea membrilor inscrisi in <list>"
+
+#: src/etc/tt2/helpfile.tt2:25
+msgid "Displays which lists you are subscribed to"
+msgstr "Afisarea listelor la care sunteti inscris"
+
+#: wwsympa/tt2/modindex.tt2:46 wwsympa/tt2/viewmod.tt2:8
+msgid "Distribute"
+msgstr "Trimite mai departe\">"
+
+#: wwsympa/tt2/view_translations.tt2:20
+msgid "Do it"
+msgstr "Fa-o"
+
+#: wwsympa/tt2/d_read.tt2:10
+#. (path)
+msgid "Do you really want to delete %1 ?"
+msgstr "Do you really want to delete %1 ?"
+
+#: wwsympa/tt2/d_read.tt2:189
+#. (path,s.doc,f.size)
+msgid "Do you really want to delete %1%2 ([% f.size %] Kb) ?"
+msgstr "Do you really want to delete %1%2 (%3 Kb) ?"
+
+#: wwsympa/tt2/d_read.tt2:122
+#. (path,s.doc)
+msgid "Do you really want to delete %1%2 ?"
+msgstr "Do you really want to delete %1%2 ?"
+
+#: src/etc/mhonarc-ressources:351 src/etc/mhonarc-ressources:360
+msgid "Do you really want to delete this message ?"
+msgstr ""
+
+#: wwsympa/tt2/reviewbouncing.tt2:16
+#. (total)
+msgid "Do you really want to send a subscription remind message to the %1 subscribers"
+msgstr "Do you really want to send a subscription remind message to the %1 subscribers"
+
+#: wwsympa/tt2/review.tt2:42
+#. (total)
+msgid "Do you really want to send a subscription remind message to the %1 subscribers ?"
+msgstr "Do you really want to send a subscription remind message to the %1 subscribers ?"
+
+#: wwsympa/tt2/list_menu.tt2:230
+#. (list)
+msgid "Do you really want to subscribe to list %1"
+msgstr "Do you really want to subscribe to list %1"
+
+#: wwsympa/tt2/list_menu.tt2:192
+#. (list)
+msgid "Do you really want to subscribe to list %1?"
+msgstr ""
+
+#: wwsympa/tt2/review.tt2:78
+msgid "Do you really want to unsubscribe ALL selected subscribers ?"
+msgstr "Do you really want to unsubscribe ALL selected subscribers ?"
+
+#: wwsympa/tt2/list_menu.tt2:262
+#. (list)
+msgid "Do you really want to unsubscribe from list %1"
+msgstr "Do you really want to unsubscribe from list %1"
+
+#: wwsympa/tt2/list_menu.tt2:167
+#. (list)
+msgid "Do you really want to unsubscribe from list %1?"
+msgstr "Do you really want to unsubscribe from list %1?"
+
+#: wwsympa/tt2/d_read.tt2:27
+msgid "Document"
+msgstr "Document"
+
+#: wwsympa/tt2/d_read.tt2:87 wwsympa/tt2/editfile.tt2:23 wwsympa/tt2/serveradmin.tt2:114 wwsympa/tt2/serveradmin.tt2:125
+msgid "Edit"
+msgstr "Editeaza\">"
+
+#: wwsympa/tt2/admin_menu.tt2:25 wwsympa/tt2/admin_menu.tt2:30
+msgid "Edit List Config"
+msgstr "Creaza lista comuna"
+
+#: wwsympa/tt2/d_control.tt2:24
+msgid "Edit access"
+msgstr "Acces Edit"
+
+#: wwsympa/tt2/help_admin.tt2:7
+msgid "Edit list config"
+msgstr "Edit list config"
+
+#: wwsympa/tt2/d_editfile.tt2:4
+#. (path)
+msgid "Edition of the bookmark %1"
+msgstr "Editarea bookmark-urilor %1"
+
+#: wwsympa/tt2/d_editfile.tt2:6
+#. (path)
+msgid "Edition of the directory %1"
+msgstr "Editarea directorului%1"
+
+#: wwsympa/tt2/d_editfile.tt2:8
+#. (path)
+msgid "Edition of the file %1"
+msgstr "Editarea fisierului %1"
+
+#: wwsympa/tt2/title.tt2:19
+msgid "Editor"
+msgstr "Editor"
+
+#: wwsympa/tt2/d_read.tt2:93
+msgid "Empty folder"
+msgstr "Folder gol"
+
+#: src/etc/tt2/digest.tt2:39
+#. (list.name,date)
+msgid "End of digest for list %1 - %2"
+msgstr "Terminarea compilarii mesajelor pentru lista %1 - %2"
+
+#: wwsympa/tt2/remove_arc.tt2:13
+msgid "Error while deleting this message"
+msgstr ""
+"Eroare aparuta in timpul 
+\n"
+"stergerii acestui mesaj, trimite URL-ul complet al mesajului problema la administrator.</b>\n"
+
+#: src/etc/tt2/expire_warning1.tt2:9 src/etc/tt2/expire_warning2.tt2:9 src/etc/tt2/remind.tt2:7
+msgid "Everything about this list : "
+msgstr "Informatii despre lista :"
+
+#: src/etc/tt2/welcome.tt2:18 src/etc/tt2/welcome.tt2:42
+msgid "Everything about this list:"
+msgstr "Afla mai multe despre aceasta lista:"
+
+#: wwsympa/tt2/arcsearch_form.tt2:72
+msgid "Extend search field"
+msgstr "Extinde aria de cautare"
+
+#: wwsympa/tt2/home.tt2:63
+msgid "Extended search"
+msgstr "Extended search"
+
+#: wwsympa/tt2/error.tt2:137
+#. (error.directory)
+msgid "Failed : %1 not empty"
+msgstr "Eroare: %1 nu e deschis"
+
+#: wwsympa/tt2/error.tt2:113
+msgid "Failed : your content is empty"
+msgstr "Eroare: nu exista continut"
+
+#: wwsympa/tt2/error.tt2:70
+#. (error.user)
+msgid "Failed to add user %1"
+msgstr ""
+"Eroare la adaugarea utilizatorului 
+\n"
+"%1\n"
+
+#: wwsympa/tt2/notice.tt2:20
+#. (notice.path)
+msgid "File %1 saved"
+msgstr "Fisierul %1 salvat"
+
+#: src/etc/tt2/list_unknown.tt2:22
+#. (conf.host)
+msgid "For further assistance, please contact listmaster@%1"
+msgstr "Pentru mai multe informatii, contacteaza listmaster@%1"
+
+#: src/etc/tt2/global_remind.tt2:5
+msgid "Foreach list here is a mailto to use if you want to unsubscribe."
+msgstr ""
+
+#: src/etc/tt2/stats_report.tt2:7
+#. (stats.byte_sent)
+msgid "Forwarded mega-bytes        :      %1"
+msgstr "Mega-bytes retransmisi        :      %1"
+
+#: wwsympa/tt2/arcsearch.tt2:65
+msgid "From"
+msgstr ""
+
+#: wwsympa/tt2/compose_mail.tt2:4
+#. (user.email)
+msgid "From: %1"
+msgstr "De la: %1"
+
+#: wwsympa/tt2/help.tt2:13
+msgid ""
+"Functions, equivalent to Sympa robot commands, are accessible in\n"
+"the higher part of the user interface's banner. WWSympa provides \n"
+"a customized environment with access to the following functions :\n"
+msgstr ""
+
+#: wwsympa/tt2/show_cert.tt2:5
+msgid "HTTPS authentication information"
+msgstr "Informatii de autentificare HTTPS"
+
+#: wwsympa/tt2/edit_list_request.tt2:48 wwsympa/tt2/menu.tt2:118 wwsympa/tt2/menu.tt2:121
+msgid "Help"
+msgstr "Ajutor"
+
+#: src/etc/tt2/sendpasswd.tt2:39
+#. (base_url,path_cgi)
+msgid "Help on Sympa: %1%2"
+msgstr "Ajutor Sympa: %1%2"
+
+#: src/etc/tt2/review.tt2:1
+#. (list.name,list.host)
+msgid "Here are the subscribers of %1@%2 mailing list:"
+msgstr "Ai aici lista de abonati pe lista %1@%2:"
+
+#: src/etc/tt2/lists.tt2:1
+#. (conf.email,conf.host)
+msgid "Here is the list of list from %1@%2"
+msgstr "Aici este lista completa de liste %1@%2"
+
+#: wwsympa/tt2/menu.tt2:110 wwsympa/tt2/menu.tt2:113
+msgid "Home"
+msgstr "Acasa"
+
+#: src/etc/tt2/info_report.tt2:22
+#. (url)
+msgid "Homepage           : %1"
+msgstr "Pagina lista           : %1"
+
+#: wwsympa/tt2/help.tt2:44
+msgid "I am not a list subscriber"
+msgstr "Nu sunt inscris pe o lista"
+
+#: wwsympa/tt2/arc_protect.tt2:6
+msgid "I am not a spammer"
+msgstr "Nu sunt un spammer\">"
+
+#: wwsympa/tt2/help.tt2:49
+msgid "I am subscriber to at least one list but I have no password"
+msgstr "Sunt inscris cel putin pe o lista dar nu am parola"
+
+#: wwsympa/tt2/help.tt2:54
+msgid "I forgot my password"
+msgstr "Mi-am uitat parola"
+
+#: wwsympa/tt2/subrequest.tt2:12
+#. (list)
+msgid "I subscribe to list %1"
+msgstr "Ma inscriu pe lista %1\">"
+
+#: wwsympa/tt2/sigrequest.tt2:11
+#. (list)
+msgid "I unsubscribe from list %1"
+msgstr "Ma dezabonez de pe lista %1\">"
+
+#: src/etc/tt2/invite.tt2:13
+msgid "If you don't want to subscribe just ignore this message."
+msgstr "Daca nu doresti abonarea pe lista, ignora mesajul."
+
+#: wwsympa/tt2/loginbanner.tt2:47 wwsympa/tt2/sigrequest.tt2:72
+msgid "If you never had a password from that server or if you don't remember it :"
+msgstr "Daca nu ai avut niciodata parola pe acel server sau ai uitat-o :"
+
+#: src/etc/tt2/global_remind.tt2:3
+msgid "If you want to unsubscribe from some list, please save this mail."
+msgstr "Daca vrei sa te dezabonezi de pe lista, salveaza acest mail."
+
+#: src/etc/tt2/global_remind.tt2:17
+#. (conf.wwsympa_url,user.email,user.password)
+msgid ""
+"In order to authenticate your self using wwsympa %1\n"
+"use your e-mail %2 and your password %2\n"
+msgstr ""
+
+#: wwsympa/tt2/loginbanner.tt2:17
+msgid ""
+"In order to benefit from the full services provided by this server, you probably\n"
+" need to identify yourself first.\n"
+msgstr ""
+
+#: src/etc/tt2/helpfile.tt2:52
+msgid ""
+"Indicates the end of the commands (to ignore a\n"
+"                               signature)\n"
+msgstr ""
+
+#: src/etc/tt2/helpfile.tt2:22
+msgid "Information about a list"
+msgstr "Informatii legate de o lista"
+
+#: wwsympa/tt2/set_pending_list_request.tt2:51
+msgid "Information file"
+msgstr "Fisier de informare"
+
+#: src/etc/tt2/stats_report.tt2:1
+#. (list.name)
+msgid "Information regarding list %1"
+msgstr "Informatii legate de lista %1"
+
+#: src/etc/tt2/info_report.tt2:1
+#. (list.name,list.host)
+msgid "Information regarding list %1@%2"
+msgstr "Informatii despre lista %1@%2"
+
+#: wwsympa/tt2/set_pending_list_request.tt2:35
+msgid "Install it &nbsp;&nbsp;"
+msgstr "Instaleaza&nbsp;&nbsp;"
+
+#: wwsympa/tt2/help_user_options.tt2:21
+msgid ""
+"Instead of receiving individual mail messages from the list, the subscriber will periodically \n"
+"receive a list of messages. This mode is very close to the Digest reception mode but the \n"
+"subscriber receives only the list of messages.\n"
+msgstr ""
+
+#: wwsympa/tt2/help_user_options.tt2:13
+msgid ""
+"Instead of receiving individual mail messages from the list, the subscriber will periodically \n"
+"receive batched messages in a Digest. This Digest compiles a group of messages from the list, using\n"
+"the multipart/digest MIME format.\n"
+msgstr ""
+
+#: src/etc/tt2/helpfile.tt2:48
+msgid "Invite <email> for subscribtion in <list>"
+msgstr "Invita <email> pentru abonare in <list>"
+
+#: src/etc/tt2/x509-user-cert-missing.tt2:11
+#. (user.email)
+msgid ""
+"It was not possible to send it to you because the mailing list manager\n"
+"was unable to access to your personal certificat (email %1).\n"
+msgstr ""
+
+#: src/etc/mhonarc-ressources:456
+msgid "January:February:March:April:May:June:July:August:September:October:November:December"
+msgstr ""
+
+#: wwsympa/tt2/pref.tt2:24
+msgid "Language"
+msgstr "Limba"
+
+#: wwsympa/tt2/editsubscriber.tt2:24
+#. (current_subscriber.lang)
+msgid "Language : %1"
+msgstr ""
+
+#: wwsympa/tt2/d_read.tt2:72
+msgid "Last update"
+msgstr "Ultima actualizare"
+
+#: wwsympa/tt2/d_control.tt2:5 wwsympa/tt2/d_editfile.tt2:11 wwsympa/tt2/d_read.tt2:14 wwsympa/tt2/editsubscriber.tt2:15
+#. (doc_date)
+#. (current_subscriber.update_date)
+msgid "Last update : %1"
+msgstr "Ultima actualizare: %1"
+
+#: wwsympa/tt2/suboptions.tt2:6
+msgid "Last update:"
+msgstr "Ultima actualizare:"
+
+#: wwsympa/tt2/serveradmin.tt2:57
+msgid "Latest lists"
+msgstr ""
+"Ultima 
+\n"
+"      lista\n"
+
+#: wwsympa/tt2/arcsearch_form.tt2:48
+msgid "Layout"
+msgstr "Afisare"
+
+#: wwsympa/tt2/admin_menu.tt2:5
+msgid "List Administration Panel"
+msgstr ""
+"Panou 
+\n"
+"  de comanda de lista\n"
+
+#: wwsympa/tt2/admin_menu.tt2:132
+msgid "List Definition"
+msgstr ""
+
+#: src/etc/tt2/listowner_notification.tt2:4
+#. (list.name)
+msgid "List \"%1\" archive quota exceeded"
+msgstr ""
+
+#: src/etc/tt2/listmaster_notification.tt2:4
+#. (list.name)
+msgid "List \"%1\" creation request"
+msgstr ""
+
+#: src/etc/tt2/listowner_notification.tt2:11
+#. (list.name,rate)
+msgid "List \"%1\" warning : archive %2% full"
+msgstr ""
+
+#: wwsympa/tt2/list_menu.tt2:78 wwsympa/tt2/list_menu.tt2:82 wwsympa/tt2/list_menu.tt2:88
+msgid "List admin"
+msgstr "Adminstrare lista"
+
+#: wwsympa/tt2/close_list.tt2:7
+msgid "List aliases have been removed."
+msgstr "Aliasurile listei au fost sterse."
+
+#: wwsympa/tt2/create_list_request.tt2:66
+msgid "List classification in the directory"
+msgstr "List classification in the directory"
+
+#: wwsympa/tt2/edit_list_request.tt2:5
+msgid "List definition"
+msgstr "Definirea listei"
+
+#: wwsympa/tt2/help_editfile.tt2:29
+msgid ""
+"List description : This text is sent as an answer to the mail command\n"
+"INFO. It can also be included in the\n"
+msgstr ""
+
+#: wwsympa/tt2/error.tt2:52
+msgid "List has no bouncing subscribers"
+msgstr "Lista nu are abonati in asteptare"
+
+#: wwsympa/tt2/error.tt2:49
+msgid "List has no subscribers"
+msgstr ""
+"List has no 
+\n"
+"subscriber\n"
+
+#: wwsympa/tt2/help_editfile.tt2:26
+msgid ""
+"List homepage : HTML text to describe the list. It is printed on the\n"
+"right-hand side of the main list page. (default for this is the list description)\n"
+msgstr ""
+
+#: wwsympa/tt2/list_menu.tt2:20 wwsympa/tt2/list_menu.tt2:24
+msgid "List info"
+msgstr ""
+"Informatii 
+\n"
+"      lista\n"
+
+#: wwsympa/tt2/create_list_request.tt2:9
+msgid "List name:"
+msgstr "Denumire lista:"
+
+#: wwsympa/tt2/install_pending_list.tt2:17 wwsympa/tt2/set_pending_list_request.tt2:17
+msgid "List requested by"
+msgstr "Lista ceruta de"
+
+#: wwsympa/tt2/create_list_request.tt2:21
+msgid "List type :"
+msgstr "Tip lista:"
+
+#: src/etc/tt2/list_unknown.tt2:3
+msgid "List unknown"
+msgstr "Lista necunoscuta"
+
+#: wwsympa/tt2/d_read.tt2:21
+msgid "Listing of folder SHARED"
+msgstr "Listarea folderului SHARED"
+
+#: wwsympa/tt2/get_latest_lists.tt2:7 wwsympa/tt2/scenario_test.tt2:25
+msgid "Listname"
+msgstr "Denumire liste"
+
+#: wwsympa/tt2/install_pending_list.tt2:11 wwsympa/tt2/set_pending_list_request.tt2:11
+msgid "Listname :"
+msgstr "Denumire lista:"
+
+#: src/etc/tt2/listowner_notification.tt2:2
+msgid "Listowners"
+msgstr ""
+
+#: wwsympa/tt2/serveradmin.tt2:41
+msgid "Lists"
+msgstr "Liste"
+
+#: wwsympa/tt2/list_menu.tt2:61
+msgid "Load certificate"
+msgstr "Incarca certificatul</"
+
+#: wwsympa/tt2/home.tt2:62
+msgid "Local"
+msgstr "Local"
+
+#: wwsympa/tt2/help.tt2:22 wwsympa/tt2/help.tt2:25 wwsympa/tt2/help.tt2:28 wwsympa/tt2/loginbanner.tt2:34 wwsympa/tt2/menu.tt2:35
+msgid "Login"
+msgstr "Autentifica-te"
+
+#: wwsympa/tt2/help.tt2:42
+msgid "Login issues"
+msgstr "Probleme legate de login"
+
+#: wwsympa/tt2/help.tt2:22 wwsympa/tt2/menu.tt2:22
+msgid "Logout"
+msgstr "Iesi din sistem"
+
+#: src/etc/create_list_templates/news-letter/comment:1
+msgid "Mailing list configuration to be used for a news letter"
+msgstr ""
+
+#: src/etc/create_list_templates/html-news-letter/comment:1
+msgid "Mailing list configuration to be used for a news letter providing both text plain and HTML formats"
+msgstr ""
+
+#: wwsympa/tt2/home.tt2:16
+msgid "Mailing lists"
+msgstr "Liste Mailing"
+
+#: src/etc/tt2/info_report.tt2:17
+#. (max_size)
+msgid "Maximum size       : %1"
+msgstr "Marime maxima       : %1"
+
+#: src/etc/tt2/your_infected_msg.tt2:12
+msgid "May be it is usefull to check your system for viruses."
+msgstr "Va sugeram sa verifici sistemul tau de virusi."
+
+#: wwsympa/tt2/serveradmin.tt2:160
+msgid "May take a lot of CPU time,  be careful !"
+msgstr "Poate folosi mult din timpul processorului, a se folosi cu atentie!"
+
+#: wwsympa/tt2/help_editfile.tt2:34
+msgid "Message footer : same as"
+msgstr ""
+
+#: wwsympa/tt2/help_editfile.tt2:34
+msgid "Message header,"
+msgstr ""
+
+#: wwsympa/tt2/help_editfile.tt2:32
+msgid ""
+"Message header: If this file is not empty, it is added as a MIME\n"
+"attachment at the beginning of each message distributed to the list.\n"
+msgstr ""
+
+#: src/etc/mhonarc-ressources:202
+msgid "Message not available"
+msgstr ""
+
+#: src/etc/tt2/helpfile.tt2:36
+msgid "Message reception in compilation mode"
+msgstr "Receptionarea mesajelor in mod de compilare"
+
+#: src/etc/tt2/listowner_notification.tt2:16
+#. (conf.host)
+msgid "Messages are still archived but you should contact listmaster@%1"
+msgstr ""
+
+#: src/etc/create_list_templates/public_web_forum/comment:3
+msgid ""
+"Messages can either be read via email (subscription) or\n"
+"via the web (web archives)\n"
+msgstr ""
+
+#: wwsympa/tt2/list_menu.tt2:112
+msgid "Messages to moderate :"
+msgstr "Mesaje pentru moderare:"
+
+#: wwsympa/tt2/admin_menu.tt2:153 wwsympa/tt2/edit_list_request.tt2:12
+msgid "Miscellaneous"
+msgstr "Diverse"
+
+#: wwsympa/tt2/error.tt2:86
+#. (error.argument)
+msgid "Missing argument %1"
+msgstr "Argument lipsa%1"
+
+#: wwsympa/tt2/error.tt2:58
+msgid "Missing filter"
+msgstr "Filtrul nu exista"
+
+#: wwsympa/tt2/admin_menu.tt2:36 wwsympa/tt2/admin_menu.tt2:42 wwsympa/tt2/admin_menu.tt2:46 wwsympa/tt2/help_admin.tt2:10
+msgid "Moderate"
+msgstr "Sterge lista comuna"
+
+#: src/etc/tt2/modindex.tt2:2
+#. (list.name)
+msgid "Moderation spool for list %1"
+msgstr "Moderare pentru lista %1"
+
+#: src/etc/tt2/helpfile.tt2:80
+msgid ""
+"Moderation: to consult the message list to\n"
+"                                   moderate\n"
+msgstr ""
+
+#: src/etc/tt2/helpfile.tt2:78
+msgid "Moderation: to reject a message"
+msgstr "Moderare: pentru refuzarea mesajului"
+
+#: src/etc/tt2/helpfile.tt2:77
+msgid "Moderation: to validate a message"
+msgstr "Moderare: pentru validarea mesajului"
+
+#: src/etc/tt2/info_report.tt2:10
+#. (e.gecos)
+msgid "Moderator          : %1"
+msgstr "Moderator          : %1"
+
+#: wwsympa/tt2/list_menu.tt2:53
+msgid "Moderators"
+msgstr "Moderatori"
+
+#: src/etc/tt2/moderate.tt2:2
+#. (list.name)
+msgid "Moderators of list %1"
+msgstr "Moderatorul listei %1"
+
+#: wwsympa/tt2/d_editfile.tt2:31
+msgid "Modifier"
+msgstr "Modificare"
+
+#: wwsympa/tt2/loginbanner.tt2:15
+msgid ""
+"Most mailing list features require your email. Some mailing lists are hidden to\n"
+" unidentified persons.\n"
+msgstr ""
+
+#: wwsympa/tt2/subrequest.tt2:65
+msgid "My password ?"
+msgstr "value=\"Parola mea ?\">"
+
+#: wwsympa/tt2/pref.tt2:22 wwsympa/tt2/subindex.tt2:9
+msgid "Name"
+msgstr "Nume"
+
+#: wwsympa/tt2/editsubscriber.tt2:13
+msgid "Name :"
+msgstr "Nume :"
+
+#: wwsympa/tt2/pref.tt2:69
+msgid "New email address :"
+msgstr "Noua adresa email:"
+
+#: wwsympa/tt2/choosepasswd.tt2:17 wwsympa/tt2/pref.tt2:76
+msgid "New password :"
+msgstr "Noua parola :"
+
+#: wwsympa/tt2/choosepasswd.tt2:19
+msgid "New password again :"
+msgstr "Confirma parola noua: </font>"
+
+#: wwsympa/tt2/arcsearch.tt2:114
+msgid "New search"
+msgstr "Cautare noua\">"
+
+#: wwsympa/tt2/arcsearch.tt2:42
+msgid "Newest messages first"
+msgstr "Ordonate dupa mesaje noi"
+
+#: wwsympa/tt2/review.tt2:106 wwsympa/tt2/reviewbouncing.tt2:127 wwsympa/tt2/reviewbouncing.tt2:52
+msgid "Next page"
+msgstr "Next page"
+
+#: wwsympa/tt2/serveradmin.tt2:29
+msgid "No Virtual Robot defined on this server"
+msgstr "Pe acest server nu a fost definit nici un robot virtual"
+
+#: wwsympa/tt2/error.tt2:89
+#. (error.email)
+msgid "No bounces for user  %1"
+msgstr "Nu exista asteptare pentru utilizator %1"
+
+#: wwsympa/tt2/error.tt2:110
+msgid "No description specified"
+msgstr "Descriere nespecificata"
+
+#: wwsympa/tt2/list_menu.tt2:110
+msgid "No message to moderate"
+msgstr "Nu exista mesaje pentru moderare"
+
+#: wwsympa/tt2/notice.tt2:29
+#. (notice.list)
+msgid "No message to moderate for list %1"
+msgstr "Nu exista mesaje pentru moderarea pe aceasta lista %1"
+
+#: wwsympa/tt2/error.tt2:116
+msgid "No name specified"
+msgstr "Nume nespecificat"
+
+#: wwsympa/tt2/error.tt2:55
+#. (error.page)
+msgid "No page %1"
+msgstr "Pagina nu exista %1"
+
+#: wwsympa/tt2/error.tt2:31
+msgid "No password for user"
+msgstr "Parola inexistenta pentru utilizator"
+
+#: wwsympa/tt2/modindex.tt2:35
+msgid "No subject"
+msgstr "No subject"
+
+#: wwsympa/tt2/subindex.tt2:49
+msgid "No subscription requests"
+msgstr "Nu exista cereri de inscriere"
+
+#: wwsympa/tt2/lists.tt2:40
+#. (user.email)
+msgid "No subscriptions with address <B>%1</B>!"
+msgstr ""
+"Nu exista 
+\n"
+"inscrieri cu adresa<B> %1</B>!</FONT>\n"
+
+#: wwsympa/tt2/help_user_options.tt2:24
+msgid "Nomail"
+msgstr "Nomail"
+
+#: wwsympa/tt2/error.tt2:77
+#. (error.email)
+msgid "Not subscribed: %1"
+msgstr "Nu esti abonat: %1"
+
+#: wwsympa/tt2/modindex.tt2:48 wwsympa/tt2/viewmod.tt2:10
+msgid "Notified reject"
+msgstr "Respinge si notifica\">"
+
+#: src/etc/tt2/stats_report.tt2:4
+#. (stats.msg_sent)
+msgid "Number of forwarded messages:      %1"
+msgstr "Numar de mesaje retransmise   :      %1"
+
+#: src/etc/tt2/stats_report.tt2:3
+#. (stats.msg_rcv)
+msgid "Number of received messages :      %1"
+msgstr "Numar de mesaje primite       :      %1"
+
+#: wwsympa/tt2/arcsearch.tt2:44
+msgid "Oldest messages first"
+msgstr "Ordonate dupa mesaje vechi"
+
+#: wwsympa/tt2/help.tt2:32
+msgid ""
+"Once you have been authenticated, a <I>cookie</I> containing your login \n"
+"information make your connection to WWSympa last. The lifetime of this\n"
+"<I>cookie</I> is customizeable through your\n"
+msgstr ""
+
+#: wwsympa/tt2/remove_arc.tt2:4
+msgid "Operation successful"
+msgstr "Operatie reusita"
+
+#: src/etc/tt2/moderate.tt2:15 src/etc/tt2/moderate.tt2:20
+#. (conf.email,conf.host)
+msgid "Or send a message to %1@%2 with the following subject :"
+msgstr "sau trimite un mesaj la %1@%2 cu urmatorul subiect :"
+
+#: wwsympa/tt2/create_list_request.tt2:63
+msgid "Other"
+msgstr "Other"
+
+#: wwsympa/tt2/pref.tt2:116
+msgid "Other email address :"
+msgstr "Alte adrese email : </font>"
+
+#: wwsympa/tt2/help_editfile.tt2:23
+msgid "Other files/pages description :"
+msgstr ""
+
+#: wwsympa/tt2/home.tt2:27
+msgid "Others"
+msgstr "Others"
+
+#: src/etc/tt2/your_infected_msg.tt2:8
+#. (virus_name,recipient,from)
+msgid ""
+"Our viruschecker found the a virus named %1\n"
+"in a message adressed to %2 and that seems\n"
+"to be yours (From: %3).\n"
+msgstr ""
+
+#: wwsympa/tt2/title.tt2:17
+msgid "Owner"
+msgstr "Owner"
+
+#: src/etc/tt2/info_report.tt2:6
+#. (o.gecos)
+msgid "Owner              : %1"
+msgstr "Proprietar              : %1"
+
+#: wwsympa/tt2/d_control.tt2:4 wwsympa/tt2/d_editfile.tt2:10 wwsympa/tt2/d_read.tt2:13
+#. (owner)
+#. (doc_owner)
+msgid "Owner : %1"
+msgstr "Proprietar: %1"
+
+#: wwsympa/tt2/create_list_request.tt2:15
+msgid "Owner:"
+msgstr "Proprietar:"
+
+#: wwsympa/tt2/list_menu.tt2:46
+msgid "Owners"
+msgstr "Proprietari"
+
+#: wwsympa/tt2/review.tt2:89 wwsympa/tt2/reviewbouncing.tt2:34
+msgid "Page size"
+msgstr "Marimea paginii\">"
+
+#: wwsympa/tt2/arcsearch.tt2:13
+#. (key_word)
+msgid "Parameters of these search make on <b> &quot;%1&quot;</b>"
+msgstr "Parametrii cautarii pe cuvintele <b> &quot;%1&quot;</b> <I>"
+
+#: wwsympa/tt2/pref.tt2:118
+msgid "Password :"
+msgstr "Parola :"
+
+#: wwsympa/tt2/change_email.tt2:9
+#. (email)
+msgid "Password for %1"
+msgstr "Parola pentru %1"
+
+#: wwsympa/tt2/get_pending_lists.tt2:11 wwsympa/tt2/serveradmin.tt2:51
+msgid "Pending lists"
+msgstr ""
+"Liste 
+\n"
+"      in asteptare\n"
+
+#: wwsympa/tt2/editsubscriber.tt2:53
+#. (current_subscriber.first_bounce,current_subscriber.last_bounce)
+msgid "Period : from %1 to %2"
+msgstr "Perioada : de la %1 la%2"
+
+#: wwsympa/tt2/loginbanner.tt2:6
+msgid "Please check your e-mail box to provide your password below."
+msgstr "Verifica contul pentru a scrie mai jos parola."
+
+#: wwsympa/tt2/sigrequest.tt2:47
+#. (list)
+msgid "Please gives your email address for your unsubscription request from list %1."
+msgstr "Please gives your email address for your unsubscription request from list %1."
+
+#: wwsympa/tt2/error.tt2:16
+msgid "Please provide your email address"
+msgstr "Trimite adresa ta email"
+
+#: wwsympa/tt2/error.tt2:25
+msgid "Please provide your password"
+msgstr "Scrie parola"
+
+#: wwsympa/tt2/remove_arc.tt2:9
+msgid ""
+"Please refer to listmaster with\n"
+"complete URL of the incriminated message\n"
+msgstr ""
+
+#: wwsympa/tt2/error.tt2:160
+msgid "Please select archive months"
+msgstr ""
+
+#: src/etc/tt2/x509-user-cert-missing.tt2:13
+#. (conf.email,conf.host)
+msgid ""
+"Please, in order to receive futur crypted messages send a signed message\n"
+"to  %1@%2 .\n"
+msgstr ""
+
+#: wwsympa/tt2/list_menu.tt2:336 wwsympa/tt2/list_menu.tt2:343 wwsympa/tt2/list_menu.tt2:346
+msgid "Post"
+msgstr "Publica"
+
+#: src/etc/tt2/helpfile.tt2:83
+msgid "Powered by Sympa"
+msgstr "Powered by Sympa"
+
+#: wwsympa/tt2/menu.tt2:102
+msgid "Pref"
+msgstr "Pref"
+
+#: wwsympa/tt2/arcsearch_form.tt2:30
+msgid "Prefer"
+msgstr "Preferinte"
+
+#: wwsympa/tt2/help.tt2:16 wwsympa/tt2/menu.tt2:82 wwsympa/tt2/menu.tt2:86
+msgid "Preferences"
+msgstr "Optiuni"
+
+#: wwsympa/tt2/review.tt2:100 wwsympa/tt2/reviewbouncing.tt2:121 wwsympa/tt2/reviewbouncing.tt2:46
+msgid "Previous page"
+msgstr "Previous page"
+
+#: src/etc/create_list_templates/private_working_group/comment:1
+msgid "Private working group setup"
+msgstr ""
+
+#: wwsympa/tt2/title.tt2:15
+msgid "Privileged owner"
+msgstr "Privileged owner"
+
+#: wwsympa/tt2/admin_menu.tt2:140 wwsympa/tt2/edit_list_request.tt2:7
+msgid "Privileges"
+msgstr "Privilegii"
+
+#: wwsympa/tt2/error.tt2:37
+msgid "Provided password is incomplete"
+msgstr "Parola furnizata este incompleta"
+
+#: wwsympa/tt2/error.tt2:34
+msgid "Provided password is incorrect"
+msgstr "Parola furnizata nu este corecta"
+
+#: src/etc/create_list_templates/discussion_list/comment:1
+msgid "Public discussion mailing list"
+msgstr ""
+
+#: wwsympa/tt2/help.tt2:18
+msgid "Public lists"
+msgstr "Liste publice"
+
+#: wwsympa/tt2/d_editfile.tt2:33 wwsympa/tt2/d_editfile.tt2:96 wwsympa/tt2/d_read.tt2:288
+msgid "Publish"
+msgstr "Publica"
+
+#: wwsympa/tt2/get_closed_lists.tt2:27
+msgid "Purge selected lists"
+msgstr "Purge selected lists\">"
+
+#: wwsympa/tt2/pref.tt2:78
+msgid "Re-enter your new password :"
+msgstr "Confirma parola noua:"
+
+#: wwsympa/tt2/d_control.tt2:15
+msgid "Read access"
+msgstr "Acces Read"
+
+#: wwsympa/tt2/serveradmin.tt2:153
+msgid "Rebuild HTML archives"
+msgstr "Refacere arhive HTML"
+
+#: wwsympa/tt2/serveradmin.tt2:167
+msgid "Rebuild archive"
+msgstr "Refacere arhive\">"
+
+#: src/etc/tt2/helpfile.tt2:38
+msgid "Receiving message subject only"
+msgstr "Receptionarea numai a subiectului de mesaj"
+
+#: src/etc/tt2/helpfile.tt2:37
+msgid "Receiving the message index only"
+msgstr "Receptionarea numai a indexului de mesaj"
+
+#: wwsympa/tt2/review.tt2:145
+msgid "Reception"
+msgstr "Primire"
+
+#: wwsympa/tt2/editsubscriber.tt2:16
+msgid "Reception :"
+msgstr "Primire :"
+
+#: wwsympa/tt2/suboptions.tt2:8
+msgid "Reception mode :"
+msgstr "Mod de primire:"
+
+#: src/etc/tt2/info_report.tt2:21
+#. (available_reception_mode)
+msgid "Reception modes    : %1"
+msgstr "Mod de primire    : %1"
+
+#: src/etc/tt2/listmaster_notification.tt2:26
+#. (param0)
+msgid "Refer to documentation to adapt %1."
+msgstr ""
+
+#: wwsympa/tt2/modindex.tt2:47 wwsympa/tt2/viewmod.tt2:9
+msgid "Reject"
+msgstr "Respinge\">"
+
+#: wwsympa/tt2/subindex.tt2:54
+msgid "Reject selected addresses"
+msgstr "Sterge adresele selectate\">"
+
+#: wwsympa/tt2/scenario_test.tt2:43
+msgid "Related email"
+msgstr "Email secundar"
+
+#: wwsympa/tt2/review.tt2:42 wwsympa/tt2/reviewbouncing.tt2:16
+msgid "Remind all subscribers"
+msgstr "Aminteste tuturor  abonatilor"
+
+#: wwsympa/tt2/help_editfile.tt2:17
+msgid ""
+"Remind message : This message is sent to each subscriber\n"
+"when using the command  REMIND. It's very useful to help people who are\n"
+"confused about their own subscription emails or people who are not able to\n"
+"unsubscribe themselves.\n"
+msgstr ""
+
+#: src/etc/tt2/remind.tt2:2
+#. (list.name)
+msgid "Reminder of your subscribtion to %1"
+msgstr "Reamintire pentru lista %1"
+
+#: wwsympa/tt2/scenario_test.tt2:49
+msgid "Remote addr"
+msgstr "Adresa Remote"
+
+#: wwsympa/tt2/scenario_test.tt2:55
+msgid "Remote host"
+msgstr "Hostul Remote"
+
+#: wwsympa/tt2/admin_menu.tt2:122 wwsympa/tt2/admin_menu.tt2:124
+msgid "Remove List"
+msgstr ""
+
+#: wwsympa/tt2/help_admin.tt2:4
+msgid "Remove list"
+msgstr "b>Remove list"
+
+#: src/etc/tt2/expire_deletion.tt2:2 src/etc/tt2/removed.tt2:2
+#. (list.name)
+msgid "Removed from %1"
+msgstr "Ai fost sters de pe lista %1"
+
+#: wwsympa/tt2/d_editfile.tt2:25
+#. (path)
+msgid "Replace the file %1 by your file"
+msgstr "Inlocuieste fisierul %1 cu fisierul tau"
+
+#: src/etc/mhonarc-ressources:341
+msgid "Reply"
+msgstr ""
+
+#: src/etc/tt2/info_report.tt2:16
+#. (reply_to)
+msgid "Reply to           : %1"
+msgstr "Raspuns la           : %1"
+
+#: src/etc/mhonarc-ressources:337
+msgid "Reply to sender"
+msgstr ""
+
+#: wwsympa/tt2/get_closed_lists.tt2:13 wwsympa/tt2/get_pending_lists.tt2:16
+msgid "Requested by"
+msgstr "Ceruta de"
+
+#: wwsympa/tt2/create_list.tt2:11
+msgid "Required aliases"
+msgstr "Aliasuri obligatorii"
+
+#: wwsympa/tt2/editsubscriber.tt2:55
+msgid "Reset errors"
+msgstr "Reseteaza erorile\">"
+
+#: wwsympa/tt2/reviewbouncing.tt2:117 wwsympa/tt2/reviewbouncing.tt2:55
+msgid "Reset errors for selected users"
+msgstr "Reseteaza erorile pentru utilizatorii selectati\">"
+
+#: wwsympa/tt2/admin_menu.tt2:117 wwsympa/tt2/admin_menu.tt2:119
+msgid "Restore List"
+msgstr "Moderare"
+
+#: wwsympa/tt2/help_admin.tt2:4
+msgid "Restore list"
+msgstr ""
+"Restore 
+\n"
+"  list\n"
+
+#: wwsympa/tt2/admin_menu.tt2:103 wwsympa/tt2/help_admin.tt2:6
+msgid "Restore shared"
+msgstr ""
+"Restore 
+\n"
+"  shared\n"
+
+#: wwsympa/tt2/arcsearch.tt2:53
+msgid "Result"
+msgstr "Resultat"
+
+#: wwsympa/tt2/arcsearch.tt2:3
+msgid "Result of your search in the archive"
+msgstr "Rezultatul cautarii in arhiva listei"
+
+#: wwsympa/tt2/arcsearch.tt2:120
+#. (archive_name)
+msgid "Return to archive %1"
+msgstr "Inapoi in arhiva %1"
+
+#: wwsympa/tt2/list_menu.tt2:404
+msgid "Review"
+msgstr "Revizuire"
+
+#: src/etc/tt2/info_report.tt2:15
+#. (review)
+msgid "Review subscribers : %1"
+msgstr "Vizualizare abonati : %1"
+
+#: src/etc/tt2/helpfile.tt2:9
+msgid ""
+"SYMPA is an electronic mailing-list manager that automates list management\n"
+"functions such as subscriptions, moderation, and archive management.\n"
+msgstr ""
+
+#: wwsympa/tt2/editfile.tt2:11
+msgid "Save"
+msgstr "Salveaza\">"
+
+#: wwsympa/tt2/scenario_test.tt2:14
+msgid "Scenari name"
+msgstr "Nume scenariu"
+
+#: wwsympa/tt2/serveradmin.tt2:178
+msgid "Scenari test module"
+msgstr ""
+"Modul 
+\n"
+"      de test scenariu\n"
+
+#: wwsympa/tt2/scenario_test.tt2:10
+msgid "Scenario test module"
+msgstr "Scenario test module"
+
+#: wwsympa/tt2/arc.tt2:19 wwsympa/tt2/arcsearch_form.tt2:15 wwsympa/tt2/arcsearch_form.tt2:23 wwsympa/tt2/review.tt2:58 wwsympa/tt2/reviewbouncing.tt2:11
+msgid "Search"
+msgstr "Cauta\">"
+
+#: wwsympa/tt2/serveradmin.tt2:86
+msgid "Search User"
+msgstr "Cauta utilizator\">"
+
+#: wwsympa/tt2/arcsearch_form.tt2:56
+msgid "Search area"
+msgstr "Arie de cautare"
+
+#: wwsympa/tt2/arcsearch.tt2:6 wwsympa/tt2/arcsearch_form.tt2:11
+msgid "Search field :"
+msgstr "=\"+1\">Arie de cautare:"
+
+#: wwsympa/tt2/home.tt2:60
+msgid "Search lists"
+msgstr "Search lists\">"
+
+#: wwsympa/tt2/lists.tt2:46
+msgid "See your subscriptions with the following email addresses"
+msgstr "See your subscriptions with the following email addresses"
+
+#: wwsympa/tt2/review.tt2:62
+msgid "Selection too wide, can not show selection"
+msgstr "Domeniu prea larg, selectia nu poate fi afisata"
+
+#: src/etc/tt2/helpfile.tt2:73
+msgid ""
+"Send a reminder message to each\n"
+"                                   subscriber (this is a way to inform\n"
+"                                   anyone what is his real subscribing\n"
+"                                   email).\n"
+msgstr ""
+
+#: wwsympa/tt2/loginbanner.tt2:61
+msgid "Send me a password"
+msgstr "Trimite-mi parola"
+
+#: wwsympa/tt2/remindpasswd.tt2:19 wwsympa/tt2/sigrequest.tt2:72
+msgid "Send me my password"
+msgstr "Trimite-mi parola\">"
+
+#: wwsympa/tt2/compose_mail.tt2:7
+msgid "Send this mail"
+msgstr "Trimite acest mesaj\">"
+
+#: wwsympa/tt2/arcsearch_form.tt2:57
+msgid "Sender"
+msgstr "Expeditor"
+
+#: src/etc/tt2/info_report.tt2:14
+#. (send)
+msgid "Sending messages   : %1"
+msgstr "Trimitere mesaje   : %1"
+
+#: wwsympa/tt2/admin_menu.tt2:136
+msgid "Sending/Reception"
+msgstr "><b>Moderare</b"
+
+#: wwsympa/tt2/edit_list_request.tt2:6
+msgid "Sending/reception setup"
+msgstr "Configurare trimitere/primire"
+
+#: src/etc/tt2/stats_report.tt2:6
+#. (stats.byte_rcv)
+msgid "Sent mega-bytes             :      %1"
+msgstr "Megabytes trimisi             :      %1"
+
+#: wwsympa/tt2/help_editfile.tt2:3
+msgid "Service messages description :"
+msgstr "Acewst formular este creat pentru editarea mai multor liste:"
+
+#: wwsympa/tt2/d_control.tt2:51
+msgid "Set owner"
+msgstr "Set owner\">"
+
+#: wwsympa/tt2/d_control.tt2:43
+#. (path)
+msgid "Set the owner of the directory %1"
+msgstr "Configureaza proprietarul pentru directorul %1"
+
+#: wwsympa/tt2/serveradmin.tt2:107
+msgid "Setting defaults list templates"
+msgstr ""
+"Configurare template-uri default pentru 
+\n"
+"        lista\n"
+
+#: wwsympa/tt2/serveradmin.tt2:118
+msgid "Setting site templates"
+msgstr "Configurare template-uri de site"
+
+#: wwsympa/tt2/stats.tt2:1
+msgid "Shared document directory size"
+msgstr ""
+
+#: wwsympa/tt2/list_menu.tt2:375 wwsympa/tt2/list_menu.tt2:380
+msgid "Shared web"
+msgstr "Shared web"
+
+#: wwsympa/tt2/modindex.tt2:17
+msgid "Size"
+msgstr "Marime"
+
+#: wwsympa/tt2/d_read.tt2:57
+msgid "Size (Kb)"
+msgstr "Marime (Kb)"
+
+#: wwsympa/tt2/d_read.tt2:46
+msgid "Sort by author"
+msgstr "Sort by author\">"
+
+#: wwsympa/tt2/d_read.tt2:76
+msgid "Sort by date"
+msgstr "Sort by date\">"
+
+#: wwsympa/tt2/d_read.tt2:31
+msgid "Sort by name"
+msgstr "Sort by name\">"
+
+#: wwsympa/tt2/d_read.tt2:61
+msgid "Sort by size"
+msgstr "Sort by size\">"
+
+#: wwsympa/tt2/editsubscriber.tt2:51
+#. (current_subscriber.bounce_status)
+msgid "Status : %1"
+msgstr "Statut : %1"
+
+#: wwsympa/tt2/arcsearch.tt2:61 wwsympa/tt2/arcsearch_form.tt2:59 wwsympa/tt2/get_latest_lists.tt2:8 wwsympa/tt2/modindex.tt2:16
+msgid "Subject"
+msgstr "Subiect"
+
+#: src/etc/tt2/info_report.tt2:3
+#. (subject)
+msgid "Subject            : %1"
+msgstr "Subiect            : %1"
+
+#: wwsympa/tt2/install_pending_list.tt2:14 wwsympa/tt2/set_pending_list_request.tt2:14
+msgid "Subject :"
+msgstr "Subiect :"
+
+#: wwsympa/tt2/compose_mail.tt2:6 wwsympa/tt2/create_list_request.tt2:41
+msgid "Subject:"
+msgstr "Subiect:"
+
+#: wwsympa/tt2/choosepasswd.tt2:21 wwsympa/tt2/pref.tt2:120 wwsympa/tt2/pref.tt2:40 wwsympa/tt2/pref.tt2:71 wwsympa/tt2/pref.tt2:80
+msgid "Submit"
+msgstr "Submit\">"
+
+#: wwsympa/tt2/create_list_request.tt2:80
+msgid "Submit your creation request"
+msgstr "Trimite cererea pentru crearea listei\">"
+
+#: wwsympa/tt2/list_menu.tt2:192 wwsympa/tt2/list_menu.tt2:224 wwsympa/tt2/list_menu.tt2:230 wwsympa/tt2/list_menu.tt2:234 wwsympa/tt2/list_menu.tt2:238 wwsympa/tt2/subrequest.tt2:34 wwsympa/tt2/subrequest.tt2:64
+msgid "Subscribe"
+msgstr ""
+"Inscrie-te\">
+\n"
+"  <input type\n"
+
+#: wwsympa/tt2/editsubscriber.tt2:14
+#. (current_subscriber.date)
+msgid "Subscribed since %1"
+msgstr "Abonat din%1"
+
+#: wwsympa/tt2/title.tt2:21
+msgid "Subscriber"
+msgstr "Subscriber"
+
+#: wwsympa/tt2/list_menu.tt2:136 wwsympa/tt2/list_menu.tt2:140
+msgid "Subscriber Options"
+msgstr "Optiunile abonatului"
+
+#: src/etc/tt2/helpfile.tt2:42
+msgid "Subscriber address visible via REView"
+msgstr "Adresa de membru inscris vizibila prin REVIEW"
+
+#: wwsympa/tt2/editsubscriber.tt2:6
+msgid "Subscriber information"
+msgstr "Informatii abonat</font>"
+
+#: wwsympa/tt2/admin_menu.tt2:11 wwsympa/tt2/admin_menu.tt2:17 wwsympa/tt2/help_admin.tt2:9
+msgid "Subscribers"
+msgstr "Subscribers"
+
+#: wwsympa/tt2/list_menu.tt2:44
+msgid "Subscribers:"
+msgstr "Subscribers:"
+
+#: wwsympa/tt2/help_editfile.tt2:20
+msgid ""
+"Subscribing invitation message : it is sent to a person if some user  \n"
+"use the INVITE command to invite someone for subscription.\n"
+msgstr ""
+
+#: src/etc/tt2/info_report.tt2:12
+#. (subscribe)
+msgid "Subscription       : %1"
+msgstr "Inscriere       : %1"
+
+#: wwsympa/tt2/help_user_options.tt2:17
+msgid "Summary"
+msgstr "Rezumat"
+
+#: src/etc/tt2/global_remind.tt2:2
+#. (user.email)
+msgid "Summary of your subscription (using the e-mail %1)."
+msgstr "Descrierea abonarii tale (folosind adresa de e-mail %1)."
+
+#: src/etc/mhonarc-ressources:438
+msgid "Sunday:Monday:Tuesday:Wednesday:Thursday:Friday:Saturday"
+msgstr ""
+
+#: wwsympa/tt2/menu.tt2:69 wwsympa/tt2/menu.tt2:73
+msgid "Sympa admin"
+msgstr "Sympa admin"
+
+#: src/etc/tt2/listmaster_notification.tt2:33
+msgid ""
+"Sympa could not include subscribers from external data sources ; the\n"
+"database or LDAP directory might be unreachable.\n"
+msgstr ""
+
+#: wwsympa/tt2/error.tt2:98
+#. (error.params)
+msgid "Syntax errors with the following parameters : %1"
+msgstr "Erori de sintaxa cu urmatorii parametri: %1"
+
+#: src/etc/tt2/digest.tt2:12
+msgid "Table of content:"
+msgstr "Continut:"
+
+#: wwsympa/tt2/serveradmin.tt2:97
+msgid "Templates"
+msgstr "Templateuri"
+
+#: wwsympa/tt2/lists.tt2:67
+msgid "That is to say using a unique email address in Sympa for your subscriptions and preferences"
+msgstr "Adica utilizarea unei adrese email unice in Sympa pentru abonari si optiuni</FONT>"
+
+#: src/etc/tt2/listmaster_notification.tt2:15
+msgid "The antivirus scan has failed while processing the following file:"
+msgstr ""
+
+#: src/etc/tt2/certif_warning.tt2:5
+msgid "The certificate subject is :"
+msgstr "Subiectul certificarii este :"
+
+#: wwsympa/tt2/error.tt2:154
+msgid "The document repository exceed disk quota."
+msgstr ""
+
+#: src/etc/tt2/list_unknown.tt2:14
+msgid "The following address is not a known mailing list :"
+msgstr "Adresa urmatoare nu este cunoscuta ca si lista:"
+
+#: src/etc/tt2/helpfile.tt2:56
+msgid "The following commands are available only for lists's owners or moderators:"
+msgstr "Urmatoarele comenzi sunt disponibile numai pentru proprietarii listelor sau pentru moderatorii acestora:"
+
+#: wwsympa/tt2/serveradmin.tt2:22
+msgid "The following virtual robots are running on this server :"
+msgstr "Urmatorii roboti virtuali ruleaza pe acest server:"
+
+#: wwsympa/tt2/notice.tt2:32
+msgid "The list of list members will be built/updated soon (a few minutes)."
+msgstr "Nu exista mesaje pentru moderarea pe aceasta lista [% notice.list %]"
+
+#: wwsympa/tt2/create_list_request.tt2:38
+msgid "The list type is a set of parameters' profile. Parameters will be editable, once the list created"
+msgstr "The list type is a set of parameters' profile. Parameters will be editable, once the list created"
+
+#: wwsympa/tt2/create_list_request.tt2:43
+msgid "The list's subject"
+msgstr "The list's subject"
+
+#: wwsympa/tt2/error.tt2:83
+msgid "The passwords you typed do not match"
+msgstr "Cele 2 parole difera"
+
+#: src/etc/tt2/listmaster_notification.tt2:18
+msgid "The returned error message :"
+msgstr ""
+
+#: wwsympa/tt2/help_user_options.tt2:15
+msgid "The sending interval for these Digests is defined by the list owner."
+msgstr ""
+"Perioada de trimitere a acestor compilatii este decisa de catre proprietarul 
+\n"
+"    listei.\n"
+
+#: src/etc/tt2/modindex.tt2:10
+#. (total,list.name,list.host)
+msgid "There are %1 messages to be moderated for list %2@%3"
+msgstr "Sunt in total de %1 mesaje care asteapta a fi moderate pe lista %2@%3"
+
+#: wwsympa/tt2/serveradmin.tt2:189
+#. (process_id,loop_count,start_time)
+msgid "This FastCGI process (%1) has served %2 since %3."
+msgstr ""
+"Procesul FastCGI (%1) a servit%2 din data 
+\n"
+"de %3.\n"
+
+#: wwsympa/tt2/arc_protect.tt2:9
+msgid "This button aims at protecting mailing lists archives against Spam Harvester."
+msgstr ""
+"Acest buton incearca sa protejeze importiva programelor care cauta dupa adrese 
+\n"
+"de email.\n"
+
+#: src/etc/tt2/helpfile.tt2:21
+msgid "This help file"
+msgstr "Ajutor pentru acest fisier"
+
+#: wwsympa/tt2/help_user_options.tt2:6
+msgid ""
+"This is a description of the reception modes available in Sympa. These options\n"
+"are mutually exclusive, which means that you can't set two different reception\n"
+"modes at the same time. Only some of the modes might be available for specific\n"
+"mailing lists.\n"
+msgstr ""
+
+#: src/etc/tt2/list_unknown.tt2:12
+msgid "This is an automatic response sent by Sympa Mailing Lists Manager."
+msgstr "Acesta este un raspuns automat trimis de Sympa Mailing Lists Manager."
+
+#: src/etc/tt2/invite.tt2:8
+#. (list.subject)
+msgid "This list is about %1, so you are probably concerned."
+msgstr "[% ELSE %]"
+
+#: wwsympa/tt2/help_user_options.tt2:43
+msgid ""
+"This mode is used when a subscriber does not want to receive attached files. The attached files are \n"
+"replaced by a URL leading to the file stored on the list site.\n"
+msgstr ""
+
+#: wwsympa/tt2/help_user_options.tt2:48
+msgid ""
+"This mode is used when a subscriber does not want to receive copies of messages that he or she has sent to \n"
+"the list.\n"
+msgstr ""
+
+#: wwsympa/tt2/help_user_options.tt2:28
+msgid ""
+"This mode is used when a subscriber no longer wishes to receive mail from the list, but \n"
+"nevertheless wishes to retain the ability to post to the list. This mode therefore \n"
+"prevents the subscriber from unsubscribing and subscribing later on.\n"
+msgstr ""
+
+#: wwsympa/tt2/help_user_options.tt2:38
+msgid ""
+"This mode is used when a subscriber wishes to receive mails sent in both HTML and plain text formats\n"
+"only in HTML format.\n"
+msgstr ""
+
+#: wwsympa/tt2/help_user_options.tt2:33
+msgid ""
+"This mode is used when a subscriber wishes to receive mails sent in both HTML and plain text formats\n"
+"only in plain text format.\n"
+msgstr ""
+
+#: wwsympa/tt2/help_user_options.tt2:53
+msgid ""
+"This option is used mainly to cancel the nomail, summary or digest modes. If the subscriber was \n"
+"in nomail mode, he or she will again receive individual mail messages from the list.\n"
+msgstr ""
+
+#: wwsympa/tt2/pref.tt2:126
+msgid ""
+"This other email address, that should be known by Sympa, will be recognized by Sympa as \n"
+"	an alternate email address. You will also be able to unify your subscriptions with\n"
+"	your main email address.\n"
+msgstr ""
+
+#: wwsympa/tt2/sigrequest.tt2:44 wwsympa/tt2/subrequest.tt2:38
+msgid ""
+"This password, associated to your email address, will\n"
+"	allow you to access your custom environment.\n"
+msgstr ""
+
+#: wwsympa/tt2/home.tt2:7
+#. (conf.email,conf.host)
+msgid ""
+"This server provides you access to your environment on mailing list server %1@%2. Starting from this URL, you can perform subscription options, unsubscription,\n"
+"archives, list management and so on.\n"
+msgstr ""
+
+#: src/etc/mhonarc-ressources:140 src/etc/mhonarc-ressources:304 src/etc/mhonarc-ressources:62
+msgid "Thread"
+msgstr ""
+
+#: src/etc/tt2/sendpasswd.tt2:27
+msgid "To access your personal environment, you need to login first"
+msgstr "Pentru a avea acces la zona ta, trebuie sa fi autentificat"
+
+#: src/etc/tt2/listmaster_notification.tt2:10
+msgid "To activate/delete this mailing list :"
+msgstr ""
+
+#: src/etc/tt2/helpfile.tt2:58
+msgid "To add a user to a list"
+msgstr "Adaugarea unui utilizator la lista"
+
+#: src/etc/tt2/helpfile.tt2:41
+msgid "To become unlisted (hidden subscriber address)"
+msgstr "Pentru a deveni nelistat (adresa de membru ascunsa)"
+
+#: src/etc/tt2/helpfile.tt2:64
+msgid ""
+"To begin an expiration process for <list>\n"
+"                                   subscribers who have not confirmed their\n"
+"                                   subscription for <old> days. The\n"
+"                                   subscribers have <delay> days to confirm\n"
+msgstr ""
+
+#: wwsympa/tt2/notice.tt2:26
+msgid "To choose your password go to 'preferences', from the upper menu."
+msgstr ""
+"Pentru 
+\n"
+"a alege o parola mergi pe 'preferences', din meniul de deasupra.\n"
+
+#: wwsympa/tt2/subrequest.tt2:6
+msgid ""
+"To confirm\n"
+"	your request, please click the button below :\n"
+msgstr ""
+
+#: wwsympa/tt2/sigrequest.tt2:5
+msgid ""
+"To confirm\n"
+"      your request, please click the button below :\n"
+msgstr ""
+
+#: wwsympa/tt2/change_email.tt2:5
+msgid ""
+"To confirm your email address change, please enter the password\n"
+"you received below :\n"
+msgstr ""
+
+#: wwsympa/tt2/subrequest.tt2:21
+msgid ""
+"To confirm your identity and prevent anyone from subscribing you to \n"
+"	this list against your will, a message containing your password\n"
+"	will be sent to you.\n"
+msgstr ""
+
+#: wwsympa/tt2/sigrequest.tt2:28
+msgid ""
+"To confirm your identity and prevent anyone from unsubscribing you from \n"
+"	this list against your will, a message containing an URL\n"
+"	will be sent to you.\n"
+msgstr ""
+
+#: wwsympa/tt2/subrequest.tt2:54
+#. (list)
+msgid ""
+"To confirm your subscription to list %1, please enter\n"
+"	your password below :\n"
+msgstr ""
+
+#: src/etc/tt2/sendpasswd.tt2:15
+msgid "To confirm your subscription, you need to provide the following password"
+msgstr "Pentru a confirma abonarea ta, trebuie sa trimiti urmatoarea parola:"
+
+#: wwsympa/tt2/sigrequest.tt2:61
+#. (list)
+msgid ""
+"To confirm your unsubscription from list %1, please enter\n"
+"	your password below :\n"
+msgstr ""
+
+#: src/etc/tt2/helpfile.tt2:60
+msgid "To consult the statistics for <list>"
+msgstr "Consultarea statisticii pentru <list>"
+
+#: wwsympa/tt2/help.tt2:61
+msgid "To contact this service administrator :"
+msgstr ""
+
+#: src/etc/tt2/helpfile.tt2:68
+msgid ""
+"To de-activate the expiration process for\n"
+"                                   <list>\n"
+msgstr ""
+
+#: src/etc/tt2/helpfile.tt2:59
+msgid "To delete a user from a list"
+msgstr "Stergerea unui utilizator din lista"
+
+#: src/etc/tt2/moderate.tt2:13
+#. (list.name)
+msgid "To distribute the attached message in list %1:"
+msgstr "Pentru a distribui mesajul pe lista %1 apasa pe linkul:"
+
+#: src/etc/tt2/list_unknown.tt2:18
+msgid "To find out the correct listname, ask for this server's lists directory :"
+msgstr "Pentru a afla numele corect a listelor, trimite un mesja la :"
+
+#: src/etc/tt2/helpfile.tt2:46
+msgid "To get <file> of <list> archive"
+msgstr "Pentru a accesa <file> arhivei apartinand la <list>"
+
+#: src/etc/tt2/helpfile.tt2:32
+msgid ""
+"To quit <list>. <EMAIL> is an optional \n"
+"                               email address, usefull if different from\n"
+"                               your \"From:\" address.\n"
+msgstr ""
+
+#: src/etc/tt2/helpfile.tt2:33
+msgid "To quit all lists."
+msgstr "Deconectarea de la toate listele."
+
+#: src/etc/tt2/certif_warning.tt2:12
+#. (conf.email,conf.host)
+msgid ""
+"To receive them again, renew your certificate with your certification authority\n"
+"and send a signed message to %1@%2\n"
+"or\n"
+"click : \n"
+msgstr ""
+
+#: wwsympa/tt2/help.tt2:50
+msgid "To receive your password :"
+msgstr "Pentru a primi parola:"
+
+#: src/etc/tt2/moderate.tt2:18
+msgid "To reject it (it will be removed):"
+msgstr "Pentru a-l respinge (va fi sters):"
+
+#: src/etc/tt2/invite.tt2:10
+msgid "To subscribe just reply to this message or hit the following mailto url :"
+msgstr "Aceasta lista este destinat: [% list.subject %], probabil esti interesat de acesta."
+
+#: src/etc/tt2/helpfile.tt2:28
+msgid ""
+"To subscribe or to confirm a subscription to\n"
+"                               <list>, <GECOS> is an optional information\n"
+"                               about subscriber.\n"
+msgstr ""
+
+#: src/etc/tt2/helpfile.tt2:35
+msgid "To suspend the message reception for <list>"
+msgstr "Suspendarea receptionarii mesajelor pentru <list>"
+
+#: src/etc/tt2/sendpasswd.tt2:24
+#. (newuser.password)
+msgid ""
+"To unsubscribe from the list, you need to provide the following password\n"
+"\n"
+"	password: %1\n"
+msgstr ""
+
+#: wwsympa/tt2/compose_mail.tt2:5
+#. (mailto)
+msgid "To: %1"
+msgstr "La: %1"
+
+#: wwsympa/tt2/reviewbouncing.tt2:130
+msgid "Toggle Selection"
+msgstr "Deselecteaza"
+
+#: wwsympa/tt2/create_list_request.tt2:46
+msgid "Topics:"
+msgstr "Teme:"
+
+#: src/etc/tt2/listowner_notification.tt2:14
+#. (list.name,size)
+msgid "Total size used for %1@%2 Bytes."
+msgstr ""
+
+#: src/etc/tt2/review.tt2:8
+#. (total)
+msgid "Total subscribers : %1"
+msgstr "Total abonati : %1"
+
+#: wwsympa/tt2/d_read.tt2:261
+msgid "URL"
+msgstr "titlu"
+
+#: wwsympa/tt2/remove_arc.tt2:11 wwsympa/tt2/remove_arc.tt2:7
+msgid "Unable to find the message to delete"
+msgstr ""
+"Mesajul 
+\n"
+"care urmeaza sa fie sters nu poate fi gasit\n"
+
+#: wwsympa/tt2/error.tt2:107
+#. (error.path)
+msgid "Unable to read %1 : empty document"
+msgstr "Nu poate fi citit %1 : document gol"
+
+#: wwsympa/tt2/lists.tt2:66
+msgid "Unify your subscriptions with the email"
+msgstr "Unifica abonarile tale cu adresa de mail"
+
+#: wwsympa/tt2/d_read.tt2:106 wwsympa/tt2/d_read.tt2:166
+msgid "Unknown"
+msgstr "Necunoscut"
+
+#: wwsympa/tt2/list_menu.tt2:163 wwsympa/tt2/list_menu.tt2:167 wwsympa/tt2/list_menu.tt2:173 wwsympa/tt2/list_menu.tt2:262 wwsympa/tt2/list_menu.tt2:266 wwsympa/tt2/sigrequest.tt2:40 wwsympa/tt2/sigrequest.tt2:54 wwsympa/tt2/sigrequest.tt2:69
+msgid "Unsubscribe"
+msgstr "Dezabonare\">"
+
+#: wwsympa/tt2/editsubscriber.tt2:42
+msgid "Unsubscribe the User"
+msgstr "Dezabonare utilizator\">"
+
+#: src/etc/tt2/expire_warning1.tt2:10 src/etc/tt2/expire_warning2.tt2:10 src/etc/tt2/remind.tt2:8
+msgid "Unsubscribtion :"
+msgstr "Dezabonare de pe lista :"
+
+#: src/etc/tt2/info_report.tt2:13
+#. (unsubscribe)
+msgid "Unsubscription     : %1"
+msgstr "Dezabonare     : %1"
+
+#: src/etc/tt2/bye.tt2:2
+#. (list.name)
+msgid "Unsubscription from %1"
+msgstr "Dezabonare de pe lista %1"
+
+#: wwsympa/tt2/help_editfile.tt2:8
+msgid ""
+"Unsubscription message : This message is sent when users leave the list\n"
+"using the UNSUBSCRIBE command.\n"
+msgstr ""
+
+#: src/etc/tt2/listmaster_notification.tt2:28
+#. (param0)
+msgid ""
+"Until then we recommend your remove %1 ;\n"
+"default configuration will be used.\n"
+msgstr ""
+
+#: wwsympa/tt2/d_control.tt2:7 wwsympa/tt2/d_editfile.tt2:13 wwsympa/tt2/d_read.tt2:18
+msgid "Up to higher level directory"
+msgstr "Up toNivelul precedent"
+
+#: wwsympa/tt2/edit_list_request.tt2:353 wwsympa/tt2/editsubscriber.tt2:41 wwsympa/tt2/suboptions.tt2:33
+msgid "Update"
+msgstr "Actualizeaza\">"
+
+#: wwsympa/tt2/d_read.tt2:280
+#. (path)
+msgid "Upload a file inside the folder %1"
+msgstr ""
+"Incarca un fisier in folderul 
+\n"
+"        %1\n"
+
+#: wwsympa/tt2/d_read.tt2:282
+msgid "Upload a file inside the folder SHARED"
+msgstr "Incarca un fisier in folderul SHARED"
+
+#: src/etc/tt2/helpfile.tt2:47
+msgid "Used to received the last message from <list>"
+msgstr "Utilizat pentru accesarea ultimului mesaj de pe <list>"
+
+#: wwsympa/tt2/show_cert.tt2:8
+msgid "User certificate belong to"
+msgstr "Certificatul de utilizare apartine lui"
+
+#: src/etc/tt2/helpfile.tt2:5
+msgid "User's Guide"
+msgstr "Ghidul utilizatorului"
+
+#: wwsympa/tt2/serveradmin.tt2:75
+msgid "Users"
+msgstr "Utilizatori"
+
+#: wwsympa/tt2/lists.tt2:74
+msgid "Valider"
+msgstr ""
+"Validare\">
+\n"
+"      </FORM>\n"
+
+#: wwsympa/tt2/editsubscriber.tt2:54
+msgid "View last bounce"
+msgstr ""
+"Vezi 
+\n"
+"            ultimul efect bumerang\n"
+
+#: wwsympa/tt2/serveradmin.tt2:12
+msgid "Virtual Robots"
+msgstr "Roboti virtuali"
+
+#: wwsympa/tt2/suboptions.tt2:24
+msgid "Visibility :"
+msgstr "Vizibilitate :"
+
+#: wwsympa/tt2/editsubscriber.tt2:23
+#. (current_subscriber.visibility)
+msgid "Visibility : %1"
+msgstr ""
+"Vizibilitate : %1 
+\n"
+"          <DD>Limba\n"
+
+#: wwsympa/tt2/help.tt2:56
+msgid "WWSympa can remind you your password by email :"
+msgstr "WWSympa iti poate trimite parola prin email:"
+
+#: wwsympa/tt2/help.tt2:8
+msgid "WWSympa provides  you access to your environment on mailing list server"
+msgstr "WWSympa iti ofera acces la mediul tau pe mailing list server"
+
+#: src/etc/tt2/your_infected_msg.tt2:10
+msgid "We stopped delivery of this email."
+msgstr "Am oprit trimiterea mesajului catre lista."
+
+#: wwsympa/tt2/stats.tt2:2
+msgid "Web archives size"
+msgstr ""
+
+#: src/etc/create_list_templates/public_web_forum/comment:1
+msgid "Web forum ML"
+msgstr ""
+
+#: wwsympa/tt2/help_editfile.tt2:29
+msgid "Welcome message"
+msgstr ""
+
+#: wwsympa/tt2/help_editfile.tt2:5
+msgid ""
+"Welcome message: This message is sent to new subscribers. It can be\n"
+"a full MIME structured message (only for MIME gurus).\n"
+msgstr ""
+
+#: src/etc/tt2/welcome.tt2:2
+#. (list.name)
+msgid "Welcome to list %1"
+msgstr "Bine ai venit pe lista %1"
+
+#: src/etc/tt2/welcome.tt2:27
+#. (list.name,list.host)
+msgid "Welcome to list %1@%2"
+msgstr "Bine ai venit pe lista  %1@%2"
+
+#: src/etc/tt2/welcome.tt2:30
+#. (list.name,list.host)
+msgid "Welcome to list %1@%2."
+msgstr "Bine ai venit pe lista %1@%2."
+
+#: src/etc/tt2/welcome.tt2:11
+#. (list.name,list.host,user.email)
+msgid ""
+"Welcome to list %1@%2.\n"
+"Your subscription email is %3\n"
+msgstr ""
+
+#: wwsympa/tt2/help.tt2:28
+msgid "When authenticating ("
+msgstr "La autentificare("
+
+#: wwsympa/tt2/error.tt2:13
+#. (error.email)
+msgid "You are already logged in as %1"
+msgstr "Esti deja actualizat ca %1"
+
+#: wwsympa/tt2/error.tt2:64
+#. (error.list)
+msgid "You are already subscribed to the list %1"
+msgstr "Esti de ja abonat in lista%1"
+
+#: wwsympa/tt2/subrequest.tt2:70
+#. (list)
+msgid "You are already subscriber of list %1"
+msgstr ""
+"Esti deja inscris 
+\n"
+"pe aceasta lista %1\n"
+
+#: wwsympa/tt2/sigrequest.tt2:17
+#. (list,email)
+msgid ""
+"You are not subscribed to list %1 with e-mail address\n"
+"      %2\n"
+msgstr ""
+
+#: wwsympa/tt2/error.tt2:79
+#. (error.list)
+msgid "You are not subscribed to the list %1"
+msgstr "Nu esti abonat la lista%1"
+
+#: wwsympa/tt2/suboptions.tt2:5
+msgid "You are subscribed since"
+msgstr "Esti inscris din"
+
+#: wwsympa/tt2/create_list_request.tt2:17
+msgid "You are the privileged owner of this list"
+msgstr "You are the privileged owner of this list"
+
+#: wwsympa/tt2/edit_list_request.tt2:4
+msgid "You can choose below a subset of parameters to edit :"
+msgstr "Poti alege de mai jos un set de parametri pentru editare:"
+
+#: wwsympa/tt2/create_list.tt2:5
+msgid "You can configure it via the"
+msgstr ""
+
+#: wwsympa/tt2/editfile.tt2:14
+msgid "You can edit several messages/files associated to your list :"
+msgstr ""
+
+#: wwsympa/tt2/help.tt2:38
+msgid "You can logout (deletion of the <I>cookie</I>) at any time using"
+msgstr ""
+"Poti iesi din sistem(stergere <I>cookie</I>) oricand utilizand functia 
+\n"
+"<\n"
+
+#: src/etc/tt2/helpfile.tt2:17
+msgid ""
+"You can put multiple commands in a message. These commands must appear in the\n"
+"message body and each line must contain only one command. The message body\n"
+"is ignored if the Content-Type is different from text/plain but even with\n"
+"crasy mailer using multipart and text/html for any message, commands in the\n"
+"subject are recognized.\n"
+msgstr ""
+
+#: src/etc/tt2/expire_deletion.tt2:8 src/etc/tt2/removed.tt2:10
+msgid "You can subscribe again :"
+msgstr "Te poti re-abona din nou trimitand un mesaj :"
+
+#: wwsympa/tt2/error.tt2:140
+msgid "You did not choose a password, request a reminder of the initial password"
+msgstr "Nu ti-ai ales o parola, cere parola initiala"
+
+#: src/etc/tt2/expire_warning1.tt2:4 src/etc/tt2/expire_warning2.tt2:4
+#. (list.name,list.host,user.email)
+msgid "You have been subscriber of list %1@%2 with email %3 for 1 year or more;"
+msgstr "Cererea de reabonare pe lista %1"
+
+#: wwsympa/tt2/error.tt2:92
+#. (error.pname)
+msgid "You have changed a parameter without permissions: %1"
+msgstr ""
+"Ati schimbat un parametru fara a 
+\n"
+"avea permisiunea: %1\n"
+
+#: wwsympa/tt2/remindpasswd.tt2:4
+msgid "You have forgotten your password, or you never had any password related to this server"
+msgstr ""
+"Ti-ai uitat parola sau nu ai avut parola pentru acest server, iti va fi trimis
+\n"
+"prin email: 
+\n"
+"<\n"
+
+#: wwsympa/tt2/login.tt2:3
+#. (user.email)
+msgid "You have logged in with email address %1"
+msgstr "Te-ai autentificat cu adresa email %1"
+
+#: wwsympa/tt2/sigrequest.tt2:20
+msgid ""
+"You might have subscribed with another address.\n"
+"      Please contact the list owner to help you unsubscribe :\n"
+msgstr ""
+
+#: wwsympa/tt2/choosepasswd.tt2:4
+msgid ""
+"You need to choose a password for your WWSympa environment.\n"
+"You will need this password to access privileged features.\n"
+msgstr ""
+
+#: wwsympa/tt2/error.tt2:40
+msgid "You need to login"
+msgstr "Trebuie sa te autentifici"
+
+#: wwsympa/tt2/loginbanner.tt2:12
+msgid ""
+"You need to login to access your custom WWSympa environment or to perform a\n"
+"privileged operation (one that requires your email address).\n"
+msgstr ""
+
+#: src/etc/tt2/sendpasswd.tt2:13
+#. (list)
+msgid "You requested a subscription to %1 mailing list."
+msgstr "Ai cerut abonarea pe lista %1."
+
+#: wwsympa/tt2/subrequest.tt2:17
+#. (list)
+msgid "You requested a subscription to list %1"
+msgstr "Ai cerut inscrierea pe lista %1."
+
+#: wwsympa/tt2/subrequest.tt2:5
+#. (list)
+msgid "You requested subscription to list %1"
+msgstr "Ai cerut inscrierea in lista%1"
+
+#: src/etc/tt2/sendpasswd.tt2:20
+#. (list)
+msgid "You requested unsubscription from %1 mailing list."
+msgstr "Ai cerut dezabonarea pe lista %1."
+
+#: wwsympa/tt2/sigrequest.tt2:24 wwsympa/tt2/sigrequest.tt2:4
+#. (list)
+msgid "You requested unsubscription from list %1"
+msgstr "Ai cerut sa te dezabonezi de la lista %1."
+
+#: wwsympa/tt2/close_list.tt2:9
+msgid "You should remove list aliases manually"
+msgstr ""
+"Trebuie sa stergi aliasurile 
+\n"
+"manual\n"
+
+#: wwsympa/tt2/change_email.tt2:3
+msgid "You will receive an email, reminding you your password."
+msgstr "Vei primi un email, cu parole ta."
+
+#: src/etc/tt2/certif_warning.tt2:8
+msgid "You won"
+msgstr "Nu vei mai primii mesajele semnate de pe lista ta"
+
+#: wwsympa/tt2/error.tt2:122
+#. (error.dir)
+msgid "You're not authorized to upload an INDEX.HTML in %1"
+msgstr "Nu esti autorizat sa incarci fisier INDEX.HTML in %1"
+
+#: src/etc/tt2/expire_deletion.tt2:6
+#. (user.email,list.name,list.host)
+msgid ""
+"Your address (%1) has been removed from list\n"
+"%2@%3\n"
+"because you haven't answered to our resubscription request.\n"
+msgstr ""
+
+#: src/etc/tt2/removed.tt2:8
+#. (user.email,list.name,list.host)
+msgid ""
+"Your address (%1) has been removed from list\n"
+"%2@%3, probably because we received\n"
+"non-delivery reports for your address.\n"
+msgstr ""
+
+#: src/etc/tt2/remind.tt2:5
+#. (list.name,list.host,user.email,user.password)
+msgid ""
+"Your are subscriber of list %1@%2 with  email %3 \n"
+"your password : %4\n"
+msgstr ""
+
+#: wwsympa/tt2/help.tt2:46
+msgid ""
+"Your are therefore not registered in Sympa user database and you can't login.\n"
+"If you subscribe to a list, WWSympa will give you an initial password.\n"
+msgstr ""
+
+#: src/etc/tt2/certif_warning.tt2:4
+#. (expiration_date)
+msgid "Your authentification certificate will expire on %1."
+msgstr "Cerificatul tau de autentificare expira pe data de %1."
+
+#: wwsympa/tt2/remindpasswd.tt2:12 wwsympa/tt2/subrequest.tt2:43
+msgid "Your e-mail address"
+msgstr "Your e-mail address"
+
+#: wwsympa/tt2/sigrequest.tt2:50
+msgid "Your e-mail address :"
+msgstr "Adresa ta de e-mail:"
+
+#: src/etc/tt2/bye.tt2:4
+#. (user.email,list.name,list.host)
+msgid "Your email address (%1) has been removed from list %2@%3"
+msgstr "Dezabonare de pe lista %1"
+
+#: wwsympa/tt2/pref.tt2:10
+msgid "Your environment"
+msgstr "Mediul tau"
+
+#: wwsympa/tt2/create_list.tt2:24
+msgid ""
+"Your list creation request is registered. You can now  modify its\n"
+"configuration using the admin button but the list will be unusable until the listmaster validates it.\n"
+msgstr ""
+
+#: wwsympa/tt2/create_list.tt2:4
+msgid "Your list is created."
+msgstr "Lista ta a fost creata."
+
+#: src/etc/tt2/reject.tt2:5
+#. (list.name,list.host,rejected_by)
+msgid ""
+"Your message for list %1@%2\n"
+"as been rejected by %3 list editor.\n"
+msgstr ""
+
+#: src/etc/tt2/reject.tt2:2
+msgid "Your message has been rejected."
+msgstr "Mesajul tau a fost respins"
+
+#: wwsympa/tt2/pref.tt2:91
+msgid "Your other email addresses"
+msgstr "Celalalte adrese email"
+
+#: src/etc/tt2/welcome.tt2:13 src/etc/tt2/welcome.tt2:34
+#. (user.password)
+msgid "Your password : %1"
+msgstr "Parola este : %1."
+
+#: wwsympa/tt2/notice.tt2:23
+msgid "Your password has been emailed to you"
+msgstr "Parola ti-a fost trimisa"
+
+#: wwsympa/tt2/loginbanner.tt2:5
+#. (init_email)
+msgid "Your password has been sent to your email address %1"
+msgstr "Parola ti-a fost trimisa la adresa%1"
+
+#: wwsympa/tt2/error.tt2:157
+msgid "Your password is stored in an LDAP directory, therefore Sympa cannot post you a reminder"
+msgstr ""
+
+#: wwsympa/tt2/notice.tt2:5
+msgid "Your request has been forwarded to the list owner"
+msgstr ""
+"Cererea ta a fost trimisa 
+\n"
+"mai departe la proprietarul listei\n"
+
+#: src/etc/tt2/welcome.tt2:31
+#. (user.email)
+msgid "Your subscription email is %1"
+msgstr "Adresa de mail de abonare este %1"
+
+#: wwsympa/tt2/help.tt2:20 wwsympa/tt2/menu.tt2:105 wwsympa/tt2/menu.tt2:92 wwsympa/tt2/menu.tt2:96
+msgid "Your subscriptions"
+msgstr ""
+"b>Inscrierile 
+\n"
+"                  tale</b\n"
+
+#: wwsympa/tt2/list_menu.tt2:44
+msgid "[% total %]"
+msgstr "[% total %]"
+
+#: src/etc/tt2/listowner_notification.tt2:13
+#. (rate2,list.name,list.host,rate)
+msgid "]%1%%2@%3 archives use %4% of allowed disk quota."
+msgstr ""
+
+#: wwsympa/tt2/d_read.tt2:11 wwsympa/tt2/d_read.tt2:134 wwsympa/tt2/d_read.tt2:200
+msgid "access"
+msgstr "acces"
+
+#: wwsympa/tt2/create_list.tt2:5 wwsympa/tt2/lists.tt2:18
+msgid "admin"
+msgstr "admin"
+
+#: wwsympa/tt2/arcsearch_form.tt2:25
+msgid "all of"
+msgstr "toate"
+
+#: wwsympa/tt2/arcsearch.tt2:35
+msgid "and checking on entire word)"
+msgstr "si verificare pe intreg cuvant)"
+
+#: wwsympa/tt2/arcsearch.tt2:33
+msgid "and checking on part of word)"
+msgstr ""
+"si verificare 
+\n"
+"pe parte din cuvant)\n"
+
+#:
+msgid "because your new address is not allowed to subscribe."
+msgstr "Modificarea adresei de subscriere la lista"
+
+#: wwsympa/tt2/reviewbouncing.tt2:63
+msgid "bounce count"
+msgstr "numar de intoarceri"
+
+#: wwsympa/tt2/help_editfile.tt2:35
+msgid ""
+"but attached at the\n"
+"end of the message.\n"
+msgstr ""
+
+#: wwsympa/tt2/create_list.tt2:5
+msgid "button beside."
+msgstr "alaturat."
+
+#: wwsympa/tt2/help_editfile.tt2:12
+msgid "button."
+msgstr "Welcome message</I>."
+
+#: src/etc/tt2/bye.tt2:5
+msgid "bye !"
+msgstr "Dezabonare de pe lista [% list.name %]"
+
+#: wwsympa/tt2/arcsearch.tt2:27
+msgid "case insensitive"
+msgstr "caz senzitiv"
+
+#: wwsympa/tt2/arcsearch.tt2:29
+msgid "case sensitive"
+msgstr "caz senzitiv"
+
+#: wwsympa/tt2/d_control.tt2:36
+msgid "change access"
+msgstr "modifica optiune acces\">"
+
+#: wwsympa/tt2/help_admin.tt2:6
+msgid "close it. It can be restored using"
+msgstr ". Poate fi recreata prin comanda"
+
+#: wwsympa/tt2/help_admin.tt2:4
+msgid "completely remove the current list. Listmaster privileges are required to"
+msgstr ""
+"sterge in intregime lista curenta. Pentru a reface o lista 
+\n"
+"  trebuie sa ai drepturi de administrator, comanda\n"
+
+#: src/etc/create_list_templates/hotline/comment:5 src/etc/create_list_templates/private_working_group/comment:5
+msgid "controlled subscription"
+msgstr ""
+
+#: src/etc/tt2/x509-user-cert-missing.tt2:2
+#. (list.name,list.host)
+msgid "crypted message for list %1@%2"
+msgstr "Mesaj criptat pentru lista %1@%2"
+
+#: wwsympa/tt2/edit_list_request.tt2:341
+msgid "default"
+msgstr "default"
+
+#: src/etc/create_list_templates/html-news-letter/comment:5
+msgid "default reception format is HTML"
+msgstr ""
+
+#: wwsympa/tt2/d_read.tt2:10 wwsympa/tt2/d_read.tt2:122
+msgid "delete"
+msgstr "sterge"
+
+#: wwsympa/tt2/serveradmin.tt2:153
+msgid "directories as input."
+msgstr "ca si intrare.</font>"
+
+#: wwsympa/tt2/sigrequest.tt2:35 wwsympa/tt2/sigrequest.tt2:64 wwsympa/tt2/subrequest.tt2:27 wwsympa/tt2/subrequest.tt2:57
+msgid "e-mail address"
+msgstr "adresa e-mail"
+
+#: wwsympa/tt2/d_read.tt2:116 wwsympa/tt2/d_read.tt2:181 wwsympa/tt2/d_read.tt2:9
+msgid "edit"
+msgstr "editeaza"
+
+#: src/etc/tt2/listmaster_notification.tt2:24
+msgid ""
+"edit_list.conf format has changed :\n"
+"'default' is no more accepted for a population.\n"
+msgstr ""
+
+#: wwsympa/tt2/arcsearch_form.tt2:44
+msgid "entire"
+msgstr "intregi"
+
+#: src/etc/create_list_templates/hotline/comment:3
+msgid "everyone can post"
+msgstr ""
+
+#: wwsympa/tt2/arcsearch.tt2:61 wwsympa/tt2/arcsearch.tt2:65 wwsympa/tt2/arcsearch.tt2:69
+msgid "field"
+msgstr "mesaje Date</i><BR>"
+
+#: wwsympa/tt2/help.tt2:40
+msgid "function."
+msgstr "."
+
+#: wwsympa/tt2/scenario_test.tt2:73
+msgid "get applyed rule"
+msgstr "regula aplicata\">"
+
+#: wwsympa/tt2/arcsearch.tt2:61 wwsympa/tt2/arcsearch.tt2:65 wwsympa/tt2/arcsearch.tt2:69
+msgid "hits on message's"
+msgstr "<i>cautate in"
+
+#: src/etc/tt2/list_created.tt2:6
+msgid "homepage"
+msgstr "[% list.name %] pagina principala"
+
+#: src/etc/create_list_templates/hotline/comment:1
+msgid "hotline mailing list"
+msgstr ""
+
+#: src/etc/tt2/listmaster_notification.tt2:21
+msgid "incorrect format of edit_list.conf"
+msgstr ""
+
+#: wwsympa/tt2/help_admin.tt2:5
+msgid "initialize the shared document web space."
+msgstr ""
+"initializeaza documentul 
+\n"
+"  shared pentru web.\n"
+
+#: wwsympa/tt2/arcsearch_form.tt2:37
+msgid "insensitive"
+msgstr "nu tine cont"
+
+#: wwsympa/tt2/remindpasswd.tt2:5
+msgid "it will be sent to you by email :"
+msgstr ""
+
+#: wwsympa/tt2/close_list.tt2:4
+msgid ""
+"list has been closed. Its subscribers have been deleted from\n"
+"the subscriber database. The list is no more public on the site.\n"
+msgstr ""
+
+#: wwsympa/tt2/get_closed_lists.tt2:11 wwsympa/tt2/get_pending_lists.tt2:14
+msgid "list name"
+msgstr "denumire lista"
+
+#: wwsympa/tt2/get_closed_lists.tt2:12 wwsympa/tt2/get_pending_lists.tt2:15
+msgid "list subject"
+msgstr "subiectul listei"
+
+#: wwsympa/tt2/loginbanner.tt2:24
+msgid "login"
+msgstr "login\">"
+
+#: wwsympa/tt2/help.tt2:39
+msgid "logout"
+msgstr "logout"
+
+#: src/etc/create_list_templates/intranet_list/comment:1
+msgid "mailing list for intranets"
+msgstr ""
+
+#: src/etc/mhonarc-ressources:49
+#. ($PAGENUM$,$NUMOFPAGES$)
+msgid "mails, page # %1/%2"
+msgstr ""
+
+#: wwsympa/tt2/arcsearch_form.tt2:31 wwsympa/tt2/arcsearch_form.tt2:32
+msgid "messages"
+msgstr "mesaje"
+
+#: wwsympa/tt2/help_admin.tt2:8
+msgid ""
+"must be used with care : it allows to modify some of the\n"
+"                 list parameters. The list of parameters you can modify depends on your privilege.\n"
+msgstr ""
+
+#: src/etc/tt2/certif_warning.tt2:2
+msgid "near expiration of your certificate"
+msgstr "Certificare aproape expirata"
+
+#: wwsympa/tt2/arcsearch_form.tt2:31
+msgid "newest"
+msgstr "cele mai noi"
+
+#: src/etc/mhonarc-ressources:167
+msgid "next"
+msgstr ""
+
+#: wwsympa/tt2/set_pending_list_request.tt2:40
+msgid "notify owner"
+msgstr "notifica proprietar"
+
+#: wwsympa/tt2/arcsearch_form.tt2:43
+msgid "of word"
+msgstr "<b>i</b> din cuvinte"
+
+#: wwsympa/tt2/arcsearch_form.tt2:32
+msgid "oldest"
+msgstr "cele mai vechi"
+
+#: wwsympa/tt2/install_pending_list.tt2:17 wwsympa/tt2/set_pending_list_request.tt2:17
+msgid "on"
+msgstr "in data de"
+
+#: wwsympa/tt2/arcsearch_form.tt2:26
+msgid "one of"
+msgstr "unul"
+
+#: src/etc/create_list_templates/discussion_list/comment:3 src/etc/create_list_templates/private_working_group/comment:3
+msgid "only subscribers can post"
+msgstr ""
+
+#: wwsympa/tt2/reviewbouncing.tt2:124 wwsympa/tt2/reviewbouncing.tt2:49
+#. (page,total_page)
+msgid "page %1 / %2"
+msgstr "page %1 / %2"
+
+#: src/etc/mhonarc-ressources:128
+#. ('$PAGENUM$','$NUMOFPAGES$')
+msgid "page n&#176; %1/%2"
+msgstr ""
+
+#: wwsympa/tt2/arcsearch_form.tt2:43
+msgid "part"
+msgstr "part"
+
+#: wwsympa/tt2/loginbanner.tt2:43 wwsympa/tt2/sigrequest.tt2:36 wwsympa/tt2/sigrequest.tt2:65 wwsympa/tt2/subrequest.tt2:28 wwsympa/tt2/subrequest.tt2:58
+msgid "password"
+msgstr "parola"
+
+#: wwsympa/tt2/loginbanner.tt2:32
+msgid "password :"
+msgstr "password :"
+
+#: src/etc/tt2/sendpasswd.tt2:17
+#. (newuser.password)
+msgid "password: %1"
+msgstr "password: %1"
+
+#: wwsympa/tt2/reviewbouncing.tt2:64
+msgid "period"
+msgstr "perioada"
+
+#: wwsympa/tt2/help.tt2:33
+msgid "preferences"
+msgstr "preferintelor"
+
+#: src/etc/create_list_templates/hotline/comment:4 src/etc/create_list_templates/private_working_group/comment:4
+msgid "private archives"
+msgstr ""
+
+#: src/etc/create_list_templates/html-news-letter/comment:3 src/etc/create_list_templates/news-letter/comment:3
+msgid "public and moderated list"
+msgstr ""
+
+#: src/etc/create_list_templates/discussion_list/comment:2
+msgid "public archives"
+msgstr ""
+
+#: wwsympa/tt2/add_request.tt2:13 wwsympa/tt2/editsubscriber.tt2:43 wwsympa/tt2/help_editfile.tt2:12 wwsympa/tt2/review.tt2:82 wwsympa/tt2/reviewbouncing.tt2:116 wwsympa/tt2/reviewbouncing.tt2:31
+msgid "quiet"
+msgstr "mut"
+
+#: src/etc/tt2/expire_warning1.tt2:2 src/etc/tt2/expire_warning2.tt2:2
+#. (list.name)
+msgid "resubscription to %1"
+msgstr "Cererea de reabonare pe lista %1"
+
+#: wwsympa/tt2/arcsearch_form.tt2:49 wwsympa/tt2/arcsearch_form.tt2:51 wwsympa/tt2/arcsearch_form.tt2:52
+msgid "results by page"
+msgstr "rezultate/pagina"
+
+#: src/etc/mhonarc-ressources:342
+#. (user.email)
+msgid "send it back to %1"
+msgstr ""
+
+#: wwsympa/tt2/scenario_test.tt2:37
+msgid "sender email"
+msgstr "Adresa email a expeditorului"
+
+#: wwsympa/tt2/arcsearch_form.tt2:38
+msgid "sensitive"
+msgstr "tine cont"
+
+#: wwsympa/tt2/arcsearch_form.tt2:24
+msgid "sentence"
+msgstr "propozitie"
+
+#: wwsympa/tt2/set_pending_list_request.tt2:39 wwsympa/tt2/subrequest.tt2:47
+msgid "submit"
+msgstr "Trimite\">"
+
+#: src/etc/create_list_templates/html-news-letter/comment:4 src/etc/create_list_templates/news-letter/comment:4
+msgid "subscribers emails are protected"
+msgstr ""
+
+#: src/etc/tt2/listmaster_notification.tt2:30
+#. (param0)
+msgid "subscribers update failed for list %1"
+msgstr ""
+
+#: src/etc/mhonarc-ressources:351 src/etc/mhonarc-ressources:360
+msgid "tag this mail for deletion"
+msgstr ""
+
+#: wwsympa/tt2/create_list_request.tt2:11
+msgid "the list name ; be careful, not its address !"
+msgstr "the list name ; be careful, not its address !"
+
+#: wwsympa/tt2/arcsearch_form.tt2:24
+msgid "this"
+msgstr ""
+
+#: wwsympa/tt2/arcsearch_form.tt2:25 wwsympa/tt2/arcsearch_form.tt2:26
+msgid "this words"
+msgstr "dintre aceste cuvinte"
+
+#: wwsympa/tt2/d_read.tt2:260
+msgid "title"
+msgstr "URL"
+
+#: src/etc/mhonarc-ressources:339
+msgid "to list"
+msgstr ""
+
+#: wwsympa/tt2/view_translations.tt2:22
+msgid "translated"
+msgstr "tradus"
+
+#: wwsympa/tt2/reviewbouncing.tt2:65
+msgid "type"
+msgstr "tip"
+
+#: wwsympa/tt2/serveradmin.tt2:153
+msgid "using"
+msgstr "utilizand directoare"
+
+#: wwsympa/tt2/home.tt2:51
+msgid "view all lists"
+msgstr "vizualizeaza toate listele"
+
+#: wwsympa/tt2/arcsearch_form.tt2:44
+msgid "word"
+msgstr ""
+
+#: wwsympa/tt2/error.tt2:45
+msgid "you need to login"
+msgstr "trebuie sa te autentifici"
+
+#: src/etc/tt2/sendpasswd.tt2:29
+#. (newuser.email)
+msgid "your email address    : %1"
+msgstr "adresa ta de mail: %1"
+
+#: src/etc/tt2/expire_warning1.tt2:7 src/etc/tt2/expire_warning2.tt2:7 src/etc/tt2/sendpasswd.tt2:30
+#. (user.password)
+#. (newuser.password)
+msgid "your password : %1"
+msgstr "parola ta: %1"

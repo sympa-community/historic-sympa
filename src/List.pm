@@ -24,6 +24,7 @@ package List;
 use strict;
 require X509;
 require Exporter;
+require Encode;
 require 'tools.pl';
 
 my @ISA = qw(Exporter);
@@ -2051,7 +2052,7 @@ sub send_msg {
 
     ## Add Custom Subject
     if ($admin->{'custom_subject'}) {
-	my $subject_field = &MIME::Words::decode_mimewords($message->{'msg'}->head->get('Subject'));
+	my $subject_field = &Encode::decode('MIME-Header', $message->{'msg'}->head->get('Subject'));
 	$subject_field =~ s/^\s*(.*)\s*$/$1/; ## Remove leading and trailing blanks
 
 	## Search previous subject tagging in Subject
@@ -2073,7 +2074,7 @@ sub send_msg {
 	}else {
 	    $subject_field = '['.$parsed_tag[0].'] '.$subject_field
 	}
-	$message->{'msg'}->head->add('Subject', $subject_field);
+	$message->{'msg'}->head->add('Subject', Encode::encode('MIME-Header', $subject_field));
     }
  
     ## Who is the enveloppe sender ?
@@ -2515,9 +2516,8 @@ sub send_global_file {
     my $lang = $data->{'user'}{'lang'} || &Conf::get_robot_conf($robot, 'lang');
 
     ## What file   
-    foreach my $f ("$Conf{'etc'}/$robot/templates/$action.$lang.tpl","$Conf{'etc'}/$robot/templates/$action.tpl",
-		   "$Conf{'etc'}/templates/$action.$lang.tpl","$Conf{'etc'}/templates/$action.tpl",
-		   "--ETCBINDIR--/templates/$action.$lang.tpl","--ETCBINDIR--/templates/$action.tpl") {
+    foreach my $f ("$Conf{'etc'}/$robot/tt2/$action.$lang.tt2","$Conf{'etc'}/$robot/tt2/$action.tt2",
+		   "$Conf{'etc'}/tt2/$action.tt2", "--ETCBINDIR--/tt2/$action.tt2") {
 	if (-r $f) {
 	    $filename = $f;
 	    last;
@@ -2525,7 +2525,7 @@ sub send_global_file {
     }
 
     unless ($filename) {
-	do_log('err',"Unable to open file $Conf{'etc'}/$robot/templates/$action.tpl NOR  $Conf{'etc'}/templates/$action.tpl NOR --ETCBINDIR--/templates/$action.tpl");
+	do_log('err',"Unable to open file $Conf{'etc'}/$robot/tt2/$action.tt2 NOR  $Conf{'etc'}/tt2/$action.tt2 NOR --ETCBINDIR--/tt2/$action.tt2");
     }
 
     foreach my $p ('email','host','sympa','request','listmaster','wwsympa_url','title') {
@@ -2595,17 +2595,13 @@ sub send_file {
     my $lang = $data->{'user'}{'lang'} || $self->{'lang'} || &Conf::get_robot_conf($robot, 'lang');
 
     ## What file   
-    foreach my $f ("$self->{'dir'}/$action.$lang.tpl",
-		   "$self->{'dir'}/$action.tpl",
+    foreach my $f ("$self->{'dir'}/$action.tt2",
 		   "$self->{'dir'}/$action.mime","$self->{'dir'}/$action",
-		   "$Conf{'etc'}/$robot/templates/$action.$lang.tpl",
-		   "$Conf{'etc'}/$robot/templates/$action.tpl",
-		   "$Conf{'etc'}/templates/$action.$lang.tpl",
-		   "$Conf{'etc'}/templates/$action.tpl",
+		   "$Conf{'etc'}/$robot/tt2/$action.tt2",
+		   "$Conf{'etc'}/tt2/$action.tt2",
 		   "$Conf{'home'}/$action.mime",
 		   "$Conf{'home'}/$action",
-		   "--ETCBINDIR--/templates/$action.$lang.tpl",
-		   "--ETCBINDIR--/templates/$action.tpl") {
+		   "--ETCBINDIR--/tt2/$action.tt2") {
 	if (-r $f) {
 	    $filename = $f;
 	    last;
@@ -2613,7 +2609,7 @@ sub send_file {
     }
 
     unless ($filename) {
-	do_log('err',"Unable to find '$action' template in list directory NOR $Conf{'etc'}/templates/ NOR --ETCBINDIR--/templates/");
+	do_log('err',"Unable to find '$action' template in list directory NOR $Conf{'etc'}/tt2/ NOR --ETCBINDIR--/tt2/");
     }
     
     foreach my $p ('email','host','sympa','request','listmaster','wwsympa_url','title') {
@@ -4584,7 +4580,7 @@ sub may_edit {
     my ($what, @order);
 
     if (($parameter =~ /^(\w+)\.(\w+)$/) &&
-	($parameter !~ /\.tpl$/)) {
+	($parameter !~ /\.tt2$/)) {
 	my $main_parameter = $1;
 	@order = ($edit_conf->{$parameter}{$role},
 		  $edit_conf->{$main_parameter}{$role}, 

@@ -44,7 +44,7 @@ use Message;
 
 require 'tools.pl';
 require 'msg.pl';
-require 'parser.pl';
+require 'tt2native.pl';
 
 
 # durty global variables

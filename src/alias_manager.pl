@@ -27,7 +27,7 @@ use lib '--LIBDIR--';
 use Conf;
 use POSIX;
 require "tools.pl";
-require "parser.pl";
+require "tt2native.pl";
 
 
 unless (Conf::load('--CONFIG--')) {
@@ -72,7 +72,7 @@ $data{'list'}{'domain'} = $data{'robot'} = $domain;
 $data{'list'}{'name'} = $listname;
 $data{'default_domain'} = $default_domain;
 $data{'is_default_domain'} = 1 if ($domain eq $default_domain);
-my $template_file = &tools::get_filename('etc', 'list_aliases.tpl', $domain);
+my $template_file = &tools::get_filename('etc', 'list_aliases.tt2', $domain);
 my @aliases ;
 &parser::parse_tpl (\%data,$template_file,\@aliases);
 

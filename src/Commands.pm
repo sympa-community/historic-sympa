@@ -149,7 +149,8 @@ sub help {
     do_log('debug', 'Commands::help to robot %s',$robot);
 
     # sa ne prends pas en compte la structure des répertoires par lang.
-    if ((-r "$Conf{'etc'}/templates/helpfile.tpl")||("$Conf{'etc'}/$robot/templates/helpfile.tpl")) {
+    # we should make this utilize Template's chain of responsibility
+    if ((-r "$Conf{'etc'}/tt2/helpfile.tt2")||("$Conf{'etc'}/$robot/tt2/helpfile.tt2")) {
 
 	my $data = {};
 
@@ -184,7 +185,7 @@ sub help {
 	push @msg::report, sprintf Msg(6, 70, "\nPowered by Sympa %s : http://www.sympa.org/\n")
 	    , $Version ;
 
-    }elsif (-r "--ETCBINDIR--/templates/helpfile.tpl") {
+    }elsif (-r "--ETCBINDIR--/tt2/helpfile.tt2") {
 
 	my $data = {};
 

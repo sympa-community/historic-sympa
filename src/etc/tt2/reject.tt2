@@ -1,0 +1,11 @@
+From: [% conf.email %]@[% conf.host %]
+Subject: [%|l%]Your message has been rejected.[%END%]
+
+[%|l(list.name,list.host,rejected_by)%]Your message for list %1@%2
+as been rejected by %3 list editor.[%END%]
+
+[%|l(subject)%](Subject of your mail : %1)[%END%]
+
+
+[%|l(list.name)%]Check %1 list usage :[%END%]
+[% conf.wwsympa_url %]/info/[% list.name %]

@@ -189,7 +189,7 @@ sub mailfile {
 #  }
 
    ## Does the file include headers ?
-   if ($filename =~ /\.tpl$/) {
+   if ($filename =~ /\.tt2$/) {
        open TPL, $filename;
        my $first_line = <TPL>;
        $full_msg = 1 if ($first_line =~ /^From:\s/);
@@ -226,8 +226,12 @@ sub mailfile {
    }
 
    if ($filename) {
-       if ($filename =~ /\.tpl$/) {
-	   &parser::parse_tpl($data, $filename, $fh);
+       if ($filename =~ /\.tt2$/) {
+#	   &parser::parse_tpl($data, $filename, $fh);
+my $output;
+	   &parser::parse_tpl($data, $filename, \$output);
+warn 'from tmpl:',join('',$output);
+print $fh join('',$output);
 
        }else {
 	   ## Old style

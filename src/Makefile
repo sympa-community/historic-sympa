@@ -27,7 +27,7 @@ bin_SRC		=	queue bouncequeue
 
 lib_SRC		=	Archive.pm Commands.pm Conf.pm \
 			Language.pm List.pm Log.pm mail.pm msg.pl Ldap.pm \
-			smtp.pm tools.pl Version.pm parser.pl X509.pm Message.pm
+			smtp.pm tools.pl Version.pm X509.pm Message.pm tt2native.pl
 
 libexec_SRC	=	aliaswrapper virtualwrapper
 
@@ -55,13 +55,9 @@ newinstall: makedir subst $(sbin_SRC) $(lib_SRC) installqueue installwrapper ins
 
 installtemplates:
 	@echo "Deleting current templates..."
-	rm -f $(DESTDIR)$(ETCBINDIR)/templates/*.tpl
+	rm -f $(DESTDIR)$(ETCBINDIR)/tt2/*.tt2
 	@echo "Installing default templates..."
-	@for lang in etc/templates/* ; do \
-		echo $$lang; \
-		cp $$lang/*.tpl  $(DESTDIR)$(ETCBINDIR)/templates/; \
-	done
-	$(PERL) ../set_symlinks.pl templates $(DESTDIR)$(ETCBINDIR)/templates
+	cp etc/tt2/*.tt2 $(DESTDIR)$(ETCBINDIR)/tt2/
 
 installtask_models:
 	@echo "Installing default task models ..."
@@ -92,7 +88,7 @@ installetc:
 		INSTALLDIR=$(ETCBINDIR); export INSTALLDIR;\
 		MAILERPROGDIR=$(MAILERPROGDIR); export MAILERPROGDIR;\
 		cd etc;\
-		$(PERL) ../../subst.pl list_aliases.tpl \
+		$(PERL) ../../subst.pl list_aliases.tt2 \
 	)
 
 installlisttemplates:
@@ -149,9 +145,9 @@ makedir:
 		echo "Creating required directory $(DESTDIR)$(ETCBINDIR)/create_list_templates"; \
 		mkdir $(DESTDIR)$(ETCBINDIR)/create_list_templates; \
 	fi
-	@if [ ! -d $(DESTDIR)$(ETCBINDIR)/templates ]; then \
-		echo "Creating required directory $(DESTDIR)$(ETCBINDIR)/templates"; \
-		mkdir $(DESTDIR)$(ETCBINDIR)/templates; \
+	@if [ ! -d $(DESTDIR)$(ETCBINDIR)/tt2 ]; then \
+		echo "Creating required directory $(DESTDIR)$(ETCBINDIR)/tt2"; \
+		mkdir $(DESTDIR)$(ETCBINDIR)/tt2; \
 	fi
 	@if [ ! -d $(DESTDIR)$(ETCBINDIR)/list_task_models ]; then \
 		echo "Creating required directory $(DESTDIR)$(ETCBINDIR)/list_task_models"; \
@@ -177,7 +173,7 @@ installmod:
 	chgrp -R $(GROUP) $(DESTDIR)$(ETCBINDIR)
 	@echo "Setting privileges..."
 	chmod 755 $(DESTDIR)$(SBINDIR) $(DESTDIR)$(ETCBINDIR) 
-	chmod 755 $(DESTDIR)$(ETCBINDIR)/scenari $(DESTDIR)$(ETCBINDIR)/templates $(DESTDIR)$(ETCBINDIR)/list_task_models $(DESTDIR)$(ETCBINDIR)/global_task_models
+	chmod 755 $(DESTDIR)$(ETCBINDIR)/scenari $(DESTDIR)$(ETCBINDIR)/tt2 $(DESTDIR)$(ETCBINDIR)/list_task_models $(DESTDIR)$(ETCBINDIR)/global_task_models
 	chmod 755 $(DESTDIR)$(ETCBINDIR)/create_list_templates
 	chmod 644 $(DESTDIR)$(ETCBINDIR)/*.conf $(DESTDIR)$(ETCBINDIR)/*.crt 
 	chmod 600 $(DESTDIR)$(ETCBINDIR)/ca-bundle.crt

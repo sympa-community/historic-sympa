@@ -27,7 +27,7 @@ use Exporter;
 @EXPORT = ();
 
 ## Supported web languages
-@languages = ('fr','us','es','it','nl','cn','cz','de','hu','et','ro','fi');
+@languages = ('fr','us','es','it','nl','cn','cz','de','hu','et','ro','fi', 'tw');
 
 %reception_mode = ('mail' => 'normal',
 		   'digest' => 'digest',

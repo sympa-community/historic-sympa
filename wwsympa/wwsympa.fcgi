@@ -35,7 +35,7 @@ use Getopt::Long;
 use strict vars;
 
 ## Template parser
-require "--LIBDIR--/parser.pl";
+require "--LIBDIR--/tt2native.pl";
 
 ## Sympa API
 use List;
@@ -729,22 +729,22 @@ if ($wwsconf->{'use_fast_cgi'}) {
 
 	 ## Action template
 	 if (defined $param->{'action'}) {
-	     $param->{'action_template'} = &tools::get_filename('etc', "wws_templates/$param->{'action'}.$param->{'lang'}.tpl", $robot,$list);
+	     $param->{'action_template'} = &tools::get_filename('etc', "wws.tt2/$param->{'action'}.tt2", $robot,$list);
 	     unless ($param->{'action_template'})  {
-		 &error_message('template_error');
+		 &error_message('template_erro');
 		 &do_log('info',"unable to find template for $param->{'action'}");
 	     }
 	 }
 
 	 ## Menu template
-	 $param->{'menu_template'} = &tools::get_filename('etc', "wws_templates/menu.$param->{'lang'}.tpl", $robot,$list);
+	 $param->{'menu_template'} = &tools::get_filename('etc', "wws.tt2/menu.tt2", $robot,$list);
 	 unless ($param->{'menu_template'})  {
 	     &error_message('template_error');
 	     &do_log('info','unable to find menu template');
 	 }
 
 	 ## List_menu template
-	 $param->{'list_menu_template'} = &tools::get_filename('etc', "wws_templates/list_menu.$param->{'lang'}.tpl", $robot,$list);
+	 $param->{'list_menu_template'} = &tools::get_filename('etc', "wws.tt2/list_menu.tt2", $robot,$list);
 
 	 unless ($param->{'list_menu_template'})  {
 	     &error_message('template_error');
@@ -752,7 +752,7 @@ if ($wwsconf->{'use_fast_cgi'}) {
 	 }
 
 	 ## admin_menu template
-	 $param->{'admin_menu_template'} = &tools::get_filename('etc', "wws_templates/admin_menu.$param->{'lang'}.tpl", $robot,$list);
+	 $param->{'admin_menu_template'} = &tools::get_filename('etc', "wws.tt2/admin_menu.tt2", $robot,$list);
 
 	 unless ($param->{'admin_menu_template'})  {
 	     &error_message('template_error');
@@ -760,7 +760,7 @@ if ($wwsconf->{'use_fast_cgi'}) {
 	 }
 
 	 ## Title template
-	 $param->{'title_template'} = &tools::get_filename('etc', "wws_templates/title.$param->{'lang'}.tpl", $robot,$list);
+	 $param->{'title_template'} = &tools::get_filename('etc', "wws.tt2/title.tt2", $robot,$list);
 
 	 unless ($param->{'title_template'})  {
 	     &error_message('template_error');
@@ -768,7 +768,7 @@ if ($wwsconf->{'use_fast_cgi'}) {
 	 }
 
 	 ## Error template
-	 $param->{'error_template'} = &tools::get_filename('etc', "wws_templates/error.$param->{'lang'}.tpl", $robot,$list);
+	 $param->{'error_template'} = &tools::get_filename('etc', "wws.tt2/error.tt2", $robot,$list);
 
 	 unless ($param->{'error_template'})  {
 	     &error_message('template_error');
@@ -776,7 +776,7 @@ if ($wwsconf->{'use_fast_cgi'}) {
 	 }
 
 	 ## Notice template
-	 $param->{'notice_template'} = &tools::get_filename('etc', "wws_templates/notice.$param->{'lang'}.tpl", $robot,$list);
+	 $param->{'notice_template'} = &tools::get_filename('etc', "wws.tt2/notice.tt2", $robot,$list);
 
 	 unless ($param->{'notice_template'})  {
 	     &error_message('template_error');
@@ -784,10 +784,10 @@ if ($wwsconf->{'use_fast_cgi'}) {
 	 }
 
 	 ## Help template
-	 $param->{'help_template'} = &tools::get_filename('etc', "wws_templates/help_$param->{'help_topic'}.$param->{'lang'}.tpl", $robot,$list);
+	 $param->{'help_template'} = &tools::get_filename('etc', "wws.tt2/help_$param->{'help_topic'}.tt2", $robot,$list);
 
 	 ## main template
-	 my $main = &tools::get_filename('etc', "wws_templates/main.$param->{'lang'}.tpl", $robot,$list);;
+	 my $main = &tools::get_filename('etc', "wws.tt2/main.tt2", $robot,$list);;
 
 	 unless ($main)  {
 	     &error_message('template_error');
@@ -798,7 +798,7 @@ if ($wwsconf->{'use_fast_cgi'}) {
 	     $param->{'list_conf'} = $list->{'admin'};
 	 }
 
-	 &parser::parse_tpl($param,$main , \*STDOUT);
+	 &parser::parse_tpl($param,'main.tt2' , \*STDOUT);
      }    
 
      # exit if wwsympa.fcgi itself has changed
@@ -4762,7 +4762,7 @@ if ($wwsconf->{'use_fast_cgi'}) {
 	 return undef;
      }
 
-     my $template_file = &tools::get_filename('etc', 'create_list_templates/'.$in{'template'}.'/config.tpl', $robot);
+     my $template_file = &tools::get_filename('etc', 'create_list_templates/'.$in{'template'}.'/config.tt2', $robot);
      unless ($template_file) {
 	 &error_message('unable_to_open_template');
 	 &do_log('info', 'no template %s in %s NOR %s',$in{'template'},"$Conf{'etc'}/$robot/create_list_templates/$in{'template'}","$Conf{'etc'}/create_list_templates/$in{'template'}","--ETCBINDIR--/create_list_templates/$in{'template'}");

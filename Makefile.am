@@ -235,7 +235,7 @@ clean:
 	$(MAKE) PERL='${PERL}' clean) || exit 1; \
 	done;
 
-install: importantchanges installsrc installnls installwws installman installscript installsample installdir installconfig installdoc
+install: importantchanges installsrc installnls installwws installpo installman installscript installsample installdir installconfig installdoc
 
 importantchanges:
 	@( 	PERL=$(PERL); export PERL; \
@@ -258,6 +258,7 @@ installsrc:
 	VIRTUAL_ALIASES='${VIRTUAL_ALIASES}'  HOST='${HOST}' COOKIE='${COOKIE}' \
 	SPOOLDIR='${SPOOLDIR}' LOG_SOCKET_TYPE='${LOG_SOCKET_TYPE}' \
 	SSLCERTDIR='${SSLCERTDIR}' \
+	PODIR='${prefix}/po' \
 	USER='${USER}' GROUP='${GROUP}' newinstall) || exit 1;
 
 installdoc:
@@ -286,6 +287,14 @@ installwws:
 	CGIDIR='${CGIDIR}' WWSBINDIR='${WWSBINDIR}' MAILERPROGDIR='${MAILERPROGDIR}' \
 	PIDDIR='${PIDDIR}' CONFIG='${CONFIG}' WWSCONFIG='${WWSCONFIG}' ETCBINDIR='${ETCBINDIR}' \
 	DESTDIR='${DESTDIR}' USER='${USER}' GROUP='${GROUP}' ICONSDIR='${ICONSDIR}' newinstall) || exit 1;
+
+installpo:
+	@(cd po && echo "making in po...." && \
+	$(MAKE) SH='${SH}' CC='${CC}' CFLAGS='${CFLAGS}' PERL='${PERL}' \
+	DIR='${DIR}' NLSDIR='${NLSDIR}' ETCBINDIR='${ETCBINDIR}' \
+	DESTDIR='${DESTDIR}' CONFIG='${CONFIG}' WWSCONFIG='${WWSCONFIG}' \
+	PODIR='${prefix}/po' \
+	USER='${USER}' GROUP='${GROUP}' newinstall) || exit 1;
 
 installsample:
 	@(cd src/etc/sample && echo "making in src/etc/sample..." && \

@@ -1,0 +1,18 @@
+<!-- $Id$ -->
+
+<!-- begin help_admin.tt2 -->
+          <LI><FONT COLOR="[% dark_color %]"><b>[%|l%]Remove list[%END%]</b></FONT> [%|l%]completely remove the current list. Listmaster privileges are required to[%END%] <FONT COLOR="[% dark_color %]"><b>[%|l%]Restore list[%END%]</b></FONT>.
+          <LI><FONT COLOR="[% dark_color %]"><b>[%|l%]Create shared[%END%]</b></FONT> [%|l%]initialize the shared document web space.[%END%]
+              <FONT COLOR="[% dark_color %]"><b>[%|l%]Delete shared[%END%]</b></FONT> [%|l%]close it. It can be restored using[%END%] <FONT COLOR="[% dark_color %]"><b>[%|l%]Restore shared[%END%]</b></FONT>.
+	  <LI><FONT COLOR="[% dark_color %]"><b>[%|l%]Edit list config[%END%]</b></FONT> [%|l%]must be used with care : it allows to modify some of the
+                 list parameters. The list of parameters you can modify depends on your privilege.[%END%]
+          <LI><FONT COLOR="[% dark_color %]"><b>[%|l%]Subscribers[%END%]</b></FONT> [%|l%]: subscribers management, add, del, search, bounces, etc...[%END%]
+          <LI><FONT COLOR="[% dark_color %]"><b>[%|l%]Moderate[%END%]</b></FONT> [%|l%]: reject and accept messages for distribution.[%END%]
+          <LI><FONT COLOR="[% dark_color %]"><b>[%|l%]Customizing[%END%]</b></FONT> [%|l(dark_color)%]: editing of various files and messages attached to your list.
+          <LI><FONT COLOR="%1"><b>Manage Archives</b></FONT> : Allow you to download and delete list archives.[%END%]	
+
+<!-- end help_admin.tt2 -->
+
+
+
+
