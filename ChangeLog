@@ -1,3 +1,11 @@
+2003-04-29 17:59  salaun
+
+	* src/List.pm: Fix: using wrong log subroutine
+
+2003-04-29 17:27  salaun
+
+	* ChangeLog, NEWS: Update
+
 2003-04-29 17:17  salaun
 
 	* src/List.pm, wwsympa/wwsympa.fcgi: Change: HTML version of
