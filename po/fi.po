@@ -1,0 +1,6756 @@
+# #-#-#-#-#  fi.po (PACKAGE VERSION)  #-#-#-#-#
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR Free Software Foundation, Inc.
+# FIRST AUTHOR <EMAIL>, YEAR.
+#
+# #-#-#-#-#  fi.po (PACKAGE VERSION)  #-#-#-#-#
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"POT-Creation-Date: 2002-07-16 17:27+0800\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: Finnish\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=iso-8859-1\n"
+"Content-Transfer-Encoding: 8bit\n"
+"#-#-#-#-#  fi.po (PACKAGE VERSION)  #-#-#-#-#\n"
+"#-#-#-#-#  fi.po (PACKAGE VERSION)  #-#-#-#-#\n"
+
+#. (from_count)
+#: web_tt2/arcsearch.tt2:64
+#, fuzzy
+msgid " %1 hits on message's From field"
+msgstr "osumaa viestin"
+
+#. (count)
+#: web_tt2/latest_lists.tt2:6
+#, fuzzy
+msgid " The %1 latest lists "
+msgstr "Uusimmat listat"
+
+#. (count)
+#: web_tt2/latest_arc.tt2:6
+#, fuzzy
+msgid " The %1 latest messages "
+msgstr "Uusi viesti ensiksi"
+
+# nlsref 16,70
+#. (count)
+#: web_tt2/latest_d_read.tt2:6
+#, fuzzy
+msgid " The %1 latest shared documents "
+msgstr "Jaetut dokumentit"
+
+#. (count)
+#: web_tt2/active_lists.tt2:6
+#, fuzzy
+msgid " The %1 most active lists "
+msgstr "Uusimmat listat"
+
+#: web_tt2/active_lists.tt2:8
+#, fuzzy
+msgid " The active lists "
+msgstr "Uusimmat listat"
+
+#: web_tt2/latest_lists.tt2:8
+#, fuzzy
+msgid " The latest lists "
+msgstr "Uusimmat listat"
+
+#: web_tt2/latest_arc.tt2:8
+#, fuzzy
+msgid " The latest messages "
+msgstr "Uusi viesti ensiksi"
+
+# nlsref 16,70
+#: web_tt2/latest_d_read.tt2:8
+#, fuzzy
+msgid " The latest shared documents "
+msgstr "Jaetut dokumentit"
+
+#. (loc)
+#. (for)
+#: web_tt2/active_lists.tt2:12 web_tt2/latest_arc.tt2:12
+#: web_tt2/latest_d_read.tt2:12 web_tt2/latest_lists.tt2:12
+msgid " for %1 days "
+msgstr ""
+
+#. (list_request_date)
+#: web_tt2/set_pending_list_request.tt2:17
+#, fuzzy
+msgid " on %1"
+msgstr "Vastaanottaja: %1"
+
+#. (conf.title,list)
+#: mail_tt2/sendpasswd.tt2:5
+msgid "%1 / subscribing to %2"
+msgstr "%1 / tilaus listalle %2"
+
+#. (conf.title,list)
+#: mail_tt2/sendpasswd.tt2:7
+msgid "%1 / unsubscribing from %2"
+msgstr "%1 / tilauksen poisto listalle %2"
+
+#. (conf.title)
+#: mail_tt2/sendpasswd.tt2:9
+msgid "%1 / your environment"
+msgstr "%1 / asetuksesi"
+
+#. (error.path)
+#: web_tt2/error.tt2:103
+msgid "%1 : No such file"
+msgstr "%1 : Tiedostoa ei olemassa"
+
+#. (error.path)
+#: web_tt2/error.tt2:100
+msgid "%1 : No such file or directory"
+msgstr "%1 : Tiedosto tai hakemisto ei olemassa"
+
+#. (notice.action)
+#: web_tt2/notice.tt2:10
+msgid "%1 : action succeeded"
+msgstr "%1 : toiminto onnistui"
+
+#. (error.file)
+#: web_tt2/error.tt2:60
+msgid "%1 : file not editable"
+msgstr "%1 : tiedosto ei ole muutettavissa"
+
+#. (error.name)
+#: web_tt2/error.tt2:118
+msgid "%1 : incorrect name"
+msgstr "%1 : väärä nimi"
+
+#. (error.action)
+#: web_tt2/error.tt2:6
+msgid "%1 : unknown action"
+msgstr "%1 : tuntematon toiminto"
+
+#. (error.list)
+#: web_tt2/error.tt2:9
+msgid "%1 : unknown list"
+msgstr "%1 : tuntamaton lista"
+
+#. (error.action)
+#: web_tt2/error.tt2:42
+msgid "%1 : you are not allowed to perform this action"
+msgstr "%1 : sinulla ei ole oikeuksia suorittaa tätä toimenpidettä"
+
+#. (list.name,date)
+#: mail_tt2/digest_plain.tt2:4 mail_tt2/digest_plain.tt2:8
+#, fuzzy
+msgid "%1 Digest %2"
+msgstr "Kooste"
+
+#. (notice.total)
+#: web_tt2/notice.tt2:43
+msgid "%1 addresses have been subscribed"
+msgstr ""
+
+#. (list.name)
+#: mail_tt2/list_created.tt2:9
+msgid "%1 admin page"
+msgstr "%1 hallinta sivu"
+
+#. (list.name,list.host,size,conf.host,conf.listmaster_email)
+#: mail_tt2/listowner_notification.tt2:8
+msgid ""
+"%1 archive quota exceeded. \n"
+"Total size used for %1@%2 archive is %3 Bytes. Messages\n"
+"are no more web-archived. Please contact %5@%4. \n"
+msgstr ""
+
+# nlsref 17,6
+#. (l.average)
+#: web_tt2/rss.tt2:102
+#, fuzzy
+msgid "%1 by day "
+msgstr "1 päivä"
+
+#. (body_count)
+#: web_tt2/arcsearch.tt2:56
+#, fuzzy
+msgid "%1 hits on message's Body"
+msgstr "osumaa viestin"
+
+#. (date_count)
+#: web_tt2/arcsearch.tt2:68
+#, fuzzy
+msgid "%1 hits on message's Date field"
+msgstr "osumaa viestin"
+
+#. (subj_count)
+#: web_tt2/arcsearch.tt2:60
+#, fuzzy
+msgid "%1 hits on message's Subject field"
+msgstr "osumaa viestin"
+
+#. (error.email,error.list)
+#: web_tt2/error.tt2:66
+msgid "%1 is already subscribed to the list %2"
+msgstr "%1 on jo tilaajana listalla %2"
+
+#. (list.name)
+#: mail_tt2/list_created.tt2:2
+msgid "%1 mailing list creation"
+msgstr "%1 listan luonti"
+
+#. (searched,num)
+#: web_tt2/arcsearch.tt2:53
+msgid "%1 messages selected out of %2"
+msgstr "%1 viestiä valittuna %2 viestistä..."
+
+#. (occurrence)
+#: web_tt2/lists.tt2:4 web_tt2/review.tt2:71
+msgid "%1 occurrence(s) found"
+msgstr "%1 osumaa löytyi"
+
+#. (notice.total)
+#: web_tt2/notice.tt2:7
+msgid "%1 subscribers added"
+msgstr "%1 tilaajaa lisätty"
+
+#. (error.action)
+#: web_tt2/error.tt2:72
+msgid "%1: action failed"
+msgstr "%1: toimepide epäonnistui"
+
+#. (l.name,l.host,l.subject,l.msg_count)
+#: web_tt2/rss.tt2:101
+msgid "%1@%2 - %3 : %4 messages"
+msgstr ""
+
+#. (list.name,list.host,param0)
+#: mail_tt2/listowner_notification.tt2:22
+msgid ""
+"%1@%2 is no more an instance of family %3.\n"
+"This list has been closed.\n"
+msgstr ""
+
+#. (list.name,list.host)
+#: mail_tt2/list_created.tt2:4
+msgid "%1@%2 mailing list has been activated by listmaster."
+msgstr "%1 listan luonti"
+
+#. (list.name,list.host)
+#: mail_tt2/list_rejected.tt2:4
+msgid "%1@%2 mailing list has been rejected by listmaster."
+msgstr ""
+
+#. (rate2,list.name,list.host,rate)
+#: mail_tt2/listowner_notification.tt2:13
+#, fuzzy
+msgid "%2@%3 archives use %4% of allowed disk quota."
+msgstr "Lista \"%1\" varoitus : arkisto %2% täynnä"
+
+#: src/PlainDigest.pm:353
+msgid "%Image(%s)"
+msgstr ""
+
+# nlsref 6,52
+#: src/Commands.pm:2166
+msgid "%s did not receive confirmation for the following addresses :\n"
+msgstr "%s ei vastaanottanut vahvistusta seuraaville osoitteille :\n"
+
+# nlsref 6,91
+#: src/Commands.pm:1557
+msgid "%s mailing list does not provide subscriber preferences.\n"
+msgstr "%s postituslista ei salli tilaajan asetuksiin muutoksia.\n"
+
+# nlsref 6,69
+#: src/Commands.pm:2023
+msgid "%s posted your expiration message to the following addresses :\n"
+msgstr "%s lähetti tilauksen päättymisviestisi seuraaviin osoitteisiin :\n"
+
+#: web_tt2/arcsearch.tt2:18
+msgid "(All of this words,"
+msgstr "(Kaikki sanat,"
+
+#: web_tt2/help_editlist.tt2:17
+msgid ""
+"(Default value: reception mail,notice,digest,digestplain,summary,nomail)"
+msgstr ""
+
+#: web_tt2/arcsearch.tt2:20
+msgid "(Each of this words,"
+msgstr "(Jokainen sanoista,"
+
+#. (subject)
+#: mail_tt2/reject.tt2:7
+msgid "(Subject of your mail : %1)"
+msgstr "Tarkista [% list.name %] listan käyttö :"
+
+#: web_tt2/arcsearch.tt2:16
+msgid "(This sentence,"
+msgstr "(Tämä lause,"
+
+#: web_tt2/help.tt2:28
+msgid "), provide your email address and associated password."
+msgstr "), anna email osoitteesi ja salasana."
+
+#: src/PlainDigest.pm:238
+msgid ""
+"** Warning: Message part originally used character set %s\n"
+"    Some characters may be lost or incorrect **\n"
+"\n"
+msgstr ""
+
+#: mail_tt2/your_infected_msg.tt2:4
+msgid "***** V I R U S    A L E R T *****"
+msgstr ""
+
+# nlsref 5,4
+#: src/tools.pl:137
+msgid "------ End of suspected message ------\n"
+msgstr "------ Epäselvän viestin loppu ------\n"
+
+#: src/PlainDigest.pm:258
+msgid "-----End of Delivery Status Report-----\n"
+msgstr ""
+
+# nlsref 5,4
+#: src/PlainDigest.pm:199
+#, fuzzy
+msgid ""
+"-----End of original message from %s-----\n"
+"\n"
+msgstr "------ Epäselvän viestin loppu ------\n"
+
+#: web_tt2/create_list_request.tt2:48
+msgid "--Select a topic--"
+msgstr "--Valitse aihe--"
+
+# nlsref 17,6
+#: wwsympa/wwslib.pm:52
+msgid "1 day"
+msgstr "1 päivä"
+
+# nlsref 17,4
+#: wwsympa/wwslib.pm:50
+msgid "1 hour"
+msgstr "1 tunti"
+
+# nlsref 17,7
+#: wwsympa/wwslib.pm:53
+msgid "1 week"
+msgstr "1 viikko"
+
+# nlsref 17,2
+#: wwsympa/wwslib.pm:48
+msgid "10 minutes"
+msgstr "10 minuuttia"
+
+# nlsref 17,3
+#: wwsympa/wwslib.pm:49
+msgid "30 minutes"
+msgstr "30 minuuttia"
+
+# nlsref 17,5
+#: wwsympa/wwslib.pm:51
+msgid "6 hours"
+msgstr "6 tuntia"
+
+#: web_tt2/help.tt2:22
+msgid ": Login / Logout from WWSympa."
+msgstr ": Kirjautuminen/Kirjautuminen ulos WWWSympassa."
+
+#: web_tt2/error.tt2:21
+msgid ": bad listname"
+msgstr ": väärä listan nimi"
+
+#: web_tt2/help.tt2:18
+msgid ": directory of lists available on the server"
+msgstr ": hakemisto listoista jotka ovat saatavilla tällä palvelimella"
+
+#: web_tt2/help.tt2:16
+#, fuzzy
+msgid ": user preferences. This is proposed to identified users only."
+msgstr ": käyttäjän asetukset. Tämä on vain tunnistetuille käyttäjille."
+
+#: web_tt2/error.tt2:27
+msgid ": user unknown"
+msgstr ": käyttäjä tuntematon"
+
+#: web_tt2/help.tt2:20
+msgid ": your environment as a subscriber or as owner"
+msgstr ": ympäristösi tilaajana tai omistajana"
+
+#. (email)
+#: web_tt2/lists.tt2:6
+msgid "<B>%1</B> is subscribed to the following mailing lists"
+msgstr "<B>%1</B> on tilaajana seuraavilla listoilla"
+
+#: web_tt2/help_editlist.tt2:18
+msgid ""
+"<em>modelist</em> is a list of modes (mail, notice, digest, digestplain, "
+"summary, nomail), separated by commas. Only these modes will be allowed for "
+"the subscribers of this list. If a subscriber has a reception mode not in "
+"the list, sympa uses the mode specified in the default_user_options "
+"paragraph."
+msgstr ""
+
+#: web_tt2/help_admin.tt2:5
+#, fuzzy
+msgid ""
+"<strong>Create shared</strong> : initializes the shared document web space."
+msgstr "alusta jaettu dokumentti WWW-tila."
+
+#: web_tt2/help_admin.tt2:10
+msgid ""
+"<strong>Customizing</strong> : editing of various files and messages "
+"attached to your list."
+msgstr ""
+
+#: web_tt2/help_admin.tt2:6
+msgid ""
+"<strong>Delete shared</strong> closes it. It can be restored using \"Restore "
+"shared\" button"
+msgstr ""
+
+#: web_tt2/help_admin.tt2:7
+msgid ""
+"<strong>Edit list config</strong>:  must be used with care : it allows to "
+"modify some of the list parameters. The list of parameters you can modify "
+"depends on your privilege."
+msgstr ""
+
+#: web_tt2/help_admin.tt2:11
+msgid ""
+"<strong>Manage Archives</strong>  : Allow you to download and delete list "
+"archives."
+msgstr ""
+
+#: web_tt2/help_admin.tt2:9
+#, fuzzy
+msgid ""
+"<strong>Moderate</strong> : reject and accept messages and documents for "
+"distribution."
+msgstr ": tilaajien hallinta, lisäys, poisto, haku, palaavat viestit, jne..."
+
+#: web_tt2/help_admin.tt2:4
+#, fuzzy
+msgid ""
+"<strong>Remove list</strong> : completely removes the current list. "
+"Listmaster privileges are required to Restore a list"
+msgstr "poista lista kokonaan. Listmaster oikeudet vaaditaan"
+
+#: web_tt2/help_admin.tt2:8
+#, fuzzy
+msgid ""
+"<strong>Subscribers</strong> : subscribers management, add, del, search, "
+"bounces, etc..."
+msgstr ": tilaajien hallinta, lisäys, poisto, haku, palaavat viestit, jne..."
+
+#: web_tt2/create_list_request.tt2:70
+msgid "A few lines describing the list"
+msgstr "Listan kuvaus muutamalla rivillä"
+
+#: mail_tt2/your_infected_msg.tt2:2
+msgid "A virus in your email"
+msgstr "Virus viestissäsi"
+
+#: mail_tt2/helpfile.tt2:47
+msgid "ADD <list> user@host Full name  * To add a user to a list"
+msgstr ""
+
+#: web_tt2/serveradmin.tt2:189
+msgid "ALL"
+msgstr "KAIKKI"
+
+#: web_tt2/d_read.tt2:127
+msgid "Access"
+msgstr "Oikeudet"
+
+#. (visible_path)
+#: web_tt2/d_control.tt2:4
+msgid "Access rights for the document %1"
+msgstr "Dokumentin saantioikeudet %1"
+
+# nlsref 16,1
+#: src/List.pm:309
+msgid "Account"
+msgstr "Tili"
+
+#: web_tt2/d_read.tt2:411 web_tt2/review.tt2:13
+msgid "Add"
+msgstr "Lisää"
+
+#: web_tt2/d_read.tt2:405
+msgid "Add a bookmark"
+msgstr "Lisää kirjanmerkki"
+
+#: web_tt2/subindex.tt2:53
+msgid "Add selected addresses"
+msgstr "Lisää valitut osoitteet"
+
+#: web_tt2/add_request.tt2:12
+msgid "Add subscribers"
+msgstr "Lisää tilaajia"
+
+#. (error.email)
+#: web_tt2/error.tt2:18
+msgid "Address \"%1\" is incorrect"
+msgstr "Osoite \"%1\" on väärä"
+
+#: web_tt2/arc.tt2:21
+msgid "Advanced search"
+msgstr "Erikois haku"
+
+#: web_tt2/create_list.tt2:8 web_tt2/install_pending_list.tt2:26
+msgid "Aliases have been installed."
+msgstr "Aliakset on asennettu."
+
+#: web_tt2/install_pending_list.tt2:29
+msgid "Aliases you should install in your mailer"
+msgstr "Aliakset jotka sinun tulee asentaa postiohjelmaan"
+
+#. (conf.sympa)
+#: mail_tt2/helpfile.tt2:10
+msgid "All commands must be sent to the electronic address %1"
+msgstr ""
+
+# nlsref 4,28
+#: src/sympa.pl:1635
+msgid ""
+"Among subscriber of list %s since %d days, %d didn't confirm there "
+"subscription.\n"
+msgstr ""
+"Listan %s tilaajien joukossa %d päivän aikana, %d ei vahvistanut "
+"tilaustaan.\n"
+
+#. (mail.sender,mail.subject)
+#: mail_tt2/x509-user-cert-missing.tt2:8
+msgid ""
+"An encrypted message from %1 has been distributed to\n"
+"Subject : %2\n"
+msgstr ""
+
+# nlsref 6,56
+#: src/Commands.pm:2041
+msgid ""
+"An expiration process for list %s has been started. This process\n"
+"will end in %d days. You will then receive the list of subscribers \n"
+"who didn't confirm their subscription in time.\n"
+"You will then be able to remove these addresses yourself with the DEL "
+"command.\n"
+msgstr ""
+"Listaa %s koskeva expire-prosessi aloitettu. Tämä prosessi loppuu\n"
+"%d:ssä päivässä. Saat prosessin loputtua listan tilaajista jotka eivät\n"
+"vahvistaneet tilaustaan ajoissa.\n"
+"Voit sitten poistaa nuo tilaajat itse DEL-komennon avulla.\n"
+
+# nlsref 16,3
+#: src/List.pm:317
+msgid "Anonymous sender"
+msgstr "Anonyymi lähettäjä"
+
+#: mail_tt2/listmaster_notification.tt2:15
+msgid "Antivirus scan failed"
+msgstr "Antivirus skannaus epäonnistui"
+
+#: mail_tt2/x509-user-cert-missing.tt2:15
+msgid "Any information about this list :"
+msgstr ""
+
+#: web_tt2/d_properties.tt2:39
+msgid "Apply"
+msgstr "Toteuta"
+
+#: web_tt2/list_menu.tt2:298 web_tt2/list_menu.tt2:302
+#: web_tt2/list_menu.tt2:306 web_tt2/list_menu.tt2:310
+#: web_tt2/list_menu.tt2:317 web_tt2/list_menu.tt2:320
+msgid "Archive"
+msgstr "Arkisto"
+
+# #-#-#-#-#  fi.po (PACKAGE VERSION)  #-#-#-#-#
+# nlsref 16,7
+#: web_tt2/arc_manage.tt2:3
+#, fuzzy
+msgid "Archive Management"
+msgstr ""
+"#-#-#-#-#  fi.po (PACKAGE VERSION)  #-#-#-#-#\n"
+"Hyljättyjen viestien hallinta\n"
+"#-#-#-#-#  fi.po (PACKAGE VERSION)  #-#-#-#-#\n"
+"Väärien osoitteiden hallinta"
+
+# nlsref 16,212
+#: src/List.pm:336
+msgid "Archive encrypted mails as cleartext"
+msgstr ""
+
+#: src/etc/mhonarc-ressources.tt2:33
+msgid "Archive powered by"
+msgstr ""
+
+#: web_tt2/admin_menu.tt2:152 web_tt2/edit_list_request.tt2:8
+#: web_tt2/serveradmin.tt2:173
+msgid "Archives"
+msgstr "Arkistot"
+
+#: web_tt2/arc_manage.tt2:7
+#, fuzzy
+msgid "Archives Selection:"
+msgstr "Toggle Selection"
+
+#. (error.year_month)
+#: web_tt2/error.tt2:183
+msgid "Archives from %1 are not accessible"
+msgstr ""
+
+#. (list)
+#: web_tt2/admin_menu.tt2:123 web_tt2/admin_menu.tt2:125
+msgid "Are you sure you wish to close %1 list ?"
+msgstr ""
+
+#. (list.name)
+#: mail_tt2/moderate.tt2:3
+msgid "Article to be approved for %1"
+msgstr "Viesti hyväksyntää varten listalle %1"
+
+# nlsref 16,31
+#: src/List.pm:555
+msgid "Attachment type"
+msgstr "Liitteen tyyppi"
+
+#: web_tt2/scenario_test.tt2:59
+msgid "Auth method"
+msgstr "Tunnistus tapa"
+
+# nlsref 8,16
+#: src/List.pm:2573
+msgid "Authentication requested"
+msgstr "Tarvitaan käyttöoikeuksien vahvistus"
+
+#: web_tt2/d_read.tt2:79 web_tt2/latest_d_read.tt2:21 web_tt2/modindex.tt2:18
+#: web_tt2/modindex.tt2:70
+msgid "Author"
+msgstr "Lähettäjä"
+
+#: mail_tt2/helpfile.tt2:14
+msgid "Available commands are:"
+msgstr ""
+
+# nlsref 16,88
+#: src/List.pm:346
+msgid "Available subscription options"
+msgstr "Saatavilla olevat tilaus asetukset"
+
+#: web_tt2/active_lists.tt2:24
+msgid "Average by day"
+msgstr ""
+
+#: web_tt2/arcsearch.tt2:115
+msgid ""
+"Based on <em><a href=\"http://www.mhonarc.org/contrib/marc-search/\">Marc-"
+"Search</a></em>, search engine of MHonArc archives"
+msgstr ""
+
+#. (total,list.name)
+#: mail_tt2/listmaster_notification.tt2:112
+#: mail_tt2/listowner_notification.tt2:39
+msgid ""
+"Because we received MANY non-delivery reports, the %1 subscribers listed "
+"below have been\n"
+"notified that they might be removed from list %2:\n"
+msgstr ""
+
+#. (total,list.name)
+#: mail_tt2/listmaster_notification.tt2:115
+#: mail_tt2/listowner_notification.tt2:42
+msgid ""
+"Because we received MANY non-delivery reports, the %1 subscribers listed "
+"below have been\n"
+"removed from list %2:\n"
+msgstr ""
+
+#. (total,list.name)
+#: mail_tt2/listmaster_notification.tt2:118
+#: mail_tt2/listowner_notification.tt2:45
+msgid ""
+"Because we received MANY non-delivery reports, the %1 subscribers listed "
+"below have been\n"
+"selected by Sympa as severe bouncing addresses:\n"
+msgstr ""
+
+#: web_tt2/arcsearch_form.tt2:64
+msgid "Body"
+msgstr "Sisältö"
+
+#. (d.anchor)
+#: web_tt2/rss.tt2:121
+#, fuzzy
+msgid "Bookmark %1"
+msgstr "Kirjanmerkin URL"
+
+#: web_tt2/d_editfile.tt2:30
+msgid "Bookmark URL"
+msgstr "Kirjanmerkin URL"
+
+#: web_tt2/admin_menu.tt2:156
+msgid "Bounce Settings"
+msgstr "><b>Omat asetukset</b></FONT>"
+
+# nlsref 8,27
+#: src/List.pm:2299
+msgid ""
+"Bounce rate in list %s is %d%%.\n"
+"\n"
+"You should delete bouncing subscribers : \n"
+"%s/reviewbouncing/%s"
+msgstr ""
+"Palautettujen (bounce) viestien osuus listalla %s on %d%%.\n"
+"\n"
+"Sinun tulisi poistaa nämä tilaajat,\n"
+"joille lähetetyt viestit ovat palanneet takaisin : \n"
+"%s/reviewbouncing/%s"
+
+#: web_tt2/list_menu.tt2:105
+msgid "Bounced email rate:"
+msgstr "Palautuneiden viestien määrä:"
+
+#: web_tt2/admin_menu.tt2:82 web_tt2/admin_menu.tt2:88
+#, fuzzy
+msgid "Bounces"
+msgstr "><b>Omat asetukset</b></FONT>"
+
+#. (current_subscriber.bounce_count)
+#: web_tt2/editsubscriber.tt2:50
+msgid "Bounces count : %1"
+msgstr "Palanneiden viestien määrä : %1"
+
+# #-#-#-#-#  fi.po (PACKAGE VERSION)  #-#-#-#-#
+# nlsref 16,7
+#: src/List.pm:365 web_tt2/edit_list_request.tt2:9
+#, fuzzy
+msgid "Bounces management"
+msgstr ""
+"#-#-#-#-#  fi.po (PACKAGE VERSION)  #-#-#-#-#\n"
+"Hyljättyjen viestien hallinta\n"
+"#-#-#-#-#  fi.po (PACKAGE VERSION)  #-#-#-#-#\n"
+"Väärien osoitteiden hallinta"
+
+#: web_tt2/editsubscriber.tt2:46
+msgid "Bouncing address"
+msgstr "Palatut viestit osoitteeseen"
+
+#: mail_tt2/helpfile.tt2:40
+msgid ""
+"CONFIRM <key>               * Confirmation for sending a message (depending "
+"on the list's configuration)"
+msgstr ""
+
+#: web_tt2/d_install_shared.tt2:17 web_tt2/d_upload.tt2:31
+msgid "Cancel"
+msgstr ""
+
+#. (error.path)
+#: web_tt2/error.tt2:139
+#, fuzzy
+msgid "Cannot create %1"
+msgstr "Hakemistoa ei voida luoda %1"
+
+#. (error.path)
+#: web_tt2/error.tt2:142
+msgid "Cannot create directory %1"
+msgstr "Hakemistoa ei voida luoda %1"
+
+#. (error.path)
+#: web_tt2/error.tt2:133
+msgid "Cannot overwrite file %1"
+msgstr "Tiedostoa ei voida tallentaa %1"
+
+#. (error.name)
+#: web_tt2/error.tt2:145
+#, fuzzy
+msgid "Cannot unzip file %1"
+msgstr "Tiedostoa ei voida ladata(upload) %1"
+
+#. (error.path)
+#: web_tt2/error.tt2:136
+msgid "Cannot upload file %1"
+msgstr "Tiedostoa ei voida ladata(upload) %1"
+
+#: web_tt2/arcsearch_form.tt2:36
+msgid "Case"
+msgstr "Isot/pienet kirjaimet"
+
+#: web_tt2/show_cert.tt2:9
+msgid "Certificate expiration date"
+msgstr "Sertifikaatin voimassaoloaika päättyy"
+
+#: web_tt2/show_cert.tt2:10
+msgid "Certificate issuer"
+msgstr "Sertifikaatin myöntäjä"
+
+#: web_tt2/change_email.tt2:11
+msgid "Change my email address"
+msgstr "Muuta email osoitteeni"
+
+#: web_tt2/pref.tt2:50
+msgid "Changing your email address"
+msgstr "Email osoitteen muuttaminen"
+
+#: mail_tt2/sendpasswd.tt2:32 web_tt2/pref.tt2:54
+msgid "Changing your password"
+msgstr "Salasanan muuttaminen"
+
+#: web_tt2/arcsearch_form.tt2:42
+msgid "Check"
+msgstr "Tarkistus"
+
+#. (list.name)
+#: mail_tt2/reject.tt2:10
+msgid "Check %1 list usage :"
+msgstr "Tarkista %1 listan käyttö :"
+
+#: mail_tt2/listmaster_notification.tt2:37
+#: mail_tt2/listmaster_notification.tt2:98
+msgid "Check Sympa log files for more precise information"
+msgstr ""
+
+#: mail_tt2/listmaster_notification.tt2:105
+#: mail_tt2/listmaster_notification.tt2:44
+#: mail_tt2/listmaster_notification.tt2:51
+#: mail_tt2/listmaster_notification.tt2:58
+#: mail_tt2/listmaster_notification.tt2:65
+#: mail_tt2/listmaster_notification.tt2:71
+#: mail_tt2/listmaster_notification.tt2:78
+#: mail_tt2/listmaster_notification.tt2:85
+#: mail_tt2/listmaster_notification.tt2:92
+msgid "Check Sympa log files for more precise information."
+msgstr ""
+
+#. (list)
+#: web_tt2/sigrequest.tt2:31
+msgid ""
+"Check your mailbox for new messages and enter below the\n"
+"\tpassword given in the message Sympa sent you. This will\n"
+"\tconfirm your unsubscription from list %1.\n"
+msgstr ""
+
+#. (list)
+#: web_tt2/subrequest.tt2:24
+msgid ""
+"Check your mailbox for new messages and enter below the\n"
+"\tpassword. This will confirm your subscription to list %1\n"
+msgstr ""
+
+#: web_tt2/loginbanner.tt2:73
+#, fuzzy
+msgid "Choose your authentication server"
+msgstr "Kun tunnistaudut("
+
+#: src/etc/mhonarc-ressources.tt2:136 src/etc/mhonarc-ressources.tt2:244
+#: src/etc/mhonarc-ressources.tt2:337
+msgid "Chronological"
+msgstr ""
+
+#: web_tt2/show_cert.tt2:11
+msgid "Cipher key size used"
+msgstr "Käytetyn salatekstiavaimen koko"
+
+#: web_tt2/set_pending_list_request.tt2:34
+#, fuzzy
+msgid "Close it"
+msgstr "Suljetut listat"
+
+#: web_tt2/get_closed_lists.tt2:6 web_tt2/serveradmin.tt2:95
+msgid "Closed lists"
+msgstr "Suljetut listat"
+
+# nlsref 4,18
+#: src/Commands.pm:131
+msgid "Command 'quit' found : ignoring end of message.\n"
+msgstr "Käskyä 'quit' ei löytynyt : viestin loppuosasta ei välitetä.\n"
+
+# nlsref 4,19
+#: src/sympa.pl:1491 src/sympa.pl:1522
+msgid "Command not understood: ignoring end of message.\n"
+msgstr "Käskyä ei ymmärretty : viestin loppuosasta ei välitetä.\n"
+
+# nlsref 6,13
+#: src/Commands.pm:1210 src/Commands.pm:1899 src/Commands.pm:813
+msgid "Command syntax error.\n"
+msgstr "Syntaksivirhe komennossa.\n"
+
+#. (error.email)
+#: web_tt2/error.tt2:94
+msgid "Config file has been modified by %1. Cannot apply your changes"
+msgstr ""
+"Asetustiedostoa on muutettu %1 toimesta. Ei voida ottaa käyttöön muutoksia."
+
+#: web_tt2/set_pending_list_request.tt2:67
+msgid "Configuration file"
+msgstr "Asetus tiedosto"
+
+#: web_tt2/notice.tt2:13
+msgid "Configuration file has been updated"
+msgstr "Asetustiedosto on päivitetty"
+
+#: web_tt2/d_install_shared.tt2:16
+msgid "Confirm"
+msgstr ""
+
+#: web_tt2/pref.tt2:31
+msgid "Connexion expiration period"
+msgstr "Yhteyden voimassaoloaika"
+
+#: web_tt2/arcsearch.tt2:109
+msgid "Continue search"
+msgstr "Jatka hakua"
+
+#. (error.list)
+#: web_tt2/error.tt2:163
+msgid "Could not change email for list %1"
+msgstr "Email osoitteen muuttaminen listaan %1 epäonnistui"
+
+#. (error.list)
+#: web_tt2/error.tt2:171
+msgid ""
+"Could not change your subscription address for the list '%1%'\n"
+"because you are not allowed to unsubscribe.\n"
+msgstr ""
+
+#. (error.list)
+#: web_tt2/error.tt2:167
+msgid ""
+"Could not change your subscription address for the list '%1'\n"
+"because your new address is not allowed to subscribe.\n"
+msgstr ""
+
+#: web_tt2/admin_menu.tt2:97 web_tt2/admin_menu.tt2:99
+msgid "Create Shared"
+msgstr ""
+
+#: web_tt2/d_read.tt2:387 web_tt2/d_read.tt2:392
+msgid "Create a new file"
+msgstr "Luo uusi tiedosto"
+
+#. (visible_path)
+#: web_tt2/d_read.tt2:365
+msgid "Create a new folder inside the folder %1"
+msgstr "Luo uusi kansio hakemiston %1 sisään"
+
+#: web_tt2/d_read.tt2:367
+msgid "Create a new folder inside the folder SHARED"
+msgstr "Luo uusi hakemiston JAETTU sisään"
+
+#: web_tt2/d_read.tt2:373
+msgid "Create a new subdirectory"
+msgstr "Luo uusi alihakemisto"
+
+#: web_tt2/menu.tt2:57 web_tt2/menu.tt2:61
+msgid "Create list"
+msgstr "Luo lista"
+
+#: web_tt2/active_lists.tt2:25 web_tt2/get_inactive_lists.tt2:6
+#: web_tt2/get_latest_lists.tt2:6 web_tt2/latest_lists.tt2:23
+msgid "Creation date"
+msgstr "Luonti pvm"
+
+# nlsref 16,12
+#: src/List.pm:438
+msgid "Creation of the list"
+msgstr "Listan luominen"
+
+#: web_tt2/choosepasswd.tt2:13
+msgid "Current password :"
+msgstr "Nykyinen salasana :"
+
+# nlsref 16,16
+#: src/List.pm:446
+msgid "Custom header field"
+msgstr "Mukautettu otsikko kenttä"
+
+#: web_tt2/serveradmin.tt2:162
+msgid "Customize templates"
+msgstr "Muuta malleja"
+
+#: web_tt2/admin_menu.tt2:53 web_tt2/admin_menu.tt2:59
+msgid "Customizing"
+msgstr "Hallitse"
+
+#: mail_tt2/helpfile.tt2:48
+#, fuzzy
+msgid "DEL <list> user@host            * To delete a user from a list"
+msgstr "Poistaaksesi tilaajan listalta"
+
+#: mail_tt2/helpfile.tt2:55
+#, fuzzy
+msgid "DISTribute <list> <key>        * Moderation: to validate a message"
+msgstr "Hallinta: hyväksy viesti"
+
+#: src/etc/global_task_models/eval_bouncers.daily.task:1
+#, fuzzy
+msgid "Daily evaluation of bouncing users"
+msgstr "Listalla ei ole tavoittamattomia tilaajia"
+
+#: web_tt2/admin_menu.tt2:165
+msgid "Data Source"
+msgstr "size=\"-1\"><b>Omat asetukset</b"
+
+#: web_tt2/error.tt2:124
+msgid "Data have changed on disk. Cannot apply your changes"
+msgstr "Data on muuttunut levyllä. Muutoksia ei voida ottaa käyttöön."
+
+#: web_tt2/edit_list_request.tt2:10
+msgid "Data sources setup"
+msgstr "Data lähteiden asetukset"
+
+#: web_tt2/arcsearch_form.tt2:62 web_tt2/latest_arc.tt2:19
+#: web_tt2/modindex.tt2:17 web_tt2/modindex.tt2:69 web_tt2/subindex.tt2:11
+msgid "Date"
+msgstr "Pvm"
+
+# nlsref 8,25
+#: src/List.pm:2292
+msgid ""
+"Dear owner of list %s,\n"
+"\n"
+"A user asked to be deleted from your list. Shall this be fine\n"
+"with you, you should click the following URL :\n"
+"\n"
+"mailto:%s?subject=auth%%20%s%%20DEL%%20%s%%20%s\n"
+"\n"
+"or send an email to %s with the following subject :\n"
+"AUTH %s DEL %s %s\n"
+msgstr ""
+"Hyvä listan %s omistaja,\n"
+"\n"
+"Käyttäjä pyysi että hänet tuhotaan tilaajalistalta. Jos tämä käy sinulle,\n"
+"sinun tulisi käyttää seuraavaa komentoa:\n"
+"\n"
+"DEL %s %s\n"
+
+#: web_tt2/help_editlist.tt2:131 web_tt2/help_editlist.tt2:138
+#: web_tt2/help_editlist.tt2:31 web_tt2/help_editlist.tt2:41
+#: web_tt2/help_editlist.tt2:44 web_tt2/help_editlist.tt2:47
+#: web_tt2/help_editlist.tt2:57 web_tt2/help_editlist.tt2:60
+#: web_tt2/help_editlist.tt2:63
+msgid "Default value:"
+msgstr ""
+
+#: web_tt2/help_editlist.tt2:27
+msgid "Default value: bounce_halt_rate robot parameter"
+msgstr ""
+
+#: web_tt2/help_editlist.tt2:24
+msgid "Default value: bounce_warn_rate robot parameter"
+msgstr ""
+
+#: web_tt2/help_editlist.tt2:170
+msgid "Defines who can access the web archive for the list."
+msgstr ""
+
+#: web_tt2/help_editlist.tt2:82
+msgid ""
+"Definition of digest mode. If this parameter is present, subscribers can "
+"select the option of receiving messages in multipart/digest MIME format, or "
+"as a plain text digest. Messages are then grouped together, and compilations "
+"of messages are sent to subscribers in accordance with the rhythm selected "
+"with this parameter."
+msgstr ""
+
+#: web_tt2/d_read.tt2:126 web_tt2/d_upload.tt2:12
+msgid "Delete"
+msgstr "Poista"
+
+#: web_tt2/arc_manage.tt2:21
+#, fuzzy
+msgid "Delete Selected Month(s)"
+msgstr "Poista valitut tilaajat"
+
+#: web_tt2/admin_menu.tt2:106
+msgid "Delete Shared"
+msgstr ""
+
+#: web_tt2/review.tt2:275 web_tt2/review.tt2:89 web_tt2/review.tt2:91
+#: web_tt2/reviewbouncing.tt2:106 web_tt2/reviewbouncing.tt2:30
+msgid "Delete selected email addresses"
+msgstr "Poista valitut email osoitteet"
+
+#: web_tt2/help_editfile.tt2:12
+msgid ""
+"Deletion message : This message is sent to users when you\n"
+"remove them from the list using the DEL command (unless you hit the\n"
+"Quiet button.\n"
+msgstr ""
+
+#. (fname)
+#: web_tt2/d_properties.tt2:27
+msgid "Describe the directory %1"
+msgstr "Kuvaa hakemisto %1"
+
+#. (fname)
+#: web_tt2/d_properties.tt2:29
+msgid "Describe the file %1"
+msgstr "Kuvaa tiedosto %1"
+
+#. (doc_title)
+#. (desc)
+#: web_tt2/d_control.tt2:11 web_tt2/d_editfile.tt2:21
+#: web_tt2/d_properties.tt2:19 web_tt2/d_read.tt2:53
+msgid "Description : %1"
+msgstr "Kuvaus : %1"
+
+#: web_tt2/create_list_request.tt2:68
+msgid "Description:"
+msgstr "Kuvaus:"
+
+#: web_tt2/help_user_options.tt2:7
+msgid "Digest"
+msgstr "Kooste"
+
+#. (digest)
+#: mail_tt2/info_report.tt2:17
+#, fuzzy
+msgid "Digest       : %1"
+msgstr "Vastaanotto tilat  : [% available_reception_mode %]"
+
+#. (list.name)
+#: mail_tt2/digest.tt2:4
+msgid "Digest for list %1"
+msgstr "Listan %1 digest"
+
+# nlsref 16,22
+#: src/List.pm:492
+msgid "Digest frequency"
+msgstr "Digest aikaväli"
+
+#: web_tt2/help_user_options.tt2:14
+#, fuzzy
+msgid "DigestPlain"
+msgstr "Kooste"
+
+#: web_tt2/latest_d_read.tt2:22
+msgid "Directory"
+msgstr ""
+
+#. (error.name)
+#: web_tt2/error.tt2:154
+msgid "Directory %1 and its contents are not copied"
+msgstr ""
+
+#: web_tt2/modindex.tt2:10 web_tt2/modindex.tt2:48 web_tt2/viewmod.tt2:8
+msgid "Distribute"
+msgstr "Lähetä"
+
+#. (visible_path)
+#: web_tt2/d_read.tt2:41
+msgid "Do you really want to delete %1 ?"
+msgstr "Do you really want to delete %1 ?"
+
+#. (visible_path,f.doc,f.size)
+#: web_tt2/d_read.tt2:303 web_tt2/d_read.tt2:305
+#, fuzzy
+msgid "Do you really want to delete %1%2 (%3 Kb) ?"
+msgstr "Do you really want to delete %1%2 ?"
+
+#. (visible_path,s.doc)
+#: web_tt2/d_read.tt2:166 web_tt2/d_read.tt2:168
+msgid "Do you really want to delete %1%2 ?"
+msgstr "Do you really want to delete %1%2 ?"
+
+#: web_tt2/arc_manage.tt2:21
+#, fuzzy
+msgid "Do you really want to delete Selected Archives?"
+msgstr "Do you really want to delete %1 ?"
+
+#: src/etc/mhonarc-ressources.tt2:406 src/etc/mhonarc-ressources.tt2:413
+#, fuzzy
+msgid "Do you really want to delete this message ?"
+msgstr "Do you really want to delete %1 ?"
+
+#: web_tt2/rename_list_request.tt2:14
+#, fuzzy
+msgid "Do you really want to rename this list?"
+msgstr "Haluatko varmasti tilata listan %1"
+
+#. (total)
+#: web_tt2/reviewbouncing.tt2:16
+msgid ""
+"Do you really want to send a subscription remind message to the %1 "
+"subscribers"
+msgstr "Haluatko varmasti lähettää tilausmuistutuksen kaikille %1 tilaajille"
+
+#. (total)
+#: web_tt2/review.tt2:52
+msgid ""
+"Do you really want to send a subscription remind message to the %1 "
+"subscribers ?"
+msgstr "Haluatko varmasti lähettää muistutusviestin kaikille %1 tilaajalle ?"
+
+#. (list)
+#: web_tt2/list_menu.tt2:200 web_tt2/list_menu.tt2:238
+msgid "Do you really want to subscribe to list %1?"
+msgstr ""
+
+#: web_tt2/review.tt2:89
+msgid "Do you really want to unsubscribe ALL selected subscribers ?"
+msgstr "Haluatko varmasti poistaa KAIKKI valitut käyttäjät ?"
+
+#. (list)
+#: web_tt2/list_menu.tt2:175 web_tt2/list_menu.tt2:270
+msgid "Do you really want to unsubscribe from list %1?"
+msgstr "Haluatko varmasti poistua listalta %1?"
+
+#: web_tt2/arc_manage.tt2:21
+msgid "Do you want to DownLoad a Zip of the selected Archives before?"
+msgstr ""
+
+#: web_tt2/d_upload.tt2:28
+#, fuzzy
+msgid "Do you want to cancel the upload ?"
+msgstr "Do you really want to delete %1 ?"
+
+#. (shortname)
+#: web_tt2/d_upload.tt2:9
+#, fuzzy
+msgid "Do you want to delete the old file %1 ?"
+msgstr "Do you really want to delete %1 ?"
+
+#. (shortname)
+#: web_tt2/d_upload.tt2:18
+#, fuzzy
+msgid "Do you want to rename your file %1 ?"
+msgstr "Do you really want to delete %1 ?"
+
+#: web_tt2/d_read.tt2:64
+msgid "Document"
+msgstr "Dokumentti"
+
+#: web_tt2/list_menu.tt2:118
+#, fuzzy
+msgid "Documents to moderate :"
+msgstr "Hallittavat viestit :"
+
+#: web_tt2/review.tt2:139 web_tt2/review.tt2:143
+#, fuzzy
+msgid "Domain"
+msgstr "Ei viestejä"
+
+#: web_tt2/help_editlist.tt2:100
+msgid ""
+"Domain name of the list, default is the robot domain name set in the related "
+"robot.conf file or in file /etc/sympa.conf."
+msgstr ""
+
+#: web_tt2/arc_manage.tt2:20
+msgid "DownLoad ZipFile"
+msgstr ""
+
+# nlsref 6,33
+#: src/Commands.pm:1457 src/Commands.pm:1567
+msgid "E-mail address %s was not found in the list.\n"
+msgstr "Sähköpostiosoitetta %s ei löytynyt listalta.\n"
+
+#: web_tt2/help_editlist.tt2:58
+msgid ""
+"Each bouncing user have a score (from 0 to 100).This parameter defines limit "
+"between each category of bouncing users.For example, level 2 is for users "
+"with a score between 80 and 100."
+msgstr ""
+
+#: web_tt2/help_editlist.tt2:42
+msgid ""
+"Each bouncing user have a score (from 0 to 100).This parameter defines lower "
+"limit foreach category of bouncing users.for example, level 1 begins from 45 "
+"to level_2_treshold."
+msgstr ""
+
+#: web_tt2/d_read.tt2:125 web_tt2/editfile.tt2:23 web_tt2/serveradmin.tt2:145
+#: web_tt2/serveradmin.tt2:155
+msgid "Edit"
+msgstr "Muuta"
+
+#: web_tt2/admin_menu.tt2:25 web_tt2/admin_menu.tt2:30
+msgid "Edit List Config"
+msgstr "Luo jaettu"
+
+#: web_tt2/d_control.tt2:28
+msgid "Edit access"
+msgstr "Muutos oikeus"
+
+#. (visible_path)
+#: web_tt2/d_editfile.tt2:59
+#, fuzzy
+msgid "Edit the file %1"
+msgstr "Tiedoston muuttaminen%1"
+
+#. (visible_path)
+#: web_tt2/d_editfile.tt2:8
+msgid "Edition of the bookmark %1"
+msgstr "Kirjamerkin muuttaminen %1"
+
+#. (visible_path)
+#: web_tt2/d_editfile.tt2:10
+msgid "Edition of the file %1"
+msgstr "Tiedoston muuttaminen%1"
+
+#: web_tt2/title.tt2:19
+msgid "Editor"
+msgstr "Tarkistaja"
+
+#: web_tt2/help_editlist.tt2:84
+msgid ""
+"Editors are responsible for moderating messages. If the mailing list is "
+"moderated, messages posted to the list will first be passed to the editors, "
+"who will decide whether to distribute or reject it."
+msgstr ""
+
+#: web_tt2/review.tt2:130 web_tt2/review.tt2:134 web_tt2/reviewbouncing.tt2:62
+#: web_tt2/subindex.tt2:8
+#, fuzzy
+msgid "Email"
+msgstr "Ei viestejä"
+
+#: web_tt2/d_read.tt2:137
+msgid "Empty folder"
+msgstr "Tyhjä kansio"
+
+#. (list.name,date)
+#: mail_tt2/digest_plain.tt2:28
+#, fuzzy
+msgid "End of %1 Digest %2"
+msgstr "Listan %1 digestin loppu - %2"
+
+#. (list.name,date)
+#: mail_tt2/digest.tt2:37
+msgid "End of digest for list %1 - %2"
+msgstr "Listan %1 digestin loppu - %2"
+
+# nlsref 4,24
+#: src/sympa.pl:1607
+msgid "End of your EXPIRE command on list %s"
+msgstr "EXPIRE-käskysi loppu listalla %s"
+
+# nlsref 1,3
+#: src/Conf.pm:221
+msgid "Error at line %d : %s"
+msgstr "Virhe rivillä %d : %s"
+
+#: web_tt2/remove_arc.tt2:14
+msgid ""
+"Error while deleting this message, please refer to listmaster with\n"
+"complete URL of the concerned message.\n"
+msgstr ""
+
+#. (param0)
+#: mail_tt2/listmaster_notification.tt2:70
+#, fuzzy
+msgid "Error(s) found in the file %1."
+msgstr "Tiedoston muuttaminen%1"
+
+#. (param0,param1)
+#: mail_tt2/listmaster_notification.tt2:49
+msgid "Errors occured while copying family %2 file in list %1 directory."
+msgstr ""
+
+#. (error.name)
+#: web_tt2/error.tt2:148
+#, fuzzy
+msgid "Errors while unzipping file %1"
+msgstr "Tiedoston muuttaminen%1"
+
+#: mail_tt2/expire_warning1.tt2:9 mail_tt2/expire_warning2.tt2:9
+#: mail_tt2/remind.tt2:8
+msgid "Everything about this list : "
+msgstr "Kaikki listasta :"
+
+#: mail_tt2/welcome.tt2:18 mail_tt2/welcome.tt2:42
+msgid "Everything about this list:"
+msgstr "Kaikki tiedot listasta:"
+
+# nlsref 16,10
+#: src/List.pm:414
+msgid "Expiration of unmoderated messages"
+msgstr "Tarkistamattomien viestin erääntymisaika"
+
+#: web_tt2/arcsearch_form.tt2:70
+msgid "Extend search field"
+msgstr "Jatkettu hakukenttä"
+
+#: web_tt2/home.tt2:61
+msgid "Extended search"
+msgstr "Erikois haku"
+
+# nlsref 8,22
+#: src/List.pm:2314
+msgid ""
+"FYI command %s list %s from %s %s \n"
+" (no action needed)\n"
+msgstr ""
+"FYI-komento %s listalla %s lähteestä %s %s \n"
+" (tähän ei tarvitse puuttua)\n"
+
+# nlsref 8,26
+#: src/List.pm:2312
+msgid ""
+"FYI command %s list %s from %s %s validated by %s\n"
+" (no action needed)\n"
+msgstr ""
+"FYI-komento %s listalla %s lähteestä %s %s vahvistettu %s toimesta\n"
+" (sinun ei tarvitse tehdä mitään)\n"
+
+# nlsref 8,21
+#: src/List.pm:2268 src/List.pm:2310
+msgid "FYI: %s list %s from %s %s"
+msgstr "FYI: %s listalla %s lähteestä %s %s"
+
+#: web_tt2/help_editlist.tt2:85
+msgid ""
+"FYI: Defining editors will not make the list moderated ; you will have to "
+"set the \"send\" parameter."
+msgstr ""
+
+#: web_tt2/help_editlist.tt2:86
+msgid ""
+"FYI: If the list is moderated, any editor can distribute or reject a message "
+"without the knowledge or consent of the other editors. Messages that have "
+"not been distributed or rejected will remain in the moderation spool until "
+"they are acted on."
+msgstr ""
+
+#. (error.directory)
+#: web_tt2/error.tt2:157
+msgid "Failed : %1 not empty"
+msgstr "Virhe : %1 ei ole tyhjä"
+
+#: web_tt2/error.tt2:112
+msgid "Failed : your content is empty"
+msgstr "Epäonnistui: sisältö on tyhjä"
+
+#. (error.user)
+#: web_tt2/error.tt2:69
+msgid "Failed to add user %1"
+msgstr "Käyttäjän %1 lisääminen epäonnistui"
+
+# nlsref 6,92
+#: src/Commands.pm:1590 src/Commands.pm:1603
+msgid "Failed to change your subscriber options for list %s.\n"
+msgstr "Tilausasetusten muuttaaminen epäonnistui listalle %s.\n"
+
+#. (param0,param1)
+#: mail_tt2/listmaster_notification.tt2:90
+#, fuzzy
+msgid "Failed to instantiate family %2 for list %1"
+msgstr "Email osoitteen muuttaminen listaan %1 epäonnistui"
+
+# nlsref 8,7
+#: web_tt2/serveradmin.tt2:41
+#, fuzzy
+msgid "Families"
+msgstr "Tiedosto"
+
+# nlsref 8,7
+#: src/List.pm:6177
+msgid "File"
+msgstr "Tiedosto"
+
+#. (error.name)
+#: web_tt2/error.tt2:151
+#, fuzzy
+msgid "File %1 is not copied"
+msgstr "File %1 tallennettu"
+
+#. (notice.path)
+#: web_tt2/notice.tt2:28
+msgid "File %1 saved"
+msgstr "File %1 tallennettu"
+
+#. (notice.path)
+#: web_tt2/notice.tt2:16
+#, fuzzy
+msgid "File %1 successfully uploaded!"
+msgstr "%1 ladattu onnistuneesti!"
+
+#. (notice.path)
+#: web_tt2/notice.tt2:19
+#, fuzzy
+msgid "File %1 unziped!"
+msgstr "File %1 tallennettu"
+
+#. (notice.path)
+#: web_tt2/notice.tt2:25
+msgid "File %1 waiting for moderation"
+msgstr ""
+
+# nlsref 16,34
+#: src/List.pm:570
+msgid "File inclusion"
+msgstr "Tiedoston liittäminen"
+
+#. (conf.host)
+#: mail_tt2/list_unknown.tt2:22
+msgid "For further assistance, please contact listmaster@%1"
+msgstr "Lisätietoja saat ottamalla yhteyttä listmaster@%1"
+
+#: web_tt2/help_editlist.tt2:111
+msgid ""
+"For this operation, one Sympa site act as a server while the other one act "
+"as client. On the server side, the only setting needed is to give permission "
+"to the remote Sympa to review the list. This is controled by the review "
+"scenario. "
+msgstr ""
+
+# nlsref 16,32
+#: src/List.pm:559
+msgid "Forced reply address"
+msgstr "Pakotettu vastausosoite"
+
+#: mail_tt2/global_remind.tt2:5
+msgid "Foreach list here is a mailto to use if you want to unsubscribe."
+msgstr "Yhteenveto tilauksestasi (käyttäen osoitetta [% user.email %])."
+
+#. (stats.byte_sent)
+#: mail_tt2/stats_report.tt2:7
+msgid "Forwarded mega-bytes        :      %1"
+msgstr "Vastaanotettujen viestien lkm :      [% stats.msg_rcv %]"
+
+#: web_tt2/latest_arc.tt2:21
+msgid "From"
+msgstr "Lähettäjä"
+
+#. (user.email)
+#: web_tt2/compose_mail.tt2:4
+msgid "From: %1"
+msgstr "Lähettäjä: %1"
+
+#: web_tt2/help.tt2:13
+msgid ""
+"Functions, equivalent to Sympa robot commands, are accessible in\n"
+"the higher part of the user interface's banner. WWSympa provides \n"
+"a customized environment with access to the following functions :\n"
+msgstr ""
+
+#: mail_tt2/helpfile.tt2:37
+#, fuzzy
+msgid "GET <list> <file>           * To get <file> of <list> archive"
+msgstr "Saadaksesi tiedosto <file> listan <list> arkistosta"
+
+#: web_tt2/loginbanner.tt2:54 web_tt2/loginbanner.tt2:80
+msgid "Go"
+msgstr ""
+
+#: mail_tt2/helpfile.tt2:16
+msgid "HELp                        * This help file"
+msgstr ""
+
+#: web_tt2/show_cert.tt2:5
+msgid "HTTPS authentication information"
+msgstr "HTTPS tunnistus tiedot"
+
+#: web_tt2/edit_list_request.tt2:47 web_tt2/menu.tt2:118 web_tt2/menu.tt2:121
+msgid "Help"
+msgstr "Apua"
+
+#. (base_url,path_cgi)
+#: mail_tt2/sendpasswd.tt2:39
+msgid "Help on Sympa: %1%2"
+msgstr "Apua Sympan käyttöön: %1%2"
+
+# nlsref 6,67
+#: src/Commands.pm:2364
+msgid ""
+"Here are the lists you are currently subscribe to :\n"
+"\n"
+msgstr ""
+"Tässä listat, joiden tilaaja tällä hetkellä olet :\n"
+"\n"
+
+#. (list.name,list.host)
+#: mail_tt2/review.tt2:1
+msgid "Here are the subscribers of %1@%2 mailing list:"
+msgstr "Tässä ovat listan %1@%2 tilaajat:"
+
+#. (conf.email,conf.host)
+#: mail_tt2/lists.tt2:1
+msgid "Here is the list of list from %1@%2"
+msgstr "Tässä postituslistat palvelimelta %1@%2"
+
+#: web_tt2/menu.tt2:110 web_tt2/menu.tt2:113
+msgid "Home"
+msgstr "Aloitussivu"
+
+#. (url)
+#: mail_tt2/info_report.tt2:20
+msgid "Homepage           : %1"
+msgstr "Vastaanotto tilat  : [% available_reception_mode %]"
+
+#: web_tt2/help.tt2:41
+msgid "I am not a list subscriber"
+msgstr "En ole listan tilaaja"
+
+#: web_tt2/arc_protect.tt2:6
+msgid "I am not a spammer"
+msgstr "En ole spammaaja"
+
+#: web_tt2/help.tt2:46
+msgid "I am subscriber to at least one list but I have no password"
+msgstr "Olen tilaaja ainakin yhdellä listalla, mutta minulla ei ole salasanaa"
+
+#: web_tt2/help.tt2:51
+msgid "I forgot my password"
+msgstr "Unohdin salasanan"
+
+#. (list)
+#: web_tt2/subrequest.tt2:12
+msgid "I subscribe to list %1"
+msgstr "Tilaan listan %1"
+
+#. (list)
+#: web_tt2/sigrequest.tt2:11
+msgid "I unsubscribe from list %1"
+msgstr "Poistun listalta %1"
+
+#: mail_tt2/helpfile.tt2:36
+#, fuzzy
+msgid "INDex <list>                * <list> archive file list"
+msgstr "<list> arkistojen listaus"
+
+#: mail_tt2/helpfile.tt2:17
+#, fuzzy
+msgid "INFO <list>                 * Information about a list"
+msgstr "Tietoja listoista"
+
+#: mail_tt2/helpfile.tt2:39
+#, fuzzy
+msgid "INVITE <list> <email>       * Invite <email> for subscription in <list>"
+msgstr "Kutsu <email> tilaajaksi listalle <list>"
+
+#: web_tt2/help_editlist.tt2:172
+msgid ""
+"Idem spam_protection but restricted to web archive. A additional value is "
+"available: cookie which mean that users must submit a small form in order to "
+"receive a cookie before browsing archives. This block all robot, even google "
+"and co."
+msgstr ""
+
+#: web_tt2/help_editlist.tt2:174
+msgid ""
+"If set to unique, the welcome message is sent using a unique return path in "
+"order to remove the subscriber immediately in the case of a bounce."
+msgstr ""
+
+#: web_tt2/help_editlist.tt2:136
+msgid ""
+"If value was set to other_email, this parameter defines the e-mail address "
+"used."
+msgstr ""
+
+#: mail_tt2/invite.tt2:13
+msgid "If you don't want to subscribe just ignore this message."
+msgstr "Jos et halua tilata, poista vain viesti."
+
+# nlsref 4,27
+#: src/sympa.pl:1655
+msgid ""
+"If you want to remove these subscriber from the list, use the following "
+"commands :\n"
+msgstr ""
+"Jos haluat poistaa nämä tilaajat listalta, käytä seuraavia komentoja :\n"
+
+#: mail_tt2/global_remind.tt2:3
+msgid "If you want to unsubscribe from some list, please save this mail."
+msgstr "Yhteenveto tilauksestasi (käyttäen osoitetta [% user.email %])."
+
+#: web_tt2/loginbanner.tt2:122 web_tt2/sigrequest.tt2:71
+#, fuzzy
+msgid ""
+"If you've never had a password from that server or if you don't remember it :"
+msgstr "Jos et ole koskaan saanut salasanaa tai et muista sitä :"
+
+# nlsref 4,37
+#: src/sympa.pl:1444
+msgid ""
+"Ignoring message body not in text/plain, please use text/plain only \n"
+"(or put your command in the subject).\n"
+msgstr ""
+"Hylkään text/plainiin kuulumattoman viestin osan, käytä vain text/plainia \n"
+"(tai laita käskysi subject-kenttään).\n"
+
+#. (conf.wwsympa_url,user.email,user.password)
+#: mail_tt2/global_remind.tt2:16
+msgid ""
+"In order to authenticate on the web interface(%1)\n"
+"use your e-mail %2 and your password %3\n"
+msgstr ""
+
+#: web_tt2/serveradmin.tt2:89
+#, fuzzy
+msgid "Inactive lists"
+msgstr "Uusimmat listat"
+
+# nlsref 16,75
+#: src/List.pm:1087
+msgid "Inclusions timeout"
+msgstr "Liittämisen aikaraja"
+
+#: web_tt2/set_pending_list_request.tt2:51
+msgid "Information file"
+msgstr "Informaatio tiedosto"
+
+#. (list.name)
+#: mail_tt2/stats_report.tt2:1
+msgid "Information regarding list %1"
+msgstr "Tietoja listasta %1"
+
+#. (list.name,list.host)
+#: mail_tt2/info_report.tt2:1
+msgid "Information regarding list %1@%2"
+msgstr "Tietoja listasta %1@%2"
+
+# nlsref 6,36
+#: src/Commands.pm:1035
+msgid "Information regarding user %s have been updated for list %s.\n"
+msgstr "Käyttäjää %s koskevat tiedot on päivitetty listalle %s.\n"
+
+#: web_tt2/modindex.tt2:62 web_tt2/modindex.tt2:97
+#, fuzzy
+msgid "Install"
+msgstr "Asenna &nbsp;&nbsp;"
+
+#: web_tt2/set_pending_list_request.tt2:35
+#, fuzzy
+msgid "Install it"
+msgstr "Asenna &nbsp;&nbsp;"
+
+#: web_tt2/review_family.tt2:8
+#, fuzzy
+msgid "Instantiation date"
+msgstr "Luonti pvm"
+
+#: web_tt2/help_user_options.tt2:26
+msgid ""
+"Instead of receiving individual mail messages from the list, the subscriber "
+"will periodically \n"
+"receive a list of messages. This mode is very close to the Digest reception "
+"mode but the \n"
+"subscriber receives only the list of messages.\n"
+msgstr ""
+
+#: web_tt2/help_user_options.tt2:10
+msgid ""
+"Instead of receiving individual mail messages from the list, the subscriber "
+"will periodically \n"
+"receive batched messages in a Digest. This Digest compiles a group of "
+"messages from the list, using\n"
+"the multipart/digest MIME format.\n"
+msgstr ""
+
+# nlsref 16,33
+#: src/List.pm:564
+msgid "Internet domain"
+msgstr "Internet domain"
+
+# nlsref 8,29
+#. (list.name)
+#: mail_tt2/invite.tt2:3
+#, fuzzy
+msgid "Invitation to join list %1"
+msgstr "Kutsu listalle %s liittymiseksi"
+
+#. (user.email)
+#: mail_tt2/x509-user-cert-missing.tt2:11
+msgid ""
+"It was not possible to send it to you because the mailing list manager\n"
+"was unable to access to your personal certificat (email %1).\n"
+msgstr ""
+
+#: src/etc/mhonarc-ressources.tt2:582
+msgid ""
+"January:February:March:April:May:June:July:August:September:October:November:"
+"December"
+msgstr ""
+
+#: mail_tt2/helpfile.tt2:38
+#, fuzzy
+msgid ""
+"LAST <list>                 * Used to received the last message from <list>"
+msgstr "Käytä saadaksesi viimeisin viesti listalta <list>"
+
+# nlsref 16,135
+#: src/List.pm:770
+msgid "LDAP 2-level query inclusion"
+msgstr "LDAP 2-tason kyselyn liittäminen"
+
+# nlsref 16,35
+#: src/List.pm:662
+msgid "LDAP query inclusion"
+msgstr "LDAP kyselyn liittäminen"
+
+#: mail_tt2/helpfile.tt2:18
+#, fuzzy
+msgid "LISts                       * Directory of lists managed on this node"
+msgstr "Hakemisto listoista joita palvelimella on olemassa"
+
+#: web_tt2/pref.tt2:24
+msgid "Language"
+msgstr "Kieli"
+
+#. (current_subscriber.lang)
+#: web_tt2/editsubscriber.tt2:23
+msgid "Language : %1"
+msgstr ""
+
+# nlsref 16,55
+#: src/List.pm:877
+msgid "Language of the list"
+msgstr "Listan kieli"
+
+#: web_tt2/d_read.tt2:109 web_tt2/latest_d_read.tt2:19
+msgid "Last update"
+msgstr "Viim. päivitys"
+
+#. (doc_date)
+#. (current_subscriber.update_date)
+#: web_tt2/d_control.tt2:10 web_tt2/d_editfile.tt2:20
+#: web_tt2/d_properties.tt2:18 web_tt2/d_read.tt2:51
+#: web_tt2/editsubscriber.tt2:15
+msgid "Last update : %1"
+msgstr "Viim. päivitys : %1"
+
+# nlsref 16,77
+#: src/List.pm:1112
+msgid "Last update of config"
+msgstr "Asetuksia viimeksi muutettu"
+
+#: web_tt2/suboptions.tt2:6
+msgid "Last update:"
+msgstr "Viim. päivitys:"
+
+#: web_tt2/serveradmin.tt2:83
+msgid "Latest lists"
+msgstr "Uusimmat listat"
+
+#: web_tt2/get_inactive_lists.tt2:7
+#, fuzzy
+msgid "Latest message"
+msgstr "Uusi viesti ensiksi"
+
+#: web_tt2/arcsearch_form.tt2:48
+msgid "Layout"
+msgstr "Ulkoasu"
+
+#. (list.name,type)
+#: mail_tt2/listowner_notification.tt2:54
+#, fuzzy
+msgid "List %1 / %2"
+msgstr "page %1 / %2"
+
+#. (list.name)
+#: mail_tt2/listowner_notification.tt2:4
+#, fuzzy
+msgid "List %1 archive quota exceeded"
+msgstr "Listan \"%1\" arkisto ylittänyt quota rajan"
+
+# #-#-#-#-#  fi.po (PACKAGE VERSION)  #-#-#-#-#
+# nlsref 16,7
+#. (list.name)
+#: mail_tt2/listmaster_notification.tt2:108
+#: mail_tt2/listowner_notification.tt2:35
+#, fuzzy
+msgid "List %1 automatic bounce management"
+msgstr ""
+"#-#-#-#-#  fi.po (PACKAGE VERSION)  #-#-#-#-#\n"
+"Hyljättyjen viestien hallinta\n"
+"#-#-#-#-#  fi.po (PACKAGE VERSION)  #-#-#-#-#\n"
+"Väärien osoitteiden hallinta"
+
+#. (param0,param1)
+#: mail_tt2/listmaster_notification.tt2:56
+msgid "List %1 configuration does not respect family %2 rules."
+msgstr ""
+
+#. (list.name)
+#: mail_tt2/listowner_notification.tt2:19
+msgid "List %1 is closed"
+msgstr ""
+
+#. (list.name,list.host,param0,param1,param2)
+#: mail_tt2/listowner_notification.tt2:32
+msgid ""
+"List %list(.name)@%list(.host) has been reinstantiated (family %3). \n"
+"Some of the customizations have been removed because they no more respect "
+"the family rules :\n"
+"\n"
+"     Parameters : %4\n"
+"     Files : %5\n"
+"\n"
+msgstr ""
+
+# nlsref 6,90
+#: src/Commands.pm:1582
+#, fuzzy
+msgid "List %s allows only these reception modes : %s\n"
+msgstr ""
+"Lista %s sallii ainoastaan seuraavat vastaanotto tavat: %s\n"
+"Asetukseasi ei ole muutettu.\n"
+
+# nlsref 6,45
+#: src/Commands.pm:1574
+msgid ""
+"List %s does not accept the DIGEST mode. Your configuration regarding this "
+"command has not been updated.\n"
+msgstr ""
+"Lista %s ei hyväksy DIGEST-tilaa. Asetuksiasi tämän komennon suhteen ei ole "
+"päivitetty.\n"
+
+# nlsref 6,54
+#: src/Commands.pm:2200 src/Commands.pm:2244
+msgid "List %s is not currently running an expiration process.\n"
+msgstr "Listalla %s ei ole tällä hetkellä menossa expire-prosessia.\n"
+
+# nlsref 6,5
+#: src/Commands.pm:1097 src/Commands.pm:1221 src/Commands.pm:1294
+#: src/Commands.pm:1398 src/Commands.pm:1550 src/Commands.pm:1633
+#: src/Commands.pm:1821 src/Commands.pm:1910 src/Commands.pm:2121
+#: src/Commands.pm:2219 src/Commands.pm:2263 src/Commands.pm:263
+#: src/Commands.pm:319 src/Commands.pm:364 src/Commands.pm:410
+#: src/Commands.pm:451 src/Commands.pm:573 src/Commands.pm:718
+#: src/Commands.pm:841 src/Commands.pm:977
+msgid "List '%s' does not exist.\n"
+msgstr "Listaa '%s' ei ole olemassa.\n"
+
+# nlsref 6,3
+#: src/Commands.pm:504
+msgid "List '%s' has no subscriber.\n"
+msgstr ""
+
+#: web_tt2/admin_menu.tt2:5
+msgid "List Administration Panel"
+msgstr "Listojen hallinnan paneeli"
+
+#: web_tt2/admin_menu.tt2:140
+msgid "List Definition"
+msgstr ""
+
+#. (list.name)
+#: mail_tt2/listmaster_notification.tt2:4
+msgid "List \"%1\" creation request"
+msgstr "Listan \"%1\" luonti pyyntö"
+
+#. (list.name)
+#: mail_tt2/listowner_notification.tt2:25
+#, fuzzy
+msgid "List \"%1\" customizations have been removed"
+msgstr "Listan aliakset on poistettu."
+
+#. (list.name,rate)
+#: mail_tt2/listowner_notification.tt2:11
+msgid "List \"%1\" warning : archive %2% full"
+msgstr "Lista \"%1\" varoitus : arkisto %2% täynnä"
+
+#: web_tt2/list_menu.tt2:76 web_tt2/list_menu.tt2:80 web_tt2/list_menu.tt2:86
+msgid "List admin"
+msgstr "Listan hallinta"
+
+#: web_tt2/close_list.tt2:7
+msgid "List aliases have been removed."
+msgstr "Listan aliakset on poistettu."
+
+#: web_tt2/create_list_request.tt2:64
+msgid "List classification in the directory"
+msgstr "Listan määrittely hakemistossa"
+
+#: web_tt2/edit_list_request.tt2:5
+msgid "List definition"
+msgstr "Listan määritykset"
+
+#: web_tt2/help_editfile.tt2:29
+msgid ""
+"List description : This text is sent as an answer to the mail command\n"
+"INFO. It can also be included in the\n"
+msgstr ""
+
+#: web_tt2/error.tt2:51
+msgid "List has no bouncing subscribers"
+msgstr "Listalla ei ole tavoittamattomia tilaajia"
+
+#: web_tt2/error.tt2:48
+msgid "List has no subscribers"
+msgstr "Listalla ei ole tilaajia"
+
+#: web_tt2/help_editfile.tt2:26
+msgid ""
+"List homepage : HTML text to describe the list. It is printed on the\n"
+"right-hand side of the main list page. (default for this is the list "
+"description)\n"
+msgstr ""
+
+# nlsref 16,44
+#: src/List.pm:775
+msgid "List inclusion"
+msgstr "Listan liittäminen"
+
+#: web_tt2/list_menu.tt2:20 web_tt2/list_menu.tt2:24
+msgid "List info"
+msgstr "Listan tiedot"
+
+# nlsref 6,10
+#: src/Commands.pm:421
+msgid "List is Private : You can not browse available files.\n"
+msgstr "Lista on yksityinen : Et voi selata tiedostoja.\n"
+
+# nlsref 6,9
+#: src/Commands.pm:343 src/Commands.pm:383
+msgid "List is Private : You can not read the archives.\n"
+msgstr "Lista on yksityinen : Et voi lukea arkistoja.\n"
+
+#: web_tt2/create_list_request.tt2:9
+msgid "List name:"
+msgstr "Listan nimi:"
+
+#: web_tt2/help_editlist.tt2:90
+msgid ""
+"List owners may decide to add message headers or footers to messages sent "
+"via the list. This parameter defines the way a footer/header is added to a "
+"message."
+msgstr ""
+
+#: web_tt2/install_pending_list.tt2:17 web_tt2/set_pending_list_request.tt2:17
+msgid "List requested by"
+msgstr "Listan pyytäjä"
+
+#: web_tt2/create_list_request.tt2:21
+msgid "List type :"
+msgstr "Listan tyyppi :"
+
+#: mail_tt2/list_unknown.tt2:3
+msgid "List unknown"
+msgstr "Lista tuntematon"
+
+#: web_tt2/modindex.tt2:7
+#, fuzzy
+msgid "Listing messages to moderate"
+msgstr "Ei viestejä hallittavana"
+
+#: web_tt2/modindex.tt2:59
+#, fuzzy
+msgid "Listing of documents shared to moderate"
+msgstr "Ei viestejä hallittavana"
+
+#: web_tt2/d_read.tt2:58
+msgid "Listing of folder SHARED"
+msgstr "JAETUN hakemiston listaus"
+
+#: web_tt2/title.tt2:13
+#, fuzzy
+msgid "Listmaster"
+msgstr "listan nimi"
+
+#: web_tt2/active_lists.tt2:22 web_tt2/get_inactive_lists.tt2:8
+#: web_tt2/get_latest_lists.tt2:7 web_tt2/latest_lists.tt2:22
+#: web_tt2/review_family.tt2:7 web_tt2/scenario_test.tt2:24
+msgid "Listname"
+msgstr "Listan nimi"
+
+#: web_tt2/install_pending_list.tt2:11 web_tt2/set_pending_list_request.tt2:11
+msgid "Listname :"
+msgstr "Listan nimi :"
+
+#: mail_tt2/listowner_notification.tt2:2
+msgid "Listowners"
+msgstr "Listowners"
+
+#: web_tt2/serveradmin.tt2:67
+msgid "Lists"
+msgstr "Listat"
+
+#: web_tt2/list_menu.tt2:59
+msgid "Load certificate"
+msgstr "Lataa sertifikaatti"
+
+#: web_tt2/error.tt2:127
+msgid "Loading admins failed"
+msgstr ""
+
+#: web_tt2/home.tt2:60
+msgid "Local"
+msgstr "Paikallinen"
+
+#: web_tt2/help.tt2:22 web_tt2/help.tt2:25 web_tt2/help.tt2:28
+#: web_tt2/loginbanner.tt2:112 web_tt2/menu.tt2:35
+msgid "Login"
+msgstr "Kirjaudu"
+
+#: web_tt2/help.tt2:39
+msgid "Login issues"
+msgstr "Kirjautumis asiaa"
+
+#: web_tt2/loginbanner.tt2:23
+#, fuzzy
+msgid ""
+"Login with you email address and password. You can request a password "
+"reminder."
+msgstr "), anna email osoitteesi ja salasana."
+
+#: web_tt2/help.tt2:22 web_tt2/menu.tt2:22
+msgid "Logout"
+msgstr "Kirjaudu ulos"
+
+#: mail_tt2/helpfile.tt2:57
+msgid ""
+"MODINDEX <list>                 * Moderation: to consult the list of "
+"messages to moderate"
+msgstr ""
+
+#: web_tt2/loginbanner.tt2:48
+#, fuzzy
+msgid "Magic authentification"
+msgstr "Kun tunnistaudut("
+
+# nlsref 16,19
+#: web_tt2/help_editlist.tt2:76
+#, fuzzy
+msgid "Mail reception mode."
+msgstr "vastaanotto moodi"
+
+#: web_tt2/home.tt2:16
+msgid "Mailing lists"
+msgstr "Postituslistat"
+
+#: web_tt2/admin_menu.tt2:74
+#, fuzzy
+msgid "Manage Archives"
+msgstr "Arkistot"
+
+#: src/List.pm:386
+msgid "Management of bouncers, 1st level"
+msgstr ""
+
+#: src/List.pm:407
+msgid "Management of bouncers, 2nd level"
+msgstr ""
+
+#: mail_tt2/listmaster_notification.tt2:125
+#: mail_tt2/listowner_notification.tt2:52
+#, fuzzy
+msgid "Managing bouncing subscribers:"
+msgstr "Listalla ei ole tavoittamattomia tilaajia"
+
+# nlsref 16,56
+#: src/List.pm:903
+msgid "Maximum message size"
+msgstr "Viestin max. koko"
+
+#. (max_size)
+#: mail_tt2/info_report.tt2:15
+msgid "Maximum size       : %1"
+msgstr "Tilauksen poisto   : [% unsubscribe %]"
+
+#: web_tt2/help_editlist.tt2:117
+msgid "Maximum size of a message in 8-bit bytes."
+msgstr ""
+
+#: web_tt2/serveradmin.tt2:190
+msgid "May take a lot of CPU time,  be careful !"
+msgstr "Saattaa viedä paljon CPU aikaa, ole varovainen !"
+
+#: mail_tt2/your_infected_msg.tt2:14
+msgid ""
+"Maybe it is usefull to check your system for viruses.\n"
+"\n"
+"Note, however, that many viruses fake sender's e-mail address, so it is "
+"possible that the virus didn't come from your computer. In that case, please "
+"disregard this message.\n"
+msgstr ""
+
+# nlsref 6,44
+#: src/Commands.pm:1684 src/Commands.pm:1793
+msgid "Message %s for list %s has been distributed.\n"
+msgstr "Listan %s viesti on pistetty levitykseen.\n"
+
+# nlsref 6,43
+#: src/Commands.pm:1857
+msgid "Message %s for list %s has been rejected.\n"
+msgstr "Listan %s viesti on poistettu.\n"
+
+# nlsref 15,4
+#: web_tt2/active_lists.tt2:23
+#, fuzzy
+msgid "Message count"
+msgstr "viestin alaosa"
+
+#: web_tt2/help_editfile.tt2:35
+msgid ""
+"Message footer : same as <em>Message header,</em> but attached at the\n"
+"end of the message.\n"
+msgstr ""
+
+#: web_tt2/help_editfile.tt2:32
+msgid ""
+"Message header: If this file is not empty, it is added as a MIME\n"
+"attachment at the beginning of each message distributed to the list.\n"
+msgstr ""
+
+#. (conf.host,conf.listmaster_email)
+#: mail_tt2/listowner_notification.tt2:16
+#, fuzzy
+msgid "Messages are still archived but you should contact %2@%1"
+msgstr "Lista \"[% list.name %]\" varoitus : arkisto [% rate %]% täynnä"
+
+#. (list.name,to,subscriber.first_bounce)
+#: mail_tt2/subscriber_notification.tt2:8
+msgid ""
+"Messages from list %1 that were sent to your address %2\n"
+"generated non-delivery reports since %3. \n"
+"If this problem persists, you will be automatically unsubscribed from the "
+"list.\n"
+msgstr ""
+
+#: web_tt2/list_menu.tt2:111
+msgid "Messages to moderate :"
+msgstr "Hallittavat viestit :"
+
+#: web_tt2/admin_menu.tt2:161 web_tt2/edit_list_request.tt2:12
+msgid "Miscellaneous"
+msgstr "Sekalaiset"
+
+#. (error.argument)
+#: web_tt2/error.tt2:85
+msgid "Missing argument %1"
+msgstr "Puuttuva argumentti %1"
+
+#: web_tt2/error.tt2:57
+msgid "Missing filter"
+msgstr "Puuttuva suodatin"
+
+#: web_tt2/admin_menu.tt2:36 web_tt2/admin_menu.tt2:42
+#: web_tt2/admin_menu.tt2:46
+msgid "Moderate"
+msgstr "Poista jaettu"
+
+#: src/etc/scenari/send.editorkey:1
+#, fuzzy
+msgid "Moderated"
+msgstr "Poista jaettu"
+
+#: src/etc/scenari/send.editorkeyonly:1
+msgid "Moderated, even for moderators"
+msgstr ""
+
+#: src/etc/scenari/send.privateandnomultipartoreditorkey:1
+msgid "Moderated, for non subscribers sending multipart messages"
+msgstr ""
+
+#: src/etc/scenari/send.privatekeyandeditorkeyonly:1
+msgid "Moderated, for subscribers and moderators"
+msgstr ""
+
+#: src/etc/scenari/send.privateandeditorkey:1
+#, fuzzy
+msgid "Moderated, restricted to subscribers"
+msgstr "Poista valitut käyttäjät"
+
+#: src/etc/scenari/send.editorkeyonlyauth:1
+msgid "Moderated, with editor confirmation"
+msgstr ""
+
+# nlsref 4,40
+#: src/List.pm:2414
+msgid "Moderating your message"
+msgstr "Viestiäsi tarkistetaan ennen julkaisua"
+
+# #-#-#-#-#  fi.po (PACKAGE VERSION)  #-#-#-#-#
+# nlsref 16,26
+#: web_tt2/d_read.tt2:130
+#, fuzzy
+msgid "Moderation"
+msgstr ""
+"#-#-#-#-#  fi.po (PACKAGE VERSION)  #-#-#-#-#\n"
+"Moderaattorit\n"
+"#-#-#-#-#  fi.po (PACKAGE VERSION)  #-#-#-#-#\n"
+"Hallitsijat"
+
+#. (list.name)
+#: mail_tt2/modindex.tt2:2
+msgid "Moderation spool for list %1"
+msgstr "Hallinta jono (spool) listalle %1"
+
+#. (e.gecos)
+#: mail_tt2/info_report.tt2:8
+msgid "Moderator          : %1"
+msgstr "Hallitsija          : %1"
+
+# #-#-#-#-#  fi.po (PACKAGE VERSION)  #-#-#-#-#
+# nlsref 16,26
+#: src/List.pm:519 web_tt2/list_menu.tt2:52
+#, fuzzy
+msgid "Moderators"
+msgstr ""
+"#-#-#-#-#  fi.po (PACKAGE VERSION)  #-#-#-#-#\n"
+"Moderaattorit\n"
+"#-#-#-#-#  fi.po (PACKAGE VERSION)  #-#-#-#-#\n"
+"Hallitsijat"
+
+#. (list.name)
+#: mail_tt2/moderate.tt2:2
+msgid "Moderators of list %1"
+msgstr "Moderators of list %1"
+
+#: web_tt2/loginbanner.tt2:13
+msgid ""
+"Most mailing list features require your email. Some mailing lists are hidden "
+"to  unidentified persons.<BR>\n"
+" In order to benefit from the full services provided by this server, you "
+"probably need to identify yourself first.\n"
+msgstr ""
+
+#: web_tt2/review.tt2:41
+msgid "Multiple add"
+msgstr ""
+
+#: web_tt2/subrequest.tt2:65
+msgid "My password ?"
+msgstr "Salasanani ?"
+
+#: web_tt2/help_editlist.tt2:29
+msgid ""
+"NOT USED YET. If bounce rate reaches the halt_rate, messages for the list "
+"will be halted, i.e. they are retained for subsequent moderation. Once the "
+"number of bounces exceeds this value, messages for the list are no longer\n"
+"              distributed.\n"
+msgstr ""
+
+#: web_tt2/latest_d_read.tt2:20 web_tt2/pref.tt2:22 web_tt2/review.tt2:148
+#: web_tt2/review.tt2:152 web_tt2/subindex.tt2:9
+msgid "Name"
+msgstr "Nimi"
+
+#: web_tt2/editsubscriber.tt2:13
+msgid "Name :"
+msgstr "Nimi :"
+
+#: web_tt2/help_editlist.tt2:32
+msgid ""
+"Name of the task template use to remove old bounces. Usefull to remove "
+"bounces for a subscriber email if some message are distributed without "
+"receiving new bounce. In this case, the subscriber email seems to be OK "
+"again. Active if task_manager.pl is running."
+msgstr ""
+
+#: web_tt2/pref.tt2:67
+msgid "New email address :"
+msgstr "Uusi email osoite :"
+
+#: web_tt2/rename_list_request.tt2:3
+#, fuzzy
+msgid "New list name:"
+msgstr "listan nimi"
+
+#: web_tt2/choosepasswd.tt2:17 web_tt2/pref.tt2:74
+msgid "New password :"
+msgstr "Uusi salasana :"
+
+#: web_tt2/choosepasswd.tt2:19
+msgid "New password again :"
+msgstr "Uusi salasana uudelleen :"
+
+#: web_tt2/arcsearch.tt2:112
+msgid "New search"
+msgstr "Uusi haku"
+
+#: web_tt2/arcsearch.tt2:40
+msgid "Newest messages first"
+msgstr "Uusi viesti ensiksi"
+
+#: src/etc/scenari/send.newsletter:1
+msgid "Newsletter, restricted to moderators"
+msgstr ""
+
+#: src/etc/scenari/send.newsletterkeyonly:1
+msgid "Newsletter, restricted to moderators after confirmation"
+msgstr ""
+
+#: web_tt2/review.tt2:117 web_tt2/review.tt2:290
+#: web_tt2/reviewbouncing.tt2:118 web_tt2/reviewbouncing.tt2:52
+msgid "Next page"
+msgstr "Next page"
+
+#: web_tt2/help_editlist.tt2:176
+msgid "No Comment"
+msgstr ""
+
+#: web_tt2/serveradmin.tt2:28
+msgid "No Virtual Robot defined on this server"
+msgstr "Ei Virtuaali robotteja määriteltynä tällä palvelimella"
+
+#. (error.email)
+#: web_tt2/error.tt2:88
+msgid "No bounces for user  %1"
+msgstr "Ei palaavia viestejä käyttäjällä %1"
+
+# nlsref 4,39
+#: src/sympa.pl:1513
+msgid "No command found in message"
+msgstr "Viestistä ei löytynyt komentoa"
+
+#: web_tt2/error.tt2:109
+msgid "No description specified"
+msgstr "Kuvausta ei määritelty"
+
+#: web_tt2/list_menu.tt2:116
+#, fuzzy
+msgid "No document to moderate"
+msgstr "Ei viestejä hallittavana"
+
+#. (notice.list)
+#: web_tt2/notice.tt2:37
+#, fuzzy
+msgid "No message and no document to moderate for list %1"
+msgstr "Ei viestejä hallittavana listalla %1"
+
+#: web_tt2/list_menu.tt2:109
+msgid "No message to moderate"
+msgstr "Ei viestejä hallittavana"
+
+#: web_tt2/error.tt2:115
+msgid "No name specified"
+msgstr "Nimeä ei määritelty"
+
+#. (param0)
+#: mail_tt2/listmaster_notification.tt2:42
+#, fuzzy
+msgid "No owner is defined for list %1."
+msgstr "Kunnes olet sen tehnyt, suosittelemme parametrin %1 poistoa"
+
+#. (error.page)
+#: web_tt2/error.tt2:54
+msgid "No page %1"
+msgstr "Ei sivua %1"
+
+#: web_tt2/error.tt2:30
+msgid "No password for user"
+msgstr "Ei salasanaa käyttäjälle"
+
+#: web_tt2/modindex.tt2:37
+msgid "No subject"
+msgstr "Ei otsikkoa"
+
+#: web_tt2/subindex.tt2:48
+msgid "No subscription requests"
+msgstr "Ei tilauspyyntöjä"
+
+#. (user.email)
+#: web_tt2/lists.tt2:39
+msgid "No subscriptions with address <B>%1</B>!"
+msgstr "Ei tilauksia osoitteella <B>%1</B>!</"
+
+#: web_tt2/help_user_options.tt2:29
+msgid "Nomail"
+msgstr "Ei viestejä"
+
+#. (error.email)
+#: web_tt2/error.tt2:76
+msgid "Not subscribed: %1"
+msgstr "Ei tilaajana: %1"
+
+#: web_tt2/help_editlist.tt2:133
+msgid ""
+"Note: it is inadvisable to change this parameter, and particularly "
+"inadvisable to set it to list. Experience has shown it to be almost "
+"inevitable that users, mistakenly believing that they are replying only to "
+"the sender, will send private messages to a list. This can lead, at the very "
+"least, to embarrassment, and sometimes to more serious consequences."
+msgstr ""
+
+#: web_tt2/modindex.tt2:12 web_tt2/modindex.tt2:50 web_tt2/modindex.tt2:64
+#: web_tt2/modindex.tt2:99 web_tt2/viewmod.tt2:10
+msgid "Notified reject"
+msgstr "Hylkää tiedottaen"
+
+#. (stats.msg_sent)
+#: mail_tt2/stats_report.tt2:4
+msgid "Number of forwarded messages:      %1"
+msgstr "Vastaanotettujen viestien lkm :      [% stats.msg_rcv %]"
+
+#. (stats.msg_rcv)
+#: mail_tt2/stats_report.tt2:3
+msgid "Number of received messages :      %1"
+msgstr "Vastaanotettujen viestien lkm :      %1"
+
+#. (notice.path)
+#: web_tt2/notice.tt2:22
+msgid "Old file %1 has been erased"
+msgstr ""
+
+#: web_tt2/arcsearch.tt2:42
+msgid "Oldest messages first"
+msgstr "Vanhin viestin ensiksi"
+
+#: web_tt2/help.tt2:32
+msgid ""
+"Once you have been authenticated, a <em>cookie</em> containing your login \n"
+"information make your connection to WWSympa last. The lifetime of this\n"
+"<em>cookie</em> is customizeable through your <strong>Preferences</strong>\n"
+msgstr ""
+
+#: web_tt2/remove_arc.tt2:5
+msgid ""
+"Operation successful. The message will be deleted as soon\n"
+"as possible. This task may be performed in a few minutes.\n"
+msgstr ""
+
+#. (conf.email,conf.host)
+#: mail_tt2/moderate.tt2:15 mail_tt2/moderate.tt2:20
+msgid "Or send a message to %1@%2 with the following subject :"
+msgstr "tai lähetä viesti osoitteeseen %1@%2 seuraavalla otsikolla :"
+
+#: web_tt2/create_list_request.tt2:61
+msgid "Other"
+msgstr "Muu"
+
+#: web_tt2/pref.tt2:113
+msgid "Other email address :"
+msgstr "Vaihtoehtoinen email osoite :"
+
+#: web_tt2/help_editfile.tt2:23
+msgid "Other files/pages description :"
+msgstr "Muut tiedosto/sivu kuvaukset :"
+
+#: web_tt2/home.tt2:26
+msgid "Others"
+msgstr "Muut"
+
+#. (virus_name,recipient,from)
+#: mail_tt2/your_infected_msg.tt2:8
+msgid ""
+"Our viruschecker found a virus named %1\n"
+"in a message addressed to %2 and that seems\n"
+"to be yours (From: %3).\n"
+msgstr ""
+
+# #-#-#-#-#  fi.po (PACKAGE VERSION)  #-#-#-#-#
+# nlsref 16,57
+#: src/List.pm:934 web_tt2/title.tt2:17
+msgid "Owner"
+msgstr "Omistaja"
+
+#. (o.gecos)
+#: mail_tt2/info_report.tt2:5
+msgid "Owner              : %1"
+msgstr "Omistaja              : %1"
+
+#. (owner)
+#. (doc_owner)
+#: web_tt2/d_control.tt2:9 web_tt2/d_editfile.tt2:19
+#: web_tt2/d_properties.tt2:17 web_tt2/d_read.tt2:50
+msgid "Owner : %1"
+msgstr "Omistaja : %1"
+
+#: web_tt2/create_list_request.tt2:15
+msgid "Owner:"
+msgstr "Omistajan email:"
+
+#: web_tt2/list_menu.tt2:46
+msgid "Owners"
+msgstr "Omistajat"
+
+#: web_tt2/help_editlist.tt2:119
+msgid ""
+"Owners are managing subscribers of the list. They may review subscribers and "
+"add or delete email addresses from the mailing list. If you are a privileged "
+"owner of the list, you can choose other owners for the mailing list. "
+"Privileged owners may edit a few more options than other owners. There can "
+"only be one privileged owner per list; his/her email address may not be "
+"edited from the web."
+msgstr ""
+
+# nlsref 8,1
+#: src/List.pm:2264 src/List.pm:2279 src/List.pm:2291
+msgid "Owners of list %s"
+msgstr "Listan %s omistajat"
+
+#: web_tt2/review.tt2:100 web_tt2/reviewbouncing.tt2:34
+msgid "Page size"
+msgstr "Sivun koko"
+
+#. (key_word)
+#: web_tt2/arcsearch.tt2:12
+#, fuzzy
+msgid "Parameters of these search make on <strong> &quot;%1&quot;</strong>"
+msgstr "Haun parametrit sanalle <b> &quot;%1&quot;</b>"
+
+#: web_tt2/pref.tt2:115
+msgid "Password :"
+msgstr "Salasana :"
+
+#. (email)
+#: web_tt2/change_email.tt2:9
+msgid "Password for %1"
+msgstr "Salasana osoitteelle%1"
+
+#: web_tt2/modindex.tt2:71
+msgid "Path"
+msgstr ""
+
+#: web_tt2/get_pending_lists.tt2:11 web_tt2/serveradmin.tt2:77
+msgid "Pending lists"
+msgstr "Odottavat listat"
+
+#: web_tt2/review.tt2:32
+#, fuzzy
+msgid "Pending subscriptions"
+msgstr "Tilaukset"
+
+#. (current_subscriber.first_bounce,current_subscriber.last_bounce)
+#: web_tt2/editsubscriber.tt2:51
+msgid "Period : from %1 to %2"
+msgstr "Ajanjakso : lähettäjä %1 vastaanottaja %2"
+
+#: web_tt2/main.tt2:130
+msgid "Please activate JavaScript in your web browser"
+msgstr ""
+
+#: web_tt2/tt2_error.tt2:23
+msgid "Please contact the listmaster."
+msgstr ""
+
+#: web_tt2/error.tt2:15
+msgid "Please provide your email address"
+msgstr "Anna email osoite"
+
+#. (list)
+#: web_tt2/sigrequest.tt2:46
+msgid ""
+"Please provide your email address for your unsubscription request from list %"
+"1."
+msgstr ""
+
+#: web_tt2/error.tt2:24
+msgid "Please provide your password"
+msgstr "Anna salasanasi"
+
+#: web_tt2/error.tt2:180
+msgid "Please select archive months"
+msgstr ""
+
+#. (conf.email,conf.host)
+#: mail_tt2/x509-user-cert-missing.tt2:13
+msgid ""
+"Please, in order to receive futur crypted messages send a signed message\n"
+"to  %1@%2 .\n"
+msgstr ""
+
+#: web_tt2/list_menu.tt2:344 web_tt2/list_menu.tt2:351
+#: web_tt2/list_menu.tt2:354
+msgid "Post"
+msgstr "Lähetä"
+
+#: mail_tt2/helpfile.tt2:60
+msgid "Powered by Sympa"
+msgstr "Alustana Sympa"
+
+#: web_tt2/menu.tt2:102
+msgid "Pref"
+msgstr "Aset"
+
+#: web_tt2/arcsearch_form.tt2:30
+msgid "Prefer"
+msgstr "Hakujärjestys"
+
+#: web_tt2/help.tt2:16 web_tt2/menu.tt2:82 web_tt2/menu.tt2:86
+msgid "Preferences"
+msgstr "Asetukset"
+
+#: web_tt2/review.tt2:111 web_tt2/review.tt2:284
+#: web_tt2/reviewbouncing.tt2:112 web_tt2/reviewbouncing.tt2:46
+msgid "Previous page"
+msgstr "Edell sivu"
+
+# nlsref 16,63
+#: src/List.pm:966
+msgid "Priority"
+msgstr "Prioriteetti"
+
+#: src/etc/scenari/send.privateorpublickey:1
+msgid "Private, confirmation for non subscribers"
+msgstr ""
+
+#: src/etc/scenari/send.privateoreditorkey:1
+#, fuzzy
+msgid "Private, moderated for non subscribers"
+msgstr "Listalla ei ole tilaajia"
+
+# nlsref 16,73
+#: web_tt2/help_editlist.tt2:9
+#, fuzzy
+msgid "Privilege for adding (ADD command) a subscriber to the list"
+msgstr "Kuka voi tilata listaa"
+
+#: web_tt2/help_editlist.tt2:13
+msgid "Privilege for reading mail archives and frequency of archiving"
+msgstr ""
+
+#: web_tt2/title.tt2:15
+msgid "Privileged owner"
+msgstr "Oikeutettu omistaja"
+
+#: web_tt2/admin_menu.tt2:148 web_tt2/edit_list_request.tt2:7
+msgid "Privileges"
+msgstr "Oikeudet"
+
+#: web_tt2/d_read.tt2:128
+msgid "Properties"
+msgstr ""
+
+#. (visible_path)
+#: web_tt2/d_properties.tt2:6
+#, fuzzy
+msgid "Properties of the bookmark %1"
+msgstr "Kirjamerkin muuttaminen %1"
+
+#. (visible_path)
+#: web_tt2/d_properties.tt2:8
+#, fuzzy
+msgid "Properties of the directory %1"
+msgstr "Hakemiston muuttaminen %1"
+
+#. (visible_path)
+#: web_tt2/d_properties.tt2:10
+#, fuzzy
+msgid "Properties of the file %1"
+msgstr "Tiedoston muuttaminen%1"
+
+#: web_tt2/error.tt2:36
+msgid "Provided password is incomplete"
+msgstr "Annettu salasana on puutteellinen"
+
+#: web_tt2/error.tt2:33
+msgid "Provided password is incorrect"
+msgstr "Annettu salasana on väärä"
+
+# #-#-#-#-#  fi.po (PACKAGE VERSION)  #-#-#-#-#
+# nlsref 6,82
+#: src/Commands.pm:245 web_tt2/help.tt2:18
+msgid "Public lists"
+msgstr "Julkiset listat"
+
+#: web_tt2/d_editfile.tt2:41 web_tt2/d_editfile.tt2:66 web_tt2/d_read.tt2:433
+#: web_tt2/d_read.tt2:454
+msgid "Publish"
+msgstr "Julkista"
+
+#: web_tt2/get_closed_lists.tt2:26
+msgid "Purge selected lists"
+msgstr "Poista valitut listat"
+
+#: mail_tt2/helpfile.tt2:41
+msgid ""
+"QUIT                        * Indicates the end of the commands (to ignore a "
+"signature)"
+msgstr ""
+
+#: mail_tt2/helpfile.tt2:56
+#, fuzzy
+msgid "REJect <list> <key>            * Moderation: to reject a message"
+msgstr "Hallinta: hylkää viesti"
+
+#: mail_tt2/helpfile.tt2:51
+msgid ""
+"REMIND <list>                   * Send a reminder message to each subscriber "
+"(this is a way to inform anyone what is his real subscribing email)."
+msgstr ""
+
+#: mail_tt2/helpfile.tt2:19
+#, fuzzy
+msgid "REView <list>               * Displays the subscribers to <list>"
+msgstr "Näyttää tilaajat listlle <list>"
+
+# nlsref 16,16
+#: src/List.pm:1016
+#, fuzzy
+msgid "RFC 2369 Header fields"
+msgstr "Mukautettu otsikko kenttä"
+
+#: web_tt2/pref.tt2:76
+msgid "Re-enter your new password :"
+msgstr "Salasana uudelleen :"
+
+#: web_tt2/d_control.tt2:19
+msgid "Read access"
+msgstr "Lukuoikeus"
+
+#: web_tt2/serveradmin.tt2:183
+msgid "Rebuild HTML archives using \"arctxt\" directories as input."
+msgstr ""
+
+#: web_tt2/serveradmin.tt2:197
+msgid "Rebuild archive"
+msgstr "Luo arkisto uudelleen"
+
+#. (stats.byte_rcv)
+#: mail_tt2/stats_report.tt2:6
+#, fuzzy
+msgid "Received mega-bytes             :      %1"
+msgstr "Vastaanotettujen viestien lkm :      [% stats.msg_rcv %]"
+
+#: web_tt2/review.tt2:156
+msgid "Reception"
+msgstr "Vastaanotto"
+
+#: web_tt2/editsubscriber.tt2:16
+msgid "Reception :"
+msgstr "Vastaanotto :"
+
+#: web_tt2/suboptions.tt2:8
+msgid "Reception mode :"
+msgstr "Vastaanotto tila :"
+
+#. (available_reception_mode)
+#: mail_tt2/info_report.tt2:19
+msgid "Reception modes    : %1"
+msgstr "Vastaanotto tilat  : %1"
+
+#. (param0)
+#: mail_tt2/listmaster_notification.tt2:28
+msgid "Refer to documentation to adapt %1."
+msgstr ""
+
+#: web_tt2/modindex.tt2:11 web_tt2/modindex.tt2:49 web_tt2/modindex.tt2:63
+#: web_tt2/modindex.tt2:98 web_tt2/viewmod.tt2:9
+msgid "Reject"
+msgstr "Hylkää"
+
+#: web_tt2/subindex.tt2:54
+msgid "Reject selected addresses"
+msgstr "Hylkää valitut osoitteet"
+
+#: web_tt2/scenario_test.tt2:41
+msgid "Related email"
+msgstr "Asiaan liittyvä email"
+
+#: web_tt2/review.tt2:52 web_tt2/reviewbouncing.tt2:16
+msgid "Remind all subscribers"
+msgstr "Muistuta kaikkia tilaajia"
+
+#: web_tt2/help_editfile.tt2:17
+msgid ""
+"Remind message : This message is sent to each subscriber\n"
+"when using the command  REMIND. It's very useful to help people who are\n"
+"confused about their own subscription emails or people who are not able to\n"
+"unsubscribe themselves.\n"
+msgstr ""
+
+# nlsref 16,65
+#: src/List.pm:975
+msgid "Remind return-path"
+msgstr "Muistutuksen palaa-polku"
+
+# nlsref 6,76
+#: src/Commands.pm:1309
+msgid "Reminder of your %s subscription"
+msgstr "Muistutus %s tilauksestasi"
+
+#. (list.name)
+#: mail_tt2/remind.tt2:2
+#, fuzzy
+msgid "Reminder of your subscription to %1"
+msgstr "Muistutus tilauksestasi listalle %1"
+
+#: web_tt2/scenario_test.tt2:47
+msgid "Remote addr"
+msgstr "Etäosoite"
+
+# nlsref 16,34
+#: src/List.pm:597
+#, fuzzy
+msgid "Remote file inclusion"
+msgstr "Tiedoston liittäminen"
+
+#: web_tt2/scenario_test.tt2:53
+msgid "Remote host"
+msgstr "Etäpalvelin"
+
+#: web_tt2/admin_menu.tt2:123 web_tt2/admin_menu.tt2:125
+msgid "Remove List"
+msgstr ""
+
+#. (list.name)
+#: mail_tt2/expire_deletion.tt2:2 mail_tt2/removed.tt2:2
+msgid "Removed from %1"
+msgstr "Poistettu listalta %1"
+
+# nlsref 16,29
+#: web_tt2/d_properties.tt2:61 web_tt2/d_upload.tt2:22
+#, fuzzy
+msgid "Rename"
+msgstr "nimi"
+
+#: web_tt2/admin_menu.tt2:130 web_tt2/admin_menu.tt2:132
+#, fuzzy
+msgid "Rename List"
+msgstr "Poista lista"
+
+#. (fname)
+#: web_tt2/d_properties.tt2:49
+#, fuzzy
+msgid "Rename directory %1"
+msgstr "Hakemistoa ei voida luoda %1"
+
+#. (fname)
+#: web_tt2/d_properties.tt2:51
+#, fuzzy
+msgid "Rename file %1"
+msgstr "Poistettu listalta %1"
+
+#: web_tt2/edit_list_request.tt2:11
+#, fuzzy
+msgid "Rename list"
+msgstr "Poista lista"
+
+#: web_tt2/rename_list_request.tt2:14
+#, fuzzy
+msgid "Rename this list"
+msgstr "Poista lista"
+
+# nlsref 6,21
+#: src/Commands.pm:2035
+msgid "Renewal of your subscription to list '%s'"
+msgstr "Tilauksen uusiminen listalle '%s'"
+
+#. (visible_path)
+#: web_tt2/d_editfile.tt2:33
+#, fuzzy
+msgid "Replace the file %1 with your file"
+msgstr "Korvaa tiedosto %1 omalla tiedostolla"
+
+#: src/etc/mhonarc-ressources.tt2:398
+msgid "Reply"
+msgstr ""
+
+# nlsref 16,66
+#: src/List.pm:1004 src/List.pm:984
+msgid "Reply address"
+msgstr "Vastausosoite (reply)"
+
+#. (reply_to)
+#: mail_tt2/info_report.tt2:14
+msgid "Reply to           : %1"
+msgstr "Tilauksen poisto   : [% unsubscribe %]"
+
+#: src/etc/mhonarc-ressources.tt2:394
+msgid "Reply to sender"
+msgstr ""
+
+#: web_tt2/get_closed_lists.tt2:13 web_tt2/get_pending_lists.tt2:16
+msgid "Requested by"
+msgstr "Pyytäjä"
+
+#: web_tt2/create_list.tt2:11
+msgid "Required aliases"
+msgstr "Vaaditut aliakset"
+
+# nlsref 6,8
+#: src/Commands.pm:333 src/Commands.pm:338 src/Commands.pm:378
+msgid "Required file does not exist.\n"
+msgstr "Tarvittavaa tiedostoa ei ole.\n"
+
+#: web_tt2/editsubscriber.tt2:53
+msgid "Reset errors"
+msgstr "Tyhjää virheet"
+
+#: web_tt2/reviewbouncing.tt2:108 web_tt2/reviewbouncing.tt2:55
+msgid "Reset errors for selected users"
+msgstr "Nollaa virheet valituilta käyttäjiltä"
+
+#: web_tt2/admin_menu.tt2:118 web_tt2/admin_menu.tt2:120
+msgid "Restore List"
+msgstr "Hallinnointi"
+
+#: web_tt2/admin_menu.tt2:103
+msgid "Restore shared"
+msgstr "Palauta jaettu"
+
+#: web_tt2/arcsearch.tt2:52
+msgid "Result"
+msgstr "Tulokset"
+
+#: web_tt2/arcsearch.tt2:3
+msgid "Result of your search in the archive"
+msgstr "Hakusi arkistossa tuotti seuraavat tulokset"
+
+# nlsref 4,17
+#: src/sympa.pl:1062
+msgid "Results of your commands"
+msgstr "Käskyjesi lopputulos"
+
+#. (archive_name)
+#: web_tt2/arcsearch.tt2:118
+msgid "Return to archive %1"
+msgstr "Palaa arkistoon %1"
+
+#: web_tt2/list_menu.tt2:412 web_tt2/list_menu.tt2:417
+msgid "Review"
+msgstr "Tarkista"
+
+#: web_tt2/serveradmin.tt2:55
+msgid "Review lists from this family"
+msgstr ""
+
+#. (review)
+#: mail_tt2/info_report.tt2:13
+msgid "Review subscribers : %1"
+msgstr "Tilauksen poisto   : [% unsubscribe %]"
+
+# nlsref 5,2
+#: src/tools.pl:130
+msgid "Routing error ?"
+msgstr "Reititysvirhe ?"
+
+#: mail_tt2/helpfile.tt2:32
+#, fuzzy
+msgid ""
+"SET <list>|* CONCEAL        * To become unlisted (hidden subscriber address)"
+msgstr "Salaa osoitteesi muilta"
+
+#: mail_tt2/helpfile.tt2:27
+#, fuzzy
+msgid "SET <list>|* DIGEST         * Message reception in compilation mode"
+msgstr "Viestien vastaanotto koostetilassa"
+
+#: mail_tt2/helpfile.tt2:31
+#, fuzzy
+msgid "SET <list>|* MAIL           * <list> reception in normal mode"
+msgstr "<list> vastaanotto normaali tilassa"
+
+#: mail_tt2/helpfile.tt2:33
+#, fuzzy
+msgid "SET <list>|* NOCONCEAL      * Subscriber address visible via REView"
+msgstr "Tilaajan osoite näkyvissä REView komennon kautta"
+
+#: mail_tt2/helpfile.tt2:26
+#, fuzzy
+msgid ""
+"SET <list>|* NOMAIL         * To suspend the message reception for <list>"
+msgstr "Pysäyttääksesi viestien vastaanoton listalta <list>"
+
+#: mail_tt2/helpfile.tt2:30
+#, fuzzy
+msgid "SET <list>|* NOTICE         * Receiving message subject only"
+msgstr "Ainoastaan viestien otsikon vastaanotto"
+
+#: mail_tt2/helpfile.tt2:29
+#, fuzzy
+msgid "SET <list>|* SUMMARY        * Receiving the message index only"
+msgstr "Ainoastaan viestien listauksen vastaanotto"
+
+#: mail_tt2/helpfile.tt2:28
+msgid ""
+"SET <list|*> DIGESTPLAIN    * Message reception in compilation mode, sent as "
+"a plain text email with all attachments"
+msgstr ""
+
+# nlsref 16,51
+#: src/List.pm:848
+msgid "SQL query"
+msgstr "SQL kysely"
+
+# nlsref 16,45
+#: src/List.pm:863
+msgid "SQL query inclusion"
+msgstr "SQL kyselyn liittäminen"
+
+#: mail_tt2/helpfile.tt2:49
+#, fuzzy
+msgid "STATS <list>                    * To consult the statistics for <list>"
+msgstr "Saadaksesi tilastot listalle <list>"
+
+#: mail_tt2/helpfile.tt2:21
+msgid ""
+"SUBscribe <list> <name>     * To subscribe or to confirm a subscription to "
+"<list>."
+msgstr ""
+
+#: mail_tt2/helpfile.tt2:8
+msgid ""
+"SYMPA is an electronic mailing-list manager that automates list management "
+"functions such as subscriptions, moderation, and archive management."
+msgstr ""
+
+#: web_tt2/help_editlist.tt2:125
+msgid "Same as welcome_return_path, but applied to remind messages."
+msgstr ""
+
+#: web_tt2/editfile.tt2:11
+msgid "Save"
+msgstr "Tallenna"
+
+#: web_tt2/scenario_test.tt2:14
+msgid "Scenari name"
+msgstr "Skenaarion nimi"
+
+#: web_tt2/serveradmin.tt2:208
+msgid "Scenari test module"
+msgstr "Skenaario testi moduuli"
+
+#: web_tt2/scenario_test.tt2:10
+msgid "Scenario test module"
+msgstr "Skenaario testi moduuli"
+
+#: web_tt2/arc.tt2:20 web_tt2/arcsearch_form.tt2:15
+#: web_tt2/arcsearch_form.tt2:23 web_tt2/review.tt2:68
+#: web_tt2/reviewbouncing.tt2:11
+msgid "Search"
+msgstr "Etsi"
+
+#: web_tt2/serveradmin.tt2:118
+msgid "Search User"
+msgstr "Etsi käyttäjä"
+
+#: web_tt2/arcsearch_form.tt2:55
+msgid "Search area"
+msgstr "Hakualue"
+
+#: web_tt2/arcsearch.tt2:6 web_tt2/arcsearch_form.tt2:11
+msgid "Search field :"
+msgstr "Hakukenttä :"
+
+#: web_tt2/home.tt2:58
+msgid "Search lists"
+msgstr "Hae listoista"
+
+# nlsref 16,11
+#: src/List.pm:420
+msgid "Secret string for generating unique keys"
+msgstr "Salainen avain ainutlaatuisten avainten luontiin"
+
+#: web_tt2/lists.tt2:45
+msgid "See your subscriptions with the following email addresses"
+msgstr "Tarkista tilauksesi seuraavilla osoitteilla"
+
+#: web_tt2/arc_manage.tt2:5
+msgid ""
+"Select below Archives months you want to delete or download (ZiP format):"
+msgstr ""
+
+#: web_tt2/review.tt2:73
+msgid "Selection too wide, can not show selection"
+msgstr "Valinta liian laaja, ei voida näyttää"
+
+#: web_tt2/loginbanner.tt2:136
+msgid "Send me a password"
+msgstr "Lähetä salasana"
+
+#: web_tt2/remindpasswd.tt2:19 web_tt2/sigrequest.tt2:71
+msgid "Send me my password"
+msgstr "Lähetä salasanani"
+
+#: web_tt2/compose_mail.tt2:7
+msgid "Send this mail"
+msgstr "Lähetä tämä viesti"
+
+#: web_tt2/arcsearch_form.tt2:56
+msgid "Sender"
+msgstr "Lähettäjä"
+
+#. (send)
+#: mail_tt2/info_report.tt2:12
+msgid "Sending messages   : %1"
+msgstr "Tilaus       : [% subscribe %]"
+
+#: web_tt2/admin_menu.tt2:144
+msgid "Sending/Reception"
+msgstr "><b>Hallinnointi</b"
+
+#: web_tt2/edit_list_request.tt2:6
+msgid "Sending/reception setup"
+msgstr "Lähetys/vastaanotto asetukset"
+
+# nlsref 16,69
+#: src/List.pm:1027
+msgid "Serial number of the config"
+msgstr "Asetusten sarjanumero"
+
+#: web_tt2/rss.tt2:28 web_tt2/rss.tt2:7
+#, fuzzy
+msgid "Server error"
+msgstr "Tyhjää virheet"
+
+#: web_tt2/help_editfile.tt2:3
+msgid "Service messages description :"
+msgstr "Palveluviestien kuvaus:"
+
+#: web_tt2/d_control.tt2:55
+msgid "Set owner"
+msgstr "Aseta omistaja"
+
+#. (visible_path)
+#: web_tt2/d_control.tt2:47
+msgid "Set the owner of the directory %1"
+msgstr "Aseta hakemiston omistaja %1"
+
+#: web_tt2/serveradmin.tt2:139
+msgid "Setting defaults list templates"
+msgstr "Asetetaan lista oletusmallit"
+
+#: web_tt2/serveradmin.tt2:149
+msgid "Setting site templates"
+msgstr "Asetetaan sivuston oletusmallit"
+
+#: web_tt2/stats.tt2:1
+msgid "Shared document directory size"
+msgstr "Jaetun dokementtihakemiston koko"
+
+# nlsref 16,70
+#: src/List.pm:1047
+msgid "Shared documents"
+msgstr "Jaetut dokumentit"
+
+#: web_tt2/list_menu.tt2:377 web_tt2/list_menu.tt2:383
+#: web_tt2/list_menu.tt2:388
+msgid "Shared web"
+msgstr "Jaettu WWW"
+
+#: web_tt2/d_read.tt2:20
+msgid "Show expert commands"
+msgstr ""
+
+#: web_tt2/d_read.tt2:9
+#, fuzzy
+msgid "Show user page "
+msgstr "[% list.name %] listan luonti"
+
+#: web_tt2/help_user_options.tt2:18
+msgid ""
+"Similar to the Digest option in that the subscriber will periodically \n"
+"receive batched messages in a Digest. With DigestPlain the Digest is sent in "
+"a plain text \n"
+"format, with all attachments stripped out. DigestPlain is useful if your "
+"email software doesn't\n"
+"display multipart/digest format messages well.\n"
+msgstr ""
+
+#: web_tt2/modindex.tt2:20 web_tt2/modindex.tt2:72
+msgid "Size"
+msgstr "Koko"
+
+#: web_tt2/d_read.tt2:94
+msgid "Size (Kb)"
+msgstr "Koko (Kb)"
+
+# nlsref 6,260
+#: src/List.pm:8675
+msgid ""
+"Someone (hopefully you) asked for your e-mail address\n"
+"to be added to list '%s'.\n"
+"If you want this action to be taken, please\n"
+"\n"
+"- reply to this mail\n"
+"OR\n"
+"- send a message to %s with subject\n"
+" %s\n"
+"OR\n"
+"- hit the following mailto %s\n"
+"\n"
+"If you do not want this action to be taken, you can safely ignore\n"
+"this message."
+msgstr ""
+"Joku (toivottavasti sinä) pyysi sähköpostiosoitteesi\n"
+"lisäämistä listalle '%s'.\n"
+"Jos haluat että näin tapahtuu niin\n"
+"\n"
+"- vastaa tähän mailiin\n"
+"TAI\n"
+"- lähetä viesti osoitteeseen %s ja laita subject-kenttään\n"
+" %s\n"
+"TAI\n"
+"- käytä tätä: %s\n"
+"\n"
+"Jos et halua että mailiosoitettasi lisätään listalle, sinun ei\n"
+"tarvitse reagoida mitenkään."
+
+# nlsref 6,260
+#: src/List.pm:8668
+#, fuzzy
+msgid ""
+"Someone (hopefully you) asked for your e-mail address\n"
+"to be removed from list '%s'.\n"
+"If you want this action to be taken, please \n"
+"\n"
+"- reply to this mail\n"
+"OR\n"
+"- send a message to '%s' with subject\n"
+" %s\n"
+"OR\n"
+"- hit the following mailto %s\n"
+"\n"
+"If you do not want this action to be taken, you can safely ignore\n"
+"this message"
+msgstr ""
+"Joku (toivottavasti sinä) pyysi sähköpostiosoitteesi\n"
+"lisäämistä listalle '%s'.\n"
+"Jos haluat että näin tapahtuu niin\n"
+"\n"
+"- vastaa tähän mailiin\n"
+"TAI\n"
+"- lähetä viesti osoitteeseen %s ja laita subject-kenttään\n"
+" %s\n"
+"TAI\n"
+"- käytä tätä: %s\n"
+"\n"
+"Jos et halua että mailiosoitettasi lisätään listalle, sinun ei\n"
+"tarvitse reagoida mitenkään."
+
+# nlsref 6,39
+#: src/List.pm:8680 src/List.pm:8685
+msgid ""
+"Someone (hopefully you) requested a user of list %s to be\n"
+"added or removed.\n"
+"\n"
+"If you want this action to be taken, please send an e-mail to\n"
+"%s containing \n"
+"\n"
+"   %s\n"
+"\n"
+"If you do not want this action to be taken, simply ignore this message.\n"
+msgstr ""
+"Joku (toivon mukaan sinä) pyysi listan %s käyttäjän\n"
+"poistettavaksi tai lisättäväksi.\n"
+"\n"
+"Jos haluat että näin todellakin tehdään, lähetäpä viesti osoitteeseen\n"
+"%s, viestin tulisi sisältää \n"
+"\n"
+"   %s\n"
+"\n"
+"Jos et halua tehdä tätä, älä reagoi tähän viestiin.\n"
+
+# nlsref 6,48
+#: src/Commands.pm:2059
+#, fuzzy
+msgid ""
+"Someone (hopefully you) requested that the subscribers to the list\n"
+"'%s' for more than %d days have to confirm their subscription.\n"
+"If you do not want this action to be taken, simply ignore this message.\n"
+"To confirm this action, please send an e-mail to '%s', with the following "
+"command:\n"
+"\n"
+"AUTH %s EXPIRE %s %d %d\n"
+msgstr ""
+"Joku (toivottavasti sinä) pyysi, että listan '%s' %d päivää ylittävien\n"
+"tilaajien täytyy vahvistaa tilauksensa.\n"
+"Jos et halua että näin tapahtuu, älä reagoi tähän viestiin.\n"
+"Jos haluat vahvistaa tämän toimenpiteen, lähetä sähköpostia osoitteeseen '%"
+"s'.\n"
+"Sähköpostin tulisi sisältää seuraava komento:\n"
+"\n"
+"AUTH %s EXPIRE %s %d %d\n"
+
+#: web_tt2/d_read.tt2:83
+msgid "Sort by author"
+msgstr "Lajittele tekijän mukaan"
+
+#: web_tt2/d_read.tt2:113
+msgid "Sort by date"
+msgstr "Lajittele pvm mukaan"
+
+#: web_tt2/d_read.tt2:68
+msgid "Sort by name"
+msgstr "Lajittele nimen mukaan"
+
+#: web_tt2/d_read.tt2:98
+msgid "Sort by size"
+msgstr "Lajittele koon mukaan"
+
+#: web_tt2/review.tt2:161 web_tt2/review.tt2:165
+#, fuzzy
+msgid "Sources"
+msgstr "size=\"-1\"><b>Omat asetukset</b"
+
+#: web_tt2/review_family.tt2:6
+#, fuzzy
+msgid "Status"
+msgstr "Tilanne : %1"
+
+#. (current_subscriber.bounce_status)
+#: web_tt2/editsubscriber.tt2:49
+msgid "Status : %1"
+msgstr "Tilanne : %1"
+
+# nlsref 16,71
+#: src/List.pm:1063
+msgid "Status of the list"
+msgstr "Listan status"
+
+#: web_tt2/review.tt2:171 web_tt2/review.tt2:175
+#, fuzzy
+msgid "Sub date"
+msgstr "Lajittele pvm mukaan"
+
+#: web_tt2/active_lists.tt2:26 web_tt2/arcsearch_form.tt2:58
+#: web_tt2/get_inactive_lists.tt2:9 web_tt2/get_latest_lists.tt2:8
+#: web_tt2/latest_arc.tt2:20 web_tt2/latest_lists.tt2:24
+#: web_tt2/modindex.tt2:19 web_tt2/review_family.tt2:9
+msgid "Subject"
+msgstr "Otsikko"
+
+#. (subject)
+#: mail_tt2/info_report.tt2:3
+msgid "Subject            : %1"
+msgstr "Otsikko            : %1"
+
+#: web_tt2/install_pending_list.tt2:14 web_tt2/set_pending_list_request.tt2:14
+msgid "Subject :"
+msgstr "Otsikko :"
+
+# nlsref 16,72
+#: src/List.pm:1070
+msgid "Subject of the list"
+msgstr "Listan otsikko"
+
+# nlsref 16,17
+#: src/List.pm:451
+msgid "Subject tagging"
+msgstr "Otsikon muuttaminen"
+
+#: web_tt2/compose_mail.tt2:6 web_tt2/create_list_request.tt2:41
+msgid "Subject:"
+msgstr "Otsikko:"
+
+#: web_tt2/choosepasswd.tt2:21 web_tt2/pref.tt2:117 web_tt2/pref.tt2:38
+#: web_tt2/pref.tt2:69 web_tt2/pref.tt2:78
+msgid "Submit"
+msgstr "Lähetä"
+
+#: web_tt2/create_list_request.tt2:78
+msgid "Submit your creation request"
+msgstr "Lähetä luontipyyntö"
+
+#: web_tt2/list_menu.tt2:200 web_tt2/list_menu.tt2:232
+#: web_tt2/list_menu.tt2:238 web_tt2/list_menu.tt2:242
+#: web_tt2/list_menu.tt2:246 web_tt2/subrequest.tt2:34
+#: web_tt2/subrequest.tt2:64
+msgid "Subscribe"
+msgstr "Tilaa"
+
+#. (current_subscriber.date)
+#: web_tt2/editsubscriber.tt2:14
+msgid "Subscribed since %1"
+msgstr "Tilauksen alkamispvm %1"
+
+#: web_tt2/title.tt2:21
+msgid "Subscriber"
+msgstr "Tilaaja"
+
+#: web_tt2/list_menu.tt2:144 web_tt2/list_menu.tt2:148
+msgid "Subscriber Options"
+msgstr "Tilaajan Asetukset"
+
+#: web_tt2/editsubscriber.tt2:6
+msgid "Subscriber information"
+msgstr "Tilaaja tiedot"
+
+#: web_tt2/admin_menu.tt2:11 web_tt2/admin_menu.tt2:17
+msgid "Subscribers"
+msgstr "Tilaajat"
+
+#: web_tt2/list_menu.tt2:44
+msgid "Subscribers:"
+msgstr "Tilaajat:"
+
+#: web_tt2/help_editfile.tt2:20
+msgid ""
+"Subscribing invitation message : it is sent to a person if some user  \n"
+"use the INVITE command to invite someone for subscription.\n"
+msgstr ""
+
+#. (subscribe)
+#: mail_tt2/info_report.tt2:10
+msgid "Subscription       : %1"
+msgstr "Tilaus       : %1"
+
+# nlsref 16,18
+#: src/List.pm:465
+msgid "Subscription profile"
+msgstr "Tilausprofiili"
+
+# nlsref 6,78
+#: src/Commands.pm:1316
+msgid "Subscription reminder sent to each of %d %s subscribers\n"
+msgstr "Tilausmuistutus lähetetty jokaiselle %d:lle listan %s tilaajista\n"
+
+# nlsref 8,2
+#: src/List.pm:2278
+msgid "Subscription request to list %s"
+msgstr "Tilauspyyntö listalle %s"
+
+# nlsref 6,83
+#: src/Commands.pm:1327
+msgid "Subscription summary"
+msgstr "Tilausyhteenveto"
+
+#: web_tt2/help_user_options.tt2:22
+msgid "Summary"
+msgstr "Yhteenveto"
+
+# nlsref 8,31
+#: src/List.pm:3199
+msgid "Summary of list %s"
+msgstr "Yhteenveto listasta %s"
+
+#. (user.email)
+#: mail_tt2/global_remind.tt2:2
+msgid "Summary of your subscription (using the e-mail %1)."
+msgstr "Yhteenveto tilauksestasi (käyttäen osoitetta %1)."
+
+#: src/etc/mhonarc-ressources.tt2:564
+msgid "Sunday:Monday:Tuesday:Wednesday:Thursday:Friday:Saturday"
+msgstr ""
+
+#: web_tt2/menu.tt2:69 web_tt2/menu.tt2:73
+msgid "Sympa admin"
+msgstr "Sympan hallinta"
+
+#: web_tt2/help_editlist.tt2:166
+msgid ""
+"Sympa allows the list owner to choose how Sympa loads list member data. "
+"Subscriber information can be stored in a text file or relational database, "
+"or included from various external sources (list, flat file, result of or "
+"query)."
+msgstr ""
+
+#: web_tt2/help_editlist.tt2:162
+msgid ""
+"Sympa caches user data extracted using the include parameter. Their TTL "
+"(time-to-live) within Sympa can be controlled using this parameter. The "
+"default value is 3600"
+msgstr ""
+
+#: web_tt2/help_editlist.tt2:110
+msgid ""
+"Sympa can contact another Sympa service using https to fetch a remote list "
+"in order to include each member of a remote list as subscriber. You may "
+"include as many lists as required, using one include_remote_sympa_list "
+"paragraph for each included list. Be careful, however, not to give rise an "
+"infinite loop making cross includes."
+msgstr ""
+
+#. (param0,param1)
+#: mail_tt2/listmaster_notification.tt2:63
+msgid ""
+"Sympa could not check family %2 rules with list %1 param_constraint.conf "
+"file."
+msgstr ""
+
+#: web_tt2/tt2_error.tt2:21
+msgid "Sympa could not deliver the requested page for the following reason : "
+msgstr ""
+
+#: mail_tt2/listmaster_notification.tt2:97
+msgid ""
+"Sympa could not include admins from external data sources ; the database or "
+"LDAP directory might be unreachable."
+msgstr ""
+
+#: mail_tt2/listmaster_notification.tt2:36
+msgid ""
+"Sympa could not include subscribers from external data sources ; the\n"
+"database or LDAP directory might be unreachable.\n"
+msgstr ""
+
+#. (param0,param1)
+#: mail_tt2/listmaster_notification.tt2:83
+#, fuzzy
+msgid "Sympa could not load family %2 for list %1."
+msgstr "Email osoitteen muuttaminen listaan %1 epäonnistui"
+
+#: mail_tt2/listmaster_notification.tt2:76
+msgid "Sympa could not load the list config file."
+msgstr ""
+
+#. (param0,param1)
+#: mail_tt2/listmaster_notification.tt2:103
+msgid "Sympa could not modify list %1 (Family %2)"
+msgstr ""
+
+#: web_tt2/main.tt2:89
+msgid ""
+"Sympa could not set a cookie for login.\n"
+" Your should setup your navigator to accept cookies"
+msgstr ""
+
+#: web_tt2/tt2_error.tt2:16
+msgid "Sympa error - could not display web page"
+msgstr ""
+
+#: web_tt2/help_editlist.tt2:96
+msgid ""
+"Sympa will not create new MIME parts, but will try to append the header/"
+"footer to the body of the message. Predefined message-footers will be "
+"ignored. Headers/footers may be appended to text/plain messages only."
+msgstr ""
+
+#: web_tt2/review.tt2:23
+msgid "Synchronize members with data sources"
+msgstr ""
+
+#. (error.params)
+#: web_tt2/error.tt2:97
+msgid "Syntax errors with the following parameters : %1"
+msgstr "Syntaksi virhe seuraavissa parametreissa: %1"
+
+#: mail_tt2/digest.tt2:12 mail_tt2/digest_plain.tt2:10 src/List.pm:3083
+#, fuzzy
+msgid "Table of contents:"
+msgstr "Sisällysluettelo:"
+
+#: web_tt2/serveradmin.tt2:129
+msgid "Templates"
+msgstr "Oletusmallit"
+
+# nlsref 16,4
+#: src/List.pm:331
+msgid "Text archives"
+msgstr "Teksti arkistot"
+
+#: web_tt2/lists.tt2:65
+msgid ""
+"That is to say using a unique email address in Sympa for your subscriptions "
+"and preferences"
+msgstr ""
+"Tämä on uniikki email osoite Sympassa tilauksia ja asetuksia varten\n"
+"</FONT"
+
+#. (file_name)
+#: mail_tt2/urlized_part.tt2:5
+msgid ""
+"The %1 file that was initially attached to this message has been stored of "
+"the mailing lists server:"
+msgstr ""
+
+#. (count)
+#: web_tt2/rss.tt2:31
+#, fuzzy
+msgid "The %1 latest created lists"
+msgstr "Poista valitut listat"
+
+#. (count)
+#: web_tt2/rss.tt2:51
+#, fuzzy
+msgid "The %1 latest messages"
+msgstr "Uusi viesti ensiksi"
+
+# nlsref 16,70
+#. (count)
+#: web_tt2/rss.tt2:60
+#, fuzzy
+msgid "The %1 latest shared documents"
+msgstr "Jaetut dokumentit"
+
+#. (count)
+#: web_tt2/rss.tt2:41
+#, fuzzy
+msgid "The %1 most active lists"
+msgstr "Uusimmat listat"
+
+#: web_tt2/help_editlist.tt2:38
+msgid ""
+"The Bouncers_level1 paragraphs defines the automatic behavior of bounce "
+"management.<br />\n"
+"\tLevel 1 is the lower level of bouncing users\n"
+msgstr ""
+
+#: web_tt2/help_editlist.tt2:54
+msgid ""
+"The Bouncers_levelX paragraphs defines the automatic behavior of bounce "
+"management.<br />\n"
+"\tLevel 2 is the highest level of bouncing users\n"
+msgstr ""
+
+# nlsref 6,47
+#: src/Commands.pm:1923 src/Commands.pm:2136 src/Commands.pm:2232
+msgid ""
+"The EXPIRE, EXPIREINDEX and EXPIREDEL commands are restricted to the owners "
+"of the list.\n"
+"You are not one of the owners for list %s.\n"
+msgstr ""
+"Vain listan omistajat voivat käyttää EXPIRE, EXPIREINDEX tai EXPIREDEL -"
+"komentoja.\n"
+"Et kuulu listan %s omistajiin.\n"
+
+# nlsref 6,46
+#: src/Commands.pm:2275
+#, fuzzy
+msgid "The MODINDEX command is restricted to moderators.\n"
+msgstr ""
+"Vain moderaattorit voivat käyttää MODINDEX-käskyä.\n"
+"Et kuulu listan %s moderaattoreihin.\n"
+
+# nlsref 6,84
+#: src/Commands.pm:1145
+msgid "The User '%s' is already subscriber of list '%s'\n"
+msgstr "Käyttäjä '%s' on jo listan '%s' tilaaja\n"
+
+#: mail_tt2/listmaster_notification.tt2:17
+msgid "The antivirus scan has failed while processing the following file:"
+msgstr "Antivirus skannaus epäonnistui"
+
+# nlsref 6,15
+#: src/Commands.pm:1110 src/Commands.pm:1243 src/Commands.pm:1411
+#: src/Commands.pm:1995 src/Commands.pm:466 src/Commands.pm:593
+#: src/Commands.pm:733 src/Commands.pm:854 src/Commands.pm:990
+msgid ""
+"The authentication process failed\n"
+"\n"
+msgstr ""
+"Käyttöoikeuksien tarkastusprosessi epäonnistui\n"
+"\n"
+
+#: web_tt2/help_editlist.tt2:15
+msgid ""
+"The available_user_options parameter starts a paragraph to define available "
+"options for the subscribers of the list."
+msgstr ""
+
+#: mail_tt2/certif_warning.tt2:5
+msgid "The certificate subject is :"
+msgstr "Tunnistussertifikaatin voimassaoloaika loppuu [% expiration_date %]"
+
+# nlsref 1,1
+#: src/alias_manager.pl:40
+#, fuzzy
+msgid "The configuration file --CONFIG-- contains errors.\n"
+msgstr "Asetustiedostossa on virheitä.\n"
+
+#: web_tt2/help_editlist.tt2:139
+msgid ""
+"The default is to respect (preserve) the existing Reply-To: SMTP header "
+"field in incoming messages. If set to forced, Reply-To: SMTP header field "
+"will be overwritten."
+msgstr ""
+
+#: web_tt2/help_editlist.tt2:93
+msgid "The default value. Sympa will add the footer/header as a new MIME part."
+msgstr ""
+
+#: web_tt2/help_editlist.tt2:74
+msgid ""
+"The default_user_options parameter starts a paragraph to define a default "
+"profile for the subscribers of the list."
+msgstr ""
+
+#: web_tt2/error.tt2:174
+msgid "The document repository exceed disk quota."
+msgstr ""
+
+#: mail_tt2/list_unknown.tt2:14
+msgid "The following address is not a known mailing list :"
+msgstr ""
+"Tämä on automaattinen vastaus jonka lähetti Sympa Postituslista ohjelmisto."
+
+#: mail_tt2/helpfile.tt2:45
+msgid ""
+"The following commands are available only for lists's owners or moderators:"
+msgstr ""
+"Seuraavat komennot ovat saatavilla vain listan omistajille ja hallitsijoille:"
+
+# nlsref 5,3
+#: src/tools.pl:135
+msgid ""
+"The following message was sent to a list while it seems to contain\n"
+"commands like subscribe, unsubscribe, help, index, get, ...\n"
+"\n"
+"If your message effectively contained a command, please notice that \n"
+"commands should never ever be sent to lists. Commands must be sent\n"
+"to %s exclusively.\n"
+"\n"
+"If your message was effectively addressed to the list, it has been\n"
+"interpreted by the software as a command. Please contact the manager\n"
+"of the service : %s so that they can take care of your message.\n"
+"\n"
+"Thank you for your attention.\n"
+"\n"
+"------ Beginning of suspected message ------\n"
+msgstr ""
+"Seuraava viesti oli lähetetty listalle vaikka se näyttää sisältävän\n"
+"käskyjä kuten subscribe, unsubscribe, help, index, get, ...\n"
+"\n"
+"Jos viestisi todellakin sisälsi komentoja, huomaa että \n"
+"komentoja ei tulisi koskaan, missään tapauksessa, lähettää listoille. \n"
+"Komennot tulee lähettää yksinomaan osoitteeseen %s.\n"
+"\n"
+"Jos viestisi oli tosiaan tarkoitettu listalle, se on tulkittu\n"
+"ohjelmiston puolesta komentona. Ole hyvä ja ota yhteys palvelun\n"
+"ylläpitäjään : %s jotta viestisi voidaan käsitellä.\n"
+"\n"
+"Kiitos ajastasi.\n"
+"\n"
+"------ Epäselvän viestin alku ------\n"
+
+#: web_tt2/serveradmin.tt2:22
+msgid "The following virtual robots are running on this server :"
+msgstr "Seuraavat Virtuaali robotit pyörivät tällä palvelimella :"
+
+#: web_tt2/rss.tt2:33
+#, fuzzy
+msgid "The latest created lists"
+msgstr "Poista valitut listat"
+
+#: web_tt2/rss.tt2:53
+#, fuzzy
+msgid "The latest messages"
+msgstr "Uusi viesti ensiksi"
+
+# nlsref 16,70
+#: web_tt2/rss.tt2:62
+#, fuzzy
+msgid "The latest shared documents"
+msgstr "Jaetut dokumentit"
+
+#. (conf.wwsympa_url,list.name)
+#: mail_tt2/d_install_shared.tt2:7
+msgid "The list document repository : %1/d_read/%2"
+msgstr ""
+
+#: web_tt2/notice.tt2:40
+msgid "The list of list members will be built/updated soon (a few minutes)."
+msgstr "Ei viestejä hallittavana listalla [% notice.list %]"
+
+#: web_tt2/help_editlist.tt2:25
+msgid ""
+"The list owner receives a warning whenever a message is distributed and the "
+"number (percentage) of bounces exceeds this value."
+msgstr ""
+
+#: mail_tt2/listmaster_notification.tt2:104
+#: mail_tt2/listmaster_notification.tt2:43
+#: mail_tt2/listmaster_notification.tt2:50
+#: mail_tt2/listmaster_notification.tt2:57
+#: mail_tt2/listmaster_notification.tt2:64
+#: mail_tt2/listmaster_notification.tt2:77
+#: mail_tt2/listmaster_notification.tt2:84
+#: mail_tt2/listmaster_notification.tt2:91
+msgid "The list status has been set to error_config."
+msgstr ""
+
+#: web_tt2/create_list_request.tt2:38
+msgid ""
+"The list type is a set of parameters' profile. Parameters will be editable, "
+"once the list created"
+msgstr ""
+"Listan tyyppi on joukko parametrejä, joita voi muuttaa kun lista on luotu"
+
+#: web_tt2/create_list_request.tt2:43
+msgid "The list's subject"
+msgstr "Listan otsikko"
+
+#: web_tt2/rss.tt2:43
+#, fuzzy
+msgid "The most active lists"
+msgstr "Uusimmat listat"
+
+#: web_tt2/error.tt2:82
+msgid "The passwords you typed do not match"
+msgstr "Salasanat eivät täsmää"
+
+#: web_tt2/help_editlist.tt2:121
+msgid ""
+"The priority with which Sympa will process messages for this list. This "
+"level of priority is applied while the message is going through the spool. "
+"The z priority will freeze the message in the spool."
+msgstr ""
+
+#: web_tt2/help_editlist.tt2:129
+msgid ""
+"The reply_to_header parameter starts a paragraph defining what Sympa will "
+"place in the Reply-To: SMTP header field of the messages it distributes."
+msgstr ""
+
+#: mail_tt2/listmaster_notification.tt2:20
+msgid "The returned error message :"
+msgstr "Saatu virheilmoitus :"
+
+#: web_tt2/help_user_options.tt2:12 web_tt2/help_user_options.tt2:20
+msgid "The sending interval for these Digests is defined by the list owner."
+msgstr ""
+
+#: web_tt2/help_editlist.tt2:158
+msgid "The subscribe parameter defines the rules for subscribing to the list."
+msgstr ""
+
+# nlsref 6,38
+#: src/Commands.pm:1490
+msgid "The user %s has been removed from the list %s/\n"
+msgstr "Käyttäjä %s on poistettu listalta %s/\n"
+
+#. (total,list.name,list.host)
+#: mail_tt2/modindex.tt2:10
+msgid "There are %1 messages to be moderated for list %2@%3"
+msgstr "%1 viestiä odottaa hallintaa listalle %2@%3"
+
+#: web_tt2/help_editlist.tt2:149
+msgid ""
+"There is a need to protect Sympa web site against spambot which collect "
+"email address in public web site. Various methods are available in Sympa and "
+"you can choose it with spam_protection and web_archive_spam_protection "
+"parameters. Possible value are:"
+msgstr ""
+
+#: web_tt2/error.tt2:130
+msgid "There is not any owner defined for the list"
+msgstr ""
+
+# nlsref 4,26
+#: src/sympa.pl:1637
+msgid "These subscribers are :\n"
+msgstr "Tilaajiin kuuluu :\n"
+
+#. (process_id,loop_count,start_time)
+#: web_tt2/serveradmin.tt2:219
+msgid "This FastCGI process (%1) has served %2 since %3."
+msgstr "Tämä FastCGI prosessi (%1) on ollut ajossa %2 %3 asti."
+
+#: web_tt2/arc_protect.tt2:9
+msgid ""
+"This button aims at protecting mailing lists archives against Spam Harvester."
+msgstr ""
+"Tämän napin tarkoitus on suojella postituslista-arkistoja SPAMia vastaan."
+
+#: web_tt2/help_user_options.tt2:3
+msgid ""
+"This is a description of the reception modes available in Sympa. These "
+"options are mutually exclusive, which means that you can't set two different "
+"reception modes at the same time. Only some of the modes might be available "
+"for specific mailing lists."
+msgstr ""
+
+#: mail_tt2/list_unknown.tt2:12
+msgid "This is an automatic response sent by Sympa Mailing Lists Manager."
+msgstr ""
+"Tämä on automaattinen vastaus jonka lähetti Sympa Postituslista ohjelmisto."
+
+#. (list.subject)
+#: mail_tt2/invite.tt2:8
+msgid "This list is about %1, so you are probably concerned."
+msgstr "[% ELSE %]"
+
+# nlsref 6,7
+#: src/Commands.pm:327 src/Commands.pm:372 src/Commands.pm:426
+msgid "This list's archives do not contain any file.\n"
+msgstr "Tämän listan arkistot eivät sisällä mitään tiedostoa.\n"
+
+#: web_tt2/help_user_options.tt2:46
+msgid ""
+"This mode is used when a subscriber does not want to receive attached files. "
+"The attached files are \n"
+"replaced by a URL leading to the file stored on the list site.\n"
+msgstr ""
+
+#: web_tt2/help_user_options.tt2:51
+msgid ""
+"This mode is used when a subscriber does not want to receive copies of "
+"messages that he or she has sent to \n"
+"the list.\n"
+msgstr ""
+
+#: web_tt2/help_user_options.tt2:31
+msgid ""
+"This mode is used when a subscriber no longer wishes to receive mail from "
+"the list, but nevertheless wishes to retain the ability to post to the list. "
+"This mode therefore prevents the subscriber from unsubscribing and "
+"subscribing later on."
+msgstr ""
+
+#: web_tt2/help_user_options.tt2:41
+msgid ""
+"This mode is used when a subscriber wishes to receive mails sent in both "
+"HTML and plain text formats\n"
+"only in HTML format.\n"
+msgstr ""
+
+#: web_tt2/help_user_options.tt2:36
+msgid ""
+"This mode is used when a subscriber wishes to receive mails sent in both "
+"HTML and plain text formats\n"
+"only in plain text format.\n"
+msgstr ""
+
+#: web_tt2/help_user_options.tt2:56
+msgid ""
+"This option is used mainly to cancel the nomail, summary or digest modes. If "
+"the subscriber was \n"
+"in nomail mode, he or she will again receive individual mail messages from "
+"the list.\n"
+msgstr ""
+
+#: web_tt2/pref.tt2:123
+msgid ""
+"This other email address, that should be known by Sympa, will be recognized "
+"by Sympa as \n"
+"\tan alternate email address. You will also be able to unify your "
+"subscriptions with\n"
+"\tyour main email address.\n"
+msgstr ""
+
+#: web_tt2/help_editlist.tt2:22
+msgid "This paragraph defines bounce management parameters:"
+msgstr ""
+
+#: web_tt2/help_editlist.tt2:106
+msgid ""
+"This paragraph defines parameters for a query returning a list of "
+"subscribers. This paragraph is used only if user_data_source is set to "
+"include. This feature requires the Net::LDAP (perlldap) PERL module."
+msgstr ""
+
+#: web_tt2/help_editlist.tt2:104
+msgid ""
+"This paragraph defines parameters for a two-level query returning a list of "
+"subscribers. Usually the first-level query returns a list of DNs and the "
+"second-level queries convert the DNs into e-mail addresses. This paragraph "
+"is used only if user_data_source is set to include. This feature requires "
+"the Net::LDAP (perlldap) PERL module."
+msgstr ""
+
+#: web_tt2/help_editlist.tt2:147
+msgid ""
+"This paragraph defines read and edit access to the shared document "
+"repository."
+msgstr ""
+
+#: web_tt2/help_editlist.tt2:160
+msgid ""
+"This parameter allows the classification of lists. You may define multiple "
+"topics as well as hierarchical ones. WWSympa's list of public lists uses "
+"this parameter."
+msgstr ""
+
+#: web_tt2/help_editlist.tt2:115
+msgid ""
+"This parameter defines the language used for the list. It is used to "
+"initialize a user's language preference; Sympa command reports are extracted "
+"from the associated message catalog."
+msgstr ""
+
+#: web_tt2/help_editlist.tt2:45
+msgid ""
+"This parameter defines which task is automaticaly applied on level 1 "
+"bouncers."
+msgstr ""
+
+#: web_tt2/help_editlist.tt2:61
+msgid ""
+"This parameter defines which task is automaticaly applied on level 2 "
+"bouncers."
+msgstr ""
+
+#: web_tt2/help_editlist.tt2:156
+msgid ""
+"This parameter indicates the subject of the list, which is sent in response "
+"to the LISTS mail command. The subject is a free form text limited to one "
+"line."
+msgstr ""
+
+#: web_tt2/help_editlist.tt2:132
+msgid ""
+"This parameter indicates whether the Reply-To: field should indicate the "
+"sender of the message (sender), the list itself (list), both list and sender "
+"(all) or an arbitrary e-mail address (defined by the other_email parameter)."
+msgstr ""
+
+#: web_tt2/help_editlist.tt2:168
+msgid ""
+"This parameter indicates whether the list should feature in the output "
+"generated in response to a LISTS command or should be shown in the list "
+"overview of the web-interface."
+msgstr ""
+
+#: web_tt2/help_editlist.tt2:68
+msgid ""
+"This parameter is a confidential item for generating authentication keys for "
+"administrative commands (ADD, DELETE, etc.). This parameter should remain "
+"concealed, even for owners. The cookie is applied to all list owners, and is "
+"only taken into account when the owner has the auth parameter."
+msgstr ""
+
+#: web_tt2/help_editlist.tt2:72
+msgid ""
+"This parameter is optional. It specifies a string which is added to the "
+"subject of distributed messages (intended to help users who do not use "
+"automatic tools to sort incoming messages). This string will be surrounded "
+"by [] characters."
+msgstr ""
+
+#: web_tt2/help_editlist.tt2:70
+msgid ""
+"This parameter is optional. The headers specified will be added to the "
+"headers of messages distributed via the list. As of release 1.2.2 of Sympa, "
+"it is possible to put several custom header lines in the configuration file "
+"at the same time."
+msgstr ""
+
+#: web_tt2/help_editlist.tt2:164
+msgid ""
+"This parameter specifies the unsubscription method for the list. Use "
+"open_notify or auth_notify to allow owner notification of each unsubscribe "
+"command."
+msgstr ""
+
+#: web_tt2/help_editlist.tt2:143
+msgid ""
+"This parameter specifies who can access the list of members. Since "
+"subscriber addresses can be abused by spammers, it is strongly recommended "
+"that you only authorize owners or subscribers to access the subscriber list. "
+msgstr ""
+
+#: web_tt2/help_editlist.tt2:145
+msgid "This parameter specifies who can send messages to the list."
+msgstr ""
+
+#: web_tt2/help_editlist.tt2:80
+msgid "This parameter specifies who is authorized to use the DEL command."
+msgstr ""
+
+#: web_tt2/help_editlist.tt2:123
+msgid "This parameter specifies who is authorized to use the remind command."
+msgstr ""
+
+#: web_tt2/help_editlist.tt2:88
+msgid ""
+"This parameter states which model is used to create a expire task. An expire "
+"task regurlaly checks the inscription or reinscription date of subscribers "
+"and asks them to renew their subscription. If they don't they are deleted."
+msgstr ""
+
+#: web_tt2/help_editlist.tt2:127
+msgid ""
+"This parameter states which model is used to create a remind task. A remind "
+"task regurlaly sends to the subscribers a message which reminds them their "
+"subscription to list."
+msgstr ""
+
+#: web_tt2/help_editlist.tt2:113
+msgid ""
+"This parameter will be interpreted only if the user_data_source value is set "
+"to include, and is used to begin a paragraph defining the SQL query "
+"parameters. "
+msgstr ""
+
+#: web_tt2/help_editlist.tt2:102
+msgid ""
+"This parameter will be interpreted only if the user_data_source value is set "
+"to include. The file should contain one e-mail address per line (lines "
+"beginning with a \"#\" are ignored)."
+msgstr ""
+
+#: web_tt2/help_editlist.tt2:108
+msgid ""
+"This parameter will be interpreted only if user_data_source is set to "
+"include. All subscribers of list listname become subscribers of the current "
+"list. You may include as many lists as required, using one include_list "
+"listname line for each included list. Any list at all may be included; the "
+"user_data_source definition of the included list is irrelevant, and you may "
+"therefore include lists which are also defined by the inclusion of other "
+"lists. Be careful, however, not to include list A in list B and then list B "
+"in list A, since this will give rise an infinite loop."
+msgstr ""
+
+#: web_tt2/sigrequest.tt2:43 web_tt2/subrequest.tt2:38
+msgid ""
+"This password, associated to your email address, will\n"
+"\tallow you to access your custom environment.\n"
+msgstr ""
+
+#. (conf.email,conf.host)
+#: web_tt2/home.tt2:7
+msgid ""
+"This server provides you access to your environment on mailing list server %"
+"1@%2. Starting from this URL, you can perform subscription options, "
+"unsubscription,\n"
+"archives, list management and so on.\n"
+msgstr ""
+
+#: src/etc/mhonarc-ressources.tt2:140 src/etc/mhonarc-ressources.tt2:248
+#: src/etc/mhonarc-ressources.tt2:344
+msgid "Thread"
+msgstr ""
+
+# nlsref 6,61
+#: src/Commands.pm:1940
+msgid "Thus, your message is sent back to you :\n"
+msgstr "Viestisi on lähetetty sinulle takaisin :\n"
+
+#: mail_tt2/sendpasswd.tt2:27
+msgid "To access your personal environment, you need to login first"
+msgstr ""
+
+#: mail_tt2/listmaster_notification.tt2:12
+msgid "To activate/delete this mailing list :"
+msgstr "Aktivoidaksesi/poistaaksesi listan :"
+
+#: web_tt2/notice.tt2:34
+msgid "To choose your password go to 'preferences', from the upper menu."
+msgstr "Valitaksesi salasana mene 'asetukset' sivulle, ylävalikon kautta."
+
+#: web_tt2/subrequest.tt2:6
+msgid ""
+"To confirm\n"
+"\tyour request, please click the button below :\n"
+msgstr ""
+
+#: web_tt2/sigrequest.tt2:5
+msgid ""
+"To confirm\n"
+"      your request, please click the button below :\n"
+msgstr ""
+
+#: web_tt2/change_email.tt2:5
+msgid ""
+"To confirm your email address change, please enter the password\n"
+"you received below :\n"
+msgstr ""
+
+#: web_tt2/subrequest.tt2:21
+msgid ""
+"To confirm your identity and prevent anyone from subscribing you to \n"
+"\tthis list against your will, a message containing your password\n"
+"\twill be sent to you.\n"
+msgstr ""
+
+#: web_tt2/sigrequest.tt2:27
+msgid ""
+"To confirm your identity and prevent anyone from unsubscribing you from \n"
+"\tthis list against your will, a message containing an URL\n"
+"\twill be sent to you.\n"
+msgstr ""
+
+#. (list)
+#: web_tt2/subrequest.tt2:54
+msgid ""
+"To confirm your subscription to list %1, please enter\n"
+"\tyour password below :\n"
+msgstr ""
+
+#: mail_tt2/sendpasswd.tt2:15
+msgid ""
+"To confirm your subscription, you need to provide the following password"
+msgstr "Pyysit tilausta postituslistalle [% list %]."
+
+#. (list)
+#: web_tt2/sigrequest.tt2:60
+msgid ""
+"To confirm your unsubscription from list %1, please enter\n"
+"\tyour password below :\n"
+msgstr ""
+
+#: web_tt2/help.tt2:58
+msgid "To contact this service administrator :"
+msgstr "Ottaaksesi yhteyttä tämän palvelun ylläpitäjään :"
+
+#. (list.name)
+#: mail_tt2/moderate.tt2:13
+msgid "To distribute the attached message in list %1:"
+msgstr "Lähettääksesi ohessa olevan viestin listalle %1:"
+
+# nlsref 8,12
+#: src/List.pm:2584
+msgid ""
+"To distribute the attached message in list %s :\n"
+"mailto:%s?subject=CONFIRM%%20%s\n"
+"Or send a message to %s with the following subject :\n"
+"CONFIRM %s\n"
+msgstr ""
+"Levittääksesi liitetyn viestin listalla %s :\n"
+"mailto:%s?subject=CONFIRM%%20%s\n"
+"\n"
+
+#: mail_tt2/list_unknown.tt2:18
+msgid ""
+"To find out the correct listname, ask for this server's lists directory :"
+msgstr ""
+"Löytääksesi oikean listan nimen, kysy sitä palvelimen listahakemistosta :"
+
+#: web_tt2/help_editlist.tt2:11
+msgid ""
+"To hide the sender's email address before distributing the message. It is "
+"replaced by the provided email address."
+msgstr ""
+
+#: web_tt2/loginbanner.tt2:18
+msgid ""
+"To login, select your organization authentication server below.<BR>\n"
+"If it is not listed or if you don't have any, login using your email and "
+"password on the right column.\n"
+msgstr ""
+
+# nlsref 6,57
+#: src/Commands.pm:1982
+#, fuzzy
+msgid ""
+"To read the list of subscribers who haven't confirm their\n"
+"subscription : EXPIREINDEX %s\n"
+"\n"
+msgstr ""
+"Saadaksesi luettelon listan tilaajista, jotka eivät ole\n"
+"vahvistaneet tilaustaan : EXPIREINDEX %s\n"
+
+#. (conf.email,conf.host)
+#: mail_tt2/certif_warning.tt2:12
+msgid ""
+"To receive them again, renew your certificate with your certification "
+"authority\n"
+"and send a signed message to %1@%2\n"
+"or\n"
+"click : \n"
+msgstr ""
+
+#: web_tt2/help.tt2:47
+msgid "To receive your password :"
+msgstr "Vastaanottaaksesi salasanan :"
+
+#: mail_tt2/moderate.tt2:18
+msgid "To reject it (it will be removed):"
+msgstr "Hylätäksesi viestin (se poistetaan) :"
+
+# nlsref 6,53
+#: src/Commands.pm:1984 src/Commands.pm:2042
+msgid "To stop the expiration process : EXPIREDEL %s\n"
+msgstr "Expire-prosessin lopettaminen : EXPIREDEL %s\n"
+
+#: mail_tt2/invite.tt2:10
+msgid ""
+"To subscribe just reply to this message or hit the following mailto url :"
+msgstr "Tervehdys,"
+
+#: mail_tt2/sendpasswd.tt2:22
+#, fuzzy
+msgid ""
+"To unsubscribe from the list, you need to provide the following password"
+msgstr "Pyysit tilausta postituslistalle [% list %]."
+
+#. (mailto)
+#: web_tt2/compose_mail.tt2:5
+msgid "To: %1"
+msgstr "Vastaanottaja: %1"
+
+#: web_tt2/review.tt2:296 web_tt2/reviewbouncing.tt2:121
+msgid "Toggle Selection"
+msgstr "Toggle Selection"
+
+# nlsref 16,74
+#: src/List.pm:1080
+msgid "Topics for the list"
+msgstr "Listan aiheita"
+
+#: web_tt2/create_list_request.tt2:46
+msgid "Topics:"
+msgstr "Aiheet:"
+
+#. (list.name,size)
+#: mail_tt2/listowner_notification.tt2:14
+msgid "Total size used for %1@%2 Bytes."
+msgstr "Lista \"%1\" varoitus : arkisto [% rate %]% täynnä"
+
+#. (total)
+#: mail_tt2/review.tt2:7
+msgid "Total subscribers : %1"
+msgstr "Tilaajaa yhteensä : %1"
+
+#: mail_tt2/helpfile.tt2:24
+msgid "UNSubscribe * <EMAIL>       * To quit all lists."
+msgstr ""
+
+#: mail_tt2/helpfile.tt2:23
+msgid ""
+"UNSubscribe <list> <EMAIL>  * To quit <list>. <EMAIL> is an optional email "
+"address, usefull if different from your \"From:\" address."
+msgstr ""
+
+# nlsref 8,24
+#: src/List.pm:2290
+msgid "UNsubscription request from list %s"
+msgstr "Tilauksen päättämispyyntö listalta %s"
+
+#: web_tt2/d_read.tt2:407
+msgid "URL"
+msgstr "otsikko"
+
+# nlsref 3,1
+#: src/sympa.pl:1534
+msgid "Unable to access directory %s : %m"
+msgstr "Hakemiston %s käyttäminen ei onnistu : %m"
+
+# nlsref 6,41
+#: src/Commands.pm:1731 src/Commands.pm:1851
+#, fuzzy
+msgid ""
+"Unable to access the moderated message on list %s with key %s.\n"
+"This message may already have been sent by one of the list's moderators\n"
+msgstr ""
+"Listan %s moderoidun viestin käyttö avaimella %s ei onnistunut.\n"
+"Viesti on jo saatettu lähettää listan jonkun moderoijan toimesta\n"
+".\n"
+
+# nlsref 6,68
+#: src/Commands.pm:1723
+msgid "Unable to access to the message authenticated with key %s.\n"
+msgstr "En voinut käyttää avaimella %s vahvistettua viestiä.\n"
+
+# nlsref 11,2
+#: src/smtp.pm:114
+msgid "Unable to create a channel in smtpto: %m"
+msgstr "Ei voitu luoda kanavaa smtpto:ssa : %m"
+
+# nlsref 6,41
+#: src/Commands.pm:1656
+#, fuzzy
+msgid ""
+"Unable to find the message of the list %s locked by the key %s.\n"
+"Warning : this message could have ever been send by another editor"
+msgstr ""
+"Listan %s moderoidun viestin käyttö avaimella %s ei onnistunut.\n"
+"Viesti on jo saatettu lähettää listan jonkun moderoijan toimesta\n"
+".\n"
+
+#: web_tt2/remove_arc.tt2:11
+msgid "Unable to find the message to delete"
+msgstr "Viestiä ei löydy poistettavaksi"
+
+#: web_tt2/remove_arc.tt2:9
+msgid ""
+"Unable to find the message to delete, probably this message\n"
+"was received without Message-Id. Please refer to listmaster with\n"
+"complete URL of the concerned message\n"
+msgstr ""
+
+#. (error.path)
+#: web_tt2/error.tt2:106
+msgid "Unable to read %1 : empty document"
+msgstr "Luku epäonnistui%1 : tyhjä dokumentti"
+
+# nlsref 6,2
+#: src/Commands.pm:201
+msgid "Unable to read help file : %s\n"
+msgstr "Ohjetiedoston luku epäonnistui : %s\n"
+
+#: web_tt2/lists.tt2:64
+msgid "Unify your subscriptions with the email"
+msgstr "Yhdistä tilauksesi seuraavalla osoitteella"
+
+#: web_tt2/d_read.tt2:153 web_tt2/d_read.tt2:268 web_tt2/latest_d_read.tt2:43
+msgid "Unknown"
+msgstr "Tuntematon"
+
+#: web_tt2/list_menu.tt2:171 web_tt2/list_menu.tt2:175
+#: web_tt2/list_menu.tt2:181 web_tt2/list_menu.tt2:270
+#: web_tt2/list_menu.tt2:274 web_tt2/sigrequest.tt2:39
+#: web_tt2/sigrequest.tt2:53 web_tt2/sigrequest.tt2:68
+msgid "Unsubscribe"
+msgstr "Poistu listalta"
+
+# nlsref 6,71
+#: soap/sympasoap.pm:553 src/Commands.pm:946 wwsympa/wwsympa.fcgi:3271
+msgid "Unsubscribe from list %s"
+msgstr "Lopeta tilauksesi listalle %s"
+
+#: web_tt2/editsubscriber.tt2:39
+msgid "Unsubscribe the User"
+msgstr "Poista käyttäjän tilaus"
+
+#. (unsubscribe)
+#: mail_tt2/info_report.tt2:11
+msgid "Unsubscription     : %1"
+msgstr "Tilaus       : [% subscribe %]"
+
+#: mail_tt2/expire_warning1.tt2:10 mail_tt2/expire_warning2.tt2:10
+#: mail_tt2/remind.tt2:9
+#, fuzzy
+msgid "Unsubscription :"
+msgstr "Tilauksen poisto :"
+
+#. (list.name)
+#: mail_tt2/bye.tt2:2
+msgid "Unsubscription from %1"
+msgstr "Poistuminen listalta %1"
+
+#: web_tt2/help_editfile.tt2:8
+msgid ""
+"Unsubscription message : This message is sent when users leave the list\n"
+"using the UNSUBSCRIBE command.\n"
+msgstr ""
+
+#. (param0)
+#: mail_tt2/listmaster_notification.tt2:30
+msgid ""
+"Until then we recommend your remove %1 ;\n"
+"default configuration will be used.\n"
+msgstr ""
+
+#. (visible_path)
+#: web_tt2/d_read.tt2:445
+#, fuzzy
+msgid "Unzip a file inside the folder %1"
+msgstr "Lähetä tiedoston kansioon %1"
+
+#: web_tt2/d_read.tt2:447
+#, fuzzy
+msgid "Unzip a file inside the folder SHARED"
+msgstr "Lähetä tiedoston kansioon JAETTU"
+
+#: web_tt2/d_control.tt2:5 web_tt2/d_editfile.tt2:14
+#: web_tt2/d_properties.tt2:13 web_tt2/d_read.tt2:35
+msgid "Up to higher level directory"
+msgstr "Ylempään hakemistoon"
+
+#: web_tt2/d_editfile.tt2:39 web_tt2/edit_list_request.tt2:410
+#: web_tt2/editsubscriber.tt2:38 web_tt2/suboptions.tt2:31
+msgid "Update"
+msgstr "Päivitä"
+
+#: src/etc/list_task_models/sync_include.ttl.task:1
+msgid "Update of list members based on the TTL"
+msgstr ""
+
+#. (visible_path)
+#: web_tt2/d_read.tt2:425
+msgid "Upload a file inside the folder %1"
+msgstr "Lähetä tiedoston kansioon %1"
+
+#: web_tt2/d_read.tt2:427
+msgid "Upload a file inside the folder SHARED"
+msgstr "Lähetä tiedoston kansioon JAETTU"
+
+# nlsref 6,85
+#: src/Commands.pm:1169 src/Commands.pm:1177
+msgid "User %s has been invited to subscribe in list %s.\n"
+msgstr "Käyttäjä %s on kutsuttu liittymään listan %s tilaajaksi.\n"
+
+# nlsref 6,37
+#: src/Commands.pm:1046
+msgid "User %s is now subscriber of list %s.\n"
+msgstr "Käyttäjä %s on nyt listan %s tilaaja.\n"
+
+# nlsref 6,86
+#: src/Commands.pm:1185
+msgid "User %s is unwanted in list %s.\n"
+msgstr "Käyttäjää %s ei haluta listalle %s.\n"
+
+#: web_tt2/show_cert.tt2:8
+msgid "User certificate belong to"
+msgstr "Käyttäjän sertifikaatti kuuluu"
+
+# nlsref 16,81
+#: src/List.pm:1118
+msgid "User data source"
+msgstr "Käyttäjän datalähde"
+
+# nlsref 6,81
+#: src/Commands.pm:160 src/Commands.pm:196
+msgid "User guide"
+msgstr "Käyttäjän opas"
+
+#: mail_tt2/helpfile.tt2:5
+msgid "User's Guide"
+msgstr "Käyttäjän Opas"
+
+#: web_tt2/serveradmin.tt2:107
+msgid "Users"
+msgstr "Käyttäjät"
+
+#: web_tt2/lists.tt2:71
+#, fuzzy
+msgid "Validate"
+msgstr "Tarkista"
+
+#: web_tt2/editsubscriber.tt2:52
+msgid "View last bounce"
+msgstr "Katso viimeksi palannut viesti"
+
+#: web_tt2/serveradmin.tt2:12
+msgid "Virtual Robots"
+msgstr "Virtuaali Robotit"
+
+#: web_tt2/suboptions.tt2:23
+msgid "Visibility :"
+msgstr "Näkyvyys :"
+
+#. (current_subscriber.visibility)
+#: web_tt2/editsubscriber.tt2:22
+msgid "Visibility : %1"
+msgstr ""
+"Näkyvyys : %1\n"
+"<DD>Kieli"
+
+# nlsref 16,82
+#: src/List.pm:1124
+msgid "Visibility of the list"
+msgstr "Listan näkyminen"
+
+#: web_tt2/help_editlist.tt2:77
+msgid "Visibility of the subscriber with the REVIEW command."
+msgstr ""
+
+# nlsref 8,23
+#: src/List.pm:2269
+#, fuzzy
+msgid ""
+"WARNING : %s %s failed to unsubscribe from %s because his address was not "
+"found in the list\n"
+" (You may help this person)"
+msgstr ""
+"VAROITUS : %s %s ei onnistunut lähtemään listalta %s koska hänen "
+"osoitteensa\n"
+"ei löytynyt listalta\n"
+" (Voisit auttaa tätä henkilöä)\n"
+
+# nlsref 8,28
+#: src/List.pm:2298
+msgid "WARNING: bounce rate too high in list %s"
+msgstr "VAROITUS: palanneiden (bounce) viestien osuus liian suuri listalla %s"
+
+#: mail_tt2/helpfile.tt2:20
+#, fuzzy
+msgid ""
+"WHICH                       * Displays which lists you are subscribed to"
+msgstr "Näyttää mitä listoja tilaat"
+
+#: web_tt2/help.tt2:53
+msgid "WWSympa can remind you your password by email :"
+msgstr "WWSympa voi muistuttaa salasanasta emailina :"
+
+#: web_tt2/help.tt2:8
+msgid "WWSympa provides  you access to your environment on mailing list server"
+msgstr "WWSympa tarjoaa liittymän postituslistaohjelmaan palvelimella"
+
+#: mail_tt2/your_infected_msg.tt2:10
+msgid "We stopped delivery of this email."
+msgstr "Pysäytimme viestin jakelun."
+
+# nlsref 16,83
+#: src/List.pm:1140
+msgid "Web archives"
+msgstr "WWW arkistot"
+
+#: web_tt2/stats.tt2:2
+msgid "Web archives size"
+msgstr "WWW arkiston koko"
+
+#: web_tt2/help_editfile.tt2:29
+msgid "Welcome message"
+msgstr "Tervetuloa</i> viestiin"
+
+#: web_tt2/help_editfile.tt2:5
+msgid ""
+"Welcome message: This message is sent to new subscribers. It can be\n"
+"a full MIME structured message (only for MIME gurus).\n"
+msgstr ""
+
+# nlsref 8,6
+#: soap/sympasoap.pm:701 soap/sympasoap.pm:702 src/Commands.pm:1062
+#: src/Commands.pm:1063 src/Commands.pm:685 src/Commands.pm:686
+#: wwsympa/wwsympa.fcgi:3042 wwsympa/wwsympa.fcgi:3043
+#: wwsympa/wwsympa.fcgi:3641 wwsympa/wwsympa.fcgi:3642
+msgid "Welcome on list %s"
+msgstr "Tervetuloa listalle %s"
+
+# nlsref 16,85
+#: src/List.pm:1146
+msgid "Welcome return-path"
+msgstr "Tervetuloviestin paluu-polku"
+
+#. (list.name)
+#: mail_tt2/welcome.tt2:2
+msgid "Welcome to list %1"
+msgstr "Tervetuloa listalle %1"
+
+#. (list.name,list.host)
+#: mail_tt2/welcome.tt2:10 mail_tt2/welcome.tt2:27 mail_tt2/welcome.tt2:30
+msgid "Welcome to list %1@%2"
+msgstr "Tervetuloa listalle %1@%2"
+
+#: web_tt2/help.tt2:28
+msgid "When authenticating ("
+msgstr "Kun tunnistaudut("
+
+#: web_tt2/help_editlist.tt2:48
+msgid ""
+"When automatic task is executed on level 1 bouncers, a notification email "
+"can be send to listowner or listmaster."
+msgstr ""
+
+#: web_tt2/help_editlist.tt2:64
+msgid ""
+"When automatic task is executed on level 2 bouncers, a notification email "
+"can be send to listowner or listmaster."
+msgstr ""
+
+# nlsref 16,2
+#: src/List.pm:313
+msgid "Who can add subscribers"
+msgstr "Kuka voi lisätä tilaajia"
+
+# nlsref 16,21
+#: src/List.pm:469
+msgid "Who can delete subscribers"
+msgstr "Kuka voi poistaa tilaajia"
+
+# nlsref 16,87
+#: src/List.pm:1036
+msgid "Who can edit"
+msgstr "Kuka voi muuttaa"
+
+# nlsref 16,54
+#: src/List.pm:871
+msgid "Who can invite people"
+msgstr "Kuka saa kutsua tilaajia"
+
+# nlsref 16,67
+#: src/List.pm:1009
+msgid "Who can review subscribers"
+msgstr "Kuka voi katsoa tilaajia"
+
+# nlsref 16,68
+#: src/List.pm:1020
+msgid "Who can send messages"
+msgstr "Kuka voi lähettää viestejä"
+
+# nlsref 16,64
+#: src/List.pm:970
+msgid "Who can start a remind process"
+msgstr "Kuka voi aloittaa muistutusprosessin"
+
+# nlsref 16,73
+#: src/List.pm:1074
+msgid "Who can subscribe to the list"
+msgstr "Kuka voi tilata listaa"
+
+# nlsref 16,76
+#: src/List.pm:1091
+msgid "Who can unsubscribe"
+msgstr "Ketä voi lopettaa tilauksen"
+
+# nlsref 16,86
+#: src/List.pm:1032
+msgid "Who can view"
+msgstr "Kuka voi katsoa"
+
+# nlsref 16,53
+#: src/List.pm:867
+msgid "Who can view list information"
+msgstr "Kuka voi katsoa listan tiedot"
+
+#. (error.email)
+#: web_tt2/error.tt2:12
+msgid "You are already logged in as %1"
+msgstr "Olet jo kirjautuneena sisään %1"
+
+#. (error.list)
+#: web_tt2/error.tt2:63
+msgid "You are already subscribed to the list %1"
+msgstr "Olet jo tilajaana listalla %1"
+
+#. (list)
+#: web_tt2/subrequest.tt2:70
+msgid "You are already subscriber of list %1"
+msgstr "Olet jo tilaajana listalla %1"
+
+# nlsref 6,77
+#: src/Commands.pm:1310
+msgid "You are member of list %s with email %s\n"
+msgstr "Olet listan %s tilaaja sähköpostiosoitteella %s\n"
+
+# nlsref 6,80
+#: src/Commands.pm:1013 src/Commands.pm:1132 src/Commands.pm:1277
+#: src/Commands.pm:1438 src/Commands.pm:289 src/Commands.pm:493
+#: src/Commands.pm:619 src/Commands.pm:755 src/Commands.pm:878
+msgid "You are not allowed to perform command %s in list %s\n"
+msgstr "Komennon %s suorittaminen listalla %s kielletty\n"
+
+#. (error.list)
+#: web_tt2/error.tt2:78
+#, fuzzy
+msgid "You are not subscribed to list %1"
+msgstr "Et ole tilaajana listalla %1"
+
+#. (list,email)
+#: web_tt2/sigrequest.tt2:16
+#, fuzzy
+msgid "You are not subscribed to list %1 with e-mail address %2"
+msgstr "Et ole tilaajana listalla %1"
+
+#: web_tt2/suboptions.tt2:5
+msgid "You are subscribed since"
+msgstr "Olet ollut tilaajana"
+
+#: web_tt2/create_list_request.tt2:17
+msgid "You are the privileged owner of this list"
+msgstr "Listan ylläpitäjä"
+
+#: web_tt2/edit_list_request.tt2:4
+msgid "You can choose below a subset of parameters to edit :"
+msgstr "Voit valita ryhmän parametreja joita muuttaa :"
+
+#: web_tt2/create_list.tt2:5
+#, fuzzy
+msgid "You can configure it via the admin button beside."
+msgstr "Voit muuttaa asetuksia"
+
+#: mail_tt2/subscriber_notification.tt2:10
+msgid "You can contact list owner:"
+msgstr ""
+
+#: web_tt2/editfile.tt2:14
+msgid "You can edit several messages/files associated to your list :"
+msgstr "Voit muuttaa useita viestejä/tiedostoja jotka liittyvät listaasi:"
+
+#: web_tt2/help.tt2:37
+#, fuzzy
+msgid ""
+"You can logout (deletion of the cookie) at any time using logout button."
+msgstr ""
+"Voit kirjautua ulos (<I>kuitin</I> poisto) milloin tahansa\n"
+"<"
+
+#: mail_tt2/helpfile.tt2:12
+msgid ""
+"You can put multiple commands in a message. These commands must appear in "
+"the message body and each line must contain only one command. The message "
+"body is ignored if the Content-Type is different from text/plain but even "
+"with crasy mailer using multipart and text/html for any message, commands in "
+"the subject are recognized."
+msgstr ""
+
+# nlsref 6,58
+#: src/Commands.pm:2183
+msgid ""
+"You can remove these subscriber from the list by using the following "
+"commands :\n"
+msgstr "Voit poistaa nämä tilaajat listalta seuraavia käskyjä käyttäen :\n"
+
+#: mail_tt2/expire_deletion.tt2:8 mail_tt2/removed.tt2:8
+msgid "You can subscribe again :"
+msgstr ""
+
+#: web_tt2/error.tt2:160
+msgid ""
+"You did not choose a password, request a reminder of the initial password"
+msgstr "Et valinnut salasanaa, pyydä muistutus alkuperäisestä salasanasta"
+
+# nlsref 6,38
+#: wwsympa/wwsympa.fcgi:3272 wwsympa/wwsympa.fcgi:3747
+#, fuzzy
+msgid "You have been removed from list %s.\n"
+msgstr "Käyttäjä %s on poistettu listalta %s/\n"
+
+# nlsref 6,31
+#: soap/sympasoap.pm:554 src/Commands.pm:1485 src/Commands.pm:947
+msgid ""
+"You have been removed from list %s.\n"
+"Thank you for using this list.\n"
+msgstr ""
+"Sinut on poistettu listalta %s.\n"
+"Kiitos listan käytöstä.\n"
+
+#. (list.name,list.host,user.email)
+#: mail_tt2/expire_warning1.tt2:4 mail_tt2/expire_warning2.tt2:4
+msgid ""
+"You have been subscriber of list %1@%2 with email %3 for 1 year or more;"
+msgstr "tilauksen uusintapyyntö listalle %1"
+
+#. (error.pname)
+#: web_tt2/error.tt2:91
+msgid "You have changed a parameter without permissions: %1"
+msgstr "Muutit parametria ilman oikeuksia: %1"
+
+#: web_tt2/remindpasswd.tt2:4
+#, fuzzy
+msgid ""
+"You have forgotten your password, or you've never had any password related "
+"to this server"
+msgstr "Olet unohtanut salasanasi, tai et ole sitä koskaan saanut"
+
+#. (user.email)
+#: web_tt2/login.tt2:3
+msgid "You have logged in with email address %1"
+msgstr "Olet kirjautuneena osoitteella %1"
+
+# nlsref 6,55
+#: src/Commands.pm:2239
+msgid "You just stopped the expiration process for list %s\n"
+msgstr "Listaa %s koskeva expire-prosessi lopetettu\n"
+
+#: web_tt2/sigrequest.tt2:19
+msgid ""
+"You might have subscribed with another address.\n"
+"      Please contact the list owner to help you unsubscribe :\n"
+msgstr ""
+
+#: web_tt2/choosepasswd.tt2:4
+msgid ""
+"You need to choose a password for your WWSympa environment.\n"
+"You will need this password to perform privileged operations.\n"
+msgstr ""
+
+#: web_tt2/error.tt2:39
+msgid "You need to login"
+msgstr "Sinun täytyy kirjautua"
+
+#: web_tt2/loginbanner.tt2:10
+msgid ""
+"You need to login to access your custom WWSympa environment or to perform a "
+"privileged operation (one that requires your email address)."
+msgstr ""
+
+# nlsref 6,16
+#: src/Commands.pm:1111 src/Commands.pm:1412 src/Commands.pm:594
+#: src/Commands.pm:855 src/Commands.pm:991
+#, fuzzy
+msgid ""
+"You probably confirmed your subscription using a different\n"
+"email address. Please try subscribing using your canonical address.\n"
+msgstr ""
+"Vahvistit listan tilauksen luultavasti eri sähköpostiosoitteesta.\n"
+"Yritä listan tilaamista alkuperäisestä osoitteesta."
+
+# nlsref 6,79
+#: src/List.pm:8690 src/List.pm:8697
+msgid ""
+"You requested a subscription reminder to be sent\n"
+"to each subscriber of list %s\n"
+"\n"
+"If you want this action to be taken, please send an e-mail to\n"
+"%s containing \n"
+"\n"
+"   %s\n"
+"\n"
+"If you do not want this action to be taken, simply ignore this message.\n"
+msgstr ""
+"Joku (sinä toivottavasti) pyysi Sympaa lähettämään tilauksen\n"
+"jokaiselle listan %s tilaajista\n"
+"\n"
+"Jos haluat että näin tapahtuu, lähetä viesti sähköpostiosoitteeseen\n"
+"%s, viestin tulee sisältää \n"
+"\n"
+"   %s\n"
+"\n"
+"Jos et halua että näin tapahtuu, älä reagoi tähän viestiin.\n"
+
+#. (list)
+#: mail_tt2/sendpasswd.tt2:13
+msgid "You requested a subscription to %1 mailing list."
+msgstr "Pyysit tilausta postituslistalle %1."
+
+#. (list)
+#: web_tt2/subrequest.tt2:17
+msgid "You requested a subscription to list %1"
+msgstr "Pyysit tilausta listalle %1"
+
+#. (list)
+#: web_tt2/subrequest.tt2:5
+msgid "You requested subscription to list %1"
+msgstr "Pyysit tilausta listalle %1"
+
+#. (list)
+#: mail_tt2/sendpasswd.tt2:20
+msgid "You requested unsubscription from %1 mailing list."
+msgstr "Pyysit tilauksen poistoa listalta %1"
+
+#. (list)
+#: web_tt2/sigrequest.tt2:23 web_tt2/sigrequest.tt2:4
+msgid "You requested unsubscription from list %1"
+msgstr "Pyysit poistoa listalta %1"
+
+#: web_tt2/close_list.tt2:9
+msgid "You should remove list aliases manually"
+msgstr "Sinun tulee poistaa listan aliakset manuaalisesti"
+
+#: web_tt2/change_email.tt2:3
+msgid "You will receive an email, reminding you your password."
+msgstr "Tulet saamaan viestin, joka sisältää salasanasi."
+
+#: mail_tt2/certif_warning.tt2:8
+#, fuzzy
+msgid "You won't receive the signed messages from your lists."
+msgstr "Käytä saadaksesi viimeisin viesti listalta <list>"
+
+#. (error.dir)
+#: web_tt2/error.tt2:121
+msgid "You're not authorized to upload an INDEX.HTML in %1"
+msgstr "Sinulla ei ole oikeuksia ladata INDEX.HTML:ää hakemistoon %1"
+
+#. (user.email,list.name,list.host)
+#: mail_tt2/expire_deletion.tt2:6
+#, fuzzy
+msgid ""
+"Your address (%1) has been removed from list\n"
+"%2@%3\n"
+"because you didn't confirm your subscription.\n"
+msgstr "Email osoitteesi (%1) on poistettu listalta %2@%3"
+
+#. (user.email,list.name,list.host)
+#: mail_tt2/removed.tt2:6
+msgid ""
+"Your address (%1) has been removed from list\n"
+"%2@%3, probably because we received\n"
+"non-delivery reports for your address.\n"
+msgstr ""
+
+# nlsref 6,77
+#. (list.name,list.host,user.email,user.password)
+#: mail_tt2/remind.tt2:4
+#, fuzzy
+msgid "Your are subscriber of list %1@%2 with  email %3"
+msgstr "Olet listan %s tilaaja sähköpostiosoitteella %s\n"
+
+#: web_tt2/help.tt2:43
+msgid ""
+"Your are therefore not registered in Sympa user database and you can't "
+"login.\n"
+"If you subscribe to a list, WWSympa will give you an initial password.\n"
+msgstr ""
+
+#. (expiration_date)
+#: mail_tt2/certif_warning.tt2:4
+msgid "Your authentification certificate will expire on %1."
+msgstr "sertifikaatti vanhenemassa"
+
+#. (list.name)
+#: mail_tt2/subscriber_notification.tt2:4
+#, fuzzy
+msgid "Your bouncing address in list %1"
+msgstr "Palatut viestit osoitteeseen"
+
+# nlsref 6,40
+#: src/Commands.pm:1596 src/Commands.pm:1609
+msgid "Your configuration regarding list %s has been updated.\n"
+msgstr "Listaan %s liittyvät asetukset on päivitetty.\n"
+
+# nlsref 4,38
+#. (filename,list.name,list.host,rejected_by)
+#: mail_tt2/d_reject_shared.tt2:5
+#, fuzzy
+msgid ""
+"Your document %1  for list %2@%3\n"
+"has been rejected by %4 list editor.\n"
+msgstr "Viestisi listalle %s on annettu eteenpäin toimittajille\n"
+
+# nlsref 4,38
+#. (filename,list.name,list.host,installed_by)
+#: mail_tt2/d_install_shared.tt2:5
+#, fuzzy
+msgid ""
+"Your document %1 for list %2@%3\n"
+"has been installed by %4 list editor.\n"
+msgstr "Viestisi listalle %s on annettu eteenpäin toimittajille\n"
+
+#: mail_tt2/d_install_shared.tt2:2
+#, fuzzy
+msgid "Your document has been installed."
+msgstr "Viestisi on hylätty"
+
+#: mail_tt2/d_reject_shared.tt2:2
+#, fuzzy
+msgid "Your document has been rejected."
+msgstr "Viestisi on hylätty"
+
+#: web_tt2/remindpasswd.tt2:12 web_tt2/subrequest.tt2:43
+msgid "Your e-mail address"
+msgstr "Email osoite"
+
+#: web_tt2/sigrequest.tt2:49
+msgid "Your e-mail address :"
+msgstr "Email osoite :"
+
+# nlsref 6,30
+#: src/Commands.pm:909
+msgid ""
+"Your e-mail address has not been found in the list %s. Maybe\n"
+"you subscribed from a different e-mail address ?\n"
+msgstr ""
+"Sähköpostiosoitettasi ei löytynyt listalta. Ehkä\n"
+"liityit listan tilaajaksi eri sähköpostiosoitteesta ?\n"
+
+#. (user.email,list.name,list.host)
+#: mail_tt2/bye.tt2:4
+msgid "Your email address (%1) has been removed from list %2@%3"
+msgstr "Email osoitteesi (%1) on poistettu listalta %2@%3"
+
+#: web_tt2/pref.tt2:10
+msgid "Your environment"
+msgstr "Asetuksesi"
+
+#: web_tt2/create_list.tt2:24
+msgid ""
+"Your list creation request is registered. You can now  modify its\n"
+"configuration using the admin button but the list will be unusable until the "
+"listmaster validates it.\n"
+msgstr ""
+
+#: web_tt2/create_list.tt2:4
+msgid "Your list is created."
+msgstr "Listasi on luotu."
+
+# nlsref 4,12
+#: src/sympa.pl:1285
+msgid ""
+"Your message could not be sent because its size \n"
+"was over the maximum size allowed on this list.\n"
+msgstr ""
+"Viestiäsi ei voitu lähettää, koska viestin koko ylitti listalle asetetun "
+"kokorajoituksen.\n"
+
+# nlsref 4,38
+#. (list.name,list.host,rejected_by)
+#: mail_tt2/reject.tt2:5
+#, fuzzy
+msgid ""
+"Your message for list %1@%2\n"
+"has been rejected by the moderator (%3).\n"
+msgstr "Viestisi listalle %s on annettu eteenpäin toimittajille\n"
+
+# nlsref 4,38
+#: src/List.pm:2415
+msgid "Your message for list %s has been forwarded to editor(s)\n"
+msgstr "Viestisi listalle %s on annettu eteenpäin toimittajille\n"
+
+# nlsref 4,15
+#: src/Commands.pm:1776 src/sympa.pl:1361
+msgid ""
+"Your message for list %s has been rejected.\n"
+"The message is thus sent back to you.\n"
+"\n"
+"Your message :\n"
+msgstr ""
+"Yritit lähettää viestin yksityiselle listalle, vaikket kyseiselle listalle "
+"kuulu.\n"
+"Siispä viestisi palautetaan.\n"
+"\n"
+"Viestisi :\n"
+
+#: mail_tt2/reject.tt2:2
+msgid "Your message has been rejected."
+msgstr "Viestisi on hylätty"
+
+# nlsref 6,262
+#: src/Commands.pm:546
+msgid "Your message signature was succesfuly verified using S/MIME"
+msgstr "Viestisi allekirjoitus tarkistettiin onnistuneesti S/MIME:n avulla"
+
+# nlsref 4,11
+#: src/Commands.pm:1772 src/sympa.pl:1281 src/sympa.pl:1357
+msgid "Your message to %s has been rejected"
+msgstr "Viestisi listalle %s on hylätty"
+
+# nlsref 6,263
+#: src/Commands.pm:549
+msgid ""
+"Your message was not a multipart/signed message or Sympa could not\n"
+"verify the signature (be aware that Sympa can't check signature if you use "
+"the subject header to write a command)."
+msgstr ""
+"Viestisi ei ollut moniosainen/allekirjoitettu tai Sympa ei onnistunut\n"
+" tarkistamaan allekirjoitusta (muista että Sympa ei voi tarkistaa "
+"allekirjoitusta jos käytät otsikkoriviä komennon antamiseen)."
+
+#: web_tt2/pref.tt2:89
+msgid "Your other email addresses"
+msgstr "Vaihtoehtoinen email osoite"
+
+#. (user.password)
+#: mail_tt2/remind.tt2:6
+msgid "Your password : %1"
+msgstr "Salasanasi : %1."
+
+#: web_tt2/notice.tt2:31
+msgid "Your password has been emailed to you"
+msgstr "Salasanasi on lähetetty emailina"
+
+#. (init_email)
+#: web_tt2/loginbanner.tt2:5
+#, fuzzy
+msgid ""
+"Your password has been sent to your email address %1.<BR>Please check your e-"
+"mail box to provide your password below."
+msgstr "Tarkista postisi ja anna salasana alle."
+
+#: web_tt2/error.tt2:177
+msgid ""
+"Your password is stored in an LDAP directory, therefore Sympa cannot post "
+"you a reminder"
+msgstr ""
+
+#. (user.password)
+#: mail_tt2/welcome.tt2:13 mail_tt2/welcome.tt2:34
+#, fuzzy
+msgid "Your password: %1."
+msgstr "Salasanasi : %1."
+
+#: web_tt2/notice.tt2:4
+msgid "Your request has been forwarded to the list owner"
+msgstr "Pyyntösi on lähetetty listan omistajalle"
+
+# nlsref 6,25
+#: soap/sympasoap.pm:625
+#, fuzzy
+msgid ""
+"Your request of subscription/unssubscription has been forwarded to the "
+"list's\n"
+"owners for approval. You will receive a notification when you will have\n"
+"been subscribed (or unsubscribed) to the list.\n"
+"\n"
+msgstr ""
+"Pyyntösi listalle liittymiseen tai listalta poistumiseen on lähetetty "
+"eteenpäin\n"
+"listan omistajien hyväksyttäväksi. Saat vahvistuksen kun listan tilaus\n"
+"(tai listalta poistuminen) on hyväksytty.\n"
+
+# nlsref 6,25
+#: src/Commands.pm:625 src/Commands.pm:892
+#, fuzzy
+msgid ""
+"Your request to subscribe/unsubscribe has been forwarded to the list's\n"
+"owners for approval. You will receive a notification when you will have\n"
+"been subscribed (or unsubscribed) to the list.\n"
+"\n"
+msgstr ""
+"Pyyntösi listalle liittymiseen tai listalta poistumiseen on lähetetty "
+"eteenpäin\n"
+"listan omistajien hyväksyttäväksi. Saat vahvistuksen kun listan tilaus\n"
+"(tai listalta poistuminen) on hyväksytty.\n"
+
+#. (user.email)
+#: mail_tt2/welcome.tt2:11 mail_tt2/welcome.tt2:31
+msgid "Your subscription email is %1"
+msgstr "Tilauksesi osoite on %1"
+
+# nlsref 6,18
+#: src/Commands.pm:1484 wwsympa/wwsympa.fcgi:3746
+msgid "Your subscription to list %s has been removed."
+msgstr "Tilauksesi listalle %s on poistettu."
+
+#: web_tt2/help.tt2:20 web_tt2/menu.tt2:105 web_tt2/menu.tt2:92
+#: web_tt2/menu.tt2:96
+msgid "Your subscriptions"
+msgstr "Tilaukset"
+
+# nlsref 11,1
+#: src/smtp.pm:43
+msgid ""
+"Your system does not conform to the POSIX P1003.1 standard, or\n"
+"your Perl system does not define the _SC_ARG_MAX constant in its POSIX\n"
+"library. You must modify the smtp.pm module in order to set a value\n"
+"for variable $max_arg.\n"
+msgstr ""
+"Järjestelmäsi ei seuraa POSIX P1003.1 standardia, tai\n"
+"Perl ei definoi _SC_ARG_MAX constantia POSIX-kirjastossaan.\n"
+"Sinun täytyy muokata smtp.pm moduulia asettaaksesi arvon\n"
+"muuttujalle $max_arg.\n"
+
+#: src/PlainDigest.pm:353
+msgid "[ Image%s ]"
+msgstr ""
+
+#: src/PlainDigest.pm:327
+msgid "[ Text converted from HTML ]\n"
+msgstr ""
+
+#: src/PlainDigest.pm:296 src/PlainDigest.pm:317
+msgid ""
+"\n"
+"%*(* Unable to process HTML message part **)\n"
+msgstr ""
+
+#: src/PlainDigest.pm:250
+msgid ""
+"\n"
+"%An( attachment of type %s was included here)\n"
+msgstr ""
+
+#: src/PlainDigest.pm:189
+msgid ""
+"\n"
+"%Attached( message follows)\n"
+"-----Original message-----\n"
+msgstr ""
+
+#: src/PlainDigest.pm:256
+msgid ""
+"\n"
+"-----Delivery Status Report-----\n"
+msgstr ""
+
+# nlsref 6,49
+#: src/Commands.pm:1981 src/Commands.pm:2164
+#, fuzzy
+msgid ""
+"\n"
+"An EXPIRE command is currently running for list %s.\n"
+"It had been run by owner %s (%s)\n"
+"There cannot be more than one 'expire' process at a time for a given list.\n"
+"The currently running expiration is for people subscribing for more\n"
+"than %d days and who didn't confirm their subscription. The expiration\n"
+"will end in %d day(s) (%s).\n"
+msgstr ""
+"EXPIRE-komento on juuri ajautumassa listalla %s.\n"
+"Sen käynnisti omistaja %s (%s)\n"
+"Vain yksi expire-prosessi voi olla kerrallaan käynnissä listalla.\n"
+"Tällä hetkellä pyörivä expire-käsky koskee ihmisiä jotka ovat tilanneet\n"
+"yli %d päivää tai ihmisiä jotka eivät ole vahvistaneet tilaustaan. Expire\n"
+"päättyy %d:ssä päivässä (%s).\n"
+
+# nlsref 6,56
+#: src/Commands.pm:2022
+#, fuzzy
+msgid ""
+"\n"
+"An expiration process for list %s has been started. This process\n"
+"will end in %d days. You will then receive the list of subscribers \n"
+"who didn't confirm their subscription in time.\n"
+"You will then be able to remove these addresses yourself with the DEL "
+"command.\n"
+msgstr ""
+"Listaa %s koskeva expire-prosessi aloitettu. Tämä prosessi loppuu\n"
+"%d:ssä päivässä. Saat prosessin loputtua listan tilaajista jotka eivät\n"
+"vahvistaneet tilaustaan ajoissa.\n"
+"Voit sitten poistaa nuo tilaajat itse DEL-komennon avulla.\n"
+
+# nlsref 8,3
+#: src/List.pm:2280
+#, fuzzy
+msgid ""
+"\n"
+"Dear owner of list %s,\n"
+"\n"
+"A user asked to be added as a subscriber to your list. Shall this be fine\n"
+"with you, you should click the following URL :\n"
+"\n"
+"mailto:%s?subject=auth%%20%s%%20ADD%%20%s%%20%s%%20%s\n"
+"\n"
+"or send an email to %s with the following subject :\n"
+"AUTH %s ADD %s %s %s\n"
+msgstr ""
+"Hyvä listan %s omistaja,\n"
+"\n"
+"Käyttäjä pyysi päästä listasi tilaajaksi. Jos tämä käy sinulle,\n"
+"voisit harkita seuraavan komennon käyttämistä:\n"
+"\n"
+"mailto:%s?subject=auth%%20%s%%20ADD%%20%s%%20%s%%20%s\n"
+
+# nlsref 6,70
+#: src/Commands.pm:183
+msgid ""
+"\n"
+"Powered by Sympa %s : http://www.sympa.org/\n"
+msgstr ""
+"\n"
+"Powered by Sympa %s : http://listes.cru.fr/sympa/\n"
+
+# nlsref 6,60
+#: src/Commands.pm:1938
+#, fuzzy
+msgid ""
+"\n"
+"The EXPIRE command couldn't be run. It must followed by an explication\n"
+"text aimed to subscribers who need to confirm their subscription.\n"
+"This text must\n"
+"\n"
+" - start on the very first line following the EXPIRE command,\n"
+" - contain at least 20 words,\n"
+" - and end with the QUIT word.\n"
+msgstr ""
+"EXPIRE-käskyä ei voitu suorittaa. Käskyä tulee seurata teksti joka\n"
+"on tarkoitettu tilauksen vahvistamista tarvitseville tilaajille.\n"
+"Tämän tekstin täytyy\n"
+" - alkaa EXPIRE-käskyä seuraavalta riviltä,\n"
+" - sisältää ainakin 20 sanaa,\n"
+" - ja loppua QUIT-sanaan.\n"
+
+#: src/PlainDigest.pm:334
+msgid ""
+"\n"
+"[ ** Unable to process HTML message part ** ]\n"
+msgstr ""
+
+#: src/PlainDigest.pm:323
+msgid ""
+"\n"
+"[ ** Unable to process HTML message part **]\n"
+msgstr ""
+
+# nlsref 6,73
+#: src/Commands.pm:2382
+msgid ""
+"\n"
+"\n"
+"Lists you are editor of :\n"
+"\n"
+msgstr ""
+"\n"
+"\n"
+"Listat, joiden toimittaja olet:\n"
+"\n"
+
+# nlsref 6,72
+#: src/Commands.pm:2374
+msgid ""
+"\n"
+"\n"
+"Lists you are owner of:\n"
+"\n"
+msgstr ""
+"\n"
+"\n"
+"Listat, joiden omistaja olet:\n"
+"\n"
+
+#: web_tt2/d_read.tt2:179 web_tt2/d_read.tt2:181 web_tt2/d_read.tt2:315
+#: web_tt2/d_read.tt2:317 web_tt2/d_read.tt2:45
+msgid "access"
+msgstr "oikeudet"
+
+# nlsref 16,6
+#: src/List.pm:1128 src/List.pm:327
+msgid "access right"
+msgstr "sisäänpääsy oikeus"
+
+#: src/List.pm:377 src/List.pm:398
+msgid "action for this population"
+msgstr ""
+
+#: src/etc/scenari/add.closed:1
+msgid "add impossible"
+msgstr ""
+
+#: src/etc/scenari/add.auth:1
+#, fuzzy
+msgid "add need authentication"
+msgstr "Kun tunnistaudut("
+
+#: src/etc/scenari/add.owner:1
+msgid "add performed by list owner do not need authentication"
+msgstr ""
+
+#: src/etc/scenari/add.owner_notify:1
+msgid "add performed by owner do not need authentication (notification)"
+msgstr ""
+
+#: web_tt2/lists.tt2:17
+msgid "admin"
+msgstr "hallitsija"
+
+#. (param0)
+#: mail_tt2/listmaster_notification.tt2:95
+#, fuzzy
+msgid "admins update failed for list %1"
+msgstr "Kunnes olet sen tehnyt, suosittelemme parametrin %1 poistoa"
+
+#: web_tt2/arcsearch_form.tt2:25
+#, fuzzy
+msgid "all of these words"
+msgstr "(Kaikki sanat,"
+
+#: web_tt2/d_install_shared.tt2:13
+msgid ""
+"already exist(s), do you want to confirm the install and erase the old file"
+"(s) or cancel the install ?"
+msgstr ""
+
+# nlsref 16,27
+#: web_tt2/help_editlist.tt2:135
+#, fuzzy
+msgid "an_email_address"
+msgstr "email osoite"
+
+#: web_tt2/arcsearch.tt2:32
+msgid "and checking on entire word)"
+msgstr "ja tarkistaa koko sanan)"
+
+#: web_tt2/arcsearch.tt2:30
+msgid "and checking on part of word)"
+msgstr "ja tarkistaa osan sanasta)"
+
+#: src/etc/scenari/create_list.public_listmaster:1
+msgid "anybody by validation by listmaster requiered"
+msgstr ""
+
+# nlsref 16,87
+#: src/etc/scenari/review.public:1
+#, fuzzy
+msgid "anyone can do it !"
+msgstr "Kuka voi muuttaa"
+
+#: src/etc/scenari/create_list.intranet:1
+msgid "anyone from local domain "
+msgstr ""
+
+#: src/etc/scenari/send.publickey:1
+msgid "anyone with previous md5 authentication"
+msgstr ""
+
+#: src/etc/scenari/unsubscribe.open:1
+#, fuzzy
+msgid "anyone without authentication"
+msgstr "Kun tunnistaudut("
+
+# nlsref 15,1
+#: src/etc/scenari/subscribe.open_quiet:1
+#, fuzzy
+msgid "anyone, no welcome message"
+msgstr "tervetuloa viesti"
+
+#: src/etc/scenari/subscribe.open_notify:1
+msgid "anyone, notification is sent to list owner"
+msgstr ""
+
+# nlsref 6,74
+#: src/etc/scenari/unsubscribe.auth_notify:1
+#, fuzzy
+msgid "authentication requested, notification sent to owner"
+msgstr "%s tarvitsee vahvistusta komennolle %s\n"
+
+#: web_tt2/reviewbouncing.tt2:63
+#, fuzzy
+msgid "bounce score"
+msgstr "palautuneiden viestin lkm"
+
+#: web_tt2/review.tt2:210
+#, fuzzy
+msgid "bouncing"
+msgstr "käyttäen"
+
+#: src/etc/scenari/access_web_archive.owner:1
+#, fuzzy
+msgid "by owner"
+msgstr "Aseta omistaja"
+
+#: src/etc/scenari/del.owner:1
+msgid "by owner without authentication"
+msgstr ""
+
+#: mail_tt2/bye.tt2:5
+msgid "bye !"
+msgstr "näkemisiin !"
+
+#: web_tt2/arcsearch.tt2:24
+msgid "case insensitive"
+msgstr "EI ota huomioon isot ja pienet kirjaimet"
+
+#: web_tt2/arcsearch.tt2:26
+msgid "case sensitive"
+msgstr "OTTAA huomioon isot ja pienet kirjaimet"
+
+# nlsref 16,208
+#: src/List.pm:797
+msgid "certificate for authentication by remote Sympa"
+msgstr ""
+
+#: web_tt2/d_control.tt2:40
+msgid "change access"
+msgstr "muuta oikeuksia"
+
+#: src/etc/scenari/access_web_archive.closed:1 src/etc/scenari/invite.closed:1
+#: src/etc/scenari/send.closed:1
+msgid "closed"
+msgstr ""
+
+# nlsref 16,67
+#: src/etc/scenari/visibility.secret:1
+#, fuzzy
+msgid "conceal even for subscribers"
+msgstr "Kuka voi katsoa tilaajia"
+
+# nlsref 16,21
+#: src/etc/scenari/visibility.conceal:1
+#, fuzzy
+msgid "conceal except for subscribers"
+msgstr "Kuka voi poistaa tilaajia"
+
+#: src/etc/scenari/topics_visibility.conceal:1
+msgid "conceal unless for listmaster"
+msgstr ""
+
+#: src/etc/scenari/topics_visibility.identified:1
+msgid "conceal unless user is logged in"
+msgstr ""
+
+# nlsref 16,94
+#: src/List.pm:828
+msgid "connection options"
+msgstr "yhteysasetukset"
+
+# nlsref 16,98
+#: src/List.pm:652
+msgid "connection timeout"
+msgstr "Yhteyden aikaraja"
+
+#. (list.name,list.host)
+#: mail_tt2/x509-user-cert-missing.tt2:2
+msgid "crypted message for list %1@%2"
+msgstr "salakirjoitettu viesti listalle %1@%2"
+
+#: src/etc/global_task_models/chk_cert_expiration.daily.task:1
+msgid ""
+"daily certificate expiration date checking ; users are warned when their "
+"certificate has expired or expires within 3 days"
+msgstr ""
+
+#: src/etc/global_task_models/crl_update.daily.task:1
+msgid "daily update of the certificate revocation list"
+msgstr ""
+
+#: src/List.pm:574
+msgid "data location URL"
+msgstr ""
+
+# nlsref 16,48
+#: src/List.pm:824
+msgid "database name"
+msgstr "tietokannan nimi"
+
+# nlsref 16,46
+#: src/List.pm:814
+msgid "database type"
+msgstr "tietokannan tyyppi"
+
+# nlsref 16,23
+#: src/List.pm:476
+msgid "days"
+msgstr "päivää"
+
+#: web_tt2/edit_list_request.tt2:398
+msgid "default"
+msgstr "oletus"
+
+#: web_tt2/d_read.tt2:166 web_tt2/d_read.tt2:168 web_tt2/d_read.tt2:303
+#: web_tt2/d_read.tt2:305 web_tt2/d_read.tt2:41
+msgid "delete"
+msgstr "poista"
+
+#: src/etc/global_task_models/purge_orphan_bounces.monthly.task:1
+msgid "delete monthly bounces for unsubscribed addresses"
+msgstr ""
+
+# nlsref 15,3
+#: wwsympa/wwslib.pm:61
+msgid "deletion message"
+msgstr "poistamis viesti"
+
+#: src/etc/scenari/del.auth:1
+msgid "deletion performed only by list owners, need authentication"
+msgstr ""
+
+# nlsref 15,10
+#: wwsympa/wwslib.pm:68
+msgid "directory of lists"
+msgstr "Listojen hakemisto"
+
+#: web_tt2/sigrequest.tt2:34 web_tt2/sigrequest.tt2:63
+#: web_tt2/subrequest.tt2:27 web_tt2/subrequest.tt2:57
+msgid "e-mail address"
+msgstr "email osoite"
+
+#: web_tt2/d_read.tt2:296 web_tt2/d_read.tt2:298
+msgid "edit"
+msgstr "muuta"
+
+#: mail_tt2/listmaster_notification.tt2:26
+msgid ""
+"edit_list.conf format has changed :\n"
+"'default' is no more accepted for a population.\n"
+msgstr ""
+
+# nlsref 15,7
+#: wwsympa/wwslib.pm:65
+msgid "editor rejection message"
+msgstr "ylläpitäjän hylkäys viesti"
+
+# nlsref 16,27
+#: src/List.pm:499 src/List.pm:909
+msgid "email address"
+msgstr "email osoite"
+
+#: src/List.pm:1052 src/List.pm:1057
+msgid "email address protection method"
+msgstr ""
+
+#: web_tt2/add_request.tt2:6
+msgid "email1@dom1 Name1"
+msgstr ""
+
+#: web_tt2/add_request.tt2:7
+msgid "email2@dom2 Name2"
+msgstr ""
+
+#: web_tt2/arcsearch_form.tt2:44
+#, fuzzy
+msgid "entire word"
+msgstr "koko"
+
+# nlsref 16,148
+#: src/List.pm:833
+msgid "environment variables for database connexion"
+msgstr "ympäristömuuttujat tietokantayhteydelle"
+
+#: mail_tt2/listmaster_notification.tt2:68
+msgid "errors in param_constraint.conf file"
+msgstr ""
+
+#: src/etc/list_task_models/expire.yearly.task:1
+msgid "expiration routine run yearly"
+msgstr ""
+
+# nlsref 16,42
+#: src/List.pm:636
+msgid "extracted attribute"
+msgstr "purettu attribuutti"
+
+# nlsref 16,41
+#: src/List.pm:630
+msgid "filter"
+msgstr "suodatin"
+
+# nlsref 16,198
+#: src/List.pm:715
+msgid "first-level connection timeout"
+msgstr "ykköstason yhteyden aikaraja"
+
+# nlsref 16,142
+#: src/List.pm:699
+msgid "first-level extracted attribute"
+msgstr "ykköstason purettu atribuutti"
+
+# nlsref 16,141
+#: src/List.pm:694
+msgid "first-level filter"
+msgstr "ykköstason suodatin"
+
+# nlsref 16,201
+#: src/List.pm:721
+msgid "first-level regular expression"
+msgstr "ykköstason regular expression"
+
+# nlsref 16,197
+#: src/List.pm:709
+msgid "first-level search scope"
+msgstr "ykköstason haun laajuus"
+
+# nlsref 16,143
+#: src/List.pm:704
+msgid "first-level selection"
+msgstr "ykköstason valinta"
+
+# nlsref 16,140
+#: src/List.pm:688
+msgid "first-level suffix"
+msgstr "ykköstason jälkiliite"
+
+#: src/etc/scenari/info.open:1
+msgid "for anyone"
+msgstr ""
+
+#: src/etc/scenari/subscribe.open:1
+msgid "for anyone without authentication"
+msgstr ""
+
+# nlsref 16,5
+#: src/List.pm:322
+msgid "frequency"
+msgstr "lähetysväli"
+
+#: web_tt2/scenario_test.tt2:70
+#, fuzzy
+msgid "get matched rule"
+msgstr "hae toteutettu sääntö"
+
+# nlsref 15,11
+#: wwsympa/wwslib.pm:69
+msgid "global remind message"
+msgstr "yleinen muistutus viesti"
+
+# nlsref 16,9
+#: src/List.pm:361
+msgid "halt rate"
+msgstr "pysäytysnopeus"
+
+# nlsref 15,9
+#: wwsympa/wwslib.pm:67
+msgid "help file"
+msgstr "apua tiedosto"
+
+#: mail_tt2/list_created.tt2:6
+msgid "homepage"
+msgstr "[% list.name %] listan luonti"
+
+# nlsref 16,24
+#: src/List.pm:482
+msgid "hour"
+msgstr "tuntia"
+
+#: src/etc/scenari/unsubscribe.closed:1
+msgid "impossible"
+msgstr ""
+
+#: src/etc/scenari/edit_list.closed:1
+msgid "impossible, closed at the moment"
+msgstr ""
+
+#: mail_tt2/listmaster_notification.tt2:23
+msgid "incorrect format of edit_list.conf"
+msgstr ""
+
+#: web_tt2/arcsearch_form.tt2:37
+msgid "insensitive"
+msgstr "EI ota huomioon"
+
+#: src/etc/scenari/visibility.intranet:1
+#, fuzzy
+msgid "intranet access"
+msgstr "muuta oikeuksia"
+
+#: src/etc/scenari/invite.owner:1
+msgid "invite perform by list owner do not need authentication"
+msgstr ""
+
+#: web_tt2/remindpasswd.tt2:5
+msgid "it will be sent to you by email :"
+msgstr "se lähetetään sinulle emailina :"
+
+#: src/etc/scenari/global_remind.listmaster:1
+msgid "just for listmaster"
+msgstr ""
+
+#. (param0)
+#: mail_tt2/listmaster_notification.tt2:101
+#: mail_tt2/listmaster_notification.tt2:40
+#: mail_tt2/listmaster_notification.tt2:47
+#: mail_tt2/listmaster_notification.tt2:54
+#: mail_tt2/listmaster_notification.tt2:61
+#: mail_tt2/listmaster_notification.tt2:74
+#: mail_tt2/listmaster_notification.tt2:81
+#: mail_tt2/listmaster_notification.tt2:88
+msgid "list %1 in status error_config"
+msgstr ""
+
+# nlsref 15,18
+#: wwsympa/wwslib.pm:76
+msgid "list aliases template"
+msgstr ""
+
+# nlsref 15,16
+#: wwsympa/wwslib.pm:74
+msgid "list creation notification message"
+msgstr "listan luomisilmoitus viesti"
+
+# nlsref 15,15
+#: wwsympa/wwslib.pm:73
+msgid "list creation request message"
+msgstr "listan luomispyyntö viesti"
+
+# nlsref 15,13
+#: wwsympa/wwslib.pm:71
+msgid "list description"
+msgstr "listan kuvaus"
+
+#: web_tt2/close_list.tt2:4
+msgid ""
+"list has been closed. Its subscribers have been deleted from\n"
+"the subscriber database. The list is no more public on the site.\n"
+msgstr ""
+
+# nlsref 15,14
+#: wwsympa/wwslib.pm:72
+msgid "list homepage"
+msgstr "listan kotisivu"
+
+#: web_tt2/get_closed_lists.tt2:11 web_tt2/get_pending_lists.tt2:14
+msgid "list name"
+msgstr "listan nimi"
+
+#: src/etc/scenari/del.owner_notify:1
+msgid "list owners, authentication not needed (notification)"
+msgstr ""
+
+#: web_tt2/get_closed_lists.tt2:12 web_tt2/get_pending_lists.tt2:15
+msgid "list subject"
+msgstr "listan otsikko"
+
+#: src/etc/scenari/access_web_archive.listmaster:1
+#, fuzzy
+msgid "listmaster"
+msgstr "listan nimi"
+
+#: src/etc/scenari/remind.listmaster:1 src/etc/scenari/review.listmaster:1
+msgid "listmaster only"
+msgstr ""
+
+#: src/etc/scenari/subscribe.intranetorowner:1
+msgid "local domain users or owner approval"
+msgstr ""
+
+#. ($PAGENUM$,$NUMOFPAGES$)
+#: src/etc/mhonarc-ressources.tt2:131 src/etc/mhonarc-ressources.tt2:239
+#, fuzzy
+msgid "mails, page # %1/%2"
+msgstr "page %1 / %2"
+
+# nlsref 15,4
+#: wwsympa/wwslib.pm:62
+msgid "message footer"
+msgstr "viestin alaosa"
+
+# nlsref 15,5
+#: wwsympa/wwslib.pm:63
+msgid "message header"
+msgstr "viestin yläosa"
+
+# nlsref 16,25
+#: src/List.pm:488
+msgid "minute"
+msgstr "minuuttia"
+
+#: web_tt2/d_read.tt2:340
+#, fuzzy
+msgid "moderate"
+msgstr "Poista jaettu"
+
+#: src/etc/scenari/d_edit.editor:1
+#, fuzzy
+msgid "moderated for subscribers"
+msgstr "Listalla ei ole tilaajia"
+
+# nlsref 16,29
+#: src/List.pm:509 src/List.pm:919
+msgid "name"
+msgstr "nimi"
+
+#: mail_tt2/certif_warning.tt2:2
+msgid "near expiration of your certificate"
+msgstr "sertifikaatti vanhenemassa"
+
+#: src/etc/scenari/unsubscribe.auth:1
+#, fuzzy
+msgid "need authentication"
+msgstr "Kun tunnistaudut("
+
+#: src/etc/scenari/subscribe.auth_notify:1
+msgid "need authentication (notification is sent to owners)"
+msgstr ""
+
+#: web_tt2/arcsearch_form.tt2:31
+#, fuzzy
+msgid "newest messages"
+msgstr "Uusi viesti ensiksi"
+
+#: src/etc/scenari/topics_visibility.noconceal:1
+#: src/etc/scenari/visibility.noconceal:1
+msgid "no conceal"
+msgstr ""
+
+#: web_tt2/help_editlist.tt2:153
+msgid "no protection against spammer."
+msgstr ""
+
+# nlsref 16,86
+#: src/etc/scenari/review.closed:1
+#, fuzzy
+msgid "nobody can review"
+msgstr "Kuka voi katsoa"
+
+#: src/List.pm:382 src/List.pm:403
+msgid "notification"
+msgstr ""
+
+#: web_tt2/set_pending_list_request.tt2:40
+msgid "notify owner"
+msgstr "huomauta omistajaa"
+
+#: web_tt2/arcsearch_form.tt2:32
+#, fuzzy
+msgid "oldest messages"
+msgstr "Vanhin viestin ensiksi"
+
+#. (list_request_date)
+#: web_tt2/install_pending_list.tt2:17
+#, fuzzy
+msgid "on %1"
+msgstr "Vastaanottaja: %1"
+
+#: web_tt2/arcsearch_form.tt2:26
+#, fuzzy
+msgid "one of these words"
+msgstr "(Kaikki sanat,"
+
+#: src/etc/scenari/review.owner:1
+msgid "only owner (and listmaster)"
+msgstr ""
+
+# nlsref 16,92
+#: src/List.pm:995
+msgid "other email address"
+msgstr "muu email osoite"
+
+#: src/etc/scenari/subscribe.owner:1 src/etc/scenari/unsubscribe.owner:1
+msgid "owners approval"
+msgstr ""
+
+#. (page,total_page)
+#: web_tt2/reviewbouncing.tt2:115 web_tt2/reviewbouncing.tt2:49
+msgid "page %1 / %2"
+msgstr "page %1 / %2"
+
+#: web_tt2/arcsearch_form.tt2:43
+#, fuzzy
+msgid "part of word"
+msgstr "sanasta"
+
+#: web_tt2/sigrequest.tt2:35 web_tt2/sigrequest.tt2:64
+#: web_tt2/subrequest.tt2:28 web_tt2/subrequest.tt2:58
+msgid "password"
+msgstr "salasana"
+
+#. (newuser.password)
+#: mail_tt2/sendpasswd.tt2:17 mail_tt2/sendpasswd.tt2:24
+msgid "password: %1"
+msgstr "Pyysit tilausta postituslistalle [% list %]."
+
+# nlsref 16,30
+#: src/List.pm:514
+msgid "private information"
+msgstr "yksityiset tiedot"
+
+# nlsref 16,61
+#: src/List.pm:924
+msgid "private informations"
+msgstr "yksityiset tiedot"
+
+# nlsref 16,62
+#: src/List.pm:929
+msgid "profile"
+msgstr "profiili"
+
+#: web_tt2/d_read.tt2:191 web_tt2/d_read.tt2:193 web_tt2/d_read.tt2:327
+#: web_tt2/d_read.tt2:329 web_tt2/d_read.tt2:42
+msgid "properties"
+msgstr ""
+
+#: src/etc/scenari/access_web_archive.public:1 src/etc/scenari/invite.public:1
+#, fuzzy
+msgid "public"
+msgstr "Julkista"
+
+# nlsref 16,70
+#: src/etc/scenari/d_edit.public:1 src/etc/scenari/d_read.public:1
+#, fuzzy
+msgid "public documents"
+msgstr "Jaetut dokumentit"
+
+# #-#-#-#-#  fi.po (PACKAGE VERSION)  #-#-#-#-#
+# nlsref 6,82
+#: src/etc/scenari/send.public:1
+#, fuzzy
+msgid "public list"
+msgstr "Julkiset listat"
+
+#: src/etc/scenari/send.publicnomultipart:1
+msgid "public list multipart messages are rejected"
+msgstr ""
+
+#: src/etc/scenari/send.publicnoattachment:1
+msgid "public list multipart/mixed messages are forwarded to moderator"
+msgstr ""
+
+#: src/etc/scenari/send.public_nobcc:1
+msgid "public list, Bcc rejected (anti-spam)"
+msgstr ""
+
+#: src/etc/global_task_models/purge_user_table.monthly.task:1
+msgid "purge of orphan entries in user table every month"
+msgstr ""
+
+#: web_tt2/add_request.tt2:13 web_tt2/editsubscriber.tt2:40
+#: web_tt2/review.tt2:13 web_tt2/review.tt2:277 web_tt2/review.tt2:93
+#: web_tt2/reviewbouncing.tt2:107
+msgid "quiet"
+msgstr "hiljainen"
+
+# nlsref 16,203
+#: src/List.pm:1043 src/List.pm:1135
+msgid "quota"
+msgstr ""
+
+# nlsref 16,19
+#: src/List.pm:343 src/List.pm:456 src/List.pm:504 src/List.pm:914
+msgid "reception mode"
+msgstr "vastaanotto moodi"
+
+# nlsref 15,6
+#: wwsympa/wwslib.pm:64
+msgid "remind message"
+msgstr "muistutus viesti"
+
+#: src/etc/list_task_models/remind.2month.task:1
+msgid "remind message sent to subscribers every 2 month"
+msgstr ""
+
+#: src/etc/list_task_models/remind.monthly.task:1
+msgid "remind message sent to subscribers every month"
+msgstr ""
+
+#: src/etc/list_task_models/remind.yearly.task:1
+msgid "remind message sent to subscribers every year"
+msgstr ""
+
+# nlsref 16,36
+#: src/List.pm:603 src/List.pm:667 src/List.pm:780 src/List.pm:819
+msgid "remote host"
+msgstr "etäpalvelin"
+
+# nlsref 16,206
+#: src/List.pm:809
+msgid "remote list inclusion"
+msgstr ""
+
+# nlsref 16,39
+#: src/List.pm:587 src/List.pm:620 src/List.pm:684 src/List.pm:842
+msgid "remote password"
+msgstr "etäpalvelimen salasana"
+
+# nlsref 16,207
+#: src/List.pm:792
+msgid "remote path of sympa list dump"
+msgstr ""
+
+# nlsref 16,37
+#: src/List.pm:609 src/List.pm:673 src/List.pm:786
+msgid "remote port"
+msgstr "etäpalvelimen portti"
+
+# nlsref 16,38
+#: src/List.pm:580 src/List.pm:614 src/List.pm:678 src/List.pm:837
+msgid "remote user"
+msgstr "etäpalvelimen käyttäjätunnus"
+
+#: src/etc/scenari/del.closed:1
+#, fuzzy
+msgid "remove subscriber impossible"
+msgstr "Olet ollut tilaajana"
+
+#: src/etc/scenari/subscribe.smime:1
+msgid "requires S/MIME signed"
+msgstr ""
+
+#: src/etc/scenari/subscribe.smimeorowner:1
+msgid "requires S/MIME signed or owner approval"
+msgstr ""
+
+#: src/etc/scenari/subscribe.auth_owner:1
+msgid "requires authentication then owner approval"
+msgstr ""
+
+# nlsref 16,93
+#: src/List.pm:1000
+msgid "respect of existing header field"
+msgstr "käytä olemassaolevaa otsikko kenttää"
+
+#: src/etc/scenari/d_edit.owner:1 src/etc/scenari/d_read.owner:1
+#: src/etc/scenari/edit_list.owner:1 src/etc/scenari/remind.owner:1
+msgid "restricted to list owners"
+msgstr ""
+
+#: src/etc/scenari/create_list.listmaster:1
+msgid "restricted to listmaster"
+msgstr ""
+
+#: src/etc/scenari/send.intranet:1
+msgid "restricted to local domain"
+msgstr ""
+
+# nlsref 16,2
+#: src/etc/scenari/send.intranetorprivate:1
+#, fuzzy
+msgid "restricted to local domain and subscribers"
+msgstr "Kuka voi lisätä tilaajia"
+
+#: src/etc/scenari/access_web_archive.intranet:1
+#: src/etc/scenari/subscribe.intranet:1
+msgid "restricted to local domain users"
+msgstr ""
+
+#: src/etc/scenari/d_edit.private-https~:1 src/etc/scenari/d_edit.private:1
+#: src/etc/scenari/d_read.private-https~:1 src/etc/scenari/d_read.private:1
+#: src/etc/scenari/info.private:1 src/etc/scenari/invite.private:1
+#: src/etc/scenari/review.private:1 src/etc/scenari/send.private:1
+#, fuzzy
+msgid "restricted to subscribers"
+msgstr "Poista valitut käyttäjät"
+
+#: src/etc/scenari/d_edit.private-https:1
+#: src/etc/scenari/d_read.private-https:1
+#, fuzzy
+msgid "restricted to subscribers authenticated with user cert"
+msgstr "Poista valitut käyttäjät"
+
+#: src/etc/scenari/send.private_smime:1
+msgid "restricted to subscribers check smime signature"
+msgstr ""
+
+#: src/etc/scenari/review.intranet:1
+msgid "restricted to subscribers or local domain users"
+msgstr ""
+
+#: src/etc/scenari/send.privatekey:1
+msgid "restricted to subscribers with previous md5 authentication"
+msgstr ""
+
+#. (list.name)
+#: mail_tt2/expire_warning1.tt2:2 mail_tt2/expire_warning2.tt2:2
+msgid "resubscription to %1"
+msgstr "tilauksen uusintapyyntö listalle %1"
+
+#: web_tt2/arcsearch_form.tt2:49 web_tt2/arcsearch_form.tt2:50
+#: web_tt2/arcsearch_form.tt2:51
+msgid "results by page"
+msgstr "tulosta sivulla"
+
+# nlsref 16,97
+#: src/List.pm:646
+msgid "search scope"
+msgstr "haun laajuus"
+
+# nlsref 16,200
+#: src/List.pm:753
+msgid "second-level connection timeout"
+msgstr "kakkostason yhteyden aikaraja"
+
+# nlsref 16,146
+#: src/List.pm:737
+msgid "second-level extracted attribute"
+msgstr "kakkostason purettu atribuutti"
+
+# nlsref 16,145
+#: src/List.pm:731
+msgid "second-level filter template"
+msgstr "kakkostason suodatin"
+
+# nlsref 16,202
+#: src/List.pm:759
+msgid "second-level regular expression"
+msgstr "kakkostason regular expression"
+
+# nlsref 16,199
+#: src/List.pm:747
+msgid "second-level search scope"
+msgstr "kakkostason haun laajuus"
+
+# nlsref 16,147
+#: src/List.pm:742
+msgid "second-level selection"
+msgstr "kakkostason valinta"
+
+# nlsref 16,144
+#: src/List.pm:725
+msgid "second-level suffix template"
+msgstr "kakkostason jälkiliite"
+
+#: web_tt2/menu.tt2:9
+#, fuzzy
+msgid "security info"
+msgstr "Listan tiedot"
+
+# nlsref 16,43
+#: src/List.pm:641
+msgid "selection (if multiple)"
+msgstr "valinta (jos useampia)"
+
+#. (user.email)
+#: src/etc/mhonarc-ressources.tt2:399
+msgid "send it back to %1"
+msgstr ""
+
+#: web_tt2/scenario_test.tt2:35
+msgid "sender email"
+msgstr "lähettäjän email"
+
+#: web_tt2/arcsearch_form.tt2:38
+msgid "sensitive"
+msgstr "OTTAA huomioon"
+
+# nlsref 17,1
+#: wwsympa/wwslib.pm:47
+msgid "session"
+msgstr "sessio"
+
+# nlsref 16,209
+#: src/List.pm:592 src/List.pm:656 src/List.pm:763 src/List.pm:802
+#: src/List.pm:856
+msgid "short name for this source"
+msgstr ""
+
+#: web_tt2/set_pending_list_request.tt2:39 web_tt2/subrequest.tt2:47
+msgid "submit"
+msgstr "lähetä"
+
+#: src/etc/scenari/subscribe.closed:1
+#, fuzzy
+msgid "subscribe is impossible"
+msgstr "Poista käyttäjän tilaus"
+
+#: src/etc/scenari/access_web_archive.private:1
+#, fuzzy
+msgid "subscribers only"
+msgstr "Tilaajat"
+
+#. (param0)
+#: mail_tt2/listmaster_notification.tt2:33
+msgid "subscribers update failed for list %1"
+msgstr "Kunnes olet sen tehnyt, suosittelemme parametrin %1 poistoa"
+
+# nlsref 15,8
+#: wwsympa/wwslib.pm:66
+msgid "subscribing invitation message"
+msgstr "tilauskutsu viesti"
+
+#: src/etc/scenari/subscribe.auth:1
+#, fuzzy
+msgid "subscription request confirmed"
+msgstr "Ei tilauspyyntöjä"
+
+# nlsref 16,40
+#: src/List.pm:624
+msgid "suffix"
+msgstr "jälkiliite(suffix)"
+
+# nlsref 15,12
+#: wwsympa/wwslib.pm:70
+msgid "summary message"
+msgstr "yhteenveto viesti"
+
+#: src/etc/mhonarc-ressources.tt2:406 src/etc/mhonarc-ressources.tt2:413
+msgid "tag this mail for deletion"
+msgstr ""
+
+#: web_tt2/help_editlist.tt2:152
+msgid "the @ char is replaced by the string \" AT \"."
+msgstr ""
+
+#: web_tt2/help_editlist.tt2:151
+msgid ""
+"the address is hidden using a javascript. User who enable javascript can see "
+"a nice mailto address where others have nothing."
+msgstr ""
+
+#. (shortname)
+#: web_tt2/d_upload.tt2:1
+msgid "the file %1 already exists"
+msgstr ""
+
+#: web_tt2/create_list_request.tt2:11
+msgid "the list name ; be careful, not its address !"
+msgstr "listan nimi; ole tarkkana, ei osoite !"
+
+#: web_tt2/arcsearch_form.tt2:24
+#, fuzzy
+msgid "this sentence"
+msgstr "(Tämä lause,"
+
+#: src/List.pm:372 src/List.pm:393
+msgid "threshold"
+msgstr ""
+
+#: web_tt2/d_read.tt2:406
+msgid "title"
+msgstr "URL"
+
+#: src/etc/mhonarc-ressources.tt2:396
+#, fuzzy
+msgid "to list"
+msgstr "Listan palautukseen"
+
+#: web_tt2/d_read.tt2:261
+#, fuzzy
+msgid "to moderate"
+msgstr "Poista jaettu"
+
+# nlsref 15,2
+#: wwsympa/wwslib.pm:60
+msgid "unsubscription message"
+msgstr "lopetus viesti"
+
+# nlsref 16,91
+#: src/List.pm:990 web_tt2/help_editlist.tt2:131
+msgid "value"
+msgstr "arvo"
+
+#: web_tt2/home.tt2:49
+msgid "view all lists"
+msgstr "katso kaikkia listoja"
+
+# nlsref 15,17
+#: wwsympa/wwslib.pm:75
+msgid "virus infection message"
+msgstr "virusilmoitus viesti"
+
+# nlsref 16,20
+#: src/List.pm:461
+msgid "visibility"
+msgstr "näkyvyys"
+
+# nlsref 16,8
+#: src/List.pm:354
+msgid "warn rate"
+msgstr "varoistusnopeus"
+
+# nlsref 15,1
+#: wwsympa/wwslib.pm:59
+msgid "welcome message"
+msgstr "tervetuloa viesti"
+
+#: src/etc/scenari/unsubscribe.open_notify:1
+#, fuzzy
+msgid "without authentication, notification is sent to owners"
+msgstr "sertifikaatti vanhenemassa"
+
+#: web_tt2/error.tt2:44
+msgid "you need to login"
+msgstr "sinun täytyy kirjautua"
+
+#. (newuser.email)
+#: mail_tt2/sendpasswd.tt2:29
+msgid "your email address    : %1"
+msgstr ""
+
+#. (user.password)
+#. (newuser.password)
+#: mail_tt2/expire_warning1.tt2:7 mail_tt2/expire_warning2.tt2:7
+#: mail_tt2/sendpasswd.tt2:30
+msgid "your password : %1"
+msgstr "Muuten sinut poistetaan listalta viikon kuluttua."
+
+#, fuzzy
+#~ msgid "The [% count %] latest messages"
+#~ msgstr "Vanhin viestin ensiksi"
+
+#~ msgid "Modifier"
+#~ msgstr "Muuttaja"
+
+#, fuzzy
+#~ msgid "page n&#176; %1/%2"
+#~ msgstr "page %1 / %2"
+
+# nlsref 12,3
+#~ msgid "7bit"
+#~ msgstr "8bit"
+
+#, fuzzy
+#~ msgid "_language_"
+#~ msgstr "Kieli"
+
+#, fuzzy
+#~ msgid "moderated to subscribers"
+#~ msgstr "Poista valitut käyttäjät"
+
+# nlsref 12,2
+#~ msgid "us-ascii"
+#~ msgstr "iso-8859-1"
+
+#~ msgid "%1 occurrences found"
+#~ msgstr "%1 osumaa löytynyt"
+
+# nlsref 12,1
+#~ msgid "1.0"
+#~ msgstr "1.0"
+
+#~ msgid "Delete selected subscribers"
+#~ msgstr "Poista valitut käyttäjät"
+
+#~ msgid "Do it"
+#~ msgstr "Toteuta"
+
+#~ msgid "Do you really want to unsubscribe from list %1"
+#~ msgstr "Haluatko varmasti poistaa tilauksen listalta %1"
+
+#~ msgid "Error while deleting this message"
+#~ msgstr "Virhe viestiä poistettaessa"
+
+#~ msgid "May be it is usefull to check your system for viruses."
+#~ msgstr "Pysäytimme viestin jakelun."
+
+# #-#-#-#-#  fi.po (PACKAGE VERSION)  #-#-#-#-#
+# nlsref 16,26
+#, fuzzy
+#~ msgid "Moderated, old style"
+#~ msgstr ""
+#~ "#-#-#-#-#  fi.po (PACKAGE VERSION)  #-#-#-#-#\n"
+#~ "Moderaattorit\n"
+#~ "#-#-#-#-#  fi.po (PACKAGE VERSION)  #-#-#-#-#\n"
+#~ "Hallitsijat"
+
+#~ msgid "Operation successful"
+#~ msgstr "Operaatio onnistui"
+
+# nlsref 12,4
+#~ msgid "SYMPA <%s>"
+#~ msgstr "SYMPA <%s>"
+
+# nlsref 6,261
+#, fuzzy
+#~ msgid ""
+#~ "Someone (hopefully you) asked for you e-mail address\n"
+#~ "to be removed from list '%s'.\n"
+#~ "If you want this action to be taken, please \n"
+#~ "\n"
+#~ "- reply to this mail\n"
+#~ "OR\n"
+#~ "- send a message to '%s' with subject\n"
+#~ " %s\n"
+#~ "OR\n"
+#~ "- hit the following mailto %s\n"
+#~ "\n"
+#~ "This can be done via the URL %s\n"
+#~ "If you do not want this action to be taken, you can safely ignore\n"
+#~ "this message"
+#~ msgstr ""
+#~ "Joku (toivon mukaan sinä) pyysi että mailiosoitteesi\n"
+#~ "poistetaan listalta '%s'.\n"
+#~ "Jos haluat että näin tehdään niin \n"
+#~ "\n"
+#~ "- vastaa tähän mailiin\n"
+#~ "TAI\n"
+#~ "- lähetä viesti osoitteeseen '%s' ja laita subject-kenttään\n"
+#~ " %s\n"
+#~ "TAI\n"
+#~ "- käytä tätä: %s\n"
+#~ "\n"
+#~ "Tämä voidaan tehdä URLin %s avulla\n"
+#~ "Jos et halua että näin tapahtuu, voit vain unohtaa tämän viestin."
+
+#, fuzzy
+#~ msgid "Table of content"
+#~ msgstr "Sisällysluettelo:"
+
+#~ msgid "This help file"
+#~ msgstr "Tämä tiedosto"
+
+#~ msgid "To add a user to a list"
+#~ msgstr "Lisätäksesi tilaajan listalle"
+
+#~ msgid "To quit all lists."
+#~ msgstr "Poistuaksesi kaikilta listoilta."
+
+# nlsref 8,30
+#~ msgid "You are invited to join list %s"
+#~ msgstr "Sinut on kutsuttu listalle %s"
+
+#~ msgid "Your password has been sent to your email address %1"
+#~ msgstr "Salasanasi on lähetetty osoitteeseen %1"
+
+#, fuzzy
+#~ msgid "Your subscription email is %3"
+#~ msgstr "Tilauksesi osoite on %1"
+
+#, fuzzy
+#~ msgid "email, is your subscriber email address"
+#~ msgstr ", on tilaus osoite"
+
+# nlsref 14,1
+#~ msgid "en_US"
+#~ msgstr "fi_FI"
+
+# nlsref 14,2
+#~ msgid "english"
+#~ msgstr "finnish"
+
+#~ msgid "login"
+#~ msgstr "login"
+
+#~ msgid "on"
+#~ msgstr "pvm"
+
+#~ msgid "password :"
+#~ msgstr "salasana :"
+
+#, fuzzy
+#~ msgid "password, is your password."
+#~ msgstr ", on salasana."
+
+#~ msgid "period"
+#~ msgstr "ajanjakso"
+
+#, fuzzy
+#~ msgid "subscribers"
+#~ msgstr "Tilaajat"
+
+#~ msgid "translated"
+#~ msgstr "käännetty"
+
+#~ msgid "type"
+#~ msgstr "tyyppi"
+
+# nlsref 1,102
+#~ msgid "3.3a"
+#~ msgstr "3.3a"
+
+# nlsref 5,1
+#~ msgid "Safefork cannot create a new process : %m"
+#~ msgstr "Safefork ei voinut luoda uutta prosessia : %m"
+
+# nlsref 6,11
+#~ msgid "List is Private : You can not browse subscribers' list.\n"
+#~ msgstr "Lista on yksityinen : Et voi selata tilaajalistaa.\n"
+
+# nlsref 6,24
+#~ msgid "Subscription to this list are currently suspended.\n"
+#~ msgstr "Tilaus tälle listalle on tällä hetkellä keskeytetty.\n"
+
+# nlsref 6,26
+#~ msgid "Unsubscription is not available for list %s.\n"
+#~ msgstr "Listalta %s poistuminen ei ole mahdollista.\n"
+
+# nlsref 6,27
+#~ msgid "Information regarding your subscription have been updated.\n"
+#~ msgstr "Listan tilaukseesi liittyvää tietoa on päivitetty.\n"
+
+# nlsref 6,28
+#~ msgid "You are now a subscriber of list %s.\n"
+#~ msgstr "Olet nyt listan %s tilaaja.\n"
+
+# nlsref 6,29
+#~ msgid ""
+#~ "Information regarding this list will be sent in a separate message.\n"
+#~ msgstr "Tätä listaa koskevat tiedot lähetetään erillisessä viestissä.\n"
+
+# nlsref 6,32
+#~ msgid ""
+#~ "Only owners of list %s may add or remove subscribers.\n"
+#~ "You are not allowed to use this command, or you didn't provide the items\n"
+#~ "requested for your identification.\n"
+#~ msgstr ""
+#~ "Vain listan %s omistajat voivat lisätä tai poistaa tilaajia.\n"
+#~ "Tämän komennon käyttö ei ole sallittua, tai et antanut käyttöoikeuksien\n"
+#~ "tarkastamiseen tarvittavia tietoja.\n"
+
+# nlsref 6,34
+#~ msgid ""
+#~ "Your have been removed from the list\n"
+#~ "by %s, owner of this list.\n"
+#~ "\n"
+#~ "This action is generally performed to delete addresses generating\n"
+#~ "non-delivery reports. Your address may however work correctly.\n"
+#~ "If so, please excuse us for this trouble and renew your subsciption.\n"
+#~ msgstr ""
+#~ "Sinut on poistettu listalta. Poistamisen\n"
+#~ "suoritti %s, listan omistaja.\n"
+#~ "\n"
+#~ "Tällainen toimenpide tehdään yleensä kun viestien toimittaminen\n"
+#~ "aiheuttaa ilmoituksia viestin toimitusongelmista. Osoitteesi saattaa\n"
+#~ "kuitenkin toimia oikein. Jos näin on asian laita, pyydämme anteeksi\n"
+#~ "ja toivomme että uusit tilauksesi.\n"
+
+# nlsref 6,35
+#~ msgid "The archive will be sent to you in a separate message.\n"
+#~ msgstr "Arkisto lähetetään sinulle erillisessä viestissä.\n"
+
+# nlsref 6,75
+#~ msgid "Enable to unsubscribe %s from any list \n"
+#~ msgstr ""
+#~ "Käytä lopettaaksesi käyttäjän %s tilauksen miltä tahansa listalta \n"
+
+#~ msgid "Close it &nbsp;&nbsp;"
+#~ msgstr "Sulje &nbsp;&nbsp;"
+
+#~ msgid "Content-Type: text/plain"
+#~ msgstr "Content-Type: text/plain; charset=iso-8859-1"
+
+#~ msgid "Content-transfer-encoding: 7bit"
+#~ msgstr "Content-transfer-encoding: 8bit"
+
+#~ msgid "Could not change your subscription address for the list"
+#~ msgstr "Tilausosoitetta ei voitu muuttaa listalle"
+
+#~ msgid "Create shared"
+#~ msgstr "Luo jaettu"
+
+#~ msgid "Delete shared"
+#~ msgstr "Poista jaettu"
+
+#~ msgid "Do you really want to delete %1%2 ([% f.size %] Kb) ?"
+#~ msgstr "Do you really want to delete %1%2 (%3 Kb) ?"
+
+#~ msgid "Edit list config"
+#~ msgstr "Muuta listan asetuksia"
+
+#~ msgid "Message footer : same as"
+#~ msgstr "Viestin alaosa : sama kuin"
+
+#~ msgid "Message header,"
+#~ msgstr "Viestin yläosa"
+
+#~ msgid "Rebuild HTML archives"
+#~ msgstr "Luo HTML arkistot uudelleen"
+
+#~ msgid "Welcome to list %1@%2."
+#~ msgstr "Tervetuloa listalle %1@%2."
+
+#~ msgid "You won"
+#~ msgstr "Tunnistussertifikaatin voimassaoloaika loppuu [% expiration_date %]"
+
+#~ msgid "[% total %]"
+#~ msgstr "[% total %]"
+
+#~ msgid "all of"
+#~ msgstr "kaikki"
+
+#~ msgid "because you are not allowed to unsubscribe."
+#~ msgstr "koska uudi osoitteesi ei ole sallittu tilaamaan listaa."
+
+#~ msgid "because your new address is not allowed to subscribe."
+#~ msgstr "Email osoitteen muuttaminen listaan [% error.list %] epäonnistui"
+
+#~ msgid "button beside."
+#~ msgstr "napin kautta."
+
+#~ msgid "button."
+#~ msgstr "nappia."
+
+#~ msgid "close it. It can be restored using"
+#~ msgstr "sulje jaettu. Se voidaan palauttaa käyttämällä"
+
+#~ msgid "directories as input."
+#~ msgstr "hakemistoja syöttönä."
+
+#~ msgid "field"
+#~ msgstr "kenttään"
+
+#~ msgid "function."
+#~ msgstr "toiminnolla."
+
+#~ msgid "logout"
+#~ msgstr "uloskirjautumis"
+
+#~ msgid "messages"
+#~ msgstr "viestit"
+
+#~ msgid "newest"
+#~ msgstr "uusimmat"
+
+#~ msgid "oldest"
+#~ msgstr "vanhimmat"
+
+#~ msgid "one of"
+#~ msgstr "yksi"
+
+#~ msgid "part"
+#~ msgstr "osa"
+
+#~ msgid "preferences"
+#~ msgstr "asetuksissa"
+
+#~ msgid "sentence"
+#~ msgstr "lause"
+
+#~ msgid "this"
+#~ msgstr "tämä"
+
+#~ msgid "this words"
+#~ msgstr "sanoista"
+
+#~ msgid "word"
+#~ msgstr "sana"

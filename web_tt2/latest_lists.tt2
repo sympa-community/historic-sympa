@@ -1,0 +1,43 @@
+<!-- $Id$ -->
+
+
+<h2> <strong>
+ [% IF count %]
+   [%|loc(count)%] The %1 latest lists [%END%] 
+ [% ELSE %]
+   [%|loc%] The latest lists [%END%] 
+ [% END %]
+
+ [% IF for %]
+   [%|loc(for)%] for %1 days [%END%] 	
+ [% END %]
+</strong> </h2> 	
+
+<br /> 
+
+
+<table style="width: 100%;">
+
+ <tr style="background-color: [% light_color %];">
+   <th><strong>[%|loc%]Listname[%END%]</strong></th>
+   <th><strong>[%|loc%]Creation date[%END%]</strong></th>
+   <th><strong>[%|loc%]Subject[%END%]</strong></th>
+ </tr>
+
+ [% FOREACH l = latest_lists %]
+ <tr>
+   <td>
+     <a href="[% path_cgi %]/info/[% l.name %]" ><strong>[% hidden_head %][% l.name %][% hidden_at %][% l.host %][% hidden_end %]</strong></a>
+   </td>
+
+  <td> [% l.date %] </td>
+  <td> [% l.subject %] </td>
+ </tr>
+ 
+ [% END %] 
+ 
+ <br />
+</table>
+
+
+

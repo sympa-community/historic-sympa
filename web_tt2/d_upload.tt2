@@ -1,0 +1,42 @@
+[%|loc(shortname)%]the file %1 already exists[%END%]
+
+ <form action="[% path_cgi %]" method="post">
+
+   <table cellspacing="15">
+    <tr> 
+     <td style="text-align: right;" valign="bottom">
+      [%|loc(shortname)%]Do you want to delete the old file %1 ?[%END%]
+     </td>
+     <td style="text-align: left;" valign="bottom">
+      <input type="submit" name="mode_delete" value="[%|loc%]Delete[%END%]" />
+     </td>
+    </tr>
+    <tr>
+     <td style="text-align: right;" valign="bottom">
+      [%|loc(shortname)%]Do you want to rename your file %1 ?[%END%] <br />
+      <input size="50" maxlength="100" name="new_name" />
+     </td>
+     <td style="text-align: left;" valign="bottom">
+      <input size="20" maxlength="50" type="submit" name="mode_rename" value="[%|loc%]Rename[%END%]" />
+     </td>
+    </tr>
+    <tr> 
+     <td style="text-align: right;" valign="bottom">
+      [%|loc%]Do you want to cancel the upload ?[%END%]
+     </td>
+     <td style="text-align: left;" valign="bottom">
+      <input type="submit" name="mode_cancel" value="[%|loc%]Cancel[%END%]" />
+     </td>
+    </tr>
+   </table>
+
+   <input type="hidden" name="action_d_upload" value="1" />
+   <input type="hidden" name="serial" value="[% serial_file %]" />
+   <input type="hidden" name="path" value="[% path %]" />
+   <input type="hidden" name="list" value="[% list %]" />
+   <input type="hidden" name="shortname" value="[% shortname %]" />
+
+ </form>
+
+
+

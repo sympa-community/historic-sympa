@@ -1,0 +1,56 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html>
+
+<head>
+<meta http-equiv="content-type" content="text/html; charset=[%|loc%]_charset_[%END%]" />
+
+
+<style type="text/css" title="style sympa">
+<!--
+a {
+	text-decoration: none;
+}
+a:link {
+	color: [% selected_color %];
+}
+a:visited {
+	color: [% selected_color %];
+}
+-->
+</style>
+
+  <title>[%|loc%]Sympa error - could not display web page[%END%]</title>
+</head>
+
+<body style="background-color: [% bg_color %]; color: [% text_color %];">
+
+<h2>[%|loc%]Sympa could not deliver the requested page for the following reason : [%END%]<br />
+[% IF tt2_error %]
+<em>[% tt2_error %]</em><br /><br />
+[% ELSIF errors %]
+          <table>
+          <tr style="background-color: [% error_color %];">
+            <td>
+              <span style="color: [% bg_color %];">
+       [% PROCESS error.tt2 %]
+       </span>
+            </td>
+          </tr>
+          </table>
+[% END %]
+[%|loc%]Please contact the listmaster.[%END%]</h2>
+
+<div style="text-align: right; margin-left: auto; margin-right: auto;">
+ <table border="0" style="text-align: left;">
+  <tr>
+   <td style="width: 100%;">&nbsp;</td>
+    <td style="white-space: nowrap;"><em>[%|loc%]Powered by[%END%]</em></td>
+    <td><a href="http://www.sympa.org/">
+           <img src="[% icons_url %]/logo-s.png" alt="Sympa [% version %]" style="border: 0px;" />
+         </a></td>
+   </tr>
+  </table>
+</div>
+</body>
+</html>
+

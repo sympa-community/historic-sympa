@@ -1,0 +1,45 @@
+<!-- $Id$ -->
+
+
+<h2> <strong>
+ [% IF count %]
+   [%|loc(count)%] The %1 most active lists [%END%] 
+ [% ELSE %]
+   [%|loc%] The active lists [%END%] 
+ [% END %]
+
+ [% IF for %]
+   [%|loc(loc)%] for %1 days [%END%] 	
+ [% END %]
+</strong> </h2> 	
+
+<br /> 
+
+
+<table style="width: 100%;">
+
+ <tr style="background: [% light_color %];">
+   <th><strong>[%|loc%]Listname[%END%]</strong></th>
+   <th><strong>[%|loc%]Message count[%END%]</strong></th>	
+   <th><strong>[%|loc%]Average by day[%END%]</strong></th>	
+   <th><strong>[%|loc%]Creation date[%END%]</strong></th>
+   <th><strong>[%|loc%]Subject[%END%]</strong></th>
+ </tr>
+
+ [% FOREACH l = active_lists %]
+ <tr>
+   <td>
+     <a href="[% path_cgi %]/info/[% l.name %]" ><strong>[% hidden_head %][% l.name %][% hidden_at %][% l.host %][% hidden_end %]</strong></a>
+   </td>
+  <td style="text-align: center;"> [% l.msg_count %] </td>
+  <td style="text-align: center;"> [% l.average %] </td>
+  <td> [% l.date %] </td>
+  <td> [% l.subject %] </td>
+ </tr>
+ 
+ [% END %] 
+ 
+</table>
+
+
+

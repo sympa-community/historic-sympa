@@ -1,0 +1,20 @@
+	<form action="[% path_cgi %]" method="post">
+	  <input type="hidden" name="list" value="[% list %]" />
+	  [%|loc%]New list name:[%END%] <input name="new_listname" value="" /> @
+	[% IF robots %]
+           <select name="new_robot">
+           [% FOREACH vr = robots %]
+             <option value="[% vr.key %]" [% vr.value %]>[% vr.key %]</option>
+           [% END %]
+	   </select>
+	[% ELSE %]
+	   <input name="new_robot" type="hidden" value="[% robot %]" />
+	   [% robot %]
+        [% END %]
+	  <input type="submit" name="action_rename_list" value="[%|loc%]Rename this list[%END%]" onclick="return request_confirm('[%|loc%]Do you really want to rename this list?[%END%]')" />
+	</form>
+
+
+	
+	
+

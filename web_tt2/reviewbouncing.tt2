@@ -1,0 +1,129 @@
+<!-- RCS Identication ; $Revision$ ; $Date$ -->
+
+<table style="width: 100%;" border="0">
+<tr><td>
+    <form action="[% path_cgi %]" method="post"> 
+      <input type="hidden" name="previous_action" value="reviewbouncing" />
+      <input type="hidden" name="list" value="[% list %]" />
+      <input type="hidden" name="action" value="search" />
+
+      <input size="25" name="filter" value="[% filter %]" />
+      <input type="submit" name="action_search" value="[%|loc%]Search[%END%]" />
+    </form>
+</td>
+<td>
+  <form method="post" action="[% path_cgi %]">
+    <input type="submit" value="[%|loc%]Remind all subscribers[%END%]" name="action_remind" onclick="return request_confirm('[%|loc(total)%]Do you really want to send a subscription remind message to the %1 subscribers[%END%]')" />
+    <input type="hidden" name="action" value="remind" />
+    <input type="hidden" name="list" value="[% list %]" />
+  </form>	
+</td>
+
+</tr></table>
+    <form name="myform" action="[% path_cgi %]" method="post">
+    <input type="hidden" name="list" value="[% list %]" />
+    <input type="hidden" name="previous_action" value="reviewbouncing" />
+
+    <table style="width: 100%;" border="0">
+    <tr><td style="text-align: left; white-space: nowrap;">
+        <br />
+        <input type="submit" name="action_del" value="[%|loc%]Delete selected email addresses[%END%]" />
+        <input type="checkbox" name="quiet" /> quiet
+
+	<input type="hidden" name="sortby" value="[% sortby %]" />
+	<input type="submit" name="action_reviewbouncing" value="[%|loc%]Page size[%END%]" />
+	        <select name="size">
+                  <option value="[% size %]" selected="selected">[% size %]</option>
+		  <option value="25">25</option>
+		  <option value="50">50</option>
+		  <option value="100">100</option>
+		   <option value="500">500</option>
+		</select>
+   </td>
+
+ <td style="text-align: right;">
+        [% IF prev_page %]
+	  <a href="[% path_cgi %]/reviewbouncing/[% list %]/[% prev_page %]/[% size %]"><img src="[% icons_url %]/left.png" style="border: 0px;" alt="[%|loc%]Previous page[%END%]"></a>
+        [% END %]
+        [% IF page %]
+  	  [%|loc(page,total_page)%]page %1 / %2[%END%]
+        [% END %]
+        [% IF next_page %]
+	  <a href="[% path_cgi %]/reviewbouncing/[% list %]/[% next_page %]/[% size %]"><img src="[% icons_url %]/right.png" style="border: 0px;" alt="[%|loc%]Next page[%END%]"></a>
+        [% END %]
+    </td></tr>
+    <tr><td><input type="submit" name="action_resetbounce" value="[%|loc%]Reset errors for selected users[%END%]" />
+    </td></tr>
+    </table>
+
+    <table border="1">
+      <tr style="background-color: [% error_color %]; white-space: nowrap;">
+	<th><span style="color: [% bg_color %];">X</span></th>
+        <th><span style="color: [% bg_color %];">[%|loc%]Email[%END%]</span></th>
+	<th><span style="color: [% bg_color %];">[%|loc%]bounce score[%END%]</span></th>
+      </tr>
+      
+      [% FOREACH u = members %]
+      
+	[% IF dark == '1' %]
+	  <tr style="background-color: [% shaded_color %];">
+	[% ELSE %]
+	  <tr style="background-color: [% bg_color %];">
+	[% END %]
+
+	  <td>
+	    <input type="checkbox" name="email" value="[% u.escaped_email %]" />
+	  </td>
+	  <td style="white-space: nowrap;">
+	      <a href="[% path_cgi %]/editsubscriber/[% list %]/[% u.escaped_email %]/reviewbouncing">[% u.email %]</a>
+
+	  </td>
+          <td style="text-align: center;
+	  [% IF u.bounce_level == '2' %]
+            background-color: #FF0000;
+	  [% ELSIF u.bounce_level == '1' %]
+	    background-color: #FF8C00;
+	  [% END %]
+	  ">
+  	      [% u.bounce_score %]
+	  </td>
+        </tr>
+
+        [% IF dark == '1' %]
+	  [% SET dark = 0 %]
+	[% ELSE %]
+	  [% SET dark = 1 %]
+	[% END %]
+
+        [% END %]
+
+
+      </table>
+    <table style="width: 100%;" border="0">
+    <tr><td style="text-align: left; white-space: nowrap;">
+      [% IF is_owner %]
+        <br />
+        <input type="submit" name="action_del" value="[%|loc%]Delete selected email addresses[%END%]" />
+        <input type="checkbox" name="quiet" /> [%|loc%]quiet[%END%]
+	<input type="submit" name="action_resetbounce" value="[%|loc%]Reset errors for selected users[%END%]" />
+      [% END %]
+    </td><td style="text-align: right; white-space: nowrap;">
+        [% IF prev_page %]
+	  <a href="[% path_cgi %]/reviewbouncing/[% list %]/[% prev_page %]/[% size %]"><img src="[% icons_url %]/left.png" style="border: 0px;" alt="[%|loc%]Previous page[%END%]" /></a>
+        [% END %]
+        [% IF page %]
+  	  [%|loc(page,total_page)%]page %1 / %2[%END%]
+        [% END %]
+        [% IF next_page %]
+	  <a href="[% path_cgi %]/reviewbouncing/[% list %]/[% next_page %]/[% size %]"><img src="[% icons_url %]/right.png" style="border: 0px;" alt="[%|loc%]Next page[%END%]" /></a>
+        [% END %]
+    </td></tr>
+    <tr><td><input type="button" value="[%|loc%]Toggle Selection[%END%]" onclick="toggle_selection(document.myform.email)" />
+    </td></tr>
+    </table>
+
+
+      </form>
+
+
+

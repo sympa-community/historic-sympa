@@ -1,0 +1,76 @@
+<!-- $Id$ -->
+
+<br />
+
+<br />
+<table border="0" style="width: 100%;">
+<tr style="background-color: [% light_color %];">
+<td>
+<table border="0" style="width: 100%;">
+<tr style="background-color: [% light_color %];">
+ <td><strong>[%|loc%]Listname :[%END%]</strong></td><td style="width: 100%;">[% list %]</td>
+</tr>
+<tr style="background-color: [% light_color %];">
+ <td><strong>[%|loc%]Subject :[%END%] </strong></td><td style="width: 100%;">[% list_subject %]</td>
+</tr>
+<tr style="background-color: [% light_color %];">
+ <td style="white-space: nowrap;"><strong>[%|loc%]List requested by[%END%] </strong></td><td style="width: 100%;">[% list_request_by %] [%|loc(list_request_date)%] on %1[%END%]</td>
+</tr>
+</table>
+</td>
+</tr>
+</table>
+<br /><br />
+[% IF is_listmaster %]
+[% IF list_status == 'pending' %]
+<div>
+<form action="[% path_cgi %]" method="post">
+<input type="hidden" name="list" value="[% list %]" />
+<input type="hidden" name="serial" value="[% list_serial %]" />
+
+<ul style="list-style-type: none; display: inline;">
+<li style="display: inline; margin-right: 1em; margin-left: 1em;"><label><input type="radio" name="status" value="closed" />[%|loc%]Close it[%END%]</label></li>
+<li style="display: inline; margin-right: 1em; margin-left: 1em;"><label><input type="radio" name="status" value="open" />[%|loc%]Install it[%END%]</label></li>
+</ul>
+<input type="submit" name="action_install_pending_list" value="[%|loc%]submit[%END%]" />
+<label><input type="checkbox" name="notify" checked="checked" />[%|loc%]notify owner[%END%]</label>
+</form>
+</div>
+<br /><hr /><br />
+[% END %]
+[% END %]
+<table border="0" style="width: 100%;">
+<tr>
+ <td style="text-align: center;">
+   <strong>[%|loc%]Information file[%END%]</strong> 
+   [% IF is_listmaster %]
+      ([% list_info %])
+   [% END %]
+ </td>
+</tr>
+<tr>
+ <td>
+     <table style="width: 100%;" border="1">
+      <tr><td><pre style="font-family: monospace;">
+       [% INSERT 'info' %]
+      </pre></td></tr>
+     </table>
+ </td>
+</tr>
+<tr>
+ <td style="text-align: center;"><strong>[%|loc%]Configuration file[%END%]</strong>
+   [% IF is_listmaster %]
+      ([% list_config %])
+   [% END %]
+ </td>
+</tr><tr>
+ <td><table style="width: 100%;" border="1">
+      <tr><td><pre style="font-family: monospace;">
+        [% INSERT 'config' %]
+      </pre></td></tr>
+     </table>
+ </td>
+</tr>
+</table>
+
+

@@ -67,13 +67,13 @@ sub sortbydomain {
 }
 
 ## Safefork does several tries before it gives up.
-## Do 3 trials and wait 10 seconds between each.
+## Do 3 trials and wait 10 seconds * $i between each.
 ## Exit with a fatal error is fork failed after all
 ## tests have been exhausted.
 sub safefork {
    my($i, $pid);
    
-   for ($i = 1; $i < 360; $i++) {
+   for ($i = 1; $i < 4; $i++) {
       my($pid) = fork;
       return $pid if (defined($pid));
       do_log ('warning', "Can't create new process in safefork: %m");
@@ -97,7 +97,7 @@ sub checkcommand {
    ## Check for commands in the subject.
    my $subject = $msg->head->get('Subject');
    if ($subject) {
-       if ($Conf{'misaddressed_commands_regexp'} && ($subject =~ /^$Conf{'misaddressed_commands_regexp'}$/im)) {
+       if ($Conf{'misaddressed_commands_regexp'} && ($subject =~ /^$Conf{'misaddressed_commands_regexp'}\b/im)) {
 	   &rejectMessage($msg, $sender,$robot);
 	   return 1;
        }
@@ -106,7 +106,7 @@ sub checkcommand {
    return 0 if ($#{$msg->body} >= 5);  ## More than 5 lines in the text.
 
    foreach $i (@{$msg->body}) {
-       if ($Conf{'misaddressed_commands_regexp'} && ($i =~ /^$Conf{'misaddressed_commands_regexp'}$/im)) {
+       if ($Conf{'misaddressed_commands_regexp'} && ($i =~ /^$Conf{'misaddressed_commands_regexp'}\b/im)) {
 	   &rejectMessage($msg, $sender, $robot);
 	   return 1;
        }
@@ -839,28 +839,27 @@ sub as_singlepart {
     my ($msg, $preferred_type) = @_;
     my $done = 0;
     
-    # First, if the message has a type of multipart/alternative
-    # make this the main message so we can get at the sub parts
-    my @parts = $msg->parts();
-    foreach my $index (0..$#parts) {
-        if ($parts[$index]->effective_type() =~ /^multipart\/alternative/) {
-            ## Only keep the multipart/alternative part
-            $msg->parts([$parts[$index]]);
-            $msg->make_singlepart();
-            last;
-        }
-    }
-
-    # Now look for the preferred_type and if found, make this the main message
-    @parts = $msg->parts();
-    foreach my $index (0..$#parts) {
-	if ($parts[$index]->effective_type() =~ /^$preferred_type$/) {
-	    ## Only keep the first matching part
-	    $msg->parts([$parts[$index]]);
-	    $msg->make_singlepart();
-	    $done = 1;
-	    last;
+    if ($msg->effective_type() =~ /^multipart\/alternative/) {
+	my @parts = $msg->parts();
+	foreach my $index (0..$#parts) {
+	    if (($parts[$index]->effective_type() =~ /^$preferred_type$/) ||
+		(
+		 ($parts[$index]->effective_type() =~ /^multipart\/related$/) &&
+		 ($parts[$index]->parts(0)->effective_type() =~ /^$preferred_type$/))) {
+		## Only keep the first matching part
+		$msg->parts([$parts[$index]]);
+		$msg->make_singlepart();
+		$done = 1;
+		last;
+	    }
 	}
+    }elsif ($msg->effective_type() =~ /^multipart/) {
+	my @parts = $msg->parts();
+	foreach my $index (0..$#parts) {
+	    if ($parts[$index]->effective_type() =~ /^multipart\/alternative/) {
+		$done ||= &as_singlepart($parts[$index], $preferred_type);
+	    }
+	}    
     }
 
     return $done;
@@ -1103,6 +1102,7 @@ sub split_mail {
 		    return undef;
 		}
 		$decoder->decode(\*BODY, \*OFILE);
+		close BODY;
 		unlink "$dir/$pathname.$fileExt.$encoding";
 	    }else {
 		$message->print_body (\*OFILE) ;
@@ -1554,7 +1554,7 @@ sub write_pid {
 sub get_message_id {
     my $robot = shift;
 
-    my $id = sprintf 'sympa.%d.%d.%d@%s', time, $$, int(rand(999)), $robot;
+    my $id = sprintf '<sympa.%d.%d.%d@%s>', time, $$, int(rand(999)), $robot;
 
     return $id;
 }
@@ -1616,7 +1616,7 @@ sub remove_dir {
 	    do_log('info',"$current_dir not removed (not enough / in directory name)");
 	    next;
 	}
-	finddepth(\&del,$current_dir);
+	finddepth({wanted => \&del, no_chdir => 1},$current_dir);
     }
     sub del {
 	my $name = $File::Find::name;

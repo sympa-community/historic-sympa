@@ -1,0 +1,51 @@
+<!-- $Id$ -->
+
+
+<h2> <strong>
+ [% IF count %]
+   [%|loc(count)%] The %1 latest shared documents [%END%] 
+ [% ELSE %]
+   [%|loc%] The latest shared documents [%END%] 
+ [% END %]
+
+ [% IF for %]
+   [%|loc(for)%] for %1 days [%END%] 	
+ [% END %]
+</strong> </h2> 	
+<br /> 
+ 
+<table style="width: 100%;">
+ <tr style="background-color: [% light_color %]">
+   <th style="width: 10%;"><strong>[%|loc%]Last update[%END%]</strong></th>
+   <th><strong>[%|loc%]Name[%END%]</strong></th>
+   <th><strong>[%|loc%]Author[%END%]</strong></th>
+   <th><strong>[%|loc%]Directory[%END%]</strong></th>
+ </tr>
+
+ [% FOREACH d = documents %]
+ <tr>
+   <td> [% d.last_update %] </td>
+   <td>
+    [% IF d.html %]
+      <a href="[% path_cgi %]/d_read/[% list %][% d.escaped_content_dir %]/[% d.escaped_name %]" target="html_window">
+      <img style="vertical-align: bottom; border: 0px;" src="[% d.icon %]" alt="[% d.escaped_title %]" /> [% d.name %] </a>
+    [% ELSIF d.url %]
+      <a href="[% d.url %]" target="html_window">
+      <img style="vertical-align: bottom; border: 0px;" src="[% d.icon %]" alt="[% d.escaped_title %]" /> [% d.anchor %] </a>
+    [% ELSE %]
+      <a href="[% path_cgi %]/d_read/[% list %][% d.escaped_content_dir %]/[% d.escaped_name %]">
+	  <img style="text-align: bottom; border: 0px;" src="[% d.icon %]" alt="[% d.escaped_title %]" /> [% d.name %] </a>
+    [% END %] 
+
+   <td> [% IF d.author %] 
+           [% d.author %] 
+	[% ELSE %]
+	   [%|loc%]Unknown[%END%] 
+	[% END %] 
+   </td>
+   <td> <a href="[% path_cgi %]/d_read/[% list %][% d.escaped_content_dir %]"/> [% d.content_dir %] </td>
+ </tr>
+ 
+ [% END %]  
+
+</table>

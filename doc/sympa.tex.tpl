@@ -642,7 +642,7 @@ a virtual robot or for the whole site.
 	The daemon which manages the tasks : creation, checking, execution. 
 	It regularly scans the \dir {task/} spool.
 
-	\item \file {sympa\_soap\_server.pl}\\
+	\item \file {sympa\_soap\_server.fcgi}\\
 	The server will process SOAP (web services) request. This server requires FastCGI ;
 	it should be referenced from within your HTTPS config.
 
@@ -1417,7 +1417,7 @@ You can also add a unique entry, with a regular expression, for your domain.
 
 With Postfix, you should edit the \file {/etc/postfix/virtual.regexp} file as follows :
 \begin {quote}
-/\verb+^+(.*)\samplerobot\$/	 \samplerobot-\${1}
+/\verb+^+(.*)@\samplerobot\$/	 \samplerobot-\${1}
 \end {quote}
  Entries in the 'aliases' file will look like this :
 \begin {quote}
@@ -1499,7 +1499,7 @@ is still recognized but should not be used anymore.
 
 	This is the root URL of Sympa's SOAP server. Sympa's WSDL document refer to this URL in its \texttt {service} section.
 
-        \example {wwsympa\_url http://my.server/sympasoap}
+        \example {soap\_url http://my.server/sympasoap}
 
 \subsection {\cfkeyword {spam\_protection}}  
 
@@ -2187,6 +2187,14 @@ db_additional_user_fields 	address,gender
 \end {quote}
 
 
+\subsection {\cfkeyword {purge\_user\_table\_task}}
+
+\label{purge-user-table-task}
+
+This parameter refers to the name of the task (\example {monthly}) that will be regularly run
+by the \file {task\_manager.pl} to remove entries in the \textindex {user\_table} table that
+have no corresponding entries in the \textindex {subscriber\_table} table.
+
 \section {Loop prevention}
 
    The following define your loop prevention policy for commands.
@@ -2250,7 +2258,7 @@ The password for list private key encryption. If not
 \label {certificate-task-config}
 \subsection {\cfkeyword {chk\_cert\_expiration\_task}}
 
-States the model version used to create the task which regurlaly checks the certificate
+States the model version used to create the task which regularly checks the certificate
 expiration dates and warns users whose certificate have expired or are going to.
 To know more about tasks, see \ref {tasks}, page~\pageref {tasks}.
 
@@ -2943,8 +2951,8 @@ You \textbf {NEED TO} install FastCGI for the SOAP server to work properly becau
 Here is a sample piece of your Apache \file {httpd.conf} with a SOAP server configured :
 \begin {quote}
 \begin{verbatim}
-	FastCgiServer [CGIDIR]/sympa_soap_server.pl -processes 1
-	ScriptAlias /sympasoap [CGIDIR]/sympa_soap_server.pl
+	FastCgiServer [CGIDIR]/sympa_soap_server.fcgi -processes 1
+	ScriptAlias /sympasoap [CGIDIR]/sympa_soap_server.fcgi
 
 	<Location /sympasoap>
    	  SetHandler fastcgi-script
@@ -3588,7 +3596,7 @@ The cookie format is :
 sympauser=<user_email>:<checksum>
 \end{verbatim}
 where \texttt{<}user\_email\texttt{>} is the user's complete e-mail address, and
-\texttt{<}checksum\texttt{>} are the 8 first bytes of the a MD5 checksum of the \texttt{<}user\_email\texttt{>}+\Sympa \cfkeyword {cookie}
+\texttt{<}checksum\texttt{>} are the 8 last bytes of the a MD5 checksum of the \texttt{<}user\_email\texttt{>}+\Sympa \cfkeyword {cookie}
 configuration parameter.
 Your application needs to know what the \cfkeyword {cookie} parameter
 is, so it can check the HTTP cookie validity ; this is a secret shared
@@ -3923,12 +3931,15 @@ a specific email address for the robot itself and its lists and also a virtual
 http server. Each robot provides access to a set of lists, each list is
 related to only one robot.
 
-Most configuration parameters can be define for each robot except 
+Most configuration parameters can be redefined for each robot except 
 general Sympa installation parameters (binary and spool location, smtp engine,
 antivirus plugging,...).
 
 The Virtual robot name as defined in \Sympa documentation and configuration file refers
 to the Internet domaine of the Virtual robot.
+
+Note that the main limitation of virtual robots in Sympa is that you cannot create 
+2 lists with the same name (local part) among your virtual robots.
 
 \section {How to create a virtual robot}
 
@@ -4001,6 +4012,9 @@ Only the following parameters can be redefined for a particular robot :
 
 	\item \cfkeyword {wwsympa\_url} \\
 	The base URL of WWSympa
+
+	\item \cfkeyword {soap\_url} \\
+	The base URL of Sympa's SOAP server (if it is running ; see ~\ref {soap}, page~\pageref {soap})
 
 	\item \cfkeyword {cookie\_domain}
 
@@ -6091,20 +6105,18 @@ Example : (cn=testgroup,dc=cru,dc=fr should be a groupOfUniqueNames here)
 \begin{verbatim}
 
     include_ldap_2level_query
-    host ldap.cru.fr
-    suffix1 cn=testgroup, dc=cru, dc=fr
-    timeout1 10
-    filter1 (objectClass=*)
-    attrs1 uniqueMember
+    host ldap.univ.fr
+    port 389
+    suffix1 ou=Groups,dc=univ,dc=fr
+    scope1 one
+    filter1 (&(objectClass=groupOfUniqueNames) (| (cn=cri)(cn=ufrmi)))
+    attrs1 uniquemember
     select1 all
-    scope1 base
-    suffix2 dc=cru, dc=fr
-    timeout2 10
-    filter2 (&(dn=[attrs1]) (c=fr))
+    suffix2 [attrs1]
+    scope2 base
+    filter2 (objectClass=n2pers)
     attrs2 mail
-    select2 regex
-    regex2 ^*@cru.fr$
-    scope2 one
+    select2 first
 
 \end{verbatim}
 \end {quote}

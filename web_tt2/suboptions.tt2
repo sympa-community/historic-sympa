@@ -1,0 +1,33 @@
+<!-- $Id$ -->
+
+  <form action="[% path_cgi %]" method="post">
+
+  [%|loc%]You are subscribed since[%END%] <span style="color: [% dark_color %];">[% subscriber.date %]</span>  <br /><br />
+  [%|loc%]Last update:[%END%] <span style="color: [% dark_color %];">[% subscriber.update_date %]</span>  <br /><br />
+     <input type="hidden" name="list" value="[% list %]" />
+     [%|loc%]Reception mode :[%END%] 
+     <select name="reception">
+        [% FOREACH r = reception %]
+          <option value="[% r.key %]" [% r.value.selected %]>[% r.value.description %]</option>
+        [% END %]
+     </select>
+
+     [% PROCESS 'button_header.tt2' %]
+     <td style="white-space: nowrap; background-color: [% light_color %]; text-align: center;"> 
+      <a href="[% path_cgi %]/nomenu/help/user_options" onclick="window.open('','wws_help','toolbar=no,location=no,directories=no,status=no,menubar=no,scrollbars=yes,resizable=yes,copyhistory=no,width=400,height=200')" target="wws_help">
+     <span style="font-size: smaller;"><strong>Help</strong></span></a>
+     </td>
+     [% PROCESS 'button_footer.tt2' %]
+
+     <br />
+     [%|loc%]Visibility :[%END%]
+     <select name="visibility">
+        [% FOREACH r = visibility %]
+          <option value="[% r.key %]" [% r.value.selected %]>[% r.value.description %]</option>
+        [% END %]
+     </select>
+
+     <br />
+     <input type="submit" name="action_set" value="[%|loc%]Update[%END%]" />
+     
+</form>
