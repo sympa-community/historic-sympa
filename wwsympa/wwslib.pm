@@ -42,36 +42,36 @@ use Exporter;
 		   'not_me' => 'not_me');
 
 ## Cookie expiration periods with corresponding entry in NLS
-%cookie_period = (0     => 1,
-		  10    => 2,
-		  30    => 3, 
-		  60    => 4,
-		  360   => 5,
-		  1440  => 6, 
-		  43200 => 7);
+%cookie_period = (0     => "session",
+		  10    => "10 minutes",
+		  30    => "30 minutes", 
+		  60    => "1 hour",
+		  360   => "6 hours",
+		  1440  => "1 day", 
+		  43200 => "1 week");
 
 %visibility_mode = ('noconceal' => 'public',
 		    'conceal' => 'conceal');
 
 ## Filenames with corresponding entry in NLS set 15
-%filenames = ('welcome.tpl' => 1,
-	      'bye.tpl' => 2,
-	      'removed.tpl'=> 3,
-	      'message.footer' => 4,
-	      'message.header' => 5,
-	      'remind.tpl' => 6,
-	      'reject.tpl' => 7,
-	      'invite.tpl' => 8,
-	      'helpfile.tpl' => 9,
-	      'lists.tpl' => 10,
-	      'global_remind.tpl' => 11,
-	      'summary.tpl' => 12,
-	      'info' => 13,
-	      'homepage' => 14,
-	      'create_list_request.tpl' => 15,
-	      'list_created.tpl' => 16,
-	      'your_infected_msg.tpl' => 17,
-	      'list_aliases.tpl' => 18
+%filenames = ('welcome.tpl' => "welcome message",
+	      'bye.tpl' => "unsubscription message",
+	      'removed.tpl'=> "deletion message",
+	      'message.footer' => "message footer",
+	      'message.header' => "message header",
+	      'remind.tpl' => "remind message",
+	      'reject.tpl' => "editor rejection message",
+	      'invite.tpl' => "subscribing invitation message",
+	      'helpfile.tpl' => "help file",
+	      'lists.tpl' => "directory of lists",
+	      'global_remind.tpl' => "global remind message",
+	      'summary.tpl' => "summary message",
+	      'info' => "list description",
+	      'homepage' => "list homepage",
+	      'create_list_request.tpl' => "list creation request message",
+	      'list_created.tpl' => "list creation notification message",
+	      'your_infected_msg.tpl' => "virus infection message",
+	      'list_aliases.tpl' => "list aliases template"
 	      );
 
 ## Defined in RFC 1893

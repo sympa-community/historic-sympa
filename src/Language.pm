@@ -24,7 +24,7 @@ package Language;
 require Exporter;
 use Carp;
 @ISA = qw(Exporter);
-@EXPORT = qw(Msg);
+@EXPORT = qw(Msg gettext);
 
 use strict;
 use Log;

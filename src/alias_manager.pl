@@ -31,7 +31,7 @@ require "tt2native.pl";
 
 
 unless (Conf::load('--CONFIG--')) {
-   print Msg(1, 1, "Configuration file --CONFIG-- has errors.\n");
+   print gettext("The configuration file contains errors.\n");
    exit(1);
 }
 my $tmp_alias_file = $Conf{'tmpdir'}.'/sympa_aliases.'.time;

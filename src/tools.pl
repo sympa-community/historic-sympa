@@ -104,28 +104,14 @@ sub rejectMessage {
 
    *REJ = smtp::smtpto(&Conf::get_robot_conf($robot, 'request'), \$sender);
    print REJ "To: $sender\n";
-   print REJ "Subject: [sympa] " . Msg(5, 2, "Misadressed message ?") . "\n";
-   printf REJ "MIME-Version: %s\n", Msg(12, 1, '1.0');
-   printf REJ "Content-Type: text/plain; charset=%s\n", Msg(12, 2, 'us-ascii');
-   printf REJ "Content-Transfer-Encoding: %s\n", Msg(12, 3, '7bit');
+   print REJ "Subject: [sympa] " . gettext("Routing error ?") . "\n";
+   printf REJ "MIME-Version: %s\n", gettext("1.0");
+   printf REJ "Content-Type: text/plain; charset=%s\n", gettext("us-ascii");
+   printf REJ "Content-Transfer-Encoding: %s\n", gettext("7bit");
    print REJ "\n";
-   printf REJ Msg(5, 3, "\
-Your message has been sent to a list but it seems it contains commands like
-subscribe, signoff, help, index, get, ...
-
-If your message did really contain a command, please note that such messages
-must be sent to %s only.
-
-If it happens that your message was by mistake considered as containing
-commands, then please contact the manager of this service %s
-so that he can take care of your problem.
-
-Thank you for your attention.
-
------- Beginning of the suspect message --------
-"), &Conf::get_robot_conf($robot, 'sympa'), &Conf::get_robot_conf($robot, 'request');
+   printf REJ gettext("The following message was sent to a list while it seems to contain\n"commands like subscribe, unsubscribe, help, index, get, ...\n\n"If your message effectively contained a command, please notice that \n"commands should never ever be sent to lists. Commands must be sent\n"to %s exclusively.\n\n"If your message was effectively addressed to the list, it has been\n"interpreted by the software as a command. Please contact the manager\n"of the service : %s so that they can take care of your message.\n\n"Thank you for your attention.\n\n------ Beginning of suspected message ------\n"), &Conf::get_robot_conf($robot, 'sympa'), &Conf::get_robot_conf($robot, 'request');
    $msg->print(\*REJ);
-   print REJ Msg(5, 4, "------- Fin message suspect ---------\n");
+   print REJ gettext("------ End of suspected message ------\n");
    close(REJ);
 }
 

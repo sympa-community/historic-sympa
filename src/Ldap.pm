@@ -68,7 +68,6 @@ sub load {
 	
 	    $o{$keyword} = [ $value, $line_num ];
 	}else {
-#	    printf STDERR Msg(1, 3, "Malformed line %d: %s"), $config, $_;
 	    $config_err++;
 	}
     }

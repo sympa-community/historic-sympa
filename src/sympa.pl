@@ -164,11 +164,6 @@ $main::options{'lang'} =~ s/\.cat$//; ## Compatibility with version < 2.3.3
 $Language::default_lang = $main::options{'lang'} || $Conf{'lang'};
 &Language::LoadLang($Conf{'msgcat'});
 
-## Check locale version
-#if (Msg(1, 102, $Version) ne $Version){
-#    &do_log('info', 'NLS message file version %s different from src version %s', Msg(1, 102,""), $Version);
-#} 
-
 ## Main program
 if (!chdir($Conf{'home'})) {
    fatal_err("Can't chdir to %s: %m", $Conf{'home'});
@@ -736,15 +731,15 @@ sub DoFile {
 
 	## Prepare the reply message
 	my $reply_hdr = new Mail::Header;
-#	$reply_hdr->add('From', sprintf Msg(12, 4, 'SYMPA <%s>'), $Conf{'sympa'});
-	$reply_hdr->add('From', sprintf Msg(12, 4, 'SYMPA <%s>'), &Conf::get_robot_conf($robot, 'sympa'));
+#	$reply_hdr->add('From', sprintf gettext("SYMPA <%s>"), $Conf{'sympa'});
+	$reply_hdr->add('From', sprintf gettext("SYMPA <%s>"));
 	$reply_hdr->add('To', $sender);
-	$reply_hdr->add('Subject', Msg(4, 17, 'Output of your commands'));
+	$reply_hdr->add('Subject', gettext("Results of your commands"));
 	$reply_hdr->add('X-Loop', &Conf::get_robot_conf($robot, 'sympa'));
-	$reply_hdr->add('MIME-Version', Msg(12, 1, '1.0'));
+	$reply_hdr->add('MIME-Version', gettext("1.0"));
 	$reply_hdr->add('Content-type', sprintf 'text/plain; charset=%s', 
-			Msg(12, 2, 'us-ascii'));
-	$reply_hdr->add('Content-Transfer-Encoding', Msg(12, 3, '7bit'));
+			gettext("us-ascii"));
+	$reply_hdr->add('Content-Transfer-Encoding', gettext("7bit"));
 	
 	## Open the SMTP process for the response to the command.
 	*FH = &smtp::smtpto(&Conf::get_robot_conf($robot, 'request'), \$sender);
@@ -970,13 +965,13 @@ sub DoMessage{
     if ($max_size && $message->{'size'} > $max_size) {
 	do_log('notice', 'Message for %s from %s rejected because too large (%d > %d)', $name, $sender, $message->{'size'}, $max_size);
 	*SIZ  = smtp::smtpto(&Conf::get_robot_conf($robot, 'request'), \$sender);
-	print SIZ "From: " . sprintf (Msg(12, 4, 'SYMPA <%s>'), &Conf::get_robot_conf($robot, 'request')) . "\n";
+	print SIZ "From: " . sprintf (gettext("SYMPA <%s>")) . "\n";
 	printf SIZ "To: %s\n", $sender;
-	printf SIZ "Subject: " . Msg(4, 11, "Your message for list %s has been rejected") . "\n", $name;
-	printf SIZ "MIME-Version: %s\n", Msg(12, 1, '1.0');
-	printf SIZ "Content-Type: text/plain; charset=%s\n", Msg(12, 2, 'us-ascii');
-	printf SIZ "Content-Transfer-Encoding: %s\n\n", Msg(12, 3, '7bit');
-	print SIZ Msg(4, 12, $msg::msg_too_large);
+	printf SIZ "Subject: " . gettext("Your message to %s has been rejected") . "\n", $name;
+	printf SIZ "MIME-Version: %s\n", gettext("1.0");
+	printf SIZ "Content-Type: text/plain; charset=%s\n", gettext("us-ascii");
+	printf SIZ "Content-Transfer-Encoding: %s\n\n", gettext("7bit");
+	print SIZ gettext("Your message could not be sent because its size \nwas over the maximum size allowed on this list.\n");
 	$message->{'msg'}->print(\*SIZ);
 	close(SIZ);
 	return undef;
@@ -1052,13 +1047,13 @@ sub DoMessage{
 		$list->send_file($tpl, $sender, $robot, {});
 	    }else {
 		*SIZ  = smtp::smtpto(&Conf::get_robot_conf($robot, 'request'), \$sender);
-		print SIZ "From: " . sprintf (Msg(12, 4, 'SYMPA <%s>'), &Conf::get_robot_conf($robot, 'request')) . "\n";
+		print SIZ "From: " . sprintf (gettext("SYMPA <%s>")) . "\n";
 		printf SIZ "To: %s\n", $sender;
-		printf SIZ "Subject: " . Msg(4, 11, "Your message for list %s has been rejected")."\n", $name ;
-		printf SIZ "MIME-Version: %s\n", Msg(12, 1, '1.0');
-		printf SIZ "Content-Type: text/plain; charset=%s\n", Msg(12, 2, 'us-ascii');
-		printf SIZ "Content-Transfer-Encoding: %s\n\n", Msg(12, 3, '7bit');
-		printf SIZ Msg(4, 15, $msg::list_is_private), $name;
+		printf SIZ "Subject: " . gettext("Your message to %s has been rejected")."\n", $name ;
+		printf SIZ "MIME-Version: %s\n", gettext("1.0");
+		printf SIZ "Content-Type: text/plain; charset=%s\n", gettext("us-ascii");
+		printf SIZ "Content-Transfer-Encoding: %s\n\n", gettext("7bit");
+		printf SIZ gettext("Your message for list %s has been rejected.\nThe message is thus sent back to you.\n\nYour message :\n"), $name;
 		$message->{'msg'}->print(\*SIZ);
 		close(SIZ);
 	    }
@@ -1134,7 +1129,7 @@ sub DoCommand {
 	    or !($content_type) 
 	    or ($content_type =~ /text\/plain/i)) {
 	do_log('notice', "Ignoring message body not in text/plain, Content-type: %s", $content_type);
-	print Msg(4, 37, "Ignoring message body not in text/plain, please use text/plain only \n(or put your command in the subject).\n");
+	print gettext("Ignoring message body not in text/plain, please use text/plain only \n(or put your command in the subject).\n");
 	
 	return $success;
     }
@@ -1180,7 +1175,7 @@ sub DoCommand {
 	    &do_log('debug2',"is_signed->body $is_signed->{'body'}");
 
 	    unless ($status = Commands::parse($sender, $robot, $i, $is_signed->{'body'})) {
-		push @msg::report, sprintf Msg(4, 19, "Command not understood: ignoring end of message.\n");
+		push @msg::report, sprintf gettext("Command not understood: ignoring end of message.\n");
 		last;
 	    }
 
@@ -1202,7 +1197,7 @@ sub DoCommand {
 	## No status => no command
 	unless (defined $success) {
 	    do_log('info', "No command found in message");
-	    push @msg::report, sprintf Msg(4, 39, "No command found in message");
+	    push @msg::report, sprintf gettext("No command found in message");
 	}
 	return undef;
     }
@@ -1211,7 +1206,7 @@ sub DoCommand {
     if ($expire){
 	print STDERR "expire\n";
 	unless (&Commands::parse($sender, $robot, $expire, @msgexpire)) {
-	    print Msg(4, 19, "Command not understood: ignoring end of message.\n");
+	    print gettext("Command not understood: ignoring end of message.\n");
 	}
     }
 
@@ -1223,7 +1218,7 @@ sub SendDigest{
     &do_log('debug', 'SendDigest()');
 
     if (!opendir(DIR, $Conf{'queuedigest'})) {
-	fatal_err(Msg(3, 1, "Can't open dir %s: %m"), $Conf{'queuedigest'}); ## No return.
+	fatal_err(gettext("Unable to access directory %s : %m"), $Conf{'queuedigest'}); ## No return.
     }
     my @dfile =( sort grep (!/^\./,readdir(DIR)));
     closedir(DIR);
@@ -1294,14 +1289,14 @@ sub ProcessExpire{
 	
 	    ## Prepare the reply message
 	    my $reply_hdr = new Mail::Header;
-	    $reply_hdr->add('From', sprintf Msg(12, 4, 'SYMPA <%s>'), $Conf{'sympa'});
+	    $reply_hdr->add('From', sprintf gettext("SYMPA <%s>"), $Conf{'sympa'});
 	    $reply_hdr->add('To', $proprio);
- 	    $reply_hdr->add('Subject',sprintf( Msg(4, 24, 'End of your command EXPIRE on list %s'),$expire));
+ 	    $reply_hdr->add('Subject',sprintf( gettext("End of your EXPIRE command on list %s"),$expire));
 
-	    $reply_hdr->add('MIME-Version', Msg(12, 1, '1.0'));
-	    my $content_type = 'text/plain; charset='.Msg(12, 2, 'us-ascii');
+	    $reply_hdr->add('MIME-Version', gettext("1.0"));
+	    my $content_type = 'text/plain; charset='.gettext("us-ascii");
 	    $reply_hdr->add('Content-type', $content_type);
-	    $reply_hdr->add('Content-Transfer-Encoding', Msg(12, 3, '7bit'));
+	    $reply_hdr->add('Content-Transfer-Encoding', gettext("7bit"));
 
 	    ## Open the SMTP process for the response to the command.
 	    *FH = &smtp::smtpto($Conf{'request'}, \$proprio);
@@ -1324,9 +1319,9 @@ sub ProcessExpire{
 	    }
 
 	    ## Message to the owner who launched the expire command
-	    printf Msg(4, 28, "Among the subscribers of list %s for %d days, %d did not confirm their subscription.\n"), $listname, $d1, $cpt_badboys;
+	    printf gettext("Among subscriber of list %s since %d days, %d didn't confirm there subscription.\n"), $listname, $d1, $cpt_badboys;
 	    print "\n";
-	    printf Msg(4, 26, "Subscribers who do not have confirm their subscription:\n");	
+	    printf gettext("These subscribers are :\n");	
 	    print "\n";
 	
 	    my $temp=0;
@@ -1344,7 +1339,7 @@ sub ProcessExpire{
 		$temp=1 if ($temp == 0);
 	    }
 	    print "\n\n";
-	    printf Msg(4, 27, "You must delete these subscribers from this list with the following commands :\n");
+	    printf gettext("If you want to remove these subscriber from the list, use the following commands :\n");
 	    print "\n";
 
 	    unless ($user = $list->get_first_user()) {

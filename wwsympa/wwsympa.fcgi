@@ -576,7 +576,7 @@ if ($wwsconf->{'use_fast_cgi'}) {
 
 	 $param->{'lang'} = $param->{'cookie_lang'} || $param->{'user'}{'lang'} || $list->{'admin'}{'lang'} || &Conf::get_robot_conf($robot, 'lang');
 	 &Language::SetLang($param->{'lang'});
-	 &POSIX::setlocale(&POSIX::LC_ALL, Msg(14, 1, 'en_US'));
+	 &POSIX::setlocale(&POSIX::LC_ALL, gettext("en_US"));
 
 	 ## use default_home parameter
 	 if ($action eq 'home') {
@@ -679,7 +679,7 @@ if ($wwsconf->{'use_fast_cgi'}) {
      my $saved_lang = &Language::GetLang();
      foreach my $l (@wwslib::languages) {
 	 &Language::SetLang($l) || next;
-	 $param->{'languages'}{$l}{'complete'} = sprintf Msg(14, 2, $l);
+	 $param->{'languages'}{$l}{'complete'} = sprintf gettext("english");
 	 if ($param->{'lang'} eq $l) {
 	     $param->{'languages'}{$l}{'selected'} = 'SELECTED';
 	 }else {
@@ -2364,7 +2364,7 @@ if ($wwsconf->{'use_fast_cgi'}) {
 	 my $entry = {'value' => $p};
 
 	 ## Set description from NLS
-	 $entry->{'desc'} = sprintf Msg(17, $wwslib::cookie_period{$p}, $p);
+	 $entry->{'desc'} = sprintf gettext($wwslib::cookie_period{$p});
 
 	 ## Choose nearest delay
 	 if ((! $selected) && $param->{'user'}{'cookie_delay'} >= $p) {
@@ -2682,8 +2682,8 @@ if ($wwsconf->{'use_fast_cgi'}) {
 
 	 unless ($sub_is =~ /quiet/i ) {
 	     my %context;
-	     $context{'subject'} = sprintf(Msg(8, 6, "Welcome to list %s"), $list->{'name'});
-	     $context{'body'} = sprintf(Msg(8, 6, "You are now subscriber of list %s"), $list->{'name'});
+	     $context{'subject'} = sprintf(gettext("Welcome on list %s"), $list->{'name'});
+	     $context{'body'} = sprintf(gettext("Welcome on list %s"), $list->{'name'});
 	     $list->send_file('welcome', $param->{'user'}{'email'}, $robot, \%context);
 	 }
 
@@ -2911,8 +2911,8 @@ if ($wwsconf->{'use_fast_cgi'}) {
 	 }
 
 	 my %context;
-	 $context{'subject'} = sprintf(Msg(6 , 71, 'Signoff from list %s'), $list->{'name'});
-	 $context{'body'} = sprintf(Msg(6 , 31, "You have been removed from list %s.\n Thanks for being with us.\n"), $list->{'name'});
+	 $context{'subject'} = sprintf(gettext("Unsubscribe from list %s"), $list->{'name'});
+	 $context{'body'} = sprintf(gettext("You have been removed from list %s.\n"), $list->{'name'});
 	 ## perform which to update your_subscribtions cookie ;
 	 @{$param->{'get_which'}} = &List::get_which($param->{'user'}{'email'},$robot,'member') ; 
 
@@ -3060,7 +3060,7 @@ if ($wwsconf->{'use_fast_cgi'}) {
      ## Messages edition
      foreach my $f ('info','homepage','welcome.tpl','bye.tpl','removed.tpl','message.footer','message.header','remind.tpl','invite.tpl','reject.tpl') {
 	 next unless ($list->may_edit($f, $param->{'user'}{'email'}) eq 'write');
-	 $param->{'files'}{$f}{'complete'} = Msg(15, $wwslib::filenames{$f}, $f);
+	 $param->{'files'}{$f}{'complete'} = gettext($wwslib::filenames{$f});
 	 $param->{'files'}{$f}{'selected'} = '';
      }
      $param->{'files'}{'info'}{'selected'} = 'SELECTED';
@@ -3094,7 +3094,7 @@ if ($wwsconf->{'use_fast_cgi'}) {
 
      ## Lists Default files
      foreach my $f ('welcome.tpl','bye.tpl','removed.tpl','message.footer','message.header','remind.tpl','invite.tpl','reject.tpl','your_infected_msg.tpl') {
-	 $param->{'lists_default_files'}{$f}{'complete'} = Msg(15, $wwslib::filenames{$f}, $f);
+	 $param->{'lists_default_files'}{$f}{'complete'} = gettext($wwslib::filenames{$f});
 	 $param->{'lists_default_files'}{$f}{'selected'} = '';
      }
 
@@ -3106,7 +3106,7 @@ if ($wwsconf->{'use_fast_cgi'}) {
 
      ## Server files
      foreach my $f ('helpfile.tpl','lists.tpl','global_remind.tpl','summary.tpl','create_list_request.tpl','list_created.tpl','list_aliases.tpl') {
-	 $param->{'server_files'}{$f}{'complete'} = Msg(15, $wwslib::filenames{$f}, $f);
+	 $param->{'server_files'}{$f}{'complete'} = gettext($wwslib::filenames{$f});
 	 $param->{'server_files'}{$f}{'selected'} = '';
      }
      $param->{'server_files'}{'helpfile.tpl'}{'selected'} = 'SELECTED';
@@ -3259,8 +3259,8 @@ if ($wwsconf->{'use_fast_cgi'}) {
 
 	 unless ($in{'quiet'} || ($add_is =~ /quiet/i )) {
 	     my %context;
-	     $context{'subject'} = sprintf(Msg(8, 6, "Welcome to list %s"), $list->{'name'});
-	     $context{'body'} = sprintf(Msg(8, 6, "You are now subscriber of list %s"), $list->{'name'});
+	     $context{'subject'} = sprintf(gettext("Welcome on list %s"), $list->{'name'});
+	     $context{'body'} = sprintf(gettext("Welcome on list %s"), $list->{'name'});
 	     $list->send_file('welcome', $email, $robot, \%context);
 	 }
      }
@@ -3362,8 +3362,8 @@ if ($wwsconf->{'use_fast_cgi'}) {
 
 	 unless ($in{'quiet'}) {
 	     my %context;
-	     $context{'subject'} = sprintf(Msg(6, 18, "You have been removed from list %s\n"), $list->{'name'});
-	     $context{'body'} = sprintf(Msg(6, 31, "You have been removed from list %s.\nThanks for being with us.\n"), $list->{'name'});
+	     $context{'subject'} = sprintf(gettext("Your subscription to list %s has been removed."), $list->{'name'});
+	     $context{'body'} = sprintf(gettext("You have been removed from list %s.\n"), $list->{'name'});
 
 	     $list->send_file('removed', $email, $robot, \%context);
 	 }
@@ -3645,7 +3645,7 @@ if ($wwsconf->{'use_fast_cgi'}) {
 	 ## Messages edition
 	 foreach my $f ('info','homepage','welcome.tpl','bye.tpl','removed.tpl','message.footer','message.header','remind.tpl','invite.tpl','reject.tpl','your_infected_msg.tpl') {
 	     next unless ($list->may_edit($f, $param->{'user'}{'email'}) eq 'write');
-	     $param->{'files'}{$f}{'complete'} = Msg(15, $wwslib::filenames{$f}, $f);
+	     $param->{'files'}{$f}{'complete'} = gettext($wwslib::filenames{$f});
 	     $param->{'files'}{$f}{'selected'} = '';
 	 }
 	 return 1;
@@ -5848,7 +5848,7 @@ if ($wwsconf->{'use_fast_cgi'}) {
 	     my $saved_lang = &Language::GetLang();
 	     foreach my $lang (keys %{$p->{'value'}}) {
 		 &Language::SetLang($lang);
-		 $p->{'value'}{$lang}{'title'} = Msg(14, 2, $lang);
+		 $p->{'value'}{$lang}{'title'} = gettext("english");
 	     }
 	     &Language::SetLang($saved_lang);
 	 }
@@ -5864,7 +5864,7 @@ if ($wwsconf->{'use_fast_cgi'}) {
 
      ## Prepare data structure for the parser
      my $p_glob = {'name' => $name,
-		   'title' => Msg(16, $struct->{'title_id'}, $name),
+		   'title' => gettext($struct->{'title_id'}),
 		   'comment' => $struct->{'comment'}{$param->{'lang'}}
 	       };
 
