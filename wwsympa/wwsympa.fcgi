@@ -2390,6 +2390,10 @@ sub do_redirect {
 	 &error_message('no_filter');
 	 &wwslog('info','do_search: no filter');
 	 return undef;
+     }elsif ($in{'filter'} =~ /[<>\\\*\$]/) {
+	 &error_message('syntax_errors', {'argument' => 'filter'});
+	 &wwslog('err','do_search: syntax error');
+	 return undef;
      }
 
      ## May review
@@ -4297,6 +4301,10 @@ sub do_redirect {
 	 &error_message('missing_argument', {'argument' => 'key_word'});
 	 &wwslog('info','do_arcsearch: no search term');
 	 return undef;
+     }elsif ($in{'key_word'} =~ /[<>\\\*\$]/) {
+	 &error_message('syntax_errors', {'argument' => 'key_word'});
+	 &wwslog('info','do_arcsearch: syntax error');
+	 return undef;
      }
 
      $param->{'key_word'} = $in{'key_word'};
@@ -5486,6 +5494,10 @@ sub do_set_pending_list_request {
      unless ($in{'filter'}) {
 	 &error_message('no_filter');
 	 &wwslog('info','do_search_list: no filter');
+	 return undef;
+     }elsif ($in{'filter'} =~ /[<>\\\*\$]/) {
+	 &error_message('syntax_errors', {'argument' => 'filter'});
+	 &wwslog('err','do_search_list: syntax error');
 	 return undef;
      }
 
@@ -9203,6 +9215,10 @@ sub do_set_pending_list_request {
      unless ($in{'email'}) {
 	 &error_message('missing_arg', {'argument' => 'email'});
 	 &wwslog('info','do_search_user: no email');
+	 return undef;
+     }elsif ($in{'email'} =~ /[<>\\\*\$]/) {
+	 &error_message('syntax_errors', {'argument' => 'email'});
+	 &wwslog('err','do_search_user: syntax error');
 	 return undef;
      }
 
