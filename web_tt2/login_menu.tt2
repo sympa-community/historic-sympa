@@ -27,12 +27,12 @@
         [% IF use_sso %]
 	  <input type="hidden" name="action" value="sso_login" />
           [% IF sso_number == '1' %]
-     	    <strong><div id="menuInactive2">[%|loc%]Magic authentification[%END%]</div></strong>
+     	    <strong><div class="menuInactive2">[%|loc%]Magic authentification[%END%]</div></strong>
             [% FOREACH server = sso %]
               <input type="hidden" name="auth_service_name" value="[% server.key %]" />
             [% END %]
           [% ELSE %]
-     	    <strong><div id="menuInactive2">[%|loc%]Choose your authentication server[%END%]</div></strong>
+     	    <strong><div class="menuInactive2">[%|loc%]Choose your authentication server[%END%]</div></strong>
             <select name="auth_service_name" onchange="this.form.submit();">
             [% FOREACH server = sso %]
                <option value="[% server.key %]">[% server.value %]</option>

@@ -42,8 +42,8 @@ body {
 #Logo {text-align: left; padding-top: 5px; padding-left: 5px;}
 #Logo a {font-size: 72px;}
 #Title {}
-#menuInactive {padding-left: 20px}
-#menuInactive2 {font-size: 14px; text-decoration: none;}
+.menuInactive {padding-left: 20px}
+.menuInactive2 {font-size: 14px; text-decoration: none;}
 #FormLabel {font-size: 12px; font-weight: bold;}
 #ArcCalendar {padding-bottom: 10px;}
 /* #SITELINKS {position: relative; text-align: center;} */

@@ -29,7 +29,7 @@
       [% IF action == 'arc' || action == 'arcsearch_form' || action == 'arcsearch' ||  action == 'arc_protect' %][% SET class = 'menuLinksCurrentPage' %][% ELSE %][% SET class = 'menuLinks' %][% END %]
       <strong><a class="[% class %]" href="[% path_cgi %]/arc/[% list %]" >[%|loc%]Archive[%END%]</a></strong><br />
    [% ELSE %]
-      <div id="menuInactive2">[%|loc%]Archive[%END%]</div><br />
+      <div class="menuInactive2">[%|loc%]Archive[%END%]</div><br />
    [% END %]
 [% END %]
 
@@ -37,7 +37,7 @@
 [% IF action == 'compose_mail' %][% SET class = 'menuLinksCurrentPage' %][% ELSE %][% SET class = 'menuLinks' %][% END %]
           <strong><a class="[% class %]" href="[% path_cgi %]/compose_mail/[% list %]" >[%|loc%]Post[%END%]</a></strong><br />
 [% ELSE %]
-          <div id="menuInactive2">[%|loc%]Post[%END%]</div><br />
+          <div class="menuInactive2">[%|loc%]Post[%END%]</div><br />
 [% END %]
 
 [% IF shared == 'exist' %]
@@ -45,7 +45,7 @@
     [% IF action == 'd_read' || action == 'd_edit' || action == 'd_properties' %][% SET class = 'menuLinksCurrentPage' %][% ELSE %][% SET class = 'menuLinks' %][% END %]
         <strong><a class="[% class %]" href="[% path_cgi %]/d_read/[% list %]/" >[%|loc%]Shared web[%END%]</a></strong><br />
     [% ELSE %]
-          <div id="menuInactive2">[%|loc%]Shared web[%END%]</div><br />
+          <div class="menuInactive2">[%|loc%]Shared web[%END%]</div><br />
     [% END %]
 [% END %]
 

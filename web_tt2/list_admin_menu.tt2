@@ -10,13 +10,13 @@
 <li><a class="[% class %]" href="[% path_cgi %]/edit_list_request/[% list %]">[%|loc%]Edit List Config[%END%]</a></li>
 
 [% IF mod_total == '0' %]
-<li><div id="menuInactive">[%|loc%]No message to moderate[%END%]</div></li>
+<li><div class="menuInactive">[%|loc%]No message to moderate[%END%]</div></li>
 [% ELSE %]
   [% IF is_editor %]
      [% IF action == 'modindex' %][% SET class = 'menuLinksCurrentPage' %][% ELSE %][% SET class = 'menuLinks' %][% END %]
        <li><a class="[% class %]" href="[% path_cgi %]/modindex/[% list %]">[%|loc%]Moderate[%END%]</a> ([% mod_total %]) </li>
   [% ELSE %]       
-       <li><div id="menuInactive">[%|loc%]Messages to moderate :[%END%][% mod_total %]</div></li>
+       <li><div class="menuInactive">[%|loc%]Messages to moderate :[%END%][% mod_total %]</div></li>
   [% END %]
 [% END %]
 	
