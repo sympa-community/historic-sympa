@@ -6,6 +6,7 @@ title.es add necesita autentificación
 title.cz add vy¾aduje autentizaci
 title.hu hozzáadáshoz be kell lépni
 title.nl toevoegen heeft authenticatie nodig
+title.it aggiungi necessita autenticazione
 
 is_owner([listname],[sender]) smtp -> request_auth
 is_listmaster([sender])	      smtp -> request_auth

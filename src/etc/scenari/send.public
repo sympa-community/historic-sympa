@@ -6,6 +6,7 @@ title.es lista pública
 title.cz veøejná konference
 title.hu nyilvános lista
 title.nl publieke lijst
+title.it lista pubblica
 
 true()       smtp,smime,md5    -> do_it
 

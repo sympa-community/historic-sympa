@@ -6,6 +6,7 @@ title.et võimatu, hetkel suletud
 title.cz nelze, momentálnì uzavøena
 title.hu nem lehet, a lista jelenleg nem mûködik
 title.nl onmogelijk, op dit moment geen toegang
+title.it impossibile, la lista è chiusa
 
 true()    smtp,md5,smime -> reject
 

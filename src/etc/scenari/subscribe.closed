@@ -6,6 +6,7 @@ title.es subscripciones no son posibles
 title.cz nelze se pøihlásit
 title.hu senkisem
 title.nl abonneren is onmogelijk
+title.it iscrizione non possibile
 
 true()   smtp,md5,smime -> reject
 

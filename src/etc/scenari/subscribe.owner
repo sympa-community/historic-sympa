@@ -6,6 +6,7 @@ title.es cualquiera, autorización es solicitada al propietario
 title.cz kdokoli, správce musí ovìøit
 title.hu bárki, a tulajdonosok engedélyezése után
 title.nl toestemming van de eigenaren
+title.it con autorizzazione del proprietario
 
 # if subscriber request come from a subscriber, it's just an update, do it
 is_subscriber([listname],[sender]) smtp,smime,md5    -> do_it

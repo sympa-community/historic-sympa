@@ -6,6 +6,7 @@ title.es restringido al propietario de la lista
 title.cz pouze vlastník
 title.hu csak a lista tulajdonos
 title.nl alleen voor de lijst eigenaar
+title.it solo proprietario
 
 # only owner's may perform a reminder command
 is_owner([listname],[sender])      smtp       -> request_auth

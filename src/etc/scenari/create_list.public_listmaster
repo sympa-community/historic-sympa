@@ -6,6 +6,7 @@ title.es add ejecutado por el propietario no necesita autentificación (notificac
 title.cz kdokoli, vy¾adováno potvrzení správce
 title.hu bárki, akinek a listmaster engedélyezi
 title.nl iedereen, validatie door listmaster verplicht
+title.it chiunque dopo validazione del listmaster
 
 is_listmaster([sender])   md5,smime -> do_it
 true()                    md5,smime -> listmaster,notify

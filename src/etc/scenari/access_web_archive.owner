@@ -6,6 +6,7 @@ title.es por el propietario
 title.cz pro vlastníka
 title.hu tulajdonos
 title.nl door eigenaar
+title.it proprietario della lista
 
 is_owner([listname],[sender])  md5,smime  -> do_it
 is_listmaster([sender])        md5,smime  -> do_it

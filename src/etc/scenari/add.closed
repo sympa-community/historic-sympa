@@ -6,6 +6,7 @@ title.es add imposible
 title.cz add zakázán
 title.hu nem lehet hozzáadni
 title.nl toevoegen onmogelijk
+title.it aggiungi non possibile
 
 true()   smtp -> reject
 

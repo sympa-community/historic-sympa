@@ -6,6 +6,7 @@ title.es autentificación solicitada, notificación enviada al propietario
 title.cz vy¾adováno ovìøení, vlastník obdr¾í upozornìní
 title.hu azonosítással, a tulajdonos értesítve lesz
 title.nl authenticatie gevraagd, waarschuwing verstuurd naar eigenaar
+title.it con autenticazione, notifica al proprietario
 
 !is_subscriber ([listname],[email]) smtp,md5,smime -> do_it,notify
 true()                              smtp           -> request_auth([email])

@@ -6,6 +6,7 @@ title.de privat mit Authentifikation und an Moderator
 title.cz èlenové s ovìøením a pomocí moderátora
 title.hu bárki, azonosítással és szerkesztõi engedélyezéssel
 title.nl Gemodereerd, beperkt tot abonnees
+title.it Moderato, ristretto agli iscritti
 
 is_subscriber([listname],[sender]) smtp,smime,md5    -> editorkey
 is_editor([listname],[sender])     smtp              -> request_auth

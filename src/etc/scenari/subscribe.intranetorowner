@@ -6,6 +6,7 @@ title.es usuarios del dominio local o tras autorización del propietario
 title.cz pouze z lokální domény, nebo po ovìøení správce
 title.hu helyi felhasználók, vagy tulajdonos által engedélyezettek
 title.nl lokale domein gebruikers of eigenaren toestemming
+title.it ristretto agli utenti del dominio locale o con approvazione proprietario
 
 # if subscriber request come from local domain do_it else reject
 is_subscriber([listname],[sender]) smtp,smime,md5    -> do_it

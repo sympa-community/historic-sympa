@@ -6,6 +6,7 @@ title.es propietario de la lista, no necesita autentificación (notificación)
 title.cz pouze vlastník, bez ovìøení (s upozornìním)
 title.hu lista tulajdonosok, azonosítás nem szükséges (értesítés)
 title.nl lijst eigenaren, authenticatie niet nodig (herinnering)
+title.it proprietari della lista, autenticazione non necessaria (notifica)
 
 is_owner([listname],[sender])  smtp,smime,md5 -> do_it,notify
 is_listmaster([sender])        smtp           -> request_auth

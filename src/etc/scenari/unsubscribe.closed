@@ -6,5 +6,6 @@ title.es imposible
 title.cz zakázáno
 title.hu senkisem
 title.nl onmogelijk
+title.it impossibile
 
 true()                              smtp,md5,smime -> reject

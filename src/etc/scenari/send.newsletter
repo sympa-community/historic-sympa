@@ -6,6 +6,7 @@ title.es restringido a editores
 title.cz pouze moderátoøi
 title.hu szerkesztõk
 title.nl Nieuwsbrief, beperkt tot moderators
+title.it Newsletter, ristretto ai moderatori
 
 is_editor([listname],[sender])                 smtp,smime,md5     -> do_it
 true()					       smtp,smime,md5     -> reject

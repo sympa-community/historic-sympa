@@ -6,6 +6,7 @@ title.es listmaster
 title.cz listmaster
 title.hu listmaster
 title.nl listmaster
+title.it listmaster
 
 is_listmaster([sender])        md5,smime  -> do_it
 

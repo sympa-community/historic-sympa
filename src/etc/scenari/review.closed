@@ -6,5 +6,6 @@ title.es nadie puede revisar
 title.cz nikdo
 title.hu senkisem
 title.nl niemand
+title.it nessuno
 
 true()   smtp,smime,md5 -> reject

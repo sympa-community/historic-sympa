@@ -6,5 +6,6 @@ title.es restringido a los propietarios de la lista y autor del documento
 title.cz omezeno pouze pro vlastníky a autora dokumentu
 title.hu lista tulajdonosok és a dokumentum készítõje
 title.nl beperkt tot lijst eigenaars en document eigenaar
+title.it ristretto a proprietario della liste e autore del documento
 
 is_owner([listname],[sender])                  smime,md5    -> do_it

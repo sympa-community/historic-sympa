@@ -6,6 +6,7 @@ title.es lista visible
 title.cz viditelná 
 title.hu nincs elrejtés
 title.nl zichtbaar
+title.it lista visibile
 
 true()                          smtp,md5,smime    -> do_it
 

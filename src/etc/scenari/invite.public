@@ -6,6 +6,7 @@ title.es público
 title.cz kdokoli
 title.hu bárki
 title.nl publiek
+title.it pubblico
 
 true() smtp,md5,smime -> do_it
 

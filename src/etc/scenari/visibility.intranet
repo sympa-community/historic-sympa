@@ -6,6 +6,7 @@ title.es visible en Intranet
 title.cz viditelná jen z intranetu
 title.hu intranet elérés
 title.nl intranet toegang
+title.it accesso intranet
 
 match([remote_host],/[conf->host]$/)       smtp,md5,smime    -> do_it
 match([sender],/[conf->host]$/)            smtp,md5,smime    -> do_it

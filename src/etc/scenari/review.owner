@@ -6,6 +6,7 @@ title.es sólo propietario (y listmaster)
 title.cz pouze vlastník a správce
 title.hu csak a tulajdonos (és a listmaster)
 title.nl alleen de eigenaar (en listmaster)
+title.it solo proprietario (e listmaster)
 
 # only owner's may perform a review command
 is_owner([listname],[sender])      smtp,md5,smime  -> do_it

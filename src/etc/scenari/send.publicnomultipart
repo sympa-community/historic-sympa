@@ -6,6 +6,7 @@ title.de oeffentliche Liste, multipart-Nachrichten werden verworfen
 title.cz veøejné zprávy s více èástmi jsou odmítnuty
 title.hu nyilvános lista, többrészes levelek elutasítva
 title.nl publieke lijst multipart berichten worden geweigerd
+title.it lista pubblica, messaggi multipart proibiti
 
 match([header->Content-Type],/multipart/)      smtp,smime,md5    -> reject
 true()				               smtp,md5,smime    -> do_it

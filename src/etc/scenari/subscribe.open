@@ -6,5 +6,6 @@ title.es para cualquier sin autentificación
 title.cz kdokoli bez ovìøení
 title.hu bárki, azonosítás nélkül
 title.nl voor iedereen zonder authenticatie
+title.it tutti senza autenticazione
 
 true()  smtp,smime,md5 -> do_it
