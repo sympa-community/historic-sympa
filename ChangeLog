@@ -1,3 +1,37 @@
+2003-04-16 11:59  salaun
+
+	* Makefile.am, Makefile.in, configure, configure.in: New feature:
+	check suidperl and mhonarc are installed
+
+2003-04-11 17:07  salaun
+
+	* wwsympa/wws_templates/us/main.us.tpl: Revert previous change
+
+2003-04-11 16:16  salaun
+
+	* wwsympa/wws_templates/us/main.us.tpl: [B. Hortner] Fix: missing }
+	in javascript subroutine
+
+2003-04-11 11:40  salaun
+
+	* src/tools.pl: Fix: make better error handling in virus scanning
+	subroutine, in case we can't decode message parts
+
+2003-04-09 17:47  salaun
+
+	* src/etc/script/sympa.spec: [G. Paressant] Change: use a
+	spam-proof email address
+
+2003-04-09 17:19  salaun
+
+	* src/etc/scenari/: access_web_archive.intranet, review.intranet:
+	[N. Arles] Fix: look for current domain in email addresses when
+	logged in
+
+2003-04-09 17:16  salaun
+
+	* ChangeLog: Update
+
 2003-04-09 16:36  salaun
 
 	* src/etc/script/sympa.spec: [reported by G. Paressant] Restore

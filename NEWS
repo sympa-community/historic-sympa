@@ -3,6 +3,87 @@
 
 (See Changelog file for the full changes log)
 
+3.4.4		16 April 2003
+
+  New features :
+
+	Makefile.am, check_perl_modules.pl, configure.in, doc/sympa.tex.tpl, nls/Makefile, src/Language.pm: 
+	[B. Hortner] no more use Locale::Msgcat for NLS management, home-made functions instead.  
+	This solves MacOS X users problem that don't have gencat available ;-)
+
+	Makefile.am, configure.in: check suidperl and mhonarc are installed
+
+	
+
+  Changes :
+
+	 Makefile.am, src/etc/script/sympa.spec: these changes are related to the RPM building :
+ 		+ Add missing variables to build sympa.spec for RH	  
+		+ require 'smtpdaemon' with RH, 'MailTransportAgent' with MDK   
+		+ ./configure is done at RPM build time with relevant options   
+		+ correct path to sympa_wizard  
+		+ fix problems with the %files section, when changing directories	  
+		+ missing %changelog
+
+	src/etc/script/sympa.spec: [G. Paressant] Update
+
+	check_perl_modules.pl: set FTP Passive mode for CPAN install to work behind a firewall
+
+	doc/Makefile: Change: rename sympa/ directory to html/
+
+  Bug fixes :
+
+	src/tools.pl: make better error handling in virus scanning subroutine, in case we can't 
+	decode message parts
+
+	src/etc/scenari/: [N. Arles]  look for current domain in email addresses when logged in
+
+	src/sympa_wizard.pl: parameter was not parsed
+
+	src/alias_manager.pl: [reported by Xavier AT cs.gouv.qc.ca] Missing \n when printing to STDERR
+
+	wwsympa/wws_templates/: fr/d_editfile.fr.tpl, us/d_editfile.us.tpl: [reported by J. Rezeau] 
+	wrong default for rename input
+
+	src/etc/script/:  [A. de Pretis] scripts were looking for libs in the wrong directory 
+	(BINDIR instead LIBDIR)
+
+	src/: Message.pm, sympa.pl: [reported by H. Penning] Sympa would log "Incorrect name" 
+	entries when processing messages for -request, -unsubscribe, etc... messages
+
+	src/: Commands.pm, sympa.pl: "no command found in message" when distributing twice a moderated message
+
+	doc/: Makefile, sympa.tex.tpl: [BugID 133] [reported by X. Renaut] 
+	Missing paths in documentation ; using Env variables in parse_tex.tpl
+
+	src/Ldap.pm, src/sympa.pl, wwsympa/wwsympa.fcgi: [BugID 131] [G. Paressant] 
+	Incorrect LDAP password crashes wwsympa ; fixed	similar code in Ldap.pm
+
+	src/List.pm: [BugID 121] [reported by G. Paressant] importproblems with include2.  
+	Now set 'subscribed' DB field in &user_add() if required
+
+	src/List.pm, wwsympa/wwsympa.fcgi: [reported by P. Maes] urlize-related problems: 
+	missing quotes around URL.  Escaped chars in URL need to be re-escaped in wwsympa
+
+	src/List.pm: [G. Bittencourt] incorrect Sybase (DBD::Sybase 0.95) connect string ; 
+	replaced dbname with database
+
+	Makefile.am: [reported by J. Douglas] make	install failed on Solaris : 
+	"sh: test: argument expected" Changed test condition in Makefile
+	
+	src/tools.pl: Sympa.pl could die with error "Can't call	method "decode" on an undefined value" 
+	while decoding malformed multipart messages
+
+	important_changes.pl: Fix it
+	
+	Makefile.am, src/etc/sample/Makefile: [G. Paressant]  small fixes, samplelist could not be installed
+
+	src/: List.pm, etc/templates/fr/listmaster_notification.fr.tpl,	etc/templates/us/listmaster_notification.us.tpl: 
+	[BugID 108] [reported by G. Paressant] include2 lists subscribers are deleted when a problem occur with the 
+	datasource LDAP server. Now interrupt the database update if _load_users_include2() failed ; also notify listmaster.
+
+	src/List.pm: if a list param does not exist, scenario verification failed.  Also fixed some 'return -1'
+
 3.4.3.1		05 February 2003
 
    Bug fixes :
