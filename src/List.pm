@@ -190,6 +190,7 @@ use Language;
 use Log;
 use Conf;
 use mail;
+use Ldap;
 use Time::Local;
 use MIME::Entity;
 use MIME::Words;
@@ -990,7 +991,8 @@ my %alias = ('reply-to' => 'reply_to',
 				   'group' => 'data_source'
 				   },
 	    'visibility' => {'scenario' => 'visibility',
-			     'synonym' => {'public' => 'noconceal'},
+			     'synonym' => {'public' => 'noconceal',
+					   'private' => 'conceal'},
 			     'title_id' => 82,
 			     'group' => 'description'
 			     },
@@ -1245,7 +1247,7 @@ sub increment_msg_count {
 	do_log('err', "Unable to create '%s.%s' : %s", $file,$$, $!);
 	return undef;
     }
-    foreach my $key (keys %count) {
+    foreach my $key (sort {$a <=> $b} keys %count) {
 	printf MSG_COUNT "%d\t%d\n",$key,$count{$key} ;
     }
     close MSG_COUNT ;
@@ -3321,7 +3323,7 @@ sub get_first_user {
 
 	## If no offset (for LIMIT) was used, update total of subscribers
 	unless ($offset) {
-	    my $total = &_load_total_db($self->{'name'});
+	    my $total = &_load_total_db($self->{'name'},'nocache');
 	    if ($total != $self->{'total'}) {
 		$self->{'total'} = $total;
 		$self->savestats();
@@ -4679,7 +4681,7 @@ sub search{
     my $value;
 
     my %ldap_conf;
-
+    
     return undef unless (%ldap_conf = &Ldap::load($file));
 
  
