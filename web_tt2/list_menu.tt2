@@ -52,7 +52,7 @@
 [% IF may_review %]
 [% IF action == 'review' %][% SET class = 'menuLinksCurrentPage' %][% ELSE %][% SET class = 'menuLinks' %][% END %]
 <strong><a class="[% class %]" href="[% path_cgi %]/review/[% list %]" >[%|loc%]Review[%END%]</a></strong><br />
-[% IF is_priv %]([%|loc%]Bounced email rate:[%END%][% bounce_rate %])[% END %]
+[% IF is_priv %]([%|loc%]Bounced email rate:[%END%][% bounce_rate %] %)[% END %]
 <br />
 [% END %]
 

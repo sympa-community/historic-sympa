@@ -74,7 +74,7 @@ ul#MainMenuLinks li {list-style: none; display: inline;}
 
 .MenuBlock {
 	background: [% color_5 %];
-	padding: 10px;
+	padding: 5px;
 	border: 1px solid [% color_2 %];
 	text-align: left;
 	margin-bottom: 10px;
