@@ -5030,7 +5030,8 @@ even when several moderators are defined.
 
 \lparam {host} \textit {fully-qualified-domain-name}
 
-Domain name of the list, default is the robot domain name set in the related \file {robot.conf} file or in file \file {[CONFIG]}.
+This parameter should almost not be used anymore ; refer to \ref {virtual-robot} chapter, page~\pageref {virtual-robot} for 
+virtual hosting managenent.
 
 \subsection {lang}
     \label {par-lang}
