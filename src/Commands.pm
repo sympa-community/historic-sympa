@@ -467,7 +467,7 @@ sub review {
 	    $auth_method='md5';
 	}else{
             do_log ('debug2', 'auth should be %s',$list->compute_auth ('','review'));
-	    push @msg::report, sprintf gettext("La phase d'authentification a échoué.\n\n");
+	    push @msg::report, sprintf gettext("The authentication process failed\n\n");
 	    do_log('info', 'REVIEW %s from %s refused, auth failed', $listname,$sender);
 	    return 'wrong_auth';
 	}
@@ -594,7 +594,7 @@ sub subscribe {
 	if ($auth eq $list->compute_auth ($sender,'subscribe')) {
 	    $auth_method='md5';
 	}else{
-	    push @msg::report, sprintf gettext("La phase d'authentification a échoué.\n\n");
+	    push @msg::report, sprintf gettext("The authentication process failed\n\n");
 	    push @msg::report, sprintf gettext("You probably confirmed your subscription using a different
 email address. Please try subscribing using your canonical address.");
 	    do_log('info', 'SUB %s from %s refused, auth failed'
@@ -902,7 +902,7 @@ been subscribed (or unsubscribed) to the list.\n")
 	## command.
 	my $user_entry = $list->get_subscriber($email);
 	unless ((defined $user_entry) && ($user_entry->{'subscribed'} == 1)) {
-	    push @msg::report, sprintf gettext("Your e-mail address has not been found in the list %s. Maybe\n"), $email, $list->{'name'};
+	    push @msg::report, sprintf gettext("Your e-mail address has not been found in the list %s. Maybe\nyou subscribed from a different e-mail address ?\n"), $email, $list->{'name'};
 	    do_log('info', 'SIG %s from %s refused, not on list', $which, $email);
 	    
 	    ## Tell the owner somebody tried to unsubscribe
@@ -940,7 +940,7 @@ been subscribed (or unsubscribed) to the list.\n")
 	    ## Send bye file to subscriber
 	    my %context;
 	    $context{'subject'} = sprintf(gettext("Unsubscribe from list %s"), $list->{'name'});
-	    $context{'body'} = sprintf(gettext("You have been removed from list %s.\n"), $list->{'name'});
+	    $context{'body'} = sprintf(gettext("You have been removed from list %s.\nThank you for using this list.\n"), $list->{'name'});
 	    $list->send_file('bye', $email, $robot, \%context);
 	}
 
@@ -1481,7 +1481,7 @@ email address. Please try subscribing using your canonical address.");
 	unless ($quiet || ($action =~ /quiet/i )) {
 	    my %context;
 	    $context{'subject'} = sprintf(gettext("Your subscription to list %s has been removed."), $list->{'name'});
-	    $context{'body'} = sprintf(gettext("You have been removed from list %s.\n"), $list->{'name'});
+	    $context{'body'} = sprintf(gettext("You have been removed from list %s.\nThank you for using this list.\n"), $list->{'name'});
 	    
 	    $list->send_file('removed', $who, $robot, \%context);
 	    
@@ -1644,7 +1644,7 @@ sub distribute {
     my $message = new Message($file);
     unless (defined $message) {
 	do_log('err', 'Unable to create Message object %s', $file);
-	push @msg::report, sprintf gettext("Unable to access the moderated message on list %s with key %s.\n"),$name,$key ;
+	push @msg::report, sprintf gettext("Unable to access the moderated message on list %s with key %s.\nThis message may already have been sent by one of the list's moderators\n"),$name,$key ;
 	return 'msg_not_found';
     }
 
@@ -1834,7 +1834,7 @@ sub reject {
     
     ## Open the file
     if (!open(IN, $file)) {
-	push @msg::report, sprintf gettext("Unable to access the moderated message on list %s with key %s.\n"),$name,$key ;
+	push @msg::report, sprintf gettext("Unable to access the moderated message on list %s with key %s.\nThis message may already have been sent by one of the list's moderators\n"),$name,$key ;
 	do_log('info', 'REJECT %s %s from %s refused, auth failed', $which, $key, $sender);
 	return 'wrong_auth';
     }
@@ -2042,7 +2042,7 @@ subscription : EXPIREINDEX %s\n"), $name;
     }else { 
         ## Ask the requestor for an authentication
 	$key=substr(Digest::MD5::md5_hex(join('/', $list->get_cookie(), $name, $sender, $d1, $d2, 'expire', time)), -8);
-	push @msg::report, sprintf gettext("\nQuelqu'un (probablement vous) a demandé que les abonnés à la\nliste '%s' depuis plus de %d jours reconfirment leur abonnement.\nSi vous ne souhaitez pas que l'action soit entreprise, vous pouvez ignorer ce message.\nPour confirmer, veuillez renvoyer un courrier électronique à l'adresse '%s' avec la commande suivante :\n"), $name, $d1, &Conf::get_robot_conf($robot, 'sympa'),$key,$name, $d1, $d2;
+	push @msg::report, sprintf gettext("Someone (hopefully you) resquested that the subscribers to the list\n'%s' for more than %d days have to confirm their subscription.\nIf you do not want this action to be taken, simply ignore this message.\nTo confirm this action, please send an e-mail to '%s', with the following command:\n\nAUTH %s EXPIRE %s %d %d\n"), $name, $d1, &Conf::get_robot_conf($robot, 'sympa'),$key,$name, $d1, $d2;
 
 	$limitday= time - 86400* $d1;
 	$confirmday= time + 86400* $d2;

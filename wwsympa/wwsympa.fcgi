@@ -2363,7 +2363,7 @@ if ($wwsconf->{'use_fast_cgi'}) {
 	 my $entry = {'value' => $p};
 
 	 ## Set description from NLS
-	 $entry->{'desc'} = sprintf gettext($wwslib::cookie_period{$p});
+	 $entry->{'desc'} = sprintf gettext($wwslib::cookie_period{$p}{'gettext_id'}});
 
 	 ## Choose nearest delay
 	 if ((! $selected) && $param->{'user'}{'cookie_delay'} >= $p) {
@@ -3059,7 +3059,7 @@ if ($wwsconf->{'use_fast_cgi'}) {
      ## Messages edition
      foreach my $f ('info','homepage','welcome.tpl','bye.tpl','removed.tpl','message.footer','message.header','remind.tpl','invite.tpl','reject.tpl') {
 	 next unless ($list->may_edit($f, $param->{'user'}{'email'}) eq 'write');
-	 $param->{'files'}{$f}{'complete'} = gettext($wwslib::filenames{$f});
+	 $param->{'files'}{$f}{'complete'} = gettext($wwslib::filenames{$f}{'gettext_id'});
 	 $param->{'files'}{$f}{'selected'} = '';
      }
      $param->{'files'}{'info'}{'selected'} = 'SELECTED';
@@ -3093,7 +3093,7 @@ if ($wwsconf->{'use_fast_cgi'}) {
 
      ## Lists Default files
      foreach my $f ('welcome.tpl','bye.tpl','removed.tpl','message.footer','message.header','remind.tpl','invite.tpl','reject.tpl','your_infected_msg.tpl') {
-	 $param->{'lists_default_files'}{$f}{'complete'} = gettext($wwslib::filenames{$f});
+	 $param->{'lists_default_files'}{$f}{'complete'} = gettext($wwslib::filenames{$f}{'gettext_id'});
 	 $param->{'lists_default_files'}{$f}{'selected'} = '';
      }
 
@@ -3105,7 +3105,7 @@ if ($wwsconf->{'use_fast_cgi'}) {
 
      ## Server files
      foreach my $f ('helpfile.tpl','lists.tpl','global_remind.tpl','summary.tpl','create_list_request.tpl','list_created.tpl','list_aliases.tpl') {
-	 $param->{'server_files'}{$f}{'complete'} = gettext($wwslib::filenames{$f});
+	 $param->{'server_files'}{$f}{'complete'} = gettext($wwslib::filenames{$f}{'gettext_id'});
 	 $param->{'server_files'}{$f}{'selected'} = '';
      }
      $param->{'server_files'}{'helpfile.tpl'}{'selected'} = 'SELECTED';
@@ -3644,7 +3644,7 @@ if ($wwsconf->{'use_fast_cgi'}) {
 	 ## Messages edition
 	 foreach my $f ('info','homepage','welcome.tpl','bye.tpl','removed.tpl','message.footer','message.header','remind.tpl','invite.tpl','reject.tpl','your_infected_msg.tpl') {
 	     next unless ($list->may_edit($f, $param->{'user'}{'email'}) eq 'write');
-	     $param->{'files'}{$f}{'complete'} = gettext($wwslib::filenames{$f});
+	     $param->{'files'}{$f}{'complete'} = gettext($wwslib::filenames{$f}{'gettext_id');
 	     $param->{'files'}{$f}{'selected'} = '';
 	 }
 	 return 1;
@@ -5863,7 +5863,7 @@ if ($wwsconf->{'use_fast_cgi'}) {
 
      ## Prepare data structure for the parser
      my $p_glob = {'name' => $name,
-		   'title' => gettext($struct->{'title_id'}),
+		   'title' => gettext($struct->{'gettext_id'}),
 		   'comment' => $struct->{'comment'}{$param->{'lang'}}
 	       };
 
