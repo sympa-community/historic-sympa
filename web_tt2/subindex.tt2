@@ -1,7 +1,7 @@
 <form action="[% path_cgi %]" method="post"> 
 <input type="hidden" name="list" value="[% list %]" />
 
-    <table style="width: 100%;" border="1">
+    <table border="1">
       <tr style="background-color: [% dark_color %];">
       <th><span style="color: [% bg_color %]; font-size: smaller;"><strong>X</strong></span></th>
         <th style="white-space: nowrap;" colspan="2">

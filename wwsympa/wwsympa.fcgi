@@ -202,6 +202,7 @@ my %comm = ('home' => 'do_home',
 	 'help' => 'do_help',
 	 'edit_list_request' => 'do_edit_list_request',
 	 'edit_list' => 'do_edit_list',
+	 'css' => 'do_css',
 	 'create_list_request' => 'do_create_list_request',
 	 'create_list' => 'do_create_list',
 	 'get_pending_lists' => 'do_get_pending_lists', 
@@ -275,6 +276,7 @@ my %action_args = ('default' => ['list'],
 		'loginrequest' => ['previous_action','previous_list'],
 		'logout' => ['previous_action','previous_list'],
 		'remindpasswd' => ['previous_action','previous_list'],
+		'css' => ['file'],
 		'pref' => ['previous_action','previous_list'],
 		'reject' => ['list','id'],
 		'distribute' => ['list','id'],
@@ -590,9 +592,9 @@ if ($wwsconf->{'use_fast_cgi'}) {
      $param->{'conf'} = {};
      foreach my $p ('email','host','sympa','request','soap_url','wwsympa_url','listmaster_email',
 		    'dark_color','light_color','text_color','bg_color','error_color',
-                    'selected_color','shaded_color','web_recode_to') {
+                    'selected_color','shaded_color','web_recode_to','color_0','color_1','color_2','color_3','color_4','color_5','color_6','color_7','color_8','color_9','color_10','color_11','color_12','color_13','color_14','color_15') {
 	 $param->{'conf'}{$p} = &Conf::get_robot_conf($robot, $p);
-	 $param->{$p} = &Conf::get_robot_conf($robot, $p) if ($p =~ /_color$/);
+	 $param->{$p} = &Conf::get_robot_conf($robot, $p) if (($p =~ /_color$/) || ($p =~ /color_/));
      }
 
      foreach my $auth (keys  %{$Conf{'cas_id'}}) {
@@ -847,6 +849,7 @@ if ($wwsconf->{'use_fast_cgi'}) {
      if ($param->{'list'}) {
 	 $param->{'main_title'} = "$param->{'list'} - $list->{'admin'}{'subject'}";
 	 $param->{'title'} = &get_protected_email_address($param->{'list'}, $list->{'admin'}{'host'});
+	 $param->{'list_protected_email'} = $param->{'title'};
 	 $param->{'title_clear_txt'} = "$param->{'list'}\@$list->{'admin'}{'host'}";
 
 	 if ($param->{'subtitle'}) {
@@ -857,6 +860,8 @@ if ($wwsconf->{'use_fast_cgi'}) {
      }else {
 	 $param->{'main_title'} = $param->{'title'} = &Conf::get_robot_conf($robot,'title');
      }
+
+	 $param->{'robot_title'} = &Conf::get_robot_conf($robot,'title');
 
      ## Do not manage cookies at this level if content was already sent
      unless ($param->{'bypass'} eq 'extreme') {
@@ -1217,8 +1222,10 @@ if ($wwsconf->{'use_fast_cgi'}) {
      }
 
      ## Check parameters format
-     foreach my $p (keys %in) {
 
+     foreach my $p (keys %in) {
+	 my $xxx = $in{$p};
+	 $xxx =~ s/\0/\#/;
 	 ## Skip empty parameters
  	 next if ($in{$p} =~ /^$/);
 
@@ -1233,6 +1240,7 @@ if ($wwsconf->{'use_fast_cgi'}) {
 		 $regexp = $in_regexp{'*'};
 	     }
 	 foreach my $one_p (split /\0/, $in{$p}) {
+#	     next if $one_p =~ /^$/;
 	     unless ($one_p =~ /^$regexp$/m) {
 		 ## Dump parameters in a tmp file for later analysis
 		 my $dump_file = '/tmp/sympa_dump.'.time.'.'.$$;
@@ -1240,6 +1248,7 @@ if ($wwsconf->{'use_fast_cgi'}) {
 		     &wwslog('err','get_parameters: failed to create %s : %s', $dump_file, $!);		     
 		 }
 		 &tools::dump_var(\%in, 0, \*DUMP);
+		 printf DUMP "xxxx xxx: -$xxx- p: -$p-   one_p: -$one_p- regexp: -$regexp-\n";
 		 close DUMP;
 
 		 &error_message('syntax_errors', {'params' => $p} );
@@ -1383,7 +1392,7 @@ sub send_html {
 	## Privileged info
 
 	if ($param->{'is_priv'}) {
-	    $param->{'mod_total'} = $list->get_mod_spool_size();
+	    $param->{'mod_message'} = $list->get_mod_spool_size();
 	   
 	    $param->{'doc_mod_list'} = $list->get_shared_moderated();
 	    $param->{'mod_total_shared'} = $#{$param->{'doc_mod_list'}} + 1;
@@ -1395,6 +1404,7 @@ sub send_html {
 	    }else {
 		$param->{'bounce_rate'} = 0;
 	    }
+   	    $param->{'mod_total'} = $param->{'mod_total_shared'}+$param->{'mod_message'};
 	}
 
 	## (Un)Subscribing 
@@ -1659,6 +1669,9 @@ sub send_html {
      }else {
 	 $next_action = 'home';
      }
+     # never return to login or logout when login.
+     $next_action = 'home' if ($in{'next_action'} eq 'login') ;
+     $next_action = 'home' if ($in{'next_action'} eq 'logout') ;
 
      if ($param->{'user'}{'email'}) {
 	 &error_message('already_login', {'email' => $param->{'user'}{'email'}});
@@ -1676,7 +1689,7 @@ sub send_html {
 	 &error_message('no_email');
 	 &wwslog('info','do_login: no email');
 	 # &List::db_log('wwsympa','nobody',$param->{'auth_method'},$ip,'login','',$robot,'','no email');
-	 return $in{'previous_action'} || 'home';
+	 return $next_action ;
      }
      
      unless ($in{'passwd'}) {
@@ -2198,7 +2211,7 @@ sub do_remindpasswd {
 		 if ($url_redirect && ($url_redirect != 1));
 	 }elsif (! &tools::valid_email($in{'email'})) {
 	     &error_message('incorrect_email', {'email' => $in{'email'}});
-	     &wwslog('info','do_remindpasswd: incorrect email %s', $in{'email'});
+	     &wwslog('info','do_remindpasswd: incorrect email \"%s\"', $in{'email'});
 	     return undef;
 	 }
      }
@@ -2213,7 +2226,7 @@ sub do_remindpasswd {
      return 1;
 
  }
- sub do_sendpasswd {
+sub do_sendpasswd {
      &wwslog('info', 'do_sendpasswd(%s)', $in{'email'}); 
      my ($passwd, $user);
 
@@ -2245,7 +2258,7 @@ sub do_remindpasswd {
      }
 
      if ($param->{'newuser'} =  &List::get_user_db($in{'email'})) {
-
+	 &wwslog('info','do_sendpasswd: new password allocation for %s', $in{'email'});
 	 ## Create a password if none
 	 unless ($param->{'newuser'}{'password'}) {
 	     unless ( &List::update_user_db($in{'email'},
@@ -2261,7 +2274,7 @@ sub do_remindpasswd {
 	 $param->{'newuser'}{'escaped_email'} =  &tools::escape_chars($param->{'newuser'}{'email'});
 
      }else {
-
+	 &wwslog('debug','do_sendpasswd: sending password for %s', $in{'email'});
 	 $param->{'newuser'} = {'email' => $in{'email'},
 				'escaped_email' => &tools::escape_chars($in{'email'}),
 				'password' => &tools::tmp_passwd($in{'email'}) 
@@ -2278,6 +2291,8 @@ sub do_remindpasswd {
 
      $param->{'email'} = $in{'email'};
      $param->{'referer'} = $in{'referer'};
+
+#     return 'home'; #   xxxxxxx pour voir
 
  #    if ($in{'previous_action'}) {
  #	$in{'list'} = $in{'previous_list'};
@@ -12424,6 +12439,31 @@ sub do_arc_delete {
     
     &message('performed');
     return 'arc_manage';
+}
+
+sub do_css {
+   &do_log('info', "do_css ($in{'file'})");		
+   $param->{'bypass'} = 'extreme';
+   printf "Content-type: text/css\n\n";
+   $param->{'css'} = $in{'file'}; 
+   my $tt2_include_path = [$Conf{'etc'}.'/web_tt2/'.&Language::Lang2Locale($param->{'lang'}),
+			   $Conf{'etc'}.'/web_tt2',
+			   '--ETCBINDIR--'.'/web_tt2/'.&Language::Lang2Locale($param->{'lang'}),
+			   '--ETCBINDIR--'.'/web_tt2'];
+   ## not the default robot
+   if (lc($robot) ne lc($Conf{'host'})) {
+       unshift @{$tt2_include_path}, $Conf{'etc'}.'/'.$robot.'/web_tt2';
+       unshift @{$tt2_include_path}, $Conf{'etc'}.'/'.$robot.'/web_tt2/'.&Language::Lang2Locale($param->{'lang'});
+   }
+   
+   unless (&tt2::parse_tt2($param,'css.tt2' ,\*STDOUT, $tt2_include_path)) {
+ 	     my $error = &tt2::get_error();
+ 	     $param->{'tt2_error'} = $error;
+ 	     &List::send_notify_to_listmaster('web_tt2_error', $robot, $error);
+	     &do_log('info', "do_css/$in{'file'} : error");
+ 	 }
+
+   return;
 }
 
 sub do_wsdl {
