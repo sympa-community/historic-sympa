@@ -290,7 +290,7 @@ my %action_args = ('default' => ['list'],
 		'search' => ['list','filter'],
 		'search_user' => ['email'],
 		'set_lang' => ['lang'],
-		'attach' => ['list','@path'],
+		'attach' => ['list','dir','file'],
 		'change_identity' => ['email','previous_action','previous_list'],
 		   'edit_list_request' => ['list','group']
 		);
@@ -751,7 +751,7 @@ while ($query = &new_loop()) {
     }    
 
     # exit if wwsympa.fcgi itself has changed
-    if ((stat($ENV{'SCRIPT_FILENAME'}))[9] gt $birthday ) {
+    if ((stat($ENV{'SCRIPT_FILENAME'}))[9] > $birthday ) {
          do_log('notice',"Exiting because $ENV{'SCRIPT_FILENAME'} has changed since fastcgi server started");
          exit(0);
     }
@@ -987,7 +987,7 @@ sub check_param_in {
        $param->{'subtitle'} = $list->{'admin'}{'subject'};
        $param->{'subscribe'} = $list->{'admin'}{'subscribe'}{'name'};
        $param->{'send'} = $list->{'admin'}{'send'}{'title'}{$param->{'lang'}};
-       $param->{'total'} = $list->get_total();
+       $param->{'total'} = $list->get_total('nocache');
        $param->{'list_as_x509_cert'} = $list->{'as_x509_cert'};
        $param->{'listconf'} = $list->{'admin'};
 
@@ -1364,10 +1364,11 @@ sub ldap_authentication {
 		$cnx = $ldap_anonymous->bind;
 	    }
 
-	    unless($cnx->code() == 0){
-		do_log ('err','Ldap Error : %s, Ldap server error : %s',$cnx->error,$cnx->server_error);
-		$ldap_anonymous->unbind;
+	    unless(defined($cnx) && ($cnx->code() == 0)){
+		do_log('notice',"Can\'t bind to LDAP server $host");
 		last;
+		#do_log ('err','Ldap Error : %s, Ldap server error : %s',$cnx->error,$cnx->server_error);
+		#$ldap_anonymous->unbind;
 	    }
 
 	    $mesg = $ldap_anonymous->search(base => $ldap->{'suffix'},
@@ -1395,13 +1396,14 @@ sub ldap_authentication {
 	    }
 
 	    $cnx = $ldap_passwd->bind($DN[0], password => $pwd);
-	    unless($cnx->code() == 0){
+	    unless(defined($cnx) && ($cnx->code() == 0)){
 		do_log('notice', 'Incorrect password for user %s ; host: %s',$auth, $host);
-	        do_log ('err','Ldap Error : %s, Ldap server error : %s',$cnx->error,$cnx->server_error);
+	        #do_log ('err','Ldap Error : %s, Ldap server error : %s',$cnx->error,$cnx->server_error);
 		$ldap_passwd->unbind;
 		last;
 	    }
-	    $ldap_passwd->bind($DN[0]);
+            # this bind is anonymous and may return 
+	    # $ldap_passwd->bind($DN[0]);
 	    $mesg= $ldap_passwd->search ( base => $ldap->{'suffix'},
 					  filter => "$filter",
 					  scope => $ldap->{'scope'},
@@ -1451,7 +1453,7 @@ sub ldap_authentication {
 	
 	next unless ($ldap_anonymous);
 	next unless ($ldap_passwd);
-	next unless ($cnx->code() == 0);
+	next unless (defined($cnx) && ($cnx->code() == 0));
 	next if($mesg->count() == 0);
 	next if($mesg->code() != 0);
 	next unless ($host);
@@ -1727,9 +1729,16 @@ sub do_sendpasswd {
     
     my $url_redirect;
     if($url_redirect = &is_ldap_user($in{'email'})){
-	$param->{'redirect_to'} = $url_redirect
-	    if ($url_redirect && ($url_redirect != 1));
-	return 1;
+	## There might be no authentication_info_url URL defined in auth.conf
+	if ($url_redirect == 1) {
+	    &error_message('ldap_user');
+	    &wwslog('info','do_sendpasswd: LDAP user %s, cannot remind password', $in{'email'});
+	    return 'remindpasswd';
+	}else {
+	    $param->{'redirect_to'} = $url_redirect
+		if ($url_redirect && ($url_redirect != 1));
+	    return 1;
+	}
     }
 
     if ($param->{'newuser'} =  &List::get_user_db($in{'email'})) {
@@ -1845,7 +1854,7 @@ sub do_lists {
     }
 
     foreach my $l ( &List::get_lists($robot) ) {
-	my $list = new List ($l);
+	my $list = new List ($l, $robot);
 
 	my $sender = $param->{'user'}{'email'} || 'nobody';
 	my $action = &List::request_action ('visibility',$param->{'auth_method'},$robot,
@@ -2279,7 +2288,7 @@ sub do_set {
     ## Lower-case new email address
     $in{'new_email'} = lc( $in{'new_email'});
 
-    if ($in{'email'} ne $in{'new_email'}) {
+    if ($in{'new_email'} && ($in{'email'} ne $in{'new_email'})) {
 
 	unless ($in{'new_email'} && &tools::valid_email($in{'new_email'})) {
 	    &do_log('notice', "do_set:incorrect email %s",$in{'new_email'});
@@ -3408,27 +3417,9 @@ sub do_viewmod {
     my $tmp_dir = $Conf{'queuemod'}.'/.'.$list->{'name'}.'_'.$in{'id'};
 
     unless (-d $tmp_dir) {
-	unless (mkdir ($tmp_dir, 0777)) {
-	    &error_message('may_not_create_dir');
-	    &wwslog('info','do_viewmod: unable to create %s', $tmp_dir);
-	    return undef;
-	}
-	my $mhonarc_ressources ;
-	$mhonarc_ressources = &tools::get_filename('etc', 'mhonarc-ressources', $robot, $list);
-	
-	unless ($mhonarc_ressources) {
-	    do_log('notice',"Cannot find any MhOnArc ressource file");
-	}
-
-	## generate HTML
-	chdir $tmp_dir;
-	open ARCMOD, "$wwsconf->{'mhonarc'}  -single -rcfile $mhonarc_ressources -definevars listname=$list->{'name'} -definevars hostname=$list->{'admin'}{'host'} $Conf{'queuemod'}/$list->{'name'}_$in{'id'}|";
-	open MSG, ">msg00000.html";
-	&do_log('debug4', "$wwsconf->{'mhonarc'}  -single -rcfile $mhonarc_ressources -definevars listname=$list->{'name'} -definevars hostname=$list->{'admin'}{'host'} $Conf{'queuemod'}/$list->{'name'}_$in{'id'}|");
-	print MSG <ARCMOD>;
-	close MSG;
-	close ARCMOD;
-	chdir $Conf{'home'};
+	&error_message('no_html_message_available');
+	&wwslog('info','do_viewmod: no HTML version of the message available in %s', $tmp_dir);
+	return undef;
     }
 
     if ($in{'file'}) {
@@ -3927,7 +3918,12 @@ sub do_arcsearch {
     
     $param->{'key_word'} = $in{'key_word'};
     $in{'key_word'} =~ s/\@/\\\@/g;
-    
+    $in{'key_word'} =~ s/\[/\\\[/g;
+    $in{'key_word'} =~ s/\]/\\\]/g;
+    $in{'key_word'} =~ s/\(/\\\(/g;
+    $in{'key_word'} =~ s/\)/\\\)/g;
+    $in{'key_word'} =~ s/\$/\\\$/g;
+   
     $search->limit ($in{'limit'});
     
     $search->age (1) 
@@ -4000,7 +3996,12 @@ sub do_arcsearch {
     $param->{'searched'} = $search->searched;
     
     $param->{'res'} = $search->res;
-    
+
+    ## Decode subject header fields
+    foreach my $m (@{$param->{'res'}}) {
+	$m->{'subj'} = &MIME::Words::decode_mimewords($m->{'subj'});
+    }
+
     return 1;
 }
 
@@ -4060,7 +4061,12 @@ sub do_arcsearch_id {
     $in{'key_word'} =~ s/\@/\\\@/g;
     $in{'key_word'} =~ s/\[/\\\[/g;
     $in{'key_word'} =~ s/\]/\\\]/g;
+    $in{'key_word'} =~ s/\(/\\\(/g;
+    $in{'key_word'} =~ s/\)/\\\)/g;
     $in{'key_word'} =~ s/\$/\\\$/g;
+
+    ## Mhonarc escapes '-' characters (&#45;)
+    $in{'key_word'} =~ s/\-/\&\#45\;/g;
 
     $search->limit (1);
 
@@ -4113,7 +4119,7 @@ sub do_get_pending_lists {
 	return undef;
     } 
 
-    foreach my $l ( &List::get_lists('*') ) {
+    foreach my $l ( &List::get_lists($robot) ) {
 	my $list = new List ($l,$robot);
 	if ($list->{'admin'}{'status'} eq 'pending') {
 	    $param->{'pending'}{$l}{'subject'} = $list->{'admin'}{'subject'};
@@ -4141,7 +4147,7 @@ sub do_get_closed_lists {
 	return undef;
     } 
 
-    foreach my $l ( &List::get_lists('*') ) {
+    foreach my $l ( &List::get_lists($robot) ) {
 	my $list = new List ($l,$robot);
 	if ($list->{'admin'}{'status'} eq 'closed') {
 	    $param->{'closed'}{$l}{'subject'} = $list->{'admin'}{'subject'};
@@ -4171,7 +4177,7 @@ sub do_get_latest_lists {
     } 
 
     my @unordered_lists;
-    foreach my $l ( &List::get_lists('*') ) {
+    foreach my $l ( &List::get_lists($robot) ) {
 	my $list = new List ($l,$robot);
 	unless ($list) {
 	    next;
@@ -4256,16 +4262,31 @@ sub do_install_pending_list {
 #    dump_var ($list->{'admin'}, 0, \*TMP);
 #    close TMP;
 
-    ## create the list
-    &_install_aliases();
+    ## create the aliases
+    if ($in{'status'} eq 'open') {
+	&_install_aliases();
+    }
 
     if ($in{'notify'}) {
 	foreach my $i (@{$list->{'admin'}{'owner'}}) {
 	    next if ($i->{'reception'} eq 'nomail');
-	    $list->send_file('list_created', $i->{'email'}, $robot,{})
-		if ($i->{'email'});
+	    next unless ($i->{'email'});
+	    if ($in{'status'} eq 'open') {
+		$list->send_file('list_created', $i->{'email'}, $robot,{});
+	    }elsif ($in{'status'} eq 'closed') {
+		$list->send_file('list_rejected', $i->{'email'}, $robot,{});
+	    }
 	}
     }
+
+    $param->{'status'} = $in{'status'};
+
+    if ($in{'status'} ne 'open') {
+	$list = $param->{'list'} = $in{'list'} = undef;
+	return 'get_pending_lists';
+    }
+
+    return 1;
 }
 
 ## Install sendmail aliases
@@ -4276,17 +4297,18 @@ sub _install_aliases {
     &do_log('notice',"$alias_manager add $list->{'name'} $list->{'admin'}{'host'}");
     if (-x $alias_manager) {
 	system ("$alias_manager add $list->{'name'} $list->{'admin'}{'host'}") ;
-	&wwslog('info','Configuration file --CONFIG-- has errors') if ($? == '1') ;
-	&wwslog('info','Internal error : Incorrect call to alias_manager') if ($? == '2') ;
-	&wwslog('info','Could not read sympa config file, report to httpd error_log') if ($? == '3') ;
-	&wwslog('info','Could not get default domain, report to httpd error_log') if ($? == '4') ;
-	&wwslog('info','Unable to append to alias file') if ($? == '5') ;
-	&wwslog('info','Unable run newaliases') if ($? == '6') ;
-	&wwslog('info','Unable to read alias file, report to httpd error_log') if ($? == '7') ;
-	&wwslog('info','Could not create temporay file, report to httpd error_log') if ($? == '8') ;
-	&wwslog('info','Some of list aliases already exist') if ($? == '13') ;
-	&wwslog('info','Can not open lock file, report to httpd error_log') if ($? == '14') ;
-	&wwslog('info','Aliases installed successfully') if ($? == '0') ;
+	my $status = $?;
+	&wwslog('info','Configuration file --CONFIG-- has errors') if ($status == '1') ;
+	&wwslog('info','Internal error : Incorrect call to alias_manager') if ($status == '2') ;
+	&wwslog('info','Could not read sympa config file, report to httpd error_log') if ($status == '3') ;
+	&wwslog('info','Could not get default domain, report to httpd error_log') if ($status == '4') ;
+	&wwslog('info','Unable to append to alias file') if ($status == '5') ;
+	&wwslog('info','Unable run newaliases') if ($status == '6') ;
+	&wwslog('info','Unable to read alias file, report to httpd error_log') if ($status == '7') ;
+	&wwslog('info','Could not create temporay file, report to httpd error_log') if ($status == '8') ;
+	&wwslog('info','Some of list aliases already exist') if ($status == '13') ;
+	&wwslog('info','Can not open lock file, report to httpd error_log') if ($status == '14') ;
+	&wwslog('info','Aliases installed successfully') if ($status == '0') ;
 	$param->{'auto_aliases'} = 1;
     }else {
 	&wwslog('info','Failed to install aliases: %s', $!);
@@ -4314,12 +4336,19 @@ sub _remove_aliases {
     &wwslog('info', '_remove_aliases()');
 
     my $alias_manager = '--SBINDIR--/alias_manager.pl';
-    if ((-x $alias_manager) 
-	&& (system ("$alias_manager'} del $list->{'name'} $list->{'admin'}{'host'}") == 0)) {
+
+    unless (-x $alias_manager) {
+	&wwslog('info','Cannot run alias_manager %s', $alias_manager);
+	&error_message('failed_to_remove_aliases');
+    }
+    
+    system ("$alias_manager del $list->{'name'} $list->{'admin'}{'host'}");
+    my $status = $? / 256;
+    if ($status == 0) {
 	&wwslog('info','Aliases removed successfully');
 	$param->{'auto_aliases'} = 1;
     }else {
-	&wwslog('info','Failed to remove aliases: %s', $!);
+	&wwslog('info','Failed to remove aliases ; status %d : %s', $status, $!);
 	&error_message('failed_to_remove_aliases');
     }
 
@@ -4610,19 +4639,19 @@ sub do_editsubscriber {
 	return undef;
     }
 
-    $param->{'subscriber'} = $user;
-    $param->{'subscriber'}{'escaped_email'} = &tools::escape_html($param->{'subscriber'}{'email'});
+    $param->{'current_subscriber'} = $user;
+    $param->{'current_subscriber'}{'escaped_email'} = &tools::escape_html($param->{'current_subscriber'}{'email'});
 
-    $param->{'subscriber'}{'date'} = &POSIX::strftime("%d %b %Y", localtime($user->{'date'}));
-    $param->{'subscriber'}{'update_date'} = &POSIX::strftime("%d %b %Y", localtime($user->{'update_date'}));
+    $param->{'current_subscriber'}{'date'} = &POSIX::strftime("%d %b %Y", localtime($user->{'date'}));
+    $param->{'current_subscriber'}{'update_date'} = &POSIX::strftime("%d %b %Y", localtime($user->{'update_date'}));
 
     ## Prefs
-    $param->{'subscriber'}{'reception'} ||= 'mail';
-    $param->{'subscriber'}{'visibility'} ||= 'noconceal';
+    $param->{'current_subscriber'}{'reception'} ||= 'mail';
+    $param->{'current_subscriber'}{'visibility'} ||= 'noconceal';
     foreach my $m (keys %wwslib::reception_mode) {		
       if ($list->is_available_reception_mode($m)) {
 	$param->{'reception'}{$m}{'description'} = $wwslib::reception_mode{$m};
-	if ($param->{'subscriber'}{'reception'} eq $m) {
+	if ($param->{'current_subscriber'}{'reception'} eq $m) {
 	    $param->{'reception'}{$m}{'selected'} = 'SELECTED';
 	}else {
 	    $param->{'reception'}{$m}{'selected'} = '';
@@ -4633,9 +4662,9 @@ sub do_editsubscriber {
     ## Bounces
     if ($user->{'bounce'} =~ /^(\d+)\s+(\d+)\s+(\d+)(\s+(.*))?$/) {
 	my @bounce = ($1, $2, $3, $5);
-    	$param->{'subscriber'}{'first_bounce'} = &POSIX::strftime("%d %b %Y", localtime($bounce[0]));
-    	$param->{'subscriber'}{'last_bounce'} = &POSIX::strftime("%d %b %Y", localtime($bounce[1]));
-    	$param->{'subscriber'}{'bounce_count'} = $bounce[2];
+    	$param->{'current_subscriber'}{'first_bounce'} = &POSIX::strftime("%d %b %Y", localtime($bounce[0]));
+    	$param->{'current_subscriber'}{'last_bounce'} = &POSIX::strftime("%d %b %Y", localtime($bounce[1]));
+    	$param->{'current_subscriber'}{'bounce_count'} = $bounce[2];
 	if ($bounce[3] =~ /^(\d+\.(\d+\.\d+))$/) {
 	   $user->{'bounce_code'} = $1;
 	   $user->{'bounce_status'} = $wwslib::bounce_status{$2};
@@ -4931,8 +4960,8 @@ sub do_rebuildallarc {
 	&wwslog('info','do_rebuildallarc: not listmaster');
 	return undef;
     }
-    foreach my $l ( &List::get_lists('*') ) {
-	my $list = new List ($l); 
+    foreach my $l ( &List::get_lists($robot) ) {
+	my $list = new List ($l,$robot); 
 	next unless (defined $list->{'admin'}{'web_archive'});
         my $file = "$Conf{'queueoutgoing'}/.rebuild.$list->{'name'}\@$list->{'admin'}{'host'}";
 
@@ -4976,7 +5005,7 @@ sub do_search_list {
     my $record = 0;
     foreach my $l ( &List::get_lists($robot) ) {
 	my $is_admin;
-	my $list = new List ($l);
+	my $list = new List ($l, $robot);
 
 	## Search filter
 	next if (($list->{'name'} !~ /$param->{'regexp'}/i) 
@@ -5474,10 +5503,12 @@ sub _prepare_edit_form {
 		foreach my $topic (keys %list_of_topics) {
 		    $menu->{'value'}{$topic}{'selected'} = 0;
 		    $menu->{'value'}{$topic}{'title'} = $list_of_topics{$topic}{'title'};
-
-		    foreach my $subtopic (keys %{$list_of_topics{$topic}{'sub'}}) {
-			$menu->{'value'}{"$topic/$subtopic"}{'selected'} = 0;
-			$menu->{'value'}{"$topic/$subtopic"}{'title'} = "$list_of_topics{$topic}{'title'}/$list_of_topics{$topic}{'sub'}{$subtopic}{'title'}";
+		    
+		    if ($list_of_topics{$topic}{'sub'}) {
+			foreach my $subtopic (keys %{$list_of_topics{$topic}{'sub'}}) {
+			    $menu->{'value'}{"$topic/$subtopic"}{'selected'} = 0;
+			    $menu->{'value'}{"$topic/$subtopic"}{'title'} = "$list_of_topics{$topic}{'title'}/$list_of_topics{$topic}{'sub'}{$subtopic}{'title'}";
+			}
 		    }
 		}
 		$menu->{'value'}{$selected_topic}{'selected'} = 1;
@@ -5747,13 +5778,13 @@ sub do_restore_list {
     $list->save_config($param->{'user'}{'email'});
 
     if ($list->{'admin'}{'user_data_source'} eq 'file') {
-	$list->{'users'} = &List::_load_users_file("$list->{'name'}/subscribers.closed.dump");
+	$list->{'users'} = &List::_load_users_file("$list->{'dir'}/subscribers.closed.dump");
 	$list->save();
     }elsif ($list->{'admin'}{'user_data_source'} eq 'database') {
-	unless (-f "$list->{'name'}/subscribers.closed.dump") {
+	unless (-f "$list->{'dir'}/subscribers.closed.dump") {
 	    &wwslog('notice', 'No subscribers to restore');
 	}
-	my @users = &List::_load_users_file("$list->{'name'}/subscribers.closed.dump");
+	my @users = &List::_load_users_file("$list->{'dir'}/subscribers.closed.dump");
 	
 	## Insert users in database
 	foreach my $user (@users) {
@@ -8287,6 +8318,7 @@ sub do_change_email {
 	    my $sub_is = &List::request_action('subscribe',$param->{'auth_method'},$robot,
 					       {'listname' => $l,
 						'sender' => $in{'email'}, 
+						'previous_email' => $param->{'user'}{'email'},
 						'remote_host' => $param->{'remote_host'},
 						'remote_addr' => $param->{'remote_addr'}});
 
@@ -8532,7 +8564,7 @@ sub do_attach {
     my $list_name = $list->{'name'};
 
     # relative path / directory shared of the document 
-    my $path = $in{'path'};
+    my $path = &tools::escape_chars($in{'dir'}).'/'.$in{'file'};
     my $path_orig = $path;
   
     # path of the urlized directory
