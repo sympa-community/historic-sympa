@@ -70,7 +70,7 @@
             \label {fig:#1}
         \end {figure}
     }
-    \newcommand {\version} {4.1}
+    \newcommand {\version} {4.1.1}
 
     \newcommand {\samplelist} {mylist}
 
@@ -124,13 +124,13 @@
 
 \begin {document}
 
-    \title {\Huge\bf Sympa \\ \huge\bf Mailing Lists Management Software \\ version 4.1\\}
+    \title {\Huge\bf Sympa \\ \huge\bf Mailing Lists Management Software \\ version 4.1.1\\}
     \author {
         Serge Aumont,
         Olivier Sala\"un,
         Christophe Wolfhugel,
          }
-    \date {15 March 2004}
+    \date {19 April 2004}
 \begin {htmlonly}
 For printing purpose, use the 
 \htmladdnormallink {postscript format version} {sympa.ps} of this documentation.
@@ -638,7 +638,7 @@ a virtual robot or for the whole site.
 	The daemon which manages the tasks : creation, checking, execution. 
 	It regularly scans the \dir {task/} spool.
 
-	\item \file {sympa\_soap\_server.pl}\\
+	\item \file {sympa\_soap\_server.fcgi}\\
 	The server will process SOAP (web services) request. This server requires FastCGI ;
 	it should be referenced from within your HTTPS config.
 
@@ -1495,7 +1495,7 @@ is still recognized but should not be used anymore.
 
 	This is the root URL of Sympa's SOAP server. Sympa's WSDL document refer to this URL in its \texttt {service} section.
 
-        \example {wwsympa\_url http://my.server/sympasoap}
+        \example {soap\_url http://my.server/sympasoap}
 
 \subsection {\cfkeyword {spam\_protection}}  
 
@@ -3110,8 +3110,8 @@ You \textbf {NEED TO} install FastCGI for the SOAP server to work properly becau
 Here is a sample piece of your Apache \file {httpd.conf} with a SOAP server configured :
 \begin {quote}
 \begin{verbatim}
-	FastCgiServer /sympa_soap_server.pl -processes 1
-	ScriptAlias /sympasoap /sympa_soap_server.pl
+	FastCgiServer /sympa_soap_server.fcgi -processes 1
+	ScriptAlias /sympasoap /sympa_soap_server.fcgi
 
 	<Location /sympasoap>
    	  SetHandler fastcgi-script
@@ -4563,6 +4563,9 @@ Only the following parameters can be redefined for a particular robot :
 	\item \cfkeyword {wwsympa\_url} \\
 	The base URL of WWSympa
 
+	\item \cfkeyword {soap\_url} \\
+	The base URL of Sympa's SOAP server (if it is running ; see ~\ref {soap}, page~\pageref {soap})
+
 	\item \cfkeyword {cookie\_domain}
 
 	\item \cfkeyword {email}
@@ -5295,6 +5298,7 @@ title.fr mise a jour quotidienne des listes de révocation
 title.us daily certificate revocation list update
 title.et sertifikaatide kehtivuse nimekirja uuendatakse iga päev
 title.hu napi frissítése a hitelesítési bizonylatok visszavonásának
+title.cz denní aktualizace seznamu revokací certifikátù
 
 /ACTION
 update_crl (CA_list, [execution_date]+1d)
@@ -6080,12 +6084,6 @@ output generated in response to a \mailcmd {LISTS} command.
      \item \lparam {visibility} \texttt {secret}
 	\begin {htmlonly}
 	  (\htmladdnormallink {view} {http://listes.cru.fr/sympa/distribution/current/src/etc/scenari/visibility.secret})
-	\end {htmlonly}\\
-	conceal even for subscribers
-
-     \item \lparam {visibility} \texttt {s}
-	\begin {htmlonly}
-	  (\htmladdnormallink {view} {http://listes.cru.fr/sympa/distribution/current/src/etc/scenari/visibility.s})
 	\end {htmlonly}\\
 	conceal even for subscribers
 
@@ -7184,7 +7182,7 @@ Predefined authorization scenarios are :
 	\begin {htmlonly}
 	  (\htmladdnormallink {view} {http://listes.cru.fr/sympa/distribution/current/src/etc/scenari/d_read.owner})
 	\end {htmlonly}\\
-	restricted to list owners and document author
+	restricted to list owners
 
      \item \lparam {d\_read} \texttt {private} 
 	\begin {htmlonly}
@@ -7218,7 +7216,7 @@ Predefined authorization scenarios are :
 	\begin {htmlonly}
 	  (\htmladdnormallink {view} {http://listes.cru.fr/sympa/distribution/current/src/etc/scenari/d_edit.owner})
 	\end {htmlonly}\\
-	restricted to list owners and document author
+	restricted to list owners
 
      \item \lparam {d\_edit} \texttt {private} 
 	\begin {htmlonly}

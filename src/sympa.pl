@@ -39,7 +39,6 @@ use Version;
 use smtp;
 use MIME::QuotedPrint;
 use List;
-use Ldap;
 use Message;
 
 require 'tools.pl';
@@ -1114,7 +1113,7 @@ sub DoCommand {
     my $hdr = $msg->head;
     
     ## Decode headers
-    $hdr->decode();
+    #$hdr->decode();
     
     my $from_field = $hdr->get('From');
     my $messageid = $hdr->get('Message-Id');
@@ -1144,7 +1143,7 @@ sub DoCommand {
     
     ## Process the Subject of the message
     ## Search and process a command in the Subject field
-    my $subject_field = $hdr->get('Subject');
+    my $subject_field = &MIME::Words::decode_mimewords($hdr->get('Subject'));
     chomp $subject_field;
     $subject_field =~ s/\n//mg; ## multiline subjects
     $subject_field =~ s/^\s*(Re:)?\s*(.*)\s*$/$2/i;

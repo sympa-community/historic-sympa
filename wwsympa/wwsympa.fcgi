@@ -45,7 +45,6 @@ use Conf;
 use Commands;
 use Language;
 use Log;
-use Ldap;
 use Auth;
 
 use Mail::Header;
@@ -685,7 +684,6 @@ if ($wwsconf->{'use_fast_cgi'}) {
          $param->{'lang'} = $param->{'cookie_lang'} || $param->{'user'}{'lang'} || 
 	     $list->{'admin'}{'lang'} || &Conf::get_robot_conf($robot, 'lang');
          &Language::SetLang($param->{'lang'});
-         &POSIX::setlocale(&POSIX::LC_ALL, Msg(14, 1, 'en_US'));
 
          ## use default_home parameter
          if ($action eq 'home') {
@@ -1771,6 +1769,19 @@ sub do_sso_login_succeeded {
      unless (&tools::get_filename('etc', 'auth.conf', $robot)) {
 	 return undef;
      }
+
+     ## List all LDAP servers first
+     my @ldap_servers;
+     foreach my $ldap (@{$Conf{'auth_services'}}){
+	 next unless ($ldap->{'auth_type'} eq 'ldap');
+	 
+	 push @ldap_servers, $ldap;
+     }    
+     
+     unless ($#ldap_servers >= 0) {
+	 return undef;
+     }
+
      unless (eval "require Net::LDAP") {
 	 do_log ('err',"Unable to use LDAP library, Net::LDAP required,install perl-ldap (CPAN) first");
 	 return undef;
@@ -1779,9 +1790,7 @@ sub do_sso_login_succeeded {
 
      my ($ldap_anonymous,$host,$filter);
 
-     foreach my $ldap (@{$Conf{'auth_services'}}){
-	 # only ldap service are to be applied here
-	 next unless ($ldap->{'auth_type'} eq 'ldap');
+     foreach my $ldap (@ldap_servers){
 
 	 # skip ldap auth service if the user id or email do not match regexp auth service parameter
 	 next unless ($auth =~ /$ldap->{'regexp'}/i);
@@ -3537,21 +3546,21 @@ sub do_redirect {
 	 my $id = $1;
 
 	 ## Load msg
-	 unless (open MSG, "$Conf{'queuemod'}/$msg") {
+	 my $mail = new Message("$Conf{'queuemod'}/$msg");
+	 
+	 unless (defined $mail) {
 	     &error_message('msg_error');
-	     &wwslog('info','do_modindex: unable to read msg %s', $msg);
+	     &wwslog('err','do_modindex: unable to parse msg %s', $msg);
 	     closedir SPOOL;
 	     return 'admin';
 	 }
 
-	 my $mail = new Mail::Internet [<MSG>];
-	 close MSG;
 
 	 $param->{'spool'}{$id}{'size'} = int( (-s "$Conf{'queuemod'}/$msg") / 1024 + 0.5);
-	 $param->{'spool'}{$id}{'subject'} =  &MIME::Words::decode_mimewords($mail->head->get('Subject'));
+	 $param->{'spool'}{$id}{'subject'} =  &MIME::Words::decode_mimewords($mail->{'msg'}->head->get('Subject'));
 	 $param->{'spool'}{$id}{'subject'} ||= 'no_subject';
-	 $param->{'spool'}{$id}{'date'} = $mail->head->get('Date');
-	 $param->{'spool'}{$id}{'from'} = &MIME::Words::decode_mimewords($mail->head->get('From'));
+	 $param->{'spool'}{$id}{'date'} = $mail->{'msg'}->head->get('Date');
+	 $param->{'spool'}{$id}{'from'} = &MIME::Words::decode_mimewords($mail->{'msg'}->head->get('From'));
 	 foreach my $field ('subject','date','from') {
 	     $param->{'spool'}{$id}{$field} =~ s/</&lt;/;
 	     $param->{'spool'}{$id}{$field} =~ s/>/&gt;/;
@@ -4295,6 +4304,7 @@ sub do_redirect {
      $in{'key_word'} =~ s/\(/\\\(/g;
      $in{'key_word'} =~ s/\)/\\\)/g;
      $in{'key_word'} =~ s/\$/\\\$/g;
+     $in{'key_word'} =~ s/\'/\\\'/g;
 
      $search->limit ($in{'limit'});
 
@@ -4598,7 +4608,7 @@ sub do_get_inactive_lists {
 
 	 if (open COUNT, $list->{'dir'}.'/msg_count') {
 	     while (<COUNT>) {
-		 $last_message = $1 if (/^(\d+)\s/);
+		 $last_message = $1 if (/^(\d+)\s/ && ($1 > $last_message));
 	     }
 	     close COUNT;
 
@@ -4931,7 +4941,7 @@ sub do_set_pending_list_request {
      my $list_dir;
 
      ## A virtual robot
-     if ($robot ne $Conf{'domain'}) {
+     if (-d "$Conf{'home'}/$robot") {
 	 unless (-d $Conf{'home'}.'/'.$robot) {
 	     unless (mkdir ($Conf{'home'}.'/'.$robot,0777)) {
 		 &error_message('unable_to_create_dir');
@@ -5773,7 +5783,7 @@ sub do_set_pending_list_request {
 		     &wwslog('notice', 'No subscribers to load in database');
 		 }
 		 @users = &List::_load_users_file("$list->{'dir'}/subscribers");
-	     }elsif (($list->{'admin'}{'user_data_source'} eq 'database') &&
+	     }elsif (($list->{'admin'}{'user_data_source'} ne 'include2') &&
 		     ($new_admin->{'user_data_source'} eq 'include2')) {
 		 $list->update_user('*', {'subscribed' => 1});
 		 &message('subscribers_update_soon');
@@ -6109,8 +6119,15 @@ sub do_set_pending_list_request {
 		     $p_glob->{'value'}{$elt}{'selected'} = 0;
 		 }
 	     }
-	     $p_glob->{'value'}{$d}{'selected'} = 1;
-
+	     if (ref ($d)) {
+		 next unless (ref ($d) eq 'ARRAY');
+		 foreach my $v (@{$d}) {
+		     $p_glob->{'value'}{$v}{'selected'} = 1;
+		 }
+	     }else {
+		 $p_glob->{'value'}{$d}{'selected'} = 1 if (defined $d);
+	     }
+	     
 	 }else {
 	     $p_glob->{'type'} = 'scalar';
 	     $p->{'value'} = &tools::escape_html($d);
@@ -6189,7 +6206,7 @@ sub do_set_pending_list_request {
 
  # in order to rename a list you must be list owner and you must be allowed to create new list
  sub do_rename_list {
-     &wwslog('info', 'do_rename_list()');
+     &wwslog('info', 'do_rename_list(%s,%s)', $in{'new_listname'}, $in{'new_robot'});
 
      unless (($param->{'is_privileged_owner'}) || ($param->{'is_listmaster'})) {
 	 &error_message('may_not');
@@ -6236,7 +6253,9 @@ sub do_set_pending_list_request {
 		 $wwsconf->{'list_check_smtp'});
 	 return undef;
      }
-     if( $res || new List ($in{'new_listname'}, $in{'new_robot'})) {
+     if( $res || 
+	 ($list->{'name'} ne $in{'new_listname'}) && ## Do not test if listname did not change
+	 (new List ($in{'new_listname'}, $in{'new_robot'}))) {
 	 &error_message('list_already_exists');
 	 &do_log('info', 'Could not rename list %s for %s: new list %s already existing list', 
 		 $in{'listname'},$param->{'user'}{'email'},$in{'new_listname'});
@@ -6268,8 +6287,12 @@ sub do_set_pending_list_request {
      }else {
 	 $new_dir = $Conf{'home'}.'/'.$in{'new_robot'}.'/'.$in{'new_listname'};
      }
+
+     ## Save config file for the new() later to reload it
+     $list->save_config($param->{'user'}{'email'});
+
      unless (rename ($list->{'dir'}, $new_dir )){
-	 &wwslog('info',"do_rename_list : unable to rename $list->{'dir'} to $new_dir");
+	 &wwslog('info',"do_rename_list : unable to rename $list->{'dir'} to $new_dir : $!");
 	 &error_message('failed');
 	 return undef;
      }
@@ -6283,10 +6306,12 @@ sub do_set_pending_list_request {
 	 }
      }
      ## Rename bounces
-     if (-d "$wwsconf->{'bounce_path'}/$list->{'name'}") {
-	 unless (rename ("wwsconf->{'bounce_path'}/$list->{'name'}","wwsconf->{'bounce_path'}/$in{'new_listname'}")) {
+     if (-d "$wwsconf->{'bounce_path'}/$list->{'name'}" &&
+	 ($list->{'name'} ne $in{'new_listname'})
+	 ) {
+	 unless (rename ("$wwsconf->{'bounce_path'}/$list->{'name'}","$wwsconf->{'bounce_path'}/$in{'new_listname'}")) {
 	      &error_message('unable_to_rename_bounces');
-	      &wwslog('info',"do_rename_list unable to rename bounces from wwsconf->{'bounce_path'}/$list->{'name'} to sconf->{'bounce_path'}/$in{'new_listname'}");
+	      &wwslog('info',"do_rename_list unable to rename bounces from $wwsconf->{'bounce_path'}/$list->{'name'} to $wwsconf->{'bounce_path'}/$in{'new_listname'}");
 	 }
      }
 
@@ -6299,6 +6324,7 @@ sub do_set_pending_list_request {
 
      ## Install new aliases
      $in{'listname'} = $in{'new_listname'};
+     
      unless ($list = new List ($in{'new_listname'}, $in{'new_robot'})) {
 	 &wwslog('info',"do_rename_list : unable to load $in{'new_listname'} while renamming");
 	 &error_message('failed');
@@ -6412,7 +6438,16 @@ sub do_set_pending_list_request {
 	 &error_message('already_closed');
 	 &wwslog('info','do_close_list: already closed');
 	 return undef;
-     }      
+     }elsif($list->{'admin'}{'status'} eq 'pending') {
+	 &wwslog('info','do_close_list: closing a pending list make it purged');
+	 &tools::remove_dir($list->{'dir'});
+	 if ($list->{'name'}) {
+		&tools::remove_dir("$wwsconf->{'arc_path'}/$list->{'name'}\@$list->{'domain'}");
+		&tools::remove_dir("$wwsconf->{'bounce_path'}/$list->{'name'}");
+	 }
+	 &message('list_purged');
+	 return 'home';	
+     }     
 
      $list->close($param->{'user'}{'email'});
 

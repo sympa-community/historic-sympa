@@ -184,12 +184,12 @@ currently selected descriptor.
 use Carp;
 
 use Mail::Header;
-use Mail::Internet;
 use Archive;
 use Language;
 use Log;
 use Conf;
 use mail;
+use Ldap;
 use Time::Local;
 use MIME::Entity;
 use MIME::Words;
@@ -990,7 +990,8 @@ my %alias = ('reply-to' => 'reply_to',
 				   'group' => 'data_source'
 				   },
 	    'visibility' => {'scenario' => 'visibility',
-			     'synonym' => {'public' => 'noconceal'},
+			     'synonym' => {'public' => 'noconceal',
+					   'private' => 'conceal'},
 			     'title_id' => 82,
 			     'group' => 'description'
 			     },
@@ -1245,7 +1246,7 @@ sub increment_msg_count {
 	do_log('err', "Unable to create '%s.%s' : %s", $file,$$, $!);
 	return undef;
     }
-    foreach my $key (keys %count) {
+    foreach my $key (sort {$a <=> $b} keys %count) {
 	printf MSG_COUNT "%d\t%d\n",$key,$count{$key} ;
     }
     close MSG_COUNT ;
@@ -1629,11 +1630,14 @@ sub send_notify_to_listmaster {
 	my $list = new List $param[0];
 	my $host = &Conf::get_robot_conf($robot, 'host');
 
-	$list->send_file('listmaster_notification', &Conf::get_robot_conf($robot, 'listmaster'), $robot,
-			 {'to' => "listmaster\@$host",
-			  'type' => 'request_list_creation',
-			  'email' => $param[1]});
-
+	&send_global_file('listmaster_notification', &Conf::get_robot_conf($robot, 'listmaster'), $robot,
+			  {'to' => "listmaster\@$host",
+			   'list' => {'name' => $list->{'name'},
+				      'host' => $list->{'domain'},
+				      'subject' => $list->{'admin'}{'subject'}},
+			   'type' => 'request_list_creation',
+			   'email' => $param[1]});
+	
     ## Loop detected in Sympa
     }elsif ($operation eq 'loop_command') {
 	my $file = $param[0];
@@ -1871,8 +1875,7 @@ sub send_to_editor {
        my $tmp_dir = "$modqueue\/.$name\_$modkey";
        unless (-d $tmp_dir) {
 	   unless (mkdir ($tmp_dir, 0777)) {
-	       &error_message('may_not_create_dir');
-	       &do_log('info','do_viewmod: unable to create %s', $tmp_dir);
+	       &do_log('err','Unable to create %s', $tmp_dir);
 	       return undef;
 	   }
 	   my $mhonarc_ressources = &tools::get_filename('etc', 'mhonarc-ressources', $robot, $self);
@@ -2718,7 +2721,7 @@ sub send_file {
     $data->{'return_path'} ||= "$name-owner\@$self->{'admin'}{'host'}";
 
     ## Lang
-    my $lang = $data->{'user'}{'lang'} || $self->{'lang'} || &Conf::get_robot_conf($robot, 'lang');
+    my $lang = $data->{'user'}{'lang'} || $self->{'admin'}{'lang'} || &Conf::get_robot_conf($robot, 'lang');
 
     ## What file   
     foreach my $f ("$self->{'dir'}/$action.$lang.tpl",
@@ -3321,7 +3324,7 @@ sub get_first_user {
 
 	## If no offset (for LIMIT) was used, update total of subscribers
 	unless ($offset) {
-	    my $total = &_load_total_db($self->{'name'});
+	    my $total = &_load_total_db($self->{'name'},'nocache');
 	    if ($total != $self->{'total'}) {
 		$self->{'total'} = $total;
 		$self->savestats();
@@ -4679,7 +4682,7 @@ sub search{
     my $value;
 
     my %ldap_conf;
-
+    
     return undef unless (%ldap_conf = &Ldap::load($file));
 
  
@@ -6163,6 +6166,18 @@ sub sync_include {
     ## Load a hash with the old subscribers
     for (my $user=$self->get_first_user(); $user; $user=$self->get_next_user()) {
 	$old_subscribers{lc($user->{'email'})} = $user;
+	
+	## User neither included nor subscribed = > set subscribed to 1 
+	unless ($old_subscribers{lc($user->{'email'})}{'included'} || $old_subscribers{lc($user->{'email'})}{'subscribed'}) {
+	    &do_log('notice','Update user %s neither included nor subscribed', $user->{'email'});
+	    unless( $self->update_user(lc($user->{'email'}),  {'update_date' => time,
+							       'subscribed' => 1 }) ) {
+		&do_log('err', 'List:sync_include(%s): Failed to update %s', $name, lc($user->{'email'}));
+		next;
+	    }			    
+	    $old_subscribers{lc($user->{'email'})}{'subscribed'} = 1;
+	}
+
 	$total++;
     }
 

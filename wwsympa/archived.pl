@@ -52,6 +52,8 @@ if ($main::options{'debug'}) {
     $main::options{'log_level'} = 2 unless ($main::options{'log_level'});
 }
 
+$main::options{'foreground'} = 1 if ($main::options{'debug'});
+
 $Version = '0.1';
 
 $wwsympa_conf = "--WWSCONFIG--";
@@ -198,7 +200,7 @@ while (!$end) {
 	   
 	   if ($file =~ /^(\d{4})-(\d{2})-(\d{2})-(\d{2})-(\d{2})-(\d{2})-(.*)$/) {
 	       ($yyyy, $mm, $dd, $hh, $min, $ss, $adrlist) = ($1, $2, $3, $4, $5, $6, $7);
-	   }elsif ($file =~ /^(.*)\.(\d+)\.(\d+)\.(\d+)$/) {
+	   }elsif (($file =~ /^(.*)\.(\d+)\.(\d+)\.(\d+)$/) || ($file =~ /^(.*)\.(\d+)\.(\d+)$/)) {
 	       $adrlist = $1;
 	       my $date = $2;
 

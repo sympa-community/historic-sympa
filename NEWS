@@ -3,6 +3,93 @@
 
 (See Changelog file for the full changes log)
 
+
+4.1.2		21 june 2004
+
+   Bug fixes :
+
+	wwsympa/wwsympa.fcgi: fix a bug that allow to "open" a pending list without listmaster privilege.
+
+	wwsympa/wwsympa.fcgi: [reported by Y.Edelist] wwsympa would log a warning if Net::LDAP was not installed, 
+	even though it was not used : "Unable to use LDAP library, Net::LDAP required,install perl-ldap (CPAN) first"
+
+	src/List.pm, wwsympa/wwsympa.fcgi: [BugID 295] "Internal Server Error" while accessing to modindex
+
+	src/etc/edit_list.conf: new include_xxx parameters should be hidden for owners
+
+	configure.in: [reported by L.Veillon] [O.Lacroix] incorrect AC_ARG_WITH
+
+	wwsympa/: archived.pl, bounced.pl: when in debug mode, log entries were not printed
+
+	src/List.pm: [reported by P.Maes] list creation request message could not be sent (foo-owner User Unknown) because
+	Return-path address was not yet created
+
+	wwsympa/wwsympa.fcgi: [reported by V. Mathieu] incorrectly handled multiple enum parameters in edit_list
+
+	wwsympa/wwsympa.fcgi, src/Language.pm: Add &POSIX::setlocale to SetLang(), for better dates syntax
+
+	src/List.pm: did not take the list language into account in send_file()
+
+	wwsympa/wwsympa.fcgi: previously created ML directory directly in expl/ directory if robot was also the default host.
+
+	src/tools.pl: [O.Lacroix] failed to remove list directory (while purging) becaude finddepth() used to chdir. 
+	rmdir() failed with 'device busy' error
+
+	wwsympa/wwsympa.fcgi: [reported by mwk] escape single quotes in archives search engine (could cause a 500 error)
+
+
+
+
+   Changes :
+
+	src/tools.pl: [reported by O. Lacroix] previously made too many trials for safefork()
+
+	src/Conf.pm: Change: check Sympa access to capath and cafile if defined
+
+	wwsympa/wwsympa.fcgi: notify user that the config will be updated soon when user_data_source changed 
+	from anything to 'include2'
+
+
+4.1.1.1		26 April 2004
+
+   Bug fixes :
+	
+	wwsympa/Makefile: [BugID 152] UMASK was not set when installing web templates
+
+	wwsympa/Makefile: [BugID 205] wws_templates/ directory was installed with wrong permissions
+
+	src/task_manager.pl: Do not warn/remove boucing members that are included
+
+	src/List.pm: [reported by O.Thalmann] total of subscribers was not uptodate just after a DEL or ADD operation.  
+	Added 'nocache' option to the call to _load_total_db() in get_first_user()
+
+	src/List.pm, src/sympa.pl, wwsympa/wwsympa.fcgi: [reported by V.Mathieu] Fix: Ldap.pm was not loaded in sympa_soap_server.fcgi
+
+	src/tools.pl: [L. Labat] Antivirus check would fail under some circumstances (Unable to open xxx). 
+	BODY filehandle was never closed
+
+	wwsympa/wwsympa.fcgi: renaming a list if the list was moved to another robot with the same name
+
+	src/sympa.pl: remove call to deprecated MIME::Head::decode()
+
+   Changes :
+
+	check_perl_modules.pl: [reported by V.Mathieu] FCGI 0.67 is required for the SOAP server.  
+	Corresponding error message : Can't locate object method "BINMODE" via package "FCGI::Stream"
+
+
+4.1.1		22 March 2004
+
+   Bug fixes :
+	
+	wwsympa/archived.pl: web archives were stored in the wrong directory.
+	If you have been running Sympa 4.1, you should run the arcrepair.pl script on your server.
+
+	wwsympa/wwsympa.fcgi: [reported by V. Mathieu] list of inactive lists did not consider 
+	the msg_count file was not ordered
+
+	src/List.pm: sorting msg_count file when it is updated
+
 4.1		15 March 2004
 
    Changes :
@@ -257,7 +344,7 @@
 
 	wwsympa/Auth.pm: contact LDAP directory in asynchronous mode
 
-4.0.a7		16 October 2003
+4.0.a7		18 October 2003
 
    New features :
 
@@ -285,6 +372,12 @@
 	Incorrect listname regexp in task_manager (ingnored lists with '+').  Now centralized regexps in tools.pl
 
    Bug fixes :
+
+	src/List.pm: [K.Marrocco] incorrectly refers to column "attributes" instead of "attributes_user" (for Oracle)
+
+	src/Archive.pm, wwsympa/archived.pl: [BugID 273] [C.Nahaboo]  filenames in archived spool
+	(outgoing) were using current time and PID which is not enough when 2 messages for the same list are sent 
+	within the same second. Now adding incremental number to filenames in outgoing spool.
 
 	src/tools.pl: S/MIME related ; Sympa would die if it could	not find user certificate
 

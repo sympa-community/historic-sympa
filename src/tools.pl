@@ -67,13 +67,13 @@ sub sortbydomain {
 }
 
 ## Safefork does several tries before it gives up.
-## Do 3 trials and wait 10 seconds between each.
+## Do 3 trials and wait 10 seconds * $i between each.
 ## Exit with a fatal error is fork failed after all
 ## tests have been exhausted.
 sub safefork {
    my($i, $pid);
    
-   for ($i = 1; $i < 360; $i++) {
+   for ($i = 1; $i < 4; $i++) {
       my($pid) = fork;
       return $pid if (defined($pid));
       do_log ('warning', "Can't create new process in safefork: %m");
@@ -1103,6 +1103,7 @@ sub split_mail {
 		    return undef;
 		}
 		$decoder->decode(\*BODY, \*OFILE);
+		close BODY;
 		unlink "$dir/$pathname.$fileExt.$encoding";
 	    }else {
 		$message->print_body (\*OFILE) ;
@@ -1616,7 +1617,7 @@ sub remove_dir {
 	    do_log('info',"$current_dir not removed (not enough / in directory name)");
 	    next;
 	}
-	finddepth(\&del,$current_dir);
+	finddepth({wanted => \&del, no_chdir => 1},$current_dir);
     }
     sub del {
 	my $name = $File::Find::name;
