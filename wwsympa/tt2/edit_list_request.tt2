@@ -8,7 +8,7 @@
 <LI><A HREF="[% path_cgi %]/edit_list_request/[% list %]/archives" >[%|l%]Archives[%END%]</A>
 <LI><A HREF="[% path_cgi %]/edit_list_request/[% list %]/bounces" >[%|l%]Bounces management[%END%]</A>
 <LI><A HREF="[% path_cgi %]/edit_list_request/[% list %]/data_source" >[%|l%]Data sources setup[%END%]</A>
-<LI><A HREF="[% path_cgi %]/rename_list_request/[% list %]" >Rename list</A>	
+<LI><A HREF="[% path_cgi %]/rename_list_request/[% list %]" >[%|l%]Rename list[%END%]</A>	
 <LI><A HREF="[% path_cgi %]/edit_list_request/[% list %]/other" >[%|l%]Miscellaneous[%END%]</A>
 </UL>
 [% ELSE %]

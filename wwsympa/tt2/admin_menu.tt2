@@ -71,7 +71,7 @@
     <TD BGCOLOR="[% light_color %]" ALIGN="CENTER">
         [% IF is_owner %]
         <A HREF="[% path_cgi %]/arc_manage/[% list %]" >
-	<FONT size="-1"><b>Manage Archives</b></FONT></A>
+	<FONT size="-1"><b>[%|l%]Manage Archives[%END%]</b></FONT></A>
         [% END %]
     </TD>
     [% END %]
@@ -79,13 +79,13 @@
 
     [% IF action == 'reviewbouncing' %]
     <TD BGCOLOR="[% selected_color %]" ALIGN="CENTER">
-       <FONT size="-1" COLOR="[% bg_color %]"><b>Bounces</b></FONT>
+       <FONT size="-1" COLOR="[% bg_color %]"><b>[%|l%]Bounces[%END%]</b></FONT>
     </TD>
     [% ELSE %]
     <TD BGCOLOR="[% light_color %]" ALIGN="CENTER">
        [% IF is_owner %]
        <A HREF="[% path_cgi %]/reviewbouncing/[% list %]" >
-       <FONT size="-1"><b>Bounces</b></FONT></A>
+       <FONT size="-1"><b>[%|l%]Bounces[%END%]</b></FONT></A>
        [% END %]
     </TD>
     [% END %]

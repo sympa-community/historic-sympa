@@ -10,7 +10,7 @@
       <INPUT TYPE="hidden" NAME="list" VALUE="[% list %]">
       <INPUT TYPE="hidden" NAME="action" VALUE="add">
       <INPUT TYPE="text" NAME="email" SIZE="35">
-      <INPUT TYPE="submit" NAME="action_add" VALUE="Add"> quiet<INPUT TYPE="checkbox" NAME="quiet">
+      <INPUT TYPE="submit" NAME="action_add" VALUE="Add"> [%|l%]quiet[%END%]<INPUT TYPE="checkbox" NAME="quiet">
     </FORM>
 </TD>
 </TR>
@@ -19,7 +19,7 @@
      [% PROCESS 'button_header.tt2' %]
        <TD BGCOLOR="[% light_color %]" ALIGN="center" VALIGN="top">
          <FONT COLOR="[% selected_color %]" SIZE="-1">
-         <A HREF="[% path_cgi %]/subindex/[% list %]" ><b>Pending subscriptions</b></A>
+         <A HREF="[% path_cgi %]/subindex/[% list %]" ><b>[%|l%]Pending subscriptions[%END%]</b></A>
          </FONT>
        </TD>
      [% PROCESS 'button_footer.tt2' %]
@@ -28,7 +28,7 @@
      [% PROCESS 'button_header.tt2' %]
        <TD BGCOLOR="[% light_color %]" ALIGN="center" VALIGN="top">
          <FONT COLOR="[% selected_color %]" SIZE="-1">
-         <A HREF="[% path_cgi %]/add_request/[% list %]" ><b>Multiple add</b></A>
+         <A HREF="[% path_cgi %]/add_request/[% list %]" ><b>[%|l%]Multiple add[%END%]</b></A>
          </FONT>
        </TD>
      [% PROCESS 'button_footer.tt2' %]

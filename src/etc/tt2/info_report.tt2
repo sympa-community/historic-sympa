@@ -16,7 +16,7 @@
 [%|l(reply_to)%]Reply to           : %1[%END%]
 [%|l(max_size)%]Maximum size       : %1[%END%]
 [% IF digest %]
-Digest             : [% digest %]
+[%|l(digest)%]Digest       : %1[%END%]
 [% END %]
 [%|l(available_reception_mode)%]Reception modes    : %1[%END%]
 [%|l(url)%]Homepage           : %1[%END%]

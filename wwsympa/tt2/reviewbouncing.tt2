@@ -89,11 +89,11 @@
 	  </FONT></TD>
 	  <TD NOWRAP ALIGN="center"><FONT SIZE=-1>
 	    [% IF u.bounce_class == '2' %]
-	    	success
+	    	[%|l%]success[%END%]
 	    [% ELSIF u.bounce_class == '4' %]
-		temporary
+		[%|l%]temporary[%END%]
 	    [% ELSIF u.bounce_class == '5' %]
-		permanent
+		[%|l%]permanent[%END%]
 	    [% END %]
 	  </FONT></TD>
         </TR>
