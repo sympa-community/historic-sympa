@@ -152,7 +152,8 @@ a.ArcMenuLinksInactive { border-bottom: 1px solid [% color_2 %]; border-right:  
 a.ArcMenuLinksInactive:hover { border-bottom: 1px solid [% color_2 %]; border-right:  1px solid [% color_10 %]; border-top: 1px solid [% color_10 %]; border-left: 1px solid [% color_10 %]; background: transparent; color: [% color_10 %]; text-decoration: none; padding: 0px 10px 0px 10px;}
 #ArcMenuLinksInactive {border: 0px solid [% color_2 %]; text-decoration: none; padding: 0px 0px 0px 3px;}
 
-.messageHeaders {border: 1px dotted [% color_2 %]; background: transparent; padding : 10px;}
+.block {border: 1px dotted [% color_2 %]; background: transparent; padding : 10px;}
+.blockerror {border: 3px dashed [% error_color %]; background: transparent; padding : 10px;}
 
 ul.menuLinks {list-style-type: none;}
 a.menuLinks {padding: 0px 10px 0px 0px; text-decoration: none;}
@@ -198,23 +199,23 @@ p a:first-letter {font-size: 16px; font-weight: bold;}
  
 ul {margin-left: 10px; }
 
-p {text-indent: 30px;}
-p:first-letter {font-size: 16px; font-weight: bold;}
-h1 {text-indent: 30px; font-size: 20px;}
+p {text-indent: 0px;}
+
+h1 {text-indent: 0px; font-size: 20px;}
 h1:first-letter {font-size: 20px; font-weight: bold;}
-h2 {text-indent: 30px; font-size: 16px;}
-h2:first-letter {font-size: 20px; font-weight: bold;}
-h3 {text-indent: 30px; font-size: 16px;}
-h3:first-letter {font-size: 20px; font-weight: bold;}
-h4 {text-indent: 30px; font-size: 16px;}
-h4:first-letter {font-size: 20px; font-weight: bold;}
-h5 {text-indent: 30px; font-size: 16px;}
-h5:first-letter {font-size: 20px; font-weight: bold;}
-h6 {text-indent: 30px; font-size: 16px;}
-h6:first-letter {font-size: 20px; font-weight: bold;}
+h2 {text-indent: 0px; font-size: 16px;}
+h2:first-letter {font-size: 16px; font-weight: bold;}
+h3 {text-indent: 0px; font-size: 14px;}
+h3:first-letter {font-size: 16px; font-weight: bold;}
+h4 {text-indent: 0px; font-size: 14px;}
+h4:first-letter {font-size: 14px; font-weight: bold;}
+h5 {text-indent: 0px; font-size: 12px;}
+h5:first-letter {font-size: 12px; font-weight: bold;}
+h6 {text-indent: 0px; font-size: 12px;}
+h6:first-letter {font-size: 12px; font-weight: bold;}
 /* strong {text-indent: 30px; font-size: 16px; padding-bottom:10px;} */
-strong {text-indent: 30px; font-size: 16px;}
-strong:first-letter {font-size: 20px; font-weight: bold;}
+/* strong {text-indent: 30px; font-size: 16px;} */
+/* strong:first-letter {font-size: 20px; font-weight: bold;} */
 
 a.input {background: [% color_13 %]; border: 1px solid [% color_2 %]; padding: 3px; cursor: text; text-decoration: none;}
 input {background: [% color_13 %]; border: 1px solid [% color_2 %]; padding: 0px; cursor: text;}

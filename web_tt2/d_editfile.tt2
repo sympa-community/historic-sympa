@@ -1,6 +1,6 @@
 <!-- $Id$ -->
 
-<div class="messageHeaders">
+<div class="block">
 
   <div style="float: right">
      <a class="input"  href="[% path_cgi %]/d_read/[% list %]/[% escaped_father %]"> <img style="border: 0px; vertical-align: bottom;" src="[% father_icon %]"> [%|loc%]Up to higher level directory[%END%] </a>

@@ -430,7 +430,7 @@ $POWERED_BY$
 
 ($tag$% END %$tag$)
 
-<div class="messageHeaders">
+<div class="block">
 </SUBJECTHEADER>
 
 <!-- Message itself -->
