@@ -14,6 +14,8 @@
 *****	ALTER TABLE subscriber_table CHANGE date_subscriber timestamp with time zone NOT NULL; 
 *****	ALTER TABLE subscriber_table CHANGE update_subscriber timestamp with time zone;
 
+	wwsympa.fcgi, List.pm: otal subscribers is now updated more often, based on DB entries
+
 	src/task_manager.pl: Fix problems with REMIND task, it has been	reactivated
 
 	Makefile.am, Makefile.in, wwsympa/archived.pl: Create 'arc_path' directory if not created ; 
