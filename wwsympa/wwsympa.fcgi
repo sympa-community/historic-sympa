@@ -5900,7 +5900,7 @@ if ($wwsconf->{'use_fast_cgi'}) {
 	     $list_of_scenario->{$d->{'name'}}{'selected'} = 1;
 
 	     foreach my $key (keys %{$list_of_scenario}) {
-		 $list_of_scenario->{$key}{'title'} = $list_of_scenario->{$key}{'title'}{$param->{'lang'}} || $key;
+		 $list_of_scenario->{$key}{'title'} = gettext($list_of_scenario->{$key}{'title'}) || $key;
 	     }
 
 	     $p->{'value'} = $list_of_scenario;
