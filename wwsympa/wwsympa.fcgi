@@ -6438,7 +6438,16 @@ sub do_set_pending_list_request {
 	 &error_message('already_closed');
 	 &wwslog('info','do_close_list: already closed');
 	 return undef;
-     }      
+     }elsif($list->{'admin'}{'status'} eq 'pending') {
+	 &wwslog('info','do_close_list: closing a pending list make it purged');
+	 &tools::remove_dir($list->{'dir'});
+	 if ($list->{'name'}) {
+		&tools::remove_dir("$wwsconf->{'arc_path'}/$list->{'name'}\@$list->{'domain'}");
+		&tools::remove_dir("$wwsconf->{'bounce_path'}/$list->{'name'}");
+	 }
+	 &message('list_purged');
+	 return 'home';	
+     }     
 
      $list->close($param->{'user'}{'email'});
 
