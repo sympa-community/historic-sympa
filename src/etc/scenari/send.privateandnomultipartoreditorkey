@@ -1,12 +1,4 @@
-title.us Moderated, for non subscribers sending multipart messages
-title.et liikmetele lubatud, teiste manustega kirjad edastatakse moderaatorile
-title.fr Modérée, pour les non abonnés postant un message multipart
-title.de Nicht-Abonnenten und multipart-Nachrichten gehen an Moderator
-title.es mensajes de los subscriptores son enviados al editor (multipart messages are sent to editor)
-title.cz neèlenové a zprávy s více èástmi pomocí moderátora
-title.hu nem listatagok és többrészes levelek a szerkesztõkön keresztül
-title.nl Gemodereerd, voor niet-abonnees die een multipart bericht sturen.
-title.it Moderato, per non iscritti con messaggi multipart
+title.gettext Moderated, for non subscribers sending multipart messages
 
 match([header->Content-Type],/multipart/)      smtp,smime,md5  -> editorkey
 is_subscriber([listname],[sender])             smtp,md5,smime  -> do_it
