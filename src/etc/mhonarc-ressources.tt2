@@ -14,13 +14,18 @@ reference other variables.
 -->
 
 <DefineVar>
-SELECTED_MONTH
-<P><FONT COLOR="($tag$% dark_color %$tag$)" SIZE="+1"><STRONG>
+PRINTABLE_MONTH
 ($tag$% IF lang == 'fr' %$tag$)
 $mois$/$yyyy$
 ($tag$% ELSE %$tag$)
 $yyyy$/$mois$
 ($tag$% END %$tag$)
+</DefineVar>
+
+<DefineVar>
+SELECTED_MONTH
+<P><FONT COLOR="($tag$% dark_color %$tag$)" SIZE="+1"><STRONG>
+$PRINTABLE_MONTH$
 </STRONG></FONT><BR>
 <HR width="30%">
 </P>
@@ -123,25 +128,19 @@ $SELECTED_MONTH$
 <TABLE CELLPADDING="2" CELLSPACING="2" WIDTH="100%" BORDER="0">
 <TR ALIGN="CENTER" BGCOLOR="($tag$% dark_color %$tag$)">
 <TD>
+
 <!-- begin header -->
-<TABLE WIDTH="100%" BORDER="0" CELLSPACING="0" CELLPADDING="2">
-<TR ALIGN="CENTER" VALIGN="MIDDLE">
-<TD NOWRAP BGCOLOR="($tag$% light_color %$tag$)" ALIGN="CENTER">
-$PREVPGLINK$&nbsp;&nbsp;
-<FONT SIZE="-1" FACE="Arial,Helvetica"><STRONG>$NUMOFMSG$ ($tag$%|loc($PAGENUM$,$NUMOFPAGES$)%$tag$)mails, page # %1/%2($tag$%END%$tag$)</STRONG></FONT>
-&nbsp;&nbsp;$NEXTPGLINK$
-</TD>
-<TD NOWRAP BGCOLOR="($tag$% light_color %$tag$)" ALIGN="CENTER">
-<FONT COLOR="($tag$% bg_color %$tag$)" SIZE="-1"><STRONG>
-($tag$%|loc%$tag$)Chronological($tag$%END%$tag$)
-</STRONG></FONT>
-&nbsp;&nbsp;
-<FONT SIZE="-1"><STRONG><A HREF="thrd$PAGENUM$.html" STYLE="text-decoration: none">
-($tag$%|loc%$tag$)Thread($tag$%END%$tag$)
-</A></STRONG></FONT>
-</TD>
-</TR>
-</TABLE>
+<div id=Header>
+  <div id="Title" style="text-align: center;"><strong>$PRINTABLE_MONTH$&nbsp;&nbsp;&nbsp;$NUMOFMSG$ ($tag$%|loc%$tag$)mails($tag$%END%$tag$)</strong></div><br />
+  <span style="float: right">
+    <a class="ActionMenuLinksCurrentPage" href="mail$PAGENUM$.html">($tag$%|loc%$tag$)chronologie($tag$%END%$tag$)</a> or 
+    <a class="ActionMenuLinks" href="thrd$PAGENUM$.html">($tag$%|loc%$tag$)Thread($tag$%END%$tag$)</a>&nbsp;
+  </span>
+  Pages navigation : <br />
+  <ul id="MainMenuLinks">
+  &nbps;&nbps;&nbps;$PREVPGLINK$ ($tag$%|loc($PAGENUM$,$NUMOFPAGES$)%$tag$)page # %1/%2($tag$%END%$tag$)</span> $NEXTPGLINK$ 
+   </ul>
+</div>
 <!-- end header -->
 </TD>
 </TR>
@@ -172,7 +171,8 @@ $POWERED_BY$
 
 <!-- links definition -->
 <PrevPgLink chop>
-<FONT SIZE="-1" FACE="Arial,Helvetica" COLOR="($tag$% dark_color %$tag$)"><A HREF="$FIRSTPG$"><IMG SRC="($tag$% icons_url %$tag$)/begin.png" ALT="First" HEIGHT="20" BORDER="0" ALIGN="middle"></A>&nbsp;&nbsp;<A HREF="$PREVPG$"><IMG SRC="($tag$% icons_url %$tag$)/left.png" ALT="Previous" HEIGHT="20" BORDER="0" ALIGN="middle"></A></FONT>
+<li><a class="ActionMenuLinks" href="$FIRSTPG$">($tag$%|loc%$tag$)First($tag$%END%$tag$)</a></li>
+<li><a class="ActionMenuLinks" href="$PREVPG$">($tag$%|loc%$tag$)Previous($tag$%END%$tag$)</a></li>
 </PrevPgLink>
 
 <PrevPgLinkIA chop>
@@ -180,7 +180,8 @@ $POWERED_BY$
 </PrevPgLinkIA>
 
 <NextPgLink chop>
-<FONT SIZE="-1" FACE="Arial,Helvetica" COLOR="($tag$% dark_color %$tag$)"><A HREF="$NEXTPG$"><IMG SRC="($tag$% icons_url %$tag$)/right.png" ALT="Next" HEIGHT="20" BORDER="0" ALIGN="center"></A>&nbsp;&nbsp;<A HREF="$LASTPG$"><IMG SRC="($tag$% icons_url %$tag$)/end.png" ALT="Last" HEIGHT="20" BORDER="0" ALIGN="middle"></A></FONT>
+<li><a class="ActionMenuLinks" href="$NEXTPG$">($tag$%|loc%$tag$)Next($tag$%END%$tag$)</a></li>
+<li><a class="ActionMenuLinks" href="$LASTPG$">($tag$%|loc%$tag$)Last($tag$%END%$tag$)</a></li>
 </NextPgLink>
 
 <NextPgLinkIA chop>
@@ -322,31 +323,20 @@ MSGPGEND
 [%TAGS ($tag$% %$tag$) %]
 </MSGPGBEGIN>
 
+
 <TOPLINKS>
 <CENTER>
-$SELECTED_MONTH$
-<TABLE CELLPADDING="2" CELLSPACING="2" WIDTH="100%" BORDER="0">
-<TR ALIGN="center" BGCOLOR="($tag$% dark_color %$tag$)">
-<TD>
-<!-- begin header -->
-<TABLE WIDTH="100%" BORDER="0" CELLSPACING="0" CELLPADDING="2">
-<TR ALIGN="CENTER" VALIGN="MIDDLE">
-<TD WIDTH="50%" BGCOLOR="($tag$% light_color %$tag$)" ALIGN="center" VALIGN="middle" NOWRAP>
-$PREVBUTTON$&nbsp;&nbsp;
-<FONT SIZE="-1"><STRONG><A HREF="$IDXFNAME$#$MSGNUM$" STYLE="text-decoration: none">
-($tag$%|loc%$tag$)Chronological($tag$%END%$tag$)
-</A></STRONG></FONT>
-&nbsp;&nbsp;$NEXTBUTTON$
-</TD>
-<TD WIDTH="50%" BGCOLOR="($tag$% light_color %$tag$)" ALIGN="center" VALIGN="middle" NOWRAP>
-$TPREVBUTTON$&nbsp;&nbsp;
-<FONT SIZE="-1"><STRONG><A HREF="$TIDXFNAME$#$MSGNUM$" STYLE="text-decoration: none">
-($tag$%|loc%$tag$)Thread($tag$%END%$tag$)
-</A></STRONG></FONT>
-&nbsp;&nbsp;$TNEXTBUTTON$
-</TD>
-</TR>
-</TABLE>
+<div id=Header>
+   <div id="Title" style="text-align: center;"><strong>$PRINTABLE_MONTH$&nbsp;&nbsp;&nbsp;$NUMOFMSG$ ($tag$%|loc%$tag$)mails($tag$%END%$tag$)</strong></div><br />
+   <span style="float: right">
+     <a class="ActionMenuLinksCurrentPage" href="mail$PAGENUM$.html">($tag$%|loc%$tag$)chronologie($tag$%END%$tag$)</a> or 
+     <a class="ActionMenuLinks" href="thrd$PAGENUM$.html">($tag$%|loc%$tag$)Thread($tag$%END%$tag$)</a>&nbsp;
+   </span>
+   <ul id="MainMenuLinks">
+     Messages navigation : $PREVBUTTON$ $NEXTBUTTON$ $TPREVBUTTON$  $TNEXTBUTTON$
+   </ul>
+</div>
+
 <!-- end header -->
 </TD>
 </TR>
@@ -503,9 +493,7 @@ Subject:strong
 
 <!-- Buttons definition -->
 <PREVBUTTON>
-<FONT SIZE="-1" FACE="Arial,Helvetica">
-<A HREF="$PREVMSG$"><IMG SRC="($tag$% icons_url %$tag$)/left.png" ALT="Previous" HEIGHT="20" BORDER="0" ALIGN="middle"></A>
-</FONT>
+<a class="ActionMenuLinks" href="$PREVMSG$">previous</a>
 </PREVBUTTON>
 
 <PREVBUTTONIA>
@@ -513,9 +501,7 @@ Subject:strong
 </PREVBUTTONIA>
 
 <NEXTBUTTON>
-<FONT SIZE="-1" FACE="Arial,Helvetica">
-<A HREF="$NEXTMSG$"><IMG SRC="($tag$% icons_url %$tag$)/right.png" ALT="Next" HEIGHT="20" BORDER="0" ALIGN="middle"></A>
-</FONT>
+<a class="ActionMenuLinks" href="$NEXTMSG">next</a>
 </NEXTBUTTON>
 
 <NEXTBUTTONIA>
@@ -523,9 +509,7 @@ Subject:strong
 </NEXTBUTTONIA>
 
 <TPREVBUTTON>
-<FONT SIZE="-1" FACE="Arial,Helvetica">
-<A HREF="$TPREVMSG$"><IMG SRC="($tag$% icons_url %$tag$)/left.png" height=20 border=0 ALIGN=middle ALT="Previous"></A>
-</FONT>
+<a class="ActionMenuLinks" href="$TPREVMSG$">previous by thread</a>
 </TPREVBUTTON>
 
 <TPREVBUTTONIA>
@@ -533,9 +517,7 @@ Subject:strong
 </TPREVBUTTONIA>
 
 <TNEXTBUTTON>
-<FONT SIZE="-1" FACE="Arial,Helvetica">
-<A HREF="$TNEXTMSG$"><IMG SRC="($tag$% icons_url %$tag$)/right.png" HEIGHT="20" BORDER="0" ALIGN="middle" ALT="Next"></A>
-</FONT>
+<a class="ActionMenuLinks" href="$TNEXTMSG$">next by thread</a>
 </TNEXTBUTTON>
 
 <TNEXTBUTTONIA>
