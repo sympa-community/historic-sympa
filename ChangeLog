@@ -1,3 +1,24 @@
+2003-02-05 17:05  salaun
+
+	* src/List.pm: [galibert AT pobox.com] Fix:  The 28 jan. patch lost
+	the space between the tag and the subject when adding a new tag.
+	This puts it back.
+
+2003-02-05 16:56  salaun
+
+	* src/List.pm: Fix: scenarios using [previous_email] var could not
+	be evaluated.  Now allowing undef vars in scenarios. Notify
+	listmaster if a scenario could not be evaluated.
+
+2003-02-05 08:49  salaun
+
+	* src/etc/list_aliases.tpl: Fix: incorrect parameter for
+	bouncequeue (only for default domain)
+
+2003-01-28 15:33  salaun
+
+	* ChangeLog, NEWS: Update
+
 2003-01-28 15:32  salaun
 
 	* src/List.pm: [BugID 99] Change: Pg 7.3 no longer supports the

@@ -3,6 +3,19 @@
 
 (See Changelog file for the full changes log)
 
+3.4.3.1		05 February 2003
+
+   Bug fixes :
+
+	src/List.pm: scenarios using [previous_email] var could not be evaluated.  
+	Now allowing undef vars in scenarios. Notify listmaster if a scenario could not be evaluated.
+
+	src/etc/list_aliases.tpl: incorrect parameter for bouncequeue (only for default domain)
+
+	src/List.pm:[galibert AT pobox.com] : The 28 jan. patch lost the space between the tag and the 
+	subject when adding a new tag. This puts it back.
+	
+
 3.4.3		24 January 2003
 
    CHanges :
