@@ -1,10 +1,17 @@
 # #-#-#-#-#  fr.po (PACKAGE VERSION)  #-#-#-#-#
+# #-#-#-#-#  fr.po (PACKAGE VERSION)  #-#-#-#-#
 # SOME DESCRIPTIVE TITLE.
 # Copyright (C) YEAR Free Software Foundation, Inc.
 # FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+# #-#-#-#-#  fr.po (PACKAGE VERSION)  #-#-#-#-#
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR Free Software Foundation, Inc.
+# FIRST AUTHOR <EMAIL>, YEAR.
+#
 #, fuzzy
 msgid ""
 msgstr ""
+"#-#-#-#-#  fr.po (PACKAGE VERSION)  #-#-#-#-#\n"
 "Project-Id-Version: PACKAGE VERSION\n"
 "POT-Creation-Date: 2002-07-16 17:27+0800\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI +ZONE\n"
@@ -19,6 +26,15 @@ msgstr ""
 "#-#-#-#-#  frbis.po (PACKAGE VERSION)  #-#-#-#-#\n"
 "#-#-#-#-#  frbis.po (PACKAGE VERSION)  #-#-#-#-#\n"
 "#-#-#-#-#  fr2.po (PACKAGE VERSION)  #-#-#-#-#\n"
+"#-#-#-#-#  fr.po (PACKAGE VERSION)  #-#-#-#-#\n"
+"Project-Id-Version: PACKAGE VERSION\n"
+"POT-Creation-Date: 2002-07-16 17:27+0800\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI +ZONE\n"
+"Last-Translator: FULL NAME <EMAIL>\n"
+"Language-Team: LANGUAGE <LL.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=iso_8859-1\n"
+"Content-Transfer-Encoding: 8bit\n"
 
 #. (from_count)
 #: wwsympa/tt2/arcsearch.tt2:65
@@ -4893,6 +4909,306 @@ msgstr "votre adresse électronique : %1"
 #: src/etc/tt2/sendpasswd.tt2:30
 msgid "your password : %1"
 msgstr "votre mot de passe         : %1"
+
+#: nlsref src/etc/scenari/add.auth:1
+msgid "add need authentication"
+msgstr "ajout soumis a authentification"
+
+#: nlsref src/etc/scenari/del.owner_notify:1
+msgid "list owners, authentication not needed (notification)"
+msgstr "proprio de liste, pas d'authentification (notification)"
+
+#: nlsref src/etc/scenari/subscribe.closed:1
+msgid "subscribe is impossible"
+msgstr "abonnement impossible"
+
+#: nlsref src/etc/scenari/del.closed:1
+msgid "remove subscriber impossible"
+msgstr "suppresion d'abonné impossible"
+
+#: nlsref src/etc/scenari/del.owner:1
+msgid "by owner without authentication"
+msgstr "proprio de liste, pas d'authentification"
+
+#: nlsref src/etc/scenari/invite.owner:1
+msgid "invite perform by list owner do not need authentication"
+msgstr "invitation par le proprio sans authentification"
+
+#: nlsref src/etc/scenari/send.privateorpublickey:1
+msgid "Private, confirmation for non subscribers"
+msgstr "Privée, confirmation pour les non abonnés"
+
+#: nlsref src/etc/scenari/review.listmaster:1
+msgid "listmaster only"
+msgstr "listmaster seulement"
+
+#: nlsref src/etc/scenari/d_edit.public:1
+msgid "public documents"
+msgstr "documents publics"
+
+#: nlsref src/etc/scenari/unsubscribe.owner:1
+msgid "owner approval"
+msgstr "soumis à autorisation du proprio"
+
+#: nlsref src/etc/scenari/access_web_archive.public:1
+msgid "public"
+msgstr "public"
+
+#: nlsref src/etc/scenari/visibility.noconceal:1
+msgid "no conceal"
+msgstr "liste visible"
+
+#: nlsref src/etc/scenari/send.newsletterkeyonly:1
+msgid "Newsletter, restricted to moderators after confirmation"
+msgstr "Newsletter, limité aux modérateurs après confirmation"
+
+#: nlsref src/etc/scenari/info.open:1
+msgid "for anyone"
+msgstr "pour tous"
+
+#: nlsref src/etc/scenari/create_list.public_listmaster:1
+msgid "anybody by validation by listmaster requiered"
+msgstr "quiconque via le listmaster"
+
+#: nlsref src/etc/scenari/access_web_archive.closed:1
+msgid "closed"
+msgstr "fermé"
+
+#: nlsref src/etc/scenari/subscribe.smimeorowner:1
+msgid "requires S/MIME signed or owner approval"
+msgstr "ouvert a tous après autorisation du proprio"
+
+#: nlsref src/etc/scenari/topics_visibility.identified:1
+msgid "conceal unless user is logged in"
+msgstr "liste visible pour les utilisateurs identifiés uniquement"
+
+#: nlsref src/etc/scenari/send.editor:1
+msgid "Moderated, old style"
+msgstr "Modérée, ancienne méthode"
+
+#: nlsref src/etc/scenari/visibility.conceal:1
+msgid "conceal except for subscribers"
+msgstr "liste cachée sauf aux abonnés"
+
+#: nlsref src/etc/scenari/subscribe.auth_owner:1
+msgid "requires authentication then owner approval"
+msgstr "sousmis a authentification puis accord du proprio"
+
+#: nlsref src/etc/scenari/remind.owner:1
+msgid "restricted to list owner"
+msgstr "restreint au proprio de list"
+
+#: nlsref src/etc/scenari/send.editorkeyonlyauth:1
+msgid "Moderated, with editor confirmation"
+msgstr "Modérée, avec confirmation du modérateur"
+
+#: nlsref src/etc/scenari/access_web_archive.listmaster:1
+msgid "listmaster"
+msgstr "listmaster"
+
+#: nlsref src/etc/scenari/unsubscribe.auth:1
+msgid "need authentication"
+msgstr "possible après authentification"
+
+#: nlsref src/etc/scenari/add.owner:1
+msgid "add performed by list owner do not need authentication"
+msgstr "ajout par le proprio sans authentification"
+
+#: nlsref src/etc/scenari/topics_visibility.conceal:1
+msgid "conceal unless for listmaster"
+msgstr "liste cachée sauf aux listmaster"
+
+#: nlsref src/etc/scenari/d_read.private:1
+msgid "restricted to subscribers"
+msgstr "limité aux abonnés"
+
+#: nlsref src/etc/scenari/access_web_archive.private:1
+msgid "subscribers only"
+msgstr "les abonnés seulement"
+
+#: nlsref src/etc/scenari/send.public_nobcc:1
+msgid "public list, Bcc rejected (anti-spam)"
+msgstr "liste ouverte, Bcc interdit (anti-spam)"
+
+#: nlsref src/etc/scenari/add.owner_notify:1
+msgid "add performed by owner do not need authentication (notification)"
+msgstr "ajout par le proprio sans authentification (notification)"
+
+#: nlsref src/etc/scenari/edit_list.closed:1
+msgid "impossible, closed at the moment"
+msgstr "impossible, pas assez sur pour le moment"
+
+#: nlsref src/etc/scenari/send.intranetorprivate:1
+msgid "restricted to local domain and subscribers"
+msgstr "limité aux utilisateurs du domaine local et aux abonnés"
+
+#: nlsref src/etc/scenari/subscribe.smime:1
+msgid "requires S/MIME signed"
+msgstr "demande d'abonnement avec signature par certificat"
+
+#: nlsref src/etc/scenari/subscribe.owner:1
+msgid "owners approval"
+msgstr "ouvert a tous après autorisation du proprio"
+
+#: nlsref src/etc/scenari/review.owner:1
+msgid "only owner (and listmaster)"
+msgstr "proprio de list seulement (et listmaster)"
+
+#: nlsref src/etc/scenari/visibility.intranet:1
+msgid "intranet access"
+msgstr "visible de l'intranet"
+
+#: nlsref src/etc/scenari/send.publicnomultipart:1
+msgid "public list multipart messages are rejected"
+msgstr "liste ouverte mais attachements interdits"
+
+#: nlsref src/etc/scenari/send.privateandeditorkey:1
+msgid "Moderated, restricted to subscribers"
+msgstr "Modérée, limitée aux abonnés"
+
+#: nlsref src/etc/scenari/d_read.owner:1
+msgid "restricted to list owners and document author"
+msgstr "limité aux propriétaires de la liste ou auteur du document"
+
+#: nlsref src/etc/scenari/subscribe.auth_notify:1
+msgid "need authentication (notification is sent to owners)"
+msgstr "soumis a authentification (notification des proprio)"
+
+#: nlsref src/etc/scenari/access_web_archive.owner:1
+msgid "by owner"
+msgstr "proprio de liste"
+
+#: nlsref src/etc/scenari/global_remind.listmaster:1
+msgid "just for listmaster"
+msgstr "seulement pour le listmaster"
+
+#: nlsref src/etc/scenari/visibility.secret:1
+msgid "conceal even for subscribers"
+msgstr "liste cachée même aux abonnés"
+
+#: nlsref src/etc/scenari/add.closed:1
+msgid "add impossible"
+msgstr "ajout impossible"
+
+#: nlsref src/etc/scenari/review.intranet:1
+msgid "restricted to subscribers or local domain users"
+msgstr "les abonnés ou le domaine local"
+
+#: nlsref src/etc/scenari/send.privateandnomultipartoreditorkey:1
+msgid "Moderated, for non subscribers sending multipart messages"
+msgstr "Modérée, pour les non abonnés postant un message multipart"
+
+#: nlsref src/etc/scenari/send.public:1
+msgid "public list"
+msgstr "liste ouverte"
+
+#: nlsref src/etc/scenari/subscribe.open_quiet:1
+msgid "anyone, no welcome message"
+msgstr "n'importe qui pas de bienvenue"
+
+#: nlsref src/etc/scenari/subscribe.open:1
+msgid "for anyone without authentication"
+msgstr "ouvert a tous sans authentification"
+
+#: nlsref src/etc/scenari/create_list.listmaster:1
+msgid "restricted to listmaster"
+msgstr "resteint au listmaster"
+
+#: nlsref src/etc/scenari/send.intranet:1
+msgid "restricted to local domain"
+msgstr "limité aux utilisateurs du domaine local"
+
+#: nlsref src/etc/scenari/unsubscribe.auth_notify:1
+msgid "authentication requested, notification sent to owner"
+msgstr "authentification demandée, notification du proprio"
+
+#: nlsref src/etc/scenari/send.editorkeyonly:1
+msgid "Moderated, even for moderators"
+msgstr "Modérée, même pour les modérateurs"
+
+#: nlsref src/etc/scenari/send.publicnoattachment:1
+msgid "public list multipart/mixed messages are forwarded to moderator"
+msgstr "liste ouverte mais attachements passés au modérateur"
+
+#: nlsref src/etc/scenari/send.private_smime:1
+msgid "restricted to subscribers check smime signature"
+msgstr "limité aux abonnés, vérif de la signature smime"
+
+#: nlsref src/etc/scenari/create_list.intranet:1
+msgid "anyone from local domain "
+msgstr "les membres du domaine local"
+
+#: nlsref src/etc/scenari/access_web_archive.intranet:1
+msgid "restricted to local domain users"
+msgstr "les abonnés ou le domaine local"
+
+#: nlsref src/etc/scenari/send.newsletter:1
+msgid "Newsletter, restricted to moderators"
+msgstr "Newsletter, limité aux modérateurs"
+
+#: nlsref src/etc/scenari/unsubscribe.closed:1
+msgid "impossible"
+msgstr "impossible"
+
+#: nlsref src/etc/scenari/send.privatekey:1
+msgid "restricted to subscribers with previous md5 authentication"
+msgstr "réservé aux abonnés avec authentification MD5 préalable"
+
+#: nlsref src/etc/scenari/edit_list.owner:1
+msgid "restricted to list owners"
+msgstr "réservé aux propriétaires"
+
+#: nlsref src/etc/scenari/send.privatekeyandeditorkeyonly:1
+msgid "Moderated, for subscribers and moderators"
+msgstr "Modérée, pour les abonnés et les modérateurs"
+
+#: nlsref src/etc/scenari/send.editorkey:1
+msgid "Moderated"
+msgstr "Modérée"
+
+#: nlsref src/etc/scenari/subscribe.open_notify:1
+msgid "anyone, notification is sent to list owner"
+msgstr "ouvert à tous, notification du propriétaire"
+
+#: nlsref src/etc/scenari/review.public:1
+msgid "anyone can do it !"
+msgstr "accessible à tous !"
+
+#: nlsref src/etc/scenari/del.auth:1
+msgid "deletion performed only by list owners, need authentication"
+msgstr "suppression réservée au propriétaire avec authentification"
+
+#: nlsref src/etc/scenari/visibility.private:1
+msgid "subscribers"
+msgstr "visible des abonnés"
+
+#: nlsref src/etc/scenari/review.closed:1
+msgid "nobody can review"
+msgstr "pour personne"
+
+#: nlsref src/etc/scenari/subscribe.auth:1
+msgid "subscription request confirmed"
+msgstr "demande d'abonnement après confirmation"
+
+#: nlsref src/etc/scenari/subscribe.intranetorowner:1
+msgid "local domain users or owner approval"
+msgstr "usager du domaine local ou via autorisation du proprio"
+
+#: nlsref src/etc/scenari/unsubscribe.open_notify:1
+msgid "without authentication, notification is sent to owners"
+msgstr "pas d'authentification (notification au proprio)"
+
+#: nlsref src/etc/scenari/send.privateoreditorkey:1
+msgid "Private, moderated for non subscribers"
+msgstr "Privée, modérée pour les non abonnés"
+
+#: nlsref src/etc/scenari/send.publickey:1
+msgid "anyone with previous md5 authentication"
+msgstr "quiconque mais avec authentification md5"
+
+#: nlsref src/etc/scenari/unsubscribe.open:1
+msgid "anyone without authentication"
+msgstr "autorisé à tous sans authentification"
 
 # nlsref 1,102
 #~ msgid "3.3a"
