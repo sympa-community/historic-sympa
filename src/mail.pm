@@ -220,7 +220,7 @@ sub mailfile {
        print $fh "Subject: $data->{'subject'}\n";
        print $fh "Reply-to: $data->{'replyto'}\n" if ($data->{'replyto'}) ;
        printf $fh "MIME-Version: %s\n", gettext("1.0");
-       printf $fh "Content-Type: text/plain; charset=%s\n", gettext("");
+       printf $fh "Content-Type: text/plain; charset=%s\n", gettext("us-ascii");
        printf $fh "Content-Transfer-Encoding: %s\n", gettext("7bit");
        print $fh "\n";
    }

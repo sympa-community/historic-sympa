@@ -2366,7 +2366,7 @@ sub send_msg_digest {
 		 'return_path' => "$self->{'name'}-owner\@$self->{'admin'}{'host'}",
 		 'reply' => "$self->{'name'}-request\@$self->{'admin'}{'host'}",
 		 'to' => "$self->{'name'}\@$self->{'admin'}{'host'}",
-		 'table_of_content' => sprintf(gettext("")),
+		 'table_of_content' => sprintf(gettext("Table of content")),
 		 'boundary1' => '----------=_'.&tools::get_message_id($robot),
 		 'boundary2' => '----------=_'.&tools::get_message_id($robot),
 		 };
@@ -2437,7 +2437,7 @@ sub send_msg_digest {
     }
 
     my @topics;
-    push @topics, sprintf(gettext(""));
+    push @topics, sprintf(gettext("Table of content"));
     push @topics, sprintf(" :\n\n");
 
     ## Digest index
