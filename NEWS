@@ -40,6 +40,10 @@
 
    Bug fixes :
 
+	wwsympa/wwsympa.fcgi: Fix: looking for subscribers.closed.dump in the wrong directory. 
+	Could not restore subscribers for lists in a Virtual Robot.
+
+
 	src/List.pm: [reported by A. Delvaux] Fix: incorrect format of List-ID header field
 	
 	src/Makefile: Fix: Aliaswraper was installed with wrong	attributes (sympa instead of root). 
