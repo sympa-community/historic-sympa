@@ -5658,7 +5658,6 @@ sub _include_users_ldap {
 	    $total++;
 	}
 
-	my %u = %{$default_user_options};
 	$u{'email'} = $email;
 	$u{'date'} = time;
 	$u{'update_date'} = time;
