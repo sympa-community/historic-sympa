@@ -729,7 +729,7 @@ if ($wwsconf->{'use_fast_cgi'}) {
 
 	 ## Action template
 	 if (defined $param->{'action'}) {
-	     $param->{'action_template'} = &tools::get_filename('etc', "wws.tt2/$param->{'action'}.$param->{'lang'}.tt2", $robot,$list);
+	     $param->{'action_template'} = &tools::get_filename('etc', "web_tt2/$param->{'action'}.$param->{'lang'}.tt2", $robot,$list);
 	     unless ($param->{'action_template'})  {
 		 &error_message('template_erro');
 		 &do_log('info',"unable to find template for $param->{'action'}");
@@ -737,14 +737,14 @@ if ($wwsconf->{'use_fast_cgi'}) {
 	 }
 
 	 ## Menu template
-	 $param->{'menu_template'} = &tools::get_filename('etc', "wws.tt2/menu.$param->{'lang'}.tt2", $robot,$list);
+	 $param->{'menu_template'} = &tools::get_filename('etc', "web_tt2/menu.$param->{'lang'}.tt2", $robot,$list);
 	 unless ($param->{'menu_template'})  {
 	     &error_message('template_error');
 	     &do_log('info','unable to find menu template');
 	 }
 
 	 ## List_menu template
-	 $param->{'list_menu_template'} = &tools::get_filename('etc', "wws.tt2/list_menu.$param->{'lang'}.tt2", $robot,$list);
+	 $param->{'list_menu_template'} = &tools::get_filename('etc', "web_tt2/list_menu.$param->{'lang'}.tt2", $robot,$list);
 
 	 unless ($param->{'list_menu_template'})  {
 	     &error_message('template_error');
@@ -752,7 +752,7 @@ if ($wwsconf->{'use_fast_cgi'}) {
 	 }
 
 	 ## admin_menu template
-	 $param->{'admin_menu_template'} = &tools::get_filename('etc', "wws.tt2/admin_menu.$param->{'lang'}.tt2", $robot,$list);
+	 $param->{'admin_menu_template'} = &tools::get_filename('etc', "web_tt2/admin_menu.$param->{'lang'}.tt2", $robot,$list);
 
 	 unless ($param->{'admin_menu_template'})  {
 	     &error_message('template_error');
@@ -760,7 +760,7 @@ if ($wwsconf->{'use_fast_cgi'}) {
 	 }
 
 	 ## Title template
-	 $param->{'title_template'} = &tools::get_filename('etc', "wws.tt2/title.$param->{'lang'}.tt2", $robot,$list);
+	 $param->{'title_template'} = &tools::get_filename('etc', "web_tt2/title.$param->{'lang'}.tt2", $robot,$list);
 
 	 unless ($param->{'title_template'})  {
 	     &error_message('template_error');
@@ -768,7 +768,7 @@ if ($wwsconf->{'use_fast_cgi'}) {
 	 }
 
 	 ## Error template
-	 $param->{'error_template'} = &tools::get_filename('etc', "wws.tt2/error.$param->{'lang'}.tt2", $robot,$list);
+	 $param->{'error_template'} = &tools::get_filename('etc', "web_tt2/error.$param->{'lang'}.tt2", $robot,$list);
 
 	 unless ($param->{'error_template'})  {
 	     &error_message('template_error');
@@ -776,7 +776,7 @@ if ($wwsconf->{'use_fast_cgi'}) {
 	 }
 
 	 ## Notice template
-	 $param->{'notice_template'} = &tools::get_filename('etc', "wws.tt2/notice.$param->{'lang'}.tt2", $robot,$list);
+	 $param->{'notice_template'} = &tools::get_filename('etc', "web_tt2/notice.$param->{'lang'}.tt2", $robot,$list);
 
 	 unless ($param->{'notice_template'})  {
 	     &error_message('template_error');
@@ -784,10 +784,10 @@ if ($wwsconf->{'use_fast_cgi'}) {
 	 }
 
 	 ## Help template
-	 $param->{'help_template'} = &tools::get_filename('etc', "wws.tt2/help_$param->{'help_topic'}.$param->{'lang'}.tt2", $robot,$list);
+	 $param->{'help_template'} = &tools::get_filename('etc', "web_tt2/help_$param->{'help_topic'}.$param->{'lang'}.tt2", $robot,$list);
 
 	 ## main template
-	 my $main = &tools::get_filename('etc', "wws.tt2/main.$param->{'lang'}.tt2", $robot,$list);;
+	 my $main = &tools::get_filename('etc', "web_tt2/main.$param->{'lang'}.tt2", $robot,$list);;
 
 	 unless ($main)  {
 	     &error_message('template_error');

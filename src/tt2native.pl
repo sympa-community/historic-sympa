@@ -28,7 +28,7 @@ use Log;
 
 my $tt2 = Template->new({
     ABSOLUTE => 1,
-    INCLUDE_PATH => '--ETCBINDIR--/wws.tt2',
+    INCLUDE_PATH => '--ETCBINDIR--/web_tt2',
 
     FILTERS => {
 	unescape => \&CGI::Util::unescape,

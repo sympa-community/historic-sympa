@@ -42,14 +42,14 @@ my %wws_template_equiv = ('lists' => ['which', 'search_list','search_user'],
 			  );
 
 unless ($#ARGV >= 1) {
-    printf STDERR "Usage %s wws.tt2|tt2|scenari <install directory>\n", $0;
+    printf STDERR "Usage %s web_tt2|tt2|scenari <install directory>\n", $0;
     exit -1;
 }
 
 my ($action, $dir) = ($ARGV[0], $ARGV[1]);
 
-unless ($action =~ /^wws.tt2|tt2|scenari$/) {
-    printf STDERR "Usage %s wws.tt2|tt2|scenari <install directory>\n", $0;
+unless ($action =~ /^web_tt2|tt2|scenari$/) {
+    printf STDERR "Usage %s web_tt2|tt2|scenari <install directory>\n", $0;
     exit -1;
 }
  
@@ -83,7 +83,7 @@ if ($action eq 'scenari') {
 	}
 	
     }
-}elsif ($action eq 'wws.tt2') {
+}elsif ($action eq 'web_tt2') {
     chdir $dir;
 
     ## Set equiv
