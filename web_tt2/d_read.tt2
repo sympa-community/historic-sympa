@@ -4,48 +4,36 @@
   [% INSERT $file IF file %]
 [% ELSE %]
 
-  [% IF expert_page %]
-    <form method="post" action="[% path_cgi %]">
-    <input type="submit" value="[%|loc%]Show user page [%END%]" name="action_d_read" />
-    <input type="hidden" name="previous_action" value="d_read" />
-    <input type="hidden" name="list" value="[% list %]" />
-    <input type="hidden" name="path" value="[% path %]" />
-    <input type="hidden" name="type" value="directory" />
-    <input type="hidden" name="action" value="d_read" />
-    <input type="hidden" name="show_user_page" value="1" />
-    </form>
-  [% ELSE %] 
-    [% IF has_dir_rights %]
-      <form method="post" action="[% path_cgi %]">
-      <input type="submit" value="[%|loc%]Show expert commands[%END%]" name="action_d_read" />
-      <input type="hidden" name="previous_action" value="d_read" />
-      <input type="hidden" name="list" value="[% list %]" />
-      <input type="hidden" name="path" value="[% path %]" />
-      <input type="hidden" name="type" value="directory" />
-      <input type="hidden" name="action" value="d_read" />
-      <input type="hidden" name="show_expert_page" value="1" />
-      </form>
-    [% END %]
-    <br/>
-  [% END %]  
+[% IF path %]  <span style="float: right"> <a class="actionMenuLinks" href="[% path_cgi %]/d_read/[% list %]/[% escaped_father %]">[%|loc%]Up to higher level directory[%END%]</a></span>
+[% END %]
 
-  [% IF path %]  
-     <table width="100%"><tr>
-      <td><h2><strong><img src="[% icons_url %]/folder.open.png" alt="" /> [% visible_path %] </strong> </h2> </td>
-      <td align="right"> <span style="font-size: larger;"> <a href="[% path_cgi %]/d_read/[% list %]/[% escaped_father %]"> <img style="vertical-align: bottom; border: 0px;"  src="[% father_icon %]" alt="" /> [%|loc%]Up to higher level directory[%END%]</a></span></td>      
-    </tr></table>
-    <br /> 
+[% IF expert_page %]
+    <a class="actionMenuLinks" href="[% path_cgi %]/d_read/[% list %]/[% escaped_path %]?type=directory&previous_action=d_read&show_user_page=1">[%|loc%]User mode[%END%]</a>
+    <a class="actionMenuLinksCurrentPage" href="[% path_cgi %]/d_read/[% list %]/[% escaped_path %]?type=directory&previous_action=d_read&show_expert_page=1">[%|loc%]Expert mode[%END%]</a>
+[% ELSE %] 
+    [% IF has_dir_rights %]
+    <a class="actionMenuLinksCurrentPage" href="[% path_cgi %]/d_read/[% list %]/[% escaped_path %]?type=directory&previous_action=d_read&show_user_page=1">[%|loc%]User mode[%END%]</a>
+    <a class="actionMenuLinks" href="[% path_cgi %]/d_read/[% list %]/[% escaped_path %]?type=directory&previous_action=d_read&show_expert_page=1">[%|loc%]Expert mode[%END%]</a>
+    [% END %]
+[% END %]  
+
+[% IF path %]  
+    <h2><strong><img src="[% icons_url %]/folder.open.png" alt="" /> [% visible_path %] </strong> </h2>
 
     [% IF expert_page %]
+    <span style="float: right">
       [% IF may_edit %]
-    <a href="[% path_cgi %]/d_delete/[% list %]/[% escaped_path %]" onclick="request_confirm_link('[% path_cgi %]/d_delete/[% list %]/[% escaped_path %]', '[%|loc(visible_path)%]Do you really want to delete %1 ?[%END%]'); return false;">[%|loc%]delete[%END%]</a> |
-	 <a href="[% path_cgi %]/d_properties/[% list %]/[% escaped_path %]">[%|loc%]properties[%END%]</a> |
+    <a class="actionMenuLinks" href="[% path_cgi %]/d_delete/[% list %]/[% escaped_path %]" onclick="request_confirm_link('[% path_cgi %]/d_delete/[% list %]/[% escaped_path %]', '[%|loc(visible_path)%]Do you really want to delete %1 ?[%END%]'); return false;">[%|loc%]delete[%END%]</a> 
+	 <a class="actionMenuLinks"  href="[% path_cgi %]/d_properties/[% list %]/[% escaped_path %]">[%|loc%]properties[%END%]</a>
       [% END %]
       [% IF may_control %]      
-        <a href="[% path_cgi %]/d_control/[% list %]/[% escaped_path %]">[%|loc%]access[%END%]</a>
+        <a  class="actionMenuLinks" href="[% path_cgi %]/d_control/[% list %]/[% escaped_path %]">[%|loc%]access[%END%]</a>
       [% END %]      
-      <br />
+	</span>
     [% END %]
+
+
+      <br />
 
     [%|loc(doc_owner)%]Owner : %1[%END%] <br />
     [%|loc(doc_date)%]Last update : %1[%END%] <br />
@@ -55,7 +43,7 @@
     
     <br />  
   [% ELSE %]
-    <h2> <strong> [%|loc%]Listing of folder SHARED[%END%] </strong> </h2> 
+    <h2>[%|loc%]Listing of folder SHARED[%END%]</h2> 
   [% END %]
    
   <table style="width: 100%;">
