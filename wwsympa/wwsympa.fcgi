@@ -7856,9 +7856,10 @@ sub do_set_pending_list_request {
      my $fh = $query->upload('uploaded_file');
      my $fn = $query->param('uploaded_file');
 
-     $fn =~ /([^\/\\]+)$/;
-     my $fname = $1;
-
+     my $fname;
+     if ($fn =~ /([^\/\\]+)$/) {
+	 $fname = $1;
+     }
 
  ####### Controls
      ### action relative to a list ?
