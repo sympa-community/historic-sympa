@@ -633,6 +633,7 @@ if ($wwsconf->{'use_fast_cgi'}) {
 
          if (&List::is_user_db($param->{'user'}{'email'})) {
              $param->{'user'} = &List::get_user_db($param->{'user'}{'email'});
+	     $param->{'user_attributes'} = $param->{'user'}{'attributes'};
          }
 
          ## For the parser to display an empty field instead of [xxx]
