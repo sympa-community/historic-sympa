@@ -1651,8 +1651,6 @@ sub distribute {
 	};
 	$hdr = $msg->head;
 	do_log('debug2', "message successfully decrypted");
-    }else {
-	$is_crypted = 'not_crypted';
     }
 
     $hdr->add('X-Validation-by', $sender);

@@ -2048,7 +2048,7 @@ sub send_msg {
            push @tabrcpt_html, $user->{'email'};
        } elsif ($mixed and ($user->{'reception'} eq 'urlize')) {
            push @tabrcpt_url, $user->{'email'};
-       } elsif ($encrypt && (! -r "$Conf{'ssl_cert_dir'}/".&tools::escape_chars($user->{'email'}))) {
+       } elsif (($encrypt eq 'smime_crypted') && (! -r "$Conf{'ssl_cert_dir'}/".&tools::escape_chars($user->{'email'}))) {
 	   ## Missing User certificate
 	   $self->send_file('x509-user-cert-missing', $user->{'email'}, $robot, {'mail' => {'subject' => $hdr->get('Subject'),
 											    'sender' => $hdr->get('From')}});
