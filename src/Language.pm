@@ -46,6 +46,11 @@ my %language_equiv = ( 'zh_CN' => 'cn',
 		       'en_us' => 'us',
 		       );
 
+## Supported languages
+@supported_languages = ('cs_CZ','de_DE','en_US','es_ES','et_EE',
+	      'fi_FI','fr_FR','hu_HU','it_IT','nl_NL',
+	      'pl_PL','pt_PT','ro_RO','zh_CN','zh_TW');
+
 sub SetLang {
 ###########
     my $locale = shift;
