@@ -3,6 +3,46 @@
 
 (See Changelog file for the full changes log)
 
+5.1a		05 March 2005
+*****    This alpha version is not derived from latest 5.0 version but 
+*****    from a previous 5.0b1. We will merge 5.0 release and 5.1a ASAP.
+
+
+   New features :
+	 This version use CSS and produce a new look and feel
+
+*****    templates are completly defferent and probably completly incompatible
+*****    with any previous version including 5.0X. The new wwsympa.fcgi comes 
+*****    with some minor modification (mainly a new action named css to deliver
+*****    cascading style sheet document from template css.tt2). It can be use
+*****    properly with any previous template set but you can't mixe new templates
+*****    with previous ones : you must use all of the previous templates or all
+*****    of the new ones.(you can style use previous templates but the new ones 
+*****    will be needed to use new features.
+*****    In order to run the new skin, you must edit and adapt any
+*****    customized templates located in .../sympa/etc/... and .../sympa/expl/...
+*****    If you currently don't run a tt2 version. Start wwsympa, it will
+*****    convert previous templates in tt2 format. Then for every version, select
+*****    files that need to be edited :
+*****    find /home/sympa/etc /home:sympa/expl -name "*.tt2" | grep -v mail_tt2
+*****    For most installation it should be limited to the home.tt2
+*****    Idem for mhonarc_ressources
+
+         check colors parameters in server_admin page
+
+	 Now you can customize your site editing css.tt2 (install it in 
+         ./sympa/etc/web_tt2 to customize you ).
+
+*****    Win a tee shirt with Sympa's logo if you submit a new css to Sympa authors
+
+    Changes :
+
+*****    It is needed need to rebuild all archives because mhonarc_ressouces changes
+         
+         new sympa.conf colors parameters color_0, color_1, ... color_15
+
+
+
 5.0b.1		11 January 2005
 
    New features :
