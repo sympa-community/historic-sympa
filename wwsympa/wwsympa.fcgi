@@ -4014,7 +4014,12 @@ sub do_arcsearch {
     $param->{'searched'} = $search->searched;
     
     $param->{'res'} = $search->res;
-    
+
+    ## Decode subject header fields
+    foreach my $m (@{$param->{'res'}}) {
+	$m->{'subj'} = &MIME::Words::decode_mimewords($m->{'subj'});
+    }
+
     return 1;
 }
 
