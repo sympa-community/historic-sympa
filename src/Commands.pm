@@ -815,7 +815,8 @@ sub signoff {
     if ($which eq '*') {
 	my $success ;
 	foreach $l ( List::get_which ($email,$robot,'member') ){
-            $success ||= &signoff($l,$email);
+	    my $result = &signoff("$l $email", $robot);
+            $success ||= $result;
 	}
 	return ($success);
     }
@@ -862,7 +863,7 @@ sub signoff {
 	}else {
 	    push @msg::report, sprintf Msg(6, 80, "You are not allowed to perform %s %s in list %s.\n"),'sig',$which,$email;
 	}
-	do_log('info', 'DEL %s %s from %s refused (not allowed)', $which, $email, $sender);
+	do_log('info', 'SIG %s %s from %s refused (not allowed)', $which, $email, $sender);
 	return 'not_allowed';
     }
     if ($action =~ /request_auth\s*\(\s*\[\s*(email|sender)\s*\]\s*\)/i) {
