@@ -173,6 +173,7 @@ ul a.menuLinksCurrentPage:hover {padding: 0px 10px 0px 20px; font-weight: bold; 
 ul.calendar a {font-size: 10px;}
 ul.calendar li {list-style: none; display: inline; padding: 0px 1px 0px 2px; font-size: 10px; text-decoration: none; border: 1px solid [% color_2 %];}
 ul li.calendarLinks {background: [% color_13 %];}
+ul li.calendarLinks:hover {background: [% color_7 %]; color: [% color_11 %]; }
 ul li.calendarLinksCurrentPage {background: [% color_6 %];}
 ul li.calendarLinksCurrentPage:hover {background: [% color_6 %];}
 ul li.calendarLinksInactive {}
