@@ -3,6 +3,18 @@
 
 (See Changelog file for the full changes log)
 
+4.1.1		22 March 2004
+
+   Bug fixes :
+	
+	wwsympa/archived.pl: web archives were stored in the wrong directory.
+	If you have been running Sympa 4.1, you should run the arcrepair.pl script on your server.
+
+	wwsympa/wwsympa.fcgi: [reported by V. Mathieu] list of inactive lists did not consider 
+	the msg_count file was not ordered
+
+	src/List.pm: sorting msg_count file when it is updated
+
 4.1		15 March 2004
 
    Changes :
