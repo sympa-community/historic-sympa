@@ -47,9 +47,13 @@ my %language_equiv = ( 'zh_CN' => 'cn',
 		       );
 
 ## Supported languages
-@supported_languages = ('cs_CZ','de_DE','en_US','es_ES','et_EE',
-	      'fi_FI','fr_FR','hu_HU','it_IT','nl_NL',
-	      'pl_PL','pt_PT','ro_RO','zh_CN','zh_TW');
+my @supported_languages = ('cs_CZ','de_DE','en_US','es_ES','et_EE',
+			   'fi_FI','fr_FR','hu_HU','it_IT','nl_NL',
+			   'pl_PL','pt_PT','ro_RO','zh_CN','zh_TW');
+
+sub GetSupportedLanguages {
+    return @supported_languages;
+}
 
 sub SetLang {
 ###########
@@ -67,7 +71,10 @@ sub SetLang {
     }
    
     ## Set Locale::Messages context
-    setlocale(LC_MESSAGES, $locale);
+    unless (setlocale(LC_MESSAGES, $locale)) {
+	&do_log('err','Failed to setlocale(%s)', $locale);
+	return undef;
+    }
     textdomain "sympa";
     bindtextdomain sympa => '--DIR--/locale';
     #bind_textdomain_codeset sympa => 'iso-8859-1';

@@ -675,11 +675,11 @@ if ($wwsconf->{'use_fast_cgi'}) {
 
      ## Available languages
      my $saved_lang = &Language::GetLang();
-     foreach my $l (@Language::languages) {
+     foreach my $l (&Language::GetSupportedLanguages()) {
 	 &Language::SetLang($l) || next;
 	 $param->{'languages'}{$l}{'complete'} = gettext("english");
-	 if (($param->{'languages'}{$l}{'complete'} eq 'english')&& 
-	     ($l !~ /^en/)) {
+	 if (($param->{'languages'}{$l}{'complete'} eq 'english')) {#&& 
+#	     ($l !~ /^en/)) {
 	     $param->{'languages'}{$l}{'complete'} = $l;
 	 }
 
