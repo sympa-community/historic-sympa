@@ -55,7 +55,7 @@ ul#MainMenuLinks li {list-style: none; display: inline;}
 	float: left;
 	width: 180px; /* width: 25%; nogo w/ ie yet */
 	border: 0px solid [% color_1 %];
-	padding-top: 10px;
+	padding-top: 0px;
 	text-align: left;
 }
 #Footer {
