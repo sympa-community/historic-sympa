@@ -150,7 +150,7 @@
 
       <TR>
         <TD>
-<FONT COLOR="[% dark_color %]"><B>[%|l%]Rebuild HTML archives[%END%]</B> [%|l%]using[%END%] <CODE>arctxt</CODE> [%|l%]directories as input.[%END%]</FONT>
+<FONT COLOR="[% dark_color %]"><B>[%|l%]Rebuild HTML archives using "arctxt" directories as input.[%END%]</FONT>
         </TD>
       </TR>
       <TR>

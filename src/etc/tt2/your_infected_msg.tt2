@@ -3,7 +3,7 @@ Subject: [%|l%]A virus in your email[%END%]
 
     [%|l%]***** V I R U S    A L E R T *****[%END%]
 
-[%|l(virus_name,recipient,from)%]Our viruschecker found the a virus named %1
+[%|l(virus_name,recipient,from)%]Our viruschecker found a virus named %1
 in a message adressed to %2 and that seems
 to be yours (From: %3).[%END%]
 

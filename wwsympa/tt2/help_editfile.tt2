@@ -8,8 +8,8 @@ a full MIME structured message (only for MIME gurus).[%END%]
 using the UNSUBSCRIBE command.[%END%]
 
 <LI>[%|l%]Deletion message : This message is sent to users when you
-remove them from the list using the DEL command (unless you hit the[%END%]
-<i>[%|l%]quiet[%END%]</i> [%|l%]button.[%END%]
+remove them from the list using the DEL command (unless you hit the
+Quiet button.[%END%]
 
 <LI>[%|l%]Remind message : This message is sent to each subscriber
 when using the command  REMIND. It's very useful to help people who are
@@ -31,7 +31,7 @@ INFO. It can also be included in the[%END%] <i>[%|l%]Welcome message[%END%]</I>.
 <LI>[%|l%]Message header: If this file is not empty, it is added as a MIME
 attachment at the beginning of each message distributed to the list.[%END%]
 
-<LI>[%|l%]Message footer : same as[%END%] <i>[%|l%]Message header,[%END%]</i> [%|l%]but attached at the
+<LI>[%|l%]Message footer : same as <i>Message header,</i> but attached at the
 end of the message.[%END%]
 
 </UL>

@@ -76,7 +76,7 @@
 [% IF error.email %]
   [%|l(error.email)%]Not subscribed: %1[%END%]
 [% ELSE %]
-[%|l(error.list)%]You are not subscribed to the list %1[%END%]
+[%|l(error.list)%]You are not subscribed to list %1[%END%]
 [% END %]
 
 [% ELSIF error.msg == 'diff_passwd' %]

@@ -23,9 +23,8 @@ subject are recognized.[%END%]
  LISts                       * [%|l%]Directory of lists managed on this node[%END%]
  REView <list>               * [%|l%]Displays the subscribers to <list>[%END%]
  WHICH                       * [%|l%]Displays which lists you are subscribed to[%END%]
- SUBscribe <list> <GECOS>    * [%|l%]To subscribe or to confirm a subscription to
-                               <list>, <GECOS> is an optional information
-                               about subscriber.[%END%]
+ SUBscribe <list> <name>     * [%|l%]To subscribe or to confirm a subscription to
+                               <list>.[%END%]
 
  UNSubscribe <list> <EMAIL>  * [%|l%]To quit <list>. <EMAIL> is an optional 
                                email address, usefull if different from

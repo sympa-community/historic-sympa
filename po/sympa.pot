@@ -8,192 +8,186 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "POT-Creation-Date: 2002-07-16 17:27+0800\n"
-"PO-Revision-Date: 2003-07-15 17:54+0200\n"
-"Last-Translator: FULL NAME <os@cru.fr>\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "MIME-Version: 1.0\n"
-"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Type: text/plain; charset=CHARSET\n"
 "Content-Transfer-Encoding: 8bit\n"
 
-#. (from_count)
 #: wwsympa/tt2/arcsearch.tt2:65
+#. (from_count)
 msgid " %1 hits on message's From field"
-msgstr "%1 occurence(s) dans le champs From"
+msgstr ""
 
-#. (conf.title,list)
 #: src/etc/tt2/sendpasswd.tt2:5
-msgid "%1 / subscribing to %2"
-msgstr "%1 / abonnement à %2"
-
 #. (conf.title,list)
+msgid "%1 / subscribing to %2"
+msgstr ""
+
 #: src/etc/tt2/sendpasswd.tt2:7
+#. (conf.title,list)
 msgid "%1 / unsubscribing from %2"
-msgstr "%1 / désabonnement de %2"
+msgstr ""
 
-#. (conf.title)
 #: src/etc/tt2/sendpasswd.tt2:9
+#. (conf.title)
 msgid "%1 / your environment"
-msgstr "%1 / votre environnement"
+msgstr ""
 
-#. (error.path)
 #: wwsympa/tt2/error.tt2:104
-msgid "%1 : No such file"
-msgstr "%1 : fichier inexistant"
-
 #. (error.path)
+msgid "%1 : No such file"
+msgstr ""
+
 #: wwsympa/tt2/error.tt2:101
+#. (error.path)
 msgid "%1 : No such file or directory"
-msgstr "%1 : document inexistant"
+msgstr ""
 
-#. (notice.action)
 #: wwsympa/tt2/notice.tt2:11
+#. (notice.action)
 msgid "%1 : action succeeded"
-msgstr "%1 : l'opération a été effectuée"
+msgstr ""
 
-#. (error.file)
 #: wwsympa/tt2/error.tt2:61
+#. (error.file)
 msgid "%1 : file not editable"
-msgstr "%1 : fichier non éditable"
+msgstr ""
 
-#. (error.name)
 #: wwsympa/tt2/error.tt2:119
+#. (error.name)
 msgid "%1 : incorrect name"
-msgstr "%1 : nom incorrect"
+msgstr ""
 
-#. (error.action)
 #: wwsympa/tt2/error.tt2:7
-msgid "%1 : unknown action"
-msgstr "%1 : cette action est incorrecte"
-
-#. (error.list)
-#: wwsympa/tt2/error.tt2:10
-msgid "%1 : unknown list"
-msgstr "%1 : cette liste est inconnue"
-
 #. (error.action)
+msgid "%1 : unknown action"
+msgstr ""
+
+#: wwsympa/tt2/error.tt2:10
+#. (error.list)
+msgid "%1 : unknown list"
+msgstr ""
+
 #: wwsympa/tt2/error.tt2:43
+#. (error.action)
 msgid "%1 : you are not allowed to perform this action"
-msgstr "%1 : vous n'êtes pas autorisé à effectuer cette action"
+msgstr ""
 
-#. (list.name)
 #: src/etc/tt2/list_created.tt2:9
+#. (list.name)
 msgid "%1 admin page"
-msgstr "La page d'administration de %1 est :"
+msgstr ""
 
-#. (list.name,list.host,size,conf.host)
 #: src/etc/tt2/listowner_notification.tt2:8
+#. (list.name,list.host,size,conf.host)
 msgid ""
 "%1 archive quota exceeded. \n"
 "Total size used for %1@%2 archive is %3 Bytes. Messages\n"
 "are no more web-archived. Please contact listmaster@%4. \n"
 msgstr ""
-"Le quota des archives de la liste %1@%2 estdépassé.\n"
-"La taille des archives est de %3 octets. Les messages de la liste\n"
-"ne sont plus archivés. Veuillez contacter listmaster@%4.\n"
 
-#. (body_count)
 #: wwsympa/tt2/arcsearch.tt2:57
+#. (body_count)
 msgid "%1 hits on message's Body"
-msgstr "%1 occurence(s) dans le corps du message"
+msgstr ""
 
-#. (date_count)
 #: wwsympa/tt2/arcsearch.tt2:69
+#. (date_count)
 msgid "%1 hits on message's Date field"
-msgstr "%1 occurence(s) dans le champs Date"
+msgstr ""
 
-#. (subj_count)
 #: wwsympa/tt2/arcsearch.tt2:61
+#. (subj_count)
 msgid "%1 hits on message's Subject field"
-msgstr "%1 occurence(s) dans le champs Objet"
+msgstr ""
 
-#. (error.email,error.list)
 #: wwsympa/tt2/error.tt2:67
+#. (error.email,error.list)
 msgid "%1 is already subscribed to the list %2"
-msgstr "%1 est déjà abonné à la liste %2"
+msgstr ""
 
-#. (list.name)
 #: src/etc/tt2/list_created.tt2:2
+#. (list.name)
 msgid "%1 mailing list creation"
-msgstr "Création de la liste %1"
+msgstr ""
 
-#. (searched,num)
 #: wwsympa/tt2/arcsearch.tt2:54
+#. (searched,num)
 msgid "%1 messages selected out of %2"
-msgstr "%1 messages trouvés parmis %2"
+msgstr ""
 
-#. (occurrence)
 #: wwsympa/tt2/review.tt2:60
-msgid "%1 occurrence(s) found"
-msgstr "%1 occurrence(s) trouvées"
-
 #. (occurrence)
+msgid "%1 occurrence(s) found"
+msgstr ""
+
 #: wwsympa/tt2/lists.tt2:4
+#. (occurrence)
 msgid "%1 occurrences found"
-msgstr "%1 occurrences sélectionnées"
+msgstr ""
 
-#. (notice.total)
 #: wwsympa/tt2/notice.tt2:8
+#. (notice.total)
 msgid "%1 subscribers added"
-msgstr "%1 adresses ont été abonnées"
+msgstr ""
 
-#. (notice.path)
 #: wwsympa/tt2/notice.tt2:17
+#. (notice.path)
 msgid "%1 successfully uploaded!"
-msgstr "Le fichier %1 a été déposé"
+msgstr ""
 
-#. (error.action)
 #: wwsympa/tt2/error.tt2:73
+#. (error.action)
 msgid "%1: action failed"
-msgstr "%1 : l'opération a échoué"
+msgstr ""
 
-#. (list.name,list.host)
 #: src/etc/tt2/list_created.tt2:4
-msgid "%1@%2 mailing list has been activated by listmaster."
-msgstr "La liste %1@%2 a été validée par le listmaster."
-
 #. (list.name,list.host)
-#: src/etc/tt2/list_rejected.tt2:4
-msgid "%1@%2 mailing list has been rejected by listmaster."
-msgstr "La liste %1@%2 a été rejetée par le listmaster."
+msgid "%1@%2 mailing list has been activated by listmaster."
+msgstr ""
 
-#. (rate2,list.name,list.host,rate)
+#: src/etc/tt2/list_rejected.tt2:4
+#. (list.name,list.host)
+msgid "%1@%2 mailing list has been rejected by listmaster."
+msgstr ""
+
 #: src/etc/tt2/listowner_notification.tt2:13
+#. (rate2,list.name,list.host,rate)
 msgid "%2@%3 archives use %4% of allowed disk quota."
-msgstr "Les archives de la liste %2@%3 ont atteint %4% de l'espace autorisé"
+msgstr ""
 
 #: wwsympa/tt2/arcsearch.tt2:19
 msgid "(All of this words,"
-msgstr "(Tout ces mots,"
+msgstr ""
 
 #: wwsympa/tt2/arcsearch.tt2:21
 msgid "(Each of this words,"
-msgstr "(Chacun de ces mots,"
+msgstr ""
 
-#. (subject)
 #: src/etc/tt2/reject.tt2:7
+#. (subject)
 msgid "(Subject of your mail : %1)"
-msgstr "(L'objet de votre message : %1"
+msgstr ""
 
 #: wwsympa/tt2/arcsearch.tt2:17
 msgid "(This sentence,"
-msgstr "(Cette phrase,"
+msgstr ""
 
 #: wwsympa/tt2/help.tt2:28
 msgid "), provide your email address and associated password."
-msgstr "), veuillez saisir votre adresse électronique et votre mot de passe"
+msgstr ""
 
 #: src/etc/tt2/your_infected_msg.tt2:4
 msgid "***** V I R U S    A L E R T *****"
-msgstr "**** A L E R T E    V I R U S ****"
+msgstr ""
 
 #: wwsympa/tt2/remove_arc.tt2:14
 msgid ""
 ", please refer to listmaster with\n"
 "complete URL of the incriminated message.\n"
 msgstr ""
-"probablement, ce message a été reçu sans l'entête Message-Id:. Merci\n"
-"de contacter le listmaster et de lui transmettre l'URL\n"
-"du message à détruire."
 
 #: wwsympa/tt2/remove_arc.tt2:9
 msgid ""
@@ -201,474 +195,424 @@ msgid ""
 "was received without Message-Id. Please refer to listmaster with\n"
 "complete URL of the incriminated message\n"
 msgstr ""
-"probablement, ce message a été reçu sans l'entête Message-Id:. Merci\n"
-"de contacter le listmaster et de lui transmettre l'URL\n"
-"du message à détruire."
 
 #: wwsympa/tt2/create_list_request.tt2:48
 msgid "--Select a topic--"
-msgstr "--Choisir une catégorie--"
+msgstr ""
 
 #: wwsympa/tt2/remove_arc.tt2:5
 msgid ""
 ". The message will be deleted as soon\n"
 "as possible. This task may be down in a few minutes.\n"
 msgstr ""
-"Le message sera détruit rapidement (quelques minutes). N'oubliez pas de "
-"rafraîchir la page concernée pour le vérifier."
 
 #: wwsympa/tt2/help.tt2:22
 msgid ": Login / Logout from WWSympa."
-msgstr "Connexion / Déconnexion de Sympa"
+msgstr ""
 
 #: wwsympa/tt2/error.tt2:22
 msgid ": bad listname"
-msgstr ": nom de liste incorrect"
+msgstr ""
 
 #: wwsympa/tt2/help.tt2:18
 msgid ": directory of lists available on the server"
-msgstr ": liste des listes"
+msgstr ""
 
 #: wwsympa/tt2/help.tt2:16
 msgid ": user preferences. This is proposed to identified users only."
 msgstr ""
-": Préférences d'usager. Visible uniquement par les utilisateurs identifiés."
 
 #: wwsympa/tt2/error.tt2:28
 msgid ": user unknown"
-msgstr ": utilisateur non reconnu"
+msgstr ""
 
 #: wwsympa/tt2/help.tt2:20
 msgid ": your environment as a subscriber or as owner"
-msgstr ": votre environnement en tant qu'abonné ou que propriétaire de listes."
+msgstr ""
 
-#. (email)
 #: wwsympa/tt2/lists.tt2:6
+#. (email)
 msgid "<B>%1</B> is subscribed to the following mailing lists"
-msgstr "<B>%1</B> est abonné aux listes suivantes"
+msgstr ""
 
 #: wwsympa/tt2/help_admin.tt2:5
 msgid "<b>Create shared</b> : initializes the shared document web space."
 msgstr ""
-"<b>Créer un espace partagé</b> : créer un espace partagé de documents sur le "
-"Web."
 
 #: wwsympa/tt2/help_admin.tt2:10
-msgid ""
-"<b>Customizing</b> : editing of various files and messages attached to your "
-"list."
+msgid "<b>Customizing</b> : editing of various files and messages attached to your list."
 msgstr ""
-"<b>Personnaliser</b> : Edition des différents fichiers liés à votre liste."
 
 #: wwsympa/tt2/help_admin.tt2:6
-msgid ""
-"<b>Delete shared</b> closes it. It can be restored using \"Restore shared\" "
-"button"
-msgstr "<b>Supprimer l'espace partagé</b>: le fermer. Il peut être restauré."
+msgid "<b>Delete shared</b> closes it. It can be restored using \"Restore shared\" button"
+msgstr ""
 
 #: wwsympa/tt2/help_admin.tt2:7
-msgid ""
-"<b>Edit list config</b>:  must be used with care : it allows to modify some "
-"of the list parameters. The list of parameters you can modify depends on "
-"your privilege."
+msgid "<b>Edit list config</b>:  must be used with care : it allows to modify some of the list parameters. The list of parameters you can modify depends on your privilege."
 msgstr ""
-"<b>Configurer la liste</b> : A utiliser avec prudence. Ce menu vous permet "
-"de modifier certains paramètres de votre liste. Les paramètres modifiables "
-"dépendent de vos privilèges."
 
 #: wwsympa/tt2/help_admin.tt2:11
-msgid ""
-"<b>Manage Archives</b>  : Allow you to download and delete list archives."
+msgid "<b>Manage Archives</b>  : Allow you to download and delete list archives."
 msgstr ""
-"<b>Gérer les archives</b> : Téléchargement et Suppression des archives de la "
-"liste."
 
 #: wwsympa/tt2/help_admin.tt2:9
 msgid "<b>Moderate</b> : reject and accept messages for distribution."
-msgstr "<b>Modérer</b> : Rejet et validation des messages pour distribution."
+msgstr ""
 
 #: wwsympa/tt2/help_admin.tt2:4
-msgid ""
-"<b>Remove list</b> : completely removes the current list. Listmaster "
-"privileges are required to Restore a list"
+msgid "<b>Remove list</b> : completely removes the current list. Listmaster privileges are required to Restore a list"
 msgstr ""
-"<b>Supprimer la liste</b> : Supprimer entièrement la liste actuelle. Les "
-"privilèges Listmaster sont requis pour restaurer une liste"
 
 #: wwsympa/tt2/help_admin.tt2:8
-msgid ""
-"<b>Subscribers</b> : subscribers management, add, del, search, bounces, "
-"etc..."
+msgid "<b>Subscribers</b> : subscribers management, add, del, search, bounces, etc..."
 msgstr ""
-"<b>Abonnés</b> : Gestion des abonnés, ajout/suppression, recherche, erreurs, "
-"etc."
 
 #: src/etc/tt2/helpfile.tt2:44
 msgid "<list> archive file list"
-msgstr "Recevoir la liste des fichiers de l'archive"
+msgstr ""
 
 #: src/etc/tt2/helpfile.tt2:39
 msgid "<list> reception in normal mode"
-msgstr "Recevoir l'objet des message uniquement"
+msgstr ""
 
 #: wwsympa/tt2/create_list_request.tt2:72
 msgid "A few lines describing the list"
-msgstr "La liste en quelques lignes"
+msgstr ""
 
 #: src/etc/tt2/your_infected_msg.tt2:2
 msgid "A virus in your email"
-msgstr "D=?iso-8859-1?Q?=E9?=tection de virus."
+msgstr ""
 
 #: wwsympa/tt2/serveradmin.tt2:159
 msgid "ALL"
-msgstr "TOUTES"
+msgstr ""
 
 #: wwsympa/tt2/d_read.tt2:89
 msgid "Access"
-msgstr "Accès"
+msgstr ""
 
-#. (path)
 #: wwsympa/tt2/d_control.tt2:3
+#. (path)
 msgid "Access rights for the document %1"
-msgstr "Droit d'accès au document %1"
+msgstr ""
 
 #: wwsympa/tt2/d_read.tt2:266
 msgid "Add"
-msgstr "Ajouter"
+msgstr ""
 
 #: wwsympa/tt2/d_read.tt2:259
 msgid "Add a bookmark"
-msgstr "Ajouter un signet"
+msgstr ""
 
 #: wwsympa/tt2/subindex.tt2:53
 msgid "Add selected addresses"
-msgstr "Abonner les adresses sélectionnées"
+msgstr ""
 
 #: wwsympa/tt2/add_request.tt2:12
 msgid "Add subscribers"
-msgstr "Ajout d'abonnés"
+msgstr ""
 
-#. (error.email)
 #: wwsympa/tt2/error.tt2:19
+#. (error.email)
 msgid "Address \"%1\" is incorrect"
-msgstr "L'adresse \"%1\" est incorrecte"
+msgstr ""
 
 #: wwsympa/tt2/arc.tt2:20
 msgid "Advanced search"
-msgstr "Recherche avancée"
+msgstr ""
 
 #: wwsympa/tt2/create_list.tt2:8 wwsympa/tt2/install_pending_list.tt2:26
 msgid "Aliases have been installed."
-msgstr "Les alias ont été installés."
+msgstr ""
 
 #: wwsympa/tt2/install_pending_list.tt2:29
 msgid "Aliases you should install in your mailer"
-msgstr "Les alias à installer"
+msgstr ""
 
-#. (conf.sympa)
 #: src/etc/tt2/helpfile.tt2:11
+#. (conf.sympa)
 msgid "All commands must be sent to the electronic address %1"
-msgstr "Toutes les commandes doivent être adressées à l'adresse %1"
+msgstr ""
 
-#. (mail.sender,mail.subject)
 #: src/etc/tt2/x509-user-cert-missing.tt2:8
+#. (mail.sender,mail.subject)
 msgid ""
 "An encrypted message from %1 has been distributed to\n"
 "Subject : %2\n"
 msgstr ""
-"Un message crypté émis par %1 a été diffusé dans la liste.\n"
-"Objet du message : %2\n"
 
 #: src/etc/tt2/listmaster_notification.tt2:13
 msgid "Antivirus scan failed"
-msgstr "Echec de la détection antivirale"
+msgstr ""
 
 #: src/etc/tt2/x509-user-cert-missing.tt2:15
 msgid "Any information about this list :"
-msgstr "Pour toute information sur cette liste :"
+msgstr ""
 
 #: wwsympa/tt2/d_editfile.tt2:58
 msgid "Apply"
-msgstr "Appliquer"
+msgstr ""
 
 #: wwsympa/tt2/list_menu.tt2:309 wwsympa/tt2/list_menu.tt2:312
 msgid "Archive"
-msgstr "Archive"
+msgstr ""
 
-#: wwsympa/tt2/admin_menu.tt2:144 wwsympa/tt2/edit_list_request.tt2:8
-#: wwsympa/tt2/serveradmin.tt2:143
+#: wwsympa/tt2/admin_menu.tt2:144 wwsympa/tt2/edit_list_request.tt2:8 wwsympa/tt2/serveradmin.tt2:143
 msgid "Archives"
-msgstr "Les archives"
+msgstr ""
 
-#. (list)
 #: wwsympa/tt2/admin_menu.tt2:122 wwsympa/tt2/admin_menu.tt2:124
+#. (list)
 msgid "Are you sure you wish to close %1 list ?"
-msgstr "Vous êtes sur le point de suppimer la liste %1. Confirmer ?"
+msgstr ""
 
-#. (list.name)
 #: src/etc/tt2/moderate.tt2:3
+#. (list.name)
 msgid "Article to be approved for %1"
-msgstr "Message à modérer pour %1"
+msgstr ""
 
 #: wwsympa/tt2/scenario_test.tt2:61
 msgid "Auth method"
-msgstr "Méthode d'authentification"
+msgstr ""
 
 #: wwsympa/tt2/d_read.tt2:42 wwsympa/tt2/modindex.tt2:15
 msgid "Author"
-msgstr "Auteur"
+msgstr ""
 
 #: src/etc/tt2/helpfile.tt2:19
 msgid "Available commands are:"
-msgstr "Les commandes disponibles sont :"
+msgstr ""
 
 #: wwsympa/tt2/arcsearch_form.tt2:66
 msgid "Body"
-msgstr "Contenu de message"
+msgstr ""
 
 #: wwsympa/tt2/d_editfile.tt2:22
 msgid "Bookmark URL"
-msgstr "URL du signet [% path %]"
+msgstr ""
 
 #: wwsympa/tt2/admin_menu.tt2:148
 msgid "Bounce Settings"
-msgstr "Gestion des erreurs"
+msgstr ""
 
 #: wwsympa/tt2/list_menu.tt2:107
 msgid "Bounced email rate:"
-msgstr "Taux d'adresses en erreur :"
+msgstr ""
 
-#. (current_subscriber.bounce_count)
 #: wwsympa/tt2/editsubscriber.tt2:52
+#. (current_subscriber.bounce_count)
 msgid "Bounces count : %1"
-msgstr "Nombre de retours : %1"
+msgstr ""
 
 #: wwsympa/tt2/edit_list_request.tt2:9
 msgid "Bounces management"
-msgstr "Gestion des rapports de non-remise"
+msgstr ""
 
 #: wwsympa/tt2/editsubscriber.tt2:48
 msgid "Bouncing address"
-msgstr "Adresse en erreur"
+msgstr ""
 
-#. (error.path)
 #: wwsympa/tt2/error.tt2:134
+#. (error.path)
 msgid "Cannot create directory %1"
-msgstr "Impossible de créer le répertoire %1"
+msgstr ""
 
-#. (error.path)
 #: wwsympa/tt2/error.tt2:128
-msgid "Cannot overwrite file %1"
-msgstr "Impossible d'écraser le fichier %1"
-
 #. (error.path)
+msgid "Cannot overwrite file %1"
+msgstr ""
+
 #: wwsympa/tt2/error.tt2:131
+#. (error.path)
 msgid "Cannot upload file %1"
-msgstr "Impossible de déposer le fichier %1"
+msgstr ""
 
 #: wwsympa/tt2/arcsearch_form.tt2:36
 msgid "Case"
-msgstr "Majuscules/minuscules"
+msgstr ""
 
 #: wwsympa/tt2/show_cert.tt2:9
 msgid "Certificate expiration date"
-msgstr "Date d'expiration"
+msgstr ""
 
 #: wwsympa/tt2/show_cert.tt2:10
 msgid "Certificate issuer"
-msgstr "Certificat émis par"
+msgstr ""
 
 #: wwsympa/tt2/change_email.tt2:11
 msgid "Change my email address"
-msgstr "Valider le changement"
+msgstr ""
 
 #: wwsympa/tt2/pref.tt2:52
 msgid "Changing your email address"
-msgstr "Changement d'adresse e-mail"
+msgstr ""
 
 #: src/etc/tt2/sendpasswd.tt2:32 wwsympa/tt2/pref.tt2:56
 msgid "Changing your password"
-msgstr "Changement de mot de passe"
+msgstr ""
 
 #: wwsympa/tt2/arcsearch_form.tt2:42
 msgid "Check"
-msgstr "Vérifier par"
+msgstr ""
 
-#. (list.name)
 #: src/etc/tt2/reject.tt2:10
+#. (list.name)
 msgid "Check %1 list usage :"
 msgstr ""
-"Vérifiez les conditions d'utilisation de cette liste %1 en cliquant ici :"
 
 #: src/etc/tt2/listmaster_notification.tt2:34
 msgid "Check Sympa log files for more precise information"
-msgstr "Consultez les logs de Sympa pour plus de précisions."
+msgstr ""
 
-#. (list)
 #: wwsympa/tt2/sigrequest.tt2:31
-msgid ""
-"Check your mailbox for new messages and enter below the\n"
-"\tpassword given in the message Sympa sent you. This will\n"
-"\tconfirm your unsubscription from list %1.\n"
-msgstr ""
-"Relevez votre boîte aux lettres pour renseigner votre mot de passe. Cela "
-"confirmera\n"
-"votre demande de désabonnement de la liste %1.\n"
-
 #. (list)
-#: wwsympa/tt2/subrequest.tt2:24
 msgid ""
 "Check your mailbox for new messages and enter below the\n"
-"\tpassword. This will confirm your subscription to list %1\n"
+"	password given in the message Sympa sent you. This will\n"
+"	confirm your unsubscription from list %1.\n"
 msgstr ""
-"Surveillez votre boîte aux lettres et fournissez ce mot de passe\n"
-"ici dès sa réception.\n"
+
+#: wwsympa/tt2/subrequest.tt2:24
+#. (list)
+msgid ""
+"Check your mailbox for new messages and enter below the\n"
+"	password. This will confirm your subscription to list %1\n"
+msgstr ""
 
 #: wwsympa/tt2/show_cert.tt2:11
 msgid "Cipher key size used"
-msgstr "Taille de clef utilisée"
+msgstr ""
 
 #: wwsympa/tt2/set_pending_list_request.tt2:34
 msgid "Close it"
-msgstr "Fermer la liste"
+msgstr ""
 
 #: wwsympa/tt2/get_closed_lists.tt2:6 wwsympa/tt2/serveradmin.tt2:63
 msgid "Closed lists"
-msgstr "Listes fermées"
+msgstr ""
 
-#. (error.email)
 #: wwsympa/tt2/error.tt2:95
+#. (error.email)
 msgid "Config file has been modified by %1. Cannot apply your changes"
 msgstr ""
-"Le fichier de configuration a été modifié par %1. Impossible d'appliquer vos "
-"modifications"
 
 #: wwsympa/tt2/set_pending_list_request.tt2:67
 msgid "Configuration file"
-msgstr "Fichier de configuration"
+msgstr ""
 
 #: wwsympa/tt2/notice.tt2:14
 msgid "Configuration file has been updated"
-msgstr "La configuration de la liste a été mise à jour"
+msgstr ""
 
 #: src/etc/tt2/helpfile.tt2:49
 msgid ""
 "Confirmation for sending a message (depending\n"
 "                               on the list's configuration)\n"
 msgstr ""
-"Confirmer l'envoi d'un message\n"
-"                               (selon la configuration de la liste)\n"
 
 #: wwsympa/tt2/pref.tt2:32
 msgid "Connexion expiration period"
-msgstr "Expiration de la connexion"
+msgstr ""
 
 #: wwsympa/tt2/arcsearch.tt2:111
 msgid "Continue search"
-msgstr "Continue search"
+msgstr ""
 
-#. (error.list)
 #: wwsympa/tt2/error.tt2:143
-msgid "Could not change email for list %1"
-msgstr "Changement d'adresse e-mail impossible dans la liste %1"
-
 #. (error.list)
+msgid "Could not change email for list %1"
+msgstr ""
+
 #: wwsympa/tt2/error.tt2:151
+#. (error.list)
 msgid ""
 "Could not change your subscription address for the list '%1%'\n"
 "because you are not allowed to unsubscribe.\n"
 msgstr ""
-"Changement d'adresse e-mail impossible dans la liste '%1'\n"
-"parce que le dsabonnement n'est pas autorisé.\n"
 
-#. (error.list)
 #: wwsympa/tt2/error.tt2:147
+#. (error.list)
 msgid ""
 "Could not change your subscription address for the list '%1'\n"
 "because your new address is not allowed to subscribe.\n"
 msgstr ""
-"Changement d'adresse e-mail impossible dans la liste %1\n"
-"parce que l'abonnement avec la nouvelle adresse n'est pas autorisé.\n"
 
 #: wwsympa/tt2/admin_menu.tt2:97
 msgid "Create Shared"
-msgstr "Créer un espace partagé"
+msgstr ""
 
 #: wwsympa/tt2/d_read.tt2:241 wwsympa/tt2/d_read.tt2:246
 msgid "Create a new file"
-msgstr "Créer"
+msgstr ""
 
-#. (path)
 #: wwsympa/tt2/d_read.tt2:220
+#. (path)
 msgid "Create a new folder inside the folder %1"
-msgstr "Créer un sous dossier dans %1"
+msgstr ""
 
 #: wwsympa/tt2/d_read.tt2:222
 msgid "Create a new folder inside the folder SHARED"
-msgstr "Créer un dossier"
+msgstr ""
 
 #: wwsympa/tt2/d_read.tt2:228
 msgid "Create a new subdirectory"
-msgstr "Créer"
+msgstr ""
 
 #: wwsympa/tt2/menu.tt2:57 wwsympa/tt2/menu.tt2:61
 msgid "Create list"
-msgstr "Création de liste"
+msgstr ""
 
 #: wwsympa/tt2/get_latest_lists.tt2:6
 msgid "Creation date"
-msgstr "Date de création"
+msgstr ""
 
 #: wwsympa/tt2/choosepasswd.tt2:13
 msgid "Current password :"
-msgstr "Mot de passe actuel :"
+msgstr ""
 
 #: wwsympa/tt2/serveradmin.tt2:132
 msgid "Customize templates"
-msgstr "Voir les traductions des \"templates\""
+msgstr ""
 
 #: wwsympa/tt2/admin_menu.tt2:53 wwsympa/tt2/admin_menu.tt2:59
 msgid "Customizing"
-msgstr "Personnaliser"
+msgstr ""
 
 #: wwsympa/tt2/admin_menu.tt2:158
 msgid "Data Source"
-msgstr "Sources de données"
+msgstr ""
 
 #: wwsympa/tt2/error.tt2:125
 msgid "Data have changed on disk. Cannot apply your changes"
 msgstr ""
-"Les données ont changé sur le disque. Impossible d'appliquer vos "
-"modifications"
 
 #: wwsympa/tt2/edit_list_request.tt2:10
 msgid "Data sources setup"
-msgstr "Définition des sources de données"
+msgstr ""
 
-#: wwsympa/tt2/arcsearch_form.tt2:64 wwsympa/tt2/modindex.tt2:14
-#: wwsympa/tt2/subindex.tt2:11
+#: wwsympa/tt2/arcsearch_form.tt2:64 wwsympa/tt2/modindex.tt2:14 wwsympa/tt2/subindex.tt2:11
 msgid "Date"
-msgstr "Date"
+msgstr ""
 
 #: wwsympa/tt2/d_read.tt2:88
 msgid "Delete"
-msgstr "Supprimer"
+msgstr ""
 
 #: wwsympa/tt2/admin_menu.tt2:106
 msgid "Delete Shared"
-msgstr "Fermer l'espace partager"
+msgstr ""
 
 #: wwsympa/tt2/review.tt2:78 wwsympa/tt2/review.tt2:80
 msgid "Delete selected email addresses"
-msgstr "Désabonner les adresses sélectionnées"
+msgstr ""
 
 #: wwsympa/tt2/reviewbouncing.tt2:115
 msgid "Delete selected subscribers"
-msgstr "Supprimer les adresses sélectionnées"
+msgstr ""
 
 #: wwsympa/tt2/reviewbouncing.tt2:30
 msgid "Delete selected users"
-msgstr "Supprimer les adresses sélectionnées"
+msgstr ""
 
 #: wwsympa/tt2/help_editfile.tt2:12
 msgid ""
@@ -676,228 +620,212 @@ msgid ""
 "remove them from the list using the DEL command (unless you hit the\n"
 "Quiet button.\n"
 msgstr ""
-"Message de suppression : Envoyé aux personnes supprimées de la liste des "
-"abonnés\n"
-"par le propriétaire de la liste ou via le module de gestion des erreurs.\n"
 
-#. (path)
 #: wwsympa/tt2/d_editfile.tt2:47
-msgid "Describe the directory %1"
-msgstr "Décrire le répertoire %1"
-
 #. (path)
-#: wwsympa/tt2/d_editfile.tt2:49
-msgid "Describe the file %1"
-msgstr "Décrire le fichier %1"
+msgid "Describe the directory %1"
+msgstr ""
 
+#: wwsympa/tt2/d_editfile.tt2:49
+#. (path)
+msgid "Describe the file %1"
+msgstr ""
+
+#: wwsympa/tt2/d_control.tt2:6 wwsympa/tt2/d_editfile.tt2:12 wwsympa/tt2/d_read.tt2:16
 #. (doc_title)
 #. (desc)
-#: wwsympa/tt2/d_control.tt2:6 wwsympa/tt2/d_editfile.tt2:12
-#: wwsympa/tt2/d_read.tt2:16
 msgid "Description : %1"
-msgstr "Description : %1"
+msgstr ""
 
 #: wwsympa/tt2/create_list_request.tt2:70
 msgid "Description:"
-msgstr "Description :"
+msgstr ""
 
 #: wwsympa/tt2/help_user_options.tt2:7
 msgid "Digest"
-msgstr "Digest"
+msgstr ""
 
-#. (list.name)
 #: src/etc/tt2/digest.tt2:4
+#. (list.name)
 msgid "Digest for list %1"
-msgstr "Compilation de la liste %1"
+msgstr ""
 
 #: src/etc/tt2/helpfile.tt2:23
 msgid "Directory of lists managed on this node"
-msgstr "Recevoir l'annuaire des listes gérées sur ce server"
+msgstr ""
 
 #: src/etc/tt2/helpfile.tt2:65
 msgid ""
 "Displays the current expiration process\n"
 "                                   state for <list>\n"
 msgstr ""
-"Connaître l'état du processus d'expiration\n"
-"                                   en cours pour la liste <list>\n"
 
 #: src/etc/tt2/helpfile.tt2:24
 msgid "Displays the subscribers to <list>"
-msgstr "Recevoir la liste des abonnés à"
+msgstr ""
 
 #: src/etc/tt2/helpfile.tt2:25
 msgid "Displays which lists you are subscribed to"
-msgstr "Recevoir la liste des abonnés à"
+msgstr ""
 
 #: wwsympa/tt2/modindex.tt2:46 wwsympa/tt2/viewmod.tt2:8
 msgid "Distribute"
-msgstr "Distribuer"
+msgstr ""
 
 #: wwsympa/tt2/view_translations.tt2:20
 msgid "Do it"
-msgstr "Traduire"
+msgstr ""
 
-#. (path)
 #: wwsympa/tt2/d_read.tt2:10
+#. (path)
 msgid "Do you really want to delete %1 ?"
-msgstr "Voulez-vous vraiment supprimer %1 ?"
+msgstr ""
 
-#. (path,s.doc,f.size)
 #: wwsympa/tt2/d_read.tt2:189
+#. (path,s.doc,f.size)
 msgid "Do you really want to delete %1%2 (%3 Kb) ?"
-msgstr "Voulez-vous vraiment supprimer %1%2 (%3 Ko) ?"
+msgstr ""
 
-#. (path,s.doc)
 #: wwsympa/tt2/d_read.tt2:122
+#. (path,s.doc)
 msgid "Do you really want to delete %1%2 ?"
-msgstr "Voulez-vous vraiment supprimer %1%2 ?"
+msgstr ""
 
-#. (total)
 #: wwsympa/tt2/reviewbouncing.tt2:16
-msgid ""
-"Do you really want to send a subscription remind message to the %1 "
-"subscribers"
-msgstr ""
-"Êtes-vous sûr de vouloir envoyer un rappel d\\'abonnement à chacun des %1 "
-"abonnés ?'"
-
 #. (total)
-#: wwsympa/tt2/review.tt2:42
-msgid ""
-"Do you really want to send a subscription remind message to the %1 "
-"subscribers ?"
+msgid "Do you really want to send a subscription remind message to the %1 subscribers"
 msgstr ""
-"Êtes-vous sûr de vouloir envoyer un rappel d\\'abonnement à chacun des %1 "
-"abonnés ?'"
 
-#. (list)
+#: wwsympa/tt2/review.tt2:42
+#. (total)
+msgid "Do you really want to send a subscription remind message to the %1 subscribers ?"
+msgstr ""
+
 #: wwsympa/tt2/list_menu.tt2:230
-msgid "Do you really want to subscribe to list %1"
-msgstr "Voulez-vous vous abonner à la liste %1"
-
 #. (list)
+msgid "Do you really want to subscribe to list %1"
+msgstr ""
+
 #: wwsympa/tt2/list_menu.tt2:192
+#. (list)
 msgid "Do you really want to subscribe to list %1?"
-msgstr "Voulez-vous vous abonner à la liste %1 ?"
+msgstr ""
 
 #: wwsympa/tt2/review.tt2:78
 msgid "Do you really want to unsubscribe ALL selected subscribers ?"
-msgstr "Etes-vous sûr de vouloir désabonner TOUS les abonnés ?"
+msgstr ""
 
-#. (list)
 #: wwsympa/tt2/list_menu.tt2:262
-msgid "Do you really want to unsubscribe from list %1"
-msgstr "Voulez-vous vous désabonner de la liste %1"
-
 #. (list)
+msgid "Do you really want to unsubscribe from list %1"
+msgstr ""
+
 #: wwsympa/tt2/list_menu.tt2:167
+#. (list)
 msgid "Do you really want to unsubscribe from list %1?"
-msgstr "Voulez-vous vous désabonner de la liste %1 ?"
+msgstr ""
 
 #: wwsympa/tt2/d_read.tt2:27
 msgid "Document"
-msgstr "Document"
+msgstr ""
 
-#: wwsympa/tt2/d_read.tt2:87 wwsympa/tt2/editfile.tt2:23
-#: wwsympa/tt2/serveradmin.tt2:114 wwsympa/tt2/serveradmin.tt2:125
+#: wwsympa/tt2/d_read.tt2:87 wwsympa/tt2/editfile.tt2:23 wwsympa/tt2/serveradmin.tt2:114 wwsympa/tt2/serveradmin.tt2:125
 msgid "Edit"
-msgstr "Editer"
+msgstr ""
 
 #: wwsympa/tt2/admin_menu.tt2:25 wwsympa/tt2/admin_menu.tt2:30
 msgid "Edit List Config"
-msgstr "Configurer la liste"
+msgstr ""
 
 #: wwsympa/tt2/d_control.tt2:24
 msgid "Edit access"
-msgstr "Droit d'écriture"
+msgstr ""
 
-#. (path)
 #: wwsympa/tt2/d_editfile.tt2:4
+#. (path)
 msgid "Edition of the bookmark %1"
-msgstr "Edition du signet %1"
+msgstr ""
 
-#. (path)
 #: wwsympa/tt2/d_editfile.tt2:6
-msgid "Edition of the directory %1"
-msgstr "Edition du répertoire %1"
-
 #. (path)
+msgid "Edition of the directory %1"
+msgstr ""
+
 #: wwsympa/tt2/d_editfile.tt2:8
+#. (path)
 msgid "Edition of the file %1"
-msgstr "Edition du fichier %1"
+msgstr ""
 
 #: wwsympa/tt2/title.tt2:19
 msgid "Editor"
-msgstr "Modérateur"
+msgstr ""
 
 #: wwsympa/tt2/d_read.tt2:93
 msgid "Empty folder"
-msgstr "Dossier vide"
+msgstr ""
 
-#. (list.name,date)
 #: src/etc/tt2/digest.tt2:39
+#. (list.name,date)
 msgid "End of digest for list %1 - %2"
-msgstr "Fin de compilation de la liste %1 - %2"
+msgstr ""
 
 #: wwsympa/tt2/remove_arc.tt2:13
 msgid "Error while deleting this message"
-msgstr "Erreur lors de la suppression de ce message"
+msgstr ""
 
-#: src/etc/tt2/expire_warning1.tt2:9 src/etc/tt2/expire_warning2.tt2:9
-#: src/etc/tt2/remind.tt2:8
+#: src/etc/tt2/expire_warning1.tt2:9 src/etc/tt2/expire_warning2.tt2:9 src/etc/tt2/remind.tt2:8
 msgid "Everything about this list : "
-msgstr "Pour tout savoir sur cette liste :"
+msgstr ""
 
 #: src/etc/tt2/welcome.tt2:18 src/etc/tt2/welcome.tt2:42
 msgid "Everything about this list:"
-msgstr "Pour tout savoir sur cette liste :"
+msgstr ""
 
 #: wwsympa/tt2/arcsearch_form.tt2:72
 msgid "Extend search field"
-msgstr "Etendue de la recherche"
+msgstr ""
 
 #: wwsympa/tt2/home.tt2:63
 msgid "Extended search"
-msgstr "Recherche étendue"
+msgstr ""
 
-#. (error.directory)
 #: wwsympa/tt2/error.tt2:137
+#. (error.directory)
 msgid "Failed : %1 not empty"
-msgstr "Echec : le répertoire %1 n'est pas vide"
+msgstr ""
 
 #: wwsympa/tt2/error.tt2:113
 msgid "Failed : your content is empty"
-msgstr "Echec : votre zone d'édition est vide"
+msgstr ""
 
-#. (error.user)
 #: wwsympa/tt2/error.tt2:70
+#. (error.user)
 msgid "Failed to add user %1"
-msgstr "Impossible d'abonner %1"
+msgstr ""
 
-#. (notice.path)
 #: wwsympa/tt2/notice.tt2:20
+#. (notice.path)
 msgid "File %1 saved"
-msgstr "Fichier %1 sauvegardé"
+msgstr ""
 
-#. (conf.host)
 #: src/etc/tt2/list_unknown.tt2:22
+#. (conf.host)
 msgid "For further assistance, please contact listmaster@%1"
-msgstr "Pour plus de détails, contactez listmaster@%1"
+msgstr ""
 
 #: src/etc/tt2/global_remind.tt2:5
 msgid "Foreach list here is a mailto to use if you want to unsubscribe."
-msgstr "Voici pour chaque liste une méthode de désabonnement :"
+msgstr ""
 
-#. (stats.byte_sent)
 #: src/etc/tt2/stats_report.tt2:7
+#. (stats.byte_sent)
 msgid "Forwarded mega-bytes        :      %1"
-msgstr "Méga-octets transmis        :      %1"
+msgstr ""
 
-#. (user.email)
 #: wwsympa/tt2/compose_mail.tt2:4
+#. (user.email)
 msgid "From: %1"
-msgstr "De : %1"
+msgstr ""
 
 #: wwsympa/tt2/help.tt2:13
 msgid ""
@@ -905,557 +833,503 @@ msgid ""
 "the higher part of the user interface's banner. WWSympa provides \n"
 "a customized environment with access to the following functions :\n"
 msgstr ""
-"Seules les fonctions qui vous sont autorisées sont affichées dans\n"
-"chaque page. Cette interface est donc plus complète et facile à utiliser\n"
-"si vous vous êtes identifiés préalablement (via le bouton login). Exemple :\n"
 
 #: wwsympa/tt2/show_cert.tt2:5
 msgid "HTTPS authentication information"
-msgstr "Information d'authentification HTTPS"
+msgstr ""
 
-#: wwsympa/tt2/edit_list_request.tt2:48 wwsympa/tt2/menu.tt2:118
-#: wwsympa/tt2/menu.tt2:121
+#: wwsympa/tt2/edit_list_request.tt2:48 wwsympa/tt2/menu.tt2:118 wwsympa/tt2/menu.tt2:121
 msgid "Help"
-msgstr "Aide"
+msgstr ""
 
-#. (base_url,path_cgi)
 #: src/etc/tt2/sendpasswd.tt2:39
+#. (base_url,path_cgi)
 msgid "Help on Sympa: %1%2"
-msgstr "Aide sur Sympa : %1%2"
+msgstr ""
 
-#. (list.name,list.host)
 #: src/etc/tt2/review.tt2:1
+#. (list.name,list.host)
 msgid "Here are the subscribers of %1@%2 mailing list:"
-msgstr "Les abonnés à la liste %1@%2 sont :"
+msgstr ""
 
-#. (conf.email,conf.host)
 #: src/etc/tt2/lists.tt2:1
+#. (conf.email,conf.host)
 msgid "Here is the list of list from %1@%2"
-msgstr "Voici la liste des listes de %1@[% robot_domain %] :"
+msgstr ""
 
 #: wwsympa/tt2/menu.tt2:110 wwsympa/tt2/menu.tt2:113
 msgid "Home"
-msgstr "Accueil"
+msgstr ""
 
-#. (url)
 #: src/etc/tt2/info_report.tt2:22
+#. (url)
 msgid "Homepage           : %1"
-msgstr "Page web           : %1"
+msgstr ""
 
 #: wwsympa/tt2/help.tt2:41
 msgid "I am not a list subscriber"
-msgstr "Je ne suis abonné à aucune liste"
+msgstr ""
 
 #: wwsympa/tt2/arc_protect.tt2:6
 msgid "I am not a spammer"
-msgstr "Je ne suis pas un spameur"
+msgstr ""
 
 #: wwsympa/tt2/help.tt2:46
 msgid "I am subscriber to at least one list but I have no password"
-msgstr "Je suis abonné à une liste, mais je n'ai pas de mot de passe"
+msgstr ""
 
 #: wwsympa/tt2/help.tt2:51
 msgid "I forgot my password"
-msgstr "J'ai oublié mon mot de passe"
+msgstr ""
 
-#. (list)
 #: wwsympa/tt2/subrequest.tt2:12
-msgid "I subscribe to list %1"
-msgstr "Je m'abonne à %1"
-
 #. (list)
+msgid "I subscribe to list %1"
+msgstr ""
+
 #: wwsympa/tt2/sigrequest.tt2:11
+#. (list)
 msgid "I unsubscribe from list %1"
-msgstr "Je me désabonne de %1"
+msgstr ""
 
 #: src/etc/tt2/invite.tt2:13
 msgid "If you don't want to subscribe just ignore this message."
-msgstr "Si vous ne voulez pas vous abonner, ignorez ce message."
+msgstr ""
 
 #: wwsympa/tt2/loginbanner.tt2:46 wwsympa/tt2/sigrequest.tt2:71
-msgid ""
-"If you never had a password from that server or if you don't remember it :"
-msgstr "Si vous n'avez jamais eu de mot de passe ou si vous l'avez oublié :"
+msgid "If you never had a password from that server or if you don't remember it :"
+msgstr ""
 
 #: src/etc/tt2/global_remind.tt2:3
 msgid "If you want to unsubscribe from some list, please save this mail."
-msgstr "Pour pouvoir vous désabonner d'une liste, conservez ce message."
+msgstr ""
 
-#. (conf.wwsympa_url,user.email,user.password)
 #: src/etc/tt2/global_remind.tt2:17
+#. (conf.wwsympa_url,user.email,user.password)
 msgid ""
 "In order to authenticate on the web interface(%1)\n"
 "use your e-mail %2 and your password %3\n"
 msgstr ""
-"Pour vous identifier sous %1 :\n"
-"\n"
-"     votre adresse électronique : %2\n"
-"     votre mot de passe         : %3\n"
 
 #: wwsympa/tt2/loginbanner.tt2:16
 msgid ""
-"In order to benefit from the full services provided by this server, you "
-"probably\n"
+"In order to benefit from the full services provided by this server, you probably\n"
 " need to identify yourself first.\n"
 msgstr ""
-"Pour bénéficier de l'accès intégral à ce serveur de listes, vous\n"
-"devez probablement vous identifier préalablement.\n"
 
 #: src/etc/tt2/helpfile.tt2:51
 msgid ""
 "Indicates the end of the commands (to ignore a\n"
 "                               signature)\n"
 msgstr ""
-"Indiquer la fin des commandes\n"
-"                               (pour ignorer une signature)\n"
 
 #: src/etc/tt2/helpfile.tt2:22
 msgid "Information about a list"
-msgstr "Recevoir ce fichier d'aide"
+msgstr ""
 
 #: wwsympa/tt2/set_pending_list_request.tt2:51
 msgid "Information file"
-msgstr "Fichier d'information"
+msgstr ""
 
-#. (list.name)
 #: src/etc/tt2/stats_report.tt2:1
+#. (list.name)
 msgid "Information regarding list %1"
-msgstr "Informations concernant la liste %1"
+msgstr ""
 
-#. (list.name,list.host)
 #: src/etc/tt2/info_report.tt2:1
+#. (list.name,list.host)
 msgid "Information regarding list %1@%2"
-msgstr "Informations sur la liste %1@%2"
+msgstr ""
 
 #: wwsympa/tt2/set_pending_list_request.tt2:35
 msgid "Install it"
-msgstr "L'installer"
+msgstr ""
 
 #: wwsympa/tt2/help_user_options.tt2:18
 msgid ""
-"Instead of receiving individual mail messages from the list, the subscriber "
-"will periodically \n"
-"receive a list of messages. This mode is very close to the Digest reception "
-"mode but the \n"
+"Instead of receiving individual mail messages from the list, the subscriber will periodically \n"
+"receive a list of messages. This mode is very close to the Digest reception mode but the \n"
 "subscriber receives only the list of messages.\n"
 msgstr ""
-"Au lieu de recevoir régulièrement les messages de la liste, vous en recevrez "
-"périodiquement une compilation. Cette compilation regroupe un ensemble de "
-"messages de la liste, au sein d'un message au format MIME multipart/digest.\n"
 
 #: wwsympa/tt2/help_user_options.tt2:10
 msgid ""
-"Instead of receiving individual mail messages from the list, the subscriber "
-"will periodically \n"
-"receive batched messages in a Digest. This Digest compiles a group of "
-"messages from the list, using\n"
+"Instead of receiving individual mail messages from the list, the subscriber will periodically \n"
+"receive batched messages in a Digest. This Digest compiles a group of messages from the list, using\n"
 "the multipart/digest MIME format.\n"
 msgstr ""
-"Au lieu de recevoir régulièrement les messages de la liste, vous en recevrez "
-"périodiquement\n"
-"une compilation. Cette compilation regroupe un ensemble de messages de la "
-"liste, au\n"
-"sein d'un message au format MIME multipart/digest.\n"
 
 #: src/etc/tt2/helpfile.tt2:47
 msgid "Invite <email> for subscribtion in <list>"
-msgstr "Inviter <e-mail> à s'abonner à <list>"
+msgstr ""
 
-#. (user.email)
 #: src/etc/tt2/x509-user-cert-missing.tt2:11
+#. (user.email)
 msgid ""
 "It was not possible to send it to you because the mailing list manager\n"
 "was unable to access to your personal certificat (email %1).\n"
 msgstr ""
-"Il n'a pas été possible de vous remettre ce message car le serveur\n"
-"de liste ne dispose pas de votre certificat X509 (pour l'adresse\n"
-"%1).\n"
 
 #: wwsympa/tt2/pref.tt2:24
 msgid "Language"
-msgstr "Langue"
+msgstr ""
 
-#. (current_subscriber.lang)
 #: wwsympa/tt2/editsubscriber.tt2:24
+#. (current_subscriber.lang)
 msgid "Language : %1"
-msgstr "Langue : %1"
+msgstr ""
 
 #: wwsympa/tt2/d_read.tt2:72
 msgid "Last update"
-msgstr "Mise à jour"
+msgstr ""
 
+#: wwsympa/tt2/d_control.tt2:5 wwsympa/tt2/d_editfile.tt2:11 wwsympa/tt2/d_read.tt2:14 wwsympa/tt2/editsubscriber.tt2:15
 #. (doc_date)
 #. (current_subscriber.update_date)
-#: wwsympa/tt2/d_control.tt2:5 wwsympa/tt2/d_editfile.tt2:11
-#: wwsympa/tt2/d_read.tt2:14 wwsympa/tt2/editsubscriber.tt2:15
 msgid "Last update : %1"
-msgstr "Dernière mise à jour : %1"
+msgstr ""
 
 #: wwsympa/tt2/suboptions.tt2:6
 msgid "Last update:"
-msgstr "Dernière mise à jour :"
+msgstr ""
 
 #: wwsympa/tt2/serveradmin.tt2:57
 msgid "Latest lists"
-msgstr "Listes récentes"
+msgstr ""
 
 #: wwsympa/tt2/arcsearch_form.tt2:48
 msgid "Layout"
-msgstr "Résultats"
+msgstr ""
 
 #: wwsympa/tt2/admin_menu.tt2:5
 msgid "List Administration Panel"
-msgstr "Administration de liste"
+msgstr ""
 
 #: wwsympa/tt2/admin_menu.tt2:132
 msgid "List Definition"
-msgstr "Définition de la liste"
+msgstr ""
 
-#. (list.name)
 #: src/etc/tt2/listowner_notification.tt2:4
-msgid "List \"%1\" archive quota exceeded"
-msgstr "Quota des archives de la liste \"%1\" dépassé"
-
 #. (list.name)
+msgid "List \"%1\" archive quota exceeded"
+msgstr ""
+
 #: src/etc/tt2/listmaster_notification.tt2:4
+#. (list.name)
 msgid "List \"%1\" creation request"
-msgstr "Demande de création de la liste \"%1\""
+msgstr ""
 
-#. (list.name,rate)
 #: src/etc/tt2/listowner_notification.tt2:11
+#. (list.name,rate)
 msgid "List \"%1\" warning : archive %2% full"
-msgstr "Alerte liste \"%1\" : archives pleines à %2%"
+msgstr ""
 
-#: wwsympa/tt2/list_menu.tt2:78 wwsympa/tt2/list_menu.tt2:82
-#: wwsympa/tt2/list_menu.tt2:88
+#: wwsympa/tt2/list_menu.tt2:78 wwsympa/tt2/list_menu.tt2:82 wwsympa/tt2/list_menu.tt2:88
 msgid "List admin"
-msgstr "Admin liste"
+msgstr ""
 
 #: wwsympa/tt2/close_list.tt2:7
 msgid "List aliases have been removed."
-msgstr "Les alias ont été supprimés"
+msgstr ""
 
 #: wwsympa/tt2/create_list_request.tt2:66
 msgid "List classification in the directory"
-msgstr "Classement de liste dans l'annuaire"
+msgstr ""
 
 #: wwsympa/tt2/edit_list_request.tt2:5
 msgid "List definition"
-msgstr "Définition de la liste"
+msgstr ""
 
 #: wwsympa/tt2/help_editfile.tt2:29
 msgid ""
 "List description : This text is sent as an answer to the mail command\n"
 "INFO. It can also be included in the\n"
 msgstr ""
-"Description de la liste : Ce texte est envoyé en retour à la commande "
-"<code>INFO [nom de liste]</code> en mode messagerie.\n"
-"Il est aussi inclus dans le <I>message de bienvenue</I>.\n"
 
 #: wwsympa/tt2/error.tt2:52
 msgid "List has no bouncing subscribers"
-msgstr "La liste ne comporte aucun abonné en erreur"
+msgstr ""
 
 #: wwsympa/tt2/error.tt2:49
 msgid "List has no subscribers"
-msgstr "La liste ne comporte aucun abonné"
+msgstr ""
 
 #: wwsympa/tt2/help_editfile.tt2:26
 msgid ""
 "List homepage : HTML text to describe the list. It is printed on the\n"
-"right-hand side of the main list page. (default for this is the list "
-"description)\n"
+"right-hand side of the main list page. (default for this is the list description)\n"
 msgstr ""
-"Page d'accueil de la liste : Description de la liste  au format HTML. "
-"S'affiche en partie\n"
-"droite de la page de la liste. (a pour défaut la description de la liste)\n"
 
 #: wwsympa/tt2/list_menu.tt2:20 wwsympa/tt2/list_menu.tt2:24
 msgid "List info"
-msgstr "Info liste"
+msgstr ""
 
 #: wwsympa/tt2/create_list_request.tt2:9
 msgid "List name:"
-msgstr "Nom de liste :"
+msgstr ""
 
-#: wwsympa/tt2/install_pending_list.tt2:17
-#: wwsympa/tt2/set_pending_list_request.tt2:17
+#: wwsympa/tt2/install_pending_list.tt2:17 wwsympa/tt2/set_pending_list_request.tt2:17
 msgid "List requested by"
-msgstr "Demandée par"
+msgstr ""
 
 #: wwsympa/tt2/create_list_request.tt2:21
 msgid "List type :"
-msgstr "Type de liste :"
+msgstr ""
 
 #: src/etc/tt2/list_unknown.tt2:3
 msgid "List unknown"
-msgstr "Liste inconnue"
+msgstr ""
 
 #: wwsympa/tt2/d_read.tt2:21
 msgid "Listing of folder SHARED"
-msgstr "Liste des documents"
+msgstr ""
 
 #: wwsympa/tt2/get_latest_lists.tt2:7 wwsympa/tt2/scenario_test.tt2:25
 msgid "Listname"
-msgstr "Nom de la liste"
+msgstr ""
 
-#: wwsympa/tt2/install_pending_list.tt2:11
-#: wwsympa/tt2/set_pending_list_request.tt2:11
+#: wwsympa/tt2/install_pending_list.tt2:11 wwsympa/tt2/set_pending_list_request.tt2:11
 msgid "Listname :"
-msgstr "Nom de liste :"
+msgstr ""
 
 #: src/etc/tt2/listowner_notification.tt2:2
 msgid "Listowners"
-msgstr "Propriétaires de liste"
+msgstr ""
 
 #: wwsympa/tt2/serveradmin.tt2:41
 msgid "Lists"
-msgstr "Les listes"
+msgstr ""
 
 #: wwsympa/tt2/list_menu.tt2:61
 msgid "Load certificate"
-msgstr "Charger le certificat"
+msgstr ""
 
 #: wwsympa/tt2/home.tt2:62
 msgid "Local"
-msgstr "Localement"
+msgstr ""
 
-#: wwsympa/tt2/help.tt2:22 wwsympa/tt2/help.tt2:25 wwsympa/tt2/help.tt2:28
-#: wwsympa/tt2/loginbanner.tt2:33 wwsympa/tt2/menu.tt2:35
+#: wwsympa/tt2/help.tt2:22 wwsympa/tt2/help.tt2:25 wwsympa/tt2/help.tt2:28 wwsympa/tt2/loginbanner.tt2:33 wwsympa/tt2/menu.tt2:35
 msgid "Login"
-msgstr "Login"
+msgstr ""
 
 #: wwsympa/tt2/help.tt2:39
 msgid "Login issues"
-msgstr "Problèmes de Login"
+msgstr ""
 
 #: wwsympa/tt2/help.tt2:22 wwsympa/tt2/menu.tt2:22
 msgid "Logout"
-msgstr "Logout"
+msgstr ""
 
 #: wwsympa/tt2/home.tt2:16
 msgid "Mailing lists"
-msgstr "Listes de diffusion"
+msgstr ""
 
-#. (max_size)
 #: src/etc/tt2/info_report.tt2:17
+#. (max_size)
 msgid "Maximum size       : %1"
-msgstr "Taille maximale    : %1"
+msgstr ""
 
 #: src/etc/tt2/your_infected_msg.tt2:12
 msgid "May be it is usefull to check your system for viruses."
-msgstr "Il peut être prudent de passez votre poste de travail à"
+msgstr ""
 
 #: wwsympa/tt2/serveradmin.tt2:160
 msgid "May take a lot of CPU time,  be careful !"
-msgstr "Attention, cela peut prendre beaucoup de temps CPU !"
+msgstr ""
 
 #: wwsympa/tt2/help_editfile.tt2:35
 msgid ""
 "Message footer : same as <i>Message header,</i> but attached at the\n"
 "end of the message.\n"
 msgstr ""
-"Attachement de fin de message : Identique à l'<i>Attachement de début de "
-"message</i> mais attaché en fin de message."
 
 #: wwsympa/tt2/help_editfile.tt2:32
 msgid ""
 "Message header: If this file is not empty, it is added as a MIME\n"
 "attachment at the beginning of each message distributed to the list.\n"
 msgstr ""
-"Attachement de début de message : Si non vide, ce fichier estattaché au "
-"début de chaque message diffusé dans la liste."
 
 #: src/etc/tt2/helpfile.tt2:35
 msgid "Message reception in compilation mode"
-msgstr "Recevoir les messages en mode compilation"
+msgstr ""
 
-#. (conf.host)
 #: src/etc/tt2/listowner_notification.tt2:16
+#. (conf.host)
 msgid "Messages are still archived but you should contact listmaster@%1"
 msgstr ""
-"L'archivage des messages est toujours assuré, mais vous devriez contacter"
 
 #: wwsympa/tt2/list_menu.tt2:112
 msgid "Messages to moderate :"
-msgstr "Messages en attente de modération :"
+msgstr ""
 
 #: wwsympa/tt2/admin_menu.tt2:153 wwsympa/tt2/edit_list_request.tt2:12
 msgid "Miscellaneous"
-msgstr "Divers"
+msgstr ""
 
-#. (error.argument)
 #: wwsympa/tt2/error.tt2:86
+#. (error.argument)
 msgid "Missing argument %1"
-msgstr "%1 : paramètre manquant"
+msgstr ""
 
 #: wwsympa/tt2/error.tt2:58
 msgid "Missing filter"
-msgstr "Aucun filtre spécifié"
+msgstr ""
 
-#: wwsympa/tt2/admin_menu.tt2:36 wwsympa/tt2/admin_menu.tt2:42
-#: wwsympa/tt2/admin_menu.tt2:46
+#: wwsympa/tt2/admin_menu.tt2:36 wwsympa/tt2/admin_menu.tt2:42 wwsympa/tt2/admin_menu.tt2:46
 msgid "Moderate"
-msgstr "Modérer"
+msgstr ""
 
-#. (list.name)
 #: src/etc/tt2/modindex.tt2:2
+#. (list.name)
 msgid "Moderation spool for list %1"
-msgstr "Messages à modérer pour %1"
+msgstr ""
 
 #: src/etc/tt2/helpfile.tt2:79
 msgid ""
 "Moderation: to consult the message list to\n"
 "                                   moderate\n"
 msgstr ""
-"Modération : consulter la liste des messages\n"
-"                                                à modérer\n"
 
 #: src/etc/tt2/helpfile.tt2:77
 msgid "Moderation: to reject a message"
-msgstr "Modération : invalider un message"
+msgstr ""
 
 #: src/etc/tt2/helpfile.tt2:76
 msgid "Moderation: to validate a message"
-msgstr "Modération : valider un message"
+msgstr ""
 
-#. (e.gecos)
 #: src/etc/tt2/info_report.tt2:10
+#. (e.gecos)
 msgid "Moderator          : %1"
-msgstr "Modérateur         : %1"
+msgstr ""
 
 #: wwsympa/tt2/list_menu.tt2:53
 msgid "Moderators"
-msgstr "Modérateurs :"
+msgstr ""
 
-#. (list.name)
 #: src/etc/tt2/moderate.tt2:2
+#. (list.name)
 msgid "Moderators of list %1"
-msgstr "Moderateurs de la liste %1"
+msgstr ""
 
 #: wwsympa/tt2/d_editfile.tt2:31
 msgid "Modifier"
-msgstr "Modifier"
+msgstr ""
 
 #: wwsympa/tt2/loginbanner.tt2:14
-msgid ""
-"Most mailing list features require your email. Some mailing lists are hidden "
-"to unidentified persons."
+msgid "Most mailing list features require your email. Some mailing lists are hidden to unidentified persons."
 msgstr ""
-"La plupart des services nécessitent votre adresse e-mail. Certaines listes "
-"sont cachées aux personnes non identifées."
 
 #: wwsympa/tt2/subrequest.tt2:65
 msgid "My password ?"
-msgstr "Envoyez-moi mon mot de passe"
+msgstr ""
 
 #: wwsympa/tt2/pref.tt2:22 wwsympa/tt2/subindex.tt2:9
 msgid "Name"
-msgstr "Nom"
+msgstr ""
 
 #: wwsympa/tt2/editsubscriber.tt2:13
 msgid "Name :"
-msgstr "Nom :"
+msgstr ""
 
 #: wwsympa/tt2/pref.tt2:69
 msgid "New email address :"
-msgstr "Nouvelle adresse e-mail :"
+msgstr ""
 
 #: wwsympa/tt2/choosepasswd.tt2:17 wwsympa/tt2/pref.tt2:76
 msgid "New password :"
-msgstr "Nouveau mot de passe :"
+msgstr ""
 
 #: wwsympa/tt2/choosepasswd.tt2:19
 msgid "New password again :"
-msgstr "Confirmation nouveau mot de passe :"
+msgstr ""
 
 #: wwsympa/tt2/arcsearch.tt2:114
 msgid "New search"
-msgstr "Nouvelle recherche"
+msgstr ""
 
 #: wwsympa/tt2/arcsearch.tt2:42
 msgid "Newest messages first"
-msgstr "Messages les plus récents en tête"
+msgstr ""
 
-#: wwsympa/tt2/review.tt2:106 wwsympa/tt2/reviewbouncing.tt2:127
-#: wwsympa/tt2/reviewbouncing.tt2:52
+#: wwsympa/tt2/review.tt2:106 wwsympa/tt2/reviewbouncing.tt2:127 wwsympa/tt2/reviewbouncing.tt2:52
 msgid "Next page"
-msgstr "Page suivante"
+msgstr ""
 
 #: wwsympa/tt2/serveradmin.tt2:29
 msgid "No Virtual Robot defined on this server"
-msgstr "Aucun robot virtuel défini sur ce serveur"
+msgstr ""
 
-#. (error.email)
 #: wwsympa/tt2/error.tt2:89
+#. (error.email)
 msgid "No bounces for user  %1"
-msgstr "Aucun bounce pour l'utilisateur %1"
+msgstr ""
 
 #: wwsympa/tt2/error.tt2:110
 msgid "No description specified"
-msgstr "Aucune description spécifiée"
+msgstr ""
 
 #: wwsympa/tt2/list_menu.tt2:110
 msgid "No message to moderate"
-msgstr "Aucun message à modérer"
+msgstr ""
 
-#. (notice.list)
 #: wwsympa/tt2/notice.tt2:29
+#. (notice.list)
 msgid "No message to moderate for list %1"
-msgstr "Aucun message à modérer pour la liste %1"
+msgstr ""
 
 #: wwsympa/tt2/error.tt2:116
 msgid "No name specified"
-msgstr "Aucun nom spécifié"
+msgstr ""
 
-#. (error.page)
 #: wwsympa/tt2/error.tt2:55
+#. (error.page)
 msgid "No page %1"
-msgstr "Pas de page %1"
+msgstr ""
 
 #: wwsympa/tt2/error.tt2:31
 msgid "No password for user"
-msgstr "Aucun mot de passe pour l'utilisateur"
+msgstr ""
 
 #: wwsympa/tt2/modindex.tt2:35
 msgid "No subject"
-msgstr "Sans objet"
+msgstr ""
 
 #: wwsympa/tt2/subindex.tt2:49
 msgid "No subscription requests"
-msgstr "Aucune demande d'abonnement"
+msgstr ""
 
-#. (user.email)
 #: wwsympa/tt2/lists.tt2:40
+#. (user.email)
 msgid "No subscriptions with address <B>%1</B>!"
-msgstr "Pas d'abonnements avec l'adresse <B>%1</B> !"
+msgstr ""
 
 #: wwsympa/tt2/help_user_options.tt2:21
 msgid "Nomail"
-msgstr "Nomail"
+msgstr ""
 
-#. (error.email)
 #: wwsympa/tt2/error.tt2:77
+#. (error.email)
 msgid "Not subscribed: %1"
-msgstr "Pas abonné : %1"
+msgstr ""
 
 #: wwsympa/tt2/modindex.tt2:48 wwsympa/tt2/viewmod.tt2:10
 msgid "Notified reject"
-msgstr "Rejeter"
+msgstr ""
 
-#. (stats.msg_sent)
 #: src/etc/tt2/stats_report.tt2:4
+#. (stats.msg_sent)
 msgid "Number of forwarded messages:      %1"
-msgstr "Nombre de messages transmis :      %1"
+msgstr ""
 
-#. (stats.msg_rcv)
 #: src/etc/tt2/stats_report.tt2:3
+#. (stats.msg_rcv)
 msgid "Number of received messages :      %1"
-msgstr "Nombre de messages reçus    :      %1"
+msgstr ""
 
 #: wwsympa/tt2/arcsearch.tt2:44
 msgid "Oldest messages first"
-msgstr "Messages les plus anciens en tête"
+msgstr ""
 
 #: wwsympa/tt2/help.tt2:32
 msgid ""
@@ -1463,252 +1337,231 @@ msgid ""
 "information make your connection to WWSympa last. The lifetime of this\n"
 "<I>cookie</I> is customizeable through your <b>Preferences</b>\n"
 msgstr ""
-"Une fois authentifié, un <I>cookie</I> contenant vos informations de "
-"connexion\n"
-"est envoyé à votre navigateur. Votre adresse apparaît en haut à gauche de la "
-"page.\n"
-"La durée de vie de ce cookie est paramétrable via vos <b>Préférences</b>\n"
 
 #: wwsympa/tt2/remove_arc.tt2:4
 msgid "Operation successful"
-msgstr "Opération réussie"
+msgstr ""
 
-#. (conf.email,conf.host)
 #: src/etc/tt2/moderate.tt2:15 src/etc/tt2/moderate.tt2:20
+#. (conf.email,conf.host)
 msgid "Or send a message to %1@%2 with the following subject :"
 msgstr ""
-"ou\n"
-"envoyez un e-mail à %1@%2 avec comme sujet :"
 
 #: wwsympa/tt2/create_list_request.tt2:63
 msgid "Other"
-msgstr "Autre"
+msgstr ""
 
 #: wwsympa/tt2/pref.tt2:116
 msgid "Other email address :"
-msgstr "Autre adresse e-mail :"
+msgstr ""
 
 #: wwsympa/tt2/help_editfile.tt2:23
 msgid "Other files/pages description :"
-msgstr "Description des autres fichiers/pages :"
+msgstr ""
 
 #: wwsympa/tt2/home.tt2:27
 msgid "Others"
-msgstr "Autre"
+msgstr ""
 
-#. (virus_name,recipient,from)
 #: src/etc/tt2/your_infected_msg.tt2:8
+#. (virus_name,recipient,from)
 msgid ""
 "Our viruschecker found a virus named %1\n"
 "in a message adressed to %2 and that seems\n"
 "to be yours (From: %3).\n"
 msgstr ""
-"Un message qui semble avoir été émis par vous (%3)\n"
-"a destination de %2 contenait le virus\n"
-"suivant : %1.\n"
 
 #: wwsympa/tt2/title.tt2:17
 msgid "Owner"
-msgstr "Gestionnaire"
+msgstr ""
 
-#. (o.gecos)
 #: src/etc/tt2/info_report.tt2:6
+#. (o.gecos)
 msgid "Owner              : %1"
-msgstr "Propriétaire       : %1"
+msgstr ""
 
+#: wwsympa/tt2/d_control.tt2:4 wwsympa/tt2/d_editfile.tt2:10 wwsympa/tt2/d_read.tt2:13
 #. (owner)
 #. (doc_owner)
-#: wwsympa/tt2/d_control.tt2:4 wwsympa/tt2/d_editfile.tt2:10
-#: wwsympa/tt2/d_read.tt2:13
 msgid "Owner : %1"
-msgstr "Propriétaire : %1"
+msgstr ""
 
 #: wwsympa/tt2/create_list_request.tt2:15
 msgid "Owner:"
-msgstr "Propriétaire :"
+msgstr ""
 
 #: wwsympa/tt2/list_menu.tt2:46
 msgid "Owners"
-msgstr "Propriétaires"
+msgstr ""
 
 #: wwsympa/tt2/review.tt2:89 wwsympa/tt2/reviewbouncing.tt2:34
 msgid "Page size"
-msgstr "Taille de page"
+msgstr ""
 
-#. (key_word)
 #: wwsympa/tt2/arcsearch.tt2:13
+#. (key_word)
 msgid "Parameters of these search make on <b> &quot;%1&quot;</b>"
-msgstr "Recherche effectuée sur <b> &quot;%1&quot;</b>"
+msgstr ""
 
 #: wwsympa/tt2/pref.tt2:118
 msgid "Password :"
-msgstr "Mot de passe :"
+msgstr ""
 
-#. (email)
 #: wwsympa/tt2/change_email.tt2:9
+#. (email)
 msgid "Password for %1"
-msgstr "Mot de passe pour %1"
+msgstr ""
 
 #: wwsympa/tt2/get_pending_lists.tt2:11 wwsympa/tt2/serveradmin.tt2:51
 msgid "Pending lists"
-msgstr "Listes en attente"
+msgstr ""
 
-#. (current_subscriber.first_bounce,current_subscriber.last_bounce)
 #: wwsympa/tt2/editsubscriber.tt2:53
+#. (current_subscriber.first_bounce,current_subscriber.last_bounce)
 msgid "Period : from %1 to %2"
-msgstr "Période : from %1 to %2"
+msgstr ""
 
 #: wwsympa/tt2/loginbanner.tt2:6
 msgid "Please check your e-mail box to provide your password below."
 msgstr ""
-"Relevez votre boîte aux lettres pour renseigner votre mot de passe ci-"
-"dessous."
 
-#. (list)
 #: wwsympa/tt2/sigrequest.tt2:46
-msgid ""
-"Please gives your email address for your unsubscription request from list %1."
+#. (list)
+msgid "Please gives your email address for your unsubscription request from list %1."
 msgstr ""
-"Indiquez votre adresse pour votre demande de désabonnement de\n"
-"      la liste %1.\n"
 
 #: wwsympa/tt2/error.tt2:16
 msgid "Please provide your email address"
-msgstr "Vous devez fournir votre adresse e-mail"
+msgstr ""
 
 #: wwsympa/tt2/error.tt2:25
 msgid "Please provide your password"
-msgstr "Vous devez fournir votre mot de passe"
+msgstr ""
 
 #: wwsympa/tt2/error.tt2:160
 msgid "Please select archive months"
-msgstr "Veuillez sélectionner les mois d'archives"
+msgstr ""
 
-#. (conf.email,conf.host)
 #: src/etc/tt2/x509-user-cert-missing.tt2:13
+#. (conf.email,conf.host)
 msgid ""
 "Please, in order to receive futur crypted messages send a signed message\n"
 "to  %1@%2 .\n"
 msgstr ""
-"Pour remédier à ce problème, envoyez un e-mail signé\n"
-"à l'adresse %1@%2.\n"
 
-#: wwsympa/tt2/list_menu.tt2:336 wwsympa/tt2/list_menu.tt2:343
-#: wwsympa/tt2/list_menu.tt2:346
+#: wwsympa/tt2/list_menu.tt2:336 wwsympa/tt2/list_menu.tt2:343 wwsympa/tt2/list_menu.tt2:346
 msgid "Post"
-msgstr "Poster"
+msgstr ""
 
 #: src/etc/tt2/helpfile.tt2:82
 msgid "Powered by Sympa"
-msgstr "Powered by Sympa"
+msgstr ""
 
 #: wwsympa/tt2/menu.tt2:102
 msgid "Pref"
-msgstr "Préférences"
+msgstr ""
 
 #: wwsympa/tt2/arcsearch_form.tt2:30
 msgid "Prefer"
-msgstr "D'abord les messages"
+msgstr ""
 
 #: wwsympa/tt2/help.tt2:16 wwsympa/tt2/menu.tt2:82 wwsympa/tt2/menu.tt2:86
 msgid "Preferences"
-msgstr "Préférences"
+msgstr ""
 
-#: wwsympa/tt2/review.tt2:100 wwsympa/tt2/reviewbouncing.tt2:121
-#: wwsympa/tt2/reviewbouncing.tt2:46
+#: wwsympa/tt2/review.tt2:100 wwsympa/tt2/reviewbouncing.tt2:121 wwsympa/tt2/reviewbouncing.tt2:46
 msgid "Previous page"
-msgstr "Page précédente"
+msgstr ""
 
 #: wwsympa/tt2/title.tt2:15
 msgid "Privileged owner"
-msgstr "Gestionnaire privilégié"
+msgstr ""
 
 #: wwsympa/tt2/admin_menu.tt2:140 wwsympa/tt2/edit_list_request.tt2:7
 msgid "Privileges"
-msgstr "Droits d'accès"
+msgstr ""
 
 #: wwsympa/tt2/error.tt2:37
 msgid "Provided password is incomplete"
-msgstr "Mot de passe saisi incomplet"
+msgstr ""
 
 #: wwsympa/tt2/error.tt2:34
 msgid "Provided password is incorrect"
-msgstr "Mot de passe saisi incorrect"
+msgstr ""
 
 #: wwsympa/tt2/help.tt2:18
 msgid "Public lists"
-msgstr "La liste des listes"
+msgstr ""
 
-#: wwsympa/tt2/d_editfile.tt2:33 wwsympa/tt2/d_editfile.tt2:96
-#: wwsympa/tt2/d_read.tt2:288
+#: wwsympa/tt2/d_editfile.tt2:33 wwsympa/tt2/d_editfile.tt2:96 wwsympa/tt2/d_read.tt2:288
 msgid "Publish"
-msgstr "Publier"
+msgstr ""
 
 #: wwsympa/tt2/get_closed_lists.tt2:27
 msgid "Purge selected lists"
-msgstr "Effacer les listes sélectionnées"
+msgstr ""
 
 #: wwsympa/tt2/pref.tt2:78
 msgid "Re-enter your new password :"
-msgstr "Ressaisissez le nouveau mot de passe :"
+msgstr ""
 
 #: wwsympa/tt2/d_control.tt2:15
 msgid "Read access"
-msgstr "Droit de consultation"
+msgstr ""
 
 #: wwsympa/tt2/serveradmin.tt2:153
 msgid "Rebuild HTML archives using \"arctxt\" directories as input."
-msgstr "Reconstruire les archives HTML"
+msgstr ""
 
 #: wwsympa/tt2/serveradmin.tt2:167
 msgid "Rebuild archive"
-msgstr "Reconstruire l'archive"
+msgstr ""
 
 #: src/etc/tt2/helpfile.tt2:37
 msgid "Receiving message subject only"
-msgstr "Recevoir l'objet des message uniquement"
+msgstr ""
 
 #: src/etc/tt2/helpfile.tt2:36
 msgid "Receiving the message index only"
-msgstr "Recevoir la liste des messages uniquement"
+msgstr ""
 
 #: wwsympa/tt2/review.tt2:145
 msgid "Reception"
-msgstr "Réception"
+msgstr ""
 
 #: wwsympa/tt2/editsubscriber.tt2:16
 msgid "Reception :"
-msgstr "Réception :"
+msgstr ""
 
 #: wwsympa/tt2/suboptions.tt2:8
 msgid "Reception mode :"
-msgstr "Mode de réception :"
+msgstr ""
 
-#. (available_reception_mode)
 #: src/etc/tt2/info_report.tt2:21
+#. (available_reception_mode)
 msgid "Reception modes    : %1"
-msgstr "Modes de réception : %1"
+msgstr ""
 
-#. (param0)
 #: src/etc/tt2/listmaster_notification.tt2:26
+#. (param0)
 msgid "Refer to documentation to adapt %1."
-msgstr "Reportez-vous à la documentation pour adapter %1."
+msgstr ""
 
 #: wwsympa/tt2/modindex.tt2:47 wwsympa/tt2/viewmod.tt2:9
 msgid "Reject"
-msgstr "Rejeter sans prévenir l'auteur"
+msgstr ""
 
 #: wwsympa/tt2/subindex.tt2:54
 msgid "Reject selected addresses"
-msgstr "Rejeter les adresses sélectionnées"
+msgstr ""
 
 #: wwsympa/tt2/scenario_test.tt2:43
 msgid "Related email"
-msgstr "Adresse email"
+msgstr ""
 
 #: wwsympa/tt2/review.tt2:42 wwsympa/tt2/reviewbouncing.tt2:16
 msgid "Remind all subscribers"
-msgstr "Rappel des abonnements"
+msgstr ""
 
 #: wwsympa/tt2/help_editfile.tt2:17
 msgid ""
@@ -1717,147 +1570,134 @@ msgid ""
 "confused about their own subscription emails or people who are not able to\n"
 "unsubscribe themselves.\n"
 msgstr ""
-"Message de rappel individualisé : Message envoyé à chaque abonné lors du "
-"rappel des abonnements.\n"
-"Ce message peut être envoyé depuis l'interface d'administration de liste "
-"dans la page\n"
-"<i>abonnés</i>. Cette procédure est très utile pour aider chaque personne à "
-"se désabonner\n"
-"au cas où celles-ci ne connaissent plus leur adresse d'abonnement.\n"
 
-#. (list.name)
 #: src/etc/tt2/remind.tt2:2
+#. (list.name)
 msgid "Reminder of your subscribtion to %1"
-msgstr "Rappel de votre abonnement à %1"
+msgstr ""
 
 #: wwsympa/tt2/scenario_test.tt2:49
 msgid "Remote addr"
-msgstr "Remote_addr"
+msgstr ""
 
 #: wwsympa/tt2/scenario_test.tt2:55
 msgid "Remote host"
-msgstr "Remote host"
+msgstr ""
 
 #: wwsympa/tt2/admin_menu.tt2:122 wwsympa/tt2/admin_menu.tt2:124
 msgid "Remove List"
-msgstr "Supprimer la liste"
+msgstr ""
 
-#. (list.name)
 #: src/etc/tt2/expire_deletion.tt2:2 src/etc/tt2/removed.tt2:2
+#. (list.name)
 msgid "Removed from %1"
-msgstr "Vous avez été supprimé de la list %1"
+msgstr ""
 
-#. (path)
 #: wwsympa/tt2/d_editfile.tt2:25
+#. (path)
 msgid "Replace the file %1 by your file"
-msgstr "Remplacer le fichier %1 par votre fichier"
+msgstr ""
 
-#. (reply_to)
 #: src/etc/tt2/info_report.tt2:16
+#. (reply_to)
 msgid "Reply to           : %1"
-msgstr "Réponse à          : %1"
+msgstr ""
 
 #: wwsympa/tt2/get_closed_lists.tt2:13 wwsympa/tt2/get_pending_lists.tt2:16
 msgid "Requested by"
-msgstr "Demandée par"
+msgstr ""
 
 #: wwsympa/tt2/create_list.tt2:11
 msgid "Required aliases"
-msgstr "Les alias à installer"
+msgstr ""
 
 #: wwsympa/tt2/editsubscriber.tt2:55
 msgid "Reset errors"
-msgstr "Effacer les erreurs"
+msgstr ""
 
 #: wwsympa/tt2/reviewbouncing.tt2:117 wwsympa/tt2/reviewbouncing.tt2:55
 msgid "Reset errors for selected users"
-msgstr "Annuler les erreurs pour les abonnés sélectionnés"
+msgstr ""
 
 #: wwsympa/tt2/admin_menu.tt2:117 wwsympa/tt2/admin_menu.tt2:119
 msgid "Restore List"
-msgstr "Restaurer la liste"
+msgstr ""
 
 #: wwsympa/tt2/admin_menu.tt2:103
 msgid "Restore shared"
-msgstr "Restaurer le partage"
+msgstr ""
 
 #: wwsympa/tt2/arcsearch.tt2:53
 msgid "Result"
-msgstr "Resultats"
+msgstr ""
 
 #: wwsympa/tt2/arcsearch.tt2:3
 msgid "Result of your search in the archive"
-msgstr "Résultat de votre recherche dans l'archive"
+msgstr ""
 
-#. (archive_name)
 #: wwsympa/tt2/arcsearch.tt2:120
+#. (archive_name)
 msgid "Return to archive %1"
-msgstr "Retour dans l'archive %1"
+msgstr ""
 
 #: wwsympa/tt2/list_menu.tt2:404
 msgid "Review"
-msgstr "Les abonnés"
+msgstr ""
 
-#. (review)
 #: src/etc/tt2/info_report.tt2:15
+#. (review)
 msgid "Review subscribers : %1"
-msgstr "Liste des abonnés  : %1"
+msgstr ""
 
 #: src/etc/tt2/helpfile.tt2:9
 msgid ""
 "SYMPA is an electronic mailing-list manager that automates list management\n"
 "functions such as subscriptions, moderation, and archive management.\n"
 msgstr ""
-"SYMPA est un gestionnaire de listes électroniques. Il permet d'automatiser\n"
-"les fonctions de gestion des listes telles que les abonnements, la "
-"modération\n"
-"et la gestion des archives.\n"
 
 #: wwsympa/tt2/editfile.tt2:11
 msgid "Save"
-msgstr "Sauvegarder"
+msgstr ""
 
 #: wwsympa/tt2/scenario_test.tt2:14
 msgid "Scenari name"
-msgstr "Nom du scénario"
+msgstr ""
 
 #: wwsympa/tt2/serveradmin.tt2:178
 msgid "Scenari test module"
-msgstr "Module de test des scénarios"
+msgstr ""
 
 #: wwsympa/tt2/scenario_test.tt2:10
 msgid "Scenario test module"
-msgstr "Module de test des scénarios"
+msgstr ""
 
-#: wwsympa/tt2/arc.tt2:19 wwsympa/tt2/arcsearch_form.tt2:15
-#: wwsympa/tt2/arcsearch_form.tt2:23 wwsympa/tt2/review.tt2:58
-#: wwsympa/tt2/reviewbouncing.tt2:11
+#: wwsympa/tt2/arc.tt2:19 wwsympa/tt2/arcsearch_form.tt2:15 wwsympa/tt2/arcsearch_form.tt2:23 wwsympa/tt2/review.tt2:58 wwsympa/tt2/reviewbouncing.tt2:11
 msgid "Search"
-msgstr "Recherche"
+msgstr ""
 
 #: wwsympa/tt2/serveradmin.tt2:86
 msgid "Search User"
-msgstr "Rechercher un utilisateur"
+msgstr ""
 
 #: wwsympa/tt2/arcsearch_form.tt2:56
 msgid "Search area"
-msgstr "Zone de recherche"
+msgstr ""
 
 #: wwsympa/tt2/arcsearch.tt2:6 wwsympa/tt2/arcsearch_form.tt2:11
 msgid "Search field :"
-msgstr "Recherche sur :"
+msgstr ""
 
 #: wwsympa/tt2/home.tt2:60
 msgid "Search lists"
-msgstr "Chercher une liste"
+msgstr ""
 
 #: wwsympa/tt2/lists.tt2:46
 msgid "See your subscriptions with the following email addresses"
-msgstr "Voir les abonnements avec les adresses suivantes"
+msgstr ""
 
 #: wwsympa/tt2/review.tt2:62
 msgid "Selection too wide, can not show selection"
-msgstr "La sélection est trop large, impossible d'afficher la sélection"
+msgstr ""
 
 #: src/etc/tt2/helpfile.tt2:72
 msgid ""
@@ -1866,426 +1706,352 @@ msgid ""
 "                                   anyone what is his real subscribing\n"
 "                                   email).\n"
 msgstr ""
-"Envoyer à chaque abonné un message\n"
-"                                   personnalisé lui rappelant l'adresse\n"
-"                                   avec laquelle il est abonné\n"
 
 #: wwsympa/tt2/loginbanner.tt2:60
 msgid "Send me a password"
-msgstr "Envoyez-moi un mot de passe"
+msgstr ""
 
 #: wwsympa/tt2/remindpasswd.tt2:19 wwsympa/tt2/sigrequest.tt2:71
 msgid "Send me my password"
-msgstr "envoyez moi mon mot de passe\">"
+msgstr ""
 
 #: wwsympa/tt2/compose_mail.tt2:7
 msgid "Send this mail"
-msgstr "Envoyer le message"
+msgstr ""
 
 #: wwsympa/tt2/arcsearch_form.tt2:57
 msgid "Sender"
-msgstr "From"
+msgstr ""
 
-#. (send)
 #: src/etc/tt2/info_report.tt2:14
+#. (send)
 msgid "Sending messages   : %1"
-msgstr "Envoi de messages  : %1"
+msgstr ""
 
 #: wwsympa/tt2/admin_menu.tt2:136
 msgid "Sending/Reception"
-msgstr "Diffusion/Réception"
+msgstr ""
 
 #: wwsympa/tt2/edit_list_request.tt2:6
 msgid "Sending/reception setup"
-msgstr "Diffusion/réception"
+msgstr ""
 
-#. (stats.byte_rcv)
 #: src/etc/tt2/stats_report.tt2:6
+#. (stats.byte_rcv)
 msgid "Sent mega-bytes             :      %1"
-msgstr "Méga-octets reçus           :      %1"
+msgstr ""
 
 #: wwsympa/tt2/help_editfile.tt2:3
 msgid "Service messages description :"
-msgstr "Description des messages de service :"
+msgstr ""
 
 #: wwsympa/tt2/d_control.tt2:51
 msgid "Set owner"
-msgstr "Changer le propriétaire"
+msgstr ""
 
-#. (path)
 #: wwsympa/tt2/d_control.tt2:43
+#. (path)
 msgid "Set the owner of the directory %1"
-msgstr "Changer le propriétaire de %1"
+msgstr ""
 
 #: wwsympa/tt2/serveradmin.tt2:107
 msgid "Setting defaults list templates"
-msgstr "Editer les \"templates\" par défaut des listes"
+msgstr ""
 
 #: wwsympa/tt2/serveradmin.tt2:118
 msgid "Setting site templates"
-msgstr "Editer les \"templates\" du serveur"
+msgstr ""
 
 #: wwsympa/tt2/stats.tt2:1
 msgid "Shared document directory size"
-msgstr "Taille de l'espace documentaire"
+msgstr ""
 
 #: wwsympa/tt2/list_menu.tt2:375 wwsympa/tt2/list_menu.tt2:380
 msgid "Shared web"
-msgstr "Documents"
+msgstr ""
 
 #: wwsympa/tt2/modindex.tt2:17
 msgid "Size"
-msgstr "Taille"
+msgstr ""
 
 #: wwsympa/tt2/d_read.tt2:57
 msgid "Size (Kb)"
-msgstr "Taille (Ko)"
+msgstr ""
 
 #: wwsympa/tt2/d_read.tt2:46
 msgid "Sort by author"
-msgstr "Sort by author"
+msgstr ""
 
 #: wwsympa/tt2/d_read.tt2:76
 msgid "Sort by date"
-msgstr "Sort by date"
+msgstr ""
 
 #: wwsympa/tt2/d_read.tt2:31
 msgid "Sort by name"
-msgstr "Sort by name"
+msgstr ""
 
 #: wwsympa/tt2/d_read.tt2:61
 msgid "Sort by size"
-msgstr "Sort by size"
+msgstr ""
 
-#. (current_subscriber.bounce_status)
 #: wwsympa/tt2/editsubscriber.tt2:51
+#. (current_subscriber.bounce_status)
 msgid "Status : %1"
-msgstr "Type d'erreur : %1"
+msgstr ""
 
-#: wwsympa/tt2/arcsearch_form.tt2:59 wwsympa/tt2/get_latest_lists.tt2:8
-#: wwsympa/tt2/modindex.tt2:16
+#: wwsympa/tt2/arcsearch_form.tt2:59 wwsympa/tt2/get_latest_lists.tt2:8 wwsympa/tt2/modindex.tt2:16
 msgid "Subject"
-msgstr "Objet"
+msgstr ""
 
-#. (subject)
 #: src/etc/tt2/info_report.tt2:3
+#. (subject)
 msgid "Subject            : %1"
-msgstr "Sujet              : %1"
+msgstr ""
 
-#: wwsympa/tt2/install_pending_list.tt2:14
-#: wwsympa/tt2/set_pending_list_request.tt2:14
+#: wwsympa/tt2/install_pending_list.tt2:14 wwsympa/tt2/set_pending_list_request.tt2:14
 msgid "Subject :"
-msgstr "Sujet :"
+msgstr ""
 
 #: wwsympa/tt2/compose_mail.tt2:6 wwsympa/tt2/create_list_request.tt2:41
 msgid "Subject:"
-msgstr "Object :"
+msgstr ""
 
-#: wwsympa/tt2/choosepasswd.tt2:21 wwsympa/tt2/pref.tt2:120
-#: wwsympa/tt2/pref.tt2:40 wwsympa/tt2/pref.tt2:71 wwsympa/tt2/pref.tt2:80
+#: wwsympa/tt2/choosepasswd.tt2:21 wwsympa/tt2/pref.tt2:120 wwsympa/tt2/pref.tt2:40 wwsympa/tt2/pref.tt2:71 wwsympa/tt2/pref.tt2:80
 msgid "Submit"
-msgstr "Valider"
+msgstr ""
 
 #: wwsympa/tt2/create_list_request.tt2:80
 msgid "Submit your creation request"
-msgstr "Envoyer votre demande de création"
+msgstr ""
 
-#: wwsympa/tt2/list_menu.tt2:192 wwsympa/tt2/list_menu.tt2:224
-#: wwsympa/tt2/list_menu.tt2:230 wwsympa/tt2/list_menu.tt2:234
-#: wwsympa/tt2/list_menu.tt2:238 wwsympa/tt2/subrequest.tt2:34
-#: wwsympa/tt2/subrequest.tt2:64
+#: wwsympa/tt2/list_menu.tt2:192 wwsympa/tt2/list_menu.tt2:224 wwsympa/tt2/list_menu.tt2:230 wwsympa/tt2/list_menu.tt2:234 wwsympa/tt2/list_menu.tt2:238 wwsympa/tt2/subrequest.tt2:34 wwsympa/tt2/subrequest.tt2:64
 msgid "Subscribe"
-msgstr "Abonnement"
+msgstr ""
 
-#. (current_subscriber.date)
 #: wwsympa/tt2/editsubscriber.tt2:14
+#. (current_subscriber.date)
 msgid "Subscribed since %1"
-msgstr "Abonné depuis : %1"
+msgstr ""
 
 #: wwsympa/tt2/title.tt2:21
 msgid "Subscriber"
-msgstr "Abonné"
+msgstr ""
 
 #: wwsympa/tt2/list_menu.tt2:136 wwsympa/tt2/list_menu.tt2:140
 msgid "Subscriber Options"
-msgstr "Options d'abonné"
+msgstr ""
 
 #: src/etc/tt2/helpfile.tt2:41
 msgid "Subscriber address visible via REView"
-msgstr "Adresse d'abonné visible via REView"
+msgstr ""
 
 #: wwsympa/tt2/editsubscriber.tt2:6
 msgid "Subscriber information"
-msgstr "Information abonné"
+msgstr ""
 
 #: wwsympa/tt2/admin_menu.tt2:11 wwsympa/tt2/admin_menu.tt2:17
 msgid "Subscribers"
-msgstr "Abonnés"
+msgstr ""
 
 #: wwsympa/tt2/list_menu.tt2:44
 msgid "Subscribers:"
-msgstr "Abonnés :"
+msgstr ""
 
 #: wwsympa/tt2/help_editfile.tt2:20
 msgid ""
 "Subscribing invitation message : it is sent to a person if some user  \n"
 "use the INVITE command to invite someone for subscription.\n"
 msgstr ""
-"Invitation à s'abonner : Message envoyé à une personne via la commande\n"
-"<CODE>INVITE [nom de liste]</CODE>.\n"
 
-#. (subscribe)
 #: src/etc/tt2/info_report.tt2:12
+#. (subscribe)
 msgid "Subscription       : %1"
-msgstr "Abonnement         : %1"
+msgstr ""
 
 #: wwsympa/tt2/help_user_options.tt2:14
 msgid "Summary"
-msgstr "Summary"
+msgstr ""
 
-#. (user.email)
 #: src/etc/tt2/global_remind.tt2:2
+#. (user.email)
 msgid "Summary of your subscription (using the e-mail %1)."
-msgstr "Synthèse de vos abonnements (avec l'adresse %1)."
+msgstr ""
 
 #: wwsympa/tt2/menu.tt2:69 wwsympa/tt2/menu.tt2:73
 msgid "Sympa admin"
-msgstr "Admin Sympa"
+msgstr ""
 
 #: src/etc/tt2/listmaster_notification.tt2:33
 msgid ""
 "Sympa could not include subscribers from external data sources ; the\n"
 "database or LDAP directory might be unreachable.\n"
 msgstr ""
-"Sympa n'a pas pu mettre à jour la liste des membres à partir des sources de\n"
-"données externes ; la base de données ou l'annuaire LDAP ne sont "
-"probablement\n"
-"pas intérogeables.\n"
 
-#. (error.params)
 #: wwsympa/tt2/error.tt2:98
+#. (error.params)
 msgid "Syntax errors with the following parameters : %1"
-msgstr "Erreurs de syntaxe des paramètres suivants : %1"
+msgstr ""
 
 #: src/etc/tt2/digest.tt2:12
 msgid "Table of content:"
-msgstr "Sommaire:"
+msgstr ""
 
 #: wwsympa/tt2/serveradmin.tt2:97
 msgid "Templates"
-msgstr "Les templates"
+msgstr ""
 
 #: wwsympa/tt2/lists.tt2:67
-msgid ""
-"That is to say using a unique email address in Sympa for your subscriptions "
-"and preferences"
+msgid "That is to say using a unique email address in Sympa for your subscriptions and preferences"
 msgstr ""
-"C'est-à-dire utiliser une unique adresse dans Sympa pour vos abonnements et "
-"préférences</FONT>"
 
 #: src/etc/tt2/listmaster_notification.tt2:15
 msgid "The antivirus scan has failed while processing the following file:"
-msgstr "L'appel à l'antivirus a échoué lors du traitement du fichier suivant :"
+msgstr ""
 
 #: src/etc/tt2/certif_warning.tt2:5
 msgid "The certificate subject is :"
-msgstr "L'identité du certificat est :"
+msgstr ""
 
 #: wwsympa/tt2/error.tt2:154
 msgid "The document repository exceed disk quota."
-msgstr "Le quota d'espace disque est dépassé."
+msgstr ""
 
 #: src/etc/tt2/list_unknown.tt2:14
 msgid "The following address is not a known mailing list :"
-msgstr "L'adresse suivante n'est pas une liste connue :"
+msgstr ""
 
 #: src/etc/tt2/helpfile.tt2:55
-msgid ""
-"The following commands are available only for lists's owners or moderators:"
-msgstr "Commandes réservées aux propriétaires de listes :"
+msgid "The following commands are available only for lists's owners or moderators:"
+msgstr ""
 
 #: wwsympa/tt2/serveradmin.tt2:22
 msgid "The following virtual robots are running on this server :"
-msgstr "Ci-dessous la liste des robots virtuels gérés sur ce serveur :"
+msgstr ""
 
 #: wwsympa/tt2/notice.tt2:32
 msgid "The list of list members will be built/updated soon (a few minutes)."
 msgstr ""
-"La liste des membres de la liste sera générée/mise à jour dans un moment "
-"(quelques minutes)."
 
 #: wwsympa/tt2/create_list_request.tt2:38
-msgid ""
-"The list type is a set of parameters' profile. Parameters will be editable, "
-"once the list created"
+msgid "The list type is a set of parameters' profile. Parameters will be editable, once the list created"
 msgstr ""
-"Le type de liste est un ensemble de paramètres regroupé dans un profile. Ces "
-"paramètres sont ré-éditable une fois la liste créée"
 
 #: wwsympa/tt2/create_list_request.tt2:43
 msgid "The list's subject"
-msgstr "L'object de la liste"
+msgstr ""
 
 #: wwsympa/tt2/error.tt2:83
 msgid "The passwords you typed do not match"
-msgstr "Les 2 mots de passe sont différents"
+msgstr ""
 
 #: src/etc/tt2/listmaster_notification.tt2:18
 msgid "The returned error message :"
-msgstr "Le message d'erreur est :"
+msgstr ""
 
 #: wwsympa/tt2/help_user_options.tt2:12
 msgid "The sending interval for these Digests is defined by the list owner."
 msgstr ""
-"La périodicité d'envoi des compilation est définie par le gestionnaire de la "
-"liste."
 
-#. (total,list.name,list.host)
 #: src/etc/tt2/modindex.tt2:10
+#. (total,list.name,list.host)
 msgid "There are %1 messages to be moderated for list %2@%3"
-msgstr "Il y a %1 messages à modérer pour la liste %2@%3."
+msgstr ""
 
-#. (process_id,loop_count,start_time)
 #: wwsympa/tt2/serveradmin.tt2:189
+#. (process_id,loop_count,start_time)
 msgid "This FastCGI process (%1) has served %2 since %3."
-msgstr "Ce processus FastCGI (%1) a traité %2 requêtes depuis %3."
+msgstr ""
 
 #: wwsympa/tt2/arc_protect.tt2:9
-msgid ""
-"This button aims at protecting mailing lists archives against Spam Harvester."
+msgid "This button aims at protecting mailing lists archives against Spam Harvester."
 msgstr ""
-"La validation de ce bouton a pour but de barrer le passage aux robots de "
-"collecte automatique d'adresses de messagerie (protection contre la "
-"publicité par messagerie)."
 
 #: src/etc/tt2/helpfile.tt2:21
 msgid "This help file"
-msgstr "Recevoir ce fichier d'aide"
+msgstr ""
 
 #: wwsympa/tt2/help_user_options.tt2:3
-msgid ""
-"This is a description of the reception modes available in Sympa. These "
-"options are mutually exclusive, which means that you can't set two different "
-"reception modes at the same time. Only some of the modes might be available "
-"for specific mailing lists."
+msgid "This is a description of the reception modes available in Sympa. These options are mutually exclusive, which means that you can't set two different reception modes at the same time. Only some of the modes might be available for specific mailing lists."
 msgstr ""
-"Voici un descriptif des modes d'abonnement dans Sympa. Ces options sont "
-"exclusives, vous ne pouvez donc pas en sélectionner 2 différentes. Seul un "
-"sous-ensemble de ces mode est disponible pour une liste donnée."
 
 #: src/etc/tt2/list_unknown.tt2:12
 msgid "This is an automatic response sent by Sympa Mailing Lists Manager."
-msgstr "Ceci est une réponse automatique du robot de listes Sympa."
+msgstr ""
 
-#. (list.subject)
 #: src/etc/tt2/invite.tt2:8
+#. (list.subject)
 msgid "This list is about %1, so you are probably concerned."
-msgstr "Cette liste traite de %1, vous ê donc sûrement concerné."
+msgstr ""
 
 #: wwsympa/tt2/help_user_options.tt2:38
 msgid ""
-"This mode is used when a subscriber does not want to receive attached files. "
-"The attached files are \n"
+"This mode is used when a subscriber does not want to receive attached files. The attached files are \n"
 "replaced by a URL leading to the file stored on the list site.\n"
 msgstr ""
-"Ce mode permet de ne pas recevoir les documents attachés. Ceux-ci sont "
-"remplacés dans le message par une URL pointant sur une URL dans l'interface "
-"web.\n"
 
 #: wwsympa/tt2/help_user_options.tt2:43
 msgid ""
-"This mode is used when a subscriber does not want to receive copies of "
-"messages that he or she has sent to \n"
+"This mode is used when a subscriber does not want to receive copies of messages that he or she has sent to \n"
 "the list.\n"
-msgstr "Ce mode permet de ne pas recevoir une copie de ses propres messages.\n"
+msgstr ""
 
 #: wwsympa/tt2/help_user_options.tt2:23
-msgid ""
-"This mode is used when a subscriber no longer wishes to receive mail from "
-"the list, but nevertheless wishes to retain the ability to post to the list. "
-"This mode therefore prevents the subscriber from unsubscribing and "
-"subscribing later on."
+msgid "This mode is used when a subscriber no longer wishes to receive mail from the list, but nevertheless wishes to retain the ability to post to the list. This mode therefore prevents the subscriber from unsubscribing and subscribing later on."
 msgstr ""
-"Ce mode permet de ne plus recevoir les messages de la liste. Vous restez "
-"cependant abonné à la liste. Cela évite de se désabonner puis de se "
-"réabonner à la liste."
 
 #: wwsympa/tt2/help_user_options.tt2:33
 msgid ""
-"This mode is used when a subscriber wishes to receive mails sent in both "
-"HTML and plain text formats\n"
+"This mode is used when a subscriber wishes to receive mails sent in both HTML and plain text formats\n"
 "only in HTML format.\n"
 msgstr ""
-"Ce mode permet de ne recevoir que la version html (text/html) des messages "
-"postés sous les 2 formes texte et HTML.\n"
 
 #: wwsympa/tt2/help_user_options.tt2:28
 msgid ""
-"This mode is used when a subscriber wishes to receive mails sent in both "
-"HTML and plain text formats\n"
+"This mode is used when a subscriber wishes to receive mails sent in both HTML and plain text formats\n"
 "only in plain text format.\n"
 msgstr ""
-"Ce mode permet de ne recevoir que la version texte (text/plain) des messages "
-"postés sous les 2 formes texte et HTML.\n"
 
 #: wwsympa/tt2/help_user_options.tt2:48
 msgid ""
-"This option is used mainly to cancel the nomail, summary or digest modes. If "
-"the subscriber was \n"
-"in nomail mode, he or she will again receive individual mail messages from "
-"the list.\n"
+"This option is used mainly to cancel the nomail, summary or digest modes. If the subscriber was \n"
+"in nomail mode, he or she will again receive individual mail messages from the list.\n"
 msgstr ""
-"Ce mode est le mode de réception par défaut ; il permet d'annuler les autres "
-"modes d'abonnement.\n"
 
 #: wwsympa/tt2/pref.tt2:126
 msgid ""
-"This other email address, that should be known by Sympa, will be recognized "
-"by Sympa as \n"
-"\tan alternate email address. You will also be able to unify your "
-"subscriptions with\n"
-"\tyour main email address.\n"
+"This other email address, that should be known by Sympa, will be recognized by Sympa as \n"
+"	an alternate email address. You will also be able to unify your subscriptions with\n"
+"	your main email address.\n"
 msgstr ""
-"Cette autre adresse e-mail, qui doit être connue de Sympa, sera reconnue "
-"comme une adresse alternative. Vous pourrez unifier vos abonnement avec "
-"votre adresse principale.\n"
 
 #: wwsympa/tt2/sigrequest.tt2:43 wwsympa/tt2/subrequest.tt2:38
 msgid ""
 "This password, associated to your email address, will\n"
-"\tallow you to access your custom environment.\n"
+"	allow you to access your custom environment.\n"
 msgstr ""
-"Ce mot de passe vous permet en outre de personnaliser votre environnement de "
-"liste.\n"
 
-#. (conf.email,conf.host)
 #: wwsympa/tt2/home.tt2:7
+#. (conf.email,conf.host)
 msgid ""
-"This server provides you access to your environment on mailing list server %"
-"1@%2. Starting from this URL, you can perform subscription options, "
-"unsubscription,\n"
+"This server provides you access to your environment on mailing list server %1@%2. Starting from this URL, you can perform subscription options, unsubscription,\n"
 "archives, list management and so on.\n"
 msgstr ""
-"Ce serveur vous propose un accès à votre environnement de listes sur %1@%2. "
-"A partir de cette URL vous pouvez choisir vos options d'abonnement, vous "
-"désabonner, accéder aux archives ou gérer les listes dont vous êtes "
-"propriétaire, etc.\n"
 
 #: src/etc/tt2/sendpasswd.tt2:27
 msgid "To access your personal environment, you need to login first"
-msgstr "Pour personnaliser votre environnement, vous devez vous identifier:"
+msgstr ""
 
 #: src/etc/tt2/listmaster_notification.tt2:10
 msgid "To activate/delete this mailing list :"
-msgstr "Pour activer/supprimer cette liste :"
+msgstr ""
 
 #: src/etc/tt2/helpfile.tt2:57
 msgid "To add a user to a list"
-msgstr "Ajouter un utilisateur à <list>"
+msgstr ""
 
 #: src/etc/tt2/helpfile.tt2:40
 msgid "To become unlisted (hidden subscriber address)"
-msgstr "Passage en liste rouge (adresse d'abonné cachée)"
+msgstr ""
 
 #: src/etc/tt2/helpfile.tt2:63
 msgid ""
@@ -2294,960 +2060,802 @@ msgid ""
 "                                   subscription for <old> days. The\n"
 "                                   subscribers have <delay> days to confirm\n"
 msgstr ""
-"Déclancher un processus d'expiration pour\n"
-"                                   les abonnés à <list> n'ayant pas "
-"confirmé\n"
-"                                   leur abonnement depuis <ancien> jours.\n"
-"                                   Les abonnés ont <delai> jours pour\n"
-"                                   confirmer\n"
 
 #: wwsympa/tt2/notice.tt2:26
 msgid "To choose your password go to 'preferences', from the upper menu."
 msgstr ""
-"Pour choisir votre mot de passe, allez dans vos 'Préférences', depuis le "
-"menu supérieur"
 
 #: wwsympa/tt2/subrequest.tt2:6
 msgid ""
 "To confirm\n"
-"\tyour request, please click the button below :\n"
-msgstr "merci de confirmer cette demande :\n"
+"	your request, please click the button below :\n"
+msgstr ""
 
 #: wwsympa/tt2/sigrequest.tt2:5
 msgid ""
 "To confirm\n"
 "      your request, please click the button below :\n"
-msgstr "merci de confirmer cette demande :\n"
+msgstr ""
 
 #: wwsympa/tt2/change_email.tt2:5
 msgid ""
 "To confirm your email address change, please enter the password\n"
 "you received below :\n"
 msgstr ""
-"Pour confirmer votre changement d'adresse, veuillez saisir ci-dessous\n"
-"le mot de passe reçu par mail :\n"
 
 #: wwsympa/tt2/subrequest.tt2:21
 msgid ""
 "To confirm your identity and prevent anyone from subscribing you to \n"
-"\tthis list against your will, a message containing your password\n"
-"\twill be sent to you.\n"
+"	this list against your will, a message containing your password\n"
+"	will be sent to you.\n"
 msgstr ""
-"Pour valider votre identité et empêcher un tiers de vous abonner à\n"
-"votre insu, un message vous a été posté. Il contient votre mot de \n"
-"passe et vous permettra de valider cet abonnement.\n"
 
 #: wwsympa/tt2/sigrequest.tt2:27
 msgid ""
 "To confirm your identity and prevent anyone from unsubscribing you from \n"
-"\tthis list against your will, a message containing an URL\n"
-"\twill be sent to you.\n"
+"	this list against your will, a message containing an URL\n"
+"	will be sent to you.\n"
 msgstr ""
-"Pour confirmer votre identité et empêcher un tiers de vos désabonner, le\n"
-"serveur vient de vous poster un message avec un mot de passe\n"
-"de confirmation.\n"
 
-#. (list)
 #: wwsympa/tt2/subrequest.tt2:54
+#. (list)
 msgid ""
 "To confirm your subscription to list %1, please enter\n"
-"\tyour password below :\n"
+"	your password below :\n"
 msgstr ""
-"Pour valider votre demande d'abonnement à %1, merci de rentrer votre mot de "
-"passe :\n"
 
 #: src/etc/tt2/sendpasswd.tt2:15
-msgid ""
-"To confirm your subscription, you need to provide the following password"
+msgid "To confirm your subscription, you need to provide the following password"
 msgstr ""
-"Pour valider votre abonnement, vous devez fournir le mot de passe suivant :"
 
-#. (list)
 #: wwsympa/tt2/sigrequest.tt2:60
+#. (list)
 msgid ""
 "To confirm your unsubscription from list %1, please enter\n"
-"\tyour password below :\n"
+"	your password below :\n"
 msgstr ""
-"Pour confirmer votre demande de désabonnement de la liste %1,\n"
-"merci de renseigner votre mot de passe ci-dessous :\n"
 
 #: src/etc/tt2/helpfile.tt2:59
 msgid "To consult the statistics for <list>"
-msgstr "Consulter les statistiques de <list>"
+msgstr ""
 
 #: wwsympa/tt2/help.tt2:58
 msgid "To contact this service administrator :"
-msgstr "Pour contacter les administrateurs de ce service :"
+msgstr ""
 
 #: src/etc/tt2/helpfile.tt2:67
 msgid ""
 "To de-activate the expiration process for\n"
 "                                   <list>\n"
 msgstr ""
-"Désactiver le processus d'expiration de\n"
-"                                   <list>\n"
 
 #: src/etc/tt2/helpfile.tt2:58
 msgid "To delete a user from a list"
-msgstr "Supprimer un utilisateur de <list>"
+msgstr ""
 
-#. (list.name)
 #: src/etc/tt2/moderate.tt2:13
+#. (list.name)
 msgid "To distribute the attached message in list %1:"
-msgstr "Pour diffuser le message ci-joint dans la liste %1,"
+msgstr ""
 
 #: src/etc/tt2/list_unknown.tt2:18
-msgid ""
-"To find out the correct listname, ask for this server's lists directory :"
+msgid "To find out the correct listname, ask for this server's lists directory :"
 msgstr ""
-"Pour chercher l'adresse de la liste, consultez la liste des listes de ce "
-"serveur :"
 
 #: src/etc/tt2/helpfile.tt2:45
 msgid "To get <file> of <list> archive"
-msgstr "Recevoir <fichier> de l'archive de <list>"
+msgstr ""
 
 #: src/etc/tt2/helpfile.tt2:31
 msgid ""
 "To quit <list>. <EMAIL> is an optional \n"
 "                               email address, usefull if different from\n"
 "                               your \"From:\" address.\n"
-msgstr "Quitter <list>, (<EMAIL> est facultatif)\n"
+msgstr ""
 
 #: src/etc/tt2/helpfile.tt2:32
 msgid "To quit all lists."
-msgstr "Se désabonner de toutes les listes"
+msgstr ""
 
-#. (conf.email,conf.host)
 #: src/etc/tt2/certif_warning.tt2:12
+#. (conf.email,conf.host)
 msgid ""
-"To receive them again, renew your certificate with your certification "
-"authority\n"
+"To receive them again, renew your certificate with your certification authority\n"
 "and send a signed message to %1@%2\n"
 "or\n"
 "click : \n"
 msgstr ""
-"Pour les recevoir à nouveau, renouvelez votre certificat auprès de votre "
-"autorité de certification.\n"
-"\n"
-"Une fois votre certificat renouvelé, envoyez un e-mail signé\n"
-" à l'adresse [conf->email]@[conf->host]\n"
-"ou\n"
-"cliquez ici :\n"
 
 #: wwsympa/tt2/help.tt2:47
 msgid "To receive your password :"
-msgstr "Pour recevoir votre mot de passe :"
+msgstr ""
 
 #: src/etc/tt2/moderate.tt2:18
 msgid "To reject it (it will be removed):"
-msgstr "Pour refuser sa diffusion (il sera effacé), cliquez ici :"
+msgstr ""
 
 #: src/etc/tt2/invite.tt2:10
-msgid ""
-"To subscribe just reply to this message or hit the following mailto url :"
+msgid "To subscribe just reply to this message or hit the following mailto url :"
 msgstr ""
-"Je vous invite à vous abonner à la liste [% list.name %]@[% list.host %]."
 
 #: src/etc/tt2/helpfile.tt2:27
 msgid ""
 "To subscribe or to confirm a subscription to\n"
 "                               <list>.\n"
-msgstr "S'abonner ou confirmer son abonnement à <list>\n"
+msgstr ""
 
 #: src/etc/tt2/helpfile.tt2:34
 msgid "To suspend the message reception for <list>"
-msgstr "Recevoir les messages en mode normal"
+msgstr ""
 
 #: src/etc/tt2/sendpasswd.tt2:22
-msgid ""
-"To unsubscribe from the list, you need to provide the following password"
+msgid "To unsubscribe from the list, you need to provide the following password"
 msgstr ""
-"Pour valider votre abonnement, vous devez fournir le mot de passe suivant :"
 
-#. (mailto)
 #: wwsympa/tt2/compose_mail.tt2:5
+#. (mailto)
 msgid "To: %1"
-msgstr "A : %1"
+msgstr ""
 
 #: wwsympa/tt2/reviewbouncing.tt2:130
 msgid "Toggle Selection"
-msgstr "Inverser la Selection"
+msgstr ""
 
 #: wwsympa/tt2/create_list_request.tt2:46
 msgid "Topics:"
-msgstr "Catégories :"
+msgstr ""
 
-#. (list.name,size)
 #: src/etc/tt2/listowner_notification.tt2:14
+#. (list.name,size)
 msgid "Total size used for %1@%2 Bytes."
-msgstr "Les archives de la liste %1@[% list.host %] ont atteint [% rate %]%"
+msgstr ""
 
-#. (total)
 #: src/etc/tt2/review.tt2:8
+#. (total)
 msgid "Total subscribers : %1"
-msgstr "Nombre d'abonnés : %1"
+msgstr ""
 
 #: wwsympa/tt2/d_read.tt2:261
 msgid "URL"
-msgstr "URL"
+msgstr ""
 
 #: wwsympa/tt2/remove_arc.tt2:11 wwsympa/tt2/remove_arc.tt2:7
 msgid "Unable to find the message to delete"
-msgstr "Impossible de trouver le message à détruire"
+msgstr ""
 
-#. (error.path)
 #: wwsympa/tt2/error.tt2:107
+#. (error.path)
 msgid "Unable to read %1 : empty document"
-msgstr "Impossible de lire %1 : document vide"
+msgstr ""
 
 #: wwsympa/tt2/lists.tt2:66
 msgid "Unify your subscriptions with the email"
-msgstr "Unifier vos abonnements avec l'adresse"
+msgstr ""
 
 #: wwsympa/tt2/d_read.tt2:106 wwsympa/tt2/d_read.tt2:166
 msgid "Unknown"
-msgstr "inconnu"
+msgstr ""
 
-#: wwsympa/tt2/list_menu.tt2:163 wwsympa/tt2/list_menu.tt2:167
-#: wwsympa/tt2/list_menu.tt2:173 wwsympa/tt2/list_menu.tt2:262
-#: wwsympa/tt2/list_menu.tt2:266 wwsympa/tt2/sigrequest.tt2:39
-#: wwsympa/tt2/sigrequest.tt2:53 wwsympa/tt2/sigrequest.tt2:68
+#: wwsympa/tt2/list_menu.tt2:163 wwsympa/tt2/list_menu.tt2:167 wwsympa/tt2/list_menu.tt2:173 wwsympa/tt2/list_menu.tt2:262 wwsympa/tt2/list_menu.tt2:266 wwsympa/tt2/sigrequest.tt2:39 wwsympa/tt2/sigrequest.tt2:53 wwsympa/tt2/sigrequest.tt2:68
 msgid "Unsubscribe"
-msgstr "Désabonnement"
+msgstr ""
 
 #: wwsympa/tt2/editsubscriber.tt2:42
 msgid "Unsubscribe the User"
-msgstr "Désabonner l'usager"
+msgstr ""
 
-#: src/etc/tt2/expire_warning1.tt2:10 src/etc/tt2/expire_warning2.tt2:10
-#: src/etc/tt2/remind.tt2:9
+#: src/etc/tt2/expire_warning1.tt2:10 src/etc/tt2/expire_warning2.tt2:10 src/etc/tt2/remind.tt2:9
 msgid "Unsubscribtion :"
-msgstr "Pour vous désabonner :"
+msgstr ""
 
-#. (unsubscribe)
 #: src/etc/tt2/info_report.tt2:13
+#. (unsubscribe)
 msgid "Unsubscription     : %1"
-msgstr "Désabonnement      : %1"
+msgstr ""
 
-#. (list.name)
 #: src/etc/tt2/bye.tt2:2
+#. (list.name)
 msgid "Unsubscription from %1"
-msgstr "Désabonnement de %1"
+msgstr ""
 
 #: wwsympa/tt2/help_editfile.tt2:8
 msgid ""
 "Unsubscription message : This message is sent when users leave the list\n"
 "using the UNSUBSCRIBE command.\n"
 msgstr ""
-"Message de désabonnement : Envoyé aux personnes qui se désabonnent de la "
-"liste.\n"
 
-#. (param0)
 #: src/etc/tt2/listmaster_notification.tt2:28
+#. (param0)
 msgid ""
 "Until then we recommend your remove %1 ;\n"
 "default configuration will be used.\n"
 msgstr ""
-"D'ici là , nous vous suggérons de supprimer %1.\n"
-"La configuration par défaut sera utilisée.\n"
 
-#: wwsympa/tt2/d_control.tt2:7 wwsympa/tt2/d_editfile.tt2:13
-#: wwsympa/tt2/d_read.tt2:18
+#: wwsympa/tt2/d_control.tt2:7 wwsympa/tt2/d_editfile.tt2:13 wwsympa/tt2/d_read.tt2:18
 msgid "Up to higher level directory"
-msgstr "Dossier parent"
+msgstr ""
 
-#: wwsympa/tt2/edit_list_request.tt2:353 wwsympa/tt2/editsubscriber.tt2:41
-#: wwsympa/tt2/suboptions.tt2:33
+#: wwsympa/tt2/edit_list_request.tt2:353 wwsympa/tt2/editsubscriber.tt2:41 wwsympa/tt2/suboptions.tt2:33
 msgid "Update"
-msgstr "Mise à jour"
+msgstr ""
 
-#. (path)
 #: wwsympa/tt2/d_read.tt2:280
+#. (path)
 msgid "Upload a file inside the folder %1"
-msgstr "Télécharger un fichier dans le dossier %1"
+msgstr ""
 
 #: wwsympa/tt2/d_read.tt2:282
 msgid "Upload a file inside the folder SHARED"
-msgstr "Télécharger un fichier"
+msgstr ""
 
 #: src/etc/tt2/helpfile.tt2:46
 msgid "Used to received the last message from <list>"
-msgstr "Recevoir le dernier message de <list>"
+msgstr ""
 
 #: wwsympa/tt2/show_cert.tt2:8
 msgid "User certificate belong to"
-msgstr "Certificat pour"
+msgstr ""
 
 #: src/etc/tt2/helpfile.tt2:5
 msgid "User's Guide"
-msgstr "Guide de l'utilisateur"
+msgstr ""
 
 #: wwsympa/tt2/serveradmin.tt2:75
 msgid "Users"
-msgstr "Les utilisateurs"
+msgstr ""
 
 #: wwsympa/tt2/lists.tt2:74
 msgid "Valider"
-msgstr "Valider"
+msgstr ""
 
 #: wwsympa/tt2/editsubscriber.tt2:54
 msgid "View last bounce"
-msgstr "Dernière erreur"
+msgstr ""
 
 #: wwsympa/tt2/serveradmin.tt2:12
 msgid "Virtual Robots"
-msgstr "Les robots virtuels"
+msgstr ""
 
 #: wwsympa/tt2/suboptions.tt2:24
 msgid "Visibility :"
-msgstr "Visibilité :"
+msgstr ""
 
-#. (current_subscriber.visibility)
 #: wwsympa/tt2/editsubscriber.tt2:23
+#. (current_subscriber.visibility)
 msgid "Visibility : %1"
-msgstr "Visibilité : %1"
+msgstr ""
 
 #: wwsympa/tt2/help.tt2:53
 msgid "WWSympa can remind you your password by email :"
-msgstr "Rappel de votre mot de passe par email :"
+msgstr ""
 
 #: wwsympa/tt2/help.tt2:8
 msgid "WWSympa provides  you access to your environment on mailing list server"
 msgstr ""
-"WWSympa vous donne accès à votre environnement sur le serveur de listes"
 
 #: src/etc/tt2/your_infected_msg.tt2:10
 msgid "We stopped delivery of this email."
-msgstr "Nous avons interrompu le transfert de ce message avant sa diffusion."
+msgstr ""
 
 #: wwsympa/tt2/stats.tt2:2
 msgid "Web archives size"
-msgstr "Taille des archives web"
+msgstr ""
 
 #: wwsympa/tt2/help_editfile.tt2:29
 msgid "Welcome message"
-msgstr "Message de bienvenue"
+msgstr ""
 
 #: wwsympa/tt2/help_editfile.tt2:5
 msgid ""
 "Welcome message: This message is sent to new subscribers. It can be\n"
 "a full MIME structured message (only for MIME gurus).\n"
 msgstr ""
-"Message de bienvenue : Ce message est envoyé aux nouveaux abonnés.\n"
-"Vous pouvez utiliser un message MIME structuré (réservé aux experts du "
-"format MIME).\n"
 
-#. (list.name)
 #: src/etc/tt2/welcome.tt2:2
+#. (list.name)
 msgid "Welcome to list %1"
-msgstr "Bienvenue sur la liste %1"
+msgstr ""
 
+#: src/etc/tt2/welcome.tt2:10 src/etc/tt2/welcome.tt2:27 src/etc/tt2/welcome.tt2:30
 #. (list.name,list.host)
-#: src/etc/tt2/welcome.tt2:10 src/etc/tt2/welcome.tt2:27
-#: src/etc/tt2/welcome.tt2:30
 msgid "Welcome to list %1@%2"
-msgstr "Bienvenue dans la liste %1@%2"
+msgstr ""
 
 #: wwsympa/tt2/help.tt2:28
 msgid "When authenticating ("
-msgstr "Lors de l'authentification ("
+msgstr ""
 
-#. (error.email)
 #: wwsympa/tt2/error.tt2:13
+#. (error.email)
 msgid "You are already logged in as %1"
-msgstr "Vous êtes déjà connecté avec l'adresse %1"
+msgstr ""
 
-#. (error.list)
 #: wwsympa/tt2/error.tt2:64
-msgid "You are already subscribed to the list %1"
-msgstr "Vous êtes déjà abonné à la liste %1"
-
-#. (list)
-#: wwsympa/tt2/subrequest.tt2:70
-msgid "You are already subscriber of list %1"
-msgstr "Vous êtes déjà abonné à la liste %1"
-
 #. (error.list)
-#: wwsympa/tt2/error.tt2:79
-msgid "You are not subscribed to list %1"
-msgstr "Vous n'êtes pas abonné à la liste %1"
+msgid "You are already subscribed to the list %1"
+msgstr ""
 
-#. (list,email)
+#: wwsympa/tt2/subrequest.tt2:70
+#. (list)
+msgid "You are already subscriber of list %1"
+msgstr ""
+
+#: wwsympa/tt2/error.tt2:79
+#. (error.list)
+msgid "You are not subscribed to list %1"
+msgstr ""
+
 #: wwsympa/tt2/sigrequest.tt2:16
+#. (list,email)
 msgid "You are not subscribed to list %1 with e-mail address %2"
-msgstr "Vous n'êtes pas abonné à la liste %1 avec l'adresse %2"
+msgstr ""
 
 #: wwsympa/tt2/suboptions.tt2:5
 msgid "You are subscribed since"
-msgstr "Vous êtes inscrit(e) depuis"
+msgstr ""
 
 #: wwsympa/tt2/create_list_request.tt2:17
 msgid "You are the privileged owner of this list"
-msgstr "Vous êtes le propriétaire de cette liste"
+msgstr ""
 
 #: wwsympa/tt2/edit_list_request.tt2:4
 msgid "You can choose below a subset of parameters to edit :"
 msgstr ""
-"Vous pouvez éditer ci-dessous un sous-ensemble des paramètres de la liste :"
 
 #: wwsympa/tt2/create_list.tt2:5
 msgid "You can configure it via the admin button beside."
 msgstr ""
-"Vous pouvez la configurer via le bouton <b>Admin liste'=</b> ci-contre."
 
 #: wwsympa/tt2/editfile.tt2:14
 msgid "You can edit several messages/files associated to your list :"
 msgstr ""
-"Vous pouvez éditer ci-dessous les messages de services et d'autres fichiers "
-"associés\n"
-"à votre liste :\n"
 
 #: wwsympa/tt2/help.tt2:37
-msgid ""
-"You can logout (deletion of the cookie) at any time using logout button."
+msgid "You can logout (deletion of the cookie) at any time using logout button."
 msgstr ""
-"Vous pouvez vous déconnecter (effacer le cookie) à  tout moment en utilisant "
-"le bouton Logout."
 
 #: src/etc/tt2/helpfile.tt2:17
 msgid ""
-"You can put multiple commands in a message. These commands must appear in "
-"the\n"
+"You can put multiple commands in a message. These commands must appear in the\n"
 "message body and each line must contain only one command. The message body\n"
 "is ignored if the Content-Type is different from text/plain but even with\n"
 "crasy mailer using multipart and text/html for any message, commands in the\n"
 "subject are recognized.\n"
 msgstr ""
-"Il est possible de mettre plusieurs commandes dans chaque message :\n"
-"les commandes doivent apparaître dans le corps du message et chaque ligne "
-"ne\n"
-"doit contenir qu'une seule commande. Sympa ignore le corps du message\n"
-"si celui-ci n'est pas de type Content-type: text/plain, mais même si vous\n"
-"êtes fanatique d'un agent de messagerie qui fabrique systématiquement des\n"
-"messages multipart ou text/html, les commandes placées dans le sujet\n"
-"du messages sont reconnues.\n"
 
 #: src/etc/tt2/expire_deletion.tt2:8 src/etc/tt2/removed.tt2:10
 msgid "You can subscribe again :"
-msgstr "Vous pouvez cependant vous réabonner en cliquant ici :"
+msgstr ""
 
 #: wwsympa/tt2/error.tt2:140
-msgid ""
-"You did not choose a password, request a reminder of the initial password"
+msgid "You did not choose a password, request a reminder of the initial password"
 msgstr ""
-"Vous n'avez pas défini de mot de passe, demandez un rappel du mot de passe "
-"initial"
 
-#. (list.name,list.host,user.email)
 #: src/etc/tt2/expire_warning1.tt2:4 src/etc/tt2/expire_warning2.tt2:4
-msgid ""
-"You have been subscriber of list %1@%2 with email %3 for 1 year or more;"
+#. (list.name,list.host,user.email)
+msgid "You have been subscriber of list %1@%2 with email %3 for 1 year or more;"
 msgstr ""
-"Vous êtes abonné à la liste %1@%2 avec l'adresse %3 depuis au moins 1 an."
 
-#. (error.pname)
 #: wwsympa/tt2/error.tt2:92
+#. (error.pname)
 msgid "You have changed a parameter without permissions: %1"
-msgstr "Vous avez édité un paramètre interdit : %1"
+msgstr ""
 
 #: wwsympa/tt2/remindpasswd.tt2:4
-msgid ""
-"You have forgotten your password, or you never had any password related to "
-"this server"
+msgid "You have forgotten your password, or you never had any password related to this server"
 msgstr ""
-"Vous avez oublié votre mot de passe ou vous n'avez pas encore de mot de\n"
-"      passe sur ce serveur\n"
 
-#. (user.email)
 #: wwsympa/tt2/login.tt2:3
+#. (user.email)
 msgid "You have logged in with email address %1"
-msgstr "Vous êtes identifié avec l'adresse %1"
+msgstr ""
 
 #: wwsympa/tt2/sigrequest.tt2:19
 msgid ""
 "You might have subscribed with another address.\n"
 "      Please contact the list owner to help you unsubscribe :\n"
 msgstr ""
-"Peut-être êtes vous abonné avec une autre adresse ? Dans ce cas connectez\n"
-"       vous avec celle-ci. En cas de difficultés, contactez le propriétaire "
-"de la\n"
-"        liste :\n"
 
 #: wwsympa/tt2/choosepasswd.tt2:4
 msgid ""
 "You need to choose a password for your WWSympa environment.\n"
 "You will need this password to perform privileged operations.\n"
 msgstr ""
-"Vous devez choisir un mot de passe pour votre environnement\n"
-"de listes de diffusion Sympa. Ce mot de passe vous permettra\n"
-"d'accéder aux opérations privilégiées.\n"
 
 #: wwsympa/tt2/error.tt2:40
 msgid "You need to login"
-msgstr "Vous devez vous identifier"
+msgstr ""
 
 #: wwsympa/tt2/loginbanner.tt2:12
 msgid ""
 "You need to login to access your custom WWSympa environment or to perform a\n"
 "privileged operation (one that requires your email address).\n"
 msgstr ""
-"Vous devez vous identifier pour accéder à votre environnement personnalisé \n"
-"ou effectuer un opération privilégiée (requérant votre adresse email).\n"
 
-#. (list)
 #: src/etc/tt2/sendpasswd.tt2:13
+#. (list)
 msgid "You requested a subscription to %1 mailing list."
-msgstr "Vous avez demandé à vous abonner à la liste %1."
+msgstr ""
 
-#. (list)
 #: wwsympa/tt2/subrequest.tt2:17
+#. (list)
 msgid "You requested a subscription to list %1"
-msgstr "Vous avez demandé un abonnement à la liste  %1"
+msgstr ""
 
-#. (list)
 #: wwsympa/tt2/subrequest.tt2:5
+#. (list)
 msgid "You requested subscription to list %1"
-msgstr "Vous avez demandé un abonnement à la liste %1"
+msgstr ""
 
-#. (list)
 #: src/etc/tt2/sendpasswd.tt2:20
-msgid "You requested unsubscription from %1 mailing list."
-msgstr "Vous avez demandé à vous désabonner de la liste %1."
-
 #. (list)
+msgid "You requested unsubscription from %1 mailing list."
+msgstr ""
+
 #: wwsympa/tt2/sigrequest.tt2:23 wwsympa/tt2/sigrequest.tt2:4
+#. (list)
 msgid "You requested unsubscription from list %1"
-msgstr "Vous avez demandé un désabonnement de la liste %1"
+msgstr ""
 
 #: wwsympa/tt2/close_list.tt2:9
 msgid "You should remove list aliases manually"
-msgstr "Vous devriez supprimer les alias manuellement"
+msgstr ""
 
 #: wwsympa/tt2/change_email.tt2:3
 msgid "You will receive an email, reminding you your password."
-msgstr "Vous allez recevoir un e-mail de rappel de votre mot de passe."
+msgstr ""
 
 #: src/etc/tt2/certif_warning.tt2:8
 msgid "You won't receive the signed messages from your lists."
 msgstr ""
-"Vous ne recevrez plus les messages signés des listes auxquelles vous êtes "
-"inscrits."
 
-#. (error.dir)
 #: wwsympa/tt2/error.tt2:122
+#. (error.dir)
 msgid "You're not authorized to upload an INDEX.HTML in %1"
-msgstr "Vous n'êtes pas autorisé à déposer un fichier INDEX.HTML dans %1"
+msgstr ""
 
-#. (user.email,list.name,list.host)
 #: src/etc/tt2/expire_deletion.tt2:6
+#. (user.email,list.name,list.host)
 msgid ""
 "Your address (%1) has been removed from list\n"
 "%2@%3\n"
 "because you didn't confirm your subscription.\n"
 msgstr ""
-"Votre adresse (%1) a été supprimée de la liste\n"
-"%2@%3\n"
-"car vous n'avez pas répondu à notre demande de réinscription.\n"
 
-#. (user.email,list.name,list.host)
 #: src/etc/tt2/removed.tt2:8
+#. (user.email,list.name,list.host)
 msgid ""
 "Your address (%1) has been removed from list\n"
 "%2@%3, probably because we received\n"
 "non-delivery reports for your address.\n"
 msgstr ""
-"Votre adresse (%1) a été supprimée de la liste\n"
-"%1@%2 probablement parce que nous recevons des rapports d'anomalie \n"
-"concernant cette adresse.\n"
 
-#. (list.name,list.host,user.email,user.password)
 #: src/etc/tt2/remind.tt2:4
+#. (list.name,list.host,user.email,user.password)
 msgid "Your are subscriber of list %1@%2 with  email %3"
-msgstr "Vous êtes abonné à la liste %1@%2 avec l'adresse %3\n"
+msgstr ""
 
 #: wwsympa/tt2/help.tt2:43
 msgid ""
-"Your are therefore not registered in Sympa user database and you can't "
-"login.\n"
+"Your are therefore not registered in Sympa user database and you can't login.\n"
 "If you subscribe to a list, WWSympa will give you an initial password.\n"
 msgstr ""
-"Vous n'êtes pas connu de la base des utilisateurs et vous ne pouvez par\n"
-"conséquent pas vous identifier.\n"
-"En vous abonnant à une liste, Sympa vous allouera un mot de passe initial.\n"
 
-#. (expiration_date)
 #: src/etc/tt2/certif_warning.tt2:4
+#. (expiration_date)
 msgid "Your authentification certificate will expire on %1."
-msgstr "Votre certificat d'authentification va expirer le %1."
+msgstr ""
 
 #: wwsympa/tt2/remindpasswd.tt2:12 wwsympa/tt2/subrequest.tt2:43
 msgid "Your e-mail address"
-msgstr "Votre adresse de messagerie :"
+msgstr ""
 
 #: wwsympa/tt2/sigrequest.tt2:49
 msgid "Your e-mail address :"
-msgstr "Votre adresse email :"
+msgstr ""
 
-#. (user.email,list.name,list.host)
 #: src/etc/tt2/bye.tt2:4
+#. (user.email,list.name,list.host)
 msgid "Your email address (%1) has been removed from list %2@%3"
-msgstr "Vous (%1) êtes désabonné de la liste %2@%3"
+msgstr ""
 
 #: wwsympa/tt2/pref.tt2:10
 msgid "Your environment"
-msgstr "Votre environnement"
+msgstr ""
 
 #: wwsympa/tt2/create_list.tt2:24
 msgid ""
 "Your list creation request is registered. You can now  modify its\n"
-"configuration using the admin button but the list will be unusable until the "
-"listmaster validates it.\n"
+"configuration using the admin button but the list will be unusable until the listmaster validates it.\n"
 msgstr ""
-"Votre demande de création de liste est enregistrée. Vous pouvez \n"
-"la modifier en utilisant le bouton Admin liste. Mais cette liste\n"
-"ne sera effectivement installée et rendue visible sur ce serveur\n"
-"que quand le listmaster validera sa création.\n"
 
 #: wwsympa/tt2/create_list.tt2:4
 msgid "Your list is created."
-msgstr "Votre liste est créée."
+msgstr ""
 
-#. (list.name,list.host,rejected_by)
 #: src/etc/tt2/reject.tt2:5
+#. (list.name,list.host,rejected_by)
 msgid ""
 "Your message for list %1@%2\n"
 "has been rejected by the moderator (%3).\n"
 msgstr ""
-"Votre message pour la liste %1@%2\n"
-"a été rejeté par %3, modérateur de la liste.\n"
 
 #: src/etc/tt2/reject.tt2:2
 msgid "Your message has been rejected."
-msgstr "Rejet de votre message"
+msgstr ""
 
 #: wwsympa/tt2/pref.tt2:91
 msgid "Your other email addresses"
-msgstr "Vos autres adresses e-mail"
+msgstr ""
 
+#: src/etc/tt2/remind.tt2:6 src/etc/tt2/welcome.tt2:13 src/etc/tt2/welcome.tt2:34
 #. (user.password)
-#: src/etc/tt2/remind.tt2:6 src/etc/tt2/welcome.tt2:13
-#: src/etc/tt2/welcome.tt2:34
 msgid "Your password : %1"
-msgstr "Votre mot de passe est : %1"
+msgstr ""
 
 #: wwsympa/tt2/notice.tt2:23
 msgid "Your password has been emailed to you"
-msgstr "Votre mot de passe vous a été transmis par email"
+msgstr ""
 
-#. (init_email)
 #: wwsympa/tt2/loginbanner.tt2:5
+#. (init_email)
 msgid "Your password has been sent to your email address %1"
-msgstr "Votre mot de passe vous a été envoyé à l'adresse %1"
+msgstr ""
 
 #: wwsympa/tt2/error.tt2:157
-msgid ""
-"Your password is stored in an LDAP directory, therefore Sympa cannot post "
-"you a reminder"
+msgid "Your password is stored in an LDAP directory, therefore Sympa cannot post you a reminder"
 msgstr ""
-"Votre mot de passe est défini dans un annuaire LDAP, Sympa ne peut donc pas "
-"vous le rapeller"
 
 #: wwsympa/tt2/notice.tt2:5
 msgid "Your request has been forwarded to the list owner"
-msgstr "La demande a été soumise au gestionnaire de la liste"
+msgstr ""
 
-#. (user.email)
 #: src/etc/tt2/welcome.tt2:31
-msgid "Your subscription email is %1"
-msgstr "Votre adresse d'abonné est : %1"
-
 #. (user.email)
-#: src/etc/tt2/welcome.tt2:11
 msgid "Your subscription email is %1"
-msgstr "Votre adresse d'abonné est : %1"
+msgstr ""
 
-#: wwsympa/tt2/help.tt2:20 wwsympa/tt2/menu.tt2:105 wwsympa/tt2/menu.tt2:92
-#: wwsympa/tt2/menu.tt2:96
+#: src/etc/tt2/welcome.tt2:11
+#. (user.email)
+msgid "Your subscription email is %3"
+msgstr ""
+
+#: wwsympa/tt2/help.tt2:20 wwsympa/tt2/menu.tt2:105 wwsympa/tt2/menu.tt2:92 wwsympa/tt2/menu.tt2:96
 msgid "Your subscriptions"
-msgstr "Vos abonnements"
+msgstr ""
 
-#: wwsympa/tt2/d_read.tt2:11 wwsympa/tt2/d_read.tt2:134
-#: wwsympa/tt2/d_read.tt2:200
+#: wwsympa/tt2/d_read.tt2:11 wwsympa/tt2/d_read.tt2:134 wwsympa/tt2/d_read.tt2:200
 msgid "access"
-msgstr "accès"
+msgstr ""
 
 #: wwsympa/tt2/lists.tt2:18
 msgid "admin"
-msgstr "admin"
+msgstr ""
 
 #: wwsympa/tt2/arcsearch_form.tt2:25
 msgid "all of these words"
-msgstr "Tout ces mots"
+msgstr ""
 
 #: wwsympa/tt2/arcsearch.tt2:35
 msgid "and checking on entire word)"
-msgstr "et recherche sur des mots entiers)"
+msgstr ""
 
 #: wwsympa/tt2/arcsearch.tt2:33
 msgid "and checking on part of word)"
-msgstr "et recherche sur des parties de mots)"
+msgstr ""
 
 #: wwsympa/tt2/reviewbouncing.tt2:63
 msgid "bounce count"
-msgstr "Nombre d'erreurs"
+msgstr ""
 
 #: src/etc/tt2/bye.tt2:5
 msgid "bye !"
-msgstr "Désabonnement de [% list.name %]"
+msgstr ""
 
 #: wwsympa/tt2/arcsearch.tt2:27
 msgid "case insensitive"
-msgstr "pas de distinction majuscules/minuscules"
+msgstr ""
 
 #: wwsympa/tt2/arcsearch.tt2:29
 msgid "case sensitive"
-msgstr "distinction majuscules/minuscules activée"
+msgstr ""
 
 #: wwsympa/tt2/d_control.tt2:36
 msgid "change access"
-msgstr "Changer les droits"
+msgstr ""
 
-#. (list.name,list.host)
 #: src/etc/tt2/x509-user-cert-missing.tt2:2
+#. (list.name,list.host)
 msgid "crypted message for list %1@%2"
-msgstr "Message confidentiel de la liste %1@%2"
+msgstr ""
 
 #: wwsympa/tt2/edit_list_request.tt2:341
 msgid "default"
-msgstr "défaut"
+msgstr ""
 
 #: wwsympa/tt2/d_read.tt2:10 wwsympa/tt2/d_read.tt2:122
 msgid "delete"
-msgstr "supprimer"
+msgstr ""
 
-#: wwsympa/tt2/sigrequest.tt2:34 wwsympa/tt2/sigrequest.tt2:63
-#: wwsympa/tt2/subrequest.tt2:27 wwsympa/tt2/subrequest.tt2:57
+#: wwsympa/tt2/sigrequest.tt2:34 wwsympa/tt2/sigrequest.tt2:63 wwsympa/tt2/subrequest.tt2:27 wwsympa/tt2/subrequest.tt2:57
 msgid "e-mail address"
-msgstr "Adresse de messagerie"
+msgstr ""
 
-#: wwsympa/tt2/d_read.tt2:116 wwsympa/tt2/d_read.tt2:181
-#: wwsympa/tt2/d_read.tt2:9
+#: wwsympa/tt2/d_read.tt2:116 wwsympa/tt2/d_read.tt2:181 wwsympa/tt2/d_read.tt2:9
 msgid "edit"
-msgstr "éditer"
+msgstr ""
 
 #: src/etc/tt2/listmaster_notification.tt2:24
 msgid ""
 "edit_list.conf format has changed :\n"
 "'default' is no more accepted for a population.\n"
 msgstr ""
-"Le format du fichier de configuration edit_list.conf a changé :\n"
-"'default' n'est plus reconnu pour une population.\n"
 
 #: wwsympa/tt2/loginbanner.tt2:41
 msgid "email, is your subscriber email address"
-msgstr "est votre adresse électronique"
+msgstr ""
 
 #: wwsympa/tt2/arcsearch_form.tt2:44
 msgid "entire word"
-msgstr "partie de mot"
+msgstr ""
 
 #: wwsympa/tt2/scenario_test.tt2:73
 msgid "get matched rule"
-msgstr "montrer la régle validée"
+msgstr ""
 
 #: src/etc/tt2/list_created.tt2:6
 msgid "homepage"
-msgstr "La page d'accueil de la liste"
+msgstr ""
 
 #: src/etc/tt2/listmaster_notification.tt2:21
 msgid "incorrect format of edit_list.conf"
-msgstr "Format incorrect de edit_list.conf"
+msgstr ""
 
 #: wwsympa/tt2/arcsearch_form.tt2:37
 msgid "insensitive"
-msgstr "indifférenciées"
+msgstr ""
 
 #: wwsympa/tt2/remindpasswd.tt2:5
 msgid "it will be sent to you by email :"
-msgstr "Un mot de passe va vous être envoyé par e-mail :"
+msgstr ""
 
 #: wwsympa/tt2/close_list.tt2:4
 msgid ""
 "list has been closed. Its subscribers have been deleted from\n"
 "the subscriber database. The list is no more public on the site.\n"
 msgstr ""
-"La liste est fermée. Les abonnés sont supprimés de la\n"
-"base de donnée et la liste n'est plus visible sur le serveur.\n"
 
 #: wwsympa/tt2/get_closed_lists.tt2:11 wwsympa/tt2/get_pending_lists.tt2:14
 msgid "list name"
-msgstr "Nom de liste"
+msgstr ""
 
 #: wwsympa/tt2/get_closed_lists.tt2:12 wwsympa/tt2/get_pending_lists.tt2:15
 msgid "list subject"
-msgstr "Object de la liste"
+msgstr ""
 
 #: wwsympa/tt2/loginbanner.tt2:23
 msgid "login"
-msgstr "login"
+msgstr ""
 
 #: src/etc/tt2/certif_warning.tt2:2
 msgid "near expiration of your certificate"
-msgstr "Expiration prochaine de votre certificat"
+msgstr ""
 
 #: wwsympa/tt2/arcsearch_form.tt2:31
 msgid "newest messages"
-msgstr "Messages les plus récents en tête"
+msgstr ""
 
 #: wwsympa/tt2/set_pending_list_request.tt2:40
 msgid "notify owner"
-msgstr "Notifier le propriétaire"
+msgstr ""
 
 #: wwsympa/tt2/arcsearch_form.tt2:32
 msgid "oldest messages"
-msgstr "Messages les plus anciens en tête"
+msgstr ""
 
-#: wwsympa/tt2/install_pending_list.tt2:17
-#: wwsympa/tt2/set_pending_list_request.tt2:17
+#: wwsympa/tt2/install_pending_list.tt2:17 wwsympa/tt2/set_pending_list_request.tt2:17
 msgid "on"
-msgstr "le"
+msgstr ""
 
 #: wwsympa/tt2/arcsearch_form.tt2:26
 msgid "one of these words"
-msgstr "Un de ces mots"
+msgstr ""
 
-#. (page,total_page)
 #: wwsympa/tt2/reviewbouncing.tt2:124 wwsympa/tt2/reviewbouncing.tt2:49
+#. (page,total_page)
 msgid "page %1 / %2"
-msgstr "page %1 / %2"
+msgstr ""
 
 #: wwsympa/tt2/arcsearch_form.tt2:43
 msgid "part of word"
-msgstr "partie de mot"
+msgstr ""
 
-#: wwsympa/tt2/sigrequest.tt2:35 wwsympa/tt2/sigrequest.tt2:64
-#: wwsympa/tt2/subrequest.tt2:28 wwsympa/tt2/subrequest.tt2:58
+#: wwsympa/tt2/sigrequest.tt2:35 wwsympa/tt2/sigrequest.tt2:64 wwsympa/tt2/subrequest.tt2:28 wwsympa/tt2/subrequest.tt2:58
 msgid "password"
-msgstr "mot de passe"
+msgstr ""
 
 #: wwsympa/tt2/loginbanner.tt2:31
 msgid "password :"
-msgstr "mot de passe :"
+msgstr ""
 
 #: wwsympa/tt2/loginbanner.tt2:42
 msgid "password, is your password."
-msgstr "<b>mot de passe</b> est votre mot de passe"
+msgstr ""
 
-#. (newuser.password)
 #: src/etc/tt2/sendpasswd.tt2:17 src/etc/tt2/sendpasswd.tt2:24
+#. (newuser.password)
 msgid "password: %1"
-msgstr "%1"
+msgstr ""
 
 #: wwsympa/tt2/reviewbouncing.tt2:64
 msgid "period"
-msgstr "période"
+msgstr ""
 
-#: wwsympa/tt2/add_request.tt2:13 wwsympa/tt2/editsubscriber.tt2:43
-#: wwsympa/tt2/review.tt2:82 wwsympa/tt2/reviewbouncing.tt2:116
-#: wwsympa/tt2/reviewbouncing.tt2:31
+#: wwsympa/tt2/add_request.tt2:13 wwsympa/tt2/editsubscriber.tt2:43 wwsympa/tt2/review.tt2:82 wwsympa/tt2/reviewbouncing.tt2:116 wwsympa/tt2/reviewbouncing.tt2:31
 msgid "quiet"
-msgstr "sans prévenir"
+msgstr ""
 
-#. (list.name)
 #: src/etc/tt2/expire_warning1.tt2:2 src/etc/tt2/expire_warning2.tt2:2
+#. (list.name)
 msgid "resubscription to %1"
-msgstr "Demande de réinscription à %1"
+msgstr ""
 
-#: wwsympa/tt2/arcsearch_form.tt2:49 wwsympa/tt2/arcsearch_form.tt2:51
-#: wwsympa/tt2/arcsearch_form.tt2:52
+#: wwsympa/tt2/arcsearch_form.tt2:49 wwsympa/tt2/arcsearch_form.tt2:51 wwsympa/tt2/arcsearch_form.tt2:52
 msgid "results by page"
-msgstr "résultats par page"
+msgstr ""
 
 #: wwsympa/tt2/scenario_test.tt2:37
 msgid "sender email"
-msgstr "adresse de l'émetteur"
+msgstr ""
 
 #: wwsympa/tt2/arcsearch_form.tt2:38
 msgid "sensitive"
-msgstr "différenciées"
+msgstr ""
 
 #: wwsympa/tt2/set_pending_list_request.tt2:39 wwsympa/tt2/subrequest.tt2:47
 msgid "submit"
-msgstr "valider"
+msgstr ""
 
-#. (param0)
 #: src/etc/tt2/listmaster_notification.tt2:30
+#. (param0)
 msgid "subscribers update failed for list %1"
-msgstr "problème de mise à jour des membres de la liste %1"
+msgstr ""
 
 #: wwsympa/tt2/create_list_request.tt2:11
 msgid "the list name ; be careful, not its address !"
-msgstr "Attention, le nom pas l'adresse !"
+msgstr ""
 
 #: wwsympa/tt2/arcsearch_form.tt2:24
 msgid "this sentence"
-msgstr "Cette phrase"
+msgstr ""
 
 #: wwsympa/tt2/d_read.tt2:260
 msgid "title"
-msgstr "intitulé"
+msgstr ""
 
 #: wwsympa/tt2/view_translations.tt2:22
 msgid "translated"
-msgstr "traduit"
+msgstr ""
 
 #: wwsympa/tt2/reviewbouncing.tt2:65
 msgid "type"
-msgstr "type"
+msgstr ""
 
 #: wwsympa/tt2/home.tt2:51
 msgid "view all lists"
-msgstr "La liste des listes"
+msgstr ""
 
 #: wwsympa/tt2/error.tt2:45
 msgid "you need to login"
-msgstr "identifiez-vous (Login)"
+msgstr ""
 
-#. (newuser.email)
 #: src/etc/tt2/sendpasswd.tt2:29
+#. (newuser.email)
 msgid "your email address    : %1"
-msgstr "votre adresse électronique : %1"
+msgstr ""
 
+#: src/etc/tt2/expire_warning1.tt2:7 src/etc/tt2/expire_warning2.tt2:7 src/etc/tt2/sendpasswd.tt2:30
 #. (user.password)
 #. (newuser.password)
-#: src/etc/tt2/expire_warning1.tt2:7 src/etc/tt2/expire_warning2.tt2:7
-#: src/etc/tt2/sendpasswd.tt2:30
 msgid "your password : %1"
-msgstr "votre mot de passe         : %1"
-
-#~ msgid "all of"
-#~ msgstr "chacun"
-
-#~ msgid "one of"
-#~ msgstr "un"
-
-#~ msgid "sentence"
-#~ msgstr "phrase"
-
-#~ msgid "this"
-#~ msgstr "cette"
-
-#~ msgid "this words"
-#~ msgstr "de ces mots"
-
-#~ msgid "Welcome to list %1@%2."
-#~ msgstr "Bienvenue dans la liste %1@%2."
-
-#~ msgid "preferences"
-#~ msgstr ""
-#~ "remindpasswd\" >\n"
-#~ "     <FONT SIZE=-1><B>Recevoir mon mot de passe</B></FONT></A>\n"
-#~ "     </TD>\n"
-#~ "    </TR>\n"
-#~ "  </TABLE></TD>\n"
-#~ "</TR>\n"
-#~ "</TABLE>\n"
-#~ "de la page d'accueil permet de vous en faire allouer (ou ré-allouer) un.\n"
-#~ "\n"
-#~ "<BR><BR>\n"
+msgstr ""

@@ -13,7 +13,7 @@ the higher part of the user interface's banner. WWSympa provides
 a customized environment with access to the following functions :[%END%]
 
 <UL>
-<LI><A HREF="[% path_cgi %]/pref">[%|l%]Preferences[%END%]</A> [%|l%]: user preferences. This proposed to identified users only.[%END%]
+<LI><A HREF="[% path_cgi %]/pref">[%|l%]Preferences[%END%]</A> [%|l%]: user preferences. This is proposed to identified users only.[%END%]
 
 <LI><A HREF="[% path_cgi %]/lists">[%|l%]Public lists[%END%]</A> [%|l%]: directory of lists available on the server[%END%]
 
@@ -29,15 +29,12 @@ a customized environment with access to the following functions :[%END%]
 <BR><BR>
 [%|l%]Once you have been authenticated, a <I>cookie</I> containing your login 
 information make your connection to WWSympa last. The lifetime of this
-<I>cookie</I> is customizeable through your[%END%]  
-<A HREF="[% path_cgi %]/pref">[%|l%]preferences[%END%]</A>. 
+<I>cookie</I> is customizeable through your <b>Preferences</b>[%END%]. 
 
 <BR><BR>
 [% END %]
 
-[%|l%]You can logout (deletion of the <I>cookie</I>) at any time using[%END%] 
-<A HREF="[% path_cgi %]/logout">[%|l%]logout[%END%]</A>
-[%|l%]function.[%END%]
+[%|l%]You can logout (deletion of the cookie) at any time using logout button.[%END%]
 
 <H5>[%|l%]Login issues[%END%]</H5>
 

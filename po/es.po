@@ -1253,9 +1253,7 @@ msgid "Modifier"
 msgstr "Publicar"
 
 #: wwsympa/tt2/loginbanner.tt2:15
-msgid ""
-"Most mailing list features require your email. Some mailing lists are hidden to\n"
-" unidentified persons.\n"
+msgid "Most mailing list features require your email. Some mailing lists are hidden to unidentified persons."
 msgstr ""
 
 #: wwsympa/tt2/subrequest.tt2:65
@@ -1763,9 +1761,7 @@ msgstr "Campo de Búsqueda :"
 
 #: wwsympa/tt2/home.tt2:60
 msgid "Search lists"
-msgstr ""
-"Buscar\">\n"
-"        <\n"
+msgstr "Buscar"
 
 #: wwsympa/tt2/lists.tt2:46
 msgid "See your subscriptions with the following email addresses"

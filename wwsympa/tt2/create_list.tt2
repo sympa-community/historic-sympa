@@ -2,7 +2,7 @@
 
 [% IF status == 'open' %]
 [%|l%]Your list is created.[%END%]<BR> 
-[%|l%]You can configure it via the[%END%] <B>[%|l%]admin[%END%]</B> [%|l%]button beside.[%END%]
+[%|l%]You can configure it via the admin button beside.[%END%]
 <BR>
 [% IF auto_aliases %]
 [%|l%]Aliases have been installed.[%END%]

@@ -1784,8 +1784,7 @@ msgstr "Campo di ricerca :"
 #: wwsympa/tt2/home.tt2:60
 msgid "Search lists"
 msgstr ""
-"Cerca nelle liste\">\n"
-"        <\n"
+"Cerca nelle liste"
 
 #: wwsympa/tt2/lists.tt2:46
 msgid "See your subscriptions with the following email addresses"

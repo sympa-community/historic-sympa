@@ -2,7 +2,7 @@ From: [% conf.email %]@[% conf.host %]
 Subject: [%|l%]Your message has been rejected.[%END%]
 
 [%|l(list.name,list.host,rejected_by)%]Your message for list %1@%2
-as been rejected by %3 list editor.[%END%]
+has been rejected by the moderator (%3).[%END%]
 
 [%|l(subject)%](Subject of your mail : %1)[%END%]
 

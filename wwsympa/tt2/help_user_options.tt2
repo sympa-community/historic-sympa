@@ -1,9 +1,6 @@
 <!-- $Id$ -->
 <P>
-[%|l%]This is a description of the reception modes available in Sympa. These options
-are mutually exclusive, which means that you can't set two different reception
-modes at the same time. Only some of the modes might be available for specific
-mailing lists.[%END%]
+[%|l%]This is a description of the reception modes available in Sympa. These options are mutually exclusive, which means that you can't set two different reception modes at the same time. Only some of the modes might be available for specific mailing lists.[%END%]
 </P>
 <UL>
 
@@ -23,9 +20,7 @@ subscriber receives only the list of messages.[%END%]
 
 <LI>[%|l%]Nomail[%END%] <BR>
 
-[%|l%]This mode is used when a subscriber no longer wishes to receive mail from the list, but 
-nevertheless wishes to retain the ability to post to the list. This mode therefore 
-prevents the subscriber from unsubscribing and subscribing later on.[%END%] <BR><BR>
+[%|l%]This mode is used when a subscriber no longer wishes to receive mail from the list, but nevertheless wishes to retain the ability to post to the list. This mode therefore prevents the subscriber from unsubscribing and subscribing later on.[%END%] <BR><BR>
 
 <LI>Txt <BR>
 

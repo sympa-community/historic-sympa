@@ -1844,7 +1844,7 @@ msgstr "=\"+1\">Arie de cautare:"
 
 #: wwsympa/tt2/home.tt2:60
 msgid "Search lists"
-msgstr "Search lists\">"
+msgstr "Search lists"
 
 #: wwsympa/tt2/lists.tt2:46
 msgid "See your subscriptions with the following email addresses"

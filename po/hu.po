@@ -1759,7 +1759,7 @@ msgstr "Keresési tartomány:"
 
 #: wwsympa/tt2/home.tt2:60
 msgid "Search lists"
-msgstr "Lista keresés\">"
+msgstr "Lista keresés"
 
 #: wwsympa/tt2/lists.tt2:46
 msgid "See your subscriptions with the following email addresses"

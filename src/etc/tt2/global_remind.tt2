@@ -13,7 +13,7 @@
 
 [% IF user.password %]
 
-[%|l(conf.wwsympa_url,user.email,user.password)%]In order to authenticate your self using wwsympa %1
-use your e-mail %2 and your password %2[%END%]
+[%|l(conf.wwsympa_url,user.email,user.password)%]In order to authenticate on the web interface(%1)
+use your e-mail %2 and your password %3[%END%]
 
 [% END %]

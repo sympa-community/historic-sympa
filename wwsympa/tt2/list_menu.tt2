@@ -41,7 +41,7 @@
   <TD WIDTH=110 COLSPAN=3 BGCOLOR="[% bg_color %]" NOWRAP align=left>
      [% PROCESS 'list_button_header.tt2' %]
         <TD BGCOLOR="[% light_color %]">
-	  [%|l%]Subscribers:[%END%] <B>[%|l%][% total %][%END%]</B><BR>
+	  [%|l%]Subscribers:[%END%] <B>[% total %]</B><BR>
 	  <BR>
 	  [%|l%]Owners[%END%]
 	  [% FOREACH o = owner %]

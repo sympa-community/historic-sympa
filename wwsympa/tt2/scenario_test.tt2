@@ -70,7 +70,7 @@
     </TR>
     <TR>
 
-	<TD><INPUT TYPE="submit" NAME="action_scenario_test" VALUE="[%|l%]get applyed rule[%END%]"></TD>
+	<TD><INPUT TYPE="submit" NAME="action_scenario_test" VALUE="[%|l%]get matched rule[%END%]"></TD>
         <TD bgcolor="[% dark_color %]">
           [% IF scenario_action %]
              <code>[% scenario_condition %], [% scenario_auth_method %] -> [% scenario_action %]</code>

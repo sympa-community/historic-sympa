@@ -54,19 +54,19 @@
 <DT><B>[%|l(searched,num)%]%1 messages selected out of %2[%END%]...</b><BR>
 
 [% IF body %]
-	<DD><B>[% body_count %]</b> hits on message's <i>Body</i><BR>
+	<DD>[%|l(body_count)%]%1 hits on message's Body[%END%]<BR>
 [% END %]
 
 [% IF subj %]
-	<DD><B>[% subj_count %]</b> [%|l%]hits on message's[%END%] <i>[%|l%]Subject[%END%]</i> [%|l%]field[%END%]<BR>
+	<DD>[%|l(subj_count)%]%1 hits on message's Subject field[%END%]<BR>
 [% END %]
 
 [% IF from %]
-	<DD><B>[% from_count %]</b> [%|l%]hits on message's[%END%] <i>[%|l%]From[%END%]</i> [%|l%]field[%END%]<BR>
+	<DD>[%|l(from_count)%] %1 hits on message's From field[%END%]<BR>
 [% END %]
 
 [% IF date %]
-	<DD><B>[% date_count %]</b> [%|l%]hits on message's[%END%] <i>[%|l%]Date[%END%]</i> [%|l%]field[%END%]<BR>
+	<DD>[%|l(date_count)%]%1 hits on message's Date field[%END%]<BR>
 [% END %]
 
 </dl>

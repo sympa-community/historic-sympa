@@ -1,8 +1,9 @@
 From: [% conf.email %]@[% conf.host %]
 Subject: [%|l(list.name)%]Reminder of your subscribtion to %1[%END%]
 
-[%|l(list.name,list.host,user.email,user.password)%]Your are subscriber of list %1@%2 with  email %3 
-your password : %4[%END%]
+[%|l(list.name,list.host,user.email,user.password)%]Your are subscriber of list %1@%2 with  email %3[%END%]
+
+[%|l(user.password)%]Your password : %1[%END%]
 
 [%|l%]Everything about this list : [%END%][% conf.wwsympa_url %]/info/[% list.name %]
 [%|l%]Unsubscribtion :[%END%]

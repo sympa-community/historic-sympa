@@ -19,9 +19,9 @@ Subject: [%|l(conf.title)%]%1 / your environment[%END%]
 [% ELSIF action == 'sigrequest' %]
 [%|l(list)%]You requested unsubscription from %1 mailing list.[%END%]
 
-[%|l(newuser.password)%]To unsubscribe from the list, you need to provide the following password
+[%|l%]To unsubscribe from the list, you need to provide the following password[%END%]
 
-	password: %1[%END%]
+	[%|l(newuser.password)%]password: %1[%END%]
 
 [% ELSE %]
 [%|l%]To access your personal environment, you need to login first[%END%]

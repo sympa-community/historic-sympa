@@ -5,7 +5,7 @@
 as possible. This task may be down in a few minutes.[%END%]
 [% ELSIF status == 'no_msgid' %]
 <b>[%|l%]Unable to find the message to delete[%END%]</b>[%|l%], probably this message
-was received without[%END%] "Message-Id:" [%|l%]Please refer to listmaster with
+was received without Message-Id. Please refer to listmaster with
 complete URL of the incriminated message[%END%]
 [% ELSIF status == 'not_found' %]
 <b>[%|l%]Unable to find the message to delete[%END%]</b>

@@ -24,7 +24,7 @@ package List;
 use strict;
 require X509;
 require Exporter;
-require Encode;
+#require Encode;
 require 'tools.pl';
 
 my @ISA = qw(Exporter);
@@ -2052,7 +2052,7 @@ sub send_msg {
 
     ## Add Custom Subject
     if ($admin->{'custom_subject'}) {
-	my $subject_field = &Encode::decode('MIME-Header', $message->{'msg'}->head->get('Subject'));
+	my $subject_field = &MIME::Words::decode_mimewords('MIME-Header', $message->{'msg'}->head->get('Subject'));
 	$subject_field =~ s/^\s*(.*)\s*$/$1/; ## Remove leading and trailing blanks
 
 	## Search previous subject tagging in Subject
@@ -2074,7 +2074,7 @@ sub send_msg {
 	}else {
 	    $subject_field = '['.$parsed_tag[0].'] '.$subject_field
 	}
-	$message->{'msg'}->head->add('Subject', Encode::encode('MIME-Header', $subject_field));
+	$message->{'msg'}->head->add('Subject', $subject_field);
     }
  
     ## Who is the enveloppe sender ?
@@ -6602,6 +6602,12 @@ sub probe_db {
 	
 	## Get tables
 	@tables = $dbh->tables();
+
+	## Clean table names that could be surrounded by `` (recent DBD::mysql release)
+	foreach my $t (@tables) {
+	    $t =~ s/^\`(.+)\`$/\1/;
+	}
+
 	unless (defined $#tables) {
 	    &do_log('info', 'Can\'t load tables list from database %s : %s', $Conf{'db_name'}, $dbh->errstr);
 	    return undef;

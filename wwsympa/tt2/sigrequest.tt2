@@ -13,8 +13,7 @@
 
   [% ELSIF not_subscriber %]
 
-      [%|l(list,email)%]You are not subscribed to list %1 with e-mail address
-      %2[%END%].
+      [%|l(list,email)%]You are not subscribed to list %1 with e-mail address %2[%END%].
       <BR><BR>
       [%|l%]You might have subscribed with another address.
       Please contact the list owner to help you unsubscribe :[%END%]

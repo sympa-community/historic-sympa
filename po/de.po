@@ -1775,8 +1775,7 @@ msgstr "Suchfeld:"
 #: wwsympa/tt2/home.tt2:60
 msgid "Search lists"
 msgstr ""
-"Durchsuche Listen\">\n"
-"        <\n"
+"Durchsuche Listen"
 
 #: wwsympa/tt2/lists.tt2:46
 msgid "See your subscriptions with the following email addresses"

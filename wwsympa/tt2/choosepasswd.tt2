@@ -1,7 +1,7 @@
 <!-- $Id$ -->
 
 [%|l%]You need to choose a password for your WWSympa environment.
-You will need this password to access privileged features.[%END%]
+You will need this password to perform privileged operations.[%END%]
 
 <FORM ACTION="[% path_cgi %]" METHOD=POST>
 <INPUT TYPE="hidden" NAME="previous_action" VALUE="[% previous_action %]">

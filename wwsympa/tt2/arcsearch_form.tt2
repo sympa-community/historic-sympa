@@ -21,15 +21,15 @@
 
 <TR VALIGN="TOP" NOWRAP>
 <TD><b>[%|l%]Search[%END%]</b></TD>
-<TD><INPUT TYPE=RADIO NAME=how VALUE="phrase" CHECKED> [%|l%]this[%END%] <font color="[% dark_color %]"><B>[%|l%]sentence[%END%]</b></font></TD>
-<TD><INPUT TYPE=RADIO NAME=how VALUE="all"> <font color="[% dark_color %]"><b>[%|l%]all of[%END%]</b></font> [%|l%]this words[%END%]</TD>
-<TD><INPUT TYPE=RADIO NAME=how VALUE="any"> <font color="[% dark_color %]"><B>[%|l%]one of[%END%]</b></font> [%|l%]this words[%END%]</TD>
+<TD><INPUT TYPE=RADIO NAME=how VALUE="phrase" CHECKED> <b>[%|l%]this sentence[%END%]</b></TD>
+<TD><INPUT TYPE=RADIO NAME=how VALUE="all"> <b>[%|l%]all of these words[%END%]</b></TD>
+<TD><INPUT TYPE=RADIO NAME=how VALUE="any"> <B>[%|l%]one of these words[%END%]</b></TD>
 </TR>
 
 <P><TR VALIGN="TOP" NOWRAP>
 <TD><b>[%|l%]Prefer[%END%]</b></TD>
-<TD><INPUT TYPE=RADIO NAME=age VALUE="new" CHECKED> <font color="[% dark_color %]"><b>[%|l%]newest[%END%]</b></font> [%|l%]messages[%END%]</TD>
-<TD><INPUT TYPE=RADIO NAME=age VALUE="old"> <font color="[% dark_color %]"><b>[%|l%]oldest[%END%]</b></font> [%|l%]messages[%END%]</TD>
+<TD><INPUT TYPE=RADIO NAME=age VALUE="new" CHECKED> <font color="[% dark_color %]"><b>[%|l%]newest messages[%END%]</b></font></TD>
+<TD><INPUT TYPE=RADIO NAME=age VALUE="old"> <font color="[% dark_color %]"><b>[%|l%]oldest messages[%END%]</b></font></TD>
 </TR>
 
 <P><TR VALIGN="TOP" NOWRAP>
@@ -40,8 +40,8 @@
 
 <P><TR VALIGN="TOP" NOWRAP>
 <TD><b>[%|l%]Check[%END%]</b></TD>
-<TD><INPUT TYPE=RADIO NAME=match VALUE="partial" CHECKED> <font color="[% dark_color %]"><B>[%|l%]part[%END%]</b></font> [%|l%]of word[%END%]</TD>
-<TD><INPUT TYPE=RADIO NAME=match VALUE="exact"> <font color="[% dark_color %]"><B>[%|l%]entire[%END%]</b></font> [%|l%]word[%END%]</TD>
+<TD><INPUT TYPE=RADIO NAME=match VALUE="partial" CHECKED> <font color="[% dark_color %]"><B>[%|l%]part of word[%END%]</b></font></TD>
+<TD><INPUT TYPE=RADIO NAME=match VALUE="exact"> <font color="[% dark_color %]"><B>[%|l%]entire word[%END%]</b></font></TD>
 </TR>
 
 <P><TR VALIGN="TOP" NOWRAP>

@@ -31,8 +31,8 @@
 <INPUT TYPE="hidden" NAME="serial" VALUE="[% list_serial %]">
 
 <MENU>
-<INPUT TYPE="radio" NAME="status" VALUE="closed">[%|l%]Close it &nbsp;&nbsp;[%END%]
-<INPUT TYPE="radio" NAME="status" VALUE="open">[%|l%]Install it &nbsp;&nbsp;[%END%]
+<INPUT TYPE="radio" NAME="status" VALUE="closed">[%|l%]Close it[%END%] &nbsp;&nbsp;
+<INPUT TYPE="radio" NAME="status" VALUE="open">[%|l%]Install it[%END%] &nbsp;&nbsp;
 </MENU>
 </TD>
 <TD>
