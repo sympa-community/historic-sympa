@@ -97,6 +97,7 @@ sub check_lang_cookie {
 ## Set user $email cookie, ckecksum use $secret, expire=(now|session|#sec) domain=(localhost|<a domain>)
 sub set_cookie {
     my ($email, $secret, $http_domain, $expires) = @_ ;
+    &do_log('notice', 'cookielib::set_cookie(%s,%s,%s,%s)', $email, $secret, $http_domain, $expires);
 
     unless ($email) {
 	return undef;
@@ -133,7 +134,8 @@ sub set_cookie {
 
     ## Send cookie to the client
     printf "Set-Cookie: %s\n", $cookie->as_string;
-   
+    &do_log('notice','Cookie:%s', $cookie->as_string);
+
     return 1;
 }
     
@@ -157,6 +159,11 @@ sub set_arc_cookie {
 ## Set cookie with lang pref
 sub set_lang_cookie {
     my ($lang,$domain) = @_;
+    &do_log('notice', 'cookielib::set_lang_cookie(%s,%s)', $lang,$domain);
+
+    if ($domain eq 'localhost') {
+	$domain="";
+    }
 
     my $cookie = new CGI::Cookie (-name    => 'sympalang',
 				  -value   => $lang,
@@ -167,6 +174,7 @@ sub set_lang_cookie {
     
     ## Send cookie to the client
     printf "Set-Cookie:  %s\n", $cookie->as_string;
+    &do_log('notice','Cookie:%s', $cookie->as_string);
    
     return 1;
 }
