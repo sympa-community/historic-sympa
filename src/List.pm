@@ -209,7 +209,7 @@ my %date_format = (
 		       'Sybase' => 'datediff(second, "01/01/1970",%s)'
 		       },
 		   'write' => {
-		       'Pg' => '\'epoch\'::datetime + \'%d sec\'',
+		       'Pg' => '\'epoch\'::timestamp with time zone + \'%d sec\'',
 		       'mysql' => 'FROM_UNIXTIME(%d)',
 		       'Oracle' => 'to_date(to_char(round(%s/86400) + to_number(to_char(to_date(\'01/01/1970\',\'dd/mm/yyyy\'), \'J\'))) || \':\' ||to_char(mod(%s,86400)), \'J:SSSSS\')',
 		       'Sybase' => 'dateadd(second,%s,"01/01/1970")'
@@ -1820,6 +1820,9 @@ sub send_auth {
        print DESC <IN>;
    }
    close IN;
+
+   print DESC "--$boundary--\n";
+
    close(DESC);
 
    return $modkey;
@@ -1899,7 +1902,7 @@ sub distribute_msg {
 	&do_log('notice', 'Found List-Id: %s', $hdr->get('List-Id'));
 	$hdr->delete('List-ID');
     }
-    $hdr->add('List-Id', sprintf ('<%s@%s>', $self->{'name'}, $self->{'admin'}{'host'}));
+    $hdr->add('List-Id', sprintf ('<%s.%s>', $self->{'name'}, $self->{'admin'}{'host'}));
 
     ## Add RFC 2369 header fields
     foreach my $field (@{$Conf{'rfc2369_header_fields'}}) {
@@ -1945,7 +1948,7 @@ sub send_msg {
     my $name = $self->{'name'};
     my $robot = $self->{'domain'};
     my $admin = $self->{'admin'};
-    my $total = $self->{'total'};
+    my $total = $self->get_total('nocache');
     my $sender_line = $hdr->get('From');
     my @sender_hdr = Mail::Address->parse($sender_line);
     my %sender_hash;
@@ -1972,12 +1975,12 @@ sub send_msg {
     ## Add Custom Subject
     if ($admin->{'custom_subject'}) {
 	my $subject_field = &MIME::Words::decode_mimewords($msg->head->get('Subject'));
-	$subject_field =~ s/^\s*(.*)\s*$/$1/;
+	$subject_field =~ s/^\s*(.*)\s*$/$1/; ## Remove leading and trailing blanks
 
 	## Search previous subject tagging in Subject
 	my $tag_regexp = $admin->{'custom_subject'};
+	$tag_regexp =~ s/[\[\]\*\{\}\?]//g;  ## cleanup, just in case dangerous chars were left
 	$tag_regexp =~ s/\[\S+\]/\.\+/g;
-	$subject_field =~ s/\[$tag_regexp\]//;
 
 	## Add subject tag
 	$msg->head->delete('Subject');
@@ -1987,11 +1990,15 @@ sub send_msg {
 			       }},
 		   [$admin->{'custom_subject'}], \@parsed_tag);
 
-
-	$msg->head->add('Subject', '['.$parsed_tag[0].']'." ".$subject_field);
+	## If subject is tagged, replace it with new tag
+	if ($subject_field =~ /\[$tag_regexp\]/) {
+	    $subject_field =~ s/\[$tag_regexp\]/\[$parsed_tag[0]\]/;
+	}else {
+	    $subject_field = '['.$parsed_tag[0].']'.$subject_field
+	}
+	$msg->head->add('Subject', $subject_field);
     }
- 
-    ## Who is the enveloppe sender ?
+
     my $host = $self->{'admin'}{'host'};
     my $from = "$name-owner\@$host";
     
@@ -2623,7 +2630,7 @@ sub delete_user_db {
     foreach my $who (@users) {
 	my $statement;
 	
-	$who = lc($who);
+	$who = &tools::clean_email($who);
 	
 	## Update field
 	$statement = sprintf "DELETE FROM user_table WHERE (email_user =%s)", $dbh->quote($who); 
@@ -2654,7 +2661,7 @@ sub delete_user {
 	}
 	    
 	foreach my $who (@u) {
-	    $who = lc($who);
+	    $who = &tools::clean_email($who);
 	    my $statement;
 	    
 	    $list_cache{'is_user'}{$name}{$who} = undef;    
@@ -2673,7 +2680,7 @@ sub delete_user {
 	my $users = $self->{'users'};
 
 	foreach my $who (@u) {
-	    $who = lc($who);
+	    $who = &tools::clean_email($who);
 	    
 	    delete $self->{'users'}{$who};
 	    $total-- unless (exists $users->{$who});
@@ -2722,8 +2729,15 @@ sub get_default_user_options {
 sub get_total {
     my $self = shift;
     my $name = $self->{'name'};
+    my $option = shift;
     &do_log('debug3','List::get_total(%s)', $name);
 
+    if (($self->{'admin'}{'user_data_source'} eq 'database') ||
+	($self->{'admin'}{'user_data_source'} eq 'include2')) {
+	if ($option eq 'nocache') {
+	    $self->{'total'} = _load_total_db($self->{'name'});
+	}
+    }
 #    if ($self->{'admin'}{'user_data_source'} eq 'database') {
 	## If stats file was updated
 #	my $time = (stat("$name/stats"))[9];
@@ -2737,7 +2751,7 @@ sub get_total {
 
 ## Returns a hash for a given user
 sub get_user_db {
-    my $who = lc(shift);
+    my $who = &tools::clean_email(shift);
     do_log('debug2', 'List::get_user_db(%s)', $who);
 
     my $statement;
@@ -2836,7 +2850,7 @@ sub get_all_user_db {
 ## Returns a subscriber of the list.
 sub get_subscriber {
     my  $self= shift;
-    my  $email = lc(shift);
+    my  $email = &tools::clean_email(shift);
     
     do_log('debug2', 'List::get_subscriber(%s)', $email);
 
@@ -3067,7 +3081,7 @@ sub get_first_user {
 	    
 	    ## LIMIT clause
 	    if (defined($rows) and defined($offset)) {
-		$statement .= sprintf " LIMIT %d, %d", $rows, $offset;
+		$statement .= sprintf " LIMIT %d OFFSET %d", $rows, $offset;
 	    }
 	}
 	push @sth_stack, $sth;
@@ -3366,7 +3380,7 @@ sub get_total_bouncing {
 
 ## Is the person in user table (db only)
 sub is_user_db {
-   my $who = lc(pop);
+   my $who = &tools::clean_email(pop);
    do_log('debug3', 'List::is_user_db(%s)', $who);
 
    return undef unless ($who);
@@ -3409,7 +3423,7 @@ sub is_user_db {
 ## Is the indicated person a subscriber to the list ?
 sub is_user {
     my ($self, $who) = @_;
-    $who= lc($who);
+    $who = &tools::clean_email($who);
     do_log('debug3', 'List::is_user(%s)', $who);
     
     return undef unless ($self && $who);
@@ -3469,7 +3483,7 @@ sub is_user {
 sub update_user {
     my($self, $who, $values) = @_;
     do_log('debug2', 'List::update_user(%s)', $who);
-    $who = lc($who);    
+    $who = &tools::clean_email($who);    
 
     my ($field, $value);
     
@@ -3599,7 +3613,7 @@ sub update_user {
 sub update_user_db {
     my($who, $values) = @_;
     do_log('debug2', 'List::update_user_db(%s)', $who);
-    $who = lc($who);
+    $who = &tools::clean_email($who);
 
     unless ($List::use_db) {
 	&do_log('info', 'Sympa not setup to use DBI');
@@ -3673,7 +3687,7 @@ sub add_user_db {
     ## encrypt password   
     $values->{'password'} = &tools::crypt_password($values->{'password'}) if $values->{'password'};
     
-    return undef unless (my $who = lc($values->{'email'}));
+    return undef unless (my $who = &tools::clean_email($values->{'email'}));
     
     return undef if (is_user_db($who));
     
@@ -3733,7 +3747,7 @@ sub add_user {
 	}	   
 	
 	foreach my $new_user (@new_users) {
-	    my $who = lc($new_user->{'email'});
+	    my $who = &tools::clean_email($new_user->{'email'});
 
 	    next unless $who;
 
@@ -3773,7 +3787,7 @@ sub add_user {
 	my (%u, $i, $j);
 	
 	foreach my $new_user (@new_users) {
-	    my $who = lc($new_user->{'email'});
+	    my $who = &tools::clean_email($new_user->{'email'});
 	    
 	    next unless $who;
 	    
@@ -5000,7 +5014,7 @@ sub _include_users_remote_sympa_list {
 	do_log('err', 'Include remote list https://%s:%s/%s using cert %s, unable to open %s or %s', $host, $port, $path, $cert,$cert_file,$key_file);
 	return undef;
     }
-
+    
     my $getting_headers = 1;
 
     my %user ;
@@ -5199,7 +5213,7 @@ sub _include_users_file {
 	    &do_log('notice', 'Not an email address: %s', $_);
 	}
 
-	my $email = lc($1);
+	my $email = &tools::clean_email($1);
 	my $gecos = $4;
 
 	next unless $email;
@@ -5305,7 +5319,7 @@ sub _include_users_ldap {
 	## Multiple values
 	if (ref($entry) eq 'ARRAY') {
 	    foreach my $email (@{$entry}) {
-		push @emails, lc($email);
+		push @emails, &tools::clean_email($email);
 		last if ($ldap_select eq 'first');
 	    }
 	}else {
@@ -5321,13 +5335,14 @@ sub _include_users_ldap {
     foreach my $email (@emails) {
 	next if ($email =~ /^\s*$/);
 
+	$email = &tools::clean_email($email);
 	my %u;
 	## Check if user has already been included
 	if ($users->{$email}) {
 	    if ($tied) {
-		%u = split "\n",$users->{$user->{'email'}};
+		%u = split "\n",$users->{$email};
 	    }else {
-		%u = %{$users->{$user->{'email'}}};
+		%u = %{$users->{$email}};
 	    }
 	}else {
 	    %u = %{$default_user_options};
@@ -5471,7 +5486,7 @@ sub _include_users_ldap_2level {
 	    if (ref($entry) eq 'ARRAY') {
 		foreach my $email (@{$entry}) {
 		    next if (($ldap_select2 eq 'regex') && ($email !~ /$ldap_regex2/));
-		    push @emails, lc($email);
+		    push @emails, &tools::clean_email($email);
 		    last if ($ldap_select2 eq 'first');
 		}
 	    }else {
@@ -5489,14 +5504,14 @@ sub _include_users_ldap_2level {
     foreach my $email (@emails) {
 	next if ($email =~ /^\s*$/);
 
-	
+	$email = &tools::clean_email($email);
 	my %u;
 	## Check if user has already been included
 	if ($users->{$email}) {
 	    if ($tied) {
-		%u = split "\n",$users->{$user->{'email'}};
+		%u = split "\n",$users->{$email};
 	    }else {
-		%u = %{$users->{$user->{'email'}}};
+		%u = %{$users->{$email}};
 	    }
 	}else {
 	    %u = %{$default_user_options};
@@ -5600,13 +5615,14 @@ sub _include_users_sql {
 	## Empty value
 	next if ($email =~ /^\s*$/);
 
+	$email = &tools::clean_email($email);
 	my %u;
 	## Check if user has already been included
-	if ($users->{lc($email)}) {
+	if ($users->{$email}) {
 	    if ($tied) {
-		%u = split "\n",$users->{$user->{'email'}};
+		%u = split "\n",$users->{$email};
 	    }else {
-		%u = %{$users->{$user->{'email'}}};
+		%u = %{$users->{$email}};
 	    }
 	}else {
 	    %u = %{$default_user_options};
@@ -6600,6 +6616,11 @@ sub load_topics {
     do_log('debug2', 'List::load_topics(%s)',$robot);
 
     my $conf_file = &tools::get_filename('etc','topics.conf',$robot);
+
+    unless ($conf_file) {
+	&do_log('err','No topics.conf defined');
+	return undef;
+    }
 
     my $topics = {};
 

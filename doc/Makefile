@@ -120,6 +120,21 @@ rmaux:
 
 distrib: all rmaux
 
+makedir:
+	@if [ ! -d $(DESTDIR)$(DOCDIR) ]; then \
+		echo "Creating required directory $(DESTDIR)$(DOCDIR)"; \
+		mkdir -p $(DESTDIR)$(DOCDIR); \
+	fi
+
+install: makedir 
+	@for f in sympa.tex sympa.ps sympa.pdf; do \
+		echo "Installing documentation...$(DESTDIR)$(DOCDIR)/$$f"; \
+		cp -f $$f $(DESTDIR)$(DOCDIR); \
+	done
+	@if [  -d $(DESTDIR)$(DOCDIR)/sympa ]; then \
+		rm -rf $(DESTDIR)$(DOCDIR)/sympa; \
+	fi
+	cp -R sympa/ $(DESTDIR)$(DOCDIR)
 
 
 

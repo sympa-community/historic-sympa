@@ -3,6 +3,165 @@
 
 (See Changelog file for the full changes log)
 
+3.4.3		24 January 2003
+
+   CHanges :
+
+*****	[BugID 99] Pg 7.3 no longer supports the LIMIT #,# syntax
+
+	List.pm, etc/script/create_db.Pg: [E. Dreyfus] [reported by pamelant AT nerim.net] :	
+	Postgresql 7.3 has no support for not SQL standard type 'datetime'.  
+*****	If you are upgrading from	a previous Sympa version, you should update 
+*****	your sympa DB as follows : 
+*****	ALTER TABLE subscriber_table CHANGE date_subscriber timestamp with time zone NOT NULL; 
+*****	ALTER TABLE subscriber_table CHANGE update_subscriber timestamp with time zone;
+
+	wwsympa.fcgi, List.pm: otal subscribers is now updated more often, based on DB entries
+
+	src/task_manager.pl: Fix problems with REMIND task, it has been	reactivated
+
+	Makefile.am, Makefile.in, wwsympa/archived.pl: Create 'arc_path' directory if not created ; 
+	also check access
+
+	doc/: Now all path in documentation use	XXXDIR variables.  This should be used by packagers 
+	to do a "make documentation" so the documentation refer to correct path.
+
+	src/etc/sample/Makefile: install sample liste in sampledir instead of expldir
+
+	[G. Paressant]: New sympa.spec and build procedure for Mandrake.  New parameters are 
+	available in configure : with-etcdir, with-nlsdir, with-scriptdir, with-sampledir,
+	with-spooldir,with-docdir. Documentation is now installed.
+
+	src/etc/script/arc2webarc.pl: [proposed by A. Bernstein] : make the script VRobot-compatible
+
+	src/etc/topics.conf: ignore topics if no topics.conf was found. 
+	Also install a default topics.conf
+
+	src/tools.pl: Change: extend escaped characters in URLs.  JC Delepine has reported a 
+	problem with 0xB0 char not escaped in document repository
+
+   Bug fixes :
+
+	src/List.pm: If custom_subject is found in the subject,	don't move it at the beginning of 
+	the subject. This prevents Re: Re: Re: subjects
+
+	src/sympa.pl: 'antivirus_notify' was only used in message forarding context
+
+	src/List.pm: get_total() with lists in 'include' mode
+
+	new variable [previous_email] for scenario subscribe used only for change_email
+	action. It allows to accept change email by subscriber without request to
+	list owner even if new subscribtion need owner control.
+
+	wwsympa/wwsympa.fcgi: Fix: looking for subscribers.closed.dump in the wrong directory. 
+	Could not restore subscribers for lists in a Virtual Robot.
+
+	src/List.pm: [reported by A. Delvaux] Fix: incorrect format of List-ID header field
+	
+	src/Makefile: Fix: Aliaswraper was installed with wrong	attributes (sympa instead of root). 
+	Could not run newaliases
+
+	src/sympa_wizard.pl: [reported by cm AT coretec.at] : sympa_wizard created sympa.conf 
+	with old parameter 'trusted_ca_options'
+
+	wwsympa/wwsympa.fcgi: [reported by H. S. Rai] Links in summaries failed if message-id contained 
+	a dash ('-'). Mhonarc escapes these chars in HTML messages.
+
+	wwsympa/wwsympa.fcgi: also escape () in arcsearch_id. Also escape these chars in arcsearch
+
+	src/sympa_wizard.pl: [reported by G. Paressant] Fix: when building RPMs conf files were 
+	not searched at the right place
+
+	Makefile.in, src/Makefile: [reported by Oracle AT provocation.net] [BugID 79] : 
+	'make install' was doing a non-selective chown/chgrp -R on sbin/ directory. Now only installed
+	files are concerned.
+
+	Makefile.am, Makefile.in: [reported by G. Paressant] Fix: DESTDIR env variable was not set 
+	when running the wizard
+
+	ChangeLog, Makefile.am: [Guy Paressant] Fix: refered to SBINDIR	instead of LIBDIR
+
+	wwsympa/wwsympa.fcgi: [Marco AT porciletto.org] : editsubscriber failed with some 
+	versions of web_templates (including Italian) not recently updated.
+
+	src/Conf.pm: Fix: 'web_archive_spam_protection' not recognized as robot.conf parameter
+
+	wwsympa/wwsympa.fcgi: Fix: only rebuild archives of the current	VRobot
+
+	src/List.pm: Bug Fix: missing trailing boundary to the confirm	message
+
+	src/etc/scenari/: info.private, review.intranet, visibility.intranet: [O. Lacroix] : 
+	Owners and editors were not accepted
+
+	wwsympa/: editsubscriber failed if the owner was subscriber of the list. do_editsubscriber()
+	was using 'subscriber' variable already used.
+
+	src/etc/templates/: [reported by R. Salmon] Fix: rejection of pending lists was not coded
+
+	wwsympa/wwsympa.fcgi: wwsympa would die under certain circumstances if LDAP Bind 
+	failed with error mewssage : "Can't call method "code" on an undefined value"
+
+	doc/:  Missing documentation for 'authentication_info_url' in auth.conf
+
+	wwsympa/: wwsympa.fcgi, wws_templates/fr/error.fr.tpl,
+	wws_templates/us/error.us.tpl:  wwsympa would prompt a 'template error' if an LDAP 
+	user requested a password reminder when	the authentication_info_url URL was not defined 
+	in auth.conf. Now return an error message.
+
+3.4.2		25 October 2002
+
+
+   Bug fixes :
+
+	List.pm, tools.pl: [reported by G. Paressant] : if email entries returned 
+	by List::_include_users_ldap() contained spaces characters, then the database 
+	update could lead to a "duplicate entry error", causing the List::sync_include() to fail
+
+	src/List.pm: [BugID 63] [reported by G. Paressant]: sync_include() made the task_manager 
+	die if duplicate emails	where found in SQL or LDAP query result
+
+	src/sympa_wizard.pl: [BugID 58] [reported by Xavier AT cs.gouv.qc.ca] : 
+	sympa_wizard used temporary files in /tmp/ ; if	/tmp/ was an a different filesystem than /etc/, 
+	then the rename() would fail. No more use temporary files.  Change: only warn if rename() of 
+	previous cong files failed
+
+	wwsympa/wwsympa.fcgi: [O. Lacroix] : wrong comparison operator for reloading wwsympa
+
+3.4.1		17 October 2002
+
+   Bug fixes :
+
+	src/Commands.pm: Fix: Sympa would use part of the email address as the user name.  
+	Fix regular expretion usage
+
+	wwsympa/wwsympa.fcgi: [reported by Philippe Amelant] incorect command for remove_aliases
+
+3.4		15 October 2002
+
+   Changes :
+
+
+
+   Bug fixes :
+
+	[reported by O. Lacroix & V. Mathieu] Better syntaxical checks on email addresses ; 
+	also lowercase
+
+	src/List.pm: 'db_env' no more a multiple parameter ; variables/values pairs should be 
+	separated by ';' Fixes the problem with 'ARRAYxxxx' appearing in the 'db_env' entry of 
+	edit_list web form
+
+	src/etc/list_aliases.tpl: Fix: incorrect alias parameters
+	
+	[BugID 50] allow (privileged) listowner to close/restore list.  
+	Also allow shared opening/closure
+
+	wwsympa/wwsympa.fcgi: [BugID 52] Fix : Moderated messages were not accessible from the web 
+	interface. WWSympa runs as user	'sympa' and the mhonarc process that generates HTML version of
+	moderated messages also requires to run as user 'sympa'. Obviously Perl refused to allow this 
+	script to run as SetUID 'sympa' because	mhonarc had double quotes (") in its argument.
+
+
 3.3.6b.6	03 October 2002
 
    Changes :
@@ -80,7 +239,7 @@
 
 *****	wwsympa.conf parameter 'alias_manager' no more used
 *****	Sympa now always uses alias_manager.pl script ; installed aliases can be customized 
-*****	via the 'list_aliases.tpl' file
+*****	via the 'list_aliases.tpl' file (can be done via sympa admin web interface)
 
 	New Message.pm module that provide a complex message object including S/MIME information.  
 	This should fix the bug	related to moderation of crypted messages
@@ -127,9 +286,12 @@
 	separated list of recipient.  (exim). Reported by Stefan Hornburg
 	<racke AT linuxia.de>
   
-	Introduce a 2 new parameters in sympa;conf : spam_protection and
-	web_archive_spam_protection. They are use to define the way that 
-	sympa protect email adrersses from spambot. "cookie" "at" "javascript" "none"
+*****	Introduce a 2 new parameters in sympa;conf : spam_protection and
+*****	web_archive_spam_protection. They are use to define the way that 
+*****	sympa protect email adrersses from spambot. "cookie" "at" "javascript" "none"
+*****	Because mhonarc ressources as changed, you MUST rebuild all archives
+*****   otherwise old archive are unprotected. (Use rebuild button in sympa
+*****   admin page).
 
 	New [SETOPTION ignore_undef] in parser
 
