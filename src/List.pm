@@ -2395,7 +2395,7 @@ sub send_msg_digest {
     return if (($#tabrcptsummary == -1) and ($#tabrcpt == -1));
 
     my $old = $/;
-    $/ = "\n\n" . $msg::separator . "\n\n";
+    $/ = "\n\n" . $tools::separator . "\n\n";
 
     ## Digest split in individual messages
     open DIGEST, $filename or return undef;
@@ -6225,7 +6225,7 @@ sub store_digest {
     do_log('debug3', 'List::store_digest');
 
     my($filename, $newfile);
-    my $separator = $msg::separator;  
+    my $separator = $tools::separator;  
 
     unless ( -d "$Conf{'queuedigest'}") {
 	return;
@@ -6242,13 +6242,13 @@ sub store_digest {
 	printf OUT "\nThis digest for list has been created on %s\n\n",
       POSIX::strftime("%a %b %e %H:%M:%S %Y", @now);
 	print OUT "------- THIS IS A RFC934 COMPLIANT DIGEST, YOU CAN BURST IT -------\n\n";
-	print OUT "\n$separator\n\n";
+	printf OUT "\n%s\n\n", $tools::separator;
 
        # send the date of the next digest to the users
     }
     #$msg->head->delete('Received') if ($msg->head->get('received'));
     $msg->print(\*OUT);
-    print OUT "\n$separator\n\n";
+    printf OUT "\n%s\n\n", $tools::separator;
     close(OUT);
     
     #replace the old time

@@ -43,7 +43,6 @@ use Ldap;
 use Message;
 
 require 'tools.pl';
-require 'msg.pl';
 require 'tt2native.pl';
 
 

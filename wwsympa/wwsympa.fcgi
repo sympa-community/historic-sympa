@@ -50,7 +50,6 @@ use Ldap;
 use Mail::Header;
 use Mail::Address;
 
-require "--LIBDIR--/msg.pl";
 require "--LIBDIR--/tools.pl";
 
 ## WWSympa librairies

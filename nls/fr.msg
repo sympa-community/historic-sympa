@@ -151,8 +151,8 @@ leur abonnement. Ce texte doit\n\n\
 69	"%s a posté votre message d'expiration aux adresses suivantes :\n"
 70	"\nService rendu par Sympa %s : http://www.sympa.org/\n"
 71	"Desabonnement de la liste %s"
-72	"Voici les listes dont vous êtes propriétaire :\n\n"
-73	"Voici les listes dont vous êtes modérateur :\n\n"
+72	"\n\nVoici les listes dont vous êtes propriétaire :\n\n"
+73	"\n\nVoici les listes dont vous êtes modérateur :\n\n"
 74	"Authentification demandée à %s pour la commande %s\n"
 75	"Aucun désabonnement possible pour l'adresse %s\n"
 76	"Rappel de votre abonnement dans la liste %s"
@@ -182,14 +182,14 @@ Pour confirmer cette action veuillez :\n\
 - envoyer un courrier à '%s' avec pour sujet\n%s\nOU\n\
 - cliquez l'URL %s )\n\n\
 Si vous ne souhaitez pas que l'action soit entreprise, ignorez simplement\n\
-ce message.\n"
+ce message."
 261	"Quelqu'un (probablement vous) a demandé votre désabonnement de la liste '%s'.\n\n\
 Pour confirmez cette action veuillez :\n\
 - répondre à ce message\nOU\n\
 - envoyer un courrier à '%s' avec pour sujet\n%s\nOU\n\
 - cliquez l'URL %s )\n\n\
 Si vous ne souhaitez pas que l'action soit entreprise, ignorez simplement\n\
-ce message.\n"
+ce message."
 262	"Signature S/MIME correctement vérifiée"
 263	"Message non signé ou signature non reconnue (attention, Sympa ne peut\n verifier une signature S/MIME pour une commande dans l'entête Subject:)"
 
@@ -213,8 +213,8 @@ Ou alors envoyez un mail à %s avec comme sujet :\n\
 CONFIRM %s\n"
 16	"Authentification demandée"
 21	"Pour info %s liste %s de %s %s"
-22	"Pour Info, opération %s dans la liste %s de %s %s \n(aucune action requise)"
-23	"ATTENTION : %s %s a échoué dans une tentative de se désabonner de la liste %s\n(Vous devriez peut-être aider cette personne)"
+22	"Pour Info, opération %s dans la liste %s de %s %s \n(aucune action requise)\n"
+23	"ATTENTION : %s %s a échoué dans une tentative de se désabonner de la liste %s\n(Vous devriez peut-être aider cette personne)\n"
 24	"Demande de desabonnement de la liste %s"
 25	"Cher(s) propriétaires de la liste %s,\n\n\
 Un utilisateur a demandé à être DÉSabonné de votre liste. Pour valider cette,\n\
@@ -222,7 +222,7 @@ demande, vous voudrez bien cliquez sur ce lien :\n\
 mailto:%s?subject=auth%%20%s%%20DEL%%20%s%%20%s\n\n\
 Ou alors envoyez un mail à %s avec comme objet :\n\
 AUTH %s DEL %s %s\n"
-26	"Pour Info, opération %s dans la liste %s de %s %s validée par %s\n(aucune action requise)"
+26	"Pour Info, opération %s dans la liste %s de %s %s validée par %s\n(aucune action requise)\n"
 27	"Le taux de bounces dans la liste %s est de %d%%.\n\n\
 Vous devriez supprimer les abonnés en erreur : \n\
 %s/reviewbouncing/%s"

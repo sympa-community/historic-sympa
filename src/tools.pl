@@ -36,6 +36,8 @@ use File::Find;
 ## global var to store a CipherSaber object 
 my $cipher;
 
+my $separator="------- CUT --- CUT --- CUT --- CUT --- CUT --- CUT --- CUT -------";
+
 ## Sorts the list of adresses by domain name
 ## Input : users hash
 ## Sort by domain.
@@ -109,7 +111,7 @@ sub rejectMessage {
    printf REJ "Content-Type: text/plain; charset=%s\n", gettext("us-ascii");
    printf REJ "Content-Transfer-Encoding: %s\n", gettext("7bit");
    print REJ "\n";
-   printf REJ gettext("The following message was sent to a list while it seems to contain\n"commands like subscribe, unsubscribe, help, index, get, ...\n\n"If your message effectively contained a command, please notice that \n"commands should never ever be sent to lists. Commands must be sent\n"to %s exclusively.\n\n"If your message was effectively addressed to the list, it has been\n"interpreted by the software as a command. Please contact the manager\n"of the service : %s so that they can take care of your message.\n\n"Thank you for your attention.\n\n------ Beginning of suspected message ------\n"), &Conf::get_robot_conf($robot, 'sympa'), &Conf::get_robot_conf($robot, 'request');
+   printf REJ gettext("The following message was sent to a list while it seems to contain\ncommands like subscribe, unsubscribe, help, index, get, ...\n\nIf your message effectively contained a command, please notice that \ncommands should never ever be sent to lists. Commands must be sent\nto %s exclusively.\n\nIf your message was effectively addressed to the list, it has been\ninterpreted by the software as a command. Please contact the manager\nof the service : %s so that they can take care of your message.\n\nThank you for your attention.\n\n------ Beginning of suspected message ------\n"), &Conf::get_robot_conf($robot, 'sympa'), &Conf::get_robot_conf($robot, 'request');
    $msg->print(\*REJ);
    print REJ gettext("------ End of suspected message ------\n");
    close(REJ);

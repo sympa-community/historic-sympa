@@ -163,7 +163,7 @@ sub sendto {
     my $msg;
 
     ## Encode subject before sending
-    $msg_header->replace('Subject', MIME::Words::encode_mimewords($msg_header->get('Subject')));
+    $msg_header->replace('Subject', MIME::Words::encode_mimewords($msg_header->get('Subject'), "Q", gettext("us-ascii")));
 
     if ($encrypt eq 'smime_crypted') {
 	my $email ;

@@ -26,7 +26,7 @@ sbin_SRC	=	sympa.pl alias_manager.pl task_manager.pl sympa_wizard.pl
 bin_SRC		=	queue bouncequeue
 
 lib_SRC		=	Archive.pm Commands.pm Conf.pm \
-			Language.pm List.pm Log.pm mail.pm msg.pl Ldap.pm \
+			Language.pm List.pm Log.pm mail.pm Ldap.pm \
 			smtp.pm tools.pl Version.pm X509.pm Message.pm tt2native.pl \
 			tt2.pl
 
