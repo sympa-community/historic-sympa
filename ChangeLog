@@ -1,3 +1,14 @@
+2003-04-30 13:30  salaun
+
+	* ChangeLog, src/etc/script/Makefile, src/etc/script/mod2html.pl:
+	New feature: provide a script for generating missing HTML views of
+	moderated messages
+
+2003-04-30 13:30  salaun
+
+	* src/etc/script/mod2html.pl: file mod2html.pl was initially added
+	on branch sympa-3_4-branch.
+
 2003-04-29 17:59  salaun
 
 	* src/List.pm: Fix: using wrong log subroutine
