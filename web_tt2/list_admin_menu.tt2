@@ -4,7 +4,7 @@
 
 [% IF action == 'admin' %][% SET class = 'menuLinksCurrentPage' %][% ELSE %][% SET class = 'menuLinks' %][% END %]
 <strong><a class="[% class %]" href="[% path_cgi %]/admin/[% list %]">Admin</a></strong><br />
-<ul>
+<ul class="menuLinks">
 
 [% IF action == 'edit_list_request' %][% SET class = 'menuLinksCurrentPage' %][% ELSE %][% SET class = 'menuLinks' %][% END %]
 <li><a class="[% class %]" href="[% path_cgi %]/edit_list_request/[% list %]">[%|loc%]Edit List Config[%END%]</a></li>

@@ -3,8 +3,18 @@
 <!-- begin login_menu.tt2 -->
 
 [% IF user.email %]
-   [% IF auth_method == 'md5' %]
-      <div class="MenuBlock">
+
+<div class="MenuBlock">
+<div id="Identity" style="text-align: left; font-size: 12px; font-weight: bold; ">[% user.email %]<br />
+[% IF is_listmaster %][%|loc%]Listmaster[%END%]
+[% ELSIF is_privileged_owner %][%|loc%]Privileged owner[%END%]
+[% ELSIF is_owner %][%|loc%]Owner[%END%]
+[% ELSIF is_editor %][%|loc%]Editor[%END%]
+[% ELSIF is_subscriber %][%|loc%]Subscriber[%END%]
+[% END %]
+</div>
+
+  [% IF auth_method == 'md5' %]
 	<form action="[% path_cgi %]" method="post">
 	<input type="hidden" name="action" value="logout" />
         [% IF referer %]
@@ -14,8 +24,8 @@
         [% END %]
         <input type="submit" name="action_logout" value="[%|loc%]Logout[%END%]" />
 	</form>
-      </div><!-- end div=MenuBlock -->
    [% END %]
+      </div><!-- end div=MenuBlock -->
 [% ELSE %]
       <div class="MenuBlock">
       

@@ -49,7 +49,8 @@ SEARCH_FORM
 	<input name="key_word"     type="text"   size="17" />
 	<input name="action"  type="hidden" value="arcsearch" />
 	<input type="submit" name="action_arcsearch" value="($tag$%|loc%$tag$)Search($tag$%END%$tag$)" /> &nbsp;
-	<a href="($tag$% path_cgi %$tag$)/arcsearch_form/($tag$% list %$tag$)/($tag$% archive_name %$tag$)">($tag$%|loc%$tag$)Advanced search($tag$%END%$tag$)</a>
+	<input type="submit" name="action_arcsearch_form" value="($tag$%|loc%$tag$)Advanced search($tag$%END%$tag$)" />
+
 	</form>
 </DefineVar>
 
@@ -58,7 +59,6 @@ TOP_PANEL
 <div id="ActionHeader">
    $CALENDAR$
    $SEARCH_FORM$
-
    <div style="text-align: center;"><strong>$PRINTABLE_MONTH$&nbsp;&nbsp;&nbsp;$NUMOFMSG$ ($tag$%|loc%$tag$)mails($tag$%END%$tag$)</strong></div><br />
    Pages navigation : <br />
 </div>
@@ -179,12 +179,18 @@ IDXPGEND
 [%TAGS ($tag$% %$tag$) %]
 
 <!-- begin header -->
-$TOP_PANEL$
+<div id="ActionHeader">
+   $CALENDAR$
+   $SEARCH_FORM$
+   <div style="text-align: center;"><strong>$PRINTABLE_MONTH$&nbsp;&nbsp;&nbsp;$NUMOFMSG$ ($tag$%|loc%$tag$)mails($tag$%END%$tag$)</strong></div><br />
+   Pages navigation : <br />
+
   <span style="float: right">
     <a class="ArcMenuLinksCurrentPage" href="mail$PAGENUM$.html">($tag$%|loc%$tag$)chronological($tag$%END%$tag$)</a>
     <a class="ArcMenuLinks" href="thrd$PAGENUM$.html">($tag$%|loc%$tag$)Thread($tag$%END%$tag$)</a>
   </span>  
   $PREVPGLINK$ ($tag$%|loc($PAGENUM$,$NUMOFPAGES$)%$tag$)page # %1/%2($tag$%END%$tag$) $NEXTPGLINK$   
+</div>
 <!-- end header -->
 </IDXPGBEGIN>
 
@@ -227,7 +233,8 @@ $POWERED_BY$
 </NextPgLink>
 
 <NextPgLinkIA chop>
-<a class="ArcMenuLinksInactive">Next</a><a class="ArcMenuLinksInactive">Last</a>
+<a class="ArcMenuLinksInactive">Next</a>
+<a class="ArcMenuLinksInactive">Last</a>
 </NextPgLinkIA>
 
 <!-- ============================================================== -->
@@ -270,19 +277,25 @@ TIDXPGEND
 
 <THEAD>
 <!-- begin header -->
-$TOP_PANEL$
+<div id="ActionHeader">
+   $CALENDAR$
+   $SEARCH_FORM$
+   <div style="text-align: center"><strong>$PRINTABLE_MONTH$&nbsp;&nbsp;&nbsp;$NUMOFMSG$ ($tag$%|loc%$tag$)mails($tag$%END%$tag$)</strong></div><br />
+   Pages navigation : <br />
+
    <span style="float: right">
      <a class="ArcMenuLinks" href="mail$PAGENUM$.html">($tag$%|loc%$tag$)chronological($tag$%END%$tag$)</a>
      <a class="ArcMenuLinksCurrentPage" href="thrd$PAGENUM$.html">($tag$%|loc%$tag$)Thread($tag$%END%$tag$)</a>
    </span>  
    $PREVPGLINK$ ($tag$%|loc($PAGENUM$,$NUMOFPAGES$)%$tag$)page # %1/%2($tag$%END%$tag$) $NEXTPGLINK$ 
+</div>
 <!-- end header -->
 
 <ul>
 </THEAD>
 
 <TTOPBEGIN>
-<li><b>$SUBJECT$</b>, <em>$FROMNAME$</em><br />
+<li><b>$SUBJECT$</b>, <em>$FROMNAME$</em>
 </TTOPBEGIN>
 
 <TTOPEND>
@@ -300,19 +313,23 @@ $POWERED_BY$
 
 <!-- links definition -->
 <TPrevPgLink chop>
-<font size="-1" face="Arial,Helvetica" color="($tag$% dark_color %$tag$)"><a href="$TFIRSTPG$"><img src="($tag$% icons_url %$tag$)/begin.png" alt="First" height="20" border="0" align="middle"></a>&nbsp;<a href="$TPREVPG$"><img src="($tag$% icons_url %$tag$)/left.png" alt="Previous" height="20" border="0" align="middle"></a></font>
+<a class="ArcMenuLinks" href="$TFIRSTPG$">First</a>
+<a class="ArcMenuLinks" href="$TPREVPG$">Previous<:a>
 </TPrevPgLink>
 
 <TPrevPgLinkIA chop>
-<li class="ArcMenuLinksInactive">Next</li><li class="ArcMenuLinksInactive">Last</li>
+<li class="ArcMenuLinksInactive">Next</li>
+<li class="ArcMenuLinksInactive">Last</li>
 </TPrevPgLinkIA>
 
 <TNextPgLink chop>
-<font size="-1" face="Arial,Helvetica" color="($tag$% dark_color %$tag$)"><a href="$TNEXTPG$"><img src="($tag$% icons_url %$tag$)/right.png" alt="Next" HEIGHT="20" border="0" align="center"></a>&nbsp;&nbsp;<a href="$TLASTPG$"><img src="($tag$% icons_url %$tag$)/end.png" alt="Last" height="20" border="0" align="middle"></a></font>
+<a  class="ArcMenuLinks" href="$TNEXTPG$">Next</a>
+<a class="ArcMenuLinks"  href="$TLASTPG$">Last</a>
 </TNextPgLink>
 
 <TNextPgLinkIA chop>
-<li class="ArcMenuLinksInactive">Next</li><li class="ArcMenuLinksInactive">Last</li>
+<a class="ArcMenuLinksInactive">Next</a>
+<a class="ArcMenuLinksInactive">Last</a>
 </TNextPgLinkIA>
 
 <!-- ================================================================== -->

@@ -1,16 +1,6 @@
 <!-- $Id$ -->
 
 <!-- begin title.tt2 -->
-[% IF user.email %]
-<div id="Clock" style="text-align: center;">[% user.email %]<br />
-[% IF is_listmaster %][%|loc%]Listmaster[%END%]
-[% ELSIF is_privileged_owner %][%|loc%]Privileged owner[%END%]
-[% ELSIF is_owner %][%|loc%]Owner[%END%]
-[% ELSIF is_editor %][%|loc%]Editor[%END%]
-[% ELSIF is_subscriber %][%|loc%]Subscriber[%END%]
-[% END %]
-</div>
-[% END %]
 <div id="Logo"><a href="./"><!--<img src=""/>--></a></div>
 <div id="Title" style="text-align: center;"><h1>[% main_title %]</h1><br /><h2>[% subtitle %]</h2></div><br />
 <div id="top"><a class="displayNone" href="#Paint">Skip to Content.</a></div>
