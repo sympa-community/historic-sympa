@@ -472,7 +472,7 @@ locale:
 	$(MAKE) SH='${SH}' CC='${CC}' CFLAGS='${CFLAGS}' PERL='${PERL}' \
 	DIR='${DIR}' NLSDIR='${NLSDIR}' ETCBINDIR='${ETCBINDIR}' \
 	DESTDIR='${DESTDIR}' CONFIG='${CONFIG}' WWSCONFIG='${WWSCONFIG}' \
-	LOCALEDIR='${prefix}/locale' \
+	LOCALEDIR='${prefix}/locale' SCRIPTDIR='${SCRIPTDIR}' \
 	USER='${USER}' GROUP='${GROUP}') || exit 1;
 
 installlocale:
@@ -482,6 +482,14 @@ installlocale:
 	DESTDIR='${DESTDIR}' CONFIG='${CONFIG}' WWSCONFIG='${WWSCONFIG}' \
 	LOCALEDIR='${prefix}/locale' \
 	USER='${USER}' GROUP='${GROUP}' install) || exit 1;
+
+updatelocale: 
+	@(cd po && echo "make update-po in po/...." && \
+	$(MAKE) SH='${SH}' CC='${CC}' CFLAGS='${CFLAGS}' PERL='${PERL}' \
+	DIR='${DIR}' NLSDIR='${NLSDIR}' ETCBINDIR='${ETCBINDIR}' \
+	DESTDIR='${DESTDIR}' CONFIG='${CONFIG}' WWSCONFIG='${WWSCONFIG}' \
+	LOCALEDIR='${prefix}/locale' SCRIPTDIR='${SCRIPTDIR}' \
+	USER='${USER}' GROUP='${GROUP}' update-po) || exit 1;
 
 installsample:
 	@(cd src/etc/sample && echo "making in src/etc/sample..." && \
