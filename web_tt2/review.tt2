@@ -69,64 +69,64 @@
     <label><input type="checkbox" name="quiet" /> [%|loc%]quiet[%END%]</label>
   [% END %]
 
-    <table border="1">
-      <tr style="background-color: [% light_color %];">
+    <table style="border: solid 1px; width: 95%; margin: 10px">
+      <tr style="background-color: [% color_3 %];">
 	[% IF is_owner %]
-	   <th><span style="font-size: smaller; text-align: center;">X</span></th>
+	   <th style="border: solid 1px;"><span style="font-size: smaller; text-align: center;">X</span></th>
 	[% END %]
 
         [% IF sortby == 'email' %]
-  	    <th style="white-space: nowrap; background-color: [% selected_color %];" colspan="2">
+  	    <th style="white-space: nowrap; background-color: [% color_6 %]; border: solid 1px;" colspan="2">
 	    <span style="font-size: smaller; text-align: center;">[%|loc%]Email[%END%]</span>
 	[% ELSE %]
-	    <th style="white-space: nowrap;" colspan="2">	    
+	    <th style="white-space: nowrap; border: solid 1px;" colspan="2">	    
 	    <span style="font-size: smaller; text-align: center;"><a href="[% path_cgi %]/review/[% list %]/1/[% size %]/email">[%|loc%]Email[%END%]</a></span>
 	[% END %]
 	</th>
         [% IF sortby == 'domain' %]
-  	    <th style="white-space: nowrap; background-color: [% selected_color %];">
+  	    <th style="white-space: nowrap; background-color: [% color_6 %]; border: solid 1px;">
 	    <span style="font-size: smaller;text-align: center;">[%|loc%]Domain[%END%]</span>
 	[% ELSE %]
-	    <th style="white-space: nowrap;">
+	    <th style="white-space: nowrap; border: solid 1px;">
 	    <span style="font-size: smaller; text-align: center;">
                <a href="[% path_cgi %]/review/[% list %]/1/[% size %]/domain">[%|loc%]Domain[%END%]</a>
             </span>
 	[% END %]
 	</th>
 	[% IF sortby == 'name' %]
-	<th style="white-space: nowrap; background-color: [% selected_color %];">
+	<th style="white-space: nowrap; background-color: [% color_6 %]; border: solid 1px;">
 	  <span style="font-size: smaller; text-align: center;">[%|loc%]Name[%END%]</span>
 	[% ELSE %]
-	<th style="white-space: nowrap;">
+	<th style="white-space: nowrap; border: solid 1px;">
         <span style="font-size: smaller; text-align: center;">
           <a href="[% path_cgi %]/review/[% list %]/1/[% size %]/name">[%|loc%]Name[%END%]</a>
         </span>
 	[% END %] 
 	</th>
         [% IF is_owner %]
-	  <th><span style="font-size: smaller; text-align: center;">[%|loc%]Reception[%END%]</span>
+	  <th style="border: solid 1px;"><span style="font-size: smaller; text-align: center;">[%|loc%]Reception[%END%]</span>
 	  </th>
 	  [% IF list_conf.user_data_source == 'include2' %]
          [% IF sortby == 'sources' %]
-  	    <th style="white-space: nowrap; background-color: [% selected_color %];">
+  	    <th style="white-space: nowrap; background-color: [% color_6 %]; border: solid 1px;">
 	    <span style="font-size: smaller; text-align: center;">[%|loc%]Sources[%END%]</span>
 	[% ELSE %]
-	    <th style="white-space: nowrap;">
+	    <th style="white-space: nowrap; border: solid 1px;">
 	    <span style="font-size: smaller; text-align: center;"><a href="[% path_cgi %]/review/[% list %]/1/[% size %]/sources" >[%|loc%]Sources[%END%]</a></span>
 	[% END %]
 	</th>
           [% END %]
 	  [% IF sortby == 'date' %]
-  	    <th style="white-space: nowrap; background-color: [% selected_color %];">
+  	    <th style="white-space: nowrap; background-color: [% color_6 %]; border: solid 1px;">
 	    <span style="font-size: smaller; text-align: center;">[%|loc%]Sub date[%END%]</span>
 	  [% ELSE %]
-	    <th style="white-space: nowrap;">
+	    <th style="white-space: nowrap; border: solid 1px;">
             <span style="font-size: smaller; text-align: center;"><a href="[% path_cgi %]/review/[% list %]/1/[% size %]/date" >[%|loc%]Sub date[%END%]</a></span>
 	  [% END %]
           </th>
-	  <th><span style="font-size: smaller; text-align: center;">Last update</span></th>
+	  <th style="border: solid 1px;"><span style="font-size: smaller; text-align: center;">Last update</span></th>
 	  [% IF additional_fields %]
-	  <th><span style="font-size: smaller;text-align: center; ">[% additional_fields %]</span></th>
+	  <th style="border: solid 1px;"><span style="font-size: smaller;text-align: center; ">[% additional_fields %]</span></th>
 	  [% END %]
         [% END %]
       </tr>
@@ -135,7 +135,7 @@
 	[% IF dark == '1' %]
 	  <tr valign="top">
 	[% ELSE %]
-          <tr style="background-color: [% bg_color %];" valign="top">
+          <tr style="background-color: [% color_0 %];" valign="top">
 	[% END %]
 
 	 [% IF is_owner %]
