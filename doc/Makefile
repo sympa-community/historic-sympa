@@ -129,9 +129,10 @@ makedir:
 install: makedir 
 	@for f in sympa.tex sympa.ps sympa.pdf; do \
 		echo "Installing documentation...$(DESTDIR)$(DOCDIR)/$$f"; \
-		cp $$f $(DESTDIR)$(DOCDIR); \
+		cp -f $$f $(DESTDIR)$(DOCDIR); \
 	done
-	cp -R sympa/ $(DESTDIR)$(DOCDIR)
+	rm -rf $(DESTDIR)$(DOCDIR)/sympa
+	cp -Rf sympa/ $(DESTDIR)$(DOCDIR)
 
 
 
