@@ -6791,7 +6791,7 @@ sub probe_db {
 		      'password_user' => 'varchar(40)',
 		      'cookie_delay_user' => 'int(11)',
 		      'lang_user' => 'varchar(10)',
-		      'attributes_user' => 'text'},
+		      'attributes_user' => 'varchar(255)'},
 		     'subscriber_table' => 
 		     {'list_subscriber' => 'varchar(50)',
 		      'user_subscriber' => 'varchar(100)',
