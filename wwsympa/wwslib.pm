@@ -27,7 +27,7 @@ use Exporter;
 @EXPORT = ();
 
 ## Supported web languages
-@languages = ('cs_CZ','de_DE','en_us','es_ES','et_EE',
+@languages = ('cs_CZ','de_DE','en_US','es_ES','et_EE',
 	      'fi_FI','fr_FR','hu_HU','it_IT','nl_NL',
 	      'pl_PL','pt_PT','ro_RO','zh_CN','zh_TW');
 
