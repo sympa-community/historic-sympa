@@ -1,3 +1,12 @@
+2005-01-27 11:01  sympa-authors
+
+	* src/tools.pl: Fix: command detection in messages failed
+
+2005-01-27 09:54  sympa-authors
+
+	* ChangeLog, src/bouncequeue.c, src/queue.c: Fix: Apply fixes to
+	  queue and bouncequeue
+
 2004-11-22 10:59  sympa-authors
 
 	* src/Commands.pm: Fix: 'SIG *' failed ; only unsubscribed from the
