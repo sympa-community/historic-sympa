@@ -1,3 +1,22 @@
+2003-01-24 10:45  salaun
+
+	* NEWS, wwsympa/wwsympa.fcgi: Fix: looking for
+	subscribers.closed.dump in the wrong directory. Could not restore
+	subscribers for lists in a Virtual Robot.
+
+2003-01-24 10:35  salaun
+
+	* src/List.pm: Fix previous changes
+
+2003-01-24 10:30  salaun
+
+	* NEWS, src/List.pm, wwsympa/wwsympa.fcgi: Change: Total
+	subscribers is updated more often, based on DB
+
+2003-01-24 09:57  salaun
+
+	* ChangeLog, NEWS: Re-preparing 3.4.3
+
 2003-01-24 09:48  salaun
 
 	* src/Makefile: Fix: Aliaswraper was installed with wrong
