@@ -1,34 +1,10 @@
-package Sympa::I18N;
-use base 'Locale::Maketext';
-use Locale::Maketext::Lexicon;
-use vars qw/%Lexicon/;
-use Log;
-
-%Lexicon = (_AUTO => 1);
-
-Locale::Maketext::Lexicon->import({
-    '*' => [Gettext => '--PODIR--/*.po'],
-#    _decode => 1,
-});
-
-sub maketext {
-    my $self = shift;
-    my $msg = shift;
-
-    &do_log('notice','Maketext: %s', $msg);
-
-    $msg =~ s/%(\d)/[_$1]/g;
-    $self->SUPER::maketext($msg, @_);
-}
-
-1;
-
 package parser;
 
 use strict;
 use Template;
 use CGI::Util;
 use Log;
+use Language;
 
 my $tt2 = Template->new({
     ABSOLUTE => 1,
@@ -42,14 +18,13 @@ my $tt2 = Template->new({
 #POST_CHOMP   => 1,
 	}) or die $!;
 
-my %lh;
-my $currentlh;
+my $current_lang;
 
 sub maketext {
     my ($context, @arg) = @_;
 
     return sub {
-	$currentlh->maketext($_[0], @arg);
+	&Language::maketext($_[0], @arg);
     }
 }
 
@@ -72,8 +47,8 @@ sub parse_tpl {
     s|^/home/sympa/bin/etc/wws_templates/(.*?)(\...)?(\.tpl)|$1.tt2|
 	for values %$data;
 
-    &do_log('notice', 'TPL: %s ; LANG: %s', $template, $data->{lang});
-    $currentlh = ($lh{$data->{lang}} ||= Sympa::I18N->get_handle($data->{lang}));
+#    &do_log('notice', 'TPL: %s ; LANG: %s', $template, $data->{lang});
+    $current_lang = $data->{lang};
 
     unless ($tt2->process($template, $data, $output)) {
 	&do_log('err', 'Failed to parse %s : %s', $template, $tt2->error());

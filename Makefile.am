@@ -164,7 +164,7 @@ main_SRC	=	AUTHORS COPYING ChangeLog INSTALL KNOWNBUGS NEWS README
 LOG_SOCKET_TYPE	=	unix
 #endif
 
-all:	checkcpan sources checkperl checkmhonarc man
+all:	checkcpan sources checkperl checkmhonarc man locale
 
 rpm: build_rh_rpm build_mdk_rpm
 
@@ -235,7 +235,7 @@ clean:
 	$(MAKE) PERL='${PERL}' clean) || exit 1; \
 	done;
 
-install: importantchanges installsrc installnls installwws installpo installman installscript installsample installdir installconfig installdoc
+install: importantchanges installsrc installnls installwws installlocale installman installscript installsample installdir installconfig installdoc
 
 importantchanges:
 	@( 	PERL=$(PERL); export PERL; \
@@ -288,13 +288,21 @@ installwws:
 	PIDDIR='${PIDDIR}' CONFIG='${CONFIG}' WWSCONFIG='${WWSCONFIG}' ETCBINDIR='${ETCBINDIR}' \
 	DESTDIR='${DESTDIR}' USER='${USER}' GROUP='${GROUP}' ICONSDIR='${ICONSDIR}' newinstall) || exit 1;
 
-installpo:
-	@(cd po && echo "making in po...." && \
+locale:
+	@(cd po && echo "making in po/...." && \
 	$(MAKE) SH='${SH}' CC='${CC}' CFLAGS='${CFLAGS}' PERL='${PERL}' \
 	DIR='${DIR}' NLSDIR='${NLSDIR}' ETCBINDIR='${ETCBINDIR}' \
 	DESTDIR='${DESTDIR}' CONFIG='${CONFIG}' WWSCONFIG='${WWSCONFIG}' \
-	PODIR='${prefix}/po' \
-	USER='${USER}' GROUP='${GROUP}' newinstall) || exit 1;
+	LOCALEDIR='${prefix}/locale' \
+	USER='${USER}' GROUP='${GROUP}') || exit 1;
+
+installlocale:
+	@(cd po && echo "making install in po/...." && \
+	$(MAKE) SH='${SH}' CC='${CC}' CFLAGS='${CFLAGS}' PERL='${PERL}' \
+	DIR='${DIR}' NLSDIR='${NLSDIR}' ETCBINDIR='${ETCBINDIR}' \
+	DESTDIR='${DESTDIR}' CONFIG='${CONFIG}' WWSCONFIG='${WWSCONFIG}' \
+	LOCALEDIR='${prefix}/locale' \
+	USER='${USER}' GROUP='${GROUP}' install) || exit 1;
 
 installsample:
 	@(cd src/etc/sample && echo "making in src/etc/sample..." && \

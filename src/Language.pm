@@ -29,10 +29,15 @@ use Carp;
 use strict;
 use Log;
 use Version;
+use Locale::Messages qw (:locale_h :libintl_h);
+use POSIX qw (setlocale);
 
 my %msghash;     # Hash organization is like Messages file: File>>Sections>>Messages
 my %set_comment; #sets-of-messages comment   
-my $current_lang;
+
+## The lang is the NLS catalogue name ; locale is the locale preference
+## Ex: lang = fr ; locale = fr_FR
+my ($current_lang, $current_locale);
 my $default_lang;
 
 ## This was the old style locale naming, used for templates, nls, scenario
@@ -133,8 +138,10 @@ sub Msg_file_open {
 
 sub SetLang {
 ###########
-    my $lang = shift;
-    do_log('debug3', 'Language::SetLang(%s)', $lang);
+    my $locale = shift;
+    do_log('debug3', 'Language::SetLang(%s)', $locale);
+
+    my $lang = $locale;
 
     ## Get the NLS equivalent for the lang
     if (defined $language_equiv{$lang}) {
@@ -150,6 +157,7 @@ sub SetLang {
     }
 	    
     $current_lang = $lang;
+    $current_locale = $locale;
     return 1;
 }#SetLang
 
@@ -173,6 +181,30 @@ sub GetLang {
 ############
 
     return $current_lang;
+}
+
+sub maketext {
+    my $msg = shift;
+
+#    &do_log('notice','Maketext: %s', $msg);
+
+    #$msg =~ s/%(\d)/[_$1]/g;
+    setlocale(LC_MESSAGES, $current_locale);
+    textdomain "sympa";
+    bindtextdomain sympa => '--DIR--/locale';
+    bind_textdomain_codeset sympa => 'iso-8859-1';
+
+    ## xgettext.pl bug adds a \n to multi-lined strings
+    if ($msg =~ /\n.+/m) {
+	$msg .= "\n";
+    }
+
+    my $translation = gettext ($msg);
+
+    ## replace parameters in string
+    $translation =~ s/\%(\d+)/$_[$1-1]/eg;
+
+    return $translation;
 }
 
 1;

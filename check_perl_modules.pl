@@ -43,8 +43,7 @@ use CPAN;
 	     'Net::SSLeay' => '1.16',
 	     'Archive::Zip' => '1.05',
 	     'Bundle::LWP' => '1.09',
-	     'I18N::LangTags' => '0.27',
-	     'Locale::Maketext::Lexicon' => '0.27'
+#	     'Locale::Messages' => '1.00'
 	     );
 
 ### key:left "module" used by SYMPA, 
@@ -57,10 +56,8 @@ use CPAN;
 	     'MIME::Base64' => 'MIME-Base64',
 	     'CGI' => 'CGI',
 	     'File::Spec' => 'File-Spec',
-	     'I18N::LangTags' => 'I18N-LangTags',
-	     'Locale::Maketext' => 'Locale-Maketext',
 	     'Regexp::Common' => 'Regexp-Common',
-	     'Locale::Maketext::Lexicon' => 'Locale-Maketext-Lexicon',
+	     'Locale::Messages' => 'libintl-perl',
 	     'AppConfig' => 'AppConfig',
 	     'Template' => 'Template-Toolkit',
 	     );
@@ -134,7 +131,9 @@ sub check_modules {
 	    $v = $$vs;
 	    $rv = $versions{$mod} || "1.0" ;
 	    ### OK: check version
-	    if ($v ge $rv) {
+	    if (! $v) {
+		printf ("?? no version defined in module\n");
+	    }elsif ($v ge $rv) {
 		printf ("OK (%-6s >= %s)\n", $v, $rv);
 		next;
 	    }else {
