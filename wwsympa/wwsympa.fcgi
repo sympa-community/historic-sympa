@@ -5812,7 +5812,7 @@ sub do_set_pending_list_request {
 	     }elsif (($list->{'admin'}{'user_data_source'} ne 'include2') &&
 		     ($new_admin->{'user_data_source'} eq 'include2')) {
 		 $list->update_user('*', {'subscribed' => 1});
-		 &message('subscribers_update_soon');
+		 &message('subscribers_updated_soon');
 	     }elsif (($list->{'admin'}{'user_data_source'} eq 'include2') &&
 		     ($new_admin->{'user_data_source'} eq 'database')) {
 		 $list->sync_include('purge');
@@ -5875,6 +5875,11 @@ sub do_set_pending_list_request {
      ## to start a new one
      if ($data_source_updated && ($list->{'admin'}{'user_data_source'} eq 'include2')) {
 	 $list->remove_task('sync_include');
+	 if ($list->sync_include()) {
+	     &message('subscribers_updated');
+	 }else {
+	     &error_message('failed_to_include_members');
+	 }
      }
 
      ##Exportation to an Ldap directory
