@@ -2392,7 +2392,7 @@ sub send_msg_digest {
     }
     
     if (($#tabrcptsummary == -1) and ($#tabrcpt == -1)) {
-	&do_log('info', 'No subscriber for sending digest in list %s', $name);
+	&do_log('info', 'No subscriber for sending digest in list %s', $listname);
 	return 0;
     }
 
