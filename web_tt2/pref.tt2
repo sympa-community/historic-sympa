@@ -1,11 +1,8 @@
 <!-- $Id$ -->
 
+          <h2 class="block">[%|loc%]Your environment[%END%]</h2>
+
     <table style="width: 100%;" cellpadding="1" cellspacing="0">
-      <tr valign="top">
-        <th style="background-color: [% dark_color %];" colspan="2">
-          <h2>[%|loc%]Your environment[%END%]</h2>
-        </th>
-      </tr>
       <tr valign="top">
         <td>
           <form action="[% path_cgi %]" method="post">
@@ -65,11 +62,13 @@
 	    [% END %]
 
         </td>
-	<tr valign="top">
-        <th style="background-color: [% dark_color %];" colspan="2">
-           <h2>[%|loc%]Your other email addresses[%END%]</h2>
-        </th>
       </tr>
+      </table>
+
+           <h2 class="block">[%|loc%]Your other email addresses[%END%]</h2>
+
+
+    <table style="width: 100%;" cellpadding="1" cellspacing="0">
       [% IF !unique %]
       <tr valign="top">
       <td>  

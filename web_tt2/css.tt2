@@ -166,7 +166,7 @@ a.actionMenuLinksInactive { border-bottom: 1px solid [% color_2 %]; border-right
 a.actionMenuLinksInactive:hover { border-bottom: 1px solid [% color_2 %]; border-right:  1px solid [% color_10 %]; border-top: 1px solid [% color_10 %]; border-left: 1px solid [% color_10 %]; background: transparent; color: [% color_10 %]; text-decoration: none; padding: 0px 10px 0px 10px;}
 #actionnuLinksInactive {border: 0px solid [% color_2 %]; text-decoration: none; padding: 0px 0px 0px 3px;}
 
-.block {border: 1px dotted [% color_2 %]; padding: 10px;}
+.block {border: 1px dotted [% color_2 %]; padding: 7px;}
 h1.block {text-align: center; background: [% color_4 %];}
 h2.block {text-align: center; background: [% color_4 %];}
 h3.block {text-align: center; background: [% color_4 %];}

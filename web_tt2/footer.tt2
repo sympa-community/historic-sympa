@@ -1,0 +1,20 @@
+<!-- begin footer.tt2 (distrib) -->
+<div id="Footer">
+     <a style="border: 0px; padding: 0px; margin: 0px;" href="http://www.sympa.org">Powered by Sympa [% version %]</a> / <a style="border: 0px; padding: 0px; margin: 0px;" href="http://jigsaw.w3.org/css-validator/check?uri=referer">Valid CSS</a>
+</div>
+
+</div>
+
+<div class="smalltext"><br /><FORM ACTION="[% path_cgi %]" METHOD="POST">
+     <INPUT TYPE="hidden" NAME="action" VALUE="set_lang">
+     <INPUT TYPE="hidden" NAME="previous_action" VALUE="[% action %]">
+     <INPUT TYPE="hidden" NAME="previous_list" VALUE="[% list %]">
+     <SELECT NAME="lang" onchange="this.form.submit();">
+
+     [% FOREACH lang = languages %]
+     <OPTION VALUE="[% lang.key %]" [% lang.value.selected %]>[% lang.value.complete %]
+     [% END %]
+     </SELECT>
+     </FORM>
+</div>
+<!-- end footer.tt2 (distrib) -->
