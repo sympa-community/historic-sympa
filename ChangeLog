@@ -1,3 +1,37 @@
+2003-04-09 16:36  salaun
+
+	* src/etc/script/sympa.spec: [reported by G. Paressant] Restore
+	definition of etc/ subdirectories
+
+2003-04-09 15:57  salaun
+
+	* doc/man8/alias_manager.8, doc/man8/archived.8,
+	doc/man8/bounced.8, Makefile.in, doc/man8/alias_manager.8,
+	doc/man8/archived.8, doc/man8/bounced.8, doc/man8/sympa.8,
+	src/etc/script/sympa.spec: Add missing man pages to CVS
+
+2003-04-09 15:17  salaun
+
+	* Makefile.am: Change: no more clean required in nls/
+
+2003-04-08 17:20  salaun
+
+	* doc/man8/archived.pod: [reported by xavier AT cs.gouv.qc.ca]Fix:
+	no more refer to -dF option
+
+2003-04-08 15:37  salaun
+
+	* Makefile.am, Makefile.in, check_perl_modules.pl, configure,
+	configure.in, doc/sympa.pdf, doc/sympa.ps, doc/sympa.tex,
+	doc/sympa.tex.tpl, nls/Makefile, src/Language.pm: [B. Hortner] New
+	feature: no more use Locale::Msgcat for NLS management, home-made
+	functions instead.  This solves MacOS X users problem that don't
+	have gencat available ;-)
+
+2003-04-08 15:16  salaun
+
+	* ChangeLog: Update
+
 2003-04-08 15:13  salaun
 
 	* Makefile.am, Makefile.in, src/etc/script/sympa.spec: Changes:
