@@ -58,7 +58,7 @@ TOP_PANEL
 <div id="ActionHeader">
    $CALENDAR$
    $SEARCH_FORM$
-   <div class="spacer"></div>
+
    <div style="text-align: center;"><strong>$PRINTABLE_MONTH$&nbsp;&nbsp;&nbsp;$NUMOFMSG$ ($tag$%|loc%$tag$)mails($tag$%END%$tag$)</strong></div><br />
    Pages navigation : <br />
 </div>
@@ -87,7 +87,7 @@ $PRINTABLE_MONTH$
 
 <DefineVar>
 POWERED_BY
-<hr size="1" NOSHADE>
+<hr size="1" noshade>
 <p><font size="-1">
 ($tag$%|loc%$tag$)Archive powered by($tag$%END%$tag$) <a href="$DOCURL$">MhonArc $VERSION$</a>.
 </font></p>
@@ -183,28 +183,25 @@ $TOP_PANEL$
   <span style="float: right">
     <a class="ArcMenuLinksCurrentPage" href="mail$PAGENUM$.html">($tag$%|loc%$tag$)chronological($tag$%END%$tag$)</a>
     <a class="ArcMenuLinks" href="thrd$PAGENUM$.html">($tag$%|loc%$tag$)Thread($tag$%END%$tag$)</a>
-  </span>
-  
-  $PREVPGLINK$ ($tag$%|loc($PAGENUM$,$NUMOFPAGES$)%$tag$)page # %1/%2($tag$%END%$tag$) $NEXTPGLINK$ 
-  
-<div class="spacer"></div>
+  </span>  
+  $PREVPGLINK$ ($tag$%|loc($PAGENUM$,$NUMOFPAGES$)%$tag$)page # %1/%2($tag$%END%$tag$) $NEXTPGLINK$   
 <!-- end header -->
 </IDXPGBEGIN>
 
 <!-- top of message list -->
 <LISTBEGIN>
-<BR />
-<UL>
+<br />
+<ul>
 </LISTBEGIN>
 
 <!-- item of maillist.html -->
 <LITEMPLATE>
-<LI><b>$SUBJECT$</b>, <EM>$FROMNAME$</EM></LI>
+<li><b>$SUBJECT$</b>, <em>$FROMNAME$</em></li>
 </LITEMPLATE> 
 
 <!-- bottom of message list -->
 <LISTEND>
-</UL>
+</ul>
 </LISTEND>  
 
 <!--  maillist.html bottom -->
@@ -220,7 +217,8 @@ $POWERED_BY$
 </PrevPgLink>
 
 <PrevPgLinkIA chop>
-<a class="ArcMenuLinksInactive">First</a><a class="ArcMenuLinksInactive">Previous</a>
+<a class="ArcMenuLinksInactive">First</a>
+<a class="ArcMenuLinksInactive">Previous</a>
 </PrevPgLinkIA>
 
 <NextPgLink chop>
@@ -276,25 +274,23 @@ $TOP_PANEL$
    <span style="float: right">
      <a class="ArcMenuLinks" href="mail$PAGENUM$.html">($tag$%|loc%$tag$)chronological($tag$%END%$tag$)</a>
      <a class="ArcMenuLinksCurrentPage" href="thrd$PAGENUM$.html">($tag$%|loc%$tag$)Thread($tag$%END%$tag$)</a>
-   </span>
-  
+   </span>  
    $PREVPGLINK$ ($tag$%|loc($PAGENUM$,$NUMOFPAGES$)%$tag$)page # %1/%2($tag$%END%$tag$) $NEXTPGLINK$ 
-<div class="spacer"></div>
 <!-- end header -->
 
-<UL>
+<ul>
 </THEAD>
 
 <TTOPBEGIN>
-<LI><b>$SUBJECT$</b>, <EM>$FROMNAME$</EM><BR>
+<li><b>$SUBJECT$</b>, <em>$FROMNAME$</em><br />
 </TTOPBEGIN>
 
 <TTOPEND>
-</LI>
+</li>
 </TTOPEND>
 
 <TFOOT>
-</UL>
+</ul>
 </TFOOT>
 
 <TIDXPGEND>
@@ -304,7 +300,7 @@ $POWERED_BY$
 
 <!-- links definition -->
 <TPrevPgLink chop>
-<FONT SIZE="-1" FACE="Arial,Helvetica" COLOR="($tag$% dark_color %$tag$)"><A HREF="$TFIRSTPG$"><IMG SRC="($tag$% icons_url %$tag$)/begin.png" ALT="First" HEIGHT="20" BORDER="0" ALIGN="middle"></A>&nbsp;<A HREF="$TPREVPG$"><IMG SRC="($tag$% icons_url %$tag$)/left.png" ALT="Previous" HEIGHT="20" BORDER="0" ALIGN="middle"></A></FONT>
+<font size="-1" face="Arial,Helvetica" color="($tag$% dark_color %$tag$)"><a href="$TFIRSTPG$"><img src="($tag$% icons_url %$tag$)/begin.png" alt="First" height="20" border="0" align="middle"></a>&nbsp;<a href="$TPREVPG$"><img src="($tag$% icons_url %$tag$)/left.png" alt="Previous" height="20" border="0" align="middle"></a></font>
 </TPrevPgLink>
 
 <TPrevPgLinkIA chop>
@@ -312,7 +308,7 @@ $POWERED_BY$
 </TPrevPgLinkIA>
 
 <TNextPgLink chop>
-<FONT SIZE="-1" FACE="Arial,Helvetica" COLOR="($tag$% dark_color %$tag$)"><A HREF="$TNEXTPG$"><IMG SRC="($tag$% icons_url %$tag$)/right.png" ALT="Next" HEIGHT="20" BORDER="0" ALIGN="center"></A>&nbsp;&nbsp;<A HREF="$TLASTPG$"><IMG SRC="($tag$% icons_url %$tag$)/end.png" ALT="Last" HEIGHT="20" BORDER="0" ALIGN="middle"></A></FONT>
+<font size="-1" face="Arial,Helvetica" color="($tag$% dark_color %$tag$)"><a href="$TNEXTPG$"><img src="($tag$% icons_url %$tag$)/right.png" alt="Next" HEIGHT="20" border="0" align="center"></a>&nbsp;&nbsp;<a href="$TLASTPG$"><img src="($tag$% icons_url %$tag$)/end.png" alt="Last" height="20" border="0" align="middle"></a></font>
 </TNextPgLink>
 
 <TNextPgLinkIA chop>
@@ -351,10 +347,10 @@ MSGPGEND
 <TOPLINKS>
 <CENTER>
 <div id="ActionHeader">
-   <div style="text-align: center;"><h2>($tag$% subtitle $tag$)</h2></div><br />
+   <div style="text-align: center;"><h2>($tag$% subtitle %$tag$)</h2></div><br />
    <span style="float: right">
-     <a class="ArcMenuLinksCurrentPage" href="$IDXFNAME$#$MSGNUM$">($tag$%|loc%$tag$)chronological($tag$%END%$tag$)</a>
-     <a class="ArcMenuLinks" href="$TIDXFNAME$#$MSGNUM$">($tag$%|loc%$tag$)Thread($tag$%END%$tag$)</a>&nbsp;
+     <a class="ArcMenuLinksCurrentPage" href="$IDXFNAME$#$MSGNUM$">($tag$%|loc%$tag$)chronological($tag$% END %$tag$)</a>
+     <a class="ArcMenuLinks" href="$TIDXFNAME$#$MSGNUM$">($tag$%|loc%$tag$)Thread($tag$% END %$tag$)</a>&nbsp;
    </span>
    <ul id="MainMenuLinks">
      ($tag$%|loc%$tag$)chronological($tag$%END%$tag$) : $PREVBUTTON$ $NEXTBUTTON$&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;($tag$%|loc%$tag$)thread($tag$%END%$tag$) : $TPREVBUTTON$  $TNEXTBUTTON$
@@ -370,11 +366,11 @@ MSGPGEND
 
 <HEADBODYSEP>
 </UL>
-<HR SIZE="1" NOSHADE>
+<hr size="1" noshade>
 </HEADBODYSEP>
 
 <MSGBODYEND>
-<HR SIZE="1" NOSHADE>
+<hr size="1" noshade>
 $TSLICE(10;10;1)$
 </MSGBODYEND>
 
