@@ -459,6 +459,7 @@ $TNEXTBUTTON$
 
 <TD ALIGN=RIGHT bgcolor="[bg_color]">
 <FONT size="-1">
+[IF action=arc]
 [IF user->email]
 <!-- reply to button -->
 <FORM ACTION="[path_cgi]" METHOD=POST>
@@ -536,7 +537,7 @@ $TNEXTBUTTON$
 [ENDIF]
 [ENDIF]
 </FORM>
-
+[ENDIF]
 [ENDIF]
 </FONT>
  </TD>
