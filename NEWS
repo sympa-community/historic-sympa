@@ -40,6 +40,8 @@
 
    Bug fixes :
 
+	src/sympa.pl: 'antivirus_notify' was only used in message forarding context
+
 	src/List.pm: get_total() with lists in 'include' mode
 
 	new variable [previous_email] for scenario subscribe used only for change_email
