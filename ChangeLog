@@ -1,3 +1,17 @@
+2003-01-28 14:24  salaun
+
+	* src/List.pm: Fix: If custom_subject is found in the subject,
+	don't move it at the beginning of the subject. This prevents Re:
+	Re: Re: subjects
+
+2003-01-28 11:28  salaun
+
+	* ChangeLog: Update
+
+2003-01-28 11:28  salaun
+
+	* NEWS: Upd
+
 2003-01-28 11:26  salaun
 
 	* src/sympa.pl: Fix: 'antivirus_notify' was only used in message

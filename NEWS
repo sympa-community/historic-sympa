@@ -40,6 +40,9 @@
 
    Bug fixes :
 
+	src/List.pm: If custom_subject is found in the subject,	don't move it at the beginning of 
+	the subject. This prevents Re: Re: Re: subjects
+
 	src/sympa.pl: 'antivirus_notify' was only used in message forarding context
 
 	src/List.pm: get_total() with lists in 'include' mode
