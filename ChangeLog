@@ -1,3 +1,68 @@
+2003-04-02 17:13  salaun
+
+	* src/etc/script/: arc2webarc.pl, crypt_passwd.pl, init_comment.pl,
+	p12topem.pl: [A. de Pretis] Fix: scripts were looking for libs in
+	the wrong directory (BINDIR instead LIBDIR)
+
+2003-04-02 11:26  salaun
+
+	* src/: Message.pm, sympa.pl: [reported by H. Penning] Bug fix:
+	Sympa would log "Incorrect name" entries when processing messages
+	for -request, -unsubscribe, etc... messages
+
+2003-03-25 10:37  salaun
+
+	* check_perl_modules.pl: Change: set FTP Passive mode for CPAN
+	install to work behind a firewall
+
+2003-03-24 14:20  salaun
+
+	* src/: Commands.pm, sympa.pl: Fix: "no command found in message"
+	when distributing twice a moderated message
+
+2003-03-18 12:02  salaun
+
+	* doc/sympa.tex.tpl: [reported by  X. Renaut] \samplerobot
+	variables not interpreted because of verbatim paragraphs
+
+2003-03-17 09:33  salaun
+
+	* ChangeLog, Makefile.in, doc/sympa.pdf, doc/sympa.ps,
+	doc/sympa.tex, doc/sympa/index.html, doc/sympa/node1.html,
+	doc/sympa/node10.html, doc/sympa/node11.html,
+	doc/sympa/node12.html, doc/sympa/node13.html,
+	doc/sympa/node14.html, doc/sympa/node15.html,
+	doc/sympa/node16.html, doc/sympa/node17.html,
+	doc/sympa/node18.html, doc/sympa/node19.html, doc/sympa/node2.html,
+	doc/sympa/node20.html, doc/sympa/node3.html, doc/sympa/node4.html,
+	doc/sympa/node5.html, doc/sympa/node6.html, doc/sympa/node7.html,
+	doc/sympa/node8.html, doc/sympa/node9.html, doc/sympa/sympa.html,
+	doc/sympa/sympa.ps: Update doc
+
+2003-03-17 09:33  salaun
+
+	* doc/: Makefile, parse_tex.pl, sympa.tex.tpl: [BugID 133]
+	[reported by X. Renaut] Missing paths in documentation ; using Env
+	variables in parse_tex.tpl
+
+2003-03-13 09:45  salaun
+
+	* src/Ldap.pm, src/sympa.pl, wwsympa/wwsympa.fcgi: [BugID 131] [G.
+	Paressant] Fix:  Incorrect LDAP password crashes wwsympa ; fixed
+	similar code in Ldap.pm
+
+2003-03-05 15:21  salaun
+
+	* src/List.pm: [BugID 121] [reported by G. Paressant] Fix: import
+	problems with include2.  Now set 'subscribed' DB field in
+	&user_add() if required
+
+2003-02-27 11:30  salaun
+
+	* src/List.pm, wwsympa/wwsympa.fcgi: [reported by P. Maes] Fix
+	urlize-related problems: missing quotes around URL.  Escaped chars
+	in URL need to be re-escaped in wwsympa
+
 2003-02-24 17:46  salaun
 
 	* src/List.pm: [G. Bittencourt] Fix: incorrect Sybase (DBD::Sybase
