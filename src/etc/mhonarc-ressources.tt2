@@ -15,9 +15,9 @@ reference other variables.
 
 <DefineVar>
 CALENDAR
-<div style="float: right; padding: 3px;">
+<div id="ArcCalendar">
     ($tag$% FOREACH year = calendar %$tag$)
-        <div class="navBar printNone">
+        <div>
         <ul class="calendar">
         <li class="calendarLinksInactive">($tag$% year.key %$tag$)</li>
    	($tag$% FOREACH mounth = ['01' '02' '03' '04' '05' '06' '07' '08' '09' '10' '11' '12'] %$tag$)

@@ -45,6 +45,7 @@ body {
 #menuInactive {padding-left: 20px}
 #menuInactive2 {font-size: 14px; text-decoration: none;}
 #FormLabel {font-size: 12px; font-weight: bold;}
+#ArcCalendar {padding-bottom: 10px;}
 /* #SITELINKS {position: relative; text-align: center;} */
 ul#MainMenuLinks li {list-style: none; display: inline;}
 
@@ -169,11 +170,12 @@ ul a.menuLinks {padding: 0px 10px 0px 20px;}
 ul a.menuLinksCurrentPage {padding: 0px 10px 0px 40px; font-weight: bold;}
 ul a.menuLinksCurrentPage:hover {padding: 0px 10px 0px 40px; font-weight: bold; text-decoration: none;}
 
-ul.calendar li {list-style: none; display: inline;}
-ul li.calendarLinks {list-style: none; display: inline; padding: 0px 1px 0px 2px; text-decoration: none; font-size: 10px; background: [% color_13 %]; border: 1px solid [% color_2 %];}
-ul li.calendarLinksCurrentPage {list-style: none; display: inline; padding: 0px 1px 0px 2px; text-decoration: none; font-size: 10px; background: [% color_6 %]; border: 1px solid [% color_2 %];}
-ul li.calendarLinksCurrentPage:hover {list-style: none; display: inline; padding: 0px 1px 0px 2px; text-decoration: none; font-size: 10px; background: [% color_6 %]; border: 1px solid [% color_2 %];}
-ul li.calendarLinksInactive {list-style: none; display: inline; padding: 0px 1px 0px 2px; text-decoration: none; font-size: 10px ; border: 1px solid [% color_2 %];}
+
+ul.calendar li {list-style: none; display: inline; padding: 0px 1px 0px 2px; font-size: 10px; text-decoration: none; border: 1px solid [% color_2 %];}
+ul li.calendarLinks {background: [% color_13 %];}
+ul li.calendarLinksCurrentPage {background: [% color_6 %];}
+ul li.calendarLinksCurrentPage:hover {background: [% color_6 %];}
+ul li.calendarLinksInactive {}
 
 a img {border: 0px;}
 a {text-decoration: none;}
