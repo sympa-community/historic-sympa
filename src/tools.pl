@@ -820,6 +820,7 @@ sub split_mail {
     my $message = shift ; 
     my $pathname = shift ;
     my $dir = shift ;
+    &do_log('debug2', 'tools::split_mail()');
 
     my $head = $message->head ;
     my $body = $message->body ;
@@ -852,7 +853,7 @@ sub split_mail {
 
 	    ## Store body in file 
 	    unless (open OFILE, ">$dir/$pathname.$fileExt") {
-		print STDERR "Unable to open $dir/$pathname.$fileExt\n" ;
+		&do_log('err', "Unable to open $dir/$pathname.$fileExt") ;
 		return undef ; 
 	    }
 	    
@@ -877,10 +878,9 @@ sub split_mail {
 	    printf "\t-------\t Create file %s\n", $pathname.'.'.$fileExt ;
 	    
 	    ## Delete files created twice or more (with Content-Type.name and Content-Disposition.filename)
-	    $message->purge ;
-    
-	
+	    $message->purge ;	
     }
+    return 1;
 }
 
 sub virus_infected {
