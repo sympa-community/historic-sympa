@@ -291,7 +291,9 @@ while (!$end) {
 		my $model_task_parameter = "$model".'_task';
 		
 		if ( $model eq 'sync_include') {
-		    next unless ($list->{'admin'}{'user_data_source'} eq 'include2');
+		    next unless (($list->{'admin'}{'user_data_source'} eq 'include2') &&
+				 $list->has_include_data_sources() &&
+				 ($list->{'admin'}{'status'} eq 'open'));
 		    
 		    create ($current_date, 'INIT', $model, 'ttl', 'list', \%data);
 
@@ -874,6 +876,7 @@ sub next_cmd {
 		error ($context->{'task_file'}, "List $list->{'name'} no more require sync_include task");
 		return undef;
 	    }
+
 	    $data{'list'}{'ttl'} = $list->{'admin'}{'ttl'};
 	    $model_choice = 'ttl';
 	}else {
@@ -1480,7 +1483,11 @@ sub process_bouncers {
 	}
 	
 	##  first, bouncing email are sorted in @bouncer 
-	for (my $user_ref = $list->get_first_bouncing_user(); $user_ref; $user_ref = $list->get_next_bouncing_user()) {	    
+	for (my $user_ref = $list->get_first_bouncing_user(); $user_ref; $user_ref = $list->get_next_bouncing_user()) {	   
+
+	    ## Skip included users (cannot be removed)
+	    next if ($user_ref->{'is_included'});
+ 
 	    for ( my $level = $max_level;($level >= 1) ;$level--) {
 
 		if ($user_ref->{'bounce_score'} >= $list->{'admin'}{'bouncers_level'.$level}{'rate'}){
@@ -1658,9 +1665,14 @@ sub sync_include {
 	return undef;                                                          
     }
  
+    if (! $list->has_include_data_sources() &&
+	(!$list->{'last_sync'} || ($list->{'last_sync'} > (stat("$list->{'dir'}/config"))[9]))) {
+	&do_log('notice', "List $list->{'name'} no more require sync_include task");
+	return undef;	
+    }    
 
     $list->sync_include();
-}
+    }
 
 ## Check if the provided filename matches a task
 ## Returns an array of its parts
