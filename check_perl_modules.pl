@@ -46,7 +46,6 @@ use CPAN;
 ### key:left "module" used by SYMPA, 
 ### right CPAN module.		     
 %req_CPAN = ('DB_File' => 'DB_FILE',
-	     'Locale::Msgcat' => 'Msgcat',
 	     'Digest::MD5' => 'Digest-MD5',
 	     'Mail::Internet' =>, 'MailTools',
 	     'IO::Scalar' => 'IO-stringy',
@@ -150,6 +149,11 @@ sub check_modules {
 ##----------------------
 sub install_module {
     my ($module, $default) = @_;
+
+    unless ($ENV{'FTP_PASSIVE'} eq 1) {
+	$ENV{'FTP_PASSIVE'} = 1;
+	print "Setting FTP Passive mode\n";
+    }
 
     unless ($> == 0) {
 	print "\#\# You need root privileges to install $module module. \#\#\n";

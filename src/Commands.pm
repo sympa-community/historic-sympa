@@ -71,6 +71,8 @@ my $sender = '';
 my $time_command;
 my $msg_file;
 
+## Caution : if this regexp changes (more/less parenthesis), then regexp using it should 
+## also be changed
 my $email_regexp = '([\w\-\_\.\/\+\=]+|\".*\")\@[\w\-]+(\.[\w\-]+)+';
 
 ## Parse the command and call the adequate subroutine with
@@ -952,7 +954,7 @@ sub add {
     do_log('debug', 'Commands::add(%s,%s)', $what,$sign_mod );
 
     $what =~ /^(\S+)\s+($email_regexp)(\s+(.+))?\s*$/;
-    my($which, $email, $comment) = ($1, $2, $4);
+    my($which, $email, $comment) = ($1, $2, $6);
     my $auth_method ;
 
     ## Load the list if not already done, and reject the
@@ -1630,7 +1632,8 @@ sub distribute {
     my $message = new Message($file);
     unless (defined $message) {
 	do_log('err', 'Unable to create Message object %s', $file);
-	return undef;
+	push @msg::report, sprintf Msg(6, 41, "Unable to find the message of the list %s locked by the key %s.\nWarning : this message could have ever been send by another editor"),$name,$key ;
+	return 'msg_not_found';
     }
 
     my $msg = $message->{'msg'};
