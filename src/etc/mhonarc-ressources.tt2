@@ -404,17 +404,9 @@ $POWERED_BY$
 </MSGPGSSMARKUP>
 
 <SUBJECTHEADER>
-<TABLE BORDER="0" WIDTH="100%" CELLPADDING="2" CELLSPACING="2">
-<TR>
-<TD>
-<FONT SIZE="+1" COLOR="($tag$% dark_color %$tag$)"><STRONG>$SUBJECTNA$</STRONG></FONT>, &nbsp;<FONT SIZE="+1">$FROMNAME$</FONT>
-</TD>
-
+<span style="float: right">
 ($tag$% IF user.email && action == 'arc' %$tag$)
 
-<TD ALIGN="right">
-<FONT SIZE="-1">
-<!-- reply to button -->
 <form action="($tag$% path_cgi %$tag$)" method="post">
   <input type="hidden" NAME="in_reply_to" VALUE="$MSGID$" />
   <input type="hidden" NAME="subject" VALUE="Re: $SUBJECTNA$" />
@@ -435,11 +427,7 @@ $POWERED_BY$
     ($tag$% END %$tag$)
   ($tag$% END %$tag$)
 </form>
-</font>
-</td>
 ($tag$% END %$tag$)
-</tr>
-</table>
 
 <UL>
 </SUBJECTHEADER>
