@@ -1452,7 +1452,7 @@ sub ldap_authentication {
 	
 	next unless ($ldap_anonymous);
 	next unless ($ldap_passwd);
-	next unless ($cnx->code() == 0);
+	next unless (defined($cnx) && ($cnx->code() == 0));
 	next if($mesg->count() == 0);
 	next if($mesg->code() != 0);
 	next unless ($host);

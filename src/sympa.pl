@@ -284,6 +284,8 @@ if ($main::options{'dump'}) {
 	%{$u} = %{$defaults};
 	$u->{'email'} = $email;
 	$u->{'gecos'} = $gecos;
+	$u->{'date'} = $u->{'update_date'} = time;
+	$u->{'subscribed'} = 1 if ($list->{'admin'}{'user_data_source'} eq 'include2');
 
 	unless ($list->add_user($u)) {
 	    printf STDERR "\nCould not add %s\n", $email;
