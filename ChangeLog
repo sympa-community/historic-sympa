@@ -1,3 +1,12 @@
+2003-01-28 15:32  salaun
+
+	* src/List.pm: [BugID 99] Change: Pg 7.3 no longer supports the
+	LIMIT #,# syntax
+
+2003-01-28 14:29  salaun
+
+	* ChangeLog, NEWS: Update
+
 2003-01-28 14:24  salaun
 
 	* src/List.pm: Fix: If custom_subject is found in the subject,

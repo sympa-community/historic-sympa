@@ -7,6 +7,8 @@
 
    CHanges :
 
+*****	[BugID 99] Pg 7.3 no longer supports the LIMIT #,# syntax
+
 	List.pm, etc/script/create_db.Pg: [E. Dreyfus] [reported by pamelant AT nerim.net] :	
 	Postgresql 7.3 has no support for not SQL standard type 'datetime'.  
 *****	If you are upgrading from	a previous Sympa version, you should update 
