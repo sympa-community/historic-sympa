@@ -10,10 +10,10 @@ Content-Type: text/plain; charset=iso-8859-1
 Content-transfer-encoding: 8bit
 
 [IF method=md5]
-Per inoltrare il messaggio allegato alla lista '[list->name]' :\n\
-mailto:[conf->email]@[conf->host]?subject=DISTRIBUTE%20[list->name]%20[modkey]\n\n
+Per inoltrare il messaggio allegato alla lista '[list->name]' :
+mailto:[conf->email]@[conf->host]?subject=DISTRIBUTE%20[list->name]%20[modkey]
 
-Per respingerlo (sara' cancellato) :\n\
+Per respingerlo (sara' cancellato) :
 mailto:[conf->email]@[conf->host]?subject=REJECT%20[list->name]%20[modkey]
 [ENDIF]
 
