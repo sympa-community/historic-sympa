@@ -1,6 +1,6 @@
 From: [% conf.email %]@[% conf.host %]
 To: [% to %]
-Subject: [%|l%]List unknown[%END%]
+Subject: [% FILTER qencode %][%|l%]List unknown[%END%][%END%]
 Mime-version: 1.0
 Content-Type: multipart/report; report-type=delivery-status; 
 	boundary="[% boundary %]"

@@ -1,7 +1,7 @@
 From: [% from %]
 To: [% to %]
 Reply-to: [% reply %]
-Subject: [%|l(list.name)%]Digest for list %1[%END%]
+Subject: [% FILTER qencode %][%|l(list.name)%]Digest for list %1[%END%][%END%]
 Mime-version: 1.0
 Content-Type: multipart/mixed; boundary="[% boundary1 %]"
 

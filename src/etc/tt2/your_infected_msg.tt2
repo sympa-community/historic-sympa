@@ -1,5 +1,5 @@
 From: [% from %]
-Subject: [%|l%]A virus in your email[%END%]
+Subject: [% FILTER qencode %][%|l%]A virus in your email[%END%][%END%]
 
     [%|l%]***** V I R U S    A L E R T *****[%END%]
 

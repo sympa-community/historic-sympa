@@ -1,5 +1,5 @@
 From: [% list.name %]-request@[% list.host %]
-Subject: [%|l(list.name,list.host)%]crypted message for list %1@%2[%END%]
+Subject: [% FILTER qencode %][%|l(list.name,list.host)%]crypted message for list %1@%2[%END%][%END%]
 Mime-version: 1.0
 Content-Type: text/plain
 Content-transfer-encoding: 8bit

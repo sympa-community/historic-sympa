@@ -1,5 +1,5 @@
 From: [% conf.email %]@[% conf.host %]
-Subject: [%|l(list.name)%]%1 mailing list creation[%END%]
+Subject: [% FILTER qencode %][%|l(list.name)%]%1 mailing list creation[%END%][%END%]
 
 [%|l(list.name,list.host)%]%1@%2 mailing list has been activated by listmaster.[%END%]
 

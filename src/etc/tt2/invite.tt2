@@ -1,6 +1,6 @@
 From: [% requested_by %]
 Reply-To: [% conf.sympa %]
-Subject: [% subject %]
+Subject: [% FILTER qencode %][%|l(list.name)%]Invitation to join list %1[%END%][%END%]
 Mime-version: 1.0
 Content-Type: text/plain; charset=iso-8859-1
 Content-transfer-encoding: 8bit

@@ -402,7 +402,7 @@ msgstr "La liste en quelques lignes"
 
 #: src/etc/tt2/your_infected_msg.tt2:2
 msgid "A virus in your email"
-msgstr "D=?iso-8859-1?Q?=E9?=tection de virus."
+msgstr "Détection de virus."
 
 #: wwsympa/tt2/serveradmin.tt2:159
 msgid "ALL"

@@ -1,6 +1,6 @@
 From: [% from %]
 To: [%|l(list.name)%]Moderators of list %1[%END%] <[% list.name %]-editor@[% list.host %]>
-Subject: [%|l(list.name)%]Article to be approved for %1[%END%]
+Subject: [% FILTER qencode %][%|l(list.name)%]Article to be approved for %1[%END%][%END%]
 Reply-To: [% conf.email %]@[% conf.host %]
 Mime-version: 1.0
 Content-Type: multipart/mixed; boundary="[% boundary %]"

@@ -1,7 +1,7 @@
 From: [% conf.email %]@[% conf.host %]
 To: Listmaster <[% to %]>
 [% IF type == 'request_list_creation' -%]
-Subject: [%|l(list.name)%]List "%1" creation request[%END%]
+Subject: [% FILTER qencode %][%|l(list.name)%]List "%1" creation request[%END%][%END%]
 
 [% list.name %]@[% list.host %]
 [% list.subject %]
@@ -10,7 +10,7 @@ Subject: [%|l(list.name)%]List "%1" creation request[%END%]
 [%|l%]To activate/delete this mailing list :[%END%]
 [% conf.wwsympa_url %]/get_pending_lists
 [% ELSIF type == 'virus_scan_failed' -%]
-Subject: [%|l%]Antivirus scan failed[%END%]
+Subject: [% FILTER qencode %][%|l%]Antivirus scan failed[%END%][%END%]
 
 [%|l%]The antivirus scan has failed while processing the following file:[%END%]
 	[% filename %]
@@ -18,7 +18,7 @@ Subject: [%|l%]Antivirus scan failed[%END%]
 [%|l%]The returned error message :[%END%]
 	[% error_msg %]
 [% ELSIF type == 'edit_list_error' -%]
-Subject: [%|l%]incorrect format of edit_list.conf[%END%]
+Subject: [% FILTER qencode %][%|l%]incorrect format of edit_list.conf[%END%][%END%]
 
 [%|l%]edit_list.conf format has changed :
 'default' is no more accepted for a population.[%END%]
@@ -27,13 +27,13 @@ Subject: [%|l%]incorrect format of edit_list.conf[%END%]
 [%|l(param0)%]Until then we recommend your remove %1 ;
 default configuration will be used.[%END%]
 [% ELSIF type == 'sync_include_failed' -%]
-Subject: [%|l(param0)%]subscribers update failed for list %1[%END%]
+Subject: [[% FILTER qencode %]%|l(param0)%]subscribers update failed for list %1[%END%][%END%]
 
 [%|l%]Sympa could not include subscribers from external data sources ; the
 database or LDAP directory might be unreachable.[%END%] 
 [%|l%]Check Sympa log files for more precise information[%END%]
 [% ELSE -%]
-Subject: [% type %]
+Subject: [% FILTER qencode %][% type %][%END%]
 
 [% param0 %]]
 [% END %]

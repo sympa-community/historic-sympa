@@ -1144,8 +1144,6 @@ email address. Please try subscribing using your canonical address.");
             ## Is the guest user allowed to subscribe in this list ?
 
 	    my %context;
-	    $context{'subject'} = sprintf(gettext("Invitation to join list %s"), $list->{'name'});
-	    $context{'body'} = sprintf(gettext("You are invited to join list %s"), $list->{'name'});
 	    $context{'user'}{'email'} = $email;
 	    $context{'user'}{'gecos'} = $comment;
 	    $context{'requested_by'} = $sender;

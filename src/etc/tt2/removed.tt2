@@ -1,5 +1,5 @@
 From: [% conf.email %]@[% conf.host %]
-Subject: [%|l(list.name)%]Removed from %1[%END%]
+Subject: [% FILTER qencode %][%|l(list.name)%]Removed from %1[%END%][%END%]
 
 
 

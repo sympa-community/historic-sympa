@@ -12,13 +12,20 @@ my $tt2 = Template->new({
 
     FILTERS => {
 	unescape => \&CGI::Util::unescape,
-	l => [\&maketext, 1]
+	l => [\&maketext, 1],
+	qencode => [\&qencode, 0]
 	},
 #PRE_CHOMP   => 1,
 #POST_CHOMP   => 1,
 	}) or die $!;
 
 my $current_lang;
+
+sub qencode {
+    my $string = shift;
+
+    return MIME::Words::encode_mimewords($string, 'Q', gettext("us-ascii"));
+}
 
 sub maketext {
     my ($context, @arg) = @_;
