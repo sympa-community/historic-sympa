@@ -1417,7 +1417,7 @@ You can also add a unique entry, with a regular expression, for your domain.
 
 With Postfix, you should edit the \file {/etc/postfix/virtual.regexp} file as follows :
 \begin {quote}
-/\verb+^+(.*)\samplerobot\$/	 \samplerobot-\${1}
+/\verb+^+(.*)@\samplerobot\$/	 \samplerobot-\${1}
 \end {quote}
  Entries in the 'aliases' file will look like this :
 \begin {quote}
@@ -3596,7 +3596,7 @@ The cookie format is :
 sympauser=<user_email>:<checksum>
 \end{verbatim}
 where \texttt{<}user\_email\texttt{>} is the user's complete e-mail address, and
-\texttt{<}checksum\texttt{>} are the 8 first bytes of the a MD5 checksum of the \texttt{<}user\_email\texttt{>}+\Sympa \cfkeyword {cookie}
+\texttt{<}checksum\texttt{>} are the 8 last bytes of the a MD5 checksum of the \texttt{<}user\_email\texttt{>}+\Sympa \cfkeyword {cookie}
 configuration parameter.
 Your application needs to know what the \cfkeyword {cookie} parameter
 is, so it can check the HTTP cookie validity ; this is a secret shared
