@@ -1443,6 +1443,34 @@ msgstr ""
 msgid "Moderate"
 msgstr ""
 
+#: src/etc/scenari/send.editorkey:1
+msgid "Moderated"
+msgstr ""
+
+#: src/etc/scenari/send.editorkeyonly:1
+msgid "Moderated, even for moderators"
+msgstr ""
+
+#: src/etc/scenari/send.privateandnomultipartoreditorkey.orig:1 src/etc/scenari/send.privateandnomultipartoreditorkey:1
+msgid "Moderated, for non subscribers sending multipart messages"
+msgstr ""
+
+#: src/etc/scenari/send.privatekeyandeditorkeyonly:1
+msgid "Moderated, for subscribers and moderators"
+msgstr ""
+
+#: src/etc/scenari/send.editor:1
+msgid "Moderated, old style"
+msgstr ""
+
+#: src/etc/scenari/send.privateandeditorkey.orig:1 src/etc/scenari/send.privateandeditorkey:1
+msgid "Moderated, restricted to subscribers"
+msgstr ""
+
+#: src/etc/scenari/send.editorkeyonlyauth:1
+msgid "Moderated, with editor confirmation"
+msgstr ""
+
 #: src/List.pm:1715
 msgid "Moderating your message"
 msgstr ""
@@ -1518,6 +1546,14 @@ msgstr ""
 
 #: wwsympa/tt2/arcsearch.tt2:42
 msgid "Newest messages first"
+msgstr ""
+
+#: src/etc/scenari/send.newsletter:1
+msgid "Newsletter, restricted to moderators"
+msgstr ""
+
+#: src/etc/scenari/send.newsletterkeyonly:1
+msgid "Newsletter, restricted to moderators after confirmation"
 msgstr ""
 
 #: wwsympa/tt2/review.tt2:106 wwsympa/tt2/reviewbouncing.tt2:127 wwsympa/tt2/reviewbouncing.tt2:52
@@ -1751,6 +1787,14 @@ msgstr ""
 
 #: src/List.pm:814
 msgid "Priority"
+msgstr ""
+
+#: src/etc/scenari/send.privateorpublickey:1
+msgid "Private, confirmation for non subscribers"
+msgstr ""
+
+#: src/etc/scenari/send.privateoreditorkey:1
+msgid "Private, moderated for non subscribers"
 msgstr ""
 
 #: wwsympa/tt2/title.tt2:15
@@ -3327,6 +3371,22 @@ msgstr ""
 msgid "access right"
 msgstr ""
 
+#: src/etc/scenari/add.closed:1
+msgid "add impossible"
+msgstr ""
+
+#: src/etc/scenari/add.auth:1
+msgid "add need authentication"
+msgstr ""
+
+#: src/etc/scenari/add.owner:1
+msgid "add performed by list owner do not need authentication"
+msgstr ""
+
+#: src/etc/scenari/add.owner_notify:1
+msgid "add performed by owner do not need authentication (notification)"
+msgstr ""
+
 #: wwsympa/tt2/lists.tt2:18
 msgid "admin"
 msgstr ""
@@ -3347,8 +3407,48 @@ msgstr ""
 msgid "and checking on part of word)"
 msgstr ""
 
+#: src/etc/scenari/create_list.public_listmaster:1
+msgid "anybody by validation by listmaster requiered"
+msgstr ""
+
+#: src/etc/scenari/review.public:1
+msgid "anyone can do it !"
+msgstr ""
+
+#: src/etc/scenari/create_list.intranet:1
+msgid "anyone from local domain "
+msgstr ""
+
+#: src/etc/scenari/send.publickey:1
+msgid "anyone with previous md5 authentication"
+msgstr ""
+
+#: src/etc/scenari/unsubscribe.open:1
+msgid "anyone without authentication"
+msgstr ""
+
+#: src/etc/scenari/subscribe.open_quiet:1
+msgid "anyone, no welcome message"
+msgstr ""
+
+#: src/etc/scenari/subscribe.open_notify:1
+msgid "anyone, notification is sent to list owner"
+msgstr ""
+
+#: src/etc/scenari/unsubscribe.auth_notify:1
+msgid "authentication requested, notification sent to owner"
+msgstr ""
+
 #: wwsympa/tt2/reviewbouncing.tt2:63
 msgid "bounce count"
+msgstr ""
+
+#: src/etc/scenari/access_web_archive.owner:1
+msgid "by owner"
+msgstr ""
+
+#: src/etc/scenari/del.owner:1
+msgid "by owner without authentication"
 msgstr ""
 
 #: src/etc/tt2/bye.tt2:5
@@ -3369,6 +3469,26 @@ msgstr ""
 
 #: wwsympa/tt2/d_control.tt2:36
 msgid "change access"
+msgstr ""
+
+#: src/etc/scenari/access_web_archive.closed:1 src/etc/scenari/invite.closed:1 src/etc/scenari/send.closed:1
+msgid "closed"
+msgstr ""
+
+#: src/etc/scenari/visibility.secret:1
+msgid "conceal even for subscribers"
+msgstr ""
+
+#: src/etc/scenari/visibility.conceal:1
+msgid "conceal except for subscribers"
+msgstr ""
+
+#: src/etc/scenari/topics_visibility.conceal:1
+msgid "conceal unless for listmaster"
+msgstr ""
+
+#: src/etc/scenari/topics_visibility.identified:1
+msgid "conceal unless user is logged in"
 msgstr ""
 
 #: src/List.pm:723
@@ -3406,6 +3526,10 @@ msgstr ""
 
 #: wwsympa/wwslib.pm:59
 msgid "deletion message"
+msgstr ""
+
+#: src/etc/scenari/del.auth:1
+msgid "deletion performed only by list owners, need authentication"
 msgstr ""
 
 #: wwsympa/wwslib.pm:66
@@ -3494,6 +3618,14 @@ msgstr ""
 msgid "first-level suffix"
 msgstr ""
 
+#: src/etc/scenari/info.open:1
+msgid "for anyone"
+msgstr ""
+
+#: src/etc/scenari/subscribe.open:1
+msgid "for anyone without authentication"
+msgstr ""
+
 #: src/List.pm:295
 msgid "frequency"
 msgstr ""
@@ -3522,6 +3654,14 @@ msgstr ""
 msgid "hour"
 msgstr ""
 
+#: src/etc/scenari/unsubscribe.closed:1
+msgid "impossible"
+msgstr ""
+
+#: src/etc/scenari/edit_list.closed:1
+msgid "impossible, closed at the moment"
+msgstr ""
+
 #: src/etc/tt2/listmaster_notification.tt2:21
 msgid "incorrect format of edit_list.conf"
 msgstr ""
@@ -3530,8 +3670,20 @@ msgstr ""
 msgid "insensitive"
 msgstr ""
 
+#: src/etc/scenari/visibility.intranet:1
+msgid "intranet access"
+msgstr ""
+
+#: src/etc/scenari/invite.owner:1
+msgid "invite perform by list owner do not need authentication"
+msgstr ""
+
 #: wwsympa/tt2/remindpasswd.tt2:5
 msgid "it will be sent to you by email :"
+msgstr ""
+
+#: src/etc/scenari/global_remind.listmaster:1
+msgid "just for listmaster"
 msgstr ""
 
 #: wwsympa/wwslib.pm:74
@@ -3564,8 +3716,24 @@ msgstr ""
 msgid "list name"
 msgstr ""
 
+#: src/etc/scenari/del.owner_notify:1
+msgid "list owners, authentication not needed (notification)"
+msgstr ""
+
 #: wwsympa/tt2/get_closed_lists.tt2:12 wwsympa/tt2/get_pending_lists.tt2:15
 msgid "list subject"
+msgstr ""
+
+#: src/etc/scenari/access_web_archive.listmaster:1
+msgid "listmaster"
+msgstr ""
+
+#: src/etc/scenari/remind.listmaster:1 src/etc/scenari/review.listmaster:1
+msgid "listmaster only"
+msgstr ""
+
+#: src/etc/scenari/subscribe.intranetorowner:1
+msgid "local domain users or owner approval"
 msgstr ""
 
 #: wwsympa/tt2/loginbanner.tt2:23
@@ -3597,12 +3765,28 @@ msgstr ""
 msgid "near expiration of your certificate"
 msgstr ""
 
+#: src/etc/scenari/unsubscribe.auth:1
+msgid "need authentication"
+msgstr ""
+
+#: src/etc/scenari/subscribe.auth_notify:1
+msgid "need authentication (notification is sent to owners)"
+msgstr ""
+
 #: wwsympa/tt2/arcsearch_form.tt2:31
 msgid "newest messages"
 msgstr ""
 
 #: src/etc/mhonarc-ressources:167
 msgid "next"
+msgstr ""
+
+#: src/etc/scenari/topics_visibility.noconceal:1 src/etc/scenari/visibility.noconceal:1
+msgid "no conceal"
+msgstr ""
+
+#: src/etc/scenari/review.closed:1
+msgid "nobody can review"
 msgstr ""
 
 #: wwsympa/tt2/set_pending_list_request.tt2:40
@@ -3621,8 +3805,20 @@ msgstr ""
 msgid "one of these words"
 msgstr ""
 
+#: src/etc/scenari/review.owner:1
+msgid "only owner (and listmaster)"
+msgstr ""
+
 #: src/List.pm:843
 msgid "other email address"
+msgstr ""
+
+#: src/etc/scenari/unsubscribe.owner:1
+msgid "owner approval"
+msgstr ""
+
+#: src/etc/scenari/subscribe.owner:1
+msgid "owners approval"
 msgstr ""
 
 #: wwsympa/tt2/reviewbouncing.tt2:124 wwsympa/tt2/reviewbouncing.tt2:49
@@ -3672,6 +3868,30 @@ msgstr ""
 msgid "profile"
 msgstr ""
 
+#: src/etc/scenari/access_web_archive.public:1 src/etc/scenari/invite.public:1
+msgid "public"
+msgstr ""
+
+#: src/etc/scenari/d_edit.public:1 src/etc/scenari/d_read.public:1
+msgid "public documents"
+msgstr ""
+
+#: src/etc/scenari/send.public:1
+msgid "public list"
+msgstr ""
+
+#: src/etc/scenari/send.publicnomultipart.orig:1 src/etc/scenari/send.publicnomultipart:1
+msgid "public list multipart messages are rejected"
+msgstr ""
+
+#: src/etc/scenari/send.publicnoattachment:1
+msgid "public list multipart/mixed messages are forwarded to moderator"
+msgstr ""
+
+#: src/etc/scenari/send.public_nobcc:1
+msgid "public list, Bcc rejected (anti-spam)"
+msgstr ""
+
 #: wwsympa/tt2/add_request.tt2:13 wwsympa/tt2/editsubscriber.tt2:43 wwsympa/tt2/review.tt2:82 wwsympa/tt2/reviewbouncing.tt2:116 wwsympa/tt2/reviewbouncing.tt2:31
 msgid "quiet"
 msgstr ""
@@ -3712,8 +3932,68 @@ msgstr ""
 msgid "remote user"
 msgstr ""
 
+#: src/etc/scenari/del.closed:1
+msgid "remove subscriber impossible"
+msgstr ""
+
+#: src/etc/scenari/subscribe.smime:1
+msgid "requires S/MIME signed"
+msgstr ""
+
+#: src/etc/scenari/subscribe.smimeorowner:1
+msgid "requires S/MIME signed or owner approval"
+msgstr ""
+
+#: src/etc/scenari/subscribe.auth_owner:1
+msgid "requires authentication then owner approval"
+msgstr ""
+
 #: src/List.pm:848
 msgid "respect of existing header field"
+msgstr ""
+
+#: src/etc/scenari/remind.owner:1
+msgid "restricted to list owner"
+msgstr ""
+
+#: src/etc/scenari/edit_list.owner:1
+msgid "restricted to list owners"
+msgstr ""
+
+#: src/etc/scenari/d_edit.owner:1 src/etc/scenari/d_read.owner:1
+msgid "restricted to list owners and document author"
+msgstr ""
+
+#: src/etc/scenari/create_list.listmaster:1
+msgid "restricted to listmaster"
+msgstr ""
+
+#: src/etc/scenari/send.intranet:1
+msgid "restricted to local domain"
+msgstr ""
+
+#: src/etc/scenari/send.intranetorprivate:1
+msgid "restricted to local domain and subscribers"
+msgstr ""
+
+#: src/etc/scenari/access_web_archive.intranet:1 src/etc/scenari/subscribe.intranet:1
+msgid "restricted to local domain users"
+msgstr ""
+
+#: src/etc/scenari/d_edit.private:1 src/etc/scenari/d_read.private:1 src/etc/scenari/info.private:1 src/etc/scenari/invite.private:1 src/etc/scenari/review.private:1 src/etc/scenari/send.private:1
+msgid "restricted to subscribers"
+msgstr ""
+
+#: src/etc/scenari/send.private_smime:1
+msgid "restricted to subscribers check smime signature"
+msgstr ""
+
+#: src/etc/scenari/review.intranet:1
+msgid "restricted to subscribers or local domain users"
+msgstr ""
+
+#: src/etc/scenari/send.privatekey:1
+msgid "restricted to subscribers with previous md5 authentication"
 msgstr ""
 
 #: src/etc/tt2/expire_warning1.tt2:2 src/etc/tt2/expire_warning2.tt2:2
@@ -3786,6 +4066,18 @@ msgstr ""
 msgid "submit"
 msgstr ""
 
+#: src/etc/scenari/subscribe.closed:1
+msgid "subscribe is impossible"
+msgstr ""
+
+#: src/etc/scenari/visibility.private:1
+msgid "subscribers"
+msgstr ""
+
+#: src/etc/scenari/access_web_archive.private:1
+msgid "subscribers only"
+msgstr ""
+
 #: src/etc/tt2/listmaster_notification.tt2:30
 #. (param0)
 msgid "subscribers update failed for list %1"
@@ -3793,6 +4085,10 @@ msgstr ""
 
 #: wwsympa/wwslib.pm:64
 msgid "subscribing invitation message"
+msgstr ""
+
+#: src/etc/scenari/subscribe.auth:1
+msgid "subscription request confirmed"
 msgstr ""
 
 #: src/List.pm:521
@@ -3861,6 +4157,10 @@ msgstr ""
 
 #: wwsympa/wwslib.pm:57
 msgid "welcome message"
+msgstr ""
+
+#: src/etc/scenari/unsubscribe.open_notify:1
+msgid "without authentication, notification is sent to owners"
 msgstr ""
 
 #: wwsympa/tt2/error.tt2:45
