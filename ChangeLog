@@ -1,3 +1,32 @@
+2003-07-17 09:47  salaun
+
+	* src/: List.pm, tools.pl: [BugID 153] [reported by G. Tellier]
+	Fix: E-mail addresses containing an apostrophe were rejected
+
+2003-07-17 09:34  salaun
+
+	* src/: Commands.pm, List.pm: [reported by B. Geer & A. Bidaud]
+	Fix: moderated messages were considered encrypted messages and
+	therefore could not be delivered
+
+2003-07-15 16:00  salaun
+
+	* src/tools.pl: [H. Ulliac] Fix: create_list templates were not
+	searched in the robot directory
+
+2003-07-10 15:00  salaun
+
+	* src/: Makefile, alias_manager.pl: [Zakaria] Fix: unset PATH
+	before anything else ; store the lock in a writeable directory
+
+2003-07-07 16:12  salaun
+
+	* Makefile.am, Makefile.in: Fix: problem with that had no argument
+
+2003-07-04 12:05  salaun
+
+	* .version, ChangeLog, NEWS: Preparing Sympa 3.4.4.2
+
 2003-07-04 11:59  salaun
 
 	* src/List.pm: Fix recent X509-related changes : List::send_msg()

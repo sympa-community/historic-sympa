@@ -3,6 +3,21 @@
 
 (See Changelog file for the full changes log)
 
+3.4.4.3		18 July 2003
+
+  Bug fixes :
+
+	Commands.pm, List.pm: [reported by B. Geer & A. Bidaud] moderated messages were considered encrypted messages and
+	therefore could not be delivered
+
+	List.pm, tools.pl: [BugID 153] [reported by G. Tellier] E-mail addresses containing an apostrophe were rejected
+
+	src/tools.pl: [H. Ulliac] create_list templates were not searched in the robot directory
+
+	Makefile, alias_manager.pl: [Zakaria] unset PATH before anything else ; store the lock in a writeable directory
+
+	Makefile.am, Makefile.in: problem with that had no argument
+
 3.4.4.2		4 July 2003
 
   Bug fixes :
