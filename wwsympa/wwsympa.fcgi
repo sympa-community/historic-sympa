@@ -679,6 +679,11 @@ if ($wwsconf->{'use_fast_cgi'}) {
      foreach my $l (@wwslib::languages) {
 	 &Language::SetLang($l) || next;
 	 $param->{'languages'}{$l}{'complete'} = sprintf gettext("english");
+	 if (($param->{'languages'}{$l}{'complete'} eq 'english') &&
+	     ($l !~ /^en/)) {
+	     $param->{'languages'}{$l}{'complete'} = $l;
+	 }
+
 	 if ($param->{'lang'} eq $l) {
 	     $param->{'languages'}{$l}{'selected'} = 'SELECTED';
 	 }else {
