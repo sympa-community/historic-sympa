@@ -40,6 +40,8 @@
 
    Bug fixes :
 
+	src/List.pm: get_total() with lists in 'include' mode
+
 	new variable [previous_email] for scenario subscribe used only for change_email
 	action. It allows to accept change email by subscriber without request to
 	list owner even if new subscribtion need owner control.

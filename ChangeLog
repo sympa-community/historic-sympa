@@ -1,3 +1,23 @@
+2003-01-28 10:34  salaun
+
+	* doc/: sympa.pdf, sympa.ps, sympa.tex, sympa/index.html,
+	sympa/node1.html, sympa/node10.html, sympa/node11.html,
+	sympa/node12.html, sympa/node13.html, sympa/node14.html,
+	sympa/node15.html, sympa/node16.html, sympa/node17.html,
+	sympa/node18.html, sympa/node19.html, sympa/node2.html,
+	sympa/node20.html, sympa/node3.html, sympa/node4.html,
+	sympa/node5.html, sympa/node6.html, sympa/node7.html,
+	sympa/node8.html, sympa/node9.html, sympa/sympa.html,
+	sympa/sympa.ps: Update doc
+
+2003-01-28 10:21  salaun
+
+	* src/List.pm: Fix: get_total() with lists in 'include' mode
+
+2003-01-27 11:05  salaun
+
+	* ChangeLog, NEWS: [no log message]
+
 2003-01-27 10:44  salaun
 
 	* doc/sympa.tex.tpl, src/etc/scenari/subscribe.auth_owner,
