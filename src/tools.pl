@@ -1366,5 +1366,19 @@ sub valid_email {
     $email =~ /^([\w\-\_\.\/\+\=]+|\".*\")\@[\w\-]+(\.[\w\-]+)+$/;
 }
 
+## Return canonical email address (lower-cased + space cleanup)
+## It could also support alternate email
+sub get_canonical_email {
+    my $email = shift;
+
+    ## Remove leading and trailing white spaces
+    $email =~ s/^\s*(\S.*\S)\s*$/$1/;
+
+    ## Lower-case
+    $email = lc($email);
+
+    return $email;
+}
+
 1;
 
