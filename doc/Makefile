@@ -118,14 +118,13 @@ sympa.dvi: sympa.tex $(EPS)
 # HTML generation
 #
 
-html:	sympa/sympa.html
+html:	html/sympa.html
 
 # -tmp is required since cwd contains a dot in it
-sympa/sympa.html: sympa.tex $(GIF)
-	$(LATEX2HTML) -tmp /tmp -verbosity 0 -local_icons sympa
-	cd sympa ; rm -f WARNINGS images.* internals.pl labels.pl
-#	cp ls-lR.gif sympa
-	cp sympa.ps sympa
+html/sympa.html: sympa.tex $(GIF)
+	$(LATEX2HTML) -dir html -mkdir -tmp /tmp -verbosity 0 -local_icons sympa
+	cd html ; rm -f WARNINGS images.* internals.pl labels.pl
+	cp sympa.ps html
 
 #
 # Clean-up
@@ -133,7 +132,7 @@ sympa/sympa.html: sympa.tex $(GIF)
 
 clean: rmaux
 	rm -f *.ps
-	rm -rf sympa
+	rm -rf html
 
 rmaux:
 	rm -f *.aux *.log *.toc *.dvi *.bak *.cb *.ind *.idx *.ilg
@@ -155,7 +154,10 @@ install: makedir
 	@if [  -d $(DESTDIR)$(DOCDIR)/sympa ]; then \
 		rm -rf $(DESTDIR)$(DOCDIR)/sympa; \
 	fi
-	cp -R sympa/ $(DESTDIR)$(DOCDIR)
+	@if [  -d $(DESTDIR)$(DOCDIR)/html ]; then \
+		rm -rf $(DESTDIR)$(DOCDIR)/html; \
+	fi
+	cp -R html/ $(DESTDIR)$(DOCDIR)
 
 
 
