@@ -3,6 +3,25 @@
 
 (See Changelog file for the full changes log)
 
+3.4.4.1		9 May 2003
+
+  Changes :
+
+	Makefile.am: use different SPEC file for RedHat RPM building
+
+	src/etc/script/sympa.spec.rh80: only require packages for standard Sympa installation (not LDAP, SSLEAY).  
+	Some package have different naming conventions with Mandrake and RedHat
+
+  Bug fixes :
+
+	src/List.pm: Add GRANT PRIV query when creating sympa DB
+
+	Makefile.am: initialize INITCONF var
+
+	Makefile.am, src/etc/script/sympa.spec:	[reported by G. Paressant] make languages no required since
+	NLS or no more compiled
+
+
 3.4.4		30 April 2003
 
   New features :
