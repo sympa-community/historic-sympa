@@ -1,5 +1,29 @@
 <!-- $Id$ -->
 
+  [% IF action != 'search' %]
+<div style="float: right;">
+	<input type="hidden" name="sortby" value="[% sortby %]" />
+	<input type="submit" name="action_review" value="[%|loc%]Page size[%END%]" />
+	        <select name="size">
+                  <option value="[% size %]" selected="selected">[% size %]</option>
+		  <option value="25">25</option>
+		  <option value="50">50</option>
+		  <option value="100">100</option>
+		   <option value="500">500</option>
+		</select>
+   [% IF prev_page %]
+    <a href="[% path_cgi %]/review/[% list %]/[% prev_page %]/[% size %]/[% sortby %]"><img src="[% icons_url %]/left.png" style="border: 0px;" alt="[%|loc%]Previous page[%END%]" /></a>
+   [% END %]
+   [% IF page %]
+     page [% page %] / [% total_page %]
+   [% END %]
+   [% IF next_page %]
+     <a href="[% path_cgi %]/review/[% list %]/[% next_page %]/[% size %]/[% sortby %]"><img src="[% icons_url %]/right.png" style="border: 0px;" alt="[%|loc%]Next page[%END%]" /></a>
+   [% END %]
+  </div>
+  [% END %]
+
+
 [% IF is_owner %]
 <ul id="MainMenuLinks">	
   [% IF may_sync %]
@@ -20,14 +44,14 @@
  <input type="submit" name="action_add" value="[%|loc%]Add[%END%]" /> <label><input type="checkbox" name="quiet" /> [%|loc%]quiet[%END%]</label>
 </form>
 
-
+<br />
 <form action="[% path_cgi %]" method="post"> 
 <input type="hidden" name="previous_action" value="review" />
 <input type="hidden" name="list" value="[% list %]" />
 <input type="hidden" name="action" value="search" />
 <input type="text" siZE="18" name="filter" value="[% filter %]" />
 <input type="submit" name="action_search" value="[%|loc%]Search[%END%]" /> 
-
+<br />
 [% IF action == 'search' %]
 <br />[%|loc(occurrence)%]%1 occurrence(s) found[%END%]<br />
 [% IF too_many_select %]
@@ -35,51 +59,15 @@
 [% END %]
 [% END %]
 </form>
-
-
-<hr width="80%" align="center">
+<br /><br />
 <form name="myform" action="[% path_cgi %]" method="post">
  <input type="hidden" name="previous_action" value="[% action %]" />
  <input type="hidden" name="previous_list" value="[% list %]" />
  <input type="hidden" name="list" value="[% list %]" />
-
-<table border="0">
-  <tr><td style="text-align: left; white-space: nowrap;">
   [% IF is_owner %]
-
-    <!--input type="button" name="action_del" value="[%|loc%]Delete selected email addresses[%END%]" onclick="return request_confirm('[%|loc%]Do you really want to unsubscribe ALL selected subscribers ?[%END%]')" /-->
-
     <input type="submit" name="action_del" value="[%|loc%]Delete selected email addresses[%END%]" />
-
     <label><input type="checkbox" name="quiet" /> [%|loc%]quiet[%END%]</label>
   [% END %]
-  </td>
-  <td style="width: 100%;">&nbsp;</td>
-  [% IF action != 'search' %]
-  <td style="white-space: nowrap;">
-	<input type="hidden" name="sortby" value="[% sortby %]" />
-	<input type="submit" name="action_review" value="[%|loc%]Page size[%END%]" />
-	        <select name="size">
-                  <option value="[% size %]" selected="selected">[% size %]</option>
-		  <option value="25">25</option>
-		  <option value="50">50</option>
-		  <option value="100">100</option>
-		   <option value="500">500</option>
-		</select>
-   </td>
-   <td>
-   [% IF prev_page %]
-    <a href="[% path_cgi %]/review/[% list %]/[% prev_page %]/[% size %]/[% sortby %]"><img src="[% icons_url %]/left.png" style="border: 0px;" alt="[%|loc%]Previous page[%END%]" /></a>
-   [% END %]
-   [% IF page %]
-     page [% page %] / [% total_page %]
-   [% END %]
-   [% IF next_page %]
-     <a href="[% path_cgi %]/review/[% list %]/[% next_page %]/[% size %]/[% sortby %]"><img src="[% icons_url %]/right.png" style="border: 0px;" alt="[%|loc%]Next page[%END%]" /></a>
-   [% END %]
-  [% END %]
-  </td></tr>
-  </table>
 
     <table border="1">
       <tr style="background-color: [% light_color %];">
