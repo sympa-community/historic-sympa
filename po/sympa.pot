@@ -357,6 +357,10 @@ msgstr ""
 msgid "Archive"
 msgstr ""
 
+#: src/etc/mhonarc-ressources:111 src/etc/mhonarc-ressources:76
+msgid "Archive powered by"
+msgstr ""
+
 #: wwsympa/tt2/admin_menu.tt2:144 wwsympa/tt2/edit_list_request.tt2:8 wwsympa/tt2/serveradmin.tt2:143
 msgid "Archives"
 msgstr ""
@@ -477,6 +481,10 @@ msgstr ""
 msgid ""
 "Check your mailbox for new messages and enter below the\n"
 "	password. This will confirm your subscription to list %1\n"
+msgstr ""
+
+#: src/etc/mhonarc-ressources:134 src/etc/mhonarc-ressources:298 src/etc/mhonarc-ressources:58
+msgid "Chronological"
 msgstr ""
 
 #: wwsympa/tt2/show_cert.tt2:11
@@ -689,6 +697,10 @@ msgstr ""
 #: wwsympa/tt2/d_read.tt2:122
 #. (path,s.doc)
 msgid "Do you really want to delete %1%2 ?"
+msgstr ""
+
+#: src/etc/mhonarc-ressources:351 src/etc/mhonarc-ressources:360
+msgid "Do you really want to delete this message ?"
 msgstr ""
 
 #: wwsympa/tt2/reviewbouncing.tt2:16
@@ -970,6 +982,10 @@ msgid ""
 "was unable to access to your personal certificat (email %1).\n"
 msgstr ""
 
+#: src/etc/mhonarc-ressources:456
+msgid "January:February:March:April:May:June:July:August:September:October:November:December"
+msgstr ""
+
 #: wwsympa/tt2/pref.tt2:24
 msgid "Language"
 msgstr ""
@@ -1147,6 +1163,10 @@ msgstr ""
 msgid ""
 "Message header: If this file is not empty, it is added as a MIME\n"
 "attachment at the beginning of each message distributed to the list.\n"
+msgstr ""
+
+#: src/etc/mhonarc-ressources:202
+msgid "Message not available"
 msgstr ""
 
 #: src/etc/tt2/helpfile.tt2:35
@@ -1598,9 +1618,17 @@ msgstr ""
 msgid "Replace the file %1 by your file"
 msgstr ""
 
+#: src/etc/mhonarc-ressources:341
+msgid "Reply"
+msgstr ""
+
 #: src/etc/tt2/info_report.tt2:16
 #. (reply_to)
 msgid "Reply to           : %1"
+msgstr ""
+
+#: src/etc/mhonarc-ressources:337
+msgid "Reply to sender"
 msgstr ""
 
 #: wwsympa/tt2/get_closed_lists.tt2:13 wwsympa/tt2/get_pending_lists.tt2:16
@@ -1877,6 +1905,10 @@ msgstr ""
 msgid "Summary of your subscription (using the e-mail %1)."
 msgstr ""
 
+#: src/etc/mhonarc-ressources:438
+msgid "Sunday:Monday:Tuesday:Wednesday:Thursday:Friday:Saturday"
+msgstr ""
+
 #: wwsympa/tt2/menu.tt2:69 wwsympa/tt2/menu.tt2:73
 msgid "Sympa admin"
 msgstr ""
@@ -2035,6 +2067,10 @@ msgstr ""
 msgid ""
 "This server provides you access to your environment on mailing list server %1@%2. Starting from this URL, you can perform subscription options, unsubscription,\n"
 "archives, list management and so on.\n"
+msgstr ""
+
+#: src/etc/mhonarc-ressources:140 src/etc/mhonarc-ressources:304 src/etc/mhonarc-ressources:62
+msgid "Thread"
 msgstr ""
 
 #: src/etc/tt2/sendpasswd.tt2:27
@@ -2737,12 +2773,21 @@ msgstr ""
 msgid "login"
 msgstr ""
 
+#: src/etc/mhonarc-ressources:49
+#. ($PAGENUM$,$NUMOFPAGES$)
+msgid "mails, page # %1/%2"
+msgstr ""
+
 #: src/etc/tt2/certif_warning.tt2:2
 msgid "near expiration of your certificate"
 msgstr ""
 
 #: wwsympa/tt2/arcsearch_form.tt2:31
 msgid "newest messages"
+msgstr ""
+
+#: src/etc/mhonarc-ressources:167
+msgid "next"
 msgstr ""
 
 #: wwsympa/tt2/set_pending_list_request.tt2:40
@@ -2764,6 +2809,11 @@ msgstr ""
 #: wwsympa/tt2/reviewbouncing.tt2:124 wwsympa/tt2/reviewbouncing.tt2:49
 #. (page,total_page)
 msgid "page %1 / %2"
+msgstr ""
+
+#: src/etc/mhonarc-ressources:128
+#. ('$PAGENUM$','$NUMOFPAGES$')
+msgid "page n&#176; %1/%2"
 msgstr ""
 
 #: wwsympa/tt2/arcsearch_form.tt2:43
@@ -2804,6 +2854,11 @@ msgstr ""
 msgid "results by page"
 msgstr ""
 
+#: src/etc/mhonarc-ressources:342
+#. (user.email)
+msgid "send it back to %1"
+msgstr ""
+
 #: wwsympa/tt2/scenario_test.tt2:37
 msgid "sender email"
 msgstr ""
@@ -2821,6 +2876,10 @@ msgstr ""
 msgid "subscribers update failed for list %1"
 msgstr ""
 
+#: src/etc/mhonarc-ressources:351 src/etc/mhonarc-ressources:360
+msgid "tag this mail for deletion"
+msgstr ""
+
 #: wwsympa/tt2/create_list_request.tt2:11
 msgid "the list name ; be careful, not its address !"
 msgstr ""
@@ -2831,6 +2890,10 @@ msgstr ""
 
 #: wwsympa/tt2/d_read.tt2:260
 msgid "title"
+msgstr ""
+
+#: src/etc/mhonarc-ressources:339
+msgid "to list"
 msgstr ""
 
 #: wwsympa/tt2/view_translations.tt2:22
