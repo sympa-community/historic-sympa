@@ -25,12 +25,10 @@
 <br />
 
 <h2>[%|loc%]Lists[%END%]</h2>
-<ul id="MainMenuLinks">	
-  <li><a class="MainMenuLinks" href="[% path_cgi %]/get_pending_lists">[%|loc%]Pending lists[%END%]</a></li>
-  <li><a class="MainMenuLinks" href="[% path_cgi %]/get_latest_lists">[%|loc%]Latest lists[%END%]</a>
-  <li><a class="MainMenuLinks" href="[% path_cgi %]/get_inactive_lists">[%|loc%]Inactive lists[%END%]</a>
-  <li><a class="MainMenuLinks" href="[% path_cgi %]/get_closed_lists">[%|loc%]Closed lists[%END%]</a>
-</ul>
+<a class="actionMenuLinks" href="[% path_cgi %]/get_pending_lists">[%|loc%]Pending lists[%END%]</a>
+<a class="actionMenuLinks" href="[% path_cgi %]/get_latest_lists">[%|loc%]Latest lists[%END%]</a>
+<a class="actionMenuLinks" href="[% path_cgi %]/get_inactive_lists">[%|loc%]Inactive lists[%END%]</a>
+<a class="actionMenuLinks" href="[% path_cgi %]/get_closed_lists">[%|loc%]Closed lists[%END%]</a>
  <br />
 
 <h2>[%|loc%]Users[%END%]</h2>
@@ -65,10 +63,9 @@
 </form>
 </div>
 <br />
+	
+<a class="actionMenuLinks" href="[% path_cgi %]/view_translations">[%|loc%]Customize templates[%END%]</a>
 
-<ul id="MainMenuLinks">	
-  <li><a class="MainMenuLinks" href="[% path_cgi %]/view_translations">[%|loc%]Customize templates[%END%]</a></li>
-</ul>
 <br /><br />
 
 <h2>[%|loc%]Colors[%END%]</h2>
@@ -114,13 +111,7 @@ or  <input type="submit" name="action_rebuildallarc" value="[%|loc%]Rebuild all[
 
 <br /><br />
 
-<br />
 
-<h2>Scenari (deprecated)</h2>
-
-<ul id="MainMenuLinks">	
-  <li><a class="MainMenuLinks" href="[% path_cgi %]/scenario_test">[%|loc%]Scenari test module[%END%]</a></li>
-</ul>
 
 <br />
 
