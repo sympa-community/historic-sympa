@@ -8968,7 +8968,7 @@ sub do_set_pending_list_request {
 	 &wwslog('info','do_load_cert: no list');
 	 return undef;
      }
-     my @cert = $list->get_cert();
+     my @cert = $list->get_cert('der');
      unless (@cert) {
 	 &error_message('missing_cert');
 	 &wwslog('info','do_load_cert: no cert for this list');
