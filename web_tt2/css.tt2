@@ -176,6 +176,9 @@ h6.block {text-align: center; background: [% color_4 %];}
 
 .blockerror {border: 3px dashed [% error_color %]; background: transparent; padding : 10px;}
 
+ul.listenum {list-style: none;}
+ul li.listenum {padding : 5px;} 
+
 ul.menuLinks {list-style-type: none;}
 a.menuLinks {padding: 0px 10px 0px 0px; text-decoration: none;}
 a.menuLinks:link {text-decoration: none;}
