@@ -836,7 +836,7 @@ msgid ""
 "Functions, equivalent to Sympa robot commands, are accessible in\n"
 "the higher part of the user interface's banner. WWSympa provides \n"
 "a customized environment with access to the following functions :\n"
-msgstr "Sympa 的系統指令/功能，位於使用者介面的標題的最上端處。"
+msgstr "Sympa 的系統指令/功能，位於使用者介面的標題的最上端處。\n"
 
 #: wwsympa/tt2/show_cert.tt2:5
 msgid "HTTPS authentication information"
@@ -919,7 +919,7 @@ msgstr ""
 msgid ""
 "In order to benefit from the full services provided by this server, you probably\n"
 " need to identify yourself first.\n"
-msgstr "為了能夠使用本伺服器中所有提供的服務，您必須先確認身分。"
+msgstr "為了能夠使用本伺服器中所有提供的服務，您必須先確認身分。\n"
 
 #: src/etc/tt2/helpfile.tt2:52
 msgid ""
@@ -1008,7 +1008,7 @@ msgstr ""
 "	</TD>\n"
 "      </TR>\n"
 "\n"
-"      <TR><\n"
+"      <TR><"
 
 #: wwsympa/tt2/arcsearch_form.tt2:48
 msgid "Layout"
@@ -1253,7 +1253,7 @@ msgstr "修改"
 msgid ""
 "Most mailing list features require your email. Some mailing lists are hidden to\n"
 " unidentified persons.\n"
-msgstr "郵遞論壇大部分的功能都需要登入 email 方能使用；某些郵遞論壇不對一般大眾開放。"
+msgstr "郵遞論壇大部分的功能都需要登入 email 方能使用；某些郵遞論壇不對一般大眾開放。\n"
 
 #: wwsympa/tt2/subrequest.tt2:65
 msgid "My password ?"
@@ -1438,7 +1438,7 @@ msgstr "頁面大小"
 msgid "Parameters of these search make on <b> &quot;%1&quot;</b>"
 msgstr ""
 "搜尋參數的應用範圍 <b> &quot;%1&quot;</b>\n"
-"<\n"
+"<"
 
 #: wwsympa/tt2/pref.tt2:118
 msgid "Password :"
@@ -2575,7 +2575,7 @@ msgstr "您需要先登入"
 msgid ""
 "You need to login to access your custom WWSympa environment or to perform a\n"
 "privileged operation (one that requires your email address).\n"
-msgstr "您需要登入系統，方能使用自訂的 WWSympa 環境與進行特別的操作（需要電子郵件地址）。"
+msgstr "您需要登入系統，方能使用自訂的 WWSympa 環境與進行特別的操作（需要電子郵件地址）。\n"
 
 #: src/etc/tt2/sendpasswd.tt2:13
 #. (list)

@@ -2016,7 +2016,7 @@ msgstr "De foutmelding die terugkwam :"
 msgid "The sending interval for these Digests is defined by the list owner."
 msgstr ""
 "Het interval waarmee de Digests worden verstuurd wordt bepaald door de lijst\n"
-"eigenaar.\n"
+"eigenaar."
 
 #: src/etc/tt2/modindex.tt2:10
 #. (total,list.name,list.host)
@@ -2407,7 +2407,7 @@ msgstr "Zichtbaarheid :"
 msgid "Visibility : %1"
 msgstr ""
 "Zichtbaarheid : %1\n"
-"<DD>Taal\n"
+"<DD>Taal"
 
 #: wwsympa/tt2/help.tt2:56
 msgid "WWSympa can remind you your password by email :"
@@ -2547,7 +2547,7 @@ msgstr "U heeft een parameter veranderd zonder toestemming: %1"
 msgid "You have forgotten your password, or you never had any password related to this server"
 msgstr ""
 "U heeft uw wachtwoord vergeten, of u heeft nog nooit een wachtwoord\n"
-"      voor deze server gehad.\n"
+"      voor deze server gehad."
 
 #: wwsympa/tt2/login.tt2:3
 #. (user.email)

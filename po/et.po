@@ -154,7 +154,7 @@ msgstr "(See lause,"
 msgid "), provide your email address and associated password."
 msgstr ""
 "), siis sisesta kasutajanimeks \n"
-"oma eposti aadress ning parooliks sellega seotud parool.\n"
+"oma eposti aadress ning parooliks sellega seotud parool."
 
 #: src/etc/tt2/your_infected_msg.tt2:4
 msgid "***** V I R U S    A L E R T *****"
@@ -776,7 +776,7 @@ msgid "Error while deleting this message"
 msgstr ""
 "Viga kirja kustutamisel, palun saatke listmasterile kirja arhiivi \n"
 "täielik URL.\n"
-"</b>\n"
+"</b>"
 
 #: src/etc/tt2/expire_warning1.tt2:9 src/etc/tt2/expire_warning2.tt2:9 src/etc/tt2/remind.tt2:7
 msgid "Everything about this list : "
@@ -2410,7 +2410,7 @@ msgstr "Nähtavus:"
 msgid "Visibility : %1"
 msgstr ""
 "Nähtavus: %1\n"
-"<DD>Keel: [% current_subscriber.lang %]\n"
+"<DD>Keel: [% current_subscriber.lang %]"
 
 #: wwsympa/tt2/help.tt2:56
 msgid "WWSympa can remind you your password by email :"
@@ -2519,7 +2519,7 @@ msgstr ""
 msgid "You can logout (deletion of the <I>cookie</I>) at any time using"
 msgstr ""
 "Sa saad lahkuda WWSympast (see tähendab <I>küpsise</I> kustutada) igal ajal\n"
-"kasutades <\n"
+"kasutades <"
 
 #: src/etc/tt2/helpfile.tt2:17
 msgid ""
@@ -2612,7 +2612,7 @@ msgstr "Eemaldage ka aliased"
 msgid "You will receive an email, reminding you your password."
 msgstr ""
 "Teile saadetakse kiri, kus on teie parool. Et kinnitada oma<BR>\n"
-"aadressi muutust, sisestage saadud parool siia:\n"
+"aadressi muutust, sisestage saadud parool siia:"
 
 #: src/etc/tt2/certif_warning.tt2:8
 msgid "You won"

@@ -1968,7 +1968,7 @@ msgstr "Oletusmallit"
 msgid "That is to say using a unique email address in Sympa for your subscriptions and preferences"
 msgstr ""
 "Tämä on uniikki email osoite Sympassa tilauksia ja asetuksia varten\n"
-"</FONT\n"
+"</FONT"
 
 #: src/etc/tt2/listmaster_notification.tt2:15
 msgid "The antivirus scan has failed while processing the following file:"
@@ -2407,7 +2407,7 @@ msgstr "Näkyvyys :"
 msgid "Visibility : %1"
 msgstr ""
 "Näkyvyys : %1\n"
-"<DD>Kieli\n"
+"<DD>Kieli"
 
 #: wwsympa/tt2/help.tt2:56
 msgid "WWSympa can remind you your password by email :"
@@ -2516,7 +2516,7 @@ msgstr "Voit muuttaa useita viestejä/tiedostoja jotka liittyvät listaasi:"
 msgid "You can logout (deletion of the <I>cookie</I>) at any time using"
 msgstr ""
 "Voit kirjautua ulos (<I>kuitin</I> poisto) milloin tahansa\n"
-"<\n"
+"<"
 
 #: src/etc/tt2/helpfile.tt2:17
 msgid ""

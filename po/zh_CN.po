@@ -1008,7 +1008,7 @@ msgstr ""
 "	</TD>\n"
 "      </TR>\n"
 "\n"
-"      <TR><\n"
+"      <TR><"
 
 #: wwsympa/tt2/arcsearch_form.tt2:48
 msgid "Layout"
@@ -1438,7 +1438,7 @@ msgstr "页面大小"
 msgid "Parameters of these search make on <b> &quot;%1&quot;</b>"
 msgstr ""
 "查找参数的应用范围 <b> &quot;%1&quot;</b>\n"
-"<\n"
+"<"
 
 #: wwsympa/tt2/pref.tt2:118
 msgid "Password :"

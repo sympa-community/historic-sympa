@@ -155,7 +155,7 @@ msgid "), provide your email address and associated password."
 msgstr ""
 "), inserisci il tuo indirizzo e-mail
 \n"
-"e la password associata.\n"
+"e la password associata."
 
 #: src/etc/tt2/your_infected_msg.tt2:4
 msgid "***** V I R U S    A L E R T *****"
@@ -490,7 +490,7 @@ msgstr ""
 msgid "Connexion expiration period"
 msgstr ""
 "Durata della connessione (cookie) </FONT>\n"
-"	    <\n"
+"	    <"
 
 #:
 msgid "Content-Type: text/plain"
@@ -576,7 +576,7 @@ msgstr ""
 msgid "Data have changed on disk. Cannot apply your changes"
 msgstr ""
 "I dati su disco sono cambiati. \n"
-"Data have changed on disk. Non posso applicare i tuoi cambiamenti\n"
+"Data have changed on disk. Non posso applicare i tuoi cambiamenti"
 
 #: wwsympa/tt2/edit_list_request.tt2:10
 msgid "Data sources setup"
@@ -688,7 +688,7 @@ msgstr ""
 \n"
 "	<INPUT TYPE=\"hidden\" NAME=\"path\" VALUE=\"[% path %][% f.doc %]\">
 \n"
-"	</form>\n"
+"	</form>"
 
 #: wwsympa/tt2/d_read.tt2:122
 #. (path,s.doc)
@@ -698,7 +698,7 @@ msgstr ""
 \n"
 "	  <INPUT TYPE=\"hidden\" NAME=\"path\" VALUE=\"%1%2\">
 \n"
-"	  </form>\n"
+"	  </form>"
 
 #: src/etc/mhonarc-ressources:351 src/etc/mhonarc-ressources:360
 msgid "Do you really want to delete this message ?"
@@ -790,7 +790,7 @@ msgstr "Fine del riassunto della lista %1 - %2"
 msgid "Error while deleting this message"
 msgstr ""
 "Errore durante la cancellazione del messaggio, fate riferimento al vostro\n"
-"listmaster tramite l'indirizzo completo del messaggio incriminato</b>\n"
+"listmaster tramite l'indirizzo completo del messaggio incriminato</b>"
 
 #: src/etc/tt2/expire_warning1.tt2:9 src/etc/tt2/expire_warning2.tt2:9 src/etc/tt2/remind.tt2:7
 msgid "Everything about this list : "
@@ -1135,7 +1135,7 @@ msgstr "Load certificat"
 msgid "Local"
 msgstr ""
 "Cerca nelle liste\">\n"
-"        <\n"
+"        <"
 
 #: wwsympa/tt2/help.tt2:22 wwsympa/tt2/help.tt2:25 wwsympa/tt2/help.tt2:28 wwsympa/tt2/loginbanner.tt2:34 wwsympa/tt2/menu.tt2:35
 msgid "Login"
@@ -1174,7 +1174,7 @@ msgstr "Vi consigliamo di eseguire i necessari controlli antivirus."
 msgid "May take a lot of CPU time,  be careful !"
 msgstr ""
 "ATTENZIONE: Potrebbe richiedere molto tempo!\n"
-"          <\n"
+"          <"
 
 #: wwsympa/tt2/help_editfile.tt2:34
 msgid "Message footer : same as"
@@ -1447,7 +1447,7 @@ msgstr "Proprietario:"
 msgid "Owners"
 msgstr ""
 "<BR>\n"
-"	  Proprietari\n"
+"	  Proprietari"
 
 #: wwsympa/tt2/review.tt2:89 wwsympa/tt2/reviewbouncing.tt2:34
 msgid "Page size"
@@ -1459,7 +1459,7 @@ msgid "Parameters of these search make on <b> &quot;%1&quot;</b>"
 msgstr ""
 "Parametri di questa ricerca fatti su <b> &quot;%1&quot;</b> 
 \n"
-"<I>\n"
+"<I>"
 
 #: wwsympa/tt2/pref.tt2:118
 msgid "Password :"
@@ -1517,7 +1517,7 @@ msgstr ""
 msgid "Post"
 msgstr ""
 "[% dark_color %]\" VALIGN=\"top\">\n"
-"      <TABLE BORDER=\"\"\n"
+"      <TABLE BORDER=\"\""
 
 #: src/etc/tt2/helpfile.tt2:83
 msgid "Powered by Sympa"
@@ -1736,7 +1736,7 @@ msgstr ""
 "TR>\n"
 "     <TD BGCOLOR=\"[% dark_color %]\" VALIGN=\"top\">\n"
 "      <TABLE BORDER=\"\" WIDTH=\"100%\" CELLSPACING=\"1\" CELLPADDING=\"2\" VALIGN=\"top\">\n"
-"       <TR>\n"
+"       <TR>"
 
 #: src/etc/tt2/info_report.tt2:15
 #. (review)
@@ -1813,7 +1813,7 @@ msgstr ""
 \n"
 "     	      </FONT>
 \n"
-"         </FORM>\n"
+"         </FORM>"
 
 #: wwsympa/tt2/compose_mail.tt2:7
 msgid "Send this mail"
@@ -2448,7 +2448,7 @@ msgstr ""
 \n"
 "<DD>Lingua: [% current_subscriber.lang %]
 \n"
-"<\n"
+"<"
 
 #: wwsympa/tt2/help.tt2:56
 msgid "WWSympa can remind you your password by email :"
@@ -2522,7 +2522,7 @@ msgid "You are already subscriber of list %1"
 msgstr ""
 "Sei gi&agrave; iscritto alla lista %1.
 \n"
-"	</FONT>\n"
+"	</FONT>"
 
 #: wwsympa/tt2/sigrequest.tt2:17
 #. (list,email)
@@ -2648,7 +2648,7 @@ msgstr ""
 \n"
 "	Per confermare la tua identit&agrave; ed evitare abusi, ti viene ora spedito
 \n"
-"	un messaggio contente un indirizzo.\n"
+"	un messaggio contente un indirizzo."
 
 #: wwsympa/tt2/close_list.tt2:9
 msgid "You should remove list aliases manually"
@@ -2735,7 +2735,7 @@ msgstr ""
 \n"
 "(L'alias effettivo dipende dal list-master cos&igrave; &egrave; possibile che
 \n"
-"l'indirizzo della tua lista non venga ancora riconosciuto.)\n"
+"l'indirizzo della tua lista non venga ancora riconosciuto.)"
 
 #: src/etc/tt2/reject.tt2:5
 #. (list.name,list.host,rejected_by)
@@ -2799,7 +2799,7 @@ msgstr ""
 \n"
 "	  <INPUT TYPE=\"hidden\" NAME=\"path\" VALUE=\"[% path %][% f.doc %]\">     
 \n"
-"	  </form>\n"
+"	  </form>"
 
 #: wwsympa/tt2/create_list.tt2:5 wwsympa/tt2/lists.tt2:18
 msgid "admin"
@@ -2838,7 +2838,7 @@ msgstr ""
 \n"
 "(L'alias effettivo dipende dal list-master cos&igrave; &egrave; possibile che
 \n"
-"l'indirizzo della tua lista non venga ancora riconosciuto.)\n"
+"l'indirizzo della tua lista non venga ancora riconosciuto.)"
 
 #: wwsympa/tt2/help_editfile.tt2:12
 msgid "button."
@@ -2892,7 +2892,7 @@ msgstr ""
 \n"
 "	  <INPUT TYPE=\"hidden\" NAME=\"path\" VALUE=\"[% path %][% s.doc %]\">
 \n"
-"	  </form>\n"
+"	  </form>"
 
 #: wwsympa/tt2/serveradmin.tt2:153
 msgid "directories as input."
@@ -2909,7 +2909,7 @@ msgstr ""
 \n"
 "	<INPUT TYPE=\"hidden\" NAME=\"path\" VALUE=\"[% path %][% f.doc %]\">
 \n"
-"	</form>\n"
+"	</form>"
 
 #: src/etc/tt2/listmaster_notification.tt2:24
 msgid ""
@@ -2986,7 +2986,7 @@ msgstr ""
 \n"
 "
 \n"
-"        <\n"
+"        <"
 
 #: wwsympa/tt2/help.tt2:39
 msgid "logout"
@@ -3158,7 +3158,7 @@ msgid "title"
 msgstr ""
 "[% ELSE %]
 \n"
-"      <B> Create a new folder inside the folder SHARED</B>\n"
+"      <B> Create a new folder inside the folder SHARED</B>"
 
 #: src/etc/mhonarc-ressources:339
 msgid "to list"

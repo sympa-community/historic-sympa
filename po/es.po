@@ -675,21 +675,21 @@ msgstr ""
 "    }\n"
 "  }\n"
 "  // end borwsers -->\n"
-"  </SCRIPT>\n"
+"  </SCRIPT>"
 
 #: wwsympa/tt2/d_read.tt2:189
 #. (path,s.doc,f.size)
 msgid "Do you really want to delete %1%2 ([% f.size %] Kb) ?"
 msgstr ""
 "<INPUT TYPE=\"hidden\" NAME=\"list\" VALUE=\"[% list %]\">\n"
-"	<INPUT TYPE=\"hidden\" NAME=\"path\" VALUE=\"%1[% f.doc %]\"\n"
+"	<INPUT TYPE=\"hidden\" NAME=\"path\" VALUE=\"%1[% f.doc %]\""
 
 #: wwsympa/tt2/d_read.tt2:122
 #. (path,s.doc)
 msgid "Do you really want to delete %1%2 ?"
 msgstr ""
 "<INPUT TYPE=\"hidden\" NAME=\"list\" VALUE=\"[% list %]\">\n"
-"	  <INPUT TYPE=\"hidden\" NAME=\"path\" VALUE=\"%1%2\"\n"
+"	  <INPUT TYPE=\"hidden\" NAME=\"path\" VALUE=\"%1%2\""
 
 #: src/etc/mhonarc-ressources:351 src/etc/mhonarc-ressources:360
 msgid "Do you really want to delete this message ?"
@@ -1673,7 +1673,7 @@ msgstr "Solicitada por"
 msgid "Required aliases"
 msgstr ""
 "(La creación efectiva del alias depende del listmaster con lo que es posible \n"
-"que la dirección de su lista no esté todavía activa.)\n"
+"que la dirección de su lista no esté todavía activa.)"
 
 #: wwsympa/tt2/editsubscriber.tt2:55
 msgid "Reset errors"
@@ -1714,7 +1714,7 @@ msgstr ""
 "TR>\n"
 "     <TD BGCOLOR=\"[% dark_color %]\" VALIGN=\"top\">\n"
 "      <TABLE BORDER=\"\" WIDTH=\"100%\" CELLSPACING=\"1\" CELLPADDING=\"2\" VALIGN=\"top\">\n"
-"       <TR>\n"
+"       <TR>"
 
 #: src/etc/tt2/info_report.tt2:15
 #. (review)
@@ -2417,7 +2417,7 @@ msgstr ""
 msgid "Visibility : %1"
 msgstr ""
 "Visibilidad : %1\n"
-"<DD>Idioma\n"
+"<DD>Idioma"
 
 #: wwsympa/tt2/help.tt2:56
 msgid "WWSympa can remind you your password by email :"
@@ -2520,7 +2520,7 @@ msgstr ""
 "usando el botón de administrar.\n"
 "\n"
 "(La creación efectiva del alias depende del listmaster con lo que es posible \n"
-"que la dirección de su lista no esté todavía activa.)\n"
+"que la dirección de su lista no esté todavía activa.)"
 
 #: wwsympa/tt2/editfile.tt2:14
 msgid "You can edit several messages/files associated to your list :"
@@ -2561,7 +2561,7 @@ msgstr "Ha cambiado un parámetro sin permisos : %1"
 msgid "You have forgotten your password, or you never had any password related to this server"
 msgstr ""
 "Usted no tiene una contraseña en este servidor o se le ha olvidado.<br>\n"
-"      Introduzca su dirección de correo electrónico y se la mandaremos :\n"
+"      Introduzca su dirección de correo electrónico y se la mandaremos :"
 
 #: wwsympa/tt2/login.tt2:3
 #. (user.email)
@@ -2696,7 +2696,7 @@ msgstr ""
 "usando el botón de administrar.\n"
 "\n"
 "(La creación efectiva del alias depende del listmaster con lo que es posible \n"
-"que la dirección de su lista no esté todavía activa.)\n"
+"que la dirección de su lista no esté todavía activa.)"
 
 #: src/etc/tt2/reject.tt2:5
 #. (list.name,list.host,rejected_by)
@@ -2757,7 +2757,7 @@ msgstr ""
 msgid "access"
 msgstr ""
 "input type=\"submit\" value=\"    \" name=\"action_d_control\">\n"
-"	  </font\n"
+"	  </font"
 
 #: wwsympa/tt2/create_list.tt2:5 wwsympa/tt2/lists.tt2:18
 msgid "admin"
@@ -2791,7 +2791,7 @@ msgstr ""
 "usando el botón de administrar.\n"
 "\n"
 "(La creación efectiva del alias depende del listmaster con lo que es posible \n"
-"que la dirección de su lista no esté todavía activa.)\n"
+"que la dirección de su lista no esté todavía activa.)"
 
 #: wwsympa/tt2/help_editfile.tt2:12
 msgid "button."
@@ -2842,7 +2842,7 @@ msgstr ""
 msgid "delete"
 msgstr ""
 "<INPUT TYPE=\"hidden\" NAME=\"list\" VALUE=\"[% list %]\">\n"
-"	  <INPUT TYPE=\"hidden\" NAME=\"path\" VALUE=\"[% path %][% s.doc %]\"\n"
+"	  <INPUT TYPE=\"hidden\" NAME=\"path\" VALUE=\"[% path %][% s.doc %]\""
 
 #: wwsympa/tt2/serveradmin.tt2:153
 msgid "directories as input."
@@ -2856,7 +2856,7 @@ msgstr "E-mail"
 msgid "edit"
 msgstr ""
 "<INPUT TYPE=\"hidden\" NAME=\"list\" VALUE=\"[% list %]\">\n"
-"	<INPUT TYPE=\"hidden\" NAME=\"path\" VALUE=\"[% path %][% f.doc %]\"\n"
+"	<INPUT TYPE=\"hidden\" NAME=\"path\" VALUE=\"[% path %][% f.doc %]\""
 
 #: src/etc/tt2/listmaster_notification.tt2:24
 msgid ""
@@ -3099,7 +3099,7 @@ msgstr "estas palabras"
 msgid "title"
 msgstr ""
 "[% IF path %]\n"
-"      Crear una nueva carpeta dentro de la carpeta [% path %]\n"
+"      Crear una nueva carpeta dentro de la carpeta [% path %]"
 
 #: src/etc/mhonarc-ressources:339
 msgid "to list"

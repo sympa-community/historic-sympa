@@ -773,7 +773,7 @@ msgstr "Digest vége a(z) %1 listán - %2"
 msgid "Error while deleting this message"
 msgstr ""
 "Hiba az üzenet törlésénél, kérlek fordulj a listmasterhez a \n"
-"törlésre szánt üzenet teljes címével (URL).</b>\n"
+"törlésre szánt üzenet teljes címével (URL).</b>"
 
 #: src/etc/tt2/expire_warning1.tt2:9 src/etc/tt2/expire_warning2.tt2:9 src/etc/tt2/remind.tt2:7
 msgid "Everything about this list : "
@@ -1159,7 +1159,7 @@ msgstr "Csak óvatosan, mivel nagyon gépigényes!"
 msgid "Message footer : same as"
 msgstr ""
 "Felkérõ levél a feliratkozásra: elküldésre kerül, ha feliratkozásra\n"
-"kér fel valaki másvalakit az INVITE paranccsal.\n"
+"kér fel valaki másvalakit az INVITE paranccsal."
 
 #: wwsympa/tt2/help_editfile.tt2:34
 msgid "Message header,"
@@ -1437,7 +1437,7 @@ msgstr "Oldal méret"
 msgid "Parameters of these search make on <b> &quot;%1&quot;</b>"
 msgstr ""
 "Megadott paraméterek a keresésben a(z) <b> &quot;%1&quot;</b> kulcsszavakhoz:\n"
-"<\n"
+"<"
 
 #: wwsympa/tt2/pref.tt2:118
 msgid "Password :"
@@ -1712,7 +1712,7 @@ msgstr ""
 "TR>\n"
 "     <TD BGCOLOR=\"[% dark_color %]\" VALIGN=\"top\">\n"
 "      <TABLE BORDER=\"\" WIDTH=\"100%\" CELLSPACING=\"1\" CELLPADDING=\"2\" VALIGN=\"top\">\n"
-"       <TR>\n"
+"       <TR>"
 
 #: src/etc/tt2/info_report.tt2:15
 #. (review)
@@ -2415,7 +2415,7 @@ msgstr ""
 msgid "Visibility : %1"
 msgstr ""
 "Nyilvánosság: %1\n"
-"<DD>Nyelv: [% current_subscriber.lang %]\n"
+"<DD>Nyelv: [% current_subscriber.lang %]"
 
 #: wwsympa/tt2/help.tt2:56
 msgid "WWSympa can remind you your password by email :"
@@ -2441,7 +2441,7 @@ msgstr ""
 msgid "Welcome message"
 msgstr ""
 "nincs értesítés</i> gombbal az\n"
-"értesítés elmaradhat).\n"
+"értesítés elmaradhat)."
 
 #: wwsympa/tt2/help_editfile.tt2:5
 msgid ""
@@ -2557,7 +2557,7 @@ msgstr "Megfelelõ jogosultságok hiányában próbáltál meg módosítani: %1"
 msgid "You have forgotten your password, or you never had any password related to this server"
 msgstr ""
 "Ha elfelejtetted a jelszavadat, vagy ezen a gépen még nincsen,<br>\n"
-"      akkor most e-mailben lekérheted:\n"
+"      akkor most e-mailben lekérheted:"
 
 #: wwsympa/tt2/login.tt2:3
 #. (user.email)
@@ -2620,7 +2620,7 @@ msgid "You will receive an email, reminding you your password."
 msgstr ""
 "E-mailben elküldésre kerül a jelszavad. E-mail címedet csak<br>\n"
 "akkor tudod megváltoztatni, ha a lejebb található jelszót\n"
-"is megadod:\n"
+"is megadod:"
 
 #: src/etc/tt2/certif_warning.tt2:8
 msgid "You won"
