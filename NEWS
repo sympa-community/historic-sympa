@@ -20,11 +20,11 @@
 
    CHanges :
 
-*****	[BugID 99] Pg 7.3 no longer supports the LIMIT #,# syntax
+	[BugID 99] Pg 7.3 no longer supports the LIMIT #,# syntax
 
 	List.pm, etc/script/create_db.Pg: [E. Dreyfus] [reported by pamelant AT nerim.net] :	
-	Postgresql 7.3 has no support for not SQL standard type 'datetime'.  
-*****	If you are upgrading from	a previous Sympa version, you should update 
+*****	Postgresql 7.3 has no support for not SQL standard type 'datetime'.  
+*****	If you are upgrading from a previous Sympa version, you should update 
 *****	your sympa DB as follows : 
 *****	ALTER TABLE subscriber_table CHANGE date_subscriber timestamp with time zone NOT NULL; 
 *****	ALTER TABLE subscriber_table CHANGE update_subscriber timestamp with time zone;
