@@ -106,6 +106,7 @@ installtemplates:
 		( \
 		cd $$lang; \
 		PERL=$(PERL); export PERL; \
+		UMASK=0644; export UMASK; \
 		INSTALLDIR=$(ETCBINDIR)/wws_templates; export INSTALLDIR; \
 		SBINDIR=$(SBINDIR); export SBINDIR; \
 		CGIDIR=$(CGIDIR); export CGIDIR; \
@@ -124,7 +125,8 @@ installtemplates:
 		); \
 	done
 	$(PERL) ../set_symlinks.pl wws_templates $(DESTDIR)$(ETCBINDIR)/wws_templates
-	chmod -R 644 $(DESTDIR)$(ETCBINDIR)/wws_templates
+	find $(DESTDIR)$(ETCBINDIR) -type d -exec chmod 755 {} \;
+	find $(DESTDIR)$(ETCBINDIR) -type f -exec chmod 644 {} \;
 
 installicons:
 	@echo "Installing icons..."

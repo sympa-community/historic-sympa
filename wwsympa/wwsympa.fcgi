@@ -45,7 +45,6 @@ use Conf;
 use Commands;
 use Language;
 use Log;
-use Ldap;
 use Auth;
 
 use Mail::Header;
@@ -85,7 +84,7 @@ unless (&Conf::load( $sympa_conf_file )) {
     &fatal_err('Unable to load sympa config file %s', $sympa_conf_file);
 }
 
-$log_level = $Conf{'log_level'} if ($Conf{'log_level'}); 
+$log_level = $Conf{'log_level'} if ($Conf{'log_level'});
 
 &mail::set_send_spool($Conf{'queue'});
 
@@ -405,7 +404,7 @@ if ($wwsconf->{'use_fast_cgi'}) {
  my $start_time = &POSIX::strftime("%d %b %Y at %H:%M:%S", localtime(time));
  while ($query = &new_loop()) {
 
-
+     my %loop_prevention;
      undef $param;
      undef $list;
      undef $robot;
@@ -527,7 +526,9 @@ if ($wwsconf->{'use_fast_cgi'}) {
      ## Default auth method (for scenarios)
      $param->{'auth_method'} = 'md5';
 
-     if ($ENV{'SSL_CLIENT_VERIFY'} eq 'SUCCESS') {
+     if (($ENV{'SSL_CLIENT_VERIFY'} eq 'SUCCESS') &&
+	 ($in{'action'} ne 'sso_login')) { ## Do not check client certificate automatically if in sso_login 
+
 	 &do_log('debug2', "SSL verified, S_EMAIL = %s,"." S_DN_Email = %s", $ENV{'SSL_CLIENT_S_EMAIL'}, $ENV{SSL_CLIENT_S_DN_Email});
 	 if (($ENV{'SSL_CLIENT_S_EMAIL'})) {
 	     ## this is the X509v3 SubjectAlternativeName, and requires
@@ -632,6 +633,7 @@ if ($wwsconf->{'use_fast_cgi'}) {
 
          if (&List::is_user_db($param->{'user'}{'email'})) {
              $param->{'user'} = &List::get_user_db($param->{'user'}{'email'});
+	     $param->{'user_attributes'} = $param->{'user'}{'attributes'};
          }
 
          ## For the parser to display an empty field instead of [xxx]
@@ -685,7 +687,6 @@ if ($wwsconf->{'use_fast_cgi'}) {
          $param->{'lang'} = $param->{'cookie_lang'} || $param->{'user'}{'lang'} || 
 	     $list->{'admin'}{'lang'} || &Conf::get_robot_conf($robot, 'lang');
          &Language::SetLang($param->{'lang'});
-         &POSIX::setlocale(&POSIX::LC_ALL, Msg(14, 1, 'en_US'));
 
          ## use default_home parameter
          if ($action eq 'home') {
@@ -707,6 +708,8 @@ if ($wwsconf->{'use_fast_cgi'}) {
 
          my $old_action = $action;
 
+	 $loop_prevention{$action}++;
+
          ## Execute the action ## 
          $action = &{$comm{$action}}();
 
@@ -714,8 +717,10 @@ if ($wwsconf->{'use_fast_cgi'}) {
 	 
 	 last if ($action =~ /redirect/) ; # after redirect do not send anything, it will crash fcgi lib
 
-
-         if ($action eq $old_action) {
+	 
+         if ($loop_prevention{$action} > 2 ||
+	     $action eq $old_action
+	     ) {
              &wwslog('info','Stopping loop with %s action', $action);
              #undef $action;
              $action = 'home';
@@ -743,57 +748,59 @@ if ($wwsconf->{'use_fast_cgi'}) {
 	 $param->{'main_title'} = $param->{'title'} = &Conf::get_robot_conf($robot,'title');
      }
 
-     ## Set cookies "your_subscribtions"
-     if ($param->{'user'}{'email'}) {
-	 # if at least one element defined in get_which tab
-	 &cookielib::set_which_cookie ($wwsconf->{'cookie_domain'},@{$param->{'get_which'}});
-
-	 ## Add lists information to 'which_info'
-	 foreach my $l (@{$param->{'get_which'}}) {
-	     my $list = new List ($l);
-	     $param->{'which_info'}{$l}{'subject'} = $list->{'admin'}{'subject'};
-	     $param->{'which_info'}{$l}{'host'} = $list->{'admin'}{'host'};
-	     $param->{'which_info'}{$l}{'info'} = 1;
+     ## Do not manage cookies at this level if content was already sent
+     unless ($param->{'bypass'} eq 'extreme') {
+	 ## Set cookies "your_subscribtions"
+	 if ($param->{'user'}{'email'}) {
+	     # if at least one element defined in get_which tab
+	     &cookielib::set_which_cookie ($wwsconf->{'cookie_domain'},@{$param->{'get_which'}});
+	     
+	     ## Add lists information to 'which_info'
+	     foreach my $l (@{$param->{'get_which'}}) {
+		 my $list = new List ($l);
+		 $param->{'which_info'}{$l}{'subject'} = $list->{'admin'}{'subject'};
+		 $param->{'which_info'}{$l}{'host'} = $list->{'admin'}{'host'};
+		 $param->{'which_info'}{$l}{'info'} = 1;
+	     }
 	 }
-     }
-     ## Set cookies unless client use https authentication
-     if ($param->{'user'}{'email'}) {
-	 if ($param->{'user'}{'email'} ne 'x509') {
-	     my $delay = $param->{'user'}{'cookie_delay'};
-	     unless (defined $delay) {
-		 $delay = $wwsconf->{'cookie_expire'};
-	     }
-	     
-	     if ($delay == 0) {
-		 $delay = 'session';
-	     }
-	     
-	     $param->{'auth'} ||= 'classic';
-	     
-	     unless (&cookielib::set_cookie($param->{'user'}{'email'}, $Conf{'cookie'}, $param->{'cookie_domain'},$delay, $param->{'auth'} )) {
-		 &wwslog('notice', 'Could not set HTTP cookie');
-		 exit -1;
-	     }
-	     $param->{'cookie_set'} = 1;
-	     
-	     ##Cookie extern : sympa_altemails
-	     my $number = 0;
-	     foreach my $element (keys %{$param->{'alt_emails'}}){
-		  $number ++ if ($element);
-	     }  
-	     $param->{'unique'} = 1 if($number <= 1);
-	     
-	     unless ($number == 0) {
-		 unless(&cookielib::set_cookie_extern($Conf{'cookie'},$param->{'cookie_domain'},%{$param->{'alt_emails'}})){
-		     &wwslog('notice', 'Could not set HTTP cookie for external_auth');
+	 ## Set cookies unless client use https authentication
+	 if ($param->{'user'}{'email'}) {
+	     if ($param->{'user'}{'email'} ne 'x509') {
+		 my $delay = $param->{'user'}{'cookie_delay'};
+		 unless (defined $delay) {
+		     $delay = $wwsconf->{'cookie_expire'};
+		 }
+		 
+		 if ($delay == 0) {
+		     $delay = 'session';
+		 }
+		 
+		 $param->{'auth'} ||= 'classic';
+		 
+		 unless (&cookielib::set_cookie($param->{'user'}{'email'}, $Conf{'cookie'}, $param->{'cookie_domain'},$delay, $param->{'auth'} )) {
+		     &wwslog('notice', 'Could not set HTTP cookie');
+		     exit -1;
+		 }
+		 $param->{'cookie_set'} = 1;
+		 
+		 ##Cookie extern : sympa_altemails
+		 my $number = 0;
+		 foreach my $element (keys %{$param->{'alt_emails'}}){
+		     $number ++ if ($element);
+		 }  
+		 $param->{'unique'} = 1 if($number <= 1);
+		 
+		 unless ($number == 0) {
+		     unless(&cookielib::set_cookie_extern($Conf{'cookie'},$param->{'cookie_domain'},%{$param->{'alt_emails'}})){
+			 &wwslog('notice', 'Could not set HTTP cookie for external_auth');
+		     }
 		 }
 	     }
+	 }elsif ($ENV{'HTTP_COOKIE'} =~ /sympauser\=/){
+	     &cookielib::set_cookie('unknown', $Conf{'cookie'}, $param->{'cookie_domain'}, 'now');
 	 }
-     }elsif ($ENV{'HTTP_COOKIE'} =~ /sympauser\=/){
-	 &cookielib::set_cookie('unknown', $Conf{'cookie'}, $param->{'cookie_domain'}, 'now');
      }
-
-
+	 
      ## Available languages
      my $saved_lang = &Language::GetLang();
      foreach my $l (@wwslib::languages) {
@@ -809,7 +816,7 @@ if ($wwsconf->{'use_fast_cgi'}) {
      # if bypass is defined select the content-type from various vars
      if ($param->{'bypass'}) {
 
-	## if bypass = 'extreme' leave the action send the content-type
+	## if bypass = 'extreme' leave the action send the content-type and the content itself
 	unless ($param->{'bypass'} eq 'extreme') {
 
 	     ## if bypass = 'asis', file content-type is in the file itself as is define by the action in $param->{'content_type'};
@@ -1344,6 +1351,11 @@ if ($wwsconf->{'use_fast_cgi'}) {
 	     $param->{'editor'}{$e->{'email'}}{'masked_email'} = $masked_email;
 	 }  
 
+	 ## Environment variables
+	 foreach my $k (keys %ENV) {
+	     $param->{'env'}{$k} = $ENV{$k};
+	 }
+
 	## privileges
 	if ($param->{'user'}{'email'}) {
 	    $param->{'is_subscriber'} = $list->is_user($param->{'user'}{'email'});
@@ -1535,7 +1547,9 @@ if ($wwsconf->{'use_fast_cgi'}) {
 	 $param->{'back_to_mom'} = 1;
 	 return 1;
      }
-
+     
+     ## Prevents loops
+     delete $in{'passwd'};
      return $next_action;
 
  }
@@ -1771,6 +1785,19 @@ sub do_sso_login_succeeded {
      unless (&tools::get_filename('etc', 'auth.conf', $robot)) {
 	 return undef;
      }
+
+     ## List all LDAP servers first
+     my @ldap_servers;
+     foreach my $ldap (@{$Conf{'auth_services'}}){
+	 next unless ($ldap->{'auth_type'} eq 'ldap');
+	 
+	 push @ldap_servers, $ldap;
+     }    
+     
+     unless ($#ldap_servers >= 0) {
+	 return undef;
+     }
+
      unless (eval "require Net::LDAP") {
 	 do_log ('err',"Unable to use LDAP library, Net::LDAP required,install perl-ldap (CPAN) first");
 	 return undef;
@@ -1779,9 +1806,7 @@ sub do_sso_login_succeeded {
 
      my ($ldap_anonymous,$host,$filter);
 
-     foreach my $ldap (@{$Conf{'auth_services'}}){
-	 # only ldap service are to be applied here
-	 next unless ($ldap->{'auth_type'} eq 'ldap');
+     foreach my $ldap (@ldap_servers){
 
 	 # skip ldap auth service if the user id or email do not match regexp auth service parameter
 	 next unless ($auth =~ /$ldap->{'regexp'}/i);
@@ -2378,6 +2403,10 @@ sub do_redirect {
      unless ($in{'filter'}) {
 	 &error_message('no_filter');
 	 &wwslog('info','do_search: no filter');
+	 return undef;
+     }elsif ($in{'filter'} =~ /[<>\\\*\$]/) {
+	 &error_message('syntax_errors', {'argument' => 'filter'});
+	 &wwslog('err','do_search: syntax error');
 	 return undef;
      }
 
@@ -3537,21 +3566,21 @@ sub do_redirect {
 	 my $id = $1;
 
 	 ## Load msg
-	 unless (open MSG, "$Conf{'queuemod'}/$msg") {
+	 my $mail = new Message("$Conf{'queuemod'}/$msg");
+	 
+	 unless (defined $mail) {
 	     &error_message('msg_error');
-	     &wwslog('info','do_modindex: unable to read msg %s', $msg);
+	     &wwslog('err','do_modindex: unable to parse msg %s', $msg);
 	     closedir SPOOL;
 	     return 'admin';
 	 }
 
-	 my $mail = new Mail::Internet [<MSG>];
-	 close MSG;
 
 	 $param->{'spool'}{$id}{'size'} = int( (-s "$Conf{'queuemod'}/$msg") / 1024 + 0.5);
-	 $param->{'spool'}{$id}{'subject'} =  &MIME::Words::decode_mimewords($mail->head->get('Subject'));
+	 $param->{'spool'}{$id}{'subject'} =  &MIME::Words::decode_mimewords($mail->{'msg'}->head->get('Subject'));
 	 $param->{'spool'}{$id}{'subject'} ||= 'no_subject';
-	 $param->{'spool'}{$id}{'date'} = $mail->head->get('Date');
-	 $param->{'spool'}{$id}{'from'} = &MIME::Words::decode_mimewords($mail->head->get('From'));
+	 $param->{'spool'}{$id}{'date'} = $mail->{'msg'}->head->get('Date');
+	 $param->{'spool'}{$id}{'from'} = &MIME::Words::decode_mimewords($mail->{'msg'}->head->get('From'));
 	 foreach my $field ('subject','date','from') {
 	     $param->{'spool'}{$id}{$field} =~ s/</&lt;/;
 	     $param->{'spool'}{$id}{$field} =~ s/>/&gt;/;
@@ -3794,6 +3823,8 @@ sub do_redirect {
 	 ## Add list lang to tpl filename
 	 my $file = $in{'file'};
 	 $file =~ s/\.tpl$/\.$list->{'admin'}{'lang'}\.tpl/;
+	 my @path = split /\//,$param->{'filepath'};
+	 $param->{'file'} = $path[$#path];
 
 	 ## Look for the template
 	 $param->{'filepath'} = &tools::get_filename('etc','templates/'.$file,$robot, $list);
@@ -3818,6 +3849,8 @@ sub do_redirect {
 	 }else {
 	     my $lang = &Conf::get_robot_conf($robot, 'lang');
 	     $file =~ s/\.tpl$/\.$lang\.tpl/;
+	     my @path = split /\//,$file;
+	     $param->{'file'} = $path[$#path];
 
 	     $param->{'filepath'} = &tools::get_filename('etc','templates/'.$file,$robot);
 	 }
@@ -4286,6 +4319,10 @@ sub do_redirect {
 	 &error_message('missing_argument', {'argument' => 'key_word'});
 	 &wwslog('info','do_arcsearch: no search term');
 	 return undef;
+     }elsif ($in{'key_word'} =~ /[<>\\\*\$]/) {
+	 &error_message('syntax_errors', {'argument' => 'key_word'});
+	 &wwslog('info','do_arcsearch: syntax error');
+	 return undef;
      }
 
      $param->{'key_word'} = $in{'key_word'};
@@ -4295,6 +4332,7 @@ sub do_redirect {
      $in{'key_word'} =~ s/\(/\\\(/g;
      $in{'key_word'} =~ s/\)/\\\)/g;
      $in{'key_word'} =~ s/\$/\\\$/g;
+     $in{'key_word'} =~ s/\'/\\\'/g;
 
      $search->limit ($in{'limit'});
 
@@ -4598,7 +4636,7 @@ sub do_get_inactive_lists {
 
 	 if (open COUNT, $list->{'dir'}.'/msg_count') {
 	     while (<COUNT>) {
-		 $last_message = $1 if (/^(\d+)\s/);
+		 $last_message = $1 if (/^(\d+)\s/ && ($1 > $last_message));
 	     }
 	     close COUNT;
 
@@ -4931,7 +4969,7 @@ sub do_set_pending_list_request {
      my $list_dir;
 
      ## A virtual robot
-     if ($robot ne $Conf{'domain'}) {
+     if (-d "$Conf{'home'}/$robot") {
 	 unless (-d $Conf{'home'}.'/'.$robot) {
 	     unless (mkdir ($Conf{'home'}.'/'.$robot,0777)) {
 		 &error_message('unable_to_create_dir');
@@ -5475,6 +5513,10 @@ sub do_set_pending_list_request {
 	 &error_message('no_filter');
 	 &wwslog('info','do_search_list: no filter');
 	 return undef;
+     }elsif ($in{'filter'} =~ /[<>\\\*\$]/) {
+	 &error_message('syntax_errors', {'argument' => 'filter'});
+	 &wwslog('err','do_search_list: syntax error');
+	 return undef;
      }
 
      ## Regexp
@@ -5773,10 +5815,10 @@ sub do_set_pending_list_request {
 		     &wwslog('notice', 'No subscribers to load in database');
 		 }
 		 @users = &List::_load_users_file("$list->{'dir'}/subscribers");
-	     }elsif (($list->{'admin'}{'user_data_source'} eq 'database') &&
+	     }elsif (($list->{'admin'}{'user_data_source'} ne 'include2') &&
 		     ($new_admin->{'user_data_source'} eq 'include2')) {
 		 $list->update_user('*', {'subscribed' => 1});
-		 &message('subscribers_update_soon');
+		 &message('subscribers_updated_soon');
 	     }elsif (($list->{'admin'}{'user_data_source'} eq 'include2') &&
 		     ($new_admin->{'user_data_source'} eq 'database')) {
 		 $list->sync_include('purge');
@@ -5839,6 +5881,11 @@ sub do_set_pending_list_request {
      ## to start a new one
      if ($data_source_updated && ($list->{'admin'}{'user_data_source'} eq 'include2')) {
 	 $list->remove_task('sync_include');
+	 if ($list->sync_include()) {
+	     &message('subscribers_updated');
+	 }else {
+	     &error_message('failed_to_include_members');
+	 }
      }
 
      ##Exportation to an Ldap directory
@@ -6109,8 +6156,15 @@ sub do_set_pending_list_request {
 		     $p_glob->{'value'}{$elt}{'selected'} = 0;
 		 }
 	     }
-	     $p_glob->{'value'}{$d}{'selected'} = 1;
-
+	     if (ref ($d)) {
+		 next unless (ref ($d) eq 'ARRAY');
+		 foreach my $v (@{$d}) {
+		     $p_glob->{'value'}{$v}{'selected'} = 1;
+		 }
+	     }else {
+		 $p_glob->{'value'}{$d}{'selected'} = 1 if (defined $d);
+	     }
+	     
 	 }else {
 	     $p_glob->{'type'} = 'scalar';
 	     $p->{'value'} = &tools::escape_html($d);
@@ -6189,7 +6243,7 @@ sub do_set_pending_list_request {
 
  # in order to rename a list you must be list owner and you must be allowed to create new list
  sub do_rename_list {
-     &wwslog('info', 'do_rename_list()');
+     &wwslog('info', 'do_rename_list(%s,%s)', $in{'new_listname'}, $in{'new_robot'});
 
      unless (($param->{'is_privileged_owner'}) || ($param->{'is_listmaster'})) {
 	 &error_message('may_not');
@@ -6236,7 +6290,9 @@ sub do_set_pending_list_request {
 		 $wwsconf->{'list_check_smtp'});
 	 return undef;
      }
-     if( $res || new List ($in{'new_listname'}, $in{'new_robot'})) {
+     if( $res || 
+	 ($list->{'name'} ne $in{'new_listname'}) && ## Do not test if listname did not change
+	 (new List ($in{'new_listname'}, $in{'new_robot'}))) {
 	 &error_message('list_already_exists');
 	 &do_log('info', 'Could not rename list %s for %s: new list %s already existing list', 
 		 $in{'listname'},$param->{'user'}{'email'},$in{'new_listname'});
@@ -6268,8 +6324,12 @@ sub do_set_pending_list_request {
      }else {
 	 $new_dir = $Conf{'home'}.'/'.$in{'new_robot'}.'/'.$in{'new_listname'};
      }
+
+     ## Save config file for the new() later to reload it
+     $list->save_config($param->{'user'}{'email'});
+
      unless (rename ($list->{'dir'}, $new_dir )){
-	 &wwslog('info',"do_rename_list : unable to rename $list->{'dir'} to $new_dir");
+	 &wwslog('info',"do_rename_list : unable to rename $list->{'dir'} to $new_dir : $!");
 	 &error_message('failed');
 	 return undef;
      }
@@ -6283,10 +6343,12 @@ sub do_set_pending_list_request {
 	 }
      }
      ## Rename bounces
-     if (-d "$wwsconf->{'bounce_path'}/$list->{'name'}") {
-	 unless (rename ("wwsconf->{'bounce_path'}/$list->{'name'}","wwsconf->{'bounce_path'}/$in{'new_listname'}")) {
+     if (-d "$wwsconf->{'bounce_path'}/$list->{'name'}" &&
+	 ($list->{'name'} ne $in{'new_listname'})
+	 ) {
+	 unless (rename ("$wwsconf->{'bounce_path'}/$list->{'name'}","$wwsconf->{'bounce_path'}/$in{'new_listname'}")) {
 	      &error_message('unable_to_rename_bounces');
-	      &wwslog('info',"do_rename_list unable to rename bounces from wwsconf->{'bounce_path'}/$list->{'name'} to sconf->{'bounce_path'}/$in{'new_listname'}");
+	      &wwslog('info',"do_rename_list unable to rename bounces from $wwsconf->{'bounce_path'}/$list->{'name'} to $wwsconf->{'bounce_path'}/$in{'new_listname'}");
 	 }
      }
 
@@ -6299,6 +6361,7 @@ sub do_set_pending_list_request {
 
      ## Install new aliases
      $in{'listname'} = $in{'new_listname'};
+     
      unless ($list = new List ($in{'new_listname'}, $in{'new_robot'})) {
 	 &wwslog('info',"do_rename_list : unable to load $in{'new_listname'} while renamming");
 	 &error_message('failed');
@@ -6412,7 +6475,16 @@ sub do_set_pending_list_request {
 	 &error_message('already_closed');
 	 &wwslog('info','do_close_list: already closed');
 	 return undef;
-     }      
+     }elsif($list->{'admin'}{'status'} eq 'pending') {
+	 &wwslog('info','do_close_list: closing a pending list make it purged');
+	 &tools::remove_dir($list->{'dir'});
+	 if ($list->{'name'}) {
+		&tools::remove_dir("$wwsconf->{'arc_path'}/$list->{'name'}\@$list->{'domain'}");
+		&tools::remove_dir("$wwsconf->{'bounce_path'}/$list->{'name'}");
+	 }
+	 &message('list_purged');
+	 return 'home';	
+     }     
 
      $list->close($param->{'user'}{'email'});
 
@@ -7790,9 +7862,10 @@ sub do_set_pending_list_request {
      my $fh = $query->upload('uploaded_file');
      my $fn = $query->param('uploaded_file');
 
-     $fn =~ /([^\/\\]+)$/;
-     my $fname = $1;
-
+     my $fname;
+     if ($fn =~ /([^\/\\]+)$/) {
+	 $fname = $1;
+     }
 
  ####### Controls
      ### action relative to a list ?
@@ -8931,7 +9004,7 @@ sub do_set_pending_list_request {
 	 &wwslog('info','do_load_cert: no list');
 	 return undef;
      }
-     my @cert = $list->get_cert();
+     my @cert = $list->get_cert('der');
      unless (@cert) {
 	 &error_message('missing_cert');
 	 &wwslog('info','do_load_cert: no cert for this list');
@@ -9166,6 +9239,10 @@ sub do_set_pending_list_request {
      unless ($in{'email'}) {
 	 &error_message('missing_arg', {'argument' => 'email'});
 	 &wwslog('info','do_search_user: no email');
+	 return undef;
+     }elsif ($in{'email'} =~ /[<>\\\*\$]/) {
+	 &error_message('syntax_errors', {'argument' => 'email'});
+	 &wwslog('err','do_search_user: syntax error');
 	 return undef;
      }
 
@@ -9814,6 +9891,37 @@ sub do_arc_download {
     }
     
     return 1;
+}
+
+sub do_arc_delete {
+  
+    my @abs_dirs;
+    
+    &wwslog('info', "do_arc_delete ($in{'list'})");
+    
+    unless (defined  $in{'directories'}){
+      	&error_message('month_not_found');
+	&wwslog('info','No Archives months selected');
+	return 'arc_manage';
+    }
+    
+    ## if user want to download archives before delete
+    &wwslog('notice', "ZIP: $in{'zip'}");
+    if ($in{'zip'} == 1) {
+	&do_arc_download();
+    }
+  
+    
+    foreach my $dir (split/\0/, $in{'directories'}) {
+	push(@abs_dirs ,$wwsconf->{'arc_path'}.'/'.$in{'list'}.'@'.$param->{'host'}.'/'.$dir);
+    }
+
+    unless (tools::remove_dir(@abs_dirs)) {
+	&wwslog('info','Error while Calling tools::remove_dir');
+    }
+    
+    &message('performed');
+    return 'arc_manage';
 }
 
 sub do_wsdl {

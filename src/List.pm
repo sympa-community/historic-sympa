@@ -184,12 +184,12 @@ currently selected descriptor.
 use Carp;
 
 use Mail::Header;
-use Mail::Internet;
 use Archive;
 use Language;
 use Log;
 use Conf;
 use mail;
+use Ldap;
 use Time::Local;
 use MIME::Entity;
 use MIME::Words;
@@ -990,7 +990,8 @@ my %alias = ('reply-to' => 'reply_to',
 				   'group' => 'data_source'
 				   },
 	    'visibility' => {'scenario' => 'visibility',
-			     'synonym' => {'public' => 'noconceal'},
+			     'synonym' => {'public' => 'noconceal',
+					   'private' => 'conceal'},
 			     'title_id' => 82,
 			     'group' => 'description'
 			     },
@@ -1245,7 +1246,7 @@ sub increment_msg_count {
 	do_log('err', "Unable to create '%s.%s' : %s", $file,$$, $!);
 	return undef;
     }
-    foreach my $key (keys %count) {
+    foreach my $key (sort {$a <=> $b} keys %count) {
 	printf MSG_COUNT "%d\t%d\n",$key,$count{$key} ;
     }
     close MSG_COUNT ;
@@ -1496,14 +1497,7 @@ sub load {
     }elsif($self->{'admin'}{'user_data_source'} eq 'include') {
 
     ## include other subscribers as defined in include directives (list|ldap|sql|file|owners|editors)
-	unless ( defined $self->{'admin'}{'include_file'}
-		 || defined $self->{'admin'}{'include_list'}
-		 || defined $self->{'admin'}{'include_remote_sympa_list'}
-		 || defined $self->{'admin'}{'include_sql_query'}
-		 || defined $self->{'admin'}{'include_ldap_query'}
-		 || defined $self->{'admin'}{'include_ldap_2level_query'}
-		 || defined $self->{'admin'}{'include_admin'}
-		 ) {
+	unless ( $self->has_include_data_sources()) {
 	    &do_log('err', 'Include paragraph missing in configuration file %s', "$self->{'dir'}/config");
 #	    return undef;
 	}
@@ -1629,11 +1623,14 @@ sub send_notify_to_listmaster {
 	my $list = new List $param[0];
 	my $host = &Conf::get_robot_conf($robot, 'host');
 
-	$list->send_file('listmaster_notification', &Conf::get_robot_conf($robot, 'listmaster'), $robot,
-			 {'to' => "listmaster\@$host",
-			  'type' => 'request_list_creation',
-			  'email' => $param[1]});
-
+	&send_global_file('listmaster_notification', &Conf::get_robot_conf($robot, 'listmaster'), $robot,
+			  {'to' => "listmaster\@$host",
+			   'list' => {'name' => $list->{'name'},
+				      'host' => $list->{'domain'},
+				      'subject' => $list->{'admin'}{'subject'}},
+			   'type' => 'request_list_creation',
+			   'email' => $param[1]});
+	
     ## Loop detected in Sympa
     }elsif ($operation eq 'loop_command') {
 	my $file = $param[0];
@@ -1871,8 +1868,7 @@ sub send_to_editor {
        my $tmp_dir = "$modqueue\/.$name\_$modkey";
        unless (-d $tmp_dir) {
 	   unless (mkdir ($tmp_dir, 0777)) {
-	       &error_message('may_not_create_dir');
-	       &do_log('info','do_viewmod: unable to create %s', $tmp_dir);
+	       &do_log('err','Unable to create %s', $tmp_dir);
 	       return undef;
 	   }
 	   my $mhonarc_ressources = &tools::get_filename('etc', 'mhonarc-ressources', $robot, $self);
@@ -2718,7 +2714,7 @@ sub send_file {
     $data->{'return_path'} ||= "$name-owner\@$self->{'admin'}{'host'}";
 
     ## Lang
-    my $lang = $data->{'user'}{'lang'} || $self->{'lang'} || &Conf::get_robot_conf($robot, 'lang');
+    my $lang = $data->{'user'}{'lang'} || $self->{'admin'}{'lang'} || &Conf::get_robot_conf($robot, 'lang');
 
     ## What file   
     foreach my $f ("$self->{'dir'}/$action.$lang.tpl",
@@ -2972,9 +2968,19 @@ sub get_user_db {
 
     $sth = pop @sth_stack;
 
-    ## decrypt password
-    if ((defined $user) && $user->{'password'}) {
-	$user->{'password'} = &tools::decrypt_password($user->{'password'});
+    if (defined $user) {
+	## decrypt password
+	if ($user->{'password'}) {
+	    $user->{'password'} = &tools::decrypt_password($user->{'password'});
+	}
+	
+	## Turn user_attributes into a hash
+	my $attributes = $user->{'attributes'};
+	$user->{'attributes'} = undef;
+	foreach my $attr (split /;/, $attributes) {
+	    my ($key, $value) = split /=/, $attr;
+	    $user->{'attributes'}{$key} = $value;
+	}    
     }
 
     return $user;
@@ -3321,7 +3327,7 @@ sub get_first_user {
 
 	## If no offset (for LIMIT) was used, update total of subscribers
 	unless ($offset) {
-	    my $total = &_load_total_db($self->{'name'});
+	    my $total = &_load_total_db($self->{'name'},'nocache');
 	    if ($total != $self->{'total'}) {
 		$self->{'total'} = $total;
 		$self->savestats();
@@ -4419,6 +4425,10 @@ sub verify {
 		return undef;
 	    }
 
+	}elsif ($value =~ /\[env\-\>([\w\-]+)\]/i) {
+	    
+	    $value =~ s/\[env\-\>([\w\-]+)\]/$ENV{$1}/;
+
 	    ## Sender's user/subscriber attributes (if subscriber)
 	}elsif ($value =~ /\[user\-\>([\w\-]+)\]/i) {
 
@@ -4427,13 +4437,8 @@ sub verify {
 
 	}elsif ($value =~ /\[user_attributes\-\>([\w\-]+)\]/i) {
 	    
-	    $context->{'user'} ||= &get_user_db($context->{'sender'});	    
-	    foreach my $attr (split /;/, $context->{'user'}{'attributes'}) {
-		my ($key, $value) = split /=/, $attr;
-		$context->{'user_attributes'}{$key} = $value;
-	    }
-
-	    $value =~ s/\[user_attributes\-\>([\w\-]+)\]/$context->{'user_attributes'}{$1}/;
+	    $context->{'user'} ||= &get_user_db($context->{'sender'});
+	    $value =~ s/\[user_attributes\-\>([\w\-]+)\]/$context->{'user'}{'attributes'}{$1}/;
 
 	}elsif (($value =~ /\[subscriber\-\>([\w\-]+)\]/i) && defined ($context->{'sender'} ne 'nobody')) {
 	    
@@ -4679,7 +4684,7 @@ sub search{
     my $value;
 
     my %ldap_conf;
-
+    
     return undef unless (%ldap_conf = &Ldap::load($file));
 
  
@@ -5655,7 +5660,6 @@ sub _include_users_ldap {
 	    $total++;
 	}
 
-	my %u = %{$default_user_options};
 	$u{'email'} = $email;
 	$u{'date'} = time;
 	$u{'update_date'} = time;
@@ -6163,6 +6167,18 @@ sub sync_include {
     ## Load a hash with the old subscribers
     for (my $user=$self->get_first_user(); $user; $user=$self->get_next_user()) {
 	$old_subscribers{lc($user->{'email'})} = $user;
+	
+	## User neither included nor subscribed = > set subscribed to 1 
+	unless ($old_subscribers{lc($user->{'email'})}{'included'} || $old_subscribers{lc($user->{'email'})}{'subscribed'}) {
+	    &do_log('notice','Update user %s neither included nor subscribed', $user->{'email'});
+	    unless( $self->update_user(lc($user->{'email'}),  {'update_date' => time,
+							       'subscribed' => 1 }) ) {
+		&do_log('err', 'List:sync_include(%s): Failed to update %s', $name, lc($user->{'email'}));
+		next;
+	    }			    
+	    $old_subscribers{lc($user->{'email'})}{'subscribed'} = 1;
+	}
+
 	$total++;
     }
 
@@ -6777,7 +6793,7 @@ sub probe_db {
 		      'password_user' => 'varchar(40)',
 		      'cookie_delay_user' => 'int(11)',
 		      'lang_user' => 'varchar(10)',
-		      'attributes_user' => 'text'},
+		      'attributes_user' => 'varchar(255)'},
 		     'subscriber_table' => 
 		     {'list_subscriber' => 'varchar(50)',
 		      'user_subscriber' => 'varchar(100)',
@@ -7403,9 +7419,10 @@ sub _load_list_param {
 	$value = {'name' => $value};
     }
 
-    ## Do we need to split param
+    ## Do we need to split param if it is not already an array
     if (($p->{'occurrence'} =~ /n$/)
-	&& $p->{'split_char'}) {
+	&& $p->{'split_char'}
+	&& !(ref($value) eq 'ARRAY')) {
 	my @array = split /$p->{'split_char'}/, $value;
 	foreach my $v (@array) {
 	    $v =~ s/^\s*(.+)\s*$/$1/g;
@@ -7423,6 +7440,10 @@ sub _load_list_param {
 sub get_cert {
 
     my $self = shift;
+    my $format = shift;
+
+    ## Default format is PEM (can be DER)
+    $format ||= 'pem';
 
     do_log('debug2', 'List::load_cert(%s)',$self->{'name'});
 
@@ -7431,26 +7452,42 @@ sub get_cert {
     # it will have the respective cert attached anyways.
     # (the problem is that netscape, opera and IE can't only
     # read the first cert in a file)
-    my($certs,$keys) = tools::find_smime_keys($self->{dir},'encrypt');
-    unless(open(CERT, $certs)) {
-	do_log('err', "List::get_cert(): Unable to open $certs: $!");
+    my($certs,$keys) = tools::smime_find_keys($self->{dir},'encrypt');
+
+    my @cert;
+    if ($format eq 'pem') {
+	unless(open(CERT, $certs)) {
+	    do_log('err', "List::get_cert(): Unable to open $certs: $!");
+	    return undef;
+	}
+	
+	my $state;
+	while(<CERT>) {
+	    chomp;
+	    if($state == 1) {
+		# convert to CRLF for windows clients
+		push(@cert, "$_\r\n");
+		if(/^-+END/) {
+		    pop @cert;
+		    last;
+		}
+	    }elsif (/^-+BEGIN/) {
+		$state = 1;
+	    }
+	}
+	close CERT ;
+    }elsif ($format eq 'der') {
+	unless (open CERT, "$Conf{'openssl'} x509 -in $certs -outform DER|") {
+	    do_log('err', "List::get_cert(): Unable to open get $certs in DER format: $!");
+	    return undef;
+	}
+
+	@cert = <CERT>;
+	close CERT;
+    }else {
+	do_log('err', "List::get_cert(): unknown '$format' certificate format");
 	return undef;
     }
-
-    my(@cert, $state);
-    while(<CERT>) {
-	chomp;
-	if($state == 1) {
-	    # convert to CRLF for windows clients
-	    push(@cert, "$_\r\n");
-	    if(/^-+END/) {
-		last;
-	    }
-	}elsif (/^-+BEGIN/) {
-	    $state = 1;
-	}
-    }
-    close CERT ;
     
     return @cert;
 }
@@ -8289,6 +8326,17 @@ sub notify_bouncers{
     return 1;
 }
 
+## check if a list  has include-type data sources
+sub has_include_data_sources {
+    my $self = shift;
+
+    foreach my $type ('include_file','include_list','include_remote_sympa_list','include_sql_query',
+		      'include_ldap_query','include_ldap_2level_query','include_admin') {
+	return 1 if (defined $self->{'admin'}{$type});
+    }
+    
+    return 0
+}
 
 #################################################################
 

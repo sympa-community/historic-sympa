@@ -227,8 +227,9 @@ sub load {
     $o{'domain'} = $o{'host'} if (defined $o{'host'}) ;
     
     unless ( (defined $o{'cafile'}) || (defined $o{'capath'} )) {
-	$o{'cafile'} = '--ETCBINDIR--/ca-bundle.crt';
+	$o{'cafile'}[0] = '--ETCBINDIR--/ca-bundle.crt';
     }   
+
     my $spool = $o{'spool'}[0] || $Default_Conf{'spool'};
 
     unless (defined $o{'queuedigest'}) {
@@ -499,6 +500,24 @@ sub checkfiles {
 	    }
 	}
 
+    ## Check cafile and capath access
+    if (defined $Conf{'cafile'} && $Conf{'cafile'}) {
+	unless (-f $Conf{'cafile'} && -r $Conf{'cafile'}) {
+	    &do_log('err', 'Cannot access cafile %s', $Conf{'cafile'});
+	    &List::send_notify_to_listmaster('cannot_access_cafile', $Conf{'domain'}, $Conf{'cafile'});
+	    $config_err++;
+	}
+    }
+
+    if (defined $Conf{'capath'} && $Conf{'capath'}) {
+	unless (-d $Conf{'capath'} && -x $Conf{'capath'}) {
+	    &do_log('err', 'Cannot access capath %s', $Conf{'capath'});
+	    &List::send_notify_to_listmaster('cannot_access_capath', $Conf{'domain'}, $Conf{'capath'});
+	    $config_err++;
+	}
+    }
+
+
     return undef if ($config_err);
     return 1;
 }
@@ -666,8 +685,10 @@ sub _load_auth {
 sub get_robot_conf {
     my ($robot, $param) = @_;
 
-    if (defined $Conf{'robots'}{$robot} && defined $Conf{'robots'}{$robot}{$param}) {
-	return $Conf{'robots'}{$robot}{$param};
+    if ($robot ne '*') {
+	if (defined $Conf{'robots'}{$robot} && defined $Conf{'robots'}{$robot}{$param}) {
+	    return $Conf{'robots'}{$robot}{$param};
+	}
     }
     
     ## default
