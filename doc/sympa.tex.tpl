@@ -1390,7 +1390,9 @@ You can also add a unique entry, with a regular expression, for your domain.
 
 With Postfix, you should edit the \file {/etc/postfix/virtual.regexp} file as follows :
 \begin {quote}
-/^(.*)\samplerobot$/	 \samplerobot-${1}
+\begin{verbatim}
+/^(.*)samplerobot\$/	 samplerobot-\${1}
+\end{verbatim}
 \end {quote}
  Entries in the 'aliases' file will look like this :
 \begin {quote}
