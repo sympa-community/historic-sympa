@@ -1358,7 +1358,7 @@ sub get_filename {
 	    unshift @try, $list->{'dir'}.'/'.$name;
 	}	
 	foreach my $f (@try) {
-	    &do_log('notice','get_filname : %s', $f);
+	    &do_log('debug3','get_filename : %s', $f);
 	    if (-r $f) {
 		return $f;
 	    }
