@@ -139,7 +139,7 @@ sub Msg_file_open {
 sub SetLang {
 ###########
     my $locale = shift;
-    do_log('debug3', 'Language::SetLang(%s)', $locale);
+    do_log('debug', 'Language::SetLang(%s)', $locale);
 
     my $lang = $locale;
 
@@ -155,7 +155,13 @@ sub SetLang {
 	do_log('err','unknown Locale %s', $lang);
 	return undef;
     }
-	    
+	
+    ## Set Locale::Messages context
+    setlocale(LC_MESSAGES, $locale);
+    textdomain "sympa";
+    bindtextdomain sympa => '--DIR--/locale';
+    bind_textdomain_codeset sympa => 'iso-8859-1';
+
     $current_lang = $lang;
     $current_locale = $locale;
     return 1;

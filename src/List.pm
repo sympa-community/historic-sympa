@@ -2514,7 +2514,7 @@ sub send_global_file {
 
     ## Lang
     my $lang = $data->{'lang'} = $data->{'user'}{'lang'} || &Conf::get_robot_conf($robot, 'lang');
-
+ 
     ## What file   
     foreach my $f ("$Conf{'etc'}/$robot/tt2/$action.$lang.tt2","$Conf{'etc'}/$robot/tt2/$action.tt2",
 		   "$Conf{'etc'}/tt2/$action.tt2", "--ETCBINDIR--/tt2/$action.tt2") {

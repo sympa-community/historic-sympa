@@ -48,7 +48,8 @@ sub parse_tpl {
 	for values %$data;
 
 #    &do_log('notice', 'TPL: %s ; LANG: %s', $template, $data->{lang});
-    $current_lang = $data->{lang};
+
+    &Language::SetLang($data->{lang});
 
     unless ($tt2->process($template, $data, $output)) {
 	&do_log('err', 'Failed to parse %s : %s', $template, $tt2->error());

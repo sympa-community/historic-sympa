@@ -159,6 +159,8 @@ sub help {
 	
 	$data->{'is_owner'} = 1 if ($#owner > -1);
 	$data->{'is_editor'} = 1 if ($#editor > -1);
+	$data->{'user'} =  &List::get_user_db($sender);
+	&Language::SetLang($data->{'user'}{'lang'}) if $data->{'user'}{'lang'};
 	$data->{'subject'} = MIME::Words::encode_mimewords(sprintf Msg(6, 81, "User guide"));
 
 	&List::send_global_file("helpfile", $sender, $robot, $data);
