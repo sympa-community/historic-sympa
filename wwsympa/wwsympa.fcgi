@@ -2363,7 +2363,7 @@ if ($wwsconf->{'use_fast_cgi'}) {
 	 my $entry = {'value' => $p};
 
 	 ## Set description from NLS
-	 $entry->{'desc'} = sprintf gettext($wwslib::cookie_period{$p}{'gettext_id'}});
+	 $entry->{'desc'} = sprintf gettext($wwslib::cookie_period{$p}{'gettext_id'});
 
 	 ## Choose nearest delay
 	 if ((! $selected) && $param->{'user'}{'cookie_delay'} >= $p) {
@@ -3644,7 +3644,7 @@ if ($wwsconf->{'use_fast_cgi'}) {
 	 ## Messages edition
 	 foreach my $f ('info','homepage','welcome.tpl','bye.tpl','removed.tpl','message.footer','message.header','remind.tpl','invite.tpl','reject.tpl','your_infected_msg.tpl') {
 	     next unless ($list->may_edit($f, $param->{'user'}{'email'}) eq 'write');
-	     $param->{'files'}{$f}{'complete'} = gettext($wwslib::filenames{$f}{'gettext_id');
+	     $param->{'files'}{$f}{'complete'} = gettext($wwslib::filenames{$f}{'gettext_id'});
 	     $param->{'files'}{$f}{'selected'} = '';
 	 }
 	 return 1;
