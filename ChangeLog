@@ -1,3 +1,12 @@
+2005-02-14 14:20  sympa-authors
+
+	* wwsympa/wwsympa.fcgi: [reported by M.Valiukas] Fix: editfile
+	  failed because of a previous patch from dev tree
+
+2005-02-09 14:52  sympa-authors
+
+	* .version, ChangeLog, NEWS: Prepare Sympa 4.1.4
+
 2005-02-03 17:14  sympa-authors
 
 	* src/List.pm: [G.Bouteille] Fix: check if $user is defined first.

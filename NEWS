@@ -3,6 +3,13 @@
 
 (See Changelog file for the full changes log)
 
+4.1.5		14 february 2005
+
+   Bug fix :
+
+	wwsympa/wwsympa.fcgi: [reported by M.Valiukas] editfile failed because of a previous patch from dev tree
+
+
 4.1.4		09 february 2005
 
    Bug fix :
