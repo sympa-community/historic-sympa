@@ -210,8 +210,6 @@
   <HR> 
 <TABLE CELLSPACING=20>
    
-   [IF path]
-         
   [IF may_edit]
     <TR>
     <form method="post" ACTION="[path_cgi]">
