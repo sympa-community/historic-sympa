@@ -849,6 +849,7 @@ if ($wwsconf->{'use_fast_cgi'}) {
      if ($param->{'list'}) {
 	 $param->{'main_title'} = "$param->{'list'} - $list->{'admin'}{'subject'}";
 	 $param->{'title'} = &get_protected_email_address($param->{'list'}, $list->{'admin'}{'host'});
+	 $param->{'list_protected_email'} = $param->{'title'};
 	 $param->{'title_clear_txt'} = "$param->{'list'}\@$list->{'admin'}{'host'}";
 
 	 if ($param->{'subtitle'}) {
@@ -859,6 +860,8 @@ if ($wwsconf->{'use_fast_cgi'}) {
      }else {
 	 $param->{'main_title'} = $param->{'title'} = &Conf::get_robot_conf($robot,'title');
      }
+
+	 $param->{'robot_title'} = &Conf::get_robot_conf($robot,'title');
 
      ## Do not manage cookies at this level if content was already sent
      unless ($param->{'bypass'} eq 'extreme') {
