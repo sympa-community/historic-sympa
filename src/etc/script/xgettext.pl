@@ -7,6 +7,7 @@ eval 'exec /usr/bin/perl  -S $0 ${1+"$@"}'
 ## [O. Salaun] 12/08/02 : Also look for gettext() in perl code
 ##                        No more escape '\' chars
 ##                        Extract gettext_id entries from List.pm
+##                        Extract title.gettext entries from scenarios
 
 use strict;
 use Getopt::Std;
@@ -162,10 +163,18 @@ foreach my $file (@ARGV) {
 	$vars =~ s/\)\s*$//;
 	push @{$file{$str}}, [ $filename, $line, $vars ];
     }
-
-    # Sympa variables
+	    
+	    # Sympa variables (gettext_id)
 	    $line = 1; pos($_) = 0;
 	    while (/\G.*?\'gettext_id\'\s*=>\s*\"([^\"]+)\"/sg) {
+		my $str = $1;
+		$line += ( () = ($& =~ /\n/g) ); # cryptocontext!
+		push @{$file{$str}}, [ $filename, $line];
+	    }
+
+	    # Sympa scenarios variables (title.gettext)
+	    $line = 1; pos($_) = 0;
+	    while (/\G.*?title.gettext\s*([^\n]+)/sg) {
 		my $str = $1;
 		$line += ( () = ($& =~ /\n/g) ); # cryptocontext!
 		push @{$file{$str}}, [ $filename, $line];
