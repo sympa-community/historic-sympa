@@ -220,10 +220,11 @@ while (!$end) {
 	    my $head = $entity->head;
 	    my $to = $head->get('to', 0);
 	    close BOUNCE ;
-	    if ($to =~ /^bounce\+(.*)\=\=a\=\=(.*)\=\=(.*)\@/) {
+	    if ($to =~ /^bounce\+(.*)\=\=a\=\=(.*)\=\=(.*)\@/(.*)$) {
 		my $who = "$1\@$2";
 		my $listname = $3 ;
-		my $list = new List ($listname);
+		my $listhost = $4;
+		my $list = new List ($listname, $listhost);
 		my $action =&List::request_action ('del','smtp',$robot,
 					{'listname' =>$listname,
 					 'sender' => $Conf{'listmasters'}[0],
@@ -252,7 +253,7 @@ while (!$end) {
 	}
 
 	## ELSE
-	my $list = new List ($listname);
+	my $list = new List ($listname, $robot);
 	if ($list) {
 
 	    do_log('debug',"Processing bouncefile $file for list $listname");      
@@ -264,7 +265,7 @@ while (!$end) {
 	    }
 
 	    my (%hash, $from);
-	    my $bounce_dir = "$wwsconf->{'bounce_path'}/$list->{'name'}";
+	    my $bounce_dir = "$wwsconf->{'bounce_path'}/$list->{'name'}\@$list->{'domain'}";
 
 	    ## RFC1891 compliance check
 	    my $bounce_count = &rfc1891(\*BOUNCE, \%hash, \$from);

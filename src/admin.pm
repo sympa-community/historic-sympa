@@ -109,7 +109,7 @@ sub create_list_old{
 	return undef;
     }
 
-    if( $res || new List ($param->{'listname'})) {
+    if( $res || new List ($param->{'listname'}, $robot)) {
 	&do_log('err', 'admin::create_list_old : could not create already existing list %s for ', 
 		$param->{'listname'});
 	foreach my $o (@{$param->{'owner'}}){
@@ -157,7 +157,7 @@ sub create_list_old{
     ## Creation of the config file
     $param->{'creation'}{'date'} = &POSIX::strftime("%d %b %Y at %H:%M:%S", localtime(time));
     $param->{'creation'}{'date_epoch'} = time;
-    $param->{'creation_email'} = $Conf{'listmaster'} unless (defined $param->{'creation_email'});
+    $param->{'creation_email'} ||= $Conf{'listmaster'};
     $param->{'status'} = 'open'  unless (defined $param->{'status'});
        
     my $tt2_include_path = [$Conf{'etc'}.'/'.$robot.'/create_list_templates/'.$template,

@@ -47,6 +47,7 @@ $separator="------- CUT --- CUT --- CUT --- CUT --- CUT --- CUT --- CUT -------"
 	   'host' => '[\w\.\-]+',
 	   'multiple_host_with_port' => '[\w\.\-]+(:\d+)?(,[\w\.\-]+(:\d+)?)*',
 	   'listname' => '[a-z0-9][a-z0-9\-\.\+_]*',
+	   'robot' => '[a-z0-9][a-z0-9\-\.\+_]*',
 	   'sql_query' => '(SELECT|select).*',
 	   'scenario' => '[\w,\.\-]+',
 	   'task' => '\w+',
@@ -271,11 +272,12 @@ sub get_list_list_tpl {
 sub smime_sign {
     my $in_msg = shift;
     my $list = shift;
+    my $robot = shift;
     my $dir = shift;
 
     do_log('debug2', 'tools::smime_sign (%s,%s)',$in_msg,$list);
 
-    my $self = new List($list);
+    my $self = new List($list, $robot);
     my($cert, $key) = &smime_find_keys($self->{dir}, 'sign');
     my $temporary_file = $Conf{'tmpdir'}."/".$list.".".$$ ;    
 

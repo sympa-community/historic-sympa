@@ -278,7 +278,7 @@ sub mailfile {
        
        ## Signing the message
        my $signed_msg ;
-       unless ($signed_msg = &tools::smime_sign($in_msg,$data->{'list'}{'name'}, $data->{'list'}{'dir'})) {
+       unless ($signed_msg = &tools::smime_sign($in_msg,$data->{'list'}{'name'}, $robot, $data->{'list'}{'dir'})) {
 	   do_log('notice', 'Unable to sign message from %s', $data->{'list'}{'name'});
 	   return undef;
        }

@@ -225,7 +225,7 @@ sub lists {
     my $lists = {};
 
     foreach my $l ( &List::get_lists($robot) ) {
-	my $list = new List ($l);
+	my $list = new List ($l, $robot);
 
 	next unless ($list);
 	my $action = &List::request_action('visibility','smtp',$robot,
@@ -2282,7 +2282,9 @@ sub modindex {
 	}
 
 	$i=~/\_(.+)$/;
-	$curlist = new List ($`);
+	my $listadress = $`;
+	my ($listname, $listrobot) = split /\@/, $listaddress;
+	$curlist = new List ($listname, $listrobot);
 	if ($curlist) {
 	    # list loaded    
 	    if (exists $curlist->{'admin'}{'clean_delay_queuemod'}){

@@ -398,8 +398,10 @@ my $birthday = time ;
 ## If using fast_cgi, it is usefull to initialize all list context
 if ($wwsconf->{'use_fast_cgi'}) {
 
-    foreach my $l ( &List::get_lists('*') ) {
-        my $list = new List ($l);
+    foreach my $r (keys %{$Conf{'robots'}}) {
+	foreach my $l ( &List::get_lists($r) ) {
+	    my $list = new List ($l, $r);
+	}
     }
 }
 
@@ -763,7 +765,7 @@ if ($wwsconf->{'use_fast_cgi'}) {
 	     
 	     ## Add lists information to 'which_info'
 	     foreach my $l (@{$param->{'get_which'}}) {
-		 my $list = new List ($l);
+		 my $list = new List ($l, $robot);
 		 $param->{'which_info'}{$l}{'subject'} = $list->{'admin'}{'subject'};
 		 $param->{'which_info'}{$l}{'host'} = $list->{'admin'}{'host'};
 		 $param->{'which_info'}{$l}{'info'} = 1;
@@ -1711,7 +1713,7 @@ sub do_sso_login_succeeded {
 
      foreach my $email(sort keys %{$param->{'alternative_subscribers_entries'}{'member'}}){
 	 foreach my $list_name ( @{ $param->{'alternative_subscribers_entries'}{'member'}{$email} } ){ 
-	     my $newlist = new List ($list_name);
+	     my $newlist = new List ($list_name, $robot);
 
 	     unless ( $newlist->update_user($email,{'email' => $param->{'user'}{'email'} }) ) {
 		 if ($newlist->{'admin'}{'user_data_source'} eq 'include') {
@@ -2093,7 +2095,7 @@ sub do_redirect {
      foreach my $role ('member','owner','editor') {
 
 	 foreach my $l( &List::get_which($param->{'user'}{'email'}, $robot, $role) ){ 	    
-	     my $list = new List ($l);
+	     my $list = new List ($l, $robot);
 
 	     next unless (&List::request_action ('visibility', $param->{'auth_method'}, $robot,
 						 {'listname' =>  $l,
@@ -3469,9 +3471,9 @@ sub do_redirect {
 	     push @removed_users, $email;
 	 }
 
-	 if (-f "$wwsconf->{'bounce_path'}/$param->{'list'}/$escaped_email") {
-	     unless (unlink "$wwsconf->{'bounce_path'}/$param->{'list'}/$escaped_email") {
-		 &wwslog('info','do_resetbounce: failed deleting %s', "$wwsconf->{'bounce_path'}/$param->{'list'}/$escaped_email");
+	 if (-f "$wwsconf->{'bounce_path'}/$param->{'list'}\@$robot/$escaped_email") {
+	     unless (unlink "$wwsconf->{'bounce_path'}/$param->{'list'}\@$robot/$escaped_email") {
+		 &wwslog('info','do_resetbounce: failed deleting %s', "$wwsconf->{'bounce_path'}/$param->{'list'}\@$robot/$escaped_email");
 		 next;
 	     }
 	 }
@@ -3542,9 +3544,9 @@ sub do_redirect {
 
      foreach $msg ( sort grep(!/^\./, readdir SPOOL )) {
 	 next
-	     unless ($msg =~ /^$list->{'name'}\_(\w+)$/);
+	     unless ($msg =~ /^$list->{'name'}(\@$list->{'domain'})?\_(\w+)$/);
 
-	 my $id = $1;
+	 my $id = $2;
 
 	 ## Load msg
 	 my $mail = new Message("$Conf{'queuemod'}/$msg");
@@ -3843,12 +3845,16 @@ sub do_redirect {
 
      foreach my $id (split /\0/, $in{'id'}) {
 
-	 $file = "$Conf{'queuemod'}/$list->{'name'}_$id";
+	 ## Support old style format
+	 foreach my $f ("$Conf{'queuemod'}/$list->{'name'}_$id",
+			"$Conf{'queuemod'}/$list->{'name'}\@$list->{'domain'}_$id") {
+	     $file = $f if (-f $f);
+	 }
 
 	 ## Open the file
-	 if (!open(IN, $file)) {
+	 if (!$file || !open(IN, $file)) {
 	     &error_message('failed_someone_else_did_it');
-	     &wwslog('err','do_reject: Unable to open %s', $file);
+	     &wwslog('err','do_reject: Unable to open moderated message with ID %s', $id);
 	     return undef;
 	 }
 	 unless ($in{'quiet'}) {
@@ -3884,7 +3890,6 @@ sub do_redirect {
      return 'modindex';
  }
 
- ## TODO: supprimer le msg
  sub do_distribute {
      &wwslog('info', 'do_distribute()');
      my ($msg, $file);
@@ -3925,8 +3930,12 @@ sub do_redirect {
      printf DISTRIBUTE ("From: %s\n\n", $param->{'user'}{'email'});
 
      foreach my $id (split /\0/, $in{'id'}) {
-
-	 $file = "$Conf{'queuemod'}/$list->{'name'}_$id";
+	 
+	 ## Support old style format
+	 foreach my $f ("$Conf{'queuemod'}/$list->{'name'}_$id",
+			"$Conf{'queuemod'}/$list->{'name'}\@$list->{'domain'}_$id") {
+	     $file = $f if (-f $f);
+	 }
 
 	 printf DISTRIBUTE ("QUIET DISTRIBUTE %s %s\n",$list->{'name'},$id);
 	 unless (rename($file,"$file.distribute")) {
@@ -3972,7 +3981,13 @@ sub do_redirect {
 	 return undef;
      }
 
-     my $tmp_dir = $Conf{'queuemod'}.'/.'.$list->{'name'}.'_'.$in{'id'};
+     my $tmp_dir = $Conf{'queuemod'}.'/.'.$list->{'name'}.'@'.$list->{'domain'}.'_'.$in{'id'};
+     my $old_tmp_dir = $Conf{'queuemod'}.'/.'.$list->{'name'}.'_'.$in{'id'};
+     
+     ## Convert old style format
+     if (-d $old_tmp_dir) {
+	 rename $old_tmp_dir,$tmp_dir;
+     }
 
      unless (-d $tmp_dir) {
 	 &error_message('no_html_message_available');
@@ -3983,10 +3998,10 @@ sub do_redirect {
      if ($in{'file'}) {
 	 $in{'file'} =~ /\.(\w+)$/;
 	 $param->{'file_extension'} = $1;
-	 $param->{'file'} = "$Conf{'queuemod'}/.$list->{'name'}_$in{'id'}/$in{'file'}";
+	 $param->{'file'} = "$Conf{'queuemod'}/.$list->{'name'}\@$list->{'domain'}_$in{'id'}/$in{'file'}";
 	 $param->{'bypass'} = 1;
      }else {
-	 &tt2::add_include_path("$Conf{'queuemod'}/.$list->{'name'}_$in{'id'}") ;
+	 &tt2::add_include_path("$Conf{'queuemod'}/.$list->{'name'}\@$list->{'domain'}_$in{'id'}") ;
      }
 
      $param->{'base'} = sprintf "%s%s/viewmod/%s/%s/", $param->{'base_url'}, $param->{'path_cgi'}, $param->{'list'}, $in{'id'};
@@ -5239,7 +5254,7 @@ sub do_set_pending_list_request {
      ## notify listmaster
      if ($param->{'create_action'} =~ /notify/) {
 	 &do_log('info','notify listmaster');
-	 &List::send_notify_to_listmaster('request_list_creation',$robot, $in{'listname'},$parameters->{'owner'}{'email'});
+	 &List::send_notify_to_listmaster('request_list_creation',$robot, $in{'listname'},$owner{'email'});
      }
      
      $in{'list'} = $resul->{'list'}{'name'};
@@ -5437,18 +5452,41 @@ sub do_set_pending_list_request {
 
      my $escaped_email = &tools::escape_chars($in{'email'});
 
-     $param->{'lastbounce_path'} = "$wwsconf->{'bounce_path'}/$param->{'list'}/$escaped_email";
+     $param->{'lastbounce_path'} = "$wwsconf->{'bounce_path'}/$param->{'list'}/$escaped_email");
+		 next;
+	     }
+	 }
 
-     unless (-r $param->{'lastbounce_path'}) {
-	 &error_message('no_bounce', {'email' => $in{'email'}});
-	 &wwslog('info','do_viewbounce: no bounce %s', $param->{'lastbounce_path'});
-	 return undef;
+
+	 &wwslog('info','do_del: subscriber %s deleted from list %s', $email, $param->{'list'});
+
+	 unless ($in{'quiet'}) {
+	     my %context;
+	     $context{'subject'} = sprintf(gettext("Your subscription to list %s has been removed."), $list->{'name'});
+	     $context{'body'} = sprintf(gettext("You have been removed from list %s.\n"), $list->{'name'});
+
+	     $list->send_file('removed', $email, $robot, \%context);
+	 }
      }
 
-     &tt2::allow_absolute_path();
+     $total = $list->delete_user(@removed_users);
 
-     return 1;
+     unless( defined $total) {
+	 &error_message('failed');
+	 &wwslog('info','do_del: failed');
+	 # &List::db_log('wwsympa',$param->{'user'}{'email'},$param->{'auth_method'},$ip,'del',$param->{'list'},$robot,join('.',@removed_users),'failed');
+	 return undef;
+     }
+     # &List::db_log('wwsympa',$param->{'user'}{'email'},$param->{'auth_method'},$ip,'del',$param->{'list'},$robot,join(',',@removed_users),'done',$total) if (@removed_users) ;
+     $list->save();
+
+     &message('performed');
+     $param->{'is_subscriber'} = 1;
+     $param->{'may_signoff'} = 1;
+
+     return $in{'previous_action'} || 'review';
  }
+
 
  ## some help for listmaster and developpers
  sub do_scenario_test {
@@ -5642,8 +5680,8 @@ sub do_set_pending_list_request {
 	     return undef;
 	 }
 
-	 unless (unlink "$wwsconf->{'bounce_path'}/$param->{'list'}/$escaped_email") {
-	     &wwslog('info','do_resetbounce: failed deleting %s', "$wwsconf->{'bounce_path'}/$param->{'list'}/$escaped_email");
+	 unless (unlink "$wwsconf->{'bounce_path'}/$param->{'list'}\@$robot/$escaped_email") {
+	     &wwslog('info','do_resetbounce: failed deleting %s', "$wwsconf->{'bounce_path'}/$param->{'list'}\@$robot/$escaped_email");
 	 }
 
 	 &wwslog('info','do_resetbounce: bounces for %s reset ', $email);
@@ -6141,7 +6179,7 @@ sub do_edit_list {
 	     }
 
 	     ## Update total of subscribers
-	     $list->{'total'} = &List::_load_total_db($list->{'name'});
+	     $list->{'total'} = $list->_load_total_db();
 	     $list->savestats();
 	 }
 
@@ -6208,7 +6246,7 @@ sub do_edit_list {
 
 
      ## Reload config
-     $list = new List $list->{'name'};
+     $list = new List ($list->{'name'}, $robot);
 
      ## remove existing sync_include task
      ## to start a new one
@@ -6859,19 +6897,19 @@ sub _restrict_values {
 	 }
      }
      ## Rename bounces
-     if (-d "$wwsconf->{'bounce_path'}/$list->{'name'}" &&
+     if (-d "$wwsconf->{'bounce_path'}/$list->{'name'}\@$robot" &&
 	 ($list->{'name'} ne $in{'new_listname'})
 	 ) {
-	 unless (rename ("$wwsconf->{'bounce_path'}/$list->{'name'}","$wwsconf->{'bounce_path'}/$in{'new_listname'}")) {
+	 unless (rename ("$wwsconf->{'bounce_path'}/$list->{'name'}\@$robot","$wwsconf->{'bounce_path'}/$in{'new_listname'}\@$in{'new_robot'}")) {
 	      &error_message('unable_to_rename_bounces');
-	      &wwslog('info',"do_rename_list unable to rename bounces from $wwsconf->{'bounce_path'}/$list->{'name'} to $wwsconf->{'bounce_path'}/$in{'new_listname'}");
+	      &wwslog('info',"do_rename_list unable to rename bounces from $wwsconf->{'bounce_path'}/$list->{'name'}\@$robot to $wwsconf->{'bounce_path'}/$in{'new_listname'}\@$in{'new_robot'}");
 	 }
      }
 
 
      # if subscribtion are stored in database rewrite the database
      if ($list->{'admin'}{'user_data_source'} =~ /^database|include2$/) {
-	 &List::rename_list_db ($list,$in{'new_listname'});
+	 &List::rename_list_db ($list,$in{'new_listname'}, $in{'new_robot'});
 	 &wwslog('debug',"do_rename_list :List::rename_list_db ($in{'list'},$in{'new_listname'} ");
      }
 
@@ -6911,6 +6949,8 @@ sub _restrict_values {
 	     my $newfile = $file;
 	     if ($file =~ /^$param->{'list'}\_/) {
 		 $newfile =~ s/^$param->{'list'}\_/$in{'new_listname'}\_/;
+	     elsif ($file =~ /^$param->{'list'}\@$robot\_/) {
+		 $newfile =~ s/^$param->{'list'}\@$robot\_/$in{'new_listname'}\@$in{'new_robot'}\_/;
 	     }elsif ($file =~ /^$param->{'list'}\./) {
 		 $newfile =~ s/^$param->{'list'}\./$in{'new_listname'}\./;
 	     }elsif ($file =~ /^$param->{'list'}\@$robot\./) {
@@ -6972,7 +7012,7 @@ sub _restrict_values {
      my @lists = split /\0/, $in{'selected_lists'};
 
      foreach my $l (@lists) {
-	 my $list = new List ($l);
+	 my $list = new List ($l, $robot);
 	 $list->purge($param->{'user'}{'email'});
      }    
 
@@ -10051,7 +10091,7 @@ sub creation_desc_file {
 
 	 ## Change email
 	 foreach my $l ( &List::get_which($param->{'user'}{'email'},$robot, 'member') ) {
-	     my $list = new List ($l);
+	     my $list = new List ($l, $robot);
 
 	     my $sub_is = &List::request_action('subscribe',$param->{'auth_method'},$robot,
 						{'listname' => $l,
@@ -10240,7 +10280,7 @@ sub creation_desc_file {
 
      foreach my $role ('member','owner','editor') {
 	 foreach my $l ( &List::get_which($in{'email'},$robot, $role) ) {
-	     my $list = new List ($l);
+	     my $list = new List ($l, $robot);
 
 	     $param->{'which'}{$l}{'subject'} = $list->{'admin'}{'subject'};
 	     $param->{'which'}{$l}{'host'} = $list->{'admin'}{'host'};
@@ -10556,10 +10596,10 @@ sub creation_desc_file {
      $param->{'content_type'} = "text/plain";
      $param->{'file'} = undef ; 
 
-     unless ($param->{'list'}) {
-	 # any error message must start with 'err_' in order to allow remote Sympa to catch it
-	 &error_message('err_missing_arg_list');
-	 &do_log('info','do_dump: no list');
+
+     unless (defined $list) {
+	 &error_message('missing_arg', {'argument' => 'list'});
+	 &wwslog('err','do_dump: no list');
 	 return undef;
      }
 
@@ -10578,8 +10618,7 @@ sub creation_desc_file {
 	 &do_log('info','do_dump: may not review');
 	 return undef;
      }
-     my @listnames = $param->{'list'} ;
-     &List::dump(@listnames);
+     $list->dump();
      $param->{'file'} = "$list->{'dir'}/subscribers.db.dump";
      return 1;
  }
@@ -10643,7 +10682,7 @@ sub get_protected_email_address {
  sub do_viewlogs {
      &do_log('info', 'do_viewlogs()');
 
-     my $list = new List ($param->{'list'});
+     my $list = new List ($param->{'list'}, $robot);
 
      unless ($param->{'is_listmaster'}) {
 	 &error_message('may_not');

@@ -283,7 +283,7 @@ sub rebuild {
     my $listname = $1;
     my $hostname = $2;
 
-    my $list = new List($listname);
+    my $list = new List($listname, $hostname);
 
     do_log('debug',"Rebuilding $adrlist archive ($2)");
 
@@ -344,7 +344,7 @@ sub mail2arc {
     my $newfile;
     
 
-    my $list = new List($listname);
+    my $list = new List($listname, $hostname);
 
     if (($list->{'admin'}{'web_archive_spam_protection'} ne 'none') && ($list->{'admin'}{'web_archive_spam_protection'} ne 'cookie')) {
 	&set_hidden_mode();

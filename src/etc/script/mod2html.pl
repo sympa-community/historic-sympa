@@ -38,8 +38,7 @@ foreach $msg ( sort grep(!/^\./, readdir SPOOL )) {
     next if ($msg =~ /^\./);
     
     $msg =~ /^(.*)\_([^\_]+)$/;
-    my ($listname, $modkey) = ($1, $2);
-    
+    my ($listaddress, $modkey) = ($1, $2);
     
     if (-d "$Conf{'queuemod'}/.$msg") {
 	next;
@@ -47,7 +46,9 @@ foreach $msg ( sort grep(!/^\./, readdir SPOOL )) {
     
     print "Creating HTML version for $Conf{'queuemod'}/$msg\n";
     
-    my $self = new List ($listname);
+    my ($listname, $listrobot) = split /\@/, $listaddress;
+
+    my $self = new List ($listname, $listrobot);
     
     my( @rcpt);
     my $admin = $self->{'admin'};

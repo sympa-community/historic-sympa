@@ -181,7 +181,8 @@ my $date_arg_regexp3 = '(\d+|execution_date)(\+|\-)(\d+y)?(\d+m)?(\d+w)?(\d+d)?(
 my $delay_regexp = '(\d+y)?(\d+m)?(\d+w)?(\d+d)?(\d+h)?(\d+min)?(\d+sec)?';
 my $var_regexp ='@\w+'; 
 my $subarg_regexp = '(\w+)(|\((.*)\))'; # for argument with sub argument (ie arg(sub_arg))
-                 
+my $taskfile_regexp = '(\d+)\.(\w*)\.(\w+)\.('.$tools::regexp{'listname'}.'|_global)(\@('.$tools::regexp{'robot'}.'))?';
+
 # regular commands
 my %commands = ('next'                  => ['date', '\w*'],
 		                           # date   label
@@ -266,39 +267,50 @@ while (!$end) {
 
     
     ## list tasks
-    foreach ( &List::get_lists() ) {
+
+    foreach my $r (keys %{$Conf{'robots'}}) {
+	foreach my $l ( &List::get_lists($r) ) {
 	
-	my %data = %default_data;
-	my $list = new List ($_);
-	
-	$data{'list'}{'name'} = $list->{'name'};
-	
-	my %used_list_models; # stores which models already have a task 
-	foreach (@list_models) { $used_list_models{$_} = undef; }
-	
-	foreach $_ (@tasks) {
-	  
-	    if (my $task = &match_task($_)) {
-		my $model = $task->{'model'};
-		my $object = $task->{'list'};
-		if ($object eq $list->{'name'}) { $used_list_models{$model} = 1; }
+	    my %data = %default_data;
+	    my $list = new List ($l, $r);
+	    
+	    $data{'list'}{'name'} = $list->{'name'};
+	    $data{'list'}{'robot'} = $list->{'domain'};
+
+	    my %used_list_models; # stores which models already have a task 
+	    foreach my $m (@list_models) { $used_list_models{$m} = undef; }
+	    
+	    foreach my $t (@tasks) {
+		&do_log('debug2', 'Trace: Task=%s', $t);
+		if (my $task = &match_task($t)) {
+		    foreach my $k (keys %$task) {
+			&do_log('debug2', 'Trace: %s = %s', $k, $task->{$k});
+		    }
+		    if ($task->{'list'} eq $list->{'name'} && 
+			defined $task->{'robot'} &&
+			$task->{'robot'} eq $list->{'domain'}) { 
+			$used_list_models{$task->{'model'}} = 1; 
+		    }
+		}
 	    }
-	}
 
-	foreach my $model (keys %used_list_models) {
-	    unless ($used_list_models{$model}) {
-		my $model_task_parameter = "$model".'_task';
-		
-		if ( $model eq 'sync_include') {
-		    next unless (($list->{'admin'}{'user_data_source'} eq 'include2') &&
-				 $list->has_include_data_sources() &&
-				 ($list->{'admin'}{'status'} eq 'open'));
+	    ## Create tasks that don't exist in the spool
+	    foreach my $model (keys %used_list_models) {
+		&do_log('debug2', "Trace: Model=$model");
+		unless ($used_list_models{$model}) {
+		    my $model_task_parameter = "$model".'_task';
 		    
-		    create ($current_date, 'INIT', $model, 'ttl', 'list', \%data);
-
-		}elsif ($list->{'admin'}{$model_task_parameter} ) {
-		    create ($current_date, '', $model, $list->{'admin'}{$model_task_parameter}{'name'}, 
+		    if ( $model eq 'sync_include') {
+			next unless (($list->{'admin'}{'user_data_source'} eq 'include2') &&
+				     $list->has_include_data_sources() &&
+				     ($list->{'admin'}{'status'} eq 'open'));
+			
+			create ($current_date, 'INIT', $model, 'ttl', 'list', \%data);
+			
+		    }elsif ($list->{'admin'}{$model_task_parameter} ) {
+			create ($current_date, '', $model, $list->{'admin'}{$model_task_parameter}{'name'}, 
 			    'list', \%data);
+		    }
 		}
 	    }
 	}
@@ -364,12 +376,23 @@ sub create {
     &do_log ('debug2', "create date : $date label : $label model $model : $model_choice object : $object Rdata :$Rdata");
 
     my $task_file;
-    my $list_name;
+    my ($list_name, $list_robot);
+
+    $task_file  = "$spool_task/$date";
+
+    ## need to keep an empty token if no label...
+    #if ($label) {
+	$task_file .= ".$label";
+    #}
+
     if ($object eq 'list') { 
 	$list_name = $Rdata->{'list'}{'name'};
-	$task_file  = "$spool_task/$date.$label.$model.$list_name";
+	$list_robot = $Rdata->{'list'}{'robot'};
+	$task_file .= ".$model.$list_name\@$list_robot";
     }
-    else {$task_file  = $spool_task.'/'.$date.'.'.$label.'.'.$model.'.'.$object;}
+    else {
+	$task_file .= '.'.$model.'.'.$object;
+    }
 
     ## model recovery
     my $model_file;
@@ -379,7 +402,7 @@ sub create {
 
      # for global model
     if ($object eq '_global') {
-	unless ($model_file = &tools::get_filename('etc', "global_task_models/$model_name", $Conf{'host'})) {
+	unless ($model_file = &tools::get_filename('etc', "global_task_models/$model_name", $list_robot || $Conf{'host'})) {
 	    &do_log ('err', "error : unable to find $model_name, creation aborted");
 	    return undef;
 	}
@@ -387,12 +410,12 @@ sub create {
 
     # for a list
     if ($object  eq 'list') {
-	my $list = new List($list_name);
+	my $list = new List($list_name, $list_robot);
 
 	$Rdata->{'list'}{'ttl'} = $list->{'admin'}{'ttl'};
 
 	unless ($model_file = &tools::get_filename('etc', "list_task_models/$model_name", 
-						   $list->{'domain'}, $list)) {
+						   $list_robot, $list)) {
 	    &do_log ('err', "error : unable to find $model_name, for list $list_name creation aborted");
 	    return undef;
 	}
@@ -409,7 +432,7 @@ sub create {
     # special checking for list whose user_data_source config parmater is include. The task won't be created if there is a delete_subs command
     my $ok = 1;
     if ($object eq 'list') {
-	my $list = new List("$list_name");
+	my $list = new List($list_name);
 	if ($list->{'admin'}{'user_data_source'} eq 'include') {
 	    unless ( open (TASK, $task_file) ) {
 		&do_log ('err', "error : unable to read $task_file, checking is impossible");
@@ -673,7 +696,7 @@ sub execute {
     }
 
     # get the task name, without the path
-    my @path = split /\\/, $task_file;
+    my @path = split /\//, $task_file;
     my $task_name = $path[$#path];
 
     # positioning at the right label
@@ -681,10 +704,13 @@ sub execute {
     my $label = $1;
     return undef if ($label eq 'ERROR');
 
-    &do_log ('debug2', "* execution of the task $task_file");
+    &do_log ('debug2', "* execution of the task $task_file, starting at label $label");
+
+    ## First go to the right label
     unless ($label eq '') {
 	while ( <TASK> ) {
 	    $lnb++;
+	    chomp;
 	    chk_line ($_, \%result);
 	    last if ($result{'label'} eq $label);
 	}
@@ -743,12 +769,17 @@ sub cmd_process {
      # building of %context
     my %context; # datas necessary to command processing
     $context{'task_file'} = $task_file; # long task file name
-    $task_file =~ /\/($tools::regexp{'listname'})$/i;
-    $context{'task_name'} = $1; # task file name
-    $context{'task_name'} =~ /^(\d+)\..+/;
-    $context{'execution_date'} = $1; # task execution date
-    $context{'task_name'} =~ /^\w+\.\w*\.\w+\.($tools::regexp{'listname'})$/;
-    $context{'object_name'} = $1; # object of the task
+    if ($task_file =~ /\/($taskfile_regexp)$/i) {
+	$context{'task_name'} = $1; # task file name
+    }
+    if ($context{'task_name'} =~ /^(\d+)\..+/) {
+	$context{'execution_date'} = $1; # task execution date
+    }
+
+    if ($context{'task_name'} =~ /^\w+\.\w*\.\w+\.(($tools::regexp{'listname'})(\@($tools::regexp{'robot'}))?)$/) {
+	$context{'object_name'} = $1; # object of the task
+    }
+
     $context{'line_number'} = $lnb;
 
      # regular commands
@@ -878,6 +909,7 @@ sub next_cmd {
 	$type = 'list';
 	my $list = new List($name[3]);
 	$data{'list'}{'name'} = $list->{'name'};
+	$data{'list'}{'robot'} = $list->{'domain'};
 	
 	if ( $model eq 'sync_include') {
 	    unless ($list->{'admin'}{'user_data_source'} eq 'include2') {
@@ -958,7 +990,7 @@ sub select_subs {
 	# condition rewriting for older and newer
 	$new_condition = "$1($user->{'update_date'}, $2)" if ($condition =~ /(older|newer)\((\d+)\)/ );
 	
-	if (&List::verify ($verify_context, $new_condition) == 1) {
+	if (&List::verify ($verify_context, $new_condition, $list->{'domain'}) == 1) {
 	    $selection{$user->{'email'}} = undef;
 	    &do_log ('notice', "--> user $user->{'email'} has been selected");
 	}
@@ -1146,13 +1178,13 @@ sub purge_orphan_bounces {
 	     $bounced_users{$listname}{$user_id} = 1;
 	 }
 
-	 unless (-d $wwsconf->{'bounce_path'}.'/'.$listname) {
+	 unless (-d $wwsconf->{'bounce_path'}.'/'.$listname.'@'.$list->{'domain'}) {
 	     &do_log('notice', 'No bouncing subscribers in list %s', $listname);
 	     next;
 	 }
 
 	 ## then reading Bounce directory & compare with %bounced_users
-	 unless (opendir(BOUNCE,$wwsconf->{'bounce_path'}.'/'.$listname)) {
+	 unless (opendir(BOUNCE,$wwsconf->{'bounce_path'}.'@'.$list->{'domain'}.'/'.$listname)) {
 	     &do_log('err','Error while opening bounce directory %s for list %s',$wwsconf->{'bounce_path'},$listname);
 	     return undef;
 	 }
@@ -1162,7 +1194,7 @@ sub purge_orphan_bounces {
 	     if ($bounce =~ /\@/){
 		 unless (defined($bounced_users{$listname}{$bounce})) {
 		     &do_log('info','removing orphan Bounce for user %s in list %s',$bounce,$listname);
-		     unless (unlink($wwsconf->{'bounce_path'}.'/'.$listname.'/'.$bounce)) {
+		     unless (unlink($wwsconf->{'bounce_path'}.'/'.$listname.'@'.$list->{'domain'}.'/'.$bounce)) {
 			 &do_log('err','Error while removing file %s',$bounce);
 		     }
 		 }
@@ -1217,8 +1249,8 @@ sub purge_orphan_bounces {
 		     next;
 		 }
 		 my $escaped_email = &tools::escape_chars($email);
-		 unless (unlink "$wwsconf->{'bounce_path'}/$listname/$escaped_email") {
-		     do_log('info','expire_bounce: failed deleting %s', "$wwsconf->{'bounce_path'}/$listname/$escaped_email");
+		 unless (unlink "$wwsconf->{'bounce_path'}/$listname\@$list->{'domain'}/$escaped_email") {
+		     do_log('info','expire_bounce: failed deleting %s', "$wwsconf->{'bounce_path'}/$listname\@$list->{'domain'}/$escaped_email");
 		    next;
 		 }
 		 do_log('info','expire bounces for subscriber %s of list %s (last distribution %s, last bounce %s )',
@@ -1697,14 +1729,15 @@ sub sync_include {
 sub match_task {
     my $filename = shift;
 
-    if ($filename =~ /^(\d+)\.(\w*)\.(\w+)\.($tools::regexp{'listname'}|_global)$/) {
+    if ($filename =~ /^$taskfile_regexp$/) {
 	my $task = {'date' => $1,
 		    'label' => $2,
 		    'model' => $3,
-		    'list' => $4
+		    'list' => $4,
+		    'robot' => $6
 		};
 	return $task;
-    }
+    }else { &do_log('err', 'Task %s does not match %s', $filename, $taskfile_regexp);}
     
     return undef;
 }

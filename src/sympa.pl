@@ -274,18 +274,22 @@ if ($main::options{'dump'}) {
     print $usage_string;
     exit 0;
 }elsif ($main::options{'make_alias_file'}) {
-    my @listnames = &List::get_lists('*');
+
     unless (open TMP, ">/tmp/sympa_aliases.$$") {
 	printf STDERR "Unable to create tmp/sympa_aliases.$$, exiting\n";
 	exit;
     }
-    printf TMP "#\n#\tAliases for all Sympa lists open (but not for robots)\n#\n";
-    close TMP;
-    foreach my $listname (@listnames) {
-	if (my $list = new List ($listname)) {
-
-	    system ("--SBINDIR--/alias_manager.pl add $list->{'name'} $list->{'domain'} /tmp/sympa_aliases.$$") if ($list->{'admin'}{'status'} eq 'open');
-	}	
+    
+    foreach my $r (keys %{$Conf{'robots'}}) {
+	my @listnames = &List::get_lists($r);
+	printf TMP "#\n#\tAliases for all Sympa lists open (but not for robots)\n#\n";
+	close TMP;
+	foreach my $listname (@listnames) {
+	    if (my $list = new List ($listname, $r)) {
+		
+		system ("--SBINDIR--/alias_manager.pl add $list->{'name'} $list->{'domain'} /tmp/sympa_aliases.$$") if ($list->{'admin'}{'status'} eq 'open');
+	    }	
+	}
     }
     printf ("Sympa aliases file is /tmp/sympa_aliases.$$ file made, you probably need to installed it in your SMTP engine\n");
     
@@ -295,8 +299,13 @@ if ($main::options{'dump'}) {
     
     exit 0;
 }elsif ($main::options{'import'}) {
+    
+    unless ($main::options{'robot'}) {
+	&fatal_err('Missing robot argument');
+    }
+
     my ($list, $total);
-    unless ($list = new List ($main::options{'import'})) {
+    unless ($list = new List ($main::options{'import'}, $main::options{'robot'})) {
 	fatal_err('Unknown list name %s', $main::options{'import'});
     }
 
@@ -714,7 +723,7 @@ while (!$signal) {
 	}elsif ($t_listname =~ /^(sympa|$Conf{'email'})(\@$Conf{'host'})?$/i) {	
 	    $priority = $Conf{'sympa_priority'};
 	}else {
-	    my $list =  new List ($t_listname);
+	    my $list =  new List ($t_listname, $t_robot);
 	    if ($list) {
 		$priority = $list->{'admin'}{'priority'};
 	    }else {
@@ -893,7 +902,7 @@ sub DoFile {
 	$host = $conf_host;
 	$name = $listname;
     }else {
-	$list = new List ($listname);
+	$list = new List ($listname, $robot);
 	$host = $list->{'admin'}{'host'};
 	$name = $list->{'name'};
 	# setting log_level using list config unless it is set by calling option
@@ -1089,7 +1098,7 @@ sub DoForward {
 	$host = &Conf::get_robot_conf($robot, 'host');
 	$priority = 0;
     }else {
-	unless ($list = new List ($name)) {
+	unless ($list = new List ($name, $robot)) {
 	    do_log('notice', "Message for %s-%s ignored, unknown list %s",$name, $function, $name );
 	    return undef;
 	}
@@ -1172,7 +1181,7 @@ sub DoMessage{
     my $sender = $sender_hdr[0]->address || '';
 
     ## Search for the list
-    my $list = new List ($listname);
+    my $list = new List ($listname, $robot);
  
     ## List unknown
     unless ($list) {
@@ -1492,11 +1501,12 @@ sub SendDigest{
     closedir(DIR);
 
 
-    foreach my $listname (@dfile){
+    foreach my $listaddress (@dfile){
 
-	my $filename = $Conf{'queuedigest'}.'/'.$listname;
+	my $filename = $Conf{'queuedigest'}.'/'.$listaddress;
 
-	my $list = new List ($listname);
+	my ($listname, $listrobot) = split /\@/, $listaddress;
+	my $list = new List ($listname, $listrobot);
 	unless ($list) {
 	    &do_log('info', 'Unknown list, deleting digest file %s', $filename);
 	    unlink $filename;
@@ -1512,7 +1522,7 @@ sub SendDigest{
 	    $list->send_msg_digest();
 
 	    unlink($filename);
-	    do_log('info', 'Digest of the list %s sent (%d seconds)', $listname,time - $start_time);
+	    do_log('info', 'Digest of the list %s sent (%d seconds)', $listaddress,time - $start_time);
 	}
     }
 }

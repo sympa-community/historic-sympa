@@ -129,7 +129,7 @@ foreach my $vr (keys %{$Conf::Conf{'robots'}}) {
 
     ## Search in V. Robot Lists
     foreach my $l ( &List::get_lists($vr) ) {
-	my $list = new List ($l);
+	my $list = new List ($l, $vr);
 	next unless $list;
 	
 	push @directories, $list->{'dir'};
@@ -146,7 +146,7 @@ foreach my $vr (keys %{$Conf::Conf{'robots'}}) {
 ## List .tpl files
 foreach my $d (@directories) {
     unless (opendir DIR, $d) {
-	print STDERR "Error: Cannot read %s directory : %s", $d, $!;
+	printf STDERR "Error: Cannot read %s directory : %s", $d, $!;
 	next;
     }
     
@@ -163,17 +163,17 @@ foreach my $tpl (@templates) {
     ## We don't migrate mhonarc-ressources files
     if ($tpl =~ /mhonarc\-ressources$/) {
 	rename $tpl, "$tpl.uncompatible";
-	print STDERR "File $tpl could not be translated to TT2 ; it has been renamed $tpl.uncompatible. You should customize a standard mhonarc-ressourses.tt2 file\n";
+	printf STDERR "File $tpl could not be translated to TT2 ; it has been renamed $tpl.uncompatible. You should customize a standard mhonarc-ressourses.tt2 file\n";
 	next;
     }
 
     unless (-r $tpl) {
-	print STDERR "Error : Unable to read file %s\n", $tpl;
+	printf STDERR "Error : Unable to read file %s\n", $tpl;
 	next;
     }
 
     unless ($tpl =~ /^(.+)\/([^\/]+)$/) {
-	print STDERR "Error : Incorrect Path %s\n", $tpl;
+	printf STDERR "Error : Incorrect Path %s\n", $tpl;
 	next;
     }
     
@@ -225,7 +225,7 @@ foreach my $tpl (@templates) {
     
     ## Rename old files to .converted
     unless (rename $tpl, "$tpl.converted") {
-	print STDERR "Error : failed to rename $tpl to $tpl.converted : $!\n";
+	printf STDERR "Error : failed to rename $tpl to $tpl.converted : $!\n";
 	next;
     }
 }
@@ -238,27 +238,27 @@ sub convert {
 
     ## Convert tpl file
     unless (open TPL, $in_file) {
-	print STDERR "Cannot open $in_filel : $!\n";
+	printf STDERR "Cannot open $in_filel : $!\n";
 	next;
     }
     if ($out_file) {
 	unless (open TT2, ">$out_file") {
-	    print STDERR "Cannot create $out_file : $!\n";
+	    printf STDERR "Cannot create $out_file : $!\n";
 	    next;
 	}
     }
 
     while (<TPL>) {
 	if ($out_file) {
-	    print TT2 Sympa::Template::Compat::_translate($_);
+	    printf TT2 Sympa::Template::Compat::_translate($_);
 	}else {
-	    print STDOUT Sympa::Template::Compat::_translate($_);
+	    printf STDOUT Sympa::Template::Compat::_translate($_);
 	}
     }
     close TT2 if ($out_file);
     close TPL;
 
-    printf "Template file $in_file has been converted to $out_file\n";
+    printff "Template file $in_file has been converted to $out_file\n";
     
     chown '--USER--', '--GROUP--', $out_file;    
 }

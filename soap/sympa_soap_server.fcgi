@@ -66,9 +66,11 @@ my $pinfo = &List::_apply_defaults();
 &mail::set_send_spool($Conf{'queue'});
 
 ## Loading all Lists at startup, in order to increase execution speed
-foreach my $listname (&List::get_lists('*')){
-     my $list = new List ($listname);
- }
+foreach my $r (keys %{$Conf{'robots'}}) {   
+    foreach my $listname (&List::get_lists($r)){
+	my $list = new List ($listname, $r);
+    }
+}
 
 
 ##############################################################################################

@@ -1280,6 +1280,9 @@ sub new {
 	$name = $parts[0];
     }
 
+    ## Default is the main robot    
+    $robot ||= &search_list_among_robots($name);
+
     ## Only process the list if the name is valid.
     unless ($name and ($name =~ /^$tools::regexp{'listname'}$/io) ) {
 	&do_log('err', 'Incorrect listname "%s"',  $name);
@@ -1297,9 +1300,9 @@ sub new {
 	}
     }
 
-    if ($list_of_lists{$name}){
+    if ($list_of_lists{$robot}{$name}){
 	# use the current list in memory and update it
-	$list=$list_of_lists{$name};
+	$list = $list_of_lists{$robot}{$name};
     }else{
 	# create a new object list
 	bless $list, $pkg;
@@ -1325,6 +1328,29 @@ sub new {
     }
 
     return $list;
+}
+
+## When no robot is specified, look for a list among robots
+sub search_list_among_robots {
+    my $listname = shift;
+
+    unless ($listname) {
+	&do_log('err', 'List::search_list_among_robots() : Missing list parameter');
+	return undef;
+    }
+
+    ## Search in default robot
+    if (-d $Conf{'home'}.'/'.$listname) {
+	return $Conf{'host'};
+    }
+
+    foreach my $r (keys %{$Conf{'robots'}}) {
+	if (-d $Conf{'home'}.'/'.$r.'/'.$listname) {
+	    return $r;
+	}
+    }
+
+    return 0;
 }
 
 ## set the list in status error_config and send a notify to listmaster
@@ -1368,7 +1394,7 @@ sub savestats {
     ## Be sure the list has been loaded.
     my $name = $self->{'name'};
     my $dir = $self->{'dir'};
-    return undef unless ($list_of_lists{$name});
+    return undef unless ($list_of_lists{$self->{'domain'}}{$name});
     
    _save_stats_file("$dir/stats", $self->{'stats'}, $self->{'total'}, $self->{'last_sync'}, $self->{'last_sync_admin_user'});
     
@@ -1467,31 +1493,26 @@ sub update_stats {
 
 ## Dumps a copy of lists to disk, in text format
 sub dump {
-    my @listnames = @_;
-    do_log('debug2', 'List::dump(%s)', @listnames);
+    my $self = shift;
+    do_log('debug2', 'List::dump(%s)', $self->{'name'});
 
     my $done;
 
-    foreach my $l (@listnames) {
-	
-	my $list = new List($l);
-	
-	unless (defined $list) {
-	    &do_log('err','Unknown list %s', $l);
-	    next;
-	}
-
-	my $user_file_name = "$list->{'dir'}/subscribers.db.dump";
-	do_log('debug3', 'Dumping list %s',$l);	
-	unless ($list->_save_users_file($user_file_name)) {
-	    &do_log('err', 'Failed to save file %s', $user_file_name);
-	    next;
-	}
-	$list->{'mtime'} = [ (stat("$list->{'dir'}/config"))[9], (stat("$list->{'dir'}/subscribers"))[9], (stat("$list->{'dir'}/stats"))[9] ];
-
-	$done++
+    unless (defined $self) {
+	&do_log('err','Unknown list');
+	return undef;
     }
-    return $done;
+    
+    my $user_file_name = "$self->{'dir'}/subscribers.db.dump";
+
+    unless ($self->_save_users_file($user_file_name)) {
+	&do_log('err', 'Failed to save file %s', $user_file_name);
+	next;
+    }
+	
+    $self->{'mtime'} = [ (stat("self->{'dir'}/config"))[9], (stat("$self->{'dir'}/subscribers"))[9], (stat("$self->{'dir'}/stats"))[9] ];
+
+    return 1;
 }
 
 ## Saves a copy of the list to disk. Does not remove the
@@ -1503,7 +1524,7 @@ sub save {
     my $name = $self->{'name'};    
  
     return undef 
-	unless ($list_of_lists{$name});
+	unless ($list_of_lists{$self->{'domain'}}{$name});
  
     my $user_file_name;
 
@@ -1740,14 +1761,14 @@ sub load {
 
 #    elsif ($self->{'admin'}{'user_data_source'} eq 'database'){
 #	## If no total found in 'stats' AND database mode
-#	$self->{'total'} = _load_total_db($name);
+#	$self->{'total'} = $self->_load_total_db();
 #    }elsif ($self->{'admin'}{'user_data_source'} eq 'file'){
 #	$self->{'total'} = $users->{'total'};
 #    }
 
     $self->{'mtime'} = [ $m1, $m2, $m3 ];
 
-    $list_of_lists{$name} = $self;
+    $list_of_lists{$self->{'domain'}}{$name} = $self;
     return $config_reloaded;
 }
 
@@ -2146,7 +2167,7 @@ sub send_notify_to_listmaster {
 
     ## creation list requested
     }elsif ($operation eq 'request_list_creation') {
-	my $list = new List $param[0];
+	my $list = new List $param[0], $robot;
 	unless (defined $list) {
 	    &do_log('err','Parameter %s is not a valid list', $param[0]);
 	    return undef;
@@ -2188,7 +2209,7 @@ sub send_notify_to_listmaster {
      
     # Automatic action done on bouncing adresses
     }elsif ($operation eq 'automatic_bounce_management') {
-	my $list = new List $param[0];
+	my $list = new List $param[0], $robot;
 	my $host = &Conf::get_robot_conf($robot, 'host');
 
 
@@ -2527,8 +2548,8 @@ sub send_auth {
    my $boundary = "----------------- Message-Id: \<$messageid\>" ;
    my $contenttype = "Content-Type: message\/rfc822";
      
-   unless (open OUT, ">$authqueue\/$name\_$modkey") {
-       &do_log('notice', 'Cannot create file %s', "$authqueue/$name/$modkey");
+   unless (open OUT, ">$authqueue\/$name@$robot\_$modkey") {
+       &do_log('notice', 'Cannot create file %s', "$authqueue/$name@$robot\_$modkey");
        return undef;
    }
 
@@ -2897,8 +2918,8 @@ sub send_msg {
 
 ## Add footer/header to a message
 sub add_parts {
-    my ($self, $msg, $listname, $type) = @_;
-    do_log('debug2', 'List:add_parts(%s, %s, %s)', $msg, $listname, $type);
+    my ($self, $msg) = @_;
+    do_log('debug2', 'List:add_parts(%s, %s, %s)', $msg, $self->{'name'});
 
     my ($listname,$type) = ($self->{'name'}, $self->{'admin'}{'footer_type'});
     my $listdir = $self->{'dir'};
@@ -3047,7 +3068,14 @@ sub send_msg_digest {
     my $robot = $self->{'domain'};
     do_log('debug2', 'List:send_msg_digest(%s)', $listname);
     
-    my $filename = "$Conf{'queuedigest'}/$listname";
+    my $filename;
+    ## Reverse compatibility concern
+    if (-f "$Conf{'queuedigest'}/$listname") {
+	$filename = "$Conf{'queuedigest'}/$listname";
+    }else {
+	$filename = $Conf{'queuedigest'}.'/'.$listname.'@'.$robot;
+    }
+
     my $param = {'host' => $self->{'admin'}{'host'},
 		 'name' => "$self->{'name'}",
 		 'from' => "$self->{'name'}-request\@$self->{'admin'}{'host'}",
@@ -3414,7 +3442,10 @@ sub delete_user {
 	    $list_cache{'is_user'}{$name}{$who} = undef;    
 	    
 	    ## Delete record in SUBSCRIBER
-	    $statement = sprintf "DELETE FROM subscriber_table WHERE (user_subscriber=%s AND list_subscriber=%s)",$dbh->quote($who), $dbh->quote($name);
+	    $statement = sprintf "DELETE FROM subscriber_table WHERE (user_subscriber=%s AND list_subscriber=%s AND robot_subscriber=%s)",
+	    $dbh->quote($who), 
+	    $dbh->quote($name), 
+	    $dbh->quote($self->{'domain'});
 	    
 	    unless ($dbh->do($statement)) {
 		do_log('err','Unable to execute SQL statement %s : %s', $statement, $dbh->errstr);
@@ -3465,7 +3496,11 @@ sub delete_admin_user {
 	$list_cache{'is_admin_user'}{$name}{$who} = undef;    
 	    
 	## Delete record in ADMIN
-	$statement = sprintf "DELETE FROM admin_table WHERE (user_admin=%s AND list_admin=%s AND role_admin=%s)",$dbh->quote($who), $dbh->quote($name),$dbh->quote($role);
+	$statement = sprintf "DELETE FROM admin_table WHERE (user_admin=%s AND list_admin=%s AND robot_admin=%s AND role_admin=%s)",
+	$dbh->quote($who), 
+	$dbh->quote($name),
+	$dbh->quote($self->{'domain'}),
+	$dbh->quote($role);
 	
 	unless ($dbh->do($statement)) {
 	    do_log('err','Unable to execute SQL statement %s : %s', $statement, $dbh->errstr);
@@ -3523,14 +3558,14 @@ sub get_total {
     if (($self->{'admin'}{'user_data_source'} eq 'database') ||
 	($self->{'admin'}{'user_data_source'} eq 'include2')) {
 	if ($option eq 'nocache') {
-	    $self->{'total'} = _load_total_db($self->{'name'}, $option);
+	    $self->{'total'} = $self->_load_total_db($option);
 	}
     }
 #    if ($self->{'admin'}{'user_data_source'} eq 'database') {
 	## If stats file was updated
 #	my $time = (stat("$name/stats"))[9];
 #	if ($time > $self->{'mtime'}[0]) {
-#	    $self->{'total'} = _load_total_db($self->{'name'});
+#	    $self->{'total'} = $self->_load_total_db();
 #	}
 #    }
     
@@ -3679,9 +3714,21 @@ sub get_subscriber {
 
 	if ($Conf{'db_type'} eq 'Oracle') {
 	    ## "AS" not supported by Oracle
-	    $statement = sprintf "SELECT user_subscriber \"email\", comment_subscriber \"gecos\", bounce_subscriber \"bounce\", bounce_score_subscriber \"bounce_score\", reception_subscriber \"reception\", visibility_subscriber \"visibility\", %s \"date\", %s \"update_date\", subscribed_subscriber \"subscribed\", included_subscriber \"included\", include_sources_subscriber \"id\"  %s FROM subscriber_table WHERE (user_subscriber = %s AND list_subscriber = %s)", $date_field, $update_field, $additional, $dbh->quote($email), $dbh->quote($name);
+	    $statement = sprintf "SELECT user_subscriber \"email\", comment_subscriber \"gecos\", bounce_subscriber \"bounce\", bounce_score_subscriber \"bounce_score\", reception_subscriber \"reception\", visibility_subscriber \"visibility\", %s \"date\", %s \"update_date\", subscribed_subscriber \"subscribed\", included_subscriber \"included\", include_sources_subscriber \"id\"  %s FROM subscriber_table WHERE (user_subscriber = %s AND list_subscriber = %s AND robot_subscriber = %s)", 
+	    $date_field, 
+	    $update_field, 
+	    $additional, 
+	    $dbh->quote($email), 
+	    $dbh->quote($name),
+	    $dbh->quote($self->{'domain'});
 	}else {
-	    $statement = sprintf "SELECT user_subscriber AS email, comment_subscriber AS gecos, bounce_subscriber AS bounce, bounce_score_subscriber AS bounce_score, reception_subscriber AS reception, visibility_subscriber AS visibility, %s AS date, %s AS update_date, subscribed_subscriber AS subscribed, included_subscriber AS included, include_sources_subscriber AS id %s FROM subscriber_table WHERE (user_subscriber = %s AND list_subscriber = %s)", $date_field, $update_field, $additional, $dbh->quote($email), $dbh->quote($name);
+	    $statement = sprintf "SELECT user_subscriber AS email, comment_subscriber AS gecos, bounce_subscriber AS bounce, bounce_score_subscriber AS bounce_score, reception_subscriber AS reception, visibility_subscriber AS visibility, %s AS date, %s AS update_date, subscribed_subscriber AS subscribed, included_subscriber AS included, include_sources_subscriber AS id %s FROM subscriber_table WHERE (user_subscriber = %s AND list_subscriber = %s AND robot_subscriber = %s)", 
+	    $date_field, 
+	    $update_field, 
+	    $additional, 
+	    $dbh->quote($email), 
+	    $dbh->quote($name),
+	    $dbh->quote($self->{'domain'});
 	}
 
 	push @sth_stack, $sth;
@@ -3769,9 +3816,21 @@ sub get_admin_user {
 
     if ($Conf{'db_type'} eq 'Oracle') {
 	## "AS" not supported by Oracle
-	$statement = sprintf "SELECT user_admin \"email\", comment_admin \"gecos\", reception_admin \"reception\", %s \"date\", %s \"update_date\", info_admin \"info\", profile_admin \"profile\",  subscribed_admin \"subscribed\", included_admin \"included\", include_sources_admin \"id\"  FROM admin_table WHERE (user_admin = %s AND list_admin = %s AND role_admin = %s)", $date_field, $update_field, $dbh->quote($email), $dbh->quote($name), $dbh->quote($role);
+	$statement = sprintf "SELECT user_admin \"email\", comment_admin \"gecos\", reception_admin \"reception\", %s \"date\", %s \"update_date\", info_admin \"info\", profile_admin \"profile\",  subscribed_admin \"subscribed\", included_admin \"included\", include_sources_admin \"id\"  FROM admin_table WHERE (user_admin = %s AND list_admin = %s AND robot_admin = %s AND role_admin = %s)", 
+	$date_field, 
+	$update_field, 
+	$dbh->quote($email), 
+	$dbh->quote($name), 
+	$dbh->quote($self->{'domain'}),
+	$dbh->quote($role);
     }else {
-	$statement = sprintf "SELECT user_admin AS email, comment_admin AS gecos, reception_admin AS reception, %s AS date, %s AS update_date, info_admin AS info, profile_admin AS profile, subscribed_admin AS subscribed, included_admin AS included, include_sources_admin AS id FROM admin_table WHERE (user_admin = %s AND list_admin = %s AND role_admin = %s)", $date_field, $update_field, $dbh->quote($email), $dbh->quote($name), $dbh->quote($role);
+	$statement = sprintf "SELECT user_admin AS email, comment_admin AS gecos, reception_admin AS reception, %s AS date, %s AS update_date, info_admin AS info, profile_admin AS profile, subscribed_admin AS subscribed, included_admin AS included, include_sources_admin AS id FROM admin_table WHERE (user_admin = %s AND list_admin = %s AND robot_admin = %s AND role_admin = %s)", 
+	$date_field, 
+	$update_field, 
+	$dbh->quote($email), 
+	$dbh->quote($name), 
+	$dbh->quote($self->{'domain'}),
+	$dbh->quote($role);
     }
     
     push @sth_stack, $sth;
@@ -3875,11 +3934,22 @@ sub get_first_user {
 	## Oracle
 	if ($Conf{'db_type'} eq 'Oracle') {
 
-	    $statement = sprintf "SELECT user_subscriber \"email\", comment_subscriber \"gecos\", reception_subscriber \"reception\", visibility_subscriber \"visibility\", bounce_subscriber \"bounce\", bounce_score_subscriber \"bounce_score\", %s \"date\", %s \"update_date\", subscribed_subscriber \"subscribed\", included_subscriber \"included\", include_sources_subscriber \"id\" %s FROM subscriber_table WHERE (list_subscriber = %s %s)", $date_field, $update_field, $additional, $dbh->quote($name), $selection;
+	    $statement = sprintf "SELECT user_subscriber \"email\", comment_subscriber \"gecos\", reception_subscriber \"reception\", visibility_subscriber \"visibility\", bounce_subscriber \"bounce\", bounce_score_subscriber \"bounce_score\", %s \"date\", %s \"update_date\", subscribed_subscriber \"subscribed\", included_subscriber \"included\", include_sources_subscriber \"id\" %s FROM subscriber_table WHERE (list_subscriber = %s AND robot_subscriber = %s %s)", 
+	    $date_field, 
+	    $update_field, 
+	    $additional, 
+	    $dbh->quote($name), 
+	    $dbh->quote($self->{'domain'}),
+	    $selection;
 
 	    ## SORT BY
 	    if ($sortby eq 'domain') {
-		$statement = sprintf "SELECT user_subscriber \"email\", comment_subscriber \"gecos\", reception_subscriber \"reception\", visibility_subscriber \"visibility\", bounce_subscriber \"bounce\", bounce_score_subscriber \"bounce_score\", %s \"date\", %s \"update_date\", subscribed_subscriber \"subscribed\", included_subscriber \"included\", include_sources_subscriber \"id\", substr(user_subscriber,instr(user_subscriber,'\@')+1) \"dom\" %s FROM subscriber_table WHERE (list_subscriber = %s ) ORDER BY \"dom\"", $date_field, $update_field, $additional, $dbh->quote($name);
+		$statement = sprintf "SELECT user_subscriber \"email\", comment_subscriber \"gecos\", reception_subscriber \"reception\", visibility_subscriber \"visibility\", bounce_subscriber \"bounce\", bounce_score_subscriber \"bounce_score\", %s \"date\", %s \"update_date\", subscribed_subscriber \"subscribed\", included_subscriber \"included\", include_sources_subscriber \"id\", substr(user_subscriber,instr(user_subscriber,'\@')+1) \"dom\" %s FROM subscriber_table WHERE (list_subscriber = %s AND robot_subscriber = %s) ORDER BY \"dom\"", 
+		$date_field, 
+		$update_field, 
+		$additional, 
+		$dbh->quote($name),
+		$dbh->quote($self->{'domain'});
 
 	    }elsif ($sortby eq 'email') {
 		$statement .= " ORDER BY \"email\"";
@@ -3897,11 +3967,22 @@ sub get_first_user {
 	## Sybase
 	}elsif ($Conf{'db_type'} eq 'Sybase'){
 
-	    $statement = sprintf "SELECT user_subscriber \"email\", comment_subscriber \"gecos\", reception_subscriber \"reception\", visibility_subscriber \"visibility\", bounce_subscriber \"bounce\", bounce_score_subscriber \"bounce_score\", %s \"date\", %s \"update_date\", subscribed_subscriber \"subscribed\", included_subscriber \"included\", include_sources_subscriber \"id\" %s FROM subscriber_table WHERE (list_subscriber = %s %s)", $date_field, $update_field, $additional, $dbh->quote($name), $selection;
+	    $statement = sprintf "SELECT user_subscriber \"email\", comment_subscriber \"gecos\", reception_subscriber \"reception\", visibility_subscriber \"visibility\", bounce_subscriber \"bounce\", bounce_score_subscriber \"bounce_score\", %s \"date\", %s \"update_date\", subscribed_subscriber \"subscribed\", included_subscriber \"included\", include_sources_subscriber \"id\" %s FROM subscriber_table WHERE (list_subscriber = %s AND robot_subscriber = %s %s)", 
+	    $date_field, 
+	    $update_field, 
+	    $additional, 
+	    $dbh->quote($name), 
+	    $dbh->quote($self->{'domain'}),
+	    $selection;
 	    
 	    ## SORT BY
 	    if ($sortby eq 'domain') {
-		$statement = sprintf "SELECT user_subscriber \"email\", comment_subscriber \"gecos\", reception_subscriber \"reception\", visibility_subscriber \"visibility\", bounce_subscriber \"bounce\", bounce_score_subscriber \"bounce_score\", %s \"date\", %s \"update_date\", subscribed_subscriber \"subscribed\", included_subscriber \"included\", include_sources_subscriber \"id\", substring(user_subscriber,charindex('\@',user_subscriber)+1,100) \"dom\" %s FROM subscriber_table WHERE (list_subscriber = %s) ORDER BY \"dom\"", $date_field, $update_field, $additional, $dbh->quote($name);
+		$statement = sprintf "SELECT user_subscriber \"email\", comment_subscriber \"gecos\", reception_subscriber \"reception\", visibility_subscriber \"visibility\", bounce_subscriber \"bounce\", bounce_score_subscriber \"bounce_score\", %s \"date\", %s \"update_date\", subscribed_subscriber \"subscribed\", included_subscriber \"included\", include_sources_subscriber \"id\", substring(user_subscriber,charindex('\@',user_subscriber)+1,100) \"dom\" %s FROM subscriber_table WHERE (list_subscriber = %s AND robot_subscriber = %s) ORDER BY \"dom\"", 
+		$date_field, 
+		$update_field, 
+		$additional, 
+		$dbh->quote($name),
+		$dbh->quote($self->{'domain'});
 		
 	    }elsif ($sortby eq 'email') {
 		$statement .= " ORDER BY \"email\"";
@@ -3920,13 +4001,24 @@ sub get_first_user {
 	## mysql
 	}elsif ($Conf{'db_type'} eq 'mysql') {
 	    
-    $statement = sprintf "SELECT user_subscriber AS email, comment_subscriber AS gecos, reception_subscriber AS reception, visibility_subscriber AS visibility, bounce_subscriber AS bounce, bounce_score_subscriber AS bounce_score, %s AS date, %s AS update_date, subscribed_subscriber AS subscribed, included_subscriber AS included, include_sources_subscriber AS id %s FROM subscriber_table WHERE (list_subscriber = %s %s)", $date_field, $update_field, $additional, $dbh->quote($name), $selection;
+    $statement = sprintf "SELECT user_subscriber AS email, comment_subscriber AS gecos, reception_subscriber AS reception, visibility_subscriber AS visibility, bounce_subscriber AS bounce, bounce_score_subscriber AS bounce_score, %s AS date, %s AS update_date, subscribed_subscriber AS subscribed, included_subscriber AS included, include_sources_subscriber AS id %s FROM subscriber_table WHERE (list_subscriber = %s AND robot_subscriber = %s %s)", 
+    $date_field, 
+    $update_field, 
+    $additional, 
+    $dbh->quote($name), 
+    $dbh->quote($self->{'domain'}),
+    $selection;
 	    
 	    ## SORT BY
 	    if ($sortby eq 'domain') {
 		## Redefine query to set "dom"
 
-		$statement = sprintf "SELECT user_subscriber AS email, comment_subscriber AS gecos, reception_subscriber AS reception, visibility_subscriber AS visibility, bounce_subscriber AS bounce, bounce_score_subscriber AS bounce_score, %s AS date, %s AS update_date, subscribed_subscriber AS subscribed, included_subscriber AS included, include_sources_subscriber AS id, REVERSE(SUBSTRING(user_subscriber FROM position('\@' IN user_subscriber) FOR 50)) AS dom %s FROM subscriber_table WHERE (list_subscriber = %s) ORDER BY dom", $date_field, $update_field, $additional, $dbh->quote($name);
+		$statement = sprintf "SELECT user_subscriber AS email, comment_subscriber AS gecos, reception_subscriber AS reception, visibility_subscriber AS visibility, bounce_subscriber AS bounce, bounce_score_subscriber AS bounce_score, %s AS date, %s AS update_date, subscribed_subscriber AS subscribed, included_subscriber AS included, include_sources_subscriber AS id, REVERSE(SUBSTRING(user_subscriber FROM position('\@' IN user_subscriber) FOR 50)) AS dom %s FROM subscriber_table WHERE (list_subscriber = %s AND robot_subscriber = %s) ORDER BY dom", 
+		$date_field, 
+		$update_field, 
+		$additional, 
+		$dbh->quote($name),
+		$dbh->quote($self->{'domain'});
 
 	    }elsif ($sortby eq 'email') {
 		## Default SORT
@@ -3950,13 +4042,24 @@ sub get_first_user {
 	## Pg    
 	}else {
 	    
-	    $statement = sprintf "SELECT user_subscriber AS email, comment_subscriber AS gecos, reception_subscriber AS reception, visibility_subscriber AS visibility, bounce_subscriber AS bounce, bounce_score_subscriber AS bounce_score, %s AS date, %s AS update_date, subscribed_subscriber AS subscribed, included_subscriber AS included, include_sources_subscriber AS id %s FROM subscriber_table WHERE (list_subscriber = %s %s)", $date_field, $update_field, $additional, $dbh->quote($name), $selection;
+	    $statement = sprintf "SELECT user_subscriber AS email, comment_subscriber AS gecos, reception_subscriber AS reception, visibility_subscriber AS visibility, bounce_subscriber AS bounce, bounce_score_subscriber AS bounce_score, %s AS date, %s AS update_date, subscribed_subscriber AS subscribed, included_subscriber AS included, include_sources_subscriber AS id %s FROM subscriber_table WHERE (list_subscriber = %s AND robot_subscriber = %s %s)", 
+	    $date_field, 
+	    $update_field, 
+	    $additional, 
+	    $dbh->quote($name), 
+	    $dbh->quote($self->{'domain'}),
+	    $selection;
 	    
 	    ## SORT BY
 	    if ($sortby eq 'domain') {
 		## Redefine query to set "dom"
 
-		$statement = sprintf "SELECT user_subscriber AS email, comment_subscriber AS gecos, reception_subscriber AS reception, visibility_subscriber AS visibility, bounce_subscriber AS bounce, bounce_score_subscriber AS bounce_score, %s AS date, %s AS update_date, subscribed_subscriber AS subscribed, included_subscriber AS included, include_sources_subscriber AS id, SUBSTRING(user_subscriber FROM position('\@' IN user_subscriber) FOR 50) AS dom %s FROM subscriber_table WHERE (list_subscriber = %s) ORDER BY dom", $date_field, $update_field, $additional, $dbh->quote($name);
+		$statement = sprintf "SELECT user_subscriber AS email, comment_subscriber AS gecos, reception_subscriber AS reception, visibility_subscriber AS visibility, bounce_subscriber AS bounce, bounce_score_subscriber AS bounce_score, %s AS date, %s AS update_date, subscribed_subscriber AS subscribed, included_subscriber AS included, include_sources_subscriber AS id, SUBSTRING(user_subscriber FROM position('\@' IN user_subscriber) FOR 50) AS dom %s FROM subscriber_table WHERE (list_subscriber = %s AND robot_subscriber = %s) ORDER BY dom", 
+		$date_field, 
+		$update_field, 
+		$additional, 
+		$dbh->quote($name),
+		$dbh->quote($self->{'domain'});
 
 	    }elsif ($sortby eq 'email') {
 		$statement .= ' ORDER BY email';
@@ -4022,7 +4125,7 @@ sub get_first_user {
 
 	## If no offset (for LIMIT) was used, update total of subscribers
 	unless ($offset) {
-	    my $total = &_load_total_db($self->{'name'},'nocache');
+	    my $total = $self->_load_total_db('nocache');
 	    if ($total != $self->{'total'}) {
 		$self->{'total'} = $total;
 		$self->savestats();
@@ -4125,11 +4228,22 @@ sub get_first_admin_user {
 # and ok ?
     if ($Conf{'db_type'} eq 'Oracle') {
 	
-	$statement = sprintf "SELECT user_admin \"email\", comment_admin \"gecos\", reception_admin \"reception\", %s \"date\", %s \"update_date\", info_admin \"info\", profile_admin \"profile\", subscribed_admin \"subscribed\", included_admin \"included\", include_sources_admin \"id\" FROM admin_table WHERE (list_admin = %s %s AND role_admin = %s)", $date_field, $update_field, $dbh->quote($name), $selection, $dbh->quote($role);
+	$statement = sprintf "SELECT user_admin \"email\", comment_admin \"gecos\", reception_admin \"reception\", %s \"date\", %s \"update_date\", info_admin \"info\", profile_admin \"profile\", subscribed_admin \"subscribed\", included_admin \"included\", include_sources_admin \"id\" FROM admin_table WHERE (list_admin = %s AND robot_admin = %s %s AND role_admin = %s)", 
+	$date_field, 
+	$update_field, 
+	$dbh->quote($name), 
+	$dbh->quote($self->{'domain'}),
+	$selection, 
+	$dbh->quote($role);
 	
 	## SORT BY
 	if ($sortby eq 'domain') {
-	    $statement = sprintf "SELECT user_admin \"email\", comment_admin \"gecos\", reception_admin \"reception\", %s \"date\", %s \"update_date\", info_admin \"info\", profile_admin \"profile\", subscribed_admin \"subscribed\", included_admin \"included\", include_sources_admin \"id\", substr(user_admin,instr(user_admin,'\@')+1) \"dom\"  FROM admin_table WHERE (list_admin = %s AND role_admin = %s ) ORDER BY \"dom\"", $date_field, $update_field, $dbh->quote($name), $dbh->quote($role);
+	    $statement = sprintf "SELECT user_admin \"email\", comment_admin \"gecos\", reception_admin \"reception\", %s \"date\", %s \"update_date\", info_admin \"info\", profile_admin \"profile\", subscribed_admin \"subscribed\", included_admin \"included\", include_sources_admin \"id\", substr(user_admin,instr(user_admin,'\@')+1) \"dom\"  FROM admin_table WHERE (list_admin = %s AND robot_admin = %s AND role_admin = %s ) ORDER BY \"dom\"", 
+	    $date_field, 
+	    $update_field, 
+	    $dbh->quote($name), 
+	    $dbh->quote($self->{'domain'}),
+	    $dbh->quote($role);
 	    
 	}elsif ($sortby eq 'email') {
 	    $statement .= " ORDER BY \"email\"";
@@ -4147,10 +4261,21 @@ sub get_first_admin_user {
 	## Sybase
     }elsif ($Conf{'db_type'} eq 'Sybase'){
 	
-	$statement = sprintf "SELECT user_admin \"email\", comment_admin \"gecos\", reception_admin \"reception\", %s \"date\", %s \"update_date\", info_admin \"info\", profile_admin \"profile\", subscribed_admin \"subscribed\", included_admin \"included\", include_sources_admin \"id\" FROM admin_table WHERE (list_admin = %s %s AND role_admin = %s)", $date_field, $update_field, $dbh->quote($name), $selection, $dbh->quote($role);
+	$statement = sprintf "SELECT user_admin \"email\", comment_admin \"gecos\", reception_admin \"reception\", %s \"date\", %s \"update_date\", info_admin \"info\", profile_admin \"profile\", subscribed_admin \"subscribed\", included_admin \"included\", include_sources_admin \"id\" FROM admin_table WHERE (list_admin = %s AND robot_admin %s AND role_admin = %s)", 
+	$date_field, 
+	$update_field, 
+	$dbh->quote($name), 
+	$dbh->quote($self->{'domain'}),
+	$selection, 
+	$dbh->quote($role);
 	## SORT BY
 	if ($sortby eq 'domain') {
-	    $statement = sprintf "SELECT user_admin \"email\", comment_admin \"gecos\", reception_admin \"reception\", %s \"date\", %s \"update_date\", info_admin \"info\", profile_admin \"profile\", subscribed_admin \"subscribed\", included_admin \"included\", include_sources_admin \"id\", substring(user_admin,charindex('\@',user_admin)+1,100) \"dom\" FROM admin_table WHERE (list_admin = %s  AND role_admin = %s) ORDER BY \"dom\"", $date_field, $update_field,  $dbh->quote($name), $dbh->quote($role);
+	    $statement = sprintf "SELECT user_admin \"email\", comment_admin \"gecos\", reception_admin \"reception\", %s \"date\", %s \"update_date\", info_admin \"info\", profile_admin \"profile\", subscribed_admin \"subscribed\", included_admin \"included\", include_sources_admin \"id\", substring(user_admin,charindex('\@',user_admin)+1,100) \"dom\" FROM admin_table WHERE (list_admin = %s  AND robot_admin = %s AND role_admin = %s) ORDER BY \"dom\"", 
+	    $date_field, 
+	    $update_field, 
+	    $dbh->quote($name), 
+	    $dbh->quote($self->{'domain'}),
+	    $dbh->quote($role);
 	    
 	}elsif ($sortby eq 'email') {
 	    $statement .= " ORDER BY \"email\"";
@@ -4169,13 +4294,24 @@ sub get_first_admin_user {
 	## mysql
     }elsif ($Conf{'db_type'} eq 'mysql') {
 	
-	$statement = sprintf "SELECT user_admin AS email, comment_admin AS gecos, reception_admin AS reception, %s AS date, %s AS update_date, info_admin AS info, profile_admin AS profile, subscribed_admin AS subscribed, included_admin AS included, include_sources_admin AS id  FROM admin_table WHERE (list_admin = %s %s AND role_admin = %s)", $date_field, $update_field, $dbh->quote($name), $selection, $dbh->quote($role);
+	$statement = sprintf "SELECT user_admin AS email, comment_admin AS gecos, reception_admin AS reception, %s AS date, %s AS update_date, info_admin AS info, profile_admin AS profile, subscribed_admin AS subscribed, included_admin AS included, include_sources_admin AS id  FROM admin_table WHERE (list_admin = %s AND robot_admin = %s %s AND role_admin = %s)", 
+	$date_field, 
+	$update_field, 
+	$dbh->quote($name), 
+	$dbh->quote($self->{'domain'}),
+	$selection, 
+	$dbh->quote($role);
 	
 	## SORT BY
 	if ($sortby eq 'domain') {
 	    ## Redefine query to set "dom"
 	    
-	    $statement = sprintf "SELECT user_admin AS email, comment_admin AS gecos, reception_admin AS reception, %s AS date, %s AS update_date, info_admin AS info, profile_admin AS profile, subscribed_admin AS subscribed, included_admin AS included, include_sources_admin AS id, REVERSE(SUBSTRING(user_admin FROM position('\@' IN user_admin) FOR 50)) AS dom FROM admin_table WHERE (list_admin = %s AND role_admin = %s ) ORDER BY dom", $date_field, $update_field, $dbh->quote($name), $dbh->quote($role);
+	    $statement = sprintf "SELECT user_admin AS email, comment_admin AS gecos, reception_admin AS reception, %s AS date, %s AS update_date, info_admin AS info, profile_admin AS profile, subscribed_admin AS subscribed, included_admin AS included, include_sources_admin AS id, REVERSE(SUBSTRING(user_admin FROM position('\@' IN user_admin) FOR 50)) AS dom FROM admin_table WHERE (list_admin = %s AND robot_admin = %s AND role_admin = %s ) ORDER BY dom", 
+	    $date_field, 
+	    $update_field, 
+	    $dbh->quote($name), 
+	    $dbh->quote($self->{'domain'}),
+	    $dbh->quote($role);
 	    
 	}elsif ($sortby eq 'email') {
 	    ## Default SORT
@@ -4199,13 +4335,24 @@ sub get_first_admin_user {
 	## Pg    
     }else {
 	
-	$statement = sprintf "SELECT user_admin AS email, comment_admin AS gecos, reception_admin AS reception, %s AS date, %s AS update_date, info_admin AS info, profile_admin AS profile, subscribed_admin AS subscribed, included_admin AS included, include_sources_admin AS id FROM admin_table WHERE (list_admin = %s %s AND role_admin = %s)", $date_field, $update_field, $dbh->quote($name), $selection, $dbh->quote($role);
+	$statement = sprintf "SELECT user_admin AS email, comment_admin AS gecos, reception_admin AS reception, %s AS date, %s AS update_date, info_admin AS info, profile_admin AS profile, subscribed_admin AS subscribed, included_admin AS included, include_sources_admin AS id FROM admin_table WHERE (list_admin = %s AND robot_admin = %s %s AND role_admin = %s)", 
+	$date_field, 
+	$update_field, 
+	$dbh->quote($name), 
+	$dbh->quote($self->{'domain'}),
+	$selection, 
+	$dbh->quote($role);
 	
 	## SORT BY
 	if ($sortby eq 'domain') {
 	    ## Redefine query to set "dom"
 	    
-	    $statement = sprintf "SELECT user_admin AS email, comment_admin AS gecos, reception_admin AS reception, %s AS date, %s AS update_date, info_admin AS info, profile_admin AS profile, subscribed_admin AS subscribed, included_admin AS included, include_sources_admin AS id, SUBSTRING(user_admin FROM position('\@' IN user_admin) FOR 50) AS dom  FROM admin_table WHERE (list_admin = %s AND role_admin = %s) ORDER BY dom", $date_field, $update_field, $dbh->quote($name), $dbh->quote($role);
+	    $statement = sprintf "SELECT user_admin AS email, comment_admin AS gecos, reception_admin AS reception, %s AS date, %s AS update_date, info_admin AS info, profile_admin AS profile, subscribed_admin AS subscribed, included_admin AS included, include_sources_admin AS id, SUBSTRING(user_admin FROM position('\@' IN user_admin) FOR 50) AS dom  FROM admin_table WHERE (list_admin = %s AND robot_admin = %s AND role_admin = %s) ORDER BY dom", 
+	    $date_field, 
+	    $update_field, 
+	    $dbh->quote($name), 
+	    $dbh->quote($self->{'domain'}),
+	    $dbh->quote($role);
 	    
 	}elsif ($sortby eq 'email') {
 	    $statement .= ' ORDER BY email';
@@ -4427,9 +4574,19 @@ sub get_first_bouncing_user {
 
     if ($Conf{'db_type'} eq 'Oracle') {
 	## "AS" not supported by Oracle
-	$statement = sprintf "SELECT user_subscriber \"email\", reception_subscriber \"reception\", visibility_subscriber \"visibility\", bounce_subscriber \"bounce\",bounce_score_subscriber \"bounce_score\", %s \"date\", %s \"update_date\" %s FROM subscriber_table WHERE (list_subscriber = %s AND bounce_subscriber is not NULL)", $date_field, $update_field, $additional, $dbh->quote($name);
+	$statement = sprintf "SELECT user_subscriber \"email\", reception_subscriber \"reception\", visibility_subscriber \"visibility\", bounce_subscriber \"bounce\",bounce_score_subscriber \"bounce_score\", %s \"date\", %s \"update_date\" %s FROM subscriber_table WHERE (list_subscriber = %s AND robot_subscriber = %s AND bounce_subscriber is not NULL)", 
+	$date_field, 
+	$update_field, 
+	$additional, 
+	$dbh->quote($name),
+	$dbh->quote($self->{'domain'});
     }else {
-	$statement = sprintf "SELECT user_subscriber AS email, reception_subscriber AS reception, visibility_subscriber AS visibility, bounce_subscriber AS bounce,bounce_score_subscriber AS bounce_score, %s AS date, %s AS update_date %s FROM subscriber_table WHERE (list_subscriber = %s AND bounce_subscriber is not NULL)", $date_field, $update_field, $additional, $dbh->quote($name);
+	$statement = sprintf "SELECT user_subscriber AS email, reception_subscriber AS reception, visibility_subscriber AS visibility, bounce_subscriber AS bounce,bounce_score_subscriber AS bounce_score, %s AS date, %s AS update_date %s FROM subscriber_table WHERE (list_subscriber = %s AND robot_subscriber = %s AND bounce_subscriber is not NULL)", 
+	$date_field, 
+	$update_field, 
+	$additional, 
+	$dbh->quote($name),
+	$dbh->quote($self->{'domain'});
     }
 
     push @sth_stack, $sth;
@@ -4561,7 +4718,9 @@ sub get_total_bouncing {
     }	   
     
     ## Query the Database
-    $statement = sprintf "SELECT count(*) FROM subscriber_table WHERE (list_subscriber = %s  AND bounce_subscriber is not NULL)", $dbh->quote($name);
+    $statement = sprintf "SELECT count(*) FROM subscriber_table WHERE (list_subscriber = %s  AND robot_subscriber = %s AND bounce_subscriber is not NULL)", 
+    $dbh->quote($name),
+    $dbh->quote($self->{'domain'});
     
     push @sth_stack, $sth;
 
@@ -4652,7 +4811,10 @@ sub is_user {
 	}	   
 	
 	## Query the Database
-	$statement = sprintf "SELECT count(*) FROM subscriber_table WHERE (list_subscriber = %s AND user_subscriber = %s)",$dbh->quote($name), $dbh->quote($who);
+	$statement = sprintf "SELECT count(*) FROM subscriber_table WHERE (list_subscriber = %s AND robot_subscriber = %s AND user_subscriber = %s)",
+	$dbh->quote($name), 
+	$dbh->quote($self->{'domain'}),
+	$dbh->quote($who);
 	
 	push @sth_stack, $sth;
 	
@@ -4791,9 +4953,18 @@ sub update_user {
 
 	    }elsif ($table eq 'subscriber_table') {
 		if ($who eq '*') {
-		    $statement = sprintf "UPDATE %s SET %s WHERE (list_subscriber=%s)", $table, join(',', @set_list), $dbh->quote($name);
+		    $statement = sprintf "UPDATE %s SET %s WHERE (list_subscriber=%s AND robot_subscriber = %s)", 
+		    $table, 
+		    join(',', @set_list), 
+		    $dbh->quote($name),
+		    $dbh->quote($self->{'domain'});
 		}else {
-		    $statement = sprintf "UPDATE %s SET %s WHERE (user_subscriber=%s AND list_subscriber=%s)", $table, join(',', @set_list), $dbh->quote($who), $dbh->quote($name);
+		    $statement = sprintf "UPDATE %s SET %s WHERE (user_subscriber=%s AND list_subscriber=%s AND robot_subscriber=%s)", 
+		    $table, 
+		    join(',', @set_list), 
+		    $dbh->quote($who), 
+		    $dbh->quote($name),
+		    $dbh->quote($self->{'domain'});
 		}
 	    }
 	    
@@ -4932,9 +5103,20 @@ sub update_admin_user {
 	    
 	}elsif ($table eq 'admin_table') {
 	    if ($who eq '*') {
-		$statement = sprintf "UPDATE %s SET %s WHERE (list_admin=%s AND role_admin=%s)", $table, join(',', @set_list), $dbh->quote($name), $dbh->quote($role);
+		$statement = sprintf "UPDATE %s SET %s WHERE (list_admin=%s AND robot_admin=% AND role_admin=%s)", 
+		$table, 
+		join(',', @set_list), 
+		$dbh->quote($name), 
+		$dbh->quote($self->{'domain'}),
+		$dbh->quote($role);
 	    }else {
-		$statement = sprintf "UPDATE %s SET %s WHERE (user_admin=%s AND list_admin=%s AND role_admin=%s )", $table, join(',', @set_list), $dbh->quote($who), $dbh->quote($name), $dbh->quote($role);
+		$statement = sprintf "UPDATE %s SET %s WHERE (user_admin=%s AND list_admin=%s AND robot_admin=%s AND role_admin=%s )", 
+		$table, 
+		join(',', @set_list), 
+		$dbh->quote($who), 
+		$dbh->quote($name), 
+		$dbh->quote($self->{'domain'}),
+		$dbh->quote($role);
 	    }
 	}
     }
@@ -5127,7 +5309,18 @@ sub add_user {
 	    }	    
 
 	    ## Update Subscriber Table
-	    $statement = sprintf "INSERT INTO subscriber_table (user_subscriber, comment_subscriber, list_subscriber, date_subscriber, update_subscriber, reception_subscriber, visibility_subscriber,subscribed_subscriber,included_subscriber,include_sources_subscriber) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s)", $dbh->quote($who), $dbh->quote($new_user->{'gecos'}), $dbh->quote($name), $date_field, $update_field, $dbh->quote($new_user->{'reception'}), $dbh->quote($new_user->{'visibility'}), $dbh->quote($new_user->{'subscribed'}), $dbh->quote($new_user->{'included'}), $dbh->quote($new_user->{'id'});
+	    $statement = sprintf "INSERT INTO subscriber_table (user_subscriber, comment_subscriber, list_subscriber, robot_subscriber, date_subscriber, update_subscriber, reception_subscriber, visibility_subscriber,subscribed_subscriber,included_subscriber,include_sources_subscriber) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)", 
+	    $dbh->quote($who), 
+	    $dbh->quote($new_user->{'gecos'}), 
+	    $dbh->quote($name), 
+	    $dbh->quote($self->{'domain'}),
+	    $date_field, 
+	    $update_field, 
+	    $dbh->quote($new_user->{'reception'}), 
+	    $dbh->quote($new_user->{'visibility'}), 
+	    $dbh->quote($new_user->{'subscribed'}), 
+	    $dbh->quote($new_user->{'included'}), 
+	    $dbh->quote($new_user->{'id'});
 	    
 	    unless ($dbh->do($statement)) {
 		do_log('err','Unable to execute SQL statement "%s" : %s', $statement, $dbh->errstr);
@@ -5214,7 +5407,20 @@ sub add_admin_user {
 	}	    
 
 	## Update Admin Table
-	$statement = sprintf "INSERT INTO admin_table (user_admin, comment_admin, list_admin, date_admin, update_admin, reception_admin,subscribed_admin,included_admin,include_sources_admin, role_admin, info_admin, profile_admin) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)", $dbh->quote($who), $dbh->quote($new_admin_user->{'gecos'}), $dbh->quote($name), $date_field, $update_field, $dbh->quote($new_admin_user->{'reception'}), $dbh->quote($new_admin_user->{'subscribed'}), $dbh->quote($new_admin_user->{'included'}), $dbh->quote($new_admin_user->{'id'}), $dbh->quote($role), $dbh->quote($new_admin_user->{'info'}), $dbh->quote($new_admin_user->{'profile'});
+	$statement = sprintf "INSERT INTO admin_table (user_admin, comment_admin, list_admin, robot_admin, date_admin, update_admin, reception_admin,subscribed_admin,included_admin,include_sources_admin, role_admin, info_admin, profile_admin) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)", 
+	$dbh->quote($who), 
+	$dbh->quote($new_admin_user->{'gecos'}), 
+	$dbh->quote($name), 
+	$dbh->quote($self->{'domain'}),
+	$date_field, 
+	$update_field, 
+	$dbh->quote($new_admin_user->{'reception'}), 
+	$dbh->quote($new_admin_user->{'subscribed'}), 
+	$dbh->quote($new_admin_user->{'included'}), 
+	$dbh->quote($new_admin_user->{'id'}), 
+	$dbh->quote($role), 
+	$dbh->quote($new_admin_user->{'info'}), 
+	$dbh->quote($new_admin_user->{'profile'});
 	
 	unless ($dbh->do($statement)) {
 	    do_log('err','Unable to execute SQL statement "%s" : %s', $statement, $dbh->errstr);
@@ -5228,8 +5434,8 @@ sub add_admin_user {
 
 ## Update subscribers and admin users (used while renaming a list)
 sub rename_list_db {
-    my($list, $new_listname) = @_;
-    do_log('debug', 'List::rename_list_db(%s,%s)', $list->{'name'},$new_listname);
+    my($self, $new_listname, $new_robot) = @_;
+    do_log('debug', 'List::rename_list_db(%s,%s)', $self->{'name'},$new_listname);
 
     unless ($List::use_db) {
 	&do_log('info', 'Sympa not setup to use DBI');
@@ -5244,7 +5450,11 @@ sub rename_list_db {
 	return undef unless &db_connect();
     }	   
     
-    $statement_subscriber =  sprintf "UPDATE subscriber_table SET list_subscriber=%s WHERE list_subscriber=%s", $dbh->quote($new_listname), $dbh->quote($list->{'name'}) ; 
+    $statement_subscriber =  sprintf "UPDATE subscriber_table SET list_subscriber=%s, robot_subscriber=%s WHERE (list_subscriber=%s AND robot_subscriber=%s)", 
+    $dbh->quote($new_listname),
+    $dbh->quote($new_robot),
+    $dbh->quote($self->{'name'}),
+    $dbh->quote($self->{'domain'}); 
 
     do_log('debug', 'List::rename_list_db statement : %s',  $statement_subscriber );
 
@@ -5254,15 +5464,19 @@ sub rename_list_db {
     }
 
     # admin_table is "alive" only in case include2
-    if ($list->{'admin'}{'user_data_source'} eq 'include2'){
+    if ($self->{'admin'}{'user_data_source'} eq 'include2'){
 
-	$statement_admin =  sprintf "UPDATE admin_table SET list_admin=%s WHERE list_admin=%s", $dbh->quote($new_listname), $dbh->quote($list->{'name'}) ; 
+	$statement_admin =  sprintf "UPDATE admin_table SET list_admin=%s, robot_admin=%s WHERE (list_admin=%s AND robot_admin=%s)", 
+	$dbh->quote($new_listname), 
+	$dbh->quote($new_robot),
+	$dbh->quote($self->{'name'}),
+	$dbh->quote($self->{'domain'}); 
 	do_log('debug', 'List::rename_list_db statement : %s',  $statement_admin );
 
 	unless ($dbh->do($statement_admin)) {
 	    do_log('err','Unable to execute SQL statement "%s" : %s', $statement_admin, $dbh->errstr);
 	return undef;
-    }
+	}
     }
     
     return 1;
@@ -5421,7 +5635,7 @@ sub request_action {
     my (@rules, $name) ;
     my $list;
     if ($context->{'listname'}) {
-        unless ( $list = new List ($context->{'listname'}) ){
+        unless ( $list = new List ($context->{'listname'}, $robot) ){
 	    do_log('info',"request_action :  unable to create object $context->{'listname'}");
 	    return undef ;
 	}
@@ -5486,7 +5700,7 @@ sub request_action {
     foreach my $rule (@rules) {
 	next if ($rule eq 'scenario');
 	if ($auth_method eq $rule->{'auth_method'}) {
-	    my $result =  &verify ($context,$rule->{'condition'});
+	    my $result =  &verify ($context,$rule->{'condition'},$robot);
 
 	    if (! defined ($result)) {
 		do_log('info',"error in $rule->{'condition'},$rule->{'auth_method'},$rule->{'action'}" );
@@ -5534,7 +5748,7 @@ sub init_list_cache {
 
 ## check if email respect some condition
 sub verify {
-    my ($context, $condition) = @_;
+    my ($context, $condition, $robot) = @_;
     do_log('debug3', 'List::verify(%s)', $condition);
 
 #    while (my($k,$v) = each %{$context}) {
@@ -5560,7 +5774,7 @@ sub verify {
     }
     my $list;
     if (defined ($context->{'listname'})) {
-	$list = new List ($context->{'listname'});
+	$list = new List ($context->{'listname'}, $robot);
 	unless ($list) {
 	    do_log('err','Unable to create list object %s', $context->{'listname'});
 	    return undef;
@@ -5769,7 +5983,7 @@ sub verify {
 	    return -1 * $negation ;
 	}
 
-	$list2 = new List ($args[0]);
+	$list2 = new List ($args[0],$robot);
 	if (! $list2) {
 	    do_log('err',"unable to create list object \"$args[0]\"");
 	    return -1 * $negation ;
@@ -6206,9 +6420,14 @@ sub get_nextdigest {
     my $digest = $self->{'admin'}{'digest'};
     my $listname = $self->{'name'};
 
-    unless (-f "$Conf{'queuedigest'}/$listname") {
-	return undef;
+    ## Reverse compatibility concerns
+    my $filename;
+    foreach my $f ("$Conf{'queuedigest'}/$listname",
+		   $Conf{'queuedigest'}.'/'.$listname.'@'.$self->{'domain'}) {
+	$filename = $f if (-f $f);
     }
+
+    return undef unless (defined $filename);
 
     unless ($digest) {
 	return undef;
@@ -6219,7 +6438,7 @@ sub get_nextdigest {
      
     my @now  = localtime(time);
     my $today = $now[6]; # current day
-    my @timedigest = localtime( (stat "$Conf{'queuedigest'}/$listname")[9]);
+    my @timedigest = localtime( (stat $filename)[9]);
 
     ## Should we send a digest today
     my $send_digest = 0;
@@ -6594,12 +6813,16 @@ sub _load_users_file {
 
 ## include a remote sympa list as subscribers.
 sub _include_users_remote_sympa_list {
-    my ($self, $users, $param, $dir, $robot, $default_user_options , $tied) = @_;
+    my ($self, $users, $param, $tied) = @_;
 
     my $host = $param->{'host'};
     my $port = $param->{'port'} || '443';
     my $path = $param->{'path'};
     my $cert = $param->{'cert'} || 'list';
+
+    my $robot = $self->{'domain'};
+    my $default_user_options = $self->{'admin'}{'default_user_options'};
+    my $dir = $self->{'dir'};
 
     my $id = _get_datasource_id($param);
 
@@ -6707,12 +6930,14 @@ sub _include_users_remote_sympa_list {
 
 ## include a list as subscribers.
 sub _include_users_list {
-    my ($users, $includelistname, $default_user_options, $tied) = @_;
+    my ($self, $users, $includelistname, $tied) = @_;
     do_log('debug2', 'List::_include_users_list');
+
+    my $default_user_options = $self->{'admin'}{'default_user_options'};
 
     my $total = 0;
     
-    my $includelist = new List ($includelistname);
+    my $includelist = new List ($includelistname, $self->{'domain'});
     unless ($includelist) {
 	do_log('info', 'Included list %s unknown' , $includelistname);
 	return undef;
@@ -6783,8 +7008,10 @@ sub _include_users_admin {
 }
     
 sub _include_users_file {
-    my ($users, $filename, $default_user_options,$tied) = @_;
+    my ($self, $users, $filename, $tied) = @_;
     do_log('debug2', 'List::_include_users_file');
+    
+    my $default_user_options = $self->{'admin'}{'default_user_options'};
 
     my $total = 0;
     
@@ -6845,7 +7072,9 @@ sub _include_users_file {
 }
     
 sub _include_users_remote_file {
-    my ($users, $param, $default_user_options,$tied) = @_;
+    my ($self, $users, $param, $tied) = @_;
+
+    my $default_user_options = $self->{'admin'}{'default_user_options'};
 
     my $url = $param->{'url'};
     
@@ -6928,9 +7157,11 @@ sub _include_users_remote_file {
 
 ## Returns a list of subscribers extracted from a remote LDAP Directory
 sub _include_users_ldap {
-    my ($users, $param, $default_user_options, $tied) = @_;
+    my ($self, $users, $param, $tied) = @_;
     do_log('debug2', 'List::_include_users_ldap');
     
+    my $default_user_options = $self->{'admin'}{'default_user_options'};
+
     unless (eval "require Net::LDAP") {
 	do_log('err',"Unable to use LDAP library, install perl-ldap (CPAN) first");
 	return undef;
@@ -7058,9 +7289,11 @@ sub _include_users_ldap {
 ## Returns a list of subscribers extracted indirectly from a remote LDAP
 ## Directory using a two-level query
 sub _include_users_ldap_2level {
-    my ($users, $param, $default_user_options,$tied) = @_;
+    my ($self, $users, $param, $tied) = @_;
     do_log('debug2', 'List::_include_users_ldap_2level');
     
+    my $default_user_options = $self->{'admin'}{'default_user_options'};
+
     unless (eval "require Net::LDAP") {
 	do_log('err',"Unable to use LDAP library, install perl-ldap (CPAN) first");
 	return undef;
@@ -7233,9 +7466,11 @@ sub _include_users_ldap_2level {
 
 ## Returns a list of subscribers extracted from an remote Database
 sub _include_users_sql {
-    my ($users, $param, $default_user_options, $tied) = @_;
+    my ($self, $users, $param, $tied) = @_;
 
     &do_log('debug2','List::_include_users_sql()');
+
+    my $default_user_options = $self->{'admin'}{'default_user_options'};
 
     unless ( eval "require DBI" ){
 	do_log('err',"Intall module DBI (CPAN) before using include_sql_query");
@@ -7400,26 +7635,26 @@ sub _load_users_include {
 		
 		## get the list of users
 		if ($type eq 'include_sql_query') {
-		    $included = _include_users_sql(\%users, $incl, $admin->{'default_user_options'}, 'tied');
+		    $included = $self->_include_users_sql(\%users, $incl, 'tied');
 		}elsif ($type eq 'include_ldap_query') {
-		    $included = _include_users_ldap(\%users, $incl, $admin->{'default_user_options'}, 'tied');
+		    $included = $self->_include_users_ldap(\%users, $incl, 'tied');
 		}elsif ($type eq 'include_ldap_2level_query') {
-		    $included = _include_users_ldap_2level(\%users, $incl, $admin->{'default_user_options'}, 'tied');
+		    $included = $self->_include_users_ldap_2level(\%users, $incl, 'tied');
 		}elsif ($type eq 'include_list') {
 		    $depend_on->{$name} = 1 ;
 		    if (&_inclusion_loop ($name,$incl,$depend_on)) {
 			do_log('err','loop detection in list inclusion : could not include again %s in %s',$incl,$name);
 		    }else{
 			$depend_on->{$incl};
-			$included = _include_users_list (\%users, $incl, $admin->{'default_user_options'}, 'tied');
+			$included = $self->_include_users_list (\%users, $incl, 'tied');
 
 		    }
 		}elsif ($type eq 'include_remote_sympa_list') {
-		    $included = $self->_include_users_remote_sympa_list(\%users, $incl, $dir,$admin->{'domain'},$admin->{'default_user_options'}, 'tied');
+		    $included = $self->_include_users_remote_sympa_list(\%users, $incl, 'tied');
 		}elsif ($type eq 'include_file') {
-		    $included = _include_users_file (\%users, $incl, $admin->{'default_user_options'}, 'tied');
+		    $included = $self->_include_users_file (\%users, $incl, 'tied');
 		}elsif ($type eq 'include_remote_file') {
-		    $included = _include_users_remote_file (\%users, $incl, $admin->{'default_user_options'}, 'tied');
+		    $included = $self->_include_users_remote_file (\%users, $incl, 'tied');
 		}
 		unless (defined $included) {
 		    &do_log('err', 'Inclusion %s failed in list %s', $type, $name);
@@ -7512,28 +7747,28 @@ sub _load_users_include2 {
 
 	    ## get the list of users
 	    if ($type eq 'include_sql_query') {
-		$included = _include_users_sql(\%users, $incl, $admin->{'default_user_options'});
+		$included = $self->_include_users_sql(\%users, $incl);
 	    }elsif ($type eq 'include_ldap_query') {
-		$included = _include_users_ldap(\%users, $incl, $admin->{'default_user_options'});
+		$included = $self->_include_users_ldap(\%users, $incl);
 	    }elsif ($type eq 'include_ldap_2level_query') {
-		$included = _include_users_ldap_2level(\%users, $incl, $admin->{'default_user_options'});
+		$included = $self->_include_users_ldap_2level(\%users, $incl);
 	    }elsif ($type eq 'include_remote_sympa_list') {
-		$included = $self->_include_users_remote_sympa_list(\%users, $incl, $dir,$admin->{'domain'},$admin->{'default_user_options'});
+		$included = $self->_include_users_remote_sympa_list(\%users, $incl);
 	    }elsif ($type eq 'include_list') {
 		$depend_on->{$name} = 1 ;
 		if (&_inclusion_loop ($name,$incl,$depend_on)) {
 		    do_log('err','loop detection in list inclusion : could not include again %s in %s',$incl,$name);
 		}else{
 		    $depend_on->{$incl};
-		    $included = _include_users_list (\%users, $incl, $admin->{'default_user_options'});
+		    $included = $self->_include_users_list (\%users, $incl);
 		}
 	    }elsif ($type eq 'include_file') {
-		$included = _include_users_file (\%users, $incl, $admin->{'default_user_options'});
+		$included = $self->_include_users_file (\%users, $incl);
 #	    }elsif ($type eq 'include_admin') {
 #		$included = _include_users_admin (\\%users, $incl, $admin->{'default_user_options'});
 #	    }
 	    }elsif ($type eq 'include_remote_file') {
-		$included = _include_users_remote_file (\%users, $incl, $admin->{'default_user_options'});
+		$included = $self->_include_users_remote_file (\%users, $incl);
 	    }
 	    unless (defined $included) {
 		&do_log('err', 'Inclusion %s failed in list %s', $type, $name);
@@ -7599,23 +7834,23 @@ sub _load_admin_users_include {
 		## get the list of admin users
 		## does it need to define a 'default_admin_user_option' ?
 		if ($type eq 'include_sql_query') {
-		    $included = _include_users_sql(\%admin_users, $incl,\%option); 
+		    $included = $self->_include_users_sql(\%admin_users, $incl); 
 		}elsif ($type eq 'include_ldap_query') {
-		    $included = _include_users_ldap(\%admin_users, $incl,\%option); 
+		    $included = $self->_include_users_ldap(\%admin_users, $incl); 
 		}elsif ($type eq 'include_ldap_2level_query') {
-		    $included = _include_users_ldap_2level(\%admin_users, $incl,\%option); 
+		    $included = $self->_include_users_ldap_2level(\%admin_users, $incl); 
 		}elsif ($type eq 'include_remote_sympa_list') {
-		    $included = $self->_include_users_remote_sympa_list(\%admin_users, $incl, $dir,$list_admin->{'domain'},\%option);
+		    $included = $self->_include_users_remote_sympa_list(\%admin_users, $incl, );
 		}elsif ($type eq 'include_list') {
 		    $depend_on->{$name} = 1 ;
 		    if (&_inclusion_loop ($name,$incl,$depend_on)) {
 			do_log('err','loop detection in list inclusion : could not include again %s in %s',$incl,$name);
 		    }else{
 			$depend_on->{$incl};
-			$included = _include_users_list (\%admin_users, $incl, \%option);
+			$included = $self->_include_users_list (\%admin_users, $incl);
 		    }
 		}elsif ($type eq 'include_file') {
-		    $included = _include_users_file (\%admin_users, $incl, \%option);
+		    $included = $self->_include_users_file (\%admin_users, $incl);
 		}
 		unless (defined $included) {
 		    &do_log('err', 'Inclusion %s %s failed in list %s', $role, $type, $name);
@@ -7950,7 +8185,7 @@ sub sync_include {
     delete $list_of_fh{$lock_file};
 
     ## Get and save total of subscribers
-    $self->{'total'} = _load_total_db($self->{'name'}, 'nocache');
+    $self->{'total'} = $self->_load_total_db('nocache');
     $self->{'last_sync'} = time;
     $self->savestats();
 
@@ -8275,9 +8510,10 @@ sub _inclusion_loop {
 }
 
 sub _load_total_db {
-    my $name = shift;
+    my $self = shift;
     my $option = shift;
-    do_log('debug2', 'List::_load_total_db(%s)', $name);
+    do_log('debug2', 'List::_load_total_db(%s)', $self->{'name'});
+    my $name = $self->{'name'};
 
     unless ($List::use_db) {
 	&do_log('info', 'Sympa not setup to use DBI');
@@ -8298,7 +8534,9 @@ sub _load_total_db {
     }	   
 
     ## Query the Database
-    $statement = sprintf "SELECT count(*) FROM subscriber_table WHERE list_subscriber = %s", $dbh->quote($name);
+    $statement = sprintf "SELECT count(*) FROM subscriber_table WHERE (list_subscriber = %s AND robot_subscriber = %s)", 
+    $dbh->quote($name),
+    $dbh->quote($self->{'domain'});
        
     push @sth_stack, $sth;
 
@@ -8390,7 +8628,14 @@ sub store_digest {
     }
     
     my @now  = localtime(time);
-    $filename = "$Conf{'queuedigest'}/$self->{'name'}";
+ 
+    ## Reverse compatibility concern
+    if (-f "$Conf{'queuedigest'}/$self->{'name'}") {
+	$filename = "$Conf{'queuedigest'}/$self->{'name'}";
+    }else {
+	$filename = $Conf{'queuedigest'}.'/'.$self->{'name'}.'@'.$self->{'domain'};
+    }
+
     $newfile = !(-e $filename);
     my $oldtime=(stat $filename)[9] unless($newfile);
   
@@ -8476,8 +8721,8 @@ sub get_robots {
 
 ## List of lists in database mode which e-mail parameter is member of
 sub get_which_db {
-    my $email = shift;
-    do_log('debug3', 'List::get_which_db(%s)', $email);
+    my ($email, $robot) = @_;
+    do_log('debug3', 'List::get_which_db(%s,%s)', $email, $robot);
 
     unless ($List::use_db) {
 	&do_log('info', 'Sympa not setup to use DBI');
@@ -8491,7 +8736,9 @@ sub get_which_db {
 	return undef unless &db_connect();
     }	   
 
-    $statement = sprintf "SELECT list_subscriber FROM subscriber_table WHERE user_subscriber = %s",$dbh->quote($email);
+    $statement = sprintf "SELECT list_subscriber FROM subscriber_table WHERE (user_subscriber = %s AND robot_subscriber=%s)",
+    $dbh->quote($email),
+    $dbh->quote($robot);
 
     push @sth_stack, $sth;
 
@@ -8531,13 +8778,13 @@ sub get_which {
 
     if (($function eq 'member') and (defined $Conf{'db_type'})) {
 	if ($List::use_db) {
-	    $db_which = &get_which_db($email);
+	    $db_which = &get_which_db($email,$robot);
 	}
     }
 
     foreach $l (get_lists($robot)){
  
-	my $list = new List ($l);
+	my $list = new List ($l, $robot);
 	next unless ($list);
 	# next unless (($list->{'admin'}{'host'} eq $robot) || ($robot eq '*')) ;
 
@@ -8799,6 +9046,7 @@ sub probe_db {
 		      'attributes_user' => 'text'},
 		     'subscriber_table' => 
 		     {'list_subscriber' => 'varchar(50)',
+		      'robot_subscriber' => 'varchar(50)',
 		      'user_subscriber' => 'varchar(100)',
 		      'date_subscriber' => 'datetime',
 		      'update_subscriber' => 'datetime',
@@ -8812,6 +9060,7 @@ sub probe_db {
 		      'bounce_score_subscriber' => 'smallint(6)'},
 		     'admin_table' =>
 		     {'list_admin' => 'varchar(50)',
+		      'robot_admin' => 'varchar(50)',
 		      'user_admin' => 'varchar(100)',
 		      'role_admin' => "enum('listmaster','owner','editor')",
 		      'date_admin' => 'datetime',
@@ -9150,26 +9399,66 @@ sub maintenance {
 	close EXEC;
 	
 	&do_log('notice','Rebuilding web archives...');
-	foreach my $l ( &List::get_lists('*') ) {
-	    my $list = new List ($l); 
-	    next unless (defined $list->{'admin'}{'web_archive'});
-	    my $file = "$Conf{'queueoutgoing'}/.rebuild.$list->{'name'}\@$list->{'admin'}{'host'}";
-	    
-	    unless (open REBUILD, ">$file") {
-		&do_log('err','Cannot create %s', $file);
-		next;
-	    }
-	    print REBUILD ' ';
-	    close REBUILD;
-	}	
+	foreach my $r (keys %{$Conf{'robots'}}) {
+	    foreach my $l ( &List::get_lists($r) ) {
+		my $list = new List ($l,$r); 
+		next unless (defined $list->{'admin'}{'web_archive'});
+		my $file = "$Conf{'queueoutgoing'}/.rebuild.$list->{'name'}\@$list->{'admin'}{'host'}";
+		
+		unless (open REBUILD, ">$file") {
+		    &do_log('err','Cannot create %s', $file);
+		    next;
+		}
+		print REBUILD ' ';
+		close REBUILD;
+	    }	
+	}
     }
     
     ## Initializing the new admin_table
     unless (&tools::higher_version($previous_version, '4.2b.4')) {
 	&do_log('notice','Initializing the new admin_table...');
-	foreach my $l ( &List::get_lists('*') ) {
-	    my $list = new List ($l); 
-	    $list->sync_include_admin();
+	foreach my $r (keys %{$Conf{'robots'}}) {
+	    foreach my $l ( &List::get_lists($r) ) {
+		my $list = new List ($l, $r); 
+		$list->sync_include_admin();
+	    }
+	}
+    }
+
+    ## Fill the robot_subscriber and robot_admin fields in DB
+    unless (&tools::higher_version($previous_version, '5.1b')) {
+	unless ($List::use_db) {
+	    &do_log('info', 'Sympa not setup to use DBI');
+	    return undef;
+	}
+
+	## Check database connection
+	unless ($dbh and $dbh->ping) {
+	    return undef unless &db_connect();
+	}	   
+
+	foreach my $r (keys %{$Conf{'robots'}}) {
+	    foreach my $l ( &List::get_lists($r) ) {
+		my $list = new List ($l, $r);
+		
+		foreach my $table ('subscriber','admin') {
+		    my $statement = sprintf "UPDATE %s_table SET robot_%s=%s WHERE (list_%s=%s AND robot_%s=%s)",
+		    $table,
+		    $table,
+		    $dbh->quote($r),
+		    $table,
+		    $dbh->quote($l),
+		    $table,
+		    $dbh->quote($r);    
+
+		    unless ($dbh->do($statement)) {
+			do_log('err','Unable to execute SQL statement "%s" : %s', 
+			       $statement, $dbh->errstr);
+			return undef;
+		    }
+		}
+	    }
 	}
     }
 
@@ -10127,7 +10416,7 @@ sub store_subscription_request {
     my ($self, $email, $gecos) = @_;
     do_log('debug2', 'List::store_subscription_request(%s, %s, %s)', $self->{'name'}, $email, $gecos);
 
-    my $filename = $Conf{'queuesubscribe'}.'/'.$self->{'name'}.'.'.time.'.'.int(rand(1000));
+    my $filename = $Conf{'queuesubscribe'}.'/'.$self->{'name'}.'@'.$self->{'domain'}.'.'.time.'.'.int(rand(1000));
     
     unless (open REQUEST, ">$filename") {
 	do_log('notice', 'Could not open %s', $filename);
@@ -10151,7 +10440,7 @@ sub get_subscription_requests {
 	return undef;
     }
 
-    foreach my $filename (sort grep(/^$self->{'name'}\.\d+\.\d+$/, readdir SPOOL)) {
+    foreach my $filename (sort grep(/^$self->{'name'}(\@$self->{'domain'})?\.\d+\.\d+$/, readdir SPOOL)) {
 	unless (open REQUEST, "$Conf{'queuesubscribe'}/$filename") {
 	    do_log('notice', 'Could not open %s', $filename);
 	    closedir SPOOL;
@@ -10170,8 +10459,8 @@ sub get_subscription_requests {
 		}
 	}
 
-	$filename =~ /^$self->{'name'}\.(\d+)\.\d+$/;
-	$subscriptions{$email}{'date'} = $1;
+	$filename =~ /^$self->{'name'}(\@$self->{'domain'})?\.(\d+)\.\d+$/;
+	$subscriptions{$email}{'date'} = $2;
 	close REQUEST;
     }
     closedir SPOOL;
@@ -10189,7 +10478,7 @@ sub delete_subscription_request {
     }
 
     my $removed_file = 0;
-    foreach my $filename (sort grep(/^$self->{'name'}\.\d+\.\d+$/, readdir SPOOL)) {
+    foreach my $filename (sort grep(/^$self->{'name'}(\@$self->{'domain'})?\.\d+\.\d+$/, readdir SPOOL)) {
 	unless (open REQUEST, "$Conf{'queuesubscribe'}/$filename") {
 	    do_log('notice', 'Could not open %s', $filename);
 	    closedir SPOOL;
@@ -10419,7 +10708,7 @@ sub close {
     my ($self, $email, $status) = @_;
 
     return undef 
-	unless ($self && ($list_of_lists{$self->{'name'}}));
+	unless ($self && ($list_of_lists{$self->{'domain'}}{$self->{'name'}}));
     
     ## Dump subscribers
     $self->_save_users_file("$self->{'dir'}/subscribers.closed.dump");
@@ -10458,7 +10747,7 @@ sub purge {
     my ($self, $email) = @_;
 
     return undef 
-	unless ($self && ($list_of_lists{$self->{'name'}}));
+	unless ($self && ($list_of_lists{$self->{'domain'}}{$self->{'name'}}));
     
     &tools::remove_dir($self->{'dir'});
 
@@ -10466,7 +10755,13 @@ sub purge {
 	my $arc_dir = &Conf::get_robot_conf($self->{'domain'},'arc_path');
 	&tools::remove_dir("$arc_dir/$self->{'name'}\@$self->{'domain'}");
 	my $bounce_dir = &Conf::get_robot_conf($self->{'domain'},'bounce_path');
-	&tools::remove_dir("$bounce_dir/$self->{'name'}");
+
+	## Also check old style bounce dir
+	foreach my $dir ("$bounce_dir/$self->{'name'}\@$self->{'domain'}",
+			 "$bounce_dir/$self->{'name'}") {
+	    &tools::remove_dir($dir);
+	}
+
     }
     my @users;
     for ( my $user = $self->get_first_user(); $user; $user = $self->get_next_user() ){
@@ -10485,7 +10780,7 @@ sub remove_aliases {
     my $self = shift;
 
     return undef 
-	unless ($self && ($list_of_lists{$self->{'name'}}));
+	unless ($self && ($list_of_lists{$self->{'domain'}}{$self->{'name'}}));
     
     my $alias_manager = '--SBINDIR--/alias_manager.pl';
     
