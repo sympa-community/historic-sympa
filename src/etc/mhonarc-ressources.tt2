@@ -12,6 +12,202 @@ information occurs in multiple places. It also help centralize
 information that maybe likely to change. User defined variables can
 reference other variables.
 -->
+<DefineVar>
+CALENDAR
+<span style="float: right; padding: 3px;">
+	($tag$% FOREACH year = calendar %$tag$)
+          <ul id="CalendarLinks">
+          ($tag$% year.key %$tag$)
+          ($tag$% IF year.value.item('01') %$tag$)
+                 ($tag$% IF  year.key == '$yyyy$' && '01' == '$mois$'%$tag$) <li class="calendarLinksCurrentPage"><a href="($tag$% path_cgi %$tag$)/arc/($tag$% list %$tag$)/($tag$% year.key %$tag$)-01/">01</a></li>
+                 ($tag$% ELSE %$tag$)<li class="calendarLinks"><a href="($tag$% path_cgi %$tag$)/arc/($tag$% list %$tag$)/($tag$% year.key %$tag$)-01/">01</a></li>
+		 ($tag$% END %$tag$)
+          ($tag$% ELSE %$tag$)<li class="calendarLinksInactive">01</li>
+          ($tag$% END %$tag$)
+          ($tag$% IF year.value.item('02') %$tag$)
+                 ($tag$% IF  year.key == '$yyyy$' && '02' == '$mois$'%$tag$) <li class="calendarLinksCurrentPage"><a href="($tag$% path_cgi %$tag$)/arc/($tag$% list %$tag$)/($tag$% year.key %$tag$)-02/">02</a></li>
+                 ($tag$% ELSE %$tag$)<li class="calendarLinks"><a href="($tag$% path_cgi %$tag$)/arc/($tag$% list %$tag$)/($tag$% year.key %$tag$)-02/">02</a></li>
+		 ($tag$% END %$tag$)
+          ($tag$% ELSE %$tag$)<li class="calendarLinksInactive">02</li>
+          ($tag$% END %$tag$)
+          ($tag$% IF year.value.item('03') %$tag$)
+                 ($tag$% IF  year.key == '$yyyy$' && '03' == '$mois$'%$tag$) <li class="calendarLinksCurrentPage"><a href="($tag$% path_cgi %$tag$)/arc/($tag$% list %$tag$)/($tag$% year.key %$tag$)-03/">03</a></li>
+                 ($tag$% ELSE %$tag$)<li class="calendarLinks"><a href="($tag$% path_cgi %$tag$)/arc/($tag$% list %$tag$)/($tag$% year.key %$tag$)-03/">03</a></li>
+		 ($tag$% END %$tag$)
+          ($tag$% ELSE %$tag$)<li class="calendarLinksInactive">03</li>
+          ($tag$% END %$tag$)
+          ($tag$% IF year.value.item('04') %$tag$)
+                 ($tag$% IF  year.key == '$yyyy$' && '04' == '$mois$'%$tag$) <li class="calendarLinksCurrentPage"><a href="($tag$% path_cgi %$tag$)/arc/($tag$% list %$tag$)/($tag$% year.key %$tag$)-04/">04</a></li>
+                 ($tag$% ELSE %$tag$)<li class="calendarLinks"><a href="($tag$% path_cgi %$tag$)/arc/($tag$% list %$tag$)/($tag$% year.key %$tag$)-04/">04</a></li>
+		 ($tag$% END %$tag$)
+          ($tag$% ELSE %$tag$)<li class="calendarLinksInactive">04</li>
+          ($tag$% END %$tag$)
+          ($tag$% IF year.value.item('05') %$tag$)
+                 ($tag$% IF  year.key == '$yyyy$' && '05' == '$mois$'%$tag$) <li class="calendarLinksCurrentPage"><a href="($tag$% path_cgi %$tag$)/arc/($tag$% list %$tag$)/($tag$% year.key %$tag$)-05/">05</a></li>
+                 ($tag$% ELSE %$tag$)<li class="calendarLinks"><a href="($tag$% path_cgi %$tag$)/arc/($tag$% list %$tag$)/($tag$% year.key %$tag$)-05/">05</a></li>
+		 ($tag$% END %$tag$)
+          ($tag$% ELSE %$tag$)<li class="calendarLinksInactive">05</li>
+          ($tag$% END %$tag$)
+          ($tag$% IF year.value.item('06') %$tag$)
+                 ($tag$% IF  year.key == '$yyyy$' && '06' == '$mois$'%$tag$) <li class="calendarLinksCurrentPage"><a href="($tag$% path_cgi %$tag$)/arc/($tag$% list %$tag$)/($tag$% year.key %$tag$)-06/">06</a></li>
+                 ($tag$% ELSE %$tag$)<li class="calendarLinks"><a href="($tag$% path_cgi %$tag$)/arc/($tag$% list %$tag$)/($tag$% year.key %$tag$)-06/">06</a></li>
+		 ($tag$% END %$tag$)
+          ($tag$% ELSE %$tag$)<li class="calendarLinksInactive">06</li>
+          ($tag$% END %$tag$)
+          ($tag$% IF year.value.item('07') %$tag$)
+                 ($tag$% IF  year.key == '$yyyy$' && '07' == '$mois$'%$tag$) <li class="calendarLinksCurrentPage"><a href="($tag$% path_cgi %$tag$)/arc/($tag$% list %$tag$)/($tag$% year.key %$tag$)-07/">07</a></li>
+                 ($tag$% ELSE %$tag$)<li class="calendarLinks"><a href="($tag$% path_cgi %$tag$)/arc/($tag$% list %$tag$)/($tag$% year.key %$tag$)-07/">07</a></li>
+		 ($tag$% END %$tag$)
+          ($tag$% ELSE %$tag$)<li class="calendarLinksInactive">07</li>
+          ($tag$% END %$tag$)
+          ($tag$% IF year.value.item('08') %$tag$)
+                 ($tag$% IF  year.key == '$yyyy$' && '08' == '$mois$'%$tag$) <li class="calendarLinksCurrentPage"><a href="($tag$% path_cgi %$tag$)/arc/($tag$% list %$tag$)/($tag$% year.key %$tag$)-08/">08</a></li>
+                 ($tag$% ELSE %$tag$)<li class="calendarLinks"><a href="($tag$% path_cgi %$tag$)/arc/($tag$% list %$tag$)/($tag$% year.key %$tag$)-08/">08</a></li>
+		 ($tag$% END %$tag$)
+          ($tag$% ELSE %$tag$)<li class="calendarLinksInactive">08</li>
+          ($tag$% END %$tag$)
+          ($tag$% IF year.value.item('09') %$tag$)
+                 ($tag$% IF  year.key == '$yyyy$' && '09' == '$mois$'%$tag$) <li class="calendarLinksCurrentPage"><a href="($tag$% path_cgi %$tag$)/arc/($tag$% list %$tag$)/($tag$% year.key %$tag$)-09/">09</a></li>
+                 ($tag$% ELSE %$tag$)<li class="calendarLinks"><a href="($tag$% path_cgi %$tag$)/arc/($tag$% list %$tag$)/($tag$% year.key %$tag$)-09/">09</a></li>
+		 ($tag$% END %$tag$)
+          ($tag$% ELSE %$tag$)<li class="calendarLinksInactive">09</li>
+          ($tag$% END %$tag$)
+          ($tag$% IF year.value.item('10') %$tag$)
+                 ($tag$% IF  year.key == '$yyyy$' && '10' == '$mois$'%$tag$) <li class="calendarLinksCurrentPage"><a href="($tag$% path_cgi %$tag$)/arc/($tag$% list %$tag$)/($tag$% year.key %$tag$)-10/">10</a></li>
+                 ($tag$% ELSE %$tag$)<li class="calendarLinks"><a href="($tag$% path_cgi %$tag$)/arc/($tag$% list %$tag$)/($tag$% year.key %$tag$)-10/">10</a></li>
+		 ($tag$% END %$tag$)
+          ($tag$% ELSE %$tag$)<li class="calendarLinksInactive">10</li>
+          ($tag$% END %$tag$)
+          ($tag$% IF year.value.item('11') %$tag$)
+                 ($tag$% IF  year.key == '$yyyy$' && '11' == '$mois$'%$tag$) <li class="calendarLinksCurrentPage"><a href="($tag$% path_cgi %$tag$)/arc/($tag$% list %$tag$)/($tag$% year.key %$tag$)-11/">11</a></li>
+                 ($tag$% ELSE %$tag$)<li class="calendarLinks"><a href="($tag$% path_cgi %$tag$)/arc/($tag$% list %$tag$)/($tag$% year.key %$tag$)-11/">11</a></li>
+		 ($tag$% END %$tag$)
+          ($tag$% ELSE %$tag$)<li class="calendarLinksInactive">11</li>
+          ($tag$% END %$tag$)
+          ($tag$% IF year.value.item('12') %$tag$)
+                 ($tag$% IF  year.key == '$yyyy$' && '12' == '$mois$'%$tag$) <li class="calendarLinksCurrentPage"><a href="($tag$% path_cgi %$tag$)/arc/($tag$% list %$tag$)/($tag$% year.key %$tag$)-12/">12</a></li>
+                 ($tag$% ELSE %$tag$)<li class="calendarLinks"><a href="($tag$% path_cgi %$tag$)/arc/($tag$% list %$tag$)/($tag$% year.key %$tag$)-12/">12</a></li>
+		 ($tag$% END %$tag$)
+          ($tag$% ELSE %$tag$)<li class="calendarLinksInactive">12</li>
+          ($tag$% END %$tag$)
+          </ul>
+        ($tag$% END %$tag$)
+</span>
+</DefineVar>
+CALENDAR2
+<span style="float: right; padding: 3px;">
+	($tag$% FOREACH year = calendar %$tag$)
+          <ul id="CalendarLinks">
+          ($tag$% year.key %$tag$)
+          ($tag$% IF year.value.item('01') %$tag$)
+                 ($tag$% IF  year.key == '$yyyy$' && '01' == '$mois$'%$tag$) <li><a class="calendarLinksCurrentPage" href="($tag$% path_cgi %$tag$)/arc/($tag$% list %$tag$)/($tag$% year.key %$tag$)-01/">01</a></li>
+                 ($tag$% ELSE %$tag$)<li><a class="calendarLinks" href="($tag$% path_cgi %$tag$)/arc/($tag$% list %$tag$)/($tag$% year.key %$tag$)-01/">01</a></li>
+		 ($tag$% END %$tag$)
+          ($tag$% ELSE %$tag$)<li class="calendarLinksInactive">01</li>
+          ($tag$% END %$tag$)
+          ($tag$% IF year.value.item('02') %$tag$)
+                 ($tag$% IF  year.key == '$yyyy$' && '02' == '$mois$'%$tag$) <li><a class="calendarLinksCurrentPage" href="($tag$% path_cgi %$tag$)/arc/($tag$% list %$tag$)/($tag$% year.key %$tag$)-02/">02</a></li>
+                 ($tag$% ELSE %$tag$)<li><a class="calendarLinks" href="($tag$% path_cgi %$tag$)/arc/($tag$% list %$tag$)/($tag$% year.key %$tag$)-02/">02</a></li>
+		 ($tag$% END %$tag$)
+          ($tag$% ELSE %$tag$)<li class="calendarLinksInactive">02</li>
+          ($tag$% END %$tag$)
+          ($tag$% IF year.value.item('03') %$tag$)
+                 ($tag$% IF  year.key == '$yyyy$' && '03' == '$mois$'%$tag$) <li><a class="calendarLinksCurrentPage" href="($tag$% path_cgi %$tag$)/arc/($tag$% list %$tag$)/($tag$% year.key %$tag$)-03/">03</a></li>
+                 ($tag$% ELSE %$tag$)<li><a class="calendarLinks" href="($tag$% path_cgi %$tag$)/arc/($tag$% list %$tag$)/($tag$% year.key %$tag$)-03/">03</a></li>
+		 ($tag$% END %$tag$)
+          ($tag$% ELSE %$tag$)<li class="calendarLinksInactive">03</li>
+          ($tag$% END %$tag$)
+          ($tag$% IF year.value.item('04') %$tag$)
+                 ($tag$% IF  year.key == '$yyyy$' && '04' == '$mois$'%$tag$) <li><a class="calendarLinksCurrentPage" href="($tag$% path_cgi %$tag$)/arc/($tag$% list %$tag$)/($tag$% year.key %$tag$)-04/">04</a></li>
+                 ($tag$% ELSE %$tag$)<li><a class="calendarLinks" href="($tag$% path_cgi %$tag$)/arc/($tag$% list %$tag$)/($tag$% year.key %$tag$)-04/">04</a></li>
+		 ($tag$% END %$tag$)
+          ($tag$% ELSE %$tag$)<li class="calendarLinksInactive">04</li>
+          ($tag$% END %$tag$)
+          ($tag$% IF year.value.item('05') %$tag$)
+                 ($tag$% IF  year.key == '$yyyy$' && '05' == '$mois$'%$tag$) <li><a class="calendarLinksCurrentPage" href="($tag$% path_cgi %$tag$)/arc/($tag$% list %$tag$)/($tag$% year.key %$tag$)-05/">05</a></li>
+                 ($tag$% ELSE %$tag$)<li><a class="calendarLinks" href="($tag$% path_cgi %$tag$)/arc/($tag$% list %$tag$)/($tag$% year.key %$tag$)-05/">05</a></li>
+		 ($tag$% END %$tag$)
+          ($tag$% ELSE %$tag$)<li class="calendarLinksInactive">05</li>
+          ($tag$% END %$tag$)
+          ($tag$% IF year.value.item('06') %$tag$)
+                 ($tag$% IF  year.key == '$yyyy$' && '06' == '$mois$'%$tag$) <li><a class="calendarLinksCurrentPage" href="($tag$% path_cgi %$tag$)/arc/($tag$% list %$tag$)/($tag$% year.key %$tag$)-06/">06</a></li>
+                 ($tag$% ELSE %$tag$)<li><a class="calendarLinks" href="($tag$% path_cgi %$tag$)/arc/($tag$% list %$tag$)/($tag$% year.key %$tag$)-06/">06</a></li>
+		 ($tag$% END %$tag$)
+          ($tag$% ELSE %$tag$)<li class="calendarLinksInactive">06</li>
+          ($tag$% END %$tag$)
+          ($tag$% IF year.value.item('07') %$tag$)
+                 ($tag$% IF  year.key == '$yyyy$' && '07' == '$mois$'%$tag$) <li><a class="calendarLinksCurrentPage" href="($tag$% path_cgi %$tag$)/arc/($tag$% list %$tag$)/($tag$% year.key %$tag$)-07/">07</a></li>
+                 ($tag$% ELSE %$tag$)<li><a class="calendarLinks" href="($tag$% path_cgi %$tag$)/arc/($tag$% list %$tag$)/($tag$% year.key %$tag$)-07/">07</a></li>
+		 ($tag$% END %$tag$)
+          ($tag$% ELSE %$tag$)<li class="calendarLinksInactive">07</li>
+          ($tag$% END %$tag$)
+          ($tag$% IF year.value.item('08') %$tag$)
+                 ($tag$% IF  year.key == '$yyyy$' && '08' == '$mois$'%$tag$) <li><a class="calendarLinksCurrentPage" href="($tag$% path_cgi %$tag$)/arc/($tag$% list %$tag$)/($tag$% year.key %$tag$)-08/">08</a></li>
+                 ($tag$% ELSE %$tag$)<li><a class="calendarLinks" href="($tag$% path_cgi %$tag$)/arc/($tag$% list %$tag$)/($tag$% year.key %$tag$)-08/">08</a></li>
+		 ($tag$% END %$tag$)
+          ($tag$% ELSE %$tag$)<li class="calendarLinksInactive">08</li>
+          ($tag$% END %$tag$)
+          ($tag$% IF year.value.item('09') %$tag$)
+                 ($tag$% IF  year.key == '$yyyy$' && '09' == '$mois$'%$tag$) <li><a class="calendarLinksCurrentPage" href="($tag$% path_cgi %$tag$)/arc/($tag$% list %$tag$)/($tag$% year.key %$tag$)-09/">09</a></li>
+                 ($tag$% ELSE %$tag$)<li><a class="calendarLinks" href="($tag$% path_cgi %$tag$)/arc/($tag$% list %$tag$)/($tag$% year.key %$tag$)-09/">09</a></li>
+		 ($tag$% END %$tag$)
+          ($tag$% ELSE %$tag$)<li class="calendarLinksInactive">09</li>
+          ($tag$% END %$tag$)
+          ($tag$% IF year.value.item('10') %$tag$)
+                 ($tag$% IF  year.key == '$yyyy$' && '10' == '$mois$'%$tag$) <li><a class="calendarLinksCurrentPage" href="($tag$% path_cgi %$tag$)/arc/($tag$% list %$tag$)/($tag$% year.key %$tag$)-10/">10</a></li>
+                 ($tag$% ELSE %$tag$)<li><a class="calendarLinks" href="($tag$% path_cgi %$tag$)/arc/($tag$% list %$tag$)/($tag$% year.key %$tag$)-10/">10</a></li>
+		 ($tag$% END %$tag$)
+          ($tag$% ELSE %$tag$)<li class="calendarLinksInactive">10</li>
+          ($tag$% END %$tag$)
+          ($tag$% IF year.value.item('11') %$tag$)
+                 ($tag$% IF  year.key == '$yyyy$' && '11' == '$mois$'%$tag$) <li><a class="calendarLinksCurrentPage" href="($tag$% path_cgi %$tag$)/arc/($tag$% list %$tag$)/($tag$% year.key %$tag$)-11/">11</a></li>
+                 ($tag$% ELSE %$tag$)<li><a class="calendarLinks" href="($tag$% path_cgi %$tag$)/arc/($tag$% list %$tag$)/($tag$% year.key %$tag$)-11/">11</a></li>
+		 ($tag$% END %$tag$)
+          ($tag$% ELSE %$tag$)<li class="calendarLinksInactive">11</li>
+          ($tag$% END %$tag$)
+          ($tag$% IF year.value.item('12') %$tag$)
+                 ($tag$% IF  year.key == '$yyyy$' && '12' == '$mois$'%$tag$) <li><a class="calendarLinksCurrentPage" href="($tag$% path_cgi %$tag$)/arc/($tag$% list %$tag$)/($tag$% year.key %$tag$)-12/">12</a></li>
+                 ($tag$% ELSE %$tag$)<li><a class="calendarLinks" href="($tag$% path_cgi %$tag$)/arc/($tag$% list %$tag$)/($tag$% year.key %$tag$)-12/">12</a></li>
+		 ($tag$% END %$tag$)
+          ($tag$% ELSE %$tag$)<li class="calendarLinksInactive">12</li>
+          ($tag$% END %$tag$)
+          </ul>
+        ($tag$% END %$tag$)
+</span>
+</DefineVar>
+
+<DefineVar>
+SEARCH_FORM
+	<form method="post" action="($tag$% path_cgi %$tag$)">
+	<input name="list" type="hidden" value="($tag$% list %$tag$)" />
+	<input name="archive_name" type="hidden" value="($tag$% archive_name %$tag$)" />
+	<input name="how"   type="hidden" value="phrase" />
+	<input name="age"   type="hidden" value="new" />
+	<input name="case"  type="hidden" value="off" /> 
+	<input name="match" type="hidden" value="partial" />
+	<input name="limit" type="hidden" value="10" /> 
+	<input name="body"  type="hidden" Value="true" />
+	<input name="subj"  type="hidden" Value="true" />
+	<input name="key_word"     type="text"   size="17" />
+	<input name="action"  type="hidden" value="arcsearch" />
+	<input type="submit" name="action_arcsearch" value="($tag$%|loc%$tag$)Search($tag$%END%$tag$)" /> &nbsp;
+	<a href="($tag$% path_cgi %$tag$)/arcsearch_form/($tag$% list %$tag$)/($tag$% archive_name %$tag$)">($tag$%|loc%$tag$)Advanced search($tag$%END%$tag$)</a>
+	</form>
+</DefineVar>
+
+<DefineVar>
+TOP_PANEL
+<div id=ActionHeader>
+   $CALENDAR$
+   $SEARCH_FORM$
+   <div class="spacer"></div>
+   <div id="Title" style="text-align: center;"><strong>$PRINTABLE_MONTH$&nbsp;&nbsp;&nbsp;$NUMOFMSG$ ($tag$%|loc%$tag$)mails($tag$%END%$tag$)</strong></div><br />
+   Pages navigation : <br />
+</div>
+</DefineVar>
+
+
+
 
 <DefineVar>
 PRINTABLE_MONTH
@@ -123,33 +319,23 @@ IDXPGEND
 <!--  mail1.html -->
 <IDXPGBEGIN>
 [%TAGS ($tag$% %$tag$) %]
-<CENTER>
-$SELECTED_MONTH$
-<TABLE CELLPADDING="2" CELLSPACING="2" WIDTH="100%" BORDER="0">
-<TR ALIGN="CENTER" BGCOLOR="($tag$% dark_color %$tag$)">
-<TD>
 
 <!-- begin header -->
-<div id=Header>
-  <div id="Title" style="text-align: center;"><strong>$PRINTABLE_MONTH$&nbsp;&nbsp;&nbsp;$NUMOFMSG$ ($tag$%|loc%$tag$)mails($tag$%END%$tag$)</strong></div><br />
+$TOP_PANEL$
   <span style="float: right">
-    <a class="ActionMenuLinksCurrentPage" href="mail$PAGENUM$.html">($tag$%|loc%$tag$)chronologie($tag$%END%$tag$)</a> or 
-    <a class="ActionMenuLinks" href="thrd$PAGENUM$.html">($tag$%|loc%$tag$)Thread($tag$%END%$tag$)</a>&nbsp;
+    <a class="ArcMenuLinksCurrentPage" href="mail$PAGENUM$.html">($tag$%|loc%$tag$)chronological($tag$%END%$tag$)</a>
+    <a class="ArcMenuLinks" href="thrd$PAGENUM$.html">($tag$%|loc%$tag$)Thread($tag$%END%$tag$)</a>
   </span>
-  Pages navigation : <br />
   <ul id="MainMenuLinks">
-  &nbps;&nbps;&nbps;$PREVPGLINK$ ($tag$%|loc($PAGENUM$,$NUMOFPAGES$)%$tag$)page # %1/%2($tag$%END%$tag$)</span> $NEXTPGLINK$ 
+  $PREVPGLINK$ ($tag$%|loc($PAGENUM$,$NUMOFPAGES$)%$tag$)page # %1/%2($tag$%END%$tag$)</span> $NEXTPGLINK$ 
    </ul>
-</div>
+<div class="spacer"></div>
 <!-- end header -->
-</TD>
-</TR>
-</TABLE>
-</CENTER>
 </IDXPGBEGIN>
 
 <!-- top of message list -->
 <LISTBEGIN>
+<BR />
 <UL>
 </LISTBEGIN>
 
@@ -171,21 +357,21 @@ $POWERED_BY$
 
 <!-- links definition -->
 <PrevPgLink chop>
-<li><a class="ActionMenuLinks" href="$FIRSTPG$">($tag$%|loc%$tag$)First($tag$%END%$tag$)</a></li>
-<li><a class="ActionMenuLinks" href="$PREVPG$">($tag$%|loc%$tag$)Previous($tag$%END%$tag$)</a></li>
+<li><a class="ArcMenuLinks" href="$FIRSTPG$">($tag$%|loc%$tag$)First($tag$%END%$tag$)</a></li>
+<li><a class="ArcMenuLinks" href="$PREVPG$">($tag$%|loc%$tag$)Previous($tag$%END%$tag$)</a></li>
 </PrevPgLink>
 
 <PrevPgLinkIA chop>
-&nbsp;&nbsp;
+<li class="ArcMenuLinksInactive">First</li><li class="ArcMenuLinksInactive">Previous</li>
 </PrevPgLinkIA>
 
 <NextPgLink chop>
-<li><a class="ActionMenuLinks" href="$NEXTPG$">($tag$%|loc%$tag$)Next($tag$%END%$tag$)</a></li>
-<li><a class="ActionMenuLinks" href="$LASTPG$">($tag$%|loc%$tag$)Last($tag$%END%$tag$)</a></li>
+<li><a class="ArcMenuLinks" href="$NEXTPG$">($tag$%|loc%$tag$)Next($tag$%END%$tag$)</a></li>
+<li><a class="ArcMenuLinks" href="$LASTPG$">($tag$%|loc%$tag$)Last($tag$%END%$tag$)</a></li>
 </NextPgLink>
 
 <NextPgLinkIA chop>
-&nbsp;&nbsp;
+<li class="ArcMenuLinksInactive">Next</li><li class="ArcMenuLinksInactive">Last</li>
 </NextPgLinkIA>
 
 <!-- ============================================================== -->
@@ -227,35 +413,18 @@ TIDXPGEND
 </TIDXPGBEGIN>
 
 <THEAD>
-<CENTER>
-$SELECTED_MONTH$
-<TABLE CELLPADDING="2" CELLSPACING="2" WIDTH="100%" BORDER="0">
-<TR ALIGN="center" BGCOLOR="($tag$% dark_color %$tag$)">
-<TD>
 <!-- begin header -->
-<TABLE WIDTH="100%" BORDER="0" CELLSPACING="0" CELLPADDING="2">
-<TR ALIGN="center" VALIGN="middle">
-<TD NOWRAP BGCOLOR="($tag$% light_color %$tag$)" ALIGN="center">
-$TPREVPGLINK$&nbsp;&nbsp;
-<FONT SIZE="-1" FACE="Arial,Helvetica"><STRONG>$NUMOFMSG$ ($tag$%|loc($PAGENUM$,$NUMOFPAGES$)%$tag$)mails, page # %1/%2($tag$%END%$tag$)</STRONG></FONT>
-&nbsp;&nbsp;$TNEXTPGLINK$
-</TD>
-<td NOWRAP BGCOLOR="($tag$% light_color %$tag$)" ALIGN="center">
-<FONT SIZE="-1"><STRONG><A HREF="mail$PAGENUM$.html" STYLE="TEXT-DECORATION: NONE">
-($tag$%|loc%$tag$)Chronological($tag$%END%$tag$)
-</A></STRONG></FONT>
-&nbsp;&nbsp;
-<FONT COLOR="($tag$% bg_color %$tag$)" SIZE="-1"><STRONG>
-($tag$%|loc%$tag$)Thread($tag$%END%$tag$)
-</STRONG></FONT>
-</TD>
-</TR>
-</TABLE>
+$TOP_PANEL$
+   <span style="float: right">
+     <a class="ArcMenuLinks" href="mail$PAGENUM$.html">($tag$%|loc%$tag$)chronological($tag$%END%$tag$)</a>
+     <a class="ArcMenuLinksCurrentPage" href="thrd$PAGENUM$.html">($tag$%|loc%$tag$)Thread($tag$%END%$tag$)</a>
+   </span>
+  <ul id="MainMenuLinks">
+<!--   $TPREVPGLINK$ ($tag$%|loc($PAGENUM$,$NUMOFPAGES$)%$tag$)page # %1/%2($tag$%END%$tag$)</span> $TNEXTPGLINK$    -->
+   $PREVPGLINK$ ($tag$%|loc($PAGENUM$,$NUMOFPAGES$)%$tag$)page # %1/%2($tag$%END%$tag$)</span> $NEXTPGLINK$ 
+  </ul>
+<div class="spacer"></div>
 <!-- end header -->
-</TD>
-</TR>
-</TABLE>
-</CENTER>
 
 <UL>
 </THEAD>
@@ -283,7 +452,7 @@ $POWERED_BY$
 </TPrevPgLink>
 
 <TPrevPgLinkIA chop>
-&nbsp;&nbsp;
+<li class="ArcMenuLinksInactive">Next</li><li class="ArcMenuLinksInactive">Last</li>
 </TPrevPgLinkIA>
 
 <TNextPgLink chop>
@@ -291,7 +460,7 @@ $POWERED_BY$
 </TNextPgLink>
 
 <TNextPgLinkIA chop>
-&nbsp;&nbsp;
+<li class="ArcMenuLinksInactive">Next</li><li class="ArcMenuLinksInactive">Last</li>
 </TNextPgLinkIA>
 
 <!-- ================================================================== -->
@@ -323,17 +492,16 @@ MSGPGEND
 [%TAGS ($tag$% %$tag$) %]
 </MSGPGBEGIN>
 
-
 <TOPLINKS>
 <CENTER>
-<div id=Header>
-   <div id="Title" style="text-align: center;"><strong>$PRINTABLE_MONTH$&nbsp;&nbsp;&nbsp;$NUMOFMSG$ ($tag$%|loc%$tag$)mails($tag$%END%$tag$)</strong></div><br />
+<div id=ActionHeader>
+   <div id="Title" style="text-align: center;"><h2>($tag$% subtitle $tag$)</h2></div><br />
    <span style="float: right">
-     <a class="ActionMenuLinksCurrentPage" href="mail$PAGENUM$.html">($tag$%|loc%$tag$)chronologie($tag$%END%$tag$)</a> or 
-     <a class="ActionMenuLinks" href="thrd$PAGENUM$.html">($tag$%|loc%$tag$)Thread($tag$%END%$tag$)</a>&nbsp;
+     <a class="ArcMenuLinksCurrentPage" href="$IDXFNAME$#$MSGNUM$">($tag$%|loc%$tag$)chronological($tag$%END%$tag$)</a>
+     <a class="ArcMenuLinks" href="$TIDXFNAME$#$MSGNUM$">($tag$%|loc%$tag$)Thread($tag$%END%$tag$)</a>&nbsp;
    </span>
    <ul id="MainMenuLinks">
-     Messages navigation : $PREVBUTTON$ $NEXTBUTTON$ $TPREVBUTTON$  $TNEXTBUTTON$
+     ($tag$%|loc%$tag$)chronological($tag$%END%$tag$) : $PREVBUTTON$ $NEXTBUTTON$&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;($tag$%|loc%$tag$)thread($tag$%END%$tag$) : $TPREVBUTTON$  $TNEXTBUTTON$
    </ul>
 </div>
 
@@ -374,7 +542,8 @@ $POWERED_BY$
 </TD>
 
 ($tag$% IF user.email && action == 'arc' %$tag$)
-<TD ALIGN="right" BGCOLOR="($tag$% bg_color %$tag$)">
+
+<TD ALIGN="right">
 <FONT SIZE="-1">
 <!-- reply to button -->
 <FORM ACTION="($tag$% path_cgi %$tag$)" METHOD=POST>
@@ -388,14 +557,7 @@ $POWERED_BY$
   <INPUT TYPE="submit" NAME="action_compose_mail" VALUE="($tag$%|loc%$tag$)Reply($tag$%END%$tag$)">
   <INPUT TYPE="submit" NAME="action_send_me" VALUE="($tag$%|loc(user.email)%$tag$)send it back to %1($tag$%END%$tag$)">	
   ($tag$% IF action != 'viewmod' %$tag$)
-    ($tag$% IF user.email == '$FROMADDR$' %$tag$)
-    <INPUT TYPE="hidden" NAME="yyyy" VALUE="$yyyy$">
-    <INPUT TYPE="hidden" NAME="month" VALUE="$mois$">
-    <INPUT TYPE="hidden" NAME="msgid" VALUE="$MSGID$">
-    <INPUT TYPE="hidden" NAME="action" VALUE="">
-    <INPUT TYPE="submit" NAME="action_remove_arc" VALUE="($tag$%|loc%$tag$)tag this mail for deletion($tag$%END%$tag$)" onClick="return request_confirm('($tag$%|loc%$tag$)Do you really want to delete this message ?($tag$%END%$tag$)')">
-
-    ($tag$% ELSIF is_owner %$tag$)
+    ($tag$% IF user.email == '$FROMADDR$'  || is_owner %$tag$)
     <INPUT TYPE="hidden" NAME="yyyy" VALUE="$yyyy$">
     <INPUT TYPE="hidden" NAME="month" VALUE="$mois$">
     <INPUT TYPE="hidden" NAME="msgid" VALUE="$MSGID$">
@@ -409,6 +571,7 @@ $POWERED_BY$
 ($tag$% END %$tag$)
 </TR>
 </TABLE>
+
 <UL>
 </SUBJECTHEADER>
 
@@ -493,7 +656,7 @@ Subject:strong
 
 <!-- Buttons definition -->
 <PREVBUTTON>
-<a class="ActionMenuLinks" href="$PREVMSG$">previous</a>
+<a class="ArcMenuLinks" href="$PREVMSG$">previous</a>
 </PREVBUTTON>
 
 <PREVBUTTONIA>
@@ -501,7 +664,7 @@ Subject:strong
 </PREVBUTTONIA>
 
 <NEXTBUTTON>
-<a class="ActionMenuLinks" href="$NEXTMSG">next</a>
+<a class="ArcMenuLinks" href="$NEXTMSG">next</a>
 </NEXTBUTTON>
 
 <NEXTBUTTONIA>
@@ -509,7 +672,7 @@ Subject:strong
 </NEXTBUTTONIA>
 
 <TPREVBUTTON>
-<a class="ActionMenuLinks" href="$TPREVMSG$">previous by thread</a>
+<a class="ArcMenuLinks" href="$TPREVMSG$">previous</a>
 </TPREVBUTTON>
 
 <TPREVBUTTONIA>
@@ -517,7 +680,7 @@ Subject:strong
 </TPREVBUTTONIA>
 
 <TNEXTBUTTON>
-<a class="ActionMenuLinks" href="$TNEXTMSG$">next by thread</a>
+<a class="ArcMenuLinks" href="$TNEXTMSG$">next</a>
 </TNEXTBUTTON>
 
 <TNEXTBUTTONIA>
