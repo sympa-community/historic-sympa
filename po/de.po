@@ -154,7 +154,7 @@ msgstr "(Diese Phrase,"
 msgid "), provide your email address and associated password."
 msgstr ""
 "), geben Sie Ihre\n"
-"EMail-Adresse und Ihr zugeh&ouml;riges WWSympa-Passwort an.\n"
+"EMail-Adresse und Ihr zugeh&ouml;riges WWSympa-Passwort an."
 
 #: src/etc/tt2/your_infected_msg.tt2:4
 msgid "***** V I R U S    A L E R T *****"
@@ -202,7 +202,7 @@ msgstr ": Schlechter Listenname"
 msgid ": directory of lists available on the server"
 msgstr ""
 ": Verzeichnis\n"
-"von Mailing-Listen, welche &uuml;ber diese Maschine verteilt werden.\n"
+"von Mailing-Listen, welche &uuml;ber diese Maschine verteilt werden."
 
 #: wwsympa/tt2/help_admin.tt2:12
 #. (dark_color)
@@ -215,19 +215,19 @@ msgstr ""
 msgid ": reject and accept messages for distribution."
 msgstr ""
 "Abonnenten Verwaltung, hinzuf&uuml;gen, l&ouml;schen,\n"
-"		unzustellbare Addressen, u.s.w.\n"
+"		unzustellbare Addressen, u.s.w."
 
 #: wwsympa/tt2/help_admin.tt2:9
 msgid ": subscribers management, add, del, search, bounces, etc..."
 msgstr ""
 "Abonnenten Verwaltung, hinzuf&uuml;gen, l&ouml;schen,\n"
-"		unzustellbare Addressen, u.s.w.\n"
+"		unzustellbare Addressen, u.s.w."
 
 #: wwsympa/tt2/help.tt2:16
 msgid ": user preferences. This proposed to identified users only."
 msgstr ""
 ": Benutzerspezifische\n"
-"Einstellungen\n"
+"Einstellungen"
 
 #: wwsympa/tt2/error.tt2:28
 msgid ": user unknown"
@@ -237,7 +237,7 @@ msgstr ": Benutzer unbekannt"
 msgid ": your environment as a subscriber or as owner"
 msgstr ""
 ": Ihre Listen, welche Sie\n"
-"als Besitzer oder Abonnent empfangen.\n"
+"als Besitzer oder Abonnent empfangen."
 
 #: wwsympa/tt2/lists.tt2:6
 #. (email)
@@ -481,7 +481,7 @@ msgstr ""
 msgid "Config file has been modified by %1. Cannot apply your changes"
 msgstr ""
 "Konfigurationsdatei wurde ge&auml;nder durch %1. Ihre\n"
-"&Auml;nderungen k&ouml;nnen nicht durchgef&uuml;hrt werden.\n"
+"&Auml;nderungen k&ouml;nnen nicht durchgef&uuml;hrt werden."
 
 #: wwsympa/tt2/set_pending_list_request.tt2:67
 msgid "Configuration file"
@@ -585,7 +585,7 @@ msgstr "size=\"-1\"><b>Anpassen</b"
 msgid "Data have changed on disk. Cannot apply your changes"
 msgstr ""
 "Daten auf Festplatte haben sich ge&auml;ndert. Ihre &Auml;nderungen k&ouml;nnen\n"
-"nicht gespeichert werden\n"
+"nicht gespeichert werden"
 
 #: wwsympa/tt2/edit_list_request.tt2:10
 msgid "Data sources setup"
@@ -786,7 +786,7 @@ msgid "Error while deleting this message"
 msgstr ""
 "Fehler beim L&ouml;schen der Nachricht. Bitte wenden Sie\n"
 "sich an den Sympa-Administrator (listmaster) und geben Sie die volle\n"
-"URL der betroffenen Nachricht an.</b>\n"
+"URL der betroffenen Nachricht an.</b>"
 
 #: src/etc/tt2/expire_warning1.tt2:9 src/etc/tt2/expire_warning2.tt2:9 src/etc/tt2/remind.tt2:7
 msgid "Everything about this list : "
@@ -897,7 +897,7 @@ msgstr "Ich bin kein Spammer"
 msgid "I am subscriber to at least one list but I have no password"
 msgstr ""
 "Ich bin Abonnent von mindestens einer Liste, aber ich habe trotzdem kein\n"
-"Passwort\n"
+"Passwort"
 
 #: wwsympa/tt2/help.tt2:54
 msgid "I forgot my password"
@@ -1133,7 +1133,7 @@ msgstr "Lade Zertifikat"
 msgid "Local"
 msgstr ""
 "Durchsuche Listen\">\n"
-"        <\n"
+"        <"
 
 #: wwsympa/tt2/help.tt2:22 wwsympa/tt2/help.tt2:25 wwsympa/tt2/help.tt2:28 wwsympa/tt2/loginbanner.tt2:34 wwsympa/tt2/menu.tt2:35
 msgid "Login"
@@ -1176,7 +1176,7 @@ msgstr "Achtung! Das kann viel Prozessorzeit kosten."
 msgid "Message footer : same as"
 msgstr ""
 "invite: Wird verschickt, wenn jemand von einem Benutzer\n"
-"&uuml;ber das INVITE-Kommando eingeladen wurde.\n"
+"&uuml;ber das INVITE-Kommando eingeladen wurde."
 
 #: wwsympa/tt2/help_editfile.tt2:34
 msgid "Message header,"
@@ -1727,7 +1727,7 @@ msgstr ""
 "TR>\n"
 "     <TD BGCOLOR=\"[% dark_color %]\" VALIGN=\"top\">\n"
 "      <TABLE BORDER=\"\" WIDTH=\"100%\" CELLSPACING=\"1\" CELLPADDING=\"2\" VALIGN=\"top\">\n"
-"       <TR>\n"
+"       <TR>"
 
 #: src/etc/tt2/info_report.tt2:15
 #. (review)
@@ -2431,7 +2431,7 @@ msgstr ""
 msgid "Visibility : %1"
 msgstr ""
 "Sichbarkeit: %1\n"
-"<DD>Sprache: [% current_subscriber.lang %]\n"
+"<DD>Sprache: [% current_subscriber.lang %]"
 
 #: wwsympa/tt2/help.tt2:56
 msgid "WWSympa can remind you your password by email :"
@@ -2441,7 +2441,7 @@ msgstr "WWSympa kann Ihnen Ihr Passwort auch noch einmal schicken:"
 msgid "WWSympa provides  you access to your environment on mailing list server"
 msgstr ""
 "WWSympa erm&ouml;glicht Ihnen Zugang zu Ihren Mailing-Listen-Einstellungen\n"
-"auf dem Server\n"
+"auf dem Server"
 
 #: src/etc/tt2/your_infected_msg.tt2:10
 msgid "We stopped delivery of this email."
@@ -2542,7 +2542,7 @@ msgstr ""
 msgid "You can logout (deletion of the <I>cookie</I>) at any time using"
 msgstr ""
 "Sie k&ouml;nnen sich jederzeit abmelden (Ihr <I>cookie</I> l&ouml;schen)\n"
-"indem Sie die <\n"
+"indem Sie die <"
 
 #: src/etc/tt2/helpfile.tt2:17
 msgid ""
@@ -2576,7 +2576,7 @@ msgid "You have forgotten your password, or you never had any password related t
 msgstr ""
 "Falls Sie noch nie ein Passwort f&uuml;r diesen Server hatten oder\n"
 "      sich nicht mehr erinnern, k&ouml;nnen Sie sich ein Passwort per EMail\n"
-"      zusenden lassen:\n"
+"      zusenden lassen:"
 
 #: wwsympa/tt2/login.tt2:3
 #. (user.email)
@@ -2912,7 +2912,7 @@ msgstr "egal"
 msgid "it will be sent to you by email :"
 msgstr ""
 "sich nicht mehr erinnern, k&ouml;nnen Sie sich ein Passwort per EMail\n"
-"      zusenden lassen:\n"
+"      zusenden lassen:"
 
 #: wwsympa/tt2/close_list.tt2:4
 msgid ""
@@ -3101,7 +3101,7 @@ msgstr "dieser W&ouml;rter"
 msgid "title"
 msgstr ""
 "[% ELSE %]\n"
-"      <B> Erzeuge neues Verzeichnis in Verzeichnis SHARED</B>\n"
+"      <B> Erzeuge neues Verzeichnis in Verzeichnis SHARED</B>"
 
 #: src/etc/mhonarc-ressources:339
 msgid "to list"
