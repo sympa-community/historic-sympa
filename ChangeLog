@@ -1,3 +1,182 @@
+2002-10-24 14:59  salaun
+
+	* src/sympa_wizard.pl: [BugID 58] [reported by Xavier AT
+	cs.gouv.qc.ca] Fix: sympa_wizard used temporary files in /tmp/ ; if
+	/tmp/ was an a different filesystem than /etc/, then the rename()
+	would fail. No more use temporary files.  Change: only warn if
+	rename() of previous cong files failed
+
+2002-10-22 17:51  salaun
+
+	* src/List.pm: [reported by M. Beheregaray] Fix: Sympa.pl would die
+	with error "unmatched [] in regexp" if custom_subject contained
+	'[]' Now do some custom_subject cleanup
+
+2002-10-22 17:25  salaun
+
+	* nls/fr.msg, nls/us.msg, src/List.pm, wwsympa/wwsympa.fcgi,
+	wwsympa/wws_templates/fr/review.fr.tpl,
+	wwsympa/wws_templates/us/review.us.tpl: [requested by V. Mathieu]
+	New feature: Add names to data sources, also allow sorting from
+	REVIEW page
+
+2002-10-22 16:01  salaun
+
+	* wwsympa/wws_templates/: fr/review.fr.tpl, us/review.us.tpl:
+	Change: remove unusefull 'domain' column
+
+2002-10-22 15:13  salaun
+
+	* src/etc/mhonarc-ressources, wwsympa/icons/begin.png,
+	wwsympa/icons/end.png: [O. Lacroix] New feature: new 'FastForward'
+	and 'Rewind' button in archives
+
+2002-10-22 15:12  salaun
+
+	* wwsympa/wwsympa.fcgi: Fix: jump to 'serveradmin' when a
+	rebuildall has been performed
+
+2002-10-22 14:49  salaun
+
+	* src/tools.pl: Change: Also look for templates in the list's
+	templates/ subdir
+
+2002-10-22 14:46  salaun
+
+	* src/tools.pl: Change: do not use $' for emacs's sake
+
+2002-10-22 14:43  salaun
+
+	* wwsympa/wwsympa.fcgi: Fix: re-evaluate important vars before
+	parsing templates ; things change so fast....
+
+2002-10-22 14:42  salaun
+
+	* src/List.pm: Fix: reset 'get_subscriber' cache entry after an
+	update
+
+2002-10-22 14:26  salaun
+
+	* wwsympa/wws_templates/: fr/list_menu.fr.tpl, us/list_menu.us.tpl:
+	Fix: in inckude2 mode, show 'subscribe' button even if user is
+	included
+
+2002-10-22 14:14  salaun
+
+	* wwsympa/wwsympa.fcgi: Fix previous change
+
+2002-10-22 14:08  salaun
+
+	* wwsympa/wwsympa.fcgi: Change: don't use $' for emacs edition
+	concerns
+
+2002-10-22 14:06  salaun
+
+	* wwsympa/wwsympa.fcgi: Fix: with 'include2', included users could
+	not be added ; included+subscribed users could not be deleted
+
+2002-10-21 13:46  salaun
+
+	* src/parse_translation.pl, src/tools.pl, wwsympa/wwsympa.fcgi,
+	wwsympa/wws_templates/us/translate.us.tpl,
+	wwsympa/wws_templates/us/view_template.us.tpl: New feature: web
+	templates translation system (first version)
+
+2002-10-21 11:29  salaun
+
+	* doc/: sympa.pdf, sympa.ps, sympa.tex, sympa.tex.tpl,
+	sympa/index.html, sympa/node1.html, sympa/node10.html,
+	sympa/node11.html, sympa/node12.html, sympa/node13.html,
+	sympa/node14.html, sympa/node15.html, sympa/node16.html,
+	sympa/node17.html, sympa/node18.html, sympa/node19.html,
+	sympa/node2.html, sympa/node20.html, sympa/node3.html,
+	sympa/node4.html, sympa/node5.html, sympa/node6.html,
+	sympa/node7.html, sympa/node8.html, sympa/node9.html,
+	sympa/sympa.html, sympa/sympa.ps: [bugID 59] [reported by xavier AT
+	cs.gouv.qc.ca] Duplicates in manual ; fix macros
+
+2002-10-21 11:24  salaun
+
+	* NEWS: fix missing "you MUST rebuild archives"
+
+2002-10-21 11:21  salaun
+
+	* NEWS: missing "you MUST rebuild archives"
+
+2002-10-21 11:12  salaun
+
+	* doc/: sympa.pdf, sympa.ps, sympa.tex: [bugID 59] [reported by
+	xavier AT cs.gouv.qc.ca] Duplicates in manual ; fix macros
+
+2002-10-21 11:09  salaun
+
+	* doc/sympa.tex.tpl: [bugID 59] [reported by xavier AT
+	cs.gouv.qc.ca] Duplicates in manual ; fix macros
+
+2002-10-18 10:02  salaun
+
+	* wwsympa/wwsympa.fcgi: [path_info] available in web templates
+
+2002-10-18 09:35  salaun
+
+	* src/sympa_wizard.pl: [xavier AT cs.gouv.qc.ca] Changes: Precise
+	error message
+
+2002-10-17 17:17  salaun
+
+	* src/sympa.pl: Fix: 'antivirus_notify' was only used in message
+	forarding context
+
+2002-10-17 15:44  salaun
+
+	* wwsympa/wws_templates/fr/: admin_menu.fr.tpl,
+	get_closed_lists.fr.tpl, get_latest_lists.fr.tpl,
+	set_pending_list_request.fr.tpl: [O. Lacroix] New translated
+	templates, fixes
+
+2002-10-17 14:50  salaun
+
+	* wwsympa/wwsympa.fcgi: [O. Lacroix] Fix: wrong comparison operator
+	for reloading wwsympa
+
+2002-10-17 14:37  salaun
+
+	* wwsympa/wwsympa.fcgi: [O. Lacroix] Fix: wrong comparison operator
+	for reloading wwsympa
+
+2002-10-17 14:32  salaun
+
+	* .version: New version
+
+2002-10-17 14:24  salaun
+
+	* src/Commands.pm: Fix: Sympa would use part of the email address
+	as the user name.  Fix regular expretion usage
+
+2002-10-17 14:11  salaun
+
+	* src/Commands.pm: Fix: Sympa would use part of the email address
+	as the user name.  Fix regular expretion usage
+
+2002-10-17 12:31  salaun
+
+	* wwsympa/wwsympa.fcgi: [reported by Philippe Amelant] incorect
+	command for remove_aliases
+
+2002-10-16 15:43  salaun
+
+	* wwsympa/wwsympa.fcgi: [reported by Philippe Amelant] incorect
+	command for remove_aliases
+
+2002-10-16 09:35  salaun
+
+	* ChangeLog, NEWS: 
+	preparing 3.4
+
+2002-10-15 15:49  salaun
+
+	* .version, ChangeLog, NEWS: preparing release 3.4
+
 2002-10-15 15:34  salaun
 
 	* src/Commands.pm, src/List.pm, src/tools.pl, wwsympa/wwslib.pm,

@@ -5321,13 +5321,14 @@ sub _include_users_ldap {
     foreach my $email (@emails) {
 	next if ($email =~ /^\s*$/);
 
+	$email = lc($email);
 	my %u;
 	## Check if user has already been included
 	if ($users->{$email}) {
 	    if ($tied) {
-		%u = split "\n",$users->{$user->{'email'}};
+		%u = split "\n",$users->{$email};
 	    }else {
-		%u = %{$users->{$user->{'email'}}};
+		%u = %{$users->{$email}};
 	    }
 	}else {
 	    %u = %{$default_user_options};
@@ -5489,14 +5490,14 @@ sub _include_users_ldap_2level {
     foreach my $email (@emails) {
 	next if ($email =~ /^\s*$/);
 
-	
+	$email = lc($email);
 	my %u;
 	## Check if user has already been included
 	if ($users->{$email}) {
 	    if ($tied) {
-		%u = split "\n",$users->{$user->{'email'}};
+		%u = split "\n",$users->{$email};
 	    }else {
-		%u = %{$users->{$user->{'email'}}};
+		%u = %{$users->{$email}};
 	    }
 	}else {
 	    %u = %{$default_user_options};
@@ -5600,13 +5601,14 @@ sub _include_users_sql {
 	## Empty value
 	next if ($email =~ /^\s*$/);
 
+	$email = lc($email);
 	my %u;
 	## Check if user has already been included
-	if ($users->{lc($email)}) {
+	if ($users->{$email}) {
 	    if ($tied) {
-		%u = split "\n",$users->{$user->{'email'}};
+		%u = split "\n",$users->{$email};
 	    }else {
-		%u = %{$users->{$user->{'email'}}};
+		%u = %{$users->{$email}};
 	    }
 	}else {
 	    %u = %{$default_user_options};
