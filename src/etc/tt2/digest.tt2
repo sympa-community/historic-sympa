@@ -7,7 +7,7 @@ Content-Type: multipart/mixed; boundary="[% boundary1 %]"
 
 --[% boundary1 %]
 Content-Type: text/plain
-Content-transfer-encoding: 7bit
+Content-transfer-encoding: [%|l%]7bit[%END%]
 
 [%|l%]Table of content:[%END%]
 
@@ -33,7 +33,7 @@ Content-Disposition: inline
 [% END %]
 --[% boundary2 %]
 Content-Type: text/plain
-Content-transfer-encoding: 7bit
+Content-transfer-encoding: [%|l%]7bit[%END%]
 Content-Disposition: inline
 
 [%|l(list.name,date)%]End of digest for list %1 - %2[%END%]
