@@ -216,7 +216,7 @@ h6:first-letter {font-size: 20px; font-weight: bold;}
 strong {text-indent: 30px; font-size: 16px;}
 strong:first-letter {font-size: 20px; font-weight: bold;}
 
-
+a.input {background: [% color_13 %]; border: 1px solid [% color_2 %]; padding: 3px; cursor: text; text-decoration: none;}
 input {background: [% color_13 %]; border: 1px solid [% color_2 %]; padding: 0px; cursor: text;}
 input:hover {background: [% color_13 %]; cursor: text;}
 textarea {background: [% color_13 %]; border: 1px solid [% color_2 %]; padding: 3px; cursor: text;}
