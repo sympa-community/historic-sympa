@@ -37,9 +37,6 @@ body {
         padding: 3px;
 	margin-bottom : 10px;
 }
-#col-left { width: 30%; }
-#col-middle { width: 34.99%; }
-#col-right  { width: 35%; }
 
 #Clock {float: right; padding-right: 3px; vertical-align:top; font-family: Arial, sans-serif;}
 #Login {text-align: left; padding-left: 5px; vertical-align:top; font-family: Arial, sans-serif;}
@@ -160,6 +157,12 @@ a.ArcMenuLinksInactive:hover { border-bottom: 1px solid [% color_2 %]; border-ri
 
 .block {border: 1px dotted [% color_2 %]; padding: 10px;}
 h1.block {text-align: center; background: [% color_4 %];}
+h2.block {text-align: center; background: [% color_4 %];}
+h3.block {text-align: center; background: [% color_4 %];}
+h4.block {text-align: center; background: [% color_4 %];}
+h5.block {text-align: center; background: [% color_4 %];}
+h6.block {text-align: center; background: [% color_4 %];}
+
 .blockerror {border: 3px dashed [% error_color %]; background: transparent; padding : 10px;}
 
 ul.menuLinks {list-style-type: none;}
