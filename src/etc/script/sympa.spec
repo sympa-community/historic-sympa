@@ -281,7 +281,7 @@ done
 %doc %attr(-,root,root) INSTALL README AUTHORS COPYING NEWS ChangeLog
 %doc %attr(-,root,root) doc/sympa.tex doc/sympa.ps doc/sympa.pdf
 %doc %attr(-,root,root) doc/html/
-%attr(-,root,root) %{_mandir}/man8/*
+%attr(-,root,root) %{_mandir}/man8/
  
 # Spools
 %dir %{spoo_s}
