@@ -3,6 +3,29 @@
 
 (See Changelog file for the full changes log)
 
+3.4.4.2		4 July 2003
+
+  Bug fixes :
+
+	* src/List.pm: [reported by R. Pfeiffer & T. Oger] recent versions of DBD::mysql have changed the behavior for tables() :
+	Table names are surrounded by ``. Sympa considered Sympa DB did not have the right structure with the following error message :
+	"DBD::mysql::db do failed: Table 'subscriber_table' already exists"
+
+	* src/List.pm: [BugID 173] [reported by O. Wild] Bug fix: sympa.pl dies on a S/MIME encrypted message when it does not have 
+	every user (when using Exim MTA). Notification of certificate-less users is now performed at a higher level, in List::send_msg()
+
+	* src/tools.pl: incorrect openssl argument rtelated to null	capath or null cafile argument.
+
+	* src/Conf.pm: [reported by P. Machard] remove trailing spaces in robot.conf
+
+	* src/tools.pl: Encrypted messages were including 2 header fields remaining from openssl output
+
+	* doc/sympa.tex.tpl: incorrect instructions regarding aliases management
+
+	* src/tools.pl, wwsympa/wwsympa.fcgi: [BugID 155][Reported by G.Tellier] Gecos was lost while doing multiple ADD if email
+	address contained upper-cased chars
+
+
 3.4.4.1		9 May 2003
 
   Changes :

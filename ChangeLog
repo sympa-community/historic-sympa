@@ -1,3 +1,61 @@
+2003-07-04 11:59  salaun
+
+	* src/List.pm: Fix recent X509-related changes : List::send_msg()
+	did not get a Message object
+
+2003-07-04 11:21  salaun
+
+	* src/List.pm: [reported by R. Pfeiffer & T. Oger] Fix: recent
+	versions of DBD::mysql have changed the behavior for tables() :
+	Table names are surrounded by ``. Sympa considered Sympa DB did not
+	have the right structure.
+
+2003-06-26 09:54  salaun
+
+	* src/Conf.pm: [reported by P. Machard] Fix: remove trailing spaces
+	in robot.conf
+
+2003-06-13 16:51  salaun
+
+	* src/tools.pl: Bug fix: Encrypted messages were including 2 header
+	fields remaining from openssl output
+
+2003-06-13 15:58  salaun
+
+	* src/List.pm: [BugID 173] [reported by O. Wild] Bug fix: sympa.pl
+	dies on a S/MIME encrypted message when it does not have every user
+	(when using Exim MTA).	Notification of certificate-less users is
+	now performed at a higher level, in List::send_msg()
+
+2003-06-13 14:57  salaun
+
+	* src/tools.pl: Fix incorrect openssl argument rtelated to null
+	capath or null cafile argument.
+
+2003-05-14 16:53  salaun
+
+	* Makefile.in, doc/sympa.pdf, doc/sympa.ps, doc/sympa.tex,
+	doc/sympa.tex.tpl, doc/html/index.html, doc/html/node1.html,
+	doc/html/node10.html, doc/html/node11.html, doc/html/node12.html,
+	doc/html/node13.html, doc/html/node14.html, doc/html/node15.html,
+	doc/html/node16.html, doc/html/node17.html, doc/html/node18.html,
+	doc/html/node19.html, doc/html/node2.html, doc/html/node20.html,
+	doc/html/node21.html, doc/html/node3.html, doc/html/node4.html,
+	doc/html/node5.html, doc/html/node6.html, doc/html/node7.html,
+	doc/html/node8.html, doc/html/node9.html, doc/html/sympa.html,
+	doc/html/sympa.ps: Fix: incorrect instructions regarding aliases
+	management
+
+2003-05-12 14:42  salaun
+
+	* src/tools.pl, wwsympa/wwsympa.fcgi: [BugID 155][Reported by G.
+	Tellier] Fix: Gecos was lost while doing multiple ADD if email
+	address contained upper-cased chars
+
+2003-05-09 15:04  salaun
+
+	* .version, ChangeLog, NEWS: preparing 3.4.4.1
+
 2003-05-09 15:00  salaun
 
 	* INSTALL, src/etc/script/sympa.spec,
