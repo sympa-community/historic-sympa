@@ -140,15 +140,15 @@ a.ActionMenuLinksCurrentPage:hover {border: 1px solid [% color_2 %]; background:
 ul li.ActionMenuLinksInactive {border: 1px doted [% color_2 %]; background: [% color_1 %]; text-decoration: none; padding: 0px 10px 0px 10px;}
 
 
-a.ArcMenuLinks {border: 1px solid [% color_2 %]; background: transparent; text-decoration: none; padding: 0px 10px 0px 10px; left-margin: 10px;}
-a.ArcMenuLinks:link {border: 1px solid [% color_2 %]; background: transparent; text-decoration: none; padding: 0px 10px 0px 10px; left-margin: 10px;}
-a.ArcMenuLinks:visited {border: 1px solid [% color_2 %]; background: transparent;  text-decoration: none; padding: 0px 10px 0px 10px; left-margin: 10px;}
-a.ArcMenuLinks:hover {border: 1px solid [% color_2 %]; background: [% color_6 %]; color: [% color_11 %]; text-decoration: none; padding: 0px 10px 0px 10px; left-margin: 10px;}
-a.ArcMenuLinks:active {border: 1px solid [% color_2 %]; background: [% color_6 %]; color: [% color_11 %]; text-decoration: none; padding: 0px 10px 0px 10px; left-margin: 10px;}
-a.ArcMenuLinksCurrentPage {border: 1px solid [% color_2 %]; background: [% color_6 %]; color: [% color_11 %] text-decoration: none; padding: 0px 10px 0px 10px; left-margin: 10px;}
-a.ArcMenuLinksCurrentPage:hover {border: 1px solid [% color_2 %]; background: [% color_6 %]; text-decoration: none; padding: 0px 10px 0px 10px; left-margin: 10px;}
-a.ArcMenuLinksInactive {border: 1px solid [% color_2 %]; background: transparent; color: [% color_4 %]; text-decoration: none; padding: 0px 10px 0px 10px; left-margin: 10px;}
-a.ArcMenuLinksInactive:hover {border: 1px solid [% color_2 %]; background: transparent; color: [% color_4 %]; text-decoration: none; padding: 0px 10px 0px 10px; left-margin: 10px;}
+a.ArcMenuLinks {border: 1px solid [% color_2 %]; background: transparent; text-decoration: none; padding: 0px 10px 0px 10px;}
+a.ArcMenuLinks:link {border: 1px solid [% color_2 %]; background: transparent; text-decoration: none; padding: 0px 10px 0px 10px;}
+a.ArcMenuLinks:visited {border: 1px solid [% color_2 %]; background: transparent;  text-decoration: none; padding: 0px 10px 0px 10px;}
+a.ArcMenuLinks:hover {border: 1px solid [% color_2 %]; background: [% color_6 %]; color: [% color_11 %]; text-decoration: none; padding: 0px 10px 0px 10px;}
+a.ArcMenuLinks:active {border: 1px solid [% color_2 %]; background: [% color_6 %]; color: [% color_11 %]; text-decoration: none; padding: 0px 10px 0px 10px;}
+a.ArcMenuLinksCurrentPage {border: 1px solid [% color_2 %]; background: [% color_6 %]; color: [% color_11 %] text-decoration: none; padding: 0px 10px 0px 10px;}
+a.ArcMenuLinksCurrentPage:hover {border: 1px solid [% color_2 %]; background: [% color_6 %]; text-decoration: none; padding: 0px 10px 0px 10px;}
+a.ArcMenuLinksInactive {border: 1px solid [% color_2 %]; background: transparent; color: [% color_4 %]; text-decoration: none; padding: 0px 10px 0px 10px;}
+a.ArcMenuLinksInactive:hover {border: 1px solid [% color_2 %]; background: transparent; color: [% color_4 %]; text-decoration: none; padding: 0px 10px 0px 10px;}
 
 #ArcMenuLinksInactive {border: 0px solid [% color_2 %]; text-decoration: none; padding: 0px 0px 0px 3px;}
 
