@@ -1,3 +1,212 @@
+2003-04-16 17:39  salaun
+
+	* src/List.pm: {BugID 144] [R. Marchand] FIx: When upgrading to
+	Sympa 3.4.3.1 from 3.3.5.  Sympa adds the two fields
+	'subscribed_subscriber' and 'include_sources_subscriber' when
+	started the first time but fail to add the third field
+	'included_subscriber'.	Consequence of this is that no user is
+	found when viewing the lists admin pages.  There may be other
+	consequences.
+
+2003-04-16 13:52  salaun
+
+	* doc/html/node9.html: file node9.html was initially added on
+	branch sympa-3_4-branch.
+
+2003-04-16 13:52  salaun
+
+	* doc/html/img1.png: file img1.png was initially added on branch
+	sympa-3_4-branch.
+
+2003-04-16 13:52  salaun
+
+	* doc/html/index.png: file index.png was initially added on branch
+	sympa-3_4-branch.
+
+2003-04-16 13:52  salaun
+
+	* doc/html/node15.html: file node15.html was initially added on
+	branch sympa-3_4-branch.
+
+2003-04-16 13:52  salaun
+
+	* doc/html/up_g.png: file up_g.png was initially added on branch
+	sympa-3_4-branch.
+
+2003-04-16 13:52  salaun
+
+	* doc/html/sympa.css: file sympa.css was initially added on branch
+	sympa-3_4-branch.
+
+2003-04-16 13:52  salaun
+
+	* doc/html/node20.html: file node20.html was initially added on
+	branch sympa-3_4-branch.
+
+2003-04-16 13:52  salaun
+
+	* doc/html/node18.html: file node18.html was initially added on
+	branch sympa-3_4-branch.
+
+2003-04-16 13:52  salaun
+
+	* doc/html/node1.html: file node1.html was initially added on
+	branch sympa-3_4-branch.
+
+2003-04-16 13:52  salaun
+
+	* doc/html/index.html: file index.html was initially added on
+	branch sympa-3_4-branch.
+
+2003-04-16 13:52  salaun
+
+	* doc/html/node4.html: file node4.html was initially added on
+	branch sympa-3_4-branch.
+
+2003-04-16 13:52  salaun
+
+	* doc/html/sympa.html: file sympa.html was initially added on
+	branch sympa-3_4-branch.
+
+2003-04-16 13:52  salaun
+
+	* doc/html/node10.html: file node10.html was initially added on
+	branch sympa-3_4-branch.
+
+2003-04-16 13:52  salaun
+
+	* doc/html/node7.html: file node7.html was initially added on
+	branch sympa-3_4-branch.
+
+2003-04-16 13:52  salaun
+
+	* doc/html/node13.html: file node13.html was initially added on
+	branch sympa-3_4-branch.
+
+2003-04-16 13:52  salaun
+
+	* doc/html/img2.png: file img2.png was initially added on branch
+	sympa-3_4-branch.
+
+2003-04-16 13:52  salaun
+
+	* doc/html/node16.html: file node16.html was initially added on
+	branch sympa-3_4-branch.
+
+2003-04-16 13:52  salaun
+
+	* doc/html/node19.html: file node19.html was initially added on
+	branch sympa-3_4-branch.
+
+2003-04-16 13:52  salaun
+
+	* doc/html/node2.html: file node2.html was initially added on
+	branch sympa-3_4-branch.
+
+2003-04-16 13:52  salaun
+
+	* doc/html/node21.html: file node21.html was initially added on
+	branch sympa-3_4-branch.
+
+2003-04-16 13:52  salaun
+
+	* doc/html/node5.html: file node5.html was initially added on
+	branch sympa-3_4-branch.
+
+2003-04-16 13:52  salaun
+
+	* doc/html/node11.html: file node11.html was initially added on
+	branch sympa-3_4-branch.
+
+2003-04-16 13:52  salaun
+
+	* doc/html/next.png: file next.png was initially added on branch
+	sympa-3_4-branch.
+
+2003-04-16 13:52  salaun
+
+	* doc/html/node8.html: file node8.html was initially added on
+	branch sympa-3_4-branch.
+
+2003-04-16 13:52  salaun
+
+	* doc/html/prev.png: file prev.png was initially added on branch
+	sympa-3_4-branch.
+
+2003-04-16 13:52  salaun
+
+	* doc/html/node14.html: file node14.html was initially added on
+	branch sympa-3_4-branch.
+
+2003-04-16 13:52  salaun
+
+	* doc/html/: contents.png, crossref.png, img1.png, img2.png,
+	index.html, index.png, next.png, next_g.png, node1.html,
+	node10.html, node11.html, node12.html, node13.html, node14.html,
+	node15.html, node16.html, node17.html, node18.html, node19.html,
+	node2.html, node20.html, node21.html, node3.html, node4.html,
+	node5.html, node6.html, node7.html, node8.html, node9.html,
+	prev.png, prev_g.png, sympa.css, sympa.html, sympa.ps, up.png,
+	up_g.png: Restore documentation in HTML format
+
+2003-04-16 13:52  salaun
+
+	* doc/html/prev_g.png: file prev_g.png was initially added on
+	branch sympa-3_4-branch.
+
+2003-04-16 13:52  salaun
+
+	* doc/html/up.png: file up.png was initially added on branch
+	sympa-3_4-branch.
+
+2003-04-16 13:52  salaun
+
+	* doc/html/next_g.png: file next_g.png was initially added on
+	branch sympa-3_4-branch.
+
+2003-04-16 13:52  salaun
+
+	* doc/html/node17.html: file node17.html was initially added on
+	branch sympa-3_4-branch.
+
+2003-04-16 13:52  salaun
+
+	* doc/html/crossref.png: file crossref.png was initially added on
+	branch sympa-3_4-branch.
+
+2003-04-16 13:52  salaun
+
+	* doc/html/node3.html: file node3.html was initially added on
+	branch sympa-3_4-branch.
+
+2003-04-16 13:52  salaun
+
+	* doc/html/sympa.ps: file sympa.ps was initially added on branch
+	sympa-3_4-branch.
+
+2003-04-16 13:52  salaun
+
+	* doc/html/contents.png: file contents.png was initially added on
+	branch sympa-3_4-branch.
+
+2003-04-16 13:52  salaun
+
+	* doc/html/node6.html: file node6.html was initially added on
+	branch sympa-3_4-branch.
+
+2003-04-16 13:52  salaun
+
+	* doc/html/node12.html: file node12.html was initially added on
+	branch sympa-3_4-branch.
+
+2003-04-16 13:29  salaun
+
+	* important_changes.pl: Comment debug trace
+
+2003-04-16 13:15  salaun
+
+	* .version, ChangeLog, NEWS: Preparing 3.4.4
+
 2003-04-16 11:59  salaun
 
 	* Makefile.am, Makefile.in, configure, configure.in: New feature:

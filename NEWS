@@ -33,6 +33,12 @@
 
   Bug fixes :
 
+	src/List.pm: [BugID 144] [R. Marchand] When upgrading to Sympa 3.4.3.1 from 3.3.5.  
+	Sympa adds the two fields 'subscribed_subscriber' and 'include_sources_subscriber' when
+	started the first time but fail to add the third field 'included_subscriber'.	
+	Consequence of this is that no user is found when viewing the lists admin pages. There may 
+	be other consequences.
+
 	src/tools.pl: make better error handling in virus scanning subroutine, in case we can't 
 	decode message parts
 
