@@ -355,8 +355,8 @@ sub smime_sign_check {
 
     my $temporary_file = "/tmp/smime-sender.".$$ ;
     my $trusted_ca_options = '';
-    $trusted_ca_options = "-CAfile $Conf{'cafile'}" if (defined $Conf{'cafile'});
-    $trusted_ca_options = "-CApath $Conf{'capath'}" if (defined $Conf{'capath'});
+    $trusted_ca_options = "-CAfile $Conf{'cafile'}" if ($Conf{'cafile'});
+    $trusted_ca_options = "-CApath $Conf{'capath'}" if ($Conf{'capath'});
     do_log('debug3', "$Conf{'openssl'} smime -verify  $trusted_ca_options -signer  $temporary_file");
 
     unless (open (MSGDUMP, "| $Conf{'openssl'} smime -verify  $trusted_ca_options -signer $temporary_file > /dev/null")) {
@@ -571,14 +571,22 @@ sub smime_decrypt {
 	$msg_as_string .= $_;
     }
 	
+    close NEWMSG ;
+    unlink ($temporary_file) unless ($main::options{'debug'}) ;
+    
+    ## Create a MIME object with decrypted message
     my $parser = new MIME::Parser;
     $parser->output_to_core(1);
     unless ($decryptedmsg = $parser->parse_data($msg_as_string)) {
 	do_log('notice', 'Unable to parse message');
 	return undef;
     }
-    close NEWMSG ;
-    unlink ($temporary_file) unless ($main::options{'debug'}) ;
+
+    ## Now remove headers from $msg_as_string
+    my @msg_tab = split(/\n/, $msg_as_string);
+    my $line;
+    do {$line = shift(@msg_tab)} while ($line !~ /^\s*$/);
+    $msg_as_string = join("\n", @msg_tab);
     
     ## foreach header defined in the incomming message but undefined in the
     ## decrypted message, add this header in the decrypted form.
@@ -644,7 +652,7 @@ sub escape_chars {
     ## Escape chars
     ##  !"#$%&'()+,:;<=>?[] AND accented chars
     ## escape % first
-    foreach my $i (0x25,0x20..0x24,0x26..0x2c,0x3a..0x3f,0x5b,0x5d,0xc0..0xff) {
+    foreach my $i (0x25,0x20..0x24,0x26..0x2c,0x3a..0x3f,0x5b,0x5d,0xa0..0xff) {
 	next if ($i == $ord_except);
 	my $hex_i = sprintf "%lx", $i;
 	$s =~ s/\x$hex_i/%$hex_i/g;
@@ -659,7 +667,7 @@ sub unescape_chars {
     my $s = shift;
 
     $s =~ s/%a5/\//g;  ## Special traetment for '/'
-    foreach my $i (0x20..0x2c,0x3a..0x3f,0x5b,0x5d,0xc0..0xff) {
+    foreach my $i (0x20..0x2c,0x3a..0x3f,0x5b,0x5d,0xa0..0xff) {
 	my $hex_i = sprintf "%lx", $i;
 	my $hex_s = sprintf "%c", $i;
 	$s =~ s/%$hex_i/$hex_s/g;
@@ -820,6 +828,7 @@ sub split_mail {
     my $message = shift ; 
     my $pathname = shift ;
     my $dir = shift ;
+    &do_log('debug2', 'tools::split_mail()');
 
     my $head = $message->head ;
     my $body = $message->body ;
@@ -852,11 +861,11 @@ sub split_mail {
 
 	    ## Store body in file 
 	    unless (open OFILE, ">$dir/$pathname.$fileExt") {
-		print STDERR "Unable to open $dir/$pathname.$fileExt\n" ;
+		&do_log('err', "Unable to open $dir/$pathname.$fileExt") ;
 		return undef ; 
 	    }
 	    
-	    if ($encoding =~ /^binary|7bit|8bit|base64|quoted-printable|x-uu|x-uuencode|x-gzip64$/ ) {
+	    if ($encoding =~ /^(binary|7bit|8bit|base64|quoted-printable|x-uu|x-uuencode|x-gzip64)$/ ) {
 		open TMP, ">$dir/$pathname.$fileExt.$encoding";
 		$message->print_body (\*TMP);
 		close TMP;
@@ -864,6 +873,10 @@ sub split_mail {
 		open BODY, "$dir/$pathname.$fileExt.$encoding";
 
 		my $decoder = new MIME::Decoder $encoding;
+		unless (defined $decoder) {
+		    &do_log('err', 'Cannot create decoder for %s', $encoding);
+		    return undef;
+		}
 		$decoder->decode(\*BODY, \*OFILE);
 		unlink "$dir/$pathname.$fileExt.$encoding";
 	    }else {
@@ -873,10 +886,9 @@ sub split_mail {
 	    printf "\t-------\t Create file %s\n", $pathname.'.'.$fileExt ;
 	    
 	    ## Delete files created twice or more (with Content-Type.name and Content-Disposition.filename)
-	    $message->purge ;
-    
-	
+	    $message->purge ;	
     }
+    return 1;
 }
 
 sub virus_infected {
@@ -907,7 +919,10 @@ sub virus_infected {
     #$mail->dump_skeleton;
 
     ## Call the procedure of spliting mail
-    &split_mail ($mail,'msg', $work_dir) ;
+    unless (&split_mail ($mail,'msg', $work_dir)) {
+	&do_log('err', 'Could not split mail %s', $mail);
+	return undef;
+    }
 
     my $virusfound; 
     my $error_msg;
@@ -1317,6 +1332,19 @@ sub get_message_id {
     return $id;
 }
 
+## Clean email address
+sub clean_email {
+    my $email = shift;
+
+    ## Lower-case
+    $email = lc($email);
+
+    ## remove leading and trailing spaces
+    $email =~ s/^\s*//;
+    $email =~ s/\s*$//;
+
+    return $email;
+}
 
 sub get_dir_size {
     my $dir =shift;
@@ -1344,6 +1372,20 @@ sub valid_email {
     my $email = shift;
     
     $email =~ /^([\w\-\_\.\/\+\=]+|\".*\")\@[\w\-]+(\.[\w\-]+)+$/;
+}
+
+## Return canonical email address (lower-cased + space cleanup)
+## It could also support alternate email
+sub get_canonical_email {
+    my $email = shift;
+
+    ## Remove leading and trailing white spaces
+    $email =~ s/^\s*(\S.*\S)\s*$/$1/;
+
+    ## Lower-case
+    $email = lc($email);
+
+    return $email;
 }
 
 1;

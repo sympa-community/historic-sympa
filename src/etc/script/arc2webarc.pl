@@ -22,7 +22,7 @@
 # along with this program; if not, write to the Free Software
 # Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
 
-use lib '--BINDIR--';
+use lib '--LIBDIR--';
 use wwslib;
 $wwsympa_conf_file = '--WWSCONFIG--';
 $sympa_conf_file = '--CONFIG--';
@@ -62,8 +62,9 @@ my $pinfo = &List::_apply_defaults();
 
 $| = 1;
 
-die "Usage : $ARGV[-1] <listname>" unless ($#ARGV >= 0);
+die "Usage : $ARGV[-1] <listname> [robot]" unless ($#ARGV >= 0);
 my $listname = $ARGV[0];
+my $robot = $ARGV[1];
 
 ## Check UID
 unless (getlogin() eq '--USER--') {
@@ -91,7 +92,12 @@ chdir $Conf::Conf{'home'};
 my $list = new List($listname) 
     or die 'Cannot create List object';
 
-my $home_sympa = $Conf::Conf{'home'};
+my $home_sympa;
+if ($robot) {
+    $home_sympa = $Conf::Conf{'home'}.'/'.$robot;
+}else {
+    $home_sympa = $Conf::Conf{'home'};
+}
 my $dest_dir = "$wwsconf->{'arc_path'}/$listname\@$list->{'admin'}{'host'}";
 
 ## Burst archives
