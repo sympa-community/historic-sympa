@@ -382,7 +382,7 @@ MSGPGEND
 </TOPLINKS>
 
 <HEADBODYSEP>
-</UL>
+</div>
 <hr size="1" noshade>
 </HEADBODYSEP>
 
@@ -404,9 +404,8 @@ $POWERED_BY$
 </MSGPGSSMARKUP>
 
 <SUBJECTHEADER>
-<span style="float: right">
 ($tag$% IF user.email && action == 'arc' %$tag$)
-
+<span style="float: right">
 <form action="($tag$% path_cgi %$tag$)" method="post">
   <input type="hidden" NAME="in_reply_to" VALUE="$MSGID$" />
   <input type="hidden" NAME="subject" VALUE="Re: $SUBJECTNA$" />
@@ -415,8 +414,8 @@ $POWERED_BY$
   <input type="radio" NAME="to" VALUE="$FROMADDRNAME$ $FROMADDRDOMAIN$" checked />
   ($tag$%|loc%$tag$)to list($tag$%END%$tag$)
   <input type="radio" NAME="to" VALUE="($tag$% list %$tag$) ($tag$% list_conf.host %$tag$)" />
-  <input type="submit" NAME="action_compose_mail" VALUE="($tag$%|loc%$tag$)Reply($tag$%END%$tag$)" />
-  <input type="submit" NAME="action_send_me" VALUE="($tag$%|loc(user.email)%$tag$)send it back to %1($tag$%END%$tag$)" />	
+  <input type="submit" NAME="action_compose_mail" VALUE="($tag$%|loc%$tag$)Reply($tag$%END%$tag$)" /><br />
+  <input type="submit" NAME="action_send_me" VALUE="($tag$%|loc(user.email)%$tag$)send it back to %1($tag$%END%$tag$)" /><br />
   ($tag$% IF action != 'viewmod' %$tag$)
     ($tag$% IF user.email == '$FROMADDR$'  || is_owner %$tag$)
     <input type="hidden" NAME="yyyy" VALUE="$yyyy$" />
@@ -427,9 +426,11 @@ $POWERED_BY$
     ($tag$% END %$tag$)
   ($tag$% END %$tag$)
 </form>
+</span>
+
 ($tag$% END %$tag$)
 
-<UL>
+<div class="messageHeaders">
 </SUBJECTHEADER>
 
 <!-- Message itself -->
@@ -480,7 +481,7 @@ date
 From:strong
 To:strong
 Subject:strong
--default-:em
+-default-:strong
 </LABELSTYLES>
 
 <TSLICELEVELS>

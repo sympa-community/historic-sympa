@@ -35,6 +35,7 @@ body {
 	text-align: left;
 	vertical-align: top;
         padding: 3px;
+	margin-bottom : 10px;
 }
 #Clock {float: right; padding-right: 3px; vertical-align:top; font-family: Arial, sans-serif;}
 #Login {text-align: left; padding-left: 5px; vertical-align:top; font-family: Arial, sans-serif;}
@@ -149,8 +150,9 @@ a.ArcMenuLinksCurrentPage {border: 1px solid [% color_2 %]; background: [% color
 a.ArcMenuLinksCurrentPage:hover {border: 1px solid [% color_2 %]; background: [% color_6 %]; text-decoration: none; padding: 0px 10px 0px 10px;}
 a.ArcMenuLinksInactive { border-bottom: 1px solid [% color_2 %]; border-right:  1px solid [% color_10 %]; border-top: 1px solid [% color_10 %]; border-left: 1px solid [% color_10 %]; background: transparent; color: [% color_10 %]; text-decoration: none; padding: 0px 10px 0px 10px;}
 a.ArcMenuLinksInactive:hover { border-bottom: 1px solid [% color_2 %]; border-right:  1px solid [% color_10 %]; border-top: 1px solid [% color_10 %]; border-left: 1px solid [% color_10 %]; background: transparent; color: [% color_10 %]; text-decoration: none; padding: 0px 10px 0px 10px;}
-
 #ArcMenuLinksInactive {border: 0px solid [% color_2 %]; text-decoration: none; padding: 0px 0px 0px 3px;}
+
+.messageHeaders {border: 1px dotted [% color_2 %]; background: transparent; padding : 10px;}
 
 ul.menuLinks {list-style-type: none;}
 a.menuLinks {padding: 0px 10px 0px 0px; text-decoration: none;}
