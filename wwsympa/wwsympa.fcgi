@@ -4931,7 +4931,7 @@ sub do_set_pending_list_request {
      my $list_dir;
 
      ## A virtual robot
-     if ($robot ne $Conf{'domain'}) {
+     if (-d "$Conf{'home'}/$robot") {
 	 unless (-d $Conf{'home'}.'/'.$robot) {
 	     unless (mkdir ($Conf{'home'}.'/'.$robot,0777)) {
 		 &error_message('unable_to_create_dir');
