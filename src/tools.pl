@@ -1317,6 +1317,19 @@ sub get_message_id {
     return $id;
 }
 
+## Clean email address
+sub clean_email {
+    my $email = shift;
+
+    ## Lower-case
+    $email = lc($email);
+
+    ## remove leading and trailing spaces
+    $email =~ s/^\s*//;
+    $email =~ s/\s*$//;
+
+    return $email;
+}
 
 sub get_dir_size {
     my $dir =shift;
