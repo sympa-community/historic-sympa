@@ -404,7 +404,7 @@ if ($wwsconf->{'use_fast_cgi'}) {
  my $start_time = &POSIX::strftime("%d %b %Y at %H:%M:%S", localtime(time));
  while ($query = &new_loop()) {
 
-
+     my %loop_prevention;
      undef $param;
      undef $list;
      undef $robot;
@@ -708,6 +708,8 @@ if ($wwsconf->{'use_fast_cgi'}) {
 
          my $old_action = $action;
 
+	 $loop_prevention{$action}++;
+
          ## Execute the action ## 
          $action = &{$comm{$action}}();
 
@@ -715,8 +717,10 @@ if ($wwsconf->{'use_fast_cgi'}) {
 	 
 	 last if ($action =~ /redirect/) ; # after redirect do not send anything, it will crash fcgi lib
 
-
-         if ($action eq $old_action) {
+	 
+         if ($loop_prevention{$action} > 2 ||
+	     $action eq $old_action
+	     ) {
              &wwslog('info','Stopping loop with %s action', $action);
              #undef $action;
              $action = 'home';
@@ -1543,7 +1547,9 @@ if ($wwsconf->{'use_fast_cgi'}) {
 	 $param->{'back_to_mom'} = 1;
 	 return 1;
      }
-
+     
+     ## Prevents loops
+     delete $in{'passwd'};
      return $next_action;
 
  }
