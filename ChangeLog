@@ -1,3 +1,23 @@
+2002-10-24 17:27  salaun
+
+	* ChangeLog, src/List.pm: [BugID 63] [reported by G. Paressant]
+	Fix: sync_include() made the task_manager die if duplicate emails
+	where found in SQL or LDAP query result
+
+2002-10-24 16:43  salaun
+
+	* src/List.pm: [BugID 63] [reported by G. Paressant] Fix:
+	sync_include() made the task_manager die if duplicate emails where
+	found in SQL or LDAP query result
+
+2002-10-24 15:32  salaun
+
+	* src/sympa_wizard.pl: [BugID 58] [reported by Xavier AT
+	cs.gouv.qc.ca] Fix: sympa_wizard used temporary files in /tmp/ ; if
+	/tmp/ was an a different filesystem than /etc/, then the rename()
+	would fail. No more use temporary files.  Change: only warn if
+	rename() of previous cong files failed
+
 2002-10-24 14:59  salaun
 
 	* src/sympa_wizard.pl: [BugID 58] [reported by Xavier AT
