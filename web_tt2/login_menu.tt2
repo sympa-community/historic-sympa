@@ -44,7 +44,7 @@
 
       <input type="hidden" name="action" value="login" />
       <label for="email">[%|loc%]email address[%END%] :<br />
-      <input type="text" name="email" id="email" size="20" value="[% init_email %]" /></label><br />
+      <input type="text" name="email" id="email" size="18" value="[% init_email %]" /></label><br />
       <label for="passwd" >[%|loc%]password[%END%] :<br />
       <input type="password" name="passwd" id="passwd" size="8" /></label> &nbsp;&nbsp;
       <input type="submit" name="action_login" value="[%|loc%]Login[%END%]" />
