@@ -3,16 +3,8 @@
     <table style="width: 100%;" cellpadding="1" cellspacing="0">
       <tr valign="top">
         <th style="background-color: [% dark_color %];" colspan="2">
-          <table style="width: 100%;" cellpadding="0" cellspacing="0">
-            <tr>
-             <th style="background-color: [% selected_color %]; width: 50%;">
-              <span style="color: [% bg_color %];">
-                [%|loc%]Your environment[%END%]
-              </span>
-             </th>
-            </tr>
-           </table>
-         </th>
+          <h2>[%|loc%]Your environment[%END%]</h2>
+        </th>
       </tr>
       <tr valign="top">
         <td>
@@ -36,28 +28,17 @@
             </select></td></tr>
 			</table>
             <input type="submit" name="action_setpref" value="[%|loc%]Submit[%END%]" />
-          </form>
+          </form><br />
         </td>
       </tr>
 
       [% IF auth == 'classic' %]
       <tr valign="top">
-        <th style="background-color: [% dark_color %];" colspan="2">
-          <table style="width: 100%;" cellpadding="0" cellspacing="0">
-            <tr>
-             <th style="width: 50%; background-color: [% selected_color %];">
-              <span style="color: [% bg_color %];">
-                [%|loc%]Changing your email address[%END%]
-              </span>
-             </th><th style="width: 50%; background-color: [% selected_color %];">
-              <span style="color: [% bg_color %];">
-                [%|loc%]Changing your password[%END%]
-              </span>
-             </th>
-            </tr>
-           </table>
+        <th style="background-color: [% dark_color %]; width: 50%;" >
+                <h2>[%|loc%]Changing your email address[%END%]</h2>
+         </th><th style="width: 50%; background-color: [% dark_color %];">
+                <h2>[%|loc%]Changing your password[%END%]</h2>
          </th>
-
       </tr>
        
       <tr valign="top">
@@ -69,7 +50,7 @@
             <td><input id="email" name="email" size="15" /></td></tr>
 					 </table>
             <input type="submit" name="action_change_email" value="[%|loc%]Submit[%END%]" />
-            </form>
+            </form><br />
         </td>
         <td>
           <form action="[% path_cgi %]" method="post">
@@ -80,22 +61,14 @@
             <td><input type="password" name="newpasswd2" id="newpasswd2" size="15" /></td></tr>
 					</table>
           <input type="submit" name="action_setpasswd" value="[%|loc%]Submit[%END%]" />
-            </form>
+            </form><br />
 	    [% END %]
 
         </td>
 	<tr valign="top">
         <th style="background-color: [% dark_color %];" colspan="2">
-          <table style="width: 100%;" cellpadding="0" cellspacing="0">
-            <tr>
-             <th style="width: 50%; background-color: [% selected_color %];">
-              <span style="color: [% bg_color %];">
-                [%|loc%]Your other email addresses[%END%]
-              </span>
-             </th>
-            </tr>
-           </table>
-         </th>
+           <h2>[%|loc%]Your other email addresses[%END%]</h2>
+        </th>
       </tr>
       [% IF !unique %]
       <tr valign="top">
@@ -106,7 +79,7 @@
 	    <input name="email" type="hidden" value="[% email.key %]" />
 	    <br />
 	    [% END %]
-	    </form>
+	    </form><br />
       </td>
       </tr> 
       [% END %]
@@ -120,7 +93,7 @@
 	    <td><input type="password" name="new_password" id="new_password" size="15" /></td></tr>
 			</table>
       <input type="submit" name="action_record_email" value="[%|loc%]Submit[%END%]" />
-            </form>
+            </form><br />
       </td>
       <td valign="middle">
       [%|loc%]This other email address, that should be known by Sympa, will be recognized by Sympa as 
