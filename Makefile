@@ -13,7 +13,7 @@ HOST		=	`$(PERL) -MSys::Hostname -e "printf '%s', Sys::Hostname::hostname();"`
 COOKIE		=	`$(PERL) -e " print int(rand ( time ))  "`
 PERL_VERSION	=	`$(PERL) -e ' print $$]'`
 
-SYMPA_VERSION	=	'3.0'
+SYMPA_VERSION	=	'3.1b.3'
 
 #SYMPA_VERSION	=	`pwd | $(PERL) -e 'my @version = split /-/, <STDIN>; printf "%s", $$version[1];'`
 
@@ -54,6 +54,7 @@ TEXT_COLOR	=	'\#000000'
 BG_COLOR	=	'\#ffffff'
 ERROR_COLOR	=	'\#ff6666'
 SELECTED_COLOR	=	'\#3366cc'
+SHADED_COLOR	=	'\#eeeeee'
 
 ## Target directory for installing Icons
 ICONSDIR	=	/home/httpd/icons
@@ -90,10 +91,15 @@ all:	checkcpan sources languages checkperl
 rpm: build_rh_rpm build_mdk_rpm
 
 checkperl:
+	@echo "#######################################"
+	@echo "## Database structure has been extended"
+	@echo "## You need to run the following command on your database :"
+	@echo "## ALTER TABLE subscriber_table ADD comment_subscriber varchar (150);"
+	@echo "## ";
+	@echo "## Then run $(BINDIR)/init_comment.pl"
 	@if [ $(PERL_VERSION) = '5.006' ]; then \
-	echo "Perl: $(PERL_VERSION)"; \
 	echo "##################################"; \
-	echo "## You are using Perl version 5.6.0 :"; \
+	echo "## You are using Perl version $(PERL_VERSION) :"; \
 	echo "## You need to patch your syslog.pm "; \
 	echo "## See http://bugs.perl.org/perlbug.cgi?req=bidmids&bidmids=20000712.003"; \
 	echo "##"; \
@@ -147,7 +153,7 @@ installsrc:
 	DIR='${DIR}' BINDIR='${BINDIR}' WWSBINDIR='${WWSBINDIR}' MAILERPROGDIR='${MAILERPROGDIR}' \
 	DESTDIR='${DESTDIR}' DARK_COLOR='${DARK_COLOR}' LIGHT_COLOR='${LIGHT_COLOR}' \
 	TEXT_COLOR='${TEXT_COLOR}' BG_COLOR='${BG_COLOR}' ERROR_COLOR='${ERROR_COLOR}' \
-	CONFIG='${CONFIG}' WWSCONFIG='${WWSCONFIG}' ETCBINDIR='${ETCBINDIR}' \
+	SHADED_COLOR='${SHADED_COLOR}' CONFIG='${CONFIG}' WWSCONFIG='${WWSCONFIG}' ETCBINDIR='${ETCBINDIR}' \
 	USER='${USER}' GROUP='${GROUP}' newinstall) || exit 1;
 
 installnls:
@@ -163,7 +169,7 @@ installwws:
 	DIR='${DIR}' BINDIR='${BINDIR}' WWSBINDIR='${WWSBINDIR}' MAILERPROGDIR='${MAILERPROGDIR}' \
 	CONFIG='${CONFIG}' WWSCONFIG='${WWSCONFIG}' ETCBINDIR='${ETCBINDIR}' \
 	DESTDIR='${DESTDIR}' DARK_COLOR='${DARK_COLOR}' LIGHT_COLOR='${LIGHT_COLOR}' \
-	TEXT_COLOR='${TEXT_COLOR}' BG_COLOR='${BG_COLOR}' \
+	TEXT_COLOR='${TEXT_COLOR}' BG_COLOR='${BG_COLOR}' SHADED_COLOR='${SHADED_COLOR}' \
 	ERROR_COLOR='${ERROR_COLOR}' SELECTED_COLOR='${SELECTED_COLOR}' \
 	USER='${USER}' GROUP='${GROUP}' ICONSDIR='${ICONSDIR}' newinstall) || exit 1;
 
@@ -173,7 +179,7 @@ installsample:
 	DESTDIR='${DESTDIR}' DIR='${DIR}' BINDIR='${BINDIR}' WWSBINDIR='${WWSBINDIR}' HOST='${HOST}' \
 	CONFIG='${CONFIG}' WWSCONFIG='${WWSCONFIG}' ETCBINDIR='${ETCBINDIR}' MAILERPROGDIR='${MAILERPROGDIR}' \
 	DARK_COLOR='${DARK_COLOR}' LIGHT_COLOR='${LIGHT_COLOR}' COOKIE='${COOKIE}' \
-	OPENSSL='${OPENSSL}' SSLCERTDIR='${SSLCERTDIR}' \
+	SHADED_COLOR='${SHADED_COLOR}' OPENSSL='${OPENSSL}' SSLCERTDIR='${SSLCERTDIR}' \
 	SPOOLDIR='${SPOOLDIR}' TEXT_COLOR='${TEXT_COLOR}' BG_COLOR='${BG_COLOR}' ERROR_COLOR='${ERROR_COLOR}' \
 	USER='${USER}' GROUP='${GROUP}' ICONSDIR='${ICONSDIR}' PIDDIR='${PIDDIR}' install) || exit 1;
 
@@ -185,7 +191,7 @@ installscript:
 	MAILERPROGDIR='${MAILERPROGDIR}' \
 	DARK_COLOR='${DARK_COLOR}' LIGHT_COLOR='${LIGHT_COLOR}' COOKIE='${COOKIE}' INITDIR='${INITDIR}' \
 	TEXT_COLOR='${TEXT_COLOR}' BG_COLOR='${BG_COLOR}' ERROR_COLOR='${ERROR_COLOR}' OPENSSL='${OPENSSL}' \
-	USER='${USER}' GROUP='${GROUP}' ICONSDIR='${ICONSDIR}' install) || exit 1;
+	SHADED_COLOR='${SHADED_COLOR}' USER='${USER}' GROUP='${GROUP}' ICONSDIR='${ICONSDIR}' install) || exit 1;
 
 
 installdir:

@@ -1,4 +1,4 @@
-SUBSTSRC	=	bounced.pl archived.pl wws-lib.pl cookie-lib.pl bounce-lib.pl Marc.pm
+SUBSTSRC	=	bounced.pl archived.pl wwslib.pm cookielib.pm bounce-lib.pl Marc.pm
 
 SRC		=	mime.types 
 
@@ -72,6 +72,7 @@ installtemplates:
 	TEXT_COLOR=$(TEXT_COLOR); export TEXT_COLOR; \
 	BG_COLOR=$(BG_COLOR); export BG_COLOR; \
 	ERROR_COLOR=$(ERROR_COLOR); export ERROR_COLOR; \
+	SHADED_COLOR=$(SHADED_COLOR); export SHADED_COLOR; \
 	COL1=5; export COL1; \
 	COL2=40; export COL2; \
 	COL3=30; export COL3; \
@@ -81,11 +82,12 @@ installtemplates:
 	COL34=70; export COL34; \
 	COL234=110; export COL234; \
 	$(PERL) ../subst.pl wws_templates/* 
+	$(PERL) ../set_symlinks.pl wws_templates $(DESTDIR)$(ETCBINDIR)/wws_templates
 	chmod -R 644 $(DESTDIR)$(ETCBINDIR)/wws_templates
 
 installicons:
 	@echo "Installing icons..."
-	cp icons/* $(DESTDIR)$(ICONSDIR)
+	cp icons/*.gif $(DESTDIR)$(ICONSDIR)
 
 subst:
 	@echo "Doing multiple substitutions while installing ..."

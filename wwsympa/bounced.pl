@@ -3,7 +3,6 @@
 ## Worl Wide Sympa is a front-end to Sympa Mailing Lists Manager
 ## Copyright Comite Reseau des Universites
 
-
 ## Options :  F         -> do not detach TTY
 ##         :  d		-> debug -d is equiv to -dF
 
@@ -43,7 +42,7 @@ my %equiv = ( "user unknown" => '5.1.1',
 
 
 require "--BINDIR--/bounce-lib.pl";
-require "--BINDIR--/wws-lib.pl";
+use wwslib;
 
 getopts('dF');
 
@@ -53,7 +52,7 @@ $sympa_conf_file = '--CONFIG--';
 $wwsconf = {};
 
 # Load WWSympa configuration
-unless ($wwsconf = &load_config($wwsympa_conf)) {
+unless ($wwsconf = &wwslib::load_config($wwsympa_conf)) {
     print STDERR 'unable to load config file';
     exit;
 }
@@ -140,6 +139,8 @@ while (!$end) {
     
     sleep 2;
     
+    &List::init_list_cache();
+
     unless (opendir(DIR, $queue)) {
 	fatal_err("Can't open dir %s: %m", $queue); ## No return.
     }
@@ -278,6 +279,7 @@ while (!$end) {
 	    ## No address found
 	    unless ($adr_count) {
 		
+		$escaped_from = &tools::escape_chars($from);
 		&do_log('info', 'error: no address found in message from %s for list %s',$from, $list->{'name'});
 		
 		## We keep bounce msg
@@ -289,13 +291,13 @@ while (!$end) {
 		## Original msg
 		if (-w "$bounce_dir/OTHER") {
 		    open BOUNCE, "$queue/$file";
-		    open ARC, ">$bounce_dir/OTHER/$from" or &leave();
+		    open ARC, ">$bounce_dir/OTHER/$escaped_from" or &leave("creating $bounce_dir/OTHER/$escaped_from");
 		    print ARC <BOUNCE>;
 		    close BOUNCE;
 		    close ARC;
-		    chmod 0777, '$bounce_dir/OTHER/$from';
+		    chmod 0777, '$bounce_dir/OTHER/$escaped_from';
 		}else {
-		    &do_log('notice', "Failed to write $bounce_dir/OTHER/$from");
+		    &do_log('notice', "Failed to write $bounce_dir/OTHER/$escaped_from");
 		}
 	    }
 	    
@@ -329,7 +331,7 @@ sub process_bounce {
 sub leave() {
     my $msg = shift(@_);
 
-    die "Errorr : $msg";
+    die "Error : $msg";
 }
 
 

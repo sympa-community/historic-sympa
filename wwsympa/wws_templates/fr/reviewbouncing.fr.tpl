@@ -18,7 +18,7 @@
 </TD>
 
 </TR></TABLE>
-    <FORM ACTION="[path_cgi]" METHOD=POST>
+    <FORM NAME="myform" ACTION="[path_cgi]" METHOD=POST>
     <INPUT TYPE="hidden" NAME="list" VALUE="[list]">
     <INPUT TYPE="hidden" NAME="previous_action" VALUE="reviewbouncing">
 
@@ -58,13 +58,19 @@
       <TR BGCOLOR="--ERROR_COLOR--" NOWRAP>
 	<TH><FONT COLOR="--BG_COLOR--">X</FONT></TH>
         <TH><FONT COLOR="--BG_COLOR--">email</FONT></TH>
-	<TH><FONT COLOR="--BG_COLOR--">Nombre d'erreur</FONT></TH>
+	<TH><FONT COLOR="--BG_COLOR--">Nombre d'erreurs</FONT></TH>
 	<TH><FONT COLOR="--BG_COLOR--">période</FONT></TH>
 	<TH NOWRAP><FONT COLOR="--BG_COLOR--">type</FONT></TH>
       </TR>
       
       [FOREACH u IN members]
-         <TR>
+
+	[IF dark=1]
+	  <TR BGCOLOR="--SHADED_COLOR--">
+	[ELSE]
+          <TR>
+	[ENDIF]
+
 	  <TD>
 	    <INPUT TYPE=checkbox name="email" value="[u->escaped_email]">
 	  </TD>
@@ -88,6 +94,13 @@
 	    [ENDIF]
 	  </FONT></TD>
         </TR>
+
+        [IF dark=1]
+	  [SET dark=0]
+	[ELSE]
+	  [SET dark=1]
+	[ENDIF]
+
         [END]
 
 
@@ -110,6 +123,8 @@
         [IF next_page]
 	  <A HREF="[path_cgi]/reviewbouncing/[list]/[next_page]/[size]"><IMG SRC="/icons/right.gif" BORDER=0ALT="Page suivante"></A>
         [ENDIF]
+    </TD></TR>
+    <TR><TD><input type=button value="Inverser la Selection" onClick="toggle_selection(document.myform.email)">
     </TD></TR>
     </TABLE>
 

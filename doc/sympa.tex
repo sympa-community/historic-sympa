@@ -2680,7 +2680,8 @@ Rules are defined as follows :
                 | is_owner (<listname>, <var>)
                 | is_editor (<listname>, <var>)
                 | is_listmaster (<var>)
-<var> ::= [email] | [sender] | [host] | [header-><smtp\_key\_word>] |  <string>
+<var> ::= [email] | [sender] | [list-><list\_key\_word>] | [conf-><conf\_key\_word>] | [header-><smtp\_key\_word>] |  <string>
+
 <listname> ::= [listname] | <listname_string>
 
 <auth\_list> ::= <auth>,<auth\_list> | <auth>
@@ -2692,6 +2693,13 @@ Rules are defined as follows :
              | reject
              | request_auth
              | owner
+
+<list\_key\_word> ::= name | host | lang | max\_size | priority | reply\_to | 
+		      status | subject | account | 
+
+<conf\_key\_word> ::= host | email | listmaster | default\_list\_priority | 
+		      sympa\_priority | request\_priority | lang | max\_size
+	 	      
 \end{verbatim}
 \end{quote}
 
@@ -4437,13 +4445,13 @@ page~\pageref {par-owner}).
 
 	\default {\cfkeyword {default\_list\_priority} robot parameter}
 
-\lparam {priority} \textit {0-9a-z}
+\lparam {priority} \textit {0-9}
 
 This is the priority \Sympa will process messages for this list.
 This is applied while going through the spool. 
 
 0 is the highest priority. The following priorities can be used:  
-\texttt {0...9~A...Z~a...z}.
+\texttt {0...9~z}.
 \texttt {z} is a special priority since messages will
 stay in spool forever (useful to hangup a list).
 
@@ -4600,7 +4608,13 @@ one more sophisticated tool for web publishing, as web dav or such
 product like \textit {Rearsite} provide.
 Anyhow, it is very useful to be able to define privilege on
 web documents in relation with list attributes, like \textit {subscribers},
-\textit {list owners}, or \textit {list editors}.
+\textit {list owners}, or \textit {list editors}. 
+
+All files and directories name are converted by Sympa into lower case. The consequence
+is that it is impossible to create two deferent document which name differ only
+by char case. This has been introduced in Sympa in order to allow correct URL links
+even when using some HTML document generator (typically power point) that use 
+random case for file name !
 
 In order to have a better control on the documents of
 the shared space, each document is linked with specific information : 
@@ -4705,7 +4719,7 @@ title
   module C++ which uses the class List
 
 creation
-  email Bill.Gates@Cplusplus.com
+  email foo@some.domain.com
   date_epoch 998698638
 
 access

@@ -55,16 +55,21 @@
     </TABLE>
 
     <TABLE WIDTH="100%" BORDER=1>
-      <TR BGCOLOR="#ff6666" NOWRAP>
-	<TH><FONT COLOR="#ffffff">X</FONT></TH>
-        <TH><FONT COLOR="#ffffff">email</FONT></TH>
-	<TH><FONT COLOR="#ffffff">bounce count</FONT></TH>
-	<TH><FONT COLOR="#ffffff">period</FONT></TH>
-	<TH NOWRAP><FONT COLOR="#ffffff">type</FONT></TH>
+      <TR BGCOLOR="--ERROR_COLOR--" NOWRAP>
+	<TH><FONT COLOR="--BG_COLOR--">X</FONT></TH>
+        <TH><FONT COLOR="--BG_COLOR--">email</FONT></TH>
+	<TH><FONT COLOR="--BG_COLOR--">bounce count</FONT></TH>
+	<TH><FONT COLOR="--BG_COLOR--">period</FONT></TH>
+	<TH NOWRAP><FONT COLOR="--BG_COLOR--">type</FONT></TH>
       </TR>
       
       [FOREACH u IN members]
-         <TR>
+	[IF dark=1]
+	  <TR BGCOLOR="--SHADED_COLOR--">
+	[ELSE]
+          <TR>
+	[ENDIF]
+
 	  <TD>
 	    <INPUT TYPE=checkbox name="email" value="[u->escaped_email]">
 	  </TD>
@@ -88,6 +93,12 @@
 	    [ENDIF]
 	  </FONT></TD>
         </TR>
+        [IF dark=1]
+	  [SET dark=0]
+	[ELSE]
+	  [SET dark=1]
+	[ENDIF]
+
         [END]
 
 

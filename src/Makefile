@@ -22,7 +22,7 @@ newinstall: makedir subst $(SRC) installqueue installscenari installtemplates in
 
 installtemplates:
 	@echo "Installing default templates..."
-	cp etc/templates/*  $(DESTDIR)$(ETCBINDIR)/templates
+	cp etc/templates/*.tpl  $(DESTDIR)$(ETCBINDIR)/templates
 
 installetc:
 	@echo "Installing default configuration ..."
@@ -36,6 +36,7 @@ installetc:
 		BG_COLOR=$(BG_COLOR); export BG_COLOR;\
 		TEXT_COLOR=$(TEXT_COLOR); export TEXT_COLOR;\
 		ERROR_COLOR=$(ERROR_COLOR); export ERROR_COLOR;\
+		SHADED_COLOR=$(SHADED_COLOR); export SHADED_COLOR;\
 		cd etc;\
 		$(PERL) ../../subst.pl mhonarc-ressources \
 	)
@@ -46,7 +47,8 @@ installlisttemplates:
 
 installscenari:
 	@echo "Installing default scenari..."
-	cp etc/scenari/* $(DESTDIR)$(ETCBINDIR)/scenari
+	cp etc/scenari/*.* $(DESTDIR)$(ETCBINDIR)/scenari
+	$(PERL) ../set_symlinks.pl scenari $(DESTDIR)$(ETCBINDIR)/scenari
 
 installqueue:
 	@echo "Installing Queue binary..."

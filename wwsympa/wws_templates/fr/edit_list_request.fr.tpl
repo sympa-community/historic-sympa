@@ -1,4 +1,3 @@
-<!-- edit_list_request.it.tpl -->
 <FORM ACTION="[path_cgi]" METHOD="POST">
 <INPUT TYPE="hidden" NAME="serial" VALUE="[serial]">
 <TABLE WIDTH="100%" BORDER=0 CELLPADDING="0" CELLSPACING="0">
@@ -31,7 +30,7 @@
     [ENDIF]
   [ENDIF]
   </TH><TH BGCOLOR="--LIGHT_COLOR--">
-  <A HREF="[path_cgi]/help/editlist#[p->name]" onClick="window.open('','wws_help','toolbar=no,location=no,directories=no,status=no,menubar=no,scrollbars=yes,resizable=yes,copyhistory=no,width=400,height=200')" TARGET="wws_help"  STYLE="TEXT-DECORATION: NONE"><FONT SIZE="-1">Help</FONT></A>
+  <A HREF="[path_cgi]/help/editlist#[p->name]" onClick="window.open('','wws_help','toolbar=no,location=no,directories=no,status=no,menubar=no,scrollbars=yes,resizable=yes,copyhistory=no,width=400,height=200')" TARGET="wws_help"  ><FONT SIZE="-1">Help</FONT></A>
   </TH></TR></TABLE>
 
   </TH></TR>
@@ -72,6 +71,7 @@
 	          [FOREACH enum IN key->value]
 	            [IF enum->selected=1]
 	              [enum->NAME]
+		      <INPUT TYPE="hidden" NAME="single_param.[p->name].[o->INDEX].[key->name]" VALUE="[enum->NAME]">
 	            [ENDIF]
 	          [END]
 	        [ENDIF]
@@ -276,7 +276,8 @@
 [END]
 </TABLE>
 <INPUT TYPE="hidden" NAME="list" VALUE="[list]">
-<INPUT TYPE="submit" NAME="action_edit_list" VALUE="Aggiorna">
+<INPUT TYPE="submit" NAME="action_edit_list" VALUE="Mise à jour">
 </FORM>
 
-<!-- edit_list_request.it.tpl end -->
+
+

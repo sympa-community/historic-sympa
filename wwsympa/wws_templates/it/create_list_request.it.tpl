@@ -47,9 +47,11 @@
 	    SELECTED
 	  [ENDIF]
 	  >[topic->title]
+	  [IF  topic->sub]
 	  [FOREACH subtopic IN topic->sub]
 	     <OPTION VALUE="[topic->NAME]/[subtopic->NAME]">[topic->title] / [subtopic->title]
 	  [END]
+	  [ENDIF]
 	[END]
      </SELECT>
    </TD>
@@ -62,7 +64,7 @@
  </TR>
 
 <TR><TD COLSPAN=2 ALIGN="center">
-<TABLE><TR><TD BGCOLOR="#ccccff">
+<TABLE><TR><TD BGCOLOR="--LIGHT_COLOR--">
 <INPUT TYPE="submit" NAME="action_create_list" VALUE="Spedisci la tua richiesta di creazione"></TD></TR></TABLE
 </TD></TR>
 </TABLE>

@@ -58,7 +58,7 @@ La sélection est trop large, impossible d'afficher la sélection
 </TD>
 </TR>
 </TABLE>
-<FORM ACTION="[path_cgi]" METHOD="POST">
+<FORM NAME="myform" ACTION="[path_cgi]" METHOD="POST">
  <INPUT TYPE="hidden" NAME="previous_action" VALUE="[action]">
  <INPUT TYPE="hidden" NAME="previous_list" VALUE="[list]">
  <INPUT TYPE=hidden NAME=list VALUE="[list]">
@@ -130,7 +130,12 @@ La sélection est trop large, impossible d'afficher la sélection
       </TR>
       
       [FOREACH u IN members]
-        <TR>
+
+	[IF dark=1]
+	  <TR BGCOLOR="--SHADED_COLOR--">
+	[ELSE]
+          <TR>
+	[ENDIF]
 	 [IF is_owner]
 	    <TD>
 	      [IF action=search]
@@ -178,6 +183,13 @@ La sélection est trop large, impossible d'afficher la sélection
 	    </FONT></TD>
        	  [ENDIF]
         </TR>
+
+        [IF dark=1]
+	  [SET dark=0]
+	[ELSE]
+	  [SET dark=1]
+	[ENDIF]
+
         [END]
 
 
@@ -204,6 +216,8 @@ La sélection est trop large, impossible d'afficher la sélection
     </TD>
    [ENDIF]
     </TR>
+    <TR><TD><input type=button value="Inverser la Selection" onClick="toggle_selection(document.myform.email)">
+    </TD></TR>
     </TABLE>
     </FORM>
 

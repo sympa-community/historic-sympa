@@ -15,7 +15,7 @@ use Conf;
 use Log;
 use Getopt::Std;
 
-require "--BINDIR--/wws-lib.pl";
+use wwslib;
 
 getopts('dF');
 
@@ -28,7 +28,7 @@ $wwsconf = {};
 $adrlist = {};
 
 # Load WWSympa configuration
-unless ($wwsconf = &load_config($wwsympa_conf)) {
+unless ($wwsconf = &wwslib::load_config($wwsympa_conf)) {
     print STDERR 'unable to load config file';
     exit;
 }
@@ -112,6 +112,8 @@ print "queue : $queue\n";
 ## infinite loop scanning the queue (unless a sig TERM is received
 while (!$end) {
 
+    &List::init_list_cache();
+    
    unless (opendir(DIR, $queue)) {
        fatal_err("Can't open dir %s: %m", $queue); ## No return.
    }

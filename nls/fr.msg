@@ -193,8 +193,10 @@ $set 8	Messages utilises dans List.pm
 2	"Demande d'abonnement a la liste %s"
 3	"Cher(s) propriétaires de la liste %s,\n\n\
 Un utilisateur a demandé à être abonné à votre liste. Pour valider cette,\n\
-demande, vous voudrez bien utiliser la commande suivante :\n\n\
-mailto:%s?subject=auth%%20%s%%20ADD%%20%s%%20%s%%20%s\n"
+demande, vous voudrez bien cliquez sur ce lien :\n\
+mailto:%s?subject=auth%%20%s%%20ADD%%20%s%%20%s%%20%s\n\n\
+Ou alors envoyez un mail à %s avec comme objet :\n\
+AUTH %s ADD %s %s %s\n"
 4	"Moderateurs de la liste %s"
 5	"[%s] Article a approuver"
 6	"Bienvenue sur la liste %s"
@@ -229,9 +231,11 @@ CONFIRM %s\n"
 23	"ATTENTION : %s %s a échoué dans une tentative de se désabonner de la liste %s\n(Vous devriez peut-être aider cette personne)"
 24	"Demande de desabonnement de la liste %s"
 25	"Cher(s) propriétaires de la liste %s,\n\n\
-Un utilisateur a demandé à être DESabonné à votre liste. Si cela vous agrée,\n\
-vous voudrez bien utiliser la commande suivante :\n\n\
-DEL %s %s\n"
+Un utilisateur a demandé à être DÉSabonné de votre liste. Pour valider cette,\n\
+demande, vous voudrez bien cliquez sur ce lien :\n\
+mailto:%s?subject=auth%%20%s%%20DEL%%20%s%%20%s\n\n\
+Ou alors envoyez un mail à %s avec comme objet :\n\
+AUTH %s DEL %s %s\n"
 26	"Pour Info, opération %s dans la liste %s de %s %s validée par %s\n(aucune action requise)"
 27	"Le taux de bounces dans la liste %s est de %d%%.\n\n\
 Vous devriez supprimer les abonnés en erreur : \n\
@@ -375,3 +379,5 @@ $set 16 Titres des paramètres de config de listes
 85	"Return-path d'abonnement"
 86	"droit de consultation"
 87	"droit d'édition"
+88	"Options d'abonné disponibles"
+89	"mode de réception"

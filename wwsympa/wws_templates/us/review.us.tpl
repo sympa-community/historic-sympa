@@ -61,7 +61,7 @@ Selection too wide, can not show selection
 </TD>
 </TR>
 </TABLE>
-<FORM ACTION="[path_cgi]" METHOD="POST">
+<FORM NAME="myform" ACTION="[path_cgi]" METHOD="POST">
  <INPUT TYPE="hidden" NAME="previous_action" VALUE="[action]">
  <INPUT TYPE="hidden" NAME="previous_list" VALUE="[list]">
  <INPUT TYPE=hidden NAME=list VALUE="[list]">
@@ -77,7 +77,6 @@ Selection too wide, can not show selection
     <INPUT TYPE="checkbox" NAME="quiet"> quiet
   [ENDIF]
   </TD>
-  <TD>
   <TD WIDTH="100%">&nbsp;</TD>
   [IF action<>search]
   <TD NOWRAP>
@@ -137,7 +136,12 @@ Selection too wide, can not show selection
       </TR>
       
       [FOREACH u IN members]
-        <TR>
+	[IF dark=1]
+	  <TR BGCOLOR="--SHADED_COLOR--">
+	[ELSE]
+          <TR>
+	[ENDIF]
+
 	 [IF is_owner]
 	    <TD>
 	      [IF action=search]
@@ -184,6 +188,13 @@ Selection too wide, can not show selection
 	    </FONT></TD>
        	  [ENDIF]
         </TR>
+
+        [IF dark=1]
+	  [SET dark=0]
+	[ELSE]
+	  [SET dark=1]
+	[ENDIF]
+
         [END]
 
 
@@ -214,6 +225,8 @@ Selection too wide, can not show selection
     </TD>
    [ENDIF]
     </TR>
+    <TR><TD><input type=button value="Toggle Selection" onClick="toggle_selection(document.myform.email)">
+    </TD></TR>
     </TABLE>
     </FORM>
 
