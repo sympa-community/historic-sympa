@@ -1,4 +1,4 @@
-SUBSTSRC	=	bounced.pl archived.pl wws-lib.pl cookie-lib.pl bounce-lib.pl Marc.pm
+SUBSTSRC	=	bounced.pl archived.pl wwslib.pl cookie-lib.pl bounce-lib.pl Marc.pm
 
 SRC		=	mime.types 
 
@@ -85,7 +85,7 @@ installtemplates:
 
 installicons:
 	@echo "Installing icons..."
-	cp icons/* $(DESTDIR)$(ICONSDIR)
+	cp icons/*.gif $(DESTDIR)$(ICONSDIR)
 
 subst:
 	@echo "Doing multiple substitutions while installing ..."

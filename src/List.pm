@@ -172,6 +172,9 @@ use MIME::Parser;
 
 ## Database and SQL statement handlers
 my ($dbh, $sth, @sth_stack, $use_db);
+
+my %list_cache;
+
 my %date_format = (
 		   'read' => {
 		       'Pg' => 'date_part(\'epoch\',%s)',
@@ -192,7 +195,7 @@ my %regexp = ('email' => '(\S+|\".*\")(@\S+)',
 	      'host' => '[\w\.\-]+',
 	      'listname' => '[a-z0-9][a-z0-9\-\._]+',
 	      'sql_query' => 'SELECT.*',
-	      'scenario' => '[\w,]+'
+	      'scenario' => '[\w,\.\-]+'
 	      );
 
 ## List parameters defaults
@@ -219,7 +222,7 @@ my %alias = ('reply-to' => 'reply_to',
 	     'max-size' => 'max_size');
 
 ##############################################################
-## This hash COMPLETELY defined ALL list parameters     
+## This hash COMPLETELY defines ALL list parameters     
 ## It is then used to load, save, view, edit list config files
 ##############################################################
 ## List parameters format accepts the following keywords :
@@ -234,18 +237,22 @@ my %alias = ('reply-to' => 'reply_to',
 ## unit :        Unit of the parameter ; this is used in web forms
 ## occurrence :  Occurerence of the parameter in the config file
 ##               possible values: 0-1 | 1 | 0-n | 1-n
-##               example : a list may have multiple owners 
+##               example : a list may have multiple owner 
 ## title_id :    Title reference in NLS catalogues
+## group :       Group of parameters
 ###############################################################
 %::pinfo = ('account' => {'format' => '\S+',
 			  'length' => 10,
-			  'title_id' => 1
+			  'title_id' => 1,
+			  'group' => 'other'
 			  },
 	    'add' => {'scenario' => 'add',
-		      'title_id' => 2
+		      'title_id' => 2,
+		      'group' => 'command'
 		      },
 	    'anonymous_sender' => {'format' => '.+',
-				   'title_id' => 3
+				   'title_id' => 3,
+				   'group' => 'tuning'
 				   },
 	    'archive' => {'format' => {'period' => {'format' => ['day','week','month','quarter','year'],
 						    'default' => 'week',
@@ -258,7 +265,8 @@ my %alias = ('reply-to' => 'reply_to',
 						    'title_id' => 6
 						}
 				   },
-			  'title_id' => 4
+			  'title_id' => 4,
+			  'group' => 'archives'
 		      },
 
 	    'bounce' => {'format' => {'warn_rate' => {'format' => '\d+',
@@ -274,18 +282,21 @@ my %alias = ('reply-to' => 'reply_to',
 						      'title_id' => 9
 						  }
 				  },
-			 'title_id' => 7
+			 'title_id' => 7,
+			 'group' => 'bounces'
 		     },
 	    'clean_delay_queuemod' => {'format' => '\d+',
 				       'length' => 3,
 				       'unit' => 'days',
 				       'default' => {'conf' => 'clean_delay_queuemod'},
-				       'title_id' => 10
+				       'title_id' => 10,
+				       'group' => 'other'
 				       },
 	    'cookie' => {'format' => '\S+',
 			 'length' => 15,
 			 'default' => {'conf' => 'cookie'},
-			 'title_id' => 11
+			 'title_id' => 11,
+			 'group' => 'other'
 		     },
 	    'creation' => {'format' => {'date_epoch' => {'format' => '\d+',
 							 'occurrence' => '1',
@@ -299,17 +310,20 @@ my %alias = ('reply-to' => 'reply_to',
 						    'title_id' => 15
 						    }
 				    },
-			   'title_id' => 12
+			   'title_id' => 12,
+			   'group' => 'other'
 
 		       },
 	    'custom_header' => {'format' => '\S+:\s+.*',
 				'length' => 30,
 				'occurrence' => '0-n',
-				'title_id' => 16
+				'title_id' => 16,
+				'group' => 'tuning'
 				},
 	    'custom_subject' => {'format' => '.*',
 				 'length' => 15,
-				 'title_id' => 17
+				 'title_id' => 17,
+				 'group' => 'tuning'
 				 },
 	    'default_user_options' => {'format' => {'reception' => {'format' => ['digest','mail','nomail',
 										 'summary','notice'],
@@ -321,10 +335,12 @@ my %alias = ('reply-to' => 'reply_to',
 								     'title_id' => 20
 								     }
 						},
-				       'title_id' => 18
+				       'title_id' => 18,
+				       'group' => 'other'
 				   },
 	    'del' => {'scenario' => 'del',
-		      'title_id' => 21
+		      'title_id' => 21,
+		      'group' => 'command'
 		      },
 	    'digest' => {'file_format' => '\d+(\s*,\s*\d+)*\s+\d+:\d+',
 			 'format' => {'days' => {'format' => [1..7],
@@ -342,7 +358,8 @@ my %alias = ('reply-to' => 'reply_to',
 						   'title_id' => 25
 						   }
 				  },
-			 'title_id' => 22
+			 'title_id' => 22,
+			 'group' => 'tuning'
 		     },
 	    'editor' => {'format' => {'email' => {'format' => $regexp{'email'},
 						  'length' => 30,
@@ -363,24 +380,29 @@ my %alias = ('reply-to' => 'reply_to',
 						 }
 				  },
 			 'occurrence' => '0-n',
-			 'title_id' => 26
+			 'title_id' => 26,
+			 'group' => 'description'
 			 },
 	    'footer_type' => {'format' => ['mime','append'],
 			      'default' => 'mime',
-			      'title_id' => 31
+			      'title_id' => 31,
+			      'group' => 'tuning'
 			      },
 	    'forced_reply_to' => {'format' => '\S+',
-				  'title_id' => 32
+				  'title_id' => 32,
+				 'group' => 'tuning'
 			 },
 	    'host' => {'format' => $regexp{'host'},
 		       'length' => 20,
 		       'default' => {'conf' => 'host'},
-		       'title_id' => 33
+		       'title_id' => 33,
+		       'group' => 'description'
 		   },
 	    'include_file' => {'format' => '\S+',
 			       'length' => 20,
 			       'occurrence' => '0-n',
-			       'title_id' => 34
+			       'title_id' => 34,
+			       'group' => 'data_source'
 			       },
 
 #	    'include_admin' => {'format' => ['owners','editors','privileged_owners'],
@@ -422,11 +444,13 @@ my %alias = ('reply-to' => 'reply_to',
 							       }  
 					      },
 				     'occurrence' => '0-n',
-				     'title_id' => 35
+				     'title_id' => 35,
+				     'group' => 'data_source'
 				     },
 	    'include_list' => {'format' => $regexp{'listname'},
 			       'occurrence' => '0-n',
-			       'title_id' => 44
+			       'title_id' => 44,
+			       'group' => 'data_source'
 			       },
 	    'include_sql_query' => {'format' => {'db_type' => {'format' => ['mysql','Pg','Oracle','Sybase'],
 							       'occurrence' => '1',
@@ -457,23 +481,28 @@ my %alias = ('reply-to' => 'reply_to',
 							     }
 					     },
 				    'occurrence' => '0-n',
-				    'title_id' => 45
+				    'title_id' => 45,
+				    'group' => 'data_source'
 				    },
 	    'info' => {'scenario' => 'info',
-		       'title_id' => 53
+		       'title_id' => 53,
+		       'group' => 'command'
 		       },
 	    'invite' => {'scenario' => 'invite',
-			 'title_id' => 54
+			 'title_id' => 54,
+			 'group' => 'command'
 			 },
 	    'lang' => {'format' => ['fr','us','de','it','fi','es','cn-big5','cn-gb'],
 		       'default' => {'conf' => 'lang'},
-		       'title_id' => 55
+		       'title_id' => 55,
+		       'group' => 'description'
 		   },
 	    'max_size' => {'format' => '\d+',
 			   'length' => 8,
 			   'unit' => 'bytes',
 			   'default' => {'conf' => 'max_size'},
-			   'title_id' => 56
+			   'title_id' => 56,
+			   'group' => 'tuning'
 		       },
 	    'owner' => {'format' => {'email' => {'format' => $regexp{'email'},
 						 'length' =>30,
@@ -498,26 +527,32 @@ my %alias = ('reply-to' => 'reply_to',
 						   }
 				 },
 			'occurrence' => '1-n',
-			'title_id' => 57
+			'title_id' => 57,
+			'group' => 'description'
 			},
 	    'priority' => {'format' => [0..9,'z'],
 			   'length' => 1,
 			   'default' => {'conf' => 'default_list_priority'},
-			   'title_id' => 63
+			   'title_id' => 63,
+			   'group' => 'tuning'
 		       },
 	    'remind' => {'scenario' => 'remind',
-			 'title_id' => 64
+			 'title_id' => 64,
+			 'group' => 'command'
 			  },
 	    'remind_return_path' => {'format' => ['unique','owner'],
 				     'default' => {'conf' => 'remind_return_path'},
-				     'title_id' => 65
+				     'title_id' => 65,
+				     'group' => 'bounces'
 				 },
 	    'reply_to' => {'format' => '\S+',
 			   'default' => 'sender',
-			   'title_id' => 66
+			   'title_id' => 66,
+			   'group' => 'tuning'
 			   },
 	    'review' => {'scenario' => 'review',
-			 'title_id' => 67
+			 'title_id' => 67,
+			 'group' => 'command'
 			 },
 	    'send' => {'scenario' => 'send',
 		       'title_id' => 68
@@ -526,7 +561,8 @@ my %alias = ('reply-to' => 'reply_to',
 			 'default' => 0,
 			 'length' => 3,
 			 'default' => 0,
-			 'title_id' => 69
+			 'title_id' => 69,
+			 'group' => 'other'
 			 },
 	    'shared_doc' => {'format' => {'d_read' => {'scenario' => 'd_read',
 						       'title_id' => 86
@@ -535,33 +571,40 @@ my %alias = ('reply-to' => 'reply_to',
 						       'title_id' => 87
 						       }
 				      },
-			     'title_id' => 70
+			     'title_id' => 70,
+			     'group' => 'command'
 			 },
 	    'status' => {'format' => ['open','closed','pending'],
 			 'default' => 'open',
-			 'title_id' => 71
+			 'title_id' => 71,
+			 'group' => 'other'
 			  },
 	    'subject' => {'format' => '.+',
 			  'length' => 50,
 			  'occurrence' => '1',
-			  'title_id' => 72
+			  'title_id' => 72,
+			  'group' => 'description'
 			   },
 	    'subscribe' => {'scenario' => 'subscribe',
-			    'title_id' => 73
+			    'title_id' => 73,
+			    'group' => 'command'
 			    },
 	    'topics' => {'file_format' => '\w+(\/\w+)*(,\w+(\/\w+)*)*',
 			 'format' => '\w+(\/\w+)?',
 			 'occurrence' => '0-n',
-			 'title_id' => 74
+			 'title_id' => 74,
+			 'group' => 'description'
 			 },
 	    'ttl' => {'format' => '\d+',
 		      'length' => 6,
 		      'unit' => 'seconds',
 		      'default' => 3600,
-		      'title_id' => 75
+		      'title_id' => 75,
+		      'group' => 'data_source'
 		      },
 	    'unsubscribe' => {'scenario' => 'unsubscribe',
-			      'title_id' => 76
+			      'title_id' => 76,
+			      'group' => 'command'
 			      },
 	    'update' => {'format' => {'date_epoch' => {'format' => '\d+',
 						       'length' => 8,
@@ -578,25 +621,30 @@ my %alias = ('reply-to' => 'reply_to',
 						  'title_id' => 80
 						  }
 				  },
-			 'title_id' => 77
+			 'title_id' => 77,
+			 'group' => 'other'
 		     },
 	    'user_data_source' => {'format' => ['database','file','include'],
 				   'default' => 'file',
-				   'title_id' => 81
+				   'title_id' => 81,
+				   'group' => 'data_source'
 				   },
 	    'visibility' => {'scenario' => 'visibility',
-			     'title_id' => 82
+			     'title_id' => 82,
+			     'group' => 'description'
 			     },
 	    'web_archive'  => {'format' => {'access' => {'scenario' => 'access_web_archive',
 							 'title_id' => 84
 							 }
 					},
-			       'title_id' => 83
+			       'title_id' => 83,
+			       'group' => 'archives'
 
 			   },
 	    'welcome_return_path' => {'format' => ['unique','owner'],
 				      'default' => {'conf' => 'welcome_return_path'},
-				      'title_id' => 85
+				      'title_id' => 85,
+				      'group' => 'bounces'
 				  }
 	    );
 
@@ -680,6 +728,14 @@ sub db_disconnect {
     return 1;
 }
 
+## Get database handler
+sub db_get_handler {
+    do_log('debug2', 'List::db_get_handler');
+
+
+    return $dbh;
+}
+
 ## Creates an object.
 sub new {
     my($pkg, $name) = @_;
@@ -698,7 +754,7 @@ sub new {
 	# use the current list in memory and update it
 	$liste=$list_of_lists{$name};
     }else{
-	do_log('debug', 'List object %s created', $name) if $main::opt_d; ##TEMP
+	do_log('debug', 'List object %s created', $name) if $main::options{'debug'}; ##TEMP
 
 	# create a new object list
 	bless $liste, $pkg;
@@ -742,25 +798,24 @@ sub update_stats {
 
 ## Dumps a copy of lists to disk, in text format
 sub dump {
-    do_log('debug2', 'List::dump');
+    my @listnames = @_;
+    do_log('debug2', 'List::dump(%s)', @listnames);
 
-    my $listname;
-
-    foreach $listname (keys %list_of_lists) {
+    foreach my $l (@listnames) {
 	
-	my $list = new List($listname);
+	my $list = new List($l);
 	my $user_file_name;
 
 	if ($list->{'admin'}{'user_data_source'} eq 'database') {
-            do_log('debug', 'Dumping list %s',$listname);
-	    $user_file_name = "$listname/subscribers.db.dump";
+            do_log('debug', 'Dumping list %s',$l);
+	    $user_file_name = "$l/subscribers.db.dump";
 	    $list->_save_users_file($user_file_name);
-	    $list->{'mtime'} = [ (stat("$listname/config"))[9], (stat("$listname/subscribers"))[9], (stat("$listname/stats"))[9] ];
+	    $list->{'mtime'} = [ (stat("$l/config"))[9], (stat("$l/subscribers"))[9], (stat("$l/stats"))[9] ];
 	}elsif ($list->{'admin'}{'user_data_source'} eq 'include') {
-            do_log('debug', 'Dumping list %s',$listname);
-	    $user_file_name = "$listname/subscribers.incl.dump";
+            do_log('debug', 'Dumping list %s',$l);
+	    $user_file_name = "$l/subscribers.incl.dump";
 	    $list->_save_users_file($user_file_name);
-	    $list->{'mtime'} = [ (stat("$listname/config"))[9], (stat("$listname/subscribers"))[9], (stat("$listname/stats"))[9] ];
+	    $list->{'mtime'} = [ (stat("$l/config"))[9], (stat("$l/subscribers"))[9], (stat("$l/stats"))[9] ];
 	} 
 
     }
@@ -1056,7 +1111,7 @@ sub send_sub_to_owner {
 
    my $subject = sprintf(Msg(8, 2, "%s subscription request"), $name);
    my $to = sprintf (Msg(8, 1, "Owners of list %s :"), $name)." <$name-request\@$host>";
-   my $body = sprintf Msg(8, 3, $msg::sub_owner), $name, $replyto, $keyauth, $name, $who, $gecos;
+   my $body = sprintf Msg(8, 3, $msg::sub_owner), $name, $replyto, $keyauth, $name, $who, $gecos, $replyto, $keyauth, $name, $who, $gecos;
    &mail::mailback (\$body, $subject, $to, @rcpt);
 
 }
@@ -1314,13 +1369,11 @@ sub distribute_msg {
     }
     
     ## Remove unwanted headers if present.
-    &do_log('notice','remove_headers... '.$Conf{'remove_headers'});
     if ($Conf{'remove_headers'}) {
         foreach my $field (@{$Conf{'remove_headers'}}) {
             $hdr->delete($field);
         }
     }
-    &do_log('notice','remove_headers done');
 
     ## Add useful headers
     $hdr->add('X-Loop', "$name\@$host");
@@ -2043,9 +2096,9 @@ sub get_subscriber {
 
 	if ($Conf{'db_type'} eq 'Oracle') {
 	    ## "AS" not supported by Oracle
-	    $statement = sprintf "SELECT email_user \"email\", gecos_user \"gecos\", lang_user \"lang\", bounce_subscriber \"bounce\", reception_subscriber \"reception\", visibility_subscriber \"visibility\", %s \"date\"  FROM user_table, subscriber_table WHERE (email_user = %s AND list_subscriber = %s AND user_subscriber = %s)", $date_field, $dbh->quote($email), $dbh->quote($name), $dbh->quote($email);
+	    $statement = sprintf "SELECT email_user \"email\", comment_subscriber \"gecos\", lang_user \"lang\", bounce_subscriber \"bounce\", reception_subscriber \"reception\", visibility_subscriber \"visibility\", %s \"date\"  FROM user_table, subscriber_table WHERE (email_user = %s AND list_subscriber = %s AND user_subscriber = %s)", $date_field, $dbh->quote($email), $dbh->quote($name), $dbh->quote($email);
 	}else {
-	    $statement = sprintf "SELECT email_user AS email, gecos_user AS gecos, lang_user AS lang, bounce_subscriber AS bounce, reception_subscriber AS reception, visibility_subscriber AS visibility, %s AS date  FROM user_table, subscriber_table WHERE (email_user = %s AND list_subscriber = %s AND user_subscriber = %s)", $date_field, $dbh->quote($email), $dbh->quote($name), $dbh->quote($email);
+	    $statement = sprintf "SELECT email_user AS email, comment_subscriber AS gecos, lang_user AS lang, bounce_subscriber AS bounce, reception_subscriber AS reception, visibility_subscriber AS visibility, %s AS date  FROM user_table, subscriber_table WHERE (email_user = %s AND list_subscriber = %s AND user_subscriber = %s)", $date_field, $dbh->quote($email), $dbh->quote($name), $dbh->quote($email);
 	}
 
 	push @sth_stack, $sth;
@@ -2101,11 +2154,11 @@ sub get_first_user {
 	## Oracle
 	if ($Conf{'db_type'} eq 'Oracle') {
 
-	    $statement = sprintf "SELECT email_user \"email\", gecos_user \"gecos\", reception_subscriber \"reception\", visibility_subscriber \"visibility\", cookie_delay_user \"cookie_delay\", lang_user \"lang\", bounce_subscriber \"bounce\", password_user \"password\", %s \"date\" FROM user_table,subscriber_table WHERE (list_subscriber = %s AND email_user = user_subscriber)", $date_field, $dbh->quote($name);
+	    $statement = sprintf "SELECT user_subscriber \"email\", comment_subscriber \"gecos\", reception_subscriber \"reception\", visibility_subscriber \"visibility\", bounce_subscriber \"bounce\", %s \"date\" FROM subscriber_table WHERE (list_subscriber = %s)", $date_field, $dbh->quote($name);
 
 	    ## SORT BY
 	    if ($sortby eq 'domain') {
-		$statement = sprintf "SELECT email_user \"email\", gecos_user \"gecos\", reception_subscriber \"reception\", visibility_subscriber \"visibility\", cookie_delay_user \"cookie_delay\", lang_user \"lang\", bounce_subscriber \"bounce\", password_user \"password\", %s \"date\", substr(user_subscriber,instr(user_subscriber,'\@')+1) \"dom\" FROM user_table,subscriber_table WHERE (list_subscriber = %s AND email_user = user_subscriber) ORDER BY \"dom\"", $date_field, $dbh->quote($name);
+		$statement = sprintf "SELECT user_subscriber \"email\", comment_subscriber \"gecos\", reception_subscriber \"reception\", visibility_subscriber \"visibility\", bounce_subscriber \"bounce\", %s \"date\", substr(user_subscriber,instr(user_subscriber,'\@')+1) \"dom\" FROM subscriber_table WHERE (list_subscriber = %s ) ORDER BY \"dom\"", $date_field, $dbh->quote($name);
 
 	    }elsif ($sortby eq 'email') {
 		$statement .= " ORDER BY \"email\"";
@@ -2118,11 +2171,11 @@ sub get_first_user {
 	## Sybase
 	}elsif ($Conf{'db_type'} eq 'Sybase'){
 
-	    $statement = sprintf "SELECT email_user \"email\", gecos_user \"gecos\", reception_subscriber \"reception\", visibility_subscriber \"visibility\", cookie_delay_user \"cookie_delay\", lang_user \"lang\", bounce_subscriber \"bounce\", password_user \"password\", %s \"date\" FROM user_table,subscriber_table WHERE (list_subscriber = %s AND email_user = user_subscriber)", $date_field, $dbh->quote($name);
+		    $statement = sprintf "SELECT user_subscriber \"email\" comment_subscriber \"gecos\", reception_subscriber \"reception\", visibility_subscriber \"visibility\", bounce_subscriber \"bounce\", %s \"date\" FROM subscriber_table WHERE (list_subscriber = %s )", $date_field, $dbh->quote($name);
 	    
 	    ## SORT BY
 	    if ($sortby eq 'domain') {
-		$statement = sprintf "SELECT email_user \"email\", gecos_user \"gecos\", reception_subscriber \"reception\", visibility_subscriber \"visibility\", cookie_delay_user \"cookie_delay\", lang_user \"lang\", bounce_subscriber \"bounce\", password_user \"password\", %s \"date\", substring(user_subscriber,charindex('\@',user_subscriber)+1,100) \"dom\" FROM user_table,subscriber_table WHERE (list_subscriber = %s AND email_user = user_subscriber) ORDER BY \"dom\"", $date_field, $dbh->quote($name);
+		$statement = sprintf "SELECT user_subscriber \"email\", comment_subscriber \"gecos\", reception_subscriber \"reception\", visibility_subscriber \"visibility\", bounce_subscriber \"bounce\", %s \"date\", substring(user_subscriber,charindex('\@',user_subscriber)+1,100) \"dom\" FROM subscriber_table WHERE (list_subscriber = %s) ORDER BY \"dom\"", $date_field, $dbh->quote($name);
 		
 	    }elsif ($sortby eq 'email') {
 		$statement .= " ORDER BY \"email\"";
@@ -2135,12 +2188,13 @@ sub get_first_user {
 	## mysql
 	}elsif ($Conf{'db_type'} eq 'mysql') {
 	    
-	    $statement = sprintf "SELECT email_user AS email, gecos_user AS gecos, reception_subscriber AS reception, visibility_subscriber AS visibility, cookie_delay_user AS cookie_delay, lang_user AS lang, bounce_subscriber AS bounce, password_user AS password, %s AS date FROM user_table,subscriber_table WHERE (list_subscriber = %s AND email_user = user_subscriber)", $date_field, $dbh->quote($name);
+    $statement = sprintf "SELECT user_subscriber AS email, comment_subscriber AS gecos, reception_subscriber AS reception, visibility_subscriber AS visibility, bounce_subscriber AS bounce, %s AS date FROM subscriber_table WHERE (list_subscriber = %s)", $date_field, $dbh->quote($name);
 	    
 	    ## SORT BY
 	    if ($sortby eq 'domain') {
 		## Redefine query to set "dom"
-		$statement = sprintf "SELECT email_user AS email, gecos_user AS gecos, reception_subscriber AS reception, visibility_subscriber AS visibility, cookie_delay_user AS cookie_delay, lang_user AS lang, bounce_subscriber AS bounce, password_user AS password, %s AS date, SUBSTRING(user_subscriber FROM position('\@' IN user_subscriber) FOR 50) AS dom FROM user_table,subscriber_table WHERE (list_subscriber = %s AND email_user = user_subscriber) ORDER BY dom", $date_field, $dbh->quote($name);
+
+		$statement = sprintf "SELECT user_subscriber AS email, comment_subscriber AS gecos, reception_subscriber AS reception, visibility_subscriber AS visibility, bounce_subscriber AS bounce, %s AS date, SUBSTRING(user_subscriber FROM position('\@' IN user_subscriber) FOR 50) AS dom FROM subscriber_table WHERE (list_subscriber = %s) ORDER BY dom", $date_field, $dbh->quote($name);
 
 	    }elsif ($sortby eq 'email') {
 		## Default SORT
@@ -2159,12 +2213,13 @@ sub get_first_user {
 	## Pg    
 	}else {
 	    
-	    $statement = sprintf "SELECT email_user AS email, gecos_user AS gecos, reception_subscriber AS reception, visibility_subscriber AS visibility, cookie_delay_user AS cookie_delay, lang_user AS lang, bounce_subscriber AS bounce, password_user AS password, %s AS date FROM user_table,subscriber_table WHERE (list_subscriber = %s AND email_user = user_subscriber)", $date_field, $dbh->quote($name);
+	    $statement = sprintf "SELECT user_subscriber AS email, comment_subscriber AS gecos, reception_subscriber AS reception, visibility_subscriber AS visibility, bounce_subscriber AS bounce, %s AS date FROM subscriber_table WHERE (list_subscriber = %s)", $date_field, $dbh->quote($name);
 	    
 	    ## SORT BY
 	    if ($sortby eq 'domain') {
 		## Redefine query to set "dom"
-		$statement = sprintf "SELECT email_user AS email, gecos_user AS gecos, reception_subscriber AS reception, visibility_subscriber AS visibility, cookie_delay_user AS cookie_delay, lang_user AS lang, bounce_subscriber AS bounce, password_user AS password, %s AS date, SUBSTRING(user_subscriber FROM position('\@' IN user_subscriber) FOR 50) AS dom FROM user_table,subscriber_table WHERE (list_subscriber = %s AND email_user = user_subscriber) ORDER BY dom", $date_field, $dbh->quote($name);
+
+		$statement = sprintf "SELECT user_subscriber AS email, comment_subscriber AS gecos, reception_subscriber AS reception, visibility_subscriber AS visibility, bounce_subscriber AS bounce, %s AS date, SUBSTRING(user_subscriber FROM position('\@' IN user_subscriber) FOR 50) AS dom FROM subscriber_table WHERE (list_subscriber = %s) ORDER BY dom", $date_field, $dbh->quote($name);
 
 	    }elsif ($sortby eq 'email') {
 		$statement .= ' ORDER BY email';
@@ -2255,9 +2310,9 @@ sub get_first_bouncing_user {
 
     if ($Conf{'db_type'} eq 'Oracle') {
 	## "AS" not supported by Oracle
-	$statement = sprintf "SELECT email_user \"email\", gecos_user \"gecos\", reception_subscriber \"reception\", visibility_subscriber \"visibility\", cookie_delay_user \"cookie_delay\", lang_user \"lang\", bounce_subscriber \"bounce\", %s \"date\" FROM user_table, subscriber_table WHERE (list_subscriber = %s AND bounce_subscriber is not NULL AND email_user = user_subscriber )", $date_field, $dbh->quote($name);
+	$statement = sprintf "SELECT user_subscriber \"email\", reception_subscriber \"reception\", visibility_subscriber \"visibility\", bounce_subscriber \"bounce\", %s \"date\" FROM subscriber_table WHERE (list_subscriber = %s AND bounce_subscriber is not NULL)", $date_field, $dbh->quote($name);
     }else {
-	$statement = sprintf "SELECT email_user AS email, gecos_user AS gecos, reception_subscriber AS reception, visibility_subscriber AS visibility, cookie_delay_user AS cookie_delay, lang_user AS lang, bounce_subscriber AS bounce, %s AS date FROM user_table, subscriber_table WHERE (list_subscriber = %s AND bounce_subscriber is not NULL AND email_user = user_subscriber )", $date_field, $dbh->quote($name);
+	$statement = sprintf "SELECT user_subscriber AS email, reception_subscriber AS reception, visibility_subscriber AS visibility, bounce_subscriber AS bounce, %s AS date FROM subscriber_table WHERE (list_subscriber = %s AND bounce_subscriber is not NULL)", $date_field, $dbh->quote($name);
     }
 
     push @sth_stack, $sth;
@@ -2374,7 +2429,6 @@ sub is_user_db {
    }
    
    my $is_user = $sth->fetchrow();
-
    $sth->finish();
    
    $sth = pop @sth_stack;
@@ -2387,39 +2441,47 @@ sub is_user {
     my ($self, $who) = @_;
     $who= lc($who);
     do_log('debug2', 'List::is_user(%s)', $who);
+    
+    return undef unless ($self && $who);
+    
+    if ($self->{'admin'}{'user_data_source'} eq 'database') {
+	
+	my $statement;
+	my $name = $self->{'name'};
+	
+	## Use cache
+	if (defined $::list_cache{'is_user'}{$name}{$who}) {
+	    return $::list_cache{'is_user'}{$name}{$who};
+	}
+	
+	## Check database connection
+	unless ($dbh and $dbh->ping) {
+	    return undef unless &db_connect();
+	}	   
+	
+	## Query the Database
+	$statement = sprintf "SELECT count(*) FROM subscriber_table WHERE (list_subscriber = %s AND user_subscriber = %s)",$dbh->quote($name), $dbh->quote($who);
+	
+	push @sth_stack, $sth;
+	
+	unless ($sth = $dbh->prepare($statement)) {
+	    do_log('debug','Unable to prepare SQL statement : %s', $dbh->errstr);
+	    return undef;
+	}
+	
+	unless ($sth->execute) {
+	    do_log('debug','Unable to execute SQL statement "%s" : %s', $statement, $dbh->errstr);
+	    return undef;
+	}
+	
+	my $is_user = $sth->fetchrow;
+	
+	$sth->finish();
+	
+	$sth = pop @sth_stack;
 
-   return undef unless ($self && $who);
-
-   if ($self->{'admin'}{'user_data_source'} eq 'database') {
-   
-       my $statement;
-       my $name = $self->{'name'};
-
-       ## Check database connection
-       unless ($dbh and $dbh->ping) {
-	   return undef unless &db_connect();
-       }	   
-
-       ## Query the Database
-       $statement = sprintf "SELECT count(*) FROM subscriber_table WHERE (list_subscriber = %s AND user_subscriber = %s)",$dbh->quote($name), $dbh->quote($who);
-       
-       push @sth_stack, $sth;
-
-       unless ($sth = $dbh->prepare($statement)) {
-	   do_log('debug','Unable to prepare SQL statement : %s', $dbh->errstr);
-	   return undef;
-       }
-       
-       unless ($sth->execute) {
-	   do_log('debug','Unable to execute SQL statement "%s" : %s', $statement, $dbh->errstr);
-	   return undef;
-       }
-       
-       my $is_user = $sth->fetchrow;
-
-       $sth->finish();
-
-       $sth = pop @sth_stack;
+	## Set cache
+	$::list_cache{'is_user'}{$name}{$who} = $is_user;
 
        return $is_user;
    }else {
@@ -2439,6 +2501,7 @@ sub update_user {
 
     my ($field, $value);
     
+    ## Subscribers stored in database
     if ($self->{'admin'}{'user_data_source'} eq 'database') {
 	
 	my ($user, $statement, $table);
@@ -2448,7 +2511,7 @@ sub update_user {
 	my %map_field = ( reception => 'reception_subscriber',
 			  visibility => 'visibility_subscriber',
 			  date => 'date_subscriber',
-			  gecos => 'gecos_user',
+			  gecos => 'comment_subscriber',
 			  password => 'password_user',
 			  bounce => 'bounce_subscriber',
 			  email => 'user_subscriber'
@@ -2458,7 +2521,7 @@ sub update_user {
 	my %map_table = ( reception => 'subscriber_table',
 			  visibility => 'subscriber_table',
 			  date => 'subscriber_table',
-			  gecos => 'user_table',
+			  gecos => 'subscriber_table',
 			  password => 'user_table',
 			  bounce => 'subscriber_table',
 			  email => 'subscriber_table'
@@ -2474,7 +2537,9 @@ sub update_user {
 	    
 	    my @set_list;
 	    while (($field, $value) = each %{$values}) {
+
 		next unless ($map_field{$field} and $map_table{$field});
+
 		if ($map_table{$field} eq $table) {
 		    if ($field eq 'date') {
 			$value = sprintf $date_format{'write'}{$Conf{'db_type'}}, $value, $value;
@@ -2505,6 +2570,8 @@ sub update_user {
 		return undef;
 	    }
 	}
+
+	## Subscribers in text file
     }else {
 	my $user = $self->{'users'}->{$who};
 	return undef unless $user;
@@ -2626,6 +2693,7 @@ sub add_user_db {
    ## Update each table
    my (@insert_field, @insert_value);
    while (($field, $value) = each %{$values}) {
+
        next unless ($map_field{$field});
 
        my $insert = sprintf "%s", $dbh->quote($value);
@@ -2672,7 +2740,7 @@ sub add_user {
 	if ($self->is_user($who)) {
 	    
 	    ## Update User Table
-	    $statement = sprintf "UPDATE user_table SET email_user=%s, gecos_user=%s, lang_user=%s, password_user=%s WHERE email_user=%s", $dbh->quote($who), $dbh->quote($values->{'gecos'}), $dbh->quote($values->{'lang'}), $dbh->quote($values->{'password'}), $dbh->quote($who);
+	    $statement = sprintf "UPDATE user_table SET email_user=%s, lang_user=%s, password_user=%s WHERE email_user=%s", $dbh->quote($who), $dbh->quote($values->{'lang'}), $dbh->quote($values->{'password'}), $dbh->quote($who);
 	    
 	    unless ($dbh->do($statement)) {
 		do_log('debug','Unable to execute SQL statement "%s" : %s', $statement, $dbh->errstr);
@@ -2689,7 +2757,7 @@ sub add_user {
 	}
 
 	## Update Subscriber Table
-	$statement = sprintf "INSERT INTO subscriber_table (user_subscriber, list_subscriber, date_subscriber, reception_subscriber, visibility_subscriber) VALUES (%s, %s, %s, %s, %s)", $dbh->quote($who), $dbh->quote($name), $date_field, $dbh->quote($values->{'reception'}), $dbh->quote($values->{'visibility'});
+	$statement = sprintf "INSERT INTO subscriber_table (user_subscriber, comment_subscriber, list_subscriber, date_subscriber, reception_subscriber, visibility_subscriber) VALUES (%s, %s, %s, %s, %s, %s)", $dbh->quote($who), $dbh->quote($values->{'gecos'}), $dbh->quote($name), $date_field, $dbh->quote($values->{'reception'}), $dbh->quote($values->{'visibility'});
        
 	unless ($dbh->do($statement)) {
 	    do_log('debug','Unable to execute SQL statement "%s" : %s', $statement, $dbh->errstr);
@@ -2979,6 +3047,13 @@ sub get_action {
 }
 
 
+## Initialize internal list cache
+sub init_list_cache {
+    &do_log('debug2', 'List::init_list_cache()');
+    
+    undef %::list_cache;
+}
+
 ## check if email respect some condition
 sub verify {
     my ($context, $condition) = @_;
@@ -3119,7 +3194,7 @@ sub verify {
     ##### condition is_owner, is_subscriber and is_editor
     if ($condition_key =~ /is_owner|is_subscriber|is_editor/i) {
 
-	my $list2;
+	my ($list2);
 
 	if ($args[1] eq 'nobody') {
 	    return -1 * $negation ;
@@ -3132,6 +3207,7 @@ sub verify {
 	}
 
 	if ($condition_key eq 'is_subscriber') {
+
 	    if ($list2->is_user($args[1])) {
 		return $negation ;
 	    }else{
@@ -3862,7 +3938,7 @@ sub _include_users_file {
 	do_log('info', 'Unable to open file "%s"' , $filename);
 	return undef;
     }
-    do_log('debug','including file %s' , $filename) if ($main::opt_d);
+    do_log('debug','including file %s' , $filename) if ($main::options{'debug'});
     
     while (<INCLUDE>) {
 	next if /^\s*$/;
@@ -3920,16 +3996,16 @@ sub _include_users_ldap {
 	return undef;
     }
     
-    do_log('debug', "Connected to LDAP server $host:$port") if ($main::opt_d);
+    do_log('debug', "Connected to LDAP server $host:$port") if ($main::options{'debug'});
     
     unless ($ldaph->bind ($user, password => "$passwd")) {
 	do_log ('notice',"Can\'t bind with server $host:$port as user '$user' : $@");
 	return undef;
     }
 
-    do_log('debug', "Binded to LDAP server $host:$port ; user : '$user'") if ($main::opt_d);
+    do_log('debug', "Binded to LDAP server $host:$port ; user : '$user'") if ($main::option{'debug'});
     
-    do_log('debug', 'Searching on server %s ; suffix %s ; filter %s ; attrs: %s', $host, $ldap_suffix, $ldap_filter, $ldap_attrs) if ($main::opt_d);
+    do_log('debug', 'Searching on server %s ; suffix %s ; filter %s ; attrs: %s', $host, $ldap_suffix, $ldap_filter, $ldap_attrs) if ($main::options{'debug'});
     unless ($fetch = $ldaph->search ( base => $ldap_suffix,
                                       filter => $ldap_filter,
 				      attrs => $ldap_attrs)) {
@@ -3976,7 +4052,7 @@ sub _include_users_ldap {
 	}
     }
 
-    do_log ('debug',"unbinded from LDAP server %s:%s ",$host,$port) if ($main::opt_d);
+    do_log ('debug',"unbinded from LDAP server %s:%s ",$host,$port) if ($main::options{'debug'});
     do_log ('debug','%d subscribers included from LDAP query',$total);
 
     return $total;
@@ -4180,7 +4256,7 @@ sub _save_users_file {
     
     my($k, $s);
     
-    do_log('debug','Saving user file %s', $file) if ($main::opt_d);
+    do_log('debug','Saving user file %s', $file) if ($main::options{'debug'});
     
     rename("$file", "$file.old");
     open SUB, "> $file" or return undef;
@@ -4494,6 +4570,12 @@ sub probe_db {
     do_log('debug2', 'List::probe_db()');    
     my (%checked, $table);
 
+    my %db_struct = ('user_table' => ['email_user','gecos_user','password_user','cookie_delay_user','lang_user'],
+		     'subscriber_table' => ['list_subscriber','user_subscriber','date_subscriber',
+					    'update_subscriber','visibility_subscriber','reception_subscriber',
+					    'comment_subscriber']
+		     );
+
     ## Is the Database defined
     unless ($Conf{'db_name'}) {
 	&do_log('info', 'No db_name defined in configuration file');
@@ -4504,13 +4586,41 @@ sub probe_db {
 	return undef unless &db_connect();
     }
 	
-    my @tables;
+    my (@tables, $fields, %real_struct);
     if ($Conf{'db_type'} eq 'mysql') {
+	
+	## Get tables
 	unless (@tables = $dbh->func( '_ListTables' )) {
 	    &do_log('info', 'Can\'t load tables list from database %s : %s', $Conf{'db_name'}, $dbh->errstr);
 	    return undef;
 	}
 
+	## Get fields
+#	foreach my $t (@tables) {
+#	    &do_log('debug', 'Table %s', $t);
+
+#	    unless ($sth = $dbh->prepare("LISTFIELDS $t")) {
+#		do_log('debug','Unable to prepare SQL query : %s', $dbh->errstr);
+#		return undef;
+#	    }
+
+#	    unless ($sth->execute) {
+#		do_log('debug','Unable to execute SQL query : %s', $dbh->errstr);
+#		return undef;
+#	    }
+	    
+#	    unless ($sth->rows) {
+#		&do_log('info', 'Can\'t load fields list from database %s, table %s : %s', 
+#			$Conf{'db_name'}, $t, $dbh->errstr);
+#		return undef;
+#	    }
+	    
+#	    while (my $f = $sth->fetchrow()) {
+#		&do_log('debug', 'Field %s', $f);
+#		$real_struct{$t}{$f} = 1;
+#	    }
+#	}
+	
     }elsif ($Conf{'db_type'} eq 'Pg') {
 	
 	unless (@tables = $dbh->tables) {
@@ -4578,6 +4688,22 @@ sub probe_db {
 	}
     }
 
+    if (%real_struct) {
+	foreach my $t (keys %db_struct) {
+	    unless ($real_struct{$t}) {
+		&do_log('info', 'Table %s not found in database %s', $t, $Conf{'db_name'});
+		return undef;
+	    }
+	    
+	    foreach my $f (@{$db_struct{$t}}) {
+		unless ($real_struct{$t}{$f}) {
+		    &do_log('info', 'Field %s not found in database %s, table %s', $f, $Conf{'db_name'}, $t);
+		    return undef;
+		}
+	    }
+	}
+    }
+
     return 1;
 }
 
@@ -4636,7 +4762,7 @@ sub load_topics {
 	    
 	    if ($#tree == 0) {
 		$list_of_topics{$tree[0]}{'title'} = $topic->{'title'};
-		$list_of_topics{$tree[0]}{'visibility'} = _load_scenario_file('topics_visibility', $topic->{'visibility'}||'default');
+		$list_of_topics{$tree[0]}{'visibility'} = &_load_scenario_file('topics_visibility', $topic->{'visibility'}||'default');
 		$list_of_topics{$tree[0]}{'order'} = $topic->{'order'};
 	    }else {
 		my $subtopic = join ('/', @tree[1..$#tree]);
@@ -4645,7 +4771,18 @@ sub load_topics {
 	}
     }
 
-    return \%list_of_topics;
+    ## Set undefined Topic (defined via subtopic)
+    foreach my $t (keys %list_of_topics) {
+	unless (defined $list_of_topics{$t}{'visibility'}) {
+	    $list_of_topics{$t}{'visibility'} = &_load_scenario_file('topics_visibility', 'default');
+	}
+
+	unless (defined $list_of_topics{$t}{'title'}) {
+	    $list_of_topics{$t}{'title'} = $t;
+	}	
+    }
+
+    return %list_of_topics;
 }
 
 ## Inner sub used by load_topics()

@@ -43,7 +43,7 @@ my %equiv = ( "user unknown" => '5.1.1',
 
 
 require "--BINDIR--/bounce-lib.pl";
-require "--BINDIR--/wws-lib.pl";
+require "--BINDIR--/wwslib.pl";
 
 getopts('dF');
 
@@ -140,6 +140,8 @@ while (!$end) {
     
     sleep 2;
     
+    &List::init_list_cache();
+
     unless (opendir(DIR, $queue)) {
 	fatal_err("Can't open dir %s: %m", $queue); ## No return.
     }

@@ -21,17 +21,21 @@ les listes dont vous êtes propriétaire , etc.
    <TABLE BORDER=0 CELLPADDING=3><TR VALIGN="top">
     <TD WIDTH=33% NOWRAP>
      [FOREACH topic IN topics]
+      o
       [IF topic->id=topicsless]
        <A HREF="[path_cgi]/lists/[topic->id]"><B>Autre</B></A><BR>
       [ELSE]
        <A HREF="[path_cgi]/lists/[topic->id]"><B>[topic->title]</B></A><BR>
       [ENDIF]
 
+      [IF topic->sub]
       [FOREACH subtopic IN topic->sub]
        <FONT SIZE="-1">
 	&nbsp;&nbsp;<A HREF="[path_cgi]/lists/[topic->id]/[subtopic->NAME]">[subtopic->title]</A><BR>
        </FONT>
       [END]
+      [ENDIF]
+
       [IF topic->next]
 	</TD><TD></TD><TD WIDTH=33% NOWRAP>
       [ENDIF]
