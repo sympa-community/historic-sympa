@@ -152,14 +152,13 @@ a.ArcMenuLinksInactive:hover {border: 1px solid [% color_2 %]; background: trans
 
 #ArcMenuLinksInactive {border: 0px solid [% color_2 %]; text-decoration: none; padding: 0px 0px 0px 3px;}
 
-
 a.menuLinks {padding: 0px 10px 0px 0px; text-decoration: none;}
 a.menuLinks:link {text-decoration: none;}
 a.menuLinks:visited {text-decoration: none;}
 a.menuLinks:hover {border: 1px solid [% color_9 %]; background: [% color_6 %]; text-decoration: none;}
 a.menuLinks:active {border: 1px solid [% color_6 %]; background: [% color_9 %]; text-decoration: none;}
-a.menuLinksCurrentPage {border: 1px solid [% color_9 %]; background: [% color_6 %]; padding: 0px 10px 0px 20px; text-decoration: none;}
-a.menuLinksCurrentPage:hover  {border: 1px solid [% color_9 %]; background: [% color_6 %]; padding: 0px 10px 0px 20px; text-decoration: none;}
+a.menuLinksCurrentPage {border: 1px solid [% color_9 %]; background: [% color_6 %]; padding: 0px 10px 0px 0px; text-decoration: none;}
+a.menuLinksCurrentPage:hover  {border: 1px solid [% color_9 %]; background: [% color_6 %]; padding: 0px 10px 0px 0px; text-decoration: none;}
 
 strong a.menuLinks {font-size: 14px;}
 strong a.menuLinksCurrentPage {font-size: 14px; border: 1px solid [% color_9 %]; background: [% color_6 %];}
@@ -167,8 +166,9 @@ strong a.menuLinksCurrentPage:hover  {font-size: 14px; border: 1px solid [% colo
 strong a.menuLinks:first-letter {font-size: 16px; font-weight: bold;}
 strong a.menuLinksCurrentPage:first-letter {font-size: 16px; font-weight: bold;}
 ul a.menuLinks {padding: 0px 10px 0px 20px;}
-ul a.menuLinksCurrentPage {padding: 0px 10px 0px 40px; font-weight: bold;}
-ul a.menuLinksCurrentPage:hover {padding: 0px 10px 0px 40px; font-weight: bold; text-decoration: none;}
+ul a.menuLinksCurrentPage {padding: 0px 10px 0px 20px; font-weight: bold;}
+ul a.menuLinksCurrentPage:hover {padding: 0px 10px 0px 20px; font-weight: bold; text-decoration: none;}
+
 
 ul.calendar a {font-size: 10px;}
 ul.calendar li {list-style: none; display: inline; padding: 0px 1px 0px 2px; font-size: 10px; text-decoration: none; border: 1px solid [% color_2 %];}
