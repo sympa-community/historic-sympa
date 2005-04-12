@@ -3,14 +3,16 @@
 <!-- begin menu.tt2 -->
 <div class="navBar printNone">
 <ul id="MainMenuLinks">	
+
 [% IF may_create_list %]
-   [% IF action == 'create_list_request' %][% SET class = 'MainMenuLinksCurrentPage' %][% ELSE %][% SET class = 'MainMenuLinks' %][% END %]
-   <li><a class="[% class %]" href="[% path_cgi %]/create_list_request" >[%|loc%]Create list[%END%]</a></li>
+   [% IF action == 'create_list_request' %][% SET class = 'MainMenuLinksCurrentPage' %][% ELSE %][% SET class = 'MainMenuLinks' %][% END %]                                              <li><a class="[% class %]" href="[% path_cgi %]/create_list_request" >[%|loc%]Create list[%END%]</a></li>
 [% END %]
+
 [% IF is_listmaster %]
    [% IF action == 'serveradmin' %][% SET class = 'MainMenuLinksCurrentPage' %][% ELSE %][% SET class = 'MainMenuLinks' %][% END %]
    <li><a  class="[% class %]" href="[% path_cgi %]/serveradmin" >[%|loc%]Sympa admin[%END%]</a></li>
 [% END %]
+
 [% IF user.email %]
     [% IF action == 'pref' %][% SET class = 'MainMenuLinksCurrentPage' %][% ELSE %][% SET class = 'MainMenuLinks' %][% END %]
         <li><a class="[% class %]" href="[% path_cgi %]/pref/[% action %]/[% list %]">[%|loc%]Preferences[%END%]</a></li>
@@ -21,7 +23,6 @@
 
  [% IF action == 'lists' %][% SET class = 'MainMenuLinksCurrentPage' %][% ELSE %][% SET class = 'MainMenuLinks' %][% END %]
 <li><a class="[% class %]" href="[% path_cgi %]/lists">[%|loc%]list of lists[%END%]</a></li>
-
 
  [% IF action == 'home' %][% SET class = 'MainMenuLinksCurrentPage' %][% ELSE %][% SET class = 'MainMenuLinks' %][% END %]
 <li><a class="[% class %]" href="[% path_cgi %]/">[%|loc%]Home[%END%]</a></li>

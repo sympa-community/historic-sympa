@@ -66,7 +66,7 @@
         <th style="padding: 3px; border: solid 1px; background: [% color_6 %]">[%|loc%]Size (Kb)[%END%]</th> 
   [% END %]
   [% IF order_by != 'order_by_date' %]
-	<th style="padding: 3px; border: solid 1px; background: [% color_4 %]"><a href="[% path_cgi %]/d_read/[% list %]/[% escaped_path %]?order=order_by_date">[%|loc%]Size (Kb)[%END%]</a> </th>
+	<th style="padding: 3px; border: solid 1px; background: [% color_4 %]"><a href="[% path_cgi %]/d_read/[% list %]/[% escaped_path %]?order=order_by_date">[%|loc%]Last update[%END%]</a> </th>
   [% ELSE %]  
         <th style="padding: 3px; border: solid 1px; background: [% color_6 %]">[%|loc%]Last update[%END%]</span></td>
   [% END %]
@@ -222,12 +222,12 @@
 	 
 	[% IF f.moderate %]
 	  [% IF expert_page %]
-	<td style="white-space: nowrap;">&nbsp;
-	[% IF !f.url %]
-	[% f.size %] 
-	[% END %]
-	</td>
-	<td style="white-space: nowrap;"> [% f.date %] </td>
+   	     <td style="white-space: nowrap;">&nbsp;
+	     [% IF !f.url %]
+	       [% f.size %] 
+	     [% END %]
+	     </td>
+	     <td style="white-space: nowrap;"> [% f.date %] </td>
 	  [% END %]
 	[% ELSE %]
 	  <td style="white-space: nowrap;">&nbsp;

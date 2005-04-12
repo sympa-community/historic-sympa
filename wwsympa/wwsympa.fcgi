@@ -199,6 +199,7 @@ my %comm = ('home' => 'do_home',
 	 'arc_download' => 'do_arc_download',
 	 'arc_delete' => 'do_arc_delete',
 	 'serveradmin' => 'do_serveradmin',
+	 'skinsedit' => 'do_skinsedit',
 	 'help' => 'do_help',
 	 'edit_list_request' => 'do_edit_list_request',
 	 'edit_list' => 'do_edit_list',
@@ -314,6 +315,7 @@ my %action_args = ('default' => ['list'],
 		'sigrequest' => ['list','email'],
 		'set' => ['list','email','reception','gecos'],
 		'serveradmin' => [],
+		'skinsedit' => [],
 		'get_pending_lists' => [],
 		'get_closed_lists' => [],
 		'get_latest_lists' => [],
@@ -596,6 +598,8 @@ if ($wwsconf->{'use_fast_cgi'}) {
 	 $param->{'conf'}{$p} = &Conf::get_robot_conf($robot, $p);
 	 $param->{$p} = &Conf::get_robot_conf($robot, $p) if (($p =~ /_color$/) || ($p =~ /color_/));
      }
+     $param->{'css_url'} &Conf::get_robot_conf($robot, 'css_url');
+     $param->{'css_url'} ||= &Conf::get_robot_conf($robot, 'wwsympa_url').'/css';
 
      foreach my $auth (keys  %{$Conf{'cas_id'}}) {
 	 &do_log('debug2', "cas authentication service $auth");
@@ -3597,6 +3601,73 @@ sub do_sendpasswd {
 
      return 1;
  }
+
+ ## Server admin page
+ sub do_skinsedit {
+     &wwslog('info', 'do_skinsedit');
+     my $f;
+
+     unless ($param->{'user'}{'email'}) {
+	 &error_message('no_user');
+	 &wwslog('info','do_skinsedit: no user');
+	 $param->{'previous_action'} = 'skinsedit';
+	 return 'loginrequest';
+     }
+
+     unless ($param->{'is_listmaster'}) {
+	 &error_message('may_not');
+	 &wwslog('info','do_admin: %s not listmaster', $param->{'user'}{'email'});
+	 return undef;
+     }
+
+ #    $param->{'conf'} = \%Conf;
+
+     my $dir = &Conf::get_robot_conf($robot, 'css_path');
+     my $cssurl  = &Conf::get_robot_conf($robot, 'css_url');
+     $param->{'css_path'}= $dir;
+     $param->{'cssurl'}= $cssurl;
+     
+     if ($in{'installcss'}) {
+	 my $tt2_include_path = [$Conf{'etc'}.'/web_tt2/'.&Language::Lang2Locale($param->{'lang'}),
+				 $Conf{'etc'}.'/web_tt2',
+				 '--ETCBINDIR--'.'/web_tt2/'.&Language::Lang2Locale($param->{'lang'}),
+				 '--ETCBINDIR--'.'/web_tt2'];
+	 
+	 my $date= time;
+	 foreach my $css ('style.css','print.css','fullPage.css','print-preview.css') {
+	     $param->{'css'} = $css;
+
+	     unless (open (CSS,">$dir/$css.$date")) {
+		 &error_message("Can't open $dir/$css.$date");
+		 &wwslog('err','skinsedit : can\'t open file %s/%s.%s',$dir,$css,$date);
+		 return undef;
+	     }
+	     unless (open (CSSOLD,"$dir/$css")) {
+		 &error_message("Can't open $dir/$css.$date");
+		 &wwslog('err','skinsedit : can\'t open file (read) %s/%s.%s',$dir,$css.$date);
+		 return undef;
+	     }
+	     while (<CSSOLD>) {print CSS $_ ;}
+	     close CSSOLD;close CSS;
+
+	     unless (open (CSS,">$dir/$css")) {
+		 &error_message("Can't open $dir $css");
+		 &wwslog('err','skinsedit : can\'t open file (write) %s/%s',$dir,$css);
+		 return undef;
+	     }
+	     unless (&tt2::parse_tt2($param,'css.tt2' ,\*CSS, $tt2_include_path)) {
+		 my $error = &tt2::get_error();
+		 $param->{'tt2_error'} = $error;
+		 &List::send_notify_to_listmaster('web_tt2_error', $robot, $error);
+		 &do_log('info', "do_skinsedit : error while installing $dir/$css");
+	     }
+	     close (CSS) ;
+	 }  
+	 $param->{'css_result'} = 1 ;
+     }
+     return 1;
+ }
+
 
  ## Server admin page
  sub do_serveradmin {

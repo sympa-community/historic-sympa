@@ -55,6 +55,7 @@ my @valid_options = qw(
 		       antivirus_path antivirus_args antivirus_notify anonymous_header_fields sendmail_aliases
 		       dark_color light_color text_color bg_color error_color selected_color shaded_color
 		       color_0 color_1 color_2 color_3 color_4 color_5 color_6 color_7 color_8 color_9 color_10 color_11 color_12 color_13 color_14 color_15
+		       css_url css_path
 		       ldap_export_name ldap_export_host ldap_export_suffix ldap_export_password
 		       ldap_export_dnmanager ldap_export_connection_timeout urlize_min_size
 		       list_check_smtp list_check_suffixes  spam_protection web_archive_spam_protection soap_url
@@ -199,6 +200,8 @@ my %Default_Conf =
      'default_bounce_level1_rate' => 45,
      'default_bounce_level2_rate' => 75,
      'soap_url' => '',
+     'css_url' => '',
+     'css_path' => '',
      'urlize_min_size' => 10240, ## 10Kb
      'supported_lang' => 'fr,en_US,hu,it',
      'web_recode_to' => '',
@@ -401,6 +404,11 @@ sub load_robots {
 				  soap_url => 1,
 				  supported_lang => 1,
 				  default_shared_quota => 1,
+				  css_url => 1,
+				  css_path => 1,
+				  color_0 => 1, color_2 => 1, color_3 => 1, color_4 => 1, color_5 => 1,color_6 => 1, 
+                                  color_7 => 1, color_8 => 1, color_9 => 1,color_7 => 1, color_8 => 1, color_9 => 1,
+                                  color_10 => 1, color_11 => 1, color_12 => 1,color_13 => 1, color_14 => 1, color_15 => 1,
 				  );
 
     ## Load wwsympa.conf
