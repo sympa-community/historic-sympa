@@ -1756,13 +1756,27 @@ see a  nice mailto adresses where others have nothing.
 
 \subsection {\cfkeyword {color_0}, \cfkeyword {color_1} ..  \cfkeyword {color_15}}
 \label {colors}
-They are the color definition for web interface.  Thoses parameters can be overwritten in each virtual robot definition. The color are used in the CSS file and unfortunitly they are also in use in some web templates. The sympa admin interface show every colors in use.
+They are the color definition for web interface.  Thoses parameters can be overwritten in each virtual robot definition. 
+The color are used in the CSS file and unfortunitly they are also in use in some web templates. The sympa admin interface 
+show every colors in use.
 
 
 \subsection {\cfkeyword {dark\_color} \cfkeyword {light\_color} \cfkeyword {text\_color} \cfkeyword {bg\_color} \cfkeyword {error\_color} \cfkeyword {selected\_color} \cfkeyword {shaded\_color}}
 
 
-	Deprecated. They are the color definition for previous web interface. Thoses parameters are unused in 5.1 and higher version but still availible.style.css, print.css, print-preview.css and fullPage.css
+	Deprecated. They are the color definition for previous web interface. Thoses parameters are unused in 5.1 and higher 
+version but still availible.style.css, print.css, print-preview.css and fullPage.css
+
+
+
+\subsection {\cfkeyword {css\_path}}
+
+Pre-parsed CSS files (let's say static css files) can be installed using Sympa server skins module. Thoses CSS files are 
+installed in a part of the web server that can be reached without using sympa web engine. In order to do this edit the 
+robot.conf file and set the css_path parameter. Then retart the server and use skins module from the "admin sympa" page 
+to install preparsed CSS file. The in order to replace dynamic CSS by thoses static files 
+set the \cfkeyword {css\_url} parameter.
+
 
 \subsection {\cfkeyword {css\_url}}
 
@@ -1774,7 +1788,6 @@ In order to make sympa web interface faster, it is strongly recommended to insta
 only one page insteed of one page and four css page at each clic. This can be done using css\_url parameter. The parameter must contain the URL of the 
 directory where  style.css, print.css, print-preview.css and fullPage.css are installed. You can make your own a sophisticated new skin editing thoses 
 files. The server admin module include a CSS administration page that can help you to install static CSS.
-
 
 \subsection {\cfkeyword {cookie}} 
 
