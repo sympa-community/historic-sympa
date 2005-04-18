@@ -244,8 +244,8 @@ in a single software package, including:
         \textindex {MIME} in the distribution process, and in addition
         allows list owners to configure their lists with
         welcome, goodbye and other predefined messages using complex
-        \textindex {MIME} structures. For example, a welcome message can be
-        \textbf in {multipart/alternative} format, using \textbf {text/html},
+        \textindex {MIME} structures. For example, a welcome message can be in
+        \textbf {multipart/alternative} format, using \textbf {text/html},
         \textbf {audio/x-wav}~:-), or whatever (Note that \Sympa
         commands in multipart messages are successfully processed, provided that
 	one part is \textbf {text/plain }).
@@ -276,13 +276,9 @@ in a single software package, including:
         Privileged operations include the usual \mailcmd {ADD}, \mailcmd
         {DELETE} or \mailcmd {REVIEW} commands, which can be
         authenticated via a one-time password or an S/MIME signature.
-	 Any list owner using the \mailcmd {EXPIRE}
-        command can require the renewal of subscriptions. This is made
-        possible by the presence of a subscription date stored in the
-        \Sympa database.
 
     \label {wwsympa} 
-    \item textbf {Web interface} : {\WWSympa} is a global Web interface to all \Sympa functions
+    \item \textbf {Web interface} : {\WWSympa} is a global Web interface to all \Sympa functions
     	(including administration). It provides :
 
         \begin {itemize}
@@ -719,9 +715,6 @@ in \file {sympa.conf}.
 	\item \dir {[SPOOLDIR]/digest/}\\
 	For storing lists' digests before they are sent.
 
-	\item \dir {[SPOOLDIR]/expire/}\\
-	Used by the expire process.
-
 	\item \dir {[SPOOLDIR]/mod/}\\
 	For storing unmoderated messages.
 
@@ -1050,7 +1043,7 @@ this should point to \dir {/etc/smrsh}.  This is probably the case if you are us
 
 \item \option {- - with-openssl=FULLPATH}, set path to OpenSSL (default /usr/local/ssl/bin/openssl)
 
-\item \option {- - with-user=LOGIN}, set sympa user name (default sympa)\\
+\item \option {- - with-user=LOGI}, set sympa user name (default sympa)\\
 \Sympa daemons are running under this UID.
 
 \item \option {- - with-group=LOGIN}, set sympa group name (default sympa)\\
@@ -1145,14 +1138,11 @@ you may change this behavior by editing \file {sympa.conf}'s
 page~\pageref{par-log-socket-type}). You can test log feature by
 using  \file {testlogs.pl}.
 
-\section {INIT script}
-\label{init}
-
-The \unixcmd {make install} step should have installed a \unixcmd {sympa} init script in
-your \dir {/etc/rc.d/init.d/} directory (you can change this at \unixcmd {configure}
-time with the \option {- - with-initdir} option). You should edit your runlevels to make
-sure \Sympa starts after Apache and MySQL. Note that \textindex{MySQL} should
-also start before \textindex{Apache} because of \file {wwsympa.fcgi}.
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Running Sympa
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\cleardoublepage
+\chapter {Running \Sympa}
 
 \section {sympa.pl}
 \label{sympa.pl}
@@ -1263,6 +1253,32 @@ page~\pageref{lists-families}.
    page~\pageref{family-modify-list}.
     
 \end {itemize}
+
+\section {INIT script}
+\label{init}
+ 
+ The \unixcmd {make install} step should have installed a sysV init script in
+ your \dir {/etc/rc.d/init.d/} directory (you can change this at \unixcmd {configure}
+ time with the \option {--with-initdir} option). You should edit your runlevels to make
+ sure \Sympa starts after Apache and MySQL. Note that \textindex{MySQL} should
+ also start before \textindex{Apache} because of \file {wwsympa.fcgi}.
+ 
+ This script starts these deamons : sympa.pl, task\_manager.pl, archived.pl and bounced.pl.
+ 
+\section {Stopping \Sympa and signals}
+ \label{stop-signals}
+ \index{stop-signals}
+ 
+ \subsubsection{\file{kill -TERM}}
+ 
+ When this signal is sent to sympa.pl (\option {kill -TERM}), the daemon is stopped ending message distribution in progress 
+ and this can be long (for big lists). If \option {kill -TERM} is used, sympa.pl will stop immediatly whatever a distribution 
+ message is in progress. In this case, when sympa.pl restart, message will distributed many times.
+ 
+ \subsubsection{\file{kill -HUP}}
+ 
+ When this signal is sent to sympa.pl (\option {kill -HUP}), it switchs of the \option{--mail} logging option
+ and continues current task.
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -2068,12 +2084,6 @@ see a  nice mailto adresses where others have nothing.
 \subsection {\cfkeyword {queuedigest}}  
         \index{digest}
         \index{spool}
-
-        This parameter is optional and retained solely for backward compatibility.
-
-\subsection {\cfkeyword {queueexpire}}  
-
-	\default {\dir {[SPOOLDIR]/expire}}
 
         This parameter is optional and retained solely for backward compatibility.
 
@@ -3923,7 +3933,7 @@ This is the SSO service name that will be proposed to the user in the login bann
 \item{service\_id} \\
 This service ID is used as a parameter by sympa to refer to the SSO service (instead of the service name). 
 
-A corresponding URL on the local web server should be protected by the SSO system ; this URL would look like textbf {http://yourhost.yourdomain/sympa/sso\_login/inqueue} if the service\_id is \textbf {inqueue}.
+A corresponding URL on the local web server should be protected by the SSO system ; this URL would look like \textbf {http://yourhost.yourdomain/sympa/sso\_login/inqueue} if the service\_id is \textbf {inqueue}.
 
 \item{http\_header\_prefix} \\
 Sympa gets user attributes from environment variables comming from the web server. These variables are then stored in the user\_table DB table for later use in authorization scenarios (in [user_attributes] structure). Only environment variables starting with the defined prefix will kept.
@@ -5740,8 +5750,8 @@ The XML file format should comply with the following rules :
 \begin{itemize}
   \item The root element is \file{<list>}
   \item One XML element is mandatory : \file{<listname>} contains the name of the list.
-        That not excludes mandatory parameters for list creation (listname, subject,owner.email and/or 
-	owner\_include.source).
+        That not excludes mandatory parameters for list creation (\lparam {listname, subject,owner.email and/or 
+	owner\_include.source}).
   \item \file{<type>} : without family context, this element contains the name of template list creation.
         In a family context, this element is no used.
   \item \file{<description>} : the text contained in this element is written in list \file{info} file(it can be a CDATA section).
@@ -6090,6 +6100,10 @@ ttl 360
     
 	 \end{itemize}
 	 The parameters constraints will be checked at every list loading.
+
+\textbf {WARNING} : Some parameters cannot be constrained, they are : \lparam {owner\_include.source\_parameter} 
+(see~\ref {par-owner-include}, page~\pageref {par-owner-include}), \lparam {editor\_include.source\_parameter} (see~\ref {par-editor-include}, page~\pageref {par-editor-include}). About \lparam {digest} parameter (see~\ref {par-digest}, page~\pageref {par-digest}) , just days can be constrained.
+
     
 \textit {Example:} 
 \begin {quote}
@@ -6130,7 +6144,7 @@ by the set of values for affectation list parameters.
 Here is an sample command to instantiate a family :
 \begin {quote}
 \begin{verbatim}
-sympa.pl --instantiate\_family my_family --robot \samplerobot --input\_file my\_file.xml
+sympa.pl --instantiate_family my_family --robot \samplerobot --input_file my_file.xml
 \end{verbatim}
 \end {quote}
 This means lists that belong to family \file{my\_family} will be created under the robot 
@@ -6212,7 +6226,9 @@ new family properties and they would be set in status error\_config immediately.
  
  Here is a sample command to close a family :
  \begin {quote}
- sympa.pl --close\_family my\_family --robot \samplerobot 
+ \begin{verbatim}
+ sympa.pl --close_family my_family --robot \samplerobot 
+ \end{verbatim}
  \end {quote} 
 
 \subsection {Adding one list}
@@ -6226,7 +6242,9 @@ new family properties and they would be set in status error\_config immediately.
  
  Here is a sample command to add a list to a family :
  \begin {quote}
- sympa.pl --add\_list my\_family --robot \samplerobot  --input\_file my\_file.xml
+ \begin{verbatim}
+ sympa.pl --add_list my_family --robot \samplerobot  --input_file my_file.xml
+ \end{verbatim}
  \end {quote} 
 
 \subsection {Removing one list}
@@ -6238,7 +6256,9 @@ Closes the list  installed under the indicated robot : the list status is set to
  
  Here is a sample command to close a list family (same as an orphan list) :
  \begin {quote}
- sympa.pl --close\_list my\_list@\samplerobot
+ \begin{verbatim}
+ sympa.pl --close_list my_list@\samplerobot
+ \end{verbatim}
  \end {quote} 
  
  \subsection {Modifying one list}
@@ -6251,7 +6271,9 @@ Closes the list  installed under the indicated robot : the list status is set to
  
  Here is a sample command to modify a list to a family :
  \begin {quote}
- sympa.pl --modify\_list my\_family --robot \samplerobot --input\_file my\_file.xml
+ \begin{verbatim}
+ sympa.pl --modify_list my_family --robot \samplerobot --input_file my_file.xml
+ \end{verbatim}
  \end {quote} 
 
 \subsection {List parameters edition in a family context}
@@ -9166,64 +9188,6 @@ These comands are:
 	of this command is restricted to listmasters. 
 	Processing may take a lot of time !
 	
-    \item  \mailcmd {EXPIRE}
-        \label {cmd-expire}
-
-        \textit {listname}
-        \textit {age (in days)}
-        \textit {deadline (in days)}
-        (listname) (age (in days)) (deadline (in days))
-        \textit {explanatory text to be sent to the subscribers concerned}
-
-        This command activates an \textindex {expiration} process
-        for former subscribers of the designated list. Subscribers
-        for which no procedures have been enabled for more than
-        \textit {age} days receive the explanatory text appended
-        to the \mailcmd {EXPIRE} command. This text, which must be
-        adapted by the list owner for each subscriber population,
-        should explain to the people receiving this message that
-        they can update their subscription date so as to not be
-        deleted from the subscriber list, within a deadline of
-        \textit {deadline} days.
-
-        Past this deadline, the initiator of the \mailcmd {EXPIRE}
-        command receives the list of persons who have not confirmed
-        their subscription.  It is up to the initiator to send
-        \Sympa the corresponding \mailcmd {DELETE} commands.
-
-        Any operation updating the subscription date of an address
-        serves as confirmation of subscription. This is also the
-        case for \mailcmd {SET} option selecting commands and for
-        the \mailcmd {SUBSCRIBE} subscription command itself. The fact
-        of sending a message to the list also updates the subscription
-        date.
-
-        The explanatory message should contain at least 20 words;
-        it is possible to delimit it by the word \mailcmd {QUIT},
-        in particular in order not to include a signature, which
-        would systematically end the command message.
-
-        A single expiration process can be activated at any given
-        time for a given list. The \mailcmd {EXPIRE} command
-        systematically gives rise to \textindex {authentication}
-        by return mail.  The \mailcmd {EXPIRE} command has \textbf
-        {no effect on the subscriber list}.
-
-    \item  \mailcmd {EXPIREINDEX} \textit {listname}
-       \label {cmd-expireindex}
-
-       Makes it possible, at any time, for an expiration process
-       activated using an \mailcmd {EXPIRE} command to receive the
-       list of addresses for which no enabling has been received.
-
-    \item  \mailcmd {EXPIREDEL} \textit {listname}
-       \label {cmd-expiredel}
-
-       Deletion of a process activated using the \mailcmd {EXPIRE}
-       command.  The \mailcmd {EXPIREDEL} command has no effect on
-       subscribers, but it possible to activate a new expiration
-       process with new deadlines.
-
 \end {itemize}
 
 As above, these commands can be prefixed with \mailcmd {QUIET} to
@@ -9273,6 +9237,1366 @@ methods for enabling message distribution, depending on the \lparam
 
 See also the
 \htmladdnormallinkfoot {recommendations for moderators} {http://listes.cru.fr/admin/moderation.html}.
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Internals
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\cleardoublepage
+\chapter {Internals}
+\label {internals}
+
+This chapter describes these modules (or a part of) :
+\begin {itemize}
+  \item \file {src/mail.pm}
+  \item \file {src/List.pm}  
+  \item \file {src/sympa.pm}  
+  \item \file {src/Commands.pm}
+  \item \file {src/wwsympa.pm} 
+  \item \file {src/tools.pm}  
+\end {itemize}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%% mail.pm %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section {mail.pm}
+\index{mail.pm}
+
+This module deals with mail sending and does the SMTP job. It provides a function for message distribution to a list, 
+the message can be encrypted. There is also a function to send service messages by parsing tt2 files, 
+These messages can be signed.
+For sending, a call to sendmail is done or the message is pushed in a spool according to calling context.
+
+\subsection {public functions}
+
+  mail\_file(), mail\_message(), mail\_forward(), set\_send\_spool(), reaper().
+
+
+\subsubsection {\large{mail\_file()}}
+\label{mail-mail-file}
+\index{mail::mail\_file()}
+
+   Message is written by parsing a tt2 file (or with a string ). It writes mail headers if they are missing and they are encoded. 
+   Then the message is sent by calling mail::sending() function (see \ref {mail-sending}, page~\pageref {mail-sending}).
+
+   \textbf{IN} : 
+   \begin{enumerate}
+     \item \lparam{filename} : string - tt2 filename \(\mid\) '' - no tt2 filename sent
+     \item \lparam{rcpt} (+) : SCALAR \(\mid\) ref(ARRAY) - SMTP "RCPT To:" field
+     \item \lparam{data} (+) : ref(HASH) - used to parse tt2 file, contains header values, keys are : 
+       \begin{itemize}
+         \item \lparam{return\_path} (+) : SMTP "MAIL From:" field \emph{if send by SMTP}, q
+	                                "X-Sympa-From:" field \emph{if send by spool}
+         \item \lparam{to} : "To:" header field \emph{else it is \$rcpt}
+         \item \lparam{from} : "From:" field  \emph{if \$filename is not a full msg}
+         \item \lparam{subject} : "Subject:" field \emph{if \$filename is not a full msg}
+         \item \lparam{replyto} : "Reply-to:" field \emph{if \$filename is not a full msg}
+         \item \lparam{headers} : ref(HASH), keys are other mail headers
+         \item \lparam{body} : body message \emph{if not \$filename}
+         \item \lparam{lang} : tt2 language \emph{if \$filename}  
+         \item \lparam{list} : ref(HASH) \emph{if sign\_mode='smime'} - keys are :
+	   \begin{itemize}
+             \item \lparam{name} : list name
+             \item \lparam{dir} : list directory
+	   \end{itemize}
+       \end{itemize}
+     \item \lparam{robot} (+) : robot
+     \item \lparam{sign\_mode} : 'smime'- the mail is signed with smime  \(\mid\)  undef - no signature 
+   \end{enumerate}
+
+   \textbf{OUT} : 1
+
+\subsubsection   {\large{mail\_message()}}
+\label{mail-mail-message}  
+\index{mail::mail\_message()}
+
+   Distributes a message to a list. The message is encrypted if needed, in this case, only one SMTP session is used for each recepient 
+   otherwise, recepient are grouped by domain for sending (it controls the number recepient arguments to call sendmail). 
+   Message is sent by calling mail::sendto() function (see \ref {mail-sendto}, page~\pageref {mail-sendto}).
+
+   \textbf{IN} : 
+   \begin{enumerate}
+     \item \lparam{message} (+) : ref(Message) - message to distribute
+     \item \lparam{from} (+) : message from
+     \item \lparam{robot} (+) : robot
+     \item \lparam{rcpt} (+) : ARRAY - recepients     
+   \end{enumerate}
+
+   \textbf{OUT} : \lparam{\$numsmtp} = number of sendmail process 
+
+\subsubsection   {\large{mail\_forward()}}
+\label{mail-mail-forward}  
+\index{mail::mail\_forward()}
+
+   Forward a message by calling mail::sending() function (see \ref {mail-sending}, page~\pageref {mail-sending}).
+
+   \textbf{IN} : 
+   \begin{enumerate}
+     \item \lparam{msg} (+) : ref(Message) \(\mid\) ref(MIME::Entity) \(\mid\) string - message to forward
+     \item \lparam{from} (+) : message from
+     \item \lparam{rcpt} (+) : ref(SCALAR) \(\mid\) ref(ARRAY) - recepients     
+     \item \lparam{robot} (+) : robot
+   \end{enumerate}
+
+   \textbf{OUT} : 1
+
+\subsubsection {\large{set\_send\_spool()}}
+\label{mail-set-send-spool}  
+\index{mail::set\_send\_spool()}
+
+   Used by other processes than sympa.pl to indicate to send message by 
+   writting message in spool instead of calling mail::smtpto() function (see \ref {mail-smtpto}, page~\pageref {mail-smtpto}). 
+   The concerned spool is set in \lparam{\$send\_spool} global variable, used by mail::sending() function
+  (see \ref {mail-sending}, page~\pageref {mail-sending}).
+
+   \textbf{IN} : 
+   \begin{enumerate}
+     \item \lparam{spool} (+) : the concerned spool for sending.
+   \end{enumerate}
+
+   \textbf{OUT} : -
+
+\subsubsection {\large{reaper()}}
+\label{mail-reaper}  
+\index{mail::reaper()}
+
+   Non blocking function used to clean the defuncts child processes by waiting for them and then
+   decreasing the counter. For exemple, this function is called by mail::smtpto() (see 
+   \ref {mail-smtpto}, page~\pageref {mail-smtpto}), main loop of sympa.pl, task\_manager.pl,
+   bounced.pl.
+
+   \textbf{IN} : 
+   \begin{enumerate}
+      \item \lparam{block}
+   \end{enumerate}
+
+   \textbf{OUT} : the pid of the defunct process \(\mid\) -1 \emph{if there is no such child process}.
+
+
+\subsection {private functions}
+
+  sendto(), sending(), smtpto().
+
+\subsubsection {\large{sendto()}}
+\label{mail-sendto}
+\index{mail::sendto()}
+
+   Encodes subject header. Encrypts the message if needed. In this case, it checks if there is
+   only one recepient. Then the message is sent by calling mail::sending() function 
+   (see \ref {mail-sending}, page~\pageref {mail-sending}).
+
+   \textbf{IN} : 
+   \begin{enumerate}
+     \item \lparam{msg\_header} (+) : ref(MIME::Head) - message header 
+     \item \lparam{msg\_body} (+) : message body
+     \item \lparam{from} (+) : message from
+     \item \lparam{rcpt} (+) : ref(SCALAR) \(\mid\) ref(ARRAY) - message recepients (ref(SCALAR) for encryption)
+     \item \lparam{robot} (+) : robot
+     \item \lparam{encrypt} : 'smime\_crypted' the mail is encrypted with smime \(\mid\)  undef - no encryption
+   \end{enumerate}
+
+   \textbf{OUT} : 1 - sending by calling smtpto (sendmail) \(\mid\) 0 - sending by push in spool
+
+\subsubsection {\large{sending()}}
+\label{mail-sending}
+\index{mail::sending()}
+
+   Signs the message according to \lparam{\$sign\_mode}. Chooses sending mode according to context. If \lparam{\$send\_spool} global variable is empty, the message is
+   sent by calling mail::smtpto() function  (see \ref {mail-smtpto}, page~\pageref {mail-smtpto})
+   else the message is written in spool \lparam{\$send\_spool} in order to be handled by sympa.pl process (because only this 
+   is allowed to make a fork).
+   When the message is pushed in spool, these mail headers are added :
+   \begin{itemize}
+     \item ``X-Sympa-To:'' : recepients
+     \item ``X-Sympa-From:'' : from
+     \item ``X-Sympa-Checksum:'' : to check allowed program to push in spool 
+   \end{itemize}
+   A message pushed in spool like this will be handled later by sympa::DoSendMessage() function 
+   (see \ref {sympa-dosendmessage}, page~\pageref {sympa-dosendmessage})
+
+   \textbf{IN} : 
+   \begin{enumerate}
+      \item \lparam{msg} (+) : ref(MIME::Entity) \(\mid\) string - message to send
+      \item \lparam{rcpt} (+) : ref(SCALAR) \(\mid\) ref(ARRAY) - recepients (for SMTP : "RCPT To:" field)
+      \item \lparam{from} (+) : for SMTP : "MAIL From:" field  \(\mid\) for spool sending : "X-Sympa-From" field
+      \item \lparam{robot} (+) : robot 
+      \item \lparam{listname} : listname \(\mid\) ''
+      \item \lparam{sign\_mode} (+) : 'smime' \(\mid\) 'none'for signing
+      \item \lparam{sympa\_email} : for the file name for spool sending
+   \end{enumerate}
+
+   \textbf{OUT} : 1 - sending by calling smtpto() (sendmail) \(\mid\) 0 - sending by pushing in spool
+
+\subsubsection {\large{smtpto()}}
+\label{mail-smtpto}
+\index{mail::smtpto()}
+
+   Calls to sendmail for the recipients given as argument by making a fork and an exec. Before, 
+   waits for number of children process \(<\) number allowed by sympa.conf by calling mail::reaper() function
+   (see \ref {mail-reaper}, page~\pageref {mail-repaer}).
+
+   \textbf{IN} : 
+   \begin{enumerate}
+      \item \lparam{from} (+) : SMTP "MAIL From:" field
+      \item \lparam{rcpt} (+) : ref(SCALAR)) \(\mid\) ref(ARRAY) - SMTP "RCPT To:" field
+      \item \lparam{robot} (+) : robot 
+   \end{enumerate}
+
+   \textbf{OUT} : \lparam{mail::\$fh} - file handle on opened file for ouput, for SMTP "DATA" field\\
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%% List.pm %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section {List.pm}
+\index{List.pm}
+
+ This module includes all list processing functions. 
+
+ Here are only described functions used for message sending : 
+ \begin{itemize}
+   \item Message distribution in a list
+   \item Sending using templates
+   \item Service messages
+   \item Notification message
+ \end{itemize}
+
+%%%%%%%%%%%%%%% message distribution %%%%%%%%%%%%%%%%%%%%
+\subsection {Functions for message distribution} 
+
+   distribute\_message(), send\_msg(), send\_msg\_digest().
+
+   These functions are used to message distribution in a list.
+
+\subsubsection {\large{distribute\_msg()}}
+\label{list-distribute-msg}
+\index{List::distribute\_msg()}
+
+   Prepares and distributes a message to a list : 
+   \begin{itemize}
+     \item updates the list stats
+     \item hides the sender if the list is anonymoused (list config : anonymous\_sender)
+     \item adds custom subject if necessary (list config : custom\_subject)
+     \item archives the message 
+     \item changes the reply-to header if necessary (list config : reply\_to\_header)
+     \item removes unwanted headers if present (config : remove\_headers))
+     \item adds useful headers (X-Loop,X-Sequence,Errors-to,Precedence,X-no-archive - list config : custom\_header) 
+     \item adds RFC 2919 header field (List-Id) and RFC 2369 header fields (list config : rfc2369\_header\_fields)
+     \item stores message in digest if the list accepts digest mode (encrypted message can't be included in digest) 
+     \item sends the message by calling List::send\_msg() (see \ref {list-send-msg}, 
+           page~\pageref {list-send-msg}). 
+   \end{itemize}
+
+   \textbf{IN} : 
+   \begin{enumerate}
+      \item \lparam{self} (+) : ref(List) - the list concerned by distribution
+      \item \lparam{message} (+): ref(Message) - the message to distribute
+   \end{enumerate}
+
+   \textbf{OUT} : result of List::send\_msg() function (number of sendmail process)
+
+
+\subsubsection {\large{send\_msg()}}
+\label{list-send-msg}
+\index{List::send\_msg()}
+
+
+  This function is called by List::distribute\_msg() (see \ref {list-distribute-msg}, 
+  page~\pageref {list-distribute-msg})  to select subscribers
+  according to their reception mode and to the ``Content-Type'' header field of the message.
+  Sending are grouped according to their reception mode : \begin{itemize}
+    \item normal : add a footer if the message is not protected (then the message is ``altered'')
+    \item notice
+    \item txt : add a footer 
+    \item html : add a footer 
+    \item urlize : add a footer and create an urlize directory for Web access
+  \end{itemize}
+  The message is sent by calling List::mail\_message() (see \ref {mail-mail-message}, 
+  page~\pageref {mail-mail-message}). 
+  If the message is ``smime\_crypted'' and the user has not got any certificate, a message service is sent to him.
+ 
+   \textbf{IN} : 
+   \begin{enumerate}
+      \item \lparam{self} (+) : ref(List) - the list concerned by distribution
+      \item \lparam{message} (+): ref(Message) - the message to distribute
+   \end{enumerate}
+
+   \textbf{OUT} : \lparam{\$numsmtp} : addition of mail::mail\_message() function results 
+   ( = number of sendmail process )
+
+\subsubsection {\large{send\_msg\_digest()}}
+\label{list-send-msg-digest}
+\index{List::send\_msg\_digest()}
+
+   Sends a digest message to the list subscribers with reception digest, digestplain or summary : 
+   it creates the list of subscribers in various digest modes and then creates the list of
+   messages. Finally sending to subscribers is done by calling List::send\_file() function
+   (see \ref {list-send-file}, page~\pageref {list-send-file})
+   with mail template ``digest'', ``digestplain'' or ``summary''.
+   
+   \textbf{IN} : 
+   \begin{enumerate}
+      \item \lparam{self} (+): ref(List) - the concerned list 
+   \end{enumerate}
+
+   \textbf{OUT} : \begin{itemize}
+     \item 1  \emph{if sending} 
+     \item 0  \emph{if no subscriber for sending digest, digestplain or summary} 
+   \end{itemize}
+
+%%%%%%%%%%%%%%% template sending %%%%%%%%%%%%%%%%%%%%%
+\subsection {Functions for template sending} 
+
+   send\_file(), send\_global\_file().
+
+   These functions are used by others to send files. These files are made from template given in parameters.
+
+\subsubsection {\large{send\_file()}}
+\label{list-send-file}
+\index{List::send\_file()}
+
+   Sends a message to a user, relative to a list. It finds the \$tpl.tt2 file to make the message.
+   If the list has a key and a certificat and if openssl is in the configuration, the message is signed.
+   The parsing is done with variable \$data set up first with parameter \$context and then with configuration, here are 
+   set keys :
+   \begin{itemize}
+     \item \emph{if \$who=SCALAR then} \begin{itemize}
+                    \item \lparam{user.password}
+		    \item \emph{if \$user key is not defined in \$context then} \lparam{user.email}(:= \$who), \lparam{user.lang} (:= list lang)  
+		          \emph{and if the user is in DB then} \lparam{user.attributes} (:= attributes in DB user\_table) are defined
+		    \item \emph{if \$who is subscriber of \$self then} \lparam{subscriber.date subscriber.update\_date}	  
+			  \emph{and if exists then} \lparam{subscriber.bounce subscriber.first\_bounce} are defined
+           \end{itemize}
+     \item \lparam{return\_path} : used for SMTP ``MAIL From'' field or "X-Sympa-From:" field 
+     \item \lparam{lang} : the user lang or list lang or robot lang
+     \item \lparam{fromlist} : "From:" field, pointed on list
+     \item \lparam{from} : "From:" field, pointed on list \emph{if no defined in \$context}
+     \item \lparam{replyto} : \emph{if openssl is is sympa.conf and the list has a key ('private\_key') and a certificat ('cert.pem') in its directory}
+     \item \lparam{boundary} : boundary for multipart message \emph{if no contained in \$context}
+     \item \lparam{conf.email conf.host conf.sympa conf.request conf.listmaster conf.wwsympa\_url conf.title} : updated with robot config
+     \item \lparam{list.lang list.name list.domain list.host list.subject list.dir list.owner}(ref(ARRAY)) : updated with list config
+   \end{itemize}
+   The message is sent by calling mail::mail\_file() function 
+   (see \ref {mail-mail-file}, page~\pageref {mail-mail-file}).
+
+   \textbf{IN} : 
+   \begin{enumerate}
+      \item \lparam{self} (+) : ref(List) 
+      \item \lparam{tpl} (+) : template file name without .tt2 extension (\$tpl.tt2)
+      \item \lparam{who} (+) : SCALAR \(\mid\) ref(ARRAY) - recepient(s)
+      \item \lparam{robot} (+) : robot
+      \item \lparam{context} : ref(HASH) - for the \$data set up 
+   \end{enumerate}
+
+   \textbf{OUT} : 1
+
+
+\subsubsection {\large{send\_global\_file()}}
+\label{list-send-global-file}
+\index{List::send\_global\_file()}
+
+   Sends a message to a user not relative to a list. It finds the \$tpl.tt2 file to make the message.
+   The parsing is done with variable \$data set up first with parameter \$context and then with configuration, here are 
+   set keys :
+   \begin{itemize}
+     \item \lparam{user.password user.lang}
+     \item \emph{if \$user key is not defined in \$context then} \lparam{user.email} (:= \$who)
+     \item \lparam{return\_path} : used for SMTP ``MAIL From'' field or "X-Sympa-From:" field 
+     \item \lparam{lang} : the user lang or robot lang
+     \item \lparam{from} : "From:" field, pointed on SYMPA \emph{if no defined in \$context}
+     \item \lparam{boundary} : boundary for multipart message \emph{if no defined in \$context}
+     \item \lparam{conf.email conf.host conf.sympa conf.request conf.listmaster conf.wwsympa\_url conf.title} : updated with robot config
+     \item \lparam{conf.version} : \Sympa version
+     \item \lparam{robot\_domain} : the robot
+    \end{itemize}
+   The message is sent by calling mail::mail\_file() function 
+   (see \ref {mail-mail-file}, page~\pageref {mail-mail-file}).
+
+   \textbf{IN} : 
+   \begin{enumerate}
+      \item \lparam{tpl} (+) : template file name (filename.tt2), without .tt2 extension
+      \item \lparam{who} (+) : SCALAR \(\mid\) ref(ARRAY) - recepient(s)
+      \item \lparam{robot} (+) : robot
+      \item \lparam{context} : ref(HASH) - for the \$data set up 
+   \end{enumerate}
+
+   \textbf{OUT} : 1
+
+
+%%%%%%%%%%%%%%% service messages %%%%%%%%%%%%%%%%%%%%%
+\subsection {Functions for service messages} 
+
+  archive\_send(), send\_to\_editor(), request\_auth(), send\_auth().
+
+  These functions are used to send services messgase, correponding to a result of a command. 
+
+\subsubsection {\large{archive\_send()}}
+\label{list-archive-send}
+\index{List::archive\_send()}
+
+   Sends an archive file (\$file) to \$who. The archive is a text file, independant from web archives.
+   It checks if the list is archived. Sending is done by callingList::send\_file() 
+   (see \ref {list-send-file}, page~\pageref {list-send-file})
+   with mail template ``archive''.
+   
+   \textbf{IN} : 
+   \begin{enumerate}
+      \item \lparam{self} (+): ref(List) - the concerned list 
+      \item \lparam{who} (+): recepient
+      \item \lparam{file} (+): name of the archive file to send
+   \end{enumerate}
+
+   \textbf{OUT} : -
+
+\subsubsection {\large{send\_to\_editor()}}
+\label{list-send-editor}
+\index{List::send\_to\_editor()}
+
+   Sends a message to the list editor to ask him for message moderation ( in moderation context : 
+   scenario ``editor'' or ``editorkey''). The message waiting for moderation is named with a key
+   and it is set in the spool queuemod. (The key is a reference on the message for editor to moderate).
+   The message for the editor is sent by calling List::send\_file() (see \ref {list-send-file}, 
+   page~\pageref {list-send-file}) with mail template ``moderate''.
+
+   \textbf{IN} : 
+   \begin{enumerate}
+      \item \lparam{self} (+): ref(List) - the concerned list 
+      \item \lparam{method} : 'md5' - for "editorkey" \(\mid\) 'smtp' - for "editor"
+      \item \lparam{message} (+): ref(Message) - the message to moderate
+   \end{enumerate}
+
+   \textbf{OUT} : \$modkey - the moderation key for naming message waiting 
+         for moderation in spool queuemod.
+
+\subsubsection {\large{request\_auth()}}
+\label{list-request-auth}
+\index{List::request\_auth()}
+
+   Sends an authentification request for a requested command. The authentification request contains
+   the command to be send next and it is authentified by a key. The message is
+   sent to user by calling  List::send\_file() (see \ref {list-send-file}, 
+   page~\pageref {list-send-file}) with mail template ``request\_auth''.
+
+   \textbf{IN} : 
+   \begin{enumerate}
+      \item \lparam{self} : ref(List) \emph{not required if \$cmd = ``remind''}.
+      \item \lparam{email}(+): recepient, the requesting command user
+      \item \lparam{cmd} : 
+	\begin{itemize}
+          \item \emph{if \$self then} 'signoff' \(\mid\) 'subscribe' \(\mid\) 'add' \(\mid\) 'del' \(\mid\) 'remind'
+          \item \emph{else} 'remind'	  
+	\end{itemize}
+      \item \lparam{robot} (+): robot
+      \item \lparam{param} : ARRAY  
+	\begin{itemize}
+          \item 0 : used \emph{if \$cmd ='subscribe' \(\mid\) 'add' \(\mid\) 'del' \(\mid\) 'invite'} 
+          \item 1 : used \emph{if \$cmd ='add'} 
+	\end{itemize}
+   \end{enumerate}
+
+   \textbf{OUT} : 1
+
+\subsubsection {\large{send\_auth()}}
+\label{list-send-auth}
+\index{List::send\_auth()}
+
+   Sends an authentication request for a sent message for distribution. The message for distribution is 
+   copied in the authqueue spool to wait for confirmation by its sender. This message 
+   is named with a key. The request is sent to user by calling  List::send\_file() 
+   (see \ref {list-send-file}, page~\pageref {list-send-file}) with mail 
+   template ``send\_auth''.
+
+   \textbf{IN} : 
+   \begin{enumerate}
+      \item \lparam{self}(+): ref(List) - the concerned list
+      \item \lparam{message}(+): ref(Message) - the message to confirm
+   \end{enumerate}
+
+   \textbf{OUT} : \$modkey, the key for naming message waiting for confirmation in spool queuemod.
+
+%%%%%%%%%%%%%%% message notification %%%%%%%%%%%%%%%%%%%%%
+\subsection {Functions for message notification} 
+
+   send\_notify\_to\_listmaster(), send\_notify\_to\_owner(), send\_notify\_to\_editor(), send\_notify\_to\_user().
+
+   These functions are used to notify listmaster, list owner, list editor or user
+   about events.
+
+\subsubsection {\large{send\_notify\_to\_listmaster()}}
+\label{list-send-notify-listmaster}
+\index{List::send\_notify\_to\_listmaster()}
+
+   Sends a notice to listmaster by parsing ``listmaster\_notification'' template. The template makes a specified or a 
+   generic treatement according to variable \$param.type (:= \$operation parameter).
+   The message is sent by calling List::send\_file() (see \ref {list-send-file}, page~\pageref {list-send-file})
+   or List::send\_global\_file() (see \ref {list-send-global-file}, page~\pageref {list-send-global-file})
+   according to the context  : global or list context.
+   Available variables for the template are set up by this function, by \$param parameter and by 
+   List::send\_global\_file() or List::send\_file().
+
+   \textbf{IN} : 
+   \begin{enumerate}
+      \item \lparam{operation} (+) : notification type, corresponds to \$type in the template
+      \item \lparam{robot} (+): robot
+      \item \lparam{param} (+): ref(HASH) \(\mid\) ref (ARRAY) - values for variable used in the template  : 
+	\begin{itemize}
+	  \item \emph{if ref(HASH) then} variables used in the template are keys of this HASH. These following 
+	    keys are required in the function, according to \$operation value : 
+	    \begin{itemize}
+	      \item 'listname'(+) \emph{if \$operation=('request\_list\_creation' \(\mid\) 'automatic\_bounce\_management')}
+	    \end{itemize}
+	  \item \emph{if ref(ARRAY) then} variables used in template are named as : \$param0, \$param1, \$param2, ...  
+	\end{itemize}
+   \end{enumerate}
+
+   \textbf{OUT} : 1
+
+\subsubsection {\large{send\_notify\_to\_owner()}}
+\label{list-send-notify-owner}
+\index{List::send\_notify\_to\_owner()}
+
+   Sends a notice to list owner(s) by parsing ``listowner\_notification'' template. The template makes a specified or a 
+   generic treatement according to variable \$param.type ( := \$operation parameter).
+   The message is sent by calling List::send\_file() (see \ref {list-send-file}, page~\pageref {list-send-file}).
+   Available variables for the template are set up by this function, by \$param parameter and by
+   List::send\_file(). 
+
+   \textbf{IN} : 
+   \begin{enumerate}
+      \item \lparam{self} (+): ref(List) - the list for owner notification
+      \item \lparam{operation} (+) : notification type, corresponds to \$type in the template
+      \item \lparam{param} (+): ref(HASH) \(\mid\) ref (ARRAY) - values for variable used in the template  : 
+	\begin{itemize}
+	  \item \emph{if ref(HASH) then} variables used in the template are keys of this HASH. 
+	  \item \emph{if ref(ARRAY) then} variables used in template are named as : \$param0, \$param1, \$param2, ...  
+	\end{itemize}
+   \end{enumerate}
+
+   \textbf{OUT} : 1
+
+\subsubsection {\large{send\_notify\_to\_editor()}}
+\label{list-send-notify-editor}
+\index{List::send\_notify\_to\_editor()}
+
+   Sends a notice to list editor(s) by parsing ``listeditor\_notification'' template. The template makes a specified or a 
+   generic treatement according to variable \$param.type ( := \$operation parameter).
+   The message is sent by calling List::send\_file() (see \ref {list-send-file}, page~\pageref {list-send-file}).
+   Available variables for the template are set up by this function, by \$param parameter and by
+ List::send\_file(). 
+
+   \textbf{IN} : 
+   \begin{enumerate}
+      \item \lparam{self} (+): ref(List) - the list for editor notification
+      \item \lparam{operation} (+) : notification type, corresponds to \$type in the template
+      \item \lparam{param} (+): ref(HASH) \(\mid\) ref (ARRAY) - values for variable used in the template  : 
+	\begin{itemize}
+	  \item \emph{if ref(HASH) then} variables used in the template are keys of this HASH. 
+	  \item \emph{if ref(ARRAY) then} variables used in template are named as : \$param0, \$param1, \$param2, ...  
+	\end{itemize}
+   \end{enumerate}
+
+   \textbf{OUT} : 1
+
+
+\subsubsection {\large{send\_notify\_to\_user()}}
+\label{list-send-notify-user}
+\index{List::send\_notify\_to\_user()}
+
+   Sends a notice to a user by parsing ``user\_notification'' template. The template makes a specified or a 
+   generic treatement according to variable \$param.type ( := with \$operation parameter).
+   The message is sent by calling List::send\_file() (see \ref {list-send-file}, page~\pageref {list-send-file}).
+   Available variables for the template are set up by this function, by \$param parameter and by
+ List::send\_file(). 
+
+   \textbf{IN} : 
+   \begin{enumerate}
+      \item \lparam{self} (+): ref(List) - the list for owner notification
+      \item \lparam{operation} (+) : notification type, corresponds to \$type in the template
+      \item \lparam{user} (+) : user email to notify
+      \item \lparam{param} (+): ref(HASH) \(\mid\) ref (ARRAY) - values for variable used in the template  : 
+	\begin{itemize}
+	  \item \emph{if ref(HASH) then} variables used in the template are keys of this HASH. 
+	  \item \emph{if ref(ARRAY) then} variables used in template are named as : \$param0, \$param1, \$param2, ...  
+	\end{itemize}
+   \end{enumerate}
+
+   \textbf{OUT} : 1
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%% sympa.pl %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section {sympa.pl}
+\index{sympa.pl}
+
+   This is the main script ; it runs as a daemon and does the messages/commands processing. It uses these funstions :
+   DoFile(), DoMessage(), DoCommand(), DoSendMessage(), DoForward(), SendDigest(), CleanSpool(), sigterm(), sighup().
+   
+   Concerning reports about message distribution, function List::send\_file() 
+   (see \ref {list-send-file}, page~\pageref {list-send-file}) or List::send\_global\_file() 
+   (see \ref {list-send-global-file}, page~\pageref {list-send-global-file}) is called with 
+   mail template ``message\_report''. Concernong reports about commands, it is the mail template
+   ``command\_report''.
+
+\subsubsection {\large{DoFile()}}
+\label{sympa-dofile}
+\index{sympa::DoFile()}
+
+   Handles a received file : function called by the sympa.pl main loop in order to process files 
+   contained in the queue spool. The file is encapsulated in a Message object not to alter it. Then 
+   the file is read, the header and the body of the message are separeted. Then the adequate function 
+   is called whether a command has been received or a message has to be redistributed to a list.
+
+   So this function can call various functions : \begin{itemize}
+     \item sympa::DoMessage() for message distribution (see \ref {sympa-domessage}, page~\pageref {sympa-domessage}) 
+     \item sympa::DoCommand() for command processing (see \ref {sympa-docommand}, page~\pageref {sympa-docommand})
+     \item sympa::DoForward() for message forwarding to administrators (see \ref {sympa-doforward}, page~\pageref {sympa-doforward}) 
+     \item sympa::DoSendMessage() for wwsympa message sending (see \ref {sympa-dosendmessage}, page~\pageref {sympa-dosendmessage}).
+   \end{itemize}
+   About command process a report can be sent by calling List::send\_global\_file() (see \ref {list-send-global-file}, 
+   page~\pageref {list-send-global-file}) with template ``command\_report''. For message report it is the template ``message\_report''.
+  
+   \textbf{IN} : 
+   \begin{enumerate}
+      \item \lparam{file}(+): the file to handle
+   \end{enumerate}
+
+   \textbf{OUT} : \$status - result of the called function.
+
+\subsubsection {\large{DoMessage()}}
+\label{sympa-domessage}
+\index{sympa::DoMessage()}
+
+   Handles a message sent to a list (Those that can make loop and those containing a command are 
+   rejected). This function can call various functions : \begin{itemize}
+     \item List::distribute\_msg() for distribution (see \ref {list-distribute-msg}, page~\pageref {list-distribute-msg})
+     \item List::send\_auth() for confirmation (see \ref {list-send-auth}, page~\pageref {list-send-auth})
+     \item List::send\_to\_editor() for moderation (see \ref {list-send-to-editor}, page~\pageref {list-send-to-editor}).
+   \end{itemize}
+  
+   \textbf{IN} : 
+   \begin{enumerate}
+      \item \lparam{which}(+): 'list\_name@domain\_name - the concerned list
+      \item \lparam{message}(+): ref(Message) - sent message 
+      \item \lparam{robot}(+): robot
+   \end{enumerate}
+
+   \textbf{OUT} : 1  \emph{if everything went fine} in order to remove the file from the queue.
+
+\subsubsection {\large{DoCommand()}}
+\label{sympa-docommand}
+\index{sympa::DoCommand()}
+
+   Handles a command sent to sympa. The command is parse by calling Commands::parse() (see 
+   \ref {commands-parse}, page~\pageref {commands-parse}).
+  
+   \textbf{IN} : 
+   \begin{enumerate}
+      \item \lparam{rcpt} : recepient \(\mid\) \texttt{<}listname\texttt{>}-\texttt{<}subscribe\(\mid\)unsubscribe\texttt{>}
+      \item \lparam{robot}(+): robot
+      \item \lparam{msg}(+): ref(MIME::Entity) - message containing the command
+      \item \lparam{file}(+): file containing the message
+   \end{enumerate}
+
+   \textbf{OUT} : \$success - result of Command::parse() function.
+
+\subsubsection {\large{DoSendMessage()}}
+\label{sympa-dosendmessage}
+\index{sympa::DoSendMessage()}
+
+   Sends a message pushed in spool by another process (ex : wwsympa.fcgi) by calling function
+   mail::mail\_forward() (see \ref {mail-mail-forward}, page~\pageref {mail-mail-forward}).
+  
+   \textbf{IN} : 
+   \begin{enumerate}
+      \item \lparam{msg}(+): ref(MIME::Entity)
+      \item \lparam{robot}(+): robot	
+   \end{enumerate}
+
+   \textbf{OUT} : 1  
+
+\subsubsection {\large{DoForward()}}
+\label{sympa-doforward}
+\index{sympa::DoForward()}
+
+   Handles a message sent to \texttt{<}listname\texttt{>}-editor : the list editor,  \texttt{<}list\texttt{>}-request : the list owner or the listmaster. 
+   The message is forwarded according to \$function by calling function
+   mail::mail\_forward() (see \ref {mail-mail-forward}, page~\pageref {mail-mail-forward}).
+  
+   \textbf{IN} : 
+   \begin{enumerate}
+      \item \lparam{name}(+): list name \emph{if (\$function != 'listmaster')}
+      \item \lparam{function}(+): 'listmaster' \(\mid\) 'request' \(\mid\) 'editor'
+      \item \lparam{robot}(+): robot
+      \item \lparam{msg}(+): ref(MIME::Entity)
+   \end{enumerate}
+
+   \textbf{OUT} : 1  
+
+
+\subsubsection {\large{SendDigest()}}
+\label{sympa-sendigest}
+\index{sympa::SendDigest()}
+
+   Reads the queuedigest spool and send old digests to the subscribers with the digest option by 
+   calling List::send\_msg\_digest() function mail::mail\_forward() (see \ref {list-send-msg-digest}, 
+   page~\pageref {list-send-msg-digest}).
+  
+   \textbf{IN} : -
+   \textbf{OUT} : -  
+
+\subsubsection {\large{CleanSpool()}}
+\label{sympa-cleanspool}
+\index{sympa::cleanspool()}
+
+  Cleans old files from spool \$spool\_dir older than \$clean\_delay.
+  
+   \textbf{IN} :   
+   \begin{enumerate}
+     \item \lparam{spool\_dir}(+) : the spool directory 
+     \item \lparam{clean\_delay}(+) : the delay in days
+   \end{enumerate}
+
+   \textbf{OUT} : 1 
+
+
+\subsubsection {\large{sigterm()}}
+\label{sympa-sigterm}
+\index{sympa::sigterm()}
+
+   This function is called when a signal -TERM is received by sympa.pl.
+   It just changes the value of \$signal loop variable in order to stop sympa.pl after endding its message distribution
+   if in progress. (see \ref {stop-signals}, page~\pageref {stop-signals})
+
+   \textbf{IN} : -
+   \textbf{OUT} : -
+
+\subsubsection {\large{sighup()}}
+\label{sympa-sighup}
+\index{sympa::sighup()}
+
+   This function is called when a signal -HUP is received by sympa.pl.
+   It changes the value of \$signal loop variable and switchs of the "--mail" (see \ref {stop-signals}, 
+   page~\pageref {stop-signals}) logging option and continues current task.
+
+   \textbf{IN} : -
+   \textbf{OUT} : -
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%% Commands.pm %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section {Commands.pm}
+\index{Commands.pm}
+
+   This module does the mail commands processing.
+
+\subsection {Commands processing}
+
+   parse(), add(), del(), subscribe(), signoff(), invite(), last(), index(), getfile(), confirm(),
+   set(), distribute(), reject(), modindex(), review(), verify(), remind(), info(), stats(), help(),
+   lists(), which(), finished().
+
+\subsubsection {\large{parse()}}
+\label{commands-parse}
+\index{commands::parse()}
+
+   Parses the command line and calls the adequate subroutine (following functions)
+   with the arguments of the command. This function is called by sympa::DoCommand() (see \ref {sympa-docommand}, 
+   page~\pageref {sympa-docommand}).
+
+   \textbf{IN} : 
+   \begin{enumerate}
+      \item \lparam{sender}(+): the command sender
+      \item \lparam{robot}(+): robot
+      \item \lparam{i}(+): command line	
+      \item \lparam{sign\_mod} : 'smime' \(\mid\) undef
+   \end{enumerate}
+
+   \textbf{OUT} : 'unknown\_cmd' \(\mid\)  \$status - command process result
+
+\subsubsection {\large{add()}}
+\label{commands-add}
+\index{commands::add()}
+
+   Adds a user to a list (requested by another user), and can send acknowledgements.
+   New subscriber can be notified by sending template 'welcome'.  
+
+   \textbf{IN} : 
+   \begin{enumerate}
+      \item \lparam{what}(+): command parameters : listname, email and comments eventually
+      \item \lparam{robot}(+): robot
+      \item \lparam{sign\_mod} : 'smime' \(\mid\) undef - authentification
+   \end{enumerate}
+
+   \textbf{OUT} : 'unknown\_list' \(\mid\) 'wrong\_auth' \(\mid\) 'not\_allowed' \(\mid\) 1 
+
+\subsubsection {\large{del()}}
+\label{commands-del}
+\index{commands::del()}
+
+   Removes a user to a list (requested by another user), and can send acknowledgements.
+   Unsubscriber can be notified by sending template 'removed'.
+
+   \textbf{IN} : 
+   \begin{enumerate}
+      \item \lparam{what}(+): command parameters : listname and email 
+      \item \lparam{robot}(+): robot
+      \item \lparam{sign\_mod} : 'smime' \(\mid\) undef - authentification
+   \end{enumerate}
+
+   \textbf{OUT} : 'unknown\_list' \(\mid\) 'wrong\_auth' \(\mid\) 'not\_allowed' \(\mid\) 1
+
+\subsubsection {\large{subscribe()}}
+\label{commands-subscribe}
+\index{commands::subscribe()}
+
+   Subscribes a user to a list. New subscriber can be notified by sending him template 'welcome'.
+
+   \textbf{IN} : 
+   \begin{enumerate}
+      \item \lparam{what}(+): command parameters : listname and comments eventually
+      \item \lparam{robot}(+): robot
+      \item \lparam{sign\_mod} : 'smime' \(\mid\) undef - authentification
+   \end{enumerate}
+
+   \textbf{OUT} : 'unknown\_list' \(\mid\) 'wrong\_auth' \(\mid\) 'not\_allowed' \(\mid\) 1 
+
+\subsubsection {\large{signoff()}}
+\label{commands-signoff}
+\index{commands::signoff()}
+
+   Unsubscribes a user from a list. He can be notified by sending him template 'bye'.
+
+   \textbf{IN} : 
+   \begin{enumerate}
+      \item \lparam{which}(+): command parameters : listname and email 
+      \item \lparam{robot}(+): robot
+      \item \lparam{sign\_mod} : 'smime' \(\mid\) undef - authentification
+   \end{enumerate}
+
+   \textbf{OUT} : 'syntax\_error' \(\mid\) 'unknown\_list' \(\mid\) 'wrong\_auth' \(\mid\) 'not\_allowed' \(\mid\) 1
+
+\subsubsection {\large{invite()}}
+\label{commands-invite}
+\index{commands::invite()}
+
+   Invites someone to subscribe to a list by sending him the template 'invite'.
+
+   \textbf{IN} : 
+   \begin{enumerate}
+      \item \lparam{what}(+): command parameters : listname, email and comments 
+      \item \lparam{robot}(+): robot
+      \item \lparam{sign\_mod} : 'smime' \(\mid\) undef - authentification
+   \end{enumerate}
+
+   \textbf{OUT} : 'unknown\_list' \(\mid\) 'wrong\_auth' \(\mid\) 'not\_allowed' \(\mid\) 1
+
+\subsubsection {\large{last()}}
+\label{commands-last}
+\index{commands::last()}
+
+   Sends back the last archive file by calling List::archive\_send() function
+   (see \ref {list-archive-send}, page~\pageref {list-archive-send}).
+
+   \textbf{IN} : 
+   \begin{enumerate}
+      \item \lparam{which}(+): listname
+      \item \lparam{robot}(+): robot
+   \end{enumerate}
+
+   \textbf{OUT} : 'unknown\_list' \(\mid\) 'no\_archive' \(\mid\) 'not\_allowed' \(\mid\) 1 
+
+\subsubsection {\large{index()}}
+\label{commands-index}
+\index{commands::index()}
+
+   Sends the list of archived files of a list.
+
+   \textbf{IN} : 
+   \begin{enumerate}
+      \item \lparam{which}(+): listname
+      \item \lparam{robot}(+): robot
+   \end{enumerate}
+
+   \textbf{OUT} : 'unknown\_list' \(\mid\) 'no\_archive' \(\mid\) 'not\_allowed' \(\mid\) 1 
+
+\subsubsection {\large{getfile()}}
+\label{commands-last}
+\index{commands::last()}
+
+   Sends back the requested archive file by calling List::archive\_send() function
+   (see \ref {list-archive-send}, page~\pageref {list-archive-send}).
+
+   \textbf{IN} : 
+   \begin{enumerate}
+      \item \lparam{which}(+): commands parameters : listname and filename(archive file)
+      \item \lparam{robot}(+): robot
+   \end{enumerate}
+
+   \textbf{OUT} : 'unknown\_list' \(\mid\) 'no\_archive' \(\mid\) 'not\_allowed' \(\mid\) 1
+
+\subsubsection {\large{confirm()}}
+\label{commands-confirm}
+\index{commands::confirm()}
+
+   Confirms the authentification of a message for its distribution on a list by calling function
+   List::distribute\_msg() for distribution (see \ref {list-distribute-msg}, page~\pageref {list-distribute-msg}) 
+   or by calling  List::send\_to\_editor() for moderation (see \ref {list-send-editor}, page~\pageref {list-send-editor}).
+   
+   \textbf{IN} : 
+   \begin{enumerate}
+      \item \lparam{what}(+): authentification key (command parameter)
+      \item \lparam{robot}(+): robot
+   \end{enumerate}
+
+   \textbf{OUT} : 'wrong\_auth' \(\mid\) 'msg\_not\_found' \(\mid\) 1
+
+\subsubsection {\large{set()}}
+\label{commands--set}
+\index{commands::set()}
+
+   Changes subscription options (reception or visibility)
+
+   \textbf{IN} : 
+   \begin{enumerate}
+      \item \lparam{what}(+): command parameters : listname and 
+        reception mode (digest\(\mid\)digestplain\(\mid\)nomail\(\mid\)normal...) or visibility mode(conceal\(\mid\)noconceal).
+      \item \lparam{robot}(+): robot
+   \end{enumerate}
+
+   \textbf{OUT} : 'syntax\_error' \(\mid\) 'unknown\_list' \(\mid\) 'not\_allowed' \(\mid\) 'failed' \(\mid\) 1
+
+\subsubsection {\large{distribute()}}
+\label{commands-distribute}
+\index{commands::distribute()}
+
+   Distributes the broadcast of a validated moderated message.
+
+   \textbf{IN} : 
+   \begin{enumerate}
+      \item \lparam{what}(+): command parameters : listname and authentification key
+      \item \lparam{robot}(+): robot
+   \end{enumerate}
+
+   \textbf{OUT} : 'unknown\_list' \(\mid\) 'msg\_not\_found' \(\mid\) 1
+
+\subsubsection {\large{reject()}}
+\label{commands-reject}
+\index{commands::reject()}
+   
+   Refuses and deletes a moderated message. Rejected message sender can be notified by sending him template 'reject'.
+
+   \textbf{IN} : 
+   \begin{enumerate}
+      \item \lparam{what}(+): command parameters : listname and authentification key
+      \item \lparam{robot}(+): robot
+   \end{enumerate}
+
+   \textbf{OUT} : 'unknown\_list' \(\mid\) 'wrong\_auth' \(\mid\) 1 
+
+\subsubsection {\large{modindex()}}
+\label{commands-modindex}
+\index{commands::modindex()}
+
+   Sends a list of current messages to moderate of a list (look into spool queuemod)
+   by using template 'modindex'.
+
+   \textbf{IN} : 
+   \begin{enumerate}
+      \item \lparam{name}(+): listname
+      \item \lparam{robot}(+): robot
+   \end{enumerate}
+
+   \textbf{OUT} : 'unknown\_list' \(\mid\) 'not\_allowed' \(\mid\) 'no\_file' \(\mid\) 1
+
+\subsubsection {\large{review()}}
+\label{commands-review}
+\index{commands::review()}
+
+   Sends the list of subscribers of a list to the requester by using template 'review'.
+
+   \textbf{IN} : 
+   \begin{enumerate}
+      \item \lparam{listname}(+): list name
+      \item \lparam{robot}(+): robot
+      \item \lparam{sign\_mod} : 'smime' \(\mid\) undef - authentification
+   \end{enumerate}
+
+   \textbf{OUT} : 'unknown\_list' \(\mid\) wrong\_auth \(\mid\) no\_subscribers \(\mid\) 'not\_allowed' \(\mid\) 1
+
+\subsubsection {\large{verify()}}
+\label{commands-verify}
+\index{commands::verify()}
+
+   Verifies an S/MIME signature.
+
+   \textbf{IN} : 
+   \begin{enumerate}
+      \item \lparam{listname}(+): list name
+      \item \lparam{robot}(+): robot
+      \item \lparam{sign\_mod} : 'smime' \(\mid\) undef - authentification
+   \end{enumerate}
+
+   \textbf{OUT} : 1
+
+
+\subsubsection {\large{remind()}}
+\label{commands-remind}
+\index{commands::remind()}
+
+   Sends a personal reminder to each subscriber of a list or of every list (if \$which = *) 
+   using template 'remind' or 'global\_remind'.
+
+   \textbf{IN} : 
+   \begin{enumerate}
+      \item \lparam{which}(+): * \(\mid\) listname
+      \item \lparam{robot}(+): robot
+      \item \lparam{sign\_mod} : 'smime' \(\mid\) undef - authentification
+   \end{enumerate}
+
+   \textbf{OUT} : 'syntax\_error' \(\mid\) 'unknown\_list' \(\mid\) 'wrong\_auth' \(\mid\) 'not\_allowed' \(\mid\) 1
+
+\subsubsection {\large{info()}}
+\label{commands-info}
+\index{commands::info()}
+
+   Sends the list information file to the requester by using template 'info\_report'.
+
+   \textbf{IN} : 
+   \begin{enumerate}
+      \item \lparam{listname}(+): name of concerned list
+      \item \lparam{robot}(+): robot
+      \item \lparam{sign\_mod} : 'smime' \(\mid\) undef - authentification
+   \end{enumerate}
+
+   \textbf{OUT} : 'unknown\_list' \(\mid\) 'wrong\_auth' \(\mid\) 'not\_allowed' \(\mid\) 1 
+
+\subsubsection {\large{stats()}}
+\label{commands-stats}
+\index{commands::stats()}
+
+   Sends the statistics about a list using template 'stats\_report'.
+
+   \textbf{IN} : 
+   \begin{enumerate}
+      \item \lparam{listname}(+): list name
+      \item \lparam{robot}(+): robot
+      \item \lparam{sign\_mod} : 'smime' \(\mid\) undef - authentification
+   \end{enumerate}
+
+   \textbf{OUT} : 'unknown\_list' \(\mid\) 'not\_allowed' \(\mid\) 1 
+
+\subsubsection {\large{help()}}
+\label{commands-help}
+\index{commands::help()}
+
+  Sends the help file for the software by using template 'helpfile'.
+
+   \textbf{IN} : 
+   \begin{enumerate}
+      \item \lparam{} : ?
+      \item \lparam{robot}(+): robot
+   \end{enumerate}
+
+   \textbf{OUT} : 1
+
+\subsubsection {\large{lists()}}
+\label{commands-lists}
+\index{commands::lists()}
+
+  Sends back the list of public lists on this node by using template 'lists'. 
+
+   \textbf{IN} : 
+   \begin{enumerate}
+      \item \lparam{} : ?
+      \item \lparam{robot}(+): robot
+   \end{enumerate}
+
+   \textbf{OUT} : 1
+
+\subsubsection {\large{which()}}
+\label{commands-lists}
+\index{commands::lists()}
+
+   Sends back the list of lists that sender is subscribed to. If he is owner or
+   editor, managed lists are noticed. Message is sent by using template 'which'.
+
+   \textbf{IN} : 
+   \begin{enumerate}
+      \item \lparam{} : ?
+      \item \lparam{robot}(+): robot
+   \end{enumerate}
+
+   \textbf{OUT} : 1
+
+\subsubsection {\large{finished()}}
+\label{commands-finished}
+\index{commands::finished()}
+   
+   Called when 'quit' command is found. It sends a notification to sender : no
+   process will be done after this line.
+
+   \textbf{IN} : -
+
+   \textbf{OUT} : 1
+
+
+
+\subsection {tools for command processing}
+
+   get\_auth\_method(), error\_report\_cmd(), notice\_report\_cmd(), global\_report\_cmd().
+
+
+\subsubsection {\large{get\_auth\_method()}}
+\label{commands-get-auth-method}
+\index{commands::get\_auth\_method()}
+   
+   Called by processing command functions to return the authentification method
+   and to check the key if it is 'md5' method.
+
+   \textbf{IN} : 
+   \begin{enumerate}
+      \item \lparam{cmd}(+): requesting command 
+      \item \lparam{email}(+): used to compute auth if needed in command
+      \item \lparam{error}(+): ref(HASH) - keys are :
+	   \begin{itemize}
+             \item \lparam{type} : \$type for ``message\_report'' template parsing
+             \item \lparam{data} : ref(HASH) for ``message\_report'' template parsing
+             \item \lparam{msg} : for do\_log()
+	   \end{itemize}
+      \item \lparam{sign\_mod}(+): 'smime' - smime authentification \(\mid\) undef - smtp or md5 authentification 
+      \item \lparam{list}: ref(List) \(\mid\) undef - in a list context or not
+   \end{enumerate}
+   \textbf{OUT} : 'smime' \(\mid\) 'md5' \(\mid\) 'smtp' - authentification method if checking not failed.
+
+
+The following functions are called by processing command functions. It allows to push errors in 
+\@errors\_report array, notices in \@notices\_report array and global errors in
+\@globals\_report array. These arrays are used to parse ``command\_report'' template
+by  List::send\_global\_file() funstion(see \ref {list-send-global-file}, page~\pageref {list-send-global-file})  
+called by sympa::DoFile() function (see \ref {sympa-dofile},page~\pageref {sympa-dofile}).
+
+\subsubsection {\large{error\_report\_cmd()}}
+\label{commands-error-report-cmd}
+\index{commands::error\_report\_cmd()}
+
+   Pushes error reports of processed commands in  \@errors\_report array used in ``command\_report'' template.
+
+   \textbf{IN} : 
+   \begin{enumerate}
+      \item \lparam{cmd}: command line sent to sympa
+      \item \lparam{type}: type of error, used as \$error.type in ``command\_report'' template.
+      \item \lparam{data}: hash used in ``command\_report'' template. Its keys
+	 are used as \$error.key. 
+   \end{enumerate}
+
+   \textbf{OUT} : -
+
+\subsubsection {\large{notice\_report\_cmd()}}
+\label{commands-notice-report-cmd}
+\index{commands::notice\_report\_cmd()}
+
+   Pushes notice reports of processed commands in  \@notices\_report array used in ``command\_report'' template. 
+
+   \textbf{IN} : 
+   \begin{enumerate}
+      \item \lparam{cmd}: command line sent to sympa
+      \item \lparam{type}: type of notice, used as \$notice.type in ``command\_report'' template.
+      \item \lparam{data}: hash used in ``command\_report'' template. Its keys
+	 are used as \$notice.key. 
+   \end{enumerate}
+
+   \textbf{OUT} : -
+
+\subsubsection {\large{global\_report\_cmd()}}
+\label{commands-global-report-cmd}
+\index{commands::global\_report\_cmd()}
+
+   Pushes global error reports of processed commands in  \@globals\_report array used in ``command\_report'' template. 
+
+   \textbf{IN} : 
+   \begin{enumerate}
+      \item \lparam{cmd}: command line sent to sympa
+      \item \lparam{type}: type of global error, used as \$glob.type in ``command\_report'' template.
+      \item \lparam{data}: hash used in ``command\_report'' template. Its keys
+	 are used as \$glob.key. 
+   \end{enumerate}
+
+   \textbf{OUT} : -
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%% wwsympa.fcgi %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section {wwsympa.fcgi}
+\index{wwsympa.fcgi}
+
+This script provides the web interface to \Sympa.
+
+do\_subscribe(), do\_signoff(), do\_add(), do\_del(), do\_change\_email(), do\_reject(),
+do\_send\_mail(), do\_sendpasswd(), do\_remind(), do\_set(), do\_send\_me().
+
+\subsubsection {\large{do\_subscribe()}}
+\label{wwsympa-do-subscribe}
+\index{wwsympa::do\_subscribe()}
+
+  Subscribes a user to a list. New subscriber can be notified
+  by sending him template 'welcome'.\begin{itemize}   
+   \item \textbf{IN} : -
+   \item \textbf{OUT} : 'subrequest' \(\mid\) 'login' \(\mid\) 'info' \(\mid\) \$in.previous\_action
+  \end{itemize}    
+
+\subsubsection {\large{do\_signoff()}}
+\label{wwsympa-do-signoff}
+\index{wwsympa::do\_signoff()}
+
+  Unsubscribes a user from a list.  The unsubscriber can be notified
+  by sending him template 'bye'.\begin{itemize}   
+   \item \textbf{IN} : -
+   \item \textbf{OUT} : 'sigrequest' \(\mid\) 'login' \(\mid\) 'info'
+  \end{itemize}    
+
+\subsubsection {\large{do\_add()}}
+\label{wwsympa-do-add}
+\index{wwsympa::do\_add()}
+
+   Adds a user to a list (requested by another user) and can send acknowledgements. 
+   New subscriber can be notified by sending him template 'welcome'.\begin{itemize}
+    \item \textbf{IN} : -
+    \item \textbf{OUT} : 'loginrequest' \(\mid\) (\$in.previous\_action \(\mid\mid\) 'review')
+  \end{itemize}    
+
+\subsubsection {\large{do\_del()}}
+\label{wwsympa-do-del}
+\index{wwsympa::do\_del()}
+
+   Removes a user from a list (requested by another user) and can send acknowledgements.
+   Unsubscriber can be notified by sending template 'removed'.\begin{itemize} 
+   \item \textbf{IN} : -
+   \item \textbf{OUT} : 'loginrequest' \(\mid\) (\$in.previous\_action \(\mid\mid\) 'review')
+  \end{itemize}    
+
+\subsubsection {\large{do\_change\_email()}}
+\label{wwsympa-do-change-email}
+\index{wwsympa::do\_change\_email()}
+
+  Changes a user's email address in \Sympa environment. Password can be send to user by sending
+  template 'sendpasswd'.\begin{itemize} 
+   \item \textbf{IN} : -
+   \item \textbf{OUT} : '1' \(\mid\) 'pref'
+  \end{itemize}    
+
+\subsubsection {\large{do\_reject()}}
+\label{wwsympa-do-reject}
+\index{wwsympa::do\_reject()}
+
+  Refuses and deletes moderated messages. Rejected message senders are notified by
+  sending them template 'reject'.\begin{itemize} 
+   \item \textbf{IN} : -
+   \item \textbf{OUT} : 'loginrequest' \(\mid\) 'modindex'
+  \end{itemize}    
+
+\subsubsection {\large{do\_distribute()}}
+\label{wwsympa-do-distribute}
+\index{wwsympa::do\_distribute()}
+
+  Distributes moderated messages by sending a command remind to sympa.pl. For it, it calls mail::mail\_file()
+ (see \ref {mail-mail-file}, page~\pageref {mail-mail-file}). As it is in a Web context, the message will be 
+ set in spool.\begin{itemize} 
+   \item \textbf{IN} : -
+   \item \textbf{OUT} : 'loginrequest' \(\mid\) 'modindex'
+  \end{itemize}    
+
+\subsubsection {\large{do\_send\_mail()}}
+\label{wwsympa-do-send-mail}
+\index{wwsympa::do\_send\_mail()}
+
+  Sends a message to a list by the Web interface.
+  It uses mail::mail\_file() (see \ref {mail-mail-file}, page~\pageref {mail-mail-file})
+  to do it. As it is in a Web context, the message will be set in spool.\begin{itemize} 
+   \item \textbf{IN} : -
+   \item \textbf{OUT} : 'loginrequest' \(\mid\) 'info'
+  \end{itemize}    
+
+\subsubsection {\large{do\_sendpasswd()}}
+\label{wwsympa-do-sendpasswd}
+\index{wwsympa::do\_sendpasswd()}
+
+  Sends a message to a user, containing his password, by sending him template
+  'sendpasswd'.\begin{itemize} 
+   \item \textbf{IN} : -
+   \item \textbf{OUT} : 'loginrequest' \(\mid\) 'remindpasswd' \(\mid\) 1
+  \end{itemize}    
+
+
+\subsubsection {\large{do\_remind()}}
+\label{wwsympa-do-remind}
+\index{wwsympa::do\_remind()}
+
+  Sends a command remind to sympa.pl by calling mail::mail\_file() (see \ref {mail-mail-file}, 
+  page~\pageref {mail-mail-file}). As it is in a Web context, the message will be set in spool.
+  \begin{itemize} 
+   \item \textbf{IN} : -
+   \item \textbf{OUT} : 'loginrequest' \(\mid\) 'admin'
+  \end{itemize}    
+
+\subsubsection {\large{do\_set()}}
+\label{wwsympa-do-set}
+\index{wwsympa::do\_set()}
+
+   Changes subscription options (reception or visibility)
+   \begin{itemize} 
+    \item \textbf{IN} : -
+    \item \textbf{OUT} : 'loginrequest' \(\mid\) 'info'
+   \end{itemize}    
+
+\subsubsection {\large{do\_send\_me()}}
+\label{wwsympa-do-send-me}
+\index{wwsympa::do\_send\_me()}
+
+   Sends a web archive message to a requesting user It calls mail::mail\_forward() to do it 
+   (see \ref {mail-mail-forward}, page~\pageref {mail-mail-forward}). As it is in a Web context, 
+   the message will be set in spool.
+   \begin{itemize} 
+    \item \textbf{IN} : -
+    \item \textbf{OUT} : 'arc' \(\mid\) 1
+   \end{itemize}    
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%% tools.pl %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section {tools.pl}
+\index{tools.pl}
+
+ This module provides various tools for Sympa.
+
+\subsubsection {\large{checkcommand()}}
+\label{tools-checkcommand}
+\index{tools::checkcommand()}
+
+   Checks for no command in the body of the message. If there are some command in it, 
+   it returns true and sends a message to \$sender by calling  List::send\_global\_file() 
+   (see \ref {list-send-global-file}, page~\pageref {list-send-global-file}) with mail 
+   template ``message\_report''.
+
+   \textbf{IN} : 
+   \begin{enumerate}
+      \item \lparam{msg}(+): ref(MIME::Entity) - the message to check
+      \item \lparam{sender}(+): the message sender
+      \item \lparam{robot}(+): robot
+   \end{enumerate}
+
+   \textbf{OUT} : 
+     \begin{itemize}
+       \item 1 \emph{if there are some command in the message}
+       \item 0 \emph{else}
+     \end{itemize}
+
+  
+
+
+
+N.B.:
+\begin{itemize}
+\item (+) : required parameter, value must not be empty 
+\item \(\mid\) : ``or'' for parameters value 
+\item \$ : reference to code parameters or variables
+\item \emph{condition for parameter}
+\end{itemize}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % Appendices
