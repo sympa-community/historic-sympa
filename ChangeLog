@@ -1,3 +1,22 @@
+2005-04-18 16:21  sympa-authors
+
+	* src/: Family.pm, List.pm, sympa.pl, etc/script/create_db.Oracle,
+	  etc/script/create_db.Pg, etc/script/create_db.Sybase,
+	  etc/script/create_db.mysql: Adding msg_topic and
+	  msg_topic_keywords_apply_on list parameter. Adding field topics
+	  subscriber in the subscriber table, modifying function access to
+	  subscriber_table. Modifying subscriber otpion to able topic
+	  subscription.
+
+2005-04-18 15:47  sympa-authors
+
+	* mail_tt2/subscriber_notification.tt2, src/mail.pm: removing of
+	  mail_tt2/subscriber_notification.tt2 (forgotten before)
+
+2005-04-18 14:54  sympa-authors
+
+	* ChangeLog: [no log message]
+
 2005-04-18 14:53  sympa-authors
 
 	* doc/: sympa.pdf, sympa.ps, sympa.tex, sympa.tex.tpl,
