@@ -510,7 +510,7 @@ if ($main::options{'dump'}) {
     }
 
     unless (open INFILE, $main::options{'input_file'}) {
-	print STDERR $usage_string;
+	print STDERR "\n Impossible to open input file  : $! \n";
  	exit 1;	
     }
 

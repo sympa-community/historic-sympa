@@ -820,6 +820,12 @@ sub check_param_constraint {
 	}
 
 	$param_value = $list->get_param_value($param);
+
+	# exception msg_topic.keywords parameter
+	if ($param eq 'msg_topic.keywords') {
+	    next;
+	}
+
 	$value_error = $self->check_values($param_value,$constraint_value);
 	
 	if (ref($value_error)) {
@@ -895,7 +901,6 @@ sub check_values {
 	push @param_values,$param_value; # for single parameters
     }
     
- 
     foreach my $p_val (@param_values) { 
 	
 	my $found = 0;
@@ -1644,6 +1649,14 @@ sub _load_param_constraint_conf {
 	}
     }
     close FILE;
+
+ # Parameters not allowed in param_constraint.conf file :
+     foreach my $forbidden ('msg_topic.keywords','owner_include.source_parameters', 'editor_include.source_parameters') {
+ 	if (defined $constraint->{$forbidden}) {
+ 	    delete $constraint->{$forbidden};
+ 	}
+     }
+
 ###########################"
  #   open TMP, ">/tmp/dump1";
  #   &tools::dump_var ($constraint, 0, \*TMP);
