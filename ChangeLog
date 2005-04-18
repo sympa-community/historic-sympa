@@ -1,3 +1,22 @@
+2005-04-18 14:53  sympa-authors
+
+	* doc/: sympa.pdf, sympa.ps, sympa.tex, sympa.tex.tpl,
+	  html/index.html, html/node1.html, html/node10.html,
+	  html/node11.html, html/node12.html, html/node13.html,
+	  html/node14.html, html/node15.html, html/node16.html,
+	  html/node17.html, html/node18.html, html/node19.html,
+	  html/node2.html, html/node20.html, html/node21.html,
+	  html/node22.html, html/node23.html, html/node24.html,
+	  html/node25.html, html/node26.html, html/node27.html,
+	  html/node3.html, html/node4.html, html/node5.html,
+	  html/node6.html, html/node7.html, html/node8.html,
+	  html/node9.html, html/sympa.html, html/sympa.ps: Adding internal
+	  documentation for sending messages functions.
+
+2005-04-18 11:46  sympa-authors
+
+	* ChangeLog: [no log message]
+
 2005-04-18 11:24  sympa-authors
 
 	* mail_tt2/archive.tt2, mail_tt2/bye.tt2,
