@@ -80,7 +80,7 @@ sub set_send_spool {
 ####################################################
 # public mail_file                          
 ####################################################
-# send a tt2 file  signing if needed
+# send a tt2 file 
 # 
 #  
 # IN : -$filename(+) : tt2 filename (with .tt2) | ''
@@ -429,16 +429,17 @@ sub sendto {
 ####################################################
 # send a message using smpto function or puting it
 # in spool according to the context
+# Signing if needed
 # 
 #  
-# IN : -$msg(+) : string - message to send
+# IN : -$msg(+) : ref(MIME::Entity) | string - message to send
 #      -$rcpt(+) : ref(SCALAR) | ref(ARRAY) - recepients 
 #       (for SMTP : "RCPT To:" field)
 #      -$from(+) : for SMTP "MAIL From:" field , for 
 #        spool sending : "X-Sympa-From" field
 #      -$robot(+) : robot
 #      -$listname : listname | ''
-#      -$sign_mode(+) : 'smime' | 'none'
+#      -$sign_mode(+) : 'smime' | 'none' for signing
 #      -$sympa_email : for the file name for spool 
 #        sending
 # OUT : 1 - call to smtpto (sendmail) | 0 - push in spool
