@@ -1,0 +1,25 @@
+From: [% fromlist %]
+Subject: [% FILTER qencode %][%|loc(modkey)%]Confirm %1[%END%][%END%]
+Mime-version: 1.0
+Content-Type: multipart/mixed; boundary="[% boundary %]"
+Content-Transfer-Encoding: [%|loc%]_encoding_[%END%]
+
+--[% boundary %]
+Content-Type: text/plain; charset=[%|loc%]_charset_[%END%];
+
+[%|loc(list.name,conf.sympa,modkey,conf.sympa,modkey)%]To distribute the attached message in list %1 :
+
+[% FILTER escape_url %]mailto:%2?subject=CONFIRM %3[% END %]
+
+Or send a message to %4 with the following subject :
+CONFIRM %5
+[% END %]
+
+--[% boundary %]
+Content-Type: message/rfc822
+Content-Transfer-Encoding:  [%|loc%]_encoding_[%END%]
+Content-Disposition: inline
+
+[% INSERT $file IF file %]
+
+--[% boundary %]--

@@ -370,7 +370,7 @@ sub modify_list {
 	my $forbidden_param = join(',',@{$custom->{'forbidden'}{'param'}});
 	&do_log('notice',"These parameters aren't allowed in the new family definition, they are erased by a new instantiation family : \n $forbidden_param");
 
-	unless ($list->new_send_notify_to_owner('erase_customizing',($self->{'name'},$forbidden_param))) {
+	unless ($list->send_notify_to_owner('erase_customizing',[$self->{'name'},$forbidden_param])) {
 	    &do_log('notice','the owner isn\'t informed from erased customizing of the list %s',$list->{'name'});
 	}
     }
@@ -792,7 +792,6 @@ sub get_instantiation_results {
 sub check_param_constraint {
     my $self = shift;
     my $list = shift;
-    my $config = $list->{'admin'};
     &do_log('debug2','Family::check_param_constraint(%s,%s)',$self->{'name'},$list->{'name'});
 
     if ($self->{'state'} eq 'no_check') {
@@ -1305,7 +1304,7 @@ sub _update_existing_list {
 	my $forbidden_param = join(',',@{$custom->{'forbidden'}{'param'}});
 	&do_log('notice',"These parameters aren't allowed in the new family definition, they are erased by a new instantiation family : \n $forbidden_param");
 
-	unless ($list->new_send_notify_to_owner('erase_customizing',($self->{'name'},$forbidden_param))) {
+	unless ($list->send_notify_to_owner('erase_customizing',[$self->{'name'},$forbidden_param])) {
 	    &do_log('notice','the owner isn\'t informed from erased customizing of the list %s',$list->{'name'});
 	}
     }
@@ -1640,7 +1639,9 @@ sub _load_param_constraint_conf {
 	}
     }
     if ($error) {
-	&List::send_notify_to_listmaster('param_constraint_conf_error', $self->{'robot'}, $file);
+	unless (&List::send_notify_to_listmaster('param_constraint_conf_error', $self->{'robot'}, [$file])) {
+	    &do_log('notice','the owner isn\'t informed from param constraint config errors on the %s family',$self->{'name'});
+	}
     }
     close FILE;
 ###########################"
