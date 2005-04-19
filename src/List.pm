@@ -527,8 +527,7 @@ my %alias = ('reply-to' => 'reply_to',
 								      'occurrence' => '0-1',
 								      'gettext_id' => 'datasource parameters',
 								      'order' => 2
-									  #this param cannot be set in param_constraint.conf because of values syntaxe
-								      },
+    								      },
 					      'reception' => {'format' => ['mail','nomail'],
 							      'default' => 'mail',
 							      'gettext_id' => 'reception mode',
@@ -973,7 +972,6 @@ my %alias = ('reply-to' => 'reply_to',
 								     'occurrence' => '0-1',
 								     'gettext_id' => 'datasource parameters',
 								     'order' => 2
-								 #this param cannot be set in param_constraint.conf because of values syntaxe	 
 						      },
 					     'reception' => {'format' => ['mail','nomail'],
 							     'default' => 'mail',

@@ -6920,7 +6920,7 @@ sub do_edit_list {
 	  my @array_delete = keys %delete;
 	  unless ($list->update_config_changes('param',\@array_delete)) {
 	      &error_message('failed');
-	      &wwslog('info','do_savefile: cannot write in config_changes for deleted parameters from list %s', $list->{'name'});
+	      &wwslog('info','do_edit_list: cannot write in config_changes for deleted parameters from list %s', $list->{'name'});
 	      return undef;
 	  }
       }
@@ -7193,6 +7193,8 @@ sub _check_new_values {
     my $new_admin = shift;
     &do_log('debug3', '_check_new_values(%s)',$pname);
     
+    my $uncompellable_param = &Family::get_uncompellable_param();
+
     if (ref($::pinfo{$pname}{'format'}) eq 'HASH') { #composed parameter
 
 	foreach my $key (keys %{$check_family->{$pname}}) {
@@ -7201,10 +7203,16 @@ sub _check_new_values {
 	    my $values = &List::_get_param_value_anywhere($new_admin,"$pname.$key");
 	    my $nb_for = 0;
 	    
-	    if (($pname eq 'msg_topic') && ($key eq 'keywords')) { # exception for msg_topic.keywords
-		return 1;
+	    # exception for uncompellable param
+	    foreach my $p (keys %{$uncompellable_param}) {
+		if (($pname eq $p) && !($uncompellable_param->{$p})) { 
+		    return 1;
+		}
+		
+		if (($pname eq $p) && ($key eq $uncompellable_param->{$p})) { 
+		    return 1;
+		}
 	    }
-
 	    foreach my $p_val (@{$values}) { #each element value
 		$nb_for++;
 		if (ref($p_val) eq 'ARRAY') { # multiple values
@@ -7226,9 +7234,18 @@ sub _check_new_values {
 	}
     } else { #simple parameter
 
+	    # exception for uncompellable param
+	    foreach my $p (keys %{$uncompellable_param}) {
+		if ($pname eq $p) {
+		    return 1;
+		}
+	    }
+
+
 	my $constraint = $check_family->{$pname};
 	my $values = &List::_get_param_value_anywhere($new_admin,$pname);
 	my $nb_for = 0;
+
 
 	foreach my $p_val (@{$values}) { #each element value
 	    $nb_for++;

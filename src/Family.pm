@@ -32,6 +32,7 @@ use admin;
 use Config_XML;
 
 my %list_of_families;
+my @uncompellable_param = ('msg_topic.keywords','owner_include.source_parameters', 'editor_include.source_parameters');
 
 ## Class methods
 ################
@@ -133,7 +134,6 @@ sub new {
     ## state of the family for the use of check_param_constraint : 'no_check' or 'normal'
     ## check_param_constraint  only works in state "normal"
     $self->{'state'} = 'normal';
-
     return $self;
 }
      
@@ -821,10 +821,14 @@ sub check_param_constraint {
 
 	$param_value = $list->get_param_value($param);
 
-	# exception msg_topic.keywords parameter
-	if ($param eq 'msg_topic.keywords') {
-	    next;
+	# exception for uncompellable parameter
+	foreach my $forbidden (@uncompellable_param) {
+	    if ($param eq $forbidden) {
+		next;
+	    }  
 	}
+
+
 
 	$value_error = $self->check_values($param_value,$constraint_value);
 	
@@ -1018,6 +1022,33 @@ sub get_hash_family_lists {
     }
     return \%list_of_lists;
 }
+
+#########################################
+# get_uncompellable_param
+#########################################
+# return the uncompellable parameters 
+#  into a hash
+#  
+# IN  : -
+# OUT : -\%list_of_param  
+#       
+#########################################    
+sub get_uncompellable_param {
+    my %list_of_param;
+    &do_log('debug3','Family::get_uncompellable_param()');
+
+    foreach my $param (@uncompellable_param) {
+	if ($param =~ /^([\w-]+)\.([\w-]+)$/) {
+	    $list_of_param{$1} = $2;
+	    
+	} else {
+	    $list_of_param{$param} = '';
+	}
+    }
+
+    return \%list_of_param;
+}
+
 
 ############################# PRIVATE METHODS ##############################
 
@@ -1651,7 +1682,7 @@ sub _load_param_constraint_conf {
     close FILE;
 
  # Parameters not allowed in param_constraint.conf file :
-     foreach my $forbidden ('msg_topic.keywords','owner_include.source_parameters', 'editor_include.source_parameters') {
+    foreach my $forbidden (@uncompellable_param) {
  	if (defined $constraint->{$forbidden}) {
  	    delete $constraint->{$forbidden};
  	}
