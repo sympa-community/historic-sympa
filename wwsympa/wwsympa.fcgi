@@ -2660,6 +2660,7 @@ sub do_remindpasswd {
 	     $param->{'reception'}{$m}{'description'} = $wwslib::reception_mode{$m};
 	     if ($s->{'reception'} eq $m) {
 		 $param->{'reception'}{$m}{'selected'} = 'selected="selected"';
+
 	     }else {
 		 $param->{'reception'}{$m}{'selected'} = '';
 	     }
@@ -3041,6 +3042,29 @@ sub do_remindpasswd {
 	 $update->{'email'} = $in{'new_email'};
      }
 
+     ## message topic subscription
+     if (($reception eq '') && defined $list->{'admin'}{'msg_topic'}) {
+ 	my @user_topics;
+ 	
+ 	if ($in{'no_topic'}) {
+ 	    $update->{'topics'} = undef;
+ 	    
+ 	} else {
+ 	    foreach my $msg_topic (@{$list->{'admin'}{'msg_topic'}}) {
+ 		my $var_name = "topic_"."$msg_topic->{'name'}";
+ 		if ($in{"$var_name"}) {
+ 		    push @user_topics, $msg_topic->{'name'};
+ 		}
+ 	    }	 
+ 	    
+ 	    if ($in{"topic_other"}) {
+ 		push @user_topics, 'other';
+ 	    }
+ 	    
+ 	    $update->{'topics'} = join(',',@user_topics);
+ 	}
+     }
+
      ## Get additional DB fields
      foreach my $v (keys %in) {
 	 if ($v =~ /^additional_field_(\w+)$/) {
@@ -3314,6 +3338,10 @@ sub do_remindpasswd {
 	 $param->{'reception'}{$m}{'description'} = $wwslib::reception_mode{$m};
 	 if ($s->{'reception'} eq $m) {
 	     $param->{'reception'}{$m}{'selected'} = 'selected="selected"';
+
+	     if ($m eq 'mail') {
+		 $param->{'possible_topic'} = 1;
+	     }
 	 }else {
 	     $param->{'reception'}{$m}{'selected'} = '';
 	 }
@@ -3331,10 +3359,27 @@ sub do_remindpasswd {
 
      $param->{'subscriber'} = $s;
 
+
+     #msg_topic
+     $param->{'sub_user_topic'} = 0;
+     foreach my $user_topic (split /,/,$s->{'topics'}) {
+	 $param->{'topic_checked'}{$user_topic} = 1;
+	 $param->{'sub_user_topic'}++;
+     }
+     
+     if (ref($list->{'admin'}{'msg_topic'}) eq "ARRAY") {
+
+	 foreach my $top (@{$list->{'admin'}{'msg_topic'}}) {
+	     if ($top->{'name'}) {
+		 push (@{$param->{'available_topics'}},$top);
+	     }
+	 }
+     }
+     
      return 1;
  }
 
- ## Subscription request (user not authentified)
+## Subscription request (user not authentified)
  sub do_subrequest {
      &wwslog('info', 'do_subrequest(%s)', $in{'email'});
 
@@ -4060,6 +4105,14 @@ sub do_remindpasswd {
 	     &wwslog('err','do_modindex: unable to parse msg %s', $msg);
 	     closedir SPOOL;
 	     return 'admin';
+	 }
+
+
+	 if (defined $list->{'admin'}{'msg_topic'}){
+	     foreach my $topic (@{$list->{'admin'}{'msg_topic'}}) {
+		##########################################
+
+	     }
 	 }
 
 	 $param->{'spool'}{$id}{'size'} = int( (-s "$Conf{'queuemod'}/$msg") / 1024 + 0.5);
@@ -6066,7 +6119,7 @@ sub do_set_pending_list_request {
 
  }
 
- ## WWSympa Home-Page
+## WWSympa Home-Page
  sub do_home {
      &wwslog('info', 'do_home');
      # all variables are set in export_topics
@@ -6691,9 +6744,11 @@ sub do_edit_list {
 	     }
 	     $p = $list->{'admin'}{$pname};
 	     $new_p = $new_admin->{$pname};
+#	     &wwslog('notice',"MULTIPLE param 5 6 7 8: $pname...........................");
 	 }else {
 	     $p = [$list->{'admin'}{$pname}];
 	     $new_p = [$new_admin->{$pname}];
+#	     &wwslog('notice',"UNIQUE param 1 2 3 4 : $pname.........................");
 	 }
 
 	 ## Check changed parameters
@@ -6707,10 +6762,11 @@ sub do_edit_list {
 		 if ($p->[$i]{'name'} ne $new_p->[$i]{'name'}) {
 		     $changed{$pname} = 1; next;
 		 }
+ #		 &wwslog('notice',"..scenario task, SIMPLE UNIVALUE, param 1-5 : $pname($new_p->[$i]{'name'})");
 		 ## Hash
 		 ## Ex: 'owner'
 	     }elsif (ref ($pinfo->{$pname}{'format'}) eq 'HASH') {
-
+#		 &wwslog('notice',"..COMPOSE param 2 4 6 8 : $pname");
 		 ## Foreach Keys
 		 ## Ex: 'owner->email'
 		 foreach my $key (keys %{$pinfo->{$pname}{'format'}}) {
@@ -6733,13 +6789,15 @@ sub do_edit_list {
 		     ## Ex: 'shared_doc->d_read'
 		     if ($pinfo->{$pname}{'format'}{$key}{'scenario'} || 
 			 $pinfo->{$pname}{'format'}{$key}{'task'} ) {
+ #			 &wwslog('notice',"....scenario task UNIVALUE param 2 6 : $pname.$key($new_p->[$i]{$key}{'name'})");
 			 if ($p->[$i]{$key}{'name'} ne $new_p->[$i]{$key}{'name'}) {
 			     $changed{$pname} = 1; next;
 			 }
 		     }else{
 			 ## Multiple param
+			 #&wwslog('notice',"....non task non scenario param 2 4 6 8");
 			 if ($pinfo->{$pname}{'format'}{$key}{'occurrence'} =~ /n$/) {
-
+			     #&wwslog('notice',"......MULTIVALUE param 4 8 : $pname.$key(@{$new_p->[$i]{$key}})");
 			     if ($#{$p->[$i]{$key}} != $#{$new_p->[$i]{$key}}) {
 				 $changed{$pname} = 1; next;
 			     }
@@ -6747,7 +6805,7 @@ sub do_edit_list {
 			     ## Multiple param, foreach entry
 			     ## Ex: 'digest->days'
 			     foreach my $index (0..$#{$p->[$i]{$key}}) {
-
+#				 &wwslog('notice',"........($new_p->[$i]{$key}[$index])");
 				 my $format = $pinfo->{$pname}{'format'}{$key}{'format'};
 				 if (ref ($format)) {
 				     $format = $pinfo->{$pname}{'format'}{$key}{'file_format'};
@@ -6765,6 +6823,7 @@ sub do_edit_list {
 			 ## Single Param
 			 ## Ex: 'owner->email'
 			 }else {
+#			     &wwslog('notice',"......UNIVALUE param 2 6: $pname.$key($new_p->[$i]{$key})");
 			     if (! $new_p->[$i]{$key}) {
 				 ## If empty and is primary key => delete entry
 				 if ($pinfo->{$pname}{'format'}{$key}{'occurrence'} =~ /^1/) {
@@ -6797,6 +6856,7 @@ sub do_edit_list {
 	     ## Scalar
 	     ## Ex: 'max_size'
 	     }else {
+#		 &wwslog('notice',"..SIMPLE non SCENARIO non TASK param 1-3-5-7 : $pname($new_p->[$i])");
 		 if (! defined($new_p->[$i])) {
 		     push @{$delete{$pname}}, $i;
 		     $changed{$pname} = 1;
@@ -6953,7 +7013,8 @@ sub do_edit_list {
 		 $editor_update = 1;
 	     }
 	 }
-	  # updating config_changes for changed parameters
+	  # updating config_changes for changed parameters7094
+
 	  if (ref($family)) {
 	      my @array_changed = keys %changed;
 	      unless ($list->update_config_changes('param',\@array_changed)) {
@@ -7034,10 +7095,10 @@ sub do_edit_list {
      ## Save stats
      $list->savestats();
 
- #    print "Content-type: text/plain\n\n";
- #    &tools::dump_var(\%pinfo,0);
- #    &tools::dump_var($list->{'admin'},0);
+#      print "Content-type: text/plain\n\n";
+ #    &tools::dump_var($list->{'admin'}{'msg_topic'},0);
  #    &tools::dump_var($param->{'param'},0);
+
 
      &message('list_config_updated');
 
@@ -7140,6 +7201,10 @@ sub _check_new_values {
 	    my $values = &List::_get_param_value_anywhere($new_admin,"$pname.$key");
 	    my $nb_for = 0;
 	    
+	    if (($pname eq 'msg_topic') && ($key eq 'keywords')) { # exception for msg_topic.keywords
+		return 1;
+	    }
+
 	    foreach my $p_val (@{$values}) { #each element value
 		$nb_for++;
 		if (ref($p_val) eq 'ARRAY') { # multiple values
@@ -7392,7 +7457,7 @@ sub _prepare_data {
 		 push @{$p->{'value'}}, $v;
 	     }
 
-	 }elsif (ref ($struct->{'format'}) eq 'ARRAY') {
+	 }elsif ((ref ($struct->{'format'}) eq 'ARRAY') || ($restrict && ($main_p eq 'msg_topic' && $name eq 'keywords'))) {
 	     $p_glob->{'type'} = 'enum';
 
 	     unless (defined $p_glob->{'value'}) {
@@ -7918,7 +7983,7 @@ sub _restrict_values {
  #  read(/) = default (config list)
  #  edit(/) = default (config list)
  #  control(/) = not defined
- #  read(A/B)= (read(A) && read(B)) ||
+#  read(A/B)= (read(A) && read(B)) ||
  #             (author(A) || author(B))
  #  edit = idem read
  #  control (A/B) : author(A) || author(B)
@@ -8224,7 +8289,7 @@ sub merge_edit{
  }
 
  #*******************************************
- # Function : do_d_read
+# Function : do_d_read
  # Description : reads a file or a directory
  #******************************************
 
@@ -8836,7 +8901,7 @@ sub make_visible_path {
 
 
  ## Access to latest shared documents
- sub do_latest_d_read {
+sub do_latest_d_read {
      &wwslog('info', 'do_latest_d_read(%s,%s,%s)', $in{'list'}, $in{'for'}, $in{'count'});
 
      unless ($param->{'list'}) {
@@ -9858,7 +9923,7 @@ sub do_d_savefile {
  # Function : do_d_upload
  # Description : Creates a new file with a 
  #               uploaded file
- #******************************************
+#******************************************
 
  sub do_d_upload {
      # Parameters of the uploaded file (from d_read.tt2)
