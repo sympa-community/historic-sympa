@@ -10,13 +10,13 @@ original version by:  Nikos Drakos, CBLU, University of Leeds
   Jens Lippmann, Marek Rouchal, Martin Wilck and others -->
 <HTML>
 <HEAD>
-<TITLE>26. Internals</TITLE>
-<META NAME="description" CONTENT="26. Internals">
+<TITLE>26. Using Sympa commands</TITLE>
+<META NAME="description" CONTENT="26. Using Sympa commands">
 <META NAME="keywords" CONTENT="sympa">
 <META NAME="resource-type" CONTENT="document">
 <META NAME="distribution" CONTENT="global">
 
-<META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=EUC-JP">
+<META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=iso-8859-1">
 <META NAME="Generator" CONTENT="jLaTeX2HTML v2002-2-1 JA patch-2.0">
 <META HTTP-EQUIV="Content-Style-Type" CONTENT="text/css">
 
@@ -30,2824 +30,524 @@ original version by:  Nikos Drakos, CBLU, University of Leeds
 
 <BODY TEXT="#000000" BGCOLOR="#ffffff">
 <!--Navigation Panel-->
-<A NAME="tex2html1429"
+<A NAME="tex2html1435"
   HREF="node28.html">
 <IMG WIDTH="37" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="next" SRC="next.png"></A> 
-<A NAME="tex2html1423"
+<A NAME="tex2html1429"
   HREF="sympa.html">
 <IMG WIDTH="26" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="up" SRC="up.png"></A> 
-<A NAME="tex2html1417"
+<A NAME="tex2html1423"
   HREF="node26.html">
 <IMG WIDTH="63" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="previous" SRC="prev.png"></A> 
-<A NAME="tex2html1425"
+<A NAME="tex2html1431"
   HREF="node1.html">
 <IMG WIDTH="65" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="contents" SRC="contents.png"></A> 
-<A NAME="tex2html1427"
-  HREF="node28.html">
+<A NAME="tex2html1433"
+  HREF="node29.html">
 <IMG WIDTH="43" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="index" SRC="index.png"></A> 
 <BR>
-<B> :</B> <A NAME="tex2html1430"
-  HREF="node28.html">索引</A>
-<B> :</B> <A NAME="tex2html1424"
+<B> Next:</B> <A NAME="tex2html1436"
+  HREF="node28.html">27. Internals</A>
+<B> Up:</B> <A NAME="tex2html1430"
   HREF="sympa.html">Sympa Mailing Lists Management Software version</A>
-<B> :</B> <A NAME="tex2html1418"
-  HREF="node26.html">25. Using Sympa commands</A>
- &nbsp; <B>  <A NAME="tex2html1426"
-  HREF="node1.html">目次</A></B> 
- &nbsp; <B>  <A NAME="tex2html1428"
-  HREF="node28.html">索引</A></B> 
+<B> Previous:</B> <A NAME="tex2html1424"
+  HREF="node26.html">25. Sympa with S/MIME and HTTPS</A>
+ &nbsp; <B>  <A NAME="tex2html1432"
+  HREF="node1.html">Contents</A></B> 
+ &nbsp; <B>  <A NAME="tex2html1434"
+  HREF="node29.html">Index</A></B> 
 <BR>
 <BR>
 <!--End of Navigation Panel-->
 <!--Table of Child-Links-->
+<A NAME="CHILD_LINKS"><STRONG>Subsections</STRONG></A>
 
-
 <UL>
-<LI><A NAME="tex2html1431"
-  HREF="node27.html#SECTION002710000000000000000">26.1 mail.pm</A>
-<UL>
-<LI><A NAME="tex2html1432"
-  HREF="node27.html#SECTION002711000000000000000">26.1.1 public functions</A>
-<LI><A NAME="tex2html1433"
-  HREF="node27.html#SECTION002712000000000000000">26.1.2 private functions</A>
-</UL>
-<BR>
-<LI><A NAME="tex2html1434"
-  HREF="node27.html#SECTION002720000000000000000">26.2 List.pm</A>
-<UL>
-<LI><A NAME="tex2html1435"
-  HREF="node27.html#SECTION002721000000000000000">26.2.1 Functions for message distribution</A>
-<LI><A NAME="tex2html1436"
-  HREF="node27.html#SECTION002722000000000000000">26.2.2 Functions for template sending</A>
 <LI><A NAME="tex2html1437"
-  HREF="node27.html#SECTION002723000000000000000">26.2.3 Functions for service messages</A>
+  HREF="node27.html#SECTION002710000000000000000">26.1 User commands</A>
 <LI><A NAME="tex2html1438"
-  HREF="node27.html#SECTION002724000000000000000">26.2.4 Functions for message notification</A>
-</UL>
-<BR>
+  HREF="node27.html#SECTION002720000000000000000">26.2 Owner commands</A>
 <LI><A NAME="tex2html1439"
-  HREF="node27.html#SECTION002730000000000000000">26.3 sympa.pl</A>
-<LI><A NAME="tex2html1440"
-  HREF="node27.html#SECTION002740000000000000000">26.4 Commands.pm</A>
-<UL>
-<LI><A NAME="tex2html1441"
-  HREF="node27.html#SECTION002741000000000000000">26.4.1 Commands processing</A>
-<LI><A NAME="tex2html1442"
-  HREF="node27.html#SECTION002742000000000000000">26.4.2 tools for command processing</A>
-</UL>
-<BR>
-<LI><A NAME="tex2html1443"
-  HREF="node27.html#SECTION002750000000000000000">26.5 wwsympa.fcgi</A>
-<LI><A NAME="tex2html1444"
-  HREF="node27.html#SECTION002760000000000000000">26.6 tools.pl</A>
+  HREF="node27.html#SECTION002730000000000000000">26.3 Moderator commands</A>
 </UL>
 <!--End of Table of Child-Links-->
 <HR>
 
-<H1><A NAME="SECTION002700000000000000000"></A>
-<A NAME="internals"></A>
-<BR>
-26. Internals
+<H1><A NAME="SECTION002700000000000000000">
+26. Using <I>Sympa</I> commands</A>
 </H1>
 
 <P>
-This chapter describes these modules (or a part of) :
+Users interact with <I>Sympa</I>, of course, when they send messages to
+one of the lists, but also indirectly through administrative requests
+(subscription, list of users, etc.).
 
-<UL>
-<LI><A NAME="10844"></A><TT>src/mail.pm</TT>
-</LI>
-<LI><A NAME="10847"></A><TT>src/List.pm</TT>  
-</LI>
-<LI><A NAME="10850"></A><TT>src/sympa.pm</TT>  
-</LI>
-<LI><A NAME="10853"></A><TT>src/Commands.pm</TT>
-</LI>
-<LI><A NAME="10856"></A><TT>src/wwsympa.pm</TT> 
-</LI>
-<LI><A NAME="10859"></A><TT>src/tools.pm</TT>  
-</LI>
-</UL>
+<P>
+This section describes administrative requests, as well as interaction
+modes in the case of private and moderated lists.  Administrative
+requests are messages whose body contains commands understood by
+<I>Sympa</I>, one per line. These commands can be indiscriminately placed
+in the <A NAME="10646"></A><TT>Subject:</TT> or in the body of the message. The
+<A NAME="10649"></A><TT>To:</TT> address is generally the <TT>sympadomain</TT>
+alias, although it is also advisable to recognize the <TT>listservdomain</TT> address.
+
+<P>
+Example:
+
+<P><PRE>
+From: pda@prism.uvsq.fr
+To: sympa@cru.fr
+
+LISTS
+INFO sympa-users
+REVIEW sympa-users
+QUIT
+</PRE>
+
+<P>
+Most user commands have three-letter abbreviations (e.g. <TT>REV</TT> instead of <A NAME="10656"></A><TT>REVIEW</TT>).
 
 <P>
 
-<H1><A NAME="SECTION002710000000000000000"></A>
-<A NAME="4381"></A>
-<BR>
-26.1 mail.pm
+<H1><A NAME="SECTION002710000000000000000">
+26.1 User commands</A>
 </H1>
 
 <P>
-This module deals with mail sending and does the SMTP job. It provides a function for message distribution to a list, 
-the message can be encrypted. There is also a function to send service messages by parsing tt2 files, 
-These messages can be signed.
-For sending, a call to sendmail is done or the message is pushed in a spool according to calling context.
 
-<P>
-
-<H2><A NAME="SECTION002711000000000000000">
-26.1.1 public functions</A>
-</H2>
-
-<P>
-mail_file(), mail_message(), mail_forward(), set_send_spool(), reaper().
-
-<P>
-
-<H3><A NAME="SECTION002711100000000000000"></A>
-<A NAME="mail-mail-file"></A><A NAME="4385"></A>
-<BR>
-26.1.1.1 <FONT SIZE="+1">mail_file()</FONT>
-</H3>
-
-<P>
-Message is written by parsing a tt2 file (or with a string ). It writes mail headers if they are missing and they are encoded. 
-   Then the message is sent by calling mail::sending() function (see <A HREF="#mail-sending">26.1.2</A>, page&nbsp;<A HREF="node27.html#mail-sending"><IMG  ALIGN="BOTTOM" BORDER="1" ALT="[*]" SRC="crossref.png"></A>).
-
-<P>
-<B>IN</B> : 
-   
-<OL>
-<LI><A NAME="10862"></A><TT>filename</TT> : string - tt2 filename <IMG
- WIDTH="7" HEIGHT="32" ALIGN="MIDDLE" BORDER="0"
- SRC="img3.png"
- ALT="\(\mid\)"> '' - no tt2 filename sent
-</LI>
-<LI><A NAME="10865"></A><TT>rcpt</TT> (+) : SCALAR <IMG
- WIDTH="7" HEIGHT="32" ALIGN="MIDDLE" BORDER="0"
- SRC="img3.png"
- ALT="\(\mid\)"> ref(ARRAY) - SMTP "RCPT To:" field
-</LI>
-<LI><A NAME="10868"></A><TT>data</TT> (+) : ref(HASH) - used to parse tt2 file, contains header values, keys are : 
-       
 <UL>
-<LI><A NAME="10871"></A><TT>return_path</TT> (+) : SMTP "MAIL From:" field <I>if send by SMTP</I>, q
-	                                "X-Sympa-From:" field <I>if send by spool</I>
+<LI><A NAME="10659"></A><TT>HELP</TT>
+
+<P>
+Provides instructions for the use of <I>Sympa</I> commands.  The
+        result is the content of the <A NAME="10663"></A><TT>helpfile.tt2</TT> template
+        file. 
+
+<P>
 </LI>
-<LI><A NAME="10874"></A><TT>to</TT> : "To:" header field <I>else it is $rcpt</I>
+<LI><A NAME="10666"></A><TT>INFO</TT> <I>listname</I>
+
+<P>
+Provides the parameters of the specified list (owner,
+        subscription mode, etc.) and its description. The
+        result is the content of <A NAME="10669"></A><TT>~welcome[.mime]</TT>.
+
+<P>
 </LI>
-<LI><A NAME="10877"></A><TT>from</TT> : "From:" field  <I>if $filename is not a full msg</I>
+<LI><A NAME="10674"></A><TT>LISTS</TT>
+        <A NAME="cmd-lists"></A>
+<P>
+Provides the names of lists managed by <I>Sympa</I>.  This list
+        is generated dynamically, using the <A NAME="10678"></A><TT>visibility</TT>
+        (see <A HREF="node21.html#par-visibility">20.1.9</A>, page&nbsp;<A HREF="node21.html#par-visibility"><IMG  ALIGN="BOTTOM" BORDER="1" ALT="[*]" SRC="crossref.png"></A>).
+	The <TT>lists.tt2</TT> template defines the message return
+	by the <A NAME="10681"></A><TT>LISTS</TT> command.
+
+<P>
 </LI>
-<LI><A NAME="10880"></A><TT>subject</TT> : "Subject:" field <I>if $filename is not a full msg</I>
+<LI><A NAME="10684"></A><TT>REVIEW</TT> <I>listname</I>
+        <A NAME="cmd-review"></A>
+<P>
+Provides the addresses of subscribers if the run mode authorizes it. 
+	See the <A NAME="10687"></A><TT>review</TT> parameter (<A HREF="node21.html#par-review">20.3.9</A>, page&nbsp;<A HREF="node21.html#par-review"><IMG  ALIGN="BOTTOM" BORDER="1" ALT="[*]" SRC="crossref.png"></A>) for the configuration file of each list,
+        which controls consultation authorizations for the subscriber
+        list. Since subscriber addresses can be abused by spammers,
+        it is strongly recommended that you <B>only authorize owners
+        to access the subscriber list</B>.
+
+<P>
 </LI>
-<LI><A NAME="10883"></A><TT>replyto</TT> : "Reply-to:" field <I>if $filename is not a full msg</I>
+<LI><A NAME="10690"></A><TT>WHICH</TT>
+         <A NAME="cmd-which"></A>
+<P>
+Returns the list of lists to which one is subscribed,
+        as well as the configuration of his or her subscription to
+        each of the lists (DIGEST, NOMAIL, SUMMARY, CONCEAL).
+
+<P>
 </LI>
-<LI><A NAME="10886"></A><TT>headers</TT> : ref(HASH), keys are other mail headers
+<LI><A NAME="10693"></A><TT>STATS</TT> <I>listname</I>
+        <A NAME="cmd-stats"></A>
+<P>
+Provides statistics for the specified list:
+        number of messages received, number of messages sent,
+        megabytes received, megabytes sent. This is the contents
+        of the <A NAME="10696"></A><TT>stats</TT> file.
+
+<P>
+Access to this command is controlled by the <A NAME="10699"></A><TT>review</TT> parameter.
+
+<P>
 </LI>
-<LI><A NAME="10889"></A><TT>body</TT> : body message <I>if not $filename</I>
+<LI><A NAME="10702"></A><TT>INDEX</TT> <I>listname</I>
+        <A NAME="cmd-index"></A>
+<P>
+Provides index of archives for specified list. Access rights
+        to this function are the same as for the <A NAME="10705"></A><TT>GET</TT>
+        command. 
+
+<P>
 </LI>
-<LI><A NAME="10892"></A><TT>lang</TT> : tt2 language <I>if $filename</I>  
+<LI><A NAME="10708"></A><TT>GET</TT> <I>listname</I> <I>archive</I>
+        <A NAME="cmd-get"></A>
+<P>
+To retrieve archives for list (see above).  Access
+        rights are the same as for the <A NAME="10711"></A><TT>REVIEW</TT> command.
+        See <A NAME="10714"></A><TT>review</TT> parameter (<A HREF="node21.html#par-review">20.3.9</A>,
+        page&nbsp;<A HREF="node21.html#par-review"><IMG  ALIGN="BOTTOM" BORDER="1" ALT="[*]" SRC="crossref.png"></A>).
+
+<P>
 </LI>
-<LI><A NAME="10895"></A><TT>list</TT> : ref(HASH) <I>if sign_mode='smime'</I> - keys are :
-	   
-<UL>
-<LI><A NAME="10898"></A><TT>name</TT> : list name
+<LI><A NAME="10717"></A><TT>LAST</TT> <I>listname</I>
+        <A NAME="cmd-last"></A>
+<P>
+To receive the last message distributed in a list (see above).  Access
+        rights are the same as for the <A NAME="10720"></A><TT>GET</TT> command.
+
+<P>
 </LI>
-<LI><A NAME="10901"></A><TT>dir</TT> : list directory
-	   
+<LI><A NAME="10723"></A><TT>SUBSCRIBE</TT> <I>listname firstname name</I>
+        <A NAME="cmd-subscribe"></A>
+<P>
+Requests sign-up to the specified list. The <I>firstname</I> and <I>name</I> are optional. If the
+        list is parameterized with a restricted subscription (see
+        <A NAME="10726"></A><TT>subscribe</TT> parameter, <A HREF="node21.html#par-subscribe">20.3.1</A>,
+        page&nbsp;<A HREF="node21.html#par-subscribe"><IMG  ALIGN="BOTTOM" BORDER="1" ALT="[*]" SRC="crossref.png"></A>), this command is sent to the
+        list owner for approval.
+
+<P>
+</LI>
+<LI><A NAME="10729"></A><TT>INVITE</TT> <I>listname user@host name</I>
+        <A NAME="cmd-invite"></A>
+<P>
+Invite someone to subscribe to the specified list. The 
+        <I>name</I> is optional. The command is similar to the
+        <A NAME="10732"></A><TT>ADD</TT> but the specified person is not added to the
+        list but invited to subscribe to it in accordance with the 
+        <A NAME="10735"></A><TT>subscribe</TT> parameter, <A HREF="node21.html#par-subscribe">20.3.1</A>,
+        page&nbsp;<A HREF="node21.html#par-subscribe"><IMG  ALIGN="BOTTOM" BORDER="1" ALT="[*]" SRC="crossref.png"></A>).
+
+<P>
+</LI>
+<LI><A NAME="10738"></A><TT>SIGNOFF</TT> <I>listname</I> [ <I>user@host</I> ]
+        <A NAME="cmd-signoff"></A>
+<P>
+Requests unsubscription from the specified list.
+        <A NAME="10741"></A><TT>SIGNOFF *</TT> means unsubscription from all lists.
+
+<P>
+</LI>
+<LI><A NAME="10744"></A><TT>SET</TT> <I>listname</I> <TT>DIGEST</TT>
+        <A NAME="cmd-setdigest"></A>
+<P>
+Puts the subscriber in <I>digest</I> mode for the <I>listname</I> list.  Instead of receiving mail from the list
+        in a normal manner, the subscriber will periodically receive
+        it in a DIGEST. This DIGEST compiles a group of messages
+        from the list, using multipart/digest mime format.
+
+<P>
+The sending period for these DIGESTs is regulated by the
+        list owner using the <A NAME="10747"></A><TT>digest</TT> parameter (see&nbsp;<A HREF="node21.html#par-digest">20.4.8</A>, page&nbsp;<A HREF="node21.html#par-digest"><IMG  ALIGN="BOTTOM" BORDER="1" ALT="[*]" SRC="crossref.png"></A>).  See the <A NAME="10750"></A><TT>SET&nbsp;LISTNAME&nbsp;MAIL</TT> command (<A HREF="#cmd-setmail">26.1</A>, page&nbsp;<A HREF="node27.html#cmd-setmail"><IMG  ALIGN="BOTTOM" BORDER="1" ALT="[*]" SRC="crossref.png"></A>) and the <A NAME="10753"></A><TT>reception</TT> parameter (<A HREF="node18.html#par-reception">17.4</A>, page&nbsp;<A HREF="node18.html#par-reception"><IMG  ALIGN="BOTTOM" BORDER="1" ALT="[*]" SRC="crossref.png"></A>).
+
+<P>
+</LI>
+<LI><A NAME="10756"></A><TT>SET</TT> <I>listname</I> <TT>SUMMARY</TT>
+        <A NAME="cmd-setsummary"></A>
+<P>
+Puts the subscriber in <I>summary</I> mode for the <I>listname</I> list.  Instead of receiving mail from the list
+        in a normal manner, the subscriber will periodically receive
+        the list of messages. This mode is very close to the DIGEST
+        reception mode but the subscriber receives only the list of messages.
+
+<P>
+This option is available only if the digest mode is set.
+
+<P>
+</LI>
+<LI><A NAME="10759"></A><TT>SET</TT> <I>listname</I> <TT>NOMAIL</TT>
+        <A NAME="cmd-setnomail"></A>
+<P>
+Puts subscriber in <I>nomail</I> mode for the <I>listname</I> list.  This mode is used when a subscriber no longer wishes
+        to receive mail from the list, but nevertheless wishes to retain
+        the possibility of posting to the list.
+        This mode therefore prevents the subscriber from unsubscribing
+        and subscribing later on.  See the <A NAME="10762"></A><TT>SET&nbsp;LISTNAME&nbsp;MAIL</TT>
+        command (<A HREF="#cmd-setmail">26.1</A>, page&nbsp;<A HREF="node27.html#cmd-setmail"><IMG  ALIGN="BOTTOM" BORDER="1" ALT="[*]" SRC="crossref.png"></A>) and
+        the <A NAME="10765"></A><TT>reception</TT> (<A HREF="node18.html#par-reception">17.4</A>, page&nbsp;<A HREF="node18.html#par-reception"><IMG  ALIGN="BOTTOM" BORDER="1" ALT="[*]" SRC="crossref.png"></A>). 
+
+<P>
+</LI>
+<LI><A NAME="10768"></A><TT>SET</TT> <I>listname</I> <TT>TXT</TT>
+        <A NAME="cmd-settxt"></A>
+<P>
+Puts subscriber in <I>txt</I> mode for the <I>listname</I> list.  This mode is used when a subscriber wishes
+        to receive mails sent in both format txt/html and txt/plain 
+        only in txt/plain format.
+        See the <A NAME="10771"></A><TT>reception</TT> (<A HREF="node18.html#par-reception">17.4</A>, page&nbsp;<A HREF="node18.html#par-reception"><IMG  ALIGN="BOTTOM" BORDER="1" ALT="[*]" SRC="crossref.png"></A>). 
+
+<P>
+</LI>
+<LI><A NAME="10774"></A><TT>SET</TT> <I>listname</I> <TT>HTML</TT>
+        <A NAME="cmd-sethtml"></A>
+<P>
+Puts subscriber in <I>html</I> mode for the <I>listname</I> list.  This mode is used when a subscriber wishes
+        to receive mails sent in both format txt/html and txt/plain 
+        only in txt/html format.
+        See the <A NAME="10777"></A><TT>reception</TT> (<A HREF="node18.html#par-reception">17.4</A>, page&nbsp;<A HREF="node18.html#par-reception"><IMG  ALIGN="BOTTOM" BORDER="1" ALT="[*]" SRC="crossref.png"></A>). 
+
+<P>
+</LI>
+<LI><A NAME="10780"></A><TT>SET</TT> <I>listname</I> <TT>URLIZE</TT>
+        <A NAME="cmd-seturlize"></A>
+<P>
+Puts subscriber in <I>urlize</I> mode for the <I>listname</I> list.  This mode is used when a subscriber wishes
+        not to receive attached files. The attached files are replaced by
+        an URL leading to the file stored on the list site. 
+
+<P>
+See the <A NAME="10783"></A><TT>reception</TT> (<A HREF="node18.html#par-reception">17.4</A>, page&nbsp;<A HREF="node18.html#par-reception"><IMG  ALIGN="BOTTOM" BORDER="1" ALT="[*]" SRC="crossref.png"></A>). 
+
+<P>
+</LI>
+<LI><A NAME="10786"></A><TT>SET</TT> <I>listname</I> <TT>NOT_ME</TT>
+        <A NAME="cmd-not-me"></A>
+<P>
+Puts subscriber in <I>not_me</I> mode for the <I>listname</I> list.  This mode is used when a subscriber wishes
+        not to receive back the message that he has sent to the list. 
+
+<P>
+See the <A NAME="10789"></A><TT>reception</TT> (<A HREF="node18.html#par-reception">17.4</A>, page&nbsp;<A HREF="node18.html#par-reception"><IMG  ALIGN="BOTTOM" BORDER="1" ALT="[*]" SRC="crossref.png"></A>). 
+
+<P>
+</LI>
+<LI><A NAME="10792"></A><TT>SET</TT> <I>listname</I> <TT>MAIL</TT>
+        <A NAME="cmd-setmail"></A>
+<P>
+Puts the subscriber in normal mode (default) for the <I>listname</I> list.  This option is mainly used to cancel the
+        <I>nomail</I>, <I>summary</I> or <I>digest</I> modes. If the subscriber
+        was in <I>nomail</I> mode, he or she will again receive
+        mail from the list in a normal manner.  See the <A NAME="10795"></A><TT>SET&nbsp;LISTNAME&nbsp;NOMAIL</TT> command (<A HREF="#cmd-setnomail">26.1</A>,
+        page&nbsp;<A HREF="node27.html#cmd-setnomail"><IMG  ALIGN="BOTTOM" BORDER="1" ALT="[*]" SRC="crossref.png"></A>) and the <A NAME="10798"></A><TT>reception</TT>
+        parameter (<A HREF="node18.html#par-reception">17.4</A>, page&nbsp;<A HREF="node18.html#par-reception"><IMG  ALIGN="BOTTOM" BORDER="1" ALT="[*]" SRC="crossref.png"></A>).
+
+<P>
+</LI>
+<LI><A NAME="10801"></A><TT>SET</TT> <I>listname</I> <TT>CONCEAL</TT>
+        <A NAME="cmd-setconceal"></A>
+<P>
+Puts the subscriber in <I>conceal</I> mode for the
+        <I>listname</I> list.  The subscriber will then become
+        invisible during <A NAME="10804"></A><TT>REVIEW</TT> on this list. Only owners
+        will see the whole subscriber list.
+
+<P>
+See the <A NAME="10807"></A><TT>SET&nbsp;LISTNAME&nbsp;NOCONCEAL</TT> command (<A HREF="#cmd-setnoconceal">26.1</A>, page&nbsp;<A HREF="node27.html#cmd-setnoconceal"><IMG  ALIGN="BOTTOM" BORDER="1" ALT="[*]" SRC="crossref.png"></A>) and
+        the <A NAME="10810"></A><TT>visibility</TT> parameter (<A HREF="node21.html#par-visibility">20.1.9</A>,
+        page&nbsp;<A HREF="node21.html#par-visibility"><IMG  ALIGN="BOTTOM" BORDER="1" ALT="[*]" SRC="crossref.png"></A>).
+
+<P>
+</LI>
+<LI><A NAME="10813"></A><TT>SET</TT> <I>listname</I> <TT>NOCONCEAL</TT>
+        <A NAME="cmd-setnoconceal"></A>
+<P>
+Puts the subscriber in <I>noconceal</I> mode (default)
+        for <I>listname</I> list. The subscriber will then
+        become visible during <A NAME="10816"></A><TT>REVIEW</TT> of this list. The
+        <I>conceal</I> mode is then cancelled.
+
+<P>
+See <A NAME="10819"></A><TT>SET&nbsp;LISTNAME&nbsp;CONCEAL</TT> command (<A HREF="#cmd-setconceal">26.1</A>, page&nbsp;<A HREF="node27.html#cmd-setconceal"><IMG  ALIGN="BOTTOM" BORDER="1" ALT="[*]" SRC="crossref.png"></A>) and
+        <A NAME="10822"></A><TT>visibility</TT> parameter (<A HREF="node21.html#par-visibility">20.1.9</A>,
+        page&nbsp;<A HREF="node21.html#par-visibility"><IMG  ALIGN="BOTTOM" BORDER="1" ALT="[*]" SRC="crossref.png"></A>).
+
+<P>
+</LI>
+<LI><A NAME="10825"></A><TT>QUIT</TT>
+        <A NAME="cmd-quit"></A>
+<P>
+Ends acceptance of commands. This can prove useful when
+        the message contains additional lines, as for example in
+        the case where a signature is automatically added by the
+        user's mail program (MUA).
+
+<P>
+</LI>
+<LI><A NAME="10828"></A><TT>CONFIRM</TT> <I>key</I>
+        <A NAME="cmd-confirm"></A>
+<P>
+If the <A NAME="10831"></A><TT>send</TT> parameter of a list is set to <TT>privatekey, publickey</TT> or <TT>privateorpublickey</TT>,
+        messages are only distributed in the list after an
+        <A NAME="10834"></A>authentication phase by return mail, using a
+        one-time password (numeric key). For this authentication,
+        the sender of the message is requested to post the ``<A NAME="10835"></A><TT>CONFIRM</TT>&nbsp;<I>key</I>'' command to <I>Sympa</I>.
+
+<P>
+</LI>
+<LI><A NAME="10839"></A><TT>QUIET</TT>
+
+<P>
+This command is used for silent (mute) processing: no
+        performance report is returned for commands prefixed with
+        <A NAME="10842"></A><TT>QUIET</TT>.
+
+<P>
 </LI>
 </UL>
-</LI>
-</UL>
-</LI>
-<LI><A NAME="10904"></A><TT>robot</TT> (+) : robot
-</LI>
-<LI><A NAME="10907"></A><TT>sign_mode</TT> : 'smime'- the mail is signed with smime  <IMG
- WIDTH="7" HEIGHT="32" ALIGN="MIDDLE" BORDER="0"
- SRC="img3.png"
- ALT="\(\mid\)">  undef - no signature 
-   
-</LI>
-</OL>
-
-<P>
-<B>OUT</B> : 1
 
 <P>
 
-<H3><A NAME="SECTION002711200000000000000"></A>
-<A NAME="mail-mail-message"></A>  
-<A NAME="4423"></A>
-<BR>
-26.1.1.2 <FONT SIZE="+1">mail_message()</FONT>
-</H3>
-
-<P>
-Distributes a message to a list. The message is encrypted if needed, in this case, only one SMTP session is used for each recepient 
-   otherwise, recepient are grouped by domain for sending (it controls the number recepient arguments to call sendmail). 
-   Message is sent by calling mail::sendto() function (see <A HREF="#mail-sendto">26.1.2</A>, page&nbsp;<A HREF="node27.html#mail-sendto"><IMG  ALIGN="BOTTOM" BORDER="1" ALT="[*]" SRC="crossref.png"></A>).
-
-<P>
-<B>IN</B> : 
-   
-<OL>
-<LI><A NAME="10910"></A><TT>message</TT> (+) : ref(Message) - message to distribute
-</LI>
-<LI><A NAME="10913"></A><TT>from</TT> (+) : message from
-</LI>
-<LI><A NAME="10916"></A><TT>robot</TT> (+) : robot
-</LI>
-<LI><A NAME="10919"></A><TT>rcpt</TT> (+) : ARRAY - recepients     
-   
-</LI>
-</OL>
-
-<P>
-<B>OUT</B> : <A NAME="10922"></A><TT>$numsmtp</TT> = number of sendmail process 
-
-<P>
-
-<H3><A NAME="SECTION002711300000000000000"></A>
-<A NAME="mail-mail-forward"></A>  
-<A NAME="4437"></A>
-<BR>
-26.1.1.3 <FONT SIZE="+1">mail_forward()</FONT>
-</H3>
-
-<P>
-Forward a message by calling mail::sending() function (see <A HREF="#mail-sending">26.1.2</A>, page&nbsp;<A HREF="node27.html#mail-sending"><IMG  ALIGN="BOTTOM" BORDER="1" ALT="[*]" SRC="crossref.png"></A>).
-
-<P>
-<B>IN</B> : 
-   
-<OL>
-<LI><A NAME="10925"></A><TT>msg</TT> (+) : ref(Message) <IMG
- WIDTH="7" HEIGHT="32" ALIGN="MIDDLE" BORDER="0"
- SRC="img3.png"
- ALT="\(\mid\)"> ref(MIME::Entity) <IMG
- WIDTH="7" HEIGHT="32" ALIGN="MIDDLE" BORDER="0"
- SRC="img3.png"
- ALT="\(\mid\)"> string - message to forward
-</LI>
-<LI><A NAME="10928"></A><TT>from</TT> (+) : message from
-</LI>
-<LI><A NAME="10931"></A><TT>rcpt</TT> (+) : ref(SCALAR) <IMG
- WIDTH="7" HEIGHT="32" ALIGN="MIDDLE" BORDER="0"
- SRC="img3.png"
- ALT="\(\mid\)"> ref(ARRAY) - recepients     
-</LI>
-<LI><A NAME="10934"></A><TT>robot</TT> (+) : robot
-   
-</LI>
-</OL>
-
-<P>
-<B>OUT</B> : 1
-
-<P>
-
-<H3><A NAME="SECTION002711400000000000000"></A>
-<A NAME="mail-set-send-spool"></A>  
-<A NAME="4450"></A>
-<BR>
-26.1.1.4 <FONT SIZE="+1">set_send_spool()</FONT>
-</H3>
-
-<P>
-Used by other processes than sympa.pl to indicate to send message by 
-   writting message in spool instead of calling mail::smtpto() function (see <A HREF="#mail-smtpto">26.1.2</A>, page&nbsp;<A HREF="node27.html#mail-smtpto"><IMG  ALIGN="BOTTOM" BORDER="1" ALT="[*]" SRC="crossref.png"></A>). 
-   The concerned spool is set in <A NAME="10937"></A><TT>$send_spool</TT> global variable, used by mail::sending() function
-  (see <A HREF="#mail-sending">26.1.2</A>, page&nbsp;<A HREF="node27.html#mail-sending"><IMG  ALIGN="BOTTOM" BORDER="1" ALT="[*]" SRC="crossref.png"></A>).
-
-<P>
-<B>IN</B> : 
-   
-<OL>
-<LI><A NAME="10940"></A><TT>spool</TT> (+) : the concerned spool for sending.
-   
-</LI>
-</OL>
-
-<P>
-<B>OUT</B> : -
-
-<P>
-
-<H3><A NAME="SECTION002711500000000000000"></A>
-<A NAME="mail-reaper"></A>  
-<A NAME="4463"></A>
-<BR>
-26.1.1.5 <FONT SIZE="+1">reaper()</FONT>
-</H3>
-
-<P>
-Non blocking function used to clean the defuncts child processes by waiting for them and then
-   decreasing the counter. For exemple, this function is called by mail::smtpto() (see 
-   <A HREF="#mail-smtpto">26.1.2</A>, page&nbsp;<A HREF="node27.html#mail-smtpto"><IMG  ALIGN="BOTTOM" BORDER="1" ALT="[*]" SRC="crossref.png"></A>), main loop of sympa.pl, task_manager.pl,
-   bounced.pl.
-
-<P>
-<B>IN</B> : 
-   
-<OL>
-<LI><A NAME="10943"></A><TT>block</TT>
-   
-</LI>
-</OL>
-
-<P>
-<B>OUT</B> : the pid of the defunct process <IMG
- WIDTH="7" HEIGHT="32" ALIGN="MIDDLE" BORDER="0"
- SRC="img3.png"
- ALT="\(\mid\)"> -1 <I>if there is no such child process</I>.
-
-<P>
-
-<H2><A NAME="SECTION002712000000000000000">
-26.1.2 private functions</A>
-</H2>
-
-<P>
-sendto(), sending(), smtpto().
-
-<P>
-
-<H3><A NAME="SECTION002712100000000000000"></A>
-<A NAME="mail-sendto"></A><A NAME="4475"></A>
-<BR>
-26.1.2.1 <FONT SIZE="+1">sendto()</FONT>
-</H3>
-
-<P>
-Encodes subject header. Encrypts the message if needed. In this case, it checks if there is
-   only one recepient. Then the message is sent by calling mail::sending() function 
-   (see <A HREF="#mail-sending">26.1.2</A>, page&nbsp;<A HREF="node27.html#mail-sending"><IMG  ALIGN="BOTTOM" BORDER="1" ALT="[*]" SRC="crossref.png"></A>).
-
-<P>
-<B>IN</B> : 
-   
-<OL>
-<LI><A NAME="10946"></A><TT>msg_header</TT> (+) : ref(MIME::Head) - message header 
-</LI>
-<LI><A NAME="10949"></A><TT>msg_body</TT> (+) : message body
-</LI>
-<LI><A NAME="10952"></A><TT>from</TT> (+) : message from
-</LI>
-<LI><A NAME="10955"></A><TT>rcpt</TT> (+) : ref(SCALAR) <IMG
- WIDTH="7" HEIGHT="32" ALIGN="MIDDLE" BORDER="0"
- SRC="img3.png"
- ALT="\(\mid\)"> ref(ARRAY) - message recepients (ref(SCALAR) for encryption)
-</LI>
-<LI><A NAME="10958"></A><TT>robot</TT> (+) : robot
-</LI>
-<LI><A NAME="10961"></A><TT>encrypt</TT> : 'smime_crypted' the mail is encrypted with smime <IMG
- WIDTH="7" HEIGHT="32" ALIGN="MIDDLE" BORDER="0"
- SRC="img3.png"
- ALT="\(\mid\)">  undef - no encryption
-   
-</LI>
-</OL>
-
-<P>
-<B>OUT</B> : 1 - sending by calling smtpto (sendmail) <IMG
- WIDTH="7" HEIGHT="32" ALIGN="MIDDLE" BORDER="0"
- SRC="img3.png"
- ALT="\(\mid\)"> 0 - sending by push in spool
-
-<P>
-
-<H3><A NAME="SECTION002712200000000000000"></A>
-<A NAME="mail-sending"></A><A NAME="4490"></A>
-<BR>
-26.1.2.2 <FONT SIZE="+1">sending()</FONT>
-</H3>
-
-<P>
-Signs the message according to <A NAME="10964"></A><TT>$sign_mode</TT>. Chooses sending mode according to context. If <A NAME="10967"></A><TT>$send_spool</TT> global variable is empty, the message is
-   sent by calling mail::smtpto() function  (see <A HREF="#mail-smtpto">26.1.2</A>, page&nbsp;<A HREF="node27.html#mail-smtpto"><IMG  ALIGN="BOTTOM" BORDER="1" ALT="[*]" SRC="crossref.png"></A>)
-   else the message is written in spool <A NAME="10970"></A><TT>$send_spool</TT> in order to be handled by sympa.pl process (because only this 
-   is allowed to make a fork).
-   When the message is pushed in spool, these mail headers are added :
-   
-<UL>
-<LI>``X-Sympa-To:'' : recepients
-</LI>
-<LI>``X-Sympa-From:'' : from
-</LI>
-<LI>``X-Sympa-Checksum:'' : to check allowed program to push in spool 
-   
-</LI>
-</UL>
-   A message pushed in spool like this will be handled later by sympa::DoSendMessage() function 
-   (see <A HREF="#sympa-dosendmessage">26.3</A>, page&nbsp;<A HREF="node27.html#sympa-dosendmessage"><IMG  ALIGN="BOTTOM" BORDER="1" ALT="[*]" SRC="crossref.png"></A>)
-
-<P>
-<B>IN</B> : 
-   
-<OL>
-<LI><A NAME="10973"></A><TT>msg</TT> (+) : ref(MIME::Entity) <IMG
- WIDTH="7" HEIGHT="32" ALIGN="MIDDLE" BORDER="0"
- SRC="img3.png"
- ALT="\(\mid\)"> string - message to send
-</LI>
-<LI><A NAME="10976"></A><TT>rcpt</TT> (+) : ref(SCALAR) <IMG
- WIDTH="7" HEIGHT="32" ALIGN="MIDDLE" BORDER="0"
- SRC="img3.png"
- ALT="\(\mid\)"> ref(ARRAY) - recepients (for SMTP : "RCPT To:" field)
-</LI>
-<LI><A NAME="10979"></A><TT>from</TT> (+) : for SMTP : "MAIL From:" field  <IMG
- WIDTH="7" HEIGHT="32" ALIGN="MIDDLE" BORDER="0"
- SRC="img3.png"
- ALT="\(\mid\)"> for spool sending : "X-Sympa-From" field
-</LI>
-<LI><A NAME="10982"></A><TT>robot</TT> (+) : robot 
-</LI>
-<LI><A NAME="10985"></A><TT>listname</TT> : listname <IMG
- WIDTH="7" HEIGHT="32" ALIGN="MIDDLE" BORDER="0"
- SRC="img3.png"
- ALT="\(\mid\)"> ''
-</LI>
-<LI><A NAME="10988"></A><TT>sign_mode</TT> (+) : 'smime' <IMG
- WIDTH="7" HEIGHT="32" ALIGN="MIDDLE" BORDER="0"
- SRC="img3.png"
- ALT="\(\mid\)"> 'none'for signing
-</LI>
-<LI><A NAME="10991"></A><TT>sympa_email</TT> : for the file name for spool sending
-   
-</LI>
-</OL>
-
-<P>
-<B>OUT</B> : 1 - sending by calling smtpto() (sendmail) <IMG
- WIDTH="7" HEIGHT="32" ALIGN="MIDDLE" BORDER="0"
- SRC="img3.png"
- ALT="\(\mid\)"> 0 - sending by pushing in spool
-
-<P>
-
-<H3><A NAME="SECTION002712300000000000000"></A>
-<A NAME="mail-smtpto"></A><A NAME="4513"></A>
-<BR>
-26.1.2.3 <FONT SIZE="+1">smtpto()</FONT>
-</H3>
-
-<P>
-Calls to sendmail for the recipients given as argument by making a fork and an exec. Before, 
-   waits for number of children process <IMG
- WIDTH="16" HEIGHT="30" ALIGN="MIDDLE" BORDER="0"
- SRC="img4.png"
- ALT="\(&lt;\)"> number allowed by sympa.conf by calling mail::reaper() function
-   (see <A HREF="#mail-reaper">26.1.1</A>, page&nbsp;<A HREF="#mail-repaer"><IMG  ALIGN="BOTTOM" BORDER="1" ALT="[*]" SRC="crossref.png"></A>).
-
-<P>
-<B>IN</B> : 
-   
-<OL>
-<LI><A NAME="10994"></A><TT>from</TT> (+) : SMTP "MAIL From:" field
-</LI>
-<LI><A NAME="10997"></A><TT>rcpt</TT> (+) : ref(SCALAR)) <IMG
- WIDTH="7" HEIGHT="32" ALIGN="MIDDLE" BORDER="0"
- SRC="img3.png"
- ALT="\(\mid\)"> ref(ARRAY) - SMTP "RCPT To:" field
-</LI>
-<LI><A NAME="11000"></A><TT>robot</TT> (+) : robot 
-   
-</LI>
-</OL>
-
-<P>
-<B>OUT</B> : <A NAME="11003"></A><TT>mail::$fh</TT> - file handle on opened file for ouput, for SMTP "DATA" field
-<BR>
-<P>
-
-<H1><A NAME="SECTION002720000000000000000"></A>
-<A NAME="4525"></A>
-<BR>
-26.2 List.pm
+<H1><A NAME="SECTION002720000000000000000">
+26.2 Owner commands</A>
 </H1>
 
 <P>
-This module includes all list processing functions. 
+Some administrative requests are only available to list owner(s).
+They are indispensable for all procedures in limited access mode,
+and to perform requests in place of users.
+These comands are:
 
 <P>
-Here are only described functions used for message sending : 
- 
+
 <UL>
-<LI>Message distribution in a list
+<LI><A NAME="10845"></A><TT>ADD</TT> <I>listname user@host firstname name</I>
+        <A NAME="cmd-add"></A>
+<P>
+Add command similar to <A NAME="10848"></A><TT>SUBSCRIBE</TT>. 
+	You can avoid user notification by using the <A NAME="10851"></A><TT>QUIET</TT>
+	prefix (ie: <A NAME="10854"></A><TT>QUIET ADD</TT>).
+
+<P>
 </LI>
-<LI>Sending using templates
+<LI><A NAME="10857"></A><TT>DELETE</TT> <I>listname user@host</I>
+        <A NAME="cmd-delete"></A>
+<P>
+Delete command similar to <A NAME="10860"></A><TT>SIGNOFF</TT>.
+	You can avoid user notification by using the <A NAME="10863"></A><TT>QUIET</TT>
+	prefix (ie: <A NAME="10866"></A><TT>QUIET DELETE</TT>).
+
+<P>
 </LI>
-<LI>Service messages
+<LI><A NAME="10869"></A><TT>REMIND</TT> <I>listname</I>
+	<A NAME="cmd-remind"></A>
+<P>
+<A NAME="10872"></A><TT>REMIND</TT> is used by list owners in order to send
+        an individual service reminder message to each subscriber. This
+        message is made by parsing the remind.tt2 file.
+
+<P>
 </LI>
-<LI>Notification message
- 
+<LI><A NAME="10875"></A><TT>REMIND</TT> <I>*</I>
+
+<P>
+<A NAME="10878"></A><TT>REMIND</TT> is used by the listmaster to send to each subscriber of any list a single
+        message with a summary of his/her subscriptions. In this case the 
+        message sent is constructed by parsing the global_remind.tt2 file.
+        For each list, <I>Sympa</I> tests whether the list is configured as hidden 
+	to each subscriber (parameter lparam visibility). By default the use 
+	of this command is restricted to listmasters. 
+	Processing may take a lot of time !
+
+<P>
 </LI>
 </UL>
 
 <P>
-
-<H2><A NAME="SECTION002721000000000000000">
-26.2.1 Functions for message distribution</A>
-</H2> 
-
-<P>
-distribute_message(), send_msg(), send_msg_digest().
-
-<P>
-These functions are used to message distribution in a list.
-
-<P>
-
-<H3><A NAME="SECTION002721100000000000000"></A>
-<A NAME="list-distribute-msg"></A><A NAME="4531"></A>
-<BR>
-26.2.1.1 <FONT SIZE="+1">distribute_msg()</FONT>
-</H3>
-
-<P>
-Prepares and distributes a message to a list : 
-   
-<UL>
-<LI>updates the list stats
-</LI>
-<LI>hides the sender if the list is anonymoused (list config : anonymous_sender)
-</LI>
-<LI>adds custom subject if necessary (list config : custom_subject)
-</LI>
-<LI>archives the message 
-</LI>
-<LI>changes the reply-to header if necessary (list config : reply_to_header)
-</LI>
-<LI>removes unwanted headers if present (config : remove_headers))
-</LI>
-<LI>adds useful headers (X-Loop,X-Sequence,Errors-to,Precedence,X-no-archive - list config : custom_header) 
-</LI>
-<LI>adds RFC 2919 header field (List-Id) and RFC 2369 header fields (list config : rfc2369_header_fields)
-</LI>
-<LI>stores message in digest if the list accepts digest mode (encrypted message can't be included in digest) 
-</LI>
-<LI>sends the message by calling List::send_msg() (see <A HREF="#list-send-msg">26.2.1</A>, 
-           page&nbsp;<A HREF="node27.html#list-send-msg"><IMG  ALIGN="BOTTOM" BORDER="1" ALT="[*]" SRC="crossref.png"></A>). 
-   
-</LI>
-</UL>
-
-<P>
-<B>IN</B> : 
-   
-<OL>
-<LI><A NAME="11006"></A><TT>self</TT> (+) : ref(List) - the list concerned by distribution
-</LI>
-<LI><A NAME="11009"></A><TT>message</TT> (+): ref(Message) - the message to distribute
-   
-</LI>
-</OL>
-
-<P>
-<B>OUT</B> : result of List::send_msg() function (number of sendmail process)
-
-<P>
-
-<H3><A NAME="SECTION002721200000000000000"></A>
-<A NAME="list-send-msg"></A><A NAME="4544"></A>
-<BR>
-26.2.1.2 <FONT SIZE="+1">send_msg()</FONT>
-</H3>
-
-<P>
-This function is called by List::distribute_msg() (see <A HREF="#list-distribute-msg">26.2.1</A>, 
-  page&nbsp;<A HREF="node27.html#list-distribute-msg"><IMG  ALIGN="BOTTOM" BORDER="1" ALT="[*]" SRC="crossref.png"></A>)  to select subscribers
-  according to their reception mode and to the ``Content-Type'' header field of the message.
-  Sending are grouped according to their reception mode : 
-<UL>
-<LI>normal : add a footer if the message is not protected (then the message is ``altered'')
-</LI>
-<LI>notice
-</LI>
-<LI>txt : add a footer 
-</LI>
-<LI>html : add a footer 
-</LI>
-<LI>urlize : add a footer and create an urlize directory for Web access
-  
-</LI>
-</UL>
-  The message is sent by calling List::mail_message() (see <A HREF="#mail-mail-message">26.1.1</A>, 
-  page&nbsp;<A HREF="node27.html#mail-mail-message"><IMG  ALIGN="BOTTOM" BORDER="1" ALT="[*]" SRC="crossref.png"></A>). 
-  If the message is ``smime_crypted'' and the user has not got any certificate, a message service is sent to him.
-
-<P>
-<B>IN</B> : 
-   
-<OL>
-<LI><A NAME="11012"></A><TT>self</TT> (+) : ref(List) - the list concerned by distribution
-</LI>
-<LI><A NAME="11015"></A><TT>message</TT> (+): ref(Message) - the message to distribute
-   
-</LI>
-</OL>
-
-<P>
-<B>OUT</B> : <A NAME="11018"></A><TT>$numsmtp</TT> : addition of mail::mail_message() function results 
-   ( = number of sendmail process )
-
-<P>
-
-<H3><A NAME="SECTION002721300000000000000"></A>
-<A NAME="list-send-msg-digest"></A><A NAME="4560"></A>
-<BR>
-26.2.1.3 <FONT SIZE="+1">send_msg_digest()</FONT>
-</H3>
-
-<P>
-Sends a digest message to the list subscribers with reception digest, digestplain or summary : 
-   it creates the list of subscribers in various digest modes and then creates the list of
-   messages. Finally sending to subscribers is done by calling List::send_file() function
-   (see <A HREF="#list-send-file">26.2.2</A>, page&nbsp;<A HREF="node27.html#list-send-file"><IMG  ALIGN="BOTTOM" BORDER="1" ALT="[*]" SRC="crossref.png"></A>)
-   with mail template ``digest'', ``digestplain'' or ``summary''.
-
-<P>
-<B>IN</B> : 
-   
-<OL>
-<LI><A NAME="11021"></A><TT>self</TT> (+): ref(List) - the concerned list 
-   
-</LI>
-</OL>
-
-<P>
-<B>OUT</B> : 
-<UL>
-<LI>1  <I>if sending</I> 
-</LI>
-<LI>0  <I>if no subscriber for sending digest, digestplain or summary</I> 
-   
-</LI>
-</UL>
-
-<P>
-
-<H2><A NAME="SECTION002722000000000000000">
-26.2.2 Functions for template sending</A>
-</H2> 
-
-<P>
-send_file(), send_global_file().
-
-<P>
-These functions are used by others to send files. These files are made from template given in parameters.
-
-<P>
-
-<H3><A NAME="SECTION002722100000000000000"></A>
-<A NAME="list-send-file"></A><A NAME="4575"></A>
-<BR>
-26.2.2.1 <FONT SIZE="+1">send_file()</FONT>
-</H3>
-
-<P>
-Sends a message to a user, relative to a list. It finds the $tpl.tt2 file to make the message.
-   If the list has a key and a certificat and if openssl is in the configuration, the message is signed.
-   The parsing is done with variable $data set up first with parameter $context and then with configuration, here are 
-   set keys :
-   
-<UL>
-<LI><I>if $who=SCALAR then</I> 
-<UL>
-<LI><A NAME="11024"></A><TT>user.password</TT>
-</LI>
-<LI><I>if $user key is not defined in $context then</I> <A NAME="11027"></A><TT>user.email</TT>(:= $who), <A NAME="11030"></A><TT>user.lang</TT> (:= list lang)  
-		          <I>and if the user is in DB then</I> <A NAME="11033"></A><TT>user.attributes</TT> (:= attributes in DB user_table) are defined
-</LI>
-<LI><I>if $who is subscriber of $self then</I> <A NAME="11036"></A><TT>subscriber.date subscriber.update_date</TT>	  
-			  <I>and if exists then</I> <A NAME="11039"></A><TT>subscriber.bounce subscriber.first_bounce</TT> are defined
-           
-</LI>
-</UL>
-</LI>
-<LI><A NAME="11042"></A><TT>return_path</TT> : used for SMTP ``MAIL From'' field or "X-Sympa-From:" field 
-</LI>
-<LI><A NAME="11045"></A><TT>lang</TT> : the user lang or list lang or robot lang
-</LI>
-<LI><A NAME="11048"></A><TT>fromlist</TT> : "From:" field, pointed on list
-</LI>
-<LI><A NAME="11051"></A><TT>from</TT> : "From:" field, pointed on list <I>if no defined in $context</I>
-</LI>
-<LI><A NAME="11054"></A><TT>replyto</TT> : <I>if openssl is is sympa.conf and the list has a key ('private_key') and a certificat ('cert.pem') in its directory</I>
-</LI>
-<LI><A NAME="11057"></A><TT>boundary</TT> : boundary for multipart message <I>if no contained in $context</I>
-</LI>
-<LI><A NAME="11060"></A><TT>conf.email conf.host conf.sympa conf.request conf.listmaster conf.wwsympa_url conf.title</TT> : updated with robot config
-</LI>
-<LI><A NAME="11063"></A><TT>list.lang list.name list.domain list.host list.subject list.dir list.owner</TT>(ref(ARRAY)) : updated with list config
-   
-</LI>
-</UL>
-   The message is sent by calling mail::mail_file() function 
-   (see <A HREF="#mail-mail-file">26.1.1</A>, page&nbsp;<A HREF="node27.html#mail-mail-file"><IMG  ALIGN="BOTTOM" BORDER="1" ALT="[*]" SRC="crossref.png"></A>).
-
-<P>
-<B>IN</B> : 
-   
-<OL>
-<LI><A NAME="11066"></A><TT>self</TT> (+) : ref(List) 
-</LI>
-<LI><A NAME="11069"></A><TT>tpl</TT> (+) : template file name without .tt2 extension ($tpl.tt2)
-</LI>
-<LI><A NAME="11072"></A><TT>who</TT> (+) : SCALAR <IMG
- WIDTH="7" HEIGHT="32" ALIGN="MIDDLE" BORDER="0"
- SRC="img3.png"
- ALT="\(\mid\)"> ref(ARRAY) - recepient(s)
-</LI>
-<LI><A NAME="11075"></A><TT>robot</TT> (+) : robot
-</LI>
-<LI><A NAME="11078"></A><TT>context</TT> : ref(HASH) - for the $data set up 
-   
-</LI>
-</OL>
-
-<P>
-<B>OUT</B> : 1
-
-<P>
-
-<H3><A NAME="SECTION002722200000000000000"></A>
-<A NAME="list-send-global-file"></A><A NAME="4615"></A>
-<BR>
-26.2.2.2 <FONT SIZE="+1">send_global_file()</FONT>
-</H3>
-
-<P>
-Sends a message to a user not relative to a list. It finds the $tpl.tt2 file to make the message.
-   The parsing is done with variable $data set up first with parameter $context and then with configuration, here are 
-   set keys :
-   
-<UL>
-<LI><A NAME="11081"></A><TT>user.password user.lang</TT>
-</LI>
-<LI><I>if $user key is not defined in $context then</I> <A NAME="11084"></A><TT>user.email</TT> (:= $who)
-</LI>
-<LI><A NAME="11087"></A><TT>return_path</TT> : used for SMTP ``MAIL From'' field or "X-Sympa-From:" field 
-</LI>
-<LI><A NAME="11090"></A><TT>lang</TT> : the user lang or robot lang
-</LI>
-<LI><A NAME="11093"></A><TT>from</TT> : "From:" field, pointed on SYMPA <I>if no defined in $context</I>
-</LI>
-<LI><A NAME="11096"></A><TT>boundary</TT> : boundary for multipart message <I>if no defined in $context</I>
-</LI>
-<LI><A NAME="11099"></A><TT>conf.email conf.host conf.sympa conf.request conf.listmaster conf.wwsympa_url conf.title</TT> : updated with robot config
-</LI>
-<LI><A NAME="11102"></A><TT>conf.version</TT> : <I>Sympa</I> version
-</LI>
-<LI><A NAME="11106"></A><TT>robot_domain</TT> : the robot
-    
-</LI>
-</UL>
-   The message is sent by calling mail::mail_file() function 
-   (see <A HREF="#mail-mail-file">26.1.1</A>, page&nbsp;<A HREF="node27.html#mail-mail-file"><IMG  ALIGN="BOTTOM" BORDER="1" ALT="[*]" SRC="crossref.png"></A>).
-
-<P>
-<B>IN</B> : 
-   
-<OL>
-<LI><A NAME="11109"></A><TT>tpl</TT> (+) : template file name (filename.tt2), without .tt2 extension
-</LI>
-<LI><A NAME="11112"></A><TT>who</TT> (+) : SCALAR <IMG
- WIDTH="7" HEIGHT="32" ALIGN="MIDDLE" BORDER="0"
- SRC="img3.png"
- ALT="\(\mid\)"> ref(ARRAY) - recepient(s)
-</LI>
-<LI><A NAME="11115"></A><TT>robot</TT> (+) : robot
-</LI>
-<LI><A NAME="11118"></A><TT>context</TT> : ref(HASH) - for the $data set up 
-   
-</LI>
-</OL>
-
-<P>
-<B>OUT</B> : 1
-
-<P>
-
-<H2><A NAME="SECTION002723000000000000000">
-26.2.3 Functions for service messages</A>
-</H2> 
-
-<P>
-archive_send(), send_to_editor(), request_auth(), send_auth().
-
-<P>
-These functions are used to send services messgase, correponding to a result of a command. 
-
-<P>
-
-<H3><A NAME="SECTION002723100000000000000"></A>
-<A NAME="list-archive-send"></A><A NAME="4643"></A>
-<BR>
-26.2.3.1 <FONT SIZE="+1">archive_send()</FONT>
-</H3>
-
-<P>
-Sends an archive file ($file) to $who. The archive is a text file, independant from web archives.
-   It checks if the list is archived. Sending is done by callingList::send_file() 
-   (see <A HREF="#list-send-file">26.2.2</A>, page&nbsp;<A HREF="node27.html#list-send-file"><IMG  ALIGN="BOTTOM" BORDER="1" ALT="[*]" SRC="crossref.png"></A>)
-   with mail template ``archive''.
-
-<P>
-<B>IN</B> : 
-   
-<OL>
-<LI><A NAME="11121"></A><TT>self</TT> (+): ref(List) - the concerned list 
-</LI>
-<LI><A NAME="11124"></A><TT>who</TT> (+): recepient
-</LI>
-<LI><A NAME="11127"></A><TT>file</TT> (+): name of the archive file to send
-   
-</LI>
-</OL>
-
-<P>
-<B>OUT</B> : -
-
-<P>
-
-<H3><A NAME="SECTION002723200000000000000"></A>
-<A NAME="list-send-editor"></A><A NAME="4655"></A>
-<BR>
-26.2.3.2 <FONT SIZE="+1">send_to_editor()</FONT>
-</H3>
-
-<P>
-Sends a message to the list editor to ask him for message moderation ( in moderation context : 
-   scenario ``editor'' or ``editorkey''). The message waiting for moderation is named with a key
-   and it is set in the spool queuemod. (The key is a reference on the message for editor to moderate).
-   The message for the editor is sent by calling List::send_file() (see <A HREF="#list-send-file">26.2.2</A>, 
-   page&nbsp;<A HREF="node27.html#list-send-file"><IMG  ALIGN="BOTTOM" BORDER="1" ALT="[*]" SRC="crossref.png"></A>) with mail template ``moderate''.
-
-<P>
-<B>IN</B> : 
-   
-<OL>
-<LI><A NAME="11130"></A><TT>self</TT> (+): ref(List) - the concerned list 
-</LI>
-<LI><A NAME="11133"></A><TT>method</TT> : 'md5' - for "editorkey" <IMG
- WIDTH="7" HEIGHT="32" ALIGN="MIDDLE" BORDER="0"
- SRC="img3.png"
- ALT="\(\mid\)"> 'smtp' - for "editor"
-</LI>
-<LI><A NAME="11136"></A><TT>message</TT> (+): ref(Message) - the message to moderate
-   
-</LI>
-</OL>
-
-<P>
-<B>OUT</B> : $modkey - the moderation key for naming message waiting 
-         for moderation in spool queuemod.
-
-<P>
-
-<H3><A NAME="SECTION002723300000000000000"></A>
-<A NAME="list-request-auth"></A><A NAME="4667"></A>
-<BR>
-26.2.3.3 <FONT SIZE="+1">request_auth()</FONT>
-</H3>
-
-<P>
-Sends an authentification request for a requested command. The authentification request contains
-   the command to be send next and it is authentified by a key. The message is
-   sent to user by calling  List::send_file() (see <A HREF="#list-send-file">26.2.2</A>, 
-   page&nbsp;<A HREF="node27.html#list-send-file"><IMG  ALIGN="BOTTOM" BORDER="1" ALT="[*]" SRC="crossref.png"></A>) with mail template ``request_auth''.
-
-<P>
-<B>IN</B> : 
-   
-<OL>
-<LI><A NAME="11139"></A><TT>self</TT> : ref(List) <I>not required if $cmd = ``remind''</I>.
-</LI>
-<LI><A NAME="11142"></A><TT>email</TT>(+): recepient, the requesting command user
-</LI>
-<LI><A NAME="11145"></A><TT>cmd</TT> : 
-	
-<UL>
-<LI><I>if $self then</I> 'signoff' <IMG
- WIDTH="7" HEIGHT="32" ALIGN="MIDDLE" BORDER="0"
- SRC="img3.png"
- ALT="\(\mid\)"> 'subscribe' <IMG
- WIDTH="7" HEIGHT="32" ALIGN="MIDDLE" BORDER="0"
- SRC="img3.png"
- ALT="\(\mid\)"> 'add' <IMG
- WIDTH="7" HEIGHT="32" ALIGN="MIDDLE" BORDER="0"
- SRC="img3.png"
- ALT="\(\mid\)"> 'del' <IMG
- WIDTH="7" HEIGHT="32" ALIGN="MIDDLE" BORDER="0"
- SRC="img3.png"
- ALT="\(\mid\)"> 'remind'
-</LI>
-<LI><I>else</I> 'remind'	  
-	
-</LI>
-</UL>
-</LI>
-<LI><A NAME="11148"></A><TT>robot</TT> (+): robot
-</LI>
-<LI><A NAME="11151"></A><TT>param</TT> : ARRAY  
-	
-<UL>
-<LI>0 : used <I>if $cmd ='subscribe' <IMG
- WIDTH="7" HEIGHT="32" ALIGN="MIDDLE" BORDER="0"
- SRC="img3.png"
- ALT="\(\mid\)"> 'add' <IMG
- WIDTH="7" HEIGHT="32" ALIGN="MIDDLE" BORDER="0"
- SRC="img3.png"
- ALT="\(\mid\)"> 'del' <IMG
- WIDTH="7" HEIGHT="32" ALIGN="MIDDLE" BORDER="0"
- SRC="img3.png"
- ALT="\(\mid\)"> 'invite'</I> 
-</LI>
-<LI>1 : used <I>if $cmd ='add'</I> 
-	
-</LI>
-</UL>
-</LI>
-</OL>
-
-<P>
-<B>OUT</B> : 1
-
-<P>
-
-<H3><A NAME="SECTION002723400000000000000"></A>
-<A NAME="list-send-auth"></A><A NAME="4690"></A>
-<BR>
-26.2.3.4 <FONT SIZE="+1">send_auth()</FONT>
-</H3>
-
-<P>
-Sends an authentication request for a sent message for distribution. The message for distribution is 
-   copied in the authqueue spool to wait for confirmation by its sender. This message 
-   is named with a key. The request is sent to user by calling  List::send_file() 
-   (see <A HREF="#list-send-file">26.2.2</A>, page&nbsp;<A HREF="node27.html#list-send-file"><IMG  ALIGN="BOTTOM" BORDER="1" ALT="[*]" SRC="crossref.png"></A>) with mail 
-   template ``send_auth''.
-
-<P>
-<B>IN</B> : 
-   
-<OL>
-<LI><A NAME="11154"></A><TT>self</TT>(+): ref(List) - the concerned list
-</LI>
-<LI><A NAME="11157"></A><TT>message</TT>(+): ref(Message) - the message to confirm
-   
-</LI>
-</OL>
-
-<P>
-<B>OUT</B> : $modkey, the key for naming message waiting for confirmation in spool queuemod.
-
-<P>
-
-<H2><A NAME="SECTION002724000000000000000">
-26.2.4 Functions for message notification</A>
-</H2> 
-
-<P>
-send_notify_to_listmaster(), send_notify_to_owner(), send_notify_to_editor(), send_notify_to_user().
-
-<P>
-These functions are used to notify listmaster, list owner, list editor or user
-   about events.
-
-<P>
-
-<H3><A NAME="SECTION002724100000000000000"></A>
-<A NAME="list-send-notify-listmaster"></A><A NAME="4702"></A>
-<BR>
-26.2.4.1 <FONT SIZE="+1">send_notify_to_listmaster()</FONT>
-</H3>
-
-<P>
-Sends a notice to listmaster by parsing ``listmaster_notification'' template. The template makes a specified or a 
-   generic treatement according to variable $param.type (:= $operation parameter).
-   The message is sent by calling List::send_file() (see <A HREF="#list-send-file">26.2.2</A>, page&nbsp;<A HREF="node27.html#list-send-file"><IMG  ALIGN="BOTTOM" BORDER="1" ALT="[*]" SRC="crossref.png"></A>)
-   or List::send_global_file() (see <A HREF="#list-send-global-file">26.2.2</A>, page&nbsp;<A HREF="node27.html#list-send-global-file"><IMG  ALIGN="BOTTOM" BORDER="1" ALT="[*]" SRC="crossref.png"></A>)
-   according to the context  : global or list context.
-   Available variables for the template are set up by this function, by $param parameter and by 
-   List::send_global_file() or List::send_file().
-
-<P>
-<B>IN</B> : 
-   
-<OL>
-<LI><A NAME="11160"></A><TT>operation</TT> (+) : notification type, corresponds to $type in the template
-</LI>
-<LI><A NAME="11163"></A><TT>robot</TT> (+): robot
-</LI>
-<LI><A NAME="11166"></A><TT>param</TT> (+): ref(HASH) <IMG
- WIDTH="7" HEIGHT="32" ALIGN="MIDDLE" BORDER="0"
- SRC="img3.png"
- ALT="\(\mid\)"> ref (ARRAY) - values for variable used in the template  : 
-	
-<UL>
-<LI><I>if ref(HASH) then</I> variables used in the template are keys of this HASH. These following 
-	    keys are required in the function, according to $operation value : 
-	    
-<UL>
-<LI>'listname'(+) <I>if $operation=('request_list_creation' <IMG
- WIDTH="7" HEIGHT="32" ALIGN="MIDDLE" BORDER="0"
- SRC="img3.png"
- ALT="\(\mid\)"> 'automatic_bounce_management')</I>
-	    
-</LI>
-</UL>
-</LI>
-<LI><I>if ref(ARRAY) then</I> variables used in template are named as : $param0, $param1, $param2, ...  
-	
-</LI>
-</UL>
-</LI>
-</OL>
-
-<P>
-<B>OUT</B> : 1
-
-<P>
-
-<H3><A NAME="SECTION002724200000000000000"></A>
-<A NAME="list-send-notify-owner"></A><A NAME="4723"></A>
-<BR>
-26.2.4.2 <FONT SIZE="+1">send_notify_to_owner()</FONT>
-</H3>
-
-<P>
-Sends a notice to list owner(s) by parsing ``listowner_notification'' template. The template makes a specified or a 
-   generic treatement according to variable $param.type ( := $operation parameter).
-   The message is sent by calling List::send_file() (see <A HREF="#list-send-file">26.2.2</A>, page&nbsp;<A HREF="node27.html#list-send-file"><IMG  ALIGN="BOTTOM" BORDER="1" ALT="[*]" SRC="crossref.png"></A>).
-   Available variables for the template are set up by this function, by $param parameter and by
-   List::send_file(). 
-
-<P>
-<B>IN</B> : 
-   
-<OL>
-<LI><A NAME="11169"></A><TT>self</TT> (+): ref(List) - the list for owner notification
-</LI>
-<LI><A NAME="11172"></A><TT>operation</TT> (+) : notification type, corresponds to $type in the template
-</LI>
-<LI><A NAME="11175"></A><TT>param</TT> (+): ref(HASH) <IMG
- WIDTH="7" HEIGHT="32" ALIGN="MIDDLE" BORDER="0"
- SRC="img3.png"
- ALT="\(\mid\)"> ref (ARRAY) - values for variable used in the template  : 
-	
-<UL>
-<LI><I>if ref(HASH) then</I> variables used in the template are keys of this HASH. 
-</LI>
-<LI><I>if ref(ARRAY) then</I> variables used in template are named as : $param0, $param1, $param2, ...  
-	
-</LI>
-</UL>
-</LI>
-</OL>
-
-<P>
-<B>OUT</B> : 1
-
-<P>
-
-<H3><A NAME="SECTION002724300000000000000"></A>
-<A NAME="list-send-notify-editor"></A><A NAME="4739"></A>
-<BR>
-26.2.4.3 <FONT SIZE="+1">send_notify_to_editor()</FONT>
-</H3>
-
-<P>
-Sends a notice to list editor(s) by parsing ``listeditor_notification'' template. The template makes a specified or a 
-   generic treatement according to variable $param.type ( := $operation parameter).
-   The message is sent by calling List::send_file() (see <A HREF="#list-send-file">26.2.2</A>, page&nbsp;<A HREF="node27.html#list-send-file"><IMG  ALIGN="BOTTOM" BORDER="1" ALT="[*]" SRC="crossref.png"></A>).
-   Available variables for the template are set up by this function, by $param parameter and by
- List::send_file(). 
-
-<P>
-<B>IN</B> : 
-   
-<OL>
-<LI><A NAME="11178"></A><TT>self</TT> (+): ref(List) - the list for editor notification
-</LI>
-<LI><A NAME="11181"></A><TT>operation</TT> (+) : notification type, corresponds to $type in the template
-</LI>
-<LI><A NAME="11184"></A><TT>param</TT> (+): ref(HASH) <IMG
- WIDTH="7" HEIGHT="32" ALIGN="MIDDLE" BORDER="0"
- SRC="img3.png"
- ALT="\(\mid\)"> ref (ARRAY) - values for variable used in the template  : 
-	
-<UL>
-<LI><I>if ref(HASH) then</I> variables used in the template are keys of this HASH. 
-</LI>
-<LI><I>if ref(ARRAY) then</I> variables used in template are named as : $param0, $param1, $param2, ...  
-	
-</LI>
-</UL>
-</LI>
-</OL>
-
-<P>
-<B>OUT</B> : 1
-
-<P>
-
-<H3><A NAME="SECTION002724400000000000000"></A>
-<A NAME="list-send-notify-user"></A><A NAME="4755"></A>
-<BR>
-26.2.4.4 <FONT SIZE="+1">send_notify_to_user()</FONT>
-</H3>
-
-<P>
-Sends a notice to a user by parsing ``user_notification'' template. The template makes a specified or a 
-   generic treatement according to variable $param.type ( := with $operation parameter).
-   The message is sent by calling List::send_file() (see <A HREF="#list-send-file">26.2.2</A>, page&nbsp;<A HREF="node27.html#list-send-file"><IMG  ALIGN="BOTTOM" BORDER="1" ALT="[*]" SRC="crossref.png"></A>).
-   Available variables for the template are set up by this function, by $param parameter and by
- List::send_file(). 
-
-<P>
-<B>IN</B> : 
-   
-<OL>
-<LI><A NAME="11187"></A><TT>self</TT> (+): ref(List) - the list for owner notification
-</LI>
-<LI><A NAME="11190"></A><TT>operation</TT> (+) : notification type, corresponds to $type in the template
-</LI>
-<LI><A NAME="11193"></A><TT>user</TT> (+) : user email to notify
-</LI>
-<LI><A NAME="11196"></A><TT>param</TT> (+): ref(HASH) <IMG
- WIDTH="7" HEIGHT="32" ALIGN="MIDDLE" BORDER="0"
- SRC="img3.png"
- ALT="\(\mid\)"> ref (ARRAY) - values for variable used in the template  : 
-	
-<UL>
-<LI><I>if ref(HASH) then</I> variables used in the template are keys of this HASH. 
-</LI>
-<LI><I>if ref(ARRAY) then</I> variables used in template are named as : $param0, $param1, $param2, ...  
-	
-</LI>
-</UL>
-</LI>
-</OL>
-
-<P>
-<B>OUT</B> : 1
+As above, these commands can be prefixed with <A NAME="10882"></A><TT>QUIET</TT> to
+indicate processing without acknowledgment of receipt.
 
 <P>
 
 <H1><A NAME="SECTION002730000000000000000"></A>
-<A NAME="4771"></A>
+    <A NAME="moderation"></A>
 <BR>
-26.3 sympa.pl
+26.3 Moderator commands
 </H1>
 
 <P>
-This is the main script ; it runs as a daemon and does the messages/commands processing. It uses these funstions :
-   DoFile(), DoMessage(), DoCommand(), DoSendMessage(), DoForward(), SendDigest(), CleanSpool(), sigterm(), sighup().
-
-<P>
-Concerning reports about message distribution, function List::send_file() 
-   (see <A HREF="#list-send-file">26.2.2</A>, page&nbsp;<A HREF="node27.html#list-send-file"><IMG  ALIGN="BOTTOM" BORDER="1" ALT="[*]" SRC="crossref.png"></A>) or List::send_global_file() 
-   (see <A HREF="#list-send-global-file">26.2.2</A>, page&nbsp;<A HREF="node27.html#list-send-global-file"><IMG  ALIGN="BOTTOM" BORDER="1" ALT="[*]" SRC="crossref.png"></A>) is called with 
-   mail template ``message_report''. Concernong reports about commands, it is the mail template
-   ``command_report''.
+If a list is moderated, <I>Sympa</I> only distributes messages enabled by one of
+its moderators (editors). Moderators have several
+methods for enabling message distribution, depending on the <A NAME="10886"></A><TT>send</TT> list parameter (<A HREF="node21.html#par-send">20.3.8</A>, page&nbsp;<A HREF="node21.html#par-send"><IMG  ALIGN="BOTTOM" BORDER="1" ALT="[*]" SRC="crossref.png"></A>).
 
 <P>
 
-<H3><A NAME="SECTION002730100000000000000"></A>
-<A NAME="sympa-dofile"></A><A NAME="4778"></A>
-<BR>
-26.3.0.1 <FONT SIZE="+1">DoFile()</FONT>
-</H3>
-
-<P>
-Handles a received file : function called by the sympa.pl main loop in order to process files 
-   contained in the queue spool. The file is encapsulated in a Message object not to alter it. Then 
-   the file is read, the header and the body of the message are separeted. Then the adequate function 
-   is called whether a command has been received or a message has to be redistributed to a list.
-
-<P>
-So this function can call various functions : 
 <UL>
-<LI>sympa::DoMessage() for message distribution (see <A HREF="#sympa-domessage">26.3</A>, page&nbsp;<A HREF="node27.html#sympa-domessage"><IMG  ALIGN="BOTTOM" BORDER="1" ALT="[*]" SRC="crossref.png"></A>) 
-</LI>
-<LI>sympa::DoCommand() for command processing (see <A HREF="#sympa-docommand">26.3</A>, page&nbsp;<A HREF="node27.html#sympa-docommand"><IMG  ALIGN="BOTTOM" BORDER="1" ALT="[*]" SRC="crossref.png"></A>)
-</LI>
-<LI>sympa::DoForward() for message forwarding to administrators (see <A HREF="#sympa-doforward">26.3</A>, page&nbsp;<A HREF="node27.html#sympa-doforward"><IMG  ALIGN="BOTTOM" BORDER="1" ALT="[*]" SRC="crossref.png"></A>) 
-</LI>
-<LI>sympa::DoSendMessage() for wwsympa message sending (see <A HREF="#sympa-dosendmessage">26.3</A>, page&nbsp;<A HREF="node27.html#sympa-dosendmessage"><IMG  ALIGN="BOTTOM" BORDER="1" ALT="[*]" SRC="crossref.png"></A>).
-   
-</LI>
-</UL>
-   About command process a report can be sent by calling List::send_global_file() (see <A HREF="#list-send-global-file">26.2.2</A>, 
-   page&nbsp;<A HREF="node27.html#list-send-global-file"><IMG  ALIGN="BOTTOM" BORDER="1" ALT="[*]" SRC="crossref.png"></A>) with template ``command_report''. For message report it is the template ``message_report''.
+<LI><A NAME="10889"></A><TT>DISTRIBUTE</TT> <I>listname</I> <I>key</I>
+        <A NAME="cmd-distribute"></A>
+<P>
+If the <A NAME="10892"></A><TT>send</TT> parameter of a list is set to <TT>editorkey</TT> or <TT>editorkeyonly</TT>, each message queued
+        for <A NAME="10895"></A>moderation is stored in a spool (see&nbsp;<A HREF="node8.html#cf:queuemod">7.6.4</A>, page&nbsp;<A HREF="node8.html#cf:queuemod"><IMG  ALIGN="BOTTOM" BORDER="1" ALT="[*]" SRC="crossref.png"></A>), and linked
+        to a key.
 
 <P>
-<B>IN</B> : 
-   
-<OL>
-<LI><A NAME="11199"></A><TT>file</TT>(+): the file to handle
-   
-</LI>
-</OL>
+The <A NAME="10896"></A>moderator must use this command to enable
+        message distribution.
 
 <P>
-<B>OUT</B> : $status - result of the called function.
+</LI>
+<LI><A NAME="10897"></A><TT>REJECT</TT> <I>listname</I> <I>key</I>
+        <A NAME="cmd-reject"></A>
+<P>
+The message with the <I>key</I> key is deleted from the
+        moderation <A NAME="10900"></A>spool of the <I>listname</I>
+        list.
 
 <P>
-
-<H3><A NAME="SECTION002730200000000000000"></A>
-<A NAME="sympa-domessage"></A><A NAME="4798"></A>
-<BR>
-26.3.0.2 <FONT SIZE="+1">DoMessage()</FONT>
-</H3>
+</LI>
+<LI><A NAME="10901"></A><TT>MODINDEX</TT> <I>listname</I>
+        <A NAME="cmd-modindex"></A>
+<P>
+This command returns the list of messages queued for
+        moderation for the <I>listname</I> list.
 
 <P>
-Handles a message sent to a list (Those that can make loop and those containing a command are 
-   rejected). This function can call various functions : 
-<UL>
-<LI>List::distribute_msg() for distribution (see <A HREF="#list-distribute-msg">26.2.1</A>, page&nbsp;<A HREF="node27.html#list-distribute-msg"><IMG  ALIGN="BOTTOM" BORDER="1" ALT="[*]" SRC="crossref.png"></A>)
-</LI>
-<LI>List::send_auth() for confirmation (see <A HREF="#list-send-auth">26.2.3</A>, page&nbsp;<A HREF="node27.html#list-send-auth"><IMG  ALIGN="BOTTOM" BORDER="1" ALT="[*]" SRC="crossref.png"></A>)
-</LI>
-<LI>List::send_to_editor() for moderation (see <A HREF="#list-send-to-editor"><IMG  ALIGN="BOTTOM" BORDER="1" ALT="[*]" SRC="crossref.png"></A>, page&nbsp;<A HREF="#list-send-to-editor"><IMG  ALIGN="BOTTOM" BORDER="1" ALT="[*]" SRC="crossref.png"></A>).
-   
+The result is presented in the form of an index, which
+        supplies, for each message, its sending date, its sender,
+        its size, and its associated key, as well as all
+        messages in the form of a digest.
+
+<P>
 </LI>
 </UL>
 
 <P>
-<B>IN</B> : 
-   
-<OL>
-<LI><A NAME="11202"></A><TT>which</TT>(+): 'list_name@domain_name - the concerned list
-</LI>
-<LI><A NAME="11205"></A><TT>message</TT>(+): ref(Message) - sent message 
-</LI>
-<LI><A NAME="11208"></A><TT>robot</TT>(+): robot
-   
-</LI>
-</OL>
-
-<P>
-<B>OUT</B> : 1  <I>if everything went fine</I> in order to remove the file from the queue.
-
-<P>
-
-<H3><A NAME="SECTION002730300000000000000"></A>
-<A NAME="sympa-docommand"></A><A NAME="4817"></A>
-<BR>
-26.3.0.3 <FONT SIZE="+1">DoCommand()</FONT>
-</H3>
-
-<P>
-Handles a command sent to sympa. The command is parse by calling Commands::parse() (see 
-   <A HREF="#commands-parse">26.4.1</A>, page&nbsp;<A HREF="node27.html#commands-parse"><IMG  ALIGN="BOTTOM" BORDER="1" ALT="[*]" SRC="crossref.png"></A>).
-
-<P>
-<B>IN</B> : 
-   
-<OL>
-<LI><A NAME="11211"></A><TT>rcpt</TT> : recepient <IMG
- WIDTH="7" HEIGHT="32" ALIGN="MIDDLE" BORDER="0"
- SRC="img3.png"
- ALT="\(\mid\)"> <TT>&lt;</TT>listname<TT>&gt;</TT>-<TT>&lt;</TT>subscribe<IMG
- WIDTH="7" HEIGHT="32" ALIGN="MIDDLE" BORDER="0"
- SRC="img3.png"
- ALT="\(\mid\)">unsubscribe<TT>&gt;</TT>
-</LI>
-<LI><A NAME="11214"></A><TT>robot</TT>(+): robot
-</LI>
-<LI><A NAME="11217"></A><TT>msg</TT>(+): ref(MIME::Entity) - message containing the command
-</LI>
-<LI><A NAME="11220"></A><TT>file</TT>(+): file containing the message
-   
-</LI>
-</OL>
-
-<P>
-<B>OUT</B> : $success - result of Command::parse() function.
-
-<P>
-
-<H3><A NAME="SECTION002730400000000000000"></A>
-<A NAME="sympa-dosendmessage"></A><A NAME="4834"></A>
-<BR>
-26.3.0.4 <FONT SIZE="+1">DoSendMessage()</FONT>
-</H3>
-
-<P>
-Sends a message pushed in spool by another process (ex : wwsympa.fcgi) by calling function
-   mail::mail_forward() (see <A HREF="#mail-mail-forward">26.1.1</A>, page&nbsp;<A HREF="node27.html#mail-mail-forward"><IMG  ALIGN="BOTTOM" BORDER="1" ALT="[*]" SRC="crossref.png"></A>).
-
-<P>
-<B>IN</B> : 
-   
-<OL>
-<LI><A NAME="11223"></A><TT>msg</TT>(+): ref(MIME::Entity)
-</LI>
-<LI><A NAME="11226"></A><TT>robot</TT>(+): robot	
-   
-</LI>
-</OL>
-
-<P>
-<B>OUT</B> : 1  
-
-<P>
-
-<H3><A NAME="SECTION002730500000000000000"></A>
-<A NAME="sympa-doforward"></A><A NAME="4845"></A>
-<BR>
-26.3.0.5 <FONT SIZE="+1">DoForward()</FONT>
-</H3>
-
-<P>
-Handles a message sent to <TT>&lt;</TT>listname<TT>&gt;</TT>-editor : the list editor,  <TT>&lt;</TT>list<TT>&gt;</TT>-request : the list owner or the listmaster. 
-   The message is forwarded according to $function by calling function
-   mail::mail_forward() (see <A HREF="#mail-mail-forward">26.1.1</A>, page&nbsp;<A HREF="node27.html#mail-mail-forward"><IMG  ALIGN="BOTTOM" BORDER="1" ALT="[*]" SRC="crossref.png"></A>).
-
-<P>
-<B>IN</B> : 
-   
-<OL>
-<LI><A NAME="11229"></A><TT>name</TT>(+): list name <I>if ($function != 'listmaster')</I>
-</LI>
-<LI><A NAME="11232"></A><TT>function</TT>(+): 'listmaster' <IMG
- WIDTH="7" HEIGHT="32" ALIGN="MIDDLE" BORDER="0"
- SRC="img3.png"
- ALT="\(\mid\)"> 'request' <IMG
- WIDTH="7" HEIGHT="32" ALIGN="MIDDLE" BORDER="0"
- SRC="img3.png"
- ALT="\(\mid\)"> 'editor'
-</LI>
-<LI><A NAME="11235"></A><TT>robot</TT>(+): robot
-</LI>
-<LI><A NAME="11238"></A><TT>msg</TT>(+): ref(MIME::Entity)
-   
-</LI>
-</OL>
-
-<P>
-<B>OUT</B> : 1  
-
-<P>
-
-<H3><A NAME="SECTION002730600000000000000"></A>
-<A NAME="sympa-sendigest"></A><A NAME="4863"></A>
-<BR>
-26.3.0.6 <FONT SIZE="+1">SendDigest()</FONT>
-</H3>
-
-<P>
-Reads the queuedigest spool and send old digests to the subscribers with the digest option by 
-   calling List::send_msg_digest() function mail::mail_forward() (see <A HREF="#list-send-msg-digest">26.2.1</A>, 
-   page&nbsp;<A HREF="node27.html#list-send-msg-digest"><IMG  ALIGN="BOTTOM" BORDER="1" ALT="[*]" SRC="crossref.png"></A>).
-
-<P>
-<B>IN</B> : -
-   <B>OUT</B> : -  
-
-<P>
-
-<H3><A NAME="SECTION002730700000000000000"></A>
-<A NAME="sympa-cleanspool"></A><A NAME="4870"></A>
-<BR>
-26.3.0.7 <FONT SIZE="+1">CleanSpool()</FONT>
-</H3>
-
-<P>
-Cleans old files from spool $spool_dir older than $clean_delay.
-
-<P>
-<B>IN</B> :   
-   
-<OL>
-<LI><A NAME="11241"></A><TT>spool_dir</TT>(+) : the spool directory 
-</LI>
-<LI><A NAME="11244"></A><TT>clean_delay</TT>(+) : the delay in days
-   
-</LI>
-</OL>
-
-<P>
-<B>OUT</B> : 1 
-
-<P>
-
-<H3><A NAME="SECTION002730800000000000000"></A>
-<A NAME="sympa-sigterm"></A><A NAME="4879"></A>
-<BR>
-26.3.0.8 <FONT SIZE="+1">sigterm()</FONT>
-</H3>
-
-<P>
-This function is called when a signal -TERM is received by sympa.pl.
-   It just changes the value of $signal loop variable in order to stop sympa.pl after endding its message distribution
-   if in progress. (see <A HREF="node5.html#stop-signals">4.3</A>, page&nbsp;<A HREF="node5.html#stop-signals"><IMG  ALIGN="BOTTOM" BORDER="1" ALT="[*]" SRC="crossref.png"></A>)
-
-<P>
-<B>IN</B> : -
-   <B>OUT</B> : -
-
-<P>
-
-<H3><A NAME="SECTION002730900000000000000"></A>
-<A NAME="sympa-sighup"></A><A NAME="4886"></A>
-<BR>
-26.3.0.9 <FONT SIZE="+1">sighup()</FONT>
-</H3>
-
-<P>
-This function is called when a signal -HUP is received by sympa.pl.
-   It changes the value of $signal loop variable and switchs of the "-mail" (see <A HREF="node5.html#stop-signals">4.3</A>, 
-   page&nbsp;<A HREF="node5.html#stop-signals"><IMG  ALIGN="BOTTOM" BORDER="1" ALT="[*]" SRC="crossref.png"></A>) logging option and continues current task.
-
-<P>
-<B>IN</B> : -
-   <B>OUT</B> : -
-
-<P>
-
-<H1><A NAME="SECTION002740000000000000000"></A>
-<A NAME="4892"></A>
-<BR>
-26.4 Commands.pm
-</H1>
-
-<P>
-This module does the mail commands processing.
-
-<P>
-
-<H2><A NAME="SECTION002741000000000000000">
-26.4.1 Commands processing</A>
-</H2>
-
-<P>
-parse(), add(), del(), subscribe(), signoff(), invite(), last(), index(), getfile(), confirm(),
-   set(), distribute(), reject(), modindex(), review(), verify(), remind(), info(), stats(), help(),
-   lists(), which(), finished().
-
-<P>
-
-<H3><A NAME="SECTION002741100000000000000"></A>
-<A NAME="commands-parse"></A><A NAME="4896"></A>
-<BR>
-26.4.1.1 <FONT SIZE="+1">parse()</FONT>
-</H3>
-
-<P>
-Parses the command line and calls the adequate subroutine (following functions)
-   with the arguments of the command. This function is called by sympa::DoCommand() (see <A HREF="#sympa-docommand">26.3</A>, 
-   page&nbsp;<A HREF="node27.html#sympa-docommand"><IMG  ALIGN="BOTTOM" BORDER="1" ALT="[*]" SRC="crossref.png"></A>).
-
-<P>
-<B>IN</B> : 
-   
-<OL>
-<LI><A NAME="11247"></A><TT>sender</TT>(+): the command sender
-</LI>
-<LI><A NAME="11250"></A><TT>robot</TT>(+): robot
-</LI>
-<LI><A NAME="11253"></A><TT>i</TT>(+): command line	
-</LI>
-<LI><A NAME="11256"></A><TT>sign_mod</TT> : 'smime' <IMG
- WIDTH="7" HEIGHT="32" ALIGN="MIDDLE" BORDER="0"
- SRC="img3.png"
- ALT="\(\mid\)"> undef
-   
-</LI>
-</OL>
-
-<P>
-<B>OUT</B> : 'unknown_cmd' <IMG
- WIDTH="7" HEIGHT="32" ALIGN="MIDDLE" BORDER="0"
- SRC="img3.png"
- ALT="\(\mid\)">  $status - command process result
-
-<P>
-
-<H3><A NAME="SECTION002741200000000000000"></A>
-<A NAME="commands-add"></A><A NAME="4909"></A>
-<BR>
-26.4.1.2 <FONT SIZE="+1">add()</FONT>
-</H3>
-
-<P>
-Adds a user to a list (requested by another user), and can send acknowledgements.
-   New subscriber can be notified by sending template 'welcome'.  
-
-<P>
-<B>IN</B> : 
-   
-<OL>
-<LI><A NAME="11259"></A><TT>what</TT>(+): command parameters : listname, email and comments eventually
-</LI>
-<LI><A NAME="11262"></A><TT>robot</TT>(+): robot
-</LI>
-<LI><A NAME="11265"></A><TT>sign_mod</TT> : 'smime' <IMG
- WIDTH="7" HEIGHT="32" ALIGN="MIDDLE" BORDER="0"
- SRC="img3.png"
- ALT="\(\mid\)"> undef - authentification
-   
-</LI>
-</OL>
-
-<P>
-<B>OUT</B> : 'unknown_list' <IMG
- WIDTH="7" HEIGHT="32" ALIGN="MIDDLE" BORDER="0"
- SRC="img3.png"
- ALT="\(\mid\)"> 'wrong_auth' <IMG
- WIDTH="7" HEIGHT="32" ALIGN="MIDDLE" BORDER="0"
- SRC="img3.png"
- ALT="\(\mid\)"> 'not_allowed' <IMG
- WIDTH="7" HEIGHT="32" ALIGN="MIDDLE" BORDER="0"
- SRC="img3.png"
- ALT="\(\mid\)"> 1 
-
-<P>
-
-<H3><A NAME="SECTION002741300000000000000"></A>
-<A NAME="commands-del"></A><A NAME="4919"></A>
-<BR>
-26.4.1.3 <FONT SIZE="+1">del()</FONT>
-</H3>
-
-<P>
-Removes a user to a list (requested by another user), and can send acknowledgements.
-   Unsubscriber can be notified by sending template 'removed'.
-
-<P>
-<B>IN</B> : 
-   
-<OL>
-<LI><A NAME="11268"></A><TT>what</TT>(+): command parameters : listname and email 
-</LI>
-<LI><A NAME="11271"></A><TT>robot</TT>(+): robot
-</LI>
-<LI><A NAME="11274"></A><TT>sign_mod</TT> : 'smime' <IMG
- WIDTH="7" HEIGHT="32" ALIGN="MIDDLE" BORDER="0"
- SRC="img3.png"
- ALT="\(\mid\)"> undef - authentification
-   
-</LI>
-</OL>
-
-<P>
-<B>OUT</B> : 'unknown_list' <IMG
- WIDTH="7" HEIGHT="32" ALIGN="MIDDLE" BORDER="0"
- SRC="img3.png"
- ALT="\(\mid\)"> 'wrong_auth' <IMG
- WIDTH="7" HEIGHT="32" ALIGN="MIDDLE" BORDER="0"
- SRC="img3.png"
- ALT="\(\mid\)"> 'not_allowed' <IMG
- WIDTH="7" HEIGHT="32" ALIGN="MIDDLE" BORDER="0"
- SRC="img3.png"
- ALT="\(\mid\)"> 1
-
-<P>
-
-<H3><A NAME="SECTION002741400000000000000"></A>
-<A NAME="commands-subscribe"></A><A NAME="4929"></A>
-<BR>
-26.4.1.4 <FONT SIZE="+1">subscribe()</FONT>
-</H3>
-
-<P>
-Subscribes a user to a list. New subscriber can be notified by sending him template 'welcome'.
-
-<P>
-<B>IN</B> : 
-   
-<OL>
-<LI><A NAME="11277"></A><TT>what</TT>(+): command parameters : listname and comments eventually
-</LI>
-<LI><A NAME="11280"></A><TT>robot</TT>(+): robot
-</LI>
-<LI><A NAME="11283"></A><TT>sign_mod</TT> : 'smime' <IMG
- WIDTH="7" HEIGHT="32" ALIGN="MIDDLE" BORDER="0"
- SRC="img3.png"
- ALT="\(\mid\)"> undef - authentification
-   
-</LI>
-</OL>
-
-<P>
-<B>OUT</B> : 'unknown_list' <IMG
- WIDTH="7" HEIGHT="32" ALIGN="MIDDLE" BORDER="0"
- SRC="img3.png"
- ALT="\(\mid\)"> 'wrong_auth' <IMG
- WIDTH="7" HEIGHT="32" ALIGN="MIDDLE" BORDER="0"
- SRC="img3.png"
- ALT="\(\mid\)"> 'not_allowed' <IMG
- WIDTH="7" HEIGHT="32" ALIGN="MIDDLE" BORDER="0"
- SRC="img3.png"
- ALT="\(\mid\)"> 1 
-
-<P>
-
-<H3><A NAME="SECTION002741500000000000000"></A>
-<A NAME="commands-signoff"></A><A NAME="4939"></A>
-<BR>
-26.4.1.5 <FONT SIZE="+1">signoff()</FONT>
-</H3>
-
-<P>
-Unsubscribes a user from a list. He can be notified by sending him template 'bye'.
-
-<P>
-<B>IN</B> : 
-   
-<OL>
-<LI><A NAME="11286"></A><TT>which</TT>(+): command parameters : listname and email 
-</LI>
-<LI><A NAME="11289"></A><TT>robot</TT>(+): robot
-</LI>
-<LI><A NAME="11292"></A><TT>sign_mod</TT> : 'smime' <IMG
- WIDTH="7" HEIGHT="32" ALIGN="MIDDLE" BORDER="0"
- SRC="img3.png"
- ALT="\(\mid\)"> undef - authentification
-   
-</LI>
-</OL>
-
-<P>
-<B>OUT</B> : 'syntax_error' <IMG
- WIDTH="7" HEIGHT="32" ALIGN="MIDDLE" BORDER="0"
- SRC="img3.png"
- ALT="\(\mid\)"> 'unknown_list' <IMG
- WIDTH="7" HEIGHT="32" ALIGN="MIDDLE" BORDER="0"
- SRC="img3.png"
- ALT="\(\mid\)"> 'wrong_auth' <IMG
- WIDTH="7" HEIGHT="32" ALIGN="MIDDLE" BORDER="0"
- SRC="img3.png"
- ALT="\(\mid\)"> 'not_allowed' <IMG
- WIDTH="7" HEIGHT="32" ALIGN="MIDDLE" BORDER="0"
- SRC="img3.png"
- ALT="\(\mid\)"> 1
-
-<P>
-
-<H3><A NAME="SECTION002741600000000000000"></A>
-<A NAME="commands-invite"></A><A NAME="4949"></A>
-<BR>
-26.4.1.6 <FONT SIZE="+1">invite()</FONT>
-</H3>
-
-<P>
-Invites someone to subscribe to a list by sending him the template 'invite'.
-
-<P>
-<B>IN</B> : 
-   
-<OL>
-<LI><A NAME="11295"></A><TT>what</TT>(+): command parameters : listname, email and comments 
-</LI>
-<LI><A NAME="11298"></A><TT>robot</TT>(+): robot
-</LI>
-<LI><A NAME="11301"></A><TT>sign_mod</TT> : 'smime' <IMG
- WIDTH="7" HEIGHT="32" ALIGN="MIDDLE" BORDER="0"
- SRC="img3.png"
- ALT="\(\mid\)"> undef - authentification
-   
-</LI>
-</OL>
-
-<P>
-<B>OUT</B> : 'unknown_list' <IMG
- WIDTH="7" HEIGHT="32" ALIGN="MIDDLE" BORDER="0"
- SRC="img3.png"
- ALT="\(\mid\)"> 'wrong_auth' <IMG
- WIDTH="7" HEIGHT="32" ALIGN="MIDDLE" BORDER="0"
- SRC="img3.png"
- ALT="\(\mid\)"> 'not_allowed' <IMG
- WIDTH="7" HEIGHT="32" ALIGN="MIDDLE" BORDER="0"
- SRC="img3.png"
- ALT="\(\mid\)"> 1
-
-<P>
-
-<H3><A NAME="SECTION002741700000000000000"></A>
-<A NAME="commands-last"></A><A NAME="4959"></A>
-<BR>
-26.4.1.7 <FONT SIZE="+1">last()</FONT>
-</H3>
-
-<P>
-Sends back the last archive file by calling List::archive_send() function
-   (see <A HREF="#list-archive-send">26.2.3</A>, page&nbsp;<A HREF="node27.html#list-archive-send"><IMG  ALIGN="BOTTOM" BORDER="1" ALT="[*]" SRC="crossref.png"></A>).
-
-<P>
-<B>IN</B> : 
-   
-<OL>
-<LI><A NAME="11304"></A><TT>which</TT>(+): listname
-</LI>
-<LI><A NAME="11307"></A><TT>robot</TT>(+): robot
-   
-</LI>
-</OL>
-
-<P>
-<B>OUT</B> : 'unknown_list' <IMG
- WIDTH="7" HEIGHT="32" ALIGN="MIDDLE" BORDER="0"
- SRC="img3.png"
- ALT="\(\mid\)"> 'no_archive' <IMG
- WIDTH="7" HEIGHT="32" ALIGN="MIDDLE" BORDER="0"
- SRC="img3.png"
- ALT="\(\mid\)"> 'not_allowed' <IMG
- WIDTH="7" HEIGHT="32" ALIGN="MIDDLE" BORDER="0"
- SRC="img3.png"
- ALT="\(\mid\)"> 1 
-
-<P>
-
-<H3><A NAME="SECTION002741800000000000000"></A>
-<A NAME="commands-index"></A><A NAME="4970"></A>
-<BR>
-26.4.1.8 <FONT SIZE="+1">index()</FONT>
-</H3>
-
-<P>
-Sends the list of archived files of a list.
-
-<P>
-<B>IN</B> : 
-   
-<OL>
-<LI><A NAME="11310"></A><TT>which</TT>(+): listname
-</LI>
-<LI><A NAME="11313"></A><TT>robot</TT>(+): robot
-   
-</LI>
-</OL>
-
-<P>
-<B>OUT</B> : 'unknown_list' <IMG
- WIDTH="7" HEIGHT="32" ALIGN="MIDDLE" BORDER="0"
- SRC="img3.png"
- ALT="\(\mid\)"> 'no_archive' <IMG
- WIDTH="7" HEIGHT="32" ALIGN="MIDDLE" BORDER="0"
- SRC="img3.png"
- ALT="\(\mid\)"> 'not_allowed' <IMG
- WIDTH="7" HEIGHT="32" ALIGN="MIDDLE" BORDER="0"
- SRC="img3.png"
- ALT="\(\mid\)"> 1 
-
-<P>
-
-<H3><A NAME="SECTION002741900000000000000"></A>
-<A NAME="commands-last"></A><A NAME="4979"></A>
-<BR>
-26.4.1.9 <FONT SIZE="+1">getfile()</FONT>
-</H3>
-
-<P>
-Sends back the requested archive file by calling List::archive_send() function
-   (see <A HREF="#list-archive-send">26.2.3</A>, page&nbsp;<A HREF="node27.html#list-archive-send"><IMG  ALIGN="BOTTOM" BORDER="1" ALT="[*]" SRC="crossref.png"></A>).
-
-<P>
-<B>IN</B> : 
-   
-<OL>
-<LI><A NAME="11316"></A><TT>which</TT>(+): commands parameters : listname and filename(archive file)
-</LI>
-<LI><A NAME="11319"></A><TT>robot</TT>(+): robot
-   
-</LI>
-</OL>
-
-<P>
-<B>OUT</B> : 'unknown_list' <IMG
- WIDTH="7" HEIGHT="32" ALIGN="MIDDLE" BORDER="0"
- SRC="img3.png"
- ALT="\(\mid\)"> 'no_archive' <IMG
- WIDTH="7" HEIGHT="32" ALIGN="MIDDLE" BORDER="0"
- SRC="img3.png"
- ALT="\(\mid\)"> 'not_allowed' <IMG
- WIDTH="7" HEIGHT="32" ALIGN="MIDDLE" BORDER="0"
- SRC="img3.png"
- ALT="\(\mid\)"> 1
-
-<P>
-
-<H3><A NAME="SECTION0027411000000000000000"></A>
-<A NAME="commands-confirm"></A><A NAME="4990"></A>
-<BR>
-26.4.1.10 <FONT SIZE="+1">confirm()</FONT>
-</H3>
-
-<P>
-Confirms the authentification of a message for its distribution on a list by calling function
-   List::distribute_msg() for distribution (see <A HREF="#list-distribute-msg">26.2.1</A>, page&nbsp;<A HREF="node27.html#list-distribute-msg"><IMG  ALIGN="BOTTOM" BORDER="1" ALT="[*]" SRC="crossref.png"></A>) 
-   or by calling  List::send_to_editor() for moderation (see <A HREF="#list-send-editor">26.2.3</A>, page&nbsp;<A HREF="node27.html#list-send-editor"><IMG  ALIGN="BOTTOM" BORDER="1" ALT="[*]" SRC="crossref.png"></A>).
-
-<P>
-<B>IN</B> : 
-   
-<OL>
-<LI><A NAME="11322"></A><TT>what</TT>(+): authentification key (command parameter)
-</LI>
-<LI><A NAME="11325"></A><TT>robot</TT>(+): robot
-   
-</LI>
-</OL>
-
-<P>
-<B>OUT</B> : 'wrong_auth' <IMG
- WIDTH="7" HEIGHT="32" ALIGN="MIDDLE" BORDER="0"
- SRC="img3.png"
- ALT="\(\mid\)"> 'msg_not_found' <IMG
- WIDTH="7" HEIGHT="32" ALIGN="MIDDLE" BORDER="0"
- SRC="img3.png"
- ALT="\(\mid\)"> 1
-
-<P>
-
-<H3><A NAME="SECTION0027411100000000000000"></A>
-<A NAME="commands-set"></A><A NAME="5003"></A>
-<BR>
-26.4.1.11 <FONT SIZE="+1">set()</FONT>
-</H3>
-
-<P>
-Changes subscription options (reception or visibility)
-
-<P>
-<B>IN</B> : 
-   
-<OL>
-<LI><A NAME="11328"></A><TT>what</TT>(+): command parameters : listname and 
-        reception mode (digest<IMG
- WIDTH="7" HEIGHT="32" ALIGN="MIDDLE" BORDER="0"
- SRC="img3.png"
- ALT="\(\mid\)">digestplain<IMG
- WIDTH="7" HEIGHT="32" ALIGN="MIDDLE" BORDER="0"
- SRC="img3.png"
- ALT="\(\mid\)">nomail<IMG
- WIDTH="7" HEIGHT="32" ALIGN="MIDDLE" BORDER="0"
- SRC="img3.png"
- ALT="\(\mid\)">normal...) or visibility mode(conceal<IMG
- WIDTH="7" HEIGHT="32" ALIGN="MIDDLE" BORDER="0"
- SRC="img3.png"
- ALT="\(\mid\)">noconceal).
-</LI>
-<LI><A NAME="11331"></A><TT>robot</TT>(+): robot
-   
-</LI>
-</OL>
-
-<P>
-<B>OUT</B> : 'syntax_error' <IMG
- WIDTH="7" HEIGHT="32" ALIGN="MIDDLE" BORDER="0"
- SRC="img3.png"
- ALT="\(\mid\)"> 'unknown_list' <IMG
- WIDTH="7" HEIGHT="32" ALIGN="MIDDLE" BORDER="0"
- SRC="img3.png"
- ALT="\(\mid\)"> 'not_allowed' <IMG
- WIDTH="7" HEIGHT="32" ALIGN="MIDDLE" BORDER="0"
- SRC="img3.png"
- ALT="\(\mid\)"> 'failed' <IMG
- WIDTH="7" HEIGHT="32" ALIGN="MIDDLE" BORDER="0"
- SRC="img3.png"
- ALT="\(\mid\)"> 1
-
-<P>
-
-<H3><A NAME="SECTION0027411200000000000000"></A>
-<A NAME="commands-distribute"></A><A NAME="5012"></A>
-<BR>
-26.4.1.12 <FONT SIZE="+1">distribute()</FONT>
-</H3>
-
-<P>
-Distributes the broadcast of a validated moderated message.
-
-<P>
-<B>IN</B> : 
-   
-<OL>
-<LI><A NAME="11334"></A><TT>what</TT>(+): command parameters : listname and authentification key
-</LI>
-<LI><A NAME="11337"></A><TT>robot</TT>(+): robot
-   
-</LI>
-</OL>
-
-<P>
-<B>OUT</B> : 'unknown_list' <IMG
- WIDTH="7" HEIGHT="32" ALIGN="MIDDLE" BORDER="0"
- SRC="img3.png"
- ALT="\(\mid\)"> 'msg_not_found' <IMG
- WIDTH="7" HEIGHT="32" ALIGN="MIDDLE" BORDER="0"
- SRC="img3.png"
- ALT="\(\mid\)"> 1
-
-<P>
-
-<H3><A NAME="SECTION0027411300000000000000"></A>
-<A NAME="commands-reject"></A><A NAME="5021"></A>
-<BR>
-26.4.1.13 <FONT SIZE="+1">reject()</FONT>
-</H3>
-
-<P>
-Refuses and deletes a moderated message. Rejected message sender can be notified by sending him template 'reject'.
-
-<P>
-<B>IN</B> : 
-   
-<OL>
-<LI><A NAME="11340"></A><TT>what</TT>(+): command parameters : listname and authentification key
-</LI>
-<LI><A NAME="11343"></A><TT>robot</TT>(+): robot
-   
-</LI>
-</OL>
-
-<P>
-<B>OUT</B> : 'unknown_list' <IMG
- WIDTH="7" HEIGHT="32" ALIGN="MIDDLE" BORDER="0"
- SRC="img3.png"
- ALT="\(\mid\)"> 'wrong_auth' <IMG
- WIDTH="7" HEIGHT="32" ALIGN="MIDDLE" BORDER="0"
- SRC="img3.png"
- ALT="\(\mid\)"> 1 
-
-<P>
-
-<H3><A NAME="SECTION0027411400000000000000"></A>
-<A NAME="commands-modindex"></A><A NAME="5030"></A>
-<BR>
-26.4.1.14 <FONT SIZE="+1">modindex()</FONT>
-</H3>
-
-<P>
-Sends a list of current messages to moderate of a list (look into spool queuemod)
-   by using template 'modindex'.
-
-<P>
-<B>IN</B> : 
-   
-<OL>
-<LI><A NAME="11346"></A><TT>name</TT>(+): listname
-</LI>
-<LI><A NAME="11349"></A><TT>robot</TT>(+): robot
-   
-</LI>
-</OL>
-
-<P>
-<B>OUT</B> : 'unknown_list' <IMG
- WIDTH="7" HEIGHT="32" ALIGN="MIDDLE" BORDER="0"
- SRC="img3.png"
- ALT="\(\mid\)"> 'not_allowed' <IMG
- WIDTH="7" HEIGHT="32" ALIGN="MIDDLE" BORDER="0"
- SRC="img3.png"
- ALT="\(\mid\)"> 'no_file' <IMG
- WIDTH="7" HEIGHT="32" ALIGN="MIDDLE" BORDER="0"
- SRC="img3.png"
- ALT="\(\mid\)"> 1
-
-<P>
-
-<H3><A NAME="SECTION0027411500000000000000"></A>
-<A NAME="commands-review"></A><A NAME="5039"></A>
-<BR>
-26.4.1.15 <FONT SIZE="+1">review()</FONT>
-</H3>
-
-<P>
-Sends the list of subscribers of a list to the requester by using template 'review'.
-
-<P>
-<B>IN</B> : 
-   
-<OL>
-<LI><A NAME="11352"></A><TT>listname</TT>(+): list name
-</LI>
-<LI><A NAME="11355"></A><TT>robot</TT>(+): robot
-</LI>
-<LI><A NAME="11358"></A><TT>sign_mod</TT> : 'smime' <IMG
- WIDTH="7" HEIGHT="32" ALIGN="MIDDLE" BORDER="0"
- SRC="img3.png"
- ALT="\(\mid\)"> undef - authentification
-   
-</LI>
-</OL>
-
-<P>
-<B>OUT</B> : 'unknown_list' <IMG
- WIDTH="7" HEIGHT="32" ALIGN="MIDDLE" BORDER="0"
- SRC="img3.png"
- ALT="\(\mid\)"> wrong_auth <IMG
- WIDTH="7" HEIGHT="32" ALIGN="MIDDLE" BORDER="0"
- SRC="img3.png"
- ALT="\(\mid\)"> no_subscribers <IMG
- WIDTH="7" HEIGHT="32" ALIGN="MIDDLE" BORDER="0"
- SRC="img3.png"
- ALT="\(\mid\)"> 'not_allowed' <IMG
- WIDTH="7" HEIGHT="32" ALIGN="MIDDLE" BORDER="0"
- SRC="img3.png"
- ALT="\(\mid\)"> 1
-
-<P>
-
-<H3><A NAME="SECTION0027411600000000000000"></A>
-<A NAME="commands-verify"></A><A NAME="5049"></A>
-<BR>
-26.4.1.16 <FONT SIZE="+1">verify()</FONT>
-</H3>
-
-<P>
-Verifies an S/MIME signature.
-
-<P>
-<B>IN</B> : 
-   
-<OL>
-<LI><A NAME="11361"></A><TT>listname</TT>(+): list name
-</LI>
-<LI><A NAME="11364"></A><TT>robot</TT>(+): robot
-</LI>
-<LI><A NAME="11367"></A><TT>sign_mod</TT> : 'smime' <IMG
- WIDTH="7" HEIGHT="32" ALIGN="MIDDLE" BORDER="0"
- SRC="img3.png"
- ALT="\(\mid\)"> undef - authentification
-   
-</LI>
-</OL>
-
-<P>
-<B>OUT</B> : 1
-
-<P>
-
-<H3><A NAME="SECTION0027411700000000000000"></A>
-<A NAME="commands-remind"></A><A NAME="5059"></A>
-<BR>
-26.4.1.17 <FONT SIZE="+1">remind()</FONT>
-</H3>
-
-<P>
-Sends a personal reminder to each subscriber of a list or of every list (if $which = *) 
-   using template 'remind' or 'global_remind'.
-
-<P>
-<B>IN</B> : 
-   
-<OL>
-<LI><A NAME="11370"></A><TT>which</TT>(+): * <IMG
- WIDTH="7" HEIGHT="32" ALIGN="MIDDLE" BORDER="0"
- SRC="img3.png"
- ALT="\(\mid\)"> listname
-</LI>
-<LI><A NAME="11373"></A><TT>robot</TT>(+): robot
-</LI>
-<LI><A NAME="11376"></A><TT>sign_mod</TT> : 'smime' <IMG
- WIDTH="7" HEIGHT="32" ALIGN="MIDDLE" BORDER="0"
- SRC="img3.png"
- ALT="\(\mid\)"> undef - authentification
-   
-</LI>
-</OL>
-
-<P>
-<B>OUT</B> : 'syntax_error' <IMG
- WIDTH="7" HEIGHT="32" ALIGN="MIDDLE" BORDER="0"
- SRC="img3.png"
- ALT="\(\mid\)"> 'unknown_list' <IMG
- WIDTH="7" HEIGHT="32" ALIGN="MIDDLE" BORDER="0"
- SRC="img3.png"
- ALT="\(\mid\)"> 'wrong_auth' <IMG
- WIDTH="7" HEIGHT="32" ALIGN="MIDDLE" BORDER="0"
- SRC="img3.png"
- ALT="\(\mid\)"> 'not_allowed' <IMG
- WIDTH="7" HEIGHT="32" ALIGN="MIDDLE" BORDER="0"
- SRC="img3.png"
- ALT="\(\mid\)"> 1
-
-<P>
-
-<H3><A NAME="SECTION0027411800000000000000"></A>
-<A NAME="commands-info"></A><A NAME="5069"></A>
-<BR>
-26.4.1.18 <FONT SIZE="+1">info()</FONT>
-</H3>
-
-<P>
-Sends the list information file to the requester by using template 'info_report'.
-
-<P>
-<B>IN</B> : 
-   
-<OL>
-<LI><A NAME="11379"></A><TT>listname</TT>(+): name of concerned list
-</LI>
-<LI><A NAME="11382"></A><TT>robot</TT>(+): robot
-</LI>
-<LI><A NAME="11385"></A><TT>sign_mod</TT> : 'smime' <IMG
- WIDTH="7" HEIGHT="32" ALIGN="MIDDLE" BORDER="0"
- SRC="img3.png"
- ALT="\(\mid\)"> undef - authentification
-   
-</LI>
-</OL>
-
-<P>
-<B>OUT</B> : 'unknown_list' <IMG
- WIDTH="7" HEIGHT="32" ALIGN="MIDDLE" BORDER="0"
- SRC="img3.png"
- ALT="\(\mid\)"> 'wrong_auth' <IMG
- WIDTH="7" HEIGHT="32" ALIGN="MIDDLE" BORDER="0"
- SRC="img3.png"
- ALT="\(\mid\)"> 'not_allowed' <IMG
- WIDTH="7" HEIGHT="32" ALIGN="MIDDLE" BORDER="0"
- SRC="img3.png"
- ALT="\(\mid\)"> 1 
-
-<P>
-
-<H3><A NAME="SECTION0027411900000000000000"></A>
-<A NAME="commands-stats"></A><A NAME="5079"></A>
-<BR>
-26.4.1.19 <FONT SIZE="+1">stats()</FONT>
-</H3>
-
-<P>
-Sends the statistics about a list using template 'stats_report'.
-
-<P>
-<B>IN</B> : 
-   
-<OL>
-<LI><A NAME="11388"></A><TT>listname</TT>(+): list name
-</LI>
-<LI><A NAME="11391"></A><TT>robot</TT>(+): robot
-</LI>
-<LI><A NAME="11394"></A><TT>sign_mod</TT> : 'smime' <IMG
- WIDTH="7" HEIGHT="32" ALIGN="MIDDLE" BORDER="0"
- SRC="img3.png"
- ALT="\(\mid\)"> undef - authentification
-   
-</LI>
-</OL>
-
-<P>
-<B>OUT</B> : 'unknown_list' <IMG
- WIDTH="7" HEIGHT="32" ALIGN="MIDDLE" BORDER="0"
- SRC="img3.png"
- ALT="\(\mid\)"> 'not_allowed' <IMG
- WIDTH="7" HEIGHT="32" ALIGN="MIDDLE" BORDER="0"
- SRC="img3.png"
- ALT="\(\mid\)"> 1 
-
-<P>
-
-<H3><A NAME="SECTION0027412000000000000000"></A>
-<A NAME="commands-help"></A><A NAME="5089"></A>
-<BR>
-26.4.1.20 <FONT SIZE="+1">help()</FONT>
-</H3>
-
-<P>
-Sends the help file for the software by using template 'helpfile'.
-
-<P>
-<B>IN</B> : 
-   
-<OL>
-<LI><A NAME="11397"></A> : ?
-</LI>
-<LI><A NAME="11400"></A><TT>robot</TT>(+): robot
-   
-</LI>
-</OL>
-
-<P>
-<B>OUT</B> : 1
-
-<P>
-
-<H3><A NAME="SECTION0027412100000000000000"></A>
-<A NAME="commands-lists"></A><A NAME="5098"></A>
-<BR>
-26.4.1.21 <FONT SIZE="+1">lists()</FONT>
-</H3>
-
-<P>
-Sends back the list of public lists on this node by using template 'lists'. 
-
-<P>
-<B>IN</B> : 
-   
-<OL>
-<LI><A NAME="11403"></A> : ?
-</LI>
-<LI><A NAME="11406"></A><TT>robot</TT>(+): robot
-   
-</LI>
-</OL>
-
-<P>
-<B>OUT</B> : 1
-
-<P>
-
-<H3><A NAME="SECTION0027412200000000000000"></A>
-<A NAME="commands-lists"></A><A NAME="5107"></A>
-<BR>
-26.4.1.22 <FONT SIZE="+1">which()</FONT>
-</H3>
-
-<P>
-Sends back the list of lists that sender is subscribed to. If he is owner or
-   editor, managed lists are noticed. Message is sent by using template 'which'.
-
-<P>
-<B>IN</B> : 
-   
-<OL>
-<LI><A NAME="11409"></A> : ?
-</LI>
-<LI><A NAME="11412"></A><TT>robot</TT>(+): robot
-   
-</LI>
-</OL>
-
-<P>
-<B>OUT</B> : 1
-
-<P>
-
-<H3><A NAME="SECTION0027412300000000000000"></A>
-<A NAME="commands-finished"></A><A NAME="5116"></A>
-<BR>
-26.4.1.23 <FONT SIZE="+1">finished()</FONT>
-</H3>
-
-<P>
-Called when 'quit' command is found. It sends a notification to sender : no
-   process will be done after this line.
-
-<P>
-<B>IN</B> : -
-
-<P>
-<B>OUT</B> : 1
-
-<P>
-
-<H2><A NAME="SECTION002742000000000000000">
-26.4.2 tools for command processing</A>
-</H2>
-
-<P>
-get_auth_method(), error_report_cmd(), notice_report_cmd(), global_report_cmd().
-
-<P>
-
-<H3><A NAME="SECTION002742100000000000000"></A>
-<A NAME="commands-get-auth-method"></A><A NAME="5122"></A>
-<BR>
-26.4.2.1 <FONT SIZE="+1">get_auth_method()</FONT>
-</H3>
-
-<P>
-Called by processing command functions to return the authentification method
-   and to check the key if it is 'md5' method.
-
-<P>
-<B>IN</B> : 
-   
-<OL>
-<LI><A NAME="11415"></A><TT>cmd</TT>(+): requesting command 
-</LI>
-<LI><A NAME="11418"></A><TT>email</TT>(+): used to compute auth if needed in command
-</LI>
-<LI><A NAME="11421"></A><TT>error</TT>(+): ref(HASH) - keys are :
-	   
-<UL>
-<LI><A NAME="11424"></A><TT>type</TT> : $type for ``message_report'' template parsing
-</LI>
-<LI><A NAME="11427"></A><TT>data</TT> : ref(HASH) for ``message_report'' template parsing
-</LI>
-<LI><A NAME="11430"></A><TT>msg</TT> : for do_log()
-	   
-</LI>
-</UL>
-</LI>
-<LI><A NAME="11433"></A><TT>sign_mod</TT>(+): 'smime' - smime authentification <IMG
- WIDTH="7" HEIGHT="32" ALIGN="MIDDLE" BORDER="0"
- SRC="img3.png"
- ALT="\(\mid\)"> undef - smtp or md5 authentification 
-</LI>
-<LI><A NAME="11436"></A><TT>list</TT>: ref(List) <IMG
- WIDTH="7" HEIGHT="32" ALIGN="MIDDLE" BORDER="0"
- SRC="img3.png"
- ALT="\(\mid\)"> undef - in a list context or not
-   
-</LI>
-</OL>
-   <B>OUT</B> : 'smime' <IMG
- WIDTH="7" HEIGHT="32" ALIGN="MIDDLE" BORDER="0"
- SRC="img3.png"
- ALT="\(\mid\)"> 'md5' <IMG
- WIDTH="7" HEIGHT="32" ALIGN="MIDDLE" BORDER="0"
- SRC="img3.png"
- ALT="\(\mid\)"> 'smtp' - authentification method if checking not failed.
-
-<P>
-The following functions are called by processing command functions. It allows to push errors in 
-errors_report array, notices in notices_report array and global errors in
-globals_report array. These arrays are used to parse ``command_report'' template
-by  List::send_global_file() funstion(see <A HREF="#list-send-global-file">26.2.2</A>, page&nbsp;<A HREF="node27.html#list-send-global-file"><IMG  ALIGN="BOTTOM" BORDER="1" ALT="[*]" SRC="crossref.png"></A>)  
-called by sympa::DoFile() function (see <A HREF="#sympa-dofile">26.3</A>,page&nbsp;<A HREF="node27.html#sympa-dofile"><IMG  ALIGN="BOTTOM" BORDER="1" ALT="[*]" SRC="crossref.png"></A>).
-
-<P>
-
-<H3><A NAME="SECTION002742200000000000000"></A>
-<A NAME="commands-error-report-cmd"></A><A NAME="5143"></A>
-<BR>
-26.4.2.2 <FONT SIZE="+1">error_report_cmd()</FONT>
-</H3>
-
-<P>
-Pushes error reports of processed commands in  errors_report array used in ``command_report'' template.
-
-<P>
-<B>IN</B> : 
-   
-<OL>
-<LI><A NAME="11439"></A><TT>cmd</TT>: command line sent to sympa
-</LI>
-<LI><A NAME="11442"></A><TT>type</TT>: type of error, used as $error.type in ``command_report'' template.
-</LI>
-<LI><A NAME="11445"></A><TT>data</TT>: hash used in ``command_report'' template. Its keys
-	 are used as $error.key. 
-   
-</LI>
-</OL>
-
-<P>
-<B>OUT</B> : -
-
-<P>
-
-<H3><A NAME="SECTION002742300000000000000"></A>
-<A NAME="commands-notice-report-cmd"></A><A NAME="5153"></A>
-<BR>
-26.4.2.3 <FONT SIZE="+1">notice_report_cmd()</FONT>
-</H3>
-
-<P>
-Pushes notice reports of processed commands in  notices_report array used in ``command_report'' template. 
-
-<P>
-<B>IN</B> : 
-   
-<OL>
-<LI><A NAME="11448"></A><TT>cmd</TT>: command line sent to sympa
-</LI>
-<LI><A NAME="11451"></A><TT>type</TT>: type of notice, used as $notice.type in ``command_report'' template.
-</LI>
-<LI><A NAME="11454"></A><TT>data</TT>: hash used in ``command_report'' template. Its keys
-	 are used as $notice.key. 
-   
-</LI>
-</OL>
-
-<P>
-<B>OUT</B> : -
-
-<P>
-
-<H3><A NAME="SECTION002742400000000000000"></A>
-<A NAME="commands-global-report-cmd"></A><A NAME="5163"></A>
-<BR>
-26.4.2.4 <FONT SIZE="+1">global_report_cmd()</FONT>
-</H3>
-
-<P>
-Pushes global error reports of processed commands in  globals_report array used in ``command_report'' template. 
-
-<P>
-<B>IN</B> : 
-   
-<OL>
-<LI><A NAME="11457"></A><TT>cmd</TT>: command line sent to sympa
-</LI>
-<LI><A NAME="11460"></A><TT>type</TT>: type of global error, used as $glob.type in ``command_report'' template.
-</LI>
-<LI><A NAME="11463"></A><TT>data</TT>: hash used in ``command_report'' template. Its keys
-	 are used as $glob.key. 
-   
-</LI>
-</OL>
-
-<P>
-<B>OUT</B> : -
-
-<P>
-
-<H1><A NAME="SECTION002750000000000000000"></A>
-<A NAME="5172"></A>
-<BR>
-26.5 wwsympa.fcgi
-</H1>
-
-<P>
-This script provides the web interface to <I>Sympa</I>.
-
-<P>
-do_subscribe(), do_signoff(), do_add(), do_del(), do_change_email(), do_reject(),
-do_send_mail(), do_sendpasswd(), do_remind(), do_set(), do_send_me().
-
-<P>
-
-<H3><A NAME="SECTION002750100000000000000"></A>
-<A NAME="wwsympa-do-subscribe"></A><A NAME="5175"></A>
-<BR>
-26.5.0.1 <FONT SIZE="+1">do_subscribe()</FONT>
-</H3>
-
-<P>
-Subscribes a user to a list. New subscriber can be notified
-  by sending him template 'welcome'.
-   
-<UL>
-<LI><B>IN</B> : -
-</LI>
-<LI><B>OUT</B> : 'subrequest' <IMG
- WIDTH="7" HEIGHT="32" ALIGN="MIDDLE" BORDER="0"
- SRC="img3.png"
- ALT="\(\mid\)"> 'login' <IMG
- WIDTH="7" HEIGHT="32" ALIGN="MIDDLE" BORDER="0"
- SRC="img3.png"
- ALT="\(\mid\)"> 'info' <IMG
- WIDTH="7" HEIGHT="32" ALIGN="MIDDLE" BORDER="0"
- SRC="img3.png"
- ALT="\(\mid\)"> $in.previous_action
-  
-</LI>
-</UL>    
-
-<P>
-
-<H3><A NAME="SECTION002750200000000000000"></A>
-<A NAME="wwsympa-do-signoff"></A><A NAME="5182"></A>
-<BR>
-26.5.0.2 <FONT SIZE="+1">do_signoff()</FONT>
-</H3>
-
-<P>
-Unsubscribes a user from a list.  The unsubscriber can be notified
-  by sending him template 'bye'.
-   
-<UL>
-<LI><B>IN</B> : -
-</LI>
-<LI><B>OUT</B> : 'sigrequest' <IMG
- WIDTH="7" HEIGHT="32" ALIGN="MIDDLE" BORDER="0"
- SRC="img3.png"
- ALT="\(\mid\)"> 'login' <IMG
- WIDTH="7" HEIGHT="32" ALIGN="MIDDLE" BORDER="0"
- SRC="img3.png"
- ALT="\(\mid\)"> 'info'
-  
-</LI>
-</UL>    
-
-<P>
-
-<H3><A NAME="SECTION002750300000000000000"></A>
-<A NAME="wwsympa-do-add"></A><A NAME="5189"></A>
-<BR>
-26.5.0.3 <FONT SIZE="+1">do_add()</FONT>
-</H3>
-
-<P>
-Adds a user to a list (requested by another user) and can send acknowledgements. 
-   New subscriber can be notified by sending him template 'welcome'.
-<UL>
-<LI><B>IN</B> : -
-</LI>
-<LI><B>OUT</B> : 'loginrequest' <IMG
- WIDTH="7" HEIGHT="32" ALIGN="MIDDLE" BORDER="0"
- SRC="img3.png"
- ALT="\(\mid\)"> ($in.previous_action <IMG
- WIDTH="12" HEIGHT="32" ALIGN="MIDDLE" BORDER="0"
- SRC="img5.png"
- ALT="\(\mid\mid\)"> 'review')
-  
-</LI>
-</UL>    
-
-<P>
-
-<H3><A NAME="SECTION002750400000000000000"></A>
-<A NAME="wwsympa-do-del"></A><A NAME="5196"></A>
-<BR>
-26.5.0.4 <FONT SIZE="+1">do_del()</FONT>
-</H3>
-
-<P>
-Removes a user from a list (requested by another user) and can send acknowledgements.
-   Unsubscriber can be notified by sending template 'removed'.
- 
-<UL>
-<LI><B>IN</B> : -
-</LI>
-<LI><B>OUT</B> : 'loginrequest' <IMG
- WIDTH="7" HEIGHT="32" ALIGN="MIDDLE" BORDER="0"
- SRC="img3.png"
- ALT="\(\mid\)"> ($in.previous_action <IMG
- WIDTH="12" HEIGHT="32" ALIGN="MIDDLE" BORDER="0"
- SRC="img5.png"
- ALT="\(\mid\mid\)"> 'review')
-  
-</LI>
-</UL>    
-
-<P>
-
-<H3><A NAME="SECTION002750500000000000000"></A>
-<A NAME="wwsympa-do-change-email"></A><A NAME="5203"></A>
-<BR>
-26.5.0.5 <FONT SIZE="+1">do_change_email()</FONT>
-</H3>
-
-<P>
-Changes a user's email address in <I>Sympa</I> environment. Password can be send to user by sending
-  template 'sendpasswd'.
- 
-<UL>
-<LI><B>IN</B> : -
-</LI>
-<LI><B>OUT</B> : '1' <IMG
- WIDTH="7" HEIGHT="32" ALIGN="MIDDLE" BORDER="0"
- SRC="img3.png"
- ALT="\(\mid\)"> 'pref'
-  
-</LI>
-</UL>    
-
-<P>
-
-<H3><A NAME="SECTION002750600000000000000"></A>
-<A NAME="wwsympa-do-reject"></A><A NAME="5210"></A>
-<BR>
-26.5.0.6 <FONT SIZE="+1">do_reject()</FONT>
-</H3>
-
-<P>
-Refuses and deletes moderated messages. Rejected message senders are notified by
-  sending them template 'reject'.
- 
-<UL>
-<LI><B>IN</B> : -
-</LI>
-<LI><B>OUT</B> : 'loginrequest' <IMG
- WIDTH="7" HEIGHT="32" ALIGN="MIDDLE" BORDER="0"
- SRC="img3.png"
- ALT="\(\mid\)"> 'modindex'
-  
-</LI>
-</UL>    
-
-<P>
-
-<H3><A NAME="SECTION002750700000000000000"></A>
-<A NAME="wwsympa-do-distribute"></A><A NAME="5217"></A>
-<BR>
-26.5.0.7 <FONT SIZE="+1">do_distribute()</FONT>
-</H3>
-
-<P>
-Distributes moderated messages by sending a command remind to sympa.pl. For it, it calls mail::mail_file()
- (see <A HREF="#mail-mail-file">26.1.1</A>, page&nbsp;<A HREF="node27.html#mail-mail-file"><IMG  ALIGN="BOTTOM" BORDER="1" ALT="[*]" SRC="crossref.png"></A>). As it is in a Web context, the message will be 
- set in spool.
- 
-<UL>
-<LI><B>IN</B> : -
-</LI>
-<LI><B>OUT</B> : 'loginrequest' <IMG
- WIDTH="7" HEIGHT="32" ALIGN="MIDDLE" BORDER="0"
- SRC="img3.png"
- ALT="\(\mid\)"> 'modindex'
-  
-</LI>
-</UL>    
-
-<P>
-
-<H3><A NAME="SECTION002750800000000000000"></A>
-<A NAME="wwsympa-do-send-mail"></A><A NAME="5226"></A>
-<BR>
-26.5.0.8 <FONT SIZE="+1">do_send_mail()</FONT>
-</H3>
-
-<P>
-Sends a message to a list by the Web interface.
-  It uses mail::mail_file() (see <A HREF="#mail-mail-file">26.1.1</A>, page&nbsp;<A HREF="node27.html#mail-mail-file"><IMG  ALIGN="BOTTOM" BORDER="1" ALT="[*]" SRC="crossref.png"></A>)
-  to do it. As it is in a Web context, the message will be set in spool.
- 
-<UL>
-<LI><B>IN</B> : -
-</LI>
-<LI><B>OUT</B> : 'loginrequest' <IMG
- WIDTH="7" HEIGHT="32" ALIGN="MIDDLE" BORDER="0"
- SRC="img3.png"
- ALT="\(\mid\)"> 'info'
-  
-</LI>
-</UL>    
-
-<P>
-
-<H3><A NAME="SECTION002750900000000000000"></A>
-<A NAME="wwsympa-do-sendpasswd"></A><A NAME="5235"></A>
-<BR>
-26.5.0.9 <FONT SIZE="+1">do_sendpasswd()</FONT>
-</H3>
-
-<P>
-Sends a message to a user, containing his password, by sending him template
-  'sendpasswd'.
- 
-<UL>
-<LI><B>IN</B> : -
-</LI>
-<LI><B>OUT</B> : 'loginrequest' <IMG
- WIDTH="7" HEIGHT="32" ALIGN="MIDDLE" BORDER="0"
- SRC="img3.png"
- ALT="\(\mid\)"> 'remindpasswd' <IMG
- WIDTH="7" HEIGHT="32" ALIGN="MIDDLE" BORDER="0"
- SRC="img3.png"
- ALT="\(\mid\)"> 1
-  
-</LI>
-</UL>    
-
-<P>
-
-<H3><A NAME="SECTION0027501000000000000000"></A>
-<A NAME="wwsympa-do-remind"></A><A NAME="5242"></A>
-<BR>
-26.5.0.10 <FONT SIZE="+1">do_remind()</FONT>
-</H3>
-
-<P>
-Sends a command remind to sympa.pl by calling mail::mail_file() (see <A HREF="#mail-mail-file">26.1.1</A>, 
-  page&nbsp;<A HREF="node27.html#mail-mail-file"><IMG  ALIGN="BOTTOM" BORDER="1" ALT="[*]" SRC="crossref.png"></A>). As it is in a Web context, the message will be set in spool.
-
-<UL>
-<LI><B>IN</B> : -
-</LI>
-<LI><B>OUT</B> : 'loginrequest' <IMG
- WIDTH="7" HEIGHT="32" ALIGN="MIDDLE" BORDER="0"
- SRC="img3.png"
- ALT="\(\mid\)"> 'admin'
-  
-</LI>
-</UL>    
-
-<P>
-
-<H3><A NAME="SECTION0027501100000000000000"></A>
-<A NAME="wwsympa-do-set"></A><A NAME="5251"></A>
-<BR>
-26.5.0.11 <FONT SIZE="+1">do_set()</FONT>
-</H3>
-
-<P>
-Changes subscription options (reception or visibility)
-
-<UL>
-<LI><B>IN</B> : -
-</LI>
-<LI><B>OUT</B> : 'loginrequest' <IMG
- WIDTH="7" HEIGHT="32" ALIGN="MIDDLE" BORDER="0"
- SRC="img3.png"
- ALT="\(\mid\)"> 'info'
-   
-</LI>
-</UL>    
-
-<P>
-
-<H3><A NAME="SECTION0027501200000000000000"></A>
-<A NAME="wwsympa-do-send-me"></A><A NAME="5258"></A>
-<BR>
-26.5.0.12 <FONT SIZE="+1">do_send_me()</FONT>
-</H3>
-
-<P>
-Sends a web archive message to a requesting user It calls mail::mail_forward() to do it 
-   (see <A HREF="#mail-mail-forward">26.1.1</A>, page&nbsp;<A HREF="node27.html#mail-mail-forward"><IMG  ALIGN="BOTTOM" BORDER="1" ALT="[*]" SRC="crossref.png"></A>). As it is in a Web context, 
-   the message will be set in spool.
-
-<UL>
-<LI><B>IN</B> : -
-</LI>
-<LI><B>OUT</B> : 'arc' <IMG
- WIDTH="7" HEIGHT="32" ALIGN="MIDDLE" BORDER="0"
- SRC="img3.png"
- ALT="\(\mid\)"> 1
-   
-</LI>
-</UL>    
-
-<P>
-
-<H1><A NAME="SECTION002760000000000000000"></A>
-<A NAME="5266"></A>
-<BR>
-26.6 tools.pl
-</H1>
-
-<P>
-This module provides various tools for Sympa.
-
-<P>
-
-<H3><A NAME="SECTION002760100000000000000"></A>
-<A NAME="tools-checkcommand"></A><A NAME="5269"></A>
-<BR>
-26.6.0.1 <FONT SIZE="+1">checkcommand()</FONT>
-</H3>
-
-<P>
-Checks for no command in the body of the message. If there are some command in it, 
-   it returns true and sends a message to $sender by calling  List::send_global_file() 
-   (see <A HREF="#list-send-global-file">26.2.2</A>, page&nbsp;<A HREF="node27.html#list-send-global-file"><IMG  ALIGN="BOTTOM" BORDER="1" ALT="[*]" SRC="crossref.png"></A>) with mail 
-   template ``message_report''.
-
-<P>
-<B>IN</B> : 
-   
-<OL>
-<LI><A NAME="11468"></A><TT>msg</TT>(+): ref(MIME::Entity) - the message to check
-</LI>
-<LI><A NAME="11471"></A><TT>sender</TT>(+): the message sender
-</LI>
-<LI><A NAME="11474"></A><TT>robot</TT>(+): robot
-   
-</LI>
-</OL>
-
-<P>
-<B>OUT</B> : 
-     
-<UL>
-<LI>1 <I>if there are some command in the message</I>
-</LI>
-<LI>0 <I>else</I>
-     
-</LI>
-</UL>
-
-<P>
-N.B.:
-
-<UL>
-<LI>(+) : required parameter, value must not be empty 
-</LI>
-<LI><IMG
- WIDTH="7" HEIGHT="32" ALIGN="MIDDLE" BORDER="0"
- SRC="img3.png"
- ALT="\(\mid\)"> : ``or'' for parameters value 
-</LI>
-<LI>$ : reference to code parameters or variables
-</LI>
-<LI><I>condition for parameter</I>
-</LI>
-</UL>
+See also the
+<A NAME="tex2html110"
+  HREF="http://listes.cru.fr/admin/moderation.html">recommendations for moderators</A>.
 
 <P>
 
 <HR>
 <!--Navigation Panel-->
-<A NAME="tex2html1429"
+<A NAME="tex2html1435"
   HREF="node28.html">
 <IMG WIDTH="37" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="next" SRC="next.png"></A> 
-<A NAME="tex2html1423"
+<A NAME="tex2html1429"
   HREF="sympa.html">
 <IMG WIDTH="26" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="up" SRC="up.png"></A> 
-<A NAME="tex2html1417"
+<A NAME="tex2html1423"
   HREF="node26.html">
 <IMG WIDTH="63" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="previous" SRC="prev.png"></A> 
-<A NAME="tex2html1425"
+<A NAME="tex2html1431"
   HREF="node1.html">
 <IMG WIDTH="65" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="contents" SRC="contents.png"></A> 
-<A NAME="tex2html1427"
-  HREF="node28.html">
+<A NAME="tex2html1433"
+  HREF="node29.html">
 <IMG WIDTH="43" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="index" SRC="index.png"></A> 
 <BR>
-<B> :</B> <A NAME="tex2html1430"
-  HREF="node28.html">索引</A>
-<B> :</B> <A NAME="tex2html1424"
+<B> Next:</B> <A NAME="tex2html1436"
+  HREF="node28.html">27. Internals</A>
+<B> Up:</B> <A NAME="tex2html1430"
   HREF="sympa.html">Sympa Mailing Lists Management Software version</A>
-<B> :</B> <A NAME="tex2html1418"
-  HREF="node26.html">25. Using Sympa commands</A>
- &nbsp; <B>  <A NAME="tex2html1426"
-  HREF="node1.html">目次</A></B> 
- &nbsp; <B>  <A NAME="tex2html1428"
-  HREF="node28.html">索引</A></B> 
+<B> Previous:</B> <A NAME="tex2html1424"
+  HREF="node26.html">25. Sympa with S/MIME and HTTPS</A>
+ &nbsp; <B>  <A NAME="tex2html1432"
+  HREF="node1.html">Contents</A></B> 
+ &nbsp; <B>  <A NAME="tex2html1434"
+  HREF="node29.html">Index</A></B> 
 <!--End of Navigation Panel-->
 <ADDRESS>
 root
-平成17年4月18日
+2005-04-22
 </ADDRESS>
 </BODY>
 </HTML>

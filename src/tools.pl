@@ -1854,6 +1854,107 @@ sub dump_var {
     }
 }
 
+####################################################
+# get_array_from_splitted_string                          
+####################################################
+# return an array made on a string splited by ','.
+# It removes spaces.
+#
+# 
+# IN : -$string (+): string to split 
+#
+# OUT : -ref(ARRAY)
+#
+######################################################
+sub get_array_from_splitted_string {
+    my ($string) = @_;
+    my @array;
+
+    foreach my $word (split /,/,$string) {
+	$word =~ s/\s//;
+	push @array, $word;
+    }
+
+    return \@array;
+}
+
+
+####################################################
+# diff_on_arrays                     
+####################################################
+# Makes set operation on arrays (seen as set, with no double) :
+#  - deleted : A \ B
+#  - added : B \ A
+#  - intersection : A /\ B
+#  - union : A \/ B
+# 
+# IN : -$setA : ref(ARRAY) - set
+#      -$setB : ref(ARRAY) - set
+#
+# OUT : -ref(HASH) with keys :  
+#          deleted, added, intersection, union
+#
+#######################################################    
+sub diff_on_arrays {
+    my ($setA,$setB) = @_;
+    my $result = {'intersection' => [],
+	          'union' => [],
+	          'added' => [],
+	          'deleted' => []};
+    my %deleted;
+    my %added;
+    my %intersection;
+    my %union;
+    
+    my %hashA;
+    my %hashB;
+    
+    foreach my $eltA (@$setA) {
+	$hashA{$eltA} = 1;
+	$deleted{$eltA} = 1;
+	$union{$eltA} = 1;
+    }
+    
+    foreach my $eltB (@$setB) {
+	$hashB{$eltB} = 1;
+	$added{$eltB} = 1;
+	
+	if ($hashA{$eltB}) {
+	    $intersection{$eltB} = 1;
+	    $deleted{$eltB} = 0;
+	}else {
+	    $union{$eltB} = 1;
+	}
+    }
+    
+    foreach my $eltA (@$setA) {
+	if ($hashB{$eltA}) {
+	    $added{$eltA} = 0; 
+	}
+    }
+    
+    foreach my $elt (keys %deleted) {
+	next unless $elt;
+	push @{$result->{'deleted'}},$elt if ($deleted{$elt});
+    }
+    foreach my $elt (keys %added) {
+	next unless $elt;
+	push @{$result->{'added'}},$elt if ($added{$elt});
+    }
+    foreach my $elt (keys %intersection) {
+	next unless $elt;
+	push @{$result->{'intersection'}},$elt if ($intersection{$elt});
+    }
+    foreach my $elt (keys %union) {
+	next unless $elt;
+	push @{$result->{'union'}},$elt if ($union{$elt});
+    } 
+    
+    return $result;
+    
+} 
+
+
 ## Change X-Sympa-To: header field in the message
 sub change_x_sympa_to {
     my ($file, $value) = @_;

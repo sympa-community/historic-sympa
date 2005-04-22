@@ -6623,252 +6623,252 @@ sub do_set_pending_list_request {
  }
 
 sub do_edit_list {
-      &wwslog('info', 'do_edit_list()');
+    &wwslog('info', 'do_edit_list()');
+    
+    unless ($param->{'user'}{'email'}) {
+	&error_message('no_user');
+	&wwslog('info','do_edit_list:  no user');
+	return 'loginrequest';
+    }
+    
+    unless ($param->{'is_owner'}) {
+	&error_message('may_not');
+	&wwslog('info','do_edit_list: not allowed');
+	return undef;
+    }
+    
+    my $family;
+    if (defined $list->{'admin'}{'family_name'}) {
+	unless ($family = $list->get_family()) {
+	    &error_message('failed');
+	    &wwslog('info','do_edit_list : impossible to get list %s\'s family',$list->{'name'});
+	    return undef;
+	}          
+    }
+    
+    my $new_admin = {};
+    
+    ## List the parameters editable sent in the form
+    my $edited_param = {};
+    
+    foreach my $key (sort keys %in) {
+	next unless ($key =~ /^(single_param|multiple_param)\.(\S+)$/);
+	
+	$key =~ /^(single_param|multiple_param)\.(\S+)$/;
+	my ($type, $name) = ($1, $2);
+	
+	## Tag parameter as present in the form
+	if ($name =~ /^([^\.]+)(\.)/ ||
+	    $name =~ /^([^\.]+)$/) {
+	    $edited_param->{$1} = 1;
+	}
+	
+	## Parameter value
+	my $value = $in{$key};
+	next if ($value =~ /^\s*$/);
+	
+	if ($type eq 'multiple_param') {
+	    my @values = split /\0/, $value;
+	    $value = \@values;
+	}
+	
+	my @token = split /\./, $name;
+	
+	## make it an entry in $new_admin
+	my $var = &_shift_var(0, $new_admin, @token);
+	$$var = $value;
+    } 
 
-     unless ($param->{'user'}{'email'}) {
-	 &error_message('no_user');
-	 &wwslog('info','do_edit_list:  no user');
-	 return 'loginrequest';
-     }
-
-      unless ($param->{'is_owner'}) {
-	 &error_message('may_not');
-	 &wwslog('info','do_edit_list: not allowed');
-	 return undef;
-     }
-
-      my $family;
-      if (defined $list->{'admin'}{'family_name'}) {
-	  unless ($family = $list->get_family()) {
-	      &error_message('failed');
-	      &wwslog('info','do_edit_list : impossible to get list %s\'s family',$list->{'name'});
-	      return undef;
-	  }          
-      }
-      
-      my $new_admin = {};
-
-     ## List the parameters editable sent in the form
-     my $edited_param = {};
-
-      foreach my $key (sort keys %in) {
-	 next unless ($key =~ /^(single_param|multiple_param)\.(\S+)$/);
-	 
-	 $key =~ /^(single_param|multiple_param)\.(\S+)$/;
-	 my ($type, $name) = ($1, $2);
-
-	 ## Tag parameter as present in the form
-	 if ($name =~ /^([^\.]+)(\.)/ ||
-	     $name =~ /^([^\.]+)$/) {
-	     $edited_param->{$1} = 1;
-	 }
-	 
-	 ## Parameter value
-	 my $value = $in{$key};
-	 next if ($value =~ /^\s*$/);
-
-	 if ($type eq 'multiple_param') {
-	     my @values = split /\0/, $value;
-	     $value = \@values;
-	 }
-
-	 my @token = split /\./, $name;
-
-	 ## make it an entry in $new_admin
-	 my $var = &_shift_var(0, $new_admin, @token);
-	 $$var = $value;
-     } 
-
- #    print "Content-type: text/plain\n\n";
- #    &tools::dump_var($new_admin,0);
-
-      ## Did the config changed ?
-     unless ($list->{'admin'}{'serial'} == $in{'serial'}) {
-	 &error_message('config_changed', {'email' => $list->{'admin'}{'update'}{'email'}});
-	 &wwslog('info','do_edit_list: Config file has been modified(%d => %d) by %s. Cannot apply changes', $in{'single_param.serial'}, $list->{'admin'}{'serial'}, $list->{'admin'}{'update'}{'email'});
-	 return undef;
-     }
-
-      ## Check changes & check syntax
-      my (%changed, %delete);
-      my @syntax_error;
-      
-      ## Check family constraint
-      my %check_family;
-      
-      
-     ## getting changes about owners or editors
-     my $owner_update = 0;
-     my $editor_update = 0;	
-
-     foreach my $pname (sort List::by_order keys %{$edited_param}) {
-	 
-	 my ($p, $new_p);
-	 ## Check privileges first
-	 next unless ($list->may_edit($pname,$param->{'user'}{'email'}) eq 'write');
-	 
-	 ## family_constraint : edit control
-	 if (ref($family) eq 'Family') {
-	     
-	     if ((ref($::pinfo{$pname}{'format'}) ne 'HASH') && (!ref($pname))) { # simple parameter
-		 my $constraint = $family->get_param_constraint($pname);
-		 
-		 if (ref($constraint) eq 'HASH') { # controlled parameter        
-		     $check_family{$pname} = $constraint;
-		     
-		 } elsif ($constraint ne '0') {    # fixed parameter (free : no control)
-		     next;
-		 }
-	     }
-	 }
- 	 
-	 #next unless (defined $new_admin->{$pname});
-	 next if $pinfo->{$pname}{'obsolete'};
-
-	 my $to_index;
-
-	 ## Single vs multiple parameter
-	 if ($pinfo->{$pname}{'occurrence'} =~ /n$/) {
-
-	     my $last_index = $#{$new_admin->{$pname}};
-
-	     if ($#{$list->{'admin'}{$pname}} < $last_index) {
-		 $to_index = $last_index;
-	     }else {
-		 $to_index = $#{$list->{'admin'}{$pname}};
-	     }
-
-	     if ($#{$list->{'admin'}{$pname}} != $last_index) {
-		 $changed{$pname} = 1; 
-		 #next;
-	     }
-	     $p = $list->{'admin'}{$pname};
-	     $new_p = $new_admin->{$pname};
+    #    print "Content-type: text/plain\n\n";
+    #    &tools::dump_var($new_admin,0);
+    
+    ## Did the config changed ?
+    unless ($list->{'admin'}{'serial'} == $in{'serial'}) {
+	&error_message('config_changed', {'email' => $list->{'admin'}{'update'}{'email'}});
+	&wwslog('info','do_edit_list: Config file has been modified(%d => %d) by %s. Cannot apply changes', $in{'single_param.serial'}, $list->{'admin'}{'serial'}, $list->{'admin'}{'update'}{'email'});
+	return undef;
+    }
+    
+    ## Check changes & check syntax
+    my (%changed, %delete);
+    my @syntax_error;
+    
+    ## Check family constraint
+    my %check_family;
+    
+    
+    ## getting changes about owners or editors
+    my $owner_update = 0;
+    my $editor_update = 0;	
+    
+    foreach my $pname (sort List::by_order keys %{$edited_param}) {
+	
+	my ($p, $new_p);
+	## Check privileges first
+	next unless ($list->may_edit($pname,$param->{'user'}{'email'}) eq 'write');
+	
+	## family_constraint : edit control
+	if (ref($family) eq 'Family') {
+	    
+	    if ((ref($::pinfo{$pname}{'format'}) ne 'HASH') && (!ref($pname))) { # simple parameter
+		my $constraint = $family->get_param_constraint($pname);
+		
+		if (ref($constraint) eq 'HASH') { # controlled parameter        
+		    $check_family{$pname} = $constraint;
+		    
+		} elsif ($constraint ne '0') {    # fixed parameter (free : no control)
+		    next;
+		}
+	    }
+	}
+	
+	#next unless (defined $new_admin->{$pname});
+	next if $pinfo->{$pname}{'obsolete'};
+	
+	my $to_index;
+	
+	## Single vs multiple parameter
+	if ($pinfo->{$pname}{'occurrence'} =~ /n$/) {
+	    
+	    my $last_index = $#{$new_admin->{$pname}};
+	    
+	    if ($#{$list->{'admin'}{$pname}} < $last_index) {
+		$to_index = $last_index;
+	    }else {
+		$to_index = $#{$list->{'admin'}{$pname}};
+	    }
+	    
+	    if ($#{$list->{'admin'}{$pname}} != $last_index) {
+		$changed{$pname} = 1; 
+		#next;
+	    }
+	    $p = $list->{'admin'}{$pname};
+	    $new_p = $new_admin->{$pname};
 #	     &wwslog('notice',"MULTIPLE param 5 6 7 8: $pname...........................");
-	 }else {
-	     $p = [$list->{'admin'}{$pname}];
-	     $new_p = [$new_admin->{$pname}];
+	}else {
+	    $p = [$list->{'admin'}{$pname}];
+	    $new_p = [$new_admin->{$pname}];
 #	     &wwslog('notice',"UNIQUE param 1 2 3 4 : $pname.........................");
-	 }
+	}
 
 	 ## Check changed parameters
 	 ## Also check syntax
-	 foreach my $i (0..$to_index) {
-
-	     ## Scenario
-	     ## Eg: 'subscribe'
-	     if ($pinfo->{$pname}{'scenario'} || 
-		 $pinfo->{$pname}{'task'} ) {
-		 if ($p->[$i]{'name'} ne $new_p->[$i]{'name'}) {
-		     $changed{$pname} = 1; next;
-		 }
- #		 &wwslog('notice',"..scenario task, SIMPLE UNIVALUE, param 1-5 : $pname($new_p->[$i]{'name'})");
-		 ## Hash
-		 ## Ex: 'owner'
-	     }elsif (ref ($pinfo->{$pname}{'format'}) eq 'HASH') {
+	foreach my $i (0..$to_index) {
+	    
+	    ## Scenario
+	    ## Eg: 'subscribe'
+	    if ($pinfo->{$pname}{'scenario'} || 
+		$pinfo->{$pname}{'task'} ) {
+		if ($p->[$i]{'name'} ne $new_p->[$i]{'name'}) {
+		    $changed{$pname} = 1; next;
+		}
+		# &wwslog('notice',"..scenario task, SIMPLE UNIVALUE, param 1-5 : $pname($new_p->[$i]{'name'})");
+		## Hash
+		## Ex: 'owner'
+	    }elsif (ref ($pinfo->{$pname}{'format'}) eq 'HASH') {
 #		 &wwslog('notice',"..COMPOSE param 2 4 6 8 : $pname");
-		 ## Foreach Keys
-		 ## Ex: 'owner->email'
-		 foreach my $key (keys %{$pinfo->{$pname}{'format'}}) {
-
-		     next unless ($list->may_edit("$pname.$key",$param->{'user'}{'email'}) eq 'write');
-		     
-		     ## family_constraint : edit_control
-		     if (ref($family) eq 'Family') {
-			 if ((ref($::pinfo{$pname}{'format'}) eq 'HASH') && !ref($pname) && !ref($key)) {
-			     my $constraint = $family->get_param_constraint("$pname.$key");
-			     
-			     if (ref($constraint) eq 'HASH') { # controlled parameter        
-				 $check_family{$pname}{$key} = $constraint;
-			     } elsif ($constraint ne '0') {    # fixed parameter
-				 next;
-			     }
-			 }
-		     }		     
-		     
-		     ## Ex: 'shared_doc->d_read'
-		     if ($pinfo->{$pname}{'format'}{$key}{'scenario'} || 
-			 $pinfo->{$pname}{'format'}{$key}{'task'} ) {
- #			 &wwslog('notice',"....scenario task UNIVALUE param 2 6 : $pname.$key($new_p->[$i]{$key}{'name'})");
-			 if ($p->[$i]{$key}{'name'} ne $new_p->[$i]{$key}{'name'}) {
-			     $changed{$pname} = 1; next;
-			 }
-		     }else{
-			 ## Multiple param
-			 #&wwslog('notice',"....non task non scenario param 2 4 6 8");
-			 if ($pinfo->{$pname}{'format'}{$key}{'occurrence'} =~ /n$/) {
-			     #&wwslog('notice',"......MULTIVALUE param 4 8 : $pname.$key(@{$new_p->[$i]{$key}})");
-			     if ($#{$p->[$i]{$key}} != $#{$new_p->[$i]{$key}}) {
-				 $changed{$pname} = 1; next;
-			     }
-
-			     ## Multiple param, foreach entry
-			     ## Ex: 'digest->days'
-			     foreach my $index (0..$#{$p->[$i]{$key}}) {
+		## Foreach Keys
+		## Ex: 'owner->email'
+		foreach my $key (keys %{$pinfo->{$pname}{'format'}}) {
+		    
+		    next unless ($list->may_edit("$pname.$key",$param->{'user'}{'email'}) eq 'write');
+		    
+		    ## family_constraint : edit_control
+		    if (ref($family) eq 'Family') {
+			if ((ref($::pinfo{$pname}{'format'}) eq 'HASH') && !ref($pname) && !ref($key)) {
+			    my $constraint = $family->get_param_constraint("$pname.$key");
+			    
+			    if (ref($constraint) eq 'HASH') { # controlled parameter        
+				$check_family{$pname}{$key} = $constraint;
+			    } elsif ($constraint ne '0') {    # fixed parameter
+				next;
+			    }
+			}
+		    }		     
+		    
+		    ## Ex: 'shared_doc->d_read'
+		    if ($pinfo->{$pname}{'format'}{$key}{'scenario'} || 
+			$pinfo->{$pname}{'format'}{$key}{'task'} ) {
+			#			 &wwslog('notice',"....scenario task UNIVALUE param 2 6 : $pname.$key($new_p->[$i]{$key}{'name'})");
+			if ($p->[$i]{$key}{'name'} ne $new_p->[$i]{$key}{'name'}) {
+			    $changed{$pname} = 1; next;
+			}
+		    }else{
+			## Multiple param
+			#&wwslog('notice',"....non task non scenario param 2 4 6 8");
+			if ($pinfo->{$pname}{'format'}{$key}{'occurrence'} =~ /n$/) {
+			    #&wwslog('notice',"......MULTIVALUE param 4 8 : $pname.$key(@{$new_p->[$i]{$key}})");
+			    if ($#{$p->[$i]{$key}} != $#{$new_p->[$i]{$key}}) {
+				$changed{$pname} = 1; next;
+			    }
+			    
+			    ## Multiple param, foreach entry
+			    ## Ex: 'digest->days'
+			    foreach my $index (0..$#{$p->[$i]{$key}}) {
 #				 &wwslog('notice',"........($new_p->[$i]{$key}[$index])");
-				 my $format = $pinfo->{$pname}{'format'}{$key}{'format'};
-				 if (ref ($format)) {
-				     $format = $pinfo->{$pname}{'format'}{$key}{'file_format'};
-				 }
-
-				 if ($p->[$i]{$key}[$index] ne $new_p->[$i]{$key}[$index]) {
-
-				     if ($new_p->[$i]{$key}[$index] !~ /^$format$/i) {
-					 push @syntax_error, $pname;
-				     }
-				     $changed{$pname} = 1; next;
-				 }
-			     }
-
-			 ## Single Param
-			 ## Ex: 'owner->email'
-			 }else {
+				my $format = $pinfo->{$pname}{'format'}{$key}{'format'};
+				if (ref ($format)) {
+				    $format = $pinfo->{$pname}{'format'}{$key}{'file_format'};
+				}
+				
+				if ($p->[$i]{$key}[$index] ne $new_p->[$i]{$key}[$index]) {
+				    
+				    if ($new_p->[$i]{$key}[$index] !~ /^$format$/i) {
+					push @syntax_error, $pname;
+				    }
+				    $changed{$pname} = 1; next;
+				}
+			    }
+			    
+			    ## Single Param
+			    ## Ex: 'owner->email'
+			}else {
 #			     &wwslog('notice',"......UNIVALUE param 2 6: $pname.$key($new_p->[$i]{$key})");
-			     if (! $new_p->[$i]{$key}) {
-				 ## If empty and is primary key => delete entry
-				 if ($pinfo->{$pname}{'format'}{$key}{'occurrence'} =~ /^1/) {
-				     $new_p->[$i] = undef;
-
-				     ## Skip the rest of the paragraph
-				     $changed{$pname} = 1; last;
-
-				     ## If optionnal parameter
-				 }else {
-				     $changed{$pname} = 1; next;
-				 }
-			     }
-			     if ($p->[$i]{$key} ne $new_p->[$i]{$key}) {
-
-				 my $format = $pinfo->{$pname}{'format'}{$key}{'format'};
-				 if (ref ($format)) {
-				     $format = $pinfo->{$pname}{'format'}{$key}{'file_format'};
-				 }
-
-				 if ($new_p->[$i]{$key} !~ /^$format$/i) {
-				     push @syntax_error, $pname;
-				 }
-
-				 $changed{$pname} = 1; next;
-			     }
-			 }
-		     }
-		 }
-	     ## Scalar
-	     ## Ex: 'max_size'
-	     }else {
+			    if (! $new_p->[$i]{$key}) {
+				## If empty and is primary key => delete entry
+				if ($pinfo->{$pname}{'format'}{$key}{'occurrence'} =~ /^1/) {
+				    $new_p->[$i] = undef;
+				    
+				    ## Skip the rest of the paragraph
+				    $changed{$pname} = 1; last;
+				    
+				    ## If optionnal parameter
+				}else {
+				    $changed{$pname} = 1; next;
+				}
+			    }
+			    if ($p->[$i]{$key} ne $new_p->[$i]{$key}) {
+				
+				my $format = $pinfo->{$pname}{'format'}{$key}{'format'};
+				if (ref ($format)) {
+				    $format = $pinfo->{$pname}{'format'}{$key}{'file_format'};
+				}
+				
+				if ($new_p->[$i]{$key} !~ /^$format$/i) {
+				    push @syntax_error, $pname;
+				}
+				
+				$changed{$pname} = 1; next;
+			    }
+			}
+		    }
+		}
+		## Scalar
+		## Ex: 'max_size'
+	    }else {
 #		 &wwslog('notice',"..SIMPLE non SCENARIO non TASK param 1-3-5-7 : $pname($new_p->[$i])");
-		 if (! defined($new_p->[$i])) {
-		     push @{$delete{$pname}}, $i;
-		     $changed{$pname} = 1;
-		 }elsif ($p->[$i] ne $new_p->[$i]) {
-		     unless ($new_p->[$i] =~ /^$pinfo->{$pname}{'file_format'}$/) {
-			 push @syntax_error, $pname;
-		     }
-		     $changed{$pname} = 1; 
-		 }
-	     }	    
-	 }
-     }
+		if (! defined($new_p->[$i])) {
+		    push @{$delete{$pname}}, $i;
+		    $changed{$pname} = 1;
+		}elsif ($p->[$i] ne $new_p->[$i]) {
+		    unless ($new_p->[$i] =~ /^$pinfo->{$pname}{'file_format'}$/) {
+			push @syntax_error, $pname;
+		    }
+		    $changed{$pname} = 1; 
+		}
+	    }	    
+	}
+    }
 
      ## Syntax errors
      if ($#syntax_error > -1) {
@@ -6879,151 +6879,156 @@ sub do_edit_list {
 	 return undef;
      }
 
-     ## Delete selected params
-     foreach my $p (keys %delete) {
+    ## For changed msg_topic.name
+    if ($list->modifying_msg_topic_for_subscribers($new_admin->{'msg_topic'})) {
+	&message('subscribers_noticed_deleted_topics');
+    }
 
-	 if (($p eq 'owner') || ($p eq 'owner_include')) {
-	     $owner_update = 1;
-	 }
-
-	 if (($p eq 'editor') || ($p eq 'editor_include')) {
-	     $editor_update = 1;
-	 }
-
-	 ## Delete ALL entries
-	 unless (ref ($delete{$p})) {
-	     #	    if (defined $check_family{$p}) { # $p is family controlled
-	     #		&error_message('failed');
-	     #		&wwslog('info','do_edit_list : parameter %s must have values (family context)',$p);
-	     #		return undef;	
-	     #	    }
-	     undef $new_admin->{$p};
-	     next;
-	 }
-
-	 ## Delete selected entries
-	 foreach my $k (reverse @{$delete{$p}}) {
-	     splice @{$new_admin->{$p}}, $k, 1;
-	 }
-
-	 if (defined $check_family{$p}) { # $p is family controlled
-	     if ($#{$new_admin->{$p}} < 0) {
-		 &error_message('failed');
-		 &wwslog('info','do_edit_list : parameter %s must have values (family context)',$p);
-		 return undef;	
-	     }    
-	 }
-     }
+    ## Delete selected params
+    foreach my $p (keys %delete) {
+	
+	if (($p eq 'owner') || ($p eq 'owner_include')) {
+	    $owner_update = 1;
+	}
+	
+	if (($p eq 'editor') || ($p eq 'editor_include')) {
+	    $editor_update = 1;
+	}
+	
+	## Delete ALL entries
+	unless (ref ($delete{$p})) {
+	    #	    if (defined $check_family{$p}) { # $p is family controlled
+	    #		&error_message('failed');
+	    #		&wwslog('info','do_edit_list : parameter %s must have values (family context)',$p);
+	    #		return undef;	
+	    #	    }
+	    undef $new_admin->{$p};
+	    next;
+	}
+	
+	## Delete selected entries
+	foreach my $k (reverse @{$delete{$p}}) {
+	    splice @{$new_admin->{$p}}, $k, 1;
+	}
+	
+	if (defined $check_family{$p}) { # $p is family controlled
+	    if ($#{$new_admin->{$p}} < 0) {
+		&error_message('failed');
+		&wwslog('info','do_edit_list : parameter %s must have values (family context)',$p);
+		return undef;	
+	    }    
+	}
+    }
       
-      # updating config_changes for deleted parameters
-      if (ref($family)) {
-	  my @array_delete = keys %delete;
-	  unless ($list->update_config_changes('param',\@array_delete)) {
-	      &error_message('failed');
-	      &wwslog('info','do_edit_list: cannot write in config_changes for deleted parameters from list %s', $list->{'name'});
-	      return undef;
-	  }
-      }
- 	
-      ## Update config in memory
-      my $data_source_updated;
-      foreach my $parameter (keys %changed) {
-	  
-	  my $pname;
-	  if ($parameter =~ /^([\w-]+)\.([\w-]+)$/) {
-	      $pname = $1;
-	  } else{
-	      $pname = $parameter;
-	  }
-	 
-	 my @users;
-
-	  if (defined $check_family{$pname}) { # $pname is CONTROLLED
-	      &_check_new_values(\%check_family,$pname,$new_admin);
-	  }	  
-	  
-	 ## If datasource config changed
-	 if ($pname =~ /^(include_.*|user_data_source|ttl)$/) {
-	     $data_source_updated = 1;
-	 }
-
-	 ## User Data Source
-	 if ($pname eq 'user_data_source') {
-	     ## Migrating to database
-	     if (($list->{'admin'}{'user_data_source'} eq 'file') &&
-		 ($new_admin->{'user_data_source'} eq 'database')) {
-		 unless (-f "$list->{'dir'}/subscribers") {
-		     &wwslog('notice', 'No subscribers to load in database');
-		 }
-		 @users = &List::_load_users_file("$list->{'dir'}/subscribers");
-	     }elsif (($list->{'admin'}{'user_data_source'} ne 'include2') &&
-		     ($new_admin->{'user_data_source'} eq 'include2')) {
-		 $list->update_user('*', {'subscribed' => 1});
-		 &message('subscribers_updated_soon');
-	     }elsif (($list->{'admin'}{'user_data_source'} eq 'include2') &&
-		     ($new_admin->{'user_data_source'} eq 'database')) {
-		 $list->sync_include('purge');
-	     }
-
-	     ## Update total of subscribers
-	     $list->{'total'} = &List::_load_total_db($list->{'name'});
-	     $list->savestats();
-	 }
-
-	 #If no directory, delete the entry
-	 if($pname eq 'export'){
-	     foreach my $old_directory (@{$list->{'admin'}{'export'}}){
-		 my $var = 0;
-		 foreach my $new_directory (@{$new_admin->{'export'}}){
-		     next unless($new_directory eq $old_directory);
-		     $var = 1;
-		 }
-
-		 if(!$var || $new_admin->{'status'} ne 'open'){
-		     &Ldap::delete_list($old_directory,$list);
-		 }
-	     }
-	 }
-
-	 $list->{'admin'}{$pname} = $new_admin->{$pname};
-	 if (defined $new_admin->{$pname} || $pinfo->{$pname}{'internal'}) {
-	     delete $list->{'admin'}{'defaults'}{$pname};
-	 }else {
-	     $list->{'admin'}{'defaults'}{$pname} = 1;
-	 }
-
-	 if (($pname eq 'user_data_source') &&
-	     ($#users >= 0)) {
-
-	     $list->{'total'} = 0;
-
-	     ## Insert users in database
-	     foreach my $user (@users) {
-		 $list->add_user($user);
-	     }
-
-	     $list->get_total();
-	     $list->{'mtime'}[1] = 0;
-
-	     if (($pname eq 'owner') || ($pname eq 'owner_include')){
-		 $owner_update = 1;
-	     }
-	     
-	     if (($pname eq 'editor') || ($pname eq 'editor_include')){
-		 $editor_update = 1;
-	     }
-	 }
-	  # updating config_changes for changed parameters7094
-
-	  if (ref($family)) {
-	      my @array_changed = keys %changed;
-	      unless ($list->update_config_changes('param',\@array_changed)) {
-		  &error_message('failed');
-		  &wwslog('info','do_edit_file: cannot write in config_changes for changed parameters from list %s', $list->{'name'});
-		  return undef;
-	      }
-	  }
-     }
+    # updating config_changes for deleted parameters
+    if (ref($family)) {
+	my @array_delete = keys %delete;
+	unless ($list->update_config_changes('param',\@array_delete)) {
+	    &error_message('failed');
+	    &wwslog('info','do_edit_list: cannot write in config_changes for deleted parameters from list %s', $list->{'name'});
+	    return undef;
+	}
+    }
+    
+    ## Update config in memory
+    my $data_source_updated;
+    foreach my $parameter (keys %changed) {
+	
+	my $pname;
+	if ($parameter =~ /^([\w-]+)\.([\w-]+)$/) {
+	    $pname = $1;
+	} else{
+	    $pname = $parameter;
+	}
+	
+	my @users;
+	
+	if (defined $check_family{$pname}) { # $pname is CONTROLLED
+	    &_check_new_values(\%check_family,$pname,$new_admin);
+	}	  
+	
+	## If datasource config changed
+	if ($pname =~ /^(include_.*|user_data_source|ttl)$/) {
+	    $data_source_updated = 1;
+	}
+	
+	## User Data Source
+	if ($pname eq 'user_data_source') {
+	    ## Migrating to database
+	    if (($list->{'admin'}{'user_data_source'} eq 'file') &&
+		($new_admin->{'user_data_source'} eq 'database')) {
+		unless (-f "$list->{'dir'}/subscribers") {
+		    &wwslog('notice', 'No subscribers to load in database');
+		}
+		@users = &List::_load_users_file("$list->{'dir'}/subscribers");
+	    }elsif (($list->{'admin'}{'user_data_source'} ne 'include2') &&
+		    ($new_admin->{'user_data_source'} eq 'include2')) {
+		$list->update_user('*', {'subscribed' => 1});
+		&message('subscribers_updated_soon');
+	    }elsif (($list->{'admin'}{'user_data_source'} eq 'include2') &&
+		    ($new_admin->{'user_data_source'} eq 'database')) {
+		$list->sync_include('purge');
+	    }
+	    
+	    ## Update total of subscribers
+	    $list->{'total'} = &List::_load_total_db($list->{'name'});
+	    $list->savestats();
+	}
+	
+	#If no directory, delete the entry
+	if($pname eq 'export'){
+	    foreach my $old_directory (@{$list->{'admin'}{'export'}}){
+		my $var = 0;
+		foreach my $new_directory (@{$new_admin->{'export'}}){
+		    next unless($new_directory eq $old_directory);
+		    $var = 1;
+		}
+		
+		if(!$var || $new_admin->{'status'} ne 'open'){
+		    &Ldap::delete_list($old_directory,$list);
+		}
+	    }
+	}
+	
+	$list->{'admin'}{$pname} = $new_admin->{$pname};
+	if (defined $new_admin->{$pname} || $pinfo->{$pname}{'internal'}) {
+	    delete $list->{'admin'}{'defaults'}{$pname};
+	}else {
+	    $list->{'admin'}{'defaults'}{$pname} = 1;
+	}
+	
+	if (($pname eq 'user_data_source') &&
+	    ($#users >= 0)) {
+	    
+	    $list->{'total'} = 0;
+	    
+	    ## Insert users in database
+	    foreach my $user (@users) {
+		$list->add_user($user);
+	    }
+	    
+	    $list->get_total();
+	    $list->{'mtime'}[1] = 0;
+	    
+	    if (($pname eq 'owner') || ($pname eq 'owner_include')){
+		$owner_update = 1;
+	    }
+	    
+	    if (($pname eq 'editor') || ($pname eq 'editor_include')){
+		$editor_update = 1;
+	    }
+	}
+	# updating config_changes for changed parameters7094
+	
+	if (ref($family)) {
+	    my @array_changed = keys %changed;
+	    unless ($list->update_config_changes('param',\@array_changed)) {
+		&error_message('failed');
+		&wwslog('info','do_edit_file: cannot write in config_changes for changed parameters from list %s', $list->{'name'});
+		return undef;
+	    }
+	}
+    }
 
      ## Save config file
      unless ($list->save_config($param->{'user'}{'email'})) {
@@ -7379,12 +7384,16 @@ sub _prepare_data {
  	    }
  	}
  	if ($constraint eq '0') {              # free parameter
- 	    $p_glob->{'may_edit'} = 'write';         	
+ 	    $p_glob->{'may_edit'} = 'write';        
+
  	} elsif (ref($constraint) eq 'HASH') { # controlled parameter        
  	    $p_glob->{'may_edit'} = 'write';
  	    $restrict = 1;
+
  	} else {                               # fixed parameter
  	    $p_glob->{'may_edit'} = 'read';
+
+
  	}
 	
     } else {

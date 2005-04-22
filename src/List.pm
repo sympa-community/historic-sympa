@@ -522,6 +522,7 @@ my %alias = ('reply-to' => 'reply_to',
 	    'editor_include' => {'format' => {'source' => {'datasource' => 1,
 							   'occurrence' => '1',
 							   'gettext_id' => 'the datasource',
+							   'order' => 1
 							   },
 					      'source_parameters' => {'format' => '.*',
 								      'occurrence' => '0-1',
@@ -924,9 +925,8 @@ my %alias = ('reply-to' => 'reply_to',
 			    'gettext_id' => "Topics for message categorisation",
 			    'group' => 'sending'
 			    },
-	    'msg_topic_keywords_apply_on' => { 'format' => ['subject','body'],
-                                               'split_char' => ',',
-					       'occurrence' => '0-n',
+	    'msg_topic_keywords_apply_on' => { 'format' => ['subject','body','subject and body'],
+					       'occurrence' => '0-1',
 					       'default' => 'subject',
 					       'gettext_id' => "On which part of message check for message topic keywords",
 					       'group' => 'sending'
@@ -10406,8 +10406,16 @@ sub available_reception_mode {
 }
 
 
-
-# Is the $topic in the list msg_topic parameter
+####################################################
+# is_available_msg_topic
+####################################################
+#  Checks for a topic if it is available in the list
+# (look foreach list parameter msg_topic.name)
+# 
+# IN : -$self (+): ref(List)
+#      -$topic (+): string
+# OUT : -$topic if it is ok
+####################################################
 sub is_available_msg_topic {
     my ($self,$topic) = @_;
     
@@ -10420,19 +10428,61 @@ sub is_available_msg_topic {
     return undef;
 }
 
-# return an array of the msg_topic list
-sub get_array_msg_topic {
-    my ($string) = @_;
-    my @array;
 
-    foreach my $word (split /,/,$string) {
-	$word =~ s/\s//;
-	push @array, $word;
+####################################################
+# modifying_msg_topic_for_subscribers()
+####################################################
+#  Deletes topics subscriber that does not exist anymore
+#  and send a notify to concerned subscribers.
+# 
+# IN : -$self (+): ref(List)
+#      -$new_msg_topic (+): ref(ARRAY) - new state 
+#        of msg_topic parameters
+#
+# OUT : -0 if no deleting 
+#       -1 if some topics are deleted
+##################################################### 
+sub modifying_msg_topic_for_subscribers(){
+    my ($self,$new_msg_topic) = @_;
+    &do_log('debug4',"List::modifying_msg_topic_for_subscribers($self->{'name'}");
+
+    my @old_msg_topic_name;
+    foreach my $msg_topic (@{$self->{'admin'}{'msg_topic'}}) {
+	push @old_msg_topic_name,$msg_topic->{'name'};
     }
 
-    return \@array;
-}
+    my @new_msg_topic_name;
+    foreach my $msg_topic (@{$new_msg_topic}) {
+	push @new_msg_topic_name,$msg_topic->{'name'};
+    }
 
+    my $msg_topic_changes = &tools::diff_on_arrays(\@old_msg_topic_name,\@new_msg_topic_name);
+
+    if ($#{$msg_topic_changes->{'deleted'}} >= 0) {
+	
+	for (my $subscriber=$self->get_first_user(); $subscriber; $subscriber=$self->get_next_user()) {
+	    
+	    if ($subscriber->{'reception'} eq 'mail') {
+		my $topics = &tools::diff_on_arrays($msg_topic_changes->{'deleted'},&tools::get_array_from_splitted_string($subscriber->{'topics'}));
+		
+		if ($#{$topics->{'intersection'}} >= 0) {
+		    my $wwsympa_url = &Conf::get_robot_conf($self->{'domain'}, 'wwsympa_url');
+		    unless ($self->send_notify_to_user('deleted_msg_topics',$subscriber->{'email'},
+						       {'del_topics' => $topics->{'intersection'},
+							'url' => $wwsympa_url.'/suboptions/'.$self->{'name'}})) {
+			&do_log('err',"List::modifying_msg_topic_for_subscribers($self->{'name'}) : impossible to send notify to user about 'deleted_msg_topics'");
+		    }
+		    unless ($self->update_user(lc($subscriber->{'email'}), 
+					       {'update_date' => time,
+						'topics' => join(',',@{$topics->{'added'}})})) {
+			&do_log('err',"List::modifying_msg_topic_for_subscribers($self->{'name'} : impossible to update user '$subscriber->{'email'}'");
+		    }
+		}
+	    }
+	}
+    }
+    return 1;
+}
 
 sub _urlize_part {
     my $message = shift;

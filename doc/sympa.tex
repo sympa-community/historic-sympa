@@ -132,7 +132,7 @@
         Olivier Sala\"un,
         Christophe Wolfhugel,
          }
-    \date {18 avril 2005}
+    \date {22 avril 2005}
 \begin {htmlonly}
 For printing purpose, use the 
 \htmladdnormallink {postscript format version} {sympa.ps} of this documentation.
@@ -2751,6 +2751,7 @@ CREATE TABLE subscriber_table (
 	update_subscriber	datetime,
 	visibility_subscriber	varchar (20),
 	reception_subscriber	varchar (20),
+	topics_subscriber	varchar (200),
 	bounce_subscriber	varchar (35),
 	comment_subscriber	varchar (150),
 	subscribed_subscriber 	enum ('0','1'),
@@ -2833,6 +2834,7 @@ CREATE TABLE subscriber_table (
 	update_subscriber 	timestamp with time zone,
 	visibility_subscriber	varchar (20),
 	reception_subscriber	varchar (20),
+	topics_subscriber	varchar (200),
 	bounce_subscriber	varchar (35),
 	bounce_score_subscriber int4,
 	comment_subscriber	varchar (150),
@@ -2900,6 +2902,7 @@ create table subscriber_table
     update_subscriber      datetime               null,
     visibility_subscriber  varchar(20)            null    ,
     reception_subscriber   varchar(20)            null    ,
+    topics_subscriber	   varchar(200)           null,
     bounce_subscriber      varchar(35)            null    ,
     bounce_score_subscriber numeric               null    ,
     comment_subscriber     varchar(150)           null    ,
@@ -2984,6 +2987,7 @@ CREATE TABLE subscriber_table (
 	update_subscriber	date,
         visibility_subscriber   varchar2(20),
         reception_subscriber    varchar2(20),
+	topics_subscriber	varchar2(200),
  	bounce_subscriber       varchar2 (35),
 	bounce_score_subscriber number,
  	comment_subscriber      varchar2 (150),
@@ -3519,9 +3523,6 @@ the \textbf {Send me a password} button on the web interface. As for any user, t
 Note that you must start the \file {sympa.pl} process with the web interface ; it is in responsible for delivering 
 mail messages including password reminders.
 
-\section {RSS channel}
-
-See \ref {rss}, page~\pageref {rss}. 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % Sympa RSS Channel
@@ -3619,12 +3620,6 @@ Parameters :
   \item \file{count} : maximum number of expected records. This is a CGI parameter. It is optional but one of the two parameters 
      ``for'' or ``count'' is required.
 \end{itemize}
-
-
-
-
-
-
 
 
  
@@ -5229,6 +5224,58 @@ customize \cfkeyword {host}, \cfkeyword {http\_host} and \cfkeyword {wwsympa\_ur
 with the same values as the default robot (as defined in \file {sympa.conf} and \file {wwsympa.conf} files).
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Interaction between SYMPA and other applications
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\cleardoublepage
+\chapter {Interaction between \Sympa and other applications}
+    \label {interaction}
+
+\section {Soap}
+
+See~\ref {soap}, page~\pageref {soap}.
+
+\section {RSS channel}
+
+See \ref {rss}, page~\pageref {rss}. 
+
+\section {Sharing \WWSympa authentication with other applications}
+
+See \ref {sharing-auth}, page~\pageref {sharing-auth}.
+
+\section {Sharing data with other applications}
+
+You may extract subscribers, owners and editors for a list from any of :
+\begin{itemize}
+
+\item a text file
+
+\item a Relational database
+
+\item a LDAP directory
+
+\end{itemize}
+
+See \lparam {user\_data\_source} list parameter \ref {user-data-source}, page~\pageref {user-data-source}.
+
+The three tables can have more fields than the one used by \Sympa, by defining these additional fields, they will be available
+from within \Sympa's authorization scenarios and templates (see \ref {db-additional-subscriber-fields}, 
+page~\pageref {db-additional-subscriber-fields} and \ref {db-additional-user-fields}, page~\pageref {db-additional-user-fields}).
+
+See data inclusion file \ref {data-inclusion-file}, page~\pageref {data-inclusion-file}. 
+
+\section {Subscriber count}
+ \label {subscriber-count}
+ \index {subscriber\_count}
+
+The number of subscribers of a list can be get from an external application by requesting function 'subscriber\_count' on the Web 
+interface.
+
+      \example {http://my.server/wws/subscriber\_count/\samplelist}\\
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % Customization
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
@@ -5402,30 +5449,6 @@ directory ; your site web templates in \tildedir {/usr/local/sympa-gb/etc/web\_t
 
 Note that web colors are defined in \Sympa's main Makefile (see \ref {makefile},
 page~\pageref {makefile}).
-
-\section {Sharing data with other applications}
-
-You may extract subscribers, owners and editors for a list from any of :
-\begin{itemize}
-
-\item a text file
-
-\item a Relational database
-
-\item a LDAP directory
-
-\end{itemize}
-
-See \lparam {user\_data\_source} liste parameter \ref {user-data-source}, page~\pageref {user-data-source}.
-
-The three tables can have more fields than the one used by \Sympa, by defining these additional fields, they will be available
-from within \Sympa's authorization scenarios and templates (see \ref {db-additional-subscriber-fields}, 
-page~\pageref {db-additional-subscriber-fields} and \ref {db-additional-user-fields}, page~\pageref {db-additional-user-fields}).
-
-
-\section {Sharing \WWSympa authentication with other applications}
-
-See \ref {sharing-auth}, page~\pageref {sharing-auth}.
 
 
 \section {Internationalization}
@@ -9738,8 +9761,7 @@ named \texttt {send.private\_smime}, and restricts sends to subscribers using an
 title.us restricted to subscribers check smime signature
 title.fr limité aux abonnés, vérif de la signature smime
 
-is_subscriber([listname],[sender])             smime  -> do_it
-is_editor([listname],[sender])                 smime  -> do_it
+is_subscriber([listname],[sender])             smime  -> do_is_editor([listname],[sender])                 smime  -> do_it
 is_owner([listname],[sender])                  smime  -> do_it
 \end{verbatim}
 \end {quote}
@@ -10427,12 +10449,13 @@ For sending, a call to sendmail is done or the message is pushed in a spool acco
 
  This module includes all list processing functions. 
 
- Here are only described functions used for message sending : 
+ Here are only described functions about : 
  \begin{itemize}
    \item Message distribution in a list
    \item Sending using templates
    \item Service messages
    \item Notification message
+   \item topic messages
  \end{itemize}
 
 %%%%%%%%%%%%%%% message distribution %%%%%%%%%%%%%%%%%%%%
@@ -10795,6 +10818,50 @@ For sending, a call to sendmail is done or the message is pushed in a spool acco
    \end{enumerate}
 
    \textbf{OUT} : 1
+
+%%%%%%%%%%%%%%% topic messages %%%%%%%%%%%%%%%%%%%%%
+\subsection {Functions for topic messages} 
+
+is\_available\_topic(), modifying\_msg\_topic\_for\_subscribers().
+
+These functions are used to manages message topics. 
+
+
+\subsubsection {\large{is\_available\_topic()}}
+\label{list-is-available-topic}
+\index{List::is\_available\_topic()}
+
+Checks for a topic if it is available in the list : 
+look foreach list parameter \lparam{msg\_topic.name}.
+
+   \textbf{IN} : 
+   \begin{enumerate}
+      \item \lparam{self} (+): ref(List) - the concerned list
+      \item \lparam{topic} (+) : the name of the requested topic
+   \end{enumerate}
+
+   \textbf{OUT} : \lparam{topic} \emph{if it is available}
+
+\subsubsection {\large{modifying\_msg\_topic\_for\_subscribers()}}
+\label{list-modifying-msg-topic-for-subscribers}
+\index{List::modifying\_msg\_topic\_for\_subscribers()}
+
+ Deletes topics subscriber that does not exist anymore
+ and send a notify to concerned subscribers. 
+ (Makes a diff on msg\_topic parameter between the list configuration 
+  and a new state). 
+
+   \textbf{IN} : 
+   \begin{enumerate}
+      \item \lparam{self} (+): ref(List) - the concerned list
+      \item \lparam{new\_msg\_topic} (+) : ref(ARRAY) - new state of msg\_topic parameters
+   \end{enumerate}
+
+   \textbf{OUT} :
+   \begin{enumerate}
+      \item 1 \emph{if some topics have been deleted}
+      \item 0 \emph{else}	
+   \end{enumerate}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%% sympa.pl %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -11562,7 +11629,36 @@ do\_send\_mail(), do\_sendpasswd(), do\_remind(), do\_set(), do\_send\_me().
        \item 0 \emph{else}
      \end{itemize}
 
-  
+\subsubsection {\large{get\_array\_from\_splitted\_string()}}
+\label{tools-get-array-from-splitted-string}
+\index{tools::get\_array\_from\_splitted\_string()}  
+
+  Return an array made on a string splited by ','.
+ It removes spaces.
+
+   \textbf{IN} : \lparam{string}(+): string to split
+
+   \textbf{OUT} : ref(ARRAY) - splitted string
+
+\subsubsection {\large{diff\_on\_arrays()}}
+\label{tools-diff-on-arrays}
+\index{tools::diff\_on\_arrays()}
+
+Makes set operation on arrays seen as set (with no double) :
+
+   \textbf{IN} : 
+   \begin{enumerate}
+      \item \lparam{A}(+):  ref(ARRAY) - set
+      \item \lparam{B}(+):  ref(ARRAY) - set
+   \end{enumerate}
+
+   \textbf{OUT} : ref(HASH) with keys : 
+     \begin{itemize}
+       \item deleted : A \(\setminus\) B
+       \item added : B \(\setminus\) A
+       \item intersection : A \(\cap\) B
+       \item union : A \(\cup\) B
+     \end{itemize}
 
 
 
