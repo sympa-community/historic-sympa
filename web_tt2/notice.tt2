@@ -80,9 +80,8 @@
 [% notice.msg %]
 
 [% END %]
-
+<br />
 [% END %]
 </strong>
-<br />
 </div>
 <!-- end notice.tt2 -->
