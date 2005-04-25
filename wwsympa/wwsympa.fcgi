@@ -3064,6 +3064,10 @@ sub do_remindpasswd {
  	    $update->{'topics'} = join(',',@user_topics);
  	}
      }
+     
+     if ($reception ne '') {
+	 $update->{'topics'} = '';
+     }     
 
      ## Get additional DB fields
      foreach my $v (keys %in) {
