@@ -10405,7 +10405,13 @@ sub available_reception_mode {
   return join (' ',@{$self->{'admin'}{'available_user_options'}{'reception'}});
 }
 
+########################################################################################
+#                       FUNCTIONS FOR MESSAGE TOPICS                                   #
+########################################################################################
+#                                                                                      #
+#                                                                                      #
 
+ 
 ####################################################
 # is_available_msg_topic
 ####################################################
@@ -10426,6 +10432,26 @@ sub is_available_msg_topic {
     }
     
     return undef;
+}
+
+####################################################
+# get_available_msg_topic
+####################################################
+#  Return an array of available msg topic
+# 
+# IN : -$self (+): ref(List)
+#
+# OUT : -\@topics : ref(ARRAY)
+####################################################
+sub get_available_msg_topic {
+    my ($self) = @_;
+    
+    my @topics;
+    foreach my $msg_topic (@{$self->{'admin'}{'msg_topic'}}) {
+	push @topics,$msg_topic->{'name'};
+    }
+    
+    return \@topics;
 }
 
 
