@@ -9669,11 +9669,12 @@ For sending, a call to sendmail is done or the message is pushed in a spool acco
 \label{list-send-editor}
 \index{List::send\_to\_editor()}
 
-   Sends a message to the list editor to ask him for message moderation ( in moderation context : 
-   scenario ``editor'' or ``editorkey''). The message waiting for moderation is named with a key
-   and it is set in the spool queuemod. (The key is a reference on the message for editor to moderate).
+   Sends a message to the list editor for a request concerning a message to distribute. 
+   The message awaiting for moderation is named with a key and is set in the spool queuemod.
+   The key is a reference on the message for editor.
    The message for the editor is sent by calling List::send\_file() (see \ref {list-send-file}, 
    page~\pageref {list-send-file}) with mail template ``moderate''.
+
 
    \textbf{IN} : 
    \begin{enumerate}
@@ -9682,8 +9683,8 @@ For sending, a call to sendmail is done or the message is pushed in a spool acco
       \item \lparam{message} (+): ref(Message) - the message to moderate
    \end{enumerate}
 
-   \textbf{OUT} : \$modkey - the moderation key for naming message waiting 
-         for moderation in spool queuemod.
+   \textbf{OUT} : \$modkey - the moderation key for naming message waiting for moderation
+          in spool queuemod.
 
 \subsubsection {\large{request\_auth()}}
 \label{list-request-auth}
@@ -9717,11 +9718,10 @@ For sending, a call to sendmail is done or the message is pushed in a spool acco
 \label{list-send-auth}
 \index{List::send\_auth()}
 
-   Sends an authentication request for a sent message for distribution. The message for distribution is 
-   copied in the authqueue spool to wait for confirmation by its sender. This message 
-   is named with a key. The request is sent to user by calling  List::send\_file() 
-   (see \ref {list-send-file}, page~\pageref {list-send-file}) with mail 
-   template ``send\_auth''.
+   Sends an authentifiaction request for a message sent for distribution.
+   The message for distribution is copied in the authqueue spool to wait for confirmation by its sender .
+   This message is named with a key. The request is sent to user by calling  List::send\_file() 
+   (see \ref {list-send-file}, page~\pageref {list-send-file}) with mail template ``send\_auth''.
 
    \textbf{IN} : 
    \begin{enumerate}
@@ -9842,14 +9842,14 @@ For sending, a call to sendmail is done or the message is pushed in a spool acco
 %%%%%%%%%%%%%%% topic messages %%%%%%%%%%%%%%%%%%%%%
 \subsection {Functions for topic messages} 
 
-is\_available\_topic(), modifying\_msg\_topic\_for\_subscribers().
+is\_available\_msg\_topic(), get\_available\_msg\_topic(), modifying\_msg\_topic\_for\_subscribers().
 
-These functions are used to manages message topics. 
+These functions are used to manages message topics.
 
 
-\subsubsection {\large{is\_available\_topic()}}
-\label{list-is-available-topic}
-\index{List::is\_available\_topic()}
+\subsubsection {\large{is\_available\_msg\_topic()}}
+\label{list-is-available-msg--topic}
+\index{List::is\_available\_msg\_topic()}
 
 Checks for a topic if it is available in the list : 
 look foreach list parameter \lparam{msg\_topic.name}.
@@ -9861,6 +9861,16 @@ look foreach list parameter \lparam{msg\_topic.name}.
    \end{enumerate}
 
    \textbf{OUT} : \lparam{topic} \emph{if it is available}
+
+\subsubsection {\large{get\_available\_msg\_topic()}}
+\label{list-get-available-msg-topic}
+\index{List::get\_available\_msg\_topic()}
+
+Returns an array of available message topics
+
+   \textbf{IN} : \lparam{self} (+): ref(List) - the concerned list
+
+   \textbf{OUT} : ref(ARRAY)
 
 \subsubsection {\large{modifying\_msg\_topic\_for\_subscribers()}}
 \label{list-modifying-msg-topic-for-subscribers}
@@ -9930,7 +9940,7 @@ look foreach list parameter \lparam{msg\_topic.name}.
    rejected). This function can call various functions : \begin{itemize}
      \item List::distribute\_msg() for distribution (see \ref {list-distribute-msg}, page~\pageref {list-distribute-msg})
      \item List::send\_auth() for confirmation (see \ref {list-send-auth}, page~\pageref {list-send-auth})
-     \item List::send\_to\_editor() for moderation (see \ref {list-send-to-editor}, page~\pageref {list-send-to-editor}).
+     \item List::send\_to\_editor() for moderation(see \ref {list-send-to-editor}, page~\pageref {list-send-to-editor}).
    \end{itemize}
   
    \textbf{IN} : 
