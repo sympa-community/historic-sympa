@@ -681,6 +681,7 @@ while (!$signal) {
 	    &CleanSpool("$spool/bad", $Conf{'clean_delay_queue'});
 	    &CleanSpool($Conf{'queuemod'}, $Conf{'clean_delay_queuemod'});
 	    &CleanSpool($Conf{'queueauth'}, $Conf{'clean_delay_queueauth'});
+	    &CleanSpool($Conf{'queuetopic'}, $Conf{'clean_delay_queuetopic'});
 	}
     }
     my $filename;
@@ -1275,10 +1276,10 @@ sub DoMessage{
 	my $sympa_email = &Conf::get_robot_conf($robot, 'sympa');
 	
 	unless (&List::send_global_file('list_unknown', $sender, $robot,
-				{'list' => $which,
-				 'date' => &POSIX::strftime("%d %b %Y  %H:%M", localtime(time)),
+					{'list' => $which,
+					 'date' => &POSIX::strftime("%d %b %Y  %H:%M", localtime(time)),
 					 'boundary' => $sympa_email.time,
-				 'header' => $hdr->as_string()
+					 'header' => $hdr->as_string()
 					 })) {
 	    &do_log('notice',"Unable to send template 'list_unknown' to $sender");
 	}
@@ -1286,13 +1287,13 @@ sub DoMessage{
     }
     
     ($listname, $host) = ($list->{'name'}, $list->{'admin'}{'host'});
-
+    
     my $start_time = time;
     
     &Language::SetLang($list->{'admin'}{'lang'});
-
+    
     ## Now check if the sender is an authorized address.
-
+    
     do_log('info', "Processing message for %s with priority %s, %s", $listname,$list->{'admin'}{'priority'}, $messageid );
     
     my $conf_email = &Conf::get_robot_conf($robot, 'sympa');
@@ -1300,7 +1301,7 @@ sub DoMessage{
 	do_log('notice', 'Ignoring message which would cause a loop');
 	return undef;
     }
-
+	
     if ($msgid_table{$listname}{$messageid}) {
 	do_log('notice', 'Found known Message-ID, ignoring message which would cause a loop');
 	return undef;
@@ -1315,8 +1316,8 @@ sub DoMessage{
 	    return undef;
 	}
     }
-
-    my $admin = $list->{'admin'};
+	
+	my $admin = $list->{'admin'};
     return undef unless $admin;
     
     my $customheader = $admin->{'custom_header'};
@@ -1328,7 +1329,7 @@ sub DoMessage{
 	return undef;
     }
     
-    ## Check if the message is too large
+	## Check if the message is too large
     my $max_size = $list->get_max_size() ||  &Conf::get_robot_conf($robot,'max_size');
     if ($max_size && $message->{'size'} > $max_size) {
 		
@@ -1339,12 +1340,36 @@ sub DoMessage{
 								  'msg' => $message->{'msg'}->as_string})) {
 	    &do_log('notice',"Unable to send template 'message_report' to $sender");
 	}
-
+	
 	return undef;
     }
     
     my $rc;
-   
+	
+    my $context =  {'listname' => $listname,
+		    'sender' => $sender,
+		    'message' => $message };
+
+    ## list msg topic	
+    if ($list->is_there_msg_topic()) {
+
+	my $info_msg_topic = $list->get_msg_topic_file($message->{'msg'},$robot);
+	
+	$context->{'topic_auto'} = $list->automatic_tag($message->{'msg'});
+	
+	if (ref($info_msg_topic) eq "HASH") {
+	    if ($info_msg_topic->{'method'} eq "sender") {
+		$context->{'topic_sender'} =  $info_msg_topic->{'topic'};
+		
+	    }elsif ($info_msg_topic->{'method'} eq "editor") {
+		$context->{'topic_editor'} =  $info_msg_topic->{'topic'};
+	    }
+	}
+
+	$context->{'topic'} = $context->{'topic_auto'} || $context->{'topic_sender'} || $context->{'topic_editor'};
+	$context->{'topic_needed'} = (!$context->{'topic'} && $list->is_msg_topic_tagging_required());
+    }
+
     ## Call scenarii : auth_method MD5 do not have any sense in send
     ## scenarii because auth is perfom by distribute or reject command.
     
