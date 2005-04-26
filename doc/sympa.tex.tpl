@@ -9842,7 +9842,7 @@ For sending, a call to sendmail is done or the message is pushed in a spool acco
 %%%%%%%%%%%%%%% topic messages %%%%%%%%%%%%%%%%%%%%%
 \subsection {Functions for topic messages} 
 
-is\_available\_msg\_topic(), get\_available\_msg\_topic(), modifying\_msg\_topic\_for\_subscribers().
+is\_available\_msg\_topic(), get\_available\_msg\_topic(), is\_msg\_topic\_tagging\_required, modifying\_msg\_topic\_for\_subscribers().
 
 These functions are used to manages message topics.
 
@@ -9871,6 +9871,16 @@ Returns an array of available message topics
    \textbf{IN} : \lparam{self} (+): ref(List) - the concerned list
 
    \textbf{OUT} : ref(ARRAY)
+
+\subsubsection {\large{is\_msg\_topic\_tagging\_required()}}
+\label{list-is-msg-topic-tagging-required}
+\index{List::is\_msg\_topic\_tagging\_required()}
+
+Return if the msg must be tagged or not
+
+   \textbf{IN} : \lparam{self} (+): ref(List) - the concerned list
+
+   \textbf{OUT} : 1 - the msg must be tagged \(\mid\( 0 - the msg can be no tagged
 
 \subsubsection {\large{modifying\_msg\_topic\_for\_subscribers()}}
 \label{list-modifying-msg-topic-for-subscribers}
