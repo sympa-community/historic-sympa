@@ -1871,7 +1871,8 @@ sub get_array_from_splitted_string {
     my @array;
 
     foreach my $word (split /,/,$string) {
-	$word =~ s/\s//;
+	$word =~ s/^\s+//;
+	$word =~ s/\s+$//;
 	push @array, $word;
     }
 
