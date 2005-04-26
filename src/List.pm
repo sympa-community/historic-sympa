@@ -260,7 +260,7 @@ my %default = ('occurrence' => '0-1',
 my @param_order = qw (subject visibility info subscribe add unsubscribe del owner owner_include
 		      send editor editor_include account topics 
 		      host lang web_archive archive digest available_user_options 
-		      default_user_options msg_topic msg_topic_keywords_apply_on reply_to_header reply_to forced_reply_to * 
+		      default_user_options msg_topic msg_topic_keywords_apply_on msg_topic_tagging reply_to_header reply_to forced_reply_to * 
 		      welcome_return_path remind_return_path user_data_source include_file include_remote_file 
 		      include_list include_remote_sympa_list include_ldap_query
                       include_ldap_2level_query include_sql_query include_admin ttl creation update 
@@ -336,7 +336,7 @@ my %alias = ('reply-to' => 'reply_to',
 				    'gettext_id' => "Archive encrypted mails as cleartext",
 				    'group' => 'archives'
 				    },
-        'available_user_options' => {'format' => {'reception' => {'format' => ['mail','notice','digest','digestplain','summary','nomail','txt','html','urlize','not_me'],
+           'available_user_options' => {'format' => {'reception' => {'format' => ['mail','notice','digest','digestplain','summary','nomail','txt','html','urlize','not_me'],
 								      'occurrence' => '1-n',
 								      'split_char' => ',',
                                       'default' => 'mail,notice,digest,digestplain,summary,nomail,txt,html,urlize,not_me',
@@ -925,12 +925,19 @@ my %alias = ('reply-to' => 'reply_to',
 			    'gettext_id' => "Topics for message categorisation",
 			    'group' => 'sending'
 			    },
-	    'msg_topic_keywords_apply_on' => { 'format' => ['subject','body','subject and body'],
+	    'msg_topic_keywords_apply_on' => { 'format' => ['subject','body','subject_and_body'],
 					       'occurrence' => '0-1',
 					       'default' => 'subject',
 					       'gettext_id' => "On which part of message check for message topic keywords",
 					       'group' => 'sending'
 					     },    
+
+	    'msg_topic_tagging' => { 'format' => ['required','optional'],
+				      'occurrence' => '0-1',
+				      'default' => 'optional',
+				      'gettext_id' => "Message tagging",
+				      'group' => 'sending'
+				      },    
 						   
 	    'owner' => {'format' => {'email' => {'format' => $tools::regexp{'email'},
 						 'length' =>30,
@@ -10411,6 +10418,27 @@ sub available_reception_mode {
 #                                                                                      #
 #                                                                                      #
 
+
+####################################################
+# is_there_msg_topic
+####################################################
+#  Look if some msg_topic are defined
+# 
+# IN : -$self (+): ref(List)
+#      
+# OUT : 1 | 0
+####################################################
+sub is_there_msg_topic {
+    my ($self,$topic) = @_;
+    
+    if (defined $self->{'admin'}{'msg_topic'}) {
+	if ($#{$self->{'admin'}{'msg_topic'}} >= 0) {
+	    return 1;
+	}
+    }
+    return 0;
+}
+
  
 ####################################################
 # is_available_msg_topic
@@ -10434,6 +10462,7 @@ sub is_available_msg_topic {
     return undef;
 }
 
+
 ####################################################
 # get_available_msg_topic
 ####################################################
@@ -10452,6 +10481,171 @@ sub get_available_msg_topic {
     }
     
     return \@topics;
+}
+
+####################################################
+# is_msg_topic_tagging_required
+####################################################
+#  
+#
+# IN : -$self (+): ref(List)
+#
+# OUT : 1 - the msg must must be tagged 
+#       | 0 - the msg can be no tagged
+####################################################
+sub is_msg_topic_tagging_required {
+    my ($self) = @_;
+    
+    if ($self->{'admin'}{'msg_topic_tagging'} eq 'required') {
+	return 1;
+    } else {
+	return 0;
+    }
+}
+
+
+####################################################
+# automatic_tag
+####################################################
+#  Compute the topic on the message. The topic is get
+#  from applying a regexp on the message
+#
+# IN : -$self (+): ref(List)
+#      -$msg (+): ref(MIME::Entity)
+#
+# OUT : 
+####################################################
+sub automatic_tag {
+    my ($self,$msg) = @_;
+    &do_log('debug3','automatic_tag(%s,%s)',$self->{'name'},$msg->head->get('Message-ID'));
+    my @topic_names;
+
+
+    ## BY KEYWORDS
+    my %keywords;
+
+    # getting keywords
+    foreach my $topic (@{$self->{'admin'}{'msg_topic'}}) {
+
+	my $list_keyw = &tools::get_array_from_splitted_string($topic->{'keywords'});
+
+	foreach my $keyw (@{$list_keyw}) {
+	    $keywords{$keyw} = $topic->{'name'}
+	}
+    }
+
+    # getting string to parse
+    my $mail_string;
+
+    if ($self->{'admin'}{'msg_topic_keywords_apply_on'} eq 'subject'){
+	$mail_string = $msg->head->get('subject');
+
+    }elsif ($self->{'admin'}{'msg_topic_keywords_apply_on'} eq 'body'){
+	$mail_string = $msg->bodyhandle->as_string();
+    }else {
+	$mail_string = $msg->head->get('subject');
+	$mail_string .= $msg->bodyhandle->as_string();
+    }
+
+    $mail_string =~ s/\-/\\-/;
+    $mail_string =~ s/\./\\./;
+
+    # parsing
+
+    foreach my $keyw (keys %keywords) {
+	if ($mail_string =~ /$keyw/i){
+	    push @topic_names,$keywords{$keyw};
+	}
+    }
+
+    ## INHERITED BY THREAD
+#
+#  todo
+    
+    if ($#topic_names <0) {
+	return '';
+
+    } else {
+	return (join(',',@topic_names));
+    }
+}
+
+####################################################
+# get_msg_topic_file
+####################################################
+#  
+#
+# IN : -$self (+): ref(List)
+#      -$msg : ref(MIME::Entity)
+#
+# OUT : undef | ref(HASH}
+####################################################
+sub get_msg_topic_file {
+    my ($self,$msg,$robot) = @_;
+    my $head = $msg->head;
+    my $msg_id = $head->get('Message-ID');
+    $msg_id =~ s/\s*$//;
+    $msg_id =~ s/\n*$//;
+    &do_log('debug4','get_msg_topic_file(%s,%s)',$self->{'name'},$msg_id);
+
+    my $queuetopic = &Conf::get_robot_conf($robot, 'queuetopic');
+    my $listname = "$self->{'name'}\@$robot.";
+    my $found;
+    my %info;
+
+    if (opendir(DIR, $queuetopic)) {
+	
+	foreach my $file ( sort grep (/^$listname/,readdir(DIR))) {
+		
+	    unless (open (FILE, "$queuetopic/$file")) {
+		&do_log('info','Unable to open info msg topic file %s/%s : %s', $queuetopic,$file, $!);
+		next;
+	    }
+
+	    %info = ();
+	    my $next;
+	    
+	    while (<FILE>) {
+		next if /^\s*(\#.*|\s*)$/;
+
+		if (/^(\S+)\s+(.+)$/io) {
+		    my($keyword, $value) = ($1, $2);
+		    $value =~ s/\s*$//;
+		    
+		    if ($keyword eq 'MSG_ID') {
+			if ($value eq $msg_id) {
+			    $found = 1;
+			}else {
+			    $next = 1; 
+			    last;
+			}
+		    } elsif ($keyword eq 'TOPIC') {
+			$info{'topic'} = $value;
+		
+		    }elsif ($keyword eq 'METHOD') {
+			if ($value =~ /^(editor|sender|auto)$/) {
+			    $info{'method'} = $value;
+			}else {
+			    $next = 1; 
+			    last;
+			}
+		    }
+		}
+	    }
+	    last if ($found);
+	    next if ($next);
+	}
+	close FILE;
+    }	
+    close DIR;
+
+    if ($found) {
+	if ((exists $info{'topic'}) && (exists $info{'method'})) {
+	    return \%info;
+	}
+    }
+    return undef;
+	
 }
 
 
@@ -10506,8 +10700,9 @@ sub modifying_msg_topic_for_subscribers(){
 		}
 	    }
 	}
+	return 1;
     }
-    return 1;
+    return 0;
 }
 
 sub _urlize_part {
