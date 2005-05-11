@@ -609,7 +609,7 @@ a virtual robot or for the whole site.
 %\Sympa has currently been translatedinto 14 different languages.
 
 	\item \dir {[SPOOLDIR]}\\
-	\Sympa uses 8 different spools (see \ref{spools}, page~\pageref{spools}).
+	\Sympa uses 9 different spools (see \ref{spools}, page~\pageref{spools}).
 
 	\item \dir {[DIR]/src/}\\
 	\Sympa sources.
@@ -736,6 +736,9 @@ in \file {sympa.conf}.
 	\item \dir {[SPOOLDIR]/outgoing/}\\
 	\file {sympa.pl} dumps messages in this spool to await archiving
 	by \file {archived.pl}.
+
+	\item \dir {[SPOOLDIR]/topic/}\\
+	For storing files containing information about messages topics.
 
 \end {itemize}
 
@@ -2099,6 +2102,12 @@ see a  nice mailto adresses where others have nothing.
 
 	This parameter is optional and retained solely for backward compatibility.
 
+\subsection {\cfkeyword {queuetopic}} 
+
+	\default {\dir {[SPOOLDIR]/topic}}
+
+	This parameter is optional and retained solely for backward compatibility.
+
 \subsection {\cfkeyword {queuebounce}} 
     \index{bounce}
 
@@ -2161,6 +2170,14 @@ see a  nice mailto adresses where others have nothing.
 
         Expiration delay (in days) in the \textindex {authentication}
         queue.  Beyond this deadline, messages not enabled are
+        deleted.
+
+\subsection {\cfkeyword {clean\_delay\_queuetopic}}  
+
+	\default {7}
+
+        Delay for keeping message topic files (in days) in the \textindex {topic}
+        queue.  Beyond this deadline, files are
         deleted.
 
 \section {Internationalization related}    
@@ -9475,7 +9492,7 @@ For sending, a call to sendmail is done or the message is pushed in a spool acco
    \item Sending using templates
    \item Service messages
    \item Notification message
-   \item topic messages
+   \item Topic messages
  \end{itemize}
 
 %%%%%%%%%%%%%%% message distribution %%%%%%%%%%%%%%%%%%%%
@@ -9666,7 +9683,7 @@ For sending, a call to sendmail is done or the message is pushed in a spool acco
    \textbf{OUT} : -
 
 \subsubsection {\large{send\_to\_editor()}}
-\label{list-send-editor}
+\label{list-send-to-editor}
 \index{List::send\_to\_editor()}
 
    Sends a message to the list editor for a request concerning a message to distribute. 
@@ -9842,21 +9859,32 @@ For sending, a call to sendmail is done or the message is pushed in a spool acco
 %%%%%%%%%%%%%%% topic messages %%%%%%%%%%%%%%%%%%%%%
 \subsection {Functions for topic messages} 
 
-is\_available\_msg\_topic(), get\_available\_msg\_topic(), is\_msg\_topic\_tagging\_required, modifying\_msg\_topic\_for\_subscribers().
+is\_there\_msg\_topic(), is\_available\_msg\_topic(), get\_available\_msg\_topic(), is\_msg\_topic\_tagging\_required, 
+automatic\_tag(), compute\_topic(), tag\_topic(), load\_msg\_topic\_file(), modifying\_msg\_topic\_for\_subscribers().
 
 These functions are used to manages message topics.
 
 
+\subsubsection {\large{is\_there\_msg\_topic()}}
+\label{list-is-there-msg--topic}
+\index{List::is\_there\_msg\_topic()}
+
+Tests if some message topic are defined (\lparam{msg\_topic} list parameter, see \ref {msg-topic}, page~\pageref {msg-topic}).
+
+   \textbf{IN} : \lparam{self} (+): ref(List)
+
+   \textbf{OUT} :  1 - some msg\_topic are defined \(\mid\) 0 - no msg\_topic
+ 
 \subsubsection {\large{is\_available\_msg\_topic()}}
 \label{list-is-available-msg--topic}
 \index{List::is\_available\_msg\_topic()}
 
 Checks for a topic if it is available in the list : 
-look foreach list parameter \lparam{msg\_topic.name}.
+look foreach \lparam{msg\_topic.name} list parameter (see \ref {msg-topic}, page~\pageref {msg-topic}).
 
    \textbf{IN} : 
    \begin{enumerate}
-      \item \lparam{self} (+): ref(List) - the concerned list
+      \item \lparam{self} (+): ref(List)
       \item \lparam{topic} (+) : the name of the requested topic
    \end{enumerate}
 
@@ -9866,9 +9894,9 @@ look foreach list parameter \lparam{msg\_topic.name}.
 \label{list-get-available-msg-topic}
 \index{List::get\_available\_msg\_topic()}
 
-Returns an array of available message topics
+Returns an array of available message topics (\lparam{msg\_topic.name} list parameter, see \ref {msg-topic}, page~\pageref {msg-topic}).
 
-   \textbf{IN} : \lparam{self} (+): ref(List) - the concerned list
+   \textbf{IN} : \lparam{self} (+): ref(List)
 
    \textbf{OUT} : ref(ARRAY)
 
@@ -9876,11 +9904,79 @@ Returns an array of available message topics
 \label{list-is-msg-topic-tagging-required}
 \index{List::is\_msg\_topic\_tagging\_required()}
 
-Return if the msg must be tagged or not
+Return if the msg must be tagged or not (\lparam{msg\_topic\_tagging} list parameter, see \ref {msg-topic-tagging}, page~\pageref {msg-topic-tagging}).
 
-   \textbf{IN} : \lparam{self} (+): ref(List) - the concerned list
+   \textbf{IN} : \lparam{self} (+): ref(List)
 
-   \textbf{OUT} : 1 - the msg must be tagged \(\mid\( 0 - the msg can be no tagged
+   \textbf{OUT} : 1 - the msg must be tagged \(\mid\) 0 - the msg can be no tagged
+
+\subsubsection {\large{automatic\_tag()}}
+\label{list-automatic-tag}
+\index{List::automatic\_tag()}
+
+Computes topic(s) (with compute\_topic() function) and tags the message (with tag\_topic() function) if there are some topics defined.
+
+   \textbf{IN} : 
+   \begin{enumerate}
+      \item \lparam{self} (+): ref(List) 
+      \item \lparam{msg} (+): ref(MIME::Entity)- the message to tag
+   \end{enumerate}
+
+   \textbf{OUT} : list of tagged topic : strings separated by ','. It can be empty.
+
+\subsubsection {\large{compute\_topic()}}
+\label{list-compute-topic}
+\index{List::compute\_topic()}
+
+Computes topic(s) on the message. The topic is got from applying a regexp on the subject and/or the 
+body of the message. (\lparam{msg\_topic\_keywords\_apply\_on} list parameter, see\ref {msg-topic-keywords-apply-on}, 
+page~\pageref {msg-topic-keywords-apply-on}). Regexp is made from \lparam{msg\_topic.keywords} list parameters
+(See \ref {msg-topic}, page~\pageref {msg-topic}).
+
+   \textbf{IN} : 
+   \begin{enumerate}
+      \item \lparam{self} (+): ref(List) 
+      \item \lparam{msg} (+): ref(MIME::Entity)- the message to tag
+   \end{enumerate}
+
+   \textbf{OUT} : list of computed topic : strings separated by ','. It can be empty.
+
+\subsubsection {\large{tag\_topic()}}
+\label{list-tag-topic}
+\index{List::tag\_topic()}
+
+Tags the message by creating its message topic file in the \dir {[SPOOLDIR]/topic/} spool. 
+The file contains the message ID, the topic list and the method used to tag the message.
+
+   \textbf{IN} : 
+   \begin{enumerate}
+      \item \lparam{self} (+): ref(List) 
+      \item \lparam{msg\_id} (+): the message ID of the message to tag
+      \item \lparam{topic\_list} (+): the list of topics (strings separated by ',')
+      \item \lparam{method} (+): 'auto' \(\mid\)'editor'\(\mid\)'sender' - the method used for tagging
+   \end{enumerate}
+
+   \textbf{OUT} : name of the created file (listname.msg\_id)
+
+\subsubsection {\large{load\_msg\_topic\_file()}}
+\label{list-load-msg-topic-file}
+\index{List::load\_msg\_topic\_file()}
+
+Find and load msg topic file and return information contained inside about the message incoming.
+
+   \textbf{IN} : 
+   \begin{enumerate}
+      \item \lparam{self} (+): ref(List) 
+      \item \lparam{msg} (+): ref(MIME::Entity)
+   \end{enumerate}
+
+   \textbf{OUT} : ref(HASH), keys are :
+   \begin{enumerate}
+     \item \lparam{topic} : list of topics (strings separated by ',')
+     \item \lparam{method} : 'auto' \(\mid\)'editor'\(\mid\)'sender' - the method used for tagging
+     \item \lparam{msg\_id} : message ID of the tagged message
+     \item \lparam{filename} : name of the file
+   \end{enumerate}
 
 \subsubsection {\large{modifying\_msg\_topic\_for\_subscribers()}}
 \label{list-modifying-msg-topic-for-subscribers}
@@ -9888,12 +9984,12 @@ Return if the msg must be tagged or not
 
  Deletes topics subscriber that does not exist anymore
  and send a notify to concerned subscribers. 
- (Makes a diff on msg\_topic parameter between the list configuration 
+ (Makes a diff on msg\_topic parameter between the list configuration before modification
   and a new state). 
 
    \textbf{IN} : 
    \begin{enumerate}
-      \item \lparam{self} (+): ref(List) - the concerned list
+      \item \lparam{self} (+): ref(List) - the concerned list before modification
       \item \lparam{new\_msg\_topic} (+) : ref(ARRAY) - new state of msg\_topic parameters
    \end{enumerate}
 
@@ -9951,6 +10047,7 @@ Return if the msg must be tagged or not
      \item List::distribute\_msg() for distribution (see \ref {list-distribute-msg}, page~\pageref {list-distribute-msg})
      \item List::send\_auth() for confirmation (see \ref {list-send-auth}, page~\pageref {list-send-auth})
      \item List::send\_to\_editor() for moderation(see \ref {list-send-to-editor}, page~\pageref {list-send-to-editor}).
+     \item List::automatic\_tag() for automatic topic tagging (see \ref {list-automatic-tag}, page~\pageref {list-automatic-tag}).
    \end{itemize}
   
    \textbf{IN} : 

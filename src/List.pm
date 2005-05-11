@@ -10422,7 +10422,7 @@ sub available_reception_mode {
 ####################################################
 # is_there_msg_topic
 ####################################################
-#  Look if some msg_topic are defined
+#  Test if some msg_topic are defined
 # 
 # IN : -$self (+): ref(List)
 #      
@@ -10503,25 +10503,58 @@ sub is_msg_topic_tagging_required {
     }
 }
 
-
 ####################################################
 # automatic_tag
 ####################################################
-#  Compute the topic on the message. The topic is get
+#  Compute the topic(s) of the message and tag it.
+#
+# IN : -$self (+): ref(List)
+#      -$msg (+): ref(MIME::Entity)
+#
+# OUT : string of tag(s), can be separated by ',', can be empty
+####################################################
+sub automatic_tag {
+    my ($self,$msg) = @_;
+    my $msg_id = $msg->head->get('Message-ID');
+    $msg_id =~ s/\s*$//;
+    $msg_id =~ s/\n*$//;
+    &do_log('debug3','automatic_tag(%s,%s)',$self->{'name'},$msg_id);
+
+
+    my $topic_list = $self->compute_topic($msg);
+
+    if ($topic_list) {
+	my $filename = $self->tag_topic($msg_id,$topic_list,'auto');
+
+	unless ($filename) {
+	    &do_log('err','Unable to tag message %s with topic "%s"',$msg_id,$topic_list);
+	    return undef;
+	}
+    } 
+	
+    return $topic_list;
+}
+
+
+####################################################
+# compute_topic
+####################################################
+#  Compute the topic on the message. The topic is got
 #  from applying a regexp on the message
 #
 # IN : -$self (+): ref(List)
 #      -$msg (+): ref(MIME::Entity)
 #
-# OUT : 
+# OUT : string of tag(s)
 ####################################################
-sub automatic_tag {
+sub compute_topic {
     my ($self,$msg) = @_;
-    &do_log('debug3','automatic_tag(%s,%s)',$self->{'name'},$msg->head->get('Message-ID'));
-    my @topic_names;
+    &do_log('debug3','compute_topic(%s,%s)',$self->{'name'},$msg->head->get('Message-ID'));
+    my @topic_array;
+    my %topic_hash;
 
 
-    ## BY KEYWORDS
+    ## TAGGING BY KEYWORDS
     my %keywords;
 
     # getting keywords
@@ -10554,44 +10587,97 @@ sub automatic_tag {
 
     foreach my $keyw (keys %keywords) {
 	if ($mail_string =~ /$keyw/i){
-	    push @topic_names,$keywords{$keyw};
+	    my $k = $keywords{$keyw};
+	    $topic_hash{$k} = 1;
 	}
     }
 
-    ## INHERITED BY THREAD
+    ## TAGGING INHERITED BY THREAD
 #
 #  todo
     
-    if ($#topic_names <0) {
+    # for no double
+    foreach my $k (keys %topic_hash) {
+	push @topic_array,$k if ($topic_hash{$k});
+    }
+    
+    if ($#topic_array <0) {
 	return '';
 
     } else {
-	return (join(',',@topic_names));
+	return (join(',',@topic_array));
     }
 }
 
 ####################################################
-# get_msg_topic_file
+# tag_topic
 ####################################################
-#  
+#  tag the message by creating the msg topic file
+# 
+# IN : -$self (+): ref(List)
+#      -$msg_id (+): string
+#      -$topic_list (+): string (with ,)
+#      -$method (+) : 'auto'|'editor'|'sender'
+#         the method for tagging
+#
+# OUT : msg topic filename
+####################################################
+sub tag_topic {
+    my ($self,$msg_id,$topic_list,$method) = @_;
+    &do_log('debug4','tag_topic(%s,%s,"%s",%s)',$self->{'name'},$msg_id,$topic_list,$method);
+
+    my $robot = $self->{'domain'};
+    my $queuetopic = &Conf::get_robot_conf($robot, 'queuetopic');
+    my $listname = "$self->{'name'}\@$robot.";
+    $msg_id =~ s/^<//;
+    $msg_id =~ s/>$//;
+    my $file = $listname.$msg_id;
+
+    unless (open (FILE, ">$queuetopic/$file")) {
+	&do_log('info','Unable to create msg topic file %s/%s : %s', $queuetopic,$file, $!);
+	return undef;
+    }
+
+    print FILE "MSG_ID  $msg_id\n";
+    print FILE "TOPIC   $topic_list\n";
+    print FILE "METHOD  $method\n";
+
+    close FILE;
+
+    return "$queuetopic/$file";
+}
+
+
+
+####################################################
+# load_msg_topic_file
+####################################################
+#  Load msg topic file and return contained information 
+# in a HASH
 #
 # IN : -$self (+): ref(List)
 #      -$msg : ref(MIME::Entity)
 #
-# OUT : undef | ref(HASH}
+# OUT : undef 
+#     | ref(HASH) : - topic : string of topic name(s)
+#                   - method : editor|sender|auto - for tagging
+#                   - msg_id : the msg_id
+#                   - filename : name of the file containing these informations 
 ####################################################
-sub get_msg_topic_file {
+sub load_msg_topic_file {
     my ($self,$msg,$robot) = @_;
     my $head = $msg->head;
     my $msg_id = $head->get('Message-ID');
     $msg_id =~ s/\s*$//;
     $msg_id =~ s/\n*$//;
-    &do_log('debug4','get_msg_topic_file(%s,%s)',$self->{'name'},$msg_id);
+    &do_log('debug4','load_msg_topic_file(%s,%s)',$self->{'name'},$msg_id);
 
     my $queuetopic = &Conf::get_robot_conf($robot, 'queuetopic');
     my $listname = "$self->{'name'}\@$robot.";
     my $found;
+    my $filename;
     my %info;
+
 
     if (opendir(DIR, $queuetopic)) {
 	
@@ -10615,6 +10701,7 @@ sub get_msg_topic_file {
 		    if ($keyword eq 'MSG_ID') {
 			if ($value eq $msg_id) {
 			    $found = 1;
+			    $filename = "$queuetopic/$file";
 			}else {
 			    $next = 1; 
 			    last;
@@ -10641,6 +10728,9 @@ sub get_msg_topic_file {
 
     if ($found) {
 	if ((exists $info{'topic'}) && (exists $info{'method'})) {
+	    $info{'msg_id'} = $msg_id;
+	    $info{'filename'} = $filename;
+
 	    return \%info;
 	}
     }
@@ -10704,6 +10794,9 @@ sub modifying_msg_topic_for_subscribers(){
     }
     return 0;
 }
+
+
+################### end topics ################################"
 
 sub _urlize_part {
     my $message = shift;

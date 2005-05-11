@@ -1353,17 +1353,23 @@ sub DoMessage{
     ## list msg topic	
     if ($list->is_there_msg_topic()) {
 
-	my $info_msg_topic = $list->get_msg_topic_file($message->{'msg'},$robot);
-	
-	$context->{'topic_auto'} = $list->automatic_tag($message->{'msg'});
-	
-	if (ref($info_msg_topic) eq "HASH") {
+	my $info_msg_topic = $list->load_msg_topic_file($message->{'msg'},$robot);
+
+	# is msg already tagged ?	
+	if (ref($info_msg_topic) eq "HASH") { 
 	    if ($info_msg_topic->{'method'} eq "sender") {
 		$context->{'topic_sender'} =  $info_msg_topic->{'topic'};
 		
 	    }elsif ($info_msg_topic->{'method'} eq "editor") {
 		$context->{'topic_editor'} =  $info_msg_topic->{'topic'};
+	    
+	    }elsif ($info_msg_topic->{'method'} eq "auto") {
+		$context->{'topic_auto'} =  $info_msg_topic->{'topic'};
 	    }
+
+	# not already tagged   
+	} else {
+	    $context->{'topic_auto'} = $list->automatic_tag($message->{'msg'});
 	}
 
 	$context->{'topic'} = $context->{'topic_auto'} || $context->{'topic_sender'} || $context->{'topic_editor'};
