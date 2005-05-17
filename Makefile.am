@@ -356,7 +356,7 @@ installman:
 	( \
 		cd doc/man8 ; \
 		PERL=$(PERL); export PERL; \
-		UMASK=0600; export UMASK; \
+		UMASK=0644; export UMASK; \
 		DIR=$(DIR); export DIR; \
 		INSTALLDIR=$(MANDIR)/man8; export INSTALLDIR; \
 		DESTDIR=$(DESTDIR); export DESTDIR; \
