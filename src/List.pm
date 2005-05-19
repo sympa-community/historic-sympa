@@ -2966,6 +2966,8 @@ sub send_file {
 # ( in moderation context : editor or editorkey). The message 
 # to moderate is set in spool queuemod with name containing
 # a key (reference send to editor for moderation)
+# In context of msg_topic defined the editor must tag it 
+# for the moderation (on Web interface)
 #  
 # IN : -$self(+) : ref(List)
 #      -$method : 'md5' - for "editorkey" | 'smtp' - for "editor"
@@ -3051,6 +3053,16 @@ sub send_to_editor {
        do_log('notice','Warning : no editor defined for list %s, contacting owners', $name );
    }
 
+   my $param = {'modkey' => $modkey,
+		'boundary' => $boundary,
+		'msg_from' => $message->{'sender'},
+		'mod_spool_size' => $self->get_mod_spool_size(),
+		'method' => $method};
+
+   if ($self->is_there_msg_topic()) {
+       $param->{'request_topic'} = 1;
+   }
+
    if ($encrypt eq 'smime_crypted') {
 
        ## Send a different crypted message to each moderator
@@ -3072,25 +3084,20 @@ sub send_to_editor {
 	   print CRYPTED $cryptedmsg;
 	   close CRYPTED;
 	   
+
+	   $param->{'msg'} = $crypted_file;
+
 	   &tt2::allow_absolute_path();
-	   unless ($self->send_file('moderate', $recipient, $self->{'domain'}, {'modkey' => $modkey,
-										'boundary' => $boundary,
-										'msg' => $crypted_file,
-	 									'msg_from' => $message->{'sender'},
-										'mod_spool_size' => $self->get_mod_spool_size(),
-										'method' => $method})) {
+	   unless ($self->send_file('moderate', $recipient, $self->{'domain'}, $param)) {
 	       &do_log('notice',"Unable to send template 'moderate' to $recipient");
 	       return undef;
 	   }
        }
    }else{
+       $param->{'msg'} = $file;
+
        &tt2::allow_absolute_path();
-       unless ($self->send_file('moderate', \@rcpt, $self->{'domain'}, {'modkey' => $modkey,
-									'boundary' => $boundary,
-									'msg' => $file,
-									'msg_from' => $message->{'sender'},
-									'mod_spool_size' => $self->get_mod_spool_size(),
-									'method' => $method})) {
+       unless ($self->send_file('moderate', \@rcpt, $self->{'domain'}, $param)) {
 	   &do_log('notice',"Unable to send template 'moderate' to $self->{'name'} editors");
 	   return undef;
        }
@@ -3105,13 +3112,14 @@ sub send_to_editor {
 # The message for distribution is copied in the authqueue 
 # spool in order to wait for confirmation by its sender.
 # This message is named with a key.
-#
+# In context of msg_topic defined the sender must tag it 
+# for the confirmation
 #  
 # IN : -$self (+): ref(List)
 #      -$message (+): ref(Message)
 #
-# OUT : $modkey : the key for naming message waiting 
-#         for confirmation in spool queuemod
+# OUT : $authkey : the key for naming message waiting 
+#         for confirmation (or tagging) in spool queueauth
 #
 ####################################################
 sub send_auth {
@@ -3158,7 +3166,6 @@ sub send_auth {
    if ($self->is_there_msg_topic()) {
        $param->{'request_topic'} = 1;
    }
-
 
    &tt2::allow_absolute_path();
    unless ($self->send_file('send_auth',$sender,$robot,$param)) {

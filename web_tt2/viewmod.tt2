@@ -1,14 +1,30 @@
 <!-- $Id$ -->
 
- <form action="[% path_cgi %]" method="post">
+ <form action="[% path_cgi %]" method="post" name="moderate_mail">
   <input type="hidden" name="list" value="[% list %]" />
   <input type="hidden" name="id" value="[% id %]" />
 <table>
 <tr style="background-color: [% bg_color %];"><td>
+[%- IF topic_required -%]
+  <input type="submit" name="action_distribute" value="[%|loc%]Distribute[%END%]" onclick="return checkbox_check_topic(moderate_mail)" />
+[%- ELSE -%]
   <input type="submit" name="action_distribute" value="[%|loc%]Distribute[%END%]" />
+[%- END -%]
   <input type="submit" name="action_reject.quiet" value="[%|loc%]Reject[%END%]" />
   <input type="submit" name="action_reject" value="[%|loc%]Notified reject[%END%]" />
 </td></tr></table>
+[%- IF request_topic -%]
+<br/>
+[%|loc%]This list is configured to require topic(s).[%END%]
+<br/>
+[%|loc%]Please select one or more topic(s) that corresponds to your message below :[%END%] 
+<br/><br/>
+[% FOREACH t = available_topics %]
+<input type="checkbox" name="topic_[%t.name%]" value="1"> [% t.title %] </input>
+<br/>
+[%- END- %]
+<hr style="width: 90%;" />
+[%- END -%]
 </form>
 [% PROCESS 'msg00000.html' %]
 

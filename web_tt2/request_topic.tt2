@@ -1,16 +1,16 @@
 <!-- $Id$ -->
 
 <form action="[% path_cgi %]" method="post" name="select_topic_msg">
-This list is configured to require topic(s) foreach message.
+[%|loc%]This list is configured to require topic(s) foreach message.[%END%]
 <br/>
-Please select one or more topic(s) that corresponds to your message below : 
+[%|loc%]Please select one or more topic(s) that corresponds to your message below :[%END%] 
 <br/><br/>
 [% FOREACH t = available_topics %]
 <input type="checkbox" name="topic_[%t.name%]" value="1"> [% t.title %] </input>
 <br/>
 [% END %]
 [%- IF topic_required -%]
-<input type="submit" name="action_tag_topic_by_sender" value="[%|loc%]Tag this mail[%END%]" onclick="return checkbox_check(select_topic_msg,'You must select a topic')" />
+<input type="submit" name="action_tag_topic_by_sender" value="[%|loc%]Tag this mail[%END%]" onclick="return checkbox_check_topic(select_topic_msg)" />
 [%- ELSE -%]
 <input type="submit" name="action_tag_topic_by_sender" value="[%|loc%]Tag this mail[%END%]" />
 [%- END -%]

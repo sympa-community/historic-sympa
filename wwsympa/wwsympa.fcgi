@@ -4059,7 +4059,17 @@ sub do_remindpasswd {
  }
 
 
- ### moderation of messages and documents
+####################################################
+#  do_modindex
+####################################################
+#  Web page for an editor to moderate documents and
+#  mail and/or tag mail
+# 
+# IN : -
+#
+# OUT : '1'
+#
+####################################################### 
  sub do_modindex {
      &wwslog('info', 'do_modindex');
      my $msg;
@@ -4109,13 +4119,6 @@ sub do_remindpasswd {
 	 }
 
 
-	 if (defined $list->{'admin'}{'msg_topic'}){
-	     foreach my $topic (@{$list->{'admin'}{'msg_topic'}}) {
-		##########################################
-
-	     }
-	 }
-
 	 $param->{'spool'}{$id}{'size'} = int( (-s "$Conf{'queuemod'}/$msg") / 1024 + 0.5);
 	 $param->{'spool'}{$id}{'subject'} =  &MIME::Words::decode_mimewords($mail->{'msg'}->head->get('Subject'));
 	 $param->{'spool'}{$id}{'subject'} ||= 'no_subject';
@@ -4127,6 +4130,20 @@ sub do_remindpasswd {
 	 }
      }
      closedir SPOOL;
+
+     if ($list->is_there_msg_topic()) {
+
+	 $param->{'request_topic'} = 1;
+     
+	 foreach my $top (@{$list->{'admin'}{'msg_topic'}}) {
+	     if ($top->{'name'}) {
+		 push (@{$param->{'available_topics'}},$top);
+	     }
+	 }
+	 $param->{'topic_required'} = $list->is_msg_topic_tagging_required();
+     }
+
+
 
      ##  document shared awaiting for moderation
      foreach my $d (@{$param->{'doc_mod_list'}}) {
@@ -4500,12 +4517,46 @@ sub do_remindpasswd {
      my $data = {'headers' => {'Message-ID' => <"$time"."\@wwsympa">},
 		 'from'=> $param->{'user'}{'email'}};
 
-     foreach my $id (split /\0/, $in{'id'}) {
+     ## msg topics
+     my @msg_topics;
+     foreach my $msg_topic (@{$list->{'admin'}{'msg_topic'}}) {
+	 my $var_name = "topic_"."$msg_topic->{'name'}";
+	 if ($in{"$var_name"}) {
+	     push @msg_topics, $msg_topic->{'name'};
+	 }
+     }	 
+     my $list_topics = join(',',@msg_topics);
+    
+     if (!$list_topics && $list->is_msg_topic_tagging_required()) {
+	 &error_message('msg_topic_missing');
+	 &wwslog('info','do_distribute: message(s) without topic topic but in a required list');
+	 return undef;
+     } 
 
+
+     ## messages
+     foreach my $id (split /\0/, $in{'id'}) {
 	 my $mail_command = sprintf ("QUIET DISTRIBUTE %s %s\n",$list->{'name'},$id);
 	 $data->{'body'} = $mail_command;
 
 	 $file = "$Conf{'queuemod'}/$list->{'name'}_$id";
+
+	 ## TAG 
+	 if ($list_topics) {
+
+	     my $parser = new MIME::Parser;
+	     $parser->output_to_core(1);
+	     
+	     unless (open FILE, "$file") {
+		 &wwslog('notice', 'Cannot open file %s', $file);
+		 &error_message('may_not');
+		 return undef;
+	     }
+
+	     my $msg = $parser->parse(\*FILE);
+	     my $head = $msg->head();
+	     my $filetopic = $list->tag_topic(&tools::clean_msg_id($head->get('Message-Id')),$list_topics,'editor');
+	 }
 
 	 unless (&mail::mail_file('',&Conf::get_robot_conf($robot, 'sympa'),$data,$robot)) {
 	     &error_message('failed');
@@ -4524,6 +4575,17 @@ sub do_remindpasswd {
      return 'modindex';
  }
 
+####################################################
+#  do_viewmod
+####################################################
+#  Web page for an editor to moderate a mail and/or 
+#  tag it
+# 
+# IN : -
+#
+# OUT : '1'
+#
+####################################################
  sub do_viewmod {
      &wwslog('info', 'do_viewmod(%s)', $in{'id'});
      my $msg;
@@ -4571,6 +4633,18 @@ sub do_remindpasswd {
 
      $param->{'base'} = sprintf "%s/viewmod/%s/%s/", &Conf::get_robot_conf($robot, 'wwsympa_url'), $param->{'list'}, $in{'id'};
      $param->{'id'} = $in{'id'};
+
+     if ($list->is_there_msg_topic()) {
+
+	 $param->{'request_topic'} = 1;
+     
+	 foreach my $top (@{$list->{'admin'}{'msg_topic'}}) {
+	     if ($top->{'name'}) {
+		 push (@{$param->{'available_topics'}},$top);
+	     }
+	 }
+	 $param->{'topic_required'} = $list->is_msg_topic_tagging_required();
+     }
 
      return 1;
  }
@@ -12177,7 +12251,8 @@ sub d_test_existing_and_rights {
      $parser->output_to_core(1);
 
      unless (open FILE, "$filename") {
-	 &do_log('notice', 'Cannot open file %s', $filename);
+	 &error_message('may_not');
+	 &wwslog('notice', 'Cannot open file %s', $filename);
 	 return undef;
      }
      my $msg = $parser->parse(\*FILE);
@@ -12237,7 +12312,7 @@ sub d_test_existing_and_rights {
 
      if (!$list_topics && $list->is_msg_topic_tagging_required()) {
 	 &error_message('msg_topic_missing');
-	 &wwslog('info','do_tag_topic_by_sender: list without topic message');
+	 &wwslog('info','do_tag_topic_by_sender: message without topic but in a required list');
 	 return undef;
      }
 
