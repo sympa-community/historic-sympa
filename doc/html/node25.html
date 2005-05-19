@@ -1,103 +1,37 @@
-<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2 Final//EN">
 
-<!--Converted with jLaTeX2HTML 2002-2-1 (1.70) JA patch-2.0
-patched version by:  Kenshi Muto, Debian Project.
-* modified by:  Shige TAKENO
-LaTeX2HTML 2002-2-1 (1.70),
-original version by:  Nikos Drakos, CBLU, University of Leeds
-* revised and updated by:  Marcus Hennecke, Ross Moore, Herb Swan
-* with significant contributions from:
-  Jens Lippmann, Marek Rouchal, Martin Wilck and others -->
-<HTML>
-<HEAD>
-<TITLE>24. Using Sympa with LDAP</TITLE>
-<META NAME="description" CONTENT="24. Using Sympa with LDAP">
-<META NAME="keywords" CONTENT="sympa">
-<META NAME="resource-type" CONTENT="document">
-<META NAME="distribution" CONTENT="global">
-
-<META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=iso-8859-1">
-<META NAME="Generator" CONTENT="jLaTeX2HTML v2002-2-1 JA patch-2.0">
-<META HTTP-EQUIV="Content-Style-Type" CONTENT="text/css">
-
-<LINK REL="STYLESHEET" HREF="sympa.css">
-
-<LINK REL="next" HREF="node26.html">
-<LINK REL="previous" HREF="node24.html">
-<LINK REL="up" HREF="sympa.html">
-<LINK REL="next" HREF="node26.html">
-</HEAD>
-
-<BODY TEXT="#000000" BGCOLOR="#ffffff">
-<!--Navigation Panel-->
-<A NAME="tex2html1396"
-  HREF="node26.html">
-<IMG WIDTH="37" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="next" SRC="next.png"></A> 
-<A NAME="tex2html1390"
-  HREF="sympa.html">
-<IMG WIDTH="26" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="up" SRC="up.png"></A> 
-<A NAME="tex2html1384"
-  HREF="node24.html">
-<IMG WIDTH="63" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="previous" SRC="prev.png"></A> 
-<A NAME="tex2html1392"
-  HREF="node1.html">
-<IMG WIDTH="65" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="contents" SRC="contents.png"></A> 
-<A NAME="tex2html1394"
-  HREF="node29.html">
-<IMG WIDTH="43" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="index" SRC="index.png"></A> 
-<BR>
-<B> Next:</B> <A NAME="tex2html1397"
-  HREF="node26.html">25. Sympa with S/MIME and HTTPS</A>
-<B> Up:</B> <A NAME="tex2html1391"
-  HREF="sympa.html">Sympa Mailing Lists Management Software version</A>
-<B> Previous:</B> <A NAME="tex2html1385"
-  HREF="node24.html">23. Antivirus</A>
- &nbsp; <B>  <A NAME="tex2html1393"
-  HREF="node1.html">Contents</A></B> 
- &nbsp; <B>  <A NAME="tex2html1395"
-  HREF="node29.html">Index</A></B> 
-<BR>
-<BR>
-<!--End of Navigation Panel-->
-
-<H1><A NAME="SECTION002500000000000000000"></A>
-<A NAME="ldap"></A>
-<BR>
+<H1><A NAME="SECTION002500000000000000000"><tex2html_anchor_invisible_mark></A>
+<A NAME="ldap"><tex2html_anchor_mark></A><BR>
 24. Using <I>Sympa</I> with LDAP
 </H1>
 
 <P>
-<A NAME="10550"></A>LDAP is a client-server protocol for accessing a directory service. Sympa
+<A NAME="10664"><tex2html_anchor_invisible_mark></A>LDAP is a client-server protocol for accessing a directory service. Sympa
 provide various features based on access to one or more LDAP directories :
 
 <P>
 
 <UL>
-<LI>authentication using LDAP directory instead of sympa internal storage of password
-<BR>
-see&nbsp;<A HREF="node13.html#auth-conf">12.5</A>, page&nbsp;<A HREF="node13.html#auth-conf"><IMG  ALIGN="BOTTOM" BORDER="1" ALT="[*]" SRC="crossref.png"></A>
+<LI><#4038#>authentication using LDAP directory instead of sympa internal storage of password<#4038#>
+<BR>	  see ~<A HREF=<tex2html_cr_mark>#auth-conf#4039><tex2html_cr_mark></A>, page~<A HREF=<tex2html_cr_mark>#auth-conf#4040><tex2html_cross_ref_visible_mark></A>
 
 <P>
 </LI>
-<LI>named filters used in authorization scenario condition
-<BR>
-see&nbsp;<A HREF="node14.html#named-filters">13.2</A>, page&nbsp;<A HREF="node14.html#named-filters"><IMG  ALIGN="BOTTOM" BORDER="1" ALT="[*]" SRC="crossref.png"></A>
+<LI><#4041#>named filters used in authorization scenario condition<#4041#>
+<BR>	  see ~<A HREF=<tex2html_cr_mark>#named-filters#4042><tex2html_cr_mark></A>, page~<A HREF=<tex2html_cr_mark>#named-filters#4043><tex2html_cross_ref_visible_mark></A>
 
 <P>
 </LI>
-<LI>LDAP extraction of list subscribers (see&nbsp;<A HREF="node21.html#par-user-data-source">20.2.1</A>)
+<LI><#5648#>LDAP extraction of list subscribers (see ~<A HREF=<tex2html_cr_mark>#par-user-data-source#4044><tex2html_cr_mark></A>)<#5648#>
 <BR>
 <P>
 </LI>
-<LI>LDAP extraction of list owners or editors
-<BR>
-see&nbsp;<A HREF="node18.html#data-inclusion-file">17.7</A>, page&nbsp;<A HREF="node18.html#data-inclusion-file"><IMG  ALIGN="BOTTOM" BORDER="1" ALT="[*]" SRC="crossref.png"></A>
+<LI><#4045#>LDAP extraction of list owners or editors<#4045#>
+<BR>	  see ~<A HREF=<tex2html_cr_mark>#data-inclusion-file#4046><tex2html_cr_mark></A>, page~<A HREF=<tex2html_cr_mark>#data-inclusion-file#4047><tex2html_cross_ref_visible_mark></A>
 
 <P>
 </LI>
-<LI>mail aliases stored in LDAP
-<BR>
-see&nbsp;<A HREF="node7.html#ldap-aliases">6.3</A>, page&nbsp;<A HREF="node7.html#ldap-aliases"><IMG  ALIGN="BOTTOM" BORDER="1" ALT="[*]" SRC="crossref.png"></A>
+<LI><#4048#>mail aliases stored in LDAP<#4048#>
+<BR>	  see ~<A HREF=<tex2html_cr_mark>#ldap-aliases#4049><tex2html_cr_mark></A>, page~<A HREF=<tex2html_cr_mark>#ldap-aliases#4050><tex2html_cross_ref_visible_mark></A>
 
 <P>
 </LI>
@@ -105,10 +39,3 @@ see&nbsp;<A HREF="node7.html#ldap-aliases">6.3</A>, page&nbsp;<A HREF="node7.htm
 
 <P>
 
-<BR><HR>
-<ADDRESS>
-root
-2005-04-22
-</ADDRESS>
-</BODY>
-</HTML>

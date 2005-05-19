@@ -169,19 +169,13 @@ my %comm = ('home' => 'do_home',
 	 'modindex' => 'do_modindex',
 	 'reject' => 'do_reject',
 	 'reject_notify' => 'do_reject_notify',
-## ?
          'd_reject_shared' =>'admin',
-## ?
          'reject_notify_shared' =>'admin',
-## ?
          'd_install_shared' =>'admin',
 	 'distribute' => 'do_distribute',
 	 'viewmod' => 'do_viewmod',
-# ?	
 	 'd_reject_shared' => 'do_d_reject_shared',
-# ?
 	 'reject_notify_shared' => 'do_reject_notify_shared',
-# ?
 	 'd_install_shared' => 'do_d_install_shared',
 	 'editfile' => 'do_editfile',
 	 'savefile' => 'do_savefile',
@@ -247,6 +241,8 @@ my %comm = ('home' => 'do_home',
 	 'load_cert' => 'do_load_cert',
 	 'compose_mail' => 'do_compose_mail',
 	 'send_mail' => 'do_send_mail',
+	 'request_topic' => 'do_request_topic',
+	 'tag_topic_by_sender' =>'do_tag_topic_by_sender', 
 	 'search_user' => 'do_search_user',
 	 'unify_email' => 'do_unify_email',
 	 'record_email' => 'do_record_email',	    
@@ -344,7 +340,9 @@ my %action_args = ('default' => ['list'],
 #		'viewlogs' => ['list'],
 		'wsdl' => [],
 		'sync_include' => ['list'],
-		   'review_family' => ['family_name'],
+		'review_family' => ['family_name'],
+		'request_topic' => ['list','authkey'],
+		'tag_topic_by_sender' => ['list']   
 		);
 
 my %action_type = ('editfile' => 'admin',
@@ -3043,7 +3041,7 @@ sub do_remindpasswd {
      }
 
      ## message topic subscription
-     if (($reception eq '') && defined $list->{'admin'}{'msg_topic'}) {
+     if (($reception eq '') && $list->is_there_msg_topic()) {
  	my @user_topics;
  	
  	if ($in{'no_topic'}) {
@@ -3371,10 +3369,9 @@ sub do_remindpasswd {
 	 $param->{'sub_user_topic'}++;
      }
      
-     if (ref($list->{'admin'}{'msg_topic'}) eq "ARRAY") {
-
+     if ($list->is_there_msg_topic()) {
 	 foreach my $top (@{$list->{'admin'}{'msg_topic'}}) {
-	     if ($top->{'name'}) {
+	     if (defined $top->{'name'}) {
 		 push (@{$param->{'available_topics'}},$top);
 	     }
 	 }
@@ -4430,7 +4427,7 @@ sub do_remindpasswd {
 	     my $parser = new MIME::Parser;
 	     $parser->output_to_core(1);
 	     unless ($msg = $parser->read(\*IN)) {
-		 do_log('err', 'Unable to parse message %s', $file);
+		 &wwslog('err', 'Unable to parse message %s', $file);
 		 next;
 	     }
 	     
@@ -5032,11 +5029,7 @@ sub do_remindpasswd {
 		 }
 		 
 		 $msg_info{'message_id'} = $hdr->get('Message-Id');
-		 if ( $msg_info{'message_id'} =~ /^\<(.+)\>$/) {
-		     $msg_info{'message_id'}  =~ s/^\<(.+)\>$/$1/;
-		 } else {
-		     $msg_info{'message_id'}  =~ s/^\<(.+)\>(.+)/$1/;
-		 }
+		 $msg_info{'message_id'} = &tools::clean_msg_id($msg_info{'message_id'});
 		 $msg_info{'message_id'} = &tools::escape_chars($msg_info{'message_id'});
 	
 		 $msg_info{'year_month'} = $year_month;
@@ -12062,6 +12055,7 @@ sub d_test_existing_and_rights {
      $param->{'subject'}= &MIME::Words::encode_mimewords($in{'subject'});
      $param->{'in_reply_to'}= $in{'in_reply_to'};
      $param->{'message_id'} = &tools::get_message_id($robot);
+
      return 1;
  }
 
@@ -12132,6 +12126,151 @@ sub d_test_existing_and_rights {
      &message('performed');
      return 'info';
  }
+
+####################################################
+#  do_request_topic
+####################################################
+#  Web page for a sender to tag his mail
+# 
+# IN : -
+#
+# OUT : '1'
+#
+####################################################
+ sub do_request_topic {
+     &wwslog('info', 'do_request_topic');
+
+     unless ($param->{'user'}{'email'}) {
+	 &error_message('no_user');
+	 &wwslog('info','do_request_topic: no user');
+	 $param->{'previous_action'} = 'request_topic';
+	 return 'loginrequest';
+     }
+
+     unless ($param->{'list'}) {
+	 &error_message('missing_arg', {'argument' => 'list'});
+	 &wwslog('info','do_request_topic: no list');
+	 return undef;
+     }
+
+     unless ($list->is_there_msg_topic()) {
+	 &error_message('may_not');
+	 &wwslog('info','do_request_topic: list without topic message');
+	 return undef;
+     }
+
+     foreach my $top (@{$list->{'admin'}{'msg_topic'}}) {
+	 if ($top->{'name'}) {
+	     push (@{$param->{'available_topics'}},$top);
+	 }
+     }
+
+     $param->{'to'} = $list->{'name'} . '@' . $list->{'admin'}{'host'};
+     $param->{'mailto'}= &mailto($list,$param->{'to'});
+     $param->{'authkey'} = $in{'authkey'};
+
+     my $listname = $list->{'name'};
+     my $authqueue = &Conf::get_robot_conf($robot,'queueauth');
+     my $filename = "$authqueue\/$listname\_$in{'authkey'}";
+
+     my $parser = new MIME::Parser;
+     $parser->output_to_core(1);
+
+     unless (open FILE, "$filename") {
+	 &do_log('notice', 'Cannot open file %s', $filename);
+	 return undef;
+     }
+     my $msg = $parser->parse(\*FILE);
+     my $head = $msg->head();
+     $param->{'subject'}= &MIME::Words::encode_mimewords($head->get('subject'));
+     $param->{'message_id'} = &tools::clean_msg_id($head->get('Message-Id'));
+
+     my $body = $msg->bodyhandle();
+     $param->{'body'} = $body->as_string();
+
+     $param->{'topic_required'} = $list->is_msg_topic_tagging_required();
+
+     return 1;
+ }
+
+####################################################
+#  do_tag_topic_by_sender
+####################################################
+#  Tag a mail by its sender : tag the mail and send
+#  send a command CONFIRM for it
+# 
+# IN : -
+#
+# OUT : 'info'
+#
+####################################################
+ sub do_tag_topic_by_sender {
+     &wwslog('info', 'do_tag_topic_by_sender');
+
+     unless ($param->{'user'}{'email'}) {
+	 &error_message('no_user');
+	 &wwslog('info','do_tag_topic_by_sender: no user');
+	 $param->{'previous_action'} = 'request_topic';
+	 return 'loginrequest';
+     }
+
+     unless ($param->{'list'}) {
+	 &error_message('missing_arg', {'argument' => 'list'});
+	 &wwslog('info','do_tag_topic_by_sender: no list');
+	 return undef;
+     }
+
+     unless ($list->is_there_msg_topic()) {
+	 &error_message('may_not');
+	 &wwslog('info','do_tag_topic_by_sender: list without topic message');
+	 return undef;
+     }
+
+     my @msg_topics;
+     foreach my $msg_topic (@{$list->{'admin'}{'msg_topic'}}) {
+	 my $var_name = "topic_"."$msg_topic->{'name'}";
+	 if ($in{"$var_name"}) {
+	     push @msg_topics, $msg_topic->{'name'};
+	 }
+     }	 
+     my $list_topics = join(',',@msg_topics);
+
+     if (!$list_topics && $list->is_msg_topic_tagging_required()) {
+	 &error_message('msg_topic_missing');
+	 &wwslog('info','do_tag_topic_by_sender: list without topic message');
+	 return undef;
+     }
+
+     ## TAG 
+     my $filetopic = $list->tag_topic($in{'message_id'},$list_topics,'sender');
+
+     ## CONFIRM
+     my $time = time;
+     my $data = {'headers' => {'Message-ID' => <"$time"."\@wwsympa">},
+		 'from'=> $param->{'user'}{'email'}};
+
+     $data->{'body'} = sprintf ("QUIET CONFIRM %s\n",$in{'authkey'});
+
+     my $queueauth = &Conf::get_robot_conf($robot, 'queueauth');
+     my $filemsg = "$queueauth/$list->{'name'}_$in{'authkey'}";
+
+     unless ($filemsg && (-r $filemsg)) {
+	 &wwslog('err', 'do_tag_topic_by_sender: Unable to find message %s from %s, auth failed', $in{'authkey'},$param->{'user'}{'email'});
+	 &error_message('auth_msg_failed');
+	 return undef;
+     }
+
+     unless (&mail::mail_file('',&Conf::get_robot_conf($robot, 'sympa'),$data,$robot)) {
+	 &error_message('failed');
+	 &wwslog('err','do_tag_topic_by_sender: failed to send message for file %s', $filemsg);
+	 return undef;
+     }
+
+     &message('performed_soon');
+     return 'info';
+ }
+
+
 
  sub do_search_user {
      &wwslog('info', 'do_search_user');

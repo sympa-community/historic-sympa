@@ -1353,7 +1353,7 @@ sub DoMessage{
     ## list msg topic	
     if ($list->is_there_msg_topic()) {
 
-	my $info_msg_topic = $list->load_msg_topic_file($message->{'msg'},$robot);
+	my $info_msg_topic = $list->load_msg_topic_file($messageid,$robot);
 
 	# is msg already tagged ?	
 	if (ref($info_msg_topic) eq "HASH") { 
@@ -1381,16 +1381,10 @@ sub DoMessage{
     
     my $action ;
     if ($is_signed->{'body'}) {
-	$action = &List::request_action ('send', 'smime',$robot,
-					 {'listname' => $listname,
-					  'sender' => $sender,
-					  'message' => $message });
+	$action = &List::request_action ('send', 'smime',$robot,$context);
     }else{
-	$action = &List::request_action ('send', 'smtp',$robot,
-					 {'listname' => $listname,
-					  'sender' => $sender,
-					  'message' => $message });
-    }
+	$action = &List::request_action ('send', 'smtp',$robot,$context);
+    } 
 
     return undef unless (defined $action);
 

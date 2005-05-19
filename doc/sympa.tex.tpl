@@ -5673,7 +5673,7 @@ To create a list, some data concerning list parameters are required :
 Moreover of these required data, provided values are assigned to vars being in the list creation template. 
 Then the result is the list configuration file :\\
 
-% \centerline{\includegraphics*[width=13cm]{/tmp/creation.jpg}} 
+ \centerline{\includegraphics*[width=13cm]{/tmp/creation.jpg}} 
 
 On the Web interface, these data are given by the list creator in the web form. On command line these 
 data are given by an xml file.
@@ -9962,12 +9962,12 @@ The file contains the message ID, the topic list and the method used to tag the 
 \label{list-load-msg-topic-file}
 \index{List::load\_msg\_topic\_file()}
 
-Find and load msg topic file and return information contained inside about the message incoming.
+Finds and load msg topic file corresponding to the message ID. It returns information contained inside about the message incoming.
 
    \textbf{IN} : 
    \begin{enumerate}
       \item \lparam{self} (+): ref(List) 
-      \item \lparam{msg} (+): ref(MIME::Entity)
+      \item \lparam{msg_id} (+): the message ID
    \end{enumerate}
 
    \textbf{OUT} : ref(HASH), keys are :

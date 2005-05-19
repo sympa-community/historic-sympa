@@ -106,9 +106,32 @@
     }
   }
 
+  // To check at least one checkbox checked
+  function checkbox_check(form,string) {
+
+    var checkbox_checked = false;
+ 
+   for (i = 0; i < form.elements.length; i++) {
+     if (form.elements[i].type == "checkbox") { 
+       var box = form.elements[i];
+       if (box.checked == "1") {
+	 checkbox_checked = true;
+      	 break;	
+       }
+     }
+   }
+   if (checkbox_checked) {
+     return(true);	
+   } else {
+     alert(string);
+     return(false);
+   }
+ }
+
+
+   // No used function	
   //If the motif is found in the string, my_question is asked
   // if the answer == yes than action is d_unzip else d_upload 
-
   function requestBasedOnRegExp(my_question,my_form) {
     expr = /^.+\.zip$/i;
 

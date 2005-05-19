@@ -1955,6 +1955,27 @@ sub diff_on_arrays {
     
 } 
 
+####################################################
+# clean_msg_id
+####################################################
+# clean msg_id to use it without  \n, \s or <,>
+# 
+# IN : -$msg_id (+) : the msg_id
+#
+# OUT : -$msg_id : the clean msg_id
+#
+######################################################
+sub clean_msg_id {
+    my $msg_id = shift;
+  
+    ## remove leading and trailing spaces, cr
+    chomp($msg_id);
+    $msg_id =~ s/^\s*<?([^>\s]+)>?\s*/$1/i;
+
+    return $msg_id;
+}
+
+
 
 ## Change X-Sympa-To: header field in the message
 sub change_x_sympa_to {

@@ -1,89 +1,20 @@
-<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2 Final//EN">
 
-<!--Converted with jLaTeX2HTML 2002-2-1 (1.70) JA patch-2.0
-patched version by:  Kenshi Muto, Debian Project.
-* modified by:  Shige TAKENO
-LaTeX2HTML 2002-2-1 (1.70),
-original version by:  Nikos Drakos, CBLU, University of Leeds
-* revised and updated by:  Marcus Hennecke, Ross Moore, Herb Swan
-* with significant contributions from:
-  Jens Lippmann, Marek Rouchal, Martin Wilck and others -->
-<HTML>
-<HEAD>
-<TITLE>23. Antivirus</TITLE>
-<META NAME="description" CONTENT="23. Antivirus">
-<META NAME="keywords" CONTENT="sympa">
-<META NAME="resource-type" CONTENT="document">
-<META NAME="distribution" CONTENT="global">
-
-<META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=iso-8859-1">
-<META NAME="Generator" CONTENT="jLaTeX2HTML v2002-2-1 JA patch-2.0">
-<META HTTP-EQUIV="Content-Style-Type" CONTENT="text/css">
-
-<LINK REL="STYLESHEET" HREF="sympa.css">
-
-<LINK REL="next" HREF="node25.html">
-<LINK REL="previous" HREF="node23.html">
-<LINK REL="up" HREF="sympa.html">
-<LINK REL="next" HREF="node25.html">
-</HEAD>
-
-<BODY TEXT="#000000" BGCOLOR="#ffffff">
-<!--Navigation Panel-->
-<A NAME="tex2html1382"
-  HREF="node25.html">
-<IMG WIDTH="37" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="next" SRC="next.png"></A> 
-<A NAME="tex2html1376"
-  HREF="sympa.html">
-<IMG WIDTH="26" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="up" SRC="up.png"></A> 
-<A NAME="tex2html1370"
-  HREF="node23.html">
-<IMG WIDTH="63" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="previous" SRC="prev.png"></A> 
-<A NAME="tex2html1378"
-  HREF="node1.html">
-<IMG WIDTH="65" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="contents" SRC="contents.png"></A> 
-<A NAME="tex2html1380"
-  HREF="node29.html">
-<IMG WIDTH="43" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="index" SRC="index.png"></A> 
-<BR>
-<B> Next:</B> <A NAME="tex2html1383"
-  HREF="node25.html">24. Using Sympa with LDAP</A>
-<B> Up:</B> <A NAME="tex2html1377"
-  HREF="sympa.html">Sympa Mailing Lists Management Software version</A>
-<B> Previous:</B> <A NAME="tex2html1371"
-  HREF="node23.html">22. Bounce management</A>
- &nbsp; <B>  <A NAME="tex2html1379"
-  HREF="node1.html">Contents</A></B> 
- &nbsp; <B>  <A NAME="tex2html1381"
-  HREF="node29.html">Index</A></B> 
-<BR>
-<BR>
-<!--End of Navigation Panel-->
-
-<H1><A NAME="SECTION002400000000000000000"></A>
-<A NAME="antivirus"></A>
-<BR>
+<H1><A NAME="SECTION002400000000000000000"><tex2html_anchor_invisible_mark></A>
+<A NAME="antivirus"><tex2html_anchor_mark></A><BR>
 23. Antivirus
 </H1>
 
 <P>
 <I>Sympa</I> lets you use an external antivirus solution to check incoming mails.
-In this case you must set the <A NAME="10533"></A><TT>antivirus_path</TT> and 
-<A NAME="10536"></A><TT>antivirus_args</TT> configuration parameters
- (see <A HREF="node8.html#Antivirus_plug-in">7.13</A>, page&nbsp;<A HREF="node8.html#Antivirus_plug-in"><IMG  ALIGN="BOTTOM" BORDER="1" ALT="[*]" SRC="crossref.png"></A>.
+In this case you must set the <A NAME="10647"><tex2html_anchor_invisible_mark></A><TT>antivirus_path</TT> and 
+<A NAME="10650"><tex2html_anchor_invisible_mark></A><TT>antivirus_args</TT> configuration parameters
+ (see <A HREF=<tex2html_cr_mark>#Antivirus_plug-in#4030><tex2html_cr_mark></A>, page~<A HREF=<tex2html_cr_mark>#Antivirus_plug-in#4031><tex2html_cross_ref_visible_mark></A>.
 <I>Sympa</I> is already compatible with McAfee/uvscan, Fsecure/fsav, Sophos, AVP, Trend Micro/VirusWall and Clam Antivirus.
-For each mail received, <I>Sympa</I> extracts its MIME parts in the <A NAME="10541"></A><TT>/usr/local/sympa-gb/spool/tmp/antivirus</TT> directory and
+For each mail received, <I>Sympa</I> extracts its MIME parts in the <A NAME="10655"><tex2html_anchor_invisible_mark></A><TT>/usr/local/sympa-gb/spool/tmp/antivirus</TT> directory and
 then calls the antivirus software to check them.
 When a virus is detected, <I>Sympa</I> looks for the virus name in the virus scanner STDOUT and sends a
-<A NAME="10545"></A><TT>your_infected_msg.tt2</TT> warning to the sender of the mail.
+<A NAME="10659"><tex2html_anchor_invisible_mark></A><TT>your_infected_msg.tt2</TT> warning to the sender of the mail.
 The mail is saved as 'bad' and the working directory is deleted (except if <I>Sympa</I> is running in debug mode).
 
 <P>
 
-<BR><HR>
-<ADDRESS>
-root
-2005-04-22
-</ADDRESS>
-</BODY>
-</HTML>

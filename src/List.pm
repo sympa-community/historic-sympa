@@ -3135,10 +3135,10 @@ sub send_auth {
    my $messageid = $now[6].$now[5].$now[4].$now[3].$now[2].$now[1]."."
                    .int(rand(6)).int(rand(6)).int(rand(6)).int(rand(6))
 		   .int(rand(6)).int(rand(6))."\@".$host;
-   my $modkey = Digest::MD5::md5_hex(join('/', $self->get_cookie(),$messageid));
+   my $authkey = Digest::MD5::md5_hex(join('/', $self->get_cookie(),$messageid));
      
-   unless (open OUT, ">$authqueue\/$name\_$modkey") {
-       &do_log('notice', 'Cannot create file %s', "$authqueue/$name/$modkey");
+   unless (open OUT, ">$authqueue\/$name\_$authkey") {
+       &do_log('notice', 'Cannot create file %s', "$authqueue/$name\_$authkey");
        return undef;
    }
 
@@ -3151,17 +3151,22 @@ sub send_auth {
 
    close IN; close OUT;
 
-   my $param = {'modkey' => $modkey,
+   my $param = {'authkey' => $authkey,
 		'boundary' => "----------------- Message-Id: \<$messageid\>",
 		'file' => $file};
    
+   if ($self->is_there_msg_topic()) {
+       $param->{'request_topic'} = 1;
+   }
+
+
    &tt2::allow_absolute_path();
    unless ($self->send_file('send_auth',$sender,$robot,$param)) {
        &do_log('notice',"Unable to send template 'send_auth' to $sender");
        return undef;
    }
 
-   return $modkey;
+   return $authkey;
 }
 
 ####################################################
@@ -10429,11 +10434,13 @@ sub available_reception_mode {
 # OUT : 1 | 0
 ####################################################
 sub is_there_msg_topic {
-    my ($self,$topic) = @_;
+    my ($self) = @_;
     
     if (defined $self->{'admin'}{'msg_topic'}) {
-	if ($#{$self->{'admin'}{'msg_topic'}} >= 0) {
-	    return 1;
+	if (ref($self->{'admin'}{'msg_topic'}) eq "ARRAY") {
+	    if ($#{$self->{'admin'}{'msg_topic'}} >= 0) {
+		return 1;
+	    }
 	}
     }
     return 0;
@@ -10477,7 +10484,9 @@ sub get_available_msg_topic {
     
     my @topics;
     foreach my $msg_topic (@{$self->{'admin'}{'msg_topic'}}) {
-	push @topics,$msg_topic->{'name'};
+	if ($msg_topic->{'name'}) {
+	    push @topics,$msg_topic->{'name'};
+	}
     }
     
     return \@topics;
@@ -10516,9 +10525,7 @@ sub is_msg_topic_tagging_required {
 sub automatic_tag {
     my ($self,$msg) = @_;
     my $msg_id = $msg->head->get('Message-ID');
-    $msg_id =~ s/\s*$//;
-    $msg_id =~ s/\n*$//;
-    &do_log('debug3','automatic_tag(%s,%s)',$self->{'name'},$msg_id);
+    &do_log('debug3','automatic_tag(%s,%s)',$self->{'name'},chomp($msg_id));
 
 
     my $topic_list = $self->compute_topic($msg);
@@ -10549,7 +10556,8 @@ sub automatic_tag {
 ####################################################
 sub compute_topic {
     my ($self,$msg) = @_;
-    &do_log('debug3','compute_topic(%s,%s)',$self->{'name'},$msg->head->get('Message-ID'));
+    my $msg_id = $msg->head->get('Message-ID');
+    &do_log('debug3','compute_topic(%s,%s)',$self->{'name'},chomp($msg_id));
     my @topic_array;
     my %topic_hash;
 
@@ -10629,7 +10637,7 @@ sub tag_topic {
     my $robot = $self->{'domain'};
     my $queuetopic = &Conf::get_robot_conf($robot, 'queuetopic');
     my $listname = "$self->{'name'}\@$robot.";
-    $msg_id =~ s/^<//;
+    $msg_id = &tools::clean_msg_id($msg_id);
     $msg_id =~ s/>$//;
     my $file = $listname.$msg_id;
 
@@ -10656,20 +10664,18 @@ sub tag_topic {
 # in a HASH
 #
 # IN : -$self (+): ref(List)
-#      -$msg : ref(MIME::Entity)
+#      -$msg_id : the message ID 
 #
 # OUT : undef 
-#     | ref(HASH) : - topic : string of topic name(s)
+#     | ref(HASH) file contents : 
+#                   - topic : string of topic name(s)
 #                   - method : editor|sender|auto - for tagging
 #                   - msg_id : the msg_id
 #                   - filename : name of the file containing these informations 
 ####################################################
 sub load_msg_topic_file {
-    my ($self,$msg,$robot) = @_;
-    my $head = $msg->head;
-    my $msg_id = $head->get('Message-ID');
-    $msg_id =~ s/\s*$//;
-    $msg_id =~ s/\n*$//;
+    my ($self,$msg_id,$robot) = @_;
+    $msg_id = &tools::clean_msg_id($msg_id);
     &do_log('debug4','load_msg_topic_file(%s,%s)',$self->{'name'},$msg_id);
 
     my $queuetopic = &Conf::get_robot_conf($robot, 'queuetopic');
