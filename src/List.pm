@@ -2213,45 +2213,68 @@ sub distribute_msg {
     ## Update the stats, and returns the new X-Sequence, if any.
     my $sequence = $self->update_stats($message->{'size'});
     
+    ## Loading info msg_topic file if exists, add X-Sympa-Topic
+    my $info_msg_topic;
+    if ($self->is_there_msg_topic()) {
+	my $msg_id = $hdr->get('Message-ID');
+	chomp($msg_id);
+	$info_msg_topic = $self->load_msg_topic_file($msg_id,$robot);
+
+	# add X-Sympa-Topic header
+	if (ref($info_msg_topic) eq "HASH") {
+	    $message->add_topic($info_msg_topic->{'topic'});
+	}
+    }
+
     ## Hide the sender if the list is anonymoused
     if ( $self->{'admin'}{'anonymous_sender'} ) {
+
 	foreach my $field (@{$Conf{'anonymous_header_fields'}}) {
 	    $hdr->delete($field);
 	}
 	
 	$hdr->add('From',"$self->{'admin'}{'anonymous_sender'}");
-	$hdr->add('Message-id',"<$self->{'name'}.$sequence\@anonymous>");
-
+	my $new_id = "$self->{'name'}.$sequence\@anonymous";
+	$hdr->add('Message-id',"<$new_id>");
+	
+	# rename msg_topic filename
+	if ($info_msg_topic) {
+	    my $queuetopic = &Conf::get_robot_conf($robot, 'queuetopic');
+	    my $listname = "$self->{'name'}\@$robot";
+	    rename("$queuetopic/$info_msg_topic->{'filename'}","$queuetopic/$listname.$new_id");
+	    $info_msg_topic->{'filename'} = "$listname.$new_id";
+	}
+	
 	## xxxxxx Virer eventuelle signature S/MIME
     }
-
+    
     ## Add Custom Subject
     if ($self->{'admin'}{'custom_subject'}) {
 	my $subject_field = $message->{'decoded_subject'};
 	$subject_field =~ s/^\s*(.*)\s*$/$1/; ## Remove leading and trailing blanks
-
+	
 	## Search previous subject tagging in Subject
 	my $tag_regexp = $self->{'admin'}{'custom_subject'};
 	$tag_regexp =~ s/([\[\]\*\-\(\)\+\{\}\?])/\\$1/g;  ## cleanup, just in case dangerous chars were left
 	$tag_regexp =~ s/\[\S+\]/\.\+/g;
-
+	
 	## Add subject tag
 	$message->{'msg'}->head->delete('Subject');
 	my @parsed_tag;
 	&parser::parse_tpl({'list' => {'name' => $self->{'name'},
-			       'sequence' => $self->{'stats'}->[0]
-			       }},
-		   [$self->{'admin'}{'custom_subject'}], \@parsed_tag);
-
+				       'sequence' => $self->{'stats'}->[0]
+				       }},
+			   [$self->{'admin'}{'custom_subject'}], \@parsed_tag);
+	
 	## If subject is tagged, replace it with new tag
 	if ($subject_field =~ /\[$tag_regexp\]/) {
 	    $subject_field =~ s/\[$tag_regexp\]/\[$parsed_tag[0]\]/;
 	}else {
-	    $subject_field = '['.$parsed_tag[0].'] '.$subject_field
+	    $subject_field = '['.$parsed_tag[0].'] '.$subject_field;
 	}
 	$message->{'msg'}->head->add('Subject', $subject_field);
     }
-
+    
     ## Archives
     my $msgtostore = $message->{'msg'};
     if (($message->{'smime_crypted'} eq 'smime_crypted') &&
@@ -2259,14 +2282,14 @@ sub distribute_msg {
 	$msgtostore = $message->{'orig_msg'};
     }
     $self->archive_msg($msgtostore);
-
+    
     ## Change the reply-to header if necessary. 
     if ($self->{'admin'}{'reply_to_header'}) {
 	unless ($hdr->get('Reply-To') && ($self->{'admin'}{'reply_to_header'}{'apply'} ne 'forced')) {
 	    my $reply;
-
+	    
 	    $hdr->delete('Reply-To');
-
+	    
 	    if ($self->{'admin'}{'reply_to_header'}{'value'} eq 'list') {
 		$reply = "$name\@$host";
 	    }elsif ($self->{'admin'}{'reply_to_header'}{'value'} eq 'sender') {
@@ -2276,7 +2299,7 @@ sub distribute_msg {
 	    }elsif ($self->{'admin'}{'reply_to_header'}{'value'} eq 'other_email') {
 		$reply = $self->{'admin'}{'reply_to_header'}{'other_email'};
 	    }
-
+	    
 	    $hdr->add('Reply-To',$reply) if $reply;
 	}
     }
@@ -2287,7 +2310,7 @@ sub distribute_msg {
             $hdr->delete($field);
         }
     }
-
+    
     ## Add useful headers
     $hdr->add('X-Loop', "$name\@$host");
     $hdr->add('X-Sequence', $sequence);
@@ -2297,6 +2320,9 @@ sub distribute_msg {
     foreach my $i (@{$self->{'admin'}{'custom_header'}}) {
 	$hdr->add($1, $2) if ($i=~/^([\S\-\:]*)\s(.*)$/);
     }
+    
+    ## Add X-Sympa-Topic if tagged message
+    
 
     ## Add RFC 2919 header field
     if ($hdr->get('List-Id')) {
@@ -2304,7 +2330,7 @@ sub distribute_msg {
 	$hdr->delete('List-ID');
     }
     $hdr->add('List-Id', sprintf ('<%s.%s>', $self->{'name'}, $self->{'admin'}{'host'}));
-
+    
     ## Add RFC 2369 header fields
     foreach my $field (@{$self->{'admin'}{'rfc2369_header_fields'}}) {
 	if ($field eq 'help') {
@@ -2328,7 +2354,7 @@ sub distribute_msg {
     if (($self->is_digest()) and ($message->{'smime_crypted'} ne 'smime_crypted')) {
 	$self->archive_msg_digest($msgtostore);
     }
-
+    
     ## Blindly send the message to all users.
     my $numsmtp = $self->send_msg($message);
     unless (defined ($numsmtp)) {
@@ -2442,7 +2468,17 @@ sub send_msg {
 		$message->{'altered'} = '_ALTERED_';
 	    }
 	}
-	my $result = &mail::mail_message($message, $from, $robot, @tabrcpt);
+	
+	## TOPICS
+	my @selected_tabrcpt;
+	if ($self->is_there_msg_topic()){
+	    @selected_tabrcpt = $self->select_subscribers_for_topic($message->get_topic(),\@tabrcpt);
+
+	} else {
+	    @selected_tabrcpt = @tabrcpt;
+
+	}
+	my $result = &mail::mail_message($message, $from, $robot, @selected_tabrcpt);
 	unless (defined $result) {
 	    &do_log('err',"List::send_msg, could not send message to distribute from $from");
 	    return undef;
@@ -2559,6 +2595,58 @@ sub send_msg {
 
     return $nbr_smtp;
 }
+
+####################################################
+# select_subscribers_for_topic
+####################################################
+# Select users subscribed to a topic in the topic list
+# 
+# IN : -$self(+) : ref(List)
+#      -$string_topic(+) : string splitted by ','
+#      -$subscribers(+) : ref(ARRAY)
+#
+# OUT : @selected_users : ok
+#       | 0 if no subscriber for sending digest
+#
+####################################################
+sub select_subscribers_for_topic {
+    my ($self,$string_topic,$subscribers) = @_;
+    &do_log('debug3', 'List::select_subscribers_for_topic(%s, %s)', $self->{'name'},$string_topic); 
+    
+    my @selected_users;
+    my $msg_topics;
+
+    if ($string_topic) {
+	$msg_topics = &tools::get_array_from_splitted_string($string_topic);
+    }
+
+    foreach my $user (@$subscribers) {
+
+	# user topic
+	my $info_user = $self->get_subscriber($user);
+
+	if ($info_user->{'reception'} ne 'mail') {
+	    push @selected_users,$user;
+	    next;
+	}
+	my $user_topics = &tools::get_array_from_splitted_string($info_user->{'topics'});
+
+	if ($string_topic) {
+	    my $result = &tools::diff_on_arrays($msg_topics,$user_topics);
+	    if ($#{$result->{'intersection'}} >=0 ) {
+		push @selected_users,$user;
+	    }
+	}else {
+	    my $result = &tools::diff_on_arrays(['other'],$user_topics);
+	    if ($#{$result->{'intersection'}} >=0 ) {
+		push @selected_users,$user;
+	    }
+	}
+    }
+    return @selected_users;
+}
+
+
 
 ####################################################
 # send_msg_digest                              
@@ -10532,7 +10620,8 @@ sub is_msg_topic_tagging_required {
 sub automatic_tag {
     my ($self,$msg) = @_;
     my $msg_id = $msg->head->get('Message-ID');
-    &do_log('debug3','automatic_tag(%s,%s)',$self->{'name'},chomp($msg_id));
+    chomp($msg_id);
+    &do_log('debug3','automatic_tag(%s,%s)',$self->{'name'},$msg_id);
 
 
     my $topic_list = $self->compute_topic($msg);
@@ -10564,7 +10653,8 @@ sub automatic_tag {
 sub compute_topic {
     my ($self,$msg) = @_;
     my $msg_id = $msg->head->get('Message-ID');
-    &do_log('debug3','compute_topic(%s,%s)',$self->{'name'},chomp($msg_id));
+    chomp($msg_id);
+    &do_log('debug3','compute_topic(%s,%s)',$self->{'name'},$msg_id);
     my @topic_array;
     my %topic_hash;
 
@@ -10653,7 +10743,6 @@ sub tag_topic {
 	return undef;
     }
 
-    print FILE "MSG_ID  $msg_id\n";
     print FILE "TOPIC   $topic_list\n";
     print FILE "METHOD  $method\n";
 
@@ -10683,72 +10772,48 @@ sub tag_topic {
 sub load_msg_topic_file {
     my ($self,$msg_id,$robot) = @_;
     $msg_id = &tools::clean_msg_id($msg_id);
-    &do_log('debug4','load_msg_topic_file(%s,%s)',$self->{'name'},$msg_id);
-
+    &do_log('debug4','List::load_msg_topic_file(%s,%s)',$self->{'name'},$msg_id);
+    
     my $queuetopic = &Conf::get_robot_conf($robot, 'queuetopic');
-    my $listname = "$self->{'name'}\@$robot.";
-    my $found;
-    my $filename;
-    my %info;
-
-
-    if (opendir(DIR, $queuetopic)) {
+    my $listname = "$self->{'name'}\@$robot";
+    my $file = "$listname.$msg_id";
+    
+    unless (open (FILE, "$queuetopic/$file")) {
+	&do_log('info','Unable to open info msg_topic file %s/%s : %s', $queuetopic,$file, $!);
+	return undef;
+    }
+    
+    my %info = ();
+    
+    while (<FILE>) {
+	next if /^\s*(\#.*|\s*)$/;
 	
-	foreach my $file ( sort grep (/^$listname/,readdir(DIR))) {
-		
-	    unless (open (FILE, "$queuetopic/$file")) {
-		&do_log('info','Unable to open info msg topic file %s/%s : %s', $queuetopic,$file, $!);
-		next;
-	    }
-
-	    %info = ();
-	    my $next;
+	if (/^(\S+)\s+(.+)$/io) {
+	    my($keyword, $value) = ($1, $2);
+	    $value =~ s/\s*$//;
 	    
-	    while (<FILE>) {
-		next if /^\s*(\#.*|\s*)$/;
-
-		if (/^(\S+)\s+(.+)$/io) {
-		    my($keyword, $value) = ($1, $2);
-		    $value =~ s/\s*$//;
-		    
-		    if ($keyword eq 'MSG_ID') {
-			if ($value eq $msg_id) {
-			    $found = 1;
-			    $filename = "$queuetopic/$file";
-			}else {
-			    $next = 1; 
-			    last;
-			}
-		    } elsif ($keyword eq 'TOPIC') {
-			$info{'topic'} = $value;
+	    if ($keyword eq 'TOPIC') {
+		$info{'topic'} = $value;
 		
-		    }elsif ($keyword eq 'METHOD') {
-			if ($value =~ /^(editor|sender|auto)$/) {
-			    $info{'method'} = $value;
-			}else {
-			    $next = 1; 
-			    last;
-			}
-		    }
+	    }elsif ($keyword eq 'METHOD') {
+		if ($value =~ /^(editor|sender|auto)$/) {
+		    $info{'method'} = $value;
+		}else {
+		    &do_log('err','List::load_msg_topic_file(%s,%s): syntax error in file %s/%s : %s', $queuetopic,$file, $!);
+		    return undef;
 		}
 	    }
-	    last if ($found);
-	    next if ($next);
-	}
-	close FILE;
-    }	
-    close DIR;
-
-    if ($found) {
-	if ((exists $info{'topic'}) && (exists $info{'method'})) {
-	    $info{'msg_id'} = $msg_id;
-	    $info{'filename'} = $filename;
-
-	    return \%info;
 	}
     }
-    return undef;
+    close FILE;
+    
+    if ((exists $info{'topic'}) && (exists $info{'method'})) {
+	$info{'msg_id'} = $msg_id;
+	$info{'filename'} = $file;
 	
+	return \%info;
+    }
+    return undef;
 }
 
 

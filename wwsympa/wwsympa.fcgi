@@ -3086,7 +3086,7 @@ sub do_remindpasswd {
 
      &message('performed');
 
-     return 'info';
+     return 'suboptions';
  }
 
  ## Update of user preferences
@@ -4557,6 +4557,7 @@ sub do_remindpasswd {
 	     my $head = $msg->head();
 	     my $filetopic = $list->tag_topic(&tools::clean_msg_id($head->get('Message-Id')),$list_topics,'editor');
 	 }
+
 
 	 unless (&mail::mail_file('',&Conf::get_robot_conf($robot, 'sympa'),$data,$robot)) {
 	     &error_message('failed');

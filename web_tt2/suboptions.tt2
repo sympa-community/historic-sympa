@@ -36,7 +36,7 @@
 	    [%IF topic_checked.other %]
 	    <input type="checkbox" name="topic_other" value="1"  checked="1"/> [%|loc%]Other (no tagged mails) [%END%]
             [%ELSE%]	
-            <input type="checkbox" name="topic_other" value="1" /> [%|loc%]Other (no tagged mails) [%END%] 	
+            <input type="checkbox" name="topic_other" value="1" /> [%|loc%]Other (messages not tagged) [%END%] 	
 	    [%END%] 
 	   <br/>
          </BLOCKQUOTE>

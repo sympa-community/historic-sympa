@@ -208,14 +208,21 @@ sub mail_file {
    }
    
     $message = "$headers"."$message";
+
+    my $listname = '';
+    if (ref($data->{'list'}) eq "HASH") {
+	$listname = $data->{'list'}{'name'};
+    } elsif ($data->{'list'}) {
+	$listname = $data->{'list'};
+    }
        
     ## SENDING
     if (ref($rcpt)) {
-	unless (defined &sending($message,$rcpt,$data->{'return_path'},$robot,$data->{'list'}{'name'},$sign_mode)) {
+	unless (defined &sending($message,$rcpt,$data->{'return_path'},$robot,$listname,$sign_mode)) {
 	    return undef;
 	}
     } else {
-	unless (defined &sending($message,\$rcpt,$data->{'return_path'},$robot,$data->{'list'}{'name'},$sign_mode)) {
+	unless (defined &sending($message,\$rcpt,$data->{'return_path'},$robot,$listname,$sign_mode)) {
 	    return undef;
 	}
     }
