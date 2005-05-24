@@ -172,11 +172,6 @@ sub maketext {
 
 #    &do_log('notice','Maketext: %s', $msg);
 
-    ## xgettext.pl bug adds a \n to multi-lined strings
-    if ($msg =~ /\n.+/m) {
-	$msg .= "\n";
-    }
-
     my $translation = &gettext ($msg);
 
     ## replace parameters in string
