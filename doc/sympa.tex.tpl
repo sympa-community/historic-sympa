@@ -5673,7 +5673,7 @@ To create a list, some data concerning list parameters are required :
 Moreover of these required data, provided values are assigned to vars being in the list creation template. 
 Then the result is the list configuration file :\\
 
- \centerline{\includegraphics*[width=13cm]{/tmp/creation.jpg}} 
+% \centerline{\includegraphics*[width=13cm]{/tmp/creation.jpg}} 
 
 On the Web interface, these data are given by the list creator in the web form. On command line these 
 data are given by an xml file.
@@ -9509,7 +9509,9 @@ For sending, a call to sendmail is done or the message is pushed in a spool acco
    Prepares and distributes a message to a list : 
    \begin{itemize}
      \item updates the list stats
+     \item Loads information from message topic file if exists and adds X-Sympa-Topic header  
      \item hides the sender if the list is anonymoused (list config : anonymous\_sender)
+           and changes name of msg topic file if exists.
      \item adds custom subject if necessary (list config : custom\_subject)
      \item archives the message 
      \item changes the reply-to header if necessary (list config : reply\_to\_header)
@@ -9540,6 +9542,9 @@ For sending, a call to sendmail is done or the message is pushed in a spool acco
   according to their reception mode and to the ``Content-Type'' header field of the message.
   Sending are grouped according to their reception mode : \begin{itemize}
     \item normal : add a footer if the message is not protected (then the message is ``altered'')
+          In a message topic context, selects only one who are subscribed to the topic of the
+          message to distribute (calls to select\_subcribers\_for\_topic(), see \ref {list-select-subscribers-for-topic}, 
+  page~\pageref {list-select-subscribers-for-topic}). 
     \item notice
     \item txt : add a footer 
     \item html : add a footer 
@@ -9690,7 +9695,8 @@ For sending, a call to sendmail is done or the message is pushed in a spool acco
    The message awaiting for moderation is named with a key and is set in the spool queuemod.
    The key is a reference on the message for editor.
    The message for the editor is sent by calling List::send\_file() (see \ref {list-send-file}, 
-   page~\pageref {list-send-file}) with mail template ``moderate''.
+   page~\pageref {list-send-file}) with mail template ``moderate''. In msg\_topic context, the editor is 
+   asked to tag the message.
 
 
    \textbf{IN} : 
@@ -9739,6 +9745,7 @@ For sending, a call to sendmail is done or the message is pushed in a spool acco
    The message for distribution is copied in the authqueue spool to wait for confirmation by its sender .
    This message is named with a key. The request is sent to user by calling  List::send\_file() 
    (see \ref {list-send-file}, page~\pageref {list-send-file}) with mail template ``send\_auth''.
+   In msg\_topic context, the sender is asked to tag his message.
 
    \textbf{IN} : 
    \begin{enumerate}
@@ -9860,9 +9867,17 @@ For sending, a call to sendmail is done or the message is pushed in a spool acco
 \subsection {Functions for topic messages} 
 
 is\_there\_msg\_topic(), is\_available\_msg\_topic(), get\_available\_msg\_topic(), is\_msg\_topic\_tagging\_required, 
-automatic\_tag(), compute\_topic(), tag\_topic(), load\_msg\_topic\_file(), modifying\_msg\_topic\_for\_subscribers().
+automatic\_tag(), compute\_topic(), tag\_topic(), load\_msg\_topic\_file(), modifying\_msg\_topic\_for\_subscribers(), 
+select\_subscribers\_for\_topic().
 
-These functions are used to manages message topics.
+These functions are used to manages message topics.\\
+
+N.B.: There is some exception to use some parameters : msg\_topic.keywords for list parameters and topics\_subscriber
+for subscribers options in the DB table. These parameters are used as string splitted by ',' but to access to each one, use the function 
+tools::get\_array\_from\_splitted\_string() (see \ref {tools-get-array-from-splitted-string}, 
+page~\pageref {tools-get-array-from-splitted-string}) allows to access the enumeration.
+
+
 
 
 \subsubsection {\large{is\_there\_msg\_topic()}}
@@ -9904,11 +9919,11 @@ Returns an array of available message topics (\lparam{msg\_topic.name} list para
 \label{list-is-msg-topic-tagging-required}
 \index{List::is\_msg\_topic\_tagging\_required()}
 
-Return if the msg must be tagged or not (\lparam{msg\_topic\_tagging} list parameter, see \ref {msg-topic-tagging}, page~\pageref {msg-topic-tagging}).
+Returns if the message must be tagged or not (\lparam{msg\_topic\_tagging} list parameter set to 'required', see \ref {msg-topic-tagging}, page~\pageref {msg-topic-tagging}).
 
    \textbf{IN} : \lparam{self} (+): ref(List)
 
-   \textbf{OUT} : 1 - the msg must be tagged \(\mid\) 0 - the msg can be no tagged
+   \textbf{OUT} : 1 - the message must be tagged \(\mid\) 0 - the msg can be no tagged
 
 \subsubsection {\large{automatic\_tag()}}
 \label{list-automatic-tag}
@@ -9928,9 +9943,9 @@ Computes topic(s) (with compute\_topic() function) and tags the message (with ta
 \label{list-compute-topic}
 \index{List::compute\_topic()}
 
-Computes topic(s) on the message. The topic is got from applying a regexp on the subject and/or the 
-body of the message. (\lparam{msg\_topic\_keywords\_apply\_on} list parameter, see\ref {msg-topic-keywords-apply-on}, 
-page~\pageref {msg-topic-keywords-apply-on}). Regexp is made from \lparam{msg\_topic.keywords} list parameters
+Computes topic(s) of the message. Topic(s) is(are) got from applying a regexp on the subject and/or the 
+body of the message (\lparam{msg\_topic\_keywords\_apply\_on} list parameter, see\ref {msg-topic-keywords-apply-on}, 
+page~\pageref {msg-topic-keywords-apply-on}). Regexp is based on \lparam{msg\_topic.keywords} list parameters
 (See \ref {msg-topic}, page~\pageref {msg-topic}).
 
    \textbf{IN} : 
@@ -9946,46 +9961,54 @@ page~\pageref {msg-topic-keywords-apply-on}). Regexp is made from \lparam{msg\_t
 \index{List::tag\_topic()}
 
 Tags the message by creating its message topic file in the \dir {[SPOOLDIR]/topic/} spool. 
-The file contains the message ID, the topic list and the method used to tag the message.
-
+The file contains the topic list and the method used to tag the message. Here is the format :
+\begin {quote}
+\begin{verbatim}
+TOPIC topicname,...
+METHOD editor|sender|auto  
+\end{verbatim}
+\end {quote}
+ 
    \textbf{IN} : 
    \begin{enumerate}
       \item \lparam{self} (+): ref(List) 
-      \item \lparam{msg\_id} (+): the message ID of the message to tag
-      \item \lparam{topic\_list} (+): the list of topics (strings separated by ',')
+      \item \lparam{msg\_id} (+): string - the message ID of the message to tag
+      \item \lparam{topic\_list} (+): the list of topics (strings splitted by ',')
       \item \lparam{method} (+): 'auto' \(\mid\)'editor'\(\mid\)'sender' - the method used for tagging
    \end{enumerate}
 
-   \textbf{OUT} : name of the created file (listname.msg\_id)
+   \textbf{OUT} : name of the created file (\lparam{directory/listname.msg\_id})
 
 \subsubsection {\large{load\_msg\_topic\_file()}}
 \label{list-load-msg-topic-file}
 \index{List::load\_msg\_topic\_file()}
 
-Finds and load msg topic file corresponding to the message ID. It returns information contained inside about the message incoming.
+Search and load msg topic file corresponding to the message ID  (\lparam{directory/listname.msg\_id}). It returns information contained inside.
 
    \textbf{IN} : 
    \begin{enumerate}
       \item \lparam{self} (+): ref(List) 
-      \item \lparam{msg_id} (+): the message ID
+      \item \lparam{msg\_id} (+): the message ID
+      \item \lparam{robot} (+): the robot
    \end{enumerate}
 
    \textbf{OUT} : ref(HASH), keys are :
-   \begin{enumerate}
+   \begin{itemize}
      \item \lparam{topic} : list of topics (strings separated by ',')
      \item \lparam{method} : 'auto' \(\mid\)'editor'\(\mid\)'sender' - the method used for tagging
      \item \lparam{msg\_id} : message ID of the tagged message
      \item \lparam{filename} : name of the file
-   \end{enumerate}
+   \end{itemize}
 
 \subsubsection {\large{modifying\_msg\_topic\_for\_subscribers()}}
 \label{list-modifying-msg-topic-for-subscribers}
 \index{List::modifying\_msg\_topic\_for\_subscribers()}
 
- Deletes topics subscriber that does not exist anymore
+ Deletes topics of subscriber that does not exist anymore
  and send a notify to concerned subscribers. 
  (Makes a diff on msg\_topic parameter between the list configuration before modification
-  and a new state). 
+  and a new state by calling tools::diff\_on\_arrays() function, see \ref{tools-diff-on-arrays}, 
+ page~\pageref{tools-diff-on-arrays}). This function is used by wwsympa::do\_edit\_list().
 
    \textbf{IN} : 
    \begin{enumerate}
@@ -9995,9 +10018,28 @@ Finds and load msg topic file corresponding to the message ID. It returns inform
 
    \textbf{OUT} :
    \begin{enumerate}
-      \item 1 \emph{if some topics have been deleted}
+      \item 1 \emph{if some subscriber topics have been deleted}
       \item 0 \emph{else}	
    \end{enumerate}
+
+\subsubsection {\large{select\_subscribers\_for\_topic()}}
+\label{list-select-subscriber-for-topic}
+\index{List::select\_subscribers\_for\_topic()}
+
+ Selects subscribers that are subscribed to one or more topic
+ appearing in the topic list incoming when their recpetion mode is 'mail', and selects the other subscribers 
+ (reception mode different from 'mail'). This function is used by List::send\_msg() function during message 
+ diffusion (see \ref {list-send-msg}, page~\pageref {list-send-msg}).
+
+   \textbf{IN} : 
+   \begin{enumerate}
+      \item \lparam{self} (+): ref(List) 
+      \item \lparam{string\_topic} (+): string splitted by ',' - the topic list
+      \item \lparam{subscribers} (+): ref(ARRAY) - list of subscriber emails 
+   \end{enumerate}
+
+   \textbf{OUT} : ARRAY - list of selected subscribers
+
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%% sympa.pl %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -10031,10 +10073,7 @@ Finds and load msg topic file corresponding to the message ID. It returns inform
    About command process a report can be sent by calling List::send\_global\_file() (see \ref {list-send-global-file}, 
    page~\pageref {list-send-global-file}) with template ``command\_report''. For message report it is the template ``message\_report''.
   
-   \textbf{IN} : 
-   \begin{enumerate}
-      \item \lparam{file}(+): the file to handle
-   \end{enumerate}
+   \textbf{IN} : \lparam{file}(+): the file to handle
 
    \textbf{OUT} : \$status - result of the called function.
 
@@ -10045,8 +10084,8 @@ Finds and load msg topic file corresponding to the message ID. It returns inform
    Handles a message sent to a list (Those that can make loop and those containing a command are 
    rejected). This function can call various functions : \begin{itemize}
      \item List::distribute\_msg() for distribution (see \ref {list-distribute-msg}, page~\pageref {list-distribute-msg})
-     \item List::send\_auth() for confirmation (see \ref {list-send-auth}, page~\pageref {list-send-auth})
-     \item List::send\_to\_editor() for moderation(see \ref {list-send-to-editor}, page~\pageref {list-send-to-editor}).
+     \item List::send\_auth() for authentification or topic tagging by message sender(see \ref {list-send-auth}, page~\pageref {list-send-auth})
+     \item List::send\_to\_editor() for moderation or topic tagging by list moderator(see \ref {list-send-to-editor}, page~\pageref {list-send-to-editor}).
      \item List::automatic\_tag() for automatic topic tagging (see \ref {list-automatic-tag}, page~\pageref {list-automatic-tag}).
    \end{itemize}
   
@@ -10608,7 +10647,8 @@ called by sympa::DoFile() function (see \ref {sympa-dofile},page~\pageref {sympa
 This script provides the web interface to \Sympa.
 
 do\_subscribe(), do\_signoff(), do\_add(), do\_del(), do\_change\_email(), do\_reject(),
-do\_send\_mail(), do\_sendpasswd(), do\_remind(), do\_set(), do\_send\_me().
+do\_send\_mail(), do\_sendpasswd(), do\_remind(), do\_set(), do\_send\_me(), do\_request\_topic(),
+do\_tag\_topic\_by\_sender().
 
 \subsubsection {\large{do\_subscribe()}}
 \label{wwsympa-do-subscribe}
@@ -10674,9 +10714,10 @@ do\_send\_mail(), do\_sendpasswd(), do\_remind(), do\_set(), do\_send\_me().
 \label{wwsympa-do-distribute}
 \index{wwsympa::do\_distribute()}
 
-  Distributes moderated messages by sending a command remind to sympa.pl. For it, it calls mail::mail\_file()
+  Distributes moderated messages by sending a command DISTRIBUTE to sympa.pl. For it, it calls mail::mail\_file()
  (see \ref {mail-mail-file}, page~\pageref {mail-mail-file}). As it is in a Web context, the message will be 
- set in spool.\begin{itemize} 
+ set in spool. In a context of message topic, tags the message by calling to function List::tag\_topic() 
+ (see \ref {list-tag-topic}, page~\pageref {list-tag-topic}).\begin{itemize} 
    \item \textbf{IN} : -
    \item \textbf{OUT} : 'loginrequest' \(\mid\) 'modindex'
   \end{itemize}    
@@ -10692,16 +10733,36 @@ do\_send\_mail(), do\_sendpasswd(), do\_remind(), do\_set(), do\_send\_me().
    \item \textbf{OUT} : 'loginrequest' \(\mid\) 'info'
   \end{itemize}    
 
-\subsubsection {\large{do\_sendpasswd()}}
-\label{wwsympa-do-sendpasswd}
-\index{wwsympa::do\_sendpasswd()}
+\subsubsection {\large{do\_send\_mail()}}
+\label{wwsympa-do-send-mail}
+\index{wwsympa::do\_send\_mail()}
 
-  Sends a message to a user, containing his password, by sending him template
-  'sendpasswd'.\begin{itemize} 
+  Sends a message to a list by the Web interface.
+  It uses mail::mail\_file() (see \ref {mail-mail-file}, page~\pageref {mail-mail-file})
+  to do it. As it is in a Web context, the message will be set in spool.\begin{itemize} 
    \item \textbf{IN} : -
-   \item \textbf{OUT} : 'loginrequest' \(\mid\) 'remindpasswd' \(\mid\) 1
+   \item \textbf{OUT} : 'loginrequest' \(\mid\) 'info'
   \end{itemize}    
 
+\subsubsection {\large{do\_request\_topic()}}
+\label{wwsympa-do-request-topic()}
+\index{wwsympa::do\_request\_topic()}
+
+  Allows a sender to tag his mail in message topic context.\begin{itemize} 
+   \item \textbf{IN} : -
+   \item \textbf{OUT} : 1
+  \end{itemize}    
+
+\subsubsection {\large{do\_tag\_topic\_by\_sender()}}
+\label{wwsympa-do-tag-topic-by-sender()}
+\index{wwsympa::do\_tag\_topic\_by\_sender()}
+
+  Tags a message by its sender by calling List::tag\_topic() and allows its diffusion by sending a command CONFIRM 
+  to sympa.pl.
+  \begin{itemize} 
+   \item \textbf{IN} : -
+   \item \textbf{OUT} : 'info'
+  \end{itemize}    
 
 \subsubsection {\large{do\_remind()}}
 \label{wwsympa-do-remind}
@@ -10770,12 +10831,12 @@ do\_send\_mail(), do\_sendpasswd(), do\_remind(), do\_set(), do\_send\_me().
 \label{tools-get-array-from-splitted-string}
 \index{tools::get\_array\_from\_splitted\_string()}  
 
-  Return an array made on a string splited by ','.
+  Return an array made from a string splitted by ','.
  It removes spaces.
 
    \textbf{IN} : \lparam{string}(+): string to split
 
-   \textbf{OUT} : ref(ARRAY) - splitted string
+   \textbf{OUT} : ref(ARRAY) - 
 
 \subsubsection {\large{diff\_on\_arrays()}}
 \label{tools-diff-on-arrays}
@@ -10796,6 +10857,112 @@ Makes set operation on arrays seen as set (with no double) :
        \item intersection : A \(\cap\) B
        \item union : A \(\cup\) B
      \end{itemize}
+
+\subsubsection {\large{clean\_msg\_id()}}
+\label{tools-clean-msg-id}
+\index{tools::clean\_msg\_id()}  
+
+  Cleans a msg\_id to use it without '\\n', '\\s', < and >.
+
+   \textbf{IN} : \lparam{msg\_id}(+): the message id
+
+   \textbf{OUT} : the clean msg\_id
+
+\subsubsection {\large{clean\_email()}}
+\label{tools-clean-email}
+\index{tools::clean\_email()}  
+
+  Lower-case it and remove leading and trailing spaces.
+
+   \textbf{IN} : \lparam{msg\_id}(+): the email
+
+   \textbf{OUT} : the clean email
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%% Message.pm %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section {Message.pm}
+\index{Message.pm}
+
+ This module provides objects to encapsulate file message in order to prevent it from its alteration
+ for using signatures.
+
+\subsubsection {\large{new()}}
+\label{message-new}
+\index{message::new()}  
+
+  Creates an object Message and initialize it :
+  \begin{itemize}
+    \item \lparam{msg} : ref(MIME::Entity)
+    \item \lparam{altered} \emph{if the message is altered} 
+    \item \lparam{filename} : the file containing the message
+    \item \lparam{size} : the message size
+    \item \lparam{sender} : the first email address, in the 'From' field
+    \item \lparam{decoded\_subject} : the 'Subject' field decoded by MIME::Words::decode\_mimewords
+    \item \lparam{subject\_charset} : the charset used to encode the 'Subject' field
+    \item \lparam{rcpt} : the 'X-Sympa-To' field
+    \item \lparam{list} : ref(List) \emph{if it is a message no addressed to \Sympa or a listmaster} 
+    \item \lparam{topic} : the 'X-Sympa-Topic' field. 
+    \item \emph{in a 'openssl' context - decrypt message} : \begin{itemize}
+      \item \lparam{smime\_crypted} : 'smime\_crypted' \emph{if it is in a 'openssl' context} 
+      \item \lparam{orig\_msg} : ref(MIME::Entity) - crypted message
+      \item \lparam{msg} : ref(MIME::Entity) - decrypted message (see tools::smime\_decrypt())
+      \item \lparam{msg\_as\_string} : string - decrypted message (see tools::smime\_decrypt())
+      \end{itemize}	
+    \item \emph{in a 'openssl' context - check signature} : \begin{itemize}	
+      \item \lparam{protected} : 1 \emph{if the message should not be altered} 
+      \item \lparam{smime\_signed} : 1 \emph{if the message is signed} 
+      \item \lparam{smime\_subject} : ref(HASH)\emph{if the message is signed} - information on the signer
+	see tools::smime\_parse\_cert().
+      \end{itemize}
+   \end{itemize}
+
+   \textbf{IN} : 
+   \begin{enumerate}
+      \item \lparam{pkg}(+):  Message
+      \item \lparam{file}(+):  the message file
+   \end{enumerate}
+
+   \textbf{OUT} :   ref(Message)
+
+\subsubsection {\large{dump()}}
+\label{message-dump}
+\index{message::dump()}  
+
+Dump the message object in the file descriptor \$output
+
+   \textbf{IN} : 
+   \begin{enumerate}
+      \item \lparam{self}(+):  ref(Message)
+      \item \lparam{output}(+): file descriptor  
+   \end{enumerate}
+
+   \textbf{OUT} :  '1'
+ 
+\subsubsection {\large{add\_topic()}}
+\label{message-add-topic}
+\index{message::add\_topic()}  
+
+Adds the message topic in the Message object (\lparam{topic'} and adds
+the 'X-Sympa-Topic' field in the ref(MIME::Entity) \lparam{msg'}.
+
+   \textbf{IN} : 
+   \begin{enumerate}
+      \item \lparam{self}(+):  ref(Message)
+      \item \lparam{topic}(+): string splitted by ',' - list of topic 
+   \end{enumerate}
+
+   \textbf{OUT} :  '1'
+ 
+\subsubsection {\large{get\_topic()}}
+\label{message-get-topic}
+\index{message::get\_topic()}  
+
+Returns the topic(s) of the message
+
+   \textbf{IN} : \lparam{self}(+):  ref(Message)
+
+   \textbf{OUT} :  '' \emph{if no message topic} | string splitted by ',' \emph{if message topic}
+ 
 
 
 
