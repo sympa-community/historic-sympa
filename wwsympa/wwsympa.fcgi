@@ -4063,7 +4063,7 @@ sub do_remindpasswd {
 #  do_modindex
 ####################################################
 #  Web page for an editor to moderate documents and
-#  mail and/or tag mail
+#  and/or to tag message in message topic context
 # 
 # IN : -
 #
@@ -4478,7 +4478,7 @@ sub do_remindpasswd {
 #  do_distribute
 ####################################################
 #  Moderation of messages : distributes moderated 
-#  messages.
+#  messages and tag it in message moderation context
 # 
 # IN : -
 #
@@ -4580,7 +4580,7 @@ sub do_remindpasswd {
 #  do_viewmod
 ####################################################
 #  Web page for an editor to moderate a mail and/or 
-#  tag it
+#  to tag it in message topic context
 # 
 # IN : -
 #
@@ -12205,7 +12205,8 @@ sub d_test_existing_and_rights {
 ####################################################
 #  do_request_topic
 ####################################################
-#  Web page for a sender to tag his mail
+#  Web page for a sender to tag his mail in message 
+#  topic context.
 # 
 # IN : -
 #
@@ -12272,7 +12273,7 @@ sub d_test_existing_and_rights {
 ####################################################
 #  do_tag_topic_by_sender
 ####################################################
-#  Tag a mail by its sender : tag the mail and send
+#  Tag a mail by its sender : tag the mail and 
 #  send a command CONFIRM for it
 # 
 # IN : -

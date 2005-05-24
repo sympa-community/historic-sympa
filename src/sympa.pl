@@ -1260,16 +1260,16 @@ sub DoMessage{
     
     ## List and host.
     my($listname, $host) = split(/[@\s]+/, $which);
-
+    
     my $hdr = $message->{'msg'}->head;
     
     my $messageid = $hdr->get('Message-Id');
-
+    
     my $sender = $message->{'sender'};
-
+    
     ## Search for the list
     my $list = new List ($listname);
- 
+    
     ## List unknown
     unless ($list) {
 	&do_log('notice', 'Unknown list %s', $listname);
@@ -1294,7 +1294,7 @@ sub DoMessage{
     
     ## Now check if the sender is an authorized address.
     
-    do_log('info', "Processing message for %s with priority %s, %s", $listname,$list->{'admin'}{'priority'}, $messageid );
+    &do_log('info', "Processing message for %s with priority %s, %s", $listname,$list->{'admin'}{'priority'}, $messageid );
     
     my $conf_email = &Conf::get_robot_conf($robot, 'sympa');
     if ($sender =~ /^(mailer-daemon|sympa|listserv|majordomo|smartlist|mailman|$conf_email)(\@|$)/mio) {
@@ -1306,18 +1306,17 @@ sub DoMessage{
 	do_log('notice', 'Found known Message-ID, ignoring message which would cause a loop');
 	return undef;
     }
-    
+	
     # Reject messages with commands
     if ( &Conf::get_robot_conf($robot,'misaddressed_commands') =~ /reject/i) {
 	## Check the message for commands and catch them.
 	if (&tools::checkcommand($message->{'msg'}, $sender, $robot)) {
 	    &do_log('notice', 'Found command in message, ignoring message');
-	    
 	    return undef;
 	}
     }
 	
-	my $admin = $list->{'admin'};
+    my $admin = $list->{'admin'};
     return undef unless $admin;
     
     my $customheader = $admin->{'custom_header'};
@@ -1329,12 +1328,11 @@ sub DoMessage{
 	return undef;
     }
     
-	## Check if the message is too large
+    ## Check if the message is too large
     my $max_size = $list->get_max_size() ||  &Conf::get_robot_conf($robot,'max_size');
     if ($max_size && $message->{'size'} > $max_size) {
-		
 	&do_log('notice', 'Message for %s from %s rejected because too large (%d > %d)', $listname, $sender, $message->{'size'}, $max_size);
-
+	
 	unless ($list->send_file('message_report',$sender,$robot,{'to' => $sender,
 								  'type' => 'message_too_large',
 								  'msg' => $message->{'msg'}->as_string})) {
@@ -1349,7 +1347,7 @@ sub DoMessage{
     my $context =  {'listname' => $listname,
 		    'sender' => $sender,
 		    'message' => $message };
-
+	
     ## list msg topic	
     if ($list->is_there_msg_topic()) {
 
@@ -1375,7 +1373,7 @@ sub DoMessage{
 	$context->{'topic'} = $context->{'topic_auto'} || $context->{'topic_sender'} || $context->{'topic_editor'};
 	$context->{'topic_needed'} = (!$context->{'topic'} && $list->is_msg_topic_tagging_required());
     }
-
+	
     ## Call scenarii : auth_method MD5 do not have any sense in send
     ## scenarii because auth is perfom by distribute or reject command.
     
@@ -1385,11 +1383,17 @@ sub DoMessage{
     }else{
 	$action = &List::request_action ('send', 'smtp',$robot,$context);
     } 
-
+	
     return undef unless (defined $action);
 
+    ## message topic context	
+    if (($action =~ /^do_it/) && ($context->{'topic_needed'})) {
+	$action = "editorkey";
+    }
+
     if (($action =~ /^do_it/) || ($main::daemon_usage eq 'message')) {
-	    
+
+
 	if (($main::daemon_usage eq  'message') || ($main::daemon_usage eq  'command_and_message')) {
 	    my $numsmtp = $list->distribute_msg($message);
 	    

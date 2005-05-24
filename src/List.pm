@@ -2371,9 +2371,12 @@ sub distribute_msg {
 ####################################################
 # selects subscribers according to their reception 
 # mode in order to distribute a message to a list
-# and sends the message to them
+# and sends the message to them. For subscribers in reception mode 'mail', 
+# and in a msg topic context, selects only one who are subscribed to the topic
+# of the message.
+# 
 #  
-# IN : -$self (+): ref(List)
+# IN : -$self (+): ref(List)  
 #      -$message (+): ref(Message)
 # OUT : -$numsmtp : number of sendmail process 
 #       | 0 : no subscriber for sending message in list
@@ -2595,57 +2598,6 @@ sub send_msg {
 
     return $nbr_smtp;
 }
-
-####################################################
-# select_subscribers_for_topic
-####################################################
-# Select users subscribed to a topic in the topic list
-# 
-# IN : -$self(+) : ref(List)
-#      -$string_topic(+) : string splitted by ','
-#      -$subscribers(+) : ref(ARRAY)
-#
-# OUT : @selected_users : ok
-#       | 0 if no subscriber for sending digest
-#
-####################################################
-sub select_subscribers_for_topic {
-    my ($self,$string_topic,$subscribers) = @_;
-    &do_log('debug3', 'List::select_subscribers_for_topic(%s, %s)', $self->{'name'},$string_topic); 
-    
-    my @selected_users;
-    my $msg_topics;
-
-    if ($string_topic) {
-	$msg_topics = &tools::get_array_from_splitted_string($string_topic);
-    }
-
-    foreach my $user (@$subscribers) {
-
-	# user topic
-	my $info_user = $self->get_subscriber($user);
-
-	if ($info_user->{'reception'} ne 'mail') {
-	    push @selected_users,$user;
-	    next;
-	}
-	my $user_topics = &tools::get_array_from_splitted_string($info_user->{'topics'});
-
-	if ($string_topic) {
-	    my $result = &tools::diff_on_arrays($msg_topics,$user_topics);
-	    if ($#{$result->{'intersection'}} >=0 ) {
-		push @selected_users,$user;
-	    }
-	}else {
-	    my $result = &tools::diff_on_arrays(['other'],$user_topics);
-	    if ($#{$result->{'intersection'}} >=0 ) {
-		push @selected_users,$user;
-	    }
-	}
-    }
-    return @selected_users;
-}
-
 
 
 ####################################################
@@ -3200,7 +3152,7 @@ sub send_to_editor {
 # The message for distribution is copied in the authqueue 
 # spool in order to wait for confirmation by its sender.
 # This message is named with a key.
-# In context of msg_topic defined the sender must tag it 
+# In context of msg_topic defined, the sender must tag it 
 # for the confirmation
 #  
 # IN : -$self (+): ref(List)
@@ -3704,11 +3656,12 @@ sub send_notify_to_user{
     }
     return 1;
 }
+#                                                                                       #             
+#                                                                                       #  
+#                                                                                       #
+######################### END functions for sending messages ############################
 
 
-
-
-################################################## END functions for sending messages ###
 
 ## genererate a md5 checksum using private cookie and parameters
 sub compute_auth {
@@ -10526,7 +10479,7 @@ sub available_reception_mode {
 # 
 # IN : -$self (+): ref(List)
 #      
-# OUT : 1 | 0
+# OUT : 1 - some are defined | 0 - not defined
 ####################################################
 sub is_there_msg_topic {
     my ($self) = @_;
@@ -10550,7 +10503,7 @@ sub is_there_msg_topic {
 # 
 # IN : -$self (+): ref(List)
 #      -$topic (+): string
-# OUT : -$topic if it is ok
+# OUT : -$topic if it is available 
 ####################################################
 sub is_available_msg_topic {
     my ($self,$topic) = @_;
@@ -10568,7 +10521,7 @@ sub is_available_msg_topic {
 ####################################################
 # get_available_msg_topic
 ####################################################
-#  Return an array of available msg topic
+#  Return an array of available msg topics (msg_topic.name)
 # 
 # IN : -$self (+): ref(List)
 #
@@ -10590,7 +10543,8 @@ sub get_available_msg_topic {
 ####################################################
 # is_msg_topic_tagging_required
 ####################################################
-#  
+# Checks for the list parameter msg_topic_tagging
+# if it is set to 'required'
 #
 # IN : -$self (+): ref(List)
 #
@@ -10642,13 +10596,17 @@ sub automatic_tag {
 ####################################################
 # compute_topic
 ####################################################
-#  Compute the topic on the message. The topic is got
-#  from applying a regexp on the message
+#  Compute the topic of the message. The topic is got
+#  from applying a regexp on the message, regexp 
+#  based on keywords defined in list_parameter
+#  msg_topic.keywords. The regexp is applied on the 
+#  subject and/or the body of the message according
+#  to list parameter msg_topic_keywords_apply_on
 #
 # IN : -$self (+): ref(List)
 #      -$msg (+): ref(MIME::Entity)
 #
-# OUT : string of tag(s)
+# OUT : string of tag(s), can be separated by ',', can be empty
 ####################################################
 sub compute_topic {
     my ($self,$msg) = @_;
@@ -10698,8 +10656,8 @@ sub compute_topic {
     }
 
     ## TAGGING INHERITED BY THREAD
-#
-#  todo
+    #
+    #  todo
     
     # for no double
     foreach my $k (keys %topic_hash) {
@@ -10720,12 +10678,12 @@ sub compute_topic {
 #  tag the message by creating the msg topic file
 # 
 # IN : -$self (+): ref(List)
-#      -$msg_id (+): string
-#      -$topic_list (+): string (with ,)
+#      -$msg_id (+): string, msg_id of the msg to tag
+#      -$topic_list (+): string (splitted by ',')
 #      -$method (+) : 'auto'|'editor'|'sender'
-#         the method for tagging
+#         the method used for tagging
 #
-# OUT : msg topic filename
+# OUT : string - msg topic filename
 ####################################################
 sub tag_topic {
     my ($self,$msg_id,$topic_list,$method) = @_;
@@ -10756,18 +10714,20 @@ sub tag_topic {
 ####################################################
 # load_msg_topic_file
 ####################################################
-#  Load msg topic file and return contained information 
+#  Looks for a msg topic file from the msg_id of 
+# the message, loads it and return contained information 
 # in a HASH
 #
 # IN : -$self (+): ref(List)
-#      -$msg_id : the message ID 
+#      -$msg_id (+): the message ID 
+#      -$robot (+): the robot
 #
 # OUT : undef 
 #     | ref(HASH) file contents : 
-#                   - topic : string of topic name(s)
-#                   - method : editor|sender|auto - for tagging
-#                   - msg_id : the msg_id
-#                   - filename : name of the file containing these informations 
+#         - topic : string - list of topic name(s)
+#         - method : editor|sender|auto - method used to tag
+#         - msg_id : the msg_id
+#         - filename : name of the file containing these informations 
 ####################################################
 sub load_msg_topic_file {
     my ($self,$msg_id,$robot) = @_;
@@ -10827,12 +10787,13 @@ sub load_msg_topic_file {
 #      -$new_msg_topic (+): ref(ARRAY) - new state 
 #        of msg_topic parameters
 #
-# OUT : -0 if no deleting 
-#       -1 if some topics are deleted
+# OUT : -0 if no subscriber topics have been deleted
+#       -1 if some subscribers topics have been deleted 
 ##################################################### 
 sub modifying_msg_topic_for_subscribers(){
     my ($self,$new_msg_topic) = @_;
     &do_log('debug4',"List::modifying_msg_topic_for_subscribers($self->{'name'}");
+    my $deleted = 0;
 
     my @old_msg_topic_name;
     foreach my $msg_topic (@{$self->{'admin'}{'msg_topic'}}) {
@@ -10865,16 +10826,75 @@ sub modifying_msg_topic_for_subscribers(){
 						'topics' => join(',',@{$topics->{'added'}})})) {
 			&do_log('err',"List::modifying_msg_topic_for_subscribers($self->{'name'} : impossible to update user '$subscriber->{'email'}'");
 		    }
+		    $deleted = 1;
 		}
 	    }
 	}
-	return 1;
     }
+    return 1 if ($deleted);
     return 0;
 }
 
+####################################################
+# select_subscribers_for_topic
+####################################################
+# Select users subscribed to a topic that is in
+# the topic list incoming when reception mode is 'mail', and the other
+# subscribers (recpetion mode different from 'mail')
+# 
+# IN : -$self(+) : ref(List)
+#      -$string_topic(+) : string splitted by ','
+#                          topic list
+#      -$subscribers(+) : ref(ARRAY) - list of subscribers(emails)
+#
+# OUT : @selected_users
+#     
+#
+####################################################
+sub select_subscribers_for_topic {
+    my ($self,$string_topic,$subscribers) = @_;
+    &do_log('debug3', 'List::select_subscribers_for_topic(%s, %s)', $self->{'name'},$string_topic); 
+    
+    my @selected_users;
+    my $msg_topics;
 
-################### end topics ################################"
+    if ($string_topic) {
+	$msg_topics = &tools::get_array_from_splitted_string($string_topic);
+    }
+
+    foreach my $user (@$subscribers) {
+
+	# user topic
+	my $info_user = $self->get_subscriber($user);
+
+	if ($info_user->{'reception'} ne 'mail') {
+	    push @selected_users,$user;
+	    next;
+	}
+	my $user_topics = &tools::get_array_from_splitted_string($info_user->{'topics'});
+
+	if ($string_topic) {
+	    my $result = &tools::diff_on_arrays($msg_topics,$user_topics);
+	    if ($#{$result->{'intersection'}} >=0 ) {
+		push @selected_users,$user;
+	    }
+	}else {
+	    my $result = &tools::diff_on_arrays(['other'],$user_topics);
+	    if ($#{$result->{'intersection'}} >=0 ) {
+		push @selected_users,$user;
+	    }
+	}
+    }
+    return @selected_users;
+}
+
+#                                                                                         #
+#                                                                                         # 
+#                                                                                         #
+########## END - functions for message topics #############################################
+
+
+
 
 sub _urlize_part {
     my $message = shift;
