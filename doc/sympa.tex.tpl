@@ -738,7 +738,7 @@ in \file {sympa.conf}.
 	by \file {archived.pl}.
 
 	\item \dir {[SPOOLDIR]/topic/}\\
-	For storing files containing information about messages topics.
+	For storing topic information files. 
 
 \end {itemize}
 
@@ -4224,7 +4224,9 @@ Rules are defined as follows :
                   | [remote_host] | [remote_addr] | [user_attributes-><user_attributes_keyword>]
 	 	  | [subscriber-><subscriber_key_word>] | [list-><list_key_word>] | [env-><env_var>]
 		  | [conf-><conf_key_word>] | [msg_header-><smtp_key_word>] | [msg_body] 
-	 	  | [msg_part->type] | [msg_part->body] | [msg_encrypted] | [is_bcc] | [current_date] | <string>
+	 	  | [msg_part->type] | [msg_part->body] | [msg_encrypted] | [is_bcc] | [current_date] 
+		  | [topic-auto] | [topic-sender,] | [topic-editor] | [topic] | [topic-needed]
+		  | <string>
 
 [is_bcc] ::= set to 1 if the list is neither in To: nor Cc:
 
@@ -4233,6 +4235,16 @@ Rules are defined as follows :
 [previous_email] ::= old email when changing subscription email in preference page. 
 
 [msg_encrypted] ::= set to 'smime' if the message was S/MIME encrypted
+
+[topic-auto] ::= topic of the message if it has been automatically tagged
+
+[topic-sender] ::= topic of the message if it has been tagged by sender
+
+[topic-editor] ::= topic of the message if it has been tagged by editor
+
+[topic]  ::= topic of the message
+
+[topic-needed] ::= the message has not got any topic and message topic are required for the list
 
 <date> ::= '<date_element> [ +|- <date_element>]'
 
@@ -4897,7 +4909,8 @@ it.
 \WWSympa's homepage shows a list of topics for classifying
 mailing lists. This is dynamically generated using the different lists'
 \lparam {topics} configuration parameters. A list may appear 
-in multiple categories.
+in multiple categories (This parameter is different from \lparam{msg\_topic}
+used to tag list messages)
 
 The list of topics is defined in the \file {topics.conf} configuration
 file, located in the \dir {[ETCDIR]} directory. The format of this file is 
@@ -5296,8 +5309,8 @@ are:
         {digest}, \textit {summary}, \textit {notice}, \textit {txt},
         \textit {html}, \textit {urlize}, \textit {not\_me} .
         In normal receive mode, the receive attribute
-        for a subscriber is not displayed.  See the \mailcmd
-        {SET~LISTNAME~SUMMARY} (\ref {cmd-setsummary}, 
+        for a subscriber is not displayed. In this mode subscription to message topics is available.
+        See the \mailcmd {SET~LISTNAME~SUMMARY} (\ref {cmd-setsummary}, 
         page~\pageref {cmd-setsummary}),
         the \mailcmd {SET~LISTNAME~NOMAIL} command (\ref {cmd-setnomail},
         page~\pageref {cmd-setnomail}), and the \lparam {digest}
@@ -6572,7 +6585,8 @@ a free form text limited to one line.
 
 This parameter allows the classification of lists. You may define multiple 
 topics as well as hierarchical ones. \WWSympa's list of public lists 
-uses this parameter.
+uses this parameter. This parameter is different from (\lparam{msg\_topic})
+parameter used to tag mails.
 
 \subsection {visibility }
     \label {par-visibility}
@@ -7782,6 +7796,89 @@ visibility	noconceal
 \end{verbatim}
 \end {quote}
 
+\subsection {msg\_topic}
+
+    	\label {par-msg-topic}
+	\index{msg-topic}
+
+	The \lparam {msg\_topic} parameter starts a paragraph to
+	define a message topic used to tag a message. Foreach message topic, 
+        you have to define a new paragraph.(See \ref {msg-topics}, page~\pageref {msg-topics})
+
+\textit {Example:} 
+\begin {quote}
+\begin{verbatim}
+msg_topic
+name os
+keywords linux,mac-os,nt,xp
+title Operating System
+\end{verbatim}
+\end {quote}
+
+Parameter \lparam{msg\_topic.name} and \lparam{msg\_topic.title} are mandatory. \lparam{msg\_topic.title} is used
+on the web interface. The \lparam{msg\_topic.keywords} parameter allows to select automatically message topic by searching 
+keywords in the message. 
+
+
+N.B.: In a family context, \lparam{msg\_topic.keywords} parameter is uncompellable.
+
+\subsection {msg\_topic\_key\_apply\_on}
+
+    	\label {par-msg-topic-key-apply-on}
+	\index{msg-topic-key-apply-on}
+
+	The \lparam {msg\_topic\_key\_apply\_on} parameter defines on which part of the message is used to perform
+	automatic tagging.(See \ref {msg-topics}, page~\pageref {msg-topics})
+
+\textit {Example:} 
+\begin {quote}
+\begin{verbatim}
+msg_topic_key_apply_on subject
+\end{verbatim}
+\end {quote}  
+Its values can be : subject \(\mid\) body\(\mid\) subject\_and\_body.
+
+\subsection {msg\_topic\_tagging}
+
+    	\label {par-msg-topic-tagging}
+	\index{msg-topic-tagging}
+
+	The \lparam {msg\_topic\_tagging} parameter indicates if the tagging is optional or required for a list.
+	(See \ref {msg-topics}, page~\pageref {msg-topics})
+
+\textit {Example:} 
+\begin {quote}
+\begin{verbatim}
+msg_topic_tagging optional
+\end{verbatim}
+\end {quote}  
+Its values can be : optional \(\mid\) required
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 \subsection {cookie}
 
@@ -8159,6 +8256,52 @@ date_epoch 1090911878
 \end{verbatim}
 \end {quote}
 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Reception mode 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\cleardoublepage
+\chapter {Reception mode}
+    \label {reception-mode}
+    \index{reception mode}
+
+\section {Message topics}
+\label{msg-topics}
+\index{message topic}
+
+A list can be configured to have message topics (this notion is different from topics used to class
+mailing lists). Users can subscribe to these message topics in order to receive a subset of distributed messages :
+a message can have one or more topics and subscribers will receive only messages that have been 
+tagged with a topic they are subscribed to. A message can be tagged automatically, by the message 
+sender or by the list moderator.
+
+\subsection {Message topic definition in a list}
+
+Available message topics are defined by list parameters. Foreach new message topic, create a new \lparam{msg\_topic} paragraph
+that defines the name and the title of the topic. To use automatic tagging, you should define keywords 
+(See (\ref {par-msg-topic}, page~\pageref {par-msg-topic}). To define which part of the message is used for automatic tagging
+you have to define \lparam{msg\_topic\_key\_apply\_on} list parameter (See \ref {par-msg-topic-key-apply-on}, 
+page~\pageref {par-msg-topic-key-apply-on}). Tagging a message can be optional or it can be required, depending on the
+\lparam{msg\_topic\_tagging} list parameter (See (\ref {par-msg-topic-tagging},page~\pageref {par-msg-topic-tagging}).
+
+\subsection {Subscribing to message topic for list subscribers}
+
+This functionnality is only available via ``normal'' reception mode. Subscribers can select message topic to receive messages tagged with this topic.
+To receive messages that were not tagged, users can subscribe to the topic ``other''. Message topics selected by a subscriber are stored in \Sympa 
+database (subscriber\_table table).
+
+\subsection {Message tagging}
+
+First of all, if one or more \lparam{msg\_topic.keywords} are defined, \Sympa tries to tag messages automatically. 
+To trigger manual tagging, by message sender or list moderator, on the web interface, \Sympa uses authorization scenarios : if the resulted action is ``editorkey'' 
+(for example in scenario send.editorkey), the list moderator is asked to tag the message. 
+If the resulted action is ``request\_auth'' (for example in scenario send.privatekey), the message sender is asked to tag the message. 
+The following variables are available as scenario variables to customize tagging : topic, topic-sender, topic-editor, topic-auto, topic-needed.
+(See (\ref {scenarios}, page~\pageref {scenarios}) If message tagging is required and if it was not yet performed, \Sympa will ask to the list moderator.
+
+
+Tagging a message will create a topic information file in the \dir {[SPOOLDIR]/topic/} spool. Its name is based on the listname and the Message-ID. 
+For message distribution, a ``X-Sympa-Topic'' field is added to the message to allow members to use mail filters.
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -9128,6 +9271,8 @@ Most user commands have three-letter abbreviations (e.g. \texttt
         {SET~LISTNAME~NOMAIL} command (\ref {cmd-setnomail},
         page~\pageref {cmd-setnomail}) and the \lparam {reception}
         parameter (\ref {par-reception}, page~\pageref {par-reception}).
+	Moreover, this mode allows message topic subscription  
+	(\ref {msg-topics}, page~\pageref {msg-topics})
 
     \item  \mailcmd {SET} \textit {listname} \texttt {CONCEAL}
         \label {cmd-setconceal}
@@ -9960,7 +10105,7 @@ page~\pageref {msg-topic-keywords-apply-on}). Regexp is based on \lparam{msg\_to
 \label{list-tag-topic}
 \index{List::tag\_topic()}
 
-Tags the message by creating its message topic file in the \dir {[SPOOLDIR]/topic/} spool. 
+Tags the message by creating its topic information file in the \dir {[SPOOLDIR]/topic/} spool. 
 The file contains the topic list and the method used to tag the message. Here is the format :
 \begin {quote}
 \begin{verbatim}
@@ -9977,13 +10122,13 @@ METHOD editor|sender|auto
       \item \lparam{method} (+): 'auto' \(\mid\)'editor'\(\mid\)'sender' - the method used for tagging
    \end{enumerate}
 
-   \textbf{OUT} : name of the created file (\lparam{directory/listname.msg\_id})
+   \textbf{OUT} : name of the created topic information file (\file{directory/listname.msg\_id})
 
 \subsubsection {\large{load\_msg\_topic\_file()}}
 \label{list-load-msg-topic-file}
 \index{List::load\_msg\_topic\_file()}
 
-Search and load msg topic file corresponding to the message ID  (\lparam{directory/listname.msg\_id}). It returns information contained inside.
+Search and load msg topic file corresponding to the message ID  (\file{directory/listname.msg\_id}). It returns information contained inside.
 
    \textbf{IN} : 
    \begin{enumerate}
@@ -10027,7 +10172,7 @@ Search and load msg topic file corresponding to the message ID  (\lparam{directo
 \index{List::select\_subscribers\_for\_topic()}
 
  Selects subscribers that are subscribed to one or more topic
- appearing in the topic list incoming when their recpetion mode is 'mail', and selects the other subscribers 
+ appearing in the topic list incoming when their reception mode is 'mail', and selects the other subscribers 
  (reception mode different from 'mail'). This function is used by List::send\_msg() function during message 
  diffusion (see \ref {list-send-msg}, page~\pageref {list-send-msg}).
 
