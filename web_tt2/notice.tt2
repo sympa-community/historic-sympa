@@ -65,6 +65,9 @@
 [% ELSIF notice.msg == 'subscribers_updated' %]
 [%|loc%]The subscribers have been updated[%END%]
 
+[% ELSIF notice.msg == 'subscribers_noticed_deleted_topics' %]
+[%|loc%]Concerned subscribers have been noticed about deleted topics[%END%]
+
 [% ELSIF notice.msg == 'you_have_been_authenticated' %]
 [%|loc%]You have been authenticated[%END%]
 
@@ -77,8 +80,8 @@
 [% notice.msg %]
 
 [% END %]
-</strong>
 <br />
-</div>
 [% END %]
+</strong>
+</div>
 <!-- end notice.tt2 -->

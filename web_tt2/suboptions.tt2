@@ -19,7 +19,39 @@
      </td>
      [% PROCESS 'button_footer.tt2' %]
 
-     <br />
+     <br/>
+
+     [%IF available_topics %]	
+     [%|loc%]Thematic subscription :[%END%]		
+       [%IF possible_topic %] 
+	 <BLOCKQUOTE>	
+	 [% FOREACH t = available_topics %]
+	    [%IF topic_checked.${t.name} %]	
+            <input type="checkbox" name="topic_[%t.name%]" value="1" checked="1"> [% t.title %] </input>
+	    [%ELSE%]
+	    <input type="checkbox" name="topic_[%t.name%]" value="1"> [% t.title %] </input>
+	    [%END%] 	
+	    <br/>
+	 [% END %]
+	    [%IF topic_checked.other %]
+	    <input type="checkbox" name="topic_other" value="1"  checked="1"/> [%|loc%]Other (no tagged mails) [%END%]
+            [%ELSE%]	
+            <input type="checkbox" name="topic_other" value="1" /> [%|loc%]Other (messages not tagged) [%END%] 	
+	    [%END%] 
+	   <br/>
+         </BLOCKQUOTE>
+ 
+	  [%IF sub_user_topic %]
+	     <input type="checkbox" name="no_topic" value="1"> [%|loc%]Disallow thematic subscription[%END%]</input>
+	     <br/>
+	  [%END%]
+      	
+       [%ELSE%]
+	 <BLOCKQUOTE><i>Only possible in "normal" reception mode</i></BLOCKQUOTE>
+       [%END%]
+     [%END%]	
+	 
+     <br/>
      [%|loc%]Visibility :[%END%]
      <select name="visibility">
         [% FOREACH r = visibility %]
@@ -27,7 +59,7 @@
         [% END %]
      </select>
 
-     <br />
+     <br/>
      <input type="submit" name="action_set" value="[%|loc%]Update[%END%]" />
      
 </form>

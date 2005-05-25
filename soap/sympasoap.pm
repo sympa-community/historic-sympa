@@ -531,8 +531,9 @@ sub signoff {
 	    
 	    ## Tell the owner somebody tried to unsubscribe
 	    if ($action =~ /notify/i) {
-		$list->send_notify_to_owner({'who' => $sender, 
-					     'type' => 'warn-signoff'});
+		unless ($list->send_notify_to_owner('warn-signoff',{'who' => $sender})) {
+		    &Log::do_log('err',"Unable to send notify 'warn-signoff' to $list->{'name'} listowner");
+		}
 	    }
 	    die SOAP::Fault->faultcode('Server')
 		->faultstring('Not allowed.')
@@ -544,15 +545,16 @@ sub signoff {
 
 	## Notify the owner
 	if ($action =~ /notify/i) {
-	    $list->send_notify_to_owner({'who' => $sender,
-					 'type' => 'signoff'});
+	    unless ($list->send_notify_to_owner('notice',{'who' => $sender,
+							  'command' => 'signoff'})) {
+		&Log::do_log('err',"Unable to send notify 'notice' to $list->{'name'} listowner");
+	    }
 	}
 
 	## Send bye.tpl to sender
-	my %context;
-	$context{'subject'} = sprintf(gettext("Unsubscribe from list %s"), $list->{'name'});
-	$context{'body'} = sprintf(gettext("You have been removed from list %s.\nThank you for using this list.\n"), $list->{'name'});
-	$list->send_file('bye', $sender, $robot, \%context);
+	unless ($list->send_file('bye', $sender, $robot,{})) {
+	    &Log::do_log('err',"Unable to send template 'bye' to $sender");
+	}
 	
 	$list->save();
 
@@ -622,16 +624,16 @@ sub subscribe {
 	  ->faultdetail("You don't have proper rights");
   }
   if ($action =~ /owner/i) {
-      push @msg::report, sprintf gettext("Your request of subscription/unssubscription has been forwarded to the list's
-owners for approval. You will receive a notification when you will have
-been subscribed (or unsubscribed) to the list.\n");
+       
       ## Send a notice to the owners.
       my $keyauth = $list->compute_auth($sender,'add');
-      $list->send_notify_to_owner({'who' => $sender,
+      unless ($list->send_notify_to_owner('subrequest',{'who' => $sender,
 				   'keyauth' => $list->compute_auth($sender,'add'),
 				   'replyto' => &Conf::get_robot_conf($robot, 'sympa'),
-				   'gecos' => $gecos,
-				   'type' => 'subrequest'});
+							'gecos' => $gecos})) {
+	  &Log::do_log('err',"Unable to send notify 'subrequest' to $list->{'name'} listowner");
+      }
+
 #      $list->send_sub_to_owner($sender, $keyauth, &Conf::get_robot_conf($robot, 'sympa'), $gecos);
       $list->store_susbscription_request($sender, $gecos);
       &Log::do_log('info', 'SOAP subscribe : %s from %s forwarded to the owners of the list (%d seconds)',$listname,$sender,time-$time_command);
@@ -697,17 +699,18 @@ been subscribed (or unsubscribed) to the list.\n");
 
       ## Now send the welcome file to the user
       unless ($quiet || ($action =~ /quiet/i )) {
-	  my %context;
-	  $context{'subject'} = sprintf(gettext("Welcome on list %s"), $list->{'name'});
-	  $context{'body'} = sprintf(gettext("Welcome on list %s"), $list->{'name'});
-	  $list->send_file('welcome', $sender, $robot, \%context);
+	  unless ($list->send_file('welcome', $sender, $robot,{})) {
+	      &Log::do_log('err',"Unable to send template 'bye' to $sender");
+	  }
       }
       
       ## If requested send notification to owners
       if ($action =~ /notify/i) {
-	  $list->send_notify_to_owner({'who' => $sender,
+	  unless ($list->send_notify_to_owner('notice',{'who' => $sender,
 				       'gecos' => $gecos,
-				       'type' => 'subscribe'});
+							'command' => 'subscribe'})) {
+	      &Log::do_log('err',"Unable to send notify 'notice' to $list->{'name'} listowner");
+	  }
       }
       &Log::do_log('info', 'SOAP subcribe : %s from %s accepted', $listname, $sender);
       

@@ -1,94 +1,438 @@
-<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2 Final//EN">
-
-<!--Converted with jLaTeX2HTML 2002-2-1 (1.70) JA patch-2.0
-patched version by:  Kenshi Muto, Debian Project.
-* modified by:  Shige TAKENO
-LaTeX2HTML 2002-2-1 (1.70),
-original version by:  Nikos Drakos, CBLU, University of Leeds
-* revised and updated by:  Marcus Hennecke, Ross Moore, Herb Swan
-* with significant contributions from:
-  Jens Lippmann, Marek Rouchal, Martin Wilck and others -->
-<HTML>
-<HEAD>
-<TITLE>この文書について...</TITLE>
-<META NAME="description" CONTENT="この文書について...">
-<META NAME="keywords" CONTENT="sympa">
-<META NAME="resource-type" CONTENT="document">
-<META NAME="distribution" CONTENT="global">
-
-<META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=EUC-JP">
-<META NAME="Generator" CONTENT="jLaTeX2HTML v2002-2-1 JA patch-2.0">
-<META HTTP-EQUIV="Content-Style-Type" CONTENT="text/css">
-
-<LINK REL="STYLESHEET" HREF="sympa.css">
-
-<LINK REL="previous" HREF="node26.html">
-<LINK REL="up" HREF="sympa.html">
-</HEAD>
-
-<BODY TEXT="#000000" BGCOLOR="#ffffff">
-<!--Navigation Panel-->
-<IMG WIDTH="37" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="next" SRC="next_g.png"> 
-<A NAME="tex2html1394"
-  HREF="sympa.html">
-<IMG WIDTH="26" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="up" SRC="up.png"></A> 
-<A NAME="tex2html1390"
-  HREF="node26.html">
-<IMG WIDTH="63" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="previous" SRC="prev.png"></A> 
-<A NAME="tex2html1396"
-  HREF="node1.html">
-<IMG WIDTH="65" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="contents" SRC="contents.png"></A> 
-<A NAME="tex2html1398"
-  HREF="node26.html">
-<IMG WIDTH="43" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="index" SRC="index.png"></A> 
-<BR>
-<B> :</B> <A NAME="tex2html1395"
-  HREF="sympa.html">Sympa Mailing Lists Management Software version</A>
-<B> :</B> <A NAME="tex2html1391"
-  HREF="node26.html">索引</A>
- &nbsp; <B>  <A NAME="tex2html1397"
-  HREF="node1.html">目次</A></B> 
- &nbsp; <B>  <A NAME="tex2html1399"
-  HREF="node26.html">索引</A></B> 
-<BR>
-<BR>
-<!--End of Navigation Panel-->
 
 <H1><A NAME="SECTION002700000000000000000">
-&#164;^3&#164;&#206;&#202;&#184; 12&#241;&#164;&#203;&#164;&#196;&#164;&#164;&#164;&#198;...</A>
+26. Using <I>Sympa</I> commands</A>
 </H1>
- <STRONG><FONT SIZE="+4"><B>Sympa 
-<BR><FONT SIZE="+3"><B>Mailing Lists Management Software 
-<BR>
-version 5.0b.1
-<BR></B></FONT></B></FONT></STRONG><P>
-この文書は<A HREF="http://www.latex2html.org/"><STRONG>LaTeX</STRONG>2<tt>HTML</tt></A> 翻訳プログラム Version 2002-2-1 (1.70)
+
 <P>
-Copyright &#169; 1993, 1994, 1995, 1996,
-<A HREF="http://cbl.leeds.ac.uk/nikos/personal.html">Nikos Drakos</A>, 
-Computer Based Learning Unit, University of Leeds,
-<BR>
-Copyright &#169; 1997, 1998, 1999,
-<A HREF="http://www.maths.mq.edu.au/~ross/">Ross Moore</A>, 
-Mathematics Department, Macquarie University, Sydney.
-<P>を<A HREF="http://takeno.iee.niit.ac.jp/~shige/TeX/latex2html/ltx2html.html">日本語化したもの</A>(
-2002-2-1 (1.70) JA patch-2.0 版)
+Users interact with <I>Sympa</I>, of course, when they send messages to
+one of the lists, but also indirectly through administrative requests
+(subscription, list of users, etc.).
+
 <P>
-Copyright &#169; 1998, 1999,
-<A HREF="http://www.topstudio.co.jp/~kmuto/">Kenshi Muto</A>, 
-Debian Project.
-<BR>
-Copyright &#169; 2001, 2002,
-<A HREF="http://takeno.iee.niit.ac.jp/~shige/">Shige TAKENO</A>, 
-Niigata Inst.Tech.
-<P>を用いて生成されました。
-<P>コマンド行は以下の通りでした。: <BR>
- <STRONG>latex2html</STRONG> <tt>-dir html -mkdir -tmp /tmp -verbosity 0 -local_icons sympa</tt>.
-<P>翻訳は root によって 平成17年3月8日 に実行されました。
-<BR><HR>
-<ADDRESS>
-root
-平成17年3月8日
-</ADDRESS>
-</BODY>
-</HTML>
+This section describes administrative requests, as well as interaction
+modes in the case of private and moderated lists.  Administrative
+requests are messages whose body contains commands understood by
+<I>Sympa</I>, one per line. These commands can be indiscriminately placed
+in the <A NAME="10760"><tex2html_anchor_invisible_mark></A><TT>Subject:</TT> or in the body of the message. The
+<A NAME="10763"><tex2html_anchor_invisible_mark></A><TT>To:</TT> address is generally the <TT>sympa<#10767#><#10767#>domain</TT>
+alias, although it is also advisable to recognize the <TT>listserv<#10769#><#10769#>domain</TT> address.
+
+<P>
+Example:
+
+<P>
+<BLOCKQUOTE>
+</BLOCKQUOTE><PRE><tex2html_verbatim_mark>verbatim392#</PRE><BLOCKQUOTE>
+</BLOCKQUOTE>
+
+<P>
+Most user commands have three-letter abbreviations (e.g. <TT>REV</TT> instead of <A NAME="10770"><tex2html_anchor_invisible_mark></A><TT>REVIEW</TT>).
+
+<P>
+
+<H1><A NAME="SECTION002710000000000000000">
+26.1 User commands</A>
+</H1>
+
+<P>
+
+<UL>
+<LI><A NAME="10773"><tex2html_anchor_invisible_mark></A><TT>HELP</TT>
+
+<P>
+Provides instructions for the use of <I>Sympa</I> commands.  The
+        result is the content of the <A NAME="10777"><tex2html_anchor_invisible_mark></A><TT>helpfile.tt2</TT> template
+        file. 
+
+<P>
+</LI>
+<LI><A NAME="10780"><tex2html_anchor_invisible_mark></A><TT>INFO</TT> <I>listname</I>
+
+<P>
+Provides the parameters of the specified list (owner,
+        subscription mode, etc.) and its description. The
+        result is the content of <A NAME="10783"><tex2html_anchor_invisible_mark></A><TT>&#126;welcome[.mime]</TT>.
+
+<P>
+</LI>
+<LI><A NAME="10788"><tex2html_anchor_invisible_mark></A><TT>LISTS</TT>
+        <A NAME="cmd-lists"><tex2html_anchor_mark></A>
+<P>
+Provides the names of lists managed by <I>Sympa</I>.  This list
+        is generated dynamically, using the <A NAME="10792"><tex2html_anchor_invisible_mark></A><TT>visibility</TT>
+        (see <A HREF=<tex2html_cr_mark>#par-visibility#4152><tex2html_cr_mark></A>, page~<A HREF=<tex2html_cr_mark>#par-visibility#4153><tex2html_cross_ref_visible_mark></A>).
+	The <TT>lists.tt2</TT> template defines the message return
+	by the <A NAME="10795"><tex2html_anchor_invisible_mark></A><TT>LISTS</TT> command.
+
+<P>
+</LI>
+<LI><A NAME="10798"><tex2html_anchor_invisible_mark></A><TT>REVIEW</TT> <I>listname</I>
+        <A NAME="cmd-review"><tex2html_anchor_mark></A>
+<P>
+Provides the addresses of subscribers if the run mode authorizes it. 
+	See the <A NAME="10801"><tex2html_anchor_invisible_mark></A><TT>review</TT> parameter (<A HREF=<tex2html_cr_mark>#par-review#4160><tex2html_cr_mark></A>, page~<A HREF=<tex2html_cr_mark>#par-review#4161><tex2html_cross_ref_visible_mark></A>) for the configuration file of each list,
+        which controls consultation authorizations for the subscriber
+        list. Since subscriber addresses can be abused by spammers,
+        it is strongly recommended that you <B>only authorize owners
+        to access the subscriber list</B>.
+
+<P>
+</LI>
+<LI><A NAME="10804"><tex2html_anchor_invisible_mark></A><TT>WHICH</TT>
+         <A NAME="cmd-which"><tex2html_anchor_mark></A>
+<P>
+Returns the list of lists to which one is subscribed,
+        as well as the configuration of his or her subscription to
+        each of the lists (DIGEST, NOMAIL, SUMMARY, CONCEAL).
+
+<P>
+</LI>
+<LI><A NAME="10807"><tex2html_anchor_invisible_mark></A><TT>STATS</TT> <I>listname</I>
+        <A NAME="cmd-stats"><tex2html_anchor_mark></A>
+<P>
+Provides statistics for the specified list:
+        number of messages received, number of messages sent,
+        megabytes received, megabytes sent. This is the contents
+        of the <A NAME="10810"><tex2html_anchor_invisible_mark></A><TT>stats</TT> file.
+
+<P>
+Access to this command is controlled by the <A NAME="10813"><tex2html_anchor_invisible_mark></A><TT>review</TT> parameter.
+
+<P>
+</LI>
+<LI><A NAME="10816"><tex2html_anchor_invisible_mark></A><TT>INDEX</TT> <I>listname</I>
+        <A NAME="cmd-index"><tex2html_anchor_mark></A>
+<P>
+Provides index of archives for specified list. Access rights
+        to this function are the same as for the <A NAME="10819"><tex2html_anchor_invisible_mark></A><TT>GET</TT>
+        command. 
+
+<P>
+</LI>
+<LI><A NAME="10822"><tex2html_anchor_invisible_mark></A><TT>GET</TT> <I>listname</I> <I>archive</I>
+        <A NAME="cmd-get"><tex2html_anchor_mark></A>
+<P>
+To retrieve archives for list (see above).  Access
+        rights are the same as for the <A NAME="10825"><tex2html_anchor_invisible_mark></A><TT>REVIEW</TT> command.
+        See <A NAME="10828"><tex2html_anchor_invisible_mark></A><TT>review</TT> parameter (<A HREF=<tex2html_cr_mark>#par-review#4180><tex2html_cr_mark></A>,
+        page~<A HREF=<tex2html_cr_mark>#par-review#4181><tex2html_cross_ref_visible_mark></A>).
+
+<P>
+</LI>
+<LI><A NAME="10831"><tex2html_anchor_invisible_mark></A><TT>LAST</TT> <I>listname</I>
+        <A NAME="cmd-last"><tex2html_anchor_mark></A>
+<P>
+To receive the last message distributed in a list (see above).  Access
+        rights are the same as for the <A NAME="10834"><tex2html_anchor_invisible_mark></A><TT>GET</TT> command.
+
+<P>
+</LI>
+<LI><A NAME="10837"><tex2html_anchor_invisible_mark></A><TT>SUBSCRIBE</TT> <I>listname firstname name</I>
+        <A NAME="cmd-subscribe"><tex2html_anchor_mark></A>
+<P>
+Requests sign-up to the specified list. The <I>firstname</I> and <I>name</I> are optional. If the
+        list is parameterized with a restricted subscription (see
+        <A NAME="10840"><tex2html_anchor_invisible_mark></A><TT>subscribe</TT> parameter, <A HREF=<tex2html_cr_mark>#par-subscribe#4192><tex2html_cr_mark></A>,
+        page~<A HREF=<tex2html_cr_mark>#par-subscribe#4193><tex2html_cross_ref_visible_mark></A>), this command is sent to the
+        list owner for approval.
+
+<P>
+</LI>
+<LI><A NAME="10843"><tex2html_anchor_invisible_mark></A><TT>INVITE</TT> <I>listname user@host name</I>
+        <A NAME="cmd-invite"><tex2html_anchor_mark></A>
+<P>
+Invite someone to subscribe to the specified list. The 
+        <I>name</I> is optional. The command is similar to the
+        <A NAME="10846"><tex2html_anchor_invisible_mark></A><TT>ADD</TT> but the specified person is not added to the
+        list but invited to subscribe to it in accordance with the 
+        <A NAME="10849"><tex2html_anchor_invisible_mark></A><TT>subscribe</TT> parameter, <A HREF=<tex2html_cr_mark>#par-subscribe#4200><tex2html_cr_mark></A>,
+        page~<A HREF=<tex2html_cr_mark>#par-subscribe#4201><tex2html_cross_ref_visible_mark></A>).
+
+<P>
+</LI>
+<LI><A NAME="10852"><tex2html_anchor_invisible_mark></A><TT>SIGNOFF</TT> <I>listname</I> [ <I>user@host</I> ]
+        <A NAME="cmd-signoff"><tex2html_anchor_mark></A>
+<P>
+Requests unsubscription from the specified list.
+        <A NAME="10855"><tex2html_anchor_invisible_mark></A><TT>SIGNOFF *</TT> means unsubscription from all lists.
+
+<P>
+</LI>
+<LI><A NAME="10858"><tex2html_anchor_invisible_mark></A><TT>SET</TT> <I>listname</I> <TT>DIGEST</TT>
+        <A NAME="cmd-setdigest"><tex2html_anchor_mark></A>
+<P>
+Puts the subscriber in <I>digest</I> mode for the <I>listname</I> list.  Instead of receiving mail from the list
+        in a normal manner, the subscriber will periodically receive
+        it in a DIGEST. This DIGEST compiles a group of messages
+        from the list, using multipart/digest mime format.
+
+<P>
+The sending period for these DIGESTs is regulated by the
+        list owner using the <A NAME="10861"><tex2html_anchor_invisible_mark></A><TT>digest</TT> parameter (see~<A HREF=<tex2html_cr_mark>#par-digest#4214><tex2html_cr_mark></A>, page~<A HREF=<tex2html_cr_mark>#par-digest#4215><tex2html_cross_ref_visible_mark></A>).  See the <A NAME="10864"><tex2html_anchor_invisible_mark></A><TT>SET~LISTNAME~MAIL</TT> command (<A HREF=<tex2html_cr_mark>#cmd-setmail#4217><tex2html_cr_mark></A>, page~<A HREF=<tex2html_cr_mark>#cmd-setmail#4218><tex2html_cross_ref_visible_mark></A>) and the <A NAME="10867"><tex2html_anchor_invisible_mark></A><TT>reception</TT> parameter (<A HREF=<tex2html_cr_mark>#par-reception#4220><tex2html_cr_mark></A>, page~<A HREF=<tex2html_cr_mark>#par-reception#4221><tex2html_cross_ref_visible_mark></A>).
+
+<P>
+</LI>
+<LI><A NAME="10870"><tex2html_anchor_invisible_mark></A><TT>SET</TT> <I>listname</I> <TT>SUMMARY</TT>
+        <A NAME="cmd-setsummary"><tex2html_anchor_mark></A>
+<P>
+Puts the subscriber in <I>summary</I> mode for the <I>listname</I> list.  Instead of receiving mail from the list
+        in a normal manner, the subscriber will periodically receive
+        the list of messages. This mode is very close to the DIGEST
+        reception mode but the subscriber receives only the list of messages.
+
+<P>
+This option is available only if the digest mode is set.
+
+<P>
+</LI>
+<LI><A NAME="10873"><tex2html_anchor_invisible_mark></A><TT>SET</TT> <I>listname</I> <TT>NOMAIL</TT>
+        <A NAME="cmd-setnomail"><tex2html_anchor_mark></A>
+<P>
+Puts subscriber in <I>nomail</I> mode for the <I>listname</I> list.  This mode is used when a subscriber no longer wishes
+        to receive mail from the list, but nevertheless wishes to retain
+        the possibility of posting to the list.
+        This mode therefore prevents the subscriber from unsubscribing
+        and subscribing later on.  See the <A NAME="10876"><tex2html_anchor_invisible_mark></A><TT>SET~LISTNAME~MAIL</TT>
+        command (<A HREF=<tex2html_cr_mark>#cmd-setmail#4235><tex2html_cr_mark></A>, page~<A HREF=<tex2html_cr_mark>#cmd-setmail#4236><tex2html_cross_ref_visible_mark></A>) and
+        the <A NAME="10879"><tex2html_anchor_invisible_mark></A><TT>reception</TT> (<A HREF=<tex2html_cr_mark>#par-reception#4238><tex2html_cr_mark></A>, page~<A HREF=<tex2html_cr_mark>#par-reception#4239><tex2html_cross_ref_visible_mark></A>). 
+
+<P>
+</LI>
+<LI><A NAME="10882"><tex2html_anchor_invisible_mark></A><TT>SET</TT> <I>listname</I> <TT>TXT</TT>
+        <A NAME="cmd-settxt"><tex2html_anchor_mark></A>
+<P>
+Puts subscriber in <I>txt</I> mode for the <I>listname</I> list.  This mode is used when a subscriber wishes
+        to receive mails sent in both format txt/html and txt/plain 
+        only in txt/plain format.
+        See the <A NAME="10885"><tex2html_anchor_invisible_mark></A><TT>reception</TT> (<A HREF=<tex2html_cr_mark>#par-reception#4247><tex2html_cr_mark></A>, page~<A HREF=<tex2html_cr_mark>#par-reception#4248><tex2html_cross_ref_visible_mark></A>). 
+
+<P>
+</LI>
+<LI><A NAME="10888"><tex2html_anchor_invisible_mark></A><TT>SET</TT> <I>listname</I> <TT>HTML</TT>
+        <A NAME="cmd-sethtml"><tex2html_anchor_mark></A>
+<P>
+Puts subscriber in <I>html</I> mode for the <I>listname</I> list.  This mode is used when a subscriber wishes
+        to receive mails sent in both format txt/html and txt/plain 
+        only in txt/html format.
+        See the <A NAME="10891"><tex2html_anchor_invisible_mark></A><TT>reception</TT> (<A HREF=<tex2html_cr_mark>#par-reception#4256><tex2html_cr_mark></A>, page~<A HREF=<tex2html_cr_mark>#par-reception#4257><tex2html_cross_ref_visible_mark></A>). 
+
+<P>
+</LI>
+<LI><A NAME="10894"><tex2html_anchor_invisible_mark></A><TT>SET</TT> <I>listname</I> <TT>URLIZE</TT>
+        <A NAME="cmd-seturlize"><tex2html_anchor_mark></A>
+<P>
+Puts subscriber in <I>urlize</I> mode for the <I>listname</I> list.  This mode is used when a subscriber wishes
+        not to receive attached files. The attached files are replaced by
+        an URL leading to the file stored on the list site. 
+
+<P>
+See the <A NAME="10897"><tex2html_anchor_invisible_mark></A><TT>reception</TT> (<A HREF=<tex2html_cr_mark>#par-reception#4265><tex2html_cr_mark></A>, page~<A HREF=<tex2html_cr_mark>#par-reception#4266><tex2html_cross_ref_visible_mark></A>). 
+
+<P>
+</LI>
+<LI><A NAME="10900"><tex2html_anchor_invisible_mark></A><TT>SET</TT> <I>listname</I> <TT>NOT_ME</TT>
+        <A NAME="cmd-not-me"><tex2html_anchor_mark></A>
+<P>
+Puts subscriber in <I>not_me</I> mode for the <I>listname</I> list.  This mode is used when a subscriber wishes
+        not to receive back the message that he has sent to the list. 
+
+<P>
+See the <A NAME="10903"><tex2html_anchor_invisible_mark></A><TT>reception</TT> (<A HREF=<tex2html_cr_mark>#par-reception#4274><tex2html_cr_mark></A>, page~<A HREF=<tex2html_cr_mark>#par-reception#4275><tex2html_cross_ref_visible_mark></A>). 
+
+<P>
+</LI>
+<LI><A NAME="10906"><tex2html_anchor_invisible_mark></A><TT>SET</TT> <I>listname</I> <TT>MAIL</TT>
+        <A NAME="cmd-setmail"><tex2html_anchor_mark></A>
+<P>
+Puts the subscriber in normal mode (default) for the <I>listname</I> list.  This option is mainly used to cancel the
+        <I>nomail</I>, <I>summary</I> or <I>digest</I> modes. If the subscriber
+        was in <I>nomail</I> mode, he or she will again receive
+        mail from the list in a normal manner.  See the <A NAME="10909"><tex2html_anchor_invisible_mark></A><TT>SET~LISTNAME~NOMAIL</TT> command (<A HREF=<tex2html_cr_mark>#cmd-setnomail#4286><tex2html_cr_mark></A>,
+        page~<A HREF=<tex2html_cr_mark>#cmd-setnomail#4287><tex2html_cross_ref_visible_mark></A>) and the <A NAME="10912"><tex2html_anchor_invisible_mark></A><TT>reception</TT>
+        parameter (<A HREF=<tex2html_cr_mark>#par-reception#4289><tex2html_cr_mark></A>, page~<A HREF=<tex2html_cr_mark>#par-reception#4290><tex2html_cross_ref_visible_mark></A>).
+
+<P>
+</LI>
+<LI><A NAME="10915"><tex2html_anchor_invisible_mark></A><TT>SET</TT> <I>listname</I> <TT>CONCEAL</TT>
+        <A NAME="cmd-setconceal"><tex2html_anchor_mark></A>
+<P>
+Puts the subscriber in <I>conceal</I> mode for the
+        <I>listname</I> list.  The subscriber will then become
+        invisible during <A NAME="10918"><tex2html_anchor_invisible_mark></A><TT>REVIEW</TT> on this list. Only owners
+        will see the whole subscriber list.
+
+<P>
+See the <A NAME="10921"><tex2html_anchor_invisible_mark></A><TT>SET~LISTNAME~NOCONCEAL</TT> command (<A HREF=<tex2html_cr_mark>#cmd-setnoconceal#4299><tex2html_cr_mark></A>, page~<A HREF=<tex2html_cr_mark>#cmd-setnoconceal#4300><tex2html_cross_ref_visible_mark></A>) and
+        the <A NAME="10924"><tex2html_anchor_invisible_mark></A><TT>visibility</TT> parameter (<A HREF=<tex2html_cr_mark>#par-visibility#4302><tex2html_cr_mark></A>,
+        page~<A HREF=<tex2html_cr_mark>#par-visibility#4303><tex2html_cross_ref_visible_mark></A>).
+
+<P>
+</LI>
+<LI><A NAME="10927"><tex2html_anchor_invisible_mark></A><TT>SET</TT> <I>listname</I> <TT>NOCONCEAL</TT>
+        <A NAME="cmd-setnoconceal"><tex2html_anchor_mark></A>
+<P>
+Puts the subscriber in <I>noconceal</I> mode (default)
+        for <I>listname</I> list. The subscriber will then
+        become visible during <A NAME="10930"><tex2html_anchor_invisible_mark></A><TT>REVIEW</TT> of this list. The
+        <I>conceal</I> mode is then cancelled.
+
+<P>
+See <A NAME="10933"><tex2html_anchor_invisible_mark></A><TT>SET~LISTNAME~CONCEAL</TT> command (<A HREF=<tex2html_cr_mark>#cmd-setconceal#4313><tex2html_cr_mark></A>, page~<A HREF=<tex2html_cr_mark>#cmd-setconceal#4314><tex2html_cross_ref_visible_mark></A>) and
+        <A NAME="10936"><tex2html_anchor_invisible_mark></A><TT>visibility</TT> parameter (<A HREF=<tex2html_cr_mark>#par-visibility#4316><tex2html_cr_mark></A>,
+        page~<A HREF=<tex2html_cr_mark>#par-visibility#4317><tex2html_cross_ref_visible_mark></A>).
+
+<P>
+</LI>
+<LI><A NAME="10939"><tex2html_anchor_invisible_mark></A><TT>QUIT</TT>
+        <A NAME="cmd-quit"><tex2html_anchor_mark></A>
+<P>
+Ends acceptance of commands. This can prove useful when
+        the message contains additional lines, as for example in
+        the case where a signature is automatically added by the
+        user's mail program (MUA).
+
+<P>
+</LI>
+<LI><A NAME="10942"><tex2html_anchor_invisible_mark></A><TT>CONFIRM</TT> <I>key</I>
+        <A NAME="cmd-confirm"><tex2html_anchor_mark></A>
+<P>
+If the <A NAME="10945"><tex2html_anchor_invisible_mark></A><TT>send</TT> parameter of a list is set to <TT>privatekey, publickey</TT> or <TT>privateorpublickey</TT>,
+        messages are only distributed in the list after an
+        <A NAME="10948"><tex2html_anchor_invisible_mark></A>authentication phase by return mail, using a
+        one-time password (numeric key). For this authentication,
+        the sender of the message is requested to post the ``<A NAME="10949"><tex2html_anchor_invisible_mark></A><TT>CONFIRM</TT>~<I>key</I>'' command to <I>Sympa</I>.
+
+<P>
+</LI>
+<LI><A NAME="10953"><tex2html_anchor_invisible_mark></A><TT>QUIET</TT>
+
+<P>
+This command is used for silent (mute) processing: no
+        performance report is returned for commands prefixed with
+        <A NAME="10956"><tex2html_anchor_invisible_mark></A><TT>QUIET</TT>.
+
+<P>
+</LI>
+</UL>
+
+<P>
+
+<H1><A NAME="SECTION002720000000000000000">
+26.2 Owner commands</A>
+</H1>
+
+<P>
+Some administrative requests are only available to list owner(s).
+They are indispensable for all procedures in limited access mode,
+and to perform requests in place of users.
+These comands are:
+
+<P>
+
+<UL>
+<LI><A NAME="10959"><tex2html_anchor_invisible_mark></A><TT>ADD</TT> <I>listname user@host firstname name</I>
+        <A NAME="cmd-add"><tex2html_anchor_mark></A>
+<P>
+Add command similar to <A NAME="10962"><tex2html_anchor_invisible_mark></A><TT>SUBSCRIBE</TT>. 
+	You can avoid user notification by using the <A NAME="10965"><tex2html_anchor_invisible_mark></A><TT>QUIET</TT>
+	prefix (ie: <A NAME="10968"><tex2html_anchor_invisible_mark></A><TT>QUIET ADD</TT>).
+
+<P>
+</LI>
+<LI><A NAME="10971"><tex2html_anchor_invisible_mark></A><TT>DELETE</TT> <I>listname user@host</I>
+        <A NAME="cmd-delete"><tex2html_anchor_mark></A>
+<P>
+Delete command similar to <A NAME="10974"><tex2html_anchor_invisible_mark></A><TT>SIGNOFF</TT>.
+	You can avoid user notification by using the <A NAME="10977"><tex2html_anchor_invisible_mark></A><TT>QUIET</TT>
+	prefix (ie: <A NAME="10980"><tex2html_anchor_invisible_mark></A><TT>QUIET DELETE</TT>).
+
+<P>
+</LI>
+<LI><A NAME="10983"><tex2html_anchor_invisible_mark></A><TT>REMIND</TT> <I>listname</I>
+	<A NAME="cmd-remind"><tex2html_anchor_mark></A>
+<P>
+<A NAME="10986"><tex2html_anchor_invisible_mark></A><TT>REMIND</TT> is used by list owners in order to send
+        an individual service reminder message to each subscriber. This
+        message is made by parsing the remind.tt2 file.
+
+<P>
+</LI>
+<LI><A NAME="10989"><tex2html_anchor_invisible_mark></A><TT>REMIND</TT> <I>*</I>
+
+<P>
+<A NAME="10992"><tex2html_anchor_invisible_mark></A><TT>REMIND</TT> is used by the listmaster to send to each subscriber of any list a single
+        message with a summary of his/her subscriptions. In this case the 
+        message sent is constructed by parsing the global_remind.tt2 file.
+        For each list, <I>Sympa</I> tests whether the list is configured as hidden 
+	to each subscriber (parameter lparam <#4353#>visibility<#4353#>). By default the use 
+	of this command is restricted to listmasters. 
+	Processing may take a lot of time !
+
+<P>
+</LI>
+</UL>
+
+<P>
+As above, these commands can be prefixed with <A NAME="10996"><tex2html_anchor_invisible_mark></A><TT>QUIET</TT> to
+indicate processing without acknowledgment of receipt.
+
+<P>
+
+<H1><A NAME="SECTION002730000000000000000"><tex2html_anchor_invisible_mark></A>
+    <A NAME="moderation"><tex2html_anchor_mark></A><BR>
+26.3 Moderator commands
+</H1>
+
+<P>
+If a list is moderated, <I>Sympa</I> only distributes messages enabled by one of
+its moderators (editors). Moderators have several
+methods for enabling message distribution, depending on the <A NAME="11000"><tex2html_anchor_invisible_mark></A><TT>send</TT> list parameter (<A HREF=<tex2html_cr_mark>#par-send#4359><tex2html_cr_mark></A>, page~<A HREF=<tex2html_cr_mark>#par-send#4360><tex2html_cross_ref_visible_mark></A>).
+
+<P>
+
+<UL>
+<LI><A NAME="11003"><tex2html_anchor_invisible_mark></A><TT>DISTRIBUTE</TT> <I>listname</I> <I>key</I>
+        <A NAME="cmd-distribute"><tex2html_anchor_mark></A>
+<P>
+If the <A NAME="11006"><tex2html_anchor_invisible_mark></A><TT>send</TT> parameter of a list is set to <TT>editorkey</TT> or <TT>editorkeyonly</TT>, each message queued
+        for <A NAME="11009"><tex2html_anchor_invisible_mark></A>moderation is stored in a spool (see~<A HREF=<tex2html_cr_mark>#cf:queuemod#4370><tex2html_cr_mark></A>, page~<A HREF=<tex2html_cr_mark>#cf:queuemod#4371><tex2html_cross_ref_visible_mark></A>), and linked
+        to a key.
+
+<P>
+The <A NAME="11010"><tex2html_anchor_invisible_mark></A>moderator must use this command to enable
+        message distribution.
+
+<P>
+</LI>
+<LI><A NAME="11011"><tex2html_anchor_invisible_mark></A><TT>REJECT</TT> <I>listname</I> <I>key</I>
+        <A NAME="cmd-reject"><tex2html_anchor_mark></A>
+<P>
+The message with the <I>key</I> key is deleted from the
+        moderation <A NAME="11014"><tex2html_anchor_invisible_mark></A>spool of the <I>listname</I>
+        list.
+
+<P>
+</LI>
+<LI><A NAME="11015"><tex2html_anchor_invisible_mark></A><TT>MODINDEX</TT> <I>listname</I>
+        <A NAME="cmd-modindex"><tex2html_anchor_mark></A>
+<P>
+This command returns the list of messages queued for
+        moderation for the <I>listname</I> list.
+
+<P>
+The result is presented in the form of an index, which
+        supplies, for each message, its sending date, its sender,
+        its size, and its associated key, as well as all
+        messages in the form of a digest.
+
+<P>
+</LI>
+</UL>
+
+<P>
+See also the
+<A NAME="tex2html110"
+  HREF="http://listes.cru.fr/admin/moderation.html">recommendations for moderators</A>.
+
+<P>
+

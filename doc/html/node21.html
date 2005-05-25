@@ -1,167 +1,284 @@
-<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2 Final//EN">
 
-<!--Converted with jLaTeX2HTML 2002-2-1 (1.70) JA patch-2.0
-patched version by:  Kenshi Muto, Debian Project.
-* modified by:  Shige TAKENO
-LaTeX2HTML 2002-2-1 (1.70),
-original version by:  Nikos Drakos, CBLU, University of Leeds
-* revised and updated by:  Marcus Hennecke, Ross Moore, Herb Swan
-* with significant contributions from:
-  Jens Lippmann, Marek Rouchal, Martin Wilck and others -->
-<HTML>
-<HEAD>
-<TITLE>20. Bounce management</TITLE>
-<META NAME="description" CONTENT="20. Bounce management">
-<META NAME="keywords" CONTENT="sympa">
-<META NAME="resource-type" CONTENT="document">
-<META NAME="distribution" CONTENT="global">
-
-<META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=EUC-JP">
-<META NAME="Generator" CONTENT="jLaTeX2HTML v2002-2-1 JA patch-2.0">
-<META HTTP-EQUIV="Content-Style-Type" CONTENT="text/css">
-
-<LINK REL="STYLESHEET" HREF="sympa.css">
-
-<LINK REL="next" HREF="node22.html">
-<LINK REL="previous" HREF="node20.html">
-<LINK REL="up" HREF="sympa.html">
-<LINK REL="next" HREF="node22.html">
-</HEAD>
-
-<BODY TEXT="#000000" BGCOLOR="#ffffff">
-<!--Navigation Panel-->
-<A NAME="tex2html1306"
-  HREF="node22.html">
-<IMG WIDTH="37" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="next" SRC="next.png"></A> 
-<A NAME="tex2html1300"
-  HREF="sympa.html">
-<IMG WIDTH="26" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="up" SRC="up.png"></A> 
-<A NAME="tex2html1294"
-  HREF="node20.html">
-<IMG WIDTH="63" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="previous" SRC="prev.png"></A> 
-<A NAME="tex2html1302"
-  HREF="node1.html">
-<IMG WIDTH="65" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="contents" SRC="contents.png"></A> 
-<A NAME="tex2html1304"
-  HREF="node26.html">
-<IMG WIDTH="43" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="index" SRC="index.png"></A> 
-<BR>
-<B> :</B> <A NAME="tex2html1307"
-  HREF="node22.html">21. Antivirus</A>
-<B> :</B> <A NAME="tex2html1301"
-  HREF="sympa.html">Sympa Mailing Lists Management Software version</A>
-<B> :</B> <A NAME="tex2html1295"
-  HREF="node20.html">19. Shared documents</A>
- &nbsp; <B>  <A NAME="tex2html1303"
-  HREF="node1.html">目次</A></B> 
- &nbsp; <B>  <A NAME="tex2html1305"
-  HREF="node26.html">索引</A></B> 
-<BR>
-<BR>
-<!--End of Navigation Panel-->
-
-<H1><A NAME="SECTION002100000000000000000">
-20. Bounce management</A>
+<H1><A NAME="SECTION002100000000000000000"><tex2html_anchor_invisible_mark></A>
+    <A NAME="list-configuration-param"><tex2html_anchor_mark></A><BR>
+20. List configuration parameters
 </H1>
 
 <P>
-<I>Sympa</I> allows bounce (non-delivery report) management. This
-prevents list owners from receiving each bounce (1 per message
-sent to a bouncing subscriber) in their own mailbox. Without
-automatic processing of bounces, list owners either go
-mad, or just delete them without further attention.
+The configuration file is composed of paragraphs separated by blank
+lines and introduced by a keyword.
 
 <P>
-Bounces are received at mylist-owner address, which should
-be sent to the <A NAME="9433"></A><TT>bouncequeue</TT> program via aliases :
-
-<P><PRE>
-	\samplelist-owner: "|/usr/local/sympa-os/bin/bouncequeue \samplelist"
-</PRE>
+Even though there are a very large number of possible parameters, the minimal list
+definition is very short. The only required parameters are <A NAME="9489"><tex2html_anchor_invisible_mark></A><TT>owner</TT> (or <A NAME="9492"><tex2html_anchor_invisible_mark></A><TT>owner_include</TT>) and <A NAME="9495"><tex2html_anchor_invisible_mark></A><TT>subject</TT>.
+All other parameters have a default value.
 
 <P>
-<A NAME="9436"></A><TT>bouncequeue</TT> (see <A HREF="node3.html#binaries">2.2</A>, page&nbsp;<A HREF="node3.html#binaries"><IMG  ALIGN="BOTTOM" BORDER="1" ALT="[*]" SRC="crossref.png"></A>) stores bounces in a
-<A NAME="9439"></A><TT>/usr/local/sympa-os/spool/bounce/</TT> spool.
+<BLOCKQUOTE>
+<I>keyword value</I>
+
+</BLOCKQUOTE>
 
 <P>
-Bounces are then processed by the <A NAME="9442"></A><TT>bounced.pl</TT> daemon.
-This daemon analyses bounces to find out which
-e-mail addresses are concerned and what kind of error was generated.
-If bouncing addresses match a subscriber's address, information 
-is stored in the <I>Sympa</I> database (in subscriber_table). Moreover, the most recent
-bounce itself is archived in <A NAME="9446"></A><TT>bounce_path/mylist/email</TT>
-(where bounce_path is defined in a <A NAME="9449"></A><TT>wwsympa.conf</TT> parameter and
-email is the user e-mail address).
+<B>WARNING</B>: configuration parameters must be separated by
+blank lines and BLANK LINES ONLY !
 
 <P>
-When reviewing a list, bouncing addresses are tagged as bouncing.
-You may access further information such as dates of first and last bounces,
-number of received bounces for the address, the last bounce itself.
+
+<H1><A NAME="SECTION002110000000000000000">
+20.1 List description</A>
+</H1>
 
 <P>
-With these informations, the automatic bounce management is possible:
+
+<H2><A NAME="SECTION002111000000000000000"><tex2html_anchor_invisible_mark></A>
+    <A NAME="par-editor"><tex2html_anchor_mark></A>    <A NAME="2717"><tex2html_anchor_invisible_mark></A><BR>
+20.1.1 editor
+</H2>
+
+<P>
+The <A NAME="9498"><tex2html_anchor_invisible_mark></A><TT>config</TT> file contains one <A NAME="9501"><tex2html_anchor_invisible_mark></A><TT>editor</TT> paragraph
+per <A NAME="9504"><tex2html_anchor_invisible_mark></A>moderator (or editor).
+It concerns static editor definition. For dynamic definition and more information about editors see~<A HREF=<tex2html_cr_mark>#par-editor-include#2721><tex2html_cr_mark></A>, 
+page~<A HREF=<tex2html_cr_mark>#par-editor-include#2722><tex2html_cross_ref_visible_mark></A>.
+
+<P>
+<I>Example:</I> 
+
+<P>
+<BLOCKQUOTE>
+</BLOCKQUOTE><PRE><tex2html_verbatim_mark>verbatim359#</PRE><BLOCKQUOTE>
+</BLOCKQUOTE>
+
+<P>
+Only the editor of a list is authorized to send messages
+to the list when the <A NAME="9505"><tex2html_anchor_invisible_mark></A><TT>send</TT> parameter (see~<A HREF=<tex2html_cr_mark>#par-send#2729><tex2html_cr_mark></A>,
+page~<A HREF=<tex2html_cr_mark>#par-send#2730><tex2html_cross_ref_visible_mark></A>) is set to either <A NAME="9508"><tex2html_anchor_invisible_mark></A><TT>editor</TT>, <A NAME="9511"><tex2html_anchor_invisible_mark></A><TT>editorkey</TT>, or <A NAME="9514"><tex2html_anchor_invisible_mark></A><TT>editorkeyonly</TT>.
+The <A NAME="9517"><tex2html_anchor_invisible_mark></A><TT>editor</TT> parameter is also consulted in certain other cases
+( <A NAME="9520"><tex2html_anchor_invisible_mark></A><TT>privateoreditorkey</TT> ).
+
+<P>
+The syntax of this directive is the same as that of the <A NAME="9523"><tex2html_anchor_invisible_mark></A><TT>owner</TT> parameter (see~<A HREF=<tex2html_cr_mark>#par-owner#2737><tex2html_cr_mark></A>, page~<A HREF=<tex2html_cr_mark>#par-owner#2738><tex2html_cross_ref_visible_mark></A>),
+even when several moderators are defined.
+
+<P>
+
+<H2><A NAME="SECTION002112000000000000000"><tex2html_anchor_invisible_mark></A>
+    <A NAME="par-editor-include"><tex2html_anchor_mark></A>    <A NAME="2741"><tex2html_anchor_invisible_mark></A><BR>
+20.1.2 editor_include
+</H2>
+
+<P>
+The <A NAME="9526"><tex2html_anchor_invisible_mark></A><TT>config</TT> file contains one <A NAME="9529"><tex2html_anchor_invisible_mark></A><TT>editor_include</TT> paragraph
+per data inclusion file (see~<A HREF=<tex2html_cr_mark>#data-inclusion-file#2744><tex2html_cr_mark></A>, page~<A HREF=<tex2html_cr_mark>#data-inclusion-file#2745><tex2html_cross_ref_visible_mark></A>).
+It concerns dynamic editor definition : inclusion of external data. For static editor definition and more information about moderation see~<A HREF=<tex2html_cr_mark>#par-editor#2746><tex2html_cr_mark></A>, page~<A HREF=<tex2html_cr_mark>#par-editor#2747><tex2html_cross_ref_visible_mark></A>.
+
+<P>
+<I>Example:</I> 
+
+<P>
+<BLOCKQUOTE>
+</BLOCKQUOTE><PRE><tex2html_verbatim_mark>verbatim360#</PRE><BLOCKQUOTE>
+</BLOCKQUOTE>
+
+<P>
+The syntax of this directive is the same as that of the <A NAME="9532"><tex2html_anchor_invisible_mark></A><TT>owner_include</TT> parameter (see~<A HREF=<tex2html_cr_mark>#par-owner-include#2754><tex2html_cr_mark></A>, page~<A HREF=<tex2html_cr_mark>#par-owner-include#2755><tex2html_cross_ref_visible_mark></A>),
+even when several moderators are defined.
+
+<P>
+
+<H2><A NAME="SECTION002113000000000000000"><tex2html_anchor_invisible_mark></A>
+ <A NAME="par-host"><tex2html_anchor_mark></A> <A NAME="2758"><tex2html_anchor_invisible_mark></A><BR>
+20.1.3 host
+</H2>
+
+<P>
+(Default value: <TT><A NAME="9537"><tex2html_anchor_invisible_mark></A><TT>domain</TT> robot parameter</TT>)
+
+<P>
+<A NAME="9540"><tex2html_anchor_invisible_mark></A><TT>host</TT> <I>fully-qualified-domain-name</I>
+
+<P>
+Domain name of the list, default is the robot domain name set in the related <A NAME="9543"><tex2html_anchor_invisible_mark></A><TT>robot.conf</TT> file or in file <A NAME="9546"><tex2html_anchor_invisible_mark></A><TT>/usr/local/sympa-gb/etc/sympa.conf</TT>.
+
+<P>
+
+<H2><A NAME="SECTION002114000000000000000"><tex2html_anchor_invisible_mark></A>
+    <A NAME="par-lang"><tex2html_anchor_mark></A><BR>
+20.1.4 lang
+</H2>
+
+<P>
+(Default value: <TT><A NAME="9551"><tex2html_anchor_invisible_mark></A><TT>lang</TT> robot parameter</TT>)
+
+<P>
+<I>Example:</I> 
+
+<P>
+<BLOCKQUOTE>
+</BLOCKQUOTE><PRE><tex2html_verbatim_mark>verbatim361#</PRE><BLOCKQUOTE>
+</BLOCKQUOTE>
+
+<P>
+This parameter defines the language used for the list. It is
+used to initialize a user's language preference ; <I>Sympa</I> command
+reports are extracted from the associated message catalog.
+
+<P>
+See <A HREF=<tex2html_cr_mark>#internationalization#2772><tex2html_cr_mark></A>, page~<A HREF=<tex2html_cr_mark>#internationalization#2773><tex2html_cross_ref_visible_mark></A>
+for available languages.
+
+<P>
+
+<H2><A NAME="SECTION002115000000000000000"><tex2html_anchor_invisible_mark></A>
+    <A NAME="par-owner"><tex2html_anchor_mark></A><BR>
+20.1.5 owner
+</H2>
+
+<P>
+The <A NAME="9555"><tex2html_anchor_invisible_mark></A><TT>config</TT> file contains one <A NAME="9558"><tex2html_anchor_invisible_mark></A><TT>owner</TT> paragraph per owner. 
+It concerns static owner definition. For dynamic definition see~<A HREF=<tex2html_cr_mark>#par-owner-include#2778><tex2html_cr_mark></A>, page~<A HREF=<tex2html_cr_mark>#par-owner-include#2779><tex2html_cross_ref_visible_mark></A>.
+
+<P>
+<I>Example:</I> 
+
+<P>
+<BLOCKQUOTE>
+</BLOCKQUOTE><PRE><tex2html_verbatim_mark>verbatim362#</PRE><BLOCKQUOTE>
+</BLOCKQUOTE>
+
+<P>
+The list owner is usually the person who has the authorization to send
+<A NAME="9561"><tex2html_anchor_invisible_mark></A><TT>ADD</TT> (see~<A HREF=<tex2html_cr_mark>#cmd-add#2786><tex2html_cr_mark></A>, page~<A HREF=<tex2html_cr_mark>#cmd-add#2787><tex2html_cross_ref_visible_mark></A>) and
+<A NAME="9564"><tex2html_anchor_invisible_mark></A><TT>DELETE</TT> (see~<A HREF=<tex2html_cr_mark>#cmd-delete#2789><tex2html_cr_mark></A>, page~<A HREF=<tex2html_cr_mark>#cmd-delete#2790><tex2html_cross_ref_visible_mark></A>)
+commands on behalf of other users.
+
+<P>
+When the <A NAME="9567"><tex2html_anchor_invisible_mark></A><TT>subscribe</TT> parameter (see~<A HREF=<tex2html_cr_mark>#par-subscribe#2792><tex2html_cr_mark></A>,
+page~<A HREF=<tex2html_cr_mark>#par-subscribe#2793><tex2html_cross_ref_visible_mark></A>) specifies a restricted list, it is
+the owner who has the exclusive right to subscribe users, and
+it is therefore to the owner that <A NAME="9570"><tex2html_anchor_invisible_mark></A><TT>SUBSCRIBE</TT> requests
+will be forwarded.
+
+<P>
+There may be several owners of a single list; in this case, each
+owner is declared in a paragraph starting with the <A NAME="9573"><tex2html_anchor_invisible_mark></A><TT>owner</TT>
+keyword.
+
+<P>
+The <A NAME="9576"><tex2html_anchor_invisible_mark></A><TT>owner</TT> directive is followed by one or several lines
+giving details regarding the owner's characteristics:
 
 <P>
 
 <UL>
-<LI>The automatic task <A NAME="9452"></A><TT>eval_bouncer</TT> gives a score foreach bouncing user.
-  The score, between 0 to 100, allows the classification of bouncing users in two levels.
-  (Level 1 or 2). 
-  According to the level, automatic actions are executed periodicaly by <A NAME="9455"></A><TT>process_bouncers</TT>
-  task.
+<LI><A NAME="9579"><tex2html_anchor_invisible_mark></A><TT>email</TT> <I>address</I>
+
+<P>
+Owner's e-mail address
 
 <P>
 </LI>
-<LI>The score evaluation main parameters are: 
+<LI><A NAME="9582"><tex2html_anchor_invisible_mark></A><TT>reception nomail</TT>
 
 <P>
-<A NAME="9458"></A><TT>Bounces count</TT>: The number of bouncing messages received by sympa for the user.
-
-<P>
-<A NAME="9461"></A><TT>Type rate</TT> : Bounces are classified depending on the type of errors generated on the user
-  side. If the error type is "mailbox is full" (ie a temporary 4.2.2 error type) the type rate will be
-  0.5 whereas permanent errors (5.x.x) have a type rate equal to 1.
-
-<P>
-<A NAME="9464"></A><TT>Regularity rate</TT> : This rate tells if the bounces where received regularly, compared to list
- traffic. The list traffic is deduced from <A NAME="9467"></A><TT>msg_count</TT> file data.
-
-<P><PRE>
-      The score formula is  :
-  
-      Score = bounce_count * type_rate * regularity_rate
-</PRE>
-
-<P>
-To avoid making decisions (ie defining a score) without enough relevant data, the score is not
-  evaluated if :
-
-<P>
-
-<UL>
-<LI>The number of the number of received bounces is lower than <A NAME="9470"></A><TT>minimum_bouncing_count</TT> 
-	(see <A HREF="node7.html#kw-minimum-bouncing-count">6.8.9</A>, page&nbsp;<A HREF="node7.html#kw-minimum-bouncing-count"><IMG  ALIGN="BOTTOM" BORDER="1" ALT="[*]" SRC="crossref.png"></A>)
+Optional attribute for an owner who does not wish to receive
+        mails.  Useful to define an owner with multiple e-mail
+        addresses: they are all recognized when <I>Sympa</I> receives
+        mail, but thanks to <A NAME="9586"><tex2html_anchor_invisible_mark></A><TT>reception nomail</TT>, not all of
+	these addresses need receive administrative mail from <I>Sympa</I>.
 
 <P>
 </LI>
-<LI>The bouncing period is shorter than <A NAME="9473"></A><TT>minimum_bouncing_period</TT> 
-	(see <A HREF="node7.html#kw-minimum-bouncing-period">6.8.10</A>, page&nbsp;<A HREF="node7.html#kw-minimum-bouncing-period"><IMG  ALIGN="BOTTOM" BORDER="1" ALT="[*]" SRC="crossref.png"></A>)
+<LI><A NAME="9590"><tex2html_anchor_invisible_mark></A><TT>gecos</TT> <I>data</I>
+
+<P>
+Public information on the owner
+
+<P>
+</LI>
+<LI><A NAME="9593"><tex2html_anchor_invisible_mark></A><TT>info</TT> <I>data</I>
+
+<P>
+Available since release 2.3
+
+<P>
+Private information on the owner
+
+<P>
+</LI>
+<LI><A NAME="9596"><tex2html_anchor_invisible_mark></A><TT>profile</TT> <TT>privileged</TT> <TT>|</TT>
+	                    <TT>normal</TT>
+
+<P>
+Available since release 2.3.5
+
+<P>
+Profile of the owner. This is currently used to restrict
+	access to some features of WWSympa, such as adding new owners
+	to a list.
 
 <P>
 </LI>
 </UL>
 
 <P>
-</LI>
-<LI>You can define the limit between each level via the <B>List configuration pannel</B>, 
-  in subsection <B>Bounce settings</B>. (see <A HREF="node19.html#rate">18.5.2</A>) The principle consists in
-  associating a score interval with a level.
+
+<H2><A NAME="SECTION002116000000000000000"><tex2html_anchor_invisible_mark></A>
+    <A NAME="par-owner-include"><tex2html_anchor_mark></A>    <A NAME="2813"><tex2html_anchor_invisible_mark></A><BR>
+20.1.6 owner_include
+</H2>
+
+<P>
+The <A NAME="9599"><tex2html_anchor_invisible_mark></A><TT>config</TT> file contains one <A NAME="9602"><tex2html_anchor_invisible_mark></A><TT>owner_include</TT> paragraph per data inclusion file 
+(see~<A HREF=<tex2html_cr_mark>#data-inclusion-file#2816><tex2html_cr_mark></A>, page~<A HREF=<tex2html_cr_mark>#data-inclusion-file#2817><tex2html_cross_ref_visible_mark></A>.
+It concerns dynamic owner definition : inclusion of external data. For static owner definition and more information 
+about owners see~<A HREF=<tex2html_cr_mark>#par-owner#2818><tex2html_cr_mark></A>, page~<A HREF=<tex2html_cr_mark>#par-owner#2819><tex2html_cross_ref_visible_mark></A>.
+
+<P>
+<I>Example:</I> 
+
+<P>
+<BLOCKQUOTE>
+</BLOCKQUOTE><PRE><tex2html_verbatim_mark>verbatim363#</PRE><BLOCKQUOTE>
+</BLOCKQUOTE>
+
+<P>
+The <A NAME="9605"><tex2html_anchor_invisible_mark></A><TT>owner_include</TT> directive is followed by one or several lines
+giving details regarding the owner(s) included characteristics:
+
+<P>
+
+<UL>
+<LI><A NAME="9608"><tex2html_anchor_invisible_mark></A><TT>source myfile</TT>
+
+<P>
+This is an mandatory field : it indicates the data inclusion file 
+	myfile.incl (but declared myfile). This file can be a template. In this case, it will be interpreted
+	with values given by subparameter <A NAME="9611"><tex2html_anchor_invisible_mark></A><TT>source_parameter</TT>.
 
 <P>
 </LI>
-<LI>You can also define wich action must be applied on each category of user.(see <A HREF="node19.html#action">18.5.2</A>)
-  Each time an action will be done, a notification email will be send to the person of your choice.
-  (see <A HREF="node19.html#notification">18.5.2</A>)
+<LI><A NAME="9614"><tex2html_anchor_invisible_mark></A><TT>source_parameters a,b,c</TT>
+
+<P>
+It contains values enumeration that will be affected to the <A NAME="9617"><tex2html_anchor_invisible_mark></A><TT>param</TT> array used in the template file (see~<A HREF=<tex2html_cr_mark>#data-inclusion-file#2831><tex2html_cr_mark></A>, page~<A HREF=<tex2html_cr_mark>#data-inclusion-file#2832><tex2html_cross_ref_visible_mark></A>).
+
+<P>
+</LI>
+<LI><A NAME="9620"><tex2html_anchor_invisible_mark></A><TT>reception nomail</TT>
+
+<P>
+Optional attribute for owner(s) who does not wish to receive
+        mails.  
+
+<P>
+</LI>
+<LI><A NAME="9623"><tex2html_anchor_invisible_mark></A><TT>profile</TT> <TT>privileged</TT> <TT>|</TT>
+	                    <TT>normal</TT>
+
+<P>
+Profile of the owner(s).
 
 <P>
 </LI>
@@ -169,38 +286,2495 @@ To avoid making decisions (ie defining a score) without enough relevant data, th
 
 <P>
 
-<HR>
-<!--Navigation Panel-->
-<A NAME="tex2html1306"
-  HREF="node22.html">
-<IMG WIDTH="37" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="next" SRC="next.png"></A> 
-<A NAME="tex2html1300"
-  HREF="sympa.html">
-<IMG WIDTH="26" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="up" SRC="up.png"></A> 
-<A NAME="tex2html1294"
-  HREF="node20.html">
-<IMG WIDTH="63" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="previous" SRC="prev.png"></A> 
-<A NAME="tex2html1302"
-  HREF="node1.html">
-<IMG WIDTH="65" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="contents" SRC="contents.png"></A> 
-<A NAME="tex2html1304"
-  HREF="node26.html">
-<IMG WIDTH="43" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="index" SRC="index.png"></A> 
+<H2><A NAME="SECTION002117000000000000000"><tex2html_anchor_invisible_mark></A>
+    <A NAME="par-subject"><tex2html_anchor_mark></A><BR>
+20.1.7 subject
+</H2>
+
+<P>
+<A NAME="9626"><tex2html_anchor_invisible_mark></A><TT>subject</TT> <I>subject-of-the-list</I>
+
+<P>
+This parameter indicates the subject of the list, which is sent in
+response to the <A NAME="9629"><tex2html_anchor_invisible_mark></A><TT>LISTS</TT> mail command. The subject is
+a free form text limited to one line.
+
+<P>
+
+<H2><A NAME="SECTION002118000000000000000"><tex2html_anchor_invisible_mark></A>
+    <A NAME="par-topics"><tex2html_anchor_mark></A><BR>
+20.1.8 topics
+</H2>
+
+<P>
+<A NAME="9632"><tex2html_anchor_invisible_mark></A><TT>topics</TT> computing/internet,education/university
+
+<P>
+This parameter allows the classification of lists. You may define multiple 
+topics as well as hierarchical ones. <A NAME="9635"><tex2html_anchor_invisible_mark></A><I>WWSympa</I>'s list of public lists 
+uses this parameter.
+
+<P>
+
+<H2><A NAME="SECTION002119000000000000000"><tex2html_anchor_invisible_mark></A>
+    <A NAME="par-visibility"><tex2html_anchor_mark></A><BR>
+20.1.9 visibility 
+</H2>
+
+<P>
+(Default value: <TT>conceal</TT>)
+
+<P>
+<TT>visibility</TT> parameter is defined by an authorization scenario (see~<A HREF=<tex2html_cr_mark>#scenarios#9640><tex2html_cr_mark></A>, page~<A HREF=<tex2html_cr_mark>#scenarios#9641><tex2html_cross_ref_visible_mark></A>)
+
+<P>
+This parameter indicates whether the list should feature in the
+output generated in response to a <A NAME="9642"><tex2html_anchor_invisible_mark></A><TT>LISTS</TT> command.
+
+<P>
+
+<UL>
+<LI><A NAME="9645"><tex2html_anchor_invisible_mark></A><TT>visibility</TT> <TT>conceal</TT>
+	(<A NAME="tex2html36"
+  HREF="http://listes.cru.fr/sympa/distribution/current/src/etc/scenari/visibility.conceal">view</A>)
+
+
 <BR>
-<B> :</B> <A NAME="tex2html1307"
-  HREF="node22.html">21. Antivirus</A>
-<B> :</B> <A NAME="tex2html1301"
-  HREF="sympa.html">Sympa Mailing Lists Management Software version</A>
-<B> :</B> <A NAME="tex2html1295"
-  HREF="node20.html">19. Shared documents</A>
- &nbsp; <B>  <A NAME="tex2html1303"
-  HREF="node1.html">目次</A></B> 
- &nbsp; <B>  <A NAME="tex2html1305"
-  HREF="node26.html">索引</A></B> 
-<!--End of Navigation Panel-->
-<ADDRESS>
-root
-平成17年3月8日
-</ADDRESS>
-</BODY>
-</HTML>
+<P>
+</LI>
+<LI><A NAME="9648"><tex2html_anchor_invisible_mark></A><TT>visibility</TT> <TT>intranet</TT>
+	(<A NAME="tex2html37"
+  HREF="http://listes.cru.fr/sympa/distribution/current/src/etc/scenari/visibility.intranet">view</A>)
+
+
+<BR>
+<P>
+</LI>
+<LI><A NAME="9651"><tex2html_anchor_invisible_mark></A><TT>visibility</TT> <TT>noconceal</TT>
+	(<A NAME="tex2html38"
+  HREF="http://listes.cru.fr/sympa/distribution/current/src/etc/scenari/visibility.noconceal">view</A>)
+
+
+<BR>
+<P>
+</LI>
+<LI><A NAME="9654"><tex2html_anchor_invisible_mark></A><TT>visibility</TT> <TT>secret</TT>
+	(<A NAME="tex2html39"
+  HREF="http://listes.cru.fr/sympa/distribution/current/src/etc/scenari/visibility.secret">view</A>)
+
+
+<BR>
+<P>
+</LI>
+</UL>
+
+<P>
+
+<H1><A NAME="SECTION002120000000000000000">
+20.2 Data source related</A>
+</H1>
+
+<P>
+
+<H2><A NAME="SECTION002121000000000000000">
+20.2.1 user_data_source</A>
+</H2>
+
+<P>
+<A NAME="par-user-data-source"><tex2html_anchor_mark></A>	<A NAME="2873"><tex2html_anchor_invisible_mark></A>
+
+<P>
+(Default value: <TT>file|database, if using an RDBMS</TT>)
+
+<P>
+<A NAME="9658"><tex2html_anchor_invisible_mark></A><TT>user_data_source</TT>
+   <TT>file</TT> <TT>|</TT>
+   <TT>database</TT> <TT>|</TT>
+   <TT>include</TT> <TT>|</TT>
+   <TT>include2</TT>
+
+<P>
+Sympa allows the mailing list manager to choose how <I>Sympa</I> loads
+subscriber and administartive data. User information can be stored in a text 
+file or relational database, or included from various external
+sources (list, flat file, result of <A NAME="9662"><tex2html_anchor_invisible_mark></A>LDAP or <A NAME="9663"><tex2html_anchor_invisible_mark></A>SQL query).
+
+<P>
+
+<UL>
+<LI><A NAME="9664"><tex2html_anchor_invisible_mark></A><TT>user_data_source</TT> <TT>file</TT>
+
+<P>
+When this value is used, subscriber data
+       are stored in a file whose name is defined by the
+       <A NAME="9667"><tex2html_anchor_invisible_mark></A><TT>subscribers</TT> parameter in <A NAME="9670"><tex2html_anchor_invisible_mark></A><TT>sympa.conf</TT>. This is maintained for backward compatibility.
+
+<P>
+</LI>
+<LI><A NAME="9673"><tex2html_anchor_invisible_mark></A><TT>user_data_source</TT> <TT>database</TT> 
+
+<P>
+This mode was been introduced to enable data to be stored
+       in a relational database. This can be used for instance to share subscriber
+       data with an HTTP interface, or simply to facilitate
+       the administration of very large mailing lists. It has been
+       tested with MySQL, using a list of 200 000 subscribers. 
+       We strongly recommend the use of a database in place of text files.
+       It will improve performance, and solve possible conflicts between
+       <I>Sympa</I> and <A NAME="9677"><tex2html_anchor_invisible_mark></A><I>WWSympa</I>. Please refer to the 
+       &#168;<I>Sympa</I> and its databasesection
+       (<A HREF=<tex2html_cr_mark>#sec-rdbms#2892><tex2html_cr_mark></A>, page~<A HREF=<tex2html_cr_mark>#sec-rdbms#2893><tex2html_cross_ref_visible_mark></A>).
+
+<P>
+</LI>
+<LI><A NAME="9681"><tex2html_anchor_invisible_mark></A><TT>user_data_source</TT> <TT>include</TT> 
+<A NAME="user-data-source"><tex2html_anchor_mark></A>       
+
+<P>
+Here, subscribers are not defined <I>extensively</I> (enumeration
+       of their e-mail addresses) but <I>intensively</I> (definition of criteria
+       subscribers must satisfy). Includes can be performed 
+       by extracting e-mail addresses using an <A NAME="9684"><tex2html_anchor_invisible_mark></A>SQL or <A NAME="9685"><tex2html_anchor_invisible_mark></A>LDAP query, or 
+       by including other mailing lists. At least one include 
+       paragraph, defining a data source, is needed. Valid include paragraphs (see
+       below) are <A NAME="9686"><tex2html_anchor_invisible_mark></A><TT>include_file</TT>, <A NAME="9689"><tex2html_anchor_invisible_mark></A><TT>include_list</TT>, <A NAME="9692"><tex2html_anchor_invisible_mark></A><TT>include_remote_sympa_list</TT>, 
+	<A NAME="9695"><tex2html_anchor_invisible_mark></A><TT>include_sql_query</TT> and <A NAME="9698"><tex2html_anchor_invisible_mark></A><TT>include_ldap_query</TT>. 
+
+<P>
+</LI>
+<LI><A NAME="9701"><tex2html_anchor_invisible_mark></A><TT>user_data_source</TT> <TT>include2</TT> 
+
+<P>
+This is a replacement for the <A NAME="9704"><tex2html_anchor_invisible_mark></A>include mode. In this mode, the members cache is no more maitained in
+       a DB FIle but in the main database instead. The behavior of the cache is detailed in the database chapter 
+       (see~<A HREF=<tex2html_cr_mark>#include2-cache#2909><tex2html_cr_mark></A>, page~<A HREF=<tex2html_cr_mark>#include2-cache#2910><tex2html_cross_ref_visible_mark></A>). This is the only mode that run the database for administrative data 
+       in the database
+
+<P>
+</LI>
+</UL>
+
+<P>
+
+<H2><A NAME="SECTION002122000000000000000">
+20.2.2 ttl</A>
+</H2>
+
+<P>
+<A NAME="ttl"><tex2html_anchor_mark></A>	<A NAME="2914"><tex2html_anchor_invisible_mark></A>
+
+<P>
+(Default value: <TT>3600</TT>)
+
+<P>
+<A NAME="9706"><tex2html_anchor_invisible_mark></A><TT>ttl</TT> <TT>delay_in_seconds</TT> 
+
+<P>
+<I>Sympa</I> caches user data extracted using the include parameter.
+Their TTL (time-to-live) within <I>Sympa</I> can be controlled using this
+parameter. The default value is 3600.
+
+<P>
+
+<H2><A NAME="SECTION002123000000000000000">
+20.2.3 include_list</A>
+</H2>
+
+<P>
+<A NAME="include-list"><tex2html_anchor_mark></A>	<A NAME="2920"><tex2html_anchor_invisible_mark></A>
+
+<P>
+<A NAME="9711"><tex2html_anchor_invisible_mark></A><TT>include_list</TT> <TT>listname</TT>
+
+<P>
+This parameter will be interpreted only if 
+<A NAME="9714"><tex2html_anchor_invisible_mark></A><TT>user_data_source</TT> is set to <TT>include</TT>.
+All subscribers of list <TT>listname</TT> become subscribers 
+of the current list. You may include as many lists as required, using one
+<A NAME="9717"><tex2html_anchor_invisible_mark></A><TT>include_list</TT> <TT>listname</TT> line for each included
+list. Any list at all may be included ; the <A NAME="9720"><tex2html_anchor_invisible_mark></A><TT>user_data_source</TT> definition
+of the included list is irrelevant, and you may therefore
+include lists which are also defined by the inclusion of other lists. 
+Be careful, however, not to include list <TT>A</TT> in list <TT>B</TT> and
+then list <TT>B</TT> in list <TT>A</TT>, since this will give rise an 
+infinite loop.
+
+<P>
+
+<H2><A NAME="SECTION002124000000000000000">
+20.2.4 include_remote_sympa_list</A>
+</H2>
+
+<P>
+<A NAME="include-remote-sympa-list"><tex2html_anchor_mark></A><A NAME="2935"><tex2html_anchor_invisible_mark></A>
+
+<P>
+<A NAME="9723"><tex2html_anchor_invisible_mark></A><TT>include_remote_sympa_list</TT>
+
+<P>
+Sympa can contact another <I>Sympa</I> service using https to fetch
+a remote list in order to include each member of a remote list
+as subscriber. You may include as many lists as required, using one
+<A NAME="9727"><tex2html_anchor_invisible_mark></A><TT>include_remote_sympa_list</TT> paragraph for each included
+list. Be careful, however, not to give rise an infinite loop making cross includes.
+
+<P>
+For this operation, one <I>Sympa</I> site act as a server while the other one
+act as client. On the server side, the only  setting needed is to
+give permition to the remote <I>Sympa</I> to review the list. This is controled
+by the review authorization scenario. 
+
+<P>
+From the client side you must define the remote list dump URI.
+
+<P>
+
+<UL>
+<LI><A NAME="remote-host"><tex2html_anchor_mark></A><A NAME="9732"><tex2html_anchor_invisible_mark></A><TT>remote_host</TT> <I>remote_host_name</I> 
+
+<P>
+</LI>
+<LI><A NAME="port"><tex2html_anchor_mark></A><A NAME="9735"><tex2html_anchor_invisible_mark></A><TT>port</TT> <I>port</I> (Default 443) 
+
+<P>
+</LI>
+<LI><A NAME="path"><tex2html_anchor_mark></A><A NAME="9738"><tex2html_anchor_invisible_mark></A><TT>path</TT> <I>absolute path</I> (In most cases, for a list name foo /sympa/dump/foo ) 
+
+<P>
+</LI>
+</UL>
+
+<P>
+Because https offert a easy and secure client authentication, https is the only one
+protocole currently supported. A additional parameter is needed : the name of the
+certificate (and the private key) to be used :
+<A NAME="cert"><tex2html_anchor_mark></A>
+<P>
+
+<UL>
+<LI><A NAME="9741"><tex2html_anchor_invisible_mark></A><TT>cert</TT> <TT>list</TT> the certificate to be use is the list
+certificate (the certificate subject distinguished name email is the list adress).
+Certificate and private key are located in the list directory.
+</LI>
+<LI><A NAME="9744"><tex2html_anchor_invisible_mark></A><TT>cert</TT> <TT>robot</TT> the certificate used is then related to
+sympa itself : the certificate subject distinguished name email look like
+sympa@my.domain and files are located in virtual robot etc dir if virtual robot
+is used otherwise in <A NAME="9747"><tex2html_anchor_invisible_mark></A><TT>/usr/local/sympa-gb/etc</TT>.
+</LI>
+</UL>
+
+<P>
+
+<H2><A NAME="SECTION002125000000000000000"><tex2html_anchor_invisible_mark></A>
+    <A NAME="include-sql-query"><tex2html_anchor_mark></A><BR>
+20.2.5 include_sql_query
+</H2>
+
+<P>
+<A NAME="9750"><tex2html_anchor_invisible_mark></A><TT>include_sql_query</TT>
+
+<P>
+This parameter will be interpreted only if the
+<A NAME="9753"><tex2html_anchor_invisible_mark></A><TT>user_data_source</TT> value is set to  <TT>include</TT>, and
+is used to begin a paragraph defining the SQL query parameters :
+
+<P>
+
+<UL>
+<LI><A NAME="db-type"><tex2html_anchor_mark></A><A NAME="9756"><tex2html_anchor_invisible_mark></A><TT>db_type</TT> <I>dbd_name</I> 
+
+<P>
+The database type (mysql, Pg, Oracle, Sybase, CSV ...). This value identifies the PERL
+DataBase Driver (DBD) to be used, and is therefore case-sensitive.
+
+<P>
+</LI>
+<LI><A NAME="host"><tex2html_anchor_mark></A><A NAME="9759"><tex2html_anchor_invisible_mark></A><TT>host</TT> <I>hostname</I>
+
+<P>
+The Database Server <I>Sympa</I> will try to connect to.
+
+<P>
+</LI>
+<LI><A NAME="db-name"><tex2html_anchor_mark></A><A NAME="9763"><tex2html_anchor_invisible_mark></A><TT>db_name</TT> <I>sympa_db_name</I>
+
+<P>
+The hostname of the database system.
+
+<P>
+</LI>
+<LI><A NAME="user"><tex2html_anchor_mark></A><A NAME="9766"><tex2html_anchor_invisible_mark></A><TT>user</TT> <I>user_id</I>
+
+<P>
+The user id to be used when connecting to the database.
+
+<P>
+</LI>
+<LI><A NAME="passwd"><tex2html_anchor_mark></A><A NAME="9769"><tex2html_anchor_invisible_mark></A><TT>passwd</TT> <I>some secret</I>
+
+<P>
+The user passwd for <A NAME="9772"><tex2html_anchor_invisible_mark></A><TT>user</TT>.
+
+<P>
+</LI>
+<LI><A NAME="sql-query"><tex2html_anchor_mark></A><A NAME="9775"><tex2html_anchor_invisible_mark></A><TT>sql_query</TT> <I>a query string</I>
+The SQL query string. No fields other than e-mail addresses should be returned
+by this query!
+
+<P>
+</LI>
+<LI><A NAME="connect-options"><tex2html_anchor_mark></A><A NAME="9778"><tex2html_anchor_invisible_mark></A><TT>connect_options</TT> <I>option1=x;option2=y</I>
+
+<P>
+This parameter is optional and specific to each RDBMS.
+
+<P>
+These options are appended to the connect string.
+
+<P>
+Example :
+
+<P>
+<BLOCKQUOTE>
+</BLOCKQUOTE><PRE><tex2html_verbatim_mark>verbatim364#</PRE><BLOCKQUOTE>
+</BLOCKQUOTE>
+
+<P>
+Connexion timeout is set to 5 seconds.
+
+<P>
+</LI>
+<LI><A NAME="9781"><tex2html_anchor_invisible_mark></A><TT>db_env</TT> <I>list_of_var_def</I>
+
+<P>
+This parameter is optional ; it is needed for some RDBMS (Oracle).
+
+<P>
+Sets a list of environment variables to set before database connexion.
+This is a ';' separated list of variable assignment.
+
+<P>
+Example for Oracle:
+<BLOCKQUOTE>
+</BLOCKQUOTE><PRE><tex2html_verbatim_mark>verbatim365#</PRE><BLOCKQUOTE>
+</BLOCKQUOTE>
+
+<P>
+</LI>
+<LI><A NAME="sql-name"><tex2html_anchor_mark></A><A NAME="9784"><tex2html_anchor_invisible_mark></A><TT>name</TT> <I>short name</I>
+
+<P>
+This parameter is optional.
+
+<P>
+It provides a human-readable name to this datasource. It will be used within the REVIEW page to indicate what datasource
+each list member comes from (usefull when having multiple data sources).
+
+<P>
+</LI>
+<LI><A NAME="sql-fdir"><tex2html_anchor_mark></A><A NAME="9787"><tex2html_anchor_invisible_mark></A><TT>f_dir</TT> <I>/var/csvdir</I>
+
+<P>
+This parameter is optional, only used when accessing a CSV datasource.
+
+<P>
+When connecting to a CSV datasource, this parameter indicates the directory where the CSV files are located.
+
+<P>
+</LI>
+</UL>
+
+<P>
+Example :
+
+<P>
+<BLOCKQUOTE>
+</BLOCKQUOTE><PRE><tex2html_verbatim_mark>verbatim366#</PRE><BLOCKQUOTE>
+</BLOCKQUOTE>
+
+<P>
+
+<H2><A NAME="SECTION002126000000000000000"><tex2html_anchor_invisible_mark></A>
+    <A NAME="include-ldap-query"><tex2html_anchor_mark></A><BR>
+20.2.6 include_ldap_query
+</H2>
+
+<P>
+<A NAME="9790"><tex2html_anchor_invisible_mark></A><TT>include_ldap_query</TT>
+
+<P>
+This paragraph defines parameters for a <A NAME="9793"><tex2html_anchor_invisible_mark></A>LDAP query returning a
+list of subscribers. This paragraph is used only if <A NAME="9794"><tex2html_anchor_invisible_mark></A><TT>user_data_source</TT> is set to <TT>include</TT>. This feature
+requires the <A NAME="9797"><tex2html_anchor_invisible_mark></A><TT>Net::LDAP</TT> (perlldap) PERL module.
+
+<P>
+
+<UL>
+<LI><A NAME="host"><tex2html_anchor_mark></A><A NAME="9800"><tex2html_anchor_invisible_mark></A><TT>host</TT> <I>ldap_directory_hostname</I> 
+
+<P>
+Name of the LDAP directory host or a comma separated list of host:port. The
+second form is usefull if you are using some replication ldap host. 
+
+<P>
+Example :
+
+<P>
+<BLOCKQUOTE>
+</BLOCKQUOTE><PRE><tex2html_verbatim_mark>verbatim367#</PRE><BLOCKQUOTE>
+</BLOCKQUOTE>
+
+<P>
+</LI>
+<LI><A NAME="port"><tex2html_anchor_mark></A><A NAME="9803"><tex2html_anchor_invisible_mark></A><TT>port</TT> <I>ldap_directory_port</I> (OBSOLETE) 
+
+<P>
+Port on which the Directory accepts connections.
+
+<P>
+</LI>
+<LI><A NAME="user"><tex2html_anchor_mark></A><A NAME="9806"><tex2html_anchor_invisible_mark></A><TT>user</TT> <I>ldap_user_name</I>
+
+<P>
+Username with read access to the LDAP directory.
+
+<P>
+</LI>
+<LI><A NAME="passwd"><tex2html_anchor_mark></A><A NAME="9809"><tex2html_anchor_invisible_mark></A><TT>passwd</TT> <I>LDAP_user_password</I>
+
+<P>
+Password for <A NAME="9812"><tex2html_anchor_invisible_mark></A><TT>user</TT>.
+
+<P>
+</LI>
+<LI><A NAME="suffix"><tex2html_anchor_mark></A><A NAME="9815"><tex2html_anchor_invisible_mark></A><TT>suffix</TT> <I>directory name</I>
+
+<P>
+Defines the naming space covered by the search (optional, depending on
+the LDAP server).
+
+<P>
+</LI>
+<LI><A NAME="timeout"><tex2html_anchor_mark></A><A NAME="9818"><tex2html_anchor_invisible_mark></A><TT>timeout</TT> <I>delay_in_seconds</I>
+
+<P>
+Timeout when connecting the remote server.
+
+<P>
+</LI>
+<LI><A NAME="filter"><tex2html_anchor_mark></A><A NAME="9821"><tex2html_anchor_invisible_mark></A><TT>filter</TT> <I>search_filter</I>
+
+<P>
+Defines the LDAP search filter (RFC 2254 compliant).
+
+<P>
+</LI>
+<LI><A NAME="attrs"><tex2html_anchor_mark></A><A NAME="9824"><tex2html_anchor_invisible_mark></A><TT>attrs</TT> <I>mail_attribute</I> 
+(Default value: <TT>mail</TT>)
+
+<P>
+The attribute containing the e-mail address(es) in the returned object.
+
+<P>
+</LI>
+<LI><A NAME="select"><tex2html_anchor_mark></A><A NAME="9828"><tex2html_anchor_invisible_mark></A><TT>select</TT> <I>first <TT>|</TT> all</I>
+(Default value: <TT>first</TT>)
+
+<P>
+Defines whether to use only the first address, or all the addresses, in
+cases where multiple values are returned.
+
+<P>
+</LI>
+<LI><A NAME="scope"><tex2html_anchor_mark></A><A NAME="9832"><tex2html_anchor_invisible_mark></A><TT>scope</TT> <I>base <TT>|</TT> one <TT>|</TT> sub</I>
+(Default value: <TT>sub</TT>)
+
+<P>
+By default the search is performed on the whole tree below the specified
+base object. This may be changed by specifying a scope parameter with one
+of the following values. 
+
+<UL>
+<LI><B>base</B> : 
+	Search only the base object. 
+
+<P>
+</LI>
+<LI><B>one</B> : 
+	Search the entries immediately below the base object.
+
+<P>
+</LI>
+<LI><B>sub</B> : 
+	Search the whole tree below the base object. 
+
+<P>
+</LI>
+</UL>
+
+<P>
+</LI>
+</UL>
+
+<P>
+Example :
+
+<P>
+<BLOCKQUOTE>
+</BLOCKQUOTE><PRE><tex2html_verbatim_mark>verbatim368#</PRE><BLOCKQUOTE>
+</BLOCKQUOTE>
+
+<P>
+
+<H2><A NAME="SECTION002127000000000000000"><tex2html_anchor_invisible_mark></A>
+    <A NAME="include-ldap-2level-query"><tex2html_anchor_mark></A><BR>
+20.2.7 include_ldap_2level_query
+</H2>
+
+<P>
+<A NAME="9836"><tex2html_anchor_invisible_mark></A><TT>include_ldap_2level_query</TT>
+
+<P>
+This paragraph defines parameters for a two-level <A NAME="9839"><tex2html_anchor_invisible_mark></A>LDAP query returning a
+list of subscribers. Usually the first-level query returns a list of DNs
+and the second-level queries convert the DNs into e-mail addresses.
+This paragraph is used only if <A NAME="9840"><tex2html_anchor_invisible_mark></A><TT>user_data_source</TT> is set to <TT>include</TT>. This feature
+requires the <A NAME="9843"><tex2html_anchor_invisible_mark></A><TT>Net::LDAP</TT> (perlldap) PERL module.
+
+<P>
+
+<UL>
+<LI><A NAME="host"><tex2html_anchor_mark></A><A NAME="9846"><tex2html_anchor_invisible_mark></A><TT>host</TT> <I>ldap_directory_hostname</I> 
+
+<P>
+Name of the LDAP directory host or a comma separated list of host:port. The
+second form is usefull if you are using some replication ldap host. 
+
+<P>
+Example :
+
+<P>
+<BLOCKQUOTE>
+</BLOCKQUOTE><PRE><tex2html_verbatim_mark>verbatim369#</PRE><BLOCKQUOTE>
+</BLOCKQUOTE>
+
+<P>
+</LI>
+<LI><A NAME="port"><tex2html_anchor_mark></A><A NAME="9849"><tex2html_anchor_invisible_mark></A><TT>port</TT> <I>ldap_directory_port</I> (OBSOLETE) 
+
+<P>
+Port on which the Directory accepts connections (this parameter is ignored if host definition include port specification).
+
+<P>
+</LI>
+<LI><A NAME="user"><tex2html_anchor_mark></A><A NAME="9852"><tex2html_anchor_invisible_mark></A><TT>user</TT> <I>ldap_user_name</I>
+
+<P>
+Username with read access to the LDAP directory.
+
+<P>
+</LI>
+<LI><A NAME="passwd"><tex2html_anchor_mark></A><A NAME="9855"><tex2html_anchor_invisible_mark></A><TT>passwd</TT> <I>LDAP_user_password</I>
+
+<P>
+Password for <A NAME="9858"><tex2html_anchor_invisible_mark></A><TT>user</TT>.
+
+<P>
+</LI>
+<LI><A NAME="suffix1"><tex2html_anchor_mark></A><A NAME="9861"><tex2html_anchor_invisible_mark></A><TT>suffix1</TT> <I>directory name</I>
+
+<P>
+Defines the naming space covered by the first-level search (optional, depending
+on the LDAP server).
+
+<P>
+</LI>
+<LI><A NAME="timeout1"><tex2html_anchor_mark></A><A NAME="9864"><tex2html_anchor_invisible_mark></A><TT>timeout1</TT> <I>delay_in_seconds</I>
+
+<P>
+Timeout for the first-level query when connecting to the remote server.
+
+<P>
+</LI>
+<LI><A NAME="filter1"><tex2html_anchor_mark></A><A NAME="9867"><tex2html_anchor_invisible_mark></A><TT>filter1</TT> <I>search_filter</I>
+
+<P>
+Defines the LDAP search filter for the first-level query (RFC 2254 compliant).
+
+<P>
+</LI>
+<LI><A NAME="attrs1"><tex2html_anchor_mark></A><A NAME="9870"><tex2html_anchor_invisible_mark></A><TT>attrs1</TT> <I>attribute</I> 
+
+<P>
+The attribute containing the data in the returned object that will be used for
+the second-level query.  This data is referenced using the syntax ``[attrs1]''.
+
+<P>
+</LI>
+<LI><A NAME="select1"><tex2html_anchor_mark></A><A NAME="9873"><tex2html_anchor_invisible_mark></A><TT>select1</TT> <I>first <TT>|</TT> all <TT>|</TT> regex</I>
+(Default value: <TT>first</TT>)
+
+<P>
+Defines whether to use only the first attribute value, all the values, or only
+those values matching a regular expression.
+
+<P>
+</LI>
+<LI><A NAME="regex1"><tex2html_anchor_mark></A><A NAME="9877"><tex2html_anchor_invisible_mark></A><TT>regex1</TT> <I>regular_expression</I>
+(Default value: <TT></TT>)
+
+<P>
+The Perl regular expression to use if ``select1'' is set to ``regex''.
+
+<P>
+</LI>
+<LI><A NAME="scope1"><tex2html_anchor_mark></A><A NAME="9881"><tex2html_anchor_invisible_mark></A><TT>scope1</TT> <I>base <TT>|</TT> one <TT>|</TT> sub</I>
+(Default value: <TT>sub</TT>)
+
+<P>
+By default the first-level search is performed on the whole tree below the
+specified base object. This may be changed by specifying a scope parameter
+with one of the following values. 
+
+<UL>
+<LI><B>base</B> : 
+	Search only the base object. 
+
+<P>
+</LI>
+<LI><B>one</B> : 
+	Search the entries immediately below the base object.
+
+<P>
+</LI>
+<LI><B>sub</B> : 
+	Search the whole tree below the base object. 
+
+<P>
+</LI>
+</UL>
+
+<P>
+</LI>
+<LI><A NAME="suffix2"><tex2html_anchor_mark></A><A NAME="9885"><tex2html_anchor_invisible_mark></A><TT>suffix2</TT> <I>directory name</I>
+
+<P>
+Defines the naming space covered by the second-level search (optional, depending
+on the LDAP server).  The ``[attrs1]'' syntax may be used to substitute data
+from the first-level query into this parameter.
+
+<P>
+</LI>
+<LI><A NAME="timeout2"><tex2html_anchor_mark></A><A NAME="9888"><tex2html_anchor_invisible_mark></A><TT>timeout2</TT> <I>delay_in_seconds</I>
+
+<P>
+Timeout for the second-level queries when connecting to the remote server.
+
+<P>
+</LI>
+<LI><A NAME="filter2"><tex2html_anchor_mark></A><A NAME="9891"><tex2html_anchor_invisible_mark></A><TT>filter2</TT> <I>search_filter</I>
+
+<P>
+Defines the LDAP search filter for the second-level queries
+(RFC 2254 compliant).  The ``[attrs1]'' syntax may be used to
+substitute data from the first-level query into this parameter.
+
+<P>
+</LI>
+<LI><A NAME="attrs2"><tex2html_anchor_mark></A><A NAME="9894"><tex2html_anchor_invisible_mark></A><TT>attrs2</TT> <I>mail_attribute</I> 
+(Default value: <TT>mail</TT>)
+
+<P>
+The attribute containing the e-mail address(es) in the returned objects from the
+second-level queries.
+
+<P>
+</LI>
+<LI><A NAME="select2"><tex2html_anchor_mark></A><A NAME="9898"><tex2html_anchor_invisible_mark></A><TT>select2</TT> <I>first <TT>|</TT> all <TT>|</TT> regex</I>
+(Default value: <TT>first</TT>)
+
+<P>
+Defines whether to use only the first address, all the addresses, or only
+those addresses matching a regular expression in the second-level queries.
+
+<P>
+</LI>
+<LI><A NAME="regex2"><tex2html_anchor_mark></A><A NAME="9902"><tex2html_anchor_invisible_mark></A><TT>regex2</TT> <I>regular_expression</I>
+(Default value: <TT></TT>)
+
+<P>
+The Perl regular expression to use if ``select2'' is set to ``regex''.
+
+<P>
+</LI>
+<LI><A NAME="scope2"><tex2html_anchor_mark></A><A NAME="9906"><tex2html_anchor_invisible_mark></A><TT>scope2</TT> <I>base <TT>|</TT> one <TT>|</TT> sub</I>
+(Default value: <TT>sub</TT>)
+
+<P>
+By default the second-level search is performed on the whole tree below the
+specified base object. This may be changed by specifying a scope2 parameter
+with one of the following values. 
+
+<UL>
+<LI><B>base</B> : 
+	Search only the base object. 
+
+<P>
+</LI>
+<LI><B>one</B> : 
+	Search the entries immediately below the base object.
+
+<P>
+</LI>
+<LI><B>sub</B> : 
+	Search the whole tree below the base object. 
+
+<P>
+</LI>
+</UL>
+
+<P>
+</LI>
+</UL>
+
+<P>
+Example : (cn=testgroup,dc=cru,dc=fr should be a groupOfUniqueNames here)
+
+<P>
+<BLOCKQUOTE>
+</BLOCKQUOTE><PRE><tex2html_verbatim_mark>verbatim370#</PRE><BLOCKQUOTE>
+</BLOCKQUOTE>
+
+<P>
+
+<H2><A NAME="SECTION002128000000000000000"><tex2html_anchor_invisible_mark></A>
+    <A NAME="include-file"><tex2html_anchor_mark></A><BR>
+20.2.8 include_file
+</H2>
+
+<P>
+<A NAME="9910"><tex2html_anchor_invisible_mark></A><TT>include_file</TT>    <TT>path_to_file</TT> 
+
+<P>
+This parameter will be interpreted only if the
+<A NAME="9913"><tex2html_anchor_invisible_mark></A><TT>user_data_source</TT> value is set to  <TT>include</TT>.
+The file should contain one e-mail address per line with an optional user description, separated from the email address by spaces (lines beginning with a ;SPMquot;#;SPMquot; are ignored).
+
+<P>
+<I>Sample included file:</I> 
+
+<P>
+<BLOCKQUOTE>
+</BLOCKQUOTE><PRE><tex2html_verbatim_mark>verbatim371#</PRE><BLOCKQUOTE>
+</BLOCKQUOTE>
+
+<P>
+
+<H2><A NAME="SECTION002129000000000000000"><tex2html_anchor_invisible_mark></A>
+    <A NAME="include-remote-file"><tex2html_anchor_mark></A><BR>
+20.2.9 include_remote_file
+</H2>
+
+<P>
+<A NAME="9916"><tex2html_anchor_invisible_mark></A><TT>include_remote_file</TT>
+
+<P>
+This parameter (organized as a paragraph) does the same as the <A NAME="9919"><tex2html_anchor_invisible_mark></A><TT>include_file</TT> parameter, except that
+it gets a remote file. This paragraph is used only if <A NAME="9922"><tex2html_anchor_invisible_mark></A><TT>user_data_source</TT> is set to <TT>include</TT>. 
+Using this method you should be able to include any <I>exotic</I> data source that is not supported by Sympa.
+The paragraph is made of the following entries :
+
+<P>
+
+<UL>
+<LI><A NAME="url"><tex2html_anchor_mark></A><A NAME="9925"><tex2html_anchor_invisible_mark></A><TT>url</TT> <I>url_of_remote_file</I> 
+
+<P>
+This is the URL of the remote file to include.
+
+<P>
+</LI>
+<LI><A NAME="user"><tex2html_anchor_mark></A><A NAME="9928"><tex2html_anchor_invisible_mark></A><TT>user</TT> <I>user_name</I> 
+
+<P>
+This entry is optional, only used if HTTP basic authentication is required to access the remote file.
+
+<P>
+</LI>
+<LI><A NAME="passwd"><tex2html_anchor_mark></A><A NAME="9931"><tex2html_anchor_invisible_mark></A><TT>passwd</TT> <I>user_passwd</I> 
+
+<P>
+This entry is optional, only used if HTTP basic authentication is required to access the remote file.
+
+<P>
+</LI>
+</UL>
+
+<P>
+<I>Example:</I> 
+
+<P>
+<BLOCKQUOTE>
+</BLOCKQUOTE><PRE><tex2html_verbatim_mark>verbatim372#</PRE><BLOCKQUOTE>
+</BLOCKQUOTE>
+
+<P>
+
+<H1><A NAME="SECTION002130000000000000000">
+20.3 Command related</A>
+</H1>
+
+<P>
+
+<H2><A NAME="SECTION002131000000000000000"><tex2html_anchor_invisible_mark></A>
+    <A NAME="par-subscribe"><tex2html_anchor_mark></A><BR>
+20.3.1 subscribe
+</H2>
+
+<P>
+(Default value: <TT>open</TT>)
+
+<P>
+<TT>subscribe</TT> parameter is defined by an authorization scenario (see~<A HREF=<tex2html_cr_mark>#scenarios#9936><tex2html_cr_mark></A>, page~<A HREF=<tex2html_cr_mark>#scenarios#9937><tex2html_cross_ref_visible_mark></A>)
+
+<P>
+The <A NAME="9938"><tex2html_anchor_invisible_mark></A><TT>subscribe</TT> parameter defines the rules for subscribing to the list. 
+Predefined authorization scenarios are :
+
+<P>
+
+<UL>
+<LI><A NAME="9941"><tex2html_anchor_invisible_mark></A><TT>subscribe</TT> <TT>auth</TT>
+	(<A NAME="tex2html40"
+  HREF="http://listes.cru.fr/sympa/distribution/current/src/etc/scenari/subscribe.auth">view</A>)
+
+
+<BR>
+<P>
+</LI>
+<LI><A NAME="9944"><tex2html_anchor_invisible_mark></A><TT>subscribe</TT> <TT>auth_notify</TT>
+	(<A NAME="tex2html41"
+  HREF="http://listes.cru.fr/sympa/distribution/current/src/etc/scenari/subscribe.auth_notify">view</A>)
+
+
+<BR>
+<P>
+</LI>
+<LI><A NAME="9947"><tex2html_anchor_invisible_mark></A><TT>subscribe</TT> <TT>auth_owner</TT>
+	(<A NAME="tex2html42"
+  HREF="http://listes.cru.fr/sympa/distribution/current/src/etc/scenari/subscribe.auth_owner">view</A>)
+
+
+<BR>
+<P>
+</LI>
+<LI><A NAME="9950"><tex2html_anchor_invisible_mark></A><TT>subscribe</TT> <TT>closed</TT>
+	(<A NAME="tex2html43"
+  HREF="http://listes.cru.fr/sympa/distribution/current/src/etc/scenari/subscribe.closed">view</A>)
+
+
+<BR>
+<P>
+</LI>
+<LI><A NAME="9953"><tex2html_anchor_invisible_mark></A><TT>subscribe</TT> <TT>intranet</TT>
+	(<A NAME="tex2html44"
+  HREF="http://listes.cru.fr/sympa/distribution/current/src/etc/scenari/subscribe.intranet">view</A>)
+
+
+<BR>
+<P>
+</LI>
+<LI><A NAME="9956"><tex2html_anchor_invisible_mark></A><TT>subscribe</TT> <TT>intranetorowner</TT>
+	(<A NAME="tex2html45"
+  HREF="http://listes.cru.fr/sympa/distribution/current/src/etc/scenari/subscribe.intranetorowner">view</A>)
+
+
+<BR>
+<P>
+</LI>
+<LI><A NAME="9959"><tex2html_anchor_invisible_mark></A><TT>subscribe</TT> <TT>open</TT>
+	(<A NAME="tex2html46"
+  HREF="http://listes.cru.fr/sympa/distribution/current/src/etc/scenari/subscribe.open">view</A>)
+
+
+<BR>
+<P>
+</LI>
+<LI><A NAME="9962"><tex2html_anchor_invisible_mark></A><TT>subscribe</TT> <TT>open_notify</TT>
+	(<A NAME="tex2html47"
+  HREF="http://listes.cru.fr/sympa/distribution/current/src/etc/scenari/subscribe.open_notify">view</A>)
+
+
+<BR>
+<P>
+</LI>
+<LI><A NAME="9965"><tex2html_anchor_invisible_mark></A><TT>subscribe</TT> <TT>open_quiet</TT>
+	(<A NAME="tex2html48"
+  HREF="http://listes.cru.fr/sympa/distribution/current/src/etc/scenari/subscribe.open_quiet">view</A>)
+
+
+<BR>
+<P>
+</LI>
+<LI><A NAME="9968"><tex2html_anchor_invisible_mark></A><TT>subscribe</TT> <TT>owner</TT>
+	(<A NAME="tex2html49"
+  HREF="http://listes.cru.fr/sympa/distribution/current/src/etc/scenari/subscribe.owner">view</A>)
+
+
+<BR>
+<P>
+</LI>
+<LI><A NAME="9971"><tex2html_anchor_invisible_mark></A><TT>subscribe</TT> <TT>smime</TT>
+	(<A NAME="tex2html50"
+  HREF="http://listes.cru.fr/sympa/distribution/current/src/etc/scenari/subscribe.smime">view</A>)
+
+
+<BR>
+<P>
+</LI>
+<LI><A NAME="9974"><tex2html_anchor_invisible_mark></A><TT>subscribe</TT> <TT>smimeorowner</TT>
+	(<A NAME="tex2html51"
+  HREF="http://listes.cru.fr/sympa/distribution/current/src/etc/scenari/subscribe.smimeorowner">view</A>)
+
+
+<BR>
+<P>
+</LI>
+</UL>
+
+<P>
+
+<H2><A NAME="SECTION002132000000000000000"><tex2html_anchor_invisible_mark></A>
+    <A NAME="par-unsubscribe"><tex2html_anchor_mark></A><BR>
+20.3.2 unsubscribe
+</H2>
+
+<P>
+(Default value: <TT>open</TT>)
+
+<P>
+<TT>unsubscribe</TT> parameter is defined by an authorization scenario (see~<A HREF=<tex2html_cr_mark>#scenarios#9979><tex2html_cr_mark></A>, page~<A HREF=<tex2html_cr_mark>#scenarios#9980><tex2html_cross_ref_visible_mark></A>)
+
+<P>
+This parameter specifies the unsubscription method for the list.
+Use <TT>open_notify</TT> or <TT>auth_notify</TT> to allow owner
+notification of each unsubscribe command. 
+Predefined authorization scenarios are :
+
+<P>
+
+<UL>
+<LI><A NAME="9981"><tex2html_anchor_invisible_mark></A><TT>unsubscribe</TT> <TT>auth</TT> 
+	(<A NAME="tex2html52"
+  HREF="http://listes.cru.fr/sympa/distribution/current/src/etc/scenari/unsubscribe.auth">view</A>)
+
+
+<BR>
+<P>
+</LI>
+<LI><A NAME="9984"><tex2html_anchor_invisible_mark></A><TT>unsubscribe</TT> <TT>auth_notify</TT> 
+	(<A NAME="tex2html53"
+  HREF="http://listes.cru.fr/sympa/distribution/current/src/etc/scenari/unsubscribe.auth_notify">view</A>)
+
+
+<BR>
+<P>
+</LI>
+<LI><A NAME="9987"><tex2html_anchor_invisible_mark></A><TT>unsubscribe</TT> <TT>closed</TT> 
+	(<A NAME="tex2html54"
+  HREF="http://listes.cru.fr/sympa/distribution/current/src/etc/scenari/unsubscribe.closed">view</A>)
+
+
+<BR>
+<P>
+</LI>
+<LI><A NAME="9990"><tex2html_anchor_invisible_mark></A><TT>unsubscribe</TT> <TT>open</TT> 
+	(<A NAME="tex2html55"
+  HREF="http://listes.cru.fr/sympa/distribution/current/src/etc/scenari/unsubscribe.open">view</A>)
+
+
+<BR>
+<P>
+</LI>
+<LI><A NAME="9993"><tex2html_anchor_invisible_mark></A><TT>unsubscribe</TT> <TT>open_notify</TT> 
+	(<A NAME="tex2html56"
+  HREF="http://listes.cru.fr/sympa/distribution/current/src/etc/scenari/unsubscribe.open_notify">view</A>)
+
+
+<BR>
+<P>
+</LI>
+<LI><A NAME="9996"><tex2html_anchor_invisible_mark></A><TT>unsubscribe</TT> <TT>owner</TT> 
+	(<A NAME="tex2html57"
+  HREF="http://listes.cru.fr/sympa/distribution/current/src/etc/scenari/unsubscribe.owner">view</A>)
+
+
+<BR>
+<P>
+</LI>
+</UL>
+
+<P>
+
+<H2><A NAME="SECTION002133000000000000000"><tex2html_anchor_invisible_mark></A>
+    <A NAME="par-add"><tex2html_anchor_mark></A><BR>
+20.3.3 add
+</H2>
+
+<P>
+(Default value: <TT>owner</TT>)
+
+<P>
+<TT>add</TT> parameter is defined by an authorization scenario (see~<A HREF=<tex2html_cr_mark>#scenarios#10001><tex2html_cr_mark></A>, page~<A HREF=<tex2html_cr_mark>#scenarios#10002><tex2html_cross_ref_visible_mark></A>)
+
+<P>
+This parameter specifies who is authorized to use the <A NAME="10003"><tex2html_anchor_invisible_mark></A><TT>ADD</TT> command.
+Predefined authorization scenarios are :
+
+<P>
+
+<UL>
+<LI><A NAME="10006"><tex2html_anchor_invisible_mark></A><TT>add</TT> <TT>auth</TT>
+	(<A NAME="tex2html58"
+  HREF="http://listes.cru.fr/sympa/distribution/current/src/etc/scenari/add.auth">view</A>)
+
+
+<BR>
+<P>
+</LI>
+<LI><A NAME="10009"><tex2html_anchor_invisible_mark></A><TT>add</TT> <TT>closed</TT>
+	(<A NAME="tex2html59"
+  HREF="http://listes.cru.fr/sympa/distribution/current/src/etc/scenari/add.closed">view</A>)
+
+
+<BR>
+<P>
+</LI>
+<LI><A NAME="10012"><tex2html_anchor_invisible_mark></A><TT>add</TT> <TT>owner</TT>
+	(<A NAME="tex2html60"
+  HREF="http://listes.cru.fr/sympa/distribution/current/src/etc/scenari/add.owner">view</A>)
+
+
+<BR>
+<P>
+</LI>
+<LI><A NAME="10015"><tex2html_anchor_invisible_mark></A><TT>add</TT> <TT>owner_notify</TT>
+	(<A NAME="tex2html61"
+  HREF="http://listes.cru.fr/sympa/distribution/current/src/etc/scenari/add.owner_notify">view</A>)
+
+
+<BR>
+<P>
+</LI>
+</UL>
+
+<P>
+
+<H2><A NAME="SECTION002134000000000000000"><tex2html_anchor_invisible_mark></A>
+    <A NAME="par-del"><tex2html_anchor_mark></A><BR>
+20.3.4 del
+</H2>
+
+<P>
+(Default value: <TT>owner</TT>)
+
+<P>
+<TT>del</TT> parameter is defined by an authorization scenario (see~<A HREF=<tex2html_cr_mark>#scenarios#10020><tex2html_cr_mark></A>, page~<A HREF=<tex2html_cr_mark>#scenarios#10021><tex2html_cross_ref_visible_mark></A>)
+
+<P>
+This parameter specifies who is authorized to use the <A NAME="10022"><tex2html_anchor_invisible_mark></A><TT>DEL</TT> command.
+Predefined authorization scenarios are :
+
+<P>
+
+<UL>
+<LI><A NAME="10025"><tex2html_anchor_invisible_mark></A><TT>del</TT> <TT>auth</TT> 
+	(<A NAME="tex2html62"
+  HREF="http://listes.cru.fr/sympa/distribution/current/src/etc/scenari/del.auth">view</A>)
+
+
+<BR>
+<P>
+</LI>
+<LI><A NAME="10028"><tex2html_anchor_invisible_mark></A><TT>del</TT> <TT>closed</TT> 
+	(<A NAME="tex2html63"
+  HREF="http://listes.cru.fr/sympa/distribution/current/src/etc/scenari/del.closed">view</A>)
+
+
+<BR>
+<P>
+</LI>
+<LI><A NAME="10031"><tex2html_anchor_invisible_mark></A><TT>del</TT> <TT>owner</TT> 
+	(<A NAME="tex2html64"
+  HREF="http://listes.cru.fr/sympa/distribution/current/src/etc/scenari/del.owner">view</A>)
+
+
+<BR>
+<P>
+</LI>
+<LI><A NAME="10034"><tex2html_anchor_invisible_mark></A><TT>del</TT> <TT>owner_notify</TT> 
+	(<A NAME="tex2html65"
+  HREF="http://listes.cru.fr/sympa/distribution/current/src/etc/scenari/del.owner_notify">view</A>)
+
+
+<BR>
+<P>
+</LI>
+</UL>
+
+<P>
+
+<H2><A NAME="SECTION002135000000000000000"><tex2html_anchor_invisible_mark></A>
+    <A NAME="par-remind"><tex2html_anchor_mark></A><BR>
+20.3.5 remind
+</H2>
+
+<P>
+(Default value: <TT>owner</TT>)
+
+<P>
+<TT>remind</TT> parameter is defined by an authorization scenario (see~<A HREF=<tex2html_cr_mark>#scenarios#10039><tex2html_cr_mark></A>, page~<A HREF=<tex2html_cr_mark>#scenarios#10040><tex2html_cross_ref_visible_mark></A>)
+
+<P>
+This parameter specifies who is authorized to use the <A NAME="10041"><tex2html_anchor_invisible_mark></A><TT>remind</TT> command.
+Predefined authorization scenarios are :
+
+<P>
+
+<UL>
+<LI><A NAME="10044"><tex2html_anchor_invisible_mark></A><TT>remind</TT> <TT>listmaster</TT> 
+	(<A NAME="tex2html66"
+  HREF="http://listes.cru.fr/sympa/distribution/current/src/etc/scenari/remind.listmaster">view</A>)
+
+
+<BR>
+<P>
+</LI>
+<LI><A NAME="10047"><tex2html_anchor_invisible_mark></A><TT>remind</TT> <TT>owner</TT> 
+	(<A NAME="tex2html67"
+  HREF="http://listes.cru.fr/sympa/distribution/current/src/etc/scenari/remind.owner">view</A>)
+
+
+<BR>
+<P>
+</LI>
+</UL>
+
+<P>
+<A NAME="list-task-parameters"><tex2html_anchor_mark></A>
+<H2><A NAME="SECTION002136000000000000000">
+20.3.6 remind_task</A>
+</H2>
+
+<P>
+(Default value: <TT>no default value</TT>)
+
+<P>
+This parameter states which model is used to create a <TT>remind</TT> task. 
+A <TT>remind</TT> task regurlaly sends to the subscribers a message which reminds them
+their subscription to list.
+
+<P>
+example :
+
+<P>
+remind annual
+
+<P>
+
+<H2><A NAME="SECTION002137000000000000000">
+20.3.7 expire_task</A>
+</H2>
+
+<P>
+(Default value: <TT>no default value</TT>)
+
+<P>
+This parameter states which model is used to create a <TT>remind</TT> task.
+A <TT>expire</TT> task regurlaly checks the inscription or reinscription date of subscribers
+and asks them to renew their subscription. If they don't they are deleted.
+
+<P>
+example :
+
+<P>
+expire annual
+
+<P>
+
+<H2><A NAME="SECTION002138000000000000000"><tex2html_anchor_invisible_mark></A>
+    <A NAME="par-send"><tex2html_anchor_mark></A><BR>
+20.3.8 send
+</H2>
+
+<P>
+(Default value: <TT>private</TT>)
+
+<P>
+<TT>send</TT> parameter is defined by an authorization scenario (see~<A HREF=<tex2html_cr_mark>#scenarios#10054><tex2html_cr_mark></A>, page~<A HREF=<tex2html_cr_mark>#scenarios#10055><tex2html_cross_ref_visible_mark></A>)
+
+<P>
+This parameter specifies who can send messages to the list. Valid values for this
+parameter are pointers to <I>scenarios</I>.
+
+<P>
+
+<UL>
+<LI><A NAME="10056"><tex2html_anchor_invisible_mark></A><TT>send</TT> <TT>closed</TT> 
+	(<A NAME="tex2html68"
+  HREF="http://listes.cru.fr/sympa/distribution/current/src/etc/scenari/send.closed">view</A>)
+
+
+<BR>
+<P>
+</LI>
+<LI><A NAME="10059"><tex2html_anchor_invisible_mark></A><TT>send</TT> <TT>editorkey</TT> 
+	(<A NAME="tex2html69"
+  HREF="http://listes.cru.fr/sympa/distribution/current/src/etc/scenari/send.editorkey">view</A>)
+
+
+<BR>
+<P>
+</LI>
+<LI><A NAME="10062"><tex2html_anchor_invisible_mark></A><TT>send</TT> <TT>editorkeyonly</TT> 
+	(<A NAME="tex2html70"
+  HREF="http://listes.cru.fr/sympa/distribution/current/src/etc/scenari/send.editorkeyonly">view</A>)
+
+
+<BR>
+<P>
+</LI>
+<LI><A NAME="10065"><tex2html_anchor_invisible_mark></A><TT>send</TT> <TT>editorkeyonlyauth</TT> 
+	(<A NAME="tex2html71"
+  HREF="http://listes.cru.fr/sympa/distribution/current/src/etc/scenari/send.editorkeyonlyauth">view</A>)
+
+
+<BR>
+<P>
+</LI>
+<LI><A NAME="10068"><tex2html_anchor_invisible_mark></A><TT>send</TT> <TT>intranet</TT> 
+	(<A NAME="tex2html72"
+  HREF="http://listes.cru.fr/sympa/distribution/current/src/etc/scenari/send.intranet">view</A>)
+
+
+<BR>
+<P>
+</LI>
+<LI><A NAME="10071"><tex2html_anchor_invisible_mark></A><TT>send</TT> <TT>intranetorprivate</TT> 
+	(<A NAME="tex2html73"
+  HREF="http://listes.cru.fr/sympa/distribution/current/src/etc/scenari/send.intranetorprivate">view</A>)
+
+
+<BR>
+<P>
+</LI>
+<LI><A NAME="10074"><tex2html_anchor_invisible_mark></A><TT>send</TT> <TT>newsletter</TT> 
+	(<A NAME="tex2html74"
+  HREF="http://listes.cru.fr/sympa/distribution/current/src/etc/scenari/send.newsletter">view</A>)
+
+
+<BR>
+<P>
+</LI>
+<LI><A NAME="10077"><tex2html_anchor_invisible_mark></A><TT>send</TT> <TT>newsletterkeyonly</TT> 
+	(<A NAME="tex2html75"
+  HREF="http://listes.cru.fr/sympa/distribution/current/src/etc/scenari/send.newsletterkeyonly">view</A>)
+
+
+<BR>
+<P>
+</LI>
+<LI><A NAME="10080"><tex2html_anchor_invisible_mark></A><TT>send</TT> <TT>private</TT> 
+	(<A NAME="tex2html76"
+  HREF="http://listes.cru.fr/sympa/distribution/current/src/etc/scenari/send.private">view</A>)
+
+
+<BR>
+<P>
+</LI>
+<LI><A NAME="10083"><tex2html_anchor_invisible_mark></A><TT>send</TT> <TT>private_smime</TT> 
+	(<A NAME="tex2html77"
+  HREF="http://listes.cru.fr/sympa/distribution/current/src/etc/scenari/send.private_smime">view</A>)
+
+
+<BR>
+<P>
+</LI>
+<LI><A NAME="10086"><tex2html_anchor_invisible_mark></A><TT>send</TT> <TT>privateandeditorkey</TT> 
+	(<A NAME="tex2html78"
+  HREF="http://listes.cru.fr/sympa/distribution/current/src/etc/scenari/send.privateandeditorkey">view</A>)
+
+
+<BR>
+<P>
+</LI>
+<LI><A NAME="10089"><tex2html_anchor_invisible_mark></A><TT>send</TT> <TT>privateandnomultipartoreditorkey</TT> 
+	(<A NAME="tex2html79"
+  HREF="http://listes.cru.fr/sympa/distribution/current/src/etc/scenari/send.privateandnomultipartoreditorkey">view</A>)
+
+
+<BR>
+<P>
+</LI>
+<LI><A NAME="10092"><tex2html_anchor_invisible_mark></A><TT>send</TT> <TT>privatekey</TT> 
+	(<A NAME="tex2html80"
+  HREF="http://listes.cru.fr/sympa/distribution/current/src/etc/scenari/send.privatekey">view</A>)
+
+
+<BR>
+<P>
+</LI>
+<LI><A NAME="10095"><tex2html_anchor_invisible_mark></A><TT>send</TT> <TT>privatekeyandeditorkeyonly</TT> 
+	(<A NAME="tex2html81"
+  HREF="http://listes.cru.fr/sympa/distribution/current/src/etc/scenari/send.privatekeyandeditorkeyonly">view</A>)
+
+
+<BR>
+<P>
+</LI>
+<LI><A NAME="10098"><tex2html_anchor_invisible_mark></A><TT>send</TT> <TT>privateoreditorkey</TT> 
+	(<A NAME="tex2html82"
+  HREF="http://listes.cru.fr/sympa/distribution/current/src/etc/scenari/send.privateoreditorkey">view</A>)
+
+
+<BR>
+<P>
+</LI>
+<LI><A NAME="10101"><tex2html_anchor_invisible_mark></A><TT>send</TT> <TT>privateorpublickey</TT> 
+	(<A NAME="tex2html83"
+  HREF="http://listes.cru.fr/sympa/distribution/current/src/etc/scenari/send.privateorpublickey">view</A>)
+
+
+<BR>
+<P>
+</LI>
+<LI><A NAME="10104"><tex2html_anchor_invisible_mark></A><TT>send</TT> <TT>public</TT> 
+	(<A NAME="tex2html84"
+  HREF="http://listes.cru.fr/sympa/distribution/current/src/etc/scenari/send.public">view</A>)
+
+
+<BR>
+<P>
+</LI>
+<LI><A NAME="10107"><tex2html_anchor_invisible_mark></A><TT>send</TT> <TT>public_nobcc</TT> 
+	(<A NAME="tex2html85"
+  HREF="http://listes.cru.fr/sympa/distribution/current/src/etc/scenari/send.public_nobcc">view</A>)
+
+
+<BR>
+<P>
+</LI>
+<LI><A NAME="10110"><tex2html_anchor_invisible_mark></A><TT>send</TT> <TT>publickey</TT> 
+	(<A NAME="tex2html86"
+  HREF="http://listes.cru.fr/sympa/distribution/current/src/etc/scenari/send.publickey">view</A>)
+
+
+<BR>
+<P>
+</LI>
+<LI><A NAME="10113"><tex2html_anchor_invisible_mark></A><TT>send</TT> <TT>publicnoattachment</TT> 
+	(<A NAME="tex2html87"
+  HREF="http://listes.cru.fr/sympa/distribution/current/src/etc/scenari/send.publicnoattachment">view</A>)
+
+
+<BR>
+<P>
+</LI>
+<LI><A NAME="10116"><tex2html_anchor_invisible_mark></A><TT>send</TT> <TT>publicnomultipart</TT> 
+	(<A NAME="tex2html88"
+  HREF="http://listes.cru.fr/sympa/distribution/current/src/etc/scenari/send.publicnomultipart">view</A>)
+
+
+<BR>
+<P>
+</LI>
+</UL>
+
+<P>
+
+<H2><A NAME="SECTION002139000000000000000"><tex2html_anchor_invisible_mark></A>
+    <A NAME="par-review"><tex2html_anchor_mark></A><BR>
+20.3.9 review
+</H2>
+
+<P>
+(Default value: <TT>owner</TT>)
+
+<P>
+<TT>review</TT> parameter is defined by an authorization scenario (see~<A HREF=<tex2html_cr_mark>#scenarios#10121><tex2html_cr_mark></A>, page~<A HREF=<tex2html_cr_mark>#scenarios#10122><tex2html_cross_ref_visible_mark></A>)
+
+<P>
+This parameter specifies who can use
+<A NAME="10123"><tex2html_anchor_invisible_mark></A><TT>REVIEW</TT> (see~<A HREF=<tex2html_cr_mark>#cmd-review#3444><tex2html_cr_mark></A>, page~<A HREF=<tex2html_cr_mark>#cmd-review#3445><tex2html_cross_ref_visible_mark></A>),
+administrative requests. 
+
+<P>
+Predefined authorization scenarios are :
+
+<P>
+
+<UL>
+<LI><A NAME="10126"><tex2html_anchor_invisible_mark></A><TT>review</TT> <TT>closed</TT> 
+	(<A NAME="tex2html89"
+  HREF="http://listes.cru.fr/sympa/distribution/current/src/etc/scenari/review.closed">view</A>)
+
+
+<BR>
+<P>
+</LI>
+<LI><A NAME="10129"><tex2html_anchor_invisible_mark></A><TT>review</TT> <TT>intranet</TT> 
+	(<A NAME="tex2html90"
+  HREF="http://listes.cru.fr/sympa/distribution/current/src/etc/scenari/review.intranet">view</A>)
+
+
+<BR>
+<P>
+</LI>
+<LI><A NAME="10132"><tex2html_anchor_invisible_mark></A><TT>review</TT> <TT>listmaster</TT> 
+	(<A NAME="tex2html91"
+  HREF="http://listes.cru.fr/sympa/distribution/current/src/etc/scenari/review.listmaster">view</A>)
+
+
+<BR>
+<P>
+</LI>
+<LI><A NAME="10135"><tex2html_anchor_invisible_mark></A><TT>review</TT> <TT>owner</TT> 
+	(<A NAME="tex2html92"
+  HREF="http://listes.cru.fr/sympa/distribution/current/src/etc/scenari/review.owner">view</A>)
+
+
+<BR>
+<P>
+</LI>
+<LI><A NAME="10138"><tex2html_anchor_invisible_mark></A><TT>review</TT> <TT>private</TT> 
+	(<A NAME="tex2html93"
+  HREF="http://listes.cru.fr/sympa/distribution/current/src/etc/scenari/review.private">view</A>)
+
+
+<BR>
+<P>
+</LI>
+<LI><A NAME="10141"><tex2html_anchor_invisible_mark></A><TT>review</TT> <TT>public</TT> 
+	(<A NAME="tex2html94"
+  HREF="http://listes.cru.fr/sympa/distribution/current/src/etc/scenari/review.public">view</A>)
+
+
+<BR>
+<P>
+</LI>
+</UL>
+
+<P>
+
+<H2><A NAME="SECTION0021310000000000000000"><tex2html_anchor_invisible_mark></A>
+    <A NAME="par-shared"><tex2html_anchor_mark></A>    <A NAME="3474"><tex2html_anchor_invisible_mark></A><BR>
+20.3.10 shared_doc
+</H2>
+
+<P>
+This paragraph defines read and edit access to the shared document 
+repository.
+
+<P>
+
+<H3><A NAME="SECTION0021310100000000000000">
+20.3.10.1 d_read</A>
+</H3>
+
+<P>
+(Default value: <TT>private</TT>)
+
+<P>
+<TT>d_read</TT> parameter is defined by an authorization scenario (see~<A HREF=<tex2html_cr_mark>#scenarios#10146><tex2html_cr_mark></A>, page~<A HREF=<tex2html_cr_mark>#scenarios#10147><tex2html_cross_ref_visible_mark></A>)
+
+<P>
+This parameter specifies who can read shared documents
+(access the contents of a list's <A NAME="10148"><tex2html_anchor_invisible_mark></A><TT>shared</TT> directory).
+
+<P>
+Predefined authorization scenarios are :
+
+<P>
+
+<UL>
+<LI><A NAME="10151"><tex2html_anchor_invisible_mark></A><TT>d_read</TT> <TT>owner</TT> 
+	(<A NAME="tex2html95"
+  HREF="http://listes.cru.fr/sympa/distribution/current/src/etc/scenari/d_read.owner">view</A>)
+
+
+<BR>
+<P>
+</LI>
+<LI><A NAME="10154"><tex2html_anchor_invisible_mark></A><TT>d_read</TT> <TT>private</TT> 
+	(<A NAME="tex2html96"
+  HREF="http://listes.cru.fr/sympa/distribution/current/src/etc/scenari/d_read.private">view</A>)
+
+
+<BR>
+<P>
+</LI>
+<LI><A NAME="10157"><tex2html_anchor_invisible_mark></A><TT>d_read</TT> <TT>p</TT> 
+	(<A NAME="tex2html97"
+  HREF="http://listes.cru.fr/sympa/distribution/current/src/etc/scenari/d_read.p">view</A>)
+
+
+<BR>
+<P>
+</LI>
+<LI><A NAME="10160"><tex2html_anchor_invisible_mark></A><TT>d_read</TT> <TT>public</TT> 
+	(<A NAME="tex2html98"
+  HREF="http://listes.cru.fr/sympa/distribution/current/src/etc/scenari/d_read.public">view</A>)
+
+
+<BR>
+<P>
+</LI>
+</UL>
+
+<P>
+
+<H3><A NAME="SECTION0021310200000000000000">
+20.3.10.2 d_edit</A>
+</H3>
+
+<P>
+(Default value: <TT>owner</TT>)
+
+<P>
+<TT>d_edit</TT> parameter is defined by an authorization scenario (see~<A HREF=<tex2html_cr_mark>#scenarios#10165><tex2html_cr_mark></A>, page~<A HREF=<tex2html_cr_mark>#scenarios#10166><tex2html_cross_ref_visible_mark></A>)
+
+<P>
+This parameter specifies who can perform changes
+within a list's <A NAME="10167"><tex2html_anchor_invisible_mark></A><TT>shared</TT> directory (i.e. upload files
+and create subdirectories).
+
+<P>
+Predefined authorization scenarios are :
+
+<P>
+
+<UL>
+<LI><A NAME="10170"><tex2html_anchor_invisible_mark></A><TT>d_edit</TT> <TT>editor</TT> 
+	(<A NAME="tex2html99"
+  HREF="http://listes.cru.fr/sympa/distribution/current/src/etc/scenari/d_edit.editor">view</A>)
+
+
+<BR>
+<P>
+</LI>
+<LI><A NAME="10173"><tex2html_anchor_invisible_mark></A><TT>d_edit</TT> <TT>owner</TT> 
+	(<A NAME="tex2html100"
+  HREF="http://listes.cru.fr/sympa/distribution/current/src/etc/scenari/d_edit.owner">view</A>)
+
+
+<BR>
+<P>
+</LI>
+<LI><A NAME="10176"><tex2html_anchor_invisible_mark></A><TT>d_edit</TT> <TT>private</TT> 
+	(<A NAME="tex2html101"
+  HREF="http://listes.cru.fr/sympa/distribution/current/src/etc/scenari/d_edit.private">view</A>)
+
+
+<BR>
+<P>
+</LI>
+<LI><A NAME="10179"><tex2html_anchor_invisible_mark></A><TT>d_edit</TT> <TT>p</TT> 
+	(<A NAME="tex2html102"
+  HREF="http://listes.cru.fr/sympa/distribution/current/src/etc/scenari/d_edit.p">view</A>)
+
+
+<BR>
+<P>
+</LI>
+<LI><A NAME="10182"><tex2html_anchor_invisible_mark></A><TT>d_edit</TT> <TT>public</TT> 
+	(<A NAME="tex2html103"
+  HREF="http://listes.cru.fr/sympa/distribution/current/src/etc/scenari/d_edit.public">view</A>)
+
+
+<BR>
+<P>
+</LI>
+</UL>
+
+<P>
+Example:
+<BLOCKQUOTE>
+</BLOCKQUOTE><PRE><tex2html_verbatim_mark>verbatim373#</PRE><BLOCKQUOTE>
+</BLOCKQUOTE>
+
+<P>
+
+<H3><A NAME="SECTION0021310300000000000000">
+20.3.10.3 quota</A>
+</H3>
+
+<P>
+<A NAME="10185"><tex2html_anchor_invisible_mark></A><TT>quota</TT> <I>number-of-Kbytes</I>
+
+<P>
+This parameter specifies the disk quota for the document repository, in kilobytes.
+If quota is exceeded, file uploads fail.
+
+<P>
+
+<H1><A NAME="SECTION002140000000000000000">
+20.4 List tuning</A>
+</H1>
+
+<P>
+
+<H2><A NAME="SECTION002141000000000000000"><tex2html_anchor_invisible_mark></A>
+    <A NAME="par-reply-to-header"><tex2html_anchor_mark></A><BR>
+20.4.1 reply_to_header
+</H2>
+
+<P>
+The <A NAME="10188"><tex2html_anchor_invisible_mark></A><TT>reply_to_header</TT> parameter starts a paragraph defining
+	what <I>Sympa</I> will place in the <A NAME="10192"><tex2html_anchor_invisible_mark></A><TT>Reply-To:</TT> SMTP header field of
+	the messages it distributes.
+
+<P>
+
+<UL>
+<LI><A NAME="10195"><tex2html_anchor_invisible_mark></A><TT>value</TT>   <TT>sender</TT> <TT>|</TT>
+    			<TT>list</TT>   <TT>|</TT>
+    			<TT>all</TT>    <TT>|</TT>
+    			<TT>other_email</TT>
+	(Default value: <TT>sender</TT>)
+
+<P>
+This parameter indicates whether the <A NAME="10199"><tex2html_anchor_invisible_mark></A><TT>Reply-To:</TT> field
+	should indicate the sender of the message (<TT>sender</TT>),
+	the list itself (<TT>list</TT>), both list and sender (<TT>all</TT>)
+        or an arbitrary e-mail address (defined by the
+	<A NAME="10202"><tex2html_anchor_invisible_mark></A><TT>other_email</TT> parameter).
+
+<P>
+Note: it is inadvisable to change this parameter, and particularly inadvisable to
+set it to <TT>list</TT>. Experience has shown it to be almost inevitable that users,
+mistakenly believing that they are replying only to the sender, will send private
+messages to a list. This can lead, at the very least, to embarrassment, and sometimes
+to more serious consequences.
+
+<P>
+</LI>
+<LI><A NAME="10205"><tex2html_anchor_invisible_mark></A><TT>other_email</TT> <I>an_email_address</I>
+
+<P>
+If <A NAME="10208"><tex2html_anchor_invisible_mark></A><TT>value</TT> was set to <TT>other_email</TT>, this parameter
+	defines the e-mail address used.
+
+<P>
+</LI>
+<LI><A NAME="10211"><tex2html_anchor_invisible_mark></A><TT>apply</TT>   <TT>respect</TT> <TT>|</TT>
+    			<TT>forced</TT>  
+	(Default value: <TT>respect</TT>)
+
+<P>
+The default is to respect (preserve) the existing <A NAME="10215"><tex2html_anchor_invisible_mark></A><TT>Reply-To:</TT> SMTP header field
+	in incoming messages. If set to <TT>forced</TT>, <A NAME="10218"><tex2html_anchor_invisible_mark></A><TT>Reply-To:</TT> SMTP header
+	field will be overwritten.
+
+<P>
+</LI>
+</UL>
+
+<P>
+Example :
+<BLOCKQUOTE>
+</BLOCKQUOTE><PRE><tex2html_verbatim_mark>verbatim374#</PRE><BLOCKQUOTE>
+</BLOCKQUOTE>
+
+<P>
+
+<H2><A NAME="SECTION002142000000000000000"><tex2html_anchor_invisible_mark></A>
+ <A NAME="par-max-size"><tex2html_anchor_mark></A> <A NAME="3570"><tex2html_anchor_invisible_mark></A><BR>
+20.4.2 max_size
+</H2>
+
+<P>
+(Default value: <TT><A NAME="10223"><tex2html_anchor_invisible_mark></A><TT>max_size</TT> robot parameter</TT>)
+
+<P>
+<A NAME="10226"><tex2html_anchor_invisible_mark></A><TT>max_size</TT> <I>number-of-bytes</I>
+
+<P>
+Maximum size of a message in 8-bit bytes. The default value is set in
+ the <A NAME="10229"><tex2html_anchor_invisible_mark></A><TT>/usr/local/sympa-gb/etc/sympa.conf</TT> file.
+
+<P>
+
+<H2><A NAME="SECTION002143000000000000000"><tex2html_anchor_invisible_mark></A>
+    	<A NAME="par-anonymous-sender"><tex2html_anchor_mark></A>    	<A NAME="3577"><tex2html_anchor_invisible_mark></A><BR>
+20.4.3 anonymous_sender
+</H2>
+
+<P>
+<A NAME="10232"><tex2html_anchor_invisible_mark></A><TT>anonymous_sender</TT> <I>value</I>
+
+<P>
+If this parameter is set for a list, all messages distributed via the list are
+rendered anonymous. SMTP <TT>From:</TT> headers in distributed messages are altered
+to contain the value of the <A NAME="10235"><tex2html_anchor_invisible_mark></A><TT>anonymous_sender</TT> parameter. Various other
+fields are removed (<TT>Received:, Reply-To:, Sender:, 
+X-Sender:, Message-id:, Resent-From:</TT>
+
+<P>
+
+<H2><A NAME="SECTION002144000000000000000"><tex2html_anchor_invisible_mark></A>
+    	<A NAME="par-custom-header"><tex2html_anchor_mark></A>    	<A NAME="3585"><tex2html_anchor_invisible_mark></A><BR>
+20.4.4 custom_header
+</H2>
+
+<P>
+<A NAME="10238"><tex2html_anchor_invisible_mark></A><TT>custom_header</TT> <I>header-field</I><TT>:</TT> <I>value</I>
+
+<P>
+This parameter is optional. The headers specified
+will be added to the headers of messages distributed via the
+list. As of release 1.2.2 of <I>Sympa</I>, it is possible to put several
+custom header lines in the configuration file at the same time.
+
+<P>
+ Example: <TT>custom_header X-url: http://www.cru.fr/listes/apropos/sedesabonner.faq.html</TT>.
+
+<P>
+
+<H2><A NAME="SECTION002145000000000000000"><tex2html_anchor_invisible_mark></A>
+    	<A NAME="par-rfc2369-header-fields"><tex2html_anchor_mark></A>    	<A NAME="3593"><tex2html_anchor_invisible_mark></A><BR>
+20.4.5 rfc2369_header_fields
+</H2>
+
+<P>
+(Default value: <TT><A NAME="10245"><tex2html_anchor_invisible_mark></A><TT>rfc2369_header_fields</TT> sympa.conf parameter</TT>)
+	<A NAME="10248"><tex2html_anchor_invisible_mark></A><TT>rfc2369_header_fields</TT> <I>help,archive</I>
+
+<P>
+RFC2369 compliant header fields (List-xxx) to be added to distributed messages. 
+These header-fields should be implemented by MUA's, adding menus.
+
+<P>
+ Example: <TT>custom_header X-url: http://www.cru.fr/listes/apropos/sedesabonner.faq.html</TT>.
+
+<P>
+
+<H2><A NAME="SECTION002146000000000000000">
+20.4.6 custom_subject</A>
+</H2>
+
+<P>
+<A NAME="par-custom-subject"><tex2html_anchor_mark></A>	<A NAME="3600"><tex2html_anchor_invisible_mark></A>
+
+<P>
+<A NAME="10252"><tex2html_anchor_invisible_mark></A><TT>custom_subject</TT> <I>value</I>
+
+<P>
+This parameter is optional. It specifies a string which is
+added to the subject of distributed messages (intended to help
+users who do not use automatic tools to sort incoming messages).
+This string will be surrounded by [] characters.
+
+<P>
+The custom subject can also refer to list variables ([list-;SPMgt;sequence] in the example bellow).
+
+<P>
+ Example: <TT>custom_subject sympa-users</TT>.
+
+<P>
+ Example: <TT>custom_subject newsletter num [list-;SPMgt;sequence]</TT>.
+
+<P>
+
+<H2><A NAME="SECTION002147000000000000000"><tex2html_anchor_invisible_mark></A>
+    	<A NAME="par-footer-type"><tex2html_anchor_mark></A>	<A NAME="3607"><tex2html_anchor_invisible_mark></A><BR>
+20.4.7 footer_type
+</H2>
+
+<P>
+(Default value: <TT>mime</TT>)
+
+<P>
+<A NAME="10258"><tex2html_anchor_invisible_mark></A><TT>footer_type (optional, default value is mime)</TT>
+   <TT>mime</TT> <TT>|</TT>
+   <TT>append</TT>
+
+<P>
+List owners may decide to add message headers or footers to messages
+sent via the list. This parameter defines the way a footer/header is
+added to a message.
+
+<P>
+
+<UL>
+<LI><A NAME="10261"><tex2html_anchor_invisible_mark></A><TT>footer_type</TT> <TT>mime</TT>
+
+<P>
+The default value. Sympa will add the
+       footer/header as a new MIME part. If the message is in
+       multipart/alternative format, no action is taken (since this would require another
+       level of MIME encapsulation).
+
+<P>
+</LI>
+<LI><A NAME="10264"><tex2html_anchor_invisible_mark></A><TT>footer_type</TT> <TT>append</TT> 
+
+<P>
+Sympa will not create new MIME parts, but
+        will try to append the header/footer to the body of the
+        message. <A NAME="10267"><tex2html_anchor_invisible_mark></A><TT>/usr/local/sympa-gb/expl/mylist/message.footer.mime</TT> will be
+        ignored. Headers/footers may be appended to text/plain
+        messages only.
+
+<P>
+</LI>
+</UL>
+
+<P>
+
+<H2><A NAME="SECTION002148000000000000000">
+20.4.8 digest</A>
+</H2>
+
+<P>
+<A NAME="par-digest"><tex2html_anchor_mark></A>    	<A NAME="3622"><tex2html_anchor_invisible_mark></A>
+
+<P>
+<A NAME="10270"><tex2html_anchor_invisible_mark></A><TT>digest</TT> <I>daylist</I> <I>hour</I><TT>:</TT><I>minutes</I>
+
+<P>
+Definition of <A NAME="10273"><tex2html_anchor_invisible_mark></A><TT>digest</TT> mode. If this parameter is present,
+subscribers can select the option of receiving messages in multipart/digest
+MIME format.  Messages are then grouped together, and compilations of messages
+are sent to subscribers in accordance with the rythm selected
+with this parameter.
+
+<P>
+<I>Daylist</I> designates a list of days in the week in number
+format (from 0 for Sunday to 6 for Saturday), separated by commas.
+
+<P>
+ Example: <TT>digest 1,2,3,4,5 15:30</TT> 
+
+<P>
+In this example, <I>Sympa</I> sends digests at 3:30 PM from Monday to Friday.
+
+<P>
+<B>WARNING</B>: if the sending time is too late, <I>Sympa</I> may not
+be able to process it. It is essential that <I>Sympa</I> could scan the digest
+queue at least once between the time laid down for sending the
+digest and 12:00~AM (midnight). As a rule of thumb, do not use a digest time
+later than 11:00~PM.
+
+<P>
+
+<H2><A NAME="SECTION002149000000000000000">
+20.4.9 available_user_options</A>
+</H2>
+
+<P>
+<A NAME="par-available-user-options"><tex2html_anchor_mark></A>	<A NAME="3634"><tex2html_anchor_invisible_mark></A>
+
+<P>
+The <A NAME="10280"><tex2html_anchor_invisible_mark></A><TT>available_user_options</TT> parameter starts a paragraph to
+	define available options for the subscribers of the list.
+
+<P>
+
+<UL>
+<LI><A NAME="10283"><tex2html_anchor_invisible_mark></A><TT>reception</TT> <I>modelist</I>
+
+<P>
+(Default value: <TT><A NAME="10288"><tex2html_anchor_invisible_mark></A><TT>reception</TT> mail,notice,digest,summary,nomail</TT>)
+
+<P>
+<I>modelist</I> is a list of modes (mail, notice, digest, summary, nomail),
+separated by commas. Only these modes will be allowed for the subscribers of
+this list. If a subscriber has a reception mode not in the list, sympa uses
+the mode specified in the <I>default_user_options</I> paragraph.
+
+<P>
+</LI>
+</UL>
+
+<P>
+Example :
+<BLOCKQUOTE>
+</BLOCKQUOTE><PRE><tex2html_verbatim_mark>verbatim375#</PRE><BLOCKQUOTE>
+</BLOCKQUOTE>
+
+<P>
+
+<H2><A NAME="SECTION0021410000000000000000">
+20.4.10 default_user_options</A>
+</H2>
+
+<P>
+<A NAME="par-default-user-options"><tex2html_anchor_mark></A>	<A NAME="3649"><tex2html_anchor_invisible_mark></A>
+
+<P>
+The <A NAME="10291"><tex2html_anchor_invisible_mark></A><TT>default_user_options</TT> parameter starts a paragraph to
+	define a default profile for the subscribers of the list.
+
+<P>
+
+<UL>
+<LI><A NAME="10294"><tex2html_anchor_invisible_mark></A><TT>reception</TT>
+            <TT>notice</TT> <TT>|</TT>
+            <TT>digest</TT> <TT>|</TT>
+            <TT>summary</TT> <TT>|</TT>
+            <TT>nomail</TT> <TT>|</TT>
+            <TT>mail</TT>
+
+<P>
+Mail reception mode.
+
+<P>
+</LI>
+<LI><A NAME="10297"><tex2html_anchor_invisible_mark></A><TT>visibility</TT>
+            <TT>conceal</TT> <TT>|</TT>
+            <TT>noconceal</TT> 
+
+<P>
+Visibility of the subscriber with the <A NAME="10300"><tex2html_anchor_invisible_mark></A><TT>REVIEW</TT>
+        command.
+
+<P>
+</LI>
+</UL>
+
+<P>
+Example :
+<BLOCKQUOTE>
+</BLOCKQUOTE><PRE><tex2html_verbatim_mark>verbatim376#</PRE><BLOCKQUOTE>
+</BLOCKQUOTE>
+
+<P>
+
+<H2><A NAME="SECTION0021411000000000000000">
+20.4.11 cookie</A>
+</H2>
+
+<P>
+<A NAME="par-cookie"><tex2html_anchor_mark></A>	<A NAME="3674"><tex2html_anchor_invisible_mark></A>
+
+<P>
+(Default value: <TT><A NAME="10305"><tex2html_anchor_invisible_mark></A><TT>cookie</TT> robot parameter</TT>)
+
+<P>
+<A NAME="10308"><tex2html_anchor_invisible_mark></A><TT>cookie</TT> <I>random-numbers-or-letters</I>
+
+<P>
+This parameter is a confidential item for generating <A NAME="10311"><tex2html_anchor_invisible_mark></A>authentication keys for administrative commands (<A NAME="10312"><tex2html_anchor_invisible_mark></A><TT>ADD</TT>,
+<A NAME="10315"><tex2html_anchor_invisible_mark></A><TT>DELETE</TT>, etc.).  This parameter should remain concealed,
+even for owners. The cookie is applied to all list owners, and is
+only taken into account when the owner has the <A NAME="10318"><tex2html_anchor_invisible_mark></A><TT>auth</TT>
+parameter (<A NAME="10321"><tex2html_anchor_invisible_mark></A><TT>owner</TT> parameter, see~<A HREF=<tex2html_cr_mark>#par-owner#3683><tex2html_cr_mark></A>,
+page~<A HREF=<tex2html_cr_mark>#par-owner#3684><tex2html_cross_ref_visible_mark></A>).
+
+<P>
+ Example: <TT>cookie secret22</TT>
+
+<P>
+
+<H2><A NAME="SECTION0021412000000000000000"><tex2html_anchor_invisible_mark></A>
+    <A NAME="par-priority"><tex2html_anchor_mark></A><BR>
+20.4.12 priority
+</H2>
+
+<P>
+(Default value: <TT><A NAME="10327"><tex2html_anchor_invisible_mark></A><TT>default_list_priority</TT> robot parameter</TT>)
+
+<P>
+<A NAME="10330"><tex2html_anchor_invisible_mark></A><TT>priority</TT> <I>0-9</I>
+
+<P>
+The priority with which <I>Sympa</I> will process messages for this list.
+This level of priority is applied while the message is going through the spool. 
+
+<P>
+0 is the highest priority. The following priorities can be used:  
+<TT>0...9~z</TT>.
+<TT>z</TT> is a special priority causing messages to
+remain spooled indefinitely (useful to hang up a list).
+
+<P>
+Available since release 2.3.1.
+
+<P>
+
+<H1><A NAME="SECTION002150000000000000000">
+20.5 Bounce related</A>
+</H1>
+
+<P>
+
+<H2><A NAME="SECTION002151000000000000000"><tex2html_anchor_invisible_mark></A>
+    <A NAME="bounce"><tex2html_anchor_mark></A><BR>
+20.5.1 bounce
+</H2>
+
+<P>
+This paragraph defines bounce management parameters :
+
+<P>
+
+<UL>
+<LI><A NAME="warn-rate"><tex2html_anchor_mark></A><A NAME="10334"><tex2html_anchor_invisible_mark></A><TT>warn_rate</TT> 
+
+<P>
+(Default value: <TT><A NAME="10339"><tex2html_anchor_invisible_mark></A><TT>bounce_warn_rate</TT> robot parameter</TT>)
+
+<P>
+The list owner receives a warning whenever a message is distributed and
+	the number (percentage) of bounces exceeds this value.
+
+<P>
+</LI>
+<LI><A NAME="halt-rate"><tex2html_anchor_mark></A><A NAME="10342"><tex2html_anchor_invisible_mark></A><TT>halt_rate</TT> 
+
+<P>
+(Default value: <TT><A NAME="10347"><tex2html_anchor_invisible_mark></A><TT>bounce_halt_rate</TT> robot parameter</TT>)
+
+<P>
+<TT>NOT USED YET</TT>
+
+<P>
+If bounce rate reaches the <TT>halt_rate</TT>, messages 
+	for the list will be halted, i.e. they are retained for subsequent 
+	moderation. Once the number of bounces exceeds this value,
+	messages for the list are no longer distributed. 
+
+<P>
+</LI>
+<LI><A NAME="expire-bounce-task"><tex2html_anchor_mark></A><A NAME="10350"><tex2html_anchor_invisible_mark></A><TT>expire_bounce_task</TT> 
+
+<P>
+(Default value: <TT>d</TT>)aily
+
+<P>
+Name of the task template use to remove old bounces. Usefull to
+        remove bounces for a subscriber email if some message are
+        distributed without receiving new bounce. In this case, the
+        subscriber email seems to be OK again. Active if
+        task_manager.pl is running. 
+
+<P>
+</LI>
+</UL>
+
+<P>
+<I>Example:</I> 
+
+<P>
+<BLOCKQUOTE>
+</BLOCKQUOTE><PRE><tex2html_verbatim_mark>verbatim377#</PRE><BLOCKQUOTE>
+</BLOCKQUOTE>
+
+<P>
+
+<H2><A NAME="SECTION002152000000000000000"><tex2html_anchor_invisible_mark></A>
+    <A NAME="bouncerslevel1"><tex2html_anchor_mark></A><BR>
+20.5.2 bouncers_level1
+</H2>
+
+<P>
+
+<UL>
+<LI><A NAME="rate"><tex2html_anchor_mark></A><A NAME="10354"><tex2html_anchor_invisible_mark></A><TT>rate</TT> 
+
+<P>
+(Default value: <TT><A NAME="10359"><tex2html_anchor_invisible_mark></A><TT>bouncers_level1_rate</TT> config parameter</TT>)
+
+<P>
+Each bouncing user have a score (from 0 to 100).This parameter define the lower score 
+	 for a user to be a level1 bouncing user. For example, with default values : Users with a score
+	 between 45 and 80 are level1 bouncers.
+</LI>
+<LI><A NAME="action"><tex2html_anchor_mark></A><A NAME="10362"><tex2html_anchor_invisible_mark></A><TT>action</TT> 
+
+<P>
+(Default value: <TT><A NAME="10367"><tex2html_anchor_invisible_mark></A><TT>bouncers_level1_action</TT> config parameter</TT>)
+
+<P>
+This parameter define which task is automaticaly applied on level 1 bouncing
+	users: for exemple, automaticaly notify all level1 users.
+
+<P>
+</LI>
+<LI><A NAME="notification"><tex2html_anchor_mark></A><A NAME="10370"><tex2html_anchor_invisible_mark></A><TT>Notification</TT> 
+
+<P>
+(Default value: <TT>owner</TT>)
+
+<P>
+When automatic task is executed on level 1 bouncers, a notification
+	email can be send to listowner or listmaster. This email contain the adresses
+	of concerned users and the name of the action executed.
+
+<P>
+</LI>
+</UL>
+
+<P>
+
+<H2><A NAME="SECTION002153000000000000000"><tex2html_anchor_invisible_mark></A>
+    <A NAME="bouncers-level2"><tex2html_anchor_mark></A><BR>
+20.5.3 bouncers_level2
+</H2>
+
+<P>
+
+<UL>
+<LI><A NAME="rate2"><tex2html_anchor_mark></A><A NAME="10374"><tex2html_anchor_invisible_mark></A><TT>rate</TT> 
+
+<P>
+(Default value: <TT><A NAME="10379"><tex2html_anchor_invisible_mark></A><TT>bouncers_level2_rate</TT> config parameter</TT>)
+
+<P>
+Each bouncing user have a score (from 0 to 100).This parameter define the lower score 
+	 for a user to be a level 2 bouncing user. For example, with default values : Users with a score
+	 between 75 and 100 are level 2 bouncers.
+</LI>
+<LI><A NAME="action2"><tex2html_anchor_mark></A><A NAME="10382"><tex2html_anchor_invisible_mark></A><TT>action</TT> 
+
+<P>
+(Default value: <TT><A NAME="10387"><tex2html_anchor_invisible_mark></A><TT>bouncers_level1_action</TT> config parameter</TT>)
+
+<P>
+This parameter define which task is automaticaly applied on level 2 bouncing
+	users: for exemple, automaticaly notify all level1 users.
+
+<P>
+</LI>
+<LI><A NAME="Notification2"><tex2html_anchor_mark></A><A NAME="10390"><tex2html_anchor_invisible_mark></A><TT>Notification</TT> 
+
+<P>
+(Default value: <TT>owner</TT>)
+
+<P>
+When automatic task is executed on level 2 bouncers, a notification
+	email can be send to listowner or listmaster. This email contain the adresses
+	of concerned users and the name of the action executed.
+
+<P>
+</LI>
+</UL>
+
+<P>
+<I>Example:</I> 
+
+<P>
+<BLOCKQUOTE>
+</BLOCKQUOTE><PRE><tex2html_verbatim_mark>verbatim378#</PRE><BLOCKQUOTE>
+</BLOCKQUOTE>
+
+<P>
+
+<H2><A NAME="SECTION002154000000000000000"><tex2html_anchor_invisible_mark></A>
+<A NAME="welcome-return-path"><tex2html_anchor_mark></A><BR>
+20.5.4 welcome_return_path
+</H2>
+
+<P>
+(Default value: <TT><A NAME="10396"><tex2html_anchor_invisible_mark></A><TT>welcome_return_path</TT> robot parameter</TT>)
+	<A NAME="10399"><tex2html_anchor_invisible_mark></A><TT>welcome_return_path</TT> unique <TT>|</TT> owner
+
+<P>
+If set to <A NAME="10402"><tex2html_anchor_invisible_mark></A><TT>unique</TT>, the welcome message is sent using
+        a unique return path in order to remove the subscriber immediately in
+	the case of a bounce. See <A NAME="10405"><tex2html_anchor_invisible_mark></A><TT>welcome_return_path</TT> <A NAME="10408"><tex2html_anchor_invisible_mark></A><TT>sympa.conf</TT>
+	parameter (<A HREF=<tex2html_cr_mark>#kw-welcome-return-path#3752><tex2html_cr_mark></A>, page~<A HREF=<tex2html_cr_mark>#kw-welcome-return-path#3753><tex2html_cross_ref_visible_mark></A>).
+
+<P>
+
+<H2><A NAME="SECTION002155000000000000000"><tex2html_anchor_invisible_mark></A> 
+<A NAME="remind-return-path"><tex2html_anchor_mark></A><BR>
+20.5.5 remind_return_path
+</H2>
+
+<P>
+(Default value: <TT><A NAME="10413"><tex2html_anchor_invisible_mark></A><TT>remind_return_path</TT> robot parameter</TT>)
+	<A NAME="10416"><tex2html_anchor_invisible_mark></A><TT>remind_return_path</TT> unique <TT>|</TT> owner
+
+<P>
+Same as <A NAME="10419"><tex2html_anchor_invisible_mark></A><TT>welcome_return_path</TT>, but applied to remind
+        messages. See <A NAME="10422"><tex2html_anchor_invisible_mark></A><TT>remind_return_path</TT> <A NAME="10425"><tex2html_anchor_invisible_mark></A><TT>sympa.conf</TT>
+	parameter (<A HREF=<tex2html_cr_mark>#kw-remind-return-path#3762><tex2html_cr_mark></A>, page~<A HREF=<tex2html_cr_mark>#kw-remind-return-path#3763><tex2html_cross_ref_visible_mark></A>).
+
+<P>
+
+<H1><A NAME="SECTION002160000000000000000">
+20.6 Archive related</A>
+</H1>
+
+<P>
+<I>Sympa</I> maintains 2 kinds of archives: mail archives and web archives.
+
+<P>
+Mail archives can be retrieved via a mail command send to the robot,
+they are stored in <A NAME="10429"><tex2html_anchor_invisible_mark></A><TT>/usr/local/sympa-gb/expl/mylist/archives/</TT> directory.
+
+<P>
+Web archives are accessed via the web interface (with access control), they
+are stored in a directory defined in <A NAME="10432"><tex2html_anchor_invisible_mark></A><TT>wwsympa.conf</TT>.
+
+<P>
+
+<H2><A NAME="SECTION002161000000000000000"><tex2html_anchor_invisible_mark></A>
+    <A NAME="par-archive"><tex2html_anchor_mark></A>    <A NAME="3769"><tex2html_anchor_invisible_mark></A><BR>
+20.6.1 archive
+</H2>
+
+<P>
+If the <A NAME="10435"><tex2html_anchor_invisible_mark></A><TT>config</TT> file contains an <A NAME="10438"><tex2html_anchor_invisible_mark></A><TT>archive</TT> paragraph
+<I>Sympa</I> will manage an archive for this list.
+
+<P>
+<I>Example:</I> 
+
+<P>
+<BLOCKQUOTE>
+</BLOCKQUOTE><PRE><tex2html_verbatim_mark>verbatim379#</PRE><BLOCKQUOTE>
+</BLOCKQUOTE>
+
+<P>
+If the <A NAME="10442"><tex2html_anchor_invisible_mark></A><TT>archive</TT> parameter is specified, archives are
+accessible to users through the <A NAME="10445"><tex2html_anchor_invisible_mark></A><TT>GET</TT> command, 
+and the index of the list archives is provided in reply to the <A NAME="10448"><tex2html_anchor_invisible_mark></A><TT>INDEX</TT>
+command (the last message of a list can be consulted using the <A NAME="10451"><tex2html_anchor_invisible_mark></A><TT>LAST</TT> command).
+
+<P>
+<A NAME="10454"><tex2html_anchor_invisible_mark></A><TT>period</TT>
+    <TT>day</TT> <TT>|</TT>
+    <TT>week</TT> <TT>|</TT>
+    <TT>month</TT> <TT>|</TT>
+    <TT>quarter</TT> <TT>|</TT>
+    <TT>year</TT>
+
+<P>
+This parameter specifies how archiving is organized: by <TT>day</TT>, <TT>week</TT>, <TT>month</TT>, <TT>quarter</TT>,
+or <TT>year</TT>.  Generation of automatic list archives requires
+the creation of an archive directory at the root of the list directory 
+(<A NAME="10457"><tex2html_anchor_invisible_mark></A><TT>/usr/local/sympa-gb/expl/mylist/archives/</TT>), used to store these documents.
+
+<P>
+<A NAME="10460"><tex2html_anchor_invisible_mark></A><TT>access</TT>
+    <TT>private</TT> <TT>|</TT>
+    <TT>public</TT> <TT>|</TT>
+    <TT>owner</TT> <TT>|</TT>
+    <TT>closed</TT> <TT>|</TT>
+
+<P>
+This parameter specifies who is authorized to use the <A NAME="10463"><tex2html_anchor_invisible_mark></A><TT>GET</TT>, <A NAME="10466"><tex2html_anchor_invisible_mark></A><TT>LAST</TT> and <A NAME="10469"><tex2html_anchor_invisible_mark></A><TT>INDEX</TT> commands.
+
+<P>
+
+<H2><A NAME="SECTION002162000000000000000"><tex2html_anchor_invisible_mark></A>
+    <A NAME="par-web-archive"><tex2html_anchor_mark></A>    <A NAME="3811"><tex2html_anchor_invisible_mark></A><BR>
+20.6.2 web_archive
+</H2>
+
+<P>
+If the <A NAME="10472"><tex2html_anchor_invisible_mark></A><TT>config</TT> file contains a <A NAME="10475"><tex2html_anchor_invisible_mark></A><TT>web_archive</TT> paragraph
+<I>Sympa</I> will copy all messages distributed via the list to the
+;SPMquot;queueoutgoing;SPMquot;  spool. It is intended to be used with WWSympa html
+archive tools. This paragraph must contain at least the access
+parameter to control who can browse the web archive.
+
+<P>
+<I>Example:</I> 
+
+<P>
+<BLOCKQUOTE>
+</BLOCKQUOTE><PRE><tex2html_verbatim_mark>verbatim380#</PRE><BLOCKQUOTE>
+</BLOCKQUOTE>
+
+<P>
+
+<H3><A NAME="SECTION002162100000000000000">
+20.6.2.1 access</A>
+</H3>
+
+<P>
+<TT>access_web_archive</TT> parameter is defined by an authorization scenario (see~<A HREF=<tex2html_cr_mark>#scenarios#10480><tex2html_cr_mark></A>, page~<A HREF=<tex2html_cr_mark>#scenarios#10481><tex2html_cross_ref_visible_mark></A>)
+
+<P>
+Predefined authorization scenarios are :
+
+<P>
+
+<UL>
+<LI><A NAME="10482"><tex2html_anchor_invisible_mark></A><TT>access</TT> <TT>closed</TT> 
+	(<A NAME="tex2html104"
+  HREF="http://listes.cru.fr/sympa/distribution/current/src/etc/scenari/access_web_archive.closed">view</A>)
+
+
+<BR>
+<P>
+</LI>
+<LI><A NAME="10485"><tex2html_anchor_invisible_mark></A><TT>access</TT> <TT>intranet</TT> 
+	(<A NAME="tex2html105"
+  HREF="http://listes.cru.fr/sympa/distribution/current/src/etc/scenari/access_web_archive.intranet">view</A>)
+
+
+<BR>
+<P>
+</LI>
+<LI><A NAME="10488"><tex2html_anchor_invisible_mark></A><TT>access</TT> <TT>listmaster</TT> 
+	(<A NAME="tex2html106"
+  HREF="http://listes.cru.fr/sympa/distribution/current/src/etc/scenari/access_web_archive.listmaster">view</A>)
+
+
+<BR>
+<P>
+</LI>
+<LI><A NAME="10491"><tex2html_anchor_invisible_mark></A><TT>access</TT> <TT>owner</TT> 
+	(<A NAME="tex2html107"
+  HREF="http://listes.cru.fr/sympa/distribution/current/src/etc/scenari/access_web_archive.owner">view</A>)
+
+
+<BR>
+<P>
+</LI>
+<LI><A NAME="10494"><tex2html_anchor_invisible_mark></A><TT>access</TT> <TT>private</TT> 
+	(<A NAME="tex2html108"
+  HREF="http://listes.cru.fr/sympa/distribution/current/src/etc/scenari/access_web_archive.private">view</A>)
+
+
+<BR>
+<P>
+</LI>
+<LI><A NAME="10497"><tex2html_anchor_invisible_mark></A><TT>access</TT> <TT>public</TT> 
+	(<A NAME="tex2html109"
+  HREF="http://listes.cru.fr/sympa/distribution/current/src/etc/scenari/access_web_archive.public">view</A>)
+
+
+<BR>
+<P>
+</LI>
+</UL>
+
+<P>
+
+<H3><A NAME="SECTION002162200000000000000">
+20.6.2.2 quota</A>
+</H3>
+
+<P>
+<A NAME="10500"><tex2html_anchor_invisible_mark></A><TT>quota</TT> <I>number-of-Kbytes</I>
+
+<P>
+This parameter specifies the disk quota for the list's web archives, in kilobytes. This parameter's default is
+<A NAME="10503"><tex2html_anchor_invisible_mark></A><TT>default_archive_quota</TT> <A NAME="10506"><tex2html_anchor_invisible_mark></A><TT>sympa.conf</TT> parameter. If quota is exceeded, messages are no more 
+archived, list owner is notified. When archives are 95<tex2html_percent_mark> full, the list owner is warned.
+
+<P>
+
+<H2><A NAME="SECTION002163000000000000000"><tex2html_anchor_invisible_mark></A>
+<A NAME="archive-crypted-msg"><tex2html_anchor_mark></A><BR>
+20.6.3 archive_crypted_msg
+</H2>
+
+<P>
+(Default value: <TT>cleartext</TT>)
+
+<P>
+<A NAME="10510"><tex2html_anchor_invisible_mark></A><TT>archive_crypted_msg</TT> cleartext <TT>|</TT> decrypted
+
+<P>
+This parameter defines Sympa behavior while archiving S/MIME crypted messages.
+	If set to <TT>cleartext</TT> the original crypted form of the message will
+	be archived ; if set to  <TT>decrypted</TT> a decrypted message will be
+	archived. Note that this apply to both mail and web archives ; also to
+	digests.
+
+<P>
+
+<H1><A NAME="SECTION002170000000000000000">
+20.7 Spam protection</A>
+</H1>
+
+<P>
+
+<H2><A NAME="SECTION002171000000000000000">
+20.7.1 spam_protection</A>
+</H2>  
+
+<P>
+<A NAME="3861"><tex2html_anchor_invisible_mark></A>
+	(Default value: <TT><A NAME="10515"><tex2html_anchor_invisible_mark></A><TT>spam_protection</TT> robot parameter</TT>)
+
+<P>
+There is a need to protection Sympa web site against spambot which collect
+        email adresse in public web site. Various method are availible into Sympa
+        and you can choose it with <A NAME="10518"><tex2html_anchor_invisible_mark></A><TT>spam_protection</TT> and
+        <A NAME="10521"><tex2html_anchor_invisible_mark></A><TT>web_archive_spam_protection</TT> parameters.
+        Possible value are :
+
+<UL>
+<LI>javascript : the adresse is hidden using a javascript. User who enable javascript can
+see a  nice mailto adresses where others have nothing.
+</LI>
+<LI>at : the @ char is replaced by the string ;SPMquot; AT ;SPMquot;.
+</LI>
+<LI>none : no protection against spammer.
+</LI>
+</UL>
+
+<P>
+
+<H2><A NAME="SECTION002172000000000000000">
+20.7.2 web_archive_spam_protection</A>
+</H2>
+	(Default value: <TT><A NAME="10526"><tex2html_anchor_invisible_mark></A><TT>web_archive_spam_protection</TT> robot parameter</TT>)
+
+<P>
+Idem <A NAME="10529"><tex2html_anchor_invisible_mark></A><TT>spam_protection</TT> but restricted to web archive.
+        A additional value is available : cookie which mean that users
+        must submit a small form in order to receive a cookie before
+        browsing archives. This block all robot, even google and co.
+
+<P>
+
+<H1><A NAME="SECTION002180000000000000000">
+20.8 Intern parameters</A>
+</H1>
+
+<P>
+
+<H2><A NAME="SECTION002181000000000000000"><tex2html_anchor_invisible_mark></A>
+     <A NAME="par-family-name"><tex2html_anchor_mark></A>     <A NAME="3873"><tex2html_anchor_invisible_mark></A><BR>
+20.8.1 family_name
+</H2>
+
+<P>
+This parameter indicates the name of the family that the list belongs to. 
+
+<P>
+<I>Example:</I> 
+
+<P>
+<BLOCKQUOTE>
+</BLOCKQUOTE><PRE><tex2html_verbatim_mark>verbatim381#</PRE><BLOCKQUOTE>
+</BLOCKQUOTE>
+
+<P>
+
+<H2><A NAME="SECTION002182000000000000000"><tex2html_anchor_invisible_mark></A>
+     <A NAME="par-latest-instantiation"><tex2html_anchor_mark></A>     <A NAME="3881"><tex2html_anchor_invisible_mark></A><BR>
+20.8.2 latest_instantiation
+</H2>
+
+<P>
+This parameter indicates the date of the latest instantiation.
+
+<P>
+<I>Example:</I> 
+
+<P>
+<BLOCKQUOTE>
+</BLOCKQUOTE><PRE><tex2html_verbatim_mark>verbatim382#</PRE><BLOCKQUOTE>
+</BLOCKQUOTE>
+
+<P>
+

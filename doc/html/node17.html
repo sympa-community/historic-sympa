@@ -1,590 +1,664 @@
-<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2 Final//EN">
 
-<!--Converted with jLaTeX2HTML 2002-2-1 (1.70) JA patch-2.0
-patched version by:  Kenshi Muto, Debian Project.
-* modified by:  Shige TAKENO
-LaTeX2HTML 2002-2-1 (1.70),
-original version by:  Nikos Drakos, CBLU, University of Leeds
-* revised and updated by:  Marcus Hennecke, Ross Moore, Herb Swan
-* with significant contributions from:
-  Jens Lippmann, Marek Rouchal, Martin Wilck and others -->
-<HTML>
-<HEAD>
-<TITLE>16. List creation, families and list edition</TITLE>
-<META NAME="description" CONTENT="16. List creation, families and list edition">
-<META NAME="keywords" CONTENT="sympa">
-<META NAME="resource-type" CONTENT="document">
-<META NAME="distribution" CONTENT="global">
-
-<META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=EUC-JP">
-<META NAME="Generator" CONTENT="jLaTeX2HTML v2002-2-1 JA patch-2.0">
-<META HTTP-EQUIV="Content-Style-Type" CONTENT="text/css">
-
-<LINK REL="STYLESHEET" HREF="sympa.css">
-
-<LINK REL="next" HREF="node18.html">
-<LINK REL="previous" HREF="node16.html">
-<LINK REL="up" HREF="sympa.html">
-<LINK REL="next" HREF="node18.html">
-</HEAD>
-
-<BODY TEXT="#000000" BGCOLOR="#ffffff">
-<!--Navigation Panel-->
-<A NAME="tex2html1151"
-  HREF="node18.html">
-<IMG WIDTH="37" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="next" SRC="next.png"></A> 
-<A NAME="tex2html1145"
-  HREF="sympa.html">
-<IMG WIDTH="26" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="up" SRC="up.png"></A> 
-<A NAME="tex2html1139"
-  HREF="node16.html">
-<IMG WIDTH="63" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="previous" SRC="prev.png"></A> 
-<A NAME="tex2html1147"
-  HREF="node1.html">
-<IMG WIDTH="65" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="contents" SRC="contents.png"></A> 
-<A NAME="tex2html1149"
-  HREF="node26.html">
-<IMG WIDTH="43" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="index" SRC="index.png"></A> 
-<BR>
-<B> :</B> <A NAME="tex2html1152"
-  HREF="node18.html">17. Lists Families</A>
-<B> :</B> <A NAME="tex2html1146"
-  HREF="sympa.html">Sympa Mailing Lists Management Software version</A>
-<B> :</B> <A NAME="tex2html1140"
-  HREF="node16.html">15. Mailing list definition</A>
- &nbsp; <B>  <A NAME="tex2html1148"
-  HREF="node1.html">目次</A></B> 
- &nbsp; <B>  <A NAME="tex2html1150"
-  HREF="node26.html">索引</A></B> 
-<BR>
-<BR>
-<!--End of Navigation Panel-->
-<!--Table of Child-Links-->
-
-
-<UL>
-<LI><A NAME="tex2html1153"
-  HREF="node17.html#SECTION001710000000000000000">16.1 List creation</A>
-<UL>
-<LI><A NAME="tex2html1154"
-  HREF="node17.html#SECTION001711000000000000000">16.1.1 Data for list creation</A>
-<LI><A NAME="tex2html1155"
-  HREF="node17.html#SECTION001712000000000000000">16.1.2 XML file format</A>
-</UL>
-<BR>
-<LI><A NAME="tex2html1156"
-  HREF="node17.html#SECTION001720000000000000000">16.2 List families</A>
-<LI><A NAME="tex2html1157"
-  HREF="node17.html#SECTION001730000000000000000">16.3 List creation on command line with <TT>sympa.pl</TT></A>
-<LI><A NAME="tex2html1158"
-  HREF="node17.html#SECTION001740000000000000000">16.4 Creating and editing mailing using the web</A>
-<UL>
-<LI><A NAME="tex2html1159"
-  HREF="node17.html#SECTION001741000000000000000">16.4.1 List creation on the Web interface</A>
-<LI><A NAME="tex2html1160"
-  HREF="node17.html#SECTION001742000000000000000">16.4.2 Who can create lists on the Web interface</A>
-<LI><A NAME="tex2html1161"
-  HREF="node17.html#SECTION001743000000000000000">16.4.3 typical list profile and Web interface</A>
-<LI><A NAME="tex2html1162"
-  HREF="node17.html#SECTION001744000000000000000">16.4.4 List edition</A>
-</UL></UL>
-<!--End of Table of Child-Links-->
-<HR>
-
-<H1><A NAME="SECTION001700000000000000000"></A>
-    <A NAME="ml-creation"></A>
-<BR>
-16. List creation, families and list edition
+<H1><A NAME="SECTION001700000000000000000"><tex2html_anchor_invisible_mark></A><A NAME="8487"><tex2html_anchor_invisible_mark></A>
+    <A NAME="customization"><tex2html_anchor_mark></A><BR>
+16. Customizing <I>Sympa</I>/<I>WWSympa</I> 
 </H1>
 
 <P>
-The list creation can be done by two ways, according to listmaster 
-needs : 
 
-<UL>
-<LI>instanciation family to create and manage large number of related lists. 
-    In this case, lists are linked to their family all along their life.
-</LI>
-<LI>command line creation of individual list with <A NAME="8131"></A><TT>sympa.pl</TT> or on the Web 
-interface according to privileges defined by listmasters. Here lists are free from 
-their model creation.
-</LI>
-</UL> 
-Management of mailing lists by list owners is usually done via the Web interface : 
-when a list is created, whatever its status (<A NAME="8134"></A><TT>pending</TT> or <A NAME="8137"></A><TT>open</TT>), the owner 
-can use WWSympa admin features to modify list parameters, or to edit the welcome 
-message, and so on.
-
-<P>
-WWSympa keeps logs of the creation and all modifications to a list as part of the list's
-<A NAME="8140"></A><TT>config</TT> file (old configuration files are archived).
-A complete installation requires some careful planning, although default
-values should be acceptable for most sites.
-
-<P>
-
-<H1><A NAME="SECTION001710000000000000000"></A>
-    <A NAME="list-creation"></A>
-<BR>
-16.1 List creation
+<H1><A NAME="SECTION001710000000000000000"><tex2html_anchor_invisible_mark></A>
+<A NAME="tpl-format"><tex2html_anchor_mark></A><A NAME="1981"><tex2html_anchor_invisible_mark></A><BR>
+16.1 Template file format
 </H1>
 
 <P>
-Mailing lists can have many different uses. <I>Sympa</I> offers a
-wide choice of parameters to adapt a list behavior
-to different situations. Users might have difficulty selecting all the
-correct parameters to make the list configuration, so instead of selecting each 
-parameters, list configuration is made with a list profile. This is an 
-almost complete list configuration, but with a number of unspecified fields
-(such as owner e-mail) to be replaced by <I>Sympa</I> at list creation time. It is easy to create new list 
-templates by modifying existing ones. (Contributions to the distribution are welcome...)
+Template files within <I>Sympa</I> used to be in a proprietary format that has been
+replaced with the <A NAME="tex2html34"
+  HREF="http://www.tt2.org">TT2</A>
+template format.
 
 <P>
-
-<H2><A NAME="SECTION001711000000000000000">
-16.1.1 Data for list creation</A>
-</H2>
+You will find detailed documentation about the TT2 syntax on the web site : <B>http://www.tt2.org</B>
 
 <P>
-To create a list, some data concerning list parameters are required : 
+Here are some aspects regarding templates that are specific to <I>Sympa</I>: 
 
 <UL>
-<LI><B>listname </B> : name of the list,
-</LI>
-<LI><B>subject</B> : subject of the list (a short description),
-</LI>
-<LI><B>owner(s)</B> : by static definition and/or dynamic definition.
-    In case of static definition, the parameter <B>owner</B> and its subparameter <B>email</B> are required.
-    For dynamic definition, the parameter  <B>owner_include</B> and its subparameter <B>source</B> are required, 
-    indicating source file of data inclusion.
-</LI>
-<LI><B>list creation template</B> : the typical list profile.
-</LI>
-</UL>
+<LI>References to PO catalogue are noted with the <B>[<tex2html_percent_mark> loc <tex2html_percent_mark>]</B> tag that may include 
+  parameters. Example: <TT>[<tex2html_percent_mark>|loc(list.name,list.host)<tex2html_percent_mark>]Welcome to list <tex2html_percent_mark>1<tex2html_percent_mark>2[<tex2html_percent_mark>END<tex2html_percent_mark>]</TT>.
 
 <P>
-Moreover of these required data, provided values are assigned to vars being in the list creation template. 
-Then the result is the list configuration file :
-<BR>
-<P>
-On the Web interface, these data are given by the list creator in the web form. On command line these 
-data are given by an xml file.
+</LI>
+<LI>Few exceptions apart, templates cannot insert or parse a file given its full or relative 
+   path, for security reason. Only the file name should be provided ; the TT2 parser will then
+   use the INCLUDE_PATH provided by <I>Sympa</I> to find the relevant file to insert/parse.
 
 <P>
-
-<H2><A NAME="SECTION001712000000000000000"></A>
-<A NAME="xml-file-format"></A>
-<BR>
-16.1.2 XML file format
-</H2>
+</LI>
+<LI>The <B>qencode</B> filter should be used if a template includes SMTP header fields
+  that should be Q-encoded. Example: <TT>[<tex2html_percent_mark> FILTER qencode <tex2html_percent_mark>]Message &#224; mod&#233;rer[<tex2html_percent_mark>END<tex2html_percent_mark>]</TT>
 
 <P>
-The xml file provides information on :
-<BR>
-<UL>
-<LI>the list name,
 </LI>
-<LI>values to assign vars in the list creation template
-</LI>
-<LI>the list description in order to be written in the list file info
-</LI>
-<LI>the name of the list creation template (not in a family context)
-</LI>
-</UL>
+<LI>You can write different versions of a template file in different language, each of them 
+  being located in a subdirectory of the <B>tt2</B> directory. Example: <TT>/web_tt2/fr_FR/helpfile.tt2</TT>
 
 <P>
-Here is an example of XML document that you can map with the following example of list creation template.:
-
-<P><PRE>
-&lt;?xml version="1.0" ?&gt;
-&lt;list&gt;
-	&lt;listname&gt;example&lt;/listname&gt;
-  	&lt;type&gt;my_profile&lt;/type&gt;
-  	&lt;subject&gt;a list example&lt;/subject&gt;
-  	&lt;description/&gt;
-  	&lt;status&gt;open&lt;/status&gt;
-  	&lt;shared_edit&gt;editor&lt;/shared_edit&gt;
-    	&lt;shared_read&gt;private&lt;/shared_read&gt;
-	&lt;language&gt;fr&lt;/language&gt;
-	&lt;owner multiple="1"&gt; 
-	   &lt;email&gt;serge.aumont@cru.fr&lt;/email&gt;
-	   &lt;gecos&gt;C.R.U.&lt;/gecos&gt;
-	&lt;/owner&gt;
-	&lt;owner multiple="1"&gt; 
-	   &lt;email&gt;olivier.salaun@cru.fr&lt;/email&gt;
-	&lt;/owner&gt;
-	&lt;owner_include multiple="1"&gt;
-	   &lt;source&gt;my_file&lt;/source&gt;
-	&lt;/owner_include&gt;
-	&lt;sql&gt; 
-	   &lt;type&gt;oracle&lt;/type&gt;
-	   &lt;host&gt;sqlserv.admin.univ-x.fr&lt;/host&gt;
-	   &lt;user&gt;stdutilisateur&lt;/user&gt;
-	   &lt;pwd&gt;monsecret&lt;/pwd&gt;
-	   &lt;name&gt;les_etudiants&lt;/name&gt;
-	   &lt;query&gt;SELECT DISTINCT email FROM etudiant&lt;/query&gt;
-	&lt;/sql&gt;
-&lt;/list&gt;
-
-
-
-subject [% subject %]
-
-status [% status %]
-
-[% IF topic %]
-topics [% topic %]
-
-[% END %]
-visibility noconceal
-
-send privateoreditorkey
-
-Web_archive
-  access public
-
-subscribe open_notify
-
-shared_doc
-  d_edit [% shared_edit %]
-  d_read [% shared_read %]
-
-lang [% language %]
-
-[% FOREACH o = owner %]
-owner
-  email [% o.email %]
-  profile privileged
-  [% IF o.gecos %] 
-  gecos [% o.gecos %]
-  [% END %]
-
-[% END %]
-[% IF moderator %]
-   [% FOREACH m = moderator %]
-editor
-  email [% m.email %]
-
-   [% END %]
-[% END %]
- 
-[% IF sql %]
-include_sql_query
-  db_type [% sql.type %]
-  host [% sql.host %]
-  user [% sql.user %]
-  passwd [% sql.pwd %]
-  db_name [% sql.name %]
-  sql_query [% sql.query %]
-    
-[% END %]
-ttl 360
-</PRE>
-
-<P>
-The XML file format should comply with the following rules : 
-
-<UL>
-<LI>The root element is <A NAME="8145"></A><TT>&lt;list&gt;</TT>
-</LI>
-<LI>One XML element is mandatory : <A NAME="8148"></A><TT>&lt;listname&gt;</TT> contains the name of the list.
-        That not excludes mandatory parameters for list creation (listname, subject,owner.email and/or 
-	owner_include.source).
-</LI>
-<LI><A NAME="8151"></A><TT>&lt;type&gt;</TT> : without family context, this element contains the name of template list creation.
-        In a family context, this element is no used.
-</LI>
-<LI><A NAME="8154"></A><TT>&lt;description&gt;</TT> : the text contained in this element is written in list <A NAME="8157"></A><TT>info</TT> file(it can be a CDATA section).
-</LI>
-<LI>For other elements, its name is the name of the var to assign in the list creation template. 
-</LI>
-<LI>Each element concerning multiple parameters must have the <A NAME="8160"></A><TT>multiple</TT> attribute set 
-    to ``1'', example : <A NAME="8163"></A><TT>&lt;owner multiple=''1''></TT>. 
-</LI>
-<LI>For composed and multiple parameters, sub-elements are used. Example for <A NAME="8166"></A><TT>owner</TT> parameter :
-    <A NAME="8169"></A><TT>&lt;email&gt;</TT> and <A NAME="8172"></A><TT>&lt;gecos&gt;</TT> elements are contained in the <A NAME="8175"></A><TT>&lt;owner&gt;</TT>element. 
-    An element can only have homogeneous content.
-</LI>
-<LI>A list requires at least one owner, defined in the XML input file with one of the following elements :
-    
-<UL>
-<LI><A NAME="8178"></A><TT>&lt;owner multiple=''1''> &lt;email&gt; ... &lt;/email&gt; &lt;/owner&gt;</TT>
-</LI>
-<LI><A NAME="8181"></A><TT>&lt;owner_include multiple=''1''> &lt;source&gt; ... &lt;/source&gt; &lt;/owner_include&gt;</TT>
-    
-</LI>
-</UL>
 </LI>
 </UL>
 
 <P>
 
-<H1><A NAME="SECTION001720000000000000000">
-16.2 List families</A>
+<H1><A NAME="SECTION001720000000000000000"><tex2html_anchor_invisible_mark></A>
+<A NAME="site-tpl"><tex2html_anchor_mark></A><A NAME="1995"><tex2html_anchor_invisible_mark></A><BR>
+16.2 Site template files
 </H1>
 
 <P>
-See chapter <A HREF="node18.html#lists-families">17</A>, page&nbsp;<A HREF="node18.html#lists-families"><IMG  ALIGN="BOTTOM" BORDER="1" ALT="[*]" SRC="crossref.png"></A>
+These files are used by Sympa as service messages for the <A NAME="8496"><tex2html_anchor_invisible_mark></A><TT>HELP</TT>, 
+<A NAME="8499"><tex2html_anchor_invisible_mark></A><TT>LISTS</TT> and <A NAME="8502"><tex2html_anchor_invisible_mark></A><TT>REMIND *</TT> commands. These files are interpreted 
+(parsed) by <I>Sympa</I> and respect the TT2 template format ; every file has a <B>.tt2</B> extension. 
+See <A HREF=<tex2html_cr_mark>#tpl-format#2000><tex2html_cr_mark></A>, 
+page~<A HREF=<tex2html_cr_mark>#tpl-format#2001><tex2html_cross_ref_visible_mark></A>. 
+
+<P>
+Sympa looks for these files in the following order (where <TT>;SPMlt;</TT>list<TT>;SPMgt;</TT> is the
+listname if defined, <TT>;SPMlt;</TT>action<TT>;SPMgt;</TT> is the name of the command, and <TT>;SPMlt;</TT>lang<TT>;SPMgt;</TT> is
+the preferred language of the user) :
+
+<OL>
+<LI><A NAME="8530"><tex2html_anchor_invisible_mark></A><TT>/usr/local/sympa-gb/expl/<TT>;SPMlt;</TT>list<TT>;SPMgt;</TT>/mail_tt2/<TT>;SPMlt;</TT>lang<TT>;SPMgt;</TT>/<TT>;SPMlt;</TT>action<TT>;SPMgt;</TT>.tt2</TT>. 
+</LI>
+<LI><A NAME="8569"><tex2html_anchor_invisible_mark></A><TT>/usr/local/sympa-gb/expl/<TT>;SPMlt;</TT>list<TT>;SPMgt;</TT>/mail_tt2/<TT>;SPMlt;</TT>action<TT>;SPMgt;</TT>.tt2</TT>. 
+</LI>
+<LI><A NAME="8602"><tex2html_anchor_invisible_mark></A><TT>/usr/local/sympa-gb/etc/my.domain.org/mail_tt2/<TT>;SPMlt;</TT>lang<TT>;SPMgt;</TT>/<TT>;SPMlt;</TT>action<TT>;SPMgt;</TT>.tt2</TT>. 
+</LI>
+<LI><A NAME="8629"><tex2html_anchor_invisible_mark></A><TT>/usr/local/sympa-gb/etc/my.domain.org/mail_tt2/<TT>;SPMlt;</TT>action<TT>;SPMgt;</TT>.tt2</TT>. 
+</LI>
+<LI><A NAME="8656"><tex2html_anchor_invisible_mark></A><TT>/usr/local/sympa-gb/etc/mail_tt2/<TT>;SPMlt;</TT>lang<TT>;SPMgt;</TT>/<TT>;SPMlt;</TT>action<TT>;SPMgt;</TT>.tt2</TT>. 
+</LI>
+<LI><A NAME="8683"><tex2html_anchor_invisible_mark></A><TT>/usr/local/sympa-gb/etc/mail_tt2/<TT>;SPMlt;</TT>action<TT>;SPMgt;</TT>.tt2</TT>. 
+</LI>
+<LI><A NAME="8710"><tex2html_anchor_invisible_mark></A><TT>/usr/local/sympa-gb/bin/etc/mail_tt2/<TT>;SPMlt;</TT>lang<TT>;SPMgt;</TT>/<TT>;SPMlt;</TT>action<TT>;SPMgt;</TT>.tt2</TT>.
+</LI>
+<LI><A NAME="8737"><tex2html_anchor_invisible_mark></A><TT>/usr/local/sympa-gb/bin/etc/mail_tt2/<TT>;SPMlt;</TT>action<TT>;SPMgt;</TT>.tt2</TT>.
+</LI>
+</OL>
+
+<P>
+If the file starts with a From: line, it is considered as
+a full message and will be sent (after parsing) without adding SMTP
+headers. Otherwise the file is treated as a text/plain message body.
+
+<P>
+The following variables may be used in these template files :
+
+<P>
+<DL COMPACT>
+<DT><#30076#><#30067#>-<#30067#><#30076#></DT>
+<DD>[<tex2html_percent_mark> conf.email <tex2html_percent_mark>] : sympa e-mail address local part
+
+<P>
+</DD>
+<DT><#30077#><#30068#>-<#30068#><#30077#></DT>
+<DD>[<tex2html_percent_mark> conf.domain <tex2html_percent_mark>] : sympa robot domain name
+
+<P>
+</DD>
+<DT><#30078#><#30069#>-<#30069#><#30078#></DT>
+<DD>[<tex2html_percent_mark> conf.sympa <tex2html_percent_mark>] : sympa's complete e-mail address
+
+<P>
+</DD>
+<DT><#30079#><#30070#>-<#30070#><#30079#></DT>
+<DD>[<tex2html_percent_mark> conf.wwsympa_url <tex2html_percent_mark>] : <A NAME="8746"><tex2html_anchor_invisible_mark></A><I>WWSympa</I> root URL
+
+<P>
+</DD>
+<DT><#30080#><#30071#>-<#30071#><#30080#></DT>
+<DD>[<tex2html_percent_mark> conf.listmaster <tex2html_percent_mark>] : listmaster e-mail addresses
+
+<P>
+</DD>
+<DT><#30081#><#30072#>-<#30072#><#30081#></DT>
+<DD>[<tex2html_percent_mark> user.email <tex2html_percent_mark>] : user e-mail address
+
+<P>
+</DD>
+<DT><#30082#><#30073#>-<#30073#><#30082#></DT>
+<DD>[<tex2html_percent_mark> user.gecos <tex2html_percent_mark>] : user gecos field (usually his/her name)
+
+<P>
+</DD>
+<DT><#30083#><#30074#>-<#30074#><#30083#></DT>
+<DD>[<tex2html_percent_mark> user.password <tex2html_percent_mark>] : user password
+
+<P>
+</DD>
+<DT><#30084#><#30075#>-<#30075#><#30084#></DT>
+<DD>[<tex2html_percent_mark> user.lang <tex2html_percent_mark>] : user language	
+</DD>
+</DL>
 
 <P>
 
-<H1><A NAME="SECTION001730000000000000000"></A><A NAME="8184"></A>
-    <A NAME="list-creation-sympa"></A>
-<BR>
-16.3 List creation on command line with <TT>sympa.pl</TT>
-</H1>
+<H2><A NAME="SECTION001721000000000000000">
+16.2.1 helpfile.tt2</A>
+</H2> 
 
 <P>
-This way to create lists is independent of family. 
+This file is sent in response to a <A NAME="8749"><tex2html_anchor_invisible_mark></A><TT>HELP</TT> command. 
+	You may use additional variables
+<DL COMPACT>
+<DT><#30088#><#30086#>-<#30086#><#30088#></DT>
+<DD>[<tex2html_percent_mark> is_owner <tex2html_percent_mark>] : TRUE if the user is list owner
 
 <P>
-Here is a sample command to create one list :.
+</DD>
+<DT><#30089#><#30087#>-<#30087#><#30089#></DT>
+<DD>[<tex2html_percent_mark> is_editor <tex2html_percent_mark>] : TRUE if the user is list editor
+
+<P>
+</DD>
+</DL>
+
+<P>
+
+<H2><A NAME="SECTION001722000000000000000">
+16.2.2 lists.tt2</A>
+</H2> 
+
+<P>
+File returned by <A NAME="8752"><tex2html_anchor_invisible_mark></A><TT>LISTS</TT> command. 
+	An additional variable is available :
+<DL COMPACT>
+<DT><#30092#><#30091#>-<#30091#><#30092#></DT>
+<DD>[<tex2html_percent_mark> lists <tex2html_percent_mark>] : this is a hash table indexed by list names and
+			containing lists' subjects. Only lists visible
+			to this user (according to the <A NAME="8755"><tex2html_anchor_invisible_mark></A><TT>visibility</TT> 
+			list parameter) are listed.
+</DD>
+</DL>
+
+<P>
+<I>Example:</I> 
+
+<P>
 <BLOCKQUOTE>
-sympa.pl -create_list -robot my.domain.org-input_file my_file.xml
-
+</BLOCKQUOTE><PRE><tex2html_verbatim_mark>verbatim330#</PRE><BLOCKQUOTE>
 </BLOCKQUOTE>
 
 <P>
-The list is created under the <A NAME="8187"></A><TT>my_robot</TT> robot and the list 
-is described in the file <A NAME="8190"></A><TT>my_file.xml</TT>. The XML file is 
-described before, see <A HREF="#xml-file-format">16.1.2</A>, page&nbsp;<A HREF="node17.html#xml-file-format"><IMG  ALIGN="BOTTOM" BORDER="1" ALT="[*]" SRC="crossref.png"></A>.
+
+<H2><A NAME="SECTION001723000000000000000">
+16.2.3 global_remind.tt2</A>
+</H2> 
 
 <P>
-By default, the status of the created list is <A NAME="8193"></A><TT>open</TT>.
+This file is sent in response to a <A NAME="8758"><tex2html_anchor_invisible_mark></A><TT>REMIND *</TT> command. 
+	(see~<A HREF=<tex2html_cr_mark>#cmd-remind#2056><tex2html_cr_mark></A>, page~<A HREF=<tex2html_cr_mark>#cmd-remind#2057><tex2html_cross_ref_visible_mark></A>)
+	You may use additional variables
+<DL COMPACT>
+<DT><#30095#><#30094#>-<#30094#><#30095#></DT>
+<DD>[<tex2html_percent_mark> lists <tex2html_percent_mark>] : this is an array containing the list names the user
+			is subscribed to.
+</DD>
+</DL>
 
 <P>
-
-<H3><A NAME="SECTION001730100000000000000"></A>
-    <A NAME="typical-list-profile"></A>
-<BR>
-16.3.0.1 typical list profile (list template creation)
-</H3>
+<I>Example:</I> 
 
 <P>
-The list creator has to choose a profile
-for the list and put its name in the XML element <A NAME="8196"></A><TT>&lt;type&gt;</TT>.
-
-<P>
-List profiles are stored in <A NAME="8199"></A><TT>/usr/local/sympa-os/etc/create_list_templates</TT> or in
-<A NAME="8202"></A><TT>/usr/local/sympa-os/bin/etc/create_list_templates</TT> (default of distrib).
-
-<P>
-You might want to hide or modify profiles (not useful, or dangerous 
-for your site). If a profile exists both in the local site directory
-<A NAME="8205"></A><TT>/usr/local/sympa-os/etc/create_list_templates</TT> and
-<A NAME="8208"></A><TT>/usr/local/sympa-os/bin/etc/create_list_templates</TT> directory, then the local profile 
-will be used by WWSympa. 
+<BLOCKQUOTE>
+</BLOCKQUOTE><PRE><tex2html_verbatim_mark>verbatim331#</PRE><BLOCKQUOTE>
+</BLOCKQUOTE>
 
 <P>
 
-<H1><A NAME="SECTION001740000000000000000"></A>
-    <A NAME="web-ml-creation"></A>
-<BR>
-16.4 Creating and editing mailing using the web
+<H2><A NAME="SECTION001724000000000000000">
+16.2.4 your_infected_msg.tt2</A>
+</H2> 
+
+<P>
+This message is sent to warn the sender of a virus infected mail,
+indicating the name of the virus found 
+(see~<A HREF=<tex2html_cr_mark>#Antivirus#2066><tex2html_cr_mark></A>, page~<A HREF=<tex2html_cr_mark>#Antivirus#2067><tex2html_cross_ref_visible_mark></A>).
+
+<P>
+
+<H1><A NAME="SECTION001730000000000000000"><tex2html_anchor_invisible_mark></A>
+<A NAME="web-tpl"><tex2html_anchor_mark></A><A NAME="2070"><tex2html_anchor_invisible_mark></A><BR>
+16.3 Web template files
 </H1>
 
 <P>
-The management of mailing lists is based on a strict definition of privileges 
-which pertain respectively to the listmaster, to the main list owner, and to 
-basic list owners. The goal is to allow each listmaster to define who can create 
-lists, and which parameters may be set by owners.
+You may define your own web template files, different from the standard
+ones. <A NAME="8761"><tex2html_anchor_invisible_mark></A><I>WWSympa</I> first looks for list specific web templates, then for
+site web templates, before falling back on its defaults. 
+
+<P>
+Your list web template files should be placed in the <A NAME="8764"><tex2html_anchor_invisible_mark></A><TT>/usr/local/sympa-gb/expl/mylist/web_tt2</TT> 
+directory ; your site web templates in <A NAME="8767"><tex2html_anchor_invisible_mark></A><TT>&#126;/usr/local/sympa-gb/etc/web_tt2</TT> directory.
+
+<P>
+Note that web colors are defined in <I>Sympa</I>'s main Makefile (see <A HREF=<tex2html_cr_mark>#makefile#2073><tex2html_cr_mark></A>,
+page~<A HREF=<tex2html_cr_mark>#makefile#2074><tex2html_cross_ref_visible_mark></A>).
+
+<P>
+
+<H1><A NAME="SECTION001740000000000000000"><tex2html_anchor_invisible_mark></A>
+<A NAME="internationalization"><tex2html_anchor_mark></A><A NAME="2077"><tex2html_anchor_invisible_mark></A>
+<A NAME="2078"><tex2html_anchor_invisible_mark></A><BR>
+16.4 Internationalization
+</H1>
+
+<P>
+<I>Sympa</I> was originally designed as a multilingual Mailing List
+Manager. Even in its earliest versions, <I>Sympa</I> separated messages from
+the code itself, messages being stored in NLS catalogues (according 
+to the XPG4 standard). Later a <A NAME="8775"><tex2html_anchor_invisible_mark></A><TT>lang</TT> list parameter was introduced.
+Nowadays <I>Sympa</I> is able to keep track of individual users' language preferences.
+
+<P>
+If you are willing to provide Sympa into your native language, please check the <B>translation howto</B> (<A NAME="tex2html35"
+  HREF="http://www.sympa.org/howtotranslate.html"><TT>http://www.sympa.org/howtotranslate.html</TT></A>);
 
 <P>
 
 <H2><A NAME="SECTION001741000000000000000">
-16.4.1 List creation on the Web interface</A>
+16.4.1 <I>Sympa</I> internationalization</A>
 </H2>
 
 <P>
-Listmasters have all privileges. The listmaster
-is defined in <A NAME="8211"></A><TT>sympa.conf</TT> and others are defined at the virtual robot level. By default, newly created
-lists must be activated by the listmaster. List creation is possible for all intranet users 
-(i.e. : users with an e-mail address within the same domain as Sympa).
-This is controlled by the <A NAME="8214"></A><TT>create_list</TT> authorization scenario.
+Every message sent by <I>Sympa</I> to users, owners and editors is outside
+the code, in a message catalog. These catalogs are located in the
+<A NAME="8781"><tex2html_anchor_invisible_mark></A><TT>/usr/local/sympa-gb/locale</TT> directory. 
 
 <P>
-List rejection message and list creation notification message are both
-templates that you can customize (<A NAME="8217"></A><TT>list_rejected.tt2</TT> and
-<A NAME="8220"></A><TT>list_created.tt2</TT>).
+To tell <I>Sympa</I> to use a particular message catalog, you can should set 
+the <A NAME="8785"><tex2html_anchor_invisible_mark></A><TT>lang</TT> parameter in <A NAME="8788"><tex2html_anchor_invisible_mark></A><TT>sympa.conf</TT>.
 
 <P>
 
 <H2><A NAME="SECTION001742000000000000000">
-16.4.2 Who can create lists on the Web interface</A>
+16.4.2 List internationalization</A>
 </H2>
 
 <P>
-This is defined by the <A NAME="8223"></A><TT>create_list</TT> sympa.conf parameter (see <A HREF="node7.html#create-list">6.1.12</A>,  
-page&nbsp;<A HREF="node7.html#create-list"><IMG  ALIGN="BOTTOM" BORDER="1" ALT="[*]" SRC="crossref.png"></A>). This parameter refers to a <B>create_list</B> authorization scenario.
-It will determine if the <I>create list</I> button is displayed and if it requires
-a listmaster confirmation.
+The <A NAME="8791"><tex2html_anchor_invisible_mark></A><TT>lang</TT> list parameter defines the language for a list.
+It is currently used by <A NAME="8794"><tex2html_anchor_invisible_mark></A><I>WWSympa</I> and to initialize users'
+language preferences at subscription time.
 
 <P>
-The authorization scenario can accept any condition concerning the [sender]
-(i.e. WWSympa user), and it returns <A NAME="8226"></A><TT>reject</TT>, <A NAME="8229"></A><TT>do_it</TT>
-or <A NAME="8232"></A><TT>listmaster</TT> as an action.
-
-<P>
-Only in cases where a user is authorized by the create_list authorization scenario
-will the "create" button be available in the main menu.
-If the scenario returns <A NAME="8235"></A><TT>do_it</TT>, the list will be created and installed.
-If the scenario returns "listmaster", the user is allowed to create a list, but
-the list is created with the <A NAME="8238"></A><TT>pending</TT> status,
-which means that only the list owner may view or use it.
-The listmaster will need to open the list of pending lists
-using the "pending list" button in the "server admin"
-menu in order to install or refuse a pending list.
+In future versions, all messages returned by <I>Sympa</I> concerning
+a list should be in the list's language. 
 
 <P>
 
 <H2><A NAME="SECTION001743000000000000000">
-16.4.3 typical list profile and Web interface</A>
-</H2>
-As on command line creation, the list creator has to choose a list profile and to fill in the owner's e-mail 
-and the list subject together with a short description. But in this case, you don't need any XML file. Concerning
-these typical list profiles, they are described before, see <A HREF="#typical-list-profile">16.3</A>, page&nbsp;<A HREF="node17.html#typical-list-profile"><IMG  ALIGN="BOTTOM" BORDER="1" ALT="[*]" SRC="crossref.png"></A>. 
-You can check available profile. On the Web interface, another way 
-to control publicly available profiles is to
-edit the <A NAME="8241"></A><TT>create_list.conf</TT> file (the default for this file is in
-the <A NAME="8244"></A><TT>/usr/local/sympa-os/bin/etc</TT> directory, and you may create your own customized
-version in <A NAME="8247"></A><TT>/usr/local/sympa-os/etc</TT>).
-This file controls which of the available list templates are to be displayed. Example :<PRE>
-# Do not allow the public_anonymous profile
-public_anonymous hidden
-* read
-</PRE>
-
-<P>
-
-<H2><A NAME="SECTION001744000000000000000"></A>
-<A NAME="list-edition"></A>
-<BR>
-16.4.4 List edition
+16.4.3 User internationalization</A>
 </H2>
 
 <P>
-For each parameter, you may specify (via the <A NAME="8250"></A><TT>/usr/local/sympa-os/etc/edit_list.conf</TT>
-configuration file) who has the right to edit the parameter concerned ; the default 
-<A NAME="8253"></A><TT>/usr/local/sympa-os/bin/etc/edit_list.conf</TT> is reasonably safe.
+The user language preference is currently used by <A NAME="8798"><tex2html_anchor_invisible_mark></A><I>WWSympa</I> 
+only. There is no e-mail-based command for a user to set his/her
+language. The language preference is initialized when the user
+subscribes to his/her first list. <A NAME="8801"><tex2html_anchor_invisible_mark></A><I>WWSympa</I> allows the user to change 
+it.
 
 <P>
-<PRE>
-Each line is a set of 3 field
-&lt;Parameter&gt; &lt;Population&gt; &lt;Privilege&gt;
-&lt;Population&gt; : &lt;listmaster|privileged_owner|owner&gt; 
-&lt;Privilege&gt; : &lt;write|read|hidden&gt;
-parameter named "default" means any other parameter
-</PRE>
+
+<H1><A NAME="SECTION001750000000000000000"><tex2html_anchor_invisible_mark></A>
+<A NAME="topics"><tex2html_anchor_mark></A><A NAME="2092"><tex2html_anchor_invisible_mark></A><BR>
+16.5 Topics
+</H1>
 
 <P>
-There is no hierarchical relation between  populations in this
-configuration file. You need to explicitely list populations.
+<A NAME="8804"><tex2html_anchor_invisible_mark></A><I>WWSympa</I>'s homepage shows a list of topics for classifying
+mailing lists. This is dynamically generated using the different lists'
+<A NAME="8807"><tex2html_anchor_invisible_mark></A><TT>topics</TT> configuration parameters. A list may appear 
+in multiple categories.
 
 <P>
-Eg: listmaster will not match rules refering to owner or privileged_owner
-
-<P><PRE>
-     examples :
-
-	# only listmaster can edit user_data_source, priority, ...
-	user_data_source listmaster write  
-
-	priority 	owner,privileged_owner 		read
-	priority 	listmaster 			write
-      
-	# only privileged owner can modify  editor parameter, send, ...
-	editor privileged_owner write
-	
-	send 		owner 				read
-	send 		privileged_owner,listmaster 	write
-
-	# other parameters can be changed by simple owners
-	default 	owner 				write
-</PRE>
+The list of topics is defined in the <A NAME="8810"><tex2html_anchor_invisible_mark></A><TT>topics.conf</TT> configuration
+file, located in the <A NAME="8813"><tex2html_anchor_invisible_mark></A><TT>/usr/local/sympa-gb/etc</TT> directory. The format of this file is 
+as follows :
+<BLOCKQUOTE>
+</BLOCKQUOTE><PRE><tex2html_verbatim_mark>verbatim332#</PRE><BLOCKQUOTE>
+</BLOCKQUOTE>
 
 <P>
-Privileged owners are defined in the list's <A NAME="8256"></A><TT>config</TT> file as follows :
-	<PRE>
-	owner
-	email owners.email@foo.bar
-	profile privileged
-</PRE>
+You will notice that subtopics can be used, the separator being <I>/</I>.
+The topic name is composed of alphanumerics (0-1a-zA-Z) or underscores (_).
+The order in which the topics are listed is respected in <A NAME="8816"><tex2html_anchor_invisible_mark></A><I>WWSympa</I>'s homepage.
+The <B>visibility</B> line defines who can view the topic (now available for subtopics).
+It refers to the associated topics_visibility authorization scenario.
+You will find a sample <A NAME="8819"><tex2html_anchor_invisible_mark></A><TT>topics.conf</TT> in the <A NAME="8822"><tex2html_anchor_invisible_mark></A><TT>sample</TT> 
+directory ; NONE is installed as the default. 
 
 <P>
-The following rules are hard coded in WWSympa :
+A default topic is hard-coded in <I>Sympa</I>: <I>default</I>. This default topic
+contains all lists for which a topic has not been specified.
+
+<P>
+
+<H1><A NAME="SECTION001760000000000000000">
+16.6 Authorization scenarios</A>
+</H1>
+
+<P>
+See <A HREF=<tex2html_cr_mark>#scenarios#2106><tex2html_cr_mark></A>, page~<A HREF=<tex2html_cr_mark>#scenarios#2107><tex2html_cross_ref_visible_mark></A>.
+
+<P>
+
+<H1><A NAME="SECTION001770000000000000000"><tex2html_anchor_invisible_mark></A>
+    <A NAME="loop-detection"><tex2html_anchor_mark></A>    <A NAME="2110"><tex2html_anchor_invisible_mark></A><BR>
+16.7 Loop detection
+</H1>
+
+<P>
+<I>Sympa</I> uses multiple heuristics to avoid loops in Mailing lists
+
+<P>
+First, it rejects messages coming from a robot (as indicated by the
+From: and other header fields), and messages containing commands.
+
+<P>
+Secondly, every message sent by <I>Sympa</I> includes an X-Loop header field set to
+the listname. If the message comes back, <I>Sympa</I> will detect that
+it has already been sent (unless X-Loop header fields have been
+erased).
+
+<P>
+Thirdly, <I>Sympa</I> keeps track of Message IDs and will refuse to send multiple
+messages with the same message ID to the same mailing list.
+
+<P>
+Finally, <I>Sympa</I> detect loops arising from command reports (i.e. sympa-generated replies to commands). 
+This sort of loop might occur as follows:
+
+<P>
+<BLOCKQUOTE>
+</BLOCKQUOTE><PRE><tex2html_verbatim_mark>verbatim333#</PRE><BLOCKQUOTE>
+</BLOCKQUOTE>
+
+<P>
+<I>Sympa</I> keeps track (via an internal counter) of reports sent to any particular address.
+The loop detection algorithm is :
+
+<P>
 
 <UL>
-<LI>only listmaster can edit the "profile privileged"
-      owner attribute 
+<LI>Increment the counter
 
 <P>
 </LI>
-<LI>owners can edit their own attributes (except profile and e-mail)
+<LI>If we are within the sampling period (as defined by the
+	<A NAME="8832"><tex2html_anchor_invisible_mark></A><TT>loop_command_sampling_delay</TT> parameter)
+
+<P>
+
+<UL>
+<LI>If the counter exceeds the 
+		<A NAME="8835"><tex2html_anchor_invisible_mark></A><TT>loop_command_max</TT> parameter, then 
+		do not send the report, and notify the listmaster
 
 <P>
 </LI>
-<LI>the requestor creating a new list becomes a privileged owner
-
-<P>
+<LI>Else, start a new sampling period and reinitialize
+		the counter,  i.e. multiply it by the 
+		<A NAME="8838"><tex2html_anchor_invisible_mark></A><TT>loop_command_decrease_factor</TT> parameter
+	
 </LI>
-<LI>privileged owners can edit any gecos/reception/info attribute
-of any owner
-
-<P>
-</LI>
-<LI>privileged owners can edit owners' e-mail addresses (but not privileged owners' e-mail addresses)
+</UL>
 
 <P>
 </LI>
 </UL>
 
 <P>
-Sympa aims to define two levels of trust for owners (some being entitled 
-      simply to edit secondary parameters such as "custom_subject", others having
-      the right to manage more important parameters), while leaving control of
-      crucial parameters (such as the list of privileged owners and user_data_sources)
-      in the hands of the listmaster.
-      Consequently, privileged owners can change owners' e-mails,
-      but they cannot grant the responsibility of list management to others without
-      referring to the listmaster.
+
+<H1><A NAME="SECTION001780000000000000000"><tex2html_anchor_invisible_mark></A>
+    <A NAME="tasks"><tex2html_anchor_mark></A>    <A NAME="2124"><tex2html_anchor_invisible_mark></A><BR>
+16.8 Tasks
+</H1>
 
 <P>
-Concerning list edition in a family context, see <A HREF="node18.html#list-param-edit-family">17.2.8</A>, page&nbsp;<A HREF="node18.html#list-param-edit-family"><IMG  ALIGN="BOTTOM" BORDER="1" ALT="[*]" SRC="crossref.png"></A>
+A task is a sequence of simple actions which realize a complex routine. It is executed in background 
+by the task manager daemon and allow the list master to automate the processing of recurrent tasks. 
+For example a task sends every year the subscribers of a list a message to remind their subscription. 
+
+<P>
+A task is created with a task model. It is a text file which describes a sequence of simple actions. 
+It may have different versions (for instance reminding subscribers every year or semester).
+A task model file name has the following format : <A NAME="8859"><tex2html_anchor_invisible_mark></A><TT><TT>;SPMlt;</TT>model name<TT>;SPMgt;</TT>.<TT>;SPMlt;</TT>model version<TT>;SPMgt;</TT>.task</TT>.
+For instance <A NAME="8874"><tex2html_anchor_invisible_mark></A><TT>remind.annual.task</TT>  or <A NAME="8877"><tex2html_anchor_invisible_mark></A><TT>remind.semestrial.task</TT>.
+
+<P>
+<I>Sympa</I> provides several task models stored in <A NAME="8881"><tex2html_anchor_invisible_mark></A><TT>/usr/local/sympa-gb/bin/etc/global_task_models</TT> 
+  and <A NAME="8884"><tex2html_anchor_invisible_mark></A><TT>/usr/local/sympa-gb/bin/etc/list_task_models</TT> directories.
+Others can be designed by the listmaster. 
+
+<P>
+A task is global or related to a list.
 
 <P>
 
-<HR>
-<!--Navigation Panel-->
-<A NAME="tex2html1151"
-  HREF="node18.html">
-<IMG WIDTH="37" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="next" SRC="next.png"></A> 
-<A NAME="tex2html1145"
-  HREF="sympa.html">
-<IMG WIDTH="26" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="up" SRC="up.png"></A> 
-<A NAME="tex2html1139"
-  HREF="node16.html">
-<IMG WIDTH="63" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="previous" SRC="prev.png"></A> 
-<A NAME="tex2html1147"
-  HREF="node1.html">
-<IMG WIDTH="65" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="contents" SRC="contents.png"></A> 
-<A NAME="tex2html1149"
-  HREF="node26.html">
-<IMG WIDTH="43" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="index" SRC="index.png"></A> 
-<BR>
-<B> :</B> <A NAME="tex2html1152"
-  HREF="node18.html">17. Lists Families</A>
-<B> :</B> <A NAME="tex2html1146"
-  HREF="sympa.html">Sympa Mailing Lists Management Software version</A>
-<B> :</B> <A NAME="tex2html1140"
-  HREF="node16.html">15. Mailing list definition</A>
- &nbsp; <B>  <A NAME="tex2html1148"
-  HREF="node1.html">目次</A></B> 
- &nbsp; <B>  <A NAME="tex2html1150"
-  HREF="node26.html">索引</A></B> 
-<!--End of Navigation Panel-->
-<ADDRESS>
-root
-平成17年3月8日
-</ADDRESS>
-</BODY>
-</HTML>
+<H2><A NAME="SECTION001781000000000000000">
+16.8.1 List task creation</A>
+</H2>
+
+<P>
+You define in the list config file the model and the version you want to use (see 
+<A HREF=<tex2html_cr_mark>#list-task-parameters#2134><tex2html_cr_mark></A>, page~<A HREF=<tex2html_cr_mark>#list-task-parameters#2135><tex2html_cross_ref_visible_mark></A>). Then the task manager daemon will automatically 
+create the task by looking for the appropriate model file in different directories in the
+following order :
+
+<P>
+
+<OL>
+<LI><A NAME="8899"><tex2html_anchor_invisible_mark></A><TT>/usr/local/sympa-gb/expl/<TT>;SPMlt;</TT>list name<TT>;SPMgt;</TT>/</TT>
+</LI>
+<LI><A NAME="8908"><tex2html_anchor_invisible_mark></A><TT>/usr/local/sympa-gb/etc/list_task_models/</TT>
+</LI>
+<LI><A NAME="8911"><tex2html_anchor_invisible_mark></A><TT>/usr/local/sympa-gb/bin/etc/list_task_models/</TT>
+</LI>
+</OL>
+
+<P>
+See also <A HREF=<tex2html_cr_mark>#Listmodelfiles#2142><tex2html_cr_mark></A>, page~<A HREF=<tex2html_cr_mark>#Listmodelfiles#2143><tex2html_cross_ref_visible_mark></A>, to know more about standard list models provided with <I>Sympa</I>.
+
+<P>
+
+<H2><A NAME="SECTION001782000000000000000">
+16.8.2 Global task creation</A>
+</H2>
+
+<P>
+The task manager daemon checks if a version of a global task model is specified in <A NAME="8915"><tex2html_anchor_invisible_mark></A><TT>sympa.conf</TT> 
+and then creates a task as soon as it finds the model file by looking in different directories
+in the following order :
+
+<P>
+
+<OL>
+<LI><A NAME="8918"><tex2html_anchor_invisible_mark></A><TT>/usr/local/sympa-gb/etc/global_task_models/</TT>
+</LI>
+<LI><A NAME="8921"><tex2html_anchor_invisible_mark></A><TT>/usr/local/sympa-gb/bin/etc/global_task_models/</TT>
+</LI>
+</OL>
+
+<P>
+
+<H2><A NAME="SECTION001783000000000000000">
+16.8.3 Model file format</A>
+</H2>
+
+<P>
+Model files are composed of comments, labels, references, variables, date values
+and commands. All those syntactical elements are composed of alphanumerics (0-9a-zA-Z) and underscores (_).
+
+<P>
+
+<UL>
+<LI>Comment lines begin by '#' and are not interpreted by the task manager.
+</LI>
+<LI>Label lines begin by '/' and are used by the next command (see below).
+</LI>
+<LI>References are enclosed between brackets '[]'. They refer to a value 
+depending on the object of the task (for instance [list-<TT>;SPMgt;</TT>name]). Those variables
+are instantiated when a task file is created from a model file. The list of available 
+variables is the same as for templates (see <A HREF=<tex2html_cr_mark>#list-tpl#2153><tex2html_cr_mark></A>, see 
+page~<A HREF=<tex2html_cr_mark>#list-tpl#2154><tex2html_cross_ref_visible_mark></A>) plus [creation_date] (see below).
+</LI>
+<LI>Variables store results of some commands and are paramaters for others.
+Their name begins with '@'.
+</LI>
+<LI>A date value may be written in two ways :
+
+<P>
+
+<UL>
+<LI>absolute dates follow the format : xxxxYxxMxxDxxHxxMin. Y is the year, 
+		M the month (1-12), D the day (1-28<TT>|</TT>30<TT>|</TT>31, leap-years are not managed),
+		H the hour (0-23), Min the minute (0-59). H and Min are optionnals.
+		For instance, 2001y12m4d44min is the 4th of December 2001 at 00h44.
+
+<P>
+</LI>
+<LI>relative dates use the [creation_date] or [execution_date] references. 
+		[creation_date] is the date when the task file is created, [execution_date] 
+		when the command line is executed.
+		A duration may follow with '+' or '-' operators. The duration is expressed 
+		like an absolute date whose all parameters are optionnals. 	
+		Examples : [creation_date], [execution_date]+1y, [execution_date]-6m4d
+	
+</LI>
+</UL>
+
+<P>
+</LI>
+<LI>Command arguments are separated by commas and enclosed between parenthesis '()'.
+</LI>
+</UL>
+
+<P>
+Here is the list of current avalable commands :
+
+<UL>
+<LI>stop ()
+
+<P>
+Stops the execution of the task and delete the task file
+</LI>
+<LI>next (<TT>;SPMlt;</TT>date value<TT>;SPMgt;</TT>, <TT>;SPMlt;</TT>label<TT>;SPMgt;</TT>)
+
+<P>
+Stop the execution. The task will go on at the date value and begin at the label line.
+</LI>
+<LI><TT>;SPMlt;</TT><#2166#><#2166#>deleted_users<TT>;SPMgt;</TT> = delete_subs (<TT>;SPMlt;</TT><#2169#><#2169#>user_selection<TT>;SPMgt;</TT>)
+
+<P>
+Delete @user_selection email list and stores user emails successfully deleted in @deleted_users.
+</LI>
+<LI>send_msg (<TT>;SPMlt;</TT><#2172#><#2172#>user_selection<TT>;SPMgt;</TT>, <TT>;SPMlt;</TT>template<TT>;SPMgt;</TT>)
+
+<P>
+Send the template message to emails stored in @user_selection.
+</LI>
+<LI><#2176#><#2176#>user_selection = select_subs (<TT>;SPMlt;</TT>condition<TT>;SPMgt;</TT>)
+
+<P>
+Store emails which match the condition in @user_selection. See 8.6 Authorization Scenarios section to know how to write conditions. Only available for list models.
+</LI>
+<LI>create (global | list (<TT>;SPMlt;</TT>list name<TT>;SPMgt;</TT>), <TT>;SPMlt;</TT>model type<TT>;SPMgt;</TT>, <TT>;SPMlt;</TT>model<TT>;SPMgt;</TT>)
+
+<P>
+Create a task for object with model file <A NAME="8924"><tex2html_anchor_invisible_mark></A><TT>&#126;model type.model.task</TT>.
+</LI>
+<LI>chk_cert_expiration (<TT>;SPMlt;</TT>template<TT>;SPMgt;</TT>, <TT>;SPMlt;</TT>date value<TT>;SPMgt;</TT>)
+
+<P>
+Send the template message to emails whose certificate has expired or will expire before the date value.
+</LI>
+<LI>update_crl (<TT>;SPMlt;</TT>file name<TT>;SPMgt;</TT>, <TT>;SPMlt;</TT>date value<TT>;SPMgt;</TT>)
+
+<P>
+Update certificate revocation lists (CRL) which are expired or will expire before the date value. The file stores the CRL's URLs.
+
+<P>
+</LI>
+<LI>purge_orphan_bounces()
+
+<P>
+Clean bounces by removing unsubscribed-users archives.
+
+<P>
+</LI>
+<LI>eval_bouncers()
+
+<P>
+Evaluate all bouncing users of all list and give them a score from 0 to 100. (0 = no bounces for this user, 100 is for users who should be removed).
+
+<P>
+</LI>
+<LI>process_bouncers()
+
+<P>
+Execute actions defined in list configuration on each bouncing users, according to their score.
+</LI>
+</UL>
+
+<P>
+Model files may have a scenario-like title line at the beginning.
+
+<P>
+When you change a configuration file by hand, and a task parameter is created or modified, it is up to you
+to remove existing task files in the <A NAME="8929"><tex2html_anchor_invisible_mark></A><TT>task/</TT> spool if needed. Task file names have the following format : 
+
+<P>
+<A NAME="8962"><tex2html_anchor_invisible_mark></A><TT><TT>;SPMlt;</TT>date<TT>;SPMgt;</TT>.<TT>;SPMlt;</TT>label<TT>;SPMgt;</TT>.<TT>;SPMlt;</TT>model name<TT>;SPMgt;</TT>.<TT>;SPMlt;</TT>list name | global<TT>;SPMgt;</TT></TT> where :
+
+<P>
+
+<UL>
+<LI>date is when the task is executed, it is an epoch date
+</LI>
+<LI>label states where in the task file the execution begins. If empty, starts at the beginning 
+</LI>
+</UL>
+
+<P>
+
+<H2><A NAME="SECTION001784000000000000000">
+16.8.4 Model file examples</A>
+</H2>
+
+<P>
+
+<UL>
+<LI>remind.annual.task
+	<A NAME="remind-annual-task"><tex2html_anchor_mark></A>	<BLOCKQUOTE>
+</BLOCKQUOTE><PRE><tex2html_verbatim_mark>verbatim334#</PRE><BLOCKQUOTE>
+</BLOCKQUOTE>
+
+<P>
+</LI>
+<LI>expire.annual.task
+	<A NAME="expire-annual-task"><tex2html_anchor_mark></A>	<BLOCKQUOTE>
+</BLOCKQUOTE><PRE><tex2html_verbatim_mark>verbatim335#</PRE><BLOCKQUOTE>
+</BLOCKQUOTE>
+
+<P>
+</LI>
+<LI>crl_update.daily.task
+<BR>	<BLOCKQUOTE>
+</BLOCKQUOTE><PRE><tex2html_verbatim_mark>verbatim336#</PRE><BLOCKQUOTE>
+</BLOCKQUOTE>
+
+<P>
+</LI>
+</UL>
+
+<P>
+

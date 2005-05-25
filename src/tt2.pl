@@ -120,6 +120,15 @@ sub qencode {
     return $encoded_string;
 }
 
+sub escape_url {
+    # FAUX  put : [%|loc(...)%][% FILTER escape_url %] %1 %2 ...[% END %][% END %]
+    my $string = shift;
+    
+    $string =~ s/ /%%20/g;
+    
+    return $string;
+}
+
 sub escape_xml {
     my $string = shift;
     
@@ -209,10 +218,11 @@ sub parse_tt2 {
 	    l => [\&tt2::maketext, 1],
 	    loc => [\&tt2::maketext, 1],
 	    qencode => [\&qencode, 0],
- 	    escape_xml => [\&escape_xml, 0]
-	    },
-	    };
-
+ 	    escape_xml => [\&escape_xml, 0],
+	    escape_url => [\&escape_url, 0]
+	    }
+    };
+    
     if ($allow_absolute) {
 	$config->{'ABSOLUTE'} = 1;
 	$allow_absolute = 0;

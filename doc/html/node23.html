@@ -1,103 +1,106 @@
-<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2 Final//EN">
 
-<!--Converted with jLaTeX2HTML 2002-2-1 (1.70) JA patch-2.0
-patched version by:  Kenshi Muto, Debian Project.
-* modified by:  Shige TAKENO
-LaTeX2HTML 2002-2-1 (1.70),
-original version by:  Nikos Drakos, CBLU, University of Leeds
-* revised and updated by:  Marcus Hennecke, Ross Moore, Herb Swan
-* with significant contributions from:
-  Jens Lippmann, Marek Rouchal, Martin Wilck and others -->
-<HTML>
-<HEAD>
-<TITLE>22. Using Sympa with LDAP</TITLE>
-<META NAME="description" CONTENT="22. Using Sympa with LDAP">
-<META NAME="keywords" CONTENT="sympa">
-<META NAME="resource-type" CONTENT="document">
-<META NAME="distribution" CONTENT="global">
-
-<META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=EUC-JP">
-<META NAME="Generator" CONTENT="jLaTeX2HTML v2002-2-1 JA patch-2.0">
-<META HTTP-EQUIV="Content-Style-Type" CONTENT="text/css">
-
-<LINK REL="STYLESHEET" HREF="sympa.css">
-
-<LINK REL="next" HREF="node24.html">
-<LINK REL="previous" HREF="node22.html">
-<LINK REL="up" HREF="sympa.html">
-<LINK REL="next" HREF="node24.html">
-</HEAD>
-
-<BODY TEXT="#000000" BGCOLOR="#ffffff">
-<!--Navigation Panel-->
-<A NAME="tex2html1334"
-  HREF="node24.html">
-<IMG WIDTH="37" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="next" SRC="next.png"></A> 
-<A NAME="tex2html1328"
-  HREF="sympa.html">
-<IMG WIDTH="26" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="up" SRC="up.png"></A> 
-<A NAME="tex2html1322"
-  HREF="node22.html">
-<IMG WIDTH="63" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="previous" SRC="prev.png"></A> 
-<A NAME="tex2html1330"
-  HREF="node1.html">
-<IMG WIDTH="65" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="contents" SRC="contents.png"></A> 
-<A NAME="tex2html1332"
-  HREF="node26.html">
-<IMG WIDTH="43" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="index" SRC="index.png"></A> 
-<BR>
-<B> :</B> <A NAME="tex2html1335"
-  HREF="node24.html">23. Sympa with S/MIME and HTTPS</A>
-<B> :</B> <A NAME="tex2html1329"
-  HREF="sympa.html">Sympa Mailing Lists Management Software version</A>
-<B> :</B> <A NAME="tex2html1323"
-  HREF="node22.html">21. Antivirus</A>
- &nbsp; <B>  <A NAME="tex2html1331"
-  HREF="node1.html">目次</A></B> 
- &nbsp; <B>  <A NAME="tex2html1333"
-  HREF="node26.html">索引</A></B> 
-<BR>
-<BR>
-<!--End of Navigation Panel-->
-
-<H1><A NAME="SECTION002300000000000000000"></A>
-<A NAME="ldap"></A>
-<BR>
-22. Using <I>Sympa</I> with LDAP
+<H1><A NAME="SECTION002300000000000000000">
+22. Bounce management</A>
 </H1>
 
 <P>
-<A NAME="9494"></A>LDAP is a client-server protocol for accessing a directory service. Sympa
-provide various features based on access to one or more LDAP directories :
+<I>Sympa</I> allows bounce (non-delivery report) management. This
+prevents list owners from receiving each bounce (1 per message
+sent to a bouncing subscriber) in their own mailbox. Without
+automatic processing of bounces, list owners either go
+mad, or just delete them without further attention.
+
+<P>
+Bounces are received at mylist-owner address, which should
+be sent to the <A NAME="10603"><tex2html_anchor_invisible_mark></A><TT>bouncequeue</TT> program via aliases :
+
+<P>
+<BLOCKQUOTE>
+</BLOCKQUOTE><PRE><tex2html_verbatim_mark>verbatim388#</PRE><BLOCKQUOTE>
+</BLOCKQUOTE>
+
+<P>
+<A NAME="10606"><tex2html_anchor_invisible_mark></A><TT>bouncequeue</TT> (see <A HREF=<tex2html_cr_mark>#binaries#3995><tex2html_cr_mark></A>, page~<A HREF=<tex2html_cr_mark>#binaries#3996><tex2html_cross_ref_visible_mark></A>) stores bounces in a
+<A NAME="10609"><tex2html_anchor_invisible_mark></A><TT>/usr/local/sympa-gb/spool/bounce/</TT> spool.
+
+<P>
+Bounces are then processed by the <A NAME="10612"><tex2html_anchor_invisible_mark></A><TT>bounced.pl</TT> daemon.
+This daemon analyses bounces to find out which
+e-mail addresses are concerned and what kind of error was generated.
+If bouncing addresses match a subscriber's address, information 
+is stored in the <I>Sympa</I> database (in subscriber_table). Moreover, the most recent
+bounce itself is archived in <A NAME="10616"><tex2html_anchor_invisible_mark></A><TT>bounce_path/mylist/email</TT>
+(where bounce_path is defined in a <A NAME="10619"><tex2html_anchor_invisible_mark></A><TT>wwsympa.conf</TT> parameter and
+email is the user e-mail address).
+
+<P>
+When reviewing a list, bouncing addresses are tagged as bouncing.
+You may access further information such as dates of first and last bounces,
+number of received bounces for the address, the last bounce itself.
+
+<P>
+With these informations, the automatic bounce management is possible:
 
 <P>
 
 <UL>
-<LI>authentication using LDAP directory instead of sympa internal storage of password
-<BR>
-see&nbsp;<A HREF="node12.html#auth-conf">11.5</A>, page&nbsp;<A HREF="node12.html#auth-conf"><IMG  ALIGN="BOTTOM" BORDER="1" ALT="[*]" SRC="crossref.png"></A>
+<LI>The automatic task <A NAME="10622"><tex2html_anchor_invisible_mark></A><TT>eval_bouncer</TT> gives a score foreach bouncing user.
+  The score, between 0 to 100, allows the classification of bouncing users in two levels.
+  (Level 1 or 2). 
+  According to the level, automatic actions are executed periodicaly by <A NAME="10625"><tex2html_anchor_invisible_mark></A><TT>process_bouncers</TT>
+  task.
 
 <P>
 </LI>
-<LI>named filters used in authorization scenario condition
-<BR>
-see&nbsp;<A HREF="node13.html#named-filters">12.2</A>, page&nbsp;<A HREF="node13.html#named-filters"><IMG  ALIGN="BOTTOM" BORDER="1" ALT="[*]" SRC="crossref.png"></A>
+<LI>The score evaluation main parameters are: 
+
+<P>
+<A NAME="10628"><tex2html_anchor_invisible_mark></A><TT>Bounces count</TT>: The number of bouncing messages received by sympa for the user.
+
+<P>
+<A NAME="10631"><tex2html_anchor_invisible_mark></A><TT>Type rate</TT> : Bounces are classified depending on the type of errors generated on the user
+  side. If the error type is ;SPMquot;mailbox is full;SPMquot; (ie a temporary 4.2.2 error type) the type rate will be
+  0.5 whereas permanent errors (5.x.x) have a type rate equal to 1.
+
+<P>
+<A NAME="10634"><tex2html_anchor_invisible_mark></A><TT>Regularity rate</TT> : This rate tells if the bounces where received regularly, compared to list
+ traffic. The list traffic is deduced from <A NAME="10637"><tex2html_anchor_invisible_mark></A><TT>msg_count</TT> file data.
+
+<P>
+<BLOCKQUOTE>
+</BLOCKQUOTE><PRE><tex2html_verbatim_mark>verbatim389#</PRE><BLOCKQUOTE>
+</BLOCKQUOTE>
+
+<P>
+To avoid making decisions (ie defining a score) without enough relevant data, the score is not
+  evaluated if :
+
+<P>
+
+<UL>
+<LI>The number of the number of received bounces is lower than <A NAME="10640"><tex2html_anchor_invisible_mark></A><TT>minimum_bouncing_count</TT> 
+	(see <A HREF=<tex2html_cr_mark>#kw-minimum-bouncing-count#4014><tex2html_cr_mark></A>, page~<A HREF=<tex2html_cr_mark>#kw-minimum-bouncing-count#4015><tex2html_cross_ref_visible_mark></A>)
 
 <P>
 </LI>
-<LI>LDAP extraction of list subscribers (see&nbsp;<A HREF="node19.html#par-user-data-source">18.2.1</A>)
-<BR>
-<P>
-</LI>
-<LI>LDAP extraction of list owners or editors
-<BR>
-see&nbsp;<A HREF="node16.html#data-inclusion-file">15.7</A>, page&nbsp;<A HREF="node16.html#data-inclusion-file"><IMG  ALIGN="BOTTOM" BORDER="1" ALT="[*]" SRC="crossref.png"></A>
+<LI>The bouncing period is shorter than <A NAME="10643"><tex2html_anchor_invisible_mark></A><TT>minimum_bouncing_period</TT> 
+	(see <A HREF=<tex2html_cr_mark>#kw-minimum-bouncing-period#4017><tex2html_cr_mark></A>, page~<A HREF=<tex2html_cr_mark>#kw-minimum-bouncing-period#4018><tex2html_cross_ref_visible_mark></A>)
 
 <P>
 </LI>
-<LI>mail aliases stored in LDAP
-<BR>
-see&nbsp;<A HREF="node6.html#ldap-aliases">5.3</A>, page&nbsp;<A HREF="node6.html#ldap-aliases"><IMG  ALIGN="BOTTOM" BORDER="1" ALT="[*]" SRC="crossref.png"></A>
+</UL>
+
+<P>
+</LI>
+<LI>You can define the limit between each level via the <B>List configuration pannel</B>, 
+  in subsection <B>Bounce settings</B>. (see <A HREF=<tex2html_cr_mark>#rate#4022><tex2html_cr_mark></A>) The principle consists in
+  associating a score interval with a level.
+
+<P>
+</LI>
+<LI>You can also define wich action must be applied on each category of user.(see <A HREF=<tex2html_cr_mark>#action#4023><tex2html_cr_mark></A>)
+  Each time an action will be done, a notification email will be send to the person of your choice.
+  (see <A HREF=<tex2html_cr_mark>#notification#4024><tex2html_cr_mark></A>)
 
 <P>
 </LI>
@@ -105,10 +108,3 @@ see&nbsp;<A HREF="node6.html#ldap-aliases">5.3</A>, page&nbsp;<A HREF="node6.htm
 
 <P>
 
-<BR><HR>
-<ADDRESS>
-root
-平成17年3月8日
-</ADDRESS>
-</BODY>
-</HTML>
