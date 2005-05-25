@@ -1367,7 +1367,7 @@ sub DoMessage{
 
 	# not already tagged   
 	} else {
-	    $context->{'topic_auto'} = $list->automatic_tag($message->{'msg'});
+	    $context->{'topic_auto'} = $list->automatic_tag($message->{'msg'},$robot);
 	}
 
 	$context->{'topic'} = $context->{'topic_auto'} || $context->{'topic_sender'} || $context->{'topic_editor'};

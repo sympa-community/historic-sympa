@@ -8278,8 +8278,9 @@ sender or by the list moderator.
 \subsection {Message topic definition in a list}
 
 Available message topics are defined by list parameters. Foreach new message topic, create a new \lparam{msg\_topic} paragraph
-that defines the name and the title of the topic. To use automatic tagging, you should define keywords 
-(See (\ref {par-msg-topic}, page~\pageref {par-msg-topic}). To define which part of the message is used for automatic tagging
+that defines the name and the title of the topic. If a thread is identified for the current message then the automatic procedure is performed.
+Else, to use automatic tagging, you should define keywords (See (\ref {par-msg-topic}, page~\pageref {par-msg-topic}) 
+To define which part of the message is used for automatic tagging
 you have to define \lparam{msg\_topic\_key\_apply\_on} list parameter (See \ref {par-msg-topic-key-apply-on}, 
 page~\pageref {par-msg-topic-key-apply-on}). Tagging a message can be optional or it can be required, depending on the
 \lparam{msg\_topic\_tagging} list parameter (See (\ref {par-msg-topic-tagging},page~\pageref {par-msg-topic-tagging}).
@@ -10080,6 +10081,7 @@ Computes topic(s) (with compute\_topic() function) and tags the message (with ta
    \begin{enumerate}
       \item \lparam{self} (+): ref(List) 
       \item \lparam{msg} (+): ref(MIME::Entity)- the message to tag
+      \item \lparam{robot} (+): robot	
    \end{enumerate}
 
    \textbf{OUT} : list of tagged topic : strings separated by ','. It can be empty.
@@ -10088,10 +10090,10 @@ Computes topic(s) (with compute\_topic() function) and tags the message (with ta
 \label{list-compute-topic}
 \index{List::compute\_topic()}
 
-Computes topic(s) of the message. Topic(s) is(are) got from applying a regexp on the subject and/or the 
-body of the message (\lparam{msg\_topic\_keywords\_apply\_on} list parameter, see\ref {msg-topic-keywords-apply-on}, 
-page~\pageref {msg-topic-keywords-apply-on}). Regexp is based on \lparam{msg\_topic.keywords} list parameters
-(See \ref {msg-topic}, page~\pageref {msg-topic}).
+Computes topic(s) of the message. If the message is in a thread, topic is got from the previous message else topic is got from 
+applying a regexp on the subject and/or the body of the message (\lparam{msg\_topic\_keywords\_apply\_on} list parameter, 
+see\ref {msg-topic-keywords-apply-on}, page~\pageref {msg-topic-keywords-apply-on}). Regexp is based on \lparam{msg\_topic.keywords} 
+list parameters (See \ref {msg-topic}, page~\pageref {msg-topic}).
 
    \textbf{IN} : 
    \begin{enumerate}

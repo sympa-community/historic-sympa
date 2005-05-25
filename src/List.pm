@@ -10568,17 +10568,18 @@ sub is_msg_topic_tagging_required {
 #
 # IN : -$self (+): ref(List)
 #      -$msg (+): ref(MIME::Entity)
+#      -$robot (+): robot
 #
 # OUT : string of tag(s), can be separated by ',', can be empty
 ####################################################
 sub automatic_tag {
-    my ($self,$msg) = @_;
+    my ($self,$msg,$robot) = @_;
     my $msg_id = $msg->head->get('Message-ID');
     chomp($msg_id);
     &do_log('debug3','automatic_tag(%s,%s)',$self->{'name'},$msg_id);
 
 
-    my $topic_list = $self->compute_topic($msg);
+    my $topic_list = $self->compute_topic($msg,$robot);
 
     if ($topic_list) {
 	my $filename = $self->tag_topic($msg_id,$topic_list,'auto');
@@ -10605,21 +10606,34 @@ sub automatic_tag {
 #
 # IN : -$self (+): ref(List)
 #      -$msg (+): ref(MIME::Entity)
+#      -$robot(+) : robot
 #
 # OUT : string of tag(s), can be separated by ',', can be empty
 ####################################################
 sub compute_topic {
-    my ($self,$msg) = @_;
+    my ($self,$msg,$robot) = @_;
     my $msg_id = $msg->head->get('Message-ID');
     chomp($msg_id);
     &do_log('debug3','compute_topic(%s,%s)',$self->{'name'},$msg_id);
     my @topic_array;
     my %topic_hash;
+    my %keywords;
+
+
+    ## TAGGING INHERITED BY THREAD
+    # getting reply-to
+    my $reply_to = $msg->head->get('In-Reply-To');
+    $reply_to =  &tools::clean_msg_id($reply_to);
+    my $info_msg_reply_to = $self->load_msg_topic_file($reply_to,$robot);
+
+    # is msg reply to already tagged ?	
+    if (ref($info_msg_reply_to) eq "HASH") { 
+	return $info_msg_reply_to->{'topic'};
+    }
+     
 
 
     ## TAGGING BY KEYWORDS
-    my %keywords;
-
     # getting keywords
     foreach my $topic (@{$self->{'admin'}{'msg_topic'}}) {
 
@@ -10655,9 +10669,7 @@ sub compute_topic {
 	}
     }
 
-    ## TAGGING INHERITED BY THREAD
-    #
-    #  todo
+
     
     # for no double
     foreach my $k (keys %topic_hash) {
