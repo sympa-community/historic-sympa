@@ -7023,14 +7023,21 @@ sub _include_users_ldap {
     do_log('debug2', "Binded to LDAP server %s ; user : '$user'", join(',',@{$host})) ;
     
     do_log('debug2', 'Searching on server %s ; suffix %s ; filter %s ; attrs: %s', join(',',@{$host}), $ldap_suffix, $ldap_filter, $ldap_attrs);
-    unless ($fetch = $ldaph->search ( base => "$ldap_suffix",
+    $fetch = $ldaph->search ( base => "$ldap_suffix",
                                       filter => "$ldap_filter",
 				      attrs => "$ldap_attrs",
-				      scope => "$param->{'scope'}")) {
-        do_log('debug2',"Unable to perform LDAP search in $ldap_suffix for $ldap_filter : $@");
+				      scope => "$param->{'scope'}");
+    unless ($fetch) {
+        do_log('err',"Unable to perform LDAP search in $ldap_suffix for $ldap_filter : $@");
         return undef;
     }
     
+    unless ($fetch->code == 0) {
+	do_log('err','Ldap search failed : %s (searching on server %s ; suffix %s ; filter %s ; attrs: %s)', 
+	       $fetch->error(), join(',',@{$host}), $ldap_suffix, $ldap_filter, $ldap_attrs);
+	return undef;
+    }
+
     ## Counters.
     my $total = 0;
     my $dn; 
