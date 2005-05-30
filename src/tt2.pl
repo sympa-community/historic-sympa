@@ -114,10 +114,19 @@ my $last_error;
 sub qencode {
     my $string = shift;
     
-    my $encoded_string = MIME::Words::encode_mimewords($string, 'Q', gettext("_charset_"));
+    my $encoded_string = MIME::Words::encode_mimewords($string, ('Encode' => 'Q', 'Charset' => gettext("_charset_")));
     $encoded_string =~ s/\?=\s+=\?/_\?= =?/g; ## Fix bug 5462 of MIME::Words
 
     return $encoded_string;
+}
+
+sub escape_url {
+    # FAUX  put : [%|loc(...)%][% FILTER escape_url %] %1 %2 ...[% END %][% END %]
+    my $string = shift;
+    
+    $string =~ s/ /%%20/g;
+    
+    return $string;
 }
 
 sub escape_xml {
@@ -209,10 +218,11 @@ sub parse_tt2 {
 	    l => [\&tt2::maketext, 1],
 	    loc => [\&tt2::maketext, 1],
 	    qencode => [\&qencode, 0],
- 	    escape_xml => [\&escape_xml, 0]
-	    },
-	    };
-
+ 	    escape_xml => [\&escape_xml, 0],
+	    escape_url => [\&escape_url, 0]
+	    }
+    };
+    
     if ($allow_absolute) {
 	$config->{'ABSOLUTE'} = 1;
 	$allow_absolute = 0;

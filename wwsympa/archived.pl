@@ -38,7 +38,7 @@ use Language;
 use Digest::MD5;
 
 use wwslib;
-use smtp;
+use mail;
 
 require 'tt2.pl';
 require 'tools.pl';
@@ -84,7 +84,10 @@ if ($wwsconf->{'arc_path'}) {
 }
 
 ## Check databse connectivity
-$List::use_db = &List::probe_db();
+unless ($List::use_db = &List::probe_db()) {
+    &fatal_err('Database %s defined in sympa.conf has not the right structure or is unreachable. If you don\'t use any database, comment db_xxx parameters in sympa.conf', $Conf{'db_name'});
+}
+
 
 ## Put ourselves in background if not in debug mode. 
 unless ($main::options{'debug'} || $main::options{'foreground'}) {
@@ -416,20 +419,17 @@ sub mail2arc {
 	
 	if ($used >= $list->{'admin'}{'web_archive'}{'quota'} * 1024){
 	    &do_log('err',"archived::mail2arc : web_arc Quota exceeded for list $list->{'name'}");
-	    $list->send_notify_to_owner({ 'type' => 'arc_quota_exceeded',
-					  'robot'=>$hostname,
-					  'size' => $used,
-					  'email' => $param[1]});
-	    
+	    unless ($list->send_notify_to_owner('arc_quota_exceeded',{'size' => $used})) {
+		&do_log('notice',"Unable to send notify 'arc_quota_exceeded' to $list->{'name'} owner");	
+	    }
 	    return undef;
 	}
 	if ($used >= ($list->{'admin'}{'web_archive'}{'quota'} * 1024 * 0.95)){
 	    &do_log('err',"archived::mail2arc : web_arc Quota exceeded for list $list->{'name'}");
-	    $list->send_notify_to_owner({ 'type' => 'arc_quota_95',
-					  'robot'=>$hostname,
-					  'size' => $used,
-					  'rate' => int($used * 100 / ($list->{'admin'}{'web_archive'}{'quota'} * 1024 )) ,
-					  'email' => $param[1]});
+	    unless ($list->send_notify_to_owner('arc_quota_95',{'size' => $used,
+								'rate' => int($used * 100 / ($list->{'admin'}{'web_archive'}{'quota'} * 1024 ))})) {
+		&do_log('notice',"Unable to send notify 'arc_quota_95' to $list->{'name'} owner");	
+	    }
 	}
     }
 	
