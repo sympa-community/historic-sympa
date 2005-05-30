@@ -17,7 +17,7 @@
  
      <br /><br />
      [%IF available_topics %]	
-      [%|loc%]Thematic subscription :[%END%]		
+      [%|loc%]Topic subscription :[%END%]		
         [%IF possible_topic %] 
  	 <BLOCKQUOTE>	
  	  [% FOREACH t = available_topics %]
@@ -38,7 +38,7 @@
   
  	  [%IF sub_user_topic %]
 	   <br />	
- 	   <input type="checkbox" name="no_topic" value="1"> [%|loc%]Disallow thematic subscription[%END%]</input>
+ 	   <input type="checkbox" name="no_topic" value="1"> [%|loc%]Disallow topic subscription[%END%]</input>
  	   <br />
  	  [%END%]
        	
