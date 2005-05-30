@@ -1,3 +1,77 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2 Final//EN">
+
+<!--Converted with jLaTeX2HTML 2002-2-1 (1.70) JA patch-2.0
+patched version by:  Kenshi Muto, Debian Project.
+* modified by:  Shige TAKENO
+LaTeX2HTML 2002-2-1 (1.70),
+original version by:  Nikos Drakos, CBLU, University of Leeds
+* revised and updated by:  Marcus Hennecke, Ross Moore, Herb Swan
+* with significant contributions from:
+  Jens Lippmann, Marek Rouchal, Martin Wilck and others -->
+<HTML>
+<HEAD>
+<TITLE>4. Running Sympa </TITLE>
+<META NAME="description" CONTENT="4. Running Sympa ">
+<META NAME="keywords" CONTENT="sympa">
+<META NAME="resource-type" CONTENT="document">
+<META NAME="distribution" CONTENT="global">
+
+<META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=iso-8859-1">
+<META NAME="Generator" CONTENT="jLaTeX2HTML v2002-2-1 JA patch-2.0">
+<META HTTP-EQUIV="Content-Style-Type" CONTENT="text/css">
+
+<LINK REL="STYLESHEET" HREF="sympa.css">
+
+<LINK REL="next" HREF="node6.html">
+<LINK REL="previous" HREF="node4.html">
+<LINK REL="up" HREF="sympa.html">
+<LINK REL="next" HREF="node6.html">
+</HEAD>
+
+<BODY TEXT="#000000" BGCOLOR="#ffffff">
+<!--Navigation Panel-->
+<A NAME="tex2html795"
+  HREF="node6.html">
+<IMG WIDTH="37" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="next" SRC="next.png"></A> 
+<A NAME="tex2html789"
+  HREF="sympa.html">
+<IMG WIDTH="26" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="up" SRC="up.png"></A> 
+<A NAME="tex2html783"
+  HREF="node4.html">
+<IMG WIDTH="63" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="previous" SRC="prev.png"></A> 
+<A NAME="tex2html791"
+  HREF="node1.html">
+<IMG WIDTH="65" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="contents" SRC="contents.png"></A> 
+<A NAME="tex2html793"
+  HREF="node30.html">
+<IMG WIDTH="43" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="index" SRC="index.png"></A> 
+<BR>
+<B> Next:</B> <A NAME="tex2html796"
+  HREF="node6.html">5. Upgrading Sympa</A>
+<B> Up:</B> <A NAME="tex2html790"
+  HREF="sympa.html">Sympa Mailing Lists Management Software version</A>
+<B> Previous:</B> <A NAME="tex2html784"
+  HREF="node4.html">3. Installing Sympa</A>
+ &nbsp; <B>  <A NAME="tex2html792"
+  HREF="node1.html">Contents</A></B> 
+ &nbsp; <B>  <A NAME="tex2html794"
+  HREF="node30.html">Index</A></B> 
+<BR>
+<BR>
+<!--End of Navigation Panel-->
+<!--Table of Child-Links-->
+<A NAME="CHILD_LINKS"><STRONG>Subsections</STRONG></A>
+
+<UL>
+<LI><A NAME="tex2html797"
+  HREF="node5.html#SECTION00510000000000000000">4.1 sympa.pl</A>
+<LI><A NAME="tex2html798"
+  HREF="node5.html#SECTION00520000000000000000">4.2 INIT script</A>
+<LI><A NAME="tex2html799"
+  HREF="node5.html#SECTION00530000000000000000">4.3 Stopping <I>Sympa</I> and signals</A>
+</UL>
+<!--End of Table of Child-Links-->
+<HR>
 
 <H1><A NAME="SECTION00500000000000000000">
 4. Running <I>Sympa</I> </A>
@@ -5,22 +79,23 @@
 
 <P>
 
-<H1><A NAME="SECTION00510000000000000000"><tex2html_anchor_invisible_mark></A>
-<A NAME="sympa.pl"><tex2html_anchor_mark></A><BR>
+<H1><A NAME="SECTION00510000000000000000"></A>
+<A NAME="sympa.pl"></A>
+<BR>
 4.1 sympa.pl
 </H1>
 
 <P>
-<A NAME="6529"><tex2html_anchor_invisible_mark></A><TT>sympa.pl</TT> is the main daemon ; it processes mail commands and is in charge of
+<A NAME="6719"></A><TT>sympa.pl</TT> is the main daemon ; it processes mail commands and is in charge of
 messages distribution.
 
 <P>
-<A NAME="6532"><tex2html_anchor_invisible_mark></A><TT>sympa.pl</TT> recognizes the following command line arguments:
+<A NAME="6722"></A><TT>sympa.pl</TT> recognizes the following command line arguments:
 
 <P>
 
 <UL>
-<LI><A NAME="6535"><tex2html_anchor_invisible_mark></A><TT>- - debug</TT> | <A NAME="6538"><tex2html_anchor_invisible_mark></A><TT>-d</TT> 
+<LI><A NAME="6725"></A><TT>- - debug</TT> | <A NAME="6728"></A><TT>-d</TT> 
 
 <P>
 Sets <I>Sympa</I> in debug mode and keeps it attached to the terminal. 
@@ -30,14 +105,14 @@ Sets <I>Sympa</I> in debug mode and keeps it attached to the terminal.
 
 <P>
 </LI>
-<LI><A NAME="6542"><tex2html_anchor_invisible_mark></A><TT>service</TT>  <I>process_command</I> | <I>process_message</I>
+<LI><A NAME="6732"></A><TT>service</TT>  <I>process_command</I> | <I>process_message</I>
 
 <P>
 Sets <I>Sympa</I> daemon in way it process only message distribution (process_message) or in way it process only command (process_command).
 
 <P>
 </LI>
-<LI><A NAME="6555"><tex2html_anchor_invisible_mark></A><TT>- - config <I>config_file</I></TT> | <A NAME="6570"><tex2html_anchor_invisible_mark></A><TT>-f <I>config_file</I></TT>
+<LI><A NAME="6745"></A><TT>- - config <I>config_file</I></TT> | <A NAME="6760"></A><TT>-f <I>config_file</I></TT>
 
 <P>
 Forces <I>Sympa</I> to use an alternative configuration file. Default behavior is
@@ -45,7 +120,7 @@ Forces <I>Sympa</I> to use an alternative configuration file. Default behavior i
 
 <P>
 </LI>
-<LI><A NAME="6577"><tex2html_anchor_invisible_mark></A><TT>- - mail</TT> | <A NAME="6580"><tex2html_anchor_invisible_mark></A><TT>-m</TT> 
+<LI><A NAME="6767"></A><TT>- - mail</TT> | <A NAME="6770"></A><TT>-m</TT> 
 
 <P>
 <I>Sympa</I> will log calls to sendmail, including recipients. Useful for
@@ -53,77 +128,76 @@ Forces <I>Sympa</I> to use an alternative configuration file. Default behavior i
 
 <P>
 </LI>
-<LI><A NAME="6593"><tex2html_anchor_invisible_mark></A><TT>- - lang <I>catalog</I></TT> | <A NAME="6608"><tex2html_anchor_invisible_mark></A><TT>-l <I>catalog</I></TT>
+<LI><A NAME="6783"></A><TT>- - lang <I>catalog</I></TT> | <A NAME="6798"></A><TT>-l <I>catalog</I></TT>
 
 <P>
 Set this option to use a language catalog for <I>Sympa</I>. 
-  The corresponding catalog file must be located in <A NAME="6615"><tex2html_anchor_invisible_mark></A><TT>&#126;sympa/locale</TT>
+  The corresponding catalog file must be located in <A NAME="6805"></A><TT>~sympa/locale</TT>
   directory. 
 
 <P>
 </LI>
-<LI><A NAME="6629"><tex2html_anchor_invisible_mark></A><TT>- - keepcopy <I>recipient_directory</I></TT> | <A NAME="6644"><tex2html_anchor_invisible_mark></A><TT>-k <I>recipient_directory</I></TT>
+<LI><A NAME="6819"></A><TT>- - keepcopy <I>recipient_directory</I></TT> | <A NAME="6834"></A><TT>-k <I>recipient_directory</I></TT>
 
 <P>
 This option tells Sympa to keep a copy of every incoming message,
   instead of deleting them. <I>recipient_directory</I> is the directory
   to store messages.
 
-<P>
-<BLOCKQUOTE>
-</BLOCKQUOTE><PRE><tex2html_verbatim_mark>verbatim271#</PRE><BLOCKQUOTE>
-</BLOCKQUOTE>
+<P><PRE>
+/home/sympa/bin/sympa.pl
+</PRE>
 
 <P>
 </LI>
-<LI><A NAME="6662"><tex2html_anchor_invisible_mark></A><TT>- - create_list - - robot <I>robotname</I> - - input_file <I>list_file.xml</I></TT>
+<LI><A NAME="6852"></A><TT>- - create_list - - robot <I>robotname</I> - - input_file <I>list_file.xml</I></TT>
 
 <P>
-Create the list described by the xml file, see <A HREF=<tex2html_cr_mark>#list-creation-sympa#576><tex2html_cr_mark></A>, 
-page~<A HREF=<tex2html_cr_mark>#list-creation-sympa#577><tex2html_cross_ref_visible_mark></A>.
+Create the list described by the xml file, see <A HREF="node19.html#list-creation-sympa">18.3</A>, 
+page&nbsp;<A HREF="node19.html#list-creation-sympa"><IMG  ALIGN="BOTTOM" BORDER="1" ALT="[*]" SRC="crossref.png"></A>.
 
 <P>
 </LI>
-<LI><A NAME="6680"><tex2html_anchor_invisible_mark></A><TT>- - close_list <I>listname@robot</I></TT>
+<LI><A NAME="6870"></A><TT>- - close_list <I>listname@robot</I></TT>
 
 <P>
 Close the list (changing its status to closed), remove aliases and remove
 subscribers from DB (a dump is created in the list directory to allow restoring
-the list). See <A HREF=<tex2html_cr_mark>#family-close-list#579><tex2html_cr_mark></A>, page~<A HREF=<tex2html_cr_mark>#family-close-list#580><tex2html_cross_ref_visible_mark></A> when you
+the list). See <A HREF="#family-close-list"><IMG  ALIGN="BOTTOM" BORDER="1" ALT="[*]" SRC="crossref.png"></A>, page&nbsp;<A HREF="#family-close-list"><IMG  ALIGN="BOTTOM" BORDER="1" ALT="[*]" SRC="crossref.png"></A> when you
 are in a family context.
 
 <P>
 </LI>
-<LI><A NAME="6698"><tex2html_anchor_invisible_mark></A><TT>- - dump <I>listname <TT>|</TT> ALL</I></TT>
+<LI><A NAME="6888"></A><TT>- - dump <I>listname <TT>|</TT> ALL</I></TT>
 
 <P>
 Dumps subscribers of a list or all lists. Subscribers are dumped
-  in <A NAME="6707"><tex2html_anchor_invisible_mark></A><TT>subscribers.db.dump</TT>.
+  in <A NAME="6897"></A><TT>subscribers.db.dump</TT>.
 
 <P>
 </LI>
-<LI><A NAME="6719"><tex2html_anchor_invisible_mark></A><TT>- - import <I>listname</I></TT>
+<LI><A NAME="6909"></A><TT>- - import <I>listname</I></TT>
 
 <P>
 Import subscribers in the <I>listname</I> list. Data are read from STDIN.
 
 <P>
 </LI>
-<LI><A NAME="6725"><tex2html_anchor_invisible_mark></A><TT>- - lowercase</TT>
+<LI><A NAME="6915"></A><TT>- - lowercase</TT>
 
 <P>
 Lowercases e-mail addresses in database.
 
 <P>
 </LI>
-<LI><A NAME="6728"><tex2html_anchor_invisible_mark></A><TT>- - help</TT> | <A NAME="6731"><tex2html_anchor_invisible_mark></A><TT>-h</TT>
+<LI><A NAME="6918"></A><TT>- - help</TT> | <A NAME="6921"></A><TT>-h</TT>
 
 <P>
 Print usage of sympa.pl.
 
 <P>
 </LI>
-<LI><A NAME="6734"><tex2html_anchor_invisible_mark></A><TT>- - make_alias_file</TT>
+<LI><A NAME="6924"></A><TT>- - make_alias_file</TT>
 
 <P>
 Create an aliases file in /tmp/ with all list aliases (only list which status is 'open'). It uses the list_aliases.tt2
@@ -131,42 +205,42 @@ template.
 
 <P>
 </LI>
-<LI><A NAME="6737"><tex2html_anchor_invisible_mark></A><TT>- - version</TT> | <A NAME="6740"><tex2html_anchor_invisible_mark></A><TT>-v</TT>
+<LI><A NAME="6927"></A><TT>- - version</TT> | <A NAME="6930"></A><TT>-v</TT>
 
 <P>
 Print current version of <I>Sympa</I>.
 
 <P>
 </LI>
-<LI><A NAME="6759"><tex2html_anchor_invisible_mark></A><TT>- - instanciate_family <I>familyname</I> <I>robotname</I> - - input_file <I>family_file.xml</I></TT>
+<LI><A NAME="6949"></A><TT>- - instanciate_family <I>familyname</I> <I>robotname</I> - - input_file <I>family_file.xml</I></TT>
 
 <P>
-Instantiate the family <I>familyname</I>. See <A HREF=<tex2html_cr_mark>#lists-families#595><tex2html_cr_mark></A>, 
-page~<A HREF=<tex2html_cr_mark>#lists-families#596><tex2html_cross_ref_visible_mark></A>.
-
-<P>
-</LI>
-<LI><A NAME="6783"><tex2html_anchor_invisible_mark></A><TT>- - close_family <I>familyname</I> - - robot <I>robotname</I></TT>
-
-<P>
-Close the <I>familyname</I> family. See <A HREF=<tex2html_cr_mark>#family-closure#600><tex2html_cr_mark></A>, 
-   page~<A HREF=<tex2html_cr_mark>#family-closure#601><tex2html_cross_ref_visible_mark></A>.
+Instantiate the family <I>familyname</I>. See <A HREF="node20.html#lists-families">19</A>, 
+page&nbsp;<A HREF="node20.html#lists-families"><IMG  ALIGN="BOTTOM" BORDER="1" ALT="[*]" SRC="crossref.png"></A>.
 
 <P>
 </LI>
-<LI><A NAME="6807"><tex2html_anchor_invisible_mark></A><TT>- - add_list <I>familyname</I> - - robot <I>robotname</I> - - input_file <I>list_file.xml</I></TT>
+<LI><A NAME="6973"></A><TT>- - close_family <I>familyname</I> - - robot <I>robotname</I></TT>
 
 <P>
-Add the list described in the XML file to the <I>familyname</I> family. See <A HREF=<tex2html_cr_mark>#family-add-list#606><tex2html_cr_mark></A>, 
-   page~<A HREF=<tex2html_cr_mark>#family-add-list#607><tex2html_cross_ref_visible_mark></A>.
+Close the <I>familyname</I> family. See <A HREF="node20.html#family-closure">19.2.4</A>, 
+   page&nbsp;<A HREF="node20.html#family-closure"><IMG  ALIGN="BOTTOM" BORDER="1" ALT="[*]" SRC="crossref.png"></A>.
 
 <P>
 </LI>
-<LI><A NAME="6834"><tex2html_anchor_invisible_mark></A><TT>- - modify_list <I>familyname</I> - - robot <I>robotname</I> - - input_file <I>list_file.xml</I></TT>
+<LI><A NAME="6997"></A><TT>- - add_list <I>familyname</I> - - robot <I>robotname</I> - - input_file <I>list_file.xml</I></TT>
 
 <P>
-Modify the existing family list, with description contained in the XML file. See <A HREF=<tex2html_cr_mark>#family-modify-list#611><tex2html_cr_mark></A>, 
-   page~<A HREF=<tex2html_cr_mark>#family-modify-list#612><tex2html_cross_ref_visible_mark></A>.
+Add the list described in the XML file to the <I>familyname</I> family. See <A HREF="node20.html#family-add-list">19.2.5</A>, 
+   page&nbsp;<A HREF="node20.html#family-add-list"><IMG  ALIGN="BOTTOM" BORDER="1" ALT="[*]" SRC="crossref.png"></A>.
+
+<P>
+</LI>
+<LI><A NAME="7024"></A><TT>- - modify_list <I>familyname</I> - - robot <I>robotname</I> - - input_file <I>list_file.xml</I></TT>
+
+<P>
+Modify the existing family list, with description contained in the XML file. See <A HREF="node20.html#family-modify-list">19.2.7</A>, 
+   page&nbsp;<A HREF="node20.html#family-modify-list"><IMG  ALIGN="BOTTOM" BORDER="1" ALT="[*]" SRC="crossref.png"></A>.
 
 <P>
 </LI>
@@ -174,48 +248,87 @@ Modify the existing family list, with description contained in the XML file. See
 
 <P>
 
-<H1><A NAME="SECTION00520000000000000000"><tex2html_anchor_invisible_mark></A>
-<A NAME="init"><tex2html_anchor_mark></A><BR>
+<H1><A NAME="SECTION00520000000000000000"></A>
+<A NAME="init"></A>
+<BR>
 4.2 INIT script
 </H1>
 
 <P>
-The <A NAME="6846"><tex2html_anchor_invisible_mark></A><TT>make install</TT> step should have installed a sysV init script in
- your <A NAME="6849"><tex2html_anchor_invisible_mark></A><TT>/etc/rc.d/init.d/</TT> directory (you can change this at <A NAME="6852"><tex2html_anchor_invisible_mark></A><TT>configure</TT>
- time with the <A NAME="6855"><tex2html_anchor_invisible_mark></A><TT>--with-initdir</TT> option). You should edit your runlevels to make
- sure <I>Sympa</I> starts after Apache and MySQL. Note that <A NAME="6859"><tex2html_anchor_invisible_mark></A>MySQL should
- also start before <A NAME="6860"><tex2html_anchor_invisible_mark></A>Apache because of <A NAME="6861"><tex2html_anchor_invisible_mark></A><TT>wwsympa.fcgi</TT>.
+The <A NAME="7036"></A><TT>make install</TT> step should have installed a sysV init script in
+ your <A NAME="7039"></A><TT>/etc/rc.d/init.d/</TT> directory (you can change this at <A NAME="7042"></A><TT>configure</TT>
+ time with the <A NAME="7045"></A><TT>-with-initdir</TT> option). You should edit your runlevels to make
+ sure <I>Sympa</I> starts after Apache and MySQL. Note that <A NAME="7049"></A>MySQL should
+ also start before <A NAME="7050"></A>Apache because of <A NAME="7051"></A><TT>wwsympa.fcgi</TT>.
 
 <P>
 This script starts these deamons : sympa.pl, task_manager.pl, archived.pl and bounced.pl.
 
 <P>
 
-<H1><A NAME="SECTION00530000000000000000"><tex2html_anchor_invisible_mark></A>
- <A NAME="stop-signals"><tex2html_anchor_mark></A> <A NAME="625"><tex2html_anchor_invisible_mark></A><BR>
+<H1><A NAME="SECTION00530000000000000000"></A>
+ <A NAME="stop-signals"></A> <A NAME="625"></A>
+<BR>
 4.3 Stopping <I>Sympa</I> and signals
 </H1>
 
 <P>
 
-<H3><A NAME="SECTION00530100000000000000"><tex2html_anchor_invisible_mark></A><A NAME="6865"><tex2html_anchor_invisible_mark></A><BR>
+<H3><A NAME="SECTION00530100000000000000"></A><A NAME="7055"></A>
+<BR>
 4.3.0.1 <TT>kill -TERM</TT>
 </H3>
 
 <P>
-When this signal is sent to sympa.pl (<A NAME="6868"><tex2html_anchor_invisible_mark></A><TT>kill -TERM</TT>), the daemon is stopped ending message distribution in progress 
- and this can be long (for big lists). If <A NAME="6871"><tex2html_anchor_invisible_mark></A><TT>kill -TERM</TT> is used, sympa.pl will stop immediatly whatever a distribution 
+When this signal is sent to sympa.pl (<A NAME="7058"></A><TT>kill -TERM</TT>), the daemon is stopped ending message distribution in progress 
+ and this can be long (for big lists). If <A NAME="7061"></A><TT>kill -TERM</TT> is used, sympa.pl will stop immediatly whatever a distribution 
  message is in progress. In this case, when sympa.pl restart, message will distributed many times.
 
 <P>
 
-<H3><A NAME="SECTION00530200000000000000"><tex2html_anchor_invisible_mark></A><A NAME="6874"><tex2html_anchor_invisible_mark></A><BR>
+<H3><A NAME="SECTION00530200000000000000"></A><A NAME="7064"></A>
+<BR>
 4.3.0.2 <TT>kill -HUP</TT>
 </H3>
 
 <P>
-When this signal is sent to sympa.pl (<A NAME="6877"><tex2html_anchor_invisible_mark></A><TT>kill -HUP</TT>), it switchs of the <A NAME="6880"><tex2html_anchor_invisible_mark></A><TT>--mail</TT> logging option
+When this signal is sent to sympa.pl (<A NAME="7067"></A><TT>kill -HUP</TT>), it switchs of the <A NAME="7070"></A><TT>-mail</TT> logging option
  and continues current task.
 
 <P>
 
+<HR>
+<!--Navigation Panel-->
+<A NAME="tex2html795"
+  HREF="node6.html">
+<IMG WIDTH="37" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="next" SRC="next.png"></A> 
+<A NAME="tex2html789"
+  HREF="sympa.html">
+<IMG WIDTH="26" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="up" SRC="up.png"></A> 
+<A NAME="tex2html783"
+  HREF="node4.html">
+<IMG WIDTH="63" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="previous" SRC="prev.png"></A> 
+<A NAME="tex2html791"
+  HREF="node1.html">
+<IMG WIDTH="65" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="contents" SRC="contents.png"></A> 
+<A NAME="tex2html793"
+  HREF="node30.html">
+<IMG WIDTH="43" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="index" SRC="index.png"></A> 
+<BR>
+<B> Next:</B> <A NAME="tex2html796"
+  HREF="node6.html">5. Upgrading Sympa</A>
+<B> Up:</B> <A NAME="tex2html790"
+  HREF="sympa.html">Sympa Mailing Lists Management Software version</A>
+<B> Previous:</B> <A NAME="tex2html784"
+  HREF="node4.html">3. Installing Sympa</A>
+ &nbsp; <B>  <A NAME="tex2html792"
+  HREF="node1.html">Contents</A></B> 
+ &nbsp; <B>  <A NAME="tex2html794"
+  HREF="node30.html">Index</A></B> 
+<!--End of Navigation Panel-->
+<ADDRESS>
+root
+2005-05-25
+</ADDRESS>
+</BODY>
+</HTML>

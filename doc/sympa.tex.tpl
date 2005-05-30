@@ -1773,10 +1773,43 @@ see a  nice mailto adresses where others have nothing.
         browsing archives. This block all robot, even google and co.
 
 
-\subsection {\cfkeyword {dark\_color} \cfkeyword {light\_color} \cfkeyword {text\_color} \cfkeyword {bg\_color} \cfkeyword {error\_color} \cfkeyword {selected\_color} \cfkeyword {shaded\_color}}
-\label {colors}
+\subsection {\cfkeyword {color\_0}, \cfkeyword {color\_1} ..  \cfkeyword {color\_15}}
+  \label {colors}
+ They are the color definition for web interface.  Thoses parameters can be overwritten in each virtual robot definition. 
+ The color are used in the CSS file and unfortunitly they are also in use in some web templates. The sympa admin interface 
+ show every colors in use.
+ 
+ 
+ \subsection {\cfkeyword {dark\_color} \cfkeyword {light\_color} \cfkeyword {text\_color} \cfkeyword {bg\_color} \cfkeyword {error\_color} \cfkeyword {selected\_color} \cfkeyword {shaded\_color}}
+ 
+ 
+ 	Deprecated. They are the color definition for previous web interface. Thoses parameters are unused in 5.1 and higher 
+ version but still availible.style.css, print.css, print-preview.css and fullPage.css
+ 
+\subsection {\cfkeyword {logo\_html\_definition}}
+This parameter allow you to insert in the left top page corner oa piece of html code, usually to insert la logo in the page. This is a very basic but easy customization.
+\example {logo\_html\_definition <a href="http://www.mycompagnie.com"><img style="float: left; margin-top: 7px; margin-left: 37px;" src="http:/logos/mylogo.jpg" alt="my compagnie" /></a>}
 
-	They are the color definition for web interface. Default are set in the main Makefile. Thoses parameters can be overwritten in each virtual robot definition.
+\subsection {\cfkeyword {css\_path}}
+ 
+Pre-parsed CSS files (let's say static css files) can be installed using Sympa server skins module. Thoses CSS files are 
+installed in a part of the web server that can be reached without using sympa web engine. In order to do this edit the 
+robot.conf file and set the css\_path parameter. Then retart the server and use skins module from the "admin sympa" page 
+to install preparsed CSS file. The in order to replace dynamic CSS by thoses static files 
+set the \cfkeyword {css\_url} parameter.
+
+
+\subsection {\cfkeyword {css\_url}}
+
+By default, CSS files style.css, print.css, print-preview.css and fullPage.css are delivred by Sympa web interface itself using a sympa action 
+named css. URL look like http://foo.org/sympa/css/style.css . CSS file are made parsing a web\_tt2 file named css.tt2. This allow dynamique 
+definition of colors and in a near futur a complete definition of the skin, user preference skins etc.
+  
+In order to make sympa web interface faster, it is strongly recommended to install static css file somewhere in your web site. This way sympa will deliver 
+only one page insteed of one page and four css page at each clic. This can be done using css\_url parameter. The parameter must contain the URL of the 
+directory where  style.css, print.css, print-preview.css and fullPage.css are installed. You can make your own a sophisticated new skin editing thoses 
+files. The server admin module include a CSS administration page that can help you to install static CSS.
+
 
 \subsection {\cfkeyword {cookie}} 
 
@@ -2427,8 +2460,17 @@ bounce-test+*: 	"| /home/sympa/bin/queuebounce sympa@\samplerobot"
 
 \section {Database related}
 
-The following parameters are needed when using an RDBMS, but are otherwise not
-required:
+The following parameters are needed when using an RDBMS, but are otherwise not required:
+
+\subsection {\cfkeyword {update\_db\_field\_types}}
+
+	\texttt {Format: update\_db\_field\_types auto | disabled}
+
+	\default {auto}
+
+This parameter defines if Sympa may automatically update database structure to match the expected datafield types.
+This feature is only available with \textindex{mysql}.
+
 
 \subsection {\cfkeyword {db\_type}}
 
@@ -4146,6 +4188,32 @@ further authentication.
 
 \end {itemize}
 
+\section {Provide a Sympa login form in another application}
+\label {external-auth}
+
+You can easily trigger a Sympa login from within another web page. The login form should look like this :
+\begin {quote}
+\begin{verbatim}
+<FORM ACTION="http://listes.cru.fr/wws" method="post">
+      <input type="hidden" name="previous_action" value="arc" />
+      Accès web archives of list
+      <select name="previous_list">
+      <option value="sympa-users" >sympa-users</option>
+      </select><br/>
+
+      <input type="hidden" name="action" value="login" />
+      <label for="email">email address :
+      <input type="text" name="email" id="email" size="18" value="" /></label><br />
+      <label for="passwd" >password :
+      <input type="password" name="passwd" id="passwd" size="8" /></label> <br/>
+      <input class="MainMenuLinks" type="submit" name="action_login" value="Login and access web archives" />
+</FORM>
+\end{verbatim}
+\end  {quote}
+
+The example above does not only perform the login action but also redirects the user to another sympa page, a list web archives here. 
+The  \texttt {previous\_action} and \texttt {previous\_list} variable define the action that will be performed after the login is done.
+
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % Managing authorizations
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -4578,7 +4646,16 @@ Only the following parameters can be redefined for a particular robot :
 
 	\item \cfkeyword {max\_size}
 
-	\item \cfkeyword {dark\_color}, \cfkeyword {light\_color}, \cfkeyword {text\_color}, \cfkeyword {bg\_color}, \cfkeyword {error\_color}, \cfkeyword {selected\_color}, \cfkeyword {shaded\_color} 
+        \item \cfkeyword {css\_path}
+
+        \item \cfkeyword {css\_url}
+
+        \item \cfkeyword {logo\_html\_definition}
+
+	\item  \cfkeyword {color\_0}, {color\_1} ... {color\_15}
+
+	\item deprecated color definition \cfkeyword {dark\_color}, \cfkeyword {light\_color}, \cfkeyword {text\_color}, \cfkeyword {bg\_color}, \cfkeyword {error\_color}, \cfkeyword {selected\_color}, \cfkeyword {shaded\_color}
+ 
 \end {itemize}
 
 These settings overwrite the equivalent global parameter defined in \file {[CONFIG]}
@@ -4588,7 +4665,9 @@ environment variable to recognize which robot is in used.
 
 \subsection {Robot customization}
 
-If needed, you can customize each virtual robot using its set of templates and authorization scenarios.
+In order to customize the web look and feel, you may edit the CSS definition. CSS are defined in a template named css.tt2. Any robot can use static css file for making Sympa web interface faster. Then you can edit this static definition and change web style. Please refer to  \cfkeyword {css\_path} \cfkeyword {css\_url}. You can also quickly introduce a logo in left top corner of all pages configuring \cfkeyword {logo\_html\_definition} parameter in robot.conf file. 
+
+In addition, if needed, you can customize each virtual robot using its set of templates and authorization scenarios. 
 
 \dir {[ETCDIR]/\samplerobot/wws\_templates/},
 \dir {[ETCDIR]/\samplerobot/templates/}, 
@@ -7822,12 +7901,12 @@ keywords in the message.
 
 N.B.: In a family context, \lparam{msg\_topic.keywords} parameter is uncompellable.
 
-\subsection {msg\_topic\_key\_apply\_on}
+\subsection {msg\_topic\_keywords\_apply\_on}
 
     	\label {par-msg-topic-key-apply-on}
-	\index{msg-topic-key-apply-on}
+	\index{msg-topic-keywords-apply-on}
 
-	The \lparam {msg\_topic\_key\_apply\_on} parameter defines on which part of the message is used to perform
+	The \lparam {msg\_topic\_keywords\_apply\_on} parameter defines on which part of the message is used to perform
 	automatic tagging.(See \ref {msg-topics}, page~\pageref {msg-topics})
 
 \textit {Example:} 
@@ -8281,7 +8360,7 @@ Available message topics are defined by list parameters. Foreach new message top
 that defines the name and the title of the topic. If a thread is identified for the current message then the automatic procedure is performed.
 Else, to use automatic tagging, you should define keywords (See (\ref {par-msg-topic}, page~\pageref {par-msg-topic}) 
 To define which part of the message is used for automatic tagging
-you have to define \lparam{msg\_topic\_key\_apply\_on} list parameter (See \ref {par-msg-topic-key-apply-on}, 
+you have to define \lparam{msg\_topic\_keywords\_apply\_on} list parameter (See \ref {par-msg-topic-key-apply-on}, 
 page~\pageref {par-msg-topic-key-apply-on}). Tagging a message can be optional or it can be required, depending on the
 \lparam{msg\_topic\_tagging} list parameter (See (\ref {par-msg-topic-tagging},page~\pageref {par-msg-topic-tagging}).
 

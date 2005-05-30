@@ -1,313 +1,114 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2 Final//EN">
 
-<H1><A NAME="SECTION002600000000000000000"><tex2html_anchor_invisible_mark></A>
-    <A NAME="smime"><tex2html_anchor_mark></A><BR>
-25. <I>Sympa</I> with S/MIME and HTTPS
+<!--Converted with jLaTeX2HTML 2002-2-1 (1.70) JA patch-2.0
+patched version by:  Kenshi Muto, Debian Project.
+* modified by:  Shige TAKENO
+LaTeX2HTML 2002-2-1 (1.70),
+original version by:  Nikos Drakos, CBLU, University of Leeds
+* revised and updated by:  Marcus Hennecke, Ross Moore, Herb Swan
+* with significant contributions from:
+  Jens Lippmann, Marek Rouchal, Martin Wilck and others -->
+<HTML>
+<HEAD>
+<TITLE>25. Using Sympa with LDAP</TITLE>
+<META NAME="description" CONTENT="25. Using Sympa with LDAP">
+<META NAME="keywords" CONTENT="sympa">
+<META NAME="resource-type" CONTENT="document">
+<META NAME="distribution" CONTENT="global">
+
+<META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=iso-8859-1">
+<META NAME="Generator" CONTENT="jLaTeX2HTML v2002-2-1 JA patch-2.0">
+<META HTTP-EQUIV="Content-Style-Type" CONTENT="text/css">
+
+<LINK REL="STYLESHEET" HREF="sympa.css">
+
+<LINK REL="next" HREF="node27.html">
+<LINK REL="previous" HREF="node25.html">
+<LINK REL="up" HREF="sympa.html">
+<LINK REL="next" HREF="node27.html">
+</HEAD>
+
+<BODY TEXT="#000000" BGCOLOR="#ffffff">
+<!--Navigation Panel-->
+<A NAME="tex2html1433"
+  HREF="node27.html">
+<IMG WIDTH="37" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="next" SRC="next.png"></A> 
+<A NAME="tex2html1427"
+  HREF="sympa.html">
+<IMG WIDTH="26" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="up" SRC="up.png"></A> 
+<A NAME="tex2html1421"
+  HREF="node25.html">
+<IMG WIDTH="63" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="previous" SRC="prev.png"></A> 
+<A NAME="tex2html1429"
+  HREF="node1.html">
+<IMG WIDTH="65" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="contents" SRC="contents.png"></A> 
+<A NAME="tex2html1431"
+  HREF="node30.html">
+<IMG WIDTH="43" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="index" SRC="index.png"></A> 
+<BR>
+<B> Next:</B> <A NAME="tex2html1434"
+  HREF="node27.html">26. Sympa with S/MIME and HTTPS</A>
+<B> Up:</B> <A NAME="tex2html1428"
+  HREF="sympa.html">Sympa Mailing Lists Management Software version</A>
+<B> Previous:</B> <A NAME="tex2html1422"
+  HREF="node25.html">24. Antivirus</A>
+ &nbsp; <B>  <A NAME="tex2html1430"
+  HREF="node1.html">Contents</A></B> 
+ &nbsp; <B>  <A NAME="tex2html1432"
+  HREF="node30.html">Index</A></B> 
+<BR>
+<BR>
+<!--End of Navigation Panel-->
+
+<H1><A NAME="SECTION002600000000000000000"></A>
+<A NAME="ldap"></A>
+<BR>
+25. Using <I>Sympa</I> with LDAP
 </H1>
 
 <P>
-S/MIME is a cryptographic method for Mime messages based on X509 certificates.
-Before installing <I>Sympa</I> S/Mime features (which we call S/Sympa), you should be
-under no illusion about what the S stands for : ``S/MIME'' means ``Secure MIME''.
-That S certainly does not stand for ``Simple''.
-
-<P>
-The aim of this chapter is simply to describe what security level is provided
-by <I>Sympa</I> while
-using S/MIME messages, and how to configure <I>Sympa</I> for it. It is not intended
-to teach anyone what S/Mime is and why it is so complex ! RFCs numbers 2311,
-2312, 2632, 2633 and 2634, along with a lot of literature about S/MIME, PKCS#7
-and PKI is available on the Internet. <I>Sympa</I> 2.7 is the first version of
-<I>Sympa</I> to include S/MIME features as beta-testing features.
-
-<P>
-
-<H1><A NAME="SECTION002610000000000000000">
-25.1 Signed message distribution</A>
-</H1>
-
-<P>
-No action required.
-You probably imagine that any mailing list manager (or any mail forwarder)
-is compatible with S/MIME signatures, as long as it respects the MIME structure of
-incoming messages. You are right. Even Majordomo can distribute a signed message!
-As <I>Sympa</I> provides MIME compatibility, you don't need to do
-anything in order to allow subscribers to verify signed messages distributed
-through a list. This is not an issue at all, since any processe that
-distributes messages  is compatible with end user
-signing processes. Sympa simply skips the message footer attachment
-(ref <A HREF=<tex2html_cr_mark>#messagefooter#4055><tex2html_cr_mark></A>, page~<A HREF=<tex2html_cr_mark>#messagefooter#4056><tex2html_cross_ref_visible_mark></A>) to prevent any
-body corruption which would break the signature.
-
-<P>
-
-<H1><A NAME="SECTION002620000000000000000"><tex2html_anchor_invisible_mark></A>
-    <A NAME="smime-sig"><tex2html_anchor_mark></A><BR>
-25.2 Use of S/MIME signature by Sympa itself
-</H1>
-
-<P>
-Sympa is able to verify S/MIME signatures in order to apply S/MIME
-authentication methods for message handling. 
-Currently, this feature is limited to the
-distribution process, and to any commands <I>Sympa</I> might find in the message
-body.  The reasons for this restriction are related to current S/MIME
-usage.
-S/MIME signature structure is based on the encryption of a digest of the
-message. Most S/MIME agents do not include any part of the
-message headers in the message digest, so anyone can modify the message
-header without signature corruption! This is easy to do : for example, anyone
-can edit a signed message with their preferred message agent, modify whatever
-header they want (for example <TT>Subject:</TT> , <TT>Date:</TT> and
-<TT>To:</TT>, and redistribute the message to a list or to the robot
-without breaking the signature.
-
-<P>
-So Sympa cannot apply the S/MIME
-authentication method to a command parsed in the <TT>Subject:</TT> field of a
-message or via the <TT>-subscribe</TT> or <TT>-unsubscribe</TT> e-mail
-address. 
-
-<P>
-
-<H1><A NAME="SECTION002630000000000000000">
-25.3 Use of S/MIME encryption</A>
-</H1> 
-
-<P>
-S/Sympa is not an implementation of the ``S/MIME Symmetric Key Distribution''
-internet draft. This sophisticated scheme is required for large lists
-with encryption. So, there is still some scope for future developments :) 
-
-<P>
-We assume that S/Sympa distributes message as received, i.e. unencrypted when the
-list receives an unencrypted message, but otherwise encrypted.
-
-<P>
-In order to be able to send encrypted messages to a list, the sender needs
-to use the X509 certificate of the list. Sympa will send an encrypted message
-to each subscriber using the subscriber's certificate. To provide this feature,
-<I>Sympa</I> needs to manage one certificate for each list and one for each
-subscriber. This is available in Sympa version 2.8 and above.
-
-<P>
-
-<H1><A NAME="SECTION002640000000000000000">
-25.4 S/Sympa configuration</A>
-</H1> 
-
-<P>
-
-<H2><A NAME="SECTION002641000000000000000"><tex2html_anchor_invisible_mark></A>
-<A NAME="smimeinstall"><tex2html_anchor_mark></A><BR>
-25.4.1 Installation
-</H2>
-
-<P>
-The only requirement is OpenSSL (http://www.openssl.org) version 0.9.5a and above.
-OpenSSL is used by <I>Sympa</I> as an external plugin
-(like sendmail or postfix), so it must be installed with the appropriate access
-(x for sympa.sympa). 
-
-<P>
-
-<H2><A NAME="SECTION002642000000000000000"><tex2html_anchor_invisible_mark></A>
-<A NAME="smimeconf"><tex2html_anchor_mark></A><BR>
-25.4.2 configuration in sympa.conf
-</H2>
-
-<P>
-S/Sympa configuration is very simple. If you are used to Apache SSL,
-you should not feel lost. If you are an OpenSSL guru, you will
-feel at home, and there may even be changes you will wish to suggest to us.
-
-<P>
-The basic requirement is to let <I>Sympa</I> know where to find the binary file for the OpenSSL program
-and the certificates of the trusted certificate authority. 
-This is done using the optional parameters <A NAME="10676"><tex2html_anchor_invisible_mark></A><TT>openSSL</TT> and
-<A NAME="10679"><tex2html_anchor_invisible_mark></A><TT>capath</TT> and / or <A NAME="10682"><tex2html_anchor_invisible_mark></A><TT>cafile</TT>.
+<A NAME="10904"></A>LDAP is a client-server protocol for accessing a directory service. Sympa
+provide various features based on access to one or more LDAP directories :
 
 <P>
 
 <UL>
-<LI><A NAME="10685"><tex2html_anchor_invisible_mark></A><TT>openSSL</TT> : the path for the OpenSSL binary file,
-         usually <TT>/usr/local/ssl/bin/openSSL</TT>
-</LI>
-<LI><A NAME="10688"><tex2html_anchor_invisible_mark></A><TT>cafile</TT> : the path of a bundle of trusted ca certificates. 
-        The file <A NAME="10691"><tex2html_anchor_invisible_mark></A><TT>&#126;/usr/local/sympa-gb/bin/etc/cabundle.crt</TT> included in Sympa distribution can be used.
-
-<P>
-Both the <A NAME="10696"><tex2html_anchor_invisible_mark></A><TT>cafile</TT> file and the <A NAME="10699"><tex2html_anchor_invisible_mark></A><TT>capath</TT> directory
-        should be shared with your Apache+mod_ssl configuration. This is useful
-	for the S/Sympa web interface.  Please refer to the OpenSSL documentation for details.
+<LI>authentication using LDAP directory instead of sympa internal storage of password
+<BR>
+see&nbsp;<A HREF="node13.html#auth-conf">12.5</A>, page&nbsp;<A HREF="node13.html#auth-conf"><IMG  ALIGN="BOTTOM" BORDER="1" ALT="[*]" SRC="crossref.png"></A>
 
 <P>
 </LI>
-<LI><A NAME="10702"><tex2html_anchor_invisible_mark></A><TT>key_password</TT> : the password used to protect all list private keys. xxxxxxx	
+<LI>named filters used in authorization scenario condition
+<BR>
+see&nbsp;<A HREF="node14.html#named-filters">13.2</A>, page&nbsp;<A HREF="node14.html#named-filters"><IMG  ALIGN="BOTTOM" BORDER="1" ALT="[*]" SRC="crossref.png"></A>
+
+<P>
+</LI>
+<LI>LDAP extraction of list subscribers (see&nbsp;<A HREF="node21.html#par-user-data-source">20.2.1</A>)
+<BR>
+<P>
+</LI>
+<LI>LDAP extraction of list owners or editors
+<BR>
+see&nbsp;<A HREF="node18.html#data-inclusion-file">17.7</A>, page&nbsp;<A HREF="node18.html#data-inclusion-file"><IMG  ALIGN="BOTTOM" BORDER="1" ALT="[*]" SRC="crossref.png"></A>
+
+<P>
+</LI>
+<LI>mail aliases stored in LDAP
+<BR>
+see&nbsp;<A HREF="node7.html#ldap-aliases">6.3</A>, page&nbsp;<A HREF="node7.html#ldap-aliases"><IMG  ALIGN="BOTTOM" BORDER="1" ALT="[*]" SRC="crossref.png"></A>
+
+<P>
 </LI>
 </UL>
 
 <P>
 
-<H2><A NAME="SECTION002643000000000000000"><tex2html_anchor_invisible_mark></A>
-<A NAME="smimeforsign"><tex2html_anchor_mark></A><BR>
-25.4.3 configuration to recognize S/MIME signatures
-</H2>
-
-<P>
-Once  <TT>OpenSSL</TT> has been installed, and <TT>sympa.conf</TT> configured,
-your S/Sympa is ready to use S/Mime signatures for any authentication operation. You simply need
-to use the appropriate authorization scenario for the operation you want to secure. 
-(see <A HREF=<tex2html_cr_mark>#scenarios#4087><tex2html_cr_mark></A>, page~<A HREF=<tex2html_cr_mark>#scenarios#4088><tex2html_cross_ref_visible_mark></A>).
-
-<P>
-When receiving a message, <I>Sympa</I> applies
-the authorization scenario with the appropriate authentication method parameter.
-In most cases the authentication method is ``<TT>smtp</TT>'', but in cases
-where the message is signed and the signature has been checked and matches the
-sender e-mail, <I>Sympa</I> applies the ``<TT>smime</TT>'' authentication
-method.
-
-<P>
-It is vital to ensure that if the authorization scenario does not recognize this authentication method, the
-operation requested will be rejected. Consequently, authorization scenarios distributed
-prior to version 2.7 are not compatible with the OpenSSL configuration of Sympa. 
-All
-standard authorization scenarios (those distributed with sympa)
-now include the <TT>smime</TT> method. The following example is
-named <TT>send.private_smime</TT>, and restricts sends to subscribers using an S/mime signature :
-
-<P>
-<BLOCKQUOTE>
-</BLOCKQUOTE><PRE><tex2html_verbatim_mark>verbatim390#</PRE><BLOCKQUOTE>
-</BLOCKQUOTE>
-
-<P>
-It as also possible to mix various authentication methods in a single authorization scenario. The following
-example, <TT>send.private_key</TT>, requires either an md5 return key or an S/Mime signature :
-<BLOCKQUOTE>
-</BLOCKQUOTE><PRE><tex2html_verbatim_mark>verbatim391#</PRE><BLOCKQUOTE>
-</BLOCKQUOTE>
-
-<P>
-
-<H2><A NAME="SECTION002644000000000000000"><tex2html_anchor_invisible_mark></A>
-<A NAME="smimeforencrypt"><tex2html_anchor_mark></A><BR>
-25.4.4 distributing encrypted messages
-</H2>
-
-<P>
-In this section we describe S/Sympa encryption features. The goal is to use
-S/MIME encryption for distribution of a message to subscribers whenever the message has been
-received encrypted from the sender. 
-
-<P>
-Why is S/Sympa concerned by the S/MIME encryption distribution process ?
-It is because encryption is performed using the <B>recipient</B> X509
-certificate, whereas the signature requires the sender's private key. Thus, an encrypted
-message can be read by the recipient only if he or she is the owner of the private
-key associated with the certificate.
-Consequently, the only way to encrypt a message for a list of recipients is
-to encrypt and send the message for each recipient. This is what S/Sympa
-does when distributing an encrypted message.
-
-<P>
-The S/Sympa encryption feature in the distribution process supposes that Sympa
-has received an encrypted message for some list. To be able to encrypt a message
-for a list, the sender must have some access to an X509 certificate for the list.
-So the first requirement is to install a certificate and a private key for
-the list.
-The mechanism whereby certificates are obtained and managed is complex. Current versions
-of S/Sympa assume that list certificates and private keys are installed by
-the listmaster using <A NAME="10707"><tex2html_anchor_invisible_mark></A><TT>/usr/local/sympa-gb/bin/p12topem.pl</TT> script. This script allows
-you to install a PKCS#12 bundle file containing a private key and
-a certificate using the appropriate format.
-
-<P>
-It is a good idea to have a look at the OpenCA (http://www.openssl.org)
-documentation and/or PKI providers' web documentation.
-You can use commercial certificates or home-made ones. Of course, the
-certificate must be approved for e-mail applications, and issued by one of
-the trusted CA's described in the <A NAME="10710"><tex2html_anchor_invisible_mark></A><TT>cafile</TT> file or the
-<A NAME="10713"><tex2html_anchor_invisible_mark></A><TT>capath</TT> Sympa configuration parameter. 
-
-<P>
-The list private key must be installed in a file named
-<A NAME="10716"><tex2html_anchor_invisible_mark></A><TT>/usr/local/sympa-gb/expl/mylist/private_key</TT>. All the list private
-keys must be encrypted using a single password defined by the
-<A NAME="10719"><tex2html_anchor_invisible_mark></A><TT>password</TT> parameter in <A NAME="10722"><tex2html_anchor_invisible_mark></A><TT>sympa.conf</TT>.
-
-<P>
-
-<H3><A NAME="SECTION002644100000000000000">
-25.4.4.1 Use of navigator to obtain X509 list certificates</A>
-</H3>
-
-<P>
-In many cases e-mail X509 certificates are distributed via a web server and
-loaded into the browser using your mouse :) Mozilla or internet explorer allows
-certificates to be exported to a file.
-
-<P>
-Here is a way to install a certificat for a list:
-
-<P>
-
- 
-<UL>
-<LI>Get a list certificate is to obtain an personal e-mail
-certificate for the canonical list address in your browser as if it was your personal certificate, 
-
-<P>
-</LI>
-<LI>export the intended certificate
-it. The format used by Netscape is  ``pkcs#12''. 
-Copy this file to the list home directory.
-</LI>
-<LI>convert the pkcs#12 file into a pair of pem files :
-<A NAME="10725"><tex2html_anchor_invisible_mark></A><TT>cert.pem</TT> and <A NAME="10728"><tex2html_anchor_invisible_mark></A><TT>private_key</TT> using
-the <A NAME="10731"><tex2html_anchor_invisible_mark></A><TT>/usr/local/sympa-gb/bin/p12topem.pl</TT> script. Use <A NAME="10734"><tex2html_anchor_invisible_mark></A><TT>p12topem.pl -help</TT> for details.
-</LI>
-<LI>be sure that <A NAME="10737"><tex2html_anchor_invisible_mark></A><TT>cert.pem</TT> and <A NAME="10740"><tex2html_anchor_invisible_mark></A><TT>private_key</TT>
-are owned by sympa with ``r'' access.
-</LI>
-<LI>As soon as a certificate is installed for a list, the list  home page
-includes a new link to load the certificate to the user's browser, and the welcome
-message is signed by the list.
-</LI>
-</UL> 
-
-<P>
-
-<H1><A NAME="SECTION002650000000000000000">
-25.5 Managing certificates with tasks</A>
-</H1>
-
-<P>
-You may automate the management of certificates with two global task models provided with
-<I>Sympa</I>. See <A HREF=<tex2html_cr_mark>#tasks#4121><tex2html_cr_mark></A>, page~<A HREF=<tex2html_cr_mark>#tasks#4122><tex2html_cross_ref_visible_mark></A> to know more about tasks.
-Report to <A HREF=<tex2html_cr_mark>#certificate-task-config#4123><tex2html_cr_mark></A>, page~<A HREF=<tex2html_cr_mark>#certificate-task-config#4124><tex2html_cross_ref_visible_mark></A> to configure your <I>Sympa</I> to use these facilities.
-
-<P>
-
-<H2><A NAME="SECTION002651000000000000000">
-25.5.1 chk_cert_expiration.daily.task model</A>
-</H2>
-
-<P>
-A task created with the model <A NAME="10745"><tex2html_anchor_invisible_mark></A><TT>chk_cert_expiration.daily.task</TT> checks every day the expiration date of
-certificates stored in the <A NAME="10748"><tex2html_anchor_invisible_mark></A><TT>/usr/local/sympa-gb/expl/X509-user-certs/</TT> directory.
-The user is warned with the <A NAME="10751"><tex2html_anchor_invisible_mark></A><TT>daily_cert_expiration</TT> template when his certificate has expired
-or is going to expire within three days.
-
-<P>
-
-<H2><A NAME="SECTION002652000000000000000">
-25.5.2 crl_update.daily.task model</A>
-</H2>
-
-<P>
-You may use the model <A NAME="10754"><tex2html_anchor_invisible_mark></A><TT>crl_update.daily.task</TT> to create a task which daily updates the certificate revocation
-lists when needed.
-
-<P>
-
+<BR><HR>
+<ADDRESS>
+root
+2005-05-25
+</ADDRESS>
+</BODY>
+</HTML>

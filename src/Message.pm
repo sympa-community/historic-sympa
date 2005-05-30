@@ -1,5 +1,5 @@
-# Message.pm - This module includes all list processing functions
-# <!-- RCS Identication ; $Revision$ ; $Date$ -->
+# Message.pm - This module includes Message processing functions
+#<!-- RCS Identication ; $Revision$ ; $Date$ --> 
 
 #
 # Sympa - SYsteme de Multi-Postage Automatique
@@ -91,6 +91,11 @@ sub new {
 	return undef;
     }
     $message->{'sender'} = lc($sender_hdr[0]->address);
+
+    unless (&tools::valid_email($message->{'sender'})) {
+	do_log('err', "Invalid From: field '%s'", $message->{'sender'});
+	return undef;
+    }
 
     ## Store decoded subject
     my @decoded_subject =  &MIME::Words::decode_mimewords($hdr->get('Subject'));

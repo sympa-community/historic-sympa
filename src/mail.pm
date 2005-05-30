@@ -172,24 +172,24 @@ sub mail_file {
 	}else{
 	    $to = $rcpt;
 	}   
-	$headers .= "To: ".MIME::Words::encode_mimewords($to, 'Q', $charset)."\n"; 
+	$headers .= "To: ".MIME::Words::encode_mimewords($to, ('Encode' => 'Q', 'Charset' => $charset))."\n"; 
     }     
     unless ($header_ok{'from'}) {
 	if ($data->{'from'} eq 'sympa') {
-	    $headers .= "From: ".MIME::Words::encode_mimewords((sprintf ("SYMPA <%s>",&Conf::get_robot_conf($robot, 'sympa'))), 'Q', $charset)."\n";
+	    $headers .= "From: ".MIME::Words::encode_mimewords((sprintf ("SYMPA <%s>",&Conf::get_robot_conf($robot, 'sympa'))), ('Encode' => 'Q', 'Charset' => $charset))."\n";
 	} else {
-	    $headers .= "From: ".MIME::Words::encode_mimewords($data->{'from'}, 'Q', $charset)."\n"; 
+	    $headers .= "From: ".MIME::Words::encode_mimewords($data->{'from'},('Encode' => 'Q', 'Charset' => $charset))."\n"; 
 	}
    }
     unless ($header_ok{'subject'}) {
-	$headers .= "Subject: ".MIME::Words::encode_mimewords($data->{'subject'}, 'Q', $charset)."\n";
+	$headers .= "Subject: ".MIME::Words::encode_mimewords($data->{'subject'},('Encode' => 'Q', 'Charset' => $charset))."\n";
    }
     unless ($header_ok{'reply-to'}) { 
-	$headers .= "Reply-to: ".MIME::Words::encode_mimewords($data->{'replyto'}, 'Q', $charset)."\n" if ($data->{'replyto'})
+	$headers .= "Reply-to: ".MIME::Words::encode_mimewords($data->{'replyto'},('Encode' => 'Q', 'Charset' => $charset))."\n" if ($data->{'replyto'})
     }
     if ($data->{'headers'}) {
 	foreach my $field (keys %{$data->{'headers'}}) {
-	    $headers .= $field.': '.MIME::Words::encode_mimewords($data->{'headers'}{$field}, 'Q', $charset)."\n";
+	    $headers .= $field.': '.MIME::Words::encode_mimewords($data->{'headers'}{$field},('Encode' => 'Q', 'Charset' => $charset))."\n";
 	}
     }
     unless ($header_ok{'mime-version'}) {

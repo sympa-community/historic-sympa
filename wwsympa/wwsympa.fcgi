@@ -35,6 +35,7 @@ use Archive::Zip;
 
 use strict 'vars';
 use Time::Local;
+use Text::Wrap;
 
 ## Template parser
 require "--LIBDIR--/tt2.pl";
@@ -49,6 +50,7 @@ use Language;
 use Log;
 use Auth;
 use admin;
+use SharedDocument;
 
 use Mail::Header;
 use Mail::Address;
@@ -193,6 +195,8 @@ my %comm = ('home' => 'do_home',
 	 'arc_download' => 'do_arc_download',
 	 'arc_delete' => 'do_arc_delete',
 	 'serveradmin' => 'do_serveradmin',
+	 'skinsedit' => 'do_skinsedit',
+	 'css' => 'do_css',
 	 'help' => 'do_help',
 	 'edit_list_request' => 'do_edit_list_request',
 	 'edit_list' => 'do_edit_list',
@@ -234,6 +238,7 @@ my %comm = ('home' => 'do_home',
 	 'd_change_access' => 'do_d_change_access',
 	 'd_set_owner' => 'do_d_set_owner',
 	 'd_admin' => 'do_d_admin',
+	 'dump_scenario' => 'do_dump_scenario',
 	 'dump' => 'do_dump',
 	 'arc_protect' => 'do_arc_protect',
 	 'remind' => 'do_remind',
@@ -254,6 +259,11 @@ my %comm = ('home' => 'do_home',
 	 'wsdl'=> 'do_wsdl',
 	 'sync_include' => 'do_sync_include',
 	 'review_family' => 'do_review_family',
+	 'ls_templates' => 'do_ls_templates',
+	 'remove_template' => 'do_remove_template',
+	 'copy_template' => 'do_copy_template',	   
+	 'view_template' => 'do_view_template',
+	 'edit_template' => 'do_edit_template',
 	 );
 
 ## Arguments awaited in the PATH_INFO, depending on the action 
@@ -271,9 +281,11 @@ my %action_args = ('default' => ['list'],
 		'loginrequest' => ['previous_action','previous_list'],
 		'logout' => ['previous_action','previous_list'],
 		'remindpasswd' => ['previous_action','previous_list'],
+		'css' => ['file'],
 		'pref' => ['previous_action','previous_list'],
 		'reject' => ['list','id'],
 		'distribute' => ['list','id'],
+		'dump_scenario' => ['list','pname'],
 		'd_reject_shared' => ['list','id'],
 		'd_install_shared' => ['list','id'],
 		'modindex' => ['list'],
@@ -308,6 +320,7 @@ my %action_args = ('default' => ['list'],
 		'sigrequest' => ['list','email'],
 		'set' => ['list','email','reception','gecos'],
 		'serveradmin' => [],
+		'skinsedit' => [],
 		'get_pending_lists' => [],
 		'get_closed_lists' => [],
 		'get_latest_lists' => [],
@@ -328,7 +341,7 @@ my %action_args = ('default' => ['list'],
 		'd_control' => ['list','@path'],
 		'd_change_access' =>  ['list','@path'],
 		'd_set_owner' =>  ['list','@path'],
-		'dump' => ['list'],
+		'dump' => ['list','format'],
 		'search' => ['list','filter'],
 		'search_user' => ['email'],
 		'set_lang' => ['lang'],
@@ -341,6 +354,11 @@ my %action_args = ('default' => ['list'],
 		'wsdl' => [],
 		'sync_include' => ['list'],
 		'review_family' => ['family_name'],
+		'ls_templates' => [],
+ 		'view_template' => [],
+ 		'remove_template' => [],
+ 		'copy_template' => [],
+ 		'edit_template' => [],
 		'request_topic' => ['list','authkey'],
 		'tag_topic_by_sender' => ['list']   
 		);
@@ -353,7 +371,7 @@ my %action_type = ('editfile' => 'admin',
 		'add_request' =>'admin',
 		'add' =>'admin',
 		'del' =>'admin',
-		'modindex' =>'admin',
+#		'modindex' =>'admin',
 		'reject' =>'admin',
 		'reject_notify' =>'admin',
 		'add_request' =>'admin',
@@ -373,16 +391,22 @@ my %action_type = ('editfile' => 'admin',
 		'close_list' =>'admin',
 		'restore_list' => 'admin',
 		'd_admin' => 'admin',
-## mettre ici les trucs qui se promènent plus haut ! ?
+                'dump_scenario' => 'admin',
+## 
 		'dump' => 'admin',
 		'remind' => 'admin',
-		'subindex' => 'admin',
+#		'subindex' => 'admin',
 		'stats' => 'admin',
 		'ignoresub' => 'admin',
 		'rename_list' => 'admin',
 		'rename_list_request' => 'admin',
 		'arc_manage' => 'admin',
 		'sync_include' => 'admin',
+		'ls_templates' => 'admin',
+		'view_template' => 'admin',
+		'remove_template' => 'admin',
+		'copy_template' => 'admin',
+		'edit_template' => 'admin',
 #		'viewlogs' => 'admin'
 );
 
@@ -418,6 +442,7 @@ my %in_regexp = (
 
 		 ## File names
 		 'file' => '[^<>\*\$]+',
+		 'template_path' => '[\w\-\.\/_]+',
 		 'arc_file' => '[\w\-\.]+', 
 		 'path' => '[^<>\\\*\$]+',
 		 'uploaded_file' => '[^<>\*\$]+', # Could be precised (use of "'")
@@ -462,7 +487,7 @@ my %in_regexp = (
 		 'family_name' => $tools::regexp{'family_name'},
 
 		 ## Email addresses
-		 'email' => $tools::regexp{'email'},
+		 'email' => $tools::regexp{'email'}.'|'.$tools::regexp{'uid'},
 		 'init_email' => $tools::regexp{'email'},
 		 'new_alternative_email' => $tools::regexp{'email'},
 		 'new_email' => $tools::regexp{'email'},
@@ -537,7 +562,7 @@ if ($wwsconf->{'use_fast_cgi'}) {
 	 &wwslog('err','Config error: wwsympa should with UID %s (instead of %s)', (getpwnam('--USER--'))[2], $>);
      }
 
-     unless ($List::use_db = &List::probe_db()) {
+     unless ($List::use_db = &List::check_db_connect()) {
 	 &error_message('no_database');
 	 &do_log('info','WWSympa requires a RDBMS to run');
      }
@@ -595,10 +620,16 @@ if ($wwsconf->{'use_fast_cgi'}) {
      $param->{'conf'} = {};
      foreach my $p ('email','host','sympa','request','soap_url','wwsympa_url','listmaster_email',
 		    'dark_color','light_color','text_color','bg_color','error_color',
-                    'selected_color','shaded_color','web_recode_to') {
+                    'selected_color','shaded_color','web_recode_to','color_0','color_1','color_2','color_3','color_4','color_5','color_6','color_7','color_8','color_9','color_10','color_11','color_12','color_13','color_14','color_15') {
 	 $param->{'conf'}{$p} = &Conf::get_robot_conf($robot, $p);
-	 $param->{$p} = &Conf::get_robot_conf($robot, $p) if ($p =~ /_color$/);
+	 $param->{$p} = &Conf::get_robot_conf($robot, $p) if (($p =~ /_color$/)|| ($p =~ /color_/));
      }
+
+
+     $param->{'css_url'} = &Conf::get_robot_conf($robot, 'css_url');
+     $param->{'css_url'} ||= &Conf::get_robot_conf($robot, 'wwsympa_url').'/css';
+
+     &do_log('info', "parameter css_url ($param->{'css_url'}) seems strange, it must be the url of a directory not a css file") if ($param->{'css_url'} =~ /\.css$/);
 
      foreach my $auth (keys  %{$Conf{'cas_id'}}) {
 	 &do_log('debug2', "cas authentication service $auth");
@@ -618,6 +649,7 @@ if ($wwsconf->{'use_fast_cgi'}) {
      $param->{'path_cgi'} = $ENV{'SCRIPT_NAME'};
      $param->{'version'} = $Version::Version;
      $param->{'date'} = &POSIX::strftime("%d %b %Y at %H:%M:%S", localtime(time));
+     $param->{'time'} = &POSIX::strftime("%H:%M:%S", localtime(time));
 
      my $tmp_lang = &Language::GetLang();
      &Language::SetLang('en_US');
@@ -649,7 +681,7 @@ if ($wwsconf->{'use_fast_cgi'}) {
      if (($ENV{'SSL_CLIENT_VERIFY'} eq 'SUCCESS') &&
 	 ($in{'action'} ne 'sso_login')) { ## Do not check client certificate automatically if in sso_login 
 
-	 &do_log('debug2', "SSL verified, S_EMAIL = %s,"." S_DN_Email = %s", $ENV{'SSL_CLIENT_S_EMAIL'}, $ENV{SSL_CLIENT_S_DN_Email});
+	 &do_log('debug2', "SSL verified, S_EMAIL = %s,"." S_DN_Email = %s", $ENV{'SSL_CLIENT_S_EMAIL'}, $ENV{'SSL_CLIENT_S_DN_Email'});
 	 if (($ENV{'SSL_CLIENT_S_EMAIL'})) {
 	     ## this is the X509v3 SubjectAlternativeName, and requires
 	     ## a patch to mod_ssl -- cm@coretec.at
@@ -858,7 +890,8 @@ if ($wwsconf->{'use_fast_cgi'}) {
      $param->{'lang'} ||= &Conf::get_robot_conf($robot, 'lang');
 
      if ($param->{'list'}) {
-	 $param->{'main_title'} = "$param->{'list'} - $list->{'admin'}{'subject'}";
+	 $param->{'list_title'} = $list->{'admin'}{'subject'};
+	 $param->{'list_protected_email'} = &get_protected_email_address($param->{'list'}, $list->{'admin'}{'host'});
 	 $param->{'title'} = &get_protected_email_address($param->{'list'}, $list->{'admin'}{'host'});
 	 $param->{'title_clear_txt'} = "$param->{'list'}\@$list->{'admin'}{'host'}";
 
@@ -871,6 +904,8 @@ if ($wwsconf->{'use_fast_cgi'}) {
 	 $param->{'main_title'} = $param->{'title'} = &Conf::get_robot_conf($robot,'title');
 	 $param->{'title_clear_txt'} = $param->{'title'};
      }
+     $param->{'robot_title'} = &Conf::get_robot_conf($robot,'title');
+
 
      ## Do not manage cookies at this level if content was already sent
      unless ($param->{'bypass'} eq 'extreme') {
@@ -1003,8 +1038,7 @@ if ($wwsconf->{'use_fast_cgi'}) {
  	     }
 	     
  	     unshift @{$tt2_include_path}, $list->{'dir'}.'/web_tt2';
- 	     unshift @{$tt2_include_path}, $list->{'dir'}.'/web_tt2/'.&Language::Lang2Locale($param->{'lang'});
- 	 }
+ 	     unshift @{$tt2_include_path}, $list->{'dir'}.'/web_tt2/'.&Language::Lang2Locale($param->{'lang'}); 	 }
  	    
  	 unless (&tt2::parse_tt2($param,'rss.tt2' ,\*STDOUT, $tt2_include_path)) {
  	     my $error = &tt2::get_error();
@@ -1177,7 +1211,7 @@ if ($wwsconf->{'use_fast_cgi'}) {
 	     $in{'action'} = $params[0];
 
 	     my $args;
-	     if ($action_args{$in{'action'}}) {
+	     if (defined $action_args{$in{'action'}}) {
 		 $args = $action_args{$in{'action'}};
 	     }else {
 		 $args = $action_args{'default'};
@@ -1240,6 +1274,9 @@ if ($wwsconf->{'use_fast_cgi'}) {
 	 ## Skip empty parameters
  	 next if ($in{$p} =~ /^$/);
 
+	 ## Remove DOS linefeeds (^M) that cause problems with Outlook 98, AOL, and EIMS:
+	 $in{$p} =~ s/\015//g;	 
+
 	 my @tokens = split /\./, $p;
 	 my $pname = $tokens[0];
 	 my $regexp;
@@ -1253,7 +1290,7 @@ if ($wwsconf->{'use_fast_cgi'}) {
 	 foreach my $one_p (split /\0/, $in{$p}) {
 	     unless ($one_p =~ /^$regexp$/m) {
 		 ## Dump parameters in a tmp file for later analysis
-		 my $dump_file = '/tmp/sympa_dump.'.time.'.'.$$;
+		 my $dump_file =  &Conf::get_robot_conf($robot, 'tmpdir').'/sympa_dump.'.time.'.'.$$;
 		 unless (open DUMP, ">$dump_file") {
 		     &wwslog('err','get_parameters: failed to create %s : %s', $dump_file, $!);		     
 		 }
@@ -1324,7 +1361,7 @@ sub send_html {
     unless (&tt2::parse_tt2($param,$tt2_file , \*STDOUT, $tt2_include_path, $tt2_options)) {
 	my $error = &tt2::get_error();
 	$param->{'tt2_error'} = $error;
-	&List::send_notify_to_listmaster('web_tt2_error', $robot, $error);
+	&List::send_notify_to_listmaster('web_tt2_error', $robot, [$error]);
 	&tt2::parse_tt2($param,'tt2_error.tt2' , \*STDOUT, $tt2_include_path);
     }
     
@@ -1401,7 +1438,9 @@ sub send_html {
 	## Privileged info
 
 	if ($param->{'is_priv'}) {
-	    $param->{'mod_total'} = $list->get_mod_spool_size();
+	    $param->{'mod_message'} = $list->get_mod_spool_size();
+
+            $param->{'mod_subscription'} = $list->get_subscription_request_count();
 	   
 	    $param->{'doc_mod_list'} = $list->get_shared_moderated();
 	    $param->{'mod_total_shared'} = $#{$param->{'doc_mod_list'}} + 1;
@@ -1413,6 +1452,7 @@ sub send_html {
 	    }else {
 		$param->{'bounce_rate'} = 0;
 	    }
+	    $param->{'mod_total'} = $param->{'mod_total_shared'}+$param->{'mod_message'}+$param->{'mod_subscription'};
 	}
 
 	## (Un)Subscribing 
@@ -1671,12 +1711,16 @@ sub send_html {
 
      if ($in{'referer'}) {
 	 $param->{'redirect_to'} = &tools::unescape_chars($in{'referer'});
-     }elsif ($in{'previous_action'}) {
+     }elsif ($in{'previous_action'} && 
+	     $in{'previous_action'} !~ /^login|logout|loginrequest$/) {
 	 $next_action = $in{'previous_action'};
 	 $in{'list'} = $in{'previous_list'};
      }else {
 	 $next_action = 'home';
      }
+      # never return to login or logout when login.
+      $next_action = 'home' if ($in{'next_action'} eq 'login') ;
+      $next_action = 'home' if ($in{'next_action'} eq 'logout') ;
 
      if ($param->{'user'}{'email'}) {
 	 &error_message('already_login', {'email' => $param->{'user'}{'email'}});
@@ -2093,7 +2137,12 @@ sub do_sso_login_succeeded {
 		 next;
 	     }
 
-	     $ldap_anonymous->bind;
+	     my $status = $ldap_anonymous->bind;
+	     unless(defined($status) && ($status->code == 0)){
+		 &Log::do_log('err', 'Bind failed on  %s', $host);
+		 last;
+	     }
+
 	     my $mesg = $ldap_anonymous->search(base => $ldap->{'suffix'} ,
 						filter => "$filter",
 						scope => $ldap->{'scope'}, 
@@ -2220,7 +2269,7 @@ sub do_remindpasswd {
 		 if ($url_redirect && ($url_redirect != 1));
 	 }elsif (! &tools::valid_email($in{'email'})) {
 	     &error_message('incorrect_email', {'email' => $in{'email'}});
-	     &wwslog('info','do_remindpasswd: incorrect email %s', $in{'email'});
+	     &wwslog('info','do_remindpasswd: incorrect email \"%s\"', $in{'email'});
 	     return undef;
 	 }
      }
@@ -2277,7 +2326,7 @@ sub do_remindpasswd {
      }
 
      if ($param->{'newuser'} =  &List::get_user_db($in{'email'})) {
-
+	 &wwslog('info','do_sendpasswd: new password allocation for %s', $in{'email'});
 	 ## Create a password if none
 	 unless ($param->{'newuser'}{'password'}) {
 	     unless ( &List::update_user_db($in{'email'},
@@ -2293,7 +2342,7 @@ sub do_remindpasswd {
 	 $param->{'newuser'}{'escaped_email'} =  &tools::escape_chars($param->{'newuser'}{'email'});
 
      }else {
-
+	 &wwslog('debug','do_sendpasswd: sending existing password for %s', $in{'email'});
 	 $param->{'newuser'} = {'email' => $in{'email'},
 				'escaped_email' => &tools::escape_chars($in{'email'}),
 				'password' => &tools::tmp_passwd($in{'email'}) 
@@ -3614,7 +3663,8 @@ sub do_remindpasswd {
 	 return 'loginrequest';
      }
 
-     unless ($in{'newpasswd1'}) {
+     if ( ! $in{'newpasswd1'} || 
+	     $in{'newpasswd1'} =~ /^\s+$/ ) {
 	 &error_message('no_passwd');
 	 &wwslog('info','do_setpasswd: no newpasswd1');
 	 return undef;
@@ -3754,6 +3804,259 @@ sub do_remindpasswd {
 
      return 1;
  }
+
+
+## list availible templates
+sub do_ls_templates  {
+    &wwslog('info', 'do_ls_templates');
+
+    unless ($param->{'is_listmaster'}) {
+	&error_message('may_not');
+	&wwslog('info','do_admin: %s not listmaster', $param->{'user'}{'email'});
+	return undef;
+    }
+
+    my $type =  $param->{'webormail'} = $in{'webormail'};
+    return 1 unless (($type == 'web')||($type == 'mail'));
+ 
+    if ($in{'listname'}) {
+	chomp ($in{'listname'});
+	$param->{'listname'} = $in{'listname'};
+	
+	unless ($list = new List ($in{'listname'}, $robot)) {
+	    &error_message('unknown_list', {'list' => $in{'listname'}} );
+	    &wwslog('info','check_param_in: unknown list %s', $in{'listname'});
+	    return undef;		
+	}
+	$param->{'templates'} = &tools::get_templates_list($type,$robot,$list->{'dir'});
+    }else{
+	$param->{'templates'} = &tools::get_templates_list($type,$robot);
+    }
+    return 1;
+}    
+
+# show a template, used by copy_template and edit_emplate
+sub do_view_template {
+    
+    &wwslog('info', 'do_view_template');
+    unless ($param->{'is_listmaster'}) {
+	&error_message('may_not');
+	&wwslog('info','do_admin: %s not listmaster', $param->{'user'}{'email'});
+	return undef;
+    }
+
+    my $type =  $param->{'webormail'} = $in{'webormail'};
+    return 1 unless (($type == 'web')||($type == 'mail'));
+
+    my $scope = $in{'scope'} ;
+    $param->{'scope'} = $scope;    
+
+    return 1 unless (($scope eq 'distrib')||($scope eq 'robot')||($scope eq 'family')||($scope eq 'list')||($scope eq 'site'));
+
+    my $namedlist ; 
+
+    if ($in{'listname'}) {
+	chomp ($in{'listname'});
+	$param->{'listname'} = $in{'listname'};
+	
+	unless ($namedlist = new List ($in{'listname'}, $robot)) {
+	    &error_message('unknown_list', {'list' => $in{'listname'}} );
+	    &wwslog('info','check_param_in: unknown list %s', $in{'listname'});
+	    return undef;		
+	}
+    }
+
+    my $template_name = $param->{'template_name'} = $in{'template_name'};
+    my $template_path ;
+
+    if ($in{'scope'} eq 'list') { 
+	$template_path = &tools::get_template_path($type,$robot,'list',$template_name,$in{'listname'});
+    }else{
+	$template_path = &tools::get_template_path($type,$robot,$in{'scope'},$template_name);
+    }
+    
+    
+    &wwslog('debug',"edit_template: template_path '$template_path'");
+    unless ($template_path eq $in{'template_path'}) {
+	&error_message('wrong_input_path');
+	&wwslog('info',"edit_template: wrong input path $in{'template_path'} differ from $template_path");
+	return undef;		
+    }
+    unless (open (TPL,"$template_path")) {
+	&error_message("Can't open $template_path");
+	&wwslog('err',"edit_template: can't open file %s",$template_path);
+	return undef;
+    }
+    $param->{'rows'} = 5; #input area is always contain 5 emptyline; 
+    while(<TPL>) {$param->{'template_content'}.= $_; $param->{'rows'}++;}
+    close TPL;
+}
+
+##  template copy
+sub do_copy_template  {
+    &wwslog('info', 'do_copy_template');
+    
+    my $type =  $param->{'webormail'} = $in{'webormail'};
+    my $template_name = $param->{'template_name'} = $in{'template_name'};
+    my $listname = $param->{'listname'}= $in{'listname'};
+    $param->{'template_path'} = $in{'template_path'};
+    $param->{'scope'} = $in{'scope'};
+
+    &do_view_template;               
+
+    # $in{'scopeout'} = 'list' if ($in{'listnameout'});
+    return 1 unless ($in{'scopeout'}) ;
+
+    # one of theses parameters is commint from the form submission
+    my $pathout ; 
+    my $scopeout = $param->{'scopeout'} = $in{'scopeout'} ;
+    if ($in{'scopeout'} eq 'list') { 
+	if ($in{'listnameout'}) {
+	    $pathout = &tools::get_template_path($type,$robot,$in{'scopeout'},$in{'template_nameout'},$in{'listnameout'});
+	}else{
+	    &error_message('listname needed');
+	    &wwslog('info',"edit_template : no output lisname while output scope is list");
+	    return 1;
+	}
+    }else{
+	$pathout = &tools::get_template_path($type,$robot,$in{'scopeout'},$in{'template_nameout'});
+    }
+    
+    
+    $param->{'pathout'} = $pathout ;
+    
+    &tools::mk_parent_dir($pathout);
+
+    unless (open (TPLOUT,">$pathout")) {
+	&error_message("Can't open $pathout");
+	&wwslog('err',"edit_template: can't open file %s",$pathout);
+	return undef;
+    }
+    print TPLOUT $param->{'template_content'};
+    close TPLOUT;
+    
+    if ($in{'listnameout'}) {$in{'listname'} = $in{'listnameout'} ;}else{$in{'listname'} = undef; }
+    $in{'template_name'} = $in{'template_nameout'};
+    $in{'scope'} = $in{'scopeout'};
+    $in{'template_path'} = $pathout;
+
+    return (edit_template);    
+}
+
+## online template edition
+sub do_edit_template  {
+    &wwslog('info', 'do_edit_template');
+
+    my $type =  $param->{'webormail'} = $in{'webormail'};
+    my $template_name = $param->{'template_name'} = $in{'template_name'};
+    my $listname = $param->{'listname'}= $in{'listname'};
+    $param->{'template_path'} = $in{'template_path'};
+    $param->{'scope'} = $in{'scope'};
+
+    &do_view_template; 
+
+    return 1 unless $in{'content'};
+
+    &wwslog('info',"xxxxxxxxx POST content : $in{'content'} ");
+    my $pathout ; 
+    my $scopeout = $param->{'scopeout'} = $in{'scopeout'} ;
+    if ($in{'scopeout'} == 'list') { 
+	if ($listname) {
+	    $pathout = &tools::get_template_path($type,$robot,$in{'scopeout'},$template_name,$listname);
+	}else{
+	    &error_message('listname needed');
+	    &wwslog('info',"edit_template : no output lisname while output scope is list");
+	    return undef;
+	}
+    }
+    
+    $pathout = &tools::get_template_path($type,$robot,$in{'scopeout'},$template_name);
+    $param->{'pathout'} = $pathout ;
+    
+    &wwslog('info', "xxxxxxxxxxxxxxx open $pathout");
+    unless (open (TPLOUT,">$pathout")) {
+	&error_message("Can't open $pathout");
+	&wwslog('err',"edit_template: can't open file %s",$pathout);
+	return undef;
+    }
+    print TPLOUT $in{'content'};
+    close TPLOUT;
+
+    $param->{'saved'} = 1;
+    $param->{'template_content'} = $in{'content'};
+    return 1;
+    
+}    
+
+
+   ## Server show colors, and install static css in futur edit colors etc
+sub do_skinsedit {
+    &wwslog('info', 'do_skinsedit');
+    my $f;
+    
+    unless ($param->{'user'}{'email'}) {
+	&error_message('no_user');
+	&wwslog('info','do_skinsedit: no user');
+	$param->{'previous_action'} = 'skinsedit';
+	return 'loginrequest';
+    }
+    
+    unless ($param->{'is_listmaster'}) {
+	&error_message('may_not');
+	&wwslog('info','do_admin: %s not listmaster', $param->{'user'}{'email'});
+	return undef;
+    }
+    
+    #    $param->{'conf'} = \%Conf;
+    
+    my $dir = &Conf::get_robot_conf($robot, 'css_path');
+    my $css_url  = &Conf::get_robot_conf($robot, 'css_url');
+    $param->{'css_path'}= $dir;
+    $param->{'css_url'}= $css_url;
+	
+    $param->{'css_warning'} = "parameter css_url seems strange, it must be the url of a directory not a css file" if ($param->{'css_url'} =~ /.css$/);
+    
+    if ($in{'installcss'}) {
+	my $tt2_include_path = [$Conf{'etc'}.'/web_tt2/'.&Language::Lang2Locale($param->{'lang'}),
+				$Conf{'etc'}.'/web_tt2',
+				'--ETCBINDIR--'.'/web_tt2/'.&Language::Lang2Locale($param->{'lang'}),
+				'--ETCBINDIR--'.'/web_tt2'];
+	
+	my $date= time;
+	foreach my $css ('style.css','print.css','fullPage.css','print-preview.css') {
+	    $param->{'css'} = $css;
+	    
+	    unless (open (CSS,">$dir/$css.$date")) {
+		&error_message("Can't open $dir/$css.$date");
+		&wwslog('err','skinsedit : can\'t open file %s/%s.%s',$dir,$css,$date);
+		return undef;
+	    }
+	    unless (open (CSSOLD,"$dir/$css")) {
+		&error_message("Can't open $dir/$css.$date");
+		&wwslog('err','skinsedit : can\'t open file (read) %s/%s.%s',$dir,$css.$date);
+		return undef;
+	    }
+	    while (<CSSOLD>) {print CSS $_ ;}
+	    close CSSOLD;close CSS;
+	    
+	    unless (open (CSS,">$dir/$css")) {
+		&error_message("Can't open $dir $css");
+		&wwslog('err','skinsedit : can\'t open file (write) %s/%s',$dir,$css);
+		return undef;
+	    }
+	    unless (&tt2::parse_tt2($param,'css.tt2' ,\*CSS, $tt2_include_path)) {
+		my $error = &tt2::get_error();
+		$param->{'tt2_error'} = $error;
+		&List::send_notify_to_listmaster('web_tt2_error', $robot,[$error]);
+		&do_log('info', "do_skinsedit : error while installing $dir/$css");
+	    }
+	    close (CSS) ;
+	}  
+	$param->{'css_result'} = 1 ;
+    }
+    return 1;
+}
+
 
  ## Multiple add
  sub do_add_request {
@@ -4548,8 +4851,8 @@ sub do_remindpasswd {
 	     $parser->output_to_core(1);
 	     
 	     unless (open FILE, "$file") {
-		 &wwslog('notice', 'Cannot open file %s', $file);
-		 &error_message('may_not');
+		 &wwslog('notice', 'do_distribute: Cannot open file %s', $file);
+		 &error_message('failed');
 		 return undef;
 	     }
 
@@ -7090,7 +7393,7 @@ sub do_edit_list {
 		$editor_update = 1;
 	    }
 	}
-	# updating config_changes for changed parameters7094
+	# updating config_changes for changed parameters
 	
 	if (ref($family)) {
 	    my @array_changed = keys %changed;
@@ -8104,7 +8407,6 @@ sub _restrict_values {
      # $result{'scenario'}{'read'} = scenario name for the document
      # $result{'scenario'}{'edit'} = scenario name for the document
 
-     &wwslog('info', "d_access_control");
      
      # Result
       my %result;
@@ -8115,6 +8417,8 @@ sub _restrict_values {
      my $mode = shift;
      my $path = shift;
 
+      &wwslog('debug', "d_access_control(%s, %s)", join('/',%$mode), $path);
+      
      my $mode_read = $mode->{'read'};
      my $mode_edit = $mode->{'edit'};
      my $mode_control = $mode->{'control'};
@@ -8899,6 +9203,10 @@ sub do_d_read {
 	}
     }
     
+     #open TMP, ">/tmp/dump1";
+     #&tools::dump_var($param, 0,\*TMP);
+     #close TMP;
+
 
      return 1;
 }
@@ -12173,8 +12481,9 @@ sub d_test_existing_and_rights {
 	 $to = $list->{'name'}.'@'.$list->{'admin'}{'host'};
      }
 
-     ## Remove DOS linefeeds (^M) that cause problems with Outlook 98, AOL, and EIMS:
-     $in{'body'} =~ s/\015//g;
+     $Text::Wrap::columns = 80;
+     $in{'body'} = &Text::Wrap::wrap ('','',$in{'body'});
+
 
      my @body = split /\0/, $in{'body'};
 
@@ -12333,7 +12642,7 @@ sub d_test_existing_and_rights {
 
      unless ($filemsg && (-r $filemsg)) {
 	 &wwslog('err', 'do_tag_topic_by_sender: Unable to find message %s from %s, auth failed', $in{'authkey'},$param->{'user'}{'email'});
-	 &error_message('auth_msg_failed');
+	 &error_message('auth_msg_failed',{ 'key' => $in{'authkey'} });
 	 return undef;
      }
 
@@ -12674,6 +12983,30 @@ sub d_test_existing_and_rights {
  }
 
 
+# output in text/plain format a scenario
+sub do_dump_scenario {
+     &do_log('info', "do_dump_scenario($param->{'list'}), $in{'pname'}");
+     unless ($param->{'list'}){
+	 &error_message('missing_arg', {'argument' => 'list'});
+	 &do_log('info','do_dump_scenario: no list');
+	 return undef;
+     }
+     unless ($in{'pname'}){
+	 &error_message('missing_arg', {'argument' => 'pname'});
+	 &do_log('info','do_dump_scenario: missing scenario name');
+	 return undef;
+     }
+     unless (&List::is_listmaster($param->{'user'}{'email'})) {
+	 &error_message('insuffisant privilege');
+	 &do_log('info','do_dump_scenario: reject because not listmaster');
+	 return undef;
+     }
+
+     $param->{'rules'} =  &List::request_action ($in{'pname'},'smtp',$robot,{'listname' => $param->{'list'}},'dump');
+     $param->{'parameter'} = $in{'pname'};
+     return 1 ;
+}
+
  ## Subscribers' list
  sub do_dump {
      &do_log('info', "do_dump($param->{'list'})");
@@ -12708,6 +13041,27 @@ sub d_test_existing_and_rights {
      my @listnames = $param->{'list'} ;
      &List::dump(@listnames);
      $param->{'file'} = "$list->{'dir'}/subscribers.db.dump";
+
+     if ($in{'format'}= 'light') {
+	 unless (open (DUMP,$param->{'file'} )) {
+	     &error_message('internal error unable to open dumpfile');
+	     &wwslog ('info', 'unable to open file %s\n',$param->{'file'} );
+	     return undef;
+	 }
+	 unless (open (LIGHTDUMP,">$param->{'file'}.light")) {
+	     &error_message("internal error unable to create dumpfile");
+	     &wwslog('err','unable to create file %s.light\n',$param->{'file'} );
+	     return undef;
+	 }
+	 while (<DUMP>){
+	     next unless ($_ =~ /^email\s(.*)/);
+	     print LIGHTDUMP "$1\n";
+	 }
+	 close LIGHTDUMP;
+	 close DUMP;
+	 $param->{'file'} = "$list->{'dir'}/subscribers.db.dump.light";
+     }	 
+     	
      return 1;
  }
 
@@ -12932,6 +13286,31 @@ sub do_arc_delete {
     return 'arc_manage';
 }
 
+sub do_css {
+    &do_log('debug', "do_css ($in{'file'})");		
+    $param->{'bypass'} = 'extreme';
+    printf "Content-type: text/css\n\n";
+    $param->{'css'} = $in{'file'}; 
+    my $tt2_include_path = [$Conf{'etc'}.'/web_tt2/'.&Language::Lang2Locale($param->{'lang'}),
+			    $Conf{'etc'}.'/web_tt2',
+			    '--ETCBINDIR--'.'/web_tt2/'.&Language::Lang2Locale($param->{'lang'}),
+			    '--ETCBINDIR--'.'/web_tt2'];
+    ## not the default robot
+    if (lc($robot) ne lc($Conf{'host'})) {
+        unshift @{$tt2_include_path}, $Conf{'etc'}.'/'.$robot.'/web_tt2';
+        unshift @{$tt2_include_path}, $Conf{'etc'}.'/'.$robot.'/web_tt2/'.&Language::Lang2Locale($param->{'lang'});
+    }
+    
+    unless (&tt2::parse_tt2($param,'css.tt2' ,\*STDOUT, $tt2_include_path)) {
+	my $error = &tt2::get_error();
+	$param->{'tt2_error'} = $error;
+	&List::send_notify_to_listmaster('web_tt2_error', $robot, [$error]);
+	&do_log('info', "do_css/$in{'file'} : error");
+    }
+    
+    return;
+}
+
 sub do_wsdl {
   
     &do_log('info', "do_wsdl ()");
@@ -13082,3 +13461,243 @@ sub _prepare_subscriber {
     return 1;
 }
 
+## New d_read function using SharedDocument module
+## The following features should be tested : 
+##      * inheritance on privileges
+##      * moderation
+##      * escaping special chars
+sub new_d_read {
+     &wwslog('info', 'new_d_read(%s)', $in{'path'});
+
+     ### action relative to a list ?
+     unless ($param->{'list'}) {
+	 &error_message('missing_arg',{'argument' => 'list'});
+	 &wwslog('err','do_d_read: no list');
+	 return undef;
+     }
+
+     # current list / current shared directory
+     my $list_name = $list->{'name'};
+
+     my $document = new SharedDocument ($list, $in{'path'}, $param->{'user'}{'email'});
+
+     unless (defined $document) {
+	 &error_message('failed');
+	 &wwslog('err',"d_read : cannot open $document->{'absolute_path'} : $!");
+	 return undef;	 
+     }
+
+     my $path = $document->{'path'};
+     my $visible_path = $document->{'visible_path'};
+     my $shareddir = $document->{'shared_dir'};
+     my $doc = $document->{'absolute_path'};
+     my $ref_access = $document->{'access'}; my %access = %{$ref_access};
+     $param->{'doc_owner'} = $document->{'owner'};
+     $param->{'doc_title'} = $document->{'title'};
+     $param->{'doc_date'} = $document->{'date'};
+
+     ### Access control    
+     unless ($access{'may'}{'read'}) {
+	 &error_message('may_not');
+	 &wwslog('err','d_read : access denied for %s', $param->{'user'}{'email'});
+	 return undef;
+     }
+
+     my $may_edit = $access{'may'}{'edit'};
+     my $may_control = $access{'may'}{'control'};
+     $param->{'may_edit'} = $may_edit;	
+     $param->{'may_control'} = $may_control;
+
+     ### File or directory ?
+     if ($document->{'type'} eq 'url') { 
+	 $param->{'file_extension'} = $document->{'file_extension'};
+	 $param->{'redirect_to'} = $document->{'url'};
+	 return 1;
+
+     }elsif ($document->{'type'} eq 'file') {
+	 $param->{'file'} = $document->{'absolute_path'};
+	 $param->{'bypass'} = 1;
+	 return 1;	 
+
+     }else { # directory
+     
+	 $param->{'empty'} = $#{$document->{'subdir'}} == -1;
+     
+	 # subdirectories hash
+	 my %subdirs;
+	 # file hash
+	 my %files;
+	 
+	 ## for the exception of index.html
+	 # name of the file "index.html" if exists in the directory read
+	 my $indexhtml;
+	 
+	 # boolean : one of the subdirectories or files inside
+	 # can be edited -> normal mode of read -> d_read.tt2;
+	 my $normal_mode;	 
+	 
+	 my $path_doc;
+	 my %desc_hash;
+	 my $may, my $def_desc;
+	 
+	 foreach my $subdocument (@{$document->{'subdir'}}) {
+	     
+	     my $d = $subdocument->{'filename'};	     
+	     my $path_doc = $subdocument->{'path'};
+	     
+	     ## Subdir
+	     if ($subdocument->{'type'} eq 'directory') {
+		 
+		 if ($subdocument->{'access'}{'may'}{'read'}) {
+		     
+		     $subdirs{$d} = $subdocument->dup();
+		     $subdirs{$d}{'doc'} = $subdocument->{'filename'};
+		     $subdirs{$d}{'escaped_doc'} =  $subdocument->{'escaped_filename'};
+		     
+		     if ($param->{'user'}{'email'}) {
+			 if ($subdocument->{'access'}{'may'}{'control'} == 1) {
+			     
+			     $subdirs{$d}{'edit'} = 1;  # or = $may_action_edit ?
+			     # if index.html, must know if something can be edit in the dir
+			     $normal_mode = 1;                         
+			 }elsif ($subdocument->{'access'}{'may'}{'edit'} != 0) {
+			     # $may_action_edit = 0.5 or 1 
+			     $subdirs{$d}{'edit'} = $subdocument->{'access'}{'may'}{'edit'};
+			     # if index.html, must know if something can be edit in the dir
+			     $normal_mode = 1;
+			 }
+			 
+			 if  ($subdocument->{'access'}{'may'}{'control'}) {
+			     $subdirs{$d}{'control'} = 1;
+			 }
+		     }
+		 }
+	     }else {
+		 # case file
+		 
+		 if ($subdocument->{'access'}{'may'}{'read'}) {
+		     
+		     $files{$d} = $subdocument->dup();
+
+		     $files{$d}{'doc'} = $subdocument->{'filename'};
+		     $files{$d}{'escaped_doc'} =  $subdocument->{'escaped_filename'};
+
+		     ## exception of index.html
+		     if ($d =~ /^(index\.html?)$/i) {
+			 $indexhtml = $1;
+		     }
+		     
+		     if ($param->{'user'}{'email'}) {
+			 if ($subdocument->{'access'}{'may'}{'edit'} == 1) {
+			     $normal_mode = 1;
+			     $files{$d}{'edit'} = 1;  # or = $may_action_edit ? 
+			 } elsif ($subdocument->{'access'}{'may'}{'edit'}  != 0){
+			     # $may_action_edit = 1 or 0.5
+			     $normal_mode = 1;
+			     $files{$d}{'edit'} = $subdocument->{'access'}{'may'}{'edit'};
+			 }
+			 
+			 if ($subdocument->{'access'}{'may'}{'control'}) { 
+			     $files{$d}{'control'} = 1;    
+			 }
+		     }
+		 }
+	     }
+	 }
+
+	 ### Exception : index.html
+	 if ($indexhtml) {
+	     unless ($normal_mode) {
+		 $param->{'file_extension'} = 'html';
+		 $param->{'bypass'} = 1;
+		 $param->{'file'} = $document->{'absolute_path'};
+		 return 1;
+	     }
+	 }
+
+	 ## to sort subdirs
+	 my @sort_subdirs;
+	 my $order = $in{'order'} || 'order_by_doc';
+	 $param->{'order_by'} = $order;
+	 foreach my $k (sort {by_order($order,\%subdirs)} keys %subdirs) {
+	     push @sort_subdirs, $subdirs{$k};
+	 }
+
+	 ## to sort files
+	 my @sort_files;
+	 foreach my $k (sort {by_order($order,\%files)} keys %files) {
+	     push @sort_files, $files{$k};
+	 }
+
+	 # parameters for the template file
+	 $param->{'list'} = $list_name;
+
+	 $param->{'father'} = $document->{'father_path'};
+	 $param->{'escaped_father'} = $document->{'escaped_father_path'} ;
+	 $param->{'description'} = $document->{'title'};
+	 $param->{'serial_desc'} = $document->{'serial_desc'};	 
+	 $param->{'path'} = $document->{'path'};
+	 $param->{'visible_path'} = $document->{'visible_path'};
+	 $param->{'escaped_path'} = $document->{'escaped_path'};
+
+	 if (scalar keys %subdirs) {
+	     $param->{'sort_subdirs'} = \@sort_subdirs;
+	 }
+	 if (scalar keys %files) {
+	     $param->{'sort_files'} = \@sort_files;
+	 }
+     }
+     $param->{'father_icon'} = $icon_table{'father'};
+     $param->{'sort_icon'} = $icon_table{'sort'};
+
+
+    ## Show expert commands / user page
+    
+    # for the curent directory
+    if ($may_edit == 0 && $may_control == 0) {
+	$param->{'has_dir_rights'} = 0;
+    } else {
+	$param->{'has_dir_rights'} = 1;
+	if ($may_edit == 1) { # (is_author || ! moderated)
+	    $param->{'total_edit'} = 1;
+	}
+    }
+
+    # set the page mode
+    if ($in{'show_expert_page'} && $param->{'has_dir_rights'}) {
+	$param->{'expert_page'} = 1;
+	&cookielib::set_expertpage_cookie(1,$param->{'cookie_domain'});
+ 
+    } elsif ($in{'show_user_page'}) {
+	$param->{'expert_page'} = 0;
+	&cookielib::set_expertpage_cookie(0,$param->{'cookie_domain'});
+    } else {
+	if (&cookielib::check_expertpage_cookie($ENV{'HTTP_COOKIE'}) && $param->{'has_dir_rights'}) {
+	    $param->{'expert_page'} = 1; 
+	} else {
+	    $param->{'expert_page'} = 0;
+	}
+    }
+    
+     open TMP, ">/tmp/dump";
+     $document->dump(\*TMP);
+     close TMP;
+
+     open TMP, ">/tmp/dump2";
+     &tools::dump_var ($param, 0, \*TMP);
+     close TMP;
+
+     return 1;
+}
+
+sub get_icon {
+    my $type = shift;
+
+    return $icon_table{$type};
+}
+
+sub get_mime_type {
+    my $type = shift;
+
+    return $mime_types->{$type};
+}

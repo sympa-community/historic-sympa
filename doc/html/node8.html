@@ -1,17 +1,351 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2 Final//EN">
 
-<H1><A NAME="SECTION00800000000000000000"><tex2html_anchor_invisible_mark></A>
-    <A NAME="exp-admin"><tex2html_anchor_mark></A>    <A NAME="783"><tex2html_anchor_invisible_mark></A>
-    <A NAME="784"><tex2html_anchor_invisible_mark></A><BR>
+<!--Converted with jLaTeX2HTML 2002-2-1 (1.70) JA patch-2.0
+patched version by:  Kenshi Muto, Debian Project.
+* modified by:  Shige TAKENO
+LaTeX2HTML 2002-2-1 (1.70),
+original version by:  Nikos Drakos, CBLU, University of Leeds
+* revised and updated by:  Marcus Hennecke, Ross Moore, Herb Swan
+* with significant contributions from:
+  Jens Lippmann, Marek Rouchal, Martin Wilck and others -->
+<HTML>
+<HEAD>
+<TITLE>7. sympa.conf parameters</TITLE>
+<META NAME="description" CONTENT="7. sympa.conf parameters">
+<META NAME="keywords" CONTENT="sympa">
+<META NAME="resource-type" CONTENT="document">
+<META NAME="distribution" CONTENT="global">
+
+<META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=iso-8859-1">
+<META NAME="Generator" CONTENT="jLaTeX2HTML v2002-2-1 JA patch-2.0">
+<META HTTP-EQUIV="Content-Style-Type" CONTENT="text/css">
+
+<LINK REL="STYLESHEET" HREF="sympa.css">
+
+<LINK REL="next" HREF="node9.html">
+<LINK REL="previous" HREF="node7.html">
+<LINK REL="up" HREF="sympa.html">
+<LINK REL="next" HREF="node9.html">
+</HEAD>
+
+<BODY TEXT="#000000" BGCOLOR="#ffffff">
+<!--Navigation Panel-->
+<A NAME="tex2html848"
+  HREF="node9.html">
+<IMG WIDTH="37" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="next" SRC="next.png"></A> 
+<A NAME="tex2html842"
+  HREF="sympa.html">
+<IMG WIDTH="26" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="up" SRC="up.png"></A> 
+<A NAME="tex2html836"
+  HREF="node7.html">
+<IMG WIDTH="63" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="previous" SRC="prev.png"></A> 
+<A NAME="tex2html844"
+  HREF="node1.html">
+<IMG WIDTH="65" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="contents" SRC="contents.png"></A> 
+<A NAME="tex2html846"
+  HREF="node30.html">
+<IMG WIDTH="43" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="index" SRC="index.png"></A> 
+<BR>
+<B> Next:</B> <A NAME="tex2html849"
+  HREF="node9.html">8. Sympa and its database</A>
+<B> Up:</B> <A NAME="tex2html843"
+  HREF="sympa.html">Sympa Mailing Lists Management Software version</A>
+<B> Previous:</B> <A NAME="tex2html837"
+  HREF="node7.html">6. Mail aliases</A>
+ &nbsp; <B>  <A NAME="tex2html845"
+  HREF="node1.html">Contents</A></B> 
+ &nbsp; <B>  <A NAME="tex2html847"
+  HREF="node30.html">Index</A></B> 
+<BR>
+<BR>
+<!--End of Navigation Panel-->
+<!--Table of Child-Links-->
+<A NAME="CHILD_LINKS"><STRONG>Subsections</STRONG></A>
+
+<UL>
+<LI><A NAME="tex2html850"
+  HREF="node8.html#SECTION00810000000000000000">7.1 Site customization</A>
+<UL>
+<LI><A NAME="tex2html851"
+  HREF="node8.html#SECTION00811000000000000000">7.1.1 <TT>domain</TT></A>
+<LI><A NAME="tex2html852"
+  HREF="node8.html#SECTION00812000000000000000">7.1.2 <TT>email</TT></A>
+<LI><A NAME="tex2html853"
+  HREF="node8.html#SECTION00813000000000000000">7.1.3 <TT>listmaster</TT></A>
+<LI><A NAME="tex2html854"
+  HREF="node8.html#SECTION00814000000000000000">7.1.4 <TT>listmaster_email</TT></A>
+<LI><A NAME="tex2html855"
+  HREF="node8.html#SECTION00815000000000000000">7.1.5 <TT>wwsympa_url</TT></A>
+<LI><A NAME="tex2html856"
+  HREF="node8.html#SECTION00816000000000000000">7.1.6 <TT>rss_url</TT></A>
+<LI><A NAME="tex2html857"
+  HREF="node8.html#SECTION00817000000000000000">7.1.7 <TT>soap_url</TT></A>
+<LI><A NAME="tex2html858"
+  HREF="node8.html#SECTION00818000000000000000">7.1.8 <TT>spam_protection</TT></A>
+<LI><A NAME="tex2html859"
+  HREF="node8.html#SECTION00819000000000000000">7.1.9 <TT>web_archive_spam_protection</TT></A>
+<LI><A NAME="tex2html860"
+  HREF="node8.html#SECTION008110000000000000000">7.1.10 <TT>dark_color</TT> <TT>light_color</TT> <TT>text_color</TT> <TT>bg_color</TT> <TT>error_color</TT> <TT>selected_color</TT> <TT>shaded_color</TT></A>
+<LI><A NAME="tex2html861"
+  HREF="node8.html#SECTION008111000000000000000">7.1.11 <TT>cookie</TT></A>
+<LI><A NAME="tex2html862"
+  HREF="node8.html#SECTION008112000000000000000">7.1.12 <TT>create_list</TT></A>
+<LI><A NAME="tex2html863"
+  HREF="node8.html#SECTION008113000000000000000">7.1.13 <TT>global_remind</TT></A>
+</UL>
+<BR>
+<LI><A NAME="tex2html864"
+  HREF="node8.html#SECTION00820000000000000000">7.2 Directories</A>
+<UL>
+<LI><A NAME="tex2html865"
+  HREF="node8.html#SECTION00821000000000000000">7.2.1 <TT>home</TT></A>
+<LI><A NAME="tex2html866"
+  HREF="node8.html#SECTION00822000000000000000">7.2.2 <TT>etc</TT></A>
+</UL>
+<BR>
+<LI><A NAME="tex2html867"
+  HREF="node8.html#SECTION00830000000000000000">7.3 System related</A>
+<UL>
+<LI><A NAME="tex2html868"
+  HREF="node8.html#SECTION00831000000000000000">7.3.1 <TT>syslog</TT></A>
+<LI><A NAME="tex2html869"
+  HREF="node8.html#SECTION00832000000000000000">7.3.2 <TT>log_level</TT></A>
+<LI><A NAME="tex2html870"
+  HREF="node8.html#SECTION00833000000000000000">7.3.3 <TT>log_socket_type</TT></A>
+<LI><A NAME="tex2html871"
+  HREF="node8.html#SECTION00834000000000000000">7.3.4 <TT>pidfile</TT></A>
+<LI><A NAME="tex2html872"
+  HREF="node8.html#SECTION00835000000000000000">7.3.5 <TT>umask</TT></A>
+</UL>
+<BR>
+<LI><A NAME="tex2html873"
+  HREF="node8.html#SECTION00840000000000000000">7.4 Sending related</A>
+<UL>
+<LI><A NAME="tex2html874"
+  HREF="node8.html#SECTION00841000000000000000">7.4.1 <TT>distribution_mode</TT></A>
+<LI><A NAME="tex2html875"
+  HREF="node8.html#SECTION00842000000000000000">7.4.2 <TT>maxsmtp</TT></A>
+<LI><A NAME="tex2html876"
+  HREF="node8.html#SECTION00843000000000000000">7.4.3 <TT>log_smtp</TT></A>
+<LI><A NAME="tex2html877"
+  HREF="node8.html#SECTION00844000000000000000">7.4.4 <TT>max_size</TT></A>
+<LI><A NAME="tex2html878"
+  HREF="node8.html#SECTION00845000000000000000">7.4.5 <TT>misaddressed_commands</TT></A>
+<LI><A NAME="tex2html879"
+  HREF="node8.html#SECTION00846000000000000000">7.4.6 <TT>misaddressed_commands_regexp</TT></A>
+<LI><A NAME="tex2html880"
+  HREF="node8.html#SECTION00847000000000000000">7.4.7 <TT>nrcpt</TT></A>
+<LI><A NAME="tex2html881"
+  HREF="node8.html#SECTION00848000000000000000">7.4.8 <TT>avg</TT></A>
+<LI><A NAME="tex2html882"
+  HREF="node8.html#SECTION00849000000000000000">7.4.9 <TT>sendmail</TT></A>
+<LI><A NAME="tex2html883"
+  HREF="node8.html#SECTION008410000000000000000">7.4.10 <TT>sendmail_args</TT></A>
+<LI><A NAME="tex2html884"
+  HREF="node8.html#SECTION008411000000000000000">7.4.11 <TT>sendmail_alias</TT></A>
+<LI><A NAME="tex2html885"
+  HREF="node8.html#SECTION008412000000000000000">7.4.12 <TT>rfc2369_header_fields</TT></A>
+<LI><A NAME="tex2html886"
+  HREF="node8.html#SECTION008413000000000000000">7.4.13 <TT>remove_headers</TT></A>
+<LI><A NAME="tex2html887"
+  HREF="node8.html#SECTION008414000000000000000">7.4.14 <TT>anonymous_headers_fields</TT></A>
+<LI><A NAME="tex2html888"
+  HREF="node8.html#SECTION008415000000000000000">7.4.15 <TT>list_check_smtp</TT></A>
+<LI><A NAME="tex2html889"
+  HREF="node8.html#SECTION008416000000000000000">7.4.16 <TT>list_check_suffixes</TT></A>
+<LI><A NAME="tex2html890"
+  HREF="node8.html#SECTION008417000000000000000">7.4.17 <TT>urlize_min_size</TT></A>
+</UL>
+<BR>
+<LI><A NAME="tex2html891"
+  HREF="node8.html#SECTION00850000000000000000">7.5 Quotas</A>
+<UL>
+<LI><A NAME="tex2html892"
+  HREF="node8.html#SECTION00851000000000000000">7.5.1 <TT>default_shared_quota</TT></A>
+<LI><A NAME="tex2html893"
+  HREF="node8.html#SECTION00852000000000000000">7.5.2 <TT>default_archive_quota</TT></A>
+</UL>
+<BR>
+<LI><A NAME="tex2html894"
+  HREF="node8.html#SECTION00860000000000000000">7.6 Spool related</A>
+<UL>
+<LI><A NAME="tex2html895"
+  HREF="node8.html#SECTION00861000000000000000">7.6.1 <TT>spool</TT></A>
+<LI><A NAME="tex2html896"
+  HREF="node8.html#SECTION00862000000000000000">7.6.2 <TT>queue</TT></A>
+<LI><A NAME="tex2html897"
+  HREF="node8.html#SECTION00863000000000000000">7.6.3 <TT>queuedistribute</TT></A>
+<LI><A NAME="tex2html898"
+  HREF="node8.html#SECTION00864000000000000000">7.6.4 <TT>queuemod</TT></A>
+<LI><A NAME="tex2html899"
+  HREF="node8.html#SECTION00865000000000000000">7.6.5 <TT>queuedigest</TT></A>
+<LI><A NAME="tex2html900"
+  HREF="node8.html#SECTION00866000000000000000">7.6.6 <TT>queueauth</TT></A>
+<LI><A NAME="tex2html901"
+  HREF="node8.html#SECTION00867000000000000000">7.6.7 <TT>queueoutgoing</TT></A>
+<LI><A NAME="tex2html902"
+  HREF="node8.html#SECTION00868000000000000000">7.6.8 <TT>queuetopic</TT></A>
+<LI><A NAME="tex2html903"
+  HREF="node8.html#SECTION00869000000000000000">7.6.9 <TT>queuebounce</TT></A>
+<LI><A NAME="tex2html904"
+  HREF="node8.html#SECTION008610000000000000000">7.6.10 <TT>queuetask</TT></A>
+<LI><A NAME="tex2html905"
+  HREF="node8.html#SECTION008611000000000000000">7.6.11 <TT>tmpdir</TT></A>
+<LI><A NAME="tex2html906"
+  HREF="node8.html#SECTION008612000000000000000">7.6.12 <TT>sleep</TT></A>
+<LI><A NAME="tex2html907"
+  HREF="node8.html#SECTION008613000000000000000">7.6.13 <TT>clean_delay_queue</TT></A>
+<LI><A NAME="tex2html908"
+  HREF="node8.html#SECTION008614000000000000000">7.6.14 <TT>clean_delay_queuemod</TT></A>
+<LI><A NAME="tex2html909"
+  HREF="node8.html#SECTION008615000000000000000">7.6.15 <TT>clean_delay_queueauth</TT></A>
+<LI><A NAME="tex2html910"
+  HREF="node8.html#SECTION008616000000000000000">7.6.16 <TT>clean_delay_queuetopic</TT></A>
+</UL>
+<BR>
+<LI><A NAME="tex2html911"
+  HREF="node8.html#SECTION00870000000000000000">7.7 Internationalization related</A>
+<UL>
+<LI><A NAME="tex2html912"
+  HREF="node8.html#SECTION00871000000000000000">7.7.1 <TT>localedir</TT></A>
+<LI><A NAME="tex2html913"
+  HREF="node8.html#SECTION00872000000000000000">7.7.2 <TT>supported_lang</TT></A>
+<LI><A NAME="tex2html914"
+  HREF="node8.html#SECTION00873000000000000000">7.7.3 <TT>lang</TT></A>
+<LI><A NAME="tex2html915"
+  HREF="node8.html#SECTION00874000000000000000">7.7.4 <TT>web_recode_to</TT></A>
+</UL>
+<BR>
+<LI><A NAME="tex2html916"
+  HREF="node8.html#SECTION00880000000000000000">7.8 Bounce related</A>
+<UL>
+<LI><A NAME="tex2html917"
+  HREF="node8.html#SECTION00881000000000000000">7.8.1 <TT>bounce_warn_rate</TT></A>
+<LI><A NAME="tex2html918"
+  HREF="node8.html#SECTION00882000000000000000">7.8.2 <TT>bounce_halt_rate</TT></A>
+<LI><A NAME="tex2html919"
+  HREF="node8.html#SECTION00883000000000000000">7.8.3 <TT>welcome_return_path</TT></A>
+<LI><A NAME="tex2html920"
+  HREF="node8.html#SECTION00884000000000000000">7.8.4 <TT>remind_return_path</TT></A>
+<LI><A NAME="tex2html921"
+  HREF="node8.html#SECTION00885000000000000000">7.8.5 <TT>expire_bounce_task</TT></A>
+<LI><A NAME="tex2html922"
+  HREF="node8.html#SECTION00886000000000000000">7.8.6 <TT>purge_orphan_bounces_task</TT></A>
+<LI><A NAME="tex2html923"
+  HREF="node8.html#SECTION00887000000000000000">7.8.7 <TT>eval_bouncers_task</TT></A>
+<LI><A NAME="tex2html924"
+  HREF="node8.html#SECTION00888000000000000000">7.8.8 <TT>process_bouncers_task</TT></A>
+<LI><A NAME="tex2html925"
+  HREF="node8.html#SECTION00889000000000000000">7.8.9 <TT>minimum_bouncing_count</TT></A>
+<LI><A NAME="tex2html926"
+  HREF="node8.html#SECTION008810000000000000000">7.8.10 <TT>minimum_bouncing_period</TT></A>
+<LI><A NAME="tex2html927"
+  HREF="node8.html#SECTION008811000000000000000">7.8.11 <TT>bounce_delay</TT></A>
+<LI><A NAME="tex2html928"
+  HREF="node8.html#SECTION008812000000000000000">7.8.12 <TT>default_bounce_level1_rate</TT></A>
+<LI><A NAME="tex2html929"
+  HREF="node8.html#SECTION008813000000000000000">7.8.13 <TT>default_bounce_level2_rate</TT></A>
+<LI><A NAME="tex2html930"
+  HREF="node8.html#SECTION008814000000000000000">7.8.14 <TT>bounce_email_prefix</TT></A>
+<LI><A NAME="tex2html931"
+  HREF="node8.html#SECTION008815000000000000000">7.8.15 <TT>default_remind_task</TT></A>
+</UL>
+<BR>
+<LI><A NAME="tex2html932"
+  HREF="node8.html#SECTION00890000000000000000">7.9 Priority related</A>
+<UL>
+<LI><A NAME="tex2html933"
+  HREF="node8.html#SECTION00891000000000000000">7.9.1 <TT>sympa_priority</TT></A>
+<LI><A NAME="tex2html934"
+  HREF="node8.html#SECTION00892000000000000000">7.9.2 <TT>request_priority</TT></A>
+<LI><A NAME="tex2html935"
+  HREF="node8.html#SECTION00893000000000000000">7.9.3 <TT>owner_priority</TT></A>
+<LI><A NAME="tex2html936"
+  HREF="node8.html#SECTION00894000000000000000">7.9.4 <TT>default_list_priority</TT></A>
+</UL>
+<BR>
+<LI><A NAME="tex2html937"
+  HREF="node8.html#SECTION008100000000000000000">7.10 Database related</A>
+<UL>
+<LI><A NAME="tex2html938"
+  HREF="node8.html#SECTION008101000000000000000">7.10.1 <TT>db_type</TT></A>
+<LI><A NAME="tex2html939"
+  HREF="node8.html#SECTION008102000000000000000">7.10.2 <TT>db_name</TT></A>
+<LI><A NAME="tex2html940"
+  HREF="node8.html#SECTION008103000000000000000">7.10.3 <TT>db_host</TT></A>
+<LI><A NAME="tex2html941"
+  HREF="node8.html#SECTION008104000000000000000">7.10.4 <TT>db_port</TT></A>
+<LI><A NAME="tex2html942"
+  HREF="node8.html#SECTION008105000000000000000">7.10.5 <TT>db_user</TT></A>
+<LI><A NAME="tex2html943"
+  HREF="node8.html#SECTION008106000000000000000">7.10.6 <TT>db_passwd</TT></A>
+<LI><A NAME="tex2html944"
+  HREF="node8.html#SECTION008107000000000000000">7.10.7 <TT>db_options</TT></A>
+<LI><A NAME="tex2html945"
+  HREF="node8.html#SECTION008108000000000000000">7.10.8 <TT>db_env</TT></A>
+<LI><A NAME="tex2html946"
+  HREF="node8.html#SECTION008109000000000000000">7.10.9 <TT>db_additional_subscriber_fields</TT></A>
+<LI><A NAME="tex2html947"
+  HREF="node8.html#SECTION0081010000000000000000">7.10.10 <TT>db_additional_user_fields</TT></A>
+<LI><A NAME="tex2html948"
+  HREF="node8.html#SECTION0081011000000000000000">7.10.11 <TT>purge_user_table_task</TT></A>
+</UL>
+<BR>
+<LI><A NAME="tex2html949"
+  HREF="node8.html#SECTION008110000000000000000">7.11 Loop prevention</A>
+<UL>
+<LI><A NAME="tex2html950"
+  HREF="node8.html#SECTION008111000000000000000">7.11.1 <TT>loop_command_max</TT></A>
+<LI><A NAME="tex2html951"
+  HREF="node8.html#SECTION008112000000000000000">7.11.2 <TT>loop_command_sampling_delay</TT></A>
+<LI><A NAME="tex2html952"
+  HREF="node8.html#SECTION008113000000000000000">7.11.3 <TT>loop_command_decrease_factor</TT></A>
+</UL>
+<BR>
+<LI><A NAME="tex2html953"
+  HREF="node8.html#SECTION008120000000000000000">7.12 S/MIME configuration</A>
+<UL>
+<LI><A NAME="tex2html954"
+  HREF="node8.html#SECTION008121000000000000000">7.12.1 <TT>openssl</TT></A>
+<LI><A NAME="tex2html955"
+  HREF="node8.html#SECTION008122000000000000000">7.12.2 <TT>capath</TT></A>
+<LI><A NAME="tex2html956"
+  HREF="node8.html#SECTION008123000000000000000">7.12.3 <TT>cafile</TT></A>
+<LI><A NAME="tex2html957"
+  HREF="node8.html#SECTION008124000000000000000">7.12.4 <TT>key_passwd</TT></A>
+<LI><A NAME="tex2html958"
+  HREF="node8.html#SECTION008125000000000000000">7.12.5 <TT>chk_cert_expiration_task</TT></A>
+<LI><A NAME="tex2html959"
+  HREF="node8.html#SECTION008126000000000000000">7.12.6 <TT>crl_update_task</TT></A>
+</UL>
+<BR>
+<LI><A NAME="tex2html960"
+  HREF="node8.html#SECTION008130000000000000000">7.13 Antivirus plug-in</A>
+<UL>
+<LI><A NAME="tex2html961"
+  HREF="node8.html#SECTION008131000000000000000">7.13.1 <TT>antivirus_path</TT></A>
+<LI><A NAME="tex2html962"
+  HREF="node8.html#SECTION008132000000000000000">7.13.2 <TT>antivirus_args</TT></A>
+<LI><A NAME="tex2html963"
+  HREF="node8.html#SECTION008133000000000000000">7.13.3 <TT>antivirus_notify</TT></A>
+</UL></UL>
+<!--End of Table of Child-Links-->
+<HR>
+
+<H1><A NAME="SECTION00800000000000000000"></A>
+    <A NAME="exp-admin"></A>    <A NAME="783"></A>
+    <A NAME="784"></A>
+<BR>
 7. sympa.conf parameters
 </H1>
 
 <P>
-The <A NAME="7052"><tex2html_anchor_invisible_mark></A><TT>/usr/local/sympa-gb/etc/sympa.conf</TT> configuration file contains numerous
+The <A NAME="7242"></A><TT>/usr/local/sympa-gb/etc/sympa.conf</TT> configuration file contains numerous
 parameters which are read on start-up of <I>Sympa</I>. If you change this file, do not forget
 that you will need to restart <I>Sympa</I> afterwards. 
 
 <P>
-The <A NAME="7057"><tex2html_anchor_invisible_mark></A><TT>/usr/local/sympa-gb/etc/sympa.conf</TT> file contains directives in the following
+The <A NAME="7247"></A><TT>/usr/local/sympa-gb/etc/sympa.conf</TT> file contains directives in the following
 format:
 
 <P>
@@ -34,23 +368,25 @@ the file is of no importance.
 
 <P>
 
-<H2><A NAME="SECTION00811000000000000000"><tex2html_anchor_invisible_mark></A><A NAME="7060"><tex2html_anchor_invisible_mark></A><BR>
+<H2><A NAME="SECTION00811000000000000000"></A><A NAME="7250"></A>
+<BR>
 7.1.1 <TT>domain</TT>
 </H2>
 
 <P>
 This keyword is <B>mandatory</B>. It is the domain name
-used in the <A NAME="7063"><tex2html_anchor_invisible_mark></A><TT>From:</TT> header in replies to administrative
+used in the <A NAME="7253"></A><TT>From:</TT> header in replies to administrative
 requests. So the smtp engine (qmail, sendmail, postfix or whatever) must
-recognize this domain as a local address. The old keyword <A NAME="7066"><tex2html_anchor_invisible_mark></A><TT>host</TT>
+recognize this domain as a local address. The old keyword <A NAME="7256"></A><TT>host</TT>
 is still recognized but should not be used anymore.
 
 <P>
- Example: <TT>domain cru.fr</TT>
+Example: <TT>domain cru.fr</TT>
 
 <P>
 
-<H2><A NAME="SECTION00812000000000000000"><tex2html_anchor_invisible_mark></A><A NAME="7070"><tex2html_anchor_invisible_mark></A><BR>
+<H2><A NAME="SECTION00812000000000000000"></A><A NAME="7260"></A>
+<BR>
 7.1.2 <TT>email</TT>
 </H2> 
 
@@ -59,14 +395,15 @@ is still recognized but should not be used anymore.
 
 <P>
 Username (the part of the address preceding the <TT>@</TT> sign) used
-        in the <A NAME="7074"><tex2html_anchor_invisible_mark></A><TT>From:</TT> header in replies to administrative requests.
+        in the <A NAME="7264"></A><TT>From:</TT> header in replies to administrative requests.
 
 <P>
- Example: <TT>email           listserv</TT>
+Example: <TT>email           listserv</TT>
 
 <P>
 
-<H2><A NAME="SECTION00813000000000000000"><tex2html_anchor_invisible_mark></A><A NAME="7078"><tex2html_anchor_invisible_mark></A><BR>
+<H2><A NAME="SECTION00813000000000000000"></A><A NAME="7268"></A>
+<BR>
 7.1.3 <TT>listmaster</TT>
 </H2> 
 
@@ -75,11 +412,12 @@ The list of e-mail addresses  of listmasters (users authorized to perform
         global  server commands). Listmasters can be defined for each virtual robot.
 
 <P>
- Example: <TT>listmaster postmaster@cru.fr,root@cru.fr</TT>
+Example: <TT>listmaster postmaster@cru.fr,root@cru.fr</TT>
 
 <P>
 
-<H2><A NAME="SECTION00814000000000000000"><tex2html_anchor_invisible_mark></A><A NAME="7082"><tex2html_anchor_invisible_mark></A><BR>
+<H2><A NAME="SECTION00814000000000000000"></A><A NAME="7272"></A>
+<BR>
 7.1.4 <TT>listmaster_email</TT>
 </H2> 
 
@@ -108,46 +446,49 @@ you must modify the sympa aliases like this :
 
 <P>
 <BLOCKQUOTE>
-listmaster-test: 	;SPMquot;| /home/sympa/bin/queue listmaster@my.domain.org;SPMquot;
+listmaster-test: 	"| /home/sympa/bin/queue listmaster@my.domain.org"
 
 </BLOCKQUOTE>
 
 <P>
-See <A HREF=<tex2html_cr_mark>#robot-aliases#811><tex2html_cr_mark></A>,page~<A HREF=<tex2html_cr_mark>#robot-aliases#812><tex2html_cross_ref_visible_mark></A> for all aliases.
+See <A HREF="node7.html#robot-aliases">6.1</A>,page&nbsp;<A HREF="node7.html#robot-aliases"><IMG  ALIGN="BOTTOM" BORDER="1" ALT="[*]" SRC="crossref.png"></A> for all aliases.
 
 <P>
 
-<H2><A NAME="SECTION00815000000000000000"><tex2html_anchor_invisible_mark></A><A NAME="7086"><tex2html_anchor_invisible_mark></A><BR>
+<H2><A NAME="SECTION00815000000000000000"></A><A NAME="7276"></A>
+<BR>
 7.1.5 <TT>wwsympa_url</TT>
 </H2>  
 
 <P>
-(Default value: <TT>http://<TT>;SPMlt;</TT>host<TT>;SPMgt;</TT>/wws</TT>)
+(Default value: <TT>http://<TT>&lt;</TT>host<TT>&gt;</TT>/wws</TT>)
 
 <P>
-This is the root URL of <A NAME="7092"><tex2html_anchor_invisible_mark></A><I>WWSympa</I>.
+This is the root URL of <A NAME="7282"></A><I>WWSympa</I>.
 
 <P>
- Example: <TT>wwsympa_url https://my.server/sympa</TT>
+Example: <TT>wwsympa_url https://my.server/sympa</TT>
 
 <P>
 
-<H2><A NAME="SECTION00816000000000000000"><tex2html_anchor_invisible_mark></A><A NAME="7096"><tex2html_anchor_invisible_mark></A><BR>
+<H2><A NAME="SECTION00816000000000000000"></A><A NAME="7286"></A>
+<BR>
 7.1.6 <TT>rss_url</TT>
 </H2>  
 
 <P>
-(Default value: <TT>http://<TT>;SPMlt;</TT>host<TT>;SPMgt;</TT>/sympa/rss</TT>)
+(Default value: <TT>http://<TT>&lt;</TT>host<TT>&gt;</TT>/sympa/rss</TT>)
 
 <P>
-This is the root URL of <A NAME="7102"><tex2html_anchor_invisible_mark></A><I>WWSympa</I>'s rss channel.
+This is the root URL of <A NAME="7292"></A><I>WWSympa</I>'s rss channel.
 
 <P>
- Example: <TT>wwsympa_url https://my.server/sympa/rss</TT>
+Example: <TT>wwsympa_url https://my.server/sympa/rss</TT>
 
 <P>
 
-<H2><A NAME="SECTION00817000000000000000"><tex2html_anchor_invisible_mark></A><A NAME="7106"><tex2html_anchor_invisible_mark></A><BR>
+<H2><A NAME="SECTION00817000000000000000"></A><A NAME="7296"></A>
+<BR>
 7.1.7 <TT>soap_url</TT>
 </H2>  
 
@@ -155,30 +496,31 @@ This is the root URL of <A NAME="7102"><tex2html_anchor_invisible_mark></A><I>WW
 This is the root URL of Sympa's SOAP server. Sympa's WSDL document refer to this URL in its <TT>service</TT> section.
 
 <P>
- Example: <TT>soap_url http://my.server/sympasoap</TT>
+Example: <TT>soap_url http://my.server/sympasoap</TT>
 
 <P>
 
-<H2><A NAME="SECTION00818000000000000000"><tex2html_anchor_invisible_mark></A><A NAME="7110"><tex2html_anchor_invisible_mark></A><BR>
+<H2><A NAME="SECTION00818000000000000000"></A><A NAME="7300"></A>
+<BR>
 7.1.8 <TT>spam_protection</TT>
 </H2>  
 
 <P>
-<A NAME="7113"><tex2html_anchor_invisible_mark></A>spam_protection 
+<A NAME="7303"></A>spam_protection 
 	 (Default value: <TT>javascript</TT>)
 
 <P>
 There is a need to protection Sympa web site against spambot which collect
         email adresse in public web site. Various method are availble into Sympa
-        and you can choose it with <A NAME="7115"><tex2html_anchor_invisible_mark></A><TT>spam_protection</TT> and
-        <A NAME="7118"><tex2html_anchor_invisible_mark></A><TT>web_archive_spam_protection</TT> parameters.
+        and you can choose it with <A NAME="7305"></A><TT>spam_protection</TT> and
+        <A NAME="7308"></A><TT>web_archive_spam_protection</TT> parameters.
         Possible value are :
 
 <UL>
 <LI>javascript : the adresse is hidden using a javascript. User who enable javascript can
 see a  nice mailto adresses where others have nothing.
 </LI>
-<LI>at : the @ char is replaced by the string ;SPMquot; AT ;SPMquot;.
+<LI>at : the @ char is replaced by the string " AT ".
 </LI>
 <LI>none : no protection against spammer.
 </LI>
@@ -186,21 +528,23 @@ see a  nice mailto adresses where others have nothing.
 
 <P>
 
-<H2><A NAME="SECTION00819000000000000000"><tex2html_anchor_invisible_mark></A><A NAME="7121"><tex2html_anchor_invisible_mark></A><BR>
+<H2><A NAME="SECTION00819000000000000000"></A><A NAME="7311"></A>
+<BR>
 7.1.9 <TT>web_archive_spam_protection</TT>
 </H2>
 	  (Default value: <TT>cookie</TT>)
 
 <P>
-Idem <A NAME="7125"><tex2html_anchor_invisible_mark></A><TT>spam_protection</TT> but restricted to web archive.
+Idem <A NAME="7315"></A><TT>spam_protection</TT> but restricted to web archive.
         A additional value is availible : cookie which mean that users
         must submit a small form in order to receive a cookie before
         browsing archives. This block all robot, even google and co.
 
 <P>
 
-<H2><A NAME="SECTION008110000000000000000"><tex2html_anchor_invisible_mark></A><A NAME="7128"><tex2html_anchor_invisible_mark></A><A NAME="7131"><tex2html_anchor_invisible_mark></A><A NAME="7134"><tex2html_anchor_invisible_mark></A><A NAME="7137"><tex2html_anchor_invisible_mark></A><A NAME="7140"><tex2html_anchor_invisible_mark></A><A NAME="7143"><tex2html_anchor_invisible_mark></A><A NAME="7146"><tex2html_anchor_invisible_mark></A>
-<A NAME="colors"><tex2html_anchor_mark></A><BR>
+<H2><A NAME="SECTION008110000000000000000"></A><A NAME="7318"></A><A NAME="7321"></A><A NAME="7324"></A><A NAME="7327"></A><A NAME="7330"></A><A NAME="7333"></A><A NAME="7336"></A>
+<A NAME="colors"></A>
+<BR>
 7.1.10 <TT>dark_color</TT> <TT>light_color</TT> <TT>text_color</TT> <TT>bg_color</TT> <TT>error_color</TT> <TT>selected_color</TT> <TT>shaded_color</TT>
 </H2>
 
@@ -209,7 +553,8 @@ They are the color definition for web interface. Default are set in the main Mak
 
 <P>
 
-<H2><A NAME="SECTION008111000000000000000"><tex2html_anchor_invisible_mark></A><A NAME="7149"><tex2html_anchor_invisible_mark></A><BR>
+<H2><A NAME="SECTION008111000000000000000"></A><A NAME="7339"></A>
+<BR>
 7.1.11 <TT>cookie</TT>
 </H2> 
 
@@ -218,7 +563,7 @@ This string is used to generate MD5 authentication keys.
 	It allows generated authentication keys to differ from one
 	site to another. It is also used for reversible encryption of
         user passwords stored in the database. The presence of this string
-	is one reason why access to <A NAME="7152"><tex2html_anchor_invisible_mark></A><TT>sympa.conf</TT> needs to be restricted
+	is one reason why access to <A NAME="7342"></A><TT>sympa.conf</TT> needs to be restricted
 	to the Sympa user. 
 
 <P>
@@ -227,42 +572,44 @@ Note that changing this parameter will break all
 	and lists X509 private keys.
 
 <P>
- Example: <TT>cookie gh869jku5</TT>
+Example: <TT>cookie gh869jku5</TT>
 
 <P>
 
-<H2><A NAME="SECTION008112000000000000000"><tex2html_anchor_invisible_mark></A><A NAME="7156"><tex2html_anchor_invisible_mark></A><BR>
+<H2><A NAME="SECTION008112000000000000000"></A><A NAME="7346"></A>
+<BR>
 7.1.12 <TT>create_list</TT>
 </H2>  
 
 <P>
-<A NAME="create-list"><tex2html_anchor_mark></A>
+<A NAME="create-list"></A>
 <P>
 (Default value: <TT>public_listmaster</TT>)
 
 <P>
-<TT>create_list</TT> parameter is defined by an authorization scenario (see~<A HREF=<tex2html_cr_mark>#scenarios#7161><tex2html_cr_mark></A>, page~<A HREF=<tex2html_cr_mark>#scenarios#7162><tex2html_cross_ref_visible_mark></A>)
+<TT>create_list</TT> parameter is defined by an authorization scenario (see&nbsp;<A HREF="node14.html#scenarios">13</A>, page&nbsp;<A HREF="node14.html#scenarios"><IMG  ALIGN="BOTTOM" BORDER="1" ALT="[*]" SRC="crossref.png"></A>)
 
 <P>
 Defines who can create lists (or request list creations).
 	Sympa will use the corresponding authorization scenario.
 
 <P>
- Example: <TT>create_list intranet</TT>
+Example: <TT>create_list intranet</TT>
 
 <P>
 
-<H2><A NAME="SECTION008113000000000000000"><tex2html_anchor_invisible_mark></A><A NAME="7164"><tex2html_anchor_invisible_mark></A><BR>
+<H2><A NAME="SECTION008113000000000000000"></A><A NAME="7354"></A>
+<BR>
 7.1.13 <TT>global_remind</TT>
 </H2>  
 
 <P>
-<A NAME="global-remind"><tex2html_anchor_mark></A>
+<A NAME="global-remind"></A>
 <P>
 (Default value: <TT>listmaster</TT>)
 
 <P>
-<TT>global_remind</TT> parameter is defined by an authorization scenario (see~<A HREF=<tex2html_cr_mark>#scenarios#7169><tex2html_cr_mark></A>, page~<A HREF=<tex2html_cr_mark>#scenarios#7170><tex2html_cross_ref_visible_mark></A>)
+<TT>global_remind</TT> parameter is defined by an authorization scenario (see&nbsp;<A HREF="node14.html#scenarios">13</A>, page&nbsp;<A HREF="node14.html#scenarios"><IMG  ALIGN="BOTTOM" BORDER="1" ALT="[*]" SRC="crossref.png"></A>)
 
 <P>
 Defines who can run a <TT>REMIND *</TT> command.
@@ -273,38 +620,40 @@ Defines who can run a <TT>REMIND *</TT> command.
 7.2 Directories</A>
 </H1>
 
-<H2><A NAME="SECTION00821000000000000000"><tex2html_anchor_invisible_mark></A><A NAME="7171"><tex2html_anchor_invisible_mark></A><BR>
+<H2><A NAME="SECTION00821000000000000000"></A><A NAME="7361"></A>
+<BR>
 7.2.1 <TT>home</TT>
 </H2>
 
 <P>
-(Default value: <TT><A NAME="7176"><tex2html_anchor_invisible_mark></A><TT>/usr/local/sympa-gb/expl</TT></TT>)
+(Default value: <TT><A NAME="7366"></A><TT>/usr/local/sympa-gb/expl</TT></TT>)
 
 <P>
 The directory whose subdirectories correspond to the different lists.
 
 <P>
- Example: <TT>home          /home/sympa/expl</TT>
+Example: <TT>home          /home/sympa/expl</TT>
 
 <P>
 
-<H2><A NAME="SECTION00822000000000000000"><tex2html_anchor_invisible_mark></A><A NAME="7180"><tex2html_anchor_invisible_mark></A><BR>
+<H2><A NAME="SECTION00822000000000000000"></A><A NAME="7370"></A>
+<BR>
 7.2.2 <TT>etc</TT>
 </H2>
 
 <P>
-(Default value: <TT><A NAME="7185"><tex2html_anchor_invisible_mark></A><TT>/usr/local/sympa-gb/etc</TT></TT>)
+(Default value: <TT><A NAME="7375"></A><TT>/usr/local/sympa-gb/etc</TT></TT>)
 
 <P>
 This is the local directory for configuration files (such as
-	<A NAME="7188"><tex2html_anchor_invisible_mark></A><TT>edit_list.conf</TT>. It contains 5 subdirectories:
-	<A NAME="7191"><tex2html_anchor_invisible_mark></A><TT>scenari</TT> for local authorization scenarios; <A NAME="7194"><tex2html_anchor_invisible_mark></A><TT>templates</TT>
-	for the site's local templates and default list templates; <A NAME="7197"><tex2html_anchor_invisible_mark></A><TT>wws_templates</TT>
-        for the site's local html templates; <A NAME="7200"><tex2html_anchor_invisible_mark></A><TT>global_task_models</TT> for local
-	global task models; and <A NAME="7203"><tex2html_anchor_invisible_mark></A><TT>list_task_models</TT> for local list task models
+	<A NAME="7378"></A><TT>edit_list.conf</TT>. It contains 5 subdirectories:
+	<A NAME="7381"></A><TT>scenari</TT> for local authorization scenarios; <A NAME="7384"></A><TT>templates</TT>
+	for the site's local templates and default list templates; <A NAME="7387"></A><TT>wws_templates</TT>
+        for the site's local html templates; <A NAME="7390"></A><TT>global_task_models</TT> for local
+	global task models; and <A NAME="7393"></A><TT>list_task_models</TT> for local list task models
 
 <P>
- Example: <TT>etc          /home/sympa/etc</TT>
+Example: <TT>etc          /home/sympa/etc</TT>
 
 <P>
 
@@ -314,7 +663,8 @@ This is the local directory for configuration files (such as
 
 <P>
 
-<H2><A NAME="SECTION00831000000000000000"><tex2html_anchor_invisible_mark></A><A NAME="7207"><tex2html_anchor_invisible_mark></A><BR>
+<H2><A NAME="SECTION00831000000000000000"></A><A NAME="7397"></A>
+<BR>
 7.3.1 <TT>syslog</TT>
 </H2> 
 
@@ -325,11 +675,12 @@ This is the local directory for configuration files (such as
 Name of the sub-system (facility) for logging messages.
 
 <P>
- Example: <TT>syslog          LOCAL2</TT>
+Example: <TT>syslog          LOCAL2</TT>
 
 <P>
 
-<H2><A NAME="SECTION00832000000000000000"><tex2html_anchor_invisible_mark></A><A NAME="7212"><tex2html_anchor_invisible_mark></A><BR>
+<H2><A NAME="SECTION00832000000000000000"></A><A NAME="7402"></A>
+<BR>
 7.3.2 <TT>log_level</TT>
 </H2> 
 
@@ -342,12 +693,13 @@ This parameter sets the verbosity of Sympa processes (including) in log files.
 	logged.
 
 <P>
- Example: <TT>log_level          2</TT>
+Example: <TT>log_level          2</TT>
 
 <P>
 
-<H2><A NAME="SECTION00833000000000000000"><tex2html_anchor_invisible_mark></A><A NAME="7217"><tex2html_anchor_invisible_mark></A> 
-    <A NAME="par-log-socket-type"><tex2html_anchor_mark></A><BR>
+<H2><A NAME="SECTION00833000000000000000"></A><A NAME="7407"></A> 
+    <A NAME="par-log-socket-type"></A>
+<BR>
 7.3.3 <TT>log_socket_type</TT>
 </H2>
 
@@ -355,30 +707,32 @@ This parameter sets the verbosity of Sympa processes (including) in log files.
 (Default value: <TT>unix</TT>)
 
 <P>
-<I>Sympa</I> communicates with <A NAME="7222"><tex2html_anchor_invisible_mark></A><TT>syslogd</TT>
-        using either UDP or UNIX sockets.  Set <A NAME="7225"><tex2html_anchor_invisible_mark></A><TT>log_socket_type</TT> to <TT>inet</TT> to use UDP, or <TT>unix</TT> for UNIX sockets.
+<I>Sympa</I> communicates with <A NAME="7412"></A><TT>syslogd</TT>
+        using either UDP or UNIX sockets.  Set <A NAME="7415"></A><TT>log_socket_type</TT> to <TT>inet</TT> to use UDP, or <TT>unix</TT> for UNIX sockets.
 
 <P>
 
-<H2><A NAME="SECTION00834000000000000000"><tex2html_anchor_invisible_mark></A><A NAME="7228"><tex2html_anchor_invisible_mark></A><BR>
+<H2><A NAME="SECTION00834000000000000000"></A><A NAME="7418"></A>
+<BR>
 7.3.4 <TT>pidfile</TT>
 </H2> 
 
 <P>
-(Default value: <TT><A NAME="7233"><tex2html_anchor_invisible_mark></A><TT>/usr/local/sympa-gb/etc/sympa.pid</TT></TT>)
+(Default value: <TT><A NAME="7423"></A><TT>/usr/local/sympa-gb/etc/sympa.pid</TT></TT>)
 
 <P>
-The file where the <A NAME="7236"><tex2html_anchor_invisible_mark></A><TT>sympa.pl</TT> daemon stores its
+The file where the <A NAME="7426"></A><TT>sympa.pl</TT> daemon stores its
         process number. Warning: the <TT>sympa</TT> user must be
         able to write to this file, and to create it if it doesn't
         exist.
 
 <P>
- Example: <TT>pidfile         /var/run/sympa.pid</TT>
+Example: <TT>pidfile         /var/run/sympa.pid</TT>
 
 <P>
 
-<H2><A NAME="SECTION00835000000000000000"><tex2html_anchor_invisible_mark></A><A NAME="7240"><tex2html_anchor_invisible_mark></A><BR>
+<H2><A NAME="SECTION00835000000000000000"></A><A NAME="7430"></A>
+<BR>
 7.3.5 <TT>umask</TT>
 </H2> 
 
@@ -386,11 +740,11 @@ The file where the <A NAME="7236"><tex2html_anchor_invisible_mark></A><TT>sympa.
 (Default value: <TT>027</TT>)
 
 <P>
-Default mask for file creation (see <A NAME="7244"><tex2html_anchor_invisible_mark></A><TT>umask</TT>(2)).
+Default mask for file creation (see <A NAME="7434"></A><TT>umask</TT>(2)).
 	Note that it will be interpreted as an octual value.
 
 <P>
- Example: <TT>umask 007</TT>
+Example: <TT>umask 007</TT>
 
 <P>
 
@@ -400,7 +754,8 @@ Default mask for file creation (see <A NAME="7244"><tex2html_anchor_invisible_ma
 
 <P>
 
-<H2><A NAME="SECTION00841000000000000000"><tex2html_anchor_invisible_mark></A><A NAME="7248"><tex2html_anchor_invisible_mark></A><BR>
+<H2><A NAME="SECTION00841000000000000000"></A><A NAME="7438"></A>
+<BR>
 7.4.1 <TT>distribution_mode</TT>
 </H2>
 
@@ -412,11 +767,12 @@ Default mask for file creation (see <A NAME="7244"><tex2html_anchor_invisible_ma
         distribution and faster command response, but it require a bit more computer ressources.
 
 <P>
- Example: <TT>distribution_mode fork</TT>
+Example: <TT>distribution_mode fork</TT>
 
 <P>
 
-<H2><A NAME="SECTION00842000000000000000"><tex2html_anchor_invisible_mark></A><A NAME="7253"><tex2html_anchor_invisible_mark></A><BR>
+<H2><A NAME="SECTION00842000000000000000"></A><A NAME="7443"></A>
+<BR>
 7.4.2 <TT>maxsmtp</TT>
 </H2> 
 
@@ -428,11 +784,12 @@ Maximum number of SMTP delivery child processes spawned
         by  <I>Sympa</I>. This is the main load control parameter.
 
 <P>
- Example: <TT>maxsmtp           500</TT>
+Example: <TT>maxsmtp           500</TT>
 
 <P>
 
-<H2><A NAME="SECTION00843000000000000000"><tex2html_anchor_invisible_mark></A><A NAME="7259"><tex2html_anchor_invisible_mark></A><BR>
+<H2><A NAME="SECTION00843000000000000000"></A><A NAME="7449"></A>
+<BR>
 7.4.3 <TT>log_smtp</TT>
 </H2> 
 
@@ -443,11 +800,12 @@ Maximum number of SMTP delivery child processes spawned
 Set logging of each MTA call. Can be overwritten by -m sympa option.
 
 <P>
- Example: <TT>log_smtp           on</TT>
+Example: <TT>log_smtp           on</TT>
 
 <P>
 
-<H2><A NAME="SECTION00844000000000000000"><tex2html_anchor_invisible_mark></A><A NAME="7264"><tex2html_anchor_invisible_mark></A><BR>
+<H2><A NAME="SECTION00844000000000000000"></A><A NAME="7454"></A>
+<BR>
 7.4.4 <TT>max_size</TT>
 </H2> 
 
@@ -456,15 +814,16 @@ Set logging of each MTA call. Can be overwritten by -m sympa option.
 
 <P>
 Maximum size allowed for messages distributed by <I>Sympa</I>.
-	This may be customized per virtual robot or per list by setting the <A NAME="7269"><tex2html_anchor_invisible_mark></A><TT>max_size</TT> 
+	This may be customized per virtual robot or per list by setting the <A NAME="7459"></A><TT>max_size</TT> 
 	robot or list parameter.
 
 <P>
- Example: <TT>max_size           2097152</TT>
+Example: <TT>max_size           2097152</TT>
 
 <P>
 
-<H2><A NAME="SECTION00845000000000000000"><tex2html_anchor_invisible_mark></A><A NAME="7273"><tex2html_anchor_invisible_mark></A><BR>
+<H2><A NAME="SECTION00845000000000000000"></A><A NAME="7463"></A>
+<BR>
 7.4.5 <TT>misaddressed_commands</TT>
 </H2> 
 
@@ -473,11 +832,12 @@ Maximum size allowed for messages distributed by <I>Sympa</I>.
 
 <P>
 When a robot command is sent to a list, by default Sympa reject this message. This feature
-        can be turned off setting this parameter to <A NAME="7277"><tex2html_anchor_invisible_mark></A><TT>ignore</TT>.
+        can be turned off setting this parameter to <A NAME="7467"></A><TT>ignore</TT>.
 
 <P>
 
-<H2><A NAME="SECTION00846000000000000000"><tex2html_anchor_invisible_mark></A><A NAME="7280"><tex2html_anchor_invisible_mark></A><BR>
+<H2><A NAME="SECTION00846000000000000000"></A><A NAME="7470"></A>
+<BR>
 7.4.6 <TT>misaddressed_commands_regexp</TT>
 </H2> 
 
@@ -486,11 +846,12 @@ When a robot command is sent to a list, by default Sympa reject this message. Th
 
 <P>
 This is the Perl regular expression applied on messages subject and body to detect 
-	misaddressed commands, see <A NAME="7284"><tex2html_anchor_invisible_mark></A><TT>misaddressed_commands</TT> parameter above.
+	misaddressed commands, see <A NAME="7474"></A><TT>misaddressed_commands</TT> parameter above.
 
 <P>
 
-<H2><A NAME="SECTION00847000000000000000"><tex2html_anchor_invisible_mark></A><A NAME="7287"><tex2html_anchor_invisible_mark></A><BR>
+<H2><A NAME="SECTION00847000000000000000"></A><A NAME="7477"></A>
+<BR>
 7.4.7 <TT>nrcpt</TT>
 </H2> 
 
@@ -498,13 +859,14 @@ This is the Perl regular expression applied on messages subject and body to dete
 (Default value: <TT>25</TT>)
 
 <P>
-Maximum number of recipients per <A NAME="7291"><tex2html_anchor_invisible_mark></A><TT>sendmail</TT> call.
-        This grouping factor makes it possible for the (<A NAME="7294"><tex2html_anchor_invisible_mark></A><TT>sendmail</TT>) MTA to optimize the number of SMTP sessions for
+Maximum number of recipients per <A NAME="7481"></A><TT>sendmail</TT> call.
+        This grouping factor makes it possible for the (<A NAME="7484"></A><TT>sendmail</TT>) MTA to optimize the number of SMTP sessions for
         message distribution.
 
 <P>
 
-<H2><A NAME="SECTION00848000000000000000"><tex2html_anchor_invisible_mark></A><A NAME="7297"><tex2html_anchor_invisible_mark></A><BR>
+<H2><A NAME="SECTION00848000000000000000"></A><A NAME="7487"></A>
+<BR>
 7.4.8 <TT>avg</TT>
 </H2> 
 
@@ -513,11 +875,12 @@ Maximum number of recipients per <A NAME="7291"><tex2html_anchor_invisible_mark>
 
 <P>
 Maximum number of different internet domains within addresses per
-        <A NAME="7301"><tex2html_anchor_invisible_mark></A><TT>sendmail</TT> call.
+        <A NAME="7491"></A><TT>sendmail</TT> call.
 
 <P>
 
-<H2><A NAME="SECTION00849000000000000000"><tex2html_anchor_invisible_mark></A><A NAME="7304"><tex2html_anchor_invisible_mark></A><BR>
+<H2><A NAME="SECTION00849000000000000000"></A><A NAME="7494"></A>
+<BR>
 7.4.9 <TT>sendmail</TT>
 </H2> 
 
@@ -526,15 +889,16 @@ Maximum number of different internet domains within addresses per
 
 <P>
 Absolute path to SMTP message transfer agent binary. Sympa expects this binary to
-	be sendmail compatible (<A NAME="7308"><tex2html_anchor_invisible_mark></A>postfix, <A NAME="7309"><tex2html_anchor_invisible_mark></A>Qmail and <A NAME="7310"><tex2html_anchor_invisible_mark></A>Exim binaries all
+	be sendmail compatible (<A NAME="7498"></A>postfix, <A NAME="7499"></A>Qmail and <A NAME="7500"></A>Exim binaries all
 	provide sendmail compatibility).
 
 <P>
- Example: <TT>sendmail        /usr/sbin/sendmail</TT>
+Example: <TT>sendmail        /usr/sbin/sendmail</TT>
 
 <P>
 
-<H2><A NAME="SECTION008410000000000000000"><tex2html_anchor_invisible_mark></A><A NAME="7312"><tex2html_anchor_invisible_mark></A><BR>
+<H2><A NAME="SECTION008410000000000000000"></A><A NAME="7502"></A>
+<BR>
 7.4.10 <TT>sendmail_args</TT>
 </H2> 
 
@@ -546,7 +910,8 @@ Arguments passed to SMTP message transfer agent
 
 <P>
 
-<H2><A NAME="SECTION008411000000000000000"><tex2html_anchor_invisible_mark></A><A NAME="7316"><tex2html_anchor_invisible_mark></A><BR>
+<H2><A NAME="SECTION008411000000000000000"></A><A NAME="7506"></A>
+<BR>
 7.4.11 <TT>sendmail_alias</TT>
 </H2> 
 
@@ -554,11 +919,12 @@ Arguments passed to SMTP message transfer agent
 (Default value: <TT>defined by makefile, sendmail_aliases</TT>)
 
 <P>
-Path of the alias file that contain all lists related aliases. It is recommended to create a sp&#233;cific alias file so Sympa never overright the standard alias file but only a dedicated file.You must refer to this aliases file in your <A NAME="7320"><tex2html_anchor_invisible_mark></A><TT>sendmail.mc</TT> :
+Path of the alias file that contain all lists related aliases. It is recommended to create a sp&#233;cific alias file so Sympa never overright the standard alias file but only a dedicated file.You must refer to this aliases file in your <A NAME="7510"></A><TT>sendmail.mc</TT> :
 
 <P>
 
-<H2><A NAME="SECTION008412000000000000000"><tex2html_anchor_invisible_mark></A><A NAME="7323"><tex2html_anchor_invisible_mark></A><BR>
+<H2><A NAME="SECTION008412000000000000000"></A><A NAME="7513"></A>
+<BR>
 7.4.12 <TT>rfc2369_header_fields</TT>
 </H2> 
 
@@ -572,7 +938,8 @@ RFC2369 compliant header fields (List-xxx) to be added to
 
 <P>
 
-<H2><A NAME="SECTION008413000000000000000"><tex2html_anchor_invisible_mark></A><A NAME="7327"><tex2html_anchor_invisible_mark></A><BR>
+<H2><A NAME="SECTION008413000000000000000"></A><A NAME="7517"></A>
+<BR>
 7.4.13 <TT>remove_headers</TT>
 </H2> 
 
@@ -584,15 +951,16 @@ This is the list of headers that <I>Sympa</I> should remove from
         outgoing messages. Use it, for example, to ensure some privacy
         for your users by discarding anonymous options.
         It is (for the moment) site-wide. It is applied before the
-        <I>Sympa</I>, <#933#>rfc2369_header_fields<#933#>, and <#934#>custom_header<#934#> fields are
+        <I>Sympa</I>, rfc2369_header_fields, and custom_header fields are
         added.
 
 <P>
- Example: <TT>remove_headers      Resent-Date,Resent-From,Resent-To,Resent-Message-Id,Sender,Delivered-To,Return-Receipt-To,Precedence,X-Sequence,Disposition-Notification-To</TT>
+Example: <TT>remove_headers      Resent-Date,Resent-From,Resent-To,Resent-Message-Id,Sender,Delivered-To,Return-Receipt-To,Precedence,X-Sequence,Disposition-Notification-To</TT>
 
 <P>
 
-<H2><A NAME="SECTION008414000000000000000"><tex2html_anchor_invisible_mark></A><A NAME="7334"><tex2html_anchor_invisible_mark></A><BR>
+<H2><A NAME="SECTION008414000000000000000"></A><A NAME="7524"></A>
+<BR>
 7.4.14 <TT>anonymous_headers_fields</TT>
 </H2> 
 
@@ -602,11 +970,12 @@ This is the list of headers that <I>Sympa</I> should remove from
 <P>
 This parameter defines the list of SMTP header fields that should be
 	removed when a mailing list is setup in anonymous mode (see 
-	<A HREF=<tex2html_cr_mark>#par-anonymous-sender#938><tex2html_cr_mark></A>,  page~<A HREF=<tex2html_cr_mark>#par-anonymous-sender#939><tex2html_cross_ref_visible_mark></A>).
+	<A HREF="node21.html#par-anonymous-sender">20.4.3</A>,  page&nbsp;<A HREF="node21.html#par-anonymous-sender"><IMG  ALIGN="BOTTOM" BORDER="1" ALT="[*]" SRC="crossref.png"></A>).
 
 <P>
 
-<H2><A NAME="SECTION008415000000000000000"><tex2html_anchor_invisible_mark></A><A NAME="7338"><tex2html_anchor_invisible_mark></A><BR>
+<H2><A NAME="SECTION008415000000000000000"></A><A NAME="7528"></A>
+<BR>
 7.4.15 <TT>list_check_smtp</TT>
 </H2> 
 
@@ -623,7 +992,8 @@ If this parameter is set with a SMTP server address, <I>Sympa</I> will check if 
 
 <P>
 
-<H2><A NAME="SECTION008416000000000000000"><tex2html_anchor_invisible_mark></A><A NAME="7344"><tex2html_anchor_invisible_mark></A><BR>
+<H2><A NAME="SECTION008416000000000000000"></A><A NAME="7534"></A>
+<BR>
 7.4.16 <TT>list_check_suffixes</TT>
 </H2> 
 
@@ -633,12 +1003,13 @@ If this parameter is set with a SMTP server address, <I>Sympa</I> will check if 
 <P>
 This paramater is a comma-separated list of admin suffixes you're using
 	for <I>Sympa</I> aliases, i.e. mylist-request, mylist-owner etc...
-	This parameter is used with <A NAME="7349"><tex2html_anchor_invisible_mark></A><TT>list_check_smtp</TT> parameter.
+	This parameter is used with <A NAME="7539"></A><TT>list_check_smtp</TT> parameter.
 	It is also used to check list names at list creation time.
 
 <P>
 
-<H2><A NAME="SECTION008417000000000000000"><tex2html_anchor_invisible_mark></A><A NAME="7352"><tex2html_anchor_invisible_mark></A><BR>
+<H2><A NAME="SECTION008417000000000000000"></A><A NAME="7542"></A>
+<BR>
 7.4.17 <TT>urlize_min_size</TT>
 </H2> 
 
@@ -651,14 +1022,16 @@ This parameter is related to the <TT>URLIZE</TT> subscriber reception mode ; it
 
 <P>
 
-<H1><A NAME="SECTION00850000000000000000"><tex2html_anchor_invisible_mark></A>
-<A NAME="quotas"><tex2html_anchor_mark></A><BR>
+<H1><A NAME="SECTION00850000000000000000"></A>
+<A NAME="quotas"></A>
+<BR>
 7.5 Quotas
 </H1>
 
 <P>
 
-<H2><A NAME="SECTION00851000000000000000"><tex2html_anchor_invisible_mark></A><A NAME="7356"><tex2html_anchor_invisible_mark></A><BR>
+<H2><A NAME="SECTION00851000000000000000"></A><A NAME="7546"></A>
+<BR>
 7.5.1 <TT>default_shared_quota</TT>
 </H2>
 
@@ -667,7 +1040,8 @@ The default disk quota for lists' document repository.
 
 <P>
 
-<H2><A NAME="SECTION00852000000000000000"><tex2html_anchor_invisible_mark></A><A NAME="7359"><tex2html_anchor_invisible_mark></A><BR>
+<H2><A NAME="SECTION00852000000000000000"></A><A NAME="7549"></A>
+<BR>
 7.5.2 <TT>default_archive_quota</TT>
 </H2>
 
@@ -676,67 +1050,73 @@ The default disk quota for lists' web archives.
 
 <P>
 
-<H1><A NAME="SECTION00860000000000000000"><tex2html_anchor_invisible_mark></A>
-<A NAME="spool-related"><tex2html_anchor_mark></A><BR>
+<H1><A NAME="SECTION00860000000000000000"></A>
+<A NAME="spool-related"></A>
+<BR>
 7.6 Spool related
 </H1>
 
-<H2><A NAME="SECTION00861000000000000000"><tex2html_anchor_invisible_mark></A><A NAME="7362"><tex2html_anchor_invisible_mark></A><BR>
+<H2><A NAME="SECTION00861000000000000000"></A><A NAME="7552"></A>
+<BR>
 7.6.1 <TT>spool</TT>
 </H2>
 
 <P>
-(Default value: <TT><A NAME="7367"><tex2html_anchor_invisible_mark></A><TT>/usr/local/sympa-gb/spool</TT></TT>)
+(Default value: <TT><A NAME="7557"></A><TT>/usr/local/sympa-gb/spool</TT></TT>)
 
 <P>
 The parent directory which contains all the other spools.  
 
 <P>
 
-<H2><A NAME="SECTION00862000000000000000"><tex2html_anchor_invisible_mark></A><A NAME="7370"><tex2html_anchor_invisible_mark></A><BR>
+<H2><A NAME="SECTION00862000000000000000"></A><A NAME="7560"></A>
+<BR>
 7.6.2 <TT>queue</TT>
 </H2> 
 
 <P>
 The absolute path of the directory which contains the queue, used both by the
-        <A NAME="7373"><tex2html_anchor_invisible_mark></A><TT>queue</TT> program and the <A NAME="7376"><tex2html_anchor_invisible_mark></A><TT>sympa.pl</TT> daemon. This
+        <A NAME="7563"></A><TT>queue</TT> program and the <A NAME="7566"></A><TT>sympa.pl</TT> daemon. This
         parameter is mandatory.
 
 <P>
- Example: <TT><A NAME="7381"><tex2html_anchor_invisible_mark></A><TT>/usr/local/sympa-gb/spool/msg</TT></TT>
+Example: <TT><A NAME="7571"></A><TT>/usr/local/sympa-gb/spool/msg</TT></TT>
 
 <P>
 
-<H2><A NAME="SECTION00863000000000000000"><tex2html_anchor_invisible_mark></A><A NAME="7384"><tex2html_anchor_invisible_mark></A> 
-	<A NAME="961"><tex2html_anchor_invisible_mark></A>
-	<A NAME="962"><tex2html_anchor_invisible_mark></A><BR>
+<H2><A NAME="SECTION00863000000000000000"></A><A NAME="7574"></A> 
+	<A NAME="961"></A>
+	<A NAME="962"></A>
+<BR>
 7.6.3 <TT>queuedistribute</TT>
 </H2>
 
 <P>
-(Default value: <TT><A NAME="7389"><tex2html_anchor_invisible_mark></A><TT>/usr/local/sympa-gb/spool/distribute</TT></TT>)
+(Default value: <TT><A NAME="7579"></A><TT>/usr/local/sympa-gb/spool/distribute</TT></TT>)
 
 <P>
 This parameter is optional and retained solely for backward compatibility.
 
 <P>
 
-<H2><A NAME="SECTION00864000000000000000"><tex2html_anchor_invisible_mark></A><A NAME="7392"><tex2html_anchor_invisible_mark></A>  
-        <A NAME="cf:queuemod"><tex2html_anchor_mark></A>        <A NAME="966"><tex2html_anchor_invisible_mark></A><BR>
+<H2><A NAME="SECTION00864000000000000000"></A><A NAME="7582"></A>  
+        <A NAME="cf:queuemod"></A>        <A NAME="966"></A>
+<BR>
 7.6.4 <TT>queuemod</TT>
 </H2>
 
 <P>
-(Default value: <TT><A NAME="7397"><tex2html_anchor_invisible_mark></A><TT>/usr/local/sympa-gb/spool/moderation</TT></TT>)
+(Default value: <TT><A NAME="7587"></A><TT>/usr/local/sympa-gb/spool/moderation</TT></TT>)
 
 <P>
 This parameter is optional and retained solely for backward compatibility.
 
 <P>
 
-<H2><A NAME="SECTION00865000000000000000"><tex2html_anchor_invisible_mark></A><A NAME="7400"><tex2html_anchor_invisible_mark></A>  
-        <A NAME="969"><tex2html_anchor_invisible_mark></A>
-        <A NAME="970"><tex2html_anchor_invisible_mark></A><BR>
+<H2><A NAME="SECTION00865000000000000000"></A><A NAME="7590"></A>  
+        <A NAME="969"></A>
+        <A NAME="970"></A>
+<BR>
 7.6.5 <TT>queuedigest</TT>
 </H2>
 
@@ -745,64 +1125,69 @@ This parameter is optional and retained solely for backward compatibility.
 
 <P>
 
-<H2><A NAME="SECTION00866000000000000000"><tex2html_anchor_invisible_mark></A><A NAME="7403"><tex2html_anchor_invisible_mark></A><BR>
+<H2><A NAME="SECTION00866000000000000000"></A><A NAME="7593"></A>
+<BR>
 7.6.6 <TT>queueauth</TT>
 </H2> 
 
 <P>
-(Default value: <TT><A NAME="7408"><tex2html_anchor_invisible_mark></A><TT>/usr/local/sympa-gb/spool/auth</TT></TT>)
+(Default value: <TT><A NAME="7598"></A><TT>/usr/local/sympa-gb/spool/auth</TT></TT>)
 
 <P>
 This parameter is optional and retained solely for backward compatibility.
 
 <P>
 
-<H2><A NAME="SECTION00867000000000000000"><tex2html_anchor_invisible_mark></A><A NAME="7411"><tex2html_anchor_invisible_mark></A><BR>
+<H2><A NAME="SECTION00867000000000000000"></A><A NAME="7601"></A>
+<BR>
 7.6.7 <TT>queueoutgoing</TT>
 </H2> 
 
 <P>
-(Default value: <TT><A NAME="7416"><tex2html_anchor_invisible_mark></A><TT>/usr/local/sympa-gb/spool/outgoing</TT></TT>)
+(Default value: <TT><A NAME="7606"></A><TT>/usr/local/sympa-gb/spool/outgoing</TT></TT>)
 
 <P>
 This parameter is optional and retained solely for backward compatibility.
 
 <P>
 
-<H2><A NAME="SECTION00868000000000000000"><tex2html_anchor_invisible_mark></A><A NAME="7419"><tex2html_anchor_invisible_mark></A><BR>
+<H2><A NAME="SECTION00868000000000000000"></A><A NAME="7609"></A>
+<BR>
 7.6.8 <TT>queuetopic</TT>
 </H2> 
 
 <P>
-(Default value: <TT><A NAME="7424"><tex2html_anchor_invisible_mark></A><TT>/usr/local/sympa-gb/spool/topic</TT></TT>)
+(Default value: <TT><A NAME="7614"></A><TT>/usr/local/sympa-gb/spool/topic</TT></TT>)
 
 <P>
 This parameter is optional and retained solely for backward compatibility.
 
 <P>
 
-<H2><A NAME="SECTION00869000000000000000"><tex2html_anchor_invisible_mark></A><A NAME="7427"><tex2html_anchor_invisible_mark></A> 
-    <A NAME="978"><tex2html_anchor_invisible_mark></A><BR>
+<H2><A NAME="SECTION00869000000000000000"></A><A NAME="7617"></A> 
+    <A NAME="978"></A>
+<BR>
 7.6.9 <TT>queuebounce</TT>
 </H2>
 
 <P>
-(Default value: <TT><A NAME="7432"><tex2html_anchor_invisible_mark></A><TT>/usr/local/sympa-gb/spool/bounce</TT></TT>)
+(Default value: <TT><A NAME="7622"></A><TT>/usr/local/sympa-gb/spool/bounce</TT></TT>)
 
 <P>
-Spool to store bounces (non-delivery reports) received by the <A NAME="7435"><tex2html_anchor_invisible_mark></A><TT>bouncequeue</TT>
+Spool to store bounces (non-delivery reports) received by the <A NAME="7625"></A><TT>bouncequeue</TT>
 	program via the mylist-owner or bounce+* addresses . This parameter is mandatory
         and must be an absolute path.
 
 <P>
 
-<H2><A NAME="SECTION008610000000000000000"><tex2html_anchor_invisible_mark></A><A NAME="7438"><tex2html_anchor_invisible_mark></A> 
-    <A NAME="982"><tex2html_anchor_invisible_mark></A><BR>
+<H2><A NAME="SECTION008610000000000000000"></A><A NAME="7628"></A> 
+    <A NAME="982"></A>
+<BR>
 7.6.10 <TT>queuetask</TT>
 </H2>
 
 <P>
-(Default value: <TT><A NAME="7443"><tex2html_anchor_invisible_mark></A><TT>/usr/local/sympa-gb/spool/task</TT></TT>)
+(Default value: <TT><A NAME="7633"></A><TT>/usr/local/sympa-gb/spool/task</TT></TT>)
 
 <P>
 Spool to store task files created by the task manager. This parameter is mandatory
@@ -810,20 +1195,22 @@ Spool to store task files created by the task manager. This parameter is mandato
 
 <P>
 
-<H2><A NAME="SECTION008611000000000000000"><tex2html_anchor_invisible_mark></A><A NAME="7446"><tex2html_anchor_invisible_mark></A><BR>
+<H2><A NAME="SECTION008611000000000000000"></A><A NAME="7636"></A>
+<BR>
 7.6.11 <TT>tmpdir</TT>
 </H2>
 
 <P>
-(Default value: <TT><A NAME="7451"><tex2html_anchor_invisible_mark></A><TT>/usr/local/sympa-gb/spool/tmp</TT></TT>)
+(Default value: <TT><A NAME="7641"></A><TT>/usr/local/sympa-gb/spool/tmp</TT></TT>)
 
 <P>
 Temporary directory used by OpenSSL and antiviruses.
 
 <P>
 
-<H2><A NAME="SECTION008612000000000000000"><tex2html_anchor_invisible_mark></A><A NAME="7454"><tex2html_anchor_invisible_mark></A>  
-        <A NAME="kw-sleep"><tex2html_anchor_mark></A><BR>
+<H2><A NAME="SECTION008612000000000000000"></A><A NAME="7644"></A>  
+        <A NAME="kw-sleep"></A>
+<BR>
 7.6.12 <TT>sleep</TT>
 </H2>
 
@@ -832,11 +1219,12 @@ Temporary directory used by OpenSSL and antiviruses.
 
 <P>
 Waiting period (in seconds) between each scan of the main queue.
-        Never set this value to~0!
+        Never set this value to&nbsp;0!
 
 <P>
 
-<H2><A NAME="SECTION008613000000000000000"><tex2html_anchor_invisible_mark></A><A NAME="7458"><tex2html_anchor_invisible_mark></A><BR>
+<H2><A NAME="SECTION008613000000000000000"></A><A NAME="7648"></A>
+<BR>
 7.6.13 <TT>clean_delay_queue</TT>
 </H2> 
 
@@ -845,7 +1233,7 @@ Waiting period (in seconds) between each scan of the main queue.
 
 <P>
 Retention period (in days) for ``bad'' messages in
-        <A NAME="7462"><tex2html_anchor_invisible_mark></A>spool (as specified by <A NAME="7463"><tex2html_anchor_invisible_mark></A><TT>queue</TT>).
+        <A NAME="7652"></A>spool (as specified by <A NAME="7653"></A><TT>queue</TT>).
         <I>Sympa</I> keeps messages rejected for various reasons (badly
         formatted, looping, etc.) in
         this directory, with a name prefixed by <TT>BAD</TT>.
@@ -853,11 +1241,12 @@ Retention period (in days) for ``bad'' messages in
         these messages are kept.
 
 <P>
- Example: <TT>clean_delay_queue 3</TT>
+Example: <TT>clean_delay_queue 3</TT>
 
 <P>
 
-<H2><A NAME="SECTION008614000000000000000"><tex2html_anchor_invisible_mark></A><A NAME="7468"><tex2html_anchor_invisible_mark></A><BR>
+<H2><A NAME="SECTION008614000000000000000"></A><A NAME="7658"></A>
+<BR>
 7.6.14 <TT>clean_delay_queuemod</TT>
 </H2> 
 
@@ -865,15 +1254,16 @@ Retention period (in days) for ``bad'' messages in
 (Default value: <TT>10</TT>)
 
 <P>
-Expiration delay (in days) in the <A NAME="7472"><tex2html_anchor_invisible_mark></A>moderation
-        <A NAME="7473"><tex2html_anchor_invisible_mark></A>spool (as specified by <A NAME="7474"><tex2html_anchor_invisible_mark></A><TT>queuemod</TT>).
+Expiration delay (in days) in the <A NAME="7662"></A>moderation
+        <A NAME="7663"></A>spool (as specified by <A NAME="7664"></A><TT>queuemod</TT>).
         Beyond this deadline, messages that have not been processed
         are deleted.  For moderated lists, the contents of this spool
-	can be consulted using a key along with the <A NAME="7477"><tex2html_anchor_invisible_mark></A><TT>MODINDEX</TT> command.
+	can be consulted using a key along with the <A NAME="7667"></A><TT>MODINDEX</TT> command.
 
 <P>
 
-<H2><A NAME="SECTION008615000000000000000"><tex2html_anchor_invisible_mark></A><A NAME="7480"><tex2html_anchor_invisible_mark></A><BR>
+<H2><A NAME="SECTION008615000000000000000"></A><A NAME="7670"></A>
+<BR>
 7.6.15 <TT>clean_delay_queueauth</TT>
 </H2>  
 
@@ -881,13 +1271,14 @@ Expiration delay (in days) in the <A NAME="7472"><tex2html_anchor_invisible_mark
 (Default value: <TT>3</TT>)
 
 <P>
-Expiration delay (in days) in the <A NAME="7484"><tex2html_anchor_invisible_mark></A>authentication
+Expiration delay (in days) in the <A NAME="7674"></A>authentication
         queue.  Beyond this deadline, messages not enabled are
         deleted.
 
 <P>
 
-<H2><A NAME="SECTION008616000000000000000"><tex2html_anchor_invisible_mark></A><A NAME="7485"><tex2html_anchor_invisible_mark></A><BR>
+<H2><A NAME="SECTION008616000000000000000"></A><A NAME="7675"></A>
+<BR>
 7.6.16 <TT>clean_delay_queuetopic</TT>
 </H2>  
 
@@ -895,7 +1286,7 @@ Expiration delay (in days) in the <A NAME="7484"><tex2html_anchor_invisible_mark
 (Default value: <TT>7</TT>)
 
 <P>
-Delay for keeping message topic files (in days) in the <A NAME="7489"><tex2html_anchor_invisible_mark></A>topic
+Delay for keeping message topic files (in days) in the <A NAME="7679"></A>topic
         queue.  Beyond this deadline, files are
         deleted.
 
@@ -907,24 +1298,26 @@ Delay for keeping message topic files (in days) in the <A NAME="7489"><tex2html_
 
 <P>
 
-<H2><A NAME="SECTION00871000000000000000"><tex2html_anchor_invisible_mark></A><A NAME="7490"><tex2html_anchor_invisible_mark></A><BR>
+<H2><A NAME="SECTION00871000000000000000"></A><A NAME="7680"></A>
+<BR>
 7.7.1 <TT>localedir</TT>
 </H2>   
 
 <P>
-(Default value: <TT><A NAME="7495"><tex2html_anchor_invisible_mark></A><TT>/usr/local/sympa-gb/locale</TT></TT>)
+(Default value: <TT><A NAME="7685"></A><TT>/usr/local/sympa-gb/locale</TT></TT>)
 
 <P>
-The location of multilingual catalog files. Must correspond to	<A NAME="7498"><tex2html_anchor_invisible_mark></A><TT>&#126;src/locale/Makefile</TT>.
+The location of multilingual catalog files. Must correspond to	<A NAME="7688"></A><TT>~src/locale/Makefile</TT>.
 
 <P>
 
-<H2><A NAME="SECTION00872000000000000000"><tex2html_anchor_invisible_mark></A><A NAME="7503"><tex2html_anchor_invisible_mark></A><BR>
+<H2><A NAME="SECTION00872000000000000000"></A><A NAME="7693"></A>
+<BR>
 7.7.2 <TT>supported_lang</TT>
 </H2>
 
 <P>
- Example: <TT>supported_lang  fr,en_US,de,es</TT>
+Example: <TT>supported_lang  fr,en_US,de,es</TT>
 
 <P>
 This parameter lists all supported languages (comma separated) for the user interface. The default value will include
@@ -932,7 +1325,8 @@ This parameter lists all supported languages (comma separated) for the user inte
 
 <P>
 
-<H2><A NAME="SECTION00873000000000000000"><tex2html_anchor_invisible_mark></A><A NAME="7507"><tex2html_anchor_invisible_mark></A><BR>
+<H2><A NAME="SECTION00873000000000000000"></A><A NAME="7697"></A>
+<BR>
 7.7.3 <TT>lang</TT>
 </H2>   
 
@@ -941,11 +1335,12 @@ This parameter lists all supported languages (comma separated) for the user inte
 
 <P>
 This is the default language for <I>Sympa</I>. The message catalog (.po, compiled as a .mo file) located 
-	in the corresponding <A NAME="7512"><tex2html_anchor_invisible_mark></A><TT>locale</TT> directory will be used.
+	in the corresponding <A NAME="7702"></A><TT>locale</TT> directory will be used.
 
 <P>
 
-<H2><A NAME="SECTION00874000000000000000"><tex2html_anchor_invisible_mark></A><A NAME="7515"><tex2html_anchor_invisible_mark></A><BR>
+<H2><A NAME="SECTION00874000000000000000"></A><A NAME="7705"></A>
+<BR>
 7.7.4 <TT>web_recode_to</TT>
 </H2>   
 
@@ -955,16 +1350,16 @@ If you set this parameter to a charset then web pages will be recoded to this sp
 	all using the same charset.
 
 <P>
-Example :
-<BLOCKQUOTE>
-</BLOCKQUOTE><PRE><tex2html_verbatim_mark>verbatim277#</PRE><BLOCKQUOTE>
-</BLOCKQUOTE>
+Example :<PRE>
+web_recode_to   utf-8
+</PRE>
 
 <P>
-Note : if you recode web pages to utf-8, you should also add the following tag to your <A NAME="7518"><tex2html_anchor_invisible_mark></A><TT>mhonarc-ressources.tt2</TT> file :
-<BLOCKQUOTE>
-</BLOCKQUOTE><PRE><tex2html_verbatim_mark>verbatim278#</PRE><BLOCKQUOTE>
-</BLOCKQUOTE>
+Note : if you recode web pages to utf-8, you should also add the following tag to your <A NAME="7708"></A><TT>mhonarc-ressources.tt2</TT> file :<PRE>
+&lt;TextEncode&gt;
+utf-8; MHonArc::UTF8::to_utf8; MHonArc/UTF8.pm
+&lt;/TextEncode&gt;
+</PRE>
 
 <P>
 
@@ -974,8 +1369,9 @@ Note : if you recode web pages to utf-8, you should also add the following tag t
 
 <P>
 
-<H2><A NAME="SECTION00881000000000000000"><tex2html_anchor_invisible_mark></A><A NAME="7521"><tex2html_anchor_invisible_mark></A>
-        <A NAME="kw-bounce-warn-rate"><tex2html_anchor_mark></A><BR>
+<H2><A NAME="SECTION00881000000000000000"></A><A NAME="7711"></A>
+        <A NAME="kw-bounce-warn-rate"></A>
+<BR>
 7.8.1 <TT>bounce_warn_rate</TT>
 </H2>
 
@@ -983,14 +1379,15 @@ Note : if you recode web pages to utf-8, you should also add the following tag t
 (Default value: <TT>30</TT>)
 
 <P>
-Site default value for <A NAME="7525"><tex2html_anchor_invisible_mark></A><TT>bounce</TT>.
+Site default value for <A NAME="7715"></A><TT>bounce</TT>.
 	The list owner receives a warning whenever a message is distributed and
 	the number of bounces exceeds this value.
 
 <P>
 
-<H2><A NAME="SECTION00882000000000000000"><tex2html_anchor_invisible_mark></A><A NAME="7528"><tex2html_anchor_invisible_mark></A>
-        <A NAME="kw-bounce-halt-rate"><tex2html_anchor_mark></A><BR>
+<H2><A NAME="SECTION00882000000000000000"></A><A NAME="7718"></A>
+        <A NAME="kw-bounce-halt-rate"></A>
+<BR>
 7.8.2 <TT>bounce_halt_rate</TT>
 </H2>
 
@@ -1001,13 +1398,14 @@ Site default value for <A NAME="7525"><tex2html_anchor_invisible_mark></A><TT>bo
 <TT>FOR FUTURE USE</TT>
 
 <P>
-Site default value for <A NAME="7532"><tex2html_anchor_invisible_mark></A><TT>bounce</TT>.
+Site default value for <A NAME="7722"></A><TT>bounce</TT>.
 	Messages will cease to be distributed if the number of bounces exceeds this value.
 
 <P>
 
-<H2><A NAME="SECTION00883000000000000000"><tex2html_anchor_invisible_mark></A><A NAME="7535"><tex2html_anchor_invisible_mark></A>
-        <A NAME="kw-welcome-return-path"><tex2html_anchor_mark></A><BR>
+<H2><A NAME="SECTION00883000000000000000"></A><A NAME="7725"></A>
+        <A NAME="kw-welcome-return-path"></A>
+<BR>
 7.8.3 <TT>welcome_return_path</TT>
 </H2>
 
@@ -1022,8 +1420,9 @@ If set to string <TT>unique</TT>, sympa will use a unique e-mail address in the
 
 <P>
 
-<H2><A NAME="SECTION00884000000000000000"><tex2html_anchor_invisible_mark></A><A NAME="7539"><tex2html_anchor_invisible_mark></A>
-        <A NAME="kw-remind-return-path"><tex2html_anchor_mark></A><BR>
+<H2><A NAME="SECTION00884000000000000000"></A><A NAME="7729"></A>
+        <A NAME="kw-remind-return-path"></A>
+<BR>
 7.8.4 <TT>remind_return_path</TT>
 </H2>
 
@@ -1031,13 +1430,14 @@ If set to string <TT>unique</TT>, sympa will use a unique e-mail address in the
 (Default value: <TT>owner</TT>)
 
 <P>
-Like <A NAME="7543"><tex2html_anchor_invisible_mark></A><TT>welcome_return_path</TT>, but relates to the remind message.
+Like <A NAME="7733"></A><TT>welcome_return_path</TT>, but relates to the remind message.
 	Also requires the bounce+* alias to be installed.
 
 <P>
 
-<H2><A NAME="SECTION00885000000000000000"><tex2html_anchor_invisible_mark></A><A NAME="7546"><tex2html_anchor_invisible_mark></A>
-        <A NAME="kw-expire-bounce-task"><tex2html_anchor_mark></A><BR>
+<H2><A NAME="SECTION00885000000000000000"></A><A NAME="7736"></A>
+        <A NAME="kw-expire-bounce-task"></A>
+<BR>
 7.8.5 <TT>expire_bounce_task</TT>
 </H2>
 
@@ -1045,14 +1445,15 @@ Like <A NAME="7543"><tex2html_anchor_invisible_mark></A><TT>welcome_return_path<
 (Default value: <TT>daily</TT>)
 
 <P>
-This parameter tells what task will be used by <A NAME="7550"><tex2html_anchor_invisible_mark></A><TT>task_manager.pl</TT>
+This parameter tells what task will be used by <A NAME="7740"></A><TT>task_manager.pl</TT>
 	to perform bounces expiration. This task resets bouncing information for
 	addresses not bouncing in the last 10 days after the latest message distribution.
 
 <P>
 
-<H2><A NAME="SECTION00886000000000000000"><tex2html_anchor_invisible_mark></A><A NAME="7553"><tex2html_anchor_invisible_mark></A>
-        <A NAME="kw-purge-orphan-bounce-task"><tex2html_anchor_mark></A><BR>
+<H2><A NAME="SECTION00886000000000000000"></A><A NAME="7743"></A>
+        <A NAME="kw-purge-orphan-bounce-task"></A>
+<BR>
 7.8.6 <TT>purge_orphan_bounces_task</TT>
 </H2>
 
@@ -1060,14 +1461,15 @@ This parameter tells what task will be used by <A NAME="7550"><tex2html_anchor_i
 (Default value: <TT>Monthly</TT>)
 
 <P>
-This parameter tells what task will be used by <A NAME="7557"><tex2html_anchor_invisible_mark></A><TT>task_manager.pl</TT>
+This parameter tells what task will be used by <A NAME="7747"></A><TT>task_manager.pl</TT>
 	to perform bounces cleaning. This task delete bounces archives for 
 	unsubscribed users.	
 
 <P>
 
-<H2><A NAME="SECTION00887000000000000000"><tex2html_anchor_invisible_mark></A><A NAME="7560"><tex2html_anchor_invisible_mark></A>
-        <A NAME="kw-eval-bouncers-task"><tex2html_anchor_mark></A><BR>
+<H2><A NAME="SECTION00887000000000000000"></A><A NAME="7750"></A>
+        <A NAME="kw-eval-bouncers-task"></A>
+<BR>
 7.8.7 <TT>eval_bouncers_task</TT>
 </H2>
 
@@ -1076,13 +1478,14 @@ This parameter tells what task will be used by <A NAME="7557"><tex2html_anchor_i
 
 <P>
 The task eval_bouncers evaluate all bouncing users for all lists, and fill
-	the field <A NAME="7564"><tex2html_anchor_invisible_mark></A><TT>bounce_score_suscriber</TT> in table <A NAME="7567"><tex2html_anchor_invisible_mark></A><TT>suscriber_table</TT>
+	the field <A NAME="7754"></A><TT>bounce_score_suscriber</TT> in table <A NAME="7757"></A><TT>suscriber_table</TT>
 	with a score. This score allow the auto-management of bouncing-users.
 
 <P>
 
-<H2><A NAME="SECTION00888000000000000000"><tex2html_anchor_invisible_mark></A><A NAME="7570"><tex2html_anchor_invisible_mark></A>
-        <A NAME="kw-process-bouncers-task"><tex2html_anchor_mark></A><BR>
+<H2><A NAME="SECTION00888000000000000000"></A><A NAME="7760"></A>
+        <A NAME="kw-process-bouncers-task"></A>
+<BR>
 7.8.8 <TT>process_bouncers_task</TT>
 </H2>
 
@@ -1096,8 +1499,9 @@ The task process_bouncers execute configured actions on bouncing users, accordin
 
 <P>
 
-<H2><A NAME="SECTION00889000000000000000"><tex2html_anchor_invisible_mark></A><A NAME="7574"><tex2html_anchor_invisible_mark></A>
-        <A NAME="kw-minimum-bouncing-count"><tex2html_anchor_mark></A><BR>
+<H2><A NAME="SECTION00889000000000000000"></A><A NAME="7764"></A>
+        <A NAME="kw-minimum-bouncing-count"></A>
+<BR>
 7.8.9 <TT>minimum_bouncing_count</TT>
 </H2>
 
@@ -1112,8 +1516,9 @@ This parameter is for the bounce-score evaluation : the bounce-score is a note t
 
 <P>
 
-<H2><A NAME="SECTION008810000000000000000"><tex2html_anchor_invisible_mark></A><A NAME="7578"><tex2html_anchor_invisible_mark></A>
-        <A NAME="kw-minimum-bouncing-period"><tex2html_anchor_mark></A><BR>
+<H2><A NAME="SECTION008810000000000000000"></A><A NAME="7768"></A>
+        <A NAME="kw-minimum-bouncing-period"></A>
+<BR>
 7.8.10 <TT>minimum_bouncing_period</TT>
 </H2>
 
@@ -1126,8 +1531,9 @@ Determine the minimum bouncing period for a user to allow his bounce-score evalu
 
 <P>
 
-<H2><A NAME="SECTION008811000000000000000"><tex2html_anchor_invisible_mark></A><A NAME="7582"><tex2html_anchor_invisible_mark></A>
-        <A NAME="kw-bounce-score-min-bouncing-period"><tex2html_anchor_mark></A><BR>
+<H2><A NAME="SECTION008811000000000000000"></A><A NAME="7772"></A>
+        <A NAME="kw-bounce-score-min-bouncing-period"></A>
+<BR>
 7.8.11 <TT>bounce_delay</TT>
 </H2>
 
@@ -1141,8 +1547,9 @@ Another parameter for the bounce-score evaluation : This one represent the avera
 
 <P>
 
-<H2><A NAME="SECTION008812000000000000000"><tex2html_anchor_invisible_mark></A><A NAME="7586"><tex2html_anchor_invisible_mark></A>
-        <A NAME="kw-default-bounce-level1-rate"><tex2html_anchor_mark></A><BR>
+<H2><A NAME="SECTION008812000000000000000"></A><A NAME="7776"></A>
+        <A NAME="kw-default-bounce-level1-rate"></A>
+<BR>
 7.8.12 <TT>default_bounce_level1_rate</TT>
 </H2>
 
@@ -1150,13 +1557,14 @@ Another parameter for the bounce-score evaluation : This one represent the avera
 (Default value: <TT>45</TT>)
 
 <P>
-This is the default value for <A NAME="7590"><tex2html_anchor_invisible_mark></A><TT>bouncerslevel1</TT> <A NAME="7593"><tex2html_anchor_invisible_mark></A><TT>rate</TT> entry
-	(<A HREF=<tex2html_cr_mark>#bouncers-level1#1076><tex2html_cr_mark></A>, page~<A HREF=<tex2html_cr_mark>#bouncers-level1#1077><tex2html_cross_ref_visible_mark></A>)
+This is the default value for <A NAME="7780"></A><TT>bouncerslevel1</TT> <A NAME="7783"></A><TT>rate</TT> entry
+	(<A HREF="#bouncers-level1"><IMG  ALIGN="BOTTOM" BORDER="1" ALT="[*]" SRC="crossref.png"></A>, page&nbsp;<A HREF="#bouncers-level1"><IMG  ALIGN="BOTTOM" BORDER="1" ALT="[*]" SRC="crossref.png"></A>)
 
 <P>
 
-<H2><A NAME="SECTION008813000000000000000"><tex2html_anchor_invisible_mark></A><A NAME="7596"><tex2html_anchor_invisible_mark></A>
-        <A NAME="kw-default-bounce-level1-rate"><tex2html_anchor_mark></A><BR>
+<H2><A NAME="SECTION008813000000000000000"></A><A NAME="7786"></A>
+        <A NAME="kw-default-bounce-level1-rate"></A>
+<BR>
 7.8.13 <TT>default_bounce_level2_rate</TT>
 </H2>
 
@@ -1164,12 +1572,13 @@ This is the default value for <A NAME="7590"><tex2html_anchor_invisible_mark></A
 (Default value: <TT>75</TT>)
 
 <P>
-This is the default value for <A NAME="7600"><tex2html_anchor_invisible_mark></A><TT>bouncerslevel2</TT> <A NAME="7603"><tex2html_anchor_invisible_mark></A><TT>rate</TT> entry
-	(<A HREF=<tex2html_cr_mark>#bouncers-level2#1083><tex2html_cr_mark></A>, page~<A HREF=<tex2html_cr_mark>#bouncers-level2#1084><tex2html_cross_ref_visible_mark></A>)
+This is the default value for <A NAME="7790"></A><TT>bouncerslevel2</TT> <A NAME="7793"></A><TT>rate</TT> entry
+	(<A HREF="node21.html#bouncers-level2">20.5.3</A>, page&nbsp;<A HREF="node21.html#bouncers-level2"><IMG  ALIGN="BOTTOM" BORDER="1" ALT="[*]" SRC="crossref.png"></A>)
 
 <P>
 
-<H2><A NAME="SECTION008814000000000000000"><tex2html_anchor_invisible_mark></A><A NAME="7606"><tex2html_anchor_invisible_mark></A><BR>
+<H2><A NAME="SECTION008814000000000000000"></A><A NAME="7796"></A>
+<BR>
 7.8.14 <TT>bounce_email_prefix</TT>
 </H2> 
 
@@ -1199,17 +1608,18 @@ you must modify the sympa aliases like this :
 
 <P>
 <BLOCKQUOTE>
-bounce-test+*: 	;SPMquot;| /home/sympa/bin/queuebounce sympa@my.domain.org;SPMquot;
+bounce-test+*: 	"| /home/sympa/bin/queuebounce sympa@my.domain.org"
 
 </BLOCKQUOTE>
 
 <P>
-See <A HREF=<tex2html_cr_mark>#robot-aliases#1092><tex2html_cr_mark></A>,page~<A HREF=<tex2html_cr_mark>#robot-aliases#1093><tex2html_cross_ref_visible_mark></A> for all aliases.
+See <A HREF="node7.html#robot-aliases">6.1</A>,page&nbsp;<A HREF="node7.html#robot-aliases"><IMG  ALIGN="BOTTOM" BORDER="1" ALT="[*]" SRC="crossref.png"></A> for all aliases.
 
 <P>
 
-<H2><A NAME="SECTION008815000000000000000"><tex2html_anchor_invisible_mark></A><A NAME="7610"><tex2html_anchor_invisible_mark></A>
-        <A NAME="kw-default-remind-task"><tex2html_anchor_mark></A><BR>
+<H2><A NAME="SECTION008815000000000000000"></A><A NAME="7800"></A>
+        <A NAME="kw-default-remind-task"></A>
+<BR>
 7.8.15 <TT>default_remind_task</TT>
 </H2>
 
@@ -1217,7 +1627,7 @@ See <A HREF=<tex2html_cr_mark>#robot-aliases#1092><tex2html_cr_mark></A>,page~<A
 (Default value: <TT>2month</TT>)
 
 <P>
-This parameter defines the default <A NAME="7614"><tex2html_anchor_invisible_mark></A><TT>remind_task</TT> list parameter.
+This parameter defines the default <A NAME="7804"></A><TT>remind_task</TT> list parameter.
 
 <P>
 
@@ -1227,8 +1637,9 @@ This parameter defines the default <A NAME="7614"><tex2html_anchor_invisible_mar
 
 <P>
 
-<H2><A NAME="SECTION00891000000000000000"><tex2html_anchor_invisible_mark></A><A NAME="7617"><tex2html_anchor_invisible_mark></A>  
-        <A NAME="kw-sympa-priority"><tex2html_anchor_mark></A><BR>
+<H2><A NAME="SECTION00891000000000000000"></A><A NAME="7807"></A>  
+        <A NAME="kw-sympa-priority"></A>
+<BR>
 7.9.1 <TT>sympa_priority</TT>
 </H2>
 
@@ -1243,8 +1654,9 @@ Available since release 2.3.1.
 
 <P>
 
-<H2><A NAME="SECTION00892000000000000000"><tex2html_anchor_invisible_mark></A><A NAME="7622"><tex2html_anchor_invisible_mark></A>  
-        <A NAME="kw-request-priority"><tex2html_anchor_mark></A><BR>
+<H2><A NAME="SECTION00892000000000000000"></A><A NAME="7812"></A>  
+        <A NAME="kw-request-priority"></A>
+<BR>
 7.9.2 <TT>request_priority</TT>
 </H2>
 
@@ -1260,8 +1672,9 @@ Available since release 2.3.3
 
 <P>
 
-<H2><A NAME="SECTION00893000000000000000"><tex2html_anchor_invisible_mark></A><A NAME="7626"><tex2html_anchor_invisible_mark></A>  
-        <A NAME="kw-owner-priority"><tex2html_anchor_mark></A><BR>
+<H2><A NAME="SECTION00893000000000000000"></A><A NAME="7816"></A>  
+        <A NAME="kw-owner-priority"></A>
+<BR>
 7.9.3 <TT>owner_priority</TT>
 </H2>
 
@@ -1278,8 +1691,9 @@ Available since release 2.3.3
 
 <P>
 
-<H2><A NAME="SECTION00894000000000000000"><tex2html_anchor_invisible_mark></A><A NAME="7630"><tex2html_anchor_invisible_mark></A>  
-        <A NAME="kw-default-list-priority"><tex2html_anchor_mark></A><BR>
+<H2><A NAME="SECTION00894000000000000000"></A><A NAME="7820"></A>  
+        <A NAME="kw-default-list-priority"></A>
+<BR>
 7.9.4 <TT>default_list_priority</TT>
 </H2>
 
@@ -1305,7 +1719,8 @@ required:
 
 <P>
 
-<H2><A NAME="SECTION008101000000000000000"><tex2html_anchor_invisible_mark></A><A NAME="7634"><tex2html_anchor_invisible_mark></A><BR>
+<H2><A NAME="SECTION008101000000000000000"></A><A NAME="7824"></A>
+<BR>
 7.10.1 <TT>db_type</TT>
 </H2>
 
@@ -1321,7 +1736,8 @@ This corresponds to the PERL DataBase Driver (DBD) name and
 
 <P>
 
-<H2><A NAME="SECTION008102000000000000000"><tex2html_anchor_invisible_mark></A><A NAME="7637"><tex2html_anchor_invisible_mark></A><BR>
+<H2><A NAME="SECTION008102000000000000000"></A><A NAME="7827"></A>
+<BR>
 7.10.2 <TT>db_name</TT>
 </H2> 
 
@@ -1330,12 +1746,13 @@ This corresponds to the PERL DataBase Driver (DBD) name and
 
 <P>
 Name of the database containing user information. See
-        detailed notes on database structure, <A HREF=<tex2html_cr_mark>#rdbms-struct#1116><tex2html_cr_mark></A>,
-        page~<A HREF=<tex2html_cr_mark>#rdbms-struct#1117><tex2html_cross_ref_visible_mark></A>.
+        detailed notes on database structure, <A HREF="#rdbms-struct"><IMG  ALIGN="BOTTOM" BORDER="1" ALT="[*]" SRC="crossref.png"></A>,
+        page&nbsp;<A HREF="#rdbms-struct"><IMG  ALIGN="BOTTOM" BORDER="1" ALT="[*]" SRC="crossref.png"></A>.
 
 <P>
 
-<H2><A NAME="SECTION008103000000000000000"><tex2html_anchor_invisible_mark></A><A NAME="7641"><tex2html_anchor_invisible_mark></A><BR>
+<H2><A NAME="SECTION008103000000000000000"></A><A NAME="7831"></A>
+<BR>
 7.10.3 <TT>db_host</TT>
 </H2>
 
@@ -1344,7 +1761,8 @@ Database host name.
 
 <P>
 
-<H2><A NAME="SECTION008104000000000000000"><tex2html_anchor_invisible_mark></A><A NAME="7644"><tex2html_anchor_invisible_mark></A><BR>
+<H2><A NAME="SECTION008104000000000000000"></A><A NAME="7834"></A>
+<BR>
 7.10.4 <TT>db_port</TT>
 </H2>
 
@@ -1353,7 +1771,8 @@ Database port.
 
 <P>
 
-<H2><A NAME="SECTION008105000000000000000"><tex2html_anchor_invisible_mark></A><A NAME="7647"><tex2html_anchor_invisible_mark></A><BR>
+<H2><A NAME="SECTION008105000000000000000"></A><A NAME="7837"></A>
+<BR>
 7.10.5 <TT>db_user</TT>
 </H2>
 
@@ -1362,16 +1781,18 @@ User with read access to the database.
 
 <P>
 
-<H2><A NAME="SECTION008106000000000000000"><tex2html_anchor_invisible_mark></A><A NAME="7650"><tex2html_anchor_invisible_mark></A><BR>
+<H2><A NAME="SECTION008106000000000000000"></A><A NAME="7840"></A>
+<BR>
 7.10.6 <TT>db_passwd</TT>
 </H2>
 
 <P>
-Password for <A NAME="7653"><tex2html_anchor_invisible_mark></A><TT>db_user</TT>.
+Password for <A NAME="7843"></A><TT>db_user</TT>.
 
 <P>
 
-<H2><A NAME="SECTION008107000000000000000"><tex2html_anchor_invisible_mark></A><A NAME="7656"><tex2html_anchor_invisible_mark></A><BR>
+<H2><A NAME="SECTION008107000000000000000"></A><A NAME="7846"></A>
+<BR>
 7.10.7 <TT>db_options</TT>
 </H2>
 
@@ -1380,14 +1801,14 @@ If these options are defined, they will be appended to the
 	database connect string.
 
 <P>
-Example for MySQL:
-<BLOCKQUOTE>
-</BLOCKQUOTE><PRE><tex2html_verbatim_mark>verbatim279#</PRE><BLOCKQUOTE>
-</BLOCKQUOTE>
+Example for MySQL:<PRE>
+db_options	mysql_read_default_file=/home/joe/my.cnf
+</PRE>
 
 <P>
 
-<H2><A NAME="SECTION008108000000000000000"><tex2html_anchor_invisible_mark></A><A NAME="7659"><tex2html_anchor_invisible_mark></A><BR>
+<H2><A NAME="SECTION008108000000000000000"></A><A NAME="7849"></A>
+<BR>
 7.10.8 <TT>db_env</TT>
 </H2>
 
@@ -1396,15 +1817,15 @@ Gives a list of environment variables to set before database connexion.
 	This is a ';' separated list of variable assignments.
 
 <P>
-Example for Oracle:
-<BLOCKQUOTE>
-</BLOCKQUOTE><PRE><tex2html_verbatim_mark>verbatim280#</PRE><BLOCKQUOTE>
-</BLOCKQUOTE>
+Example for Oracle:<PRE>
+db_env	ORACLE_TERM=vt100;ORACLE_HOME=/var/hote/oracle/7.3.4
+</PRE>
 
 <P>
 
-<H2><A NAME="SECTION008109000000000000000"><tex2html_anchor_invisible_mark></A><A NAME="7662"><tex2html_anchor_invisible_mark></A>
-<A NAME="db-additional-subscriber-fields"><tex2html_anchor_mark></A><BR>
+<H2><A NAME="SECTION008109000000000000000"></A><A NAME="7852"></A>
+<A NAME="db-additional-subscriber-fields"></A>
+<BR>
 7.10.9 <TT>db_additional_subscriber_fields</TT>
 </H2>
 
@@ -1412,50 +1833,50 @@ Example for Oracle:
 If your <B>subscriber_table</B> database table has more fields
 	than required by <I>Sympa</I> (because other programs access this
 	table), you can make <I>Sympa</I> load these fields. You will then be able to
-	use them from within mail/web templates and authorization scenarios (as [subscriber-<TT>;SPMgt;</TT>field]).
+	use them from within mail/web templates and authorization scenarios (as [subscriber-<TT>&gt;</TT>field]).
 	This parameter is a comma-separated list.
 
 <P>
-Example :
-<BLOCKQUOTE>
-</BLOCKQUOTE><PRE><tex2html_verbatim_mark>verbatim281#</PRE><BLOCKQUOTE>
-</BLOCKQUOTE>
+Example :<PRE>
+db_additional_subscriber_fields 	billing_delay,subscription_expiration
+</PRE>
 
 <P>
 
-<H2><A NAME="SECTION0081010000000000000000"><tex2html_anchor_invisible_mark></A><A NAME="7667"><tex2html_anchor_invisible_mark></A><BR>
+<H2><A NAME="SECTION0081010000000000000000"></A><A NAME="7857"></A>
+<BR>
 7.10.10 <TT>db_additional_user_fields</TT>
 </H2>
 
 <P>
-<A NAME="db-additional-user-fields"><tex2html_anchor_mark></A>
+<A NAME="db-additional-user-fields"></A>
 <P>
 If your <B>user_table</B> database table has more fields
 	than required by <I>Sympa</I> (because other programs access this
 	table), you can make <I>Sympa</I> load these fields. You will then be able to
-	use them from within mail/web templates (as [user-<TT>;SPMgt;</TT>field]).
+	use them from within mail/web templates (as [user-<TT>&gt;</TT>field]).
 
 <P>
 This parameter is a comma-separated list.
 
 <P>
-Example :
-<BLOCKQUOTE>
-</BLOCKQUOTE><PRE><tex2html_verbatim_mark>verbatim282#</PRE><BLOCKQUOTE>
-</BLOCKQUOTE>
+Example :<PRE>
+db_additional_user_fields 	address,gender
+</PRE>
 
 <P>
 
-<H2><A NAME="SECTION0081011000000000000000"><tex2html_anchor_invisible_mark></A><A NAME="7672"><tex2html_anchor_invisible_mark></A><BR>
+<H2><A NAME="SECTION0081011000000000000000"></A><A NAME="7862"></A>
+<BR>
 7.10.11 <TT>purge_user_table_task</TT>
 </H2>
 
 <P>
-<A NAME="purge-user-table-task"><tex2html_anchor_mark></A>
+<A NAME="purge-user-table-task"></A>
 <P>
 This parameter refers to the name of the task (Example: <TT>monthly</TT>) that will be regularly run
-by the <A NAME="7676"><tex2html_anchor_invisible_mark></A><TT>task_manager.pl</TT> to remove entries in the <A NAME="7679"><tex2html_anchor_invisible_mark></A>user_table  table that
-have no corresponding entries in the <A NAME="7680"><tex2html_anchor_invisible_mark></A>subscriber_table  table.
+by the <A NAME="7866"></A><TT>task_manager.pl</TT> to remove entries in the <A NAME="7869"></A>user_table  table that
+have no corresponding entries in the <A NAME="7870"></A>subscriber_table  table.
 
 <P>
 
@@ -1465,11 +1886,12 @@ have no corresponding entries in the <A NAME="7680"><tex2html_anchor_invisible_m
 
 <P>
 The following define your loop prevention policy for commands.
-(see~<A HREF=<tex2html_cr_mark>#loop-detection#1156><tex2html_cr_mark></A>, page~<A HREF=<tex2html_cr_mark>#loop-detection#1157><tex2html_cross_ref_visible_mark></A>)
+(see&nbsp;<A HREF="node17.html#loop-detection">16.7</A>, page&nbsp;<A HREF="node17.html#loop-detection"><IMG  ALIGN="BOTTOM" BORDER="1" ALT="[*]" SRC="crossref.png"></A>)
 
 <P>
 
-<H2><A NAME="SECTION008111000000000000000"><tex2html_anchor_invisible_mark></A><A NAME="7681"><tex2html_anchor_invisible_mark></A><BR>
+<H2><A NAME="SECTION008111000000000000000"></A><A NAME="7871"></A>
+<BR>
 7.11.1 <TT>loop_command_max</TT>
 </H2>
 
@@ -1483,7 +1905,8 @@ The maximum number of command reports sent to an e-mail
 
 <P>
 
-<H2><A NAME="SECTION008112000000000000000"><tex2html_anchor_invisible_mark></A><A NAME="7685"><tex2html_anchor_invisible_mark></A><BR>
+<H2><A NAME="SECTION008112000000000000000"></A><A NAME="7875"></A>
+<BR>
 7.11.2 <TT>loop_command_sampling_delay</TT>
 </H2> 
 
@@ -1496,7 +1919,8 @@ This parameter defines the delay in seconds before decrementing
 
 <P>
 
-<H2><A NAME="SECTION008113000000000000000"><tex2html_anchor_invisible_mark></A><A NAME="7689"><tex2html_anchor_invisible_mark></A><BR>
+<H2><A NAME="SECTION008113000000000000000"></A><A NAME="7879"></A>
+<BR>
 7.11.3 <TT>loop_command_decrease_factor</TT>
 </H2> 
 
@@ -1516,11 +1940,12 @@ The decrementation factor (<TT>from 0 to 1</TT>), used to
 <P>
 <I>Sympa</I> can optionally verify and use S/MIME signatures for security purposes.
 In this case, the three first following parameters must be set by the listmaster
-(see <A HREF=<tex2html_cr_mark>#smimeconf#1166><tex2html_cr_mark></A>,  page~<A HREF=<tex2html_cr_mark>#smimeconf#1167><tex2html_cross_ref_visible_mark></A>). The two others are optionnal.
+(see <A HREF="node27.html#smimeconf">26.4.2</A>,  page&nbsp;<A HREF="node27.html#smimeconf"><IMG  ALIGN="BOTTOM" BORDER="1" ALT="[*]" SRC="crossref.png"></A>). The two others are optionnal.
 
 <P>
 
-<H2><A NAME="SECTION008121000000000000000"><tex2html_anchor_invisible_mark></A><A NAME="7694"><tex2html_anchor_invisible_mark></A><BR>
+<H2><A NAME="SECTION008121000000000000000"></A><A NAME="7884"></A>
+<BR>
 7.12.1 <TT>openssl</TT>
 </H2>
 
@@ -1529,7 +1954,8 @@ The path for the openSSL binary file.
 
 <P>
 
-<H2><A NAME="SECTION008122000000000000000"><tex2html_anchor_invisible_mark></A><A NAME="7697"><tex2html_anchor_invisible_mark></A><BR>
+<H2><A NAME="SECTION008122000000000000000"></A><A NAME="7887"></A>
+<BR>
 7.12.2 <TT>capath</TT>
 </H2> 
 The directory path use by openssl for trusted CA certificates.
@@ -1537,14 +1963,15 @@ The directory path use by openssl for trusted CA certificates.
 <P>
 A directory of trusted certificates. The certificates should
 have names of the form: hash.0 or have symbolic links to
-them of this form (;SPMquot;hash;SPMquot; is the hashed certificate subject
+them of this form ("hash" is the hashed certificate subject
 name: see the -hash option of the openssl x509 utility). This
 directory should be the same as the  directory
 SSLCACertificatePath specified for mod_ssl module for Apache.
 
 <P>
 
-<H2><A NAME="SECTION008123000000000000000"><tex2html_anchor_invisible_mark></A><A NAME="7700"><tex2html_anchor_invisible_mark></A><BR>
+<H2><A NAME="SECTION008123000000000000000"></A><A NAME="7890"></A>
+<BR>
 7.12.3 <TT>cafile</TT>
 </H2> 
 This parameter sets the all-in-one file where you can assemble
@@ -1552,11 +1979,12 @@ the Certificates of Certification Authorities (CA) whose clients
 you deal with. These are used for Client Authentication. Such a
 file is simply the concatenation of the various PEM-encoded
 Certificate files, in order of preference. This can be used
-alternatively and/or additionally to <A NAME="7703"><tex2html_anchor_invisible_mark></A><TT>capath</TT>. 
+alternatively and/or additionally to <A NAME="7893"></A><TT>capath</TT>. 
 
 <P>
 
-<H2><A NAME="SECTION008124000000000000000"><tex2html_anchor_invisible_mark></A><A NAME="7706"><tex2html_anchor_invisible_mark></A><BR>
+<H2><A NAME="SECTION008124000000000000000"></A><A NAME="7896"></A>
+<BR>
 7.12.4 <TT>key_passwd</TT>
 </H2> 
 
@@ -1565,19 +1993,21 @@ The password for list private key encryption. If not
 	defined, <I>Sympa</I> assumes that list private keys are not encrypted.
 
 <P>
-<A NAME="certificate-task-config"><tex2html_anchor_mark></A>
-<H2><A NAME="SECTION008125000000000000000"><tex2html_anchor_invisible_mark></A><A NAME="7710"><tex2html_anchor_invisible_mark></A><BR>
+<A NAME="certificate-task-config"></A>
+<H2><A NAME="SECTION008125000000000000000"></A><A NAME="7900"></A>
+<BR>
 7.12.5 <TT>chk_cert_expiration_task</TT>
 </H2>
 
 <P>
 States the model version used to create the task which regularly checks the certificate
 expiration dates and warns users whose certificate have expired or are going to.
-To know more about tasks, see <A HREF=<tex2html_cr_mark>#tasks#1175><tex2html_cr_mark></A>, page~<A HREF=<tex2html_cr_mark>#tasks#1176><tex2html_cross_ref_visible_mark></A>.
+To know more about tasks, see <A HREF="node17.html#tasks">16.8</A>, page&nbsp;<A HREF="node17.html#tasks"><IMG  ALIGN="BOTTOM" BORDER="1" ALT="[*]" SRC="crossref.png"></A>.
 
 <P>
 
-<H2><A NAME="SECTION008126000000000000000"><tex2html_anchor_invisible_mark></A><A NAME="7713"><tex2html_anchor_invisible_mark></A><BR>
+<H2><A NAME="SECTION008126000000000000000"></A><A NAME="7903"></A>
+<BR>
 7.12.6 <TT>crl_update_task</TT>
 </H2>
 
@@ -1587,8 +2017,9 @@ revocation lists.
 
 <P>
 
-<H1><A NAME="SECTION008130000000000000000"><tex2html_anchor_invisible_mark></A>
-<A NAME="Antivirus_plug-in"><tex2html_anchor_mark></A><BR>
+<H1><A NAME="SECTION008130000000000000000"></A>
+<A NAME="Antivirus_plug-in"></A>
+<BR>
 7.13 Antivirus plug-in
 </H1>
 
@@ -1598,7 +2029,8 @@ You must then set two parameters.
 
 <P>
 
-<H2><A NAME="SECTION008131000000000000000"><tex2html_anchor_invisible_mark></A><A NAME="7717"><tex2html_anchor_invisible_mark></A><BR>
+<H2><A NAME="SECTION008131000000000000000"></A><A NAME="7907"></A>
+<BR>
 7.13.1 <TT>antivirus_path</TT>
 </H2>
 
@@ -1606,14 +2038,14 @@ You must then set two parameters.
 The path to your favorite antivirus binary file (including the binary file).
 
 <P>
-Example :
-<BLOCKQUOTE>
-</BLOCKQUOTE><PRE><tex2html_verbatim_mark>verbatim283#</PRE><BLOCKQUOTE>
-</BLOCKQUOTE>
+Example :<PRE>
+antivirus_path		/usr/local/bin/uvscan
+</PRE>
 
 <P>
 
-<H2><A NAME="SECTION008132000000000000000"><tex2html_anchor_invisible_mark></A><A NAME="7720"><tex2html_anchor_invisible_mark></A><BR>
+<H2><A NAME="SECTION008132000000000000000"></A><A NAME="7910"></A>
+<BR>
 7.13.2 <TT>antivirus_args</TT>
 </H2> 
 
@@ -1623,38 +2055,37 @@ You must set them so as to get the virus name.
 You should use, if available, the 'unzip' option and check all extensions.
 
 <P>
-Example with uvscan :
-<BLOCKQUOTE>
-</BLOCKQUOTE><PRE><tex2html_verbatim_mark>verbatim284#</PRE><BLOCKQUOTE>
-</BLOCKQUOTE>
+Example with uvscan :<PRE>
+antivirus_args		--summary --secure
+</PRE>
 
 <P>
-Example with fsav :
-<BLOCKQUOTE>
-</BLOCKQUOTE><PRE><tex2html_verbatim_mark>verbatim285#</PRE><BLOCKQUOTE>
-</BLOCKQUOTE>
+Example with fsav :<PRE>
+antivirus_args		--dumb	--archive
+</PRE>
 
 <P>
-Exemple with AVP :
-<BLOCKQUOTE>
-</BLOCKQUOTE><PRE><tex2html_verbatim_mark>verbatim286#</PRE><BLOCKQUOTE>
-</BLOCKQUOTE>
+Exemple with AVP :<PRE>
+antivirus_path  /opt/AVP/kavscanner
+antivirus_args  -Y -O- -MP -I0
+</PRE>
 
 <P>
-Exemple with Sophos :
-<BLOCKQUOTE>
-</BLOCKQUOTE><PRE><tex2html_verbatim_mark>verbatim287#</PRE><BLOCKQUOTE>
-</BLOCKQUOTE>
+Exemple with Sophos :<PRE>
+antivirus_path  /usr/local/bin/sweep
+antivirus_args  -nc -nb -ss -archive
+</PRE>
 
 <P>
-Exemple with Clam :
-<BLOCKQUOTE>
-</BLOCKQUOTE><PRE><tex2html_verbatim_mark>verbatim288#</PRE><BLOCKQUOTE>
-</BLOCKQUOTE>
+Exemple with Clam :<PRE>
+antivirus_path  /usr/local/bin/clamscan
+antivirus_args  --stdout
+</PRE>
 
 <P>
 
-<H2><A NAME="SECTION008133000000000000000"><tex2html_anchor_invisible_mark></A><A NAME="7723"><tex2html_anchor_invisible_mark></A><BR>
+<H2><A NAME="SECTION008133000000000000000"></A><A NAME="7913"></A>
+<BR>
 7.13.3 <TT>antivirus_notify</TT>
 </H2> <TT>sender</TT> | <TT>nobody</TT>
 
@@ -1667,3 +2098,38 @@ detected.
 
 <P>
 
+<HR>
+<!--Navigation Panel-->
+<A NAME="tex2html848"
+  HREF="node9.html">
+<IMG WIDTH="37" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="next" SRC="next.png"></A> 
+<A NAME="tex2html842"
+  HREF="sympa.html">
+<IMG WIDTH="26" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="up" SRC="up.png"></A> 
+<A NAME="tex2html836"
+  HREF="node7.html">
+<IMG WIDTH="63" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="previous" SRC="prev.png"></A> 
+<A NAME="tex2html844"
+  HREF="node1.html">
+<IMG WIDTH="65" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="contents" SRC="contents.png"></A> 
+<A NAME="tex2html846"
+  HREF="node30.html">
+<IMG WIDTH="43" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="index" SRC="index.png"></A> 
+<BR>
+<B> Next:</B> <A NAME="tex2html849"
+  HREF="node9.html">8. Sympa and its database</A>
+<B> Up:</B> <A NAME="tex2html843"
+  HREF="sympa.html">Sympa Mailing Lists Management Software version</A>
+<B> Previous:</B> <A NAME="tex2html837"
+  HREF="node7.html">6. Mail aliases</A>
+ &nbsp; <B>  <A NAME="tex2html845"
+  HREF="node1.html">Contents</A></B> 
+ &nbsp; <B>  <A NAME="tex2html847"
+  HREF="node30.html">Index</A></B> 
+<!--End of Navigation Panel-->
+<ADDRESS>
+root
+2005-05-25
+</ADDRESS>
+</BODY>
+</HTML>

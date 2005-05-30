@@ -69,7 +69,7 @@ Send a message to the list owners telling that someone
 wanted to subscribe to the list.
 
 =item send_to_editor ( MSG )
-
+    
 Send a Mail::Internet type object to the editor (for approval).
 
 =item send_msg ( MSG )
@@ -2272,6 +2272,9 @@ sub distribute_msg {
 	}else {
 	    $subject_field = '['.$parsed_tag[0].'] '.$subject_field;
 	}
+ 	## Encode subject using initial charset
+ 	$subject_field = MIME::Words::encode_mimewords($subject_field, ('Encode' => 'Q', 'Charset' => $message->{'subject_charset'}));
+
 	$message->{'msg'}->head->add('Subject', $subject_field);
     }
     
@@ -2321,9 +2324,6 @@ sub distribute_msg {
 	$hdr->add($1, $2) if ($i=~/^([\S\-\:]*)\s(.*)$/);
     }
     
-    ## Add X-Sympa-Topic if tagged message
-    
-
     ## Add RFC 2919 header field
     if ($hdr->get('List-Id')) {
 	&do_log('notice', 'Found List-Id: %s', $hdr->get('List-Id'));
@@ -2801,7 +2801,7 @@ sub send_global_file {
     }
 
     ## Lang
-    $data->{'lang'} = $data->{'lang'} = $data->{'user'}{'lang'} || &Conf::get_robot_conf($robot, 'lang');
+    $data->{'lang'} = $data->{'lang'} || $data->{'user'}{'lang'} || &Conf::get_robot_conf($robot, 'lang');
 
     ## What file   
     my $tt2_include_path = ["$Conf{'etc'}/$robot/mail_tt2/".&Language::Lang2Locale($data->{'lang'}),
@@ -3445,8 +3445,6 @@ sub send_notify_to_listmaster {
 	&do_log('err','List::send_notify_to_listmaster(%s,%s) : error on incoming parameter "$param", it must be a ref on HASH or a ref on ARRAY', $operation, $robot );
 	return undef;
     }
-
-    
     return 1;
 }
 
@@ -6414,7 +6412,7 @@ sub search{
 	    $status = $ldap->bind();
 	}
 
-	unless ($status) {
+	unless ($status && ($status->code == 0)) {
 	    do_log('notice','Unable to bind to the LDAP server %s:%d',$host, $port);
 	    next;
 	}
@@ -7446,14 +7444,17 @@ sub _include_users_ldap {
     }
     
     do_log('debug2', "Connected to LDAP server %s", join(',',@{$host}));
+    my $status;
     
     if ( defined $user ) {
-	unless ($ldaph->bind ($user, password => "$passwd")) {
+	$status = $ldaph->bind ($user, password => "$passwd");
+	unless (defined($status) && ($status->code == 0)) {
 	    do_log('notice',"Can\'t bind with server %s as user '$user' : $@", join(',',@{$host}));
 	    return undef;
 	}
     }else {
-	unless ($ldaph->bind ) {
+	$status = $ldaph->bind;
+	unless (defined($status) && ($status->code == 0)) {
 	    do_log('notice',"Can\'t do anonymous bind with server %s : $@", join(',',@{$host}));
 	    return undef;
 	}
@@ -7583,14 +7584,17 @@ sub _include_users_ldap_2level {
     }
     
     do_log('debug2', "Connected to LDAP server %s", join(',',@{$host}));
+    my $status;
     
     if ( defined $user ) {
-	unless ($ldaph->bind ($user, password => "$passwd")) {
+	$status = $ldaph->bind ($user, password => "$passwd");
+	unless (defined($status) && ($status->code == 0)) {
 	    do_log('err',"Can\'t bind with server %s as user '$user' : $@", join(',',@{$host}));
 	    return undef;
 	}
     }else {
-	unless ($ldaph->bind ) {
+	$status = $ldaph->bind;
+	unless (defined($status) && ($status->code == 0)) {
 	    do_log('err',"Can\'t do anonymous bind with server %s : $@", join(',',@{$host}));
 	    return undef;
 	}
@@ -9210,8 +9214,27 @@ sub get_db_field_type {
     return undef;
 }
 
+## Just check if DB connection is ok
+sub check_db_connect {
+    
+    ## Is the Database defined
+    unless ($Conf{'db_name'}) {
+	&do_log('err', 'No db_name defined in configuration file');
+	return undef;
+    }
+    
+    unless ($dbh and $dbh->ping) {
+	unless (&db_connect('just_try')) {
+	    &do_log('err', 'Failed to connect to database');	   
+	    return undef;
+	}
+    }
+
+    return 1;
+}
+
 sub probe_db {
-    do_log('debug3', 'List::probe_db()');    
+    &do_log('debug3', 'List::probe_db()');    
     my (%checked, $table);
 
     ## Database structure
@@ -9259,7 +9282,7 @@ sub probe_db {
 		    'user_admin' => 1,
 		    'role_admin' => 1,
 		    'date_admin' => 1);
-
+    
     ## Is the Database defined
     unless ($Conf{'db_name'}) {
 	&do_log('info', 'No db_name defined in configuration file');
@@ -9270,26 +9293,30 @@ sub probe_db {
 	    unless (&create_db()) {
 		return undef;
 	    }
-	    return undef unless &db_connect();
+	    if ($ENV{'HTTP_HOST'}) { ## Web context
+		return undef unless &db_connect('just_try');
+	    }else {
+		return undef unless &db_connect();
+	    }
 	}
     }
-	
+    
     my (@tables, $fields, %real_struct);
     if ($Conf{'db_type'} eq 'mysql') {
 	
 	## Get tables
 	@tables = $dbh->tables();
-
+	
 	## Clean table names that could be surrounded by `` (recent DBD::mysql release)
 	foreach my $t (@tables) {
 	    $t =~ s/^\`(.+)\`$/\1/;
 	}
-
+	
 	unless (defined $#tables) {
 	    &do_log('info', 'Can\'t load tables list from database %s : %s', $Conf{'db_name'}, $dbh->errstr);
 	    return undef;
 	}
-
+	
 	## Check required tables
 	foreach my $t1 (keys %db_struct) {
 	    my $found;
@@ -9301,23 +9328,23 @@ sub probe_db {
 		    &do_log('err', 'Could not create table %s in database %s : %s', $t1, $Conf{'db_name'}, $dbh->errstr);
 		    next;
 		}
-
+		
 		&do_log('notice', 'Table %s created in database %s', $t1, $Conf{'db_name'});
 		push @tables, $t1;
 	    }
 	}
 	
-
+	
 	## Get fields
 	foreach my $t (@tables) {
-
+	    
 #	    unless ($sth = $dbh->table_info) {
 #	    unless ($sth = $dbh->prepare("LISTFIELDS $t")) {
 	    unless ($sth = $dbh->prepare("SHOW FIELDS FROM $t")) {
 		do_log('err','Unable to prepare SQL query : %s', $dbh->errstr);
 		return undef;
 	    }
-
+	    
 	    unless ($sth->execute) {
 		do_log('err','Unable to execute SQL query : %s', $dbh->errstr);
 		return undef;
@@ -9334,37 +9361,37 @@ sub probe_db {
 	    &do_log('info', 'Can\'t load tables list from database %s', $Conf{'db_name'});
 	    return undef;
 	}
-
+	
     }elsif ($Conf{'db_type'} eq 'Oracle') {
  	
  	my $statement = "SELECT table_name FROM user_tables";	 
-
+	
 	push @sth_stack, $sth;
-
+	
 	unless ($sth = $dbh->prepare($statement)) {
 	    do_log('err','Unable to prepare SQL query : %s', $dbh->errstr);
 	    return undef;
      	}
-
+	
        	unless ($sth->execute) {
 	    &do_log('err','Can\'t load tables list from database and Unable to perform SQL query %s : %s ',$statement, $dbh->errstr);
 	    return undef;
      	}
- 
+	
 	## Process the SQL results
      	while (my $table= $sth->fetchrow()) {
 	    push @tables, lc ($table);   	
 	}
 	
      	$sth->finish();
-
+	
 	$sth = pop @sth_stack;
-
+	
     }elsif ($Conf{'db_type'} eq 'Sybase') {
-  
+	
 	my $statement = sprintf "SELECT name FROM %s..sysobjects WHERE type='U'",$Conf{'db_name'};
 #	my $statement = "SELECT name FROM sympa..sysobjects WHERE type='U'";     
- 
+	
 	push @sth_stack, $sth;
 	unless ($sth = $dbh->prepare($statement)) {
 	    do_log('err','Unable to prepare SQL query : %s', $dbh->errstr);
@@ -9374,7 +9401,7 @@ sub probe_db {
 	    &do_log('err','Can\'t load tables list from database and Unable to perform SQL query %s : %s ',$statement, $dbh->errstr);
 	    return undef;
 	}
-
+	
 	## Process the SQL results
 	while (my $table= $sth->fetchrow()) {
 	    push @tables, lc ($table);   
@@ -9383,7 +9410,7 @@ sub probe_db {
 	$sth->finish();
 	$sth = pop @sth_stack;
     }
-    
+
     foreach $table ( @tables ) {
 	$checked{$table} = 1;
     }
@@ -9394,7 +9421,7 @@ sub probe_db {
 	    return undef;
 	}
     }
-
+    
     ## Check tables structure if we could get it
     if (%real_struct) {
 	foreach my $t (keys %db_struct) {
@@ -9406,18 +9433,18 @@ sub probe_db {
 	    foreach my $f (sort keys %{$db_struct{$t}}) {
 		unless ($real_struct{$t}{$f}) {
 		    &do_log('info', 'Field \'%s\' (table \'%s\' ; database \'%s\') was NOT found. Attempting to add it...', $f, $t, $Conf{'db_name'});
-
+		    
 		    my $options;
 		    if ($not_null{$f}) {
 			$options .= 'NOT NULL';
 		    }
-		    
+		
 		    unless ($dbh->do("ALTER TABLE $t ADD $f $db_struct{$t}{$f} $options")) {
 			&do_log('err', 'Could not add field \'%s\' to table\'%s\'.', $f, $t);
 			&do_log('err', 'Sympa\'s database structure may have change since last update ; please check RELEASE_NOTES');
 			return undef;
 		    }
-
+		    
 		    if ($f eq 'email_user') {
 			&do_log('info', 'Setting %s field as PRIMARY', $f);
 			unless ($dbh->do("ALTER TABLE $t ADD PRIMARY KEY ($f)")) {
@@ -9425,7 +9452,7 @@ sub probe_db {
 			    return undef;
 			}
 		    }
-
+		    
 		    if ($f eq 'user_subscriber') {
 			&do_log('info', 'Setting list_subscriber,user_subscriber fields as PRIMARY');
 			unless ($dbh->do("ALTER TABLE $t ADD PRIMARY KEY (list_subscriber,user_subscriber)")) {
@@ -9437,8 +9464,8 @@ sub probe_db {
 			    return undef;
 			}
 		    }
-
-		      if ($f eq 'user_admin') {
+		    
+		    if ($f eq 'user_admin') {
 			&do_log('info', 'Setting list_admin,user_admin,role_admin fields as PRIMARY');
 			unless ($dbh->do("ALTER TABLE $t ADD PRIMARY KEY (list_admin,user_admin,role_admin)")) {
 			    &do_log('err', 'Could not set field field \'list_admin,user_admin,role_admin\' as PRIMARY KEY, table\'%s\'.', $t);
@@ -9449,10 +9476,10 @@ sub probe_db {
 			    return undef;
 			}
 		    }
-
+		    
 		    
 		    &do_log('info', 'Field %s added to table %s', $f, $t);
-
+		    
 		    ## Remove temporary DB field
 		    if ($real_struct{$t}{'temporary'}) {
 			unless ($dbh->do("ALTER TABLE $t DROP temporary")) {
@@ -9460,26 +9487,34 @@ sub probe_db {
 			}
 			delete $real_struct{$t}{'temporary'};
 		    }
-
+		    
 		    next;
 		}
 		
 		
-		unless ($real_struct{$t}{$f} eq $db_struct{$t}{$f}) {
-		     &do_log('err', 'Field \'%s\'  (table \'%s\' ; database \'%s\') does NOT have awaited type (%s). Attempting to change it...', $f, $t, $Conf{'db_name'}, $db_struct{$t}{$f});
-		     
-		     unless ($dbh->do("ALTER TABLE $t CHANGE $f $f $db_struct{$t}{$f}")) {
-			 &do_log('err', 'Could not change field \'%s\' in table\'%s\'.', $f, $t);
-			 &do_log('err', 'Sympa\'s database structure may have change since last update ; please check RELEASE_NOTES');
-			 return undef;
-		     }
-		     
-		     &do_log('info', 'Field %s in table %s, structur updated', $f, $t);
+		## Change DB types if different and if update_db_types enabled
+		if ($Conf{'update_db_field_types'} eq 'auto') {
+		    unless ($real_struct{$t}{$f} eq $db_struct{$t}{$f}) {
+			&do_log('err', 'Field \'%s\'  (table \'%s\' ; database \'%s\') does NOT have awaited type (%s). Attempting to change it...', $f, $t, $Conf{'db_name'}, $db_struct{$t}{$f});
+			
+			my $options;
+			if ($not_null{$f}) {
+			    $options .= 'NOT NULL';
+			}
+			
+			&do_log('notice', "ALTER TABLE $t CHANGE $f $f $db_struct{$t}{$f} $options");
+			unless ($dbh->do("ALTER TABLE $t CHANGE $f $f $db_struct{$t}{$f} $options")) {
+			    &do_log('err', 'Could not change field \'%s\' in table\'%s\'.', $f, $t);
+			    &do_log('err', 'Sympa\'s database structure may have change since last update ; please check RELEASE_NOTES');
+			    return undef;
+			}
+			
+			&do_log('info', 'Field %s in table %s, structur updated', $f, $t);
+		    }
 		}
 	    }
 	}
     }
-    
     return 1;
 }
 
@@ -10852,7 +10887,7 @@ sub modifying_msg_topic_for_subscribers(){
 ####################################################
 # Select users subscribed to a topic that is in
 # the topic list incoming when reception mode is 'mail', and the other
-# subscribers (recpetion mode different from 'mail')
+# subscribers (recpetion mode different from 'mail'), 'mail' and no topic subscription
 # 
 # IN : -$self(+) : ref(List)
 #      -$string_topic(+) : string splitted by ','
@@ -10880,6 +10915,10 @@ sub select_subscribers_for_topic {
 	my $info_user = $self->get_subscriber($user);
 
 	if ($info_user->{'reception'} ne 'mail') {
+	    push @selected_users,$user;
+	    next;
+	}
+	unless ($info_user->{'topics'}) {
 	    push @selected_users,$user;
 	    next;
 	}
@@ -11054,6 +11093,26 @@ sub get_subscription_requests {
     closedir SPOOL;
 
     return \%subscriptions;
+} 
+
+sub get_subscription_request_count {
+    my ($self) = shift;
+    do_log('debug2', 'List::get_subscription_requests_count(%s)', $self->{'name'});
+
+    my %subscriptions;
+    my $i = 0 ;
+
+    unless (opendir SPOOL, $Conf{'queuesubscribe'}) {
+	&do_log('info', 'Unable to read spool %s', $Conf{'queuemod'});
+	return undef;
+    }
+
+    foreach my $filename (sort grep(/^$self->{'name'}\.\d+\.\d+$/, readdir SPOOL)) {
+	$i++;
+    }
+    closedir SPOOL;
+
+    return $i;
 } 
 
 sub delete_subscription_request {

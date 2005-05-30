@@ -50,7 +50,8 @@ $separator="------- CUT --- CUT --- CUT --- CUT --- CUT --- CUT --- CUT -------"
 	   'sql_query' => '(SELECT|select).*',
 	   'scenario' => '[\w,\.\-]+',
 	   'task' => '\w+',
-	   'datasource' => '[\w-]+'
+	   'datasource' => '[\w-]+',
+	   'uid' => '[\w\-\.\+]+',
 	   );
 
 my %openssl_errors = (1 => 'an error occurred parsing the command options',
@@ -276,6 +277,109 @@ sub get_list_list_tpl {
     }
 
     return ($list_templates);
+}
+
+#to be used before creating a file in a directory that may not exist allready. 
+sub mk_parent_dir {
+    my $file = shift;
+    $file =~ /^(.*)\/([^\/])*$/ ;
+    my $dir = $1;
+    do_log('info', "xxxxxxxxxxxxxxxxxxxxxxx create $dir");
+    return if (-d $dir);
+    return undef unless (mkdir ($dir, 0755));
+}
+
+sub get_templates_list {
+
+    my $type = shift;
+    my $robot = shift;
+    my $listdir = shift;
+
+do_log('info', "xxxxxxxxxxxxxxxxxxxxxxxxxx get_templates_list () : $type $robot $listdir");
+    unless (($type == 'web')||($type == 'mail')) {
+	do_log('info', 'get_templates_list () : internal error incorrect parameter');
+    }
+
+    my $distrib_dir = '--ETCBINDIR--/'.$type.'_tt2';
+    my $site_dir = $Conf{'etc'}.'/'.$type.'_tt2';
+    my $robot_dir = $Conf{'etc'}.'/'.$robot.'/'.$type.'_tt2';
+
+    my @try;
+    push @try, $distrib_dir ;
+    push @try, $site_dir ;
+    push @try, $robot_dir;
+    
+    if (defined ($listdir)) {
+	$listdir .='/'.$type.'_tt2';
+	push @try, $listdir ;
+    }
+    my $i = 0 ;
+    my $tpl;
+    foreach my $dir (@try) {
+	do_log('info', "xxxxxxxxxxxxxxxxxxxxxxxxxx get_templates_list () : open '$dir'");
+	next unless opendir (DIR, $dir);
+	foreach my $file ( readdir(DIR)) {	    
+	    next unless ($file =~ /\.tt2$/);
+	    if ($dir eq $distrib_dir){$tpl->{$file}{'distrib'} = $dir.'/'.$file ;}
+	    if ($dir eq $site_dir)   {$tpl->{$file}{'site'} =  $dir.'/'.$file;}
+	    if ($dir eq $robot_dir)  {$tpl->{$file}{'robot'} = $dir.'/'.$file;}
+	    if ($dir eq $listdir)    {$tpl->{$file}{'listname'} = $dir.'/'.$file ; do_log('info', "xxxxxxxxxxxxxxxxxxxxxxxxxx found list template $file");}
+	}
+	closedir DIR;
+    }
+
+    open DUMP, ">/tmp/dump";
+    &tools::dump_var($tpl, 0, \*DUMP);
+    close DUMP;
+    return ($tpl);
+}
+
+# return the path for a specific template
+sub get_template_path {
+
+    my $type = shift;
+    my $robot = shift;
+    my $scope = shift;
+    my $tpl = shift;
+    my $listname = shift;
+
+    do_log('info', "get_templates_path () : type=$type; robot $robot scope $scope tpl $tpl listdir $listname");
+
+    if ($listname) {
+	chomp ($listname);
+	unless ($namedlist = new List ($listname, $robot)) {
+	    return undef;		
+	}
+    }
+
+    my $listdir = $namedlist->{'dir'} if (defined $namedlist);
+
+    unless (($type == 'web')||($type == 'mail')) {
+	do_log('info', 'get_templates_path () : internal error incorrect parameter');
+    }
+
+    my $distrib_dir = '--ETCBINDIR--/'.$type.'_tt2';
+    my $site_dir = $Conf{'etc'}.'/'.$type.'_tt2';
+    my $robot_dir = $Conf{'etc'}.'/'.$robot.'/'.$type.'_tt2';
+
+    if ($scope eq 'list')  {
+do_log('info', "get_templates_path () : xxxxxxxxxxxxxxxx$listdir/$tpl");
+	return $listdir.'/'.$type.'_tt2/'.$tpl ;
+    }
+
+    if (($scope eq 'robot')||($scope eq 'list'))  {
+do_log('info', "get_templates_path () : xxxxxxxxxxxxxxxx $robot_dir/$tpl");
+	return $robot_dir.'/'.$tpl;
+    }
+    if (($scope eq 'site')||($scope eq 'robot')||($scope eq 'list')) {
+do_log('info', "get_templates_path () : xxxxxxxxxxxxxxxx $site_dir/$tpl");
+	return $site_dir.'/'.$tpl;
+    }
+    
+    if (($scope eq 'distrib')||($scope eq 'site')||($scope eq 'robot')||($scope eq 'list')) {
+do_log('info', "get_templates_path () : xxxxxxxxxxxxxxxx $distrib_dir/$tpl");
+	return $distrib_dir.'/'.$tpl;
+    }
 }
 
 # input object msg and listname, output signed message object
@@ -1565,7 +1669,18 @@ sub get_dir_size {
 sub valid_email {
     my $email = shift;
     
-    $email =~ /^$tools::regexp{'email'}$/;
+    unless ($email =~ /^$tools::regexp{'email'}$/) {
+	do_log('err', "Invalid email address '%s'", $email);
+	return undef;
+    }
+    
+    ## Forbidden characters
+    if ($email =~ /[\|\$\*\?\!]/) {
+	do_log('err', "Invalid email address '%s'", $email);
+	return undef;
+    }
+
+    return 1;
 }
 
 ## Clean email address
@@ -1839,7 +1954,7 @@ sub dump_var {
 		print $fd "\t"x$level.$index."\n";
 		&dump_var($var->[$index], $level+1, $fd);
 	    }
-	}elsif (ref($var) eq 'HASH') {
+	}else {
 	    foreach my $key (sort keys %{$var}) {
 		print $fd "\t"x$level.'_'.$key.'_'."\n";
 		&dump_var($var->{$key}, $level+1, $fd);
