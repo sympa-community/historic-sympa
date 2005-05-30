@@ -48,7 +48,7 @@ my %language_equiv = ( 'zh_CN' => 'cn',
 
 ## Supported languages
 my @supported_languages = ('cs_CZ','de_DE','en_US','es_ES','et_EE',
-			   'fi_FI','fr_FR','hu_HU','it_IT','nl_NL',
+			   'fi_FI','fr_FR','hu_HU','it_IT','nl_NL','oc_FR',
 			   'pl_PL','pt_PT','ro_RO','zh_CN','zh_TW');
 
 my %lang2locale = ('cz' => 'cs_CZ',
@@ -61,11 +61,31 @@ my %lang2locale = ('cz' => 'cs_CZ',
 		   'hu' => 'hu_HU',
 		   'it' => 'it_IT',
 		   'nl' => 'nl_NL',
+		   'oc' => 'oc_FR',
 		   'pl' => 'pl_PL',
 		   'pt' => 'pt_PT',
 		   'ro' => 'ro_RO',
 		   'cn' => 'zh_CN',
 		   'tw' => 'zh_TW');
+
+## Used to perform setlocale on FreeBSD / Solaris
+my %locale2charset = ('cs_CZ' => 'iso8859-2',
+		      'de_DE' => 'iso8859-1',
+		      'en_US' => 'us-ascii',
+		      'es_ES' => 'iso8859-1',
+		      'et_EE' => 'iso8859-4',
+		      'fi_FI' => 'iso8859-1',
+		      'fr_FR' => 'iso8859-1',
+		      'hu_HU' => 'iso8859-2',
+		      'it_IT' => 'iso8859-1',
+		      'nl_NL' => 'iso8859-1',
+		      'oc_FR' => 'iso8859-1',		      
+		      'pl_PL' => 'iso8859-2',
+		      'pt_PT' => 'iso8859-1',
+		      'ro_RO' => 'iso8859-2',
+		      'zh_CN' => 'utf-8',
+		      'zh_TW' => 'big5',
+		      );
 
 my $recode;
 
@@ -105,8 +125,12 @@ sub SetLang {
 
     ## Set Locale::Messages context
     unless (setlocale(&POSIX::LC_ALL, $locale)) {
-	&do_log('err','Failed to setlocale(%s)', $locale);
+	unless (setlocale(&POSIX::LC_ALL, $lang)) {
+	    unless (setlocale(&POSIX::LC_ALL, $locale.'.'.$locale2charset{$locale})) {
+		&do_log('err','Failed to setlocale(%s) ; you should edit your /etc/locale.gen or /etc/sysconfig/i18n files', $locale2charset{$locale});
 	return undef;
+    }
+	}
     }
     $current_lang = $lang;
     $current_locale = $locale;
@@ -149,11 +173,6 @@ sub maketext {
     my $msg = shift;
 
 #    &do_log('notice','Maketext: %s', $msg);
-
-    ## xgettext.pl bug adds a \n to multi-lined strings
-    if ($msg =~ /\n.+/m) {
-	$msg .= "\n";
-    }
 
     my $translation = &gettext ($msg);
 

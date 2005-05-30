@@ -1,5 +1,5 @@
-# Message.pm - This module includes all list processing functions
-# <!-- RCS Identication ; $Revision$ ; $Date$ -->
+# Message.pm - This module includes Message processing functions
+#<!-- RCS Identication ; $Revision$ ; $Date$ --> 
 
 #
 # Sympa - SYsteme de Multi-Postage Automatique
@@ -92,6 +92,11 @@ sub new {
     }
     $message->{'sender'} = lc($sender_hdr[0]->address);
 
+    unless (&tools::valid_email($message->{'sender'})) {
+	do_log('err', "Invalid From: field '%s'", $message->{'sender'});
+	return undef;
+    }
+
     ## Store decoded subject
     my @decoded_subject =  &MIME::Words::decode_mimewords($hdr->get('Subject'));
     foreach my $token (@decoded_subject) {
@@ -175,6 +180,12 @@ sub new {
 	
     }
 
+    ## TOPICS
+    my $topics;
+    if ($topics = $hdr->get('X-Sympa-Topic')){
+	$message->{'topic'} = $topics;
+    }
+
     ## Bless Message object
     bless $message, $pkg;
 
@@ -202,6 +213,31 @@ sub dump {
 
     return 1;
 }
+
+## Add topic and put header X-Sympa-Topic
+sub add_topic {
+    my ($self,$topic) = @_;
+
+    $self->{'topic'} = $topic;
+    my $hdr = $self->{'msg'}->head;
+    $hdr->add('X-Sympa-Topic', $topic);
+
+    return 1;
+}
+
+
+## Get topic
+sub get_topic {
+    my ($self) = @_;
+
+    if (defined $self->{'topic'}) {
+	return $self->{'topic'};
+
+    } else {
+	return '';
+    }
+}
+
 
 ## Packages must return true.
 1;

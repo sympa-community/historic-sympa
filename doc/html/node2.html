@@ -16,7 +16,7 @@ original version by:  Nikos Drakos, CBLU, University of Leeds
 <META NAME="resource-type" CONTENT="document">
 <META NAME="distribution" CONTENT="global">
 
-<META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=EUC-JP">
+<META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=iso-8859-1">
 <META NAME="Generator" CONTENT="jLaTeX2HTML v2002-2-1 JA patch-2.0">
 <META HTTP-EQUIV="Content-Style-Type" CONTENT="text/css">
 
@@ -30,50 +30,50 @@ original version by:  Nikos Drakos, CBLU, University of Leeds
 
 <BODY TEXT="#000000" BGCOLOR="#ffffff">
 <!--Navigation Panel-->
-<A NAME="tex2html686"
+<A NAME="tex2html732"
   HREF="node3.html">
 <IMG WIDTH="37" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="next" SRC="next.png"></A> 
-<A NAME="tex2html680"
+<A NAME="tex2html726"
   HREF="sympa.html">
 <IMG WIDTH="26" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="up" SRC="up.png"></A> 
-<A NAME="tex2html674"
+<A NAME="tex2html720"
   HREF="node1.html">
 <IMG WIDTH="63" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="previous" SRC="prev.png"></A> 
-<A NAME="tex2html682"
+<A NAME="tex2html728"
   HREF="node1.html">
 <IMG WIDTH="65" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="contents" SRC="contents.png"></A> 
-<A NAME="tex2html684"
-  HREF="node26.html">
+<A NAME="tex2html730"
+  HREF="node30.html">
 <IMG WIDTH="43" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="index" SRC="index.png"></A> 
 <BR>
-<B> :</B> <A NAME="tex2html687"
+<B> Next:</B> <A NAME="tex2html733"
   HREF="node3.html">2. what does Sympa consist of</A>
-<B> :</B> <A NAME="tex2html681"
+<B> Up:</B> <A NAME="tex2html727"
   HREF="sympa.html">Sympa Mailing Lists Management Software version</A>
-<B> :</B> <A NAME="tex2html675"
-  HREF="node1.html">目次</A>
- &nbsp; <B>  <A NAME="tex2html683"
-  HREF="node1.html">目次</A></B> 
- &nbsp; <B>  <A NAME="tex2html685"
-  HREF="node26.html">索引</A></B> 
+<B> Previous:</B> <A NAME="tex2html721"
+  HREF="node1.html">Contents</A>
+ &nbsp; <B>  <A NAME="tex2html729"
+  HREF="node1.html">Contents</A></B> 
+ &nbsp; <B>  <A NAME="tex2html731"
+  HREF="node30.html">Index</A></B> 
 <BR>
 <BR>
 <!--End of Navigation Panel-->
 <!--Table of Child-Links-->
-
+<A NAME="CHILD_LINKS"><STRONG>Subsections</STRONG></A>
 
 <UL>
-<LI><A NAME="tex2html688"
+<LI><A NAME="tex2html734"
   HREF="node2.html#SECTION00210000000000000000">1.1 License</A>
-<LI><A NAME="tex2html689"
+<LI><A NAME="tex2html735"
   HREF="node2.html#SECTION00220000000000000000">1.2 Features</A>
-<LI><A NAME="tex2html690"
+<LI><A NAME="tex2html736"
   HREF="node2.html#SECTION00230000000000000000">1.3 Project directions</A>
-<LI><A NAME="tex2html691"
+<LI><A NAME="tex2html737"
   HREF="node2.html#SECTION00240000000000000000">1.4 History</A>
-<LI><A NAME="tex2html692"
+<LI><A NAME="tex2html738"
   HREF="node2.html#SECTION00250000000000000000">1.5 Authors and credits</A>
-<LI><A NAME="tex2html693"
+<LI><A NAME="tex2html739"
   HREF="node2.html#SECTION00260000000000000000">1.6 Mailing lists and support</A>
 </UL>
 <!--End of Table of Child-Links-->
@@ -102,7 +102,7 @@ exactly who is authorized to perform the relevant operations, along with the
 authentication method to be used. Currently, authentication can be based
 on either an SMTP From header, a password, or an S/MIME signature.
 <BR><I>Sympa</I> is also able to extract electronic
-addresses from an <A NAME="4703"></A>LDAP directory or <A NAME="4704"></A>SQL server, and include them
+addresses from an <A NAME="6031"></A>LDAP directory or <A NAME="6032"></A>SQL server, and include them
 dynamically in a list.
 
 <P>
@@ -116,7 +116,7 @@ i386 server with Linux).
 
 <P>
 This guide covers the installation, configuration and management of
-the current release (5.0b.1) of
+the current release (5.0b.2) of
 <A NAME="tex2html2"
   HREF="http://listes.cru.fr/sympa/">sympa</A>.
 
@@ -160,7 +160,7 @@ in a single software package, including:
 
 <UL>
 <LI>the use of your preferred SMTP engine, e.g.
-                <A NAME="4712"></A><TT>sendmail</TT>, <A NAME="4715"></A><TT>qmail</TT> or <A NAME="4718"></A><TT>postfix</TT>
+                <A NAME="6040"></A><TT>sendmail</TT>, <A NAME="6043"></A><TT>qmail</TT> or <A NAME="6046"></A><TT>postfix</TT>
 
 <P>
 </LI>
@@ -192,11 +192,11 @@ in a single software package, including:
 <P>
 </LI>
 <LI><B>MIME support</B>. <I>Sympa</I> naturally respects
-        <A NAME="4722"></A>MIME in the distribution process, and in addition
+        <A NAME="6050"></A>MIME in the distribution process, and in addition
         allows list owners to configure their lists with
         welcome, goodbye and other predefined messages using complex
-        <A NAME="4723"></A>MIME structures. For example, a welcome message can be
-        <B>i</B>n multipart/alternative format, using <B>text/html</B>,
+        <A NAME="6051"></A>MIME structures. For example, a welcome message can be in
+        <B>multipart/alternative</B> format, using <B>text/html</B>,
         <B>audio/x-wav</B>&nbsp;:-), or whatever (Note that <I>Sympa</I> 
         commands in multipart messages are successfully processed, provided that
 	one part is <B>text/plain </B>).
@@ -205,14 +205,14 @@ in a single software package, including:
 </LI>
 <LI>The <B>sending process is controlled</B> on a per-list basis.
         The list definition allows a number of different actions for
-        each incoming message. A <A NAME="4725"></A><TT>private</TT> list is a list where
+        each incoming message. A <A NAME="6053"></A><TT>private</TT> list is a list where
         only subscribers can send messages. A list configured using
-        <A NAME="4728"></A><TT>privateoreditorkey</TT> mode accepts incoming messages
+        <A NAME="6056"></A><TT>privateoreditorkey</TT> mode accepts incoming messages
         from subscribers, but will forward any other (i.e. non-subscriber) message
 	to the editor with a one-time secret numeric key that will be used by the
         editor to <I>reject</I> or <I>distribute</I> it.
         For details about the different sending modes, refer to the
-        <A NAME="4731"></A><TT>send</TT> parameter (<A HREF="node19.html#par-send">18.3.8</A>, page&nbsp;<A HREF="node19.html#par-send"><IMG  ALIGN="BOTTOM" BORDER="1" ALT="[*]" SRC="crossref.png"></A>). 
+        <A NAME="6059"></A><TT>send</TT> parameter (<A HREF="node21.html#par-send">20.3.8</A>, page&nbsp;<A HREF="node21.html#par-send"><IMG  ALIGN="BOTTOM" BORDER="1" ALT="[*]" SRC="crossref.png"></A>). 
 	The sending process configuration (as well as most other list
 	operations) is defined using  an <B>authorization scenario</B>. Any listmaster
         can define new authorization scenarios in order to complement the 20
@@ -225,21 +225,17 @@ Example : forward multipart messages to the list editor, while
 </LI>
 <LI>Privileged operations can be performed by list editors or
         list owners (or any other user category), as defined in the list
-        <A NAME="4734"></A><TT>config</TT> file or by
-        the robot <A NAME="4737"></A>administrator, the listmaster, defined
-        in the <A NAME="4738"></A><TT>/usr/local/sympa-os/etc/sympa.conf</TT>  global configuration file (listmaster
+        <A NAME="6062"></A><TT>config</TT> file or by
+        the robot <A NAME="6065"></A>administrator, the listmaster, defined
+        in the <A NAME="6066"></A><TT>/usr/local/sympa-gb/etc/sympa.conf</TT>  global configuration file (listmaster
         can also be defined for a particular virtual robot).
-        Privileged operations include the usual <A NAME="4741"></A><TT>ADD</TT>, <A NAME="4744"></A><TT>DELETE</TT> or <A NAME="4747"></A><TT>REVIEW</TT> commands, which can be
+        Privileged operations include the usual <A NAME="6069"></A><TT>ADD</TT>, <A NAME="6072"></A><TT>DELETE</TT> or <A NAME="6075"></A><TT>REVIEW</TT> commands, which can be
         authenticated via a one-time password or an S/MIME signature.
-	 Any list owner using the <A NAME="4750"></A><TT>EXPIRE</TT>
-        command can require the renewal of subscriptions. This is made
-        possible by the presence of a subscription date stored in the
-        <I>Sympa</I> database.
 
 <P>
 <A NAME="wwsympa"></A> 
 </LI>
-<LI>textbf Web interface : <A NAME="4754"></A><I>WWSympa</I>  is a global Web interface to all <I>Sympa</I> functions
+<LI><B>Web interface</B> : <A NAME="6078"></A><I>WWSympa</I>  is a global Web interface to all <I>Sympa</I> functions
     	(including administration). It provides :
 
 <P>
@@ -272,51 +268,51 @@ Example : forward multipart messages to the list editor, while
 <P>
 </LI>
 <LI>tools for the robot administrator (list creation, global robot
-                  configuration) <A NAME="171"></A>
+                  configuration) <A NAME="170"></A>
 
 <P>
 </LI>
 </UL>
-	(See <A HREF="node9.html#WWSympa">8.1</A>, page&nbsp; <A HREF="node9.html#WWSympa"><IMG  ALIGN="BOTTOM" BORDER="1" ALT="[*]" SRC="crossref.png"></A>)
+	(See <A HREF="node10.html#WWSympa">9.1</A>, page&nbsp; <A HREF="node10.html#WWSympa"><IMG  ALIGN="BOTTOM" BORDER="1" ALT="[*]" SRC="crossref.png"></A>)
 
 <P>
 </LI>
 <LI><B>RDBMS</B> : the internal subscriber and administrative data structure can be stored in a
         database or, for compatibility with versions 1.x, in text
         files for subscriber data. The introduction of databases came out of the
-        <A NAME="4758"></A><I>WWSympa</I> project.  The database ensures a secure access to
-        shared data. The PERL database API <A NAME="4761"></A><TT>DBI</TT>/<A NAME="4764"></A><TT>DBD</TT> enables
-        interoperability with various <A NAME="4767"></A>RDBMS (<A NAME="4768"></A>MySQL, <A NAME="4769"></A>PostgreSQL,
-        <A NAME="4770"></A>Oracle, <A NAME="4771"></A>Sybase).
-	(See ref sec-rdbms, page&nbsp;<A HREF="node8.html#sec-rdbms"><IMG  ALIGN="BOTTOM" BORDER="1" ALT="[*]" SRC="crossref.png"></A>)
+        <A NAME="6082"></A><I>WWSympa</I> project.  The database ensures a secure access to
+        shared data. The PERL database API <A NAME="6085"></A><TT>DBI</TT>/<A NAME="6088"></A><TT>DBD</TT> enables
+        interoperability with various <A NAME="6091"></A>RDBMS (<A NAME="6092"></A>MySQL, <A NAME="6093"></A>PostgreSQL,
+        <A NAME="6094"></A>Oracle, <A NAME="6095"></A>Sybase).
+	(See ref sec-rdbms, page&nbsp;<A HREF="node9.html#sec-rdbms"><IMG  ALIGN="BOTTOM" BORDER="1" ALT="[*]" SRC="crossref.png"></A>)
 
 <P>
 </LI>
 <LI><B>Virtual robots</B> : a single <I>Sympa</I> installation
         can provide multiple virtual robots with both email and web interface
-        customization (See <A HREF="node14.html#virtual-robot">13</A>, page&nbsp;<A HREF="node14.html#virtual-robot"><IMG  ALIGN="BOTTOM" BORDER="1" ALT="[*]" SRC="crossref.png"></A>).
+        customization (See <A HREF="node15.html#virtual-robot">14</A>, page&nbsp;<A HREF="node15.html#virtual-robot"><IMG  ALIGN="BOTTOM" BORDER="1" ALT="[*]" SRC="crossref.png"></A>).
 
 <P>
 </LI>
-<LI><B><A NAME="4773"></A>LDAP-based mailing lists</B> : e-mail addresses can be retrieved dynamically from a database
-    	accepting <A NAME="4774"></A>SQL queries, or from an <A NAME="4775"></A>LDAP directory. In the interest
+<LI><B><A NAME="6097"></A>LDAP-based mailing lists</B> : e-mail addresses can be retrieved dynamically from a database
+    	accepting <A NAME="6098"></A>SQL queries, or from an <A NAME="6099"></A>LDAP directory. In the interest
 	of reasonable response times, <I>Sympa</I> retains the data source in an
 	internal cache controlled by a TTL (Time To Live) parameter.
-	(See <A HREF="node19.html#include-ldap-query">18.2.6</A>, page&nbsp;<A HREF="node19.html#include-ldap-query"><IMG  ALIGN="BOTTOM" BORDER="1" ALT="[*]" SRC="crossref.png"></A>)
+	(See <A HREF="node21.html#include-ldap-query">20.2.6</A>, page&nbsp;<A HREF="node21.html#include-ldap-query"><IMG  ALIGN="BOTTOM" BORDER="1" ALT="[*]" SRC="crossref.png"></A>)
 
 <P>
 </LI>
-<LI><B><A NAME="4777"></A>LDAP authentication</B>:  via uid and emails stored 
+<LI><B><A NAME="6101"></A>LDAP authentication</B>:  via uid and emails stored 
       	in LDAP Directories.  Alternative email addresses, extracted from LDAP 
         directory, may be used to "unify" subscriptions.
-	(See ref ldap-auth, page&nbsp;<A HREF="node12.html#ldap-auth"><IMG  ALIGN="BOTTOM" BORDER="1" ALT="[*]" SRC="crossref.png"></A>)
+	(See ref ldap-auth, page&nbsp;<A HREF="node13.html#ldap-auth"><IMG  ALIGN="BOTTOM" BORDER="1" ALT="[*]" SRC="crossref.png"></A>)
 
 <P>
 </LI>
 <LI><B>Antivirus scanner</B> : <I>Sympa</I> extracts attachements from incoming
 	messages and run a virus scanner on them. Curently working with McAfee/uvscan,
 	Fsecure/fsav, Sophos, AVP, Trend Micro/VirusWall and Clam Antivirus.
-	(See ref antivirus, page&nbsp;<A HREF="node22.html#antivirus"><IMG  ALIGN="BOTTOM" BORDER="1" ALT="[*]" SRC="crossref.png"></A>)
+	(See ref antivirus, page&nbsp;<A HREF="node25.html#antivirus"><IMG  ALIGN="BOTTOM" BORDER="1" ALT="[*]" SRC="crossref.png"></A>)
 
 <P>
 </LI>
@@ -356,7 +352,7 @@ for information about project direction.
 
 <P>
 <I>Sympa</I> development started from scratch in 1995. The goal was to
-ensure continuity with the <A NAME="4781"></A>TULP list manager, produced
+ensure continuity with the <A NAME="6105"></A>TULP list manager, produced
 partly by the initial author of <I>Sympa</I>: Christophe Wolfhugel.
 
 <P>
@@ -374,7 +370,7 @@ Other date :
 <P>
 
 <UL>
-<LI>Mar 1999 Internal use of a database (Mysql), definition of list subscriber with external datasource (RDBMS or <A NAME="4784"></A>LDAP).
+<LI>Mar 1999 Internal use of a database (Mysql), definition of list subscriber with external datasource (RDBMS or <A NAME="6108"></A>LDAP).
 </LI>
 <LI>Oct 1999 Stable version of WWsympa, introduction of authorization scenarios.
 </LI>
@@ -388,7 +384,7 @@ Other date :
 </LI>
 <LI>Jun 2001 Auto-install of aliases at list creation time, antivirus scanner plugging
 </LI>
-<LI>Jan 2002 Virtual robot, <A NAME="4785"></A>LDAP authentication
+<LI>Jan 2002 Virtual robot, <A NAME="6109"></A>LDAP authentication
 </LI>
 <LI>Aug 2003 Automatic bounces management
 </LI>
@@ -453,7 +449,7 @@ Our thanks to all contributors, including:
 <P>
 </LI>
 <LI>Vincent Mathieu, Lynda Amadouche, John Dalbec for their integration
-	of <A NAME="4788"></A>LDAP features in <I>Sympa</I>.
+	of <A NAME="6112"></A>LDAP features in <I>Sympa</I>.
 
 <P>
 </LI>
@@ -526,7 +522,7 @@ Our thanks to all contributors, including:
 
 <P>
 </LI>
-<LI>All contributors and beta-testers cited in the <A NAME="4790"></A><TT>RELEASE_NOTES</TT> file, who, by serving as guinea pigs and
+<LI>All contributors and beta-testers cited in the <A NAME="6114"></A><TT>RELEASE_NOTES</TT> file, who, by serving as guinea pigs and
        being the first to use it, made it possible to quickly and
        efficiently debug the <I>Sympa</I> software.
 
@@ -614,36 +610,36 @@ and so on.
 
 <HR>
 <!--Navigation Panel-->
-<A NAME="tex2html686"
+<A NAME="tex2html732"
   HREF="node3.html">
 <IMG WIDTH="37" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="next" SRC="next.png"></A> 
-<A NAME="tex2html680"
+<A NAME="tex2html726"
   HREF="sympa.html">
 <IMG WIDTH="26" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="up" SRC="up.png"></A> 
-<A NAME="tex2html674"
+<A NAME="tex2html720"
   HREF="node1.html">
 <IMG WIDTH="63" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="previous" SRC="prev.png"></A> 
-<A NAME="tex2html682"
+<A NAME="tex2html728"
   HREF="node1.html">
 <IMG WIDTH="65" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="contents" SRC="contents.png"></A> 
-<A NAME="tex2html684"
-  HREF="node26.html">
+<A NAME="tex2html730"
+  HREF="node30.html">
 <IMG WIDTH="43" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="index" SRC="index.png"></A> 
 <BR>
-<B> :</B> <A NAME="tex2html687"
+<B> Next:</B> <A NAME="tex2html733"
   HREF="node3.html">2. what does Sympa consist of</A>
-<B> :</B> <A NAME="tex2html681"
+<B> Up:</B> <A NAME="tex2html727"
   HREF="sympa.html">Sympa Mailing Lists Management Software version</A>
-<B> :</B> <A NAME="tex2html675"
-  HREF="node1.html">目次</A>
- &nbsp; <B>  <A NAME="tex2html683"
-  HREF="node1.html">目次</A></B> 
- &nbsp; <B>  <A NAME="tex2html685"
-  HREF="node26.html">索引</A></B> 
+<B> Previous:</B> <A NAME="tex2html721"
+  HREF="node1.html">Contents</A>
+ &nbsp; <B>  <A NAME="tex2html729"
+  HREF="node1.html">Contents</A></B> 
+ &nbsp; <B>  <A NAME="tex2html731"
+  HREF="node30.html">Index</A></B> 
 <!--End of Navigation Panel-->
 <ADDRESS>
 root
-平成17年3月8日
+2005-05-25
 </ADDRESS>
 </BODY>
 </HTML>
