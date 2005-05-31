@@ -2850,9 +2850,21 @@ sub do_remindpasswd {
      $param->{'size'} = $size;
      $param->{'sortby'} = $sortby;
 
+
      ## additional DB fields
      $param->{'additional_fields'} = $Conf{'db_additional_subscriber_fields'};
      ('wwsympa',$param->{'user'}{'email'},$param->{'auth_method'},$ip,'review',$param->{'list'},$robot,'','done');
+
+     ## msg_topics
+     if ($list->is_there_msg_topic()) {
+	 foreach my $top (@{$list->{'admin'}{'msg_topic'}}) {
+	     if (defined $top->{'name'}) {
+		 push (@{$param->{'available_topics'}},$top);
+	     }
+	 }
+     }
+
+
      return 1;
  }
 
@@ -12439,6 +12451,18 @@ sub d_test_existing_and_rights {
      $param->{'in_reply_to'}= $in{'in_reply_to'};
      $param->{'message_id'} = &tools::get_message_id($robot);
 
+     if  ($list->is_there_msg_topic()) {
+
+	 $param->{'request_topic'} = 1;
+
+	 foreach my $top (@{$list->{'admin'}{'msg_topic'}}) {
+	     if ($top->{'name'}) {
+		 push (@{$param->{'available_topics'}},$top);
+	     }
+	 }
+	 $param->{'topic_required'} = $list->is_msg_topic_tagging_required();
+     }
+
      return 1;
  }
 
@@ -12491,6 +12515,29 @@ sub d_test_existing_and_rights {
      if ($param->{'user'}{'gecos'}) {
 	 $from = $param->{'user'}{'gecos'}.'<'.$from.'>';
      }
+
+     ## TOPICS
+     my $list_topics;
+     if ($list->is_there_msg_topic()) {
+	 my @msg_topics;
+
+	 foreach my $msg_topic (@{$list->{'admin'}{'msg_topic'}}) {
+	     my $var_name = "topic_"."$msg_topic->{'name'}";
+	     if ($in{"$var_name"}) {
+		 push @msg_topics, $msg_topic->{'name'};
+	     }
+	 }	 
+	 
+	 $list_topics = join(',',@msg_topics);
+     }
+
+     if (!$list_topics && $list->is_msg_topic_tagging_required()) {
+#	 &error_message('msg_topic_missing');
+#	 &wwslog('info','do_send_mail: message without topic but in a requiring list');
+#	 return undef;
+     }
+
+     my $filetopic = $list->tag_topic($in{'message_id'},$list_topics,'sender');
 
      my $data = {'headers' => {'In-Reply-To' => $in{'in_reply_to'},
 		      'Message-ID' => $in{'message_id'}}, 
@@ -13429,7 +13476,11 @@ sub _prepare_subscriber {
     $user->{'date'} = &POSIX::strftime("%d %b %Y", localtime($user->{'date'}));
     $user->{'update_date'} = &POSIX::strftime("%d %b %Y", localtime($user->{'update_date'}));
     
+    ## Reception mode and topics
     $user->{'reception'} ||= 'mail';
+    if (($user->{'reception'} eq 'mail') &&  $user->{'topics'}) {
+	$user->{'reception'} = "topic ($user->{'topics'})";
+    }
     
     $user->{'email'} =~ /\@(.+)$/;
     $user->{'domain'} = $1;

@@ -5,7 +5,7 @@
   <input type="hidden" name="id" value="[% id %]" />
 
  [%- IF topic_required -%]
-  <input type="submit" name="action_distribute" value="[%|loc%]Distribute[%END%]" onclick="return checkbox_check_topic(moderate_mail)" />
+  <input class="MainMenuLinks" type="submit" name="action_distribute" value="[%|loc%]Distribute[%END%]" onclick="return checkbox_check_topic(moderate_mail)" />
  [%- ELSE -%]
   <input class="MainMenuLinks" type="submit" name="action_distribute" value="[%|loc%]Distribute[%END%]" />
  [%- END -%]
