@@ -7266,6 +7266,15 @@ sub do_edit_list {
 	 return undef;
      }
 
+    ## Checking no topic named "other"
+    foreach my $msg_topic (@{$list->{'admin'}{'msg_topic'}}) {
+	if ($msg_topic->{'name'} =~  /^other$/i) {
+	    &error_message('topic_other');
+	    &wwslog('notice',"do_edit_list: topic other is a reserved word");
+	    return undef;
+	}
+    }
+
     ## For changed msg_topic.name
     if ($list->modifying_msg_topic_for_subscribers($new_admin->{'msg_topic'})) {
 	&message('subscribers_noticed_deleted_topics');
@@ -7772,26 +7781,24 @@ sub _prepare_data {
  	}
  	if ($constraint eq '0') {              # free parameter
  	    $p_glob->{'may_edit'} = 'write';        
-
+	    
  	} elsif (ref($constraint) eq 'HASH') { # controlled parameter        
  	    $p_glob->{'may_edit'} = 'write';
  	    $restrict = 1;
-
+	    
  	} else {                               # fixed parameter
  	    $p_glob->{'may_edit'} = 'read';
-
-
  	}
 	
     } else {
  	$p_glob->{'may_edit'} = $may_edit;
     }        
-
-     if ($struct->{'gettext_id'}) {
-	 $p_glob->{'title'} = gettext($struct->{'gettext_id'});
-     }else {
-	 $p_glob->{'title'} = $name;
-     }
+    
+    if ($struct->{'gettext_id'}) {
+	$p_glob->{'title'} = gettext($struct->{'gettext_id'});
+    }else {
+	$p_glob->{'title'} = $name;
+    }
 
      ## Occurrences
      my $data2;

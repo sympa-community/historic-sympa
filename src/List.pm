@@ -296,6 +296,7 @@ my %alias = ('reply-to' => 'reply_to',
 ##               possible values: 0-1 | 1 | 0-n | 1-n
 ##               example : a list may have multiple owner 
 ## gettext_id :    Title reference in NLS catalogues
+## description : deescription text of a parameter
 ## group :       Group of parameters
 ## obsolete :    Obsolete parameter ; should not be displayed 
 ##               nor saved

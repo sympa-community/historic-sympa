@@ -7895,7 +7895,7 @@ title Operating System
 \end {quote}
 
 Parameter \lparam{msg\_topic.name} and \lparam{msg\_topic.title} are mandatory. \lparam{msg\_topic.title} is used
-on the web interface. The \lparam{msg\_topic.keywords} parameter allows to select automatically message topic by searching 
+on the web interface (``other'' is not allowed for msg\_topic.name parameter). The \lparam{msg\_topic.keywords} parameter allows to select automatically message topic by searching 
 keywords in the message. 
 
 

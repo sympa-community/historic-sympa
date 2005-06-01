@@ -70,6 +70,7 @@
 [% ELSIF error.msg == 'inaccessible_archive' %][%|loc(error.year_month)%]Archives from %1 are not accessible[%END%]
 [% ELSIF error.msg == 'auth_msg_failed' %][%|loc(error.key)%]Unable to access to the message authenticated with key %1[%END%]
 [% ELSIF error.msg == 'msg_topic_missing' %][%|loc%]Tagging message is required for this list[%END%]
+[% ELSIF error.msg == 'topic_other' %][%|loc%]Topic "other" is a reserved word[%END%]
 [% ELSE %]
 [% error.msg %]
 [% END %]
