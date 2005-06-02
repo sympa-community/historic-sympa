@@ -6229,7 +6229,8 @@ ttl 360
 	 \end{itemize}
 	 The parameters constraints will be checked at every list loading.
 
-\textbf {WARNING} : Some parameters cannot be constrained, they are : \lparam {owner\_include.source\_parameter} 
+\textbf {WARNING} : Some parameters cannot be constrained, they are : \lparam {msg\_topic.keywords} 
+(see~\ref {par-msg-topic}, page~\pageref {par-msg-topic}),\lparam {owner\_include.source\_parameter} 
 (see~\ref {par-owner-include}, page~\pageref {par-owner-include}), \lparam {editor\_include.source\_parameter} (see~\ref {par-editor-include}, page~\pageref {par-editor-include}). About \lparam {digest} parameter (see~\ref {par-digest}, page~\pageref {par-digest}) , just days can be constrained.
 
     
@@ -6633,6 +6634,7 @@ giving details regarding the owner(s) included characteristics:
     \item \lparam {source\_parameters a,b,c}
 
         It contains values enumeration that will be affected to the \file {param} array used in the template file (see~\ref {data-inclusion-file}, page~\pageref {data-inclusion-file}).
+	This parameter is uncompellable.
 
     \item  \lparam {reception nomail}
 
@@ -7808,6 +7810,8 @@ be able to process it. It is essential that \Sympa could scan the digest
 queue at least once between the time laid down for sending the
 digest and 12:00~AM (midnight). As a rule of thumb, do not use a digest time
 later than 11:00~PM.
+
+N.B.: In family context, \lparam{digest} can be constrainted only on days.
 
 \subsection {available\_user\_options}
 
@@ -9582,7 +9586,7 @@ For sending, a call to sendmail is done or the message is pushed in a spool acco
      \item \lparam{rcpt} (+) : ARRAY - recepients     
    \end{enumerate}
 
-   \textbf{OUT} : \lparam{\$numsmtp} = number of sendmail process 
+   \textbf{OUT} : \lparam{\$numsmtp} = number of sendmail process  \(\mid\)  undef 
 
 \subsubsection   {\large{mail\_forward()}}
 \label{mail-mail-forward}  
@@ -9598,7 +9602,7 @@ For sending, a call to sendmail is done or the message is pushed in a spool acco
      \item \lparam{robot} (+) : robot
    \end{enumerate}
 
-   \textbf{OUT} : 1
+   \textbf{OUT} : 1 \(\mid\)  undef 
 
 \subsubsection {\large{set\_send\_spool()}}
 \label{mail-set-send-spool}  
@@ -9655,7 +9659,7 @@ For sending, a call to sendmail is done or the message is pushed in a spool acco
      \item \lparam{encrypt} : 'smime\_crypted' the mail is encrypted with smime \(\mid\)  undef - no encryption
    \end{enumerate}
 
-   \textbf{OUT} : 1 - sending by calling smtpto (sendmail) \(\mid\) 0 - sending by push in spool
+   \textbf{OUT} : 1 - sending by calling smtpto (sendmail) \(\mid\) 0 - sending by push in spool \(\mid\)  undef 
 
 \subsubsection {\large{sending()}}
 \label{mail-sending}
@@ -9685,7 +9689,7 @@ For sending, a call to sendmail is done or the message is pushed in a spool acco
       \item \lparam{sympa\_email} : for the file name for spool sending
    \end{enumerate}
 
-   \textbf{OUT} : 1 - sending by calling smtpto() (sendmail) \(\mid\) 0 - sending by pushing in spool
+   \textbf{OUT} : 1 - sending by calling smtpto() (sendmail) \(\mid\) 0 - sending by pushing in spool \(\mid\)  undef 
 
 \subsubsection {\large{smtpto()}}
 \label{mail-smtpto}
@@ -9702,7 +9706,7 @@ For sending, a call to sendmail is done or the message is pushed in a spool acco
       \item \lparam{robot} (+) : robot 
    \end{enumerate}
 
-   \textbf{OUT} : \lparam{mail::\$fh} - file handle on opened file for ouput, for SMTP "DATA" field\\
+   \textbf{OUT} : \lparam{mail::\$fh} - file handle on opened file for ouput, for SMTP "DATA" field \(\mid\) undef \\
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%% List.pm %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -9711,7 +9715,7 @@ For sending, a call to sendmail is done or the message is pushed in a spool acco
 
  This module includes all list processing functions. 
 
- Here are only described functions about : 
+ Here are described functions about : 
  \begin{itemize}
    \item Message distribution in a list
    \item Sending using templates
@@ -9719,6 +9723,8 @@ For sending, a call to sendmail is done or the message is pushed in a spool acco
    \item Notification message
    \item Topic messages
  \end{itemize}
+
+ There is also a description of structure and access on list parameters.
 
 %%%%%%%%%%%%%%% message distribution %%%%%%%%%%%%%%%%%%%%
 \subsection {Functions for message distribution} 
@@ -9786,7 +9792,7 @@ For sending, a call to sendmail is done or the message is pushed in a spool acco
    \end{enumerate}
 
    \textbf{OUT} : \lparam{\$numsmtp} : addition of mail::mail\_message() function results 
-   ( = number of sendmail process )
+   ( = number of sendmail process ) \(\mid\) undef 
 
 \subsubsection {\large{send\_msg\_digest()}}
 \label{list-send-msg-digest}
@@ -9806,6 +9812,7 @@ For sending, a call to sendmail is done or the message is pushed in a spool acco
    \textbf{OUT} : \begin{itemize}
      \item 1  \emph{if sending} 
      \item 0  \emph{if no subscriber for sending digest, digestplain or summary} 
+     \item undef
    \end{itemize}
 
 %%%%%%%%%%%%%%% template sending %%%%%%%%%%%%%%%%%%%%%
@@ -9852,7 +9859,7 @@ For sending, a call to sendmail is done or the message is pushed in a spool acco
       \item \lparam{context} : ref(HASH) - for the \$data set up 
    \end{enumerate}
 
-   \textbf{OUT} : 1
+   \textbf{OUT} : 1 \(\mid\) undef 
 
 
 \subsubsection {\large{send\_global\_file()}}
@@ -9884,7 +9891,7 @@ For sending, a call to sendmail is done or the message is pushed in a spool acco
       \item \lparam{context} : ref(HASH) - for the \$data set up 
    \end{enumerate}
 
-   \textbf{OUT} : 1
+   \textbf{OUT} : 1 \(\mid\) undef 
 
 
 %%%%%%%%%%%%%%% service messages %%%%%%%%%%%%%%%%%%%%%
@@ -9910,7 +9917,7 @@ For sending, a call to sendmail is done or the message is pushed in a spool acco
       \item \lparam{file} (+): name of the archive file to send
    \end{enumerate}
 
-   \textbf{OUT} : -
+   \textbf{OUT} : - \(\mid\) undef 
 
 \subsubsection {\large{send\_to\_editor()}}
 \label{list-send-to-editor}
@@ -9932,7 +9939,7 @@ For sending, a call to sendmail is done or the message is pushed in a spool acco
    \end{enumerate}
 
    \textbf{OUT} : \$modkey - the moderation key for naming message waiting for moderation
-          in spool queuemod.
+          in spool queuemod. \(\mid\) undef 
 
 \subsubsection {\large{request\_auth()}}
 \label{list-request-auth}
@@ -9960,7 +9967,7 @@ For sending, a call to sendmail is done or the message is pushed in a spool acco
 	\end{itemize}
    \end{enumerate}
 
-   \textbf{OUT} : 1
+   \textbf{OUT} : 1 \(\mid\) undef 
 
 \subsubsection {\large{send\_auth()}}
 \label{list-send-auth}
@@ -9978,7 +9985,7 @@ For sending, a call to sendmail is done or the message is pushed in a spool acco
       \item \lparam{message}(+): ref(Message) - the message to confirm
    \end{enumerate}
 
-   \textbf{OUT} : \$modkey, the key for naming message waiting for confirmation in spool queuemod.
+   \textbf{OUT} : \$modkey, the key for naming message waiting for confirmation in spool queuemod. \(\mid\) undef 
 
 %%%%%%%%%%%%%%% message notification %%%%%%%%%%%%%%%%%%%%%
 \subsection {Functions for message notification} 
@@ -10015,7 +10022,7 @@ For sending, a call to sendmail is done or the message is pushed in a spool acco
 	\end{itemize}
    \end{enumerate}
 
-   \textbf{OUT} : 1
+   \textbf{OUT} : 1 \(\mid\) undef 
 
 \subsubsection {\large{send\_notify\_to\_owner()}}
 \label{list-send-notify-owner}
@@ -10038,7 +10045,7 @@ For sending, a call to sendmail is done or the message is pushed in a spool acco
 	\end{itemize}
    \end{enumerate}
 
-   \textbf{OUT} : 1
+   \textbf{OUT} : 1 \(\mid\) undef 
 
 \subsubsection {\large{send\_notify\_to\_editor()}}
 \label{list-send-notify-editor}
@@ -10061,7 +10068,7 @@ For sending, a call to sendmail is done or the message is pushed in a spool acco
 	\end{itemize}
    \end{enumerate}
 
-   \textbf{OUT} : 1
+   \textbf{OUT} : 1 \(\mid\) undef 
 
 
 \subsubsection {\large{send\_notify\_to\_user()}}
@@ -10086,7 +10093,7 @@ For sending, a call to sendmail is done or the message is pushed in a spool acco
 	\end{itemize}
    \end{enumerate}
 
-   \textbf{OUT} : 1
+   \textbf{OUT} : 1 \(\mid\) undef 
 
 %%%%%%%%%%%%%%% topic messages %%%%%%%%%%%%%%%%%%%%%
 \subsection {Functions for topic messages} 
@@ -10128,7 +10135,7 @@ look foreach \lparam{msg\_topic.name} list parameter (see \ref {msg-topic}, page
       \item \lparam{topic} (+) : the name of the requested topic
    \end{enumerate}
 
-   \textbf{OUT} : \lparam{topic} \emph{if it is available}
+   \textbf{OUT} : \lparam{topic} \emph{if it is available} \(\mid\) undef 
 
 \subsubsection {\large{get\_available\_msg\_topic()}}
 \label{list-get-available-msg-topic}
@@ -10163,7 +10170,7 @@ Computes topic(s) (with compute\_topic() function) and tags the message (with ta
       \item \lparam{robot} (+): robot	
    \end{enumerate}
 
-   \textbf{OUT} : list of tagged topic : strings separated by ','. It can be empty.
+   \textbf{OUT} : list of tagged topic : strings separated by ','. It can be empty. \(\mid\) undef 
 
 \subsubsection {\large{compute\_topic()}}
 \label{list-compute-topic}
@@ -10203,7 +10210,7 @@ METHOD editor|sender|auto
       \item \lparam{method} (+): 'auto' \(\mid\)'editor'\(\mid\)'sender' - the method used for tagging
    \end{enumerate}
 
-   \textbf{OUT} : name of the created topic information file (\file{directory/listname.msg\_id})
+   \textbf{OUT} : name of the created topic information file (\file{directory/listname.msg\_id}) \(\mid\) undef 
 
 \subsubsection {\large{load\_msg\_topic\_file()}}
 \label{list-load-msg-topic-file}
@@ -10218,7 +10225,7 @@ Search and load msg topic file corresponding to the message ID  (\file{directory
       \item \lparam{robot} (+): the robot
    \end{enumerate}
 
-   \textbf{OUT} : ref(HASH), keys are :
+   \textbf{OUT} :  undef \(\mid\) ref(HASH), keys are :
    \begin{itemize}
      \item \lparam{topic} : list of topics (strings separated by ',')
      \item \lparam{method} : 'auto' \(\mid\)'editor'\(\mid\)'sender' - the method used for tagging
@@ -10266,6 +10273,86 @@ Search and load msg topic file corresponding to the message ID  (\file{directory
 
    \textbf{OUT} : ARRAY - list of selected subscribers
 
+%%%%%%%%%%%%%%% structure and access to list parameters %%%%%%%%%%%%%%%%%%%%
+\subsection {Structure and access to list configuration parameters} 
+
+List parameters are representated in the list configuration file, in the list object (\lparam{list->\{'admin'\}})
+and on the Web interface. Here are translation and access functions :
+
+
+\begin{tabular}{c|c|c|c|c}
+             &                        &      other (3)  &                        &               \\
+             & (1)\(\longrightarrow\) &   \(\uparrow\)  & (5)\(\longrightarrow\) &               \\
+CONFIG FILE  &                        &   LIST OBJECT   &                        & WEB INTERFACE \\
+             & \(\longleftarrow\) (2) &   (4)           & \(\longleftarrow\) (6) &              
+\end{tabular}
+
+
+\begin{enumerate}
+  \item Loading file in memory : \begin{verbatim} List::_load_admin_file(),_load_include_admin_user_file(),_load_list_param() \end{verbatim}
+  \item Saving list configuration in file : \begin{verbatim} List::_save_admin_file(),_save_list_param() \end{verbatim}
+  \item Tools to get parameter values : \begin{verbatim} List::get_param_value(),_get_param_value_anywhere(),_get_single_param_value() \end{verbatim}
+  \item Tools to initialize list parameter with defaults :\begin{verbatim} List::_apply_default() \end{verbatim}
+  \item To present list parameters on the web interface : \begin{verbatim} wwsympa::do_edit_list_request(),_prepare_edit_form(),_prepare_data() \end{verbatim}
+  \item To get updates on list parameters from the web interface : \begin{verbatim} wwsympa::do_edit_list(),_check_new_value \end{verbatim}
+\end{enumerate}
+
+List parameters can be simple or composed in paragraph, they can be unique or multiple and they can singlevalued or multivalued. Here are the different kinds 
+of parameters and an exemple : 
+
+\begin{tabular}{|c|c||c|c|}
+\hline
+\multicolumn{2}{|c||}{parameters}  &          SIMPLE          &               COMPOSED               \\
+\hline\hline 
+SINGLE & singlevalued            &           (a)             &                 (b)                  \\
+       &                         &       \emph{lang}         &       \emph{archiv.period}            \\  
+\cline{2-4}
+       & multivalued             &           (c)             &                 (d)                  \\
+       &                         &      \emph{topics}        &    \emph{available\_user\_option.reception}\\
+\hline
+MULTIPLE & singlevalued          &            (e)            &                 (f)                  \\
+         &                       &      \emph{include\_list} &         \emph{owner.email}               \\ 
+\cline{2-4}  
+       & multi values            &          not defined      &          not defined                  \\
+\hline
+\end{tabular}
+
+
+Here are these list parameters format in list configuration file in front of perl representation in memory :
+
+\begin{tabular}{|c||l|l|}
+\hline
+              & List Configuration FILE                   &     \lparam{\$list->\{'admin'\}}                          \\
+\hline\hline
+(a)           & param value                               &          'scalar'                                         \\ 
+\hline
+(b)           & param                                     &                                                           \\
+              & p1 val1                                   &          'HASH\(\rightarrow\)scalar'                      \\    
+	      &	p2 val2                                   &                                                           \\
+\hline
+(c)           & param val1,val2,val3                      &          'ARRAY(scalar \& split\_char)'                   \\
+\hline
+(d)           & param                                     &                                                           \\
+              & p1 val11, val12, val13                    &          'HASH\(\rightarrow\)ARRAY(scalar \& split\_char)'\\ 
+	      &	p2 val21, val22, val23                    &                                                            \\
+\hline
+(e)           & param val1                                &          'ARRAY(scalar)'                                   \\
+	      &	param val2                                &                                                            \\
+\hline
+(d)           & param                                     &                                                            \\
+              & p1 val11                                  &          'ARRAY(HASH\(\rightarrow\)scalar)'                \\  
+	      &	p2 val12                                  &                                                            \\
+              &                                           &                                                            \\
+              & param                                     &                                                            \\
+              & p1 val21                                  &                                                            \\ 
+	      &	p2 val22                                  &                                                            \\
+\hline
+\end{tabular}
+                                        
+
+
+
+
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%% sympa.pl %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -10301,7 +10388,7 @@ Search and load msg topic file corresponding to the message ID  (\file{directory
   
    \textbf{IN} : \lparam{file}(+): the file to handle
 
-   \textbf{OUT} : \$status - result of the called function.
+   \textbf{OUT} : \$status - result of the called function \(\mid\) undef
 
 \subsubsection {\large{DoMessage()}}
 \label{sympa-domessage}
@@ -10322,7 +10409,7 @@ Search and load msg topic file corresponding to the message ID  (\file{directory
       \item \lparam{robot}(+): robot
    \end{enumerate}
 
-   \textbf{OUT} : 1  \emph{if everything went fine} in order to remove the file from the queue.
+   \textbf{OUT} : 1  \emph{if everything went fine} in order to remove the file from the queue \(\mid\) undef
 
 \subsubsection {\large{DoCommand()}}
 \label{sympa-docommand}
@@ -10339,7 +10426,7 @@ Search and load msg topic file corresponding to the message ID  (\file{directory
       \item \lparam{file}(+): file containing the message
    \end{enumerate}
 
-   \textbf{OUT} : \$success - result of Command::parse() function.
+   \textbf{OUT} : \$success - result of Command::parse() function \(\mid\) undef.
 
 \subsubsection {\large{DoSendMessage()}}
 \label{sympa-dosendmessage}
@@ -10354,7 +10441,7 @@ Search and load msg topic file corresponding to the message ID  (\file{directory
       \item \lparam{robot}(+): robot	
    \end{enumerate}
 
-   \textbf{OUT} : 1  
+   \textbf{OUT} : 1  \(\mid\) undef 
 
 \subsubsection {\large{DoForward()}}
 \label{sympa-doforward}
@@ -10372,7 +10459,7 @@ Search and load msg topic file corresponding to the message ID  (\file{directory
       \item \lparam{msg}(+): ref(MIME::Entity)
    \end{enumerate}
 
-   \textbf{OUT} : 1  
+   \textbf{OUT} : 1   \(\mid\) undef
 
 
 \subsubsection {\large{SendDigest()}}
@@ -10384,7 +10471,7 @@ Search and load msg topic file corresponding to the message ID  (\file{directory
    page~\pageref {list-send-msg-digest}).
   
    \textbf{IN} : -
-   \textbf{OUT} : -  
+   \textbf{OUT} : -  \(\mid\) undef 
 
 \subsubsection {\large{CleanSpool()}}
 \label{sympa-cleanspool}
@@ -10468,7 +10555,7 @@ Search and load msg topic file corresponding to the message ID  (\file{directory
       \item \lparam{sign\_mod} : 'smime' \(\mid\) undef - authentification
    \end{enumerate}
 
-   \textbf{OUT} : 'unknown\_list' \(\mid\) 'wrong\_auth' \(\mid\) 'not\_allowed' \(\mid\) 1 
+   \textbf{OUT} : 'unknown\_list' \(\mid\) 'wrong\_auth' \(\mid\) 'not\_allowed' \(\mid\) 1  \(\mid\) undef
 
 \subsubsection {\large{del()}}
 \label{commands-del}
@@ -10499,7 +10586,7 @@ Search and load msg topic file corresponding to the message ID  (\file{directory
       \item \lparam{sign\_mod} : 'smime' \(\mid\) undef - authentification
    \end{enumerate}
 
-   \textbf{OUT} : 'unknown\_list' \(\mid\) 'wrong\_auth' \(\mid\) 'not\_allowed' \(\mid\) 1 
+   \textbf{OUT} : 'unknown\_list' \(\mid\) 'wrong\_auth' \(\mid\) 'not\_allowed' \(\mid\) 1  \(\mid\) undef
 
 \subsubsection {\large{signoff()}}
 \label{commands-signoff}
@@ -10514,7 +10601,7 @@ Search and load msg topic file corresponding to the message ID  (\file{directory
       \item \lparam{sign\_mod} : 'smime' \(\mid\) undef - authentification
    \end{enumerate}
 
-   \textbf{OUT} : 'syntax\_error' \(\mid\) 'unknown\_list' \(\mid\) 'wrong\_auth' \(\mid\) 'not\_allowed' \(\mid\) 1
+   \textbf{OUT} : 'syntax\_error' \(\mid\) 'unknown\_list' \(\mid\) 'wrong\_auth' \(\mid\) 'not\_allowed' \(\mid\) 1 \(\mid\) undef
 
 \subsubsection {\large{invite()}}
 \label{commands-invite}
@@ -10529,7 +10616,7 @@ Search and load msg topic file corresponding to the message ID  (\file{directory
       \item \lparam{sign\_mod} : 'smime' \(\mid\) undef - authentification
    \end{enumerate}
 
-   \textbf{OUT} : 'unknown\_list' \(\mid\) 'wrong\_auth' \(\mid\) 'not\_allowed' \(\mid\) 1
+   \textbf{OUT} : 'unknown\_list' \(\mid\) 'wrong\_auth' \(\mid\) 'not\_allowed' \(\mid\) 1 \(\mid\) undef
 
 \subsubsection {\large{last()}}
 \label{commands-last}
@@ -10589,7 +10676,7 @@ Search and load msg topic file corresponding to the message ID  (\file{directory
       \item \lparam{robot}(+): robot
    \end{enumerate}
 
-   \textbf{OUT} : 'wrong\_auth' \(\mid\) 'msg\_not\_found' \(\mid\) 1
+   \textbf{OUT} : 'wrong\_auth' \(\mid\) 'msg\_not\_found' \(\mid\) 1 \(\mid\) undef
 
 \subsubsection {\large{set()}}
 \label{commands--set}
@@ -10618,7 +10705,7 @@ Search and load msg topic file corresponding to the message ID  (\file{directory
       \item \lparam{robot}(+): robot
    \end{enumerate}
 
-   \textbf{OUT} : 'unknown\_list' \(\mid\) 'msg\_not\_found' \(\mid\) 1
+   \textbf{OUT} : 'unknown\_list' \(\mid\) 'msg\_not\_found' \(\mid\) 1 \(\mid\) undef
 
 \subsubsection {\large{reject()}}
 \label{commands-reject}
@@ -10632,7 +10719,7 @@ Search and load msg topic file corresponding to the message ID  (\file{directory
       \item \lparam{robot}(+): robot
    \end{enumerate}
 
-   \textbf{OUT} : 'unknown\_list' \(\mid\) 'wrong\_auth' \(\mid\) 1 
+   \textbf{OUT} : 'unknown\_list' \(\mid\) 'wrong\_auth' \(\mid\) 1  \(\mid\) undef
 
 \subsubsection {\large{modindex()}}
 \label{commands-modindex}
@@ -10662,7 +10749,7 @@ Search and load msg topic file corresponding to the message ID  (\file{directory
       \item \lparam{sign\_mod} : 'smime' \(\mid\) undef - authentification
    \end{enumerate}
 
-   \textbf{OUT} : 'unknown\_list' \(\mid\) wrong\_auth \(\mid\) no\_subscribers \(\mid\) 'not\_allowed' \(\mid\) 1
+   \textbf{OUT} : 'unknown\_list' \(\mid\) wrong\_auth \(\mid\) no\_subscribers \(\mid\) 'not\_allowed' \(\mid\) 1 \(\mid\) undef
 
 \subsubsection {\large{verify()}}
 \label{commands-verify}
@@ -10694,7 +10781,7 @@ Search and load msg topic file corresponding to the message ID  (\file{directory
       \item \lparam{sign\_mod} : 'smime' \(\mid\) undef - authentification
    \end{enumerate}
 
-   \textbf{OUT} : 'syntax\_error' \(\mid\) 'unknown\_list' \(\mid\) 'wrong\_auth' \(\mid\) 'not\_allowed' \(\mid\) 1
+   \textbf{OUT} : 'syntax\_error' \(\mid\) 'unknown\_list' \(\mid\) 'wrong\_auth' \(\mid\) 'not\_allowed' \(\mid\) 1 \(\mid\) undef
 
 \subsubsection {\large{info()}}
 \label{commands-info}
@@ -10709,7 +10796,7 @@ Search and load msg topic file corresponding to the message ID  (\file{directory
       \item \lparam{sign\_mod} : 'smime' \(\mid\) undef - authentification
    \end{enumerate}
 
-   \textbf{OUT} : 'unknown\_list' \(\mid\) 'wrong\_auth' \(\mid\) 'not\_allowed' \(\mid\) 1 
+   \textbf{OUT} : 'unknown\_list' \(\mid\) 'wrong\_auth' \(\mid\) 'not\_allowed' \(\mid\) 1 \(\mid\) undef 
 
 \subsubsection {\large{stats()}}
 \label{commands-stats}
@@ -10724,7 +10811,7 @@ Search and load msg topic file corresponding to the message ID  (\file{directory
       \item \lparam{sign\_mod} : 'smime' \(\mid\) undef - authentification
    \end{enumerate}
 
-   \textbf{OUT} : 'unknown\_list' \(\mid\) 'not\_allowed' \(\mid\) 1 
+   \textbf{OUT} : 'unknown\_list' \(\mid\) 'not\_allowed' \(\mid\) 1  \(\mid\) undef
 
 \subsubsection {\large{help()}}
 \label{commands-help}
@@ -10738,7 +10825,7 @@ Search and load msg topic file corresponding to the message ID  (\file{directory
       \item \lparam{robot}(+): robot
    \end{enumerate}
 
-   \textbf{OUT} : 1
+   \textbf{OUT} : 1 \(\mid\) undef
 
 \subsubsection {\large{lists()}}
 \label{commands-lists}
@@ -10752,7 +10839,7 @@ Search and load msg topic file corresponding to the message ID  (\file{directory
       \item \lparam{robot}(+): robot
    \end{enumerate}
 
-   \textbf{OUT} : 1
+   \textbf{OUT} : 1 \(\mid\) undef
 
 \subsubsection {\large{which()}}
 \label{commands-lists}
@@ -10807,7 +10894,7 @@ Search and load msg topic file corresponding to the message ID  (\file{directory
       \item \lparam{sign\_mod}(+): 'smime' - smime authentification \(\mid\) undef - smtp or md5 authentification 
       \item \lparam{list}: ref(List) \(\mid\) undef - in a list context or not
    \end{enumerate}
-   \textbf{OUT} : 'smime' \(\mid\) 'md5' \(\mid\) 'smtp' - authentification method if checking not failed.
+   \textbf{OUT} : 'smime' \(\mid\) 'md5' \(\mid\) 'smtp' - authentification method if checking not failed \(\mid\) undef
 
 
 The following functions are called by processing command functions. It allows to push errors in 
@@ -10883,7 +10970,7 @@ do\_tag\_topic\_by\_sender().
   Subscribes a user to a list. New subscriber can be notified
   by sending him template 'welcome'.\begin{itemize}   
    \item \textbf{IN} : -
-   \item \textbf{OUT} : 'subrequest' \(\mid\) 'login' \(\mid\) 'info' \(\mid\) \$in.previous\_action
+   \item \textbf{OUT} : 'subrequest' \(\mid\) 'login' \(\mid\) 'info' \(\mid\) \$in.previous\_action \(\mid\) undef
   \end{itemize}    
 
 \subsubsection {\large{do\_signoff()}}
@@ -10893,7 +10980,7 @@ do\_tag\_topic\_by\_sender().
   Unsubscribes a user from a list.  The unsubscriber can be notified
   by sending him template 'bye'.\begin{itemize}   
    \item \textbf{IN} : -
-   \item \textbf{OUT} : 'sigrequest' \(\mid\) 'login' \(\mid\) 'info'
+   \item \textbf{OUT} : 'sigrequest' \(\mid\) 'login' \(\mid\) 'info' \(\mid\) undef
   \end{itemize}    
 
 \subsubsection {\large{do\_add()}}
@@ -10903,7 +10990,7 @@ do\_tag\_topic\_by\_sender().
    Adds a user to a list (requested by another user) and can send acknowledgements. 
    New subscriber can be notified by sending him template 'welcome'.\begin{itemize}
     \item \textbf{IN} : -
-    \item \textbf{OUT} : 'loginrequest' \(\mid\) (\$in.previous\_action \(\mid\mid\) 'review')
+    \item \textbf{OUT} : 'loginrequest' \(\mid\) (\$in.previous\_action \(\mid\mid\) 'review') \(\mid\) undef
   \end{itemize}    
 
 \subsubsection {\large{do\_del()}}
@@ -10913,7 +11000,7 @@ do\_tag\_topic\_by\_sender().
    Removes a user from a list (requested by another user) and can send acknowledgements.
    Unsubscriber can be notified by sending template 'removed'.\begin{itemize} 
    \item \textbf{IN} : -
-   \item \textbf{OUT} : 'loginrequest' \(\mid\) (\$in.previous\_action \(\mid\mid\) 'review')
+   \item \textbf{OUT} : 'loginrequest' \(\mid\) (\$in.previous\_action \(\mid\mid\) 'review') \(\mid\) undef
   \end{itemize}    
 
 \subsubsection {\large{do\_change\_email()}}
@@ -10923,7 +11010,7 @@ do\_tag\_topic\_by\_sender().
   Changes a user's email address in \Sympa environment. Password can be send to user by sending
   template 'sendpasswd'.\begin{itemize} 
    \item \textbf{IN} : -
-   \item \textbf{OUT} : '1' \(\mid\) 'pref'
+   \item \textbf{OUT} : '1' \(\mid\) 'pref' \(\mid\) undef
   \end{itemize}    
 
 \subsubsection {\large{do\_reject()}}
@@ -10933,7 +11020,7 @@ do\_tag\_topic\_by\_sender().
   Refuses and deletes moderated messages. Rejected message senders are notified by
   sending them template 'reject'.\begin{itemize} 
    \item \textbf{IN} : -
-   \item \textbf{OUT} : 'loginrequest' \(\mid\) 'modindex'
+   \item \textbf{OUT} : 'loginrequest' \(\mid\) 'modindex' \(\mid\) undef
   \end{itemize}    
 
 \subsubsection {\large{do\_distribute()}}
@@ -10945,7 +11032,27 @@ do\_tag\_topic\_by\_sender().
  set in spool. In a context of message topic, tags the message by calling to function List::tag\_topic() 
  (see \ref {list-tag-topic}, page~\pageref {list-tag-topic}).\begin{itemize} 
    \item \textbf{IN} : -
-   \item \textbf{OUT} : 'loginrequest' \(\mid\) 'modindex'
+   \item \textbf{OUT} : 'loginrequest' \(\mid\) 'modindex' \(\mid\) undef
+  \end{itemize}    
+
+\subsubsection {\large{do\_modindex()}}
+\label{wwsympa-do-modindex}
+\index{wwsympa::do\_modindex()}
+
+  Allows a moderator to moderate a list of messages and documents and/or tag message in message topic context.
+  \begin{itemize} 
+   \item \textbf{IN} : -
+   \item \textbf{OUT} : 'loginrequest' \(\mid\) 'admin' \(\mid\) 1 \(\mid\) undef
+  \end{itemize}    
+
+\subsubsection {\large{do\_viewmod()}}
+\label{wwsympa-do-viewmod}
+\index{wwsympa::do\_modindex()}
+
+  Allows a moderator to moderate a message and/or tag message in message topic context.
+  \begin{itemize} 
+   \item \textbf{IN} : -
+   \item \textbf{OUT} : 'loginrequest' \(\mid\) 1 \(\mid\) undef
   \end{itemize}    
 
 \subsubsection {\large{do\_send\_mail()}}
@@ -10956,18 +11063,17 @@ do\_tag\_topic\_by\_sender().
   It uses mail::mail\_file() (see \ref {mail-mail-file}, page~\pageref {mail-mail-file})
   to do it. As it is in a Web context, the message will be set in spool.\begin{itemize} 
    \item \textbf{IN} : -
-   \item \textbf{OUT} : 'loginrequest' \(\mid\) 'info'
+   \item \textbf{OUT} : 'loginrequest' \(\mid\) 'info' \(\mid\) undef
   \end{itemize}    
 
-\subsubsection {\large{do\_send\_mail()}}
-\label{wwsympa-do-send-mail}
-\index{wwsympa::do\_send\_mail()}
+\subsubsection {\large{do\_sendpasswd()}}
+\label{wwsympa-do-sendpasswd}
+\index{wwsympa::do\_sendpasswd()}
 
-  Sends a message to a list by the Web interface.
-  It uses mail::mail\_file() (see \ref {mail-mail-file}, page~\pageref {mail-mail-file})
-  to do it. As it is in a Web context, the message will be set in spool.\begin{itemize} 
+  Sends a message to a user, containing his password, by sending him template 'sendpasswd' list by the Web interface.
+  \begin{itemize} 
    \item \textbf{IN} : -
-   \item \textbf{OUT} : 'loginrequest' \(\mid\) 'info'
+   \item \textbf{OUT} : 'loginrequest' \(\mid\) 'info' \(\mid\) undef
   \end{itemize}    
 
 \subsubsection {\large{do\_request\_topic()}}
@@ -10976,7 +11082,7 @@ do\_tag\_topic\_by\_sender().
 
   Allows a sender to tag his mail in message topic context.\begin{itemize} 
    \item \textbf{IN} : -
-   \item \textbf{OUT} : 1
+   \item \textbf{OUT} : 'loginrequest' \(\mid\) 1 \(\mid\) undef
   \end{itemize}    
 
 \subsubsection {\large{do\_tag\_topic\_by\_sender()}}
@@ -10987,7 +11093,7 @@ do\_tag\_topic\_by\_sender().
   to sympa.pl.
   \begin{itemize} 
    \item \textbf{IN} : -
-   \item \textbf{OUT} : 'info'
+   \item \textbf{OUT} : 'loginrequest' \(\mid\) 'info' \(\mid\) undef
   \end{itemize}    
 
 \subsubsection {\large{do\_remind()}}
@@ -10998,7 +11104,7 @@ do\_tag\_topic\_by\_sender().
   page~\pageref {mail-mail-file}). As it is in a Web context, the message will be set in spool.
   \begin{itemize} 
    \item \textbf{IN} : -
-   \item \textbf{OUT} : 'loginrequest' \(\mid\) 'admin'
+   \item \textbf{OUT} : 'loginrequest' \(\mid\) 'admin' \(\mid\) undef
   \end{itemize}    
 
 \subsubsection {\large{do\_set()}}
@@ -11008,7 +11114,7 @@ do\_tag\_topic\_by\_sender().
    Changes subscription options (reception or visibility)
    \begin{itemize} 
     \item \textbf{IN} : -
-    \item \textbf{OUT} : 'loginrequest' \(\mid\) 'info'
+    \item \textbf{OUT} : 'loginrequest' \(\mid\) 'info' \(\mid\) undef
    \end{itemize}    
 
 \subsubsection {\large{do\_send\_me()}}
@@ -11020,7 +11126,7 @@ do\_tag\_topic\_by\_sender().
    the message will be set in spool.
    \begin{itemize} 
     \item \textbf{IN} : -
-    \item \textbf{OUT} : 'arc' \(\mid\) 1
+    \item \textbf{OUT} : 'arc' \(\mid\) 1 \(\mid\) undef
    \end{itemize}    
 
 
@@ -11148,7 +11254,7 @@ Makes set operation on arrays seen as set (with no double) :
       \item \lparam{file}(+):  the message file
    \end{enumerate}
 
-   \textbf{OUT} :   ref(Message)
+   \textbf{OUT} :   ref(Message) \(\mid\) undef
 
 \subsubsection {\large{dump()}}
 \label{message-dump}
