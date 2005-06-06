@@ -276,7 +276,7 @@ msgstr ""
 msgid "***** V I R U S    A L E R T *****"
 msgstr ""
 
-#: src/tools.pl:137
+#: src/tools.pl:138
 msgid ""
 "------ End of suspected message ------\n"
 msgstr ""
@@ -396,7 +396,7 @@ msgstr ""
 msgid "A virus in your email"
 msgstr ""
 
-#: mail_tt2/helpfile.tt2:47
+#: mail_tt2/helpfile.tt2:52
 msgid "ADD <list> user@host Full name  * To add a user to a list"
 msgstr ""
 
@@ -450,7 +450,7 @@ msgstr ""
 msgid "Aliases you should install in your mailer"
 msgstr ""
 
-#: mail_tt2/helpfile.tt2:10
+#: mail_tt2/helpfile.tt2:15
 #. (conf.sympa)
 msgid "All commands must be sent to the electronic address %1"
 msgstr ""
@@ -550,7 +550,7 @@ msgstr ""
 msgid "Author"
 msgstr ""
 
-#: mail_tt2/helpfile.tt2:14
+#: mail_tt2/helpfile.tt2:19
 msgid "Available commands are:"
 msgstr ""
 
@@ -631,7 +631,7 @@ msgstr ""
 msgid "Bouncing address"
 msgstr ""
 
-#: mail_tt2/helpfile.tt2:40
+#: mail_tt2/helpfile.tt2:45
 msgid "CONFIRM <key>               * Confirmation for sending a message (depending on the list's configuration)"
 msgstr ""
 
@@ -745,7 +745,7 @@ msgstr ""
 msgid "Choose your authentication server"
 msgstr ""
 
-#: src/etc/mhonarc-ressources.tt2:136 src/etc/mhonarc-ressources.tt2:244 src/etc/mhonarc-ressources.tt2:337
+#: src/etc/mhonarc-ressources.tt2:141 src/etc/mhonarc-ressources.tt2:249 src/etc/mhonarc-ressources.tt2:342
 msgid "Chronological"
 msgstr ""
 
@@ -881,11 +881,11 @@ msgstr ""
 msgid "Customizing"
 msgstr ""
 
-#: mail_tt2/helpfile.tt2:48
+#: mail_tt2/helpfile.tt2:53
 msgid "DEL <list> user@host            * To delete a user from a list"
 msgstr ""
 
-#: mail_tt2/helpfile.tt2:55
+#: mail_tt2/helpfile.tt2:60
 msgid "DISTribute <list> <key>        * Moderation: to validate a message"
 msgstr ""
 
@@ -1044,7 +1044,7 @@ msgstr ""
 msgid "Do you really want to delete Selected Archives?"
 msgstr ""
 
-#: src/etc/mhonarc-ressources.tt2:406 src/etc/mhonarc-ressources.tt2:413
+#: src/etc/mhonarc-ressources.tt2:411 src/etc/mhonarc-ressources.tt2:418
 msgid "Do you really want to delete this message ?"
 msgstr ""
 
@@ -1305,7 +1305,7 @@ msgstr ""
 msgid "Families"
 msgstr ""
 
-#: src/List.pm:6184
+#: src/List.pm:6187
 msgid "File"
 msgstr ""
 
@@ -1380,7 +1380,7 @@ msgid ""
 "a customized environment with access to the following functions :"
 msgstr ""
 
-#: mail_tt2/helpfile.tt2:37
+#: mail_tt2/helpfile.tt2:42
 msgid "GET <list> <file>           * To get <file> of <list> archive"
 msgstr ""
 
@@ -1388,7 +1388,7 @@ msgstr ""
 msgid "Go"
 msgstr ""
 
-#: mail_tt2/helpfile.tt2:16
+#: mail_tt2/helpfile.tt2:21
 msgid "HELp                        * This help file"
 msgstr ""
 
@@ -1415,7 +1415,7 @@ msgstr ""
 msgid "Here are the subscribers of %1@%2 mailing list:"
 msgstr ""
 
-#: mail_tt2/lists.tt2:1
+#: mail_tt2/lists.tt2:7
 #. (conf.email,conf.host)
 msgid "Here is the list of list from %1@%2"
 msgstr ""
@@ -1459,15 +1459,15 @@ msgstr ""
 msgid "I unsubscribe from list %1"
 msgstr ""
 
-#: mail_tt2/helpfile.tt2:36
+#: mail_tt2/helpfile.tt2:41
 msgid "INDex <list>                * <list> archive file list"
 msgstr ""
 
-#: mail_tt2/helpfile.tt2:17
+#: mail_tt2/helpfile.tt2:22
 msgid "INFO <list>                 * Information about a list"
 msgstr ""
 
-#: mail_tt2/helpfile.tt2:39
+#: mail_tt2/helpfile.tt2:44
 msgid "INVITE <list> <email>       * Invite <email> for subscription in <list>"
 msgstr ""
 
@@ -1587,11 +1587,11 @@ msgid ""
 "was unable to access to your personal certificat (email %1)."
 msgstr ""
 
-#: src/etc/mhonarc-ressources.tt2:583
+#: src/etc/mhonarc-ressources.tt2:588
 msgid "January:February:March:April:May:June:July:August:September:October:November:December"
 msgstr ""
 
-#: mail_tt2/helpfile.tt2:38
+#: mail_tt2/helpfile.tt2:43
 msgid "LAST <list>                 * Used to received the last message from <list>"
 msgstr ""
 
@@ -1603,7 +1603,7 @@ msgstr ""
 msgid "LDAP query inclusion"
 msgstr ""
 
-#: mail_tt2/helpfile.tt2:18
+#: mail_tt2/helpfile.tt2:23
 msgid "LISts                       * Directory of lists managed on this node"
 msgstr ""
 
@@ -1876,7 +1876,7 @@ msgstr ""
 msgid "Lost password ?"
 msgstr ""
 
-#: mail_tt2/helpfile.tt2:57
+#: mail_tt2/helpfile.tt2:62
 msgid "MODINDEX <list>                 * Moderation: to consult the list of messages to moderate"
 msgstr ""
 
@@ -2253,7 +2253,7 @@ msgstr ""
 msgid "Number of forwarded messages:      %1"
 msgstr ""
 
-#: mail_tt2/moderate.tt2:24
+#: mail_tt2/moderate.tt2:26
 #. (mod_spool_size)
 msgid "Number of messages awaiting moderation for this list : %1"
 msgstr ""
@@ -2285,7 +2285,7 @@ msgid ""
 "as possible. This task may be performed in a few minutes."
 msgstr ""
 
-#: mail_tt2/moderate.tt2:15 mail_tt2/moderate.tt2:20
+#: mail_tt2/moderate.tt2:16 mail_tt2/moderate.tt2:22
 #. (conf.email,conf.host)
 msgid "Or send a message to %1@%2 with the following subject :"
 msgstr ""
@@ -2423,7 +2423,7 @@ msgstr ""
 msgid "Powered by"
 msgstr ""
 
-#: mail_tt2/helpfile.tt2:60
+#: mail_tt2/helpfile.tt2:65
 msgid "Powered by Sympa"
 msgstr ""
 
@@ -2506,7 +2506,7 @@ msgstr ""
 msgid "Public discussion mailing list"
 msgstr ""
 
-#: src/Commands.pm:245 web_tt2/help.tt2:18
+#: mail_tt2/lists.tt2:2 src/Commands.pm:245 web_tt2/help.tt2:18
 msgid "Public lists"
 msgstr ""
 
@@ -2518,19 +2518,19 @@ msgstr ""
 msgid "Purge selected lists"
 msgstr ""
 
-#: mail_tt2/helpfile.tt2:41
+#: mail_tt2/helpfile.tt2:46
 msgid "QUIT                        * Indicates the end of the commands (to ignore a signature)"
 msgstr ""
 
-#: mail_tt2/helpfile.tt2:56
+#: mail_tt2/helpfile.tt2:61
 msgid "REJect <list> <key>            * Moderation: to reject a message"
 msgstr ""
 
-#: mail_tt2/helpfile.tt2:51
+#: mail_tt2/helpfile.tt2:56
 msgid "REMIND <list>                   * Send a reminder message to each subscriber (this is a way to inform anyone what is his real subscribing email)."
 msgstr ""
 
-#: mail_tt2/helpfile.tt2:19
+#: mail_tt2/helpfile.tt2:24
 msgid "REView <list>               * Displays the subscribers to <list>"
 msgstr ""
 
@@ -2674,7 +2674,7 @@ msgstr ""
 msgid "Replace the file %1 with your file"
 msgstr ""
 
-#: src/etc/mhonarc-ressources.tt2:398
+#: src/etc/mhonarc-ressources.tt2:403
 msgid "Reply"
 msgstr ""
 
@@ -2687,7 +2687,7 @@ msgstr ""
 msgid "Reply to           : %1"
 msgstr ""
 
-#: src/etc/mhonarc-ressources.tt2:394
+#: src/etc/mhonarc-ressources.tt2:399
 msgid "Reply to sender"
 msgstr ""
 
@@ -2750,39 +2750,39 @@ msgstr ""
 msgid "Review subscribers : %1"
 msgstr ""
 
-#: src/tools.pl:130
+#: src/tools.pl:131
 msgid "Routing error ?"
 msgstr ""
 
-#: mail_tt2/helpfile.tt2:32
+#: mail_tt2/helpfile.tt2:37
 msgid "SET <list>|* CONCEAL        * To become unlisted (hidden subscriber address)"
 msgstr ""
 
-#: mail_tt2/helpfile.tt2:27
+#: mail_tt2/helpfile.tt2:32
 msgid "SET <list>|* DIGEST         * Message reception in compilation mode"
 msgstr ""
 
-#: mail_tt2/helpfile.tt2:31
+#: mail_tt2/helpfile.tt2:36
 msgid "SET <list>|* MAIL           * <list> reception in normal mode"
 msgstr ""
 
-#: mail_tt2/helpfile.tt2:33
+#: mail_tt2/helpfile.tt2:38
 msgid "SET <list>|* NOCONCEAL      * Subscriber address visible via REView"
 msgstr ""
 
-#: mail_tt2/helpfile.tt2:26
+#: mail_tt2/helpfile.tt2:31
 msgid "SET <list>|* NOMAIL         * To suspend the message reception for <list>"
 msgstr ""
 
-#: mail_tt2/helpfile.tt2:30
+#: mail_tt2/helpfile.tt2:35
 msgid "SET <list>|* NOTICE         * Receiving message subject only"
 msgstr ""
 
-#: mail_tt2/helpfile.tt2:29
+#: mail_tt2/helpfile.tt2:34
 msgid "SET <list>|* SUMMARY        * Receiving the message index only"
 msgstr ""
 
-#: mail_tt2/helpfile.tt2:28
+#: mail_tt2/helpfile.tt2:33
 msgid "SET <list|*> DIGESTPLAIN    * Message reception in compilation mode, sent as a plain text email with all attachments"
 msgstr ""
 
@@ -2794,15 +2794,15 @@ msgstr ""
 msgid "SQL query inclusion"
 msgstr ""
 
-#: mail_tt2/helpfile.tt2:49
+#: mail_tt2/helpfile.tt2:54
 msgid "STATS <list>                    * To consult the statistics for <list>"
 msgstr ""
 
-#: mail_tt2/helpfile.tt2:21
+#: mail_tt2/helpfile.tt2:26
 msgid "SUBscribe <list> <name>     * To subscribe or to confirm a subscription to <list>."
 msgstr ""
 
-#: mail_tt2/helpfile.tt2:8
+#: mail_tt2/helpfile.tt2:13
 msgid "SYMPA is an electronic mailing-list manager that automates list management functions such as subscriptions, moderation, and archive management."
 msgstr ""
 
@@ -2960,7 +2960,7 @@ msgstr ""
 msgid "Size (Kb)"
 msgstr ""
 
-#: src/List.pm:8684
+#: src/List.pm:8694
 msgid ""
 "Someone (hopefully you) asked for your e-mail address\n"
 "to be added to list '%s'.\n"
@@ -2975,7 +2975,7 @@ msgid ""
 "this message."
 msgstr ""
 
-#: src/List.pm:8677
+#: src/List.pm:8687
 msgid ""
 "Someone (hopefully you) asked for your e-mail address\n"
 "to be removed from list '%s'.\n"
@@ -2990,7 +2990,7 @@ msgid ""
 "this message"
 msgstr ""
 
-#: src/List.pm:8689 src/List.pm:8694
+#: src/List.pm:8699 src/List.pm:8704
 msgid ""
 "Someone (hopefully you) requested a user of list %s to be\n"
 "added or removed.\n\n"
@@ -3147,7 +3147,7 @@ msgstr ""
 msgid "Summary"
 msgstr ""
 
-#: src/List.pm:3211
+#: src/List.pm:3214
 msgid "Summary of list %s"
 msgstr ""
 
@@ -3156,7 +3156,7 @@ msgstr ""
 msgid "Summary of your subscription (using the e-mail %1)."
 msgstr ""
 
-#: src/etc/mhonarc-ressources.tt2:565
+#: src/etc/mhonarc-ressources.tt2:570
 msgid "Sunday:Monday:Tuesday:Wednesday:Thursday:Friday:Saturday"
 msgstr ""
 
@@ -3236,7 +3236,7 @@ msgstr ""
 msgid "Syntax errors with the following parameters : %1"
 msgstr ""
 
-#: mail_tt2/digest.tt2:12 mail_tt2/digest_plain.tt2:10 src/List.pm:3090
+#: mail_tt2/digest.tt2:12 mail_tt2/digest_plain.tt2:10 src/List.pm:3093
 msgid "Table of contents:"
 msgstr ""
 
@@ -3364,11 +3364,11 @@ msgstr ""
 msgid "The following address is not a known mailing list :"
 msgstr ""
 
-#: mail_tt2/helpfile.tt2:45
+#: mail_tt2/helpfile.tt2:50
 msgid "The following commands are available only for lists's owners or moderators:"
 msgstr ""
 
-#: src/tools.pl:135
+#: src/tools.pl:136
 msgid ""
 "The following message was sent to a list while it seems to contain\n"
 "commands like subscribe, unsubscribe, help, index, get, ...\n\n"
@@ -3696,7 +3696,7 @@ msgid ""
 "archives, list management and so on."
 msgstr ""
 
-#: src/etc/mhonarc-ressources.tt2:140 src/etc/mhonarc-ressources.tt2:248 src/etc/mhonarc-ressources.tt2:344
+#: src/etc/mhonarc-ressources.tt2:145 src/etc/mhonarc-ressources.tt2:253 src/etc/mhonarc-ressources.tt2:349
 msgid "Thread"
 msgstr ""
 
@@ -3817,7 +3817,7 @@ msgstr ""
 msgid "To receive your password :"
 msgstr ""
 
-#: mail_tt2/moderate.tt2:18
+#: mail_tt2/moderate.tt2:19
 msgid "To reject it (it will be removed):"
 msgstr ""
 
@@ -3861,11 +3861,11 @@ msgstr ""
 msgid "Total subscribers : %1"
 msgstr ""
 
-#: mail_tt2/helpfile.tt2:24
+#: mail_tt2/helpfile.tt2:29
 msgid "UNSubscribe * <EMAIL>       * To quit all lists."
 msgstr ""
 
-#: mail_tt2/helpfile.tt2:23
+#: mail_tt2/helpfile.tt2:28
 msgid "UNSubscribe <list> <EMAIL>  * To quit <list>. <EMAIL> is an optional email address, usefull if different from your \"From:\" address."
 msgstr ""
 
@@ -3967,7 +3967,7 @@ msgstr ""
 msgid "Unsubscribe"
 msgstr ""
 
-#: soap/sympasoap.pm:553 src/Commands.pm:946 wwsympa/wwsympa.fcgi:3449
+#: soap/sympasoap.pm:553 src/Commands.pm:946 wwsympa/wwsympa.fcgi:3451
 msgid "Unsubscribe from list %s"
 msgstr ""
 
@@ -4059,11 +4059,11 @@ msgstr ""
 msgid "User data source"
 msgstr ""
 
-#: src/Commands.pm:160 src/Commands.pm:196
+#: mail_tt2/helpfile.tt2:2 src/Commands.pm:160 src/Commands.pm:196
 msgid "User guide"
 msgstr ""
 
-#: mail_tt2/helpfile.tt2:5
+#: mail_tt2/helpfile.tt2:10
 msgid "User's Guide"
 msgstr ""
 
@@ -4105,7 +4105,7 @@ msgstr ""
 msgid "WARNING: bounce rate too high in list %s"
 msgstr ""
 
-#: mail_tt2/helpfile.tt2:20
+#: mail_tt2/helpfile.tt2:25
 msgid "WHICH                       * Displays which lists you are subscribed to"
 msgstr ""
 
@@ -4143,7 +4143,7 @@ msgid ""
 "a full MIME structured message (only for MIME gurus)."
 msgstr ""
 
-#: soap/sympasoap.pm:701 soap/sympasoap.pm:702 src/Commands.pm:1062 src/Commands.pm:1063 src/Commands.pm:685 src/Commands.pm:686 wwsympa/wwsympa.fcgi:3220 wwsympa/wwsympa.fcgi:3221 wwsympa/wwsympa.fcgi:3819 wwsympa/wwsympa.fcgi:3820
+#: soap/sympasoap.pm:701 soap/sympasoap.pm:702 src/Commands.pm:1062 src/Commands.pm:1063 src/Commands.pm:685 src/Commands.pm:686 wwsympa/wwsympa.fcgi:3222 wwsympa/wwsympa.fcgi:3223 wwsympa/wwsympa.fcgi:3821 wwsympa/wwsympa.fcgi:3822
 msgid "Welcome on list %s"
 msgstr ""
 
@@ -4284,7 +4284,7 @@ msgstr ""
 msgid "You can logout (deletion of the cookie) at any time using logout button."
 msgstr ""
 
-#: mail_tt2/helpfile.tt2:12
+#: mail_tt2/helpfile.tt2:17
 msgid "You can put multiple commands in a message. These commands must appear in the message body and each line must contain only one command. The message body is ignored if the Content-Type is different from text/plain but even with crasy mailer using multipart and text/html for any message, commands in the subject are recognized."
 msgstr ""
 
@@ -4313,7 +4313,7 @@ msgstr ""
 msgid "You have been authenticated"
 msgstr ""
 
-#: wwsympa/wwsympa.fcgi:3450 wwsympa/wwsympa.fcgi:3925
+#: wwsympa/wwsympa.fcgi:3452 wwsympa/wwsympa.fcgi:3927
 msgid ""
 "You have been removed from list %s.\n"
 msgstr ""
@@ -4378,7 +4378,7 @@ msgid ""
 "email address. Please try subscribing using your canonical address."
 msgstr ""
 
-#: src/List.pm:8699 src/List.pm:8706
+#: src/List.pm:8709 src/List.pm:8716
 msgid ""
 "You requested a subscription reminder to be sent\n"
 "to each subscriber of list %s\n\n"
@@ -4610,7 +4610,7 @@ msgstr ""
 msgid "Your subscription email is %1"
 msgstr ""
 
-#: src/Commands.pm:1484 wwsympa/wwsympa.fcgi:3924
+#: src/Commands.pm:1484 wwsympa/wwsympa.fcgi:3926
 msgid "Your subscription to list %s has been removed."
 msgstr ""
 
@@ -5167,7 +5167,7 @@ msgstr ""
 msgid "local domain users or owner approval"
 msgstr ""
 
-#: src/etc/mhonarc-ressources.tt2:131 src/etc/mhonarc-ressources.tt2:239
+#: src/etc/mhonarc-ressources.tt2:136 src/etc/mhonarc-ressources.tt2:244
 #. ($PAGENUM$,$NUMOFPAGES$)
 msgid "mails, page # %1/%2"
 msgstr ""
@@ -5496,7 +5496,7 @@ msgstr ""
 msgid "selection (if multiple)"
 msgstr ""
 
-#: src/etc/mhonarc-ressources.tt2:399
+#: src/etc/mhonarc-ressources.tt2:404
 #. (user.email)
 msgid "send it back to %1"
 msgstr ""
@@ -5554,7 +5554,7 @@ msgstr ""
 msgid "summary message"
 msgstr ""
 
-#: src/etc/mhonarc-ressources.tt2:406 src/etc/mhonarc-ressources.tt2:413
+#: src/etc/mhonarc-ressources.tt2:411 src/etc/mhonarc-ressources.tt2:418
 msgid "tag this mail for deletion"
 msgstr ""
 
@@ -5587,7 +5587,7 @@ msgstr ""
 msgid "title"
 msgstr ""
 
-#: src/etc/mhonarc-ressources.tt2:396
+#: src/etc/mhonarc-ressources.tt2:401
 msgid "to list"
 msgstr ""
 
