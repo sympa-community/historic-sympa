@@ -316,7 +316,7 @@ msgstr "------ Ende der Nachricht ------\n"
 
 #: src/PlainDigest.pm:258
 msgid "-----End of Delivery Status Report-----\n"
-msgstr "----- Ende des Auslieferungs Reportes -----"
+msgstr "----- Ende des Auslieferungs Reportes -----\n"
 
 # nlsref 5,4
 #: src/PlainDigest.pm:199
@@ -1810,7 +1810,7 @@ msgstr "INFO <list> * Information über eine Liste"
 msgid "INVITE <list> <email>       * Invite <email> for subscription in <list>"
 msgstr ""
 "INVITE <list> <email> * Den Benutzer mit der Adresse <email> zum Abonnement "
-"der Liste <list> einladen \n"
+"der Liste <list> einladen"
 
 #: web_tt2/help_editlist.tt2:172
 msgid ""
@@ -2098,7 +2098,7 @@ msgstr ""
 "Familie passen : \n"
 "\n"
 "     Parameter : %4\n"
-"     Dateien : %5"
+"     Dateien : %5\n"
 
 # nlsref 6,90
 #: src/Commands.pm:1582
@@ -3639,7 +3639,7 @@ msgstr ""
 "- klicken Sie diesen Link: %s\n"
 "\n"
 "Wenn es sich um einen Irrtum handelt, ignorieren Sie diese\n"
-"Nachricht einfach.\n"
+"Nachricht einfach."
 
 # nlsref 6,260
 #: src/List.pm:8687
@@ -3670,7 +3670,7 @@ msgstr ""
 "- klicken Sie diesen Link: %s\n"
 "\n"
 "Wenn es sich um einen Irrtum handelt, ignorieren Sie diese\n"
-"Nachricht einfach.\n"
+"Nachricht einfach."
 
 # nlsref 6,39
 #: src/List.pm:8699 src/List.pm:8704
@@ -4145,7 +4145,7 @@ msgstr "Der Betreff des Zertifikates ist :"
 # nlsref 1,1
 #: src/alias_manager.pl:40
 msgid "The configuration file --CONFIG-- contains errors.\n"
-msgstr "Die Konfigurationsdatei enthält Fehler."
+msgstr "Die Konfigurationsdatei enthält Fehler.\n"
 
 #: web_tt2/help_editlist.tt2:139
 msgid ""
@@ -4941,7 +4941,7 @@ msgid ""
 "subscription : EXPIREINDEX %s\n"
 msgstr ""
 "Um die Liste der Mitglieder anzuzeigen, die ihr\n"
-"Abonnement nicht bestätigt haben: EXPIREINDEX %s"
+"Abonnement nicht bestätigt haben: EXPIREINDEX %s\n"
 
 #. (conf.email,conf.host)
 #: mail_tt2/certif_warning.tt2:12
@@ -5044,7 +5044,7 @@ msgstr ""
 "Freizugebende Nachricht für Liste %s mit Schlüssel\n"
 "%s nicht gefunden.\n"
 "Die Nachricht wurde eventuell schon von einem anderen Moderator\n"
-"freigegeben."
+"freigegeben.\n"
 
 # nlsref 6,68
 #: src/Commands.pm:1723
@@ -5670,7 +5670,7 @@ msgid ""
 msgstr ""
 "Sie haben Ihr Abonnement wahrscheinlich unter einer\n"
 "anderen EMail-Adresse bestätigt. Bitte versuchen Sie es noch\n"
-"einmal mit Ihrer Hauptadresse.\n"
+"einmal mit Ihrer Hauptadresse."
 
 # nlsref 6,79
 #: src/List.pm:8709 src/List.pm:8716
@@ -5871,7 +5871,7 @@ msgid ""
 "has been rejected by the moderator (%3)."
 msgstr ""
 "Ihre Nachricht an Liste %1@%2\n"
-"wurde an vom Moderator (%3) abgelehnt.\n"
+"wurde an vom Moderator (%3) abgelehnt."
 
 # nlsref 4,38
 #: src/List.pm:2418
@@ -6004,7 +6004,7 @@ msgstr "[ Bild%s ]"
 
 #: src/PlainDigest.pm:327
 msgid "[ Text converted from HTML ]\n"
-msgstr "[ Text konvertiert von HTML ]"
+msgstr "[ Text konvertiert von HTML ]\n"
 
 #: web_tt2/main.tt2:162 web_tt2/main.tt2:165
 #, fuzzy
@@ -6051,13 +6051,15 @@ msgid ""
 msgstr ""
 "\n"
 "%Angehängt( Nachricht folgt)\n"
-"-----Original-Nachricht-----"
+"-----Original-Nachricht-----\n"
 
 #: src/PlainDigest.pm:256
 msgid ""
 "\n"
 "-----Delivery Status Report-----\n"
-msgstr "-----Zustell-Statusbericht -----"
+msgstr ""
+"\n"
+"-----Zustell-Statusbericht -----\n"
 
 # nlsref 6,49
 #: src/Commands.pm:1981 src/Commands.pm:2164
@@ -6070,6 +6072,7 @@ msgid ""
 "than %d days and who didn't confirm their subscription. The expiration\n"
 "will end in %d day(s) (%s).\n"
 msgstr ""
+"\n"
 "Für die Liste %s läuft bereits ein EXPIRE-Befehl, der vom Verwalter\n"
 "%s (%s) gestartet wurde.\n"
 "\n"
@@ -6088,6 +6091,7 @@ msgid ""
 "You will then be able to remove these addresses yourself with the DEL "
 "command.\n"
 msgstr ""
+"\n"
 "Ein EXPIRE-Befehl für Liste %s wurde gestartet. Dieser Befehl\n"
 "endet in %d Tagen. Sie werden eine Liste der Mitglieder erhalten,\n"
 "die ihr Abonnement nicht bestätigt haben, und können dann diese\n"
@@ -6117,7 +6121,7 @@ msgstr ""
 "mailto:%s?subject=auth%%20%s%%20ADD%%20%s%%20%s%%20%s\n"
 "\n"
 "Sie können auch ein E-Mail an %s mit folgendem Betreff senden :\n"
-"AUTH %s ADD %s %s %s"
+"AUTH %s ADD %s %s %s\n"
 
 # nlsref 6,70
 #: src/Commands.pm:183
