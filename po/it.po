@@ -5890,11 +5890,11 @@ msgstr ""
 #: web_tt2/create_list.tt2:4
 msgid "Your list is created."
 msgstr ""
-"La tua lista è stata creata. Puoi provarla o modificare la sua configurazione"
-"\r\n"
-"usando il tasto di amministrazione.\r\n"
-"\r\n"
-"(L'alias effettivo dipende dal list-master quindi è possibile che\r\n"
+"La tua lista è stata creata. Puoi provarla o modificare la sua "
+"configurazione\n"
+"usando il tasto di amministrazione.\n"
+"\n"
+"(L'alias effettivo dipende dal list-master quindi è possibile che\n"
 "l'indirizzo della tua lista non venga ancora riconosciuto.)"
 
 # nlsref 4,12
