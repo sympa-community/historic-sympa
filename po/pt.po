@@ -1387,6 +1387,10 @@ msgstr ""
 msgid "Families"
 msgstr ""
 
+#: src/List.pm:549
+msgid "Family name"
+msgstr ""
+
 #: src/List.pm:6187
 msgid "File"
 msgstr ""
@@ -1744,6 +1748,10 @@ msgstr ""
 
 #: web_tt2/suboptions.tt2:6
 msgid "Last update:"
+msgstr ""
+
+#: src/List.pm:895
+msgid "Latest family instantiation"
 msgstr ""
 
 #: web_tt2/serveradmin.tt2:83
@@ -2203,6 +2211,10 @@ msgstr ""
 msgid "Moderators"
 msgstr ""
 
+#: src/List.pm:540
+msgid "Moderators defined in an external datasource"
+msgstr ""
+
 #. (list.name)
 #: mail_tt2/moderate.tt2:2
 msgid "Moderators of list %1"
@@ -2489,6 +2501,10 @@ msgid ""
 "Privileged owners may edit a few more options than other owners. There can "
 "only be one privileged owner per list; his/her email address may not be "
 "edited from the web."
+msgstr ""
+
+#: src/List.pm:960
+msgid "Owners defined in an external datasource"
 msgstr ""
 
 #: src/List.pm:2267 src/List.pm:2282 src/List.pm:2294
@@ -5316,6 +5332,14 @@ msgstr ""
 msgid "database type"
 msgstr ""
 
+#: src/List.pm:528 src/List.pm:944
+msgid "datasource parameters"
+msgstr ""
+
+#: src/List.pm:1103 src/List.pm:886
+msgid "date"
+msgstr ""
+
 #: src/List.pm:476
 msgid "days"
 msgstr ""
@@ -5391,6 +5415,10 @@ msgstr ""
 
 #: src/List.pm:833
 msgid "environment variables for database connexion"
+msgstr ""
+
+#: src/List.pm:1098 src/List.pm:882
+msgid "epoch date"
 msgstr ""
 
 #: mail_tt2/listmaster_notification.tt2:68
@@ -5705,7 +5733,7 @@ msgstr ""
 msgid "private informations"
 msgstr ""
 
-#: src/List.pm:929
+#: src/List.pm:929 src/List.pm:955
 msgid "profile"
 msgstr ""
 
@@ -5761,7 +5789,8 @@ msgstr ""
 msgid "quota"
 msgstr ""
 
-#: src/List.pm:343 src/List.pm:456 src/List.pm:504 src/List.pm:914
+#: src/List.pm:343 src/List.pm:456 src/List.pm:504 src/List.pm:534
+#: src/List.pm:914 src/List.pm:950
 msgid "reception mode"
 msgstr ""
 
@@ -5994,6 +6023,10 @@ msgid ""
 "a nice mailto address where others have nothing."
 msgstr ""
 
+#: src/List.pm:524 src/List.pm:939
+msgid "the datasource"
+msgstr ""
+
 #. (shortname)
 #: web_tt2/d_upload.tt2:1
 msgid "the file %1 already exists"
@@ -6049,6 +6082,14 @@ msgstr ""
 
 #: wwsympa/wwslib.pm:59
 msgid "welcome message"
+msgstr ""
+
+#: src/List.pm:891
+msgid "who ran the instantiation"
+msgstr ""
+
+#: src/List.pm:1109
+msgid "who updated the config"
 msgstr ""
 
 #: src/etc/scenari/unsubscribe.open_notify:1

@@ -1546,6 +1546,12 @@ msgid "Families"
 msgstr "ÎÄ¼þ"
 
 # nlsref 8,7
+#: src/List.pm:549
+#, fuzzy
+msgid "Family name"
+msgstr "ÎÄ¼þ"
+
+# nlsref 8,7
 #: src/List.pm:6187
 msgid "File"
 msgstr "ÎÄ¼þ"
@@ -1938,6 +1944,10 @@ msgstr "ÅäÖÃµÄ×îºó¸üÐÂÊ±¼ä"
 
 #: web_tt2/suboptions.tt2:6
 msgid "Last update:"
+msgstr ""
+
+#: src/List.pm:895
+msgid "Latest family instantiation"
 msgstr ""
 
 #: web_tt2/serveradmin.tt2:83
@@ -2461,6 +2471,10 @@ msgstr ""
 "#-#-#-#-#  zh_CN.po (PACKAGE VERSION)  #-#-#-#-#\n"
 "监管者:"
 
+#: src/List.pm:540
+msgid "Moderators defined in an external datasource"
+msgstr ""
+
 #. (list.name)
 #: mail_tt2/moderate.tt2:2
 msgid "Moderators of list %1"
@@ -2763,6 +2777,10 @@ msgid ""
 "Privileged owners may edit a few more options than other owners. There can "
 "only be one privileged owner per list; his/her email address may not be "
 "edited from the web."
+msgstr ""
+
+#: src/List.pm:960
+msgid "Owners defined in an external datasource"
 msgstr ""
 
 # nlsref 8,1
@@ -6011,6 +6029,16 @@ msgstr "Êý¾Ý¿âÃû"
 msgid "database type"
 msgstr "Êý¾Ý¿âÀàÐÍ"
 
+#: src/List.pm:528 src/List.pm:944
+#, fuzzy
+msgid "datasource parameters"
+msgstr "Data sources setup"
+
+#: src/List.pm:1103 src/List.pm:886
+#, fuzzy
+msgid "date"
+msgstr "更新"
+
 # nlsref 16,23
 #: src/List.pm:476
 msgid "days"
@@ -6094,6 +6122,11 @@ msgstr "整个"
 #: src/List.pm:833
 msgid "environment variables for database connexion"
 msgstr ""
+
+#: src/List.pm:1098 src/List.pm:882
+#, fuzzy
+msgid "epoch date"
+msgstr "更新"
 
 #: mail_tt2/listmaster_notification.tt2:68
 msgid "errors in param_constraint.conf file"
@@ -6454,7 +6487,7 @@ msgid "private informations"
 msgstr "Ë½ÈËÐÅÏ¢"
 
 # nlsref 16,62
-#: src/List.pm:929
+#: src/List.pm:929 src/List.pm:955
 msgid "profile"
 msgstr "ÃèÊö"
 
@@ -6531,7 +6564,8 @@ msgid "quota"
 msgstr ""
 
 # nlsref 16,19
-#: src/List.pm:343 src/List.pm:456 src/List.pm:504 src/List.pm:914
+#: src/List.pm:343 src/List.pm:456 src/List.pm:504 src/List.pm:534
+#: src/List.pm:914 src/List.pm:950
 msgid "reception mode"
 msgstr "½ÓÊÕÄ£Ê½"
 
@@ -6795,6 +6829,12 @@ msgid ""
 "a nice mailto address where others have nothing."
 msgstr ""
 
+# nlsref 16,81
+#: src/List.pm:524 src/List.pm:939
+#, fuzzy
+msgid "the datasource"
+msgstr "ÓÃ»§Êý¾ÝÔ´"
+
 #. (shortname)
 #: web_tt2/d_upload.tt2:1
 msgid "the file %1 already exists"
@@ -6860,6 +6900,18 @@ msgstr "¾¯¸æ±ÈÂÊ"
 #: wwsympa/wwslib.pm:59
 msgid "welcome message"
 msgstr "»¶Ó­´Ç"
+
+# nlsref 16,53
+#: src/List.pm:891
+#, fuzzy
+msgid "who ran the instantiation"
+msgstr "Ë­¿ÉÒÔ²é¿´ÓÊµÝ±íÐÅÏ¢"
+
+# nlsref 16,77
+#: src/List.pm:1109
+#, fuzzy
+msgid "who updated the config"
+msgstr "ÅäÖÃµÄ×îºó¸üÐÂÊ±¼ä"
 
 #: src/etc/scenari/unsubscribe.open_notify:1
 msgid "without authentication, notification is sent to owners"

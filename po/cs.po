@@ -1460,6 +1460,13 @@ msgstr ""
 "[% ELSE %]\n"
 "      <B> VytvoÃ¸it novÃ½ adresÃ¡Ã¸ ve sdÃ­lenÃ©m adresÃ¡Ã¸i</B>"
 
+#: src/List.pm:549
+#, fuzzy
+msgid "Family name"
+msgstr ""
+"[% ELSE %]\n"
+"      <B> VytvoÃ¸it novÃ½ adresÃ¡Ã¸ ve sdÃ­lenÃ©m adresÃ¡Ã¸i</B>"
+
 #: src/List.pm:6187
 #, fuzzy
 msgid "File"
@@ -1846,6 +1853,10 @@ msgstr "Ã¨lenem od [% current_subscriber.date %]"
 
 #: web_tt2/suboptions.tt2:6
 msgid "Last update:"
+msgstr ""
+
+#: src/List.pm:895
+msgid "Latest family instantiation"
 msgstr ""
 
 #: web_tt2/serveradmin.tt2:83
@@ -2339,6 +2350,10 @@ msgstr "ModerÃ¡tor             : %1"
 msgid "Moderators"
 msgstr "ModerÃ¡toÃ¸i"
 
+#: src/List.pm:540
+msgid "Moderators defined in an external datasource"
+msgstr ""
+
 #. (list.name)
 #: mail_tt2/moderate.tt2:2
 msgid "Moderators of list %1"
@@ -2631,6 +2646,10 @@ msgid ""
 "Privileged owners may edit a few more options than other owners. There can "
 "only be one privileged owner per list; his/her email address may not be "
 "edited from the web."
+msgstr ""
+
+#: src/List.pm:960
+msgid "Owners defined in an external datasource"
 msgstr ""
 
 #: src/List.pm:2267 src/List.pm:2282 src/List.pm:2294
@@ -5628,6 +5647,16 @@ msgstr ""
 msgid "database type"
 msgstr ""
 
+#: src/List.pm:528 src/List.pm:944
+#, fuzzy
+msgid "datasource parameters"
+msgstr "Data sources setup"
+
+#: src/List.pm:1103 src/List.pm:886
+#, fuzzy
+msgid "date"
+msgstr "ZmÃ¬nit"
+
 #: src/List.pm:476
 msgid "days"
 msgstr ""
@@ -5710,6 +5739,11 @@ msgstr "celÃ©"
 #, fuzzy
 msgid "environment variables for database connexion"
 msgstr ": VaÂ¹e prostÃ¸edÃ­ jako Ã¨len nebo vlastnÃ­k"
+
+#: src/List.pm:1098 src/List.pm:882
+#, fuzzy
+msgid "epoch date"
+msgstr "ZmÃ¬nit"
 
 #: mail_tt2/listmaster_notification.tt2:68
 msgid "errors in param_constraint.conf file"
@@ -6056,7 +6090,7 @@ msgstr "Informace o Ã¨lenu"
 msgid "private informations"
 msgstr "Informace o Ã¨lenu"
 
-#: src/List.pm:929
+#: src/List.pm:929 src/List.pm:955
 msgid "profile"
 msgstr ""
 
@@ -6117,7 +6151,8 @@ msgstr "skrytÃ¬"
 msgid "quota"
 msgstr "skrytÃ¬"
 
-#: src/List.pm:343 src/List.pm:456 src/List.pm:504 src/List.pm:914
+#: src/List.pm:343 src/List.pm:456 src/List.pm:504 src/List.pm:534
+#: src/List.pm:914 src/List.pm:950
 #, fuzzy
 msgid "reception mode"
 msgstr "ZpÃ¹sob pÃ¸Ã­jÃ­mÃ¡nÃ­ :"
@@ -6367,6 +6402,11 @@ msgid ""
 "a nice mailto address where others have nothing."
 msgstr ""
 
+#: src/List.pm:524 src/List.pm:939
+#, fuzzy
+msgid "the datasource"
+msgstr "size=\"-1\"><b>Ãšpravy</b"
+
 #. (shortname)
 #: web_tt2/d_upload.tt2:1
 msgid "the file %1 already exists"
@@ -6434,6 +6474,15 @@ msgstr ""
 #, fuzzy
 msgid "welcome message"
 msgstr "skrytÃ¬</i"
+
+#: src/List.pm:891
+msgid "who ran the instantiation"
+msgstr ""
+
+#: src/List.pm:1109
+#, fuzzy
+msgid "who updated the config"
+msgstr "Ã¨lenem od [% current_subscriber.date %]"
 
 #: src/etc/scenari/unsubscribe.open_notify:1
 msgid "without authentication, notification is sent to owners"

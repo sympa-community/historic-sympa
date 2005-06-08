@@ -1418,6 +1418,11 @@ msgstr ""
 msgid "Families"
 msgstr "ファミリー"
 
+#: src/List.pm:549
+#, fuzzy
+msgid "Family name"
+msgstr "ファミリー"
+
 #: src/List.pm:6187
 msgid "File"
 msgstr "ファイル"
@@ -1779,6 +1784,10 @@ msgstr "設定の最終更新"
 #: web_tt2/suboptions.tt2:6
 msgid "Last update:"
 msgstr "最終更新: "
+
+#: src/List.pm:895
+msgid "Latest family instantiation"
+msgstr ""
 
 #: web_tt2/serveradmin.tt2:83
 msgid "Latest lists"
@@ -2249,6 +2258,10 @@ msgstr "査読者: %1"
 msgid "Moderators"
 msgstr "査読者"
 
+#: src/List.pm:540
+msgid "Moderators defined in an external datasource"
+msgstr ""
+
 #. (list.name)
 #: mail_tt2/moderate.tt2:2
 msgid "Moderators of list %1"
@@ -2546,6 +2559,10 @@ msgid ""
 "Privileged owners may edit a few more options than other owners. There can "
 "only be one privileged owner per list; his/her email address may not be "
 "edited from the web."
+msgstr ""
+
+#: src/List.pm:960
+msgid "Owners defined in an external datasource"
 msgstr ""
 
 #: src/List.pm:2267 src/List.pm:2282 src/List.pm:2294
@@ -5442,6 +5459,16 @@ msgstr "データベース名"
 msgid "database type"
 msgstr "データベースのタイプ"
 
+#: src/List.pm:528 src/List.pm:944
+#, fuzzy
+msgid "datasource parameters"
+msgstr "データソースの設定"
+
+#: src/List.pm:1103 src/List.pm:886
+#, fuzzy
+msgid "date"
+msgstr "更新"
+
 #: src/List.pm:476
 msgid "days"
 msgstr "日"
@@ -5518,6 +5545,11 @@ msgstr "単語全体"
 #: src/List.pm:833
 msgid "environment variables for database connexion"
 msgstr ""
+
+#: src/List.pm:1098 src/List.pm:882
+#, fuzzy
+msgid "epoch date"
+msgstr "更新"
 
 #: mail_tt2/listmaster_notification.tt2:68
 msgid "errors in param_constraint.conf file"
@@ -5832,7 +5864,7 @@ msgstr ""
 msgid "private informations"
 msgstr ""
 
-#: src/List.pm:929
+#: src/List.pm:929 src/List.pm:955
 msgid "profile"
 msgstr ""
 
@@ -5888,7 +5920,8 @@ msgstr "通知を送らない"
 msgid "quota"
 msgstr "Quota"
 
-#: src/List.pm:343 src/List.pm:456 src/List.pm:504 src/List.pm:914
+#: src/List.pm:343 src/List.pm:456 src/List.pm:504 src/List.pm:534
+#: src/List.pm:914 src/List.pm:950
 msgid "reception mode"
 msgstr "メール受信モード"
 
@@ -6121,6 +6154,11 @@ msgid ""
 "a nice mailto address where others have nothing."
 msgstr ""
 
+#: src/List.pm:524 src/List.pm:939
+#, fuzzy
+msgid "the datasource"
+msgstr "ユーザデータソース"
+
 #. (shortname)
 #: web_tt2/d_upload.tt2:1
 msgid "the file %1 already exists"
@@ -6178,6 +6216,16 @@ msgstr "警告レート"
 #: wwsympa/wwslib.pm:59
 msgid "welcome message"
 msgstr "ウェルカムメッセージ"
+
+#: src/List.pm:891
+#, fuzzy
+msgid "who ran the instantiation"
+msgstr "メーリングリスト情報を見ることができるのは"
+
+#: src/List.pm:1109
+#, fuzzy
+msgid "who updated the config"
+msgstr "設定の最終更新"
 
 #: src/etc/scenari/unsubscribe.open_notify:1
 msgid "without authentication, notification is sent to owners"

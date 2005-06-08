@@ -1573,6 +1573,11 @@ msgstr "Impossible de supprimer les alias de messagerie"
 msgid "Families"
 msgstr "Familles"
 
+#: src/List.pm:549
+#, fuzzy
+msgid "Family name"
+msgstr "Nom de liste"
+
 # nlsref 8,7
 #: src/List.pm:6187
 msgid "File"
@@ -1989,6 +1994,10 @@ msgstr "Dernière mise à jour de la config"
 #: web_tt2/suboptions.tt2:6
 msgid "Last update:"
 msgstr "Dernière mise à jour :"
+
+#: src/List.pm:895
+msgid "Latest family instantiation"
+msgstr ""
 
 #: web_tt2/serveradmin.tt2:83
 msgid "Latest lists"
@@ -2507,6 +2516,10 @@ msgstr "Modérateur         : %1"
 msgid "Moderators"
 msgstr "Modérateurs"
 
+#: src/List.pm:540
+msgid "Moderators defined in an external datasource"
+msgstr ""
+
 #. (list.name)
 #: mail_tt2/moderate.tt2:2
 msgid "Moderators of list %1"
@@ -2828,6 +2841,10 @@ msgstr ""
 "pour la liste. Les propriétaires privilégiés peuvent éditer certains "
 "paramètres non éditable par les autres propriétaires. Il ne peut y avoir "
 "qu'un seul propriétaire privilégié."
+
+#: src/List.pm:960
+msgid "Owners defined in an external datasource"
+msgstr ""
 
 # nlsref 8,1
 #: src/List.pm:2267 src/List.pm:2282 src/List.pm:2294
@@ -6259,6 +6276,16 @@ msgstr "nom de la base"
 msgid "database type"
 msgstr "type de la base"
 
+#: src/List.pm:528 src/List.pm:944
+#, fuzzy
+msgid "datasource parameters"
+msgstr "Paramètres incorrects"
+
+#: src/List.pm:1103 src/List.pm:886
+#, fuzzy
+msgid "date"
+msgstr "Mise à jour"
+
 # nlsref 16,23
 #: src/List.pm:476
 msgid "days"
@@ -6344,6 +6371,11 @@ msgstr "partie de mot"
 #: src/List.pm:833
 msgid "environment variables for database connexion"
 msgstr "variable d'environnement pour la connexion"
+
+#: src/List.pm:1098 src/List.pm:882
+#, fuzzy
+msgid "epoch date"
+msgstr "Mise à jour"
 
 #: mail_tt2/listmaster_notification.tt2:68
 msgid "errors in param_constraint.conf file"
@@ -6687,7 +6719,7 @@ msgid "private informations"
 msgstr "informations privées"
 
 # nlsref 16,62
-#: src/List.pm:929
+#: src/List.pm:929 src/List.pm:955
 msgid "profile"
 msgstr "profil"
 
@@ -6746,7 +6778,8 @@ msgid "quota"
 msgstr "quota"
 
 # nlsref 16,19
-#: src/List.pm:343 src/List.pm:456 src/List.pm:504 src/List.pm:914
+#: src/List.pm:343 src/List.pm:456 src/List.pm:504 src/List.pm:534
+#: src/List.pm:914 src/List.pm:950
 msgid "reception mode"
 msgstr "mode de réception"
 
@@ -7005,6 +7038,12 @@ msgstr ""
 "activé javascript dans son navigateur voit les adresses email affichées "
 "normalement."
 
+# nlsref 16,81
+#: src/List.pm:524 src/List.pm:939
+#, fuzzy
+msgid "the datasource"
+msgstr "Source de données"
+
 #. (shortname)
 #: web_tt2/d_upload.tt2:1
 msgid "the file %1 already exists"
@@ -7067,6 +7106,18 @@ msgstr "seuil d'alerte"
 #: wwsympa/wwslib.pm:59
 msgid "welcome message"
 msgstr "message de bienvenue"
+
+# nlsref 16,53
+#: src/List.pm:891
+#, fuzzy
+msgid "who ran the instantiation"
+msgstr "Qui a accès aux informations sur la liste"
+
+# nlsref 16,77
+#: src/List.pm:1109
+#, fuzzy
+msgid "who updated the config"
+msgstr "Dernière mise à jour de la config"
 
 #: src/etc/scenari/unsubscribe.open_notify:1
 msgid "without authentication, notification is sent to owners"
@@ -7356,10 +7407,6 @@ msgstr "votre mot de passe         : %1"
 
 #~ msgid "Error while deleting this message"
 #~ msgstr "Erreur lors de la suppression de ce message"
-
-#, fuzzy
-#~ msgid "Full name"
-#~ msgstr "Nom de liste"
 
 #~ msgid ""
 #~ "Moderation: to consult the message list to\n"

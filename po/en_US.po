@@ -1557,6 +1557,11 @@ msgstr "Failed to add user %1"
 msgid "Families"
 msgstr "File"
 
+#: src/List.pm:549
+#, fuzzy
+msgid "Family name"
+msgstr "File"
+
 #: src/List.pm:6187
 msgid "File"
 msgstr "File"
@@ -1967,6 +1972,10 @@ msgstr "Last update of config"
 #: web_tt2/suboptions.tt2:6
 msgid "Last update:"
 msgstr "Last update:"
+
+#: src/List.pm:895
+msgid "Latest family instantiation"
+msgstr ""
 
 #: web_tt2/serveradmin.tt2:83
 msgid "Latest lists"
@@ -2473,6 +2482,10 @@ msgstr "Moderator          : %1"
 msgid "Moderators"
 msgstr "Moderators"
 
+#: src/List.pm:540
+msgid "Moderators defined in an external datasource"
+msgstr ""
+
 #. (list.name)
 #: mail_tt2/moderate.tt2:2
 msgid "Moderators of list %1"
@@ -2804,6 +2817,10 @@ msgstr ""
 "Privileged owners may edit a few more options than other owners. There can "
 "only be one privileged owner per list; his/her email address may not be "
 "edited from the web."
+
+#: src/List.pm:960
+msgid "Owners defined in an external datasource"
+msgstr ""
 
 #: src/List.pm:2267 src/List.pm:2282 src/List.pm:2294
 msgid "Owners of list %s"
@@ -6192,6 +6209,16 @@ msgstr "database name"
 msgid "database type"
 msgstr "database type"
 
+#: src/List.pm:528 src/List.pm:944
+#, fuzzy
+msgid "datasource parameters"
+msgstr "Data sources setup"
+
+#: src/List.pm:1103 src/List.pm:886
+#, fuzzy
+msgid "date"
+msgstr "Update"
+
 #: src/List.pm:476
 msgid "days"
 msgstr "days"
@@ -6271,6 +6298,11 @@ msgstr "entire word"
 #: src/List.pm:833
 msgid "environment variables for database connexion"
 msgstr "environment variables for database connexion"
+
+#: src/List.pm:1098 src/List.pm:882
+#, fuzzy
+msgid "epoch date"
+msgstr "Update"
 
 #: mail_tt2/listmaster_notification.tt2:68
 msgid "errors in param_constraint.conf file"
@@ -6592,7 +6624,7 @@ msgstr "private information"
 msgid "private informations"
 msgstr "private informations"
 
-#: src/List.pm:929
+#: src/List.pm:929 src/List.pm:955
 msgid "profile"
 msgstr "profile"
 
@@ -6650,7 +6682,8 @@ msgstr "quiet"
 msgid "quota"
 msgstr "quota"
 
-#: src/List.pm:343 src/List.pm:456 src/List.pm:504 src/List.pm:914
+#: src/List.pm:343 src/List.pm:456 src/List.pm:504 src/List.pm:534
+#: src/List.pm:914 src/List.pm:950
 msgid "reception mode"
 msgstr "reception mode"
 
@@ -6887,6 +6920,11 @@ msgstr ""
 "the address is hidden using a javascript. User who enable javascript can see "
 "a nice mailto address where others have nothing."
 
+#: src/List.pm:524 src/List.pm:939
+#, fuzzy
+msgid "the datasource"
+msgstr "User data source"
+
 #. (shortname)
 #: web_tt2/d_upload.tt2:1
 msgid "the file %1 already exists"
@@ -6943,6 +6981,16 @@ msgstr "warn rate"
 #: wwsympa/wwslib.pm:59
 msgid "welcome message"
 msgstr "welcome message"
+
+#: src/List.pm:891
+#, fuzzy
+msgid "who ran the instantiation"
+msgstr "Who can view list information"
+
+#: src/List.pm:1109
+#, fuzzy
+msgid "who updated the config"
+msgstr "Last update of config"
 
 #: src/etc/scenari/unsubscribe.open_notify:1
 msgid "without authentication, notification is sent to owners"

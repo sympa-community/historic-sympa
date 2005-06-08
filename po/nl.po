@@ -1546,6 +1546,12 @@ msgid "Families"
 msgstr "Bestand"
 
 # nlsref 8,7
+#: src/List.pm:549
+#, fuzzy
+msgid "Family name"
+msgstr "Bestand"
+
+# nlsref 8,7
 #: src/List.pm:6187
 msgid "File"
 msgstr "Bestand"
@@ -1949,6 +1955,10 @@ msgstr "Laatste update van de configuratie"
 #: web_tt2/suboptions.tt2:6
 msgid "Last update:"
 msgstr "Laatste wijziging:"
+
+#: src/List.pm:895
+msgid "Latest family instantiation"
+msgstr ""
 
 #: web_tt2/serveradmin.tt2:83
 msgid "Latest lists"
@@ -2468,6 +2478,10 @@ msgstr ""
 "#-#-#-#-#  nl.po (PACKAGE VERSION)  #-#-#-#-#\n"
 "Moderatoren"
 
+#: src/List.pm:540
+msgid "Moderators defined in an external datasource"
+msgstr ""
+
 #. (list.name)
 #: mail_tt2/moderate.tt2:2
 msgid "Moderators of list %1"
@@ -2766,6 +2780,10 @@ msgid ""
 "Privileged owners may edit a few more options than other owners. There can "
 "only be one privileged owner per list; his/her email address may not be "
 "edited from the web."
+msgstr ""
+
+#: src/List.pm:960
+msgid "Owners defined in an external datasource"
 msgstr ""
 
 # nlsref 8,1
@@ -6053,6 +6071,16 @@ msgstr "database naam"
 msgid "database type"
 msgstr "database type"
 
+#: src/List.pm:528 src/List.pm:944
+#, fuzzy
+msgid "datasource parameters"
+msgstr "Data bronnen configuratie"
+
+#: src/List.pm:1103 src/List.pm:886
+#, fuzzy
+msgid "date"
+msgstr "Wijzig"
+
 # nlsref 16,23
 #: src/List.pm:476
 msgid "days"
@@ -6138,6 +6166,11 @@ msgstr "entire"
 #: src/List.pm:833
 msgid "environment variables for database connexion"
 msgstr "environment variabele voor database connectie."
+
+#: src/List.pm:1098 src/List.pm:882
+#, fuzzy
+msgid "epoch date"
+msgstr "Wijzig"
 
 #: mail_tt2/listmaster_notification.tt2:68
 msgid "errors in param_constraint.conf file"
@@ -6492,7 +6525,7 @@ msgid "private informations"
 msgstr "private informatie"
 
 # nlsref 16,62
-#: src/List.pm:929
+#: src/List.pm:929 src/List.pm:955
 msgid "profile"
 msgstr "profiel"
 
@@ -6554,7 +6587,8 @@ msgid "quota"
 msgstr "quota"
 
 # nlsref 16,19
-#: src/List.pm:343 src/List.pm:456 src/List.pm:504 src/List.pm:914
+#: src/List.pm:343 src/List.pm:456 src/List.pm:504 src/List.pm:534
+#: src/List.pm:914 src/List.pm:950
 msgid "reception mode"
 msgstr "Ontvangst stand"
 
@@ -6813,6 +6847,12 @@ msgid ""
 "a nice mailto address where others have nothing."
 msgstr ""
 
+# nlsref 16,81
+#: src/List.pm:524 src/List.pm:939
+#, fuzzy
+msgid "the datasource"
+msgstr "Gebruiker data bron"
+
 #. (shortname)
 #: web_tt2/d_upload.tt2:1
 msgid "the file %1 already exists"
@@ -6878,6 +6918,18 @@ msgstr "waarschuwings percentage"
 #: wwsympa/wwslib.pm:59
 msgid "welcome message"
 msgstr "welkomstbericht"
+
+# nlsref 16,53
+#: src/List.pm:891
+#, fuzzy
+msgid "who ran the instantiation"
+msgstr "Wie kan lijstinformatie zien"
+
+# nlsref 16,77
+#: src/List.pm:1109
+#, fuzzy
+msgid "who updated the config"
+msgstr "Laatste update van de configuratie"
 
 #: src/etc/scenari/unsubscribe.open_notify:1
 msgid "without authentication, notification is sent to owners"

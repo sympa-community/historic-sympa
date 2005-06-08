@@ -1617,6 +1617,12 @@ msgid "Families"
 msgstr "Familien"
 
 # nlsref 8,7
+#: src/List.pm:549
+#, fuzzy
+msgid "Family name"
+msgstr "Familien"
+
+# nlsref 8,7
 #: src/List.pm:6187
 msgid "File"
 msgstr "Datei"
@@ -2043,6 +2049,10 @@ msgstr "Letze Konfigurationsänderung"
 #: web_tt2/suboptions.tt2:6
 msgid "Last update:"
 msgstr "Zuletzt aufdatiert"
+
+#: src/List.pm:895
+msgid "Latest family instantiation"
+msgstr ""
 
 #: web_tt2/serveradmin.tt2:83
 msgid "Latest lists"
@@ -2583,6 +2593,10 @@ msgstr "Moderator             : %1"
 msgid "Moderators"
 msgstr "Moderatoren"
 
+#: src/List.pm:540
+msgid "Moderators defined in an external datasource"
+msgstr ""
+
 #. (list.name)
 #: mail_tt2/moderate.tt2:2
 msgid "Moderators of list %1"
@@ -2913,6 +2927,10 @@ msgstr ""
 "Privilegierte Eigentümer können etwas mehr Optionen editieren als andere "
 "Eigentümer. Pro Liste gibt es nur einen privilegierten Eigentümer. Seine/"
 "Ihre E-Mail Adresse kann nicht über die Web-Oberfläche geändert werden."
+
+#: src/List.pm:960
+msgid "Owners defined in an external datasource"
+msgstr ""
 
 # nlsref 8,1
 #: src/List.pm:2267 src/List.pm:2282 src/List.pm:2294
@@ -6394,6 +6412,16 @@ msgstr "Datanbankname"
 msgid "database type"
 msgstr "Datenbanktyp"
 
+#: src/List.pm:528 src/List.pm:944
+#, fuzzy
+msgid "datasource parameters"
+msgstr "Datenquelle Setup"
+
+#: src/List.pm:1103 src/List.pm:886
+#, fuzzy
+msgid "date"
+msgstr "&Auml;ndern"
+
 # nlsref 16,23
 #: src/List.pm:476
 msgid "days"
@@ -6478,6 +6506,11 @@ msgstr "ganzes Wort"
 #: src/List.pm:833
 msgid "environment variables for database connexion"
 msgstr "Umgebungs Variable f&uuml;r die Datenbank Verbindung"
+
+#: src/List.pm:1098 src/List.pm:882
+#, fuzzy
+msgid "epoch date"
+msgstr "&Auml;ndern"
 
 #: mail_tt2/listmaster_notification.tt2:68
 msgid "errors in param_constraint.conf file"
@@ -6827,7 +6860,7 @@ msgid "private informations"
 msgstr "private Information"
 
 # nlsref 16,62
-#: src/List.pm:929
+#: src/List.pm:929 src/List.pm:955
 msgid "profile"
 msgstr "Profil"
 
@@ -6886,7 +6919,8 @@ msgid "quota"
 msgstr "Quota"
 
 # nlsref 16,19
-#: src/List.pm:343 src/List.pm:456 src/List.pm:504 src/List.pm:914
+#: src/List.pm:343 src/List.pm:456 src/List.pm:504 src/List.pm:534
+#: src/List.pm:914 src/List.pm:950
 msgid "reception mode"
 msgstr "Empfangsmodus"
 
@@ -7145,6 +7179,12 @@ msgstr ""
 "Die Adresse wird mittels JavaScript versteckt. Nur tzer, die JavaScript "
 "aktivieren, sehen die E-Mail Adresse."
 
+# nlsref 16,81
+#: src/List.pm:524 src/List.pm:939
+#, fuzzy
+msgid "the datasource"
+msgstr "Benutzerdatenquelle"
+
 #. (shortname)
 #: web_tt2/d_upload.tt2:1
 msgid "the file %1 already exists"
@@ -7208,6 +7248,18 @@ msgstr "Warnungrate"
 #: wwsympa/wwslib.pm:59
 msgid "welcome message"
 msgstr "Begrüßungsnachricht"
+
+# nlsref 16,53
+#: src/List.pm:891
+#, fuzzy
+msgid "who ran the instantiation"
+msgstr "Wer kann Listen-Information ansehen"
+
+# nlsref 16,77
+#: src/List.pm:1109
+#, fuzzy
+msgid "who updated the config"
+msgstr "Letze Konfigurationsänderung"
 
 #: src/etc/scenari/unsubscribe.open_notify:1
 msgid "without authentication, notification is sent to owners"
