@@ -652,7 +652,7 @@ sub install_aliases {
 	 }elsif ($status == '14') {
 	     &do_log('err','admin::install_aliases : Can not open lock file, report to httpd error_log') ;
 	 }elsif ($status == '15') {
-	     &wwslog('err','The parser returned empty aliases') ;
+	     &do_log('err','The parser returned empty aliases') ;
 	 }else {
 	     &do_log('err',"admin::install_aliases : Unknown error $status while running alias manager $alias_manager");
 	 } 

@@ -1,4 +1,4 @@
-#!--PERL-- -U
+#!--Perl-- -U
 
 # wwsympa.fcgi - This script provides the web interface to Sympa 
 # RCS Identication ; $Revision$ ; $Date$ 
@@ -2291,7 +2291,7 @@ sub do_remindpasswd {
 # 
 # IN : -
 #
-# OUT : 'remindpasswd' |  1 | 'loginrequest'
+# OUT : 'remindpasswd' |  1 | 'loginrequest' | undef
 #
 ####################################################
  sub do_sendpasswd {
@@ -3022,7 +3022,7 @@ sub do_remindpasswd {
 # 
 # IN : -
 #
-# OUT :'loginrequest'|'info'
+# OUT :'loginrequest'|'info' | undef
 #
 ###################################################### 
  sub do_set {
@@ -3238,7 +3238,7 @@ sub do_remindpasswd {
 # IN : -
 #
 # OUT :'subrequest'|'login'|'info'|$in{'previous_action'}
-#
+#     | undef
 ####################################################
  ## TOTO: accepter nouveaux users
  sub do_subscribe {
@@ -4114,7 +4114,7 @@ sub do_skinsedit {
 #
 # OUT : 'loginrequest' 
 #      | ($in{'previous_action'} || 'review')
-#
+#      | undef
 ####################################################
 ## TODO: vérifier validité email
  sub do_add {
@@ -4265,7 +4265,7 @@ sub do_skinsedit {
 # IN : -
 #
 # OUT : 'loginrequest' 
-#      | ($in{'previous_action'} || 'review')
+#      | ($in{'previous_action'} || 'review') | undef
 #
 ####################################################
  ## TODO: vérifier validité email
@@ -4382,7 +4382,7 @@ sub do_skinsedit {
 # 
 # IN : -
 #
-# OUT : '1'
+# OUT : 'loginrequest' | 'admin' | '1' | undef
 #
 ####################################################### 
  sub do_modindex {
@@ -4713,7 +4713,7 @@ sub do_skinsedit {
 # 
 # IN : -
 #
-# OUT : 'loginrequest' | 'modindex'
+# OUT : 'loginrequest' | 'modindex' | undef
 #      
 ####################################################
  sub do_reject {
@@ -4797,7 +4797,7 @@ sub do_skinsedit {
 # 
 # IN : -
 #
-# OUT : 'loginrequest' | 'modindex'
+# OUT : 'loginrequest' | 'modindex' | undef
 #      
 ###################################################### 
  sub do_distribute {
@@ -4899,7 +4899,7 @@ sub do_skinsedit {
 # 
 # IN : -
 #
-# OUT : '1'
+# OUT : 'login,request' | '1' | undef
 #
 ####################################################
  sub do_viewmod {
@@ -5595,7 +5595,7 @@ sub get_timelocal_from_date {
 # 
 # IN : -
 #
-# OUT : 'arc' | 1
+# OUT : 'arc' | 1 | undef
 #
 #################################################### 
  sub do_send_me {
@@ -12203,7 +12203,7 @@ sub d_test_existing_and_rights {
 # 
 # IN : -
 #
-# OUT : 'loginrequest' | 'admin'
+# OUT : 'loginrequest' | 'admin' | undef
 #
 #####################################################
  sub do_remind {
@@ -12305,7 +12305,7 @@ sub d_test_existing_and_rights {
 # 
 # IN : -
 #
-# OUT : '1' | 'pref'
+# OUT : '1' | 'pref' | undef
 #      
 ####################################################
  ## Change a user's email address in Sympa environment
@@ -12482,7 +12482,7 @@ sub d_test_existing_and_rights {
 # IN : -
 #
 # OUT : 'loginrequest' 
-#      | 'info'
+#      | 'info' | undef
 #
 ####################################################
  sub do_send_mail {
@@ -12573,7 +12573,7 @@ sub d_test_existing_and_rights {
 # 
 # IN : -
 #
-# OUT : '1'
+# OUT : '1' | 'loginrequest' | undef
 #
 ####################################################
  sub do_request_topic {
@@ -12641,7 +12641,7 @@ sub d_test_existing_and_rights {
 # 
 # IN : -
 #
-# OUT : 'info'
+# OUT : 'loginrequest' | 'info' | undef
 #
 ####################################################
  sub do_tag_topic_by_sender {

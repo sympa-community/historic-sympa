@@ -169,7 +169,7 @@ sub finished {
 # IN : - ? 
 #      -$robot (+): robot 
 #
-# OUT : 1 
+# OUT : 1 | undef
 #      
 ##############################################
 sub help {
@@ -236,7 +236,7 @@ sub help {
 # IN : - ? 
 #      -$robot (+): robot 
 #
-# OUT : 1 
+# OUT : 1  | undef
 #      
 ####################################################### 
 sub lists {
@@ -289,7 +289,7 @@ sub lists {
 #      -$robot (+): robot 
 #      -$sign_mod : 'smime' | -
 #
-# OUT : 'unknown_list'|'not_allowed'|1 
+# OUT : 'unknown_list'|'not_allowed'|1  | undef
 #      
 ####################################################### 
 sub stats {
@@ -359,7 +359,7 @@ sub stats {
 # IN : -$which (+): command parameters : listname filename
 #      -$robot (+): robot 
 #
-# OUT : 'unknownlist'|'no_archive'|'not_allowed'|1
+# OUT : 'unknownlist'|'no_archive'|'not_allowed'|1 
 #      
 ############################################### 
 sub getfile {
@@ -518,7 +518,7 @@ sub index {
 #      -$sign_mod : 'smime'| -
 #
 # OUT : 'unknown_list'|'wrong_auth'|'not_allowed'
-#       |'no_subscribers'|1
+#       |'no_subscribers'|1 | undef
 #
 ################################################################ 
 sub review {
@@ -651,7 +651,7 @@ sub verify {
 #      -$robot (+): robot 
 #      -$sign_mod : 'smime'| -
 #
-# OUT : 'unknown_list'|'wrong_auth'|'not_allowed'| 1
+# OUT : 'unknown_list'|'wrong_auth'|'not_allowed'| 1 | undef
 #
 ################################################################
 sub subscribe {
@@ -806,7 +806,7 @@ sub subscribe {
 #      -$sign_mod : 'smime'|undef
 #
 # OUT : 'unknown_list'|'wrong_auth'|'not_allowed' 
-#       | 1
+#       | 1 | undef
 #      
 #
 ############################################################## 
@@ -907,7 +907,7 @@ sub info {
 #      -$sign_mod : 'smime'| -
 #
 # OUT : 'syntax_error'|'unknown_list'|'wrong_auth'
-#       |'not_allowed'| 1
+#       |'not_allowed'| 1 | undef
 #      
 #
 ##############################################################
@@ -1073,7 +1073,7 @@ sub signoff {
 #      -$sign_mod : 'smime'|undef
 #
 # OUT : 'unknown_list'|'wrong_auth'|'not_allowed' 
-#       | 1
+#       | 1 | undef
 #      
 #
 ############################################################
@@ -1200,7 +1200,7 @@ sub add {
 #      -$sign_mod : 'smime'|undef
 #
 # OUT : 'unknown_list'|'wrong_auth'|'not_allowed' 
-#       | 1
+#       | 1 | undef
 #      
 #
 ##############################################################
@@ -1328,7 +1328,7 @@ sub invite {
 #      -$sign_mod : 'smime'| -
 #
 # OUT : 'syntax_error'|'unknown_list'|'wrong_auth'
-#       |'not_allowed' 1
+#       |'not_allowed' |  1 | undef
 #      
 #
 ############################################################## 
@@ -1519,7 +1519,7 @@ sub remind {
 #      -$sign_mod : 'smime'|undef
 #
 # OUT : 'unknown_list'|'wrong_auth'|'not_allowed' 
-#       | 1
+#       | 1 | undef
 #      
 #
 ############################################################## 
@@ -1766,7 +1766,7 @@ sub set {
 # IN : -$what (+): command parameters : listname(+), authentification key(+)
 #      -$robot (+): robot 
 #
-# OUT : 'unknown_list'|'msg_noty_found'| 1
+# OUT : 'unknown_list'|'msg_noty_found'| 1 | undef
 #      
 ##############################################################
 sub distribute {
@@ -1876,7 +1876,7 @@ sub distribute {
 #      -$robot (+): robot 
 #
 # OUT : 'wrong_auth'|'msg_not_found' 
-#       | 1 
+#       | 1  | undef
 #      
 #
 ############################################################
@@ -2020,7 +2020,7 @@ sub confirm {
 # IN : -$what (+): command parameter : listname and authentification key
 #      -$robot (+): robot 
 #
-# OUT : 'unknown_list'|'wrong_auth'| 1
+# OUT : 'unknown_list'|'wrong_auth'| 1 | undef
 #      
 #
 ############################################################## 
@@ -2083,36 +2083,36 @@ sub reject {
 	return 'wrong_auth';
     }
     do_log('debug2', 'message to be rejected by %s',$sender);
-    unless ($quiet || ($action =~ /quiet/i )) {
-	unless ($list->send_file('message_report',$sender,$robot,{'to' => $sender,
-								  'type' => 'message_rejected',
-								  'listname' => $name,
+
+    unless ($list->send_file('message_report',$sender,$robot,{'to' => $sender,
+							      'type' => 'message_rejected',
+							      'listname' => $name,
 								  'key'=> $key})){
-	    &do_log('notice',"Unable to send template 'message_report' to $sender");
-	}
-
-	my $message;
-	my $parser = new MIME::Parser;
-	$parser->output_to_core(1);
-	unless ($message = $parser->read(\*IN)) {
-	    do_log('notice', 'Unable to parse message');
-	    return undef;
-	}
-
-	my @sender_hdr = Mail::Address->parse($message->head->get('From'));
-        unless  ($#sender_hdr == -1) {
-	    my $rejected_sender = $sender_hdr[0]->address;
-	    my %context;
-	    $context{'subject'} = &MIME::Words::decode_mimewords($message->head->get('subject'));
-	    $context{'rejected_by'} = $sender;
-	    do_log('debug2', 'message %s by %s rejected sender %s',$context{'subject'},$context{'rejected_by'},$rejected_sender);
-
- 	    unless ($list->send_file('reject', $rejected_sender, $robot, \%context)){
- 		&do_log('notice',"Unable to send template 'reject' to $rejected_sender");
-		
-	    }
+	&do_log('notice',"Unable to send template 'message_report' to $sender");
+    }
+    
+    my $message;
+    my $parser = new MIME::Parser;
+    $parser->output_to_core(1);
+    unless ($message = $parser->read(\*IN)) {
+	do_log('notice', 'Unable to parse message');
+	return undef;
+    }
+    
+    my @sender_hdr = Mail::Address->parse($message->head->get('From'));
+    unless  ($#sender_hdr == -1) {
+	my $rejected_sender = $sender_hdr[0]->address;
+	my %context;
+	$context{'subject'} = &MIME::Words::decode_mimewords($message->head->get('subject'));
+	$context{'rejected_by'} = $sender;
+	do_log('debug2', 'message %s by %s rejected sender %s',$context{'subject'},$context{'rejected_by'},$rejected_sender);
+	
+	unless ($list->send_file('reject', $rejected_sender, $robot, \%context)){
+	    &do_log('notice',"Unable to send template 'reject' to $rejected_sender");
+	    
 	}
     }
+    
     close(IN);
     do_log('info', 'REJECT %s %s from %s accepted (%d seconds)', $name, $sender, $key, time-$time_command);
     unlink($file);
@@ -2309,7 +2309,7 @@ sub which {
 #     -$list : ref(List) | -
 #
 # OUT : 'smime'|'md5'|'smtp' if authentification OK, undef else
-#      
+#       | undef   
 ##########################################################
 sub get_auth_method {
     my ($cmd,$email,$error,$sign_mod,$list) = @_;

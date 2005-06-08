@@ -426,7 +426,6 @@ sub review {
     die SOAP::Fault->faultcode('Server')
 	->faultstring('No action available')
 	unless (defined $action);
-
     if ($action =~ /reject(\(\'?(\w+)\'?\))?/i) {
 	&Log::do_log('info', 'SOAP : review %s from %s refused (not allowed)', $listname,$sender);
 	die SOAP::Fault->faultcode('Server')

@@ -882,6 +882,7 @@ sub sighup {
 # IN : -$file (+): the file to handle
 #      
 # OUT : $status
+#     | undef
 #
 ##############################################################
 sub DoFile {
@@ -1118,6 +1119,7 @@ sub DoFile {
 #      -$robot (+) :robot
 #      
 # OUT : 1 
+#     | undef
 #
 ############################################################## 
 sub DoSendMessage {
@@ -1170,6 +1172,7 @@ sub DoSendMessage {
 #      -$msg (+): ref(MIME::Entity)
 #
 # OUT : 1 
+#     | undef
 #
 ############################################################
 sub DoForward {
@@ -1252,6 +1255,7 @@ sub DoForward {
 #      -$robot (+): robot
 #
 # OUT : 1 if ok (in order to remove the file from the queue)
+#     | undef
 #
 ####################################################
 sub DoMessage{
@@ -1478,6 +1482,7 @@ sub DoMessage{
 #      -$file (+): file containing message
 #      
 # OUT : $success
+#     | undef
 #
 ############################################################## 
 sub DoCommand {
@@ -1611,6 +1616,7 @@ sub DoCommand {
 # IN : -
 #      
 # OUT : -
+#     | undef
 #
 ############################################################## 
 sub SendDigest{

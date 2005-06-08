@@ -2381,6 +2381,7 @@ sub distribute_msg {
 #      -$message (+): ref(Message)
 # OUT : -$numsmtp : number of sendmail process 
 #       | 0 : no subscriber for sending message in list
+#       | undef 
 ####################################################
 sub send_msg {
     my($self, $message) = @_;
@@ -2611,7 +2612,7 @@ sub send_msg {
 #
 # OUT : 1 : ok
 #       | 0 if no subscriber for sending digest
-#
+#       | undef
 ####################################################
 sub send_msg_digest {
     my ($self) = @_;
@@ -2779,7 +2780,7 @@ sub send_msg_digest {
 #           -lang
 #           -password
 #         -...
-# OUT : 1
+# OUT : 1 | undef
 #       
 ####################################################
 sub send_global_file {
@@ -2865,7 +2866,7 @@ sub send_global_file {
 #           -lang
 #           -password
 #         -...
-# OUT : 1
+# OUT : 1 | undef
 ####################################################
 sub send_file {
     my($self, $tpl, $who, $robot, $context) = @_;
@@ -3015,7 +3016,7 @@ sub send_file {
 #      -$message(+) : ref(Message) - the message to moderatte
 # OUT : $modkey : the moderation key for naming message waiting 
 #         for moderation in spool queuemod
-#
+#       | undef
 #################################################################
 sub send_to_editor {
    my($self, $method, $message) = @_;
@@ -3161,7 +3162,7 @@ sub send_to_editor {
 #
 # OUT : $authkey : the key for naming message waiting 
 #         for confirmation (or tagging) in spool queueauth
-#
+#       | undef
 ####################################################
 sub send_auth {
    my($self, $message) = @_;
@@ -3233,7 +3234,7 @@ sub send_auth {
 #      -@param : 0 : used if $cmd = subscribe|add|del|invite
 #                1 : used if $cmd = add 
 #
-# OUT : 1
+# OUT : 1 | undef
 #
 ####################################################
 sub request_auth {
@@ -3324,7 +3325,7 @@ sub request_auth {
 # IN : -$self(+) : ref(List)
 #      -$who(+) : recepient
 #      -file(+) : name of the archive file to send
-# OUT : -
+# OUT : - | undef
 #
 ######################################################
 sub archive_send {
@@ -3361,7 +3362,7 @@ sub archive_send {
 #      -$param(+) : ref(HASH) | ref(ARRAY)
 #       values for template parsing
 #    
-# OUT : 1
+# OUT : 1 | undef
 #       
 ###################################################### 
 sub send_notify_to_listmaster {
@@ -3461,7 +3462,7 @@ sub send_notify_to_listmaster {
 #      -$param(+) : ref(HASH) | ref(ARRAY)
 #       values for template parsing
 #
-# OUT : 1
+# OUT : 1 | undef
 #    
 ######################################################
 sub send_notify_to_owner {
@@ -3540,7 +3541,7 @@ sub send_notify_to_owner {
 #      -$param(+) : ref(HASH) | ref(ARRAY)
 #       values for template parsing
 #
-# OUT : 1
+# OUT : 1 | undef
 #    
 ######################################################
 sub send_notify_to_editor {
@@ -3602,7 +3603,7 @@ sub send_notify_to_editor {
 #      -$param(+) : ref(HASH) | ref(ARRAY)
 #       values for template parsing
 #
-# OUT : 1
+# OUT : 1 | undef
 #    
 ######################################################
 sub send_notify_to_user{
@@ -10539,7 +10540,7 @@ sub is_there_msg_topic {
 # 
 # IN : -$self (+): ref(List)
 #      -$topic (+): string
-# OUT : -$topic if it is available 
+# OUT : -$topic if it is available  | undef
 ####################################################
 sub is_available_msg_topic {
     my ($self,$topic) = @_;
@@ -10607,6 +10608,7 @@ sub is_msg_topic_tagging_required {
 #      -$robot (+): robot
 #
 # OUT : string of tag(s), can be separated by ',', can be empty
+#        | undef 
 ####################################################
 sub automatic_tag {
     my ($self,$msg,$robot) = @_;
@@ -10732,6 +10734,7 @@ sub compute_topic {
 #         the method used for tagging
 #
 # OUT : string - msg topic filename
+#       | undef
 ####################################################
 sub tag_topic {
     my ($self,$msg_id,$topic_list,$method) = @_;
@@ -10770,12 +10773,12 @@ sub tag_topic {
 #      -$msg_id (+): the message ID 
 #      -$robot (+): the robot
 #
-# OUT : undef 
-#     | ref(HASH) file contents : 
+# OUT : ref(HASH) file contents : 
 #         - topic : string - list of topic name(s)
 #         - method : editor|sender|auto - method used to tag
 #         - msg_id : the msg_id
 #         - filename : name of the file containing these informations 
+#     | undef 
 ####################################################
 sub load_msg_topic_file {
     my ($self,$msg_id,$robot) = @_;

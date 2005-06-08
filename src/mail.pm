@@ -101,7 +101,7 @@ sub set_send_spool {
 #      -$robot(+)
 #      -$sign_mode :'smime' | '' | undef
 #         
-# OUT : 1
+# OUT : 1 | undef
 ####################################################
 sub mail_file {
     my ($filename, $rcpt, $data,$robot,$sign_mode) = @_;
@@ -239,7 +239,7 @@ sub mail_file {
 #      -$from(+) : message from
 #      -$robot(+) : robot
 #      -@rcpt(+) : recepients
-# OUT : -$numsmtp : number of sendmail process
+# OUT : -$numsmtp : number of sendmail process | undef
 #       
 ####################################################
 sub mail_message {
@@ -324,7 +324,7 @@ sub mail_message {
 #      -$from(+) : message from
 #      -$rcpt(+) : ref(SCALAR) | ref(ARRAY)  - recepients
 #      -$robot(+) : robot
-# OUT : 1
+# OUT : 1 | undef
 #
 ####################################################
 sub mail_forward {
@@ -392,7 +392,7 @@ sub reaper {
 #     $rcpt(+) : ref(SCALAR) | ref(ARRAY) - message recepients
 #     $robot(+) : robot
 #     $encrypt : 'smime_crypted' | undef  
-# OUT : 1 - call to smtpto (sendmail) | 0 - push in spool
+# OUT : 1 - call to smtpto (sendmail) | 0 - push in spool | undef
 #       
 ####################################################
 sub sendto {
@@ -450,6 +450,7 @@ sub sendto {
 #      -$sympa_email : for the file name for spool 
 #        sending
 # OUT : 1 - call to smtpto (sendmail) | 0 - push in spool
+#           | undef
 #  
 ####################################################
 sub sending {
@@ -563,6 +564,7 @@ sub sending {
 #      $rcpt :(+) ref(SCALAR)|ref(ARRAY)- for SMTP "RCPT To:" field
 #      $robot :(+) robot
 # OUT : mail::$fh - file handle on opened file for ouput, for SMTP "DATA" field
+#       | undef
 #
 ##################################################################################
 sub smtpto {
