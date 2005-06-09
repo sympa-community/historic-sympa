@@ -110,7 +110,7 @@
     <a href="[% path_cgi %]/review/[% list %]/[% prev_page %]/[% size %]/[% sortby %]"><img src="[% icons_url %]/left.png" style="border: 0px;" alt="[%|loc%]Previous page[%END%]" /></a>
    [% END %]
    [% IF page %]
-     page [% page %] / [% total_page %]
+     [%|loc%]page[%END%] [% page %] / [% total_page %]
    [% END %]
    [% IF next_page %]
      <a href="[% path_cgi %]/review/[% list %]/[% next_page %]/[% size %]/[% sortby %]"><img src="[% icons_url %]/right.png" style="border: 0px;" alt="[%|loc%]Next page[%END%]" /></a>
@@ -174,7 +174,7 @@
 	    <strong>[%|loc%]Sub date[%END%]</strong></a></span>
 	  [% END %]
           </th>
-	  <th><span style="font-size: smaller;"><strong>Last update</strong></span></th>
+	  <th><span style="font-size: smaller;"><strong>[%|loc%]Last update[%END%]</strong></span></th>
 	  [% IF additional_fields %]
 	  <th><span style="font-size: smaller;"><strong>[% additional_fields %]</strong></span></th>
 	  [% END %]
