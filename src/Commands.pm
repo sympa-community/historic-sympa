@@ -2259,6 +2259,9 @@ sub which {
     ## Subscriptions
     my $data;
     foreach $listname (List::get_which ($sender,$robot,'member')){
+        ## wwsympa :  my $list = new List ($l);
+        ##            next unless (defined $list);
+
 	next unless (&List::request_action ('visibility', 'smtp',$robot,
 					    {'listname' =>  $listname,
 					     'sender' => $sender}) =~ /do_it/);
