@@ -1,4 +1,4 @@
-#!--Perl-- -U
+#!--PERL-- -U
 
 # wwsympa.fcgi - This script provides the web interface to Sympa 
 # RCS Identication ; $Revision$ ; $Date$ 
@@ -606,7 +606,7 @@ if ($wwsconf->{'use_fast_cgi'}) {
      $ip = $ENV{'REMOTE_ADDR'} unless ($ip);
      $ip = 'undef' unless ($ip);
       ## In case HTTP_HOST does not match cookie_domain
-     my $http_host = $ENV{'HTTP_HOST'};
+    my $http_host = $ENV{'HTTP_HOST'};
      $http_host =~ s/:\d+$//; ## suppress port
      unless (($http_host =~ /$param->{'cookie_domain'}$/) || 
              ($param->{'cookie_domain'} eq 'localhost')) {
@@ -7267,8 +7267,10 @@ sub do_edit_list {
      }
 
     ## Checking no topic named "other"
-    foreach my $msg_topic (@{$list->{'admin'}{'msg_topic'}}) {
+    foreach my $msg_topic (@{$new_admin->{'msg_topic'}}) {
 	if ($msg_topic->{'name'} =~  /^other$/i) {
+	    $msg_topic->{'name'} = undef;
+	    $msg_topic->{'title'} = undef;
 	    &error_message('topic_other');
 	    &wwslog('notice',"do_edit_list: topic other is a reserved word");
 	    return undef;
