@@ -50,7 +50,8 @@ $separator="------- CUT --- CUT --- CUT --- CUT --- CUT --- CUT --- CUT -------"
 	   'sql_query' => '(SELECT|select).*',
 	   'scenario' => '[\w,\.\-]+',
 	   'task' => '\w+',
-	   'datasource' => '[\w-]+'
+	   'datasource' => '[\w-]+',
+	   'uid' => '[\w\-\.\+]+',
 	   );
 
 my %openssl_errors = (1 => 'an error occurred parsing the command options',
@@ -1554,7 +1555,18 @@ sub get_dir_size {
 sub valid_email {
     my $email = shift;
     
-    $email =~ /^$tools::regexp{'email'}$/;
+    unless ($email =~ /^$tools::regexp{'email'}$/) {
+	do_log('err', "Invalid email address '%s'", $email);
+	return undef;
+    }
+    
+    ## Forbidden characters
+    if ($email =~ /[\|\$\*\?\!]/) {
+	do_log('err', "Invalid email address '%s'", $email);
+	return undef;
+    }
+
+    return 1;
 }
 
 ## Clean email address

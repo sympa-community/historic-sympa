@@ -34,24 +34,24 @@ CREATE TABLE subscriber_table (
  	bounce_subscriber       varchar2 (35),
 	bounce_score_subscriber number,
  	comment_subscriber      varchar2 (150),
-	subscribed_subscriber 	number(1,0),
-	included_subscriber 	number(1,0),
+	subscribed_subscriber 	number NULL    constraint  cons_subscribed_subscriber CHECK (subscribed_subscriber in (0,1)),
+	included_subscriber 	number NULL    constraint  cons_included_subscriber CHECK (included_subscriber in (0,1)),
 	include_sources_subscriber varchar2(50),
         CONSTRAINT ind_subscriber PRIMARY KEY (list_subscriber,user_subscriber)
 );
 CREATE TABLE admin_table (
 	list_admin 		varchar2(50) NOT NULL,
  	user_admin 		varchar2(100) NOT NULL,
-	role_admin 		number('listmaster','owner','editor') NOT NULL,
+	role_admin 		varchar2(20) NOT NULL,
 	date_admin 		date NOT NULL,
 	update_admin 		date,
 	reception_admin 	varchar2(20),
 	comment_admin 		varchar2(150),
-	subscribed_admin  	number('0','1'),
-	included_admin  	number('0','1'),
+	subscribed_admin  	number NULL    constraint  cons_subscribed_admin CHECK (subscribed_admin in (0,1)),
+	included_admin  	number NULL    constraint  cons_included_admin CHECK (included_admin in (0,1)),
 	include_sources_admin  	varchar2(50),
 	info_admin   		varchar2(150),
-	profile_admin  		number('privileged','normal'),
+	profile_admin  		varchar2(20),
        CONSTRAINT ind_admin PRIMARY KEY (list_admin,user_admin,role_admin),
 );
 

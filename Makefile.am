@@ -219,7 +219,7 @@ sources: src/Makefile src/queue.c src/bouncequeue.c src/aliaswrapper.c
 documentation: doc/sympa.tex.tpl doc/Makefile 
 	@echo "Making documentation"
 	@(cd doc && echo "making in doc/..." && \
-	$(MAKE) SH='${SH}' CC='${CC}' CFLAGS='${CFLAGS}' PERL='${PERL}' \
+	$(MAKE) SH='${SH}' CC='${CC}' CFLAGS='${CFLAGS}' PERL='${PERL}' CGIDIR='${CGIDIR}' \
 	DIR='${DIR}' BINDIR='${BINDIR}' SBINDIR='${SBINDIR}' LIBDIR='${LIBDIR}' WWSBINDIR='${WWSBINDIR}' \
 	MAILERPROGDIR='${MAILERPROGDIR}' ETCBINDIR='${ETCBINDIR}' ETCDIR='${ETCDIR}' PIDDIR='${PIDDIR}' \
 	CONFIG='${CONFIG}' WWSCONFIG='${WWSCONFIG}' EXPL_DIR='${EXPL_DIR}' LOCALEDIR='${LOCALEDIR}' SPOOLDIR='${SPOOLDIR}' \
@@ -356,7 +356,7 @@ installman:
 	( \
 		cd doc/man8 ; \
 		PERL=$(PERL); export PERL; \
-		UMASK=0600; export UMASK; \
+		UMASK=0644; export UMASK; \
 		DIR=$(DIR); export DIR; \
 		INSTALLDIR=$(MANDIR)/man8; export INSTALLDIR; \
 		DESTDIR=$(DESTDIR); export DESTDIR; \

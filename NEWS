@@ -3,6 +3,67 @@
 
 (See Changelog file for the full changes log)
 
+5.0.1		8 June 2005
+
+   Changes :
+
+	src/etc/topics.conf: [M.Redinger] Translated topics to German
+
+	src/etc/script/sympa: Made the init script compatible with OS X, Debian and Suze
+
+	po/de.po, src/Conf.pm: [M.Redinger] Updated German translations
+
+	src/: Conf.pm, Language.pm: [K.Moriwaka] New translation to Japonese
+
+	src/: Message.pm, tools.pl: add sanity check of incoming email address
+
+   Bug fixes :
+
+	wwsympa/wwsympa.fcgi: [S.Amrani] the regexp run by search_list could make wwsympa.fcgi process die ; 
+	now using eval{} Now escaping some more dangerous caracters.
+
+	web_tt2/arcsearch.tt2, wwsympa/wwsympa.fcgi: [BugId 427] [reported by K/Moriwaka] : sort by age did 
+	not work properly in web archives search engine
+
+	src/etc/script/create_db.Oracle: [reported by I.Vecchia] : Oracle does not accept number(0,1) data type
+
+	web_tt2/: admin_menu.tt2, review.tt2: [M.Redinger] : Some strings were not tagged as translatable
+
+	po/xgettext.pl: [M.Redinger]xgettext.pl did not collect all gettext_id from List.pm
+
+	mail_tt2/: helpfile.tt2, lists.tt2: [G. Bouteille] Add header fields top templates
+
+	soap/sympa_soap_server.fcgi: [S.Amrani] replace hard-coded path to Sympa libdir
+
+	src/List.pm: [BugID 418] Ldap search return code was not examined in _include_users_ldap()
+
+	wwsympa/wwsympa.fcgi: $rss variable was not reinitialized if in POST context. 
+	Wwsympa could provide RSS content instead of HTML content
+
+	src/List.pm, wwsympa/wwsympa.fcgi: [reported by S.Amrani] for every web request, 
+	wwsympa was running List::probe_db() that performs a database structure checkup. 
+	Now using a lighter subroutine
+
+	src/: List.pm, mail.pm, tt2.pl: [BugID 415) [Moriwaka] incorrect parameters to encode_mimewords() ; 
+	Sympa previously encoded every string in iso-8859-1
+
+	Makefile.am, Makefile.in: [reported by S.Amrani] Fix umask while installing man pages
+
+	src/List.pm: [BugID 393 & 409] adding custom_subject would break subject encoding
+
+	po/it.po: Fix headers
+
+	src/tools.pl, wwsympa/wwsympa.fcgi: [reported by S.Lalonde] regexp for email was too restrictive, not allowing uid
+
+	mail_tt2/: global_remind.tt2, moderate.tt2: [reported by O.Archer] some MUA require an empty line after mailto: URLs
+
+	po/xgettext.pl: some multi-line strings were not properly added to sympa.pot. 
+	Therefore these translations were not available.
+
+	wwsympa/Auth.pm: CAS authentication was not able to use ldap_bind_dn and ldap_bind_password
+
+	src/Ldap.pm, src/List.pm, wwsympa/wwsympa.fcgi: [BugID 402] [J.Dalbec] Sympa did not report failed LDAP binds
+
 5.0		20 April 2005
 
    New features :

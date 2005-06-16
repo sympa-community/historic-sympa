@@ -415,7 +415,7 @@ my %in_regexp = (
 		 'dump' => '[^<>\\\*\$]+', # contents email + gecos
 
 		 ## Search
-		 'filter' => '[^<>\\\*\$]+', # search list
+		 'filter' => '[^<>\\\$]+', # search list
 		 'key_word' => '[^<>\\\*\$]+',
 
 		 ## File names
@@ -464,7 +464,7 @@ my %in_regexp = (
 		 'family_name' => $tools::regexp{'family_name'},
 
 		 ## Email addresses
-		 'email' => $tools::regexp{'email'},
+		 'email' => $tools::regexp{'email'}.'|'.$tools::regexp{'uid'},
 		 'init_email' => $tools::regexp{'email'},
 		 'new_alternative_email' => $tools::regexp{'email'},
 		 'new_email' => $tools::regexp{'email'},
@@ -526,6 +526,7 @@ if ($wwsconf->{'use_fast_cgi'}) {
      undef $list;
      undef $robot;
      undef $ip;
+     undef $rss;
 
      undef $log_level;
      $log_level = $Conf{'log_level'} if ($Conf{'log_level'}); 
@@ -539,7 +540,7 @@ if ($wwsconf->{'use_fast_cgi'}) {
 	 &wwslog('err','Config error: wwsympa should with UID %s (instead of %s)', (getpwnam('--USER--'))[2], $>);
      }
 
-     unless ($List::use_db = &List::probe_db()) {
+     unless ($List::use_db = &List::check_db_connect()) {
 	 &error_message('no_database');
 	 &do_log('info','WWSympa requires a RDBMS to run');
      }
@@ -1057,6 +1058,9 @@ if ($wwsconf->{'use_fast_cgi'}) {
      $msg = "[user $param->{'user'}{'email'}] " . $msg
 	 if $param->{'user'}{'email'};
 
+     $msg = "[rss] ".$msg
+	 if $rss;
+
      $msg = "[client $remote] ".$msg
 	 if $remote;
 
@@ -1168,9 +1172,7 @@ if ($wwsconf->{'use_fast_cgi'}) {
 	 if ($params[0] =~ /rss/) {
 	     shift @params;
 	     $rss = 1;
-	 }else{
-	     $rss = 0;
-	 } 
+	 }
 
 	 if ($#params >= 0) {
 	     $in{'action'} = $params[0];
@@ -2092,7 +2094,12 @@ sub do_sso_login_succeeded {
 		 next;
 	     }
 
-	     $ldap_anonymous->bind;
+	     my $status = $ldap_anonymous->bind;
+	     unless(defined($status) && ($status->code == 0)){
+		 &Log::do_log('err', 'Bind failed on  %s', $host);
+		 last;
+	     }
+
 	     my $mesg = $ldap_anonymous->search(base => $ldap->{'suffix'} ,
 						filter => "$filter",
 						scope => $ldap->{'scope'}, 
@@ -5237,7 +5244,7 @@ sub get_timelocal_from_date {
      $search->limit ($in{'limit'});
 
      $search->age (1) 
-	 if (($in{'age'} eq 'new') or ($in{'age'} eq '1'));
+	 if ($in{'age'} eq 'new');
 
      $search->match (1) 
 	 if (($in{'match'} eq 'partial') or ($in{'match'} eq '1'));
@@ -6402,6 +6409,10 @@ sub do_set_pending_list_request {
      $param->{'regexp'} =~ s/\*/\.\*/g;
      $param->{'regexp'} =~ s/\+/\\\+/g;
      $param->{'regexp'} =~ s/\?/\\\?/g;
+     $param->{'regexp'} =~ s/\[/\\\[/g;
+     $param->{'regexp'} =~ s/\]/\\\]/g;
+     $param->{'regexp'} =~ s/\(/\\\)/g;
+     $param->{'regexp'} =~ s/\)/\\\)/g;
 
      ## Members list
      my $record = 0;
@@ -6409,9 +6420,15 @@ sub do_set_pending_list_request {
 	 my $is_admin;
 	 my $list = new List ($l, $robot);
 
-	 ## Search filter
-	 next if (($list->{'name'} !~ /$param->{'regexp'}/i) 
-		  && ($list->{'admin'}{'subject'} !~ /$param->{'regexp'}/i));
+         ## Search filter
+         my $regtest = eval { (($list->{'name'} !~ /$param->{'regexp'}/i)
+			       && ($list->{'admin'}{'subject'} !~ /$param->{'regexp'}/i)) };
+         unless (defined($regtest)) {
+	     &error_message('syntax_errors', {'params' => 'filter'});
+	     &wwslog('err','do_search_list: syntax error');
+	     return undef;
+         }
+         next if $regtest;
 
 	 my $action = &List::request_action ('visibility',$param->{'auth_method'},$robot,
 					     {'listname' =>  $list->{'name'},

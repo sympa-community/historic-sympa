@@ -183,7 +183,7 @@ my %Default_Conf =
      'default_bounce_level2_rate' => 75,
      'soap_url' => '',
      'urlize_min_size' => 10240, ## 10Kb
-     'supported_lang' => 'fr,en_US,hu,it',
+     'supported_lang' => 'fr,en_US,hu,it,ja_JP,de',
      'web_recode_to' => '',
      'default_remind_task' => '',
      );

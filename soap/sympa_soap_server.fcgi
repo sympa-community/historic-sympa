@@ -78,7 +78,7 @@ foreach my $listname (&List::get_lists('*')){
 my $server = SOAP::Transport::HTTP::FCGI::Sympa->new(); 
 
 #$server->dispatch_with({'urn:Sympa' => 'sympasoap'});
-$server->dispatch_to('/home/sympa/bin','sympasoap');
+$server->dispatch_to('--LIBDIR--','sympasoap');
 
 $server->handle($birthday);
 

@@ -2656,6 +2656,9 @@ sub distribute_msg {
 	}else {
 	    $subject_field = '['.$parsed_tag[0].'] '.$subject_field
 	}
+	## Encode subject using initial charset
+	$subject_field = MIME::Words::encode_mimewords($subject_field, ('Encode' => 'Q', 'Charset' => $message->{'subject_charset'}));
+
 	$message->{'msg'}->head->add('Subject', $subject_field);
     }
 
@@ -3236,7 +3239,7 @@ sub send_global_file {
     }
 
     ## Lang
-    $data->{'lang'} = $data->{'lang'} = $data->{'user'}{'lang'} || &Conf::get_robot_conf($robot, 'lang');
+    $data->{'lang'} = $data->{'lang'} || $data->{'user'}{'lang'} || &Conf::get_robot_conf($robot, 'lang');
 
     ## What file   
     my $tt2_include_path = ["$Conf{'etc'}/$robot/mail_tt2/".&Language::Lang2Locale($data->{'lang'}),
@@ -5963,7 +5966,7 @@ sub search{
 		$status = $ldap->bind();
 	    }
 	    
-	    unless ($status) {
+	    unless ($status && ($status->code == 0)) {
 		do_log('notice','Unable to bind to the LDAP server %s:%d',$host, $port);
 		next;
 	    }
@@ -7001,14 +7004,17 @@ sub _include_users_ldap {
     }
     
     do_log('debug2', "Connected to LDAP server %s", join(',',@{$host}));
-    
+    my $status;
+
     if ( defined $user ) {
-	unless ($ldaph->bind ($user, password => "$passwd")) {
+	$status = $ldaph->bind ($user, password => "$passwd");
+	unless (defined($status) && ($status->code == 0)) {
 	    do_log('notice',"Can\'t bind with server %s as user '$user' : $@", join(',',@{$host}));
 	    return undef;
 	}
     }else {
-	unless ($ldaph->bind ) {
+	$status = $ldaph->bind;
+	unless (defined($status) && ($status->code == 0)) {
 	    do_log('notice',"Can\'t do anonymous bind with server %s : $@", join(',',@{$host}));
 	    return undef;
 	}
@@ -7017,14 +7023,21 @@ sub _include_users_ldap {
     do_log('debug2', "Binded to LDAP server %s ; user : '$user'", join(',',@{$host})) ;
     
     do_log('debug2', 'Searching on server %s ; suffix %s ; filter %s ; attrs: %s', join(',',@{$host}), $ldap_suffix, $ldap_filter, $ldap_attrs);
-    unless ($fetch = $ldaph->search ( base => "$ldap_suffix",
+    $fetch = $ldaph->search ( base => "$ldap_suffix",
                                       filter => "$ldap_filter",
 				      attrs => "$ldap_attrs",
-				      scope => "$param->{'scope'}")) {
-        do_log('debug2',"Unable to perform LDAP search in $ldap_suffix for $ldap_filter : $@");
+				      scope => "$param->{'scope'}");
+    unless ($fetch) {
+        do_log('err',"Unable to perform LDAP search in $ldap_suffix for $ldap_filter : $@");
         return undef;
     }
     
+    unless ($fetch->code == 0) {
+	do_log('err','Ldap search failed : %s (searching on server %s ; suffix %s ; filter %s ; attrs: %s)', 
+	       $fetch->error(), join(',',@{$host}), $ldap_suffix, $ldap_filter, $ldap_attrs);
+	return undef;
+    }
+
     ## Counters.
     my $total = 0;
     my $dn; 
@@ -7138,14 +7151,17 @@ sub _include_users_ldap_2level {
     }
     
     do_log('debug2', "Connected to LDAP server %s", join(',',@{$host}));
-    
+    my $status;
+
     if ( defined $user ) {
-	unless ($ldaph->bind ($user, password => "$passwd")) {
+	$status = $ldaph->bind ($user, password => "$passwd");
+	unless (defined($status) && ($status->code == 0)) {
 	    do_log('err',"Can\'t bind with server %s as user '$user' : $@", join(',',@{$host}));
 	    return undef;
 	}
     }else {
-	unless ($ldaph->bind ) {
+	$status = $ldaph->bind;
+	unless (defined($status) && ($status->code == 0)) {
 	    do_log('err',"Can\'t do anonymous bind with server %s : $@", join(',',@{$host}));
 	    return undef;
 	}
@@ -8860,6 +8876,25 @@ sub get_db_field_type {
     return undef;
 }
 
+## Just check if DB connection is ok
+sub check_db_connect {
+    
+    ## Is the Database defined
+    unless ($Conf{'db_name'}) {
+	&do_log('err', 'No db_name defined in configuration file');
+	return undef;
+    }
+    
+    unless ($dbh and $dbh->ping) {
+	unless (&db_connect('just_try')) {
+	    &do_log('err', 'Failed to connect to database');	   
+	    return undef;
+	}
+    }
+
+    return 1;
+}
+
 sub probe_db {
     do_log('debug3', 'List::probe_db()');    
     my (%checked, $table);
@@ -8919,7 +8954,11 @@ sub probe_db {
 	    unless (&create_db()) {
 		return undef;
 	    }
-	    return undef unless &db_connect();
+	    if ($ENV{'HTTP_HOST'}) { ## Web context
+		return undef unless &db_connect('just_try');
+	    }else {
+		return undef unless &db_connect();
+	    }
 	}
     }
 	
@@ -9117,7 +9156,12 @@ sub probe_db {
 		unless ($real_struct{$t}{$f} eq $db_struct{$t}{$f}) {
 		     &do_log('err', 'Field \'%s\'  (table \'%s\' ; database \'%s\') does NOT have awaited type (%s). Attempting to change it...', $f, $t, $Conf{'db_name'}, $db_struct{$t}{$f});
 		     
-		     unless ($dbh->do("ALTER TABLE $t CHANGE $f $f $db_struct{$t}{$f}")) {
+		     my $options;
+		     if ($not_null{$f}) {
+			 $options .= 'NOT NULL';
+		     }
+		     
+		     unless ($dbh->do("ALTER TABLE $t CHANGE $f $f $db_struct{$t}{$f} $options")) {
 			 &do_log('err', 'Could not change field \'%s\' in table\'%s\'.', $f, $t);
 			 &do_log('err', 'Sympa\'s database structure may have change since last update ; please check RELEASE_NOTES');
 			 return undef;
