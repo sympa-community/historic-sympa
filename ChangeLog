@@ -1,3 +1,62 @@
+2005-06-15 17:19  sympa-authors
+
+	* wwsympa/wwsympa.fcgi: [S.Amrani] Fix: the regexp run by
+	  search_list could make wwsympa.fcgi process die ; now using
+	  eval{} Now escaping some more dangerous caracters.
+
+2005-06-15 14:28  sympa-authors
+
+	* web_tt2/arcsearch.tt2, wwsympa/wwsympa.fcgi: [BugId 427]
+	  [reported by K/Moriwaka] Fix: sort by age did not work properly
+	  in web archives search engine
+
+2005-06-15 14:10  sympa-authors
+
+	* doc/: sympa.pdf, sympa.ps, sympa.tex, sympa.tex.tpl,
+	  html/img1.old, html/img2.old, html/index.html, html/node1.html,
+	  html/node10.html, html/node11.html, html/node12.html,
+	  html/node13.html, html/node14.html, html/node15.html,
+	  html/node16.html, html/node17.html, html/node18.html,
+	  html/node19.html, html/node2.html, html/node20.html,
+	  html/node21.html, html/node22.html, html/node23.html,
+	  html/node24.html, html/node25.html, html/node26.html,
+	  html/node27.html, html/node3.html, html/node4.html,
+	  html/node5.html, html/node6.html, html/node7.html,
+	  html/node8.html, html/node9.html, html/sympa.html, html/sympa.ps:
+	  Replace old listes.cru.fr URLs
+
+2005-06-10 09:48  sympa-authors
+
+	* src/etc/script/create_db.Oracle: [E.Rynes] Restored boolean
+	  constraints
+
+2005-06-10 09:43  sympa-authors
+
+	* src/etc/script/create_db.Oracle: [reported by I.Vecchia] Fix:
+	  Oracle 5 does not accept number(0,1) data type
+
+2005-06-09 11:25  sympa-authors
+
+	* src/etc/topics.conf: [M.Redinger] Translated topics to German
+
+2005-06-09 11:22  sympa-authors
+
+	* web_tt2/: admin_menu.tt2, review.tt2: [M.Redinger] Fix: Some
+	  strings were not tagged as translatable
+
+2005-06-09 11:18  sympa-authors
+
+	* po/de.po: [M.Redinger] Updated German translations
+
+2005-06-09 09:42  sympa-authors
+
+	* src/etc/script/create_db.Oracle: [reported by Emr] Fix: incorrect
+	  enum types for Oracle
+
+2005-06-08 17:10  sympa-authors
+
+	* ChangeLog, NEWS: Preparing 5.0.1
+
 2005-06-08 17:05  sympa-authors
 
 	* src/etc/script/sympa: Made the init script compatible with Debian

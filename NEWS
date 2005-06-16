@@ -7,6 +7,8 @@
 
    Changes :
 
+	src/etc/topics.conf: [M.Redinger] Translated topics to German
+
 	src/etc/script/sympa: Made the init script compatible with OS X, Debian and Suze
 
 	po/de.po, src/Conf.pm: [M.Redinger] Updated German translations
@@ -16,6 +18,16 @@
 	src/: Message.pm, tools.pl: add sanity check of incoming email address
 
    Bug fixes :
+
+	wwsympa/wwsympa.fcgi: [S.Amrani] the regexp run by search_list could make wwsympa.fcgi process die ; 
+	now using eval{} Now escaping some more dangerous caracters.
+
+	web_tt2/arcsearch.tt2, wwsympa/wwsympa.fcgi: [BugId 427] [reported by K/Moriwaka] : sort by age did 
+	not work properly in web archives search engine
+
+	src/etc/script/create_db.Oracle: [reported by I.Vecchia] : Oracle does not accept number(0,1) data type
+
+	web_tt2/: admin_menu.tt2, review.tt2: [M.Redinger] : Some strings were not tagged as translatable
 
 	po/xgettext.pl: [M.Redinger]xgettext.pl did not collect all gettext_id from List.pm
 
