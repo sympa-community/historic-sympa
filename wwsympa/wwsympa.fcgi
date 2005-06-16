@@ -1018,27 +1018,9 @@ if ($wwsconf->{'use_fast_cgi'}) {
  	 if (defined $list) {
  	     $param->{'list_conf'} = $list->{'admin'};
  	 }
- 
- 	 my $tt2_include_path = [$Conf{'etc'}.'/web_tt2/'.&Language::Lang2Locale($param->{'lang'}),
- 				 $Conf{'etc'}.'/web_tt2',
- 				 '--ETCBINDIR--'.'/web_tt2/'.&Language::Lang2Locale($param->{'lang'}),
- 				 '--ETCBINDIR--'.'/web_tt2'];
- 	 ## not the default robot
- 	 if (lc($robot) ne lc($Conf{'host'})) {
- 	     unshift @{$tt2_include_path}, $Conf{'etc'}.'/'.$robot.'/web_tt2';
- 	     unshift @{$tt2_include_path}, $Conf{'etc'}.'/'.$robot.'/web_tt2/'.&Language::Lang2Locale($param->{'lang'});
- 	 }
- 
- 	 ## If in list context
- 	 if (defined $list) {
- 	     if (defined $list->{'admin'}{'family_name'}) {
- 		 my $family = $list->get_family();
- 		 unshift @{$tt2_include_path}, $family->{'dir'}.'/web_tt2';
- 		 unshift @{$tt2_include_path}, $family->{'dir'}.'/web_tt2/'.&Language::Lang2Locale($param->{'lang'});
- 	     }
-	     
- 	     unshift @{$tt2_include_path}, $list->{'dir'}.'/web_tt2';
- 	     unshift @{$tt2_include_path}, $list->{'dir'}.'/web_tt2/'.&Language::Lang2Locale($param->{'lang'}); 	 }
+
+	 my $lang = &Language::Lang2Locale($param->{'lang'});
+	 my $tt2_include_path = &tools::make_tt2_include_path($robot,'web_tt2',$lang,$list);
  	    
  	 unless (&tt2::parse_tt2($param,'rss.tt2' ,\*STDOUT, $tt2_include_path)) {
  	     my $error = &tt2::get_error();
@@ -1331,27 +1313,8 @@ sub send_html {
 	$param->{'list_conf'} = $list->{'admin'};
     }
     
-    my $tt2_include_path = [$Conf{'etc'}.'/web_tt2/'.&Language::Lang2Locale($param->{'lang'}),
-			    $Conf{'etc'}.'/web_tt2',
-			    '--ETCBINDIR--'.'/web_tt2/'.&Language::Lang2Locale($param->{'lang'}),
-			    '--ETCBINDIR--'.'/web_tt2'];
-    ## not the default robot
-    if (lc($robot) ne lc($Conf{'host'})) {
-	unshift @{$tt2_include_path}, $Conf{'etc'}.'/'.$robot.'/web_tt2';
-	unshift @{$tt2_include_path}, $Conf{'etc'}.'/'.$robot.'/web_tt2/'.&Language::Lang2Locale($param->{'lang'});
-    }
-    
-    ## If in list context
-    if (defined $list) {
-	if (defined $list->{'admin'}{'family_name'}) {
-	    my $family = $list->get_family();
-	    unshift @{$tt2_include_path}, $family->{'dir'}.'/web_tt2';
-	    unshift @{$tt2_include_path}, $family->{'dir'}.'/web_tt2/'.&Language::Lang2Locale($param->{'lang'});
-	}
-	
-	unshift @{$tt2_include_path}, $list->{'dir'}.'/web_tt2';
-	unshift @{$tt2_include_path}, $list->{'dir'}.'/web_tt2/'.&Language::Lang2Locale($param->{'lang'});
-    }
+    my $lang = &Language::Lang2Locale($param->{'lang'})
+    my $tt2_include_path = &tools::make_tt2_include_path($robot,'web_tt2',$lang,$list);
     
     my $tt2_options = {};
     if ($Conf{'web_recode_to'}) {
@@ -4068,11 +4031,10 @@ sub do_skinsedit {
     $param->{'css_warning'} = "parameter css_url seems strange, it must be the url of a directory not a css file" if ($param->{'css_url'} =~ /.css$/);
     
     if ($in{'installcss'}) {
-	my $tt2_include_path = [$Conf{'etc'}.'/web_tt2/'.&Language::Lang2Locale($param->{'lang'}),
-				$Conf{'etc'}.'/web_tt2',
-				'--ETCBINDIR--'.'/web_tt2/'.&Language::Lang2Locale($param->{'lang'}),
-				'--ETCBINDIR--'.'/web_tt2'];
-	
+
+	my $lang = &Language::Lang2Locale($param->{'lang'});
+	my $tt2_include_path = &tools::make_tt2_include_path($robot,'web_tt2',$lang,'');
+
 	my $date= time;
 	foreach my $css ('style.css','print.css','fullPage.css','print-preview.css') {
 	    $param->{'css'} = $css;
@@ -6342,10 +6304,7 @@ sub do_set_pending_list_request {
 	 $data{'default_domain'} = $Conf{'domain'};
 	 $data{'is_default_domain'} = 1 if ($robot == $Conf{'domain'});
 
-	 my $tt2_include_path = [$Conf{'etc'}.'/'.$robot,
-				 $Conf{'etc'},
-				 '--ETCBINDIR--'];
-
+	 my $tt2_include_path = &tools::make_tt2_include_path($robot,'','','');
 	 &tt2::parse_tt2 (\%data,'list_aliases.tt2',\$aliases, $tt2_include_path);
 
 	 $param->{'aliases'}  = $aliases;
@@ -13470,16 +13429,10 @@ sub do_css {
     $param->{'bypass'} = 'extreme';
     printf "Content-type: text/css\n\n";
     $param->{'css'} = $in{'file'}; 
-    my $tt2_include_path = [$Conf{'etc'}.'/web_tt2/'.&Language::Lang2Locale($param->{'lang'}),
-			    $Conf{'etc'}.'/web_tt2',
-			    '--ETCBINDIR--'.'/web_tt2/'.&Language::Lang2Locale($param->{'lang'}),
-			    '--ETCBINDIR--'.'/web_tt2'];
-    ## not the default robot
-    if (lc($robot) ne lc($Conf{'host'})) {
-        unshift @{$tt2_include_path}, $Conf{'etc'}.'/'.$robot.'/web_tt2';
-        unshift @{$tt2_include_path}, $Conf{'etc'}.'/'.$robot.'/web_tt2/'.&Language::Lang2Locale($param->{'lang'});
-    }
-    
+
+    my $lang = &Language::Lang2Locale($param->{'lang'});
+    my $tt2_include_path = &tools::make_tt2_include_path($robot,'web_tt2',$lang,'');
+
     unless (&tt2::parse_tt2($param,'css.tt2' ,\*STDOUT, $tt2_include_path)) {
 	my $error = &tt2::get_error();
 	$param->{'tt2_error'} = $error;

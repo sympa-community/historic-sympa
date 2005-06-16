@@ -2805,13 +2805,9 @@ sub send_global_file {
     ## Lang
     $data->{'lang'} = $data->{'lang'} || $data->{'user'}{'lang'} || &Conf::get_robot_conf($robot, 'lang');
 
-    ## What file   
-    my $tt2_include_path = ["$Conf{'etc'}/$robot/mail_tt2/".&Language::Lang2Locale($data->{'lang'}),
-			    "$Conf{'etc'}/$robot/mail_tt2",
-			    "$Conf{'etc'}/mail_tt2/".&Language::Lang2Locale($data->{'lang'}),
-			    "$Conf{'etc'}/mail_tt2",
-			    "--ETCBINDIR--/mail_tt2/".&Language::Lang2Locale($data->{'lang'}),
-			    "--ETCBINDIR--/mail_tt2"];
+    ## What file 
+    my $lang = &Language::Lang2Locale($data->{'lang'});
+    my $tt2_include_path = &tools::make_tt2_include_path($robot,'mail_tt2',$lang,'');
 
     foreach my $d (@{$tt2_include_path}) {
 	&tt2::add_include_path($d);
@@ -2924,26 +2920,11 @@ sub send_file {
     $data->{'lang'} = $data->{'user'}{'lang'} || $self->{'admin'}{'lang'} || &Conf::get_robot_conf($robot, 'lang');
 
     ## What file   
-    my $tt2_include_path = ["$Conf{'etc'}/$robot/mail_tt2/".&Language::Lang2Locale($data->{'lang'}),
-			    "$Conf{'etc'}/$robot/mail_tt2",
-			    "$Conf{'etc'}/mail_tt2/".&Language::Lang2Locale($data->{'lang'}),
-			    "$Conf{'etc'}/mail_tt2",
-			    "--ETCBINDIR--/mail_tt2/".&Language::Lang2Locale($data->{'lang'}),
-			    "--ETCBINDIR--/mail_tt2",
-			    $self->{'dir'},            ## list directory to get the 'info' file
-			    $self->{'dir'}.'/archives' ## list archives to include the last message
-			    ];
+    my $lang = &Language::Lang2Locale($data->{'lang'});
+    my $tt2_include_path = &tools::make_tt2_include_path($robot,'mail_tt2',$lang,$self);
 
-    ## Add family-related path
-    if (defined $self->{'admin'}{'family_name'}) {
-	my $family = $self->get_family();
-	unshift @{$tt2_include_path}, $family->{'dir'}.'/mail_tt2';
-	unshift @{$tt2_include_path}, $family->{'dir'}.'/mail_tt2/'.&Language::Lang2Locale($data->{'lang'});
-    }
-
-    ## Add list-related path
-    unshift @{$tt2_include_path}, $self->{'dir'}.'/mail_tt2';
-    unshift @{$tt2_include_path}, $self->{'dir'}.'/mail_tt2/'.&Language::Lang2Locale($data->{'lang'});
+    push @{$tt2_include_path},$self->{'dir'};             ## list directory to get the 'info' file
+    push @{$tt2_include_path},$self->{'dir'}.'/archives'; ## list archives to include the last message
 
     foreach my $d (@{$tt2_include_path}) {
 	&tt2::add_include_path($d);
@@ -11093,15 +11074,9 @@ sub _urlize_part {
     my $new_part;
 
     my $lang = &Language::GetLang();
-    my $tt2_include_path = [$list->{'dir'}.'/mail_tt2/'.$lang,
-			    $list->{'dir'}.'/mail_tt2',
-			    $Conf{'etc'}.'/'.$robot.'/mail_tt2/'.$lang,
-			    $Conf{'etc'}.'/'.$robot.'/mail_tt2',
-			    $Conf{'etc'}.'/mail_tt2/'.$lang,
-			    $Conf{'etc'}.'/mail_tt2',
-			    '--ETCBINDIR--'.'/mail_tt2/'.$lang,
-			    '--ETCBINDIR--'.'/mail_tt2'];
-    
+
+    my $tt2_include_path = &tools::make_tt2_include_path($robot,'mail_tt2',$lang,$list);
+
     &tt2::parse_tt2({'file_name' => $file_name,
 		     'file_url'  => $file_url,
 		     'file_size' => $size },

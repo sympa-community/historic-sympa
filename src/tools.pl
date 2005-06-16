@@ -1582,6 +1582,93 @@ sub get_filename {
     &do_log('notice','tools::get_filename: Cannot find %s in %s', $name, join(',',@try));
     return undef;
 }
+####################################################
+# make_tt2_include_path
+####################################################
+# make an array of include path for tt2 parsing
+# 
+# IN :-$robot : robot
+#    :-$dir : directory ending each path
+#    :-$lang : lang
+#    :$list : ref(List)
+#
+# OUT : ref(ARRAY) of tt2 include path
+#
+######################################################
+sub make_tt2_include_path {
+    my ($robot,$dir,$lang,$list) = @_;
+    &do_log('debug3','tools::make_tt2_include_path(%s,%s,%s,%s)',$robot,$dir,$lang,$list);
+
+    my @include_path;
+
+    my $path_etcbin;
+    my $path_etc;
+    my $path_robot;  ## optional
+    my $path_list;   ## optional
+    my $path_family; ## optional
+
+    if ($dir) {
+	$path_etcbindir = "--ETCBINDIR--/".$dir;
+	$path_etcdir = "$Conf{'etc'}/".$dir;
+	$path_robot = "$Conf{'etc'}/".$robot.'/'.$dir if (lc($robot) ne lc($Conf{'host'}));
+	if (ref($list) eq 'List'){
+	    $path_list = $list->{'dir'}.'/'.$dir;
+	    if (defined $self->{'admin'}{'family_name'}) {
+		my $family = $self->get_family();
+	        $path_family = $family->{'dir'}.'/'.$dir;
+	    }
+	} 
+    }else {
+	$path_etcbindir = "--ETCBINDIR--";
+	$path_etcdir = "$Conf{'etc'}";
+	$path_robot = "$Conf{'etc'}/".$robot if (lc($robot) ne lc($Conf{'host'}));
+	if (ref($list) eq 'List') {
+	    $path_list = $list->{'dir'} ;
+	    if (defined $self->{'admin'}{'family_name'}) {
+		my $family = $self->get_family();
+	        $path_family = $family->{'dir'};
+	    }
+	}
+    }
+    if ($lang) {
+	@include_path = ($path_etcdir.'/'.$lang,
+			 $path_etcdir,
+			 $path_etcbindir.'/'.$lang,
+			 $path_etcbindir);
+	if ($path_robot) {
+	    unshift @include_path,$path_robot;
+	    unshift @include_path,$path_robot.'/'.$lang;
+	}
+	if ($path_list) {
+	    unshift @include_path,$path_list;
+	    unshift @include_path,$path_list.'/'.$lang;
+
+	    if ($path_family) {
+		unshift @include_path,$path_family;
+		unshift @include_path,$path_family.'/'.$lang;
+	    }	
+	    
+	}
+    }else {
+	@include_path = ($path_etcdir,
+			 $path_etcbindir);
+
+	if ($path_robot) {
+	    unshift @include_path,$path_robot;
+	}
+	if ($path_list) {
+	    unshift @include_path,$path_list;
+	   
+	    if ($path_family) {
+		unshift @include_path,$path_family;
+	    }
+	}
+    }
+
+    do_log('notice',"INCLUDE PATH ::::::::::::::::::::::::::::::: @include_path");
+    return \@include_path;
+
+}
 
 ## Find a file in an ordered list of directories
 sub find_file {
