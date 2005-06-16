@@ -1381,11 +1381,14 @@ sub DoMessage{
     ## Call scenarii : auth_method MD5 do not have any sense in send
     ## scenarii because auth is perfom by distribute or reject command.
     
-    my $action ;
+    my $action;
+    my $result;	
     if ($is_signed->{'body'}) {
-	$action = &List::request_action ('send', 'smime',$robot,$context);
+	$result = &List::request_action ('send', 'smime',$robot,$context);
+	$action = $result->{'action'} if (ref($result) eq 'HASH');
     }else{
-	$action = &List::request_action ('send', 'smtp',$robot,$context);
+	$result = &List::request_action ('send', 'smtp',$robot,$context);
+	$action = $result->{'action'} if (ref($result) eq 'HASH');
     } 
 	
     return undef unless (defined $action);
@@ -1448,13 +1451,12 @@ sub DoMessage{
 	
 #	$list->send_notify_to_user('moderating_message',$sender,{}) unless ($2 eq 'quiet');
 	return 1;
-    }elsif($action =~ /^reject(\(\'?(\w+)\'?\))?(\s?,\s?(quiet))?/) {
-	my $tpl = $2;
-	do_log('notice', 'Message for %s from %s rejected(%s) because sender not allowed', $listname, $sender, $tpl);
-	unless ($4 eq 'quiet') {
-	    if ($tpl) {
-		unless ($list->send_file($tpl, $sender, $robot, {})) {
-		    &do_log('notice',"Unable to send template '$tpl' to $sender");
+    }elsif($action =~ /^reject(,(quiet))?/) {
+	&do_log('notice', 'Message for %s from %s rejected(%s) because sender not allowed', $listname, $sender, $result->{'tt2'});
+	unless ($2 eq 'quiet') {
+	    if (defined $result->{'tt2'}) {
+		unless ($list->send_file($result->{'tt2'}, $sender, $robot, {})) {
+		    &do_log('notice',"Unable to send template '$result->{'tt2'}' to $sender");
 		}
 	    }else {
 		unless ($list->send_file('message_report',$sender,$robot,{'to' => $sender,

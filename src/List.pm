@@ -3293,6 +3293,7 @@ sub request_auth {
 	    $data->{'type'} = 'invite';
 	}
 
+	$data->{'command_escaped'} = &tt2::escape_url($data->{'command'});
 	unless ($self->send_file('request_auth',$email,$robot,$data)) {
 	    &do_log('notice',"Unable to send template 'request_auth' to $email");
 	    return undef;
@@ -3302,6 +3303,7 @@ sub request_auth {
 	if ($cmd eq 'remind'){
 	    my $keyauth = &List::compute_auth('',$cmd);
 	    $data->{'command'} = "auth $keyauth $cmd *";
+	    $data->{'command_escaped'} = &tt2::escape_url($data->{'command'});
 	    $data->{'type'} = 'remind';
 	}
 
@@ -5876,7 +5878,32 @@ sub am_i {
     }
 }
 
-## Return the action to perform for 1 sender using 1 auth method to perform 1 operation
+####################################################
+# request_action
+####################################################
+# Return the action to perform for 1 sender 
+# using 1 auth method to perform 1 operation
+#
+# IN : -$operation (+) : scalar
+#      -$auth_method (+) : 'smtp'|'md5'|'pgp'|'smime'
+#      -$robot (+) : scalar
+#      -$context (+) : ref(HASH) containing information
+#        to evaluate scenario (scenario var)
+#      -$debug : adds keys in the returned HASH 
+#
+# OUT : undef | ref(HASH) containing keys :
+#        -action : 'do_it'|'reject'|'request_auth'
+#           |'owner'|'editor'|'editorkey'|'listmaster'
+#        -reason : defined if action == 'reject' 
+#           and in scenario : reject(reason='...')
+#        -tt2 : defined if action == 'reject'  
+#           and in scenario : reject(tt2='...') or reject('...tt2')
+#           match a key in authorization_reject.tt2
+#        -condition : the checked condition 
+#           (defined if $debug)
+#        -auth_method : the checked auth_method 
+#           (defined if $debug)
+###################################################### 
 sub request_action {
     my $operation = shift;
     my $auth_method = shift;
@@ -5962,20 +5989,27 @@ sub request_action {
 	do_log('err',"internal error : configuration for operation $operation is not yet performed by scenario");
 	return undef;
     }
+
+    my $return;
     foreach my $rule (@rules) {
 	next if ($rule eq 'scenario');
 	if ($auth_method eq $rule->{'auth_method'}) {
 	    my $result =  &verify ($context,$rule->{'condition'});
-
+	    
 	    if (! defined ($result)) {
 		do_log('info',"error in $rule->{'condition'},$rule->{'auth_method'},$rule->{'action'}" );
-
+		
 #		if (defined $context->{'listname'}) {
 		&do_log('info', 'Error in %s scenario, in list %s', $context->{'scenario'}, $context->{'listname'});
 #		}
-
+		
 		if ($debug) {
-		    return ("error-performing-condition : $rule->{'condition'}",$rule->{'auth_method'},'reject') ;
+		    $return = {'action' => 'reject',
+			       'reason' => 'error-performing-condition',
+			       'auth_method' => $rule->{'auth_method'},
+			       'condition' => $rule->{'condition'}
+			   };
+		    return $return;
 		}
 		unless (&List::send_notify_to_listmaster('error-performing-condition', $robot, [$context->{'listname'}."  ".$rule->{'condition'}] )) {
 		    &do_log('notice',"Unable to send notify 'error-performing-condition' to listmaster");
@@ -5986,24 +6020,61 @@ sub request_action {
 		do_log('debug3',"rule $rule->{'condition'},$rule->{'auth_method'},$rule->{'action'} rejected");
 		next;
 	    }
+	    
+	    my $action = $rule->{'action'};
+	    
+            ## reject : get parameters
+	    if ($action =~  /^reject(\(\'?([\w+|,]+)\'?\))?(\s?,\s?(quiet))?/) {
+		if ($4 eq 'quiet') { 
+		    $action = 'reject,quiet';
+		} else{
+		    $action = 'reject';	
+		}
+		my @param = split /,/,$2;
+
+		foreach my $p (@param){
+		    &do_log('notice',"REJECT : PARAM : $p");
+
+		    if ($p =~ /^reason=\'?(\w+)\'?/){
+			$return->{'reason'} = $1;
+		
+		    }elsif ($p =~ /^tt2=\'?(\w+)\'?/){
+			$return->{'tt2'} = $1;
+		
+		    }elsif ($p =~ /^\'?[^=]+\'?/){
+			$return->{'tt2'} = $p;
+		    }
+		}
+	    }
+
+	    $return->{'action'} = $action;
+	    
 	    if ($result == 1) {
-		do_log('debug3',"rule $rule->{'condition'},$rule->{'auth_method'},$rule->{'action'} accepted");
+		&do_log('debug3',"rule $rule->{'condition'},$rule->{'auth_method'},$rule->{'action'} accepted");
 		if ($debug) {
-		    return ($rule->{'condition'},$rule->{'auth_method'},$rule->{'action'});
+		    $return->{'auth_method'} = $rule->{'auth_method'};
+		    $return->{'condition'} = $rule->{'condition'};
+
+		    return $return;
 		}
 
 		## Check syntax of returned action
-		unless ($rule->{'action'} =~ /^(do_it|reject|request_auth|owner|editor|editorkey|listmaster)/) {
+		unless ($action =~ /^(do_it|reject|request_auth|owner|editor|editorkey|listmaster)/) {
 		    &do_log('err', "Matched unknown action '%s' in scenario", $rule->{'action'});
 		    return undef;
 		}
 
-		return $rule->{'action'};
+		return $return;
 	    }
 	}
     }
     do_log('debug3',"no rule match, reject");
-    return ('default','default','reject');
+    $return = {'action' => 'reject',
+	       'reason' => 'no-rule-match',
+			   'auth_method' => 'default',
+			   'condition' => 'default'
+			   };
+    return $return;
 }
 
 ## Initialize internal list cache

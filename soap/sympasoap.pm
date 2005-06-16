@@ -86,10 +86,12 @@ sub lists {
 	
 	my $list = new List ($listname, $robot);
 	my $result_item = {};
-	my $action = &List::request_action ('visibility','md5',$robot,
+	my $result = &List::request_action ('visibility','md5',$robot,
 					    {'listname' =>  $listname,
 					     'sender' => $sender}
 					    );
+	my $action;
+	$action = $result->{'action'} if (ref($result) eq 'HASH');
 	next unless ($action eq 'do_it');
 	
 	##building result packet
@@ -339,15 +341,17 @@ sub info {
     # Part of the authorization code
     $user = &List::get_user_db($sender);
      
-    my $action = &List::request_action ('info','md5',$robot,
+    my $result = &List::request_action ('info','md5',$robot,
                                      {'listname' => $listname,
                                       'sender' => $sender});
+    my $action;
+    $action = $result->{'action'} if (ref($result) eq 'HASH');
 
     die SOAP::Fault->faultcode('Server')
 	->faultstring('No action available')
 	unless (defined $action);
 
-    if ($action =~ /reject(\(\'?(\w+)\'?\))?/i) {
+    if ($action =~ /reject/i) {
 	&Log::do_log('info', 'SOAP : info %s from %s refused (not allowed)', $listname,$sender);
 	die SOAP::Fault->faultcode('Server')
 	    ->faultstring('Not allowed')
@@ -419,14 +423,17 @@ sub review {
     # Part of the authorization code
     $user = &List::get_user_db($sender);
      
-    my $action = &List::request_action ('review','md5',$robot,
+    my $result = &List::request_action ('review','md5',$robot,
                                      {'listname' => $listname,
                                       'sender' => $sender});
+    my $action;
+    $action = $result->{'action'} if (ref($result) eq 'HASH');
 
     die SOAP::Fault->faultcode('Server')
 	->faultstring('No action available')
 	unless (defined $action);
-    if ($action =~ /reject(\(\'?(\w+)\'?\))?/i) {
+
+    if ($action =~ /reject/i) {
 	&Log::do_log('info', 'SOAP : review %s from %s refused (not allowed)', $listname,$sender);
 	die SOAP::Fault->faultcode('Server')
 	    ->faultstring('Not allowed')
@@ -505,16 +512,18 @@ sub signoff {
     # Part of the authorization code
     my $user = &List::get_user_db($sender);
     
-    my $action = &List::request_action('unsubscribe','md5',$robot,
+    my $result = &List::request_action('unsubscribe','md5',$robot,
 				       {'listname' => $listname,
 					'email' => $sender,
 					'sender' => $sender });
-    
+    my $action;
+    $action = $result->{'action'} if (ref($result) eq 'HASH');
+
     die SOAP::Fault->faultcode('Server')
 	->faultstring('No action available.')
 	unless (defined $action);   
     
-    if ($action =~ /reject(\(\'?(\w+)\'?\))?/i) {
+    if ($action =~ /reject/i) {
 	&Log::do_log('info', 'SOAP : sign off from %s for the email %s of the user %s refused (not allowed)', 
 		     $listname,$sender,$sender);
 	die SOAP::Fault->faultcode('Server')
@@ -606,17 +615,19 @@ sub subscribe {
   $gecos = "\"$gecos\"" if ($gecos =~ /[<>\(\)]/);
   
   ## query what to do with this subscribtion request
-  my $action = &List::request_action('subscribe','md5',$robot,
+  my $result = &List::request_action('subscribe','md5',$robot,
 				     {'listname' => $listname,
 				      'sender' => $sender });
- 
+  my $action;
+  $action = $result->{'action'} if (ref($result) eq 'HASH');
+
   die SOAP::Fault->faultcode('Server')
       ->faultstring('No action available.')
 	  unless (defined $action); 
   
   &Log::do_log('debug2', 'SOAP subscribe action : %s', $action);
   
-  if ($action =~ /reject(\(\'?(\w+)\'?\))?/i) {
+  if ($action =~ /reject/i) {
       &Log::do_log('info', 'SOAP subscribe to %s from %s refused (not allowed)', $listname,$sender);
       die SOAP::Fault->faultcode('Server')
 	  ->faultstring('Not allowed.')
@@ -768,10 +779,13 @@ sub which {
 	my $list_address;
 	my $result_item;
 
-	next unless (&List::request_action ('visibility', 'md5', $robot,
+	my $result = &List::request_action ('visibility', 'md5', $robot,
 					    {'listname' =>  $listname,
-					     'sender' =>$sender}) =~ /do_it/);
-	
+					     'sender' =>$sender});
+	my $action;
+	$action = $result->{'action'} if (ref($result) eq 'HASH');
+	next unless ($action =~ /do_it/i);
+
 	$result_item->{'listAddress'} = $listname.'@'.$list->{'domain'};
 	$result_item->{'subject'} = $list->{'admin'}{'subject'};
 	$result_item->{'subject'} =~ s/;/,/g;

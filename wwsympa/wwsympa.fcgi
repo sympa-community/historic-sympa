@@ -1423,11 +1423,13 @@ sub send_html {
 	    $param->{'is_priv'} = $param->{'is_owner'} || $param->{'is_editor'};
 
 	    #May post:
-	    my $action = &List::request_action ('send',$param->{'auth_method'},$robot,
+	    my $result = &List::request_action ('send',$param->{'auth_method'},$robot,
 						{'listname' => $param->{'list'},
 						 'sender' => $param->{'user'}{'email'},
 						 'remote_host' => $param->{'remote_host'},
 						 'remote_addr' => $param->{'remote_addr'}});
+	    my $action;
+	    $action = $result->{'action'} if (ref($result) eq 'HASH');
 	    $param->{'may_post'} = 1 if ($action !~ /reject/);
 
 	}
@@ -1466,11 +1468,12 @@ sub send_html {
 		if ($param->{'is_subscriber'} &&
 		    ($param->{'subscriber'}{'subscribed'} == 1)) {
 		    ## May signoff
-		    $main::action = &List::request_action ('unsubscribe',$param->{'auth_method'},$robot,
+		    my $result = &List::request_action ('unsubscribe',$param->{'auth_method'},$robot,
 						     {'listname' =>$param->{'list'}, 
 						      'sender' =>$param->{'user'}{'email'},
 						      'remote_host' => $param->{'remote_host'},
 						      'remote_addr' => $param->{'remote_addr'}});
+		    $main::action = $result->{'action'} if (ref($result) eq 'HASH');
 
 		    $param->{'may_signoff'} = 1 if ($main::action =~ /do_it|owner/);
 		    $param->{'may_suboptions'} = 1;
@@ -1478,12 +1481,13 @@ sub send_html {
 		}else {
 
 		    ## May Subscribe
-		    $main::action = &List::request_action ('subscribe',$param->{'auth_method'},$robot,
+		    my $result = &List::request_action ('subscribe',$param->{'auth_method'},$robot,
 						     {'listname' => $param->{'list'}, 
 						      'sender' => $param->{'user'}{'email'},
 						      'remote_host' => $param->{'remote_host'},
 						      'remote_addr' => $param->{'remote_addr'}});
-
+		    $main::action = $result->{'action'} if (ref($result) eq 'HASH');
+		    
 		    $param->{'may_subscribe'} = 1 if ($main::action =~ /do_it|owner/);
 		}
 	    }
@@ -1504,11 +1508,15 @@ sub send_html {
 	}
     }
 
+     my $result = &List::request_action ('create_list',$param->{'auth_method'},$robot,
+					 {'sender' => $param->{'user'}{'email'},
+					  'remote_host' => $param->{'remote_host'},
+					  'remote_addr' => $param->{'remote_addr'}}); 
+     my $action;
+     $action = $result->{'action'} if (ref($result) eq 'HASH');
+     
      if ($param->{'user'}{'email'} && 
-	 (($param->{'create_list'} = &List::request_action ('create_list',$param->{'auth_method'},$robot,
-							    {'sender' => $param->{'user'}{'email'},
-							     'remote_host' => $param->{'remote_host'},
-							     'remote_addr' => $param->{'remote_addr'}})) =~ /do_it|listmaster/)) {
+	 (($param->{'create_list'} = $action ) =~ /do_it|listmaster/)) {
 	 $param->{'may_create_list'} = 1;
      }else{
 	 undef ($param->{'may_create_list'});
@@ -1620,11 +1628,14 @@ sub send_html {
 	    $param->{'is_priv'} = $param->{'is_owner'} || $param->{'is_editor'};
 
 	    #May post:
-	    my $action = &List::request_action ('send',$param->{'auth_method'},$robot,
+	    my $result = &List::request_action ('send',$param->{'auth_method'},$robot,
 						{'listname' => $param->{'list'},
 						 'sender' => $param->{'user'}{'email'},
 						 'remote_host' => $param->{'remote_host'},
 						 'remote_addr' => $param->{'remote_addr'}});
+	    my $action;
+	    $action = $result->{'action'} if (ref($result) eq 'HASH');
+
 	    $param->{'may_post'} = 1 if ($action =~ /do_it/);
 	    
  	    if (($list->{'admin'}{'user_data_source'} eq 'include2') &&
@@ -1639,11 +1650,13 @@ sub send_html {
 	     if ($param->{'may_signoff'} || $param->{'may_subscribe'});
 
 	 ## May review
-	 my $action = &List::request_action ('review',$param->{'auth_method'},$robot,
+	 my $result = &List::request_action ('review',$param->{'auth_method'},$robot,
 					     {'listname' => $param->{'list'},
 					      'sender' => $param->{'user'}{'email'},
 					      'remote_host' => $param->{'remote_host'},
 					      'remote_addr' => $param->{'remote_addr'}});
+	 my $action;
+	 $action = $result->{'action'} if (ref($result) eq 'HASH');
 
 	 $param->{'may_suboptions'} = 1 unless ($list->{'admin'}{'user_data_source'} eq 'include');
 	 $param->{'total'} = $list->get_total();
@@ -1660,11 +1673,12 @@ sub send_html {
 		if ($param->{'is_subscriber'} &&
 		    ($param->{'subscriber'}{'subscribed'} == 1)) {
 		    ## May signoff
-		    $main::action = &List::request_action ('unsubscribe',$param->{'auth_method'},$robot,
+		    my $result = &List::request_action ('unsubscribe',$param->{'auth_method'},$robot,
 						     {'listname' =>$param->{'list'}, 
 						      'sender' =>$param->{'user'}{'email'},
 						      'remote_host' => $param->{'remote_host'},
 						      'remote_addr' => $param->{'remote_addr'}});
+		    $main::action = $result->{'action'} if (ref($result) eq 'HASH');
 
 		    $param->{'may_signoff'} = 1 if ($main::action =~ /do_it|owner/);
 		    $param->{'may_suboptions'} = 1;
@@ -1672,11 +1686,12 @@ sub send_html {
 		}else {
 
 		    ## May Subscribe
-		    $main::action = &List::request_action ('subscribe',$param->{'auth_method'},$robot,
+		    my $result = &List::request_action ('subscribe',$param->{'auth_method'},$robot,
 						     {'listname' => $param->{'list'}, 
 						      'sender' => $param->{'user'}{'email'},
 						      'remote_host' => $param->{'remote_host'},
 						      'remote_addr' => $param->{'remote_addr'}});
+		    $main::action = $result->{'action'} if (ref($result) eq 'HASH');
 
 		    $param->{'may_subscribe'} = 1 if ($main::action =~ /do_it|owner/);
 		}
@@ -1687,11 +1702,16 @@ sub send_html {
 	 if (defined $list->{'admin'}{'web_archive'}) {
 	     $param->{'is_archived'} = 1;
 
-	     if (&List::request_action ('web_archive.access',$param->{'auth_method'},$robot,
-					{'listname' => $param->{'list'},
-					 'sender' => $param->{'user'}{'email'},
-					 'remote_host' => $param->{'remote_host'},
-					 'remote_addr' => $param->{'remote_addr'}}) =~ /do_it/i) {
+	     
+	     my $result = &List::request_action ('web_archive.access',$param->{'auth_method'},$robot,
+						 {'listname' => $param->{'list'},
+						  'sender' => $param->{'user'}{'email'},
+						  'remote_host' => $param->{'remote_host'},
+						  'remote_addr' => $param->{'remote_addr'}});
+	     my $action;
+	     $action = $result->{'action'} if (ref($result) eq 'HASH');
+
+	     if ($action =~ /do_it/i) {
 		 $param->{'arc_access'} = 1; 
 	     }else{
 		 undef ($param->{'arc_access'});
@@ -2400,11 +2420,16 @@ sub do_remindpasswd {
 	     my $list = new List ($l);
 	     next unless (defined $list);
 
-	     next unless (&List::request_action ('visibility', $param->{'auth_method'}, $robot,
+	     my $result = &List::request_action ('visibility', $param->{'auth_method'}, $robot,
 						 {'listname' =>  $l,
 						  'sender' =>$param->{'user'}{'email'} ,
 						  'remote_host' => $param->{'remote_host'},
-						  'remote_addr' => $param->{'remote_addr'}}) =~ /do_it/);
+						  'remote_addr' => $param->{'remote_addr'}});
+	     
+	     my $action;
+	     $action = $result->{'action'} if (ref($result) eq 'HASH');
+	     
+	     next unless ($action =~ /do_it/);
 
 	     $param->{'which'}{$l}{'subject'} = $list->{'admin'}{'subject'};
 	     $param->{'which'}{$l}{'host'} = $list->{'admin'}{'host'};
@@ -2450,11 +2475,13 @@ sub do_remindpasswd {
 	 next unless (defined $list);
 
 	 my $sender = $param->{'user'}{'email'} || 'nobody';
-	 my $action = &List::request_action ('visibility',$param->{'auth_method'},$robot,
+	 my $result = &List::request_action ('visibility',$param->{'auth_method'},$robot,
 					     {'listname' =>  $l,
 					      'sender' => $sender, 
 					      'remote_host' => $param->{'remote_host'},
 					      'remote_addr' => $param->{'remote_addr'}});
+	 my $action;
+	 $action = $result->{'action'} if (ref($result) eq 'HASH');
 
 	 next unless ($action eq 'do_it');
 
@@ -2666,11 +2693,14 @@ sub do_remindpasswd {
      }
 
      ## May review
-     my $action = &List::request_action ('info',$param->{'auth_method'},$robot,
+     my $result = &List::request_action ('info',$param->{'auth_method'},$robot,
 					 {'listname' => $param->{'list'},
 					  'sender' => $param->{'user'}{'email'},
 					  'remote_host' => $param->{'remote_host'},
 					  'remote_addr' => $param->{'remote_addr'}});
+     my $action;
+     $action = $result->{'action'} if (ref($result) eq 'HASH');
+
      unless ($action =~ /do_it/) {
 	 &error_message('may_not');
 	 &wwslog('info','do_info: may not view info');
@@ -2768,11 +2798,14 @@ sub do_remindpasswd {
      }
 
      ## May review
-     my $action = &List::request_action ('review',$param->{'auth_method'},$robot,
+     my $result = &List::request_action ('review',$param->{'auth_method'},$robot,
 					 {'listname' => $param->{'list'},
 					  'sender' => $param->{'user'}{'email'},
 					  'remote_host' => $param->{'remote_host'},
 					  'remote_addr' => $param->{'remote_addr'}});
+     my $action;
+     $action = $result->{'action'} if (ref($result) eq 'HASH');
+     
      unless ($action =~ /do_it/) {
 	 &error_message('may_not');
 	 &wwslog('info','do_review: may not review');
@@ -2895,11 +2928,13 @@ sub do_remindpasswd {
 
      ## May review
      my $sender = $param->{'user'}{'email'} || 'nobody';
-     my $action = &List::request_action ('review',$param->{'auth_method'},$robot,
+     my $result = &List::request_action ('review',$param->{'auth_method'},$robot,
 					 {'listname' => $param->{'list'},
 					  'sender' => $sender,
 					  'remote_host' => $param->{'remote_host'},
 					  'remote_addr' => $param->{'remote_addr'}});
+     my $action;
+     $action = $result->{'action'} if (ref($result) eq 'HASH');
 
      unless ($action =~ /do_it/) {
 	 &error_message('may_not');
@@ -3281,11 +3316,13 @@ sub do_remindpasswd {
 	 return undef;
      }
 
-     my $sub_is = &List::request_action('subscribe',$param->{'auth_method'},$robot,
+     my $result = &List::request_action('subscribe',$param->{'auth_method'},$robot,
 					{'listname' => $param->{'list'},
 					 'sender' => $param->{'user'}{'email'}, 
 					 'remote_host' => $param->{'remote_host'},
 					 'remote_addr' => $param->{'remote_addr'}});
+     my $sub_is;
+     $sub_is = $result->{'action'} if (ref($result) eq 'HASH');
 
      if ($sub_is =~ /reject/) {
 	 &error_message('may_not');
@@ -3550,11 +3587,13 @@ sub do_remindpasswd {
 	 return undef;
      }
 
-     my $sig_is = &List::request_action ('unsubscribe',$param->{'auth_method'},$robot,
+     my $result = &List::request_action ('unsubscribe',$param->{'auth_method'},$robot,
 					 {'listname' => $param->{'list'}, 
 					  'sender' => $param->{'user'}{'email'},
 					  'remote_host' => $param->{'remote_host'},
 					  'remote_addr' => $param->{'remote_addr'}});
+     my $sig_is;
+     $sig_is = $result->{'action'} if (ref($result) eq 'HASH');
 
      $param->{'may_signoff'} = 1 if ($sig_is =~ /do_it|owner/);
 
@@ -4088,12 +4127,14 @@ sub do_skinsedit {
 	 return 'loginrequest';
      }
 
-     my $add_is = &List::request_action ('add',$param->{'auth_method'},$robot,
+     my $result = &List::request_action ('add',$param->{'auth_method'},$robot,
 					 {'listname' => $param->{'list'},
 					  'sender' => $param->{'user'}{'email'}, 
 					  'email' => 'nobody',
 					  'remote_host' => $param->{'remote_host'},
 					  'remote_addr' => $param->{'remote_addr'}});
+     my $add_is;
+     $add_is = $result->{'action'} if (ref($result) eq 'HASH');
 
      unless ($add_is =~ /do_it/) {
 	 &error_message('may_not');
@@ -4166,12 +4207,14 @@ sub do_skinsedit {
      my $comma_emails ;
      foreach my $email (keys %user) {
 
-	 my $add_is = &List::request_action ('add',$param->{'auth_method'},$robot,
+	 my $result = &List::request_action ('add',$param->{'auth_method'},$robot,
 					     {'listname' => $param->{'list'},
 					      'sender' => $param->{'user'}{'email'}, 
 					      'email' => $in{'email'},
 					      'remote_host' => $param->{'remote_host'},
 					      'remote_addr' => $param->{'remote_addr'}});
+	 my $add_is;
+	 $add_is = $result->{'action'} if (ref($result) eq 'HASH');
 	 
 	 unless ($add_is =~ /do_it/) {
 	     &error_message('may_not');
@@ -4292,13 +4335,15 @@ sub do_skinsedit {
 	 return 'loginrequest';
      }
 
-     my $del_is = &List::request_action ('del',$param->{'auth_method'},$robot,
+     my $result = &List::request_action ('del',$param->{'auth_method'},$robot,
 					 {'listname' =>$param->{'list'},
 					  'sender' => $param->{'user'}{'email'},
 					  'email' => $in{'email'},
 					  'remote_host' => $param->{'remote_host'},
 					  'remote_addr' => $param->{'remote_addr'}});
-
+     my $del_is;
+     $del_is = $result->{'action'} if (ref($result) eq 'HASH');
+     
      unless ( $del_is =~ /do_it/) {
 	 &error_message('may_not');
 	 # &List::db_log('wwsympa',$param->{'user'}{'email'},$param->{'auth_method'},$ip,'del',$param->{'list'},$robot,$in{'email'},'may not');
@@ -5186,11 +5231,16 @@ sub do_skinsedit {
      }
 
      ## Access control
-     unless (&List::request_action ('web_archive.access',$param->{'auth_method'},$robot,
-				    {'listname' => $param->{'list'},
-				     'sender' => $param->{'user'}{'email'},
-				     'remote_host' => $param->{'remote_host'},
-				     'remote_addr' => $param->{'remote_addr'}}) =~ /do_it/i) {
+
+     my $result = &List::request_action ('web_archive.access',$param->{'auth_method'},$robot,
+					 {'listname' => $param->{'list'},
+					  'sender' => $param->{'user'}{'email'},
+					  'remote_host' => $param->{'remote_host'},
+					  'remote_addr' => $param->{'remote_addr'}});
+     my $action;
+     $action = $result->{'action'} if (ref($result) eq 'HASH');
+
+     unless ($action =~ /do_it/i) {
 	 &error_message('may_not');
 	 &wwslog('err','do_arc: access denied for %s', $param->{'user'}{'email'});
 	 return undef;
@@ -5306,11 +5356,14 @@ sub do_skinsedit {
      }
 
      ## Access control
-     unless (&List::request_action ('web_archive.access',$param->{'auth_method'},$robot,
+     my $result = &List::request_action ('web_archive.access',$param->{'auth_method'},$robot,
 				    {'listname' => $param->{'list'},
 				     'sender' => $param->{'user'}{'email'},
 				     'remote_host' => $param->{'remote_host'},
-				     'remote_addr' => $param->{'remote_addr'}}) =~ /do_it/i) {
+				     'remote_addr' => $param->{'remote_addr'}});
+     my $action;
+     $action = $result->{'action'} if (ref($result) eq 'HASH');
+     unless ($action =~ /do_it/i) {
 	 &error_message('may_not');
 	 &wwslog('err','do_arc: access denied for %s', $param->{'user'}{'email'});
 	 return undef;
@@ -5669,11 +5722,14 @@ sub get_timelocal_from_date {
      }
 
      ## Access control
-     unless (&List::request_action ('web_archive.access',$param->{'auth_method'},$robot,
-				    {'listname' => $param->{'list'},
-				     'sender' => $param->{'user'}{'email'},
-				     'remote_host' => $param->{'remote_host'},
-				     'remote_addr' => $param->{'remote_addr'}}) =~ /do_it/i) {
+     my $result = &List::request_action ('web_archive.access',$param->{'auth_method'},$robot,
+					 {'listname' => $param->{'list'},
+					  'sender' => $param->{'user'}{'email'},
+					  'remote_host' => $param->{'remote_host'},
+					  'remote_addr' => $param->{'remote_addr'}});
+     my $action;
+     $action = $result->{'action'} if (ref($result) eq 'HASH');
+     unless ($action =~ /do_it/i) {
 	 &error_message('may_not');
 	 &wwslog('info','do_arcsearch_form: access denied for %s', $param->{'user'}{'email'});
 	 return undef;
@@ -5705,11 +5761,14 @@ sub get_timelocal_from_date {
      }
 
      ## Access control
-     unless (&List::request_action ('web_archive.access',$param->{'auth_method'},$robot,
-				    {'listname' => $param->{'list'},
-				     'sender' => $param->{'user'}{'email'},
-				     'remote_host' => $param->{'remote_host'},
-				     'remote_addr' => $param->{'remote_addr'}}) =~ /do_it/i) {
+     my $result = &List::request_action ('web_archive.access',$param->{'auth_method'},$robot,
+					 {'listname' => $param->{'list'},
+					  'sender' => $param->{'user'}{'email'},
+					  'remote_host' => $param->{'remote_host'},
+					  'remote_addr' => $param->{'remote_addr'}});
+     my $action;
+     $action = $result->{'action'} if (ref($result) eq 'HASH');
+     unless ($action =~ /do_it/i) {
 	 &error_message('may_not');
 	 &wwslog('info','do_arcsearch: access denied for %s', $param->{'user'}{'email'});
 	 return undef;
@@ -5864,11 +5923,14 @@ sub get_timelocal_from_date {
      }
 
      ## Access control
-     unless (&List::request_action ('web_archive.access',$param->{'auth_method'},$robot,
-		    {'listname' => $param->{'list'},
-		     'sender' => $param->{'user'}{'email'},
-		     'remote_host' => $param->{'remote_host'},
-		     'remote_addr' => $param->{'remote_addr'}}) =~ /do_it/i) {
+     my $result = &List::request_action ('web_archive.access',$param->{'auth_method'},$robot,
+					 {'listname' => $param->{'list'},
+					  'sender' => $param->{'user'}{'email'},
+					  'remote_host' => $param->{'remote_host'},
+					  'remote_addr' => $param->{'remote_addr'}});
+     my $action;
+     $action = $result->{'action'} if (ref($result) eq 'HASH');
+     unless ($action =~ /do_it/i) {
 	 &error_message('may_not');
 	 &wwslog('info','do_arcsearch_id: access denied for %s', $param->{'user'}{'email'});
 	 return undef;
@@ -6462,10 +6524,11 @@ sub do_set_pending_list_request {
 	 return 'loginrequest';
      }
 
-     $param->{'create_action'} = &List::request_action('create_list',$param->{'auth_method'},$robot,
+     my $result = &List::request_action('create_list',$param->{'auth_method'},$robot,
 						       {'sender' => $param->{'user'}{'email'},
 							'remote_host' => $param->{'remote_host'},
 							'remote_addr' => $param->{'remote_addr'}});
+     $param->{'create_action'} = $result->{'action'} if (ref($result) eq 'HASH');
 
      ## Initialize the form
      ## When returning to the form
@@ -6688,13 +6751,19 @@ sub do_set_pending_list_request {
      if ($in{'scenario'}) {
 	 my $operation = $in{'scenario'};
 	 &wwslog('debug4', 'do_scenario_test: perform scenario_test');
-	 ($param->{'scenario_condition'},$param->{'scenario_auth_method'},$param->{'scenario_action'}) = 
-	     &List::request_action ($operation,$in{'auth_method'},$robot,
-				    {'listname' => $in{'listname'},
-				     'sender' => $in{'sender'},
-				     'email' => $in{'email'},
-				     'remote_host' => $in{'remote_host'},
-				     'remote_addr' => $in{'remote_addr'}}, 'debug');	
+
+	 my $result = &List::request_action ($operation,$in{'auth_method'},$robot,
+					     {'listname' => $in{'listname'},
+					      'sender' => $in{'sender'},
+					      'email' => $in{'email'},
+					      'remote_host' => $in{'remote_host'},
+					      'remote_addr' => $in{'remote_addr'}},'debug');
+	 if (ref($result) eq 'HASH'){
+	    $param->{'scenario_action'} = $result->{'action'};
+	    $param->{'scenario_condition'} = $result->{'condition'};
+	    $param->{'scenario_auth_method'} = $result->{'auth_method'};
+	    $param->{'scenario_reason'} = $result->{'reason'};
+	 }	     	
      }
      return 1;
  }
@@ -6813,12 +6882,15 @@ sub do_set_pending_list_request {
      }
 
      ## Require DEL privilege
-     my $del_is = &List::request_action ('del',$param->{'auth_method'},$robot,
-	 {'listname' => $param->{'list'}, 
-	  'sender' => $param->{'user'}{'email'},
-	  'email' => $in{'email'},
-	  'remote_host' => $param->{'remote_host'},
-	  'remote_addr' => $param->{'remote_addr'}});
+
+     my $result = &List::request_action ('del',$param->{'auth_method'},$robot,
+					 {'listname' => $param->{'list'}, 
+					  'sender' => $param->{'user'}{'email'},
+					  'email' => $in{'email'},
+					  'remote_host' => $param->{'remote_host'},
+					  'remote_addr' => $param->{'remote_addr'}});
+     my $del_is;
+     $del_is = $result->{'action'} if (ref($result) eq 'HASH');
 
      unless ( $del_is =~ /do_it/) {
 	 &error_message('may_not');
@@ -6965,12 +7037,13 @@ sub do_set_pending_list_request {
 	 next if (($list->{'name'} !~ /$param->{'regexp'}/i) 
 		  && ($list->{'admin'}{'subject'} !~ /$param->{'regexp'}/i));
 
-	 my $action = &List::request_action ('visibility',$param->{'auth_method'},$robot,
+	 my $result = &List::request_action ('visibility',$param->{'auth_method'},$robot,
 					     {'listname' =>  $list->{'name'},
 					      'sender' => $param->{'user'}{'email'}, 
 					      'remote_host' => $param->{'remote_host'},
 					      'remote_addr' => $param->{'remote_addr'}});
-
+	 my $action;
+	 $action = $result->{'action'} if (ref($result) eq 'HASH');
 	 next unless ($action eq 'do_it');
 
 	 if ($param->{'user'}{'email'} &&
@@ -7985,12 +8058,13 @@ sub _restrict_values {
 	 &wwslog('info','do_rename_list_request: not owner');
 	 return undef;
      }  
-
-
-     unless ($param->{'user'}{'email'} &&  (&List::request_action ('create_list',$param->{'auth_method'},$robot,
-							    {'sender' => $param->{'user'}{'email'},
-							     'remote_host' => $param->{'remote_host'},
-							     'remote_addr' => $param->{'remote_addr'}}) =~ /do_it|listmaster/)) {
+     my $result = &List::request_action ('create_list',$param->{'auth_method'},$robot,
+					 {'sender' => $param->{'user'}{'email'},
+					  'remote_host' => $param->{'remote_host'},
+					  'remote_addr' => $param->{'remote_addr'}});
+     my $action;
+     $action = $result->{'action'} if (ref($result) eq 'HASH');
+     unless ($param->{'user'}{'email'} &&  ($action =~ /do_it|listmaster/)) {
 	 &error_message('may_not');
 	 &wwslog('info','do_rename_list_request: not owner');
 	 return undef;
@@ -8040,11 +8114,14 @@ sub _restrict_values {
 	 &wwslog('info','do_rename_list: missing new_robot parameter');
 	 return 'rename_list_request';
      }
+     my $result = &List::request_action ('create_list',$param->{'auth_method'},$in{'new_robot'},
+					{'sender' => $param->{'user'}{'email'},
+					 'remote_host' => $param->{'remote_host'},
+					 'remote_addr' => $param->{'remote_addr'}});
+     my $action;
+     $action = $result->{'action'} if (ref($result) eq 'HASH');
 
-     unless ($param->{'user'}{'email'} &&  (&List::request_action ('create_list',$param->{'auth_method'},$in{'new_robot'},
-							    {'sender' => $param->{'user'}{'email'},
-							     'remote_host' => $param->{'remote_host'},
-							     'remote_addr' => $param->{'remote_addr'}}) =~ /do_it|listmaster/)) {
+     unless ($param->{'user'}{'email'} &&  ($action =~ /do_it|listmaster/)) {
 	 &error_message('may_not');
 	 &wwslog('info','do_rename_list: not owner');
 	 return undef;
@@ -8480,19 +8557,24 @@ sub _restrict_values {
 
 	 # if not privileged owner
 	 if ($mode_read) {
-	 $may_read = (&List::request_action ('shared_doc.d_read',$param->{'auth_method'},$robot,
-							    {'listname' => $param->{'list'},
-							     'sender' => $param->{'user'}{'email'},
-							     'remote_host' => $param->{'remote_host'},
-							     'remote_addr' => $param->{'remote_addr'}}) =~ /do_it/i);
+	     my $result = &List::request_action ('shared_doc.d_read',$param->{'auth_method'},$robot,
+						 {'listname' => $param->{'list'},
+						  'sender' => $param->{'user'}{'email'},
+						  'remote_host' => $param->{'remote_host'},
+						  'remote_addr' => $param->{'remote_addr'}});    
+	     my $action;
+	     $action = $result->{'action'} if (ref($result) eq 'HASH');   
+	     $may_read = ($action =~ /do_it/i);
 	 }
      
 	 if ($mode_edit) {
-	 my $action = &List::request_action ('shared_doc.d_edit',$param->{'auth_method'},$robot,
-							       {'listname' => $param->{'list'},
-								'sender' => $param->{'user'}{'email'},
-								'remote_host' => $param->{'remote_host'},
+	 my $result = &List::request_action ('shared_doc.d_edit',$param->{'auth_method'},$robot,
+					     {'listname' => $param->{'list'},
+					      'sender' => $param->{'user'}{'email'},
+					      'remote_host' => $param->{'remote_host'},
 					      'remote_addr' => $param->{'remote_addr'}});
+	 my $action;
+	 $action = $result->{'action'} if (ref($result) eq 'HASH');   
 	 #edit = 0, 0.5 or 1
 	 $may_edit = &find_edit_mode($action);	 
 	 }
@@ -8546,24 +8628,30 @@ sub _restrict_values {
 		 %desc_hash = &get_desc_file($desc_file);
 
 		 if ($mode_read) {
-		     $may_read = $may_read && (&List::request_action ('shared_doc.d_read',$param->{'auth_method'},$robot,
-								      {'listname' => $param->{'list'},
-								       'sender' => $param->{'user'}{'email'},
-								       'remote_host' => $param->{'remote_host'},
-								       'remote_addr' => $param->{'remote_addr'},
-								       'scenario'=> $desc_hash{'read'}}) =~ /do_it/i);
+		     
+		     my $result = &List::request_action ('shared_doc.d_read',$param->{'auth_method'},$robot,
+							 {'listname' => $param->{'list'},
+							  'sender' => $param->{'user'}{'email'},
+							  'remote_host' => $param->{'remote_host'},
+							  'remote_addr' => $param->{'remote_addr'},
+							  'scenario'=> $desc_hash{'read'}});
+		     my $action;
+		     $action = $result->{'action'} if (ref($result) eq 'HASH');   
+		     $may_read = $may_read && ( $action=~ /do_it/i);
 		 }
 
 		 if ($mode_edit) {
-		 my $action_edit = &List::request_action ('shared_doc.d_edit',$param->{'auth_method'},$robot,
-								      {'listname' => $param->{'list'},
-								       'sender' => $param->{'user'}{'email'},
-								       'remote_host' => $param->{'remote_host'},
-								       'remote_addr' => $param->{'remote_addr'},
-							   'scenario'=> $desc_hash{'edit'}});
-		 # $may_edit = 0, 0.5 or 1
-		 my $may_action_edit = &find_edit_mode($action_edit);
-		 $may_edit = &merge_edit($may_edit,$may_action_edit); 
+		     my $result = &List::request_action ('shared_doc.d_edit',$param->{'auth_method'},$robot,
+							 {'listname' => $param->{'list'},
+							  'sender' => $param->{'user'}{'email'},
+							  'remote_host' => $param->{'remote_host'},
+							  'remote_addr' => $param->{'remote_addr'},
+							  'scenario'=> $desc_hash{'edit'}});
+		     my $action_edit;
+		     $action_edit = $result->{'action'} if (ref($result) eq 'HASH');  
+		     # $may_edit = 0, 0.5 or 1
+		     my $may_action_edit = &find_edit_mode($action_edit);
+		     $may_edit = &merge_edit($may_edit,$may_action_edit); 
 		 }
 
 		 ## Only authenticated users can edit files
@@ -8911,14 +8999,18 @@ sub do_d_read {
 
 		     # check access permission for reading
 		     %desc_hash = &get_desc_file("$path_doc/.desc");
+		     
+		     my $result = &List::request_action ('shared_doc.d_read',$param->{'auth_method'},$robot,
+							 {'listname' => $param->{'list'},
+							  'sender' => $param->{'user'}{'email'},
+							  'remote_host' => $param->{'remote_host'},
+							  'remote_addr' => $param->{'remote_addr'},
+							  'scenario' => $desc_hash{'read'}});
+		     my $action;
+		     $action = $result->{'action'} if (ref($result) eq 'HASH');  
 
 		     if  (($user eq $desc_hash{'email'}) || ($may_control) ||
-			  (&List::request_action ('shared_doc.d_read',$param->{'auth_method'},$robot,
-						  {'listname' => $param->{'list'},
-						   'sender' => $param->{'user'}{'email'},
-						   'remote_host' => $param->{'remote_host'},
-						   'remote_addr' => $param->{'remote_addr'},
-						   'scenario' => $desc_hash{'read'}}) =~ /do_it/i)) {
+			  ($action =~ /do_it/i)) {
 			 
 			 $subdirs{$d}{'date_epoch'} = $info[9];
 			 $subdirs{$d}{'date'} = &POSIX::strftime("%d %b %Y", localtime($info[9]));
@@ -8947,12 +9039,14 @@ sub do_d_read {
 			 ## only authentified users can edit a file
 
 			 if ($param->{'user'}{'email'}) {
-                             my $action_edit=&List::request_action ('shared_doc.d_edit',$param->{'auth_method'},$robot,
+                             my $result = &List::request_action ('shared_doc.d_edit',$param->{'auth_method'},$robot,
 								   {'listname' => $param->{'list'},
 								    'sender' => $param->{'user'}{'email'},
 								    'remote_host' => $param->{'remote_host'},
 								    'remote_addr' => $param->{'remote_addr'},
 			    				            'scenario' => $desc_hash{'edit'}});
+			     my $action_edit;
+			     $action_edit = $result->{'action'} if (ref($result) eq 'HASH');  
                              #may_action_edit = 0, 0.5 or 1
                              my $may_action_edit=&find_edit_mode($action_edit);
                              $may_action_edit=&merge_edit($may_action_edit,$may_edit);	
@@ -9003,13 +9097,17 @@ sub do_d_read {
 		     # check access permission		
 		     %desc_hash = &get_desc_file("$doc/.desc.$d");
 
+
+		     my $result = &List::request_action ('shared_doc.d_read',$param->{'auth_method'},$robot,
+							 {'listname' => $param->{'list'},
+							  'sender' => $param->{'user'}{'email'},
+							  'remote_host' => $param->{'remote_host'},
+							  'remote_addr' => $param->{'remote_addr'},
+							  'scenario' => $desc_hash{'read'}});
+		     my $action;
+		     $action = $result->{'action'} if (ref($result) eq 'HASH');  
 		     unless (($user eq $desc_hash{'email'}) || ($may_control) ||
-			     (&List::request_action ('shared_doc.d_read',$param->{'auth_method'},$robot,
-						     {'listname' => $param->{'list'},
-						      'sender' => $param->{'user'}{'email'},
-						      'remote_host' => $param->{'remote_host'},
-						      'remote_addr' => $param->{'remote_addr'},
-						      'scenario' => $desc_hash{'read'}}) =~ /do_it/i)) {
+			     ($action =~ /do_it/i)) {
 			 $may = 0;
 		     } 
 		 } 
@@ -9067,12 +9165,14 @@ sub do_d_read {
 			 ## Only authenticated users can edit files
 
                          if ($param->{'user'}{'email'}) {
-                             my $action_edit=&List::request_action ('shared_doc.d_edit',$param->{'auth_method'},$robot,
+                             my $result=&List::request_action ('shared_doc.d_edit',$param->{'auth_method'},$robot,
 								   {'listname' => $param->{'list'},
 								    'sender' => $param->{'user'}{'email'},
 								    'remote_host' => $param->{'remote_host'},
 								    'remote_addr' => $param->{'remote_addr'},
 								     'scenario' => $desc_hash{'edit'}});
+			     my $action_edit;
+			     $action_edit = $result->{'action'} if (ref($result) eq 'HASH');  
                              #may_action_edit = 0, 0.5 or 1
                              my $may_action_edit=&find_edit_mode($action_edit);
                              $may_action_edit=&merge_edit($may_action_edit,$may_edit);
@@ -9441,14 +9541,17 @@ sub do_latest_d_read {
 	     if (-e "$path_d/.desc") {
 		 # check access permission for reading
 		 my %desc_hash = &get_desc_file("$path_d/.desc");
-		 
+
+		 my $result = &List::request_action ('shared_doc.d_read',$param->{'auth_method'},$robot,
+						     {'listname' => $param->{'list'},
+						      'sender' => $param->{'user'}{'email'},
+						      'remote_host' => $param->{'remote_host'},
+						      'remote_addr' => $param->{'remote_addr'},
+						      'scenario' => $desc_hash{'read'}});
+		 my $action;
+		 $action = $result->{'action'} if (ref($result) eq 'HASH');  
 		 if  (($user eq $desc_hash{'email'}) || ($may_control) ||
-		      (&List::request_action ('shared_doc.d_read',$param->{'auth_method'},$robot,
-					      {'listname' => $param->{'list'},
-					       'sender' => $param->{'user'}{'email'},
-					       'remote_host' => $param->{'remote_host'},
-					       'remote_addr' => $param->{'remote_addr'},
-					       'scenario' => $desc_hash{'read'}}) =~ /do_it/i)) {
+		      ($action =~ /do_it/i)) {
 		     my $content_d;
 		     unless($content_d = &directory_browsing("$dir/$d",$oldest_day)) {
 			 &wwslog('err',"directory_browsing($dir) : impossible to browse subdirectory $d");
@@ -9491,13 +9594,16 @@ sub do_latest_d_read {
 		 # check access permission		
 		 %desc_hash = &get_desc_file("$path_dir/.desc.$d");
 		 
+		 my $result = &List::request_action ('shared_doc.d_read',$param->{'auth_method'},$robot,
+						     {'listname' => $param->{'list'},
+						      'sender' => $param->{'user'}{'email'},
+						      'remote_host' => $param->{'remote_host'},
+						      'remote_addr' => $param->{'remote_addr'},
+						      'scenario' => $desc_hash{'read'}});
+		 my $action;
+		 $action = $result->{'action'} if (ref($result) eq 'HASH');  
 		 unless (($user eq $desc_hash{'email'}) || ($may_control) ||
-			 (&List::request_action ('shared_doc.d_read',$param->{'auth_method'},$robot,
-						 {'listname' => $param->{'list'},
-						  'sender' => $param->{'user'}{'email'},
-						  'remote_host' => $param->{'remote_host'},
-						  'remote_addr' => $param->{'remote_addr'},
-						  'scenario' => $desc_hash{'read'}}) =~ /do_it/i)) {
+			 ($action =~ /do_it/i)) {
 		     $may = 0;
 		 } 
 	     } 
@@ -12224,11 +12330,14 @@ sub d_test_existing_and_rights {
      }
 
      ## Access control
-     unless (&List::request_action ('remind',$param->{'auth_method'},$robot,
-				    {'listname' => $param->{'list'},
-				     'sender' => $param->{'user'}{'email'},
-				     'remote_host' => $param->{'remote_host'},
-				     'remote_addr' => $param->{'remote_addr'}}) =~ /do_it/i) {
+     my $result = &List::request_action ('remind',$param->{'auth_method'},$robot,
+					 {'listname' => $param->{'list'},
+					  'sender' => $param->{'user'}{'email'},
+					  'remote_host' => $param->{'remote_host'},
+					  'remote_addr' => $param->{'remote_addr'}});
+     my $action;
+     $action = $result->{'action'} if (ref($result) eq 'HASH');  
+     unless ($action =~ /do_it/i) {
 	 &error_message('may_not');
 	 &wwslog('info','do_remind: access denied for %s', $param->{'user'}{'email'});
 	 return undef;
@@ -12238,12 +12347,14 @@ sub d_test_existing_and_rights {
      my $mail_command;
 
      ## Sympa will require a confirmation
-     if (&List::request_action ('remind','smtp',$robot,
-				    {'listname' => $param->{'list'},
-				     'sender' => $param->{'user'}{'email'},
-				     'remote_host' => $param->{'remote_host'},
-				     'remote_addr' => $param->{'remote_addr'}}) =~ /reject/i) {
-
+     my $result = &List::request_action ('remind','smtp',$robot,
+					 {'listname' => $param->{'list'},
+					  'sender' => $param->{'user'}{'email'},
+					  'remote_host' => $param->{'remote_host'},
+					  'remote_addr' => $param->{'remote_addr'}});
+     my $action;
+     $action = $result->{'action'} if (ref($result) eq 'HASH');  
+     if ($action =~ /reject/i) {
 	 &error_message('may_not');
 	 &wwslog('info','remind : access denied for %s', $param->{'user'}{'email'});
 	 return undef;
@@ -12347,19 +12458,24 @@ sub d_test_existing_and_rights {
 	 foreach my $l ( &List::get_which($param->{'user'}{'email'},$robot, 'member') ) {
 	     my $list = new List ($l);
 	     next unless (defined $list);
-	     my $sub_is = &List::request_action('subscribe',$param->{'auth_method'},$robot,
+	     
+	     my $result_sub = &List::request_action('subscribe',$param->{'auth_method'},$robot,
 						{'listname' => $l,
 						 'sender' => $in{'email'}, 
 						 'previous_email' => $param->{'user'}{'email'},
 						 'remote_host' => $param->{'remote_host'},
 						 'remote_addr' => $param->{'remote_addr'}});
+	     my $sub_is;
+	     $sub_is = $result_sub->{'action'} if (ref($result_sub) eq 'HASH');  
 
-	     my $unsub_is = &List::request_action('unsubscribe',$param->{'auth_method'},$robot,
+	     my $result_unsub = &List::request_action('unsubscribe',$param->{'auth_method'},$robot,
 						  {'listname' => $l,
 						   'sender' => $param->{'user'}{'email'}, 
 						   'remote_host' => $param->{'remote_host'},
 						   'remote_addr' => $param->{'remote_addr'}});
 
+	     my $unsub_is;
+	     $sub_is = $result_unsub->{'action'} if (ref($result_unsub) eq 'HASH');  
 
 	     if ($sub_is !~ /do_it/) {	
 		 &error_message('change_email_failed_because_subscribe_not_allowed',{'list' => $l}) ;
@@ -12832,11 +12948,14 @@ sub d_test_existing_and_rights {
      }
 
      ### Access control    
-     unless (&List::request_action ('web_archive.access',$param->{'auth_method'},$robot,
-				    {'listname' => $param->{'list'},
-				     'sender' => $param->{'user'}{'email'},
-				     'remote_host' => $param->{'remote_host'},
-				     'remote_addr' => $param->{'remote_addr'}}) =~ /do_it/i) {
+     my $result = &List::request_action ('web_archive.access',$param->{'auth_method'},$robot,
+					 {'listname' => $param->{'list'},
+					  'sender' => $param->{'user'}{'email'},
+					  'remote_host' => $param->{'remote_host'},
+					  'remote_addr' => $param->{'remote_addr'}});
+     my $action;
+     $action = $result->{'action'} if (ref($result) eq 'HASH');  
+     unless ($action =~ /do_it/i) {
 	 &error_message('may_not');
 	 &wwslog('info','do_attach: access denied for %s', $param->{'user'}{'email'});
 	 return undef;
@@ -13012,11 +13131,14 @@ sub d_test_existing_and_rights {
 
      my $total = 0;
      foreach my $t (sort {$topics{$a}{'order'} <=> $topics{$b}{'order'}} keys %topics) {
-	 next unless (&List::request_action ('topics_visibility', $param->{'auth_method'},$robot,
+	 my $result = &List::request_action ('topics_visibility', $param->{'auth_method'},$robot,
 					     {'topicname' => $t, 
 					      'sender' => $param->{'user'}{'email'},
 					      'remote_host' => $param->{'remote_host'},
-					      'remote_addr' => $param->{'remote_addr'}}) =~ /do_it/);
+					      'remote_addr' => $param->{'remote_addr'}});
+	 my $action;
+	 $action = $result->{'action'} if (ref($result) eq 'HASH');  
+	 next unless ($action =~ /do_it/);
 
 	 my $current = $topics{$t};
 	 $current->{'id'} = $t;
@@ -13057,8 +13179,8 @@ sub do_dump_scenario {
 	 &do_log('info','do_dump_scenario: reject because not listmaster');
 	 return undef;
      }
-
-     $param->{'rules'} =  &List::request_action ($in{'pname'},'smtp',$robot,{'listname' => $param->{'list'}},'dump');
+     my $result = &List::request_action ($in{'pname'},'smtp',$robot,{'listname' => $param->{'list'}},'dump');
+     $param->{'rules'} =  ($result->{'condition'},$result->{'auth_method'},$result->{'action'});
      $param->{'parameter'} = $in{'pname'};
      return 1 ;
 }
@@ -13080,12 +13202,13 @@ sub do_dump_scenario {
      }
 
      ## May dump is may review
-     my $action = &List::request_action ('review',$param->{'auth_method'},$robot,
+     my $result = &List::request_action ('review',$param->{'auth_method'},$robot,
 					 {'listname' => $param->{'list'},
 					  'sender' => $param->{'user'}{'email'},
 					  'remote_host' => $param->{'remote_host'},
 					  'remote_addr' => $param->{'remote_addr'}});
-
+     my $action;
+     $action = $result->{'action'} if (ref($result) eq 'HASH');  
 
      &do_log('info',"do_dump: request_action : $action");
      unless ($action =~ /do_it/) {

@@ -1024,11 +1024,13 @@ sub delete_subs_cmd {
     foreach my $email (keys %{$Rvars->{$var}}) {
 
 	&do_log ('notice', "email : $email");
-	my $action = &List::request_action ('del', 'smime',
+	my $result = &List::request_action ('del', 'smime',
 					    {'listname' => $context->{'list_name'},
 					     'sender'   => $Conf{'listmaster'},
 					     'email'    => $email,
 					 });
+	my $action;
+	$action = $result->{'action'} if (ref($result) eq 'HASH');
 	if ($action =~ /reject/i) {
 	    error ("$context->{'task_file'}", "error in delete_subs command : deletion of $email not allowed");
 	} else {

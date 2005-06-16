@@ -255,9 +255,11 @@ sub lists {
 	my $list = new List ($l);
 
 	next unless ($list);
-	my $action = &List::request_action('visibility','smtp',$robot,
+	my $result = &List::request_action('visibility','smtp',$robot,
                                             {'listname' => $l,
                                              'sender' => $sender });
+	my $action;
+	$action = $result->{'action'} if (ref($result) eq 'HASH');
 	return undef
 	    unless (defined $action);
 
@@ -312,18 +314,18 @@ sub stats {
     return 'wrong_auth'
 	unless (defined $auth_method);
 
-    my $action = &List::request_action ('review',$auth_method,$robot,
+    my $result = &List::request_action ('review',$auth_method,$robot,
 					{'listname' => $listname,
 					 'sender' => $sender});
+    my $action;
+    $action = $result->{'action'} if (ref($result) eq 'HASH');
 
     return undef
 	unless (defined $action);
 
-    if ($action =~ /reject(\(\'?(\w+)\'?\))?/i) {
-	my $tpl = $2;
-
-	if ($tpl) {
-	    unless ($list->send_file($tpl, $sender, $robot, {})) {
+    if ($action =~ /reject/i) {
+	if (defined $result->{'tt2'}) {
+	    unless ($list->send_file($result->{'tt2'}, $sender, $robot, {})) {
 		&do_log('notice',"Unable to send template '$tpl' to $sender");
 	    }
 	}else {
@@ -547,10 +549,11 @@ sub review {
     return 'wrong_auth'
 	unless (defined $auth_method);
 
-    my $action = &List::request_action ('review',$auth_method,$robot,
+    my $result = &List::request_action ('review',$auth_method,$robot,
                                      {'listname' => $listname,
                                       'sender' => $sender});
-
+    my $action;
+    $action = $result->{'action'} if (ref($result) eq 'HASH');
     return undef
 	unless (defined $action);
 
@@ -560,10 +563,9 @@ sub review {
 	&do_log('info', 'REVIEW %s from %s, auth requested (%d seconds)', $listname, $sender,time-$time_command);
 	return 1;
     }
-    if ($action =~ /reject(\(\'?(\w+)\'?\))?/i) {
-	my $tpl = $2;
-	if ($tpl) {
-	    unless ($list->send_file($tpl, $sender, $robot, {})) {
+    if ($action =~ /reject/i) {
+	if (defined $result->{'tt2'}) {
+	    unless ($list->send_file($result->{'tt2'}, $sender, $robot, {})) {
 		&do_log('notice',"Unable to send template '$tpl' to $sender");
 	    }
 	}else {
@@ -692,19 +694,20 @@ sub subscribe {
 
     ## query what to do with this subscribtion request
     
-    my $action = &List::request_action('subscribe',$auth_method,$robot,
+    my $result = &List::request_action('subscribe',$auth_method,$robot,
 				       {'listname' => $which, 
 					'sender' => $sender });
+    my $action;
+    $action = $result->{'action'} if (ref($result) eq 'HASH');
     
     return undef
 	unless (defined $action);
 
     &do_log('debug2', 'action : %s', $action);
     
-    if ($action =~ /reject(\(\'?(\w+)\'?\))?/i) {
-	my $tpl = $2;
-	if ($tpl) {
-	    unless ($list->send_file($tpl, $sender, $robot, {})) {
+    if ($action =~ /reject/i) {
+	if (defined $result->{'tt2'}) {
+	    unless ($list->send_file($result->{'tt2'}, $sender, $robot, {})) {
 		&do_log('notice',"Unable to send template '$tpl' to $sender");
 	    }	    
 	}else {
@@ -836,18 +839,18 @@ sub info {
     return 'wrong_auth'
 	unless (defined $auth_method);
 
-    my $action = &List::request_action('info',$auth_method,$robot,
+    my $result = &List::request_action('info',$auth_method,$robot,
 				       {'listname' => $listname, 
 					'sender' => $sender });
+    my $action;
+    $action = $result->{'action'} if (ref($result) eq 'HASH');
     
     return undef
 	unless (defined $action);
 
-    if ($action =~ /reject(\(\'?(\w+)\'?\))?/i) {
-
-	my $tpl = $2;
-	if ($tpl) {
-	    unless ($list->send_file($tpl, $sender, $robot, {})) {
+    if ($action =~ /reject/i) {
+	if (defined $result->{'tt2'}) {
+	    unless ($list->send_file($result->{'tt2'}, $sender, $robot, {})) {
 		&do_log('notice',"Unable to send template '$tpl' to $sender");
 	    }
 	}else {
@@ -935,9 +938,13 @@ sub signoff {
 	foreach $l ( List::get_which ($email,$robot,'member') ){
 
 	    ## Skip hidden lists
-	    if (&List::request_action ('visibility', 'smtp',$robot,
-				       {'listname' =>  $l,
-					'sender' => $sender}) =~ /reject/) {
+	    my $result = &List::request_action ('visibility', 'smtp',$robot,
+						{'listname' =>  $l,
+						 'sender' => $sender}) ;
+	    my $action;
+	    $action = $result->{'action'} if (ref($result) eq 'HASH');
+	    
+	    if ($action =~ /reject/) {
 		next;
 	    }
 	    
@@ -964,18 +971,19 @@ sub signoff {
     return 'wrong_auth'
 	unless (defined $auth_method);
     
-    my $action = &List::request_action('unsubscribe',$auth_method,$robot,
+    my $result = &List::request_action('unsubscribe',$auth_method,$robot,
 				       {'listname' => $which, 
 					'email' => $email,
 					'sender' => $sender });
-    
+    my $action;
+    $action = $result->{'action'} if (ref($result) eq 'HASH');
+   
     return undef
 	unless (defined $action);
 
-    if ($action =~ /reject(\(\'?(\w+)\'?\))?/i) {
-	my $tpl = $2;
-	if ($tpl) {
-	    unless ($list->send_file($tpl, $sender, $robot, {})) {
+    if ($action =~ /reject/i) {
+	if (defined $result->{'tt2'}) {
+	    unless ($list->send_file($result->{'tt2'}, $sender, $robot, {})) {
 		&do_log('notice',"Unable to send template '$tpl' to $sender");
 	    }
 	}else {
@@ -1106,18 +1114,19 @@ sub add {
     return 'wrong_auth'
 	unless (defined $auth_method);    
     
-    my $action = &List::request_action('add',$auth_method,$robot,
+    my $result = &List::request_action('add',$auth_method,$robot,
 				       {'listname' => $which, 
 					'email' => $email,
 					'sender' => $sender });
+    my $action;
+    $action = $result->{'action'} if (ref($result) eq 'HASH');
     
     return undef
 	unless (defined $action);
 
-    if ($action =~ /reject(\(\'?(\w+)\'?\))?/i) {
-	my $tpl = $2;
-	if ($tpl) {
-	    unless ($list->send_file($tpl, $sender, $robot, {})) {
+    if ($action =~ /reject/i) {
+	if (defined $result->{'tt2'}) {
+	    unless ($list->send_file($result->{'tt2'}, $sender, $robot, {})) {
 		&do_log('notice',"Unable to send template '$tpl' to $sender");
 	    }
 	}else {
@@ -1233,17 +1242,18 @@ sub invite {
     return 'wrong_auth'
 	unless (defined $auth_method);    
     
-    my $action = &List::request_action('invite',$auth_method,$robot,
+    my $result = &List::request_action('invite',$auth_method,$robot,
 				       {'listname' => $which, 
 					'sender' => $sender });
+    my $action;
+    $action = $result->{'action'} if (ref($result) eq 'HASH');
 
     return undef
 	unless (defined $action);
 
-    if ($action =~ /reject(\(\'?(\w+)\'?\))?/i) {
-	my $tpl = $2;
-	if ($tpl) {
-	    unless ($list->send_file($tpl, $sender, $robot, {})){
+    if ($action =~ /reject/i) {
+	if (defined $result->{'tt2'}) {
+	    unless ($list->send_file($result->{'tt2'}, $sender, $robot, {})){
 		&do_log('notice',"Unable to send template '$tpl' to $sender");
 	    }
 	}else {
@@ -1269,9 +1279,11 @@ sub invite {
 	    $context{'user'}{'gecos'} = $comment;
 	    $context{'requested_by'} = $sender;
 
-	    my $action = &List::request_action('subscribe','smtp',$robot,
+	    my $result = &List::request_action('subscribe','smtp',$robot,
 					       {'listname' => $which, 
 						'sender' => $sender });
+	    my $action;
+	    $action = $result->{'action'} if (ref($result) eq 'HASH');
 
 	    return undef
 		unless (defined $action);
@@ -1298,11 +1310,10 @@ sub invite {
 		do_log('info', 'INVITE %s %s from %s accepted,  (%d seconds, %d subscribers)', $which, $email, $sender, time-$time_command, $list->get_total() );
 		&notice_report_cmd($cmd_line,'invite',{'email'=> $email, 'listname' => $which}); 
 
-	    }elsif ($action =~ /reject\(\'?(\w+)\'?\)/i) {
-		$tpl = 41;
-		do_log('info', 'INVITE %s %s from %s refused, not allowed (%d seconds, %d subscribers)', $which, $email, $sender, time-$time_command, $list->get_total() );
-		if ($tpl) {
-		    unless ($list->send_file($tpl, $sender, $robot, {})) {
+	    }elsif ($action =~ /reject/i) {
+		&do_log('info', 'INVITE %s %s from %s refused, not allowed (%d seconds, %d subscribers)', $which, $email, $sender, time-$time_command, $list->get_total() );
+		if (defined $result->{'tt2'}) {
+		    unless ($list->send_file($result->{'tt2'}, $sender, $robot, {})) {
 			&do_log('notice',"Unable to send template '$tpl' to $sender");
 		    }
 		}else {
@@ -1380,8 +1391,10 @@ sub remind {
     my $action;
 
     if ($listname eq '*') {
-	$action = &List::request_action('global_remind',$auth_method,$robot,
+
+	my $result = &List::request_action('global_remind',$auth_method,$robot,
 					   {'sender' => $sender });
+	$action = $result->{'action'} if (ref($result) eq 'HASH');
 	
     }else{
 	
@@ -1389,19 +1402,20 @@ sub remind {
 
 	$host = $list->{'admin'}{'host'};
 
-	$action = &List::request_action('remind',$auth_method,$robot,
+	my $result = &List::request_action('remind',$auth_method,$robot,
 					   {'listname' => $listname, 
 					    'sender' => $sender });
+	$action = $result->{'action'} if (ref($result) eq 'HASH');	
+
     }
 
     return undef
 	unless (defined $action);
 
-    if ($action =~ /reject(\(\'?(\w+)\'?\))?/i) {
-	my $tpl = $2;
+    if ($action =~ /reject/i) {
 	&do_log ('info',"Remind for list $listname from $sender refused");
-	if ($tpl) {
-	    unless ($list->send_file($tpl, $sender, $robot, {})) {
+	if (defined $result->{'tt2'}) {
+	    unless ($list->send_file($result->{'tt2'}, $sender, $robot, {})) {
 		&do_log('notice',"Unable to send template '$tpl' to $sender");
 	    }
 	}else {
@@ -1463,9 +1477,15 @@ sub remind {
 
 		do {
 		    my $email = lc ($user->{'email'});
-		    if (List::request_action('visibility','smtp',$robot,
-					     {'listname' => $listname, 
-					      'sender' => $email}) eq 'do_it') {
+
+		    
+		    my $result = &List::request_action('visibility','smtp',$robot,
+						       {'listname' => $listname, 
+							'sender' => $email});
+		    my $action;
+		    $action = $result->{'action'} if (ref($result) eq 'HASH');	
+
+		    if ($action eq 'do_it') {
 			push @{$global_subscription{$email}},$listname;
 			
 			$user->{'lang'} ||= $list->{'admin'}{'lang'};
@@ -1553,19 +1573,19 @@ sub del {
 	unless (defined $auth_method);  
 
     ## query what to do with this DEL request
-    my $action = &List::request_action ('del',$auth_method,$robot,
+    my $result = &List::request_action ('del',$auth_method,$robot,
 					{'listname' =>$which,
 					 'sender' => $sender,
 					 'email' => $who
 					 });
-
+    my $action;
+    $action = $result->{'action'} if (ref($result) eq 'HASH');	
     return undef
 	unless (defined $action);
 
-    if ($action =~ /reject(\(\'?(\w+)\'?\))?/i) {
-	my $tpl = $2;
-	if ($tpl) {
-	    unless ($list->send_file($tpl, $sender, $robot, {})) {
+    if ($action =~ /reject/i) {
+	if (defined $result->{'tt2'}) {
+	    unless ($list->send_file($result->{'tt2'}, $sender, $robot, {})) {
 		&do_log('notice',"Unable to send template '$tpl' to $sender");
 	    }
 	}else {
@@ -1676,9 +1696,12 @@ sub set {
 	foreach $l ( &List::get_which ($sender,$robot,'member')){
 
 	    ## Skip hidden lists
-	    if (&List::request_action ('visibility', 'smtp',$robot,
-				       {'listname' =>  $l,
-					'sender' => $sender}) =~ /reject/) {
+	    my $result = &List::request_action ('visibility', 'smtp',$robot,
+						{'listname' =>  $l,
+						 'sender' => $sender});
+	    my $action;
+	    $action = $result->{'action'} if (ref($result) eq 'HASH');	
+	    if ($action =~ /reject/) {
 		next;
 	    }
 
@@ -1938,11 +1961,12 @@ sub confirm {
     my $bytes = -s $file;
     my $hdr= $msg->head;
 
-    my $action = &List::request_action('send','md5',$robot,
+    my $result = &List::request_action('send','md5',$robot,
 				       {'listname' => $name, 
 					'sender' => $sender ,
 					'message' => $message});
-
+    my $action;
+    $action = $result->{'action'} if (ref($result) eq 'HASH');	
     return undef
 	unless (defined $action);
 
@@ -1962,11 +1986,10 @@ sub confirm {
 	    &do_log('notice',"Unable to send template 'message_report' to $sender");
 	}
 	return 1;
-    }elsif($action =~ /^reject(\(\'?(\w+)\'?\))?/) {
-	my $tpl = $2;
-   	do_log('notice', 'Message for %s from %s rejected, sender not allowed', $name, $sender);
-	if ($tpl) {
-	    unless ($list->send_file($tpl, $sender, $robot, {})) {
+    }elsif($action =~ /^reject/) {
+   	&do_log('notice', 'Message for %s from %s rejected, sender not allowed', $name, $sender);
+	if (defined $result->{'tt2'}) {
+	    unless ($list->send_file($result->{'tt2'}, $sender, $robot, {})) {
 		&do_log('notice',"Unable to send template '$tpl' to $sender");
 	    }
 	}else {
@@ -2262,9 +2285,15 @@ sub which {
         ## wwsympa :  my $list = new List ($l);
         ##            next unless (defined $list);
 
-	next unless (&List::request_action ('visibility', 'smtp',$robot,
+
+	my $result = &List::request_action ('visibility', 'smtp',$robot,
 					    {'listname' =>  $listname,
-					     'sender' => $sender}) =~ /do_it/);
+					     'sender' => $sender});
+	
+	my $action;
+	$action = $result->{'action'} if (ref($result) eq 'HASH');	
+	next unless ($action =~ /do_it/);
+
 	push @{$data->{'lists'}},$listname;
     }
 

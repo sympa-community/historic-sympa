@@ -1,4 +1,4 @@
 title.gettext conceal unless for listmaster
 
 is_listmaster([sender])             smtp,smime,md5    -> do_it
-true()                         smtp,md5,smime -> reject(topic_listmaster)	
+true()                         smtp,md5,smime -> reject(reason='topic_listmaster')	

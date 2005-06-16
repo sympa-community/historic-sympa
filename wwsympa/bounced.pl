@@ -224,11 +224,12 @@ while (!$end) {
 		my $who = "$1\@$2";
 		my $listname = $3 ;
 		my $list = new List ($listname);
-		my $action =&List::request_action ('del','smtp',$robot,
+		my $result =&List::request_action ('del','smtp',$robot,
 					{'listname' =>$listname,
 					 'sender' => $Conf{'listmasters'}[0],
 					 'email' => $who});
-
+		my $action;
+		$action = $result->{'action'} if (ref($result) eq 'HASH');
 #                    &List::get_action ('del', $listname, $Conf{'listmasters'}[0], 'smtp');
 
 		if ($action =~ /do_it/i) {
