@@ -1,0 +1,120 @@
+From: SYMPA <[% conf.email %]@[% conf.host %]>
+To: [% to %]
+[% IF type == 'routing_error' -%]
+Subject: [% FILTER qencode %][%|loc%]Routing error ?[%END%][%END%]
+MIME-Version: 1.0
+Content-Type: multipart/mixed; boundary="[% boundary %]"
+Content-Transfer-Encoding: [%|loc%]_encoding_[%END%]
+
+--[% boundary %]
+Content-Type: text/plain; charset=[%|loc%]_charset_[%END%];
+
+[%|loc(conf.sympa,conf.request)%]The following message was sent to a list while it seems to contain
+commands like subscribe, unsubscribe, help, index, get, ...
+
+If your message effectively contained a command, please notice that 
+commands should never ever be sent to lists. Commands must be sent
+to %1 exclusively.
+
+If your message was effectively addressed to the list, it has been
+interpreted by the software as a command. Please contact the manager
+of the service : %2 so that they can take care of your message.
+
+Thank you for your attention.
+[%END%]
+
+[% ELSIF type == 'sender_not_allowed' -%]
+Subject: [% FILTER qencode %][%|loc(list.name)%]Your message to %1 has been rejected[%END%][%END%]
+MIME-Version: 1.0
+Content-Type: multipart/mixed; boundary="[% boundary %]"
+Content-Transfer-Encoding: [%|loc%]_encoding_[%END%]
+
+--[% boundary %]
+Content-Type: text/plain; charset=[%|loc%]_charset_[%END%];
+
+[%|loc(list.name)%]Your message for list %1 has been rejected.
+The message is thus sent back to you.
+[%END%]
+
+[% ELSIF type == 'message_too_large' -%]
+Subject: [% FILTER qencode %][%|loc(list.name)%]Your message to %1 has been rejected[%END%][%END%]
+MIME-Version: 1.0
+Content-Type: multipart/mixed; boundary="[% boundary %]"
+Content-Transfer-Encoding: [%|loc%]_encoding_[%END%]
+
+--[% boundary %]
+Content-Type: text/plain; charset=[%|loc%]_charset_[%END%];
+
+[%|loc%]Your message could not be sent because its size 
+was over the maximum size allowed on this list.
+[%END%]
+
+[% ELSIF type == 'moderating_message' -%]
+Subject: [% FILTER qencode %][%|loc(list.name)%]list %1 / Moderating your message[%END%][%END%]
+MIME-Version: 1.0
+Content-Type: text/plain; charset=[%|loc%]_charset_[%END%];
+Content-Transfer-Encoding: [%|loc%]_encoding_[%END%]
+
+[%|loc(list.name)%]Your message for list %1 has been forwarded to editor(s)[%END%]
+
+[% ELSIF type == 'unfound_file_message' -%]
+Subject: [% FILTER qencode %][%|loc%]Message has been rejected[%END%][%END%]
+MIME-Version: 1.0
+Content-Type: text/plain; charset=[%|loc%]_charset_[%END%];
+Content-Transfer-Encoding: [%|loc%]_encoding_[%END%]
+
+[%|loc(key)%]Unable to access to the message authenticated with key %1.[%END%]
+
+[% ELSIF type == 'wrong_format_message' -%]
+Subject: [% FILTER qencode %][%|loc%]Message has been rejected[%END%][%END%]
+MIME-Version: 1.0
+Content-Type: text/plain; charset=[%|loc%]_charset_[%END%];
+Content-Transfer-Encoding: [%|loc%]_encoding_[%END%]
+
+[%|loc(key)%]Unable to access to the message authenticated with key %1 because of a wrong format.[%END%]
+
+[% ELSIF type == 'unfound_message' -%]
+Subject: [% FILTER qencode %][%|loc(listname)%]Message to %1 has been rejected[%END%][%END%]
+MIME-Version: 1.0
+Content-Type: text/plain; charset=[%|loc%]_charset_[%END%];
+Content-Transfer-Encoding: [%|loc%]_encoding_[%END%]
+
+[%|loc(listname,key)%]Unable to access the message on list %1 with  key %2.
+Warning : this message may already have been sent by one of the list's editor.[%END%]
+
+[% ELSIF type == 'list_unknown' -%]
+Subject: [% FILTER qencode %][%|loc(listname)%]Message to %1 has been rejected[%END%][%END%]
+MIME-Version: 1.0
+Content-Type: text/plain; charset=[%|loc%]_charset_[%END%];
+Content-Transfer-Encoding: [%|loc%]_encoding_[%END%]
+
+[%|loc(listname)%]List '%1' does not exist.[%END%]
+
+[% ELSIF type == 'message_distributed' -%]
+Subject: [% FILTER qencode %][%|loc(listname)%]Message to %1 has been distributed[%END%][%END%]
+MIME-Version: 1.0
+Content-Type: text/plain; charset=[%|loc%]_charset_[%END%];
+Content-Transfer-Encoding: [%|loc%]_encoding_[%END%]
+
+[%|loc(key,listname)%]Message %1 for list '%1' has been distributed.[%END%]
+
+[% ELSIF type == 'message_rejected' -%]
+Subject: [% FILTER qencode %][%|loc(listname)%]Message to %1 has been rejected[%END%][%END%]
+MIME-Version: 1.0
+Content-Type: text/plain; charset=[%|loc%]_charset_[%END%];
+Content-Transfer-Encoding: [%|loc%]_encoding_[%END%]
+
+[%|loc(key,listname)%]Message %1 for list '%1' has been rejected.[%END%]
+
+[% END -%]
+
+[%- IF msg -%]
+--[% boundary %]
+Content-Type: message/rfc822
+Content-Transfer-Encoding:  [%|loc%]_encoding_[%END%]
+Content-Disposition: inline
+
+[% msg %]
+
+--[% boundary %]--
+[% END %]

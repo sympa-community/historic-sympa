@@ -1,0 +1,162 @@
+From: SYMPA <[% conf.email %]@[% conf.host %]>
+To: [% to %]
+Subject: [% FILTER qencode %][%|loc%]Results of your commands[%END%][%END%]
+X-Loop: [% conf.sympa %]
+MIME-Version: 1.0
+Content-Type: text/plain; charset=[%|loc%]_charset_[%END%];
+Content-Transfer-Encoding: [%|loc%]_encoding_[%END%]
+
+[%############################-%]
+[%########## ERRORS ##########-%]
+[%############################-%]
+[% IF nb_errors == 1 -%]Command has failed : 
+[% ELSIF nb_errors > 1 -%]These commands have failed : 
+[% END -%] 
+
+[%#### FAILURE #####-%]
+[%- FOREACH error = errors -%]
+> [% error.cmd -%]
+
+[% IF error.type == 'no_existing_list' -%]
+[%|loc(error.listname)%]List %1 does not exist.[%END%]
+
+[% ELSIF error.type == 'auth_failed' -%]
+[%|loc%]The authentication process failed.[%END%]
+
+[% ELSIF error.type == 'wrong_email_confirm' -%]
+[%|loc%]The authentication process failed.
+You probably confirmed your [% error.command %] using a different
+email address. Please try using your canonical address.[%END-%]
+
+[% ELSIF error.type == 'internal_configuration_error' -%]
+[%|loc(error.command,error.listname)%]Internal configuration error, please report to listmaster
+'%1' %2 aborted because unknown requested action in scenario.[%END-%]
+
+[% ELSIF error.type == 'no_verify_sign' -%]
+[%|loc%]Your message was not a multipart/signed message or Sympa could not verify the signature 
+(be aware that Sympa can't check signature if you use the subject header to write a command).[%END-%]
+
+[% ELSIF error.type == 'error_syntax' -%]
+[%|loc%]Command syntax error.[%END%]
+
+[% ELSIF error.type == 'your_email_not_found' -%]
+[%|loc(error.email,error.listname)%]your e-mail address %1 has not been found in the list %2. Maybe
+you subscribed from a different e-mail address ?[%END-%]
+
+[% ELSIF error.type == 'email_not_found' -%]
+[%|loc(error.email,error.listname)%]E-mail address %1 has not been found in the list %2.[%END%]
+
+[% ELSIF error.type == 'already_subscriber' -%]
+[%|loc(error.email,error.listname)%]The User '%1' is already subscriber of list '%2'.[%END%]
+
+[% ELSIF error.type == 'failed_change_reception' -%]
+[%|loc(error.listname)%]Failed to change your subscriber options for list %1.[%END%]
+
+[%#### UNAVAILABILITY #####-%]
+[% ELSIF error.type == 'empty_archives' -%]
+[%|loc()%]This list's archives do not contain any file.[%END%] 
+
+[% ELSIF error.type == 'no_subscriber' -%]
+[%|loc(error.listname)%]List %1 has no subscriber.[%END%]
+
+[% ELSIF error.type == 'no_digest' -%]
+[%|loc(error.listname)%]List %1 does not accept the DIGEST mode. 
+Your configuration regarding this command has not been updated.[%END-%]
+
+[% ELSIF error.type == 'available_reception_mode' -%]
+[%|loc(error.listname,error.modes)%]List %1 allows only these reception modes : %2[%END%]
+
+[% ELSIF error.type == 'unable_read_file' -%]
+[%|loc(error.filename,error.sys_msg)%]Unable to read %1 : %2.[%END%]
+
+[% ELSIF error.type == 'no_required_file' -%]
+[%|loc%]Required file does not exist.[%END%]
+
+[% ELSIF error.type == 'list_private_no_archive' -%]
+[%|loc%]List is Private : You can not read the archives.[%END%]
+
+[% ELSIF error.type == 'list_private_no_browse' -%]
+[%|loc%]List is Private : You can not browse available files.[%END%]
+
+[% ELSIF error.type == 'not_allowed_command' -%]
+[%|loc(error.command,error.listname)%]You are not allowed to perform command '%1' in list %2.[%END%] 
+
+[% ELSIF error.type == 'unwanted_user' -%]
+[%|loc(error.email,error.listname)%]User %1 is unwanted in list %2.[%END%]
+
+[% ELSIF error.type == 'no_subscriber_preference' -%]
+[%|loc(error.listname)%]%1 mailing list does not provide subscriber preferences.[%END%]
+
+[% ELSIF error.type == 'restricted_modindex' -%]
+[%|loc%]The MODINDEX command is restricted to moderators.[%END%]
+
+[% END -%]
+[% END -%]
+
+[%############################-%]
+[%########## NOTICES #########-%]
+[%############################-%]
+[% IF nb_notices == 1 -%]Command has been processed :
+[% ELSIF nb_notices > 1 -%]These commands have been processed :
+[% END %]
+
+[%- FOREACH notice = notices -%]
+> [% notice.cmd -%]
+
+[% IF notice.type == 'smime' -%]
+[%|loc%]Your message signature was successfully verified using S/MIME.[%END%]
+
+[% ELSIF notice.type == 'req_forward' -%]
+[%|loc%]Your request to subscribe/unsubscribe has been forwarded to the list's
+owners for approval. You will receive a notification when you have
+been subscribed (or unsubscribed) to the list.[%END-%]
+
+[% ELSIF notice.type == 'updated_info' -%]
+[%|loc(notice.email,notice.listname)%]Information regarding user %1 have been updated for list %2.[%END%]
+
+[% ELSIF notice.type == 'now_subscriber' -%]
+[%|loc(notice.email,notice.listname)%]User %1 is now subscriber of list %2.[%END%]
+
+[% ELSIF notice.type == 'invite' -%]
+[%|loc(notice.email,notice.listname)%]User %1 has been invited to subscribe in list %2.[%END%]
+
+[% ELSIF notice.type == 'remind' -%]
+[%|loc(notice.total,notice.listname)%]Subscription reminder sent to each of %1 %2 subscribers.[%END%]
+
+[% ELSIF notice.type == 'glob_remind' -%]
+[%|loc(notice.count)%]The Reminder has been sent to %1 users.[%END%]
+
+[% ELSIF notice.type == 'removed' -%]
+[%|loc(notice.email,notice.listname)%]The user %1 has been removed from the list %2.[%END%]
+
+[% ELSIF notice.type == 'config_updated' -%]
+[%|loc(notice.listname)%]Your configuration regarding list %1 has been updated.[%END%]
+
+[% ELSIF notice.type == 'not_understood' -%]
+[%|loc(notice.listname)%]Command not understood: ignoring end of message.[%END%]
+
+[% END -%]
+[% END -%]
+[%############################-%]
+[%########## GLOBALS #########-%]
+[%############################-%]
+[%- FOREACH glob = globals -%]
+           ==========================================
+
+[% IF glob.type == 'error_content_type' -%]
+[%|loc%]Ignoring message body not in text/plain, please use text/plain only 
+(or put your command in the subject).[%END-%]
+
+[% ELSIF glob.type == 'no_cmd_found' -%]
+[%|loc%]No command found in message.[%END%]
+
+[% ELSIF glob.type == 'no_cmd_understood' -%]
+[%|loc(glob.cmd)%]> %1 
+Command not understood: ignoring end of message.[%END%]
+
+[% ELSIF glob.type == 'finished' -%]
+[%|loc(glob.cmd)%]> %1
+Command '%1' found : ignoring end of message.[%END%]
+
+[% END -%]
+[% END -%]
