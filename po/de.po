@@ -280,7 +280,7 @@ msgstr "(Jedes dieser Wörter,"
 #. (subject)
 #: mail_tt2/reject.tt2:7
 msgid "(Subject of your mail : %1)"
-msgstr "(Titel Ihrer E-Mail : %1)"
+msgstr "(Betreff Ihrer E-Mail : %1)"
 
 #: web_tt2/arcsearch.tt2:16
 msgid "(This sentence,"
@@ -307,7 +307,7 @@ msgid "***** V I R U S    A L E R T *****"
 msgstr "***** V I R U S W A R N U N G *****"
 
 # nlsref 5,4
-#: src/tools.pl:137
+#: src/tools.pl:138
 msgid "------ End of suspected message ------\n"
 msgstr "------ Ende der verdächtigen Nachricht ------\n"
 
@@ -479,7 +479,7 @@ msgstr "Ein paar Zeilen als Beschreibung der Verteilerliste"
 msgid "A virus in your email"
 msgstr "Virus in Ihrer E-Mail"
 
-#: mail_tt2/helpfile.tt2:47
+#: mail_tt2/helpfile.tt2:52
 msgid "ADD <list> user@host Full name  * To add a user to a list"
 msgstr ""
 "ADD <list> user@host Ganzer Name * um den Benutzer zur Liste hinzuzufügen"
@@ -536,9 +536,9 @@ msgid "Aliases you should install in your mailer"
 msgstr "Sie sollten die folgenden Aliase in Ihrem E-Mail System installieren:"
 
 #. (conf.sympa)
-#: mail_tt2/helpfile.tt2:10
+#: mail_tt2/helpfile.tt2:15
 msgid "All commands must be sent to the electronic address %1"
-msgstr "Alle Kommandos müssen an die E-Mail Adresse %1 gesendet werden"
+msgstr "Alle Kommandos müssen an die E-Mail Adresse %1 gesendet werden."
 
 # nlsref 4,28
 #: src/sympa.pl:1629
@@ -658,7 +658,7 @@ msgstr "Authentifizierung erforderlich"
 msgid "Author"
 msgstr "Autor"
 
-#: mail_tt2/helpfile.tt2:14
+#: mail_tt2/helpfile.tt2:19
 msgid "Available commands are:"
 msgstr "Verfügbare Kommandos:"
 
@@ -766,7 +766,7 @@ msgstr "Verwaltung der Zustellfehler"
 msgid "Bouncing address"
 msgstr "Unzustellbare Adresse"
 
-#: mail_tt2/helpfile.tt2:40
+#: mail_tt2/helpfile.tt2:45
 msgid ""
 "CONFIRM <key>               * Confirmation for sending a message (depending "
 "on the list's configuration)"
@@ -861,8 +861,7 @@ msgstr "Überprüfe die Verwendung der Liste %1:"
 #: mail_tt2/listmaster_notification.tt2:37
 #: mail_tt2/listmaster_notification.tt2:98
 msgid "Check Sympa log files for more precise information"
-msgstr ""
-"Für genauere Informationen konsultieren Sie bitte die Sympa Log-Dateien"
+msgstr "Für genauere Informationen sehen Sie bitte die Sympa Log-Dateien"
 
 #: mail_tt2/listmaster_notification.tt2:105
 #: mail_tt2/listmaster_notification.tt2:44
@@ -902,8 +901,8 @@ msgstr ""
 msgid "Choose your authentication server"
 msgstr "Wählen Sie Ihren Authentifizierungsserver"
 
-#: src/etc/mhonarc-ressources.tt2:136 src/etc/mhonarc-ressources.tt2:244
-#: src/etc/mhonarc-ressources.tt2:337
+#: src/etc/mhonarc-ressources.tt2:141 src/etc/mhonarc-ressources.tt2:249
+#: src/etc/mhonarc-ressources.tt2:342
 msgid "Chronological"
 msgstr "Chronologisch"
 
@@ -1054,12 +1053,12 @@ msgstr "Vorlagen anpassen"
 msgid "Customizing"
 msgstr "Anpassen"
 
-#: mail_tt2/helpfile.tt2:48
+#: mail_tt2/helpfile.tt2:53
 msgid "DEL <list> user@host            * To delete a user from a list"
 msgstr ""
 "DEL <list> user@host            * Zum Löschen eines Benutzers von einer Liste"
 
-#: mail_tt2/helpfile.tt2:55
+#: mail_tt2/helpfile.tt2:60
 msgid "DISTribute <list> <key>        * Moderation: to validate a message"
 msgstr ""
 "DISTribute <list> <key>        * Moderation: Validierung einer Nachricht"
@@ -1201,12 +1200,12 @@ msgstr "Der Status wurde nicht wirklich geändert, keine Aktion notwendig"
 
 #: web_tt2/help_user_options.tt2:7
 msgid "Digest"
-msgstr "Nachrichtenkompilat"
+msgstr "digest"
 
 #. (digest)
 #: mail_tt2/info_report.tt2:17
 msgid "Digest       : %1"
-msgstr "Nachrichtenkompilat : % "
+msgstr "Nachrichtenkompilat   : % "
 
 #. (list.name)
 #: mail_tt2/digest.tt2:4
@@ -1220,7 +1219,7 @@ msgstr "Häufigkeit der Kompilierung"
 
 #: web_tt2/help_user_options.tt2:14
 msgid "DigestPlain"
-msgstr "Klartext-Nachrichtenkompilat"
+msgstr "DigestPlain"
 
 #: web_tt2/latest_d_read.tt2:22
 msgid "Directory"
@@ -1259,7 +1258,7 @@ msgstr "Wollen Sie %1%2 wirklich löschen ?"
 msgid "Do you really want to delete Selected Archives?"
 msgstr "Wollen Sie die gewählten Archive wirklich löschen?"
 
-#: src/etc/mhonarc-ressources.tt2:406 src/etc/mhonarc-ressources.tt2:413
+#: src/etc/mhonarc-ressources.tt2:411 src/etc/mhonarc-ressources.tt2:418
 msgid "Do you really want to delete this message ?"
 msgstr "Wollen Sie diese Nachricht wirklich löschen ?"
 
@@ -1586,7 +1585,7 @@ msgid "Family name"
 msgstr "Name der Familie"
 
 # nlsref 8,7
-#: src/List.pm:6184
+#: src/List.pm:6187
 msgid "File"
 msgstr "Datei"
 
@@ -1670,15 +1669,15 @@ msgstr "Absender: %1"
 msgid ""
 "Functions, equivalent to Sympa robot commands, are accessible in\n"
 "the higher part of the user interface's banner. WWSympa provides \n"
-"a customized environment with access to the following functions :\n"
+"a customized environment with access to the following functions :"
 msgstr ""
 "Funkionen, die Equivalente zu Sympa Roboter-Kommandos, sind im oberen Teil "
 "des\n"
 "Banners der Benutzeroberfläche zugänglich. \n"
 "WWSympa stellt eine angepasste Umgebung mit Zugang zu folgenden Funktionen\n"
-"zur Verfügung :\n"
+"zur Verfügung :"
 
-#: mail_tt2/helpfile.tt2:37
+#: mail_tt2/helpfile.tt2:42
 msgid "GET <list> <file>           * To get <file> of <list> archive"
 msgstr ""
 "GET <list> <file>           * Datei <file> des Archivs der Liste <list> "
@@ -1689,7 +1688,7 @@ msgstr ""
 msgid "Go"
 msgstr "Los"
 
-#: mail_tt2/helpfile.tt2:16
+#: mail_tt2/helpfile.tt2:21
 msgid "HELp                        * This help file"
 msgstr "HELp                        * Diese Hilfedatei"
 
@@ -1722,7 +1721,7 @@ msgid "Here are the subscribers of %1@%2 mailing list:"
 msgstr "Die Abonnenten der Verteilerliste %1@%2 :"
 
 #. (conf.email,conf.host)
-#: mail_tt2/lists.tt2:1
+#: mail_tt2/lists.tt2:7
 msgid "Here is the list of list from %1@%2"
 msgstr "Hier ist eine Übersicht der Verteilerlisten von %1@%2"
 
@@ -1733,7 +1732,7 @@ msgstr "Hauptseite"
 #. (url)
 #: mail_tt2/info_report.tt2:20
 msgid "Homepage           : %1"
-msgstr "Homepage           : %1"
+msgstr "Homepage              : %1"
 
 #: src/etc/create_list_templates/hotline/comment.tt2:1
 msgid "Hotline mailing list"
@@ -1767,15 +1766,15 @@ msgstr "Ich abonniere die Liste %1"
 msgid "I unsubscribe from list %1"
 msgstr "Ich bestelle die Liste %1 ab"
 
-#: mail_tt2/helpfile.tt2:36
+#: mail_tt2/helpfile.tt2:41
 msgid "INDex <list>                * <list> archive file list"
 msgstr "INDex <list>                * Auflistung der Dateien im Archiv <list>"
 
-#: mail_tt2/helpfile.tt2:17
+#: mail_tt2/helpfile.tt2:22
 msgid "INFO <list>                 * Information about a list"
 msgstr "INFO <list>                 * Information über eine Liste"
 
-#: mail_tt2/helpfile.tt2:39
+#: mail_tt2/helpfile.tt2:44
 msgid "INVITE <list> <email>       * Invite <email> for subscription in <list>"
 msgstr ""
 "INVITE <list> <email>       * Den Benutzer mit der Adresse <email> zum "
@@ -1949,7 +1948,7 @@ msgstr ""
 "da der Verteilerlisten-Verwalter nich auf Ihr persönliches Zertifikat "
 "zugreifen konnte (email %1)."
 
-#: src/etc/mhonarc-ressources.tt2:583
+#: src/etc/mhonarc-ressources.tt2:588
 msgid ""
 "January:February:March:April:May:June:July:August:September:October:November:"
 "December"
@@ -1957,7 +1956,7 @@ msgstr ""
 "Januar:Februar:März:April:Mai:Juni:Juli:August:September:Oktober:November:"
 "Dezember"
 
-#: mail_tt2/helpfile.tt2:38
+#: mail_tt2/helpfile.tt2:43
 msgid ""
 "LAST <list>                 * Used to received the last message from <list>"
 msgstr ""
@@ -1973,7 +1972,7 @@ msgstr "inkludierte zweistufige LDAP-Abfrage"
 msgid "LDAP query inclusion"
 msgstr "LDAP-Anfrage inkludieren"
 
-#: mail_tt2/helpfile.tt2:18
+#: mail_tt2/helpfile.tt2:23
 msgid "LISts                       * Directory of lists managed on this node"
 msgstr "LISTs                       * Auflistung der verwalteten Listen"
 
@@ -2157,7 +2156,7 @@ msgid ""
 msgstr ""
 "Beschreibung der Liste: Dieser Text wird als Antwort auf den E-Mail Befehl\n"
 "INFO gesendet.\n"
-"Sie kann auch inkludiert werden in"
+"Sie kann auch inkludiert werden in der"
 
 #: web_tt2/error.tt2:249 web_tt2/error.tt2:51
 msgid "List has no bouncing subscribers"
@@ -2302,7 +2301,7 @@ msgstr "Abmelden"
 msgid "Lost password ?"
 msgstr "Passwort vergessen ?"
 
-#: mail_tt2/helpfile.tt2:57
+#: mail_tt2/helpfile.tt2:62
 msgid ""
 "MODINDEX <list>                 * Moderation: to consult the list of "
 "messages to moderate"
@@ -2445,10 +2444,10 @@ msgstr ""
 #: src/etc/create_list_templates/public_web_forum/comment.tt2:3
 msgid ""
 "Messages can either be read via email (subscription) or\n"
-"via the web (web archives)\n"
+"via the web (web archives)"
 msgstr ""
 "Mitteilungen können entweder via E-Mail (Abonnement) oder\n"
-"Web-Archiv gelesen werden\n"
+"Web-Archiv gelesen werden"
 
 #. (list.name,to,subscriber.first_bounce)
 #: mail_tt2/subscriber_notification.tt2:8
@@ -2555,13 +2554,13 @@ msgid ""
 "Most mailing list features require your email. Some mailing lists are hidden "
 "to  unidentified persons.<br />\n"
 " In order to benefit from the full services provided by this server, you "
-"probably need to identify yourself first.\n"
+"probably need to identify yourself first."
 msgstr ""
 "Für die meisten Funktionalitäten der Verteilerlisten ist Ihre E-Mail Adresse "
 "notwendig. Einige Verteilerlisten werden vor nicht identifizierten Personen "
 "versteckt.<br /> \n"
 " Um  alle Funktionenen dieses Servers verwenden zu können, müssen Sie sich "
-"vermutlich zuerst identifizieren.\n"
+"vermutlich zuerst identifizieren."
 
 #: web_tt2/review.tt2:40
 msgid "Multiple add"
@@ -2576,13 +2575,13 @@ msgid ""
 "NOT USED YET. If bounce rate reaches the halt_rate, messages for the list "
 "will be halted, i.e. they are retained for subsequent moderation. Once the "
 "number of bounces exceeds this value, messages for the list are no longer\n"
-"              distributed.\n"
+"              distributed."
 msgstr ""
 "NOCH NICHT VERWENDET. Wenn die Rate der Zustellfehler halt_rate erreicht, "
 "werden Nachrichten an die Liste unterbrochen, d.h. sie werden für eine "
 "nachfolgende Moderation zurückgehalten. Wenn die Zahl der Zustellfehler "
 "diesen Wert überschreitet, werden Nachrichten nicht mehr an die Liste "
-"weitergeleitet.\n"
+"weitergeleitet."
 
 #: web_tt2/latest_d_read.tt2:20 web_tt2/pref.tt2:23 web_tt2/review.tt2:147
 #: web_tt2/review.tt2:151 web_tt2/subindex.tt2:9
@@ -2689,7 +2688,8 @@ msgstr "Keine Nachrichten und kein zu moderierendes Dokument für die Liste %1"
 
 #: web_tt2/error.tt2:264
 msgid "No message found in archives matching Message-ID"
-msgstr "Keine Nachrichten mit passender Nachrichten-ID in den Archiven gefunden"
+msgstr ""
+"Keine Nachrichten mit passender Nachrichten-ID in den Archiven gefunden"
 
 #: web_tt2/list_menu.tt2:109
 msgid "No message to moderate"
@@ -2728,7 +2728,7 @@ msgstr "Keine Abonnenten mit der Adresse <strong>%1</strong>!"
 
 #: web_tt2/help_user_options.tt2:29
 msgid "Nomail"
-msgstr "KeinMail"
+msgstr "Nomail"
 
 #. (error.email)
 #: web_tt2/error.tt2:76
@@ -2760,7 +2760,7 @@ msgid "Number of forwarded messages:      %1"
 msgstr "Zahl der weitergeleiteten Nachrichten :      %1"
 
 #. (mod_spool_size)
-#: mail_tt2/moderate.tt2:24
+#: mail_tt2/moderate.tt2:26
 msgid "Number of messages awaiting moderation for this list : %1"
 msgstr "Anzahl der Nachrichten, die für die Liste %1 zu moderieren sind :"
 
@@ -2782,12 +2782,12 @@ msgstr "Älteste Nachricht zuerst"
 msgid ""
 "Once you have been authenticated, a <em>cookie</em> containing your login \n"
 "information make your connection to WWSympa last. The lifetime of this\n"
-"<em>cookie</em> is customizeable through your <strong>Preferences</strong>\n"
+"<em>cookie</em> is customizeable through your <strong>Preferences</strong>"
 msgstr ""
 "Wenn Sie sich authentifiziert haben, wird durch ein \"<em>Cookie</em>\" mit "
 "Ihren Anmeldeinformationen Ihre Verbindung zu WWSympa aufrecht erhalten. \n"
 "Die Lebensdauer dieses <em>Cookies<em kann in Ihren <em>Einstellungen</em> "
-"geändert werden.\n"
+"geändert werden."
 
 #: web_tt2/remove_arc.tt2:5
 msgid ""
@@ -2798,7 +2798,7 @@ msgstr ""
 "gelöscht."
 
 #. (conf.email,conf.host)
-#: mail_tt2/moderate.tt2:15 mail_tt2/moderate.tt2:20
+#: mail_tt2/moderate.tt2:16 mail_tt2/moderate.tt2:22
 msgid "Or send a message to %1@%2 with the following subject :"
 msgstr "Oder: Senden Sie eine Nachricht an %1@%2 mit folgendem Betreff :"
 
@@ -2838,7 +2838,7 @@ msgstr "Eigentümer"
 #. (o.gecos)
 #: mail_tt2/info_report.tt2:5
 msgid "Owner              : %1"
-msgstr "Eigentümer         : %1"
+msgstr "Eigentümer            : %1"
 
 #. (owner)
 #. (doc_owner)
@@ -2953,8 +2953,8 @@ msgid ""
 "Please, in order to receive futur crypted messages send a signed message\n"
 "to  %1@%2 ."
 msgstr ""
-"Senden Sie bitte eine signierte Nachricht an %1@%2, um weiter "
-"verschlüsselte Nachrichten zu erhalten."
+"Senden Sie bitte eine signierte Nachricht an %1@%2, um weiter verschlüsselte "
+"Nachrichten zu erhalten."
 
 #: web_tt2/list_menu.tt2:344 web_tt2/list_menu.tt2:351
 #: web_tt2/list_menu.tt2:354
@@ -2965,7 +2965,7 @@ msgstr "Senden"
 msgid "Powered by"
 msgstr "Powered by"
 
-#: mail_tt2/helpfile.tt2:60
+#: mail_tt2/helpfile.tt2:65
 msgid "Powered by Sympa"
 msgstr "Powered by Sympa"
 
@@ -3053,7 +3053,7 @@ msgstr "Öffentliche Diskussions-Verteilerliste"
 
 # #-#-#-#-#  de.po (PACKAGE VERSION)  #-#-#-#-#
 # nlsref 6,82
-#: src/Commands.pm:245 web_tt2/help.tt2:18
+#: mail_tt2/lists.tt2:2 src/Commands.pm:245 web_tt2/help.tt2:18
 msgid "Public lists"
 msgstr "Öffentliche Listen"
 
@@ -3066,7 +3066,7 @@ msgstr "Veröffentlichen"
 msgid "Purge selected lists"
 msgstr "Gewählte Listen endgültig löschen"
 
-#: mail_tt2/helpfile.tt2:41
+#: mail_tt2/helpfile.tt2:46
 msgid ""
 "QUIT                        * Indicates the end of the commands (to ignore a "
 "signature)"
@@ -3074,20 +3074,21 @@ msgstr ""
 "QUIT                        * zeigt das Ende der Befehle an (zum Ignorieren "
 "einer nachfolgenden Unterschrift)"
 
-#: mail_tt2/helpfile.tt2:56
+#: mail_tt2/helpfile.tt2:61
 msgid "REJect <list> <key>            * Moderation: to reject a message"
 msgstr "REJect <list> <key>            * Moderation: Ablehnen einer Nachricht"
 
-#: mail_tt2/helpfile.tt2:51
+#: mail_tt2/helpfile.tt2:56
 msgid ""
 "REMIND <list>                   * Send a reminder message to each subscriber "
 "(this is a way to inform anyone what is his real subscribing email)."
 msgstr ""
 "REMIND <list>                   * Sende eine Erinnerungsnachricht an alle "
-"Abonnenten (das ist eine Methode, um alle über ihre reale Abonnenten-E-Mail "
+"Abonnenten (das ist eine Methode, \n"
+"                                   um alle über ihre echte Abonnenten-E-Mail "
 "Adresse zu informieren)"
 
-#: mail_tt2/helpfile.tt2:19
+#: mail_tt2/helpfile.tt2:24
 msgid "REView <list>               * Displays the subscribers to <list>"
 msgstr "REView <list>               * Anzeige der Abonnenten der Liste <list>"
 
@@ -3132,7 +3133,7 @@ msgstr "Empfangsmodus :"
 #. (available_reception_mode)
 #: mail_tt2/info_report.tt2:19
 msgid "Reception modes    : %1"
-msgstr "Empfangsmodus     : %1"
+msgstr "Empfangsmodus         : %1"
 
 #. (param0)
 #: mail_tt2/listmaster_notification.tt2:28
@@ -3243,7 +3244,7 @@ msgstr "Erneuerung Ihres Abonnements der Liste '%s'"
 msgid "Replace the file %1 with your file"
 msgstr "Ersetze die Datei %1 durch Ihre Datei"
 
-#: src/etc/mhonarc-ressources.tt2:398
+#: src/etc/mhonarc-ressources.tt2:403
 msgid "Reply"
 msgstr "Antwort"
 
@@ -3257,7 +3258,7 @@ msgstr "Antwortadresse"
 msgid "Reply to           : %1"
 msgstr "Antwort an            : %1"
 
-#: src/etc/mhonarc-ressources.tt2:394
+#: src/etc/mhonarc-ressources.tt2:399
 msgid "Reply to sender"
 msgstr "Dem Absender antworten"
 
@@ -3319,49 +3320,49 @@ msgstr "Bericht der Listen dieser Familie"
 #. (review)
 #: mail_tt2/info_report.tt2:13
 msgid "Review subscribers : %1"
-msgstr "Liste der Abonnenten : %1"
+msgstr "Liste der Abonnenten  : %1"
 
 # nlsref 5,2
-#: src/tools.pl:130
+#: src/tools.pl:131
 msgid "Routing error ?"
 msgstr "Routing-Fehler ?"
 
-#: mail_tt2/helpfile.tt2:32
+#: mail_tt2/helpfile.tt2:37
 msgid ""
 "SET <list>|* CONCEAL        * To become unlisted (hidden subscriber address)"
 msgstr "SET <list>|* CONCEAL        * Die Abonnenten-E-Mail Adresse verbergen"
 
-#: mail_tt2/helpfile.tt2:27
+#: mail_tt2/helpfile.tt2:32
 msgid "SET <list>|* DIGEST         * Message reception in compilation mode"
 msgstr "SET <list>|* DIGEST         * E-Mail-Empfang im Kompilatsmodus"
 
-#: mail_tt2/helpfile.tt2:31
+#: mail_tt2/helpfile.tt2:36
 msgid "SET <list>|* MAIL           * <list> reception in normal mode"
 msgstr "SET <list>|* MAIL           * Empfang von <list> im Normal-Modus"
 
-#: mail_tt2/helpfile.tt2:33
+#: mail_tt2/helpfile.tt2:38
 msgid "SET <list>|* NOCONCEAL      * Subscriber address visible via REView"
 msgstr ""
 "SET <list>|* NOCONCEAL      * Bei Auflistung (REVIEW) E-Mail Adresse anzeigen"
 
-#: mail_tt2/helpfile.tt2:26
+#: mail_tt2/helpfile.tt2:31
 msgid ""
 "SET <list>|* NOMAIL         * To suspend the message reception for <list>"
 msgstr ""
 "SET <list>|* NOMAIL         * Empfang von Nachrichten der Liste <list> "
 "aussetzen"
 
-#: mail_tt2/helpfile.tt2:30
+#: mail_tt2/helpfile.tt2:35
 msgid "SET <list>|* NOTICE         * Receiving message subject only"
 msgstr "SET <list>|* NOTICE         * Nur den Betreff der Nachricht empfangen"
 
-#: mail_tt2/helpfile.tt2:29
+#: mail_tt2/helpfile.tt2:34
 msgid "SET <list>|* SUMMARY        * Receiving the message index only"
 msgstr ""
 "SET <list>|* SUMMARY        * Nur das Inhaltsverzeichnis der Nachrichten "
 "empfangen"
 
-#: mail_tt2/helpfile.tt2:28
+#: mail_tt2/helpfile.tt2:33
 msgid ""
 "SET <list|*> DIGESTPLAIN    * Message reception in compilation mode, sent as "
 "a plain text email with all attachments"
@@ -3379,12 +3380,12 @@ msgstr "SQL-Abfrage"
 msgid "SQL query inclusion"
 msgstr "SQL-Abfrage inkludieren"
 
-#: mail_tt2/helpfile.tt2:49
+#: mail_tt2/helpfile.tt2:54
 msgid "STATS <list>                    * To consult the statistics for <list>"
 msgstr ""
 "STATS <list>                    * Abruf der Statistiken für die Liste <list>"
 
-#: mail_tt2/helpfile.tt2:21
+#: mail_tt2/helpfile.tt2:26
 msgid ""
 "SUBscribe <list> <name>     * To subscribe or to confirm a subscription to "
 "<list>."
@@ -3392,7 +3393,7 @@ msgstr ""
 "SUBscribe <list> <name>     * Die Liste <list> abonnieren oder das "
 "Abonnement bestätigen."
 
-#: mail_tt2/helpfile.tt2:8
+#: mail_tt2/helpfile.tt2:13
 msgid ""
 "SYMPA is an electronic mailing-list manager that automates list management "
 "functions such as subscriptions, moderation, and archive management."
@@ -3486,7 +3487,7 @@ msgstr "Absender"
 #. (send)
 #: mail_tt2/info_report.tt2:12
 msgid "Sending messages   : %1"
-msgstr "Nachrichten senden      : %1"
+msgstr "Nachrichten senden    : %1"
 
 #: web_tt2/admin_menu.tt2:144
 msgid "Sending/Reception"
@@ -3572,7 +3573,7 @@ msgid "Size (Kb)"
 msgstr "Größe (Kb)"
 
 # nlsref 6,260
-#: src/List.pm:8678
+#: src/List.pm:8694
 msgid ""
 "Someone (hopefully you) asked for your e-mail address\n"
 "to be added to list '%s'.\n"
@@ -3603,7 +3604,7 @@ msgstr ""
 "Nachricht einfach."
 
 # nlsref 6,260
-#: src/List.pm:8671
+#: src/List.pm:8687
 msgid ""
 "Someone (hopefully you) asked for your e-mail address\n"
 "to be removed from list '%s'.\n"
@@ -3634,7 +3635,7 @@ msgstr ""
 "Nachricht einfach."
 
 # nlsref 6,39
-#: src/List.pm:8683 src/List.pm:8688
+#: src/List.pm:8699 src/List.pm:8704
 msgid ""
 "Someone (hopefully you) requested a user of list %s to be\n"
 "added or removed.\n"
@@ -3743,7 +3744,7 @@ msgstr "Titelmarkierung"
 
 #: web_tt2/compose_mail.tt2:6 web_tt2/create_list_request.tt2:48
 msgid "Subject:"
-msgstr "Titel:"
+msgstr "Betreff:"
 
 #: web_tt2/choosepasswd.tt2:21 web_tt2/pref.tt2:122 web_tt2/pref.tt2:38
 #: web_tt2/pref.tt2:71 web_tt2/pref.tt2:82
@@ -3805,7 +3806,7 @@ msgstr ""
 #. (subscribe)
 #: mail_tt2/info_report.tt2:10
 msgid "Subscription       : %1"
-msgstr "Abonnement         : %1"
+msgstr "Abonnement            : %1"
 
 # nlsref 16,18
 #: src/List.pm:465
@@ -3829,10 +3830,10 @@ msgstr "Zusammenfassung des Abonnements"
 
 #: web_tt2/help_user_options.tt2:22
 msgid "Summary"
-msgstr "Zusammenfassung"
+msgstr "Summary"
 
 # nlsref 8,31
-#: src/List.pm:3211
+#: src/List.pm:3214
 msgid "Summary of list %s"
 msgstr "Zusammenfassung der Liste %s"
 
@@ -3841,7 +3842,7 @@ msgstr "Zusammenfassung der Liste %s"
 msgid "Summary of your subscription (using the e-mail %1)."
 msgstr "Zusammenfassung Ihrer Abonnements unter der E-Mail Adresse"
 
-#: src/etc/mhonarc-ressources.tt2:565
+#: src/etc/mhonarc-ressources.tt2:570
 msgid "Sunday:Monday:Tuesday:Wednesday:Thursday:Friday:Saturday"
 msgstr "Sonntag:Montag:Dienstag:Mittwoch:Donnerstag:Freitag:Samstag"
 
@@ -3969,7 +3970,7 @@ msgstr "Synchronisiere Abonnenten mit den Datenquellen"
 msgid "Syntax errors with the following parameters : %1"
 msgstr "Syntax-Fehler in folgenden Parametern : %1"
 
-#: mail_tt2/digest.tt2:12 mail_tt2/digest_plain.tt2:10 src/List.pm:3090
+#: mail_tt2/digest.tt2:12 mail_tt2/digest_plain.tt2:10 src/List.pm:3093
 msgid "Table of contents:"
 msgstr "Inhaltsverzeichnis:"
 
@@ -4024,21 +4025,21 @@ msgstr "Die %1 aktivsten Listen"
 msgid ""
 "The Bouncers_level1 paragraphs defines the automatic behavior of bounce "
 "management.<br />\n"
-"\tLevel 1 is the lower level of bouncing users\n"
+"\tLevel 1 is the lower level of bouncing users"
 msgstr ""
 "Der Abschnitt Bouncers_level1 definiert das automatische Verhalten bei der "
 "Verwaltung von Zustellfehlern <br />\n"
-"\tEbene 1 ist die untere Ebene der Benutzer mit Zustellfehlern.\n"
+"\tEbene 1 ist die untere Ebene der Benutzer mit Zustellfehlern."
 
 #: web_tt2/help_editlist.tt2:54
 msgid ""
 "The Bouncers_levelX paragraphs defines the automatic behavior of bounce "
 "management.<br />\n"
-"\tLevel 2 is the highest level of bouncing users\n"
+"\tLevel 2 is the highest level of bouncing users"
 msgstr ""
 "Der Abschnitt Bouncers_levelX definiert das automatische Verhalten bei der "
 "Verwaltung von Zustellfehlern <br />\n"
-"\tEbene 2 ist die untere Ebene der Benutzer mit Zustellfehlern.\n"
+"\tEbene 2 ist die untere Ebene der Benutzer mit Zustellfehlern."
 
 # nlsref 6,47
 #: src/Commands.pm:1923 src/Commands.pm:2136 src/Commands.pm:2232
@@ -4143,7 +4144,7 @@ msgstr "Exportieren fehlgeschlagen"
 msgid "The following address is not a known mailing list :"
 msgstr "Die folgende Adresse ist keine bekannte Verzeilerliste"
 
-#: mail_tt2/helpfile.tt2:45
+#: mail_tt2/helpfile.tt2:50
 msgid ""
 "The following commands are available only for lists's owners or moderators:"
 msgstr ""
@@ -4151,7 +4152,7 @@ msgstr ""
 "verfügbar:"
 
 # nlsref 5,3
-#: src/tools.pl:135
+#: src/tools.pl:136
 msgid ""
 "The following message was sent to a list while it seems to contain\n"
 "commands like subscribe, unsubscribe, help, index, get, ...\n"
@@ -4217,7 +4218,9 @@ msgstr "Die Liste wurde geschlossen"
 
 #: web_tt2/notice.tt2:60
 msgid "The list has been purged (closing a pending list makes it purged)"
-msgstr "Die Liste wurde endgültig gelöscht (das Schließen einer unbestätigten Liste löscht diese endgültig)"
+msgstr ""
+"Die Liste wurde endgültig gelöscht (das Schließen einer unbestätigten Liste "
+"löscht diese endgültig)"
 
 # nlsref 6,43
 #: web_tt2/notice.tt2:45
@@ -4468,13 +4471,13 @@ msgid ""
 "by Sympa as \n"
 "\tan alternate email address. You will also be able to unify your "
 "subscriptions with\n"
-"\tyour main email address.\n"
+"\tyour main email address."
 msgstr ""
 "Diese anderen E-Mail Adressen, die Sympa bekannt sein sollen, werden von "
 "Sympa als \n"
 "\talternative E-Mail Adressen erkannt.\n"
 "Damit können Sie auch Abonnements mit ihrer primären E-Mail Adresse "
-"zusammenführen.\n"
+"zusammenführen."
 
 #: web_tt2/help_editlist.tt2:22
 msgid "This paragraph defines bounce management parameters:"
@@ -4730,14 +4733,14 @@ msgid ""
 "This server provides you access to your environment on mailing list server %"
 "1@%2. Starting from this URL, you can perform subscription options, "
 "unsubscription,\n"
-"archives, list management and so on.\n"
+"archives, list management and so on."
 msgstr ""
 "Dieser Server bietet Zugang zu Ihrer Umgebung am Verteilerlisten-Server %1@%"
 "2. Ausgehend von dieser Adresse können Sie Ihre Abonnements verwalten, "
-"Archive einsehen, Listen verwalten etc.\n"
+"Archive einsehen, Listen verwalten etc."
 
-#: src/etc/mhonarc-ressources.tt2:140 src/etc/mhonarc-ressources.tt2:248
-#: src/etc/mhonarc-ressources.tt2:344
+#: src/etc/mhonarc-ressources.tt2:145 src/etc/mhonarc-ressources.tt2:253
+#: src/etc/mhonarc-ressources.tt2:349
 msgid "Thread"
 msgstr "Thread"
 
@@ -4846,7 +4849,7 @@ msgid ""
 msgstr ""
 "Um die angehängte Nachricht über Liste %s zu verteilen:\n"
 "mailto:%s?subject=CONFIRM%%20%s\n"
-"Oder: Schicken Sie eine Nachricht an %s mit folgendem Subject:\n"
+"Oder: Senden Sie eine Nachricht an %s mit folgendem Betreff:\n"
 "CONFIRM %s\n"
 
 #: mail_tt2/list_unknown.tt2:18
@@ -4901,7 +4904,7 @@ msgstr ""
 msgid "To receive your password :"
 msgstr "Um Ihr Passwort per E-Mail zu erhalten :"
 
-#: mail_tt2/moderate.tt2:18
+#: mail_tt2/moderate.tt2:19
 msgid "To reject it (it will be removed):"
 msgstr "Um sie abzulehnen (sie wird gelöscht):"
 
@@ -4950,18 +4953,19 @@ msgstr "Insgesamt Bytes für %1@%2 benutzt."
 msgid "Total subscribers : %1"
 msgstr "Abonnenten: %1"
 
-#: mail_tt2/helpfile.tt2:24
+#: mail_tt2/helpfile.tt2:29
 msgid "UNSubscribe * <EMAIL>       * To quit all lists."
 msgstr "UNSubscribe * <EMAIL>       * um alle Listen zu verlassen."
 
-#: mail_tt2/helpfile.tt2:23
+#: mail_tt2/helpfile.tt2:28
 msgid ""
 "UNSubscribe <list> <EMAIL>  * To quit <list>. <EMAIL> is an optional email "
 "address, usefull if different from your \"From:\" address."
 msgstr ""
 "UNSubscribe <list> <EMAIL>  * Zum Verlassen von <list>. <EMAIL> ist eine "
-"optionale E-Mail Adresse, falls die abzumeldende E-Mail Adresse sich von "
-"Ihrer Absenderadresse unterscheidet."
+"optionale E-Mail Adresse, falls sich \n"
+"                               die abzumeldende E-Mail Adresse von Ihrer "
+"Absenderadresse unterscheidet."
 
 # nlsref 8,24
 #: src/List.pm:2293
@@ -5088,7 +5092,7 @@ msgid "Unsubscribe"
 msgstr "Abmelden"
 
 # nlsref 6,71
-#: soap/sympasoap.pm:553 src/Commands.pm:946 wwsympa/wwsympa.fcgi:3444
+#: soap/sympasoap.pm:553 src/Commands.pm:946 wwsympa/wwsympa.fcgi:3451
 msgid "Unsubscribe from list %s"
 msgstr "Von der Liste %s abmelden"
 
@@ -5099,7 +5103,7 @@ msgstr "Benutzer abmelden"
 #. (unsubscribe)
 #: mail_tt2/info_report.tt2:11
 msgid "Unsubscription     : %1"
-msgstr "Abmeldung          : %1"
+msgstr "Abmeldung             : %1"
 
 #: mail_tt2/expire_warning1.tt2:8 mail_tt2/expire_warning2.tt2:8
 #: mail_tt2/remind.tt2:7
@@ -5191,11 +5195,11 @@ msgid "User data source"
 msgstr "Benutzerdatenquelle"
 
 # nlsref 6,81
-#: src/Commands.pm:160 src/Commands.pm:196
+#: mail_tt2/helpfile.tt2:2 src/Commands.pm:160 src/Commands.pm:196
 msgid "User guide"
 msgstr "Benutzerhandbuch"
 
-#: mail_tt2/helpfile.tt2:5
+#: mail_tt2/helpfile.tt2:10
 msgid "User's Guide"
 msgstr "Benutzerhandbuch"
 
@@ -5244,7 +5248,7 @@ msgstr ""
 msgid "WARNING: bounce rate too high in list %s"
 msgstr "WARNUNG: Die Rate der Zustellfehler in der Liste %s ist zu hoch"
 
-#: mail_tt2/helpfile.tt2:20
+#: mail_tt2/helpfile.tt2:25
 msgid ""
 "WHICH                       * Displays which lists you are subscribed to"
 msgstr ""
@@ -5293,8 +5297,8 @@ msgstr ""
 # nlsref 8,6
 #: soap/sympasoap.pm:701 soap/sympasoap.pm:702 src/Commands.pm:1062
 #: src/Commands.pm:1063 src/Commands.pm:685 src/Commands.pm:686
-#: wwsympa/wwsympa.fcgi:3215 wwsympa/wwsympa.fcgi:3216
-#: wwsympa/wwsympa.fcgi:3814 wwsympa/wwsympa.fcgi:3815
+#: wwsympa/wwsympa.fcgi:3222 wwsympa/wwsympa.fcgi:3223
+#: wwsympa/wwsympa.fcgi:3821 wwsympa/wwsympa.fcgi:3822
 msgid "Welcome on list %s"
 msgstr "Willkommen bei der Liste %s!"
 
@@ -5466,7 +5470,7 @@ msgstr ""
 "Sie können sich jederzeit abmelden (Ihr <I>Cookie</I> löschen),\n"
 "indem Sie die Abmelde-Schaltfläche betätigen."
 
-#: mail_tt2/helpfile.tt2:12
+#: mail_tt2/helpfile.tt2:17
 msgid ""
 "You can put multiple commands in a message. These commands must appear in "
 "the message body and each line must contain only one command. The message "
@@ -5515,7 +5519,7 @@ msgid "You have been authenticated"
 msgstr "Sie wurden Authentifiziert"
 
 # nlsref 6,38
-#: wwsympa/wwsympa.fcgi:3445 wwsympa/wwsympa.fcgi:3920
+#: wwsympa/wwsympa.fcgi:3452 wwsympa/wwsympa.fcgi:3927
 msgid "You have been removed from list %s.\n"
 msgstr "Sie wurden aus der Liste %s gelöscht.\n"
 
@@ -5606,7 +5610,7 @@ msgstr ""
 "einmal mit Ihrer Hauptadresse."
 
 # nlsref 6,79
-#: src/List.pm:8693 src/List.pm:8700
+#: src/List.pm:8709 src/List.pm:8716
 msgid ""
 "You requested a subscription reminder to be sent\n"
 "to each subscriber of list %s\n"
@@ -5701,12 +5705,12 @@ msgstr "Sie sind Abonnent der Liste %1@%2 mit der E-Mail Adresse %3"
 msgid ""
 "Your are therefore not registered in Sympa user database and you can't "
 "login.\n"
-"If you subscribe to a list, WWSympa will give you an initial password.\n"
+"If you subscribe to a list, WWSympa will give you an initial password."
 msgstr ""
 "Sie sind daher in der Sympa Benutzerdatenbank nicht registriert und können "
 "sich nicht anmelden. \n"
 "Wenn Sie eine Liste abonnieren, wird WWSympa Ihnen ein Anfangspasswort "
-"zuweisen.\n"
+"zuweisen."
 
 #. (expiration_date)
 #: mail_tt2/certif_warning.tt2:4
@@ -5739,8 +5743,7 @@ msgstr ""
 msgid ""
 "Your document %1 for list %2@%3\n"
 "has been installed by %4 list editor."
-msgstr ""
-"Ihre Nachricht %1 an die Liste %@@%3 wurde vom Editor %4 eingebracht."
+msgstr "Ihre Nachricht %1 an die Liste %@@%3 wurde vom Editor %4 eingebracht."
 
 #: mail_tt2/d_install_shared.tt2:2
 msgid "Your document has been installed."
@@ -5770,7 +5773,7 @@ msgstr ""
 #. (user.email,list.name,list.host)
 #: mail_tt2/bye.tt2:4
 msgid "Your email address (%1) has been removed from list %2@%3"
-msgstr "Ihre E-Mail Adresse (%1) wurde von der Liste %2@%3 entfernt"
+msgstr "Ihre E-Mail Adresse (%1) wurde von der Liste %2@%3 entfernt."
 
 #: web_tt2/pref.tt2:10
 msgid "Your environment"
@@ -5912,7 +5915,7 @@ msgid "Your subscription email is %1"
 msgstr "Sie sind mit der E-Mail Adresse %1 subskribiert."
 
 # nlsref 6,18
-#: src/Commands.pm:1484 wwsympa/wwsympa.fcgi:3919
+#: src/Commands.pm:1484 wwsympa/wwsympa.fcgi:3926
 msgid "Your subscription to list %s has been removed."
 msgstr "Ihr Abonnement der Liste %s wurde beendet."
 
@@ -6240,7 +6243,7 @@ msgstr "durch Eigentümer ohne Authentifikation"
 
 #: mail_tt2/bye.tt2:5
 msgid "bye !"
-msgstr "Adresse [% user.email %] wurde beendet."
+msgstr "Auf Wiedersehen!"
 
 #: web_tt2/arcsearch.tt2:24
 msgid "case insensitive"
@@ -6630,7 +6633,7 @@ msgid "local domain users or owner approval"
 msgstr "Benutzer der lokalen Domäne oder nach Bestätigung durch den Eigentümer"
 
 #. ($PAGENUM$,$NUMOFPAGES$)
-#: src/etc/mhonarc-ressources.tt2:131 src/etc/mhonarc-ressources.tt2:239
+#: src/etc/mhonarc-ressources.tt2:136 src/etc/mhonarc-ressources.tt2:244
 msgid "mails, page # %1/%2"
 msgstr "E-Mails, Seite # %1/%2"
 
@@ -7008,7 +7011,7 @@ msgid "selection (if multiple)"
 msgstr "Auswahl (falls mehrere)"
 
 #. (user.email)
-#: src/etc/mhonarc-ressources.tt2:399
+#: src/etc/mhonarc-ressources.tt2:404
 msgid "send it back to %1"
 msgstr "zurück senden an %1"
 
@@ -7072,7 +7075,7 @@ msgstr "Suffix"
 msgid "summary message"
 msgstr "Zusammenfassungsnachricht"
 
-#: src/etc/mhonarc-ressources.tt2:406 src/etc/mhonarc-ressources.tt2:413
+#: src/etc/mhonarc-ressources.tt2:411 src/etc/mhonarc-ressources.tt2:418
 msgid "tag this mail for deletion"
 msgstr "Dieses E-Mail zum Löschen markieren"
 
@@ -7091,7 +7094,7 @@ msgstr ""
 # nlsref 16,81
 #: src/List.pm:524 src/List.pm:939
 msgid "the datasource"
-msgstr "die Datenquelle"
+msgstr "Datenquelle"
 
 #. (shortname)
 #: web_tt2/d_upload.tt2:1
@@ -7114,7 +7117,7 @@ msgstr "Grenzwert"
 msgid "title"
 msgstr "Titel"
 
-#: src/etc/mhonarc-ressources.tt2:396
+#: src/etc/mhonarc-ressources.tt2:401
 msgid "to list"
 msgstr "an Liste"
 
@@ -7183,3 +7186,6 @@ msgstr "Ihre E-Mail Adresse   : %1"
 #: mail_tt2/sendpasswd.tt2:30
 msgid "your password : %1"
 msgstr "Ihr Passwort : %1"
+
+#~ msgid "page"
+#~ msgstr "Seite"
