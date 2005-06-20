@@ -352,10 +352,11 @@ sub info {
 	unless (defined $action);
 
     if ($action =~ /reject/i) {
+	my $reason_string = &get_reason_string($result->{'reason'},$robot);
 	&Log::do_log('info', 'SOAP : info %s from %s refused (not allowed)', $listname,$sender);
 	die SOAP::Fault->faultcode('Server')
 	    ->faultstring('Not allowed')
-	    ->faultdetail("You don't have proper rights");
+	    ->faultdetail($reason_string);
     }
     if ($action =~ /do_it/i) {
 	my $result_item;
@@ -434,10 +435,11 @@ sub review {
 	unless (defined $action);
 
     if ($action =~ /reject/i) {
+	my $reason_string = &get_reason_string($result->{'reason'},$robot);
 	&Log::do_log('info', 'SOAP : review %s from %s refused (not allowed)', $listname,$sender);
 	die SOAP::Fault->faultcode('Server')
 	    ->faultstring('Not allowed')
-		->faultdetail("You don't have proper rights");
+		->faultdetail($reason_string);
     }
     if ($action =~ /do_it/i) {
 	my $is_owner = $list->am_i('owner', $sender);
@@ -524,11 +526,12 @@ sub signoff {
 	unless (defined $action);   
     
     if ($action =~ /reject/i) {
+	my $reason_string = &get_reason_string($result->{'reason'},$robot);
 	&Log::do_log('info', 'SOAP : sign off from %s for the email %s of the user %s refused (not allowed)', 
 		     $listname,$sender,$sender);
 	die SOAP::Fault->faultcode('Server')
 	    ->faultstring('Not allowed.')
-	    ->faultdetail("You don't have proper rights");
+	    ->faultdetail($reason_string);
     }
     if ($action =~ /do_it/i) {
 	## Now check if we know this email on the list and
@@ -628,10 +631,11 @@ sub subscribe {
   &Log::do_log('debug2', 'SOAP subscribe action : %s', $action);
   
   if ($action =~ /reject/i) {
+      my $reason_string = &get_reason_string($result->{'reason'},$robot);
       &Log::do_log('info', 'SOAP subscribe to %s from %s refused (not allowed)', $listname,$sender);
       die SOAP::Fault->faultcode('Server')
 	  ->faultstring('Not allowed.')
-	  ->faultdetail("You don't have proper rights");
+	  ->faultdetail($reason_string);
   }
   if ($action =~ /owner/i) {
        
@@ -849,6 +853,24 @@ sub struct_to_soap {
     }
 
     return $soap_data;
+}
+
+
+sub get_reason_string {
+    my ($reason,$robot) = @_;
+
+    my $data = {'reason' => $reason };
+    my $string;
+    my $tt2_include_path =  &tools::make_tt2_include_path($robot,'mail_tt2','','');
+
+    unless (&tt2::parse_tt2($data,'authorization.tt2' ,\$string, $tt2_include_path)) {
+	my $error = &tt2::get_error();
+	&List::send_notify_to_listmaster('web_tt2_error', $robot, [$error]);
+	&do_log('info', "get_reason_string : error parsing");
+	return '';
+    }
+    
+    return $string
 }
 
 1;
