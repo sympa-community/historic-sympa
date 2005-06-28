@@ -5877,6 +5877,7 @@ sub am_i {
 #           |'owner'|'editor'|'editorkey'|'listmaster'
 #        -reason : defined if action == 'reject' 
 #           and in scenario : reject(reason='...')
+#           key for template authorization_reject.tt2
 #        -tt2 : defined if action == 'reject'  
 #           and in scenario : reject(tt2='...') or reject('...tt2')
 #           match a key in authorization_reject.tt2
@@ -5891,7 +5892,7 @@ sub request_action {
     my $robot=shift;
     my $context = shift;
     my $debug = shift;
-    do_log('debug3', 'List::request_action %s,%s,%s',$operation,$auth_method,$robot);
+    do_log('debug', 'List::request_action %s,%s,%s',$operation,$auth_method,$robot);
 
     $context->{'sender'} ||= 'nobody' ;
     $context->{'email'} ||= $context->{'sender'};
@@ -5975,6 +5976,7 @@ sub request_action {
     foreach my $rule (@rules) {
 	next if ($rule eq 'scenario');
 	if ($auth_method eq $rule->{'auth_method'}) {
+
 	    my $result =  &verify ($context,$rule->{'condition'});
 	    
 	    if (! defined ($result)) {
@@ -6003,28 +6005,38 @@ sub request_action {
 	    }
 	    
 	    my $action = $rule->{'action'};
-	    
+
             ## reject : get parameters
-	    if ($action =~  /^reject(\(\'?([\w+|,]+)\'?\))?(\s?,\s?(quiet))?/) {
+	    if ($action =~/^reject(\((.+)\))?(\s?,\s?(quiet))?/) {
+
 		if ($4 eq 'quiet') { 
 		    $action = 'reject,quiet';
 		} else{
 		    $action = 'reject';	
 		}
 		my @param = split /,/,$2;
-
-		foreach my $p (@param){
-		    &do_log('notice',"REJECT : PARAM : $p");
-
-		    if ($p =~ /^reason=\'?(\w+)\'?/){
-			$return->{'reason'} = $1;
 		
+       		foreach my $p (@param){
+		    &do_log('notice',"REJECT : PARAM : $p");
+		    if  ($p =~ /^reason=\'?(\w+)\'?/){
+			$return->{'reason'} = $1;
+			&do_log('notice',"REASON : $return->{'reason'}");
+			next;
+			
 		    }elsif ($p =~ /^tt2=\'?(\w+)\'?/){
 			$return->{'tt2'} = $1;
-		
-		    }elsif ($p =~ /^\'?[^=]+\'?/){
-			$return->{'tt2'} = $p;
+			next;
+			
 		    }
+		    if ($p =~ /^\'?[^=]+\'?/){
+			$return->{'tt2'} = $p;
+			# keeping existing only, not merging with reject parameters in scenarios
+			&do_log('notice',"PAS REASON");
+			
+			last;
+		    }
+		    
+		   
 		}
 	    }
 
