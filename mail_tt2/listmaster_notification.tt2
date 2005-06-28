@@ -220,6 +220,27 @@ selected by Sympa as severe bouncing addresses:[%END%]
 [%|loc%]Managing bouncing subscribers:[%END%] [% conf.wwsympa_url %]/reviewbouncing/[% list.name %]
 
 
+[% ELSIF type == 'intern_error' -%]
+Subject: [% FILTER qencode %][%|loc(list.name)%]Listmaster : internal server error[%END%][%END%]
+MIME-Version: 1.0
+Content-Type: text/plain; charset=[%|loc%]_charset_[%END%];
+Content-Transfer-Encoding: [%|loc%]_encoding_[%END%]
+
+[% IF error -%]
+[%|loc(who,action,msg_id,listname,conf.host,error)%] User %1 has encountered an internal server error
+(%2[% IF msg_id %] - MSG_ID : %3[%END%][% IF listname %] - LIST : %4@%5[%END%]) : 
+
+   %6
+
+See logs for more details.
+[%END%]
+[% ELSE -%]
+[%|loc(who,action,msg_id,listname,conf.host)%] User %1 has encountered an internal server error
+(%2[% IF msg_id %] - MSG_ID : %3[%END%][% IF listname %] - LIST : %4@%5[%END%])
+
+See logs for more details.
+[%END%]
+[% END -%]
 [% ELSE -%]
 Subject: [% FILTER qencode %]Listmaster / [% type %][%END%]
 MIME-Version: 1.0

@@ -1,5 +1,4 @@
 #! --PERL--
-
 # sympa.pl - This script is the main one ; it runs as a daemon and does
 # the messages/commands processing
 # RCS Identication ; $Revision$ ; $Date$ 
@@ -771,7 +770,7 @@ while (!$signal) {
 	next;
     }
 
-    do_log('debug', "Processing %s/%s with priority %s", &Conf::get_robot_conf($robot, 'queue'),$filename, $highest_priority) ;
+    &do_log('debug', "Processing %s/%s with priority %s", &Conf::get_robot_conf($robot, 'queue'),$filename, $highest_priority) ;
     
     if ($main::options{'mail'} != 1) {
 	$main::options{'mail'} = $robot if (&Conf::get_robot_conf($robot, 'log_smtp'));
@@ -902,11 +901,7 @@ sub DoFile {
     my $hdr = $msg->head;
     my $rcpt = $message->{'rcpt'};
     
-    # message prepared by wwsympa and distributed by sympa # dual
-    if ( $hdr->get('X-Sympa-Checksum')) {
-	return (&DoSendMessage ($msg,$robot)) ;
-    }
-    
+
     ## get listname & robot
     ($listname, $robot) = split(/\@/,$rcpt);
     
@@ -919,6 +914,11 @@ sub DoFile {
     if ($listname =~ /^(\S+)-($list_check_regexp)$/) {
 	($listname, $type) = ($1, $2);
     }
+
+    # message prepared by wwsympa and distributed by sympa # dual
+    if ( $hdr->get('X-Sympa-Checksum')) {
+	return (&DoSendMessage ($msg,$robot)) ;
+    }
     
     # setting log_level using conf unless it is set by calling option
     unless ($main::options{'log_level'}) {
@@ -929,7 +929,7 @@ sub DoFile {
     ## Ignoring messages with no sender
     my $sender = $message->{'sender'};
     unless ($sender) {
-	do_log('err', 'No From found in message, skipping.');
+	&do_log('err', 'No From found in message, skipping.');
 	return undef;
     }
 
@@ -1029,7 +1029,7 @@ sub DoFile {
   
     if ($main::daemon_usage eq 'message') {
 	if (($rcpt =~ /^$Conf{'listmaster_email'}(\@(\S+))?$/) || ($rcpt =~ /^(sympa|$conf_email)(\@\S+)?$/i) || ($type =~ /^(subscribe|unsubscribe)$/o) || ($type =~ /^(request|owner|editor)$/o)) {
-	    do_log('err','internal serveur error : distribution daemon should never proceed with command');
+	    &do_log('err','internal serveur error : distribution daemon should never proceed with command');
 	    return undef;
 	} 
     }
@@ -1133,9 +1133,16 @@ sub DoSendMessage {
     chomp $rcpt; chomp $chksum; chomp $from;
 
     do_log('info', "Processing web message for %s", $rcpt);
+    
+    my $string = $msg->as_string;
+    my $msg_id = $hdr->get('Message-ID');
+    my $sender = $hdr->get('From');
 
     unless ($chksum eq &tools::sympa_checksum($rcpt)) {
-	&do_log('notice', 'Message ignored because incorrect checksum');
+	&do_log('err', 'sympa::DoSendMessage(): message ignored because incorrect checksum');
+	&tools::reject_report_msg('intern','Message ignored because incorrect checksum',$sender,
+			  {'msg_id' => $msg_id},
+			  $robot,$string,'');
 	return undef ;
     }
 
@@ -1145,12 +1152,11 @@ sub DoSendMessage {
     
     ## Multiple recepients
     my @rcpts = split /,/,$rcpt;
-    
-
-    my $string = $msg->as_string;
-    
+   
     unless (&mail::mail_forward($msg,$from,\@rcpts,$robot)) {
-	&do_log('err',"Impossible to forward mail from $from");
+	&do_log('err',"sympa::DoSendMessage(): Impossible to forward mail from $from");
+	&tools::reject_report_msg('intern','Impossible to forward a message pushed in spool by another process than sympa.pl.',$sender,
+			  {'msg_id' => $msg_id},$robot,$string,'');
 	return undef;
     }
 
@@ -1181,7 +1187,7 @@ sub DoForward {
 
     my $hdr = $msg->head;
     my $messageid = $hdr->get('Message-Id');
-
+    my $msg_string = $msg->as_string;
     ##  Search for the list
     my ($list, $admin, $host, $recepient, $priority);
 
@@ -1191,7 +1197,17 @@ sub DoForward {
 	$priority = 0;
     }else {
 	unless ($list = new List ($name)) {
-	    do_log('notice', "Message for %s-%s ignored, unknown list %s",$name, $function, $name );
+	    &do_log('notice', "Message for %s-%s ignored, unknown list %s",$name, $function, $name );
+	    my $sender = chomp($hdr->get('From'));
+	    my $sympa_email = &Conf::get_robot_conf($robot, 'sympa');
+	    unless (&List::send_global_file('list_unknown', $sender, $robot,
+					    {'list' => $name,
+					     'date' => &POSIX::strftime("%d %b %Y  %H:%M", localtime(time)),
+					     'boundary' => $sympa_email.time,
+					     'header' => $hdr->as_string()
+					     })) {
+		&do_log('notice',"Unable to send template 'list_unknown' to $sender");
+	    }
 	    return undef;
 	}
 	
@@ -1223,20 +1239,34 @@ sub DoForward {
     }elsif ($function eq "editor") {
 	@rcpt = $list->get_editors_email();
 
-	do_log('notice', 'Warning : no owner and editor defined or all of them use nomail option in list %s', $name ) 
+	&do_log('notice', 'Warning : no owner and editor defined or all of them use nomail option in list %s', $name ) 
 	    unless (@rcpt);
     }
     
     if ($#rcpt < 0) {
-	do_log('notice', "Message for %s-%s ignored, %s undefined in list %s", $name, $function, $function, $name);
+	&do_log('err', "sympa::DoForward(): Message for %s-%s ignored, %s undefined in list %s", $name, $function, $function, $name);
+	my $string = sprintf 'Impossible to forward a message to %s-%s : undefined in this list',$name,$function;
+	my $sender = $hdr->get('From');
+	&tools::reject_report_msg('intern',$string,$sender,
+			  {'msg_id' => $messageid,
+			   'entry' => 'forward',
+			   'function' => $function}
+			  ,$robot,$msg_string,$list);
 	return undef;
-    }
+   }
    
     my $rc;
     my $msg_copy = $msg->dup;
 
     unless (&mail::mail_forward($msg,&Conf::get_robot_conf($robot, 'request'),\@rcpt,$robot)) {
 	&do_log('err',"Impossible to forward mail for $name-$function  ");
+	my $string = sprintf 'Impossible to forward a message for %s-%s',$name,$function;
+	my $sender = $hdr->get('From');
+	&tools::reject_report_msg('intern',$string,$sender,
+			  {'msg_id' => $messageid,
+			   'entry' => 'forward',
+			   'function' => $function}
+			  ,$robot,$msg_string,$list);
 	return undef;
     }
 
@@ -1268,6 +1298,7 @@ sub DoMessage{
     my $hdr = $message->{'msg'}->head;
     
     my $messageid = $hdr->get('Message-Id');
+    my $msg_string = $message->{'msg'}->as_string;
     
     my $sender = $message->{'sender'};
     
@@ -1307,7 +1338,7 @@ sub DoMessage{
     }
 	
     if ($msgid_table{$listname}{$messageid}) {
-	do_log('notice', 'Found known Message-ID, ignoring message which would cause a loop');
+	&do_log('notice', 'Found known Message-ID, ignoring message which would cause a loop');
 	return undef;
     }
 	
@@ -1315,36 +1346,35 @@ sub DoMessage{
     if ( &Conf::get_robot_conf($robot,'misaddressed_commands') =~ /reject/i) {
 	## Check the message for commands and catch them.
 	if (&tools::checkcommand($message->{'msg'}, $sender, $robot)) {
-	    &do_log('notice', 'Found command in message, ignoring message');
+	    &do_log('info', 'sympa::DoMessage(): Found command in message, ignoring message');
+	    &tools::reject_report_msg('user','routing_error',$sender,{},$robot,$msg_string,$list);
 	    return undef;
 	}
     }
 	
     my $admin = $list->{'admin'};
-    return undef unless $admin;
+    unless ($admin) {
+	&do_log('err', 'sympa::DoMessage(): list config is undefined');
+	&tools::reject_report_msg('intern','',$sender,{'msg'=>$messageid},$robot,$msg_string,$list);
+	return undef;
+  }
     
     my $customheader = $admin->{'custom_header'};
 #    $host = $admin->{'host'} if ($admin->{'host'});
 
     ## Check if the message is a return receipt
     if ($hdr->get('multipart/report')) {
-	do_log('notice', 'Message for %s from %s ignored because it is a report', $listname, $sender);
+	&do_log('notice', 'Message for %s from %s ignored because it is a report', $listname, $sender);
 	return undef;
     }
     
     ## Check if the message is too large
     my $max_size = $list->get_max_size() ||  &Conf::get_robot_conf($robot,'max_size');
     if ($max_size && $message->{'size'} > $max_size) {
-	&do_log('notice', 'Message for %s from %s rejected because too large (%d > %d)', $listname, $sender, $message->{'size'}, $max_size);
-	
-	unless ($list->send_file('message_report',$sender,$robot,{'to' => $sender,
-								  'type' => 'message_too_large',
-								  'msg' => $message->{'msg'}->as_string})) {
-	    &do_log('notice',"Unable to send template 'message_report' to $sender");
-	}
-	
+	&do_log('info', 'sympa::DoMessage(): Message for %s from %s rejected because too large (%d > %d)', $listname, $sender, $message->{'size'}, $max_size);
+	&tools::reject_report_msg('user','message_too_large',$sender,{},$robot,$msg_string,$list);
 	return undef;
-    }
+   }
     
     my $rc;
 	
@@ -1390,9 +1420,15 @@ sub DoMessage{
 	$result = &List::request_action ('send', 'smtp',$robot,$context);
 	$action = $result->{'action'} if (ref($result) eq 'HASH');
     } 
-	
-    return undef unless (defined $action);
 
+    unless (defined $action) {
+	&do_log('err', 'sympa::DoMessage(): message (%s) ignored because unable to evaluate scenario "send"for list %s',$messageid,$listname);
+	&tools::reject_report_msg('intern','Message ignored because scenario "send" cannot be evaluated',$sender,
+			  {'msg_id' => $messageid},
+			  $robot,$msg_string,$list);
+	return undef ;
+    }
+	
     ## message topic context	
     if (($action =~ /^do_it/) && ($context->{'topic_needed'})) {
 	$action = "editorkey";
@@ -1408,67 +1444,86 @@ sub DoMessage{
 	    $msgid_table{$listname}{$messageid}++ if ($messageid);
 	    
 	    unless (defined($numsmtp)) {
-		do_log('info','Unable to send message to list %s', $listname);
+		&do_log('err','sympa::DoMessage(): Unable to send message to list %s', $listname);
+		&tools::reject_report_msg('intern','',$sender,{'msg_id' => $messageid},$robot,$msg_string,$list);
 		return undef;
 	    }
-	    
-	    do_log('info', 'Message for %s from %s accepted (%d seconds, %d sessions), message-id=%s, size=%d', $listname, $sender, time - $start_time, $numsmtp, $messageid, $message->{'size'});
+	    &do_log('info', 'Message for %s from %s accepted (%d seconds, %d sessions), message-id=%s, size=%d', $listname, $sender, time - $start_time, $numsmtp, $messageid, $message->{'size'});
 	    return 1;
+
 	}else{   
 	    # this message is to be distributed but this daemon is dedicated to commands -> move it to distribution spool
-	    return undef unless (&tools::move_message($message->{'filename'},$listname,$robot)) ;	    
-	    do_log('info', 'Message for %s from %s moved in spool %s for distribution message-id=%s', $listname, $sender, $Conf{'queuedistribute'},$messageid);
+	    unless (&tools::move_message($message->{'filename'},$listname,$robot)) {
+		&do_log('err','sympa::DoMessage(): Unable to move in spool for distribution message to list %s (daemon_usage = command)', $listname);
+		&tools::reject_report_msg('intern','',$sender,{'msg_id' => $messageid},$robot,$msg_string,$list);
+		return undef;
+	    }
+	    &do_log('info', 'Message for %s from %s moved in spool %s for distribution message-id=%s', $listname, $sender, $Conf{'queuedistribute'},$messageid);
 	    return 1;
 	}
 	
     }elsif($action =~ /^request_auth/){
     	my $key = $list->send_auth($message);
-	do_log('notice', 'Message for %s from %s kept for authentication with key %s', $listname, $sender, $key);
+
+	unless (defined $key) {
+	    &do_log('err','sympa::DoMessage(): Calling to send_auth function failed for user %s in list %s', $sender, $list->{'name'});
+	    &tools::reject_report_msg('intern','The request authentication sending failed',$sender,{'msg_id' => $messageid},$robot,$msg_string,$list);
+	    return undef
+	}
+	&do_log('notice', 'Message for %s from %s kept for authentication with key %s', $listname, $sender, $key);
 	return 1;
     }elsif($action =~ /^editorkey(\s?,\s?(quiet))?/){
 	my $key = $list->send_to_editor('md5',$message);
-	do_log('info', 'Key %s for list %s from %s sent to editors, %s', $key, $listname, $sender, $message->{'filename'});
-	
-	unless ($2 eq 'quiet') {
-	    unless ($list->send_file('message_report',$sender,$robot,{'to' => $sender,
-								      'type' => 'moderating_message'})) {
-		&do_log('notice',"Unable to send template 'message_report' to $sender");
-	    }
+
+	unless (defined $key) {
+	    &do_log('err','sympa::DoMessage(): Calling to send_to_editor() function failed for user %s in list %s', $sender, $list->{'name'});
+	    &tools::reject_report_msg('intern','The request moderation sending to moderator failed.',$sender,{'msg_id' => $messageid},$robot,$msg_string,$list);
+	    return undef
 	}
 
-#	$list->send_notify_to_user('moderating_message',$sender,{}) unless ($2 eq 'quiet');
+	&do_log('info', 'Key %s for list %s from %s sent to editors, %s', $key, $listname, $sender, $message->{'filename'});
+	
+	unless ($2 eq 'quiet') {
+	    unless (&tools::notice_report_msg('moderating_message',$sender,{},$robot,$list)) {
+		&do_log('notice',"sympa::DoMessage(): Unable to send template 'message_report', entry 'moderating_message' to $sender");
+	    }
+	}
 	return 1;
     }elsif($action =~ /^editor(\s?,\s?(quiet))?/){
 	my $key = $list->send_to_editor('smtp', $message);
-	do_log('info', 'Message for %s from %s sent to editors', $listname, $sender);
+
+	unless (defined $key) {
+	    &do_log('err','sympa::DoMessage(): Calling to send_to_editor() function failed for user %s in list %s', $sender, $list->{'name'});
+	    &tools::reject_report_msg('intern','The request moderation sending to moderator failed.',$sender,{'msg_id' => $messageid},$robot,$msg_string,$list);
+	    return undef
+	}
+
+	&do_log('info', 'Message for %s from %s sent to editors', $listname, $sender);
 	
 	unless ($2 eq 'quiet') {
-	    unless ($list->send_file('message_report',$sender,$robot,{'to' => $sender,
-								      'type' => 'moderating_message'})) {
-		&do_log('notice',"Unable to send template 'message_report' to $sender");
+	    unless (&tools::notice_report_msg('moderating_message',$sender,{},$robot,$list)) {
+		&do_log('notice',"sympa::DoMessage(): Unable to send template 'message_report', type 'success', entry 'moderating_message' to $sender");
 	    }
 	}
-	
-#	$list->send_notify_to_user('moderating_message',$sender,{}) unless ($2 eq 'quiet');
 	return 1;
     }elsif($action =~ /^reject(,(quiet))?/) {
+
 	&do_log('notice', 'Message for %s from %s rejected(%s) because sender not allowed', $listname, $sender, $result->{'tt2'});
 	unless ($2 eq 'quiet') {
 	    if (defined $result->{'tt2'}) {
 		unless ($list->send_file($result->{'tt2'}, $sender, $robot, {})) {
-		    &do_log('notice',"Unable to send template '$result->{'tt2'}' to $sender");
+		    &do_log('notice',"sympa::DoMessage(): Unable to send template '$result->{'tt2'}' to $sender");
 		}
 	    }else {
-		unless ($list->send_file('message_report',$sender,$robot,{'to' => $sender,
-									  'type' => 'sender_not_allowed',
-									  'msg' => $message->{'msg'}->as_string})) {
-		    &do_log('notice',"Unable to send template 'message_report' to $sender");
+		unless (&tools::reject_report_msg('authorization',$result->{'reason'},$sender,{},$robot,$msg_string,$list)) {
+		    &do_log('notice',"sympa::DoMessage(): Unable to send template 'message_report', type 'authorization' to $sender");
 		}
 	    }
 	}
 	return undef;
     }else {
-	&do_log('err','Unknown action %s returned by the scenario', $action);
+	&do_log('err','sympa::DoMessage(): unknown action %s returned by the scenario "send"', $action);
+	&tools::reject_report_msg('intern','Unknown action returned by the scenario "send"',$sender,{'msg_id' => $messageid},$robot,$msg_string,$list);
 	return undef;
     }
 }
@@ -1706,6 +1761,17 @@ sub CleanSpool {
 
     return 1;
 }
+
+
+
+
+
+
+
+
+
+
+
 
 1;
 
