@@ -29,6 +29,7 @@ use Log;
 use List;
 use Version;
 use Message;
+use report;
 
 use Digest::MD5;
 use Fcntl;
@@ -1808,7 +1809,7 @@ sub distribute {
     my $list = new List ($which, $robot);
     unless ($list) {
 	&do_log('info', 'DISTRIBUTE %s %s from %s refused, unknown list for robot %s', $which, $key, $sender,$robot);
-	&tools::reject_report_msg('user','list_unknown',$sender,{'listname' => $which},$robot,'','');
+	&report::reject_report_msg('user','list_unknown',$sender,{'listname' => $which},$robot,'','');
 	return 'unknown_list';
     }
 
@@ -1828,11 +1829,11 @@ sub distribute {
 
     ## Open and parse the file
     my $message = new Message($file);
-    unless (defined $message) {
+#    unless (defined $message) {
 	&do_log('err', 'Commands::distribute(): Unable to create Message object %s', $file);
-	&tools::reject_report_msg('user','unfound_message',$sender,{'listname' => $name,'key'=> $key},$robot,'',$list);
+	&report::reject_report_msg('user','unfound_message',$sender,{'listname' => $name,'key'=> $key},$robot,'',$list);
 	return 'msg_not_found';
-    }
+#    }
 
     my $msg = $message->{'msg'};
     my $hdr= $msg->head;
@@ -1855,7 +1856,7 @@ sub distribute {
 	my $numsmtp =$list->distribute_msg($message);
 	unless (defined $numsmtp) {
 	    &do_log('err','Commands::distribute(): Unable to send message to list %s', $name);
-	    &tools::reject_report_msg('intern','',$sender,{'msg_id' => $msg_id},$robot,$msg_string,$list);
+	    &report::reject_report_msg('intern','',$sender,{'msg_id' => $msg_id},$robot,$msg_string,$list);
 	    return undef;
 	}
 	unless ($numsmtp) {
@@ -1864,7 +1865,7 @@ sub distribute {
 	&do_log('info', 'Message for %s from %s accepted (%d seconds, %d sessions), size=%d', $which, $sender, time - $start_time, $numsmtp, $bytes);
 
 	unless ($quiet || ($action =~ /quiet/i )) {
-	    unless (&tools::notice_report_msg('message_distributed',$sender,{'listname' => $which,'key' => $key},$robot,$list)) {
+	    unless (&report::notice_report_msg('message_distributed',$sender,{'listname' => $which,'key' => $key},$robot,$list)) {
 		&do_log('notice',"Commands::distribute(): Unable to send template 'message_report', entry 'message_distributed' to $sender");
 	    }
 	}
@@ -1875,7 +1876,7 @@ sub distribute {
 	# this message is to be distributed but this daemon is dedicated to commands -> move it to distribution spool
 	unless (&tools::move_message($file,$name,$robot)) {
 	    &do_log('err','COmmands::distribute(): Unable to move in spool for distribution message to list %s (daemon_usage = command)', $listname);
-	    &tools::reject_report_msg('intern','',$sender,{'msg_id' => $msg_id},$robot,$msg_string,$list);
+	    &report::reject_report_msg('intern','',$sender,{'msg_id' => $msg_id},$robot,$msg_string,$list);
 	    return undef;
 	}
 	&do_log('info', 'Message for %s from %s moved in spool %s for distribution message-id=%s', $name, $sender, $Conf{'queuedistribute'},$hdr->get('Message-Id'));
@@ -1915,7 +1916,7 @@ sub confirm {
     unless (opendir DIR, $queueauth ) {
         &do_log('info', 'Commands::confirm(): WARNING unable to read %s directory', $queueauth);
 	my $string = sprintf 'Unable to open directory %s to confirm message with key %s',$queueauth,$key;
-	&tools::reject_report_msg('intern',$string,$sender,{},$robot,'',$list);
+	&report::reject_report_msg('intern',$string,$sender,{},$robot,'',$list);
 	return undef;
     }
 
@@ -1929,7 +1930,7 @@ sub confirm {
 
     unless ($file && (-r $file)) {
 	&do_log('info', 'CONFIRM %s from %s refused, auth failed', $key,$sender);
-	&tools::reject_report_msg('user','unfound_file_message',$sender,{'key'=> $key},$robot,'','');
+	&report::reject_report_msg('user','unfound_file_message',$sender,{'key'=> $key},$robot,'','');
 	return 'wrong_auth';
     }
 
@@ -1937,7 +1938,7 @@ sub confirm {
 
     unless (defined $message) {
 	&do_log('err', 'Commands::confirm(): Unable to create Message object %s', $file);
-	&tools::reject_report_msg('user','wrong_format_message',$sender,{'key'=> $key},$robot,'','');
+	&report::reject_report_msg('user','wrong_format_message',$sender,{'key'=> $key},$robot,'','');
 	return 'msg_not_found';
     }
 
@@ -1964,7 +1965,7 @@ sub confirm {
 
     unless (defined $action) {
 	&do_log('err', 'Commands::confirm(): message (%s) ignored because unable to evaluate scenario for list %s',$messageid,$name);
-	&tools::reject_report_msg('intern','Message ignored because scenario "send" cannot be evaluated',$sender,{'msg_id' => $msgid},
+	&report::reject_report_msg('intern','Message ignored because scenario "send" cannot be evaluated',$sender,{'msg_id' => $msgid},
 				  $robot,$msg_string,$list);
 	return undef ;
     }
@@ -1980,14 +1981,14 @@ sub confirm {
 
 	unless (defined $key) {
 	    &do_log('err','Commands::confirm(): Calling to send_to_editor() function failed for user %s in list %s', $sender, $name);
-	    &tools::reject_report_msg('intern','The request moderation sending to moderator failed.',$sender,{'msg_id' => $msgid},$robot,$msg_string,$list);
+	    &report::reject_report_msg('intern','The request moderation sending to moderator failed.',$sender,{'msg_id' => $msgid},$robot,$msg_string,$list);
 	    return undef
 	}
 
 	&do_log('info', 'Message with key %s for list %s from %s sent to editors', $key, $name, $sender);
 
 	unless ($2 eq 'quiet') {
-	    unless (&tools::notice_report_msg('moderating_message',$sender,{},$robot,$list)) {
+	    unless (&report::notice_report_msg('moderating_message',$sender,{},$robot,$list)) {
 		&do_log('notice',"Commands::confirm(): Unable to send template 'message_report', entry 'moderating_message' to $sender");
 	    }
 	}
@@ -1998,14 +1999,14 @@ sub confirm {
 
 	unless (defined $key) {
 	    &do_log('err','Commands::confirm(): Calling to send_to_editor() function failed for user %s in list %s', $sender, $name);
-	    &tools::reject_report_msg('intern','The request moderation sending to moderator failed.',$sender,{'msg_id' => $msgid},$robot,$msg_string,$list);
+	    &report::reject_report_msg('intern','The request moderation sending to moderator failed.',$sender,{'msg_id' => $msgid},$robot,$msg_string,$list);
 	    return undef
 	}
 
 	&do_log('info', 'Message with key %s for list %s from %s sent to editors', $name, $sender);
 	
 	unless ($2 eq 'quiet') {
-	    unless (&tools::notice_report_msg('moderating_message',$sender,{},$robot,$list)) {
+	    unless (&report::notice_report_msg('moderating_message',$sender,{},$robot,$list)) {
 		&do_log('notice',"Commands::confirm(): Unable to send template 'message_report', type 'success', entry 'moderating_message' to $sender");
 	    }
 	}
@@ -2019,8 +2020,8 @@ sub confirm {
 		    &do_log('notice',"Commands::confirm(): Unable to send template '$result->{'tt2'}' to $sender");
 		}
 	    }else {
-		unless (&tools::reject_report_msg('authorization',$result->{'reason'},$sender,{},$robot,$msg_string,$list)) {
-		    &do_log('notice',"Commands::confirm(): Unable to send template 'message_report', type 'authorization' to $sender");
+		unless (&report::reject_report_msg('auth',$result->{'reason'},$sender,{},$robot,$msg_string,$list)) {
+		    &do_log('notice',"Commands::confirm(): Unable to send template 'message_report', type 'auth' to $sender");
 		}
 	    }
 	}
@@ -2036,12 +2037,12 @@ sub confirm {
 
 	    unless (defined $numsmtp) {
 		&do_log('err','Commands::confirm(): Unable to send message to list %s', $list->{'name'});
-		&tools::reject_report_msg('intern','',$sender,{'msg_id' => $msgid},$robot,$msg_string,$list);
+		&report::reject_report_msg('intern','',$sender,{'msg_id' => $msgid},$robot,$msg_string,$list);
 		return undef;
 	    }
  
 	    unless ($quiet || ($action =~ /quiet/i )) {
-		unless (&tools::notice_report_msg('message_distributed',$sender,{'listname' => $name,'key' => $key},$robot,$list)) {
+		unless (&report::notice_report_msg('message_distributed',$sender,{'listname' => $name,'key' => $key},$robot,$list)) {
 		    &do_log('notice',"Commands::confirm(): Unable to send template 'message_report', entry 'message_distributed' to $sender");
 		}
 	    }
@@ -2051,7 +2052,7 @@ sub confirm {
 	    # this message is to be distributed but this daemon is dedicated to commands -> move it to distribution spool
 	    unless (&tools::move_message($file,$name,$robot)){
 		&do_log('err','Commands::confirm(): Unable to move in spool for distribution message to list %s (daemon_usage = command)', $listname);
-		&tools::reject_report_msg('intern','',$sender,{'msg_id' => $msgid},$robot,$msg_string,$list);
+		&report::reject_report_msg('intern','',$sender,{'msg_id' => $msgid},$robot,$msg_string,$list);
 		return undef;
 	    }
 	    
@@ -2092,7 +2093,7 @@ sub reject {
 
     unless ($list) {
 	&do_log('info', 'REJECT %s %s from %s refused, unknown list for robot %s', $which, $key, $sender,$robot);
-	&tools::reject_report_msg('user','list_unknown',$sender,{'listname' => $which},$robot,'','');
+	&report::reject_report_msg('user','list_unknown',$sender,{'listname' => $which},$robot,'','');
 	return 'unknown_list';
     }
 
@@ -2108,7 +2109,7 @@ sub reject {
 
     unless ($msg = $parser->read(\*IN)) {
 	&do_log('notice', 'Commands::reject(): Unable to parse message');
-	&tools::reject_report_msg('intern','',$sender,{},$robot,'',$list);
+	&report::reject_report_msg('intern','',$sender,{},$robot,'',$list);
 	return undef;
     }
 
@@ -2122,19 +2123,19 @@ sub reject {
     ## Open the file
     if (!open(IN, $file)) {
 	&do_log('info', 'REJECT %s %s from %s refused, auth failed', $which, $key, $sender);
-	&tools::reject_report_msg('user','unfound_message',$sender,{'listname' => $name,'key'=> $key},$robot,'',$list);
+	&report::reject_report_msg('user','unfound_message',$sender,{'listname' => $name,'key'=> $key},$robot,'',$list);
 	return 'wrong_auth';
     }
     &do_log('debug2', 'message to be rejected by %s',$sender);
 
-    &tools::reject_report_msg('user','message_rejected',$sender,{'key'=> $key,'listname' => $name},$robot,'',$list);
+    &report::reject_report_msg('user','message_rejected',$sender,{'key'=> $key,'listname' => $name},$robot,'',$list);
     
     my $message;
     my $parser = new MIME::Parser;
     $parser->output_to_core(1);
     unless ($message = $parser->read(\*IN)) {
 	&do_log('notice', 'Commands::reject(): Unable to parse message');
-	&tools::reject_report_msg('intern','',$sender,{},$robot,'',$list);
+	&report::reject_report_msg('intern','',$sender,{},$robot,'',$list);
 	return undef;
     }
     
