@@ -944,11 +944,9 @@ sub DoFile {
 	&do_log('notice','Ignoring message which would cause a loop, sent by %s', $sender);
 	return undef;
     }
-       
+	
     ## Initialize command report
-    undef @Commands::errors_report;
-    undef @Commands::notices_report;
-    undef @Commands::globals_report;
+    &report::init_report_cmd();
 	
     ## Q- and B-decode subject
     my $subject_field = $message->{'decoded_subject'};
@@ -1065,7 +1063,7 @@ sub DoFile {
     
 
     ## Mail back the result.
-    if (@Commands::errors_report || @Commands::notices_report || @Commands::globals_report) {
+    if (&report::is_there_any_report_cmd()) {
 
 	## Loop prevention
 
@@ -1098,21 +1096,8 @@ sub DoFile {
 	    $loop_info{$sender}{'count'} *=  &Conf::get_robot_conf($robot,'loop_command_decrease_factor');
 	}
 
-	## Prepare the reply message
-	
-	my $data = { 'to' => $sender,
-		     'globals' => \@Commands::globals_report,
-		     'nb_globals' => $#Commands::globals_report +1,
-		     'notices' => \@Commands::notices_report,
-		     'nb_notices' => $#Commands::notices_report + 1,
-		     'errors' => \@Commands::errors_report,
-		     'nb_errors' => $#Commands::errors_report + 1};
-#####################################
-#####################################
-
-	unless (&List::send_global_file('command_report',$sender,$robot,$data)) {
-	    &do_log('notice',"Unable to send template 'command_report' to $sender");
-	}
+	## Send the reply message
+	&report::send_report_cmd($sender,$robot);
 
     }
     
@@ -1439,6 +1424,7 @@ sub DoMessage{
 	return undef ;
     }
 	
+
     ## message topic context	
     if (($action =~ /^do_it/) && ($context->{'topic_needed'})) {
 	$action = "editorkey";

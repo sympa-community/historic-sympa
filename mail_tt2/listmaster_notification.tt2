@@ -227,10 +227,10 @@ Content-Type: text/plain; charset=[%|loc%]_charset_[%END%];
 Content-Transfer-Encoding: [%|loc%]_encoding_[%END%]
 
 [% IF error -%]
-[%|loc(who,action,msg_id,listname,conf.host,error)%] User %1 has encountered an internal server error
-(%2[% IF msg_id %] - MSG_ID : %3[%END%][% IF listname %] - LIST : %4@%5[%END%]) : 
+[%|loc(who,action,msg_id,cmd,listname,conf.host,error)%] User %1 has encountered an internal server error
+(%2[% IF msg_id %] - MSG_ID : %3[%END%][% IF cmd %] - COMMAND : %4[%END%][% IF listname %] - LIST : %5@%6[%END%]) : 
 
-   %6
+   %7
 
 See logs for more details.
 [%END%]

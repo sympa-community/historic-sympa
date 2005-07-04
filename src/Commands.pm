@@ -78,10 +78,6 @@ my $auth;
 # boolean says if quiet is in the cmd line
 my $quiet;
 
-## report message
-local @errors_report;
-local @notices_report;
-local @global_report;
 
 ##############################################
 #  parse
@@ -2395,82 +2391,7 @@ sub get_auth_method {
     return $auth_method;
 }
 
-#### Functions for notices/errors/globals report command : ###########
 
-#########################################################
-# error_report_cmd
-#########################################################
-#  puts errors reports of processed commands in 
-#  @errors_report used to send message with template 
-#  command_report
-# 
-# IN : -$cmd : command line: command and args
-#      -$type : type of error, to select string in
-#               command_report.tt2
-#      -$data : hash of vars for command_report.tt2
-#
-# OUT :  
-#      
-######################################################### 
-sub error_report_cmd {
-    my ($cmd,$type,$data) = @_;
-
-    $data ||= {};
-    $data->{'cmd'} = $cmd;
-    $data->{'type'} = $type;
-
-    push @errors_report, $data;
-}
-
-#########################################################
-# notice_report_cmd
-#########################################################
-#  puts notices reports of processed commands in 
-#  @notices_report used to send message with template 
-#  command_report
-# 
-# IN : -$cmd : string command : command and args
-#      -$type : type of notice, to select string in
-#               command_report.tt2
-#      -$data : hash of vars for command_report.tt2
-#
-# OUT :  
-#      
-######################################################### 
-sub notice_report_cmd {
-    my ($cmd,$type,$data) = @_;
-
-    $data ||= {};
-    $data->{'cmd'} = $cmd;
-    $data->{'type'} = $type;
-
-    push @notices_report, $data;
-}
-
-#########################################################
-# global_report_cmd
-#########################################################
-#  puts global reports of processed commands in 
-#  @global_report used to send message with template 
-#  command_report
-# 
-# IN : -$cmd : string command : command and args
-#      -$type : type of notice, to select string in
-#               command_report.tt2
-#      -$data : HASH of vars for command_report.tt2
-#
-# OUT :  
-#      
-######################################################### 
-sub global_report_cmd {
-    my ($cmd,$type,$data) = @_;
-
-    $data ||= {};
-    $data->{'cmd'} = $cmd;
-    $data->{'type'} = $type;
-
-    push @globals_report, $data;
-}
 # end of package
 1;
 
