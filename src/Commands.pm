@@ -549,7 +549,7 @@ sub review {
 
     my $action = &List::request_action ('review',$auth_method,$robot,
                                      {'listname' => $listname,
-                                      'sender' => $sender});
+				      'sender' => $sender});
 
     return undef
 	unless (defined $action);

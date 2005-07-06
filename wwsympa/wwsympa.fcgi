@@ -2739,7 +2739,7 @@ sub do_remindpasswd {
      my $list;
      unless ($list = new List($param->{'list'},$robot)) {
 	 &error_message('failed');
-	 &do_log('info', 'do_subscriber_coount : impossible to load list %s',$param->{'list'});
+	 &do_log('info', 'do_subscriber_count : impossible to load list %s',$param->{'list'});
 	 return undef;
      }
 
@@ -3580,8 +3580,7 @@ sub do_remindpasswd {
 
 	 if ($sig_is =~ /notify/) {
 	     unless ($list->send_notify_to_owner('notice',{'who' => $param->{'user'}{'email'},
-					  'gecos' => '', 
-							   'command' => 'signoff'})) {
+					  'gecos' => '', 'command' => 'signoff'})) {
 		 &wwslog('notice',"Unable to send notify 'notice' to $list->{'name'} list owner");
 	     }
 	 }
@@ -3944,7 +3943,7 @@ sub do_copy_template  {
 }
 
 ## online template edition
-sub do_edit_template  {
+sub do_editemplate  {
     &wwslog('info', 'do_edit_template');
 
     my $type =  $param->{'webormail'} = $in{'webormail'};
@@ -4698,50 +4697,63 @@ sub do_skinsedit {
 ####################################################
 #  Moderation of messages : rejects messages and notifies 
 #  their senders
+#  Edits the content of the mail of reject and permits 
+#  to personalize it.
 # 
 # IN : -
 #
-# OUT : 'loginrequest' | 'modindex'
+# OUT : 'loginrequest' | 'modindex' | '1'
 #      
 ####################################################
  sub do_reject {
      &wwslog('info', 'do_reject()');
      my ($msg, $file);
-
+     
      unless ($param->{'list'}) {
 	 &error_message('missing_arg', {'argument' => 'list'});
 	 &wwslog('err','do_reject: no list');
 	 return undef;
      }
-
+     
      unless ($param->{'user'}{'email'}) {
 	 &error_message('no_user');
 	 &wwslog('err','do_reject: no user');
 	 return 'loginrequest';
      }
-
+     
      unless ($list->am_i('editor', $param->{'user'}{'email'})) {
 	 &error_message('may_not');
 	 &wwslog('err','do_reject: %s not editor', $param->{'user'}{'email'});
 	 return undef;
      }
-
+     
      unless ($in{'id'}) {
 	 &error_message('missing_arg', {'argument' => 'msgid'});
 	 &wwslog('err','do_reject: no msgid');
 	 return undef;
      }
 
-     foreach my $id (split /\0/, $in{'id'}) {
+     my @ids = split /\0/, $in{'id'};
 
-	 $file = "$Conf{'queuemod'}/$list->{'name'}_$id";
+     $param->{'ids'} = \@ids;
 
+     my $i = 0;
+     &wwslog('err','do_reject: ID total %s', join(',',@ids));
+     foreach my $id (@ids) {
+	 $i++;
+	 &wwslog('err','do_reject: i= %s, ID = %s,',$i,$id);
+	 $file = "$Conf{'queuemod'}/$list->{'name'}_$id"; 
 	 ## Open the file
 	 if (!open(IN, $file)) {
 	     &error_message('failed_someone_else_did_it');
-	     &wwslog('err','do_reject: Unable to open %s', $file);
+	     &wwslog('err','do_reject: Unable to open %s: %s', $file,$!);
 	     return undef;
 	 }
+	 
+	 my $rejected_sender;
+	 my %context;
+	 my %headers;
+	 
 	 unless ($in{'quiet'}) {
 	     my $msg;
 	     my $parser = new MIME::Parser;
@@ -4752,29 +4764,75 @@ sub do_skinsedit {
 	     }
 	     
 	     my @sender_hdr = Mail::Address->parse($msg->head->get('From'));
+	     
 	     unless  ($#sender_hdr == -1) {
-		 my $rejected_sender = $sender_hdr[0]->address;
-		 my %context;
+		 $rejected_sender = $sender_hdr[0]->address;
 		 $context{'subject'} = &MIME::Words::decode_mimewords($msg->head->get('subject'));
 		 $context{'rejected_by'} = $param->{'user'}{'email'};
-		 unless ($list->send_file('reject', $rejected_sender, $robot, \%context)) {
-		     &wwslog('notice',"Unable to send template 'reject' to $rejected_sender");
+	     }
+	 
+	     my $output;
+
+	     unless (&List::get_parsed_file(\$output, 'reject', $rejected_sender, $robot, \%context, $list)) {
+		 &error_message('failed');
+		 &wwslog('err','do_reject: failed to parse the template');
+		 return undef;
+	     }
+		 
+	     my @mail = split("\n",$output);
+
+	     if (! $in{'body'}) {
+		 my $find = 0;
+		 my @body;
+		 foreach my $line(@mail){ 
+		     unless ($find) {
+			 if ($line =~/^\s*$/) {
+			     $find = 1;
+			 }
+		     } else {
+			 push(@body,$line);
+		     }
+		 }	   
+		 $param->{'body'} = join("\n",@body);
+
+	     } else {
+		 my @head;
+		 foreach my $line(@mail){ 
+		     if ($line =~/^\s*$/) {
+			 last;
+		     } else {
+			 push(@head,$line);
+		     }
+		 }	   
+		 my $head = join("\n",@head);
+
+		 $context{'body'} = $in{'body'};
+		 $context{'head'} = $head;
+	
+		 unless (&mail::mail_file('', $rejected_sender, \%context, $robot,'smime')) {
+		     &error_message('failed');
+		     &wwslog('err','do_reject: failed to send mail_file');
+		     return undef;
 		 }
 	     }
 	 }
 	 close(IN);  
-
-	 unless (unlink($file)) {
-	     &error_message('failed');
-	     &wwslog('err','do_reject: failed to erase %s', $file);
-	     return undef;
+     
+	 if ($in{'body'}) {
+	     unless (unlink($file)) {
+		 &error_message('failed');
+		 &wwslog('err','do_reject: failed to erase %s', $file);
+		 return undef;
+	     }	 
 	 }
-
      }
 
-     &message('performed');
-
-     return 'modindex';
+     if ($in{'quiet'} || $in{'body'}) {
+	 &message('performed');
+         return 'modindex';
+     } else {
+	 return 1;
+     }
  }
 
 ####################################################
@@ -4791,35 +4849,36 @@ sub do_skinsedit {
  sub do_distribute {
      &wwslog('info', 'do_distribute()');
      my ($msg, $file);
-
+     
      unless ($param->{'list'}) {
 	 &error_message('missing_arg', {'argument' => 'list'});
 	 &wwslog('err','do_distribute: no list');
 	 return undef;
      }
-
+     
      unless ($param->{'user'}{'email'}) {
 	 &error_message('no_user');
 	 &wwslog('err','do_distribute: no user');
 	 return 'loginrequest';
      }
-
+     
      unless ($list->am_i('editor', $param->{'user'}{'email'})) {
 	 &error_message('may_not');
 	 &wwslog('err','do_distribute: %s not editor', $param->{'user'}{'email'});
 	 return undef;
      }
-
+     
      unless ($in{'id'}) {
 	 &error_message('missing_arg', {'argument' => 'msgid'});
 	 &wwslog('err','do_distribute: no msgid');
 	 return undef;
      }
-
+     
      my $time = time;
+     
      my $data = {'headers' => {'Message-ID' => <"$time"."\@wwsympa">},
 		 'from'=> $param->{'user'}{'email'}};
-
+     
      ## msg topics
      my @msg_topics;
      foreach my $msg_topic (@{$list->{'admin'}{'msg_topic'}}) {
@@ -4829,24 +4888,24 @@ sub do_skinsedit {
 	 }
      }	 
      my $list_topics = join(',',@msg_topics);
-    
+     
      if (!$list_topics && $list->is_msg_topic_tagging_required()) {
 	 &error_message('msg_topic_missing');
 	 &wwslog('info','do_distribute: message(s) without topic topic but in a required list');
 	 return undef;
      } 
-
-
+     
+     
      ## messages
      foreach my $id (split /\0/, $in{'id'}) {
 	 my $mail_command = sprintf ("QUIET DISTRIBUTE %s %s\n",$list->{'name'},$id);
 	 $data->{'body'} = $mail_command;
-
+	 
 	 $file = "$Conf{'queuemod'}/$list->{'name'}_$id";
-
+	 
 	 ## TAG 
 	 if ($list_topics) {
-
+	     
 	     my $parser = new MIME::Parser;
 	     $parser->output_to_core(1);
 	     
@@ -4855,27 +4914,27 @@ sub do_skinsedit {
 		 &error_message('failed');
 		 return undef;
 	     }
-
+	     
 	     my $msg = $parser->parse(\*FILE);
 	     my $head = $msg->head();
 	     my $filetopic = $list->tag_topic(&tools::clean_msg_id($head->get('Message-Id')),$list_topics,'editor');
 	 }
-
-
+	 
+	 
 	 unless (&mail::mail_file('',&Conf::get_robot_conf($robot, 'sympa'),$data,$robot)) {
 	     &error_message('failed');
 	     &wwslog('err','do_distribute: failed to send message for file %s', $file);
 	     return undef;
 	 }
-
+	 
 	 unless (rename($file,"$file.distribute")) {
 	     &error_message('failed');
 	     &wwslog('err','do_distribute: failed to rename %s', $file);
 	 }
      }
-
+     
      &message('performed_soon');
-
+     
      return 'modindex';
  }
 
@@ -4893,39 +4952,39 @@ sub do_skinsedit {
  sub do_viewmod {
      &wwslog('info', 'do_viewmod(%s)', $in{'id'});
      my $msg;
-
+     
      unless ($param->{'list'}) {
 	 &error_message('missing_arg', {'argument' => 'list'});
 	 &wwslog('err','do_viewmod: no list');
 	 return undef;
      }
-
+     
      unless ($param->{'user'}{'email'}) {
 	 &error_message('no_user');
 	 &wwslog('err','do_viewmod: no user');
 	 return 'loginrequest';
      }
-
+     
      unless ($in{'id'}) {
 	 &error_message('missing_arg', {'argument' => 'msgid'});
 	 &wwslog('err','do_viewmod: no msgid');
 	 return undef;
      }
-
+     
      unless ($list->am_i('editor', $param->{'user'}{'email'})) {
 	 &error_message('may_not');
 	 &wwslog('err','do_viewmod: %s not editor', $param->{'user'}{'email'});
 	 return undef;
      }
-
+     
      my $tmp_dir = $Conf{'queuemod'}.'/.'.$list->{'name'}.'_'.$in{'id'};
-
+     
      unless (-d $tmp_dir) {
 	 &error_message('no_html_message_available');
 	 &wwslog('err','do_viewmod: no HTML version of the message available in %s', $tmp_dir);
 	 return undef;
      }
-
+     
      if ($in{'file'}) {
 	 $in{'file'} =~ /\.(\w+)$/;
 	 $param->{'file_extension'} = $1;
@@ -4934,14 +4993,14 @@ sub do_skinsedit {
      }else {
 	 &tt2::add_include_path("$Conf{'queuemod'}/.$list->{'name'}_$in{'id'}") ;
      }
-
+     
      $param->{'base'} = sprintf "%s/viewmod/%s/%s/", &Conf::get_robot_conf($robot, 'wwsympa_url'), $param->{'list'}, $in{'id'};
      $param->{'id'} = $in{'id'};
-
-     if ($list->is_there_msg_topic()) {
-
-	 $param->{'request_topic'} = 1;
      
+     if ($list->is_there_msg_topic()) {
+	 
+	 $param->{'request_topic'} = 1;
+	 
 	 foreach my $top (@{$list->{'admin'}{'msg_topic'}}) {
 	     if ($top->{'name'}) {
 		 push (@{$param->{'available_topics'}},$top);
@@ -4949,7 +5008,7 @@ sub do_skinsedit {
 	 }
 	 $param->{'topic_required'} = $list->is_msg_topic_tagging_required();
      }
-
+     
      return 1;
  }
 
@@ -5094,6 +5153,8 @@ sub do_skinsedit {
      }else {
 	 unless (&List::is_listmaster($param->{'user'}{'email'}),$robot) {
 	     &error_message('missing_arg', {'argument' => 'list'});
+
+
 	     &wwslog('err','do_savefile: no list');
 	     return undef;
 	 }
@@ -6405,7 +6466,7 @@ sub do_set_pending_list_request {
      my $resul = &admin::create_list_old($parameters,$in{'template'},$robot);
      unless(defined $resul) {
 	 &error_message('failed');
-	 &wwslog('info','do_create_list: unable to create list %s for %s',$in{'listname'},$param->{'user'}{'email'});
+	 &wwslog('info','do_create_list: unable to create list %s for %s',{'listname'},$param->{'user'}{'email'});
 	 return undef
      }
      
@@ -6604,7 +6665,7 @@ sub do_set_pending_list_request {
      return 1;
  }
 
- sub do_viewbounce {
+ sub doviewbounce {
      &wwslog('info', 'do_viewbounce(%s)', $in{'email'});
 
      unless ($param->{'is_owner'}) {
@@ -10027,7 +10088,7 @@ sub do_d_savefile {
 	 &wwslog('err',"do_d_savefile : Synchronization failed for $shareddir/$path");
 	 return undef;
      }
-     }
+ }
 
      # Renaming of the old file 
 ############""" pas les url ?
@@ -10322,7 +10383,7 @@ sub do_d_savefile {
 
      # message of success
      &message('upload_success', {'path' => $visible_path});
-     return 'd_editfile';
+     return 'd_editfil';
  }
 
  #*******************************************
@@ -13440,7 +13501,7 @@ sub _prepare_subscriber {
     ## Check data sources
     if ($user->{'id'}) {
 	my @s;
-	     my @ids = split /,/,$user->{'id'};
+	my @ids = split /,/,$user->{'id'};
 	foreach my $id (@ids) {
 	    unless (defined ($sources->{$id})) {
 		$sources->{$id} = $list->search_datasource($id);

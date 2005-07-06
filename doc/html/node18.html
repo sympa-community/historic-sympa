@@ -1,126 +1,6 @@
-<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2 Final//EN">
 
-<!--Converted with jLaTeX2HTML 2002-2-1 (1.70) JA patch-2.0
-patched version by:  Kenshi Muto, Debian Project.
-* modified by:  Shige TAKENO
-LaTeX2HTML 2002-2-1 (1.70),
-original version by:  Nikos Drakos, CBLU, University of Leeds
-* revised and updated by:  Marcus Hennecke, Ross Moore, Herb Swan
-* with significant contributions from:
-  Jens Lippmann, Marek Rouchal, Martin Wilck and others -->
-<HTML>
-<HEAD>
-<TITLE>17. Mailing list definition</TITLE>
-<META NAME="description" CONTENT="17. Mailing list definition">
-<META NAME="keywords" CONTENT="sympa">
-<META NAME="resource-type" CONTENT="document">
-<META NAME="distribution" CONTENT="global">
-
-<META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=iso-8859-1">
-<META NAME="Generator" CONTENT="jLaTeX2HTML v2002-2-1 JA patch-2.0">
-<META HTTP-EQUIV="Content-Style-Type" CONTENT="text/css">
-
-<LINK REL="STYLESHEET" HREF="sympa.css">
-
-<LINK REL="next" HREF="node19.html">
-<LINK REL="previous" HREF="node17.html">
-<LINK REL="up" HREF="sympa.html">
-<LINK REL="next" HREF="node19.html">
-</HEAD>
-
-<BODY TEXT="#000000" BGCOLOR="#ffffff">
-<!--Navigation Panel-->
-<A NAME="tex2html1193"
-  HREF="node19.html">
-<IMG WIDTH="37" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="next" SRC="next.png"></A> 
-<A NAME="tex2html1187"
-  HREF="sympa.html">
-<IMG WIDTH="26" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="up" SRC="up.png"></A> 
-<A NAME="tex2html1181"
-  HREF="node17.html">
-<IMG WIDTH="63" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="previous" SRC="prev.png"></A> 
-<A NAME="tex2html1189"
-  HREF="node1.html">
-<IMG WIDTH="65" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="contents" SRC="contents.png"></A> 
-<A NAME="tex2html1191"
-  HREF="node30.html">
-<IMG WIDTH="43" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="index" SRC="index.png"></A> 
-<BR>
-<B> Next:</B> <A NAME="tex2html1194"
-  HREF="node19.html">18. List creation, families and list</A>
-<B> Up:</B> <A NAME="tex2html1188"
-  HREF="sympa.html">Sympa Mailing Lists Management Software version</A>
-<B> Previous:</B> <A NAME="tex2html1182"
-  HREF="node17.html">16. Customizing Sympa/WWSympa</A>
- &nbsp; <B>  <A NAME="tex2html1190"
-  HREF="node1.html">Contents</A></B> 
- &nbsp; <B>  <A NAME="tex2html1192"
-  HREF="node30.html">Index</A></B> 
-<BR>
-<BR>
-<!--End of Navigation Panel-->
-<!--Table of Child-Links-->
-<A NAME="CHILD_LINKS"><STRONG>Subsections</STRONG></A>
-
-<UL>
-<LI><A NAME="tex2html1195"
-  HREF="node18.html#SECTION001810000000000000000">17.1 Mail aliases</A>
-<LI><A NAME="tex2html1196"
-  HREF="node18.html#SECTION001820000000000000000">17.2 List configuration file</A>
-<LI><A NAME="tex2html1197"
-  HREF="node18.html#SECTION001830000000000000000">17.3 Examples of configuration files</A>
-<LI><A NAME="tex2html1198"
-  HREF="node18.html#SECTION001840000000000000000">17.4 Subscribers file</A>
-<LI><A NAME="tex2html1199"
-  HREF="node18.html#SECTION001850000000000000000">17.5 Info file</A>
-<LI><A NAME="tex2html1200"
-  HREF="node18.html#SECTION001860000000000000000">17.6 Homepage file</A>
-<LI><A NAME="tex2html1201"
-  HREF="node18.html#SECTION001870000000000000000">17.7 Data inclusion file</A>
-<LI><A NAME="tex2html1202"
-  HREF="node18.html#SECTION001880000000000000000">17.8 List template files</A>
-<UL>
-<LI><A NAME="tex2html1203"
-  HREF="node18.html#SECTION001881000000000000000">17.8.1 welcome.tt2</A>
-<LI><A NAME="tex2html1204"
-  HREF="node18.html#SECTION001882000000000000000">17.8.2 bye.tt2</A>
-<LI><A NAME="tex2html1205"
-  HREF="node18.html#SECTION001883000000000000000">17.8.3 removed.tt2</A>
-<LI><A NAME="tex2html1206"
-  HREF="node18.html#SECTION001884000000000000000">17.8.4 reject.tt2</A>
-<LI><A NAME="tex2html1207"
-  HREF="node18.html#SECTION001885000000000000000">17.8.5 invite.tt2</A>
-<LI><A NAME="tex2html1208"
-  HREF="node18.html#SECTION001886000000000000000">17.8.6 remind.tt2</A>
-<LI><A NAME="tex2html1209"
-  HREF="node18.html#SECTION001887000000000000000">17.8.7 summary.tt2</A>
-<LI><A NAME="tex2html1210"
-  HREF="node18.html#SECTION001888000000000000000">17.8.8 list_aliases.tt2</A>
-</UL>
-<BR>
-<LI><A NAME="tex2html1211"
-  HREF="node18.html#SECTION001890000000000000000">17.9 Stats file</A>
-<LI><A NAME="tex2html1212"
-  HREF="node18.html#SECTION0018100000000000000000">17.10 List model files</A>
-<UL>
-<LI><A NAME="tex2html1213"
-  HREF="node18.html#SECTION0018101000000000000000">17.10.1 remind.annual.task</A>
-<LI><A NAME="tex2html1214"
-  HREF="node18.html#SECTION0018102000000000000000">17.10.2 expire.annual.task</A>
-</UL>
-<BR>
-<LI><A NAME="tex2html1215"
-  HREF="node18.html#SECTION0018110000000000000000">17.11 Message header and footer</A>
-<UL>
-<LI><A NAME="tex2html1216"
-  HREF="node18.html#SECTION0018111000000000000000">17.11.1 Archive directory</A>
-</UL></UL>
-<!--End of Table of Child-Links-->
-<HR>
-
-<H1><A NAME="SECTION001800000000000000000"></A>
-    <A NAME="ml-creation"></A>
-<BR>
+<H1><A NAME="SECTION001800000000000000000"><tex2html_anchor_invisible_mark></A>
+    <A NAME="ml-creation"><tex2html_anchor_mark></A><BR>
 17. Mailing list definition
 </H1>
 
@@ -129,29 +9,27 @@ This chapter describes what a mailing list is made of within Sympa environment.
 
 <P>
 
-<H1><A NAME="SECTION001810000000000000000"></A>
-    <A NAME="list-aliases"></A>    <A NAME="2228"></A>
-    <A NAME="2229"></A>
-<BR>
+<H1><A NAME="SECTION001810000000000000000"><tex2html_anchor_invisible_mark></A>
+    <A NAME="list-aliases"><tex2html_anchor_mark></A>    <A NAME="2257"><tex2html_anchor_invisible_mark></A>
+    <A NAME="2258"><tex2html_anchor_invisible_mark></A><BR>
 17.1 Mail aliases
 </H1>
 
 <P>
-See list aliases section, <A HREF="#list-aliases">17.1</A>,
-page&nbsp;<A HREF="node18.html#list-aliases"><IMG  ALIGN="BOTTOM" BORDER="1" ALT="[*]" SRC="crossref.png"></A>)
+See list aliases section, <A HREF=<tex2html_cr_mark>#list-aliases#2259><tex2html_cr_mark></A>,
+page~<A HREF=<tex2html_cr_mark>#list-aliases#2260><tex2html_cross_ref_visible_mark></A>)
 
 <P>
 
-<H1><A NAME="SECTION001820000000000000000"></A>
-    <A NAME="exp-config"></A>
-<BR>
+<H1><A NAME="SECTION001820000000000000000"><tex2html_anchor_invisible_mark></A>
+    <A NAME="exp-config"><tex2html_anchor_mark></A><BR>
 17.2 List configuration file
 </H1>
 
 <P>
 The configuration file for the <TT>mylist</TT> list is named
-<A NAME="9183"></A><TT>/usr/local/sympa-gb/expl/my.domain.org/mylist/config</TT> 
-(or <A NAME="9186"></A><TT>/usr/local/sympa-gb/expl/mylist/config</TT> if no virtual robot is defined). 
+<A NAME="9312"><tex2html_anchor_invisible_mark></A><TT>/usr/local/sympa-ff//expl/my.domain.org/mylist/config</TT> 
+(or <A NAME="9315"><tex2html_anchor_invisible_mark></A><TT>/usr/local/sympa-ff//expl/mylist/config</TT> if no virtual robot is defined). 
 <I>Sympa</I> reads it into memory the first time the list is refered to. This file is not rewritten by 
 <I>Sympa</I>, so you may put comment lines in it. 
 It is possible to change this file when the program is running. 
@@ -159,10 +37,10 @@ Changes are taken into account the next time the list is
 accessed. Be careful to provide read access for <I>Sympa</I> user to this file !
 
 <P>
-You will find a few configuration files in the <A NAME="9192"></A><TT>sample</TT> directory. 
+You will find a few configuration files in the <A NAME="9321"><tex2html_anchor_invisible_mark></A><TT>sample</TT> directory. 
 
 <P>
-List configuration parameters are described in the list creation section, <A HREF="node21.html#list-configuration-param">20</A>, page&nbsp;<A HREF="node21.html#list-configuration-param"><IMG  ALIGN="BOTTOM" BORDER="1" ALT="[*]" SRC="crossref.png"></A>.
+List configuration parameters are described in the list creation section, <A HREF=<tex2html_cr_mark>#list-configuration-param#2267><tex2html_cr_mark></A>, page~<A HREF=<tex2html_cr_mark>#list-configuration-param#2268><tex2html_cross_ref_visible_mark></A>.
 
 <P>
 
@@ -173,87 +51,46 @@ List configuration parameters are described in the list creation section, <A HRE
 <P>
 This first example is for a list open to everyone:
 
-<P><PRE>
-subject First example (an open list)
-
-visibility noconceal
-
-owner
-email Pierre.David@prism.uvsq.fr
-
-send public
-
-review public
-</PRE>
+<P>
+<BLOCKQUOTE>
+</BLOCKQUOTE><PRE><tex2html_verbatim_mark>verbatim343#</PRE><BLOCKQUOTE>
+</BLOCKQUOTE>
 
 <P>
 The second example is for a moderated list with authenticated subscription:
-<A NAME="2245"></A>
-<A NAME="2246"></A>
+<A NAME="2274"><tex2html_anchor_invisible_mark></A>
+<A NAME="2275"><tex2html_anchor_invisible_mark></A>
 
-<P><PRE>
-subject Second example (a moderated list)
-
-visibility noconceal
-
-owner
-email moi@ici.fr
-
-editor
-email big.prof@ailleurs.edu
-
-send editor
-
-subscribe auth
-
-review owner
-
-reply_to_header
-value list
-
-cookie 142cleliste
-</PRE>
+<P>
+<BLOCKQUOTE>
+</BLOCKQUOTE><PRE><tex2html_verbatim_mark>verbatim344#</PRE><BLOCKQUOTE>
+</BLOCKQUOTE>
 
 <P>
 The third example is for a moderated list, with subscription
 controlled by the owner, and running in digest mode. Subscribers
-who are in <A NAME="9195"></A>digest mode receive messages on Mondays and
+who are in <A NAME="9324"><tex2html_anchor_invisible_mark></A>digest mode receive messages on Mondays and
 Thursdays.
 
-<P><PRE>
-owner
-email moi@ici.fr
-
-editor
-email prof@ailleurs.edu
-
-send editor
-
-subscribe owner
-
-review owner
-
-reply_to_header
-value list
-
-digest 1,4 12:00
-</PRE>
+<P>
+<BLOCKQUOTE>
+</BLOCKQUOTE><PRE><tex2html_verbatim_mark>verbatim345#</PRE><BLOCKQUOTE>
+</BLOCKQUOTE>
 
 <P>
 
-<H1><A NAME="SECTION001840000000000000000"></A>
-    <A NAME="file-subscribers"></A>    <A NAME="2258"></A>
-<BR>
+<H1><A NAME="SECTION001840000000000000000"><tex2html_anchor_invisible_mark></A>
+    <A NAME="file-subscribers"><tex2html_anchor_mark></A>    <A NAME="2287"><tex2html_anchor_invisible_mark></A><BR>
 17.4 Subscribers file
 </H1>
 
 <P>
 <B>Be carefull</B>: Since version 3.3.6 of <I>Sympa</I>, a RDBMS is required for internal data storage. Flat file should
 not be use anymore except for testing purpose. <I>Sympa</I> will not use this file if the list is configured
-with <TT>include</TT> or <TT>database</TT> <A NAME="9198"></A><TT>user_data_source</TT>.
+with <TT>include</TT> or <TT>database</TT> <A NAME="9327"><tex2html_anchor_invisible_mark></A><TT>user_data_source</TT>.
 
 <P>
-The <A NAME="9201"></A><TT>/usr/local/sympa-gb/expl/mylist/subscribers</TT> file is automatically created and
+The <A NAME="9330"><tex2html_anchor_invisible_mark></A><TT>/usr/local/sympa-ff//expl/mylist/subscribers</TT> file is automatically created and
 populated. It contains information about list
 subscribers.  It is not advisable to edit this file.  Main parameters
 are:
@@ -261,14 +98,14 @@ are:
 <P>
 
 <UL>
-<LI><A NAME="9204"></A><TT>email</TT> <I>address</I>
+<LI><A NAME="9333"><tex2html_anchor_invisible_mark></A><TT>email</TT> <I>address</I>
 
 <P>
 E-mail address of subscriber.
 
 <P>
 </LI>
-<LI><A NAME="9207"></A><TT>gecos</TT> <I>data</I> 
+<LI><A NAME="9336"><tex2html_anchor_invisible_mark></A><TT>gecos</TT> <I>data</I> 
 
 <P>
 Information about subscriber (last name, first name,
@@ -276,7 +113,7 @@ Information about subscriber (last name, first name,
 
 <P>
 </LI>
-<LI><A NAME="9210"></A><TT>reception</TT>
+<LI><A NAME="9339"><tex2html_anchor_invisible_mark></A><TT>reception</TT>
             <TT>nomail</TT> <TT>|</TT>
             <TT>digest</TT> <TT>|</TT>
             <TT>summary</TT> <TT>|</TT>
@@ -285,7 +122,7 @@ Information about subscriber (last name, first name,
 	    <TT>html</TT> <TT>|</TT>
  	    <TT>urlize</TT> <TT>|</TT>
 	    <TT>not_me</TT> <TT>|</TT>
-        <A NAME="par-reception"></A> 
+        <A NAME="par-reception"><tex2html_anchor_mark></A> 
 
 <P>
 Special receive modes which the subscriber may select.
@@ -293,23 +130,23 @@ Special receive modes which the subscriber may select.
         <I>html</I>, <I>urlize</I>, <I>not_me</I> .
         In normal receive mode, the receive attribute
         for a subscriber is not displayed. In this mode subscription to message topics is available.
-        See the <A NAME="9213"></A><TT>SET&nbsp;LISTNAME&nbsp;SUMMARY</TT> (<A HREF="node28.html#cmd-setsummary">27.1</A>, 
-        page&nbsp;<A HREF="node28.html#cmd-setsummary"><IMG  ALIGN="BOTTOM" BORDER="1" ALT="[*]" SRC="crossref.png"></A>),
-        the <A NAME="9216"></A><TT>SET&nbsp;LISTNAME&nbsp;NOMAIL</TT> command (<A HREF="node28.html#cmd-setnomail">27.1</A>,
-        page&nbsp;<A HREF="node28.html#cmd-setnomail"><IMG  ALIGN="BOTTOM" BORDER="1" ALT="[*]" SRC="crossref.png"></A>), and the <A NAME="9219"></A><TT>digest</TT>
-        parameter (<A HREF="node21.html#par-digest">20.4.8</A>, page&nbsp;<A HREF="node21.html#par-digest"><IMG  ALIGN="BOTTOM" BORDER="1" ALT="[*]" SRC="crossref.png"></A>).
+        See the <A NAME="9342"><tex2html_anchor_invisible_mark></A><TT>SET~LISTNAME~SUMMARY</TT> (<A HREF=<tex2html_cr_mark>#cmd-setsummary#2325><tex2html_cr_mark></A>, 
+        page~<A HREF=<tex2html_cr_mark>#cmd-setsummary#2326><tex2html_cross_ref_visible_mark></A>),
+        the <A NAME="9345"><tex2html_anchor_invisible_mark></A><TT>SET~LISTNAME~NOMAIL</TT> command (<A HREF=<tex2html_cr_mark>#cmd-setnomail#2328><tex2html_cr_mark></A>,
+        page~<A HREF=<tex2html_cr_mark>#cmd-setnomail#2329><tex2html_cross_ref_visible_mark></A>), and the <A NAME="9348"><tex2html_anchor_invisible_mark></A><TT>digest</TT>
+        parameter (<A HREF=<tex2html_cr_mark>#par-digest#2331><tex2html_cr_mark></A>, page~<A HREF=<tex2html_cr_mark>#par-digest#2332><tex2html_cross_ref_visible_mark></A>).
 
 <P>
 </LI>
-<LI><A NAME="9222"></A><TT>visibility</TT> <TT>conceal</TT>  
-        <A NAME="par-visibility-conceal"></A>
+<LI><A NAME="9351"><tex2html_anchor_invisible_mark></A><TT>visibility</TT> <TT>conceal</TT>  
+        <A NAME="par-visibility-conceal"><tex2html_anchor_mark></A>
 <P>
 Special mode which allows the subscriber to remain invisible when
-        a <A NAME="9225"></A><TT>REVIEW</TT> command is issued for the list.  If this
+        a <A NAME="9354"><tex2html_anchor_invisible_mark></A><TT>REVIEW</TT> command is issued for the list.  If this
         parameter is not declared, the subscriber will be visible
-        for <A NAME="9228"></A><TT>REVIEW</TT>.  Note: this option does not affect
-        the results of a <A NAME="9231"></A><TT>REVIEW</TT> command issued by an
-        owner.  See the <A NAME="9234"></A><TT>SET&nbsp;LISTNAME&nbsp;MAIL</TT> command (<A HREF="node28.html#cmd-setconceal">27.1</A>, page&nbsp;<A HREF="node28.html#cmd-setconceal"><IMG  ALIGN="BOTTOM" BORDER="1" ALT="[*]" SRC="crossref.png"></A>) for
+        for <A NAME="9357"><tex2html_anchor_invisible_mark></A><TT>REVIEW</TT>.  Note: this option does not affect
+        the results of a <A NAME="9360"><tex2html_anchor_invisible_mark></A><TT>REVIEW</TT> command issued by an
+        owner.  See the <A NAME="9363"><tex2html_anchor_invisible_mark></A><TT>SET~LISTNAME~MAIL</TT> command (<A HREF=<tex2html_cr_mark>#cmd-setconceal#2340><tex2html_cr_mark></A>, page~<A HREF=<tex2html_cr_mark>#cmd-setconceal#2341><tex2html_cross_ref_visible_mark></A>) for
         details.
 
 <P>
@@ -323,8 +160,8 @@ Special mode which allows the subscriber to remain invisible when
 </H1>
 
 <P>
-<A NAME="9237"></A><TT>/usr/local/sympa-gb/expl/mylist/info</TT> should contain a detailed text
-description of the list, to be displayed by the <A NAME="9240"></A><TT>INFO</TT> command. 
+<A NAME="9366"><tex2html_anchor_invisible_mark></A><TT>/usr/local/sympa-ff//expl/mylist/info</TT> should contain a detailed text
+description of the list, to be displayed by the <A NAME="9369"><tex2html_anchor_invisible_mark></A><TT>INFO</TT> command. 
 It can also be referenced from template files for service messages.
 
 <P>
@@ -334,50 +171,49 @@ It can also be referenced from template files for service messages.
 </H1>
 
 <P>
-<A NAME="9243"></A><TT>/usr/local/sympa-gb/expl/mylist/homepage</TT> is the HTML text 
-on the <A NAME="9246"></A><I>WWSympa</I> info page for the list.
+<A NAME="9372"><tex2html_anchor_invisible_mark></A><TT>/usr/local/sympa-ff//expl/mylist/homepage</TT> is the HTML text 
+on the <A NAME="9375"><tex2html_anchor_invisible_mark></A><I>WWSympa</I> info page for the list.
 
 <P>
 
-<H1><A NAME="SECTION001870000000000000000"></A>
-<A NAME="data-inclusion-file"></A><A NAME="2321"></A>
-<BR>
+<H1><A NAME="SECTION001870000000000000000"><tex2html_anchor_invisible_mark></A>
+<A NAME="data-inclusion-file"><tex2html_anchor_mark></A><A NAME="2350"><tex2html_anchor_invisible_mark></A><BR>
 17.7 Data inclusion file
 </H1>
 
 <P>
-Sympa will use these files only if the list is configured in <TT>include2</TT> <A NAME="9249"></A><TT>user_data_source</TT> mode.
+Sympa will use these files only if the list is configured in <TT>include2</TT> <A NAME="9378"><tex2html_anchor_invisible_mark></A><TT>user_data_source</TT> mode.
 Every file has the .incl extension. 
-More over, these files must be declared in paragraphs <A NAME="9252"></A><TT>owner_include</TT> or <A NAME="9255"></A><TT>editor_inlude</TT> in the list configuration file 
-without the .incl extension (see <A HREF="node21.html#list-configuration-param">20</A>, page&nbsp;<A HREF="node21.html#list-configuration-param"><IMG  ALIGN="BOTTOM" BORDER="1" ALT="[*]" SRC="crossref.png"></A>).
+More over, these files must be declared in paragraphs <A NAME="9381"><tex2html_anchor_invisible_mark></A><TT>owner_include</TT> or <A NAME="9384"><tex2html_anchor_invisible_mark></A><TT>editor_inlude</TT> in the list configuration file 
+without the .incl extension (see <A HREF=<tex2html_cr_mark>#list-configuration-param#2355><tex2html_cr_mark></A>, page~<A HREF=<tex2html_cr_mark>#list-configuration-param#2356><tex2html_cross_ref_visible_mark></A>).
 This files can be template file.
 
 <P>
 Sympa looks for them in the following order :
 
 <OL>
-<LI><A NAME="9270"></A><TT>/usr/local/sympa-gb/expl/mylist/data_sources/<TT>&lt;</TT>file<TT>&gt;</TT>.incl</TT>. 
+<LI><A NAME="9399"><tex2html_anchor_invisible_mark></A><TT>/usr/local/sympa-ff//expl/mylist/data_sources/<TT>;SPMlt;</TT>file<TT>;SPMgt;</TT>.incl</TT>. 
 </LI>
-<LI><A NAME="9291"></A><TT>/usr/local/sympa-gb/etc/data_sources/<TT>&lt;</TT>file<TT>&gt;</TT>.incl</TT>. 
+<LI><A NAME="9420"><tex2html_anchor_invisible_mark></A><TT>/usr/local/sympa-ff//etc/data_sources/<TT>;SPMlt;</TT>file<TT>;SPMgt;</TT>.incl</TT>. 
 </LI>
-<LI><A NAME="9312"></A><TT>/usr/local/sympa-gb/etc/my.domain.org/data_sources/<TT>&lt;</TT>file<TT>&gt;</TT>.incl</TT>.
+<LI><A NAME="9441"><tex2html_anchor_invisible_mark></A><TT>/usr/local/sympa-ff//etc/my.domain.org/data_sources/<TT>;SPMlt;</TT>file<TT>;SPMgt;</TT>.incl</TT>.
 </LI>
 </OL> 
 
 <P>
 These files are used by Sympa to load administrative data in a relational database :
 Owners or editors are defined <I>intensively</I> (definition of criteria owners or editors must satisfy).  
-Includes can be performed by extracting e-mail addresses using an <A NAME="9321"></A>SQL or <A NAME="9322"></A>LDAP query, or 
+Includes can be performed by extracting e-mail addresses using an <A NAME="9450"><tex2html_anchor_invisible_mark></A>SQL or <A NAME="9451"><tex2html_anchor_invisible_mark></A>LDAP query, or 
 by including other mailing lists.
 
 <P>
 A data inclusion file is composed of paragraphs separated by blank lines and introduced by a keyword.
-Valid paragraphs are <A NAME="9323"></A><TT>include_file</TT>, <A NAME="9326"></A><TT>include_list</TT>, <A NAME="9329"></A><TT>include_remote_sympa_list</TT>, 
-<A NAME="9332"></A><TT>include_sql_query</TT> and <A NAME="9335"></A><TT>include_ldap_query</TT>. They are described in the list configuration parameters chapitre, <A HREF="node21.html#list-configuration-param">20</A>, page&nbsp;<A HREF="node21.html#list-configuration-param"><IMG  ALIGN="BOTTOM" BORDER="1" ALT="[*]" SRC="crossref.png"></A>.
+Valid paragraphs are <A NAME="9452"><tex2html_anchor_invisible_mark></A><TT>include_file</TT>, <A NAME="9455"><tex2html_anchor_invisible_mark></A><TT>include_list</TT>, <A NAME="9458"><tex2html_anchor_invisible_mark></A><TT>include_remote_sympa_list</TT>, 
+<A NAME="9461"><tex2html_anchor_invisible_mark></A><TT>include_sql_query</TT> and <A NAME="9464"><tex2html_anchor_invisible_mark></A><TT>include_ldap_query</TT>. They are described in the list configuration parameters chapitre, <A HREF=<tex2html_cr_mark>#list-configuration-param#2373><tex2html_cr_mark></A>, page~<A HREF=<tex2html_cr_mark>#list-configuration-param#2374><tex2html_cross_ref_visible_mark></A>.
 
 <P>
-When this file is a template, used variables are array elements (<A NAME="9338"></A><TT>param</TT> array). This array is instantiated by values contained in the subparameter 
-<A NAME="9341"></A><TT>source_parameter</TT> of <A NAME="9344"></A><TT>owner_include</TT> or <A NAME="9347"></A><TT>editor_inlude</TT>.
+When this file is a template, used variables are array elements (<A NAME="9467"><tex2html_anchor_invisible_mark></A><TT>param</TT> array). This array is instantiated by values contained in the subparameter 
+<A NAME="9470"><tex2html_anchor_invisible_mark></A><TT>source_parameter</TT> of <A NAME="9473"><tex2html_anchor_invisible_mark></A><TT>owner_include</TT> or <A NAME="9476"><tex2html_anchor_invisible_mark></A><TT>editor_inlude</TT>.
 
 <P>
 <I>Example :</I> 
@@ -387,39 +223,28 @@ When this file is a template, used variables are array elements (<A NAME="9338">
 <UL>
 <LI>in the list configuration file :
 
-<P><PRE>
-	owner_include
-	source myfile
-	source_parameters mysql,rennes1,stduser,mysecret,studentbody,student
-</PRE>
+<P>
+<BLOCKQUOTE>
+</BLOCKQUOTE><PRE><tex2html_verbatim_mark>verbatim346#</PRE><BLOCKQUOTE>
+</BLOCKQUOTE>
 
 <P>
 </LI>
 <LI>in myfile.incl :
 
-<P><PRE>
-	include_sql_query
-	db_type [% param.0 %]
-	host sqlserv.admin.univ-[% param.1 %].fr
-	user [% param.2 %]
-	passwd [% param.3 %]
-        db_name [% param.4 %]
-	sql_query SELECT DISTINCT email FROM [% param.5 %]
-      </PRE>
+<P>
+<BLOCKQUOTE>
+</BLOCKQUOTE><PRE><tex2html_verbatim_mark>verbatim347#</PRE><BLOCKQUOTE>
+</BLOCKQUOTE>
 
 <P>
 </LI>
 <LI>resulting data inclusion file :
 
-<P><PRE>
-	include_sql_query
-	db_type mysql
-	host sqlserv.admin.univ-rennes1.fr
-        user stduser
-        passwd mysecret
-        db_name studentbody
-        sql_query SELECT DISTINCT email FROM student
-</PRE>
+<P>
+<BLOCKQUOTE>
+</BLOCKQUOTE><PRE><tex2html_verbatim_mark>verbatim348#</PRE><BLOCKQUOTE>
+</BLOCKQUOTE>
 
 <P>
 </LI>
@@ -427,28 +252,27 @@ When this file is a template, used variables are array elements (<A NAME="9338">
 
 <P>
 
-<H1><A NAME="SECTION001880000000000000000"></A>
-<A NAME="list-tpl"></A><A NAME="2367"></A>
-<BR>
+<H1><A NAME="SECTION001880000000000000000"><tex2html_anchor_invisible_mark></A>
+<A NAME="list-tpl"><tex2html_anchor_mark></A><A NAME="2396"><tex2html_anchor_invisible_mark></A><BR>
 17.8 List template files
 </H1>
 
 <P>
 These files are used by Sympa as service messages for commands such as
-<A NAME="9350"></A><TT>SUB</TT>, <A NAME="9353"></A><TT>ADD</TT>, <A NAME="9356"></A><TT>SIG</TT>, <A NAME="9359"></A><TT>DEL</TT>, <A NAME="9362"></A><TT>REJECT</TT>. 
+<A NAME="9479"><tex2html_anchor_invisible_mark></A><TT>SUB</TT>, <A NAME="9482"><tex2html_anchor_invisible_mark></A><TT>ADD</TT>, <A NAME="9485"><tex2html_anchor_invisible_mark></A><TT>SIG</TT>, <A NAME="9488"><tex2html_anchor_invisible_mark></A><TT>DEL</TT>, <A NAME="9491"><tex2html_anchor_invisible_mark></A><TT>REJECT</TT>. 
 These files are interpreted (parsed) by <I>Sympa</I> and respect the template 
-format ; every file has the .tt2 extension. See <A HREF="node17.html#tpl-format">16.1</A>, 
-page&nbsp;<A HREF="node17.html#tpl-format"><IMG  ALIGN="BOTTOM" BORDER="1" ALT="[*]" SRC="crossref.png"></A>. 
+format ; every file has the .tt2 extension. See <A HREF=<tex2html_cr_mark>#tpl-format#2402><tex2html_cr_mark></A>, 
+page~<A HREF=<tex2html_cr_mark>#tpl-format#2403><tex2html_cross_ref_visible_mark></A>. 
 
 <P>
 Sympa looks for these files in the following order :
 
 <OL>
-<LI><A NAME="9378"></A><TT>/usr/local/sympa-gb/expl/mylist/mail_tt2/<TT>&lt;</TT>file<TT>&gt;</TT>.tt2</TT> 
+<LI><A NAME="9507"><tex2html_anchor_invisible_mark></A><TT>/usr/local/sympa-ff//expl/mylist/mail_tt2/<TT>;SPMlt;</TT>file<TT>;SPMgt;</TT>.tt2</TT> 
 </LI>
-<LI><A NAME="9399"></A><TT>/usr/local/sympa-gb/etc/mail_tt2/<TT>&lt;</TT>file<TT>&gt;</TT>.tt2</TT>. 
+<LI><A NAME="9528"><tex2html_anchor_invisible_mark></A><TT>/usr/local/sympa-ff//etc/mail_tt2/<TT>;SPMlt;</TT>file<TT>;SPMgt;</TT>.tt2</TT>. 
 </LI>
-<LI><A NAME="9420"></A><TT>/usr/local/sympa-gb/bin/etc/mail_tt2/<TT>&lt;</TT>file<TT>&gt;</TT>.tt2</TT>.
+<LI><A NAME="9549"><tex2html_anchor_invisible_mark></A><TT>/usr/local/sympa-ff//bin/etc/mail_tt2/<TT>;SPMlt;</TT>file<TT>;SPMgt;</TT>.tt2</TT>.
 </LI>
 </OL>
 
@@ -462,101 +286,92 @@ The following variables may be used in list template files :
 
 <P>
 <DL COMPACT>
-<DT>-</DT>
-<DD>[% conf.email %] : sympa e-mail address local part
+<DT><#31576#><#31561#>-<#31561#><#31576#></DT>
+<DD>[<tex2html_percent_mark> conf.email <tex2html_percent_mark>] : sympa e-mail address local part
 
 <P>
 </DD>
-<DT>-</DT>
-<DD>[% conf.domain %] : sympa robot domain name
+<DT><#31577#><#31562#>-<#31562#><#31577#></DT>
+<DD>[<tex2html_percent_mark> conf.domain <tex2html_percent_mark>] : sympa robot domain name
 
 <P>
 </DD>
-<DT>-</DT>
-<DD>[% conf.sympa %] : sympa's complete e-mail address
+<DT><#31578#><#31563#>-<#31563#><#31578#></DT>
+<DD>[<tex2html_percent_mark> conf.sympa <tex2html_percent_mark>] : sympa's complete e-mail address
 
 <P>
 </DD>
-<DT>-</DT>
-<DD>[% conf.wwsympa_url %] : <A NAME="9429"></A><I>WWSympa</I> root URL
+<DT><#31579#><#31564#>-<#31564#><#31579#></DT>
+<DD>[<tex2html_percent_mark> conf.wwsympa_url <tex2html_percent_mark>] : <A NAME="9558"><tex2html_anchor_invisible_mark></A><I>WWSympa</I> root URL
 
 <P>
 </DD>
-<DT>-</DT>
-<DD>[% conf.listmaster %] : listmaster e-mail addresses
+<DT><#31580#><#31565#>-<#31565#><#31580#></DT>
+<DD>[<tex2html_percent_mark> conf.listmaster <tex2html_percent_mark>] : listmaster e-mail addresses
 
 <P>
 </DD>
-<DT>-</DT>
-<DD>[% list.name %] : list name
+<DT><#31581#><#31566#>-<#31566#><#31581#></DT>
+<DD>[<tex2html_percent_mark> list.name <tex2html_percent_mark>] : list name
 
 <P>
 </DD>
-<DT>-</DT>
-<DD>[% list.host %] : list hostname (default is sympa robot domain name)
+<DT><#31582#><#31567#>-<#31567#><#31582#></DT>
+<DD>[<tex2html_percent_mark> list.host <tex2html_percent_mark>] : list hostname (default is sympa robot domain name)
 
 <P>
 </DD>
-<DT>-</DT>
-<DD>[% list.lang %] : list language
+<DT><#31583#><#31568#>-<#31568#><#31583#></DT>
+<DD>[<tex2html_percent_mark> list.lang <tex2html_percent_mark>] : list language
 
 <P>
 </DD>
-<DT>-</DT>
-<DD>[% list.subject %] : list subject
+<DT><#31584#><#31569#>-<#31569#><#31584#></DT>
+<DD>[<tex2html_percent_mark> list.subject <tex2html_percent_mark>] : list subject
 
 <P>
 </DD>
-<DT>-</DT>
-<DD>[% list.owner %] : list owners table hash
+<DT><#31585#><#31570#>-<#31570#><#31585#></DT>
+<DD>[<tex2html_percent_mark> list.owner <tex2html_percent_mark>] : list owners table hash
 
 <P>
 </DD>
-<DT>-</DT>
-<DD>[% user.email %] : user e-mail address
+<DT><#31586#><#31571#>-<#31571#><#31586#></DT>
+<DD>[<tex2html_percent_mark> user.email <tex2html_percent_mark>] : user e-mail address
 
 <P>
 </DD>
-<DT>-</DT>
-<DD>[% user.gecos %] : user gecos field (usually his/her name)
+<DT><#31587#><#31572#>-<#31572#><#31587#></DT>
+<DD>[<tex2html_percent_mark> user.gecos <tex2html_percent_mark>] : user gecos field (usually his/her name)
 
 <P>
 </DD>
-<DT>-</DT>
-<DD>[% user.password %] : user password
+<DT><#31588#><#31573#>-<#31573#><#31588#></DT>
+<DD>[<tex2html_percent_mark> user.password <tex2html_percent_mark>] : user password
 
 <P>
 </DD>
-<DT>-</DT>
-<DD>[% user.lang %] : user language
+<DT><#31589#><#31574#>-<#31574#><#31589#></DT>
+<DD>[<tex2html_percent_mark> user.lang <tex2html_percent_mark>] : user language
 
 <P>
 </DD>
-<DT>-</DT>
-<DD>[% execution_date %] : the date when the scenario is executed	
+<DT><#31590#><#31575#>-<#31575#><#31590#></DT>
+<DD>[<tex2html_percent_mark> execution_date <tex2html_percent_mark>] : the date when the scenario is executed	
 </DD>
 </DL>
 
 <P>
 You may also dynamically include a file from a template using the
-[% INSERT %] directive.
+[<tex2html_percent_mark> INSERT <tex2html_percent_mark>] directive.
 
 <P>
 <I>Example:</I> 
 
-<P><PRE>
-Dear [% user.email %],
-
-Welcome to list [% list.name %]@[% list.host %].
-
-Presentation of the list :
-[% INSERT 'info' %]
-
-The owners of [% list.name %] are :
-[% FOREACH ow = list.owner %]
-   [% ow.value.gecos %] &lt;[% ow.value.email %]&gt;
-[% END %]
-</PRE>
+<P>
+<BLOCKQUOTE>
+</BLOCKQUOTE><PRE><tex2html_verbatim_mark>verbatim349#</PRE><BLOCKQUOTE>
+</BLOCKQUOTE>
 
 <P>
 
@@ -585,7 +400,7 @@ mail command received.
 </H2> 
 
 <P>
-This message is sent to users who have been deleted (using the <A NAME="9433"></A><TT>DELETE</TT> 
+This message is sent to users who have been deleted (using the <A NAME="9562"><tex2html_anchor_invisible_mark></A><TT>DELETE</TT> 
 command) from the list by the list owner.
 
 <P>
@@ -596,7 +411,7 @@ command) from the list by the list owner.
 
 <P>
 <I>Sympa</I> will send a reject message to the senders of messages rejected
-by the list editor. If the editor prefixes her <A NAME="9437"></A><TT>REJECT</TT> with the
+by the list editor. If the editor prefixes her <A NAME="9566"><tex2html_anchor_invisible_mark></A><TT>REJECT</TT> with the
 keyword QUIET, the reject message will not be sent.
 
 <P>
@@ -606,20 +421,20 @@ keyword QUIET, the reject message will not be sent.
 </H2> 
 
 <P>
-This message is sent to users who have been invited (using the <A NAME="9440"></A><TT>INVITE</TT> 
+This message is sent to users who have been invited (using the <A NAME="9569"><tex2html_anchor_invisible_mark></A><TT>INVITE</TT> 
 command) to subscribe to a list. 
 
 <P>
 You may use additional variables
 <DL COMPACT>
-<DT>-</DT>
-<DD>[% requested_by %] : e-mail of the person who sent the 
-		<A NAME="9443"></A><TT>INVITE</TT> command
+<DT><#31598#><#31596#>-<#31596#><#31598#></DT>
+<DD>[<tex2html_percent_mark> requested_by <tex2html_percent_mark>] : e-mail of the person who sent the 
+		<A NAME="9572"><tex2html_anchor_invisible_mark></A><TT>INVITE</TT> command
 
 <P>
 </DD>
-<DT>-</DT>
-<DD>[% url %] : the mailto: URL to subscribe to the list
+<DT><#31599#><#31597#>-<#31597#><#31599#></DT>
+<DD>[<tex2html_percent_mark> url <tex2html_percent_mark>] : the mailto: URL to subscribe to the list
 
 <P>
 </DD>
@@ -633,8 +448,8 @@ You may use additional variables
 
 <P>
 This file contains a message sent to each subscriber
-when one of the list owners sends the <A NAME="9446"></A><TT>REMIND</TT> command
- (see&nbsp;<A HREF="node28.html#cmd-remind">27.2</A>, page&nbsp;<A HREF="node28.html#cmd-remind"><IMG  ALIGN="BOTTOM" BORDER="1" ALT="[*]" SRC="crossref.png"></A>).
+when one of the list owners sends the <A NAME="9575"><tex2html_anchor_invisible_mark></A><TT>REMIND</TT> command
+ (see~<A HREF=<tex2html_cr_mark>#cmd-remind#2432><tex2html_cr_mark></A>, page~<A HREF=<tex2html_cr_mark>#cmd-remind#2433><tex2html_cross_ref_visible_mark></A>).
 
 <P>
 
@@ -644,13 +459,12 @@ when one of the list owners sends the <A NAME="9446"></A><TT>REMIND</TT> command
 
 <P>
 Template for summaries (reception mode close to digest), 
-see&nbsp;<A HREF="node28.html#cmd-setsummary">27.1</A>, page&nbsp;<A HREF="node28.html#cmd-setsummary"><IMG  ALIGN="BOTTOM" BORDER="1" ALT="[*]" SRC="crossref.png"></A>.
+see~<A HREF=<tex2html_cr_mark>#cmd-setsummary#2435><tex2html_cr_mark></A>, page~<A HREF=<tex2html_cr_mark>#cmd-setsummary#2436><tex2html_cross_ref_visible_mark></A>.
 
 <P>
 
-<H2><A NAME="SECTION001888000000000000000"></A>
-<A NAME="list-aliases-tpl"></A>
-<BR>
+<H2><A NAME="SECTION001888000000000000000"><tex2html_anchor_invisible_mark></A>
+<A NAME="list-aliases-tpl"><tex2html_anchor_mark></A><BR>
 17.8.8 list_aliases.tt2
 </H2>
 
@@ -659,14 +473,13 @@ Template that defines list mail alises. It is used by the alias_manager script.
 
 <P>
 
-<H1><A NAME="SECTION001890000000000000000"></A>
-    <A NAME="stats-file"></A>    <A NAME="2412"></A>
-<BR>
+<H1><A NAME="SECTION001890000000000000000"><tex2html_anchor_invisible_mark></A>
+    <A NAME="stats-file"><tex2html_anchor_mark></A>    <A NAME="2441"><tex2html_anchor_invisible_mark></A><BR>
 17.9 Stats file
 </H1>
 
 <P>
-<A NAME="9449"></A><TT>/usr/local/sympa-gb/expl/mylist/stats</TT> is a text file containing 
+<A NAME="9578"><tex2html_anchor_invisible_mark></A><TT>/usr/local/sympa-ff//expl/mylist/stats</TT> is a text file containing 
 statistics about the list. Data are numerics separated
 by white space within a single line :
 
@@ -701,15 +514,14 @@ by white space within a single line :
 
 <P>
 
-<H1><A NAME="SECTION0018100000000000000000"></A>
-<A NAME="Listmodelfiles"></A>
-<BR>
+<H1><A NAME="SECTION0018100000000000000000"><tex2html_anchor_invisible_mark></A>
+<A NAME="Listmodelfiles"><tex2html_anchor_mark></A><BR>
 17.10 List model files
 </H1>
 
 <P>
 These files are used by <I>Sympa</I> to create task files. They are interpreted (parsed) 
-by the task manager and respect the task format. See <A HREF="node17.html#tasks">16.8</A>, page&nbsp;<A HREF="node17.html#tasks"><IMG  ALIGN="BOTTOM" BORDER="1" ALT="[*]" SRC="crossref.png"></A>.
+by the task manager and respect the task format. See <A HREF=<tex2html_cr_mark>#tasks#2448><tex2html_cr_mark></A>, page~<A HREF=<tex2html_cr_mark>#tasks#2449><tex2html_cross_ref_visible_mark></A>.
 
 <P>
 
@@ -718,7 +530,7 @@ by the task manager and respect the task format. See <A HREF="node17.html#tasks"
 </H2>
 
 <P>
-Every year <I>Sympa</I> will send a message (the template <A NAME="9454"></A><TT>remind.tt2</TT>) 
+Every year <I>Sympa</I> will send a message (the template <A NAME="9583"><tex2html_anchor_invisible_mark></A><TT>remind.tt2</TT>) 
 to all subscribers of the list to remind them of their subscription.
 
 <P>
@@ -732,40 +544,31 @@ Every month <I>Sympa</I> will delete subscribers older than one year who haven't
 
 <P>
 
-<H1><A NAME="SECTION0018110000000000000000"></A> 
-<A NAME="messagefooter"></A>
-<BR>
+<H1><A NAME="SECTION0018110000000000000000"><tex2html_anchor_invisible_mark></A> 
+<A NAME="messagefooter"><tex2html_anchor_mark></A><BR>
 17.11 Message header and footer
 </H1>
 
 <P>
-You may create <A NAME="9458"></A><TT>/usr/local/sympa-gb/expl/mylist/message.header</TT> and
-<A NAME="9461"></A><TT>/usr/local/sympa-gb/expl/mylist/message.footer</TT> files. Their content
+You may create <A NAME="9587"><tex2html_anchor_invisible_mark></A><TT>/usr/local/sympa-ff//expl/mylist/message.header</TT> and
+<A NAME="9590"><tex2html_anchor_invisible_mark></A><TT>/usr/local/sympa-ff//expl/mylist/message.footer</TT> files. Their content
 is added, respectively at the beginning and at the end of each message 
 before the distribution process. You may also include the content-type
-of the appended part (when <A NAME="9464"></A><TT>footer_type</TT> list parameter s set 
-to <B>mime</B>) by renaming the files to <A NAME="9467"></A><TT>message.header.mime</TT> 
-and <A NAME="9470"></A><TT>message.footer.mime</TT>.
+of the appended part (when <A NAME="9593"><tex2html_anchor_invisible_mark></A><TT>footer_type</TT> list parameter s set 
+to <B>mime</B>) by renaming the files to <A NAME="9596"><tex2html_anchor_invisible_mark></A><TT>message.header.mime</TT> 
+and <A NAME="9599"><tex2html_anchor_invisible_mark></A><TT>message.footer.mime</TT>.
 
 <P>
-The <A NAME="9473"></A><TT>footer_type</TT> list parameter defines whether to attach the 
+The <A NAME="9602"><tex2html_anchor_invisible_mark></A><TT>footer_type</TT> list parameter defines whether to attach the 
 header/footer content as a MIME part (except for multipart/alternative 
 messages), or to append them to the message body (for text/plain messages).
 
 <P>
 Under certain circumstances, Sympa will NOT add headers/footers, here is its
-algorythm :<PRE>
-if message is not multipart/signed 
-        if footer_type==append
-	        if message is text/plain
-		       append header/footer to it
-		else if message is multipart AND first part is text/plain
-		       append header/footer to first part
-
-        if footer_type==mime
-	        if message is not multipart/alternative
-		       add header/footer as a new MIME part
-</PRE>
+algorythm :
+<BLOCKQUOTE>
+</BLOCKQUOTE><PRE><tex2html_verbatim_mark>verbatim350#</PRE><BLOCKQUOTE>
+</BLOCKQUOTE>
 
 <P>
 
@@ -774,45 +577,10 @@ if message is not multipart/signed
 </H2> 
 
 <P>
-The <A NAME="9476"></A><TT>/usr/local/sympa-gb/expl/mylist/archives/</TT> directory contains the 
-archived messages for lists which are archived; see <A HREF="node21.html#par-archive">20.6.1</A>, 
-page&nbsp;<A HREF="node21.html#par-archive"><IMG  ALIGN="BOTTOM" BORDER="1" ALT="[*]" SRC="crossref.png"></A>. The files are named in accordance with the 
-archiving frequency defined by the <A NAME="9479"></A><TT>archive</TT> parameter.
+The <A NAME="9605"><tex2html_anchor_invisible_mark></A><TT>/usr/local/sympa-ff//expl/mylist/archives/</TT> directory contains the 
+archived messages for lists which are archived; see <A HREF=<tex2html_cr_mark>#par-archive#2468><tex2html_cr_mark></A>, 
+page~<A HREF=<tex2html_cr_mark>#par-archive#2469><tex2html_cross_ref_visible_mark></A>. The files are named in accordance with the 
+archiving frequency defined by the <A NAME="9608"><tex2html_anchor_invisible_mark></A><TT>archive</TT> parameter.
 
 <P>
 
-<HR>
-<!--Navigation Panel-->
-<A NAME="tex2html1193"
-  HREF="node19.html">
-<IMG WIDTH="37" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="next" SRC="next.png"></A> 
-<A NAME="tex2html1187"
-  HREF="sympa.html">
-<IMG WIDTH="26" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="up" SRC="up.png"></A> 
-<A NAME="tex2html1181"
-  HREF="node17.html">
-<IMG WIDTH="63" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="previous" SRC="prev.png"></A> 
-<A NAME="tex2html1189"
-  HREF="node1.html">
-<IMG WIDTH="65" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="contents" SRC="contents.png"></A> 
-<A NAME="tex2html1191"
-  HREF="node30.html">
-<IMG WIDTH="43" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="index" SRC="index.png"></A> 
-<BR>
-<B> Next:</B> <A NAME="tex2html1194"
-  HREF="node19.html">18. List creation, families and list</A>
-<B> Up:</B> <A NAME="tex2html1188"
-  HREF="sympa.html">Sympa Mailing Lists Management Software version</A>
-<B> Previous:</B> <A NAME="tex2html1182"
-  HREF="node17.html">16. Customizing Sympa/WWSympa</A>
- &nbsp; <B>  <A NAME="tex2html1190"
-  HREF="node1.html">Contents</A></B> 
- &nbsp; <B>  <A NAME="tex2html1192"
-  HREF="node30.html">Index</A></B> 
-<!--End of Navigation Panel-->
-<ADDRESS>
-root
-2005-05-25
-</ADDRESS>
-</BODY>
-</HTML>

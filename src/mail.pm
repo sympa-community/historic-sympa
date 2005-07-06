@@ -98,6 +98,7 @@ sub set_send_spool {
 #        -replyto : "Reply-to:" field if not a full msg
 #        -body  : body message if not $filename
 #        -headers : ref(HASH) with keys are headers mail
+#        -head : SCALAR - head message  if not $filename
 #      -$robot(+)
 #      -$sign_mode :'smime' | '' | undef
 #         
@@ -108,9 +109,7 @@ sub mail_file {
     &do_log('debug2', 'mail::mail_file(%s, %s, %s)', $filename, $rcpt, $sign_mode);
 
     my ($to,$message);
-
     ## boolean
-    my $header_possible = 0; # =1 : it is possible there are some headers
     my %header_ok;           # hash containing no missing headers
     my $existing_headers = 0;# the message already contains headers
    
@@ -129,31 +128,33 @@ sub mail_file {
 	&Language::SetLang($data->{'lang'}) if (defined $data->{'lang'});
 	&tt2::parse_tt2($data, $path[$#path], \$output);
 	$message .= join('',$output);
-	$header_possible = 1;
 
     }else { # or not
+	if (exists $data->{'head'}) {
+	    $message .= $data->{'head'};
+	    $message .= "\n\n";
+	}
 	$message .= $data->{'body'};
        }
+
        
     ## ## Does the message include headers ?
-    if ($header_possible) {
-	foreach my $line (split(/\n/,$message)) {
-	    last if ($line=~/^\s*$/);
-       
-	    if ($line=~/^[\w-]+:\s+\S/) {
-		$existing_headers=1;
-	    }else{
+    foreach my $line (split(/\n/,$message)) {
+	last if ($line=~/^\s*$/);
+	
+	if ($line=~/^[\w-]+:\s+\S/) {
+	    $existing_headers=1;
+	}else{
+	    last;
+	}
+	
+	foreach my $header ('to','from','subject','reply-to','mime-version', 'content-type','content-transfer-encoding') {
+	    if ($line=~/^$header:/i) {
+		$header_ok{$header} = 1;
 		last;
 	    }
-		
-	    foreach my $header ('to','from','subject','reply-to','mime-version', 'content-type','content-transfer-encoding') {
-		if ($line=~/^$header:/i) {
-		    $header_ok{$header} = 1;
-		    last;
-		}
-	    }
 	}
-   }
+    }
    
    ## Charset for encoding
    my $charset = sprintf (gettext("_charset_"));
@@ -162,11 +163,11 @@ sub mail_file {
     my $headers="";
 
     unless ($header_ok{'to'}) {
-
+	
 	if (ref ($rcpt)) {
 	    if ($data->{'to'}) {
 		$to = $data->{'to'};
-   }else {
+	    }else {
 		$to = join(",\n   ", @{$rcpt});
 	    }
 	}else{
@@ -180,10 +181,10 @@ sub mail_file {
 	} else {
 	    $headers .= "From: ".MIME::Words::encode_mimewords($data->{'from'},('Encode' => 'Q', 'Charset' => $charset))."\n"; 
 	}
-   }
+    }
     unless ($header_ok{'subject'}) {
 	$headers .= "Subject: ".MIME::Words::encode_mimewords($data->{'subject'},('Encode' => 'Q', 'Charset' => $charset))."\n";
-   }
+    }
     unless ($header_ok{'reply-to'}) { 
 	$headers .= "Reply-to: ".MIME::Words::encode_mimewords($data->{'replyto'},('Encode' => 'Q', 'Charset' => $charset))."\n" if ($data->{'replyto'})
     }
@@ -528,6 +529,11 @@ sub sending {
 	$msg->print(\*SMTP);
     
     }else {
+
+
+
+
+
 	print SMTP $msg;
     }
     close SMTP;

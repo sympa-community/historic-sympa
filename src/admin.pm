@@ -349,7 +349,7 @@ sub create_list{
     if (defined $list->{'admin'}{'shared_doc'}) {
 	$list->create_shared();
     }   
-    
+
     $list->{'admin'}{'creation'}{'date'} = &POSIX::strftime("%d %b %Y at %H:%M:%S", localtime(time));
     $list->{'admin'}{'creation'}{'date_epoch'} = time;
     if ($param->{'creation_email'}) {

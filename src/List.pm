@@ -336,7 +336,7 @@ my %alias = ('reply-to' => 'reply_to',
 				    'gettext_id' => "Archive encrypted mails as cleartext",
 				    'group' => 'archives'
 				    },
-           'available_user_options' => {'format' => {'reception' => {'format' => ['mail','notice','digest','digestplain','summary','nomail','txt','html','urlize','not_me'],
+	    'available_user_options' => {'format' => {'reception' => {'format' => ['mail','notice','digest','digestplain','summary','nomail','txt','html','urlize','not_me'],
 								      'occurrence' => '1-n',
 								      'split_char' => ',',
                                       'default' => 'mail,notice,digest,digestplain,summary,nomail,txt,html,urlize,not_me',
@@ -451,7 +451,7 @@ my %alias = ('reply-to' => 'reply_to',
 				 'gettext_id' => "Subject tagging",
 				 'group' => 'sending'
 				 },
-        'default_user_options' => {'format' => {'reception' => {'format' => ['digest','digestplain','mail','nomail','summary','notice','txt','html','urlize','not_me'],
+	    'default_user_options' => {'format' => {'reception' => {'format' => ['digest','digestplain','mail','nomail','summary','notice','txt','html','urlize','not_me'],
 								    'default' => 'mail',
 								    'gettext_id' => "reception mode",
 								    'order' => 1
@@ -2783,57 +2783,28 @@ sub send_msg_digest {
 ####################################################
 sub send_global_file {
     my($tpl, $who, $robot, $context) = @_;
-    do_log('debug2', 'List::send_global_file(%s, %s, %s)', $tpl, $who, $robot);
+    &do_log('debug2', 'List::send_global_file(%s, %s, %s)', $tpl, $who, $robot);
 
-    my $data = $context;
-
-    unless ($data->{'user'}) {
-	unless ($data->{'user'} = &get_user_db($who)) {
-	    $data->{'user'}{'email'} = $who;
-	}
-    }
-    unless ($data->{'user'}{'lang'}) {
-	$data->{'user'}{'lang'} = $Language::default_lang;
+    ## Any recepients
+    if ((ref ($who) && ($#{$who} < 0)) ||
+	(!ref ($who) && ($who eq ''))) {
+	&do_log('err', 'No recipient for sending %s', $tpl);
+	return undef;
     }
     
-    unless ($data->{'user'}{'password'}) {
-	$data->{'user'}{'password'} = &tools::tmp_passwd($who);
-    }
-
-    ## Lang
-    $data->{'lang'} = $data->{'lang'} || $data->{'user'}{'lang'} || &Conf::get_robot_conf($robot, 'lang');
-
-    ## What file   
-    my $tt2_include_path = ["$Conf{'etc'}/$robot/mail_tt2/".&Language::Lang2Locale($data->{'lang'}),
-			    "$Conf{'etc'}/$robot/mail_tt2",
-			    "$Conf{'etc'}/mail_tt2/".&Language::Lang2Locale($data->{'lang'}),
-			    "$Conf{'etc'}/mail_tt2",
-			    "--ETCBINDIR--/mail_tt2/".&Language::Lang2Locale($data->{'lang'}),
-			    "--ETCBINDIR--/mail_tt2"];
-
-    foreach my $d (@{$tt2_include_path}) {
-	&tt2::add_include_path($d);
-    }
-
-    my @path = &tt2::get_include_path();
-    my $filename = &tools::find_file($tpl.'.tt2',@path);
- 
-    unless (defined $filename) {
-	&do_log('err','Could not find template %s.tt2 in %s', $tpl, join(':',@path));
+    my $data;
+    unless ($data = &prepare_tt2_data($who,$robot,$context,'','',$tpl)) {
+	&do_log('err','List::send_global_file(): unable to prepare data for parsing');
 	return undef;
     }
 
-    foreach my $p ('email','host','sympa','request','listmaster','wwsympa_url','title','listmaster_email') {
-	$data->{'conf'}{$p} = &Conf::get_robot_conf($robot, $p);
+    my $filename;
+    my $lang = &Language::Lang2Locale($data->{'lang'});
+
+    unless ($filename = &prepare_tt2_context($robot,$lang,$tpl,'mail_tt2','')) {
+	&do_log('err','List::send_global_file(): unable to prepare context for parsing');
+	return undef;
     }
-
-    $data->{'sender'} = $who;
-    $data->{'conf'}{'version'} = $main::Version;
-    $data->{'from'} = "$data->{'conf'}{'email'}\@$data->{'conf'}{'host'}" unless ($data->{'from'});
-    $data->{'robot_domain'} = $robot;
-    $data->{'return_path'} = &Conf::get_robot_conf($robot, 'request');
-    $data->{'boundary'} = '----------=_'.&tools::get_message_id($robot) unless ($data->{'boundary'});
-
     unless (&mail::mail_file($filename, $who, $data, $robot)) {
 	&do_log('err',"List::send_global_file, could not send template $filename to $who");
 	return undef;
@@ -2868,12 +2839,9 @@ sub send_global_file {
 ####################################################
 sub send_file {
     my($self, $tpl, $who, $robot, $context) = @_;
-    do_log('debug2', 'List::send_file(%s, %s, %s)', $tpl, $who, $robot);
-
-    my $name = $self->{'name'};
-    my $sign_mode;
-
-    my $data = $context;
+    &do_log('debug2', 'List::send_file(%s, %s, %s)', $tpl, $who, $robot);
+ 
+    my $sign_mod;
 
     ## Any recepients
     if ((ref ($who) && ($#{$who} < 0)) ||
@@ -2882,24 +2850,105 @@ sub send_file {
 	return undef;
     }
     
+    ## Sign mode
+    if ($Conf{'openssl'} &&
+	(-r $self->{'dir'}.'/cert.pem') && (-r $self->{'dir'}.'/private_key')) {
+	$sign_mod = 'smime';
+    }
+
+    my $data;
+    unless ($data = &prepare_tt2_data($who,$robot,$context,$self,$sign_mod)) {
+	&do_log('err','List::send_file(): unable to prepare data for parsing');
+	return undef;
+    }
+
+    my @more_path = ($self->{'dir'},            ## list directory to get the 'info' file
+		     $self->{'dir'}.'/archives'); ## list archives to include the last message
+    my $filename;
+    my $lang = &Language::Lang2Locale($data->{'lang'});
+    unless ($filename = &prepare_tt2_context($robot,$lang,$tpl,'mail_tt2',$self,\@more_path)) {
+	&do_log('err','List::send_file(): unable to prepare context for parsing');
+	return undef;
+    }
+ 
+    unless (&mail::mail_file($filename, $who, $data, $self->{'domain'}, $sign_mod)) {
+	&do_log('err',"List::send_file, could not send template $filename to $who");
+	return undef;
+    }
+
+    return 1;
+}
+
+
+
+
+
+
+####################################################
+# prepare_tt2_data
+####################################################
+# prepare $data, hash containing values for parsing 
+# a mail template.
+#
+#  
+# IN : -$who (+): SCALAR |ref(ARRAY) - recepient(s)
+#      -$robot (+): robot
+#      -$context : ref(HASH) - for the $data set up 
+#         to parse file tt2, keys can be :
+#         -user : ref(HASH), keys can be :
+#           -email
+#           -lang
+#           -password
+#         -...
+#      -$list : '' - in a global context | ref(List) - in a list context
+#      -$sign_mode :'smime' | '' | undef
+#      -$tpl : template used for these data
+#
+# OUT : $data : ref(HASH) | undef
+####################################################
+sub prepare_tt2_data {
+    my ($who,$robot,$context,$list,$sign_mod,$tpl) = @_;
+    &do_log('debug3', 'List::prepare_tt2_data(%s,%s)', $who,$robot);
+
+    my $data = $context;
+    my $name;
+
+    if ($list) {
+	unless (ref($list) eq 'List') {
+	    &do_log('err','List::prepare_tt2_data(): param $list is not valid');
+	    return undef;
+	}
+	$name = $list->{'name'};
+    }
+
     ## Unless multiple recepients
     unless (ref ($who)) {
 	unless ($data->{'user'}) {
 	    unless ($data->{'user'} = &get_user_db($who)) {
 		$data->{'user'}{'email'} = $who;
-		$data->{'user'}{'lang'} = $self->{'admin'}{'lang'};
+	
+		unless ($data->{'user'}{'lang'}) {
+		    if ($list) {
+			$data->{'user'}{'lang'} = $list->{'admin'}{'lang'};
+		    } else {
+			$data->{'user'}{'lang'} = $Language::default_lang;
+		    }
+		}
+
 	    }
 	}
 	
-	$data->{'subscriber'} = $self->get_subscriber($who);
+	if ($list) {
+	    $data->{'subscriber'} = $list->get_subscriber($who);
 	
-	if ($data->{'subscriber'}) {
-	    $data->{'subscriber'}{'date'} = &POSIX::strftime("%d %b %Y", localtime($data->{'subscriber'}{'date'}));
-	    $data->{'subscriber'}{'update_date'} = &POSIX::strftime("%d %b %Y", localtime($data->{'subscriber'}{'update_date'}));
-	    if ($data->{'subscriber'}{'bounce'}) {
-		$data->{'subscriber'}{'bounce'} =~ /^(\d+)\s+(\d+)\s+(\d+)(\s+(.*))?$/;
-		
-		$data->{'subscriber'}{'first_bounce'} =  &POSIX::strftime("%d %b %Y",localtime($1));
+	    if ($data->{'subscriber'}) {
+		$data->{'subscriber'}{'date'} = &POSIX::strftime("%d %b %Y", localtime($data->{'subscriber'}{'date'}));
+		$data->{'subscriber'}{'update_date'} = &POSIX::strftime("%d %b %Y", localtime($data->{'subscriber'}{'update_date'}));
+		if ($data->{'subscriber'}{'bounce'}) {
+		    $data->{'subscriber'}{'bounce'} =~ /^(\d+)\s+(\d+)\s+(\d+)(\s+(.*))?$/;
+		    
+		    $data->{'subscriber'}{'first_bounce'} =  &POSIX::strftime("%d %b %Y",localtime($1));
+		}
 	    }
 	}
 	
@@ -2908,47 +2957,128 @@ sub send_file {
 	}
 	
 	## Unique return-path
-	if ((($self->{'admin'}{'welcome_return_path'} eq 'unique') && ($tpl eq 'welcome')) ||
-	    (($self->{'admin'}{'remind_return_path'} eq 'unique') && ($tpl eq 'remind')))  {
-	    my $escapercpt = $who ;
-	    $escapercpt =~ s/\@/\=\=a\=\=/;
-	    $data->{'return_path'} = "$Conf{'bounce_email_prefix'}+$escapercpt\=\=$name\@$self->{'admin'}{'host'}";
+	if ($list) {
+	    if ((($list->{'admin'}{'welcome_return_path'} eq 'unique') && ($tpl eq 'welcome')) ||
+		(($list->{'admin'}{'remind_return_path'} eq 'unique') && ($tpl eq 'remind')))  {
+		my $escapercpt = $who ;
+		$escapercpt =~ s/\@/\=\=a\=\=/;
+		$data->{'return_path'} = "$Conf{'bounce_email_prefix'}+$escapercpt\=\=$name\@$list->{'admin'}{'host'}";
+	    }
+	}
+	$data->{'sender'} = $who;
+    }
+
+    if ($list) {
+	$data->{'return_path'} ||= "$name-owner\@$list->{'admin'}{'host'}" ;
+    } else {
+	$data->{'return_path'} = &Conf::get_robot_conf($robot, 'request');
+    }
+
+    ## Lang
+    if ($list) {
+	$data->{'lang'} = $data->{'user'}{'lang'} || $list->{'admin'}{'lang'} || &Conf::get_robot_conf($robot, 'lang');
+    } else {
+	$data->{'lang'} = $data->{'lang'} || $data->{'user'}{'lang'} || &Conf::get_robot_conf($robot, 'lang');
+    }
+
+    ## conf
+    foreach my $p ('email','host','sympa','request','listmaster','wwsympa_url','title','listmaster_email') {
+	$data->{'conf'}{$p} = &Conf::get_robot_conf($robot, $p);
+    }
+    $data->{'conf'}{'version'} = $main::Version;
+
+    # list
+    if ($list) {
+	$data->{'list'}{'lang'} = $list->{'admin'}{'lang'};
+	$data->{'list'}{'name'} = $name;
+	$data->{'list'}{'domain'} = $robot;
+	$data->{'list'}{'host'} = $list->{'admin'}{'host'};
+	$data->{'list'}{'subject'} = $list->{'admin'}{'subject'};
+	$data->{'list'}{'owner'} = $list->get_owners();
+	$data->{'list'}{'dir'} = $list->{'dir'};
+    }
+
+    # if the list have it's private_key and cert sign the message
+    # . used only for the welcome message, could be usefull in other case ? 
+    # . a list should have several certificats and use if possible a certificat
+    #   issued by the same CA as the receipient CA if it exists 
+    if ($sign_mod eq 'smime' & $list) {
+	$data->{'fromlist'} = "$name\@$data->{'list'}{'host'}";
+	$data->{'replyto'} = "$name"."-request\@$data->{'list'}{'host'}";
+    }else{
+	$data->{'fromlist'} = "$name"."-request\@$data->{'list'}{'host'}";
+    }
+
+    if ($list) {
+	$data->{'from'} = $data->{'fromlist'} unless ($data->{'from'});
+    } else {
+	$data->{'from'} = "$data->{'conf'}{'email'}\@$data->{'conf'}{'host'}" unless ($data->{'from'});
+    }
+
+    $data->{'boundary'} = '----------=_'.&tools::get_message_id($robot) unless ($data->{'boundary'});
+    $data->{'robot_domain'} = $robot;
+
+    return $data;
+}
+
+
+####################################################
+# prepare_tt2_context
+####################################################
+# prepare the tt2 context for parsing and return 
+# the path of the file ($filename) to parse.
+#
+#  
+# IN : -$robot (+): robot
+#      -$lang (+): lang
+#      -$tpl (+): template name
+#      -$dir : directory for include path
+#      -$list : '' - in a global context | ref(List) - in a list context
+#      -$more_path : ref(ARRAY) path to add to include path at the end
+#
+# OUT : $filename : scalar | undef
+####################################################
+sub prepare_tt2_context {
+    my ($robot,$lang,$tpl,$dir,$list,$more_path) = @_;
+    &do_log('debug3', 'List::prepare_tt2_context(%s)', $robot);
+
+    if ($list) {
+	unless (ref($list) eq 'List') {
+	    &do_log('err','List::prepare_tt2_context(): param $list is not valid');
+	    return undef;
 	}
     }
 
-    $data->{'return_path'} ||= "$name-owner\@$self->{'admin'}{'host'}";
-
-    ## Lang
-    $data->{'lang'} = $data->{'user'}{'lang'} || $self->{'admin'}{'lang'} || &Conf::get_robot_conf($robot, 'lang');
-
     ## What file   
-    my $tt2_include_path = ["$Conf{'etc'}/$robot/mail_tt2/".&Language::Lang2Locale($data->{'lang'}),
-			    "$Conf{'etc'}/$robot/mail_tt2",
-			    "$Conf{'etc'}/mail_tt2/".&Language::Lang2Locale($data->{'lang'}),
-			    "$Conf{'etc'}/mail_tt2",
-			    "--ETCBINDIR--/mail_tt2/".&Language::Lang2Locale($data->{'lang'}),
-			    "--ETCBINDIR--/mail_tt2",
-			    $self->{'dir'},            ## list directory to get the 'info' file
-			    $self->{'dir'}.'/archives' ## list archives to include the last message
+    my $tt2_include_path = ["$Conf{'etc'}/$robot/$dir/$lang",
+			    "$Conf{'etc'}/$robot/$dir",
+			    "$Conf{'etc'}/$dir/$lang",
+			    "$Conf{'etc'}/$dir",
+			    "--ETCBINDIR--/$dir/$lang",
+			    "--ETCBINDIR--/$dir",
 			    ];
-
-    ## Add family-related path
-    if (defined $self->{'admin'}{'family_name'}) {
-	my $family = $self->get_family();
-	unshift @{$tt2_include_path}, $family->{'dir'}.'/mail_tt2';
-	unshift @{$tt2_include_path}, $family->{'dir'}.'/mail_tt2/'.&Language::Lang2Locale($data->{'lang'});
+   
+    if ($list) {
+	## Add family-related path
+	if (defined $list->{'admin'}{'family_name'}) {
+	    my $family = $list->get_family();
+	    unshift @{$tt2_include_path}, $family->{'dir'}.'/$dir';
+	    unshift @{$tt2_include_path}, $family->{'dir'}.'/$dir/'.$lang;
+	}
+	
+	## Add list-related path
+	unshift @{$tt2_include_path}, $list->{'dir'}.'/$dir';
+	unshift @{$tt2_include_path}, $list->{'dir'}.'/$dir/'.$lang;
     }
 
-    ## Add list-related path
-    unshift @{$tt2_include_path}, $self->{'dir'}.'/mail_tt2';
-    unshift @{$tt2_include_path}, $self->{'dir'}.'/mail_tt2/'.&Language::Lang2Locale($data->{'lang'});
-
-    foreach my $d (@{$tt2_include_path}) {
+    if (ref($more_path) eq 'ARRAY') {
+	foreach my $path (@$more_path) {
+	    push @{$tt2_include_path},$path;
+	}
+    }
+    
+   foreach my $d (@{$tt2_include_path}) {
 	&tt2::add_include_path($d);
-    }
-
-    foreach my $p ('email','host','sympa','request','listmaster','wwsympa_url','title','listmaster_email') {
-	$data->{'conf'}{$p} = &Conf::get_robot_conf($robot, $p);
     }
 
     my @path = &tt2::get_include_path();
@@ -2958,44 +3088,84 @@ sub send_file {
 	&do_log('err','Could not find template %s.tt2 in %s', $tpl, join(':',@path));
 	return undef;
     }
+    
+    return $filename;
+}
 
-    $data->{'sender'} = $who;
-    $data->{'list'}{'lang'} = $self->{'admin'}{'lang'};
-    $data->{'list'}{'name'} = $name;
-    $data->{'list'}{'domain'} = $data->{'robot_domain'} = $robot;
-    $data->{'list'}{'host'} = $self->{'admin'}{'host'};
-    $data->{'list'}{'subject'} = $self->{'admin'}{'subject'};
-    $data->{'list'}{'owner'} = $self->get_owners();
-    $data->{'list'}{'dir'} = $self->{'dir'};
+####################################################
+# get_parsed_file                              
+####################################################
+#  Parse a template mail to a user, relative to a list or not.
+#  Find the tt2 file according to $tpl, set up 
+#  $data for the next parsing (with $context and
+#  configuration).
+#  The parsed file is returned in $ref_output.
+#  
+# IN : -$ref_output (+) : ref(SCALAR) - parsed file
+#      -$tpl (+): template file name (file.tt2),
+#         without tt2 extension
+#      -$who (+): SCALAR |ref(ARRAY) - recepient(s)
+#      -$robot (+): robot
+#      -$context : ref(HASH) - for the $data set up 
+#         to parse file tt2, keys can be :
+#         -user : ref(HASH), keys can be :
+#           -email
+#           -lang
+#           -password
+#         -...
+#      -$list : ref(List) - for a list context
+# OUT : 1 | undef 
+####################################################
+sub get_parsed_file {
+    my($ref_output, $tpl, $who, $robot, $context, $list) = @_;
+    &do_log('debug2', 'List::get_parsed_file(%s, %s, %s)', $tpl, $who, $robot);
+ 
+    my $sign_mod;
 
-    ## Sign mode
-    if ($Conf{'openssl'} &&
-	(-r $self->{'dir'}.'/cert.pem') && (-r $self->{'dir'}.'/private_key')) {
-	$sign_mode = 'smime';
-    }
-
-    # if the list have it's private_key and cert sign the message
-    # . used only for the welcome message, could be usefull in other case ? 
-    # . a list should have several certificats and use if possible a certificat
-    #   issued by the same CA as the receipient CA if it exists 
-    if ($sign_mode eq 'smime') {
-	$data->{'fromlist'} = "$name\@$data->{'list'}{'host'}";
-	$data->{'replyto'} = "$name"."-request\@$data->{'list'}{'host'}";
-    }else{
-	$data->{'fromlist'} = "$name"."-request\@$data->{'list'}{'host'}";
-    }
-
-    $data->{'from'} = $data->{'fromlist'} unless ($data->{'from'});
-
-    $data->{'boundary'} = '----------=_'.&tools::get_message_id($robot) unless ($data->{'boundary'});
-
-    unless (&mail::mail_file($filename, $who, $data, $self->{'domain'}, $sign_mode)) {
-	&do_log('err',"List::send_file, could not send template $filename to $who");
+    ## Any recepients
+    if ((ref ($who) && ($#{$who} < 0)) ||
+	(!ref ($who) && ($who eq ''))) {
+	&do_log('err', 'No recipient for sending %s', $tpl);
 	return undef;
     }
+    
+    ## Sign mode
+    if (ref ($list) eq 'List') {
+	if ($Conf{'openssl'} &&
+	    (-r $list->{'dir'}.'/cert.pem') && (-r $list->{'dir'}.'/private_key')) {
+	    $sign_mod = 'smime';
+	}
+    }
+
+    my $data;
+    unless ($data = &prepare_tt2_data($who,$robot,$context,$list,$sign_mod,$tpl)) {
+	&do_log('err','List::get_parsed_file(): unable to prepare data for parsing');
+	return undef;
+    }
+    
+    if (ref ($list) eq 'List') {
+	my @more_path = ($list->{'dir'},            ## list directory to get the 'info' file
+			 $list->{'dir'}.'/archives'); ## list archives to include the last message
+    }
+
+    my $filename;
+    my $lang = &Language::Lang2Locale($data->{'lang'});
+    unless ($filename = &prepare_tt2_context($robot,$lang,$tpl,'mail_tt2',$list)) {
+	&do_log('err','List::get_parsed_file(): unable to prepare context for parsing');
+	return undef;
+    }
+ 
+    my $output;
+    my @path = split /\//, $filename;	   
+    &Language::SetLang($data->{'lang'}) if (defined $data->{'lang'});
+    &tt2::parse_tt2($data, $path[$#path], $ref_output);
+
+
 
     return 1;
 }
+
+
 
 #########################   SERVICE MESSAGES   ##########################################
 
@@ -11460,7 +11630,7 @@ sub remove_bouncers {
     }
 
     unless (&delete_user($self,@$reftab)){
-      &do_log('info','error while caling sub delete_users');
+      &do_log('info','error while caling sub elete_users');
       return undef;
     }
     return 1;
@@ -11489,12 +11659,31 @@ sub create_shared {
     my $dir = $self->{'dir'}.'/shared';
 
     if (-e $dir) {
-	&do_log('err',"List::create_shared : %s allready exists", $dir);
+	&do_log('err',"List::create_shared : %s already exists", $dir);
 	return undef;
     }
 
     unless (mkdir ($dir, 0777)) {
 	&do_log('err',"List::create_shared : unable to create %s : %s ", $dir, $!);
+	return undef;
+    }
+
+    return 1;
+}
+
+## Create the tracability directory
+sub create_tracability {
+    my $self = shift;
+
+    my $dir = $self->{'dir'}.'/tracability';
+
+    if (-e $dir) {
+	&do_log('err',"List::create_tracability : %s already exists", $dir);
+	return undef;
+    }
+
+    unless (mkdir ($dir, 0777)) {
+	&do_log('err',"List::create_tracability : unable to create %s : %s", $dir, $!);
 	return undef;
     }
 

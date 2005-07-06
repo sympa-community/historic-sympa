@@ -1,88 +1,6 @@
-<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2 Final//EN">
 
-<!--Converted with jLaTeX2HTML 2002-2-1 (1.70) JA patch-2.0
-patched version by:  Kenshi Muto, Debian Project.
-* modified by:  Shige TAKENO
-LaTeX2HTML 2002-2-1 (1.70),
-original version by:  Nikos Drakos, CBLU, University of Leeds
-* revised and updated by:  Marcus Hennecke, Ross Moore, Herb Swan
-* with significant contributions from:
-  Jens Lippmann, Marek Rouchal, Martin Wilck and others -->
-<HTML>
-<HEAD>
-<TITLE>11. Sympa SOAP server</TITLE>
-<META NAME="description" CONTENT="11. Sympa SOAP server">
-<META NAME="keywords" CONTENT="sympa">
-<META NAME="resource-type" CONTENT="document">
-<META NAME="distribution" CONTENT="global">
-
-<META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=iso-8859-1">
-<META NAME="Generator" CONTENT="jLaTeX2HTML v2002-2-1 JA patch-2.0">
-<META HTTP-EQUIV="Content-Style-Type" CONTENT="text/css">
-
-<LINK REL="STYLESHEET" HREF="sympa.css">
-
-<LINK REL="next" HREF="node13.html">
-<LINK REL="previous" HREF="node11.html">
-<LINK REL="up" HREF="sympa.html">
-<LINK REL="next" HREF="node13.html">
-</HEAD>
-
-<BODY TEXT="#000000" BGCOLOR="#ffffff">
-<!--Navigation Panel-->
-<A NAME="tex2html1059"
-  HREF="node13.html">
-<IMG WIDTH="37" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="next" SRC="next.png"></A> 
-<A NAME="tex2html1053"
-  HREF="sympa.html">
-<IMG WIDTH="26" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="up" SRC="up.png"></A> 
-<A NAME="tex2html1047"
-  HREF="node11.html">
-<IMG WIDTH="63" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="previous" SRC="prev.png"></A> 
-<A NAME="tex2html1055"
-  HREF="node1.html">
-<IMG WIDTH="65" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="contents" SRC="contents.png"></A> 
-<A NAME="tex2html1057"
-  HREF="node30.html">
-<IMG WIDTH="43" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="index" SRC="index.png"></A> 
-<BR>
-<B> Next:</B> <A NAME="tex2html1060"
-  HREF="node13.html">12. Authentication</A>
-<B> Up:</B> <A NAME="tex2html1054"
-  HREF="sympa.html">Sympa Mailing Lists Management Software version</A>
-<B> Previous:</B> <A NAME="tex2html1048"
-  HREF="node11.html">10. Sympa RSS channel</A>
- &nbsp; <B>  <A NAME="tex2html1056"
-  HREF="node1.html">Contents</A></B> 
- &nbsp; <B>  <A NAME="tex2html1058"
-  HREF="node30.html">Index</A></B> 
-<BR>
-<BR>
-<!--End of Navigation Panel-->
-<!--Table of Child-Links-->
-<A NAME="CHILD_LINKS"><STRONG>Subsections</STRONG></A>
-
-<UL>
-<LI><A NAME="tex2html1061"
-  HREF="node12.html#SECTION001210000000000000000">11.1 Introduction</A>
-<LI><A NAME="tex2html1062"
-  HREF="node12.html#SECTION001220000000000000000">11.2 Web server setup</A>
-<LI><A NAME="tex2html1063"
-  HREF="node12.html#SECTION001230000000000000000">11.3 Sympa setup</A>
-<LI><A NAME="tex2html1064"
-  HREF="node12.html#SECTION001240000000000000000">11.4 The WSDL service description</A>
-<LI><A NAME="tex2html1065"
-  HREF="node12.html#SECTION001250000000000000000">11.5 Client-side programming</A>
-<UL>
-<LI><A NAME="tex2html1066"
-  HREF="node12.html#SECTION001251000000000000000">11.5.1 Writting a Java client with Axis</A>
-</UL></UL>
-<!--End of Table of Child-Links-->
-<HR>
-
-<H1><A NAME="SECTION001200000000000000000"></A>
-<A NAME="soap"></A>
-<BR>
+<H1><A NAME="SECTION001200000000000000000"><tex2html_anchor_invisible_mark></A>
+<A NAME="soap"><tex2html_anchor_mark></A><BR>
 11. Sympa SOAP server
 </H1>
 
@@ -122,14 +40,10 @@ for example).
 You <B>NEED TO</B> install FastCGI for the SOAP server to work properly because it will run as a daemon.
 
 <P>
-Here is a sample piece of your Apache <A NAME="8261"></A><TT>httpd.conf</TT> with a SOAP server configured :<PRE>
-	FastCgiServer /sympa_soap_server.fcgi -processes 1
-	ScriptAlias /sympasoap /sympa_soap_server.fcgi
-
-	&lt;Location /sympasoap&gt;
-   	  SetHandler fastcgi-script
-	&lt;/Location&gt;
-</PRE>
+Here is a sample piece of your Apache <A NAME="8369"><tex2html_anchor_invisible_mark></A><TT>httpd.conf</TT> with a SOAP server configured :
+<BLOCKQUOTE>
+</BLOCKQUOTE><PRE><tex2html_verbatim_mark>verbatim308#</PRE><BLOCKQUOTE>
+</BLOCKQUOTE>
 
 <P>
 
@@ -138,8 +52,8 @@ Here is a sample piece of your Apache <A NAME="8261"></A><TT>httpd.conf</TT> wit
 </H1>
 
 <P>
-The only parameters that you need to set in <A NAME="8264"></A><TT>sympa.conf</TT>/<A NAME="8267"></A><TT>robot.conf</TT> files is
-the <A NAME="8270"></A><TT>soap_url</TT> parameter that defines the URL of the SOAP service corresponding
+The only parameters that you need to set in <A NAME="8372"><tex2html_anchor_invisible_mark></A><TT>sympa.conf</TT>/<A NAME="8375"><tex2html_anchor_invisible_mark></A><TT>robot.conf</TT> files is
+the <A NAME="8378"><tex2html_anchor_invisible_mark></A><TT>soap_url</TT> parameter that defines the URL of the SOAP service corresponding
 to the ScriptAlias you've previously setup in Apache config. 
 
 <P>
@@ -156,412 +70,10 @@ also for the SOAP server to deduce what Virtual Robot is concerned by the curren
 <P>
 Here is what the WSDL file looks like before it is parsed by WWSympa :
 
-<P><PRE>
-&lt;?xml version="1.0"?&gt;
-&lt;definitions name="Sympa" 
-	xmlns:xsd="http://www.w3.org/2001/XMLSchema" 
-	xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" 
-	targetNamespace="[% conf.wwsympa_url %]/wsdl" 
-	xmlns:tns="[% conf.wwsympa_url %]/wsdl"
-	xmlns="http://schemas.xmlsoap.org/wsdl/" 
-	xmlns:xsdl="[% conf.soap_url %]/wsdl"&gt;
-
-
-&lt;!-- types part --&gt;	
-
-
-&lt;types&gt;
-&lt;schema targetNamespace="[% conf.wwsympa_url %]/wsdl" 
-	xmlns:SOAP-ENC="http://schemas.xmlsoap.org/soap/encoding/" 
-	xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" 
-	xmlns="http://www.w3.org/2001/XMLSchema"&gt;
-	
-	&lt;complexType name="ArrayOfLists"&gt;
-		&lt;complexContent&gt;
-			&lt;restriction base="SOAP-ENC:Array"&gt;
-				&lt;attribute ref="SOAP-ENC:arrayType" wsdl:arrayType="tns:listType[]"/&gt;
-			&lt;/restriction&gt;
-		&lt;/complexContent&gt;
-	&lt;/complexType&gt;
-
-	&lt;complexType name="ArrayOfString"&gt;
-		&lt;complexContent&gt;
-			&lt;restriction base="SOAP-ENC:Array"&gt;
-				&lt;attribute ref="SOAP-ENC:arrayType" wsdl:arrayType="string[]"/&gt;
-			&lt;/restriction&gt;
-		&lt;/complexContent&gt;
-	&lt;/complexType&gt;
-	
-	&lt;complexType name="listType"&gt;
-           &lt;all&gt;
-		&lt;element name="listAddress" minOccurs="1" type="string"/&gt;
-		&lt;element name="homepage" minOccurs="0" type="string"/&gt;
-		&lt;element name="isSubscriber" minOccurs="0" type="boolean"/&gt;
-		&lt;element name="isOwner" minOccurs="0" type="boolean"/&gt;
-		&lt;element name="isEditor" minOccurs="0" type="boolean"/&gt;
-		&lt;element name="subject" minOccurs="0" type="string"/&gt;
-           &lt;/all&gt;
-	&lt;/complexType&gt;
-&lt;/schema&gt;
-&lt;/types&gt;
-
-
-&lt;!-- message part --&gt;
-
-&lt;message name="infoRequest"&gt;
-        &lt;part name="listName" type="xsd:string"/&gt;
-&lt;/message&gt;
-
-&lt;message name="infoResponse"&gt;
-	&lt;part name="return" type="tns:listType"/&gt;
-&lt;/message&gt;
-
-&lt;message name="complexWhichRequest"&gt;
-&lt;/message&gt;
-
-&lt;message name="complexWhichResponse"&gt;
-	&lt;part name="return" type="tns:ArrayOfLists"/&gt;
-&lt;/message&gt;
-
-&lt;message name="whichRequest"&gt;
-&lt;/message&gt;
-
-&lt;message name="whichResponse"&gt;
-	&lt;part name="return" type="tns:ArrayOfString"/&gt;
-&lt;/message&gt;
-
-&lt;message name="amIRequest"&gt;
-	&lt;part name="list" type="xsd:string"/&gt;
-	&lt;part name="function" type="xsd:string"/&gt;
-	&lt;part name="user" type="xsd:string"/&gt;
-&lt;/message&gt;
-
-&lt;message name="amIResponse"&gt;
-	&lt;part name="return" type="xsd:boolean"/&gt;
-&lt;/message&gt;
-
-&lt;message name="reviewRequest"&gt;
-	&lt;part name="list" type="xsd:string"/&gt;
-&lt;/message&gt;
-
-&lt;message name="reviewResponse"&gt;
-	&lt;part name="return" type="tns:ArrayOfString"/&gt;
-&lt;/message&gt;
-
-&lt;message name="signoffRequest"&gt;
-	&lt;part name="list" type="xsd:string"/&gt;
-	&lt;part name="email" type="xsd:string" xsd:minOccurs="0"/&gt;	
-&lt;/message&gt;
-
-&lt;message name="signoffResponse"&gt;
-	&lt;part name="return" type="xsd:boolean"/&gt;
-&lt;/message&gt;
-
-&lt;message name="subscribeRequest"&gt;
-	&lt;part name="list" type="xsd:string"/&gt;
-	&lt;part name="gecos" type="xsd:string" xsd:minOccurs="0"/&gt;	
-&lt;/message&gt;
-
-&lt;message name="subscribeResponse"&gt;
-	&lt;part name="return" type="xsd:boolean"/&gt;
-&lt;/message&gt;
-
-&lt;message name="loginRequest"&gt;
-	&lt;part name="email" type="xsd:string"/&gt;
-	&lt;part name="password" type="xsd:string"/&gt;
-&lt;/message&gt;
-
-&lt;message name="loginResponse"&gt;
-	&lt;part name="return" type="xsd:string"/&gt;	
-&lt;/message&gt;
-
-&lt;message name="authenticateAndRunRequest"&gt;
-	&lt;part name="email" type="xsd:string"/&gt;
-	&lt;part name="cookie" type="xsd:string"/&gt;
-	&lt;part name="service" type="xsd:string"/&gt;
-	&lt;part name="parameters" type="tns:ArrayOfString" xsd:minOccurs="0"/&gt;
-&lt;/message&gt;
-
-&lt;message name="authenticateAndRunResponse"&gt;
-	&lt;part name="return" type="tns:ArrayOfString" xsd:minOccurs="0"/&gt;	
-&lt;/message&gt;
-
-&lt;message name="casLoginRequest"&gt;
-	&lt;part name="proxyTicket" type="xsd:string"/&gt;
-&lt;/message&gt;
-
-&lt;message name="casLoginResponse"&gt;
-	&lt;part name="return" type="xsd:string"/&gt;	
-&lt;/message&gt;
-
-&lt;message name="listsRequest"&gt;
-	&lt;part name="topic" type="xsd:string" xsd:minOccurs="0"/&gt;
-	&lt;part name="subtopic" type="xsd:string" xsd:minOccurs="0"/&gt;
-&lt;/message&gt;
-
-&lt;message name="listsResponse"&gt;
-	&lt;part name="listInfo" type="xsd:string"/&gt;	
-&lt;/message&gt;
-
-&lt;message name="complexListsRequest"&gt;
-&lt;/message&gt;
-
-&lt;message name="complexListsResponse"&gt;
-	&lt;part name="return" type="tns:ArrayOfLists"/&gt;
-&lt;/message&gt;
-
-&lt;message name="checkCookieRequest"&gt;
-&lt;/message&gt;
-
-&lt;message name="checkCookieResponse"&gt;
-	&lt;part name="email" type="xsd:string"/&gt;
-&lt;/message&gt;
-
-
-&lt;!-- portType part --&gt;
-
-&lt;portType name="SympaPort"&gt;
-	&lt;operation name="info"&gt;
-		&lt;input message="tns:infoRequest" /&gt;
-		&lt;output message="tns:infoResponse" /&gt;
-	&lt;/operation&gt;
-	&lt;operation name="complexWhich"&gt;
-		&lt;input message="tns:complexWhichRequest" /&gt;
-		&lt;output message="tns:complexWhichResponse" /&gt;
-	&lt;/operation&gt;
-	&lt;operation name="which"&gt;
-		&lt;input message="tns:whichRequest" /&gt;
-		&lt;output message="tns:whichResponse" /&gt;
-	&lt;/operation&gt;
-	&lt;operation name="amI"&gt;
-		&lt;input message="tns:amIRequest" /&gt;
-		&lt;output message="tns:amIResponse" /&gt;
-	&lt;/operation&gt;
-	&lt;operation name="review"&gt;
-		&lt;input message="tns:reviewRequest" /&gt;
-		&lt;output message="tns:reviewResponse" /&gt;
-	&lt;/operation&gt;
-	&lt;operation name="subscribe"&gt;
-		&lt;input message="tns:subscribeRequest" /&gt;
-		&lt;output message="tns:subscribeResponse" /&gt;
-	&lt;/operation&gt;
-	&lt;operation name="signoff"&gt;
-		&lt;input message="tns:signoffRequest" /&gt;
-		&lt;output message="tns:signoffResponse" /&gt;
-	&lt;/operation&gt;
-	&lt;operation name="login"&gt;
-		&lt;input message="tns:loginRequest" /&gt;
-		&lt;output message="tns:loginResponse" /&gt;
-	&lt;/operation&gt;
-	&lt;operation name="casLogin"&gt;
-		&lt;input message="tns:casLoginRequest" /&gt;
-		&lt;output message="tns:casLoginResponse" /&gt;
-	&lt;/operation&gt;
-	&lt;operation name="authenticateAndRun"&gt;
-		&lt;input message="tns:authenticateAndRunRequest" /&gt;
-		&lt;output message="tns:authenticateAndRunResponse" /&gt;
-	&lt;/operation&gt;
-	&lt;operation name="lists"&gt;
-		&lt;input message="tns:listsRequest" /&gt;
-		&lt;output message="tns:listsResponse" /&gt;
-	&lt;/operation&gt;
-	&lt;operation name="complexLists"&gt;
-		&lt;input message="tns:complexListsRequest" /&gt;
-		&lt;output message="tns:complexListsResponse" /&gt;
-	&lt;/operation&gt;
-	&lt;operation name="checkCookie"&gt;
-		&lt;input message="tns:checkCookieRequest" /&gt;
-		&lt;output message="tns:checkCookieResponse" /&gt;
-	&lt;/operation&gt;
-&lt;/portType&gt;
-
-
-&lt;!-- Binding part --&gt;
-
-&lt;binding name="SOAP" type="tns:SympaPort"&gt;
-&lt;soap:binding style="rpc" transport="http://schemas.xmlsoap.org/soap/http"/&gt;
-	&lt;operation name="info"&gt;
-		&lt;soap:operation soapAction="urn:sympasoap#info"/&gt;
-			&lt;input&gt;
-				&lt;soap:body use="encoded" 
-					namespace="urn:sympasoap" 
-					encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/&gt;
-			&lt;/input&gt;
-			&lt;output&gt;
-				&lt;soap:body use="encoded"
-					namespace="urn:sympasoap" 
-					encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/&gt;
-			&lt;/output&gt;
-	&lt;/operation&gt;
-	&lt;operation name="complexWhich"&gt;
-		&lt;soap:operation soapAction="urn:sympasoap#complexWhich"/&gt;
-			&lt;input&gt;
-				&lt;soap:body use="encoded" 
-					namespace="urn:sympasoap" 
-					encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/&gt;
-			&lt;/input&gt;
-			&lt;output&gt;
-				&lt;soap:body use="encoded"
-					namespace="urn:sympasoap" 
-					encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/&gt;
-			&lt;/output&gt;
-	&lt;/operation&gt;
-	&lt;operation name="which"&gt;
-		&lt;soap:operation soapAction="urn:sympasoap#which"/&gt;
-			&lt;input&gt;
-				&lt;soap:body use="encoded" 
-					namespace="urn:sympasoap" 
-					encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/&gt;
-			&lt;/input&gt;
-			&lt;output&gt;
-				&lt;soap:body use="encoded"
-					namespace="urn:sympasoap" 
-					encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/&gt;
-			&lt;/output&gt;
-	&lt;/operation&gt;
-	&lt;operation name="amI"&gt;
-		&lt;soap:operation soapAction="urn:sympasoap#amI"/&gt;
-			&lt;input&gt;
-				&lt;soap:body use="encoded" 
-					namespace="urn:sympasoap" 
-					encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/&gt;
-			&lt;/input&gt;
-			&lt;output&gt;
-				&lt;soap:body use="encoded"
-					namespace="urn:sympasoap" 
-					encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/&gt;
-			&lt;/output&gt;
-	&lt;/operation&gt;
-	&lt;operation name="review"&gt;
-		&lt;soap:operation soapAction="urn:sympasoap#review"/&gt;
-			&lt;input&gt;
-				&lt;soap:body use="encoded" 
-					namespace="urn:sympasoap" 
-					encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/&gt;
-			&lt;/input&gt;
-			&lt;output&gt;
-				&lt;soap:body use="encoded"
-					namespace="urn:sympasoap" 
-					encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/&gt;
-			&lt;/output&gt;
-	&lt;/operation&gt;
-	&lt;operation name="subscribe"&gt;
-		&lt;soap:operation soapAction="urn:sympasoap#subscribe"/&gt;
-			&lt;input&gt;
-				&lt;soap:body use="encoded" 
-					namespace="urn:sympasoap" 
-					encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/&gt;
-			&lt;/input&gt;
-			&lt;output&gt;
-				&lt;soap:body use="encoded"
-					namespace="urn:sympasoap" 
-					encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/&gt;
-			&lt;/output&gt;
-	&lt;/operation&gt;
-	&lt;operation name="signoff"&gt;
-		&lt;soap:operation soapAction="urn:sympasoap#signoff"/&gt;
-			&lt;input&gt;
-				&lt;soap:body use="encoded" 
-					namespace="urn:sympasoap" 
-					encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/&gt;
-			&lt;/input&gt;
-			&lt;output&gt;
-				&lt;soap:body use="encoded"
-					namespace="urn:sympasoap" 
-					encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/&gt;
-			&lt;/output&gt;
-	&lt;/operation&gt;
-	&lt;operation name="login"&gt;
-		&lt;soap:operation soapAction="urn:sympasoap#login"/&gt;
-			&lt;input&gt;
-				&lt;soap:body use="encoded" 
-					namespace="urn:sympasoap" 
-					encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/&gt;
-			&lt;/input&gt;
-			&lt;output&gt;
-				&lt;soap:body use="encoded"
-					namespace="urn:sympasoap" 
-					encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/&gt;
-			&lt;/output&gt;
-	&lt;/operation&gt;
-	&lt;operation name="casLogin"&gt;
-		&lt;soap:operation soapAction="urn:sympasoap#casLogin"/&gt;
-			&lt;input&gt;
-				&lt;soap:body use="encoded" 
-					namespace="urn:sympasoap" 
-					encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/&gt;
-			&lt;/input&gt;
-			&lt;output&gt;
-				&lt;soap:body use="encoded"
-					namespace="urn:sympasoap" 
-					encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/&gt;
-			&lt;/output&gt;
-	&lt;/operation&gt;
-	&lt;operation name="authenticateAndRun"&gt;
-		&lt;soap:operation soapAction="urn:sympasoap#authenticateAndRun"/&gt;
-			&lt;input&gt;
-				&lt;soap:body use="encoded" 
-					namespace="urn:sympasoap" 
-					encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/&gt;
-			&lt;/input&gt;
-			&lt;output&gt;
-				&lt;soap:body use="encoded"
-					namespace="urn:sympasoap" 
-					encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/&gt;
-			&lt;/output&gt;
-	&lt;/operation&gt;
-	&lt;operation name="lists"&gt;
-		&lt;soap:operation soapAction="urn:sympasoap#lists"/&gt;
-			&lt;input&gt;
-				&lt;soap:body use="encoded" 
-					namespace="urn:sympasoap" 
-					encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/&gt;
-			&lt;/input&gt;
-			&lt;output&gt;
-				&lt;soap:body use="encoded"
-					namespace="urn:sympasoap" 
-					encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/&gt;
-			&lt;/output&gt;
-	&lt;/operation&gt;
-	&lt;operation name="complexLists"&gt;
-		&lt;soap:operation soapAction="urn:sympasoap#complexLists"/&gt;
-			&lt;input&gt;
-				&lt;soap:body use="encoded" 
-					namespace="urn:sympasoap" 
-					encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/&gt;
-			&lt;/input&gt;
-			&lt;output&gt;
-				&lt;soap:body use="encoded"
-					namespace="urn:sympasoap" 
-					encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/&gt;
-			&lt;/output&gt;
-	&lt;/operation&gt;
-	&lt;operation name="checkCookie"&gt;
-		&lt;soap:operation soapAction="urn:sympasoap#checkCookie"/&gt;
-			&lt;input&gt;
-				&lt;soap:body use="encoded" 
-					namespace="urn:sympasoap" 
-					encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/&gt;
-			&lt;/input&gt;
-			&lt;output&gt;
-				&lt;soap:body use="encoded"
-					namespace="urn:sympasoap" 
-					encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/&gt;
-			&lt;/output&gt;
-	&lt;/operation&gt;
-&lt;/binding&gt;
-
-&lt;!-- service part --&gt;
-
-
-&lt;service name="SympaSOAP"&gt;
-	&lt;port name="SympaPort" binding="tns:SOAP"&gt;
-		&lt;soap:address location="[% conf.soap_url %]"/&gt;
-	&lt;/port&gt;
-&lt;/service&gt;
-
-&lt;/definitions&gt;
-</PRE>
+<P>
+<BLOCKQUOTE>
+</BLOCKQUOTE><PRE><tex2html_verbatim_mark>verbatim309#</PRE><BLOCKQUOTE>
+</BLOCKQUOTE>
 
 <P>
 
@@ -599,7 +111,7 @@ should use the <B>authenticateAndRun()</B> function that does not require cookie
 First, download jakarta-axis (http://ws.apache.org/axis/)
 <BR>
 <P>
-You must add the libraries provided with jakarta axis (v &gt;1.1) to you CLASSPATH. These libraries are  :
+You must add the libraries provided with jakarta axis (v ;SPMgt;1.1) to you CLASSPATH. These libraries are  :
 
 <P>
 
@@ -634,78 +146,24 @@ java org.apache.axis.wsdl.WSDL2Java -av  WSDL_URL
 <BR>
 <P>
 For example :
-<PRE>
-java org.apache.axis.wsdl.WSDL2Java -av  http://demo.sympa.org/sympa/wsdl
-</PRE>
+<PRE><tex2html_verbatim_mark>verbatim310#</PRE>
 
 <P>
 Exemple of screen output during generation of java files :
-<BR> <PRE>
-Parsing XML file:  http://demo.sympa.org/sympa/wsdl
-Generating org/sympa/demo/sympa/msdl/ListType.java
-Generating org/sympa/demo/sympa/msdl/SympaPort.java
-Generating org/sympa/demo/sympa/msdl/SOAPStub.java
-Generating org/sympa/demo/sympa/msdl/SympaSOAP.java
-Generating org/sympa/demo/sympa/msdl/SympaSOAPLocator.java
-</PRE>
+<BR> <PRE><tex2html_verbatim_mark>verbatim311#</PRE>
 
 <P>
 If you need  more information or more generated classes (to have the server-side classes or junit testcase classes for example), you can get a list of switches :
-<BR>    <PRE>
-java org.apache.axis.wsdl.WSDL2Java -h
-</PRE>
+<BR>    <PRE><tex2html_verbatim_mark>verbatim312#</PRE>
 The reference page is :
-<BR>
-http://ws.apache.org/axis/java/reference.html
+<BR>http://ws.apache.org/axis/java/reference.html
 
 <P>
 Take care of Test classes generated by axis, there are not useable as is. You have to stay connected between each test. To use junit testcases, before each soap operation tested, you must call the authenticated connexion to sympa instance.
 
 <P>
 Here is a simple Java code that invokes the generated stub to perform a casLogin() and a which() on the remote Sympa SOAP server :
-<PRE>
-SympaSOAP loc = new SympaSOAPLocator();
-((SympaSOAPLocator)loc).setMaintainSession(true);
-SympaPort tmp = loc.getSympaPort();
-String _value = tmp.casLogin(_ticket);
-String _cookie = tmp.checkCookie();
-String[] _abonnements = tmp.which();
-</PRE>
+<PRE><tex2html_verbatim_mark>verbatim313#</PRE>
 
 <P>
 
-<HR>
-<!--Navigation Panel-->
-<A NAME="tex2html1059"
-  HREF="node13.html">
-<IMG WIDTH="37" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="next" SRC="next.png"></A> 
-<A NAME="tex2html1053"
-  HREF="sympa.html">
-<IMG WIDTH="26" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="up" SRC="up.png"></A> 
-<A NAME="tex2html1047"
-  HREF="node11.html">
-<IMG WIDTH="63" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="previous" SRC="prev.png"></A> 
-<A NAME="tex2html1055"
-  HREF="node1.html">
-<IMG WIDTH="65" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="contents" SRC="contents.png"></A> 
-<A NAME="tex2html1057"
-  HREF="node30.html">
-<IMG WIDTH="43" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="index" SRC="index.png"></A> 
-<BR>
-<B> Next:</B> <A NAME="tex2html1060"
-  HREF="node13.html">12. Authentication</A>
-<B> Up:</B> <A NAME="tex2html1054"
-  HREF="sympa.html">Sympa Mailing Lists Management Software version</A>
-<B> Previous:</B> <A NAME="tex2html1048"
-  HREF="node11.html">10. Sympa RSS channel</A>
- &nbsp; <B>  <A NAME="tex2html1056"
-  HREF="node1.html">Contents</A></B> 
- &nbsp; <B>  <A NAME="tex2html1058"
-  HREF="node30.html">Index</A></B> 
-<!--End of Navigation Panel-->
-<ADDRESS>
-root
-2005-05-25
-</ADDRESS>
-</BODY>
-</HTML>

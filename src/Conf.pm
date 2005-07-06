@@ -36,7 +36,7 @@ use Carp;
 
 my @valid_options = qw(
 		       avg bounce_warn_rate bounce_halt_rate bounce_email_prefix chk_cert_expiration_task expire_bounce_task
-		       clean_delay_queue clean_delay_queueauth clean_delay_queuemod clean_delay_queuetopic default_remind_task
+		       clean_delay_queue clean_delay_queueauth clean_delay_queuemod clean_delay_queuetopic clean_delay_queuetracability default_remind_task
 		       cookie cookie_cas_expire create_list crl_dir crl_update_task db_host db_env db_name 
 		       db_options db_passwd db_type db_user db_port db_additional_subscriber_fields db_additional_user_fields
 		       default_shared_quota default_archive_quota default_list_priority distribution_mode edit_list email etc
@@ -44,7 +44,7 @@ my @valid_options = qw(
 		       misaddressed_commands misaddressed_commands_regexp max_size maxsmtp nrcpt 
 		       owner_priority pidfile pidfile_distribute
 		       spool queue queuedistribute queueauth queuetask queuebounce queuedigest 
-		       queuemod queuetopic queuesubscribe queueoutgoing tmpdir
+		       queuemod queuetopic queuesubscribe queuetracability queueoutgoing tmpdir
 		       loop_command_max loop_command_sampling_delay loop_command_decrease_factor
 		       purge_user_table_task  purge_orphan_bounces_task eval_bouncers_task process_bouncers_task
 		       minimum_bouncing_count minimum_bouncing_period bounce_delay 
@@ -102,12 +102,14 @@ my %Default_Conf =
      'queuebounce'  => undef,    
      'queuetask' => undef,
      'queuesubscribe' => undef,
+     'queuetracability' => undef,
      'tmpdir'  => undef,     
      'sleep'      => 5,
      'clean_delay_queue'    => 1,
      'clean_delay_queuemod' => 10,
      'clean_delay_queuetopic' => 7,
      'clean_delay_queueauth' => 3,
+     'clean_delay_queuetracability' => 7,
      'log_socket_type'      => 'unix',
      'log_smtp'      => '',
      'remind_return_path' => 'owner',
@@ -292,6 +294,9 @@ sub load {
     }
     unless (defined $o{'queuetask'}) {
 	$o{'queuetask'}[0] = "$spool/task";
+    }
+    unless (defined $o{'queuetracability'}) {
+	$o{'queuetracability'}[0] = "$spool/tracability";
     }
     unless (defined $o{'tmpdir'}) {
 	$o{'tmpdir'}[0] = "$spool/tmp";
@@ -518,7 +523,7 @@ sub checkfiles {
 	}
     }
     
-    foreach my $qdir ('spool','queue','queuedigest','queuemod','queuetopic','queueauth','queueoutgoing','queuebounce','queuesubscribe','queuetask','queuedistribute','tmpdir')
+    foreach my $qdir ('spool','queue','queuedigest','queuemod','queuetopic','queueauth','queueoutgoing','queuebounce','queuesubscribe','queuetask','queuedistribute','queuetracability','tmpdir')
     {
 	unless (-d $Conf{$qdir}) {
 	    do_log('info', "creating spool $Conf{$qdir}");

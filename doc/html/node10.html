@@ -1,127 +1,3 @@
-<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2 Final//EN">
-
-<!--Converted with jLaTeX2HTML 2002-2-1 (1.70) JA patch-2.0
-patched version by:  Kenshi Muto, Debian Project.
-* modified by:  Shige TAKENO
-LaTeX2HTML 2002-2-1 (1.70),
-original version by:  Nikos Drakos, CBLU, University of Leeds
-* revised and updated by:  Marcus Hennecke, Ross Moore, Herb Swan
-* with significant contributions from:
-  Jens Lippmann, Marek Rouchal, Martin Wilck and others -->
-<HTML>
-<HEAD>
-<TITLE>9. WWSympa, Sympa's web interface</TITLE>
-<META NAME="description" CONTENT="9. WWSympa, Sympa's web interface">
-<META NAME="keywords" CONTENT="sympa">
-<META NAME="resource-type" CONTENT="document">
-<META NAME="distribution" CONTENT="global">
-
-<META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=iso-8859-1">
-<META NAME="Generator" CONTENT="jLaTeX2HTML v2002-2-1 JA patch-2.0">
-<META HTTP-EQUIV="Content-Style-Type" CONTENT="text/css">
-
-<LINK REL="STYLESHEET" HREF="sympa.css">
-
-<LINK REL="next" HREF="node11.html">
-<LINK REL="previous" HREF="node9.html">
-<LINK REL="up" HREF="sympa.html">
-<LINK REL="next" HREF="node11.html">
-</HEAD>
-
-<BODY TEXT="#000000" BGCOLOR="#ffffff">
-<!--Navigation Panel-->
-<A NAME="tex2html1002"
-  HREF="node11.html">
-<IMG WIDTH="37" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="next" SRC="next.png"></A> 
-<A NAME="tex2html996"
-  HREF="sympa.html">
-<IMG WIDTH="26" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="up" SRC="up.png"></A> 
-<A NAME="tex2html990"
-  HREF="node9.html">
-<IMG WIDTH="63" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="previous" SRC="prev.png"></A> 
-<A NAME="tex2html998"
-  HREF="node1.html">
-<IMG WIDTH="65" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="contents" SRC="contents.png"></A> 
-<A NAME="tex2html1000"
-  HREF="node30.html">
-<IMG WIDTH="43" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="index" SRC="index.png"></A> 
-<BR>
-<B> Next:</B> <A NAME="tex2html1003"
-  HREF="node11.html">10. Sympa RSS channel</A>
-<B> Up:</B> <A NAME="tex2html997"
-  HREF="sympa.html">Sympa Mailing Lists Management Software version</A>
-<B> Previous:</B> <A NAME="tex2html991"
-  HREF="node9.html">8. Sympa and its database</A>
- &nbsp; <B>  <A NAME="tex2html999"
-  HREF="node1.html">Contents</A></B> 
- &nbsp; <B>  <A NAME="tex2html1001"
-  HREF="node30.html">Index</A></B> 
-<BR>
-<BR>
-<!--End of Navigation Panel-->
-<!--Table of Child-Links-->
-<A NAME="CHILD_LINKS"><STRONG>Subsections</STRONG></A>
-
-<UL>
-<LI><A NAME="tex2html1004"
-  HREF="node10.html#SECTION001010000000000000000">9.1 Organization</A>
-<LI><A NAME="tex2html1005"
-  HREF="node10.html#SECTION001020000000000000000">9.2 Web server setup</A>
-<UL>
-<LI><A NAME="tex2html1006"
-  HREF="node10.html#SECTION001021000000000000000">9.2.1 wwsympa.fcgi access permissions</A>
-<LI><A NAME="tex2html1007"
-  HREF="node10.html#SECTION001022000000000000000">9.2.2 Installing wwsympa.fcgi in your Apache server</A>
-<LI><A NAME="tex2html1008"
-  HREF="node10.html#SECTION001023000000000000000">9.2.3 Using FastCGI</A>
-</UL>
-<BR>
-<LI><A NAME="tex2html1009"
-  HREF="node10.html#SECTION001030000000000000000">9.3 wwsympa.conf parameters</A>
-<UL>
-<LI><A NAME="tex2html1010"
-  HREF="node10.html#SECTION001031000000000000000">9.3.1 arc_path</A>
-<LI><A NAME="tex2html1011"
-  HREF="node10.html#SECTION001032000000000000000">9.3.2 archive_default_index thrd | mail</A>
-<LI><A NAME="tex2html1012"
-  HREF="node10.html#SECTION001033000000000000000">9.3.3 archived_pidfile</A>
-<LI><A NAME="tex2html1013"
-  HREF="node10.html#SECTION001034000000000000000">9.3.4 bounce_path</A>
-<LI><A NAME="tex2html1014"
-  HREF="node10.html#SECTION001035000000000000000">9.3.5 bounced_pidfile</A>
-<LI><A NAME="tex2html1015"
-  HREF="node10.html#SECTION001036000000000000000">9.3.6 cookie_expire</A>
-<LI><A NAME="tex2html1016"
-  HREF="node10.html#SECTION001037000000000000000">9.3.7 cookie_domain</A>
-<LI><A NAME="tex2html1017"
-  HREF="node10.html#SECTION001038000000000000000">9.3.8 default_home</A>
-<LI><A NAME="tex2html1018"
-  HREF="node10.html#SECTION001039000000000000000">9.3.9 icons_url</A>
-<LI><A NAME="tex2html1019"
-  HREF="node10.html#SECTION0010310000000000000000">9.3.10 log_facility</A>
-<LI><A NAME="tex2html1020"
-  HREF="node10.html#SECTION0010311000000000000000">9.3.11 mhonarc</A>
-<LI><A NAME="tex2html1021"
-  HREF="node10.html#SECTION0010312000000000000000">9.3.12 htmlarea_url</A>
-<LI><A NAME="tex2html1022"
-  HREF="node10.html#SECTION0010313000000000000000">9.3.13 password_case sensitive | insensitive</A>
-<LI><A NAME="tex2html1023"
-  HREF="node10.html#SECTION0010314000000000000000">9.3.14 title</A>
-<LI><A NAME="tex2html1024"
-  HREF="node10.html#SECTION0010315000000000000000">9.3.15 use_fast_cgi   0 | 1</A>
-</UL>
-<BR>
-<LI><A NAME="tex2html1025"
-  HREF="node10.html#SECTION001040000000000000000">9.4 MhOnArc</A>
-<LI><A NAME="tex2html1026"
-  HREF="node10.html#SECTION001050000000000000000">9.5 Archiving daemon</A>
-<LI><A NAME="tex2html1027"
-  HREF="node10.html#SECTION001060000000000000000">9.6 Database configuration</A>
-<LI><A NAME="tex2html1028"
-  HREF="node10.html#SECTION001070000000000000000">9.7 Logging in as listmaster</A>
-</UL>
-<!--End of Table of Child-Links-->
-<HR>
 
 <H1><A NAME="SECTION001000000000000000000">
 9. WWSympa, Sympa's web interface</A>
@@ -132,39 +8,37 @@ WWSympa is <I>Sympa</I>'s web interface.
 
 <P>
 
-<H1><A NAME="SECTION001010000000000000000"></A>
-<A NAME="WWSympa"></A>
-<BR>
+<H1><A NAME="SECTION001010000000000000000"><tex2html_anchor_invisible_mark></A>
+<A NAME="WWSympa"><tex2html_anchor_mark></A><BR>
 9.1 Organization
 </H1>
 
 <P>
-<A NAME="8015"></A><I>WWSympa</I> is fully integrated with <I>Sympa</I>. It uses <A NAME="8019"></A><TT>sympa.conf</TT>
+<A NAME="8123"><tex2html_anchor_invisible_mark></A><I>WWSympa</I> is fully integrated with <I>Sympa</I>. It uses <A NAME="8127"><tex2html_anchor_invisible_mark></A><TT>sympa.conf</TT>
 and <I>Sympa</I>'s libraries. The default <I>Sympa</I> installation will also
 install WWSympa.
 
 <P>
-Every single piece of HTML in <A NAME="8024"></A><I>WWSympa</I> is generated by the CGI code
-using template files (See <A HREF="node17.html#tpl-format">16.1</A>, page&nbsp;<A HREF="node17.html#tpl-format"><IMG  ALIGN="BOTTOM" BORDER="1" ALT="[*]" SRC="crossref.png"></A>).
+Every single piece of HTML in <A NAME="8132"><tex2html_anchor_invisible_mark></A><I>WWSympa</I> is generated by the CGI code
+using template files (See <A HREF=<tex2html_cr_mark>#tpl-format#1332><tex2html_cr_mark></A>, page~<A HREF=<tex2html_cr_mark>#tpl-format#1333><tex2html_cross_ref_visible_mark></A>).
 This facilitates internationalization of pages, as well as per-site
 customization. 
 
 <P>
-The code consists of one single PERL CGI script, <A NAME="8027"></A><TT>WWSympa.fcgi</TT>.
-To enhance performance you can configure <A NAME="8030"></A><I>WWSympa</I> to use
+The code consists of one single PERL CGI script, <A NAME="8135"><tex2html_anchor_invisible_mark></A><TT>WWSympa.fcgi</TT>.
+To enhance performance you can configure <A NAME="8138"><tex2html_anchor_invisible_mark></A><I>WWSympa</I> to use
 FastCGI ; the CGI will be persistent in memory.
-<BR>
-All data will be accessed through the CGI, including web archives.
+<BR>All data will be accessed through the CGI, including web archives.
 This is required to allow the authentication scheme to be applied
 systematically.
 
 <P>
 Authentication is based on passwords stored in the database table
-user_table ; if the appropriate <A NAME="8033"></A><TT>Crypt::CipherSaber</TT> is
+user_table ; if the appropriate <A NAME="8141"><tex2html_anchor_invisible_mark></A><TT>Crypt::CipherSaber</TT> is
 installed, password are encrypted in the database using reversible
 encryption based on RC4. Otherwise they are stored in clear text.
 In both cases reminding of passwords is possible.
- To keep track of authentication information <A NAME="8036"></A><I>WWSympa</I> 
+ To keep track of authentication information <A NAME="8144"><tex2html_anchor_invisible_mark></A><I>WWSympa</I> 
 uses HTTP cookies stored on the client side. The HTTP cookie only 
 indicates that a specified e-mail address has been authenticated ;
 permissions are evaluated when an action is requested.
@@ -174,7 +48,7 @@ The same web interface is used by the listmaster, list owners, subscribers and
 others. Depending on permissions, the same URL may generate a different view.
 
 <P>
-<A NAME="8039"></A><I>WWSympa</I>'s main loop algorithm is roughly the following : 
+<A NAME="8147"><tex2html_anchor_invisible_mark></A><I>WWSympa</I>'s main loop algorithm is roughly the following : 
 
 <OL>
 <LI>Check authentication information returned by 
@@ -212,9 +86,9 @@ others. Depending on permissions, the same URL may generate a different view.
 </H2>
 
 <P>
-Because Sympa and WWSympa share a lot of files, <A NAME="8042"></A><TT>wwsympa.fcgi</TT>,
+Because Sympa and WWSympa share a lot of files, <A NAME="8150"><tex2html_anchor_invisible_mark></A><TT>wwsympa.fcgi</TT>,
      must run with the same 
-     uid/gid as <A NAME="8045"></A><TT>archived.pl</TT>, <A NAME="8048"></A><TT>bounced.pl</TT> and <A NAME="8051"></A><TT>sympa.pl</TT>.
+     uid/gid as <A NAME="8153"><tex2html_anchor_invisible_mark></A><TT>archived.pl</TT>, <A NAME="8156"><tex2html_anchor_invisible_mark></A><TT>bounced.pl</TT> and <A NAME="8159"><tex2html_anchor_invisible_mark></A><TT>sympa.pl</TT>.
      There are different ways to organize this :
 
 <UL>
@@ -244,16 +118,10 @@ The User and Group directive have to be set before the FastCgiServer directive
 </LI>
 <LI>Otherwise, you can overcome restrictions on the execution of suid scripts
       by using a short C program, owned by sympa and with the suid bit set, to start
-      <A NAME="8054"></A><TT>wwsympa.fcgi</TT>. Here is an example (with no guarantee attached) :<PRE>
-#include &lt;unistd.h&gt;
-
-#define WWSYMPA "/wwsympa.fcgi"
-
-int main(int argn, char **argv, char **envp) {
-    argv[0] = WWSYMPA;
-    execve(WWSYMPA,argv,envp);
-}
-</PRE>
+      <A NAME="8162"><tex2html_anchor_invisible_mark></A><TT>wwsympa.fcgi</TT>. Here is an example (with no guarantee attached) :
+<BLOCKQUOTE>
+</BLOCKQUOTE><PRE><tex2html_verbatim_mark>verbatim302#</PRE><BLOCKQUOTE>
+</BLOCKQUOTE>
 </LI>
 </UL>
 
@@ -262,13 +130,13 @@ int main(int argn, char **argv, char **envp) {
 <H2><A NAME="SECTION001022000000000000000">
 9.2.2 Installing wwsympa.fcgi in your Apache server</A>
 </H2>
-     If you chose to run <A NAME="8057"></A><TT>wwsympa.fcgi</TT> as a simple CGI, you simply need to
+     If you chose to run <A NAME="8165"><tex2html_anchor_invisible_mark></A><TT>wwsympa.fcgi</TT> as a simple CGI, you simply need to
      script alias it. 
 
-<P><PRE>
-     Example :
-       	ScriptAlias /sympa /wwsympa.fcgi
-</PRE>
+<P>
+<BLOCKQUOTE>
+</BLOCKQUOTE><PRE><tex2html_verbatim_mark>verbatim303#</PRE><BLOCKQUOTE>
+</BLOCKQUOTE>
 
 <P>
 Running  FastCGI will provide much faster responses from your server and 
@@ -276,15 +144,10 @@ Running  FastCGI will provide much faster responses from your server and
      <A NAME="tex2html21"
   HREF="http://www.fastcgi.com/fcgi-devkit-2.1/doc/fcgi-perf.htm">http://www.fastcgi.com/fcgi-devkit-2.1/doc/fcgi-perf.htm</A>)
 
-<P><PRE>
-     Example :
-	FastCgiServer /wwsympa.fcgi -processes 2
-	&lt;Location /sympa&gt;
-   	  SetHandler fastcgi-script
-	&lt;/Location&gt;
-
-	ScriptAlias /sympa /wwsympa.fcgi
-</PRE>
+<P>
+<BLOCKQUOTE>
+</BLOCKQUOTE><PRE><tex2html_verbatim_mark>verbatim304#</PRE><BLOCKQUOTE>
+</BLOCKQUOTE>
 
 <P>
 If you run Virtual robots, then the FastCgiServer(s) can serve multiple robots. 
@@ -301,22 +164,22 @@ file.
 <A NAME="tex2html22"
   HREF="http://www.fastcgi.com/">FastCGI</A>
 is an extention to CGI that provides persistency for CGI programs. It is extemely useful
-with <A NAME="8060"></A><I>WWSympa</I> since source code interpretation and all initialisation tasks are performed only once, at server startup ; then
-file wwsympa.fcgi instances are waiting for clients requests. 
+with <A NAME="8168"><tex2html_anchor_invisible_mark></A><I>WWSympa</I> since source code interpretation and all initialisation tasks are performed only once, at server startup ; then
+file <#1366#>wwsympa.fcgi<#1366#> instances are waiting for clients requests. 
 
 <P>
-<A NAME="8063"></A><I>WWSympa</I> can also work without FastCGI, depending on the <B>use_fast_cgi</B> parameter 
-(see <A HREF="#use-fastcgi">9.3.15</A>, page&nbsp;<A HREF="node10.html#use-fastcgi"><IMG  ALIGN="BOTTOM" BORDER="1" ALT="[*]" SRC="crossref.png"></A>).
+<A NAME="8171"><tex2html_anchor_invisible_mark></A><I>WWSympa</I> can also work without FastCGI, depending on the <B>use_fast_cgi</B> parameter 
+(see <A HREF=<tex2html_cr_mark>#use-fastcgi#1368><tex2html_cr_mark></A>, page~<A HREF=<tex2html_cr_mark>#use-fastcgi#1369><tex2html_cross_ref_visible_mark></A>).
 
 <P>
-To run <A NAME="8066"></A><I>WWSympa</I> with FastCGI, you need to install :
+To run <A NAME="8174"><tex2html_anchor_invisible_mark></A><I>WWSympa</I> with FastCGI, you need to install :
 
 <UL>
-<LI><A NAME="8069"></A>mod_fastcgi  : the Apache module that provides <A NAME="8070"></A>FastCGI features
+<LI><A NAME="8177"><tex2html_anchor_invisible_mark></A>mod_fastcgi  : the Apache module that provides <A NAME="8178"><tex2html_anchor_invisible_mark></A>FastCGI features
 
 <P>
 </LI>
-<LI><A NAME="8071"></A><TT>FCGI</TT> : the Perl module used by <A NAME="8074"></A><I>WWSympa</I> 
+<LI><A NAME="8179"><tex2html_anchor_invisible_mark></A><TT>FCGI</TT> : the Perl module used by <A NAME="8182"><tex2html_anchor_invisible_mark></A><I>WWSympa</I> 
 
 <P>
 </LI>
@@ -336,9 +199,8 @@ To run <A NAME="8066"></A><I>WWSympa</I> with FastCGI, you need to install :
 
 <P>
 (Default value: <TT>/home/httpd/html/arc</TT>) 
-<BR>
-Where to store html archives. This parameter is used
-        by the <A NAME="8078"></A><TT>archived.pl</TT> daemon. It is a good idea to install the archive
+<BR>	Where to store html archives. This parameter is used
+        by the <A NAME="8186"><tex2html_anchor_invisible_mark></A><TT>archived.pl</TT> daemon. It is a good idea to install the archive
         outside the web hierarchy to prevent possible back doors in the access control
         powered by WWSympa. However, if Apache is configured with a chroot, you may
 	have to install the archive in the Apache directory tree.
@@ -351,8 +213,7 @@ Where to store html archives. This parameter is used
 
 <P>
 (Default value: <TT>thrd</TT>) 
-<BR>
-The default index organization when entering web archives : either threaded or	
+<BR>	The default index organization when entering web archives : either threaded or	
 	chronological order.
 
 <P>
@@ -361,8 +222,7 @@ The default index organization when entering web archives : either threaded or
 9.3.3 archived_pidfile</A>
 </H2>
 	(Default value: <TT>archived.pid</TT>) 
-<BR>
-The file containing the PID of <A NAME="8083"></A><TT>archived.pl</TT>.
+<BR>	The file containing the PID of <A NAME="8191"><tex2html_anchor_invisible_mark></A><TT>archived.pl</TT>.
 
 <P>
 
@@ -370,9 +230,8 @@ The file containing the PID of <A NAME="8083"></A><TT>archived.pl</TT>.
 9.3.4 bounce_path</A>
 </H2>
 	(Default value: <TT>/var/bounce</TT>) 
-<BR>
-Root directory for storing bounces (non-delivery reports). This parameter
-	is used mainly by the <A NAME="8087"></A><TT>bounced.pl</TT> daemon.
+<BR>	Root directory for storing bounces (non-delivery reports). This parameter
+	is used mainly by the <A NAME="8195"><tex2html_anchor_invisible_mark></A><TT>bounced.pl</TT> daemon.
 
 <P>
 
@@ -380,8 +239,7 @@ Root directory for storing bounces (non-delivery reports). This parameter
 9.3.5 bounced_pidfile</A>
 </H2>
 	(Default value: <TT>bounced.pid</TT>) 
-<BR>
-The file containing the PID of <A NAME="8091"></A><TT>bounced.pl</TT>.
+<BR>	The file containing the PID of <A NAME="8199"><tex2html_anchor_invisible_mark></A><TT>bounced.pl</TT>.
 
 <P>
 
@@ -398,19 +256,14 @@ The file containing the PID of <A NAME="8091"></A><TT>bounced.pl</TT>.
 9.3.7 cookie_domain</A>
 </H2>
 	(Default value: <TT>localhost</TT>) 
-<BR>
-Domain for the HTTP cookies. If beginning with a dot ('.'),
+<BR>	Domain for the HTTP cookies. If beginning with a dot ('.'),
 	the cookie is available within the specified internet domain.
 	Otherwise, for the specified host. Example : 
-		<PRE>
-		   cookie_domain cru.fr
-		   cookie is available for host 'cru.fr'
-
-		   cookie_domain .cru.fr
-		   cookie is available for any host within 'cru.fr' domain
-</PRE>
+		<BLOCKQUOTE>
+</BLOCKQUOTE><PRE><tex2html_verbatim_mark>verbatim305#</PRE><BLOCKQUOTE>
+</BLOCKQUOTE>
 	The only reason for replacing the default value would be where
-	<A NAME="8096"></A><I>WWSympa</I>'s authentication process is shared with an application
+	<A NAME="8204"><tex2html_anchor_invisible_mark></A><I>WWSympa</I>'s authentication process is shared with an application
 	running on another host.
 
 <P>
@@ -419,8 +272,7 @@ Domain for the HTTP cookies. If beginning with a dot ('.'),
 9.3.8 default_home</A>
 </H2>
 	(Default value: <TT>home</TT>) 
-<BR>
-Organization of the WWSympa home page. If you have only a few lists,
+<BR>        Organization of the WWSympa home page. If you have only a few lists,
 	the default value `home' (presenting a list of lists organized by topic)
 	should be replaced by `lists' (a simple alphabetical list of lists).
 
@@ -430,8 +282,7 @@ Organization of the WWSympa home page. If you have only a few lists,
 9.3.9 icons_url</A>
 </H2>
 	(Default value: <TT>/icons</TT>) 
-<BR>
-URL of WWSympa's icons directory.
+<BR>	URL of WWSympa's icons directory.
 
 <P>
 
@@ -450,8 +301,7 @@ WWSympa will log using this facility. Defaults to <I>Sympa</I>'s syslog
 9.3.11 mhonarc</A>
 </H2>
 	(Default value: <TT>/usr/bin/mhonarc</TT>) 
-<BR>
-Path to the (superb) MhOnArc program. Required for html archives
+<BR>	Path to the (superb) MhOnArc program. Required for html archives
 	http://www.oac.uci.edu/indiv/ehood/mhonarc.html
 
 <P>
@@ -460,8 +310,7 @@ Path to the (superb) MhOnArc program. Required for html archives
 9.3.12 htmlarea_url</A>
 </H2>
 	(Default value: <TT>undefined</TT>) 
-<BR>
-Relative URL to the (superb) online html editor HTMLarea. If you have installed javascript application you can use it
+<BR>	Relative URL to the (superb) online html editor HTMLarea. If you have installed javascript application you can use it
         when editing html document in the shared document repository. In order to activate this pluggin the value of this
         parameter should point to the root directory where HTMLarea is installed.  HTMLarea is a free opensource software you can download
         here : http://sf.net/projects/itools-htmlarea/
@@ -472,9 +321,8 @@ Relative URL to the (superb) online html editor HTMLarea. If you have installed 
 9.3.13 password_case sensitive | insensitive</A>
 </H2>
 	(Default value: <TT>insensitive</TT>) 
-<BR>
-If set to <B>insensitive</B>, WWSympa's password check will be insensitive.
-	This only concerns passwords stored in Sympa database, not the ones in <A NAME="8105"></A>LDAP.
+<BR>	If set to <B>insensitive</B>, WWSympa's password check will be insensitive.
+	This only concerns passwords stored in Sympa database, not the ones in <A NAME="8213"><tex2html_anchor_invisible_mark></A>LDAP.
 
 <P>
 <B>Be careful :</B> in previous 3.xx versions of Sympa, passwords were 
@@ -487,20 +335,17 @@ If set to <B>insensitive</B>, WWSympa's password check will be insensitive.
 9.3.14 title</A>
 </H2>
 	(Default value: <TT>Mailing List Service</TT>) 
-<BR>
-The name of your mailing list service. It will appear in
+<BR>	The name of your mailing list service. It will appear in
 	the Title section of WWSympa.
 
 <P>
 
-<H2><A NAME="SECTION0010315000000000000000"></A>
-	<A NAME="use-fastcgi"></A>
-<BR>
+<H2><A NAME="SECTION0010315000000000000000"><tex2html_anchor_invisible_mark></A>
+	<A NAME="use-fastcgi"><tex2html_anchor_mark></A><BR>
 9.3.15 use_fast_cgi   0 | 1
 </H2>
 	(Default value: <TT>1</TT>) 
-<BR>
-Choice of whether or not to use FastCGI. On listes.cru.fr, using FastCGI 
+<BR>	Choice of whether or not to use FastCGI. On listes.cru.fr, using FastCGI 
         increases WWSympa performance by as much as a factor of 10. Refer to 
        	<A NAME="tex2html23"
   HREF="http://www.fastcgi.com/">http://www.fastcgi.com/</A>
@@ -519,23 +364,23 @@ MhOnArc is a neat little converter from mime messages to html. Refer to
   HREF="http://www.oac.uci.edu/indiv/ehood/mhonarc.html">http://www.oac.uci.edu/indiv/ehood/mhonarc.html</A>.
 
 <P>
-The long mhonarc resource file is used by <A NAME="8108"></A><I>WWSympa</I> in a particular way.
+The long mhonarc resource file is used by <A NAME="8216"><tex2html_anchor_invisible_mark></A><I>WWSympa</I> in a particular way.
 MhOnArc is called to produce not a complete html document, but only a part of it
-to be included in a complete document (starting with <TT>&lt;</TT>HTML<TT>&gt;</TT> and terminating
-with <TT>&lt;</TT>/HTML<TT>&gt;</TT> ;-) ).
+to be included in a complete document (starting with <TT>;SPMlt;</TT>HTML<TT>;SPMgt;</TT> and terminating
+with <TT>;SPMlt;</TT>/HTML<TT>;SPMgt;</TT> ;-) ).
 The best way is to use the MhOnArc resource file 
-provided in the <A NAME="8111"></A><I>WWSympa</I> distribution and to modify it for your needs.
+provided in the <A NAME="8219"><tex2html_anchor_invisible_mark></A><I>WWSympa</I> distribution and to modify it for your needs.
 
 <P>
-The mhonarc resource file is named <A NAME="8114"></A><TT>mhonarc-ressources</TT>. 
+The mhonarc resource file is named <A NAME="8222"><tex2html_anchor_invisible_mark></A><TT>mhonarc-ressources</TT>. 
 You may locate this file either in 
 <OL>
-<LI><A NAME="8117"></A><TT>/usr/local/sympa-gb/expl/mylist/mhonarc-ressources</TT>
+<LI><A NAME="8225"><tex2html_anchor_invisible_mark></A><TT>/usr/local/sympa-ff//expl/mylist/mhonarc-ressources</TT>
 	in order to create a specific archive look for a particular list
 
 <P>
 </LI>
-<LI>or <A NAME="8120"></A><TT>/usr/local/sympa-gb/etc/mhonarc-ressources</TT>
+<LI>or <A NAME="8228"><tex2html_anchor_invisible_mark></A><TT>/usr/local/sympa-ff//etc/mhonarc-ressources</TT>
 
 <P>
 </LI>
@@ -546,56 +391,56 @@ You may locate this file either in
 <H1><A NAME="SECTION001050000000000000000">
 9.5 Archiving daemon</A>
 </H1>
-<A NAME="8123"></A><TT>archived.pl</TT> converts messages from <I>Sympa</I>'s spools 
-and calls <A NAME="8127"></A><TT>mhonarc</TT> to create html versions (whose location is defined by the 
-"arc_path" WWSympa parameter). You should probably install these archives 
+<A NAME="8231"><tex2html_anchor_invisible_mark></A><TT>archived.pl</TT> converts messages from <I>Sympa</I>'s spools 
+and calls <A NAME="8235"><tex2html_anchor_invisible_mark></A><TT>mhonarc</TT> to create html versions (whose location is defined by the 
+;SPMquot;arc_path;SPMquot; WWSympa parameter). You should probably install these archives 
 outside the <I>Sympa</I> home_dir (<I>Sympa</I>'s initial choice for storing mail archives : 
-<A NAME="8132"></A><TT>/usr/local/sympa-gb/expl/mylist</TT>). Note that the html archive 
+<A NAME="8240"><tex2html_anchor_invisible_mark></A><TT>/usr/local/sympa-ff//expl/mylist</TT>). Note that the html archive 
 contains a text version of each message and is totally separate from <I>Sympa</I>'s
 main archive.
 
 <OL>
-<LI>create a directory according to the WWSympa "arc_path" parameter
+<LI>create a directory according to the WWSympa ;SPMquot;arc_path;SPMquot; parameter
     (must be owned by sympa, does not have to be in Apache space unless
     your server uses chroot)
 
 <P>
 </LI>
 <LI>for each list, if you need a web archive, create a new web archive paragraph
-    in the list configuration. Example :<PRE>
-     web_archive
-     access public|private|owner|listmaster|closed
-     quota 10000
-</PRE>
+    in the list configuration. Example :
+<BLOCKQUOTE>
+</BLOCKQUOTE><PRE><tex2html_verbatim_mark>verbatim306#</PRE><BLOCKQUOTE>
+</BLOCKQUOTE>
 
 <P>
 If web_archive is defined for a list, every message distributed by this list is copied
-     to <A NAME="8136"></A><TT>/usr/local/sympa-gb/spool/outgoing/</TT>. (No need to create nonexistent subscribers to receive
+     to <A NAME="8244"><tex2html_anchor_invisible_mark></A><TT>/usr/local/sympa-ff//spool/outgoing/</TT>. (No need to create nonexistent subscribers to receive
      copies of messages). In this example disk quota for the archive is limited to 10 Mo.
 
 <P>
 </LI>
-<LI>start <A NAME="8139"></A><TT>archived.pl</TT>.
+<LI>start <A NAME="8247"><tex2html_anchor_invisible_mark></A><TT>archived.pl</TT>.
 <I>Sympa</I> and Apache
 
 <P>
 </LI>
-<LI>check <A NAME="8143"></A><I>WWSympa</I> logs, or alternatively, start <A NAME="8146"></A><TT>archived.pl</TT> in debug mode (-d). 
+<LI>check <A NAME="8251"><tex2html_anchor_invisible_mark></A><I>WWSympa</I> logs, or alternatively, start <A NAME="8254"><tex2html_anchor_invisible_mark></A><TT>archived.pl</TT> in debug mode (-d). 
 
 <P>
 </LI>
 <LI>If you change mhonarc resources and wish to rebuild the entire archive 
 using the new look defined for mhonarc, simply create an empty file named
-".rebuild.mylist@myhost" in <A NAME="8149"></A><TT>/usr/local/sympa-gb/spool/outgoing</TT>, and make sure that
+;SPMquot;.rebuild.mylist@myhost;SPMquot; in <A NAME="8257"><tex2html_anchor_invisible_mark></A><TT>/usr/local/sympa-ff//spool/outgoing</TT>, and make sure that
 the owner of this file is <I>Sympa</I>. 
 
-<P><PRE>
-     example : su sympa -c "touch /usr/local/sympa-gb/spool/outgoing/.rebuild.sympa-fr@cru.fr"
-</PRE>
+<P>
+<BLOCKQUOTE>
+</BLOCKQUOTE><PRE><tex2html_verbatim_mark>verbatim307#</PRE><BLOCKQUOTE>
+</BLOCKQUOTE>
 You can also rebuild web archives from within the admin page of the list.
 
 <P>
-Furthermore, if you want to get list's archives, you can do it via the <A NAME="8153"></A><TT> List-admin menu-&gt; Archive Management</TT>
+Furthermore, if you want to get list's archives, you can do it via the <A NAME="8261"><tex2html_anchor_invisible_mark></A><TT> List-admin menu-;SPMgt; Archive Management</TT>
 </LI>
 </OL>
 
@@ -606,7 +451,7 @@ Furthermore, if you want to get list's archives, you can do it via the <A NAME="
 </H1>
 
 <P>
-<A NAME="8156"></A><I>WWSympa</I> needs an RDBMS (Relational Database Management System) in order to
+<A NAME="8264"><tex2html_anchor_invisible_mark></A><I>WWSympa</I> needs an RDBMS (Relational Database Management System) in order to
 run. All database access is performed via the <I>Sympa</I> API. <I>Sympa</I> 
 currently interfaces with <A NAME="tex2html25"
   HREF="http://www.mysql.net/">MySQL</A>, <A NAME="tex2html26"
@@ -619,14 +464,14 @@ and <A NAME="tex2html28"
 A database is needed to store user passwords and preferences.
 The database structure is documented in the <I>Sympa</I> documentation ;
 scripts for creating it are also provided with the <I>Sympa</I> distribution
-(in <A NAME="8163"></A><TT>script</TT>). 
+(in <A NAME="8271"><tex2html_anchor_invisible_mark></A><TT>script</TT>). 
 
 <P>
-User information (password and preferences) are stored in the &#171;User&#187; table.
+User information (password and preferences) are stored in the &#171;<#31455#><#31455#>User&#187;<#31456#><#31456#> table.
 User passwords stored in the database are encrypted using reversible
-RC4 encryption controlled with the <A NAME="8166"></A><TT>cookie</TT> parameter,
-since <A NAME="8169"></A><I>WWSympa</I> might need to remind users of their passwords. 
-The security of <A NAME="8172"></A><I>WWSympa</I> rests on the security of your database. 
+RC4 encryption controlled with the <A NAME="8274"><tex2html_anchor_invisible_mark></A><TT>cookie</TT> parameter,
+since <A NAME="8277"><tex2html_anchor_invisible_mark></A><I>WWSympa</I> might need to remind users of their passwords. 
+The security of <A NAME="8280"><tex2html_anchor_invisible_mark></A><I>WWSympa</I> rests on the security of your database. 
 
 <P>
 
@@ -639,9 +484,9 @@ Once <I>Sympa</I> is running you should log in on the web interface as a privile
 to explore the admin interface, create mailing lists.
 
 <P>
-Multiple email addresses can be declared as listmaster via the <A NAME="8176"></A><TT>sympa.conf</TT> (or <A NAME="8179"></A><TT>robot.conf</TT>)
-<A NAME="8182"></A><TT>listmaster</TT> configuration parameter (see <A HREF="node8.html#exp-admin">7</A>,  page&nbsp;<A HREF="node8.html#exp-admin"><IMG  ALIGN="BOTTOM" BORDER="1" ALT="[*]" SRC="crossref.png"></A>). Note
-that listmasters on the main robot (declared in  <A NAME="8185"></A><TT>sympa.conf</TT>) also have listmaster privileges on
+Multiple email addresses can be declared as listmaster via the <A NAME="8284"><tex2html_anchor_invisible_mark></A><TT>sympa.conf</TT> (or <A NAME="8287"><tex2html_anchor_invisible_mark></A><TT>robot.conf</TT>)
+<A NAME="8290"><tex2html_anchor_invisible_mark></A><TT>listmaster</TT> configuration parameter (see <A HREF=<tex2html_cr_mark>#exp-admin#1465><tex2html_cr_mark></A>,  page~<A HREF=<tex2html_cr_mark>#exp-admin#1466><tex2html_cross_ref_visible_mark></A>). Note
+that listmasters on the main robot (declared in  <A NAME="8293"><tex2html_anchor_invisible_mark></A><TT>sympa.conf</TT>) also have listmaster privileges on
 the virtual robots but they will not receive the various mail notifications (list creation, warnings,...)
 regarding these virtual robots.
 
@@ -652,43 +497,8 @@ the <B>Send me a password</B> button on the web interface. As for any user, the 
 <B>Preferenced</B> menu.
 
 <P>
-Note that you must start the <A NAME="8189"></A><TT>sympa.pl</TT> process with the web interface ; it is in responsible for delivering 
+Note that you must start the <A NAME="8297"><tex2html_anchor_invisible_mark></A><TT>sympa.pl</TT> process with the web interface ; it is in responsible for delivering 
 mail messages including password reminders.
 
 <P>
 
-<HR>
-<!--Navigation Panel-->
-<A NAME="tex2html1002"
-  HREF="node11.html">
-<IMG WIDTH="37" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="next" SRC="next.png"></A> 
-<A NAME="tex2html996"
-  HREF="sympa.html">
-<IMG WIDTH="26" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="up" SRC="up.png"></A> 
-<A NAME="tex2html990"
-  HREF="node9.html">
-<IMG WIDTH="63" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="previous" SRC="prev.png"></A> 
-<A NAME="tex2html998"
-  HREF="node1.html">
-<IMG WIDTH="65" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="contents" SRC="contents.png"></A> 
-<A NAME="tex2html1000"
-  HREF="node30.html">
-<IMG WIDTH="43" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="index" SRC="index.png"></A> 
-<BR>
-<B> Next:</B> <A NAME="tex2html1003"
-  HREF="node11.html">10. Sympa RSS channel</A>
-<B> Up:</B> <A NAME="tex2html997"
-  HREF="sympa.html">Sympa Mailing Lists Management Software version</A>
-<B> Previous:</B> <A NAME="tex2html991"
-  HREF="node9.html">8. Sympa and its database</A>
- &nbsp; <B>  <A NAME="tex2html999"
-  HREF="node1.html">Contents</A></B> 
- &nbsp; <B>  <A NAME="tex2html1001"
-  HREF="node30.html">Index</A></B> 
-<!--End of Navigation Panel-->
-<ADDRESS>
-root
-2005-05-25
-</ADDRESS>
-</BODY>
-</HTML>

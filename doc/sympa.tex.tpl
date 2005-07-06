@@ -9821,26 +9821,9 @@ For sending, a call to sendmail is done or the message is pushed in a spool acco
 
    Sends a message to a user, relative to a list. It finds the \$tpl.tt2 file to make the message.
    If the list has a key and a certificat and if openssl is in the configuration, the message is signed.
-   The parsing is done with variable \$data set up first with parameter \$context and then with configuration, here are 
-   set keys :
-   \begin{itemize}
-     \item \emph{if \$who=SCALAR then} \begin{itemize}
-                    \item \lparam{user.password}
-		    \item \emph{if \$user key is not defined in \$context then} \lparam{user.email}(:= \$who), \lparam{user.lang} (:= list lang)  
-		          \emph{and if the user is in DB then} \lparam{user.attributes} (:= attributes in DB user\_table) are defined
-		    \item \emph{if \$who is subscriber of \$self then} \lparam{subscriber.date subscriber.update\_date}	  
-			  \emph{and if exists then} \lparam{subscriber.bounce subscriber.first\_bounce} are defined
-           \end{itemize}
-     \item \lparam{return\_path} : used for SMTP ``MAIL From'' field or "X-Sympa-From:" field 
-     \item \lparam{lang} : the user lang or list lang or robot lang
-     \item \lparam{fromlist} : "From:" field, pointed on list
-     \item \lparam{from} : "From:" field, pointed on list \emph{if no defined in \$context}
-     \item \lparam{replyto} : \emph{if openssl is is sympa.conf and the list has a key ('private\_key') and a certificat ('cert.pem') in its directory}
-     \item \lparam{boundary} : boundary for multipart message \emph{if no contained in \$context}
-     \item \lparam{conf.email conf.host conf.sympa conf.request conf.listmaster conf.wwsympa\_url conf.title} : updated with robot config
-     \item \lparam{list.lang list.name list.domain list.host list.subject list.dir list.owner}(ref(ARRAY)) : updated with list config
-   \end{itemize}
-   The message is sent by calling mail::mail\_file() function 
+   The parsing is done with variable \$data set up first with parameter \$context and then with List::prepare\_tt2\_data() function.
+   The tt2 context is set up by  List::prepare\_tt2\_context() function. The message is sent by calling mail::mail\_file() function 
+   (see \ref {mail-mail-file}, page~\pageref {mail-mail-file}). The message is sent by calling mail::mail\_file() function 
    (see \ref {mail-mail-file}, page~\pageref {mail-mail-file}).
 
    \textbf{IN} : 
@@ -9860,21 +9843,9 @@ For sending, a call to sendmail is done or the message is pushed in a spool acco
 \index{List::send\_global\_file()}
 
    Sends a message to a user not relative to a list. It finds the \$tpl.tt2 file to make the message.
-   The parsing is done with variable \$data set up first with parameter \$context and then with configuration, here are 
-   set keys :
-   \begin{itemize}
-     \item \lparam{user.password user.lang}
-     \item \emph{if \$user key is not defined in \$context then} \lparam{user.email} (:= \$who)
-     \item \lparam{return\_path} : used for SMTP ``MAIL From'' field or "X-Sympa-From:" field 
-     \item \lparam{lang} : the user lang or robot lang
-     \item \lparam{from} : "From:" field, pointed on SYMPA \emph{if no defined in \$context}
-     \item \lparam{boundary} : boundary for multipart message \emph{if no defined in \$context}
-     \item \lparam{conf.email conf.host conf.sympa conf.request conf.listmaster conf.wwsympa\_url conf.title} : updated with robot config
-     \item \lparam{conf.version} : \Sympa version
-     \item \lparam{robot\_domain} : the robot
-    \end{itemize}
-   The message is sent by calling mail::mail\_file() function 
-   (see \ref {mail-mail-file}, page~\pageref {mail-mail-file}).
+   The parsing is done with variable \$data set up first with parameter \$context and then with List::prepare\_tt2\_data() function.
+   The tt2 context is set up by  List::prepare\_tt2\_context() function. The message is sent by calling mail::mail\_file() function 
+   (see \ref {mail-mail-file}, page~\pageref {mail-mail-file}).  
 
    \textbf{IN} : 
    \begin{enumerate}
@@ -9886,6 +9857,92 @@ For sending, a call to sendmail is done or the message is pushed in a spool acco
 
    \textbf{OUT} : 1
 
+\subsubsection {\large{prepare\_tt2\_data()}}
+\label{list-prepare-tt2-data}
+\index{List::prepare\_tt2\_data()}
+
+   Prepare a set of values for parsing a mail template. It is done in the variable \$data set up first with parameter 
+   \$context, then with configuration and possibly with the list if the \$list parameter is given.
+   
+   Here are set keys in every context for variable \$data :
+   \begin{itemize}
+     \item \lparam{user.password user.lang} \emph{if there is only one recepient}
+     \item \emph{if \$user key is not defined in \$context then} \lparam{user.email} (:= \$who)
+     \item \lparam{return\_path} : used for SMTP ``MAIL From'' field or "X-Sympa-From:" field 
+     \item \lparam{lang} : the user lang or robot lang or list lang
+     \item \lparam{from} : "From:" field, pointed on SYMPA or on the list \emph{if no defined in \$context}
+     \item \lparam{boundary} : boundary for multipart message \emph{if no defined in \$context}
+     \item \lparam{conf.email conf.host conf.sympa conf.request conf.listmaster conf.wwsympa\_url conf.title} : updated with robot config
+     \item \lparam{conf.version} : \Sympa version
+     \item \lparam{robot\_domain} : the robot
+    \end{itemize}
+  
+  Here are set keys in a list context  for variable \$data:
+   \begin{itemize}
+     \item \emph{if \$who=SCALAR then} \begin{itemize}
+                    \item \lparam{user.password}
+		    \item \emph{if \$user key is not defined in \$context then} \lparam{user.email}(:= \$who), \lparam{user.lang} (:= list lang)  
+		          \emph{and if the user is in DB then} \lparam{user.attributes} (:= attributes in DB user\_table) are defined
+		    \item \emph{if \$who is subscriber of \$self then} \lparam{subscriber.date subscriber.update\_date}	  
+			  \emph{and if exists then} \lparam{subscriber.bounce subscriber.first\_bounce} are defined
+           \end{itemize}
+      \item \lparam{fromlist} : "From:" field, pointed on list
+      \item \lparam{replyto} : \emph{if openssl is is sympa.conf and the list has a key ('private\_key') and a certificat ('cert.pem') in its directory}
+      \item \lparam{list.lang list.name list.domain list.host list.subject list.dir list.owner}(ref(ARRAY)) : updated with list config
+   \end{itemize}
+
+   \textbf{IN} : 
+   \begin{enumerate}
+      \item \lparam{who} (+) : SCALAR \(\mid\) ref(ARRAY) - recepient(s)
+      \item \lparam{robot} (+) : robot
+      \item \lparam{context} : ref(HASH) - for the \$data set up 
+      \item \lparam{list} : ref(List) 	
+      \item \lparam{sign\_mod} : 'smime' \(\mid\) '' \(\mid\) undef
+      \item \lparam{tpl} : SCALAR - template parsed for these datas 
+   \end{enumerate}
+
+   \textbf{OUT} :  ref(HASH) - \lparam{data} \(\mid\) undef 
+
+
+\subsubsection {\large{prepare\_tt2\_context()}}
+\label{list-prepare-tt2-context}
+\index{List::prepare\_tt2\_context()}
+ 
+  Prepare the tt2 context for parsing and return 
+  the path of the file (\$filename) to parse.
+ 
+
+   \textbf{IN} : 
+   \begin{enumerate}
+      \item \lparam{robot} (+) : robot
+      \item \lparam{lang} (+): SCALAR - the lang for the template
+      \item \lparam{tpl} (+) : the template name to parse
+      \item \lparam{dir} : ending directory for include path
+      \item \lparam{list} : ref(List) - list context  \(\mid\) '' - global context
+      \item \lparam{more\_path} : ref(ARRAY) - set of paths to push in the include path 
+   \end{enumerate}
+
+   \textbf{OUT} :  SCALAR - \lparam{filename} \(\mid\) undef 
+
+\subsubsection {\large{get\_parsed\_file()}}
+\label{list-get-parsed-file}
+\index{List::get\_parsed\_file()}
+
+  Parse a template mail to a user, relative to a list or not. Set up \$data with List::prepare\_tt2\_data() 
+  function for the next parsing. Then, find the tt2 file according to the template name \$tpl, 
+  (with List::prepare\_tt2\_context() function).  The parsed file is returned in \$ref\_output, incoming parameter.   
+   
+   \textbf{IN} : 
+   \begin{enumerate}
+      \item \lparam{ref\_output} (+) : ref(string) - the parsed file returned
+      \item \lparam{tpl} (+) : the template name to parse
+      \item \lparam{who} (+) : SCALAR \(\mid\) ref(ARRAY) - recepient(s)
+      \item \lparam{robot} (+) : robot
+      \item \lparam{context} : ref(HASH) - for the \$data set up 
+      \item \lparam{list} : ref(List) - list context  \(\mid\) '' - global context
+   \end{enumerate}
+
+   \textbf{OUT} : 1 \(\mid\) undef 
 
 %%%%%%%%%%%%%%% service messages %%%%%%%%%%%%%%%%%%%%%
 \subsection {Functions for service messages} 

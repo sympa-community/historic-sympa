@@ -1,64 +1,3 @@
-<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2 Final//EN">
-
-<!--Converted with jLaTeX2HTML 2002-2-1 (1.70) JA patch-2.0
-patched version by:  Kenshi Muto, Debian Project.
-* modified by:  Shige TAKENO
-LaTeX2HTML 2002-2-1 (1.70),
-original version by:  Nikos Drakos, CBLU, University of Leeds
-* revised and updated by:  Marcus Hennecke, Ross Moore, Herb Swan
-* with significant contributions from:
-  Jens Lippmann, Marek Rouchal, Martin Wilck and others -->
-<HTML>
-<HEAD>
-<TITLE>23. Bounce management</TITLE>
-<META NAME="description" CONTENT="23. Bounce management">
-<META NAME="keywords" CONTENT="sympa">
-<META NAME="resource-type" CONTENT="document">
-<META NAME="distribution" CONTENT="global">
-
-<META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=iso-8859-1">
-<META NAME="Generator" CONTENT="jLaTeX2HTML v2002-2-1 JA patch-2.0">
-<META HTTP-EQUIV="Content-Style-Type" CONTENT="text/css">
-
-<LINK REL="STYLESHEET" HREF="sympa.css">
-
-<LINK REL="next" HREF="node25.html">
-<LINK REL="previous" HREF="node23.html">
-<LINK REL="up" HREF="sympa.html">
-<LINK REL="next" HREF="node25.html">
-</HEAD>
-
-<BODY TEXT="#000000" BGCOLOR="#ffffff">
-<!--Navigation Panel-->
-<A NAME="tex2html1405"
-  HREF="node25.html">
-<IMG WIDTH="37" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="next" SRC="next.png"></A> 
-<A NAME="tex2html1399"
-  HREF="sympa.html">
-<IMG WIDTH="26" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="up" SRC="up.png"></A> 
-<A NAME="tex2html1393"
-  HREF="node23.html">
-<IMG WIDTH="63" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="previous" SRC="prev.png"></A> 
-<A NAME="tex2html1401"
-  HREF="node1.html">
-<IMG WIDTH="65" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="contents" SRC="contents.png"></A> 
-<A NAME="tex2html1403"
-  HREF="node30.html">
-<IMG WIDTH="43" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="index" SRC="index.png"></A> 
-<BR>
-<B> Next:</B> <A NAME="tex2html1406"
-  HREF="node25.html">24. Antivirus</A>
-<B> Up:</B> <A NAME="tex2html1400"
-  HREF="sympa.html">Sympa Mailing Lists Management Software version</A>
-<B> Previous:</B> <A NAME="tex2html1394"
-  HREF="node23.html">22. Shared documents</A>
- &nbsp; <B>  <A NAME="tex2html1402"
-  HREF="node1.html">Contents</A></B> 
- &nbsp; <B>  <A NAME="tex2html1404"
-  HREF="node30.html">Index</A></B> 
-<BR>
-<BR>
-<!--End of Navigation Panel-->
 
 <H1><A NAME="SECTION002400000000000000000">
 23. Bounce management</A>
@@ -73,24 +12,25 @@ mad, or just delete them without further attention.
 
 <P>
 Bounces are received at mylist-owner address, which should
-be sent to the <A NAME="10843"></A><TT>bouncequeue</TT> program via aliases :
-
-<P><PRE>
-	\samplelist-owner: "|/usr/local/sympa-gb/bin/bouncequeue \samplelist"
-</PRE>
+be sent to the <A NAME="10971"><tex2html_anchor_invisible_mark></A><TT>bouncequeue</TT> program via aliases :
 
 <P>
-<A NAME="10846"></A><TT>bouncequeue</TT> (see <A HREF="node3.html#binaries">2.2</A>, page&nbsp;<A HREF="node3.html#binaries"><IMG  ALIGN="BOTTOM" BORDER="1" ALT="[*]" SRC="crossref.png"></A>) stores bounces in a
-<A NAME="10849"></A><TT>/usr/local/sympa-gb/spool/bounce/</TT> spool.
+<BLOCKQUOTE>
+</BLOCKQUOTE><PRE><tex2html_verbatim_mark>verbatim397#</PRE><BLOCKQUOTE>
+</BLOCKQUOTE>
 
 <P>
-Bounces are then processed by the <A NAME="10852"></A><TT>bounced.pl</TT> daemon.
+<A NAME="10974"><tex2html_anchor_invisible_mark></A><TT>bouncequeue</TT> (see <A HREF=<tex2html_cr_mark>#binaries#4086><tex2html_cr_mark></A>, page~<A HREF=<tex2html_cr_mark>#binaries#4087><tex2html_cross_ref_visible_mark></A>) stores bounces in a
+<A NAME="10977"><tex2html_anchor_invisible_mark></A><TT>/usr/local/sympa-ff//spool/bounce/</TT> spool.
+
+<P>
+Bounces are then processed by the <A NAME="10980"><tex2html_anchor_invisible_mark></A><TT>bounced.pl</TT> daemon.
 This daemon analyses bounces to find out which
 e-mail addresses are concerned and what kind of error was generated.
 If bouncing addresses match a subscriber's address, information 
 is stored in the <I>Sympa</I> database (in subscriber_table). Moreover, the most recent
-bounce itself is archived in <A NAME="10856"></A><TT>bounce_path/mylist/email</TT>
-(where bounce_path is defined in a <A NAME="10859"></A><TT>wwsympa.conf</TT> parameter and
+bounce itself is archived in <A NAME="10984"><tex2html_anchor_invisible_mark></A><TT>bounce_path/mylist/email</TT>
+(where bounce_path is defined in a <A NAME="10987"><tex2html_anchor_invisible_mark></A><TT>wwsympa.conf</TT> parameter and
 email is the user e-mail address).
 
 <P>
@@ -104,10 +44,10 @@ With these informations, the automatic bounce management is possible:
 <P>
 
 <UL>
-<LI>The automatic task <A NAME="10862"></A><TT>eval_bouncer</TT> gives a score foreach bouncing user.
+<LI>The automatic task <A NAME="10990"><tex2html_anchor_invisible_mark></A><TT>eval_bouncer</TT> gives a score foreach bouncing user.
   The score, between 0 to 100, allows the classification of bouncing users in two levels.
   (Level 1 or 2). 
-  According to the level, automatic actions are executed periodicaly by <A NAME="10865"></A><TT>process_bouncers</TT>
+  According to the level, automatic actions are executed periodicaly by <A NAME="10993"><tex2html_anchor_invisible_mark></A><TT>process_bouncers</TT>
   task.
 
 <P>
@@ -115,22 +55,21 @@ With these informations, the automatic bounce management is possible:
 <LI>The score evaluation main parameters are: 
 
 <P>
-<A NAME="10868"></A><TT>Bounces count</TT>: The number of bouncing messages received by sympa for the user.
+<A NAME="10996"><tex2html_anchor_invisible_mark></A><TT>Bounces count</TT>: The number of bouncing messages received by sympa for the user.
 
 <P>
-<A NAME="10871"></A><TT>Type rate</TT> : Bounces are classified depending on the type of errors generated on the user
-  side. If the error type is "mailbox is full" (ie a temporary 4.2.2 error type) the type rate will be
+<A NAME="10999"><tex2html_anchor_invisible_mark></A><TT>Type rate</TT> : Bounces are classified depending on the type of errors generated on the user
+  side. If the error type is ;SPMquot;mailbox is full;SPMquot; (ie a temporary 4.2.2 error type) the type rate will be
   0.5 whereas permanent errors (5.x.x) have a type rate equal to 1.
 
 <P>
-<A NAME="10874"></A><TT>Regularity rate</TT> : This rate tells if the bounces where received regularly, compared to list
- traffic. The list traffic is deduced from <A NAME="10877"></A><TT>msg_count</TT> file data.
+<A NAME="11002"><tex2html_anchor_invisible_mark></A><TT>Regularity rate</TT> : This rate tells if the bounces where received regularly, compared to list
+ traffic. The list traffic is deduced from <A NAME="11005"><tex2html_anchor_invisible_mark></A><TT>msg_count</TT> file data.
 
-<P><PRE>
-      The score formula is  :
-  
-      Score = bounce_count * type_rate * regularity_rate
-</PRE>
+<P>
+<BLOCKQUOTE>
+</BLOCKQUOTE><PRE><tex2html_verbatim_mark>verbatim398#</PRE><BLOCKQUOTE>
+</BLOCKQUOTE>
 
 <P>
 To avoid making decisions (ie defining a score) without enough relevant data, the score is not
@@ -139,13 +78,13 @@ To avoid making decisions (ie defining a score) without enough relevant data, th
 <P>
 
 <UL>
-<LI>The number of the number of received bounces is lower than <A NAME="10880"></A><TT>minimum_bouncing_count</TT> 
-	(see <A HREF="node8.html#kw-minimum-bouncing-count">7.8.9</A>, page&nbsp;<A HREF="node8.html#kw-minimum-bouncing-count"><IMG  ALIGN="BOTTOM" BORDER="1" ALT="[*]" SRC="crossref.png"></A>)
+<LI>The number of the number of received bounces is lower than <A NAME="11008"><tex2html_anchor_invisible_mark></A><TT>minimum_bouncing_count</TT> 
+	(see <A HREF=<tex2html_cr_mark>#kw-minimum-bouncing-count#4105><tex2html_cr_mark></A>, page~<A HREF=<tex2html_cr_mark>#kw-minimum-bouncing-count#4106><tex2html_cross_ref_visible_mark></A>)
 
 <P>
 </LI>
-<LI>The bouncing period is shorter than <A NAME="10883"></A><TT>minimum_bouncing_period</TT> 
-	(see <A HREF="node8.html#kw-minimum-bouncing-period">7.8.10</A>, page&nbsp;<A HREF="node8.html#kw-minimum-bouncing-period"><IMG  ALIGN="BOTTOM" BORDER="1" ALT="[*]" SRC="crossref.png"></A>)
+<LI>The bouncing period is shorter than <A NAME="11011"><tex2html_anchor_invisible_mark></A><TT>minimum_bouncing_period</TT> 
+	(see <A HREF=<tex2html_cr_mark>#kw-minimum-bouncing-period#4108><tex2html_cr_mark></A>, page~<A HREF=<tex2html_cr_mark>#kw-minimum-bouncing-period#4109><tex2html_cross_ref_visible_mark></A>)
 
 <P>
 </LI>
@@ -154,14 +93,14 @@ To avoid making decisions (ie defining a score) without enough relevant data, th
 <P>
 </LI>
 <LI>You can define the limit between each level via the <B>List configuration pannel</B>, 
-  in subsection <B>Bounce settings</B>. (see <A HREF="node21.html#rate">20.5.2</A>) The principle consists in
+  in subsection <B>Bounce settings</B>. (see <A HREF=<tex2html_cr_mark>#rate#4113><tex2html_cr_mark></A>) The principle consists in
   associating a score interval with a level.
 
 <P>
 </LI>
-<LI>You can also define wich action must be applied on each category of user.(see <A HREF="node21.html#action">20.5.2</A>)
+<LI>You can also define wich action must be applied on each category of user.(see <A HREF=<tex2html_cr_mark>#action#4114><tex2html_cr_mark></A>)
   Each time an action will be done, a notification email will be send to the person of your choice.
-  (see <A HREF="node21.html#notification">20.5.2</A>)
+  (see <A HREF=<tex2html_cr_mark>#notification#4115><tex2html_cr_mark></A>)
 
 <P>
 </LI>
@@ -169,38 +108,3 @@ To avoid making decisions (ie defining a score) without enough relevant data, th
 
 <P>
 
-<HR>
-<!--Navigation Panel-->
-<A NAME="tex2html1405"
-  HREF="node25.html">
-<IMG WIDTH="37" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="next" SRC="next.png"></A> 
-<A NAME="tex2html1399"
-  HREF="sympa.html">
-<IMG WIDTH="26" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="up" SRC="up.png"></A> 
-<A NAME="tex2html1393"
-  HREF="node23.html">
-<IMG WIDTH="63" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="previous" SRC="prev.png"></A> 
-<A NAME="tex2html1401"
-  HREF="node1.html">
-<IMG WIDTH="65" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="contents" SRC="contents.png"></A> 
-<A NAME="tex2html1403"
-  HREF="node30.html">
-<IMG WIDTH="43" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="index" SRC="index.png"></A> 
-<BR>
-<B> Next:</B> <A NAME="tex2html1406"
-  HREF="node25.html">24. Antivirus</A>
-<B> Up:</B> <A NAME="tex2html1400"
-  HREF="sympa.html">Sympa Mailing Lists Management Software version</A>
-<B> Previous:</B> <A NAME="tex2html1394"
-  HREF="node23.html">22. Shared documents</A>
- &nbsp; <B>  <A NAME="tex2html1402"
-  HREF="node1.html">Contents</A></B> 
- &nbsp; <B>  <A NAME="tex2html1404"
-  HREF="node30.html">Index</A></B> 
-<!--End of Navigation Panel-->
-<ADDRESS>
-root
-2005-05-25
-</ADDRESS>
-</BODY>
-</HTML>
