@@ -957,10 +957,11 @@ sub DoFile {
 	$name = $listname;
     }else {
 	$list = new List ($listname);
-#####################################
-#####################################
-
-	return undef unless (defined $list);
+	unless (defined $list) {
+	    &do_log('err', 'sympa::DoFile() : list %s no existing',$listname);
+	    &report::global_report_cmd('user','no_existing_list',{'listname'=>$listname},$sender,$robot,1);
+	    return undef;
+	}
 	$host = $list->{'admin'}{'host'};
 	$name = $list->{'name'};
 	# setting log_level using list config unless it is set by calling option
@@ -1032,9 +1033,7 @@ sub DoFile {
     if ($main::daemon_usage eq 'message') {
 	if (($rcpt =~ /^$Conf{'listmaster_email'}(\@(\S+))?$/) || ($rcpt =~ /^(sympa|$conf_email)(\@\S+)?$/i) || ($type =~ /^(subscribe|unsubscribe)$/o) || ($type =~ /^(request|owner|editor)$/o)) {
 	    &do_log('err','internal serveur error : distribution daemon should never proceed with command');
-#####################################
-#####################################
-
+	    &report::global_report_cmd('intern','Distribution daemon proceed with command',{},$sender,$robot,1);
 	    return undef;
 	} 
     }
@@ -1417,7 +1416,7 @@ sub DoMessage{
     } 
 
     unless (defined $action) {
-	&do_log('err', 'sympa::DoMessage(): message (%s) ignored because unable to evaluate scenario "send"for list %s',$messageid,$listname);
+	&do_log('err', 'sympa::DoMessage(): message (%s) ignored because unable to evaluate scenario "send" for list %s',$messageid,$listname);
 	&report::reject_report_msg('intern','Message ignored because scenario "send" cannot be evaluated',$sender,
 			  {'msg_id' => $messageid},
 			  $robot,$msg_string,$list);
@@ -1596,9 +1595,7 @@ sub DoCommand {
 
 	unless (defined $status) {
 	    &do_log('err', 'Could not change multipart to singlepart');
-#####################################
-#####################################
-
+	    &report::global_report_cmd('user','error_content_type',{});
 	    return undef;
 	}
 
@@ -1622,10 +1619,7 @@ sub DoCommand {
 	    or !($content_type) 
 	    or ($content_type =~ /text\/plain/i)) {
 	&do_log('notice', "Ignoring message body not in text/plain, Content-type: %s", $content_type);
-	#####################################
-	#####################################
-	&Commands::global_report_cmd('','error_content_type');
-	
+	&report::global_report_cmd('user','error_content_type',{});
 	return $success; 
     }
     
@@ -1644,11 +1638,9 @@ sub DoCommand {
 	$status = &Commands::parse($sender, $robot, $i, $is_signed->{'body'});
 	$cmd_found = 1; # if problem no_cmd_understood is sent here
 	if ($status eq 'unknown_cmd') {
-	    &Commands::global_report_cmd($i,'no_cmd_understood');
-#####################################
-#####################################
-	
-	    last;
+	    &do_log('notice', "Unknown command found :%s", $i);
+	    &report::reject_report_cmd('user','not_understood',{},$i);
+  	    last;
 	}
 	
 	    if ($i =~ /^(qui|quit|end|stop|-)/io) {
@@ -1662,10 +1654,7 @@ sub DoCommand {
     ## No command found
     unless ($cmd_found == 1) {
 	&do_log('info', "No command found in message");
-	&Commands::global_report_cmd('','no_cmd_found');
-#####################################
-#####################################
-
+	&report::global_report_cmd('user','no_cmd_found',{});
 	return undef;
     }
     

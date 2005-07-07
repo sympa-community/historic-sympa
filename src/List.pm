@@ -5930,7 +5930,12 @@ sub request_action {
 	## pending/closed lists => send/visibility are closed
 	unless ($list->{'admin'}{'status'} eq 'open') {
 	    if ($operation =~ /^send|visibility$/) {
-		return 'undef';
+		my $return = {'action' => 'reject',
+			      'reason' => 'list-no-open',
+			      'auth_method' => '',
+			      'condition' => ''
+			      };
+		return $return;
 	    }
 	}
 
@@ -6017,10 +6022,8 @@ sub request_action {
 		my @param = split /,/,$2;
 		
        		foreach my $p (@param){
-		    &do_log('notice',"REJECT : PARAM : $p");
 		    if  ($p =~ /^reason=\'?(\w+)\'?/){
 			$return->{'reason'} = $1;
-			&do_log('notice',"REASON : $return->{'reason'}");
 			next;
 			
 		    }elsif ($p =~ /^tt2=\'?(\w+)\'?/){
@@ -6031,12 +6034,8 @@ sub request_action {
 		    if ($p =~ /^\'?[^=]+\'?/){
 			$return->{'tt2'} = $p;
 			# keeping existing only, not merging with reject parameters in scenarios
-			&do_log('notice',"PAS REASON");
-			
 			last;
 		    }
-		    
-		   
 		}
 	    }
 
@@ -6047,7 +6046,6 @@ sub request_action {
 		if ($debug) {
 		    $return->{'auth_method'} = $rule->{'auth_method'};
 		    $return->{'condition'} = $rule->{'condition'};
-
 		    return $return;
 		}
 
@@ -6056,12 +6054,12 @@ sub request_action {
 		    &do_log('err', "Matched unknown action '%s' in scenario", $rule->{'action'});
 		    return undef;
 		}
-
 		return $return;
 	    }
 	}
     }
-    do_log('debug3',"no rule match, reject");
+    &do_log('debug3',"no rule match, reject");
+
     $return = {'action' => 'reject',
 	       'reason' => 'no-rule-match',
 			   'auth_method' => 'default',

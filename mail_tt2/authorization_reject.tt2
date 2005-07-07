@@ -133,4 +133,16 @@
 [% ELSIF reason == 'unsub_closed' -%]
 [%|loc()%]Unsubscription from this list is impossible.[%END%]
 
+[% ELSIF reason == 'list_private_no_archive' -%]
+[%|loc%]List is Private : You can not read the archives.[%END%]
+
+[% ELSIF reason == 'list_private_no_browse' -%]
+[%|loc%]List is Private : You can not browse available files.[%END%]
+
+[% ELSIF reason == 'restricted_modindex' -%]
+[%|loc%]The MODINDEX command is restricted to moderators.[%END%]
+
+[% ELSIF reason == 'list-no-open' -%]
+[%|loc%]The list is not open.[%END%]
+
 [%- END -%] 

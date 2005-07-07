@@ -50,6 +50,9 @@ been subscribed (or unsubscribed) to the list.[%END-%]
 [% ELSIF notice.entry == 'finished' -%]
 [%|loc(notice.cmd)%]  Command '%1' found : ignoring end of message.[%END%]
 
+[% ELSIF notice.entry == 'no_message_to_moderate' -%]
+[%|loc(notice.listname)%]  There is no message to moderate for list '%1'.[%END%]
+
 [% END -%]
 [% END -%]
 [% END -%]
@@ -89,6 +92,49 @@ been subscribed (or unsubscribed) to the list.[%END-%]
 [% IF u_err.entry == 'not_understood' -%]
 [%|loc%]  Command not understood: ignoring end of message.[%END%]
 
+[% ELSIF u_err.entry == 'no_verify_sign' -%]
+[%|loc%]  Your message was not a multipart/signed message or Sympa could not verify the signature 
+(be aware that Sympa can't check signature if you use the subject header to write a command).[%END-%]
+
+[% ELSIF u_err.entry == 'error_syntax' -%]
+[%|loc%]  Command syntax error.[%END%]
+
+[% ELSIF u_err.entry == 'no_existing_list' -%]
+[%|loc(u_err.listname)%]  List '%1' does not exist.[%END%]
+
+[% ELSIF u_err.entry == 'no_subscriber_preference' -%]
+[%|loc(u_err.listname)%]  %1 mailing list does not provide subscriber preferences.[%END%]
+
+[% ELSIF u_err.entry == 'your_email_not_found' -%]
+[%|loc(u_err.email,u_err.listname)%]  your e-mail address %1 has not been found in the list %2. Maybe
+you subscribed from a different e-mail address ?[%END-%]
+
+[% ELSIF u_err.entry == 'email_not_found' -%]
+[%|loc(u_err.email,u_err.listname)%]  E-mail address %1 has not been found in the list %2.[%END%]
+
+[% ELSIF u_err.entry == 'no_digest' -%]
+[%|loc(u_err.listname)%]  List %1 does not accept the DIGEST mode. 
+Your configuration regarding this command has not been updated.[%END-%]
+
+[% ELSIF u_err.entry == 'available_reception_mode' -%]
+[%|loc(u_err.listname,u_err.modes)%]  List %1 allows only these reception modes : %2[%END%]
+
+[% ELSIF u_err.entry == 'empty_archives' -%]
+[%|loc()%]  This list's archives do not contain any file.[%END%] 
+
+[% ELSIF u_err.entry == 'no_required_file' -%]
+[%|loc%]  Required file does not exist.[%END%]
+
+[% ELSIF u_err.entry == 'no_subscriber' -%]
+[%|loc(u_err.listname)%]  List %1 has no subscriber.[%END%]
+
+[% ELSIF u_err.entry == 'already_subscriber' -%]
+[%|loc(u_err.email,u_err.listname)%]  The User '%1' is already subscriber of list '%2'.[%END%]
+
+[% ELSIF u_err.entry == 'wrong_email_confirm' -%]
+[%|loc(u_err.command)%]  The authentication process failed.
+You probably confirmed your %1 using a different
+email address. Please try using your canonical address.[%END-%]
 [% END -%]
 [% END -%]
 [% END -%]
@@ -127,6 +173,8 @@ been subscribed (or unsubscribed) to the list.[%END-%]
 [% ELSIF glob.entry == 'intern_error' -%]
 [%|loc%]Ignoring message because of an internal server error.[%END%]
 
+[% ELSIF glob.entry == 'no_existing_list' -%]
+[%|loc(glob.listname)%]List %1 does not exist.[%END%]
 [% END -%]
 [% END -%]
 [% END -%]

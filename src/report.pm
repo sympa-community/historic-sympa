@@ -24,6 +24,7 @@ package report;
 
 use strict;
 
+use Language;
 use Log;
 use List;
 
@@ -94,7 +95,7 @@ sub reject_report_msg {
 	if (ref($list) ){
 	    $listname = $list->{'name'}; 
 	}
-	unless (&List::send_notify_to_listmaster('intern_error', $robot, {'error' => $error,
+	unless (&List::send_notify_to_listmaster('intern_error', $robot, {'error' => &gettext($error),
 									  'who'  => $user,
 									  'action' => 'message diffusion',
 									  'msg_id' => $param->{'msg_id'},
@@ -232,7 +233,6 @@ sub send_report_cmd {
 
     chomp($sender);
 
-    # 
     my $data = { 'to' => $sender,
 	         'nb_notice' =>$#notice_cmd +1,
 		 'nb_auth' => $#auth_reject_cmd +1,
@@ -295,7 +295,7 @@ sub global_report_cmd {
 	    &do_log('notice',"report::global_report_cmd(): unable to send notify to listmaster : no robot");
 	    return undef;
 	}	
-	unless (&List::send_notify_to_listmaster('intern_error', $robot, {'error' => $error,
+	unless (&List::send_notify_to_listmaster('intern_error', $robot, {'error' => &gettext($error),
 									  'who'  => $sender,
 									  'action' => 'Command process'})) {
 	    &do_log('notice',"report::global_report_cmd(): Unable to notify listmaster concerning '$sender'");
@@ -358,10 +358,15 @@ sub reject_report_cmd {
 	    &do_log('notice',"report::reject_report_cmd(): unable to send template message_report : no robot");
 	    return undef;
 	}	
-	unless (&List::send_notify_to_listmaster('intern_error', $robot, {'error' => $error,
+	my $listname;
+	if (defined $data->{'listname'}) {
+	    $listname = $data->{'listname'};
+	}
+	unless (&List::send_notify_to_listmaster('intern_error', $robot, {'error' => &gettext($error),
 									  'who'  => $sender,
 									  'cmd' => $cmd,
-									  'action' => 'Command process'})) {
+									  'action' => 'Command process',
+								          'listname' => $listname})) {
 	    &do_log('notice',"report::reject_report_cmd(): Unable to notify listmaster concerning '$sender'");
 	}
     }
