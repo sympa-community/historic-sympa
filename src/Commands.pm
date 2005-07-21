@@ -76,6 +76,8 @@ my $cmd_line;
 my $auth;
 # boolean says if quiet is in the cmd line
 my $quiet;
+# path of the current mailfile
+my $current_msg_filename;
 
 ## report message
 local @errors_report;
@@ -91,6 +93,7 @@ local @global_report;
 # IN :-$sender (+): the command sender
 #     -$robot (+): robot
 #     -$i (+): command line
+#     -$current_msg_file (+): current mailfile  
 #     -$sign_mod : 'smime'| -
 #
 # OUT : $status |'unknown_cmd'
@@ -100,9 +103,10 @@ sub parse {
    $sender = lc(shift);
    my $robot = shift;
    my $i = shift;
+   $current_msg_filename = shift;
    my $sign_mod = shift;
 
-   do_log('debug2', 'Commands::parse(%s, %s, %s, %s)', $sender, $robot, $i,$sign_mod );
+   do_log('debug2', 'Commands::parse(%s, %s, %s, %s)', $sender, $robot, $i, $current_msg_filename, $sign_mod );
 
    my $j;
    $cmd_line = '';
@@ -661,7 +665,7 @@ sub subscribe {
     my $sign_mod = shift ;
 
     do_log('debug', 'Commands::subscribe(%s,%s)', $what,$sign_mod);
-
+    
     $what =~ /^(\S+)(\s+(.+))?\s*$/;
     my($which, $comment) = ($1, $3);
     my $auth_method ;
@@ -702,6 +706,9 @@ sub subscribe {
     &do_log('debug2', 'action : %s', $action);
     
     if ($action =~ /reject(\(\'?(\w+)\'?\))?/i) {
+	## deletes the possible tracability files in the spool
+	&List::delete_tracability_spool_file($which, $sender);
+
 	my $tpl = $2;
 	if ($tpl) {
 	    unless ($list->send_file($tpl, $sender, $robot, {})) {
@@ -714,6 +721,21 @@ sub subscribe {
 	return 'not_allowed';
     }
     if ($action =~ /owner/i) {
+
+	if ($auth eq '') {
+	    my $sub_spoolfile = "$Conf{'queuetracability'}"."/"."$list->{'name'}"."$sender".'.sub';
+	    unless (&tools::move_file($current_msg_filename, $sub_spoolfile)) {
+		&do_log('err', "Unable to move file %s in %s", $current_msg_filename, $sub_spoolfile);
+		return undef;
+	    }
+	} else {
+	    my $auth_spoolfile = "$Conf{'queuetracability'}"."/"."$list->{'name'}"."$sender".'.auth';
+	    unless (&tools::move_file($current_msg_filename, $auth_spoolfile)) {
+		&do_log('err', "Unable to move file %s in %s", $current_msg_filename, $auth_spoolfile);
+		return undef;
+	    }
+	}
+
 	&notice_report_cmd($cmd_line,'req_forward',{});  
 	## Send a notice to the owners.
 	unless ($list->send_notify_to_owner('subrequest',{'who' => $sender,
@@ -727,6 +749,15 @@ sub subscribe {
 	return 1;
     }
     if ($action =~ /request_auth/i) {
+	
+	if ($auth eq '') {
+	    my $sub_spoolfile = "$Conf{'queuetracability'}"."/"."$list->{'name'}"."$sender".'.sub';
+	    unless (&tools::move_file($current_msg_filename, $sub_spoolfile)) {
+		&do_log('err', "Unable to move file %s in %s", $current_msg_filename, $sub_spoolfile);
+		return undef;
+	    }
+	}
+
 	my $cmd = 'subscribe';
 	$cmd = "quiet $cmd" if $quiet;
 	$list->request_auth ($sender, $cmd, $robot, $comment );
@@ -734,21 +765,29 @@ sub subscribe {
 	return 1;
     }
     if ($action =~ /do_it/i) {
-
-	my $user_entry = $list->get_subscriber($sender);
 	
+	my $user_entry = $list->get_subscriber($sender);
+	my $suffix;
+
 	if (defined $user_entry) {
-		
+
+	    $suffix = 'update';
+
 	    ## Only updates the date
 	    ## Options remain the same
 	    my $user = {};
 	    $user->{'update_date'} = time;
-		$user->{'gecos'} = $comment if $comment;
+	    $user->{'gecos'} = $comment if $comment;
 	    $user->{'subscribed'} = 1;
-	    
+	    $user->{'how_update'} = 'mail';
+	    $user->{'who_update'} = $sender;
+	    $user->{'ip_update'} = undef;
+
 	    return undef
 		unless $list->update_user($sender, $user);
 	}else {
+
+	    $suffix ='init';
 
 	    my $u;
 	    my $defaults = $list->get_default_user_options();
@@ -756,6 +795,8 @@ sub subscribe {
 	    $u->{'email'} = $sender;
 	    $u->{'gecos'} = $comment;
 	    $u->{'date'} = $u->{'update_date'} = time;
+	    $u->{'how_init'} = 'mail';
+	    $u->{'who_init'} = $sender;
 
 	    return undef  unless $list->add_user($u);
 	}
@@ -769,7 +810,58 @@ sub subscribe {
 	}
 	
 	$list->save();
-	
+
+	my $tracability_dir = $list->{'dir'}.'/tracability';
+	unless (-e $tracability_dir) {
+		unless (mkdir ($tracability_dir, 0777)) {
+			&do_log('err',"Unable to create %s : %s", $tracability_dir, $!);
+			return undef;
+    		}
+	}
+
+	my $sub_spoolfile; 
+	my $auth_spoolfile;
+	my $sub_dirfile = "$list->{'dir'}/tracability/$sender".'.sub.'."$suffix";
+	my $auth_dirfile = "$list->{'dir'}/tracability/$sender".'.auth.'."$suffix";
+
+	unless (&List::research_tracability_spool_file($list, $sender, 'sub') && &List::research_tracability_spool_file($list, $sender, 'auth')) {
+	    &do_log('err','research of tracability spoolfile failed');
+	    return undef;
+	}
+
+	if (&List::research_tracability_spool_file($list, $sender, 'sub') eq 'present') {
+	    $sub_spoolfile = "$Conf{'queuetracability'}"."/"."$list->{'name'}"."$sender".'.sub'; 
+	    if (&List::research_tracability_spool_file($list, $sender, 'auth') eq 'present') {
+		$auth_spoolfile = "$Conf{'queuetracability'}"."/"."$list->{'name'}"."$sender".'.auth'; 
+		unless (&tools::move_file($sub_spoolfile, $sub_dirfile)) {
+		    &do_log('err', "Unable to move file %s in %s", $sub_spoolfile, $sub_dirfile);
+		    return undef;
+		}
+		unless (&tools::move_file($auth_spoolfile, $auth_dirfile)) {
+		    &do_log('err', "Unable to move file %s in %s", $auth_spoolfile, $auth_dirfile);
+		    return undef;
+		}
+	    }
+	    elsif ($auth ne '') {
+		unless (&tools::move_file($sub_spoolfile, $sub_dirfile)) {
+		    &do_log('err', "Unable to move file %s in %s", $sub_spoolfile, $sub_dirfile);
+		    return undef;
+		}
+		unless (&tools::move_file($current_msg_filename, $auth_dirfile)) {
+		    &do_log('err', "Unable to move file %s in %s", $current_msg_filename, $auth_dirfile);
+		    return undef;
+		}
+	    }
+	} else {
+	    unless (&tools::move_file($current_msg_filename, $sub_dirfile)) {
+		&do_log('err', "Unable to move file %s in %s", $current_msg_filename, $sub_dirfile);
+		return undef;
+	    }
+	}
+
+	## deletes the possible tracability files in the spool
+	&List::delete_tracability_spool_file($which, $sender);
+
 	## Now send the welcome file to the user
 	unless ($quiet || ($action =~ /quiet/i )) {
 	    unless ($list->send_file('welcome', $sender, $robot,{})) {
@@ -1025,7 +1117,13 @@ sub signoff {
 	if ($user_entry->{'included'} == 1) {
 	    unless ($list->update_user($email, 
 				       {'subscribed' => 0,
-					'update_date' => time})) {
+					'update_date' => time,
+					'who_init' => undef,
+					'who_update' => undef,
+					'how_init' => undef,
+					'how_update' => undef,
+					'ip_init' => undef,
+					'ip_update' => undef})) {
 		do_log('info', 'SIG %s from %s failed, database update failed', $which, $email);
 		return undef;
 	    }
@@ -1035,10 +1133,15 @@ sub signoff {
 	    $list->delete_user($email);
 	}
 	
+	unless ($list->delete_tracability_dir_file($email, 'init') || $list->delete_tracability_dir_file($email, 'update')) {
+	    &do_log('info', 'SIG %s from %s failed, delete tracability files failed', $which, $email);
+	    return undef;
+	}	
+
 	## Notify the owner
 	if ($action =~ /notify/i) {
 	    unless ($list->send_notify_to_owner('notice',{'who' => $email, 
-					 'gecos' => $comment, 
+							  'gecos' => $comment, 
 							  'command' => 'signoff'})) {
 		&do_log('info',"Unable to send notify 'notice' to $list->{'name'} list owner");
 	    } 
@@ -1134,13 +1237,62 @@ sub add {
 	&do_log('info', 'ADD %s from %s, auth requested(%d seconds)', $which, $sender,time-$time_command);
 	return 1;
     }
+
     if ($action =~ /do_it/i) {
+	
+	my $subscribe;
+
+	unless ($list->is_user($email)) {
+	    if (($list->delete_subscription_request($email) eq 'deleted') && ($auth ne '')) {
+		$subscribe = 1;
+
+		my $tracability_dir = $list->{'dir'}.'/tracability';
+		unless (-e $tracability_dir) {
+		    unless (mkdir ($tracability_dir, 0777)) {
+			&do_log('err',"Unable to create %s : %s", $tracability_dir, $!);
+			return undef;
+		    }
+		}
+	    
+		my $sub_spoolfile; 
+		my $auth_spoolfile;
+		my $sub_dirfile = "$list->{'dir'}/tracability/$email".'.sub.init';
+		my $auth_dirfile = "$list->{'dir'}/tracability/$email".'.auth.init';
+	    
+		unless (&List::research_tracability_spool_file($list, $email, 'sub') && &List::research_tracability_spool_file($list, $email, 'auth')) {
+		    &do_log('err','research of tracability spoolfile failed');
+		    return undef;
+		}
+	    
+		if (&List::research_tracability_spool_file($list, $email, 'sub') eq 'present') {
+		    $sub_spoolfile = "$Conf{'queuetracability'}"."/"."$list->{'name'}"."$email".'.sub'; 
+		    unless (&tools::move_file($sub_spoolfile, $sub_dirfile)) {
+			&do_log('err', "Unable to move file %s in %s", $sub_spoolfile, $sub_dirfile);
+			return undef;
+		    }
+		    if (&List::research_tracability_spool_file($list, $email, 'auth') eq 'present') {
+			$auth_spoolfile = "$Conf{'queuetracability'}"."/"."$list->{'name'}"."$email".'.auth'; 
+			unless (&tools::move_file($auth_spoolfile, $auth_dirfile)) {
+			    &do_log('err', "Unable to move file %s in %s", $auth_spoolfile, $auth_dirfile);
+			    return undef;
+			}
+		    }
+		}
+
+		## deletes the possible tracability files in the spool
+		&List::delete_tracability_spool_file($which, $email);
+	    }
+	}
+
 	if ($list->is_user($email)) {
 	    my $user = {};
 	    $user->{'update_date'} = time;
 	    $user->{'gecos'} = $comment if $comment;
 	    $user->{'subscribed'} = 1;
-
+	    $user->{'how_update'} = 'mail';
+	    $user->{'who_update'} = $sender;
+	    $user->{'ip_update'} = undef;
+	
 	    return undef 
 		unless $list->update_user($email, $user);
 	    &notice_report_cmd($cmd_line,'updated_info',{'email'=> $email, 'listname' => $which});  
@@ -1151,33 +1303,39 @@ sub add {
 	    $u->{'email'} = $email;
 	    $u->{'gecos'} = $comment;
 	    $u->{'date'} = $u->{'update_date'} = time;
+	    $u->{'how_init'} = 'mail';
+
+	    unless ($subscribe) {
+		$u->{'who_init'} = $sender;
+	    } else {
+		$u->{'who_init'} = $email;
+	    }
 	    
 	    return undef unless $list->add_user($u);
-	    $list->delete_subscription_request($email);
 	    &notice_report_cmd($cmd_line,'now_subscriber',{'email'=> $email, 'listname' => $which});  
 	}
-    
+	
 	if ($List::use_db) {
 	    my $u = &List::get_user_db($email);
 	    
 	    &List::update_user_db($email, {'lang' => $u->{'lang'} || $list->{'admin'}{'lang'},
 					   'password' => $u->{'password'} || &tools::tmp_passwd($email)
-					    });
+				       });
 	}
-
+	
 	$list->save();
-    
-	## Now send the welcome file to the user if it exists.
+	
+    ## Now send the welcome file to the user if it exists.
 	unless ($quiet || ($action =~ /quiet/i )) {
 	    unless ($list->send_file('welcome', $email, $robot,{})) {
 		&do_log('notice',"Unable to send template 'welcome' to $email");
 	    }
 	}
-
+	
 	do_log('info', 'ADD %s %s from %s accepted (%d seconds, %d subscribers)', $which, $email, $sender, time-$time_command, $list->get_total() );
 	if ($action =~ /notify/i) {
 	    unless ($list->send_notify_to_owner('notice',{'who' => $email, 
-					 'gecos' => $comment,
+							  'gecos' => $comment,
 							  'command' => 'add',
 							  'by' => $sender})) {
 		&do_log('info',"Unable to send notify 'notice' to $list->{'name'} list owner");
@@ -1185,7 +1343,7 @@ sub add {
 	}
 	return 1;
     }
-
+    
 }
 
 
@@ -1599,14 +1757,28 @@ sub del {
 	if ($user_entry->{'included'} == 1) {
 	    unless ($list->update_user($who, 
 				       {'subscribed' => 0,
-					'update_date' => time})) {
-		do_log('info', 'DEL %s %s from %s failed, database update failed', $which, $who, $sender);
+					'update_date' => time,
+					'who_init' => undef,
+					'who_update' => undef,
+					'how_init' => undef,
+					'how_update' => undef,
+					'ip_init' => undef,
+					'ip_update' => undef})) {
+		&do_log('info', 'DEL %s %s from %s failed, database update failed', $which, $who, $sender);
 		return undef;
 	    }
 
 	}else {
 	    ## Really delete and rewrite to disk.
 	    my $u = $list->delete_user($who);
+	}
+	
+	my $tracability_dir = $list->{'dir'}.'/tracability';
+	if (-e $tracability_dir) {
+	    unless ($list->delete_tracability_dir_file($who, 'init') || $list->delete_tracability_dir_file($who, 'update')) {
+		&do_log('info', 'DEL %s %s from %s failed, delete tracability files failed', $which, $who, $sender);
+		return undef;
+	    }
 	}
 
 	$list->save();

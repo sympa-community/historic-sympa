@@ -1,9 +1,57 @@
 <!-- $Id$ -->
 
   <form action="[% path_cgi %]" method="post">
+  <input type="hidden" name="previous_action" value="[% previous_action %]" />
+   [% IF subscriber.subscribed %]	
+ 	  [% IF subscriber.email == subscriber.who_init %]	
+  		[%|loc%]You are subscribed since[%END%] <span style="color: [% dark_color %];">[% subscriber.date %]</span> <br />
+	  [% ELSIF !subscriber.who_init %]
+		[%|loc%]You are subscribed since[%END%] <span style="color: [% dark_color %];">[% subscriber.date %]</span> <br />
+	  [% ELSE %]
+		[%|loc%]You are added since[%END%] <span style="color: [%dark_color %];">[% subscriber.date %]</span> [%|loc%]by[%END%] <span style="color: [%dark_color %];">[% subscriber.who_init %]</span> <br />
+  	  [% END %]	
+	  [% IF subscriber.how_init %]
+  		[%|loc%]Via the method[%END%] <span style="color: [% dark_color %];">[% subscriber.how_init %]</span>
+		[%IF subscriber.ip_init %]
+			 <span style="color: [% dark_color %];">([% subscriber.ip_init %])</span>	 
+		[%END%]
+		<br />
+ 	  [% END %]	  
+  	  <br />
+	  [% IF subinit == 'present' %]	
+	  	<input class="MainMenuLinks" type="submit" name="action_subscription_trace.subinit" value="[%|loc%]Your subscription file[%END%]" /> <br />
+	  	[% IF authinit == 'present' %]	  
+			<input class="MainMenuLinks" type="submit" name="action_subscription_trace.authinit" value="[%|loc%]Your confirmation file[%END%]" /> <br />
+		[% END %]
+		<br />
+	  [% END %]	
+ 
+	[%|loc%]Last update:[%END%] <span style="color: [% dark_color %];">[% subscriber.update_date %]</span>
+	[% IF subscriber.who_update %]
+		[% IF subscriber.email != subscriber.who_update %]
+			[%|loc%]by[%END%] <span style="color: [% dark_color %];">[% subscriber.who_update %]</span>
+		[% END %]
+	[% END %]
+	<br />
+	[% IF subscriber.how_update %]
+		[%|loc%]Via the method[%END%] <span style="color: [% dark_color %];">[% subscriber.how_update %]</span>
+		[% IF subscriber.ip_update %]
+	 		<span style="color: [% dark_color %];">([% subscriber.ip_update %])</span>	 
+		[% END %]
+	[% END %]
+	<br /> <br />
+	
+	[% IF subupdate == 'present' %]
+	  	<input class="MainMenuLinks" type="submit" name="action_subscription_trace.subupdate" value="[%|loc%]Your subscription file[%END%]" /> <br /><br />
+	[% END %]
+  [% END %]
 
-  [%|loc%]You are subscribed since[%END%] <span style="color: [% dark_color %];">[% subscriber.date %]</span>  <br /><br />
-  [%|loc%]Last update:[%END%] <span style="color: [% dark_color %];">[% subscriber.update_date %]</span>  <br /><br />
+  [% IF subscriber.included %]
+	[%|loc%]You are included since[%END%] <span style="color: [% dark_color %];">[% subscriber.date %]</span> <br />
+	[%|loc%]Sources:[%END%] <span style="color: [% dark_color %];">[% subscriber.sources %]</span> <br />
+	[%|loc%]Description:[%END%] <span style="color: [% dark_color %];">[% subscriber.descriptions %]</span> <br />
+  [% END %]		  	
+
      <input type="hidden" name="list" value="[% list %]" />
      [%|loc%]Reception mode :[%END%] 
      <select name="reception">

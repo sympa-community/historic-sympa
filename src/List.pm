@@ -564,8 +564,18 @@ my %alias = ('reply-to' => 'reply_to',
 		       'gettext_id' => "Internet domain",
 		       'group' => 'description'
 		   },
-	    'include_file' => {'format' => '\S+',
-			       'length' => 20,
+	    'include_file' => {'format' => {'path' => {'format' =>  '\S+',
+						       'length' => 20,
+						       'occurence' => '1',
+						       'gettext_id' => "path",
+						       'order' => 1
+						       },
+					     'description' => {'format' => '.+',
+							       'length' => 80,
+							       'gettext_id' => "description of this source",
+							       'order' => 2
+							       },
+					},
 			       'occurrence' => '0-n',
 			       'gettext_id' => "File inclusion",
 			       'group' => 'data_source'
@@ -574,25 +584,30 @@ my %alias = ('reply-to' => 'reply_to',
 							     'gettext_id' => "data location URL",
 							     'occurrence' => '1',
 							     'length' => 50,
-							     'order' => 2
+							     'order' => 3
 							     },					       
 						   'user' => {'format' => '.+',
 							      'gettext_id' => "remote user",
-							      'order' => 3,
+							      'order' => 4,
 							      'occurrence' => '0-1'
 							      },
 						   'passwd' => {'format' => '.+',
 								'length' => 10,
 								'field_type' => 'password',
 								'gettext_id' => "remote password",
-								'order' => 4,
+								'order' => 5,
 								'occurrence' => '0-1'
 								},							      
 						    'name' => {'format' => '.+',
 							       'gettext_id' => "short name for this source",
 							       'length' => 15,
 							       'order' => 1
-							       }
+							       },
+						   'description' => {'format' => '.+',
+							       'length' => 80,
+							       'gettext_id' => "description of this source",
+							       'order' => 2
+							       },
 						     },
 				      'gettext_id' => "Remote file inclusion",
 				      'occurrence' => '0-n',
@@ -601,62 +616,67 @@ my %alias = ('reply-to' => 'reply_to',
 	    'include_ldap_query' => {'format' => {'host' => {'format' => $tools::regexp{'multiple_host_with_port'},
 							     'occurrence' => '1',
 							     'gettext_id' => "remote host",
-							     'order' => 2
+							     'order' => 3
 							     },
 						  'port' => {'format' => '\d+',
 							     'default' => 389,
 							     'length' => 4,
 							     'gettext_id' => "remote port",
 							     'obsolete' => 1,
-							     'order' => 2
+							     'order' => 3
 							     },
 						  'user' => {'format' => '.+',
 							     'gettext_id' => "remote user",
-							     'order' => 3
+							     'order' => 4
 							     },
 						  'passwd' => {'format' => '.+',
 							       'length' => 10,
 							       'field_type' => 'password',
 							       'gettext_id' => "remote password",
-							       'order' => 3
+							       'order' => 4
 							       },
 						  'suffix' => {'format' => '.+',
 							       'gettext_id' => "suffix",
-							       'order' => 4
+							       'order' => 5
 							       },
 						  'filter' => {'format' => '.+',
 							       'length' => 50,
 							       'occurrence' => '1',
 							       'gettext_id' => "filter",
-							       'order' => 7
+							       'order' => 8
 							       },
 						  'attrs' => {'format' => '\w+',
 							      'length' => 15,
 							      'default' => 'mail',
 							      'gettext_id' => "extracted attribute",
-							      'order' => 8
+							      'order' => 9
 							      },
 						  'select' => {'format' => ['all','first'],
 							       'default' => 'first',
 							       'gettext_id' => "selection (if multiple)",
-							       'order' => 9
+							       'order' => 10
 							       },
 					          'scope' => {'format' => ['base','one','sub'],
 							      'default' => 'sub',
 							      'gettext_id' => "search scope",
-							      'order' => 5
+							      'order' => 6
 							      },
 						  'timeout' => {'format' => '\w+',
 								'default' => 30,
 								'unit' => 'seconds',
 								'gettext_id' => "connection timeout",
-								'order' => 6
+								'order' => 7
 								},
 						   'name' => {'format' => '.+',
 							      'gettext_id' => "short name for this source",
 							      'length' => 15,
 							      'order' => 1
-							      }
+							      },
+						  'description' => {'format' => '.+',
+							       'length' => 80,
+							       'gettext_id' => "description of this source",
+							       'order' => 2
+							       },
 					      },
 				     'occurrence' => '0-n',
 				     'gettext_id' => "LDAP query inclusion",
@@ -665,112 +685,127 @@ my %alias = ('reply-to' => 'reply_to',
 	    'include_ldap_2level_query' => {'format' => {'host' => {'format' => $tools::regexp{'multiple_host_with_port'},
 							     'occurrence' => '1',
 							     'gettext_id' => "remote host",
-							     'order' => 1
+							     'order' => 2
 							     },
 						  'port' => {'format' => '\d+',
 							     'default' => 389,
 							     'length' => 4,
 							     'gettext_id' => "remote port",
 							     'obsolete' => 1,
-							     'order' => 2
+							     'order' => 3
 							     },
 						  'user' => {'format' => '.+',
 							     'gettext_id' => "remote user",
-							     'order' => 3
+							     'order' => 4
 							     },
 						  'passwd' => {'format' => '.+',
 							       'length' => 10,
 							       'field_type' => 'password',
 							       'gettext_id' => "remote password",
-							       'order' => 3
+							       'order' => 4
 							       },
 						  'suffix1' => {'format' => '.+',
 							       'gettext_id' => "first-level suffix",
-							       'order' => 4
+							       'order' => 5
 							       },
 						  'filter1' => {'format' => '.+',
 							       'length' => 50,
 							       'occurrence' => '1',
 							       'gettext_id' => "first-level filter",
-							       'order' => 7
+							       'order' => 8
 							       },
 						  'attrs1' => {'format' => '\w+',
 							      'length' => 15,
 							      'gettext_id' => "first-level extracted attribute",
-							      'order' => 8
+							      'order' => 9
 							      },
 						  'select1' => {'format' => ['all','first','regex'],
 							       'default' => 'first',
 							       'gettext_id' => "first-level selection",
-							       'order' => 9
+							       'order' => 10
 							       },
 					          'scope1' => {'format' => ['base','one','sub'],
 							      'default' => 'sub',
 							      'gettext_id' => "first-level search scope",
-							      'order' => 5
+							      'order' => 6
 							      },
 						  'timeout1' => {'format' => '\w+',
 								'default' => 30,
 								'unit' => 'seconds',
 								'gettext_id' => "first-level connection timeout",
-								'order' => 6
+								'order' => 7
 								},
 						  'regex1' => {'format' => '.+',
 								'length' => 50,
 								'default' => '',
 								'gettext_id' => "first-level regular expression",
-								'order' => 10
+								'order' => 11
 								},
 						  'suffix2' => {'format' => '.+',
 							       'gettext_id' => "second-level suffix template",
-							       'order' => 11
+							       'order' => 12
 							       },
 						  'filter2' => {'format' => '.+',
 							       'length' => 50,
 							       'occurrence' => '1',
 							       'gettext_id' => "second-level filter template",
-							       'order' => 14
+							       'order' => 13
 							       },
 						  'attrs2' => {'format' => '\w+',
 							      'length' => 15,
 							      'default' => 'mail',
 							      'gettext_id' => "second-level extracted attribute",
-							      'order' => 15
+							      'order' => 16
 							      },
 						  'select2' => {'format' => ['all','first','regex'],
 							       'default' => 'first',
 							       'gettext_id' => "second-level selection",
-							       'order' => 16
+							       'order' => 17
 							       },
 					          'scope2' => {'format' => ['base','one','sub'],
 							      'default' => 'sub',
 							      'gettext_id' => "second-level search scope",
-							      'order' => 12
+							      'order' => 13
 							      },
 						  'timeout2' => {'format' => '\w+',
 								'default' => 30,
 								'unit' => 'seconds',
 								'gettext_id' => "second-level connection timeout",
-								'order' => 13
+								'order' => 14
 								},
 						  'regex2' => {'format' => '.+',
 								'length' => 50,
 								'default' => '',
 								'gettext_id' => "second-level regular expression",
-								'order' => 17
+								'order' => 18
 								},
 						   'name' => {'format' => '.+',
 							      'gettext_id' => "short name for this source",
 							      'length' => 15,
 							      'order' => 1
-							      }
+							      },
+						   'description' => {'format' => '.+',
+								     'length' => 80,
+								     'gettext_id' => "description of this source",
+								     'order' => 2
+								     },
 
 					      },
 				     'occurrence' => '0-n',
 				     'gettext_id' => "LDAP 2-level query inclusion",
 				     'group' => 'data_source'
 				     },
-	    'include_list' => {'format' => $tools::regexp{'listname'},
+	    'include_list' => {'format' => {'name' => {'format' => $tools::regexp{'listname'},
+						       'occurence' => '1',
+						       'gettext_id' => "name",
+						       'order' => 1
+						       },
+					    'description' => {'format' => '.+',
+							      'length' => 80,
+							      'gettext_id' => "description of this source",
+							      'order' => 2
+							      },
+					    },		   
 			       'occurrence' => '0-n',
 			       'gettext_id' => "List inclusion",
 			       'group' => 'data_source'
@@ -784,25 +819,29 @@ my %alias = ('reply-to' => 'reply_to',
 							     'default' => 443,
 							     'length' => 4,
 							     'gettext_id' => "remote port",
-							     'order' => 2
+							     'order' => 3
 							     },
 							 'path' => {'format' => '\S+',
 			                                     'length' => 20,
 			                                     'occurrence' => '1',
 			                                     'gettext_id' => "remote path of sympa list dump",
-							     'order' => 3 
-
+							     'order' => 4 
 			                                     },
                                                          'cert' => {'format' => ['robot','list'],
 							           'gettext_id' => "certificate for authentication by remote Sympa",
 								   'default' => 'list',
-								    'order' => 4
+								    'order' => 5
 								    },
 							   'name' => {'format' => '.+',
 								      'gettext_id' => "short name for this source",
 								      'length' => 15,
 								      'order' => 1
-								      }
+								      },
+							  'description' => {'format' => '.+',
+								     'length' => 80,
+								     'gettext_id' => "description of this source",
+								     'order' => 2
+								     },	      
 					},
 
 			       'occurrence' => '0-n',
@@ -812,52 +851,57 @@ my %alias = ('reply-to' => 'reply_to',
 	    'include_sql_query' => {'format' => {'db_type' => {'format' => '\S+',
 							       'occurrence' => '1',
 							       'gettext_id' => "database type",
-							       'order' => 1
+							       'order' => 2
 							       },
 						 'host' => {'format' => $tools::regexp{'host'},
 							    'occurrence' => '1',
 							    'gettext_id' => "remote host",
-							    'order' => 2
+							    'order' => 3
 							    },
 						 'db_name' => {'format' => '\S+',
 							       'occurrence' => '1',
 							       'gettext_id' => "database name",
-							       'order' => 3 
+							       'order' => 4 
 							       },
 						 'connect_options' => {'format' => '.+',
 								       'gettext_id' => "connection options",
-								       'order' => 4
+								       'order' => 5
 								       },
 						 'db_env' => {'format' => '\w+\=\S+(;\w+\=\S+)*',
-							      'order' => 5,
+							      'order' => 6,
 							      'gettext_id' => "environment variables for database connexion"
 							      },
 						 'user' => {'format' => '\S+',
 							    'occurrence' => '1',
 							    'gettext_id' => "remote user",
-							    'order' => 6
+							    'order' => 7
 							    },
 						 'passwd' => {'format' => '.+',
 							      'field_type' => 'password',
 							      'gettext_id' => "remote password",
-							      'order' => 7
+							      'order' => 8
 							      },
 						 'sql_query' => {'format' => $tools::regexp{'sql_query'},
 								 'length' => 50,
 								 'occurrence' => '1',
 								 'gettext_id' => "SQL query",
-								 'order' => 8
+								 'order' => 9
 								 },
 						  'f_dir' => {'format' => '.+',
 							     'gettext_id' => "Directory where the database is stored (used for DBD::CSV only)",
-							     'order' => 9
+							     'order' => 10
 							     },
 						  'name' => {'format' => '.+',
 							     'gettext_id' => "short name for this source",
-							     'length' => 15,
+							     'length' => 16,
 							     'order' => 1
-							     }
-						 
+							     },
+						  'description' => {'format' => '.+',
+								     'length' => 80,
+								     'occurence' => '1',
+								     'gettext_id' => "description of this source",
+								     'order' => 2
+								     },	  
 					     },
 				    'occurrence' => '0-n',
 				    'gettext_id' => "SQL query inclusion",
@@ -3160,8 +3204,6 @@ sub get_parsed_file {
     &Language::SetLang($data->{'lang'}) if (defined $data->{'lang'});
     &tt2::parse_tt2($data, $path[$#path], $ref_output);
 
-
-
     return 1;
 }
 
@@ -4334,9 +4376,9 @@ sub get_subscriber {
 
 	if ($Conf{'db_type'} eq 'Oracle') {
 	    ## "AS" not supported by Oracle
-	    $statement = sprintf "SELECT user_subscriber \"email\", comment_subscriber \"gecos\", bounce_subscriber \"bounce\", bounce_score_subscriber \"bounce_score\", reception_subscriber \"reception\", topics_subscriber \"topics\", visibility_subscriber \"visibility\", %s \"date\", %s \"update_date\", subscribed_subscriber \"subscribed\", included_subscriber \"included\", include_sources_subscriber \"id\"  %s FROM subscriber_table WHERE (user_subscriber = %s AND list_subscriber = %s)", $date_field, $update_field, $additional, $dbh->quote($email), $dbh->quote($name);
+	    $statement = sprintf "SELECT user_subscriber \"email\", comment_subscriber \"gecos\", bounce_subscriber \"bounce\", bounce_score_subscriber \"bounce_score\", reception_subscriber \"reception\", topics_subscriber \"topics\", visibility_subscriber \"visibility\", who_init_subscriber \"who_init\", who_update_subscriber \"who_update\", how_init_subscriber \"how_init\", how_update_subscriber \"how_update\", ip_init_subscriber \"ip_init\", ip_update_subscriber \"ip_update\", %s \"date\", %s \"update_date\", subscribed_subscriber \"subscribed\", included_subscriber \"included\", include_sources_subscriber \"id\"  %s FROM subscriber_table WHERE (user_subscriber = %s AND list_subscriber = %s)", $date_field, $update_field, $additional, $dbh->quote($email), $dbh->quote($name);
 	}else {
-	    $statement = sprintf "SELECT user_subscriber AS email, comment_subscriber AS gecos, bounce_subscriber AS bounce, bounce_score_subscriber AS bounce_score, reception_subscriber AS reception,  topics_subscriber AS topics, visibility_subscriber AS visibility, %s AS date, %s AS update_date, subscribed_subscriber AS subscribed, included_subscriber AS included, include_sources_subscriber AS id %s FROM subscriber_table WHERE (user_subscriber = %s AND list_subscriber = %s)", $date_field, $update_field, $additional, $dbh->quote($email), $dbh->quote($name);
+	    $statement = sprintf "SELECT user_subscriber AS email, comment_subscriber AS gecos, bounce_subscriber AS bounce, bounce_score_subscriber AS bounce_score, reception_subscriber AS reception,  topics_subscriber AS topics, visibility_subscriber AS visibility, who_init_subscriber AS who_init, who_update_subscriber AS who_update, how_init_subscriber AS how_init, how_update_subscriber AS how_update, ip_init_subscriber AS ip_init, ip_update_subscriber AS ip_update, %s AS date, %s AS update_date, subscribed_subscriber AS subscribed, included_subscriber AS included, include_sources_subscriber AS id %s FROM subscriber_table WHERE (user_subscriber = %s AND list_subscriber = %s)", $date_field, $update_field, $additional, $dbh->quote($email), $dbh->quote($name);
 	}
 
 	push @sth_stack, $sth;
@@ -4530,11 +4572,11 @@ sub get_first_user {
 	## Oracle
 	if ($Conf{'db_type'} eq 'Oracle') {
 
-	    $statement = sprintf "SELECT user_subscriber \"email\", comment_subscriber \"gecos\", reception_subscriber \"reception\", topics_subscriber \"topics\", visibility_subscriber \"visibility\", bounce_subscriber \"bounce\", bounce_score_subscriber \"bounce_score\", %s \"date\", %s \"update_date\", subscribed_subscriber \"subscribed\", included_subscriber \"included\", include_sources_subscriber \"id\" %s FROM subscriber_table WHERE (list_subscriber = %s %s)", $date_field, $update_field, $additional, $dbh->quote($name), $selection;
+	    $statement = sprintf "SELECT user_subscriber \"email\", comment_subscriber \"gecos\", reception_subscriber \"reception\", topics_subscriber \"topics\", visibility_subscriber \"visibility\", bounce_subscriber \"bounce\", bounce_score_subscriber \"bounce_score\", who_init_subscriber \"who_init\", who_update_subscriber \"who_update\", how_init_subscriber \"how_init\", how_update_subscriber \"how_update\", ip_init_subscriber \"ip_init\", ip_update_subscriber \"ip_update\", %s \"date\", %s \"update_date\", subscribed_subscriber \"subscribed\", included_subscriber \"included\", include_sources_subscriber \"id\" %s FROM subscriber_table WHERE (list_subscriber = %s %s)", $date_field, $update_field, $additional, $dbh->quote($name), $selection;
 
 	    ## SORT BY
 	    if ($sortby eq 'domain') {
-		$statement = sprintf "SELECT user_subscriber \"email\", comment_subscriber \"gecos\", reception_subscriber \"reception\", topics_subscriber \"topics\", visibility_subscriber \"visibility\", bounce_subscriber \"bounce\", bounce_score_subscriber \"bounce_score\", %s \"date\", %s \"update_date\", subscribed_subscriber \"subscribed\", included_subscriber \"included\", include_sources_subscriber \"id\", substr(user_subscriber,instr(user_subscriber,'\@')+1) \"dom\" %s FROM subscriber_table WHERE (list_subscriber = %s ) ORDER BY \"dom\"", $date_field, $update_field, $additional, $dbh->quote($name);
+		$statement = sprintf "SELECT user_subscriber \"email\", comment_subscriber \"gecos\", reception_subscriber \"reception\", topics_subscriber \"topics\", visibility_subscriber \"visibility\", bounce_subscriber \"bounce\", bounce_score_subscriber \"bounce_score\", who_init_subscriber \"who_init\", who_update_subscriber \"who_update\", how_init_subscriber \"how_init\", how_update_subscriber \"how_update\", ip_init_subscriber \"ip_init\", ip_update_subscriber \"ip_update\", %s \"date\", %s \"update_date\", subscribed_subscriber \"subscribed\", included_subscriber \"included\", include_sources_subscriber \"id\", substr(user_subscriber,instr(user_subscriber,'\@')+1) \"dom\" %s FROM subscriber_table WHERE (list_subscriber = %s ) ORDER BY \"dom\"", $date_field, $update_field, $additional, $dbh->quote($name);
 
 	    }elsif ($sortby eq 'email') {
 		$statement .= " ORDER BY \"email\"";
@@ -4552,11 +4594,11 @@ sub get_first_user {
 	## Sybase
 	}elsif ($Conf{'db_type'} eq 'Sybase'){
 
-	    $statement = sprintf "SELECT user_subscriber \"email\", comment_subscriber \"gecos\", reception_subscriber \"reception\", topics_subscriber \"topics\", visibility_subscriber \"visibility\", bounce_subscriber \"bounce\", bounce_score_subscriber \"bounce_score\", %s \"date\", %s \"update_date\", subscribed_subscriber \"subscribed\", included_subscriber \"included\", include_sources_subscriber \"id\" %s FROM subscriber_table WHERE (list_subscriber = %s %s)", $date_field, $update_field, $additional, $dbh->quote($name), $selection;
+	    $statement = sprintf "SELECT user_subscriber \"email\", comment_subscriber \"gecos\", reception_subscriber \"reception\", topics_subscriber \"topics\", visibility_subscriber \"visibility\", bounce_subscriber \"bounce\", bounce_score_subscriber \"bounce_score\", who_init_subscriber \"who_init\", who_update_subscriber \"who_update\", how_init_subscriber \"how_init\", how_update_subscriber \"how_update\", ip_init_subscriber \"ip_init\", ip_update_subscriber \"ip_update\" , %s \"date\", %s \"update_date\", subscribed_subscriber \"subscribed\", included_subscriber \"included\", include_sources_subscriber \"id\" %s FROM subscriber_table WHERE (list_subscriber = %s %s)", $date_field, $update_field, $additional, $dbh->quote($name), $selection;
 	    
 	    ## SORT BY
 	    if ($sortby eq 'domain') {
-		$statement = sprintf "SELECT user_subscriber \"email\", comment_subscriber \"gecos\", reception_subscriber \"reception\", topics_subscriber \"topics\", visibility_subscriber \"visibility\", bounce_subscriber \"bounce\", bounce_score_subscriber \"bounce_score\", %s \"date\", %s \"update_date\", subscribed_subscriber \"subscribed\", included_subscriber \"included\", include_sources_subscriber \"id\", substring(user_subscriber,charindex('\@',user_subscriber)+1,100) \"dom\" %s FROM subscriber_table WHERE (list_subscriber = %s) ORDER BY \"dom\"", $date_field, $update_field, $additional, $dbh->quote($name);
+		$statement = sprintf "SELECT user_subscriber \"email\", comment_subscriber \"gecos\", reception_subscriber \"reception\", topics_subscriber \"topics\", visibility_subscriber \"visibility\", bounce_subscriber \"bounce\", bounce_score_subscriber \"bounce_score\", who_init_subscriber \"who_init\", who_update_subscriber \"who_update\", how_init_subscriber \"how_init\", how_update_subscriber \"how_update\", ip_init_subscriber \"ip_init_subscriber\", ip_update_subscriber \"ip_update\", %s \"date\", %s \"update_date\", subscribed_subscriber \"subscribed\", included_subscriber \"included\", include_sources_subscriber \"id\", substring(user_subscriber,charindex('\@',user_subscriber)+1,100) \"dom\" %s FROM subscriber_table WHERE (list_subscriber = %s) ORDER BY \"dom\"", $date_field, $update_field, $additional, $dbh->quote($name);
 		
 	    }elsif ($sortby eq 'email') {
 		$statement .= " ORDER BY \"email\"";
@@ -4575,13 +4617,13 @@ sub get_first_user {
 	## mysql
 	}elsif ($Conf{'db_type'} eq 'mysql') {
 	    
-    $statement = sprintf "SELECT user_subscriber AS email, comment_subscriber AS gecos, reception_subscriber AS reception, topics_subscriber AS topics, visibility_subscriber AS visibility, bounce_subscriber AS bounce, bounce_score_subscriber AS bounce_score, %s AS date, %s AS update_date, subscribed_subscriber AS subscribed, included_subscriber AS included, include_sources_subscriber AS id %s FROM subscriber_table WHERE (list_subscriber = %s %s)", $date_field, $update_field, $additional, $dbh->quote($name), $selection;
+    $statement = sprintf "SELECT user_subscriber AS email, comment_subscriber AS gecos, reception_subscriber AS reception, topics_subscriber AS topics, visibility_subscriber AS visibility, bounce_subscriber AS bounce, bounce_score_subscriber AS bounce_score, who_init_subscriber AS who_init, who_update_subscriber AS who_update, how_init_subscriber AS how_init, how_update_subscriber AS how_update, ip_init_subscriber AS ip_init, ip_update_subscriber AS ip_update, %s AS date, %s AS update_date, subscribed_subscriber AS subscribed, included_subscriber AS included, include_sources_subscriber AS id %s FROM subscriber_table WHERE (list_subscriber = %s %s)", $date_field, $update_field, $additional, $dbh->quote($name), $selection;
 	    
 	    ## SORT BY
 	    if ($sortby eq 'domain') {
 		## Redefine query to set "dom"
 
-		$statement = sprintf "SELECT user_subscriber AS email, comment_subscriber AS gecos, reception_subscriber AS reception, topics_subscriber AS topics, visibility_subscriber AS visibility, bounce_subscriber AS bounce, bounce_score_subscriber AS bounce_score, %s AS date, %s AS update_date, subscribed_subscriber AS subscribed, included_subscriber AS included, include_sources_subscriber AS id, REVERSE(SUBSTRING(user_subscriber FROM position('\@' IN user_subscriber) FOR 50)) AS dom %s FROM subscriber_table WHERE (list_subscriber = %s) ORDER BY dom", $date_field, $update_field, $additional, $dbh->quote($name);
+		$statement = sprintf "SELECT user_subscriber AS email, comment_subscriber AS gecos, reception_subscriber AS reception, topics_subscriber AS topics, visibility_subscriber AS visibility, bounce_subscriber AS bounce, bounce_score_subscriber AS bounce_score, who_init_subscriber AS who_init, who_update_subscriber AS who_update, how_init_subscriber AS how_init, how_update_subscriber AS how_update, ip_init_subscriber AS ip_init, ip_update_subscriber AS ip_update, %s AS date, %s AS update_date, subscribed_subscriber AS subscribed, included_subscriber AS included, include_sources_subscriber AS id, REVERSE(SUBSTRING(user_subscriber FROM position('\@' IN user_subscriber) FOR 50)) AS dom %s FROM subscriber_table WHERE (list_subscriber = %s) ORDER BY dom", $date_field, $update_field, $additional, $dbh->quote($name);
 
 	    }elsif ($sortby eq 'email') {
 		## Default SORT
@@ -4605,13 +4647,13 @@ sub get_first_user {
 	## Pg    
 	}else {
 	    
-	    $statement = sprintf "SELECT user_subscriber AS email, comment_subscriber AS gecos, reception_subscriber AS reception, topics_subscriber AS topics, visibility_subscriber AS visibility, bounce_subscriber AS bounce, bounce_score_subscriber AS bounce_score, %s AS date, %s AS update_date, subscribed_subscriber AS subscribed, included_subscriber AS included, include_sources_subscriber AS id %s FROM subscriber_table WHERE (list_subscriber = %s %s)", $date_field, $update_field, $additional, $dbh->quote($name), $selection;
+	    $statement = sprintf "SELECT user_subscriber AS email, comment_subscriber AS gecos, reception_subscriber AS reception, topics_subscriber AS topics, visibility_subscriber AS visibility, bounce_subscriber AS bounce, bounce_score_subscriber AS bounce_score, who_init_subscriber AS who_init, who_update_subscriber AS who_update, how_init_subscriber AS how_init, how_update_subscriber AS how_update, ip_init_subscriber AS ip_init, ip_update_subscriber AS ip_update, %s AS date, %s AS update_date, subscribed_subscriber AS subscribed, included_subscriber AS included, include_sources_subscriber AS id %s FROM subscriber_table WHERE (list_subscriber = %s %s)", $date_field, $update_field, $additional, $dbh->quote($name), $selection;
 	    
 	    ## SORT BY
 	    if ($sortby eq 'domain') {
 		## Redefine query to set "dom"
 
-		$statement = sprintf "SELECT user_subscriber AS email, comment_subscriber AS gecos, reception_subscriber AS reception, topics_subscriber AS topics, visibility_subscriber AS visibility, bounce_subscriber AS bounce, bounce_score_subscriber AS bounce_score, %s AS date, %s AS update_date, subscribed_subscriber AS subscribed, included_subscriber AS included, include_sources_subscriber AS id, SUBSTRING(user_subscriber FROM position('\@' IN user_subscriber) FOR 50) AS dom %s FROM subscriber_table WHERE (list_subscriber = %s) ORDER BY dom", $date_field, $update_field, $additional, $dbh->quote($name);
+		$statement = sprintf "SELECT user_subscriber AS email, comment_subscriber AS gecos, reception_subscriber AS reception, topics_subscriber AS topics, visibility_subscriber AS visibility, bounce_subscriber AS bounce, bounce_score_subscriber AS bounce_score, who_init_subscriber AS who_init, who_update_subscriber AS who_update, how_init_subscriber AS how_init, how_update_subscriber AS how_update, ip_init_subscriber AS ip_init, ip_update_subscriber AS ip_update, %s AS date, %s AS update_date, subscribed_subscriber AS subscribed, included_subscriber AS included, include_sources_subscriber AS id, SUBSTRING(user_subscriber FROM position('\@' IN user_subscriber) FOR 50) AS dom %s FROM subscriber_table WHERE (list_subscriber = %s) ORDER BY dom", $date_field, $update_field, $additional, $dbh->quote($name);
 
 	    }elsif ($sortby eq 'email') {
 		$statement .= ' ORDER BY email';
@@ -5072,9 +5114,9 @@ sub get_first_bouncing_user {
 
     if ($Conf{'db_type'} eq 'Oracle') {
 	## "AS" not supported by Oracle
-	$statement = sprintf "SELECT user_subscriber \"email\", reception_subscriber \"reception\", topics_subscriber \"topics\", visibility_subscriber \"visibility\", bounce_subscriber \"bounce\",bounce_score_subscriber \"bounce_score\", %s \"date\", %s \"update_date\" %s FROM subscriber_table WHERE (list_subscriber = %s AND bounce_subscriber is not NULL)", $date_field, $update_field, $additional, $dbh->quote($name);
+	$statement = sprintf "SELECT user_subscriber \"email\", reception_subscriber \"reception\", topics_subscriber \"topics\", visibility_subscriber \"visibility\", bounce_subscriber \"bounce\",bounce_score_subscriber \"bounce_score\", who_init_subscriber \"who_init\", who_update_subscriber \"who_update\", how_init_subscriber \"how_init\", how_update_subscriber \"how_update\", ip_init_subscriber \"ip_init\", ip_update_subscriber \"ip_update\", %s \"date\", %s \"update_date\" %s FROM subscriber_table WHERE (list_subscriber = %s AND bounce_subscriber is not NULL)", $date_field, $update_field, $additional, $dbh->quote($name);
     }else {
-	$statement = sprintf "SELECT user_subscriber AS email, reception_subscriber AS reception, topics_subscriber AS topics, visibility_subscriber AS visibility, bounce_subscriber AS bounce,bounce_score_subscriber AS bounce_score, %s AS date, %s AS update_date %s FROM subscriber_table WHERE (list_subscriber = %s AND bounce_subscriber is not NULL)", $date_field, $update_field, $additional, $dbh->quote($name);
+	$statement = sprintf "SELECT user_subscriber AS email, reception_subscriber AS reception, topics_subscriber AS topics, visibility_subscriber AS visibility, bounce_subscriber AS bounce,bounce_score_subscriber AS bounce_score, who_init_subscriber AS who_init, who_update_subscriber AS who_update, how_init_subscriber AS how_init, how_update_subscriber AS how_update, ip_init_subscriber AS ip_init, ip_update_subscriber AS ip_update, %s AS date, %s AS update_date %s FROM subscriber_table WHERE (list_subscriber = %s AND bounce_subscriber is not NULL)", $date_field, $update_field, $additional, $dbh->quote($name);
     }
 
     push @sth_stack, $sth;
@@ -5354,6 +5396,12 @@ sub update_user {
 	my %map_field = ( reception => 'reception_subscriber',
 			  topics => 'topics_subscriber',
 			  visibility => 'visibility_subscriber',
+			  who_init => 'who_init_subscriber',
+			  who_update => 'who_update_subscriber',
+			  how_init => 'how_init_subscriber',
+			  how_update => 'how_update_subscriber',
+			  ip_init => 'ip_init_subscriber',
+			  ip_update => 'ip_update_subscriber',
 			  date => 'date_subscriber',
 			  update_date => 'update_subscriber',
 			  gecos => 'comment_subscriber',
@@ -5370,6 +5418,12 @@ sub update_user {
 	my %map_table = ( reception => 'subscriber_table',
 			  topics => 'subscriber_table', 
 			  visibility => 'subscriber_table',
+			  who_init => 'subscriber_table',
+			  who_update => 'subscriber_table',
+			  how_init => 'subscriber_table',
+			  how_update => 'subscriber_table',
+			  ip_init => 'subscriber_table',
+			  ip_update => 'subscriber_table',
 			  date => 'subscriber_table',
 			  update_date => 'subscriber_table',
 			  gecos => 'subscriber_table',
@@ -5774,7 +5828,7 @@ sub add_user {
 	    }	    
 
 	    ## Update Subscriber Table
-	    $statement = sprintf "INSERT INTO subscriber_table (user_subscriber, comment_subscriber, list_subscriber, date_subscriber, update_subscriber, reception_subscriber, topics_subscriber, visibility_subscriber,subscribed_subscriber,included_subscriber,include_sources_subscriber) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)", $dbh->quote($who), $dbh->quote($new_user->{'gecos'}), $dbh->quote($name), $date_field, $update_field, $dbh->quote($new_user->{'reception'}), $dbh->quote($new_user->{'topics'}), $dbh->quote($new_user->{'visibility'}), $dbh->quote($new_user->{'subscribed'}), $dbh->quote($new_user->{'included'}), $dbh->quote($new_user->{'id'});
+	    $statement = sprintf "INSERT INTO subscriber_table (user_subscriber, comment_subscriber, list_subscriber, who_init_subscriber, who_update_subscriber, how_init_subscriber, how_update_subscriber, ip_init_subscriber, ip_update_subscriber, date_subscriber, update_subscriber, reception_subscriber, topics_subscriber, visibility_subscriber,subscribed_subscriber,included_subscriber,include_sources_subscriber) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)", $dbh->quote($who), $dbh->quote($new_user->{'gecos'}), $dbh->quote($name), $dbh->quote($new_user->{'who_init'}), $dbh->quote($new_user->{'who_update'}),$dbh->quote($new_user->{'how_init'}), $dbh->quote($new_user->{'how_update'}), $dbh->quote($new_user->{'ip_init'}), $dbh->quote($new_user->{'ip_update'}), $date_field, $update_field, $dbh->quote($new_user->{'reception'}), $dbh->quote($new_user->{'topics'}), $dbh->quote($new_user->{'visibility'}), $dbh->quote($new_user->{'subscribed'}), $dbh->quote($new_user->{'included'}), $dbh->quote($new_user->{'id'});
 	    
 	    unless ($dbh->do($statement)) {
 		do_log('err','Unable to execute SQL statement "%s" : %s', $statement, $dbh->errstr);
@@ -7356,18 +7410,18 @@ sub _include_users_remote_sympa_list {
 
 ## include a list as subscribers.
 sub _include_users_list {
-    my ($users, $includelistname, $default_user_options, $tied) = @_;
+    my ($users, $param, $default_user_options, $tied) = @_;
     do_log('debug2', 'List::_include_users_list');
 
     my $total = 0;
-    
+    my $includelistname = $param->{'name'};
     my $includelist = new List ($includelistname);
     unless ($includelist) {
 	do_log('info', 'Included list %s unknown' , $includelistname);
 	return undef;
     }
     
-    my $id = _get_datasource_id($includelistname);
+    my $id = _get_datasource_id($param);
 
     for (my $user = $includelist->get_first_user(); $user; $user = $includelist->get_next_user()) {
 	my %u;
@@ -7432,9 +7486,10 @@ sub _include_users_admin {
 }
     
 sub _include_users_file {
-    my ($users, $filename, $default_user_options,$tied) = @_;
-    do_log('debug2', 'List::_include_users_file(%s)', $filename);
+    my ($users, $param, $default_user_options,$tied) = @_;
+    do_log('debug2', 'List::_include_users_file(%s)', $param->{'path'});
 
+    my $filename = $param->{'path'};
     my $total = 0;
     
     unless (open(INCLUDE, "$filename")) {
@@ -7443,7 +7498,7 @@ sub _include_users_file {
     }
     do_log('debug2','including file %s' , $filename);
 
-    my $id = _get_datasource_id($filename);
+    my $id = _get_datasource_id($param);
     
     while (<INCLUDE>) {
 	next if /^\s*$/;
@@ -8498,7 +8553,7 @@ sub _load_include_admin_user_file {
 sub sync_include {
     my ($self) = shift;
     my $option = shift;
-    my $name=$self->{'name'};
+    my $name = $self->{'name'};
     &do_log('debug', 'List:sync_include(%s)', $name);
 
     my %old_subscribers;
@@ -9418,6 +9473,12 @@ sub probe_db {
 		     'subscriber_table' => 
 		     {'list_subscriber' => 'varchar(50)',
 		      'user_subscriber' => 'varchar(100)',
+		      'who_init_subscriber' => 'varchar(100)',
+		      'who_update_subscriber' => 'varchar(100)',
+		      'how_init_subscriber' => "enum('mail','web','soap')",
+		      'how_update_subscriber' => "enum('mail','web','soap')",
+		      'ip_init_subscriber' => 'varchar(15)',
+		      'ip_update_subscriber' => 'varchar(15)',
 		      'date_subscriber' => 'datetime',
 		      'update_subscriber' => 'datetime',
 		      'visibility_subscriber' => 'varchar(20)',
@@ -10054,7 +10115,6 @@ sub _apply_defaults {
 	    $::pinfo{$p}{'file_format'} ||= join '|', @{$::pinfo{$p}{'format'}};
 	}
 
-
 	## Set 'format' as default for 'file_format'
 	$::pinfo{$p}{'file_format'} ||= $::pinfo{$p}{'format'};
 	
@@ -10064,7 +10124,6 @@ sub _apply_defaults {
 	    my $char = $::pinfo{$p}{'split_char'};
 	    $::pinfo{$p}{'file_format'} = "($format)*(\\s*$char\\s*($format))*";
 	}
-
 
 	next unless ((ref $::pinfo{$p}{'format'} eq 'HASH')
 		     && (ref $::pinfo{$p}{'file_format'} eq 'HASH'));
@@ -11285,6 +11344,17 @@ sub get_subscription_request_count {
     return $i;
 } 
 
+################################################################################
+# Deletes subscription request if exists in the spool subscribe
+#
+# IN :
+#     -$self (+) : ref(List)
+#     -$email (+) : SCALAR - the subscriber's email
+#
+# OUT :
+#     'deleted' | 'absent' | undef
+################################################################################
+
 sub delete_subscription_request {
     my ($self, $email) = @_;
     do_log('debug2', 'List::delete_subscription_request(%s, %s)', $self->{'name'}, $email);
@@ -11319,16 +11389,208 @@ sub delete_subscription_request {
     
     unless ($removed_file > 0) {
 	do_log('err', 'No pending subscription was found for user %s', $email);
+	return 'absent';
+    }
+
+    return 'deleted';
+} 
+
+######################################################################################
+# Researches the tracability files .sub ou .auth in the spool tracability
+#
+# IN :
+#     -$self (+) : ref(List)
+#     -$email (+) : SCALAR - the subscriber's email
+#     -$suffix (+) : SCALAR - 'sub' | 'auth'
+#
+# OUT : 
+#     'absent' | 'present'
+#     
+######################################################################################
+
+sub research_tracability_spool_file {
+    my ($self, $email, $suffix) = @_;
+    &do_log('debug2', 'List::research_tracability_spool_file(%s, %s, %s)', $self, $email, $suffix);
+    
+    unless (opendir SPOOL, $Conf{'queuetracability'}) {
+	&do_log('info', 'Unable to read spool %s', $Conf{'queuetracability'});
+	return undef;
+    }    
+
+    my $filename = "$Conf{'queuetracability'}"."/"."$self->{'name'}"."$email".'.'."$suffix";
+    unless (open FILE, $filename) {
+	return 'absent';
+    }
+    
+    close FILE;
+    closedir SPOOL;
+    
+    return 'present';
+}
+
+######################################################################################
+# Deletes the tracability files .sub ou .auth in the spool tracability if they exist
+#
+# IN :
+#     -$self (+) : ref(List)
+#     -$email (+) : SCALAR - the subscriber's email
+#
+# OUT : 
+#     '1' | undef
+#     
+######################################################################################
+
+sub delete_tracability_spool_file {
+    my ($listname, $email) = @_;
+    &do_log('debug2', 'List::delete_tracability_spool_file(%s, %s)', $listname, $email);
+
+    unless (opendir SPOOL, $Conf{'queuetracability'}) {
+	&do_log('info', 'Unable to read spool %s', $Conf{'queuetracability'});
 	return undef;
     }
 
-    return 1;
-} 
+    my $filename_sub = "$Conf{'queuetracability'}"."/"."$listname"."$email".'.sub';
+    my $filename_auth = "$Conf{'queuetracability'}"."/"."$listname"."$email".'.auth';
+    
+    if (open FILE, $filename_sub) {
+	close FILE;
+	unless (unlink $filename_sub) {
+	    &do_log('err', 'Could not delete file %s', $filename_sub);
+	    return undef;
+	}
+	
+	if (open FILE, $filename_auth) {
+	    close FILE;
+	    unless (unlink $filename_auth) {
+		&do_log('err', 'Could not delete file %s', $filename_auth);
+		return undef;
+	    }
+	}
+    }
+
+    return 1;	
+}
+
+######################################################################################
+# Researches the tracability files .sub ou .auth in the directory tracability
+#
+# IN :
+#     -$self (+) : ref(List)
+#     -$email (+) : SCALAR - the subscriber's email
+#     -$suffix (+) : SCALAR - 'sub.init' | 'auth.init' | 'sub.update' 
+#
+# OUT : 
+#     'absent' | 'present'
+#     
+######################################################################################
+
+sub research_tracability_dir_file {
+    my ($self, $email, $suffix) = @_;
+    &do_log('debug2', 'List::research_tracability_spool_file(%s, %s, %s)', $self, $email, $suffix);
+    
+    unless (opendir DIR, "$self->{'dir'}".'/tracability') {
+	&do_log('info', 'Unable to read directory %s', "$self->{'dir'}".'/tracability');
+	return undef;
+    }    
+
+    my $filename = "$self->{'dir'}".'/tracability/'."$email".'.'."$suffix";
+    unless (open FILE, $filename) {
+	return 'absent';
+    }
+    
+    close FILE;
+    closedir DIR;
+    
+    return 'present';
+}
+
+######################################################################################
+# Returns the tracability files .sub.init(or .update) or .auth.init  
+# in the dir tracability of the list if they exist
+#
+# IN :
+#     -$self (+) : ref(List)
+#     -$email (+) : SCALAR - the subscriber's email
+#     -$suffix (+) : SCALAR - 'sub.init' | 'auth.init' | 'sub.update'
+#
+# OUT : 
+#     $file | undef
+#     
+######################################################################################
+sub get_tracability_dir_file {
+    my ($self, $email, $suffix) = @_;
+    &do_log('debug2', 'List::get_tracability_dir_file(%s, %s, %s)', $self, $email, $suffix);
+
+    unless (opendir DIR, "$self->{'dir'}".'/tracability') {
+	&do_log('info', 'Unable to read directory %s', "$self->{'dir'}".'/tracability');
+	return undef;
+    }  
+
+    my $filename = "$self->{'dir'}".'/tracability/'."$email".'.'."$suffix";
+    unless (open FILE, $filename) {
+	return undef;
+    }
+
+    my $filecontent;
+    while (<FILE>) {
+	$filecontent = "$filecontent"." $_";
+    }
+    close FILE;
+    close DIR;
+
+    return $filecontent;
+}
+
+
+######################################################################################
+# Deletes the tracability files .sub.init(or .update) or .auth.init 
+# in the dir tracability of the list if they exist
+#
+# IN :
+#     -$self (+) : ref(List)
+#     -$email (+) : SCALAR - the subscriber's email
+#     -$suffix (+) : SCALAR - 'init' | 'update'
+#
+# OUT : 
+#     '1' | undef
+#     
+######################################################################################
+
+sub delete_tracability_dir_file {
+    my ($self, $email, $suffix) = @_;
+    &do_log('debug2', 'List::delete_tracability_dir_file(%s, %s, %s)', $self, $email, $suffix);
+
+    unless (opendir DIR, "$self->{'dir'}".'/tracability') {
+	&do_log('info', 'Unable to read dir %s', "$self->{'dir'}".'/tracability');
+	return undef;
+    }
+
+    my $filename_sub = "$self->{'dir'}".'/tracability/'."$email".'.sub.'."$suffix";
+    my $filename_auth = "$self->{'dir'}".'/tracability/'."$email".'.auth.'."$suffix";
+    
+    if (open FILE, $filename_sub) {
+	close FILE;
+	unless (unlink $filename_sub) {
+	    &do_log('err', 'Could not delete file %s', $filename_sub);
+	    return undef;
+	}
+	
+	if (($suffix eq 'init') && (open FILE, $filename_auth)) {
+	    close FILE;
+	    unless (unlink $filename_auth) {
+		&do_log('err', 'Could not delete file %s', $filename_auth);
+		return undef;
+	    }
+	}
+    }
+
+    return 1;	
+}
 
 
 sub get_shared_size {
     my $self = shift;
-
+    
     return tools::get_dir_size("$self->{'dir'}/shared");
 }
 
@@ -11366,9 +11628,43 @@ sub search_datasource {
 	foreach my $s (@{$self->{'admin'}{$p}}) {
 	    if (&_get_datasource_id($s) eq $id) {
 		if (ref($s)) {
- 		    return $s->{'name'} || $s->{'host'};
-		}else{
-		    return $s;
+#		    return 'not_at_all';
+ 		    return $s->{'name'} || $s->{'path'} || $s->{'host'};
+		}#else{
+#		    return $s;
+#		}
+	    }
+	}
+    }
+
+    return undef;
+}
+
+#####################################################################
+# Searched the description of the include datasource corresponding 
+# to the provided ID
+#
+# IN : 
+#     -$self (+) : ref(List)
+#     -$id (+) : ref(HASH) unique id for an include datasource
+#
+# OUT :
+#     $id->{'description'} | "not indicated" | undef
+#
+#####################################################################
+sub search_datasource_desc {
+    my ($self, $id) = @_;
+    &do_log('debug2','List::search_datasource_desc(%s,%s)', $self->{'name'}, $id);
+
+    ## Go through list parameters
+    foreach my $p (keys %{$self->{'admin'}}) {
+	next unless ($p =~ /^include/);
+	
+	## Go through sources
+	foreach my $s (@{$self->{'admin'}{$p}}) {
+	    if (&_get_datasource_id($s) eq $id) {
+		if (ref($s)) {
+ 		    return $s->{'description'} || 'not indicated';
 		}
 	    }
 	}
@@ -11376,6 +11672,7 @@ sub search_datasource {
 
     return undef;
 }
+
 
 ## Remove a task in the tasks spool
 sub remove_task {
@@ -11665,25 +11962,6 @@ sub create_shared {
 
     unless (mkdir ($dir, 0777)) {
 	&do_log('err',"List::create_shared : unable to create %s : %s ", $dir, $!);
-	return undef;
-    }
-
-    return 1;
-}
-
-## Create the tracability directory
-sub create_tracability {
-    my $self = shift;
-
-    my $dir = $self->{'dir'}.'/tracability';
-
-    if (-e $dir) {
-	&do_log('err',"List::create_tracability : %s already exists", $dir);
-	return undef;
-    }
-
-    unless (mkdir ($dir, 0777)) {
-	&do_log('err',"List::create_tracability : unable to create %s : %s", $dir, $!);
 	return undef;
     }
 

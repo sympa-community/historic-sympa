@@ -641,6 +641,8 @@ my $index_queuedigest = 0; # verify the digest queue
 my $index_cleanqueue = 0; 
 my @qfile;
 
+my $current_msg_filename;
+
 my $spool = $Conf{'queue'};
 # if daemon is dedicated to message change the current spool
 $spool = $Conf{'queuedistribute'} if ($main::daemon_usage eq 'message');
@@ -648,6 +650,7 @@ $spool = $Conf{'queuedistribute'} if ($main::daemon_usage eq 'message');
 ## This is the main loop : look after files in the directory, handles
 ## them, sleeps a while and continues the good job.
 while (!$signal) {
+    $current_msg_filename = undef;
 
     # setting log_level using conf unless it is set by calling option
     unless ($main::options{'log_level'}) {
@@ -682,9 +685,9 @@ while (!$signal) {
 	    &CleanSpool($Conf{'queuemod'}, $Conf{'clean_delay_queuemod'});
 	    &CleanSpool($Conf{'queueauth'}, $Conf{'clean_delay_queueauth'});
 	    &CleanSpool($Conf{'queuetopic'}, $Conf{'clean_delay_queuetopic'});
+	    &CleanSpool($Conf{'queuetracability'}, $Conf{'clean_delay_queuetracability'});
 	}
     }
-    my $filename;
     my $listname;
     my $robot;
 
@@ -760,18 +763,18 @@ while (!$signal) {
 	
 	if (ord($priority) < ord($highest_priority)) {
 	    $highest_priority = $priority;
-	    $filename = $t_filename;
+	    $current_msg_filename = $t_filename;
 	}
     } ## END of spool lookup
 
     &mail::reaper;
 
-    unless ($filename) {
+    unless ($current_msg_filename) {
 	sleep(&Conf::get_robot_conf($robot, 'sleep'));
 	next;
     }
 
-    do_log('debug', "Processing %s/%s with priority %s", &Conf::get_robot_conf($robot, 'queue'),$filename, $highest_priority) ;
+    do_log('debug', "Processing %s/%s with priority %s", &Conf::get_robot_conf($robot, 'queue'),$current_msg_filename, $highest_priority) ;
     
     if ($main::options{'mail'} != 1) {
 	$main::options{'mail'} = $robot if (&Conf::get_robot_conf($robot, 'log_smtp'));
@@ -781,33 +784,34 @@ while (!$signal) {
     $Language::default_lang = $main::options{'lang'} || &Conf::get_robot_conf($robot, 'lang');
 
     my $queue = &Conf::get_robot_conf($robot, 'queue');
-    my $status = &DoFile("$queue/$filename");
+
+    my $status = &DoFile("$queue/$current_msg_filename");
     
     if (defined($status)) {
-	&do_log('debug', "Finished %s", "$queue/$filename") ;
+	&do_log('debug', "Finished %s", "$queue/$current_msg_filename") ;
 
 	if ($main::options{'keepcopy'}) {
-	    unless (rename "$queue/$filename", $main::options{'keepcopy'}."/$filename") {
- 		&do_log('notice', 'Could not rename %s to %s: %s', "$queue/$filename", $main::options{'keepcopy'}."/$filename", $!);
- 		unlink("$queue/$filename");
+	    unless (rename "$queue/$current_msg_filename", $main::options{'keepcopy'}."/$current_msg_filename") {
+ 		&do_log('notice', 'Could not rename %s to %s: %s', "$queue/$current_msg_filename", $main::options{'keepcopy'}."/$current_msg_filename", $!);
+ 		unlink("$queue/$current_msg_filename");
 	    }
 	}else {
-	    unlink("$queue/$filename");
+	    unlink("$queue/$current_msg_filename");
 	}
     }else {
 	my $bad_dir = "$queue/bad";
 
 	if (-d $bad_dir) {
-	    unless (rename("$queue/$filename", "$bad_dir/$filename")){
-		&fatal_err("Exiting, unable to rename bad file $filename to $bad_dir/$filename (check directory permission)");
+	    unless (rename("$queue/$current_msg_filename", "$bad_dir/$current_msg_filename")){
+		&fatal_err("Exiting, unable to rename bad file $current_msg_filename to $bad_dir/$current_msg_filename (check directory permission)");
 	    }
-	    do_log('notice', "Moving bad file %s to bad/", $filename);
+	    do_log('notice', "Moving bad file %s to bad/", $current_msg_filename);
 	}else{
 	    do_log('notice', "Missing directory '%s'", $bad_dir);
-	    unless (rename("$queue/$filename", "$queue/BAD-$filename")) {
-		&fatal_err("Exiting, unable to rename bad file $filename to BAD-$filename");
+	    unless (rename("$queue/$current_msg_filename", "$queue/BAD-$current_msg_filename")) {
+		&fatal_err("Exiting, unable to rename bad file $current_msg_filename to BAD-$current_msg_filename");
 	    }
-	    do_log('notice', "Renaming bad file %s to BAD-%s", $filename, $filename);
+	    do_log('notice', "Renaming bad file %s to BAD-%s", $current_msg_filename, $current_msg_filename);
 	}
 	
     }
@@ -886,7 +890,7 @@ sub sighup {
 ##############################################################
 sub DoFile {
     my ($file) = @_;
-    &do_log('debug', 'DoFile(%s)', $file);
+    &do_log('debug', 'Dofile(%s)', $file);
     
     my ($listname, $robot);
     my $status;
@@ -1515,7 +1519,7 @@ sub DoCommand {
     ## If X-Sympa-To = <listname>-<subscribe|unsubscribe> parse as a unique command
     if ($rcpt =~ /^(\S+)-(subscribe|unsubscribe)(\@(\S+))?$/o) {
 	&do_log('debug',"processing message for $1-$2");
-	&Commands::parse($sender,$robot,"$2 $1");
+	&Commands::parse($sender,$robot,"$2 $1", $file);
 	return 1; 
     }
     
@@ -1525,7 +1529,7 @@ sub DoCommand {
     $subject_field =~ s/\n//mg; ## multiline subjects
     $subject_field =~ s/^\s*(Re:)?\s*(.*)\s*$/$2/i;
 
-    $success ||= &Commands::parse($sender, $robot, $subject_field, $is_signed->{'subject'}) ;
+    $success ||= &Commands::parse($sender, $robot, $subject_field, $file, $is_signed->{'subject'}) ;
 
     unless ($success eq 'unknown_cmd') {
 	$cmd_found = 1;
@@ -1577,7 +1581,7 @@ sub DoCommand {
     
 	    &do_log('debug2',"is_signed->body $is_signed->{'body'}");
 
-	    $status = &Commands::parse($sender, $robot, $i, $is_signed->{'body'});
+	    $status = &Commands::parse($sender, $robot, $i, $file, $is_signed->{'body'});
 	    $cmd_found = 1; # if problem no_cmd_understood is sent here
 	    if ($status eq 'unknown_cmd') {
 		&Commands::global_report_cmd($i,'no_cmd_understood');	

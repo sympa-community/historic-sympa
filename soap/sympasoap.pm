@@ -543,6 +543,9 @@ sub signoff {
 	## Really delete and rewrite to disk.
 	$list->delete_user($sender);
 
+	$list->delete_tracability_dir_file($sender, 'init');
+	$list->delete_tracability_dir_file($sender, 'update');
+
 	## Notify the owner
 	if ($action =~ /notify/i) {
 	    unless ($list->send_notify_to_owner('notice',{'who' => $sender,
@@ -576,6 +579,12 @@ sub subscribe {
   my $robot = $ENV{'SYMPA_ROBOT'};
 
   &Log::do_log('info', 'subscribe(%s,%s, %s)', $listname,$sender, $gecos);
+
+  my $ip;
+
+  $ip = $ENV{'REMOTE_HOST'};
+  $ip = $ENV{'REMOTE_ADDR'} unless ($ip);
+  $ip = 'undef' unless ($ip);
 
   unless ($sender) {
       die SOAP::Fault->faultcode('Client')
@@ -664,6 +673,14 @@ sub subscribe {
 	  my $user = {};
 	  $user->{'update_date'} = time;
 	  $user->{'gecos'} = $gecos if $gecos;
+	  $user->{'who_update'} = $sender;
+	  $user->{'how_update'} = 'soap';
+	  $user->{'ip_update'} = $ip;
+
+	  unless ($list->delete_tracability_dir_file($email, 'update')) {
+	      &Log::do_log('err','Subscribe : delete tracability files failed');
+	      return undef;
+	  }	
 
 	  &Log::do_log('err','Subscribe : user already subscribed');
 
@@ -680,6 +697,9 @@ sub subscribe {
 	  $u->{'gecos'} = $gecos;
 	  $u->{'password'} = &tools::crypt_password($password);
 	  $u->{'date'} = $u->{'update_date'} = time;
+	  $u->{'who_init'} = $sender;
+	  $u->{'how_init'} = 'soap';
+	  $u->{'ip_init'} = $ip;
 	  
 	  die SOAP::Fault->faultcode('Server')
 	      ->faultstring('Undef')

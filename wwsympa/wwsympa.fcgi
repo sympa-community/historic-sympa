@@ -145,6 +145,7 @@ my %comm = ('home' => 'do_home',
 	 'subrequest' => 'do_subrequest',
 	 'subindex' => 'do_subindex',
 	 'suboptions' => 'do_suboptions',
+	 'subscription_trace' => 'do_subscription_trace',   
 	 'signoff' => 'do_signoff',
 	 'sigrequest' => 'do_sigrequest',
 	 'ignoresub' => 'do_ignoresub',
@@ -314,7 +315,7 @@ my %action_args = ('default' => ['list'],
 		'subscribe' => ['list','email','passwd'],
 		'subrequest' => ['list','email'],
 		'subrequest' => ['list'],
-		'subindex' => ['list'],
+		'subindex' => ['list'],   
                 'ignoresub' => ['list','@email','@gecos'],
 		'signoff' => ['list','email','passwd'],
 		'sigrequest' => ['list','email'],
@@ -537,7 +538,7 @@ if ($wwsconf->{'use_fast_cgi'}) {
     }
 }
 
- ## Main loop
+ ## main loopl
  my $loop_count;
  my $start_time = &POSIX::strftime("%d %b %Y at %H:%M:%S", localtime(time));
  while ($query = &new_loop()) {
@@ -2853,6 +2854,7 @@ sub do_remindpasswd {
      ## additional DB fields
      $param->{'additional_fields'} = $Conf{'db_additional_subscriber_fields'};
      ('wwsympa',$param->{'user'}{'email'},$param->{'auth_method'},$ip,'review',$param->{'list'},$robot,'','done');
+     
      return 1;
  }
 
@@ -3300,10 +3302,21 @@ sub do_remindpasswd {
 	 if ($param->{'is_subscriber'}) {
 	     unless ($list->update_user($param->{'user'}{'email'}, 
 					{'subscribed' => 1,
-					 'update_date' => time})) {
+					 'update_date' => time,
+					 'who_init' => $param->{'user'}{'email'},
+					 'how_init' => 'web',
+					 'ip_init' => $ip})) {
 		 &error_message('failed');
 		 &wwslog('info', 'do_subscribe: update failed');
 		 return undef;
+	     }
+	     my $tracability_dir = $list->{'dir'}.'/tracability';
+	     if (-e $tracability_dir) {
+		 unless ($list->delete_tracability_dir_file($param->{'user'}{'email'})) {
+		     &error_message('failed');
+		     &wwslog('info', 'do_subscribe: delete tracability files failed');
+		     return undef;
+		 }
 	     }
 	 }else {
 	     my $defaults = $list->get_default_user_options();
@@ -3314,6 +3327,9 @@ sub do_remindpasswd {
 	     $u->{'date'} = $u->{'update_date'} = time;
 	     $u->{'password'} = $param->{'user'}{'password'};
 	     $u->{'lang'} = $param->{'user'}{'lang'} || $param->{'lang'};
+	     $u->{'who_init'} = $param->{'user'}{'email'};
+	     $u->{'how_init'} = 'web';
+	     $u->{'ip_init'} = $ip;
 
 	     unless ($list->add_user($u)) {
 		 &error_message('failed');
@@ -3384,6 +3400,11 @@ sub do_remindpasswd {
      $s->{'date'} = &POSIX::strftime("%d %b %Y", localtime($s->{'date'}));
      $s->{'update_date'} = &POSIX::strftime("%d %b %Y", localtime($s->{'update_date'}));
 
+     # tracability files
+     $param->{'subinit'} = $list->research_tracability_dir_file($param->{'user'}{'email'}, 'sub.init');
+     $param->{'authinit'} = $list->research_tracability_dir_file($param->{'user'}{'email'}, 'auth.init');
+     $param->{'subupdate'} = $list->research_tracability_dir_file($param->{'user'}{'email'}, 'sub.update');
+
      foreach $m (keys %wwslib::reception_mode) {
        if ($list->is_available_reception_mode($m)) {
 	 $param->{'reception'}{$m}{'description'} = $wwslib::reception_mode{$m};
@@ -3408,8 +3429,30 @@ sub do_remindpasswd {
 	 }
      }
 
-     $param->{'subscriber'} = $s;
+     my $sources;
+     my $descriptions;
 
+     if ($s->{'id'}) {
+	 my @source;
+	 my @description;
+	 my @ids = split /,/,$s->{'id'};
+
+	 foreach my $id (@ids) {
+	     unless (defined ($sources->{$id})) {
+		 $sources->{$id} = $list->search_datasource($id);
+		 &wwslog('info', 'source: %s', $sources->{$id});
+	     }
+	     
+	     push @source, $sources->{$id};
+	     unless (defined ($descriptions->{$id})) {
+		 $descriptions->{$id} = $list->search_datasource_desc($id);
+		 &wwslog('info', 'source: %s', $descriptions->{$id});
+	     }
+	     push @description, $descriptions->{$id};
+	 }
+	 $s->{'descriptions'} = join ', ', @description;
+	 $s->{'sources'} = join ', ', @source;
+     }
 
      #msg_topic
      $param->{'sub_user_topic'} = 0;
@@ -3425,9 +3468,58 @@ sub do_remindpasswd {
 	     }
 	 }
      }
+
+     $param->{'previous_action'} = 'suboptions';
+     $param->{'subscriber'} = $s;
      
      return 1;
  }
+
+#######################################################
+# 
+##########################################################
+sub do_subscription_trace {
+    &wwslog('info', 'do_subscription_trace');
+
+    unless ($param->{'list'}) {
+	&error_message('missing_arg', {'argument' => 'list'});
+	&wwslog('info','do_subscription_trace: no list');
+	return undef;
+    }
+    
+    unless ($param->{'user'}{'email'}) {
+	&error_message('no_user');
+	&wwslog('info','do_subscription_trace: user not logged in');
+	return undef;
+    }
+    
+    unless($param->{'is_subscriber'}) {
+	&error_message('not_subscriber', {'list' => $list->{'name'}});
+	&wwslog('info','do_subscription_trace: %s not subscribed to %s',$param->{'user'}{'email'}, $param->{'list'} );
+	return undef;
+    }
+
+    if ($in{'previous_action'} eq 'suboptions') {
+	$param->{'email'} = $param->{'user'}{'email'};
+    } else {
+	$param->{'email'} = $in{'email'};
+    }
+    
+    my $suffix;
+    if ($in{'subinit'}) {
+	$suffix = 'sub.init';
+    } elsif ($in{'authinit'}) {
+	$suffix = 'auth.init';
+    } else {
+	$suffix = 'sub.update';
+    }
+
+    $param->{'file'} = $list->get_tracability_dir_file($param->{'email'}, $suffix);
+    $param->{'previous_action'} = $in{'previous_action'};
+
+    return 1;
+}
+
 
 ## Subscription request (user not authentified)
  sub do_subrequest {
@@ -3469,9 +3561,9 @@ sub do_remindpasswd {
 
 	 my $user;
 	 $user = &List::get_user_db($in{'email'})
-	     if &List::is_user_db($in{'email'});
+	     if &list::is_user_db($in{'email'});
 
-	 ## Need to send a password by email
+	 ## need to send a password by email
 	 if ((!&List::is_user_db($in{'email'}) || 
 	      !$user->{'password'} || 
 	      ($user->{'password'} =~ /^INIT/i)) &&
@@ -3560,10 +3652,25 @@ sub do_remindpasswd {
 	 &wwslog('info', 'do_signoff: signoff sent to owner');
 	 return undef;
      }else {
+
+	 my $tracability_dir = $list->{'dir'}.'/tracability';
+	 if (-e $tracability_dir) {
+	     unless ($list->delete_tracability_dir_file($param->{'user'}{'email'}, 'init') && $list->delete_tracability_dir_file($param->{'user'}{'email'}, 'update')) {
+		 &wwslog('info', 'do_del: failed');
+		 return undef;
+	     }
+	 }
+	 
 	 if ($param->{'subscriber'}{'included'}) {
 	     unless ($list->update_user($param->{'user'}{'email'}, 
 					{'subscribed' => 0,
-					 'update_date' => time})) {
+					 'update_date' => time,
+				         'who_init' => undef,
+				         'who_update' => undef,
+				         'how_init' => undef,
+				         'how_update' => undef,
+				         'ip_init' => undef,
+				         'ip_update' => undef})) {
 		 &error_message('failed');
 		 &wwslog('info', 'do_signoff: update failed');
 		 return undef;
@@ -4188,7 +4295,10 @@ sub do_skinsedit {
 	 if (defined($user_entry)) {
 	     unless ($list->update_user($email, 
 					{'subscribed' => 1,
-					 'update_date' => time})) {
+					 'update_date' => time,
+					 'who_init' => $param->{'user'}{'email'},
+					 'how_init' => 'web',
+					 'ip_init' => $ip})) {
 		 &error_message('failed');
 		 &wwslog('info', 'do_add: update failed');
 		 ('wwsympa',$param->{'user'}{'email'},$param->{'auth_method'},$ip,'add',$param->{'list'},$robot,$email,"update failed");
@@ -4211,6 +4321,60 @@ sub do_skinsedit {
 	     }else{
 		 $comma_emails = $email;
 	     }
+	     
+	     ## Tracability
+	     if ($list->delete_subscription_request($email) eq 'present') {
+		 $u->{'who_init'} = $email;
+
+		 unless (&List::research_tracability_spool_file($list, $email, 'sub') && &List::research_tracability_spool_file($list, $email, 'auth')) {
+		     &do_log('err','research of tracability spoolfile failed');
+		     return undef;
+		 }
+
+		 my $sub_spoolfile; 
+		 my $auth_spoolfile;
+		 my $sub_dirfile = "$list->{'dir'}/tracability/$email".'.sub.init';
+		 my $auth_dirfile = "$list->{'dir'}/tracability/$email".'.auth.init';
+
+		 if (&List::research_tracability_spool_file($list, $email, 'sub') eq 'present') {
+		     $sub_spoolfile = "$Conf{'queuetracability'}"."/"."$list->{'name'}"."$email".'.sub'; 
+
+		     my $tracability_dir = $list->{'dir'}.'/tracability';
+		     unless (-e $tracability_dir) {
+			 unless (mkdir ($tracability_dir, 0777)) {
+			     &do_log('err',"Unable to create %s : %s", $tracability_dir, $!);
+			     return undef;
+			 }
+		     }
+
+		     unless (&tools::move_file($sub_spoolfile, $sub_dirfile)) {
+			 &do_log('err', "Unable to move file %s in %s", $sub_spoolfile, $sub_dirfile);
+			 return undef;
+		     }
+
+		     if (&List::research_tracability_spool_file($list, $email, 'auth') eq 'present') {
+			 $auth_spoolfile = "$Conf{'queuetracability'}"."/"."$list->{'name'}"."$email".'.auth'; 
+			 unless (&tools::move_file($auth_spoolfile, $auth_dirfile)) {
+			     &do_log('err', "Unable to move file %s in %s", $auth_spoolfile, $auth_dirfile);
+			     return undef;
+			 }
+		     }
+
+		     $u->{'how_init'} = 'mail';
+
+		     ## deletes the possible tracability files in the spool
+		     &List::delete_tracability_spool_file($list, $email);
+
+		 } else {
+		     $u->{'how_init'} = 'web';
+		     #ip???????????
+		 }
+	     } else {
+		 $u->{'who_init'} = $param->{'user'}{'email'};
+		 $u->{'how_init'} = 'web';
+		 $u->{'ip_init'} = $ip;
+	     }
+	     
 
 	     ##
 	     push @new_users, $u;
@@ -4313,7 +4477,13 @@ sub do_skinsedit {
 	 if ($user_entry->{'included'}) {
 	     unless ($list->update_user($email, 
 					{'subscribed' => 0,
-					 'update_date' => time})) {
+					 'update_date' => time,
+					 'who_init' => undef,
+				         'who_update' => undef,
+				         'how_init' => undef,
+				         'how_update' => undef,
+				         'ip_init' => undef,
+				         'ip_update' => undef})) {
 		 &error_message('failed');
 		 # &List::db_log('wwsympa',$param->{'user'}{'email'},$param->{'auth_method'},$ip,'del',$param->{'list'},$robot,$email,'failed subscriber included');
 		 &wwslog('info', 'do_del: update failed');
@@ -4338,6 +4508,14 @@ sub do_skinsedit {
 	 unless ($in{'quiet'}) {
 	     unless ($list->send_file('removed', $email, $robot,{})) {
 		 &wwslog('notice',"Unable to send template 'removed' to $email");
+	     }
+	 }
+
+	 my $tracability_dir = $list->{'dir'}.'/tracability';
+	 if (-e $tracability_dir) {
+	     unless ($list->delete_tracability_dir_file($email, 'init') && $list->delete_tracability_dir_file($email, 'update')) {
+		 &wwslog('info', 'do_del: failed');
+		 return undef;
 	     }
 	 }
      }
@@ -6661,6 +6839,37 @@ sub do_set_pending_list_request {
 	 }
 	 $param->{'additional_fields'} = \%data;
      }
+
+     my $sources;
+     my $descriptions;
+
+     if ($param->{'current_subscriber'}{'id'}) {
+	 my @source;
+	 my @description;
+	 my @ids = split /,/,$param->{'current_subscriber'}{'id'};
+
+	 foreach my $id (@ids) {
+	     unless (defined ($sources->{$id})) {
+		 $sources->{$id} = $list->search_datasource($id);
+		 &wwslog('info', 'source: %s', $sources->{$id});
+	     }
+	     
+	     push @source, $sources->{$id};
+	     unless (defined ($descriptions->{$id})) {
+		 $descriptions->{$id} = $list->search_datasource_desc($id);
+		 &wwslog('info', 'source: %s', $descriptions->{$id});
+	     }
+	     push @description, $descriptions->{$id};
+	 }
+	 $param->{'current_subscriber'}{'descriptions'} = join ', ', @description;
+	 $param->{'current_subscriber'}{'sources'} = join ', ', @source;
+     }
+     
+
+     # tracability files
+     $param->{'subinit'} = $list->research_tracability_dir_file($param->{'current_subscriber'}{'email'}, 'sub.init');
+     $param->{'authinit'} = $list->research_tracability_dir_file($param->{'current_subscriber'}{'email'}, 'auth.init');
+     $param->{'subupdate'} = $list->research_tracability_dir_file($param->{'current_subscriber'}{'email'}, 'sub.update');
 
      return 1;
  }
@@ -13510,6 +13719,17 @@ sub _prepare_subscriber {
 	}
 	$user->{'sources'} = join ', ', @s;
     }
+
+
+##########################################################################TEST########################################################################################################"""
+#    if ($user->{'id'}) {
+#	my @s;
+#	my @ids = split /,/,$user->{'id'};
+#	foreach my $id (@ids) {
+#		my $description  = $list->search_datasource_desc($id);
+#		&wwslog('info', 'description = %s',$description);
+#	}
+#    }
     
     if (@{$additional_fields}) {
 	my @fields;

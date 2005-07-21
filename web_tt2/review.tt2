@@ -191,11 +191,26 @@ page size
 	    </span></td>
           [% IF list_conf.user_data_source == 'include2' %]
             <td style="text-align: left;"><span style="font-size: smaller;">
+
             [% IF u.subscribed %]
-              [% IF u.included %]
-                 subscribed<br />[% u.sources %]
-              [% ELSE %]
-                 subscribed
+		[% IF u.email == u.who_init %]
+         	     [% IF u.included %]
+              		   subscribed<br />[% u.sources %]
+             		 [% ELSE %]
+                	   subscribed
+		     [% END %]
+		[% ELSIF u.email == u.who_update %]
+			[% IF u.included %]
+            		   	subscribed<br />[% u.sources %]
+             		[% ELSE %]
+                  		subscribed
+		     	[% END %]		
+		[% ELSE %]
+		 	[% IF u.included %]
+              		   added<br />[% u.sources %]
+             		[% ELSE %]
+                	   added
+			[% END %]		
               [% END %]
             [% ELSE %]
               [% u.sources %]

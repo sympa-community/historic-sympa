@@ -1697,13 +1697,44 @@ sub clean_email {
     return $email;
 }
 
+#######################################################################
+# Cleans a file $file from spool $spool_dir
+#
+# IN : -$spool_dir (+): the spool directory
+#      -$file (+): the name of the file
+#
+# OUT : 1
+#
+#######################################################################
+sub clean_spool_file {
+    my ($spool_dir, $file) = @_;
+    &do_log('debug', 'CleanSpoolFile(%s,%s)', $spool_dir, $file);
+    
+    unless (opendir(DIR, $spool_dir)) {
+	&do_log('err', "Unable to open '%s' spool : %s", $spool_dir, $!);
+	return undef;	
+    }
+
+    if (defined $file) {
+	unless (unlink("$spool_dir/$file")) {
+	    &do_log('err','clean_spool_file : failed to erase %s', $file);
+	    return undef;
+	}		
+    }
+    closedir DIR;
+
+    &do_log('notice', 'Deleting file  %s', "$spool_dir/$file");
+
+    return 1;
+}
+
 ## Function for Removing a non-empty directory
 ## It takes a variale number of arguments : 
 ## it can be a list of directory
 ## or few direcoty paths
 sub remove_dir {
     
-    do_log('info','remove_dir()');
+    &do_log('info','remove_dir()');
     
     foreach my $current_dir (@_){
 
@@ -2250,5 +2281,26 @@ sub move_message {
     }
     return 1;
 }
+
+# move a file from orig_path to dest_path
+sub move_file {
+    my($orig_path, $dest_path) = @_;
+    &do_log('debug2', "tools::move_file($orig_path,$dest_path)");
+
+    unless (open OUT, ">$dest_path") {
+	&do_log('err', 'Cannot create file %s', "$dest_path");
+	return undef;
+    }
+
+    unless (open IN, "$orig_path") {
+        &do_log('err', 'Cannot open file %s', "$orig_path");
+	return undef;
+    }
+
+    print OUT <IN>; close IN; close OUT;
+
+    return 1;
+}
+
 1;
 

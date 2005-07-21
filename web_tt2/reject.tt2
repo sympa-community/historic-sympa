@@ -1,0 +1,15 @@
+<!-- $Id$ -->
+
+ <form action="[% path_cgi %]" method="post">
+[%|loc%]You have the possibility to modify your reject :[%END%]<br />
+<textarea cols="60" rows="10" name="body">[% body %]</textarea></td>    
+ 
+<input class="MainMenuLinks" type="submit" name="action_reject" value="[%|loc%]Send[%END%]" />
+<input type="hidden" name="list" value="[% list %]" />
+[% FOREACH id = ids %]
+<input type="hidden" name="id" value="[% id %]" />
+[% END %]
+     </td>
+   </tr>
+  </table>
+ </form>
