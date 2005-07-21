@@ -40,12 +40,12 @@ use List;
 #  reject_report_msg
 ############################################################
 #  Send a notification to the user about an error rejecting
-#  its message diffusion, using message_report.tt2
+#  its message diffusion, using mail_tt2/message_report.tt2
 #  
 # IN : -$type (+): 'intern'|'intern_quiet'|'user'|auth' - the error type 
-#      -$error (+): scalar - the entry in message_report.tt2 if $type = 'user'
-#                          - string error for listmaster if $type = 'intern'
-#                          - the entry in authorization reject (called by message_report.tt2)
+#      -$error : scalar - the entry in message_report.tt2 if $type = 'user'
+#                       - string error for listmaster if $type = 'intern'
+#                       - the entry in authorization reject (called by message_report.tt2)
 #                               if $type = 'auth'
 #      -$user (+): scalar - the user to notify
 #      -$param : ref(HASH) - var used in message_report.tt2
@@ -61,7 +61,18 @@ sub reject_report_msg {
     my ($type,$error,$user,$param,$robot,$msg_string,$list) = @_;
 
     unless ($type eq 'intern' | $type eq 'intern_quiet' | $type eq 'user'| $type eq 'auth') {
-	&do_log('notice',"report::reject_report_msg(): error for to prepare parsing 'message_report' template to $user : not a valid error type");
+	&do_log('err',"report::reject_report_msg(): error to prepare parsing 'message_report' template to $user : not a valid error type");
+	return undef
+    }
+
+    unless ($user){
+	&do_log('err',"report::reject_report_msg(): unable to send template message_report.tt2 : no user to notify");
+	return undef;
+    }
+ 
+    unless ($robot){
+	&do_log('err',"report::reject_report_msg(): unable to send template message_report.tt2 : no robot");
+	return undef;
     }
 
     chomp($user);
@@ -72,8 +83,8 @@ sub reject_report_msg {
 	$param->{'entry'} = $error;
 	$param->{'type'} = 'user_error';
 
-    } elsif ($type eq 'authorization') {
-	$param->{'reason'} = $error;
+    } elsif ($type eq 'auth') {
+	$param->{'entry'} = $error;
 	$param->{'type'} = 'authorization_reject';
 
     } else {
@@ -95,11 +106,14 @@ sub reject_report_msg {
 	if (ref($list) ){
 	    $listname = $list->{'name'}; 
 	}
-	unless (&List::send_notify_to_listmaster('intern_error', $robot, {'error' => &gettext($error),
-									  'who'  => $user,
-									  'action' => 'message diffusion',
-									  'msg_id' => $param->{'msg_id'},
-								          'listname' => $listname})){
+
+	$param ||= {}; 
+	$param->{'error'} =  &gettext($error);
+	$param->{'who'} = $user;
+	$param->{'action'} = 'message diffusion';
+	$param->{'msg_id'} = $param->{'msg_id'};
+	$param->{'listname'} = $listname;
+	unless (&List::send_notify_to_listmaster('mail_intern_error', $robot, $param)) {
 	    &do_log('notice',"report::reject_report_msg(): Unable to notify_listmaster concerning '$user'");
 	}
     }
@@ -111,7 +125,7 @@ sub reject_report_msg {
 #  notice_report_msg
 ############################################################
 #  Send a notification to the user about a success for its
-#   message diffusion, using message_report.tt2
+#   message diffusion, using mail_tt2/message_report.tt2
 #  
 # IN : -$entry (+): scalar - the entry in message_report.tt2
 #      -$user (+): scalar - the user to notify
@@ -129,6 +143,17 @@ sub notice_report_msg {
     $param->{'type'} = 'success';   
     $param->{'entry'} = $entry;
     
+
+    unless ($user){
+	&do_log('err',"report::notice_report_msg(): unable to send template message_report.tt2 : no user to notify");
+	return undef;
+    }
+ 
+    unless ($robot){
+	&do_log('err',"report::notice_report_msg(): unable to send template message_report.tt2 : no robot");
+	return undef;
+    }
+
     if (ref($list) eq "List") {
 	unless ($list->send_file('message_report',$user,$robot,$param)) {
 	    &do_log('notice',"report::notice_report_msg(): Unable to send template 'message_report' to '$user'");
@@ -164,7 +189,7 @@ my @notice_cmd;
 #########################################################
 # init_report_cmd
 #########################################################
-#  init arrays for commands reports :
+#  init arrays for mail command reports :
 #
 # 
 # IN : -
@@ -185,7 +210,7 @@ sub init_report_cmd {
 #########################################################
 # is_there_any_report_cmd
 #########################################################
-#  Look for some commands report in one of arrays report
+#  Look for some mail command report in one of arrays report
 # 
 # IN : -
 #
@@ -220,6 +245,16 @@ sub is_there_any_report_cmd {
 sub send_report_cmd {
     my ($sender,$robot) = @_;
 
+    unless ($sender){
+	&do_log('err',"report::send_report_cmd(): unable to send template command_report.tt2 : no user to notify");
+	return undef;
+    }
+ 
+    unless ($robot){
+	&do_log('err',"report::send_report_cmd() : unable to send template command_report.tt2 : no robot");
+	return undef;
+    }
+
    
     # for mail layout
     my $before_auth = 0;
@@ -247,14 +282,12 @@ sub send_report_cmd {
 		 'user_errors' => \@user_error_cmd,
 		 'intern_errors' => \@intern_error_cmd,
 		 'globals' => \@global_error_cmd,
+	     };
+
 		 
 
-
-
-};
-
     unless (&List::send_global_file('command_report',$sender,$robot,$data)) {
-	&do_log('notice',"Unable to send template 'command_report' to $sender");
+	&do_log('notice',"report::send_report_cmd() : Unable to send template 'command_report' to $sender");
     }
     
     &init_report_cmd();
@@ -266,12 +299,12 @@ sub send_report_cmd {
 #########################################################
 #  puts global report of mail with commands in 
 #  @global_report_cmd  used to send message with template 
-#  command_report.tt2
+#  mail_tt2/command_report.tt2
 #  if $now , the template is sent now
 #  if $type eq 'intern', the listmaster is notified
 # 
 # IN : -$type (+): 'intern'|'intern_quiet|'user'
-#      -$error (+): scalar - $glob.entry in command_report.tt2 if $type = 'user'
+#      -$error : scalar - $glob.entry in command_report.tt2 if $type = 'user'
 #                          - string error for listmaster if $type = 'intern'
 #      -$data : ref(HASH) - var used in command_report.tt2
 #      -$sender :  required if $type eq 'intern' or if $now
@@ -287,19 +320,25 @@ sub global_report_cmd {
     my $entry;
 
     unless ($type eq 'intern' | $type eq 'intern_quiet' | $type eq 'user') {
-	&do_log('notice',"report::global_report_msg(): error to prepare parsing 'command_report' template to $sender : not a valid error type");
+	&do_log('err',"report::global_report_msg(): error to prepare parsing 'command_report' template to $sender : not a valid error type");
+	return undef;
     }
     
     if ($type eq 'intern') {
-	unless ($robot){
+
+	if ($robot){
+	    my $param = $data;
+	    $param ||= {};
+	    $param->{'error'} = &gettext($error);
+	    $param->{'who'} = $sender;
+	    $param->{'action'} = 'Command process';
+	    
+	    unless (&List::send_notify_to_listmaster('mail_intern_error', $robot,$param)) {
+		&do_log('notice',"report::global_report_cmd(): Unable to notify listmaster concerning '$sender'");
+	    }
+	} else {
 	    &do_log('notice',"report::global_report_cmd(): unable to send notify to listmaster : no robot");
-	    return undef;
 	}	
-	unless (&List::send_notify_to_listmaster('intern_error', $robot, {'error' => &gettext($error),
-									  'who'  => $sender,
-									  'action' => 'Command process'})) {
-	    &do_log('notice',"report::global_report_cmd(): Unable to notify listmaster concerning '$sender'");
-	}
     }
 
     if ($type eq 'user') {
@@ -315,7 +354,7 @@ sub global_report_cmd {
 
     if ($now) {
 	unless ($sender && $robot){
-	    &do_log('notice',"report::global_report_msg(): unable to send template command_report now : no sender or robot");
+	    &do_log('err',"report::global_report_cmd(): unable to send template command_report now : no sender or robot");
 	    return undef;
 	}	
 	&send_report_cmd($sender,$robot);
@@ -328,20 +367,21 @@ sub global_report_cmd {
 # reject_report_cmd
 #########################################################
 #  puts errors reports of processed commands in 
-#  @reject_report_cmd used to send message with template 
-#  command_report.tt2
+#  @user/intern_error_cmd, @auth_reject_cmd  
+#  used to send message with template 
+#  mail_tt2/command_report.tt2
 #  if $type eq 'intern', the listmaster is notified
 # 
 # IN : -$type (+): 'intern'|'intern_quiet|'user'|'auth'
-#      -$error (+): scalar - $u_err.entry in command_report.tt2 if $type = 'user'
-#                          - $auth.reason in command_report.tt2 if $type = 'auth' 
-#                          - string error for listmaster if $type = 'intern'|'intern_quiet'
+#      -$error : scalar - $u_err.entry in command_report.tt2 if $type = 'user'
+#                       - $auth.entry in command_report.tt2 if $type = 'auth' 
+#                       - string error for listmaster if $type = 'intern'
 #      -$data : ref(HASH) - var used in command_report.tt2
-#      -$cmd : SCALAR - the rejected cmd
+#      -$cmd : SCALAR - the rejected cmd : $xx.cmd in command_report.tt2
 #      -$sender :  required if $type eq 'intern' 
 #                  scalar - the user to notify 
 #      -$robot :   required if $type eq 'intern'
-#                  scalar - to notify useror listmaster
+#                  scalar - to notify listmaster
 #
 # OUT : 1| undef  
 #      
@@ -350,32 +390,39 @@ sub reject_report_cmd {
     my ($type,$error,$data,$cmd,$sender,$robot) = @_;
 
     unless ($type eq 'intern' | $type eq 'intern_quiet' | $type eq 'user' | $type eq 'auth') {
-	&do_log('notice',"report::reject_report_msg(): error to prepare parsing 'command_report' template to $sender : not a valid error type");
+	&do_log('err',"report::reject_report_cmd(): error to prepare parsing 'command_report' template to $sender : not a valid error type");
+	return undef;
     }
     
     if ($type eq 'intern') {
-	unless ($robot){
-	    &do_log('notice',"report::reject_report_cmd(): unable to send template message_report : no robot");
-	    return undef;
-	}	
-	my $listname;
-	if (defined $data->{'listname'}) {
-	    $listname = $data->{'listname'};
-	}
-	unless (&List::send_notify_to_listmaster('intern_error', $robot, {'error' => &gettext($error),
-									  'who'  => $sender,
-									  'cmd' => $cmd,
-									  'action' => 'Command process',
-								          'listname' => $listname})) {
-	    &do_log('notice',"report::reject_report_cmd(): Unable to notify listmaster concerning '$sender'");
-	}
-    }
+	if ($robot){
+	    
+	    my $listname;
+	    if (defined $data->{'listname'}) {
+		$listname = $data->{'listname'};
+	    }
+	    
+	    my $param = $data;
+	    $param ||= {};
+	    $param->{'error'} = &gettext($error);
+	    $param->{'cmd'} = $cmd;
+	    $param->{'listname'} = $listname;
+	    $param->{'who'} = $sender;
+	    $param->{'action'} = 'Command process';
 
+	    unless (&List::send_notify_to_listmaster('mail_intern_error', $robot,$param)) {
+		&do_log('notice',"report::reject_report_cmd(): Unable to notify listmaster concerning '$sender'");
+	    }
+	} else {
+	    &do_log('notice',"report::reject_report_cmd(): unable to notify listmaster for error: '$error' : (no robot) ");
+	}	
+    }
+	
     $data ||= {};
     $data->{'cmd'} = $cmd;
 
     if ($type eq 'auth') {
-	$data->{'reason'} = $error;
+	$data->{'entry'} = $error;
 	push @auth_reject_cmd,$data;
 
     } elsif ($type eq 'user') {
@@ -395,7 +442,7 @@ sub reject_report_cmd {
 #########################################################
 #  puts notices reports of processed commands in 
 #  @notice_cmd used to send message with template 
-#  command_report.tt2
+#  mail_tt2/command_report.tt2
 # 
 # IN : -$entry : $notice.entry to select string in
 #               command_report.tt2
@@ -413,6 +460,275 @@ sub notice_report_cmd {
     $data->{'entry'} = $entry;
     push @notice_cmd, $data;
 }
+
+
+
+########################### WEB COMMAND REPORT #############################################
+
+
+# for rejected web command because of internal error
+my @intern_error_web;
+# for rejected web command because of system error 
+my @system_error_web;
+# for rejected web command because of user error
+my @user_error_web;
+# for rejected web command because of no authorization
+my @auth_reject_web;
+# for web command notice
+my @notice_web;
+
+
+#########################################################
+# init_report_web
+#########################################################
+#  init arrays for web reports :
+#
+# 
+# IN : -
+#
+# OUT : - 
+#      
+######################################################### 
+sub init_report_web {
+
+    undef @intern_error_web;
+    undef @system_error_web;
+    undef @user_error_web;
+    undef @auth_reject_web;
+    undef @notice_web;
+}
+
+
+#########################################################
+# is_there_any_reject_report_web
+#########################################################
+#  Look for some web reports in one of web 
+#  arrays reject report 
+# 
+# IN : -
+#
+# OUT : 1 if there are some reports to send
+#      
+######################################################### 
+sub is_there_any_reject_report_web {
+    
+    return (@intern_error_web ||
+	    @system_error_web ||
+	    @user_error_web ||
+	    @auth_reject_web );
+}
+
+
+#########################################################
+# get_intern_error_web
+#########################################################
+#  return array of web intern error
+# 
+# IN : -
+#
+# OUT : ref(ARRAY) - clone of \@intern_error_web
+#      
+######################################################### 
+sub get_intern_error_web {
+    my @intern_err;
+    
+    foreach my $i (@intern_error_web) {
+	push @intern_err,$i;
+    }
+    return \@intern_err;
+}
+
+
+#########################################################
+# get_system_error_web
+#########################################################
+#  return array of web system error
+# 
+# IN : -
+#
+# OUT : ref(ARRAY) - clone of \@system_error_web
+#      
+######################################################### 
+sub get_system_error_web {
+    my @system_err;
+    
+    foreach my $i (@system_error_web) {
+	push @system_err,$i;
+    }
+    return \@system_err;
+}
+
+
+#########################################################
+# get_user_error_web
+#########################################################
+#  return array of web user error
+# 
+# IN : -
+#
+# OUT : ref(ARRAY) - clone of \@user_error_web
+#      
+######################################################### 
+sub get_user_error_web {
+    my @user_err;
+    
+    foreach my $u (@user_error_web) {
+	push @user_err,$u;
+    }
+    return \@user_err;
+}
+
+
+#########################################################
+# get_auth_reject_web
+#########################################################
+#  return array of web authentication reject
+# 
+# IN : -
+#
+# OUT : ref(ARRAY) - clone of \@auth_reject_web
+#      
+######################################################### 
+sub get_auth_reject_web {
+    my @auth_rej;
+    
+    foreach my $a (@auth_reject_web) {
+	push @auth_rej,$a;
+    }
+    return \@auth_rej;
+}
+
+
+#########################################################
+# get_notice_web
+#########################################################
+#  return array of web notice
+# 
+# IN : -
+#
+# OUT : ref(ARRAY) - clone of \@notice_web
+#      
+######################################################### 
+sub get_notice_web {
+    my @notice;
+    
+    foreach my $n (@notice_web) {
+	push @notice,$n;
+    }
+    return \@notice;
+}
+
+
+#########################################################
+# notice_report_web
+#########################################################
+#  puts notices reports of web commands in 
+#  @notice_web used to notice user with template 
+#  web_tt2/notice.tt2
+# 
+# IN : -$msg : $notice.msg to select string in
+#               web/notice.tt2
+#      -$data : ref(HASH) - var used in web_tt2/notices.tt2
+#      -$action : SCALAR - the noticed action
+#
+# OUT : 1
+#      
+######################################################### 
+sub notice_report_web {
+    my ($msg,$data,$action) = @_;
+   
+    $data ||= {};
+    $data->{'action'} = $action;
+    $data->{'msg'} = $msg;
+    push @notice_web, $data;
+}
+
+#########################################################
+# reject_report_web
+#########################################################
+#  puts errors reports of web commands in 
+#  @intern/user/system_error_web, @auth_reject_web
+#   used to send message with template  web_tt2/error.tt2
+#  if $type = 'intern'|'system', the listmaster is notified
+#  (with 'web_intern_error' | 'web_system_error')
+# 
+# IN : -$type (+): 'intern'|'intern_quiet|'system'|'system_quiet'|user'|'auth'
+#      -$error (+): scalar - $u_err.msg in error.tt2 if $type = 'user'
+#                          - $auth.msg in error.tt2 if $type = 'auth' 
+#                          - $s_err.msg in error.tt2 if $type = 'system'|'system_quiet'
+#                          - $i_err.msg in error.tt2 if $type = 'intern' | 'intern_quiet'
+#                          - $error in listmaster_notification if $type = 'system'|'intern'
+#      -$data : ref(HASH) - var used in web_tt2/error.tt2 
+#      -$action(+) : SCALAR - the rejected action : 
+#            $xx.action in web_tt2/error.tt2
+#            $action in listmaster_notification.tt2 if needed
+#      -$list : ref(List) | ''
+#      -$user :  required if $type eq 'intern'|'system'
+#                  scalar - the concerned user to notify listmaster
+#      -$robot :   required if $type eq 'intern'|'system'
+#                  scalar - the robot to notify listmaster
+#
+# OUT : 1| undef  
+#      
+######################################################### 
+sub reject_report_web {
+    my ($type,$error,$data,$action,$list,$user,$robot) = @_;
+
+
+    unless ($type eq 'intern' | $type eq 'intern_quiet' | $type eq 'system' | $type eq 'system_quiet' | $type eq 'user'| $type eq 'auth') {
+	&do_log('err',"report::reject_report_web(): error  to prepare parsing 'web_tt2/error.tt2' template to $user : not a valid error type");
+	return undef
+    }
+    
+    my $listname;
+    if (ref($list) eq 'List'){
+	$listname = $list->{'name'};
+    }
+
+
+    if ($type eq 'intern'| $type eq 'system') {
+	if ($robot){
+	    my $param = $data;
+	    $param ||= {};
+	    $param->{'error'} = &gettext($error);
+	    $param->{'listname'} = $listname;
+	    $param->{'who'} = $user;
+	    $param->{'action'} = 'Command process';
+
+	    unless (&List::send_notify_to_listmaster('web_'.$type.'_error', $robot, $param)) {
+		&do_log('notice',"report::reject_report_web(): Unable to notify listmaster concerning '$user'");
+	    } 
+	}else {
+	    &do_log('notice',"report::reject_report_web(): unable to notify listmaster for error: '$error' : (no robot) ");
+	} 
+    }
+    
+    $data ||= {};
+
+    $data->{'action'} = $action;
+    $data->{'msg'} = $error;
+    $data->{'listname'} = $listname;
+
+    if ($type eq 'auth') {
+	push @auth_reject_web,$data;
+	
+    }elsif ($type eq 'user') {
+	push @user_error_web,$data;
+	
+    }elsif ($type eq 'system' | $type eq 'system_quiet') {
+	push @system_error_web,$data;
+	
+    }elsif ($type eq 'intern' | $type eq 'intern_quiet') {
+	push @intern_error_web,$data;
+	
+    }
+}
+
+
+#############################################
+
+
+
 
 
 1;

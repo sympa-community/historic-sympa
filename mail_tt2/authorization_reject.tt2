@@ -142,7 +142,31 @@
 [% ELSIF reason == 'restricted_modindex' -%]
 [%|loc%]The MODINDEX command is restricted to moderators.[%END%]
 
+[% ELSIF reason == 'action_owner_or_editor' -%]
+[%|loc%]This action is restricted to list owners or moderators.[%END%]
+
+[% ELSIF reason == 'action_editor' -%]
+[%|loc%]This action is restricted to moderators.[%END%]
+
+[% ELSIF reason == 'action_owner' -%]
+[%|loc%]This action is restricted to list owners.[%END%]
+
+[% ELSIF reason == 'action_listmaster' -%]
+[%|loc%]This action is restricted to listmasters.[%END%]
+
+[% ELSIF reason == 'action_listmaster_or_owner' -%]
+[%|loc%]This action is restricted to listmasters or list owners.[%END%]
+
+[% ELSIF reason == 'action_listmaster_or_privileged_owner' -%]
+[%|loc%]This action is restricted to listmasters or privileged list owners.[%END%]
+
+[% ELSIF reason == 'action_privileged_owner' -%]
+[%|loc%]This action is restricted to privileged list owners.[%END%]
+
 [% ELSIF reason == 'list-no-open' -%]
 [%|loc%]The list is not open.[%END%]
+
+[% ELSE -%]
+[%|loc%]you are not allowed to perform this action.[%END%]
 
 [%- END -%] 
