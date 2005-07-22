@@ -5977,7 +5977,7 @@ sub request_action {
 	return undef;
     }
 
-    my $return;
+    my $return = {};
     foreach my $rule (@rules) {
 	next if ($rule eq 'scenario');
 	if ($auth_method eq $rule->{'auth_method'}) {
@@ -6063,7 +6063,7 @@ sub request_action {
     $return = {'action' => 'reject',
 	       'reason' => 'no-rule-match',
 			   'auth_method' => 'default',
-			   'condition' => 'default'
+			   'condition' => 'default²'
 			   };
     return $return;
 }
@@ -6539,7 +6539,7 @@ sub may_edit {
 #	$role = 'subscriber';
 #	
     }else {
-	return 'hidden';
+	return ('user','hidden');
     }
 
     ## What privilege does he/she has ?
@@ -6560,11 +6560,11 @@ sub may_edit {
     
     foreach $what (@order) {
 	if (defined $what) {
-	    return $what;
+	    return ($role,$what);
 	}
     }
     
-    return 'hidden';
+    return ('user','hidden');
 }
 
 

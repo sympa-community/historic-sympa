@@ -160,8 +160,23 @@
 [% ELSIF reason == 'action_listmaster_or_privileged_owner' -%]
 [%|loc%]This action is restricted to listmasters or privileged list owners.[%END%]
 
+[% ELSIF reason == 'action_listmaster_or_privileged_owner_or_author' -%]
+[%|loc%]This action is restricted to document author, listmasters or privileged list owners.[%END%]
+
 [% ELSIF reason == 'action_privileged_owner' -%]
 [%|loc%]This action is restricted to privileged list owners.[%END%]
+
+[% ELSIF reason == 'edit_right' -%]
+[%|loc(role,right)%]Right on this action is '%2' for a '%1'.[%END%]
+
+[% ELSIF reason == 'not_authenticated' -%]
+[%|loc(role,right)%]You need to login.[%END%]
+
+[% ELSIF reason == 'edit_moderated' -%]
+[%|loc(role,right)%]This action is impossible because edition is moderated.[%END%]
+
+[% ELSIF reason == 'dir_edit_moderated' -%]
+[%|loc(role,right)%]This action is impossible for directories because edition is moderated.[%END%]
 
 [% ELSIF reason == 'list-no-open' -%]
 [%|loc%]The list is not open.[%END%]

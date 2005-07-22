@@ -30,6 +30,7 @@ use Exporter;
 use Log;
 use Conf;
 use List;
+use report;
 
 # use Net::SSLeay qw(&get_https);
 # use Net::SSLeay;

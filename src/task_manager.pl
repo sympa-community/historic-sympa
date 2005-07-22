@@ -136,7 +136,7 @@ umask(oct($Conf{'umask'}));
 
 ## Change to list root
 unless (chdir($Conf{'home'})) {
-    &message('chdir_error');
+    &report::reject_report_web('intern','chdir_error',{},'','','',$robot);
     &do_log('err',"error : unable to change to directory $Conf{'home'}");
     exit (-1);
 }

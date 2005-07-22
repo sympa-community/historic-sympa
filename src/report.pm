@@ -519,6 +519,7 @@ sub is_there_any_reject_report_web {
 }
 
 
+
 #########################################################
 # get_intern_error_web
 #########################################################
@@ -612,10 +613,17 @@ sub get_auth_reject_web {
 sub get_notice_web {
     my @notice;
     
-    foreach my $n (@notice_web) {
-	push @notice,$n;
+    if (@notice_web) {
+	
+	foreach my $n (@notice_web) {
+	    push @notice,$n;
+	}
+	return \@notice;
+    
+    }else {
+	return 0;
     }
-    return \@notice;
+
 }
 
 
@@ -640,7 +648,8 @@ sub notice_report_web {
     $data ||= {};
     $data->{'action'} = $action;
     $data->{'msg'} = $msg;
-    push @notice_web, $data;
+    push @notice_web,$data;
+
 }
 
 #########################################################
