@@ -3065,9 +3065,28 @@ sub do_remindpasswd {
      $reception = '' if $reception eq 'mail';
      $visibility = '' if $visibility eq 'noconceal';
 
-     my $update = {'reception' => $reception,
-		   'visibility' => $visibility,
-		   'update_date' => time};
+     
+     my $subscribe;
+     if ($in{'previous_action'} eq 'suboptions') {
+	 $subscribe = $param->{'subscriber'}{'subscribed'};
+     } else {
+	 $subscribe =  $in{'subscribed'};
+     }
+
+     my $update;
+     if ($subscribe == 1) {
+	 $update = {'reception' => $reception,
+		    'visibility' => $visibility,
+		    'update_date' => time,
+	            'who_update' => $param->{'user'}{'email'},
+	            'how_update' => 'web',
+	            'ip_update' => $ip};
+	 $list->delete_tracability_dir_file($in{'email'}, 'update');
+     } else {
+	 $update = {'reception' => $reception,
+                    'visibility' => $visibility,
+                    'update_date' => time};
+     }
 
      ## Lower-case new email address
      $in{'new_email'} = lc( $in{'new_email'});
@@ -3136,8 +3155,12 @@ sub do_remindpasswd {
      $list->save();
 
      &message('performed');
-
-     return 'suboptions';
+     
+     if ($in{'previous_action'} eq 'suboptions') {
+	 return 'suboptions';
+     } else {
+	 return 'editsubscriber';
+     }
  }
 
  ## Update of user preferences
@@ -3324,7 +3347,7 @@ sub do_remindpasswd {
 	     %{$u} = %{$defaults};
 	     $u->{'email'} = $param->{'user'}{'email'};
 	     $u->{'gecos'} = $param->{'user'}{'gecos'} || $in{'gecos'};
-	     $u->{'date'} = $u->{'update_date'} = time;
+	     $u->{'date'} = $u->{'update_date'} =  $u->{'subscribed_date'} =  time;
 	     $u->{'password'} = $param->{'user'}{'password'};
 	     $u->{'lang'} = $param->{'user'}{'lang'} || $param->{'lang'};
 	     $u->{'who_init'} = $param->{'user'}{'email'};
@@ -3440,13 +3463,11 @@ sub do_remindpasswd {
 	 foreach my $id (@ids) {
 	     unless (defined ($sources->{$id})) {
 		 $sources->{$id} = $list->search_datasource($id);
-		 &wwslog('info', 'source: %s', $sources->{$id});
 	     }
 	     
 	     push @source, $sources->{$id};
 	     unless (defined ($descriptions->{$id})) {
 		 $descriptions->{$id} = $list->search_datasource_desc($id);
-		 &wwslog('info', 'source: %s', $descriptions->{$id});
 	     }
 	     push @description, $descriptions->{$id};
 	 }
@@ -3493,18 +3514,12 @@ sub do_subscription_trace {
 	return undef;
     }
     
-    unless($param->{'is_subscriber'}) {
-	&error_message('not_subscriber', {'list' => $list->{'name'}});
-	&wwslog('info','do_subscription_trace: %s not subscribed to %s',$param->{'user'}{'email'}, $param->{'list'} );
-	return undef;
-    }
-
     if ($in{'previous_action'} eq 'suboptions') {
 	$param->{'email'} = $param->{'user'}{'email'};
     } else {
 	$param->{'email'} = $in{'email'};
     }
-    
+
     my $suffix;
     if ($in{'subinit'}) {
 	$suffix = 'sub.init';
@@ -3665,6 +3680,7 @@ sub do_subscription_trace {
 	     unless ($list->update_user($param->{'user'}{'email'}, 
 					{'subscribed' => 0,
 					 'update_date' => time,
+					 'subscribed_date' => undef,
 				         'who_init' => undef,
 				         'who_update' => undef,
 				         'how_init' => undef,
@@ -4296,9 +4312,10 @@ sub do_skinsedit {
 	     unless ($list->update_user($email, 
 					{'subscribed' => 1,
 					 'update_date' => time,
-					 'who_init' => $param->{'user'}{'email'},
-					 'how_init' => 'web',
-					 'ip_init' => $ip})) {
+					 'subscribed_date' => time,
+					 'who_update' => $param->{'user'}{'email'},
+					 'how_update' => 'web',
+					 'ip_update' => $ip})) {
 		 &error_message('failed');
 		 &wwslog('info', 'do_add: update failed');
 		 ('wwsympa',$param->{'user'}{'email'},$param->{'auth_method'},$ip,'add',$param->{'list'},$robot,$email,"update failed");
@@ -4313,7 +4330,7 @@ sub do_skinsedit {
 	     %{$u} = %{$defaults};
 	     $u->{'email'} = $email;
 	     $u->{'gecos'} = $user{$email} || $u2->{'gecos'};
-	     $u->{'date'} = $u->{'update_date'} = time;
+	     $u->{'date'} = $u->{'update_date'} = $u->{'subscribed_date'} = time;
 	     $u->{'password'} = $u2->{'password'} || &tools::tmp_passwd($email) ;
 	     $u->{'lang'} = $u2->{'lang'} || $list->{'admin'}{'lang'};
 	     if ($comma_emails) {
@@ -4365,10 +4382,11 @@ sub do_skinsedit {
 		     ## deletes the possible tracability files in the spool
 		     &List::delete_tracability_spool_file($list, $email);
 
-		 } else {
-		     $u->{'how_init'} = 'web';
+		 } 
+#else {
+#		     $u->{'how_init'} = 'web';
 		     #ip???????????
-		 }
+#		 }
 	     } else {
 		 $u->{'who_init'} = $param->{'user'}{'email'};
 		 $u->{'how_init'} = 'web';
@@ -4467,7 +4485,7 @@ sub do_skinsedit {
 
 	 my $user_entry = $list->get_subscriber($email);
 
-	 unless ( defined($user_entry) && ($user_entry->{'subscribed'} == 1) ) {
+	 unless ( defined($user_entry) && ($user_entry->{'subscribed'}) ) {
 	     &error_message('not_subscriber', {'email' => $email});
 	     # &List::db_log('wwsympa',$param->{'user'}{'email'},$param->{'auth_method'},$ip,'del',$param->{'list'},$robot,$email,'not subscriber');
 	     &wwslog('info','do_del: %s not subscribed', $email);
@@ -4478,6 +4496,7 @@ sub do_skinsedit {
 	     unless ($list->update_user($email, 
 					{'subscribed' => 0,
 					 'update_date' => time,
+					 'subscribed_date' => undef,
 					 'who_init' => undef,
 				         'who_update' => undef,
 				         'how_init' => undef,
@@ -4534,6 +4553,11 @@ sub do_skinsedit {
      &message('performed');
      $param->{'is_subscriber'} = 1;
      $param->{'may_signoff'} = 1;
+
+
+     if ($in{'previous_action'} eq 'editsubscriber') {
+	 $in{'previous_action'} = undef;
+     }
 
      return $in{'previous_action'} || 'review';
  }
@@ -4883,16 +4907,17 @@ sub do_skinsedit {
 # OUT : 'loginrequest' | 'modindex' | '1'
 #      
 ####################################################
+
  sub do_reject {
      &wwslog('info', 'do_reject()');
      my ($msg, $file);
-     
+    
      unless ($param->{'list'}) {
 	 &error_message('missing_arg', {'argument' => 'list'});
 	 &wwslog('err','do_reject: no list');
 	 return undef;
      }
-     
+    
      unless ($param->{'user'}{'email'}) {
 	 &error_message('no_user');
 	 &wwslog('err','do_reject: no user');
@@ -4915,99 +4940,197 @@ sub do_skinsedit {
 
      $param->{'ids'} = \@ids;
 
-     my $i = 0;
-     &wwslog('err','do_reject: ID total %s', join(',',@ids));
-     foreach my $id (@ids) {
-	 $i++;
-	 &wwslog('err','do_reject: i= %s, ID = %s,',$i,$id);
-	 $file = "$Conf{'queuemod'}/$list->{'name'}_$id"; 
-	 ## Open the file
-	 if (!open(IN, $file)) {
-	     &error_message('failed_someone_else_did_it');
-	     &wwslog('err','do_reject: Unable to open %s: %s', $file,$!);
-	     return undef;
+     unless (!$in{'body'} && $#ids != 0) {
+	 foreach my $id (@ids) {
+	     $file = "$Conf{'queuemod'}/$list->{'name'}_$id"; 
+	     ## Open the file
+	     if (!open(IN, $file)) {
+		 &error_message('failed_someone_else_did_it');
+		 &wwslog('err','do_reject: Unable to open %s: %s', $file,$!);
+		 return undef;
+	     }
+	     
+	     my $rejected_sender;
+	     my %context;
+	     my %headers;
+	     
+	     unless ($in{'quiet'}) {
+		 my $msg;
+		 my $parser = new MIME::Parser;
+		 $parser->output_to_core(1);
+		 unless ($msg = $parser->read(\*IN)) {
+		     &wwslog('err', 'Unable to parse message %s', $file);
+		     next;
+		 }
+		 
+		 my @sender_hdr = Mail::Address->parse($msg->head->get('From'));
+		 
+		 unless  ($#sender_hdr == -1) {
+		     $rejected_sender = $sender_hdr[0]->address;
+		     $context{'subject'} = &MIME::Words::decode_mimewords($msg->head->get('subject'));
+		     $context{'rejected_by'} = $param->{'user'}{'email'};
+		 }
+		 
+		 
+		 if ($#ids == 0) {
+		     my $output;
+		     
+		     unless (&List::get_parsed_file(\$output, 'reject', $rejected_sender, $robot, \%context, $list)) {
+			 &error_message('failed');
+			 &wwslog('err','do_reject: failed to parse the template');
+			 return undef;
+		     }
+		     
+		     my @mail = split("\n",$output);
+		     
+		     if (! $in{'body'}) {
+			 my $find = 0;
+			 my @body;
+			 foreach my $line(@mail){ 
+			     unless ($find) {
+				 if ($line =~/^\s*$/) {
+				     $find = 1;
+				 }
+			     } else {
+				 push(@body,$line);
+			     }
+			 }
+			 
+			 $param->{'body'} = join("\n",@body);
+			 
+		     } else {
+			 my @head;
+			 foreach my $line(@mail){ 
+			     if ($line =~/^\s*$/) {
+				 last;
+			     } else {
+				 push(@head,$line);
+			     }
+			 }	   
+			 
+			 $context{'body'} = $in{'body'};
+			 $context{'head'} = join("\n",@head);
+			 
+			 unless (&mail::mail_file('', $rejected_sender, \%context, $robot,'smime')) {
+			     &error_message('failed');
+			     &wwslog('err','do_reject: failed to send mail_file');
+			     return undef;
+			 }
+	
+			 unless (unlink($file)) {
+			     &error_message('failed');
+			     &wwslog('err','do_reject: failed to erase %s', $file);
+			     return undef;
+			 }	 
+     		     }
+		 } else {
+
+		     my $output;
+			 
+		     unless (&List::get_parsed_file(\$output, 'reject', $rejected_sender, $robot, \%context, $list)) {
+			 &error_message('failed');
+			 &wwslog('err','do_reject: failed to parse the template');
+			 return undef;
+		     }
+			 
+		     my @mail = split("\n",$output);
+			 
+		     my @head;
+		     foreach my $line(@mail){ 
+			 if ($line =~/^\s*$/) {
+			     last;
+			 } else {
+			     push(@head,$line);
+			 }
+		     }	   
+	     			 
+		     $context{'head'} = join("\n",@head); 
+					 
+		     my @body = split("\n", $in{'body'});
+		     my $body_parsed;
+
+ 		     for (my $i=0;$i<$#body;$i++) {
+			 &wwslog('info','bodyline :%s',$body[$i]);
+		     }		
+     
+		     unless (&List::get_parsed_file(\$body_parsed, \@body, $rejected_sender, $robot, \%context, $list)) {
+			 &error_message('failed');
+			 &wwslog('err','do_reject: failed to parse the body');
+			 return undef;
+		     }
+		     
+		     $context{'body'} = $body_parsed;
+		     			 
+		     unless (&mail::mail_file('', $rejected_sender, \%context, $robot,'smime')) {
+			 &error_message('failed');
+			 &wwslog('err','do_reject: failed to send mail_file');
+			 return undef;
+		     }
+
+		     unless (unlink($file)) {
+			 &error_message('failed');
+			 &wwslog('err','do_reject: failed to erase %s', $file);
+			 return undef;
+		     }	 
+
+		 }
+	     } 
+	     close(IN);
+
+	     if ($in{'quiet'}) {
+		 unless (unlink($file)) {
+		     &error_message('failed');
+		     &wwslog('err','do_reject: failed to erase %s', $file);
+		     return undef;
+		 }	 
+	     }
 	 }
+     } else {
+
+	 my $lang = &Language::GetLang();
 	 
-	 my $rejected_sender;
-	 my %context;
-	 my %headers;
-	 
-	 unless ($in{'quiet'}) {
-	     my $msg;
-	     my $parser = new MIME::Parser;
-	     $parser->output_to_core(1);
-	     unless ($msg = $parser->read(\*IN)) {
-		 &wwslog('err', 'Unable to parse message %s', $file);
+	 my @tt2_include_path = ($list->{'dir'}.'/mail_tt2/'.$lang,
+				 $list->{'dir'}.'/mail_tt2',
+				 $Conf{'etc'}.'/'.$robot.'/mail_tt2/'.$lang,
+				 $Conf{'etc'}.'/'.$robot.'/mail_tt2',
+				 $Conf{'etc'}.'/mail_tt2/'.$lang,
+				 $Conf{'etc'}.'/mail_tt2',
+				 '--ETCBINDIR--'.'/mail_tt2/'.$lang,
+				 '--ETCBINDIR--'.'/mail_tt2');
+		 
+	 foreach my $path (@tt2_include_path) {
+	     my $filename = "$path".'/reject.tt2';
+	     unless (open FILE, $filename) {
+		 &wwslog('info','unable to open: %s', $filename);
 		 next;
 	     }
 	     
-	     my @sender_hdr = Mail::Address->parse($msg->head->get('From'));
+	     my @filecontent;
+	     while (<FILE>) {
+		 push(@filecontent,$_);
+	     }
+	     close FILE;
 	     
-	     unless  ($#sender_hdr == -1) {
-		 $rejected_sender = $sender_hdr[0]->address;
-		 $context{'subject'} = &MIME::Words::decode_mimewords($msg->head->get('subject'));
-		 $context{'rejected_by'} = $param->{'user'}{'email'};
-	     }
-	 
-	     my $output;
-
-	     unless (&List::get_parsed_file(\$output, 'reject', $rejected_sender, $robot, \%context, $list)) {
-		 &error_message('failed');
-		 &wwslog('err','do_reject: failed to parse the template');
-		 return undef;
-	     }
-		 
-	     my @mail = split("\n",$output);
-
-	     if (! $in{'body'}) {
-		 my $find = 0;
-		 my @body;
-		 foreach my $line(@mail){ 
-		     unless ($find) {
-			 if ($line =~/^\s*$/) {
-			     $find = 1;
-			 }
-		     } else {
-			 push(@body,$line);
-		     }
-		 }	   
-		 $param->{'body'} = join("\n",@body);
-
-	     } else {
-		 my @head;
-		 foreach my $line(@mail){ 
+	     my $find = 0;
+	     my @filebody;
+	     
+	     foreach my $line (@filecontent){ 
+		 unless ($find) {
 		     if ($line =~/^\s*$/) {
-			 last;
-		     } else {
-			 push(@head,$line);
+			 $find = 1;
 		     }
-		 }	   
-		 my $head = join("\n",@head);
-
-		 $context{'body'} = $in{'body'};
-		 $context{'head'} = $head;
-	
-		 unless (&mail::mail_file('', $rejected_sender, \%context, $robot,'smime')) {
-		     &error_message('failed');
-		     &wwslog('err','do_reject: failed to send mail_file');
-		     return undef;
+		 } else {
+		     push(@filebody,$line);
 		 }
-	     }
-	 }
-	 close(IN);  
-     
-	 if ($in{'body'}) {
-	     unless (unlink($file)) {
-		 &error_message('failed');
-		 &wwslog('err','do_reject: failed to erase %s', $file);
-		 return undef;
-	     }	 
+	     }	
+   
+	     $param->{'body'} = join("\n",@filebody);
 	 }
      }
-
+     
      if ($in{'quiet'} || $in{'body'}) {
 	 &message('performed');
-         return 'modindex';
+	 return 'modindex';
      } else {
 	 return 1;
      }
@@ -6792,6 +6915,8 @@ sub do_set_pending_list_request {
        }
      }
 
+     $param->{'previous_action'} = 'editsubscriber';
+
      ## Bounces
      if ($user->{'bounce'} =~ /^(\d+)\s+(\d+)\s+(\d+)(\s+(.*))?$/) {
 	 my @bounce = ($1, $2, $3, $5);
@@ -6851,13 +6976,11 @@ sub do_set_pending_list_request {
 	 foreach my $id (@ids) {
 	     unless (defined ($sources->{$id})) {
 		 $sources->{$id} = $list->search_datasource($id);
-		 &wwslog('info', 'source: %s', $sources->{$id});
 	     }
 	     
 	     push @source, $sources->{$id};
 	     unless (defined ($descriptions->{$id})) {
 		 $descriptions->{$id} = $list->search_datasource_desc($id);
-		 &wwslog('info', 'source: %s', $descriptions->{$id});
 	     }
 	     push @description, $descriptions->{$id};
 	 }

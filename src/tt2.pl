@@ -190,7 +190,17 @@ sub parse_tt2 {
 
     ## An array can be used as a template (instead of a filename)
     if (ref($template) eq 'ARRAY') {
-	$template = \join('', @$template);
+#	$template = \join("\n", @$template);  ############# ''
+#    }
+	my $temp;
+	foreach my $line (@$template) {
+	    if ($line =~/^\s*$/) {
+		$temp = $temp."\n"; 
+	    } else {
+		$temp = $temp.$line."\n";
+	    }
+	}
+	$template = \$temp;
     }
 
     # Do we need to recode strings

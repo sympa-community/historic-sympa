@@ -20,6 +20,7 @@ CREATE TABLE subscriber_table (
 	user_subscriber		varchar (100) NOT NULL,
 	date_subscriber		datetime NOT NULL,
 	update_subscriber	datetime,
+	subscribed_date_subscriber datetime,
 	who_init_subscriber 	varchar(100),
 	who_update_subscriber 	varchar(100),
 	how_init_subscriber	enum ('mail','web','soap'),

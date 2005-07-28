@@ -29,6 +29,7 @@ create table subscriber_table
     user_subscriber        varchar(100)           not null,
     date_subscriber        datetime               not null,
     update_subscriber      datetime               null,
+    subscribed_date_subscriber datetime           null,	
     who_init_subscriber	   varchar(100)           null,
     who_update_subscriber  varchar(100)           null,
     how_init_subscriber    varchar(4)             null,

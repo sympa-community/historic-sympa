@@ -22,6 +22,7 @@ CREATE TABLE subscriber_table (
 	user_subscriber		varchar (100) NOT NULL,
 	date_subscriber		timestamp with time zone NOT NULL,
 	update_subscriber 	timestamp with time zone,
+	subscribed_date_subscriber timestamp with time zone,
 	who_init_subscriber 	varchar(100),
 	who_update_subscriber	varchar(100),
 	how_init_subscriber	varchar(4),

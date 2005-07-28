@@ -696,7 +696,7 @@ sub subscribe {
 	  $u->{'email'} = $sender;
 	  $u->{'gecos'} = $gecos;
 	  $u->{'password'} = &tools::crypt_password($password);
-	  $u->{'date'} = $u->{'update_date'} = time;
+	  $u->{'date'} = $u->{'update_date'} = $u->{'subscribed_date'} = time;
 	  $u->{'who_init'} = $sender;
 	  $u->{'how_init'} = 'soap';
 	  $u->{'ip_init'} = $ip;

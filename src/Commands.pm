@@ -770,22 +770,38 @@ sub subscribe {
 	my $suffix;
 
 	if (defined $user_entry) {
+	    if ($user_entry->{'subscribed'} == 1) {
+		$suffix = 'update';
 
-	    $suffix = 'update';
+		## Only updates the date
+		## Options remain the same
+		my $user = {};
+		$user->{'update_date'} = time;
+		$user->{'gecos'} = $comment if $comment;
+		$user->{'subscribed'} = 1;
+		$user->{'how_update'} = 'mail';
+		$user->{'who_update'} = $sender;
+		$user->{'ip_update'} = undef;
+		
+		return undef
+		    unless $list->update_user($sender, $user);
+	    } else {
+		$suffix = 'init';
 
-	    ## Only updates the date
-	    ## Options remain the same
-	    my $user = {};
-	    $user->{'update_date'} = time;
-	    $user->{'gecos'} = $comment if $comment;
-	    $user->{'subscribed'} = 1;
-	    $user->{'how_update'} = 'mail';
-	    $user->{'who_update'} = $sender;
-	    $user->{'ip_update'} = undef;
-
-	    return undef
-		unless $list->update_user($sender, $user);
-	}else {
+		## Only updates the date
+		## Options remain the same
+		my $user = {};
+		$user->{'update_date'} = $user->{'subscribed_date'} = time;
+		$user->{'gecos'} = $comment if $comment;
+		$user->{'subscribed'} = 1;
+		$user->{'how_init'} = 'mail';
+		$user->{'who_init'} = $sender;
+		$user->{'ip_init'} = undef;
+	    
+		return undef
+		    unless $list->update_user($sender, $user);
+	    }
+	} else {
 
 	    $suffix ='init';
 
@@ -794,7 +810,7 @@ sub subscribe {
 	    %{$u} = %{$defaults};
 	    $u->{'email'} = $sender;
 	    $u->{'gecos'} = $comment;
-	    $u->{'date'} = $u->{'update_date'} = time;
+	    $u->{'date'} = $u->{'update_date'} = $u->{'subscribed_date'} = time;
 	    $u->{'how_init'} = 'mail';
 	    $u->{'who_init'} = $sender;
 
@@ -872,7 +888,7 @@ sub subscribe {
 	## If requested send notification to owners
 	if ($action =~ /notify/i) {
 	    unless ($list->send_notify_to_owner('notice',{'who' => $sender, 
-					 'gecos' =>$comment, 
+							  'gecos' =>$comment, 
 							  'command' => 'subscribe'})) {
 		&do_log('info',"Unable to send notify 'notice' to $list->{'name'} list owner");
 	}
@@ -1118,6 +1134,7 @@ sub signoff {
 	    unless ($list->update_user($email, 
 				       {'subscribed' => 0,
 					'update_date' => time,
+					'subscribed_date' => undef,
 					'who_init' => undef,
 					'who_update' => undef,
 					'how_init' => undef,
@@ -1132,12 +1149,15 @@ sub signoff {
 	    ## Really delete and rewrite to disk.
 	    $list->delete_user($email);
 	}
-	
-	unless ($list->delete_tracability_dir_file($email, 'init') || $list->delete_tracability_dir_file($email, 'update')) {
-	    &do_log('info', 'SIG %s from %s failed, delete tracability files failed', $which, $email);
-	    return undef;
-	}	
 
+	my $tracability_dir = $list->{'dir'}.'/tracability';
+	if (-e $tracability_dir) {
+	    unless ($list->delete_tracability_dir_file($email, 'init') && $list->delete_tracability_dir_file($email, 'update')) {
+		&dolog('info', 'SIG %s from %s failed, delete tracability files failed', $which, $email);
+		return undef;
+	    }
+	}
+	
 	## Notify the owner
 	if ($action =~ /notify/i) {
 	    unless ($list->send_notify_to_owner('notice',{'who' => $email, 
@@ -1302,7 +1322,7 @@ sub add {
 	    %{$u} = %{$defaults};
 	    $u->{'email'} = $email;
 	    $u->{'gecos'} = $comment;
-	    $u->{'date'} = $u->{'update_date'} = time;
+	    $u->{'date'} = $u->{'update_date'} = $u->{'subscribed_date'} = time;
 	    $u->{'how_init'} = 'mail';
 
 	    unless ($subscribe) {
@@ -1758,6 +1778,7 @@ sub del {
 	    unless ($list->update_user($who, 
 				       {'subscribed' => 0,
 					'update_date' => time,
+					'subscribed_date' => undef,
 					'who_init' => undef,
 					'who_update' => undef,
 					'how_init' => undef,
@@ -1788,13 +1809,13 @@ sub del {
 	unless ($quiet || ($action =~ /quiet/i )) {
 	    unless ($list->send_file('removed', $who, $robot, {})) {
 		&do_log('notice',"Unable to send template 'removed' to $who");
-	}
+	    }
 	}
 	&notice_report_cmd($cmd_line,'removed',{'email'=> $who, 'listname' => $which});  
 	&do_log('info', 'DEL %s %s from %s accepted (%d seconds, %d subscribers)', $which, $who, $sender, time-$time_command, $list->get_total() );
 	if ($action =~ /notify/i) {
 	    unless ($list->send_notify_to_owner('notice',{'who' => $who, 
-					 'gecos' => "", 
+							  'gecos' => "", 
 							  'command' => 'del',
 							  'by' => $sender})) {
 		&do_log('info',"Unable to send notify 'notice' to $list->{'name'} list owner");
@@ -1904,7 +1925,11 @@ sub set {
 
 	my $update_mode = $mode;
 	$update_mode = '' if ($update_mode eq 'mail');
-	unless ($list->update_user($sender,{'reception'=> $update_mode, 'update_date' => time})) {
+	unless ($list->update_user($sender,{'reception'=> $update_mode,
+					    'update_date' => time,
+					    'who_update' => $sender,
+					    'how_update' => 'mail',
+					    'ip_update' => undef})) {
 	    &error_report_cmd($cmd_line,'failed_change_reception',{'listname' => $which});
 	    &do_log('info', 'SET %s %s from %s refused, update failed',  $which, $mode, $sender);
 	    return 'failed';
@@ -1917,7 +1942,11 @@ sub set {
     }
     
     if ($mode =~ /^(conceal|noconceal)/){
-	unless ($list->update_user($sender,{'visibility'=> $mode, 'update_date' => time})) {
+	unless ($list->update_user($sender,{'visibility'=> $mode,
+					    'update_date' => time,
+					    'who_update' => $sender,
+					    'how_update' => 'mail',
+					    'ip_update' => undef})) {
 	    &error_report_cmd($cmd_line,'failed_change_reception',{'listname' => $which});
 	    &do_log('info', 'SET %s %s from %s refused, update failed',  $which, $mode, $sender);
 	    return 'failed';
@@ -1927,6 +1956,22 @@ sub set {
 	&notice_report_cmd($cmd_line,'config_updated',{'listname' => $which});  
 	&do_log('info', 'SET %s %s from %s accepted (%d seconds)', $which, $mode, $sender, time-$time_command);
     }
+
+    my $tracability_dir = $list->{'dir'}.'/tracability';
+    unless (-e $tracability_dir) {
+	unless (mkdir ($tracability_dir, 0777)) {
+	    &do_log('err',"Unable to create %s : %s", $tracability_dir, $!);
+	    return undef;
+	}
+    }
+
+    &do_log('info', 'SET a fait tracability');    
+	
+    unless (&tools::move_file($current_msg_filename, "$list->{'dir'}/tracability/$sender".'.sub.update')) {
+	&do_log('err', "Unable to move file %s in %s", $current_msg_filename,"$list->{'dir'}/tracability/$sender".'.sub.update');
+	return undef;
+    }
+
     return 1;
 }
 

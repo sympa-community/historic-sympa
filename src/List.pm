@@ -3192,17 +3192,24 @@ sub get_parsed_file {
 			 $list->{'dir'}.'/archives'); ## list archives to include the last message
     }
 
-    my $filename;
-    my $lang = &Language::Lang2Locale($data->{'lang'});
-    unless ($filename = &prepare_tt2_context($robot,$lang,$tpl,'mail_tt2',$list)) {
-	&do_log('err','List::get_parsed_file(): unable to prepare context for parsing');
-	return undef;
+    if (ref($tpl) eq 'ARRAY') {
+	my $output;
+	&tt2::parse_tt2($data, $tpl, $ref_output);
+
+    } else {
+	my $filename;
+	my $lang = &Language::Lang2Locale($data->{'lang'});
+	unless ($filename = &prepare_tt2_context($robot,$lang,$tpl,'mail_tt2',$list)) {
+	    &do_log('err','List::get_parsed_file(): unable to prepare context for parsing');
+	    return undef;
+	}
+	
+	my @path = split /\//, $filename;	   
+	&Language::SetLang($data->{'lang'}) if (defined $data->{'lang'});
+	
+	my $output;
+	&tt2::parse_tt2($data, $path[$#path], $ref_output);
     }
- 
-    my $output;
-    my @path = split /\//, $filename;	   
-    &Language::SetLang($data->{'lang'}) if (defined $data->{'lang'});
-    &tt2::parse_tt2($data, $path[$#path], $ref_output);
 
     return 1;
 }
@@ -4356,6 +4363,7 @@ sub get_subscriber {
 	my $statement;
 	my $date_field = sprintf $date_format{'read'}{$Conf{'db_type'}}, 'date_subscriber', 'date_subscriber';
 	my $update_field = sprintf $date_format{'read'}{$Conf{'db_type'}}, 'update_subscriber', 'update_subscriber';	
+	my $subscribed_date_field = sprintf $date_format{'read'}{$Conf{'db_type'}}, 'subscribed_date_subscriber', 'subscribed_date_subscriber';
 
 	## Use session cache
 	if (defined $list_cache{'get_subscriber'}{$name}{$email}) {
@@ -4376,9 +4384,9 @@ sub get_subscriber {
 
 	if ($Conf{'db_type'} eq 'Oracle') {
 	    ## "AS" not supported by Oracle
-	    $statement = sprintf "SELECT user_subscriber \"email\", comment_subscriber \"gecos\", bounce_subscriber \"bounce\", bounce_score_subscriber \"bounce_score\", reception_subscriber \"reception\", topics_subscriber \"topics\", visibility_subscriber \"visibility\", who_init_subscriber \"who_init\", who_update_subscriber \"who_update\", how_init_subscriber \"how_init\", how_update_subscriber \"how_update\", ip_init_subscriber \"ip_init\", ip_update_subscriber \"ip_update\", %s \"date\", %s \"update_date\", subscribed_subscriber \"subscribed\", included_subscriber \"included\", include_sources_subscriber \"id\"  %s FROM subscriber_table WHERE (user_subscriber = %s AND list_subscriber = %s)", $date_field, $update_field, $additional, $dbh->quote($email), $dbh->quote($name);
+	    $statement = sprintf "SELECT user_subscriber \"email\", comment_subscriber \"gecos\", bounce_subscriber \"bounce\", bounce_score_subscriber \"bounce_score\", reception_subscriber \"reception\", topics_subscriber \"topics\", visibility_subscriber \"visibility\", who_init_subscriber \"who_init\", who_update_subscriber \"who_update\", how_init_subscriber \"how_init\", how_update_subscriber \"how_update\", ip_init_subscriber \"ip_init\", ip_update_subscriber \"ip_update\", %s \"date\", %s \"update_date\", %s \"subscribed_date\", subscribed_subscriber \"subscribed\", included_subscriber \"included\", include_sources_subscriber \"id\"  %s FROM subscriber_table WHERE (user_subscriber = %s AND list_subscriber = %s)", $date_field, $update_field, $subscribed_date_field, $additional, $dbh->quote($email), $dbh->quote($name);
 	}else {
-	    $statement = sprintf "SELECT user_subscriber AS email, comment_subscriber AS gecos, bounce_subscriber AS bounce, bounce_score_subscriber AS bounce_score, reception_subscriber AS reception,  topics_subscriber AS topics, visibility_subscriber AS visibility, who_init_subscriber AS who_init, who_update_subscriber AS who_update, how_init_subscriber AS how_init, how_update_subscriber AS how_update, ip_init_subscriber AS ip_init, ip_update_subscriber AS ip_update, %s AS date, %s AS update_date, subscribed_subscriber AS subscribed, included_subscriber AS included, include_sources_subscriber AS id %s FROM subscriber_table WHERE (user_subscriber = %s AND list_subscriber = %s)", $date_field, $update_field, $additional, $dbh->quote($email), $dbh->quote($name);
+	    $statement = sprintf "SELECT user_subscriber AS email, comment_subscriber AS gecos, bounce_subscriber AS bounce, bounce_score_subscriber AS bounce_score, reception_subscriber AS reception,  topics_subscriber AS topics, visibility_subscriber AS visibility, who_init_subscriber AS who_init, who_update_subscriber AS who_update, how_init_subscriber AS how_init, how_update_subscriber AS how_update, ip_init_subscriber AS ip_init, ip_update_subscriber AS ip_update, %s AS date, %s AS update_date, %s AS subscribed_date, subscribed_subscriber AS subscribed, included_subscriber AS included, include_sources_subscriber AS id %s FROM subscriber_table WHERE (user_subscriber = %s AND list_subscriber = %s)", $date_field, $update_field, $subscribed_date_field, $additional, $dbh->quote($email), $dbh->quote($name);
 	}
 
 	push @sth_stack, $sth;
@@ -4550,6 +4558,7 @@ sub get_first_user {
 	my $statement;
 	my $date_field = sprintf $date_format{'read'}{$Conf{'db_type'}}, 'date_subscriber', 'date_subscriber';
 	my $update_field = sprintf $date_format{'read'}{$Conf{'db_type'}}, 'update_subscriber', 'update_subscriber';
+	my $subscribed_date_field = sprintf $date_format{'read'}{$Conf{'db_type'}}, 'subscribed_date_subscriber', 'subscribed_date_subscriber';
 	
 	## Check database connection
 	unless ($dbh and $dbh->ping) {
@@ -4572,11 +4581,11 @@ sub get_first_user {
 	## Oracle
 	if ($Conf{'db_type'} eq 'Oracle') {
 
-	    $statement = sprintf "SELECT user_subscriber \"email\", comment_subscriber \"gecos\", reception_subscriber \"reception\", topics_subscriber \"topics\", visibility_subscriber \"visibility\", bounce_subscriber \"bounce\", bounce_score_subscriber \"bounce_score\", who_init_subscriber \"who_init\", who_update_subscriber \"who_update\", how_init_subscriber \"how_init\", how_update_subscriber \"how_update\", ip_init_subscriber \"ip_init\", ip_update_subscriber \"ip_update\", %s \"date\", %s \"update_date\", subscribed_subscriber \"subscribed\", included_subscriber \"included\", include_sources_subscriber \"id\" %s FROM subscriber_table WHERE (list_subscriber = %s %s)", $date_field, $update_field, $additional, $dbh->quote($name), $selection;
+	    $statement = sprintf "SELECT user_subscriber \"email\", comment_subscriber \"gecos\", reception_subscriber \"reception\", topics_subscriber \"topics\", visibility_subscriber \"visibility\", bounce_subscriber \"bounce\", bounce_score_subscriber \"bounce_score\", who_init_subscriber \"who_init\", who_update_subscriber \"who_update\", how_init_subscriber \"how_init\", how_update_subscriber \"how_update\", ip_init_subscriber \"ip_init\", ip_update_subscriber \"ip_update\", %s \"date\", %s \"update_date\", %s \"subscribed_date\", subscribed_subscriber \"subscribed\", included_subscriber \"included\", include_sources_subscriber \"id\" %s FROM subscriber_table WHERE (list_subscriber = %s %s)", $date_field, $update_field, $subscribed_date_field, $additional, $dbh->quote($name), $selection;
 
 	    ## SORT BY
 	    if ($sortby eq 'domain') {
-		$statement = sprintf "SELECT user_subscriber \"email\", comment_subscriber \"gecos\", reception_subscriber \"reception\", topics_subscriber \"topics\", visibility_subscriber \"visibility\", bounce_subscriber \"bounce\", bounce_score_subscriber \"bounce_score\", who_init_subscriber \"who_init\", who_update_subscriber \"who_update\", how_init_subscriber \"how_init\", how_update_subscriber \"how_update\", ip_init_subscriber \"ip_init\", ip_update_subscriber \"ip_update\", %s \"date\", %s \"update_date\", subscribed_subscriber \"subscribed\", included_subscriber \"included\", include_sources_subscriber \"id\", substr(user_subscriber,instr(user_subscriber,'\@')+1) \"dom\" %s FROM subscriber_table WHERE (list_subscriber = %s ) ORDER BY \"dom\"", $date_field, $update_field, $additional, $dbh->quote($name);
+		$statement = sprintf "SELECT user_subscriber \"email\", comment_subscriber \"gecos\", reception_subscriber \"reception\", topics_subscriber \"topics\", visibility_subscriber \"visibility\", bounce_subscriber \"bounce\", bounce_score_subscriber \"bounce_score\", who_init_subscriber \"who_init\", who_update_subscriber \"who_update\", how_init_subscriber \"how_init\", how_update_subscriber \"how_update\", ip_init_subscriber \"ip_init\", ip_update_subscriber \"ip_update\", %s \"date\", %s \"update_date\", %s \"subscribed_date\", subscribed_subscriber \"subscribed\", included_subscriber \"included\", include_sources_subscriber \"id\", substr(user_subscriber,instr(user_subscriber,'\@')+1) \"dom\" %s FROM subscriber_table WHERE (list_subscriber = %s ) ORDER BY \"dom\"", $date_field, $update_field, $subscribed_date_field, $additional, $dbh->quote($name);
 
 	    }elsif ($sortby eq 'email') {
 		$statement .= " ORDER BY \"email\"";
@@ -4594,11 +4603,11 @@ sub get_first_user {
 	## Sybase
 	}elsif ($Conf{'db_type'} eq 'Sybase'){
 
-	    $statement = sprintf "SELECT user_subscriber \"email\", comment_subscriber \"gecos\", reception_subscriber \"reception\", topics_subscriber \"topics\", visibility_subscriber \"visibility\", bounce_subscriber \"bounce\", bounce_score_subscriber \"bounce_score\", who_init_subscriber \"who_init\", who_update_subscriber \"who_update\", how_init_subscriber \"how_init\", how_update_subscriber \"how_update\", ip_init_subscriber \"ip_init\", ip_update_subscriber \"ip_update\" , %s \"date\", %s \"update_date\", subscribed_subscriber \"subscribed\", included_subscriber \"included\", include_sources_subscriber \"id\" %s FROM subscriber_table WHERE (list_subscriber = %s %s)", $date_field, $update_field, $additional, $dbh->quote($name), $selection;
+	    $statement = sprintf "SELECT user_subscriber \"email\", comment_subscriber \"gecos\", reception_subscriber \"reception\", topics_subscriber \"topics\", visibility_subscriber \"visibility\", bounce_subscriber \"bounce\", bounce_score_subscriber \"bounce_score\", who_init_subscriber \"who_init\", who_update_subscriber \"who_update\", how_init_subscriber \"how_init\", how_update_subscriber \"how_update\", ip_init_subscriber \"ip_init\", ip_update_subscriber \"ip_update\" , %s \"date\", %s \"update_date\", %s \"subscribed_date\", subscribed_subscriber \"subscribed\", included_subscriber \"included\", include_sources_subscriber \"id\" %s FROM subscriber_table WHERE (list_subscriber = %s %s)", $date_field, $update_field, $subscribed_date_field, $additional, $dbh->quote($name), $selection;
 	    
 	    ## SORT BY
 	    if ($sortby eq 'domain') {
-		$statement = sprintf "SELECT user_subscriber \"email\", comment_subscriber \"gecos\", reception_subscriber \"reception\", topics_subscriber \"topics\", visibility_subscriber \"visibility\", bounce_subscriber \"bounce\", bounce_score_subscriber \"bounce_score\", who_init_subscriber \"who_init\", who_update_subscriber \"who_update\", how_init_subscriber \"how_init\", how_update_subscriber \"how_update\", ip_init_subscriber \"ip_init_subscriber\", ip_update_subscriber \"ip_update\", %s \"date\", %s \"update_date\", subscribed_subscriber \"subscribed\", included_subscriber \"included\", include_sources_subscriber \"id\", substring(user_subscriber,charindex('\@',user_subscriber)+1,100) \"dom\" %s FROM subscriber_table WHERE (list_subscriber = %s) ORDER BY \"dom\"", $date_field, $update_field, $additional, $dbh->quote($name);
+		$statement = sprintf "SELECT user_subscriber \"email\", comment_subscriber \"gecos\", reception_subscriber \"reception\", topics_subscriber \"topics\", visibility_subscriber \"visibility\", bounce_subscriber \"bounce\", bounce_score_subscriber \"bounce_score\", who_init_subscriber \"who_init\", who_update_subscriber \"who_update\", how_init_subscriber \"how_init\", how_update_subscriber \"how_update\", ip_init_subscriber \"ip_init_subscriber\", ip_update_subscriber \"ip_update\", %s \"date\", %s \"update_date\", %s \"subscribed_date\", subscribed_subscriber \"subscribed\", included_subscriber \"included\", include_sources_subscriber \"id\", substring(user_subscriber,charindex('\@',user_subscriber)+1,100) \"dom\" %s FROM subscriber_table WHERE (list_subscriber = %s) ORDER BY \"dom\"", $date_field, $update_field, $subscribed_date_field, $additional, $dbh->quote($name);
 		
 	    }elsif ($sortby eq 'email') {
 		$statement .= " ORDER BY \"email\"";
@@ -4617,13 +4626,13 @@ sub get_first_user {
 	## mysql
 	}elsif ($Conf{'db_type'} eq 'mysql') {
 	    
-    $statement = sprintf "SELECT user_subscriber AS email, comment_subscriber AS gecos, reception_subscriber AS reception, topics_subscriber AS topics, visibility_subscriber AS visibility, bounce_subscriber AS bounce, bounce_score_subscriber AS bounce_score, who_init_subscriber AS who_init, who_update_subscriber AS who_update, how_init_subscriber AS how_init, how_update_subscriber AS how_update, ip_init_subscriber AS ip_init, ip_update_subscriber AS ip_update, %s AS date, %s AS update_date, subscribed_subscriber AS subscribed, included_subscriber AS included, include_sources_subscriber AS id %s FROM subscriber_table WHERE (list_subscriber = %s %s)", $date_field, $update_field, $additional, $dbh->quote($name), $selection;
+    $statement = sprintf "SELECT user_subscriber AS email, comment_subscriber AS gecos, reception_subscriber AS reception, topics_subscriber AS topics, visibility_subscriber AS visibility, bounce_subscriber AS bounce, bounce_score_subscriber AS bounce_score, who_init_subscriber AS who_init, who_update_subscriber AS who_update, how_init_subscriber AS how_init, how_update_subscriber AS how_update, ip_init_subscriber AS ip_init, ip_update_subscriber AS ip_update, %s AS date, %s AS update_date, %s AS subscribed_date, subscribed_subscriber AS subscribed, included_subscriber AS included, include_sources_subscriber AS id %s FROM subscriber_table WHERE (list_subscriber = %s %s)", $date_field, $update_field, $subscribed_date_field, $additional, $dbh->quote($name), $selection;
 	    
 	    ## SORT BY
 	    if ($sortby eq 'domain') {
 		## Redefine query to set "dom"
 
-		$statement = sprintf "SELECT user_subscriber AS email, comment_subscriber AS gecos, reception_subscriber AS reception, topics_subscriber AS topics, visibility_subscriber AS visibility, bounce_subscriber AS bounce, bounce_score_subscriber AS bounce_score, who_init_subscriber AS who_init, who_update_subscriber AS who_update, how_init_subscriber AS how_init, how_update_subscriber AS how_update, ip_init_subscriber AS ip_init, ip_update_subscriber AS ip_update, %s AS date, %s AS update_date, subscribed_subscriber AS subscribed, included_subscriber AS included, include_sources_subscriber AS id, REVERSE(SUBSTRING(user_subscriber FROM position('\@' IN user_subscriber) FOR 50)) AS dom %s FROM subscriber_table WHERE (list_subscriber = %s) ORDER BY dom", $date_field, $update_field, $additional, $dbh->quote($name);
+		$statement = sprintf "SELECT user_subscriber AS email, comment_subscriber AS gecos, reception_subscriber AS reception, topics_subscriber AS topics, visibility_subscriber AS visibility, bounce_subscriber AS bounce, bounce_score_subscriber AS bounce_score, who_init_subscriber AS who_init, who_update_subscriber AS who_update, how_init_subscriber AS how_init, how_update_subscriber AS how_update, ip_init_subscriber AS ip_init, ip_update_subscriber AS ip_update, %s AS date, %s AS update_date, %s AS subscribed_date, subscribed_subscriber AS subscribed, included_subscriber AS included, include_sources_subscriber AS id, REVERSE(SUBSTRING(user_subscriber FROM position('\@' IN user_subscriber) FOR 50)) AS dom %s FROM subscriber_table WHERE (list_subscriber = %s) ORDER BY dom", $date_field, $update_field, $subscribed_date_field, $additional, $dbh->quote($name);
 
 	    }elsif ($sortby eq 'email') {
 		## Default SORT
@@ -4647,13 +4656,13 @@ sub get_first_user {
 	## Pg    
 	}else {
 	    
-	    $statement = sprintf "SELECT user_subscriber AS email, comment_subscriber AS gecos, reception_subscriber AS reception, topics_subscriber AS topics, visibility_subscriber AS visibility, bounce_subscriber AS bounce, bounce_score_subscriber AS bounce_score, who_init_subscriber AS who_init, who_update_subscriber AS who_update, how_init_subscriber AS how_init, how_update_subscriber AS how_update, ip_init_subscriber AS ip_init, ip_update_subscriber AS ip_update, %s AS date, %s AS update_date, subscribed_subscriber AS subscribed, included_subscriber AS included, include_sources_subscriber AS id %s FROM subscriber_table WHERE (list_subscriber = %s %s)", $date_field, $update_field, $additional, $dbh->quote($name), $selection;
+	    $statement = sprintf "SELECT user_subscriber AS email, comment_subscriber AS gecos, reception_subscriber AS reception, topics_subscriber AS topics, visibility_subscriber AS visibility, bounce_subscriber AS bounce, bounce_score_subscriber AS bounce_score, who_init_subscriber AS who_init, who_update_subscriber AS who_update, how_init_subscriber AS how_init, how_update_subscriber AS how_update, ip_init_subscriber AS ip_init, ip_update_subscriber AS ip_update, %s AS date, %s AS update_date, %s AS subscribed_date, subscribed_subscriber AS subscribed, included_subscriber AS included, include_sources_subscriber AS id %s FROM subscriber_table WHERE (list_subscriber = %s %s)", $date_field, $update_field, $subscribed_date_field, $additional, $dbh->quote($name), $selection;
 	    
 	    ## SORT BY
 	    if ($sortby eq 'domain') {
 		## Redefine query to set "dom"
 
-		$statement = sprintf "SELECT user_subscriber AS email, comment_subscriber AS gecos, reception_subscriber AS reception, topics_subscriber AS topics, visibility_subscriber AS visibility, bounce_subscriber AS bounce, bounce_score_subscriber AS bounce_score, who_init_subscriber AS who_init, who_update_subscriber AS who_update, how_init_subscriber AS how_init, how_update_subscriber AS how_update, ip_init_subscriber AS ip_init, ip_update_subscriber AS ip_update, %s AS date, %s AS update_date, subscribed_subscriber AS subscribed, included_subscriber AS included, include_sources_subscriber AS id, SUBSTRING(user_subscriber FROM position('\@' IN user_subscriber) FOR 50) AS dom %s FROM subscriber_table WHERE (list_subscriber = %s) ORDER BY dom", $date_field, $update_field, $additional, $dbh->quote($name);
+		$statement = sprintf "SELECT user_subscriber AS email, comment_subscriber AS gecos, reception_subscriber AS reception, topics_subscriber AS topics, visibility_subscriber AS visibility, bounce_subscriber AS bounce, bounce_score_subscriber AS bounce_score, who_init_subscriber AS who_init, who_update_subscriber AS who_update, how_init_subscriber AS how_init, how_update_subscriber AS how_update, ip_init_subscriber AS ip_init, ip_update_subscriber AS ip_update, %s AS date, %s AS update_date, %s AS subscribed_date, subscribed_subscriber AS subscribed, included_subscriber AS included, include_sources_subscriber AS id, SUBSTRING(user_subscriber FROM position('\@' IN user_subscriber) FOR 50) AS dom %s FROM subscriber_table WHERE (list_subscriber = %s) ORDER BY dom", $date_field, $update_field, $subscribed_date_field, $additional, $dbh->quote($name);
 
 	    }elsif ($sortby eq 'email') {
 		$statement .= ' ORDER BY email';
@@ -5100,7 +5109,8 @@ sub get_first_bouncing_user {
     my $statement;
     my $date_field = sprintf $date_format{'read'}{$Conf{'db_type'}}, 'date_subscriber', 'date_subscriber';
     my $update_field = sprintf $date_format{'read'}{$Conf{'db_type'}}, 'update_subscriber', 'update_subscriber';
-    
+    my $subscribed_date_field = sprintf $date_format{'read'}{$Conf{'db_type'}}, 'subscribed_date_subscriber', 'subscribed_date_subscriber';
+
     ## Check database connection
     unless ($dbh and $dbh->ping) {
 	return undef unless &db_connect();
@@ -5114,9 +5124,9 @@ sub get_first_bouncing_user {
 
     if ($Conf{'db_type'} eq 'Oracle') {
 	## "AS" not supported by Oracle
-	$statement = sprintf "SELECT user_subscriber \"email\", reception_subscriber \"reception\", topics_subscriber \"topics\", visibility_subscriber \"visibility\", bounce_subscriber \"bounce\",bounce_score_subscriber \"bounce_score\", who_init_subscriber \"who_init\", who_update_subscriber \"who_update\", how_init_subscriber \"how_init\", how_update_subscriber \"how_update\", ip_init_subscriber \"ip_init\", ip_update_subscriber \"ip_update\", %s \"date\", %s \"update_date\" %s FROM subscriber_table WHERE (list_subscriber = %s AND bounce_subscriber is not NULL)", $date_field, $update_field, $additional, $dbh->quote($name);
+	$statement = sprintf "SELECT user_subscriber \"email\", reception_subscriber \"reception\", topics_subscriber \"topics\", visibility_subscriber \"visibility\", bounce_subscriber \"bounce\",bounce_score_subscriber \"bounce_score\", who_init_subscriber \"who_init\", who_update_subscriber \"who_update\", how_init_subscriber \"how_init\", how_update_subscriber \"how_update\", ip_init_subscriber \"ip_init\", ip_update_subscriber \"ip_update\", %s \"date\", %s \"update_date\", %s \"subscribed_date\" %s FROM subscriber_table WHERE (list_subscriber = %s AND bounce_subscriber is not NULL)", $date_field, $update_field, $subscribed_date_field, $additional, $dbh->quote($name);
     }else {
-	$statement = sprintf "SELECT user_subscriber AS email, reception_subscriber AS reception, topics_subscriber AS topics, visibility_subscriber AS visibility, bounce_subscriber AS bounce,bounce_score_subscriber AS bounce_score, who_init_subscriber AS who_init, who_update_subscriber AS who_update, how_init_subscriber AS how_init, how_update_subscriber AS how_update, ip_init_subscriber AS ip_init, ip_update_subscriber AS ip_update, %s AS date, %s AS update_date %s FROM subscriber_table WHERE (list_subscriber = %s AND bounce_subscriber is not NULL)", $date_field, $update_field, $additional, $dbh->quote($name);
+	$statement = sprintf "SELECT user_subscriber AS email, reception_subscriber AS reception, topics_subscriber AS topics, visibility_subscriber AS visibility, bounce_subscriber AS bounce,bounce_score_subscriber AS bounce_score, who_init_subscriber AS who_init, who_update_subscriber AS who_update, how_init_subscriber AS how_init, how_update_subscriber AS how_update, ip_init_subscriber AS ip_init, ip_update_subscriber AS ip_update, %s AS date, %s AS update_date, %s AS subscribed_date %s FROM subscriber_table WHERE (list_subscriber = %s AND bounce_subscriber is not NULL)", $date_field, $update_field, $subscribed_date_field, $additional, $dbh->quote($name);
     }
 
     push @sth_stack, $sth;
@@ -5404,6 +5414,7 @@ sub update_user {
 			  ip_update => 'ip_update_subscriber',
 			  date => 'date_subscriber',
 			  update_date => 'update_subscriber',
+			  subscribed_date => 'subscribed_date_subscriber',
 			  gecos => 'comment_subscriber',
 			  password => 'password_user',
 			  bounce => 'bounce_subscriber',
@@ -5426,6 +5437,7 @@ sub update_user {
 			  ip_update => 'subscriber_table',
 			  date => 'subscriber_table',
 			  update_date => 'subscriber_table',
+			  subscribed_date => 'subscriber_table',
 			  gecos => 'subscriber_table',
 			  password => 'user_table',
 			  bounce => 'subscriber_table',
@@ -5803,7 +5815,8 @@ sub add_user {
 	    
 	    my $date_field = sprintf $date_format{'write'}{$Conf{'db_type'}}, $new_user->{'date'}, $new_user->{'date'};
 	    my $update_field = sprintf $date_format{'write'}{$Conf{'db_type'}}, $new_user->{'update_date'}, $new_user->{'update_date'};
-	    
+	    my $subscribed_date_field = sprintf $date_format{'write'}{$Conf{'db_type'}}, $new_user->{'subscribed_date'}, $new_user->{'subscribed_date'};
+
 	    $list_cache{'is_user'}{$name}{$who} = undef;
 	    
 	    my $statement;
@@ -5828,7 +5841,7 @@ sub add_user {
 	    }	    
 
 	    ## Update Subscriber Table
-	    $statement = sprintf "INSERT INTO subscriber_table (user_subscriber, comment_subscriber, list_subscriber, who_init_subscriber, who_update_subscriber, how_init_subscriber, how_update_subscriber, ip_init_subscriber, ip_update_subscriber, date_subscriber, update_subscriber, reception_subscriber, topics_subscriber, visibility_subscriber,subscribed_subscriber,included_subscriber,include_sources_subscriber) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)", $dbh->quote($who), $dbh->quote($new_user->{'gecos'}), $dbh->quote($name), $dbh->quote($new_user->{'who_init'}), $dbh->quote($new_user->{'who_update'}),$dbh->quote($new_user->{'how_init'}), $dbh->quote($new_user->{'how_update'}), $dbh->quote($new_user->{'ip_init'}), $dbh->quote($new_user->{'ip_update'}), $date_field, $update_field, $dbh->quote($new_user->{'reception'}), $dbh->quote($new_user->{'topics'}), $dbh->quote($new_user->{'visibility'}), $dbh->quote($new_user->{'subscribed'}), $dbh->quote($new_user->{'included'}), $dbh->quote($new_user->{'id'});
+	    $statement = sprintf "INSERT INTO subscriber_table (user_subscriber, comment_subscriber, list_subscriber, who_init_subscriber, who_update_subscriber, how_init_subscriber, how_update_subscriber, ip_init_subscriber, ip_update_subscriber, date_subscriber, update_subscriber, subscriber_date_subscriber, reception_subscriber, topics_subscriber, visibility_subscriber,subscribed_subscriber,included_subscriber,include_sources_subscriber) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)", $dbh->quote($who), $dbh->quote($new_user->{'gecos'}), $dbh->quote($name), $dbh->quote($new_user->{'who_init'}), $dbh->quote($new_user->{'who_update'}),$dbh->quote($new_user->{'how_init'}), $dbh->quote($new_user->{'how_update'}), $dbh->quote($new_user->{'ip_init'}), $dbh->quote($new_user->{'ip_update'}), $date_field, $update_field, $subscribed_date_field, $dbh->quote($new_user->{'reception'}), $dbh->quote($new_user->{'topics'}), $dbh->quote($new_user->{'visibility'}), $dbh->quote($new_user->{'subscribed'}), $dbh->quote($new_user->{'included'}), $dbh->quote($new_user->{'id'});
 	    
 	    unless ($dbh->do($statement)) {
 		do_log('err','Unable to execute SQL statement "%s" : %s', $statement, $dbh->errstr);
@@ -9481,6 +9494,7 @@ sub probe_db {
 		      'ip_update_subscriber' => 'varchar(15)',
 		      'date_subscriber' => 'datetime',
 		      'update_subscriber' => 'datetime',
+		      'subscribed_date_subscriber' => 'datetime',
 		      'visibility_subscriber' => 'varchar(20)',
 		      'reception_subscriber' => 'varchar(20)',
 		      'topics_subscriber' => 'varchar(200)',
@@ -11558,7 +11572,7 @@ sub get_tracability_dir_file {
 
 sub delete_tracability_dir_file {
     my ($self, $email, $suffix) = @_;
-    &do_log('debug2', 'List::delete_tracability_dir_file(%s, %s, %s)', $self, $email, $suffix);
+    &do_log('info', 'List::delete_tracability_dir_file(%s, %s, %s)', $self, $email, $suffix);
 
     unless (opendir DIR, "$self->{'dir'}".'/tracability') {
 	&do_log('info', 'Unable to read dir %s', "$self->{'dir'}".'/tracability');

@@ -29,6 +29,7 @@ CREATE TABLE subscriber_table (
         user_subscriber         varchar2(100) NOT NULL,
         date_subscriber         date NOT NULL,
 	update_subscriber	date,
+	subscribed_date_subscriber date,
 	who_init_subscriber 	varchar2(100),
 	who_update_subscriber	varchar(100),
 	how_init_subscriber	number('mail','web','soap'),
