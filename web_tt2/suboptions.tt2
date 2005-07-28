@@ -38,29 +38,33 @@
 
 	  <br />	
  
-	  [%|loc%]Last update [%END%] <span style="color: [% dark_color %];">[% subscriber.update_date %]</span>
-	  [% IF subscriber.who_update %]
-		[% IF subscriber.email != subscriber.who_update %]
-			[%|loc%]by[%END%] <span style="color: [% dark_color %];">[% subscriber.who_update %]</span>
-		[% END %]
-	[% END %]
+	[% IF subscriber.update_date %]
+	  	[%|loc%]Last update [%END%] <span style="color: [% dark_color %];">[% subscriber.update_date %]</span>
+	  	[% IF subscriber.who_update %]
+			[% IF subscriber.email != subscriber.who_update %]
+				[%|loc%]by[%END%] <span style="color: [% dark_color %];">[% subscriber.who_update %]</span>
+			[% END %]
+	  	[% END %]
 	
-	[% IF subscriber.how_update %]
-		[%|loc%]via the[%END%] <span style="color: [% dark_color %];">[% subscriber.how_update %]</span> [%|loc%]interface [%END%]
-		[% IF subscriber.ip_update %]
-	 		<span style="color: [% dark_color %];">([% subscriber.ip_update %])</span>	 
-		[% END %]
-	[% END %]
-	<br /> 
+          	[% IF subscriber.how_update %]
+			[%|loc%]via the[%END%] <span style="color: [% dark_color %];">[% subscriber.how_update %]</span> [%|loc%]interface [%END%]
+			[% IF subscriber.ip_update %]
+	 			<span style="color: [% dark_color %];">([% subscriber.ip_update %])</span>	 
+			[% END %]
+	  	[% END %]
+	  	<br /> 
 	
-	[% IF subupdate == 'present' %]
-	  	<input class="MainMenuLinks" type="submit" name="action_subscription_trace.subupdate" value="[%|loc%]View your subscription message[%END%]" /> <br />
+	  	[% IF subupdate == 'present' %]
+	  		<input class="MainMenuLinks" type="submit" name="action_subscription_trace.subupdate" value="[%|loc%]View your subscription message[%END%]" /> <br />
+	  	[% END %]
+	  	<br />
 	[% END %]
-	<br />
 
   [% ELSE %]
 	[%|loc%]You are member since[%END%] <span style="color: [% dark_color %];">[% subscriber.date %]</span> <br /><br />
-	[%|loc%]Last update:[%END%] <span style="color: [% dark_color %];">[% subscriber.update_date %]</span> <br /><br />	
+	[% IF subscriber.update_date %]
+		[%|loc%]Last update:[%END%] <span style="color: [% dark_color %];">[% subscriber.update_date %]</span> <br /><br />
+	[% END %]	
   [% END %]
 
   [% IF subscriber.included %]

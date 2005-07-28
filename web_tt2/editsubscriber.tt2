@@ -98,30 +98,32 @@
 [% ELSE %]
 	<tr><th>[%|loc%]Member since [%END%][% current_subscriber.date %]</th></tr>
 [% END %]
-<tr><td> &nbsp;  </td></tr>
-
-<tr><th>[%|loc%]Last update [%END%][% current_subscriber.update_date %]
-[% IF current_subscriber.subscribed %]
-	[% IF current_subscriber.who_update %]
-		[% IF current_subscriber.email != current_subscriber.who_update %]
-			[%|loc%] by [%END%][% current_subscriber.who_update %]
-		[% END %]
-	[% END %]
-
-	[% IF current_subscriber.how_update %]
-		[%|loc%]via the [%END%][% current_subscriber.how_update %][%|loc%] interface [%END%]
-		[% IF current_subscriber.ip_update %]
-			([% current_subscriber.ip_update %])
-		[% END %]
-	[% END %]
-	</th></tr>
-
-	[% IF subupdate == 'present' %]
-		<tr><td><input class="MainMenuLinks" type="submit" name="action_subscription_trace.subupdate" value="[%|loc%]View subscription message[%END%]" /></td></tr>
-	[% END %]
-[% END %]
-
 <tr><td> &nbsp; </td></tr>
+
+[% IF current_subscriber.update_date %]
+	<tr><th>[%|loc%]Last update [%END%][% current_subscriber.update_date %]
+	[% IF current_subscriber.subscribed %]
+		[% IF current_subscriber.who_update %]
+			[% IF current_subscriber.email != current_subscriber.who_update %]
+				[%|loc%] by [%END%][% current_subscriber.who_update %]
+			[% END %]
+		[% END %]
+
+		[% IF current_subscriber.how_update %]
+			[%|loc%]via the [%END%][% current_subscriber.how_update %][%|loc%] interface [%END%]
+			[% IF current_subscriber.ip_update %]
+				([% current_subscriber.ip_update %])
+			[% END %]
+		[% END %]
+		</th></tr>
+
+		[% IF subupdate == 'present' %]
+			<tr><td><input class="MainMenuLinks" type="submit" name="action_subscription_trace.subupdate" value="[%|loc%]View subscription message[%END%]" /></td></tr>
+		[% END %]
+	[% END %]
+
+	<tr><td> &nbsp; </td></tr>
+[% END %]
 
 [% IF current_subscriber.sources %]
 	[% IF current_subscriber.included %]
