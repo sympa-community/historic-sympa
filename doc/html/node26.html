@@ -1,41 +1,92 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2 Final//EN">
 
-<H1><A NAME="SECTION002600000000000000000"><tex2html_anchor_invisible_mark></A>
-<A NAME="ldap"><tex2html_anchor_mark></A><BR>
-25. Using <I>Sympa</I> with LDAP
+<!--Converted with jLaTeX2HTML 2002-2-1 (1.70) JA patch-2.0
+patched version by:  Kenshi Muto, Debian Project.
+* modified by:  Shige TAKENO
+LaTeX2HTML 2002-2-1 (1.70),
+original version by:  Nikos Drakos, CBLU, University of Leeds
+* revised and updated by:  Marcus Hennecke, Ross Moore, Herb Swan
+* with significant contributions from:
+  Jens Lippmann, Marek Rouchal, Martin Wilck and others -->
+<HTML>
+<HEAD>
+<TITLE>Running Sympa </TITLE>
+<META NAME="description" CONTENT="Running Sympa ">
+<META NAME="keywords" CONTENT="sympa">
+<META NAME="resource-type" CONTENT="document">
+<META NAME="distribution" CONTENT="global">
+
+<META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=iso-8859-1">
+<META NAME="Generator" CONTENT="jLaTeX2HTML v2002-2-1 JA patch-2.0">
+<META HTTP-EQUIV="Content-Style-Type" CONTENT="text/css">
+
+<LINK REL="STYLESHEET" HREF="sympa.css">
+
+<LINK REL="next" HREF="node32.html">
+<LINK REL="previous" HREF="node14.html">
+<LINK REL="up" HREF="sympa.html">
+<LINK REL="next" HREF="node27.html">
+</HEAD>
+
+<BODY TEXT="#000000" BGCOLOR="#ffffff">
+<!--Navigation Panel-->
+<A NAME="tex2html1477"
+  HREF="node27.html">
+<IMG WIDTH="37" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="next" SRC="next.png"></A> 
+<A NAME="tex2html1471"
+  HREF="sympa.html">
+<IMG WIDTH="26" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="up" SRC="up.png"></A> 
+<A NAME="tex2html1465"
+  HREF="node25.html">
+<IMG WIDTH="63" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="previous" SRC="prev.png"></A> 
+<A NAME="tex2html1473"
+  HREF="node1.html">
+<IMG WIDTH="65" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="contents" SRC="contents.png"></A> 
+<A NAME="tex2html1475"
+  HREF="node548.html">
+<IMG WIDTH="43" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="index" SRC="index.png"></A> 
+<BR>
+<B> Next:</B> <A NAME="tex2html1478"
+  HREF="node27.html">sympa.pl</A>
+<B> Up:</B> <A NAME="tex2html1472"
+  HREF="sympa.html">Sympa Mailing Lists Management</A>
+<B> Previous:</B> <A NAME="tex2html1466"
+  HREF="node25.html">Logs</A>
+ &nbsp; <B>  <A NAME="tex2html1474"
+  HREF="node1.html">Contents</A></B> 
+ &nbsp; <B>  <A NAME="tex2html1476"
+  HREF="node548.html">Index</A></B> 
+<BR>
+<BR>
+<!--End of Navigation Panel-->
+
+<H1><A NAME="SECTION00500000000000000000">
+Running <I>Sympa</I> </A>
 </H1>
 
 <P>
-<A NAME="11032"><tex2html_anchor_invisible_mark></A>LDAP is a client-server protocol for accessing a directory service. Sympa
-provide various features based on access to one or more LDAP directories :
-
-<P>
+<BR><HR>
+<!--Table of Child-Links-->
+<A NAME="CHILD_LINKS"><STRONG>Subsections</STRONG></A>
 
 <UL>
-<LI><#4129#>authentication using LDAP directory instead of sympa internal storage of password<#4129#>
-<BR>	  see ~<A HREF=<tex2html_cr_mark>#auth-conf#4130><tex2html_cr_mark></A>, page~<A HREF=<tex2html_cr_mark>#auth-conf#4131><tex2html_cross_ref_visible_mark></A>
-
-<P>
-</LI>
-<LI><#4132#>named filters used in authorization scenario condition<#4132#>
-<BR>	  see ~<A HREF=<tex2html_cr_mark>#named-filters#4133><tex2html_cr_mark></A>, page~<A HREF=<tex2html_cr_mark>#named-filters#4134><tex2html_cross_ref_visible_mark></A>
-
-<P>
-</LI>
-<LI><#5907#>LDAP extraction of list subscribers (see ~<A HREF=<tex2html_cr_mark>#par-user-data-source#4135><tex2html_cr_mark></A>)<#5907#>
-<BR>
-<P>
-</LI>
-<LI><#4136#>LDAP extraction of list owners or editors<#4136#>
-<BR>	  see ~<A HREF=<tex2html_cr_mark>#data-inclusion-file#4137><tex2html_cr_mark></A>, page~<A HREF=<tex2html_cr_mark>#data-inclusion-file#4138><tex2html_cross_ref_visible_mark></A>
-
-<P>
-</LI>
-<LI><#4139#>mail aliases stored in LDAP<#4139#>
-<BR>	  see ~<A HREF=<tex2html_cr_mark>#ldap-aliases#4140><tex2html_cr_mark></A>, page~<A HREF=<tex2html_cr_mark>#ldap-aliases#4141><tex2html_cross_ref_visible_mark></A>
-
-<P>
-</LI>
-</UL>
-
-<P>
-
+<LI><A NAME="tex2html1479"
+  HREF="node27.html">sympa.pl</A>
+<LI><A NAME="tex2html1480"
+  HREF="node28.html">INIT script</A>
+<LI><A NAME="tex2html1481"
+  HREF="node29.html">Stopping <I>Sympa</I> and signals</A>
+<UL>
+<LI><A NAME="tex2html1482"
+  HREF="node30.html"><TT>kill -TERM</TT></A>
+<LI><A NAME="tex2html1483"
+  HREF="node31.html"><TT>kill -HUP</TT></A>
+</UL></UL>
+<!--End of Table of Child-Links-->
+<BR><HR>
+<ADDRESS>
+root
+2005-08-02
+</ADDRESS>
+</BODY>
+</HTML>

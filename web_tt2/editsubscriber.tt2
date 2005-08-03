@@ -127,7 +127,7 @@
 
 [% IF current_subscriber.sources %]
 	[% IF current_subscriber.included %]
-		<tr><th>[%|loc%]Included by data source(s) [%END%]"[% current_subscriber.sources %]"[%|loc%] whose description(s) is(are) [%END%]"[% current_subscriber.descriptions %]"</td></tr>
+		<tr><th>[%|loc%]Included via data source(s) [%END%]"[% current_subscriber.sources %]"[%|loc%] whose description(s) is(are) [%END%]"[% current_subscriber.descriptions %]"</td></tr>
 	[% END %]
 [% END %]
 

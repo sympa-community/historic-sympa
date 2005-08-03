@@ -1,84 +1,162 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2 Final//EN">
 
-<H1><A NAME="SECTION001600000000000000000"><tex2html_anchor_invisible_mark></A>
-    <A NAME="interaction"><tex2html_anchor_mark></A><BR>
-15. Interaction between <I>Sympa</I> and other applications
+<!--Converted with jLaTeX2HTML 2002-2-1 (1.70) JA patch-2.0
+patched version by:  Kenshi Muto, Debian Project.
+* modified by:  Shige TAKENO
+LaTeX2HTML 2002-2-1 (1.70),
+original version by:  Nikos Drakos, CBLU, University of Leeds
+* revised and updated by:  Marcus Hennecke, Ross Moore, Herb Swan
+* with significant contributions from:
+  Jens Lippmann, Marek Rouchal, Martin Wilck and others -->
+<HTML>
+<HEAD>
+<TITLE>Prerequisites</TITLE>
+<META NAME="description" CONTENT="Prerequisites">
+<META NAME="keywords" CONTENT="sympa">
+<META NAME="resource-type" CONTENT="document">
+<META NAME="distribution" CONTENT="global">
+
+<META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=iso-8859-1">
+<META NAME="Generator" CONTENT="jLaTeX2HTML v2002-2-1 JA patch-2.0">
+<META HTTP-EQUIV="Content-Style-Type" CONTENT="text/css">
+
+<LINK REL="STYLESHEET" HREF="sympa.css">
+
+<LINK REL="next" HREF="node22.html">
+<LINK REL="previous" HREF="node15.html">
+<LINK REL="up" HREF="node14.html">
+<LINK REL="next" HREF="node17.html">
+</HEAD>
+
+<BODY TEXT="#000000" BGCOLOR="#ffffff">
+<!--Navigation Panel-->
+<A NAME="tex2html1337"
+  HREF="node17.html">
+<IMG WIDTH="37" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="next" SRC="next.png"></A> 
+<A NAME="tex2html1331"
+  HREF="node14.html">
+<IMG WIDTH="26" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="up" SRC="up.png"></A> 
+<A NAME="tex2html1325"
+  HREF="node15.html">
+<IMG WIDTH="63" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="previous" SRC="prev.png"></A> 
+<A NAME="tex2html1333"
+  HREF="node1.html">
+<IMG WIDTH="65" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="contents" SRC="contents.png"></A> 
+<A NAME="tex2html1335"
+  HREF="node548.html">
+<IMG WIDTH="43" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="index" SRC="index.png"></A> 
+<BR>
+<B> Next:</B> <A NAME="tex2html1338"
+  HREF="node17.html">System requirements</A>
+<B> Up:</B> <A NAME="tex2html1332"
+  HREF="node14.html">Installing Sympa</A>
+<B> Previous:</B> <A NAME="tex2html1326"
+  HREF="node15.html">Obtaining Sympa, related links</A>
+ &nbsp; <B>  <A NAME="tex2html1334"
+  HREF="node1.html">Contents</A></B> 
+ &nbsp; <B>  <A NAME="tex2html1336"
+  HREF="node548.html">Index</A></B> 
+<BR>
+<BR>
+<!--End of Navigation Panel-->
+
+<H1><A NAME="SECTION00420000000000000000">
+Prerequisites</A>
 </H1>
 
 <P>
-
-<H1><A NAME="SECTION001610000000000000000">
-15.1 Soap</A>
-</H1>
+<I>Sympa</I> installation and configuration are relatively easy
+tasks for experienced UNIX users who have already installed PERL packages.
 
 <P>
-See~<A HREF=<tex2html_cr_mark>#soap#1982><tex2html_cr_mark></A>, page~<A HREF=<tex2html_cr_mark>#soap#1983><tex2html_cross_ref_visible_mark></A>.
+Note that most of the installation time will
+involve putting in place the prerequisites, if they are not
+already on the system. No more than a handful of ancillary tools are needed,
+and on recent UNIX systems their installation is normally very
+straightforward. We strongly advise you to perform installation steps and
+checks in the order listed below; these steps will be explained in
+detail in later sections.
 
 <P>
-
-<H1><A NAME="SECTION001620000000000000000">
-15.2 RSS channel</A>
-</H1>
-
-<P>
-See <A HREF=<tex2html_cr_mark>#rss#1985><tex2html_cr_mark></A>, page~<A HREF=<tex2html_cr_mark>#rss#1986><tex2html_cross_ref_visible_mark></A>. 
-
-<P>
-
-<H1><A NAME="SECTION001630000000000000000"><tex2html_anchor_invisible_mark></A><A NAME="8796"><tex2html_anchor_invisible_mark></A><BR>
-15.3 Sharing <I>WWSympa</I> authentication with other applications
-</H1>
-
-<P>
-See <A HREF=<tex2html_cr_mark>#sharing-auth#1988><tex2html_cr_mark></A>, page~<A HREF=<tex2html_cr_mark>#sharing-auth#1989><tex2html_cross_ref_visible_mark></A>.
-
-<P>
-
-<H1><A NAME="SECTION001640000000000000000">
-15.4 Sharing data with other applications</A>
-</H1>
-
-<P>
-You may extract subscribers, owners and editors for a list from any of :
 
 <UL>
-<LI>a text file
+<LI>identification of host system characteristics
 
 <P>
 </LI>
-<LI>a Relational database
+<LI>installation of DB Berkeley module (already installed on
+      most UNIX systems)
 
 <P>
 </LI>
-<LI>a LDAP directory
+<LI>installing a <A NAME="6644"></A>RDBMS (<A NAME="6645"></A>Oracle, <A NAME="6646"></A>MySQL, <A NAME="6647"></A>Sybase or <A NAME="6648"></A>PostgreSQL) and creating <I>Sympa</I>'s Database. This is required for using the web interface for <I>Sympa</I>. Please refers to <I>Sympa</I> and its database section (<A HREF="node164.html#sec-rdbms">8</A>, page&nbsp;<A HREF="node164.html#sec-rdbms"><IMG  ALIGN="BOTTOM" BORDER="1" ALT="[*]" SRC="crossref.png"></A>).
+
+<P>
+</LI>
+<LI>installation of
+	<A NAME="6652"></A>CPAN
+        <A NAME="tex2html12"
+  HREF="http://www.perl.com/CPAN">CPAN (Comprehensive PERL Archive Network)</A>
+modules
+
+<P>
+</LI>
+<LI>creation of a UNIX user
 
 <P>
 </LI>
 </UL>
 
 <P>
-See <A NAME="8799"><tex2html_anchor_invisible_mark></A><TT>user_data_source</TT> list parameter <A HREF=<tex2html_cr_mark>#user-data-source#1994><tex2html_cr_mark></A>, page~<A HREF=<tex2html_cr_mark>#user-data-source#1995><tex2html_cross_ref_visible_mark></A>.
+<BR><HR>
+<!--Table of Child-Links-->
+<A NAME="CHILD_LINKS"><STRONG>Subsections</STRONG></A>
 
-<P>
-The three tables can have more fields than the one used by <I>Sympa</I>, by defining these additional fields, they will be available
-from within <I>Sympa</I>'s authorization scenarios and templates (see <A HREF=<tex2html_cr_mark>#db-additional-subscriber-fields#1996><tex2html_cr_mark></A>, 
-page~<A HREF=<tex2html_cr_mark>#db-additional-subscriber-fields#1997><tex2html_cross_ref_visible_mark></A> and <A HREF=<tex2html_cr_mark>#db-additional-user-fields#1998><tex2html_cr_mark></A>, page~<A HREF=<tex2html_cr_mark>#db-additional-user-fields#1999><tex2html_cross_ref_visible_mark></A>).
-
-<P>
-See data inclusion file <A HREF=<tex2html_cr_mark>#data-inclusion-file#2000><tex2html_cr_mark></A>, page~<A HREF=<tex2html_cr_mark>#data-inclusion-file#2001><tex2html_cross_ref_visible_mark></A>. 
-
-<P>
-
-<H1><A NAME="SECTION001650000000000000000"><tex2html_anchor_invisible_mark></A>
- <A NAME="subscriber-count"><tex2html_anchor_mark></A> <A NAME="2004"><tex2html_anchor_invisible_mark></A><BR>
-15.5 Subscriber count
-</H1>
-
-<P>
-The number of subscribers of a list can be get from an external application by requesting function 'subscriber_count' on the Web 
-interface.
-
-<P>
- Example: <TT>http://my.server/wws/subscriber_count/mylist</TT>
+<UL>
+<LI><A NAME="tex2html1339"
+  HREF="node17.html">System requirements</A>
+<LI><A NAME="tex2html1340"
+  HREF="node18.html">Install Berkeley DB (NEWDB)</A>
+<LI><A NAME="tex2html1341"
+  HREF="node19.html">Install PERL and CPAN modules</A>
+<LI><A NAME="tex2html1342"
+  HREF="node20.html">Required CPAN modules</A>
+<LI><A NAME="tex2html1343"
+  HREF="node21.html">Create a UNIX user</A>
+</UL>
+<!--End of Table of Child-Links-->
+<HR>
+<!--Navigation Panel-->
+<A NAME="tex2html1337"
+  HREF="node17.html">
+<IMG WIDTH="37" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="next" SRC="next.png"></A> 
+<A NAME="tex2html1331"
+  HREF="node14.html">
+<IMG WIDTH="26" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="up" SRC="up.png"></A> 
+<A NAME="tex2html1325"
+  HREF="node15.html">
+<IMG WIDTH="63" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="previous" SRC="prev.png"></A> 
+<A NAME="tex2html1333"
+  HREF="node1.html">
+<IMG WIDTH="65" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="contents" SRC="contents.png"></A> 
+<A NAME="tex2html1335"
+  HREF="node548.html">
+<IMG WIDTH="43" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="index" SRC="index.png"></A> 
 <BR>
-<P>
-
+<B> Next:</B> <A NAME="tex2html1338"
+  HREF="node17.html">System requirements</A>
+<B> Up:</B> <A NAME="tex2html1332"
+  HREF="node14.html">Installing Sympa</A>
+<B> Previous:</B> <A NAME="tex2html1326"
+  HREF="node15.html">Obtaining Sympa, related links</A>
+ &nbsp; <B>  <A NAME="tex2html1334"
+  HREF="node1.html">Contents</A></B> 
+ &nbsp; <B>  <A NAME="tex2html1336"
+  HREF="node548.html">Index</A></B> 
+<!--End of Navigation Panel-->
+<ADDRESS>
+root
+2005-08-02
+</ADDRESS>
+</BODY>
+</HTML>

@@ -1,169 +1,121 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2 Final//EN">
 
-<H1><A NAME="SECTION001200000000000000000"><tex2html_anchor_invisible_mark></A>
-<A NAME="soap"><tex2html_anchor_mark></A><BR>
-11. Sympa SOAP server
-</H1>
+<!--Converted with jLaTeX2HTML 2002-2-1 (1.70) JA patch-2.0
+patched version by:  Kenshi Muto, Debian Project.
+* modified by:  Shige TAKENO
+LaTeX2HTML 2002-2-1 (1.70),
+original version by:  Nikos Drakos, CBLU, University of Leeds
+* revised and updated by:  Marcus Hennecke, Ross Moore, Herb Swan
+* with significant contributions from:
+  Jens Lippmann, Marek Rouchal, Martin Wilck and others -->
+<HTML>
+<HEAD>
+<TITLE>Configuration files</TITLE>
+<META NAME="description" CONTENT="Configuration files">
+<META NAME="keywords" CONTENT="sympa">
+<META NAME="resource-type" CONTENT="document">
+<META NAME="distribution" CONTENT="global">
 
-<P>
+<META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=iso-8859-1">
+<META NAME="Generator" CONTENT="jLaTeX2HTML v2002-2-1 JA patch-2.0">
+<META HTTP-EQUIV="Content-Style-Type" CONTENT="text/css">
 
-<H1><A NAME="SECTION001210000000000000000">
-11.1 Introduction</A>
-</H1>
+<LINK REL="STYLESHEET" HREF="sympa.css">
 
-<P>
-<A NAME="tex2html29"
-  HREF="http://www.w3.org/2002/ws/">SOAP</A>
-is one protocol (generally over HTTP) that 
-can be used to provide <B>web services</B>. Sympa SOAP server allows to access a Sympa service 
-from within another program, written in any programming language and on any computer. SOAP encapsulates 
-procedure calls, input parameters and resulting data in an XML data structure. The Sympa SOAP server's
-API is published in a <B>WSDL </B> document, retreived via Sympa's web interface.
+<LINK REL="next" HREF="node13.html">
+<LINK REL="previous" HREF="node11.html">
+<LINK REL="up" HREF="node9.html">
+<LINK REL="next" HREF="node13.html">
+</HEAD>
 
-<P>
-The SOAP server provides a limited set of high level functions including <TT>login</TT>, <TT>which</TT>,
-<TT>lists</TT>,<TT>subscribe</TT>,<TT>signoff</TT>. Other functions might be implemented in the future.
-
-<P>
-The SOAP server uses <A NAME="tex2html30"
-  HREF="http://www.soaplite.com/">SOAP::Lite</A>
-Perl library. The server 
-is running as a daemon (thanks to FastCGI), receiving the client SOAP requests via a web server (Apache 
-for example).
-
-<P>
-
-<H1><A NAME="SECTION001220000000000000000">
-11.2 Web server setup</A>
-</H1>
-
-<P>
-You <B>NEED TO</B> install FastCGI for the SOAP server to work properly because it will run as a daemon.
-
-<P>
-Here is a sample piece of your Apache <A NAME="8369"><tex2html_anchor_invisible_mark></A><TT>httpd.conf</TT> with a SOAP server configured :
-<BLOCKQUOTE>
-</BLOCKQUOTE><PRE><tex2html_verbatim_mark>verbatim308#</PRE><BLOCKQUOTE>
-</BLOCKQUOTE>
-
-<P>
-
-<H1><A NAME="SECTION001230000000000000000">
-11.3 Sympa setup</A>
-</H1>
-
-<P>
-The only parameters that you need to set in <A NAME="8372"><tex2html_anchor_invisible_mark></A><TT>sympa.conf</TT>/<A NAME="8375"><tex2html_anchor_invisible_mark></A><TT>robot.conf</TT> files is
-the <A NAME="8378"><tex2html_anchor_invisible_mark></A><TT>soap_url</TT> parameter that defines the URL of the SOAP service corresponding
-to the ScriptAlias you've previously setup in Apache config. 
-
-<P>
-This parameter is used to publish the SOAP service URL in the WSDL file (defining the API) but
-also for the SOAP server to deduce what Virtual Robot is concerned by the current SOAP request 
-(a single SOAP server will serve all Sympa Virtual robots).
-
-<P>
-
-<H1><A NAME="SECTION001240000000000000000">
-11.4 The WSDL service description</A>
-</H1>
-
-<P>
-Here is what the WSDL file looks like before it is parsed by WWSympa :
-
-<P>
-<BLOCKQUOTE>
-</BLOCKQUOTE><PRE><tex2html_verbatim_mark>verbatim309#</PRE><BLOCKQUOTE>
-</BLOCKQUOTE>
-
-<P>
-
-<H1><A NAME="SECTION001250000000000000000">
-11.5 Client-side programming</A>
-</H1>
-
-<P>
-Sympa is distributed with 2 sample clients written in Perl and in PHP. Sympa SOAP server has also
-been successfully tested with a UPortal Chanel as a Java client (using Axis). The sample PHP SOAP
-client has been installed on our demo server :  <A NAME="tex2html31"
-  HREF="http://demo.sympa.org/sampleClient.php">http://demo.sympa.org/sampleClient.php</A>.
-
-<P>
-Depending on your programming language and the SOAP library you're using, you will either directly 
-contact the SOAP service (as with Perl SOAP::Lite library) or first load the WSDL description of
-the service (as with PHP nusoap or Java Axis). Axis is able to create a stub from the WSDL document.
-
-<P>
-The WSDL document describing the service should be fetch through WWSympa's dedicated URL :
-<B>http://your.server/sympa/wsdl</B>.
-
-<P>
-Note : the <B>login()</B> function maintains a login session using HTTP cookies. If you are not able
-to maintain this session by analysing and sending appropriate cookies under SOAP, then you
-should use the <B>authenticateAndRun()</B> function that does not require cookies to authenticate.
-
-<P>
-
-<H2><A NAME="SECTION001251000000000000000">
-11.5.1 Writting a Java client with Axis</A>
-</H2>
-
-<P>
-First, download jakarta-axis (http://ws.apache.org/axis/)
+<BODY TEXT="#000000" BGCOLOR="#ffffff">
+<!--Navigation Panel-->
+<A NAME="tex2html1272"
+  HREF="node13.html">
+<IMG WIDTH="37" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="next" SRC="next.png"></A> 
+<A NAME="tex2html1266"
+  HREF="node9.html">
+<IMG WIDTH="26" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="up" SRC="up.png"></A> 
+<A NAME="tex2html1260"
+  HREF="node11.html">
+<IMG WIDTH="63" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="previous" SRC="prev.png"></A> 
+<A NAME="tex2html1268"
+  HREF="node1.html">
+<IMG WIDTH="65" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="contents" SRC="contents.png"></A> 
+<A NAME="tex2html1270"
+  HREF="node548.html">
+<IMG WIDTH="43" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="index" SRC="index.png"></A> 
 <BR>
-<P>
-You must add the libraries provided with jakarta axis (v ;SPMgt;1.1) to you CLASSPATH. These libraries are  :
+<B> Next:</B> <A NAME="tex2html1273"
+  HREF="node13.html">Spools</A>
+<B> Up:</B> <A NAME="tex2html1267"
+  HREF="node9.html">what does Sympa consist</A>
+<B> Previous:</B> <A NAME="tex2html1261"
+  HREF="node11.html">Binaries</A>
+ &nbsp; <B>  <A NAME="tex2html1269"
+  HREF="node1.html">Contents</A></B> 
+ &nbsp; <B>  <A NAME="tex2html1271"
+  HREF="node548.html">Index</A></B> 
+<BR>
+<BR>
+<!--End of Navigation Panel-->
+
+<H1><A NAME="SECTION00330000000000000000">
+Configuration files</A>
+</H1>
 
 <P>
 
 <UL>
-<LI>axis.jar
+<LI><A NAME="6557"></A><TT>/usr/local/sympa-ff//etc/sympa.conf</TT>
+<BR>
+The main configuration file.
+	See <A HREF="node42.html#exp-admin">7</A>, page&nbsp;<A HREF="node42.html#exp-admin"><IMG  ALIGN="BOTTOM" BORDER="1" ALT="[*]" SRC="crossref.png"></A>.
+
+<P>
 </LI>
-<LI>saaj.jar
+<LI><A NAME="6560"></A><TT>/usr/local/sympa-ff//etc/wwsympa.conf</TT>
+<BR>	<A NAME="6563"></A><I>WWSympa</I> configuration file.
+	See <A HREF="node4.html#wwsympa">1.2</A>, page&nbsp;<A HREF="node4.html#wwsympa"><IMG  ALIGN="BOTTOM" BORDER="1" ALT="[*]" SRC="crossref.png"></A>.
+
+<P>
 </LI>
-<LI>commons-discovery.jar
+<LI><A NAME="6566"></A><TT>edit_list.conf</TT>
+<BR>
+Defines which parameters/files are editable by
+	owners. See <A HREF="node299.html#list-edition">18.4.4</A>, page&nbsp;<A HREF="node299.html#list-edition"><IMG  ALIGN="BOTTOM" BORDER="1" ALT="[*]" SRC="crossref.png"></A>.
+
+<P>
 </LI>
-<LI>commons-logging.jar
+<LI><A NAME="6569"></A><TT>topics.conf</TT>
+<BR>
+Contains the declarations of your site's topics (classification in
+	<A NAME="6572"></A><I>WWSympa</I>), along with their titles. A sample is provided in the
+	<A NAME="6575"></A><TT>sample/</TT> directory of the sympa distribution.
+	See <A HREF="node257.html#topics">16.5</A>, page&nbsp;<A HREF="node257.html#topics"><IMG  ALIGN="BOTTOM" BORDER="1" ALT="[*]" SRC="crossref.png"></A>.
+
+<P>
 </LI>
-<LI>xercesImpl.jar
+<LI><A NAME="6578"></A><TT>auth.conf</TT>
+<BR>
+Defines authentication backend organisation ( <A NAME="6581"></A>LDAP-based authentication,  <A NAME="6582"></A>CAS-based authentication and sympa internal )
+
+<P>
 </LI>
-<LI>jaxrpc.jar
-</LI>
-<LI>xml-apis.jar
-</LI>
-<LI>jaas.jar
-</LI>
-<LI>wsdl4j.jar
-</LI>
-<LI>soap.jar
+<LI><A NAME="6583"></A><TT>robot.conf</TT>
+<BR>
+It is a subset of <A NAME="6586"></A><TT>sympa.conf</TT> defining a Virtual robot 
+	(one per Virtual robot).
+
+<P>
 </LI>
 </UL>
 
 <P>
-Next, you have to generate client java classes files from the sympa WSDL url. Use the following command :
-<BR>
-<P>
-java org.apache.axis.wsdl.WSDL2Java -av  WSDL_URL
-<BR>
-<P>
-For example :
-<PRE><tex2html_verbatim_mark>verbatim310#</PRE>
-
-<P>
-Exemple of screen output during generation of java files :
-<BR> <PRE><tex2html_verbatim_mark>verbatim311#</PRE>
-
-<P>
-If you need  more information or more generated classes (to have the server-side classes or junit testcase classes for example), you can get a list of switches :
-<BR>    <PRE><tex2html_verbatim_mark>verbatim312#</PRE>
-The reference page is :
-<BR>http://ws.apache.org/axis/java/reference.html
-
-<P>
-Take care of Test classes generated by axis, there are not useable as is. You have to stay connected between each test. To use junit testcases, before each soap operation tested, you must call the authenticated connexion to sympa instance.
-
-<P>
-Here is a simple Java code that invokes the generated stub to perform a casLogin() and a which() on the remote Sympa SOAP server :
-<PRE><tex2html_verbatim_mark>verbatim313#</PRE>
-
-<P>
-
+<BR><HR>
+<ADDRESS>
+root
+2005-08-02
+</ADDRESS>
+</BODY>
+</HTML>

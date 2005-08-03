@@ -70,7 +70,7 @@
   [% IF subscriber.included %]
 	[%|loc%]You are included [%END%] 
 	[% IF subscriber.sources %]
-		[%|loc%]by data source(s)[%END%] <span style="color: [% dark_color %];">"[% subscriber.sources %]"</span> 
+		[%|loc%]via data source(s)[%END%] <span style="color: [% dark_color %];">"[% subscriber.sources %]"</span> 
 		[%|loc%]whose description(s) is(are)[%END%] <span style="color: [% dark_color %];">"[% subscriber.descriptions %]"</span> 
 	[% END %]
         <br /><br />

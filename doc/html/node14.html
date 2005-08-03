@@ -1,272 +1,114 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2 Final//EN">
 
-<H1><A NAME="SECTION001400000000000000000"><tex2html_anchor_invisible_mark></A>
-<A NAME="scenarios"><tex2html_anchor_mark></A><A NAME="1793"><tex2html_anchor_invisible_mark></A><BR>
-13. Authorization scenarios
+<!--Converted with jLaTeX2HTML 2002-2-1 (1.70) JA patch-2.0
+patched version by:  Kenshi Muto, Debian Project.
+* modified by:  Shige TAKENO
+LaTeX2HTML 2002-2-1 (1.70),
+original version by:  Nikos Drakos, CBLU, University of Leeds
+* revised and updated by:  Marcus Hennecke, Ross Moore, Herb Swan
+* with significant contributions from:
+  Jens Lippmann, Marek Rouchal, Martin Wilck and others -->
+<HTML>
+<HEAD>
+<TITLE>Installing Sympa </TITLE>
+<META NAME="description" CONTENT="Installing Sympa ">
+<META NAME="keywords" CONTENT="sympa">
+<META NAME="resource-type" CONTENT="document">
+<META NAME="distribution" CONTENT="global">
+
+<META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=iso-8859-1">
+<META NAME="Generator" CONTENT="jLaTeX2HTML v2002-2-1 JA patch-2.0">
+<META HTTP-EQUIV="Content-Style-Type" CONTENT="text/css">
+
+<LINK REL="STYLESHEET" HREF="sympa.css">
+
+<LINK REL="next" HREF="node26.html">
+<LINK REL="previous" HREF="node9.html">
+<LINK REL="up" HREF="sympa.html">
+<LINK REL="next" HREF="node15.html">
+</HEAD>
+
+<BODY TEXT="#000000" BGCOLOR="#ffffff">
+<!--Navigation Panel-->
+<A NAME="tex2html1298"
+  HREF="node15.html">
+<IMG WIDTH="37" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="next" SRC="next.png"></A> 
+<A NAME="tex2html1292"
+  HREF="sympa.html">
+<IMG WIDTH="26" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="up" SRC="up.png"></A> 
+<A NAME="tex2html1286"
+  HREF="node13.html">
+<IMG WIDTH="63" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="previous" SRC="prev.png"></A> 
+<A NAME="tex2html1294"
+  HREF="node1.html">
+<IMG WIDTH="65" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="contents" SRC="contents.png"></A> 
+<A NAME="tex2html1296"
+  HREF="node548.html">
+<IMG WIDTH="43" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="index" SRC="index.png"></A> 
+<BR>
+<B> Next:</B> <A NAME="tex2html1299"
+  HREF="node15.html">Obtaining Sympa, related links</A>
+<B> Up:</B> <A NAME="tex2html1293"
+  HREF="sympa.html">Sympa Mailing Lists Management</A>
+<B> Previous:</B> <A NAME="tex2html1287"
+  HREF="node13.html">Spools</A>
+ &nbsp; <B>  <A NAME="tex2html1295"
+  HREF="node1.html">Contents</A></B> 
+ &nbsp; <B>  <A NAME="tex2html1297"
+  HREF="node548.html">Index</A></B> 
+<BR>
+<BR>
+<!--End of Navigation Panel-->
+
+<H1><A NAME="SECTION00400000000000000000">
+Installing <I>Sympa</I> </A>
 </H1>
 
 <P>
-List parameters controlling the behavior of commands are linked to different authorization scenarios.
-For example : the <A NAME="8513"><tex2html_anchor_invisible_mark></A><TT>send private</TT> parameter is related to the send.private scenario.
-There are four possible locations for a authorization scenario. When <I>Sympa</I> seeks to apply an authorization scenario, it
-looks first in the related list directory <A NAME="8529"><tex2html_anchor_invisible_mark></A><TT>/usr/local/sympa-ff//expl/<TT>;SPMlt;</TT>list<TT>;SPMgt;</TT>/scenari</TT>. If it
-does not find the file there, it scans the current robot configuration directory <A NAME="8538"><tex2html_anchor_invisible_mark></A><TT>/usr/local/sympa-ff//etc/my.domain.org/scenari</TT>, then the site's configuration directory <A NAME="8541"><tex2html_anchor_invisible_mark></A><TT>/usr/local/sympa-ff//etc/scenari</TT>,
-and finally <A NAME="8544"><tex2html_anchor_invisible_mark></A><TT>/usr/local/sympa-ff//bin/etc/scenari</TT>, which is the directory installed by the Makefile.
+<I>Sympa</I> is a program written in PERL. It also calls a short
+program written in C for tasks which it would be unreasonable to
+perform via an interpreted language.
 
 <P>
-An authorization scenario is a small configuration language to describe who
-can perform an operation and which authentication method is requested for it.
-An authorization scenario is an ordered set of rules. The goal is to provide a simple and
-flexible way to configure authorization and required authentication method for each operation.
-
-<P>
-Each authorization scenario rule contains :
+<BR><HR>
+<!--Table of Child-Links-->
+<A NAME="CHILD_LINKS"><STRONG>Subsections</STRONG></A>
 
 <UL>
-<LI>a condition : the condition is evaluated by <I>Sympa</I>. It can use
-  variables such as <tex2html_image_mark>#tex2html_wrap_inline12562#sender<tex2html_image_mark>#tex2html_wrap_inline12564# for the sender e-mail, <tex2html_image_mark>#tex2html_wrap_inline12566#list<tex2html_image_mark>#tex2html_wrap_inline12568# for the listname etc.
-</LI>
-<LI>an authentication method. The authentication method can be <A NAME="8548"><tex2html_anchor_invisible_mark></A><TT>smtp</TT>,
-<A NAME="8551"><tex2html_anchor_invisible_mark></A><TT>md5</TT> or <A NAME="8554"><tex2html_anchor_invisible_mark></A><TT>smime</TT>. The rule is applied by <I>Sympa</I> if both condition
-and authentication method match the runtime context. <A NAME="8558"><tex2html_anchor_invisible_mark></A><TT>smtp</TT> is used if
-<I>Sympa</I> use the SMTP <A NAME="8562"><tex2html_anchor_invisible_mark></A><TT>from:</TT> header , <A NAME="8565"><tex2html_anchor_invisible_mark></A><TT>md5</TT> is used if a unique
-md5 key as been returned by the requestor to validate her message, <A NAME="8568"><tex2html_anchor_invisible_mark></A><TT>smime</TT>
-is used for signed messages (see <A HREF=<tex2html_cr_mark>#smimeforsign#1808><tex2html_cr_mark></A>, page~<A HREF=<tex2html_cr_mark>#smimeforsign#1809><tex2html_cross_ref_visible_mark></A>).
-</LI>
-<LI>a returned atomic action that will be executed by <I>Sympa</I> if the rule matches
-
-<P>
-</LI>
-</UL>
-
-<P>
-Example
-
-<P>
-<BLOCKQUOTE>
-del.auth
-</BLOCKQUOTE><PRE><tex2html_verbatim_mark>verbatim326#</PRE><BLOCKQUOTE>
-</BLOCKQUOTE>
-
-<P>
-
-<H1><A NAME="SECTION001410000000000000000"><tex2html_anchor_invisible_mark></A>
-<A NAME="rules"><tex2html_anchor_mark></A><BR>
-13.1 rules specifications
-</H1>
-
-<P>
-An authorization scenario consists of rules, evaluated in order beginning with the first. 
-Rules are defined as follows :
-<BLOCKQUOTE>
-</BLOCKQUOTE><PRE><tex2html_verbatim_mark>verbatim327#</PRE><BLOCKQUOTE>
-</BLOCKQUOTE>
-
-<P>
-(Refer to  <A HREF=<tex2html_cr_mark>#tasks#1821><tex2html_cr_mark></A>, page~<A HREF=<tex2html_cr_mark>#tasks#1822><tex2html_cross_ref_visible_mark></A> for date format definition)
-
-<P>
-perl_regexp can contain the string [host] (interpreted at run time as the list or robot domain).
-The variable notation [msg_header-<TT>;SPMgt;</TT><TT>;SPMlt;</TT>smtp_key_word<TT>;SPMgt;</TT>] is interpreted as the 
-SMTP header value only when evaluating the authorization scenario for sending messages. 
-It can be used, for example, to require editor validation for multipart messages.
-[msg_part-<TT>;SPMgt;</TT>type] and [msg_part-<TT>;SPMgt;</TT>body] are the MIME parts content-types and bodies ; the body is available
-for MIME parts in text/xxx format only.
-
-<P>
-The difference between <A NAME="8572"><tex2html_anchor_invisible_mark></A>editor and <A NAME="8573"><tex2html_anchor_invisible_mark></A>editorkey is, that with <A NAME="8574"><tex2html_anchor_invisible_mark></A>editor the message is simply forwarded to the moderaotr. He then can forward it to the list, if he wishes. <A NAME="8575"><tex2html_anchor_invisible_mark></A>editorkey assigns a key to the message and sends it to the moderator together with the message. So the moderator can just send back the key to distribute the message. Please note, that moderation from the webinterface is only possible when using <A NAME="8576"><tex2html_anchor_invisible_mark></A>editorkey, because otherwise there is no copy of the message saved on the server. 
-
-<P>
-A bunch of authorization scenarios is provided with the <I>Sympa</I> distribution ; they provide
-a large set of configuration that allow to create lists for most usage. But you will
-probably create authorization scenarios for your own need. In this case, don't forget to restart <I>Sympa</I> 
-and wwsympa because authorization scenarios are not reloaded dynamicaly.
-
-<P>
-These standard authorization scenarios are located in the <A NAME="8579"><tex2html_anchor_invisible_mark></A><TT>/usr/local/sympa-ff//bin/etc/scenari/</TT>
-directory. Default scenarios are named <TT>;SPMlt;</TT>command<TT>;SPMgt;</TT>.default.
-
-<P>
-You may also define and name your own authorization scenarios. Store them in the
-<A NAME="8582"><tex2html_anchor_invisible_mark></A><TT>/usr/local/sympa-ff//etc/scenari</TT> directory. They will not be overwritten by Sympa release.
-Scenarios can also be defined for a particular virtual robot (using directory <A NAME="8597"><tex2html_anchor_invisible_mark></A><TT>/usr/local/sympa-ff//etc/<TT>;SPMlt;</TT>robot<TT>;SPMgt;</TT>/scenari</TT>) or for a list ( <A NAME="8624"><tex2html_anchor_invisible_mark></A><TT>/usr/local/sympa-ff//expl/<TT>;SPMlt;</TT>robot<TT>;SPMgt;</TT>/<TT>;SPMlt;</TT>list<TT>;SPMgt;</TT>/scenari</TT> ).
-
-<P>
-Example:
-
-<P>
-Copy the previous scenario to <A NAME="8639"><tex2html_anchor_invisible_mark></A><TT>scenari/subscribe.rennes1</TT> :
-
-<P>
-<BLOCKQUOTE>
-</BLOCKQUOTE><PRE><tex2html_verbatim_mark>verbatim328#</PRE><BLOCKQUOTE>
-</BLOCKQUOTE>
-
-<P>
-You may now refer to this authorization scenario in any list configuration file, for example :
-
-<P>
-<BLOCKQUOTE>
-</BLOCKQUOTE><PRE><tex2html_verbatim_mark>verbatim329#</PRE><BLOCKQUOTE>
-</BLOCKQUOTE>
-
-<P>
-
-<H1><A NAME="SECTION001420000000000000000"><tex2html_anchor_invisible_mark></A>
-<A NAME="named-filters"><tex2html_anchor_mark></A><BR>
-13.2 LDAP Named Filters
-</H1>
-
-<P>
-At the moment Named Filters are only used in authorization scenarios. They enable to select a category of people who will be authorized or not to realise some actions.
-
-<P>
-As a consequence, you can grant privileges in a list to people belonging to an <A NAME="8642"><tex2html_anchor_invisible_mark></A>LDAP directory thanks to an authorization scenario.
-
-<P>
-
-<H2><A NAME="SECTION001421000000000000000">
-13.2.1 Definition</A>
-</H2>
-
-<P>
-People are selected through an <A NAME="8643"><tex2html_anchor_invisible_mark></A>LDAP filter defined in a configuration file. This file must have the extension '.ldap'.It is stored in <A NAME="8644"><tex2html_anchor_invisible_mark></A><TT>/usr/local/sympa-ff//etc/search_filters/</TT>.
-
-<P>
-You must give several informations in order to create a Named Filter:
-
+<LI><A NAME="tex2html1300"
+  HREF="node15.html">Obtaining <I>Sympa</I>, related links</A>
+<LI><A NAME="tex2html1301"
+  HREF="node16.html">Prerequisites</A>
 <UL>
-<LI><#1859#>host<#1859#>
-<BR>	A list of host:port LDAP directories (replicates) entries.
-
-<P>
-</LI>
-<LI><#1860#>suffix<#1860#>
-<BR>	Defines the naming space covered by the search (optional, depending on the LDAP server).
-
-<P>
-</LI>
-<LI><#1861#>filter<#1861#>
-<BR>	Defines the LDAP search filter (RFC 2254 compliant). 
-	But you must absolutely take into account the first part of the filter which is:
-	('mail_attribute' = [sender]) as shown in the example. you will have to replce 'mail_attribute' by the name 
-	of the attribute for the email.
-	<I>Sympa</I> verifies if the user belongs to the category of people defined in the filter. 
-
-<P>
-</LI>
-<LI><#1862#>scope<#1862#>
-<BR>	By default the search is performed on the whole tree below the specified base object. This may be changed by specifying a scope :
-
-<P>
-
+<LI><A NAME="tex2html1302"
+  HREF="node17.html">System requirements</A>
+<LI><A NAME="tex2html1303"
+  HREF="node18.html">Install Berkeley DB (NEWDB)</A>
+<LI><A NAME="tex2html1304"
+  HREF="node19.html">Install PERL and CPAN modules</A>
+<LI><A NAME="tex2html1305"
+  HREF="node20.html">Required CPAN modules</A>
+<LI><A NAME="tex2html1306"
+  HREF="node21.html">Create a UNIX user</A>
+</UL>
+<BR>
+<LI><A NAME="tex2html1307"
+  HREF="node22.html">Compilation and installation </A>
 <UL>
-<LI><#1864#>base<#1864#> : Search only the base object.
-</LI>
-<LI><#1865#>one<#1865#>
-<BR>		Search the entries immediately below the base object. 
-</LI>
-<LI><#1866#>sub<#1866#>
-<BR>		Search the whole tree below the base object. This is the default. 
-	
-</LI>
+<LI><A NAME="tex2html1308"
+  HREF="node23.html">Choosing directory locations</A>
 </UL>
-
-<P>
-</LI>
-<LI><#1868#>bind_dn<#1868#>
-<BR>	  If anonymous bind is not allowed on the LDAP server, a DN and password can be used.
-
-<P>
-</LI>
-<LI><#1869#>bind_password<#1869#>
-<BR>	  This password is used, combined with the bind_dn above.
-
-<P>
-</LI>
+<BR>
+<LI><A NAME="tex2html1309"
+  HREF="node24.html">Robot aliases</A>
+<LI><A NAME="tex2html1310"
+  HREF="node25.html">Logs</A>
 </UL>
-
-<P>
-example.ldap : we want to select the professors of mathematics in the university of Rennes1 in France
-<BLOCKQUOTE>
-</BLOCKQUOTE><PRE><tex2html_verbatim_mark>verbatim330#</PRE><BLOCKQUOTE>
-</BLOCKQUOTE>
-
-<P>
-
-<H2><A NAME="SECTION001422000000000000000">
-13.2.2 Search Condition</A>
-</H2>
-
-<P>
-The search condition is used in authorization scenarios which are defined and described in (see~<A HREF=<tex2html_cr_mark>#scenarios#1876><tex2html_cr_mark></A>) 
-
-<P>
-The syntax of this rule is:
-<BLOCKQUOTE>
-</BLOCKQUOTE><PRE><tex2html_verbatim_mark>verbatim331#</PRE><BLOCKQUOTE>
-</BLOCKQUOTE>
-
-<P>
-The variables used by 'search' are :
-
-<UL>
-<LI><#1882#>the name of the LDAP Configuration file<#1882#>
-<BR></LI>
-<LI><#1883#>the [sender]<#1883#>
-<BR>	That is to say the sender email address. 
-</LI>
-</UL>
-
-<P>
-Note that <I>Sympa</I> processes maintain a cache of processed search conditions to limit access to the LDAP directory ; each entry has a lifetime of 1 hour in the cache.
-
-<P>
-The method of authentication does not change.
-
-<P>
-
-<H1><A NAME="SECTION001430000000000000000">
-13.3 scenario inclusion</A>
-</H1>
-
-<P>
-Scenarios can also contain includes :
-
-<P>
-<BLOCKQUOTE>
-</BLOCKQUOTE><PRE><tex2html_verbatim_mark>verbatim332#</PRE><BLOCKQUOTE>
-</BLOCKQUOTE>
-
-<P>
-In this case sympa applies recursively the scenario named <TT>include.commonreject</TT>
-before introducing the other rules. This possibility was introduced in
-order to facilitate the administration of common rules.
-
-<P>
-You can define a set of common scenario rules, used by all lists.
-include.<TT>;SPMlt;</TT>action<TT>;SPMgt;</TT>.header is automatically added to evaluated scenarios.
-
-<P>
-
-<H1><A NAME="SECTION001440000000000000000">
-13.4 Hidding scenario files</A>
-</H1>
-
-<P>
-Because <I>Sympa</I> is distributed with many default scenario files, you may want to hidde some of them 
-to list owners (to make list admin menus shorter and readable). To hidde a scenario file you should 
-create an empty file with the <TT>:ignore</TT> suffix. Depending on where this file has been created
-will make it ignored at either a global, robot or list level.
-
-<P>
-<I>Example :</I> 
-<BLOCKQUOTE>
-/usr/local/sympa-ff//etc/my.domain.org/scenari/send.intranetorprivate:ignore
-
-</BLOCKQUOTE>
-
-<P>
-The <TT>intranetorprivate</TT> <TT>send</TT> scenario will be hidden (on the web admin interface),
-at the my.domain.orgrobot level only.
-
-<P>
+<!--End of Table of Child-Links-->
+<BR><HR>
+<ADDRESS>
+root
+2005-08-02
+</ADDRESS>
+</BODY>
+</HTML>

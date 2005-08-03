@@ -1,78 +1,148 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2 Final//EN">
 
-<H1><A NAME="SECTION00600000000000000000"><tex2html_anchor_invisible_mark></A>
-    <A NAME="upgrading-sympa"><tex2html_anchor_mark></A><BR>
-5. Upgrading Sympa
+<!--Converted with jLaTeX2HTML 2002-2-1 (1.70) JA patch-2.0
+patched version by:  Kenshi Muto, Debian Project.
+* modified by:  Shige TAKENO
+LaTeX2HTML 2002-2-1 (1.70),
+original version by:  Nikos Drakos, CBLU, University of Leeds
+* revised and updated by:  Marcus Hennecke, Ross Moore, Herb Swan
+* with significant contributions from:
+  Jens Lippmann, Marek Rouchal, Martin Wilck and others -->
+<HTML>
+<HEAD>
+<TITLE>History</TITLE>
+<META NAME="description" CONTENT="History">
+<META NAME="keywords" CONTENT="sympa">
+<META NAME="resource-type" CONTENT="document">
+<META NAME="distribution" CONTENT="global">
+
+<META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=iso-8859-1">
+<META NAME="Generator" CONTENT="jLaTeX2HTML v2002-2-1 JA patch-2.0">
+<META HTTP-EQUIV="Content-Style-Type" CONTENT="text/css">
+
+<LINK REL="STYLESHEET" HREF="sympa.css">
+
+<LINK REL="next" HREF="node7.html">
+<LINK REL="previous" HREF="node5.html">
+<LINK REL="up" HREF="node2.html">
+<LINK REL="next" HREF="node7.html">
+</HEAD>
+
+<BODY TEXT="#000000" BGCOLOR="#ffffff">
+<!--Navigation Panel-->
+<A NAME="tex2html1186"
+  HREF="node7.html">
+<IMG WIDTH="37" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="next" SRC="next.png"></A> 
+<A NAME="tex2html1180"
+  HREF="node2.html">
+<IMG WIDTH="26" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="up" SRC="up.png"></A> 
+<A NAME="tex2html1174"
+  HREF="node5.html">
+<IMG WIDTH="63" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="previous" SRC="prev.png"></A> 
+<A NAME="tex2html1182"
+  HREF="node1.html">
+<IMG WIDTH="65" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="contents" SRC="contents.png"></A> 
+<A NAME="tex2html1184"
+  HREF="node548.html">
+<IMG WIDTH="43" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="index" SRC="index.png"></A> 
+<BR>
+<B> Next:</B> <A NAME="tex2html1187"
+  HREF="node7.html">Authors and credits</A>
+<B> Up:</B> <A NAME="tex2html1181"
+  HREF="node2.html">Presentation</A>
+<B> Previous:</B> <A NAME="tex2html1175"
+  HREF="node5.html">Project directions</A>
+ &nbsp; <B>  <A NAME="tex2html1183"
+  HREF="node1.html">Contents</A></B> 
+ &nbsp; <B>  <A NAME="tex2html1185"
+  HREF="node548.html">Index</A></B> 
+<BR>
+<BR>
+<!--End of Navigation Panel-->
+
+<H1><A NAME="SECTION00240000000000000000">
+History</A>
 </H1>
 
 <P>
-Sympa upgrade is a relatively riskless operations, mainly because the install process preserves your
-customizations (templates, configuration, authorization scenarios,...) and also because Sympa automates
-a few things (DB update, CPAN modules installation).
+<I>Sympa</I> development started from scratch in 1995. The goal was to
+ensure continuity with the <A NAME="6340"></A>TULP list manager, produced
+partly by the initial author of <I>Sympa</I>: Christophe Wolfhugel.
+
+<P>
+New features were required, which the TULP code was just not up to
+handling. The initial version of <I>Sympa</I> brought authentication,
+the flexible management of commands, high performances in internal
+data access, and object oriented code for easy code maintenance.
+
+<P>
+It took nearly two years to produce the first market releases.
+
+<P>
+Other date :
 
 <P>
 
-<H1><A NAME="SECTION00610000000000000000"><tex2html_anchor_invisible_mark></A>
-    <A NAME="635"><tex2html_anchor_invisible_mark></A><BR>
-5.1 Uncompatible changes
-</H1>
+<UL>
+<LI>Mar 1999 Internal use of a database (Mysql), definition of list subscriber with external datasource (RDBMS or <A NAME="6343"></A>LDAP).
+</LI>
+<LI>Oct 1999 Stable version of WWsympa, introduction of authorization scenarios.
+</LI>
+<LI>Feb 2000 Web bounces management
+</LI>
+<LI>Apr 2000 Archives search engine and message removal
+</LI>
+<LI>May 2000 List creation feature from the web
+</LI>
+<LI>Jan 2001 Support for S/MIME (signing and encryption), list setup through the web interface, Shared document repository for each list. Full rewrite of HTML look and feel
+</LI>
+<LI>Jun 2001 Auto-install of aliases at list creation time, antivirus scanner plugging
+</LI>
+<LI>Jan 2002 Virtual robot, <A NAME="6344"></A>LDAP authentication
+</LI>
+<LI>Aug 2003 Automatic bounces management
+</LI>
+<LI>Sep 2003 CAS-base and Shibboleth-based authentication
+</LI>
+<LI>Dec 2003 Sympa SOAP server
+</LI>
+<LI>Aug 2004 Changed for TT2 template format and PO catalogue format
+</LI>
+</UL> 
 
 <P>
-New features, changes and bug fixes are summarized in the <A NAME="7154"><tex2html_anchor_invisible_mark></A><TT>NEWS</TT> file, part of the tar.gz (the 
-<A NAME="7157"><tex2html_anchor_invisible_mark></A><TT>Changelog</TT> file is a complete log file of CVS changes). As mentionned at the beginning of this
-file, uncompatible changes are preceded by '*****'. While running the <A NAME="7160"><tex2html_anchor_invisible_mark></A><TT>make install</TT> Sympa will
-detect the previously installed version and will prompt you with uncompatible changes between both versions
-of the software. You can interrupt the install process at that stage if you are too frightened.
-Output of the <A NAME="7163"><tex2html_anchor_invisible_mark></A><TT>make install</TT> :
-<BLOCKQUOTE>
-</BLOCKQUOTE><PRE><tex2html_verbatim_mark>verbatim277#</PRE><BLOCKQUOTE>
-</BLOCKQUOTE>
-
-<P>
-
-<H1><A NAME="SECTION00620000000000000000"><tex2html_anchor_invisible_mark></A>
-    <A NAME="645"><tex2html_anchor_invisible_mark></A><BR>
-5.2 CPAN modules update
-</H1>
-
-<P>
-Required and optional perl modules (CPAN) installation is automatically handled at the <A NAME="7166"><tex2html_anchor_invisible_mark></A><TT>make</TT> time. You are asked before each module is installed. For optional modules, associated features are listed.
-
-<P>
-Output of the <A NAME="7169"><tex2html_anchor_invisible_mark></A><TT>make</TT> command :
-<BLOCKQUOTE>
-</BLOCKQUOTE><PRE><tex2html_verbatim_mark>verbatim278#</PRE><BLOCKQUOTE>
-</BLOCKQUOTE>
-
-<P>
-
-<H1><A NAME="SECTION00630000000000000000"><tex2html_anchor_invisible_mark></A>
-    <A NAME="653"><tex2html_anchor_invisible_mark></A><BR>
-5.3 Database structure update
-</H1>
-
-<P>
-Whatever RDBMS you are using (mysql, Pg, Sybase or Oracle) Sympa will check every database tables and fields. If one is missing <A NAME="7172"><tex2html_anchor_invisible_mark></A><TT>sympa.pl</TT>
-will not start. If you are using <A NAME="7175"><tex2html_anchor_invisible_mark></A>mysql Sympa will also check field types and will try to change them (or create them) automatically ; 
-assuming that the DB user configured has sufficient privileges. If You are not using Mysql or if the DB user configured in <A NAME="7176"><tex2html_anchor_invisible_mark></A><TT>sympa.conf</TT> 
-does have sufficient privileges, then you should change the database structure yourself, as mentionned in the <A NAME="7179"><tex2html_anchor_invisible_mark></A><TT>NEWS</TT> file.
-
-<P>
-Output of Sympa logs :
-<BLOCKQUOTE>
-</BLOCKQUOTE><PRE><tex2html_verbatim_mark>verbatim279#</PRE><BLOCKQUOTE>
-</BLOCKQUOTE>
-
-<P>
-
-<H1><A NAME="SECTION00640000000000000000"><tex2html_anchor_invisible_mark></A>
-    <A NAME="663"><tex2html_anchor_invisible_mark></A><BR>
-5.4 Preserving your customizations
-</H1>
-
-<P>
-Sympa comes with default configuration files (templates, scenarios,...) that will be installed in the <A NAME="7182"><tex2html_anchor_invisible_mark></A><TT>/usr/local/sympa-ff//bin</TT> directory. 
-If you need to customize some of them, you should copy the file first in a safe place, ie in the <A NAME="7185"><tex2html_anchor_invisible_mark></A><TT>/usr/local/sympa-ff//etc</TT> directory.
-If you do so, the Sympa upgrade process will preserve your site customizations.
-
-<P>
-
+<HR>
+<!--Navigation Panel-->
+<A NAME="tex2html1186"
+  HREF="node7.html">
+<IMG WIDTH="37" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="next" SRC="next.png"></A> 
+<A NAME="tex2html1180"
+  HREF="node2.html">
+<IMG WIDTH="26" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="up" SRC="up.png"></A> 
+<A NAME="tex2html1174"
+  HREF="node5.html">
+<IMG WIDTH="63" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="previous" SRC="prev.png"></A> 
+<A NAME="tex2html1182"
+  HREF="node1.html">
+<IMG WIDTH="65" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="contents" SRC="contents.png"></A> 
+<A NAME="tex2html1184"
+  HREF="node548.html">
+<IMG WIDTH="43" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="index" SRC="index.png"></A> 
+<BR>
+<B> Next:</B> <A NAME="tex2html1187"
+  HREF="node7.html">Authors and credits</A>
+<B> Up:</B> <A NAME="tex2html1181"
+  HREF="node2.html">Presentation</A>
+<B> Previous:</B> <A NAME="tex2html1175"
+  HREF="node5.html">Project directions</A>
+ &nbsp; <B>  <A NAME="tex2html1183"
+  HREF="node1.html">Contents</A></B> 
+ &nbsp; <B>  <A NAME="tex2html1185"
+  HREF="node548.html">Index</A></B> 
+<!--End of Navigation Panel-->
+<ADDRESS>
+root
+2005-08-02
+</ADDRESS>
+</BODY>
+</HTML>

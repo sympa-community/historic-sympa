@@ -1,342 +1,84 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2 Final//EN">
 
-<H1><A NAME="SECTION00300000000000000000">
-2. what does <I>Sympa</I> consist of ?</A>
+<!--Converted with jLaTeX2HTML 2002-2-1 (1.70) JA patch-2.0
+patched version by:  Kenshi Muto, Debian Project.
+* modified by:  Shige TAKENO
+LaTeX2HTML 2002-2-1 (1.70),
+original version by:  Nikos Drakos, CBLU, University of Leeds
+* revised and updated by:  Marcus Hennecke, Ross Moore, Herb Swan
+* with significant contributions from:
+  Jens Lippmann, Marek Rouchal, Martin Wilck and others -->
+<HTML>
+<HEAD>
+<TITLE>License</TITLE>
+<META NAME="description" CONTENT="License">
+<META NAME="keywords" CONTENT="sympa">
+<META NAME="resource-type" CONTENT="document">
+<META NAME="distribution" CONTENT="global">
+
+<META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=iso-8859-1">
+<META NAME="Generator" CONTENT="jLaTeX2HTML v2002-2-1 JA patch-2.0">
+<META HTTP-EQUIV="Content-Style-Type" CONTENT="text/css">
+
+<LINK REL="STYLESHEET" HREF="sympa.css">
+
+<LINK REL="next" HREF="node4.html">
+<LINK REL="previous" HREF="node2.html">
+<LINK REL="up" HREF="node2.html">
+<LINK REL="next" HREF="node4.html">
+</HEAD>
+
+<BODY TEXT="#000000" BGCOLOR="#ffffff">
+<!--Navigation Panel-->
+<A NAME="tex2html1144"
+  HREF="node4.html">
+<IMG WIDTH="37" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="next" SRC="next.png"></A> 
+<A NAME="tex2html1138"
+  HREF="node2.html">
+<IMG WIDTH="26" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="up" SRC="up.png"></A> 
+<A NAME="tex2html1132"
+  HREF="node2.html">
+<IMG WIDTH="63" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="previous" SRC="prev.png"></A> 
+<A NAME="tex2html1140"
+  HREF="node1.html">
+<IMG WIDTH="65" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="contents" SRC="contents.png"></A> 
+<A NAME="tex2html1142"
+  HREF="node548.html">
+<IMG WIDTH="43" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="index" SRC="index.png"></A> 
+<BR>
+<B> Next:</B> <A NAME="tex2html1145"
+  HREF="node4.html">Features</A>
+<B> Up:</B> <A NAME="tex2html1139"
+  HREF="node2.html">Presentation</A>
+<B> Previous:</B> <A NAME="tex2html1133"
+  HREF="node2.html">Presentation</A>
+ &nbsp; <B>  <A NAME="tex2html1141"
+  HREF="node1.html">Contents</A></B> 
+ &nbsp; <B>  <A NAME="tex2html1143"
+  HREF="node548.html">Index</A></B> 
+<BR>
+<BR>
+<!--End of Navigation Panel-->
+
+<H1><A NAME="SECTION00210000000000000000">
+License</A>
 </H1>
 
 <P>
-
-<H1><A NAME="SECTION00310000000000000000"><tex2html_anchor_invisible_mark></A>
-<A NAME="organization"><tex2html_anchor_mark></A><BR>
-2.1 Organization
-</H1>
+<I>Sympa</I> is free software; you may distribute it under the terms
+of the
+<A NAME="tex2html3"
+  HREF="http://www.gnu.org/copyleft/gpl.html">GNU General Public License Version 2</A>
+<P>
+You may make and give away verbatim copies of the source form of
+this package without restriction, provided that you duplicate all
+of the original copyright notices and associated disclaimers.
 
 <P>
-Here is a snapshot of what <I>Sympa</I> looks like once it has settled down
-on your system. This also illustrates the <I>Sympa</I> philosophy, I guess.
-Almost all configuration files can be defined for a particular list, for
-a virtual robot or for the whole site.  
-
-<P>
-
-<UL>
-<LI><A NAME="6223"><tex2html_anchor_invisible_mark></A><TT>/usr/local/sympa-ff/</TT>
-<BR>	The root directory of <I>Sympa</I>. You will find almost everything
-	related to <I>Sympa</I> under this directory, except logs and main
-	configuration files.
-
-<P>
-</LI>
-<LI><A NAME="6228"><tex2html_anchor_invisible_mark></A><TT>/usr/local/sympa-ff//bin</TT>
-<BR>	This directory contains the binaries, including the CGI. It
-	also contains the default authorization scenarios, templates and configuration
-	files as in the distribution.  <A NAME="6231"><tex2html_anchor_invisible_mark></A><TT>/usr/local/sympa-ff//bin</TT> may be completely
-        overwritten by the <A NAME="6234"><tex2html_anchor_invisible_mark></A><TT>make install</TT> so you must not customize
-        templates and authorization scenarios under  <A NAME="6237"><tex2html_anchor_invisible_mark></A><TT>/usr/local/sympa-ff//bin</TT>.
-
-<P>
-</LI>
-<LI><A NAME="6240"><tex2html_anchor_invisible_mark></A><TT>/usr/local/sympa-ff//bin/etc</TT>
-<BR>	Here <I>Sympa</I> stores the default versions of what it will otherwise find
-	in <A NAME="6244"><tex2html_anchor_invisible_mark></A><TT>/usr/local/sympa-ff//etc</TT> (task models, authorization scenarios, templates and configuration
-	files, recognized S/Mime certificates, families).
-
-<P>
-</LI>
-<LI><A NAME="6247"><tex2html_anchor_invisible_mark></A><TT>/usr/local/sympa-ff//etc</TT>
-<BR>	This is your site's configuration directory. Consult
-	<A NAME="6250"><tex2html_anchor_invisible_mark></A><TT>/usr/local/sympa-ff//bin/etc</TT> when drawing up your own.
-
-<P>
-</LI>
-<LI><A NAME="6253"><tex2html_anchor_invisible_mark></A><TT>/usr/local/sympa-ff//etc/create_list_templates/</TT>
-<BR>	List templates (suggested at list creation time).
-
-<P>
-</LI>
-<LI><A NAME="6256"><tex2html_anchor_invisible_mark></A><TT>/usr/local/sympa-ff//etc/scenari/</TT>
-<BR>	This directory will contain your authorization scenarios.
-	If you don't know what the hell an authorization scenario is, refer to <A HREF=<tex2html_cr_mark>#scenarios#262><tex2html_cr_mark></A>,page~<A HREF=<tex2html_cr_mark>#scenarios#263><tex2html_cross_ref_visible_mark></A>. Those authorization scenarios are default scenarios but you may look at
-        <A NAME="6259"><tex2html_anchor_invisible_mark></A><TT>/usr/local/sympa-ff//etc/my.domain.org/scenari/</TT> for default scenarios of my.domain.org
-        virtual robot and <A NAME="6262"><tex2html_anchor_invisible_mark></A><TT>/usr/local/sympa-ff//expl/mylist/scenari</TT> for scenarios
-        specific to a particular list 
-
-<P>
-</LI>
-<LI><A NAME="6265"><tex2html_anchor_invisible_mark></A><TT>/usr/local/sympa-ff//etc/data_sources/</TT>
-<BR>	This directory will contain your .incl files (see <A HREF=<tex2html_cr_mark>#data-inclusion-file#267><tex2html_cr_mark></A>, page~<A HREF=<tex2html_cr_mark>#data-inclusion-file#268><tex2html_cross_ref_visible_mark></A>). 
-	For the moment it only deals with files requiered by paragraphs <A NAME="6268"><tex2html_anchor_invisible_mark></A><TT>owner_include</TT> and <A NAME="6271"><tex2html_anchor_invisible_mark></A><TT>editor_include</TT> in the config file.
-
-<P>
-</LI>
-<LI><A NAME="6274"><tex2html_anchor_invisible_mark></A><TT>/usr/local/sympa-ff//etc/list_task_models/</TT>
-<BR>	This directory will store your own list task models (see <A HREF=<tex2html_cr_mark>#tasks#272><tex2html_cr_mark></A>, page~<A HREF=<tex2html_cr_mark>#tasks#273><tex2html_cross_ref_visible_mark></A>).	
-
-<P>
-</LI>
-<LI><A NAME="6277"><tex2html_anchor_invisible_mark></A><TT>/usr/local/sympa-ff//etc/global_task_models/</TT>
-<BR>	Contains global task models of yours (see <A HREF=<tex2html_cr_mark>#tasks#275><tex2html_cr_mark></A>, page~<A HREF=<tex2html_cr_mark>#tasks#276><tex2html_cross_ref_visible_mark></A>).		
-
-<P>
-</LI>
-<LI><A NAME="6280"><tex2html_anchor_invisible_mark></A><TT>/usr/local/sympa-ff//etc/web_tt2/</TT> (used to be <A NAME="6283"><tex2html_anchor_invisible_mark></A><TT>/usr/local/sympa-ff//etc/wws_templates/</TT>)
-<BR>	The web interface (<A NAME="6286"><tex2html_anchor_invisible_mark></A><I>WWSympa</I>) is composed of template HTML
-	files parsed by the CGI program. Templates can also 
-        be defined for a particular list in <A NAME="6289"><tex2html_anchor_invisible_mark></A><TT>/usr/local/sympa-ff//expl/mylist/web_tt2/</TT>
-        or in <A NAME="6292"><tex2html_anchor_invisible_mark></A><TT>/usr/local/sympa-ff//etc/my.domain.org/web_tt2/</TT>
-
-<P>
-</LI>
-<LI><A NAME="6295"><tex2html_anchor_invisible_mark></A><TT>/usr/local/sympa-ff//etc/mail_tt2/</TT> (used to be <A NAME="6298"><tex2html_anchor_invisible_mark></A><TT>/usr/local/sympa-ff//etc/templates/</TT>)
-<BR>	Some of the mail robot's replies are defined by templates
-	(<A NAME="6301"><tex2html_anchor_invisible_mark></A><TT>welcome.tt2</TT> for SUBSCRIBE). You can overload
-	these template files in the individual list directories or
-        for each virtual robot, but these are the defaults.
-
-<P>
-</LI>
-<LI><A NAME="6304"><tex2html_anchor_invisible_mark></A><TT>/usr/local/sympa-ff//etc/families/</TT>
-<BR>	Contains family directories of yours (see <A HREF=<tex2html_cr_mark>#ml-creation#285><tex2html_cr_mark></A>, page~<A HREF=<tex2html_cr_mark>#ml-creation#286><tex2html_cross_ref_visible_mark></A>).
-	Families directories can also be created in <A NAME="6307"><tex2html_anchor_invisible_mark></A><TT>/usr/local/sympa-ff//etc/my.domain.org/families/</TT>
-
-<P>
-</LI>
-<LI><A NAME="6310"><tex2html_anchor_invisible_mark></A><TT>/usr/local/sympa-ff//etc/my.domain.org</TT>
-<BR>        The directory to define the virtual robot my.domain.orgdedicated to
-        managment of all lists of this domain (list description of my.domain.orgare stored
-        in <A NAME="6313"><tex2html_anchor_invisible_mark></A><TT>/usr/local/sympa-ff//expl/my.domain.org</TT>).
-        Those directories for virtual robots have the same structure as  <A NAME="6316"><tex2html_anchor_invisible_mark></A><TT>/usr/local/sympa-ff//etc</TT> which is
-        the configuration dir of the default robot. 
-
-<P>
-</LI>
-<LI><A NAME="6319"><tex2html_anchor_invisible_mark></A><TT>/usr/local/sympa-ff//expl</TT>
-<BR>	<I>Sympa</I>'s working directory.
-
-<P>
-</LI>
-<LI><A NAME="6323"><tex2html_anchor_invisible_mark></A><TT>/usr/local/sympa-ff//expl/mylist</TT>
-<BR>	The list directory (refer to <A HREF=<tex2html_cr_mark>#list-directory#293><tex2html_cr_mark></A>, 
-	page~<A HREF=<tex2html_cr_mark>#list-directory#294><tex2html_cross_ref_visible_mark></A>). Lists stored in this directory
-        belong to the default robot as defined in sympa.conf file, but a list
-        can be stored in <A NAME="6326"><tex2html_anchor_invisible_mark></A><TT>/usr/local/sympa-ff//expl/my.domain.org/mylist</TT> directory and it
-        is managed by my.domain.orgvirtual robot.
-
-<P>
-</LI>
-<LI><A NAME="6329"><tex2html_anchor_invisible_mark></A><TT>/usr/local/sympa-ff//expl/X509-user-certs</TT>
-<BR>	The directory where Sympa stores all user's certificates
-
-<P>
-</LI>
-<LI><A NAME="6332"><tex2html_anchor_invisible_mark></A><TT>/usr/local/sympa-ff//locale</TT>
-<BR>	Internationalization directory. It contains message catalogues in the GNU .po format. 
-
-<P>
-</LI>
-<LI><A NAME="6335"><tex2html_anchor_invisible_mark></A><TT>/usr/local/sympa-ff//spool</TT>
-<BR>	<I>Sympa</I> uses 9 different spools (see <A HREF=<tex2html_cr_mark>#spools#299><tex2html_cr_mark></A>, page~<A HREF=<tex2html_cr_mark>#spools#300><tex2html_cross_ref_visible_mark></A>).
-
-<P>
-</LI>
-<LI><A NAME="6339"><tex2html_anchor_invisible_mark></A><TT>/usr/local/sympa-ff//src/</TT>
-<BR>	<I>Sympa</I> sources.
-
-<P>
-</LI>
-</UL>
-
-<P>
-
-<H1><A NAME="SECTION00320000000000000000"><tex2html_anchor_invisible_mark></A>
-<A NAME="binaries"><tex2html_anchor_mark></A><BR>
-2.2 Binaries
-</H1>
-
-<P>
-
-<UL>
-<LI><A NAME="6343"><tex2html_anchor_invisible_mark></A><TT>sympa.pl</TT>
-<BR>	The main daemon ; it processes commands and delivers
-	messages. Continuously scans the <A NAME="6346"><tex2html_anchor_invisible_mark></A><TT>msg/</TT> spool.
-
-<P>
-</LI>
-<LI><A NAME="6349"><tex2html_anchor_invisible_mark></A><TT>sympa_wizard.pl</TT>
-<BR>	A wizard to edit <A NAME="6352"><tex2html_anchor_invisible_mark></A><TT>sympa.conf</TT> and <A NAME="6355"><tex2html_anchor_invisible_mark></A><TT>wwsympa.conf</TT>.
-	Maybe it is a good idea to run it at the beginning, but thoses
-	file can also be edited with your favorite text editor. 
-
-<P>
-</LI>
-<LI><A NAME="6358"><tex2html_anchor_invisible_mark></A><TT>wwsympa.fcgi</TT>
-<BR>	The CGI program offering a complete web interface
-	to mailing lists. It can work in both classical CGI and
-	FastCGI modes, although we recommend FastCGI mode, being
-	up to 10 times faster.
-
-<P>
-</LI>
-<LI><A NAME="6361"><tex2html_anchor_invisible_mark></A><TT>bounced.pl</TT>
-<BR>	This daemon processes bounces (non-delivered messages),
-	looking for bad addresses. List owners will later
-	access bounce information via <A NAME="6364"><tex2html_anchor_invisible_mark></A><I>WWSympa</I>. Continuously scans
-	the <A NAME="6367"><tex2html_anchor_invisible_mark></A><TT>bounce/</TT> spool.
-
-<P>
-</LI>
-<LI><A NAME="6370"><tex2html_anchor_invisible_mark></A><TT>archived.pl</TT>
-<BR>	This daemon feeds the web archives, converting messages
-	to HTML format and linking them. It uses the amazing 
-	<A NAME="6373"><tex2html_anchor_invisible_mark></A><TT>MhOnArc</TT>. Continuously scans the <A NAME="6376"><tex2html_anchor_invisible_mark></A><TT>outgoing/</TT> 
-	spool.
-
-<P>
-</LI>
-<LI><A NAME="6379"><tex2html_anchor_invisible_mark></A><TT>task_manager.pl</TT>
-<BR>	The daemon which manages the tasks : creation, checking, execution. 
-	It regularly scans the <A NAME="6382"><tex2html_anchor_invisible_mark></A><TT>task/</TT> spool.
-
-<P>
-</LI>
-<LI><A NAME="6385"><tex2html_anchor_invisible_mark></A><TT>sympa_soap_server.fcgi</TT>
-<BR>	The server will process SOAP (web services) request. This server requires FastCGI ;
-	it should be referenced from within your HTTPS config.
-
-<P>
-</LI>
-<LI><A NAME="6388"><tex2html_anchor_invisible_mark></A><TT>queue</TT>
-<BR>	This small program gets the incoming messages from the aliases
-	and stores them in <A NAME="6391"><tex2html_anchor_invisible_mark></A><TT>msg/</TT> spool.
-
-<P>
-</LI>
-<LI><A NAME="6394"><tex2html_anchor_invisible_mark></A><TT>bouncequeue</TT>
-<BR>	Same as <A NAME="6397"><tex2html_anchor_invisible_mark></A><TT>queue</TT> for bounces. Stores bounces in 
-	<A NAME="6400"><tex2html_anchor_invisible_mark></A><TT>bounce/</TT> spool.
-
-<P>
-</LI>
-</UL>
-
-<P>
-
-<H1><A NAME="SECTION00330000000000000000">
-2.3 Configuration files</A>
-</H1>
-
-<P>
-
-<UL>
-<LI><A NAME="6403"><tex2html_anchor_invisible_mark></A><TT>/usr/local/sympa-ff//etc/sympa.conf</TT>
-<BR>	The main configuration file.
-	See <A HREF=<tex2html_cr_mark>#exp-admin#329><tex2html_cr_mark></A>, page~<A HREF=<tex2html_cr_mark>#exp-admin#330><tex2html_cross_ref_visible_mark></A>.
-
-<P>
-</LI>
-<LI><A NAME="6406"><tex2html_anchor_invisible_mark></A><TT>/usr/local/sympa-ff//etc/wwsympa.conf</TT>
-<BR>	<A NAME="6409"><tex2html_anchor_invisible_mark></A><I>WWSympa</I> configuration file.
-	See <A HREF=<tex2html_cr_mark>#wwsympa#332><tex2html_cr_mark></A>, page~<A HREF=<tex2html_cr_mark>#wwsympa#333><tex2html_cross_ref_visible_mark></A>.
-
-<P>
-</LI>
-<LI><A NAME="6412"><tex2html_anchor_invisible_mark></A><TT>edit_list.conf</TT>
-<BR>	Defines which parameters/files are editable by
-	owners. See <A HREF=<tex2html_cr_mark>#list-edition#335><tex2html_cr_mark></A>, page~<A HREF=<tex2html_cr_mark>#list-edition#336><tex2html_cross_ref_visible_mark></A>.
-
-<P>
-</LI>
-<LI><A NAME="6415"><tex2html_anchor_invisible_mark></A><TT>topics.conf</TT>
-<BR>	Contains the declarations of your site's topics (classification in
-	<A NAME="6418"><tex2html_anchor_invisible_mark></A><I>WWSympa</I>), along with their titles. A sample is provided in the
-	<A NAME="6421"><tex2html_anchor_invisible_mark></A><TT>sample/</TT> directory of the sympa distribution.
-	See <A HREF=<tex2html_cr_mark>#topics#339><tex2html_cr_mark></A>, page~<A HREF=<tex2html_cr_mark>#topics#340><tex2html_cross_ref_visible_mark></A>.
-
-<P>
-</LI>
-<LI><A NAME="6424"><tex2html_anchor_invisible_mark></A><TT>auth.conf</TT>
-<BR>	Defines authentication backend organisation ( <A NAME="6427"><tex2html_anchor_invisible_mark></A>LDAP-based authentication,  <A NAME="6428"><tex2html_anchor_invisible_mark></A>CAS-based authentication and sympa internal )
-
-<P>
-</LI>
-<LI><A NAME="6429"><tex2html_anchor_invisible_mark></A><TT>robot.conf</TT>
-<BR>	It is a subset of <A NAME="6432"><tex2html_anchor_invisible_mark></A><TT>sympa.conf</TT> defining a Virtual robot 
-	(one per Virtual robot).
-
-<P>
-</LI>
-</UL>
-
-<P>
-
-<H1><A NAME="SECTION00340000000000000000"><tex2html_anchor_invisible_mark></A>
-<A NAME="spools"><tex2html_anchor_mark></A><BR>
-2.4 Spools
-</H1>
-
-<P>
-See <A HREF=<tex2html_cr_mark>#spool-related#349><tex2html_cr_mark></A>, page~<A HREF=<tex2html_cr_mark>#spool-related#350><tex2html_cross_ref_visible_mark></A> for spool definition
-in <A NAME="6435"><tex2html_anchor_invisible_mark></A><TT>sympa.conf</TT>.
-
-<P>
-
-<UL>
-<LI><A NAME="6438"><tex2html_anchor_invisible_mark></A><TT>/usr/local/sympa-ff//spool/auth/</TT>
-<BR>	For storing messages until they have been confirmed.
-
-<P>
-</LI>
-<LI><A NAME="6441"><tex2html_anchor_invisible_mark></A><TT>/usr/local/sympa-ff//spool/bounce/</TT>
-<BR>	For storing incoming bouncing messages.
-
-<P>
-</LI>
-<LI><A NAME="6444"><tex2html_anchor_invisible_mark></A><TT>/usr/local/sympa-ff//spool/digest/</TT>
-<BR>	For storing lists' digests before they are sent.
-
-<P>
-</LI>
-<LI><A NAME="6447"><tex2html_anchor_invisible_mark></A><TT>/usr/local/sympa-ff//spool/mod/</TT>
-<BR>	For storing unmoderated messages.
-
-<P>
-</LI>
-<LI><A NAME="6450"><tex2html_anchor_invisible_mark></A><TT>/usr/local/sympa-ff//spool/msg/</TT>
-<BR>	For storing incoming messages (including commands).
-
-<P>
-</LI>
-<LI><A NAME="6453"><tex2html_anchor_invisible_mark></A><TT>/usr/local/sympa-ff//spool/msg/bad/</TT>
-<BR>	<I>Sympa</I> stores rejected messages in this directory
-
-<P>
-</LI>
-<LI><A NAME="6457"><tex2html_anchor_invisible_mark></A><TT>/usr/local/sympa-ff//spool/distribute/</TT>
-<BR>	For storing message ready for distribution. This spool is used only if the installation run 2 sympa.pl daemon, one for commands, one for messages. 
-
-<P>
-</LI>
-<LI><A NAME="6460"><tex2html_anchor_invisible_mark></A><TT>/usr/local/sympa-ff//spool/distribute/bad/</TT>
-<BR>	<I>Sympa</I> stores rejected messages in this directory
-
-<P>
-</LI>
-<LI><A NAME="6464"><tex2html_anchor_invisible_mark></A><TT>/usr/local/sympa-ff//spool/task/</TT>
-<BR>	For storing all created tasks.
-
-<P>
-</LI>
-<LI><A NAME="6467"><tex2html_anchor_invisible_mark></A><TT>/usr/local/sympa-ff//spool/outgoing/</TT>
-<BR>	<A NAME="6470"><tex2html_anchor_invisible_mark></A><TT>sympa.pl</TT> dumps messages in this spool to await archiving
-	by <A NAME="6473"><tex2html_anchor_invisible_mark></A><TT>archived.pl</TT>.
-
-<P>
-</LI>
-<LI><A NAME="6476"><tex2html_anchor_invisible_mark></A><TT>/usr/local/sympa-ff//spool/topic/</TT>
-<BR>	For storing topic information files. 
-
-<P>
-</LI>
-</UL>
-
-<P>
-
+<BR><HR>
+<ADDRESS>
+root
+2005-08-02
+</ADDRESS>
+</BODY>
+</HTML>

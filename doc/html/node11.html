@@ -1,149 +1,179 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2 Final//EN">
 
-<H1><A NAME="SECTION001100000000000000000"><tex2html_anchor_invisible_mark></A>
-<A NAME="rss"><tex2html_anchor_mark></A><A NAME="1474"><tex2html_anchor_invisible_mark></A><BR>
-10. Sympa RSS channel
+<!--Converted with jLaTeX2HTML 2002-2-1 (1.70) JA patch-2.0
+patched version by:  Kenshi Muto, Debian Project.
+* modified by:  Shige TAKENO
+LaTeX2HTML 2002-2-1 (1.70),
+original version by:  Nikos Drakos, CBLU, University of Leeds
+* revised and updated by:  Marcus Hennecke, Ross Moore, Herb Swan
+* with significant contributions from:
+  Jens Lippmann, Marek Rouchal, Martin Wilck and others -->
+<HTML>
+<HEAD>
+<TITLE>Binaries</TITLE>
+<META NAME="description" CONTENT="Binaries">
+<META NAME="keywords" CONTENT="sympa">
+<META NAME="resource-type" CONTENT="document">
+<META NAME="distribution" CONTENT="global">
+
+<META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=iso-8859-1">
+<META NAME="Generator" CONTENT="jLaTeX2HTML v2002-2-1 JA patch-2.0">
+<META HTTP-EQUIV="Content-Style-Type" CONTENT="text/css">
+
+<LINK REL="STYLESHEET" HREF="sympa.css">
+
+<LINK REL="next" HREF="node12.html">
+<LINK REL="previous" HREF="node10.html">
+<LINK REL="up" HREF="node9.html">
+<LINK REL="next" HREF="node12.html">
+</HEAD>
+
+<BODY TEXT="#000000" BGCOLOR="#ffffff">
+<!--Navigation Panel-->
+<A NAME="tex2html1258"
+  HREF="node12.html">
+<IMG WIDTH="37" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="next" SRC="next.png"></A> 
+<A NAME="tex2html1252"
+  HREF="node9.html">
+<IMG WIDTH="26" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="up" SRC="up.png"></A> 
+<A NAME="tex2html1246"
+  HREF="node10.html">
+<IMG WIDTH="63" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="previous" SRC="prev.png"></A> 
+<A NAME="tex2html1254"
+  HREF="node1.html">
+<IMG WIDTH="65" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="contents" SRC="contents.png"></A> 
+<A NAME="tex2html1256"
+  HREF="node548.html">
+<IMG WIDTH="43" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="index" SRC="index.png"></A> 
+<BR>
+<B> Next:</B> <A NAME="tex2html1259"
+  HREF="node12.html">Configuration files</A>
+<B> Up:</B> <A NAME="tex2html1253"
+  HREF="node9.html">what does Sympa consist</A>
+<B> Previous:</B> <A NAME="tex2html1247"
+  HREF="node10.html">Organization</A>
+ &nbsp; <B>  <A NAME="tex2html1255"
+  HREF="node1.html">Contents</A></B> 
+ &nbsp; <B>  <A NAME="tex2html1257"
+  HREF="node548.html">Index</A></B> 
+<BR>
+<BR>
+<!--End of Navigation Panel-->
+
+<H1><A NAME="SECTION00320000000000000000"></A>
+<A NAME="binaries"></A>
+<BR>
+Binaries
 </H1>
 
 <P>
-This service is provided by <A NAME="8300"><tex2html_anchor_invisible_mark></A><I>WWSympa</I> (<I>Sympa</I>'s web interface). 
-Here is the root of <A NAME="8304"><tex2html_anchor_invisible_mark></A><I>WWSympa</I>'s rss channel :
-<BR>
-<P>
-(Default value: <TT>http://<TT>;SPMlt;</TT>host<TT>;SPMgt;</TT>/wws/rss</TT>)
-<BR>      Example: <TT>https://my.server/wws/rss</TT>
-
-<P>
-The access control of RSS queries proceed on the same way as <A NAME="8311"><tex2html_anchor_invisible_mark></A><I>WWSympa</I> actions referred to.
-<I>Sympa</I> provides the following RSS features :
 
 <UL>
-<LI>the latest created lists on a robot (<A NAME="8315"><tex2html_anchor_invisible_mark></A><TT>latest_lists</TT>) ;
+<LI><A NAME="6497"></A><TT>sympa.pl</TT>
+<BR>
+The main daemon ; it processes commands and delivers
+	messages. Continuously scans the <A NAME="6500"></A><TT>msg/</TT> spool.
+
+<P>
 </LI>
-<LI>the most active lists on a robot(<A NAME="8318"><tex2html_anchor_invisible_mark></A><TT>active_lists</TT>) ;  
+<LI><A NAME="6503"></A><TT>sympa_wizard.pl</TT>
+<BR>
+A wizard to edit <A NAME="6506"></A><TT>sympa.conf</TT> and <A NAME="6509"></A><TT>wwsympa.conf</TT>.
+	Maybe it is a good idea to run it at the beginning, but thoses
+	file can also be edited with your favorite text editor. 
+
+<P>
 </LI>
-<LI>the latest messages of a list (<A NAME="8321"><tex2html_anchor_invisible_mark></A><TT>active_arc</TT>) ;   
+<LI><A NAME="6512"></A><TT>wwsympa.fcgi</TT>
+<BR>
+The CGI program offering a complete web interface
+	to mailing lists. It can work in both classical CGI and
+	FastCGI modes, although we recommend FastCGI mode, being
+	up to 10 times faster.
+
+<P>
 </LI>
-<LI>the latest shared documents of a list (<A NAME="8324"><tex2html_anchor_invisible_mark></A><TT>latest_d_read</TT>) ; 
+<LI><A NAME="6515"></A><TT>bounced.pl</TT>
+<BR>
+This daemon processes bounces (non-delivered messages),
+	looking for bad addresses. List owners will later
+	access bounce information via <A NAME="6518"></A><I>WWSympa</I>. Continuously scans
+	the <A NAME="6521"></A><TT>bounce/</TT> spool.
+
+<P>
+</LI>
+<LI><A NAME="6524"></A><TT>archived.pl</TT>
+<BR>
+This daemon feeds the web archives, converting messages
+	to HTML format and linking them. It uses the amazing 
+	<A NAME="6527"></A><TT>MhOnArc</TT>. Continuously scans the <A NAME="6530"></A><TT>outgoing/</TT> 
+	spool.
+
+<P>
+</LI>
+<LI><A NAME="6533"></A><TT>task_manager.pl</TT>
+<BR>
+The daemon which manages the tasks : creation, checking, execution. 
+	It regularly scans the <A NAME="6536"></A><TT>task/</TT> spool.
+
+<P>
+</LI>
+<LI><A NAME="6539"></A><TT>sympa_soap_server.fcgi</TT>
+<BR>
+The server will process SOAP (web services) request. This server requires FastCGI ;
+	it should be referenced from within your HTTPS config.
+
+<P>
+</LI>
+<LI><A NAME="6542"></A><TT>queue</TT>
+<BR>
+This small program gets the incoming messages from the aliases
+	and stores them in <A NAME="6545"></A><TT>msg/</TT> spool.
+
+<P>
+</LI>
+<LI><A NAME="6548"></A><TT>bouncequeue</TT>
+<BR>
+Same as <A NAME="6551"></A><TT>queue</TT> for bounces. Stores bounces in 
+	<A NAME="6554"></A><TT>bounce/</TT> spool.
+
+<P>
 </LI>
 </UL>
 
 <P>
-
-<H1><A NAME="SECTION001110000000000000000"><tex2html_anchor_invisible_mark></A><A NAME="8327"><tex2html_anchor_invisible_mark></A><BR>
-10.1 <TT>latest_lists</TT>
-</H1>
-
-<P>
-This provides the latest created lists.  
-
-<P>
- Example: <TT>http://my.server/wws/rss/latest_lists?for=3<tex2html_ampersand_mark>count=6</TT>
-<BR>      This provides the 6 latest created lists for the last 3 days.
+<HR>
+<!--Navigation Panel-->
+<A NAME="tex2html1258"
+  HREF="node12.html">
+<IMG WIDTH="37" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="next" SRC="next.png"></A> 
+<A NAME="tex2html1252"
+  HREF="node9.html">
+<IMG WIDTH="26" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="up" SRC="up.png"></A> 
+<A NAME="tex2html1246"
+  HREF="node10.html">
+<IMG WIDTH="63" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="previous" SRC="prev.png"></A> 
+<A NAME="tex2html1254"
+  HREF="node1.html">
+<IMG WIDTH="65" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="contents" SRC="contents.png"></A> 
+<A NAME="tex2html1256"
+  HREF="node548.html">
+<IMG WIDTH="43" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="index" SRC="index.png"></A> 
 <BR>
-<P>
- Example: <TT>http://my.server/wws/rss/latest_lists/computing?count=6</TT>
-<BR>      This provides the 6 latest created lists with topic ``computing''.
-<BR>
-<P>
-Parameters : 
-
-<UL>
-<LI><A NAME="8332"><tex2html_anchor_invisible_mark></A><TT>for</TT> : period of interest (expressed in days). This is a CGI parameter. It is optional but one of the two parameters 
-     ``for'' or ``count'' is required.
-</LI>
-<LI><A NAME="8335"><tex2html_anchor_invisible_mark></A><TT>count</TT> : maximum number of expected records. This is a CGI parameter. It is optional but one of the two parameters 
-     ``for'' or ``count'' is required.
-</LI>
-<LI>topic : the topic is indicated in the path info (see example below with topic computing). 
-    This parameter is optional.
-</LI>
-</UL>
-
-<P>
-
-<H1><A NAME="SECTION001120000000000000000"><tex2html_anchor_invisible_mark></A><A NAME="8338"><tex2html_anchor_invisible_mark></A><BR>
-10.2 <TT>active_lists</TT>
-</H1>
-
-<P>
-This provides the most active lists, based on the number of distributed messages (number of received messages).  
-
-<P>
- Example: <TT>http://my.server/wws/rss/active_lists?for=3<tex2html_ampersand_mark>count=6</TT>
-<BR>      This provides the 6 most active lists for the last 3 days.
-<BR>
-<P>
- Example: <TT>http://my.server/wws/rss/active_lists/computing?count=6</TT>
-<BR>      This provides the 6 most active lists with topic ``computing''.
-<BR>
-<P>
-Parameters : 
-
-<UL>
-<LI><A NAME="8343"><tex2html_anchor_invisible_mark></A><TT>for</TT> : period of interest (expressed in days). This is a CGI parameter. It is optional but one of the two parameters 
-     ``for'' or ``count'' is required.
-</LI>
-<LI><A NAME="8346"><tex2html_anchor_invisible_mark></A><TT>count</TT> : maximum number of expected records. This is a CGI parameter. It is optional but one of the two parameters 
-     ``for'' or ``count'' is required.
-</LI>
-<LI>topic : the topic is indicated in the path info (see example below with topic computing). 
-    This parameter is optional.
-</LI>
-</UL>
-
-<P>
-
-<H1><A NAME="SECTION001130000000000000000"><tex2html_anchor_invisible_mark></A><A NAME="8349"><tex2html_anchor_invisible_mark></A><BR>
-10.3 <TT>latest_arc</TT>
-</H1>
-
-<P>
-This provides the latest messages of a list.  
-
-<P>
- Example: <TT>http://my.server/wws/rss/latest_arc/mylist?for=3<tex2html_ampersand_mark>count=6</TT>
-<BR>      This provides the 6 latest messages received on the mylistlist for the last 3 days.
-<BR>
-<P>
-Parameters : 
-
-<UL>
-<LI>list : the list is indicated in the path info. This parameter is mandatory.
-</LI>
-<LI><A NAME="8353"><tex2html_anchor_invisible_mark></A><TT>for</TT> : period of interest (expressed in days). This is a CGI parameter. It is optional but one of the two parameters 
-     ``for'' or ``count'' is required.
-</LI>
-<LI><A NAME="8356"><tex2html_anchor_invisible_mark></A><TT>count</TT> : maximum number of expected records. This is a CGI parameter. It is optional but one of the two parameters 
-     ``for'' or ``count'' is required.
-</LI>
-</UL>
-
-<P>
-
-<H1><A NAME="SECTION001140000000000000000"><tex2html_anchor_invisible_mark></A><A NAME="8359"><tex2html_anchor_invisible_mark></A><BR>
-10.4 <TT>latest_d_read</TT>
-</H1>
-
-<P>
-This provides the latest updated and uploaded shared documents of a list.  
-
-<P>
- Example: <TT>http://my.server/wws/rss/latest_d_read/mylist?for=3<tex2html_ampersand_mark>count=6</TT>
-<BR>      This provides the 6 latest documents uploaded or updated on the mylistlist for the last 3 days.
-<BR>
-<P>
-Parameters : 
-
-<UL>
-<LI>list : the list is indicated in the path info. This parameter is mandatory.
-</LI>
-<LI><A NAME="8363"><tex2html_anchor_invisible_mark></A><TT>for</TT> : period of interest (expressed in days). This is a CGI parameter. It is optional but one of the two parameters 
-     ``for'' or ``count'' is required.
-</LI>
-<LI><A NAME="8366"><tex2html_anchor_invisible_mark></A><TT>count</TT> : maximum number of expected records. This is a CGI parameter. It is optional but one of the two parameters 
-     ``for'' or ``count'' is required.
-</LI>
-</UL>
-
-<P>
-
+<B> Next:</B> <A NAME="tex2html1259"
+  HREF="node12.html">Configuration files</A>
+<B> Up:</B> <A NAME="tex2html1253"
+  HREF="node9.html">what does Sympa consist</A>
+<B> Previous:</B> <A NAME="tex2html1247"
+  HREF="node10.html">Organization</A>
+ &nbsp; <B>  <A NAME="tex2html1255"
+  HREF="node1.html">Contents</A></B> 
+ &nbsp; <B>  <A NAME="tex2html1257"
+  HREF="node548.html">Index</A></B> 
+<!--End of Navigation Panel-->
+<ADDRESS>
+root
+2005-08-02
+</ADDRESS>
+</BODY>
+</HTML>

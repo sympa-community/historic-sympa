@@ -1612,9 +1612,43 @@ sub remind {
 	    unless ($user = $list->get_first_user()) {
 		return undef;
 	    }
-	    
+
 	    do {
-		unless ($list->send_file('remind', $user->{'email'},$robot, {})) {
+		my $sources;
+		my $descriptions;
+		
+		if ($user->{'id'}) {
+		    my @source;
+		    my @description;
+		    my @ids = split /,/,$user->{'id'};
+		    
+		    foreach my $id (@ids) {
+			unless (defined ($sources->{$id})) {
+			    $sources->{$id} = $list->search_datasource($id);
+			}
+			
+			push @source, $sources->{$id};
+			unless (defined ($descriptions->{$id})) {
+			    $descriptions->{$id} = $list->search_datasource_desc($id);
+			}
+			push @description, $descriptions->{$id};
+		    }
+		    $user->{'descriptions'} = join ', ', @description;
+		    $user->{'sources'} = join ', ', @source;
+		}
+
+		if (($user->{'date'} == $user->{'update_date'}) || ($user->{'subscribed_date'} == $user->{'update_date'})) {
+		    $user->{'update_date'} = undef;
+		} else {
+		    $user->{'update_date'} = &POSIX::strftime("%d %b %Y", localtime($user->{'update_date'}));
+		}
+		$user->{'date'} = &POSIX::strftime("%d %b %Y", localtime($user->{'date'}));
+		$user->{'subscribed_date'} = &POSIX::strftime("%d %b %Y", localtime($user->{'subscribed_date'}));
+		
+		my %context;
+		$context{'user'} = $user;
+		
+		unless ($list->send_file('remind', $user->{'email'},$robot, \%context)) {
 		    &do_log('notice',"Unable to send template 'remind' to $user->{'email'}");
 		}
 		$total += 1 ;

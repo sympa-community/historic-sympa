@@ -3420,7 +3420,7 @@ sub do_remindpasswd {
 
      $s->{'reception'} ||= 'mail';
      $s->{'visibility'} ||= 'noconceal';
-     if ($s->{'update_date'} == $s->{'date'}) {
+     if (($s->{'update_date'} == $s->{'date'}) || ($s->{'update_date'} == $s->{'subscribed_date'})) {
 	 $s->{'update_date'} = undef;
      } else {
 	 $s->{'update_date'} = &POSIX::strftime("%d %b %Y", localtime($s->{'update_date'}));
@@ -6904,7 +6904,7 @@ sub do_set_pending_list_request {
      $param->{'current_subscriber'}{'escaped_email'} = &tools::escape_html($param->{'current_subscriber'}{'email'});
 
      $param->{'current_subscriber'}{'date'} = &POSIX::strftime("%d %b %Y", localtime($user->{'date'}));
-     if ($user->{'update_date'} == $user->{'date'}) {
+     if (($user->{'update_date'} == $user->{'date'}) || ($user->{'update_date'} == $user->{'subscribed_date'})) {
 	 $param->{'current_subscriber'}{'update_date'} = undef;
      } else {
 	 $param->{'current_subscriber'}{'update_date'} = &POSIX::strftime("%d %b %Y", localtime($user->{'update_date'}));

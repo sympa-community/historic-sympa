@@ -570,10 +570,15 @@ my %alias = ('reply-to' => 'reply_to',
 						       'gettext_id' => "path",
 						       'order' => 1
 						       },
+					     'name' => {'format' => '.+',
+							'gettext_id' => "short name for this source",
+							'length' => 15,
+							'order' => 2
+							},		   
 					     'description' => {'format' => '.+',
 							       'length' => 80,
 							       'gettext_id' => "description of this source",
-							       'order' => 2
+							       'order' => 3
 							       },
 					},
 			       'occurrence' => '0-n',
@@ -5484,6 +5489,8 @@ sub update_user {
 		    if ($field eq 'date') {
 			$value = sprintf $date_format{'write'}{$Conf{'db_type'}}, $value, $value;
 		    }elsif ($field eq 'update_date') {
+			$value = sprintf $date_format{'write'}{$Conf{'db_type'}}, $value, $value;
+		    }elsif ($field eq 'subscribed_date') {
 			$value = sprintf $date_format{'write'}{$Conf{'db_type'}}, $value, $value;
 		    }elsif ($value eq 'NULL'){
 			if ($Conf{'db_type'} eq 'mysql') {
@@ -11443,7 +11450,7 @@ sub research_tracability_spool_file {
 }
 
 ######################################################################################
-# Deletes the tracability files .sub ou .auth in the spool tracability if they exist
+# Deletes the tracability files .sub or .auth in the spool tracability if they exist
 #
 # IN :
 #     -$self (+) : ref(List)
@@ -11528,7 +11535,7 @@ sub research_tracability_dir_file {
 #     -$suffix (+) : SCALAR - 'sub.init' | 'auth.init' | 'sub.update'
 #
 # OUT : 
-#     $file | undef
+#     $filecontent | undef
 #     
 ######################################################################################
 sub get_tracability_dir_file {
@@ -11557,7 +11564,7 @@ sub get_tracability_dir_file {
 
 
 ######################################################################################
-# Deletes the tracability files .sub.init(or .update) or .auth.init 
+# Deletes the tracability files .init or .update 
 # in the dir tracability of the list if they exist
 #
 # IN :
@@ -11655,12 +11662,12 @@ sub search_datasource {
 }
 
 #####################################################################
-# Searched the description of the include datasource corresponding 
+# Searched the description of the included datasource corresponding 
 # to the provided ID
 #
 # IN : 
 #     -$self (+) : ref(List)
-#     -$id (+) : ref(HASH) unique id for an include datasource
+#     -$id (+) : ref(HASH) - unique id for an included datasource
 #
 # OUT :
 #     $id->{'description'} | "not indicated" | undef

@@ -1,20 +1,99 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2 Final//EN">
 
-<H1><A NAME="SECTION002500000000000000000"><tex2html_anchor_invisible_mark></A>
-<A NAME="antivirus"><tex2html_anchor_mark></A><BR>
-24. Antivirus
+<!--Converted with jLaTeX2HTML 2002-2-1 (1.70) JA patch-2.0
+patched version by:  Kenshi Muto, Debian Project.
+* modified by:  Shige TAKENO
+LaTeX2HTML 2002-2-1 (1.70),
+original version by:  Nikos Drakos, CBLU, University of Leeds
+* revised and updated by:  Marcus Hennecke, Ross Moore, Herb Swan
+* with significant contributions from:
+  Jens Lippmann, Marek Rouchal, Martin Wilck and others -->
+<HTML>
+<HEAD>
+<TITLE>Logs</TITLE>
+<META NAME="description" CONTENT="Logs">
+<META NAME="keywords" CONTENT="sympa">
+<META NAME="resource-type" CONTENT="document">
+<META NAME="distribution" CONTENT="global">
+
+<META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=iso-8859-1">
+<META NAME="Generator" CONTENT="jLaTeX2HTML v2002-2-1 JA patch-2.0">
+<META HTTP-EQUIV="Content-Style-Type" CONTENT="text/css">
+
+<LINK REL="STYLESHEET" HREF="sympa.css">
+
+<LINK REL="previous" HREF="node24.html">
+<LINK REL="up" HREF="node14.html">
+<LINK REL="next" HREF="node26.html">
+</HEAD>
+
+<BODY TEXT="#000000" BGCOLOR="#ffffff">
+<!--Navigation Panel-->
+<A NAME="tex2html1463"
+  HREF="node26.html">
+<IMG WIDTH="37" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="next" SRC="next.png"></A> 
+<A NAME="tex2html1457"
+  HREF="node14.html">
+<IMG WIDTH="26" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="up" SRC="up.png"></A> 
+<A NAME="tex2html1453"
+  HREF="node24.html">
+<IMG WIDTH="63" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="previous" SRC="prev.png"></A> 
+<A NAME="tex2html1459"
+  HREF="node1.html">
+<IMG WIDTH="65" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="contents" SRC="contents.png"></A> 
+<A NAME="tex2html1461"
+  HREF="node548.html">
+<IMG WIDTH="43" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="index" SRC="index.png"></A> 
+<BR>
+<B> Next:</B> <A NAME="tex2html1464"
+  HREF="node26.html">Running Sympa</A>
+<B> Up:</B> <A NAME="tex2html1458"
+  HREF="node14.html">Installing Sympa</A>
+<B> Previous:</B> <A NAME="tex2html1454"
+  HREF="node24.html">Robot aliases</A>
+ &nbsp; <B>  <A NAME="tex2html1460"
+  HREF="node1.html">Contents</A></B> 
+ &nbsp; <B>  <A NAME="tex2html1462"
+  HREF="node548.html">Index</A></B> 
+<BR>
+<BR>
+<!--End of Navigation Panel-->
+
+<H1><A NAME="SECTION00450000000000000000">
+Logs</A>
 </H1>
 
 <P>
-<I>Sympa</I> lets you use an external antivirus solution to check incoming mails.
-In this case you must set the <A NAME="11015"><tex2html_anchor_invisible_mark></A><TT>antivirus_path</TT> and 
-<A NAME="11018"><tex2html_anchor_invisible_mark></A><TT>antivirus_args</TT> configuration parameters
- (see <A HREF=<tex2html_cr_mark>#Antivirus_plug-in#4121><tex2html_cr_mark></A>, page~<A HREF=<tex2html_cr_mark>#Antivirus_plug-in#4122><tex2html_cross_ref_visible_mark></A>.
-<I>Sympa</I> is already compatible with McAfee/uvscan, Fsecure/fsav, Sophos, AVP, Trend Micro/VirusWall and Clam Antivirus.
-For each mail received, <I>Sympa</I> extracts its MIME parts in the <A NAME="11023"><tex2html_anchor_invisible_mark></A><TT>/usr/local/sympa-ff//spool/tmp/antivirus</TT> directory and
-then calls the antivirus software to check them.
-When a virus is detected, <I>Sympa</I> looks for the virus name in the virus scanner STDOUT and sends a
-<A NAME="11027"><tex2html_anchor_invisible_mark></A><TT>your_infected_msg.tt2</TT> warning to the sender of the mail.
-The mail is saved as 'bad' and the working directory is deleted (except if <I>Sympa</I> is running in debug mode).
+<I>Sympa</I> keeps a trace of each of its procedures in its log file.
+However, this requires configuration of the <A NAME="6920"></A><TT>syslogd</TT>
+daemon.  By default <I>Sympa</I> will use the <TT>local1</TT> facility
+(<A NAME="6924"></A><TT>syslog</TT> parameter in <A NAME="6927"></A><TT>sympa.conf</TT>).
+WWSympa's logging behaviour is defined by the <A NAME="6930"></A><TT>log_facility</TT>
+parameter in <A NAME="6933"></A><TT>wwsympa.conf</TT> (by default the same facility as <I>Sympa</I>).
+<BR>
+To this end, a line must be added in the <A NAME="6937"></A><TT>syslogd</TT> configuration file (<A NAME="6940"></A><TT>/etc/syslog.conf</TT>). For example:
+
+<P><PRE>
+local1.*       /var/log/sympa
+</PRE>
+
+<P>
+Then reload <A NAME="6943"></A><TT>syslogd</TT>.
+
+<P>
+Depending on your platform, your syslog daemon may use either
+a UDP or a UNIX socket. <I>Sympa</I>'s default is to use a UNIX socket;
+you may change this behavior by editing <A NAME="6947"></A><TT>sympa.conf</TT>'s
+<A NAME="6950"></A><TT>log_socket_type</TT> parameter (<A HREF="node67.html#par-log-socket-type">7.3.3</A>,
+page&nbsp;<A HREF="node67.html#par-log-socket-type"><IMG  ALIGN="BOTTOM" BORDER="1" ALT="[*]" SRC="crossref.png"></A>). You can test log feature by
+using  <A NAME="6953"></A><TT>testlogs.pl</TT>.
 
 <P>
 
+<BR><HR>
+<ADDRESS>
+root
+2005-08-02
+</ADDRESS>
+</BODY>
+</HTML>

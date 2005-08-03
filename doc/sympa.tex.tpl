@@ -740,6 +740,9 @@ in \file {sympa.conf}.
 	\item \dir {[SPOOLDIR]/topic/}\\
 	For storing topic information files. 
 
+	\item \dir {[SPOOLDIR]/tracability/}\\
+	For storing subscription or authentication messages.  
+
 \end {itemize}
 
 
@@ -2158,6 +2161,12 @@ files. The server admin module include a CSS administration page that can help y
         Spool to store task files created by the task manager. This parameter is mandatory
         and must be an absolute path.
 
+\subsection {\cfkeyword {queuetracability}}
+   
+        \default {\dir {[SPOOLDIR]/tracability}}
+
+        This parameter is optional and retained solely for backward compatibility.
+
 \subsection {\cfkeyword {tmpdir}}
 
         \default {\dir {[SPOOLDIR]/tmp}}
@@ -2212,6 +2221,12 @@ files. The server admin module include a CSS administration page that can help y
         Delay for keeping message topic files (in days) in the \textindex {topic}
         queue.  Beyond this deadline, files are
         deleted.
+
+\subsection {\cfkeyword {clean\_delay\_queuetracability}}
+
+        \default {7}
+
+	Delay for keeping message subscription or authentication files (in days) in the \textindex {tracability} queue. Beyond this dead-line, files are deleted.
 
 \section {Internationalization related}    
 
@@ -3736,7 +3751,7 @@ Example :
 \begin {quote}
 \begin{verbatim}
 [STOPPARSE]
-#Configuration file auth.conf for the LDAP authentification
+#Configuration file auth.conf for the LDAP authentication
 #Description of parameters for each directory
 
 
@@ -4257,7 +4272,7 @@ Example
 del.auth
 \begin{verbatim}
 title.us deletion performed only by list owners, need authentication
-title.fr suppression réservée au propriétaire avec authentification
+title.fr suppression réservée au propriétaire avec authentication
 title.es eliminacin reservada slo para el propietario, necesita autentificacin
 
 
@@ -5594,7 +5609,8 @@ command) from the list by the list owner.
 \subsection {reject.tt2} 
 
 \Sympa will send a reject message to the senders of messages rejected
-by the list editor. If the editor prefixes her \mailcmd {REJECT} with the
+by the list editor. The list editor has the possibility to personalize this template via the Web interface.
+ If the editor prefixes her \mailcmd {REJECT} with the
 keyword QUIET, the reject message will not be sent.
 
 
@@ -6771,19 +6787,38 @@ parameter. The default value is 3600.
     	\label {include-list}
 	\index{include-list}
 
-\lparam {include\_list} \texttt {listname}
+\lparam {include\_list} 
 
 This parameter will be interpreted only if 
 \lparam {user\_data\_source} is set to \texttt {include}.
 All subscribers of list \texttt {listname} become subscribers 
 of the current list. You may include as many lists as required, using one
-\lparam {include\_list} \texttt {listname} line for each included
+\lparam {include\_list} paragraph for each included
 list. Any list at all may be included ; the \lparam {user\_data\_source} definition
 of the included list is irrelevant, and you may therefore
 include lists which are also defined by the inclusion of other lists. 
 Be careful, however, not to include list \texttt {A} in list \texttt {B} and
 then list \texttt {B} in list \texttt {A}, since this will give rise an 
 infinite loop.
+The paragraph is made of the following entries :
+
+\begin{itemize}
+
+\item
+\label {listname}
+\lparam {listname} \textit {listname} 
+
+Name of the list to include.
+
+\item
+\label {description}
+\lparam {description} \textit {source\_description}
+
+This parameter is optional.
+
+It provides a human-readable description to this datasource. It will be used within the SUBOPTIONS and EDITSUBSCRIBER pages to detail why a list member is included.
+
+\end{itemize} 
 
 \subsection {include\_remote\_sympa\_list}
 
@@ -6832,12 +6867,31 @@ certificate (and the private key) to be used :
 \item  \lparam {cert} \texttt {list} the certificate to be use is the list
 certificate (the certificate subject distinguished name email is the list adress).
 Certificate and private key are located in the list directory.
- \item  \lparam {cert} \texttt {robot} the certificate used is then related to
+\item  \lparam {cert} \texttt {robot} the certificate used is then related to
 sympa itself : the certificate subject distinguished name email look like
 sympa@my.domain and files are located in virtual robot etc dir if virtual robot
 is used otherwise in \dir {[ETCDIR]}.
 \end{itemize}
 
+\begin {itemize}
+
+\item
+\label {name}
+\lparam {name} \textit {short name}
+
+This parameter is optional.
+
+It provides a human-readable name to this datasource. It will be used within the REVIEW, SUBOPTIONS and EDITSUBSCRIBER pages to indicate what datasource each list member comes from (usefull when having multiple data sources).
+
+\item
+\label {description}
+\lparam {description} \textit {source\_description}
+
+This parameter is optional
+
+It provides a human-readable description to this datasource. It will within the SUBOPTIONS and EDITSUBSCRIBER pages to detail why a list member is included.
+
+\end{itemize}
 
 \subsection {include\_sql\_query}
     \label {include-sql-query}
@@ -6938,8 +6992,16 @@ db_env	ORACLE_TERM=vt100;ORACLE_HOME=/var/hote/oracle/7.3.4
 
 This parameter is optional.
 
-It provides a human-readable name to this datasource. It will be used within the REVIEW page to indicate what datasource
+It provides a human-readable name to this datasource. It will be used within the REVIEW, SUBOPTIONS and EDITSUBSCRIBER  pages to indicate what datasource
 each list member comes from (usefull when having multiple data sources).
+
+\item
+\label {sql-description}
+\lparam {description} \textit {source\_description}
+
+This parameter is optional.
+
+It provides a human-readable description to this datasource. It will be used within the SUBOPTIONS and EDITSUBSCRIBER pages to detail why a list member is included.
 
 \item
 \label {sql-fdir}
@@ -7073,6 +7135,22 @@ of the following values.
 	Search the whole tree below the base object. 
 
 \end{itemize}
+
+\item
+\label {name}
+\lparam {name} \textit {short name}
+
+This parameter is optional.
+
+It provides a human-readable description to this datasource. It will be used within the REVIEW, SUBOPTIONS and EDITSUBSCRIBER pages to indicate what datasource each list member comes from (usefull when having multiple data sources).
+
+\item
+\label {description}
+\lparam {description} \textit {source\_description}
+
+This parameter is optional.
+
+It provides a human-readable description to this datasource. It will be used within the SUBOPTIONS and EDITSUBSCRIBER pages to detail why a list member is included.
 
 \end{itemize}
 
@@ -7278,6 +7356,22 @@ with one of the following values.
 
 \end{itemize}
 
+\item
+\label {name}
+\lparam {name} \textit {short name}
+
+This parameter is optional
+
+It provides a human-readable name to this datasource. It will be used within the REVIEW, SUBOPTIONS and EDITSUBSCRIBER pages to indicate what datasource each list member comes from (usefull when having multiple data sources).
+
+\item
+\label {description}
+\lparam {description} \textit {source\_description}
+
+This parameter is optional.
+
+It provides a human-readable description to this datasource. It will be used within the SUBOPTIONS and EDITSUBSCRIBER pages to detail why a list member is included.
+
 \end{itemize}
 
 Example : (cn=testgroup,dc=cru,dc=fr should be a groupOfUniqueNames here)
@@ -7311,6 +7405,28 @@ Example : (cn=testgroup,dc=cru,dc=fr should be a groupOfUniqueNames here)
 This parameter will be interpreted only if the
 \lparam {user\_data\_source} value is set to  \texttt {include}.
 The file should contain one e-mail address per line with an optional user description, separated from the email address by spaces (lines beginning with a "\#" are ignored).
+
+The paragraph is made of the following entries :
+
+\begin {itemize}
+
+\item
+\label {name}
+\lparam {name} \textit {short name}
+
+This parameter is optional.
+
+It provides a human-readable name to this datasource. It will be used within the REVIEW, SUBOPTIONS and EDITSUBSCRIBER pages to indicate what datasource each list member comes from (usefull when having multiple data sources).
+
+\item
+\label {description}
+\lparam {description} \textit {source\_description}
+
+This parameter is optional.
+
+It provides a human-readable description to this datasource. It will be used within the SUBOPTIONS and EDITSUBSCRIBER pages to detail why a list member is included.
+
+\end {itemize}
 
 \textit {Sample included file:} 
 
@@ -7352,6 +7468,22 @@ This entry is optional, only used if HTTP basic authentication is required to ac
 \lparam {passwd} \textit {user\_passwd} 
 
 This entry is optional, only used if HTTP basic authentication is required to access the remote file.
+
+\item
+\label {name}
+\lparam {name} \textit {short name}
+
+This parameter is optional.
+
+It provides a human-readable name to this datasource. It will be used within the REVIEW, SUBOPTIONS and EDITSUBSCRIBER pages to indicate what datasource each list member comes from (usefull when having multiple data sources).
+
+\item
+\label {description}
+\lparam {description} \textit {source\_description}
+
+This parameter is optional.
+
+It provides a human-readable description to this datasource. It will be used within the SUBOPTIONS and EDITSUBSCRIBER pages to detail why a list member is included.
 
 \end {itemize}
 
@@ -8385,6 +8517,47 @@ For message distribution, a ``X-Sympa-Topic'' field is added to the message to a
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Tracability
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\cleardoublepage
+\chapter {Tracability}
+\label {tracability}
+
+The main purpose of this fonctionality is to provide to a user information concerning his membership to a list and how he joined the list. The tracability 
+fonctionality was created for transparency concern, in order to, for example, make a user understand why he failed to unsubscribe.
+
+
+Here is a list of the collected information (the corresponding database fields are in parenthesis) :
+
+\begin{itemize}
+
+        \item Type of membership: subscribed, included (\lparam {subscribed\_subscriber}, \lparam {included\_subscriber})
+	\item Date of entrance in the list (\lparam {date\_subscriber})
+	\item Date of subscription (\lparam {subscribed\_date\_subscriber})  
+	\item Who subscribed the user (\lparam {who\_init\_subscriber}, \lparam {who\_update\_subscriber})
+	\item Via which interface: mail, web, soap (\lparam {how\_init\_subscriber}, \lparam {how\_update\_subscriber})
+	\item If he subscribed via the web or soap interface, the ip address (\lparam {ip\_init\_subscriber}, \lparam {ip\_update\_subscriber})
+	\item If he subscribed via the mail interface, the message containing the subscription command
+  
+\end{itemize}
+
+All these information are available via the \lparam {subscriber options} web page and the \lparam {remind} command, for the user himself, or 
+the \lparam {review} web page, for a list administrator. They are collected while sympa performs the subscription, the inclusion or an update.
+
+
+When a list member is subscribed or updated (himself or via the list editor), data (date, interface, ip address, who made the command) are stored in the 
+\lparam {subscriber\_table} table in the database.
+
+When using the mail interface, the subscription message and the authentication message (if required) are stored (only if the sender is the subscriber). n the first place, 
+these messages are saved in the \dir {[SPOOLDIR]/tracability/} spool if authorization or authentication are needed. Afterward, they moved in the \dir {tracability/} directory of 
+the list. Sympa also stores messages when a subscription update is performed.
+
+At the time of an inclusion, the list administrator fills out a description of the data source that permits to detail why a user is included in the list. This parameter 
+is also kept in the \lparam {subscriber\_table} table in the database.
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % Shared documents
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
@@ -9028,7 +9201,7 @@ example, \texttt {send.private\_key}, requires either an md5 return key or an S/
 \begin{verbatim}
 [STOPPARSE]
 title.us restricted to subscribers with previous md5 authentication
-title.fr réservé aux abonnés avec authentification MD5 préalable
+title.fr réservé aux abonnés avec authentication MD5 préalable
 
 is_subscriber([listname],[sender]) smtp          -> request_auth
 true()                             md5,smime     -> do_it
@@ -9718,6 +9891,7 @@ For sending, a call to sendmail is done or the message is pushed in a spool acco
    \item Service messages
    \item Notification message
    \item Topic messages
+   \item Tracability
  \end{itemize}
 
 %%%%%%%%%%%%%%% message distribution %%%%%%%%%%%%%%%%%%%%
@@ -9995,7 +10169,7 @@ For sending, a call to sendmail is done or the message is pushed in a spool acco
 \label{list-request-auth}
 \index{List::request\_auth()}
 
-   Sends an authentification request for a requested command. The authentification request contains
+   Sends an authentication request for a requested command. The authentication request contains
    the command to be send next and it is authentified by a key. The message is
    sent to user by calling  List::send\_file() (see \ref {list-send-file}, 
    page~\pageref {list-send-file}) with mail template ``request\_auth''.
@@ -10023,7 +10197,7 @@ For sending, a call to sendmail is done or the message is pushed in a spool acco
 \label{list-send-auth}
 \index{List::send\_auth()}
 
-   Sends an authentifiaction request for a message sent for distribution.
+   Sends an authentication request for a message sent for distribution.
    The message for distribution is copied in the authqueue spool to wait for confirmation by its sender .
    This message is named with a key. The request is sent to user by calling  List::send\_file() 
    (see \ref {list-send-file}, page~\pageref {list-send-file}) with mail template ``send\_auth''.
@@ -10323,6 +10497,108 @@ Search and load msg topic file corresponding to the message ID  (\file{directory
 
    \textbf{OUT} : ARRAY - list of selected subscribers
 
+%%%%%%%%%%%%% tracability %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\subsection {Functions for tracability}
+
+research\_tracability\_spool\_file(), delete\_tracability\_spool\_file(), research\_tracability\_dir\_file(), 
+get\_tracability\_dir\_file(), delete\_tracability\_dir\_file(), search\_datasource\_description()
+
+These functions are used to manages subscription information.
+
+
+
+
+\subsubsection {\large{research\_tracability\_spool\_file()}}
+\label{list-research-tracability-spool-file}
+\index{List::research\_tracability\_spool\_file()}
+
+Researches the tracability files .sub for subscription or .auth for authentication in the \dir{[SPOOLDIR]/tracability/} spool. 
+
+   \textbf{IN} : 
+   \begin{enumerate}
+      \item \lparam{self} (+): ref(List)
+      \item \lparam{email} (+): SCALAR - the subscriber's email
+      \item \lparam{suffix} (+): SCALAR - 'sub' | 'auth'
+   \end{enumerate}
+
+   \textbf{OUT} : 'absent' | 'present'
+
+\subsubsection {\large{delete\_tracability\_spool\_file()}}
+\label{list-delete-tracability-spool-file}
+\index{List::delete\_tracability\_spool\_file()}
+
+Deletes the tracability files .sub for subscription or .auth for authentication in the \dir{[SPOOLDIR]/tracability/} spool.
+
+   \textbf{IN} :
+   \begin{enumerate}
+      \item \lparam{self} (+): ref(List)
+      \item \lparam{email} (+): SCALAR - the subscriber's email
+   \end{enumerate}
+
+   \textbf{OUT} : 1
+
+\subsubsection {\large{research\_tracability\_dir\_file()}}
+\label{list-research-tracability-dir-file}
+\index{List::research\_tracability\_dir\_file()}
+
+Researches the tracability files .sub.init for initial subscription, .auth.init for initial authentication or 
+.sub.update for updated subscription in the tracability directory of the list.
+
+   \textbf{IN} :
+   \begin{enumerate}
+      \item \lparam{self} (+): ref(List)
+      \item \lparam{email} (+): SCALAR - the subscriber's email
+      \item \lparam{suffix} (+): SCALAR - 'sub.init' | 'auth.init' | 'sub.update'
+   \end{enumerate}
+
+   \textbf{OUT} : 'absent' | 'present'
+
+\subsubsection {\large{get\_tracability\_dir\_file()}}
+\label{list-get-tracability-dir-file}
+\index{List::get\_tracability\_dir\_file()}
+
+Returns a scalar which is the content of the tracability directory files (.sub.init for initial subscription, .auth.init for initial authentication or .sub.update 
+for updated subscription) if it exists.
+
+   \textbf{IN} :
+   \begin{enumerate}
+      \item \lparam{self} (+): ref(List)
+      \item \lparam{email} (+): SCALAR - the subscriber's email
+      \item \lparam{suffix} (+): SCALAR - 'sub.init' | 'auth.init' | 'sub.update'
+   \end{enumerate}
+
+   \textbf{OUT} : SCALAR - \lparam{filecontent} 
+
+\subsubsection {\large{delete\_tracability\_dir\_file}}
+\label{list-delete-tracability-dir-file}
+\index{List::delete\_tracability\_dir\_file()}
+
+Deletes the tracability file .init for initial subscription or 
+.update for updated subscription in the tracability directory of the list.
+
+   \textbf{IN} :
+   \begin{enumerate}
+      \item \lparam{self} (+): ref(List)
+      \item \lparam{email} (+): SCALAR - the subscriber's email
+      \item \lparam{suffix} (+): SCALAR - 'init' | 'update'
+   \end{enumerate}
+
+   \textbf{OUT} : 1
+
+\subsubsection {\large{search\_datasource\_desc}}
+\label{list-search-datasource-desc}
+\index{List::search\_datasource\_desc()}
+
+Returns the description parameter of the included datasource corresponding to the provided \lparam{id}.
+
+   \textbf{IN} :
+   \begin{enumerate}
+      \item \lparam{self} (+): ref(List)
+      \item \lparam{id} (+): ref(HASH) - unique id for an included datasource
+   \end{enumerate}
+
+   \textbf{OUT} : SCALAR - \lparam{\$id{'description'}} | 'not indicated'  
+
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%% sympa.pl %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -10367,7 +10643,7 @@ Search and load msg topic file corresponding to the message ID  (\file{directory
    Handles a message sent to a list (Those that can make loop and those containing a command are 
    rejected). This function can call various functions : \begin{itemize}
      \item List::distribute\_msg() for distribution (see \ref {list-distribute-msg}, page~\pageref {list-distribute-msg})
-     \item List::send\_auth() for authentification or topic tagging by message sender(see \ref {list-send-auth}, page~\pageref {list-send-auth})
+     \item List::send\_auth() for authentication or topic tagging by message sender(see \ref {list-send-auth}, page~\pageref {list-send-auth})
      \item List::send\_to\_editor() for moderation or topic tagging by list moderator(see \ref {list-send-to-editor}, page~\pageref {list-send-to-editor}).
      \item List::automatic\_tag() for automatic topic tagging (see \ref {list-automatic-tag}, page~\pageref {list-automatic-tag}).
    \end{itemize}
@@ -10522,7 +10798,7 @@ Search and load msg topic file corresponding to the message ID  (\file{directory
    \begin{enumerate}
       \item \lparam{what}(+): command parameters : listname, email and comments eventually
       \item \lparam{robot}(+): robot
-      \item \lparam{sign\_mod} : 'smime' \(\mid\) undef - authentification
+      \item \lparam{sign\_mod} : 'smime' \(\mid\) undef - authentication
    \end{enumerate}
 
    \textbf{OUT} : 'unknown\_list' \(\mid\) 'wrong\_auth' \(\mid\) 'not\_allowed' \(\mid\) 1 
@@ -10538,7 +10814,7 @@ Search and load msg topic file corresponding to the message ID  (\file{directory
    \begin{enumerate}
       \item \lparam{what}(+): command parameters : listname and email 
       \item \lparam{robot}(+): robot
-      \item \lparam{sign\_mod} : 'smime' \(\mid\) undef - authentification
+      \item \lparam{sign\_mod} : 'smime' \(\mid\) undef - authentication
    \end{enumerate}
 
    \textbf{OUT} : 'unknown\_list' \(\mid\) 'wrong\_auth' \(\mid\) 'not\_allowed' \(\mid\) 1
@@ -10553,7 +10829,7 @@ Search and load msg topic file corresponding to the message ID  (\file{directory
    \begin{enumerate}
       \item \lparam{what}(+): command parameters : listname and comments eventually
       \item \lparam{robot}(+): robot
-      \item \lparam{sign\_mod} : 'smime' \(\mid\) undef - authentification
+      \item \lparam{sign\_mod} : 'smime' \(\mid\) undef - authentication
    \end{enumerate}
 
    \textbf{OUT} : 'unknown\_list' \(\mid\) 'wrong\_auth' \(\mid\) 'not\_allowed' \(\mid\) 1 
@@ -10568,7 +10844,7 @@ Search and load msg topic file corresponding to the message ID  (\file{directory
    \begin{enumerate}
       \item \lparam{which}(+): command parameters : listname and email 
       \item \lparam{robot}(+): robot
-      \item \lparam{sign\_mod} : 'smime' \(\mid\) undef - authentification
+      \item \lparam{sign\_mod} : 'smime' \(\mid\) undef - authentication
    \end{enumerate}
 
    \textbf{OUT} : 'syntax\_error' \(\mid\) 'unknown\_list' \(\mid\) 'wrong\_auth' \(\mid\) 'not\_allowed' \(\mid\) 1
@@ -10583,7 +10859,7 @@ Search and load msg topic file corresponding to the message ID  (\file{directory
    \begin{enumerate}
       \item \lparam{what}(+): command parameters : listname, email and comments 
       \item \lparam{robot}(+): robot
-      \item \lparam{sign\_mod} : 'smime' \(\mid\) undef - authentification
+      \item \lparam{sign\_mod} : 'smime' \(\mid\) undef - authentication
    \end{enumerate}
 
    \textbf{OUT} : 'unknown\_list' \(\mid\) 'wrong\_auth' \(\mid\) 'not\_allowed' \(\mid\) 1
@@ -10636,13 +10912,13 @@ Search and load msg topic file corresponding to the message ID  (\file{directory
 \label{commands-confirm}
 \index{commands::confirm()}
 
-   Confirms the authentification of a message for its distribution on a list by calling function
+   Confirms the authentication of a message for its distribution on a list by calling function
    List::distribute\_msg() for distribution (see \ref {list-distribute-msg}, page~\pageref {list-distribute-msg}) 
    or by calling  List::send\_to\_editor() for moderation (see \ref {list-send-editor}, page~\pageref {list-send-editor}).
    
    \textbf{IN} : 
    \begin{enumerate}
-      \item \lparam{what}(+): authentification key (command parameter)
+      \item \lparam{what}(+): authentication key (command parameter)
       \item \lparam{robot}(+): robot
    \end{enumerate}
 
@@ -10671,7 +10947,7 @@ Search and load msg topic file corresponding to the message ID  (\file{directory
 
    \textbf{IN} : 
    \begin{enumerate}
-      \item \lparam{what}(+): command parameters : listname and authentification key
+      \item \lparam{what}(+): command parameters : listname and authentication key
       \item \lparam{robot}(+): robot
    \end{enumerate}
 
@@ -10685,7 +10961,7 @@ Search and load msg topic file corresponding to the message ID  (\file{directory
 
    \textbf{IN} : 
    \begin{enumerate}
-      \item \lparam{what}(+): command parameters : listname and authentification key
+      \item \lparam{what}(+): command parameters : listname and authentication key
       \item \lparam{robot}(+): robot
    \end{enumerate}
 
@@ -10716,7 +10992,7 @@ Search and load msg topic file corresponding to the message ID  (\file{directory
    \begin{enumerate}
       \item \lparam{listname}(+): list name
       \item \lparam{robot}(+): robot
-      \item \lparam{sign\_mod} : 'smime' \(\mid\) undef - authentification
+      \item \lparam{sign\_mod} : 'smime' \(\mid\) undef - authentication
    \end{enumerate}
 
    \textbf{OUT} : 'unknown\_list' \(\mid\) wrong\_auth \(\mid\) no\_subscribers \(\mid\) 'not\_allowed' \(\mid\) 1
@@ -10731,7 +11007,7 @@ Search and load msg topic file corresponding to the message ID  (\file{directory
    \begin{enumerate}
       \item \lparam{listname}(+): list name
       \item \lparam{robot}(+): robot
-      \item \lparam{sign\_mod} : 'smime' \(\mid\) undef - authentification
+      \item \lparam{sign\_mod} : 'smime' \(\mid\) undef - authentication
    \end{enumerate}
 
    \textbf{OUT} : 1
@@ -10748,7 +11024,7 @@ Search and load msg topic file corresponding to the message ID  (\file{directory
    \begin{enumerate}
       \item \lparam{which}(+): * \(\mid\) listname
       \item \lparam{robot}(+): robot
-      \item \lparam{sign\_mod} : 'smime' \(\mid\) undef - authentification
+      \item \lparam{sign\_mod} : 'smime' \(\mid\) undef - authentication
    \end{enumerate}
 
    \textbf{OUT} : 'syntax\_error' \(\mid\) 'unknown\_list' \(\mid\) 'wrong\_auth' \(\mid\) 'not\_allowed' \(\mid\) 1
@@ -10763,7 +11039,7 @@ Search and load msg topic file corresponding to the message ID  (\file{directory
    \begin{enumerate}
       \item \lparam{listname}(+): name of concerned list
       \item \lparam{robot}(+): robot
-      \item \lparam{sign\_mod} : 'smime' \(\mid\) undef - authentification
+      \item \lparam{sign\_mod} : 'smime' \(\mid\) undef - authentication
    \end{enumerate}
 
    \textbf{OUT} : 'unknown\_list' \(\mid\) 'wrong\_auth' \(\mid\) 'not\_allowed' \(\mid\) 1 
@@ -10778,7 +11054,7 @@ Search and load msg topic file corresponding to the message ID  (\file{directory
    \begin{enumerate}
       \item \lparam{listname}(+): list name
       \item \lparam{robot}(+): robot
-      \item \lparam{sign\_mod} : 'smime' \(\mid\) undef - authentification
+      \item \lparam{sign\_mod} : 'smime' \(\mid\) undef - authentication
    \end{enumerate}
 
    \textbf{OUT} : 'unknown\_list' \(\mid\) 'not\_allowed' \(\mid\) 1 
@@ -10848,7 +11124,7 @@ Search and load msg topic file corresponding to the message ID  (\file{directory
 \label{commands-get-auth-method}
 \index{commands::get\_auth\_method()}
    
-   Called by processing command functions to return the authentification method
+   Called by processing command functions to return the authentication method
    and to check the key if it is 'md5' method.
 
    \textbf{IN} : 
@@ -10861,10 +11137,10 @@ Search and load msg topic file corresponding to the message ID  (\file{directory
              \item \lparam{data} : ref(HASH) for ``message\_report'' template parsing
              \item \lparam{msg} : for do\_log()
 	   \end{itemize}
-      \item \lparam{sign\_mod}(+): 'smime' - smime authentification \(\mid\) undef - smtp or md5 authentification 
+      \item \lparam{sign\_mod}(+): 'smime' - smime authentication \(\mid\) undef - smtp or md5 authentication 
       \item \lparam{list}: ref(List) \(\mid\) undef - in a list context or not
    \end{enumerate}
-   \textbf{OUT} : 'smime' \(\mid\) 'md5' \(\mid\) 'smtp' - authentification method if checking not failed.
+   \textbf{OUT} : 'smime' \(\mid\) 'md5' \(\mid\) 'smtp' - authentication method if checking not failed.
 
 
 The following functions are called by processing command functions. It allows to push errors in 
@@ -10988,7 +11264,8 @@ do\_tag\_topic\_by\_sender().
 \index{wwsympa::do\_reject()}
 
   Refuses and deletes moderated messages. Rejected message senders are notified by
-  sending them template 'reject'.\begin{itemize} 
+  sending them template 'reject'. The list editor has the possibility to personalize this template 
+via the Web interface. \begin{itemize} 
    \item \textbf{IN} : -
    \item \textbf{OUT} : 'loginrequest' \(\mid\) 'modindex'
   \end{itemize}    
@@ -11160,6 +11437,20 @@ Makes set operation on arrays seen as set (with no double) :
    \textbf{IN} : \lparam{msg\_id}(+): the email
 
    \textbf{OUT} : the clean email
+
+\subsubsection {\large{move\_file()}}
+\label{tools-move-file}
+\index{tools::move\_file()}
+
+  Moves a file from its original path to an other path
+
+   \textbf{IN} : 
+   \begin{enumerate}
+      \item \lparam{orig\_path}(+): SCALAR - the original path
+      \item \lparam{dest\_path}(+): SCALAR - the final path
+   \end{enumerate}
+	
+   \textbf{OUT} : 1
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%% Message.pm %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%

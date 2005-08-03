@@ -1,66 +1,317 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2 Final//EN">
 
-<H1><A NAME="SECTION002200000000000000000"><tex2html_anchor_invisible_mark></A>
-    <A NAME="reception-mode"><tex2html_anchor_mark></A>    <A NAME="3958"><tex2html_anchor_invisible_mark></A><BR>
-21. Reception mode
+<!--Converted with jLaTeX2HTML 2002-2-1 (1.70) JA patch-2.0
+patched version by:  Kenshi Muto, Debian Project.
+* modified by:  Shige TAKENO
+LaTeX2HTML 2002-2-1 (1.70),
+original version by:  Nikos Drakos, CBLU, University of Leeds
+* revised and updated by:  Marcus Hennecke, Ross Moore, Herb Swan
+* with significant contributions from:
+  Jens Lippmann, Marek Rouchal, Martin Wilck and others -->
+<HTML>
+<HEAD>
+<TITLE>Compilation and installation </TITLE>
+<META NAME="description" CONTENT="Compilation and installation ">
+<META NAME="keywords" CONTENT="sympa">
+<META NAME="resource-type" CONTENT="document">
+<META NAME="distribution" CONTENT="global">
+
+<META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=iso-8859-1">
+<META NAME="Generator" CONTENT="jLaTeX2HTML v2002-2-1 JA patch-2.0">
+<META HTTP-EQUIV="Content-Style-Type" CONTENT="text/css">
+
+<LINK REL="STYLESHEET" HREF="sympa.css">
+
+<LINK REL="next" HREF="node24.html">
+<LINK REL="previous" HREF="node16.html">
+<LINK REL="up" HREF="node14.html">
+<LINK REL="next" HREF="node23.html">
+</HEAD>
+
+<BODY TEXT="#000000" BGCOLOR="#ffffff">
+<!--Navigation Panel-->
+<A NAME="tex2html1424"
+  HREF="node23.html">
+<IMG WIDTH="37" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="next" SRC="next.png"></A> 
+<A NAME="tex2html1418"
+  HREF="node14.html">
+<IMG WIDTH="26" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="up" SRC="up.png"></A> 
+<A NAME="tex2html1412"
+  HREF="node21.html">
+<IMG WIDTH="63" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="previous" SRC="prev.png"></A> 
+<A NAME="tex2html1420"
+  HREF="node1.html">
+<IMG WIDTH="65" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="contents" SRC="contents.png"></A> 
+<A NAME="tex2html1422"
+  HREF="node548.html">
+<IMG WIDTH="43" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="index" SRC="index.png"></A> 
+<BR>
+<B> Next:</B> <A NAME="tex2html1425"
+  HREF="node23.html">Choosing directory locations</A>
+<B> Up:</B> <A NAME="tex2html1419"
+  HREF="node14.html">Installing Sympa</A>
+<B> Previous:</B> <A NAME="tex2html1413"
+  HREF="node21.html">Create a UNIX user</A>
+ &nbsp; <B>  <A NAME="tex2html1421"
+  HREF="node1.html">Contents</A></B> 
+ &nbsp; <B>  <A NAME="tex2html1423"
+  HREF="node548.html">Index</A></B> 
+<BR>
+<BR>
+<!--End of Navigation Panel-->
+
+<H1><A NAME="SECTION00430000000000000000">
+Compilation and installation </A>
 </H1>
 
 <P>
-
-<H1><A NAME="SECTION002210000000000000000"><tex2html_anchor_invisible_mark></A>
-<A NAME="msg-topics"><tex2html_anchor_mark></A><A NAME="3961"><tex2html_anchor_invisible_mark></A><BR>
-21.1 Message topics
-</H1>
+Before using <I>Sympa</I>, you must customize the sources in order to
+specify a small number of parameters specific to your installation.
 
 <P>
-A list can be configured to have message topics (this notion is different from topics used to class
-mailing lists). Users can subscribe to these message topics in order to receive a subset of distributed messages :
-a message can have one or more topics and subscribers will receive only messages that have been 
-tagged with a topic they are subscribed to. A message can be tagged automatically, by the message 
-sender or by the list moderator.
+First, extract the sources from the archive file, for example
+in the <A NAME="6739"></A><TT>~sympa/src/</TT> directory: the archive will create a
+directory named <A NAME="6744"></A><TT>sympa-5.0b.2/</TT> where all the useful files
+and directories will be located. In particular, you will have a
+<A NAME="6747"></A><TT>doc/</TT> directory containing this documentation in various
+formats; a <A NAME="6750"></A><TT>sample/</TT> directory containing a few examples of
+configuration files; a <A NAME="6753"></A><TT>locale/</TT> directory where multi-lingual
+messages are stored; and, of course, the <A NAME="6756"></A><TT>src/</TT> directory for the
+mail robot and <A NAME="6759"></A><TT>wwsympa</TT> for the web interface.
 
 <P>
-
-<H2><A NAME="SECTION002211000000000000000">
-21.1.1 Message topic definition in a list</A>
-</H2>
+Example:
 
 <P>
-Available message topics are defined by list parameters. Foreach new message topic, create a new <A NAME="10881"><tex2html_anchor_invisible_mark></A><TT>msg_topic</TT> paragraph
-that defines the name and the title of the topic. If a thread is identified for the current message then the automatic procedure is performed.
-Else, to use automatic tagging, you should define keywords (See (<A HREF=<tex2html_cr_mark>#par-msg-topic#3964><tex2html_cr_mark></A>, page~<A HREF=<tex2html_cr_mark>#par-msg-topic#3965><tex2html_cross_ref_visible_mark></A>) 
-To define which part of the message is used for automatic tagging
-you have to define <A NAME="10884"><tex2html_anchor_invisible_mark></A><TT>msg_topic_keywords_apply_on</TT> list parameter (See <A HREF=<tex2html_cr_mark>#par-msg-topic-key-apply-on#3967><tex2html_cr_mark></A>, 
-page~<A HREF=<tex2html_cr_mark>#par-msg-topic-key-apply-on#3968><tex2html_cross_ref_visible_mark></A>). Tagging a message can be optional or it can be required, depending on the
-<A NAME="10887"><tex2html_anchor_invisible_mark></A><TT>msg_topic_tagging</TT> list parameter (See (<A HREF=<tex2html_cr_mark>#par-msg-topic-tagging#3970><tex2html_cr_mark></A>,page~<A HREF=<tex2html_cr_mark>#par-msg-topic-tagging#3971><tex2html_cross_ref_visible_mark></A>).
+<BLOCKQUOTE>
+<TT># su - 
+<BR>$ gzip -dc sympa-5.0b.2.tar.gz | tar xf -
+
+</TT></BLOCKQUOTE>
 
 <P>
-
-<H2><A NAME="SECTION002212000000000000000">
-21.1.2 Subscribing to message topic for list subscribers</A>
-</H2>
+<A NAME="makefile"></A>
+<P>
+Now you can run the installation process :
 
 <P>
-This functionnality is only available via ``normal'' reception mode. Subscribers can select message topic to receive messages tagged with this topic.
-To receive messages that were not tagged, users can subscribe to the topic ``other''. Message topics selected by a subscriber are stored in <I>Sympa</I> 
-database (subscriber_table table).
+<BLOCKQUOTE>
+<TT>$ ./configure
+<BR>$ make
+<BR>$ make install
+<BR>
+</TT></BLOCKQUOTE>
 
 <P>
-
-<H2><A NAME="SECTION002213000000000000000">
-21.1.3 Message tagging</A>
-</H2>
-
-<P>
-First of all, if one or more <A NAME="10891"><tex2html_anchor_invisible_mark></A><TT>msg_topic.keywords</TT> are defined, <I>Sympa</I> tries to tag messages automatically. 
-To trigger manual tagging, by message sender or list moderator, on the web interface, <I>Sympa</I> uses authorization scenarios : if the resulted action is ``editorkey'' 
-(for example in scenario send.editorkey), the list moderator is asked to tag the message. 
-If the resulted action is ``request_auth'' (for example in scenario send.privatekey), the message sender is asked to tag the message. 
-The following variables are available as scenario variables to customize tagging : topic, topic-sender, topic-editor, topic-auto, topic-needed.
-(See (<A HREF=<tex2html_cr_mark>#scenarios#3975><tex2html_cr_mark></A>, page~<A HREF=<tex2html_cr_mark>#scenarios#3976><tex2html_cross_ref_visible_mark></A>) If message tagging is required and if it was not yet performed, <I>Sympa</I> will ask to the list moderator.
-
-<P>
-Tagging a message will create a topic information file in the <A NAME="10897"><tex2html_anchor_invisible_mark></A><TT>/usr/local/sympa-ff//spool/topic/</TT> spool. Its name is based on the listname and the Message-ID. 
-For message distribution, a ``X-Sympa-Topic'' field is added to the message to allow members to use mail filters.
+<A NAME="6762"></A><TT>configure</TT> will build the <A NAME="6765"></A><TT>Makefile</TT> ; it recognizes the following 
+command-line arguments :
 
 <P>
 
+<UL>
+<LI><A NAME="6768"></A><TT>- - prefix=PREFIX</TT>, the <I>Sympa</I> homedirectory (default /home/sympa/)
+
+<P>
+</LI>
+<LI><A NAME="6772"></A><TT>- - with-bindir=DIR</TT>, user executables in DIR (default /home/sympa/bin/)
+<BR><A NAME="6775"></A><TT>queue</TT> and <A NAME="6778"></A><TT>bouncequeue</TT> programs will be installed in this directory.
+If sendmail is configured to use smrsh (check the mailer prog definition in your sendmail.cf),
+this should point to <A NAME="6781"></A><TT>/etc/smrsh</TT>.  This is probably the case if you are using Linux RedHat.
+
+<P>
+</LI>
+<LI><A NAME="6784"></A><TT>- - with-sbindir=DIR</TT>, system admin executables in DIR (default /home/sympa/bin)
+
+<P>
+</LI>
+<LI><A NAME="6787"></A><TT>- - with-libexecdir=DIR</TT>, program executables in DIR (default /home/sympa/bin)
+
+<P>
+</LI>
+<LI><A NAME="6790"></A><TT>- - with-cgidir=DIR</TT>, CGI programs in DIR (default /home/sympa/bin)
+
+<P>
+</LI>
+<LI><A NAME="6793"></A><TT>- - with-iconsdir=DIR</TT>, web interface icons in DIR (default /home/httpd/icons)
+
+<P>
+</LI>
+<LI><A NAME="6796"></A><TT>- - with-datadir=DIR</TT>, default configuration data in DIR (default /home/sympa/bin/etc)
+
+<P>
+</LI>
+<LI><A NAME="6799"></A><TT>- - with-confdir=DIR</TT>, Sympa main configuration files in DIR (default /etc)
+<BR><A NAME="6802"></A><TT>sympa.conf</TT> and <A NAME="6805"></A><TT>wwsympa.conf</TT> will be installed there.
+
+<P>
+</LI>
+<LI><A NAME="6808"></A><TT>- - with-exlpdir=DIR</TT>, modifiable data in DIR (default /home/sympa/expl/)
+
+<P>
+</LI>
+<LI><A NAME="6811"></A><TT>- - with-libdir=DIR</TT>,  code libraries in DIR (default /home/sympa/bin/)
+
+<P>
+</LI>
+<LI><A NAME="6814"></A><TT>- - with-mandir=DIR</TT>, man documentation in DIR (default /usr/local/man/)
+
+<P>
+</LI>
+<LI><A NAME="6817"></A><TT>- - with-docdir=DIR</TT>, man files in DIR (default /home/sympa/doc/)
+
+<P>
+</LI>
+<LI><A NAME="6820"></A><TT>- - with-initdir=DIR</TT>, install System V init script in DIR  (default /etc/rc.d/init.d)
+
+<P>
+</LI>
+<LI><A NAME="6823"></A><TT>- - with-lockdir=DIR</TT>, create lock files in DIR  (default /var/lock/subsys)
+
+<P>
+</LI>
+<LI><A NAME="6826"></A><TT>- - with-piddir=DIR</TT>, create .pid files in DIR  (default /home/sympa/)
+
+<P>
+</LI>
+<LI><A NAME="6829"></A><TT>- - with-etcdir=DIR</TT>, Config directories populated by the user are in DIR (default /home/sympa/etc)
+
+<P>
+</LI>
+<LI><A NAME="6832"></A><TT>- - with-localedir=DIR</TT>, create language files in DIR (default /home/sympa/locale)
+
+<P>
+</LI>
+<LI><A NAME="6835"></A><TT>- - with-scriptdir=DIR</TT>, create script files in DIR (default /home/sympa/script)
+
+<P>
+</LI>
+<LI><A NAME="6838"></A><TT>- - with-sampledir=DIR</TT>, create sample files in DIR (default /home/sympa/sample)
+
+<P>
+</LI>
+<LI><A NAME="6841"></A><TT>- - with-spooldir=DIR</TT>, create directory in DIR (default /home/sympa/spool)
+
+<P>
+</LI>
+<LI><A NAME="6844"></A><TT>- - with-perl=FULLPATH</TT>, set full path to Perl interpreter (default /usr/bin/perl)
+
+<P>
+</LI>
+<LI><A NAME="6847"></A><TT>- - with-openssl=FULLPATH</TT>, set path to OpenSSL (default /usr/local/ssl/bin/openssl)
+
+<P>
+</LI>
+<LI><A NAME="6850"></A><TT>- - with-user=LOGI</TT>, set sympa user name (default sympa)
+<BR><I>Sympa</I> daemons are running under this UID.
+
+<P>
+</LI>
+<LI><A NAME="6854"></A><TT>- - with-group=LOGIN</TT>, set sympa group name (default sympa)
+<BR><I>Sympa</I> daemons are running under this UID.
+
+<P>
+</LI>
+<LI><A NAME="6858"></A><TT>- - with-sendmail_aliases=ALIASFILE</TT>, set aliases file to be used by Sympa (default /etc/mail/sympa_aliases). (You can overright this value at runtime giving its value in <A NAME="6861"></A><TT>sympa.conf</TT>)
+<BR>
+<P>
+</LI>
+<LI><A NAME="6864"></A><TT>- - with-virtual_aliases=ALIASFILE</TT>, set postfix virtual file to be used by Sympa (default /etc/mail/sympa_virtual)
+<BR>
+<P>
+This is used by the <A NAME="6867"></A><TT>alias_manager.pl</TT> script :
+
+<P>
+</LI>
+<LI><A NAME="6870"></A><TT>- - with-newaliases=FULLPATH</TT>, set path to sendmail newaliases command (default /usr/bin/newaliases)
+
+<P>
+</LI>
+<LI><A NAME="6873"></A><TT>- - with-newaliases_arg=ARGS</TT>, set arguments to newaliases command (default NONE)
+
+<P>
+This is used by the <A NAME="6876"></A><TT>postfix_manager.pl</TT> script :
+
+<P>
+</LI>
+<LI><A NAME="6879"></A><TT>- - with-postmap=FULLPATH</TT>, set path to postfix postmap command (default /usr/sbin/postmap)
+
+<P>
+</LI>
+<LI><A NAME="6882"></A><TT>- - with-postmap_arg=ARGS</TT>, set arguments to postfix postmap command (default NONE)
+
+<P>
+</LI>
+</UL>
+
+<P>
+<A NAME="6885"></A><TT>make</TT> will build a few binaries (<A NAME="6888"></A><TT>queue</TT>, <A NAME="6891"></A><TT>bouncequeue</TT> and <A NAME="6894"></A><TT>aliaswrapper</TT>)
+and help you install required CPAN modules.
+
+<P>
+<A NAME="6897"></A><TT>make install</TT> does the installation job. It it recognizes the following option :
+
+<P>
+
+<UL>
+<LI>DESTDIR, can be set in the main Makefile to install sympa in DESTDIR/DIR
+(instead of DIR). This is useful for building RPM and DEB packages.
+
+<P>
+</LI>
+</UL>
+
+<P>
+Since version 3.3 of Sympa colors are <A NAME="6900"></A><TT>sympa.conf</TT> parameters (see
+<A HREF="node53.html#colors">7.1.10</A>,  page&nbsp;<A HREF="node53.html#colors"><IMG  ALIGN="BOTTOM" BORDER="1" ALT="[*]" SRC="crossref.png"></A>)
+
+<P>
+If everything goes smoothly, the <A NAME="6903"></A><TT>~sympa/bin/</TT> directory
+will contain various PERL programs as well as the <A NAME="6908"></A><TT>queue</TT>
+binary.  You will remark that this binary has the <A NAME="518"></A> <I>set-uid-on-exec</I> bit set (owner is the <TT>sympa</TT>
+user): this is deliberate, and indispensable if <I>Sympa</I> is to run correctly.
+
+<P>
+<BR><HR>
+<!--Table of Child-Links-->
+<A NAME="CHILD_LINKS"><STRONG>Subsections</STRONG></A>
+
+<UL>
+<LI><A NAME="tex2html1426"
+  HREF="node23.html">Choosing directory locations</A>
+</UL>
+<!--End of Table of Child-Links-->
+<HR>
+<!--Navigation Panel-->
+<A NAME="tex2html1424"
+  HREF="node23.html">
+<IMG WIDTH="37" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="next" SRC="next.png"></A> 
+<A NAME="tex2html1418"
+  HREF="node14.html">
+<IMG WIDTH="26" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="up" SRC="up.png"></A> 
+<A NAME="tex2html1412"
+  HREF="node21.html">
+<IMG WIDTH="63" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="previous" SRC="prev.png"></A> 
+<A NAME="tex2html1420"
+  HREF="node1.html">
+<IMG WIDTH="65" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="contents" SRC="contents.png"></A> 
+<A NAME="tex2html1422"
+  HREF="node548.html">
+<IMG WIDTH="43" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="index" SRC="index.png"></A> 
+<BR>
+<B> Next:</B> <A NAME="tex2html1425"
+  HREF="node23.html">Choosing directory locations</A>
+<B> Up:</B> <A NAME="tex2html1419"
+  HREF="node14.html">Installing Sympa</A>
+<B> Previous:</B> <A NAME="tex2html1413"
+  HREF="node21.html">Create a UNIX user</A>
+ &nbsp; <B>  <A NAME="tex2html1421"
+  HREF="node1.html">Contents</A></B> 
+ &nbsp; <B>  <A NAME="tex2html1423"
+  HREF="node548.html">Index</A></B> 
+<!--End of Navigation Panel-->
+<ADDRESS>
+root
+2005-08-02
+</ADDRESS>
+</BODY>
+</HTML>
