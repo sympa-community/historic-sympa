@@ -3681,7 +3681,7 @@ sub do_subscription_trace {
 	     }
 	 }
 	 
-	 if ($param->{'subscriber'}{'included'}) {
+	 if ($param->{'user'}{'included'}) {
 	     unless ($list->update_user($param->{'user'}{'email'}, 
 					{'subscribed' => 0,
 					 'update_date' => time,

@@ -546,7 +546,13 @@ sub signoff {
 	    unless ($list->update_user($sender, 
 				       {'subscribed' => 0,
 					'update_date' => time,
-					})) {
+					'who_init' => undef,
+					'who_update' => undef,
+					'how_init' => undef,
+					'how_update' => undef,
+					'ip_init' => undef,
+					'ip_update' => undef,
+					'subscribed_date' => undef})) {
 		&Log::do_log('err',"Unable to update $sender");
 	    }
 	} elsif ($subscriber->{'included'}) {
