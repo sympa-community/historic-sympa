@@ -1,0 +1,14 @@
+<!-- $Id$ -->
+ <form action="[% path_cgi %]" method="post">
+[%|loc%]Your subscription file :[%END%]<br />
+<textarea cols="60" rows="10" name="body">[% file %]</textarea></td>    
+<input type="hidden" name="list" value="[% list %]" /> 
+<input type="hidden" name="previous_action" value="[% previous_action %]" />
+<input type="hidden" name="email" value="[% email %]" />
+[% IF previous_action == 'suboptions' %]
+	<input class="MainMenuLinks" type="submit" name="action_suboptions" value="[%|loc%]Ok[%END%]" />
+[% ELSE %]
+	<input class="MainMenuLinks" type="submit" name="action_editsubscriber" value="[%|loc%]Ok[%END%]" />
+[% END %]
+</td>
+</form>

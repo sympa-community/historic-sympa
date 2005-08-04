@@ -10,85 +10,256 @@ original version by:  Nikos Drakos, CBLU, University of Leeds
   Jens Lippmann, Marek Rouchal, Martin Wilck and others -->
 <HTML>
 <HEAD>
-<TITLE>この文書について...</TITLE>
-<META NAME="description" CONTENT="この文書について...">
+<TITLE>sympa.pl</TITLE>
+<META NAME="description" CONTENT="sympa.pl">
 <META NAME="keywords" CONTENT="sympa">
 <META NAME="resource-type" CONTENT="document">
 <META NAME="distribution" CONTENT="global">
 
-<META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=EUC-JP">
+<META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=iso-8859-1">
 <META NAME="Generator" CONTENT="jLaTeX2HTML v2002-2-1 JA patch-2.0">
 <META HTTP-EQUIV="Content-Style-Type" CONTENT="text/css">
 
 <LINK REL="STYLESHEET" HREF="sympa.css">
 
+<LINK REL="next" HREF="node28.html">
 <LINK REL="previous" HREF="node26.html">
-<LINK REL="up" HREF="sympa.html">
+<LINK REL="up" HREF="node26.html">
+<LINK REL="next" HREF="node28.html">
 </HEAD>
 
 <BODY TEXT="#000000" BGCOLOR="#ffffff">
 <!--Navigation Panel-->
-<IMG WIDTH="37" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="next" SRC="next_g.png"> 
-<A NAME="tex2html1394"
-  HREF="sympa.html">
+<A NAME="tex2html1496"
+  HREF="node28.html">
+<IMG WIDTH="37" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="next" SRC="next.png"></A> 
+<A NAME="tex2html1490"
+  HREF="node26.html">
 <IMG WIDTH="26" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="up" SRC="up.png"></A> 
-<A NAME="tex2html1390"
+<A NAME="tex2html1484"
   HREF="node26.html">
 <IMG WIDTH="63" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="previous" SRC="prev.png"></A> 
-<A NAME="tex2html1396"
+<A NAME="tex2html1492"
   HREF="node1.html">
 <IMG WIDTH="65" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="contents" SRC="contents.png"></A> 
-<A NAME="tex2html1398"
-  HREF="node26.html">
+<A NAME="tex2html1494"
+  HREF="node548.html">
 <IMG WIDTH="43" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="index" SRC="index.png"></A> 
 <BR>
-<B> :</B> <A NAME="tex2html1395"
-  HREF="sympa.html">Sympa Mailing Lists Management Software version</A>
-<B> :</B> <A NAME="tex2html1391"
-  HREF="node26.html">索引</A>
- &nbsp; <B>  <A NAME="tex2html1397"
-  HREF="node1.html">目次</A></B> 
- &nbsp; <B>  <A NAME="tex2html1399"
-  HREF="node26.html">索引</A></B> 
+<B> Next:</B> <A NAME="tex2html1497"
+  HREF="node28.html">INIT script</A>
+<B> Up:</B> <A NAME="tex2html1491"
+  HREF="node26.html">Running Sympa</A>
+<B> Previous:</B> <A NAME="tex2html1485"
+  HREF="node26.html">Running Sympa</A>
+ &nbsp; <B>  <A NAME="tex2html1493"
+  HREF="node1.html">Contents</A></B> 
+ &nbsp; <B>  <A NAME="tex2html1495"
+  HREF="node548.html">Index</A></B> 
 <BR>
 <BR>
 <!--End of Navigation Panel-->
 
-<H1><A NAME="SECTION002700000000000000000">
-&#164;^3&#164;&#206;&#202;&#184; 12&#241;&#164;&#203;&#164;&#196;&#164;&#164;&#164;&#198;...</A>
+<H1><A NAME="SECTION00510000000000000000"></A>
+<A NAME="sympa.pl"></A>
+<BR>
+sympa.pl
 </H1>
- <STRONG><FONT SIZE="+4"><B>Sympa 
-<BR><FONT SIZE="+3"><B>Mailing Lists Management Software 
-<BR>
-version 5.0b.1
-<BR></B></FONT></B></FONT></STRONG><P>
-この文書は<A HREF="http://www.latex2html.org/"><STRONG>LaTeX</STRONG>2<tt>HTML</tt></A> 翻訳プログラム Version 2002-2-1 (1.70)
+
 <P>
-Copyright &#169; 1993, 1994, 1995, 1996,
-<A HREF="http://cbl.leeds.ac.uk/nikos/personal.html">Nikos Drakos</A>, 
-Computer Based Learning Unit, University of Leeds,
-<BR>
-Copyright &#169; 1997, 1998, 1999,
-<A HREF="http://www.maths.mq.edu.au/~ross/">Ross Moore</A>, 
-Mathematics Department, Macquarie University, Sydney.
-<P>を<A HREF="http://takeno.iee.niit.ac.jp/~shige/TeX/latex2html/ltx2html.html">日本語化したもの</A>(
-2002-2-1 (1.70) JA patch-2.0 版)
+<A NAME="6957"></A><TT>sympa.pl</TT> is the main daemon ; it processes mail commands and is in charge of
+messages distribution.
+
 <P>
-Copyright &#169; 1998, 1999,
-<A HREF="http://www.topstudio.co.jp/~kmuto/">Kenshi Muto</A>, 
-Debian Project.
+<A NAME="6960"></A><TT>sympa.pl</TT> recognizes the following command line arguments:
+
+<P>
+
+<UL>
+<LI><A NAME="6963"></A><TT>- - debug</TT> | <A NAME="6966"></A><TT>-d</TT> 
+
+<P>
+Sets <I>Sympa</I> in debug mode and keeps it attached to the terminal. 
+  Debugging information is output to STDERR, along with standard log
+  information. Each function call is traced. Useful while reporting
+  a bug.
+
+<P>
+</LI>
+<LI><A NAME="6970"></A><TT>service</TT>  <I>process_command</I> | <I>process_message</I>
+
+<P>
+Sets <I>Sympa</I> daemon in way it process only message distribution (process_message) or in way it process only command (process_command).
+
+<P>
+</LI>
+<LI><A NAME="6983"></A><TT>- - config <I>config_file</I></TT> | <A NAME="6998"></A><TT>-f <I>config_file</I></TT>
+
+<P>
+Forces <I>Sympa</I> to use an alternative configuration file. Default behavior is
+  to use the configuration file as defined in the Makefile ($CONFIG).
+
+<P>
+</LI>
+<LI><A NAME="7005"></A><TT>- - mail</TT> | <A NAME="7008"></A><TT>-m</TT> 
+
+<P>
+<I>Sympa</I> will log calls to sendmail, including recipients. Useful for
+  keeping track of each mail sent (log files may grow faster though).
+
+<P>
+</LI>
+<LI><A NAME="7021"></A><TT>- - lang <I>catalog</I></TT> | <A NAME="7036"></A><TT>-l <I>catalog</I></TT>
+
+<P>
+Set this option to use a language catalog for <I>Sympa</I>. 
+  The corresponding catalog file must be located in <A NAME="7043"></A><TT>~sympa/locale</TT>
+  directory. 
+
+<P>
+</LI>
+<LI><A NAME="7057"></A><TT>- - keepcopy <I>recipient_directory</I></TT> | <A NAME="7072"></A><TT>-k <I>recipient_directory</I></TT>
+
+<P>
+This option tells Sympa to keep a copy of every incoming message,
+  instead of deleting them. <I>recipient_directory</I> is the directory
+  to store messages.
+
+<P><PRE>
+/home/sympa/bin/sympa.pl
+</PRE>
+
+<P>
+</LI>
+<LI><A NAME="7090"></A><TT>- - create_list - - robot <I>robotname</I> - - input_file <I>list_file.xml</I></TT>
+
+<P>
+Create the list described by the xml file, see <A HREF="node293.html#list-creation-sympa">18.3</A>, 
+page&nbsp;<A HREF="node293.html#list-creation-sympa"><IMG  ALIGN="BOTTOM" BORDER="1" ALT="[*]" SRC="crossref.png"></A>.
+
+<P>
+</LI>
+<LI><A NAME="7108"></A><TT>- - close_list <I>listname@robot</I></TT>
+
+<P>
+Close the list (changing its status to closed), remove aliases and remove
+subscribers from DB (a dump is created in the list directory to allow restoring
+the list). See <A HREF="#family-close-list"><IMG  ALIGN="BOTTOM" BORDER="1" ALT="[*]" SRC="crossref.png"></A>, page&nbsp;<A HREF="#family-close-list"><IMG  ALIGN="BOTTOM" BORDER="1" ALT="[*]" SRC="crossref.png"></A> when you
+are in a family context.
+
+<P>
+</LI>
+<LI><A NAME="7126"></A><TT>- - dump <I>listname <TT>|</TT> ALL</I></TT>
+
+<P>
+Dumps subscribers of a list or all lists. Subscribers are dumped
+  in <A NAME="7135"></A><TT>subscribers.db.dump</TT>.
+
+<P>
+</LI>
+<LI><A NAME="7147"></A><TT>- - import <I>listname</I></TT>
+
+<P>
+Import subscribers in the <I>listname</I> list. Data are read from STDIN.
+
+<P>
+</LI>
+<LI><A NAME="7153"></A><TT>- - lowercase</TT>
+
+<P>
+Lowercases e-mail addresses in database.
+
+<P>
+</LI>
+<LI><A NAME="7156"></A><TT>- - help</TT> | <A NAME="7159"></A><TT>-h</TT>
+
+<P>
+Print usage of sympa.pl.
+
+<P>
+</LI>
+<LI><A NAME="7162"></A><TT>- - make_alias_file</TT>
+
+<P>
+Create an aliases file in /tmp/ with all list aliases (only list which status is 'open'). It uses the list_aliases.tt2
+template.
+
+<P>
+</LI>
+<LI><A NAME="7165"></A><TT>- - version</TT> | <A NAME="7168"></A><TT>-v</TT>
+
+<P>
+Print current version of <I>Sympa</I>.
+
+<P>
+</LI>
+<LI><A NAME="7187"></A><TT>- - instanciate_family <I>familyname</I> <I>robotname</I> - - input_file <I>family_file.xml</I></TT>
+
+<P>
+Instantiate the family <I>familyname</I>. See <A HREF="node300.html#lists-families">19</A>, 
+page&nbsp;<A HREF="node300.html#lists-families"><IMG  ALIGN="BOTTOM" BORDER="1" ALT="[*]" SRC="crossref.png"></A>.
+
+<P>
+</LI>
+<LI><A NAME="7211"></A><TT>- - close_family <I>familyname</I> - - robot <I>robotname</I></TT>
+
+<P>
+Close the <I>familyname</I> family. See <A HREF="node310.html#family-closure">19.2.4</A>, 
+   page&nbsp;<A HREF="node310.html#family-closure"><IMG  ALIGN="BOTTOM" BORDER="1" ALT="[*]" SRC="crossref.png"></A>.
+
+<P>
+</LI>
+<LI><A NAME="7235"></A><TT>- - add_list <I>familyname</I> - - robot <I>robotname</I> - - input_file <I>list_file.xml</I></TT>
+
+<P>
+Add the list described in the XML file to the <I>familyname</I> family. See <A HREF="node311.html#family-add-list">19.2.5</A>, 
+   page&nbsp;<A HREF="node311.html#family-add-list"><IMG  ALIGN="BOTTOM" BORDER="1" ALT="[*]" SRC="crossref.png"></A>.
+
+<P>
+</LI>
+<LI><A NAME="7262"></A><TT>- - modify_list <I>familyname</I> - - robot <I>robotname</I> - - input_file <I>list_file.xml</I></TT>
+
+<P>
+Modify the existing family list, with description contained in the XML file. See <A HREF="node313.html#family-modify-list">19.2.7</A>, 
+   page&nbsp;<A HREF="node313.html#family-modify-list"><IMG  ALIGN="BOTTOM" BORDER="1" ALT="[*]" SRC="crossref.png"></A>.
+
+<P>
+</LI>
+</UL>
+
+<P>
+<HR>
+<!--Navigation Panel-->
+<A NAME="tex2html1496"
+  HREF="node28.html">
+<IMG WIDTH="37" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="next" SRC="next.png"></A> 
+<A NAME="tex2html1490"
+  HREF="node26.html">
+<IMG WIDTH="26" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="up" SRC="up.png"></A> 
+<A NAME="tex2html1484"
+  HREF="node26.html">
+<IMG WIDTH="63" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="previous" SRC="prev.png"></A> 
+<A NAME="tex2html1492"
+  HREF="node1.html">
+<IMG WIDTH="65" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="contents" SRC="contents.png"></A> 
+<A NAME="tex2html1494"
+  HREF="node548.html">
+<IMG WIDTH="43" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="index" SRC="index.png"></A> 
 <BR>
-Copyright &#169; 2001, 2002,
-<A HREF="http://takeno.iee.niit.ac.jp/~shige/">Shige TAKENO</A>, 
-Niigata Inst.Tech.
-<P>を用いて生成されました。
-<P>コマンド行は以下の通りでした。: <BR>
- <STRONG>latex2html</STRONG> <tt>-dir html -mkdir -tmp /tmp -verbosity 0 -local_icons sympa</tt>.
-<P>翻訳は root によって 平成17年3月8日 に実行されました。
-<BR><HR>
+<B> Next:</B> <A NAME="tex2html1497"
+  HREF="node28.html">INIT script</A>
+<B> Up:</B> <A NAME="tex2html1491"
+  HREF="node26.html">Running Sympa</A>
+<B> Previous:</B> <A NAME="tex2html1485"
+  HREF="node26.html">Running Sympa</A>
+ &nbsp; <B>  <A NAME="tex2html1493"
+  HREF="node1.html">Contents</A></B> 
+ &nbsp; <B>  <A NAME="tex2html1495"
+  HREF="node548.html">Index</A></B> 
+<!--End of Navigation Panel-->
 <ADDRESS>
 root
-平成17年3月8日
+2005-08-02
 </ADDRESS>
 </BODY>
 </HTML>

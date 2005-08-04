@@ -42,7 +42,7 @@ use FileHandle;
 use List;
 use Conf;
 use Log;
-use smtp;
+use mail;
 #use Getopt::Std;
 use Getopt::Long;
 use POSIX;
@@ -237,10 +237,12 @@ while (!$end) {
 			$list->save();
 			do_log ('notice',"$who has been removed from $listname because welcome message bounced");
 			
-			$list->send_notify_to_owner({'who' => $who, 
+			unless ($list->send_notify_to_owner('notice',{'who' => $who, 
 						     'gecos' => "", 
-						     'type' => 'automatic_del', 
-						     'by' => 'listmaster'});
+								      'command' => 'automatic_del', 
+								      'by' => 'listmaster'})) {
+			    &do_log('notice',"Unable to send notify 'notice' to $list->{'name'} list owner");
+			}
 		    }
 		}else {
 		    do_log ('notice',"Unable to remove $who from $listname (welcome message bounced but del is closed)");
@@ -393,7 +395,7 @@ while (!$end) {
     }
 
     ## Free zombie sendmail processes
-    &smtp::reaper;
+    &mail::reaper;
 
 }
 do_log('notice', 'bounced exited normally due to signal');

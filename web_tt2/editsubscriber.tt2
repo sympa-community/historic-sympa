@@ -1,18 +1,18 @@
 <!-- $Id$ -->
 
 <form action="[% path_cgi %]" method="post">
-<table style="width: 100%;" border="0">
-<tr><th style="background: [% dark_color %];">
-<span style="color: [% bg_color %];">[%|loc%]Subscriber information[%END%]</span>
-</th></tr><tr><td>
+<h3 class="block">[%|loc%]Subscriber information[%END%]</h3>
+
+<table>
+<tr><td>
 <input type="hidden" name="previous_action" value="[% previous_action %]" />
 <input type="hidden" name="list" value="[% list %]" />
 <input type="hidden" name="email" value="[% current_subscriber.escaped_email %]" />
+<input type="hidden" name="subscribed" value="[% current_subscriber.subscribed %]" />
 <table border="0" style="text-align: left;">
 <tr><th><label for="new_email">[%|loc%]Email :[%END%]</label></th><td><input type="text" name="new_email" id="new_email" value="[% current_subscriber.escaped_email %]" size="25" /></td></tr>
 <tr><th><label for="gecos">[%|loc%]Name :[%END%]</label></th><td><input type="text" name="gecos" id="gecos" value="[% current_subscriber.gecos %]" size="25" /></td></tr>
-<tr><th>[%|loc%]Subscribed since :[%END%]</th><td>[% current_subscriber.date %]</td></tr>
-<tr><th>[%|loc%]Last update :[%END%]</th><td>[% current_subscriber.update_date %]</td></tr>
+
 <tr><th><label for="reception">[%|loc%]Reception :[%END%]</label><td><select name="reception" id="reception">
 		  [% FOREACH r = reception %]
 		    <option value="[% r.key %]" [% r.value.selected %]>[% r.value.description %]</option>
@@ -35,8 +35,8 @@
  [% END %]
 [% END %]
 [% END %]
-<tr><td colspan="2"><input type="submit" name="action_set" value="[%|loc%]Update[%END%]" />
-<input type="submit" name="action_del" value="[%|loc%]Unsubscribe the User[%END%]" />
+<tr><td colspan="2"><input class="MainMenuLinks" type="submit" name="action_set" value="[%|loc%]Update[%END%]" />
+<input class="MainMenuLinks" type="submit" name="action_del" value="[%|loc%]Unsubscribe the User[%END%]" />
 <label><input type="checkbox" name="quiet" /> [%|loc%]quiet[%END%]</label>
 </td>
 </tr>
@@ -52,10 +52,85 @@
 <tr><th>[%|loc%]Bounces count :[%END%]</th><td>[% current_subscriber.bounce_count %]</td></tr>
 <tr><th>[%|loc%]Period :[%END%]</th><td>[%|loc(current_subscriber.first_bounce,current_subscriber.last_bounce)%]from %1 to %2[%END%]</td></tr>
 <tr><td colspan="2"><a href="[% path_cgi %]/viewbounce/[% list %]/[% current_subscriber.escaped_email %]">[%|loc%]View last bounce[%END%]</a></td></tr>
-<tr><td colspan="2"><input type="submit" name="action_resetbounce" value="[%|loc%]Reset errors[%END%]" /></td></tr>
+<tr><td colspan="2"><input class="MainMenuLinks" type="submit" name="action_resetbounce" value="[%|loc%]Reset errors[%END%]" /></td></tr>
 </table>
 </td></tr>
 [% END %]
+
+<tr><td> &nbsp; </td></tr>
+
+[% IF current_subscriber.subscribed %]
+	[% IF current_subscriber.email == current_subscriber.who_init %]
+		<tr><th>[%|loc%]Subscribed [%END%]
+		[% IF current_subscriber.subscribed_date %]
+			[%|loc%]since [%END%][% current_subscriber.subscribed_date %]
+		[% END %]
+	[% ELSIF !current_subscriber.who_init %]
+		<tr><th>[%|loc%]Subscribed [%END%]
+		[% IF !current_subscriber.who_update %]
+			[%|loc%]since [%END%][% current_subscriber.date %]
+		[% END %]
+	[% ELSE %]
+		<tr><th>[%|loc%]Added [%END%]
+		[% IF current_subscriber.subscribed_date %]
+			[%|loc%]since [%END%][% current_subscriber.subscribed_date %]
+		[% END %]
+		[%|loc%]by [%END%][% current_subscriber.who_init %]
+	[% END %]
+
+	[% IF current_subscriber.how_init %]
+		[%|loc%]via the [%END%][% current_subscriber.how_init %][%|loc%] interface[%END%]
+		[% IF current_subscriber.ip_init %]
+			([% current_subscriber.ip_init %])
+		[% END %]
+		</th></tr>
+
+		[% IF subinit == 'present' %]
+			<tr><td><input class="MainMenuLinks" type="submit" name="action_subscription_trace.subinit" value="[%|loc%]View subscription message[%END%]" /></td>
+			[% IF authinit == 'present' %]
+				<td><input class="MainMenuLinks" type="submit" name="action_subscription_trace.authinit" value="[%|loc%]View confirmation message[%END%]" /></td>
+			[% END %]
+			</tr>
+		[% END %]
+	[% ELSE %]
+		</th></tr>
+	[% END %]
+[% ELSE %]
+	<tr><th>[%|loc%]Member since [%END%][% current_subscriber.date %]</th></tr>
+[% END %]
+<tr><td> &nbsp; </td></tr>
+
+[% IF current_subscriber.update_date %]
+	<tr><th>[%|loc%]Last update [%END%][% current_subscriber.update_date %]
+	[% IF current_subscriber.subscribed %]
+		[% IF current_subscriber.who_update %]
+			[% IF current_subscriber.email != current_subscriber.who_update %]
+				[%|loc%] by [%END%][% current_subscriber.who_update %]
+			[% END %]
+		[% END %]
+
+		[% IF current_subscriber.how_update %]
+			[%|loc%]via the [%END%][% current_subscriber.how_update %][%|loc%] interface [%END%]
+			[% IF current_subscriber.ip_update %]
+				([% current_subscriber.ip_update %])
+			[% END %]
+		[% END %]
+		</th></tr>
+
+		[% IF subupdate == 'present' %]
+			<tr><td><input class="MainMenuLinks" type="submit" name="action_subscription_trace.subupdate" value="[%|loc%]View subscription message[%END%]" /></td></tr>
+		[% END %]
+	[% END %]
+
+	<tr><td> &nbsp; </td></tr>
+[% END %]
+
+[% IF current_subscriber.sources %]
+	[% IF current_subscriber.included %]
+		<tr><th>[%|loc%]Included via data source(s) [%END%]"[% current_subscriber.sources %]"[%|loc%] whose description(s) is(are) [%END%]"[% current_subscriber.descriptions %]"</td></tr>
+	[% END %]
+[% END %]
+
 </table>
 </form>
 

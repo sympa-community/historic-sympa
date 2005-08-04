@@ -10,105 +10,81 @@ original version by:  Nikos Drakos, CBLU, University of Leeds
   Jens Lippmann, Marek Rouchal, Martin Wilck and others -->
 <HTML>
 <HEAD>
-<TITLE>22. Using Sympa with LDAP</TITLE>
-<META NAME="description" CONTENT="22. Using Sympa with LDAP">
+<TITLE>Choosing directory locations</TITLE>
+<META NAME="description" CONTENT="Choosing directory locations">
 <META NAME="keywords" CONTENT="sympa">
 <META NAME="resource-type" CONTENT="document">
 <META NAME="distribution" CONTENT="global">
 
-<META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=EUC-JP">
+<META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=iso-8859-1">
 <META NAME="Generator" CONTENT="jLaTeX2HTML v2002-2-1 JA patch-2.0">
 <META HTTP-EQUIV="Content-Style-Type" CONTENT="text/css">
 
 <LINK REL="STYLESHEET" HREF="sympa.css">
 
-<LINK REL="next" HREF="node24.html">
 <LINK REL="previous" HREF="node22.html">
-<LINK REL="up" HREF="sympa.html">
+<LINK REL="up" HREF="node22.html">
 <LINK REL="next" HREF="node24.html">
 </HEAD>
 
 <BODY TEXT="#000000" BGCOLOR="#ffffff">
 <!--Navigation Panel-->
-<A NAME="tex2html1334"
+<A NAME="tex2html1437"
   HREF="node24.html">
 <IMG WIDTH="37" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="next" SRC="next.png"></A> 
-<A NAME="tex2html1328"
-  HREF="sympa.html">
+<A NAME="tex2html1431"
+  HREF="node22.html">
 <IMG WIDTH="26" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="up" SRC="up.png"></A> 
-<A NAME="tex2html1322"
+<A NAME="tex2html1427"
   HREF="node22.html">
 <IMG WIDTH="63" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="previous" SRC="prev.png"></A> 
-<A NAME="tex2html1330"
+<A NAME="tex2html1433"
   HREF="node1.html">
 <IMG WIDTH="65" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="contents" SRC="contents.png"></A> 
-<A NAME="tex2html1332"
-  HREF="node26.html">
+<A NAME="tex2html1435"
+  HREF="node548.html">
 <IMG WIDTH="43" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="index" SRC="index.png"></A> 
 <BR>
-<B> :</B> <A NAME="tex2html1335"
-  HREF="node24.html">23. Sympa with S/MIME and HTTPS</A>
-<B> :</B> <A NAME="tex2html1329"
-  HREF="sympa.html">Sympa Mailing Lists Management Software version</A>
-<B> :</B> <A NAME="tex2html1323"
-  HREF="node22.html">21. Antivirus</A>
- &nbsp; <B>  <A NAME="tex2html1331"
-  HREF="node1.html">目次</A></B> 
- &nbsp; <B>  <A NAME="tex2html1333"
-  HREF="node26.html">索引</A></B> 
+<B> Next:</B> <A NAME="tex2html1438"
+  HREF="node24.html">Robot aliases</A>
+<B> Up:</B> <A NAME="tex2html1432"
+  HREF="node22.html">Compilation and installation</A>
+<B> Previous:</B> <A NAME="tex2html1428"
+  HREF="node22.html">Compilation and installation</A>
+ &nbsp; <B>  <A NAME="tex2html1434"
+  HREF="node1.html">Contents</A></B> 
+ &nbsp; <B>  <A NAME="tex2html1436"
+  HREF="node548.html">Index</A></B> 
 <BR>
 <BR>
 <!--End of Navigation Panel-->
 
-<H1><A NAME="SECTION002300000000000000000"></A>
-<A NAME="ldap"></A>
-<BR>
-22. Using <I>Sympa</I> with LDAP
-</H1>
+<H2><A NAME="SECTION00431000000000000000">
+Choosing directory locations</A>
+</H2>
 
 <P>
-<A NAME="9494"></A>LDAP is a client-server protocol for accessing a directory service. Sympa
-provide various features based on access to one or more LDAP directories :
+All directories are defined in the <A NAME="6912"></A><TT>/etc/sympa.conf</TT> file, which
+is read by <I>Sympa</I> at runtime. If no <A NAME="6916"></A><TT>sympa.conf</TT> file
+was found during installation, a sample one will be created.
+For the default organization of directories, please refer to <A HREF="node10.html#organization">2.1</A>, 
+page&nbsp;<A HREF="node10.html#organization"><IMG  ALIGN="BOTTOM" BORDER="1" ALT="[*]" SRC="crossref.png"></A>.
 
 <P>
-
-<UL>
-<LI>authentication using LDAP directory instead of sympa internal storage of password
-<BR>
-see&nbsp;<A HREF="node12.html#auth-conf">11.5</A>, page&nbsp;<A HREF="node12.html#auth-conf"><IMG  ALIGN="BOTTOM" BORDER="1" ALT="[*]" SRC="crossref.png"></A>
+It would, of course, be possible to disperse files and directories to a number of different
+locations. However, we recommend storing all the directories and files in  the <TT>sympa</TT>
+user's login directory.
 
 <P>
-</LI>
-<LI>named filters used in authorization scenario condition
-<BR>
-see&nbsp;<A HREF="node13.html#named-filters">12.2</A>, page&nbsp;<A HREF="node13.html#named-filters"><IMG  ALIGN="BOTTOM" BORDER="1" ALT="[*]" SRC="crossref.png"></A>
+These directories must be created manually now. You can use restrictive
+authorizations if you like, since only programs running with the
+<TT>sympa</TT> account will need to access them.
 
 <P>
-</LI>
-<LI>LDAP extraction of list subscribers (see&nbsp;<A HREF="node19.html#par-user-data-source">18.2.1</A>)
-<BR>
-<P>
-</LI>
-<LI>LDAP extraction of list owners or editors
-<BR>
-see&nbsp;<A HREF="node16.html#data-inclusion-file">15.7</A>, page&nbsp;<A HREF="node16.html#data-inclusion-file"><IMG  ALIGN="BOTTOM" BORDER="1" ALT="[*]" SRC="crossref.png"></A>
-
-<P>
-</LI>
-<LI>mail aliases stored in LDAP
-<BR>
-see&nbsp;<A HREF="node6.html#ldap-aliases">5.3</A>, page&nbsp;<A HREF="node6.html#ldap-aliases"><IMG  ALIGN="BOTTOM" BORDER="1" ALT="[*]" SRC="crossref.png"></A>
-
-<P>
-</LI>
-</UL>
-
-<P>
-
 <BR><HR>
 <ADDRESS>
 root
-平成17年3月8日
+2005-08-02
 </ADDRESS>
 </BODY>
 </HTML>

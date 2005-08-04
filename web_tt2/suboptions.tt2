@@ -1,9 +1,81 @@
 <!-- $Id$ -->
 
   <form action="[% path_cgi %]" method="post">
+  <input type="hidden" name="previous_action" value="[% previous_action %]" />
 
-  [%|loc%]You are subscribed since[%END%] <span style="color: [% dark_color %];">[% subscriber.date %]</span>  <br /><br />
-  [%|loc%]Last update:[%END%] <span style="color: [% dark_color %];">[% subscriber.update_date %]</span>  <br /><br />
+   [% IF subscriber.subscribed %]	
+ 	  [% IF subscriber.email == subscriber.who_init %]	
+  		[%|loc%]You are subscribed [%END%] 
+		[% IF subscriber.subscribed_date %]
+			[%|loc%]since[%END%] <span style="color: [% dark_color %];">[% subscriber.subscribed_date %]</span> 
+		[% END %]
+	  [% ELSIF !subscriber.who_init %]
+		[% IF !subscriber.included %]
+			[%|loc%]You are subscriber since[%END%] <span style="color: [% dark_color %];">[% subscriber.date %]</span> 
+		[% END %]
+	  [% ELSE %]
+		[%|loc%]You are added [%END%]
+		[% IF subscriber.subscribed_date %]
+			[%|loc%]since[%END%] <span style="color: [%dark_color %];">[% subscriber.subscriber_date %]</span> [%|loc%]by[%END%] <span style="color: [%dark_color %];">[% subscriber.who_init %]</span> 
+  	  	[% END %]
+	  [% END %]
+	
+	  [% IF subscriber.how_init %]
+  		[%|loc%]via the [%END%] <span style="color: [% dark_color %];">[% subscriber.how_init %]</span> [%|loc%]interface [%END%]
+		[%IF subscriber.ip_init %]
+			 <span style="color: [% dark_color %];">([% subscriber.ip_init %])</span>	 
+		[%END%]
+	  [% END %]	  
+  	  <br />
+
+	  [% IF subinit == 'present' %]	
+	  	<input class="MainMenuLinks" type="submit" name="action_subscription_trace.subinit" value="[%|loc%]View your subscription message[%END%]" /> 
+	  	[% IF authinit == 'present' %]	  
+			<input class="MainMenuLinks" type="submit" name="action_subscription_trace.authinit" value="[%|loc%]View your confirmation message[%END%]" /> 
+		[% END %]
+		<br />
+	  [% END %]
+
+	  <br />	
+ 
+	[% IF subscriber.update_date %]
+	  	[%|loc%]Last update [%END%] <span style="color: [% dark_color %];">[% subscriber.update_date %]</span>
+	  	[% IF subscriber.who_update %]
+			[% IF subscriber.email != subscriber.who_update %]
+				[%|loc%]by[%END%] <span style="color: [% dark_color %];">[% subscriber.who_update %]</span>
+			[% END %]
+	  	[% END %]
+	
+          	[% IF subscriber.how_update %]
+			[%|loc%]via the[%END%] <span style="color: [% dark_color %];">[% subscriber.how_update %]</span> [%|loc%]interface [%END%]
+			[% IF subscriber.ip_update %]
+	 			<span style="color: [% dark_color %];">([% subscriber.ip_update %])</span>	 
+			[% END %]
+	  	[% END %]
+	  	<br /> 
+	
+	  	[% IF subupdate == 'present' %]
+	  		<input class="MainMenuLinks" type="submit" name="action_subscription_trace.subupdate" value="[%|loc%]View your subscription message[%END%]" /> <br />
+	  	[% END %]
+	  	<br />
+	[% END %]
+
+  [% ELSE %]
+	[%|loc%]You are member since[%END%] <span style="color: [% dark_color %];">[% subscriber.date %]</span> <br /><br />
+	[% IF subscriber.update_date %]
+		[%|loc%]Last update:[%END%] <span style="color: [% dark_color %];">[% subscriber.update_date %]</span> <br /><br />
+	[% END %]	
+  [% END %]
+
+  [% IF subscriber.included %]
+	[%|loc%]You are included [%END%] 
+	[% IF subscriber.sources %]
+		[%|loc%]via data source(s)[%END%] <span style="color: [% dark_color %];">"[% subscriber.sources %]"</span> 
+		[%|loc%]whose description(s) is(are)[%END%] <span style="color: [% dark_color %];">"[% subscriber.descriptions %]"</span> 
+	[% END %]
+        <br /><br />
+  [% END %]		  	
+
      <input type="hidden" name="list" value="[% list %]" />
      [%|loc%]Reception mode :[%END%] 
      <select name="reception">
@@ -12,13 +84,41 @@
         [% END %]
      </select>
 
-     [% PROCESS 'button_header.tt2' %]
-     <td style="white-space: nowrap; background-color: [% light_color %]; text-align: center;"> 
-      <a href="[% path_cgi %]/nomenu/help/user_options" onclick="window.open('','wws_help','toolbar=no,location=no,directories=no,status=no,menubar=no,scrollbars=yes,resizable=yes,copyhistory=no,width=400,height=200')" target="wws_help">
-     <span style="font-size: smaller;"><strong>[%|loc%]Help[%END%]</strong></span></a>
-     </td>
-     [% PROCESS 'button_footer.tt2' %]
-
+      <a class="actionMenuLinks" href="[% path_cgi %]/nomenu/help/user_options" onclick="window.open('','wws_help','toolbar=no,location=no,directories=no,status=no,menubar=no,scrollbars=yes,resizable=yes,copyhistory=no,width=400,height=200')" target="wws_help">
+     <span style="font-size: smaller;"><strong>Help</strong></span></a>
+ 
+     <br /><br />
+     [%IF available_topics %]	
+      [%|loc%]Topic subscription :[%END%]		
+        [%IF possible_topic %] 
+ 	 <BLOCKQUOTE>	
+ 	  [% FOREACH t = available_topics %]
+ 	    [%IF topic_checked.${t.name} %]	
+             <input type="checkbox" name="topic_[%t.name%]" value="1" checked="1"> [% t.title %] </input>
+ 	    [%ELSE%]
+ 	     <input type="checkbox" name="topic_[%t.name%]" value="1"> [% t.title %] </input>
+ 	    [%END%] 	
+ 	     <br />
+ 	  [% END %]
+ 	  [%IF topic_checked.other %]
+ 	   <input type="checkbox" name="topic_other" value="1"  checked="1"/> [%|loc%]Other (no tagged mails) [%END%]
+          [%ELSE%]	
+           <input type="checkbox" name="topic_other" value="1" /> [%|loc%]Other (messages not tagged) [%END%] 	
+ 	  [%END%] 
+ 	  <br />
+          </BLOCKQUOTE>
+  
+ 	  [%IF sub_user_topic %]
+	   <br />	
+ 	   <input type="checkbox" name="no_topic" value="1"> [%|loc%]Disallow topic subscription[%END%]</input>
+ 	   <br />
+ 	  [%END%]
+       	
+        [%ELSE%]
+ 	 <BLOCKQUOTE><i>Only possible in "normal" reception mode</i></BLOCKQUOTE>
+        [%END%]
+      [%END%]	
+ 	 
      <br />
      [%|loc%]Visibility :[%END%]
      <select name="visibility">
@@ -27,7 +127,6 @@
         [% END %]
      </select>
 
-     <br />
-     <input type="submit" name="action_set" value="[%|loc%]Update[%END%]" />
+     <input class="MainMenuLinks" type="submit" name="action_set" value="[%|loc%]Update[%END%]" />
      
 </form>
