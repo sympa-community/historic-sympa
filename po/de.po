@@ -3917,8 +3917,7 @@ msgid ""
 "database or LDAP directory might be unreachable."
 msgstr ""
 "Sympa konnte Abonnenten nicht aus einer externen Datenquelle inkludieren.\n"
-"Die Datenbank oder das LDAP Verzeichnis ist möglicherweise nicht "
-"erreichbar."
+"Die Datenbank oder das LDAP Verzeichnis ist möglicherweise nicht erreichbar."
 
 #. (param0,param1)
 #: mail_tt2/listmaster_notification.tt2:83
