@@ -1,3 +1,515 @@
+2005-08-04 12:34  sympa-authors
+
+	* soap/sympasoap.pm, wwsympa/wwsympa.fcgi: [F.Fiquet] Addition of
+	  database fields in function Soap::signoff().
+
+2005-08-04 12:17  sympa-authors
+
+	* soap/sympasoap.pm: Bug fix: Previously allowed unsubscription for
+	  included user.
+
+2005-08-03 17:16  sympa-authors
+
+	* doc/sympa.pdf, doc/sympa.ps, doc/sympa.tex, doc/sympa.tex.tpl,
+	  doc/html/img1.old, doc/html/img1.png, doc/html/img2.old,
+	  doc/html/img2.png, doc/html/index.html, doc/html/node1.html,
+	  doc/html/node10.html, doc/html/node11.html, doc/html/node12.html,
+	  doc/html/node13.html, doc/html/node14.html, doc/html/node15.html,
+	  doc/html/node16.html, doc/html/node17.html, doc/html/node18.html,
+	  doc/html/node19.html, doc/html/node2.html, doc/html/node20.html,
+	  doc/html/node21.html, doc/html/node22.html, doc/html/node23.html,
+	  doc/html/node24.html, doc/html/node25.html, doc/html/node26.html,
+	  doc/html/node27.html, doc/html/node3.html, doc/html/node4.html,
+	  doc/html/node5.html, doc/html/node6.html, doc/html/node7.html,
+	  doc/html/node8.html, doc/html/node9.html, doc/html/sympa.html,
+	  doc/html/sympa.ps, mail_tt2/remind.tt2, src/Commands.pm,
+	  src/List.pm, src/tt2.pl, web_tt2/editsubscriber.tt2,
+	  web_tt2/suboptions.tt2, wwsympa/wwsympa.fcgi: [F.Fiquet] New
+	  feature: customization of the rejection message in the moderation
+	  process of messages. New reject.tt2 web template
+
+	  [F.Fiquet] New feature: subscription tracability ; provides
+	  information to list members concerning their membership and how
+	  they joined. These information can be accessed via the web
+	  interface (suboptions and editsubscriber) and also in the remind
+	  message.  We have introduced a new 'tracability' spool, a new
+	  'tracability' list subdirectory This feature requires 7 new
+	  database fields to be added to the database.	Example with
+	  PostgreSQL (update is automated with MySQL) :   ALTER TABLE
+	  subscriber_table ADD subscribed_date_subscriber timestamp with
+	  time zone;   ALTER TABLE subscriber_table ADD who_init_subscriber
+		varchar(100);	ALTER TABLE subscriber_table ADD
+	  who_update_subscriber  varchar(100);	 ALTER TABLE
+	  subscriber_table ADD how_init_subscriber    varchar(4);   ALTER
+	  TABLE subscriber_table ADD how_update_subscriber    varchar(4);
+	  ALTER TABLE subscriber_table ADD ip_init_subscriber
+	  varchar(15);	 ALTER TABLE subscriber_table ADD
+	  ip_update_subscriber	  varchar(15);
+
+2005-07-28 12:00  sympa-authors
+
+	* src/List.pm, web_tt2/editsubscriber.tt2, web_tt2/suboptions.tt2,
+	  wwsympa/wwsympa.fcgi: Tracability + personnalized reject
+
+2005-07-28 10:04  sympa-authors
+
+	* soap/sympasoap.pm, src/Commands.pm, src/List.pm, src/tt2.pl,
+	  src/etc/script/create_db.Oracle, src/etc/script/create_db.Pg,
+	  src/etc/script/create_db.Sybase, src/etc/script/create_db.mysql,
+	  web_tt2/editsubscriber.tt2, web_tt2/suboptions.tt2,
+	  wwsympa/wwsympa.fcgi: Tracability + personnalized reject
+
+2005-07-22 10:37  sympa-authors
+
+	* mail_tt2/authorization_reject.tt2,
+	  mail_tt2/listmaster_notification.tt2, src/List.pm, src/report.pm,
+	  src/task_manager.pl, web_tt2/error.tt2, web_tt2/notice.tt2,
+	  wwsympa/Auth.pm, wwsympa/archived.pl, wwsympa/bounced.pl,
+	  wwsympa/wwslib.pm, wwsympa/wwsympa.fcgi: Ending command report
+	  for web interface.
+
+2005-07-21 11:30  sympa-authors
+
+	* mail_tt2/authorization_reject.tt2, mail_tt2/command_report.tt2,
+	  mail_tt2/listmaster_notification.tt2,
+	  mail_tt2/message_report.tt2, src/report.pm, web_tt2/error.tt2,
+	  web_tt2/rss.tt2, wwsympa/Auth.pm, wwsympa/wwsympa.fcgi: Change
+	  report message for Web interface in a big part, changes needing
+	  function modifying will be done next.
+
+2005-07-21 11:12  sympa-authors
+
+	* soap/sympasoap.pm, src/Commands.pm, src/List.pm, src/sympa.pl,
+	  src/tools.pl, src/tt2.pl, src/etc/script/create_db.Oracle,
+	  src/etc/script/create_db.Pg, src/etc/script/create_db.Sybase,
+	  src/etc/script/create_db.mysql, web_tt2/editsubscriber.tt2,
+	  web_tt2/review.tt2, web_tt2/suboptions.tt2, wwsympa/wwsympa.fcgi:
+	  tracability
+
+2005-07-07 09:37  sympa-authors
+
+	* mail_tt2/authorization_reject.tt2, mail_tt2/command_report.tt2,
+	  mail_tt2/listmaster_notification.tt2, src/Commands.pm,
+	  src/List.pm, src/report.pm, src/sympa.pl: Command report for mail
+	  interface.
+
+2005-07-06 15:29  sympa-authors
+
+	* doc/sympa.pdf, doc/sympa.ps, doc/sympa.tex, doc/sympa.tex.tpl,
+	  doc/html/node1.html, doc/html/node10.html, doc/html/node11.html,
+	  doc/html/node12.html, doc/html/node13.html, doc/html/node14.html,
+	  doc/html/node15.html, doc/html/node16.html, doc/html/node17.html,
+	  doc/html/node18.html, doc/html/node19.html, doc/html/node2.html,
+	  doc/html/node20.html, doc/html/node21.html, doc/html/node22.html,
+	  doc/html/node23.html, doc/html/node24.html, doc/html/node25.html,
+	  doc/html/node26.html, doc/html/node27.html, doc/html/node3.html,
+	  doc/html/node4.html, doc/html/node5.html, doc/html/node6.html,
+	  doc/html/node7.html, doc/html/node8.html, doc/html/node9.html,
+	  src/Commands.pm, src/Conf.pm, src/List.pm, src/mail.pm,
+	  wwsympa/wwsympa.fcgi: Moderation reject for simple reject in
+	  wwsympa
+
+2005-07-04 10:33  sympa-authors
+
+	* mail_tt2/command_report.tt2,
+	  mail_tt2/listmaster_notification.tt2, src/Commands.pm,
+	  src/report.pm, src/sympa.pl: Preparing command report.
+
+2005-06-30 11:46  sympa-authors
+
+	* src/: Makefile, sympa.pl, tools.pl: Changes for report.pm module
+	  added.
+
+2005-06-30 11:45  sympa-authors
+
+	* src/Commands.pm: changes for report.pm module added
+
+2005-06-30 11:43  sympa-authors
+
+	* src/report.pm: new module for commands and messages diffusion
+	  report to senders
+
+2005-06-28 15:46  sympa-authors
+
+	* mail_tt2/: list_unknown.tt2, message_report.tt2: Using var for
+	  listmaster email
+
+2005-06-28 15:19  sympa-authors
+
+	* mail_tt2/authorization_reject.tt2,
+	  mail_tt2/listmaster_notification.tt2,
+	  mail_tt2/message_report.tt2, src/Commands.pm, src/sympa.pl,
+	  src/tools.pl, web_tt2/compose_mail.tt2: Managing error increase
+	  for message diffusion.
+
+2005-06-28 15:19  sympa-authors
+
+	* src/List.pm: Parsing reason reject in request_action() for
+	  scenario
+
+2005-06-20 15:22  sympa-authors
+
+	* soap/sympasoap.pm, wwsympa/wwsympa.fcgi: Notification
+	  unauthorization reason for soap.
+
+2005-06-16 15:30  sympa-authors
+
+	* mail_tt2/Makefile, src/List.pm, src/admin.pm,
+	  src/alias_manager.pl, src/tools.pl, wwsympa/wwsympa.fcgi: Add
+	  function tools::make_tt2_include_path()
+
+2005-06-16 10:49  sympa-authors
+
+	* mail_tt2/request_auth.tt2, soap/sympasoap.pm, src/Commands.pm,
+	  src/List.pm, src/sympa.pl, src/task_manager.pl,
+	  src/etc/scenari/access_web_archive.closed,
+	  src/etc/scenari/access_web_archive.intranet,
+	  src/etc/scenari/access_web_archive.listmaster,
+	  src/etc/scenari/access_web_archive.owner,
+	  src/etc/scenari/access_web_archive.private,
+	  src/etc/scenari/add.auth, src/etc/scenari/add.closed,
+	  src/etc/scenari/add.owner, src/etc/scenari/add.owner_notify,
+	  src/etc/scenari/create_list.intranet,
+	  src/etc/scenari/create_list.listmaster,
+	  src/etc/scenari/d_edit.editor, src/etc/scenari/d_edit.owner,
+	  src/etc/scenari/d_edit.private,
+	  src/etc/scenari/d_edit.private-https,
+	  src/etc/scenari/d_read.owner, src/etc/scenari/d_read.private,
+	  src/etc/scenari/d_read.private-https, src/etc/scenari/del.auth,
+	  src/etc/scenari/del.closed, src/etc/scenari/del.owner,
+	  src/etc/scenari/del.owner_notify,
+	  src/etc/scenari/edit_list.closed,
+	  src/etc/scenari/edit_list.owner,
+	  src/etc/scenari/global_remind.listmaster,
+	  src/etc/scenari/info.private, src/etc/scenari/invite.closed,
+	  src/etc/scenari/invite.owner, src/etc/scenari/invite.private,
+	  src/etc/scenari/remind.listmaster, src/etc/scenari/remind.owner,
+	  src/etc/scenari/review.closed, src/etc/scenari/review.intranet,
+	  src/etc/scenari/review.listmaster, src/etc/scenari/review.owner,
+	  src/etc/scenari/review.private, src/etc/scenari/send.closed,
+	  src/etc/scenari/send.intranet,
+	  src/etc/scenari/send.intranetorprivate,
+	  src/etc/scenari/send.newsletter,
+	  src/etc/scenari/send.newsletterkeyonly,
+	  src/etc/scenari/send.private, src/etc/scenari/send.private_smime,
+	  src/etc/scenari/send.privateandeditorkey,
+	  src/etc/scenari/send.privatekey,
+	  src/etc/scenari/send.privatekeyandeditorkeyonly,
+	  src/etc/scenari/send.publicnomultipart,
+	  src/etc/scenari/subscribe.closed,
+	  src/etc/scenari/subscribe.intranet,
+	  src/etc/scenari/subscribe.smime,
+	  src/etc/scenari/topics_visibility.conceal,
+	  src/etc/scenari/topics_visibility.identified,
+	  src/etc/scenari/unsubscribe.closed,
+	  src/etc/scenari/visibility.conceal, wwsympa/bounced.pl,
+	  wwsympa/wwsympa.fcgi: Add 'reject' parameters in scenario and
+	  modify request_action for this.
+
+2005-06-14 16:59  sympa-authors
+
+	* src/: Commands.pm, List.pm,
+	  etc/scenari/access_web_archive.closed,
+	  etc/scenari/access_web_archive.intranet,
+	  etc/scenari/access_web_archive.listmaster,
+	  etc/scenari/access_web_archive.owner,
+	  etc/scenari/access_web_archive.private, etc/scenari/add.auth,
+	  etc/scenari/add.closed, etc/scenari/add.owner,
+	  etc/scenari/add.owner_notify, etc/scenari/create_list.intranet,
+	  etc/scenari/create_list.listmaster,
+	  etc/scenari/create_list.public_listmaster,
+	  etc/scenari/d_edit.editor, etc/scenari/d_edit.owner,
+	  etc/scenari/d_edit.private, etc/scenari/d_edit.private-https,
+	  etc/scenari/d_read.owner, etc/scenari/d_read.private,
+	  etc/scenari/d_read.private-https, etc/scenari/del.auth,
+	  etc/scenari/del.closed, etc/scenari/del.owner,
+	  etc/scenari/del.owner_notify, etc/scenari/edit_list.closed,
+	  etc/scenari/edit_list.owner,
+	  etc/scenari/global_remind.listmaster, etc/scenari/info.private,
+	  etc/scenari/invite.closed, etc/scenari/invite.owner,
+	  etc/scenari/invite.private, etc/scenari/remind.listmaster,
+	  etc/scenari/remind.owner, etc/scenari/review.closed,
+	  etc/scenari/review.intranet, etc/scenari/review.listmaster,
+	  etc/scenari/review.owner, etc/scenari/review.private,
+	  etc/scenari/send.closed, etc/scenari/send.editorkey,
+	  etc/scenari/send.intranet, etc/scenari/send.intranetorprivate,
+	  etc/scenari/send.newsletter, etc/scenari/send.newsletterkeyonly,
+	  etc/scenari/send.private, etc/scenari/send.private_smime,
+	  etc/scenari/send.privateandeditorkey,
+	  etc/scenari/send.privatekey,
+	  etc/scenari/send.privatekeyandeditorkeyonly,
+	  etc/scenari/subscribe.closed, etc/scenari/subscribe.intranet,
+	  etc/scenari/subscribe.smime,
+	  etc/scenari/topics_visibility.conceal,
+	  etc/scenari/topics_visibility.identified,
+	  etc/scenari/unsubscribe.closed, etc/scenari/visibility.conceal:
+	  [no log message]
+
+2005-06-14 16:58  sympa-authors
+
+	* wwsympa/wwsympa.fcgi: [G.Bouteille] Bug fix : edition of list
+	  parameter msg_topic
+
+2005-06-08 11:52  sympa-authors
+
+	* soap/sympasoap.pm, src/Commands.pm, src/List.pm, src/admin.pm,
+	  src/mail.pm, src/sympa.pl, wwsympa/wwsympa.fcgi: Adding code
+	  comments
+
+2005-06-02 16:44  sympa-authors
+
+	* doc/sympa.tex.tpl: add internal documentation about list
+	  parameters
+
+2005-06-02 16:44  sympa-authors
+
+	* doc/sympa.ps: [no log message]
+
+2005-06-01 12:21  sympa-authors
+
+	* doc/sympa.tex.tpl, src/List.pm, web_tt2/edit_list_request.tt2,
+	  web_tt2/error.tt2, web_tt2/help_editlist.tt2,
+	  wwsympa/wwsympa.fcgi: Ending topics.
+
+2005-05-31 16:49  sympa-authors
+
+	* web_tt2/compose_mail.tt2, web_tt2/javascript.tt2,
+	  web_tt2/review.tt2, web_tt2/viewmod.tt2, wwsympa/wwsympa.fcgi:
+	  Add topics in web page review
+
+2005-05-30 11:41  sympa-authors
+
+	* web_tt2/: review.tt2, suboptions.tt2: Adding topic recption
+	  column in review.tt2 page
+
+2005-05-30 10:53  sympa-authors
+
+	* Makefile.am, NEWS, doc/sympa.ps, doc/sympa.tex,
+	  doc/sympa.tex.tpl, doc/html/index.html, doc/html/node1.html,
+	  doc/html/node10.html, doc/html/node11.html, doc/html/node12.html,
+	  doc/html/node13.html, doc/html/node14.html, doc/html/node15.html,
+	  doc/html/node16.html, doc/html/node17.html, doc/html/node18.html,
+	  doc/html/node19.html, doc/html/node2.html, doc/html/node20.html,
+	  doc/html/node21.html, doc/html/node22.html, doc/html/node23.html,
+	  doc/html/node24.html, doc/html/node25.html, doc/html/node26.html,
+	  doc/html/node27.html, doc/html/node3.html, doc/html/node4.html,
+	  doc/html/node5.html, doc/html/node6.html, doc/html/node7.html,
+	  doc/html/node8.html, doc/html/node9.html, doc/html/sympa.html,
+	  doc/html/sympa.ps, doc/man8/Makefile, po/Makefile,
+	  po/check_locales.pl, po/cs.po, po/de.po, po/en_US.po, po/es.po,
+	  po/et.po, po/fi.po, po/fr.po, po/hu.po, po/it.po, po/nl.po,
+	  po/pl.po, po/pt.po, po/ro.po, po/xgettext.pl, po/zh_CN.po,
+	  po/zh_TW.po, src/Conf.pm, src/Language.pm, src/Ldap.pm,
+	  src/List.pm, src/Message.pm, src/mail.pm, src/sympa_wizard.pl,
+	  src/tools.pl, src/tt2.pl, src/etc/mhonarc-ressources.tt2,
+	  web_tt2/add_request.tt2, web_tt2/arc.tt2, web_tt2/arc_manage.tt2,
+	  web_tt2/arc_protect.tt2, web_tt2/arcsearch.tt2,
+	  web_tt2/arcsearch_form.tt2, web_tt2/change_email.tt2,
+	  web_tt2/choosepasswd.tt2, web_tt2/compose_mail.tt2,
+	  web_tt2/create_list_request.tt2, web_tt2/css.tt2,
+	  web_tt2/d_control.tt2, web_tt2/d_editfile.tt2,
+	  web_tt2/d_install_shared.tt2, web_tt2/d_properties.tt2,
+	  web_tt2/d_read.tt2, web_tt2/d_upload.tt2,
+	  web_tt2/dump_scenario.tt2, web_tt2/edit_list_request.tt2,
+	  web_tt2/edit_template.tt2, web_tt2/editfile.tt2,
+	  web_tt2/editsubscriber.tt2, web_tt2/error.tt2,
+	  web_tt2/footer.tt2, web_tt2/get_closed_lists.tt2,
+	  web_tt2/home.tt2, web_tt2/info.tt2, web_tt2/javascript.tt2,
+	  web_tt2/latest_arc.tt2, web_tt2/list_admin_menu.tt2,
+	  web_tt2/list_menu.tt2, web_tt2/list_panel.tt2, web_tt2/lists.tt2,
+	  web_tt2/login_menu.tt2, web_tt2/loginbanner.tt2,
+	  web_tt2/loginrequest.tt2, web_tt2/ls_templates.tt2,
+	  web_tt2/main.tt2, web_tt2/menu.tt2, web_tt2/modindex.tt2,
+	  web_tt2/notice.tt2, web_tt2/pref.tt2, web_tt2/remindpasswd.tt2,
+	  web_tt2/rename_list_request.tt2, web_tt2/request_topic.tt2,
+	  web_tt2/review.tt2, web_tt2/reviewbouncing.tt2, web_tt2/rss.tt2,
+	  web_tt2/scenario_test.tt2, web_tt2/serveradmin.tt2,
+	  web_tt2/set_pending_list_request.tt2, web_tt2/setlang.tt2,
+	  web_tt2/sigrequest.tt2, web_tt2/skinsedit.tt2,
+	  web_tt2/subindex.tt2, web_tt2/suboptions.tt2,
+	  web_tt2/subrequest.tt2, web_tt2/title.tt2,
+	  web_tt2/view_template.tt2, web_tt2/viewmod.tt2, wwsympa/Auth.pm,
+	  wwsympa/Makefile, wwsympa/SharedDocument.pm,
+	  wwsympa/wwsympa.fcgi: Adding updates made on principal branches
+	  from April 18 2005 to Mai 26 2005
+
+2005-05-26 14:20  sympa-authors
+
+	* web_tt2/edit_template.tt2: file edit_template.tt2 was added on
+	  branch sympa-topics on 2005-05-30 08:53:48 +0000
+
+2005-05-26 14:20  sympa-authors
+
+	* web_tt2/list_admin_menu.tt2: file list_admin_menu.tt2 was added
+	  on branch sympa-topics on 2005-05-30 08:53:48 +0000
+
+2005-05-26 14:20  sympa-authors
+
+	* web_tt2/ls_templates.tt2: file ls_templates.tt2 was added on
+	  branch sympa-topics on 2005-05-30 08:53:48 +0000
+
+2005-05-25 16:17  sympa-authors
+
+	* doc/sympa.tex.tpl, src/List.pm, src/sympa.pl: [G.Bouteille]Topic
+	  tagging a thread of messages
+
+2005-05-25 15:05  sympa-authors
+
+	* doc/sympa.tex.tpl: [G.Bouteille]Message topics functionnality
+
+2005-05-24 16:04  sympa-authors
+
+	* wwsympa/SharedDocument.pm: file SharedDocument.pm was added on
+	  branch sympa-topics on 2005-05-30 08:53:48 +0000
+
+2005-05-24 15:17  sympa-authors
+
+	* doc/sympa.tex.tpl: [G.Bouteille] internals for message topics
+
+2005-05-24 15:16  sympa-authors
+
+	* src/List.pm, src/sympa.pl, wwsympa/wwsympa.fcgi: [G.Bouteille]
+	  message diffusion in topic context
+
+2005-05-23 18:03  sympa-authors
+
+	* web_tt2/list_panel.tt2: file list_panel.tt2 was added on branch
+	  sympa-topics on 2005-05-30 08:53:48 +0000
+
+2005-05-20 17:34  sympa-authors
+
+	* src/List.pm, src/Message.pm, src/mail.pm, web_tt2/suboptions.tt2,
+	  wwsympa/wwsympa.fcgi: [no log message]
+
+2005-05-19 15:45  sympa-authors
+
+	* mail_tt2/moderate.tt2, src/List.pm, web_tt2/main.tt2,
+	  web_tt2/modindex.tt2, web_tt2/request_topic.tt2,
+	  web_tt2/viewmod.tt2, wwsympa/wwsympa.fcgi: [G.Bouteille] Message
+	  topics : managing tagging by editor.
+
+2005-05-19 12:51  sympa-authors
+
+	* doc/sympa.pdf, doc/sympa.ps, doc/sympa.tex, doc/sympa.tex.tpl,
+	  doc/html/index.html, doc/html/node1.html, doc/html/node10.html,
+	  doc/html/node11.html, doc/html/node12.html, doc/html/node13.html,
+	  doc/html/node14.html, doc/html/node15.html, doc/html/node16.html,
+	  doc/html/node17.html, doc/html/node18.html, doc/html/node19.html,
+	  doc/html/node2.html, doc/html/node20.html, doc/html/node21.html,
+	  doc/html/node22.html, doc/html/node23.html, doc/html/node24.html,
+	  doc/html/node25.html, doc/html/node26.html, doc/html/node27.html,
+	  doc/html/node3.html, doc/html/node4.html, doc/html/node5.html,
+	  doc/html/node6.html, doc/html/node7.html, doc/html/node8.html,
+	  doc/html/node9.html, doc/html/sympa.ps, mail_tt2/send_auth.tt2,
+	  src/List.pm, src/sympa.pl, src/tools.pl,
+	  web_tt2/compose_mail.tt2, web_tt2/error.tt2, web_tt2/main.tt2,
+	  web_tt2/request_topic.tt2, wwsympa/wwsympa.fcgi: [G.Bouteille]
+	  Message topics : managing tagging by sender.
+
+2005-05-13 16:35  sympa-authors
+
+	* web_tt2/skinsedit.tt2: file skinsedit.tt2 was added on branch
+	  sympa-topics on 2005-05-30 08:53:48 +0000
+
+2005-05-11 11:31  sympa-authors
+
+	* doc/sympa.tex.tpl, src/List.pm, src/sympa.pl: [G. Bouteille]
+	  Message topics : managing automatic tagging.
+
+2005-05-10 09:36  sympa-authors
+
+	* web_tt2/setlang.tt2: file setlang.tt2 was added on branch
+	  sympa-topics on 2005-05-30 08:53:48 +0000
+
+2005-04-29 17:00  sympa-authors
+
+	* web_tt2/dump_scenario.tt2: file dump_scenario.tt2 was added on
+	  branch sympa-topics on 2005-05-30 08:53:48 +0000
+
+2005-04-29 17:00  sympa-authors
+
+	* web_tt2/footer.tt2: file footer.tt2 was added on branch
+	  sympa-topics on 2005-05-30 08:53:48 +0000
+
+2005-04-26 17:10  sympa-authors
+
+	* src/sympa.pl: Managing msg topic in DoMessage
+
+2005-04-26 17:09  sympa-authors
+
+	* doc/sympa.tex.tpl: internal documentation
+
+2005-04-26 17:08  sympa-authors
+
+	* src/tools.pl: bug fixes
+
+2005-04-26 17:07  sympa-authors
+
+	* src/List.pm: Adding functions to get msg topic file, to compute
+	  the tag and to access to msg topic information.
+
+2005-04-26 17:05  sympa-authors
+
+	* src/Conf.pm: Adding spool topic
+
+2005-04-25 15:47  sympa-authors
+
+	* src/List.pm: [no log message]
+
+2005-04-25 15:33  sympa-authors
+
+	* doc/sympa.tex.tpl: [no log message]
+
+2005-04-25 15:13  sympa-authors
+
+	* web_tt2/notice.tt2: Bug fixes
+
+2005-04-25 15:12  sympa-authors
+
+	* wwsympa/wwsympa.fcgi: Delete subscriber topics if reception mode
+	  is different from mail
+
+2005-04-22 13:28  sympa-authors
+
+	* doc/sympa.pdf, doc/sympa.ps, doc/sympa.tex, doc/sympa.tex.tpl,
+	  doc/html/img1.old, doc/html/img1.png, doc/html/img2.old,
+	  doc/html/img2.png, doc/html/index.html, doc/html/node1.html,
+	  doc/html/node10.html, doc/html/node11.html, doc/html/node12.html,
+	  doc/html/node13.html, doc/html/node14.html, doc/html/node15.html,
+	  doc/html/node16.html, doc/html/node17.html, doc/html/node18.html,
+	  doc/html/node19.html, doc/html/node2.html, doc/html/node20.html,
+	  doc/html/node21.html, doc/html/node22.html, doc/html/node23.html,
+	  doc/html/node24.html, doc/html/node25.html, doc/html/node26.html,
+	  doc/html/node27.html, doc/html/node3.html, doc/html/node4.html,
+	  doc/html/node5.html, doc/html/node6.html, doc/html/node7.html,
+	  doc/html/node8.html, doc/html/node9.html, doc/html/sympa.html,
+	  doc/html/sympa.ps, src/List.pm, src/tools.pl, web_tt2/notice.tt2,
+	  wwsympa/wwsympa.fcgi: Deleting subscriber topics when a listowner
+	  deletes some topics.
+
+2005-04-22 13:24  sympa-authors
+
+	* mail_tt2/user_notification.tt2: template for notifying users
+
+2005-04-20 16:18  sympa-authors
+
+	* po/check_locales.pl: file check_locales.pl was added on branch
+	  sympa-topics on 2005-05-30 08:53:46 +0000
+
+2005-04-19 16:40  sympa-authors
+
+	* src/Family.pm, src/List.pm, wwsympa/wwsympa.fcgi: Organization of
+	  uncompellable parameters
+
+2005-04-19 15:14  sympa-authors
+
+	* wwsympa/wwsympa.fcgi, web_tt2/suboptions.tt2: Able thematic
+	  subscription on the web interface
+
+2005-04-18 16:26  sympa-authors
+
+	* ChangeLog: [no log message]
+
 2005-04-18 16:21  sympa-authors
 
 	* src/: Family.pm, List.pm, sympa.pl, etc/script/create_db.Oracle,
