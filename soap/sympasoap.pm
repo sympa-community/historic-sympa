@@ -540,8 +540,23 @@ sub signoff {
 		->faultdetail("Email address $email has not been found on the list $list{'name'}. You did perhaps subscribe using a different address ?");
 	}
 	
-	## Really delete and rewrite to disk.
-	$list->delete_user($sender);
+	my $subscriber = $list->get_subscriber($sender);
+
+	if ($subscriber->{'included'} && $subscriber->{'subscribed'}) {
+	    unless ($list->update_user($sender, 
+				       {'subscribed' => 0,
+					'update_date' => time,
+					})) {
+		&Log::do_log('err',"Unable to update $sender");
+	    }
+	} elsif ($subscriber->{'included'}) {
+	    die SOAP::Fault->faultcode('Server')
+		->faultstring('Not allowed.')
+		->faultdetail("You are included in the list");
+	} else {
+	    ## Really delete and rewrite to disk.
+	    $list->delete_user($sender);
+	}
 
 	$list->delete_tracability_dir_file($sender, 'init');
 	$list->delete_tracability_dir_file($sender, 'update');
