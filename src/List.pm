@@ -3800,9 +3800,9 @@ sub get_admin_user {
     my $update_field = sprintf $date_format{'read'}{$Conf{'db_type'}}, 'update_admin', 'update_admin';	
 
     ## Use session cache
-    if (defined $list_cache{'get_admin_user'}{$name}{$email}) {
+    if (defined $list_cache{'get_admin_user'}{$name}{$role}{$email}) {
 	&do_log('debug3', 'xxx Use cache(get_admin_user, %s,%s,%s)', $name, $role, $email);
-	return $list_cache{'get_admin_user'}{$name}{$email};
+	return $list_cache{'get_admin_user'}{$name}{$role}{$email};
     }
 
     ## Check database connection
@@ -3845,7 +3845,7 @@ sub get_admin_user {
     $sth = pop @sth_stack;
     
     ## Set session cache
-    $list_cache{'get_admin_user'}{$name}{$email} = $admin_user;
+    $list_cache{'get_admin_user'}{$name}{$role}{$email} = $admin_user;
     
     return $admin_user;
     
@@ -4978,7 +4978,7 @@ sub update_admin_user {
     }
 
     ## Reset session cache
-    $list_cache{'get_admin_user'}{$name}{$who} = undef;
+    $list_cache{'get_admin_user'}{$name}{$role}{$who} = undef;
     
     return 1;
 }
