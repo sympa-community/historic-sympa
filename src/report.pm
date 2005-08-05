@@ -311,6 +311,7 @@ sub send_report_cmd {
 #                  scalar - the user to notify 
 #      -$robot :   required if $type eq 'intern' or if $now
 #                  scalar - to notify useror listmaster
+#      -$now : send now if true
 #
 # OUT : 1| undef  
 #      
@@ -583,7 +584,7 @@ sub get_user_error_web {
 #########################################################
 # get_auth_reject_web
 #########################################################
-#  return array of web authentication reject
+#  return array of web authorisation reject
 # 
 # IN : -
 #
@@ -637,7 +638,7 @@ sub get_notice_web {
 # IN : -$msg : $notice.msg to select string in
 #               web/notice.tt2
 #      -$data : ref(HASH) - var used in web_tt2/notices.tt2
-#      -$action : SCALAR - the noticed action
+#      -$action : SCALAR - the noticed action $notice.action in web_tt2/notices.tt2
 #
 # OUT : 1
 #      
@@ -662,11 +663,11 @@ sub notice_report_web {
 #  (with 'web_intern_error' | 'web_system_error')
 # 
 # IN : -$type (+): 'intern'|'intern_quiet|'system'|'system_quiet'|user'|'auth'
-#      -$error (+): scalar - $u_err.msg in error.tt2 if $type = 'user'
-#                          - $auth.msg in error.tt2 if $type = 'auth' 
-#                          - $s_err.msg in error.tt2 if $type = 'system'|'system_quiet'
-#                          - $i_err.msg in error.tt2 if $type = 'intern' | 'intern_quiet'
-#                          - $error in listmaster_notification if $type = 'system'|'intern'
+#      -$error (+): scalar  - $u_err.msg in error.tt2 if $type = 'user'
+#                           - $auth.msg in error.tt2 if $type = 'auth' 
+#                           - $s_err.msg in error.tt2 if $type = 'system'|'system_quiet'
+#                           - $i_err.msg in error.tt2 if $type = 'intern' | 'intern_quiet'
+#                           - $error in listmaster_notification if $type = 'system'|'intern'
 #      -$data : ref(HASH) - var used in web_tt2/error.tt2 
 #      -$action(+) : SCALAR - the rejected action : 
 #            $xx.action in web_tt2/error.tt2

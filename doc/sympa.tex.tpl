@@ -4330,13 +4330,17 @@ Rules are defined as follows :
 
 <action> ::=   do_it [,notify]
              | do_it [,quiet]
-             | reject(<tpl_name>)
+	     | reject(reason=<reason_key>)
+	     | reject(tt2=<tpl_name>)
              | request_auth
              | owner
 	     | editor
 	     | editorkey
 	     | listmaster
 
+<reason_key> ::= match a key in mail_tt2/authorization_reject.tt2 template corresponding to 
+                 an information message about the reason of the reject of the user
+  
 <tpl_name> ::= corresponding template (<tpl_name>.tt2) is send to the sender
 
 <user_key_word> ::= email | gecos | lang | password | cookie_delay_user
@@ -4358,6 +4362,8 @@ Rules are defined as follows :
 \end {quote}
 
 (Refer to  \ref {tasks}, page~\pageref {tasks} for date format definition)
+
+The function to evaluate scenario is described in section \ref {list-scenario-evaluation}, page~\pageref {list-scenario-evaluation}.
 
 perl\_regexp can contain the string [host] (interpreted at run time as the list or robot domain).
 The variable notation [msg\_header-\texttt{>}\texttt{<}smtp\_key\_word\texttt{>}] is interpreted as the 
@@ -9513,12 +9519,14 @@ See also the
 
 This chapter describes these modules (or a part of) :
 \begin {itemize}
-  \item \file {src/mail.pm}
-  \item \file {src/List.pm}  
-  \item \file {src/sympa.pm}  
-  \item \file {src/Commands.pm}
-  \item \file {src/wwsympa.pm} 
-  \item \file {src/tools.pm}  
+  \item \file {src/mail.pm} : low level of mail sending
+  \item \file {src/List.pm} : list processing and informations about structure and access to list configuration parameters  
+  \item \file {src/sympa.pm} : the main script, for messages and mail commands processing. 
+  \item \file {src/Commands.pm} : mail commands processing
+  \item \file {src/wwsympa.pm} : web interface
+  \item \file {src/report.pm} :  notification and error reports about requested services (mail and web)
+  \item \file {src/tools.pm} : various tools 
+  \item \file {src/Message.pm} : Message object used to encapsule a received message.
 \end {itemize}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -9713,7 +9721,7 @@ For sending, a call to sendmail is done or the message is pushed in a spool acco
 \section {List.pm}
 \index{List.pm}
 
- This module includes all list processing functions. 
+ This module includes list processing functions. 
 
  Here are described functions about : 
  \begin{itemize}
@@ -9722,9 +9730,10 @@ For sending, a call to sendmail is done or the message is pushed in a spool acco
    \item Service messages
    \item Notification message
    \item Topic messages
+   \item Scenario evaluation  
  \end{itemize}
 
- There is also a description of structure and access on list parameters.
+ Follows a description of structure and access on list parameters.
 
 %%%%%%%%%%%%%%% message distribution %%%%%%%%%%%%%%%%%%%%
 \subsection {Functions for message distribution} 
@@ -10262,7 +10271,7 @@ Search and load msg topic file corresponding to the message ID  (\file{directory
  Selects subscribers that are subscribed to one or more topic
  appearing in the topic list incoming when their reception mode is 'mail', and selects the other subscribers 
  (reception mode different from 'mail'). This function is used by List::send\_msg() function during message 
- diffusion (see \ref {list-send-msg}, page~\pageref {list-send-msg}).
+ diffusion (see \ref {list-send-msg}, page~\pageref {list-send-msg} ).
 
    \textbf{IN} : 
    \begin{enumerate}
@@ -10272,6 +10281,38 @@ Search and load msg topic file corresponding to the message ID  (\file{directory
    \end{enumerate}
 
    \textbf{OUT} : ARRAY - list of selected subscribers
+
+%%%%%%%%%%%%%%% scenario evaluation %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\subsection {Scenario evaluation} 
+\label{list-scenario-evaluation}
+
+The following function is used to evaluate scenario file ``\texttt{<}action\texttt{>}.\texttt{<}parameter\_value\texttt{>}'',
+where \texttt{<}action\texttt{>}action corresponds to a configuration parameter for an action and 
+\texttt{<}parameter\_value\texttt{>} corresponds to its value.
+ 
+\subsubsection {\large{request\_action()}}
+ Return the action to perform for one sender 
+ using one authentication method to perform an operation
+
+   \textbf{IN} : 
+   \begin{enumerate}
+      \item \lparam{operation} (+): SCALAR - the requested action corresponding to config parameter
+      \item \lparam{auth\_method} (+): 'smtp'\(\mid\)'md5'\(\mid\)'pgp'\(\mid\)'smime'
+      \item \lparam{robot} (+): robot
+      \item \lparam{context} (): ref(HASH) - contains value to instantiate scenario variables (hash keys)
+      \item \lparam{debug} (): boolean - \emph{if true} adds keys 'condition' and 'auth\_method' to the returned hash.
+   \end{enumerate}
+
+   \textbf{OUT} : undef \(\mid\) ref(HASH) with keys : 
+     \begin{itemize}
+       \item action : 'do\_it'\(\mid\)'reject'\(\mid\)'request\_auth'\(\mid\)'owner'\(\mid\)'editor'\(\mid\)'editorkey'\(\mid\)'listmaster' 
+       \item reason : 'value' \emph{if action == 'reject' in scenario and if there is  reject(reason='value')} to match a key in
+	 mail\_tt2/authorization\_reject.tt2. This is used in errors reports (see \ref {report.pm}, page~\pageref {report.pm})
+       \item tt2 : template name {if action == 'reject' in scenario and there is  reject(tt2='template\_name')}.
+       \item condition : the checked condition.
+       \item auth\_method : the checked auth\_method.
+     \end{itemize}
+
 
 %%%%%%%%%%%%%%% structure and access to list parameters %%%%%%%%%%%%%%%%%%%%
 \subsection {Structure and access to list configuration parameters} 
@@ -10349,17 +10390,12 @@ Here are these list parameters format in list configuration file in front of per
 \hline
 \end{tabular}
                                         
-
-
-
-
-
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%% sympa.pl %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section {sympa.pl}
 \index{sympa.pl}
 
-   This is the main script ; it runs as a daemon and does the messages/commands processing. It uses these funstions :
+   This is the main script ; it runs as a daemon and does the messages/commands processing.  It uses these funstions :
    DoFile(), DoMessage(), DoCommand(), DoSendMessage(), DoForward(), SendDigest(), CleanSpool(), sigterm(), sighup().
    
    Concerning reports about message distribution, function List::send\_file() 
@@ -10871,8 +10907,7 @@ Here are these list parameters format in list configuration file in front of per
 
 \subsection {tools for command processing}
 
-   get\_auth\_method(), error\_report\_cmd(), notice\_report\_cmd(), global\_report\_cmd().
-
+   get\_auth\_method()
 
 \subsubsection {\large{get\_auth\_method()}}
 \label{commands-get-auth-method}
@@ -10895,61 +10930,6 @@ Here are these list parameters format in list configuration file in front of per
       \item \lparam{list}: ref(List) \(\mid\) undef - in a list context or not
    \end{enumerate}
    \textbf{OUT} : 'smime' \(\mid\) 'md5' \(\mid\) 'smtp' - authentification method if checking not failed \(\mid\) undef
-
-
-The following functions are called by processing command functions. It allows to push errors in 
-\@errors\_report array, notices in \@notices\_report array and global errors in
-\@globals\_report array. These arrays are used to parse ``command\_report'' template
-by  List::send\_global\_file() funstion(see \ref {list-send-global-file}, page~\pageref {list-send-global-file})  
-called by sympa::DoFile() function (see \ref {sympa-dofile},page~\pageref {sympa-dofile}).
-
-\subsubsection {\large{error\_report\_cmd()}}
-\label{commands-error-report-cmd}
-\index{commands::error\_report\_cmd()}
-
-   Pushes error reports of processed commands in  \@errors\_report array used in ``command\_report'' template.
-
-   \textbf{IN} : 
-   \begin{enumerate}
-      \item \lparam{cmd}: command line sent to sympa
-      \item \lparam{type}: type of error, used as \$error.type in ``command\_report'' template.
-      \item \lparam{data}: hash used in ``command\_report'' template. Its keys
-	 are used as \$error.key. 
-   \end{enumerate}
-
-   \textbf{OUT} : -
-
-\subsubsection {\large{notice\_report\_cmd()}}
-\label{commands-notice-report-cmd}
-\index{commands::notice\_report\_cmd()}
-
-   Pushes notice reports of processed commands in  \@notices\_report array used in ``command\_report'' template. 
-
-   \textbf{IN} : 
-   \begin{enumerate}
-      \item \lparam{cmd}: command line sent to sympa
-      \item \lparam{type}: type of notice, used as \$notice.type in ``command\_report'' template.
-      \item \lparam{data}: hash used in ``command\_report'' template. Its keys
-	 are used as \$notice.key. 
-   \end{enumerate}
-
-   \textbf{OUT} : -
-
-\subsubsection {\large{global\_report\_cmd()}}
-\label{commands-global-report-cmd}
-\index{commands::global\_report\_cmd()}
-
-   Pushes global error reports of processed commands in  \@globals\_report array used in ``command\_report'' template. 
-
-   \textbf{IN} : 
-   \begin{enumerate}
-      \item \lparam{cmd}: command line sent to sympa
-      \item \lparam{type}: type of global error, used as \$glob.type in ``command\_report'' template.
-      \item \lparam{data}: hash used in ``command\_report'' template. Its keys
-	 are used as \$glob.key. 
-   \end{enumerate}
-
-   \textbf{OUT} : -
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -11129,8 +11109,361 @@ do\_tag\_topic\_by\_sender().
     \item \textbf{OUT} : 'arc' \(\mid\) 1 \(\mid\) undef
    \end{itemize}    
 
-
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%% report.pm %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section {report.pm}
+\index{report.pm}
+
+This module provides various tools for notification and error reports in every Sympa interface 
+(mail diffusion, mail command and web command).
+
+For a requested service, there are four kinds of reports to users:
+\begin{itemize} 
+   \item \textbf{success notification}\\
+     when the action does not involve any specific mail report or else,
+     the user is notified of the well done of the processus.
+   \item \textbf{non authorization}\file{(auth)}\\
+     a user is not allowed to perform an action, Sympa provides reason of rejecting. 
+     The template used to provides this information is \file{mail\_tt2/authorization\_reject.tt2}. It contains a list of reasons, indexed
+     by keywords that are mentioned in reject action scenario (see \ref {rules}, page~\pageref {rules})
+   \item \textbf{user error}\file{(user)}\\
+     a error caused by the user, the user is informed about the error reason
+   \item \textbf{internal server error}\file{(intern)}\\
+     an error independent from the user, the user is succintly informed 
+     about the error reason but a mail with more information is sent to listmaster using template 
+     \file{mail\_tt2/listmaster\_notification.tt2}(If it is not necessary, keyword used is \file{'intern\_quiet'}.
+\end{itemize} 
+   
+
+For other reports than non authorizations templates used depends on the interface :
+\begin{itemize} 
+   \item message diffusion : \file{mail\_tt2/message\_report.tt2}
+   \item mail commands : \file{mail\_tt2/command\_report.tt2}
+   \item web commands : \file{web\_tt2/notice.tt2} for positive notifications and \file{web\_tt2/error.tt2} for rejects.
+\end{itemize}  
+
+
+%%%%%%%%%%%%%%% message diffusion %%%%%%%%%%%%%%%%%%%%
+\subsection {Message diffusion} 
+\label {report-message-diffusion}
+
+These reports use template \file{mail\_tt2/message\_report.tt2} and there are two functions :
+\file{reject\_report\_msg()} and \file{notice\_report\_msg()}.
+
+
+\subsubsection {\large{reject\_report\_msg()}}
+\label{report-reject-report-msg}
+\index{report::reject\_report\_msg()}
+
+   Sends a notification to the user about an error rejecting his requested message diffusion.
+
+   \textbf{IN} : 
+   \begin{enumerate}
+      \item \lparam{type}(+): 'intern'\(\mid\)'intern\_quiet'\(\mid\)'user'\(\mid\)'auth' - the error type 
+      \item \lparam{error}: SCALAR - depends on \$type :
+	 \begin{itemize}
+	   \item 'intern' : string error sent to listmaster
+	   \item 'user' : \$entry  in \file{message\_report.tt2}
+	   \item 'auth' : \$reason  in \file{authorization\_reject.tt2}
+	 \end{itemize}
+      \item \lparam{user}(+): SCALAR - the user to notify
+      \item \lparam{param}: ref(HASH) - for variable instantiation \file{message\_report.tt2}
+	(key \lparam{msgid}(+) is required \emph{if type == 'intern'})
+      \item \lparam{robot}: SCALAR - robot
+      \item \lparam{msg\_string}: SCALAR - rejected message
+      \item \lparam{list}: ref(List) - in a list context
+   \end{enumerate}
+
+   \textbf{OUT} : 1 \(\mid\) undef
+
+\subsubsection {\large{notice\_report\_msg()}}
+\label{report-reject-report-msg}
+\index{report::reject\_report\_msg()}
+
+   Sends a notification to the user about a success about his requested message diffusion.
+
+   \textbf{IN} : 
+   \begin{enumerate}
+      \item \lparam{entry}(+): \$entry  in \file{message\_report.tt2}
+      \item \lparam{user}(+): SCALAR - the user to notify
+      \item \lparam{param}: ref(HASH) - for variable instantiation \file{message\_report.tt2}
+      \item \lparam{robot}(+): SCALAR - robot
+      \item \lparam{list}: ref(List) - in a list context
+   \end{enumerate}
+
+   \textbf{OUT} : 1 \(\mid\) undef
+
+
+%%%%%%%%%%%%%%% Mail commands  %%%%%%%%%%%%%%%%%%%%
+\subsection {Mail commands} 
+\label {report-mail-commands}
+
+A mail can contains many commands. Errors and notices are stored in module global arrays before sending
+(\@intern\_error\_cmd, \@user\_error\_cmd, \@global\_error\_cmd, \@auth\_reject\_cmd, \@notice\_cmd). 
+Moreover used errors here we can have global errors on mail containing commands, so there is a function for that.
+These reports use template \file{mail\_tt2/command\_report.tt2} and there are many functions :
+
+\subsubsection {\large{init\_report\_cmd()}}
+\label{report-init-report-cmd}
+\index{report::init\_report\_cmd()}
+
+   Inits global arrays for mail command reports.
+
+   \textbf{IN} : -
+
+   \textbf{OUT} : -
+
+
+\subsubsection {\large{is\_there\_any\_report\_cmd()}}
+\label{report-is-there-any-report-cmd}
+\index{report::is\_there\_any\_report\_cmd()}
+
+   Looks for some mail command reports in one of global arrays.
+
+   \textbf{IN} : -
+
+   \textbf{OUT} : 1 \emph{if there are some reports to send}
+
+
+\subsubsection {\large{global\_report\_cmd()}}
+\label{report-send-report-cmd}
+\index{report::send\_report\_cmd()}
+
+   Concerns global reports of mail commands. There are many uses cases :
+
+   \begin{enumerate}
+      \item \textbf{internal server error} for a differed sending at the end of the mail processing :
+	\begin{itemize}
+	   \item \file{global\_report\_cmd('intern',\$error,\$data,\$sender,\$robot)}
+           \item \file{global\_report\_cmd('intern\_quiet',\$error,\$data)} : the listmaster won't be noticied
+         \end{itemize}
+      \item \textbf{internal server error} for sending every reports directly (by calling \file{send\_report\_cmd()}) :
+	\begin{itemize}
+	   \item \file{global\_report\_cmd('intern',\$error,\$data,\$sender,\$robot,1)}
+           \item \file{global\_report\_cmd('intern\_quiet',\$error,\$data,\$sender,\$robot,1)} : the listmaster won't be noticied
+        \end{itemize}
+      \item \textbf{user error} for a differed sending at the end of the mail processing : \\
+	\file{global\_report\_cmd('user',\$error,\$data}
+      \item \textbf{user error} for sending every reports directly (by calling \file{send\_report\_cmd()}) : \\
+	\file{global\_report\_cmd('user',\$error,\$data,\$sender,\$robot,1)}
+  \end{enumerate}
+
+  \textbf{IN} : 
+  \begin{enumerate}
+     \item \lparam{type}(+): 'intern'\(\mid\)'intern\_quiet'\(\mid\)'user'
+     \item \lparam{error}: SCALAR - depends on \$type :
+	 \begin{itemize}
+	   \item 'intern' : string error sent to listmaster
+	   \item 'user' : \$glob.entry  in \file{command\_report.tt2}
+	 \end{itemize}
+     \item \lparam{data}: ref(HASH) - for variable instantiation in \file{command\_report.tt2}
+     \item \lparam{sender}: SCALAR - the user to notify
+     \item \lparam{robot}: SCALAR - robot
+     \item \lparam{now}: BOOLEAN - send reports now \emph{if true}
+  \end{enumerate}
+
+  \textbf{OUT} : 1 \(\mid\) undef
+
+\subsubsection {\large{reject\_report\_cmd()}}
+\label{report-reject-report-cmd}
+\index{report::reject\_report\_cmd()}
+
+Concerns reject reports of mail commands. These informations are sent at the end of the mail processing.
+There are many uses cases :
+
+   \begin{enumerate}
+      \item \textbf{internal server error} :
+	\begin{itemize}
+	   \item \file{reject\_report\_cmd('intern',\$error,\$data,\$cmd,\$sender,\$robot)}
+           \item \file{reject\_report\_cmd('intern\_quiet',\$error,\$data,\$cmd)} : the listmaster won't be noticied
+         \end{itemize}
+       \item \textbf{user error} : \\
+	\file{reject\_report\_cmd('user',\$error,\$data,\$cmd)}
+      \item \textbf{non authorization} : \\
+	\file{reject\_report\_cmd('auth',\$error,\$data,\$cmd)}
+  \end{enumerate}
+
+  \textbf{IN} : 
+  \begin{enumerate}
+     \item \lparam{type}(+): 'intern'\(\mid\)'intern\_quiet'\(\mid\)'user'\(\mid\)'auth'
+     \item \lparam{error}: SCALAR - depends on \$type :
+	 \begin{itemize}
+	   \item 'intern' : string error sent to listmaster
+	   \item 'user' : \$u\_err.entry  in \file{command\_report.tt2}
+	   \item 'auth' : \$reason  in \file{authorization\_reject.tt2}
+	 \end{itemize}
+     \item \lparam{data}: ref(HASH) - for variable instantiation in \file{command\_report.tt2}
+     \item \lparam{cmd}: SCALAR - the rejected command, \$xx.cmd in \file{command\_report.tt2}
+     \item \lparam{sender}: SCALAR - the user to notify
+     \item \lparam{robot}: SCALAR - robot
+  \end{enumerate}
+
+  \textbf{OUT} : 1 \(\mid\) undef
+
+\subsubsection {\large{notice\_report\_cmd()}}
+\label{report-notice-report-cmd}
+\index{report::notice\_report\_cmd()}
+
+Concerns positive notices  of mail commands. These informations are sent at the end of the mail processing.
+
+  \textbf{IN} : 
+  \begin{enumerate}
+     \item \lparam{entry}: \$notice.entry in \file{command\_report.tt2}
+     \item \lparam{data}: ref(HASH) - for variable instantiation in \file{command\_report.tt2}
+     \item \lparam{cmd}: SCALAR - the rejected command, \$xx.cmd in \file{command\_report.tt2}
+  \end{enumerate}
+
+  \textbf{OUT} : 1 \(\mid\) undef
+
+
+\subsubsection {\large{send\_report\_cmd()}}
+\label{report-send-report-cmd}
+\index{report::send\_report\_cmd()}
+
+   Sends the template \file{command\_report.tt2} to \$sender with global arrays and then calls to
+   \file{init\_report\_command.tt2} function. (It is used by sympa.pl at the end of mail process if there are some reports in gloal arrays)
+
+   \textbf{IN} : 
+   \begin{enumerate}
+      \item \lparam{sender}(+): SCALAR - the user to notify
+      \item \lparam{robot}(+): SCALAR - robot
+   \end{enumerate}
+   \textbf{OUT} : 1 
+
+%%%%%%%%%%%%%%% Web commands  %%%%%%%%%%%%%%%%%%%%
+\subsection {Web commands} 
+\label {report-web-commands}
+
+It can have many errors and notices so they are stored in module global arrays before html sending.
+(\@intern\_error\_web, \@user\_error\_web, \@auth\_reject\_web, \@notice\_web). 
+These reports use \file{web\_tt2/notice.tt2} template for notices and \file{web\_tt2/error.tt2} template
+for rejects.
+
+
+\subsubsection {\large{init\_report\_web()}}
+\label{report-init-report-web}
+\index{report::init\_report\_web()}
+
+   Inits global arrays for web command reports.
+
+   \textbf{IN} : -
+
+   \textbf{OUT} : -
+
+\subsubsection {\large{is\_there\_any\_reject\_report\_web()}}
+\label{report-is-there-any-reject-report-web}
+\index{report::is\_there\_any\_reject\_report\_web()}
+
+   Looks for some rejected web command reports in one of global arrays for reject. 
+
+   \textbf{IN} : -
+
+   \textbf{OUT} : 1 \emph{if there are some reject reports to send (not notice)}
+
+\subsubsection {\large{get\_intern\_error\_web()}}
+\label{report-get-intern-error-web}
+\index{report::get\_intern\_error\_web()}
+
+   Return array of web intern error
+
+   \textbf{IN} : -
+
+   \textbf{OUT} : ref(ARRAY) - clone of \@intern\_error\_web
+
+\subsubsection {\large{get\_user\_error\_web()}}
+\label{report-get-user-error-web}
+\index{report::get\_user\_error\_web()}
+
+   Return array of web user error
+
+   \textbf{IN} : -
+
+   \textbf{OUT} : ref(ARRAY) - clone of \@user\_error\_web
+
+\subsubsection {\large{get\_auth\_reject\_web()}}
+\label{report-get-auth-reject-web}
+\index{report::get\_auth\_reject\_web()}
+
+   Return array of web authorisation reject
+
+   \textbf{IN} : -
+
+   \textbf{OUT} : ref(ARRAY) - clone of \@auth\_reject\_web
+
+\subsubsection {\large{get\_notice\_web()}}
+\label{report-get-notice-web}
+\index{report::get\_notice\_web()}
+
+   Return array of web notice
+
+   \textbf{IN} : -
+
+   \textbf{OUT} : ref(ARRAY) - clone of \@notice\_web
+
+\subsubsection {\large{reject\_report\_web()}}
+\label{report-reject-report-web}
+\index{report::reject\_report\_web()}
+
+Concerning reject reports of web commands, there are many uses cases :
+
+   \begin{enumerate}
+      \item \textbf{internal server error} :
+	\begin{itemize}
+	   \item \file{reject\_report\_web('intern',\$error,\$data,\$action,\$list,\$user,\$robot)}
+           \item \file{reject\_report\_web('intern\_quiet',\$error,\$data,\$action,\$list)} : the listmaster won't be noticied
+         \end{itemize}
+       \item \textbf{user error} :\\
+	\file{reject\_report\_web('user',\$error,\$data,\$action, \$list)}
+      \item \textbf{non authorization} :\\
+	\file{reject\_report\_web('auth',\$error,\$data,\$action, \$list)}
+  \end{enumerate}
+
+  \textbf{IN} : 
+  \begin{enumerate}
+     \item \lparam{type}(+): 'intern'\(\mid\)'intern\_quiet'\(\mid\)'user'\(\mid\)'auth'
+     \item \lparam{error}(+): SCALAR - depends on \$type :
+	 \begin{itemize}
+	   \item 'intern' : \$error in \file{listmaster\_notification.tt2} and possibly \$i\_err.msg in \file{error.tt2}
+	   \item 'intern\_quiet' : possibly \$i\_err.msg in \file{error.tt2}
+	   \item 'user' : \$u\_err.msg  in \file{error.tt2}
+	   \item 'auth' : \$reason  in \file{authorization\_reject.tt2}
+	 \end{itemize}
+     \item \lparam{data}: ref(HASH) - for variable instantiation in \file{notice.tt2}
+     \item \lparam{action}(+): SCALAR - the rejected actin, \$xx.action in \file{error.tt2}, \$action in \file{listmaster\_notification.tt2}
+     \item \lparam{list}: '' \(\mid\) ref(List)
+     \item \lparam{user}: SCALAR - the user for listmaster notification
+     \item \lparam{robot}: SCALAR - robot for listmaster notification
+  \end{enumerate}
+
+  \textbf{OUT} : 1 \(\mid\) undef
+
+
+
+
+
+
+
+
+\subsubsection {\large{notice\_report\_web()}}
+\label{report-notice-report-web}
+\index{report::notice\_report\_web()}
+
+Concerns positive notices of web commands.
+
+  \textbf{IN} : 
+  \begin{enumerate}
+     \item \lparam{msg}: \$notice.msg in \file{notice.tt2}
+     \item \lparam{data}: ref(HASH) - for variable instantiation in \file{notice.tt2}
+     \item \lparam{action}: SCALAR - the noticed command, \$notice.cmd in \file{notice.tt2}
+  \end{enumerate}
+
+  \textbf{OUT} : 1 \(\mid\) undef
+
+
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%% tools.pl %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section {tools.pl}
 \index{tools.pl}
@@ -11209,6 +11542,24 @@ Makes set operation on arrays seen as set (with no double) :
    \textbf{IN} : \lparam{msg\_id}(+): the email
 
    \textbf{OUT} : the clean email
+
+\subsubsection {\large{make\_tt2\_include\_path()}}
+\label{tools-make-tt2-include-path}
+\index{tools::make\_tt2\_include\_path()}  
+
+ Make an array of include path for tt2 parsing
+
+   \textbf{IN} : 
+   \begin{enumerate}
+      \item \lparam{robot}(+):  SCALAR - the robotset
+      \item \lparam{dir}:  SCALAR - directory ending each path
+      \item \lparam{lang}:  SCALAR - for lang directories
+      \item \lparam{list}:  ref(List) - for list directory
+   \end{enumerate}  
+
+   \textbf{OUT} : ref(ARRAY) - include tt2 path, respecting 
+       path priorities.
+
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%% Message.pm %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%

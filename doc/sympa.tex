@@ -132,7 +132,7 @@
         Olivier Sala\"un,
         Christophe Wolfhugel,
          }
-    \date {27 mai 2005}
+    \date {22 July 2005}
 \begin {htmlonly}
 For printing purpose, use the 
 \htmladdnormallink {postscript format version} {sympa.ps} of this documentation.
@@ -4983,13 +4983,17 @@ Rules are defined as follows :
 
 <action> ::=   do_it [,notify]
              | do_it [,quiet]
-             | reject(<tpl_name>)
+	     | reject(reason=<reason_key>)
+	     | reject(tt2=<tpl_name>)
              | request_auth
              | owner
 	     | editor
 	     | editorkey
 	     | listmaster
 
+<reason_key> ::= match a key in mail_tt2/authorization_reject.tt2 template corresponding to 
+                 an information message about the reason of the reject of the user
+  
 <tpl_name> ::= corresponding template (<tpl_name>.tt2) is send to the sender
 
 <user_key_word> ::= email | gecos | lang | password | cookie_delay_user
@@ -5011,6 +5015,8 @@ Rules are defined as follows :
 \end {quote}
 
 (Refer to  \ref {tasks}, page~\pageref {tasks} for date format definition)
+
+The function to evaluate scenario is described in section \ref {list-scenario-evaluation}, page~\pageref {list-scenario-evaluation}.
 
 perl\_regexp can contain the string [host] (interpreted at run time as the list or robot domain).
 The variable notation [msg\_header-\texttt{>}\texttt{<}smtp\_key\_word\texttt{>}] is interpreted as the 
@@ -6865,7 +6871,8 @@ ttl 360
 	 \end{itemize}
 	 The parameters constraints will be checked at every list loading.
 
-\textbf {WARNING} : Some parameters cannot be constrained, they are : \lparam {owner\_include.source\_parameter} 
+\textbf {WARNING} : Some parameters cannot be constrained, they are : \lparam {msg\_topic.keywords} 
+(see~\ref {par-msg-topic}, page~\pageref {par-msg-topic}),\lparam {owner\_include.source\_parameter} 
 (see~\ref {par-owner-include}, page~\pageref {par-owner-include}), \lparam {editor\_include.source\_parameter} (see~\ref {par-editor-include}, page~\pageref {par-editor-include}). About \lparam {digest} parameter (see~\ref {par-digest}, page~\pageref {par-digest}) , just days can be constrained.
 
     
@@ -7269,6 +7276,7 @@ giving details regarding the owner(s) included characteristics:
     \item \lparam {source\_parameters a,b,c}
 
         It contains values enumeration that will be affected to the \file {param} array used in the template file (see~\ref {data-inclusion-file}, page~\pageref {data-inclusion-file}).
+	This parameter is uncompellable.
 
     \item  \lparam {reception nomail}
 
@@ -7317,6 +7325,12 @@ output generated in response to a \mailcmd {LISTS} command.
      \item \lparam {visibility} \texttt {conceal}
 	\begin {htmlonly}
 	  (\htmladdnormallink {view} {http://listes.cru.fr/sympa/distribution/current/src/etc/scenari/visibility.conceal})
+	\end {htmlonly}\\
+	
+
+     \item \lparam {visibility} \texttt {c}
+	\begin {htmlonly}
+	  (\htmladdnormallink {view} {http://listes.cru.fr/sympa/distribution/current/src/etc/scenari/visibility.c})
 	\end {htmlonly}\\
 	
 
@@ -8053,9 +8067,21 @@ Predefined authorization scenarios are :
 	\end {htmlonly}\\
 
 
+     \item \lparam {subscribe} \texttt {c}
+	\begin {htmlonly}
+	  (\htmladdnormallink {view} {http://listes.cru.fr/sympa/distribution/current/src/etc/scenari/subscribe.c})
+	\end {htmlonly}\\
+
+
      \item \lparam {subscribe} \texttt {intranet}
 	\begin {htmlonly}
 	  (\htmladdnormallink {view} {http://listes.cru.fr/sympa/distribution/current/src/etc/scenari/subscribe.intranet})
+	\end {htmlonly}\\
+
+
+     \item \lparam {subscribe} \texttt {i}
+	\begin {htmlonly}
+	  (\htmladdnormallink {view} {http://listes.cru.fr/sympa/distribution/current/src/etc/scenari/subscribe.i})
 	\end {htmlonly}\\
 
 
@@ -8092,6 +8118,12 @@ Predefined authorization scenarios are :
      \item \lparam {subscribe} \texttt {smime}
 	\begin {htmlonly}
 	  (\htmladdnormallink {view} {http://listes.cru.fr/sympa/distribution/current/src/etc/scenari/subscribe.smime})
+	\end {htmlonly}\\
+
+
+     \item \lparam {subscribe} \texttt {s}
+	\begin {htmlonly}
+	  (\htmladdnormallink {view} {http://listes.cru.fr/sympa/distribution/current/src/etc/scenari/subscribe.s})
 	\end {htmlonly}\\
 
 
@@ -8135,6 +8167,12 @@ Predefined authorization scenarios are :
 	\end {htmlonly}\\
 	
 
+     \item \lparam {unsubscribe} \texttt {c} 
+	\begin {htmlonly}
+	  (\htmladdnormallink {view} {http://listes.cru.fr/sympa/distribution/current/src/etc/scenari/unsubscribe.c})
+	\end {htmlonly}\\
+	
+
      \item \lparam {unsubscribe} \texttt {open} 
 	\begin {htmlonly}
 	  (\htmladdnormallink {view} {http://listes.cru.fr/sympa/distribution/current/src/etc/scenari/unsubscribe.open})
@@ -8173,15 +8211,33 @@ Predefined authorization scenarios are :
 	\end {htmlonly}\\
 	
 
+     \item \lparam {add} \texttt {a}
+	\begin {htmlonly}
+	  (\htmladdnormallink {view} {http://listes.cru.fr/sympa/distribution/current/src/etc/scenari/add.a})
+	\end {htmlonly}\\
+	
+
      \item \lparam {add} \texttt {closed}
 	\begin {htmlonly}
 	  (\htmladdnormallink {view} {http://listes.cru.fr/sympa/distribution/current/src/etc/scenari/add.closed})
 	\end {htmlonly}\\
 	
 
+     \item \lparam {add} \texttt {c}
+	\begin {htmlonly}
+	  (\htmladdnormallink {view} {http://listes.cru.fr/sympa/distribution/current/src/etc/scenari/add.c})
+	\end {htmlonly}\\
+	
+
      \item \lparam {add} \texttt {owner}
 	\begin {htmlonly}
 	  (\htmladdnormallink {view} {http://listes.cru.fr/sympa/distribution/current/src/etc/scenari/add.owner})
+	\end {htmlonly}\\
+	
+
+     \item \lparam {add} \texttt {o}
+	\begin {htmlonly}
+	  (\htmladdnormallink {view} {http://listes.cru.fr/sympa/distribution/current/src/etc/scenari/add.o})
 	\end {htmlonly}\\
 	
 
@@ -8212,15 +8268,33 @@ Predefined authorization scenarios are :
 	\end {htmlonly}\\
 	
 
+     \item \lparam {del} \texttt {a} 
+	\begin {htmlonly}
+	  (\htmladdnormallink {view} {http://listes.cru.fr/sympa/distribution/current/src/etc/scenari/del.a})
+	\end {htmlonly}\\
+	
+
      \item \lparam {del} \texttt {closed} 
 	\begin {htmlonly}
 	  (\htmladdnormallink {view} {http://listes.cru.fr/sympa/distribution/current/src/etc/scenari/del.closed})
 	\end {htmlonly}\\
 	
 
+     \item \lparam {del} \texttt {c} 
+	\begin {htmlonly}
+	  (\htmladdnormallink {view} {http://listes.cru.fr/sympa/distribution/current/src/etc/scenari/del.c})
+	\end {htmlonly}\\
+	
+
      \item \lparam {del} \texttt {owner} 
 	\begin {htmlonly}
 	  (\htmladdnormallink {view} {http://listes.cru.fr/sympa/distribution/current/src/etc/scenari/del.owner})
+	\end {htmlonly}\\
+	
+
+     \item \lparam {del} \texttt {o} 
+	\begin {htmlonly}
+	  (\htmladdnormallink {view} {http://listes.cru.fr/sympa/distribution/current/src/etc/scenari/del.o})
 	\end {htmlonly}\\
 	
 
@@ -8251,9 +8325,21 @@ Predefined authorization scenarios are :
 	\end {htmlonly}\\
 	
 
+     \item \lparam {remind} \texttt {l} 
+	\begin {htmlonly}
+	  (\htmladdnormallink {view} {http://listes.cru.fr/sympa/distribution/current/src/etc/scenari/remind.l})
+	\end {htmlonly}\\
+	
+
      \item \lparam {remind} \texttt {owner} 
 	\begin {htmlonly}
 	  (\htmladdnormallink {view} {http://listes.cru.fr/sympa/distribution/current/src/etc/scenari/remind.owner})
+	\end {htmlonly}\\
+	
+
+     \item \lparam {remind} \texttt {o} 
+	\begin {htmlonly}
+	  (\htmladdnormallink {view} {http://listes.cru.fr/sympa/distribution/current/src/etc/scenari/remind.o})
 	\end {htmlonly}\\
 	
 
@@ -8302,9 +8388,21 @@ parameter are pointers to \emph {scenarios}.
 	\end {htmlonly}\\
 	
 
+     \item \lparam {send} \texttt {c} 
+	\begin {htmlonly}
+	  (\htmladdnormallink {view} {http://listes.cru.fr/sympa/distribution/current/src/etc/scenari/send.c})
+	\end {htmlonly}\\
+	
+
      \item \lparam {send} \texttt {editorkey} 
 	\begin {htmlonly}
 	  (\htmladdnormallink {view} {http://listes.cru.fr/sympa/distribution/current/src/etc/scenari/send.editorkey})
+	\end {htmlonly}\\
+	
+
+     \item \lparam {send} \texttt {e} 
+	\begin {htmlonly}
+	  (\htmladdnormallink {view} {http://listes.cru.fr/sympa/distribution/current/src/etc/scenari/send.e})
 	\end {htmlonly}\\
 	
 
@@ -8326,9 +8424,21 @@ parameter are pointers to \emph {scenarios}.
 	\end {htmlonly}\\
 	
 
+     \item \lparam {send} \texttt {i} 
+	\begin {htmlonly}
+	  (\htmladdnormallink {view} {http://listes.cru.fr/sympa/distribution/current/src/etc/scenari/send.i})
+	\end {htmlonly}\\
+	
+
      \item \lparam {send} \texttt {intranetorprivate} 
 	\begin {htmlonly}
 	  (\htmladdnormallink {view} {http://listes.cru.fr/sympa/distribution/current/src/etc/scenari/send.intranetorprivate})
+	\end {htmlonly}\\
+	
+
+     \item \lparam {send} \texttt {i} 
+	\begin {htmlonly}
+	  (\htmladdnormallink {view} {http://listes.cru.fr/sympa/distribution/current/src/etc/scenari/send.i})
 	\end {htmlonly}\\
 	
 
@@ -8338,15 +8448,33 @@ parameter are pointers to \emph {scenarios}.
 	\end {htmlonly}\\
 	
 
+     \item \lparam {send} \texttt {n} 
+	\begin {htmlonly}
+	  (\htmladdnormallink {view} {http://listes.cru.fr/sympa/distribution/current/src/etc/scenari/send.n})
+	\end {htmlonly}\\
+	
+
      \item \lparam {send} \texttt {newsletterkeyonly} 
 	\begin {htmlonly}
 	  (\htmladdnormallink {view} {http://listes.cru.fr/sympa/distribution/current/src/etc/scenari/send.newsletterkeyonly})
 	\end {htmlonly}\\
 	
 
+     \item \lparam {send} \texttt {n} 
+	\begin {htmlonly}
+	  (\htmladdnormallink {view} {http://listes.cru.fr/sympa/distribution/current/src/etc/scenari/send.n})
+	\end {htmlonly}\\
+	
+
      \item \lparam {send} \texttt {private} 
 	\begin {htmlonly}
 	  (\htmladdnormallink {view} {http://listes.cru.fr/sympa/distribution/current/src/etc/scenari/send.private})
+	\end {htmlonly}\\
+	
+
+     \item \lparam {send} \texttt {p} 
+	\begin {htmlonly}
+	  (\htmladdnormallink {view} {http://listes.cru.fr/sympa/distribution/current/src/etc/scenari/send.p})
 	\end {htmlonly}\\
 	
 
@@ -8362,6 +8490,12 @@ parameter are pointers to \emph {scenarios}.
 	\end {htmlonly}\\
 	
 
+     \item \lparam {send} \texttt {p} 
+	\begin {htmlonly}
+	  (\htmladdnormallink {view} {http://listes.cru.fr/sympa/distribution/current/src/etc/scenari/send.p})
+	\end {htmlonly}\\
+	
+
      \item \lparam {send} \texttt {privateandnomultipartoreditorkey} 
 	\begin {htmlonly}
 	  (\htmladdnormallink {view} {http://listes.cru.fr/sympa/distribution/current/src/etc/scenari/send.privateandnomultipartoreditorkey})
@@ -8374,9 +8508,21 @@ parameter are pointers to \emph {scenarios}.
 	\end {htmlonly}\\
 	
 
+     \item \lparam {send} \texttt {p} 
+	\begin {htmlonly}
+	  (\htmladdnormallink {view} {http://listes.cru.fr/sympa/distribution/current/src/etc/scenari/send.p})
+	\end {htmlonly}\\
+	
+
      \item \lparam {send} \texttt {privatekeyandeditorkeyonly} 
 	\begin {htmlonly}
 	  (\htmladdnormallink {view} {http://listes.cru.fr/sympa/distribution/current/src/etc/scenari/send.privatekeyandeditorkeyonly})
+	\end {htmlonly}\\
+	
+
+     \item \lparam {send} \texttt {p} 
+	\begin {htmlonly}
+	  (\htmladdnormallink {view} {http://listes.cru.fr/sympa/distribution/current/src/etc/scenari/send.p})
 	\end {htmlonly}\\
 	
 
@@ -8422,6 +8568,12 @@ parameter are pointers to \emph {scenarios}.
 	\end {htmlonly}\\
 	
 
+     \item \lparam {send} \texttt {p} 
+	\begin {htmlonly}
+	  (\htmladdnormallink {view} {http://listes.cru.fr/sympa/distribution/current/src/etc/scenari/send.p})
+	\end {htmlonly}\\
+	
+
 \end {itemize}
 
 
@@ -8445,9 +8597,21 @@ Predefined authorization scenarios are :
 	\end {htmlonly}\\
 	
 
+     \item \lparam {review} \texttt {c} 
+	\begin {htmlonly}
+	  (\htmladdnormallink {view} {http://listes.cru.fr/sympa/distribution/current/src/etc/scenari/review.c})
+	\end {htmlonly}\\
+	
+
      \item \lparam {review} \texttt {intranet} 
 	\begin {htmlonly}
 	  (\htmladdnormallink {view} {http://listes.cru.fr/sympa/distribution/current/src/etc/scenari/review.intranet})
+	\end {htmlonly}\\
+	
+
+     \item \lparam {review} \texttt {i} 
+	\begin {htmlonly}
+	  (\htmladdnormallink {view} {http://listes.cru.fr/sympa/distribution/current/src/etc/scenari/review.i})
 	\end {htmlonly}\\
 	
 
@@ -8457,15 +8621,33 @@ Predefined authorization scenarios are :
 	\end {htmlonly}\\
 	
 
+     \item \lparam {review} \texttt {l} 
+	\begin {htmlonly}
+	  (\htmladdnormallink {view} {http://listes.cru.fr/sympa/distribution/current/src/etc/scenari/review.l})
+	\end {htmlonly}\\
+	
+
      \item \lparam {review} \texttt {owner} 
 	\begin {htmlonly}
 	  (\htmladdnormallink {view} {http://listes.cru.fr/sympa/distribution/current/src/etc/scenari/review.owner})
 	\end {htmlonly}\\
 	
 
+     \item \lparam {review} \texttt {o} 
+	\begin {htmlonly}
+	  (\htmladdnormallink {view} {http://listes.cru.fr/sympa/distribution/current/src/etc/scenari/review.o})
+	\end {htmlonly}\\
+	
+
      \item \lparam {review} \texttt {private} 
 	\begin {htmlonly}
 	  (\htmladdnormallink {view} {http://listes.cru.fr/sympa/distribution/current/src/etc/scenari/review.private})
+	\end {htmlonly}\\
+	
+
+     \item \lparam {review} \texttt {p} 
+	\begin {htmlonly}
+	  (\htmladdnormallink {view} {http://listes.cru.fr/sympa/distribution/current/src/etc/scenari/review.p})
 	\end {htmlonly}\\
 	
 
@@ -8503,9 +8685,27 @@ Predefined authorization scenarios are :
 	\end {htmlonly}\\
 	
 
+     \item \lparam {d\_read} \texttt {o} 
+	\begin {htmlonly}
+	  (\htmladdnormallink {view} {http://listes.cru.fr/sympa/distribution/current/src/etc/scenari/d_read.o})
+	\end {htmlonly}\\
+	
+
      \item \lparam {d\_read} \texttt {private} 
 	\begin {htmlonly}
 	  (\htmladdnormallink {view} {http://listes.cru.fr/sympa/distribution/current/src/etc/scenari/d_read.private})
+	\end {htmlonly}\\
+	
+
+     \item \lparam {d\_read} \texttt {p} 
+	\begin {htmlonly}
+	  (\htmladdnormallink {view} {http://listes.cru.fr/sympa/distribution/current/src/etc/scenari/d_read.p})
+	\end {htmlonly}\\
+	
+
+     \item \lparam {d\_read} \texttt {p} 
+	\begin {htmlonly}
+	  (\htmladdnormallink {view} {http://listes.cru.fr/sympa/distribution/current/src/etc/scenari/d_read.p})
 	\end {htmlonly}\\
 	
 
@@ -8543,15 +8743,39 @@ Predefined authorization scenarios are :
 	\end {htmlonly}\\
 	
 
+     \item \lparam {d\_edit} \texttt {e} 
+	\begin {htmlonly}
+	  (\htmladdnormallink {view} {http://listes.cru.fr/sympa/distribution/current/src/etc/scenari/d_edit.e})
+	\end {htmlonly}\\
+	
+
      \item \lparam {d\_edit} \texttt {owner} 
 	\begin {htmlonly}
 	  (\htmladdnormallink {view} {http://listes.cru.fr/sympa/distribution/current/src/etc/scenari/d_edit.owner})
 	\end {htmlonly}\\
 	
 
+     \item \lparam {d\_edit} \texttt {o} 
+	\begin {htmlonly}
+	  (\htmladdnormallink {view} {http://listes.cru.fr/sympa/distribution/current/src/etc/scenari/d_edit.o})
+	\end {htmlonly}\\
+	
+
      \item \lparam {d\_edit} \texttt {private} 
 	\begin {htmlonly}
 	  (\htmladdnormallink {view} {http://listes.cru.fr/sympa/distribution/current/src/etc/scenari/d_edit.private})
+	\end {htmlonly}\\
+	
+
+     \item \lparam {d\_edit} \texttt {p} 
+	\begin {htmlonly}
+	  (\htmladdnormallink {view} {http://listes.cru.fr/sympa/distribution/current/src/etc/scenari/d_edit.p})
+	\end {htmlonly}\\
+	
+
+     \item \lparam {d\_edit} \texttt {p} 
+	\begin {htmlonly}
+	  (\htmladdnormallink {view} {http://listes.cru.fr/sympa/distribution/current/src/etc/scenari/d_edit.p})
 	\end {htmlonly}\\
 	
 
@@ -8767,6 +8991,8 @@ queue at least once between the time laid down for sending the
 digest and 12:00~AM (midnight). As a rule of thumb, do not use a digest time
 later than 11:00~PM.
 
+N.B.: In family context, \lparam{digest} can be constrainted only on days.
+
 \subsection {available\_user\_options}
 
     	\label {par-available-user-options}
@@ -8853,18 +9079,18 @@ title Operating System
 \end {quote}
 
 Parameter \lparam{msg\_topic.name} and \lparam{msg\_topic.title} are mandatory. \lparam{msg\_topic.title} is used
-on the web interface. The \lparam{msg\_topic.keywords} parameter allows to select automatically message topic by searching 
+on the web interface (``other'' is not allowed for msg\_topic.name parameter). The \lparam{msg\_topic.keywords} parameter allows to select automatically message topic by searching 
 keywords in the message. 
 
 
 N.B.: In a family context, \lparam{msg\_topic.keywords} parameter is uncompellable.
 
-\subsection {msg\_topic\_key\_apply\_on}
+\subsection {msg\_topic\_keywords\_apply\_on}
 
     	\label {par-msg-topic-key-apply-on}
-	\index{msg-topic-key-apply-on}
+	\index{msg-topic-keywords-apply-on}
 
-	The \lparam {msg\_topic\_key\_apply\_on} parameter defines on which part of the message is used to perform
+	The \lparam {msg\_topic\_keywords\_apply\_on} parameter defines on which part of the message is used to perform
 	automatic tagging.(See \ref {msg-topics}, page~\pageref {msg-topics})
 
 \textit {Example:} 
@@ -9206,9 +9432,21 @@ Predefined authorization scenarios are :
 	\end {htmlonly}\\
 	
 
+     \item \lparam {access} \texttt {c} 
+	\begin {htmlonly}
+	  (\htmladdnormallink {view} {http://listes.cru.fr/sympa/distribution/current/src/etc/scenari/access_web_archive.c})
+	\end {htmlonly}\\
+	
+
      \item \lparam {access} \texttt {intranet} 
 	\begin {htmlonly}
 	  (\htmladdnormallink {view} {http://listes.cru.fr/sympa/distribution/current/src/etc/scenari/access_web_archive.intranet})
+	\end {htmlonly}\\
+	
+
+     \item \lparam {access} \texttt {i} 
+	\begin {htmlonly}
+	  (\htmladdnormallink {view} {http://listes.cru.fr/sympa/distribution/current/src/etc/scenari/access_web_archive.i})
 	\end {htmlonly}\\
 	
 
@@ -9218,15 +9456,33 @@ Predefined authorization scenarios are :
 	\end {htmlonly}\\
 	
 
+     \item \lparam {access} \texttt {l} 
+	\begin {htmlonly}
+	  (\htmladdnormallink {view} {http://listes.cru.fr/sympa/distribution/current/src/etc/scenari/access_web_archive.l})
+	\end {htmlonly}\\
+	
+
      \item \lparam {access} \texttt {owner} 
 	\begin {htmlonly}
 	  (\htmladdnormallink {view} {http://listes.cru.fr/sympa/distribution/current/src/etc/scenari/access_web_archive.owner})
 	\end {htmlonly}\\
 	
 
+     \item \lparam {access} \texttt {o} 
+	\begin {htmlonly}
+	  (\htmladdnormallink {view} {http://listes.cru.fr/sympa/distribution/current/src/etc/scenari/access_web_archive.o})
+	\end {htmlonly}\\
+	
+
      \item \lparam {access} \texttt {private} 
 	\begin {htmlonly}
 	  (\htmladdnormallink {view} {http://listes.cru.fr/sympa/distribution/current/src/etc/scenari/access_web_archive.private})
+	\end {htmlonly}\\
+	
+
+     \item \lparam {access} \texttt {p} 
+	\begin {htmlonly}
+	  (\htmladdnormallink {view} {http://listes.cru.fr/sympa/distribution/current/src/etc/scenari/access_web_archive.p})
 	\end {htmlonly}\\
 	
 
@@ -9346,7 +9602,7 @@ Available message topics are defined by list parameters. Foreach new message top
 that defines the name and the title of the topic. If a thread is identified for the current message then the automatic procedure is performed.
 Else, to use automatic tagging, you should define keywords (See (\ref {par-msg-topic}, page~\pageref {par-msg-topic}) 
 To define which part of the message is used for automatic tagging
-you have to define \lparam{msg\_topic\_key\_apply\_on} list parameter (See \ref {par-msg-topic-key-apply-on}, 
+you have to define \lparam{msg\_topic\_keywords\_apply\_on} list parameter (See \ref {par-msg-topic-key-apply-on}, 
 page~\pageref {par-msg-topic-key-apply-on}). Tagging a message can be optional or it can be required, depending on the
 \lparam{msg\_topic\_tagging} list parameter (See (\ref {par-msg-topic-tagging},page~\pageref {par-msg-topic-tagging}).
 
@@ -10489,12 +10745,14 @@ See also the
 
 This chapter describes these modules (or a part of) :
 \begin {itemize}
-  \item \file {src/mail.pm}
-  \item \file {src/List.pm}  
-  \item \file {src/sympa.pm}  
-  \item \file {src/Commands.pm}
-  \item \file {src/wwsympa.pm} 
-  \item \file {src/tools.pm}  
+  \item \file {src/mail.pm} : low level of mail sending
+  \item \file {src/List.pm} : list processing and informations about structure and access to list configuration parameters  
+  \item \file {src/sympa.pm} : the main script, for messages and mail commands processing. 
+  \item \file {src/Commands.pm} : mail commands processing
+  \item \file {src/wwsympa.pm} : web interface
+  \item \file {src/report.pm} :  notification and error reports about requested services (mail and web)
+  \item \file {src/tools.pm} : various tools 
+  \item \file {src/Message.pm} : Message object used to encapsule a received message.
 \end {itemize}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -10562,7 +10820,7 @@ For sending, a call to sendmail is done or the message is pushed in a spool acco
      \item \lparam{rcpt} (+) : ARRAY - recepients     
    \end{enumerate}
 
-   \textbf{OUT} : \lparam{\$numsmtp} = number of sendmail process 
+   \textbf{OUT} : \lparam{\$numsmtp} = number of sendmail process  \(\mid\)  undef 
 
 \subsubsection   {\large{mail\_forward()}}
 \label{mail-mail-forward}  
@@ -10578,7 +10836,7 @@ For sending, a call to sendmail is done or the message is pushed in a spool acco
      \item \lparam{robot} (+) : robot
    \end{enumerate}
 
-   \textbf{OUT} : 1
+   \textbf{OUT} : 1 \(\mid\)  undef 
 
 \subsubsection {\large{set\_send\_spool()}}
 \label{mail-set-send-spool}  
@@ -10635,7 +10893,7 @@ For sending, a call to sendmail is done or the message is pushed in a spool acco
      \item \lparam{encrypt} : 'smime\_crypted' the mail is encrypted with smime \(\mid\)  undef - no encryption
    \end{enumerate}
 
-   \textbf{OUT} : 1 - sending by calling smtpto (sendmail) \(\mid\) 0 - sending by push in spool
+   \textbf{OUT} : 1 - sending by calling smtpto (sendmail) \(\mid\) 0 - sending by push in spool \(\mid\)  undef 
 
 \subsubsection {\large{sending()}}
 \label{mail-sending}
@@ -10665,7 +10923,7 @@ For sending, a call to sendmail is done or the message is pushed in a spool acco
       \item \lparam{sympa\_email} : for the file name for spool sending
    \end{enumerate}
 
-   \textbf{OUT} : 1 - sending by calling smtpto() (sendmail) \(\mid\) 0 - sending by pushing in spool
+   \textbf{OUT} : 1 - sending by calling smtpto() (sendmail) \(\mid\) 0 - sending by pushing in spool \(\mid\)  undef 
 
 \subsubsection {\large{smtpto()}}
 \label{mail-smtpto}
@@ -10682,23 +10940,26 @@ For sending, a call to sendmail is done or the message is pushed in a spool acco
       \item \lparam{robot} (+) : robot 
    \end{enumerate}
 
-   \textbf{OUT} : \lparam{mail::\$fh} - file handle on opened file for ouput, for SMTP "DATA" field\\
+   \textbf{OUT} : \lparam{mail::\$fh} - file handle on opened file for ouput, for SMTP "DATA" field \(\mid\) undef \\
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%% List.pm %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section {List.pm}
 \index{List.pm}
 
- This module includes all list processing functions. 
+ This module includes list processing functions. 
 
- Here are only described functions about : 
+ Here are described functions about : 
  \begin{itemize}
    \item Message distribution in a list
    \item Sending using templates
    \item Service messages
    \item Notification message
    \item Topic messages
+   \item Scenario evaluation  
  \end{itemize}
+
+ Follows a description of structure and access on list parameters.
 
 %%%%%%%%%%%%%%% message distribution %%%%%%%%%%%%%%%%%%%%
 \subsection {Functions for message distribution} 
@@ -10766,7 +11027,7 @@ For sending, a call to sendmail is done or the message is pushed in a spool acco
    \end{enumerate}
 
    \textbf{OUT} : \lparam{\$numsmtp} : addition of mail::mail\_message() function results 
-   ( = number of sendmail process )
+   ( = number of sendmail process ) \(\mid\) undef 
 
 \subsubsection {\large{send\_msg\_digest()}}
 \label{list-send-msg-digest}
@@ -10786,6 +11047,7 @@ For sending, a call to sendmail is done or the message is pushed in a spool acco
    \textbf{OUT} : \begin{itemize}
      \item 1  \emph{if sending} 
      \item 0  \emph{if no subscriber for sending digest, digestplain or summary} 
+     \item undef
    \end{itemize}
 
 %%%%%%%%%%%%%%% template sending %%%%%%%%%%%%%%%%%%%%%
@@ -10832,7 +11094,7 @@ For sending, a call to sendmail is done or the message is pushed in a spool acco
       \item \lparam{context} : ref(HASH) - for the \$data set up 
    \end{enumerate}
 
-   \textbf{OUT} : 1
+   \textbf{OUT} : 1 \(\mid\) undef 
 
 
 \subsubsection {\large{send\_global\_file()}}
@@ -10864,7 +11126,7 @@ For sending, a call to sendmail is done or the message is pushed in a spool acco
       \item \lparam{context} : ref(HASH) - for the \$data set up 
    \end{enumerate}
 
-   \textbf{OUT} : 1
+   \textbf{OUT} : 1 \(\mid\) undef 
 
 
 %%%%%%%%%%%%%%% service messages %%%%%%%%%%%%%%%%%%%%%
@@ -10890,7 +11152,7 @@ For sending, a call to sendmail is done or the message is pushed in a spool acco
       \item \lparam{file} (+): name of the archive file to send
    \end{enumerate}
 
-   \textbf{OUT} : -
+   \textbf{OUT} : - \(\mid\) undef 
 
 \subsubsection {\large{send\_to\_editor()}}
 \label{list-send-to-editor}
@@ -10912,7 +11174,7 @@ For sending, a call to sendmail is done or the message is pushed in a spool acco
    \end{enumerate}
 
    \textbf{OUT} : \$modkey - the moderation key for naming message waiting for moderation
-          in spool queuemod.
+          in spool queuemod. \(\mid\) undef 
 
 \subsubsection {\large{request\_auth()}}
 \label{list-request-auth}
@@ -10940,7 +11202,7 @@ For sending, a call to sendmail is done or the message is pushed in a spool acco
 	\end{itemize}
    \end{enumerate}
 
-   \textbf{OUT} : 1
+   \textbf{OUT} : 1 \(\mid\) undef 
 
 \subsubsection {\large{send\_auth()}}
 \label{list-send-auth}
@@ -10958,7 +11220,7 @@ For sending, a call to sendmail is done or the message is pushed in a spool acco
       \item \lparam{message}(+): ref(Message) - the message to confirm
    \end{enumerate}
 
-   \textbf{OUT} : \$modkey, the key for naming message waiting for confirmation in spool queuemod.
+   \textbf{OUT} : \$modkey, the key for naming message waiting for confirmation in spool queuemod. \(\mid\) undef 
 
 %%%%%%%%%%%%%%% message notification %%%%%%%%%%%%%%%%%%%%%
 \subsection {Functions for message notification} 
@@ -10995,7 +11257,7 @@ For sending, a call to sendmail is done or the message is pushed in a spool acco
 	\end{itemize}
    \end{enumerate}
 
-   \textbf{OUT} : 1
+   \textbf{OUT} : 1 \(\mid\) undef 
 
 \subsubsection {\large{send\_notify\_to\_owner()}}
 \label{list-send-notify-owner}
@@ -11018,7 +11280,7 @@ For sending, a call to sendmail is done or the message is pushed in a spool acco
 	\end{itemize}
    \end{enumerate}
 
-   \textbf{OUT} : 1
+   \textbf{OUT} : 1 \(\mid\) undef 
 
 \subsubsection {\large{send\_notify\_to\_editor()}}
 \label{list-send-notify-editor}
@@ -11041,7 +11303,7 @@ For sending, a call to sendmail is done or the message is pushed in a spool acco
 	\end{itemize}
    \end{enumerate}
 
-   \textbf{OUT} : 1
+   \textbf{OUT} : 1 \(\mid\) undef 
 
 
 \subsubsection {\large{send\_notify\_to\_user()}}
@@ -11066,7 +11328,7 @@ For sending, a call to sendmail is done or the message is pushed in a spool acco
 	\end{itemize}
    \end{enumerate}
 
-   \textbf{OUT} : 1
+   \textbf{OUT} : 1 \(\mid\) undef 
 
 %%%%%%%%%%%%%%% topic messages %%%%%%%%%%%%%%%%%%%%%
 \subsection {Functions for topic messages} 
@@ -11108,7 +11370,7 @@ look foreach \lparam{msg\_topic.name} list parameter (see \ref {msg-topic}, page
       \item \lparam{topic} (+) : the name of the requested topic
    \end{enumerate}
 
-   \textbf{OUT} : \lparam{topic} \emph{if it is available}
+   \textbf{OUT} : \lparam{topic} \emph{if it is available} \(\mid\) undef 
 
 \subsubsection {\large{get\_available\_msg\_topic()}}
 \label{list-get-available-msg-topic}
@@ -11143,7 +11405,7 @@ Computes topic(s) (with compute\_topic() function) and tags the message (with ta
       \item \lparam{robot} (+): robot	
    \end{enumerate}
 
-   \textbf{OUT} : list of tagged topic : strings separated by ','. It can be empty.
+   \textbf{OUT} : list of tagged topic : strings separated by ','. It can be empty. \(\mid\) undef 
 
 \subsubsection {\large{compute\_topic()}}
 \label{list-compute-topic}
@@ -11183,7 +11445,7 @@ METHOD editor|sender|auto
       \item \lparam{method} (+): 'auto' \(\mid\)'editor'\(\mid\)'sender' - the method used for tagging
    \end{enumerate}
 
-   \textbf{OUT} : name of the created topic information file (\file{directory/listname.msg\_id})
+   \textbf{OUT} : name of the created topic information file (\file{directory/listname.msg\_id}) \(\mid\) undef 
 
 \subsubsection {\large{load\_msg\_topic\_file()}}
 \label{list-load-msg-topic-file}
@@ -11198,7 +11460,7 @@ Search and load msg topic file corresponding to the message ID  (\file{directory
       \item \lparam{robot} (+): the robot
    \end{enumerate}
 
-   \textbf{OUT} : ref(HASH), keys are :
+   \textbf{OUT} :  undef \(\mid\) ref(HASH), keys are :
    \begin{itemize}
      \item \lparam{topic} : list of topics (strings separated by ',')
      \item \lparam{method} : 'auto' \(\mid\)'editor'\(\mid\)'sender' - the method used for tagging
@@ -11235,7 +11497,7 @@ Search and load msg topic file corresponding to the message ID  (\file{directory
  Selects subscribers that are subscribed to one or more topic
  appearing in the topic list incoming when their reception mode is 'mail', and selects the other subscribers 
  (reception mode different from 'mail'). This function is used by List::send\_msg() function during message 
- diffusion (see \ref {list-send-msg}, page~\pageref {list-send-msg}).
+ diffusion (see \ref {list-send-msg}, page~\pageref {list-send-msg} ).
 
    \textbf{IN} : 
    \begin{enumerate}
@@ -11246,13 +11508,120 @@ Search and load msg topic file corresponding to the message ID  (\file{directory
 
    \textbf{OUT} : ARRAY - list of selected subscribers
 
+%%%%%%%%%%%%%%% scenario evaluation %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\subsection {Scenario evaluation} 
+\label{list-scenario-evaluation}
 
+The following function is used to evaluate scenario file ``\texttt{<}action\texttt{>}.\texttt{<}parameter\_value\texttt{>}'',
+where \texttt{<}action\texttt{>}action corresponds to a configuration parameter for an action and 
+\texttt{<}parameter\_value\texttt{>} corresponds to its value.
+ 
+\subsubsection {\large{request\_action()}}
+ Return the action to perform for one sender 
+ using one authentication method to perform an operation
+
+   \textbf{IN} : 
+   \begin{enumerate}
+      \item \lparam{operation} (+): SCALAR - the requested action corresponding to config parameter
+      \item \lparam{auth\_method} (+): 'smtp'\(\mid\)'md5'\(\mid\)'pgp'\(\mid\)'smime'
+      \item \lparam{robot} (+): robot
+      \item \lparam{context} (): ref(HASH) - contains value to instantiate scenario variables (hash keys)
+      \item \lparam{debug} (): boolean - \emph{if true} adds keys 'condition' and 'auth\_method' to the returned hash.
+   \end{enumerate}
+
+   \textbf{OUT} : undef \(\mid\) ref(HASH) with keys : 
+     \begin{itemize}
+       \item action : 'do\_it'\(\mid\)'reject'\(\mid\)'request\_auth'\(\mid\)'owner'\(\mid\)'editor'\(\mid\)'editorkey'\(\mid\)'listmaster' 
+       \item reason : 'value' \emph{if action == 'reject' in scenario and if there is  reject(reason='value')} to match a key in
+	 mail\_tt2/authorization\_reject.tt2. This is used in errors reports (see \ref {report.pm}, page~\pageref {report.pm})
+       \item tt2 : template name {if action == 'reject' in scenario and there is  reject(tt2='template\_name')}.
+       \item condition : the checked condition.
+       \item auth\_method : the checked auth\_method.
+     \end{itemize}
+
+
+%%%%%%%%%%%%%%% structure and access to list parameters %%%%%%%%%%%%%%%%%%%%
+\subsection {Structure and access to list configuration parameters} 
+
+List parameters are representated in the list configuration file, in the list object (\lparam{list->\{'admin'\}})
+and on the Web interface. Here are translation and access functions :
+
+
+\begin{tabular}{c|c|c|c|c}
+             &                        &      other (3)  &                        &               \\
+             & (1)\(\longrightarrow\) &   \(\uparrow\)  & (5)\(\longrightarrow\) &               \\
+CONFIG FILE  &                        &   LIST OBJECT   &                        & WEB INTERFACE \\
+             & \(\longleftarrow\) (2) &   (4)           & \(\longleftarrow\) (6) &              
+\end{tabular}
+
+
+\begin{enumerate}
+  \item Loading file in memory : \begin{verbatim} List::_load_admin_file(),_load_include_admin_user_file(),_load_list_param() \end{verbatim}
+  \item Saving list configuration in file : \begin{verbatim} List::_save_admin_file(),_save_list_param() \end{verbatim}
+  \item Tools to get parameter values : \begin{verbatim} List::get_param_value(),_get_param_value_anywhere(),_get_single_param_value() \end{verbatim}
+  \item Tools to initialize list parameter with defaults :\begin{verbatim} List::_apply_default() \end{verbatim}
+  \item To present list parameters on the web interface : \begin{verbatim} wwsympa::do_edit_list_request(),_prepare_edit_form(),_prepare_data() \end{verbatim}
+  \item To get updates on list parameters from the web interface : \begin{verbatim} wwsympa::do_edit_list(),_check_new_value \end{verbatim}
+\end{enumerate}
+
+List parameters can be simple or composed in paragraph, they can be unique or multiple and they can singlevalued or multivalued. Here are the different kinds 
+of parameters and an exemple : 
+
+\begin{tabular}{|c|c||c|c|}
+\hline
+\multicolumn{2}{|c||}{parameters}  &          SIMPLE          &               COMPOSED               \\
+\hline\hline 
+SINGLE & singlevalued            &           (a)             &                 (b)                  \\
+       &                         &       \emph{lang}         &       \emph{archiv.period}            \\  
+\cline{2-4}
+       & multivalued             &           (c)             &                 (d)                  \\
+       &                         &      \emph{topics}        &    \emph{available\_user\_option.reception}\\
+\hline
+MULTIPLE & singlevalued          &            (e)            &                 (f)                  \\
+         &                       &      \emph{include\_list} &         \emph{owner.email}               \\ 
+\cline{2-4}  
+       & multi values            &          not defined      &          not defined                  \\
+\hline
+\end{tabular}
+
+
+Here are these list parameters format in list configuration file in front of perl representation in memory :
+
+\begin{tabular}{|c||l|l|}
+\hline
+              & List Configuration FILE                   &     \lparam{\$list->\{'admin'\}}                          \\
+\hline\hline
+(a)           & param value                               &          'scalar'                                         \\ 
+\hline
+(b)           & param                                     &                                                           \\
+              & p1 val1                                   &          'HASH\(\rightarrow\)scalar'                      \\    
+	      &	p2 val2                                   &                                                           \\
+\hline
+(c)           & param val1,val2,val3                      &          'ARRAY(scalar \& split\_char)'                   \\
+\hline
+(d)           & param                                     &                                                           \\
+              & p1 val11, val12, val13                    &          'HASH\(\rightarrow\)ARRAY(scalar \& split\_char)'\\ 
+	      &	p2 val21, val22, val23                    &                                                            \\
+\hline
+(e)           & param val1                                &          'ARRAY(scalar)'                                   \\
+	      &	param val2                                &                                                            \\
+\hline
+(d)           & param                                     &                                                            \\
+              & p1 val11                                  &          'ARRAY(HASH\(\rightarrow\)scalar)'                \\  
+	      &	p2 val12                                  &                                                            \\
+              &                                           &                                                            \\
+              & param                                     &                                                            \\
+              & p1 val21                                  &                                                            \\ 
+	      &	p2 val22                                  &                                                            \\
+\hline
+\end{tabular}
+                                        
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%% sympa.pl %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section {sympa.pl}
 \index{sympa.pl}
 
-   This is the main script ; it runs as a daemon and does the messages/commands processing. It uses these funstions :
+   This is the main script ; it runs as a daemon and does the messages/commands processing.  It uses these funstions :
    DoFile(), DoMessage(), DoCommand(), DoSendMessage(), DoForward(), SendDigest(), CleanSpool(), sigterm(), sighup().
    
    Concerning reports about message distribution, function List::send\_file() 
@@ -11281,7 +11650,7 @@ Search and load msg topic file corresponding to the message ID  (\file{directory
   
    \textbf{IN} : \lparam{file}(+): the file to handle
 
-   \textbf{OUT} : \$status - result of the called function.
+   \textbf{OUT} : \$status - result of the called function \(\mid\) undef
 
 \subsubsection {\large{DoMessage()}}
 \label{sympa-domessage}
@@ -11302,7 +11671,7 @@ Search and load msg topic file corresponding to the message ID  (\file{directory
       \item \lparam{robot}(+): robot
    \end{enumerate}
 
-   \textbf{OUT} : 1  \emph{if everything went fine} in order to remove the file from the queue.
+   \textbf{OUT} : 1  \emph{if everything went fine} in order to remove the file from the queue \(\mid\) undef
 
 \subsubsection {\large{DoCommand()}}
 \label{sympa-docommand}
@@ -11319,7 +11688,7 @@ Search and load msg topic file corresponding to the message ID  (\file{directory
       \item \lparam{file}(+): file containing the message
    \end{enumerate}
 
-   \textbf{OUT} : \$success - result of Command::parse() function.
+   \textbf{OUT} : \$success - result of Command::parse() function \(\mid\) undef.
 
 \subsubsection {\large{DoSendMessage()}}
 \label{sympa-dosendmessage}
@@ -11334,7 +11703,7 @@ Search and load msg topic file corresponding to the message ID  (\file{directory
       \item \lparam{robot}(+): robot	
    \end{enumerate}
 
-   \textbf{OUT} : 1  
+   \textbf{OUT} : 1  \(\mid\) undef 
 
 \subsubsection {\large{DoForward()}}
 \label{sympa-doforward}
@@ -11352,7 +11721,7 @@ Search and load msg topic file corresponding to the message ID  (\file{directory
       \item \lparam{msg}(+): ref(MIME::Entity)
    \end{enumerate}
 
-   \textbf{OUT} : 1  
+   \textbf{OUT} : 1   \(\mid\) undef
 
 
 \subsubsection {\large{SendDigest()}}
@@ -11364,7 +11733,7 @@ Search and load msg topic file corresponding to the message ID  (\file{directory
    page~\pageref {list-send-msg-digest}).
   
    \textbf{IN} : -
-   \textbf{OUT} : -  
+   \textbf{OUT} : -  \(\mid\) undef 
 
 \subsubsection {\large{CleanSpool()}}
 \label{sympa-cleanspool}
@@ -11448,7 +11817,7 @@ Search and load msg topic file corresponding to the message ID  (\file{directory
       \item \lparam{sign\_mod} : 'smime' \(\mid\) undef - authentification
    \end{enumerate}
 
-   \textbf{OUT} : 'unknown\_list' \(\mid\) 'wrong\_auth' \(\mid\) 'not\_allowed' \(\mid\) 1 
+   \textbf{OUT} : 'unknown\_list' \(\mid\) 'wrong\_auth' \(\mid\) 'not\_allowed' \(\mid\) 1  \(\mid\) undef
 
 \subsubsection {\large{del()}}
 \label{commands-del}
@@ -11479,7 +11848,7 @@ Search and load msg topic file corresponding to the message ID  (\file{directory
       \item \lparam{sign\_mod} : 'smime' \(\mid\) undef - authentification
    \end{enumerate}
 
-   \textbf{OUT} : 'unknown\_list' \(\mid\) 'wrong\_auth' \(\mid\) 'not\_allowed' \(\mid\) 1 
+   \textbf{OUT} : 'unknown\_list' \(\mid\) 'wrong\_auth' \(\mid\) 'not\_allowed' \(\mid\) 1  \(\mid\) undef
 
 \subsubsection {\large{signoff()}}
 \label{commands-signoff}
@@ -11494,7 +11863,7 @@ Search and load msg topic file corresponding to the message ID  (\file{directory
       \item \lparam{sign\_mod} : 'smime' \(\mid\) undef - authentification
    \end{enumerate}
 
-   \textbf{OUT} : 'syntax\_error' \(\mid\) 'unknown\_list' \(\mid\) 'wrong\_auth' \(\mid\) 'not\_allowed' \(\mid\) 1
+   \textbf{OUT} : 'syntax\_error' \(\mid\) 'unknown\_list' \(\mid\) 'wrong\_auth' \(\mid\) 'not\_allowed' \(\mid\) 1 \(\mid\) undef
 
 \subsubsection {\large{invite()}}
 \label{commands-invite}
@@ -11509,7 +11878,7 @@ Search and load msg topic file corresponding to the message ID  (\file{directory
       \item \lparam{sign\_mod} : 'smime' \(\mid\) undef - authentification
    \end{enumerate}
 
-   \textbf{OUT} : 'unknown\_list' \(\mid\) 'wrong\_auth' \(\mid\) 'not\_allowed' \(\mid\) 1
+   \textbf{OUT} : 'unknown\_list' \(\mid\) 'wrong\_auth' \(\mid\) 'not\_allowed' \(\mid\) 1 \(\mid\) undef
 
 \subsubsection {\large{last()}}
 \label{commands-last}
@@ -11569,7 +11938,7 @@ Search and load msg topic file corresponding to the message ID  (\file{directory
       \item \lparam{robot}(+): robot
    \end{enumerate}
 
-   \textbf{OUT} : 'wrong\_auth' \(\mid\) 'msg\_not\_found' \(\mid\) 1
+   \textbf{OUT} : 'wrong\_auth' \(\mid\) 'msg\_not\_found' \(\mid\) 1 \(\mid\) undef
 
 \subsubsection {\large{set()}}
 \label{commands--set}
@@ -11598,7 +11967,7 @@ Search and load msg topic file corresponding to the message ID  (\file{directory
       \item \lparam{robot}(+): robot
    \end{enumerate}
 
-   \textbf{OUT} : 'unknown\_list' \(\mid\) 'msg\_not\_found' \(\mid\) 1
+   \textbf{OUT} : 'unknown\_list' \(\mid\) 'msg\_not\_found' \(\mid\) 1 \(\mid\) undef
 
 \subsubsection {\large{reject()}}
 \label{commands-reject}
@@ -11612,7 +11981,7 @@ Search and load msg topic file corresponding to the message ID  (\file{directory
       \item \lparam{robot}(+): robot
    \end{enumerate}
 
-   \textbf{OUT} : 'unknown\_list' \(\mid\) 'wrong\_auth' \(\mid\) 1 
+   \textbf{OUT} : 'unknown\_list' \(\mid\) 'wrong\_auth' \(\mid\) 1  \(\mid\) undef
 
 \subsubsection {\large{modindex()}}
 \label{commands-modindex}
@@ -11642,7 +12011,7 @@ Search and load msg topic file corresponding to the message ID  (\file{directory
       \item \lparam{sign\_mod} : 'smime' \(\mid\) undef - authentification
    \end{enumerate}
 
-   \textbf{OUT} : 'unknown\_list' \(\mid\) wrong\_auth \(\mid\) no\_subscribers \(\mid\) 'not\_allowed' \(\mid\) 1
+   \textbf{OUT} : 'unknown\_list' \(\mid\) wrong\_auth \(\mid\) no\_subscribers \(\mid\) 'not\_allowed' \(\mid\) 1 \(\mid\) undef
 
 \subsubsection {\large{verify()}}
 \label{commands-verify}
@@ -11674,7 +12043,7 @@ Search and load msg topic file corresponding to the message ID  (\file{directory
       \item \lparam{sign\_mod} : 'smime' \(\mid\) undef - authentification
    \end{enumerate}
 
-   \textbf{OUT} : 'syntax\_error' \(\mid\) 'unknown\_list' \(\mid\) 'wrong\_auth' \(\mid\) 'not\_allowed' \(\mid\) 1
+   \textbf{OUT} : 'syntax\_error' \(\mid\) 'unknown\_list' \(\mid\) 'wrong\_auth' \(\mid\) 'not\_allowed' \(\mid\) 1 \(\mid\) undef
 
 \subsubsection {\large{info()}}
 \label{commands-info}
@@ -11689,7 +12058,7 @@ Search and load msg topic file corresponding to the message ID  (\file{directory
       \item \lparam{sign\_mod} : 'smime' \(\mid\) undef - authentification
    \end{enumerate}
 
-   \textbf{OUT} : 'unknown\_list' \(\mid\) 'wrong\_auth' \(\mid\) 'not\_allowed' \(\mid\) 1 
+   \textbf{OUT} : 'unknown\_list' \(\mid\) 'wrong\_auth' \(\mid\) 'not\_allowed' \(\mid\) 1 \(\mid\) undef 
 
 \subsubsection {\large{stats()}}
 \label{commands-stats}
@@ -11704,7 +12073,7 @@ Search and load msg topic file corresponding to the message ID  (\file{directory
       \item \lparam{sign\_mod} : 'smime' \(\mid\) undef - authentification
    \end{enumerate}
 
-   \textbf{OUT} : 'unknown\_list' \(\mid\) 'not\_allowed' \(\mid\) 1 
+   \textbf{OUT} : 'unknown\_list' \(\mid\) 'not\_allowed' \(\mid\) 1  \(\mid\) undef
 
 \subsubsection {\large{help()}}
 \label{commands-help}
@@ -11718,7 +12087,7 @@ Search and load msg topic file corresponding to the message ID  (\file{directory
       \item \lparam{robot}(+): robot
    \end{enumerate}
 
-   \textbf{OUT} : 1
+   \textbf{OUT} : 1 \(\mid\) undef
 
 \subsubsection {\large{lists()}}
 \label{commands-lists}
@@ -11732,7 +12101,7 @@ Search and load msg topic file corresponding to the message ID  (\file{directory
       \item \lparam{robot}(+): robot
    \end{enumerate}
 
-   \textbf{OUT} : 1
+   \textbf{OUT} : 1 \(\mid\) undef
 
 \subsubsection {\large{which()}}
 \label{commands-lists}
@@ -11764,8 +12133,7 @@ Search and load msg topic file corresponding to the message ID  (\file{directory
 
 \subsection {tools for command processing}
 
-   get\_auth\_method(), error\_report\_cmd(), notice\_report\_cmd(), global\_report\_cmd().
-
+   get\_auth\_method()
 
 \subsubsection {\large{get\_auth\_method()}}
 \label{commands-get-auth-method}
@@ -11787,62 +12155,7 @@ Search and load msg topic file corresponding to the message ID  (\file{directory
       \item \lparam{sign\_mod}(+): 'smime' - smime authentification \(\mid\) undef - smtp or md5 authentification 
       \item \lparam{list}: ref(List) \(\mid\) undef - in a list context or not
    \end{enumerate}
-   \textbf{OUT} : 'smime' \(\mid\) 'md5' \(\mid\) 'smtp' - authentification method if checking not failed.
-
-
-The following functions are called by processing command functions. It allows to push errors in 
-\@errors\_report array, notices in \@notices\_report array and global errors in
-\@globals\_report array. These arrays are used to parse ``command\_report'' template
-by  List::send\_global\_file() funstion(see \ref {list-send-global-file}, page~\pageref {list-send-global-file})  
-called by sympa::DoFile() function (see \ref {sympa-dofile},page~\pageref {sympa-dofile}).
-
-\subsubsection {\large{error\_report\_cmd()}}
-\label{commands-error-report-cmd}
-\index{commands::error\_report\_cmd()}
-
-   Pushes error reports of processed commands in  \@errors\_report array used in ``command\_report'' template.
-
-   \textbf{IN} : 
-   \begin{enumerate}
-      \item \lparam{cmd}: command line sent to sympa
-      \item \lparam{type}: type of error, used as \$error.type in ``command\_report'' template.
-      \item \lparam{data}: hash used in ``command\_report'' template. Its keys
-	 are used as \$error.key. 
-   \end{enumerate}
-
-   \textbf{OUT} : -
-
-\subsubsection {\large{notice\_report\_cmd()}}
-\label{commands-notice-report-cmd}
-\index{commands::notice\_report\_cmd()}
-
-   Pushes notice reports of processed commands in  \@notices\_report array used in ``command\_report'' template. 
-
-   \textbf{IN} : 
-   \begin{enumerate}
-      \item \lparam{cmd}: command line sent to sympa
-      \item \lparam{type}: type of notice, used as \$notice.type in ``command\_report'' template.
-      \item \lparam{data}: hash used in ``command\_report'' template. Its keys
-	 are used as \$notice.key. 
-   \end{enumerate}
-
-   \textbf{OUT} : -
-
-\subsubsection {\large{global\_report\_cmd()}}
-\label{commands-global-report-cmd}
-\index{commands::global\_report\_cmd()}
-
-   Pushes global error reports of processed commands in  \@globals\_report array used in ``command\_report'' template. 
-
-   \textbf{IN} : 
-   \begin{enumerate}
-      \item \lparam{cmd}: command line sent to sympa
-      \item \lparam{type}: type of global error, used as \$glob.type in ``command\_report'' template.
-      \item \lparam{data}: hash used in ``command\_report'' template. Its keys
-	 are used as \$glob.key. 
-   \end{enumerate}
-
-   \textbf{OUT} : -
+   \textbf{OUT} : 'smime' \(\mid\) 'md5' \(\mid\) 'smtp' - authentification method if checking not failed \(\mid\) undef
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -11863,7 +12176,7 @@ do\_tag\_topic\_by\_sender().
   Subscribes a user to a list. New subscriber can be notified
   by sending him template 'welcome'.\begin{itemize}   
    \item \textbf{IN} : -
-   \item \textbf{OUT} : 'subrequest' \(\mid\) 'login' \(\mid\) 'info' \(\mid\) \$in.previous\_action
+   \item \textbf{OUT} : 'subrequest' \(\mid\) 'login' \(\mid\) 'info' \(\mid\) \$in.previous\_action \(\mid\) undef
   \end{itemize}    
 
 \subsubsection {\large{do\_signoff()}}
@@ -11873,7 +12186,7 @@ do\_tag\_topic\_by\_sender().
   Unsubscribes a user from a list.  The unsubscriber can be notified
   by sending him template 'bye'.\begin{itemize}   
    \item \textbf{IN} : -
-   \item \textbf{OUT} : 'sigrequest' \(\mid\) 'login' \(\mid\) 'info'
+   \item \textbf{OUT} : 'sigrequest' \(\mid\) 'login' \(\mid\) 'info' \(\mid\) undef
   \end{itemize}    
 
 \subsubsection {\large{do\_add()}}
@@ -11883,7 +12196,7 @@ do\_tag\_topic\_by\_sender().
    Adds a user to a list (requested by another user) and can send acknowledgements. 
    New subscriber can be notified by sending him template 'welcome'.\begin{itemize}
     \item \textbf{IN} : -
-    \item \textbf{OUT} : 'loginrequest' \(\mid\) (\$in.previous\_action \(\mid\mid\) 'review')
+    \item \textbf{OUT} : 'loginrequest' \(\mid\) (\$in.previous\_action \(\mid\mid\) 'review') \(\mid\) undef
   \end{itemize}    
 
 \subsubsection {\large{do\_del()}}
@@ -11893,7 +12206,7 @@ do\_tag\_topic\_by\_sender().
    Removes a user from a list (requested by another user) and can send acknowledgements.
    Unsubscriber can be notified by sending template 'removed'.\begin{itemize} 
    \item \textbf{IN} : -
-   \item \textbf{OUT} : 'loginrequest' \(\mid\) (\$in.previous\_action \(\mid\mid\) 'review')
+   \item \textbf{OUT} : 'loginrequest' \(\mid\) (\$in.previous\_action \(\mid\mid\) 'review') \(\mid\) undef
   \end{itemize}    
 
 \subsubsection {\large{do\_change\_email()}}
@@ -11903,7 +12216,7 @@ do\_tag\_topic\_by\_sender().
   Changes a user's email address in \Sympa environment. Password can be send to user by sending
   template 'sendpasswd'.\begin{itemize} 
    \item \textbf{IN} : -
-   \item \textbf{OUT} : '1' \(\mid\) 'pref'
+   \item \textbf{OUT} : '1' \(\mid\) 'pref' \(\mid\) undef
   \end{itemize}    
 
 \subsubsection {\large{do\_reject()}}
@@ -11913,7 +12226,7 @@ do\_tag\_topic\_by\_sender().
   Refuses and deletes moderated messages. Rejected message senders are notified by
   sending them template 'reject'.\begin{itemize} 
    \item \textbf{IN} : -
-   \item \textbf{OUT} : 'loginrequest' \(\mid\) 'modindex'
+   \item \textbf{OUT} : 'loginrequest' \(\mid\) 'modindex' \(\mid\) undef
   \end{itemize}    
 
 \subsubsection {\large{do\_distribute()}}
@@ -11925,7 +12238,27 @@ do\_tag\_topic\_by\_sender().
  set in spool. In a context of message topic, tags the message by calling to function List::tag\_topic() 
  (see \ref {list-tag-topic}, page~\pageref {list-tag-topic}).\begin{itemize} 
    \item \textbf{IN} : -
-   \item \textbf{OUT} : 'loginrequest' \(\mid\) 'modindex'
+   \item \textbf{OUT} : 'loginrequest' \(\mid\) 'modindex' \(\mid\) undef
+  \end{itemize}    
+
+\subsubsection {\large{do\_modindex()}}
+\label{wwsympa-do-modindex}
+\index{wwsympa::do\_modindex()}
+
+  Allows a moderator to moderate a list of messages and documents and/or tag message in message topic context.
+  \begin{itemize} 
+   \item \textbf{IN} : -
+   \item \textbf{OUT} : 'loginrequest' \(\mid\) 'admin' \(\mid\) 1 \(\mid\) undef
+  \end{itemize}    
+
+\subsubsection {\large{do\_viewmod()}}
+\label{wwsympa-do-viewmod}
+\index{wwsympa::do\_modindex()}
+
+  Allows a moderator to moderate a message and/or tag message in message topic context.
+  \begin{itemize} 
+   \item \textbf{IN} : -
+   \item \textbf{OUT} : 'loginrequest' \(\mid\) 1 \(\mid\) undef
   \end{itemize}    
 
 \subsubsection {\large{do\_send\_mail()}}
@@ -11936,18 +12269,17 @@ do\_tag\_topic\_by\_sender().
   It uses mail::mail\_file() (see \ref {mail-mail-file}, page~\pageref {mail-mail-file})
   to do it. As it is in a Web context, the message will be set in spool.\begin{itemize} 
    \item \textbf{IN} : -
-   \item \textbf{OUT} : 'loginrequest' \(\mid\) 'info'
+   \item \textbf{OUT} : 'loginrequest' \(\mid\) 'info' \(\mid\) undef
   \end{itemize}    
 
-\subsubsection {\large{do\_send\_mail()}}
-\label{wwsympa-do-send-mail}
-\index{wwsympa::do\_send\_mail()}
+\subsubsection {\large{do\_sendpasswd()}}
+\label{wwsympa-do-sendpasswd}
+\index{wwsympa::do\_sendpasswd()}
 
-  Sends a message to a list by the Web interface.
-  It uses mail::mail\_file() (see \ref {mail-mail-file}, page~\pageref {mail-mail-file})
-  to do it. As it is in a Web context, the message will be set in spool.\begin{itemize} 
+  Sends a message to a user, containing his password, by sending him template 'sendpasswd' list by the Web interface.
+  \begin{itemize} 
    \item \textbf{IN} : -
-   \item \textbf{OUT} : 'loginrequest' \(\mid\) 'info'
+   \item \textbf{OUT} : 'loginrequest' \(\mid\) 'info' \(\mid\) undef
   \end{itemize}    
 
 \subsubsection {\large{do\_request\_topic()}}
@@ -11956,7 +12288,7 @@ do\_tag\_topic\_by\_sender().
 
   Allows a sender to tag his mail in message topic context.\begin{itemize} 
    \item \textbf{IN} : -
-   \item \textbf{OUT} : 1
+   \item \textbf{OUT} : 'loginrequest' \(\mid\) 1 \(\mid\) undef
   \end{itemize}    
 
 \subsubsection {\large{do\_tag\_topic\_by\_sender()}}
@@ -11967,7 +12299,7 @@ do\_tag\_topic\_by\_sender().
   to sympa.pl.
   \begin{itemize} 
    \item \textbf{IN} : -
-   \item \textbf{OUT} : 'info'
+   \item \textbf{OUT} : 'loginrequest' \(\mid\) 'info' \(\mid\) undef
   \end{itemize}    
 
 \subsubsection {\large{do\_remind()}}
@@ -11978,7 +12310,7 @@ do\_tag\_topic\_by\_sender().
   page~\pageref {mail-mail-file}). As it is in a Web context, the message will be set in spool.
   \begin{itemize} 
    \item \textbf{IN} : -
-   \item \textbf{OUT} : 'loginrequest' \(\mid\) 'admin'
+   \item \textbf{OUT} : 'loginrequest' \(\mid\) 'admin' \(\mid\) undef
   \end{itemize}    
 
 \subsubsection {\large{do\_set()}}
@@ -11988,7 +12320,7 @@ do\_tag\_topic\_by\_sender().
    Changes subscription options (reception or visibility)
    \begin{itemize} 
     \item \textbf{IN} : -
-    \item \textbf{OUT} : 'loginrequest' \(\mid\) 'info'
+    \item \textbf{OUT} : 'loginrequest' \(\mid\) 'info' \(\mid\) undef
    \end{itemize}    
 
 \subsubsection {\large{do\_send\_me()}}
@@ -12000,11 +12332,360 @@ do\_tag\_topic\_by\_sender().
    the message will be set in spool.
    \begin{itemize} 
     \item \textbf{IN} : -
-    \item \textbf{OUT} : 'arc' \(\mid\) 1
+    \item \textbf{OUT} : 'arc' \(\mid\) 1 \(\mid\) undef
    \end{itemize}    
 
-
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%% report.pm %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section {report.pm}
+\index{report.pm}
+
+This module provides various tools for notification and error reports in every Sympa interface 
+(mail diffusion, mail command and web command).
+
+For a requested service, there are four kinds of reports to users:
+\begin{itemize} 
+   \item \textbf{success notification} : when the action does not involve any specific mail report or else,
+     the user is notified of the well done of the processus.
+   \item \textbf{non authorization}\file{(auth)} : a user is not allowed to perform an action, Sympa provides reason of rejecting. 
+     The template used to provides this information is \file{mail\_tt2/authorization\_reject.tt2}. It contains a list of reasons, indexed
+     by keywords that are mentioned in reject action scenario (see \ref {rules}, page~\pageref {rules})
+   \item \textbf{user error}\file{(user)} : a error caused by the user, the user is informed about the error reason
+   \item \textbf{internal server error}\file{(intern)} : an error independent from the user, the user is succintly informed 
+     about the error reason but a mail with more information is sent to listmaster using template 
+     \file{mail\_tt2/listmaster\_notification.tt2}(If it is not necessary, keyword used is \file{'intern\_quiet'}.
+\end{itemize} 
+   
+
+For other reports than non authorizations templates used depends on the interface :
+\begin{itemize} 
+   \item message diffusion : \file{mail\_tt2/message\_report.tt2}
+   \item mail commands : \file{mail\_tt2/command\_report.tt2}
+   \item web commands : \file{web\_tt2/notice.tt2} for positive notifications and \file{web\_tt2/error.tt2} for rejects.
+\end{itemize}  
+
+
+%%%%%%%%%%%%%%% message diffusion %%%%%%%%%%%%%%%%%%%%
+\subsection {Message diffusion} 
+\label {report-message-diffusion}
+
+These reports use template \file{mail\_tt2/message\_report.tt2} and there are two functions :
+\file{reject\_report\_msg()} and \file{notice\_report\_msg()}.
+
+
+\subsubsection {\large{reject\_report\_msg()}}
+\label{report-reject-report-msg}
+\index{report::reject\_report\_msg()}
+
+   Sends a notification to the user about an error rejecting his requested message diffusion.
+
+   \textbf{IN} : 
+   \begin{enumerate}
+      \item \lparam{type}(+): 'intern'\(\mid\)'intern\_quiet'\(\mid\)'user'\(\mid\)'auth' - the error type 
+      \item \lparam{error}: SCALAR - depends on \$type :
+	 \begin{itemize}
+	   \item 'intern' : string error sent to listmaster
+	   \item 'user' : \$entry  in \file{message\_report.tt2}
+	   \item 'auth' : \$reason  in \file{authorization\_reject.tt2}
+	 \end{itemize}
+      \item \lparam{user}(+): SCALAR - the user to notify
+      \item \lparam{param}: ref(HASH) - for variable instantiation \file{message\_report.tt2}
+	(key \lparam{msgid}(+) is required \emph{if type == 'intern'})
+      \item \lparam{robot}: SCALAR - robot
+      \item \lparam{msg\_string}: SCALAR - rejected message
+      \item \lparam{list}: ref(List) - in a list context
+   \end{enumerate}
+
+   \textbf{OUT} : 1 \(\mid\) undef
+
+\subsubsection {\large{notice\_report\_msg()}}
+\label{report-reject-report-msg}
+\index{report::reject\_report\_msg()}
+
+   Sends a notification to the user about a success about his requested message diffusion.
+
+   \textbf{IN} : 
+   \begin{enumerate}
+      \item \lparam{entry}(+): \$entry  in \file{message\_report.tt2}
+      \item \lparam{user}(+): SCALAR - the user to notify
+      \item \lparam{param}: ref(HASH) - for variable instantiation \file{message\_report.tt2}
+      \item \lparam{robot}(+): SCALAR - robot
+      \item \lparam{list}: ref(List) - in a list context
+   \end{enumerate}
+
+   \textbf{OUT} : 1 \(\mid\) undef
+
+
+%%%%%%%%%%%%%%% Mail commands  %%%%%%%%%%%%%%%%%%%%
+\subsection {Mail commands} 
+\label {report-mail-commands}
+
+A mail can contains many commands. Errors and notices are stored in module global arrays before sending
+(\@intern\_error\_cmd, \@user\_error\_cmd, \@global\_error\_cmd, \@auth\_reject\_cmd, \@notice\_cmd). 
+Moreover used errors here we can have global errors on mail containing commands, so there is a function for that.
+These reports use template \file{mail\_tt2/command\_report.tt2} and there are many functions :
+
+\subsubsection {\large{init\_report\_cmd()}}
+\label{report-init-report-cmd}
+\index{report::init\_report\_cmd()}
+
+   Inits global arrays for mail command reports.
+
+   \textbf{IN} : -
+
+   \textbf{OUT} : -
+
+
+\subsubsection {\large{is\_there\_any\_report\_cmd()}}
+\label{report-is-there-any-report-cmd}
+\index{report::is\_there\_any\_report\_cmd()}
+
+   Looks for some mail command reports in one of global arrays.
+
+   \textbf{IN} : -
+
+   \textbf{OUT} : 1 \emph{if there are some reports to send}
+
+
+\subsubsection {\large{global\_report\_cmd()}}
+\label{report-send-report-cmd}
+\index{report::send\_report\_cmd()}
+
+   Concerns global reports of mail commands. There are many uses cases :
+
+   \begin{enumerate}
+      \item \textbf{internal server error} for a differed sending at the end of the mail processing
+	\begin{itemize}
+	   \item \file{global\_report\_cmd('intern',\$error,\$data,\$sender,\$robot)}
+           \item \file{global\_report\_cmd('intern\_quiet',\$error,\$data)} : the listmaster won't be noticied
+         \end{itemize}
+      \item \textbf{internal server error} for sending every reports directly (by calling \file{send\_report\_cmd()}).
+	\begin{itemize}
+	   \item \file{global\_report\_cmd('intern',\$error,\$data,\$sender,\$robot,1)}
+           \item \file{global\_report\_cmd('intern\_quiet',\$error,\$data,\$sender,\$robot,1)} : the listmaster won't be noticied
+        \end{itemize}
+      \item \textbf{user error} for a differed sending at the end of the mail processing\\
+	\file{global\_report\_cmd('user',\$error,\$data}
+      \item \textbf{user error} for sending every reports directly (by calling \file{send\_report\_cmd()})\\
+	\file{global\_report\_cmd('user',\$error,\$data,\$sender,\$robot,1)}
+  \end{enumerate}
+
+  \textbf{IN} : 
+  \begin{enumerate}
+     \item \lparam{type}(+): 'intern'\(\mid\)'intern\_quiet'\(\mid\)'user'
+     \item \lparam{error}: SCALAR - depends on \$type :
+	 \begin{itemize}
+	   \item 'intern' : string error sent to listmaster
+	   \item 'user' : \$glob.entry  in \file{command\_report.tt2}
+	 \end{itemize}
+     \item \lparam{data}: ref(HASH) - for variable instantiation in \file{command\_report.tt2}
+     \item \lparam{sender}: SCALAR - the user to notify
+     \item \lparam{robot}: SCALAR - robot
+     \item \lparam{now}: BOOLEAN - send reports now \emph{if true}
+  \end{enumerate}
+
+  \textbf{OUT} : 1 \(\mid\) undef
+
+\subsubsection {\large{reject\_report\_cmd()}}
+\label{report-reject-report-cmd}
+\index{report::reject\_report\_cmd()}
+
+Concerns reject reports of mail commands. These informations are sent at the end of the mail processing.
+There are many uses cases :
+
+   \begin{enumerate}
+      \item \textbf{internal server error}
+	\begin{itemize}
+	   \item \file{reject\_report\_cmd('intern',\$error,\$data,\$cmd,\$sender,\$robot)}
+           \item \file{reject\_report\_cmd('intern\_quiet',\$error,\$data,\$cmd)} : the listmaster won't be noticied
+         \end{itemize}
+       \item \textbf{user error}
+	\file{reject\_report\_cmd('user',\$error,\$data,\$cmd)}
+      \item \textbf{non authorization}
+	\file{reject\_report\_cmd('auth',\$error,\$data,\$cmd)}
+  \end{enumerate}
+
+  \textbf{IN} : 
+  \begin{enumerate}
+     \item \lparam{type}(+): 'intern'\(\mid\)'intern\_quiet'\(\mid\)'user'\(\mid\)'auth'
+     \item \lparam{error}: SCALAR - depends on \$type :
+	 \begin{itemize}
+	   \item 'intern' : string error sent to listmaster
+	   \item 'user' : \$u\_err.entry  in \file{command\_report.tt2}
+	   \item 'auth' : \$reason  in \file{authorization\_reject.tt2}
+	 \end{itemize}
+     \item \lparam{data}: ref(HASH) - for variable instantiation in \file{command\_report.tt2}
+     \item \lparam{cmd}: SCALAR - the rejected command, \$xx.cmd in \file{command\_report.tt2}
+     \item \lparam{sender}: SCALAR - the user to notify
+     \item \lparam{robot}: SCALAR - robot
+  \end{enumerate}
+
+  \textbf{OUT} : 1 \(\mid\) undef
+
+\subsubsection {\large{notice\_report\_cmd()}}
+\label{report-notice-report-cmd}
+\index{report::notice\_report\_cmd()}
+
+Concerns positive notices  of mail commands. These informations are sent at the end of the mail processing.
+
+  \textbf{IN} : 
+  \begin{enumerate}
+     \item \lparam{entry}: \$notice.entry in \file{command\_report.tt2}
+     \item \lparam{data}: ref(HASH) - for variable instantiation in \file{command\_report.tt2}
+     \item \lparam{cmd}: SCALAR - the rejected command, \$xx.cmd in \file{command\_report.tt2}
+  \end{enumerate}
+
+  \textbf{OUT} : 1 \(\mid\) undef
+
+
+\subsubsection {\large{send\_report\_cmd()}}
+\label{report-send-report-cmd}
+\index{report::send\_report\_cmd()}
+
+   Sends the template \file{command\_report.tt2} to \$sender with global arrays and then calls to
+   \file{init\_report\_command.tt2} function. (It is used by sympa.pl at the end of mail process if there are some reports in gloal arrays)
+
+   \textbf{IN} : 
+   \begin{enumerate}
+      \item \lparam{sender}(+): SCALAR - the user to notify
+      \item \lparam{robot}(+): SCALAR - robot
+   \end{enumerate}
+   \textbf{OUT} : 1 
+
+%%%%%%%%%%%%%%% Web commands  %%%%%%%%%%%%%%%%%%%%
+\subsection {Web commands} 
+\label {report-web-commands}
+
+It can have many errors and notices so they are stored in module global arrays before html sending.
+(\@intern\_error\_web, \@user\_error\_web, \@auth\_reject\_web, \@notice\_web). 
+These reports use \file{web\_tt2/notice.tt2} template for notices and \file{web\_tt2/error.tt2} template
+for rejects.
+
+
+\subsubsection {\large{init\_report\_web()}}
+\label{report-init-report-web}
+\index{report::init\_report\_web()}
+
+   Inits global arrays for web command reports.
+
+   \textbf{IN} : -
+
+   \textbf{OUT} : -
+
+\subsubsection {\large{is\_there\_any\_reject\_report\_cmd()}}
+\label{report-is-there-any-reject-report-web}
+\index{report::is\_there\_any\_reject\_report\_web()}
+
+   Looks for some rejected web command reports in one of global arrays for reject. 
+
+   \textbf{IN} : -
+
+   \textbf{OUT} : 1 \emph{if there are some reject reports to send (not notice)}
+
+\subsubsection {\large{get\_intern\_error\_web()}}
+\label{report-get-intern-error-web}
+\index{report::get\_intern\_error\_web()}
+
+   Return array of web intern error
+
+   \textbf{IN} : -
+
+   \textbf{OUT} : ref(ARRAY) - clone of \@intern\_error\_web
+
+\subsubsection {\large{get\_user\_error\_web()}}
+\label{report-get-user-error-web}
+\index{report::get\_user\_error\_web()}
+
+   Return array of web user error
+
+   \textbf{IN} : -
+
+   \textbf{OUT} : ref(ARRAY) - clone of \@user\_error\_web
+
+\subsubsection {\large{get\_auth\_reject\_web()}}
+\label{report-get-auth-reject-web}
+\index{report::get\_auth\_reject\_web()}
+
+   Return array of web authorisation reject
+
+   \textbf{IN} : -
+
+   \textbf{OUT} : ref(ARRAY) - clone of \@auth\_reject\_web
+
+\subsubsection {\large{get\_notice\_web()}}
+\label{report-get-notice-web}
+\index{report::get\_notice\_web()}
+
+   Return array of web notice
+
+   \textbf{IN} : -
+
+   \textbf{OUT} : ref(ARRAY) - clone of \@notice\_web
+
+\subsubsection {\large{reject\_report\_cmd()}}
+\label{report-reject-report-cmd}
+\index{report::reject\_report\_cmd()}
+
+Concerning reject reports of web commands, there are many uses cases :
+
+   \begin{enumerate}
+      \item \textbf{internal server error}
+	\begin{itemize}
+	   \item \file{reject\_report\_web('intern',\$error,\$data,\$action,\$list,\$user,\$robot)}
+           \item \file{reject\_report\_web('intern\_quiet',\$error,\$data,\$action,\$list)} : the listmaster won't be noticied
+         \end{itemize}
+       \item \textbf{user error}
+	\file{reject\_report\_web('user',\$error,\$data,\$action, \$list)}
+      \item \textbf{non authorization}
+	\file{reject\_report\_web('auth',\$error,\$data,\$action, \$list)}
+  \end{enumerate}
+
+  \textbf{IN} : 
+  \begin{enumerate}
+     \item \lparam{type}(+): 'intern'\(\mid\)'intern\_quiet'\(\mid\)'user'\(\mid\)'auth'
+     \item \lparam{error}(+): SCALAR - depends on \$type :
+	 \begin{itemize}
+	   \item 'intern' : \$error in \file{listmaster\_notification.tt2} and possibly \$i\_err.msg in \file{error.tt2}
+	   \item 'intern\_quiet' : possibly \$i\_err.msg in \file{error.tt2}
+	   \item 'user' : \$u\_err.msg  in \file{error.tt2}
+	   \item 'auth' : \$reason  in \file{authorization\_reject.tt2}
+	 \end{itemize}
+     \item \lparam{data}: ref(HASH) - for variable instantiation in \file{notice.tt2}
+     \item \lparam{action}(+): SCALAR - the rejected actin, \$xx.action in \file{error.tt2}, \$action in \file{listmaster\_notification.tt2}
+     \item \lparam{list}: '' \(\mid\) ref(List)
+     \item \lparam{user}: SCALAR - the user for listmaster notification
+     \item \lparam{robot}: SCALAR - robot for listmaster notification
+  \end{enumerate}
+
+  \textbf{OUT} : 1 \(\mid\) undef
+
+
+
+
+
+
+
+
+\subsubsection {\large{notice\_report\_web()}}
+\label{report-notice-report-web}
+\index{report::notice\_report\_web()}
+
+Concerns positive notices of web commands.
+
+  \textbf{IN} : 
+  \begin{enumerate}
+     \item \lparam{msg}: \$notice.msg in \file{notice.tt2}
+     \item \lparam{data}: ref(HASH) - for variable instantiation in \file{notice.tt2}
+     \item \lparam{action}: SCALAR - the noticed command, \$notice.cmd in \file{notice.tt2}
+  \end{enumerate}
+
+  \textbf{OUT} : 1 \(\mid\) undef
+
+
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%% tools.pl %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section {tools.pl}
 \index{tools.pl}
@@ -12084,6 +12765,24 @@ Makes set operation on arrays seen as set (with no double) :
 
    \textbf{OUT} : the clean email
 
+\subsubsection {\large{make\_tt2\_include\_path()}}
+\label{tools-make-tt2-include-path}
+\index{tools::make\_tt2\_include\_path()}  
+
+ Make an array of include path for tt2 parsing
+
+   \textbf{IN} : 
+   \begin{enumerate}
+      \item \lparam{robot}(+):  SCALAR - the robotset
+      \item \lparam{dir}:  SCALAR - directory ending each path
+      \item \lparam{lang}:  SCALAR - for lang directories
+      \item \lparam{list}:  ref(List) - for list directory
+   \end{enumerate}  
+
+   \textbf{OUT} : ref(ARRAY) - include tt2 path, respecting 
+       path priorities.
+
+
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%% Message.pm %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section {Message.pm}
@@ -12128,7 +12827,7 @@ Makes set operation on arrays seen as set (with no double) :
       \item \lparam{file}(+):  the message file
    \end{enumerate}
 
-   \textbf{OUT} :   ref(Message)
+   \textbf{OUT} :   ref(Message) \(\mid\) undef
 
 \subsubsection {\large{dump()}}
 \label{message-dump}

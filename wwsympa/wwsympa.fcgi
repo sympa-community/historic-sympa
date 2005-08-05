@@ -6513,7 +6513,7 @@ sub do_set_pending_list_request {
      }elsif ($param->{'create_action'} =~ /listmaster/i) {
 	 $param->{'status'} = 'pending' ;
      }elsif  ($param->{'create_action'} =~ /do_it/i) {
-	 $param->{'status'} = 'open' ;
+	 $param->{'status'} = 'open' ;ryn
      }else{
 	 &report::reject_report_web('intern','internal_scenario_error_create_list',{},$param->{'action'},'',$param->{'user'}{'email'},$robot);
 	 &wwslog('info','do_create_list: internal error in scenario create_list');

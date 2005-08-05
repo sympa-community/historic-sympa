@@ -1579,10 +1579,10 @@ sub get_filename {
 ####################################################
 # make an array of include path for tt2 parsing
 # 
-# IN :-$robot : robot
-#    :-$dir : directory ending each path
-#    :-$lang : lang
-#    :$list : ref(List)
+# IN -$robot(+) : robot
+#    -$dir : directory ending each path
+#    -$lang : lang
+#    -$list : ref(List)
 #
 # OUT : ref(ARRAY) of tt2 include path
 #

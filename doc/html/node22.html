@@ -30,31 +30,31 @@ original version by:  Nikos Drakos, CBLU, University of Leeds
 
 <BODY TEXT="#000000" BGCOLOR="#ffffff">
 <!--Navigation Panel-->
-<A NAME="tex2html1354"
+<A NAME="tex2html1415"
   HREF="node23.html">
 <IMG WIDTH="37" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="next" SRC="next.png"></A> 
-<A NAME="tex2html1348"
+<A NAME="tex2html1409"
   HREF="sympa.html">
 <IMG WIDTH="26" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="up" SRC="up.png"></A> 
-<A NAME="tex2html1342"
+<A NAME="tex2html1403"
   HREF="node21.html">
 <IMG WIDTH="63" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="previous" SRC="prev.png"></A> 
-<A NAME="tex2html1350"
+<A NAME="tex2html1411"
   HREF="node1.html">
 <IMG WIDTH="65" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="contents" SRC="contents.png"></A> 
-<A NAME="tex2html1352"
+<A NAME="tex2html1413"
   HREF="node30.html">
 <IMG WIDTH="43" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="index" SRC="index.png"></A> 
 <BR>
-<B> Next:</B> <A NAME="tex2html1355"
+<B> Next:</B> <A NAME="tex2html1416"
   HREF="node23.html">22. Shared documents</A>
-<B> Up:</B> <A NAME="tex2html1349"
+<B> Up:</B> <A NAME="tex2html1410"
   HREF="sympa.html">Sympa Mailing Lists Management Software version</A>
-<B> Previous:</B> <A NAME="tex2html1343"
+<B> Previous:</B> <A NAME="tex2html1404"
   HREF="node21.html">20. List configuration parameters</A>
- &nbsp; <B>  <A NAME="tex2html1351"
+ &nbsp; <B>  <A NAME="tex2html1412"
   HREF="node1.html">Contents</A></B> 
- &nbsp; <B>  <A NAME="tex2html1353"
+ &nbsp; <B>  <A NAME="tex2html1414"
   HREF="node30.html">Index</A></B> 
 <BR>
 <BR>
@@ -63,21 +63,21 @@ original version by:  Nikos Drakos, CBLU, University of Leeds
 <A NAME="CHILD_LINKS"><STRONG>Subsections</STRONG></A>
 
 <UL>
-<LI><A NAME="tex2html1356"
+<LI><A NAME="tex2html1417"
   HREF="node22.html#SECTION002210000000000000000">21.1 Message topics</A>
 <UL>
-<LI><A NAME="tex2html1357"
+<LI><A NAME="tex2html1418"
   HREF="node22.html#SECTION002211000000000000000">21.1.1 Message topic definition in a list</A>
-<LI><A NAME="tex2html1358"
+<LI><A NAME="tex2html1419"
   HREF="node22.html#SECTION002212000000000000000">21.1.2 Subscribing to message topic for list subscribers</A>
-<LI><A NAME="tex2html1359"
+<LI><A NAME="tex2html1420"
   HREF="node22.html#SECTION002213000000000000000">21.1.3 Message tagging</A>
 </UL></UL>
 <!--End of Table of Child-Links-->
 <HR>
 
 <H1><A NAME="SECTION002200000000000000000"></A>
-    <A NAME="reception-mode"></A>    <A NAME="3923"></A>
+    <A NAME="reception-mode"></A>    <A NAME="4128"></A>
 <BR>
 21. Reception mode
 </H1>
@@ -85,16 +85,16 @@ original version by:  Nikos Drakos, CBLU, University of Leeds
 <P>
 
 <H1><A NAME="SECTION002210000000000000000"></A>
-<A NAME="msg-topics"></A><A NAME="3926"></A>
+<A NAME="msg-topics"></A><A NAME="4131"></A>
 <BR>
 21.1 Message topics
 </H1>
 
 <P>
-A list can be configured to have message topics (different from topics for classifying
-mailing lists. Users can subscribe to these message topics in order to select reception 
-mail : a message can have many topics and subscribers will receive only mails that are 
-tagged by topics they are subscribed to. Messages can be tagged automatically, by their 
+A list can be configured to have message topics (this notion is different from topics used to class
+mailing lists). Users can subscribe to these message topics in order to receive a subset of distributed messages :
+a message can have one or more topics and subscribers will receive only messages that have been 
+tagged with a topic they are subscribed to. A message can be tagged automatically, by the message 
 sender or by the list moderator.
 
 <P>
@@ -104,12 +104,13 @@ sender or by the list moderator.
 </H2>
 
 <P>
-Message topics are defined by list parameters. Foreach new message topic, create a new <A NAME="10752"></A><TT>msg_topic</TT> paragraph
-that defines the name and the tile of the topic. For automatic tagging, you can defines keywords 
-(See (<A HREF="node21.html#par-msg-topic">20.4.11</A>, page&nbsp;<A HREF="node21.html#par-msg-topic"><IMG  ALIGN="BOTTOM" BORDER="1" ALT="[*]" SRC="crossref.png"></A>). To define on which part of the message <I>Sympa</I> looks for keywords,
-you have to define <A NAME="10756"></A><TT>msg_topic_key_apply_on</TT> list parameter (See <A HREF="node21.html#par-msg-topic-key-apply-on">20.4.12</A>, 
-page&nbsp;<A HREF="node21.html#par-msg-topic-key-apply-on"><IMG  ALIGN="BOTTOM" BORDER="1" ALT="[*]" SRC="crossref.png"></A>). Tagging a message can be optional or it can be required. It is indicate by the
-<A NAME="10759"></A><TT>msg_topic_tagging</TT> list parameter (See (<A HREF="node21.html#par-msg-topic-tagging">20.4.13</A>,page&nbsp;<A HREF="node21.html#par-msg-topic-tagging"><IMG  ALIGN="BOTTOM" BORDER="1" ALT="[*]" SRC="crossref.png"></A>).
+Available message topics are defined by list parameters. Foreach new message topic, create a new <A NAME="11461"></A><TT>msg_topic</TT> paragraph
+that defines the name and the title of the topic. If a thread is identified for the current message then the automatic procedure is performed.
+Else, to use automatic tagging, you should define keywords (See (<A HREF="node21.html#par-msg-topic">20.4.11</A>, page&nbsp;<A HREF="node21.html#par-msg-topic"><IMG  ALIGN="BOTTOM" BORDER="1" ALT="[*]" SRC="crossref.png"></A>) 
+To define which part of the message is used for automatic tagging
+you have to define <A NAME="11464"></A><TT>msg_topic_keywords_apply_on</TT> list parameter (See <A HREF="node21.html#par-msg-topic-key-apply-on">20.4.12</A>, 
+page&nbsp;<A HREF="node21.html#par-msg-topic-key-apply-on"><IMG  ALIGN="BOTTOM" BORDER="1" ALT="[*]" SRC="crossref.png"></A>). Tagging a message can be optional or it can be required, depending on the
+<A NAME="11467"></A><TT>msg_topic_tagging</TT> list parameter (See (<A HREF="node21.html#par-msg-topic-tagging">20.4.13</A>,page&nbsp;<A HREF="node21.html#par-msg-topic-tagging"><IMG  ALIGN="BOTTOM" BORDER="1" ALT="[*]" SRC="crossref.png"></A>).
 
 <P>
 
@@ -118,8 +119,9 @@ page&nbsp;<A HREF="node21.html#par-msg-topic-key-apply-on"><IMG  ALIGN="BOTTOM" 
 </H2>
 
 <P>
-This functionnality is only available in reception mode ``normal''. Subscribers can select message topic to receive messages tagged with this topic.
-To receive not tagged mail, you can subscribe to the ``other''. Message topics of a subscriber are stored <I>Sympa</I> database (subscriber_table,field ``topics_subscriber'').
+This functionnality is only available via ``normal'' reception mode. Subscribers can select message topic to receive messages tagged with this topic.
+To receive messages that were not tagged, users can subscribe to the topic ``other''. Message topics selected by a subscriber are stored in <I>Sympa</I> 
+database (subscriber_table table).
 
 <P>
 
@@ -128,54 +130,51 @@ To receive not tagged mail, you can subscribe to the ``other''. Message topics o
 </H2>
 
 <P>
-First of all, if some <A NAME="10763"></A><TT>msg_topic.keywords</TT> are defined, <I>Sympa</I> tries to tag messages automatically. 
-For manual tagging by sender or list moderator, on Web interface, <I>Sympa</I> uses scenarios : if the resulted action is ``editorkey'' 
-(for example, scenario send.editorkey) and send.privatekey), the list moderator will asked to tag the message. 
-If the resulted action is ``request_auth'' (for example, send.privatekey), the message sender will be asked to tag the message. 
-There are some available variables to customize tagging (topic, topic-sender, topic-editor, topic-auto, topic-needed).
+First of all, if one or more <A NAME="11471"></A><TT>msg_topic.keywords</TT> are defined, <I>Sympa</I> tries to tag messages automatically. 
+To trigger manual tagging, by message sender or list moderator, on the web interface, <I>Sympa</I> uses authorization scenarios : if the resulted action is ``editorkey'' 
+(for example in scenario send.editorkey), the list moderator is asked to tag the message. 
+If the resulted action is ``request_auth'' (for example in scenario send.privatekey), the message sender is asked to tag the message. 
+The following variables are available as scenario variables to customize tagging : topic, topic-sender, topic-editor, topic-auto, topic-needed.
+(See (<A HREF="node14.html#scenarios">13</A>, page&nbsp;<A HREF="node14.html#scenarios"><IMG  ALIGN="BOTTOM" BORDER="1" ALT="[*]" SRC="crossref.png"></A>) If message tagging is required and if it was not yet performed, <I>Sympa</I> will ask to the list moderator.
 
 <P>
-In case of message tagging required and if there is no tagging, <I>Sympa</I> will ask to the list moderator.
-(See (<A HREF="node14.html#scenarios">13</A>, page&nbsp;<A HREF="node14.html#scenarios"><IMG  ALIGN="BOTTOM" BORDER="1" ALT="[*]" SRC="crossref.png"></A>) 
-
-<P>
-Tagging a message will create a topic information file in the <A NAME="10769"></A><TT>/usr/local/sympa-gb/spool/topic/</TT> spool. It is named by the listname and the Message-ID. 
-For message distribution, a field ``X-Sympa-Topic' is added to the message in order to use filters on it.
+Tagging a message will create a topic information file in the <A NAME="11477"></A><TT>/usr/local/sympa-gb/spool/topic/</TT> spool. Its name is based on the listname and the Message-ID. 
+For message distribution, a ``X-Sympa-Topic'' field is added to the message to allow members to use mail filters.
 
 <P>
 
 <HR>
 <!--Navigation Panel-->
-<A NAME="tex2html1354"
+<A NAME="tex2html1415"
   HREF="node23.html">
 <IMG WIDTH="37" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="next" SRC="next.png"></A> 
-<A NAME="tex2html1348"
+<A NAME="tex2html1409"
   HREF="sympa.html">
 <IMG WIDTH="26" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="up" SRC="up.png"></A> 
-<A NAME="tex2html1342"
+<A NAME="tex2html1403"
   HREF="node21.html">
 <IMG WIDTH="63" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="previous" SRC="prev.png"></A> 
-<A NAME="tex2html1350"
+<A NAME="tex2html1411"
   HREF="node1.html">
 <IMG WIDTH="65" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="contents" SRC="contents.png"></A> 
-<A NAME="tex2html1352"
+<A NAME="tex2html1413"
   HREF="node30.html">
 <IMG WIDTH="43" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="index" SRC="index.png"></A> 
 <BR>
-<B> Next:</B> <A NAME="tex2html1355"
+<B> Next:</B> <A NAME="tex2html1416"
   HREF="node23.html">22. Shared documents</A>
-<B> Up:</B> <A NAME="tex2html1349"
+<B> Up:</B> <A NAME="tex2html1410"
   HREF="sympa.html">Sympa Mailing Lists Management Software version</A>
-<B> Previous:</B> <A NAME="tex2html1343"
+<B> Previous:</B> <A NAME="tex2html1404"
   HREF="node21.html">20. List configuration parameters</A>
- &nbsp; <B>  <A NAME="tex2html1351"
+ &nbsp; <B>  <A NAME="tex2html1412"
   HREF="node1.html">Contents</A></B> 
- &nbsp; <B>  <A NAME="tex2html1353"
+ &nbsp; <B>  <A NAME="tex2html1414"
   HREF="node30.html">Index</A></B> 
 <!--End of Navigation Panel-->
 <ADDRESS>
 root
-2005-05-25
+2005-07-22
 </ADDRESS>
 </BODY>
 </HTML>
