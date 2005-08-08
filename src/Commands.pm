@@ -2011,11 +2011,11 @@ sub distribute {
 
     ## Open and parse the file
     my $message = new Message($file);
-#    unless (defined $message) {
+    unless (defined $message) {
 	&do_log('err', 'Commands::distribute(): Unable to create Message object %s', $file);
 	&report::reject_report_msg('user','unfound_message',$sender,{'listname' => $name,'key'=> $key},$robot,'',$list);
 	return 'msg_not_found';
-#    }
+    }
 
     my $msg = $message->{'msg'};
     my $hdr= $msg->head;
