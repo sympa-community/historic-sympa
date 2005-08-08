@@ -19,10 +19,16 @@
      [% IF action == 'subrequest' %][% SET class = 'menuLinksCurrentPage' %][% ELSE %][% SET class = 'menuLinks' %][% END %]
          <strong><a class="[% class %]" href="[% path_cgi %]/subscribe/[% list %]" onclick="request_confirm_link('[% path_cgi %]/subscribe/[% list %]', '[%|loc(list)%]Do you really want to subscribe to list %1?[%END%]'); return false;">[%|loc%]Subscribe[%END%]</a></strong><br />
   [% END %]
+
+  [% IF ! user.email %]
+      [% IF action == 'signoff' %][% SET class = 'menuLinksCurrentPage' %][% ELSE %][% SET class = 'menuLinks' %][% END %]
+     <strong><a class="[% class %]" href="[% path_cgi %]/sigrequest/[% list %]">[%|loc%]Unsubscribe[%END%]</a></strong><br />
+  [% END %]
+
 [% END %]
 
 [% IF action == 'info'%][% SET class = 'menuLinksCurrentPage' %][% ELSE %][% SET class = 'menuLinks' %][% END %]
-<strong><a class="[% class %]" href="[% path_cgi %]/info/[% list %]">Info</a></strong><br />
+<strong><a class="[% class %]"" href="[% path_cgi %]/info/[% list %]">Info</a></strong><br />
 
 <strong>[% hidden_head %]<a class=\"menuLinks\" href=\"mailto:[% list %]-request[% hidden_at %][% domain %]\">[%|loc%]Contact owners[%END%]</a>[% hidden_end %]</strong><br />
 
@@ -44,12 +50,15 @@
           <div class="menuInactive2">[%|loc%]Post[%END%]</div><br />
 [% END %]
 
+[% IF action == 'rss_request' %][% SET class = 'menuLinksCurrentPage' %][% ELSE %][% SET class = 'menuLinks' %][% END %]
+<strong><a class="[% class %]" href="[% path_cgi %]/rss_request/[% list %]" >[%|loc%]RSS[%END%]</a></strong><br />
+
 [% IF shared == 'exist' %]
     [% IF may_d_read %]
     [% IF action == 'd_read' || action == 'd_edit' || action == 'd_properties' %][% SET class = 'menuLinksCurrentPage' %][% ELSE %][% SET class = 'menuLinks' %][% END %]
-        <strong><a class="[% class %]" href="[% path_cgi %]/d_read/[% list %]/" >[%|loc%]Shared web[%END%]</a></strong><br />
+        <strong><a class="[% class %]" href="[% path_cgi %]/d_read/[% list %]/" >[%|loc%]Shared documents[%END%]</a></strong><br />
     [% ELSE %]
-          <div class="menuInactive2">[%|loc%]Shared web[%END%]</div><br />
+          <div class="menuInactive2">[%|loc%]Shared documents[%END%]</div><br />
     [% END %]
 [% END %]
 

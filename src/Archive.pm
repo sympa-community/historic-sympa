@@ -138,6 +138,9 @@ sub store {
 ## Returns an array.
 sub list {
     my $name = shift;
+
+    &do_log ('debug',"archive::list($name)");
+
     my($filename, $newfile);
     my(@l, $i);
     
@@ -151,6 +154,7 @@ sub list {
     }
    foreach $i (sort readdir(DIR)) {
        next if ($i =~ /^\./o);
+       next unless  ($i =~ /^\d\d\d\d\-\d\d$/);
        my(@s) = stat("$name/$i");
        my $a = localtime($s[9]);
        push(@l, sprintf("%-40s %7d   %s\n", $i, $s[7], $a));

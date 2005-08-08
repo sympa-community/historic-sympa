@@ -163,7 +163,7 @@ my @params = ({'title' => 'Directories and file location'},
 	       'default' => 'your_email_address@--HOST--',
 	       'query' => 'Listmasters email list comma separated',
 	       'file' => 'sympa.conf','edit' => '1',
-	       'advice' =>''},
+	       'advice' =>'Sympa will associate listmaster privileges to these email addresses (mail and web interfaces). Some error reports may also be sent to these addresses.'},
 	      
 	      {'name' => 'email',
 	       'default' => 'sympa',
@@ -431,36 +431,6 @@ my @params = ({'title' => 'Directories and file location'},
 	       'file' => 'sympa.conf','edit' => '1',
 	       'advice' =>''},
 
-	      {'name' => 'dark_color',
-	       'default' => '#006666',
-	       'query' => 'web interface color : dark',
-	       'file' => 'sympa.conf','edit' => '1',
-	       'advice' =>''},
-	      
-	      {'name' => 'selected_color',
-	       'default' => '#996666',
-	       'query' => 'web interface color : selected_color',
-	       'file' => 'sympa.conf','edit' => '1',
-	       'advice' =>''},
-	      
-	      {'name' => 'light_color',
-	       'default' => '#cccc66',
-	       'query' => 'web interface color : light',
-	       'file' => 'sympa.conf','edit' => '1',
-	       'advice' =>''},
-	      
-	      {'name' => 'shaded_color',
-	       'default' => '#66cccc',
-	       'query' => 'web_interface color : shaded',
-	       'file' => 'sympa.conf','edit' => '1',
-	       'advice' =>''},
-	      
-	      {'name' => 'bg_color',
-	       'default' => '#ffffcc',
-	       'query' => 'web_interface color : background',
-	       'file' => 'sympa.conf','edit' => '1',
-	       'advice' =>''},
-	      
 	      );
 
 

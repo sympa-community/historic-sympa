@@ -62,7 +62,10 @@
 [%|loc(notice.total)%]%1 addresses have been subscribed[%END%]
 
 [% ELSIF notice.msg == 'you_have_been_authenticated' %]
-[%|loc(notice.total)%]You have been authenticated[%END%]
+[%|loc%]You have been authenticated[%END%]
+
+[% ELSIF notice.msg == 'file_renamed' %]
+[%|loc(notice.orig_file,notice.new_file)%]File %1 has been renamed to %2[%END%]
 
 [% ELSE %]
 [% notice.msg %]

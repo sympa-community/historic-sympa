@@ -30,6 +30,7 @@ use Conf;
 use Log;
 use admin;
 use Config_XML;
+use File::Copy;
 
 my %list_of_families;
 my @uncompellable_param = ('msg_topic.keywords','owner_include.source_parameters', 'editor_include.source_parameters');
@@ -513,7 +514,7 @@ sub close {
 #########################################
 sub instantiate {
     my $self = shift;
-    my $xml_fh = shift;
+    my $xml_file = shift;
     &do_log('debug2','Family::instantiate(%s)',$self->{'name'});
 
     # initialize vars
@@ -525,7 +526,7 @@ sub instantiate {
     my $previous_family_lists = $self->get_hash_family_lists();
 
     ## xml instantiation data
-    unless ($self->_split_xml_file($xml_fh)) {
+    unless ($self->_split_xml_file($xml_file)) {
 	&do_log('err','Errors during the parsing of family xml file');
 	return undef;
     }
@@ -1188,7 +1189,7 @@ sub _initialize_instantiation() {
 #####################################################
 sub _split_xml_file {
     my $self = shift;
-    my $xml_fh = shift;
+    my $xml_file = shift;
     my $root;
     &do_log('debug2','Family::_split_xml_file(%s)',$self->{'name'});
 
@@ -1197,7 +1198,7 @@ sub _split_xml_file {
     $parser->line_numbers(1);
     my $doc;
 
-    unless ($doc = $parser->parse_fh($xml_fh)) {
+    unless ($doc = $parser->parse_file($xml_file)) {
 	&do_log('err',"Family::_split_xml_file() : failed to parse XML file");
 	return undef;
     }
@@ -1610,8 +1611,8 @@ sub _copy_files {
 
     # instance.xml
     if (defined $file) {
-	unless (rename "$dir/$file", "$list_dir/instance.xml") {
-	    &do_log('err','Family::_copy_files(%s) : impossible to move %s/%s into %s/instance.xml : %s',$self->{'name'},$dir,$file,$list_dir,$!);
+	unless (&File::Copy::copy ("$dir/$file", "$list_dir/instance.xml")) {
+	    &do_log('err','Family::_copy_files(%s) : impossible to copy %s/%s into %s/instance.xml : %s',$self->{'name'},$dir,$file,$list_dir,$!);
 	    return undef;
 	}
     }

@@ -259,7 +259,7 @@ my %default = ('occurrence' => '0-1',
 
 my @param_order = qw (subject visibility info subscribe add unsubscribe del owner owner_include
 		      send editor editor_include account topics 
-		      host lang web_archive archive digest available_user_options 
+		      host lang web_archive archive digest digest_max_size available_user_options 
 		      default_user_options msg_topic msg_topic_keywords_apply_on msg_topic_tagging reply_to_header reply_to forced_reply_to * 
 		      welcome_return_path remind_return_path user_data_source include_file include_remote_file 
 		      include_list include_remote_sympa_list include_ldap_query
@@ -494,6 +494,13 @@ my %alias = ('reply-to' => 'reply_to',
 			 'group' => 'sending'
 		     },
 
+	    'digest_max_size' => {'format' => '\d+',
+				  'length' => 2,
+				  'unit' => 'messages',
+				  'default' => 25,
+				  'gettext_id' => "Digest maximum number of messages",
+				  'group' => 'sending'
+		       },	    
 	    'editor' => {'format' => {'email' => {'format' => $tools::regexp{'email'},
 						  'length' => 30,
 						  'occurrence' => '1',
@@ -1008,7 +1015,7 @@ my %alias = ('reply-to' => 'reply_to',
 			  },
 	    'remind_return_path' => {'format' => ['unique','owner'],
 				     'default' => {'conf' => 'remind_return_path'},
-				     'gettext_id' => "Remind return-path",
+				     'gettext_id' => "Return-path of the REMIND command",
 				     'group' => 'bounces'
 				 },
 	    'remind_task' => {'task' => 'remind',
@@ -2690,6 +2697,7 @@ sub send_msg_digest {
     splice @list_of_mail, 0, 1;
     
     ## Digest index
+    my @all_msg;
     foreach $i (0 .. $#list_of_mail){
 	my $mail = $list_of_mail[$i];
 	my $subject = &MIME::Words::decode_mimewords($mail->head->get('Subject'));
@@ -2721,37 +2729,55 @@ sub send_msg_digest {
 	$msg->{'message_id'} =~ s/^\<(.+)\>$/$1/;
 	$msg->{'message_id'} = &tools::escape_chars($msg->{'message_id'});
 
-        push @{$param->{'msg_list'}}, $msg ;
-	
+        #push @{$param->{'msg_list'}}, $msg ;
+	push @all_msg, $msg ;	
     }
     
     my @now  = localtime(time);
     $param->{'datetime'} = sprintf "%s", POSIX::strftime("%a, %d %b %Y %H:%M:%S", @now);
     $param->{'date'} = sprintf "%s", POSIX::strftime("%a, %d %b %Y", @now);
 
-    ## Prepare Digest
-    if (@tabrcpt) {
-	## Send digest
-	unless ($self->send_file('digest', \@tabrcpt, $robot, $param)) {
-	    &do_log('notice',"Unable to send template 'digest' to $self->{'name'} list subscribers");
-	}
-    }    
-
-    ## Prepare Plain Text Digest
-    if (@tabrcptplain) {
-        ## Send digest-plain
-        unless ($self->send_file('digest_plain', \@tabrcptplain, $robot, $param)) {
-	    &do_log('notice',"Unable to send template 'digest_plain' to $self->{'name'} list subscribers");
-	}
-    }    
+    ## Split messages into groups of digest_max_size size
+    my @group_of_msg;
+    while (@all_msg) {
+	my @group = splice @all_msg, 0, $self->{'admin'}{'digest_max_size'};
+	
+	push @group_of_msg, \@group;
+    }
     
 
-    ## send summary
-    if (@tabrcptsummary) {
-	unless ($self->send_file('summary', \@tabrcptsummary, $robot, $param)) {
-	    &do_log('notice',"Unable to send template 'summary' to $self->{'name'} list subscribers");
+    $param->{'current_group'} = 0;
+    $param->{'total_group'} = $#group_of_msg + 1;
+    ## Foreach set of digest_max_size messages...
+    foreach my $group (@group_of_msg) {
+	
+	$param->{'current_group'}++;
+	$param->{'msg_list'} = $group;
+	
+	## Prepare Digest
+	if (@tabrcpt) {
+	    ## Send digest
+	    unless ($self->send_file('digest', \@tabrcpt, $robot, $param)) {
+		&do_log('notice',"Unable to send template 'digest' to $self->{'name'} list subscribers");
+	    }
+	}    
+	
+	## Prepare Plain Text Digest
+	if (@tabrcptplain) {
+	    ## Send digest-plain
+	    unless ($self->send_file('digest_plain', \@tabrcptplain, $robot, $param)) {
+		&do_log('notice',"Unable to send template 'digest_plain' to $self->{'name'} list subscribers");
+	    }
+	}    
+	
+	
+	## send summary
+	if (@tabrcptsummary) {
+	    unless ($self->send_file('summary', \@tabrcptsummary, $robot, $param)) {
+		&do_log('notice',"Unable to send template 'summary' to $self->{'name'} list subscribers");
+	    }
 	}
-    }
+    }    
     
     return 1;
 }
@@ -4227,9 +4253,9 @@ sub get_admin_user {
     my $update_field = sprintf $date_format{'read'}{$Conf{'db_type'}}, 'update_admin', 'update_admin';	
 
     ## Use session cache
-    if (defined $list_cache{'get_admin_user'}{$name}{$email}) {
+    if (defined $list_cache{'get_admin_user'}{$name}{$role}{$email}) {
 	&do_log('debug3', 'xxx Use cache(get_admin_user, %s,%s,%s)', $name, $role, $email);
-	return $list_cache{'get_admin_user'}{$name}{$email};
+	return $list_cache{'get_admin_user'}{$name}{$role}{$email};
     }
 
     ## Check database connection
@@ -4272,7 +4298,7 @@ sub get_admin_user {
     $sth = pop @sth_stack;
     
     ## Set session cache
-    $list_cache{'get_admin_user'}{$name}{$email} = $admin_user;
+    $list_cache{'get_admin_user'}{$name}{$role}{$email} = $admin_user;
     
     return $admin_user;
     
@@ -5407,7 +5433,7 @@ sub update_admin_user {
     }
 
     ## Reset session cache
-    $list_cache{'get_admin_user'}{$name}{$who} = undef;
+    $list_cache{'get_admin_user'}{$name}{$role}{$who} = undef;
     
     return 1;
 }
@@ -5756,8 +5782,7 @@ sub is_listmaster {
 ## Does the user have a particular function in the list ?
 sub am_i {
     my($self, $function, $who) = @_;
-    do_log('debug2', 'List::am_i(%s, %s)', $function, $who);
-
+    do_log('debug2', 'List::am_i(%s, %s, %s)', $function, $self->{'name'}, $who);
     
     return undef unless ($self && $who);
     $function =~ y/A-Z/a-z/;
@@ -5766,12 +5791,20 @@ sub am_i {
     
     ## Listmaster has all privileges except editor
     # sa contestable.
-    return 1 if (($function eq 'owner') and &is_listmaster($who,$self->{'domain'}));
+    if (($function eq 'owner' || $function eq 'privileged_owner') and &is_listmaster($who,$self->{'domain'})) {
+	$list_cache{'am_i'}{$function}{$self->{'name'}}{$who} = 1;
+	return 1;
+    }
 
-    if($self->{'admin'}{'user_data_source'} eq 'include2'){
+    ## Use cache
+    if (defined $list_cache{'am_i'}{$function}{$self->{'name'}}{$who}) {
+	# &do_log('debug3', 'Use cache(%s,%s): %s', $name, $who, $list_cache{'is_user'}{$name}{$who});
+	return $list_cache{'am_i'}{$function}{$self->{'name'}}{$who};
+    }
+
+    if ($self->{'admin'}{'user_data_source'} eq 'include2'){
 
 	##Check editors
-
 	if ($function =~ /^editor$/i){
 	    my $editor = $self->get_admin_user('editor',$who);
 
@@ -5782,7 +5815,14 @@ sub am_i {
 		$editor = $self->get_admin_user('owner',$who);
 		if (defined $editor){
 		    return 1;
+		    
+		    ## Update cache
+		    $list_cache{'am_i'}{'editor'}{$self->{'name'}}{$who} = 1;
 		}else {
+		    
+		    ## Update cache
+		    $list_cache{'am_i'}{'editor'}{$self->{'name'}}{$who} = 0;
+
 		    return undef;
 		}
 	    }
@@ -5792,15 +5832,30 @@ sub am_i {
 	    my $owner = $self->get_admin_user('owner',$who);
 	    if (defined $owner) {
 		return 1;
+		    
+		## Update cache
+		$list_cache{'am_i'}{'owner'}{$self->{'name'}}{$who} = 1;
 	    }else {
+		    
+		## Update cache
+		$list_cache{'am_i'}{'owner'}{$self->{'name'}}{$who} = 0;
+
 		return undef;
 	    }
 	}
 	elsif ($function =~ /^privileged_owner$/i) {
 	    my $privileged = $self->get_admin_user('owner',$who);
 	    if ($privileged->{'profile'} eq 'privileged') {
+		    
+		## Update cache
+		$list_cache{'am_i'}{'privileged_owner'}{$self->{'name'}}{$who} = 1;
+
 		return 1;
 	    }else {
+		    
+		## Update cache
+		$list_cache{'am_i'}{'privileged_owner'}{$self->{'name'}}{$who} = 0;
+
 		return undef;
 	    }
 	}
@@ -6683,7 +6738,9 @@ sub archive_exist {
    do_log('debug3', 'List::archive_exist(%s)', $file);
 
    return undef unless ($self->is_archived());
-   Archive::exist("$self->{'dir'}/archives", $file);
+   my $dir = &Conf::get_robot_conf($self->{'domain'},'arc_path').$self->{'name'}.'@'.$self->{'domain'};
+   Archive::exist($dir, $file);
+
 }
 
 
@@ -6693,7 +6750,9 @@ sub archive_ls {
    my $self = shift;
    do_log('debug2', 'List::archive_ls');
 
-   Archive::list("$self->{'dir'}/archives") if ($self->is_archived());
+   my $dir = &Conf::get_robot_conf($self->{'domain'},'arc_path').$self->{'name'}.'@'.$self->{'domain'};
+
+   Archive::list($dir) if ($self->is_archived());
 }
 
 ## Archive 
@@ -6726,7 +6785,7 @@ sub is_moderated {
 ## Is the list archived ?
 sub is_archived {
     do_log('debug3', 'List::is_archived');
-    return (shift->{'admin'}{'archive'}{'period'});
+    return (shift->{'admin'}{'web_archive'}{'access'});
 }
 
 ## Is the list web archived ?
@@ -6929,15 +6988,16 @@ sub load_scenario_list {
 	    $list_of_scenario{$name} = $scenario;
 
 	    ## Set the title in the current language
-	    if (defined  $list_of_scenario{$name}{'title'}{&Language::GetLang()}) {
-		$list_of_scenario{$name}{'title'} = $list_of_scenario{$name}{'title'}{&Language::GetLang()};
-	    }elsif (defined $list_of_scenario{$name}{'title'}{'gettext'}) {
-		$list_of_scenario{$name}{'title'} = gettext($list_of_scenario{$name}{'title'}{'gettext'});
-	    }elsif (defined $list_of_scenario{$name}{'title'}{'us'}) {
-		$list_of_scenario{$name}{'title'} = gettext($list_of_scenario{$name}{'title'}{'us'});		
+	    if (defined  $scenario->{'title'}{&Language::GetLang()}) {
+		$list_of_scenario{$name}{'title'} = $scenario->{'title'}{&Language::GetLang()};
+	    }elsif (defined $scenario->{'title'}{'gettext'}) {
+		$list_of_scenario{$name}{'title'} = gettext($scenario->{'title'}{'gettext'});
+	    }elsif (defined $scenario->{'title'}{'us'}) {
+		$list_of_scenario{$name}{'title'} = gettext($scenario->{'title'}{'us'});
 	    }else {
 		$list_of_scenario{$name}{'title'} = $name;		     
 	    }
+	    $list_of_scenario{$name}{'name'} = $name;	    
 	}
     }
 
@@ -7527,11 +7587,18 @@ sub _include_users_ldap {
     do_log('debug2', "Binded to LDAP server %s ; user : '$user'", join(',',@{$host})) ;
     
     do_log('debug2', 'Searching on server %s ; suffix %s ; filter %s ; attrs: %s', join(',',@{$host}), $ldap_suffix, $ldap_filter, $ldap_attrs);
-    unless ($fetch = $ldaph->search ( base => "$ldap_suffix",
+    $fetch = $ldaph->search ( base => "$ldap_suffix",
                                       filter => "$ldap_filter",
 				      attrs => "$ldap_attrs",
-				      scope => "$param->{'scope'}")) {
-        do_log('debug2',"Unable to perform LDAP search in $ldap_suffix for $ldap_filter : $@");
+				      scope => "$param->{'scope'}");
+    unless ($fetch) {
+        do_log('err',"Unable to perform LDAP search in $ldap_suffix for $ldap_filter : $@");
+        return undef;
+    }
+    
+    unless ($fetch->code == 0) {
+	do_log('err','Ldap search failed : %s (searching on server %s ; suffix %s ; filter %s ; attrs: %s)', 
+	       $fetch->error(), join(',',@{$host}), $ldap_suffix, $ldap_filter, $ldap_attrs);
         return undef;
     }
     
@@ -8308,7 +8375,8 @@ sub _load_include_admin_user_file {
 	if (ref $::pinfo{$pname}{'file_format'} eq 'HASH') {
 	    ## This should be a paragraph
 	    unless ($#paragraph > 0) {
-		&do_log('info', 'Expecting a paragraph for "%s" parameter in %s', $pname, $file);
+		&do_log('info', 'Expecting a paragraph for "%s" parameter in %s, ignore it', $pname, $file);
+		next;
 	    }
 	    
 	    ## Skipping first line
@@ -9069,7 +9137,8 @@ sub get_robots {
 ## List of lists in database mode which e-mail parameter is member of
 sub get_which_db {
     my $email = shift;
-    do_log('debug3', 'List::get_which_db(%s)', $email);
+    my $function = shift;
+    do_log('debug3', 'List::get_which_db(%s,%s)', $email, $function);
 
     unless ($List::use_db) {
 	&do_log('info', 'Sympa not setup to use DBI');
@@ -9083,28 +9152,55 @@ sub get_which_db {
 	return undef unless &db_connect();
     }	   
 
-    $statement = sprintf "SELECT list_subscriber FROM subscriber_table WHERE user_subscriber = %s",$dbh->quote($email);
+    if ($function eq 'member') {
+ 	## Get subscribers
+	$statement = sprintf "SELECT list_subscriber FROM subscriber_table WHERE user_subscriber = %s",$dbh->quote($email);
+	
+	push @sth_stack, $sth;
+	
+	unless ($sth = $dbh->prepare($statement)) {
+	    do_log('err','Unable to prepare SQL statement : %s', $dbh->errstr);
+	    return undef;
+	}
+	
+	unless ($sth->execute) {
+	    do_log('err','Unable to execute SQL statement "%s" : %s', $statement, $dbh->errstr);
+	    return undef;
+	}
 
-    push @sth_stack, $sth;
+	while ($l = $sth->fetchrow) {
+	    $l =~ s/\s*$//;  ## usefull for PostgreSQL
+	    $which{$l}{'member'} = 1;
+	}
+	
+	$sth->finish();
+	
+	$sth = pop @sth_stack;
 
-    unless ($sth = $dbh->prepare($statement)) {
-	do_log('err','Unable to prepare SQL statement : %s', $dbh->errstr);
-	return undef;
+    }else {
+	## Get admin
+	$statement = sprintf "SELECT list_admin, role_admin FROM admin_table WHERE user_admin = %s",$dbh->quote($email);
+
+	push @sth_stack, $sth;
+	
+	unless ($sth = $dbh->prepare($statement)) {
+	    do_log('err','Unable to prepare SQL statement : %s', $dbh->errstr);
+ 	return undef;
+	}
+	
+	unless ($sth->execute) {
+	    do_log('err','Unable to execute SQL statement "%s" : %s', $statement, $dbh->errstr);
+	    return undef;
+	}
+	
+	while ($l = $sth->fetchrow_hashref) {
+	    $which{$l->{'role_admin'}}{$l->{'list_admin'}} = 1;
+	}
+	
+	$sth->finish();
+	
+	$sth = pop @sth_stack;
     }
-
-    unless ($sth->execute) {
-	do_log('err','Unable to execute SQL statement "%s" : %s', $statement, $dbh->errstr);
-	return undef;
-    }
-
-    while ($l = $sth->fetchrow) {
-	$l =~ s/\s*$//;  ## usefull for PostgreSQL
-	$which{$l} = 1;
-    }
-
-    $sth->finish();
-
-    $sth = pop @sth_stack;
 
     return \%which;
 }
@@ -9121,10 +9217,8 @@ sub get_which {
     ## WHICH in Database
     my $db_which = {};
 
-    if (($function eq 'member') and (defined $Conf{'db_type'})) {
-	if ($List::use_db) {
-	    $db_which = &get_which_db($email);
-	}
+    if (defined $Conf{'db_type'} && $List::use_db) {
+	$db_which = &get_which_db($email, $function);
     }
 
     foreach $l (get_lists($robot)){
@@ -9138,14 +9232,44 @@ sub get_which {
 		($list->{'admin'}{'user_data_source'} eq 'include2')){
 		if ($db_which->{$l}) {
 		    push @which, $l ;
+
+		    ## Update cache
+		    $list_cache{'is_user'}{$l}{$email} = 1;
+		}else {
+		    ## Update cache
+		    $list_cache{'is_user'}{$l}{$email} = 0;		    
 		}
 	    }else {
 		push @which, $list->{'name'} if ($list->is_user($email));
 	    }
 	}elsif ($function eq 'owner') {
-	    push @which, $list->{'name'} if ($list->am_i('owner',$email));
+	    if ($list->{'admin'}{'user_data_source'} eq 'include2'){
+ 		if ($db_which->{'owner'}{$l} == 1) {
+  		    push @which, $l ;
+ 		    
+ 		    ## Update cache
+ 		    $list_cache{'am_i'}{'owner'}{$l}{$email} = 1;
+ 		}else {
+ 		    ## Update cache
+ 		    $list_cache{'am_i'}{'owner'}{$l}{$email} = 0;		    
+ 		}
+  	    }else {	    
+  		push @which, $list->{'name'} if ($list->am_i('owner',$email));
+  	    }
 	}elsif ($function eq 'editor') {
-	    push @which, $list->{'name'} if ($list->am_i('editor',$email));
+  	    if ($list->{'admin'}{'user_data_source'} eq 'include2'){
+ 		if ($db_which->{'editor'}{$l} == 1) {
+  		    push @which, $l ;
+ 		    
+ 		    ## Update cache
+ 		    $list_cache{'am_i'}{'editor'}{$l}{$email} = 1;
+  		}else {
+ 		    ## Update cache
+ 		    $list_cache{'am_i'}{'editor'}{$l}{$email} = 0;		    
+ 		}
+  	    }else {	    
+   		push @which, $list->{'name'} if ($list->am_i('editor',$email));
+  	    }
 	}else {
 	    do_log('err',"Internal error, unknown or undefined parameter $function  in get_which");
             return undef ;
@@ -9706,6 +9830,15 @@ sub maintenance {
 	}
     }
 
+    ## Clean buggy list config files
+    unless (&tools::higher_version($previous_version, '5.1b')) {
+	&do_log('notice','Cleaning buggy list config files...');
+	foreach my $l ( &List::get_lists('*') ) {
+	    my $list = new List ($l); 
+	    $list->save_config('listmaster@'.$list->{'domain'});
+	}
+    }
+
     ## Saving current version
     unless (open VFILE, ">$version_file") {
 	do_log('err', "Unable to open %s : %s", $version_file, $!);
@@ -10255,7 +10388,7 @@ sub _load_admin_file {
 	
 	## Look for first valid line
 	unless ($paragraph[0] =~ /^\s*([\w-]+)(\s+.*)?$/) {
-	    &do_log('info', 'Bad paragraph "%s" in %s', @paragraph, $config_file);
+	    &do_log('info', 'Bad paragraph "%s" in %s, ignore it', @paragraph, $config_file);
 	    next;
 	}
 	    
@@ -10268,7 +10401,7 @@ sub _load_admin_file {
 	}
 	
 	unless (defined $::pinfo{$pname}) {
-	    &do_log('info', 'Unknown parameter "%s" in %s', $pname, $config_file);
+	    &do_log('info', 'Unknown parameter "%s" in %s, ignore it', $pname, $config_file);
 	    next;
 	}
 
@@ -10284,7 +10417,8 @@ sub _load_admin_file {
 	if (ref $::pinfo{$pname}{'file_format'} eq 'HASH') {
 	    ## This should be a paragraph
 	    unless ($#paragraph > 0) {
-		&do_log('info', 'Expecting a paragraph for "%s" parameter in %s', $pname, $config_file);
+		&do_log('info', 'Expecting a paragraph for "%s" parameter in %s, ignore it', $pname, $config_file);
+		next;
 	    }
 	    
 	    ## Skipping first line
@@ -11129,9 +11263,9 @@ sub get_subscription_requests {
 
     foreach my $filename (sort grep(/^$self->{'name'}\.\d+\.\d+$/, readdir SPOOL)) {
 	unless (open REQUEST, "$Conf{'queuesubscribe'}/$filename") {
-	    do_log('notice', 'Could not open %s', $filename);
+	    do_log('err', 'Could not open %s', $filename);
 	    closedir SPOOL;
-	    return undef;
+	    next;
 	}
 	my $line = <REQUEST>;
 	$line =~ /^((\S+|\".*\")\@\S+)\s*(.*)$/;

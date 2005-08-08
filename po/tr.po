@@ -1,187 +1,153 @@
-# #-#-#-#-#  tw.po (PACKAGE VERSION)  #-#-#-#-#
-# SOME DESCRIPTIVE TITLE.
-# Copyright (C) YEAR Free Software Foundation, Inc.
-# FIRST AUTHOR <EMAIL>, YEAR.
-#
-# #-#-#-#-#  zh_TW.po (PACKAGE VERSION)  #-#-#-#-#
-# SOME DESCRIPTIVE TITLE.
-# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
-# This file is distributed under the same license as the PACKAGE package.
-# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+# Turkish translation for sympa
+# Copyright (c) (c) 2005 Canonical Ltd, and Rosetta Contributors 2005
+# This file is distributed under the same license as the sympa package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, 2005.
 #
 #, fuzzy
 msgid ""
 msgstr ""
-"Project-Id-Version: PACKAGE VERSION\n"
+"Project-Id-Version: sympa\n"
+"Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
 "POT-Creation-Date: 2002-07-16 17:27+0800\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
-"Language-Team: Chinese (Taiwan)\n"
+"Language-Team: Turkish <tr@li.org>\n"
 "MIME-Version: 1.0\n"
-"Content-Type: text/plain; charset=cn-big5\n"
+"Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"#-#-#-#-#  tw.po (PACKAGE VERSION)  #-#-#-#-#\n"
-"#-#-#-#-#  zh_TW.po (PACKAGE VERSION)  #-#-#-#-#\n"
+"X-Rosetta-Version: 0.1\n"
+"Plural-Forms: nplurals=1; plural=0\n"
 
 #: web_tt2/serveradmin.tt2:90
-#, fuzzy
 msgid "  May take a lot of CPU time,  be careful !"
-msgstr "可能要占用很大的 CPU 時間，小心使用!"
+msgstr "Dikkat! Fazla işlemci kullanımı olabilir"
 
 #. (from_count)
 #: web_tt2/arcsearch.tt2:64
 msgid " %1 hits on message's From field"
-msgstr ""
+msgstr " Kimden kısmında yapılan aramada %1 sonuç bulundu"
 
 #. (count)
 #: web_tt2/latest_lists.tt2:6
-#, fuzzy
 msgid " The %1 latest lists "
-msgstr ""
-"/FORM>\n"
-"\t</TD>\n"
-"      </TR>\n"
-"\n"
-"      <TR><"
+msgstr "Son %1 liste"
 
 #. (count)
 #: web_tt2/latest_arc.tt2:6
-#, fuzzy
 msgid " The %1 latest messages "
-msgstr "最新郵件優先"
+msgstr "Son %1 mesaj"
 
 #. (count)
 #: web_tt2/latest_d_read.tt2:6
-#, fuzzy
 msgid " The %1 latest shared documents "
-msgstr "最新郵件優先"
+msgstr "Son %1 paylaşılan belge"
 
 #. (count)
 #: web_tt2/active_lists.tt2:6
-#, fuzzy
 msgid " The %1 most active lists "
-msgstr ""
-"/FORM>\n"
-"\t</TD>\n"
-"      </TR>\n"
-"\n"
-"      <TR><"
+msgstr "En aktif %1 liste"
 
 #: web_tt2/active_lists.tt2:8
-#, fuzzy
 msgid " The active lists "
-msgstr ""
-"/FORM>\n"
-"\t</TD>\n"
-"      </TR>\n"
-"\n"
-"      <TR><"
+msgstr "En aktif listeler"
 
 #: web_tt2/latest_lists.tt2:8
-#, fuzzy
 msgid " The latest lists "
-msgstr ""
-"/FORM>\n"
-"\t</TD>\n"
-"      </TR>\n"
-"\n"
-"      <TR><"
+msgstr "Son Açılan Listeler"
 
 #: web_tt2/latest_arc.tt2:8
-#, fuzzy
 msgid " The latest messages "
-msgstr "最新郵件優先"
+msgstr "Son Mesajlar"
 
 #: web_tt2/latest_d_read.tt2:8
 msgid " The latest shared documents "
-msgstr ""
+msgstr "Son Paylaşılan Dosyalar"
 
 #. (for)
 #: web_tt2/active_lists.tt2:12 web_tt2/latest_arc.tt2:12
 #: web_tt2/latest_d_read.tt2:12 web_tt2/latest_lists.tt2:12
 msgid " for %1 days "
-msgstr ""
+msgstr " %1 gün için "
 
 #. (list_request_date)
 #: web_tt2/set_pending_list_request.tt2:10
-#, fuzzy
 msgid " on %1"
-msgstr "收件者: %1"
+msgstr "%1 üzerinde"
 
 #: web_tt2/active_lists.tt2:21
 #, fuzzy
 msgid "# message"
-msgstr "訊息"
+msgstr "Son mesaj"
 
 #. (conf.title,list)
 #: mail_tt2/sendpasswd.tt2:5
 msgid "%1 / subscribing to %2"
-msgstr ""
+msgstr "%2'e kayıt olunuyor / %1"
 
 #. (conf.title,list)
 #: mail_tt2/sendpasswd.tt2:7
 msgid "%1 / unsubscribing from %2"
-msgstr ""
+msgstr "%2'den kayıt siliniyor / %1"
 
 #. (conf.title)
 #: mail_tt2/sendpasswd.tt2:9
 msgid "%1 / your environment"
-msgstr ""
+msgstr "%1 / Bilgileriniz"
 
 #. (error.path)
 #: web_tt2/error.tt2:39
 msgid "%1 : No such file"
-msgstr "%1 : 沒有此文件"
+msgstr "%1 : Böyle bir dosya yok"
 
 #. (error.path)
 #: web_tt2/error.tt2:38
 msgid "%1 : No such file or directory"
-msgstr "%1: 沒有此文件或目錄"
+msgstr "%1 : Böyle bir dosya / dizin yok"
 
 #. (notice.action)
 #: web_tt2/notice.tt2:12
 msgid "%1 : action succeeded"
-msgstr "配置文件已經被更新"
+msgstr "%1 : İşlem gerçekleştirildi"
 
 #. (error.file)
 #: web_tt2/error.tt2:23
 msgid "%1 : file not editable"
-msgstr "%1: 文件不可編輯"
+msgstr "%1 : dosya değiştirilebilir değil"
 
 #. (error.name)
 #: web_tt2/error.tt2:44
 msgid "%1 : incorrect name"
-msgstr "%1: 不正確的名字"
+msgstr "%1 : Hatalı isim"
 
 #. (error.action)
 #: web_tt2/error.tt2:5
 msgid "%1 : unknown action"
-msgstr "%1 : 未知操作"
+msgstr "%1 : Bilinmeyen işlem"
 
 #. (error.list)
 #: web_tt2/error.tt2:6
 msgid "%1 : unknown list"
-msgstr "%1 : 未知郵遞論壇"
+msgstr "%1 : Bilinmeyen liste"
 
 #. (error.action)
 #: web_tt2/error.tt2:17
 msgid "%1 : you are not allowed to perform this action"
-msgstr "%1: 您不被允許進行這個操作"
+msgstr "%1 : Bu işlemi yapmak için yetkiniz yok"
 
 #. (list.name,date)
 #: mail_tt2/digest_plain.tt2:4 mail_tt2/digest_plain.tt2:8
 msgid "%1 Digest %2"
-msgstr ""
+msgstr "%1 Digest %2"
 
 #. (notice.total)
 #: web_tt2/notice.tt2:45
 msgid "%1 addresses have been subscribed"
-msgstr ""
+msgstr "%1 adres üye yapıldı"
 
 #. (list.name)
 #: mail_tt2/list_created.tt2:9
 msgid "%1 admin page"
-msgstr ""
+msgstr "%1 Yönetim sayfası"
 
 #. (list.name,list.host,size,conf.host,conf.listmaster_email)
 #: mail_tt2/listowner_notification.tt2:8
@@ -190,128 +156,130 @@ msgid ""
 "Total size used for %1@%2 archive is %3 Bytes. Messages\n"
 "are no more web-archived. Please contact %5@%4. "
 msgstr ""
+"%1 arşiv kotası aşıldı\n"
+"%1@%2 listesi için kota %3 Bytes. Bundan sonra gelecek mesajlar "
+"arşivlenmeyecektir. Lütfen %5@%4 ile iletişime geçiniz•"
 
 #. (l.average)
 #: web_tt2/rss.tt2:98
 msgid "%1 by day "
-msgstr ""
+msgstr "Gün başına %1"
 
 #. (body_count)
 #: web_tt2/arcsearch.tt2:56
 msgid "%1 hits on message's Body"
-msgstr ""
+msgstr "Mesaj içeriğine göre yapılan aramada %1 sonuç bulundu"
 
 #. (date_count)
 #: web_tt2/arcsearch.tt2:68
 msgid "%1 hits on message's Date field"
-msgstr ""
+msgstr "Tarihe göre yapılan aramada %1 sonuç bulundu"
 
 #. (subj_count)
 #: web_tt2/arcsearch.tt2:60
 msgid "%1 hits on message's Subject field"
-msgstr ""
+msgstr "Mesaj Konusuna göre yapılan aramada %1 sonuç bulundu"
 
 #. (error.email,error.list)
 #: web_tt2/error.tt2:25
 msgid "%1 is already subscribed to the list %2"
-msgstr "%1 已經訂閱了郵遞論壇 %2"
+msgstr "%1, %2 listesine zaten üye"
 
 #. (list.name)
 #: mail_tt2/list_created.tt2:2
 msgid "%1 mailing list creation"
-msgstr ""
+msgstr "%1 liste oluşturma"
 
 #. (searched,num)
 #: web_tt2/arcsearch.tt2:53
 msgid "%1 messages selected out of %2"
-msgstr "在 %2 中選中了 %1 個郵件"
+msgstr "%2 mesajdan %1 tanesi seçildi"
 
 #. (occurrence)
 #: web_tt2/lists.tt2:4 web_tt2/review.tt2:62
 msgid "%1 occurrence(s) found"
-msgstr "找到 %1 個匹配項"
+msgstr "%1 sonuç bulundu"
 
 #. (notice.total)
 #: web_tt2/notice.tt2:9
 msgid "%1 subscribers added"
-msgstr "[% notice.action %]: 操作成功"
+msgstr "%1 üye eklendi"
 
 #. (error.action)
 #: web_tt2/error.tt2:27
 msgid "%1: action failed"
-msgstr "%1: 操作失敗"
+msgstr "%1 : işlem hatası"
 
 #. (l.name,l.host,l.subject,l.msg_count)
 #: web_tt2/rss.tt2:98
 msgid "%1@%2 - %3 : %4 messages"
-msgstr ""
+msgstr "%1@%2 - %3 : %4 mesaj"
 
 #. (list.name,list.host,param0)
 #: mail_tt2/listowner_notification.tt2:22
 msgid ""
 "%1@%2 is no more an instance of family %3.\n"
 "This list has been closed."
-msgstr ""
+msgstr "%1@%2 listesi açık değil."
 
 #. (list.name,list.host)
 #: mail_tt2/list_created.tt2:4
 msgid "%1@%2 mailing list has been activated by listmaster."
-msgstr ""
+msgstr "%1@%2 listesi listmaster tarafından açıldı."
 
 #. (list.name,list.host)
 #: mail_tt2/list_rejected.tt2:4
 msgid "%1@%2 mailing list has been rejected by listmaster."
-msgstr ""
+msgstr "%1@%2 listesi listmaster tarafından reddedildi."
 
 #. (rate2,list.name,list.host,rate)
 #: mail_tt2/listowner_notification.tt2:13
 msgid "%2@%3 archives use %4% of allowed disk quota."
-msgstr ""
+msgstr "%2@%3 listesi kotasının %4% kısmını kullanıyor."
 
 #: src/PlainDigest.pm:353
 msgid "%Image(%s)"
-msgstr ""
+msgstr "%Image(%s)"
 
-# nlsref 6,52
 #: src/Commands.pm:2166
 msgid "%s did not receive confirmation for the following addresses :\n"
-msgstr "%s ¨S¦³¦¬¨ì±q¤U¦C¹q¶l¦a§}ªºÚÌ»{ :\n"
+msgstr "%s aşağıda belirtilen adresler için onay almadı:\n"
 
-# nlsref 6,91
 #: src/Commands.pm:1557
 msgid "%s mailing list does not provide subscriber preferences.\n"
-msgstr ""
+msgstr "%s mail listesi, üye tercihlerini sağlamaz.\n"
 
-# nlsref 6,69
 #: src/Commands.pm:2023
 msgid "%s posted your expiration message to the following addresses :\n"
-msgstr "%s ¶l¥ó§Aªºº¡´Á(expiration)¹q¶l¨ì¤U¦C¹q¶l¦a§} :\n"
+msgstr "%s, sizin sonlandırma mesajınızı belirtilen adreslere yolladı:\n"
 
 #: web_tt2/arcsearch.tt2:18
 msgid "(All of this words,"
-msgstr "(所有的詞，"
+msgstr "(kelimelerin tümü,"
 
 #: web_tt2/help_editlist.tt2:17
 msgid ""
 "(Default value: reception mail,notice,digest,digestplain,summary,nomail)"
 msgstr ""
+"(Varsayılan değer:kabul modu\r\n"
+"mail,notice,digest,digestplain,summary,nomail)"
 
 #: web_tt2/arcsearch.tt2:20
 msgid "(Each of this words,"
-msgstr "(每個詞，"
+msgstr "(kelimelerin herbiri, "
 
 #. (subject)
 #: mail_tt2/reject.tt2:7
 msgid "(Subject of your mail : %1)"
-msgstr ""
+msgstr "Mesajınızın konusu : %1"
 
 #: web_tt2/arcsearch.tt2:16
 msgid "(This sentence,"
-msgstr "(本句話，"
+msgstr "(Bu cümle,"
 
 #: web_tt2/help.tt2:28
 msgid "), provide your email address and associated password."
-msgstr ")時，請提供您的 Email 地址和相應的密碼。"
+msgstr "), eposta adresinizi ve şifrenizi veriniz"
 
 #: src/PlainDigest.pm:238
 msgid ""
@@ -319,121 +287,117 @@ msgid ""
 "    Some characters may be lost or incorrect **\n"
 "\n"
 msgstr ""
+"**Dikkat: Mesaj kısmı orjinal olarak %s karakter kümesini kullanmış\n"
+"    Bazı karakterler kaybolabilir veya hatalı olabilir**\n"
+"\n"
 
 #: mail_tt2/your_infected_msg.tt2:4
 msgid "***** V I R U S    A L E R T *****"
-msgstr ""
+msgstr "***** VİRÜS ALARMI *****"
 
-# nlsref 5,4
 #: src/tools.pl:138
 msgid "------ End of suspected message ------\n"
-msgstr "------ End of suspected message ------\n"
+msgstr "------ Şüpheli mesajın sonu ------\n"
 
 #: src/PlainDigest.pm:258
 msgid "-----End of Delivery Status Report-----\n"
-msgstr ""
+msgstr "-----İletim Durumu Raporunun Sonu-----\n"
 
-# nlsref 5,4
 #: src/PlainDigest.pm:199
-#, fuzzy
 msgid ""
 "-----End of original message from %s-----\n"
 "\n"
-msgstr "------ End of suspected message ------\n"
+msgstr ""
+"-----%s'in orjinal mesajının sonu-----\n"
+"\n"
 
 #: web_tt2/create_list_request.tt2:55
 msgid "--Select a topic--"
-msgstr "--選擇話題--"
+msgstr "--Bir konu başlığı seçin--"
 
 #: web_tt2/list_admin_menu.tt2:17
 #, fuzzy
 msgid "-Archives"
-msgstr "Archives setup"
+msgstr "Arşiv"
 
 #: web_tt2/list_admin_menu.tt2:18
 #, fuzzy
 msgid "-Bounces"
-msgstr "退信地址"
+msgstr "Geri Dönen Epostalar"
 
 #: web_tt2/list_admin_menu.tt2:19
 #, fuzzy
 msgid "-Data sources"
-msgstr "size=\"-1\"><b>定制</b"
+msgstr "Veri Kaynağı"
 
 #: web_tt2/list_admin_menu.tt2:14
 #, fuzzy
 msgid "-List definition"
-msgstr "List definition"
+msgstr "Liste tanımı"
 
 #: web_tt2/list_admin_menu.tt2:20
 #, fuzzy
 msgid "-Miscellaneous"
-msgstr "Other parameters"
+msgstr "Çeşitli"
 
 #: web_tt2/list_admin_menu.tt2:16
 #, fuzzy
 msgid "-Privileges"
-msgstr "Commands setup"
+msgstr "Ayrıcalıklar"
 
 #: web_tt2/list_admin_menu.tt2:15
 #, fuzzy
 msgid "-Sending/reception"
-msgstr "><b>監管</b"
+msgstr "Gönderme/Kabul"
 
-# nlsref 17,6
 #: wwsympa/wwslib.pm:53
 msgid "1 day"
-msgstr ""
+msgstr "1 gün"
 
-# nlsref 17,4
 #: wwsympa/wwslib.pm:51
 msgid "1 hour"
-msgstr ""
+msgstr "1 saat"
 
-# nlsref 17,7
 #: wwsympa/wwslib.pm:54
 msgid "1 week"
-msgstr ""
+msgstr "1 hafta"
 
-# nlsref 17,2
 #: wwsympa/wwslib.pm:49
 msgid "10 minutes"
-msgstr ""
+msgstr "10 dakika"
 
-# nlsref 17,3
 #: wwsympa/wwslib.pm:50
 msgid "30 minutes"
-msgstr ""
+msgstr "30 dakika"
 
-# nlsref 17,5
 #: wwsympa/wwslib.pm:52
 msgid "6 hours"
-msgstr ""
+msgstr "6 saat"
 
 #: web_tt2/help.tt2:22
 msgid ": Login / Logout from WWSympa."
-msgstr ": 從 WWSympa 上登入或退出。"
+msgstr ": WWSympa'dan Giriş / Çıkış yap"
 
 #: web_tt2/error.tt2:10
 msgid ": bad listname"
-msgstr "“[% error.listname %]”: 錯誤的郵遞論壇名"
+msgstr ": kötü listeadı"
 
 #: web_tt2/help.tt2:18
 msgid ": directory of lists available on the server"
-msgstr ": 服務器上提供的公開郵遞論壇。"
+msgstr ": sunucuda bulunan liste klasörleri"
 
 #: web_tt2/help.tt2:16
-#, fuzzy
 msgid ": user preferences. This is proposed to identified users only."
-msgstr ": 用戶首選項。僅提供給確認身份的用戶。"
+msgstr ""
+": kullanıcı tercihleri. Bu sadece tanımlanmış kullanıcılar için önerilmiştir."
 
 #: web_tt2/error.tt2:12
 msgid ": user unknown"
-msgstr "“[% error.email %]”: 未知用戶"
+msgstr ": bilinmeyen kullanıcı"
 
 #: web_tt2/help.tt2:20
 msgid ": your environment as a subscriber or as owner"
-msgstr ": 您作為訂閱者或擁有者的環境。"
+msgstr ": ortamınız kayıtlı kullanıcı ya da sahip"
 
 #: web_tt2/help_editlist.tt2:18
 msgid ""
@@ -443,12 +407,15 @@ msgid ""
 "the list, sympa uses the mode specified in the default_user_options "
 "paragraph."
 msgstr ""
+"<em>modelist</em> modların bir listesidir. (mail, notice, digest, "
+"digestplain, summary, nomail). Sadece bu modların kullanımına izin verilir. "
+"Eğer bir kullanıcı listede olmayan bir mod seçerse sympa varsayılan modu "
+"kullanır"
 
 #. (email)
 #: web_tt2/lists.tt2:6
-#, fuzzy
 msgid "<strong>%1</strong> is subscribed to the following mailing lists"
-msgstr "<B>%1</B> 已訂閱下列郵遞論壇"
+msgstr "<strong>%1</strong>, belirtilen mail listelerine kayıt yaptırmıştır"
 
 #: web_tt2/help_admin.tt2:8
 msgid ""
@@ -457,22 +424,25 @@ msgid ""
 msgstr ""
 
 #: web_tt2/help_admin.tt2:10
-#, fuzzy
 msgid ""
 "<strong>Create shared</strong> : initializes the shared document web space."
-msgstr "初始化共享文檔的網頁空間。"
+msgstr ""
+"<strong>Paylaşım Yarat</strong>: paylaşılmış belge web alanını başlatır."
 
 #: web_tt2/help_admin.tt2:6
 msgid ""
 "<strong>Customizing</strong> : editing of various files and messages "
 "attached to your list."
 msgstr ""
+"<strong>Ayarlar</strong> :listenize eklenen mesaj ve dosyaları değiştirme"
 
 #: web_tt2/help_admin.tt2:11
 msgid ""
 "<strong>Delete shared</strong> closes it. It can be restored using \"Restore "
 "shared\" button"
 msgstr ""
+"strong>Paylaşımı Sil</strong> paylaşımı kapatır. \"Paylaşımı Geri Getir\" "
+"ile tekrar açılabilir."
 
 #: web_tt2/help_admin.tt2:5
 msgid ""
@@ -480,102 +450,107 @@ msgid ""
 "modify some of the list parameters. The list of parameters you can modify "
 "depends on your privilege."
 msgstr ""
+"<strong>Liste ayarlarını değiştir</strong>: dikkatli kullanılmalıdır. bazı "
+"liste parametrelerinin değiştirilmesini sağlar. değiştirebileceğiniz ayarlar "
+"yetkinize bağlıdır."
 
 #: web_tt2/help_admin.tt2:7
 msgid ""
 "<strong>Manage Archives</strong>  : Allow you to download and delete list "
 "archives."
 msgstr ""
+"<strong>Arşiv Yönetimi</strong> : Liste arşivlerini indirmenize ve silmenize "
+"olanak sağlar"
 
 #: web_tt2/help_admin.tt2:9
-#, fuzzy
 msgid ""
 "<strong>Remove list</strong> : completely removes the current list. "
 "Listmaster privileges are required to Restore a list"
-msgstr "完全刪除當前郵遞論壇。需要郵遞論壇管理員特權來"
+msgstr ""
+"<strong>Listeyi Kaldır</strong> : geçerli listeyi tamamen kaldırır. Listenin "
+"eski durumuna getirilmesi için Listmaster ayrıcalıkları gerekmektedir."
 
 #: web_tt2/create_list_request.tt2:77
 msgid "A few lines describing the list"
-msgstr "幾行對郵遞論壇的描述文字"
+msgstr "Listeyi tanımlayan birkaç satır"
 
 #: mail_tt2/your_infected_msg.tt2:2
 msgid "A virus in your email"
-msgstr ""
+msgstr "Mesajınızda virüs var."
 
 #: mail_tt2/helpfile.tt2:52
 msgid "ADD <list> user@host Full name  * To add a user to a list"
 msgstr ""
+"ADD <liste> kullanıcı@host Tam isim * Belirlenmiş listeye, bir kullanıcı "
+"eklemek"
 
 #: web_tt2/d_read.tt2:77
 msgid "Access"
-msgstr "存取"
+msgstr "Erişim"
 
 #. (visible_path)
 #: web_tt2/d_control.tt2:6
 #, fuzzy
 msgid "Access control for the document %1"
-msgstr "文檔 %1 的訪問權限"
+msgstr "%1 için erişim hakları"
 
-# nlsref 16,1
 #: src/List.pm:309
 msgid "Account"
-msgstr ""
+msgstr "Hesap"
 
 #: web_tt2/d_read.tt2:347 web_tt2/review.tt2:50
 msgid "Add"
-msgstr "新增"
+msgstr "Ekle"
 
 #: web_tt2/d_read.tt2:344
 msgid "Add a bookmark"
-msgstr "建立新的書簽"
+msgstr "bookmark ekle"
 
 #: web_tt2/subindex.tt2:51
 msgid "Add selected addresses"
-msgstr ",APBTvQ!H!N;V7(B"
+msgstr "Seçili adresleri ekle"
 
 #: web_tt2/add_request.tt2:11
 msgid "Add subscribers"
-msgstr "添加訂閱者"
+msgstr "Üyeleri Ekle"
 
 #. (error.email)
 #: web_tt2/error.tt2:9
 msgid "Address \"%1\" is incorrect"
-msgstr "地址“%1”是錯誤的"
+msgstr "%1 adresi hatalı"
 
 #: src/etc/mhonarc-ressources.tt2:53
 msgid "Advanced search"
-msgstr "高級搜尋"
+msgstr "Ayrıntılı arama"
 
 #: web_tt2/create_list.tt2:8 web_tt2/install_pending_list.tt2:26
 msgid "Aliases have been installed."
-msgstr "別名已成功設定。"
+msgstr "Aliaslar yüklendi"
 
 #: web_tt2/install_pending_list.tt2:29
 msgid "Aliases you should install in your mailer"
-msgstr "您應該安裝到郵件服務中的別名"
+msgstr "mail sunucusuna ekleyebileceğiniz aliaslar"
 
 #. (conf.sympa)
 #: mail_tt2/helpfile.tt2:15
 msgid "All commands must be sent to the electronic address %1"
-msgstr ""
+msgstr "Tüm komutlar %1 adresine gönderilmeli"
 
-# nlsref 4,28
 #: src/sympa.pl:1629
 msgid ""
 "Among subscriber of list %s since %d days, %d didn't confirm there "
 "subscription.\n"
-msgstr "¦b¶l±H²M³æ %s ­q¤á¤§¤¤¡A¦Û±q %d ¡A %d ¨S¦³ÚÌ»{\n"
+msgstr "%s listesi üyeleri arasında %d gündür üyeliği kabul etmeyen üye: %d\n"
 
-# nlsref 6,44
 #. (mail.sender,mail.subject)
 #: mail_tt2/x509-user-cert-missing.tt2:8
-#, fuzzy
 msgid ""
 "An encrypted message from %1 has been distributed to\n"
 "Subject : %2"
-msgstr "¶l±H²M³æ %s ªº¶l±H¤w¸g¤Àµo¡C\n"
+msgstr ""
+"%1'den gelen şifrelenmiş mesaj iletildi:\n"
+"Konu : %2"
 
-# nlsref 6,56
 #: src/Commands.pm:2041
 msgid ""
 "An expiration process for list %s has been started. This process\n"
@@ -584,114 +559,113 @@ msgid ""
 "You will then be able to remove these addresses yourself with the DEL "
 "command.\n"
 msgstr ""
-"%s ´Áº¡(expiration)µ{§Ç¶}©l¡C¦}¥B±N¦b %d ¤Ñ§¹¦¨¡C\n"
-"§A±N¦¬¨ì¨S¦³¦b«ü©w®É¶¡¤ºÚÌ»{ªº¹q¶l¦a§}¡C\n"
-"§A¯à DEL «ü¥O¥h±¼³o¨Ç¹q¶l¦a§}¡C\n"
+"%s listesi için sonlanma süreci başlamıştır. Bu süreç\n"
+"%d gün içerisinde bitecektir. Daha sonra yaptıkları kayıtları zamanında "
+"onaylamayan \n"
+"kullanıcaların listesini alacaksınız.\n"
+"Daha sonra DEL komutunu kullanarak belirtilen bu adresleri kendiniz "
+"kaldırabileceksiniz.\n"
 
-# nlsref 16,3
 #: src/List.pm:317
 msgid "Anonymous sender"
-msgstr ""
+msgstr "Bilinmeyen gönderici"
 
 #: mail_tt2/listmaster_notification.tt2:15
 msgid "Antivirus scan failed"
-msgstr ""
+msgstr "virüs taraması hatası"
 
 #: mail_tt2/x509-user-cert-missing.tt2:15
 msgid "Any information about this list :"
-msgstr ""
+msgstr "Bu liste hakkında herhangi bir bilgi:"
 
 #: web_tt2/d_properties.tt2:37
 msgid "Apply"
-msgstr "應用"
+msgstr "Onayla"
 
 #: web_tt2/list_menu.tt2:41 web_tt2/list_menu.tt2:43
 msgid "Archive"
-msgstr "歸檔"
+msgstr "Arşiv"
 
 #: web_tt2/arc_manage.tt2:3
-#, fuzzy
 msgid "Archive Management"
-msgstr "Bounces management"
+msgstr "Arşiv Yönetimi"
 
-# nlsref 16,212
 #: src/List.pm:336
 msgid "Archive encrypted mails as cleartext"
-msgstr ""
+msgstr "Şifrelenmiş epostaları açık olarak arşivle"
 
 #: src/etc/mhonarc-ressources.tt2:90
 msgid "Archive powered by"
-msgstr ""
+msgstr "Arşiv altyapı"
 
 #: web_tt2/admin_menu.tt2:152 web_tt2/edit_list_request.tt2:9
 #: web_tt2/serveradmin.tt2:84
 msgid "Archives"
-msgstr "Archives setup"
+msgstr "Arşiv"
 
 #: web_tt2/arc_manage.tt2:7
-#, fuzzy
 msgid "Archives Selection:"
-msgstr "切換選取"
+msgstr "Arşiv seçimi"
 
 #. (error.year_month)
 #: web_tt2/error.tt2:69
 msgid "Archives from %1 are not accessible"
-msgstr ""
+msgstr "%1 arşivi ulaşılabilir değil"
 
 #. (list)
 #: web_tt2/admin_menu.tt2:123 web_tt2/admin_menu.tt2:125
 #: web_tt2/list_admin_menu.tt2:52
 msgid "Are you sure you wish to close %1 list ?"
-msgstr ""
+msgstr "%1 listesini kapatmak istediğinizden emin misiniz?"
 
 #. (list)
 #: web_tt2/list_admin_menu.tt2:43
 #, fuzzy
 msgid "Are you sure you wish to delete the shared documents ?"
-msgstr "確定要刪除 %1 ?"
+msgstr "%1 listesini kapatmak istediğinizden emin misiniz?"
 
 #. (list.name,msg_from)
 #: mail_tt2/moderate.tt2:3
 msgid "Article to be approved for list %1 from %2"
-msgstr ""
+msgstr "%1 listesine %2 tarafından gönderilen onaylanacak makale"
 
-# nlsref 16,31
 #: src/List.pm:562
 msgid "Attachment type"
-msgstr ""
+msgstr "Ek dosya tipi"
 
 #: web_tt2/scenario_test.tt2:59
 msgid "Auth method"
-msgstr "驗証模式"
+msgstr "Doğrulama metodu"
 
-# nlsref 8,16
 #: src/List.pm:2587
 msgid "Authentication requested"
-msgstr "»Ý­n®Ö­ã"
+msgstr "Doğrulama talebi"
 
 #: web_tt2/d_read.tt2:59 web_tt2/d_read.tt2:61 web_tt2/latest_d_read.tt2:21
 #: web_tt2/modindex.tt2:21 web_tt2/modindex.tt2:80
 msgid "Author"
-msgstr "作者"
+msgstr "Yazar"
 
 #: mail_tt2/helpfile.tt2:19
 msgid "Available commands are:"
-msgstr ""
+msgstr "Kullanılabilir komutlar"
 
-# nlsref 16,88
 #: src/List.pm:346
 msgid "Available subscription options"
-msgstr ""
+msgstr "Kullanılabilir üyelik tercihleri"
 
 #: web_tt2/active_lists.tt2:22
 msgid "Average by day"
-msgstr ""
+msgstr "Günlük ortalama"
 
 #: web_tt2/arcsearch.tt2:115
+#, fuzzy
 msgid ""
 "Based on <em><a href=\"http://www.mhonarc.org/contrib/marc-search/\">Marc-"
 "Search</a></em>, search engine of MHonArc archives"
 msgstr ""
+"MHonArc arşiv arama, <em><a href=\"http://www.mhonarc.org/contrib/marc- "
+"search/\">Marc-Search</a></em> altyapısını kullanır."
 
 #. (total,list.name)
 #: mail_tt2/listmaster_notification.tt2:112
@@ -701,6 +675,8 @@ msgid ""
 "below have been\n"
 "notified that they might be removed from list %2:"
 msgstr ""
+"Alınan birçok ulaşamama mesajından sonra aşağıda listelenen %1 listesi "
+"üyeleri listeden çıkartılabilecekleri konusunda uyarıldı."
 
 #. (total,list.name)
 #: mail_tt2/listmaster_notification.tt2:115
@@ -710,6 +686,8 @@ msgid ""
 "below have been\n"
 "removed from list %2:"
 msgstr ""
+"Alınan birçok ulaşamama mesajından sonra aşağıda listelenen %1 listesi "
+"üyeleri listeden çıkartıldı."
 
 #. (total,list.name)
 #: mail_tt2/listmaster_notification.tt2:118
@@ -719,136 +697,132 @@ msgid ""
 "below have been\n"
 "selected by Sympa as severe bouncing addresses:"
 msgstr ""
+"Alınan birçok ulaşamama mesajından sonra aşağıda listelenen %1 listesi "
+"üyeleri ulaşılamayan üyeler olarak seçildiler."
 
 #: web_tt2/arcsearch_form.tt2:63
 msgid "Body"
-msgstr "Body"
+msgstr "Mesaj"
 
 #. (d.anchor)
 #: web_tt2/rss.tt2:113
-#, fuzzy
 msgid "Bookmark %1"
-msgstr "設定書簽網址"
+msgstr "Bookmark %1"
 
 #: web_tt2/d_editfile.tt2:29
 msgid "Bookmark URL"
-msgstr "設定書簽網址"
+msgstr "Bookmark URL"
 
 #: web_tt2/admin_menu.tt2:156
 msgid "Bounce Settings"
-msgstr ""
+msgstr "Ulaşılamayan üye ayarları"
 
-# nlsref 8,27
 #: src/List.pm:2309
-#, fuzzy
 msgid ""
 "Bounce rate in list %s is %d%%.\n"
 "\n"
 "You should delete bouncing subscribers : \n"
 "%s/reviewbouncing/%s"
 msgstr ""
-"Bounce rate in list %s is %d%%.\n"
-"\n"
-"You should delete bouncing subscribers : \n"
+"%s listesi için ulaşılamama oranı %d%\n"
+"ulaşılamayan üyeleri silebilirsiniz:\n"
 "%s/reviewbouncing/%s"
 
 #: web_tt2/admin_menu.tt2:82 web_tt2/admin_menu.tt2:88
 #: web_tt2/list_admin_menu.tt2:37
-#, fuzzy
 msgid "Bounces"
-msgstr "退信地址"
+msgstr "Geri Dönen Epostalar"
 
 #: web_tt2/editsubscriber.tt2:52
-#, fuzzy
 msgid "Bounces count :"
-msgstr "退信計數: %1"
+msgstr "Geri Dönen eposta sayısı"
 
 #: src/List.pm:365 web_tt2/edit_list_request.tt2:10
 msgid "Bounces management"
-msgstr "Bounces management"
+msgstr "Geri Dönen Eposta Yönetimi"
 
 #: web_tt2/editsubscriber.tt2:47
 msgid "Bouncing address"
-msgstr "退信地址"
+msgstr "Geri Dönen eposta adresleir"
 
 #: mail_tt2/helpfile.tt2:45
 msgid ""
 "CONFIRM <key>               * Confirmation for sending a message (depending "
 "on the list's configuration)"
 msgstr ""
+"CONFIRM <key> * Epostanın gönderilmesi için kontrol (liste ayarlarına "
+"bağlıdır)"
 
 #: web_tt2/d_install_shared.tt2:17 web_tt2/d_upload.tt2:28
 msgid "Cancel"
-msgstr ""
+msgstr "İptal"
 
 #. (error.path)
 #: web_tt2/error.tt2:51
-#, fuzzy
 msgid "Cannot create %1"
-msgstr "無法建立目錄 %1"
+msgstr "%1 oluşturulamadı"
 
 #. (error.path)
 #: web_tt2/error.tt2:52
 msgid "Cannot create directory %1"
-msgstr "無法建立目錄 %1"
+msgstr "%1 dizini oluşturulamadı"
 
 #. (error.path)
 #: web_tt2/error.tt2:49
 msgid "Cannot overwrite file %1"
-msgstr "無法覆蓋文件 %1"
+msgstr "%1 dosyası üzerine yazılamadı"
 
 #. (error.name)
 #: web_tt2/error.tt2:53
-#, fuzzy
 msgid "Cannot unzip file %1"
-msgstr "無法上傳文件 %1"
+msgstr "%1 dosyaso sıkıştırılamadı"
 
 #. (error.path)
 #: web_tt2/error.tt2:50
 msgid "Cannot upload file %1"
-msgstr "無法上傳文件 %1"
+msgstr "%1 dosyası yüklenemedi"
 
 #: web_tt2/skinsedit.tt2:38
 msgid "Cascading Style Sheet"
-msgstr ""
+msgstr "Cascading Style Sheet"
 
 #: web_tt2/arcsearch_form.tt2:35
 msgid "Case"
-msgstr "大小寫"
+msgstr "Durum"
 
 #: web_tt2/show_cert.tt2:9
 msgid "Certificate expiration date"
-msgstr ",AF>V$5=FZHU(B"
+msgstr "Sertifika bitiş süresi"
 
 #: web_tt2/show_cert.tt2:10
 msgid "Certificate issuer"
-msgstr ",AF>V$7\"2<U_(B"
+msgstr "Sertifika yayıncısı"
 
 #: web_tt2/change_email.tt2:11
 msgid "Change my email address"
-msgstr "修改我的電子郵件地址"
+msgstr "Eposta adresimi değiştir"
 
 #: web_tt2/pref.tt2:27
 msgid "Changing your email address"
-msgstr "修改您的電子郵件地址"
+msgstr "Eposta adresinizin değiştirilmesi"
 
 #: mail_tt2/sendpasswd.tt2:32 web_tt2/pref.tt2:38
 msgid "Changing your password"
-msgstr "修改您的密碼"
+msgstr "Şifre değişikliği"
 
 #: web_tt2/arcsearch_form.tt2:41
 msgid "Check"
-msgstr "檢查"
+msgstr "Kontrol"
 
 #. (list.name)
 #: mail_tt2/reject.tt2:10
 msgid "Check %1 list usage :"
-msgstr ""
+msgstr "%1 listesinin kullanımını kontrol edin"
 
 #: mail_tt2/listmaster_notification.tt2:37
 #: mail_tt2/listmaster_notification.tt2:98
 msgid "Check Sympa log files for more precise information"
-msgstr ""
+msgstr "Ayrıntılı bilgi için sympa loglarını kontrol edin"
 
 #: mail_tt2/listmaster_notification.tt2:105
 #: mail_tt2/listmaster_notification.tt2:44
@@ -860,7 +834,7 @@ msgstr ""
 #: mail_tt2/listmaster_notification.tt2:85
 #: mail_tt2/listmaster_notification.tt2:92
 msgid "Check Sympa log files for more precise information."
-msgstr ""
+msgstr "Ayrıntılı bilgi için sympa loglarını kontrol edin."
 
 #. (list)
 #: web_tt2/sigrequest.tt2:31
@@ -869,6 +843,8 @@ msgid ""
 "\tpassword given in the message Sympa sent you. This will\n"
 "\tconfirm your unsubscription from list %1."
 msgstr ""
+"Epostalarınızı kontrol edin ve size gönderilen şifreyi giriniz. bu sizin %1 "
+"listesinden çıkma isteğinizi onaylayacaktır."
 
 #. (list)
 #: web_tt2/subrequest.tt2:24
@@ -876,78 +852,77 @@ msgid ""
 "Check your mailbox for new messages and enter below the\n"
 "\tpassword. This will confirm your subscription to list %1"
 msgstr ""
+"Epostalarınızı kontrol edin ve size gönderilen şifreyi giriniz. bu sizin %1 "
+"listesine üye olma isteğinizi onaylayacaktır."
 
 #: web_tt2/login_menu.tt2:48 web_tt2/loginbanner.tt2:56
-#, fuzzy
 msgid "Choose your authentication server"
-msgstr "在驗証身份("
+msgstr "Doğrulama sunucunuzu seçin"
 
 #: web_tt2/show_cert.tt2:11
 msgid "Cipher key size used"
-msgstr ",A<SC\\=p3W3$6H(B"
+msgstr "Şifre anahtarı boyutu"
 
 #: web_tt2/set_pending_list_request.tt2:22
-#, fuzzy
 msgid "Close it"
-msgstr "get_pending_lists\">隊列中的郵遞論壇"
+msgstr "Kapat"
 
 #: web_tt2/get_closed_lists.tt2:6 web_tt2/serveradmin.tt2:35
 msgid "Closed lists"
-msgstr "get_pending_lists\">隊列中的郵遞論壇"
+msgstr "Kapalı listeler"
 
 #: web_tt2/skinsedit.tt2:5
 msgid "Colors"
-msgstr ""
+msgstr "Renkler"
 
-# nlsref 4,18
 #: src/Commands.pm:131
 msgid "Command 'quit' found : ignoring end of message.\n"
-msgstr "µo²{«ü¥O 'quit'  : ©¿²¤±µµÛªº°T®§¡C\n"
+msgstr "'quit' komutu bulundu. mesajın sonu gözardı edilecek.\n"
 
-# nlsref 4,19
 #: src/sympa.pl:1485 src/sympa.pl:1516
 msgid "Command not understood: ignoring end of message.\n"
-msgstr "µo²{¤£²z¸Ñªº«ü¥O : ©¿²¤±µµÛªº°T®§¡C\n"
+msgstr "mesaj anlaşılamadı. mesaj sonu gözardı edildi.\n"
 
-# nlsref 6,13
 #: src/Commands.pm:1210 src/Commands.pm:1899 src/Commands.pm:813
 msgid "Command syntax error.\n"
-msgstr "«ü¥O»yªk¿ù»~¡C\n"
+msgstr "Komut söz dizimi hatası\n"
 
 #. (error.email)
 #: web_tt2/error.tt2:36
 msgid "Config file has been modified by %1. Cannot apply your changes"
-msgstr "配置文件已經被 %1 修改。無法應用您的修改"
+msgstr ""
+"Config(Ayar) dosyası %1 tarafından değiştirilmiş. Yaptığınız değişiklikler "
+"uygulanamıyor."
 
 #: web_tt2/set_pending_list_request.tt2:46
 msgid "Configuration file"
-msgstr "配置文件"
+msgstr "Ayar dosyası"
 
 #: web_tt2/notice.tt2:15
 msgid "Configuration file has been updated"
-msgstr ""
+msgstr "Ayar dosyası güncellendi"
 
 #: web_tt2/d_install_shared.tt2:16
 msgid "Confirm"
-msgstr ""
+msgstr "Onay"
 
 #: web_tt2/pref.tt2:15
 msgid "Connexion expiration period"
-msgstr "連接過期時間"
+msgstr "Bağlantı sonlama süresi"
 
 #: web_tt2/list_menu.tt2:33
 #, fuzzy
 msgid "Contact owners"
-msgstr "告知擁有者"
+msgstr "Sahibi belirle"
 
 #: web_tt2/arcsearch.tt2:109
 msgid "Continue search"
-msgstr "繼續搜尋"
+msgstr "Aramaya Devam et"
 
 #. (error.list)
 #: web_tt2/error.tt2:59
 msgid "Could not change email for list %1"
-msgstr "無法更改 %1 的電郵地址"
+msgstr "%1 listesi için eposta adresi değiştirilemiyor"
 
 #. (error.list)
 #: web_tt2/error.tt2:65
@@ -955,103 +930,103 @@ msgstr "無法更改 %1 的電郵地址"
 msgid ""
 "Could not change your subscription address for the list '%1'\n"
 "     because you are not allowed to unsubscribe."
-msgstr "無法更新論壇"
+msgstr ""
+"'%1%' listesi için kayıt adresiniz değiştirilemedi\n"
+"     çünkü, kaydınızı silmenize izin verilmiyor."
 
 #. (error.list)
 #: web_tt2/error.tt2:62
-#, fuzzy
 msgid ""
 "Could not change your subscription address for the list '%1'\n"
 "     because your new address is not allowed to subscribe."
-msgstr "無法更新論壇"
+msgstr ""
+"'%1' listesi için kayıt adresiniz değiştirilemedi\n"
+"     çünkü, yeni adresinizin kayıtlanmasına izin verilmiyor"
 
 #: web_tt2/d_read.tt2:319 web_tt2/d_read.tt2:333
 #, fuzzy
 msgid "Create"
-msgstr "建立新郵遞論壇"
+msgstr "Liste oluştur"
 
 #: web_tt2/admin_menu.tt2:97 web_tt2/admin_menu.tt2:99
 #: web_tt2/list_admin_menu.tt2:41
 msgid "Create Shared"
-msgstr ""
+msgstr "Paylaşım Oluştur"
 
 #: web_tt2/d_read.tt2:331
 msgid "Create a new file"
-msgstr "建立新的文件"
+msgstr "Yeni dosya oluştur"
 
 #. (visible_path)
 #: web_tt2/d_read.tt2:313
 msgid "Create a new folder inside the folder %1"
-msgstr "在活頁夾 %1 里建立新活頁夾"
+msgstr "%1 dizini içinde yeni dizin oluştur"
 
 #: web_tt2/d_read.tt2:315
 #, fuzzy
 msgid "Create a new folder inside the root folder"
-msgstr "在活頁夾 %1 里建立新活頁夾"
+msgstr "%1 dizini içinde yeni dizin oluştur"
 
 #: web_tt2/menu.tt2:8
 msgid "Create list"
-msgstr "建立新郵遞論壇"
+msgstr "Liste oluştur"
 
 #: web_tt2/active_lists.tt2:23 web_tt2/get_inactive_lists.tt2:6
 #: web_tt2/get_latest_lists.tt2:6 web_tt2/latest_lists.tt2:22
 msgid "Creation date"
-msgstr ""
+msgstr "Oluşturulma tarihi"
 
-# nlsref 16,12
 #: src/List.pm:438
 msgid "Creation of the list"
-msgstr ""
+msgstr "Listenin oluşturulması"
 
 #: web_tt2/choosepasswd.tt2:13
 msgid "Current password :"
-msgstr "當前密碼:"
+msgstr "Eski Şifreniz:"
 
-# nlsref 16,16
 #: src/List.pm:446
 msgid "Custom header field"
-msgstr ""
+msgstr "Özel başlık alanı"
 
 #: web_tt2/serveradmin.tt2:75
 msgid "Customize templates"
-msgstr "自訂模塊"
+msgstr "Şablonları kişiselleştir"
 
 #: web_tt2/admin_menu.tt2:53 web_tt2/admin_menu.tt2:59
 #: web_tt2/list_admin_menu.tt2:27
 msgid "Customizing"
-msgstr "定制"
+msgstr "Kişiselleştiriyor"
 
 #: mail_tt2/helpfile.tt2:53
 msgid "DEL <list> user@host            * To delete a user from a list"
 msgstr ""
+"DEL <liste> kullanıcı@host * Belirlenmiş listeden, bir kullanıcı silmek"
 
 #: mail_tt2/helpfile.tt2:60
 msgid "DISTribute <list> <key>        * Moderation: to validate a message"
-msgstr ""
+msgstr "DISTribute <liste> <key> * Moderasyon: mesakı onaylamak"
 
 #: src/etc/global_task_models/eval_bouncers.daily.task:1
-#, fuzzy
 msgid "Daily evaluation of bouncing users"
-msgstr "郵遞論壇沒有被退信的訂閱者"
+msgstr "Geri dönen kullanıcıların günlük değeri"
 
 #: web_tt2/admin_menu.tt2:165
 msgid "Data Source"
-msgstr "size=\"-1\"><b>定制</b"
+msgstr "Veri Kaynağı"
 
 #: web_tt2/error.tt2:46
 msgid "Data have changed on disk. Cannot apply your changes"
-msgstr "磁盤數據已經改變。無法應用您的修改"
+msgstr "Disk üzerindeki veri değişti. Yaptığınız değişiklikler uygulanamıyor"
 
 #: web_tt2/edit_list_request.tt2:11
 msgid "Data sources setup"
-msgstr "Data sources setup"
+msgstr "Veri Kaynağı ayarları"
 
 #: web_tt2/arcsearch_form.tt2:61 web_tt2/latest_arc.tt2:19
 #: web_tt2/modindex.tt2:20 web_tt2/modindex.tt2:79 web_tt2/subindex.tt2:9
 msgid "Date"
-msgstr ",AHUFZ(B"
+msgstr "Tarih"
 
-# nlsref 8,25
 #: src/List.pm:2302
 msgid ""
 "Dear owner of list %s,\n"
@@ -1064,11 +1039,6 @@ msgid ""
 "or send an email to %s with the following subject :\n"
 "AUTH %s DEL %s %s\n"
 msgstr ""
-"¿Ë·Rªº¶l±H²M³æ %s ¾Ö¦³ªÌ,\n"
-"\n"
-"¦³¤H­n¨D¥[¤H§Aªº¶l±H²M³æ¡C¦pªG§A±µ¨ü\\n½Ð¨Ï¥Î¤U¦Cªº«ü¥O:\n"
-"\n"
-"DEL %s %s\n"
 
 #: web_tt2/help_editlist.tt2:130 web_tt2/help_editlist.tt2:137
 #: web_tt2/help_editlist.tt2:30 web_tt2/help_editlist.tt2:40
@@ -1076,19 +1046,19 @@ msgstr ""
 #: web_tt2/help_editlist.tt2:56 web_tt2/help_editlist.tt2:59
 #: web_tt2/help_editlist.tt2:62
 msgid "Default value:"
-msgstr ""
+msgstr "Varsayılan değer:"
 
 #: web_tt2/help_editlist.tt2:27
 msgid "Default value: bounce_halt_rate robot parameter"
-msgstr ""
+msgstr "Varsayılan değer: bounce_halt_rate robot parametresi"
 
 #: web_tt2/help_editlist.tt2:24
 msgid "Default value: bounce_warn_rate robot parameter"
-msgstr ""
+msgstr "Varsayılan değer: bounce_warn_rate robot parametresi"
 
 #: web_tt2/help_editlist.tt2:169
 msgid "Defines who can access the web archive for the list."
-msgstr ""
+msgstr "Kimlerin web arşivine ulaşabileceğini tanımlar"
 
 #: web_tt2/help_editlist.tt2:81
 msgid ""
@@ -1098,24 +1068,26 @@ msgid ""
 "of messages are sent to subscribers in accordance with the rhythm selected "
 "with this parameter."
 msgstr ""
+"Özet modu açıklaması. Eğer bu parametre seçili ise, üyeler mesajlarını text "
+"ya da html olarak almayı tercih edebilirler. Mesajlar gruplanır ve seçilen "
+"peryotta üyelere gönderilir."
 
 #: web_tt2/d_read.tt2:76 web_tt2/d_upload.tt2:11
 msgid "Delete"
-msgstr "刪除"
+msgstr "Sil"
 
 #: web_tt2/arc_manage.tt2:21
-#, fuzzy
 msgid "Delete Selected Month(s)"
-msgstr "刪除選中的用戶"
+msgstr "Seçili ayları sil"
 
 #: web_tt2/admin_menu.tt2:106 web_tt2/list_admin_menu.tt2:43
 msgid "Delete Shared"
-msgstr ""
+msgstr "Paylaşımı sil"
 
 #: web_tt2/review.tt2:229 web_tt2/review.tt2:74 web_tt2/reviewbouncing.tt2:106
 #: web_tt2/reviewbouncing.tt2:30
 msgid "Delete selected email addresses"
-msgstr "刪除選中的電子郵件地址"
+msgstr "Seçili eposta adresleri sil"
 
 #: web_tt2/help_editfile.tt2:12
 msgid ""
@@ -1123,49 +1095,49 @@ msgid ""
 "remove them from the list using the DEL command (unless you hit the\n"
 "Quiet button."
 msgstr ""
+"Silme mesajı: Bu mesaj listenizden DEL komutu ile sildiğiniz kullanıcılara "
+"gönderilir. (quite butonuna basmadıysanız)"
 
 #. (fname)
 #: web_tt2/d_properties.tt2:26
 #, fuzzy
 msgid "Describe directory '%1'"
-msgstr "對目錄 %1 進行描述"
+msgstr "%1 dizinini açıkla"
 
 #. (fname)
 #: web_tt2/d_properties.tt2:28
 #, fuzzy
 msgid "Describe file '%1'"
-msgstr "對文件 %1 進行描述"
+msgstr "%1 dosyasını açıkla"
 
 #. (doc_title)
 #. (desc)
 #: web_tt2/d_control.tt2:12 web_tt2/d_editfile.tt2:19
 #: web_tt2/d_properties.tt2:18 web_tt2/d_read.tt2:41
 msgid "Description : %1"
-msgstr "描述: %1"
+msgstr "Açıklama : %1"
 
 #: web_tt2/create_list_request.tt2:75
 msgid "Description:"
-msgstr "描述:"
+msgstr "Açıklama : "
 
 #: web_tt2/help_user_options.tt2:7
 msgid "Digest"
-msgstr ""
+msgstr "Özet"
 
 #. (digest)
 #: mail_tt2/info_report.tt2:17
-#, fuzzy
 msgid "Digest       : %1"
-msgstr "郵寄清單 %1 的摘要(digest)"
+msgstr "Özet : %1"
 
 #. (list.name)
 #: mail_tt2/digest.tt2:4
 msgid "Digest for list %1"
-msgstr "郵寄清單 %1 的摘要(digest)"
+msgstr "%1 liste özeti"
 
-# nlsref 16,22
 #: src/List.pm:492
 msgid "Digest frequency"
-msgstr ""
+msgstr "Özet frekansı"
 
 #: src/List.pm:500
 msgid "Digest maximum number of messages"
@@ -1173,127 +1145,124 @@ msgstr ""
 
 #: web_tt2/help_user_options.tt2:14
 msgid "DigestPlain"
-msgstr ""
+msgstr "DigestPlain"
 
 #: web_tt2/latest_d_read.tt2:22
 msgid "Directory"
-msgstr ""
+msgstr "Dizin"
 
 #. (error.name)
 #: web_tt2/error.tt2:56
 msgid "Directory %1 and its contents are not copied"
-msgstr ""
+msgstr "%1 dizini ve içeriği kopyalanmadı"
 
 #: src/List.pm:859
 msgid "Directory where the database is stored (used for DBD::CSV only)"
-msgstr ""
+msgstr "Veritabanının tutulduğu dizin (sadece DBD::CSV  için kullanılır)"
 
 #: web_tt2/modindex.tt2:10 web_tt2/modindex.tt2:58 web_tt2/viewmod.tt2:7
 msgid "Distribute"
-msgstr "分發"
+msgstr "Dağıt"
 
 #. (visible_path)
 #: web_tt2/d_read.tt2:27
 msgid "Do you really want to delete %1 ?"
-msgstr "確定要刪除 %1 ?"
+msgstr "%1 : Silmek istediğinizden emin misiniz?"
 
 #. (visible_path,f.doc,f.size)
 #: web_tt2/d_read.tt2:253 web_tt2/d_read.tt2:255
-#, fuzzy
 msgid "Do you really want to delete %1%2 (%3 Kb) ?"
-msgstr "您確定要刪除 %1%2 嗎 ?"
+msgstr "%1%2 (%3 Kb) : Silmek istediğinizden emin misiniz?"
 
 #. (visible_path,s.doc)
 #: web_tt2/d_read.tt2:116 web_tt2/d_read.tt2:118
 msgid "Do you really want to delete %1%2 ?"
-msgstr "您確定要刪除 %1%2 嗎 ?"
+msgstr "%1%2 : Silmek istediğinizden emin misiniz?"
 
 #: web_tt2/arc_manage.tt2:21
-#, fuzzy
 msgid "Do you really want to delete Selected Archives?"
-msgstr "確定要刪除 %1 ?"
+msgstr "Seçili arşivleri silmek istediğinizden emin misiniz?"
 
 #: src/etc/mhonarc-ressources.tt2:418
-#, fuzzy
 msgid "Do you really want to delete this message ?"
-msgstr "確定要刪除 %1 ?"
+msgstr "Bu mesajı silmek istediğinize emin misiniz?"
 
 #: web_tt2/rename_list_request.tt2:14
-#, fuzzy
 msgid "Do you really want to rename this list?"
-msgstr "Do you really want to subscribe to list %1"
+msgstr "Liste adını değiştirmek istediğinize emin misiniz?"
 
 #. (total)
 #: web_tt2/reviewbouncing.tt2:16
 msgid ""
 "Do you really want to send a subscription remind message to the %1 "
 "subscribers"
-msgstr "您確定要給發送訂閱提醒到所有的%1個訂閱者嗎 ?"
+msgstr ""
+"%1 üyelerine, üyelik hatırlatma mesajı göndermek istediğinizden emin misiniz?"
 
 #. (total)
 #: web_tt2/review.tt2:39
 msgid ""
 "Do you really want to send a subscription remind message to the %1 "
 "subscribers ?"
-msgstr "您確定要給全部的%1個訂閱者發送訂閱提醒郵件嗎?"
+msgstr ""
+"%1 üyelerine, üyelik hatırlatma mesajı göndermek istediğinizden emin misiniz?"
 
 #. (list)
 #: web_tt2/list_menu.tt2:20
 msgid "Do you really want to subscribe to list %1?"
-msgstr ""
+msgstr "%1 listesine üye olmak istediğinizden emin misiniz?"
 
 #. (list)
 #: web_tt2/list_menu.tt2:15
 msgid "Do you really want to unsubscribe from list %1?"
-msgstr "您確定要從 %1 退訂?"
+msgstr "%1 listesinden ayrılmak istediğinizden emin misiniz?"
 
 #: web_tt2/arc_manage.tt2:21
 msgid "Do you want to DownLoad a Zip of the selected Archives before?"
 msgstr ""
+"Seçili ayların arşivlerini sıkıştırılmış şekilde indirmek ister misiniz?"
 
 #: web_tt2/d_upload.tt2:25
-#, fuzzy
 msgid "Do you want to cancel the upload ?"
-msgstr "確定要刪除 %1 ?"
+msgstr "Yüklemeyi iptal etmek ister misiniz?"
 
 #. (shortname)
 #: web_tt2/d_upload.tt2:8
-#, fuzzy
 msgid "Do you want to delete the old file %1 ?"
-msgstr "確定要刪除 %1 ?"
+msgstr "%1 dosyasını silmek ister misiniz?"
 
 #. (shortname)
 #: web_tt2/d_upload.tt2:16
-#, fuzzy
 msgid "Do you want to rename your file %1 ?"
-msgstr "確定要刪除 %1 ?"
+msgstr "%1 dosyasının adını değiştirmek ister misiniz?"
 
 #: web_tt2/d_read.tt2:54 web_tt2/d_read.tt2:56 web_tt2/list_admin_menu.tt2:72
 msgid "Document"
-msgstr "文檔"
+msgstr "Döküman"
 
 #: web_tt2/review.tt2:94 web_tt2/review.tt2:98
 msgid "Domain"
-msgstr ""
+msgstr "Alan adı"
 
 #: web_tt2/help_editlist.tt2:99
 msgid ""
 "Domain name of the list, default is the robot domain name set in the related "
 "robot.conf file or in file /etc/sympa.conf."
 msgstr ""
+"Liste alan adı, varsayılan değer robot.conf veya /etc/sympa.conf dosyasında "
+"tanımlıdır."
 
 #: web_tt2/arc_manage.tt2:20
 msgid "DownLoad ZipFile"
-msgstr ""
+msgstr "Zip dosyasını indir"
 
 #: web_tt2/review.tt2:40
 msgid "Dump"
-msgstr ""
+msgstr "Çöplük"
 
-# nlsref 6,33
 #: src/Commands.pm:1457 src/Commands.pm:1567
 msgid "E-mail address %s was not found in the list.\n"
-msgstr "¹q¶l¦a§} %s ¤£¦b¶l±H²M³æ¤º¡C\n"
+msgstr "%s adresim listede bulunamadı.\n"
 
 #: web_tt2/help_editlist.tt2:57
 msgid ""
@@ -1301,6 +1270,9 @@ msgid ""
 "between each category of bouncing users.For example, level 2 is for users "
 "with a score between 80 and 100."
 msgstr ""
+"Her ulaşılamayan üyenin bir puanı vardır. (1-100 arası) bu parametre her "
+"ulaşılamayan üye kategorisi arasındaki limiti tanımlar. örneğin 2. seviye 80-"
+"100 puan sahibi ulaşılamayan üyerler içindir."
 
 #: web_tt2/help_editlist.tt2:41
 msgid ""
@@ -1308,40 +1280,42 @@ msgid ""
 "limit foreach category of bouncing users.for example, level 1 begins from 45 "
 "to level_2_treshold."
 msgstr ""
+"Her ulaşılamayan üyenin bir puanı vardır. (1-100 arası) bu parametre her "
+"ulaşılamayan üye kategorisinin alt limitini tanımlar. örneğin 1. seviye 45 "
+"ile seviye 2 arasındadır."
 
 #: web_tt2/d_read.tt2:75 web_tt2/editfile.tt2:23 web_tt2/serveradmin.tt2:56
 #: web_tt2/serveradmin.tt2:67
 msgid "Edit"
-msgstr "編輯"
+msgstr "Değiştir"
 
 #: web_tt2/admin_menu.tt2:25 web_tt2/admin_menu.tt2:30
 #: web_tt2/list_admin_menu.tt2:11
 msgid "Edit List Config"
-msgstr "建立共享"
+msgstr "Liste ayar dosyasını değiştir"
 
 #: web_tt2/d_control.tt2:26
 msgid "Edit access"
-msgstr "編輯"
+msgstr "Erişim ayarlarını değiştir"
 
 #. (visible_path)
 #: web_tt2/d_editfile.tt2:55
-#, fuzzy
 msgid "Edit the file %1"
-msgstr "%1 文件的編修"
+msgstr "%1 dosyasını değiştir"
 
 #. (visible_path)
 #: web_tt2/d_editfile.tt2:12
 msgid "Edition of the bookmark %1"
-msgstr "%1 書簽的編修"
+msgstr "%1 bookmarkının değiştirilmesi"
 
 #. (visible_path)
 #: web_tt2/d_editfile.tt2:14
 msgid "Edition of the file %1"
-msgstr "%1 文件的編修"
+msgstr "%1 dosyasının değiştirilmesi"
 
 #: web_tt2/login_menu.tt2:11
 msgid "Editor"
-msgstr "監管者"
+msgstr "Editör"
 
 #: web_tt2/help_editlist.tt2:83
 msgid ""
@@ -1349,121 +1323,111 @@ msgid ""
 "moderated, messages posted to the list will first be passed to the editors, "
 "who will decide whether to distribute or reject it."
 msgstr ""
+"Editörler mesajları onaylamakla yükümlüdür. Eğer bir liste onaylı ise gelen "
+"mesajlar editörlere yönlendirilir. editörler mesajı onaylar ya da reddeder."
 
 #: web_tt2/pref.tt2:6 web_tt2/review.tt2:86 web_tt2/review.tt2:89
 #: web_tt2/reviewbouncing.tt2:62 web_tt2/subindex.tt2:7
 msgid "Email"
-msgstr ""
+msgstr "Eposta"
 
 #: web_tt2/editsubscriber.tt2:12
 msgid "Email :"
-msgstr ""
+msgstr "Eposta:"
 
 #: web_tt2/d_read.tt2:87
 msgid "Empty folder"
-msgstr "空活頁夾"
+msgstr "Boş dizin"
 
 #. (list.name,date)
 #: mail_tt2/digest_plain.tt2:28
-#, fuzzy
 msgid "End of %1 Digest %2"
-msgstr "郵寄清單 %1 的結束 - %2"
+msgstr "%1 listesi özetinin sonu , %2"
 
 #. (list.name,date)
 #: mail_tt2/digest.tt2:37
 msgid "End of digest for list %1 - %2"
-msgstr "郵寄清單 %1 的結束 - %2"
+msgstr "%1 listesi özetinin sonu - %2"
 
-# nlsref 4,24
 #: src/sympa.pl:1601
 msgid "End of your EXPIRE command on list %s"
-msgstr "EXPIRE «ü¥O§¹¦¨ %s"
+msgstr "%s listesinde EXPIRE komutunuzun sonu"
 
-# nlsref 1,3
 #: src/Conf.pm:246
 msgid "Error at line %d : %s"
-msgstr "°ÝÃDµo¥Í¦b %d ¦æ: %s"
+msgstr "%d : %s satırda hata"
 
-# nlsref 1,3
 #: web_tt2/list_panel.tt2:8
 #, fuzzy
 msgid "Error rate:"
-msgstr "°ÝÃDµo¥Í¦b %d ¦æ: %s"
+msgstr "%d : %s satırda hata"
 
 #: web_tt2/remove_arc.tt2:14
 msgid ""
 "Error while deleting this message, please refer to listmaster with\n"
 "complete URL of the concerned message."
 msgstr ""
+"Mesaj silme sırasında hata oluştu. Mesajın url'ini Listmaster'a iletiniz."
 
 #. (param0)
 #: mail_tt2/listmaster_notification.tt2:70
-#, fuzzy
 msgid "Error(s) found in the file %1."
-msgstr "%1 文件的編修"
+msgstr "%1 dosyasında hata(lar) bulundu."
 
 #. (param0,param1)
 #: mail_tt2/listmaster_notification.tt2:49
 msgid "Errors occured while copying family %2 file in list %1 directory."
-msgstr ""
+msgstr "%2 aile dosyasını, %1 liste klasörüne kopyalarken hata oluştu."
 
 #. (error.name)
 #: web_tt2/error.tt2:54
-#, fuzzy
 msgid "Errors while unzipping file %1"
-msgstr "%1 文件的編修"
+msgstr "%1 dosyasını \"unzip\"lerken hatalar oluştu."
 
 #: mail_tt2/expire_warning1.tt2:7 mail_tt2/expire_warning2.tt2:7
 #: mail_tt2/remind.tt2:6
 msgid "Everything about this list : "
-msgstr ""
+msgstr "Liste hakkında herşey : "
 
 #: mail_tt2/welcome.tt2:18 mail_tt2/welcome.tt2:41
 msgid "Everything about this list:"
-msgstr ""
+msgstr "Liste hakkında herşey:"
 
 #: web_tt2/d_read.tt2:12 web_tt2/d_read.tt2:16
-#, fuzzy
 msgid "Expert mode"
-msgstr "空活頁夾"
+msgstr "Uzman modu"
 
-# nlsref 16,10
 #: src/List.pm:414
 msgid "Expiration of unmoderated messages"
-msgstr ""
+msgstr "Modere edlimemiş mesajların sonlanması"
 
 #: web_tt2/arcsearch_form.tt2:69
 msgid "Extend search field"
-msgstr "Extend search field"
+msgstr "Arama alanını genişlet"
 
-# nlsref 8,22
 #: src/List.pm:2324
 msgid ""
 "FYI command %s list %s from %s %s \n"
 " (no action needed)\n"
 msgstr ""
-"FYI: «ü¥O %s ¶l±H²M³æ %s ¥Ñ %s %s \n"
-" (¤£»Ý­n°µ¥ô¦ó°Ê§@)\n"
 
-# nlsref 8,26
 #: src/List.pm:2322
 msgid ""
 "FYI command %s list %s from %s %s validated by %s\n"
 " (no action needed)\n"
 msgstr ""
-"«ü¥O %s ¶l±H²M³æ %s ¥Ñ %s %s  ¥Ñ %s ÚÌ»{\n"
-" (¤£»Ý­n°µ¥ô¦ó°Ê§@)\n"
 
-# nlsref 8,21
 #: src/List.pm:2278 src/List.pm:2320
 msgid "FYI: %s list %s from %s %s"
-msgstr "FYI: %s ¶l±H²M³æ %s ¥Ñ %s %s"
+msgstr "Bilgi: %s %s listesi, %s tarafından %s"
 
 #: web_tt2/help_editlist.tt2:84
 msgid ""
 "FYI: Defining editors will not make the list moderated ; you will have to "
 "set the \"send\" parameter."
 msgstr ""
+"Bilgi: Editör tanımlamak listeyi onaylı hale getirmez. Gönderim "
+"seçeneklerini değiştirmelisiniz."
 
 #: web_tt2/help_editlist.tt2:85
 msgid ""
@@ -1472,112 +1436,111 @@ msgid ""
 "not been distributed or rejected will remain in the moderation spool until "
 "they are acted on."
 msgstr ""
+"Bilgi: Eğer liste onaylı olursa, bir editör diğer editörlerden bağımsız "
+"olarak bir mesajı onaylayabilir ya da reddebilir. İşlenmeyen mesajlar "
+"işlenene kadar mesaj havuzunda beklerler."
 
 #. (error.directory)
 #: web_tt2/error.tt2:57
 msgid "Failed : %1 not empty"
-msgstr "失敗: %1 不為空"
+msgstr "Hata: %1 dizini boş değil."
 
 #: web_tt2/error.tt2:42
 msgid "Failed : your content is empty"
-msgstr "錯誤: 您提供的內容是空的"
+msgstr "Hata : içeriğiniz boş"
 
 #. (error.user)
 #: web_tt2/error.tt2:26
 msgid "Failed to add user %1"
-msgstr "新增使用者 %1 失敗"
+msgstr "%1 kullanıcısının eklenmesinde hata"
 
-# nlsref 6,92
 #: src/Commands.pm:1590 src/Commands.pm:1603
 msgid "Failed to change your subscriber options for list %s.\n"
-msgstr ""
+msgstr "%s listesi için ayarlarınız değiştirilemedi.\n"
 
 #. (param0,param1)
 #: mail_tt2/listmaster_notification.tt2:90
 #, fuzzy
 msgid "Failed to instantiate family %2 for list %1"
-msgstr "無法更改 %1 的電郵地址"
+msgstr "%1 listesi için %2 ailesi delillendirilmesi başarısız oldu."
 
-# nlsref 8,7
 #: web_tt2/serveradmin.tt2:20
-#, fuzzy
 msgid "Families"
-msgstr "ÀÉ®×"
+msgstr "Aileler"
 
 #: src/List.pm:556
 #, fuzzy
 msgid "Family name"
-msgstr "郵遞論壇名"
+msgstr "Aileler"
 
-# nlsref 8,7
 #: src/List.pm:6243
 msgid "File"
-msgstr "ÀÉ®×"
+msgstr "Dosya"
 
 #. (error.name)
 #: web_tt2/error.tt2:55
-#, fuzzy
 msgid "File %1 is not copied"
-msgstr "文件 %1 已保存"
+msgstr "%1 dosyası kopyalanamadı"
 
 #. (notice.path)
 #: web_tt2/notice.tt2:30
 msgid "File %1 saved"
-msgstr "文件 %1 已保存"
+msgstr "%1 dosyası kaydedildi"
 
 #. (notice.path)
 #: web_tt2/notice.tt2:18
-#, fuzzy
 msgid "File %1 successfully uploaded!"
-msgstr "成功上傳文件 %1 !"
+msgstr "%1 dosyası başarıyla yüklendi"
 
 #. (notice.path)
 #: web_tt2/notice.tt2:21
-#, fuzzy
 msgid "File %1 unziped!"
-msgstr "文件 %1 已保存"
+msgstr "%1 dosyası açıldı"
 
 #. (notice.path)
 #: web_tt2/notice.tt2:27
 msgid "File %1 waiting for moderation"
-msgstr ""
+msgstr "%1 dosyası onay için bekliyor"
 
-# nlsref 16,34
 #: src/List.pm:577
 msgid "File inclusion"
-msgstr ""
+msgstr "Dosya ekleme"
 
 #: web_tt2/d_read.tt2:332
 #, fuzzy
 msgid "File name"
-msgstr "郵遞論壇名"
+msgstr "Yeniden adlandır"
 
 #: web_tt2/login_menu.tt2:67
 msgid "First login ?"
-msgstr ""
+msgstr "İlk giriş?"
 
 #: web_tt2/d_read.tt2:318
 #, fuzzy
 msgid "Folder name"
-msgstr "監管"
+msgstr "Modere et"
 
 #. (conf.host)
 #: mail_tt2/list_unknown.tt2:22
 msgid "For further assistance, please contact listmaster@%1"
-msgstr ""
+msgstr "Daha fazla yardım için listmaster ile iletişime geçin"
 
 #: web_tt2/help_editlist.tt2:110
+#, fuzzy
 msgid ""
 "For this operation, one Sympa site act as a server while the other one act "
 "as client. On the server side, the only setting needed is to give permission "
 "to the remote Sympa to review the list. This is controled by the review "
 "scenario. "
 msgstr ""
+"Bu işlem için, bir Sympa sitesi sunucu olurken diğerinin kullanıcı (client) "
+"olması gerekmektedir. Sunucu tarafında yapılması gereken tek ayar, uzaktaki "
+"Sympa'ya listeyi gözden geçirebilme izninin verilmesidir. Bu, gözden geçirme "
+"senaryosu tarafından kontrol edilmektedir."
 
-# nlsref 16,32
 #: src/List.pm:566
 msgid "Forced reply address"
-msgstr ""
+msgstr "Zorunlu Cevap Adresi"
 
 #: mail_tt2/global_remind.tt2:5
 msgid "Foreach list here is a mailto to use if you want to unsubscribe."
@@ -1586,122 +1549,121 @@ msgstr ""
 #. (stats.byte_sent)
 #: mail_tt2/stats_report.tt2:7
 msgid "Forwarded mega-bytes        :      %1"
-msgstr ""
+msgstr "İletilen mb: %1"
 
 #: web_tt2/latest_arc.tt2:21
 msgid "From"
-msgstr "根據郵件<i>發件人</i>有 <B>[% from_count %]</b> 個命中"
+msgstr "Kimden "
 
 #. (user.email)
 #: web_tt2/compose_mail.tt2:4
 msgid "From: %1"
-msgstr "寄件者: %1"
+msgstr "Kimden :%1"
 
 #: web_tt2/help.tt2:13
-#, fuzzy
 msgid ""
 "Functions, equivalent to Sympa robot commands, are accessible in\n"
 "the higher part of the user interface's banner. WWSympa provides \n"
 "a customized environment with access to the following functions :"
-msgstr "Sympa 的系統指令/功能，位於使用者介面的標題的最上端處。\n"
+msgstr ""
 
 #: mail_tt2/helpfile.tt2:42
 msgid "GET <list> <file>           * To get <file> of <list> archive"
-msgstr ""
+msgstr "GET <listeadı> <dosya> * <liste> arşivine ait arşivi almak için"
 
 #: web_tt2/login_menu.tt2:55 web_tt2/loginbanner.tt2:45
 #: web_tt2/loginbanner.tt2:60
 msgid "Go"
-msgstr ""
+msgstr "Git"
 
 #: mail_tt2/helpfile.tt2:21
 msgid "HELp                        * This help file"
-msgstr ""
+msgstr "HELp * bu yardım dosyası"
 
 #: web_tt2/show_cert.tt2:5
 msgid "HTTPS authentication information"
-msgstr "HTTPS ,AF>V$PEO\"(B"
+msgstr "HTTPS doğrulama bilgisi"
 
 #: web_tt2/edit_list_request.tt2:33 web_tt2/menu.tt2:23
 #: web_tt2/suboptions.tt2:16
 msgid "Help"
-msgstr "幫助"
+msgstr "Yardım"
 
 #. (base_url,path_cgi)
 #: mail_tt2/sendpasswd.tt2:39
 msgid "Help on Sympa: %1%2"
-msgstr ""
+msgstr "Sympa Yardım : %1%2"
 
-# nlsref 6,67
 #: src/Commands.pm:2364
 msgid ""
 "Here are the lists you are currently subscribe to :\n"
 "\n"
 msgstr ""
-"¥H¤U¬O§A­q¾\\¤Fªº¶l±H²M³æ :\n"
+"Üyesi olduğunuz listeler:\n"
 "\n"
 
 #. (list.name,list.host)
 #: mail_tt2/review.tt2:1
 msgid "Here are the subscribers of %1@%2 mailing list:"
-msgstr ""
+msgstr "%1@%2 listesinin üyeleri:"
 
 #. (conf.email,conf.host)
 #: mail_tt2/lists.tt2:7
 msgid "Here is the list of list from %1@%2"
-msgstr ""
+msgstr "%1@%2 adresindeki listeler"
 
 #: web_tt2/menu.tt2:20
 msgid "Home"
-msgstr "首頁"
+msgstr "Ana Sayfa"
 
 #. (url)
 #: mail_tt2/info_report.tt2:20
 msgid "Homepage           : %1"
-msgstr ""
+msgstr "Anasayfa : %1"
 
 #: src/etc/create_list_templates/hotline/comment.tt2:1
-#, fuzzy
 msgid "Hotline mailing list"
-msgstr "郵遞論壇列表"
+msgstr "Hotline eposta listesi"
 
 #: web_tt2/help.tt2:41
 msgid "I am not a list subscriber"
-msgstr "我不是郵遞論壇的訂閱者"
+msgstr "Ben liste üyesi değilim"
 
 #: web_tt2/arc_protect.tt2:6
 msgid "I am not a spammer"
-msgstr "我不是垃圾郵件制造者"
+msgstr "Ben spammer değilim"
 
 #: web_tt2/help.tt2:46
 msgid "I am subscriber to at least one list but I have no password"
-msgstr "我是至少一個郵遞論壇的訂閱者，但是我沒有密碼"
+msgstr "En az bir listeye üyeyim ancak şifrem yok."
 
 #: web_tt2/help.tt2:51
 msgid "I forgot my password"
-msgstr "我忘記了密碼"
+msgstr "Şifremi unuttum"
 
 #. (list)
 #: web_tt2/subrequest.tt2:12
 msgid "I subscribe to list %1"
-msgstr "我訂閱郵遞論壇 %1"
+msgstr "%1 listesine üye oluyorum"
 
 #. (list)
 #: web_tt2/sigrequest.tt2:11
 msgid "I unsubscribe from list %1"
-msgstr "我退訂郵遞論壇 %1"
+msgstr "%1 listesi üyeliğinde çıkıyorum"
 
 #: mail_tt2/helpfile.tt2:41
 msgid "INDex <list>                * <list> archive file list"
-msgstr ""
+msgstr "INDex <listeadı> * <listeadı> arşiv listesi"
 
 #: mail_tt2/helpfile.tt2:22
 msgid "INFO <list>                 * Information about a list"
-msgstr ""
+msgstr "INFO <liste> * Bir liste hakkında bilgi"
 
 #: mail_tt2/helpfile.tt2:44
 msgid "INVITE <list> <email>       * Invite <email> for subscription in <list>"
 msgstr ""
+"INVITE <listeadi> <eposta> * <eposta> yı <listeadı>na üye yapmak için davet "
+"gönderir"
 
 #: web_tt2/help_editlist.tt2:171
 msgid ""
@@ -1725,82 +1687,71 @@ msgstr ""
 
 #: mail_tt2/invite.tt2:13
 msgid "If you don't want to subscribe just ignore this message."
-msgstr ""
+msgstr "Eğer kayıt olmak istemiyorsanız, bu mesajı gözardı etmeniz yeterlidir."
 
-# nlsref 4,27
 #: src/sympa.pl:1649
 msgid ""
 "If you want to remove these subscriber from the list, use the following "
 "commands :\n"
-msgstr "°²¦p§A§Æ±æ¦b¶l±H²M³æ¤º°£¥h³o¨Ç­q¤á¡A½Ð¥Î¤U¦Cªº«ü¥O :\n"
+msgstr ""
+"Eğer bu kayıtlı kullanıcıları listeden çıkarmak istiyorsanız, aşağıdaki "
+"komutları kullanın:\n"
 
 #: mail_tt2/global_remind.tt2:3
 msgid "If you want to unsubscribe from some list, please save this mail."
-msgstr ""
+msgstr "Bazı listelerden kaydınızı silmek istiyorsanız, bu mail'i kaydedin."
 
 #: web_tt2/sigrequest.tt2:71
-#, fuzzy
 msgid ""
 "If you've never had a password from that server or if you don't remember it :"
-msgstr "如果您從未從該伺服器申請過密碼，或者當您忘記密碼："
+msgstr ""
+"Eğer belirtilen sunucudan daha önce hiç şifre almadıysanız veya şifrenizi "
+"hatırlamıyorsanız:"
 
-# nlsref 4,37
 #: src/sympa.pl:1438
 msgid ""
 "Ignoring message body not in text/plain, please use text/plain only \n"
 "(or put your command in the subject).\n"
 msgstr ""
-"©¿²¤¶l¥ó¤º®e¤£¬O¯Â¤å¦r (text/plain)¡A½Ð¥Î¯Â¤å¦r (text/plain) \n"
-"(©Î «ü¥O©ñ¦b subject ¤W)¡C\n"
 
 #: web_tt2/serveradmin.tt2:34
-#, fuzzy
 msgid "Inactive lists"
-msgstr ""
-"/FORM>\n"
-"\t</TD>\n"
-"      </TR>\n"
-"\n"
-"      <TR><"
+msgstr "Aktif olmayan listeler"
 
-# nlsref 16,75
 #: src/List.pm:1095
 msgid "Inclusions timeout"
-msgstr ""
+msgstr "İlaveler zaman aşımına uğradı."
 
 #: web_tt2/set_pending_list_request.tt2:34
 msgid "Information file"
-msgstr "信息文件"
+msgstr "Bilgi dosyası"
 
 #. (list.name)
 #: mail_tt2/stats_report.tt2:1
 msgid "Information regarding list %1"
-msgstr ""
+msgstr "%1 listesi hakkında bilgi"
 
 #. (list.name,list.host)
 #: mail_tt2/info_report.tt2:1
 msgid "Information regarding list %1@%2"
-msgstr ""
+msgstr "%1@%2 listesi hakkında bilgi"
 
-# nlsref 6,36
 #: src/Commands.pm:1035
 msgid "Information regarding user %s have been updated for list %s.\n"
-msgstr "¦³Ãö¥Î¤á %s ¤w¸g§ó·s (¶l±H²M³æ %s)¡C\n"
+msgstr ""
 
 #: web_tt2/modindex.tt2:107 web_tt2/modindex.tt2:72
-#, fuzzy
 msgid "Install"
-msgstr "安裝它 &nbsp;&nbsp;"
+msgstr "Kur"
 
 #: web_tt2/set_pending_list_request.tt2:23
-#, fuzzy
 msgid "Install it"
-msgstr "安裝它 &nbsp;&nbsp;"
+msgstr "Belirtileni kur"
 
 #: web_tt2/review_family.tt2:8
 #, fuzzy
 msgid "Instantiation date"
-msgstr ",AF>V$5=FZHU(B"
+msgstr "Delilleme tarihi"
 
 #: web_tt2/help_user_options.tt2:26
 msgid ""
@@ -1820,15 +1771,14 @@ msgid ""
 "the multipart/digest MIME format."
 msgstr ""
 
-# nlsref 16,33
 #: src/List.pm:571
 msgid "Internet domain"
-msgstr ""
+msgstr "Internet domain"
 
 #. (list.name)
 #: mail_tt2/invite.tt2:3
 msgid "Invitation to join list %1"
-msgstr ""
+msgstr "%1 listesine katılmak için davet"
 
 #. (user.email)
 #: mail_tt2/x509-user-cert-missing.tt2:11
@@ -1842,64 +1792,60 @@ msgid ""
 "January:February:March:April:May:June:July:August:September:October:November:"
 "December"
 msgstr ""
+"Ocak:Şubat:Mart:Nisan:Mayıs:Haziran:Temmuz:Ağustos:Eylül:Ekim:Kasım:Aralık"
 
 #: mail_tt2/helpfile.tt2:43
 msgid ""
 "LAST <list>                 * Used to received the last message from <list>"
 msgstr ""
+"LAST <listeadı> * <listeadı> listesindeki son mesaj almak için kullanılır"
 
-# nlsref 16,135
 #: src/List.pm:777
 msgid "LDAP 2-level query inclusion"
-msgstr ""
+msgstr "LDAP 2-seviyesi sorgu kapsamı"
 
-# nlsref 16,35
 #: src/List.pm:669
 msgid "LDAP query inclusion"
-msgstr ""
+msgstr "LDAP sorgu kapsamı"
 
 #: mail_tt2/helpfile.tt2:23
 msgid "LISts                       * Directory of lists managed on this node"
-msgstr ""
+msgstr "LISts * Bu \"node\"da yönetilen listelerin klasörü"
 
 #: web_tt2/pref.tt2:9
 msgid "Language"
-msgstr "語言"
+msgstr "Dil"
 
 #: web_tt2/editsubscriber.tt2:23
-#, fuzzy
 msgid "Language :"
-msgstr "語言"
+msgstr "Dil :"
 
-# nlsref 16,55
 #: src/List.pm:884
 msgid "Language of the list"
-msgstr ""
+msgstr "Listenin dili"
 
 #: web_tt2/d_read.tt2:69 web_tt2/d_read.tt2:71 web_tt2/latest_d_read.tt2:19
 #: web_tt2/review.tt2:133
 msgid "Last update"
-msgstr "最後更新"
+msgstr "Son güncelleme"
 
 #: web_tt2/editsubscriber.tt2:15
-#, fuzzy
 msgid "Last update :"
-msgstr "最後更新"
+msgstr "Son güncelleme :"
 
 #. (doc_date)
 #: web_tt2/d_control.tt2:11 web_tt2/d_editfile.tt2:18
 #: web_tt2/d_properties.tt2:17 web_tt2/d_read.tt2:39
 msgid "Last update : %1"
-msgstr "最後更新: %1"
+msgstr "Son güncelleme : %1"
 
-# nlsref 16,77
 #: src/List.pm:1120
 msgid "Last update of config"
-msgstr ""
+msgstr "Ayarın son güncellemesi"
 
 #: web_tt2/suboptions.tt2:6
 msgid "Last update:"
-msgstr ""
+msgstr "Son güncelleme"
 
 #: src/List.pm:902
 msgid "Latest family instantiation"
@@ -1907,21 +1853,15 @@ msgstr ""
 
 #: web_tt2/serveradmin.tt2:33
 msgid "Latest lists"
-msgstr ""
-"/FORM>\n"
-"\t</TD>\n"
-"      </TR>\n"
-"\n"
-"      <TR><"
+msgstr "Son Listeler"
 
 #: web_tt2/get_inactive_lists.tt2:7
-#, fuzzy
 msgid "Latest message"
-msgstr "最新郵件優先"
+msgstr "Son mesaj"
 
 #: web_tt2/arcsearch_form.tt2:47
 msgid "Layout"
-msgstr "布局"
+msgstr "Sayfa Düzeni"
 
 #: web_tt2/rss_request.tt2:16
 msgid "Limit the number of days used for the selection"
@@ -1933,31 +1873,29 @@ msgstr ""
 
 #. (list.name,type)
 #: mail_tt2/listowner_notification.tt2:54
-#, fuzzy
 msgid "List %1 / %2"
-msgstr "第%1頁，共%2頁"
+msgstr "%1 / %2 Liste"
 
 #. (list.name)
 #: mail_tt2/listowner_notification.tt2:4
 msgid "List %1 archive quota exceeded"
-msgstr ""
+msgstr "%1 listesinin arşivi kotayı aştı"
 
 #. (list.name)
 #: mail_tt2/listmaster_notification.tt2:108
 #: mail_tt2/listowner_notification.tt2:35
-#, fuzzy
 msgid "List %1 automatic bounce management"
-msgstr "Bounces management"
+msgstr "%1 listesi otomatik \"geri gelen mesaj\" yönetimi"
 
 #. (param0,param1)
 #: mail_tt2/listmaster_notification.tt2:56
 msgid "List %1 configuration does not respect family %2 rules."
-msgstr ""
+msgstr "%1 Listesi ayarları, %2 ailesi kurallarına uymuyor."
 
 #. (list.name)
 #: mail_tt2/listowner_notification.tt2:19
 msgid "List %1 is closed"
-msgstr ""
+msgstr "%1 listesi kapatıldı"
 
 #. (list.name,list.host,param0,param1,param2)
 #: mail_tt2/listowner_notification.tt2:32
@@ -1974,19 +1912,16 @@ msgstr ""
 msgid "List %s allows only these reception modes : %s\n"
 msgstr ""
 
-# nlsref 6,45
 #: src/Commands.pm:1574
 msgid ""
 "List %s does not accept the DIGEST mode. Your configuration regarding this "
 "command has not been updated.\n"
-msgstr "¶l±H²M³æ %s ¤£¤ä´© ºK­n(DIGEST) ¼Ò¦¡¡C§A¹ï¤_³o«ü¥Oªº³]©w¨S¦³§ó·s¡C\n"
+msgstr ""
 
-# nlsref 6,54
 #: src/Commands.pm:2200 src/Commands.pm:2244
 msgid "List %s is not currently running an expiration process.\n"
-msgstr "¶l±H²M³æ %s ¥Ø«e¨S¦³°õ¦æ´Áº¡(expiration)µ{§Ç¡C\n"
+msgstr ""
 
-# nlsref 6,5
 #: src/Commands.pm:1097 src/Commands.pm:1221 src/Commands.pm:1294
 #: src/Commands.pm:1398 src/Commands.pm:1550 src/Commands.pm:1633
 #: src/Commands.pm:1821 src/Commands.pm:1910 src/Commands.pm:2121
@@ -1995,62 +1930,63 @@ msgstr "¶l±H²M³æ %s ¥Ø«e¨S¦³°õ¦æ´Áº¡(expiration)µ{§Ç¡C\n"
 #: src/Commands.pm:451 src/Commands.pm:573 src/Commands.pm:718
 #: src/Commands.pm:841 src/Commands.pm:977
 msgid "List '%s' does not exist.\n"
-msgstr "¶l±H²M³æ '%s' ¤£¦s¦b¡C\n"
+msgstr "'%s' listesi yok.\n"
 
-# nlsref 6,3
 #: src/Commands.pm:504
 msgid "List '%s' has no subscriber.\n"
-msgstr ""
+msgstr "'%s' listesinin kayıtlı kullanıcısı yok.\n"
 
 #: web_tt2/admin_menu.tt2:5
 msgid "List Administration Panel"
-msgstr "郵遞論壇管理面板"
+msgstr "Liste Yönetim Paneli"
 
 #: web_tt2/admin_menu.tt2:140
 msgid "List Definition"
-msgstr ""
+msgstr "Liste Tanımı"
 
 #. (list.name)
 #: mail_tt2/listmaster_notification.tt2:4
 msgid "List \"%1\" creation request"
-msgstr ""
+msgstr "\"%1\" listesini oluşturma talebi"
 
 #. (list.name)
 #: mail_tt2/listowner_notification.tt2:25
-#, fuzzy
 msgid "List \"%1\" customizations have been removed"
-msgstr "郵遞論壇的別名已刪除。"
+msgstr "\"%1\" Listesi kişiselleştirmeleri kaldırıldı"
 
 #. (list.name,rate)
 #: mail_tt2/listowner_notification.tt2:11
 msgid "List \"%1\" warning : archive %2% full"
-msgstr ""
+msgstr "\"%1\" Listesi için uyarı: Arşiv %2% dolu"
 
 #: web_tt2/close_list.tt2:7
 msgid "List aliases have been removed."
-msgstr "郵遞論壇的別名已刪除。"
+msgstr "Liste özellikleri kaldırıldı"
 
 #: web_tt2/create_list_request.tt2:71
 msgid "List classification in the directory"
-msgstr "目錄中的郵遞論壇分類"
+msgstr "Klasördeki liste sınıflandırması"
 
 #: web_tt2/edit_list_request.tt2:6
 msgid "List definition"
-msgstr "List definition"
+msgstr "Liste tanımı"
 
 #: web_tt2/help_editfile.tt2:29
+#, fuzzy
 msgid ""
 "List description : This text is sent as an answer to the mail command\n"
 "INFO. It can also be included in the"
 msgstr ""
+"Liste tanımı: Bu metin, mail komutuna cevap olarak gönderilecektir\r\n"
+"INFO. ?içinde kapsana bilir de"
 
 #: web_tt2/error.tt2:20
 msgid "List has no bouncing subscribers"
-msgstr "郵遞論壇沒有被退信的訂閱者"
+msgstr "Listede \"bounce\" (mesajı geri dönen) olan kayıtlı kullanıcı yok"
 
 #: web_tt2/error.tt2:19
 msgid "List has no subscribers"
-msgstr "郵遞論壇沒有訂閱者"
+msgstr "Listenin hiç kayıtlı kullanıcısı yok"
 
 #: web_tt2/help_editfile.tt2:26
 msgid ""
@@ -2059,194 +1995,182 @@ msgid ""
 "description)"
 msgstr ""
 
-# nlsref 16,44
 #: src/List.pm:782
 msgid "List inclusion"
-msgstr ""
+msgstr "Liste kapsamı"
 
-# nlsref 6,10
 #: src/Commands.pm:421
 msgid "List is Private : You can not browse available files.\n"
-msgstr "¨p¤H¶l±H²M³æ : §A¤£¯àÂsÄý¦s¦bªºÀÉ®×¡C\n"
+msgstr "Liste Özeldir: Varolan dosyaları görüntüleyemezsiniz.\n"
 
-# nlsref 6,9
 #: src/Commands.pm:343 src/Commands.pm:383
 msgid "List is Private : You can not read the archives.\n"
-msgstr "¨p¤H¶l±H²M³æ : §A¤£¯à¾\\Åª¥¦ªº¬ö¿ý¡C\n"
+msgstr "Liste Özeldir: Arşivleri okuyamazsınız.\n"
 
 #: web_tt2/active_lists.tt2:20
 #, fuzzy
 msgid "List name"
-msgstr "郵遞論壇名字:"
+msgstr "Liste adı:"
 
 #: web_tt2/create_list_request.tt2:9
 msgid "List name:"
-msgstr "郵遞論壇名字:"
+msgstr "Liste adı:"
 
 #: web_tt2/help_editlist.tt2:89
 msgid ""
 "List owners may decide to add message headers or footers to messages sent "
 "via the list. This parameter defines the way a footer/header is added to a "
 "message."
-msgstr ""
+msgstr "                        "
 
 #: web_tt2/install_pending_list.tt2:17 web_tt2/set_pending_list_request.tt2:10
 msgid "List requested by"
-msgstr "郵遞論壇由"
+msgstr "Liste talebi yapan:"
 
 #: web_tt2/create_list_request.tt2:21
 msgid "List type :"
-msgstr "郵遞論壇類型:"
+msgstr "Liste tipi:"
 
 #: mail_tt2/list_unknown.tt2:3
 msgid "List unknown"
-msgstr ""
+msgstr "Liste bilinmiyor"
 
 #: web_tt2/modindex.tt2:7
-#, fuzzy
 msgid "Listing messages to moderate"
-msgstr "沒有郵件要監管"
+msgstr "Modere edilecek mesajları listeliyor"
 
 #: web_tt2/modindex.tt2:69
-#, fuzzy
 msgid "Listing of documents shared to moderate"
-msgstr "沒有郵件要監管"
+msgstr "Modere edilecek paylaşılan belgeleri listeliyor"
 
 #: web_tt2/d_read.tt2:22
-#, fuzzy
 msgid "Listing of folder"
-msgstr "活頁夾 SHARED 的內容"
+msgstr "Klasörün listelenmesi"
 
 #: web_tt2/d_read.tt2:47
-#, fuzzy
 msgid "Listing of root folder"
-msgstr "活頁夾 SHARED 的內容"
+msgstr "root klasörünün listelenmesi"
 
 #: web_tt2/login_menu.tt2:8
-#, fuzzy
 msgid "Listmaster"
-msgstr "郵遞論壇名"
+msgstr "Listmaster"
 
 #: web_tt2/get_inactive_lists.tt2:8 web_tt2/get_latest_lists.tt2:7
 #: web_tt2/latest_lists.tt2:21 web_tt2/review_family.tt2:7
 #: web_tt2/scenario_test.tt2:24
 msgid "Listname"
-msgstr "郵遞論壇名"
+msgstr "Listeadı"
 
 #: web_tt2/install_pending_list.tt2:11 web_tt2/set_pending_list_request.tt2:7
 msgid "Listname :"
-msgstr "郵遞論壇名:"
+msgstr "Listeadı :"
 
 #: mail_tt2/listowner_notification.tt2:2
 msgid "Listowners"
-msgstr ""
+msgstr "Listesahipleri"
 
 #: web_tt2/serveradmin.tt2:31
 msgid "Lists"
-msgstr ""
+msgstr "Listeler"
 
 #: web_tt2/list_panel.tt2:18
 msgid "Load certificate"
-msgstr "加載憑証"
+msgstr "Sertifika yükle"
 
 #: web_tt2/error.tt2:47
 msgid "Loading admins failed"
-msgstr ""
+msgstr "Yöneticileri yükleme başarısız oldu"
 
 #: web_tt2/help.tt2:22 web_tt2/help.tt2:25 web_tt2/help.tt2:28
 #: web_tt2/login_menu.tt2:63 web_tt2/loginbanner.tt2:77
 msgid "Login"
-msgstr "登入"
+msgstr "Giriş"
 
 #: web_tt2/help.tt2:39
 msgid "Login issues"
-msgstr "登入問題"
+msgstr "Giriş Hakkında"
 
 #: web_tt2/loginbanner.tt2:23
-#, fuzzy
 msgid ""
 "Login with you email address and password. You can request a password "
 "reminder."
-msgstr ")時，請提供您的 Email 地址和相應的密碼。"
+msgstr ""
+"email adresiniz ve şifreniz ile giriş yapın. Şifre hatırlatıcısı isteğinde "
+"bulunabilirsiniz."
 
 #: web_tt2/help.tt2:22 web_tt2/login_menu.tt2:25
 msgid "Logout"
-msgstr "登出"
+msgstr "Çık"
 
 #: web_tt2/login_menu.tt2:68
-#, fuzzy
 msgid "Lost password ?"
-msgstr "我的密碼？"
+msgstr "Şifremi unuttum"
 
 #: mail_tt2/helpfile.tt2:62
 msgid ""
 "MODINDEX <list>                 * Moderation: to consult the list of "
 "messages to moderate"
-msgstr ""
+msgstr "                        "
 
 #: web_tt2/login_menu.tt2:43 web_tt2/loginbanner.tt2:41
 #, fuzzy
 msgid "Magic authentification"
-msgstr "在驗証身份("
+msgstr "Sihirli belgeleme"
 
 #: web_tt2/help_editlist.tt2:75
-#, fuzzy
 msgid "Mail reception mode."
-msgstr "接收模式:"
+msgstr "Mail kabul modu."
 
 #: src/etc/create_list_templates/news-letter/comment.tt2:1
 msgid "Mailing list configuration to be used for a news letter"
-msgstr ""
+msgstr "Bülten için kullanılacak mail listesi ayarı"
 
 #: src/etc/create_list_templates/html-news-letter/comment.tt2:1
 msgid ""
 "Mailing list configuration to be used for a news letter providing both text "
 "plain and HTML formats"
 msgstr ""
+"Düz metin ve HTML biçemlerini kullanan bülten için kullanılacak mail listesi "
+"ayarı"
 
 #: src/etc/create_list_templates/intranet_list/comment.tt2:1
-#, fuzzy
 msgid "Mailing list for intranets"
-msgstr "郵遞論壇列表"
+msgstr "İntrenet için mail listesi"
 
 #: web_tt2/home.tt2:10
-#, fuzzy
 msgid "Mailing lists categories"
-msgstr "郵遞論壇列表"
+msgstr "Mail listeleri kategorileri"
 
 #: web_tt2/admin_menu.tt2:68 web_tt2/admin_menu.tt2:74
 #: web_tt2/list_admin_menu.tt2:32
-#, fuzzy
 msgid "Manage Archives"
-msgstr "Archives setup"
+msgstr "Arşivleri Yönet"
 
 #: src/List.pm:386
 msgid "Management of bouncers, 1st level"
-msgstr ""
+msgstr "Mesajı geri dönenlerin (bouncer) yönetimi, 1. seviye"
 
 #: src/List.pm:407
 msgid "Management of bouncers, 2nd level"
-msgstr ""
+msgstr "Mesajı geri dönenlerin (bouncer) yönetimi, 2. seviye"
 
 #: mail_tt2/listmaster_notification.tt2:125
 #: mail_tt2/listowner_notification.tt2:52
-#, fuzzy
 msgid "Managing bouncing subscribers:"
-msgstr "郵遞論壇沒有被退信的訂閱者"
+msgstr "Bounce (mesajı geri dönenlerin) olan kayıtlı kullanıcıların yönetimi:"
 
-# nlsref 16,56
 #: src/List.pm:910
 msgid "Maximum message size"
-msgstr ""
+msgstr "Azami mesaj büyüklüğü"
 
 #. (max_size)
 #: mail_tt2/info_report.tt2:15
 msgid "Maximum size       : %1"
-msgstr ""
+msgstr "Azami büyülük: %1"
 
 #: web_tt2/help_editlist.tt2:116
 msgid "Maximum size of a message in 8-bit bytes."
-msgstr ""
+msgstr "Mesajın 8.bit'lik byte olarak azami büyüklüğü"
 
 #: mail_tt2/your_infected_msg.tt2:14
 msgid ""
@@ -2255,45 +2179,46 @@ msgid ""
 "Note, however, that many viruses fake sender's e-mail address, so it is "
 "possible that the virus didn't come from your computer. In that case, please "
 "disregard this message."
-msgstr ""
+msgstr "                        "
 
 #: web_tt2/list_admin_menu.tt2:68
 #, fuzzy
 msgid "Message"
-msgstr "訊息"
+msgstr "Mesaj Sayımı"
 
-# nlsref 6,44
 #: src/Commands.pm:1684 src/Commands.pm:1793
 msgid "Message %s for list %s has been distributed.\n"
-msgstr "¶l±H²M³æ %s ªº¶l±H¤w¸g¤Àµo¡C\n"
+msgstr "% listesi için, %s mesajı dağıtıldı.\n"
 
-# nlsref 6,43
 #: src/Commands.pm:1857
 msgid "Message %s for list %s has been rejected.\n"
-msgstr "¶l±H²M³æ %s ªº¶l±H¤w¸g§R°£¡C\n"
+msgstr "%s listesi için, %s mesajı red edildi.\n"
 
 #: web_tt2/help_editfile.tt2:35
 msgid ""
 "Message footer : same as <em>Message header,</em> but attached at the\n"
 "end of the message."
 msgstr ""
+"Mesaj altlığı: <em>Mesaj başlığı</em> ile aynı, fakat\n"
+"mesajın sonuna eklenmiş."
 
 #: web_tt2/help_editfile.tt2:32
 msgid ""
 "Message header: If this file is not empty, it is added as a MIME\n"
 "attachment at the beginning of each message distributed to the list."
-msgstr ""
+msgstr "                        "
 
 #. (conf.host,conf.listmaster_email)
 #: mail_tt2/listowner_notification.tt2:16
 msgid "Messages are still archived but you should contact %2@%1"
-msgstr ""
+msgstr "Mesajlar hala arşivleniyor fakat %2@%1 ile temas kurunuz"
 
 #: src/etc/create_list_templates/public_web_forum/comment.tt2:3
 msgid ""
 "Messages can either be read via email (subscription) or\n"
 "via the web (web archives)"
 msgstr ""
+"Mesajlar eposta yolu ile (üyelik) ya da web üzerinden (arşivler)okunabilir."
 
 #. (list.name,to,subscriber.first_bounce)
 #: mail_tt2/subscriber_notification.tt2:8
@@ -2302,30 +2227,29 @@ msgid ""
 "generated non-delivery reports since %3. \n"
 "If this problem persists, you will be automatically unsubscribed from the "
 "list."
-msgstr ""
+msgstr "                        "
 
 #: web_tt2/admin_menu.tt2:161 web_tt2/edit_list_request.tt2:12
 msgid "Miscellaneous"
-msgstr "Other parameters"
+msgstr "Çeşitli"
 
 #. (error.argument)
 #: web_tt2/error.tt2:33
 msgid "Missing argument %1"
-msgstr "缺少參數 %1"
+msgstr "%1 Argümanı kayıp"
 
 #: web_tt2/error.tt2:22
 msgid "Missing filter"
-msgstr "缺少過濾"
+msgstr "Kayıp filtre"
 
 #: web_tt2/admin_menu.tt2:36 web_tt2/admin_menu.tt2:42
 #: web_tt2/admin_menu.tt2:46 web_tt2/list_admin_menu.tt2:62
 msgid "Moderate"
-msgstr "監管"
+msgstr "Modere et"
 
 #: src/etc/scenari/send.editorkey:1
-#, fuzzy
 msgid "Moderated"
-msgstr "監管"
+msgstr "Modere edilmiş"
 
 #: src/etc/scenari/send.editorkeyonly:1
 msgid "Moderated, even for moderators"
@@ -2334,43 +2258,42 @@ msgstr ""
 #: src/etc/scenari/send.privateandnomultipartoreditorkey:1
 msgid "Moderated, for non subscribers sending multipart messages"
 msgstr ""
+"Modere ediliyor, çok parçalı mesaj yollayıp, kayıtlı olmayan kullanıcılar "
+"için"
 
 #: src/etc/scenari/send.privatekeyandeditorkeyonly:1
 msgid "Moderated, for subscribers and moderators"
-msgstr ""
+msgstr "Modere ediliyor, kayıtlı kullanıcılar ve moderatörler için"
 
 #: src/etc/scenari/send.privateandeditorkey:1
-#, fuzzy
 msgid "Moderated, restricted to subscribers"
-msgstr "刪除選中的訂閱者"
+msgstr "Modere ediliyor, kayıtlı kullanıcılara kısıtlı"
 
 #: src/etc/scenari/send.editorkeyonlyauth:1
 msgid "Moderated, with editor confirmation"
-msgstr ""
+msgstr "Modere ediliyor, editör onayı ile"
 
-# nlsref 4,40
 #: src/List.pm:2424
 msgid "Moderating your message"
-msgstr ""
+msgstr "Mesajınız modere ediliyor"
 
 #: web_tt2/d_read.tt2:80
-#, fuzzy
 msgid "Moderation"
-msgstr "監管者:"
+msgstr "Moderasyon"
 
 #. (list.name)
 #: mail_tt2/modindex.tt2:2
 msgid "Moderation spool for list %1"
-msgstr ""
+msgstr "%1 Listesi için moderasyon zinciri (spool)"
 
 #. (e.gecos)
 #: mail_tt2/info_report.tt2:8
 msgid "Moderator          : %1"
-msgstr ""
+msgstr "Moderatör: %1"
 
 #: src/List.pm:526 web_tt2/list_panel.tt2:14
 msgid "Moderators"
-msgstr "監管者:"
+msgstr "Moderatörler"
 
 #: src/List.pm:547
 msgid "Moderators defined in an external datasource"
@@ -2379,39 +2302,39 @@ msgstr ""
 #. (list.name)
 #: mail_tt2/moderate.tt2:2
 msgid "Moderators of list %1"
-msgstr ""
+msgstr "%1 Listesinin moderatörü"
 
 #: web_tt2/loginbanner.tt2:13
-#, fuzzy
 msgid ""
 "Most mailing list features require your email. Some mailing lists are hidden "
 "to  unidentified persons.<br />\n"
 " In order to benefit from the full services provided by this server, you "
 "probably need to identify yourself first."
-msgstr "為了能夠使用本伺服器中所有提供的服務，您必須先確認身分。\n"
+msgstr "                        "
 
 #: web_tt2/review.tt2:38
 msgid "Multiple add"
-msgstr ""
+msgstr "Çoklu ekle"
 
 #: web_tt2/subrequest.tt2:65
 msgid "My password ?"
-msgstr "我的密碼？"
+msgstr "Şifrem ?"
 
 #: web_tt2/help_editlist.tt2:28
+#, fuzzy
 msgid ""
 "NOT USED YET. If bounce rate reaches the halt_rate, messages for the list "
 "will be halted, i.e. they are retained for subsequent moderation."
-msgstr ""
+msgstr "                        "
 
 #: web_tt2/latest_d_read.tt2:20 web_tt2/pref.tt2:7 web_tt2/review.tt2:104
 #: web_tt2/review.tt2:108 web_tt2/subindex.tt2:8
 msgid "Name"
-msgstr ",AC{3F(B"
+msgstr "İsim"
 
 #: web_tt2/editsubscriber.tt2:13
 msgid "Name :"
-msgstr "名字:"
+msgstr "İsim :"
 
 #: web_tt2/help_editlist.tt2:31
 msgid ""
@@ -2423,115 +2346,110 @@ msgstr ""
 
 #: web_tt2/pref.tt2:32
 msgid "New email address :"
-msgstr "新的電子郵件地址 :"
+msgstr "Yeni email adresi :"
 
 #: web_tt2/rename_list_request.tt2:3
-#, fuzzy
 msgid "New list name:"
-msgstr "郵遞論壇名"
+msgstr "Yeni liste adı:"
 
 #: web_tt2/choosepasswd.tt2:17 web_tt2/pref.tt2:42
 msgid "New password :"
-msgstr "新密碼:"
+msgstr "Yeni şifre :"
 
 #: web_tt2/choosepasswd.tt2:18
 msgid "New password again :"
-msgstr "再次輸入新密碼:"
+msgstr "Yeni şifre tekrarı :"
 
 #: web_tt2/arcsearch.tt2:112
 msgid "New search"
-msgstr "新的搜尋"
+msgstr "Yeni arama"
 
 #: web_tt2/arcsearch.tt2:40
 msgid "Newest messages first"
-msgstr "最新郵件優先"
+msgstr "İlk önce en yeni mesajlar"
 
 #: src/etc/scenari/send.newsletter:1
 msgid "Newsletter, restricted to moderators"
-msgstr ""
+msgstr "Bülten, moderatörle kısıtlı"
 
 #: src/etc/scenari/send.newsletterkeyonly:1
 msgid "Newsletter, restricted to moderators after confirmation"
-msgstr ""
+msgstr "Bülten, onay sonrası moderatörleri kısıtlı"
 
 #: web_tt2/review.tt2:244 web_tt2/review.tt2:26 web_tt2/reviewbouncing.tt2:118
 #: web_tt2/reviewbouncing.tt2:52
 msgid "Next page"
-msgstr "後一頁"
+msgstr "Sonraki sayfa"
 
 #: web_tt2/help_editlist.tt2:175
 msgid "No Comment"
-msgstr ""
+msgstr "Yorum Yok"
 
 #: web_tt2/serveradmin.tt2:12
 msgid "No Virtual Robot defined on this server"
-msgstr ""
+msgstr "Bu sunucuda tanımlamış bir Sanal Robot yok"
 
 #. (error.email)
 #: web_tt2/error.tt2:34
 msgid "No bounces for user  %1"
-msgstr "用戶 %1 沒有退信"
+msgstr "%1 kullanıcısı için geri dönen mesaj yok"
 
-# nlsref 4,39
 #: src/sympa.pl:1507
 msgid "No command found in message"
-msgstr ""
+msgstr "Mesajda hiç komut bulunamadı"
 
 #: web_tt2/error.tt2:41
 msgid "No description specified"
-msgstr "沒有指定描述"
+msgstr "Hiç tanım belirtilmemiş"
 
 #: web_tt2/lists.tt2:65 web_tt2/your_lists.tt2:22
 msgid "No mailing list available."
-msgstr ""
+msgstr "Uygun olan mail listesi yok"
 
 #. (notice.list)
 #: web_tt2/notice.tt2:39
-#, fuzzy
 msgid "No message and no document to moderate for list %1"
-msgstr "沒有郵件要監管"
+msgstr "Liste %1 için modere edilecek mesaj ve belge yok"
 
 #: web_tt2/error.tt2:43
 msgid "No name specified"
-msgstr "沒有指定名字"
+msgstr "İsim belirtilmemiş"
 
 #. (param0)
 #: mail_tt2/listmaster_notification.tt2:42
-#, fuzzy
 msgid "No owner is defined for list %1."
-msgstr "無法更改 %1 的電郵地址"
+msgstr "Liste %1'in sahibi tanımlanmamış"
 
 #. (error.page)
 #: web_tt2/error.tt2:21
 msgid "No page %1"
-msgstr "沒有頁 %1"
+msgstr "Sayfa yok %1"
 
 #: web_tt2/error.tt2:13
 msgid "No password for user"
-msgstr "用戶“[% error.email %]”沒有密碼"
+msgstr "Kullanıcı için şifre yok"
 
 #: web_tt2/modindex.tt2:47
 msgid "No subject"
-msgstr "沒有標題"
+msgstr "Konu yok"
 
 #: web_tt2/subindex.tt2:46
 msgid "No subscription requests"
-msgstr ",AC;SP6)TDR*Gs(B"
+msgstr "Kayıt olma talebi yok"
 
 #. (user.email)
 #: web_tt2/lists.tt2:24
-#, fuzzy
 msgid "No subscriptions with address <strong>%1</strong>!"
-msgstr "沒有來自 <B>%1</B> 的訂閱!</"
+msgstr "<strong>%1</strong>! Adresi ile kayıt yok"
 
 #: web_tt2/help_user_options.tt2:29
 msgid "Nomail"
-msgstr ""
+msgstr "Mailyok"
 
 #. (error.email)
 #: web_tt2/error.tt2:29
 msgid "Not subscribed: %1"
-msgstr "並非訂閱者: %1"
+msgstr "%1 Kayıt olmamış"
 
 #: web_tt2/help_editlist.tt2:132
 msgid ""
@@ -2545,32 +2463,31 @@ msgstr ""
 #: web_tt2/modindex.tt2:109 web_tt2/modindex.tt2:12 web_tt2/modindex.tt2:60
 #: web_tt2/modindex.tt2:74 web_tt2/viewmod.tt2:9
 msgid "Notified reject"
-msgstr "拒絕並通知"
+msgstr ""
 
 #. (stats.msg_sent)
 #: mail_tt2/stats_report.tt2:4
 msgid "Number of forwarded messages:      %1"
-msgstr ""
+msgstr "Yönlendirilmiş mesaj sayısı: %1"
 
 #. (mod_spool_size)
 #: mail_tt2/moderate.tt2:26
-#, fuzzy
 msgid "Number of messages awaiting moderation for this list : %1"
-msgstr "沒有郵件要監管"
+msgstr "Bu listede modere edilmek üzre bekleyen mesaj sayısı: %1"
 
 #. (stats.msg_rcv)
 #: mail_tt2/stats_report.tt2:3
 msgid "Number of received messages :      %1"
-msgstr ""
+msgstr "Alınan mesajların sayısı: %1"
 
 #. (notice.path)
 #: web_tt2/notice.tt2:24
 msgid "Old file %1 has been erased"
-msgstr ""
+msgstr "Eski dosya %1 silindi"
 
 #: web_tt2/arcsearch.tt2:42
 msgid "Oldest messages first"
-msgstr "最舊郵件優先"
+msgstr "İlk olarak en eski mesaj"
 
 #: web_tt2/help.tt2:32
 msgid ""
@@ -2584,6 +2501,8 @@ msgid ""
 "Operation successful. The message will be deleted as soon\n"
 "as possible. This task may be performed in a few minutes."
 msgstr ""
+"İşlem başarılı. Mesaj en kısa sürede silinecektir\n"
+"Bu görev birkaç dakika içinde yerine getirilecektir."
 
 #. (conf.email,conf.host)
 #: mail_tt2/moderate.tt2:16 mail_tt2/moderate.tt2:22
@@ -2592,19 +2511,19 @@ msgstr ""
 
 #: web_tt2/create_list_request.tt2:68
 msgid "Other"
-msgstr "其它"
+msgstr "Diğer"
 
 #: web_tt2/pref.tt2:73
 msgid "Other email address :"
-msgstr "額外的地址:"
+msgstr "Diğer email adresi :"
 
 #: web_tt2/help_editfile.tt2:23
 msgid "Other files/pages description :"
-msgstr ""
+msgstr "Diğer dosyaların/sayfaların tanımı :"
 
 #: web_tt2/home.tt2:19
 msgid "Others"
-msgstr "其它"
+msgstr "Diğerleri"
 
 #. (virus_name,recipient,from)
 #: mail_tt2/your_infected_msg.tt2:8
@@ -2613,263 +2532,259 @@ msgid ""
 "in a message addressed to %2 and that seems\n"
 "to be yours (From: %3)."
 msgstr ""
+"Virüs denetleyicilerimiz adı %1\n"
+"olan bir virüsü, %2 adresinine giden bir mesaj içinde bulmuştur ve\n"
+"bu mesaj size ait gibi görünüyor (From: %3)"
 
 #: src/List.pm:941 web_tt2/login_menu.tt2:10
 msgid "Owner"
-msgstr "所有者"
+msgstr "Sahip"
 
 #. (o.gecos)
 #: mail_tt2/info_report.tt2:5
 msgid "Owner              : %1"
-msgstr ""
+msgstr "Sahip : %1"
 
 #. (owner)
 #. (doc_owner)
 #: web_tt2/d_control.tt2:10 web_tt2/d_editfile.tt2:17
 #: web_tt2/d_properties.tt2:16 web_tt2/d_read.tt2:38
 msgid "Owner : %1"
-msgstr "所有者: %1"
+msgstr "Sahip : %1"
 
 #: web_tt2/create_list_request.tt2:15
 msgid "Owner:"
-msgstr "所有者:"
+msgstr "Sahip"
 
 #: web_tt2/list_panel.tt2:9
 msgid "Owners"
-msgstr "所有者:"
+msgstr "Sahipler"
 
 #: web_tt2/help_editlist.tt2:118
+#, fuzzy
 msgid ""
 "Owners are managing subscribers of the list. They may review subscribers and "
 "add or delete email addresses from the mailing list. If you are a privileged "
 "owner of the list, you can choose other owners for the mailing list. "
 "Privileged owners may edit a few more options than other owners. "
 msgstr ""
+"Sahipler bir listenin kayıtlı kullanıcılarını yönetmektedir. Uygun "
+"gördükleri durumlarda kayıtlı kullanıcıları gözden geçirebilir ve mail "
+"listesine email adreslerini ekleyip çıkarabilirler. Eğer siz liste sahibi "
+"ayrıcalıklarına sahipseniz, mail listesi için başka sahipler seçebilirsiniz. "
+"Ayrıcalıklı sahipler, sahiplerden biraz daha fazla seçeneği "
+"düzenleyebilirler. Bir liste için ancak bir ayrıcalıklı sahip olabilir ve bu "
+"kişinin email adresi web üzerinden değiştirilemez."
 
 #: src/List.pm:967
 msgid "Owners defined in an external datasource"
 msgstr ""
 
-# nlsref 8,1
 #: src/List.pm:2274 src/List.pm:2289 src/List.pm:2301
 msgid "Owners of list %s"
-msgstr "¶l±H²M³æªº¾Ö¦³ªÌ %s"
+msgstr "%1 Listesini Sahipleri"
 
 #: web_tt2/review.tt2:5 web_tt2/reviewbouncing.tt2:34
 msgid "Page size"
-msgstr "頁面大小"
+msgstr "Sayfa büyüklüğü"
 
 #. (key_word)
 #: web_tt2/arcsearch.tt2:12
-#, fuzzy
 msgid "Parameters of these search make on <strong> &quot;%1&quot;</strong>"
 msgstr ""
-"搜尋參數的應用範圍 <b> &quot;%1&quot;</b>\n"
-"<"
 
 #: web_tt2/pref.tt2:75
 msgid "Password :"
-msgstr "密碼:"
+msgstr "Şifre :"
 
 #. (email)
 #: web_tt2/change_email.tt2:9
 msgid "Password for %1"
-msgstr "%1 的密碼:"
+msgstr "%1 için Şifre"
 
 #: web_tt2/edit_template.tt2:8 web_tt2/modindex.tt2:81
 msgid "Path"
-msgstr ""
+msgstr "Yol"
 
 #: web_tt2/get_pending_lists.tt2:10 web_tt2/serveradmin.tt2:32
 msgid "Pending lists"
-msgstr "OPTION VALUE='[% f.NAME %]' [% f.selected %]>[% f.complete %]"
+msgstr "Bekleyen listeler"
 
 #: web_tt2/review.tt2:37
-#, fuzzy
 msgid "Pending subscriptions"
-msgstr "您訂閱的郵遞論壇"
+msgstr "Bekleyen kayıtlar"
 
 #: web_tt2/editsubscriber.tt2:53
-#, fuzzy
 msgid "Period :"
-msgstr "間隔"
+msgstr "Periyod :"
 
 #: src/List.pm:551
-#, fuzzy
 msgid "Periodical subscription expiration task"
-msgstr ",AF>V$5=FZHU(B"
+msgstr ""
 
 #: web_tt2/main.tt2:49
 msgid "Please activate JavaScript in your web browser"
-msgstr ""
+msgstr "Lütfen \"web browser\"ınızda JavaScript'i aktif hale getiri"
 
 #: web_tt2/tt2_error.tt2:41
 msgid "Please contact the listmaster."
-msgstr ""
+msgstr "Lütfen Listmaster ile temas kurun"
 
 #: web_tt2/error.tt2:8
 msgid "Please provide your email address"
-msgstr "請輸入您的電子電子郵件地址"
+msgstr "Lütfen email adresinizi belirtiniz"
 
 #. (list)
 #: web_tt2/sigrequest.tt2:46
-#, fuzzy
 msgid ""
 "Please provide your email address for your unsubscription request from list %"
 "1."
-msgstr "請給出退訂郵遞論壇 %1 所用的電子郵件地址。"
+msgstr ""
 
 #: web_tt2/error.tt2:11
 msgid "Please provide your password"
-msgstr "請輸入您的密碼"
+msgstr "Lütfen şifrenizi belirtiniz"
 
 #: web_tt2/error.tt2:68
 msgid "Please select archive months"
-msgstr ""
+msgstr "Lütfen arşiv aylarını seçiniz"
 
 #. (conf.email,conf.host)
 #: mail_tt2/x509-user-cert-missing.tt2:13
 msgid ""
 "Please, in order to receive futur crypted messages send a signed message\n"
 "to  %1@%2 ."
-msgstr ""
+msgstr "                        "
 
 #: web_tt2/list_menu.tt2:49 web_tt2/list_menu.tt2:51
 msgid "Post"
-msgstr "發表"
+msgstr "Postala"
 
 #: web_tt2/tt2_error.tt2:47
 msgid "Powered by"
-msgstr ""
+msgstr "Powered by"
 
 #: mail_tt2/helpfile.tt2:65
 msgid "Powered by Sympa"
-msgstr ""
+msgstr "Powered by Sympa"
 
 #: web_tt2/arcsearch_form.tt2:29
 msgid "Prefer"
-msgstr "優先"
+msgstr "Tercih et"
 
 #: web_tt2/help.tt2:16
 msgid "Preferences"
-msgstr "首選項"
+msgstr "Tercihler"
 
 #: web_tt2/review.tt2:20 web_tt2/review.tt2:238 web_tt2/reviewbouncing.tt2:112
 #: web_tt2/reviewbouncing.tt2:46
 msgid "Previous page"
-msgstr "前一頁"
+msgstr "Önceki sayfa"
 
-# nlsref 16,63
 #: src/List.pm:973
 msgid "Priority"
-msgstr ""
+msgstr "Öncelik"
 
 #: src/etc/create_list_templates/private_working_group/comment.tt2:1
 msgid "Private working group setup"
-msgstr ""
+msgstr "Özel çalışma gurubu yapılandırması"
 
 #: src/etc/scenari/send.privateorpublickey:1
 msgid "Private, confirmation for non subscribers"
-msgstr ""
+msgstr "Özel, kayıtlı olmayan kullanıcılar için onay"
 
 #: src/etc/scenari/send.privateoreditorkey:1
-#, fuzzy
 msgid "Private, moderated for non subscribers"
-msgstr "郵遞論壇沒有訂閱者"
+msgstr "Özel, kayıtlı olmayan kullanıcılar için modere ediliyor"
 
 #: web_tt2/help_editlist.tt2:9
 msgid "Privilege for adding (ADD command) a subscriber to the list"
 msgstr ""
+"Belirlenmiş bir listeye kayıtlı kullanıcı eklemek için (ADD komutu) ayrıcalık"
 
 #: web_tt2/help_editlist.tt2:13
 msgid "Privilege for reading mail archives and frequency of archiving"
-msgstr ""
+msgstr "Mail arşivlerini okumak ve arşivleme sıklığı için ayrıcalık"
 
 #: web_tt2/login_menu.tt2:9
 msgid "Privileged owner"
-msgstr "有特權的所有者"
+msgstr "Ayrıcalıklı sahip"
 
 #: web_tt2/admin_menu.tt2:148 web_tt2/edit_list_request.tt2:8
 msgid "Privileges"
-msgstr "Commands setup"
+msgstr "Ayrıcalıklar"
 
 #: web_tt2/d_read.tt2:78
 msgid "Properties"
-msgstr ""
+msgstr "Özeliikler"
 
 #. (visible_path)
 #: web_tt2/d_properties.tt2:7
-#, fuzzy
 msgid "Properties of the bookmark %1"
-msgstr "%1 書簽的編修"
+msgstr "%1 yer iminin özellikler"
 
 #. (visible_path)
 #: web_tt2/d_properties.tt2:9
-#, fuzzy
 msgid "Properties of the directory %1"
-msgstr "%1 目錄的編修"
+msgstr "%1 klsörünün özellikleri"
 
 #. (visible_path)
 #: web_tt2/d_properties.tt2:11
-#, fuzzy
 msgid "Properties of the file %1"
-msgstr "%1 文件的編修"
+msgstr "%1 dosyasının özellikleri"
 
 #: web_tt2/error.tt2:15
 msgid "Provided password is incomplete"
-msgstr "輸入的密碼不完整"
+msgstr "Belirtilen şifre tamamlanmamış"
 
 #: web_tt2/error.tt2:14
 msgid "Provided password is incorrect"
-msgstr "輸入的密碼不正確"
+msgstr "Belirtilen şifre hatalı"
 
 #: src/etc/create_list_templates/discussion_list/comment.tt2:1
 msgid "Public discussion mailing list"
-msgstr ""
+msgstr "Topluluk tartışma listesi"
 
-# #-#-#-#-#  tw.po (PACKAGE VERSION)  #-#-#-#-#
-# nlsref 6,82
 #: mail_tt2/lists.tt2:2 src/Commands.pm:245 web_tt2/help.tt2:18
-#, fuzzy
 msgid "Public lists"
-msgstr ""
-"#-#-#-#-#  tw.po (PACKAGE VERSION)  #-#-#-#-#\n"
-"¤½²³¶l±H²M³æ\n"
-"#-#-#-#-#  zh_TW.po (PACKAGE VERSION)  #-#-#-#-#\n"
-"公開郵遞論壇"
+msgstr "Topluluk listeleri"
 
 #: web_tt2/d_editfile.tt2:39 web_tt2/d_editfile.tt2:62 web_tt2/d_read.tt2:365
 #: web_tt2/d_read.tt2:384
 msgid "Publish"
-msgstr "發布"
+msgstr "Yayımla"
 
 #: web_tt2/get_closed_lists.tt2:30
 msgid "Purge selected lists"
-msgstr ""
+msgstr "Seçilen listeleri temizle"
 
 #: mail_tt2/helpfile.tt2:46
 msgid ""
 "QUIT                        * Indicates the end of the commands (to ignore a "
 "signature)"
 msgstr ""
+"QUIT * Komutların sonlandığını belirtir (bir imzayı göz ardı etmek için)"
 
 #: mail_tt2/helpfile.tt2:61
 msgid "REJect <list> <key>            * Moderation: to reject a message"
-msgstr ""
+msgstr "REJect <liste> <key> * Moderasyon: Bir mesajı reddetmek"
 
 #: mail_tt2/helpfile.tt2:56
 msgid ""
 "REMIND <list>                   * Send a reminder message to each subscriber "
 "(this is a way to inform anyone what is his real subscribing email)."
 msgstr ""
+"REMIND <liste> * Her kayıtlı kullanıcıya bir hatırlatma mesajı gönderme (bu, "
+"herhangi bir kişinin gerçek kayıtlı emailini kendisine bildirmek için bir "
+"yoldur)"
 
 #: mail_tt2/helpfile.tt2:24
 msgid "REView <list>               * Displays the subscribers to <list>"
-msgstr ""
+msgstr "REView <liste> * <liste>'ye kayıtlı kullanıcıları gösterir"
 
 #: src/List.pm:1024
 msgid "RFC 2369 Header fields"
-msgstr ""
+msgstr "RFC 2369 Başlık alanı"
 
 #: web_tt2/list_menu.tt2:55
 msgid "RSS"
@@ -2878,37 +2793,22 @@ msgstr ""
 #: web_tt2/main.tt2:16 web_tt2/main.tt2:19
 #, fuzzy
 msgid "RSS Active lists"
-msgstr ""
-"/FORM>\n"
-"\t</TD>\n"
-"      </TR>\n"
-"\n"
-"      <TR><"
+msgstr "Aktif olmayan listeler"
 
 #: web_tt2/main.tt2:12
 #, fuzzy
 msgid "RSS Latest documents"
-msgstr ""
-"/FORM>\n"
-"\t</TD>\n"
-"      </TR>\n"
-"\n"
-"      <TR><"
+msgstr "En son paylaşılan belgeler"
 
 #: web_tt2/main.tt2:15 web_tt2/main.tt2:18
 #, fuzzy
 msgid "RSS Latest lists"
-msgstr ""
-"/FORM>\n"
-"\t</TD>\n"
-"      </TR>\n"
-"\n"
-"      <TR><"
+msgstr "Son Listeler"
 
 #: web_tt2/main.tt2:11
 #, fuzzy
 msgid "RSS Latest messages"
-msgstr "最新郵件優先"
+msgstr "Son mesaj"
 
 #: web_tt2/rss_request.tt2:3
 msgid "RSS channel"
@@ -2920,46 +2820,45 @@ msgstr ""
 
 #: web_tt2/pref.tt2:44
 msgid "Re-enter your new password :"
-msgstr "重新輸入新密碼:"
+msgstr "Şifrenizi tekrar girin"
 
 #: web_tt2/d_control.tt2:17
 msgid "Read access"
-msgstr "讀取"
+msgstr "Okuma erişimi"
 
 #: web_tt2/serveradmin.tt2:86
 msgid "Rebuild HTML archives using \"arctxt\" directories as input."
-msgstr ""
+msgstr "                        "
 
 #: web_tt2/serveradmin.tt2:90
-#, fuzzy
 msgid "Rebuild all"
-msgstr "重建歸檔"
+msgstr "Hepsini tekrar oluştur"
 
 #: web_tt2/serveradmin.tt2:89
 msgid "Rebuild archive"
-msgstr "重建歸檔"
+msgstr "Arşivi tekrar oluştur"
 
 #. (stats.byte_rcv)
 #: mail_tt2/stats_report.tt2:6
 msgid "Received mega-bytes             :      %1"
-msgstr ""
+msgstr "Alınan (megabayt) : %1"
 
 #: web_tt2/review.tt2:113
 msgid "Reception"
-msgstr "接收"
+msgstr "Kabul"
 
 #: web_tt2/editsubscriber.tt2:16
 msgid "Reception :"
-msgstr "接收:"
+msgstr "Kabul :"
 
 #: web_tt2/suboptions.tt2:8
 msgid "Reception mode :"
-msgstr "接收模式:"
+msgstr "Kabul modu :"
 
 #. (available_reception_mode)
 #: mail_tt2/info_report.tt2:19
 msgid "Reception modes    : %1"
-msgstr ""
+msgstr "Kabul modları : %1"
 
 #. (param0)
 #: mail_tt2/listmaster_notification.tt2:28
@@ -2969,19 +2868,19 @@ msgstr ""
 #: web_tt2/modindex.tt2:108 web_tt2/modindex.tt2:11 web_tt2/modindex.tt2:59
 #: web_tt2/modindex.tt2:73 web_tt2/viewmod.tt2:8
 msgid "Reject"
-msgstr "拒絕"
+msgstr "Reddet"
 
 #: web_tt2/subindex.tt2:52
 msgid "Reject selected addresses"
-msgstr ",A>\\>xQ!H!N;V7(B"
+msgstr "Seçilen adresleri reddet"
 
 #: web_tt2/scenario_test.tt2:41
 msgid "Related email"
-msgstr "關聯郵件"
+msgstr "İlgili email"
 
 #: web_tt2/review.tt2:39 web_tt2/reviewbouncing.tt2:16
 msgid "Remind all subscribers"
-msgstr "提醒所有訂閱者"
+msgstr "Bütün kayıtlı kullanıcılara hatırlat"
 
 #: web_tt2/help_editfile.tt2:17
 msgid ""
@@ -2989,145 +2888,134 @@ msgid ""
 "when using the command  REMIND. It's very useful to help people who are\n"
 "confused about their own subscription emails or people who are not able to\n"
 "unsubscribe themselves."
-msgstr ""
+msgstr "                        "
 
-# nlsref 6,76
 #: src/Commands.pm:1309
 msgid "Reminder of your %s subscription"
-msgstr "´£¿ô§Aªº %s ­q¾"
+msgstr "%s Kaydınız için hatırlatıcı"
 
-# nlsref 6,76
 #. (list.name)
 #: mail_tt2/remind.tt2:2
-#, fuzzy
 msgid "Reminder of your subscription to %1"
-msgstr "´£¿ô§Aªº %s ­q¾"
+msgstr "%1'e Kaydınız için hatırlatıcı"
 
 #: web_tt2/scenario_test.tt2:47
 #, fuzzy
 msgid "Remote IP address"
-msgstr "遠程地址"
+msgstr "Uzak adres"
 
 #: src/List.pm:604
 msgid "Remote file inclusion"
-msgstr ""
+msgstr "Uzak dosya içeriği"
 
 #: web_tt2/scenario_test.tt2:53
 msgid "Remote host"
-msgstr "遠程主機"
+msgstr "Uzak bilgisayar"
 
 #: web_tt2/admin_menu.tt2:123 web_tt2/admin_menu.tt2:125
 #: web_tt2/list_admin_menu.tt2:52
 msgid "Remove List"
-msgstr ""
+msgstr "Listeyi Kaldır"
 
 #. (list.name)
 #: mail_tt2/expire_deletion.tt2:2 mail_tt2/removed.tt2:2
 msgid "Removed from %1"
-msgstr ""
+msgstr "%1'den kaldırıldı"
 
 #: web_tt2/d_properties.tt2:58 web_tt2/d_upload.tt2:20
 msgid "Rename"
-msgstr ""
+msgstr "Yeniden adlandır"
 
 #: web_tt2/admin_menu.tt2:130 web_tt2/admin_menu.tt2:132
 #: web_tt2/list_admin_menu.tt2:55
-#, fuzzy
 msgid "Rename List"
-msgstr "刪除郵遞論壇"
+msgstr "Listeyi Yeniden Adlandır"
 
 #. (fname)
 #: web_tt2/d_properties.tt2:46
-#, fuzzy
 msgid "Rename directory %1"
-msgstr "無法建立目錄 %1"
+msgstr "%1 klasörünü yeniden adlandır"
 
 #. (fname)
 #: web_tt2/d_properties.tt2:48
 msgid "Rename file %1"
-msgstr ""
+msgstr "%1 dosyasını yeniden adlandır"
 
 #: web_tt2/rename_list_request.tt2:14
-#, fuzzy
 msgid "Rename this list"
-msgstr "刪除郵遞論壇"
+msgstr "Bu listeyi yeniden adlandır"
 
-# nlsref 6,21
 #: src/Commands.pm:2035
 msgid "Renewal of your subscription to list '%s'"
-msgstr "§ó·s§Aªº­q¾\\¦b '%s'"
+msgstr "'%s' Kayıtlanma listelerinin tekrar yenilenmesi"
 
 #. (visible_path)
 #: web_tt2/d_editfile.tt2:32
-#, fuzzy
 msgid "Replace the file %1 with your file"
-msgstr "用您的文件取代文件 %1"
+msgstr "Dosyayı sizin %1 dosyanızla yer değiştir"
 
 #: src/etc/mhonarc-ressources.tt2:410
 msgid "Reply"
-msgstr ""
+msgstr "Cavap"
 
-# nlsref 16,66
 #: src/List.pm:1012 src/List.pm:992
 msgid "Reply address"
-msgstr ""
+msgstr "Cevap adresi"
 
 #. (reply_to)
 #: mail_tt2/info_report.tt2:14
 msgid "Reply to           : %1"
-msgstr ""
+msgstr "Cevapla : %1"
 
 #: src/etc/mhonarc-ressources.tt2:406
 msgid "Reply to sender"
-msgstr ""
+msgstr "Göndereni cevapla"
 
 #: web_tt2/get_closed_lists.tt2:12 web_tt2/get_pending_lists.tt2:15
 msgid "Requested by"
-msgstr "要求者"
+msgstr "Talep eden:"
 
 #: web_tt2/create_list.tt2:11
 msgid "Required aliases"
-msgstr "所需別名"
+msgstr "Gereken özellikler"
 
-# nlsref 6,8
 #: src/Commands.pm:333 src/Commands.pm:338 src/Commands.pm:378
 msgid "Required file does not exist.\n"
-msgstr "¥²­nªºÀÉ®×¤£¦s¦b¡C\n"
+msgstr "Gerekli dosya yok.\n"
 
 #: web_tt2/editsubscriber.tt2:55
 msgid "Reset errors"
-msgstr "重置錯誤計數"
+msgstr "Hataları Sıfırla"
 
 #: web_tt2/reviewbouncing.tt2:108 web_tt2/reviewbouncing.tt2:55
 msgid "Reset errors for selected users"
-msgstr "為選中的用戶重置錯誤計數"
+msgstr "Seçilen kullanıcı için hataları sıfırla"
 
 #: web_tt2/admin_menu.tt2:118 web_tt2/admin_menu.tt2:120
 #: web_tt2/list_admin_menu.tt2:50
 msgid "Restore List"
-msgstr "監管"
+msgstr ""
 
 #: web_tt2/admin_menu.tt2:103 web_tt2/list_admin_menu.tt2:45
 msgid "Restore shared"
-msgstr "恢複共享"
+msgstr "Paylaşılanları eski haline getir"
 
 #: web_tt2/arcsearch.tt2:52
 msgid "Result"
-msgstr "結果"
+msgstr "Sonuç"
 
 #: web_tt2/arcsearch.tt2:3
 msgid "Result of your search in the archive"
-msgstr "在存盤中搜索的結果"
+msgstr "Arşiv içinde yaptığınız aramanın sonucu"
 
-# nlsref 4,17
 #: src/sympa.pl:1060
 msgid "Results of your commands"
-msgstr "«ü¥Oªºµ²ªG"
+msgstr "Komutlarınızın sonuçları"
 
 #. (archive_name)
 #: web_tt2/arcsearch.tt2:118
 msgid "Return to archive %1"
-msgstr "回到歸檔 %1"
+msgstr "%1 Arşivine geri dön"
 
 #: src/List.pm:982
 msgid "Return-path of the REMIND command"
@@ -3135,26 +3023,25 @@ msgstr ""
 
 #: web_tt2/list_menu.tt2:68
 msgid "Review"
-msgstr ""
+msgstr "Gözden geçir"
 
 #: web_tt2/serveradmin.tt2:25
 msgid "Review lists from this family"
-msgstr ""
+msgstr "Bu aile için listeleri gözden geçir"
 
 #. (review)
 #: mail_tt2/info_report.tt2:13
 msgid "Review subscribers : %1"
-msgstr ""
+msgstr "Kayıtlı kullanıcıları gözden geçir: %1"
 
-# nlsref 5,2
 #: src/tools.pl:131
 msgid "Routing error ?"
-msgstr "Routing error ?"
+msgstr "Routing hatası ?"
 
 #: mail_tt2/helpfile.tt2:37
 msgid ""
 "SET <list>|* CONCEAL        * To become unlisted (hidden subscriber address)"
-msgstr ""
+msgstr "                        "
 
 #: mail_tt2/helpfile.tt2:32
 msgid "SET <list>|* DIGEST         * Message reception in compilation mode"
@@ -3187,15 +3074,13 @@ msgid ""
 "a plain text email with all attachments"
 msgstr ""
 
-# nlsref 16,51
 #: src/List.pm:855
 msgid "SQL query"
-msgstr ""
+msgstr "SQL sorgulaması"
 
-# nlsref 16,45
 #: src/List.pm:870
 msgid "SQL query inclusion"
-msgstr ""
+msgstr "SQL sorgu kapsamı"
 
 #: mail_tt2/helpfile.tt2:54
 msgid "STATS <list>                    * To consult the statistics for <list>"
@@ -3205,29 +3090,29 @@ msgstr ""
 msgid ""
 "SUBscribe <list> <name>     * To subscribe or to confirm a subscription to "
 "<list>."
-msgstr ""
+msgstr "                        "
 
 #: mail_tt2/helpfile.tt2:13
 msgid ""
 "SYMPA is an electronic mailing-list manager that automates list management "
 "functions such as subscriptions, moderation, and archive management."
-msgstr ""
+msgstr "                        "
 
 #: web_tt2/help_editlist.tt2:124
 msgid "Same as welcome_return_path, but applied to remind messages."
-msgstr ""
+msgstr "                        "
 
 #: web_tt2/editfile.tt2:11
 msgid "Save"
-msgstr "保存"
+msgstr "Kaydet"
 
 #: web_tt2/scenario_test.tt2:14
 msgid "Scenari name"
-msgstr "情景名"
+msgstr "Senaryo ismi"
 
 #: web_tt2/scenario_test.tt2:10
 msgid "Scenario test module"
-msgstr "情景測試模塊"
+msgstr "Senaryo test modülü"
 
 #: web_tt2/edit_template.tt2:9
 msgid "Scope"
@@ -3237,106 +3122,103 @@ msgstr ""
 #: web_tt2/arcsearch_form.tt2:22 web_tt2/review.tt2:59
 #: web_tt2/reviewbouncing.tt2:11
 msgid "Search"
-msgstr "搜尋"
+msgstr "Ara"
 
 #: web_tt2/serveradmin.tt2:43
 msgid "Search User"
-msgstr "搜尋使用者"
+msgstr "Kullanıcı Ara"
 
 #: web_tt2/arcsearch_form.tt2:54
 msgid "Search area"
-msgstr "搜尋域"
+msgstr "Bölge Ara"
 
 #: web_tt2/arcsearch.tt2:6 web_tt2/arcsearch_form.tt2:11
 msgid "Search field :"
-msgstr "搜尋域:"
+msgstr "Alan Ara :"
 
 #: web_tt2/home.tt2:43
 msgid "Search lists"
-msgstr "搜尋郵遞論壇"
+msgstr "Liste Ara"
 
-# nlsref 16,11
 #: src/List.pm:420
 msgid "Secret string for generating unique keys"
 msgstr ""
 
 #: web_tt2/lists.tt2:30
 msgid "See your subscriptions with the following email addresses"
-msgstr "以底下的電郵地址查看您的訂閱狀況"
+msgstr ""
+"Belirtilmiş email adresleri ile yapmış olduğunuz kayıtlarınızı görüntüleyin:"
 
 #: web_tt2/arc_manage.tt2:5
 msgid ""
 "Select below Archives months you want to delete or download (ZiP format):"
-msgstr ""
+msgstr "Aşağıdan silmek veya indirmek için Arşiv aylarını seçin (ZiP formatı):"
 
 #: web_tt2/review.tt2:64
 msgid "Selection too wide, can not show selection"
-msgstr "選擇範圍太寬，無法顯示選擇"
+msgstr "Seçim çok geniş, seçimi gösteremiyor"
 
 #: web_tt2/remindpasswd.tt2:13 web_tt2/sigrequest.tt2:71
 msgid "Send me my password"
-msgstr "給我發送密碼"
+msgstr "Bana şifremi yolla"
 
 #: web_tt2/compose_mail.tt2:7
 msgid "Send this mail"
-msgstr "送出"
+msgstr "Bu maili gönder"
 
 #: web_tt2/arcsearch_form.tt2:55
 msgid "Sender"
-msgstr "發件人"
+msgstr "Gönderici"
 
 #. (send)
 #: mail_tt2/info_report.tt2:12
 msgid "Sending messages   : %1"
-msgstr ""
+msgstr "Mesajlar gönderiliyor : %1"
 
 #: web_tt2/admin_menu.tt2:144
 msgid "Sending/Reception"
-msgstr "><b>監管</b"
+msgstr "Gönderme/Kabul"
 
 #: web_tt2/edit_list_request.tt2:7
 msgid "Sending/reception setup"
-msgstr "Sending/reception setup"
+msgstr "Gönderme/Kabül yapılandırması"
 
-# nlsref 16,69
 #: src/List.pm:1035
 msgid "Serial number of the config"
-msgstr ""
+msgstr "Ayarın seri numarası"
 
 #: web_tt2/rss.tt2:28 web_tt2/rss.tt2:7
-#, fuzzy
 msgid "Server error"
-msgstr "重置錯誤計數"
+msgstr "Sunucu hatası"
 
 #: web_tt2/help_editfile.tt2:3
 msgid "Service messages description :"
-msgstr "這個表單用來編輯您的郵遞論壇的幾個文件:"
+msgstr "Servis mesajları tanımı :"
 
 #: web_tt2/d_control.tt2:54
 msgid "Set owner"
-msgstr "設置所有者"
+msgstr "Sahibi belirle"
 
 #. (visible_path)
 #: web_tt2/d_control.tt2:48
 msgid "Set the owner of the directory %1"
-msgstr "設置目錄 %1 的所有者"
+msgstr "%1 dizini için sahip belirleyin"
 
 #: web_tt2/serveradmin.tt2:52
 msgid "Setting defaults list templates"
-msgstr ""
+msgstr "Liste şablonları ön tanımlı değerleri uygulanıyor"
 
 #: web_tt2/serveradmin.tt2:63
 msgid "Setting site templates"
-msgstr ""
+msgstr "Site şablonu uygulanıyor"
 
 #: web_tt2/stats.tt2:1
 msgid "Shared document directory size"
-msgstr ""
+msgstr "Paylaşılan Belge klasörü büyüklüğü"
 
-# nlsref 16,70
 #: src/List.pm:1055 web_tt2/list_menu.tt2:60 web_tt2/list_menu.tt2:62
 msgid "Shared documents"
-msgstr ""
+msgstr "Paylaşılan belgeler"
 
 #: web_tt2/help_user_options.tt2:18
 msgid ""
@@ -3346,28 +3228,25 @@ msgid ""
 "format, with all attachments stripped out. DigestPlain is useful if your "
 "email software doesn't\n"
 "display multipart/digest format messages well."
-msgstr ""
+msgstr "                        "
 
 #: web_tt2/modindex.tt2:23 web_tt2/modindex.tt2:82
 msgid "Size"
-msgstr "大小"
+msgstr "Büyüklük"
 
 #: web_tt2/d_read.tt2:64 web_tt2/d_read.tt2:66
 msgid "Size (Kb)"
-msgstr "大小(KB)"
+msgstr "Büyüklük (kb)"
 
 #: web_tt2/serveradmin.tt2:80
-#, fuzzy
 msgid "Skins administration page"
-msgstr "郵遞論壇管理面板"
+msgstr "Kabuk (skin) yönetim sayfası"
 
 #: web_tt2/serveradmin.tt2:79
 msgid "Skins, CSS and colors"
-msgstr ""
+msgstr "Kabuk (skin), CSS ve renkler"
 
-# nlsref 6,260
 #: src/List.pm:8813
-#, fuzzy
 msgid ""
 "Someone (hopefully you) asked for your e-mail address\n"
 "to be added to list '%s'.\n"
@@ -3382,20 +3261,9 @@ msgid ""
 "\n"
 "If you do not want this action to be taken, you can safely ignore\n"
 "this message."
-msgstr ""
-"¦³¤H­n¨D¼W¥[§Aªº¹q¶l¦a§}¨ì¶l±H²M³æ '%s'¡C\n"
-"¦pªG§A°õ¦æ³o°Ê§@¡A½Ð¿í´`¤U¦C°Ê§@ :\n"
-"\n"
-"- ¦^ÂÐ³o¶l¥ó \n"
-"©Î\\n- ±H¶l¥ó¨ì %s ¥]§t¥DÃD\n"
-" %s\n"
-"©Î\\n- ±H¶l¥ó¨ì %s\n"
-"\n"
-"¦pªG§A¤£·Q°õ¦æ³o°Ê§@¡A½Ð©¿²¤¥»¶l¥ó¡C"
+msgstr "                        "
 
-# nlsref 6,260
 #: src/List.pm:8806
-#, fuzzy
 msgid ""
 "Someone (hopefully you) asked for your e-mail address\n"
 "to be removed from list '%s'.\n"
@@ -3410,18 +3278,8 @@ msgid ""
 "\n"
 "If you do not want this action to be taken, you can safely ignore\n"
 "this message"
-msgstr ""
-"¦³¤H­n¨D¼W¥[§Aªº¹q¶l¦a§}¨ì¶l±H²M³æ '%s'¡C\n"
-"¦pªG§A°õ¦æ³o°Ê§@¡A½Ð¿í´`¤U¦C°Ê§@ :\n"
-"\n"
-"- ¦^ÂÐ³o¶l¥ó \n"
-"©Î\\n- ±H¶l¥ó¨ì %s ¥]§t¥DÃD\n"
-" %s\n"
-"©Î\\n- ±H¶l¥ó¨ì %s\n"
-"\n"
-"¦pªG§A¤£·Q°õ¦æ³o°Ê§@¡A½Ð©¿²¤¥»¶l¥ó¡C"
+msgstr "                        "
 
-# nlsref 6,39
 #: src/List.pm:8818 src/List.pm:8823
 msgid ""
 "Someone (hopefully you) requested a user of list %s to be\n"
@@ -3434,16 +3292,8 @@ msgid ""
 "\n"
 "If you do not want this action to be taken, simply ignore this message.\n"
 msgstr ""
-"¦³¤H­n¨D¶l±H²M³æ %s ¤¤ªº­q¤á¼W¥[©Î°£¥h\n"
-"¦pªG§A°õ¦æ³o°Ê§@¡A½Ð±H¹q¶l¨ì %s ¦}¥B¥]§t \n"
-"\n"
-"   %s\n"
-"\n"
-"¦pªG§A¤£·Q°õ¦æ³o°Ê§@¡A½Ð©¿²¤¥»¶l¥ó¡C\n"
 
-# nlsref 6,48
 #: src/Commands.pm:2059
-#, fuzzy
 msgid ""
 "Someone (hopefully you) requested that the subscribers to the list\n"
 "'%s' for more than %d days have to confirm their subscription.\n"
@@ -3453,106 +3303,92 @@ msgid ""
 "\n"
 "AUTH %s EXPIRE %s %d %d\n"
 msgstr ""
-"¦³¤H­n¨D§å­ã¥Ó½Ð '%s' ¶W¹L %d ¤éªº­q¤á¡C\n"
-"¦pªG§A¤£·Q°õ¦æ³o°Ê§@¡A½Ð©¿²¤¥»¶l¥ó¡C\n"
-"¦pªG§A°õ¦æ³o°Ê§@¡A½Ð±H¹q¶l¨ì %s ¦}¥B¥]§t \n"
-"\n"
-"\n"
-"AUTH %s EXPIRE %s %d %d\n"
 
 #: web_tt2/review.tt2:118 web_tt2/review.tt2:121
-#, fuzzy
 msgid "Sources"
-msgstr "size=\"-1\"><b>定制</b"
+msgstr "Kaynaklar"
 
 #: web_tt2/review_family.tt2:6
-#, fuzzy
 msgid "Status"
-msgstr "狀態: %1"
+msgstr "Durum"
 
 #: web_tt2/editsubscriber.tt2:51
-#, fuzzy
 msgid "Status :"
-msgstr "狀態: %1"
+msgstr "Durum :"
 
-# nlsref 16,71
 #: src/List.pm:1071
 msgid "Status of the list"
-msgstr ""
+msgstr "Listenin durumu"
 
 #: web_tt2/review.tt2:127 web_tt2/review.tt2:130
-#, fuzzy
 msgid "Sub date"
-msgstr "按日期排序"
+msgstr "Alt tarih"
 
 #: web_tt2/active_lists.tt2:24 web_tt2/arcsearch_form.tt2:57
 #: web_tt2/get_inactive_lists.tt2:9 web_tt2/get_latest_lists.tt2:8
 #: web_tt2/latest_arc.tt2:20 web_tt2/latest_lists.tt2:23
 #: web_tt2/modindex.tt2:22 web_tt2/review_family.tt2:9
 msgid "Subject"
-msgstr "標題"
+msgstr "Konu"
 
 #. (subject)
 #: mail_tt2/info_report.tt2:3
 msgid "Subject            : %1"
-msgstr ""
+msgstr "Konu : %1"
 
 #: web_tt2/install_pending_list.tt2:14 web_tt2/set_pending_list_request.tt2:8
 msgid "Subject :"
-msgstr "主題:"
+msgstr "Konu :"
 
-# nlsref 16,72
 #: src/List.pm:1078
 msgid "Subject of the list"
-msgstr ""
+msgstr "Listenin konusu"
 
-# nlsref 16,17
 #: src/List.pm:451
 msgid "Subject tagging"
 msgstr ""
 
 #: web_tt2/compose_mail.tt2:6 web_tt2/create_list_request.tt2:48
 msgid "Subject:"
-msgstr "主題:"
+msgstr "Konu"
 
 #: web_tt2/choosepasswd.tt2:19 web_tt2/pref.tt2:22 web_tt2/pref.tt2:35
 #: web_tt2/pref.tt2:47 web_tt2/pref.tt2:78
 msgid "Submit"
-msgstr "提交"
+msgstr "Gönder"
 
 #: web_tt2/create_list_request.tt2:85
 msgid "Submit your creation request"
-msgstr "提交您的創建要求"
+msgstr "Yaratma isteğinizi gönderin"
 
 #: web_tt2/list_menu.tt2:20 web_tt2/subrequest.tt2:34
 #: web_tt2/subrequest.tt2:64
 msgid "Subscribe"
-msgstr "訂閱"
+msgstr "Kayıt ol"
 
 #: web_tt2/editsubscriber.tt2:14
-#, fuzzy
 msgid "Subscribed since :"
-msgstr "訂閱時間: %1"
+msgstr "Kayıt olduğu tarih :"
 
 #: web_tt2/login_menu.tt2:12
 msgid "Subscriber"
-msgstr "訂閱者"
+msgstr "Kayıtlı kullanıcı"
 
 #: web_tt2/list_menu.tt2:11
 msgid "Subscriber Options"
-msgstr "訂閱者選項"
+msgstr "Kayıtlı kullanıcı seçenekleri"
 
 #: web_tt2/editsubscriber.tt2:4
 msgid "Subscriber information"
-msgstr "郵遞論壇訂閱者信息"
+msgstr "Kayıtlı kullanıcı bilgisi"
 
 #: web_tt2/admin_menu.tt2:11 web_tt2/admin_menu.tt2:17
 msgid "Subscribers"
-msgstr "訂閱者"
+msgstr "Kayıtlı kullanıcılar"
 
 #: web_tt2/list_panel.tt2:7
 msgid "Subscribers:"
-msgstr "訂閱: 共"
+msgstr "Kayıtlı kullanıcılar"
 
 #: web_tt2/help_editfile.tt2:20
 msgid ""
@@ -3563,54 +3399,49 @@ msgstr ""
 #. (subscribe)
 #: mail_tt2/info_report.tt2:10
 msgid "Subscription       : %1"
-msgstr ""
+msgstr "Kayıtlanma: %1"
 
-# nlsref 16,18
 #: src/List.pm:465
 msgid "Subscription profile"
-msgstr ""
+msgstr "Kayıtlanma profili"
 
-# nlsref 6,78
 #: src/Commands.pm:1316
 msgid "Subscription reminder sent to each of %d %s subscribers\n"
-msgstr "­q¾\\´£¿ô¬£¨ì %d %s ¨C¤@­q¤á\n"
+msgstr ""
 
-# nlsref 8,2
 #: src/List.pm:2288
 msgid "Subscription request to list %s"
-msgstr "¶l±H²M³æ %s ­q¾\\­n¨D "
+msgstr "%s Listesine kayıt olma talebi"
 
-# nlsref 6,83
 #: src/Commands.pm:1327
 msgid "Subscription summary"
-msgstr "¶l±H²M³æ³Q­q¾\\ºK­n"
+msgstr "Kayıtlanma özeti"
 
 #: web_tt2/list_admin_menu.tt2:78
 #, fuzzy
 msgid "Subscriptions"
-msgstr "訂閱者選項"
+msgstr "Kayıtlı kullanıcı seçenekleri"
 
 #: web_tt2/help_user_options.tt2:22
 msgid "Summary"
-msgstr ""
+msgstr "Özet"
 
-# nlsref 8,31
 #: src/List.pm:3239
 msgid "Summary of list %s"
-msgstr ""
+msgstr "%s Listesinin özeti"
 
 #. (user.email)
 #: mail_tt2/global_remind.tt2:2
 msgid "Summary of your subscription (using the e-mail %1)."
-msgstr ""
+msgstr "Kayıtlarınızın özeti (%1 email adresini kullanarak)"
 
 #: src/etc/mhonarc-ressources.tt2:560
 msgid "Sunday:Monday:Tuesday:Wednesday:Thursday:Friday:Saturday"
-msgstr ""
+msgstr "Pazar:Pazartesi:Salı:Çarşamba:Perşembe:Cuma:Cumartesi"
 
 #: web_tt2/menu.tt2:13
 msgid "Sympa admin"
-msgstr "Sympa 管理"
+msgstr "Sympa yöneticisi"
 
 #: web_tt2/help_editlist.tt2:165
 msgid ""
@@ -3645,7 +3476,7 @@ msgstr ""
 
 #: web_tt2/tt2_error.tt2:27
 msgid "Sympa could not deliver the requested page for the following reason : "
-msgstr ""
+msgstr "Sympa belirtilen talebi şu sebepler dolayıyla iletemedi : "
 
 #: mail_tt2/listmaster_notification.tt2:97
 msgid ""
@@ -3661,49 +3492,47 @@ msgstr ""
 
 #. (param0,param1)
 #: mail_tt2/listmaster_notification.tt2:83
-#, fuzzy
 msgid "Sympa could not load family %2 for list %1."
-msgstr "無法更改 %1 的電郵地址"
+msgstr "Sympa, %1 listesi için %2 ailesini yükleyemiyor."
 
 #: mail_tt2/listmaster_notification.tt2:76
 msgid "Sympa could not load the list config file."
-msgstr ""
+msgstr "Sympa, liste ayar dosyasını yükleyemedi"
 
 #. (param0,param1)
 #: mail_tt2/listmaster_notification.tt2:103
 msgid "Sympa could not modify list %1 (Family %2)"
-msgstr ""
+msgstr "Sympa, %1 listesini değiştiremiyor (Aile %2)"
 
 #: web_tt2/javascript.tt2:108
 msgid ""
 "Sympa could not set a cookie for login.\n"
 " Your should setup your navigator to accept cookies"
-msgstr ""
+msgstr "                        "
 
 #: web_tt2/tt2_error.tt2:22
 msgid "Sympa error - could not display web page"
-msgstr ""
+msgstr "Sympa hatası - web sayfası görüntülenemiyor"
 
 #: web_tt2/help_editlist.tt2:95
 msgid ""
 "Sympa will not create new MIME parts, but will try to append the header/"
 "footer to the body of the message. Predefined message-footers will be "
 "ignored. Headers/footers may be appended to text/plain messages only."
-msgstr ""
+msgstr "                        "
 
 #: web_tt2/review.tt2:35
 msgid "Synchronize members with data sources"
-msgstr ""
+msgstr "Üyeleri veri kaynakları ile senkronize et"
 
 #. (error.params)
 #: web_tt2/error.tt2:37
 msgid "Syntax errors with the following parameters : %1"
-msgstr "下列參數語法錯誤: %1"
+msgstr "Belirtilen parametrelerde söz dizimi hatası: %1"
 
 #: mail_tt2/digest.tt2:12 mail_tt2/digest_plain.tt2:10 src/List.pm:3100
-#, fuzzy
 msgid "Table of contents:"
-msgstr "目錄:"
+msgstr "İçerik tablosu:"
 
 #: web_tt2/edit_template.tt2:3
 msgid "Template edition system"
@@ -3712,134 +3541,110 @@ msgstr ""
 #: web_tt2/edit_template.tt2:6
 #, fuzzy
 msgid "Template name"
-msgstr "郵遞論壇名"
+msgstr "Şablonlar"
 
 #: web_tt2/edit_template.tt2:39
 #, fuzzy
 msgid "Template saved"
-msgstr "刪除共享"
+msgstr "Şablonlar"
 
 #: web_tt2/serveradmin.tt2:47
 msgid "Templates"
-msgstr ""
+msgstr "Şablonlar"
 
-# nlsref 16,4
 #: src/List.pm:331
 msgid "Text archives"
-msgstr ""
+msgstr "Metin arşivleri"
 
 #: web_tt2/lists.tt2:50
 msgid ""
 "That is to say using a unique email address in Sympa for your subscriptions "
 "and preferences"
-msgstr "也就是說, 以單一的電郵地址統一管理您的 Sympa 訂閱及設定</FONT"
+msgstr "                        "
 
 #. (file_name)
 #: mail_tt2/urlized_part.tt2:5
 msgid ""
 "The %1 file that was initially attached to this message has been stored of "
 "the mailing lists server:"
-msgstr ""
+msgstr "                        "
 
 #. (count)
 #: web_tt2/rss.tt2:31
-#, fuzzy
 msgid "The %1 latest created lists"
-msgstr ""
-"/FORM>\n"
-"\t</TD>\n"
-"      </TR>\n"
-"\n"
-"      <TR><"
+msgstr "En son, %1 yaratılan liste"
 
 #. (count)
 #: web_tt2/rss.tt2:51
-#, fuzzy
 msgid "The %1 latest messages"
-msgstr "最新郵件優先"
+msgstr "En son, %1 mesaj"
 
 #. (count)
 #: web_tt2/rss.tt2:60
-#, fuzzy
 msgid "The %1 latest shared documents"
-msgstr "最新郵件優先"
+msgstr "En son, %1 paylaşılan belge"
 
 #. (count)
 #: web_tt2/rss.tt2:41
-#, fuzzy
 msgid "The %1 most active lists"
-msgstr ""
-"/FORM>\n"
-"\t</TD>\n"
-"      </TR>\n"
-"\n"
-"      <TR><"
+msgstr "%1 En aktif liste"
 
 #: web_tt2/help_editlist.tt2:37
 msgid ""
 "The Bouncers_level1 paragraphs defines the automatic behavior of bounce "
 "management.<br />\n"
 "\tLevel 1 is the lower level of bouncing users"
-msgstr ""
+msgstr "                        "
 
 #: web_tt2/help_editlist.tt2:53
 msgid ""
 "The Bouncers_levelX paragraphs defines the automatic behavior of bounce "
 "management.<br />\n"
 "\tLevel 2 is the highest level of bouncing users"
-msgstr ""
+msgstr "                        "
 
-# nlsref 6,47
 #: src/Commands.pm:1923 src/Commands.pm:2136 src/Commands.pm:2232
 msgid ""
 "The EXPIRE, EXPIREINDEX and EXPIREDEL commands are restricted to the owners "
 "of the list.\n"
 "You are not one of the owners for list %s.\n"
 msgstr ""
-"EXPIRE, EXPIREINDEX ©M EXPIREDEL «ü¥O¥u¨Ñ¶l±H²M³æ¾Ö¦³¤H¨Ï¥Î¡C\n"
-"§A¤£¬O %s ªº¾Ö¦³¤H.\n"
 
-# nlsref 6,46
 #: src/Commands.pm:2275
-#, fuzzy
 msgid "The MODINDEX command is restricted to moderators.\n"
 msgstr ""
-"MODINDEX «ü¥O¥u¨Ñ¥D«ù¤H(moderator)¨Ï¥Î¡C\n"
-"§A¤£¬O %s ªº¥D«ù¤H.\n"
 
-# nlsref 6,84
 #: src/Commands.pm:1145
 msgid "The User '%s' is already subscriber of list '%s'\n"
-msgstr "¥Î¤á '%s' ¸g¤w '%s' ªº­q¤á\n"
+msgstr "%s kullanıcısı %s listesine zaten üye\n"
 
 #: mail_tt2/listmaster_notification.tt2:17
 msgid "The antivirus scan has failed while processing the following file:"
 msgstr ""
 
-# nlsref 6,15
 #: src/Commands.pm:1110 src/Commands.pm:1243 src/Commands.pm:1411
 #: src/Commands.pm:1995 src/Commands.pm:466 src/Commands.pm:593
 #: src/Commands.pm:733 src/Commands.pm:854 src/Commands.pm:990
 msgid ""
 "The authentication process failed\n"
 "\n"
-msgstr "®Ö­ãµ{§Ç¥¢±Ñ\\n\n"
+msgstr ""
+"Kimlik denetimi süreci başarısız oldu\n"
+"\n"
 
 #: web_tt2/help_editlist.tt2:15
 msgid ""
 "The available_user_options parameter starts a paragraph to define available "
 "options for the subscribers of the list."
-msgstr ""
+msgstr "                        "
 
 #: mail_tt2/certif_warning.tt2:5
 msgid "The certificate subject is :"
-msgstr ""
+msgstr "Sertifika konusu :"
 
-# nlsref 1,1
 #: src/alias_manager.pl:40
-#, fuzzy
 msgid "The configuration file --CONFIG-- contains errors.\n"
-msgstr "³]©wÀÉµo¥Í°ÝÃD\n"
+msgstr ""
 
 #: web_tt2/help_editlist.tt2:138
 msgid ""
@@ -3860,18 +3665,17 @@ msgstr ""
 
 #: web_tt2/error.tt2:66
 msgid "The document repository exceed disk quota."
-msgstr ""
+msgstr "Belge deposu disk kotasını aştı"
 
 #: mail_tt2/list_unknown.tt2:14
 msgid "The following address is not a known mailing list :"
-msgstr ""
+msgstr "Belirtilen adres bilinen bir mail listesi değilidir :"
 
 #: mail_tt2/helpfile.tt2:50
 msgid ""
 "The following commands are available only for lists's owners or moderators:"
-msgstr ""
+msgstr "Belirtilen komutlar sadece listenin sahibi veya moderetörler içindir:"
 
-# nlsref 5,3
 #: src/tools.pl:136
 msgid ""
 "The following message was sent to a list while it seems to contain\n"
@@ -3889,53 +3693,33 @@ msgid ""
 "\n"
 "------ Beginning of suspected message ------\n"
 msgstr ""
-"The following message was sent to a list while it seems to contain\n"
-"commands like subscribe, unsubscribe, help, index, get, ...\n"
-"\n"
-"If your message effectively contained a command, please notice that \n"
-"commands should never ever be sent to lists. Commands must be sent\n"
-"to %s exclusively.\n"
-"\n"
-"If your message was effectively destinated to the list, it has been\n"
-"interpreted by the software as a command. Please contact the manager\n"
-"of the service : %s so that they can take care of your message.\n"
-"\n"
-"Thank you for your attention.\n"
-"\n"
-"------ Beginning of suspected message ------\n"
 
 #: web_tt2/serveradmin.tt2:7
 msgid "The following virtual robots are running on this server :"
-msgstr ""
+msgstr "Belirtilen sanal robotlar bu sunucuda çalışıyor:"
 
 #: web_tt2/rss.tt2:33
-#, fuzzy
 msgid "The latest created lists"
-msgstr ""
-"/FORM>\n"
-"\t</TD>\n"
-"      </TR>\n"
-"\n"
-"      <TR><"
+msgstr "En son yaratılan listeler"
 
 #: web_tt2/rss.tt2:53
-#, fuzzy
 msgid "The latest messages"
-msgstr "最新郵件優先"
+msgstr "En son mesajlar"
 
 #: web_tt2/rss.tt2:62
-#, fuzzy
 msgid "The latest shared documents"
-msgstr "最新郵件優先"
+msgstr "En son paylaşılan belgeler"
 
 #. (conf.wwsympa_url,list.name)
 #: mail_tt2/d_install_shared.tt2:7
 msgid "The list document repository : %1/d_read/%2"
-msgstr ""
+msgstr "Liste belge deposu : %1/d_read/%2"
 
 #: web_tt2/notice.tt2:42
 msgid "The list of list members will be built/updated soon (a few minutes)."
 msgstr ""
+"Liste üyelerinin listesi birkaç  dakika içinde oluşturulacaktır/"
+"güncellenecektir."
 
 #: web_tt2/help_editlist.tt2:25
 msgid ""
@@ -3958,25 +3742,19 @@ msgstr ""
 msgid ""
 "The list type is a set of parameters' profile. Parameters will be editable, "
 "once the list created"
-msgstr "郵遞論壇類型是參數集配置。可以在郵遞論壇創建後編輯參數"
+msgstr ""
 
 #: web_tt2/create_list_request.tt2:50
 msgid "The list's subject"
-msgstr "這是郵遞論壇的主題"
+msgstr "Listenin konusu"
 
 #: web_tt2/rss.tt2:43
-#, fuzzy
 msgid "The most active lists"
-msgstr ""
-"/FORM>\n"
-"\t</TD>\n"
-"      </TR>\n"
-"\n"
-"      <TR><"
+msgstr "En aktif listeler"
 
 #: web_tt2/error.tt2:32
 msgid "The passwords you typed do not match"
-msgstr "兩個密碼不一致"
+msgstr "Girdiğiniz şifre örtüşmüyor"
 
 #: web_tt2/help_editlist.tt2:120
 msgid ""
@@ -3993,25 +3771,24 @@ msgstr ""
 
 #: mail_tt2/listmaster_notification.tt2:20
 msgid "The returned error message :"
-msgstr ""
+msgstr "Geri dönen hata mesajı :"
 
 #: web_tt2/help_user_options.tt2:12 web_tt2/help_user_options.tt2:20
 msgid "The sending interval for these Digests is defined by the list owner."
-msgstr ""
+msgstr "                        "
 
 #: web_tt2/help_editlist.tt2:157
 msgid "The subscribe parameter defines the rules for subscribing to the list."
-msgstr ""
+msgstr "Kayıt parametresi, listeye kayıtlanma için gereken kuralları tanımlar."
 
-# nlsref 6,38
 #: src/Commands.pm:1490
 msgid "The user %s has been removed from the list %s/\n"
-msgstr "«ü©wªº­q¤á¤w¸g±q¶l±H²M³æ¤¤°£¥h¡C\n"
+msgstr "%s Kullanıcısı %s/ listesinden kaldırıldı.\n"
 
 #. (total,list.name,list.host)
 #: mail_tt2/modindex.tt2:10
 msgid "There are %1 messages to be moderated for list %2@%3"
-msgstr ""
+msgstr "                        "
 
 #: web_tt2/help_editlist.tt2:148
 msgid ""
@@ -4019,16 +3796,15 @@ msgid ""
 "email address in public web site. Various methods are available in Sympa and "
 "you can choose it with spam_protection and web_archive_spam_protection "
 "parameters. Possible value are:"
-msgstr ""
+msgstr "                        "
 
 #: web_tt2/error.tt2:48
 msgid "There is not any owner defined for the list"
-msgstr ""
+msgstr "Liste için tanımlanmış hiç bir Sahip yok"
 
-# nlsref 4,26
 #: src/sympa.pl:1631
 msgid "These subscribers are :\n"
-msgstr "­q¤á¦³ :\n"
+msgstr "Kayıtlı kullanıcılar :\n"
 
 #. (process_id,loop_count,start_time)
 #: web_tt2/serveradmin.tt2:98
@@ -4038,7 +3814,7 @@ msgstr ""
 #: web_tt2/arc_protect.tt2:9
 msgid ""
 "This button aims at protecting mailing lists archives against Spam Harvester."
-msgstr "這個按鈕是為了保護郵遞論壇存盤不被垃圾電子郵件地址收集者利用。"
+msgstr "                        "
 
 #: web_tt2/help_user_options.tt2:3
 msgid ""
@@ -4046,35 +3822,34 @@ msgid ""
 "options are mutually exclusive, which means that you can't set two different "
 "reception modes at the same time. Only some of the modes might be available "
 "for specific mailing lists."
-msgstr ""
+msgstr "                        "
 
 #: mail_tt2/list_unknown.tt2:12
 msgid "This is an automatic response sent by Sympa Mailing Lists Manager."
-msgstr ""
+msgstr "Bu Sympa Mail Listesi Yöneticisnden gönderilmiş otomatik bir yanıttır."
 
 #. (list.subject)
 #: mail_tt2/invite.tt2:8
 msgid "This list is about %1, so you are probably concerned."
-msgstr ""
+msgstr "                        "
 
-# nlsref 6,7
 #: src/Commands.pm:327 src/Commands.pm:372 src/Commands.pm:426
 msgid "This list's archives do not contain any file.\n"
-msgstr "¶l±H²M³æ¬ö¿ý¨S¦³¥ô¦óÀÉ®×\n"
+msgstr "Listenin arşivi hiç bir dosya içermiyor.\n"
 
 #: web_tt2/help_user_options.tt2:46
 msgid ""
 "This mode is used when a subscriber does not want to receive attached files. "
 "The attached files are \n"
 "replaced by a URL leading to the file stored on the list site."
-msgstr ""
+msgstr "                        "
 
 #: web_tt2/help_user_options.tt2:51
 msgid ""
 "This mode is used when a subscriber does not want to receive copies of "
 "messages that he or she has sent to \n"
 "the list."
-msgstr ""
+msgstr "                        "
 
 #: web_tt2/help_user_options.tt2:31
 msgid ""
@@ -4082,7 +3857,7 @@ msgid ""
 "the list, but nevertheless wishes to retain the ability to post to the list. "
 "This mode therefore prevents the subscriber from unsubscribing and "
 "subscribing later on."
-msgstr ""
+msgstr "                        "
 
 #: web_tt2/help_user_options.tt2:41
 msgid ""
@@ -4304,10 +4079,9 @@ msgstr ""
 msgid "Thread"
 msgstr ""
 
-# nlsref 6,61
 #: src/Commands.pm:1940
 msgid "Thus, your message is sent back to you :\n"
-msgstr "¦]¦¹§Aªº¹q¶l±H¦^µ¹§A :\n"
+msgstr ""
 
 #: mail_tt2/sendpasswd.tt2:27
 msgid "To access your personal environment, you need to login first"
@@ -4374,14 +4148,13 @@ msgstr ""
 
 #: web_tt2/help.tt2:58
 msgid "To contact this service administrator :"
-msgstr "如果要聯系服務器管理員:"
+msgstr ""
 
 #. (list.name)
 #: mail_tt2/moderate.tt2:13
 msgid "To distribute the attached message in list %1:"
 msgstr ""
 
-# nlsref 8,12
 #: src/List.pm:2598
 msgid ""
 "To distribute the attached message in list %s :\n"
@@ -4408,13 +4181,11 @@ msgid ""
 "password on the right column."
 msgstr ""
 
-# nlsref 6,57
 #: src/Commands.pm:1982
-#, fuzzy
 msgid ""
 "To read the list of subscribers who haven't confirm their\n"
 "subscription : EXPIREINDEX %s\n"
-msgstr "¬d¾\\¨S¦³ÚÌ»{ªº¹q¶l¦a§} : EXPIREINDEX %s\n"
+msgstr ""
 
 #. (conf.email,conf.host)
 #: mail_tt2/certif_warning.tt2:12
@@ -4428,46 +4199,42 @@ msgstr ""
 
 #: web_tt2/help.tt2:47
 msgid "To receive your password :"
-msgstr "要收到密碼:"
+msgstr ""
 
 #: mail_tt2/moderate.tt2:19
 msgid "To reject it (it will be removed):"
 msgstr ""
 
-# nlsref 6,53
 #: src/Commands.pm:1984 src/Commands.pm:2042
 msgid "To stop the expiration process : EXPIREDEL %s\n"
-msgstr "°±¤î´Áº¡(expiration)µ{§Ç½Ð¨Ï¥Î : EXPIREDEL %s\n"
+msgstr ""
 
 #: mail_tt2/invite.tt2:10
 msgid ""
 "To subscribe just reply to this message or hit the following mailto url :"
 msgstr ""
 
-# nlsref 6,58
 #: mail_tt2/sendpasswd.tt2:22
-#, fuzzy
 msgid ""
 "To unsubscribe from the list, you need to provide the following password"
-msgstr "§A¯à¤U¦C«ü¥O¥h±¼­q¤á :\n"
+msgstr ""
 
 #. (mailto)
 #: web_tt2/compose_mail.tt2:5
 msgid "To: %1"
-msgstr "收件者: %1"
+msgstr ""
 
 #: web_tt2/review.tt2:228 web_tt2/reviewbouncing.tt2:121
 msgid "Toggle Selection"
-msgstr "切換選取"
+msgstr ""
 
-# nlsref 16,74
 #: src/List.pm:1088
 msgid "Topics for the list"
 msgstr ""
 
 #: web_tt2/create_list_request.tt2:53
 msgid "Topics:"
-msgstr "話題:"
+msgstr ""
 
 #. (list.name,size)
 #: mail_tt2/listowner_notification.tt2:14
@@ -4480,9 +4247,8 @@ msgid "Total subscribers : %1"
 msgstr ""
 
 #: web_tt2/edit_template.tt2:7
-#, fuzzy
 msgid "Type"
-msgstr "類型"
+msgstr ""
 
 #: mail_tt2/helpfile.tt2:29
 msgid "UNSubscribe * <EMAIL>       * To quit all lists."
@@ -4494,55 +4260,41 @@ msgid ""
 "address, usefull if different from your \"From:\" address."
 msgstr ""
 
-# nlsref 8,24
 #: src/List.pm:2300
 msgid "UNsubscription request from list %s"
-msgstr "¨ú®ø­q¾\\­n¨D(¶l±H²M³æ %s) "
+msgstr ""
 
 #: web_tt2/d_read.tt2:346
 msgid "URL"
-msgstr "title"
+msgstr ""
 
-# nlsref 3,1
 #: src/sympa.pl:1528
 msgid "Unable to access directory %s : %m"
-msgstr "¤£¯à¦s¨ú¥Ø¿ý %s : %m"
+msgstr ""
 
-# nlsref 6,41
 #: src/Commands.pm:1731 src/Commands.pm:1851
-#, fuzzy
 msgid ""
 "Unable to access the moderated message on list %s with key %s.\n"
 "This message may already have been sent by one of the list's moderators\n"
 msgstr ""
-"¤£¯à¦s¨ú¨üºÞ¨î¹q¶l(¦b¶l±H²M³æ %s) §Q¥ÎÁä %s¡C\n"
-"³o¹q¶l¥i¯à¤w¸g°eµ¹¶l±H²M³æ¥D«ù¤H\n"
-".\n"
 
-# nlsref 6,68
 #: src/Commands.pm:1723
 msgid "Unable to access to the message authenticated with key %s.\n"
-msgstr "¤£¯à¥Î %s Áä¦s¨ú¹q¶l¡C\n"
+msgstr ""
 
-# nlsref 11,2
 #: src/smtp.pm:114
 msgid "Unable to create a channel in smtpto: %m"
-msgstr "Unable to create a channel in smtpto: %m"
+msgstr ""
 
-# nlsref 6,41
 #: src/Commands.pm:1656
-#, fuzzy
 msgid ""
 "Unable to find the message of the list %s locked by the key %s.\n"
 "Warning : this message could have ever been send by another editor"
 msgstr ""
-"¤£¯à¦s¨ú¨üºÞ¨î¹q¶l(¦b¶l±H²M³æ %s) §Q¥ÎÁä %s¡C\n"
-"³o¹q¶l¥i¯à¤w¸g°eµ¹¶l±H²M³æ¥D«ù¤H\n"
-".\n"
 
 #: web_tt2/remove_arc.tt2:11
 msgid "Unable to find the message to delete"
-msgstr "無法找到要刪除的郵件"
+msgstr ""
 
 #: web_tt2/remove_arc.tt2:9
 msgid ""
@@ -4554,34 +4306,32 @@ msgstr ""
 #. (error.path)
 #: web_tt2/error.tt2:40
 msgid "Unable to read %1 : empty document"
-msgstr "無法讀取 %1 : 空的文檔"
+msgstr ""
 
-# nlsref 6,2
 #: src/Commands.pm:201
 msgid "Unable to read help file : %s\n"
-msgstr "¤£¯à¾\\ÅªÀ°§UÀÉ®× : %s\n"
+msgstr ""
 
 #: web_tt2/lists.tt2:49
 msgid "Unify your subscriptions with the email"
-msgstr "以電郵地址"
+msgstr ""
 
 #: web_tt2/d_read.tt2:103 web_tt2/d_read.tt2:218 web_tt2/latest_d_read.tt2:43
 msgid "Unknown"
-msgstr "未知"
+msgstr ""
 
 #: web_tt2/list_menu.tt2:15 web_tt2/list_menu.tt2:25 web_tt2/sigrequest.tt2:39
 #: web_tt2/sigrequest.tt2:53 web_tt2/sigrequest.tt2:68
 msgid "Unsubscribe"
-msgstr "退訂"
+msgstr ""
 
-# nlsref 6,71
 #: soap/sympasoap.pm:553 src/Commands.pm:946 wwsympa/wwsympa.fcgi:3526
 msgid "Unsubscribe from list %s"
-msgstr "¥Ñ¶l±H²M³æ %s ÖÃ¶}"
+msgstr ""
 
 #: web_tt2/editsubscriber.tt2:39
 msgid "Unsubscribe the User"
-msgstr "取消用戶的訂閱"
+msgstr ""
 
 #. (unsubscribe)
 #: mail_tt2/info_report.tt2:11
@@ -4590,9 +4340,8 @@ msgstr ""
 
 #: mail_tt2/expire_warning1.tt2:8 mail_tt2/expire_warning2.tt2:8
 #: mail_tt2/remind.tt2:7
-#, fuzzy
 msgid "Unsubscription :"
-msgstr "描述:"
+msgstr ""
 
 #. (list.name)
 #: mail_tt2/bye.tt2:2
@@ -4614,29 +4363,26 @@ msgstr ""
 
 #. (visible_path)
 #: web_tt2/d_read.tt2:377
-#, fuzzy
 msgid "Unzip a file inside the folder %1"
-msgstr "上傳一個文件到活頁夾 %1 中"
+msgstr ""
 
 #: web_tt2/d_read.tt2:379
-#, fuzzy
 msgid "Unzip a file inside the folder SHARED"
-msgstr "上傳一個文件到活頁夾 SHARED 中"
+msgstr ""
 
 #: web_tt2/d_control.tt2:4 web_tt2/d_editfile.tt2:6 web_tt2/d_properties.tt2:4
 #: web_tt2/d_read.tt2:7
 msgid "Up to higher level directory"
-msgstr "> 轉到上一級目錄"
+msgstr ""
 
 #: web_tt2/d_editfile.tt2:37 web_tt2/edit_list_request.tt2:415
 #: web_tt2/editsubscriber.tt2:38 web_tt2/suboptions.tt2:26
 msgid "Update"
-msgstr "更新"
+msgstr ""
 
 #: web_tt2/rss_request.tt2:28
-#, fuzzy
 msgid "Update RSS URL"
-msgstr "更新"
+msgstr ""
 
 #: src/etc/list_task_models/sync_include.ttl.task:1
 msgid "Update of list members based on the TTL"
@@ -4645,46 +4391,39 @@ msgstr ""
 #. (visible_path)
 #: web_tt2/d_read.tt2:359
 msgid "Upload a file inside the folder %1"
-msgstr "上傳一個文件到活頁夾 %1 中"
+msgstr ""
 
 #: web_tt2/d_read.tt2:361
 msgid "Upload a file inside the folder SHARED"
-msgstr "上傳一個文件到活頁夾 SHARED 中"
+msgstr ""
 
-# nlsref 6,85
 #: src/Commands.pm:1169 src/Commands.pm:1177
 msgid "User %s has been invited to subscribe in list %s.\n"
-msgstr "¥Î¤á %s ¸g¤w³QÁÜ½Ð¥[¤J¶l±H²M³æ %s.\n"
+msgstr ""
 
-# nlsref 6,37
 #: src/Commands.pm:1046
 msgid "User %s is now subscriber of list %s.\n"
-msgstr "%s ¤w¸g %s ªº­q¤á¡C\n"
+msgstr ""
 
-# nlsref 6,86
 #: src/Commands.pm:1185
 msgid "User %s is unwanted in list %s.\n"
-msgstr "¥Î¤á %s ¦b¶l±H²M³æ %s ¤¤¬O¤£¨üÅwªï.\n"
+msgstr ""
 
 #: web_tt2/show_cert.tt2:8
 msgid "User certificate belong to"
-msgstr ",ASC;'F>V$Jtl6(B"
+msgstr ""
 
-# nlsref 16,81
 #: src/List.pm:1126
 msgid "User data source"
 msgstr ""
 
-# nlsref 6,81
 #: mail_tt2/helpfile.tt2:2 src/Commands.pm:160 src/Commands.pm:196
 msgid "User guide"
-msgstr "¥Î¤á«ü¤Þ"
+msgstr ""
 
-# nlsref 6,81
 #: web_tt2/d_read.tt2:11 web_tt2/d_read.tt2:15
-#, fuzzy
 msgid "User mode"
-msgstr "¥Î¤á«ü¤Þ"
+msgstr ""
 
 #: mail_tt2/helpfile.tt2:10
 msgid "User's Guide"
@@ -4695,13 +4434,12 @@ msgid "Users"
 msgstr ""
 
 #: web_tt2/lists.tt2:56
-#, fuzzy
 msgid "Validate"
-msgstr "確定"
+msgstr ""
 
 #: web_tt2/editsubscriber.tt2:54
 msgid "View last bounce"
-msgstr "查看最後的退信"
+msgstr ""
 
 #: web_tt2/serveradmin.tt2:5
 msgid "Virtual Robots"
@@ -4711,7 +4449,6 @@ msgstr ""
 msgid "Visibility :"
 msgstr ""
 
-# nlsref 16,82
 #: src/List.pm:1132
 msgid "Visibility of the list"
 msgstr ""
@@ -4720,21 +4457,16 @@ msgstr ""
 msgid "Visibility of the subscriber with the REVIEW command."
 msgstr ""
 
-# nlsref 8,23
 #: src/List.pm:2279
-#, fuzzy
 msgid ""
 "WARNING : %s %s failed to unsubscribe from %s because his address was not "
 "found in the list\n"
 " (You may help this person)"
 msgstr ""
-"Äµ§i : %s %s °h¥X¥¢±Ñ (¶l±H²M³æ: %s) ¦]¬°¥Lªº¹q¶l¦a§}\n"
-"¤£¦b¶l±H²M³æ¤º\\n (§A¥i¯à¨ó§U³o¤H)\n"
 
-# nlsref 8,28
 #: src/List.pm:2308
 msgid "WARNING: bounce rate too high in list %s"
-msgstr "WARNING: bounce rate too high in list %s"
+msgstr ""
 
 #: mail_tt2/helpfile.tt2:25
 msgid ""
@@ -4747,13 +4479,12 @@ msgstr ""
 
 #: web_tt2/help.tt2:8
 msgid "WWSympa provides  you access to your environment on mailing list server"
-msgstr "您可以在這里訪問郵件郵遞論壇服務器"
+msgstr ""
 
 #: mail_tt2/your_infected_msg.tt2:10
 msgid "We stopped delivery of this email."
 msgstr ""
 
-# nlsref 16,83
 #: src/List.pm:1148
 msgid "Web archives"
 msgstr ""
@@ -4768,7 +4499,7 @@ msgstr ""
 
 #: web_tt2/help_editfile.tt2:29
 msgid "Welcome message"
-msgstr "安靜</i>選項。"
+msgstr ""
 
 #: web_tt2/help_editfile.tt2:5
 msgid ""
@@ -4776,15 +4507,13 @@ msgid ""
 "a full MIME structured message (only for MIME gurus)."
 msgstr ""
 
-# nlsref 8,6
 #: soap/sympasoap.pm:701 soap/sympasoap.pm:702 src/Commands.pm:1062
 #: src/Commands.pm:1063 src/Commands.pm:685 src/Commands.pm:686
 #: wwsympa/wwsympa.fcgi:3297 wwsympa/wwsympa.fcgi:3298
 #: wwsympa/wwsympa.fcgi:4240 wwsympa/wwsympa.fcgi:4241
 msgid "Welcome on list %s"
-msgstr "Åwªï¥[¤J %s ¶l±H²M³æ"
+msgstr ""
 
-# nlsref 16,85
 #: src/List.pm:1154
 msgid "Welcome return-path"
 msgstr ""
@@ -4801,7 +4530,7 @@ msgstr ""
 
 #: web_tt2/help.tt2:28
 msgid "When authenticating ("
-msgstr "在驗証身份("
+msgstr ""
 
 #: web_tt2/help_editlist.tt2:47
 msgid ""
@@ -4815,57 +4544,46 @@ msgid ""
 "can be send to listowner or listmaster."
 msgstr ""
 
-# nlsref 16,2
 #: src/List.pm:313
 msgid "Who can add subscribers"
 msgstr ""
 
-# nlsref 16,21
 #: src/List.pm:469
 msgid "Who can delete subscribers"
 msgstr ""
 
-# nlsref 16,87
 #: src/List.pm:1044
 msgid "Who can edit"
 msgstr ""
 
-# nlsref 16,54
 #: src/List.pm:878
 msgid "Who can invite people"
 msgstr ""
 
-# nlsref 16,67
 #: src/List.pm:1017
 msgid "Who can review subscribers"
 msgstr ""
 
-# nlsref 16,68
 #: src/List.pm:1028
 msgid "Who can send messages"
 msgstr ""
 
-# nlsref 16,64
 #: src/List.pm:977
 msgid "Who can start a remind process"
 msgstr ""
 
-# nlsref 16,73
 #: src/List.pm:1082
 msgid "Who can subscribe to the list"
 msgstr ""
 
-# nlsref 16,76
 #: src/List.pm:1099
 msgid "Who can unsubscribe"
 msgstr ""
 
-# nlsref 16,86
 #: src/List.pm:1040
 msgid "Who can view"
 msgstr ""
 
-# nlsref 16,53
 #: src/List.pm:874
 msgid "Who can view list information"
 msgstr ""
@@ -4873,53 +4591,49 @@ msgstr ""
 #. (error.email)
 #: web_tt2/error.tt2:7
 msgid "You are already logged in as %1"
-msgstr "您已經以 %1 登入"
+msgstr ""
 
 #. (error.list)
 #: web_tt2/error.tt2:24
 msgid "You are already subscribed to the list %1"
-msgstr "您已經訂閱了郵遞論壇 %1"
+msgstr ""
 
 #. (list)
 #: web_tt2/subrequest.tt2:70
 msgid "You are already subscriber of list %1"
-msgstr "您已經訂閱了郵遞論壇 %1。"
+msgstr ""
 
-# nlsref 6,77
 #: src/Commands.pm:1310
 msgid "You are member of list %s with email %s\n"
-msgstr "§A¬O %s ¶l±H²M³æªº·|­û¦Ó¹q¶l¬O %s\n"
+msgstr ""
 
-# nlsref 6,80
 #: src/Commands.pm:1013 src/Commands.pm:1132 src/Commands.pm:1277
 #: src/Commands.pm:1438 src/Commands.pm:289 src/Commands.pm:493
 #: src/Commands.pm:619 src/Commands.pm:755 src/Commands.pm:878
 msgid "You are not allowed to perform command %s in list %s\n"
-msgstr "§A¤£¯à°õ¦æ %s «ü¥O (¶l±H²M³æ: %s)\n"
+msgstr ""
 
 #. (error.list)
 #: web_tt2/error.tt2:30
-#, fuzzy
 msgid "You are not subscribed to list %1"
-msgstr "您不是郵遞論壇 %1 的訂閱者"
+msgstr ""
 
 #. (list,email)
 #: web_tt2/sigrequest.tt2:16
-#, fuzzy
 msgid "You are not subscribed to list %1 with e-mail address %2"
-msgstr "您不是郵遞論壇 %1 的訂閱者"
+msgstr ""
 
 #: web_tt2/suboptions.tt2:5
 msgid "You are subscribed since"
-msgstr "您于"
+msgstr ""
 
 #: web_tt2/create_list_request.tt2:17
 msgid "You are the privileged owner of this list"
-msgstr "您是這個郵遞論壇的特權所有者"
+msgstr ""
 
 #: web_tt2/edit_list_request.tt2:4
 msgid "You can choose below a subset of parameters to edit :"
-msgstr "You can choose below a subset of parameters to edit :"
+msgstr ""
 
 #: web_tt2/create_list.tt2:5
 msgid "You can configure it via the admin button beside."
@@ -4934,10 +4648,9 @@ msgid "You can edit several messages/files associated to your list :"
 msgstr ""
 
 #: web_tt2/help.tt2:37
-#, fuzzy
 msgid ""
 "You can logout (deletion of the cookie) at any time using logout button."
-msgstr "您可以在任何時候使用"
+msgstr ""
 
 #: mail_tt2/helpfile.tt2:17
 msgid ""
@@ -4948,12 +4661,11 @@ msgid ""
 "the subject are recognized."
 msgstr ""
 
-# nlsref 6,58
 #: src/Commands.pm:2183
 msgid ""
 "You can remove these subscriber from the list by using the following "
 "commands :\n"
-msgstr "§A¯à¤U¦C«ü¥O¥h±¼­q¤á :\n"
+msgstr ""
 
 #: mail_tt2/expire_deletion.tt2:8 mail_tt2/removed.tt2:8
 msgid "You can subscribe again :"
@@ -4962,20 +4674,17 @@ msgstr ""
 #: web_tt2/error.tt2:58
 msgid ""
 "You did not choose a password, request a reminder of the initial password"
-msgstr "您並未選取密碼, 請要求一份原先密碼的提醒"
+msgstr ""
 
-# nlsref 6,38
 #: wwsympa/wwsympa.fcgi:3527 wwsympa/wwsympa.fcgi:4346
-#, fuzzy
 msgid "You have been removed from list %s.\n"
-msgstr "«ü©wªº­q¤á¤w¸g±q¶l±H²M³æ¤¤°£¥h¡C\n"
+msgstr ""
 
-# nlsref 6,31
 #: soap/sympasoap.pm:554 src/Commands.pm:1485 src/Commands.pm:947
 msgid ""
 "You have been removed from list %s.\n"
 "Thank you for using this list.\n"
-msgstr "§A¤w¦b¶l±H²M³æ %s ¤¤°£¥h¡A·PÁÂ§A¨Ï¥Î¥»¨t²Î¡C\n"
+msgstr ""
 
 #. (list.name,list.host,user.email)
 #: mail_tt2/expire_warning1.tt2:4 mail_tt2/expire_warning2.tt2:4
@@ -4986,24 +4695,22 @@ msgstr ""
 #. (error.pname)
 #: web_tt2/error.tt2:35
 msgid "You have changed a parameter without permissions: %1"
-msgstr "您在沒有權限的情況下修改了一個參數: %1"
+msgstr ""
 
 #: web_tt2/remindpasswd.tt2:4
-#, fuzzy
 msgid ""
 "You have forgotten your password, or you've never had any password related "
 "to this server"
-msgstr "您忘記了密碼，或者您從來沒有獲得這個服務器上的郵遞論壇密碼"
+msgstr ""
 
 #. (user.email)
 #: web_tt2/login.tt2:3
 msgid "You have logged in with email address %1"
-msgstr "您已經用電子電子郵件地址 %1 登入。"
+msgstr ""
 
-# nlsref 6,55
 #: src/Commands.pm:2239
 msgid "You just stopped the expiration process for list %s\n"
-msgstr "§A­è­è°±¤î¶l±H²M³æ %s ªº´Áº¡(expiration)µ{§Ç¡C\n"
+msgstr ""
 
 #: web_tt2/sigrequest.tt2:19
 msgid ""
@@ -5012,33 +4719,28 @@ msgid ""
 msgstr ""
 
 #: web_tt2/choosepasswd.tt2:4
-#, fuzzy
 msgid ""
 "You need to choose a password for your WWSympa environment.\n"
 "You will need this password to perform privileged operations."
-msgstr "您需要登入系統，方能使用自訂的 WWSympa 環境與進行特別的操作（需要電子郵件地址）。\n"
+msgstr ""
 
 #: web_tt2/error.tt2:16
 msgid "You need to login"
-msgstr "您需要先登入"
+msgstr ""
 
 #: web_tt2/loginbanner.tt2:10
-#, fuzzy
 msgid ""
 "You need to login to access your custom WWSympa environment or to perform a "
 "privileged operation (one that requires your email address)."
-msgstr "您需要登入系統，方能使用自訂的 WWSympa 環境與進行特別的操作（需要電子郵件地址）。\n"
+msgstr ""
 
-# nlsref 6,16
 #: src/Commands.pm:1111 src/Commands.pm:1412 src/Commands.pm:594
 #: src/Commands.pm:855 src/Commands.pm:991
-#, fuzzy
 msgid ""
 "You probably confirmed your subscription using a different\n"
 "email address. Please try subscribing using your canonical address."
-msgstr "§AÚÌ»{ªº¹q¶lÉO¥Ó½Ðªº¤£¬Û¦P¡A½Ð¥Î§Aªº¥D¹q¶l¦a§}"
+msgstr ""
 
-# nlsref 6,79
 #: src/List.pm:8828 src/List.pm:8835
 msgid ""
 "You requested a subscription reminder to be sent\n"
@@ -5051,14 +4753,6 @@ msgid ""
 "\n"
 "If you do not want this action to be taken, simply ignore this message.\n"
 msgstr ""
-"¦³¤H­n¨D Sympa °e¥X subscribtion\n"
-"¨ì¶l±H²M³æ¤¤ %s ¨C¤@­q¤á \n"
-"\n"
-"¦pªG§A¤£·Q°õ¦æ³o°Ê§@¡A½Ð©¿²¤¥»¶l¥ó¡C\n"
-"¦pªG§A°õ¦æ³o°Ê§@¡A½Ð±H¹q¶l¨ì %s ¦}¥B¥]§t \n"
-"\n"
-"   %s\n"
-"\n"
 
 #. (list)
 #: mail_tt2/sendpasswd.tt2:13
@@ -5068,12 +4762,12 @@ msgstr ""
 #. (list)
 #: web_tt2/subrequest.tt2:17
 msgid "You requested a subscription to list %1"
-msgstr "您要求訂閱郵遞論壇 %1。"
+msgstr ""
 
 #. (list)
 #: web_tt2/subrequest.tt2:5
 msgid "You requested subscription to list %1"
-msgstr "您要求訂閱郵遞論壇 %1。"
+msgstr ""
 
 #. (list)
 #: mail_tt2/sendpasswd.tt2:20
@@ -5083,15 +4777,15 @@ msgstr ""
 #. (list)
 #: web_tt2/sigrequest.tt2:23 web_tt2/sigrequest.tt2:4
 msgid "You requested unsubscription from list %1"
-msgstr "您要求退訂郵遞論壇 %1。"
+msgstr ""
 
 #: web_tt2/close_list.tt2:9
 msgid "You should remove list aliases manually"
-msgstr "郵遞論壇的別名必須手動刪除。"
+msgstr ""
 
 #: web_tt2/change_email.tt2:3
 msgid "You will receive an email, reminding you your password."
-msgstr "您將收到一個電子郵件來告訴您的密碼。"
+msgstr ""
 
 #: mail_tt2/certif_warning.tt2:8
 msgid "You won't receive the signed messages from your lists."
@@ -5100,12 +4794,12 @@ msgstr ""
 #. (error.dir)
 #: web_tt2/error.tt2:45
 msgid "You're not authorized to upload an INDEX.HTML in %1"
-msgstr "您沒有被授權上傳一個 INDEX.HTML 到 %1"
+msgstr ""
 
 #: web_tt2/your_lists.tt2:7
 #, fuzzy
 msgid "Your Lists"
-msgstr "監管"
+msgstr "Listeler"
 
 #. (user.email,list.name,list.host)
 #: mail_tt2/expire_deletion.tt2:6
@@ -5123,12 +4817,10 @@ msgid ""
 "non-delivery reports for your address."
 msgstr ""
 
-# nlsref 6,77
 #. (list.name,list.host,user.email,user.password)
 #: mail_tt2/remind.tt2:4
-#, fuzzy
 msgid "Your are subscriber of list %1@%2 with  email %3"
-msgstr "§A¬O %s ¶l±H²M³æªº·|­û¦Ó¹q¶l¬O %s\n"
+msgstr ""
 
 #: web_tt2/help.tt2:43
 msgid ""
@@ -5144,59 +4836,48 @@ msgstr ""
 
 #. (list.name)
 #: mail_tt2/subscriber_notification.tt2:4
-#, fuzzy
 msgid "Your bouncing address in list %1"
-msgstr "退信地址"
+msgstr ""
 
-# nlsref 6,40
 #: src/Commands.pm:1596 src/Commands.pm:1609
 msgid "Your configuration regarding list %s has been updated.\n"
-msgstr "Ãö¤_¶l±H²M³æ %s ªº³]©w¤w¸g§ó·s¡C\n"
+msgstr ""
 
-# nlsref 4,38
 #. (filename,list.name,list.host,rejected_by)
 #: mail_tt2/d_reject_shared.tt2:5
-#, fuzzy
 msgid ""
 "Your document %1  for list %2@%3\n"
 "has been rejected by %4 list editor."
-msgstr "§A±H¨ì %s ªº¶l¥ó¤w¸gÂà¥æ¨ì½s¿è(editor)¤W\n"
+msgstr ""
 
-# nlsref 4,38
 #. (filename,list.name,list.host,installed_by)
 #: mail_tt2/d_install_shared.tt2:5
-#, fuzzy
 msgid ""
 "Your document %1 for list %2@%3\n"
 "has been installed by %4 list editor."
-msgstr "§A±H¨ì %s ªº¶l¥ó¤w¸gÂà¥æ¨ì½s¿è(editor)¤W\n"
+msgstr ""
 
 #: mail_tt2/d_install_shared.tt2:2
-#, fuzzy
 msgid "Your document has been installed."
-msgstr "別名已成功設定。"
+msgstr ""
 
-# nlsref 4,11
 #: mail_tt2/d_reject_shared.tt2:2
-#, fuzzy
 msgid "Your document has been rejected."
-msgstr "§Aµ¹ %s ªº¶l¥ó¸g¤w³Q©Úµ´"
+msgstr ""
 
 #: web_tt2/remindpasswd.tt2:11 web_tt2/subrequest.tt2:43
 msgid "Your e-mail address"
-msgstr "您的電子電子郵件地址"
+msgstr ""
 
-# nlsref 6,30
 #: src/Commands.pm:909
-#, fuzzy
 msgid ""
 "Your e-mail address %s has not been found in the list %s. Maybe\n"
 "you subscribed from a different e-mail address ?\n"
-msgstr "§Aªº¹q¶l¦a§}¤£¦b¶l±H²M³æ¤º¡A©Î³\\§A¥Î¥t¥~ªº¹q¶l¦a§}¥Ó½Ð¡C\n"
+msgstr ""
 
 #: web_tt2/sigrequest.tt2:49
 msgid "Your e-mail address :"
-msgstr "您的電子郵件地址:"
+msgstr ""
 
 #. (user.email,list.name,list.host)
 #: mail_tt2/bye.tt2:4
@@ -5212,30 +4893,25 @@ msgstr ""
 
 #: web_tt2/create_list.tt2:4
 msgid "Your list is created."
-msgstr "您的郵遞論壇已經創建。您可以試用它或者用管理按鈕修改它的配置。"
+msgstr ""
 
-# nlsref 4,12
 #: src/sympa.pl:1280
 msgid ""
 "Your message could not be sent because its size \n"
 "was over the maximum size allowed on this list.\n"
-msgstr "§Aªº¶l¥ó¤£¯à±H¥X¡A¦]¬°¥¦ªºÊ^¿n¶W¹L­­¨î¡C\n"
+msgstr ""
 
-# nlsref 4,38
 #. (list.name,list.host,rejected_by)
 #: mail_tt2/reject.tt2:5
-#, fuzzy
 msgid ""
 "Your message for list %1@%2\n"
 "has been rejected by the moderator (%3)."
-msgstr "§A±H¨ì %s ªº¶l¥ó¤w¸gÂà¥æ¨ì½s¿è(editor)¤W\n"
+msgstr ""
 
-# nlsref 4,38
 #: src/List.pm:2425
 msgid "Your message for list %s has been forwarded to editor(s)\n"
-msgstr "§A±H¨ì %s ªº¶l¥ó¤w¸gÂà¥æ¨ì½s¿è(editor)¤W\n"
+msgstr ""
 
-# nlsref 4,15
 #: src/Commands.pm:1776 src/sympa.pl:1356
 msgid ""
 "Your message for list %s has been rejected.\n"
@@ -5243,22 +4919,18 @@ msgid ""
 "\n"
 "Your message :\n"
 msgstr ""
-"§A¹Á¸Õ±H¥X¶l¥ó¨ì¨p¤H¶l±H²M³æ¡A¦ý§A¤£¬O­q¤á¡A©Ò¥H¨t²Î¤£¯à±µ¨ü¡C\n"
-"§Aªº¶l¥ó :\n"
 
 #: mail_tt2/reject.tt2:2
 msgid "Your message has been rejected."
 msgstr ""
 
-# nlsref 6,262
 #: src/Commands.pm:546
 msgid "Your message signature was succesfuly verified using S/MIME"
 msgstr ""
 
-# nlsref 4,11
 #: src/Commands.pm:1772 src/sympa.pl:1276 src/sympa.pl:1352
 msgid "Your message to %s has been rejected"
-msgstr "§Aµ¹ %s ªº¶l¥ó¸g¤w³Q©Úµ´"
+msgstr ""
 
 #: src/Commands.pm:549
 msgid ""
@@ -5269,19 +4941,18 @@ msgstr ""
 
 #: web_tt2/pref.tt2:52
 msgid "Your other email addresses"
-msgstr "您其它的電子郵件地址"
+msgstr ""
 
 #: web_tt2/notice.tt2:33
 msgid "Your password has been emailed to you"
-msgstr "文件 [% notice.path %] 已保存"
+msgstr ""
 
 #. (init_email)
 #: web_tt2/loginbanner.tt2:5
-#, fuzzy
 msgid ""
 "Your password has been sent to your email address %1.<br />Please check your "
 "e-mail box to provide your password below."
-msgstr "請檢查您的 Email 電子郵件信箱以取得密碼，並於底下輸入。"
+msgstr ""
 
 #: web_tt2/error.tt2:67
 msgid ""
@@ -5292,46 +4963,40 @@ msgstr ""
 #: web_tt2/login_menu.tt2:31
 #, fuzzy
 msgid "Your preferences"
-msgstr "首選項"
+msgstr "Tercihler"
 
 #: web_tt2/notice.tt2:6
 msgid "Your request has been forwarded to the list owner"
-msgstr "您的要求已經被f給郵遞論壇所有者"
+msgstr ""
 
-# nlsref 6,25
 #: soap/sympasoap.pm:625
-#, fuzzy
 msgid ""
 "Your request of subscription/unssubscription has been forwarded to the "
 "list's\n"
 "owners for approval. You will receive a notification when you will have\n"
 "been subscribed (or unsubscribed) to the list.\n"
-msgstr "§Aªº¥Ó½Ð/°h¥X­n¨D¤w¸g³qª¾¤F¶l±H²M³æ¾Ö¦³ªÌ\\n·íµ{§Ç§¹¦¨¡A§A±N·|¦¬¨ì³qª¾¡C\n"
+msgstr ""
 
-# nlsref 6,25
 #: src/Commands.pm:625 src/Commands.pm:892
-#, fuzzy
 msgid ""
 "Your request to subscribe/unsubscribe has been forwarded to the list's\n"
 "owners for approval. You will receive a notification when you will have\n"
 "been subscribed (or unsubscribed) to the list.\n"
-msgstr "§Aªº¥Ó½Ð/°h¥X­n¨D¤w¸g³qª¾¤F¶l±H²M³æ¾Ö¦³ªÌ\\n·íµ{§Ç§¹¦¨¡A§A±N·|¦¬¨ì³qª¾¡C\n"
+msgstr ""
 
 #. (user.email)
 #: mail_tt2/welcome.tt2:11 mail_tt2/welcome.tt2:31
 msgid "Your subscription email is %1"
 msgstr ""
 
-# nlsref 6,18
 #: src/Commands.pm:1484 wwsympa/wwsympa.fcgi:4345
 msgid "Your subscription to list %s has been removed."
-msgstr "§A¦b¶l±H²M³æ %s ¤¤¸g¤w°£¥h"
+msgstr ""
 
 #: web_tt2/help.tt2:20
 msgid "Your subscriptions"
-msgstr "您訂閱的郵遞論壇"
+msgstr ""
 
-# nlsref 11,1
 #: src/smtp.pm:43
 msgid ""
 "Your system does not conform to the POSIX P1003.1 standard, or\n"
@@ -5339,10 +5004,6 @@ msgid ""
 "library. You must modify the smtp.pm module in order to set a value\n"
 "for variable $max_arg.\n"
 msgstr ""
-"Your system does not conform to the POSIX P1003.1 standard, or\n"
-"your Perl system does not define the _SC_ARG_MAX constant in its POSIX\n"
-"library. You must modify the smtp.pm module in order to set a value\n"
-"for variable $max_arg.\n"
 
 #: src/PlainDigest.pm:353
 msgid "[ Image%s ]"
@@ -5377,9 +5038,7 @@ msgid ""
 "-----Delivery Status Report-----\n"
 msgstr ""
 
-# nlsref 6,49
 #: src/Commands.pm:1981 src/Commands.pm:2164
-#, fuzzy
 msgid ""
 "\n"
 "An EXPIRE command is currently running for list %s.\n"
@@ -5389,14 +5048,8 @@ msgid ""
 "than %d days and who didn't confirm their subscription. The expiration\n"
 "will end in %d day(s) (%s).\n"
 msgstr ""
-"EXPIRE «ü¥O¥¿¦b°õ¦æ¤¤ (%s)¡C\n"
-"¥Ñ¾Ö¦³¤H %s (%s) °õ¦æ\\n¨t²Î¤£¯à¦P®É°õ¦æ¦h¤_¤@­Ó 'expire'¡C\n"
-"²{¦b°õ¦æ¤¤ªº¥Ø¼Ð¬O­q¤á¦h¤_ %d ¤é¶i¦æ¨S¦³ÚÌ»{µ{§Ç¡C\n"
-"«ü¥O±N¦b %d ¤éµ²§ô (%s)¡C\n"
 
-# nlsref 6,56
 #: src/Commands.pm:2022
-#, fuzzy
 msgid ""
 "\n"
 "An expiration process for list %s has been started. This process\n"
@@ -5405,13 +5058,8 @@ msgid ""
 "You will then be able to remove these addresses yourself with the DEL "
 "command.\n"
 msgstr ""
-"%s ´Áº¡(expiration)µ{§Ç¶}©l¡C¦}¥B±N¦b %d ¤Ñ§¹¦¨¡C\n"
-"§A±N¦¬¨ì¨S¦³¦b«ü©w®É¶¡¤ºÚÌ»{ªº¹q¶l¦a§}¡C\n"
-"§A¯à DEL «ü¥O¥h±¼³o¨Ç¹q¶l¦a§}¡C\n"
 
-# nlsref 8,3
 #: src/List.pm:2290
-#, fuzzy
 msgid ""
 "\n"
 "Dear owner of list %s,\n"
@@ -5424,24 +5072,14 @@ msgid ""
 "or send an email to %s with the following subject :\n"
 "AUTH %s ADD %s %s %s\n"
 msgstr ""
-"¿Ë·Rªº¶l±H²M³æ %s ¾Ö¦³ªÌ,\n"
-"\n"
-"¦³¤H­n¨D¥[¤H§Aªº¶l±H²M³æ¡C¦pªG§A±µ¨ü\\n½Ð¨Ï¥Î¤U¦Cªº«ü¥O:\n"
-"\n"
-"mailto:%s?subject=auth%%20%s%%20ADD%%20%s%%20%s%%20%s\n"
 
-# nlsref 6,70
 #: src/Commands.pm:183
 msgid ""
 "\n"
 "Powered by Sympa %s : http://www.sympa.org/\n"
 msgstr ""
-"\n"
-"Powered by Sympa %s : http://www.sympa.org/\n"
 
-# nlsref 6,60
 #: src/Commands.pm:1938
-#, fuzzy
 msgid ""
 "\n"
 "The EXPIRE command couldn't be run. It must followed by an explication\n"
@@ -5452,10 +5090,6 @@ msgid ""
 " - contain at least 20 words,\n"
 " - and end with the QUIT word.\n"
 msgstr ""
-"EXPIRE «ü¥O¤£¯à°õ¦æ¡C\n"
-"¥²¶·¿í´`¤U¦C»¡©ú : \n"
-" - EXPIRE «ü¥O¦ì¤_²Ä¤@¦æ\\n - ¥]§t¦Ü¤Ö20¦r\n"
-" - ³Ì¦Z QUIT «ü¥O¡C\n"
 
 #: src/PlainDigest.pm:334
 msgid ""
@@ -5469,7 +5103,6 @@ msgid ""
 "[ ** Unable to process HTML message part **]\n"
 msgstr ""
 
-# nlsref 6,73
 #: src/Commands.pm:2382
 msgid ""
 "\n"
@@ -5477,12 +5110,7 @@ msgid ""
 "Lists you are editor of :\n"
 "\n"
 msgstr ""
-"\n"
-"\n"
-"§A¬O¤U¦C¶l±H²M³æªº½s¿è :\n"
-"\n"
 
-# nlsref 6,72
 #: src/Commands.pm:2374
 msgid ""
 "\n"
@@ -5490,17 +5118,12 @@ msgid ""
 "Lists you are owner of:\n"
 "\n"
 msgstr ""
-"\n"
-"\n"
-"§A¬O¤U¦C¶l±H²M³æªº¾Ö¦³ªÌ :\n"
-"\n"
 
 #: web_tt2/d_read.tt2:129 web_tt2/d_read.tt2:131 web_tt2/d_read.tt2:265
 #: web_tt2/d_read.tt2:267 web_tt2/d_read.tt2:31
 msgid "access"
-msgstr "存取"
+msgstr ""
 
-# nlsref 16,6
 #: src/List.pm:1136 src/List.pm:327
 msgid "access right"
 msgstr ""
@@ -5512,21 +5135,15 @@ msgstr ""
 #: web_tt2/rss_request.tt2:46
 #, fuzzy
 msgid "active lists"
-msgstr ""
-"/FORM>\n"
-"\t</TD>\n"
-"      </TR>\n"
-"\n"
-"      <TR><"
+msgstr "Aktif olmayan listeler"
 
 #: src/etc/scenari/add.closed:1
 msgid "add impossible"
 msgstr ""
 
 #: src/etc/scenari/add.auth:1
-#, fuzzy
 msgid "add need authentication"
-msgstr "在驗証身份("
+msgstr ""
 
 #: src/etc/scenari/add.owner:1
 msgid "add performed by list owner do not need authentication"
@@ -5538,18 +5155,16 @@ msgstr ""
 
 #: web_tt2/lists.tt2:13 web_tt2/your_lists.tt2:13
 msgid "admin"
-msgstr "管理"
+msgstr ""
 
 #. (param0)
 #: mail_tt2/listmaster_notification.tt2:95
-#, fuzzy
 msgid "admins update failed for list %1"
-msgstr "無法更改 %1 的電郵地址"
+msgstr ""
 
 #: web_tt2/arcsearch_form.tt2:24
-#, fuzzy
 msgid "all of these words"
-msgstr "(所有的詞，"
+msgstr ""
 
 #: web_tt2/d_install_shared.tt2:13
 msgid ""
@@ -5558,17 +5173,16 @@ msgid ""
 msgstr ""
 
 #: web_tt2/help_editlist.tt2:134
-#, fuzzy
 msgid "an_email_address"
-msgstr "電子電子郵件地址"
+msgstr ""
 
 #: web_tt2/arcsearch.tt2:32
 msgid "and checking on entire word)"
-msgstr "和檢查整個詞)"
+msgstr ""
 
 #: web_tt2/arcsearch.tt2:30
 msgid "and checking on part of word)"
-msgstr "和檢查詞的部分)"
+msgstr ""
 
 #: src/etc/scenari/create_list.public_listmaster:1
 msgid "anybody by validation by listmaster requiered"
@@ -5587,38 +5201,32 @@ msgid "anyone with previous md5 authentication"
 msgstr ""
 
 #: src/etc/scenari/unsubscribe.open.~1.8.~:1
-#, fuzzy
 msgid "anyone without authentication"
-msgstr "在驗証身份("
+msgstr ""
 
 #: src/etc/scenari/subscribe.open_quiet:1
-#, fuzzy
 msgid "anyone, no welcome message"
-msgstr "安靜</i>選項。"
+msgstr ""
 
 #: src/etc/scenari/subscribe.open_notify:1
 msgid "anyone, notification is sent to list owner"
 msgstr ""
 
-# nlsref 6,74
 #: src/etc/scenari/unsubscribe.auth_notify:1
-#, fuzzy
 msgid "authentication requested, notification sent to owner"
-msgstr "®Ö­ã»Ý­n %s «ü¥O %s\n"
+msgstr ""
 
 #: web_tt2/reviewbouncing.tt2:63
-#, fuzzy
 msgid "bounce score"
-msgstr "退信計數"
+msgstr ""
 
 #: web_tt2/review.tt2:165
 msgid "bouncing"
 msgstr ""
 
 #: src/etc/scenari/access_web_archive.owner:1
-#, fuzzy
 msgid "by owner"
-msgstr "設置所有者"
+msgstr ""
 
 #: src/etc/scenari/del.owner:1
 msgid "by owner without authentication"
@@ -5630,20 +5238,19 @@ msgstr ""
 
 #: web_tt2/arcsearch.tt2:24
 msgid "case insensitive"
-msgstr "不區分大小寫"
+msgstr ""
 
 #: web_tt2/arcsearch.tt2:26
 msgid "case sensitive"
-msgstr "區分大小寫"
+msgstr ""
 
-# nlsref 16,208
 #: src/List.pm:804
 msgid "certificate for authentication by remote Sympa"
 msgstr ""
 
 #: web_tt2/d_control.tt2:38
 msgid "change access"
-msgstr "修改權限"
+msgstr ""
 
 #: src/etc/mhonarc-ressources.tt2:182 src/etc/mhonarc-ressources.tt2:280
 #: src/etc/mhonarc-ressources.tt2:362 src/etc/mhonarc-ressources.tt2:366
@@ -5656,14 +5263,12 @@ msgid "closed"
 msgstr ""
 
 #: src/etc/scenari/visibility.secret:1
-#, fuzzy
 msgid "conceal even for subscribers"
-msgstr "郵遞論壇沒有訂閱者"
+msgstr ""
 
 #: src/etc/scenari/visibility.conceal:1
-#, fuzzy
 msgid "conceal except for subscribers"
-msgstr "刪除選中的訂閱者"
+msgstr ""
 
 #: src/etc/scenari/topics_visibility.conceal:1
 msgid "conceal unless for listmaster"
@@ -5677,21 +5282,18 @@ msgstr ""
 msgid "concealed"
 msgstr ""
 
-# nlsref 16,94
 #: src/List.pm:835
 msgid "connection options"
 msgstr ""
 
-# nlsref 16,98
 #: src/List.pm:659
 msgid "connection timeout"
 msgstr ""
 
 #: src/etc/create_list_templates/hotline/comment.tt2:5
 #: src/etc/create_list_templates/private_working_group/comment.tt2:5
-#, fuzzy
 msgid "controlled subscription"
-msgstr "您訂閱的郵遞論壇"
+msgstr ""
 
 #. (list.name,list.host)
 #: mail_tt2/x509-user-cert-missing.tt2:2
@@ -5712,12 +5314,10 @@ msgstr ""
 msgid "data location URL"
 msgstr ""
 
-# nlsref 16,48
 #: src/List.pm:831
 msgid "database name"
 msgstr ""
 
-# nlsref 16,46
 #: src/List.pm:821
 msgid "database type"
 msgstr ""
@@ -5725,21 +5325,20 @@ msgstr ""
 #: src/List.pm:535 src/List.pm:951
 #, fuzzy
 msgid "datasource parameters"
-msgstr "Data sources setup"
+msgstr "Veri Kaynağı ayarları"
 
 #: src/List.pm:1110 src/List.pm:893
 #, fuzzy
 msgid "date"
-msgstr "更新"
+msgstr "Tarih"
 
-# nlsref 16,23
 #: src/List.pm:476
 msgid "days"
 msgstr ""
 
 #: web_tt2/edit_list_request.tt2:405
 msgid "default"
-msgstr "默認"
+msgstr ""
 
 #: src/etc/create_list_templates/html-news-letter/comment.tt2:5
 msgid "default reception format is HTML"
@@ -5748,13 +5347,12 @@ msgstr ""
 #: web_tt2/d_read.tt2:116 web_tt2/d_read.tt2:118 web_tt2/d_read.tt2:253
 #: web_tt2/d_read.tt2:255 web_tt2/d_read.tt2:27
 msgid "delete"
-msgstr "刪除"
+msgstr ""
 
 #: src/etc/global_task_models/purge_orphan_bounces.monthly.task:1
 msgid "delete monthly bounces for unsubscribed addresses"
 msgstr ""
 
-# nlsref 15,3
 #: wwsympa/wwslib.pm:63
 msgid "deletion message"
 msgstr ""
@@ -5771,7 +5369,6 @@ msgstr ""
 msgid "digest plain text format"
 msgstr ""
 
-# nlsref 15,10
 #: wwsympa/wwslib.pm:70
 msgid "directory of lists"
 msgstr ""
@@ -5779,11 +5376,11 @@ msgstr ""
 #: web_tt2/sigrequest.tt2:34 web_tt2/sigrequest.tt2:63
 #: web_tt2/subrequest.tt2:27 web_tt2/subrequest.tt2:57
 msgid "e-mail address"
-msgstr "電子電子郵件地址"
+msgstr ""
 
 #: web_tt2/d_read.tt2:246 web_tt2/d_read.tt2:248
 msgid "edit"
-msgstr "edit"
+msgstr ""
 
 #: mail_tt2/listmaster_notification.tt2:26
 msgid ""
@@ -5791,12 +5388,10 @@ msgid ""
 "'default' is no more accepted for a population."
 msgstr ""
 
-# nlsref 15,7
 #: wwsympa/wwslib.pm:67
 msgid "editor rejection message"
 msgstr ""
 
-# nlsref 16,27
 #: src/List.pm:506 src/List.pm:916 web_tt2/login_menu.tt2:59
 #: web_tt2/loginbanner.tt2:75
 msgid "email address"
@@ -5815,11 +5410,9 @@ msgid "email2@dom2 Name2"
 msgstr ""
 
 #: web_tt2/arcsearch_form.tt2:43
-#, fuzzy
 msgid "entire word"
-msgstr "整個"
+msgstr ""
 
-# nlsref 16,148
 #: src/List.pm:840
 msgid "environment variables for database connexion"
 msgstr ""
@@ -5827,7 +5420,7 @@ msgstr ""
 #: src/List.pm:1105 src/List.pm:889
 #, fuzzy
 msgid "epoch date"
-msgstr "更新"
+msgstr "Oluşturulma tarihi"
 
 #: mail_tt2/listmaster_notification.tt2:68
 msgid "errors in param_constraint.conf file"
@@ -5841,47 +5434,38 @@ msgstr ""
 msgid "expiration routine run yearly"
 msgstr ""
 
-# nlsref 16,42
 #: src/List.pm:643
 msgid "extracted attribute"
 msgstr ""
 
-# nlsref 16,41
 #: src/List.pm:637
 msgid "filter"
 msgstr ""
 
-# nlsref 16,198
 #: src/List.pm:722
 msgid "first-level connection timeout"
 msgstr ""
 
-# nlsref 16,142
 #: src/List.pm:706
 msgid "first-level extracted attribute"
 msgstr ""
 
-# nlsref 16,141
 #: src/List.pm:701
 msgid "first-level filter"
 msgstr ""
 
-# nlsref 16,201
 #: src/List.pm:728
 msgid "first-level regular expression"
 msgstr ""
 
-# nlsref 16,197
 #: src/List.pm:716
 msgid "first-level search scope"
 msgstr ""
 
-# nlsref 16,143
 #: src/List.pm:711
 msgid "first-level selection"
 msgstr ""
 
-# nlsref 16,140
 #: src/List.pm:695
 msgid "first-level suffix"
 msgstr ""
@@ -5894,33 +5478,27 @@ msgstr ""
 msgid "for anyone without authentication"
 msgstr ""
 
-# nlsref 16,5
 #: src/List.pm:322
 msgid "frequency"
 msgstr ""
 
 #. (current_subscriber.first_bounce,current_subscriber.last_bounce)
 #: web_tt2/editsubscriber.tt2:53
-#, fuzzy
 msgid "from %1 to %2"
-msgstr "時間: 從 %1 到 %2"
+msgstr ""
 
 #: web_tt2/scenario_test.tt2:70
-#, fuzzy
 msgid "get matched rule"
-msgstr "獲取應用的規則"
+msgstr ""
 
-# nlsref 15,11
 #: wwsympa/wwslib.pm:71
 msgid "global remind message"
 msgstr ""
 
-# nlsref 16,9
 #: src/List.pm:361
 msgid "halt rate"
 msgstr ""
 
-# nlsref 15,9
 #: wwsympa/wwslib.pm:69
 msgid "help file"
 msgstr ""
@@ -5929,7 +5507,6 @@ msgstr ""
 msgid "homepage"
 msgstr ""
 
-# nlsref 16,24
 #: src/List.pm:482
 msgid "hour"
 msgstr ""
@@ -5948,17 +5525,15 @@ msgstr ""
 
 #: web_tt2/arcsearch_form.tt2:36
 msgid "insensitive"
-msgstr "不區分"
+msgstr ""
 
 #: web_tt2/skinsedit.tt2:52
-#, fuzzy
 msgid "install static css"
-msgstr "修改權限"
+msgstr ""
 
 #: src/etc/scenari/visibility.intranet:1
-#, fuzzy
 msgid "intranet access"
-msgstr "修改權限"
+msgstr ""
 
 #: src/etc/scenari/invite.owner:1
 msgid "invite perform by list owner do not need authentication"
@@ -5966,7 +5541,7 @@ msgstr ""
 
 #: web_tt2/remindpasswd.tt2:5
 msgid "it will be sent to you by email :"
-msgstr "密碼將通過電子郵件發送給您:"
+msgstr ""
 
 #: src/etc/scenari/global_remind.listmaster:1
 msgid "just for listmaster"
@@ -5975,32 +5550,22 @@ msgstr ""
 #: web_tt2/edit_template.tt2:19
 #, fuzzy
 msgid "language"
-msgstr "語言"
+msgstr "Dil"
 
 #: web_tt2/rss_request.tt2:36
 #, fuzzy
 msgid "latest arc"
-msgstr "Archives setup"
+msgstr "Metin arşivleri"
 
 #: web_tt2/rss_request.tt2:41
 #, fuzzy
 msgid "latest document"
-msgstr ""
-"/FORM>\n"
-"\t</TD>\n"
-"      </TR>\n"
-"\n"
-"      <TR><"
+msgstr "En son paylaşılan belgeler"
 
 #: web_tt2/rss_request.tt2:51
 #, fuzzy
 msgid "latest lists"
-msgstr ""
-"/FORM>\n"
-"\t</TD>\n"
-"      </TR>\n"
-"\n"
-"      <TR><"
+msgstr "Son Listeler"
 
 #. (param0)
 #: mail_tt2/listmaster_notification.tt2:101
@@ -6014,22 +5579,18 @@ msgstr ""
 msgid "list %1 in status error_config"
 msgstr ""
 
-# nlsref 15,18
 #: wwsympa/wwslib.pm:78
 msgid "list aliases template"
 msgstr ""
 
-# nlsref 15,16
 #: wwsympa/wwslib.pm:76
 msgid "list creation notification message"
 msgstr ""
 
-# nlsref 15,15
 #: wwsympa/wwslib.pm:75
 msgid "list creation request message"
 msgstr ""
 
-# nlsref 15,13
 #: wwsympa/wwslib.pm:73
 msgid "list description"
 msgstr ""
@@ -6040,19 +5601,17 @@ msgid ""
 "the subscriber database. The list is no more public on the site."
 msgstr ""
 
-# nlsref 15,14
 #: wwsympa/wwslib.pm:74
 msgid "list homepage"
 msgstr ""
 
 #: web_tt2/get_closed_lists.tt2:10 web_tt2/get_pending_lists.tt2:13
 msgid "list name"
-msgstr "郵遞論壇名"
+msgstr ""
 
 #: web_tt2/menu.tt2:17
-#, fuzzy
 msgid "list of lists"
-msgstr "恢複"
+msgstr ""
 
 #: src/etc/scenari/del.owner_notify:1
 msgid "list owners, authentication not needed (notification)"
@@ -6060,21 +5619,20 @@ msgstr ""
 
 #: web_tt2/get_closed_lists.tt2:11 web_tt2/get_pending_lists.tt2:14
 msgid "list subject"
-msgstr "郵遞論壇主題"
+msgstr ""
 
 #: web_tt2/ls_templates.tt2:31
 #, fuzzy
 msgid "list templates"
-msgstr "自訂模塊"
+msgstr "Şablonları kişiselleştir"
 
 #: wwsympa/wwslib.pm:56
 msgid "listed in the list review page"
 msgstr ""
 
 #: src/etc/scenari/access_web_archive.listmaster:1
-#, fuzzy
 msgid "listmaster"
-msgstr "郵遞論壇名"
+msgstr ""
 
 #: src/etc/scenari/remind.listmaster:1 src/etc/scenari/review.listmaster:1
 msgid "listmaster only"
@@ -6084,39 +5642,31 @@ msgstr ""
 msgid "local domain users or owner approval"
 msgstr ""
 
-# nlsref 8,7
 #: src/etc/mhonarc-ressources.tt2:178 src/etc/mhonarc-ressources.tt2:276
 #: src/etc/mhonarc-ressources.tt2:63
-#, fuzzy
 msgid "mails"
-msgstr "ÀÉ®×"
+msgstr ""
 
-# nlsref 15,4
 #: wwsympa/wwslib.pm:64
 msgid "message footer"
 msgstr ""
 
-# nlsref 15,5
 #: wwsympa/wwslib.pm:65
 msgid "message header"
 msgstr ""
 
-# nlsref 16,25
 #: src/List.pm:488
 msgid "minute"
 msgstr ""
 
 #: web_tt2/d_read.tt2:290
-#, fuzzy
 msgid "moderate"
-msgstr "監管"
+msgstr ""
 
 #: src/etc/scenari/d_edit.editor:1
-#, fuzzy
 msgid "moderated for subscribers"
-msgstr "郵遞論壇沒有訂閱者"
+msgstr ""
 
-# nlsref 16,29
 #: src/List.pm:516 src/List.pm:926
 msgid "name"
 msgstr ""
@@ -6126,18 +5676,16 @@ msgid "near expiration of your certificate"
 msgstr ""
 
 #: src/etc/scenari/unsubscribe.auth:1
-#, fuzzy
 msgid "need authentication"
-msgstr "在驗証身份("
+msgstr ""
 
 #: src/etc/scenari/subscribe.auth_notify:1
 msgid "need authentication (notification is sent to owners)"
 msgstr ""
 
 #: web_tt2/arcsearch_form.tt2:30
-#, fuzzy
 msgid "newest messages"
-msgstr "最新郵件優先"
+msgstr ""
 
 #: src/etc/scenari/topics_visibility.noconceal:1
 #: src/etc/scenari/visibility.noconceal:1
@@ -6157,9 +5705,8 @@ msgid "nobody can review"
 msgstr ""
 
 #: wwsympa/wwslib.pm:39
-#, fuzzy
 msgid "notice mode"
-msgstr "整個"
+msgstr ""
 
 #: src/List.pm:382 src/List.pm:403
 msgid "notification"
@@ -6167,23 +5714,20 @@ msgstr ""
 
 #: web_tt2/set_pending_list_request.tt2:26
 msgid "notify owner"
-msgstr "告知擁有者"
+msgstr ""
 
 #: web_tt2/arcsearch_form.tt2:31
-#, fuzzy
 msgid "oldest messages"
-msgstr "最舊郵件優先"
+msgstr ""
 
 #. (list_request_date)
 #: web_tt2/install_pending_list.tt2:17
-#, fuzzy
 msgid "on %1"
-msgstr "收件者: %1"
+msgstr ""
 
 #: web_tt2/arcsearch_form.tt2:25
-#, fuzzy
 msgid "one of these words"
-msgstr "(所有的詞，"
+msgstr ""
 
 #: src/etc/scenari/review.owner:1
 msgid "only owner (and listmaster)"
@@ -6191,20 +5735,17 @@ msgstr ""
 
 #: src/etc/create_list_templates/discussion_list/comment.tt2:3
 #: src/etc/create_list_templates/private_working_group/comment.tt2:3
-#, fuzzy
 msgid "only subscribers can post"
-msgstr "訂閱者"
+msgstr ""
 
 #: src/etc/scenari/unsubscribe.open:1
-#, fuzzy
 msgid "open"
-msgstr "要求于"
+msgstr ""
 
 #: src/etc/scenari/unsubscribe.open_notify:1
 msgid "open with mail confirmation, owner is notified"
 msgstr ""
 
-# nlsref 16,92
 #: src/List.pm:1003
 msgid "other email address"
 msgstr ""
@@ -6216,29 +5757,27 @@ msgstr ""
 #: web_tt2/review.tt2:23
 #, fuzzy
 msgid "page"
-msgstr "後一頁"
+msgstr "Sonraki sayfa"
 
 #. ($PAGENUM$,$NUMOFPAGES$)
 #: src/etc/mhonarc-ressources.tt2:185 src/etc/mhonarc-ressources.tt2:283
-#, fuzzy
 msgid "page # %1/%2"
-msgstr "第%1頁，共%2頁"
+msgstr ""
 
 #. (page,total_page)
 #: web_tt2/reviewbouncing.tt2:115 web_tt2/reviewbouncing.tt2:49
 msgid "page %1 / %2"
-msgstr "第%1頁，共%2頁"
+msgstr ""
 
 #: web_tt2/arcsearch_form.tt2:42
-#, fuzzy
 msgid "part of word"
-msgstr "密碼"
+msgstr ""
 
 #: web_tt2/login_menu.tt2:61 web_tt2/loginbanner.tt2:76
 #: web_tt2/sigrequest.tt2:35 web_tt2/sigrequest.tt2:64
 #: web_tt2/subrequest.tt2:28 web_tt2/subrequest.tt2:58
 msgid "password"
-msgstr "密碼"
+msgstr ""
 
 #. (newuser.password)
 #: mail_tt2/sendpasswd.tt2:17 mail_tt2/sendpasswd.tt2:24
@@ -6247,21 +5786,17 @@ msgstr ""
 
 #: src/etc/create_list_templates/hotline/comment.tt2:4
 #: src/etc/create_list_templates/private_working_group/comment.tt2:4
-#, fuzzy
 msgid "private archives"
-msgstr "Archives setup"
+msgstr ""
 
-# nlsref 16,30
 #: src/List.pm:521
 msgid "private information"
 msgstr ""
 
-# nlsref 16,61
 #: src/List.pm:931
 msgid "private informations"
 msgstr ""
 
-# nlsref 16,62
 #: src/List.pm:936 src/List.pm:962
 msgid "profile"
 msgstr ""
@@ -6272,47 +5807,25 @@ msgid "properties"
 msgstr ""
 
 #: src/etc/scenari/access_web_archive.public:1 src/etc/scenari/invite.public:1
-#, fuzzy
 msgid "public"
-msgstr "發布"
+msgstr ""
 
-# #-#-#-#-#  tw.po (PACKAGE VERSION)  #-#-#-#-#
-# nlsref 6,82
 #: src/etc/create_list_templates/html-news-letter/comment.tt2:3
 #: src/etc/create_list_templates/news-letter/comment.tt2:3
-#, fuzzy
 msgid "public and moderated list"
 msgstr ""
-"#-#-#-#-#  tw.po (PACKAGE VERSION)  #-#-#-#-#\n"
-"¤½²³¶l±H²M³æ\n"
-"#-#-#-#-#  zh_TW.po (PACKAGE VERSION)  #-#-#-#-#\n"
-"公開郵遞論壇"
 
-# #-#-#-#-#  tw.po (PACKAGE VERSION)  #-#-#-#-#
-# nlsref 6,82
 #: src/etc/create_list_templates/discussion_list/comment.tt2:2
-#, fuzzy
 msgid "public archives"
 msgstr ""
-"#-#-#-#-#  tw.po (PACKAGE VERSION)  #-#-#-#-#\n"
-"¤½²³¶l±H²M³æ\n"
-"#-#-#-#-#  zh_TW.po (PACKAGE VERSION)  #-#-#-#-#\n"
-"公開郵遞論壇"
 
 #: src/etc/scenari/d_edit.public:1 src/etc/scenari/d_read.public:1
 msgid "public documents"
 msgstr ""
 
-# #-#-#-#-#  tw.po (PACKAGE VERSION)  #-#-#-#-#
-# nlsref 6,82
 #: src/etc/scenari/send.public:1
-#, fuzzy
 msgid "public list"
 msgstr ""
-"#-#-#-#-#  tw.po (PACKAGE VERSION)  #-#-#-#-#\n"
-"¤½²³¶l±H²M³æ\n"
-"#-#-#-#-#  zh_TW.po (PACKAGE VERSION)  #-#-#-#-#\n"
-"公開郵遞論壇"
 
 #: src/etc/scenari/send.publicnomultipart:1
 msgid "public list multipart messages are rejected"
@@ -6334,20 +5847,17 @@ msgstr ""
 #: web_tt2/review.tt2:231 web_tt2/review.tt2:50 web_tt2/review.tt2:75
 #: web_tt2/reviewbouncing.tt2:107 web_tt2/reviewbouncing.tt2:31
 msgid "quiet"
-msgstr "安靜"
+msgstr ""
 
-# nlsref 16,203
 #: src/List.pm:1051 src/List.pm:1143
 msgid "quota"
 msgstr ""
 
-# nlsref 16,19
 #: src/List.pm:343 src/List.pm:456 src/List.pm:511 src/List.pm:541
 #: src/List.pm:921 src/List.pm:957
 msgid "reception mode"
 msgstr ""
 
-# nlsref 15,6
 #: wwsympa/wwslib.pm:66
 msgid "remind message"
 msgstr ""
@@ -6364,40 +5874,33 @@ msgstr ""
 msgid "remind message sent to subscribers every year"
 msgstr ""
 
-# nlsref 16,36
 #: src/List.pm:610 src/List.pm:674 src/List.pm:787 src/List.pm:826
 msgid "remote host"
 msgstr ""
 
-# nlsref 16,206
 #: src/List.pm:816
 msgid "remote list inclusion"
 msgstr ""
 
-# nlsref 16,39
 #: src/List.pm:594 src/List.pm:627 src/List.pm:691 src/List.pm:849
 msgid "remote password"
 msgstr ""
 
-# nlsref 16,207
 #: src/List.pm:799
 msgid "remote path of sympa list dump"
 msgstr ""
 
-# nlsref 16,37
 #: src/List.pm:616 src/List.pm:680 src/List.pm:793
 msgid "remote port"
 msgstr ""
 
-# nlsref 16,38
 #: src/List.pm:587 src/List.pm:621 src/List.pm:685 src/List.pm:844
 msgid "remote user"
 msgstr ""
 
 #: src/etc/scenari/del.closed:1
-#, fuzzy
 msgid "remove subscriber impossible"
-msgstr "您于"
+msgstr ""
 
 #: src/etc/scenari/subscribe.smime:1
 msgid "requires S/MIME signed"
@@ -6411,7 +5914,6 @@ msgstr ""
 msgid "requires authentication then owner approval"
 msgstr ""
 
-# nlsref 16,93
 #: src/List.pm:1008
 msgid "respect of existing header field"
 msgstr ""
@@ -6441,15 +5943,13 @@ msgstr ""
 #: src/etc/scenari/d_edit.private:1 src/etc/scenari/d_read.private:1
 #: src/etc/scenari/info.private:1 src/etc/scenari/invite.private:1
 #: src/etc/scenari/review.private:1 src/etc/scenari/send.private:1
-#, fuzzy
 msgid "restricted to subscribers"
-msgstr "刪除選中的訂閱者"
+msgstr ""
 
 #: src/etc/scenari/d_edit.private-https:1
 #: src/etc/scenari/d_read.private-https:1
-#, fuzzy
 msgid "restricted to subscribers authenticated with user cert"
-msgstr "刪除選中的訂閱者"
+msgstr ""
 
 #: src/etc/scenari/send.private_smime:1
 msgid "restricted to subscribers check smime signature"
@@ -6476,54 +5976,44 @@ msgstr ""
 #: web_tt2/edit_template.tt2:36
 #, fuzzy
 msgid "save"
-msgstr "保存"
+msgstr "Kaydet"
 
 #: web_tt2/edit_list_request.tt2:30
-#, fuzzy
 msgid "scenario source"
-msgstr "情景測試模塊"
+msgstr ""
 
-# nlsref 16,97
 #: src/List.pm:653
 msgid "search scope"
 msgstr ""
 
-# nlsref 16,200
 #: src/List.pm:760
 msgid "second-level connection timeout"
 msgstr ""
 
-# nlsref 16,146
 #: src/List.pm:744
 msgid "second-level extracted attribute"
 msgstr ""
 
-# nlsref 16,145
 #: src/List.pm:738
 msgid "second-level filter template"
 msgstr ""
 
-# nlsref 16,202
 #: src/List.pm:766
 msgid "second-level regular expression"
 msgstr ""
 
-# nlsref 16,199
 #: src/List.pm:754
 msgid "second-level search scope"
 msgstr ""
 
-# nlsref 16,147
 #: src/List.pm:749
 msgid "second-level selection"
 msgstr ""
 
-# nlsref 16,144
 #: src/List.pm:732
 msgid "second-level suffix template"
 msgstr ""
 
-# nlsref 16,43
 #: src/List.pm:648
 msgid "selection (if multiple)"
 msgstr ""
@@ -6535,18 +6025,16 @@ msgstr ""
 
 #: web_tt2/scenario_test.tt2:35
 msgid "sender email"
-msgstr "發件人郵件"
+msgstr ""
 
 #: web_tt2/arcsearch_form.tt2:37
 msgid "sensitive"
-msgstr "區分"
+msgstr ""
 
-# nlsref 17,1
 #: wwsympa/wwslib.pm:48
 msgid "session"
 msgstr ""
 
-# nlsref 16,209
 #: src/List.pm:599 src/List.pm:663 src/List.pm:770 src/List.pm:809
 #: src/List.pm:863
 msgid "short name for this source"
@@ -6558,12 +6046,11 @@ msgstr ""
 
 #: web_tt2/set_pending_list_request.tt2:25 web_tt2/subrequest.tt2:47
 msgid "submit"
-msgstr "提交"
+msgstr ""
 
 #: src/etc/scenari/subscribe.closed:1
-#, fuzzy
 msgid "subscribe is impossible"
-msgstr "取消用戶的訂閱"
+msgstr ""
 
 #: src/etc/create_list_templates/html-news-letter/comment.tt2:4
 #: src/etc/create_list_templates/news-letter/comment.tt2:4
@@ -6571,78 +6058,73 @@ msgid "subscribers emails are protected"
 msgstr ""
 
 #: src/etc/scenari/access_web_archive.private:1
-#, fuzzy
 msgid "subscribers only"
-msgstr "訂閱者"
+msgstr ""
 
 #. (param0)
 #: mail_tt2/listmaster_notification.tt2:33
 msgid "subscribers update failed for list %1"
 msgstr ""
 
-# nlsref 15,8
 #: wwsympa/wwslib.pm:68
 msgid "subscribing invitation message"
 msgstr ""
 
 #: src/etc/scenari/subscribe.auth:1
-#, fuzzy
 msgid "subscription request confirmed"
-msgstr ",AC;SP6)TDR*Gs(B"
+msgstr ""
 
-# nlsref 16,40
 #: src/List.pm:631
 msgid "suffix"
-msgstr ""
+msgstr "Sonek"
 
-# nlsref 15,12
 #: wwsympa/wwslib.pm:72
 msgid "summary message"
-msgstr ""
+msgstr "özet mesajı"
 
-# nlsref 6,81
 #: wwsympa/wwslib.pm:38
 #, fuzzy
 msgid "summary mode"
-msgstr "¥Î¤á«ü¤Þ"
+msgstr "özet mesajı"
 
 #: src/etc/mhonarc-ressources.tt2:418
 msgid "tag this mail for deletion"
-msgstr ""
+msgstr "silmek için işaretle"
 
 #: wwsympa/wwslib.pm:40
 #, fuzzy
 msgid "text only mode"
-msgstr "接收模式:"
+msgstr "Kabul modu :"
 
 #: web_tt2/help_editlist.tt2:151
 msgid "the @ char is replaced by the string \" AT \"."
-msgstr ""
+msgstr "@ karakteri \"AT\" ile değiştirildi"
 
 #: web_tt2/help_editlist.tt2:150
 msgid ""
 "the address is hidden using a javascript. User who enable javascript can see "
 "a nice mailto address where others have nothing."
 msgstr ""
+"adres javascript ile saklanıyor. javascript uyumlu tarayıcılardan mailto "
+"adresini görebilirler."
 
 #: src/List.pm:531 src/List.pm:946
 #, fuzzy
 msgid "the datasource"
-msgstr "size=\"-1\"><b>定制</b"
+msgstr "Veri Kaynağı"
 
 #. (shortname)
 #: web_tt2/d_upload.tt2:1
 msgid "the file %1 already exists"
-msgstr ""
+msgstr "%1 dosyası zaten var"
 
 #: web_tt2/create_list_request.tt2:11
 msgid "the list name ; be careful, not its address !"
-msgstr "郵遞論壇名；注意，不是它的地址!"
+msgstr "dikkatli olun, adres değil liste adı!"
 
 #: web_tt2/arcsearch_form.tt2:23
-#, fuzzy
 msgid "this sentence"
-msgstr "(本句話，"
+msgstr "bu cümle"
 
 #: web_tt2/edit_template.tt2:13
 msgid ""
@@ -6659,655 +6141,138 @@ msgstr ""
 #: web_tt2/edit_template.tt2:10
 #, fuzzy
 msgid "this template is defined for list"
-msgstr "無法更改 %1 的電郵地址"
+msgstr "Liste %1'in sahibi tanımlanmamış"
 
 #: src/etc/mhonarc-ressources.tt2:366
 msgid "thread"
-msgstr ""
+msgstr "thread"
 
 #: src/List.pm:372 src/List.pm:393
 msgid "threshold"
-msgstr ""
+msgstr "Eşik"
 
 #: web_tt2/d_read.tt2:345
 msgid "title"
-msgstr "URL"
+msgstr "başlık"
 
 #: src/etc/mhonarc-ressources.tt2:408
-#, fuzzy
 msgid "to list"
-msgstr "恢複"
+msgstr "listesine"
 
 #: web_tt2/d_read.tt2:211
-#, fuzzy
 msgid "to moderate"
-msgstr "監管"
+msgstr "Onaya"
 
-# nlsref 15,2
 #: wwsympa/wwslib.pm:62
 msgid "unsubscription message"
+msgstr "üyelikten çıkma mesajı"
+
+#: wwsympa/wwslib.pm:42
+msgid "urlize mode"
 msgstr ""
 
-# nlsref 6,81
-#: wwsympa/wwslib.pm:42
-#, fuzzy
-msgid "urlize mode"
-msgstr "¥Î¤á«ü¤Þ"
-
-# nlsref 16,91
 #: src/List.pm:998 web_tt2/help_editlist.tt2:130
 msgid "value"
-msgstr ""
+msgstr "değer"
 
 #: web_tt2/serveradmin.tt2:74
 msgid "view translations"
 msgstr ""
 
-# nlsref 15,17
 #: wwsympa/wwslib.pm:77
 msgid "virus infection message"
-msgstr ""
+msgstr "virüs bulaşma mesajı"
 
-# nlsref 16,20
 #: src/List.pm:461
 msgid "visibility"
-msgstr ""
+msgstr "görünürlük"
 
-# nlsref 16,8
 #: src/List.pm:354
 msgid "warn rate"
-msgstr ""
+msgstr "uyarı oranı"
 
-# nlsref 15,1
 #: wwsympa/wwslib.pm:61
 msgid "welcome message"
-msgstr ""
+msgstr "hoşgeldin mesajı"
 
 #: src/List.pm:898
 msgid "who ran the instantiation"
 msgstr ""
 
 #: src/List.pm:1116
+#, fuzzy
 msgid "who updated the config"
-msgstr ""
+msgstr "Ayarın son güncellemesi"
 
 #: src/etc/scenari/unsubscribe.open_notify.~1.9.~:1
 msgid "without authentication, notification is sent to owners"
-msgstr ""
+msgstr "kimlik doğrulamasız, bilgi liste sahiplerine gönderilir"
 
 #: wwsympa/wwslib.pm:44
-#, fuzzy
 msgid "you do not receive your own posts"
-msgstr "要收到密碼:"
+msgstr ""
 
 #: web_tt2/error.tt2:18
 msgid "you need to login"
-msgstr "您需要先登入"
+msgstr "Giriş yapmalısınız"
 
 #. (newuser.email)
 #: mail_tt2/sendpasswd.tt2:29
 msgid "your email address    : %1"
-msgstr ""
+msgstr "eposta adresiniz : %1"
 
 #. (newuser.password)
 #: mail_tt2/sendpasswd.tt2:30
 msgid "your password : %1"
-msgstr ""
+msgstr "Şifreniz : %1"
 
 #, fuzzy
 #~ msgid "-Rename list"
-#~ msgstr "刪除郵遞論壇"
+#~ msgstr "Listeyi yeniden adlandır"
 
-#, fuzzy
 #~ msgid "Rename list"
-#~ msgstr "刪除郵遞論壇"
+#~ msgstr "Listeyi yeniden adlandır"
 
-#, fuzzy
 #~ msgid ""
 #~ "<strong>Moderate</strong> : reject and accept messages and documents for "
 #~ "distribution."
-#~ msgstr ": 接受或拒絕郵件的分發"
+#~ msgstr ""
+#~ "<strong>Modere Et</strong> : Belgelerin dağıtımı için mesajları kabul "
+#~ "edin veya red edin."
 
-#, fuzzy
 #~ msgid ""
 #~ "<strong>Subscribers</strong> : subscribers management, add, del, search, "
 #~ "bounces, etc..."
-#~ msgstr ": 郵遞論壇訂閱者管理，包括添加、刪除、搜尋、退信等。"
-
-#~ msgid "Shared web"
-#~ msgstr "共享頁面"
-
-#, fuzzy
-#~ msgid "Admin"
-#~ msgstr "管理"
-
-#, fuzzy
-#~ msgid "Last"
-#~ msgstr "布局"
-
-#, fuzzy
-#~ msgid "Next"
-#~ msgstr "後一頁"
-
-#, fuzzy
-#~ msgid "Previous"
-#~ msgstr "前一頁"
+#~ msgstr ""
+#~ "<strong>Kayıtlı Kullanıcılar</strong> : kayıtlı kullanıcı yönetimi, ekle, "
+#~ "sil, ara, geri dönen mesajlar, vs..."
 
 #~ msgid "Bounced email rate:"
-#~ msgstr "退信率:"
+#~ msgstr "Geri dönen eposta oranı"
 
 #~ msgid "Create a new folder inside the folder SHARED"
-#~ msgstr "在活頁夾 SHARED 里建立新活頁夾"
+#~ msgstr "Paylaşım içinde yeni dizin oluştur"
 
 #~ msgid "Create a new subdirectory"
-#~ msgstr "建立新的子目錄"
+#~ msgstr "Yeni alt dizin oluştur"
+
+#~ msgid "First"
+#~ msgstr "İlk"
+
+#~ msgid "Last"
+#~ msgstr "Son"
 
 #~ msgid "Messages to moderate :"
-#~ msgstr "要監管的郵件:"
+#~ msgstr "Modere edilecek mesaj:"
+
+#~ msgid "Next"
+#~ msgstr "Sonraki"
 
 #~ msgid "No message to moderate"
-#~ msgstr "沒有郵件要監管"
+#~ msgstr "Modere edilecek mesaj yok"
 
-#~ msgid "ALL"
-#~ msgstr "全部"
+#~ msgid "Previous"
+#~ msgstr "Önceki"
 
-#, fuzzy
-#~ msgid "Archive not found"
-#~ msgstr "切換選取"
-
-#, fuzzy
-#~ msgid "Cannot read file %1"
-#~ msgstr "無法上傳文件 %1"
-
-#, fuzzy
-#~ msgid "Could not rename the archive"
-#~ msgstr "在存盤中搜索的結果"
-
-#, fuzzy
-#~ msgid "Could not rename the bounces directory"
-#~ msgstr "無法建立目錄 %1"
-
-#~ msgid "Do you really want to unsubscribe ALL selected subscribers ?"
-#~ msgstr "Do you really want to unsubscribe ALL selected subscribers ?"
-
-#, fuzzy
-#~ msgid "Documents to moderate :"
-#~ msgstr "要監管的郵件:"
-
-#~ msgid "Extended search"
-#~ msgstr "進階搜尋"
-
-#, fuzzy
-#~ msgid "Failed to add user"
-#~ msgstr "新增使用者 %1 失敗"
-
-#, fuzzy
-#~ msgid "Failed to include members"
-#~ msgstr "新增使用者 %1 失敗"
-
-#, fuzzy
-#~ msgid "Failed to install aliases"
-#~ msgstr "新增使用者 %1 失敗"
-
-#, fuzzy
-#~ msgid "Internal server error"
-#~ msgstr "重置錯誤計數"
-
-#~ msgid "List admin"
-#~ msgstr "郵遞論壇管理"
-
-#~ msgid "List info"
-#~ msgstr "郵遞論壇信息"
-
-#~ msgid "Local"
-#~ msgstr "本地"
-
-#, fuzzy
-#~ msgid "Login failed, no authentication service was provided"
-#~ msgstr "在驗証身份("
-
-#~ msgid "Mailing lists"
-#~ msgstr "郵遞論壇列表"
-
-#, fuzzy
-#~ msgid "May not create the deleted directory"
-#~ msgstr "無法建立目錄 %1"
-
-#, fuzzy
-#~ msgid "May not send the message"
-#~ msgstr "安靜</i>選項。"
-
-#, fuzzy
-#~ msgid "Message error"
-#~ msgstr "重置錯誤計數"
-
-#, fuzzy
-#~ msgid "Missing argument: %1"
-#~ msgstr "缺少參數 %1"
-
-#, fuzzy
-#~ msgid "No SOAP service available on this server"
-#~ msgstr ": 服務器上提供的公開郵遞論壇。"
-
-#, fuzzy
-#~ msgid "No document to moderate"
-#~ msgstr "沒有郵件要監管"
-
-#, fuzzy
-#~ msgid "No entry found with email %1"
-#~ msgstr "%1 文件的編修"
-
-#~ msgid "Pref"
-#~ msgstr "首選項"
-
-#~ msgid "Scenari test module"
-#~ msgstr "情景測試模塊"
-
-#~ msgid "Send me a password"
-#~ msgstr "請寄給我密碼"
-
-#~ msgid "Sort by author"
-#~ msgstr "按作者排序"
-
-#~ msgid "Sort by date"
-#~ msgstr "按日期排序"
-
-#~ msgid "Sort by name"
-#~ msgstr "按名字排序"
-
-#~ msgid "Sort by size"
-#~ msgstr "按大小排序"
-
-#, fuzzy
-#~ msgid "Subscriber %s not found"
-#~ msgstr "郵遞論壇訂閱者信息"
-
-#, fuzzy
-#~ msgid "Subscribers will be updated soon"
-#~ msgstr "訂閱者選項"
-
-#, fuzzy
-#~ msgid "The archive is empty"
-#~ msgstr ""
-#~ "/FORM>\n"
-#~ "\t</TD>\n"
-#~ "      </TR>\n"
-#~ "\n"
-#~ "      <TR><"
-
-# nlsref 6,15
-#, fuzzy
-#~ msgid "The authentication process failed"
-#~ msgstr "®Ö­ãµ{§Ç¥¢±Ñ\\n\n"
-
-#, fuzzy
-#~ msgid "The document %1 is awaiting moderation1"
-#~ msgstr "沒有郵件要監管"
-
-#, fuzzy
-#~ msgid "The exportation failed"
-#~ msgstr "%1: 操作失敗"
-
-#, fuzzy
-#~ msgid "The list already exists"
-#~ msgstr ""
-#~ "/FORM>\n"
-#~ "\t</TD>\n"
-#~ "      </TR>\n"
-#~ "\n"
-#~ "      <TR><"
-
-#, fuzzy
-#~ msgid "The list has been closed"
-#~ msgstr "這是郵遞論壇的主題"
-
-#, fuzzy
-#~ msgid "The list has been restored"
-#~ msgstr "郵遞論壇的別名已刪除。"
-
-#, fuzzy
-#~ msgid "The list is already closed"
-#~ msgstr "最新郵件優先"
-
-#, fuzzy
-#~ msgid "The list is not closed"
-#~ msgstr "文件 %1 已保存"
-
-#, fuzzy
-#~ msgid "The list parameter is missing"
-#~ msgstr ""
-#~ "/FORM>\n"
-#~ "\t</TD>\n"
-#~ "      </TR>\n"
-#~ "\n"
-#~ "      <TR><"
-
-# nlsref 4,26
-#, fuzzy
-#~ msgid "The subscribers have been updated"
-#~ msgstr "­q¤á¦³ :\n"
-
-#, fuzzy
-#~ msgid ""
-#~ "There isn't any message or document waiting for moderation on list %1"
-#~ msgstr "沒有郵件要監管"
-
-# nlsref 3,1
-#, fuzzy
-#~ msgid "Unable to change directory"
-#~ msgstr "¤£¯à¦s¨ú¥Ø¿ý %s : %m"
-
-# nlsref 11,2
-#, fuzzy
-#~ msgid "Unable to check list using smtp"
-#~ msgstr "Unable to create a channel in smtpto: %m"
-
-# nlsref 3,1
-#, fuzzy
-#~ msgid "Unable to create directory"
-#~ msgstr "¤£¯à¦s¨ú¥Ø¿ý %s : %m"
-
-# nlsref 6,2
-#, fuzzy
-#~ msgid "Unable to load the list of topics"
-#~ msgstr "¤£¯à¾\\ÅªÀ°§UÀÉ®× : %s\n"
-
-#, fuzzy
-#~ msgid "Unable to load the templates required to create a list"
-#~ msgstr "無法找到要刪除的郵件"
-
-# nlsref 3,1
-#, fuzzy
-#~ msgid "Unable to open the scenari directory"
-#~ msgstr "¤£¯à¦s¨ú¥Ø¿ý %s : %m"
-
-# nlsref 6,2
-#, fuzzy
-#~ msgid "Unable to read spool"
-#~ msgstr "¤£¯à¾\\ÅªÀ°§UÀÉ®× : %s\n"
-
-#, fuzzy
-#~ msgid "Unknown authentication service"
-#~ msgstr "在驗証身份("
-
-#, fuzzy
-#~ msgid "Update failed"
-#~ msgstr "更新"
-
-#, fuzzy
-#~ msgid "You don't have required privileges to perform this action"
-#~ msgstr "%1: 您不被允許進行這個操作"
-
-#, fuzzy
-#~ msgid "You have been authenticated"
-#~ msgstr "在驗証身份("
-
-#~ msgid "Your environment"
-#~ msgstr "您的環境"
-
-#, fuzzy
-#~ msgid "mails, page # %1/%2"
-#~ msgstr "第%1頁，共%2頁"
-
-#, fuzzy
-#~ msgid "security info"
-#~ msgstr "郵遞論壇信息"
-
-#~ msgid "view all lists"
-#~ msgstr "檢視所有郵遞論壇"
-
-#, fuzzy
-#~ msgid "Your password: %1."
-#~ msgstr "當前密碼:"
-
-#~ msgid "Language : %1"
-#~ msgstr "語言: %1"
-
-#~ msgid "Status : %1"
-#~ msgstr "狀態: %1"
-
-#~ msgid "Visibility : %1"
-#~ msgstr "可見性: %1"
-
-#, fuzzy
-#~ msgid "The [% count %] latest messages"
-#~ msgstr "最舊郵件優先"
-
-#~ msgid "Modifier"
-#~ msgstr "修改"
-
-#, fuzzy
-#~ msgid "page n&#176; %1/%2"
-#~ msgstr "第%1頁，共%2頁"
-
-# nlsref 12,3
-#~ msgid "7bit"
-#~ msgstr "8bit"
-
-#, fuzzy
-#~ msgid "moderated to subscribers"
-#~ msgstr "刪除選中的訂閱者"
-
-# nlsref 12,2
-#~ msgid "us-ascii"
-#~ msgstr "cn-big5"
-
-#~ msgid "%1 occurrences found"
-#~ msgstr "找到 %1 個相關郵遞論壇"
-
-# nlsref 12,1
-#~ msgid "1.0"
-#~ msgstr "1.0"
-
-#~ msgid "Delete selected subscribers"
-#~ msgstr "刪除選中的訂閱者"
-
-#~ msgid "Do it"
-#~ msgstr "進行"
-
-#~ msgid "Do you really want to unsubscribe from list %1"
-#~ msgstr "您確定要從 %1 退訂?"
-
-#~ msgid "Error while deleting this message"
-#~ msgstr "在刪除此郵件時發生錯誤，請用完整的 URL 或涉及到的郵件向郵遞論壇管理者詢問。"
-
-#, fuzzy
-#~ msgid "Moderated, old style"
-#~ msgstr "監管者:"
-
-#, fuzzy
-#~ msgid ""
-#~ "Most mailing list features require your email. Some mailing lists are "
-#~ "hidden to unidentified persons."
-#~ msgstr "郵遞論壇大部分的功能都需要登入 email 方能使用；某些郵遞論壇不對一般大眾開放。\n"
-
-#~ msgid "Operation successful"
-#~ msgstr "操作成功"
-
-# nlsref 12,4
-#~ msgid "SYMPA <%s>"
-#~ msgstr "SYMPA <%s>"
-
-# nlsref 6,261
-#, fuzzy
-#~ msgid ""
-#~ "Someone (hopefully you) asked for you e-mail address\n"
-#~ "to be removed from list '%s'.\n"
-#~ "If you want this action to be taken, please \n"
-#~ "\n"
-#~ "- reply to this mail\n"
-#~ "OR\n"
-#~ "- send a message to '%s' with subject\n"
-#~ " %s\n"
-#~ "OR\n"
-#~ "- hit the following mailto %s\n"
-#~ "\n"
-#~ "This can be done via the URL %s\n"
-#~ "If you do not want this action to be taken, you can safely ignore\n"
-#~ "this message"
-#~ msgstr ""
-#~ "¦³¤H­n¨D¥Ñ %s ¶l±H²M³æ¤¤§R°£§Aªº¹q¶l¦a§}¡C\n"
-#~ "¦pªG§A°õ¦æ³o°Ê§@¡A½Ð¿í´`¤U¦C°Ê§@ :\n"
-#~ "\n"
-#~ "- ¦^ÂÐ³o¶l¥ó \n"
-#~ "©Î\\n- ±H¶l¥ó¨ì %s ¥]§t¥DÃD\n"
-#~ " %s\n"
-#~ "©Î\\n- ±H¶l¥ó¨ì %s\n"
-#~ "\n"
-#~ "¸g¥Ñ URL %s §¹¦¨\\n¦pªG§A¤£·Q°õ¦æ³o°Ê§@¡A½Ð©¿²¤¥»¶l¥ó¡C"
-
-#, fuzzy
-#~ msgid "Table of content"
-#~ msgstr "目錄:"
-
-#~ msgid "Your password has been sent to your email address %1"
-#~ msgstr "您的密碼已經被寄送到您的 Email 地址 %1。"
-
-#, fuzzy
-#~ msgid "Your subscription email is %3"
-#~ msgstr "您訂閱的郵遞論壇"
-
-#, fuzzy
-#~ msgid "email, is your subscriber email address"
-#~ msgstr "，是您的訂閱 email 地址"
-
-#~ msgid "login"
-#~ msgstr "登入"
-
-#~ msgid "password :"
-#~ msgstr "密碼:"
-
-#, fuzzy
-#~ msgid "password, is your password."
-#~ msgstr "，是您的密碼。"
-
-#, fuzzy
-#~ msgid "subscribers"
-#~ msgstr "訂閱者"
-
-#~ msgid "translated"
-#~ msgstr "完成翻譯"
-
-# nlsref 1,102
-#~ msgid "3.3a"
-#~ msgstr "2.5"
-
-# nlsref 5,1
-#~ msgid "Safefork cannot create a new process : %m"
-#~ msgstr "Safefork cannot create a new process : %m"
-
-# nlsref 6,11
-#~ msgid "List is Private : You can not browse subscribers' list.\n"
-#~ msgstr "¨p¤H¶l±H²M³æ : §A¤£¯à¾\\Åª­q¤á¸ê®Æ¡C\n"
-
-# nlsref 6,24
-#~ msgid "Subscription to this list are currently suspended.\n"
-#~ msgstr "³o¶l±H²M³æ¼È°±¥Ó½Ð¥[¤H¡C\n"
-
-# nlsref 6,26
-#~ msgid "Unsubscription is not available for list %s.\n"
-#~ msgstr "¶l±H²M³æ %s ¨S¦³¨ú®ø­q¾\\¥\\¯à¡C\n"
-
-# nlsref 6,27
-#~ msgid "Information regarding your subscription have been updated.\n"
-#~ msgstr "Ãö¤_§Aªº­q¾\\¤w¸g§ó·s¡C\n"
-
-# nlsref 6,28
-#~ msgid "You are now a subscriber of list %s.\n"
-#~ msgstr "§A¤w¸g¬O %s ªº­q¤á¡C\n"
-
-# nlsref 6,29
-#~ msgid ""
-#~ "Information regarding this list will be sent in a separate message.\n"
-#~ msgstr "¦³Ãö¥»¶l±H²M³æªº¸ê®Æ±N·|¥t¥~ªº±Hµ¹§A¡C\n"
-
-# nlsref 6,32
-#~ msgid ""
-#~ "Only owners of list %s may add or remove subscribers.\n"
-#~ "You are not allowed to use this command, or you didn't provide the items\n"
-#~ "requested for your identification.\n"
-#~ msgstr "¥u¦³¶l±H²M³æ %s ªº¾Ö¦³ªÌ¤~¯à¼W¥[©Î°£¥h­q¤á\\n§A¤£¯à¨Ï¥Î³o«ü¥O¡A©Î§A¨S¦³µý©ú§Aªº¨­¥÷¡C\n"
-
-# nlsref 6,34
-#~ msgid ""
-#~ "Your have been removed from the list\n"
-#~ "by %s, owner of this list.\n"
-#~ "\n"
-#~ "This action is generally performed to delete addresses generating\n"
-#~ "non-delivery reports. Your address may however work correctly.\n"
-#~ "If so, please excuse us for this trouble and renew your subsciption.\n"
-#~ msgstr ""
-#~ "¦]¶l±H²M³æ¾Ö¦³ªÌªº­n¨D¡A§A¤w¦b¶l±H²M³æ %s ¤¤°£¥h¡C\n"
-#~ "³o°Ê§@³q±`¬O¨t²Î¤£¯à±H¹q¶l¨ì§Aªº¹q¶l¦a§}¡A\n"
-#~ "¦pªG§Aªº¹q¶l¦a§}¬O¨S¦³°ÝÃD¡A½Ð­ì½Ì§Ú­Ì©M­«·s¥Ó½Ð¥[¤H¡C\n"
-
-# nlsref 6,35
-#~ msgid "The archive will be sent to you in a separate message.\n"
-#~ msgstr "ÀÉ®×¬ö¿ý±N·|¥t¥~ªº±Hµ¹§A¡C\n"
-
-# nlsref 6,75
-#~ msgid "Enable to unsubscribe %s from any list \n"
-#~ msgstr "®Ö­ã¨ú®ø­q¾\\ %s \n"
-
-#~ msgid "Close it &nbsp;&nbsp;"
-#~ msgstr "關閉它 &nbsp;&nbsp;"
-
-#~ msgid "Content-Type: text/plain"
-#~ msgstr "Content-Type: text/plain; charset=cn-big5"
-
-#~ msgid "Content-transfer-encoding: 7bit"
-#~ msgstr "Content-transfer-encoding: 8bit"
-
-#~ msgid "Create shared"
-#~ msgstr "建立共享"
-
-#~ msgid "Do you really want to delete %1%2 ([% f.size %] Kb) ?"
-#~ msgstr "您確定要刪除 %1%2 (%3 Kb) 嗎?"
-
-#~ msgid "Edit list config"
-#~ msgstr "編輯郵遞論壇配置"
-
-#~ msgid "Message footer : same as"
-#~ msgstr "訂閱邀請消息: 當用戶使用 INVITE 命令邀請某人訂閱時發出。"
-
-#~ msgid "[% total %]"
-#~ msgstr "[% total %]"
-
-#~ msgid "all of"
-#~ msgstr "全部"
-
-#~ msgid "because your new address is not allowed to subscribe."
-#~ msgstr "因為已禁止以新的地址訂閱."
-
-#~ msgid "close it. It can be restored using"
-#~ msgstr "關閉共享。可以用"
-
-#~ msgid "directories as input."
-#~ msgstr "目錄作為輸入<B>重建 HTML 歸檔</B>。"
-
-#~ msgid "field"
-#~ msgstr "根據郵件<i>日期</i>有 <B>[% date_count %]</b> 個命中"
-
-#~ msgid "function."
-#~ msgstr "<I>cookie</I>)。"
-
-#~ msgid "logout"
-#~ msgstr "登出"
-
-#~ msgid "newest"
-#~ msgstr "最新的"
-
-#~ msgid "oldest"
-#~ msgstr "最舊的"
-
-#~ msgid "one of"
-#~ msgstr "任一"
-
-#~ msgid "part"
-#~ msgstr "部分"
-
-#~ msgid "sentence"
-#~ msgstr "一句"
-
-#~ msgid "this"
-#~ msgstr "這"
+#~ msgid "Shared web"
+#~ msgstr "Paylaşılan web"

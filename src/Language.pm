@@ -47,30 +47,34 @@ my %language_equiv = ( 'zh_CN' => 'cn',
 		       );
 
 ## Supported languages
-my @supported_languages = ('cs_CZ','de_DE','en_US','es_ES','et_EE',
-			   'fi_FI','fr_FR','hu_HU','it_IT','nl_NL','oc_FR',
-			   'pl_PL','pt_PT','ro_RO','zh_CN','zh_TW');
+my @supported_languages = ('cs_CZ','de_DE','el_GR','en_US','es_ES','et_EE',
+			   'fi_FI','fr_FR','hu_HU','it_IT','ja_JP','nl_NL','oc_FR',
+			   'pl_PL','pt_BR','pt_PT','ro_RO','tr_TR','zh_CN','zh_TW');
 
 my %lang2locale = ('cz' => 'cs_CZ',
 		   'de' => 'de_DE',
 		   'us' => 'en_US',
+		   'el' => 'el_GR',
 		   'es' => 'es_ES',
 		   'et' => 'et_EE',
 		   'fi' => 'fi_FI',
 		   'fr' => 'fr_FR',
 		   'hu' => 'hu_HU',
 		   'it' => 'it_IT',
+		   'ja' => 'ja_JP',
 		   'nl' => 'nl_NL',
 		   'oc' => 'oc_FR',
 		   'pl' => 'pl_PL',
 		   'pt' => 'pt_PT',
 		   'ro' => 'ro_RO',
 		   'cn' => 'zh_CN',
+		   'tr' => 'tr_TR',
 		   'tw' => 'zh_TW');
 
 ## Used to perform setlocale on FreeBSD / Solaris
-my %locale2charset = ('cs_CZ' => 'iso8859-2',
+my %locale2charset = ('cs_CZ' => 'utf-8',
 		      'de_DE' => 'iso8859-1',
+		      'el_GR' => 'utf-8',
 		      'en_US' => 'us-ascii',
 		      'es_ES' => 'iso8859-1',
 		      'et_EE' => 'iso8859-4',
@@ -78,11 +82,14 @@ my %locale2charset = ('cs_CZ' => 'iso8859-2',
 		      'fr_FR' => 'iso8859-1',
 		      'hu_HU' => 'iso8859-2',
 		      'it_IT' => 'iso8859-1',
+		      'ja_JP' => 'utf-8',
 		      'nl_NL' => 'iso8859-1',
 		      'oc_FR' => 'iso8859-1',		      
 		      'pl_PL' => 'iso8859-2',
+		      'pt_BR' => 'utf-8',
 		      'pt_PT' => 'iso8859-1',
 		      'ro_RO' => 'iso8859-2',
+		      'tr_TR' => 'utf-8',
 		      'zh_CN' => 'utf-8',
 		      'zh_TW' => 'big5',
 		      );
@@ -127,11 +134,17 @@ sub SetLang {
     unless (setlocale(&POSIX::LC_ALL, $locale)) {
 	unless (setlocale(&POSIX::LC_ALL, $lang)) {
 	    unless (setlocale(&POSIX::LC_ALL, $locale.'.'.$locale2charset{$locale})) {
-		&do_log('err','Failed to setlocale(%s) ; you should edit your /etc/locale.gen or /etc/sysconfig/i18n files', $locale2charset{$locale});
-	return undef;
-    }
+		&do_log('err','Failed to setlocale(%s) ; you should edit your /etc/locale.gen or /etc/sysconfig/i18n files', $locale.'.'.$locale2charset{$locale});
+		return undef;
+	    }
 	}
     }
+
+    unless (setlocale(&POSIX::LC_TIME, $locale)) {
+ 	&do_log('err','Failed to setlocale(LC_TIME,%s)', $locale.'.'.$locale2charset{$locale});
+ 	return undef;
+    }
+
     $current_lang = $lang;
     $current_locale = $locale;
 

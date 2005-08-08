@@ -16,7 +16,7 @@ body {
 /* ########## Blocks, id and class ########## */
 
 #Canvas {margin: 7px 7px 0px 7px;}
-#Stretcher {margin: 0px 0px 0px 190px; text-align: left;}
+#Stretcher {margin: 0px 0px 0px 250px; text-align: left;}
 #Paint {
 	vertical-align:top;
 	text-align: center;
@@ -55,7 +55,7 @@ ul#MainMenuLinks li {list-style: none; display: inline;}
 #toggleMenu {float: right; padding-right: 3px;}
 #Menus {
 	float: left;
-	width: 180px; /* width: 25%; nogo w/ ie yet */
+	width: 240px; /* width: 25%; nogo w/ ie yet */
 	border: 0px solid [% color_1 %];
 	padding-top: 0px;
 	text-align: left;
@@ -71,6 +71,8 @@ ul#MainMenuLinks li {list-style: none; display: inline;}
 	text-align: center;
 }
 #Identity {text-align: left; font-size: 12px; font-weight: bold; overflow: hidden;}
+
+.Help {display: none; position: absolute; border: 1px doted [% color_2 %]; z-index: 1000; background: [% color_13 %]; }
 
 .MenuBlock {
 	background: [% color_5 %];
@@ -101,7 +103,7 @@ ul#MainMenuLinks li {list-style: none; display: inline;}
 .ContentBlock * a:hover {text-decoration:none;}
 .ContentBlock * a img {border: 0px;}
 
-.navBar {margin: 0px 0px 0px 190px;}
+.navBar {margin: 0px 0px 0px 250px;}
 
 .displayNone {display: none;height:0px;width:0px;}
 .printNone {}
@@ -147,7 +149,7 @@ a.ArcMenuLinks:link {border: 1px solid [% color_2 %]; background: transparent; t
 a.ArcMenuLinks:visited {border: 1px solid [% color_2 %]; background: transparent;  text-decoration: none; padding: 0px 10px 0px 10px;}
 a.ArcMenuLinks:hover {border: 1px solid [% color_2 %]; background: [% color_6 %]; color: [% color_11 %]; text-decoration: none; padding: 0px 10px 0px 10px;}
 a.ArcMenuLinks:active {border: 1px solid [% color_2 %]; background: [% color_6 %]; color: [% color_11 %]; text-decoration: none; padding: 0px 10px 0px 10px;}
-a.ArcMenuLinksCurrentPage {border: 1px solid [% color_2 %]; background: [% color_6 %]; color: [% color_11 %] text-decoration: none; padding: 0px 10px 0px 10px;}
+a.ArcMenuLinksCurrentPage {border: 1px solid [% color_2 %]; background: [% color_6 %]; color: [% color_11 %]; text-decoration: none; padding: 0px 10px 0px 10px;}
 a.ArcMenuLinksCurrentPage:hover {border: 1px solid [% color_2 %]; background: [% color_6 %]; text-decoration: none; padding: 0px 10px 0px 10px;}
 a.ArcMenuLinksInactive { border-bottom: 1px solid [% color_2 %]; border-right:  1px solid [% color_10 %]; border-top: 1px solid [% color_10 %]; border-left: 1px solid [% color_10 %]; background: transparent; color: [% color_10 %]; text-decoration: none; padding: 0px 10px 0px 10px;}
 a.ArcMenuLinksInactive:hover { border-bottom: 1px solid [% color_2 %]; border-right:  1px solid [% color_10 %]; border-top: 1px solid [% color_10 %]; border-left: 1px solid [% color_10 %]; background: transparent; color: [% color_10 %]; text-decoration: none; padding: 0px 10px 0px 10px;}
@@ -158,7 +160,7 @@ a.actionMenuLinks:link {border: 1px solid [% color_2 %]; background: [% color_4 
 a.actionMenuLinks:visited {border: 1px solid [% color_2 %]; background: [% color_4 %];  text-decoration: none; padding: 0px 10px 0px 10px;}
 a.actionMenuLinks:hover {border: 1px solid [% color_2 %]; background: [% color_6 %]; color: [% color_11 %]; text-decoration: none; padding: 0px 10px 0px 10px;}
 a.actionMenuLinks:active {border: 1px solid [% color_2 %]; background: [% color_6 %]; color: [% color_11 %]; text-decoration: none; padding: 0px 10px 0px 10px;}
-a.actionMenuLinksCurrentPage {border: 1px solid [% color_2 %]; background: [% color_6 %]; color: [% color_11 %] text-decoration: none; padding: 0px 10px 0px 10px;}
+a.actionMenuLinksCurrentPage {border: 1px solid [% color_2 %]; background: [% color_6 %]; color: [% color_11 %]; text-decoration: none; padding: 0px 10px 0px 10px;}
 a.actionMenuLinksCurrentPage:hover {border: 1px solid [% color_2 %]; background: [% color_6 %]; text-decoration: none; padding: 0px 10px 0px 10px;}
 a.actionMenuLinksInactive { border-bottom: 1px solid [% color_2 %]; border-right:  1px solid [% color_10 %]; border-top: 1px solid [% color_10 %]; border-left: 1px solid [% color_10 %]; background: transparent; color: [% color_10 %]; text-decoration: none; padding: 0px 10px 0px 10px;}
 a.actionMenuLinksInactive:hover { border-bottom: 1px solid [% color_2 %]; border-right:  1px solid [% color_10 %]; border-top: 1px solid [% color_10 %]; border-left: 1px solid [% color_10 %]; background: transparent; color: [% color_10 %]; text-decoration: none; padding: 0px 10px 0px 10px;}
@@ -221,7 +223,7 @@ h1 a:hover {text-indent: 30px; font-size: 16px; padding-bottom:10px;}
 p a:hover {text-indent: 30px;}
 p a:first-letter {font-size: 16px; font-weight: bold;}
  
-ul {margin-left: 10px; }
+ul {margin-left: 20px; }
 
 p {text-indent: 0px;}
 

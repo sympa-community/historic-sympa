@@ -194,7 +194,7 @@ i386 server with Linux).
 
 This guide covers the installation, configuration and management of
 the current release (\version) of
-\htmladdnormallink {sympa} {http://listes.cru.fr/sympa/}.
+\htmladdnormallink {sympa} {http://www.sympa.org}.
 
 \section {License}
 
@@ -351,7 +351,7 @@ in a single software package, including:
 \section {Project directions}
 
 \Sympa is a very active project : check the release note 
-\htmladdnormallinkfoot {release note} {http://listes.cru.fr/sympa/release.shtml}.
+\htmladdnormallinkfoot {release note} {http://www.sympa.org/release.html}.
 So it is no longer possible to
 maintain multiple document about Sympa project direction.
 Please refer to \htmladdnormallinkfoot {in-the-futur document} {http://www.sympa.org/sympa/direct/in-the-future.html}
@@ -481,7 +481,7 @@ releases of this documentation.
 If you wish to contact the authors of \Sympa, please use the address
 \mailaddr {sympa-authors{\at}cru.fr}.
 
-There are also a few \htmladdnormallinkfoot {mailing-lists about \Sympa} {http://listes.cru.fr/wws/lists/informatique/sympa} :
+There are also a few \htmladdnormallinkfoot {mailing-lists about \Sympa} {http://listes.cru.fr/sympa/lists/informatique/sympa} :
 
 	\begin {itemize}
 	   \item  \mailaddr {sympa-users{\at}cru.fr} general info list
@@ -504,8 +504,8 @@ To join, send the following message to \mailaddr {sympa{\at}cru.fr}:
 
 (replace \textit {Listname}, \textit {Firstname} and \textit {Name} by the list name, your first name and your family name).
 
-You may also consult the \Sympa \htmladdnormallink {home page} {http://listes.cru.fr/sympa},
-you will find the latest version, \htmladdnormallink {FAQ} {http://listes.cru.fr/sympa/fom-serve/cache/1.html} and so on.
+You may also consult the \Sympa \htmladdnormallink {home page} {http://www.sympa.org},
+you will find the latest version, \htmladdnormallink {FAQ} {http://www.sympa.org/distribution/} and so on.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % Overview: what does \Sympa consist of ?
@@ -742,6 +742,37 @@ in \file {sympa.conf}.
 
 \end {itemize}
 
+\section {Roles and privileges}
+\label {roles}
+
+You can assign roles to users (via their email addresses) at different level in Sympa ; privileges are associated (or can be associated) to these roles.
+We list these roles below (from the most powerful to the less), along with the relevent privileges.
+
+\subsection {(Super) listmasters}
+
+These are the persons administrating the service, defined in the \file {sympa.conf} file. They inherit the listmaster role in virtual robots and are the default set
+of listmasters for virtual robots.
+
+\subsection {(Robot) listmasters}
+
+You can define a different set of listmasters at a virtual robot level (in the \file {robot.conf} file). They are responsible for moderating mailing lists creation (if list creation is configured this way), editing default templates, providing help to list owners and moderators. Users defined as listmasters get a privileged access to Sympa web interface. Listmasters also inherit the privileges of list owners (for any list defined in the virtual robot), but not the moderator privileges.
+
+\subsection {Privileged list owners}
+
+The first defined privileged owner is the person who requested the list creation. Later it can be changed or extended. They inherit (basic) owners privileges and are also responsible for managing the list owners and editors themselves (via the web interface). With Sympa'd default behavior, privileged owners can edit more list parameters than (basic) owners can do ; but this can be customized via the \file {edit-list.conf} file.
+
+\subsection {(Basic) list owners}
+
+They are responsible for managing the members of the list, editing the list configuration and templates. Owners (and privileged owners) are defined in the list config file.
+
+\subsection {Moderators (also called Editors)}
+
+Moderators are responsible for the messages distributed in the mailing list (as opposed to owners who look after list members). Moderators are active if the list has been setup as a moderated mailing list. If no moderator is defined for the list, then list owners will inherit the moderator role.
+
+\subsection {Subscribers (or list members)}
+
+Subscribers are the persons who are member of a mailing list ; they either subscribed, or got added directly by the listmaster or via a datasource (LDAP, SQL, another list,...). These subscribers receive messages posted in the list (unless they have set the \texttt {nomail} option) and have special privileges to post in the mailing list (unless it is a newsletter). Most privileges a subscriber may have is not hardcoded in Sympa but expressed via the so-called authorization scenarios (see \ref {scenarios}, page ~\pageref {scenarios}).
+
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % Installing Sympa
@@ -760,8 +791,8 @@ perform via an interpreted language.
 \section {Obtaining \Sympa, related links}
 
 The \Sympa distribution is available from
-\htmladdnormallink {\texttt {http://listes.cru.fr/sympa/}}
-    {http://listes.cru.fr/sympa/}.
+\htmladdnormallink {\texttt {http://www.sympa.org}}
+    {http://www.sympa.org}.
 All important resources are referenced there:
 
 \begin {itemize}
@@ -1018,7 +1049,7 @@ this should point to \dir {/etc/smrsh}.  This is probably the case if you are us
 \item \option {- - with-confdir=DIR}, Sympa main configuration files in DIR (default /etc)\\
 \file {sympa.conf} and \file {wwsympa.conf} will be installed there.
 
-\item \option {- - with-exlpdir=DIR}, modifiable data in DIR (default /home/sympa/expl/)
+\item \option {- - with-expldir=DIR}, modifiable data in DIR (default /home/sympa/expl/)
 
 \item \option {- - with-libdir=DIR},  code libraries in DIR (default /home/sympa/bin/)
 
@@ -1197,7 +1228,7 @@ messages distribution.
 \end{verbatim}
   \end {quote}
 
-\item \option {- - create\_list - - robot \textit {robotname} - - input\_file \textit {list\_file.xml}}
+\item \option {- - create\_list - - robot \textit {robotname} - - input\_file \textit {/path/to/list\_file.xml}}
 
 Create the list described by the xml file, see \ref{list-creation-sympa}, 
 page~\pageref{list-creation-sympa}.
@@ -1235,7 +1266,7 @@ template.
   
   Print current version of \Sympa.
 
-\item \option {- - instanciate\_family \textit {familyname} \textit {robotname} - - input\_file \textit {family\_file.xml}}
+\item \option {- - instanciate\_family \textit {familyname} \textit {robotname} - - input\_file \textit {/path/to/family\_file.xml}}
 
 Instantiate the family \textit {familyname}. See \ref{lists-families}, 
 page~\pageref{lists-families}.
@@ -1245,12 +1276,12 @@ page~\pageref{lists-families}.
    Close the \textit {familyname} family. See \ref{family-closure}, 
    page~\pageref{family-closure}.
  
- \item \option {- - add\_list \textit {familyname} - - robot \textit {robotname} - - input\_file \textit {list\_file.xml}}
+ \item \option {- - add\_list \textit {familyname} - - robot \textit {robotname} - - input\_file \textit {/path/to/list\_file.xml}}
  
    Add the list described in the XML file to the \textit{familyname} family. See \ref{family-add-list}, 
    page~\pageref{family-add-list}.
  
- \item \option {- - modify\_list \textit {familyname} - - robot \textit {robotname} - - input\_file \textit {list\_file.xml}}
+ \item \option {- - modify\_list \textit {familyname} - - robot \textit {robotname} - - input\_file \textit {/path/to/list\_file.xml}}
  
    Modify the existing family list, with description contained in the XML file. See \ref{family-modify-list}, 
    page~\pageref{family-modify-list}.
@@ -1430,6 +1461,36 @@ Field user_admin added to table admin_table
 Sympa comes with default configuration files (templates, scenarios,...) that will be installed in the \dir {[BINDIR]} directory. 
 If you need to customize some of them, you should copy the file first in a safe place, ie in the \dir {[ETCDIR]} directory.
 If you do so, the Sympa upgrade process will preserve your site customizations.
+
+
+\section {Running 2 Sympa versions on a single server}
+    \index{double installation}
+
+This can be very convenient to have a stable version of Sympa and a fresh version for test purpose, both running on the same server.
+
+
+Both sympa instances must be completely partitioned, unless you want the make production mailing lists visible through the
+test service. 
+
+The biggest part of the partitioning is achieved while running the \unixcmd {./configure}. Here is a sample call to \unixcmd {./configure}
+on the test server side :
+
+\begin {quote}
+\begin{verbatim}
+./configure --prefix=/home/sympa-dev \
+            --with-confdir=/home/sympa-dev/etc \
+            --with-mandir=/home/sympa-dev/man \
+            --with-initdir=/home/sympa-dev/init \
+	    --with-piddir=/home/sympa-dev/pid
+            --with-lockdir=/home/sympa-dev/lock \
+            --with-sendmail_aliases=/home/sympa-dev/etc/sympa_aliases 
+\end{verbatim}
+\end {quote}
+
+You can also customize more parameters via the \file {/home/sympa-dev/etc/sympa.conf} file.
+
+If you wish to share the same lists in both Sympa instances, then some parameters should have the same value :
+\cfkeyword {home}, \cfkeyword {db\_name}, \cfkeyword {arc\_path}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % Mail aliases 
@@ -1865,8 +1926,8 @@ files. The server admin module include a CSS administration page that can help y
 
         This is the local directory for configuration files (such as
 	\file {edit\_list.conf}. It contains 5 subdirectories:
-	\dir {scenari} for local authorization scenarios; \dir {templates}
-	for the site's local templates and default list templates; \dir {wws\_templates}
+	\dir {scenari} for local authorization scenarios; \dir {mail\_tt2}
+	for the site's local mail templates and default list templates; \dir {web\_tt2}
         for the site's local html templates; \dir {global\_task\_models} for local
 	global task models; and \dir {list\_task\_models} for local list task models
 
@@ -4194,7 +4255,7 @@ further authentication.
 You can easily trigger a Sympa login from within another web page. The login form should look like this :
 \begin {quote}
 \begin{verbatim}
-<FORM ACTION="http://listes.cru.fr/wws" method="post">
+<FORM ACTION="http://listes.cru.fr/sympa" method="post">
       <input type="hidden" name="previous_action" value="arc" />
       Accès web archives of list
       <select name="previous_list">
@@ -4675,8 +4736,8 @@ In order to customize the web look and feel, you may edit the CSS definition. CS
 
 In addition, if needed, you can customize each virtual robot using its set of templates and authorization scenarios. 
 
-\dir {[ETCDIR]/\samplerobot/wws\_templates/},
-\dir {[ETCDIR]/\samplerobot/templates/}, 
+\dir {[ETCDIR]/\samplerobot/web\_tt2/},
+\dir {[ETCDIR]/\samplerobot/mail\_tt2/}, 
 \dir {[ETCDIR]/\samplerobot/scenari/} directories are searched when
 loading templates or scenari before searching into \dir {[ETCDIR]} and  \dir {[ETCBINDIR]}. This allows to define different privileges and a different GUI for a Virtual Robot.
 
@@ -5784,7 +5845,7 @@ The xml file provides information on :\\
   \item the list name,
   \item values to assign vars in the list creation template
   \item the list description in order to be written in the list file info
-  \item the name of the list creation template (not in a family context)
+  \item the name of the list creation template (only for list creation on command line with sympa.pl, in a family context, the template is specified by the family name)
 \end{itemize}
 
 Here is an example of XML document that you can map with the following example of list creation template.:
@@ -5886,7 +5947,7 @@ The XML file format should comply with the following rules :
   \item One XML element is mandatory : \file{<listname>} contains the name of the list.
         That not excludes mandatory parameters for list creation (\lparam {listname, subject,owner.email and/or 
 	owner\_include.source}).
-  \item \file{<type>} : without family context, this element contains the name of template list creation.
+  \item \file{<type>} : this element contains the name of template list creation, it is used for list creation on command line with sympa.pl.
         In a family context, this element is no used.
   \item \file{<description>} : the text contained in this element is written in list \file{info} file(it can be a CDATA section).
   \item For other elements, its name is the name of the var to assign in the list creation template. 
@@ -5914,7 +5975,7 @@ This way to create lists is independent of family.
 
 Here is a sample command to create one list :.
 \begin {quote}
-sympa.pl --create\_list --robot \samplerobot --input\_file my\_file.xml
+sympa.pl --create\_list --robot \samplerobot --input\_file /path/to/my\_file.xml
 \end {quote}
 
 The list is created under the \file{my\_robot} robot and the list 
@@ -6273,13 +6334,13 @@ shared_doc.d_edit   editor
 Instantiation permits to generate lists.You must provide an XML file that is 
 composed of lists description, the root element is \textit{family} and is only 
 composed of \textit{list} elements. List elements are described in section 
-\ref{list-creation-sympa}, page~\pageref{list-creation-sympa}. Each list is described 
+\ref{xml-file-format}, page~\pageref{xml-file-format}. Each list is described 
 by the set of values for affectation list parameters.
 
 Here is an sample command to instantiate a family :
 \begin {quote}
 \begin{verbatim}
-sympa.pl --instantiate_family my_family --robot \samplerobot --input_file my_file.xml
+sympa.pl --instantiate\_family my_family --robot \samplerobot --input\_file /path/to/my\_file.xml
 \end{verbatim}
 \end {quote}
 This means lists that belong to family \file{my\_family} will be created under the robot 
@@ -6289,10 +6350,62 @@ into several xml files describing lists. Each list XML file is put in each list 
 \textit {Example:} 
 \begin {quote}
 \begin{verbatim}
+<?xml version="1.0" ?>
 <family>
-  <list> ... <listname> liste1 </listname> ... </list>
-  <list> ...                                   </list>
-  <list> ...                                   </list>
+  <list>
+    <listname>liste1</listname>
+    <subject>a list example</subject>
+    <description/>
+    <status>open</status>
+    <shared_edit>editor</shared_edit>
+    <shared_read>private</shared_read>
+    <language>fr</language>
+    <owner multiple="1"> 
+      <email>serge.aumont@cru.fr</email> 
+      <gecos>C.R.U.</gecos>
+    </owner>
+    <owner multiple="1"> 
+      <email>olivier.salaun@cru.fr</email>
+    </owner>
+    <owner_include multiple="1">
+      <source>my_file</source>
+    </owner_include>
+    <sql> 
+      <type>oracle</type>
+      <host>sqlserv.admin.univ-x.fr</host>
+      <user>stdutilisateur</user>
+      <pwd>monsecret</pwd>
+      <name>les_etudiants</name>
+      <query>SELECT DISTINCT email FROM etudiant</query>
+    </sql>
+  </list>
+  <list>
+    <listname>liste2</listname>
+    <subject>a list example</subject>
+    <description/>
+    <status>open</status>
+    <shared_edit>editor</shared_edit>
+    <shared_read>private</shared_read>
+    <language>fr</language>
+    <owner multiple="1"> 
+      <email>serge.aumont@cru.fr</email> 
+      <gecos>C.R.U.</gecos>
+    </owner>
+    <owner multiple="1"> 
+      <email>olivier.salaun@cru.fr</email>
+    </owner>
+    <owner_include multiple="1">
+      <source>my_file</source>
+    </owner_include>
+    <sql> 
+      <type>oracle</type>
+      <host>sqlserv.admin.univ-x.fr</host>
+      <user>stdutilisateur</user>
+      <pwd>monsecret</pwd>
+      <name>les_etudiants</name>
+      <query>SELECT DISTINCT email FROM etudiant</query>
+    </sql>
+  </list>
    ...
 </family>
 \end{verbatim}
@@ -6378,7 +6491,7 @@ new family properties and they would be set in status error\_config immediately.
  Here is a sample command to add a list to a family :
  \begin {quote}
  \begin{verbatim}
- sympa.pl --add_list my_family --robot \samplerobot  --input_file my_file.xml
+ sympa.pl --add\_list my\_family --robot \samplerobot  --input\_file /path/to/my\_file.xml
  \end{verbatim}
  \end {quote} 
 
@@ -6407,7 +6520,7 @@ Closes the list  installed under the indicated robot : the list status is set to
  Here is a sample command to modify a list to a family :
  \begin {quote}
  \begin{verbatim}
- sympa.pl --modify_list my_family --robot \samplerobot --input_file my_file.xml
+ sympa.pl --modify\_list my\_family --robot \samplerobot --input\_file /path/to/my\_file.xml
  \end{verbatim}
  \end {quote} 
 
@@ -6689,7 +6802,7 @@ output generated in response to a \mailcmd {LISTS} command.
 [FOREACH s IN scenari->visibility]
      \item \lparam {visibility} \texttt {[s->name]}
 	\begin {htmlonly}
-	  (\htmladdnormallink {view} {http://listes.cru.fr/sympa/distribution/current/src/etc/scenari/visibility.[s->name]})
+	  (\htmladdnormallink {view} {http://www.sympa.org/distribution/current/src/etc/scenari/visibility.[s->name]})
 	\end {htmlonly}\\
 	[s->title]
 
@@ -7392,7 +7505,7 @@ Predefined authorization scenarios are :
 [FOREACH s IN scenari->subscribe]
      \item \lparam {subscribe} \texttt {[s->name]}
 	\begin {htmlonly}
-	  (\htmladdnormallink {view} {http://listes.cru.fr/sympa/distribution/current/src/etc/scenari/subscribe.[s->name]})
+	  (\htmladdnormallink {view} {http://www.sympa.org/distribution/current/src/etc/scenari/subscribe.[s->name]})
 	\end {htmlonly}\\
 [s->title]
 
@@ -7416,7 +7529,7 @@ Predefined authorization scenarios are :
 [FOREACH s IN scenari->unsubscribe]
      \item \lparam {unsubscribe} \texttt {[s->name]} 
 	\begin {htmlonly}
-	  (\htmladdnormallink {view} {http://listes.cru.fr/sympa/distribution/current/src/etc/scenari/unsubscribe.[s->name]})
+	  (\htmladdnormallink {view} {http://www.sympa.org/distribution/current/src/etc/scenari/unsubscribe.[s->name]})
 	\end {htmlonly}\\
 	[s->title]
 
@@ -7438,7 +7551,7 @@ Predefined authorization scenarios are :
 [FOREACH s IN scenari->add]
      \item \lparam {add} \texttt {[s->name]}
 	\begin {htmlonly}
-	  (\htmladdnormallink {view} {http://listes.cru.fr/sympa/distribution/current/src/etc/scenari/add.[s->name]})
+	  (\htmladdnormallink {view} {http://www.sympa.org/distribution/current/src/etc/scenari/add.[s->name]})
 	\end {htmlonly}\\
 	[s->title]
 
@@ -7461,7 +7574,7 @@ Predefined authorization scenarios are :
 [FOREACH s IN scenari->del]
      \item \lparam {del} \texttt {[s->name]} 
 	\begin {htmlonly}
-	  (\htmladdnormallink {view} {http://listes.cru.fr/sympa/distribution/current/src/etc/scenari/del.[s->name]})
+	  (\htmladdnormallink {view} {http://www.sympa.org/distribution/current/src/etc/scenari/del.[s->name]})
 	\end {htmlonly}\\
 	[s->title]
 
@@ -7484,7 +7597,7 @@ Predefined authorization scenarios are :
 [FOREACH s IN scenari->remind]
      \item \lparam {remind} \texttt {[s->name]} 
 	\begin {htmlonly}
-	  (\htmladdnormallink {view} {http://listes.cru.fr/sympa/distribution/current/src/etc/scenari/remind.[s->name]})
+	  (\htmladdnormallink {view} {http://www.sympa.org/distribution/current/src/etc/scenari/remind.[s->name]})
 	\end {htmlonly}\\
 	[s->title]
 
@@ -7531,7 +7644,7 @@ parameter are pointers to \emph {scenarios}.
 [FOREACH s IN scenari->send]
      \item \lparam {send} \texttt {[s->name]} 
 	\begin {htmlonly}
-	  (\htmladdnormallink {view} {http://listes.cru.fr/sympa/distribution/current/src/etc/scenari/send.[s->name]})
+	  (\htmladdnormallink {view} {http://www.sympa.org/distribution/current/src/etc/scenari/send.[s->name]})
 	\end {htmlonly}\\
 	[s->title]
 
@@ -7556,7 +7669,7 @@ Predefined authorization scenarios are :
 [FOREACH s IN scenari->review]
      \item \lparam {review} \texttt {[s->name]} 
 	\begin {htmlonly}
-	  (\htmladdnormallink {view} {http://listes.cru.fr/sympa/distribution/current/src/etc/scenari/review.[s->name]})
+	  (\htmladdnormallink {view} {http://www.sympa.org/distribution/current/src/etc/scenari/review.[s->name]})
 	\end {htmlonly}\\
 	[s->title]
 
@@ -7586,7 +7699,7 @@ Predefined authorization scenarios are :
 [FOREACH s IN scenari->d_read]
      \item \lparam {d\_read} \texttt {[s->name]} 
 	\begin {htmlonly}
-	  (\htmladdnormallink {view} {http://listes.cru.fr/sympa/distribution/current/src/etc/scenari/d_read.[s->name]})
+	  (\htmladdnormallink {view} {http://www.sympa.org/distribution/current/src/etc/scenari/d_read.[s->name]})
 	\end {htmlonly}\\
 	[s->title]
 
@@ -7610,7 +7723,7 @@ Predefined authorization scenarios are :
 [FOREACH s IN scenari->d_edit]
      \item \lparam {d\_edit} \texttt {[s->name]} 
 	\begin {htmlonly}
-	  (\htmladdnormallink {view} {http://listes.cru.fr/sympa/distribution/current/src/etc/scenari/d_edit.[s->name]})
+	  (\htmladdnormallink {view} {http://www.sympa.org/distribution/current/src/etc/scenari/d_edit.[s->name]})
 	\end {htmlonly}\\
 	[s->title]
 
@@ -7819,6 +7932,13 @@ later than 11:00~PM.
 
 N.B.: In family context, \lparam{digest} can be constrainted only on days.
 
+\subsection {\cfkeyword {digest\_max\_size}} 
+ 
+	\default {25}
+ 
+ 	Maximum number of messages in a digest. If the number of messages exceeds this limit, then multiple 
+ 	digest messages are sent to each recipient.
+ 
 \subsection {available\_user\_options}
 
     	\label {par-available-user-options}
@@ -8255,7 +8375,7 @@ Predefined authorization scenarios are :
 [FOREACH s IN scenari->access_web_archive]
      \item \lparam {access} \texttt {[s->name]} 
 	\begin {htmlonly}
-	  (\htmladdnormallink {view} {http://listes.cru.fr/sympa/distribution/current/src/etc/scenari/access_web_archive.[s->name]})
+	  (\htmladdnormallink {view} {http://www.sympa.org/distribution/current/src/etc/scenari/access_web_archive.[s->name]})
 	\end {htmlonly}\\
 	[s->title]
 
@@ -9504,9 +9624,6 @@ methods for enabling message distribution, depending on the \lparam
         messages in the form of a digest.
 
 \end {itemize}
-
-See also the
-\htmladdnormallinkfoot {recommendations for moderators} {http://listes.cru.fr/admin/moderation.html}.
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%

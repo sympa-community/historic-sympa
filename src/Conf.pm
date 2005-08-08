@@ -41,7 +41,7 @@ my @valid_options = qw(
 		       db_options db_passwd db_type db_user db_port db_additional_subscriber_fields db_additional_user_fields
 		       default_shared_quota default_archive_quota default_list_priority distribution_mode edit_list email etc
 		       global_remind home host domain lang listmaster listmaster_email localedir log_socket_type log_level 
-		       misaddressed_commands misaddressed_commands_regexp max_size maxsmtp nrcpt 
+		       logo_html_definition misaddressed_commands misaddressed_commands_regexp max_size maxsmtp nrcpt 
 		       owner_priority pidfile pidfile_distribute
 		       spool queue queuedistribute queueauth queuetask queuebounce queuedigest 
 		       queuemod queuetopic queuesubscribe queueoutgoing tmpdir
@@ -204,10 +204,11 @@ my %Default_Conf =
      'css_url' => '',
      'css_path' => '',
      'urlize_min_size' => 10240, ## 10Kb
-     'supported_lang' => 'fr,en_US,hu,it',
+     'supported_lang' => 'de,cs,el,en_US,fr,hu,it,ja_JP,nl,oc,pt_BR,tr',
      'web_recode_to' => '',
      'default_remind_task' => '',
      'update_db_field_types' => 'auto',
+     'logo_html_definition' => '',
      );
    
 my $wwsconf;
@@ -410,8 +411,8 @@ sub load_robots {
 				  soap_url => 1,
 				  css_url => 1,
  				  css_path => 1,
- 				  color_0 => 1, color_2 => 1, color_3 => 1, color_4 => 1, color_5 => 1,color_6 => 1, 
-				  color_7 => 1, color_8 => 1, color_9 => 1,color_7 => 1, color_8 => 1, color_9 => 1,
+ 				  color_0 => 1, color_1 => 1, color_2 => 1, color_3 => 1, color_4 => 1, color_5 => 1,color_6 => 1, 
+				  color_7 => 1, color_8 => 1, color_9 => 1,
 				  color_10 => 1, color_11 => 1, color_12 => 1,color_13 => 1, color_14 => 1, color_15 => 1,
 				  supported_lang => 1,
 				  default_shared_quota => 1,
@@ -471,6 +472,7 @@ sub load_robots {
 	$robot_conf->{$robot}{'log_smtp'} ||= $Conf{'log_smtp'};
 	$robot_conf->{$robot}{'log_level'} ||= $Conf{'log_level'};
 	$robot_conf->{$robot}{'wwsympa_url'} ||= 'http://'.$robot_conf->{$robot}{'http_host'}.'/wws';
+	$robot_conf->{$robot}{'css_url'} ||= $robot_conf->{$robot}{'wwsympa_url'}.'/css';
 	$robot_conf->{$robot}{'sympa'} = $robot_conf->{$robot}{'email'}.'@'.$robot_conf->{$robot}{'host'};
 	$robot_conf->{$robot}{'request'} = $robot_conf->{$robot}{'email'}.'-request@'.$robot_conf->{$robot}{'host'};
 	$robot_conf->{$robot}{'cookie_domain'} ||= 'localhost';

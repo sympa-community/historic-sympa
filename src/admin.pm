@@ -86,7 +86,7 @@ sub create_list_old{
     ## check listname
     $param->{'listname'} = lc ($param->{'listname'});
 
-    unless ($param->{'listname'} =~ /^[a-z0-9][a-z0-9\-\+\._]*$/i) {
+    unless ($param->{'listname'} =~ /^$tools::regexp{'listname'}$/i) {
 	&do_log('err','admin::create_list_old : incorrect listname %s', $param->{'listname'});
 	return undef;
     }
@@ -227,17 +227,12 @@ sub create_list{
     my ($param,$family,$robot) = @_;
     &do_log('info', 'admin::create_list(%s,%s,%s)',$param->{'listname'},$family->{'name'},$param->{'subject'});
 
-    ## obligatory list parameters 
-    foreach my $arg ('listname','subject') {
+    ## mandatory list parameters 
+    foreach my $arg ('listname') {
 	unless ($param->{$arg}) {
 	    &do_log('err','admin::create_list : missing list param %s', $arg);
 	    return undef;
 	}
-    }
-    # owner.email || owner_include.source
-    unless (&check_owner_defined($param->{'owner'},$param->{'owner_include'})) {
-	&do_log('err','admin::create_list : problem in owner definition in this list creation');
-	return undef;
     }
 
     unless ($family) {
@@ -254,7 +249,7 @@ sub create_list{
     ## check listname
     $param->{'listname'} = lc ($param->{'listname'});
 
-    unless ($param->{'listname'} =~ /^[a-z0-9][a-z0-9\-\+\._]*$/i) {
+    unless ($param->{'listname'} =~ /^$tools::regexp{'listname'}$/i) {
 	&do_log('err','admin::create_list : incorrect listname %s', $param->{'listname'});
 	return undef;
     }
@@ -399,20 +394,14 @@ sub update_list{
     my ($list,$param,$family,$robot) = @_;
     &do_log('info', 'admin::update_list(%s,%s,%s)',$param->{'listname'},$family->{'name'},$param->{'subject'});
 
-    ## obligatory list parameters
-    foreach my $arg ('listname','subject') {
+    ## mandatory list parameters
+    foreach my $arg ('listname') {
 	unless ($param->{$arg}) {
 	    &do_log('err','admin::update_list : missing list param %s', $arg);
 	    return undef;
 	}
     }
 
-    # owner.email || owner_include.source
-    unless (&check_owner_defined($param->{'owner'},$param->{'owner_include'})) {
-	&do_log('err','admin::update_list : problem in owner definition in this list updating');
-	return undef;
-    }
- 
     ## template file
     my $template_file = &tools::get_filename('etc', 'config.tt2', $robot,$family);
     unless (defined $template_file) {

@@ -1,10 +1,26 @@
-<?xml version="1.0" encoding="iso-8859-1" ?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<?xml version="1.0" encoding="[%|loc%]_charset_[%END%]" ?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xml:lang="[% iso639 = locale.match('^(.)(.)'); iso639.0; iso639.1 %]">
 
 <!-- begin main.tt2 (distrib) -->
 <head>
 <title> [% main_title %] </title>
 <link rel="stylesheet" href="[% css_url %]/style.css" type="text/css" media="screen" title="Derived from style Blank Canvas by tw3k AT tw3k.tw3k.q3machines.net" />
+
+<!-- RSS chanel -->
+   [% IF list -%] 
+     <link REL="alternate" type="application/xml" title="[%|loc%]RSS Latest messages[%END%]" href="[% base_url%][% path_cgi %]/rss/latest_arc/[%list%]?count=20"/>
+     <link REL="alternate" type="application/xml" title="[%|loc%]RSS Latest documents[%END%]" href="[% base_url%][% path_cgi %]/rss/latest_d_read/[%list%]?count=20"/>
+   [% ELSE -%]
+     [% IF (action == 'lists') && topic -%]
+       <link REL="alternate" type="application/xml" title="[%|loc%]RSS Latest lists[%END%]" href="[% base_url%][% path_cgi %]/rss/latest_lists/[%topic%]?count=20"/>
+       <link REL="alternate" type="application/xml" title="[%|loc%]RSS Active lists[%END%]" href="[% base_url%][% path_cgi %]/rss/active_lists/[%topic%]?count=20"/>
+     [% ELSE -%]
+     <link REL="alternate" type="application/xml" title="[%|loc%]RSS Latest lists[%END%]" href="[% base_url%][% path_cgi %]/rss/latest_lists?count=20"/>
+     <link REL="alternate" type="application/xml" title="[%|loc%]RSS Active lists[%END%]" href="[% base_url%][% path_cgi %]/rss/active_lists?count=20"/>
+     [% END -%]
+   [% END -%]
+
+
 <!-- the following CSS have to be improved before to be used -->
 <!-- <link rel="stylesheet" href="[% css_url %]/print.css" type="text/css" media="print" />                                            -->
 <!-- <link rel="alternative stylesheet" href="[% css_url %]/fullPage.css" type="text/css" media="screen" title="View Full Page" />     -->
@@ -32,6 +48,14 @@
 <body onload="[% IF use_htmlarea %] HTMLArea.replaceAll();[% END %][% IF cookie_set %] check_cookie();[% END %][% IF back_to_mom %] setTimeout('refresh_mom_and_die()',1000);[% END %]">
 <noscript><p><em>[%|loc%]Please activate JavaScript in your web browser[%END%]</em></p></noscript>
 
+
+[% IF nomenu %]
+       [% PROCESS error.tt2 IF errors %]
+       [% PROCESS notice.tt2 IF notices %]
+       <div class="ContentBlock"> 
+         [% PROCESS "${action}.tt2" IF action %]
+       </div>
+[% ELSE %]
 <div id="Canvas">
   <div id="Header">
     [% PROCESS title.tt2 %]
@@ -41,8 +65,10 @@
   <div id="Menus"><!-- Start Menus -->&nbsp;
     [% PROCESS login_menu.tt2 %]
     [% PROCESS list_menu.tt2 IF list %]
+    [% PROCESS your_lists.tt2 IF !list %]
     [% PROCESS setlang.tt2 %]
   </div><!-- End div Menus -->
+
   <div id="Stretcher">  <!-- <span id="toggleMenu" title="A javascript could hidde or show the meneu" class="smalltext info printNone toggleNone">toggle menu</span><br /> --> &nbsp;<br />
      <div id="Paint">
        [% PROCESS error.tt2 IF errors %]
@@ -59,9 +85,10 @@
        <a class="dingbat printNone" href="#top" title="Top of Page">&sect;</a>
      </div><!-- End div= Paint -->
   </div><!-- end div Stretcher -->
-  [% PROCESS footer.tt2 %]
 
+  [% PROCESS footer.tt2 %]
 </div> <!-- end div canvas -->
+[% END %]
 
 </body>
 </html>

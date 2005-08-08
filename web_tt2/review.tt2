@@ -2,7 +2,7 @@
 
 [% IF action != 'search' %]
 <div style="float: right;">
-page size
+[%|loc%]Page size[%END%]
   <form action="[% path_cgi %]">
   <input type="hidden" name="sortby" value="[% sortby %]" />
   <input type="hidden" name="action" value="review" />
@@ -20,12 +20,12 @@ page size
     <a href="[% path_cgi %]/review/[% list %]/[% prev_page %]/[% size %]/[% sortby %]"><img src="[% icons_url %]/left.png" style="border: 0px;" alt="[%|loc%]Previous page[%END%]" /></a>
    [% END %]
    [% IF page %]
-     page [% page %] / [% total_page %]
+     [%|loc%]page[%END%] [% page %] / [% total_page %]
    [% END %]
    [% IF next_page %]
      <a href="[% path_cgi %]/review/[% list %]/[% next_page %]/[% size %]/[% sortby %]"><img src="[% icons_url %]/right.png" style="border: 0px;" alt="[%|loc%]Next page[%END%]" /></a>
    [% END %]
-  </div>
+</div>
 [% END %]
 
 
@@ -47,7 +47,7 @@ page size
  <input type="hidden" name="list" value="[% list %]" />
  <input type="hidden" name="action" value="add" />
  <input type="text" name="email" size="35" />
- <input class="MainMenuLinks" type="submit" name="action_add" value="[%|loc%]Add[%END%]" /> <label><input type="checkbox" name="quiet" /> [%|loc%]quiet[%END%]</label>
+ <input class="MainMenuLinks" type="submit" name="action_add" value="[%|loc%]Add[%END%]" /> <input type="checkbox" name="quiet" /> <label>[%|loc%]quiet[%END%]</label>
 </form>
 
 <br />
@@ -72,10 +72,10 @@ page size
  <input type="hidden" name="list" value="[% list %]" />
   [% IF is_owner %]
     <input class="MainMenuLinks" type="submit" name="action_del" value="[%|loc%]Delete selected email addresses[%END%]" />
-    <label><input type="checkbox" name="quiet" /> [%|loc%]quiet[%END%]</label>
+    <input type="checkbox" name="quiet" /> <label>[%|loc%]quiet[%END%]</label>
   [% END %]
 
-    <table style="border: solid 1px; width: 95%; margin: 10px">
+    <table style="border: solid 1px; width: auto; margin: 10px">
       <tr style="background-color: [% color_4 %];">
 	[% IF is_owner %]
 	   <th style="padding: 3px; border: solid 1px;"><span style="text-align: center;">X</span></th>
@@ -130,7 +130,7 @@ page size
             <span style="text-align: center;"><a href="[% path_cgi %]/review/[% list %]/1/[% size %]/date" >[%|loc%]Sub date[%END%]</a></span>
 	  [% END %]
           </th>
-	  <th style="padding: 3px; border: solid 1px;"><span style="text-align: center;">Last update</span></th>
+	  <th style="padding: 3px; border: solid 1px;"><span style="text-align: center;">[%|loc%]Last update[%END%]</span></th>
 	  [% IF additional_fields %]
 	  <th style="padding: 3px; border: solid 1px;"><span style="text-align: center; ">[% additional_fields %]</span></th>
 	  [% END %]
@@ -162,7 +162,7 @@ page size
  	        [% u.email %]
  	      [% END %]
 	  </span></td>
-            <td style="text-align: right; background-color: [% error_color %];"><span style="font-size: smaller; color: [% bg_color %];"><strong>[%|loc%]bouncing[%END%]</strong></span>
+            <td style="text-align: right; background-color: [% color_7 %];"><span style="font-size: smaller; color: [% bg_color %];"><strong>[%|loc%]bouncing[%END%]</strong></span>
 	    </td>
 
 	 [% ELSE %]
@@ -228,7 +228,7 @@ page size
         <input class="MainMenuLinks" type="button" value="[%|loc%]Toggle Selection[%END%]" onclick="toggle_selection(document.myform.email)" />
 	<input class="MainMenuLinks" type="submit" name="action_del" value="[%|loc%]Delete selected email addresses[%END%]" />
 
-        <label><input type="checkbox" name="quiet" /> [%|loc%]quiet[%END%]</label>
+        <input type="checkbox" name="quiet" /> <label>[%|loc%]quiet[%END%]</label>
       [% END %]
     </td>
 
