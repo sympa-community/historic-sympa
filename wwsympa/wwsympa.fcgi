@@ -4588,11 +4588,11 @@ sub do_skinsedit {
      }
 
      ## Loads message list
-#     unless (opendir SPOOL, $Conf{'queuemod'}) {
+     unless (opendir SPOOL, $Conf{'queuemod'}) {
 	 &report::reject_report_web('intern','cannot_open_spool',{'spool'=>$Conf{'queuemod'}},$param->{'action'},$list,$param->{'user'}{'email'},$robot);
 	 &wwslog('err','do_modindex: unable to read spool');
 	 return 'admin';
-#     }
+     }
 
      foreach $msg ( sort grep(!/^\./, readdir SPOOL )) {
 	 next
