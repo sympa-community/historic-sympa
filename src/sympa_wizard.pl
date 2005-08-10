@@ -173,7 +173,7 @@ my @params = ({'title' => 'Directories and file location'},
 
 	      {'name' => 'lang',
 	       'default' => 'us',
-	       'query' => 'Default lang (fr | en_US | hu | it)',
+	       'query' => 'Default lang (cs | de | el | en_US | fr | hu | it | ja_JP | nl | oc | pt_BR | tr)',
 	       'file' => 'sympa.conf','edit' => '1',
 	       'advice' =>''},
 
