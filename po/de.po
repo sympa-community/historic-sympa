@@ -1033,22 +1033,6 @@ msgstr "Erzeugung der Liste"
 msgid "Current password :"
 msgstr "Aktuelles Passwort:"
 
-#: web_tt2/skinsedit.tt2:57
-msgid ""
-"Currently you didn't define css_path parameter. <strong>You should edit the "
-"robot.conf configuration file </strong> (or if not using virtual robot sympa."
-"conf) and set this parameter so you could use this page to install static "
-"CSS and <strong>make sympa faster</strong>. Don't forget to set parameter "
-"css_url, it must be the URL for the directory where css are stored (current "
-"value is"
-msgstr "Sie haben zur Zeit den Parameter css_path nicht definiert. "
-"<strong>Sie sollten die Konfigurationsdatei robot.conf editieren </strong> "
-"(oder sympa.conf, wenn Sie keinen virtuellen Roboter verwenden) und diesen "
-"Parameter setzen, damit Sie diese Seite verwenden können, um einen statischen "
-"CSS zu installieren und <strong>Sympa schneller zu machen</strong>. Vergessen Sie nicht, "
-"den Parameter css_url zu setzen. Es muss die URL für das Verzeichnis sein, wo CSS "
-"gespeichert werden (der derzeitige Wert ist "
-
 # nlsref 16,16
 #: src/List.pm:446
 msgid "Custom header field"
@@ -2718,7 +2702,8 @@ msgid ""
 "information make your connection to WWSympa last. The lifetime of this\n"
 "<em>cookie</em> is customizeable through your <strong>Preferences</strong>"
 msgstr ""
-"Wenn Sie sich authentifiziert haben, wird durch ein \"<em>Cookie</em>\" mit \n"
+"Wenn Sie sich authentifiziert haben, wird durch ein \"<em>Cookie</em>\" "
+"mit \n"
 "Ihren Anmeldeinformationen Ihre Verbindung zu WWSympa aufrecht erhalten. \n"
 "Die Lebensdauer dieses <em>Cookies<em kann in Ihren <em>Einstellungen</em> "
 "geändert werden."
@@ -4022,22 +4007,6 @@ msgstr "Der Betreff des Zertifikates ist :"
 msgid "The configuration file --CONFIG-- contains errors.\n"
 msgstr "Die Konfigurationsdatei --CONFIG-- enthält Fehler.\n"
 
-#: web_tt2/skinsedit.tt2:44
-msgid "The css_path parameter is defined, value is"
-msgstr "Der Parameter css_path ist definiert, der Wert ist"
-
-#: web_tt2/skinsedit.tt2:7
-msgid ""
-"The current version don't include a color editor, so you need to edit robot."
-"conf (or sympa.conf) to change colors. Here are the colors as defined for "
-"the current robot in robot.conf. If you did install statics CSS files, the "
-"colors in use may differ from this table."
-msgstr "Die aktuelle Version beinhaltet keinen Farbeditor; Sie müssen daher ihre "
-"robot.conf (oder sympa.conf) editieren, um die Farben zu ändern. Es folgen die Farben, "
-"wie sie für den aktuellen Roboter in robot.conf definiert sind. Wenn Sie statische "
-"CSS Dateien installiert haben, können sich die verwendeten Farben von denen in der Tabelle "
-"unterscheiden."
-
 #: web_tt2/help_editlist.tt2:138
 msgid ""
 "The default is to respect (preserve) the existing Reply-To: SMTP header "
@@ -4619,7 +4588,8 @@ msgid ""
 "archives, list management and so on."
 msgstr ""
 "Dieser Server bietet Zugang zu Ihrer Umgebung am Mailinglisten-Server %1@%2. "
-"Ausgehend von dieser Adresse können Sie Ihre Abonnements verwalten, Archive \n"
+"Ausgehend von dieser Adresse können Sie Ihre Abonnements verwalten, "
+"Archive \n"
 "einsehen, Listen verwalten etc."
 
 #: src/etc/mhonarc-ressources.tt2:183 src/etc/mhonarc-ressources.tt2:281
@@ -5082,10 +5052,6 @@ msgstr "Sichbarkeit der Liste"
 #: web_tt2/help_editlist.tt2:76
 msgid "Visibility of the subscriber with the REVIEW command."
 msgstr "Sichtbarkeit des Abonnenten mit dem REVIEW Befehl."
-
-#: web_tt2/skinsedit.tt2:61
-msgid "W3C CSS validation tools"
-msgstr "W3C CSS Validierungs-Tools"
 
 # nlsref 8,23
 #: src/List.pm:2279
@@ -6033,6 +5999,10 @@ msgstr "jeder aus lokalen Domäne"
 msgid "anyone with previous md5 authentication"
 msgstr "jeder mit vorheriger md5-Authentifizierung"
 
+#: src/etc/scenari/unsubscribe.open.~1.8.~:1
+msgid "anyone without authentication"
+msgstr "jeder ohne Authentifizierung"
+
 #: src/etc/scenari/subscribe.open_quiet:1
 msgid "anyone, no welcome message"
 msgstr "jeder, keine Begrüßungs-E-Mail"
@@ -6091,10 +6061,6 @@ msgstr "Chronologisch"
 #: src/etc/scenari/send.closed:1
 msgid "closed"
 msgstr "geschlossen"
-
-#: web_tt2/skinsedit.tt2:14 web_tt2/skinsedit.tt2:18
-msgid "color effect"
-msgstr "Farbeffekt"
 
 #: src/etc/scenari/visibility.secret:1
 msgid "conceal even for subscribers"
@@ -6642,14 +6608,6 @@ msgstr "Seite # %1/%2"
 msgid "page %1 / %2"
 msgstr "Seite %1 / %2"
 
-#: web_tt2/skinsedit.tt2:12 web_tt2/skinsedit.tt2:16
-msgid "parameter"
-msgstr "Parameter"
-
-#: web_tt2/skinsedit.tt2:13 web_tt2/skinsedit.tt2:17
-msgid "parameter value"
-msgstr "Wert"
-
 #: web_tt2/arcsearch_form.tt2:42
 msgid "part of word"
 msgstr "Teil des Wortes"
@@ -6952,14 +6910,6 @@ msgstr "Kurzname für diese Quelle"
 msgid "standard (direct reception)"
 msgstr "Standard (direkter Empfang)"
 
-#: web_tt2/skinsedit.tt2:41
-msgid ""
-"static css installation succeed. Reload the current page and/or check sympa "
-"logs  to be sure that static css a really in use."
-msgstr "Die Installation des statischen CSS war erfolgreich. Laden Sie die aktuelle Seite "
-"neu und/oder überprüfen Sie die Sympa Log-Dateien, um sicherzustellen, dass "
-"statische CSS auch wirklich verwendet werden."
-
 #: web_tt2/set_pending_list_request.tt2:25 web_tt2/subrequest.tt2:47
 msgid "submit"
 msgstr "Ausführen"
@@ -7026,10 +6976,6 @@ msgid ""
 msgstr ""
 "Die Adresse wird mittels JavaScript versteckt. Nur Bentzer, die JavaScript "
 "aktivieren, sehen die E-Mail Adresse."
-
-#: web_tt2/skinsedit.tt2:45
-msgid "the current definition for css location (css_url parameter) is"
-msgstr "die aktuelle Definition für den Ort der CSS Datei (css_url Parameter) ist"
 
 # nlsref 16,81
 #: src/List.pm:531 src/List.pm:946
@@ -7138,6 +7084,10 @@ msgstr "Instanziierung durchgeführt von"
 msgid "who updated the config"
 msgstr "letzte Konfigurationsänderung durchgeführt von"
 
+#: src/etc/scenari/unsubscribe.open_notify.~1.9.~:1
+msgid "without authentication, notification is sent to owners"
+msgstr "ohne Authentifikation, Nachricht an Listen-Eigentümer"
+
 #: wwsympa/wwslib.pm:44
 msgid "you do not receive your own posts"
 msgstr "Sie erhalten ihre eigenen Nachrichten nicht"
@@ -7156,11 +7106,61 @@ msgstr "Ihre E-Mail Adresse   : %1"
 msgid "your password : %1"
 msgstr "Ihr Passwort : %1"
 
-#~ msgid "anyone without authentication"
-#~ msgstr "jeder ohne Authentifizierung"
+#~ msgid ""
+#~ "Currently you didn't define css_path parameter. <strong>You should edit "
+#~ "the robot.conf configuration file </strong> (or if not using virtual "
+#~ "robot sympa.conf) and set this parameter so you could use this page to "
+#~ "install static CSS and <strong>make sympa faster</strong>. Don't forget "
+#~ "to set parameter css_url, it must be the URL for the directory where css "
+#~ "are stored (current value is"
+#~ msgstr ""
+#~ "Sie haben zur Zeit den Parameter css_path nicht definiert. <strong>Sie "
+#~ "sollten die Konfigurationsdatei robot.conf editieren </strong> (oder "
+#~ "sympa.conf, wenn Sie keinen virtuellen Roboter verwenden) und diesen "
+#~ "Parameter setzen, damit Sie diese Seite verwenden können, um einen "
+#~ "statischen CSS zu installieren und <strong>Sympa schneller zu machen</"
+#~ "strong>. Vergessen Sie nicht, den Parameter css_url zu setzen. Es muss "
+#~ "die URL für das Verzeichnis sein, wo CSS gespeichert werden (der "
+#~ "derzeitige Wert ist "
 
-#~ msgid "without authentication, notification is sent to owners"
-#~ msgstr "ohne Authentifikation, Nachricht an Listen-Eigentümer"
+#~ msgid "The css_path parameter is defined, value is"
+#~ msgstr "Der Parameter css_path ist definiert, der Wert ist"
+
+#~ msgid ""
+#~ "The current version don't include a color editor, so you need to edit "
+#~ "robot.conf (or sympa.conf) to change colors. Here are the colors as "
+#~ "defined for the current robot in robot.conf. If you did install statics "
+#~ "CSS files, the colors in use may differ from this table."
+#~ msgstr ""
+#~ "Die aktuelle Version beinhaltet keinen Farbeditor; Sie müssen daher ihre "
+#~ "robot.conf (oder sympa.conf) editieren, um die Farben zu ändern. Es "
+#~ "folgen die Farben, wie sie für den aktuellen Roboter in robot.conf "
+#~ "definiert sind. Wenn Sie statische CSS Dateien installiert haben, können "
+#~ "sich die verwendeten Farben von denen in der Tabelle unterscheiden."
+
+#~ msgid "W3C CSS validation tools"
+#~ msgstr "W3C CSS Validierungs-Tools"
+
+#~ msgid "color effect"
+#~ msgstr "Farbeffekt"
+
+#~ msgid "parameter"
+#~ msgstr "Parameter"
+
+#~ msgid "parameter value"
+#~ msgstr "Wert"
+
+#~ msgid ""
+#~ "static css installation succeed. Reload the current page and/or check "
+#~ "sympa logs  to be sure that static css a really in use."
+#~ msgstr ""
+#~ "Die Installation des statischen CSS war erfolgreich. Laden Sie die "
+#~ "aktuelle Seite neu und/oder überprüfen Sie die Sympa Log-Dateien, um "
+#~ "sicherzustellen, dass statische CSS auch wirklich verwendet werden."
+
+#~ msgid "the current definition for css location (css_url parameter) is"
+#~ msgstr ""
+#~ "die aktuelle Definition für den Ort der CSS Datei (css_url Parameter) ist"
 
 #~ msgid "-Rename list"
 #~ msgstr "-Liste umbennen"
