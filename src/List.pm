@@ -8685,7 +8685,7 @@ sub get_which_db {
 	}
 	
 	while ($l = $sth->fetchrow_hashref) {
-	    $which{$l->{'role_admin'}}{$l->{'list_admin'}} = 1;
+	    $which{$l->{'list_admin'}}{$l->{'role_admin'}} = 1;
 	}
 	
 	$sth->finish();
@@ -8722,7 +8722,7 @@ sub get_which {
 
 	    if (($list->{'admin'}{'user_data_source'} eq 'database') ||
 		($list->{'admin'}{'user_data_source'} eq 'include2')){
-		if ($db_which->{$l}) {
+		if ($db_which->{$l}{'member'}) {
 		    push @which, $l ;
 
 		    ## Update cache
@@ -8737,7 +8737,7 @@ sub get_which {
 
 	}elsif ($function eq 'owner') {
  	    if ($list->{'admin'}{'user_data_source'} eq 'include2'){
-		if ($db_which->{'owner'}{$l} == 1) {
+		if ($db_which->{$l}{'owner'} == 1) {
  		    push @which, $l ;
 		    
 		    ## Update cache
@@ -8752,7 +8752,7 @@ sub get_which {
 
 	}elsif ($function eq 'editor') {
  	    if ($list->{'admin'}{'user_data_source'} eq 'include2'){
-		if ($db_which->{'editor'}{$l} == 1) {
+		if ($db_which->{$l}{'editor'}{$l} == 1) {
  		    push @which, $l ;
 		    
 		    ## Update cache
