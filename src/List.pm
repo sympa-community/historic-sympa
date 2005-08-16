@@ -3826,9 +3826,9 @@ sub get_admin_user {
     my $update_field = sprintf $date_format{'read'}{$Conf{'db_type'}}, 'update_admin', 'update_admin';	
 
     ## Use session cache
-    if (defined $list_cache{'get_admin_user'}{$name}{$email}) {
+    if (defined $list_cache{'get_admin_user'}{$name}{$role}{$email}) {
 	&do_log('debug3', 'xxx Use cache(get_admin_user, %s,%s,%s)', $name, $role, $email);
-	return $list_cache{'get_admin_user'}{$name}{$email};
+	return $list_cache{'get_admin_user'}{$name}{$role}{$email};
     }
 
     ## Check database connection
@@ -3871,7 +3871,7 @@ sub get_admin_user {
     $sth = pop @sth_stack;
     
     ## Set session cache
-    $list_cache{'get_admin_user'}{$name}{$email} = $admin_user;
+    $list_cache{'get_admin_user'}{$name}{$role}{$email} = $admin_user;
     
     return $admin_user;
     
@@ -5004,7 +5004,7 @@ sub update_admin_user {
     }
 
     ## Reset session cache
-    $list_cache{'get_admin_user'}{$name}{$who} = undef;
+    $list_cache{'get_admin_user'}{$name}{$role}{$who} = undef;
     
     return 1;
 }
@@ -8685,7 +8685,7 @@ sub get_which_db {
 	}
 	
 	while ($l = $sth->fetchrow_hashref) {
-	    $which{$l->{'role_admin'}}{$l->{'list_admin'}} = 1;
+	    $which{$l->{'list_admin'}}{$l->{'role_admin'}} = 1;
 	}
 	
 	$sth->finish();
@@ -8722,7 +8722,7 @@ sub get_which {
 
 	    if (($list->{'admin'}{'user_data_source'} eq 'database') ||
 		($list->{'admin'}{'user_data_source'} eq 'include2')){
-		if ($db_which->{$l}) {
+		if ($db_which->{$l}{'member'}) {
 		    push @which, $l ;
 
 		    ## Update cache
@@ -8737,7 +8737,7 @@ sub get_which {
 
 	}elsif ($function eq 'owner') {
  	    if ($list->{'admin'}{'user_data_source'} eq 'include2'){
-		if ($db_which->{'owner'}{$l} == 1) {
+		if ($db_which->{$l}{'owner'} == 1) {
  		    push @which, $l ;
 		    
 		    ## Update cache
@@ -8752,7 +8752,7 @@ sub get_which {
 
 	}elsif ($function eq 'editor') {
  	    if ($list->{'admin'}{'user_data_source'} eq 'include2'){
-		if ($db_which->{'editor'}{$l} == 1) {
+		if ($db_which->{$l}{'editor'} == 1) {
  		    push @which, $l ;
 		    
 		    ## Update cache
@@ -9421,6 +9421,60 @@ sub maintenance {
 	    $list->sync_include_admin();
 	}
     }
+
+    ## Move old-style web templates out of the include_path
+    unless (&tools::higher_version($previous_version, '5.0.1')) {
+	&do_log('notice','Old web templates HTML structure is not compliant with latest ones.');
+	&do_log('notice','Moving old-style web templates out of the include_path...');
+
+	my @directories;
+
+	if (-d "$Conf::Conf{'etc'}/web_tt2") {
+	    push @directories, "$Conf::Conf{'etc'}/web_tt2";
+	}
+
+	## Go through Virtual Robots
+	foreach my $vr (keys %{$Conf::Conf{'robots'}}) {
+
+	    if (-d "$Conf::Conf{'etc'}/$vr/web_tt2") {
+		push @directories, "$Conf::Conf{'etc'}/$vr/web_tt2";
+	    }
+	}
+
+	## Search in V. Robot Lists
+	foreach my $l ( &List::get_lists('*') ) {
+	    my $list = new List ($l);
+	    next unless $list;	    
+	    if (-d "$list->{'dir'}/web_tt2") {
+		push @directories, "$list->{'dir'}/web_tt2";
+	    }	    
+	}
+
+	my @templates;
+
+	foreach my $d (@directories) {
+	    unless (opendir DIR, $d) {
+		printf STDERR "Error: Cannot read %s directory : %s", $d, $!;
+		next;
+	    }
+	    
+	    foreach my $tt2 (sort grep(/\.tt2$/,readdir DIR)) {
+		push @templates, "$d/$tt2";
+	    }
+	    
+	    closedir DIR;
+	}
+
+	foreach my $tpl (@templates) {
+	    unless (rename $tpl, "$tpl.oldtemplate") {
+		printf STDERR "Error : failed to rename $tpl to $tpl.oldtemplate : $!\n";
+		next;
+	    }
+
+	    &do_log('notice','File %s renamed %s', $tpl, "$tpl.oldtemplate");
+	}
+    }
+
 
     ## Clean buggy list config files
     unless (&tools::higher_version($previous_version, '5.1b')) {

@@ -3,7 +3,7 @@
 
 (See Changelog file for the full changes log)
 
-5.1		4 August 2005
+5.1		16 August 2005
 
   New features :
 
@@ -44,6 +44,10 @@
 
    Changes :
 
+	src/List.pm: rename old-style templates because the HTML structure is not compliant with new ones.
+
+	po/hu.po: [G.Hargitai] Updates
+
 	src/List.pm: clean buggy list config files at startup
 
 	src/etc/script/sympa: [BugID 403] made init script compatible with OS X, Debian and Suze
@@ -83,7 +87,9 @@
 	src/Language.pm: try performing different setlocale() with $lang and with $locale.charset
 
 
-   Bug fixes :
+   Bug fixes :	
+
+	src/Language.pm: when 'web_recode_to' is set, also change the 'charset'
 
 	src/task_manager.pl: [D.Lamballais] missing chomp ; incorrect split on file path.  
 	The consequence of this bug : all tasks would fail ("Error while processing task..")

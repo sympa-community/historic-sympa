@@ -134,7 +134,7 @@ sub SetLang {
     unless (setlocale(&POSIX::LC_ALL, $locale)) {
 	unless (setlocale(&POSIX::LC_ALL, $lang)) {
 	    unless (setlocale(&POSIX::LC_ALL, $locale.'.'.$locale2charset{$locale})) {
-		&do_log('err','Failed to setlocale(%s) ; you should edit your /etc/locale.gen or /etc/sysconfig/i18n files', $locale.'.'.$locale2charset{$locale});
+		&do_log('err','Failed to setlocale(%s) ; you either have a problem with the catalogue .mo files or you should extend available locales in  your /etc/locale.gen (or /etc/sysconfig/i18n) file', $locale.'.'.$locale2charset{$locale});
 		return undef;
 	    }
 	}
@@ -215,7 +215,9 @@ sub gettext {
 		    return $language;
 		}
 	    }elsif ($var eq 'charset') {
-		if (/^Content-Type:\s*.*charset=(\S+)$/i) {
+		if ($recode) {
+		    return $recode;
+		} elsif (/^Content-Type:\s*.*charset=(\S+)$/i) {
 		    return $1;
 		}
 	    }elsif ($var eq 'encoding') {
