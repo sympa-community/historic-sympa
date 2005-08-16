@@ -8752,7 +8752,7 @@ sub get_which {
 
 	}elsif ($function eq 'editor') {
  	    if ($list->{'admin'}{'user_data_source'} eq 'include2'){
-		if ($db_which->{$l}{'editor'}{$l} == 1) {
+		if ($db_which->{$l}{'editor'} == 1) {
  		    push @which, $l ;
 		    
 		    ## Update cache
