@@ -4,5 +4,14 @@ MIME-Version: 1.0
 Content-Type: text/plain; charset=[%|loc%]_charset_[%END%];
 Content-Transfer-Encoding: [%|loc%]_encoding_[%END%]
 
+[% IF user.included -%]
+[% IF user.descriptions -%]
+[%|loc(list.name,list.host,user.descriptions)%]You have been automatically removed of the list %1@%2 because you disappeared of the following data source(s): %3.[%END%]
+[% ELSE -%]
+[%|loc(list.name,list.host)%]You have been automatically removed of the list %1@%2[%END%]
+[%END -%]
+[% ELSE -%]
 [%|loc(user.email,list.name,list.host)%]Your email address (%1) has been removed from list %2@%3[%END%]
+[% END -%]
 [%|loc%]bye ![%END%]
+

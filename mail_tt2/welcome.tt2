@@ -7,8 +7,16 @@ Content-Type: multipart/alternative; boundary="===Sympa==="
 Content-Type: text/plain; charset=[%|loc%]_charset_[%END%];
 Content-Transfer-Encoding: [%|loc%]_encoding_[%END%]
 
+[% IF user.included -%]
+[% IF user.descriptions -%]
+[%|loc(list.name,list.host,user.descriptions)%]You have been automatically added to the list %1@%2 via the data source: %3.[%END%]
+[% ELSE -%]
+[%|loc(list.name,list.host)%]You have been automatically added to the list %1@%2.[%END%]
+[% END -%]
+[% ELSE -%]
 [%|loc(list.name,list.host)%]Welcome to list %1@%2[%END%]
 [%|loc(user.email)%]Your subscription email is %1[%END%]
+[% END -%]
 
 [% INSERT "info" %]
 
@@ -24,8 +32,16 @@ Content-Transfer-Encoding: [%|loc%]_encoding_[%END%]
 <TITLE>[%|loc(list.name,list.host)%]Welcome to list %1@%2[%END%]</title>
 <BODY  BGCOLOR=#ffffff>
 
+[% IF user.included -%]
+[% IF user.descriptions -%]
+[%|loc(list.name,list.host,user.descriptions)%]You have been automatically added to the list %1@%2 via the following data source(s): %3.[%END%]
+[% ELSE -%]
+[%|loc(list.name,list.host)%]You have been automatically added to the list %1@%2.[%END%]
+[% END -%]
+[% ELSE -%]
 <B>[%|loc(list.name,list.host)%]Welcome to list %1@%2[%END%] </B><BR>
 [%|loc(user.email)%]Your subscription email is %1[%END%] 
+[% END -%]
 <BR><BR>
 <PRE>
 [% INSERT "info" %]

@@ -566,7 +566,7 @@ my %alias = ('reply-to' => 'reply_to',
 		   },
 	    'include_file' => {'format' => {'path' => {'format' =>  '\S+',
 						       'length' => 20,
-						       'occurence' => '1',
+						       'occurrence' => '1',
 						       'gettext_id' => "path",
 						       'order' => 1
 						       },
@@ -580,6 +580,18 @@ my %alias = ('reply-to' => 'reply_to',
 							       'gettext_id' => "description of this source",
 							       'order' => 3
 							       },
+					     'send_welcome' => {'format' => ['off','on'],
+								'default' => 'off',
+								'gettext_id' => "send the welcome message to the entering members",
+								'order' => 4,
+								'field_type' => 'boolean'
+								},
+					     'send_bye' => {'format' => ['off','on'],
+								'default' => 'off',
+								'gettext_id' => "send the welcome message to the outgoing members",
+								'order' => 5,
+							        'field_type' => 'boolean'
+								},
 					},
 			       'occurrence' => '0-n',
 			       'gettext_id' => "File inclusion",
@@ -613,6 +625,18 @@ my %alias = ('reply-to' => 'reply_to',
 							       'gettext_id' => "description of this source",
 							       'order' => 2
 							       },
+						    'send_welcome' => {'format' => ['off','on'],
+								'default' => 'off',
+								'gettext_id' => "send the welcome message to the entering members",
+								'order' => 6,
+								'field_type' => 'boolean'       
+								},
+					            'send_bye' => {'format' => ['off','on'],
+								'default' => 'off',
+								'gettext_id' => "send the welcome message to the outgoing members",
+								'order' => 7,
+								'field_type' => 'boolean'  
+								},
 						     },
 				      'gettext_id' => "Remote file inclusion",
 				      'occurrence' => '0-n',
@@ -682,6 +706,18 @@ my %alias = ('reply-to' => 'reply_to',
 							       'gettext_id' => "description of this source",
 							       'order' => 2
 							       },
+						   'send_welcome' => {'format' => ['off','on'],
+								'default' => 'off',
+								'gettext_id' => "send the welcome message to the entering members",
+								'order' => 11,
+								'field_type' => 'boolean'      
+								},
+					            'send_bye' => {'format' => ['off','on'],
+								'default' => 'off',
+								'gettext_id' => "send the welcome message to the outgoing members",
+								'order' => 12,
+								'field_type' => 'boolean'  
+								},	       
 					      },
 				     'occurrence' => '0-n',
 				     'gettext_id' => "LDAP query inclusion",
@@ -794,6 +830,18 @@ my %alias = ('reply-to' => 'reply_to',
 								     'gettext_id' => "description of this source",
 								     'order' => 2
 								     },
+						    'send_welcome' => {'format' => ['off','on'],
+								'default' => 'off',
+								'gettext_id' => "send the welcome message to the entering members",
+								'order' => 19,
+								'field_type' => 'boolean'       
+								},
+					            'send_bye' => {'format' => ['off','on'],
+								'default' => 'off',
+								'gettext_id' => "send the welcome message to the outgoing members",
+								'order' => 20,
+								'field_type' => 'boolean'   
+								},		     
 
 					      },
 				     'occurrence' => '0-n',
@@ -801,7 +849,7 @@ my %alias = ('reply-to' => 'reply_to',
 				     'group' => 'data_source'
 				     },
 	    'include_list' => {'format' => {'name' => {'format' => $tools::regexp{'listname'},
-						       'occurence' => '1',
+						       'occurrence' => '1',
 						       'gettext_id' => "name",
 						       'order' => 1
 						       },
@@ -810,6 +858,18 @@ my %alias = ('reply-to' => 'reply_to',
 							      'gettext_id' => "description of this source",
 							      'order' => 2
 							      },
+					     'send_welcome' => {'format' => ['off','on'],
+								'default' => 'off',
+								'gettext_id' => "send the welcome message to the entering members",
+								'order' => 3,
+								'field_type' => 'boolean'
+								},
+					     'send_bye' => {'format' => ['on','off'],
+							    'default' => 'off',
+							    'gettext_id' => "send the welcome message to the outgoing members",
+							    'order' => 4,
+							    'field_type' => 'boolean'
+							    },		      
 					    },		   
 			       'occurrence' => '0-n',
 			       'gettext_id' => "List inclusion",
@@ -846,8 +906,20 @@ my %alias = ('reply-to' => 'reply_to',
 								     'length' => 80,
 								     'gettext_id' => "description of this source",
 								     'order' => 2
-								     },	      
-					},
+								     },	  
+							   'send_welcome' => {'format' => ['off','on'],
+									      'default' => 'off',
+									      'gettext_id' => "send the welcome message to the entering members",
+									      'order' => 6,
+									      'field_type' => 'boolean'
+									      },
+					                   'send_bye' => {'format' => ['off','on'],
+									  'default' => 'off',
+									  'gettext_id' => "send the welcome message to the outgoing members",
+									  'order' => 7,
+									  'field_type' => 'boolean'
+								},
+						 },
 
 			       'occurrence' => '0-n',
 			       'gettext_id' => "remote list inclusion",
@@ -907,6 +979,18 @@ my %alias = ('reply-to' => 'reply_to',
 								     'gettext_id' => "description of this source",
 								     'order' => 2
 								     },	  
+						   'send_welcome' => {'format' => ['off','on'],
+								'default' => 'off',
+								'gettext_id' => "send the welcome message to the entering members",
+								'order' => 11,
+								'field_type' => 'boolean'      
+								},
+					            'send_bye' => {'format' => ['off','on'],
+								'default' => 'off',
+								'gettext_id' => "send the welcome message to the outgoing members",
+								'order' => 12,
+								'field_type' => 'boolean'   
+								},		     
 					     },
 				    'occurrence' => '0-n',
 				    'gettext_id' => "SQL query inclusion",
@@ -8677,6 +8761,33 @@ sub sync_include {
 	    &do_log('err', 'List:sync_include(%s): Failed to add new users', $name);
 	    return undef;
 	}
+
+	foreach my $user_added (@add_tab) {
+	    my $param;
+	    $param->{'user'} = $user_added;
+	    my @ids = split /,/,$param->{'user'}{'id'};
+	    
+	    my $descriptions;
+	    my @description;
+	    my $send;
+	    foreach my $id (@ids) {
+		if ($self->search_datasource_send($id, 'welcome') eq 'on') {
+		    $send = 1;
+		}
+		
+		unless (defined ($descriptions->{$id})) {
+		    $descriptions->{$id} = $self->search_datasource_desc($id);
+		}
+		push @description, $descriptions->{$id};
+	    }
+	    $param->{'user'}{'descriptions'} = join ', ', @description;
+
+	    if ($send) {
+		unless ($self->send_file('welcome', $user_added->{'email'}, $self->{'domain'},$param)) {
+		    &do_log('notice',"List:sync_include: unable to send template 'welcome' to $user_added->{'email'}");
+		}
+	    }
+	}
     }
 
     if ($users_added) {
@@ -8687,6 +8798,7 @@ sub sync_include {
     ## Go though previous list of users
     my $users_removed = 0;
     my @deltab;
+
     foreach my $email (keys %old_subscribers) {
 	unless( defined($new_subscribers->{$email}) ) {
 	    ## User is also subscribed, update DB entry
@@ -8708,14 +8820,46 @@ sub sync_include {
 	}
     }
     if ($#deltab >= 0) {
+
+	foreach my $user_removed (@deltab) {
+	    my $param;
+	    $param->{'user'} = $self->get_subscriber($user_removed);
+	    my @ids = split /,/,$param->{'user'}{'id'};
+	    
+	    my $descriptions;
+	    my @description;
+	    my $send;
+	    foreach my $id (@ids) {
+		
+		if ($self->search_datasource_send($id, 'bye') eq 'on') {
+		    $send = 1;
+		}
+
+		unless (defined ($descriptions->{$id})) {
+		    $descriptions->{$id} = $self->search_datasource_desc($id);
+		}
+		push @description, $descriptions->{$id};
+	    }
+	    $param->{'user'}{'descriptions'} = join ', ', @description;
+	    
+	    if ($send) {
+		unless ($self->send_file('bye', $user_removed, $self->{'domain'},$param)) {
+		    &do_log('notice',"List:sync_include: unable to send template 'bye' to $user_removed");
+		}
+	    }
+	}
+
 	unless($users_removed = $self->delete_user(@deltab)) {
 	    &do_log('err', 'List:sync_include(%s): Failed to delete %s',
 		    $name, $users_removed);
 	    return undef;
         }
+
         &do_log('notice', 'List:sync_include(%s): %d users removed',
 		$name, $users_removed);
     }
+
+
     &do_log('notice', 'List:sync_include(%s): %d users updated', $name, $users_updated);
 
     ## Release lock
@@ -10447,6 +10591,17 @@ sub _load_admin_file {
 	    
 	$pname = $1;
 
+	my $pargument = $2;
+	## For compatibility with the change of simple to compose parameter, we reform the line in paragraph to obtain the new format
+	if ((($pname eq 'include_list') || ($pname eq 'include_file')) && ($2 =~ /^\s[\w]+/) && $2 ne ' ') {
+	    $paragraph[0] = $pname;
+	    if ($pname eq 'include_list') {
+		$paragraph[1] = 'name'.$pargument;
+	    } else {
+		$paragraph[1] = 'path'.$pargument;
+	    }
+	}
+
 	## Parameter aliases (compatibility concerns)
 	if (defined $alias{$pname}) {
 	    $paragraph[0] =~ s/^\s*$pname/$alias{$pname}/;
@@ -11670,7 +11825,7 @@ sub search_datasource {
 #     -$id (+) : ref(HASH) - unique id for an included datasource
 #
 # OUT :
-#     $id->{'description'} | "not indicated" | undef
+#     $id->{'description'} | 'not indicated' | undef
 #
 #####################################################################
 sub search_datasource_desc {
@@ -11686,6 +11841,27 @@ sub search_datasource_desc {
 	    if (&_get_datasource_id($s) eq $id) {
 		if (ref($s)) {
  		    return $s->{'description'} || 'not indicated';
+		}
+	    }
+	}
+    }
+
+    return undef;
+}
+
+sub search_datasource_send {
+    my ($self, $id, $tpl) = @_;
+    &do_log('debug2','List::search_datasource_desc(%s,%s,%s)', $self->{'name'}, $id, $tpl);
+
+    ## Go through list parameters
+    foreach my $p (keys %{$self->{'admin'}}) {
+	next unless ($p =~ /^include/);
+	
+	## Go through sources
+	foreach my $s (@{$self->{'admin'}{$p}}) {
+	    if (&_get_datasource_id($s) eq $id) {
+		if (ref($s)) {
+ 		    return $s->{'send_'.$tpl} || 'off';
 		}
 	    }
 	}

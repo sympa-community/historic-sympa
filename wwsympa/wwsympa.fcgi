@@ -7526,7 +7526,7 @@ sub do_edit_list {
 	}else {
 	    $p = [$list->{'admin'}{$pname}];
 	    $new_p = [$new_admin->{$pname}];
-#	     &wwslog('notice',"UNIQUE param 1 2 3 4 : $pname.........................");
+	     &wwslog('notice',"UNIQUE param 1 2 3 4 : $pname.........................");
 	}
 
 	 ## Check changed parameters
@@ -7540,7 +7540,7 @@ sub do_edit_list {
 		if ($p->[$i]{'name'} ne $new_p->[$i]{'name'}) {
 		    $changed{$pname} = 1; next;
 		}
-		# &wwslog('notice',"..scenario task, SIMPLE UNIVALUE, param 1-5 : $pname($new_p->[$i]{'name'})");
+#		 &wwslog('notice',"..scenario task, SIMPLE UNIVALUE, param 1-5 : $pname($new_p->[$i]{'name'})");
 		## Hash
 		## Ex: 'owner'
 	    }elsif (ref ($pinfo->{$pname}{'format'}) eq 'HASH') {
@@ -7573,13 +7573,13 @@ sub do_edit_list {
 			}
 		    }else{
 			## Multiple param
-			#&wwslog('notice',"....non task non scenario param 2 4 6 8");
+#			&wwslog('notice',"....non task non scenario param 2 4 6 8");
 			if ($pinfo->{$pname}{'format'}{$key}{'occurrence'} =~ /n$/) {
-			    #&wwslog('notice',"......MULTIVALUE param 4 8 : $pname.$key(@{$new_p->[$i]{$key}})");
+
+#			    &wwslog('notice',"......MULTIVALUE param 4 8 : $pname.$key(@{$new_p->[$i]{$key}})");
 			    if ($#{$p->[$i]{$key}} != $#{$new_p->[$i]{$key}}) {
 				$changed{$pname} = 1; next;
 			    }
-			    
 			    ## Multiple param, foreach entry
 			    ## Ex: 'digest->days'
 			    foreach my $index (0..$#{$p->[$i]{$key}}) {
@@ -7606,17 +7606,16 @@ sub do_edit_list {
 				## If empty and is primary key => delete entry
 				if ($pinfo->{$pname}{'format'}{$key}{'occurrence'} =~ /^1/) {
 				    $new_p->[$i] = undef;
-				    
+				   				    
 				    ## Skip the rest of the paragraph
 				    $changed{$pname} = 1; last;
-				    
+						    
 				    ## If optionnal parameter
 				}else {
 				    $changed{$pname} = 1; next;
 				}
 			    }
 			    if ($p->[$i]{$key} ne $new_p->[$i]{$key}) {
-				
 				my $format = $pinfo->{$pname}{'format'}{$key}{'format'};
 				if (ref ($format)) {
 				    $format = $pinfo->{$pname}{'format'}{$key}{'file_format'};
@@ -8263,6 +8262,9 @@ sub _prepare_data {
 
 	 }elsif ((ref ($struct->{'format'}) eq 'ARRAY') || ($restrict && ($main_p eq 'msg_topic' && $name eq 'keywords'))) {
 	     $p_glob->{'type'} = 'enum';
+
+	     $p_glob->{'field_type'} = $struct->{'field_type'};
+#	     $p_glob->{'default'} = $struct->{'default'};
 
 	     unless (defined $p_glob->{'value'}) {
 		 ## Initialize
@@ -9349,7 +9351,7 @@ sub do_d_read {
 				 $subdirs{$d}{'edit'} = $may_action_edit;
 			     # if index.html, must know if something can be edit in the dir
 			     $normal_mode = 1;
-			 }
+			     }
 			 }
 			   
 			 if  ($may_control || ($user eq $desc_hash{'email'})) {
@@ -9408,8 +9410,8 @@ sub do_d_read {
 			 chomp $url;
 			 $files{$d}{'url'} = $url;
 			 $files{$d}{'anchor'} = $d;
-			$files{$d}{'anchor'} =~ s/\.moderate$//;
-			$files{$d}{'anchor'} =~ s/^\.//;
+			 $files{$d}{'anchor'} =~ s/\.moderate$//;
+			 $files{$d}{'anchor'} =~ s/^\.//;
 			 $files{$d}{'anchor'} =~ s/\.url$//;
 			 $files{$d}{'icon'} = $icon_table{'url'};			
 

@@ -107,16 +107,33 @@
                                       [% IF key.type == 'enum' %]
                                         <!-- Enum -->
                                         [% IF key.may_edit == 'write' %]
-                                          <select name="single_param.[% p.name %].[% o_INDEX %].[% key.name %]" id="single_param.[% p.name %].[% o_INDEX %].[% key.name %]">
-                                            [% FOREACH enum = key.value %]
-                                              <option value="[% enum.key %]"
-                                              [% IF enum.value.selected == '1' %]
-                                                selected="selected"
+
+				          [% IF key.field_type == 'boolean' %]
+				            [% FOREACH enum = key.value %]	
+				              <input type="radio" name="single_param.[% p.name %].[% o_INDEX %].[% key.name %]" value="[% enum.key %]"	
+				              [% IF enum.value.selected == 1 %]	
+				                checked	= "checked"
+				              [% END %]
+  				              [% IF enum.key == 'on' %]
+				                >  [%|loc%]Active [%END%] </input>
+				              [% ELSE %]
+				                >  [%|loc%]Inactive [%END%] </input>
+				              [% END %]
+				            [% END %]
+				          [% ELSE %]	
+
+                                            <select name="single_param.[% p.name %].[% o_INDEX %].[% key.name %]" id="single_param.[% p.name %].[% o_INDEX %].[% key.name %]">
+                                              [% FOREACH enum = key.value %]
+                                                <option value="[% enum.key %]"
+                                                [% IF enum.value.selected == '1' %]
+                                                  selected="selected"
+                                                [% END %]
+                                                >[% enum.key %]
                                               [% END %]
-                                              >[% enum.key %]
-                                            [% END %]
-                                          </select>
-                                        [% ELSIF key.may_edit == 'read' %]
+					      </select>	
+					  [% END %]
+
+                                         [% ELSIF key.may_edit == 'read' %]
                                           [% FOREACH enum = key.value %]
                                             [% IF enum.value.selected == '1' %]
                                               [% enum.key %]
@@ -323,24 +340,25 @@
 
                                       [% ELSIF key.type == 'enum' %]
                                         <!-- Enum -->
+ 
                                         [% IF key.may_edit == 'write' %]
-                                          [% IF key.occurrence == 'multiple' %]
-                                            <select name="multiple_param.[% p.name %].[% key.name %]" multiple="multiple" id="single_param.[% p.name %].[% key.name %].name">
-                                          [% ELSE %]
-                                            <select name="single_param.[% p.name %].[% key.name %]" id="single_param.[% p.name %].[% key.name %].name">
-                                          [% END %]
-                                          [% FOREACH enum = key.value %]
-                                            <option value="[% enum.key %]"
-                                              [% IF enum.value.selected == '1' %]
-                                                selected="selected"
-                                              [% END %]
-                                              [% IF enum.value.title %]
-                                                >[% enum.value.title %]</option>
-                                              [% ELSE %]
-                                                >[% enum.key %]</option>
-                                              [% END %]
-                                          [% END %]
-                                          </select>
+                                            [% IF key.occurrence == 'multiple' %]
+                                              <select name="multiple_param.[% p.name %].[% key.name %]" multiple="multiple" id="single_param.[% p.name %].[% key.name %].name">
+                                            [% ELSE %]
+                                              <select name="single_param.[% p.name %].[% key.name %]" id="single_param.[% p.name %].[% key.name %].name">
+                                            [% END %]
+                                            [% FOREACH enum = key.value %]
+                                              <option value="[% enum.key %]"
+                                                [% IF enum.value.selected == '1' %]
+                                                  selected="selected"
+                                                [% END %]
+                                                [% IF enum.value.title %]
+                                                  >[% enum.value.title %]</option>
+                                                [% ELSE %]
+                                                  >[% enum.key %]</option>
+                                                [% END %]
+                                              </select>
+					    [% END %]
                                         [% ELSIF key.may_edit == 'read' %]
                                           [% FOREACH enum = key.value %]
                                             [% IF enum.value.selected == '1' %]
@@ -368,25 +386,25 @@
                             [% END %]
                             </table>
                           [% ELSIF p.type == 'enum' %]
-                          <!-- Enum -->
+                            <!-- Enum -->
                             [% IF p.may_edit == 'write' %]
-                              <select name="single_param.[% p.name %]" id="single_param.[% p.name %].name">
-                                [% FOREACH enum = p.value %]
-                                  <option value="[% enum.key %]"
-                                  [% IF enum.value.selected == '1' %]
-                                    selected="selected"
+                                <select name="single_param.[% p.name %]" id="single_param.[% p.name %].name">
+                                  [% FOREACH enum = p.value %]
+                                    <option value="[% enum.key %]"
+                                    [% IF enum.value.selected == '1' %]
+                                      selected="selected"
+                                    [% END %]
+                                    [% IF enum.value.title %]
+                                      >[% enum.value.title %]</option>
+                                    [% ELSE %]
+                                      >[% enum.key %]</option>
+                                    [% END %]
                                   [% END %]
-                                  [% IF enum.value.title %]
-                                    >[% enum.value.title %]</option>
-                                  [% ELSE %]
-                                    >[% enum.key %]</option>
-                                  [% END %]
-                                [% END %]
-                              </select>
+                                </select>
                             [% ELSIF p.may_edit == 'read' %]
                               [% FOREACH enum = p.value %]
                                 [% IF enum.value.selected == '1' %]
-                                  [% enum.key %]
+                                  [% enum.key %] 
                                 [% END %]
                               [% END %]
                             [% END %]
