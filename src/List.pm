@@ -5385,10 +5385,10 @@ sub am_i {
 		# if no editor defined, owners has editor privilege
 		$editor = $self->get_admin_user('owner',$who);
 		if (defined $editor){
-		    return 1;
-		    
 		    ## Update cache
 		    $list_cache{'am_i'}{'editor'}{$self->{'name'}}{$who} = 1;
+
+		    return 1;
 		}else {
 		    
 		    ## Update cache
@@ -5402,10 +5402,10 @@ sub am_i {
 	if ($function =~ /^owner$/i){
 	    my $owner = $self->get_admin_user('owner',$who);
 	    if (defined $owner) {
-		return 1;
-		    
 		## Update cache
 		$list_cache{'am_i'}{'owner'}{$self->{'name'}}{$who} = 1;
+
+		return 1;
 	    }else {
 		    
 		## Update cache
