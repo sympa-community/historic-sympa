@@ -1560,12 +1560,13 @@ sub send_html {
      if (&Conf::get_robot_conf($robot,'spam_protection') eq 'at') {
 	 $param->{'hidden_head'} = '';	$param->{'hidden_at'} = ' AT ';	$param->{'hidden_end'} = '';
      }elsif(&Conf::get_robot_conf($robot,'spam_protection') eq 'javascript') {
+	 $param->{'protection_type'} = 'javascript';
 	 $param->{'hidden_head'} = '
  <script type="text/javascript">
  <!-- 
  document.write("';
-	 $param->{'hidden_at'} ='" + "@" + "';
-	 $param->{'hidden_end'} ='")
+		 $param->{'hidden_at'} ='" + "@" + "';
+		 $param->{'hidden_end'} ='")
  // -->
  </script>';
      }else {
@@ -1577,9 +1578,11 @@ sub send_html {
 
 	 ## Email addresses protection
  	 if ($in{'action'} eq 'arc') {
+	     $param->{'protection_type'} = undef;
 	     if ($list->{'admin'}{'web_archive_spam_protection'} eq 'at') {
 		 $param->{'hidden_head'} = '';	$param->{'hidden_at'} = ' AT ';	$param->{'hidden_end'} = '';
 	     }elsif($list->{'admin'}{'web_archive_spam_protection'} eq 'javascript') {
+		 $param->{'protection_type'} = 'javascript';
 		 $param->{'hidden_head'} = '
  <script type="text/javascript">
  <!-- 
