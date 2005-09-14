@@ -5368,7 +5368,9 @@ sub am_i {
     }
 
     ## Use cache
-    if (defined $list_cache{'am_i'}{$function}{$self->{'name'}}{$who}) {
+    if (defined $list_cache{'am_i'}{$function}{$self->{'name'}}{$who} &&
+	$function ne 'editor') { ## Defaults for editor may be owners
+
 	# &do_log('debug3', 'Use cache(%s,%s): %s', $name, $who, $list_cache{'is_user'}{$name}{$who});
 	return $list_cache{'am_i'}{$function}{$self->{'name'}}{$who};
     }
@@ -5377,18 +5379,29 @@ sub am_i {
 
 	##Check editors
 	if ($function =~ /^editor$/i){
+	    
+	    ## Check cache first
+	    if ($list_cache{'am_i'}{$function}{$self->{'name'}}{$who} == 1) {
+		return 1;
+	    }
+	    
 	    my $editor = $self->get_admin_user('editor',$who);
 
 	    if (defined $editor) {
 		return 1;
 	    }else {
-		# if no editor defined, owners has editor privilege
-		$editor = $self->get_admin_user('owner',$who);
-		if (defined $editor){
-		    ## Update cache
-		    $list_cache{'am_i'}{'editor'}{$self->{'name'}}{$who} = 1;
+		## Check if any editor is defined ; if not owners are editors
+		my $editors = $self->get_editors();
+		if ($#{$editors} < 0) {
 
-		    return 1;
+		    # if no editor defined, owners has editor privilege
+		    $editor = $self->get_admin_user('owner',$who);
+		    if (defined $editor){
+			## Update cache
+			$list_cache{'am_i'}{'editor'}{$self->{'name'}}{$who} = 1;
+			
+			return 1;
+		    }
 		}else {
 		    
 		    ## Update cache
