@@ -1,3 +1,48 @@
+2005-08-19 16:41  sympa-authors
+
+	* web_tt2/list_menu.tt2, wwsympa/wwsympa.fcgi: [BugID 465] Fix:
+	  "contact owners" failed if protection mode was not javascript
+
+2005-08-19 10:36  sympa-authors
+
+	* web_tt2/list_menu.tt2: Fix: removed duplicate ""
+
+2005-08-19 10:34  sympa-authors
+
+	* src/List.pm: [BugID 461] Fix: List::am_i() cache control had 2
+	  blocks which returned before updating the cache
+
+2005-08-18 10:45  sympa-authors
+
+	* Makefile.am, Makefile.in, important_changes.pl: Change: do not
+	  request user interaction in important_change if DESTDIR is set
+
+2005-08-18 10:10  sympa-authors
+
+	* src/Conf.pm: Added Estonian to supported languages
+
+2005-08-18 10:03  sympa-authors
+
+	* po/et.po: [T.Kindsigo] Updated Estonian PO file
+
+2005-08-17 12:10  sympa-authors
+
+	* Makefile.am, Makefile.in: [requested by S.Hornburg] Change: never
+	  wait for user input while building a package (DESTDIR is set)
+
+2005-08-16 13:22  sympa-authors
+
+	* web_tt2/list_admin_menu.tt2: Change: now show the "Moderate"
+	  button if though there is no object awaiting moderation
+
+2005-08-16 12:18  sympa-authors
+
+	* src/List.pm: Fix previous change
+
+2005-08-16 11:51  sympa-authors
+
+	* .version, ChangeLog, Makefile.in, NEWS: preparing 5.1 release
+
 2005-08-16 11:29  sympa-authors
 
 	* src/List.pm: Fix: keys were inverted in the hash exchanged
