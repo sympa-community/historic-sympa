@@ -12878,14 +12878,14 @@ sub do_arc_download {
 	unless (opendir SPOOL, $abs_dir) {
 	    &error_message('failed');
 	    &wwslog('info','do_arc_download: unable to open %s', $abs_dir);
-	    return 'undef';
+	    return undef;
 	}
 	
 	foreach my $msg (sort grep(!/^\./, readdir SPOOL)) { 
 	    unless ($zip->addFile ($abs_dir.'/'.$msg, $in{'list'}.'_'.$dir.'/'.$msg)) {
 		&error_message('failed');
 		&wwslog('info','do_arc_download: failed to add %s file to archive', $abs_dir.'/'.$msg);
-		return 'undef';
+		return undef;
 	    }	   
 	}
 
