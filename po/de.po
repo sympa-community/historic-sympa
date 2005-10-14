@@ -539,7 +539,7 @@ msgstr "Ausgewählte Adressen hinzufügen"
 
 #: web_tt2/add_request.tt2:11
 msgid "Add subscribers"
-msgstr "Abonenten hinzufügen"
+msgstr "Abonnenten hinzufügen"
 
 #. (error.email)
 #: web_tt2/error.tt2:9
@@ -1344,7 +1344,7 @@ msgstr "ZIP-Datei herunterladen"
 
 #: web_tt2/review.tt2:40
 msgid "Dump"
-msgstr "Verwerfen"
+msgstr "Auflisten"
 
 # nlsref 6,33
 #: src/Commands.pm:1457 src/Commands.pm:1567
@@ -1530,7 +1530,7 @@ msgid ""
 "FYI: Defining editors will not make the list moderated ; you will have to "
 "set the \"send\" parameter."
 msgstr ""
-"Zu ihrer Information: Das Bestimmen von Editoren erzeugt noch keine "
+"Zu Ihrer Information: Das Bestimmen von Editoren erzeugt noch keine "
 "moderierte Liste. Sie müssen den \"send\" Paramter entsprechend setzen"
 
 #: web_tt2/help_editlist.tt2:85
@@ -1621,7 +1621,7 @@ msgstr "Dateiname"
 
 #: web_tt2/login_menu.tt2:67
 msgid "First login ?"
-msgstr "Erstes Anmeldung ?"
+msgstr "Erste Anmeldung ?"
 
 # nlsref 8,7
 #: web_tt2/d_read.tt2:318
@@ -2369,7 +2369,7 @@ msgid ""
 "possible that the virus didn't come from your computer. In that case, please "
 "disregard this message."
 msgstr ""
-"Es kann sinnvoll sein, ihren Computer auf Viren zu überprüfen.\n"
+"Es kann sinnvoll sein, Ihren Computer auf Viren zu überprüfen.\n"
 "\n"
 "Beachten Sie aber, dass viele Viren die E-Mail Adresse des Absenders "
 "fälschen, sodass es möglich ist, dass der Virus nicht von Ihrem Computer "
@@ -2427,7 +2427,7 @@ msgid ""
 "If this problem persists, you will be automatically unsubscribed from the "
 "list."
 msgstr ""
-"Meldungen von Liste %1, die an ihre Adresse %2 gesandt wurden,\n"
+"Meldungen von Liste %1, die an Ihre Adresse %2 gesandt wurden,\n"
 "erzeugten seit %3 Nichtzustellbarkeitsnachrichten. \n"
 "Falls dieses Problem weiterhin exisitiert, werden Sie automatisch von dieser "
 "Liste gelöscht"
@@ -3015,7 +3015,7 @@ msgid ""
 "(this is a way to inform anyone what is his real subscribing email)."
 msgstr ""
 "REMIND <list>                   * Sende eine Erinnerungsnachricht an alle "
-"Abonnenten (das ist eine Methode, um alle über ihre echte Abonnenten-E-Mail "
+"Abonnenten (das ist eine Methode, um alle über Ihre echte Abonnenten-E-Mail "
 "Adresse zu informieren)"
 
 #: mail_tt2/helpfile.tt2:24
@@ -3174,21 +3174,21 @@ msgstr "Umbenennen"
 #: web_tt2/admin_menu.tt2:130 web_tt2/admin_menu.tt2:132
 #: web_tt2/list_admin_menu.tt2:55
 msgid "Rename List"
-msgstr "Liste umbennen"
+msgstr "Liste umbenennen"
 
 #. (fname)
 #: web_tt2/d_properties.tt2:46
 msgid "Rename directory %1"
-msgstr "Ordner %1 umbennenen"
+msgstr "Ordner %1 umbenennen"
 
 #. (fname)
 #: web_tt2/d_properties.tt2:48
 msgid "Rename file %1"
-msgstr "Datei %1 umbennen"
+msgstr "Datei %1 umbenennen"
 
 #: web_tt2/rename_list_request.tt2:14
 msgid "Rename this list"
-msgstr "Diese Liste umbennen"
+msgstr "Diese Liste umbenennen"
 
 # nlsref 6,21
 #: src/Commands.pm:2035
@@ -3272,7 +3272,7 @@ msgstr "Antwortpfad des REMIND Befehls"
 
 #: web_tt2/list_menu.tt2:72
 msgid "Review"
-msgstr "Bericht"
+msgstr "Abonnenten verwalten"
 
 #: web_tt2/serveradmin.tt2:25
 msgid "Review lists from this family"
@@ -4037,7 +4037,7 @@ msgid ""
 "the current robot in robot.conf. If you did install statics CSS files, the "
 "colors in use may differ from this table."
 msgstr ""
-"Die aktuelle Version beinhaltet keinen Farbeditor; Sie müssen daher ihre "
+"Die aktuelle Version beinhaltet keinen Farbeditor; Sie müssen daher Ihre "
 "robot.conf (oder sympa.conf) editieren, um die Farben zu ändern. Es folgen "
 "die Farben, wie sie für den aktuellen Roboter in robot.conf definiert sind. "
 "Wenn Sie statische CSS Dateien installiert haben, können sich die "
@@ -4360,7 +4360,7 @@ msgstr ""
 "Diese anderen E-Mail Adressen, die Sympa bekannt sein sollen, werden von "
 "Sympa als \n"
 "\talternative E-Mail Adressen erkannt.\n"
-"Damit können Sie auch Abonnements mit ihrer primären E-Mail Adresse "
+"Damit können Sie auch Abonnements mit Ihrer primären E-Mail Adresse "
 "zusammenführen."
 
 #: web_tt2/help_editlist.tt2:22
@@ -5395,7 +5395,7 @@ msgid ""
 "You have forgotten your password, or you've never had any password related "
 "to this server"
 msgstr ""
-"Sie haben ihr Passwort vergessen oder noch nie ein Passwort für diesen "
+"Sie haben Ihr Passwort vergessen oder noch nie ein Passwort für diesen "
 "Server gehabt:"
 
 #. (user.email)
@@ -5666,7 +5666,7 @@ msgid ""
 "Your message :\n"
 msgstr ""
 "Ihre Nachricht an die Liste %s wurde abgelehnt.\n"
-"Sie wurde daher an Sie zurückgesehndet. \n"
+"Sie wurde daher an Sie zurückgesendet. \n"
 "\n"
 "Ihre Nachricht :\n"
 
@@ -6727,7 +6727,7 @@ msgstr "öffentliche Liste, mehrteilige Nachrichten werden verworfen"
 #: src/etc/scenari/send.publicnoattachment:1
 msgid "public list multipart/mixed messages are forwarded to moderator"
 msgstr ""
-"öffentliche Liste, mehrteilige Nachrichten werden an den Moderator gesehndet"
+"öffentliche Liste, mehrteilige Nachrichten werden an den Moderator gesendet"
 
 #: src/etc/scenari/send.public_nobcc:1
 msgid "public list, Bcc rejected (anti-spam)"
@@ -7149,7 +7149,7 @@ msgstr "letzte Konfigurationsänderung durchgeführt von"
 
 #: wwsympa/wwslib.pm:44
 msgid "you do not receive your own posts"
-msgstr "Sie erhalten ihre eigenen Nachrichten nicht"
+msgstr "Sie erhalten Ihre eigenen Nachrichten nicht"
 
 #: web_tt2/error.tt2:18
 msgid "you need to login"
@@ -7172,10 +7172,10 @@ msgstr "Ihr Passwort : %1"
 #~ msgstr "ohne Authentifikation, Nachricht an Listen-Eigentümer"
 
 #~ msgid "-Rename list"
-#~ msgstr "-Liste umbennen"
+#~ msgstr "-Liste umbenennen"
 
 #~ msgid "Rename list"
-#~ msgstr "Liste umbennen"
+#~ msgstr "Liste umbenennen"
 
 #~ msgid "impossible, closed at the moment"
 #~ msgstr "unmöglich, zur Zeit gesperrt"
