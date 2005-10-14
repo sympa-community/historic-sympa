@@ -488,7 +488,7 @@ msgstr ""
 msgid "Account"
 msgstr "Conta"
 
-#: web_tt2/d_read.tt2:347 web_tt2/review.tt2:50
+#: web_tt2/d_read.tt2:347 web_tt2/review.tt2:49
 msgid "Add"
 msgstr "Adicionar"
 
@@ -566,7 +566,7 @@ msgstr "Qualquer informação sobre esta lista :"
 msgid "Apply"
 msgstr "Aplicar"
 
-#: web_tt2/list_menu.tt2:41 web_tt2/list_menu.tt2:43
+#: web_tt2/list_menu.tt2:45 web_tt2/list_menu.tt2:47
 msgid "Archive"
 msgstr "Arquivo"
 
@@ -621,7 +621,7 @@ msgstr "Tipo de arquivo anexado"
 msgid "Auth method"
 msgstr "Método de autenticação"
 
-#: src/List.pm:2587
+#: src/List.pm:2588
 msgid "Authentication requested"
 msgstr "Autenticação requerida"
 
@@ -704,7 +704,7 @@ msgstr ""
 msgid "Bounce Settings"
 msgstr ""
 
-#: src/List.pm:2309
+#: src/List.pm:2310
 msgid ""
 "Bounce rate in list %s is %d%%.\n"
 "\n"
@@ -888,7 +888,7 @@ msgstr "Confirmar"
 msgid "Connexion expiration period"
 msgstr ""
 
-#: web_tt2/list_menu.tt2:33
+#: web_tt2/list_menu.tt2:34 web_tt2/list_menu.tt2:36
 #, fuzzy
 msgid "Contact owners"
 msgstr "notificar responsável"
@@ -957,6 +957,17 @@ msgstr "Criação de lista"
 msgid "Current password :"
 msgstr "Senha atual :"
 
+#. (cssurl)
+#: web_tt2/skinsedit.tt2:57
+msgid ""
+"Currently you didn't define css_path parameter. <strong>You should edit the "
+"robot.conf configuration file </strong> (or if not using virtual robot sympa."
+"conf) and set this parameter so you could use this page to install static "
+"CSS and <strong>make sympa faster</strong>. Don't forget to set parameter "
+"css_url, it must be the URL for the directory where css are stored (current "
+"value is <a target=\"test\" href=\"%1\">%1</a>)."
+msgstr ""
+
 #: src/List.pm:446
 msgid "Custom header field"
 msgstr ""
@@ -999,7 +1010,7 @@ msgstr ""
 msgid "Date"
 msgstr "Data"
 
-#: src/List.pm:2302
+#: src/List.pm:2303
 msgid ""
 "Dear owner of list %s,\n"
 "\n"
@@ -1203,7 +1214,7 @@ msgstr "Você quer apagar o antigo arquivo %1 ?"
 msgid "Do you want to rename your file %1 ?"
 msgstr "Você deseja renomear seu arquivo %1 ?"
 
-#: web_tt2/d_read.tt2:54 web_tt2/d_read.tt2:56 web_tt2/list_admin_menu.tt2:72
+#: web_tt2/d_read.tt2:54 web_tt2/d_read.tt2:56 web_tt2/list_admin_menu.tt2:70
 msgid "Document"
 msgstr "Documento"
 
@@ -1361,19 +1372,19 @@ msgstr ""
 msgid "Extend search field"
 msgstr ""
 
-#: src/List.pm:2324
+#: src/List.pm:2325
 msgid ""
 "FYI command %s list %s from %s %s \n"
 " (no action needed)\n"
 msgstr ""
 
-#: src/List.pm:2322
+#: src/List.pm:2323
 msgid ""
 "FYI command %s list %s from %s %s validated by %s\n"
 " (no action needed)\n"
 msgstr ""
 
-#: src/List.pm:2278 src/List.pm:2320
+#: src/List.pm:2279 src/List.pm:2321
 msgid "FYI: %s list %s from %s %s"
 msgstr "FYI: %s lista %s de %s %s"
 
@@ -1423,7 +1434,7 @@ msgstr "Famílias"
 msgid "Family name"
 msgstr "Famílias"
 
-#: src/List.pm:6243
+#: src/List.pm:6257
 msgid "File"
 msgstr "Arquivo"
 
@@ -2200,7 +2211,7 @@ msgstr "Moderado, restrito a assinantes"
 msgid "Moderated, with editor confirmation"
 msgstr "Moderado, com confirmação do editor"
 
-#: src/List.pm:2424
+#: src/List.pm:2425
 msgid "Moderating your message"
 msgstr "Moderando sua mensagem"
 
@@ -2493,7 +2504,7 @@ msgstr ""
 msgid "Owners defined in an external datasource"
 msgstr ""
 
-#: src/List.pm:2274 src/List.pm:2289 src/List.pm:2301
+#: src/List.pm:2275 src/List.pm:2290 src/List.pm:2302
 msgid "Owners of list %s"
 msgstr "Proprietários da lista %s"
 
@@ -2571,7 +2582,7 @@ msgid ""
 "to  %1@%2 ."
 msgstr ""
 
-#: web_tt2/list_menu.tt2:49 web_tt2/list_menu.tt2:51
+#: web_tt2/list_menu.tt2:53 web_tt2/list_menu.tt2:55
 msgid "Post"
 msgstr "Enviar"
 
@@ -2696,7 +2707,7 @@ msgstr ""
 msgid "RFC 2369 Header fields"
 msgstr ""
 
-#: web_tt2/list_menu.tt2:55
+#: web_tt2/list_menu.tt2:59
 msgid "RSS"
 msgstr ""
 
@@ -2931,7 +2942,7 @@ msgstr "Voltar ao arquivo %1"
 msgid "Return-path of the REMIND command"
 msgstr ""
 
-#: web_tt2/list_menu.tt2:68
+#: web_tt2/list_menu.tt2:72
 msgid "Review"
 msgstr "Revisar"
 
@@ -3128,7 +3139,7 @@ msgstr ""
 msgid "Shared document directory size"
 msgstr "Tamanho do diretório de documentos compartilhados"
 
-#: src/List.pm:1055 web_tt2/list_menu.tt2:60 web_tt2/list_menu.tt2:62
+#: src/List.pm:1055 web_tt2/list_menu.tt2:64 web_tt2/list_menu.tt2:66
 msgid "Shared documents"
 msgstr "Documentos compartilhados"
 
@@ -3158,7 +3169,7 @@ msgstr "Página de administração de temas"
 msgid "Skins, CSS and colors"
 msgstr "Temas, CSS e cores"
 
-#: src/List.pm:8813
+#: src/List.pm:8827
 msgid ""
 "Someone (hopefully you) asked for your e-mail address\n"
 "to be added to list '%s'.\n"
@@ -3187,7 +3198,7 @@ msgstr ""
 "\n"
 "Se você não quer que esta ação seja tomada, ignore esta mensagem."
 
-#: src/List.pm:8806
+#: src/List.pm:8820
 msgid ""
 "Someone (hopefully you) asked for your e-mail address\n"
 "to be removed from list '%s'.\n"
@@ -3204,7 +3215,7 @@ msgid ""
 "this message"
 msgstr ""
 
-#: src/List.pm:8818 src/List.pm:8823
+#: src/List.pm:8832 src/List.pm:8837
 msgid ""
 "Someone (hopefully you) requested a user of list %s to be\n"
 "added or removed.\n"
@@ -3333,7 +3344,7 @@ msgstr "Perfil da assinatura"
 msgid "Subscription reminder sent to each of %d %s subscribers\n"
 msgstr ""
 
-#: src/List.pm:2288
+#: src/List.pm:2289
 msgid "Subscription request to list %s"
 msgstr "Requisição de assinatura para a lista %1"
 
@@ -3341,7 +3352,7 @@ msgstr "Requisição de assinatura para a lista %1"
 msgid "Subscription summary"
 msgstr "Sumário da assinatura"
 
-#: web_tt2/list_admin_menu.tt2:78
+#: web_tt2/list_admin_menu.tt2:75
 #, fuzzy
 msgid "Subscriptions"
 msgstr "Opções do Assinante"
@@ -3350,7 +3361,7 @@ msgstr "Opções do Assinante"
 msgid "Summary"
 msgstr "Resumo"
 
-#: src/List.pm:3239
+#: src/List.pm:3240
 msgid "Summary of list %s"
 msgstr "Resumo da lista %s"
 
@@ -3454,7 +3465,7 @@ msgstr ""
 msgid "Syntax errors with the following parameters : %1"
 msgstr ""
 
-#: mail_tt2/digest.tt2:12 mail_tt2/digest_plain.tt2:10 src/List.pm:3100
+#: mail_tt2/digest.tt2:12 mail_tt2/digest_plain.tt2:10 src/List.pm:3101
 msgid "Table of contents:"
 msgstr "Tabela de conteúdo:"
 
@@ -3568,6 +3579,18 @@ msgstr ""
 
 #: src/alias_manager.pl:40
 msgid "The configuration file --CONFIG-- contains errors.\n"
+msgstr ""
+
+#: web_tt2/skinsedit.tt2:44
+msgid "The css_path parameter is defined, value is"
+msgstr ""
+
+#: web_tt2/skinsedit.tt2:7
+msgid ""
+"The current version don't include a color editor, so you need to edit robot."
+"conf (or sympa.conf) to change colors. Here are the colors as defined for "
+"the current robot in robot.conf. If you did install statics CSS files, the "
+"colors in use may differ from this table."
 msgstr ""
 
 #: web_tt2/help_editlist.tt2:138
@@ -4096,7 +4119,7 @@ msgstr "Para contactar o administrador deste serviço :"
 msgid "To distribute the attached message in list %1:"
 msgstr "Para distribuir a mensagem anexada na lista %1"
 
-#: src/List.pm:2598
+#: src/List.pm:2599
 msgid ""
 "To distribute the attached message in list %s :\n"
 "mailto:%s?subject=CONFIRM%%20%s\n"
@@ -4201,7 +4224,7 @@ msgid ""
 "address, usefull if different from your \"From:\" address."
 msgstr ""
 
-#: src/List.pm:2300
+#: src/List.pm:2301
 msgid "UNsubscription request from list %s"
 msgstr "Pedido de CANCELAMENTO de assinatura da lista %s"
 
@@ -4281,7 +4304,7 @@ msgstr "Desconhecido"
 msgid "Unsubscribe"
 msgstr "Cancelar a assinatura"
 
-#: soap/sympasoap.pm:553 src/Commands.pm:946 wwsympa/wwsympa.fcgi:3526
+#: soap/sympasoap.pm:553 src/Commands.pm:946 wwsympa/wwsympa.fcgi:3529
 msgid "Unsubscribe from list %s"
 msgstr "Cancelar a assinatura da lista %s"
 
@@ -4419,14 +4442,18 @@ msgstr "Visibilidade da lista"
 msgid "Visibility of the subscriber with the REVIEW command."
 msgstr ""
 
-#: src/List.pm:2279
+#: web_tt2/skinsedit.tt2:61
+msgid "W3C CSS validation tools"
+msgstr ""
+
+#: src/List.pm:2280
 msgid ""
 "WARNING : %s %s failed to unsubscribe from %s because his address was not "
 "found in the list\n"
 " (You may help this person)"
 msgstr ""
 
-#: src/List.pm:2308
+#: src/List.pm:2309
 msgid "WARNING: bounce rate too high in list %s"
 msgstr ""
 
@@ -4471,8 +4498,8 @@ msgstr ""
 
 #: soap/sympasoap.pm:701 soap/sympasoap.pm:702 src/Commands.pm:1062
 #: src/Commands.pm:1063 src/Commands.pm:685 src/Commands.pm:686
-#: wwsympa/wwsympa.fcgi:3297 wwsympa/wwsympa.fcgi:3298
-#: wwsympa/wwsympa.fcgi:4240 wwsympa/wwsympa.fcgi:4241
+#: wwsympa/wwsympa.fcgi:3300 wwsympa/wwsympa.fcgi:3301
+#: wwsympa/wwsympa.fcgi:4243 wwsympa/wwsympa.fcgi:4244
 msgid "Welcome on list %s"
 msgstr "Bem vindo à lista %s"
 
@@ -4640,7 +4667,7 @@ msgid ""
 "You did not choose a password, request a reminder of the initial password"
 msgstr "Você não escolheu uma senha, peça um lembrete a senha inicial"
 
-#: wwsympa/wwsympa.fcgi:3527 wwsympa/wwsympa.fcgi:4346
+#: wwsympa/wwsympa.fcgi:3530 wwsympa/wwsympa.fcgi:4349
 msgid "You have been removed from list %s.\n"
 msgstr "Você foi removido da lista %s.\n"
 
@@ -4705,7 +4732,7 @@ msgid ""
 "email address. Please try subscribing using your canonical address."
 msgstr ""
 
-#: src/List.pm:8828 src/List.pm:8835
+#: src/List.pm:8842 src/List.pm:8849
 msgid ""
 "You requested a subscription reminder to be sent\n"
 "to each subscriber of list %s\n"
@@ -4887,7 +4914,7 @@ msgid ""
 "has been rejected by the moderator (%3)."
 msgstr "Sua mensagem para a lista %s foi rejeitada pelo moderador (%3)."
 
-#: src/List.pm:2425
+#: src/List.pm:2426
 msgid "Your message for list %s has been forwarded to editor(s)\n"
 msgstr "Sua mensagem para a lista %s foi encaminhada para o(s) editor(es)\n"
 
@@ -4973,7 +5000,7 @@ msgstr ""
 msgid "Your subscription email is %1"
 msgstr ""
 
-#: src/Commands.pm:1484 wwsympa/wwsympa.fcgi:4345
+#: src/Commands.pm:1484 wwsympa/wwsympa.fcgi:4348
 msgid "Your subscription to list %s has been removed."
 msgstr "Sua assinatura à lista %s foi removida."
 
@@ -5048,7 +5075,7 @@ msgid ""
 "command.\n"
 msgstr ""
 
-#: src/List.pm:2290
+#: src/List.pm:2291
 msgid ""
 "\n"
 "Dear owner of list %s,\n"
@@ -5199,10 +5226,6 @@ msgstr "qualquer um de um domínio local "
 msgid "anyone with previous md5 authentication"
 msgstr ""
 
-#: src/etc/scenari/unsubscribe.open.~1.8.~:1
-msgid "anyone without authentication"
-msgstr "qualquer um sem autenticação"
-
 #: src/etc/scenari/subscribe.open_quiet:1
 msgid "anyone, no welcome message"
 msgstr "qualquer um, sem mensagem de boas vindas"
@@ -5260,6 +5283,10 @@ msgstr "cronológico"
 #: src/etc/scenari/send.closed:1
 msgid "closed"
 msgstr "fechado"
+
+#: web_tt2/skinsedit.tt2:14 web_tt2/skinsedit.tt2:18
+msgid "color effet"
+msgstr ""
 
 #: src/etc/scenari/visibility.secret:1
 msgid "conceal even for subscribers"
@@ -5768,6 +5795,14 @@ msgstr "página # %1/%2"
 msgid "page %1 / %2"
 msgstr "página %1 / %2"
 
+#: web_tt2/skinsedit.tt2:12 web_tt2/skinsedit.tt2:16
+msgid "parameter"
+msgstr ""
+
+#: web_tt2/skinsedit.tt2:13 web_tt2/skinsedit.tt2:17
+msgid "parameter value"
+msgstr ""
+
 #: web_tt2/arcsearch_form.tt2:42
 msgid "part of word"
 msgstr "parte da palavra"
@@ -5843,7 +5878,7 @@ msgid "purge of orphan entries in user table every month"
 msgstr ""
 
 #: web_tt2/add_request.tt2:12 web_tt2/editsubscriber.tt2:40
-#: web_tt2/review.tt2:231 web_tt2/review.tt2:50 web_tt2/review.tt2:75
+#: web_tt2/review.tt2:231 web_tt2/review.tt2:49 web_tt2/review.tt2:75
 #: web_tt2/reviewbouncing.tt2:107 web_tt2/reviewbouncing.tt2:31
 msgid "quiet"
 msgstr "silencioso"
@@ -6043,6 +6078,12 @@ msgstr "nome curto para esta fonte"
 msgid "standard (direct reception)"
 msgstr ""
 
+#: web_tt2/skinsedit.tt2:41
+msgid ""
+"static css installation succeed. Reload the current page and/or check sympa "
+"logs  to be sure that static css a really in use."
+msgstr ""
+
 #: web_tt2/set_pending_list_request.tt2:25 web_tt2/subrequest.tt2:47
 msgid "submit"
 msgstr "mandar"
@@ -6106,6 +6147,10 @@ msgid ""
 msgstr ""
 "o endereço é escondido usando javascript. O usuário que habilitar javascript "
 "pode ver um bom mailto endereço onde outros  não tem nada."
+
+#: web_tt2/skinsedit.tt2:45
+msgid "the current definition for css location (css_url parameter) is"
+msgstr ""
 
 #: src/List.pm:531 src/List.pm:946
 #, fuzzy
@@ -6205,10 +6250,6 @@ msgstr "Quem pode ver informação da lista "
 msgid "who updated the config"
 msgstr "Última atualização da configuração"
 
-#: src/etc/scenari/unsubscribe.open_notify.~1.9.~:1
-msgid "without authentication, notification is sent to owners"
-msgstr "sem autenticação, uma notificação é mandada aos responsáveis"
-
 #: wwsympa/wwslib.pm:44
 #, fuzzy
 msgid "you do not receive your own posts"
@@ -6227,6 +6268,12 @@ msgstr "seu endereço de e-mai : %1"
 #: mail_tt2/sendpasswd.tt2:30
 msgid "your password : %1"
 msgstr "sua senha  : %1"
+
+#~ msgid "anyone without authentication"
+#~ msgstr "qualquer um sem autenticação"
+
+#~ msgid "without authentication, notification is sent to owners"
+#~ msgstr "sem autenticação, uma notificação é mandada aos responsáveis"
 
 #, fuzzy
 #~ msgid "-Rename list"

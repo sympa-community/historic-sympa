@@ -522,7 +522,7 @@ msgstr "Permisos de acceso para %1"
 msgid "Account"
 msgstr "Cuenta"
 
-#: web_tt2/d_read.tt2:347 web_tt2/review.tt2:50
+#: web_tt2/d_read.tt2:347 web_tt2/review.tt2:49
 msgid "Add"
 msgstr "Crear"
 
@@ -610,7 +610,7 @@ msgstr ""
 msgid "Apply"
 msgstr "Activar"
 
-#: web_tt2/list_menu.tt2:41 web_tt2/list_menu.tt2:43
+#: web_tt2/list_menu.tt2:45 web_tt2/list_menu.tt2:47
 msgid "Archive"
 msgstr "Archivo"
 
@@ -684,7 +684,7 @@ msgid "Auth method"
 msgstr "Metodo de Autentificación"
 
 # nlsref 8,16
-#: src/List.pm:2587
+#: src/List.pm:2588
 msgid "Authentication requested"
 msgstr "Solicitud de autentificación"
 
@@ -758,7 +758,7 @@ msgid "Bounce Settings"
 msgstr ""
 
 # nlsref 8,27
-#: src/List.pm:2309
+#: src/List.pm:2310
 #, fuzzy
 msgid ""
 "Bounce rate in list %s is %d%%.\n"
@@ -963,7 +963,7 @@ msgstr ""
 msgid "Connexion expiration period"
 msgstr "Duración de la conexión"
 
-#: web_tt2/list_menu.tt2:33
+#: web_tt2/list_menu.tt2:34 web_tt2/list_menu.tt2:36
 #, fuzzy
 msgid "Contact owners"
 msgstr "Cambiar propietario"
@@ -1033,6 +1033,17 @@ msgstr "Creación de la lista"
 msgid "Current password :"
 msgstr "Contraseña actual:"
 
+#. (cssurl)
+#: web_tt2/skinsedit.tt2:57
+msgid ""
+"Currently you didn't define css_path parameter. <strong>You should edit the "
+"robot.conf configuration file </strong> (or if not using virtual robot sympa."
+"conf) and set this parameter so you could use this page to install static "
+"CSS and <strong>make sympa faster</strong>. Don't forget to set parameter "
+"css_url, it must be the URL for the directory where css are stored (current "
+"value is <a target=\"test\" href=\"%1\">%1</a>)."
+msgstr ""
+
 # nlsref 16,16
 #: src/List.pm:446
 msgid "Custom header field"
@@ -1080,7 +1091,7 @@ msgid "Date"
 msgstr "Fecha"
 
 # nlsref 8,25
-#: src/List.pm:2302
+#: src/List.pm:2303
 msgid ""
 "Dear owner of list %s,\n"
 "\n"
@@ -1354,7 +1365,7 @@ msgstr ""
 "  // end borwsers -->\n"
 "  </SCRIPT>"
 
-#: web_tt2/d_read.tt2:54 web_tt2/d_read.tt2:56 web_tt2/list_admin_menu.tt2:72
+#: web_tt2/d_read.tt2:54 web_tt2/d_read.tt2:56 web_tt2/list_admin_menu.tt2:70
 msgid "Document"
 msgstr "Documento"
 
@@ -1526,7 +1537,7 @@ msgid "Extend search field"
 msgstr "Campo de búsqueda extendida"
 
 # nlsref 8,22
-#: src/List.pm:2324
+#: src/List.pm:2325
 msgid ""
 "FYI command %s list %s from %s %s \n"
 " (no action needed)\n"
@@ -1535,7 +1546,7 @@ msgstr ""
 "(ninguna acción requerida).\n"
 
 # nlsref 8,26
-#: src/List.pm:2322
+#: src/List.pm:2323
 msgid ""
 "FYI command %s list %s from %s %s validated by %s\n"
 " (no action needed)\n"
@@ -1544,7 +1555,7 @@ msgstr ""
 " (no se requiere ninguna acción)\n"
 
 # nlsref 8,21
-#: src/List.pm:2278 src/List.pm:2320
+#: src/List.pm:2279 src/List.pm:2321
 msgid "FYI: %s list %s from %s %s"
 msgstr "Para su información: %s lista %s de %s %s"
 
@@ -1599,7 +1610,7 @@ msgid "Family name"
 msgstr "Nombre lista"
 
 # nlsref 8,7
-#: src/List.pm:6243
+#: src/List.pm:6257
 msgid "File"
 msgstr "Archivo"
 
@@ -2456,7 +2467,7 @@ msgid "Moderated, with editor confirmation"
 msgstr "editor sólo con clave md5"
 
 # nlsref 4,40
-#: src/List.pm:2424
+#: src/List.pm:2425
 msgid "Moderating your message"
 msgstr "Moderando su mensaje"
 
@@ -2761,7 +2772,7 @@ msgid "Owners defined in an external datasource"
 msgstr ""
 
 # nlsref 8,1
-#: src/List.pm:2274 src/List.pm:2289 src/List.pm:2301
+#: src/List.pm:2275 src/List.pm:2290 src/List.pm:2302
 msgid "Owners of list %s"
 msgstr "Propietarios de la lista %s"
 
@@ -2843,7 +2854,7 @@ msgid ""
 "to  %1@%2 ."
 msgstr ""
 
-#: web_tt2/list_menu.tt2:49 web_tt2/list_menu.tt2:51
+#: web_tt2/list_menu.tt2:53 web_tt2/list_menu.tt2:55
 msgid "Post"
 msgstr "Redactar"
 
@@ -2986,7 +2997,7 @@ msgstr "lista>              * Muestra los subscriptores de <lista>"
 msgid "RFC 2369 Header fields"
 msgstr "Definición del Campo de cabecera"
 
-#: web_tt2/list_menu.tt2:55
+#: web_tt2/list_menu.tt2:59
 msgid "RSS"
 msgstr ""
 
@@ -3242,7 +3253,7 @@ msgstr "Volver al archivo %1"
 msgid "Return-path of the REMIND command"
 msgstr ""
 
-#: web_tt2/list_menu.tt2:68
+#: web_tt2/list_menu.tt2:72
 msgid "Review"
 msgstr ""
 "TR>\n"
@@ -3457,7 +3468,7 @@ msgid "Shared document directory size"
 msgstr ""
 
 # nlsref 16,70
-#: src/List.pm:1055 web_tt2/list_menu.tt2:60 web_tt2/list_menu.tt2:62
+#: src/List.pm:1055 web_tt2/list_menu.tt2:64 web_tt2/list_menu.tt2:66
 msgid "Shared documents"
 msgstr "Documentos compartidos"
 
@@ -3489,7 +3500,7 @@ msgid "Skins, CSS and colors"
 msgstr ""
 
 # nlsref 6,260
-#: src/List.pm:8813
+#: src/List.pm:8827
 #, fuzzy
 msgid ""
 "Someone (hopefully you) asked for your e-mail address\n"
@@ -3520,7 +3531,7 @@ msgstr ""
 "Si usted no quiere confirmar este comando, ignore este mensaje."
 
 # nlsref 6,260
-#: src/List.pm:8806
+#: src/List.pm:8820
 #, fuzzy
 msgid ""
 "Someone (hopefully you) asked for your e-mail address\n"
@@ -3551,7 +3562,7 @@ msgstr ""
 "Si usted no quiere confirmar este comando, ignore este mensaje."
 
 # nlsref 6,39
-#: src/List.pm:8818 src/List.pm:8823
+#: src/List.pm:8832 src/List.pm:8837
 msgid ""
 "Someone (hopefully you) requested a user of list %s to be\n"
 "added or removed.\n"
@@ -3709,7 +3720,7 @@ msgid "Subscription reminder sent to each of %d %s subscribers\n"
 msgstr "Recordatorio de suscripción enviado a los %d suscriptores.\n"
 
 # nlsref 8,2
-#: src/List.pm:2288
+#: src/List.pm:2289
 msgid "Subscription request to list %s"
 msgstr "Solicitud de suscripción a la lista %s"
 
@@ -3718,7 +3729,7 @@ msgstr "Solicitud de suscripción a la lista %s"
 msgid "Subscription summary"
 msgstr "Sumario de suscripción"
 
-#: web_tt2/list_admin_menu.tt2:78
+#: web_tt2/list_admin_menu.tt2:75
 #, fuzzy
 msgid "Subscriptions"
 msgstr "Opciones del Suscriptor"
@@ -3728,7 +3739,7 @@ msgid "Summary"
 msgstr "Sumario"
 
 # nlsref 8,31
-#: src/List.pm:3239
+#: src/List.pm:3240
 msgid "Summary of list %s"
 msgstr "Sumario de la lista %s"
 
@@ -3832,7 +3843,7 @@ msgstr ""
 msgid "Syntax errors with the following parameters : %1"
 msgstr "Errores de sintaxis en los siguientes parámetros : %1"
 
-#: mail_tt2/digest.tt2:12 mail_tt2/digest_plain.tt2:10 src/List.pm:3100
+#: mail_tt2/digest.tt2:12 mail_tt2/digest_plain.tt2:10 src/List.pm:3101
 #, fuzzy
 msgid "Table of contents:"
 msgstr "Tabla de contenido:"
@@ -3966,6 +3977,19 @@ msgstr ""
 #, fuzzy
 msgid "The configuration file --CONFIG-- contains errors.\n"
 msgstr "El archivo de configuración contiene errores.\n"
+
+#: web_tt2/skinsedit.tt2:44
+#, fuzzy
+msgid "The css_path parameter is defined, value is"
+msgstr "Borrar listas seleccionadas"
+
+#: web_tt2/skinsedit.tt2:7
+msgid ""
+"The current version don't include a color editor, so you need to edit robot."
+"conf (or sympa.conf) to change colors. Here are the colors as defined for "
+"the current robot in robot.conf. If you did install statics CSS files, the "
+"colors in use may differ from this table."
+msgstr ""
 
 #: web_tt2/help_editlist.tt2:138
 msgid ""
@@ -4509,7 +4533,7 @@ msgid "To distribute the attached message in list %1:"
 msgstr "Para distribuir el mensaje adjunto en la lista %1, haga click en:"
 
 # nlsref 8,12
-#: src/List.pm:2598
+#: src/List.pm:2599
 msgid ""
 "To distribute the attached message in list %s :\n"
 "mailto:%s?subject=CONFIRM%%20%s\n"
@@ -4630,7 +4654,7 @@ msgid ""
 msgstr ""
 
 # nlsref 8,24
-#: src/List.pm:2300
+#: src/List.pm:2301
 msgid "UNsubscription request from list %s"
 msgstr "Petición de anulación de suscripción a la lista %s"
 
@@ -4710,7 +4734,7 @@ msgid "Unsubscribe"
 msgstr "Anula suscripción"
 
 # nlsref 6,71
-#: soap/sympasoap.pm:553 src/Commands.pm:946 wwsympa/wwsympa.fcgi:3526
+#: soap/sympasoap.pm:553 src/Commands.pm:946 wwsympa/wwsympa.fcgi:3529
 msgid "Unsubscribe from list %s"
 msgstr "Anular suscripción de la lista %s"
 
@@ -4854,8 +4878,12 @@ msgstr "Visibilidad de la lista"
 msgid "Visibility of the subscriber with the REVIEW command."
 msgstr ""
 
+#: web_tt2/skinsedit.tt2:61
+msgid "W3C CSS validation tools"
+msgstr ""
+
 # nlsref 8,23
-#: src/List.pm:2279
+#: src/List.pm:2280
 #, fuzzy
 msgid ""
 "WARNING : %s %s failed to unsubscribe from %s because his address was not "
@@ -4868,7 +4896,7 @@ msgstr ""
 "(Quizás se debe ayudar a esta persona)\n"
 
 # nlsref 8,28
-#: src/List.pm:2308
+#: src/List.pm:2309
 msgid "WARNING: bounce rate too high in list %s"
 msgstr ""
 "ATENCIÓN: El ratio de errores (bouncing) es demasiado alto en la lista %s."
@@ -4919,8 +4947,8 @@ msgstr ""
 # nlsref 8,6
 #: soap/sympasoap.pm:701 soap/sympasoap.pm:702 src/Commands.pm:1062
 #: src/Commands.pm:1063 src/Commands.pm:685 src/Commands.pm:686
-#: wwsympa/wwsympa.fcgi:3297 wwsympa/wwsympa.fcgi:3298
-#: wwsympa/wwsympa.fcgi:4240 wwsympa/wwsympa.fcgi:4241
+#: wwsympa/wwsympa.fcgi:3300 wwsympa/wwsympa.fcgi:3301
+#: wwsympa/wwsympa.fcgi:4243 wwsympa/wwsympa.fcgi:4244
 msgid "Welcome on list %s"
 msgstr "Bienvenido a la lista %s"
 
@@ -5113,7 +5141,7 @@ msgid ""
 msgstr ""
 
 # nlsref 6,38
-#: wwsympa/wwsympa.fcgi:3527 wwsympa/wwsympa.fcgi:4346
+#: wwsympa/wwsympa.fcgi:3530 wwsympa/wwsympa.fcgi:4349
 #, fuzzy
 msgid "You have been removed from list %s.\n"
 msgstr "El usuario especificado se ha eliminado de la lista.\n"
@@ -5192,7 +5220,7 @@ msgstr ""
 "Por favor suscríbase usando su dirección oficial."
 
 # nlsref 6,79
-#: src/List.pm:8828 src/List.pm:8835
+#: src/List.pm:8842 src/List.pm:8849
 msgid ""
 "You requested a subscription reminder to be sent\n"
 "to each subscriber of list %s\n"
@@ -5402,7 +5430,7 @@ msgid ""
 msgstr "Su mensaje para la lista %s ha sido dirigido a los editores\n"
 
 # nlsref 4,38
-#: src/List.pm:2425
+#: src/List.pm:2426
 msgid "Your message for list %s has been forwarded to editor(s)\n"
 msgstr "Su mensaje para la lista %s ha sido dirigido a los editores\n"
 
@@ -5510,7 +5538,7 @@ msgid "Your subscription email is %1"
 msgstr "Usted ha sido subscrito con el e-mail %1"
 
 # nlsref 6,18
-#: src/Commands.pm:1484 wwsympa/wwsympa.fcgi:4345
+#: src/Commands.pm:1484 wwsympa/wwsympa.fcgi:4348
 msgid "Your subscription to list %s has been removed."
 msgstr "Su suscripción a la lista %s ha sido suprimida."
 
@@ -5601,7 +5629,7 @@ msgstr ""
 "Usted podrá entonces suprimir esas direcciones con el comando DEL.\n"
 
 # nlsref 8,3
-#: src/List.pm:2290
+#: src/List.pm:2291
 #, fuzzy
 msgid ""
 "\n"
@@ -5783,10 +5811,6 @@ msgstr "cualquier miembro del dominio local "
 msgid "anyone with previous md5 authentication"
 msgstr "cualquiera con previa autentifiación MD5"
 
-#: src/etc/scenari/unsubscribe.open.~1.8.~:1
-msgid "anyone without authentication"
-msgstr "cualquiera sin autentificación"
-
 #: src/etc/scenari/subscribe.open_quiet:1
 msgid "anyone, no welcome message"
 msgstr "cualquiera, sin mensaje de bienvenida"
@@ -5849,6 +5873,10 @@ msgstr ""
 #: src/etc/scenari/send.closed:1
 msgid "closed"
 msgstr "cerrado"
+
+#: web_tt2/skinsedit.tt2:14 web_tt2/skinsedit.tt2:18
+msgid "color effet"
+msgstr ""
 
 #: src/etc/scenari/visibility.secret:1
 msgid "conceal even for subscribers"
@@ -6418,6 +6446,15 @@ msgstr "page %1 / %2"
 msgid "page %1 / %2"
 msgstr "page %1 / %2"
 
+#: web_tt2/skinsedit.tt2:12 web_tt2/skinsedit.tt2:16
+#, fuzzy
+msgid "parameter"
+msgstr "parte"
+
+#: web_tt2/skinsedit.tt2:13 web_tt2/skinsedit.tt2:17
+msgid "parameter value"
+msgstr ""
+
 #: web_tt2/arcsearch_form.tt2:42
 #, fuzzy
 msgid "part of word"
@@ -6502,7 +6539,7 @@ msgid "purge of orphan entries in user table every month"
 msgstr ""
 
 #: web_tt2/add_request.tt2:12 web_tt2/editsubscriber.tt2:40
-#: web_tt2/review.tt2:231 web_tt2/review.tt2:50 web_tt2/review.tt2:75
+#: web_tt2/review.tt2:231 web_tt2/review.tt2:49 web_tt2/review.tt2:75
 #: web_tt2/reviewbouncing.tt2:107 web_tt2/reviewbouncing.tt2:31
 msgid "quiet"
 msgstr "silencioso"
@@ -6725,6 +6762,12 @@ msgstr ""
 msgid "standard (direct reception)"
 msgstr ""
 
+#: web_tt2/skinsedit.tt2:41
+msgid ""
+"static css installation succeed. Reload the current page and/or check sympa "
+"logs  to be sure that static css a really in use."
+msgstr ""
+
 #: web_tt2/set_pending_list_request.tt2:25 web_tt2/subrequest.tt2:47
 msgid "submit"
 msgstr "Aceptar"
@@ -6790,6 +6833,10 @@ msgstr ""
 msgid ""
 "the address is hidden using a javascript. User who enable javascript can see "
 "a nice mailto address where others have nothing."
+msgstr ""
+
+#: web_tt2/skinsedit.tt2:45
+msgid "the current definition for css location (css_url parameter) is"
 msgstr ""
 
 # nlsref 16,81
@@ -6904,10 +6951,6 @@ msgstr "Quién puede ver información de la lista"
 msgid "who updated the config"
 msgstr "Ultima actualización de la configuración"
 
-#: src/etc/scenari/unsubscribe.open_notify.~1.9.~:1
-msgid "without authentication, notification is sent to owners"
-msgstr "sin autentificación, notificación es enviada al propietario"
-
 #: wwsympa/wwslib.pm:44
 #, fuzzy
 msgid "you do not receive your own posts"
@@ -6926,6 +6969,12 @@ msgstr "Escoja su contraseña :"
 #: mail_tt2/sendpasswd.tt2:30
 msgid "your password : %1"
 msgstr "Escoja su contraseña :"
+
+#~ msgid "anyone without authentication"
+#~ msgstr "cualquiera sin autentificación"
+
+#~ msgid "without authentication, notification is sent to owners"
+#~ msgstr "sin autentificación, notificación es enviada al propietario"
 
 #, fuzzy
 #~ msgid "-Rename list"
@@ -7120,10 +7169,6 @@ msgstr "Escoja su contraseña :"
 #, fuzzy
 #~ msgid "The list is not closed"
 #~ msgstr "Fichero %1 guardado"
-
-#, fuzzy
-#~ msgid "The list parameter is missing"
-#~ msgstr "Borrar listas seleccionadas"
 
 # nlsref 4,26
 #, fuzzy
@@ -7497,9 +7542,6 @@ msgstr "Escoja su contraseña :"
 
 #~ msgid "one of"
 #~ msgstr "one of"
-
-#~ msgid "part"
-#~ msgstr "parte"
 
 #~ msgid "sentence"
 #~ msgstr "frase"
