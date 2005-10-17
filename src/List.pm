@@ -9496,6 +9496,18 @@ sub maintenance {
 	}
     }
 
+    
+    ## Fix a bug in Sympa 5.1
+    unless (&tools::higher_version($previous_version, '5.1.2')) {
+	&do_log('notice','Rename archives/log. files...');
+	foreach my $l ( &List::get_lists('*') ) {
+	    my $list = new List ($l); 
+	    if (-f $list->{'dir'}.'/archives/log.') {
+		rename $list->{'dir'}.'/archives/log.', $list->{'dir'}.'/archives/log.00';
+	    }
+	}
+    }
+
     ## Saving current version
     unless (open VFILE, ">$version_file") {
 	do_log('err', "Unable to open %s : %s", $version_file, $!);
