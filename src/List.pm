@@ -6243,7 +6243,6 @@ sub archive_exist {
 
    return undef unless ($self->is_archived());
    Archive::exist("$self->{'dir'}/archives", $file);
-   Archive::exist($dir, $file);
 }
 
 ## Send an archive file to someone
