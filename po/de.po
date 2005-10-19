@@ -1634,6 +1634,7 @@ msgid "For further assistance, please contact listmaster@%1"
 msgstr "Für weitere Hilfe wenden Sie sich bitte an listmaster@%1"
 
 #: web_tt2/help_editlist.tt2:110
+#, fuzzy
 msgid ""
 "For this operation, one Sympa site act as a server while the other one act "
 "as client. On the server side, the only setting needed is to give permission "
@@ -1642,7 +1643,7 @@ msgid ""
 msgstr ""
 "Für diese Operation agiert eine Sympa Instanz als Server und die andere als "
 "Klient. Serverseitig muss der entfernten Sympa Instanz nur die Berechtigung "
-"gegeben werden, die Liste durchzusehen. Dies wird vom "review\" Szenario "
+"gegeben werden, die Liste durchzusehen. Dies wird vom review Szenario "
 "kontrolliert. "
 
 # nlsref 16,32
