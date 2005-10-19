@@ -3248,7 +3248,6 @@ msgid "Review lists from this family"
 msgstr "Voir les listes appartenant à cette famille"
 
 #: web_tt2/list_menu.tt2:72
-#, fuzzy
 msgid "Review members"
 msgstr "Les abonnés"
 

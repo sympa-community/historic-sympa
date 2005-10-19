@@ -3307,7 +3307,6 @@ msgid "Review lists from this family"
 msgstr "Veire las tièras d'aquela familha"
 
 #: web_tt2/list_menu.tt2:72
-#, fuzzy
 msgid "Review members"
 msgstr "Los abonats"
 

@@ -1642,7 +1642,7 @@ msgid ""
 msgstr ""
 "Für diese Operation agiert eine Sympa Instanz als Server und die andere als "
 "Klient. Serverseitig muss der entfernten Sympa Instanz nur die Berechtigung "
-"gegeben werden, die Liste durchzusehen. Dies wird vom \"review\" Szenario "
+"gegeben werden, die Liste durchzusehen. Dies wird vom "review\" Szenario "
 "kontrolliert. "
 
 # nlsref 16,32
@@ -3282,7 +3282,6 @@ msgid "Review lists from this family"
 msgstr "Bericht der Listen dieser Familie"
 
 #: web_tt2/list_menu.tt2:72
-#, fuzzy
 msgid "Review members"
 msgstr "Abonnenten verwalten"
 

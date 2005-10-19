@@ -3268,11 +3268,6 @@ msgstr ""
 #, fuzzy
 msgid "Review members"
 msgstr ""
-"TR>\n"
-"     <TD BGCOLOR=\"[% dark_color %]\" VALIGN=\"top\">\n"
-"      <TABLE BORDER=\"\" WIDTH=\"100%\" CELLSPACING=\"1\" CELLPADDING=\"2\" "
-"VALIGN=\"top\">\n"
-"       <TR>"
 
 #. (review)
 #: mail_tt2/info_report.tt2:13
