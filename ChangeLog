@@ -1,3 +1,90 @@
+2005-10-14 17:51  sympa-authors
+
+	* po/de.po: [M.Redinger] Updated de.po
+
+2005-10-14 17:49  sympa-authors
+
+	* po/: cs.po, de.po, el.po, en_US.po, es.po, et.po, fi.po, fr.po,
+	  hu.po, it.po, ja.po, nl.po, oc.po, pl.po, pt.po, pt_BR.po, ro.po,
+	  sympa.pot, tr.po, zh_CN.po, zh_TW.po: Updated POT file
+
+2005-10-07 14:41  sympa-authors
+
+	* src/Language.pm: [reported by O.Lacroix] Fix: failed to setlocale
+	  on HPUX ; now trying without dashes ('-').  Also fixed the
+	  setlocale(LC_TIME)
+
+2005-10-06 16:35  sympa-authors
+
+	* src/List.pm: [G.Bouteille] Fix: missing 'family_closed' parameter
+	  to close()
+
+2005-10-06 16:32  sympa-authors
+
+	* src/tt2.pl: [G.Bouteille] Fix: SetLang only if lang is available
+
+2005-10-06 15:58  sympa-authors
+
+	* po/ja.po: [K.Moriwaka] Updated Japanese translations
+
+2005-10-05 18:03  sympa-authors
+
+	* mail_tt2/info_report.tt2: Fix: prevents a parser failure if info
+	  file was not found
+
+2005-10-03 10:19  sympa-authors
+
+	* wwsympa/wwsympa.fcgi: [BugId 510] Fix buggy return
+
+2005-09-30 16:57  sympa-authors
+
+	* web_tt2/review.tt2: [O.Lacroix] Fix: subscriber add form was
+	  shown regardless of owner privilege
+
+2005-09-30 16:46  sympa-authors
+
+	* po/fr.po: [O.Lacroix] [BugId 471] Fix
+
+2005-09-30 16:40  sympa-authors
+
+	* src/tools.pl: [BugId 509] Fix: remove duplicate remove_dir()
+	  subroutine
+
+2005-09-30 16:08  sympa-authors
+
+	* Makefile.am, Makefile.in: [BugId 504] Fix: LOCALDIR was hardcoded
+
+2005-09-30 10:35  sympa-authors
+
+	* doc/: sympa.pdf, sympa.ps, sympa.tex, sympa.tex.tpl,
+	  html/index.html, html/node1.html, html/node10.html,
+	  html/node11.html, html/node12.html, html/node13.html,
+	  html/node14.html, html/node15.html, html/node16.html,
+	  html/node17.html, html/node18.html, html/node19.html,
+	  html/node2.html, html/node20.html, html/node21.html,
+	  html/node22.html, html/node23.html, html/node24.html,
+	  html/node25.html, html/node26.html, html/node27.html,
+	  html/node3.html, html/node4.html, html/node5.html,
+	  html/node6.html, html/node7.html, html/node8.html,
+	  html/node9.html, html/sympa.html, html/sympa.ps: [reported by
+	  G.Crompton] complete vrobot documentation (expl subdirectory
+	  creation)
+
+2005-09-23 17:39  sympa-authors
+
+	* ChangeLog, src/Language.pm: [BugID 502] Fix for i18n on FreeBSD
+
+2005-09-22 16:03  sympa-authors
+
+	* src/List.pm: [BugID 501] Fix: if family_name was set to an
+	  unknown family, wwsympa would die with the following error msg
+	  "Can't call method "check_param_constraint" on an undefined value
+	  at /var/sympa/bin/List.pm line 1728."
+
+2005-09-14 14:39  sympa-authors
+
+	* src/List.pm: Fix usage of owners as default editors.
+
 2005-08-19 16:41  sympa-authors
 
 	* web_tt2/list_menu.tt2, wwsympa/wwsympa.fcgi: [BugID 465] Fix:
