@@ -3260,18 +3260,19 @@ msgstr "Volver al archivo %1"
 msgid "Return-path of the REMIND command"
 msgstr ""
 
+#: web_tt2/serveradmin.tt2:25
+msgid "Review lists from this family"
+msgstr ""
+
 #: web_tt2/list_menu.tt2:72
-msgid "Review"
+#, fuzzy
+msgid "Review members"
 msgstr ""
 "TR>\n"
 "     <TD BGCOLOR=\"[% dark_color %]\" VALIGN=\"top\">\n"
 "      <TABLE BORDER=\"\" WIDTH=\"100%\" CELLSPACING=\"1\" CELLPADDING=\"2\" "
 "VALIGN=\"top\">\n"
 "       <TR>"
-
-#: web_tt2/serveradmin.tt2:25
-msgid "Review lists from this family"
-msgstr ""
 
 #. (review)
 #: mail_tt2/info_report.tt2:13

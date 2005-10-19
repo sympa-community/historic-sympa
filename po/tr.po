@@ -3038,13 +3038,14 @@ msgstr "%1 Arşivine geri dön"
 msgid "Return-path of the REMIND command"
 msgstr ""
 
-#: web_tt2/list_menu.tt2:72
-msgid "Review"
-msgstr "Gözden geçir"
-
 #: web_tt2/serveradmin.tt2:25
 msgid "Review lists from this family"
 msgstr "Bu aile için listeleri gözden geçir"
+
+#: web_tt2/list_menu.tt2:72
+#, fuzzy
+msgid "Review members"
+msgstr "Gözden geçir"
 
 #. (review)
 #: mail_tt2/info_report.tt2:13

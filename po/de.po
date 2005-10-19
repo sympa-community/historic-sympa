@@ -3277,13 +3277,14 @@ msgstr "Zurück zum Archiv %1"
 msgid "Return-path of the REMIND command"
 msgstr "Antwortpfad des REMIND Befehls"
 
-#: web_tt2/list_menu.tt2:72
-msgid "Review"
-msgstr "Abonnenten verwalten"
-
 #: web_tt2/serveradmin.tt2:25
 msgid "Review lists from this family"
 msgstr "Bericht der Listen dieser Familie"
+
+#: web_tt2/list_menu.tt2:72
+#, fuzzy
+msgid "Review members"
+msgstr "Abonnenten verwalten"
 
 #. (review)
 #: mail_tt2/info_report.tt2:13

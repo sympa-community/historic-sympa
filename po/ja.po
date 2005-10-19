@@ -3124,13 +3124,14 @@ msgstr "アーカイブ%1へ戻る"
 msgid "Return-path of the REMIND command"
 msgstr "REMINDコマンドの Return-path"
 
-#: web_tt2/list_menu.tt2:72
-msgid "Review"
-msgstr "購読者一覧"
-
 #: web_tt2/serveradmin.tt2:25
 msgid "Review lists from this family"
 msgstr "このファミリーのメーリングリストの一覧を参照"
+
+#: web_tt2/list_menu.tt2:72
+#, fuzzy
+msgid "Review members"
+msgstr "購読者一覧"
 
 #. (review)
 #: mail_tt2/info_report.tt2:13

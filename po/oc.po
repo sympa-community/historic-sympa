@@ -3302,13 +3302,14 @@ msgstr "Tornar als archius %1"
 msgid "Return-path of the REMIND command"
 msgstr ""
 
-#: web_tt2/list_menu.tt2:72
-msgid "Review"
-msgstr "Los abonats"
-
 #: web_tt2/serveradmin.tt2:25
 msgid "Review lists from this family"
 msgstr "Veire las tièras d'aquela familha"
+
+#: web_tt2/list_menu.tt2:72
+#, fuzzy
+msgid "Review members"
+msgstr "Los abonats"
 
 #. (review)
 #: mail_tt2/info_report.tt2:13

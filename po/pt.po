@@ -2873,12 +2873,12 @@ msgstr ""
 msgid "Return-path of the REMIND command"
 msgstr ""
 
-#: web_tt2/list_menu.tt2:72
-msgid "Review"
-msgstr ""
-
 #: web_tt2/serveradmin.tt2:25
 msgid "Review lists from this family"
+msgstr ""
+
+#: web_tt2/list_menu.tt2:72
+msgid "Review members"
 msgstr ""
 
 #. (review)

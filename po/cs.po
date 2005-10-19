@@ -3005,13 +3005,14 @@ msgstr "Návrat do archívu %1"
 msgid "Return-path of the REMIND command"
 msgstr ""
 
-#: web_tt2/list_menu.tt2:72
-msgid "Review"
-msgstr "Uživatelé konference"
-
 #: web_tt2/serveradmin.tt2:25
 msgid "Review lists from this family"
 msgstr ""
+
+#: web_tt2/list_menu.tt2:72
+#, fuzzy
+msgid "Review members"
+msgstr "Uživatelé konference"
 
 #. (review)
 #: mail_tt2/info_report.tt2:13

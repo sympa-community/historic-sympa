@@ -3243,13 +3243,14 @@ msgstr "Retour dans les archives %1"
 msgid "Return-path of the REMIND command"
 msgstr "Adresse de retour pour la commande REMIND"
 
-#: web_tt2/list_menu.tt2:72
-msgid "Review"
-msgstr "Les abonnés"
-
 #: web_tt2/serveradmin.tt2:25
 msgid "Review lists from this family"
 msgstr "Voir les listes appartenant à cette famille"
+
+#: web_tt2/list_menu.tt2:72
+#, fuzzy
+msgid "Review members"
+msgstr "Les abonnés"
 
 #. (review)
 #: mail_tt2/info_report.tt2:13
@@ -4006,10 +4007,11 @@ msgid ""
 "in the current robot in robot.conf. If you did install static CSS files, the "
 "colors in use may differ from this table."
 msgstr ""
-"La version courante ne fournit pas d'éditeur de couleurs, vous devez donc éditer "
-"le fichier robot.conf (ou sympa.conf) pour modifier les couleurs. Nous listons ici les couleurs actuellement définies "
-"dans le fichier robot ou robot.conf. Si vous avez installé une feuille de style statique, "
-"les couleurs utilisées peuvent différer."
+"La version courante ne fournit pas d'éditeur de couleurs, vous devez donc "
+"éditer le fichier robot.conf (ou sympa.conf) pour modifier les couleurs. "
+"Nous listons ici les couleurs actuellement définies dans le fichier robot ou "
+"robot.conf. Si vous avez installé une feuille de style statique, les "
+"couleurs utilisées peuvent différer."
 
 #: web_tt2/help_editlist.tt2:138
 msgid ""
@@ -6907,8 +6909,9 @@ msgid ""
 "static css installation succeed. Reload the current page and/or check sympa "
 "logs  to be sure that static css a really in use."
 msgstr ""
-"La feuille de style statique a été installée. Vueillez recharcher la page courante ou vérifiez dans les logs "
-"de sympa que la feuille de style statique est utilisée."
+"La feuille de style statique a été installée. Vueillez recharcher la page "
+"courante ou vérifiez dans les logs de sympa que la feuille de style statique "
+"est utilisée."
 
 #: web_tt2/set_pending_list_request.tt2:25 web_tt2/subrequest.tt2:47
 msgid "submit"
@@ -6981,7 +6984,9 @@ msgstr ""
 
 #: web_tt2/skinsedit.tt2:45
 msgid "the current definition for css location (css_url parameter) is"
-msgstr "la définition actuelle de la localisation de la feuille de style (paramètre css_url) est"
+msgstr ""
+"la définition actuelle de la localisation de la feuille de style (paramètre "
+"css_url) est"
 
 # nlsref 16,81
 #: src/List.pm:531 src/List.pm:946

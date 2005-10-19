@@ -3212,13 +3212,14 @@ msgstr "Vissza a(z) %1 archívumhoz"
 msgid "Return-path of the REMIND command"
 msgstr "Az emlékeztetõ (REMIND) parancs visszatérési útvonala"
 
-#: web_tt2/list_menu.tt2:72
-msgid "Review"
-msgstr "Betekintés"
-
 #: web_tt2/serveradmin.tt2:25
 msgid "Review lists from this family"
 msgstr "A családba tartozó listák áttekintése"
+
+#: web_tt2/list_menu.tt2:72
+#, fuzzy
+msgid "Review members"
+msgstr "Betekintés"
 
 #. (review)
 #: mail_tt2/info_report.tt2:13
