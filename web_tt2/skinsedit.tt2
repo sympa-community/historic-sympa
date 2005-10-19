@@ -4,7 +4,7 @@
 
 <h2>[%|loc%]Colors[%END%]</h2>
 <p>
-[%|loc%]The current version don't include a color editor, so you need to edit robot.conf (or sympa.conf) to change colors. Here are the colors as defined for the current robot in robot.conf. If you did install statics CSS files, the colors in use may differ from this table.[%END%]
+[%|loc%]The current version doesn't include a color editor, so you need to edit robot.conf (or sympa.conf) to change colors. Here are the colors as defined in the current robot in robot.conf. If you did install static CSS files, the colors in use may differ from this table.[%END%]
 </p>
 
 <table style="border: doted 1px">
