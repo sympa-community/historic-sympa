@@ -261,7 +261,7 @@ msgstr "%1"
 msgid "%Image(%s)"
 msgstr "%Image(%s)"
 
-#: src/Commands.pm:2166
+#: src/Commands.pm:2168
 msgid "%s did not receive confirmation for the following addresses :\n"
 msgstr "%s kreeg geen bevestigen voor de volgende adressen :\n"
 
@@ -269,7 +269,7 @@ msgstr "%s kreeg geen bevestigen voor de volgende adressen :\n"
 msgid "%s mailing list does not provide subscriber preferences.\n"
 msgstr "%s mailinglijst doet niet aan abonnee voorkeursinstellingen.\n"
 
-#: src/Commands.pm:2023
+#: src/Commands.pm:2025
 msgid "%s posted your expiration message to the following addresses :\n"
 msgstr "%s heeft uw expiratie bericht gepost op het volgende adres :\n"
 
@@ -572,7 +572,7 @@ msgid ""
 "Subject : %2"
 msgstr "Bericht %s voor lijst %s is gedistribueerd.\n"
 
-#: src/Commands.pm:2041
+#: src/Commands.pm:2043
 msgid ""
 "An expiration process for list %s has been started. This process\n"
 "will end in %d days. You will then receive the list of subscribers \n"
@@ -912,7 +912,7 @@ msgstr ""
 msgid "Command not understood: ignoring end of message.\n"
 msgstr "Commando niet begrepen: Het einde van het bericht wordt genegeerd.\n"
 
-#: src/Commands.pm:1210 src/Commands.pm:1899 src/Commands.pm:813
+#: src/Commands.pm:1210 src/Commands.pm:1901 src/Commands.pm:813
 msgid "Command syntax error.\n"
 msgstr "Commando syntax fout.\n"
 
@@ -1530,7 +1530,7 @@ msgstr "Bestand"
 msgid "Family name"
 msgstr "Bestand"
 
-#: src/List.pm:6257
+#: src/List.pm:6256
 msgid "File"
 msgstr "Bestand"
 
@@ -1651,7 +1651,7 @@ msgstr "Help"
 msgid "Help on Sympa: %1%2"
 msgstr "Hulp voor Sympa: %1%2"
 
-#: src/Commands.pm:2364
+#: src/Commands.pm:2366
 msgid ""
 "Here are the lists you are currently subscribe to :\n"
 "\n"
@@ -1992,14 +1992,14 @@ msgid ""
 "command has not been updated.\n"
 msgstr "Lijst %s kent geen DIGEST stand. Uw configuratie is niet gewijzigd..\n"
 
-#: src/Commands.pm:2200 src/Commands.pm:2244
+#: src/Commands.pm:2202 src/Commands.pm:2246
 msgid "List %s is not currently running an expiration process.\n"
 msgstr "Voor lijst %s draait geen expiratie proces op dit moment.\n"
 
 #: src/Commands.pm:1097 src/Commands.pm:1221 src/Commands.pm:1294
 #: src/Commands.pm:1398 src/Commands.pm:1550 src/Commands.pm:1633
-#: src/Commands.pm:1821 src/Commands.pm:1910 src/Commands.pm:2121
-#: src/Commands.pm:2219 src/Commands.pm:2263 src/Commands.pm:263
+#: src/Commands.pm:1823 src/Commands.pm:1912 src/Commands.pm:2123
+#: src/Commands.pm:2221 src/Commands.pm:2265 src/Commands.pm:263
 #: src/Commands.pm:319 src/Commands.pm:364 src/Commands.pm:410
 #: src/Commands.pm:451 src/Commands.pm:573 src/Commands.pm:718
 #: src/Commands.pm:841 src/Commands.pm:977
@@ -2265,13 +2265,19 @@ msgstr ""
 msgid "Message"
 msgstr "berichten"
 
-#: src/Commands.pm:1684 src/Commands.pm:1793
+#: src/Commands.pm:1684 src/Commands.pm:1794
 msgid "Message %s for list %s has been distributed.\n"
 msgstr "Bericht %s voor lijst %s is gedistribueerd.\n"
 
-#: src/Commands.pm:1857
+#: src/Commands.pm:1859
 msgid "Message %s for list %s has been rejected.\n"
 msgstr "Bericht %s voor lijst %s is afgewezen.\n"
+
+#: src/Commands.pm:1689 src/Commands.pm:1799
+#, fuzzy
+msgid ""
+"Message %s for list %s has been validated ; it will be distributed soon.\n"
+msgstr "Bericht %s voor lijst %s is gedistribueerd.\n"
 
 #: web_tt2/help_editfile.tt2:35
 msgid ""
@@ -3058,7 +3064,7 @@ msgstr "Hernoem bestand %1"
 msgid "Rename this list"
 msgstr "Hernoem deze lijst"
 
-#: src/Commands.pm:2035
+#: src/Commands.pm:2037
 msgid "Renewal of your subscription to list '%s'"
 msgstr "Vernieuwing voor uw inschrijving voor lijst '%s'"
 
@@ -3369,7 +3375,7 @@ msgstr "Lijst Administratie Paneel"
 msgid "Skins, CSS and colors"
 msgstr ""
 
-#: src/List.pm:8827
+#: src/List.pm:8824
 #, fuzzy
 msgid ""
 "Someone (hopefully you) asked for your e-mail address\n"
@@ -3400,7 +3406,7 @@ msgstr ""
 "Wanneer u niet wilt dat dit gebeurd, kunt u dit bericht \n"
 "negeren."
 
-#: src/List.pm:8820
+#: src/List.pm:8817
 #, fuzzy
 msgid ""
 "Someone (hopefully you) asked for your e-mail address\n"
@@ -3431,7 +3437,7 @@ msgstr ""
 "Wanneer u niet wilt dat dit gebeurd, kunt u dit bericht \n"
 "negeren."
 
-#: src/List.pm:8832 src/List.pm:8837
+#: src/List.pm:8829 src/List.pm:8834
 msgid ""
 "Someone (hopefully you) requested a user of list %s to be\n"
 "added or removed.\n"
@@ -3454,7 +3460,7 @@ msgstr ""
 "\n"
 "Wanneer u niet wilt dat er iets gebeurt, negeer dan dit bericht..\n"
 
-#: src/Commands.pm:2059
+#: src/Commands.pm:2061
 #, fuzzy
 msgid ""
 "Someone (hopefully you) requested that the subscribers to the list\n"
@@ -3785,7 +3791,7 @@ msgid ""
 "\tLevel 2 is the highest level of bouncing users"
 msgstr ""
 
-#: src/Commands.pm:1923 src/Commands.pm:2136 src/Commands.pm:2232
+#: src/Commands.pm:1925 src/Commands.pm:2138 src/Commands.pm:2234
 msgid ""
 "The EXPIRE, EXPIREINDEX and EXPIREDEL commands are restricted to the owners "
 "of the list.\n"
@@ -3795,7 +3801,7 @@ msgstr ""
 "van deze lijst.\n"
 "U behoort niet tot de eigenaren van lijst %s.\n"
 
-#: src/Commands.pm:2275
+#: src/Commands.pm:2277
 #, fuzzy
 msgid "The MODINDEX command is restricted to moderators.\n"
 msgstr ""
@@ -3813,7 +3819,7 @@ msgstr ""
 "bestand:"
 
 #: src/Commands.pm:1110 src/Commands.pm:1243 src/Commands.pm:1411
-#: src/Commands.pm:1995 src/Commands.pm:466 src/Commands.pm:593
+#: src/Commands.pm:1997 src/Commands.pm:466 src/Commands.pm:593
 #: src/Commands.pm:733 src/Commands.pm:854 src/Commands.pm:990
 msgid ""
 "The authentication process failed\n"
@@ -3844,9 +3850,9 @@ msgstr "Verwijder geselecteerde lijsten"
 
 #: web_tt2/skinsedit.tt2:7
 msgid ""
-"The current version don't include a color editor, so you need to edit robot."
-"conf (or sympa.conf) to change colors. Here are the colors as defined for "
-"the current robot in robot.conf. If you did install statics CSS files, the "
+"The current version doesn't include a color editor, so you need to edit "
+"robot.conf (or sympa.conf) to change colors. Here are the colors as defined "
+"in the current robot in robot.conf. If you did install static CSS files, the "
 "colors in use may differ from this table."
 msgstr ""
 
@@ -4313,7 +4319,7 @@ msgstr ""
 msgid "Thread"
 msgstr ""
 
-#: src/Commands.pm:1940
+#: src/Commands.pm:1942
 msgid "Thus, your message is sent back to you :\n"
 msgstr "Daarom wordt uw bericht naar u teruggestuurd :\n"
 
@@ -4428,7 +4434,7 @@ msgid ""
 "password on the right column."
 msgstr ""
 
-#: src/Commands.pm:1982
+#: src/Commands.pm:1984
 #, fuzzy
 msgid ""
 "To read the list of subscribers who haven't confirm their\n"
@@ -4455,7 +4461,7 @@ msgstr "Om uw wachtwoord te ontvangen :"
 msgid "To reject it (it will be removed):"
 msgstr "Om het te weigeren (het bericht zal worden weggegooid):"
 
-#: src/Commands.pm:1984 src/Commands.pm:2042
+#: src/Commands.pm:1986 src/Commands.pm:2044
 msgid "To stop the expiration process : EXPIREDEL %s\n"
 msgstr "Om het expiratie proces te stoppen : EXPIREDEL %s\n"
 
@@ -4529,7 +4535,7 @@ msgstr "URL"
 msgid "Unable to access directory %s : %m"
 msgstr "Fout bij benaderen van map %s : %m"
 
-#: src/Commands.pm:1731 src/Commands.pm:1851
+#: src/Commands.pm:1732 src/Commands.pm:1853
 #, fuzzy
 msgid ""
 "Unable to access the moderated message on list %s with key %s.\n"
@@ -4540,7 +4546,7 @@ msgstr ""
 "Dit bericht kan al verstuurd zijn door een van de moderators van de lijst\n"
 ".\n"
 
-#: src/Commands.pm:1723
+#: src/Commands.pm:1724
 msgid "Unable to access to the message authenticated with key %s.\n"
 msgstr "Geen toegang tot het bericht met sleutel %s.\n"
 
@@ -4952,7 +4958,7 @@ msgid ""
 "the subject are recognized."
 msgstr ""
 
-#: src/Commands.pm:2183
+#: src/Commands.pm:2185
 msgid ""
 "You can remove these subscriber from the list by using the following "
 "commands :\n"
@@ -5009,7 +5015,7 @@ msgstr ""
 msgid "You have logged in with email address %1"
 msgstr "U bent ingelogd met emailadres %1"
 
-#: src/Commands.pm:2239
+#: src/Commands.pm:2241
 msgid "You just stopped the expiration process for list %s\n"
 msgstr "U heeft het expiratieproces gestopt voor lijst %s\n"
 
@@ -5045,7 +5051,7 @@ msgstr ""
 "U hebt waarschijnlijk uw abonnement met een ander email adres\n"
 " bevestigd. Probeer met uw echte adres in te schrijven."
 
-#: src/List.pm:8842 src/List.pm:8849
+#: src/List.pm:8839 src/List.pm:8846
 msgid ""
 "You requested a subscription reminder to be sent\n"
 "to each subscriber of list %s\n"
@@ -5240,7 +5246,7 @@ msgstr "Uw bericht voor lijst %s is doorgestuurd naar de editor(s)\n"
 msgid "Your message for list %s has been forwarded to editor(s)\n"
 msgstr "Uw bericht voor lijst %s is doorgestuurd naar de editor(s)\n"
 
-#: src/Commands.pm:1776 src/sympa.pl:1356
+#: src/Commands.pm:1777 src/sympa.pl:1356
 msgid ""
 "Your message for list %s has been rejected.\n"
 "The message is thus sent back to you.\n"
@@ -5260,7 +5266,7 @@ msgstr "Uw bericht is afgwezen"
 msgid "Your message signature was succesfuly verified using S/MIME"
 msgstr "Uw handtekening onder dit bericht was succesvol gechecked met S/MIME"
 
-#: src/Commands.pm:1772 src/sympa.pl:1276 src/sympa.pl:1352
+#: src/Commands.pm:1773 src/sympa.pl:1276 src/sympa.pl:1352
 msgid "Your message to %s has been rejected"
 msgstr "Uw bericht aan %s is afgewezen."
 
@@ -5390,7 +5396,7 @@ msgid ""
 "-----Delivery Status Report-----\n"
 msgstr ""
 
-#: src/Commands.pm:1981 src/Commands.pm:2164
+#: src/Commands.pm:1983 src/Commands.pm:2166
 #, fuzzy
 msgid ""
 "\n"
@@ -5409,7 +5415,7 @@ msgstr ""
 "expiratie\n"
 "zal stoppen over %d dag(en) (%s).\n"
 
-#: src/Commands.pm:2022
+#: src/Commands.pm:2024
 #, fuzzy
 msgid ""
 "\n"
@@ -5456,7 +5462,7 @@ msgstr ""
 "\n"
 "Wij werken met Sympa %s : http://www.sympa.org/\n"
 
-#: src/Commands.pm:1938
+#: src/Commands.pm:1940
 #, fuzzy
 msgid ""
 "\n"
@@ -5489,7 +5495,7 @@ msgid ""
 "[ ** Unable to process HTML message part **]\n"
 msgstr ""
 
-#: src/Commands.pm:2382
+#: src/Commands.pm:2384
 msgid ""
 "\n"
 "\n"
@@ -5501,7 +5507,7 @@ msgstr ""
 "Lijsten waar u editor van bent :\n"
 "\n"
 
-#: src/Commands.pm:2374
+#: src/Commands.pm:2376
 msgid ""
 "\n"
 "\n"

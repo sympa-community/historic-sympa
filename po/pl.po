@@ -255,7 +255,7 @@ msgid "%Image(%s)"
 msgstr ""
 
 # nlsref 6,52
-#: src/Commands.pm:2166
+#: src/Commands.pm:2168
 msgid "%s did not receive confirmation for the following addresses :\n"
 msgstr "%s nie otrzyma³ potwierdzenia dla poni¿szego adresu :\n"
 
@@ -265,7 +265,7 @@ msgid "%s mailing list does not provide subscriber preferences.\n"
 msgstr ""
 
 # nlsref 6,69
-#: src/Commands.pm:2023
+#: src/Commands.pm:2025
 msgid "%s posted your expiration message to the following addresses :\n"
 msgstr "%s wys³a³ powiadomienie o wyga¶niêciu zapisania na adresy :\n"
 
@@ -558,7 +558,7 @@ msgid ""
 msgstr "Wiadomo¶æ %s wys³ana na listê %s zosta³a rozes³ana.\n"
 
 # nlsref 6,56
-#: src/Commands.pm:2041
+#: src/Commands.pm:2043
 msgid ""
 "An expiration process for list %s has been started. This process\n"
 "will end in %d days. You will then receive the list of subscribers \n"
@@ -892,7 +892,7 @@ msgid "Command not understood: ignoring end of message.\n"
 msgstr "Polecenie nie zrozumiane: ignoruje koniec wiadomo¶ci.\n"
 
 # nlsref 6,13
-#: src/Commands.pm:1210 src/Commands.pm:1899 src/Commands.pm:813
+#: src/Commands.pm:1210 src/Commands.pm:1901 src/Commands.pm:813
 msgid "Command syntax error.\n"
 msgstr "B³±d sk³adni polecenia.\n"
 
@@ -1482,7 +1482,7 @@ msgid "Family name"
 msgstr "nazwisko"
 
 # nlsref 8,7
-#: src/List.pm:6257
+#: src/List.pm:6256
 msgid "File"
 msgstr "Plik"
 
@@ -1603,7 +1603,7 @@ msgid "Help on Sympa: %1%2"
 msgstr ""
 
 # nlsref 6,67
-#: src/Commands.pm:2364
+#: src/Commands.pm:2366
 msgid ""
 "Here are the lists you are currently subscribe to :\n"
 "\n"
@@ -1942,15 +1942,15 @@ msgstr ""
 "uaktualnione.\n"
 
 # nlsref 6,54
-#: src/Commands.pm:2200 src/Commands.pm:2244
+#: src/Commands.pm:2202 src/Commands.pm:2246
 msgid "List %s is not currently running an expiration process.\n"
 msgstr "Lista %s nie ma obecnie uruchomionego procesu 'expire'.\n"
 
 # nlsref 6,5
 #: src/Commands.pm:1097 src/Commands.pm:1221 src/Commands.pm:1294
 #: src/Commands.pm:1398 src/Commands.pm:1550 src/Commands.pm:1633
-#: src/Commands.pm:1821 src/Commands.pm:1910 src/Commands.pm:2121
-#: src/Commands.pm:2219 src/Commands.pm:2263 src/Commands.pm:263
+#: src/Commands.pm:1823 src/Commands.pm:1912 src/Commands.pm:2123
+#: src/Commands.pm:2221 src/Commands.pm:2265 src/Commands.pm:263
 #: src/Commands.pm:319 src/Commands.pm:364 src/Commands.pm:410
 #: src/Commands.pm:451 src/Commands.pm:573 src/Commands.pm:718
 #: src/Commands.pm:841 src/Commands.pm:977
@@ -2221,14 +2221,21 @@ msgid "Message"
 msgstr "Stopka wiadomo¶ci"
 
 # nlsref 6,44
-#: src/Commands.pm:1684 src/Commands.pm:1793
+#: src/Commands.pm:1684 src/Commands.pm:1794
 msgid "Message %s for list %s has been distributed.\n"
 msgstr "Wiadomo¶æ %s wys³ana na listê %s zosta³a rozes³ana.\n"
 
 # nlsref 6,43
-#: src/Commands.pm:1857
+#: src/Commands.pm:1859
 msgid "Message %s for list %s has been rejected.\n"
 msgstr "Wiadomo¶æ %s wys³ana na listê %s zosta³a odrzucona.\n"
+
+# nlsref 6,44
+#: src/Commands.pm:1689 src/Commands.pm:1799
+#, fuzzy
+msgid ""
+"Message %s for list %s has been validated ; it will be distributed soon.\n"
+msgstr "Wiadomo¶æ %s wys³ana na listê %s zosta³a rozes³ana.\n"
 
 #: web_tt2/help_editfile.tt2:35
 msgid ""
@@ -2991,7 +2998,7 @@ msgid "Rename this list"
 msgstr "Jêzyk listy"
 
 # nlsref 6,21
-#: src/Commands.pm:2035
+#: src/Commands.pm:2037
 msgid "Renewal of your subscription to list '%s'"
 msgstr "Odnowi³em zapisanie na listê '%s'"
 
@@ -3301,7 +3308,7 @@ msgid "Skins, CSS and colors"
 msgstr ""
 
 # nlsref 6,260
-#: src/List.pm:8827
+#: src/List.pm:8824
 #, fuzzy
 msgid ""
 "Someone (hopefully you) asked for your e-mail address\n"
@@ -3332,7 +3339,7 @@ msgstr ""
 "W celu zaniechania proszê zignorowaæ ten list."
 
 # nlsref 6,260
-#: src/List.pm:8820
+#: src/List.pm:8817
 #, fuzzy
 msgid ""
 "Someone (hopefully you) asked for your e-mail address\n"
@@ -3363,7 +3370,7 @@ msgstr ""
 "W celu zaniechania proszê zignorowaæ ten list."
 
 # nlsref 6,39
-#: src/List.pm:8832 src/List.pm:8837
+#: src/List.pm:8829 src/List.pm:8834
 msgid ""
 "Someone (hopefully you) requested a user of list %s to be\n"
 "added or removed.\n"
@@ -3386,7 +3393,7 @@ msgstr ""
 "W celu zaniechania akcji zignoruj t± wiadomo¶æ.\n"
 
 # nlsref 6,48
-#: src/Commands.pm:2059
+#: src/Commands.pm:2061
 #, fuzzy
 msgid ""
 "Someone (hopefully you) requested that the subscribers to the list\n"
@@ -3727,7 +3734,7 @@ msgid ""
 msgstr ""
 
 # nlsref 6,47
-#: src/Commands.pm:1923 src/Commands.pm:2136 src/Commands.pm:2232
+#: src/Commands.pm:1925 src/Commands.pm:2138 src/Commands.pm:2234
 msgid ""
 "The EXPIRE, EXPIREINDEX and EXPIREDEL commands are restricted to the owners "
 "of the list.\n"
@@ -3738,7 +3745,7 @@ msgstr ""
 "Nie jeste¶ w³a¶cicielem listy %s.\n"
 
 # nlsref 6,46
-#: src/Commands.pm:2275
+#: src/Commands.pm:2277
 #, fuzzy
 msgid "The MODINDEX command is restricted to moderators.\n"
 msgstr ""
@@ -3756,7 +3763,7 @@ msgstr ""
 
 # nlsref 6,15
 #: src/Commands.pm:1110 src/Commands.pm:1243 src/Commands.pm:1411
-#: src/Commands.pm:1995 src/Commands.pm:466 src/Commands.pm:593
+#: src/Commands.pm:1997 src/Commands.pm:466 src/Commands.pm:593
 #: src/Commands.pm:733 src/Commands.pm:854 src/Commands.pm:990
 msgid ""
 "The authentication process failed\n"
@@ -3789,9 +3796,9 @@ msgstr "Wiadomo¶æ o usuniêciu"
 
 #: web_tt2/skinsedit.tt2:7
 msgid ""
-"The current version don't include a color editor, so you need to edit robot."
-"conf (or sympa.conf) to change colors. Here are the colors as defined for "
-"the current robot in robot.conf. If you did install statics CSS files, the "
+"The current version doesn't include a color editor, so you need to edit "
+"robot.conf (or sympa.conf) to change colors. Here are the colors as defined "
+"in the current robot in robot.conf. If you did install static CSS files, the "
 "colors in use may differ from this table."
 msgstr ""
 
@@ -4251,7 +4258,7 @@ msgid "Thread"
 msgstr ""
 
 # nlsref 6,61
-#: src/Commands.pm:1940
+#: src/Commands.pm:1942
 msgid "Thus, your message is sent back to you :\n"
 msgstr "Wiadomo¶c zostaje odes³ana spowrotem :\n"
 
@@ -4359,7 +4366,7 @@ msgid ""
 msgstr ""
 
 # nlsref 6,57
-#: src/Commands.pm:1982
+#: src/Commands.pm:1984
 #, fuzzy
 msgid ""
 "To read the list of subscribers who haven't confirm their\n"
@@ -4387,7 +4394,7 @@ msgid "To reject it (it will be removed):"
 msgstr ""
 
 # nlsref 6,53
-#: src/Commands.pm:1984 src/Commands.pm:2042
+#: src/Commands.pm:1986 src/Commands.pm:2044
 msgid "To stop the expiration process : EXPIREDEL %s\n"
 msgstr "¯eby zatrzymaæ proces 'expire' : EXPIREDEL %s\n"
 
@@ -4460,7 +4467,7 @@ msgid "Unable to access directory %s : %m"
 msgstr "Brak dostêpu do katalogu %s : %m"
 
 # nlsref 6,41
-#: src/Commands.pm:1731 src/Commands.pm:1851
+#: src/Commands.pm:1732 src/Commands.pm:1853
 #, fuzzy
 msgid ""
 "Unable to access the moderated message on list %s with key %s.\n"
@@ -4471,7 +4478,7 @@ msgstr ""
 ".\n"
 
 # nlsref 6,68
-#: src/Commands.pm:1723
+#: src/Commands.pm:1724
 msgid "Unable to access to the message authenticated with key %s.\n"
 msgstr "Brak dostêpu do wiadomo¶ci identyfikowanej kluczem %s.\n"
 
@@ -4904,7 +4911,7 @@ msgid ""
 msgstr ""
 
 # nlsref 6,58
-#: src/Commands.pm:2183
+#: src/Commands.pm:2185
 msgid ""
 "You can remove these subscriber from the list by using the following "
 "commands :\n"
@@ -4957,7 +4964,7 @@ msgid "You have logged in with email address %1"
 msgstr ""
 
 # nlsref 6,55
-#: src/Commands.pm:2239
+#: src/Commands.pm:2241
 msgid "You just stopped the expiration process for list %s\n"
 msgstr "W³a¶nie zatrzyma³e¶ proces 'expire' dla listy %s\n"
 
@@ -4995,7 +5002,7 @@ msgstr ""
 "Proszê u¿yæ swojego kanonicznego adresu."
 
 # nlsref 6,79
-#: src/List.pm:8842 src/List.pm:8849
+#: src/List.pm:8839 src/List.pm:8846
 msgid ""
 "You requested a subscription reminder to be sent\n"
 "to each subscriber of list %s\n"
@@ -5200,7 +5207,7 @@ msgstr ""
 " wiadomo¶æ wys³ana na listê %s zosta³a przekazana osobie administruj±cej.\n"
 
 # nlsref 4,15
-#: src/Commands.pm:1776 src/sympa.pl:1356
+#: src/Commands.pm:1777 src/sympa.pl:1356
 msgid ""
 "Your message for list %s has been rejected.\n"
 "The message is thus sent back to you.\n"
@@ -5222,7 +5229,7 @@ msgid "Your message signature was succesfuly verified using S/MIME"
 msgstr ""
 
 # nlsref 4,11
-#: src/Commands.pm:1772 src/sympa.pl:1276 src/sympa.pl:1352
+#: src/Commands.pm:1773 src/sympa.pl:1276 src/sympa.pl:1352
 msgid "Your message to %s has been rejected"
 msgstr "Twoja wiadomo¶æ do %s zosta³a odrzucona"
 
@@ -5350,7 +5357,7 @@ msgid ""
 msgstr ""
 
 # nlsref 6,49
-#: src/Commands.pm:1981 src/Commands.pm:2164
+#: src/Commands.pm:1983 src/Commands.pm:2166
 #, fuzzy
 msgid ""
 "\n"
@@ -5371,7 +5378,7 @@ msgstr ""
 "za %d dni (%s).\n"
 
 # nlsref 6,56
-#: src/Commands.pm:2022
+#: src/Commands.pm:2024
 #, fuzzy
 msgid ""
 "\n"
@@ -5418,7 +5425,7 @@ msgstr ""
 "Obs³ugiwane przez Sympa %s : http://www.sympa.org/\n"
 
 # nlsref 6,60
-#: src/Commands.pm:1938
+#: src/Commands.pm:1940
 #, fuzzy
 msgid ""
 "\n"
@@ -5450,7 +5457,7 @@ msgid ""
 msgstr ""
 
 # nlsref 6,73
-#: src/Commands.pm:2382
+#: src/Commands.pm:2384
 msgid ""
 "\n"
 "\n"
@@ -5463,7 +5470,7 @@ msgstr ""
 "\n"
 
 # nlsref 6,72
-#: src/Commands.pm:2374
+#: src/Commands.pm:2376
 msgid ""
 "\n"
 "\n"

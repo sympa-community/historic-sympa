@@ -248,7 +248,7 @@ msgstr "Το αρχείο %2@%3 χρησιμοποιεί το %4% του επι�
 msgid "%Image(%s)"
 msgstr "%Εικόνα(%s)"
 
-#: src/Commands.pm:2166
+#: src/Commands.pm:2168
 msgid "%s did not receive confirmation for the following addresses :\n"
 msgstr "%s δεν υπήρξε επιβεβαίωση για τις ακόλουθες διευθύνσεις :\r\n"
 
@@ -258,7 +258,7 @@ msgstr ""
 "Η λίστα ηλεκτρονικού ταχυδρομείου %s δεν παρέχει προτιμήσεις εγγραφής "
 "συνδρομητών. \n"
 
-#: src/Commands.pm:2023
+#: src/Commands.pm:2025
 msgid "%s posted your expiration message to the following addresses :\n"
 msgstr "%s αποστολή του μηνύματος λήξης στις ακόλουθες διευθύνσεις:\r\n"
 
@@ -576,7 +576,7 @@ msgstr ""
 "Ένα κρυπτογραφημένο μήνυμα από  %1 έχει διανεμηθεί σε\n"
 "Θέμα : %2"
 
-#: src/Commands.pm:2041
+#: src/Commands.pm:2043
 msgid ""
 "An expiration process for list %s has been started. This process\n"
 "will end in %d days. You will then receive the list of subscribers \n"
@@ -911,7 +911,7 @@ msgstr "Εύρεση της εντολής 'Έξοδος' : Θα αγνοηθε�
 msgid "Command not understood: ignoring end of message.\n"
 msgstr "Μη κατανοητή εντολή: Θα αγνοηθεί το τέλος του μηνύματος.\n"
 
-#: src/Commands.pm:1210 src/Commands.pm:1899 src/Commands.pm:813
+#: src/Commands.pm:1210 src/Commands.pm:1901 src/Commands.pm:813
 msgid "Command syntax error.\n"
 msgstr "Λάθος σύνταξη εντολής\n"
 
@@ -1539,7 +1539,7 @@ msgstr "Οικογένειες"
 msgid "Family name"
 msgstr "Οικογένειες"
 
-#: src/List.pm:6257
+#: src/List.pm:6256
 msgid "File"
 msgstr "Αρχείο"
 
@@ -1669,7 +1669,7 @@ msgstr "Βοήθεια"
 msgid "Help on Sympa: %1%2"
 msgstr "Βοήθεια Sympa: %1%2"
 
-#: src/Commands.pm:2364
+#: src/Commands.pm:2366
 msgid ""
 "Here are the lists you are currently subscribe to :\n"
 "\n"
@@ -2032,14 +2032,14 @@ msgstr ""
 "Η λίστα %s δεν δέχεται τον τρόπο ΕΠΙΣΚΟΠΗΣΗ. Δεν ενημερώθηκε η διαμόρφωση "
 "σχετικά με τη συγκεκριμένη εντολή.\n"
 
-#: src/Commands.pm:2200 src/Commands.pm:2244
+#: src/Commands.pm:2202 src/Commands.pm:2246
 msgid "List %s is not currently running an expiration process.\n"
 msgstr "Η λίστα %s δεν βρίσκεται σε διαδικασία λήξης.\n"
 
 #: src/Commands.pm:1097 src/Commands.pm:1221 src/Commands.pm:1294
 #: src/Commands.pm:1398 src/Commands.pm:1550 src/Commands.pm:1633
-#: src/Commands.pm:1821 src/Commands.pm:1910 src/Commands.pm:2121
-#: src/Commands.pm:2219 src/Commands.pm:2263 src/Commands.pm:263
+#: src/Commands.pm:1823 src/Commands.pm:1912 src/Commands.pm:2123
+#: src/Commands.pm:2221 src/Commands.pm:2265 src/Commands.pm:263
 #: src/Commands.pm:319 src/Commands.pm:364 src/Commands.pm:410
 #: src/Commands.pm:451 src/Commands.pm:573 src/Commands.pm:718
 #: src/Commands.pm:841 src/Commands.pm:977
@@ -2310,13 +2310,19 @@ msgstr ""
 msgid "Message"
 msgstr "Αριθμός μηνύματος"
 
-#: src/Commands.pm:1684 src/Commands.pm:1793
+#: src/Commands.pm:1684 src/Commands.pm:1794
 msgid "Message %s for list %s has been distributed.\n"
 msgstr "Το μήνυμα %s της λίστας %s έχει διανεμηθεί.\n"
 
-#: src/Commands.pm:1857
+#: src/Commands.pm:1859
 msgid "Message %s for list %s has been rejected.\n"
 msgstr "Το μήνυμα %s της λίστας %s έχει απορριφθεί.\n"
+
+#: src/Commands.pm:1689 src/Commands.pm:1799
+#, fuzzy
+msgid ""
+"Message %s for list %s has been validated ; it will be distributed soon.\n"
+msgstr "Το μήνυμα %s της λίστας %s έχει διανεμηθεί.\n"
 
 #: web_tt2/help_editfile.tt2:35
 msgid ""
@@ -3120,7 +3126,7 @@ msgstr "Μετονομασία αρχείου %1"
 msgid "Rename this list"
 msgstr "Μετονομασία της λίστας"
 
-#: src/Commands.pm:2035
+#: src/Commands.pm:2037
 msgid "Renewal of your subscription to list '%s'"
 msgstr "Ανανέωση της συνδρομής σας στη λίστα '%s'"
 
@@ -3449,7 +3455,7 @@ msgstr "Απογύμνωση σελίδας διαχείρισης"
 msgid "Skins, CSS and colors"
 msgstr "Αφαίρεση CCS και χρωμάτων"
 
-#: src/List.pm:8827
+#: src/List.pm:8824
 msgid ""
 "Someone (hopefully you) asked for your e-mail address\n"
 "to be added to list '%s'.\n"
@@ -3478,7 +3484,7 @@ msgstr ""
 "παρακαλούμε αγνοείστε\n"
 "το παρόν μήνυμα."
 
-#: src/List.pm:8820
+#: src/List.pm:8817
 msgid ""
 "Someone (hopefully you) asked for your e-mail address\n"
 "to be removed from list '%s'.\n"
@@ -3507,7 +3513,7 @@ msgstr ""
 "παρακαλούμε αγνοείστε\n"
 "το παρόν μήνυμα."
 
-#: src/List.pm:8832 src/List.pm:8837
+#: src/List.pm:8829 src/List.pm:8834
 msgid ""
 "Someone (hopefully you) requested a user of list %s to be\n"
 "added or removed.\n"
@@ -3530,7 +3536,7 @@ msgstr ""
 "παρακαλούμε αγνοείστε\n"
 "το παρόν μήνυμα.\n"
 
-#: src/Commands.pm:2059
+#: src/Commands.pm:2061
 msgid ""
 "Someone (hopefully you) requested that the subscribers to the list\n"
 "'%s' for more than %d days have to confirm their subscription.\n"
@@ -3870,14 +3876,14 @@ msgid ""
 "\tLevel 2 is the highest level of bouncing users"
 msgstr ""
 
-#: src/Commands.pm:1923 src/Commands.pm:2136 src/Commands.pm:2232
+#: src/Commands.pm:1925 src/Commands.pm:2138 src/Commands.pm:2234
 msgid ""
 "The EXPIRE, EXPIREINDEX and EXPIREDEL commands are restricted to the owners "
 "of the list.\n"
 "You are not one of the owners for list %s.\n"
 msgstr ""
 
-#: src/Commands.pm:2275
+#: src/Commands.pm:2277
 msgid "The MODINDEX command is restricted to moderators.\n"
 msgstr ""
 
@@ -3890,7 +3896,7 @@ msgid "The antivirus scan has failed while processing the following file:"
 msgstr ""
 
 #: src/Commands.pm:1110 src/Commands.pm:1243 src/Commands.pm:1411
-#: src/Commands.pm:1995 src/Commands.pm:466 src/Commands.pm:593
+#: src/Commands.pm:1997 src/Commands.pm:466 src/Commands.pm:593
 #: src/Commands.pm:733 src/Commands.pm:854 src/Commands.pm:990
 msgid ""
 "The authentication process failed\n"
@@ -3917,9 +3923,9 @@ msgstr ""
 
 #: web_tt2/skinsedit.tt2:7
 msgid ""
-"The current version don't include a color editor, so you need to edit robot."
-"conf (or sympa.conf) to change colors. Here are the colors as defined for "
-"the current robot in robot.conf. If you did install statics CSS files, the "
+"The current version doesn't include a color editor, so you need to edit "
+"robot.conf (or sympa.conf) to change colors. Here are the colors as defined "
+"in the current robot in robot.conf. If you did install static CSS files, the "
 "colors in use may differ from this table."
 msgstr ""
 
@@ -4354,7 +4360,7 @@ msgstr ""
 msgid "Thread"
 msgstr ""
 
-#: src/Commands.pm:1940
+#: src/Commands.pm:1942
 msgid "Thus, your message is sent back to you :\n"
 msgstr ""
 
@@ -4456,7 +4462,7 @@ msgid ""
 "password on the right column."
 msgstr ""
 
-#: src/Commands.pm:1982
+#: src/Commands.pm:1984
 msgid ""
 "To read the list of subscribers who haven't confirm their\n"
 "subscription : EXPIREINDEX %s\n"
@@ -4480,7 +4486,7 @@ msgstr ""
 msgid "To reject it (it will be removed):"
 msgstr ""
 
-#: src/Commands.pm:1984 src/Commands.pm:2042
+#: src/Commands.pm:1986 src/Commands.pm:2044
 msgid "To stop the expiration process : EXPIREDEL %s\n"
 msgstr ""
 
@@ -4547,13 +4553,13 @@ msgstr ""
 msgid "Unable to access directory %s : %m"
 msgstr ""
 
-#: src/Commands.pm:1731 src/Commands.pm:1851
+#: src/Commands.pm:1732 src/Commands.pm:1853
 msgid ""
 "Unable to access the moderated message on list %s with key %s.\n"
 "This message may already have been sent by one of the list's moderators\n"
 msgstr ""
 
-#: src/Commands.pm:1723
+#: src/Commands.pm:1724
 msgid "Unable to access to the message authenticated with key %s.\n"
 msgstr ""
 
@@ -4940,7 +4946,7 @@ msgid ""
 "the subject are recognized."
 msgstr ""
 
-#: src/Commands.pm:2183
+#: src/Commands.pm:2185
 msgid ""
 "You can remove these subscriber from the list by using the following "
 "commands :\n"
@@ -4987,7 +4993,7 @@ msgstr ""
 msgid "You have logged in with email address %1"
 msgstr ""
 
-#: src/Commands.pm:2239
+#: src/Commands.pm:2241
 msgid "You just stopped the expiration process for list %s\n"
 msgstr ""
 
@@ -5020,7 +5026,7 @@ msgid ""
 "email address. Please try subscribing using your canonical address."
 msgstr ""
 
-#: src/List.pm:8842 src/List.pm:8849
+#: src/List.pm:8839 src/List.pm:8846
 msgid ""
 "You requested a subscription reminder to be sent\n"
 "to each subscriber of list %s\n"
@@ -5191,7 +5197,7 @@ msgstr ""
 msgid "Your message for list %s has been forwarded to editor(s)\n"
 msgstr ""
 
-#: src/Commands.pm:1776 src/sympa.pl:1356
+#: src/Commands.pm:1777 src/sympa.pl:1356
 msgid ""
 "Your message for list %s has been rejected.\n"
 "The message is thus sent back to you.\n"
@@ -5207,7 +5213,7 @@ msgstr ""
 msgid "Your message signature was succesfuly verified using S/MIME"
 msgstr ""
 
-#: src/Commands.pm:1772 src/sympa.pl:1276 src/sympa.pl:1352
+#: src/Commands.pm:1773 src/sympa.pl:1276 src/sympa.pl:1352
 msgid "Your message to %s has been rejected"
 msgstr ""
 
@@ -5317,7 +5323,7 @@ msgid ""
 "-----Delivery Status Report-----\n"
 msgstr ""
 
-#: src/Commands.pm:1981 src/Commands.pm:2164
+#: src/Commands.pm:1983 src/Commands.pm:2166
 msgid ""
 "\n"
 "An EXPIRE command is currently running for list %s.\n"
@@ -5328,7 +5334,7 @@ msgid ""
 "will end in %d day(s) (%s).\n"
 msgstr ""
 
-#: src/Commands.pm:2022
+#: src/Commands.pm:2024
 msgid ""
 "\n"
 "An expiration process for list %s has been started. This process\n"
@@ -5358,7 +5364,7 @@ msgid ""
 "Powered by Sympa %s : http://www.sympa.org/\n"
 msgstr ""
 
-#: src/Commands.pm:1938
+#: src/Commands.pm:1940
 msgid ""
 "\n"
 "The EXPIRE command couldn't be run. It must followed by an explication\n"
@@ -5382,7 +5388,7 @@ msgid ""
 "[ ** Unable to process HTML message part **]\n"
 msgstr ""
 
-#: src/Commands.pm:2382
+#: src/Commands.pm:2384
 msgid ""
 "\n"
 "\n"
@@ -5390,7 +5396,7 @@ msgid ""
 "\n"
 msgstr ""
 
-#: src/Commands.pm:2374
+#: src/Commands.pm:2376
 msgid ""
 "\n"
 "\n"

@@ -243,7 +243,7 @@ msgstr "%2@%3 アーカイブはQuotaの %4% を使っています。"
 msgid "%Image(%s)"
 msgstr "%Image(%s)"
 
-#: src/Commands.pm:2166
+#: src/Commands.pm:2168
 msgid "%s did not receive confirmation for the following addresses :\n"
 msgstr "%s 以下のメールアドレスについて確認を受け取っていません :\n"
 
@@ -251,7 +251,7 @@ msgstr "%s 以下のメールアドレスについて確認を受け取ってい
 msgid "%s mailing list does not provide subscriber preferences.\n"
 msgstr "%s 本メーリングリストは購読者オプションを提供していません.\n"
 
-#: src/Commands.pm:2023
+#: src/Commands.pm:2025
 msgid "%s posted your expiration message to the following addresses :\n"
 msgstr "%s 以下のアドレスに講読確認メッセージが送信されました :\n"
 
@@ -543,7 +543,7 @@ msgstr ""
 "%1 から暗号化されたメッセージが投函されました\n"
 "Subject : %2"
 
-#: src/Commands.pm:2041
+#: src/Commands.pm:2043
 msgid ""
 "An expiration process for list %s has been started. This process\n"
 "will end in %d days. You will then receive the list of subscribers \n"
@@ -882,7 +882,7 @@ msgstr ""
 msgid "Command not understood: ignoring end of message.\n"
 msgstr "理解できないコマンド: メッセージの残りの部分は無視されます。\n"
 
-#: src/Commands.pm:1210 src/Commands.pm:1899 src/Commands.pm:813
+#: src/Commands.pm:1210 src/Commands.pm:1901 src/Commands.pm:813
 msgid "Command syntax error.\n"
 msgstr "コマンド構文エラー\n"
 
@@ -1495,7 +1495,7 @@ msgstr "ファミリー"
 msgid "Family name"
 msgstr "ファミリー名"
 
-#: src/List.pm:6257
+#: src/List.pm:6256
 msgid "File"
 msgstr "ファイル"
 
@@ -1620,7 +1620,7 @@ msgstr "ヘルプ"
 msgid "Help on Sympa: %1%2"
 msgstr "Sympaのヘルプ: %1%2"
 
-#: src/Commands.pm:2364
+#: src/Commands.pm:2366
 msgid ""
 "Here are the lists you are currently subscribe to :\n"
 "\n"
@@ -1980,14 +1980,14 @@ msgstr ""
 "メーリングリスト %s においてダイジェストモードは受け付けられません。このコマ"
 "ンドであなたの設定は更新されませんでした。\n"
 
-#: src/Commands.pm:2200 src/Commands.pm:2244
+#: src/Commands.pm:2202 src/Commands.pm:2246
 msgid "List %s is not currently running an expiration process.\n"
 msgstr "メーリングリスト %1 は現在、講読確認処理は行われていません。\n"
 
 #: src/Commands.pm:1097 src/Commands.pm:1221 src/Commands.pm:1294
 #: src/Commands.pm:1398 src/Commands.pm:1550 src/Commands.pm:1633
-#: src/Commands.pm:1821 src/Commands.pm:1910 src/Commands.pm:2121
-#: src/Commands.pm:2219 src/Commands.pm:2263 src/Commands.pm:263
+#: src/Commands.pm:1823 src/Commands.pm:1912 src/Commands.pm:2123
+#: src/Commands.pm:2221 src/Commands.pm:2265 src/Commands.pm:263
 #: src/Commands.pm:319 src/Commands.pm:364 src/Commands.pm:410
 #: src/Commands.pm:451 src/Commands.pm:573 src/Commands.pm:718
 #: src/Commands.pm:841 src/Commands.pm:977
@@ -2255,13 +2255,19 @@ msgstr ""
 msgid "Message"
 msgstr "メッセージ"
 
-#: src/Commands.pm:1684 src/Commands.pm:1793
+#: src/Commands.pm:1684 src/Commands.pm:1794
 msgid "Message %s for list %s has been distributed.\n"
 msgstr "メッセージ%sはメーリングリスト%sに配送されました。\n"
 
-#: src/Commands.pm:1857
+#: src/Commands.pm:1859
 msgid "Message %s for list %s has been rejected.\n"
 msgstr "メッセージ%sは棄却され、メーリングリスト%sに配送されませんでした。\n"
+
+#: src/Commands.pm:1689 src/Commands.pm:1799
+#, fuzzy
+msgid ""
+"Message %s for list %s has been validated ; it will be distributed soon.\n"
+msgstr "メッセージ%sはメーリングリスト%sに配送されました。\n"
 
 #: web_tt2/help_editfile.tt2:35
 msgid ""
@@ -3042,7 +3048,7 @@ msgstr "ファイル %1 のリネーム"
 msgid "Rename this list"
 msgstr "このメーリングリストのリネーム"
 
-#: src/Commands.pm:2035
+#: src/Commands.pm:2037
 msgid "Renewal of your subscription to list '%s'"
 msgstr "メーリングリスト '%s' に対する購読の更新"
 
@@ -3366,7 +3372,7 @@ msgstr "スキン管理ページ"
 msgid "Skins, CSS and colors"
 msgstr "スキン、CSS、色"
 
-#: src/List.pm:8827
+#: src/List.pm:8824
 msgid ""
 "Someone (hopefully you) asked for your e-mail address\n"
 "to be added to list '%s'.\n"
@@ -3396,7 +3402,7 @@ msgstr ""
 "\n"
 "この要求を実行したくないときは、このメッセージを単に無視してください。"
 
-#: src/List.pm:8820
+#: src/List.pm:8817
 msgid ""
 "Someone (hopefully you) asked for your e-mail address\n"
 "to be removed from list '%s'.\n"
@@ -3427,7 +3433,7 @@ msgstr ""
 "この要求を受け入れないのであれば、このメッセージは無視して\n"
 "差し支えありません。"
 
-#: src/List.pm:8832 src/List.pm:8837
+#: src/List.pm:8829 src/List.pm:8834
 msgid ""
 "Someone (hopefully you) requested a user of list %s to be\n"
 "added or removed.\n"
@@ -3449,7 +3455,7 @@ msgstr ""
 "\n"
 "この要求を実行したくないときは、このメッセージを単に無視してください。\n"
 
-#: src/Commands.pm:2059
+#: src/Commands.pm:2061
 msgid ""
 "Someone (hopefully you) requested that the subscribers to the list\n"
 "'%s' for more than %d days have to confirm their subscription.\n"
@@ -3805,7 +3811,7 @@ msgstr ""
 "自動的な処理を定義します。<br/>\n"
 "第二段階はバウンスしている購読者の上層のレベルです。"
 
-#: src/Commands.pm:1923 src/Commands.pm:2136 src/Commands.pm:2232
+#: src/Commands.pm:1925 src/Commands.pm:2138 src/Commands.pm:2234
 msgid ""
 "The EXPIRE, EXPIREINDEX and EXPIREDEL commands are restricted to the owners "
 "of the list.\n"
@@ -3815,7 +3821,7 @@ msgstr ""
 "が制限されています。\n"
 "あなたは、メーリングリスト %s のオーナーではありません。\n"
 
-#: src/Commands.pm:2275
+#: src/Commands.pm:2277
 msgid "The MODINDEX command is restricted to moderators.\n"
 msgstr "MODINDEX コマンドはモデレータのみ使用可能です。\n"
 
@@ -3828,7 +3834,7 @@ msgid "The antivirus scan has failed while processing the following file:"
 msgstr "以下のファイルを処理中にウイルススキャンが失敗しました:"
 
 #: src/Commands.pm:1110 src/Commands.pm:1243 src/Commands.pm:1411
-#: src/Commands.pm:1995 src/Commands.pm:466 src/Commands.pm:593
+#: src/Commands.pm:1997 src/Commands.pm:466 src/Commands.pm:593
 #: src/Commands.pm:733 src/Commands.pm:854 src/Commands.pm:990
 msgid ""
 "The authentication process failed\n"
@@ -3859,9 +3865,9 @@ msgstr ""
 
 #: web_tt2/skinsedit.tt2:7
 msgid ""
-"The current version don't include a color editor, so you need to edit robot."
-"conf (or sympa.conf) to change colors. Here are the colors as defined for "
-"the current robot in robot.conf. If you did install statics CSS files, the "
+"The current version doesn't include a color editor, so you need to edit "
+"robot.conf (or sympa.conf) to change colors. Here are the colors as defined "
+"in the current robot in robot.conf. If you did install static CSS files, the "
 "colors in use may differ from this table."
 msgstr ""
 
@@ -4436,7 +4442,7 @@ msgstr ""
 msgid "Thread"
 msgstr "スレッド"
 
-#: src/Commands.pm:1940
+#: src/Commands.pm:1942
 msgid "Thus, your message is sent back to you :\n"
 msgstr "上記の理由でメッセージはあなたに送り返されました。 :\n"
 
@@ -4567,7 +4573,7 @@ msgstr ""
 "一覧に表示されないか、認証サーバがない場合、右側でメールアドレスとパスワード"
 "を入力して、ログインして下さい。"
 
-#: src/Commands.pm:1982
+#: src/Commands.pm:1984
 msgid ""
 "To read the list of subscribers who haven't confirm their\n"
 "subscription : EXPIREINDEX %s\n"
@@ -4598,7 +4604,7 @@ msgstr "パスワードを受けとるには:"
 msgid "To reject it (it will be removed):"
 msgstr "拒否する(削除されます):"
 
-#: src/Commands.pm:1984 src/Commands.pm:2042
+#: src/Commands.pm:1986 src/Commands.pm:2044
 msgid "To stop the expiration process : EXPIREDEL %s\n"
 msgstr "講読確認処理を停止する為には次のコマンドを使用します: EXPIREDEL %s\n"
 
@@ -4670,7 +4676,7 @@ msgstr "URL"
 msgid "Unable to access directory %s : %m"
 msgstr "ディレクトリ %s にアクセスできません: %m"
 
-#: src/Commands.pm:1731 src/Commands.pm:1851
+#: src/Commands.pm:1732 src/Commands.pm:1853
 msgid ""
 "Unable to access the moderated message on list %s with key %s.\n"
 "This message may already have been sent by one of the list's moderators\n"
@@ -4680,7 +4686,7 @@ msgstr ""
 "このメッセージは既にこのメーリングリストのモデレータによって送信されたかもし"
 "れません\n"
 
-#: src/Commands.pm:1723
+#: src/Commands.pm:1724
 msgid "Unable to access to the message authenticated with key %s.\n"
 msgstr "キー %s で認証されたメッセージにアクセスする事ができません。\n"
 
@@ -5094,7 +5100,7 @@ msgstr ""
 "メールの場合、メッセージ本文の記述は無視されます。しかし、題名(subject)にコマ"
 "ンドを記述した場合はコマンドとして解釈されます。"
 
-#: src/Commands.pm:2183
+#: src/Commands.pm:2185
 msgid ""
 "You can remove these subscriber from the list by using the following "
 "commands :\n"
@@ -5147,7 +5153,7 @@ msgstr "パスワードを忘れた。もしくはパスワードを持ってい
 msgid "You have logged in with email address %1"
 msgstr "メールアドレス%1でログインしました"
 
-#: src/Commands.pm:2239
+#: src/Commands.pm:2241
 msgid "You just stopped the expiration process for list %s\n"
 msgstr "メーリングリスト %1 の講読確認処理を中止しました。\n"
 
@@ -5188,7 +5194,7 @@ msgstr ""
 "あなたは多分、別のメールアドレスを使用して購読要求の確認を行ったと\n"
 "思われます。あなたの正規のメールアドレスで購読要求を行って下さい。"
 
-#: src/List.pm:8842 src/List.pm:8849
+#: src/List.pm:8839 src/List.pm:8846
 msgid ""
 "You requested a subscription reminder to be sent\n"
 "to each subscriber of list %s\n"
@@ -5392,7 +5398,7 @@ msgid "Your message for list %s has been forwarded to editor(s)\n"
 msgstr ""
 "メーリングリスト %s へのあなたのメッセージはモデレータに転送されました\n"
 
-#: src/Commands.pm:1776 src/sympa.pl:1356
+#: src/Commands.pm:1777 src/sympa.pl:1356
 msgid ""
 "Your message for list %s has been rejected.\n"
 "The message is thus sent back to you.\n"
@@ -5412,7 +5418,7 @@ msgstr "メールは拒否されました。"
 msgid "Your message signature was succesfuly verified using S/MIME"
 msgstr "あなたのメッセージ署名は S/MIME による認証に成功しました"
 
-#: src/Commands.pm:1772 src/sympa.pl:1276 src/sympa.pl:1352
+#: src/Commands.pm:1773 src/sympa.pl:1276 src/sympa.pl:1352
 msgid "Your message to %s has been rejected"
 msgstr "%s へのメールは拒否されました。"
 
@@ -5547,7 +5553,7 @@ msgstr ""
 "\n"
 "-----Delivery Status Report-----\n"
 
-#: src/Commands.pm:1981 src/Commands.pm:2164
+#: src/Commands.pm:1983 src/Commands.pm:2166
 msgid ""
 "\n"
 "An EXPIRE command is currently running for list %s.\n"
@@ -5565,7 +5571,7 @@ msgstr ""
 "現在処理中の購読確認処理は、 %d 日以上確認をしけていない購読者\n"
 "の為に実行されています。購読確認処理は %d 日 (%s) で終了します。\n"
 
-#: src/Commands.pm:2022
+#: src/Commands.pm:2024
 msgid ""
 "\n"
 "An expiration process for list %s has been started. This process\n"
@@ -5613,7 +5619,7 @@ msgstr ""
 "\n"
 "Powered by Sympa %s : http://www.sympa.org/\n"
 
-#: src/Commands.pm:1938
+#: src/Commands.pm:1940
 msgid ""
 "\n"
 "The EXPIRE command couldn't be run. It must followed by an explication\n"
@@ -5649,7 +5655,7 @@ msgstr ""
 "\n"
 "[ ** Unable to process HTML message part **]\n"
 
-#: src/Commands.pm:2382
+#: src/Commands.pm:2384
 msgid ""
 "\n"
 "\n"
@@ -5661,7 +5667,7 @@ msgstr ""
 "モデレータになっているメーリングリスト:\n"
 "\n"
 
-#: src/Commands.pm:2374
+#: src/Commands.pm:2376
 msgid ""
 "\n"
 "\n"
