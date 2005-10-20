@@ -910,7 +910,6 @@ if ($wwsconf->{'use_fast_cgi'}) {
 
 	 if ($param->{'subtitle'}) {
 	     $param->{'main_title'} = "$param->{'list'} - $param->{'subtitle'}";
-	     $param->{'title_clear_txt'} = $param->{'title'};
 	 }
 
      }else {
