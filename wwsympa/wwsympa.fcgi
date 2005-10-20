@@ -5326,6 +5326,7 @@ sub do_skinsedit {
 			 
 			 $msg_info{'year_month'} = $year_month;			 
 		     }else {	     
+			 $msg_info{$var} =   &MIME::Words::decode_mimewords($msg_info{$var});
 			 $msg_info{$var} = &tools::escape_html($msg_info{$var});
 		     }
 		 }		
