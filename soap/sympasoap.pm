@@ -760,8 +760,17 @@ sub which {
 	    ->faultstring('User not authentified')
 	    ->faultdetail('You should login first');
     }
+
+    my %listnames;
+
     
-    foreach my $listname( &List::get_which($sender,$robot, 'member') ){ 	    
+    foreach my$role ('member','owner','role') {
+	foreach my $name( &List::get_which($sender,$robot,$role) ){         
+	    $listnames{$name}=1;
+	}
+    }
+    
+    foreach my $listname (keys %listnames) {
 	my $list = new List ($listname, $robot);
 	my $list_address;
 	my $result_item;
