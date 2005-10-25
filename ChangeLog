@@ -1,3 +1,64 @@
+2005-10-20 12:23  sympa-authors
+
+	* wwsympa/archived.pl: Fix: archived.pl would die with a
+	  "Modification of non-creatable array value attempted" error while
+	  creating the index file
+
+2005-10-20 11:49  sympa-authors
+
+	* po/Makefile, src/Conf.pm, src/Language.pm,
+	  web_tt2/rss_request.tt2, wwsympa/wwsympa.fcgi: [D.Nylander] New
+	  feature: sympa translated to Swedish
+
+2005-10-19 17:39  sympa-authors
+
+	* po/de.po: Fix
+
+2005-10-19 17:31  sympa-authors
+
+	* po/cs.po, po/de.po, po/el.po, po/en_US.po, po/es.po, po/fr.po,
+	  po/ja.po, po/oc.po, po/tr.po, web_tt2/list_menu.tt2: Renamed
+	  "review" to "review members"
+
+2005-10-19 17:24  sympa-authors
+
+	* po/: cs.po, de.po, el.po, en_US.po, es.po, et.po, fi.po, fr.po,
+	  hu.po, it.po, ja.po, nl.po, oc.po, pl.po, pt.po, pt_BR.po, ro.po,
+	  sympa.pot, tr.po, zh_CN.po, zh_TW.po: update
+
+2005-10-19 16:35  sympa-authors
+
+	* src/Commands.pm, web_tt2/skinsedit.tt2: [reported by A.Brugalle]
+	  Add a notification when a message is moved to the distribution
+	  spool
+
+2005-10-19 16:34  sympa-authors
+
+	* ChangeLog: update
+
+2005-10-19 16:32  sympa-authors
+
+	* po/: cs.po, de.po, el.po, en_US.po, es.po, et.po, fi.po, fr.po,
+	  hu.po, it.po, ja.po, nl.po, oc.po, pl.po, pt.po, pt_BR.po, ro.po,
+	  sympa.pot, tr.po, zh_CN.po, zh_TW.po: Update po files
+
+2005-10-19 15:46  sympa-authors
+
+	* src/Language.pm: Fix: try a setlocale() with locale.charset first
+
+2005-10-17 14:31  sympa-authors
+
+	* src/List.pm: Rename buggy archives/log. files
+
+2005-10-17 14:12  sympa-authors
+
+	* src/List.pm: Fix previous change
+
+2005-10-17 14:08  sympa-authors
+
+	* src/: Archive.pm, List.pm: [reported by V.Mathieu] Fix: mail
+	  archives files had an incorrect 'log.' filename
+
 2005-10-14 17:51  sympa-authors
 
 	* po/de.po: [M.Redinger] Updated de.po
