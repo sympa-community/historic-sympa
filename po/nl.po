@@ -75,11 +75,31 @@ msgstr "Nieuwste berichten"
 msgid " The latest shared documents "
 msgstr "Nieuwste gedeelde documenten"
 
+#: web_tt2/rss.tt2:7
+#, fuzzy
+msgid " active lists "
+msgstr "Niet actieve lijsten"
+
 #. (for)
 #: web_tt2/active_lists.tt2:12 web_tt2/latest_arc.tt2:12
 #: web_tt2/latest_d_read.tt2:12 web_tt2/latest_lists.tt2:12
 msgid " for %1 days "
 msgstr "geduurende %1 dag(en)"
+
+#: web_tt2/rss.tt2:9
+#, fuzzy
+msgid " latest documents "
+msgstr "Gedeelde documenten"
+
+#: web_tt2/rss.tt2:6
+#, fuzzy
+msgid " latest lists "
+msgstr "Nieuwste lijsten"
+
+#: web_tt2/rss.tt2:8
+#, fuzzy
+msgid " latest messages "
+msgstr "Nieuwste berichten"
 
 #. (list_request_date)
 #: web_tt2/set_pending_list_request.tt2:10
@@ -174,7 +194,7 @@ msgstr ""
 "Berichten worden vanaf nu niet meer gearchiveer op het web! Contacteer %5@%4."
 
 #. (l.average)
-#: web_tt2/rss.tt2:98
+#: web_tt2/rss.tt2:72
 msgid "%1 by day "
 msgstr "%1 per dag"
 
@@ -227,7 +247,7 @@ msgid "%1: action failed"
 msgstr "%1: actie mislukt"
 
 #. (l.name,l.host,l.subject,l.msg_count)
-#: web_tt2/rss.tt2:98
+#: web_tt2/rss.tt2:72
 msgid "%1@%2 - %3 : %4 messages"
 msgstr "%1@%2 - %3: %4 berichten"
 
@@ -724,7 +744,7 @@ msgid "Body"
 msgstr "Inhoud"
 
 #. (d.anchor)
-#: web_tt2/rss.tt2:113
+#: web_tt2/rss.tt2:88
 #, fuzzy
 msgid "Bookmark %1"
 msgstr "Favoriete URL"
@@ -1237,6 +1257,15 @@ msgstr "Wilt u het volgende %1 echt verwijderen?"
 msgid "Do you really want to delete this message ?"
 msgstr "Wilt u het volgende %1 echt verwijderen?"
 
+#. (file.value.site)
+#. (file.value.robot)
+#. (file.value.listname)
+#: web_tt2/ls_templates.tt2:109 web_tt2/ls_templates.tt2:79
+#: web_tt2/ls_templates.tt2:93
+#, fuzzy
+msgid "Do you really want to remove %1 ?"
+msgstr "Wilt u het volgende %1 echt verwijderen?"
+
 #: web_tt2/rename_list_request.tt2:14
 #, fuzzy
 msgid "Do you really want to rename this list?"
@@ -1530,7 +1559,7 @@ msgstr "Bestand"
 msgid "Family name"
 msgstr "Bestand"
 
-#: src/List.pm:6256
+#: src/List.pm:6259
 msgid "File"
 msgstr "Bestand"
 
@@ -3315,7 +3344,7 @@ msgstr "Verzenden/ontvangen configuratie"
 msgid "Serial number of the config"
 msgstr "Serienummer van de configuratie"
 
-#: web_tt2/rss.tt2:28 web_tt2/rss.tt2:7
+#: web_tt2/rss.tt2:15 web_tt2/rss.tt2:5
 #, fuzzy
 msgid "Server error"
 msgstr "Reset foutmeldingen"
@@ -3376,7 +3405,7 @@ msgstr "Lijst Administratie Paneel"
 msgid "Skins, CSS and colors"
 msgstr ""
 
-#: src/List.pm:8824
+#: src/List.pm:8827
 #, fuzzy
 msgid ""
 "Someone (hopefully you) asked for your e-mail address\n"
@@ -3407,7 +3436,7 @@ msgstr ""
 "Wanneer u niet wilt dat dit gebeurd, kunt u dit bericht \n"
 "negeren."
 
-#: src/List.pm:8817
+#: src/List.pm:8820
 #, fuzzy
 msgid ""
 "Someone (hopefully you) asked for your e-mail address\n"
@@ -3438,7 +3467,7 @@ msgstr ""
 "Wanneer u niet wilt dat dit gebeurd, kunt u dit bericht \n"
 "negeren."
 
-#: src/List.pm:8829 src/List.pm:8834
+#: src/List.pm:8832 src/List.pm:8837
 msgid ""
 "Someone (hopefully you) requested a user of list %s to be\n"
 "added or removed.\n"
@@ -3755,25 +3784,25 @@ msgid ""
 msgstr ""
 
 #. (count)
-#: web_tt2/rss.tt2:31
+#: web_tt2/rss.tt2:18
 #, fuzzy
 msgid "The %1 latest created lists"
 msgstr "Verwijder geselecteerde lijsten"
 
 #. (count)
-#: web_tt2/rss.tt2:51
+#: web_tt2/rss.tt2:38
 #, fuzzy
 msgid "The %1 latest messages"
 msgstr "Nieuwste berichten eerst"
 
 #. (count)
-#: web_tt2/rss.tt2:60
+#: web_tt2/rss.tt2:47
 #, fuzzy
 msgid "The %1 latest shared documents"
 msgstr "Gedeelde documenten"
 
 #. (count)
-#: web_tt2/rss.tt2:41
+#: web_tt2/rss.tt2:28
 #, fuzzy
 msgid "The %1 most active lists"
 msgstr "Nieuwste lijsten"
@@ -3928,17 +3957,17 @@ msgstr ""
 msgid "The following virtual robots are running on this server :"
 msgstr "De volgende virtuele robots draaien op deze server :"
 
-#: web_tt2/rss.tt2:33
+#: web_tt2/rss.tt2:20
 #, fuzzy
 msgid "The latest created lists"
 msgstr "Verwijder geselecteerde lijsten"
 
-#: web_tt2/rss.tt2:53
+#: web_tt2/rss.tt2:40
 #, fuzzy
 msgid "The latest messages"
 msgstr "Nieuwste berichten eerst"
 
-#: web_tt2/rss.tt2:62
+#: web_tt2/rss.tt2:49
 #, fuzzy
 msgid "The latest shared documents"
 msgstr "Gedeelde documenten"
@@ -3983,7 +4012,7 @@ msgstr ""
 msgid "The list's subject"
 msgstr "Het onderwerp van de lijst"
 
-#: web_tt2/rss.tt2:43
+#: web_tt2/rss.tt2:30
 #, fuzzy
 msgid "The most active lists"
 msgstr "Nieuwste lijsten"
@@ -4599,7 +4628,7 @@ msgstr "Unknown"
 msgid "Unsubscribe"
 msgstr "Uitschrijven"
 
-#: soap/sympasoap.pm:553 src/Commands.pm:946 wwsympa/wwsympa.fcgi:3529
+#: soap/sympasoap.pm:553 src/Commands.pm:946 wwsympa/wwsympa.fcgi:3531
 msgid "Unsubscribe from list %s"
 msgstr "Uitschrijven van lijst %s"
 
@@ -4801,8 +4830,8 @@ msgstr ""
 
 #: soap/sympasoap.pm:701 soap/sympasoap.pm:702 src/Commands.pm:1062
 #: src/Commands.pm:1063 src/Commands.pm:685 src/Commands.pm:686
-#: wwsympa/wwsympa.fcgi:3300 wwsympa/wwsympa.fcgi:3301
-#: wwsympa/wwsympa.fcgi:4243 wwsympa/wwsympa.fcgi:4244
+#: wwsympa/wwsympa.fcgi:3302 wwsympa/wwsympa.fcgi:3303
+#: wwsympa/wwsympa.fcgi:4245 wwsympa/wwsympa.fcgi:4246
 msgid "Welcome on list %s"
 msgstr "Welkom op de lijst %s"
 
@@ -4976,7 +5005,7 @@ msgstr ""
 "U heeft geen wachtwoord gekozen, kies een herinering voor uw eerste "
 "wachtwoord"
 
-#: wwsympa/wwsympa.fcgi:3530 wwsympa/wwsympa.fcgi:4349
+#: wwsympa/wwsympa.fcgi:3532 wwsympa/wwsympa.fcgi:4351
 #, fuzzy
 msgid "You have been removed from list %s.\n"
 msgstr "Gebruiker %s is uitgeschreven van lijst %s/\n"
@@ -5052,7 +5081,7 @@ msgstr ""
 "U hebt waarschijnlijk uw abonnement met een ander email adres\n"
 " bevestigd. Probeer met uw echte adres in te schrijven."
 
-#: src/List.pm:8839 src/List.pm:8846
+#: src/List.pm:8842 src/List.pm:8849
 msgid ""
 "You requested a subscription reminder to be sent\n"
 "to each subscriber of list %s\n"
@@ -5343,7 +5372,7 @@ msgstr ""
 msgid "Your subscription email is %1"
 msgstr "Het emailadres waarmee u zich heeft ingeschreven is %1"
 
-#: src/Commands.pm:1484 wwsympa/wwsympa.fcgi:4348
+#: src/Commands.pm:1484 wwsympa/wwsympa.fcgi:4350
 msgid "Your subscription to list %s has been removed."
 msgstr "Uw inschrijving voor lijst %s is ongedaan gemaakt."
 
@@ -5533,7 +5562,7 @@ msgstr "toegangsrecht"
 msgid "action for this population"
 msgstr ""
 
-#: web_tt2/rss_request.tt2:46
+#: web_tt2/rss_request.tt2:48
 #, fuzzy
 msgid "active lists"
 msgstr "Niet actieve lijsten"
@@ -5881,6 +5910,18 @@ msgstr "eerste-nivo selectie"
 msgid "first-level suffix"
 msgstr "eerste-nivo suffix"
 
+#. (for)
+#: web_tt2/rss.tt2:23 web_tt2/rss.tt2:33
+#, fuzzy
+msgid "for %1 days"
+msgstr "geduurende %1 dag(en)"
+
+#. (for)
+#: web_tt2/rss.tt2:43 web_tt2/rss.tt2:52
+#, fuzzy
+msgid "for %1 days "
+msgstr "geduurende %1 dag(en)"
+
 #: src/etc/scenari/info.open:1
 msgid "for anyone"
 msgstr "voor iedereen"
@@ -5966,17 +6007,17 @@ msgstr "alleen voor de listmaster"
 msgid "language"
 msgstr "Taal"
 
-#: web_tt2/rss_request.tt2:36
+#: web_tt2/rss_request.tt2:38
 #, fuzzy
 msgid "latest arc"
 msgstr "Text archieven"
 
-#: web_tt2/rss_request.tt2:41
+#: web_tt2/rss_request.tt2:43
 #, fuzzy
 msgid "latest document"
 msgstr "Gedeelde documenten"
 
-#: web_tt2/rss_request.tt2:51
+#: web_tt2/rss_request.tt2:53
 #, fuzzy
 msgid "latest lists"
 msgstr "Nieuwste lijsten"
@@ -6678,6 +6719,14 @@ msgstr "uw emailadres    : %1"
 #: mail_tt2/sendpasswd.tt2:30
 msgid "your password : %1"
 msgstr "uw wachtwoord    : %1"
+
+#, fuzzy
+#~ msgid "Do you really want to remove [% file.value.listname %] ?"
+#~ msgstr "Wilt u het volgende %1 echt verwijderen?"
+
+#, fuzzy
+#~ msgid "Do you really want to remove [% file.value.robot %] ?"
+#~ msgstr "Wilt u het volgende %1 echt verwijderen?"
 
 #~ msgid "anyone without authentication"
 #~ msgstr "iedereen zonder authenticatie"

@@ -63,11 +63,31 @@ msgstr "Son Mesajlar"
 msgid " The latest shared documents "
 msgstr "Son Paylaşılan Dosyalar"
 
+#: web_tt2/rss.tt2:7
+#, fuzzy
+msgid " active lists "
+msgstr "Aktif olmayan listeler"
+
 #. (for)
 #: web_tt2/active_lists.tt2:12 web_tt2/latest_arc.tt2:12
 #: web_tt2/latest_d_read.tt2:12 web_tt2/latest_lists.tt2:12
 msgid " for %1 days "
 msgstr " %1 gün için "
+
+#: web_tt2/rss.tt2:9
+#, fuzzy
+msgid " latest documents "
+msgstr "En son paylaşılan belgeler"
+
+#: web_tt2/rss.tt2:6
+#, fuzzy
+msgid " latest lists "
+msgstr "Son Listeler"
+
+#: web_tt2/rss.tt2:8
+#, fuzzy
+msgid " latest messages "
+msgstr "Son Mesajlar"
 
 #. (list_request_date)
 #: web_tt2/set_pending_list_request.tt2:10
@@ -161,7 +181,7 @@ msgstr ""
 "arşivlenmeyecektir. Lütfen %5@%4 ile iletişime geçiniz•"
 
 #. (l.average)
-#: web_tt2/rss.tt2:98
+#: web_tt2/rss.tt2:72
 msgid "%1 by day "
 msgstr "Gün başına %1"
 
@@ -211,7 +231,7 @@ msgid "%1: action failed"
 msgstr "%1 : işlem hatası"
 
 #. (l.name,l.host,l.subject,l.msg_count)
-#: web_tt2/rss.tt2:98
+#: web_tt2/rss.tt2:72
 msgid "%1@%2 - %3 : %4 messages"
 msgstr "%1@%2 - %3 : %4 mesaj"
 
@@ -705,7 +725,7 @@ msgid "Body"
 msgstr "Mesaj"
 
 #. (d.anchor)
-#: web_tt2/rss.tt2:113
+#: web_tt2/rss.tt2:88
 msgid "Bookmark %1"
 msgstr "Bookmark %1"
 
@@ -1198,6 +1218,15 @@ msgstr "Seçili arşivleri silmek istediğinizden emin misiniz?"
 msgid "Do you really want to delete this message ?"
 msgstr "Bu mesajı silmek istediğinize emin misiniz?"
 
+#. (file.value.site)
+#. (file.value.robot)
+#. (file.value.listname)
+#: web_tt2/ls_templates.tt2:109 web_tt2/ls_templates.tt2:79
+#: web_tt2/ls_templates.tt2:93
+#, fuzzy
+msgid "Do you really want to remove %1 ?"
+msgstr "%1 : Silmek istediğinizden emin misiniz?"
+
 #: web_tt2/rename_list_request.tt2:14
 msgid "Do you really want to rename this list?"
 msgstr "Liste adını değiştirmek istediğinize emin misiniz?"
@@ -1484,7 +1513,7 @@ msgstr "Aileler"
 msgid "Family name"
 msgstr "Aileler"
 
-#: src/List.pm:6256
+#: src/List.pm:6259
 msgid "File"
 msgstr "Dosya"
 
@@ -3204,7 +3233,7 @@ msgstr "Gönderme/Kabül yapılandırması"
 msgid "Serial number of the config"
 msgstr "Ayarın seri numarası"
 
-#: web_tt2/rss.tt2:28 web_tt2/rss.tt2:7
+#: web_tt2/rss.tt2:15 web_tt2/rss.tt2:5
 msgid "Server error"
 msgstr "Sunucu hatası"
 
@@ -3263,7 +3292,7 @@ msgstr "Kabuk (skin) yönetim sayfası"
 msgid "Skins, CSS and colors"
 msgstr "Kabuk (skin), CSS ve renkler"
 
-#: src/List.pm:8824
+#: src/List.pm:8827
 msgid ""
 "Someone (hopefully you) asked for your e-mail address\n"
 "to be added to list '%s'.\n"
@@ -3280,7 +3309,7 @@ msgid ""
 "this message."
 msgstr "                        "
 
-#: src/List.pm:8817
+#: src/List.pm:8820
 msgid ""
 "Someone (hopefully you) asked for your e-mail address\n"
 "to be removed from list '%s'.\n"
@@ -3297,7 +3326,7 @@ msgid ""
 "this message"
 msgstr "                        "
 
-#: src/List.pm:8829 src/List.pm:8834
+#: src/List.pm:8832 src/List.pm:8837
 msgid ""
 "Someone (hopefully you) requested a user of list %s to be\n"
 "added or removed.\n"
@@ -3587,22 +3616,22 @@ msgid ""
 msgstr "                        "
 
 #. (count)
-#: web_tt2/rss.tt2:31
+#: web_tt2/rss.tt2:18
 msgid "The %1 latest created lists"
 msgstr "En son, %1 yaratılan liste"
 
 #. (count)
-#: web_tt2/rss.tt2:51
+#: web_tt2/rss.tt2:38
 msgid "The %1 latest messages"
 msgstr "En son, %1 mesaj"
 
 #. (count)
-#: web_tt2/rss.tt2:60
+#: web_tt2/rss.tt2:47
 msgid "The %1 latest shared documents"
 msgstr "En son, %1 paylaşılan belge"
 
 #. (count)
-#: web_tt2/rss.tt2:41
+#: web_tt2/rss.tt2:28
 msgid "The %1 most active lists"
 msgstr "%1 En aktif liste"
 
@@ -3727,15 +3756,15 @@ msgstr ""
 msgid "The following virtual robots are running on this server :"
 msgstr "Belirtilen sanal robotlar bu sunucuda çalışıyor:"
 
-#: web_tt2/rss.tt2:33
+#: web_tt2/rss.tt2:20
 msgid "The latest created lists"
 msgstr "En son yaratılan listeler"
 
-#: web_tt2/rss.tt2:53
+#: web_tt2/rss.tt2:40
 msgid "The latest messages"
 msgstr "En son mesajlar"
 
-#: web_tt2/rss.tt2:62
+#: web_tt2/rss.tt2:49
 msgid "The latest shared documents"
 msgstr "En son paylaşılan belgeler"
 
@@ -3777,7 +3806,7 @@ msgstr ""
 msgid "The list's subject"
 msgstr "Listenin konusu"
 
-#: web_tt2/rss.tt2:43
+#: web_tt2/rss.tt2:30
 msgid "The most active lists"
 msgstr "En aktif listeler"
 
@@ -4354,7 +4383,7 @@ msgstr ""
 msgid "Unsubscribe"
 msgstr ""
 
-#: soap/sympasoap.pm:553 src/Commands.pm:946 wwsympa/wwsympa.fcgi:3529
+#: soap/sympasoap.pm:553 src/Commands.pm:946 wwsympa/wwsympa.fcgi:3531
 msgid "Unsubscribe from list %s"
 msgstr ""
 
@@ -4542,8 +4571,8 @@ msgstr ""
 
 #: soap/sympasoap.pm:701 soap/sympasoap.pm:702 src/Commands.pm:1062
 #: src/Commands.pm:1063 src/Commands.pm:685 src/Commands.pm:686
-#: wwsympa/wwsympa.fcgi:3300 wwsympa/wwsympa.fcgi:3301
-#: wwsympa/wwsympa.fcgi:4243 wwsympa/wwsympa.fcgi:4244
+#: wwsympa/wwsympa.fcgi:3302 wwsympa/wwsympa.fcgi:3303
+#: wwsympa/wwsympa.fcgi:4245 wwsympa/wwsympa.fcgi:4246
 msgid "Welcome on list %s"
 msgstr ""
 
@@ -4709,7 +4738,7 @@ msgid ""
 "You did not choose a password, request a reminder of the initial password"
 msgstr ""
 
-#: wwsympa/wwsympa.fcgi:3530 wwsympa/wwsympa.fcgi:4349
+#: wwsympa/wwsympa.fcgi:3532 wwsympa/wwsympa.fcgi:4351
 msgid "You have been removed from list %s.\n"
 msgstr ""
 
@@ -4774,7 +4803,7 @@ msgid ""
 "email address. Please try subscribing using your canonical address."
 msgstr ""
 
-#: src/List.pm:8839 src/List.pm:8846
+#: src/List.pm:8842 src/List.pm:8849
 msgid ""
 "You requested a subscription reminder to be sent\n"
 "to each subscriber of list %s\n"
@@ -5022,7 +5051,7 @@ msgstr ""
 msgid "Your subscription email is %1"
 msgstr ""
 
-#: src/Commands.pm:1484 wwsympa/wwsympa.fcgi:4348
+#: src/Commands.pm:1484 wwsympa/wwsympa.fcgi:4350
 msgid "Your subscription to list %s has been removed."
 msgstr ""
 
@@ -5165,7 +5194,7 @@ msgstr ""
 msgid "action for this population"
 msgstr ""
 
-#: web_tt2/rss_request.tt2:46
+#: web_tt2/rss_request.tt2:48
 #, fuzzy
 msgid "active lists"
 msgstr "Aktif olmayan listeler"
@@ -5503,6 +5532,18 @@ msgstr ""
 msgid "first-level suffix"
 msgstr ""
 
+#. (for)
+#: web_tt2/rss.tt2:23 web_tt2/rss.tt2:33
+#, fuzzy
+msgid "for %1 days"
+msgstr " %1 gün için "
+
+#. (for)
+#: web_tt2/rss.tt2:43 web_tt2/rss.tt2:52
+#, fuzzy
+msgid "for %1 days "
+msgstr " %1 gün için "
+
 #: src/etc/scenari/info.open:1
 msgid "for anyone"
 msgstr ""
@@ -5585,17 +5626,17 @@ msgstr ""
 msgid "language"
 msgstr "Dil"
 
-#: web_tt2/rss_request.tt2:36
+#: web_tt2/rss_request.tt2:38
 #, fuzzy
 msgid "latest arc"
 msgstr "Metin arşivleri"
 
-#: web_tt2/rss_request.tt2:41
+#: web_tt2/rss_request.tt2:43
 #, fuzzy
 msgid "latest document"
 msgstr "En son paylaşılan belgeler"
 
-#: web_tt2/rss_request.tt2:51
+#: web_tt2/rss_request.tt2:53
 #, fuzzy
 msgid "latest lists"
 msgstr "Son Listeler"
@@ -6273,6 +6314,14 @@ msgstr "eposta adresiniz : %1"
 #: mail_tt2/sendpasswd.tt2:30
 msgid "your password : %1"
 msgstr "Şifreniz : %1"
+
+#, fuzzy
+#~ msgid "Do you really want to remove [% file.value.listname %] ?"
+#~ msgstr "%1 : Silmek istediğinizden emin misiniz?"
+
+#, fuzzy
+#~ msgid "Do you really want to remove [% file.value.robot %] ?"
+#~ msgstr "%1 : Silmek istediğinizden emin misiniz?"
 
 #~ msgid "without authentication, notification is sent to owners"
 #~ msgstr "kimlik doğrulamasız, bilgi liste sahiplerine gönderilir"

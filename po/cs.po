@@ -59,11 +59,31 @@ msgstr "Začít od nejnovějších zpráv"
 msgid " The latest shared documents "
 msgstr "Poslední sdílené dokumenty"
 
+#: web_tt2/rss.tt2:7
+#, fuzzy
+msgid " active lists "
+msgstr "Neaktivní konference"
+
 #. (for)
 #: web_tt2/active_lists.tt2:12 web_tt2/latest_arc.tt2:12
 #: web_tt2/latest_d_read.tt2:12 web_tt2/latest_lists.tt2:12
 msgid " for %1 days "
 msgstr " po %1 dní "
+
+#: web_tt2/rss.tt2:9
+#, fuzzy
+msgid " latest documents "
+msgstr "\"RSS Poslední dokumenty\""
+
+#: web_tt2/rss.tt2:6
+#, fuzzy
+msgid " latest lists "
+msgstr "Poslední vytvořené"
+
+#: web_tt2/rss.tt2:8
+#, fuzzy
+msgid " latest messages "
+msgstr "Začít od nejnovějších zpráv"
 
 #. (list_request_date)
 #: web_tt2/set_pending_list_request.tt2:10
@@ -158,7 +178,7 @@ msgstr ""
 "nyní nejsou archivovány. Prosím kontaktujte %5@%4. \n"
 
 #. (l.average)
-#: web_tt2/rss.tt2:98
+#: web_tt2/rss.tt2:72
 #, fuzzy
 msgid "%1 by day "
 msgstr "1 den"
@@ -209,7 +229,7 @@ msgid "%1: action failed"
 msgstr "%1: akce selhala"
 
 #. (l.name,l.host,l.subject,l.msg_count)
-#: web_tt2/rss.tt2:98
+#: web_tt2/rss.tt2:72
 #, fuzzy
 msgid "%1@%2 - %3 : %4 messages"
 msgstr "%1@%2 : %3 zprávy"
@@ -702,7 +722,7 @@ msgid "Body"
 msgstr "Tělo zprávy"
 
 #. (d.anchor)
-#: web_tt2/rss.tt2:113
+#: web_tt2/rss.tt2:88
 msgid "Bookmark %1"
 msgstr "Přidat záložku %1"
 
@@ -1190,6 +1210,15 @@ msgstr "Opravdu chcete smazat %1%2 ?"
 msgid "Do you really want to delete this message ?"
 msgstr "Opravdu chcete smazat %1%2 ?"
 
+#. (file.value.site)
+#. (file.value.robot)
+#. (file.value.listname)
+#: web_tt2/ls_templates.tt2:109 web_tt2/ls_templates.tt2:79
+#: web_tt2/ls_templates.tt2:93
+#, fuzzy
+msgid "Do you really want to remove %1 ?"
+msgstr "Opravdu chcete odstranit %1 ?"
+
 #: web_tt2/rename_list_request.tt2:14
 msgid "Do you really want to rename this list?"
 msgstr "Opravdu se chcete přihlásit do konference %1"
@@ -1457,7 +1486,7 @@ msgstr "Skupiny"
 msgid "Family name"
 msgstr "Jméno souboru"
 
-#: src/List.pm:6256
+#: src/List.pm:6259
 msgid "File"
 msgstr "Soubor"
 
@@ -3176,7 +3205,7 @@ msgstr "Konfigurace Odeslání/Příjmu"
 msgid "Serial number of the config"
 msgstr "Seriové číslo konfigurace"
 
-#: web_tt2/rss.tt2:28 web_tt2/rss.tt2:7
+#: web_tt2/rss.tt2:15 web_tt2/rss.tt2:5
 msgid "Server error"
 msgstr "Chyba serveru"
 
@@ -3235,7 +3264,7 @@ msgstr "Úprava designu správcovské sekce"
 msgid "Skins, CSS and colors"
 msgstr "Téma, CSS a barvy"
 
-#: src/List.pm:8824
+#: src/List.pm:8827
 msgid ""
 "Someone (hopefully you) asked for your e-mail address\n"
 "to be added to list '%s'.\n"
@@ -3252,7 +3281,7 @@ msgid ""
 "this message."
 msgstr ""
 
-#: src/List.pm:8817
+#: src/List.pm:8820
 msgid ""
 "Someone (hopefully you) asked for your e-mail address\n"
 "to be removed from list '%s'.\n"
@@ -3269,7 +3298,7 @@ msgid ""
 "this message"
 msgstr ""
 
-#: src/List.pm:8829 src/List.pm:8834
+#: src/List.pm:8832 src/List.pm:8837
 msgid ""
 "Someone (hopefully you) requested a user of list %s to be\n"
 "added or removed.\n"
@@ -3559,22 +3588,22 @@ msgid ""
 msgstr ""
 
 #. (count)
-#: web_tt2/rss.tt2:31
+#: web_tt2/rss.tt2:18
 msgid "The %1 latest created lists"
 msgstr "Posledních %1 vytvořených konferencí"
 
 #. (count)
-#: web_tt2/rss.tt2:51
+#: web_tt2/rss.tt2:38
 msgid "The %1 latest messages"
 msgstr "%1 nejnovějších zpráv"
 
 #. (count)
-#: web_tt2/rss.tt2:60
+#: web_tt2/rss.tt2:47
 msgid "The %1 latest shared documents"
 msgstr "%1 sdílených dokumentů"
 
 #. (count)
-#: web_tt2/rss.tt2:41
+#: web_tt2/rss.tt2:28
 msgid "The %1 most active lists"
 msgstr "Vytvoen konference"
 
@@ -3701,15 +3730,15 @@ msgstr ""
 msgid "The following virtual robots are running on this server :"
 msgstr "Následující virtuální domény běží na tomto serveru : "
 
-#: web_tt2/rss.tt2:33
+#: web_tt2/rss.tt2:20
 msgid "The latest created lists"
 msgstr "Vytvoření konference"
 
-#: web_tt2/rss.tt2:53
+#: web_tt2/rss.tt2:40
 msgid "The latest messages"
 msgstr "Poslední zprávy"
 
-#: web_tt2/rss.tt2:62
+#: web_tt2/rss.tt2:49
 msgid "The latest shared documents"
 msgstr "Poslední sdílené dokumenty"
 
@@ -3751,7 +3780,7 @@ msgstr ""
 msgid "The list's subject"
 msgstr "Tma konference"
 
-#: web_tt2/rss.tt2:43
+#: web_tt2/rss.tt2:30
 msgid "The most active lists"
 msgstr "Vytvoen konference"
 
@@ -4374,7 +4403,7 @@ msgstr "Unknown"
 msgid "Unsubscribe"
 msgstr "Odhlásit z konference"
 
-#: soap/sympasoap.pm:553 src/Commands.pm:946 wwsympa/wwsympa.fcgi:3529
+#: soap/sympasoap.pm:553 src/Commands.pm:946 wwsympa/wwsympa.fcgi:3531
 msgid "Unsubscribe from list %s"
 msgstr "Odhlásit z konference %1"
 
@@ -4576,8 +4605,8 @@ msgstr ""
 
 #: soap/sympasoap.pm:701 soap/sympasoap.pm:702 src/Commands.pm:1062
 #: src/Commands.pm:1063 src/Commands.pm:685 src/Commands.pm:686
-#: wwsympa/wwsympa.fcgi:3300 wwsympa/wwsympa.fcgi:3301
-#: wwsympa/wwsympa.fcgi:4243 wwsympa/wwsympa.fcgi:4244
+#: wwsympa/wwsympa.fcgi:3302 wwsympa/wwsympa.fcgi:3303
+#: wwsympa/wwsympa.fcgi:4245 wwsympa/wwsympa.fcgi:4246
 msgid "Welcome on list %s"
 msgstr "Vitejte v konferenci %1"
 
@@ -4746,7 +4775,7 @@ msgid ""
 "You did not choose a password, request a reminder of the initial password"
 msgstr ""
 
-#: wwsympa/wwsympa.fcgi:3530 wwsympa/wwsympa.fcgi:4349
+#: wwsympa/wwsympa.fcgi:3532 wwsympa/wwsympa.fcgi:4351
 msgid "You have been removed from list %s.\n"
 msgstr "Byl jste odstraněn z konference  %s.\n"
 
@@ -4818,7 +4847,7 @@ msgid ""
 "email address. Please try subscribing using your canonical address."
 msgstr ""
 
-#: src/List.pm:8839 src/List.pm:8846
+#: src/List.pm:8842 src/List.pm:8849
 msgid ""
 "You requested a subscription reminder to be sent\n"
 "to each subscriber of list %s\n"
@@ -5089,7 +5118,7 @@ msgstr ""
 msgid "Your subscription email is %1"
 msgstr "Jste přihlášen z adresy %1"
 
-#: src/Commands.pm:1484 wwsympa/wwsympa.fcgi:4348
+#: src/Commands.pm:1484 wwsympa/wwsympa.fcgi:4350
 msgid "Your subscription to list %s has been removed."
 msgstr "Vaše přihlášení do konference %1 bylo odstraněno."
 
@@ -5232,7 +5261,7 @@ msgstr "přístupová práva"
 msgid "action for this population"
 msgstr "akce při této úrovni"
 
-#: web_tt2/rss_request.tt2:46
+#: web_tt2/rss_request.tt2:48
 #, fuzzy
 msgid "active lists"
 msgstr "Neaktivní konference"
@@ -5573,6 +5602,18 @@ msgstr ""
 msgid "first-level suffix"
 msgstr ""
 
+#. (for)
+#: web_tt2/rss.tt2:23 web_tt2/rss.tt2:33
+#, fuzzy
+msgid "for %1 days"
+msgstr " po %1 dní "
+
+#. (for)
+#: web_tt2/rss.tt2:43 web_tt2/rss.tt2:52
+#, fuzzy
+msgid "for %1 days "
+msgstr " po %1 dní "
+
 #: src/etc/scenari/info.open:1
 msgid "for anyone"
 msgstr "veřejně přístupné"
@@ -5656,16 +5697,16 @@ msgstr "pouze pro správce"
 msgid "language"
 msgstr "Jazyk"
 
-#: web_tt2/rss_request.tt2:36
+#: web_tt2/rss_request.tt2:38
 msgid "latest arc"
 msgstr ""
 
-#: web_tt2/rss_request.tt2:41
+#: web_tt2/rss_request.tt2:43
 #, fuzzy
 msgid "latest document"
 msgstr "\"RSS Poslední dokumenty\""
 
-#: web_tt2/rss_request.tt2:51
+#: web_tt2/rss_request.tt2:53
 #, fuzzy
 msgid "latest lists"
 msgstr "Poslední vytvořené"
@@ -6355,6 +6396,14 @@ msgstr "Vaše adresa  : %1"
 #: mail_tt2/sendpasswd.tt2:30
 msgid "your password : %1"
 msgstr "Vaše heslo   : %1"
+
+#, fuzzy
+#~ msgid "Do you really want to remove [% file.value.listname %] ?"
+#~ msgstr "Opravdu chcete odstranit %1 ?"
+
+#, fuzzy
+#~ msgid "Do you really want to remove [% file.value.robot %] ?"
+#~ msgstr "Opravdu chcete odstranit %1 ?"
 
 #~ msgid "anyone without authentication"
 #~ msgstr "kdokoliv bez autentikace"

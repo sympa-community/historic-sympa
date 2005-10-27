@@ -64,11 +64,32 @@ msgstr " Az utolsó üzenetek "
 msgid " The latest shared documents "
 msgstr " A legutolsó megosztott dokumentumok "
 
+#: web_tt2/rss.tt2:7
+#, fuzzy
+msgid " active lists "
+msgstr "aktív listák"
+
 #. (for)
 #: web_tt2/active_lists.tt2:12 web_tt2/latest_arc.tt2:12
 #: web_tt2/latest_d_read.tt2:12 web_tt2/latest_lists.tt2:12
 msgid " for %1 days "
 msgstr " %1 napig "
+
+# nlsref 16,70
+#: web_tt2/rss.tt2:9
+#, fuzzy
+msgid " latest documents "
+msgstr "Legújabb dokumentum"
+
+#: web_tt2/rss.tt2:6
+#, fuzzy
+msgid " latest lists "
+msgstr "legújabb listák"
+
+#: web_tt2/rss.tt2:8
+#, fuzzy
+msgid " latest messages "
+msgstr " Az utolsó üzenetek "
 
 #. (list_request_date)
 #: web_tt2/set_pending_list_request.tt2:10
@@ -162,7 +183,7 @@ msgstr ""
 
 # nlsref 17,6
 #. (l.average)
-#: web_tt2/rss.tt2:98
+#: web_tt2/rss.tt2:72
 msgid "%1 by day "
 msgstr "%1 napok szerint"
 
@@ -212,7 +233,7 @@ msgid "%1: action failed"
 msgstr "%1: hiba a mûvelet végrehajtásakor"
 
 #. (l.name,l.host,l.subject,l.msg_count)
-#: web_tt2/rss.tt2:98
+#: web_tt2/rss.tt2:72
 msgid "%1@%2 - %3 : %4 messages"
 msgstr "%1@%2 - %3 : %4 üzenet"
 
@@ -722,7 +743,7 @@ msgid "Body"
 msgstr "Törzs"
 
 #. (d.anchor)
-#: web_tt2/rss.tt2:113
+#: web_tt2/rss.tt2:88
 msgid "Bookmark %1"
 msgstr "%1 felvétele a könyvjelzõk közé"
 
@@ -1234,6 +1255,15 @@ msgstr "Tényleg törölni akarja a kiválasztott archívumokat?"
 msgid "Do you really want to delete this message ?"
 msgstr "Tényleg törölni akarja ezt az üzenetet?"
 
+#. (file.value.site)
+#. (file.value.robot)
+#. (file.value.listname)
+#: web_tt2/ls_templates.tt2:109 web_tt2/ls_templates.tt2:79
+#: web_tt2/ls_templates.tt2:93
+#, fuzzy
+msgid "Do you really want to remove %1 ?"
+msgstr "Tényleg törölni akarja a(z) %1 könyvtárat?"
+
 #: web_tt2/rename_list_request.tt2:14
 msgid "Do you really want to rename this list?"
 msgstr "Tényleg át akarja nevezni a listát?"
@@ -1538,7 +1568,7 @@ msgid "Family name"
 msgstr "A család neve"
 
 # nlsref 8,7
-#: src/List.pm:6256
+#: src/List.pm:6259
 msgid "File"
 msgstr "Állomány"
 
@@ -3397,7 +3427,7 @@ msgstr "Küldés/fogadás"
 msgid "Serial number of the config"
 msgstr "A beállítás sorozatszáma"
 
-#: web_tt2/rss.tt2:28 web_tt2/rss.tt2:7
+#: web_tt2/rss.tt2:15 web_tt2/rss.tt2:5
 msgid "Server error"
 msgstr "Szerver hiba"
 
@@ -3466,7 +3496,7 @@ msgid "Skins, CSS and colors"
 msgstr "Kinézetek, CSS és színek"
 
 # nlsref 6,260
-#: src/List.pm:8824
+#: src/List.pm:8827
 msgid ""
 "Someone (hopefully you) asked for your e-mail address\n"
 "to be added to list '%s'.\n"
@@ -3496,7 +3526,7 @@ msgstr ""
 "kívül ezt a levelet."
 
 # nlsref 6,260
-#: src/List.pm:8817
+#: src/List.pm:8820
 msgid ""
 "Someone (hopefully you) asked for your e-mail address\n"
 "to be removed from list '%s'.\n"
@@ -3526,7 +3556,7 @@ msgstr ""
 "kívül ezt a levelet."
 
 # nlsref 6,39
-#: src/List.pm:8829 src/List.pm:8834
+#: src/List.pm:8832 src/List.pm:8837
 msgid ""
 "Someone (hopefully you) requested a user of list %s to be\n"
 "added or removed.\n"
@@ -3873,23 +3903,23 @@ msgstr ""
 "levelezési lista szerveren lett eltárolva."
 
 #. (count)
-#: web_tt2/rss.tt2:31
+#: web_tt2/rss.tt2:18
 msgid "The %1 latest created lists"
 msgstr "A(z) %1 legújabb lista"
 
 #. (count)
-#: web_tt2/rss.tt2:51
+#: web_tt2/rss.tt2:38
 msgid "The %1 latest messages"
 msgstr "A(z) %1 legújabb üzenet"
 
 # nlsref 16,70
 #. (count)
-#: web_tt2/rss.tt2:60
+#: web_tt2/rss.tt2:47
 msgid "The %1 latest shared documents"
 msgstr "A(z) %1 legújabb megosztott dokumentum"
 
 #. (count)
-#: web_tt2/rss.tt2:41
+#: web_tt2/rss.tt2:28
 msgid "The %1 most active lists"
 msgstr "A(z) %1 legaktívabb lista"
 
@@ -4054,16 +4084,16 @@ msgstr ""
 msgid "The following virtual robots are running on this server :"
 msgstr "A következõ virtuális robotok érhetõk el a szerveren:"
 
-#: web_tt2/rss.tt2:33
+#: web_tt2/rss.tt2:20
 msgid "The latest created lists"
 msgstr "A legutoljára létrehozott listák"
 
-#: web_tt2/rss.tt2:53
+#: web_tt2/rss.tt2:40
 msgid "The latest messages"
 msgstr "A legutolsó üzenetek"
 
 # nlsref 16,70
-#: web_tt2/rss.tt2:62
+#: web_tt2/rss.tt2:49
 msgid "The latest shared documents"
 msgstr "A legutolsó megoszott dokumentumok"
 
@@ -4108,7 +4138,7 @@ msgstr ""
 msgid "The list's subject"
 msgstr "Amirõl a lista szól"
 
-#: web_tt2/rss.tt2:43
+#: web_tt2/rss.tt2:30
 msgid "The most active lists"
 msgstr "A legaktívabb listák"
 
@@ -4872,7 +4902,7 @@ msgid "Unsubscribe"
 msgstr "Leiratkozás"
 
 # nlsref 6,71
-#: soap/sympasoap.pm:553 src/Commands.pm:946 wwsympa/wwsympa.fcgi:3529
+#: soap/sympasoap.pm:553 src/Commands.pm:946 wwsympa/wwsympa.fcgi:3531
 msgid "Unsubscribe from list %s"
 msgstr "Leiratkozás a(z) %s listáról"
 
@@ -5082,8 +5112,8 @@ msgstr ""
 # nlsref 8,6
 #: soap/sympasoap.pm:701 soap/sympasoap.pm:702 src/Commands.pm:1062
 #: src/Commands.pm:1063 src/Commands.pm:685 src/Commands.pm:686
-#: wwsympa/wwsympa.fcgi:3300 wwsympa/wwsympa.fcgi:3301
-#: wwsympa/wwsympa.fcgi:4243 wwsympa/wwsympa.fcgi:4244
+#: wwsympa/wwsympa.fcgi:3302 wwsympa/wwsympa.fcgi:3303
+#: wwsympa/wwsympa.fcgi:4245 wwsympa/wwsympa.fcgi:4246
 msgid "Welcome on list %s"
 msgstr "Üdvözöljük a(z) %s levelezési listán"
 
@@ -5281,7 +5311,7 @@ msgstr ""
 "jelszavát"
 
 # nlsref 6,38
-#: wwsympa/wwsympa.fcgi:3530 wwsympa/wwsympa.fcgi:4349
+#: wwsympa/wwsympa.fcgi:3532 wwsympa/wwsympa.fcgi:4351
 msgid "You have been removed from list %s.\n"
 msgstr "Törölve lett a(z) %s listáról.\n"
 
@@ -5362,7 +5392,7 @@ msgstr ""
 "Kérem, próbáljon meg feliratkozni az általában használt e-mailcímérõl."
 
 # nlsref 6,79
-#: src/List.pm:8839 src/List.pm:8846
+#: src/List.pm:8842 src/List.pm:8849
 msgid ""
 "You requested a subscription reminder to be sent\n"
 "to each subscriber of list %s\n"
@@ -5674,7 +5704,7 @@ msgid "Your subscription email is %1"
 msgstr "Ezzel az e-mailcímmel iratkozott fel: %1"
 
 # nlsref 6,18
-#: src/Commands.pm:1484 wwsympa/wwsympa.fcgi:4348
+#: src/Commands.pm:1484 wwsympa/wwsympa.fcgi:4350
 msgid "Your subscription to list %s has been removed."
 msgstr "A(z) %s listáról törölték."
 
@@ -5885,7 +5915,7 @@ msgstr "Hozzáférési jogosultságok"
 msgid "action for this population"
 msgstr "Ezeken a tagokon végrehajtandó mûvelet"
 
-#: web_tt2/rss_request.tt2:46
+#: web_tt2/rss_request.tt2:48
 msgid "active lists"
 msgstr "aktív listák"
 
@@ -6249,6 +6279,18 @@ msgstr "Egyes szintû kiválasztás"
 msgid "first-level suffix"
 msgstr "Egyes szintû utótag"
 
+#. (for)
+#: web_tt2/rss.tt2:23 web_tt2/rss.tt2:33
+#, fuzzy
+msgid "for %1 days"
+msgstr " %1 napig "
+
+#. (for)
+#: web_tt2/rss.tt2:43 web_tt2/rss.tt2:52
+#, fuzzy
+msgid "for %1 days "
+msgstr " %1 napig "
+
 #: src/etc/scenari/info.open:1
 msgid "for anyone"
 msgstr "bárki"
@@ -6336,16 +6378,16 @@ msgid "language"
 msgstr "nyelv"
 
 # nlsref 16,4
-#: web_tt2/rss_request.tt2:36
+#: web_tt2/rss_request.tt2:38
 msgid "latest arc"
 msgstr "legújabb archívum"
 
 # nlsref 16,70
-#: web_tt2/rss_request.tt2:41
+#: web_tt2/rss_request.tt2:43
 msgid "latest document"
 msgstr "Legújabb dokumentum"
 
-#: web_tt2/rss_request.tt2:51
+#: web_tt2/rss_request.tt2:53
 msgid "latest lists"
 msgstr "legújabb listák"
 
@@ -7077,6 +7119,14 @@ msgstr "e-mail címe           : %1"
 #: mail_tt2/sendpasswd.tt2:30
 msgid "your password : %1"
 msgstr "jelszava      : %1"
+
+#, fuzzy
+#~ msgid "Do you really want to remove [% file.value.listname %] ?"
+#~ msgstr "Tényleg törölni akarja a(z) %1 könyvtárat?"
+
+#, fuzzy
+#~ msgid "Do you really want to remove [% file.value.robot %] ?"
+#~ msgstr "Tényleg törölni akarja a(z) %1 könyvtárat?"
 
 #~ msgid "anyone without authentication"
 #~ msgstr "bárki, azonosítás nélkül"

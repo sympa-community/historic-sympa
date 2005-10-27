@@ -69,11 +69,31 @@ msgstr "Latest message"
 msgid " The latest shared documents "
 msgstr "Shared documents"
 
+#: web_tt2/rss.tt2:7
+#, fuzzy
+msgid " active lists "
+msgstr "Inactive lists"
+
 #. (for)
 #: web_tt2/active_lists.tt2:12 web_tt2/latest_arc.tt2:12
 #: web_tt2/latest_d_read.tt2:12 web_tt2/latest_lists.tt2:12
 msgid " for %1 days "
 msgstr ""
+
+#: web_tt2/rss.tt2:9
+#, fuzzy
+msgid " latest documents "
+msgstr "Shared documents"
+
+#: web_tt2/rss.tt2:6
+#, fuzzy
+msgid " latest lists "
+msgstr "Latest lists"
+
+#: web_tt2/rss.tt2:8
+#, fuzzy
+msgid " latest messages "
+msgstr "Latest message"
 
 #. (list_request_date)
 #: web_tt2/set_pending_list_request.tt2:10
@@ -168,7 +188,7 @@ msgstr ""
 "are no more web-archived. Please contact listmaster@%4. \n"
 
 #. (l.average)
-#: web_tt2/rss.tt2:98
+#: web_tt2/rss.tt2:72
 #, fuzzy
 msgid "%1 by day "
 msgstr "1 day"
@@ -219,7 +239,7 @@ msgid "%1: action failed"
 msgstr "%1: action failed"
 
 #. (l.name,l.host,l.subject,l.msg_count)
-#: web_tt2/rss.tt2:98
+#: web_tt2/rss.tt2:72
 msgid "%1@%2 - %3 : %4 messages"
 msgstr ""
 
@@ -728,7 +748,7 @@ msgid "Body"
 msgstr "Body"
 
 #. (d.anchor)
-#: web_tt2/rss.tt2:113
+#: web_tt2/rss.tt2:88
 #, fuzzy
 msgid "Bookmark %1"
 msgstr "Bookmark URL"
@@ -1245,6 +1265,15 @@ msgstr "Do you really want to delete Selected Archives?"
 msgid "Do you really want to delete this message ?"
 msgstr "Do you really want to delete this message ?"
 
+#. (file.value.site)
+#. (file.value.robot)
+#. (file.value.listname)
+#: web_tt2/ls_templates.tt2:109 web_tt2/ls_templates.tt2:79
+#: web_tt2/ls_templates.tt2:93
+#, fuzzy
+msgid "Do you really want to remove %1 ?"
+msgstr "Do you really want to delete %1 ?"
+
 #: web_tt2/rename_list_request.tt2:14
 msgid "Do you really want to rename this list?"
 msgstr "Do you really want to rename this list?"
@@ -1550,7 +1579,7 @@ msgstr "File"
 msgid "Family name"
 msgstr "list name"
 
-#: src/List.pm:6256
+#: src/List.pm:6259
 msgid "File"
 msgstr "File"
 
@@ -3392,7 +3421,7 @@ msgstr "Sending/reception setup"
 msgid "Serial number of the config"
 msgstr "Serial number of the config"
 
-#: web_tt2/rss.tt2:28 web_tt2/rss.tt2:7
+#: web_tt2/rss.tt2:15 web_tt2/rss.tt2:5
 #, fuzzy
 msgid "Server error"
 msgstr "Reset errors"
@@ -3460,7 +3489,7 @@ msgstr "List Administration Panel"
 msgid "Skins, CSS and colors"
 msgstr ""
 
-#: src/List.pm:8824
+#: src/List.pm:8827
 #, fuzzy
 msgid ""
 "Someone (hopefully you) asked for your e-mail address\n"
@@ -3491,7 +3520,7 @@ msgstr ""
 "If you do not want this action to be taken, you can safely ignore\n"
 "this message."
 
-#: src/List.pm:8817
+#: src/List.pm:8820
 #, fuzzy
 msgid ""
 "Someone (hopefully you) asked for your e-mail address\n"
@@ -3522,7 +3551,7 @@ msgstr ""
 "If you do not want this action to be taken, you can safely ignore\n"
 "this message."
 
-#: src/List.pm:8829 src/List.pm:8834
+#: src/List.pm:8832 src/List.pm:8837
 msgid ""
 "Someone (hopefully you) requested a user of list %s to be\n"
 "added or removed.\n"
@@ -3865,25 +3894,25 @@ msgstr ""
 "the mailing lists server:"
 
 #. (count)
-#: web_tt2/rss.tt2:31
+#: web_tt2/rss.tt2:18
 #, fuzzy
 msgid "The %1 latest created lists"
 msgstr "Purge selected lists"
 
 #. (count)
-#: web_tt2/rss.tt2:51
+#: web_tt2/rss.tt2:38
 #, fuzzy
 msgid "The %1 latest messages"
 msgstr "Latest message"
 
 #. (count)
-#: web_tt2/rss.tt2:60
+#: web_tt2/rss.tt2:47
 #, fuzzy
 msgid "The %1 latest shared documents"
 msgstr "Shared documents"
 
 #. (count)
-#: web_tt2/rss.tt2:41
+#: web_tt2/rss.tt2:28
 #, fuzzy
 msgid "The %1 most active lists"
 msgstr "Inactive lists"
@@ -4044,17 +4073,17 @@ msgstr ""
 msgid "The following virtual robots are running on this server :"
 msgstr "The following virtual robots are running on this server :"
 
-#: web_tt2/rss.tt2:33
+#: web_tt2/rss.tt2:20
 #, fuzzy
 msgid "The latest created lists"
 msgstr "Purge selected lists"
 
-#: web_tt2/rss.tt2:53
+#: web_tt2/rss.tt2:40
 #, fuzzy
 msgid "The latest messages"
 msgstr "Latest message"
 
-#: web_tt2/rss.tt2:62
+#: web_tt2/rss.tt2:49
 #, fuzzy
 msgid "The latest shared documents"
 msgstr "Shared documents"
@@ -4099,7 +4128,7 @@ msgstr ""
 msgid "The list's subject"
 msgstr "The list's subject"
 
-#: web_tt2/rss.tt2:43
+#: web_tt2/rss.tt2:30
 #, fuzzy
 msgid "The most active lists"
 msgstr "Inactive lists"
@@ -4866,7 +4895,7 @@ msgstr "Unknown"
 msgid "Unsubscribe"
 msgstr "Unsubscribe"
 
-#: soap/sympasoap.pm:553 src/Commands.pm:946 wwsympa/wwsympa.fcgi:3529
+#: soap/sympasoap.pm:553 src/Commands.pm:946 wwsympa/wwsympa.fcgi:3531
 msgid "Unsubscribe from list %s"
 msgstr "Unsubscribe from list %s"
 
@@ -5071,8 +5100,8 @@ msgstr ""
 
 #: soap/sympasoap.pm:701 soap/sympasoap.pm:702 src/Commands.pm:1062
 #: src/Commands.pm:1063 src/Commands.pm:685 src/Commands.pm:686
-#: wwsympa/wwsympa.fcgi:3300 wwsympa/wwsympa.fcgi:3301
-#: wwsympa/wwsympa.fcgi:4243 wwsympa/wwsympa.fcgi:4244
+#: wwsympa/wwsympa.fcgi:3302 wwsympa/wwsympa.fcgi:3303
+#: wwsympa/wwsympa.fcgi:4245 wwsympa/wwsympa.fcgi:4246
 msgid "Welcome on list %s"
 msgstr "Welcome on list %s"
 
@@ -5251,7 +5280,7 @@ msgid ""
 msgstr ""
 "You did not choose a password, request a reminder of the initial password"
 
-#: wwsympa/wwsympa.fcgi:3530 wwsympa/wwsympa.fcgi:4349
+#: wwsympa/wwsympa.fcgi:3532 wwsympa/wwsympa.fcgi:4351
 msgid "You have been removed from list %s.\n"
 msgstr "You have been removed from list %s.\n"
 
@@ -5333,7 +5362,7 @@ msgstr ""
 "You probably confirmed your subscription using a different\n"
 "email address. Please try subscribing using your canonical address.\n"
 
-#: src/List.pm:8839 src/List.pm:8846
+#: src/List.pm:8842 src/List.pm:8849
 msgid ""
 "You requested a subscription reminder to be sent\n"
 "to each subscriber of list %s\n"
@@ -5644,7 +5673,7 @@ msgstr ""
 msgid "Your subscription email is %1"
 msgstr "Your subscription email is %1"
 
-#: src/Commands.pm:1484 wwsympa/wwsympa.fcgi:4348
+#: src/Commands.pm:1484 wwsympa/wwsympa.fcgi:4350
 msgid "Your subscription to list %s has been removed."
 msgstr "Your subscription to list %s has been removed."
 
@@ -5846,7 +5875,7 @@ msgstr "access right"
 msgid "action for this population"
 msgstr "action for this population"
 
-#: web_tt2/rss_request.tt2:46
+#: web_tt2/rss_request.tt2:48
 #, fuzzy
 msgid "active lists"
 msgstr "Inactive lists"
@@ -6194,6 +6223,18 @@ msgstr "first-level selection"
 msgid "first-level suffix"
 msgstr "first-level suffix"
 
+#. (for)
+#: web_tt2/rss.tt2:23 web_tt2/rss.tt2:33
+#, fuzzy
+msgid "for %1 days"
+msgstr "1 day"
+
+#. (for)
+#: web_tt2/rss.tt2:43 web_tt2/rss.tt2:52
+#, fuzzy
+msgid "for %1 days "
+msgstr "1 day"
+
 #: src/etc/scenari/info.open:1
 msgid "for anyone"
 msgstr "for anyone"
@@ -6278,17 +6319,17 @@ msgstr "just for listmaster"
 msgid "language"
 msgstr "Language"
 
-#: web_tt2/rss_request.tt2:36
+#: web_tt2/rss_request.tt2:38
 #, fuzzy
 msgid "latest arc"
 msgstr "Text archives"
 
-#: web_tt2/rss_request.tt2:41
+#: web_tt2/rss_request.tt2:43
 #, fuzzy
 msgid "latest document"
 msgstr "Shared documents"
 
-#: web_tt2/rss_request.tt2:51
+#: web_tt2/rss_request.tt2:53
 #, fuzzy
 msgid "latest lists"
 msgstr "Latest lists"
@@ -6985,6 +7026,14 @@ msgstr "your email address    : %1"
 #: mail_tt2/sendpasswd.tt2:30
 msgid "your password : %1"
 msgstr "your password : %1"
+
+#, fuzzy
+#~ msgid "Do you really want to remove [% file.value.listname %] ?"
+#~ msgstr "Do you really want to delete %1 ?"
+
+#, fuzzy
+#~ msgid "Do you really want to remove [% file.value.robot %] ?"
+#~ msgstr "Do you really want to delete %1 ?"
 
 #~ msgid "anyone without authentication"
 #~ msgstr "anyone without authentication"

@@ -86,11 +86,32 @@ msgstr "Mensajes más nuevoe primero"
 msgid " The latest shared documents "
 msgstr "Documentos compartidos"
 
+#: web_tt2/rss.tt2:7
+#, fuzzy
+msgid " active lists "
+msgstr "Crear una lista"
+
 #. (for)
 #: web_tt2/active_lists.tt2:12 web_tt2/latest_arc.tt2:12
 #: web_tt2/latest_d_read.tt2:12 web_tt2/latest_lists.tt2:12
 msgid " for %1 days "
 msgstr ""
+
+# nlsref 16,70
+#: web_tt2/rss.tt2:9
+#, fuzzy
+msgid " latest documents "
+msgstr "Documentos compartidos"
+
+#: web_tt2/rss.tt2:6
+#, fuzzy
+msgid " latest lists "
+msgstr "Crear una lista"
+
+#: web_tt2/rss.tt2:8
+#, fuzzy
+msgid " latest messages "
+msgstr "Mensajes más nuevoe primero"
 
 #. (list_request_date)
 #: web_tt2/set_pending_list_request.tt2:10
@@ -184,7 +205,7 @@ msgstr ""
 
 # nlsref 17,6
 #. (l.average)
-#: web_tt2/rss.tt2:98
+#: web_tt2/rss.tt2:72
 #, fuzzy
 msgid "%1 by day "
 msgstr "1 día"
@@ -238,7 +259,7 @@ msgid "%1: action failed"
 msgstr "La operación ha fallado"
 
 #. (l.name,l.host,l.subject,l.msg_count)
-#: web_tt2/rss.tt2:98
+#: web_tt2/rss.tt2:72
 msgid "%1@%2 - %3 : %4 messages"
 msgstr ""
 
@@ -744,7 +765,7 @@ msgid "Body"
 msgstr "Cuerpo"
 
 #. (d.anchor)
-#: web_tt2/rss.tt2:113
+#: web_tt2/rss.tt2:88
 #, fuzzy
 msgid "Bookmark %1"
 msgstr "Sustituir el fichero [% path %] por su fichero"
@@ -1290,6 +1311,23 @@ msgstr ""
 "  // end borwsers -->\n"
 "  </SCRIPT>"
 
+#. (file.value.site)
+#. (file.value.robot)
+#. (file.value.listname)
+#: web_tt2/ls_templates.tt2:109 web_tt2/ls_templates.tt2:79
+#: web_tt2/ls_templates.tt2:93
+#, fuzzy
+msgid "Do you really want to remove %1 ?"
+msgstr ""
+"message = \"¿Confirma el borrado \"+ my_doc +\" (\"+my_size +\" Kb) ?\";\n"
+"    }\n"
+"    if (window.confirm(message)) {\n"
+"      my_form.submit();\n"
+"    }\n"
+"  }\n"
+"  // end borwsers -->\n"
+"  </SCRIPT>"
+
 #: web_tt2/rename_list_request.tt2:14
 #, fuzzy
 msgid "Do you really want to rename this list?"
@@ -1610,7 +1648,7 @@ msgid "Family name"
 msgstr "Nombre lista"
 
 # nlsref 8,7
-#: src/List.pm:6256
+#: src/List.pm:6259
 msgid "File"
 msgstr "Archivo"
 
@@ -3265,7 +3303,6 @@ msgid "Review lists from this family"
 msgstr ""
 
 #: web_tt2/list_menu.tt2:72
-#, fuzzy
 msgid "Review members"
 msgstr ""
 
@@ -3440,7 +3477,7 @@ msgstr "Configurar Envio/Recepción"
 msgid "Serial number of the config"
 msgstr "Número de serie de la configuración"
 
-#: web_tt2/rss.tt2:28 web_tt2/rss.tt2:7
+#: web_tt2/rss.tt2:15 web_tt2/rss.tt2:5
 #, fuzzy
 msgid "Server error"
 msgstr "Inicializar errores"
@@ -3503,7 +3540,7 @@ msgid "Skins, CSS and colors"
 msgstr ""
 
 # nlsref 6,260
-#: src/List.pm:8824
+#: src/List.pm:8827
 #, fuzzy
 msgid ""
 "Someone (hopefully you) asked for your e-mail address\n"
@@ -3534,7 +3571,7 @@ msgstr ""
 "Si usted no quiere confirmar este comando, ignore este mensaje."
 
 # nlsref 6,260
-#: src/List.pm:8817
+#: src/List.pm:8820
 #, fuzzy
 msgid ""
 "Someone (hopefully you) asked for your e-mail address\n"
@@ -3565,7 +3602,7 @@ msgstr ""
 "Si usted no quiere confirmar este comando, ignore este mensaje."
 
 # nlsref 6,39
-#: src/List.pm:8829 src/List.pm:8834
+#: src/List.pm:8832 src/List.pm:8837
 msgid ""
 "Someone (hopefully you) requested a user of list %s to be\n"
 "added or removed.\n"
@@ -3888,26 +3925,26 @@ msgid ""
 msgstr ""
 
 #. (count)
-#: web_tt2/rss.tt2:31
+#: web_tt2/rss.tt2:18
 #, fuzzy
 msgid "The %1 latest created lists"
 msgstr "Borrar listas seleccionadas"
 
 #. (count)
-#: web_tt2/rss.tt2:51
+#: web_tt2/rss.tt2:38
 #, fuzzy
 msgid "The %1 latest messages"
 msgstr "Mensajes más nuevoe primero"
 
 # nlsref 16,70
 #. (count)
-#: web_tt2/rss.tt2:60
+#: web_tt2/rss.tt2:47
 #, fuzzy
 msgid "The %1 latest shared documents"
 msgstr "Documentos compartidos"
 
 #. (count)
-#: web_tt2/rss.tt2:41
+#: web_tt2/rss.tt2:28
 #, fuzzy
 msgid "The %1 most active lists"
 msgstr "Crear una lista"
@@ -4063,18 +4100,18 @@ msgstr ""
 msgid "The following virtual robots are running on this server :"
 msgstr ""
 
-#: web_tt2/rss.tt2:33
+#: web_tt2/rss.tt2:20
 #, fuzzy
 msgid "The latest created lists"
 msgstr "Borrar listas seleccionadas"
 
-#: web_tt2/rss.tt2:53
+#: web_tt2/rss.tt2:40
 #, fuzzy
 msgid "The latest messages"
 msgstr "Mensajes más nuevoe primero"
 
 # nlsref 16,70
-#: web_tt2/rss.tt2:62
+#: web_tt2/rss.tt2:49
 #, fuzzy
 msgid "The latest shared documents"
 msgstr "Documentos compartidos"
@@ -4117,7 +4154,7 @@ msgstr ""
 msgid "The list's subject"
 msgstr "El tema de la lista"
 
-#: web_tt2/rss.tt2:43
+#: web_tt2/rss.tt2:30
 #, fuzzy
 msgid "The most active lists"
 msgstr "Crear una lista"
@@ -4737,7 +4774,7 @@ msgid "Unsubscribe"
 msgstr "Anula suscripción"
 
 # nlsref 6,71
-#: soap/sympasoap.pm:553 src/Commands.pm:946 wwsympa/wwsympa.fcgi:3529
+#: soap/sympasoap.pm:553 src/Commands.pm:946 wwsympa/wwsympa.fcgi:3531
 msgid "Unsubscribe from list %s"
 msgstr "Anular suscripción de la lista %s"
 
@@ -4950,8 +4987,8 @@ msgstr ""
 # nlsref 8,6
 #: soap/sympasoap.pm:701 soap/sympasoap.pm:702 src/Commands.pm:1062
 #: src/Commands.pm:1063 src/Commands.pm:685 src/Commands.pm:686
-#: wwsympa/wwsympa.fcgi:3300 wwsympa/wwsympa.fcgi:3301
-#: wwsympa/wwsympa.fcgi:4243 wwsympa/wwsympa.fcgi:4244
+#: wwsympa/wwsympa.fcgi:3302 wwsympa/wwsympa.fcgi:3303
+#: wwsympa/wwsympa.fcgi:4245 wwsympa/wwsympa.fcgi:4246
 msgid "Welcome on list %s"
 msgstr "Bienvenido a la lista %s"
 
@@ -5144,7 +5181,7 @@ msgid ""
 msgstr ""
 
 # nlsref 6,38
-#: wwsympa/wwsympa.fcgi:3530 wwsympa/wwsympa.fcgi:4349
+#: wwsympa/wwsympa.fcgi:3532 wwsympa/wwsympa.fcgi:4351
 #, fuzzy
 msgid "You have been removed from list %s.\n"
 msgstr "El usuario especificado se ha eliminado de la lista.\n"
@@ -5223,7 +5260,7 @@ msgstr ""
 "Por favor suscríbase usando su dirección oficial."
 
 # nlsref 6,79
-#: src/List.pm:8839 src/List.pm:8846
+#: src/List.pm:8842 src/List.pm:8849
 msgid ""
 "You requested a subscription reminder to be sent\n"
 "to each subscriber of list %s\n"
@@ -5541,7 +5578,7 @@ msgid "Your subscription email is %1"
 msgstr "Usted ha sido subscrito con el e-mail %1"
 
 # nlsref 6,18
-#: src/Commands.pm:1484 wwsympa/wwsympa.fcgi:4348
+#: src/Commands.pm:1484 wwsympa/wwsympa.fcgi:4350
 msgid "Your subscription to list %s has been removed."
 msgstr "Su suscripción a la lista %s ha sido suprimida."
 
@@ -5741,7 +5778,7 @@ msgstr "derechos de acceso"
 msgid "action for this population"
 msgstr ""
 
-#: web_tt2/rss_request.tt2:46
+#: web_tt2/rss_request.tt2:48
 #, fuzzy
 msgid "active lists"
 msgstr "Crear una lista"
@@ -6117,6 +6154,20 @@ msgstr "selección de primer nivel"
 msgid "first-level suffix"
 msgstr "sufijo de primer nivel"
 
+# nlsref 17,6
+#. (for)
+#: web_tt2/rss.tt2:23 web_tt2/rss.tt2:33
+#, fuzzy
+msgid "for %1 days"
+msgstr "1 día"
+
+# nlsref 17,6
+#. (for)
+#: web_tt2/rss.tt2:43 web_tt2/rss.tt2:52
+#, fuzzy
+msgid "for %1 days "
+msgstr "1 día"
+
 #: src/etc/scenari/info.open:1
 msgid "for anyone"
 msgstr "para cualquiera"
@@ -6208,18 +6259,18 @@ msgid "language"
 msgstr "Idioma"
 
 # nlsref 16,4
-#: web_tt2/rss_request.tt2:36
+#: web_tt2/rss_request.tt2:38
 #, fuzzy
 msgid "latest arc"
 msgstr "Archivos de Texto"
 
 # nlsref 16,70
-#: web_tt2/rss_request.tt2:41
+#: web_tt2/rss_request.tt2:43
 #, fuzzy
 msgid "latest document"
 msgstr "Documentos compartidos"
 
-#: web_tt2/rss_request.tt2:51
+#: web_tt2/rss_request.tt2:53
 #, fuzzy
 msgid "latest lists"
 msgstr "Crear una lista"
@@ -6972,6 +7023,30 @@ msgstr "Escoja su contraseña :"
 #: mail_tt2/sendpasswd.tt2:30
 msgid "your password : %1"
 msgstr "Escoja su contraseña :"
+
+#, fuzzy
+#~ msgid "Do you really want to remove [% file.value.listname %] ?"
+#~ msgstr ""
+#~ "message = \"¿Confirma el borrado \"+ my_doc +\" (\"+my_size +\" Kb) ?\";\n"
+#~ "    }\n"
+#~ "    if (window.confirm(message)) {\n"
+#~ "      my_form.submit();\n"
+#~ "    }\n"
+#~ "  }\n"
+#~ "  // end borwsers -->\n"
+#~ "  </SCRIPT>"
+
+#, fuzzy
+#~ msgid "Do you really want to remove [% file.value.robot %] ?"
+#~ msgstr ""
+#~ "message = \"¿Confirma el borrado \"+ my_doc +\" (\"+my_size +\" Kb) ?\";\n"
+#~ "    }\n"
+#~ "    if (window.confirm(message)) {\n"
+#~ "      my_form.submit();\n"
+#~ "    }\n"
+#~ "  }\n"
+#~ "  // end borwsers -->\n"
+#~ "  </SCRIPT>"
 
 #~ msgid "anyone without authentication"
 #~ msgstr "cualquiera sin autentificación"

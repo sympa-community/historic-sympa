@@ -80,11 +80,32 @@ msgstr "Uusi viesti ensiksi"
 msgid " The latest shared documents "
 msgstr "Jaetut dokumentit"
 
+#: web_tt2/rss.tt2:7
+#, fuzzy
+msgid " active lists "
+msgstr "Uusimmat listat"
+
 #. (for)
 #: web_tt2/active_lists.tt2:12 web_tt2/latest_arc.tt2:12
 #: web_tt2/latest_d_read.tt2:12 web_tt2/latest_lists.tt2:12
 msgid " for %1 days "
 msgstr ""
+
+# nlsref 16,70
+#: web_tt2/rss.tt2:9
+#, fuzzy
+msgid " latest documents "
+msgstr "Jaetut dokumentit"
+
+#: web_tt2/rss.tt2:6
+#, fuzzy
+msgid " latest lists "
+msgstr "Uusimmat listat"
+
+#: web_tt2/rss.tt2:8
+#, fuzzy
+msgid " latest messages "
+msgstr "Uusi viesti ensiksi"
 
 #. (list_request_date)
 #: web_tt2/set_pending_list_request.tt2:10
@@ -178,7 +199,7 @@ msgstr ""
 
 # nlsref 17,6
 #. (l.average)
-#: web_tt2/rss.tt2:98
+#: web_tt2/rss.tt2:72
 #, fuzzy
 msgid "%1 by day "
 msgstr "1 päivä"
@@ -232,7 +253,7 @@ msgid "%1: action failed"
 msgstr "%1: toimepide epäonnistui"
 
 #. (l.name,l.host,l.subject,l.msg_count)
-#: web_tt2/rss.tt2:98
+#: web_tt2/rss.tt2:72
 msgid "%1@%2 - %3 : %4 messages"
 msgstr ""
 
@@ -726,7 +747,7 @@ msgid "Body"
 msgstr "Sisältö"
 
 #. (d.anchor)
-#: web_tt2/rss.tt2:113
+#: web_tt2/rss.tt2:88
 #, fuzzy
 msgid "Bookmark %1"
 msgstr "Kirjanmerkin URL"
@@ -1243,6 +1264,15 @@ msgstr "Do you really want to delete %1 ?"
 msgid "Do you really want to delete this message ?"
 msgstr "Do you really want to delete %1 ?"
 
+#. (file.value.site)
+#. (file.value.robot)
+#. (file.value.listname)
+#: web_tt2/ls_templates.tt2:109 web_tt2/ls_templates.tt2:79
+#: web_tt2/ls_templates.tt2:93
+#, fuzzy
+msgid "Do you really want to remove %1 ?"
+msgstr "Do you really want to delete %1 ?"
+
 #: web_tt2/rename_list_request.tt2:14
 #, fuzzy
 msgid "Do you really want to rename this list?"
@@ -1538,7 +1568,7 @@ msgid "Family name"
 msgstr "listan nimi"
 
 # nlsref 8,7
-#: src/List.pm:6256
+#: src/List.pm:6259
 msgid "File"
 msgstr "Tiedosto"
 
@@ -3366,7 +3396,7 @@ msgstr "Lähetys/vastaanotto asetukset"
 msgid "Serial number of the config"
 msgstr "Asetusten sarjanumero"
 
-#: web_tt2/rss.tt2:28 web_tt2/rss.tt2:7
+#: web_tt2/rss.tt2:15 web_tt2/rss.tt2:5
 #, fuzzy
 msgid "Server error"
 msgstr "Tyhjää virheet"
@@ -3429,7 +3459,7 @@ msgid "Skins, CSS and colors"
 msgstr ""
 
 # nlsref 6,260
-#: src/List.pm:8824
+#: src/List.pm:8827
 #, fuzzy
 msgid ""
 "Someone (hopefully you) asked for your e-mail address\n"
@@ -3461,7 +3491,7 @@ msgstr ""
 "tarvitse reagoida mitenkään."
 
 # nlsref 6,260
-#: src/List.pm:8817
+#: src/List.pm:8820
 #, fuzzy
 msgid ""
 "Someone (hopefully you) asked for your e-mail address\n"
@@ -3493,7 +3523,7 @@ msgstr ""
 "tarvitse reagoida mitenkään."
 
 # nlsref 6,39
-#: src/List.pm:8829 src/List.pm:8834
+#: src/List.pm:8832 src/List.pm:8837
 msgid ""
 "Someone (hopefully you) requested a user of list %s to be\n"
 "added or removed.\n"
@@ -3820,26 +3850,26 @@ msgid ""
 msgstr ""
 
 #. (count)
-#: web_tt2/rss.tt2:31
+#: web_tt2/rss.tt2:18
 #, fuzzy
 msgid "The %1 latest created lists"
 msgstr "Poista valitut listat"
 
 #. (count)
-#: web_tt2/rss.tt2:51
+#: web_tt2/rss.tt2:38
 #, fuzzy
 msgid "The %1 latest messages"
 msgstr "Uusi viesti ensiksi"
 
 # nlsref 16,70
 #. (count)
-#: web_tt2/rss.tt2:60
+#: web_tt2/rss.tt2:47
 #, fuzzy
 msgid "The %1 latest shared documents"
 msgstr "Jaetut dokumentit"
 
 #. (count)
-#: web_tt2/rss.tt2:41
+#: web_tt2/rss.tt2:28
 #, fuzzy
 msgid "The %1 most active lists"
 msgstr "Uusimmat listat"
@@ -3995,18 +4025,18 @@ msgstr ""
 msgid "The following virtual robots are running on this server :"
 msgstr "Seuraavat Virtuaali robotit pyörivät tällä palvelimella :"
 
-#: web_tt2/rss.tt2:33
+#: web_tt2/rss.tt2:20
 #, fuzzy
 msgid "The latest created lists"
 msgstr "Poista valitut listat"
 
-#: web_tt2/rss.tt2:53
+#: web_tt2/rss.tt2:40
 #, fuzzy
 msgid "The latest messages"
 msgstr "Uusi viesti ensiksi"
 
 # nlsref 16,70
-#: web_tt2/rss.tt2:62
+#: web_tt2/rss.tt2:49
 #, fuzzy
 msgid "The latest shared documents"
 msgstr "Jaetut dokumentit"
@@ -4048,7 +4078,7 @@ msgstr ""
 msgid "The list's subject"
 msgstr "Listan otsikko"
 
-#: web_tt2/rss.tt2:43
+#: web_tt2/rss.tt2:30
 #, fuzzy
 msgid "The most active lists"
 msgstr "Uusimmat listat"
@@ -4664,7 +4694,7 @@ msgid "Unsubscribe"
 msgstr "Poistu listalta"
 
 # nlsref 6,71
-#: soap/sympasoap.pm:553 src/Commands.pm:946 wwsympa/wwsympa.fcgi:3529
+#: soap/sympasoap.pm:553 src/Commands.pm:946 wwsympa/wwsympa.fcgi:3531
 msgid "Unsubscribe from list %s"
 msgstr "Lopeta tilauksesi listalle %s"
 
@@ -4875,8 +4905,8 @@ msgstr ""
 # nlsref 8,6
 #: soap/sympasoap.pm:701 soap/sympasoap.pm:702 src/Commands.pm:1062
 #: src/Commands.pm:1063 src/Commands.pm:685 src/Commands.pm:686
-#: wwsympa/wwsympa.fcgi:3300 wwsympa/wwsympa.fcgi:3301
-#: wwsympa/wwsympa.fcgi:4243 wwsympa/wwsympa.fcgi:4244
+#: wwsympa/wwsympa.fcgi:3302 wwsympa/wwsympa.fcgi:3303
+#: wwsympa/wwsympa.fcgi:4245 wwsympa/wwsympa.fcgi:4246
 msgid "Welcome on list %s"
 msgstr "Tervetuloa listalle %s"
 
@@ -5064,7 +5094,7 @@ msgid ""
 msgstr "Et valinnut salasanaa, pyydä muistutus alkuperäisestä salasanasta"
 
 # nlsref 6,38
-#: wwsympa/wwsympa.fcgi:3530 wwsympa/wwsympa.fcgi:4349
+#: wwsympa/wwsympa.fcgi:3532 wwsympa/wwsympa.fcgi:4351
 #, fuzzy
 msgid "You have been removed from list %s.\n"
 msgstr "Käyttäjä %s on poistettu listalta %s/\n"
@@ -5140,7 +5170,7 @@ msgstr ""
 "Yritä listan tilaamista alkuperäisestä osoitteesta."
 
 # nlsref 6,79
-#: src/List.pm:8839 src/List.pm:8846
+#: src/List.pm:8842 src/List.pm:8849
 msgid ""
 "You requested a subscription reminder to be sent\n"
 "to each subscriber of list %s\n"
@@ -5447,7 +5477,7 @@ msgid "Your subscription email is %1"
 msgstr "Tilauksesi osoite on %1"
 
 # nlsref 6,18
-#: src/Commands.pm:1484 wwsympa/wwsympa.fcgi:4348
+#: src/Commands.pm:1484 wwsympa/wwsympa.fcgi:4350
 msgid "Your subscription to list %s has been removed."
 msgstr "Tilauksesi listalle %s on poistettu."
 
@@ -5639,7 +5669,7 @@ msgstr "sisäänpääsy oikeus"
 msgid "action for this population"
 msgstr ""
 
-#: web_tt2/rss_request.tt2:46
+#: web_tt2/rss_request.tt2:48
 #, fuzzy
 msgid "active lists"
 msgstr "Uusimmat listat"
@@ -6019,6 +6049,20 @@ msgstr "ykköstason valinta"
 msgid "first-level suffix"
 msgstr "ykköstason jälkiliite"
 
+# nlsref 17,6
+#. (for)
+#: web_tt2/rss.tt2:23 web_tt2/rss.tt2:33
+#, fuzzy
+msgid "for %1 days"
+msgstr "1 päivä"
+
+# nlsref 17,6
+#. (for)
+#: web_tt2/rss.tt2:43 web_tt2/rss.tt2:52
+#, fuzzy
+msgid "for %1 days "
+msgstr "1 päivä"
+
 #: src/etc/scenari/info.open:1
 msgid "for anyone"
 msgstr ""
@@ -6111,18 +6155,18 @@ msgid "language"
 msgstr "Kieli"
 
 # nlsref 16,4
-#: web_tt2/rss_request.tt2:36
+#: web_tt2/rss_request.tt2:38
 #, fuzzy
 msgid "latest arc"
 msgstr "Teksti arkistot"
 
 # nlsref 16,70
-#: web_tt2/rss_request.tt2:41
+#: web_tt2/rss_request.tt2:43
 #, fuzzy
 msgid "latest document"
 msgstr "Jaetut dokumentit"
 
-#: web_tt2/rss_request.tt2:51
+#: web_tt2/rss_request.tt2:53
 #, fuzzy
 msgid "latest lists"
 msgstr "Uusimmat listat"
@@ -6893,6 +6937,14 @@ msgstr ""
 #: mail_tt2/sendpasswd.tt2:30
 msgid "your password : %1"
 msgstr "Muuten sinut poistetaan listalta viikon kuluttua."
+
+#, fuzzy
+#~ msgid "Do you really want to remove [% file.value.listname %] ?"
+#~ msgstr "Do you really want to delete %1 ?"
+
+#, fuzzy
+#~ msgid "Do you really want to remove [% file.value.robot %] ?"
+#~ msgstr "Do you really want to delete %1 ?"
 
 #, fuzzy
 #~ msgid "anyone without authentication"

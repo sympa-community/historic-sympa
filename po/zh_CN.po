@@ -99,11 +99,42 @@ msgstr "最新邮件优先"
 msgid " The latest shared documents "
 msgstr "¹²ÏíÎÄµµ"
 
+#: web_tt2/rss.tt2:7
+#, fuzzy
+msgid " active lists "
+msgstr ""
+"/FORM>\n"
+"\t</TD>\n"
+"      </TR>\n"
+"\n"
+"      <TR><"
+
 #. (for)
 #: web_tt2/active_lists.tt2:12 web_tt2/latest_arc.tt2:12
 #: web_tt2/latest_d_read.tt2:12 web_tt2/latest_lists.tt2:12
 msgid " for %1 days "
 msgstr ""
+
+# nlsref 16,70
+#: web_tt2/rss.tt2:9
+#, fuzzy
+msgid " latest documents "
+msgstr "¹²ÏíÎÄµµ"
+
+#: web_tt2/rss.tt2:6
+#, fuzzy
+msgid " latest lists "
+msgstr ""
+"/FORM>\n"
+"\t</TD>\n"
+"      </TR>\n"
+"\n"
+"      <TR><"
+
+#: web_tt2/rss.tt2:8
+#, fuzzy
+msgid " latest messages "
+msgstr "最新邮件优先"
 
 #. (list_request_date)
 #: web_tt2/set_pending_list_request.tt2:10
@@ -195,7 +226,7 @@ msgid ""
 msgstr ""
 
 #. (l.average)
-#: web_tt2/rss.tt2:98
+#: web_tt2/rss.tt2:72
 msgid "%1 by day "
 msgstr ""
 
@@ -245,7 +276,7 @@ msgid "%1: action failed"
 msgstr "%1: 操作失败"
 
 #. (l.name,l.host,l.subject,l.msg_count)
-#: web_tt2/rss.tt2:98
+#: web_tt2/rss.tt2:72
 msgid "%1@%2 - %3 : %4 messages"
 msgstr ""
 
@@ -734,7 +765,7 @@ msgid "Body"
 msgstr "Body"
 
 #. (d.anchor)
-#: web_tt2/rss.tt2:113
+#: web_tt2/rss.tt2:88
 #, fuzzy
 msgid "Bookmark %1"
 msgstr "设定书签网址"
@@ -1249,6 +1280,15 @@ msgstr "确定要删除 %1 ?"
 msgid "Do you really want to delete this message ?"
 msgstr "确定要删除 %1 ?"
 
+#. (file.value.site)
+#. (file.value.robot)
+#. (file.value.listname)
+#: web_tt2/ls_templates.tt2:109 web_tt2/ls_templates.tt2:79
+#: web_tt2/ls_templates.tt2:93
+#, fuzzy
+msgid "Do you really want to remove %1 ?"
+msgstr "确定要删除 %1 ?"
+
 #: web_tt2/rename_list_request.tt2:14
 #, fuzzy
 msgid "Do you really want to rename this list?"
@@ -1541,7 +1581,7 @@ msgid "Family name"
 msgstr "邮递表名"
 
 # nlsref 8,7
-#: src/List.pm:6256
+#: src/List.pm:6259
 msgid "File"
 msgstr "ÎÄ¼þ"
 
@@ -3373,7 +3413,7 @@ msgstr "Sending/reception setup"
 msgid "Serial number of the config"
 msgstr "ÅäÖÃµÄÐòÁÐºÅ"
 
-#: web_tt2/rss.tt2:28 web_tt2/rss.tt2:7
+#: web_tt2/rss.tt2:15 web_tt2/rss.tt2:5
 #, fuzzy
 msgid "Server error"
 msgstr "重置错误计数"
@@ -3436,7 +3476,7 @@ msgid "Skins, CSS and colors"
 msgstr ""
 
 # nlsref 6,260
-#: src/List.pm:8824
+#: src/List.pm:8827
 #, fuzzy
 msgid ""
 "Someone (hopefully you) asked for your e-mail address\n"
@@ -3467,7 +3507,7 @@ msgstr ""
 "Èç¹ûÄú²»ÏëÖ´ÐÐÕâ¸ö²Ù×÷£¬ÇëºöÂÔ±¾ÓÊ¼þ¡£"
 
 # nlsref 6,260
-#: src/List.pm:8817
+#: src/List.pm:8820
 #, fuzzy
 msgid ""
 "Someone (hopefully you) asked for your e-mail address\n"
@@ -3498,7 +3538,7 @@ msgstr ""
 "Èç¹ûÄú²»ÏëÖ´ÐÐÕâ¸ö²Ù×÷£¬ÇëºöÂÔ±¾ÓÊ¼þ¡£"
 
 # nlsref 6,39
-#: src/List.pm:8829 src/List.pm:8834
+#: src/List.pm:8832 src/List.pm:8837
 msgid ""
 "Someone (hopefully you) requested a user of list %s to be\n"
 "added or removed.\n"
@@ -3821,7 +3861,7 @@ msgid ""
 msgstr ""
 
 #. (count)
-#: web_tt2/rss.tt2:31
+#: web_tt2/rss.tt2:18
 #, fuzzy
 msgid "The %1 latest created lists"
 msgstr ""
@@ -3832,20 +3872,20 @@ msgstr ""
 "      <TR><"
 
 #. (count)
-#: web_tt2/rss.tt2:51
+#: web_tt2/rss.tt2:38
 #, fuzzy
 msgid "The %1 latest messages"
 msgstr "最新邮件优先"
 
 # nlsref 16,70
 #. (count)
-#: web_tt2/rss.tt2:60
+#: web_tt2/rss.tt2:47
 #, fuzzy
 msgid "The %1 latest shared documents"
 msgstr "¹²ÏíÎÄµµ"
 
 #. (count)
-#: web_tt2/rss.tt2:41
+#: web_tt2/rss.tt2:28
 #, fuzzy
 msgid "The %1 most active lists"
 msgstr ""
@@ -4007,7 +4047,7 @@ msgstr ""
 msgid "The following virtual robots are running on this server :"
 msgstr ""
 
-#: web_tt2/rss.tt2:33
+#: web_tt2/rss.tt2:20
 #, fuzzy
 msgid "The latest created lists"
 msgstr ""
@@ -4017,13 +4057,13 @@ msgstr ""
 "\n"
 "      <TR><"
 
-#: web_tt2/rss.tt2:53
+#: web_tt2/rss.tt2:40
 #, fuzzy
 msgid "The latest messages"
 msgstr "最新邮件优先"
 
 # nlsref 16,70
-#: web_tt2/rss.tt2:62
+#: web_tt2/rss.tt2:49
 #, fuzzy
 msgid "The latest shared documents"
 msgstr "¹²ÏíÎÄµµ"
@@ -4064,7 +4104,7 @@ msgstr "邮递表类型是参数集配置。可以在邮递表创建后编辑参
 msgid "The list's subject"
 msgstr "这是邮递表的主题"
 
-#: web_tt2/rss.tt2:43
+#: web_tt2/rss.tt2:30
 #, fuzzy
 msgid "The most active lists"
 msgstr ""
@@ -4678,7 +4718,7 @@ msgid "Unsubscribe"
 msgstr "退订"
 
 # nlsref 6,71
-#: soap/sympasoap.pm:553 src/Commands.pm:946 wwsympa/wwsympa.fcgi:3529
+#: soap/sympasoap.pm:553 src/Commands.pm:946 wwsympa/wwsympa.fcgi:3531
 msgid "Unsubscribe from list %s"
 msgstr "ÍË¶©ÓÊµÝ±í %s"
 
@@ -4887,8 +4927,8 @@ msgstr ""
 # nlsref 8,6
 #: soap/sympasoap.pm:701 soap/sympasoap.pm:702 src/Commands.pm:1062
 #: src/Commands.pm:1063 src/Commands.pm:685 src/Commands.pm:686
-#: wwsympa/wwsympa.fcgi:3300 wwsympa/wwsympa.fcgi:3301
-#: wwsympa/wwsympa.fcgi:4243 wwsympa/wwsympa.fcgi:4244
+#: wwsympa/wwsympa.fcgi:3302 wwsympa/wwsympa.fcgi:3303
+#: wwsympa/wwsympa.fcgi:4245 wwsympa/wwsympa.fcgi:4246
 msgid "Welcome on list %s"
 msgstr "»¶Ó­¼ÓÈëÓÊµÝ±í %s"
 
@@ -5073,7 +5113,7 @@ msgid ""
 msgstr "您并未选取口令, 请要求一份原先口令的提醒"
 
 # nlsref 6,38
-#: wwsympa/wwsympa.fcgi:3530 wwsympa/wwsympa.fcgi:4349
+#: wwsympa/wwsympa.fcgi:3532 wwsympa/wwsympa.fcgi:4351
 #, fuzzy
 msgid "You have been removed from list %s.\n"
 msgstr "ÓÃ»§ %s ÒÑ¾­´ÓÓÊµÝ±í %s ÖÐÉ¾³ý¡£\n"
@@ -5149,7 +5189,7 @@ msgstr ""
 "Çë³¢ÊÔÊ¹ÓÃÖ÷ÒªµÄÓÊ¼þµØÖ·À´¶©ÔÄ¡£"
 
 # nlsref 6,79
-#: src/List.pm:8839 src/List.pm:8846
+#: src/List.pm:8842 src/List.pm:8849
 msgid ""
 "You requested a subscription reminder to be sent\n"
 "to each subscriber of list %s\n"
@@ -5438,7 +5478,7 @@ msgid "Your subscription email is %1"
 msgstr ""
 
 # nlsref 6,18
-#: src/Commands.pm:1484 wwsympa/wwsympa.fcgi:4348
+#: src/Commands.pm:1484 wwsympa/wwsympa.fcgi:4350
 msgid "Your subscription to list %s has been removed."
 msgstr "ÄúÒÑ¾­ÍË¶©ÓÊµÝ±í %s¡£"
 
@@ -5630,7 +5670,7 @@ msgstr "·ÃÎÊÈ¨ÏÞ"
 msgid "action for this population"
 msgstr ""
 
-#: web_tt2/rss_request.tt2:46
+#: web_tt2/rss_request.tt2:48
 #, fuzzy
 msgid "active lists"
 msgstr ""
@@ -6014,6 +6054,16 @@ msgstr ""
 msgid "first-level suffix"
 msgstr ""
 
+#. (for)
+#: web_tt2/rss.tt2:23 web_tt2/rss.tt2:33
+msgid "for %1 days"
+msgstr ""
+
+#. (for)
+#: web_tt2/rss.tt2:43 web_tt2/rss.tt2:52
+msgid "for %1 days "
+msgstr ""
+
 #: src/etc/scenari/info.open:1
 msgid "for anyone"
 msgstr ""
@@ -6106,18 +6156,18 @@ msgid "language"
 msgstr "语言"
 
 # nlsref 16,4
-#: web_tt2/rss_request.tt2:36
+#: web_tt2/rss_request.tt2:38
 #, fuzzy
 msgid "latest arc"
 msgstr "ÎÄ±¾´æµµ"
 
 # nlsref 16,70
-#: web_tt2/rss_request.tt2:41
+#: web_tt2/rss_request.tt2:43
 #, fuzzy
 msgid "latest document"
 msgstr "¹²ÏíÎÄµµ"
 
-#: web_tt2/rss_request.tt2:51
+#: web_tt2/rss_request.tt2:53
 #, fuzzy
 msgid "latest lists"
 msgstr ""
@@ -6902,6 +6952,14 @@ msgstr ""
 #: mail_tt2/sendpasswd.tt2:30
 msgid "your password : %1"
 msgstr "口令: %1"
+
+#, fuzzy
+#~ msgid "Do you really want to remove [% file.value.listname %] ?"
+#~ msgstr "确定要删除 %1 ?"
+
+#, fuzzy
+#~ msgid "Do you really want to remove [% file.value.robot %] ?"
+#~ msgstr "确定要删除 %1 ?"
 
 #, fuzzy
 #~ msgid "anyone without authentication"

@@ -63,11 +63,31 @@ msgstr " Τα πρόσφατα μηνύματα "
 msgid " The latest shared documents "
 msgstr " Τα πρόσφατα διαμοιραζόμενα έγγραφα "
 
+#: web_tt2/rss.tt2:7
+#, fuzzy
+msgid " active lists "
+msgstr "Μη-ενεργές λίστες"
+
 #. (for)
 #: web_tt2/active_lists.tt2:12 web_tt2/latest_arc.tt2:12
 #: web_tt2/latest_d_read.tt2:12 web_tt2/latest_lists.tt2:12
 msgid " for %1 days "
 msgstr " για %1 ημέρες "
+
+#: web_tt2/rss.tt2:9
+#, fuzzy
+msgid " latest documents "
+msgstr "Διαμοιραζόμενα έγγραφα"
+
+#: web_tt2/rss.tt2:6
+#, fuzzy
+msgid " latest lists "
+msgstr "Τελευταίες λίστες"
+
+#: web_tt2/rss.tt2:8
+#, fuzzy
+msgid " latest messages "
+msgstr " Τα πρόσφατα μηνύματα "
 
 #. (list_request_date)
 #: web_tt2/set_pending_list_request.tt2:10
@@ -163,7 +183,7 @@ msgstr ""
 "τη διεύθυνση %5@%4."
 
 #. (l.average)
-#: web_tt2/rss.tt2:98
+#: web_tt2/rss.tt2:72
 msgid "%1 by day "
 msgstr "% ανά ημέρα"
 
@@ -213,7 +233,7 @@ msgid "%1: action failed"
 msgstr "1%: αποτυχημένη ενέργεια"
 
 #. (l.name,l.host,l.subject,l.msg_count)
-#: web_tt2/rss.tt2:98
+#: web_tt2/rss.tt2:72
 msgid "%1@%2 - %3 : %4 messages"
 msgstr "%1@%2 - %3 : %4 μηνύματα"
 
@@ -730,7 +750,7 @@ msgid "Body"
 msgstr "Σώμα"
 
 #. (d.anchor)
-#: web_tt2/rss.tt2:113
+#: web_tt2/rss.tt2:88
 msgid "Bookmark %1"
 msgstr "Σελιδοδείκτης %1"
 
@@ -1239,6 +1259,15 @@ msgstr "Επιθυμείτε τη διαγραφή των επιλεγμένων
 msgid "Do you really want to delete this message ?"
 msgstr "Επιθυμείτε τη διαγραφή του μηνύματος;"
 
+#. (file.value.site)
+#. (file.value.robot)
+#. (file.value.listname)
+#: web_tt2/ls_templates.tt2:109 web_tt2/ls_templates.tt2:79
+#: web_tt2/ls_templates.tt2:93
+#, fuzzy
+msgid "Do you really want to remove %1 ?"
+msgstr "Επιθυμείτε τη διαγραφή του(της) %1;"
+
 #: web_tt2/rename_list_request.tt2:14
 msgid "Do you really want to rename this list?"
 msgstr "Επιθυμείτε τη μετονομασία της λίστας;"
@@ -1539,7 +1568,7 @@ msgstr "Οικογένειες"
 msgid "Family name"
 msgstr "Οικογένειες"
 
-#: src/List.pm:6256
+#: src/List.pm:6259
 msgid "File"
 msgstr "Αρχείο"
 
@@ -3389,7 +3418,7 @@ msgstr "Ρύθμιση αποστολής/λήψης"
 msgid "Serial number of the config"
 msgstr "Σειριακός αριθμός της διαμόρφωσης"
 
-#: web_tt2/rss.tt2:28 web_tt2/rss.tt2:7
+#: web_tt2/rss.tt2:15 web_tt2/rss.tt2:5
 msgid "Server error"
 msgstr "Σφάλμα εξυπηρετητή"
 
@@ -3455,7 +3484,7 @@ msgstr "Απογύμνωση σελίδας διαχείρισης"
 msgid "Skins, CSS and colors"
 msgstr "Αφαίρεση CCS και χρωμάτων"
 
-#: src/List.pm:8824
+#: src/List.pm:8827
 msgid ""
 "Someone (hopefully you) asked for your e-mail address\n"
 "to be added to list '%s'.\n"
@@ -3484,7 +3513,7 @@ msgstr ""
 "παρακαλούμε αγνοείστε\n"
 "το παρόν μήνυμα."
 
-#: src/List.pm:8817
+#: src/List.pm:8820
 msgid ""
 "Someone (hopefully you) asked for your e-mail address\n"
 "to be removed from list '%s'.\n"
@@ -3513,7 +3542,7 @@ msgstr ""
 "παρακαλούμε αγνοείστε\n"
 "το παρόν μήνυμα."
 
-#: src/List.pm:8829 src/List.pm:8834
+#: src/List.pm:8832 src/List.pm:8837
 msgid ""
 "Someone (hopefully you) requested a user of list %s to be\n"
 "added or removed.\n"
@@ -3843,22 +3872,22 @@ msgid ""
 msgstr ""
 
 #. (count)
-#: web_tt2/rss.tt2:31
+#: web_tt2/rss.tt2:18
 msgid "The %1 latest created lists"
 msgstr ""
 
 #. (count)
-#: web_tt2/rss.tt2:51
+#: web_tt2/rss.tt2:38
 msgid "The %1 latest messages"
 msgstr ""
 
 #. (count)
-#: web_tt2/rss.tt2:60
+#: web_tt2/rss.tt2:47
 msgid "The %1 latest shared documents"
 msgstr ""
 
 #. (count)
-#: web_tt2/rss.tt2:41
+#: web_tt2/rss.tt2:28
 msgid "The %1 most active lists"
 msgstr ""
 
@@ -3981,15 +4010,15 @@ msgstr ""
 msgid "The following virtual robots are running on this server :"
 msgstr ""
 
-#: web_tt2/rss.tt2:33
+#: web_tt2/rss.tt2:20
 msgid "The latest created lists"
 msgstr ""
 
-#: web_tt2/rss.tt2:53
+#: web_tt2/rss.tt2:40
 msgid "The latest messages"
 msgstr ""
 
-#: web_tt2/rss.tt2:62
+#: web_tt2/rss.tt2:49
 msgid "The latest shared documents"
 msgstr ""
 
@@ -4029,7 +4058,7 @@ msgstr ""
 msgid "The list's subject"
 msgstr ""
 
-#: web_tt2/rss.tt2:43
+#: web_tt2/rss.tt2:30
 msgid "The most active lists"
 msgstr ""
 
@@ -4606,7 +4635,7 @@ msgstr ""
 msgid "Unsubscribe"
 msgstr ""
 
-#: soap/sympasoap.pm:553 src/Commands.pm:946 wwsympa/wwsympa.fcgi:3529
+#: soap/sympasoap.pm:553 src/Commands.pm:946 wwsympa/wwsympa.fcgi:3531
 msgid "Unsubscribe from list %s"
 msgstr ""
 
@@ -4794,8 +4823,8 @@ msgstr ""
 
 #: soap/sympasoap.pm:701 soap/sympasoap.pm:702 src/Commands.pm:1062
 #: src/Commands.pm:1063 src/Commands.pm:685 src/Commands.pm:686
-#: wwsympa/wwsympa.fcgi:3300 wwsympa/wwsympa.fcgi:3301
-#: wwsympa/wwsympa.fcgi:4243 wwsympa/wwsympa.fcgi:4244
+#: wwsympa/wwsympa.fcgi:3302 wwsympa/wwsympa.fcgi:3303
+#: wwsympa/wwsympa.fcgi:4245 wwsympa/wwsympa.fcgi:4246
 msgid "Welcome on list %s"
 msgstr ""
 
@@ -4961,7 +4990,7 @@ msgid ""
 "You did not choose a password, request a reminder of the initial password"
 msgstr ""
 
-#: wwsympa/wwsympa.fcgi:3530 wwsympa/wwsympa.fcgi:4349
+#: wwsympa/wwsympa.fcgi:3532 wwsympa/wwsympa.fcgi:4351
 msgid "You have been removed from list %s.\n"
 msgstr ""
 
@@ -5026,7 +5055,7 @@ msgid ""
 "email address. Please try subscribing using your canonical address."
 msgstr ""
 
-#: src/List.pm:8839 src/List.pm:8846
+#: src/List.pm:8842 src/List.pm:8849
 msgid ""
 "You requested a subscription reminder to be sent\n"
 "to each subscriber of list %s\n"
@@ -5274,7 +5303,7 @@ msgstr ""
 msgid "Your subscription email is %1"
 msgstr ""
 
-#: src/Commands.pm:1484 wwsympa/wwsympa.fcgi:4348
+#: src/Commands.pm:1484 wwsympa/wwsympa.fcgi:4350
 msgid "Your subscription to list %s has been removed."
 msgstr ""
 
@@ -5417,7 +5446,7 @@ msgstr ""
 msgid "action for this population"
 msgstr ""
 
-#: web_tt2/rss_request.tt2:46
+#: web_tt2/rss_request.tt2:48
 #, fuzzy
 msgid "active lists"
 msgstr "Μη-ενεργές λίστες"
@@ -5755,6 +5784,18 @@ msgstr ""
 msgid "first-level suffix"
 msgstr ""
 
+#. (for)
+#: web_tt2/rss.tt2:23 web_tt2/rss.tt2:33
+#, fuzzy
+msgid "for %1 days"
+msgstr " για %1 ημέρες "
+
+#. (for)
+#: web_tt2/rss.tt2:43 web_tt2/rss.tt2:52
+#, fuzzy
+msgid "for %1 days "
+msgstr " για %1 ημέρες "
+
 #: src/etc/scenari/info.open:1
 msgid "for anyone"
 msgstr ""
@@ -5837,17 +5878,17 @@ msgstr ""
 msgid "language"
 msgstr "Γλώσσα"
 
-#: web_tt2/rss_request.tt2:36
+#: web_tt2/rss_request.tt2:38
 #, fuzzy
 msgid "latest arc"
 msgstr "Διαχείριση Αρχείων"
 
-#: web_tt2/rss_request.tt2:41
+#: web_tt2/rss_request.tt2:43
 #, fuzzy
 msgid "latest document"
 msgstr "Διαμοιραζόμενα έγγραφα"
 
-#: web_tt2/rss_request.tt2:51
+#: web_tt2/rss_request.tt2:53
 #, fuzzy
 msgid "latest lists"
 msgstr "Τελευταίες λίστες"
@@ -6523,6 +6564,14 @@ msgstr ""
 #: mail_tt2/sendpasswd.tt2:30
 msgid "your password : %1"
 msgstr ""
+
+#, fuzzy
+#~ msgid "Do you really want to remove [% file.value.listname %] ?"
+#~ msgstr "Επιθυμείτε τη διαγραφή του(της) %1;"
+
+#, fuzzy
+#~ msgid "Do you really want to remove [% file.value.robot %] ?"
+#~ msgstr "Επιθυμείτε τη διαγραφή του(της) %1;"
 
 #, fuzzy
 #~ msgid "-Rename list"
