@@ -5325,7 +5325,7 @@ sub do_skinsedit {
 		     ## Hide full email address
 		     if ($field eq 'from') {
 			 if ($msg_info{$var} =~ /(.+)\<.+\>/) {
-			     $msg_info{$var} = $1
+			     $msg_info{$var} = $1;
 			 }else {
 			     my @email = split /\@/, $msg_info{$var};
 			     $msg_info{$var} = $email[0];
