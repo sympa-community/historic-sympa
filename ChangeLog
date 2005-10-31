@@ -1,3 +1,78 @@
+2005-10-28 16:39  sympa-authors
+
+	* src/task_manager.pl: [BugID 498] Change: 'process_bouncers' task
+	  failed if no owner could be contacted ; no more return undef
+
+2005-10-28 16:10  sympa-authors
+
+	* wwsympa/wwsympa.fcgi: [BugID 528] Fix: adding a pending
+	  subscriber failed if the user gecos contained a comma (',')
+
+2005-10-27 17:45  sympa-authors
+
+	* wwsympa/wwsympa.fcgi: missing ';'
+
+2005-10-27 17:42  sympa-authors
+
+	* web_tt2/rss.tt2, wwsympa/wwsympa.fcgi: Fixed some RSS problems
+
+2005-10-27 17:41  sympa-authors
+
+	* web_tt2/ls_templates.tt2: Fix
+
+2005-10-27 17:41  sympa-authors
+
+	* po/: cs.po, de.po, el.po, en_US.po, es.po, et.po, fi.po, fr.po,
+	  hu.po, it.po, ja.po, nl.po, oc.po, pl.po, pt.po, pt_BR.po, ro.po,
+	  sv.po, sympa.pot, tr.po, zh_CN.po, zh_TW.po: update
+
+2005-10-26 10:53  sympa-authors
+
+	* src/List.pm: Fix: get_which() for listamster returned all
+	  non-include2 lists
+
+2005-10-25 14:48  sympa-authors
+
+	* src/tt2.pl, web_tt2/admin_menu.tt2, web_tt2/arc_manage.tt2,
+	  web_tt2/d_read.tt2, web_tt2/list_admin_menu.tt2,
+	  web_tt2/list_menu.tt2, web_tt2/ls_templates.tt2,
+	  web_tt2/rename_list_request.tt2, web_tt2/review.tt2,
+	  web_tt2/reviewbouncing.tt2: [BugID 522] Fix: escape quotes in
+	  javascript calls
+
+2005-10-25 14:48  sympa-authors
+
+	* ChangeLog: update
+
+2005-10-25 13:33  sympa-authors
+
+	* wwsympa/wwsympa.fcgi: Fix: never go back to the search action
+	  after a del
+
+2005-10-24 15:04  sympa-authors
+
+	* po/sv.po: Add missing Swedish PO file
+
+2005-10-24 11:45  sympa-authors
+
+	* soap/sympasoap.pm: [BugID 516] Fix: lists and which used domain
+	  in list address instead of host
+
+2005-10-24 11:41  sympa-authors
+
+	* soap/sympasoap.pm: [G.Bouteille] Change: which SOAP subroutine
+	  result now includes lists the user is admin of
+
+2005-10-21 15:52  sympa-authors
+
+	* wwsympa/wwsympa.fcgi: Change: optimization : skip get_which()
+	  when either in a list context or while returning CSS
+
+2005-10-20 17:37  sympa-authors
+
+	* wwsympa/wwsympa.fcgi: Fix: escape encoded SMTP header fields for
+	  RSS
+
 2005-10-20 12:23  sympa-authors
 
 	* wwsympa/archived.pl: Fix: archived.pl would die with a
@@ -9,6 +84,11 @@
 	* po/Makefile, src/Conf.pm, src/Language.pm,
 	  web_tt2/rss_request.tt2, wwsympa/wwsympa.fcgi: [D.Nylander] New
 	  feature: sympa translated to Swedish
+
+2005-10-20 11:49  sympa-authors
+
+	* po/sv.po: file sv.po was added on branch sympa-5_1-branch on
+	  2005-10-24 13:04:22 +0000
 
 2005-10-19 17:39  sympa-authors
 

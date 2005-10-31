@@ -3,6 +3,81 @@
 
 (See Changelog file for the full changes log)
 
+5.1.2		31 October 2005
+
+   New features :
+
+	po/Makefile, src/Conf.pm, src/Language.pm, web_tt2/rss_request.tt2, wwsympa/wwsympa.fcgi: 
+	[D.Nylander] sympa translated to Swedish
+
+   Changes :
+
+	soap/sympasoap.pm: [G.Bouteille] which SOAP subroutine result now includes lists the user is admin of
+
+	src/Language.pm: try a setlocale() with locale.charset first
+
+	po/de.po: [M.Redinger] Updated de.po
+
+	po/ja.po: [K.Moriwaka] Updated Japanese translations
+
+	po/et.po: [T.Kindsigo] Updated Estonian PO file
+
+	Makefile.am, Makefile.in: [requested by S.Hornburg] never wait for user input while 
+	building a package (DESTDIR is set)
+
+   Bug fixes :	
+
+	src/task_manager.pl: [BugID 498] 'process_bouncers' task failed if no owner could be contacted ; no more return undef
+
+	wwsympa/wwsympa.fcgi: [BugID 528] adding a pending subscriber failed if the user gecos contained a comma (',')
+
+	web_tt2/rss.tt2, wwsympa/wwsympa.fcgi: Fixed some RSS problems
+
+	src/List.pm: get_which() for listamster returned all non-include2 lists
+	
+	* src/tt2.pl, web_tt2/: [BugID 522] escape quotes in javascript calls
+
+	wwsympa/wwsympa.fcgi: never go back to the search action after a del
+
+	soap/sympasoap.pm: [BugID 516] lists and which used domain in list address instead of host
+
+	wwsympa/wwsympa.fcgi: optimization : skip get_which() when either in a list context or while returning CSS
+
+	wwsympa/wwsympa.fcgi: escape encoded SMTP header fields for RSS
+
+	wwsympa/archived.pl: archived.pl would die with a "Modification of non-creatable array value attempted" 
+	error while creating the index file
+
+	src/Commands.pm, web_tt2/skinsedit.tt2: [reported by A.Brugalle] Add a notification 
+	when a message is moved to the distribution spool
+
+	src/: Archive.pm, List.pm: [reported by V.Mathieu] mail archives files had an incorrect 'log.' filename
+
+	src/Language.pm: [reported by O.Lacroix] failed to setlocale on HPUX ; 
+	now trying without dashes ('-').  Also fixed the setlocale(LC_TIME)
+
+	src/List.pm: [G.Bouteille] missing 'family_closed' parameter to close()
+
+	src/tt2.pl: [G.Bouteille] SetLang only if lang is available
+
+	mail_tt2/info_report.tt2: prevents a parser failure if info file was not found
+
+	web_tt2/review.tt2: [O.Lacroix] subscriber add form was shown regardless of owner privilege
+
+	po/fr.po: [O.Lacroix] [BugId 471] Fix
+
+	Makefile.am, Makefile.in: [BugId 504] Fix: LOCALDIR was hardcoded
+
+	ChangeLog, src/Language.pm: [BugID 502] Fix for i18n on FreeBSD
+
+	src/List.pm: [BugID 501] if family_name was set to an unknown family, wwsympa would die with 
+	the following error msg "Can't call method "check_param_constraint" on an undefined value
+	at /var/sympa/bin/List.pm line 1728."
+
+	web_tt2/list_menu.tt2, wwsympa/wwsympa.fcgi: [BugID 465] "contact owners" failed if protection mode was not javascript
+
+	src/List.pm: [BugID 461] List::am_i() cache control had 2 blocks which returned before updating the cache
+
 5.1		16 August 2005
 
   New features :
