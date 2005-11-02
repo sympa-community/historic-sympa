@@ -1076,7 +1076,12 @@ if ($wwsconf->{'use_fast_cgi'}) {
  	     unshift @{$tt2_include_path}, $list->{'dir'}.'/web_tt2';
  	     unshift @{$tt2_include_path}, $list->{'dir'}.'/web_tt2/'.&Language::Lang2Locale($param->{'lang'}); 	 }
  	    
- 	 unless (&tt2::parse_tt2($param,'rss.tt2' ,\*STDOUT, $tt2_include_path)) {
+	 my $tt2_options = {};
+	 if ($Conf{'web_recode_to'}) {
+	     $tt2_options =  {'recode' => $Conf{'web_recode_to'}};
+	 }    
+
+ 	 unless (&tt2::parse_tt2($param,'rss.tt2' ,\*STDOUT, $tt2_include_path, $tt2_options)) {
  	     my $error = &tt2::get_error();
  	     $param->{'tt2_error'} = $error;
  	     &List::send_notify_to_listmaster('web_tt2_error', $robot, $error);
