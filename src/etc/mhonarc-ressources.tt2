@@ -355,7 +355,7 @@ MSGPGEND
 </MSGPGBEGIN>
 
 <TOPLINKS>
-<CENTER>
+
 <div id="ActionHeader">
    <div style="text-align: center;"><h2>($tag$% subtitle %$tag$)</h2></div><br />
    <span style="float: right">
@@ -368,10 +368,7 @@ MSGPGEND
 </div>
 
 <!-- end header -->
-</TD>
-</TR>
-</TABLE>
-</CENTER>
+
 </TOPLINKS>
 
 <HEADBODYSEP>
@@ -394,6 +391,7 @@ $POWERED_BY$
 </MSGPGEND>
 
 <MSGPGSSMARKUP>
+<br clear="all" />
 </MSGPGSSMARKUP>
 
 <SUBJECTHEADER>
