@@ -370,7 +370,7 @@ MSGPGEND
 <!-- end header -->
 
 </TOPLINKS>
-
+<CENTER>
 <HEADBODYSEP>
 </div>
 <hr size="1" noshade>
@@ -384,14 +384,16 @@ $TSLICE(10;10;1)$
 <BOTLINKS>
 
 </BOTLINKS>
-
+</TD>
+</TR>
+</TABLE>
+</CENTER>
 <MSGPGEND>
 $POWERED_BY$
 ($tag$%TAGS [% %]%$tag$)
 </MSGPGEND>
 
 <MSGPGSSMARKUP>
-<br clear="all" />
 </MSGPGSSMARKUP>
 
 <SUBJECTHEADER>
