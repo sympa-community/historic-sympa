@@ -1,3 +1,47 @@
+2005-11-15 16:10  sympa-authors
+
+	* po/Makefile: [reported by JP Masse] Fix: swedish catalog was not
+	  compiled
+
+2005-11-14 12:08  sympa-authors
+
+	* src/tools.pl: Change: tools::lock() is now able to force the lock
+	  if the blocking lock was performed more than 20 minutes ago.	The
+	  PID is now written in the lockfile.  The number of attempts to
+	  lock is now different in a web context
+
+2005-11-09 11:27  sympa-authors
+
+	* check_perl_modules.pl: [reported by J.Beretta] Fix: the
+	  '-modifybodyaddresses' option is only available since mhonarc
+	  2.6.0
+
+2005-11-09 11:18  sympa-authors
+
+	* src/etc/mhonarc-ressources.tt2: Reverse previous changes
+
+2005-11-09 11:07  sympa-authors
+
+	* src/etc/mhonarc-ressources.tt2: Fix bug reported by
+	  Matthieu.Quenez (amue.fr)
+
+2005-11-02 13:10  sympa-authors
+
+	* wwsympa/wwsympa.fcgi: Now use web_recode_to for the RSS feed
+
+2005-11-02 12:02  sympa-authors
+
+	* wwsympa/wwsympa.fcgi: Fix RSS feed ; URL for virtual robots was
+	  incorrect
+
+2005-10-31 13:56  sympa-authors
+
+	* Makefile.in: Update
+
+2005-10-31 13:56  sympa-authors
+
+	* .version, ChangeLog, NEWS: preparing 5.1.2
+
 2005-10-28 16:39  sympa-authors
 
 	* src/task_manager.pl: [BugID 498] Change: 'process_bouncers' task
