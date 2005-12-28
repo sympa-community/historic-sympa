@@ -1036,9 +1036,6 @@ if ($wwsconf->{'use_fast_cgi'}) {
 	     }
 	 }
 
-     }elsif ($param->{'redirect_to'}) {
-	 do_log ('debug',"Redirecting to $param->{'redirect_to'}");
-	 print "Location: $param->{'redirect_to'}\n\n";
      }elsif ($rss) {
  	 ## Send RSS 
  	 print "Cache-control: no-cache\n";
@@ -1087,6 +1084,9 @@ if ($wwsconf->{'use_fast_cgi'}) {
  	     &List::send_notify_to_listmaster('web_tt2_error', $robot, $error);
  	 }
 # 	 close FILE;
+     }elsif ($param->{'redirect_to'}) {
+	 do_log ('debug',"Redirecting to $param->{'redirect_to'}");
+	 print "Location: $param->{'redirect_to'}\n\n";
      }else {
 	 &send_html('main.tt2');
      }    
