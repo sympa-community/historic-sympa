@@ -1,3 +1,49 @@
+2005-12-28 13:44  sympa-authors
+
+	* src/List.pm: [reported by M.Schoeb] Fix:
+	  List::has_include_data_sources() did not check owner_include and
+	  editor_include.  Therefore sync_include task might not be
+	  created.
+
+2005-12-28 13:44  sympa-authors
+
+	* src/List.pm: Reverse previous changes because boolean db fields
+	  were strangely transformed
+
+2005-12-27 11:38  sympa-authors
+
+	* src/List.pm: Change: turned the mysql subscribed and included
+	  fields into int(1) to be compatible with other RDBMS [reported by
+	  B.Riffle] Fix: no more use quoting in SQL queries with numeric
+	  fields
+
+2005-12-12 13:47  sympa-authors
+
+	* src/List.pm: [reported by B.Riffle] Fix: treat
+	  subscribed_subscriber DB field as a numeric
+
+2005-11-25 10:33  sympa-authors
+
+	* doc/sympa.tex.tpl: [reported by A.Lund] Typo in parameter name
+	  sendmail_aliases
+
+2005-11-22 17:19  sympa-authors
+
+	* Makefile.am, Makefile.in, important_changes.pl, src/List.pm:
+	  Changes related to sympa upgrade :   * no more saving
+	  data_structure.version if verion did not change   * adding a log
+	  "upgrading from x to y"   * initialize the data_structure.version
+	  file if missing
+
+2005-11-22 14:55  sympa-authors
+
+	* web_tt2/css.tt2: Fix: remove use of 'transparent' color ; it was
+	  interpreted as dark grey
+
+2005-11-17 11:50  sympa-authors
+
+	* ChangeLog: update
+
 2005-11-15 16:10  sympa-authors
 
 	* po/Makefile: [reported by JP Masse] Fix: swedish catalog was not
