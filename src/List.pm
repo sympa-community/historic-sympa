@@ -1879,33 +1879,6 @@ sub get_editors_email {
     return @rcpt;
 }
 
-## Returns an array of editors' email addresses (unless reception nomail)
-#  or owners if there isn't any editors'email adress
-sub get_editors_email {
-    my($self) = @_;
-    do_log('debug3', 'List::get_editors_email(%s)', $self->{'name'});
-    
-    my ($i, @rcpt);
-    my $admin = $self->{'admin'}; 
-    my $name = $self->{'name'};
-
-    foreach $i (@{$admin->{'editor'}}) {
-	next if ($i->{'reception'} eq 'nomail');
-	if (ref($i->{'email'})) {
-	    push(@rcpt, @{$i->{'email'}});
-	}elsif ($i->{'email'}) {
-	    push(@rcpt, $i->{'email'});
-	}
-    }
-
-    if ($#rcpt < 0) {
-	return &get_owners_email($self);
-    }
-
-    return @rcpt;
-
-}
-
 ## Returns an object Family if the list belongs to a family
 #  or undef
 sub get_family {
