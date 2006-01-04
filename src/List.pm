@@ -274,7 +274,7 @@ my @param_order = qw (subject visibility info subscribe add unsubscribe del owne
 		      send editor editor_include account topics 
 		      host lang web_archive archive digest digest_max_size available_user_options 
 		      default_user_options msg_topic msg_topic_keywords_apply_on msg_topic_tagging reply_to_header reply_to forced_reply_to * 
-		      welcome_return_path remind_return_path user_data_source include_file include_remote_file 
+		      verp_quota welcome_return_path remind_return_path user_data_source include_file include_remote_file 
 		      include_list include_remote_sympa_list include_ldap_query
                       include_ldap_2level_query include_sql_query include_admin ttl creation update 
 		      status serial);
@@ -1212,6 +1212,12 @@ my %alias = ('reply-to' => 'reply_to',
 				      'gettext_id' => "Welcome return-path",
 				      'group' => 'bounces'
 				  },
+	    'verp_rate' => {'format' => ['100%','50%','33%','25%','20%','10%','5%','2%','0%'],
+			     'default' =>  {'conf' => 'verp_quota'},
+			     'gettext_id' => "percentage of message sent with verp",
+			     'group' => 'bounces'
+			     },
+
 	    'export' => {'format' => '\w+',
 			 'split_char' => ',',
 			 'occurrence' => '0-n',
