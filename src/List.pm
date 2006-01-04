@@ -2623,7 +2623,7 @@ sub send_msg {
 	    $txt_msg = $new_msg;
        }
 	my $new_message = new Message($txt_msg);
-	my $result = &mail::mail_message($new_message, $from,$robot, @tabrcpt_notice);
+	my $result = &mail::mail_message($new_message, $from,$robot, @tabrcpt_txt);
 	unless (defined $result) {
 	    &do_log('err',"List::send_msg, could not send message to distribute from $from");
 	    return undef;
@@ -2643,7 +2643,7 @@ sub send_msg {
 	    $html_msg = $new_msg;
         }
 	my $new_message = new Message($html_msg);
-	my $result = &mail::mail_message($new_message, $from,$robot, @tabrcpt_notice);
+	my $result = &mail::mail_message($new_message, $from,$robot, @tabrcpt_html);
 	unless (defined $result) {
 	    &do_log('err',"List::send_msg, could not send message to distribute from $from");
 	    return undef;
@@ -2694,7 +2694,7 @@ sub send_msg {
 	    $url_msg = $new_msg;
 	} 
 	my $new_message = new Message($url_msg);
-	my $result = &mail::mail_message($new_message, $from,$robot, @tabrcpt_notice);
+	my $result = &mail::mail_message($new_message, $from,$robot, @tabrcpt_url);
 	unless (defined $result) {
 	    &do_log('err',"List::send_msg, could not send message to distribute from $from");
 	    return undef;
