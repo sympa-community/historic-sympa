@@ -274,7 +274,7 @@ my @param_order = qw (subject visibility info subscribe add unsubscribe del owne
 		      send editor editor_include account topics 
 		      host lang web_archive archive digest digest_max_size available_user_options 
 		      default_user_options msg_topic msg_topic_keywords_apply_on msg_topic_tagging reply_to_header reply_to forced_reply_to * 
-		      verp_quota welcome_return_path remind_return_path user_data_source include_file include_remote_file 
+		      verp_rate welcome_return_path remind_return_path user_data_source include_file include_remote_file 
 		      include_list include_remote_sympa_list include_ldap_query
                       include_ldap_2level_query include_sql_query include_admin ttl creation update 
 		      status serial);
@@ -1213,7 +1213,7 @@ my %alias = ('reply-to' => 'reply_to',
 				      'group' => 'bounces'
 				  },
 	    'verp_rate' => {'format' => ['100%','50%','33%','25%','20%','10%','5%','2%','0%'],
-			     'default' =>  {'conf' => 'verp_quota'},
+			     'default' =>  {'conf' => 'verp_rate'},
 			     'gettext_id' => "percentage of message sent with verp",
 			     'group' => 'bounces'
 			     },
@@ -1622,6 +1622,34 @@ sub update_stats {
 
     return $stats->[0];
 }
+
+## Extract a set of rcpt for which verp must be use from a rcpt_tab.
+## Input  :  percent : the rate of subscribers that must be threaded using verp
+##           xseq    : the message sequence number
+##           @rcpt   : a tab of emails
+## return :  a tab of rcpt for which rcpt must be use depending on the message sequence number, this way every subscriber is "verped" from time to time
+##           input table @rcpt is spliced : rcpt for which verp must be used are extracted from this table
+sub extract_verp_rcpt() {
+    my $percent = shift;
+    my $xseq = shift;
+    my $refrcpt = shift;
+
+    if ($percent == '0%') {
+	return ();
+    }
+    
+    my $nbpart ; 
+    if ( $percent =~ /^(\d+)\%/ ) {
+	$nbpart = 100/$1;  
+    }
+    
+    my $modulo = $xseq % $nbpart ;
+    my $lenght = int (($#{$refrcpt} + 1) / $nbpart) + 1;
+    
+    return ( splice @$refrcpt, $lenght*$modulo, $lenght ) ;
+}
+
+
 
 ## Dumps a copy of lists to disk, in text format
 sub dump {
@@ -2566,6 +2594,12 @@ sub send_msg {
     #save the message before modifying it
     my $saved_msg = $message->{'msg'}->dup;
     my $nbr_smtp;
+    my $nbr_verp;
+
+
+    # prepare verp parameter
+    my $verp_rate =  $self->{'admin'}{'verp_rate'};
+    my $xsequence =  $self->{'stats'}->[0] ;
 
     ##Send message for normal reception mode
     if (@tabrcpt) {
@@ -2587,12 +2621,23 @@ sub send_msg {
 	    @selected_tabrcpt = @tabrcpt;
 
 	}
-	my $result = &mail::mail_message($message, $from, $robot, @selected_tabrcpt);
+
+	my @verp_selected_tabrcpt = &extract_verp_rcpt($verp_rate, $xsequence,\@selected_tabrcpt);
+
+	my $result = &mail::mail_message($message, $self, {'enable' => 'off'}, @selected_tabrcpt);
 	unless (defined $result) {
-	    &do_log('err',"List::send_msg, could not send message to distribute from $from");
+	    &do_log('err',"List::send_msg, could not send message to distribute from $from (verp desabled)");
 	    return undef;
 	}
 	$nbr_smtp = $result;
+	
+	$result = &mail::mail_message($message, $self, {'enable' => 'on'}, @verp_selected_tabrcpt);
+	unless (defined $result) {
+	    &do_log('err',"List::send_msg, could not send message to distribute from $from (verp enabled)");
+	    return undef;
+	}
+	$nbr_smtp += $result;
+	$nbr_verp = $result;
 
     }
 
@@ -2602,12 +2647,24 @@ sub send_msg {
         $notice_msg->bodyhandle(undef);    
 	$notice_msg->parts([]);
 	my $new_message = new Message($notice_msg);
-	my $result = &mail::mail_message($new_message, $from,$robot, @tabrcpt_notice);
+	
+	my @verp_tabrcpt_notice = &extract_verp_rcpt($verp_rate, $xsequence,\@tabrcpt_notice);
+
+	my $result = &mail::mail_message($new_message, $self, {'enable' => 'off'}, @tabrcpt_notice);
 	unless (defined $result) {
-	    &do_log('err',"List::send_msg, could not send message to distribute from $from");
+	    &do_log('err',"List::send_msg, could not send message to distribute from $from (verp desabled)");
 	    return undef;
 	}
 	$nbr_smtp += $result;
+
+	$result = &mail::mail_message($new_message, $self , {'enable' => 'on'}, @verp_tabrcpt_notice);
+	unless (defined $result) {
+	    &do_log('err',"List::send_msg, could not send message to distribute from $from  (verp enabled)");
+	    return undef;
+	}
+	$nbr_smtp += $result;
+	$nbr_verp += $result;
+
     }
 
     ##Prepare and send message for txt reception mode
@@ -2621,14 +2678,26 @@ sub send_msg {
 	my $new_msg = $self->add_parts($txt_msg);
 	if (defined $new_msg) {
 	    $txt_msg = $new_msg;
-       }
+	}
 	my $new_message = new Message($txt_msg);
-	my $result = &mail::mail_message($new_message, $from,$robot, @tabrcpt_txt);
+
+	my @verp_tabrcpt_txt = &extract_verp_rcpt($verp_rate, $xsequence,\@tabrcpt_txt);
+	
+	my $result = &mail::mail_message($new_message, $self,  {'enable' => 'off'}, @tabrcpt_txt);
 	unless (defined $result) {
-	    &do_log('err',"List::send_msg, could not send message to distribute from $from");
+	    &do_log('err',"List::send_msg, could not send message to distribute from $from  (verp desabled)");
 	    return undef;
 	}
 	$nbr_smtp += $result;
+
+	$result = &mail::mail_message($new_message, $self , {'enable' => 'on'}, @verp_tabrcpt_txt);
+	unless (defined $result) {
+	    &do_log('err',"List::send_msg, could not send message to distribute from $from  (verp enabled)");
+	    return undef;
+	}
+	$nbr_smtp += $result;
+	$nbr_verp += $result;
+
     }
 
    ##Prepare and send message for html reception mode
@@ -2643,12 +2712,23 @@ sub send_msg {
 	    $html_msg = $new_msg;
         }
 	my $new_message = new Message($html_msg);
-	my $result = &mail::mail_message($new_message, $from,$robot, @tabrcpt_html);
+
+	my @verp_tabrcpt_html = &extract_verp_rcpt($verp_rate, $xsequence,\@tabrcpt_html);
+
+	my $result = &mail::mail_message($new_message, $self , {'enable' => 'off'}, @tabrcpt_html);
 	unless (defined $result) {
-	    &do_log('err',"List::send_msg, could not send message to distribute from $from");
+	    &do_log('err',"List::send_msg, could not send message to distribute from $from  (verp desabled)");
 	    return undef;
 	}
 	$nbr_smtp += $result;
+
+	$result = &mail::mail_message($new_message, $self , {'enable' => 'on'}, @verp_tabrcpt_html);
+	unless (defined $result) {
+	    &do_log('err',"List::send_msg, could not send message to distribute from $from  (verp enabled)");
+	    return undef;
+	}
+	$nbr_smtp += $result;
+	$nbr_verp += $result;
     }
 
    ##Prepare and send message for urlize reception mode
@@ -2694,12 +2774,25 @@ sub send_msg {
 	    $url_msg = $new_msg;
 	} 
 	my $new_message = new Message($url_msg);
-	my $result = &mail::mail_message($new_message, $from,$robot, @tabrcpt_url);
+
+
+	my @verp_tabrcpt_url = &extract_verp_rcpt($verp_rate, $xsequence,\@tabrcpt_url);
+
+	my $result = &mail::mail_message($new_message, $self , {'enable' => 'off'}, @tabrcpt_url);
 	unless (defined $result) {
-	    &do_log('err',"List::send_msg, could not send message to distribute from $from");
+	    &do_log('err',"List::send_msg, could not send message to distribute from $from  (verp desabled)");
 	    return undef;
 	}
 	$nbr_smtp += $result;
+
+	$result = &mail::mail_message($new_message, $self , {'enable' => 'on'}, @verp_tabrcpt_url);
+	unless (defined $result) {
+	    &do_log('err',"List::send_msg, could not send message to distribute from $from  (verp enabled)");
+	    return undef;
+	}
+	$nbr_smtp += $result;
+	$nbr_verp += $result;
+
     }
 
     return $nbr_smtp;
