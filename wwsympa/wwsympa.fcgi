@@ -931,7 +931,7 @@ if ($wwsconf->{'use_fast_cgi'}) {
      ## Do not manage cookies at this level if content was already sent
      unless ($param->{'bypass'} eq 'extreme' || $param->{'action'} eq 'css') {
 	 ## Set cookies "your_subscribtions"
-	 if ($param->{'user'}{'email'} && ! defined $in{'list'}) {
+	 if ($param->{'user'}{'email'} && ref($list) ne 'List') {
 
 	     ## In case get_which was not set
 	     @{$param->{'get_which'}} = &List::get_which($param->{'user'}{'email'},$robot,'member') unless (defined $param->{'get_which'}); 
