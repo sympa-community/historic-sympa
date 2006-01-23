@@ -1633,6 +1633,7 @@ sub extract_verp_rcpt() {
     my $percent = shift;
     my $xseq = shift;
     my $refrcpt = shift;
+    my $refrcptverp = shift;
 
     if ($percent == '0%') {
 	return ();
@@ -1646,7 +1647,12 @@ sub extract_verp_rcpt() {
     my $modulo = $xseq % $nbpart ;
     my $lenght = int (($#{$refrcpt} + 1) / $nbpart) + 1;
     
-    return ( splice @$refrcpt, $lenght*$modulo, $lenght ) ;
+    my @result = splice @$refrcpt, $lenght*$modulo, $lenght ;
+    
+    foreach my $verprcpt (@$refrcptverp) {
+	push @result, $verprcpt;
+    }
+    return ( @result ) ;
 }
 
 
@@ -2551,8 +2557,9 @@ sub send_msg {
     ## Who is the enveloppe sender ?
     my $host = $self->{'admin'}{'host'};
     my $from = $name.&Conf::get_robot_conf($robot, 'return_path_suffix').'@'.$host;
-    
-    my (@tabrcpt, @tabrcpt_notice, @tabrcpt_txt, @tabrcpt_html, @tabrcpt_url);
+
+    # separate subscribers depending on user reception option and also if verp a dicovered some bounce for them.
+    my (@tabrcpt, @tabrcpt_notice, @tabrcpt_txt, @tabrcpt_html, @tabrcpt_url, @tabrcpt_verp, @tabrcpt_notice_verp, @tabrcpt_txt_verp, @tabrcpt_html_verp, @tabrcpt_url_verp);
     my $mixed = ($message->{'msg'}->head->get('Content-Type') =~ /multipart\/mixed/i);
     my $alternative = ($message->{'msg'}->head->get('Content-Type') =~ /multipart\/alternative/i);
  
@@ -2560,34 +2567,53 @@ sub send_msg {
 	unless ($user->{'email'}) {
 	    &do_log('err','Skipping user with no email address in list %s', $name);
 	    next;
-	}
-	
+	}	
 	if ($user->{'reception'} =~ /^digest|digestplain|summary|nomail$/i) {
 	    next;
-	}elsif ($user->{'reception'} eq 'not_me'){
-	    push @tabrcpt, $user->{'email'} unless ($sender_hash{$user->{'email'}});
-	    
 	} elsif ($user->{'reception'} eq 'notice') {
-	    push @tabrcpt_notice, $user->{'email'}; 
-	} elsif ($alternative and ($user->{'reception'} eq 'txt')) {
-	    push @tabrcpt_txt, $user->{'email'};
-	} elsif ($alternative and ($user->{'reception'} eq 'html')) {
-	    push @tabrcpt_html, $user->{'email'};
+	    if ($user->{'bounce_address'}) {
+		push @tabrcpt_notice_verp, $user->{'email'}; 
+	    }else{
+		push @tabrcpt_notice, $user->{'email'}; 
+	    }
+        } elsif ($alternative and ($user->{'reception'} eq 'txt')) {
+	    if ($user->{'bounce_address'}) {
+		push @tabrcpt_txt_verp, $user->{'email'};
+	    }else{
+		push @tabrcpt_txt, $user->{'email'};
+	    }
+        } elsif ($alternative and ($user->{'reception'} eq 'html')) {
+	    if ($user->{'bounce_address'}) {
+		push @tabrcpt_html_verp, $user->{'email'};
+	    }else{
+		if ($user->{'bounce_address'}) {
+		    push @tabrcpt_html_verp, $user->{'email'};
+		}else{
+		    push @tabrcpt_html, $user->{'email'};
+		}
+	   }
 	} elsif ($mixed and ($user->{'reception'} eq 'urlize')) {
-	    push @tabrcpt_url, $user->{'email'};
+	    if ($user->{'bounce_address'}) {
+		push @tabrcpt_url_verp, $user->{'email'};
+	    }else{
+		push @tabrcpt_url, $user->{'email'};
+	    }
 	} elsif (($message->{'smime_crypted'}) && (! -r "$Conf{'ssl_cert_dir'}/".&tools::escape_chars($user->{'email'}))) {
 	    ## Missing User certificate
 	    unless ($self->send_file('x509-user-cert-missing', $user->{'email'}, $robot, {'mail' => {'subject' => $message->{'msg'}->head->get('Subject'),
 												     'sender' => $message->{'msg'}->head->get('From')}})) {
-		&do_log('notice',"Unable to send template 'x509-user-cert-missing' to $user->{'email'}");
+	    &do_log('notice',"Unable to send template 'x509-user-cert-missing' to $user->{'email'}");
 	    }
-       } else {
-	   push @tabrcpt, $user->{'email'};
-       }
-   }    
+	}else{
+	    if ($user->{'bounce_address'}) {
+		push @tabrcpt_verp, $user->{'email'} unless ($sender_hash{$user->{'email'}})&&($user->{'reception'} eq 'not_me');
+	    }else{	    
+		push @tabrcpt, $user->{'email'} unless ($sender_hash{$user->{'email'}})&&($user->{'reception'} eq 'not_me');}
+	    }	    
+       }    
 
     ## sa  return 0  = Pb  ?
-    unless (@tabrcpt || @tabrcpt_notice || @tabrcpt_txt || @tabrcpt_html || @tabrcpt_url) {
+    unless (@tabrcpt || @tabrcpt_notice || @tabrcpt_txt || @tabrcpt_html || @tabrcpt_url || @tabrcpt_verp || @tabrcpt_notice_verp || @tabrcpt_txt_verp || @tabrcpt_html_verp || @tabrcpt_url_verp) {
 	&do_log('info', 'No subscriber for sending msg in list %s', $name);
 	return 0;
     }
@@ -2622,7 +2648,8 @@ sub send_msg {
 
 	}
 
-	my @verp_selected_tabrcpt = &extract_verp_rcpt($verp_rate, $xsequence,\@selected_tabrcpt);
+	my @verp_selected_tabrcpt = &extract_verp_rcpt($verp_rate, $xsequence,\@selected_tabrcpt, \@tabrcpt_verp);
+
 
 	my $result = &mail::mail_message($message, $self, {'enable' => 'off'}, @selected_tabrcpt);
 	unless (defined $result) {
@@ -2648,7 +2675,7 @@ sub send_msg {
 	$notice_msg->parts([]);
 	my $new_message = new Message($notice_msg);
 	
-	my @verp_tabrcpt_notice = &extract_verp_rcpt($verp_rate, $xsequence,\@tabrcpt_notice);
+	my @verp_tabrcpt_notice = &extract_verp_rcpt($verp_rate, $xsequence,\@tabrcpt_notice, \@tabrcpt_notice_verp);
 
 	my $result = &mail::mail_message($new_message, $self, {'enable' => 'off'}, @tabrcpt_notice);
 	unless (defined $result) {
@@ -2681,7 +2708,7 @@ sub send_msg {
 	}
 	my $new_message = new Message($txt_msg);
 
-	my @verp_tabrcpt_txt = &extract_verp_rcpt($verp_rate, $xsequence,\@tabrcpt_txt);
+	my @verp_tabrcpt_txt = &extract_verp_rcpt($verp_rate, $xsequence,\@tabrcpt_txt, \@tabrcpt_txt_verp);
 	
 	my $result = &mail::mail_message($new_message, $self,  {'enable' => 'off'}, @tabrcpt_txt);
 	unless (defined $result) {
@@ -2713,7 +2740,7 @@ sub send_msg {
         }
 	my $new_message = new Message($html_msg);
 
-	my @verp_tabrcpt_html = &extract_verp_rcpt($verp_rate, $xsequence,\@tabrcpt_html);
+	my @verp_tabrcpt_html = &extract_verp_rcpt($verp_rate, $xsequence,\@tabrcpt_html, \@tabrcpt_html_verp);
 
 	my $result = &mail::mail_message($new_message, $self , {'enable' => 'off'}, @tabrcpt_html);
 	unless (defined $result) {
@@ -2776,7 +2803,7 @@ sub send_msg {
 	my $new_message = new Message($url_msg);
 
 
-	my @verp_tabrcpt_url = &extract_verp_rcpt($verp_rate, $xsequence,\@tabrcpt_url);
+	my @verp_tabrcpt_url = &extract_verp_rcpt($verp_rate, $xsequence,\@tabrcpt_url, \@tabrcpt_url_verp);
 
 	my $result = &mail::mail_message($new_message, $self , {'enable' => 'off'}, @tabrcpt_url);
 	unless (defined $result) {
@@ -3128,12 +3155,15 @@ sub send_file {
 	    $data->{'user'}{'password'} = &tools::tmp_passwd($who);
 	}
 	
-	## Unique return-path
+	## Unique return-path VERP
 	if ((($self->{'admin'}{'welcome_return_path'} eq 'unique') && ($tpl eq 'welcome')) ||
 	    (($self->{'admin'}{'remind_return_path'} eq 'unique') && ($tpl eq 'remind')))  {
 	    my $escapercpt = $who ;
 	    $escapercpt =~ s/\@/\=\=a\=\=/;
-	    $data->{'return_path'} = "$Conf{'bounce_email_prefix'}+$escapercpt\=\=$name\@$self->{'domain'}";
+	    $data->{'return_path'} = "$Conf{'bounce_email_prefix'}+$escapercpt\=\=$name";
+	    $data->{'return_path'} .= '==w' if ($tpl eq 'welcome');
+	    $data->{'return_path'} .= '==r' if ($tpl eq 'remind');
+	    $data->{'return_path'} .= "\@$self->{'domain'}";
 	}
     }
 
@@ -4357,6 +4387,7 @@ sub get_all_user_db {
     return @users;
 }
 
+
 ## Returns a subscriber of the list.
 sub get_subscriber {
     my  $self= shift;
@@ -4391,7 +4422,7 @@ sub get_subscriber {
 
 	if ($Conf{'db_type'} eq 'Oracle') {
 	    ## "AS" not supported by Oracle
-	    $statement = sprintf "SELECT user_subscriber \"email\", comment_subscriber \"gecos\", bounce_subscriber \"bounce\", bounce_score_subscriber \"bounce_score\", reception_subscriber \"reception\", topics_subscriber \"topics\", visibility_subscriber \"visibility\", %s \"date\", %s \"update_date\", subscribed_subscriber \"subscribed\", included_subscriber \"included\", include_sources_subscriber \"id\"  %s FROM subscriber_table WHERE (user_subscriber = %s AND list_subscriber = %s AND robot_subscriber = %s)", 
+	    $statement = sprintf "SELECT user_subscriber \"email\", comment_subscriber \"gecos\", bounce_subscriber \"bounce\", bounce_score_subscriber \"bounce_score\", bounce_address_subscriber \"bounce_address\", reception_subscriber \"reception\", topics_subscriber \"topics\", visibility_subscriber \"visibility\", %s \"date\", %s \"update_date\", subscribed_subscriber \"subscribed\", included_subscriber \"included\", include_sources_subscriber \"id\"  %s FROM subscriber_table WHERE (user_subscriber = %s AND list_subscriber = %s AND robot_subscriber = %s)", 
 	    $date_field, 
 	    $update_field, 
 	    $additional, 
@@ -4399,7 +4430,7 @@ sub get_subscriber {
 	    $dbh->quote($name),
 	    $dbh->quote($self->{'domain'});
 	}else {
-	    $statement = sprintf "SELECT user_subscriber AS email, comment_subscriber AS gecos, bounce_subscriber AS bounce, bounce_score_subscriber AS bounce_score, reception_subscriber AS reception,  topics_subscriber AS topics, visibility_subscriber AS visibility, %s AS date, %s AS update_date, subscribed_subscriber AS subscribed, included_subscriber AS included, include_sources_subscriber AS id %s FROM subscriber_table WHERE (user_subscriber = %s AND list_subscriber = %s AND robot_subscriber = %s)", 
+	    $statement = sprintf "SELECT user_subscriber AS email, comment_subscriber AS gecos, bounce_subscriber AS bounce, bounce_score_subscriber AS bounce_score, bounce_address_subscriber AS bounce_address, reception_subscriber AS reception,  topics_subscriber AS topics, visibility_subscriber AS visibility, %s AS date, %s AS update_date, subscribed_subscriber AS subscribed, included_subscriber AS included, include_sources_subscriber AS id %s FROM subscriber_table WHERE (user_subscriber = %s AND list_subscriber = %s AND robot_subscriber = %s)", 
 	    $date_field, 
 	    $update_field, 
 	    $additional, 
@@ -4459,6 +4490,54 @@ sub get_subscriber {
 
 	return \%user;
     }
+}
+## Returns an array of all users in User table hash for a given user
+sub get_subscriber_by_bounce_address {
+
+    my  $self= shift;
+    my  $bounce_address = &tools::clean_email(shift);
+    
+    do_log('debug2', 'List::get_subscriber_by_bounce_address (%s)', $bounce_address);
+
+    return undef unless $bounce_address;
+
+    my $statement;
+    my @users;
+    my @subscribers;
+ 
+    unless ($List::use_db) {
+	&do_log('info', 'Sympa not setup to use DBI');
+	return undef;
+    }
+
+    my $listname = $self->{'name'};
+    my $robot = $self->{'domain'};
+
+    ## Check database connection
+    unless ($dbh and $dbh->ping) {
+	return undef unless &db_connect();
+    }
+
+    return undef unless (($self->{'admin'}{'user_data_source'} eq 'database') || ($self->{'admin'}{'user_data_source'} eq 'include2'));
+
+    $statement = sprintf "SELECT user_subscriber AS email, bounce_address_subscriber AS bounce_address FROM subscriber_table WHERE (list_subscriber=%s AND robot_subscriber=%s AND bounce_address_subscriber LIKE %s",$dbh->quote($listname),$dbh->quote($robot),$dbh->quote($bounce_address);
+    
+    push @sth_stack, $sth;
+
+    unless ($sth = $dbh->prepare($statement)) {
+	do_log('err','Unable to prepare SQL statement : %s', $dbh->errstr);
+	return undef;
+    }
+    unless ($sth->execute) {
+	do_log('err','Unable to execute SQL statement "%s" : %s', $statement, $dbh->errstr);
+	return undef;
+    }
+    while (my $subscriber = $sth->fetchrow_hashref) {
+	push @subscribers, $subscriber;
+    }
+    $sth->finish();
+    $sth = pop @sth_stack;
+    return @subscribers;
 }
 
 
@@ -5626,7 +5705,8 @@ sub update_user {
 			  email => 'user_subscriber',
 			  subscribed => 'subscribed_subscriber',
 			  included => 'included_subscriber',
-			  id => 'include_sources_subscriber'
+			  id => 'include_sources_subscriber',
+			  bounce_address => 'bounce_address_subscriber'
 			  );
 
 	## mapping between var and tables
@@ -5642,7 +5722,8 @@ sub update_user {
 			  email => 'subscriber_table',
 			  subscribed => 'subscriber_table',
 			  included => 'subscriber_table',
-			  id => 'subscriber_table'
+			  id => 'subscriber_table',
+			  bounce_address => 'subscriber_table'
 			  );
 
 	## additional DB fields

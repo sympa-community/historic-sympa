@@ -6548,7 +6548,8 @@ sub do_set_pending_list_request {
 
      $param->{'current_subscriber'} = $user;
      $param->{'current_subscriber'}{'escaped_email'} = &tools::escape_html($param->{'current_subscriber'}{'email'});
-
+     $param->{'current_subscriber'}{'escaped_bounce_address'} = &tools::escape_html($param->{'current_subscriber'}{'bounce_address'});
+     &wwslog('info', "xxxxxxxxxxxxxxxxxxxxxxxxxx$param->{'current_subscriber'}{'bounce_address'}");
      $param->{'current_subscriber'}{'date'} = &POSIX::strftime("%d %b %Y", localtime($user->{'date'}));
      $param->{'current_subscriber'}{'update_date'} = &POSIX::strftime("%d %b %Y", localtime($user->{'update_date'}));
 

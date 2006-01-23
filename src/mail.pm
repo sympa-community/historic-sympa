@@ -255,7 +255,7 @@ sub mail_message {
     # normal return_path (ie used if verp is not enabled)
     my $from = $list->{'name'}.&Conf::get_robot_conf($robot, 'return_path_suffix').'@'.$host;
 
-    do_log('debug2', 'mail::mail_message(from: %s, , file:%s, %s, verp->%s %d rcpt)', $from, $message->{'filename'}, $message->{'smime_crypted'}, $verp->{'enable'}, $#rcpt+1);
+    do_log('debug', 'mail::mail_message(from: %s, , file:%s, %s, verp->%s %d rcpt)', $from, $message->{'filename'}, $message->{'smime_crypted'}, $verp->{'enable'}, $#rcpt+1);
     
     
     my($i, $j, $nrcpt, $size, @sendto);
