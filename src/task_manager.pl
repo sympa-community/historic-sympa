@@ -1237,7 +1237,7 @@ sub purge_orphan_bounces {
 		     next;
 		 }
 
-		 unless( $list->update_user($email, {'bounce' => 'NULL'})) {
+		 unless( $list->update_user($email, {'bounce' => 'NULL'},{'bounce_address' => 'NULL'})) {
 		     do_log('info','expire_bounce: failed update database for %s', $email);
 		     next;
 		 }
