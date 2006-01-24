@@ -274,7 +274,7 @@ my @param_order = qw (subject visibility info subscribe add unsubscribe del owne
 		      send editor editor_include account topics 
 		      host lang web_archive archive digest digest_max_size available_user_options 
 		      default_user_options msg_topic msg_topic_keywords_apply_on msg_topic_tagging reply_to_header reply_to forced_reply_to * 
-		      welcome_return_path remind_return_path user_data_source include_file include_remote_file 
+		      verp_rate welcome_return_path remind_return_path user_data_source include_file include_remote_file 
 		      include_list include_remote_sympa_list include_ldap_query
                       include_ldap_2level_query include_sql_query include_admin ttl creation update 
 		      status serial);
@@ -1212,6 +1212,12 @@ my %alias = ('reply-to' => 'reply_to',
 				      'gettext_id' => "Welcome return-path",
 				      'group' => 'bounces'
 				  },
+	    'verp_rate' => {'format' => ['100%','50%','33%','25%','20%','10%','5%','2%','0%'],
+			     'default' =>  {'conf' => 'verp_rate'},
+			     'gettext_id' => "percentage of message sent with verp",
+			     'group' => 'bounces'
+			     },
+
 	    'export' => {'format' => '\w+',
 			 'split_char' => ',',
 			 'occurrence' => '0-n',
@@ -1616,6 +1622,46 @@ sub update_stats {
 
     return $stats->[0];
 }
+
+## Extract a set of rcpt for which verp must be use from a rcpt_tab.
+## Input  :  percent : the rate of subscribers that must be threaded using verp
+##           xseq    : the message sequence number
+##           @rcpt   : a tab of emails
+## return :  a tab of rcpt for which rcpt must be use depending on the message sequence number, this way every subscriber is "verped" from time to time
+##           input table @rcpt is spliced : rcpt for which verp must be used are extracted from this table
+sub extract_verp_rcpt() {
+    my $percent = shift;
+    my $xseq = shift;
+    my $refrcpt = shift;
+    my $refrcptverp = shift;
+
+
+    &do_log('debug','&extract_verp(%s,%s,%s,%s)',$percent,$xseq,$refrcpt,$refrcptverp)  ;
+
+    if ($percent == '0%') {
+	return ();
+    }
+    
+    my $nbpart ; 
+    if ( $percent =~ /^(\d+)\%/ ) {
+	$nbpart = 100/$1;  
+    }
+    
+    my $modulo = $xseq % $nbpart ;
+    my $lenght = int (($#{$refrcpt} + 1) / $nbpart) + 1;
+
+    &do_log('debug','&extract_verp(%s,%s,%s,%s)',$percent,$xseq,$refrcpt,$refrcptverp)  ;
+
+    
+    my @result = splice @$refrcpt, $lenght*$modulo, $lenght ;
+    
+    foreach my $verprcpt (@$refrcptverp) {
+	push @result, $verprcpt;
+    }
+    return ( @result ) ;
+}
+
+
 
 ## Dumps a copy of lists to disk, in text format
 sub dump {
@@ -2517,8 +2563,9 @@ sub send_msg {
     ## Who is the enveloppe sender ?
     my $host = $self->{'admin'}{'host'};
     my $from = $name.&Conf::get_robot_conf($robot, 'return_path_suffix').'@'.$host;
-    
-    my (@tabrcpt, @tabrcpt_notice, @tabrcpt_txt, @tabrcpt_html, @tabrcpt_url);
+
+    # separate subscribers depending on user reception option and also if verp a dicovered some bounce for them.
+    my (@tabrcpt, @tabrcpt_notice, @tabrcpt_txt, @tabrcpt_html, @tabrcpt_url, @tabrcpt_verp, @tabrcpt_notice_verp, @tabrcpt_txt_verp, @tabrcpt_html_verp, @tabrcpt_url_verp);
     my $mixed = ($message->{'msg'}->head->get('Content-Type') =~ /multipart\/mixed/i);
     my $alternative = ($message->{'msg'}->head->get('Content-Type') =~ /multipart\/alternative/i);
  
@@ -2527,39 +2574,65 @@ sub send_msg {
 	    &do_log('err','Skipping user with no email address in list %s', $name);
 	    next;
 	}
-	
+#	&do_log('debug','trace distribution VERP email %s,reception %s,bounce_address %s',$user->{'email'},$user->{'reception'},$user->{'bounce_address'} );
 	if ($user->{'reception'} =~ /^digest|digestplain|summary|nomail$/i) {
 	    next;
-	}elsif ($user->{'reception'} eq 'not_me'){
-	    push @tabrcpt, $user->{'email'} unless ($sender_hash{$user->{'email'}});
-	    
 	} elsif ($user->{'reception'} eq 'notice') {
-	    push @tabrcpt_notice, $user->{'email'}; 
-	} elsif ($alternative and ($user->{'reception'} eq 'txt')) {
-	    push @tabrcpt_txt, $user->{'email'};
-	} elsif ($alternative and ($user->{'reception'} eq 'html')) {
-	    push @tabrcpt_html, $user->{'email'};
+	    if ($user->{'bounce_address'}) {
+		push @tabrcpt_notice_verp, $user->{'email'}; 
+	    }else{
+		push @tabrcpt_notice, $user->{'email'}; 
+	    }
+        } elsif ($alternative and ($user->{'reception'} eq 'txt')) {
+	    if ($user->{'bounce_address'}) {
+		push @tabrcpt_txt_verp, $user->{'email'};
+	    }else{
+		push @tabrcpt_txt, $user->{'email'};
+	    }
+        } elsif ($alternative and ($user->{'reception'} eq 'html')) {
+	    if ($user->{'bounce_address'}) {
+		push @tabrcpt_html_verp, $user->{'email'};
+	    }else{
+		if ($user->{'bounce_address'}) {
+		    push @tabrcpt_html_verp, $user->{'email'};
+		}else{
+		    push @tabrcpt_html, $user->{'email'};
+		}
+	   }
 	} elsif ($mixed and ($user->{'reception'} eq 'urlize')) {
-	    push @tabrcpt_url, $user->{'email'};
+	    if ($user->{'bounce_address'}) {
+		push @tabrcpt_url_verp, $user->{'email'};
+	    }else{
+		push @tabrcpt_url, $user->{'email'};
+	    }
 	} elsif (($message->{'smime_crypted'}) && (! -r "$Conf{'ssl_cert_dir'}/".&tools::escape_chars($user->{'email'}))) {
 	    ## Missing User certificate
 	    unless ($self->send_file('x509-user-cert-missing', $user->{'email'}, $robot, {'mail' => {'subject' => $message->{'msg'}->head->get('Subject'),
 												     'sender' => $message->{'msg'}->head->get('From')}})) {
-		&do_log('notice',"Unable to send template 'x509-user-cert-missing' to $user->{'email'}");
+	    &do_log('notice',"Unable to send template 'x509-user-cert-missing' to $user->{'email'}");
 	    }
-       } else {
-	   push @tabrcpt, $user->{'email'};
-       }
-   }    
+	}else{
+	    if ($user->{'bounce_address'}) {
+		push @tabrcpt_verp, $user->{'email'} unless ($sender_hash{$user->{'email'}})&&($user->{'reception'} eq 'not_me');
+	    }else{	    
+		push @tabrcpt, $user->{'email'} unless ($sender_hash{$user->{'email'}})&&($user->{'reception'} eq 'not_me');}
+	    }	    
+       }    
 
     ## sa  return 0  = Pb  ?
-    unless (@tabrcpt || @tabrcpt_notice || @tabrcpt_txt || @tabrcpt_html || @tabrcpt_url) {
+    unless (@tabrcpt || @tabrcpt_notice || @tabrcpt_txt || @tabrcpt_html || @tabrcpt_url || @tabrcpt_verp || @tabrcpt_notice_verp || @tabrcpt_txt_verp || @tabrcpt_html_verp || @tabrcpt_url_verp) {
 	&do_log('info', 'No subscriber for sending msg in list %s', $name);
 	return 0;
     }
     #save the message before modifying it
     my $saved_msg = $message->{'msg'}->dup;
     my $nbr_smtp;
+    my $nbr_verp;
+
+
+    # prepare verp parameter
+    my $verp_rate =  $self->{'admin'}{'verp_rate'};
+    my $xsequence =  $self->{'stats'}->[0] ;
 
     ##Send message for normal reception mode
     if (@tabrcpt) {
@@ -2576,17 +2649,27 @@ sub send_msg {
 	my @selected_tabrcpt;
 	if ($self->is_there_msg_topic()){
 	    @selected_tabrcpt = $self->select_subscribers_for_topic($message->get_topic(),\@tabrcpt);
-
 	} else {
 	    @selected_tabrcpt = @tabrcpt;
-
 	}
-	my $result = &mail::mail_message($message, $from, $robot, @selected_tabrcpt);
+
+	my @verp_selected_tabrcpt = &extract_verp_rcpt($verp_rate, $xsequence,\@selected_tabrcpt, \@tabrcpt_verp);
+
+
+	my $result = &mail::mail_message($message, $self, {'enable' => 'off'}, @selected_tabrcpt);
 	unless (defined $result) {
-	    &do_log('err',"List::send_msg, could not send message to distribute from $from");
+	    &do_log('err',"List::send_msg, could not send message to distribute from $from (verp desabled)");
 	    return undef;
 	}
 	$nbr_smtp = $result;
+	
+	$result = &mail::mail_message($message, $self, {'enable' => 'on'}, @verp_selected_tabrcpt);
+	unless (defined $result) {
+	    &do_log('err',"List::send_msg, could not send message to distribute from $from (verp enabled)");
+	    return undef;
+	}
+	$nbr_smtp += $result;
+	$nbr_verp = $result;
 
     }
 
@@ -2596,12 +2679,24 @@ sub send_msg {
         $notice_msg->bodyhandle(undef);    
 	$notice_msg->parts([]);
 	my $new_message = new Message($notice_msg);
-	my $result = &mail::mail_message($new_message, $from,$robot, @tabrcpt_notice);
+	
+	my @verp_tabrcpt_notice = &extract_verp_rcpt($verp_rate, $xsequence,\@tabrcpt_notice, \@tabrcpt_notice_verp);
+
+	my $result = &mail::mail_message($new_message, $self, {'enable' => 'off'}, @tabrcpt_notice);
 	unless (defined $result) {
-	    &do_log('err',"List::send_msg, could not send message to distribute from $from");
+	    &do_log('err',"List::send_msg, could not send message to distribute from $from (verp desabled)");
 	    return undef;
 	}
 	$nbr_smtp += $result;
+
+	$result = &mail::mail_message($new_message, $self , {'enable' => 'on'}, @verp_tabrcpt_notice);
+	unless (defined $result) {
+	    &do_log('err',"List::send_msg, could not send message to distribute from $from  (verp enabled)");
+	    return undef;
+	}
+	$nbr_smtp += $result;
+	$nbr_verp += $result;
+
     }
 
     ##Prepare and send message for txt reception mode
@@ -2615,14 +2710,26 @@ sub send_msg {
 	my $new_msg = $self->add_parts($txt_msg);
 	if (defined $new_msg) {
 	    $txt_msg = $new_msg;
-       }
+	}
 	my $new_message = new Message($txt_msg);
-	my $result = &mail::mail_message($new_message, $from,$robot, @tabrcpt_notice);
+
+	my @verp_tabrcpt_txt = &extract_verp_rcpt($verp_rate, $xsequence,\@tabrcpt_txt, \@tabrcpt_txt_verp);
+	
+	my $result = &mail::mail_message($new_message, $self,  {'enable' => 'off'}, @tabrcpt_txt);
 	unless (defined $result) {
-	    &do_log('err',"List::send_msg, could not send message to distribute from $from");
+	    &do_log('err',"List::send_msg, could not send message to distribute from $from  (verp desabled)");
 	    return undef;
 	}
 	$nbr_smtp += $result;
+
+	$result = &mail::mail_message($new_message, $self , {'enable' => 'on'}, @verp_tabrcpt_txt);
+	unless (defined $result) {
+	    &do_log('err',"List::send_msg, could not send message to distribute from $from  (verp enabled)");
+	    return undef;
+	}
+	$nbr_smtp += $result;
+	$nbr_verp += $result;
+
     }
 
    ##Prepare and send message for html reception mode
@@ -2637,12 +2744,23 @@ sub send_msg {
 	    $html_msg = $new_msg;
         }
 	my $new_message = new Message($html_msg);
-	my $result = &mail::mail_message($new_message, $from,$robot, @tabrcpt_notice);
+
+	my @verp_tabrcpt_html = &extract_verp_rcpt($verp_rate, $xsequence,\@tabrcpt_html, \@tabrcpt_html_verp);
+
+	my $result = &mail::mail_message($new_message, $self , {'enable' => 'off'}, @tabrcpt_html);
 	unless (defined $result) {
-	    &do_log('err',"List::send_msg, could not send message to distribute from $from");
+	    &do_log('err',"List::send_msg, could not send message to distribute from $from  (verp desabled)");
 	    return undef;
 	}
 	$nbr_smtp += $result;
+
+	$result = &mail::mail_message($new_message, $self , {'enable' => 'on'}, @verp_tabrcpt_html);
+	unless (defined $result) {
+	    &do_log('err',"List::send_msg, could not send message to distribute from $from  (verp enabled)");
+	    return undef;
+	}
+	$nbr_smtp += $result;
+	$nbr_verp += $result;
     }
 
    ##Prepare and send message for urlize reception mode
@@ -2688,12 +2806,25 @@ sub send_msg {
 	    $url_msg = $new_msg;
 	} 
 	my $new_message = new Message($url_msg);
-	my $result = &mail::mail_message($new_message, $from,$robot, @tabrcpt_notice);
+
+
+	my @verp_tabrcpt_url = &extract_verp_rcpt($verp_rate, $xsequence,\@tabrcpt_url, \@tabrcpt_url_verp);
+
+	my $result = &mail::mail_message($new_message, $self , {'enable' => 'off'}, @tabrcpt_url);
 	unless (defined $result) {
-	    &do_log('err',"List::send_msg, could not send message to distribute from $from");
+	    &do_log('err',"List::send_msg, could not send message to distribute from $from  (verp desabled)");
 	    return undef;
 	}
 	$nbr_smtp += $result;
+
+	$result = &mail::mail_message($new_message, $self , {'enable' => 'on'}, @verp_tabrcpt_url);
+	unless (defined $result) {
+	    &do_log('err',"List::send_msg, could not send message to distribute from $from  (verp enabled)");
+	    return undef;
+	}
+	$nbr_smtp += $result;
+	$nbr_verp += $result;
+
     }
 
     return $nbr_smtp;
@@ -3029,12 +3160,15 @@ sub send_file {
 	    $data->{'user'}{'password'} = &tools::tmp_passwd($who);
 	}
 	
-	## Unique return-path
+	## Unique return-path VERP
 	if ((($self->{'admin'}{'welcome_return_path'} eq 'unique') && ($tpl eq 'welcome')) ||
 	    (($self->{'admin'}{'remind_return_path'} eq 'unique') && ($tpl eq 'remind')))  {
 	    my $escapercpt = $who ;
 	    $escapercpt =~ s/\@/\=\=a\=\=/;
-	    $data->{'return_path'} = "$Conf{'bounce_email_prefix'}+$escapercpt\=\=$name\@$self->{'domain'}";
+	    $data->{'return_path'} = "$Conf{'bounce_email_prefix'}+$escapercpt\=\=$name";
+	    $data->{'return_path'} .= '==w' if ($tpl eq 'welcome');
+	    $data->{'return_path'} .= '==r' if ($tpl eq 'remind');
+	    $data->{'return_path'} .= "\@$self->{'domain'}";
 	}
     }
 
@@ -4258,6 +4392,7 @@ sub get_all_user_db {
     return @users;
 }
 
+
 ## Returns a subscriber of the list.
 sub get_subscriber {
     my  $self= shift;
@@ -4292,7 +4427,7 @@ sub get_subscriber {
 
 	if ($Conf{'db_type'} eq 'Oracle') {
 	    ## "AS" not supported by Oracle
-	    $statement = sprintf "SELECT user_subscriber \"email\", comment_subscriber \"gecos\", bounce_subscriber \"bounce\", bounce_score_subscriber \"bounce_score\", reception_subscriber \"reception\", topics_subscriber \"topics\", visibility_subscriber \"visibility\", %s \"date\", %s \"update_date\", subscribed_subscriber \"subscribed\", included_subscriber \"included\", include_sources_subscriber \"id\"  %s FROM subscriber_table WHERE (user_subscriber = %s AND list_subscriber = %s AND robot_subscriber = %s)", 
+	    $statement = sprintf "SELECT user_subscriber \"email\", comment_subscriber \"gecos\", bounce_subscriber \"bounce\", bounce_score_subscriber \"bounce_score\", bounce_address_subscriber \"bounce_address\", reception_subscriber \"reception\", topics_subscriber \"topics\", visibility_subscriber \"visibility\", %s \"date\", %s \"update_date\", subscribed_subscriber \"subscribed\", included_subscriber \"included\", include_sources_subscriber \"id\"  %s FROM subscriber_table WHERE (user_subscriber = %s AND list_subscriber = %s AND robot_subscriber = %s)", 
 	    $date_field, 
 	    $update_field, 
 	    $additional, 
@@ -4300,7 +4435,7 @@ sub get_subscriber {
 	    $dbh->quote($name),
 	    $dbh->quote($self->{'domain'});
 	}else {
-	    $statement = sprintf "SELECT user_subscriber AS email, comment_subscriber AS gecos, bounce_subscriber AS bounce, bounce_score_subscriber AS bounce_score, reception_subscriber AS reception,  topics_subscriber AS topics, visibility_subscriber AS visibility, %s AS date, %s AS update_date, subscribed_subscriber AS subscribed, included_subscriber AS included, include_sources_subscriber AS id %s FROM subscriber_table WHERE (user_subscriber = %s AND list_subscriber = %s AND robot_subscriber = %s)", 
+	    $statement = sprintf "SELECT user_subscriber AS email, comment_subscriber AS gecos, bounce_subscriber AS bounce, bounce_score_subscriber AS bounce_score, bounce_address_subscriber AS bounce_address, reception_subscriber AS reception,  topics_subscriber AS topics, visibility_subscriber AS visibility, %s AS date, %s AS update_date, subscribed_subscriber AS subscribed, included_subscriber AS included, include_sources_subscriber AS id %s FROM subscriber_table WHERE (user_subscriber = %s AND list_subscriber = %s AND robot_subscriber = %s)", 
 	    $date_field, 
 	    $update_field, 
 	    $additional, 
@@ -4360,6 +4495,54 @@ sub get_subscriber {
 
 	return \%user;
     }
+}
+## Returns an array of all users in User table hash for a given user
+sub get_subscriber_by_bounce_address {
+
+    my  $self= shift;
+    my  $bounce_address = &tools::clean_email(shift);
+    
+    do_log('debug2', 'List::get_subscriber_by_bounce_address (%s)', $bounce_address);
+
+    return undef unless $bounce_address;
+
+    my $statement;
+    my @users;
+    my @subscribers;
+ 
+    unless ($List::use_db) {
+	&do_log('info', 'Sympa not setup to use DBI');
+	return undef;
+    }
+
+    my $listname = $self->{'name'};
+    my $robot = $self->{'domain'};
+
+    ## Check database connection
+    unless ($dbh and $dbh->ping) {
+	return undef unless &db_connect();
+    }
+
+    return undef unless (($self->{'admin'}{'user_data_source'} eq 'database') || ($self->{'admin'}{'user_data_source'} eq 'include2'));
+
+    $statement = sprintf "SELECT user_subscriber AS email, bounce_address_subscriber AS bounce_address FROM subscriber_table WHERE (list_subscriber=%s AND robot_subscriber=%s AND bounce_address_subscriber LIKE %s",$dbh->quote($listname),$dbh->quote($robot),$dbh->quote($bounce_address);
+    
+    push @sth_stack, $sth;
+
+    unless ($sth = $dbh->prepare($statement)) {
+	do_log('err','Unable to prepare SQL statement : %s', $dbh->errstr);
+	return undef;
+    }
+    unless ($sth->execute) {
+	do_log('err','Unable to execute SQL statement "%s" : %s', $statement, $dbh->errstr);
+	return undef;
+    }
+    while (my $subscriber = $sth->fetchrow_hashref) {
+	push @subscribers, $subscriber;
+    }
+    $sth->finish();
+    $sth = pop @sth_stack;
+    return @subscribers;
 }
 
 
@@ -4512,7 +4695,7 @@ sub get_first_user {
 	## Oracle
 	if ($Conf{'db_type'} eq 'Oracle') {
 
-	    $statement = sprintf "SELECT user_subscriber \"email\", comment_subscriber \"gecos\", reception_subscriber \"reception\", topics_subscriber \"topics\", visibility_subscriber \"visibility\", bounce_subscriber \"bounce\", bounce_score_subscriber \"bounce_score\", %s \"date\", %s \"update_date\", subscribed_subscriber \"subscribed\", included_subscriber \"included\", include_sources_subscriber \"id\" %s FROM subscriber_table WHERE (list_subscriber = %s AND robot_subscriber = %s %s)", 
+	    $statement = sprintf "SELECT user_subscriber \"email\", comment_subscriber \"gecos\", reception_subscriber \"reception\", topics_subscriber \"topics\", visibility_subscriber \"visibility\", bounce_subscriber \"bounce\", bounce_score_subscriber \"bounce_score\", bounce_address_subscriber \"bounce_address\", %s \"date\", %s \"update_date\", subscribed_subscriber \"subscribed\", included_subscriber \"included\", include_sources_subscriber \"id\" %s FROM subscriber_table WHERE (list_subscriber = %s AND robot_subscriber = %s %s)", 
 	    $date_field, 
 	    $update_field, 
 	    $additional, 
@@ -4522,7 +4705,7 @@ sub get_first_user {
 
 	    ## SORT BY
 	    if ($sortby eq 'domain') {
-		$statement = sprintf "SELECT user_subscriber \"email\", comment_subscriber \"gecos\", reception_subscriber \"reception\", topics_subscriber \"topics\", visibility_subscriber \"visibility\", bounce_subscriber \"bounce\", bounce_score_subscriber \"bounce_score\", %s \"date\", %s \"update_date\", subscribed_subscriber \"subscribed\", included_subscriber \"included\", include_sources_subscriber \"id\", substr(user_subscriber,instr(user_subscriber,'\@')+1) \"dom\" %s FROM subscriber_table WHERE (list_subscriber = %s AND robot_subscriber = %s) ORDER BY \"dom\"", 
+		$statement = sprintf "SELECT user_subscriber \"email\", comment_subscriber \"gecos\", reception_subscriber \"reception\", topics_subscriber \"topics\", visibility_subscriber \"visibility\", bounce_subscriber \"bounce\", bounce_score_subscriber \"bounce_score\",bounce_address_subscriber \"bounce_address\", %s \"date\", %s \"update_date\", subscribed_subscriber \"subscribed\", included_subscriber \"included\", include_sources_subscriber \"id\", substr(user_subscriber,instr(user_subscriber,'\@')+1) \"dom\" %s FROM subscriber_table WHERE (list_subscriber = %s AND robot_subscriber = %s) ORDER BY \"dom\"", 
 		$date_field, 
 		$update_field, 
 		$additional, 
@@ -4545,7 +4728,7 @@ sub get_first_user {
 	## Sybase
 	}elsif ($Conf{'db_type'} eq 'Sybase'){
 
-	    $statement = sprintf "SELECT user_subscriber \"email\", comment_subscriber \"gecos\", reception_subscriber \"reception\", topics_subscriber \"topics\", visibility_subscriber \"visibility\", bounce_subscriber \"bounce\", bounce_score_subscriber \"bounce_score\", %s \"date\", %s \"update_date\", subscribed_subscriber \"subscribed\", included_subscriber \"included\", include_sources_subscriber \"id\" %s FROM subscriber_table WHERE (list_subscriber = %s AND robot_subscriber = %s %s)", 
+	    $statement = sprintf "SELECT user_subscriber \"email\", comment_subscriber \"gecos\", reception_subscriber \"reception\", topics_subscriber \"topics\", visibility_subscriber \"visibility\", bounce_subscriber \"bounce\", bounce_score_subscriber \"bounce_score\", bounce_address_subscriber \"bounce_address\", %s \"date\", %s \"update_date\", subscribed_subscriber \"subscribed\", included_subscriber \"included\", include_sources_subscriber \"id\" %s FROM subscriber_table WHERE (list_subscriber = %s AND robot_subscriber = %s %s)", 
 	    $date_field, 
 	    $update_field, 
 	    $additional, 
@@ -4555,7 +4738,7 @@ sub get_first_user {
 	    
 	    ## SORT BY
 	    if ($sortby eq 'domain') {
-		$statement = sprintf "SELECT user_subscriber \"email\", comment_subscriber \"gecos\", reception_subscriber \"reception\", topics_subscriber \"topics\", visibility_subscriber \"visibility\", bounce_subscriber \"bounce\", bounce_score_subscriber \"bounce_score\", %s \"date\", %s \"update_date\", subscribed_subscriber \"subscribed\", included_subscriber \"included\", include_sources_subscriber \"id\", substring(user_subscriber,charindex('\@',user_subscriber)+1,100) \"dom\" %s FROM subscriber_table WHERE (list_subscriber = %s AND robot_subscriber = %s) ORDER BY \"dom\"", 
+		$statement = sprintf "SELECT user_subscriber \"email\", comment_subscriber \"gecos\", reception_subscriber \"reception\", topics_subscriber \"topics\", visibility_subscriber \"visibility\", bounce_subscriber \"bounce\", bounce_score_subscriber \"bounce_score\",  bounce_address_subscriber \"bounce_address\",%s \"date\", %s \"update_date\", subscribed_subscriber \"subscribed\", included_subscriber \"included\", include_sources_subscriber \"id\", substring(user_subscriber,charindex('\@',user_subscriber)+1,100) \"dom\" %s FROM subscriber_table WHERE (list_subscriber = %s AND robot_subscriber = %s) ORDER BY \"dom\"", 
 		$date_field, 
 		$update_field, 
 		$additional, 
@@ -4579,7 +4762,7 @@ sub get_first_user {
 	    ## mysql
 	}elsif ($Conf{'db_type'} eq 'mysql') {
 	    
-	    $statement = sprintf "SELECT user_subscriber AS email, comment_subscriber AS gecos, reception_subscriber AS reception, topics_subscriber AS topics, visibility_subscriber AS visibility, bounce_subscriber AS bounce, bounce_score_subscriber AS bounce_score, %s AS date, %s AS update_date, subscribed_subscriber AS subscribed, included_subscriber AS included, include_sources_subscriber AS id %s FROM subscriber_table WHERE (list_subscriber = %s AND robot_subscriber = %s %s)", 
+	    $statement = sprintf "SELECT user_subscriber AS email, comment_subscriber AS gecos, reception_subscriber AS reception, topics_subscriber AS topics, visibility_subscriber AS visibility, bounce_subscriber AS bounce, bounce_score_subscriber AS bounce_score, bounce_address_subscriber AS bounce_address,  %s AS date, %s AS update_date, subscribed_subscriber AS subscribed, included_subscriber AS included, include_sources_subscriber AS id %s FROM subscriber_table WHERE (list_subscriber = %s AND robot_subscriber = %s %s)", 
 	    $date_field, 
 	    $update_field, 
 	    $additional, 
@@ -4591,7 +4774,7 @@ sub get_first_user {
 	    if ($sortby eq 'domain') {
 		## Redefine query to set "dom"
 		
-		$statement = sprintf "SELECT user_subscriber AS email, comment_subscriber AS gecos, reception_subscriber AS reception, topics_subscriber AS topics, visibility_subscriber AS visibility, bounce_subscriber AS bounce, bounce_score_subscriber AS bounce_score, %s AS date, %s AS update_date, subscribed_subscriber AS subscribed, included_subscriber AS included, include_sources_subscriber AS id, REVERSE(SUBSTRING(user_subscriber FROM position('\@' IN user_subscriber) FOR 50)) AS dom %s FROM subscriber_table WHERE (list_subscriber = %s AND robot_subscriber = %s ) ORDER BY dom", 
+		$statement = sprintf "SELECT user_subscriber AS email, comment_subscriber AS gecos, reception_subscriber AS reception, topics_subscriber AS topics, visibility_subscriber AS visibility, bounce_subscriber AS bounce, bounce_score_subscriber AS bounce_score, bounce_address_subscriber AS bounce_address,  %s AS date, %s AS update_date, subscribed_subscriber AS subscribed, included_subscriber AS included, include_sources_subscriber AS id, REVERSE(SUBSTRING(user_subscriber FROM position('\@' IN user_subscriber) FOR 50)) AS dom %s FROM subscriber_table WHERE (list_subscriber = %s AND robot_subscriber = %s ) ORDER BY dom", 
 		$date_field, 
 		$update_field, 
 		$additional, 
@@ -4620,7 +4803,7 @@ sub get_first_user {
 	    ## SQLite
 	}elsif ($Conf{'db_type'} eq 'SQLite') {
     
-	    $statement = sprintf "SELECT user_subscriber AS email, comment_subscriber AS gecos, reception_subscriber AS reception, visibility_subscriber AS visibility, bounce_subscriber AS bounce, bounce_score_subscriber AS bounce_score, %s AS date, %s AS update_date, subscribed_subscriber AS subscribed, included_subscriber AS included, include_sources_subscriber AS id %s FROM subscriber_table WHERE (list_subscriber = %s AND robot_subscriber = %s %s)", 
+	    $statement = sprintf "SELECT user_subscriber AS email, comment_subscriber AS gecos, reception_subscriber AS reception, visibility_subscriber AS visibility, bounce_subscriber AS bounce, bounce_score_subscriber AS bounce_score, bounce_address_subscriber AS bounce_address, %s AS date, %s AS update_date, subscribed_subscriber AS subscribed, included_subscriber AS included, include_sources_subscriber AS id %s FROM subscriber_table WHERE (list_subscriber = %s AND robot_subscriber = %s %s)", 
 	    $date_field, 
 	    $update_field, 
 	    $additional, 
@@ -4632,7 +4815,7 @@ sub get_first_user {
  	    if ($sortby eq 'domain') {
  		## Redefine query to set "dom"
 		
- 		$statement = sprintf "SELECT user_subscriber AS email, comment_subscriber AS gecos, reception_subscriber AS reception, visibility_subscriber AS visibility, bounce_subscriber AS bounce, bounce_score_subscriber AS bounce_score, %s AS date, %s AS update_date, subscribed_subscriber AS subscribed, included_subscriber AS included, include_sources_subscriber AS id, substr(user_subscriber,0,func_index(user_subscriber,'\@')+1) AS dom %s FROM subscriber_table WHERE (list_subscriber = %s AND robot_subscriber = %s) ORDER BY dom", 
+ 		$statement = sprintf "SELECT user_subscriber AS email, comment_subscriber AS gecos, reception_subscriber AS reception, visibility_subscriber AS visibility, bounce_subscriber AS bounce, bounce_score_subscriber AS bounce_score, bounce_address_subscriber AS bounce_address, %s AS date, %s AS update_date, subscribed_subscriber AS subscribed, included_subscriber AS included, include_sources_subscriber AS id, substr(user_subscriber,0,func_index(user_subscriber,'\@')+1) AS dom %s FROM subscriber_table WHERE (list_subscriber = %s AND robot_subscriber = %s) ORDER BY dom", 
 		$date_field, 
 		$update_field, 
 		$additional, 
@@ -4661,7 +4844,7 @@ sub get_first_user {
 	    ## Pg    
 	}else {
 	    
-	    $statement = sprintf "SELECT user_subscriber AS email, comment_subscriber AS gecos, reception_subscriber AS reception, topics_subscriber AS topics, visibility_subscriber AS visibility, bounce_subscriber AS bounce, bounce_score_subscriber AS bounce_score, %s AS date, %s AS update_date, subscribed_subscriber AS subscribed, included_subscriber AS included, include_sources_subscriber AS id %s FROM subscriber_table WHERE (list_subscriber = %s AND robot_subscriber = %s %s)", 
+	    $statement = sprintf "SELECT user_subscriber AS email, comment_subscriber AS gecos, reception_subscriber AS reception, topics_subscriber AS topics, visibility_subscriber AS visibility, bounce_subscriber AS bounce, bounce_score_subscriber AS bounce_score, bounce_address_subscriber AS bounce_address, %s AS date, %s AS update_date, subscribed_subscriber AS subscribed, included_subscriber AS included, include_sources_subscriber AS id %s FROM subscriber_table WHERE (list_subscriber = %s AND robot_subscriber = %s %s)", 
 	    $date_field, 
 	    $update_field, 
 	    $additional, 
@@ -4673,7 +4856,7 @@ sub get_first_user {
 	    if ($sortby eq 'domain') {
 		## Redefine query to set "dom"
 
-		$statement = sprintf "SELECT user_subscriber AS email, comment_subscriber AS gecos, reception_subscriber AS reception, topics_subscriber AS topics, visibility_subscriber AS visibility, bounce_subscriber AS bounce, bounce_score_subscriber AS bounce_score, %s AS date, %s AS update_date, subscribed_subscriber AS subscribed, included_subscriber AS included, include_sources_subscriber AS id, SUBSTRING(user_subscriber FROM position('\@' IN user_subscriber) FOR 50) AS dom %s FROM subscriber_table WHERE (list_subscriber = %s AND robot_subscriber = %s) ORDER BY dom", 
+		$statement = sprintf "SELECT user_subscriber AS email, comment_subscriber AS gecos, reception_subscriber AS reception, topics_subscriber AS topics, visibility_subscriber AS visibility, bounce_subscriber AS bounce, bounce_score_subscriber AS bounce_score, bounce_address_subscriber AS bounce_address, %s AS date, %s AS update_date, subscribed_subscriber AS subscribed, included_subscriber AS included, include_sources_subscriber AS id, SUBSTRING(user_subscriber FROM position('\@' IN user_subscriber) FOR 50) AS dom %s FROM subscriber_table WHERE (list_subscriber = %s AND robot_subscriber = %s) ORDER BY dom", 
 		$date_field, 
 		$update_field, 
 		$additional, 
@@ -5527,7 +5710,8 @@ sub update_user {
 			  email => 'user_subscriber',
 			  subscribed => 'subscribed_subscriber',
 			  included => 'included_subscriber',
-			  id => 'include_sources_subscriber'
+			  id => 'include_sources_subscriber',
+			  bounce_address => 'bounce_address_subscriber'
 			  );
 
 	## mapping between var and tables
@@ -5543,7 +5727,8 @@ sub update_user {
 			  email => 'subscriber_table',
 			  subscribed => 'subscriber_table',
 			  included => 'subscriber_table',
-			  id => 'subscriber_table'
+			  id => 'subscriber_table',
+			  bounce_address => 'subscriber_table'
 			  );
 
 	## additional DB fields
@@ -9393,7 +9578,7 @@ sub _load_total_db {
     
     ## Use session cache
     if (($option ne 'nocache') && (defined $list_cache{'load_total_db'}{$self->{'domain'}}{$self->{'name'}})) {
-	&do_log('debug3', 'xxx Use cache(load_total_db, %s)', $self->{'name'});
+#	&do_log('debug3', 'xxx Use cache(load_total_db, %s)', $self->{'name'});
 	return $list_cache{'load_total_db'}{$self->{'domain'}}{$self->{'name'}};
     }
 
@@ -9910,7 +10095,8 @@ sub probe_db {
 							'subscribed_subscriber' => "int(1)",
 							'included_subscriber' => "int(1)",
 							'include_sources_subscriber' => 'varchar(50)',
-							'bounce_score_subscriber' => 'smallint(6)'},
+							'bounce_score_subscriber' => 'smallint(6)',
+							'bounce_address_subscriber' => 'varchar(100)'},
 				 'admin_table' => {'list_admin' => 'varchar(50)',
 						   'user_admin' => 'varchar(100)',
 						   'robot_admin' => 'varchar(80)',
@@ -9944,7 +10130,8 @@ sub probe_db {
 							 'subscribed_subscriber' => "boolean",
 							 'included_subscriber' => "boolean",
 							 'include_sources_subscriber' => 'varchar(50)',
-							 'bounce_score_subscriber' => 'integer'},
+							 'bounce_score_subscriber' => 'integer',
+							 'bounce_address_subscriber' => 'varchar(100)'},
 				  'admin_table' => {'list_admin' => 'varchar(50)',
 						    'user_admin' => 'varchar(100)',
 						    'robot_admin' => 'varchar(80)',
@@ -12323,44 +12510,32 @@ sub get_first_db_log {
     }else{
 	$statement = "SELECT date AS date, pid AS pid, process AS process, email_user AS email, auth AS auth, ip AS ip, operation AS operation, list AS list, robot AS robot, arg AS arg, status AS status, subscriber_count AS count FROM log_table WHERE 1 ";	
     }
-
     if ($select->{'list'}) {
 	$select->{'list'} = lc ($select->{'list'});
 	$statement .= sprintf "AND list = %s ",$select->{'list'}; 
     }
-   
     if ($select->{'robot'}) {
 	$select->{'robot'} = lc ($select->{'robot'});
 	$statement .= sprintf "AND robot = %s ",$select->{'robot'}; 
     }
-   
     if ($select->{'ip'}) {
 	$select->{'ip'} = lc ($select->{'ip'});
 	$statement .= sprintf "AND ip = %s ",$select->{'ip'}; 
     }
-   
     if ($select->{'ope'}) {
 	$select->{'ope'} = lc ($select->{'ope'});
 	$statement .= sprintf "AND operation = %s ",$select->{'operation'}; 
     }
 
-
     push @sth_stack, $sth;
-
-    do_log('info',"xxxxxxxxxxxxxx statement $statement ");
-
     unless ($sth = $dbh->prepare($statement)) {
 	do_log('err','Unable to prepare SQL statement : %s', $dbh->errstr);
 	return undef;
     }
-    
-    unless ($sth->execute) {
+        unless ($sth->execute) {
 	do_log('err','Unable to execute SQL statement "%s" : %s', $statement, $dbh->errstr);
 	return undef;
     }
-
-    do_log('info',"xxxxxxxxxxxxxx found 1");
-  
     return ($sth->fetchrow_hashref);
 
 }
