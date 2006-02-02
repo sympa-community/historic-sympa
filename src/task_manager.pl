@@ -1567,13 +1567,11 @@ sub process_bouncers {
 
 		    unless(&List::send_notify_to_listmaster('automatic_bounce_management',$list->{'domain'},@param)){
 			&do_log('err','error while notifying listmaster');
-			return undef;
 		    }
 		}elsif ($notification eq 'owner'){
 		    
 		    unless ($list->new_send_notify_to_owner('automatic_bounce_management',@param)){
 			&do_log('err','error while notifying owner');
-			return undef;
 		    }
 		}
 	    }

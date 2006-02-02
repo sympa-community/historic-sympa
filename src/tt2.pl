@@ -132,6 +132,15 @@ sub escape_xml {
     return $string;
 }
 
+sub escape_quote {
+    my $string = shift;
+
+    $string =~ s/\'/\\\'/g; 
+    $string =~ s/\"/\\\"/g;
+
+    return $string;
+}
+
 sub maketext {
     my ($context, @arg) = @_;
 
@@ -198,7 +207,7 @@ sub parse_tt2 {
 
 #    &do_log('notice', 'TPL: %s ; LANG: %s', $template, $data->{lang});
 
-    &Language::SetLang($data->{lang});
+    &Language::SetLang($data->{lang}) if ($data->{'lang'});
 
     my $config = {
 	# ABSOLUTE => 1,
@@ -210,7 +219,8 @@ sub parse_tt2 {
 	    l => [\&tt2::maketext, 1],
 	    loc => [\&tt2::maketext, 1],
 	    qencode => [\&qencode, 0],
- 	    escape_xml => [\&escape_xml, 0]
+ 	    escape_xml => [\&escape_xml, 0],
+	    escape_quote => [\&escape_quote, 0],
 	    },
 	    };
 

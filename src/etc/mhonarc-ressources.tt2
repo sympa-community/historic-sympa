@@ -355,7 +355,7 @@ MSGPGEND
 </MSGPGBEGIN>
 
 <TOPLINKS>
-<CENTER>
+
 <div id="ActionHeader">
    <div style="text-align: center;"><h2>($tag$% subtitle %$tag$)</h2></div><br />
    <span style="float: right">
@@ -368,12 +368,9 @@ MSGPGEND
 </div>
 
 <!-- end header -->
-</TD>
-</TR>
-</TABLE>
-</CENTER>
-</TOPLINKS>
 
+</TOPLINKS>
+<CENTER>
 <HEADBODYSEP>
 </div>
 <hr size="1" noshade>
@@ -387,7 +384,10 @@ $TSLICE(10;10;1)$
 <BOTLINKS>
 
 </BOTLINKS>
-
+</TD>
+</TR>
+</TABLE>
+</CENTER>
 <MSGPGEND>
 $POWERED_BY$
 ($tag$%TAGS [% %]%$tag$)

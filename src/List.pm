@@ -1382,7 +1382,7 @@ sub set_status_family_closed {
 	
 	my $host = &Conf::get_robot_conf($self->{'robot'}, 'host');	
 	
-	unless ($self->close("listmaster\@$host")) {
+	unless ($self->close("listmaster\@$host",'family_closed')) {
 	    &do_log('err','Impossible to set the list %s in status family_closed');
 	    return undef;
 	}
@@ -1655,6 +1655,7 @@ sub load {
  	    unless ($family = $self->get_family()) {
  		&do_log('err', 'Impossible to get list %s family : %s. The list is set in status error_config',$self->{'name'},$self->{'admin'}{'family_name'});
  		$self->set_status_error_config('no_list_family',$self->{'name'}, $admin->{'family_name'});
+		return undef;
  	    }  
  	    my $error = $family->check_param_constraint($self);
  	    unless($error) {
@@ -1876,33 +1877,6 @@ sub get_editors_email {
 	do_log('notice','Warning : no editor defined for list %s, getting owners', $self->{'name'} );
     }
     return @rcpt;
-}
-
-## Returns an array of editors' email addresses (unless reception nomail)
-#  or owners if there isn't any editors'email adress
-sub get_editors_email {
-    my($self) = @_;
-    do_log('debug3', 'List::get_editors_email(%s)', $self->{'name'});
-    
-    my ($i, @rcpt);
-    my $admin = $self->{'admin'}; 
-    my $name = $self->{'name'};
-
-    foreach $i (@{$admin->{'editor'}}) {
-	next if ($i->{'reception'} eq 'nomail');
-	if (ref($i->{'email'})) {
-	    push(@rcpt, @{$i->{'email'}});
-	}elsif ($i->{'email'}) {
-	    push(@rcpt, $i->{'email'});
-	}
-    }
-
-    if ($#rcpt < 0) {
-	return &get_owners_email($self);
-    }
-
-    return @rcpt;
-
 }
 
 ## Returns an object Family if the list belongs to a family
@@ -3826,9 +3800,9 @@ sub get_admin_user {
     my $update_field = sprintf $date_format{'read'}{$Conf{'db_type'}}, 'update_admin', 'update_admin';	
 
     ## Use session cache
-    if (defined $list_cache{'get_admin_user'}{$name}{$email}) {
+    if (defined $list_cache{'get_admin_user'}{$name}{$role}{$email}) {
 	&do_log('debug3', 'xxx Use cache(get_admin_user, %s,%s,%s)', $name, $role, $email);
-	return $list_cache{'get_admin_user'}{$name}{$email};
+	return $list_cache{'get_admin_user'}{$name}{$role}{$email};
     }
 
     ## Check database connection
@@ -3871,7 +3845,7 @@ sub get_admin_user {
     $sth = pop @sth_stack;
     
     ## Set session cache
-    $list_cache{'get_admin_user'}{$name}{$email} = $admin_user;
+    $list_cache{'get_admin_user'}{$name}{$role}{$email} = $admin_user;
     
     return $admin_user;
     
@@ -5004,7 +4978,7 @@ sub update_admin_user {
     }
 
     ## Reset session cache
-    $list_cache{'get_admin_user'}{$name}{$who} = undef;
+    $list_cache{'get_admin_user'}{$name}{$role}{$who} = undef;
     
     return 1;
 }
@@ -5352,7 +5326,7 @@ sub is_listmaster {
 
 ## Does the user have a particular function in the list ?
 sub am_i {
-    my($self, $function, $who) = @_;
+    my($self, $function, $who, $options) = @_;
     do_log('debug2', 'List::am_i(%s, %s, %s)', $function, $self->{'name'}, $who);
     
     return undef unless ($self && $who);
@@ -5360,15 +5334,20 @@ sub am_i {
     $who =~ y/A-Z/a-z/;
     chomp($who);
     
-    ## Listmaster has all privileges except editor
-    # sa contestable.
-    if (($function eq 'owner' || $function eq 'privileged_owner') and &is_listmaster($who,$self->{'domain'})) {
-	$list_cache{'am_i'}{$function}{$self->{'name'}}{$who} = 1;
-	return 1;
+    ## If 'strict' option is given, then listmaster does not inherit privileged
+    unless (defined $options and $options->{'strict'}) {
+	## Listmaster has all privileges except editor
+	# sa contestable.
+	if (($function eq 'owner' || $function eq 'privileged_owner') and &is_listmaster($who,$self->{'domain'})) {
+	    $list_cache{'am_i'}{$function}{$self->{'name'}}{$who} = 1;
+	    return 1;
+	}
     }
 
     ## Use cache
-    if (defined $list_cache{'am_i'}{$function}{$self->{'name'}}{$who}) {
+    if (defined $list_cache{'am_i'}{$function}{$self->{'name'}}{$who} &&
+	$function ne 'editor') { ## Defaults for editor may be owners
+
 	# &do_log('debug3', 'Use cache(%s,%s): %s', $name, $who, $list_cache{'is_user'}{$name}{$who});
 	return $list_cache{'am_i'}{$function}{$self->{'name'}}{$who};
     }
@@ -5377,18 +5356,29 @@ sub am_i {
 
 	##Check editors
 	if ($function =~ /^editor$/i){
+	    
+	    ## Check cache first
+	    if ($list_cache{'am_i'}{$function}{$self->{'name'}}{$who} == 1) {
+		return 1;
+	    }
+	    
 	    my $editor = $self->get_admin_user('editor',$who);
 
 	    if (defined $editor) {
 		return 1;
 	    }else {
-		# if no editor defined, owners has editor privilege
-		$editor = $self->get_admin_user('owner',$who);
-		if (defined $editor){
-		    return 1;
-		    
-		    ## Update cache
-		    $list_cache{'am_i'}{'editor'}{$self->{'name'}}{$who} = 1;
+		## Check if any editor is defined ; if not owners are editors
+		my $editors = $self->get_editors();
+		if ($#{$editors} < 0) {
+
+		    # if no editor defined, owners has editor privilege
+		    $editor = $self->get_admin_user('owner',$who);
+		    if (defined $editor){
+			## Update cache
+			$list_cache{'am_i'}{'editor'}{$self->{'name'}}{$who} = 1;
+			
+			return 1;
+		    }
 		}else {
 		    
 		    ## Update cache
@@ -5402,10 +5392,10 @@ sub am_i {
 	if ($function =~ /^owner$/i){
 	    my $owner = $self->get_admin_user('owner',$who);
 	    if (defined $owner) {
-		return 1;
-		    
 		## Update cache
 		$list_cache{'am_i'}{'owner'}{$self->{'name'}}{$who} = 1;
+
+		return 1;
 	    }else {
 		    
 		## Update cache
@@ -6059,13 +6049,15 @@ sub may_edit {
     return undef unless ($self);
 
     my $edit_conf;
-    
-    if (! $edit_list_conf{$self->{'domain'}} || ((stat(&tools::get_filename('etc','edit_list.conf',$self->{'domain'},$self)))[9] > $mtime{'edit_list_conf'}{$self->{'domain'}})) {
 
-        $edit_conf = $edit_list_conf{$self->{'domain'}} = &tools::load_edit_list_conf($self->{'domain'}, $self);
-	$mtime{'edit_list_conf'}{$self->{'domain'}} = time;
+    # Load edit_list.conf: track by file, not domain (file may come from server, robot, family or list context)
+    my $edit_conf_file = &tools::get_filename('etc','edit_list.conf',$self->{'domain'},$self); 
+    if (! $edit_list_conf{$edit_conf_file} || ((stat($edit_conf_file))[9] > $mtime{'edit_list_conf'}{$edit_conf_file})) {
+
+        $edit_conf = $edit_list_conf{$edit_conf_file} = &tools::load_edit_list_conf($self->{'domain'}, $self);
+	$mtime{'edit_list_conf'}{$edit_conf_file} = time;
     }else {
-        $edit_conf = $edit_list_conf{$self->{'domain'}};
+        $edit_conf = $edit_list_conf{$edit_conf_file};
     }
 
     ## What privilege ?
@@ -6228,8 +6220,7 @@ sub archive_exist {
    do_log('debug3', 'List::archive_exist(%s)', $file);
 
    return undef unless ($self->is_archived());
-   my $dir = &Conf::get_robot_conf($self->{'domain'},'arc_path').$self->{'name'}.'@'.$self->{'domain'};
-   Archive::exist($dir, $file);
+   Archive::exist("$self->{'dir'}/archives", $file);
 }
 
 ## Send an archive file to someone
@@ -6249,9 +6240,7 @@ sub archive_ls {
    my $self = shift;
    do_log('debug2', 'List::archive_ls');
 
-   my $dir = &Conf::get_robot_conf($self->{'domain'},'arc_path').$self->{'name'}.'@'.$self->{'domain'};
-
-   Archive::list($dir) if ($self->is_archived());
+   Archive::list("$self->{'dir'}/archives") if ($self->is_archived());
 }
 
 ## Archive 
@@ -6284,7 +6273,7 @@ sub is_moderated {
 ## Is the list archived ?
 sub is_archived {
     do_log('debug3', 'List::is_archived');
-    return (shift->{'admin'}{'web_archive'}{'access'});
+    return (shift->{'admin'}{'archive'}{'period'});
 }
 
 ## Is the list web archived ?
@@ -8685,7 +8674,7 @@ sub get_which_db {
 	}
 	
 	while ($l = $sth->fetchrow_hashref) {
-	    $which{$l->{'role_admin'}}{$l->{'list_admin'}} = 1;
+	    $which{$l->{'list_admin'}}{$l->{'role_admin'}} = 1;
 	}
 	
 	$sth->finish();
@@ -8722,7 +8711,7 @@ sub get_which {
 
 	    if (($list->{'admin'}{'user_data_source'} eq 'database') ||
 		($list->{'admin'}{'user_data_source'} eq 'include2')){
-		if ($db_which->{$l}) {
+		if ($db_which->{$l}{'member'}) {
 		    push @which, $l ;
 
 		    ## Update cache
@@ -8737,7 +8726,7 @@ sub get_which {
 
 	}elsif ($function eq 'owner') {
  	    if ($list->{'admin'}{'user_data_source'} eq 'include2'){
-		if ($db_which->{'owner'}{$l} == 1) {
+		if ($db_which->{$l}{'owner'} == 1) {
  		    push @which, $l ;
 		    
 		    ## Update cache
@@ -8747,12 +8736,12 @@ sub get_which {
 		    $list_cache{'am_i'}{'owner'}{$l}{$email} = 0;		    
 		}
  	    }else {	    
- 		push @which, $list->{'name'} if ($list->am_i('owner',$email));
+ 		push @which, $list->{'name'} if ($list->am_i('owner',$email,{'strict' => 1}));
  	    }
 
 	}elsif ($function eq 'editor') {
  	    if ($list->{'admin'}{'user_data_source'} eq 'include2'){
-		if ($db_which->{'editor'}{$l} == 1) {
+		if ($db_which->{$l}{'editor'} == 1) {
  		    push @which, $l ;
 		    
 		    ## Update cache
@@ -8762,7 +8751,7 @@ sub get_which {
 		    $list_cache{'am_i'}{'editor'}{$l}{$email} = 0;		    
 		}
  	    }else {	    
- 		push @which, $list->{'name'} if ($list->am_i('editor',$email));
+ 		push @which, $list->{'name'} if ($list->am_i('editor',$email,{'strict' => 1}));
  	    }
 	}else {
 	    do_log('err',"Internal error, unknown or undefined parameter $function  in get_which");
@@ -9366,9 +9355,17 @@ sub maintenance {
 	}
 	close VFILE;
     }else {
+	&do_log('notice', "No previous data_structure.version file was found ; assuming you are upgrading to %s", $Version::Version);
 	$previous_version = '0';
     }
     
+    ## Skip if version is the same
+    if ($previous_version eq $Version::Version) {
+	return 1;
+    }
+
+    &do_log('notice', "Upgrading from Sympa version %s to %s", $previous_version, $Version::Version);    
+
     ## Set 'subscribed' data field to '1' is none of 'subscribed' and 'included' is set
     unless (&tools::higher_version($previous_version, '4.2a')) {
 
@@ -9377,7 +9374,7 @@ sub maintenance {
 	    return undef unless &db_connect();
 	}
 	
-	my $statement = "UPDATE subscriber_table SET subscribed_subscriber='1' WHERE ((included_subscriber IS NULL OR included_subscriber!='1') AND (subscribed_subscriber IS NULL OR subscribed_subscriber!='1'))";
+	my $statement = "UPDATE subscriber_table SET subscribed_subscriber=1 WHERE ((included_subscriber IS NULL OR included_subscriber!=1) AND (subscribed_subscriber IS NULL OR subscribed_subscriber!=1))";
 	
 	&do_log('notice','Updating subscribed field of the subscriber table...');
 	my $rows = $dbh->do($statement);
@@ -9422,6 +9419,60 @@ sub maintenance {
 	}
     }
 
+    ## Move old-style web templates out of the include_path
+    unless (&tools::higher_version($previous_version, '5.0.1')) {
+	&do_log('notice','Old web templates HTML structure is not compliant with latest ones.');
+	&do_log('notice','Moving old-style web templates out of the include_path...');
+
+	my @directories;
+
+	if (-d "$Conf::Conf{'etc'}/web_tt2") {
+	    push @directories, "$Conf::Conf{'etc'}/web_tt2";
+	}
+
+	## Go through Virtual Robots
+	foreach my $vr (keys %{$Conf::Conf{'robots'}}) {
+
+	    if (-d "$Conf::Conf{'etc'}/$vr/web_tt2") {
+		push @directories, "$Conf::Conf{'etc'}/$vr/web_tt2";
+	    }
+	}
+
+	## Search in V. Robot Lists
+	foreach my $l ( &List::get_lists('*') ) {
+	    my $list = new List ($l);
+	    next unless $list;	    
+	    if (-d "$list->{'dir'}/web_tt2") {
+		push @directories, "$list->{'dir'}/web_tt2";
+	    }	    
+	}
+
+	my @templates;
+
+	foreach my $d (@directories) {
+	    unless (opendir DIR, $d) {
+		printf STDERR "Error: Cannot read %s directory : %s", $d, $!;
+		next;
+	    }
+	    
+	    foreach my $tt2 (sort grep(/\.tt2$/,readdir DIR)) {
+		push @templates, "$d/$tt2";
+	    }
+	    
+	    closedir DIR;
+	}
+
+	foreach my $tpl (@templates) {
+	    unless (rename $tpl, "$tpl.oldtemplate") {
+		printf STDERR "Error : failed to rename $tpl to $tpl.oldtemplate : $!\n";
+		next;
+	    }
+
+	    &do_log('notice','File %s renamed %s', $tpl, "$tpl.oldtemplate");
+	}
+    }
+
+
     ## Clean buggy list config files
     unless (&tools::higher_version($previous_version, '5.1b')) {
 	&do_log('notice','Cleaning buggy list config files...');
@@ -9431,9 +9482,21 @@ sub maintenance {
 	}
     }
 
-    ## Saving current version
+    
+    ## Fix a bug in Sympa 5.1
+    unless (&tools::higher_version($previous_version, '5.1.2')) {
+	&do_log('notice','Rename archives/log. files...');
+	foreach my $l ( &List::get_lists('*') ) {
+	    my $list = new List ($l); 
+	    if (-f $list->{'dir'}.'/archives/log.') {
+		rename $list->{'dir'}.'/archives/log.', $list->{'dir'}.'/archives/log.00';
+	    }
+	}
+    }
+
+    ## Saving current version if required
     unless (open VFILE, ">$version_file") {
-	do_log('err', "Unable to open %s : %s", $version_file, $!);
+	do_log('err', "Unable to write %s ; sympa.pl needs write access on %s directory : %s", $version_file, $Conf{'etc'}, $!);
 	return undef;
     }
     printf VFILE "# This file is automatically created by sympa.pl after installation\n# Unless you know what you are doing, you should not modify it\n";
@@ -10846,7 +10909,7 @@ sub has_include_data_sources {
     my $self = shift;
 
     foreach my $type ('include_file','include_list','include_remote_sympa_list','include_sql_query','include_remote_file',
-		      'include_ldap_query','include_ldap_2level_query','include_admin') {
+		      'include_ldap_query','include_ldap_2level_query','include_admin','owner_include','editor_include') {
 	return 1 if (defined $self->{'admin'}{$type});
     }
     

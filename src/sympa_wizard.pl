@@ -173,7 +173,7 @@ my @params = ({'title' => 'Directories and file location'},
 
 	      {'name' => 'lang',
 	       'default' => 'us',
-	       'query' => 'Default lang (fr | en_US | hu | it)',
+	       'query' => 'Default lang (cs | de | el | en_US | fr | hu | it | ja_JP | nl | oc | pt_BR | tr)',
 	       'file' => 'sympa.conf','edit' => '1',
 	       'advice' =>''},
 
@@ -428,36 +428,6 @@ my @params = ({'title' => 'Directories and file location'},
 
 	       {'name' => 'default_shared_quota',
 	       'query' => 'Default disk quota for shared repository',
-	       'file' => 'sympa.conf','edit' => '1',
-	       'advice' =>''},
-
-	      {'name' => 'dark_color',
-	       'default' => '#006666',
-	       'query' => 'web interface color : dark',
-	       'file' => 'sympa.conf','edit' => '1',
-	       'advice' =>''},
-	      
-	      {'name' => 'selected_color',
-	       'default' => '#996666',
-	       'query' => 'web interface color : selected_color',
-	       'file' => 'sympa.conf','edit' => '1',
-	       'advice' =>''},
-	      
-	      {'name' => 'light_color',
-	       'default' => '#cccc66',
-	       'query' => 'web interface color : light',
-	       'file' => 'sympa.conf','edit' => '1',
-	       'advice' =>''},
-	      
-	      {'name' => 'shaded_color',
-	       'default' => '#66cccc',
-	       'query' => 'web_interface color : shaded',
-	       'file' => 'sympa.conf','edit' => '1',
-	       'advice' =>''},
-	      
-	      {'name' => 'bg_color',
-	       'default' => '#ffffcc',
-	       'query' => 'web_interface color : background',
 	       'file' => 'sympa.conf','edit' => '1',
 	       'advice' =>''},
 	      

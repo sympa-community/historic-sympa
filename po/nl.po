@@ -75,11 +75,31 @@ msgstr "Nieuwste berichten"
 msgid " The latest shared documents "
 msgstr "Nieuwste gedeelde documenten"
 
+#: web_tt2/rss.tt2:7
+#, fuzzy
+msgid " active lists "
+msgstr "Niet actieve lijsten"
+
 #. (for)
 #: web_tt2/active_lists.tt2:12 web_tt2/latest_arc.tt2:12
 #: web_tt2/latest_d_read.tt2:12 web_tt2/latest_lists.tt2:12
 msgid " for %1 days "
 msgstr "geduurende %1 dag(en)"
+
+#: web_tt2/rss.tt2:9
+#, fuzzy
+msgid " latest documents "
+msgstr "Gedeelde documenten"
+
+#: web_tt2/rss.tt2:6
+#, fuzzy
+msgid " latest lists "
+msgstr "Nieuwste lijsten"
+
+#: web_tt2/rss.tt2:8
+#, fuzzy
+msgid " latest messages "
+msgstr "Nieuwste berichten"
 
 #. (list_request_date)
 #: web_tt2/set_pending_list_request.tt2:10
@@ -174,7 +194,7 @@ msgstr ""
 "Berichten worden vanaf nu niet meer gearchiveer op het web! Contacteer %5@%4."
 
 #. (l.average)
-#: web_tt2/rss.tt2:98
+#: web_tt2/rss.tt2:72
 msgid "%1 by day "
 msgstr "%1 per dag"
 
@@ -227,7 +247,7 @@ msgid "%1: action failed"
 msgstr "%1: actie mislukt"
 
 #. (l.name,l.host,l.subject,l.msg_count)
-#: web_tt2/rss.tt2:98
+#: web_tt2/rss.tt2:72
 msgid "%1@%2 - %3 : %4 messages"
 msgstr "%1@%2 - %3: %4 berichten"
 
@@ -261,7 +281,7 @@ msgstr "%1"
 msgid "%Image(%s)"
 msgstr "%Image(%s)"
 
-#: src/Commands.pm:2166
+#: src/Commands.pm:2168
 msgid "%s did not receive confirmation for the following addresses :\n"
 msgstr "%s kreeg geen bevestigen voor de volgende adressen :\n"
 
@@ -269,7 +289,7 @@ msgstr "%s kreeg geen bevestigen voor de volgende adressen :\n"
 msgid "%s mailing list does not provide subscriber preferences.\n"
 msgstr "%s mailinglijst doet niet aan abonnee voorkeursinstellingen.\n"
 
-#: src/Commands.pm:2023
+#: src/Commands.pm:2025
 msgid "%s posted your expiration message to the following addresses :\n"
 msgstr "%s heeft uw expiratie bericht gepost op het volgende adres :\n"
 
@@ -518,7 +538,7 @@ msgstr "Toegangsrechten voor het document %1"
 msgid "Account"
 msgstr "Inlognaam"
 
-#: web_tt2/d_read.tt2:347 web_tt2/review.tt2:50
+#: web_tt2/d_read.tt2:347 web_tt2/review.tt2:49
 msgid "Add"
 msgstr "Add"
 
@@ -572,7 +592,7 @@ msgid ""
 "Subject : %2"
 msgstr "Bericht %s voor lijst %s is gedistribueerd.\n"
 
-#: src/Commands.pm:2041
+#: src/Commands.pm:2043
 msgid ""
 "An expiration process for list %s has been started. This process\n"
 "will end in %d days. You will then receive the list of subscribers \n"
@@ -601,7 +621,7 @@ msgstr "Alles over deze lijst:"
 msgid "Apply"
 msgstr "Toepassen"
 
-#: web_tt2/list_menu.tt2:41 web_tt2/list_menu.tt2:43
+#: web_tt2/list_menu.tt2:45 web_tt2/list_menu.tt2:47
 msgid "Archive"
 msgstr "Archief"
 
@@ -658,7 +678,7 @@ msgstr "Bijlage type"
 msgid "Auth method"
 msgstr "Auth method"
 
-#: src/List.pm:2587
+#: src/List.pm:2588
 msgid "Authentication requested"
 msgstr "Authenticatie gevraagd"
 
@@ -724,7 +744,7 @@ msgid "Body"
 msgstr "Inhoud"
 
 #. (d.anchor)
-#: web_tt2/rss.tt2:113
+#: web_tt2/rss.tt2:88
 #, fuzzy
 msgid "Bookmark %1"
 msgstr "Favoriete URL"
@@ -737,7 +757,7 @@ msgstr "Favoriete URL"
 msgid "Bounce Settings"
 msgstr "Bounce Instellingen"
 
-#: src/List.pm:2309
+#: src/List.pm:2310
 #, fuzzy
 msgid ""
 "Bounce rate in list %s is %d%%.\n"
@@ -912,7 +932,7 @@ msgstr ""
 msgid "Command not understood: ignoring end of message.\n"
 msgstr "Commando niet begrepen: Het einde van het bericht wordt genegeerd.\n"
 
-#: src/Commands.pm:1210 src/Commands.pm:1899 src/Commands.pm:813
+#: src/Commands.pm:1210 src/Commands.pm:1901 src/Commands.pm:813
 msgid "Command syntax error.\n"
 msgstr "Commando syntax fout.\n"
 
@@ -939,7 +959,7 @@ msgstr "Bevestigen"
 msgid "Connexion expiration period"
 msgstr "Connectie timeout periode"
 
-#: web_tt2/list_menu.tt2:33
+#: web_tt2/list_menu.tt2:34 web_tt2/list_menu.tt2:36
 #, fuzzy
 msgid "Contact owners"
 msgstr "melden bij eigenaar"
@@ -1010,6 +1030,17 @@ msgstr "Aanmaken van de lijst"
 msgid "Current password :"
 msgstr "Huidige wachtwoord :"
 
+#. (cssurl)
+#: web_tt2/skinsedit.tt2:57
+msgid ""
+"Currently you didn't define css_path parameter. <strong>You should edit the "
+"robot.conf configuration file </strong> (or if not using virtual robot sympa."
+"conf) and set this parameter so you could use this page to install static "
+"CSS and <strong>make sympa faster</strong>. Don't forget to set parameter "
+"css_url, it must be the URL for the directory where css are stored (current "
+"value is <a target=\"test\" href=\"%1\">%1</a>)."
+msgstr ""
+
 #: src/List.pm:446
 msgid "Custom header field"
 msgstr "Speciaal koptekst veld"
@@ -1055,7 +1086,7 @@ msgstr "Data bronnen configuratie"
 msgid "Date"
 msgstr "Datum"
 
-#: src/List.pm:2302
+#: src/List.pm:2303
 msgid ""
 "Dear owner of list %s,\n"
 "\n"
@@ -1226,6 +1257,15 @@ msgstr "Wilt u het volgende %1 echt verwijderen?"
 msgid "Do you really want to delete this message ?"
 msgstr "Wilt u het volgende %1 echt verwijderen?"
 
+#. (file.value.site)
+#. (file.value.robot)
+#. (file.value.listname)
+#: web_tt2/ls_templates.tt2:109 web_tt2/ls_templates.tt2:79
+#: web_tt2/ls_templates.tt2:93
+#, fuzzy
+msgid "Do you really want to remove %1 ?"
+msgstr "Wilt u het volgende %1 echt verwijderen?"
+
 #: web_tt2/rename_list_request.tt2:14
 #, fuzzy
 msgid "Do you really want to rename this list?"
@@ -1276,7 +1316,7 @@ msgstr "Wilt u het volgende %1 echt verwijderen?"
 msgid "Do you want to rename your file %1 ?"
 msgstr "Wilt u het bestand %1 hernoemen?"
 
-#: web_tt2/d_read.tt2:54 web_tt2/d_read.tt2:56 web_tt2/list_admin_menu.tt2:72
+#: web_tt2/d_read.tt2:54 web_tt2/d_read.tt2:56 web_tt2/list_admin_menu.tt2:70
 msgid "Document"
 msgstr "Document"
 
@@ -1451,7 +1491,7 @@ msgstr "Afloop van de termijn voor gemodereerde berichten"
 msgid "Extend search field"
 msgstr "Uitgebreid zoek veld"
 
-#: src/List.pm:2324
+#: src/List.pm:2325
 msgid ""
 "FYI command %s list %s from %s %s \n"
 " (no action needed)\n"
@@ -1459,7 +1499,7 @@ msgstr ""
 "Ter info commando %s lijst %s van %s %s \n"
 " (geen actie benodigd)\n"
 
-#: src/List.pm:2322
+#: src/List.pm:2323
 msgid ""
 "FYI command %s list %s from %s %s validated by %s\n"
 " (no action needed)\n"
@@ -1467,7 +1507,7 @@ msgstr ""
 "Ter info: commando %s lijst %s van %s %s gevalideerd door %s\n"
 " (geen actie benodigd)\n"
 
-#: src/List.pm:2278 src/List.pm:2320
+#: src/List.pm:2279 src/List.pm:2321
 msgid "FYI: %s list %s from %s %s"
 msgstr "Ter info: %s lijst %s van %s %s"
 
@@ -1519,7 +1559,7 @@ msgstr "Bestand"
 msgid "Family name"
 msgstr "Bestand"
 
-#: src/List.pm:6243
+#: src/List.pm:6259
 msgid "File"
 msgstr "Bestand"
 
@@ -1640,7 +1680,7 @@ msgstr "Help"
 msgid "Help on Sympa: %1%2"
 msgstr "Hulp voor Sympa: %1%2"
 
-#: src/Commands.pm:2364
+#: src/Commands.pm:2366
 msgid ""
 "Here are the lists you are currently subscribe to :\n"
 "\n"
@@ -1981,14 +2021,14 @@ msgid ""
 "command has not been updated.\n"
 msgstr "Lijst %s kent geen DIGEST stand. Uw configuratie is niet gewijzigd..\n"
 
-#: src/Commands.pm:2200 src/Commands.pm:2244
+#: src/Commands.pm:2202 src/Commands.pm:2246
 msgid "List %s is not currently running an expiration process.\n"
 msgstr "Voor lijst %s draait geen expiratie proces op dit moment.\n"
 
 #: src/Commands.pm:1097 src/Commands.pm:1221 src/Commands.pm:1294
 #: src/Commands.pm:1398 src/Commands.pm:1550 src/Commands.pm:1633
-#: src/Commands.pm:1821 src/Commands.pm:1910 src/Commands.pm:2121
-#: src/Commands.pm:2219 src/Commands.pm:2263 src/Commands.pm:263
+#: src/Commands.pm:1823 src/Commands.pm:1912 src/Commands.pm:2123
+#: src/Commands.pm:2221 src/Commands.pm:2265 src/Commands.pm:263
 #: src/Commands.pm:319 src/Commands.pm:364 src/Commands.pm:410
 #: src/Commands.pm:451 src/Commands.pm:573 src/Commands.pm:718
 #: src/Commands.pm:841 src/Commands.pm:977
@@ -2254,13 +2294,19 @@ msgstr ""
 msgid "Message"
 msgstr "berichten"
 
-#: src/Commands.pm:1684 src/Commands.pm:1793
+#: src/Commands.pm:1684 src/Commands.pm:1794
 msgid "Message %s for list %s has been distributed.\n"
 msgstr "Bericht %s voor lijst %s is gedistribueerd.\n"
 
-#: src/Commands.pm:1857
+#: src/Commands.pm:1859
 msgid "Message %s for list %s has been rejected.\n"
 msgstr "Bericht %s voor lijst %s is afgewezen.\n"
+
+#: src/Commands.pm:1689 src/Commands.pm:1799
+#, fuzzy
+msgid ""
+"Message %s for list %s has been validated ; it will be distributed soon.\n"
+msgstr "Bericht %s voor lijst %s is gedistribueerd.\n"
 
 #: web_tt2/help_editfile.tt2:35
 msgid ""
@@ -2345,7 +2391,7 @@ msgstr "Gemodereerd, beperkt tot abonnees"
 msgid "Moderated, with editor confirmation"
 msgstr "Gemodereerd, met md5 sleutel"
 
-#: src/List.pm:2424
+#: src/List.pm:2425
 msgid "Moderating your message"
 msgstr "Uw bericht wordt gemodereerd."
 
@@ -2659,7 +2705,7 @@ msgstr "                        "
 msgid "Owners defined in an external datasource"
 msgstr ""
 
-#: src/List.pm:2274 src/List.pm:2289 src/List.pm:2301
+#: src/List.pm:2275 src/List.pm:2290 src/List.pm:2302
 msgid "Owners of list %s"
 msgstr "Eigenaren van lijst %s"
 
@@ -2746,7 +2792,7 @@ msgstr ""
 "Gelieve om in de toekomst nog geencrypteerde berichten te ontvangen, een "
 "\"signed\" bericht te sturen naar %1@%2."
 
-#: web_tt2/list_menu.tt2:49 web_tt2/list_menu.tt2:51
+#: web_tt2/list_menu.tt2:53 web_tt2/list_menu.tt2:55
 msgid "Post"
 msgstr "Bericht plaatsen"
 
@@ -2882,9 +2928,29 @@ msgstr "Laat de abonnees zien van lijst <list>"
 msgid "RFC 2369 Header fields"
 msgstr "Speciaal koptekst veld"
 
-#: web_tt2/list_menu.tt2:55
+#: web_tt2/list_menu.tt2:59
 msgid "RSS"
 msgstr ""
+
+#: web_tt2/main.tt2:16 web_tt2/main.tt2:19
+#, fuzzy
+msgid "RSS Active lists"
+msgstr "Nieuwste lijsten"
+
+#: web_tt2/main.tt2:12
+#, fuzzy
+msgid "RSS Latest documents"
+msgstr "Gedeelde documenten"
+
+#: web_tt2/main.tt2:15 web_tt2/main.tt2:18
+#, fuzzy
+msgid "RSS Latest lists"
+msgstr "Nieuwste lijsten"
+
+#: web_tt2/main.tt2:11
+#, fuzzy
+msgid "RSS Latest messages"
+msgstr "Nieuwste berichten eerst"
 
 #: web_tt2/rss_request.tt2:3
 msgid "RSS channel"
@@ -3027,7 +3093,7 @@ msgstr "Hernoem bestand %1"
 msgid "Rename this list"
 msgstr "Hernoem deze lijst"
 
-#: src/Commands.pm:2035
+#: src/Commands.pm:2037
 msgid "Renewal of your subscription to list '%s'"
 msgstr "Vernieuwing voor uw inschrijving voor lijst '%s'"
 
@@ -3104,13 +3170,14 @@ msgstr "Terug naar archief %1"
 msgid "Return-path of the REMIND command"
 msgstr ""
 
-#: web_tt2/list_menu.tt2:68
-msgid "Review"
-msgstr "Beheer"
-
 #: web_tt2/serveradmin.tt2:25
 msgid "Review lists from this family"
 msgstr ""
+
+#: web_tt2/list_menu.tt2:72
+#, fuzzy
+msgid "Review members"
+msgstr "Beheer"
 
 #. (review)
 #: mail_tt2/info_report.tt2:13
@@ -3277,7 +3344,7 @@ msgstr "Verzenden/ontvangen configuratie"
 msgid "Serial number of the config"
 msgstr "Serienummer van de configuratie"
 
-#: web_tt2/rss.tt2:28 web_tt2/rss.tt2:7
+#: web_tt2/rss.tt2:15 web_tt2/rss.tt2:5
 #, fuzzy
 msgid "Server error"
 msgstr "Reset foutmeldingen"
@@ -3307,7 +3374,7 @@ msgstr "Zet de site sjablonen"
 msgid "Shared document directory size"
 msgstr "Gedeelde document map grootte"
 
-#: src/List.pm:1055 web_tt2/list_menu.tt2:60 web_tt2/list_menu.tt2:62
+#: src/List.pm:1055 web_tt2/list_menu.tt2:64 web_tt2/list_menu.tt2:66
 msgid "Shared documents"
 msgstr "Gedeelde documenten"
 
@@ -3338,7 +3405,7 @@ msgstr "Lijst Administratie Paneel"
 msgid "Skins, CSS and colors"
 msgstr ""
 
-#: src/List.pm:8813
+#: src/List.pm:8827
 #, fuzzy
 msgid ""
 "Someone (hopefully you) asked for your e-mail address\n"
@@ -3369,7 +3436,7 @@ msgstr ""
 "Wanneer u niet wilt dat dit gebeurd, kunt u dit bericht \n"
 "negeren."
 
-#: src/List.pm:8806
+#: src/List.pm:8820
 #, fuzzy
 msgid ""
 "Someone (hopefully you) asked for your e-mail address\n"
@@ -3400,7 +3467,7 @@ msgstr ""
 "Wanneer u niet wilt dat dit gebeurd, kunt u dit bericht \n"
 "negeren."
 
-#: src/List.pm:8818 src/List.pm:8823
+#: src/List.pm:8832 src/List.pm:8837
 msgid ""
 "Someone (hopefully you) requested a user of list %s to be\n"
 "added or removed.\n"
@@ -3423,7 +3490,7 @@ msgstr ""
 "\n"
 "Wanneer u niet wilt dat er iets gebeurt, negeer dan dit bericht..\n"
 
-#: src/Commands.pm:2059
+#: src/Commands.pm:2061
 #, fuzzy
 msgid ""
 "Someone (hopefully you) requested that the subscribers to the list\n"
@@ -3552,7 +3619,7 @@ msgstr "Inschrijvings profiel"
 msgid "Subscription reminder sent to each of %d %s subscribers\n"
 msgstr "Abonnements herinnering gestuurd naar %d %s abonnees\n"
 
-#: src/List.pm:2288
+#: src/List.pm:2289
 msgid "Subscription request to list %s"
 msgstr "Inschrijving voor lijst %s"
 
@@ -3560,7 +3627,7 @@ msgstr "Inschrijving voor lijst %s"
 msgid "Subscription summary"
 msgstr "Abonnementssamenvatting"
 
-#: web_tt2/list_admin_menu.tt2:78
+#: web_tt2/list_admin_menu.tt2:75
 #, fuzzy
 msgid "Subscriptions"
 msgstr "Abonnee opties"
@@ -3569,7 +3636,7 @@ msgstr "Abonnee opties"
 msgid "Summary"
 msgstr "Samenvatting"
 
-#: src/List.pm:3239
+#: src/List.pm:3240
 msgid "Summary of list %s"
 msgstr "Samenvatting van lijst %s"
 
@@ -3674,7 +3741,7 @@ msgstr ""
 msgid "Syntax errors with the following parameters : %1"
 msgstr "Syntax fout met de volgende parameters : %1"
 
-#: mail_tt2/digest.tt2:12 mail_tt2/digest_plain.tt2:10 src/List.pm:3100
+#: mail_tt2/digest.tt2:12 mail_tt2/digest_plain.tt2:10 src/List.pm:3101
 #, fuzzy
 msgid "Table of contents:"
 msgstr "Inhoudsopgave:"
@@ -3717,25 +3784,25 @@ msgid ""
 msgstr ""
 
 #. (count)
-#: web_tt2/rss.tt2:31
+#: web_tt2/rss.tt2:18
 #, fuzzy
 msgid "The %1 latest created lists"
 msgstr "Verwijder geselecteerde lijsten"
 
 #. (count)
-#: web_tt2/rss.tt2:51
+#: web_tt2/rss.tt2:38
 #, fuzzy
 msgid "The %1 latest messages"
 msgstr "Nieuwste berichten eerst"
 
 #. (count)
-#: web_tt2/rss.tt2:60
+#: web_tt2/rss.tt2:47
 #, fuzzy
 msgid "The %1 latest shared documents"
 msgstr "Gedeelde documenten"
 
 #. (count)
-#: web_tt2/rss.tt2:41
+#: web_tt2/rss.tt2:28
 #, fuzzy
 msgid "The %1 most active lists"
 msgstr "Nieuwste lijsten"
@@ -3754,7 +3821,7 @@ msgid ""
 "\tLevel 2 is the highest level of bouncing users"
 msgstr ""
 
-#: src/Commands.pm:1923 src/Commands.pm:2136 src/Commands.pm:2232
+#: src/Commands.pm:1925 src/Commands.pm:2138 src/Commands.pm:2234
 msgid ""
 "The EXPIRE, EXPIREINDEX and EXPIREDEL commands are restricted to the owners "
 "of the list.\n"
@@ -3764,7 +3831,7 @@ msgstr ""
 "van deze lijst.\n"
 "U behoort niet tot de eigenaren van lijst %s.\n"
 
-#: src/Commands.pm:2275
+#: src/Commands.pm:2277
 #, fuzzy
 msgid "The MODINDEX command is restricted to moderators.\n"
 msgstr ""
@@ -3782,7 +3849,7 @@ msgstr ""
 "bestand:"
 
 #: src/Commands.pm:1110 src/Commands.pm:1243 src/Commands.pm:1411
-#: src/Commands.pm:1995 src/Commands.pm:466 src/Commands.pm:593
+#: src/Commands.pm:1997 src/Commands.pm:466 src/Commands.pm:593
 #: src/Commands.pm:733 src/Commands.pm:854 src/Commands.pm:990
 msgid ""
 "The authentication process failed\n"
@@ -3805,6 +3872,19 @@ msgstr "Het id van het certificaat is :"
 #, fuzzy
 msgid "The configuration file --CONFIG-- contains errors.\n"
 msgstr "Het configuratiebestand bevat fouten.\n"
+
+#: web_tt2/skinsedit.tt2:44
+#, fuzzy
+msgid "The css_path parameter is defined, value is"
+msgstr "Verwijder geselecteerde lijsten"
+
+#: web_tt2/skinsedit.tt2:7
+msgid ""
+"The current version doesn't include a color editor, so you need to edit "
+"robot.conf (or sympa.conf) to change colors. Here are the colors as defined "
+"in the current robot in robot.conf. If you did install static CSS files, the "
+"colors in use may differ from this table."
+msgstr ""
 
 #: web_tt2/help_editlist.tt2:138
 msgid ""
@@ -3877,17 +3957,17 @@ msgstr ""
 msgid "The following virtual robots are running on this server :"
 msgstr "De volgende virtuele robots draaien op deze server :"
 
-#: web_tt2/rss.tt2:33
+#: web_tt2/rss.tt2:20
 #, fuzzy
 msgid "The latest created lists"
 msgstr "Verwijder geselecteerde lijsten"
 
-#: web_tt2/rss.tt2:53
+#: web_tt2/rss.tt2:40
 #, fuzzy
 msgid "The latest messages"
 msgstr "Nieuwste berichten eerst"
 
-#: web_tt2/rss.tt2:62
+#: web_tt2/rss.tt2:49
 #, fuzzy
 msgid "The latest shared documents"
 msgstr "Gedeelde documenten"
@@ -3932,7 +4012,7 @@ msgstr ""
 msgid "The list's subject"
 msgstr "Het onderwerp van de lijst"
 
-#: web_tt2/rss.tt2:43
+#: web_tt2/rss.tt2:30
 #, fuzzy
 msgid "The most active lists"
 msgstr "Nieuwste lijsten"
@@ -4269,7 +4349,7 @@ msgstr ""
 msgid "Thread"
 msgstr ""
 
-#: src/Commands.pm:1940
+#: src/Commands.pm:1942
 msgid "Thus, your message is sent back to you :\n"
 msgstr "Daarom wordt uw bericht naar u teruggestuurd :\n"
 
@@ -4352,7 +4432,7 @@ msgstr "Om in contact te komen met uw lijst beheerder :"
 msgid "To distribute the attached message in list %1:"
 msgstr "Om de bijgevoegde mail te distribueren op lijst %1:"
 
-#: src/List.pm:2598
+#: src/List.pm:2599
 msgid ""
 "To distribute the attached message in list %s :\n"
 "mailto:%s?subject=CONFIRM%%20%s\n"
@@ -4384,7 +4464,7 @@ msgid ""
 "password on the right column."
 msgstr ""
 
-#: src/Commands.pm:1982
+#: src/Commands.pm:1984
 #, fuzzy
 msgid ""
 "To read the list of subscribers who haven't confirm their\n"
@@ -4411,7 +4491,7 @@ msgstr "Om uw wachtwoord te ontvangen :"
 msgid "To reject it (it will be removed):"
 msgstr "Om het te weigeren (het bericht zal worden weggegooid):"
 
-#: src/Commands.pm:1984 src/Commands.pm:2042
+#: src/Commands.pm:1986 src/Commands.pm:2044
 msgid "To stop the expiration process : EXPIREDEL %s\n"
 msgstr "Om het expiratie proces te stoppen : EXPIREDEL %s\n"
 
@@ -4473,7 +4553,7 @@ msgid ""
 "address, usefull if different from your \"From:\" address."
 msgstr ""
 
-#: src/List.pm:2300
+#: src/List.pm:2301
 msgid "UNsubscription request from list %s"
 msgstr "Aanvraag voor uitschrijven bij lijst %s"
 
@@ -4485,7 +4565,7 @@ msgstr "URL"
 msgid "Unable to access directory %s : %m"
 msgstr "Fout bij benaderen van map %s : %m"
 
-#: src/Commands.pm:1731 src/Commands.pm:1851
+#: src/Commands.pm:1732 src/Commands.pm:1853
 #, fuzzy
 msgid ""
 "Unable to access the moderated message on list %s with key %s.\n"
@@ -4496,7 +4576,7 @@ msgstr ""
 "Dit bericht kan al verstuurd zijn door een van de moderators van de lijst\n"
 ".\n"
 
-#: src/Commands.pm:1723
+#: src/Commands.pm:1724
 msgid "Unable to access to the message authenticated with key %s.\n"
 msgstr "Geen toegang tot het bericht met sleutel %s.\n"
 
@@ -4548,7 +4628,7 @@ msgstr "Unknown"
 msgid "Unsubscribe"
 msgstr "Uitschrijven"
 
-#: soap/sympasoap.pm:553 src/Commands.pm:946 wwsympa/wwsympa.fcgi:3526
+#: soap/sympasoap.pm:553 src/Commands.pm:946 wwsympa/wwsympa.fcgi:3531
 msgid "Unsubscribe from list %s"
 msgstr "Uitschrijven van lijst %s"
 
@@ -4686,7 +4766,11 @@ msgstr "Zichtbaarheid van de lijst"
 msgid "Visibility of the subscriber with the REVIEW command."
 msgstr ""
 
-#: src/List.pm:2279
+#: web_tt2/skinsedit.tt2:61
+msgid "W3C CSS validation tools"
+msgstr ""
+
+#: src/List.pm:2280
 #, fuzzy
 msgid ""
 "WARNING : %s %s failed to unsubscribe from %s because his address was not "
@@ -4698,7 +4782,7 @@ msgstr ""
 "op de lijst\n"
 " (Misschien kunt u de persoon helpen)\n"
 
-#: src/List.pm:2308
+#: src/List.pm:2309
 msgid "WARNING: bounce rate too high in list %s"
 msgstr ""
 "WAARSCHUWING het percentage adressen dat niet te bereiken is is te hoog in "
@@ -4746,8 +4830,8 @@ msgstr ""
 
 #: soap/sympasoap.pm:701 soap/sympasoap.pm:702 src/Commands.pm:1062
 #: src/Commands.pm:1063 src/Commands.pm:685 src/Commands.pm:686
-#: wwsympa/wwsympa.fcgi:3297 wwsympa/wwsympa.fcgi:3298
-#: wwsympa/wwsympa.fcgi:4240 wwsympa/wwsympa.fcgi:4241
+#: wwsympa/wwsympa.fcgi:3302 wwsympa/wwsympa.fcgi:3303
+#: wwsympa/wwsympa.fcgi:4245 wwsympa/wwsympa.fcgi:4246
 msgid "Welcome on list %s"
 msgstr "Welkom op de lijst %s"
 
@@ -4904,7 +4988,7 @@ msgid ""
 "the subject are recognized."
 msgstr ""
 
-#: src/Commands.pm:2183
+#: src/Commands.pm:2185
 msgid ""
 "You can remove these subscriber from the list by using the following "
 "commands :\n"
@@ -4921,7 +5005,7 @@ msgstr ""
 "U heeft geen wachtwoord gekozen, kies een herinering voor uw eerste "
 "wachtwoord"
 
-#: wwsympa/wwsympa.fcgi:3527 wwsympa/wwsympa.fcgi:4346
+#: wwsympa/wwsympa.fcgi:3532 wwsympa/wwsympa.fcgi:4351
 #, fuzzy
 msgid "You have been removed from list %s.\n"
 msgstr "Gebruiker %s is uitgeschreven van lijst %s/\n"
@@ -4961,7 +5045,7 @@ msgstr ""
 msgid "You have logged in with email address %1"
 msgstr "U bent ingelogd met emailadres %1"
 
-#: src/Commands.pm:2239
+#: src/Commands.pm:2241
 msgid "You just stopped the expiration process for list %s\n"
 msgstr "U heeft het expiratieproces gestopt voor lijst %s\n"
 
@@ -4997,7 +5081,7 @@ msgstr ""
 "U hebt waarschijnlijk uw abonnement met een ander email adres\n"
 " bevestigd. Probeer met uw echte adres in te schrijven."
 
-#: src/List.pm:8828 src/List.pm:8835
+#: src/List.pm:8842 src/List.pm:8849
 msgid ""
 "You requested a subscription reminder to be sent\n"
 "to each subscriber of list %s\n"
@@ -5188,11 +5272,11 @@ msgid ""
 "has been rejected by the moderator (%3)."
 msgstr "Uw bericht voor lijst %s is doorgestuurd naar de editor(s)\n"
 
-#: src/List.pm:2425
+#: src/List.pm:2426
 msgid "Your message for list %s has been forwarded to editor(s)\n"
 msgstr "Uw bericht voor lijst %s is doorgestuurd naar de editor(s)\n"
 
-#: src/Commands.pm:1776 src/sympa.pl:1356
+#: src/Commands.pm:1777 src/sympa.pl:1356
 msgid ""
 "Your message for list %s has been rejected.\n"
 "The message is thus sent back to you.\n"
@@ -5212,7 +5296,7 @@ msgstr "Uw bericht is afgwezen"
 msgid "Your message signature was succesfuly verified using S/MIME"
 msgstr "Uw handtekening onder dit bericht was succesvol gechecked met S/MIME"
 
-#: src/Commands.pm:1772 src/sympa.pl:1276 src/sympa.pl:1352
+#: src/Commands.pm:1773 src/sympa.pl:1276 src/sympa.pl:1352
 msgid "Your message to %s has been rejected"
 msgstr "Uw bericht aan %s is afgewezen."
 
@@ -5288,7 +5372,7 @@ msgstr ""
 msgid "Your subscription email is %1"
 msgstr "Het emailadres waarmee u zich heeft ingeschreven is %1"
 
-#: src/Commands.pm:1484 wwsympa/wwsympa.fcgi:4345
+#: src/Commands.pm:1484 wwsympa/wwsympa.fcgi:4350
 msgid "Your subscription to list %s has been removed."
 msgstr "Uw inschrijving voor lijst %s is ongedaan gemaakt."
 
@@ -5317,26 +5401,6 @@ msgstr ""
 msgid "[ Text converted from HTML ]\n"
 msgstr ""
 
-#: web_tt2/main.tt2:16 web_tt2/main.tt2:19
-#, fuzzy
-msgid "\"RSS Active lists\""
-msgstr "Nieuwste lijsten"
-
-#: web_tt2/main.tt2:12
-#, fuzzy
-msgid "\"RSS Latest documents\""
-msgstr "Gedeelde documenten"
-
-#: web_tt2/main.tt2:15 web_tt2/main.tt2:18
-#, fuzzy
-msgid "\"RSS Latest lists\""
-msgstr "Nieuwste lijsten"
-
-#: web_tt2/main.tt2:11
-#, fuzzy
-msgid "\"RSS Latest messages\""
-msgstr "Nieuwste berichten eerst"
-
 #: src/PlainDigest.pm:296 src/PlainDigest.pm:317
 msgid ""
 "\n"
@@ -5362,7 +5426,7 @@ msgid ""
 "-----Delivery Status Report-----\n"
 msgstr ""
 
-#: src/Commands.pm:1981 src/Commands.pm:2164
+#: src/Commands.pm:1983 src/Commands.pm:2166
 #, fuzzy
 msgid ""
 "\n"
@@ -5381,7 +5445,7 @@ msgstr ""
 "expiratie\n"
 "zal stoppen over %d dag(en) (%s).\n"
 
-#: src/Commands.pm:2022
+#: src/Commands.pm:2024
 #, fuzzy
 msgid ""
 "\n"
@@ -5396,7 +5460,7 @@ msgstr ""
 "die niet op tijd hun inschrijving hebben bevestigd.\n"
 "Daarna kunt u deze adressen verwijderen met het DEL commando.\n"
 
-#: src/List.pm:2290
+#: src/List.pm:2291
 #, fuzzy
 msgid ""
 "\n"
@@ -5428,7 +5492,7 @@ msgstr ""
 "\n"
 "Wij werken met Sympa %s : http://www.sympa.org/\n"
 
-#: src/Commands.pm:1938
+#: src/Commands.pm:1940
 #, fuzzy
 msgid ""
 "\n"
@@ -5461,7 +5525,7 @@ msgid ""
 "[ ** Unable to process HTML message part **]\n"
 msgstr ""
 
-#: src/Commands.pm:2382
+#: src/Commands.pm:2384
 msgid ""
 "\n"
 "\n"
@@ -5473,7 +5537,7 @@ msgstr ""
 "Lijsten waar u editor van bent :\n"
 "\n"
 
-#: src/Commands.pm:2374
+#: src/Commands.pm:2376
 msgid ""
 "\n"
 "\n"
@@ -5498,7 +5562,7 @@ msgstr "toegangsrecht"
 msgid "action for this population"
 msgstr ""
 
-#: web_tt2/rss_request.tt2:46
+#: web_tt2/rss_request.tt2:48
 #, fuzzy
 msgid "active lists"
 msgstr "Niet actieve lijsten"
@@ -5569,10 +5633,6 @@ msgstr "iedereen uit het lokale domein"
 msgid "anyone with previous md5 authentication"
 msgstr "iedereen met voorafgaande md5 authenticatie"
 
-#: src/etc/scenari/unsubscribe.open.~1.8.~:1
-msgid "anyone without authentication"
-msgstr "iedereen zonder authenticatie"
-
 #: src/etc/scenari/subscribe.open_quiet:1
 msgid "anyone, no welcome message"
 msgstr "iedereen, geen welkomstbericht"
@@ -5632,6 +5692,10 @@ msgstr ""
 #: src/etc/scenari/send.closed:1
 msgid "closed"
 msgstr "gesloten"
+
+#: web_tt2/skinsedit.tt2:14 web_tt2/skinsedit.tt2:18
+msgid "color effet"
+msgstr ""
 
 #: src/etc/scenari/visibility.secret:1
 msgid "conceal even for subscribers"
@@ -5846,6 +5910,18 @@ msgstr "eerste-nivo selectie"
 msgid "first-level suffix"
 msgstr "eerste-nivo suffix"
 
+#. (for)
+#: web_tt2/rss.tt2:23 web_tt2/rss.tt2:33
+#, fuzzy
+msgid "for %1 days"
+msgstr "geduurende %1 dag(en)"
+
+#. (for)
+#: web_tt2/rss.tt2:43 web_tt2/rss.tt2:52
+#, fuzzy
+msgid "for %1 days "
+msgstr "geduurende %1 dag(en)"
+
 #: src/etc/scenari/info.open:1
 msgid "for anyone"
 msgstr "voor iedereen"
@@ -5931,17 +6007,17 @@ msgstr "alleen voor de listmaster"
 msgid "language"
 msgstr "Taal"
 
-#: web_tt2/rss_request.tt2:36
+#: web_tt2/rss_request.tt2:38
 #, fuzzy
 msgid "latest arc"
 msgstr "Text archieven"
 
-#: web_tt2/rss_request.tt2:41
+#: web_tt2/rss_request.tt2:43
 #, fuzzy
 msgid "latest document"
 msgstr "Gedeelde documenten"
 
-#: web_tt2/rss_request.tt2:51
+#: web_tt2/rss_request.tt2:53
 #, fuzzy
 msgid "latest lists"
 msgstr "Nieuwste lijsten"
@@ -6160,6 +6236,15 @@ msgstr "pagina %1 / %2"
 msgid "page %1 / %2"
 msgstr "pagina %1 / %2"
 
+#: web_tt2/skinsedit.tt2:12 web_tt2/skinsedit.tt2:16
+#, fuzzy
+msgid "parameter"
+msgstr "part"
+
+#: web_tt2/skinsedit.tt2:13 web_tt2/skinsedit.tt2:17
+msgid "parameter value"
+msgstr ""
+
 #: web_tt2/arcsearch_form.tt2:42
 #, fuzzy
 msgid "part of word"
@@ -6240,7 +6325,7 @@ msgid "purge of orphan entries in user table every month"
 msgstr ""
 
 #: web_tt2/add_request.tt2:12 web_tt2/editsubscriber.tt2:40
-#: web_tt2/review.tt2:231 web_tt2/review.tt2:50 web_tt2/review.tt2:75
+#: web_tt2/review.tt2:231 web_tt2/review.tt2:49 web_tt2/review.tt2:75
 #: web_tt2/reviewbouncing.tt2:107 web_tt2/reviewbouncing.tt2:31
 msgid "quiet"
 msgstr "quiet"
@@ -6442,6 +6527,12 @@ msgstr ""
 msgid "standard (direct reception)"
 msgstr ""
 
+#: web_tt2/skinsedit.tt2:41
+msgid ""
+"static css installation succeed. Reload the current page and/or check sympa "
+"logs  to be sure that static css a really in use."
+msgstr ""
+
 #: web_tt2/set_pending_list_request.tt2:25 web_tt2/subrequest.tt2:47
 msgid "submit"
 msgstr "submit"
@@ -6503,6 +6594,10 @@ msgstr ""
 msgid ""
 "the address is hidden using a javascript. User who enable javascript can see "
 "a nice mailto address where others have nothing."
+msgstr ""
+
+#: web_tt2/skinsedit.tt2:45
+msgid "the current definition for css location (css_url parameter) is"
 msgstr ""
 
 #: src/List.pm:531 src/List.pm:946
@@ -6606,10 +6701,6 @@ msgstr "Wie kan lijstinformatie zien"
 msgid "who updated the config"
 msgstr "Laatste update van de configuratie"
 
-#: src/etc/scenari/unsubscribe.open_notify.~1.9.~:1
-msgid "without authentication, notification is sent to owners"
-msgstr "zonder authenticatie, waarschuwing verstuurd naar eigenaren"
-
 #: wwsympa/wwslib.pm:44
 #, fuzzy
 msgid "you do not receive your own posts"
@@ -6628,6 +6719,20 @@ msgstr "uw emailadres    : %1"
 #: mail_tt2/sendpasswd.tt2:30
 msgid "your password : %1"
 msgstr "uw wachtwoord    : %1"
+
+#, fuzzy
+#~ msgid "Do you really want to remove [% file.value.listname %] ?"
+#~ msgstr "Wilt u het volgende %1 echt verwijderen?"
+
+#, fuzzy
+#~ msgid "Do you really want to remove [% file.value.robot %] ?"
+#~ msgstr "Wilt u het volgende %1 echt verwijderen?"
+
+#~ msgid "anyone without authentication"
+#~ msgstr "iedereen zonder authenticatie"
+
+#~ msgid "without authentication, notification is sent to owners"
+#~ msgstr "zonder authenticatie, waarschuwing verstuurd naar eigenaren"
 
 #, fuzzy
 #~ msgid "-Rename list"
@@ -6854,10 +6959,6 @@ msgstr "uw wachtwoord    : %1"
 #, fuzzy
 #~ msgid "The list is not closed"
 #~ msgstr "Bestand %1 opgeslagen"
-
-#, fuzzy
-#~ msgid "The list parameter is missing"
-#~ msgstr "Verwijder geselecteerde lijsten"
 
 #, fuzzy
 #~ msgid "The subscribers have been updated"
@@ -7217,9 +7318,6 @@ msgstr "uw wachtwoord    : %1"
 
 #~ msgid "one of"
 #~ msgstr "een van deze"
-
-#~ msgid "part"
-#~ msgstr "part"
 
 #~ msgid "sentence"
 #~ msgstr "zin"

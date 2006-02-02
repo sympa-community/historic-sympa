@@ -49,7 +49,7 @@ my %language_equiv = ( 'zh_CN' => 'cn',
 ## Supported languages
 my @supported_languages = ('cs_CZ','de_DE','el_GR','en_US','es_ES','et_EE',
 			   'fi_FI','fr_FR','hu_HU','it_IT','ja_JP','nl_NL','oc_FR',
-			   'pl_PL','pt_BR','pt_PT','ro_RO','tr_TR','zh_CN','zh_TW');
+			   'pl_PL','pt_BR','pt_PT','ro_RO','sv_SE','tr_TR','zh_CN','zh_TW');
 
 my %lang2locale = ('cz' => 'cs_CZ',
 		   'de' => 'de_DE',
@@ -67,6 +67,7 @@ my %lang2locale = ('cz' => 'cs_CZ',
 		   'pl' => 'pl_PL',
 		   'pt' => 'pt_PT',
 		   'ro' => 'ro_RO',
+		   'sv' => 'sv_SE',
 		   'cn' => 'zh_CN',
 		   'tr' => 'tr_TR',
 		   'tw' => 'zh_TW');
@@ -89,6 +90,7 @@ my %locale2charset = ('cs_CZ' => 'utf-8',
 		      'pt_BR' => 'utf-8',
 		      'pt_PT' => 'iso8859-1',
 		      'ro_RO' => 'iso8859-2',
+		      'sv_SE' => 'utf-8',
 		      'tr_TR' => 'utf-8',
 		      'zh_CN' => 'utf-8',
 		      'zh_TW' => 'big5',
@@ -118,11 +120,16 @@ sub SetLang {
 	return undef;
     }
 
-   if (length($locale) == 2) {
+    if (length($lang) == 2) {
 	$locale = $lang2locale{$lang};
     }else {
+	## uppercase the country part if needed
+	my @items = split /_/, $locale;
+	$items[1] = uc($items[1]);
+	$locale = join '_', @items;
+
 	## Get the NLS equivalent for the lang
-	$lang = &Locale2Lang($lang);
+	$lang = &Locale2Lang($locale);
     }
    
     &Locale::Messages::textdomain("sympa");
@@ -131,20 +138,27 @@ sub SetLang {
     #bind_textdomain_codeset sympa => 'iso-8859-1';
 
     ## Set Locale::Messages context
-    unless (setlocale(&POSIX::LC_ALL, $locale)) {
-	unless (setlocale(&POSIX::LC_ALL, $lang)) {
-	    unless (setlocale(&POSIX::LC_ALL, $locale.'.'.$locale2charset{$locale})) {
-		&do_log('err','Failed to setlocale(%s) ; you should edit your /etc/locale.gen or /etc/sysconfig/i18n files', $locale.'.'.$locale2charset{$locale});
-		return undef;
-	    }
+    my $locale_dashless = $locale.'.'.$locale2charset{$locale}; 
+    $locale_dashless =~ s/-//g;
+    foreach my $type (&POSIX::LC_ALL, &POSIX::LC_TIME) {
+	my $success;
+	foreach my $try ($locale.'.'.$locale2charset{$locale},
+			 $locale.'.'.uc($locale2charset{$locale}),  ## UpperCase required for FreeBSD
+			 $locale_dashless, ## Required on HPUX
+			 $locale,
+			 $lang
+			 ) {
+	    if (&setlocale($type, $try)) {
+		$success = 1;
+		last;
+	    }	
+	}
+	unless ($success) {
+	    &do_log('err','Failed to setlocale(%s) ; you either have a problem with the catalogue .mo files or you should extend available locales in  your /etc/locale.gen (or /etc/sysconfig/i18n) file', $locale);
+	    return undef;
 	}
     }
-
-    unless (setlocale(&POSIX::LC_TIME, $locale)) {
-	&do_log('err','Failed to setlocale(LC_TIME,%s)', $locale.'.'.$locale2charset{$locale});
-	return undef;
-    }
-
+ 
     $current_lang = $lang;
     $current_locale = $locale;
 
@@ -215,7 +229,9 @@ sub gettext {
 		    return $language;
 		}
 	    }elsif ($var eq 'charset') {
-		if (/^Content-Type:\s*.*charset=(\S+)$/i) {
+		if ($recode) {
+		    return $recode;
+		} elsif (/^Content-Type:\s*.*charset=(\S+)$/i) {
 		    return $1;
 		}
 	    }elsif ($var eq 'encoding') {

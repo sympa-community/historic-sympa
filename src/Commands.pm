@@ -1685,7 +1685,8 @@ sub distribute {
 	do_log('info', 'DISTRIBUTE %s %s from %s accepted (%d seconds)', $name, $key, $sender, time-$time_command);
     }else{   
 	# this message is to be distributed but this daemon is dedicated to commands -> move it to distribution spool
-	return undef unless (&tools::move_message($file,$name,$robot)) ;	    
+	return undef unless (&tools::move_message($file,$name,$robot)) ;
+	push @msg::report, sprintf gettext("Message %s for list %s has been validated ; it will be distributed soon.\n"), $key, $name   unless ($quiet || ($action =~ /quiet/i ));
 	do_log('info', 'Message for %s from %s moved in spool %s for distribution message-id=%s', $name, $sender, $Conf{'queuedistribute'},$hdr->get('Message-Id'));
     }
     unlink($file);
@@ -1795,6 +1796,7 @@ sub confirm {
 	}else{
 	    # this message is to be distributed but this daemon is dedicated to commands -> move it to distribution spool
 	    return undef unless (&tools::move_message($file,$name,$robot)) ;	    
+	    push @msg::report, sprintf gettext("Message %s for list %s has been validated ; it will be distributed soon.\n"), $key, $name   unless ($quiet || ($action =~ /quiet/i ));
 	    do_log('info', 'Message for %s from %s moved in spool %s for distribution message-id=%s', $name, $sender, $Conf{'queuedistribute'},$hdr->get('Message-Id'));
 	}
 	unlink($file);

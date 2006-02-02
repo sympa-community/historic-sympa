@@ -60,9 +60,25 @@ msgstr ""
 msgid " The latest shared documents "
 msgstr ""
 
+#: web_tt2/rss.tt2:7
+msgid " active lists "
+msgstr ""
+
 #: web_tt2/active_lists.tt2:12 web_tt2/latest_arc.tt2:12 web_tt2/latest_d_read.tt2:12 web_tt2/latest_lists.tt2:12
 #. (for)
 msgid " for %1 days "
+msgstr ""
+
+#: web_tt2/rss.tt2:9
+msgid " latest documents "
+msgstr ""
+
+#: web_tt2/rss.tt2:6
+msgid " latest lists "
+msgstr ""
+
+#: web_tt2/rss.tt2:8
+msgid " latest messages "
 msgstr ""
 
 #: web_tt2/set_pending_list_request.tt2:10
@@ -152,7 +168,7 @@ msgid ""
 "are no more web-archived. Please contact %5@%4. "
 msgstr ""
 
-#: web_tt2/rss.tt2:98
+#: web_tt2/rss.tt2:72
 #. (l.average)
 msgid "%1 by day "
 msgstr ""
@@ -202,7 +218,7 @@ msgstr ""
 msgid "%1: action failed"
 msgstr ""
 
-#: web_tt2/rss.tt2:98
+#: web_tt2/rss.tt2:72
 #. (l.name,l.host,l.subject,l.msg_count)
 msgid "%1@%2 - %3 : %4 messages"
 msgstr ""
@@ -233,7 +249,7 @@ msgstr ""
 msgid "%Image(%s)"
 msgstr ""
 
-#: src/Commands.pm:2166
+#: src/Commands.pm:2168
 msgid ""
 "%s did not receive confirmation for the following addresses :\n"
 msgstr ""
@@ -243,7 +259,7 @@ msgid ""
 "%s mailing list does not provide subscriber preferences.\n"
 msgstr ""
 
-#: src/Commands.pm:2023
+#: src/Commands.pm:2025
 msgid ""
 "%s posted your expiration message to the following addresses :\n"
 msgstr ""
@@ -440,7 +456,7 @@ msgstr ""
 msgid "Account"
 msgstr ""
 
-#: web_tt2/d_read.tt2:347 web_tt2/review.tt2:50
+#: web_tt2/d_read.tt2:347 web_tt2/review.tt2:49
 msgid "Add"
 msgstr ""
 
@@ -490,7 +506,7 @@ msgid ""
 "Subject : %2"
 msgstr ""
 
-#: src/Commands.pm:2041
+#: src/Commands.pm:2043
 msgid ""
 "An expiration process for list %s has been started. This process\n"
 "will end in %d days. You will then receive the list of subscribers \n"
@@ -514,7 +530,7 @@ msgstr ""
 msgid "Apply"
 msgstr ""
 
-#: web_tt2/list_menu.tt2:41 web_tt2/list_menu.tt2:43
+#: web_tt2/list_menu.tt2:45 web_tt2/list_menu.tt2:47
 msgid "Archive"
 msgstr ""
 
@@ -566,7 +582,7 @@ msgstr ""
 msgid "Auth method"
 msgstr ""
 
-#: src/List.pm:2587
+#: src/List.pm:2588
 msgid "Authentication requested"
 msgstr ""
 
@@ -615,7 +631,7 @@ msgstr ""
 msgid "Body"
 msgstr ""
 
-#: web_tt2/rss.tt2:113
+#: web_tt2/rss.tt2:88
 #. (d.anchor)
 msgid "Bookmark %1"
 msgstr ""
@@ -628,7 +644,7 @@ msgstr ""
 msgid "Bounce Settings"
 msgstr ""
 
-#: src/List.pm:2309
+#: src/List.pm:2310
 msgid ""
 "Bounce rate in list %s is %d%%.\n\n"
 "You should delete bouncing subscribers : \n"
@@ -774,7 +790,7 @@ msgid ""
 "Command not understood: ignoring end of message.\n"
 msgstr ""
 
-#: src/Commands.pm:1210 src/Commands.pm:1899 src/Commands.pm:813
+#: src/Commands.pm:1210 src/Commands.pm:1901 src/Commands.pm:813
 msgid ""
 "Command syntax error.\n"
 msgstr ""
@@ -800,7 +816,7 @@ msgstr ""
 msgid "Connexion expiration period"
 msgstr ""
 
-#: web_tt2/list_menu.tt2:33
+#: web_tt2/list_menu.tt2:34 web_tt2/list_menu.tt2:36
 msgid "Contact owners"
 msgstr ""
 
@@ -864,6 +880,11 @@ msgstr ""
 msgid "Current password :"
 msgstr ""
 
+#: web_tt2/skinsedit.tt2:57
+#. (cssurl)
+msgid "Currently you didn't define css_path parameter. <strong>You should edit the robot.conf configuration file </strong> (or if not using virtual robot sympa.conf) and set this parameter so you could use this page to install static CSS and <strong>make sympa faster</strong>. Don't forget to set parameter css_url, it must be the URL for the directory where css are stored (current value is <a target=\"test\" href=\"%1\">%1</a>)."
+msgstr ""
+
 #: src/List.pm:446
 msgid "Custom header field"
 msgstr ""
@@ -904,7 +925,7 @@ msgstr ""
 msgid "Date"
 msgstr ""
 
-#: src/List.pm:2302
+#: src/List.pm:2303
 msgid ""
 "Dear owner of list %s,\n\n"
 "A user asked to be deleted from your list. Shall this be fine\n"
@@ -1043,6 +1064,13 @@ msgstr ""
 msgid "Do you really want to delete this message ?"
 msgstr ""
 
+#: web_tt2/ls_templates.tt2:109 web_tt2/ls_templates.tt2:79 web_tt2/ls_templates.tt2:93
+#. (file.value.site)
+#. (file.value.robot)
+#. (file.value.listname)
+msgid "Do you really want to remove %1 ?"
+msgstr ""
+
 #: web_tt2/rename_list_request.tt2:14
 msgid "Do you really want to rename this list?"
 msgstr ""
@@ -1085,7 +1113,7 @@ msgstr ""
 msgid "Do you want to rename your file %1 ?"
 msgstr ""
 
-#: web_tt2/d_read.tt2:54 web_tt2/d_read.tt2:56 web_tt2/list_admin_menu.tt2:72
+#: web_tt2/d_read.tt2:54 web_tt2/d_read.tt2:56 web_tt2/list_admin_menu.tt2:70
 msgid "Document"
 msgstr ""
 
@@ -1228,19 +1256,19 @@ msgstr ""
 msgid "Extend search field"
 msgstr ""
 
-#: src/List.pm:2324
+#: src/List.pm:2325
 msgid ""
 "FYI command %s list %s from %s %s \n"
 " (no action needed)\n"
 msgstr ""
 
-#: src/List.pm:2322
+#: src/List.pm:2323
 msgid ""
 "FYI command %s list %s from %s %s validated by %s\n"
 " (no action needed)\n"
 msgstr ""
 
-#: src/List.pm:2278 src/List.pm:2320
+#: src/List.pm:2279 src/List.pm:2321
 msgid "FYI: %s list %s from %s %s"
 msgstr ""
 
@@ -1284,7 +1312,7 @@ msgstr ""
 msgid "Family name"
 msgstr ""
 
-#: src/List.pm:6243
+#: src/List.pm:6259
 msgid "File"
 msgstr ""
 
@@ -1392,7 +1420,7 @@ msgstr ""
 msgid "Help on Sympa: %1%2"
 msgstr ""
 
-#: src/Commands.pm:2364
+#: src/Commands.pm:2366
 msgid ""
 "Here are the lists you are currently subscribe to :\n\n"
 msgstr ""
@@ -1683,12 +1711,12 @@ msgid ""
 "List %s does not accept the DIGEST mode. Your configuration regarding this command has not been updated.\n"
 msgstr ""
 
-#: src/Commands.pm:2200 src/Commands.pm:2244
+#: src/Commands.pm:2202 src/Commands.pm:2246
 msgid ""
 "List %s is not currently running an expiration process.\n"
 msgstr ""
 
-#: src/Commands.pm:1097 src/Commands.pm:1221 src/Commands.pm:1294 src/Commands.pm:1398 src/Commands.pm:1550 src/Commands.pm:1633 src/Commands.pm:1821 src/Commands.pm:1910 src/Commands.pm:2121 src/Commands.pm:2219 src/Commands.pm:2263 src/Commands.pm:263 src/Commands.pm:319 src/Commands.pm:364 src/Commands.pm:410 src/Commands.pm:451 src/Commands.pm:573 src/Commands.pm:718 src/Commands.pm:841 src/Commands.pm:977
+#: src/Commands.pm:1097 src/Commands.pm:1221 src/Commands.pm:1294 src/Commands.pm:1398 src/Commands.pm:1550 src/Commands.pm:1633 src/Commands.pm:1823 src/Commands.pm:1912 src/Commands.pm:2123 src/Commands.pm:2221 src/Commands.pm:2265 src/Commands.pm:263 src/Commands.pm:319 src/Commands.pm:364 src/Commands.pm:410 src/Commands.pm:451 src/Commands.pm:573 src/Commands.pm:718 src/Commands.pm:841 src/Commands.pm:977
 msgid ""
 "List '%s' does not exist.\n"
 msgstr ""
@@ -1922,14 +1950,19 @@ msgstr ""
 msgid "Message"
 msgstr ""
 
-#: src/Commands.pm:1684 src/Commands.pm:1793
+#: src/Commands.pm:1684 src/Commands.pm:1794
 msgid ""
 "Message %s for list %s has been distributed.\n"
 msgstr ""
 
-#: src/Commands.pm:1857
+#: src/Commands.pm:1859
 msgid ""
 "Message %s for list %s has been rejected.\n"
+msgstr ""
+
+#: src/Commands.pm:1689 src/Commands.pm:1799
+msgid ""
+"Message %s for list %s has been validated ; it will be distributed soon.\n"
 msgstr ""
 
 #: web_tt2/help_editfile.tt2:35
@@ -2004,7 +2037,7 @@ msgstr ""
 msgid "Moderated, with editor confirmation"
 msgstr ""
 
-#: src/List.pm:2424
+#: src/List.pm:2425
 msgid "Moderating your message"
 msgstr ""
 
@@ -2276,7 +2309,7 @@ msgstr ""
 msgid "Owners defined in an external datasource"
 msgstr ""
 
-#: src/List.pm:2274 src/List.pm:2289 src/List.pm:2301
+#: src/List.pm:2275 src/List.pm:2290 src/List.pm:2302
 msgid "Owners of list %s"
 msgstr ""
 
@@ -2350,7 +2383,7 @@ msgid ""
 "to  %1@%2 ."
 msgstr ""
 
-#: web_tt2/list_menu.tt2:49 web_tt2/list_menu.tt2:51
+#: web_tt2/list_menu.tt2:53 web_tt2/list_menu.tt2:55
 msgid "Post"
 msgstr ""
 
@@ -2469,8 +2502,24 @@ msgstr ""
 msgid "RFC 2369 Header fields"
 msgstr ""
 
-#: web_tt2/list_menu.tt2:55
+#: web_tt2/list_menu.tt2:59
 msgid "RSS"
+msgstr ""
+
+#: web_tt2/main.tt2:16 web_tt2/main.tt2:19
+msgid "RSS Active lists"
+msgstr ""
+
+#: web_tt2/main.tt2:12
+msgid "RSS Latest documents"
+msgstr ""
+
+#: web_tt2/main.tt2:15 web_tt2/main.tt2:18
+msgid "RSS Latest lists"
+msgstr ""
+
+#: web_tt2/main.tt2:11
+msgid "RSS Latest messages"
 msgstr ""
 
 #: web_tt2/rss_request.tt2:3
@@ -2604,7 +2653,7 @@ msgstr ""
 msgid "Rename this list"
 msgstr ""
 
-#: src/Commands.pm:2035
+#: src/Commands.pm:2037
 msgid "Renewal of your subscription to list '%s'"
 msgstr ""
 
@@ -2680,12 +2729,12 @@ msgstr ""
 msgid "Return-path of the REMIND command"
 msgstr ""
 
-#: web_tt2/list_menu.tt2:68
-msgid "Review"
-msgstr ""
-
 #: web_tt2/serveradmin.tt2:25
 msgid "Review lists from this family"
+msgstr ""
+
+#: web_tt2/list_menu.tt2:72
+msgid "Review members"
 msgstr ""
 
 #: mail_tt2/info_report.tt2:13
@@ -2834,7 +2883,7 @@ msgstr ""
 msgid "Serial number of the config"
 msgstr ""
 
-#: web_tt2/rss.tt2:28 web_tt2/rss.tt2:7
+#: web_tt2/rss.tt2:15 web_tt2/rss.tt2:5
 msgid "Server error"
 msgstr ""
 
@@ -2863,7 +2912,7 @@ msgstr ""
 msgid "Shared document directory size"
 msgstr ""
 
-#: src/List.pm:1055 web_tt2/list_menu.tt2:60 web_tt2/list_menu.tt2:62
+#: src/List.pm:1055 web_tt2/list_menu.tt2:64 web_tt2/list_menu.tt2:66
 msgid "Shared documents"
 msgstr ""
 
@@ -2891,7 +2940,7 @@ msgstr ""
 msgid "Skins, CSS and colors"
 msgstr ""
 
-#: src/List.pm:8813
+#: src/List.pm:8827
 msgid ""
 "Someone (hopefully you) asked for your e-mail address\n"
 "to be added to list '%s'.\n"
@@ -2906,7 +2955,7 @@ msgid ""
 "this message."
 msgstr ""
 
-#: src/List.pm:8806
+#: src/List.pm:8820
 msgid ""
 "Someone (hopefully you) asked for your e-mail address\n"
 "to be removed from list '%s'.\n"
@@ -2921,7 +2970,7 @@ msgid ""
 "this message"
 msgstr ""
 
-#: src/List.pm:8818 src/List.pm:8823
+#: src/List.pm:8832 src/List.pm:8837
 msgid ""
 "Someone (hopefully you) requested a user of list %s to be\n"
 "added or removed.\n\n"
@@ -2931,7 +2980,7 @@ msgid ""
 "If you do not want this action to be taken, simply ignore this message.\n"
 msgstr ""
 
-#: src/Commands.pm:2059
+#: src/Commands.pm:2061
 msgid ""
 "Someone (hopefully you) requested that the subscribers to the list\n"
 "'%s' for more than %d days have to confirm their subscription.\n"
@@ -3041,7 +3090,7 @@ msgid ""
 "Subscription reminder sent to each of %d %s subscribers\n"
 msgstr ""
 
-#: src/List.pm:2288
+#: src/List.pm:2289
 msgid "Subscription request to list %s"
 msgstr ""
 
@@ -3049,7 +3098,7 @@ msgstr ""
 msgid "Subscription summary"
 msgstr ""
 
-#: web_tt2/list_admin_menu.tt2:78
+#: web_tt2/list_admin_menu.tt2:75
 msgid "Subscriptions"
 msgstr ""
 
@@ -3057,7 +3106,7 @@ msgstr ""
 msgid "Summary"
 msgstr ""
 
-#: src/List.pm:3239
+#: src/List.pm:3240
 msgid "Summary of list %s"
 msgstr ""
 
@@ -3142,7 +3191,7 @@ msgstr ""
 msgid "Syntax errors with the following parameters : %1"
 msgstr ""
 
-#: mail_tt2/digest.tt2:12 mail_tt2/digest_plain.tt2:10 src/List.pm:3100
+#: mail_tt2/digest.tt2:12 mail_tt2/digest_plain.tt2:10 src/List.pm:3101
 msgid "Table of contents:"
 msgstr ""
 
@@ -3175,22 +3224,22 @@ msgstr ""
 msgid "The %1 file that was initially attached to this message has been stored of the mailing lists server:"
 msgstr ""
 
-#: web_tt2/rss.tt2:31
+#: web_tt2/rss.tt2:18
 #. (count)
 msgid "The %1 latest created lists"
 msgstr ""
 
-#: web_tt2/rss.tt2:51
+#: web_tt2/rss.tt2:38
 #. (count)
 msgid "The %1 latest messages"
 msgstr ""
 
-#: web_tt2/rss.tt2:60
+#: web_tt2/rss.tt2:47
 #. (count)
 msgid "The %1 latest shared documents"
 msgstr ""
 
-#: web_tt2/rss.tt2:41
+#: web_tt2/rss.tt2:28
 #. (count)
 msgid "The %1 most active lists"
 msgstr ""
@@ -3207,13 +3256,13 @@ msgid ""
 "	Level 2 is the highest level of bouncing users"
 msgstr ""
 
-#: src/Commands.pm:1923 src/Commands.pm:2136 src/Commands.pm:2232
+#: src/Commands.pm:1925 src/Commands.pm:2138 src/Commands.pm:2234
 msgid ""
 "The EXPIRE, EXPIREINDEX and EXPIREDEL commands are restricted to the owners of the list.\n"
 "You are not one of the owners for list %s.\n"
 msgstr ""
 
-#: src/Commands.pm:2275
+#: src/Commands.pm:2277
 msgid ""
 "The MODINDEX command is restricted to moderators.\n"
 msgstr ""
@@ -3227,7 +3276,7 @@ msgstr ""
 msgid "The antivirus scan has failed while processing the following file:"
 msgstr ""
 
-#: src/Commands.pm:1110 src/Commands.pm:1243 src/Commands.pm:1411 src/Commands.pm:1995 src/Commands.pm:466 src/Commands.pm:593 src/Commands.pm:733 src/Commands.pm:854 src/Commands.pm:990
+#: src/Commands.pm:1110 src/Commands.pm:1243 src/Commands.pm:1411 src/Commands.pm:1997 src/Commands.pm:466 src/Commands.pm:593 src/Commands.pm:733 src/Commands.pm:854 src/Commands.pm:990
 msgid ""
 "The authentication process failed\n\n"
 msgstr ""
@@ -3243,6 +3292,14 @@ msgstr ""
 #: src/alias_manager.pl:40
 msgid ""
 "The configuration file --CONFIG-- contains errors.\n"
+msgstr ""
+
+#: web_tt2/skinsedit.tt2:44
+msgid "The css_path parameter is defined, value is"
+msgstr ""
+
+#: web_tt2/skinsedit.tt2:7
+msgid "The current version doesn't include a color editor, so you need to edit robot.conf (or sympa.conf) to change colors. Here are the colors as defined in the current robot in robot.conf. If you did install static CSS files, the colors in use may differ from this table."
 msgstr ""
 
 #: web_tt2/help_editlist.tt2:138
@@ -3287,15 +3344,15 @@ msgstr ""
 msgid "The following virtual robots are running on this server :"
 msgstr ""
 
-#: web_tt2/rss.tt2:33
+#: web_tt2/rss.tt2:20
 msgid "The latest created lists"
 msgstr ""
 
-#: web_tt2/rss.tt2:53
+#: web_tt2/rss.tt2:40
 msgid "The latest messages"
 msgstr ""
 
-#: web_tt2/rss.tt2:62
+#: web_tt2/rss.tt2:49
 msgid "The latest shared documents"
 msgstr ""
 
@@ -3324,7 +3381,7 @@ msgstr ""
 msgid "The list's subject"
 msgstr ""
 
-#: web_tt2/rss.tt2:43
+#: web_tt2/rss.tt2:30
 msgid "The most active lists"
 msgstr ""
 
@@ -3560,7 +3617,7 @@ msgstr ""
 msgid "Thread"
 msgstr ""
 
-#: src/Commands.pm:1940
+#: src/Commands.pm:1942
 msgid ""
 "Thus, your message is sent back to you :\n"
 msgstr ""
@@ -3636,7 +3693,7 @@ msgstr ""
 msgid "To distribute the attached message in list %1:"
 msgstr ""
 
-#: src/List.pm:2598
+#: src/List.pm:2599
 msgid ""
 "To distribute the attached message in list %s :\n"
 "mailto:%s?subject=CONFIRM%%20%s\n"
@@ -3658,7 +3715,7 @@ msgid ""
 "If it is not listed or if you don't have any, login using your email and password on the right column."
 msgstr ""
 
-#: src/Commands.pm:1982
+#: src/Commands.pm:1984
 msgid ""
 "To read the list of subscribers who haven't confirm their\n"
 "subscription : EXPIREINDEX %s\n"
@@ -3681,7 +3738,7 @@ msgstr ""
 msgid "To reject it (it will be removed):"
 msgstr ""
 
-#: src/Commands.pm:1984 src/Commands.pm:2042
+#: src/Commands.pm:1986 src/Commands.pm:2044
 msgid ""
 "To stop the expiration process : EXPIREDEL %s\n"
 msgstr ""
@@ -3733,7 +3790,7 @@ msgstr ""
 msgid "UNSubscribe <list> <EMAIL>  * To quit <list>. <EMAIL> is an optional email address, usefull if different from your \"From:\" address."
 msgstr ""
 
-#: src/List.pm:2300
+#: src/List.pm:2301
 msgid "UNsubscription request from list %s"
 msgstr ""
 
@@ -3745,13 +3802,13 @@ msgstr ""
 msgid "Unable to access directory %s : %m"
 msgstr ""
 
-#: src/Commands.pm:1731 src/Commands.pm:1851
+#: src/Commands.pm:1732 src/Commands.pm:1853
 msgid ""
 "Unable to access the moderated message on list %s with key %s.\n"
 "This message may already have been sent by one of the list's moderators\n"
 msgstr ""
 
-#: src/Commands.pm:1723
+#: src/Commands.pm:1724
 msgid ""
 "Unable to access to the message authenticated with key %s.\n"
 msgstr ""
@@ -3799,7 +3856,7 @@ msgstr ""
 msgid "Unsubscribe"
 msgstr ""
 
-#: soap/sympasoap.pm:553 src/Commands.pm:946 wwsympa/wwsympa.fcgi:3526
+#: soap/sympasoap.pm:553 src/Commands.pm:946 wwsympa/wwsympa.fcgi:3531
 msgid "Unsubscribe from list %s"
 msgstr ""
 
@@ -3931,13 +3988,17 @@ msgstr ""
 msgid "Visibility of the subscriber with the REVIEW command."
 msgstr ""
 
-#: src/List.pm:2279
+#: web_tt2/skinsedit.tt2:61
+msgid "W3C CSS validation tools"
+msgstr ""
+
+#: src/List.pm:2280
 msgid ""
 "WARNING : %s %s failed to unsubscribe from %s because his address was not found in the list\n"
 " (You may help this person)"
 msgstr ""
 
-#: src/List.pm:2308
+#: src/List.pm:2309
 msgid "WARNING: bounce rate too high in list %s"
 msgstr ""
 
@@ -3979,7 +4040,7 @@ msgid ""
 "a full MIME structured message (only for MIME gurus)."
 msgstr ""
 
-#: soap/sympasoap.pm:701 soap/sympasoap.pm:702 src/Commands.pm:1062 src/Commands.pm:1063 src/Commands.pm:685 src/Commands.pm:686 wwsympa/wwsympa.fcgi:3297 wwsympa/wwsympa.fcgi:3298 wwsympa/wwsympa.fcgi:4240 wwsympa/wwsympa.fcgi:4241
+#: soap/sympasoap.pm:701 soap/sympasoap.pm:702 src/Commands.pm:1062 src/Commands.pm:1063 src/Commands.pm:685 src/Commands.pm:686 wwsympa/wwsympa.fcgi:3302 wwsympa/wwsympa.fcgi:3303 wwsympa/wwsympa.fcgi:4245 wwsympa/wwsympa.fcgi:4246
 msgid "Welcome on list %s"
 msgstr ""
 
@@ -4120,7 +4181,7 @@ msgstr ""
 msgid "You can put multiple commands in a message. These commands must appear in the message body and each line must contain only one command. The message body is ignored if the Content-Type is different from text/plain but even with crasy mailer using multipart and text/html for any message, commands in the subject are recognized."
 msgstr ""
 
-#: src/Commands.pm:2183
+#: src/Commands.pm:2185
 msgid ""
 "You can remove these subscriber from the list by using the following commands :\n"
 msgstr ""
@@ -4133,7 +4194,7 @@ msgstr ""
 msgid "You did not choose a password, request a reminder of the initial password"
 msgstr ""
 
-#: wwsympa/wwsympa.fcgi:3527 wwsympa/wwsympa.fcgi:4346
+#: wwsympa/wwsympa.fcgi:3532 wwsympa/wwsympa.fcgi:4351
 msgid ""
 "You have been removed from list %s.\n"
 msgstr ""
@@ -4163,7 +4224,7 @@ msgstr ""
 msgid "You have logged in with email address %1"
 msgstr ""
 
-#: src/Commands.pm:2239
+#: src/Commands.pm:2241
 msgid ""
 "You just stopped the expiration process for list %s\n"
 msgstr ""
@@ -4194,7 +4255,7 @@ msgid ""
 "email address. Please try subscribing using your canonical address."
 msgstr ""
 
-#: src/List.pm:8828 src/List.pm:8835
+#: src/List.pm:8842 src/List.pm:8849
 msgid ""
 "You requested a subscription reminder to be sent\n"
 "to each subscriber of list %s\n\n"
@@ -4356,12 +4417,12 @@ msgid ""
 "has been rejected by the moderator (%3)."
 msgstr ""
 
-#: src/List.pm:2425
+#: src/List.pm:2426
 msgid ""
 "Your message for list %s has been forwarded to editor(s)\n"
 msgstr ""
 
-#: src/Commands.pm:1776 src/sympa.pl:1356
+#: src/Commands.pm:1777 src/sympa.pl:1356
 msgid ""
 "Your message for list %s has been rejected.\n"
 "The message is thus sent back to you.\n\n"
@@ -4376,7 +4437,7 @@ msgstr ""
 msgid "Your message signature was succesfuly verified using S/MIME"
 msgstr ""
 
-#: src/Commands.pm:1772 src/sympa.pl:1276 src/sympa.pl:1352
+#: src/Commands.pm:1773 src/sympa.pl:1276 src/sympa.pl:1352
 msgid "Your message to %s has been rejected"
 msgstr ""
 
@@ -4430,7 +4491,7 @@ msgstr ""
 msgid "Your subscription email is %1"
 msgstr ""
 
-#: src/Commands.pm:1484 wwsympa/wwsympa.fcgi:4345
+#: src/Commands.pm:1484 wwsympa/wwsympa.fcgi:4350
 msgid "Your subscription to list %s has been removed."
 msgstr ""
 
@@ -4455,22 +4516,6 @@ msgid ""
 "[ Text converted from HTML ]\n"
 msgstr ""
 
-#: web_tt2/main.tt2:16 web_tt2/main.tt2:19
-msgid "\"RSS Active lists\""
-msgstr ""
-
-#: web_tt2/main.tt2:12
-msgid "\"RSS Latest documents\""
-msgstr ""
-
-#: web_tt2/main.tt2:15 web_tt2/main.tt2:18
-msgid "\"RSS Latest lists\""
-msgstr ""
-
-#: web_tt2/main.tt2:11
-msgid "\"RSS Latest messages\""
-msgstr ""
-
 #: src/PlainDigest.pm:296 src/PlainDigest.pm:317
 msgid ""
 "\n%*(* Unable to process HTML message part **)\n"
@@ -4492,7 +4537,7 @@ msgid ""
 "\n-----Delivery Status Report-----\n"
 msgstr ""
 
-#: src/Commands.pm:1981 src/Commands.pm:2164
+#: src/Commands.pm:1983 src/Commands.pm:2166
 msgid ""
 "\nAn EXPIRE command is currently running for list %s.\n"
 "It had been run by owner %s (%s)\n"
@@ -4502,7 +4547,7 @@ msgid ""
 "will end in %d day(s) (%s).\n"
 msgstr ""
 
-#: src/Commands.pm:2022
+#: src/Commands.pm:2024
 msgid ""
 "\nAn expiration process for list %s has been started. This process\n"
 "will end in %d days. You will then receive the list of subscribers \n"
@@ -4510,7 +4555,7 @@ msgid ""
 "You will then be able to remove these addresses yourself with the DEL command.\n"
 msgstr ""
 
-#: src/List.pm:2290
+#: src/List.pm:2291
 msgid ""
 "\nDear owner of list %s,\n\n"
 "A user asked to be added as a subscriber to your list. Shall this be fine\n"
@@ -4525,7 +4570,7 @@ msgid ""
 "\nPowered by Sympa %s : http://www.sympa.org/\n"
 msgstr ""
 
-#: src/Commands.pm:1938
+#: src/Commands.pm:1940
 msgid ""
 "\nThe EXPIRE command couldn't be run. It must followed by an explication\n"
 "text aimed to subscribers who need to confirm their subscription.\n"
@@ -4545,12 +4590,12 @@ msgid ""
 "\n[ ** Unable to process HTML message part **]\n"
 msgstr ""
 
-#: src/Commands.pm:2382
+#: src/Commands.pm:2384
 msgid ""
 "\n\nLists you are editor of :\n\n"
 msgstr ""
 
-#: src/Commands.pm:2374
+#: src/Commands.pm:2376
 msgid ""
 "\n\nLists you are owner of:\n\n"
 msgstr ""
@@ -4567,7 +4612,7 @@ msgstr ""
 msgid "action for this population"
 msgstr ""
 
-#: web_tt2/rss_request.tt2:46
+#: web_tt2/rss_request.tt2:48
 msgid "active lists"
 msgstr ""
 
@@ -4632,10 +4677,6 @@ msgstr ""
 msgid "anyone with previous md5 authentication"
 msgstr ""
 
-#: src/etc/scenari/unsubscribe.open.~1.8.~:1
-msgid "anyone without authentication"
-msgstr ""
-
 #: src/etc/scenari/subscribe.open_quiet:1
 msgid "anyone, no welcome message"
 msgstr ""
@@ -4690,6 +4731,10 @@ msgstr ""
 
 #: src/etc/scenari/access_web_archive.closed:1 src/etc/scenari/invite.closed:1 src/etc/scenari/send.closed:1
 msgid "closed"
+msgstr ""
+
+#: web_tt2/skinsedit.tt2:14 web_tt2/skinsedit.tt2:18
+msgid "color effet"
 msgstr ""
 
 #: src/etc/scenari/visibility.secret:1
@@ -4891,6 +4936,16 @@ msgstr ""
 msgid "first-level suffix"
 msgstr ""
 
+#: web_tt2/rss.tt2:23 web_tt2/rss.tt2:33
+#. (for)
+msgid "for %1 days"
+msgstr ""
+
+#: web_tt2/rss.tt2:43 web_tt2/rss.tt2:52
+#. (for)
+msgid "for %1 days "
+msgstr ""
+
 #: src/etc/scenari/info.open:1
 msgid "for anyone"
 msgstr ""
@@ -4972,15 +5027,15 @@ msgstr ""
 msgid "language"
 msgstr ""
 
-#: web_tt2/rss_request.tt2:36
+#: web_tt2/rss_request.tt2:38
 msgid "latest arc"
 msgstr ""
 
-#: web_tt2/rss_request.tt2:41
+#: web_tt2/rss_request.tt2:43
 msgid "latest document"
 msgstr ""
 
-#: web_tt2/rss_request.tt2:51
+#: web_tt2/rss_request.tt2:53
 msgid "latest lists"
 msgstr ""
 
@@ -5174,6 +5229,14 @@ msgstr ""
 msgid "page %1 / %2"
 msgstr ""
 
+#: web_tt2/skinsedit.tt2:12 web_tt2/skinsedit.tt2:16
+msgid "parameter"
+msgstr ""
+
+#: web_tt2/skinsedit.tt2:13 web_tt2/skinsedit.tt2:17
+msgid "parameter value"
+msgstr ""
+
 #: web_tt2/arcsearch_form.tt2:42
 msgid "part of word"
 msgstr ""
@@ -5243,7 +5306,7 @@ msgstr ""
 msgid "purge of orphan entries in user table every month"
 msgstr ""
 
-#: web_tt2/add_request.tt2:12 web_tt2/editsubscriber.tt2:40 web_tt2/review.tt2:231 web_tt2/review.tt2:50 web_tt2/review.tt2:75 web_tt2/reviewbouncing.tt2:107 web_tt2/reviewbouncing.tt2:31
+#: web_tt2/add_request.tt2:12 web_tt2/editsubscriber.tt2:40 web_tt2/review.tt2:231 web_tt2/review.tt2:49 web_tt2/review.tt2:75 web_tt2/reviewbouncing.tt2:107 web_tt2/reviewbouncing.tt2:31
 msgid "quiet"
 msgstr ""
 
@@ -5433,6 +5496,10 @@ msgstr ""
 msgid "standard (direct reception)"
 msgstr ""
 
+#: web_tt2/skinsedit.tt2:41
+msgid "static css installation succeed. Reload the current page and/or check sympa logs  to be sure that static css a really in use."
+msgstr ""
+
 #: web_tt2/set_pending_list_request.tt2:25 web_tt2/subrequest.tt2:47
 msgid "submit"
 msgstr ""
@@ -5488,6 +5555,10 @@ msgstr ""
 
 #: web_tt2/help_editlist.tt2:150
 msgid "the address is hidden using a javascript. User who enable javascript can see a nice mailto address where others have nothing."
+msgstr ""
+
+#: web_tt2/skinsedit.tt2:45
+msgid "the current definition for css location (css_url parameter) is"
 msgstr ""
 
 #: src/List.pm:531 src/List.pm:946
@@ -5577,10 +5648,6 @@ msgstr ""
 
 #: src/List.pm:1116
 msgid "who updated the config"
-msgstr ""
-
-#: src/etc/scenari/unsubscribe.open_notify.~1.9.~:1
-msgid "without authentication, notification is sent to owners"
 msgstr ""
 
 #: wwsympa/wwslib.pm:44

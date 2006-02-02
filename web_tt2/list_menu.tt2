@@ -12,12 +12,12 @@
   [% END %]
   [% IF may_signoff == '1' %] 
   [% IF action == 'signoff' %][% SET class = 'menuLinksCurrentPage' %][% ELSE %][% SET class = 'menuLinks' %][% END %]
-     <strong><a class="[% class %]" href="[% path_cgi %]/signoff/[% list %]" onclick="request_confirm_link('[% path_cgi %]/signoff/[% list %]', '[%|loc(list)%]Do you really want to unsubscribe from list %1?[%END%]'); return false;">[%|loc%]Unsubscribe[%END%]</a></strong><br />
+     <strong><a class="[% class %]" href="[% path_cgi %]/signoff/[% list %]" onclick="request_confirm_link('[% path_cgi %]/signoff/[% list %]', '[% FILTER escape_quote %][%|loc(list)%]Do you really want to unsubscribe from list %1?[%END%][%END%]'); return false;">[%|loc%]Unsubscribe[%END%]</a></strong><br />
   [% END %]
 [% ELSE %]
   [% IF may_subscribe %]
      [% IF action == 'subrequest' %][% SET class = 'menuLinksCurrentPage' %][% ELSE %][% SET class = 'menuLinks' %][% END %]
-         <strong><a class="[% class %]" href="[% path_cgi %]/subscribe/[% list %]" onclick="request_confirm_link('[% path_cgi %]/subscribe/[% list %]', '[%|loc(list)%]Do you really want to subscribe to list %1?[%END%]'); return false;">[%|loc%]Subscribe[%END%]</a></strong><br />
+         <strong><a class="[% class %]" href="[% path_cgi %]/subscribe/[% list %]" onclick="request_confirm_link('[% path_cgi %]/subscribe/[% list %]', '[% FILTER escape_quote %][%|loc(list)%]Do you really want to subscribe to list %1?[%END%][%END%]'); return false;">[%|loc%]Subscribe[%END%]</a></strong><br />
   [% END %]
 
   [% IF ! user.email %]
@@ -28,9 +28,13 @@
 [% END %]
 
 [% IF action == 'info'%][% SET class = 'menuLinksCurrentPage' %][% ELSE %][% SET class = 'menuLinks' %][% END %]
-<strong><a class="[% class %]"" href="[% path_cgi %]/info/[% list %]">Info</a></strong><br />
+<strong><a class="[% class %]" href="[% path_cgi %]/info/[% list %]">Info</a></strong><br />
 
-<strong>[% hidden_head %]<a class=\"menuLinks\" href=\"mailto:[% list %]-request[% hidden_at %][% domain %]\">[%|loc%]Contact owners[%END%]</a>[% hidden_end %]</strong><br />
+[% IF protection_type == 'javascript' %]
+<strong>[% hidden_head %]<a class=\"menuLinks\" href=\"mailto:[% list %]-request[% hidden_at %][% domain %]\">[%|loc%]Contact owners[%END%]</a><[% hidden_end %]/strong><br />
+[% ELSE %]
+<strong><a class="menuLinks" href="mailto:[% hidden_head %][% list %]-request[% hidden_at %][% domain %][% hidden_end %]">[%|loc%]Contact owners[%END%]</a></strong><br />
+[% END %]
 
 
 [% PROCESS 'list_admin_menu.tt2' IF is_priv %]
@@ -65,7 +69,7 @@
 
 [% IF may_review %]
 [% IF action == 'review' %][% SET class = 'menuLinksCurrentPage' %][% ELSE %][% SET class = 'menuLinks' %][% END %]
-<strong><a class="[% class %]" href="[% path_cgi %]/review/[% list %]" >[%|loc%]Review[%END%]</a></strong><br />
+<strong><a class="[% class %]" href="[% path_cgi %]/review/[% list %]" >[%|loc%]Review members[%END%]</a></strong><br />
 <br />
 [% END %]
 

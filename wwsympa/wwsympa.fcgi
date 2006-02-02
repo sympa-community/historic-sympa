@@ -690,101 +690,105 @@ if ($wwsconf->{'use_fast_cgi'}) {
 
      &wwslog('info', "parameter css_url '%s' seems strange, it must be the url of a directory not a css file", $param->{'css_url'}) if ($param->{'css_url'} =~ /\.css$/);
 
-    if (($ENV{'SSL_CLIENT_VERIFY'} eq 'SUCCESS') &&
-	 ($in{'action'} ne 'sso_login')) { ## Do not check client certificate automatically if in sso_login 
+     ## RSS does not require user authentication
+     unless ($rss) {
 
-	 &do_log('debug2', "SSL verified, S_EMAIL = %s,"." S_DN_Email = %s", $ENV{'SSL_CLIENT_S_EMAIL'}, $ENV{'SSL_CLIENT_S_DN_Email'});
-	 if (($ENV{'SSL_CLIENT_S_EMAIL'})) {
-	     ## this is the X509v3 SubjectAlternativeName, and requires
-	     ## a patch to mod_ssl -- cm@coretec.at
-	     $param->{'user'}{'email'} = lc($ENV{'SSL_CLIENT_S_EMAIL'});
-	 }elsif ($ENV{SSL_CLIENT_S_DN_Email}) {
-	     $param->{'user'}{'email'} = lc($ENV{'SSL_CLIENT_S_DN_Email'});
-	 }elsif ($ENV{'SSL_CLIENT_S_DN'} =~ /\+MAIL=([^\+\/]+)$/) {
-	     ## Compatibility issue with old a-sign.at certs
-	     $param->{'user'}{'email'} = lc($1);
-	 }
-	 
-	 if($param->{user}{email}) {
-	     $param->{'auth_method'} = 'smime';
-	     $param->{'auth'} = 'x509';
-	     $param->{'ssl_client_s_dn'} = $ENV{'SSL_CLIENT_S_DN'};
-	     $param->{'ssl_client_v_end'} = $ENV{'SSL_CLIENT_V_END'};
-	     $param->{'ssl_client_i_dn'} =  $ENV{'SSL_CLIENT_I_DN'};
-	     $param->{'ssl_cipher_usekeysize'} =  $ENV{'SSL_CIPHER_USEKEYSIZE'};
-	 }
-
-     }elsif ($ENV{'HTTP_COOKIE'} =~ /(user|sympauser)\=/) {
-         ($param->{'user'}{'email'}, $param->{'auth'}) = &wwslib::get_email_from_cookie($Conf{'cookie'});
-	 
-     }elsif($in{'ticket'}=~/(S|P)T\-/){ # the request contain a CAS named ticket that use CAS ticket format
-	 &cookielib::set_do_not_use_cas($wwsconf->{'cookie_domain'},0,'now'); #reset the cookie do_not_use_cas because this client probably use CAS
-	 # select the cas server that redirect the user to sympa and check the ticket
-	 do_log ('notice',"CAS ticket is detected. in{'ticket'}=$in{'ticket'} in{'checked_cas'}=$in{'checked_cas'}");
-	 if ($in{'checked_cas'} =~ /^(\d+)\,?/) {
-	     my $cas_id = $1;
-	     my $ticket = $in{'ticket'};
-	     my $cas_server = $Conf{'auth_services'}[$cas_id]{'cas_server'};
+	 if (($ENV{'SSL_CLIENT_VERIFY'} eq 'SUCCESS') &&
+	     ($in{'action'} ne 'sso_login')) { ## Do not check client certificate automatically if in sso_login 
 	     
-	     my $service_url = &wwslib::get_my_url();
-	     $service_url =~ s/\&ticket\=.+$//;
-
-	     my $net_id = $cas_server->validateST($service_url, $ticket);
-
-	     if(defined $net_id) { # the ticket is valid net-id
-		 do_log('notice',"login CAS OK server netid=$net_id" );
-		 $param->{'user'}{'email'} = lc(&Auth::get_email_by_net_id($cas_id, {'uid' => $net_id}));
-		 $param->{'auth'} = 'cas';
-
-		 &cookielib::set_cas_server($wwsconf->{'cookie_domain'},$cas_id);
-
-		 
-	     }else{
-		 do_log('err',"CAS ticket validation failed : %s", &CAS::get_errors()); 
+	     &do_log('debug2', "SSL verified, S_EMAIL = %s,"." S_DN_Email = %s", $ENV{'SSL_CLIENT_S_EMAIL'}, $ENV{'SSL_CLIENT_S_DN_Email'});
+	     if (($ENV{'SSL_CLIENT_S_EMAIL'})) {
+		 ## this is the X509v3 SubjectAlternativeName, and requires
+		 ## a patch to mod_ssl -- cm@coretec.at
+		 $param->{'user'}{'email'} = lc($ENV{'SSL_CLIENT_S_EMAIL'});
+	     }elsif ($ENV{SSL_CLIENT_S_DN_Email}) {
+		 $param->{'user'}{'email'} = lc($ENV{'SSL_CLIENT_S_DN_Email'});
+	     }elsif ($ENV{'SSL_CLIENT_S_DN'} =~ /\+MAIL=([^\+\/]+)$/) {
+		 ## Compatibility issue with old a-sign.at certs
+		 $param->{'user'}{'email'} = lc($1);
 	     }
-	 }else{
-	      do_log ('notice',"Internal error while receiving a CAS ticket $in{'checked_cas'} ");
-	 }
-     }elsif(($Conf{'cas_number'} > 0) &&
-	    ($in{'action'} !~ /^login|sso_login|wsdl$/)) { # some cas server are defined but no CAS ticket detected
-	 if (&cookielib::get_do_not_use_cas($ENV{'HTTP_COOKIE'})) {
-	     &cookielib::set_do_not_use_cas($wwsconf->{'cookie_domain'},1,$Conf{'cookie_cas_expire'}); # refresh CAS cookie;
-	 }else{
-	     # user not taggued as not using cas
-	     do_log ('debug',"no cas ticket detected");
-	     foreach my $auth_service (@{$Conf{'auth_services'}}){
-		 # skip auth services not related to cas
-		 next unless ($auth_service->{'auth_type'} eq 'cas');
-		 next unless ($auth_service->{'non_blocking_redirection'} eq 'on');
+	     
+	     if($param->{user}{email}) {
+		 $param->{'auth_method'} = 'smime';
+		 $param->{'auth'} = 'x509';
+		 $param->{'ssl_client_s_dn'} = $ENV{'SSL_CLIENT_S_DN'};
+		 $param->{'ssl_client_v_end'} = $ENV{'SSL_CLIENT_V_END'};
+		 $param->{'ssl_client_i_dn'} =  $ENV{'SSL_CLIENT_I_DN'};
+		 $param->{'ssl_cipher_usekeysize'} =  $ENV{'SSL_CIPHER_USEKEYSIZE'};
+	     }
+	     
+	 }elsif ($ENV{'HTTP_COOKIE'} =~ /(user|sympauser)\=/) {
+	     ($param->{'user'}{'email'}, $param->{'auth'}) = &wwslib::get_email_from_cookie($Conf{'cookie'});
+	     
+	 }elsif($in{'ticket'}=~/(S|P)T\-/){ # the request contain a CAS named ticket that use CAS ticket format
+	     &cookielib::set_do_not_use_cas($wwsconf->{'cookie_domain'},0,'now'); #reset the cookie do_not_use_cas because this client probably use CAS
+	     # select the cas server that redirect the user to sympa and check the ticket
+	     do_log ('notice',"CAS ticket is detected. in{'ticket'}=$in{'ticket'} in{'checked_cas'}=$in{'checked_cas'}");
+	     if ($in{'checked_cas'} =~ /^(\d+)\,?/) {
+		 my $cas_id = $1;
+		 my $ticket = $in{'ticket'};
+		 my $cas_server = $Conf{'auth_services'}[$cas_id]{'cas_server'};
 		 
-		 ## skip cas server where client as been allready redirect to 
-		 ## (redirection carry the list of cas servers allready checked
-		 &do_log ('debug',"check_cas checker_cas : $in{'checked_cas'} current cas_id $Conf{'cas_id'}{$auth_service->{'auth_service_name'}}");
-		 next if ($in{'checked_cas'} =~  /$Conf{'cas_id'}{$auth_service->{'auth_service_name'}}/) ;
+		 my $service_url = &wwslib::get_my_url();
+		 $service_url =~ s/\&ticket\=.+$//;
 		 
-		 # before redirect update the list of allready checked cas server to prevent loop
-		 my $cas_server = $auth_service->{'cas_server'};
-		 my $return_url = &wwslib::get_my_url();
-
-		 if ($ENV{'REQUEST_URI'} =~ /checked_cas\=/) {
-		     $return_url =~ s/checked_cas\=/checked_cas\=$Conf{'cas_id'}{$auth_service->{'auth_service_name'}},/;
-		 }else{		 
-		     $return_url .= '?checked_cas='.$Conf{'cas_id'}{$auth_service->{'auth_service_name'}};
+		 my $net_id = $cas_server->validateST($service_url, $ticket);
+		 
+		 if(defined $net_id) { # the ticket is valid net-id
+		     do_log('notice',"login CAS OK server netid=$net_id" );
+		     $param->{'user'}{'email'} = lc(&Auth::get_email_by_net_id($cas_id, {'uid' => $net_id}));
+		     $param->{'auth'} = 'cas';
+		     
+		     &cookielib::set_cas_server($wwsconf->{'cookie_domain'},$cas_id);
+		     
+		     
+		 }else{
+		     do_log('err',"CAS ticket validation failed : %s", &CAS::get_errors()); 
 		 }
-		 
-		 my $redirect_url = $cas_server->getServerLoginGatewayURL($return_url);
-		 		 
-		 if ($redirect_url =~ /http(s)+\:\//i) {
-		     $in{'action'} = 'redirect';
-		     $param->{'redirect_to'} = $redirect_url;
-		     last
-		     }elsif($redirect_url == -1) { # CAS server auth error
-			 do_log('notice',"CAS server auth error $auth_service->{'auth_service_name'}" );
-		     }else{
-			 do_log('notice',"Strange CAS ticket detected and validated check sympa code !" );
-		     }
+	     }else{
+		 do_log ('notice',"Internal error while receiving a CAS ticket $in{'checked_cas'} ");
 	     }
-	     &cookielib::set_do_not_use_cas($wwsconf->{'cookie_domain'},1,$Conf{'cookie_cas_expire'}) unless ($param->{'redirect_to'} =~ /http(s)+\:\//i) ; #set the cookie do_not_use_cas because all cas server as been checked without success
+	 }elsif(($Conf{'cas_number'} > 0) &&
+		($in{'action'} !~ /^login|sso_login|wsdl$/)) { # some cas server are defined but no CAS ticket detected
+	     if (&cookielib::get_do_not_use_cas($ENV{'HTTP_COOKIE'})) {
+		 &cookielib::set_do_not_use_cas($wwsconf->{'cookie_domain'},1,$Conf{'cookie_cas_expire'}); # refresh CAS cookie;
+	     }else{
+		 # user not taggued as not using cas
+		 do_log ('debug',"no cas ticket detected");
+		 foreach my $auth_service (@{$Conf{'auth_services'}}){
+		     # skip auth services not related to cas
+		     next unless ($auth_service->{'auth_type'} eq 'cas');
+		     next unless ($auth_service->{'non_blocking_redirection'} eq 'on');
+		     
+		     ## skip cas server where client as been allready redirect to 
+		     ## (redirection carry the list of cas servers allready checked
+		     &do_log ('debug',"check_cas checker_cas : $in{'checked_cas'} current cas_id $Conf{'cas_id'}{$auth_service->{'auth_service_name'}}");
+		     next if ($in{'checked_cas'} =~  /$Conf{'cas_id'}{$auth_service->{'auth_service_name'}}/) ;
+		     
+		     # before redirect update the list of allready checked cas server to prevent loop
+		     my $cas_server = $auth_service->{'cas_server'};
+		     my $return_url = &wwslib::get_my_url();
+		     
+		     if ($ENV{'REQUEST_URI'} =~ /checked_cas\=/) {
+			 $return_url =~ s/checked_cas\=/checked_cas\=$Conf{'cas_id'}{$auth_service->{'auth_service_name'}},/;
+		     }else{		 
+			 $return_url .= '?checked_cas='.$Conf{'cas_id'}{$auth_service->{'auth_service_name'}};
+		     }
+		     
+		     my $redirect_url = $cas_server->getServerLoginGatewayURL($return_url);
+		     
+		     if ($redirect_url =~ /http(s)+\:\//i) {
+			 $in{'action'} = 'redirect';
+			 $param->{'redirect_to'} = $redirect_url;
+			 last
+			 }elsif($redirect_url == -1) { # CAS server auth error
+			     do_log('notice',"CAS server auth error $auth_service->{'auth_service_name'}" );
+			 }else{
+			     do_log('notice',"Strange CAS ticket detected and validated check sympa code !" );
+			 }
+		 }
+		 &cookielib::set_do_not_use_cas($wwsconf->{'cookie_domain'},1,$Conf{'cookie_cas_expire'}) unless ($param->{'redirect_to'} =~ /http(s)+\:\//i) ; #set the cookie do_not_use_cas because all cas server as been checked without success
+	     }
 	 }
      }
 
@@ -805,14 +809,17 @@ if ($wwsconf->{'use_fast_cgi'}) {
              $param->{'user'}{'cookie_delay'} = $wwsconf->{'cookie_expire'};
          }
          ## get sub crition using cookie and set param for use in templates
-         @{$param->{'get_which'}}  =  &cookielib::get_which_cookie($ENV{'HTTP_COOKIE'});
+         #@{$param->{'get_which'}}  =  &cookielib::get_which_cookie($ENV{'HTTP_COOKIE'});
 
          # if no cookie was received, look for subscriptions
 #         unless (defined $param->{'get_which'}) {
-	 @{$param->{'get_which'}} = &List::get_which($param->{'user'}{'email'},$robot,'member') ; 
-	 @{$param->{'get_which_owner'}} = &List::get_which($param->{'user'}{'email'},$robot,'owner') ; 
-	 @{$param->{'get_which_editor'}} = &List::get_which($param->{'user'}{'email'},$robot,'editor') ; 
 	 
+	 ## Skip get_which if either in a list context or accessing the CSS
+	 unless ($in{'action'} eq 'css' || defined $in{'list'}) {
+	     @{$param->{'get_which'}} = &List::get_which($param->{'user'}{'email'},$robot,'member') ; 
+	     @{$param->{'get_which_owner'}} = &List::get_which($param->{'user'}{'email'},$robot,'owner') ; 
+	     @{$param->{'get_which_editor'}} = &List::get_which($param->{'user'}{'email'},$robot,'editor') ; 
+	 }  
 #         }
 
      }else{
@@ -846,9 +853,12 @@ if ($wwsconf->{'use_fast_cgi'}) {
          $param->{'domain'} = $param->{'host'};
 
          ## language ( $ENV{'HTTP_ACCEPT_LANGUAGE'} not used !)
-	 
-         $param->{'lang'} = $param->{'cookie_lang'} || $param->{'user'}{'lang'} || 
-	     $list->{'admin'}{'lang'} || &Conf::get_robot_conf($robot, 'lang');
+	 $param->{'list_lang'} = $list->{'admin'}{'lang'} if (ref($list) eq 'List');
+	 $param->{'user_lang'} = $param->{'user'}{'lang'} if (defined $param->{'user'});
+
+
+         $param->{'lang'} = $param->{'cookie_lang'} || $param->{'user_lang'} || 
+	     $param->{'list_lang'} || &Conf::get_robot_conf($robot, 'lang');
          $param->{'locale'} = &Language::SetLang($param->{'lang'});
 
 	 &export_topics ($robot);
@@ -906,11 +916,10 @@ if ($wwsconf->{'use_fast_cgi'}) {
 	 $param->{'list_title'} = $list->{'admin'}{'subject'};
 	 $param->{'list_protected_email'} = &get_protected_email_address($param->{'list'}, $list->{'admin'}{'host'});
 	 $param->{'title'} = &get_protected_email_address($param->{'list'}, $list->{'admin'}{'host'});
-	 $param->{'title_clear_txt'} = "$param->{'list'}\@$list->{'admin'}{'host'}";
+	 $param->{'title_clear_txt'} = "$param->{'list'}";
 
 	 if ($param->{'subtitle'}) {
 	     $param->{'main_title'} = "$param->{'list'} - $param->{'subtitle'}";
-	     $param->{'title_clear_txt'} = $param->{'title'};
 	 }
 
      }else {
@@ -920,9 +929,9 @@ if ($wwsconf->{'use_fast_cgi'}) {
      $param->{'robot_title'} = &Conf::get_robot_conf($robot,'title');
 
      ## Do not manage cookies at this level if content was already sent
-     unless ($param->{'bypass'} eq 'extreme') {
+     unless ($param->{'bypass'} eq 'extreme' || $param->{'action'} eq 'css') {
 	 ## Set cookies "your_subscribtions"
-	 if ($param->{'user'}{'email'}) {
+	 if ($param->{'user'}{'email'} && ref($list) ne 'List') {
 
 	     ## In case get_which was not set
 	     @{$param->{'get_which'}} = &List::get_which($param->{'user'}{'email'},$robot,'member') unless (defined $param->{'get_which'}); 
@@ -1031,9 +1040,6 @@ if ($wwsconf->{'use_fast_cgi'}) {
 	     }
 	 }
 
-     }elsif ($param->{'redirect_to'}) {
-	 do_log ('debug',"Redirecting to $param->{'redirect_to'}");
-	 print "Location: $param->{'redirect_to'}\n\n";
      }elsif ($rss) {
  	 ## Send RSS 
  	 print "Cache-control: no-cache\n";
@@ -1071,12 +1077,20 @@ if ($wwsconf->{'use_fast_cgi'}) {
  	     unshift @{$tt2_include_path}, $list->{'dir'}.'/web_tt2';
  	     unshift @{$tt2_include_path}, $list->{'dir'}.'/web_tt2/'.&Language::Lang2Locale($param->{'lang'}); 	 }
  	    
- 	 unless (&tt2::parse_tt2($param,'rss.tt2' ,\*STDOUT, $tt2_include_path)) {
+	 my $tt2_options = {};
+	 if ($Conf{'web_recode_to'}) {
+	     $tt2_options =  {'recode' => $Conf{'web_recode_to'}};
+	 }    
+
+ 	 unless (&tt2::parse_tt2($param,'rss.tt2' ,\*STDOUT, $tt2_include_path, $tt2_options)) {
  	     my $error = &tt2::get_error();
  	     $param->{'tt2_error'} = $error;
  	     &List::send_notify_to_listmaster('web_tt2_error', $robot, $error);
  	 }
 # 	 close FILE;
+     }elsif ($param->{'redirect_to'}) {
+	 do_log ('debug',"Redirecting to $param->{'redirect_to'}");
+	 print "Location: $param->{'redirect_to'}\n\n";
      }else {
 	 &send_html('main.tt2');
      }    
@@ -1560,12 +1574,13 @@ sub send_html {
      if (&Conf::get_robot_conf($robot,'spam_protection') eq 'at') {
 	 $param->{'hidden_head'} = '';	$param->{'hidden_at'} = ' AT ';	$param->{'hidden_end'} = '';
      }elsif(&Conf::get_robot_conf($robot,'spam_protection') eq 'javascript') {
+	 $param->{'protection_type'} = 'javascript';
 	 $param->{'hidden_head'} = '
  <script type="text/javascript">
  <!-- 
  document.write("';
-	 $param->{'hidden_at'} ='" + "@" + "';
-	 $param->{'hidden_end'} ='")
+		 $param->{'hidden_at'} ='" + "@" + "';
+		 $param->{'hidden_end'} ='")
  // -->
  </script>';
      }else {
@@ -1577,9 +1592,11 @@ sub send_html {
 
 	 ## Email addresses protection
  	 if ($in{'action'} eq 'arc') {
+	     $param->{'protection_type'} = undef;
 	     if ($list->{'admin'}{'web_archive_spam_protection'} eq 'at') {
 		 $param->{'hidden_head'} = '';	$param->{'hidden_at'} = ' AT ';	$param->{'hidden_end'} = '';
 	     }elsif($list->{'admin'}{'web_archive_spam_protection'} eq 'javascript') {
+		 $param->{'protection_type'} = 'javascript';
 		 $param->{'hidden_head'} = '
  <script type="text/javascript">
  <!-- 
@@ -4139,14 +4156,14 @@ sub do_skinsedit {
 
      if ($in{'dump'}) {
 	 foreach (split /\n/, $in{'dump'}) {
-	     if (/^(\S+|\".*\"@\S+)(\s+(.*))?\s*$/) {
-		 $user{&tools::get_canonical_email($1)} = $3;
+	     if (/^($tools::regexp{'email'})(\s+(.*))?\s*$/) {
+		 $user{&tools::get_canonical_email($1)} = $5;
 	     }
 	 }
      }elsif ($in{'email'} =~ /,/) {
 	 foreach my $pair (split /\0/, $in{'email'}) {
-	     if ($pair =~ /^(.+),(.+)$/) {
-		 $user{&tools::get_canonical_email($1)} = $2;
+	     if ($pair =~ /^($tools::regexp{'email'})(,(.*))?\s*$/) {
+		 $user{&tools::get_canonical_email($1)} = $5;
 	     }
 	 }
      }elsif ($in{'email'}) {
@@ -4154,8 +4171,8 @@ sub do_skinsedit {
      }elsif ($in{'pending_email'}) {
 	 foreach my $pair (split /\0/, $in{'pending_email'}) {
 	     my ($email, $gecos);
-	     if ($pair =~ /^(.+),(.*)$/) {
-		 ($email, $gecos) = ($1,$2);
+	     if ($pair =~ /^($tools::regexp{'email'})(,(.*))?\s*$/) {
+		 ($email, $gecos) = ($1,$5);
 		 $user{&tools::get_canonical_email($email)} = $gecos;
 	     }
 	 }
@@ -4363,6 +4380,9 @@ sub do_skinsedit {
      &message('performed');
      $param->{'is_subscriber'} = 1;
      $param->{'may_signoff'} = 1;
+
+     ## Skip search because we don't have the expression anymore
+     delete $in{'previous_action'} if ($in{'previous_action'} eq 'search');
 
      return $in{'previous_action'} || 'review';
  }
@@ -5202,16 +5222,16 @@ sub do_skinsedit {
 	 return undef;
      }
 
-     if ($list->{'admin'}{'web_archive_spam_protection'} eq 'cookie'){
-	 ## Reject Email Sniffers
-	 unless (&cookielib::check_arc_cookie($ENV{'HTTP_COOKIE'})) {
-	     if ($param->{'user'}{'email'} or $in{'not_a_sniffer'}) {
-		 &cookielib::set_arc_cookie($param->{'cookie_domain'});
-	     }else {
-		 return 'arc_protect';
-	     }
-	 }
-     }
+#     if ($list->{'admin'}{'web_archive_spam_protection'} eq 'cookie'){
+#	 ## Reject Email Sniffers
+#	 unless (&cookielib::check_arc_cookie($ENV{'HTTP_COOKIE'})) {
+#	     if ($param->{'user'}{'email'} or $in{'not_a_sniffer'}) {
+#		 &cookielib::set_arc_cookie($param->{'cookie_domain'});
+#	     }else {
+#		 return 'arc_protect';
+#	     }
+#	 }
+#     }
 
      ## parameters of the query
      my $today  = time;
@@ -5314,6 +5334,16 @@ sub do_skinsedit {
 			 $msg_info{$var} = $msg_info{$var}->[0];
 		     }
 
+		     ## Hide full email address
+		     if ($field eq 'from') {
+			 if ($msg_info{$var} =~ /(.+)\<.+\>/) {
+			     $msg_info{$var} = $1;
+			 }else {
+			     my @email = split /\@/, $msg_info{$var};
+			     $msg_info{$var} = $email[0];
+			 }
+		     }
+
 		     if ($field eq 'message-id') {
 			 if ( $msg_info{$var} =~ /^\<(.+)\>$/) {
 			     $msg_info{$var}  =~ s/^\<(.+)\>$/$1/;
@@ -5324,8 +5354,10 @@ sub do_skinsedit {
 			 
 			 $msg_info{'year_month'} = $year_month;			 
 		     }else {	     
+			 $msg_info{$var} =   &MIME::Words::decode_mimewords($msg_info{$var});
 			 $msg_info{$var} = &tools::escape_html($msg_info{$var});
 		     }
+
 		 }		
 		 
 		 my $date = $hdr->get('Date'); 
@@ -5337,6 +5369,7 @@ sub do_skinsedit {
 
 		 my @array_date = &time_utils::parse_date($date);
 
+		 $msg_info{'date_smtp'} = $date;
 		 $msg_info{'date_epoch'} = &get_timelocal_from_date(@array_date[1..$#array_date]);
 
 		 $msg_info{'date'} = &POSIX::strftime("%d %b %Y",localtime($msg_info{'date_epoch'}) );
@@ -12875,14 +12908,14 @@ sub do_arc_download {
 	unless (opendir SPOOL, $abs_dir) {
 	    &error_message('failed');
 	    &wwslog('info','do_arc_download: unable to open %s', $abs_dir);
-	    return 'undef';
+	    return undef;
 	}
 	
 	foreach my $msg (sort grep(!/^\./, readdir SPOOL)) { 
 	    unless ($zip->addFile ($abs_dir.'/'.$msg, $in{'list'}.'_'.$dir.'/'.$msg)) {
 		&error_message('failed');
 		&wwslog('info','do_arc_download: failed to add %s file to archive', $abs_dir.'/'.$msg);
-		return 'undef';
+		return undef;
 	    }	   
 	}
 
@@ -12993,11 +13026,11 @@ sub do_rss_request {
         $args  = 'count='.$in{'count'}.'&' if ($in{'count'}) ;
         $args .= 'for='.$in{'for'} if ($in{'for'});
 	if ($list ) {
-   		$param->{'latest_arc_url'} = $Conf{'wwsympa_url'}."/rss/latest_arc/".$list->{'name'}."?".$args;
-		$param->{'latest_d_read_url'} = $Conf{'wwsympa_url'}."/rss/latest_d_read/".$list->{'name'}."?".$args;
+   		$param->{'latest_arc_url'} = &Conf::get_robot_conf($robot, 'wwsympa_url')."/rss/latest_arc/".$list->{'name'}."?".$args;
+		$param->{'latest_d_read_url'} = &Conf::get_robot_conf($robot, 'wwsympa_url')."/rss/latest_d_read/".$list->{'name'}."?".$args;
 	}
-	$param->{'active_lists_url'} = $Conf{'wwsympa_url'}."/rss/active_lists?".$args;
-	$param->{'latest_lists_url'} = $Conf{'wwsympa_url'}."/rss/latest_lists?".$args;	
+	$param->{'active_lists_url'} = &Conf::get_robot_conf($robot, 'wwsympa_url')."/rss/active_lists?".$args;
+	$param->{'latest_lists_url'} = &Conf::get_robot_conf($robot, 'wwsympa_url')."/rss/latest_lists?".$args;	
 
 	$param->{'output'} = 1;
 	return 1;

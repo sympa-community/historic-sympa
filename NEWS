@@ -3,7 +3,82 @@
 
 (See Changelog file for the full changes log)
 
-5.1b		16 June 2005
+5.1.2		31 October 2005
+
+   New features :
+
+	po/Makefile, src/Conf.pm, src/Language.pm, web_tt2/rss_request.tt2, wwsympa/wwsympa.fcgi: 
+	[D.Nylander] sympa translated to Swedish
+
+   Changes :
+
+	soap/sympasoap.pm: [G.Bouteille] which SOAP subroutine result now includes lists the user is admin of
+
+	src/Language.pm: try a setlocale() with locale.charset first
+
+	po/de.po: [M.Redinger] Updated de.po
+
+	po/ja.po: [K.Moriwaka] Updated Japanese translations
+
+	po/et.po: [T.Kindsigo] Updated Estonian PO file
+
+	Makefile.am, Makefile.in: [requested by S.Hornburg] never wait for user input while 
+	building a package (DESTDIR is set)
+
+   Bug fixes :	
+
+	src/task_manager.pl: [BugID 498] 'process_bouncers' task failed if no owner could be contacted ; no more return undef
+
+	wwsympa/wwsympa.fcgi: [BugID 528] adding a pending subscriber failed if the user gecos contained a comma (',')
+
+	web_tt2/rss.tt2, wwsympa/wwsympa.fcgi: Fixed some RSS problems
+
+	src/List.pm: get_which() for listamster returned all non-include2 lists
+	
+	* src/tt2.pl, web_tt2/: [BugID 522] escape quotes in javascript calls
+
+	wwsympa/wwsympa.fcgi: never go back to the search action after a del
+
+	soap/sympasoap.pm: [BugID 516] lists and which used domain in list address instead of host
+
+	wwsympa/wwsympa.fcgi: optimization : skip get_which() when either in a list context or while returning CSS
+
+	wwsympa/wwsympa.fcgi: escape encoded SMTP header fields for RSS
+
+	wwsympa/archived.pl: archived.pl would die with a "Modification of non-creatable array value attempted" 
+	error while creating the index file
+
+	src/Commands.pm, web_tt2/skinsedit.tt2: [reported by A.Brugalle] Add a notification 
+	when a message is moved to the distribution spool
+
+	src/: Archive.pm, List.pm: [reported by V.Mathieu] mail archives files had an incorrect 'log.' filename
+
+	src/Language.pm: [reported by O.Lacroix] failed to setlocale on HPUX ; 
+	now trying without dashes ('-').  Also fixed the setlocale(LC_TIME)
+
+	src/List.pm: [G.Bouteille] missing 'family_closed' parameter to close()
+
+	src/tt2.pl: [G.Bouteille] SetLang only if lang is available
+
+	mail_tt2/info_report.tt2: prevents a parser failure if info file was not found
+
+	web_tt2/review.tt2: [O.Lacroix] subscriber add form was shown regardless of owner privilege
+
+	po/fr.po: [O.Lacroix] [BugId 471] Fix
+
+	Makefile.am, Makefile.in: [BugId 504] Fix: LOCALDIR was hardcoded
+
+	ChangeLog, src/Language.pm: [BugID 502] Fix for i18n on FreeBSD
+
+	src/List.pm: [BugID 501] if family_name was set to an unknown family, wwsympa would die with 
+	the following error msg "Can't call method "check_param_constraint" on an undefined value
+	at /var/sympa/bin/List.pm line 1728."
+
+	web_tt2/list_menu.tt2, wwsympa/wwsympa.fcgi: [BugID 465] "contact owners" failed if protection mode was not javascript
+
+	src/List.pm: [BugID 461] List::am_i() cache control had 2 blocks which returned before updating the cache
+
+5.1		16 August 2005
 
   New features :
 
@@ -18,7 +93,20 @@
 *****	logo_html_definition and css_url (you should customize this parameter to install a "static" CSS 
 *****	stylesheet ; otherwise wwsympa will cope with 2 requests foreach page)
 
+	doc/: New "roles and privileges" section
+
+	doc/: New chapter: running 2 sympa versions of a single server
+
+	doc/sympa.tex.tpl, mail_tt2/digest.tt2,  mail_tt2/digest_plain.tt2, src/List.pm: 
+	new 'digest_max_size' list parameter. If a digest exceeds this limit, then multiple messages are sent.
+
+	web_tt2/, wwsympa/wwsympa.fcgi: [A.Bernstein] subscriber's groups always listed in a box. 
+	Resized the menu box (+60px) ; removed the "your subscriptions ; new your_lists.tt2 template
+
 	po/: Makefile, ja.po: [K.Moriwaka] New translation to Japonese
+
+	po/Makefile, po/el.po, po/fr.po, po/nl.po, po/pt_BR.po, po/tr.po, src/Conf.pm, src/Language.pm: 
+	Added PO files for Greek, Dutch, Portuguese (Brazil) and Turkish
 
 	wwsympa/: Makefile, SharedDocument.pm, wwsympa.fcgi: New SharedDocument.pm module to 
 	clean the shared documents code. Only used in new_d_read() now
@@ -27,9 +115,33 @@
 
 	ChangeLog, src/Message.pm, src/tools.pl: add sanity check of incoming email address
 
+	Makefile.am, Makefile.in: Added a warning about the long installation process
+
    Changes :
 
+	src/List.pm: rename old-style templates because the HTML structure is not compliant with new ones.
+
+	po/hu.po: [G.Hargitai] Updates
+
+	src/List.pm: clean buggy list config files at startup
+
 	src/etc/script/sympa: [BugID 403] made init script compatible with OS X, Debian and Suze
+
+	src/: admin.pm: [reported by JH.Belpois] owner and subject nodes no more mandatory (while updating a family)
+
+	src/: Family.pm, sympa.pl: [reported by S.Amrani & JH.Belpois] Sympa.pl would die while 
+	instantiating families with the following error : "free(): invalid pointer". 
+	Using parse_file()  instead of parse_fh() seems to fix the problem.
+
+	po/cs.po, src/Conf.pm: [V.Adamec] Updated czech translations
+
+	check_perl_modules.pl: Change: DBI and DBD_mysql required
+
+	src/etc/script/sympa: [D.Chopard-Lalier] Fix for Debian
+
+	src/: Family.pm: [BugId 411] use File::Copy::copy instead of rename() to allow traversing filesystems
+
+	Makefile.am: [BugId 431] USER and GROUP was not provided to the man Makefile
 
 	po/de.po, src/Conf.pm: [M.Redinger] Updated German translations
 
@@ -50,7 +162,33 @@
 	src/Language.pm: try performing different setlocale() with $lang and with $locale.charset
 
 
-   Bug fixes :
+   Bug fixes :	
+
+	src/Language.pm: when 'web_recode_to' is set, also change the 'charset'
+
+	src/task_manager.pl: [D.Lamballais] missing chomp ; incorrect split on file path.  
+	The consequence of this bug : all tasks would fail ("Error while processing task..")
+
+	wwsympa/: wwsympa.fcgi: [BugID 447] [E.Rynes] If a multivalued list parameter is set to read only, 
+	then the web pages will display an extra, empty value
+
+	wwsympa/wwsympa.fcgi: [reported by JH.Belpois] load subscribers in DB if changing the 
+	user_data_source from file to include2
+
+	src/List.pm: Fix: limit the SQL queries when calling get_which().
+	Sympa would do run am_i() on every list the user is not owner of
+
+	wwsympa/: wwslib.pm, wwsympa.fcgi: Reception modes can now be translated on the web interface
+
+	wwsympa/wwsympa.fcgi: various RSS fixes
+
+	src/etc/script/sympa: [S.Amrani] incorrect condition for debian and suse
+
+	web_tt2/: remore width: 100% (compatibility issues with IE6)
+
+	src/List.pm: List::get_subscription_requests() would return undef if one request was incorrect
+
+	Makefile.am: missing CGIDIR in documentation
 
 	wwsympa/wwsympa.fcgi: [S.Amrani] the regexp run by search_list could make wwsympa.fcgi process die ; 
 	now using eval{} Now escaping some more dangerous caracters.

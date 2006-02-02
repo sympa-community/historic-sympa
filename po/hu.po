@@ -1,27 +1,14 @@
-# translation of hu.po to 
-# translation of hu.po to
-# translation of hu.po to
-# translation of hu.po to
-# translation of hu.po to
-# translation of hu.po to Hungarian
-# #-#-#-#-#  hu.po (PACKAGE VERSION)  #-#-#-#-#
-# Copyright (C) 2005 Free Software Foundation, Inc.
-#
-# #-#-#-#-#  hu.po (PACKAGE VERSION)  #-#-#-#-#
-#
-# #-#-#-#-#  hu.po (PACKAGE VERSION)  #-#-#-#-#
-# This file is distributed under the same license as the PACKAGE package.
-# FIRST AUTHOR <EMAIL>, YEAR.
+# SOME DESCRIPTIVE TITLE.
 # Copyright (C) YEAR Free Software Foundation, Inc.
-# FIRST AUTHOR <EMAIL>, YEAR.
-# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER, 2005.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
 #
+#, fuzzy
 msgid ""
 msgstr ""
 "Project-Id-Version: hu\n"
 "POT-Creation-Date: 2002-07-16 17:27+0800\n"
-"PO-Revision-Date: 2005-02-25 18:40+0100\n"
-"Last-Translator: \n"
+"PO-Revision-Date: 2005-08-06 18:50+0100\n"
+"Last-Translator: Gábor Hargitai <higany@sch.bme.hu>\n"
 "Language-Team: Magyar\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=ISO-8859-2\n"
@@ -31,7 +18,6 @@ msgstr ""
 "X-Generator: KBabel 1.9.1\n"
 
 #: web_tt2/serveradmin.tt2:90
-#, fuzzy
 msgid "  May take a lot of CPU time,  be careful !"
 msgstr "Csak óvatosan, mivel nagyon gépigényes!"
 
@@ -78,11 +64,32 @@ msgstr " Az utolsó üzenetek "
 msgid " The latest shared documents "
 msgstr " A legutolsó megosztott dokumentumok "
 
+#: web_tt2/rss.tt2:7
+#, fuzzy
+msgid " active lists "
+msgstr "aktív listák"
+
 #. (for)
 #: web_tt2/active_lists.tt2:12 web_tt2/latest_arc.tt2:12
 #: web_tt2/latest_d_read.tt2:12 web_tt2/latest_lists.tt2:12
 msgid " for %1 days "
 msgstr " %1 napig "
+
+# nlsref 16,70
+#: web_tt2/rss.tt2:9
+#, fuzzy
+msgid " latest documents "
+msgstr "Legújabb dokumentum"
+
+#: web_tt2/rss.tt2:6
+#, fuzzy
+msgid " latest lists "
+msgstr "legújabb listák"
+
+#: web_tt2/rss.tt2:8
+#, fuzzy
+msgid " latest messages "
+msgstr " Az utolsó üzenetek "
 
 #. (list_request_date)
 #: web_tt2/set_pending_list_request.tt2:10
@@ -90,9 +97,8 @@ msgid " on %1"
 msgstr " dátum: %1"
 
 #: web_tt2/active_lists.tt2:21
-#, fuzzy
 msgid "# message"
-msgstr "Üzenet hiba"
+msgstr "# üzenet"
 
 #. (conf.title,list)
 #: mail_tt2/sendpasswd.tt2:5
@@ -166,7 +172,6 @@ msgstr "%1 adminisztrációs oldal"
 
 #. (list.name,list.host,size,conf.host,conf.listmaster_email)
 #: mail_tt2/listowner_notification.tt2:8
-#, fuzzy
 msgid ""
 "%1 archive quota exceeded. \n"
 "Total size used for %1@%2 archive is %3 Bytes. Messages\n"
@@ -174,14 +179,13 @@ msgid ""
 msgstr ""
 "%1 archívum túllépte a megengedett kvótáját.\n"
 "A(z) %1@%2 archívumának összmérete: %3 byte. A továbbiakban a levelek\n"
-"nem lesznek archiválva. Kérem forduljon az üzemeltetõhöz, %5@%4.\n"
+"nem lesznek archiválva. Kérem forduljon az üzemeltetõhöz, %5@%4."
 
 # nlsref 17,6
 #. (l.average)
-#: web_tt2/rss.tt2:98
-#, fuzzy
+#: web_tt2/rss.tt2:72
 msgid "%1 by day "
-msgstr "1 nap múlva"
+msgstr "%1 napok szerint"
 
 #. (body_count)
 #: web_tt2/arcsearch.tt2:56
@@ -229,20 +233,18 @@ msgid "%1: action failed"
 msgstr "%1: hiba a mûvelet végrehajtásakor"
 
 #. (l.name,l.host,l.subject,l.msg_count)
-#: web_tt2/rss.tt2:98
-#, fuzzy
+#: web_tt2/rss.tt2:72
 msgid "%1@%2 - %3 : %4 messages"
-msgstr "%1@%2 : %3 üzenet"
+msgstr "%1@%2 - %3 : %4 üzenet"
 
 #. (list.name,list.host,param0)
 #: mail_tt2/listowner_notification.tt2:22
-#, fuzzy
 msgid ""
 "%1@%2 is no more an instance of family %3.\n"
 "This list has been closed."
 msgstr ""
 "%1@%2 többé nem a(z) %3 család egy példánya.\n"
-"A lista be lett zárva.\n"
+"A lista be lett zárva."
 
 #. (list.name,list.host)
 #: mail_tt2/list_created.tt2:4
@@ -264,7 +266,7 @@ msgid "%Image(%s)"
 msgstr "%Kép(%s)"
 
 # nlsref 6,52
-#: src/Commands.pm:2166
+#: src/Commands.pm:2168
 msgid "%s did not receive confirmation for the following addresses :\n"
 msgstr "%s listára nem érkezett meg a megerõsítés a következõ címekrõl:\n"
 
@@ -274,7 +276,7 @@ msgid "%s mailing list does not provide subscriber preferences.\n"
 msgstr "%s levelezõlistán a tagok nem rendelkezhetnek egyéni beállításokkal\n"
 
 # nlsref 6,69
-#: src/Commands.pm:2023
+#: src/Commands.pm:2025
 msgid "%s posted your expiration message to the following addresses :\n"
 msgstr "%s a megerõsítési üzeneteket a következõ címekre küldte el:\n"
 
@@ -343,39 +345,32 @@ msgid "--Select a topic--"
 msgstr "--Válasszon témakört--"
 
 #: web_tt2/list_admin_menu.tt2:17
-#, fuzzy
 msgid "-Archives"
-msgstr "Archívum"
+msgstr "-Archívum"
 
 #: web_tt2/list_admin_menu.tt2:18
-#, fuzzy
 msgid "-Bounces"
-msgstr "Visszapattanások"
+msgstr "-Visszapattanások"
 
 #: web_tt2/list_admin_menu.tt2:19
-#, fuzzy
 msgid "-Data sources"
-msgstr "Adatforrások"
+msgstr "-Adatforrások"
 
 #: web_tt2/list_admin_menu.tt2:14
-#, fuzzy
 msgid "-List definition"
-msgstr "Lista jellemzõk"
+msgstr "-Lista jellemzõk"
 
 #: web_tt2/list_admin_menu.tt2:20
-#, fuzzy
 msgid "-Miscellaneous"
-msgstr "Egyéb beállítások"
+msgstr "-Egyéb beállítások"
 
 #: web_tt2/list_admin_menu.tt2:16
-#, fuzzy
 msgid "-Privileges"
-msgstr "Jogosultságok"
+msgstr "-Jogosultságok"
 
 #: web_tt2/list_admin_menu.tt2:15
-#, fuzzy
 msgid "-Sending/reception"
-msgstr "Küldés/Fogadás"
+msgstr "-Küldés/Fogadás"
 
 # nlsref 17,6
 #: wwsympa/wwslib.pm:53
@@ -455,6 +450,8 @@ msgid ""
 "<strong>Bounces</strong>  : Manage non-delivery reports (also called "
 "bounces)."
 msgstr ""
+"<strong>Visszapattanások</strong> :sikertelen kézbesítések (más néven "
+"visszapattanások) kezelése "
 
 #: web_tt2/help_admin.tt2:10
 msgid ""
@@ -525,16 +522,15 @@ msgstr "Hozzáférés"
 
 #. (visible_path)
 #: web_tt2/d_control.tt2:6
-#, fuzzy
 msgid "Access control for the document %1"
-msgstr "a(z) %1 dokumentum hozzáférési jogosultságai"
+msgstr "A(z) %1 dokumentum hozzáférési jogosultságai"
 
 # nlsref 16,1
 #: src/List.pm:309
 msgid "Account"
 msgstr "Azonosító"
 
-#: web_tt2/d_read.tt2:347 web_tt2/review.tt2:50
+#: web_tt2/d_read.tt2:347 web_tt2/review.tt2:49
 msgid "Add"
 msgstr "Hozzáad"
 
@@ -582,16 +578,15 @@ msgstr ""
 
 #. (mail.sender,mail.subject)
 #: mail_tt2/x509-user-cert-missing.tt2:8
-#, fuzzy
 msgid ""
 "An encrypted message from %1 has been distributed to\n"
 "Subject : %2"
 msgstr ""
-"A(z) %1 címrõl egy titkosított üzenet érkezet a listára\n"
-"A levél tárgya: %2\n"
+"A(z) %1 címrõl egy titkosított üzenet érkezet a listára.\n"
+"A levél tárgya: %2"
 
 # nlsref 6,56
-#: src/Commands.pm:2041
+#: src/Commands.pm:2043
 msgid ""
 "An expiration process for list %s has been started. This process\n"
 "will end in %d days. You will then receive the list of subscribers \n"
@@ -621,7 +616,7 @@ msgstr "További információk a listáról:"
 msgid "Apply"
 msgstr "Alkalmaz"
 
-#: web_tt2/list_menu.tt2:41 web_tt2/list_menu.tt2:43
+#: web_tt2/list_menu.tt2:45 web_tt2/list_menu.tt2:47
 msgid "Archive"
 msgstr "Archívum"
 
@@ -662,9 +657,8 @@ msgstr "Biztosan meg akarja szüntetni a(z) %1 listát?"
 
 #. (list)
 #: web_tt2/list_admin_menu.tt2:43
-#, fuzzy
 msgid "Are you sure you wish to delete the shared documents ?"
-msgstr "Biztosan meg akarja szüntetni a(z) %1 listát?"
+msgstr "Biztosan törölni akarja a megosztott dokumentumokat?"
 
 #. (list.name,msg_from)
 #: mail_tt2/moderate.tt2:3
@@ -681,7 +675,7 @@ msgid "Auth method"
 msgstr "Azonosítási mód"
 
 # nlsref 8,16
-#: src/List.pm:2587
+#: src/List.pm:2588
 msgid "Authentication requested"
 msgstr "Azonosítás szükséges"
 
@@ -714,45 +708,42 @@ msgstr ""
 #. (total,list.name)
 #: mail_tt2/listmaster_notification.tt2:112
 #: mail_tt2/listowner_notification.tt2:39
-#, fuzzy
 msgid ""
 "Because we received MANY non-delivery reports, the %1 subscribers listed "
 "below have been\n"
 "notified that they might be removed from list %2:"
 msgstr ""
 "Mivel SOK sikeretelen kézbesítésrõl kaptunk értesítést, %1 alább látható "
-"listatag értesítést kapott, hogy törölhetik õket a %2 listáról:\n"
+"listatag értesítést kapott, hogy törölhetik õket a %2 listáról:"
 
 #. (total,list.name)
 #: mail_tt2/listmaster_notification.tt2:115
 #: mail_tt2/listowner_notification.tt2:42
-#, fuzzy
 msgid ""
 "Because we received MANY non-delivery reports, the %1 subscribers listed "
 "below have been\n"
 "removed from list %2:"
 msgstr ""
 "Mivel SOK sikeretelen kézbesítésrõl kaptunk értesítést, %1 alább látható "
-"listatag törölve lett a %2 listáról:\n"
+"listatag törölve lett a %2 listáról:"
 
 #. (total,list.name)
 #: mail_tt2/listmaster_notification.tt2:118
 #: mail_tt2/listowner_notification.tt2:45
-#, fuzzy
 msgid ""
 "Because we received MANY non-delivery reports, the %1 subscribers listed "
 "below have been\n"
 "selected by Sympa as severe bouncing addresses:"
 msgstr ""
 "Mivel SOK sikeretelen kézbesítésrõl kaptunk értesítést, %1 alább látható "
-"listatagot a Sympa súlyosan visszapattanó címnek nyilvánított:\n"
+"listatagot a Sympa súlyosan visszapattanó címnek nyilvánított:"
 
 #: web_tt2/arcsearch_form.tt2:63
 msgid "Body"
 msgstr "Törzs"
 
 #. (d.anchor)
-#: web_tt2/rss.tt2:113
+#: web_tt2/rss.tt2:88
 msgid "Bookmark %1"
 msgstr "%1 felvétele a könyvjelzõk közé"
 
@@ -765,8 +756,7 @@ msgid "Bounce Settings"
 msgstr "Visszapattanások beállítása"
 
 # nlsref 8,27
-#: src/List.pm:2309
-#, fuzzy
+#: src/List.pm:2310
 msgid ""
 "Bounce rate in list %s is %d%%.\n"
 "\n"
@@ -776,7 +766,7 @@ msgstr ""
 "A(z) %s listán a visszapattanási arány %d%%.\n"
 "\n"
 "Érdemes törölni a visszapattanó tagokat:\n"
-"%s/reviewbouncing/%s\n"
+"%s/reviewbouncing/%s"
 
 #: web_tt2/admin_menu.tt2:82 web_tt2/admin_menu.tt2:88
 #: web_tt2/list_admin_menu.tt2:37
@@ -836,7 +826,7 @@ msgstr "Nem sikerült felölteni a(z) %1 állományt"
 
 #: web_tt2/skinsedit.tt2:38
 msgid "Cascading Style Sheet"
-msgstr ""
+msgstr "Kaszkád stíluslap (CSS)"
 
 #: web_tt2/arcsearch_form.tt2:35
 msgid "Case"
@@ -890,7 +880,6 @@ msgstr "Bõvebb információt a Sympa napló állományában lehet találni."
 
 #. (list)
 #: web_tt2/sigrequest.tt2:31
-#, fuzzy
 msgid ""
 "Check your mailbox for new messages and enter below the\n"
 "\tpassword given in the message Sympa sent you. This will\n"
@@ -898,18 +887,17 @@ msgid ""
 msgstr ""
 "Kérem ellenõrizze a postaládádját, és lent adja meg a levélben\n"
 "\tfeltüntetett jelszót. Ezzel a lépéssel véglegesítheti a\n"
-"\tleiratkozását a(z) %1 listáról.\n"
+"\tleiratkozását a(z) %1 listáról."
 
 #. (list)
 #: web_tt2/subrequest.tt2:24
-#, fuzzy
 msgid ""
 "Check your mailbox for new messages and enter below the\n"
 "\tpassword. This will confirm your subscription to list %1"
 msgstr ""
 "Kérem ellenõrizze a postaládádját, és lent adja meg a levélben\n"
 "\tfeltüntetett jelszót. Ezzel a lépéssel véglegesítheti a\n"
-"\tfeliratkozását a(z) %1 listára.\n"
+"\tfeliratkozását a(z) %1 listára."
 
 #: web_tt2/login_menu.tt2:48 web_tt2/loginbanner.tt2:56
 msgid "Choose your authentication server"
@@ -929,7 +917,7 @@ msgstr "Megszüntetett listák"
 
 #: web_tt2/skinsedit.tt2:5
 msgid "Colors"
-msgstr ""
+msgstr "Színek"
 
 # nlsref 4,18
 #: src/Commands.pm:131
@@ -942,7 +930,7 @@ msgid "Command not understood: ignoring end of message.\n"
 msgstr "Nem értelmezhetõ parancs: üzenet többi része figyelmen kívül hagyva.\n"
 
 # nlsref 6,13
-#: src/Commands.pm:1210 src/Commands.pm:1899 src/Commands.pm:813
+#: src/Commands.pm:1210 src/Commands.pm:1901 src/Commands.pm:813
 msgid "Command syntax error.\n"
 msgstr "Hibásan megadott parancs.\n"
 
@@ -968,10 +956,9 @@ msgstr "Megerõsít"
 msgid "Connexion expiration period"
 msgstr "Kapcsolat lejár"
 
-#: web_tt2/list_menu.tt2:33
-#, fuzzy
+#: web_tt2/list_menu.tt2:34 web_tt2/list_menu.tt2:36
 msgid "Contact owners"
-msgstr "tulajdonos értesítése"
+msgstr "Tulajdonosok értesítése"
 
 #: web_tt2/arcsearch.tt2:109
 msgid "Continue search"
@@ -984,28 +971,25 @@ msgstr "A(z) %1 listán nem sikerült megváltoztatni az e-mail címét"
 
 #. (error.list)
 #: web_tt2/error.tt2:65
-#, fuzzy
 msgid ""
 "Could not change your subscription address for the list '%1'\n"
 "     because you are not allowed to unsubscribe."
 msgstr ""
 "A(z) '%1%' listán nem sikerült megváltoztatni az e-mail címét,\n"
-"mert nincs jogosultsága a listáról való leiratkozáshoz.\n"
+"mert nincs jogosultsága a listáról való leiratkozáshoz."
 
 #. (error.list)
 #: web_tt2/error.tt2:62
-#, fuzzy
 msgid ""
 "Could not change your subscription address for the list '%1'\n"
 "     because your new address is not allowed to subscribe."
 msgstr ""
 "A(z) '%1' listán nem sikerült megváltoztatni az e-mail címét,\n"
-"mert az új címének nincs jogosultsága a listára való feliratkozáshoz.\n"
+"mert az új címének nincs jogosultsága a listára való feliratkozáshoz."
 
 #: web_tt2/d_read.tt2:319 web_tt2/d_read.tt2:333
-#, fuzzy
 msgid "Create"
-msgstr "Lista létrehozása"
+msgstr "Létrehozás"
 
 #: web_tt2/admin_menu.tt2:97 web_tt2/admin_menu.tt2:99
 #: web_tt2/list_admin_menu.tt2:41
@@ -1022,9 +1006,8 @@ msgid "Create a new folder inside the folder %1"
 msgstr "Hozzon létre egy új könyvtárat a(z) %1 könyvtáron belül"
 
 #: web_tt2/d_read.tt2:315
-#, fuzzy
 msgid "Create a new folder inside the root folder"
-msgstr "Hozzon létre egy új könyvtárat a(z) %1 könyvtáron belül"
+msgstr "Új könyvtár létrehozása a gyökérkönyvtáron belül"
 
 #: web_tt2/menu.tt2:8
 msgid "Create list"
@@ -1043,6 +1026,17 @@ msgstr "Lista létrehozása"
 #: web_tt2/choosepasswd.tt2:13
 msgid "Current password :"
 msgstr "Aktuális jelszó:"
+
+#. (cssurl)
+#: web_tt2/skinsedit.tt2:57
+msgid ""
+"Currently you didn't define css_path parameter. <strong>You should edit the "
+"robot.conf configuration file </strong> (or if not using virtual robot sympa."
+"conf) and set this parameter so you could use this page to install static "
+"CSS and <strong>make sympa faster</strong>. Don't forget to set parameter "
+"css_url, it must be the URL for the directory where css are stored (current "
+"value is <a target=\"test\" href=\"%1\">%1</a>)."
+msgstr ""
 
 # nlsref 16,16
 #: src/List.pm:446
@@ -1088,7 +1082,7 @@ msgid "Date"
 msgstr "Dátum"
 
 # nlsref 8,25
-#: src/List.pm:2302
+#: src/List.pm:2303
 msgid ""
 "Dear owner of list %s,\n"
 "\n"
@@ -1164,7 +1158,6 @@ msgid "Delete selected email addresses"
 msgstr "Kijelölt e-mail címek törlése"
 
 #: web_tt2/help_editfile.tt2:12
-#, fuzzy
 msgid ""
 "Deletion message : This message is sent to users when you\n"
 "remove them from the list using the DEL command (unless you hit the\n"
@@ -1172,17 +1165,15 @@ msgid ""
 msgstr ""
 "Értesítés leiratkozásról: Ezt az üzenetet azok a tagok kapják meg,\n"
 "akiket DEL parancs töröl (kivéve akkor, ha a nincs értesítés gombot \n"
-"használja).\n"
+"használja)."
 
 #. (fname)
 #: web_tt2/d_properties.tt2:26
-#, fuzzy
 msgid "Describe directory '%1'"
 msgstr "%1 könyvtár tulajdonságai"
 
 #. (fname)
 #: web_tt2/d_properties.tt2:28
-#, fuzzy
 msgid "Describe file '%1'"
 msgstr "%1 állomány tulajdonságai"
 
@@ -1218,7 +1209,7 @@ msgstr "Digest gyakoriság"
 
 #: src/List.pm:500
 msgid "Digest maximum number of messages"
-msgstr ""
+msgstr "Kivonat esetén az üzenetek maximális száma"
 
 #: web_tt2/help_user_options.tt2:14
 msgid "DigestPlain"
@@ -1263,6 +1254,15 @@ msgstr "Tényleg törölni akarja a kiválasztott archívumokat?"
 #: src/etc/mhonarc-ressources.tt2:418
 msgid "Do you really want to delete this message ?"
 msgstr "Tényleg törölni akarja ezt az üzenetet?"
+
+#. (file.value.site)
+#. (file.value.robot)
+#. (file.value.listname)
+#: web_tt2/ls_templates.tt2:109 web_tt2/ls_templates.tt2:79
+#: web_tt2/ls_templates.tt2:93
+#, fuzzy
+msgid "Do you really want to remove %1 ?"
+msgstr "Tényleg törölni akarja a(z) %1 könyvtárat?"
 
 #: web_tt2/rename_list_request.tt2:14
 msgid "Do you really want to rename this list?"
@@ -1312,7 +1312,7 @@ msgstr "Tényleg törölni akarja a régi %1 állományt?"
 msgid "Do you want to rename your file %1 ?"
 msgstr "Tényleg át akarja nevezni a(z) %1 állományt?"
 
-#: web_tt2/d_read.tt2:54 web_tt2/d_read.tt2:56 web_tt2/list_admin_menu.tt2:72
+#: web_tt2/d_read.tt2:54 web_tt2/d_read.tt2:56 web_tt2/list_admin_menu.tt2:70
 msgid "Document"
 msgstr "Dokumentumok"
 
@@ -1334,7 +1334,7 @@ msgstr "Zip állomány letöltése"
 
 #: web_tt2/review.tt2:40
 msgid "Dump"
-msgstr ""
+msgstr "Kipakolás"
 
 # nlsref 6,33
 #: src/Commands.pm:1457 src/Commands.pm:1567
@@ -1441,18 +1441,16 @@ msgstr "Hiba a(z) %d sorban: %s"
 
 # nlsref 1,3
 #: web_tt2/list_panel.tt2:8
-#, fuzzy
 msgid "Error rate:"
-msgstr "Hiba a(z) %d sorban: %s"
+msgstr "Hiba arány:"
 
 #: web_tt2/remove_arc.tt2:14
-#, fuzzy
 msgid ""
 "Error while deleting this message, please refer to listmaster with\n"
 "complete URL of the concerned message."
 msgstr ""
 "Hiba az üzenet törlésekor, kérem forduljon a listmasterhez\n"
-"a törlésre szánt üzenet teljes hivatkozási címével (URL).\n"
+"a törlésre szánt üzenet teljes hivatkozási címével (URL)."
 
 #. (param0)
 #: mail_tt2/listmaster_notification.tt2:70
@@ -1481,9 +1479,8 @@ msgid "Everything about this list:"
 msgstr "Minden ezzel a listával kapcsolatban: "
 
 #: web_tt2/d_read.tt2:12 web_tt2/d_read.tt2:16
-#, fuzzy
 msgid "Expert mode"
-msgstr "Üres könyvtár"
+msgstr "Haladó mód"
 
 # nlsref 16,10
 #: src/List.pm:414
@@ -1495,7 +1492,7 @@ msgid "Extend search field"
 msgstr "Bõvített keresési tartomány"
 
 # nlsref 8,22
-#: src/List.pm:2324
+#: src/List.pm:2325
 msgid ""
 "FYI command %s list %s from %s %s \n"
 " (no action needed)\n"
@@ -1504,7 +1501,7 @@ msgstr ""
 " (nincs teendõ)\n"
 
 # nlsref 8,26
-#: src/List.pm:2322
+#: src/List.pm:2323
 msgid ""
 "FYI command %s list %s from %s %s validated by %s\n"
 " (no action needed)\n"
@@ -1513,7 +1510,7 @@ msgstr ""
 " (nincs teendõ)\n"
 
 # nlsref 8,21
-#: src/List.pm:2278 src/List.pm:2320
+#: src/List.pm:2279 src/List.pm:2321
 msgid "FYI: %s list %s from %s %s"
 msgstr "Figyelem: %s a(z) %s listán %s %s felhasználótól"
 
@@ -1567,12 +1564,11 @@ msgid "Families"
 msgstr "Családok"
 
 #: src/List.pm:556
-#, fuzzy
 msgid "Family name"
-msgstr "A lista neve"
+msgstr "A család neve"
 
 # nlsref 8,7
-#: src/List.pm:6243
+#: src/List.pm:6259
 msgid "File"
 msgstr "Állomány"
 
@@ -1607,18 +1603,16 @@ msgid "File inclusion"
 msgstr "Állomány beágyazása"
 
 #: web_tt2/d_read.tt2:332
-#, fuzzy
 msgid "File name"
-msgstr "A lista neve"
+msgstr "Állománynév"
 
 #: web_tt2/login_menu.tt2:67
 msgid "First login ?"
-msgstr ""
+msgstr "Elsõ bejelentkezés?"
 
 #: web_tt2/d_read.tt2:318
-#, fuzzy
 msgid "Folder name"
-msgstr "Moderálás"
+msgstr "Mappa neve"
 
 #. (conf.host)
 #: mail_tt2/list_unknown.tt2:22
@@ -1661,7 +1655,6 @@ msgid "From: %1"
 msgstr "Feladó: %1"
 
 #: web_tt2/help.tt2:13
-#, fuzzy
 msgid ""
 "Functions, equivalent to Sympa robot commands, are accessible in\n"
 "the higher part of the user interface's banner. WWSympa provides \n"
@@ -1669,7 +1662,7 @@ msgid ""
 msgstr ""
 "A mûveletek, a Sympa e-mail parancsok megfelelõi, a felhasználói \n"
 "oldal felsõ részén találhatóak. A WWSympa felületén keresztül a \n"
-"következõ mûveletek érhetõk el:\n"
+"következõ mûveletek érhetõk el:"
 
 #: mail_tt2/helpfile.tt2:42
 msgid "GET <list> <file>           * To get <file> of <list> archive"
@@ -1699,7 +1692,7 @@ msgid "Help on Sympa: %1%2"
 msgstr "Súgó a Sympa használatához: %1%2"
 
 # nlsref 6,67
-#: src/Commands.pm:2364
+#: src/Commands.pm:2366
 msgid ""
 "Here are the lists you are currently subscribe to :\n"
 "\n"
@@ -1870,7 +1863,6 @@ msgid "Instantiation date"
 msgstr "Létrehozás dátuma"
 
 #: web_tt2/help_user_options.tt2:26
-#, fuzzy
 msgid ""
 "Instead of receiving individual mail messages from the list, the subscriber "
 "will periodically \n"
@@ -1883,10 +1875,9 @@ msgstr ""
 "csak a levelek listáját kapjuk meg adott idõközönként.Ez a mód nagyon "
 "hasonlít\n"
 "a kivonat (digest) küldési módra, de attól eltérõen itt csak a levelek "
-"listája kerül kézbesítésre.\n"
+"listája kerül kézbesítésre."
 
 #: web_tt2/help_user_options.tt2:10
-#, fuzzy
 msgid ""
 "Instead of receiving individual mail messages from the list, the subscriber "
 "will periodically \n"
@@ -1899,7 +1890,7 @@ msgstr ""
 "adott idõközönként összefûzve, egyben, kivonatként (digest) kaphassuk meg.A "
 "kivonatforma\n"
 "a listára érkezett leveleket összefûzve multipart/digest MIME formátumban "
-"tartalmazza.\n"
+"tartalmazza."
 
 # nlsref 16,33
 #: src/List.pm:571
@@ -1914,13 +1905,12 @@ msgstr "Felkérés a(z) %1 listára való feliratkozásra"
 
 #. (user.email)
 #: mail_tt2/x509-user-cert-missing.tt2:11
-#, fuzzy
 msgid ""
 "It was not possible to send it to you because the mailing list manager\n"
 "was unable to access to your personal certificat (email %1)."
 msgstr ""
 "A levelezési lista kezelõ nem tudta továbbítani Önnek a levelet, mert nem "
-"tudta elérni a személyes tanusítványát (e-mail: %1).\n"
+"tudta elérni a személyes tanusítványát (e-mail: %1)."
 
 #: src/etc/mhonarc-ressources.tt2:578
 msgid ""
@@ -1988,7 +1978,7 @@ msgstr "Utolsó módosítás:"
 
 #: src/List.pm:902
 msgid "Latest family instantiation"
-msgstr ""
+msgstr "Legutolsó osztály példányosítás"
 
 #: web_tt2/serveradmin.tt2:33
 msgid "Latest lists"
@@ -2004,11 +1994,11 @@ msgstr "Találatok csoportosítása"
 
 #: web_tt2/rss_request.tt2:16
 msgid "Limit the number of days used for the selection"
-msgstr ""
+msgstr "A kiválasztásnál használt napok számának korlátozása"
 
 #: web_tt2/rss_request.tt2:9
 msgid "Limit the number of response"
-msgstr ""
+msgstr "A válaszok számának korlátozása"
 
 #. (list.name,type)
 #: mail_tt2/listowner_notification.tt2:54
@@ -2040,7 +2030,6 @@ msgstr "A %1 lista be lett zárva"
 
 #. (list.name,list.host,param0,param1,param2)
 #: mail_tt2/listowner_notification.tt2:32
-#, fuzzy
 msgid ""
 "List %1@%2 has been reinstantiated (family %3). \n"
 "Some of the customizations have been removed because they no more respect "
@@ -2049,7 +2038,7 @@ msgid ""
 "     Parameters : %4\n"
 "     Files : %5\n"
 msgstr ""
-"A(z) %list(.name)@%list(.host) újra lett példányosítva (%3 család). \n"
+"A(z) %1@%2 lista újra lett példányosítva (%3 család). \n"
 "Néhány testreszabás törölve lett, mivel nem tartották be a család "
 "szabályait :\n"
 "\n"
@@ -2070,15 +2059,15 @@ msgid ""
 msgstr "%s listán nincs DIGEST mód. Ez a beállítás nem lett frissítve.\n"
 
 # nlsref 6,54
-#: src/Commands.pm:2200 src/Commands.pm:2244
+#: src/Commands.pm:2202 src/Commands.pm:2246
 msgid "List %s is not currently running an expiration process.\n"
 msgstr "A(z) %s listán nincs folyamatban megerõsítési felszólítás.\n"
 
 # nlsref 6,5
 #: src/Commands.pm:1097 src/Commands.pm:1221 src/Commands.pm:1294
 #: src/Commands.pm:1398 src/Commands.pm:1550 src/Commands.pm:1633
-#: src/Commands.pm:1821 src/Commands.pm:1910 src/Commands.pm:2121
-#: src/Commands.pm:2219 src/Commands.pm:2263 src/Commands.pm:263
+#: src/Commands.pm:1823 src/Commands.pm:1912 src/Commands.pm:2123
+#: src/Commands.pm:2221 src/Commands.pm:2265 src/Commands.pm:263
 #: src/Commands.pm:319 src/Commands.pm:364 src/Commands.pm:410
 #: src/Commands.pm:451 src/Commands.pm:573 src/Commands.pm:718
 #: src/Commands.pm:841 src/Commands.pm:977
@@ -2126,13 +2115,12 @@ msgid "List definition"
 msgstr "Lista jellemzõk"
 
 #: web_tt2/help_editfile.tt2:29
-#, fuzzy
 msgid ""
 "List description : This text is sent as an answer to the mail command\n"
 "INFO. It can also be included in the"
 msgstr ""
 "Lista leírása: Az itt megadott szöveg a válasz az INFO email\n"
-"parancsra. Ezenfelül megjelenhet még az alábbi helyen:\n"
+"parancsra. Ezenfelül megjelenhet még az alábbi helyen:"
 
 #: web_tt2/error.tt2:20
 msgid "List has no bouncing subscribers"
@@ -2143,14 +2131,13 @@ msgid "List has no subscribers"
 msgstr "A listára senki sem iratkozott fel."
 
 #: web_tt2/help_editfile.tt2:26
-#, fuzzy
 msgid ""
 "List homepage : HTML text to describe the list. It is printed on the\n"
 "right-hand side of the main list page. (default for this is the list "
 "description)"
 msgstr ""
 "Lista honlapja: A listát bemutató HTML szöveg. A lista fõlapjának\n"
-"jobb oldalán jelenik meg.\n"
+"jobb oldalán jelenik meg (az alapértelmezett lista leírása)."
 
 # nlsref 16,44
 #: src/List.pm:782
@@ -2168,9 +2155,8 @@ msgid "List is Private : You can not read the archives.\n"
 msgstr "Privát lista: Az archívumot nem olvashatja.\n"
 
 #: web_tt2/active_lists.tt2:20
-#, fuzzy
 msgid "List name"
-msgstr "Lista neve:"
+msgstr "Lista neve"
 
 #: web_tt2/create_list_request.tt2:9
 msgid "List name:"
@@ -2207,14 +2193,12 @@ msgid "Listing of documents shared to moderate"
 msgstr "Moderálásra váró megosztott dokumentumok listázása"
 
 #: web_tt2/d_read.tt2:22
-#, fuzzy
 msgid "Listing of folder"
 msgstr "Megosztott mappa tartalma"
 
 #: web_tt2/d_read.tt2:47
-#, fuzzy
 msgid "Listing of root folder"
-msgstr "Megosztott mappa tartalma"
+msgstr "Megosztott gyökérmappa tartalma"
 
 #: web_tt2/login_menu.tt2:8
 msgid "Listmaster"
@@ -2268,9 +2252,8 @@ msgid "Logout"
 msgstr "Kilépés"
 
 #: web_tt2/login_menu.tt2:68
-#, fuzzy
 msgid "Lost password ?"
-msgstr "Jelszavam?"
+msgstr "Elveszett jelszó?"
 
 #: mail_tt2/helpfile.tt2:62
 msgid ""
@@ -2306,9 +2289,8 @@ msgid "Mailing list for intranets"
 msgstr "levelezési lista intraneteknek"
 
 #: web_tt2/home.tt2:10
-#, fuzzy
 msgid "Mailing lists categories"
-msgstr "levelezési lista intraneteknek"
+msgstr "Levelezési lista kategóriák"
 
 #: web_tt2/admin_menu.tt2:68 web_tt2/admin_menu.tt2:74
 #: web_tt2/list_admin_menu.tt2:32
@@ -2343,7 +2325,6 @@ msgid "Maximum size of a message in 8-bit bytes."
 msgstr "Egy üzenet maximális mérete 8-bites byte-okban."
 
 #: mail_tt2/your_infected_msg.tt2:14
-#, fuzzy
 msgid ""
 "Maybe it is usefull to check your system for viruses.\n"
 "\n"
@@ -2355,41 +2336,45 @@ msgstr ""
 "\n"
 "Ugyanakkor vegye figyelembe, hogy sok vírus meghamisítja a küldõ e-mail "
 "címét, így lehetséges, hogy a vírus nem az Ön számítógépérõl jött. Ebben az "
-"esetben, kérem hagyja figyelmen kívül ezt az üzenetet.\n"
+"esetben, kérem hagyja figyelmen kívül ezt az üzenetet."
 
 #: web_tt2/list_admin_menu.tt2:68
-#, fuzzy
 msgid "Message"
-msgstr "Üzenet hiba"
+msgstr "Üzenet"
 
 # nlsref 6,44
-#: src/Commands.pm:1684 src/Commands.pm:1793
+#: src/Commands.pm:1684 src/Commands.pm:1794
 msgid "Message %s for list %s has been distributed.\n"
 msgstr "A(z) %s levél kiküldve a(z) %s listára.\n"
 
 # nlsref 6,43
-#: src/Commands.pm:1857
+#: src/Commands.pm:1859
 msgid "Message %s for list %s has been rejected.\n"
 msgstr "A(z) %s levelet a(z) %s listán visszautasították.\n"
 
-#: web_tt2/help_editfile.tt2:35
+# nlsref 6,44
+#: src/Commands.pm:1689 src/Commands.pm:1799
 #, fuzzy
+msgid ""
+"Message %s for list %s has been validated ; it will be distributed soon.\n"
+msgstr "A(z) %s levél kiküldve a(z) %s listára.\n"
+
+#: web_tt2/help_editfile.tt2:35
 msgid ""
 "Message footer : same as <em>Message header,</em> but attached at the\n"
 "end of the message."
 msgstr ""
 "Üzenet lábléce: hasonló az <em>Üzenet fejlécéhez</em>, de azzal ellentétben\n"
-"a levelek végére kerül beszúrásra.\n"
+"a levelek végére kerül beszúrásra."
 
 #: web_tt2/help_editfile.tt2:32
-#, fuzzy
 msgid ""
 "Message header: If this file is not empty, it is added as a MIME\n"
 "attachment at the beginning of each message distributed to the list."
 msgstr ""
 "Üzenet fejléce: Ha ez az állomány nem üres, akkor MIME kódolással a listára "
 "érkezõ\n"
-"összes levél elejére beszúrásra kerül ez a szöveg.\n"
+"összes levél elejére beszúrásra kerül ez a szöveg."
 
 #. (conf.host,conf.listmaster_email)
 #: mail_tt2/listowner_notification.tt2:16
@@ -2399,17 +2384,15 @@ msgstr ""
 "(z) %2@%1 címen"
 
 #: src/etc/create_list_templates/public_web_forum/comment.tt2:3
-#, fuzzy
 msgid ""
 "Messages can either be read via email (subscription) or\n"
 "via the web (web archives)"
 msgstr ""
 "Az üzenetek egyaránt olvashatóak emailben (feliratkozás) vagy a webes "
-"archívumban\n"
+"archívumban"
 
 #. (list.name,to,subscriber.first_bounce)
 #: mail_tt2/subscriber_notification.tt2:8
-#, fuzzy
 msgid ""
 "Messages from list %1 that were sent to your address %2\n"
 "generated non-delivery reports since %3. \n"
@@ -2418,8 +2401,7 @@ msgid ""
 msgstr ""
 "A %1 listáról az Ön %2 címére\n"
 "küldött üzeneteket nem sikerül kézbesíteni %3 óta.\n"
-"Ha ez a probléma továbbra is fennáll, automatikusan törölve lesz a "
-"listáról.\n"
+"Ha ez a probléma továbbra is fennáll, automatikusan törölve lesz a listáról."
 
 #: web_tt2/admin_menu.tt2:161 web_tt2/edit_list_request.tt2:12
 msgid "Miscellaneous"
@@ -2464,7 +2446,7 @@ msgid "Moderated, with editor confirmation"
 msgstr "Moderált, csak szerkesztõn keresztül juthat be levél"
 
 # nlsref 4,40
-#: src/List.pm:2424
+#: src/List.pm:2425
 msgid "Moderating your message"
 msgstr "Levele megjelenésérõl a moderátor dönt."
 
@@ -2492,7 +2474,7 @@ msgstr "Szerkesztõk:"
 
 #: src/List.pm:547
 msgid "Moderators defined in an external datasource"
-msgstr ""
+msgstr "Külsõ adatforrásban megadott moderátorok"
 
 #. (list.name)
 #: mail_tt2/moderate.tt2:2
@@ -2500,7 +2482,6 @@ msgid "Moderators of list %1"
 msgstr "A(z) %1 lista moderátorai"
 
 #: web_tt2/loginbanner.tt2:13
-#, fuzzy
 msgid ""
 "Most mailing list features require your email. Some mailing lists are hidden "
 "to  unidentified persons.<br />\n"
@@ -2511,7 +2492,7 @@ msgstr ""
 "címére. Némelyik levelezési lista el van rejtve az azonosítatlan "
 "felhasználók elõl.<br />\n"
 "Ha a szerver minden szolgáltatását használni akarja, elõször azonosítania "
-"kell magát.\n"
+"kell magát."
 
 #: web_tt2/review.tt2:38
 msgid "Multiple add"
@@ -2522,7 +2503,6 @@ msgid "My password ?"
 msgstr "Jelszavam?"
 
 #: web_tt2/help_editlist.tt2:28
-#, fuzzy
 msgid ""
 "NOT USED YET. If bounce rate reaches the halt_rate, messages for the list "
 "will be halted, i.e. they are retained for subsequent moderation."
@@ -2530,7 +2510,7 @@ msgstr ""
 "MÉG NINCS HASZNÁLVA. Ha a visszapattanási ráta eléri a megállásí rátát "
 "(halt_rate), a listára küldött üzenetek meg fognak állni, azaz vissza "
 "lesznek tartva késõbbi moderálásig. Ha a visszapattanások száma tullépi ezt "
-"az értéket, az erre a listára küldött üzenetek nem lesznek szétküldve.\n"
+"az értéket, az erre a listára küldött üzenetek nem lesznek szétküldve."
 
 #: web_tt2/latest_d_read.tt2:20 web_tt2/pref.tt2:7 web_tt2/review.tt2:104
 #: web_tt2/review.tt2:108 web_tt2/subindex.tt2:8
@@ -2706,25 +2686,23 @@ msgid "Oldest messages first"
 msgstr "Régebbi üzenetek elõl"
 
 #: web_tt2/help.tt2:32
-#, fuzzy
 msgid ""
 "Once you have been authenticated, a <em>cookie</em> containing your login \n"
 "information make your connection to WWSympa last. The lifetime of this\n"
 "<em>cookie</em> is customizeable through your <strong>Preferences</strong>"
 msgstr ""
 "Sikeres azonosítás után a bejelentkezési adatokat a WWSympa a kapcsolat \n"
-"folyamán egy <em>sütiben</em>(cookie) tárolja. A <em>süti</em> érvényességi "
+"folyamán egy <em>sütiben(cookie)</em> tárolja. A <em>süti</em> érvényességi "
 "idejét a <strong>Beállításaim</strong>\n"
-"menüben lehet megadni.\n"
+"menüben lehet megadni."
 
 #: web_tt2/remove_arc.tt2:5
-#, fuzzy
 msgid ""
 "Operation successful. The message will be deleted as soon\n"
 "as possible. This task may be performed in a few minutes."
 msgstr ""
 "Sikeres mûvelet. Amint lehet azonnal töröljük az üzenetet.\n"
-"Ez pár percen belül megtörténhet.\n"
+"Ez pár percen belül megtörténhet."
 
 #. (conf.email,conf.host)
 #: mail_tt2/moderate.tt2:16 mail_tt2/moderate.tt2:22
@@ -2749,7 +2727,6 @@ msgstr "Egyéb"
 
 #. (virus_name,recipient,from)
 #: mail_tt2/your_infected_msg.tt2:8
-#, fuzzy
 msgid ""
 "Our viruschecker found a virus named %1\n"
 "in a message addressed to %2 and that seems\n"
@@ -2757,7 +2734,7 @@ msgid ""
 msgstr ""
 "A víruskeresõnk %1 nevû vírust talált\n"
 "a valószínûleg Öntõl (Feladó: %3) származó\n"
-"%2-nak/nek címzett üzenetben.\n"
+"%2-nak/nek címzett üzenetben."
 
 # #-#-#-#-#  hu.po (PACKAGE VERSION)  #-#-#-#-#
 # nlsref 16,57
@@ -2786,7 +2763,6 @@ msgid "Owners"
 msgstr "Tulajdonosok:"
 
 #: web_tt2/help_editlist.tt2:118
-#, fuzzy
 msgid ""
 "Owners are managing subscribers of the list. They may review subscribers and "
 "add or delete email addresses from the mailing list. If you are a privileged "
@@ -2796,16 +2772,14 @@ msgstr ""
 "A tulajdonosok a lista tagjait felügyelik. Megtekinthetik a tagokat és "
 "felvehetnek vagy törölhetnek e-mail címeket a listáról. A lista kiemelt "
 "tulajdonosa felvehet más tulajdonosokat a listára. A kiemelt tulajdonosok "
-"állíthatnak  néhány olyan beállítást is, amit a többi tulajdonos nem. Csak "
-"egy kiemelt tulajdonosa lehet egy listának; az õ e-mail címét nem lehet "
-"beállítani a webrõl."
+"állíthatnak  néhány olyan beállítást is, amit a többi tulajdonos nem."
 
 #: src/List.pm:967
 msgid "Owners defined in an external datasource"
-msgstr ""
+msgstr "Külsp adatforrásban megadott tulajdonosok"
 
 # nlsref 8,1
-#: src/List.pm:2274 src/List.pm:2289 src/List.pm:2301
+#: src/List.pm:2275 src/List.pm:2290 src/List.pm:2302
 msgid "Owners of list %s"
 msgstr "A(z) %s lista tulajdonosai"
 
@@ -2880,15 +2854,14 @@ msgstr "Kérem válassza ki az archívum hónapokat"
 
 #. (conf.email,conf.host)
 #: mail_tt2/x509-user-cert-missing.tt2:13
-#, fuzzy
 msgid ""
 "Please, in order to receive futur crypted messages send a signed message\n"
 "to  %1@%2 ."
 msgstr ""
 "Kérem küldjön egy digitálisan aláírt levelet a(z) %1@%2 címre azért,\n"
-" hogy a jövõben titkosított leveleket kapjon.\n"
+" hogy a jövõben titkosított leveleket kapjon."
 
-#: web_tt2/list_menu.tt2:49 web_tt2/list_menu.tt2:51
+#: web_tt2/list_menu.tt2:53 web_tt2/list_menu.tt2:55
 msgid "Post"
 msgstr "Levél beküldése"
 
@@ -3025,17 +2998,34 @@ msgstr "REView <lista>               * A <lista> tagjainak listája"
 msgid "RFC 2369 Header fields"
 msgstr "RFC 2369 fejléc mezõk"
 
-#: web_tt2/list_menu.tt2:55
+#: web_tt2/list_menu.tt2:59
 msgid "RSS"
-msgstr ""
+msgstr "RSS"
+
+#: web_tt2/main.tt2:16 web_tt2/main.tt2:19
+msgid "RSS Active lists"
+msgstr "RSS Aktív listák"
+
+# nlsref 16,70
+#: web_tt2/main.tt2:12
+msgid "RSS Latest documents"
+msgstr "RSS Legújabb dokumentumok"
+
+#: web_tt2/main.tt2:15 web_tt2/main.tt2:18
+msgid "RSS Latest lists"
+msgstr "RSS Legújabb listák"
+
+#: web_tt2/main.tt2:11
+msgid "RSS Latest messages"
+msgstr "RSS Legújabb üzenetek"
 
 #: web_tt2/rss_request.tt2:3
 msgid "RSS channel"
-msgstr ""
+msgstr "RSS csatorna"
 
 #: web_tt2/home.tt2:49
 msgid "RSS news"
-msgstr ""
+msgstr "RSS hírek"
 
 #: web_tt2/pref.tt2:44
 msgid "Re-enter your new password :"
@@ -3050,9 +3040,8 @@ msgid "Rebuild HTML archives using \"arctxt\" directories as input."
 msgstr "HTML archívum frissítése az \"arctxt\" könyvtár felhasználásával."
 
 #: web_tt2/serveradmin.tt2:90
-#, fuzzy
 msgid "Rebuild all"
-msgstr "Archívum frissítése"
+msgstr "Mind frissítése"
 
 #: web_tt2/serveradmin.tt2:89
 msgid "Rebuild archive"
@@ -3103,7 +3092,6 @@ msgid "Remind all subscribers"
 msgstr "Emlékeztetõ elküldése az összes listatagnak"
 
 #: web_tt2/help_editfile.tt2:17
-#, fuzzy
 msgid ""
 "Remind message : This message is sent to each subscriber\n"
 "when using the command  REMIND. It's very useful to help people who are\n"
@@ -3114,7 +3102,7 @@ msgstr ""
 "parancs\n"
 "hatására elküldésre kerül ez az üzenet. Segíthet azoknak a tagoknak,\n"
 "akik nem biztosak a feliratkozási címükben, vagy akik nem tudnak\n"
-"valamiért leiratkozni.\n"
+"valamiért leiratkozni."
 
 # nlsref 6,76
 #: src/Commands.pm:1309
@@ -3127,9 +3115,8 @@ msgid "Reminder of your subscription to %1"
 msgstr "Emlékeztetõ a(z) %1 levelezési listás tagságáról"
 
 #: web_tt2/scenario_test.tt2:47
-#, fuzzy
 msgid "Remote IP address"
-msgstr "Távoli cím"
+msgstr "Távoli IP cím"
 
 # nlsref 16,206
 #: src/List.pm:604
@@ -3176,7 +3163,7 @@ msgid "Rename this list"
 msgstr "Ennek a listának az átnevezése"
 
 # nlsref 6,21
-#: src/Commands.pm:2035
+#: src/Commands.pm:2037
 msgid "Renewal of your subscription to list '%s'"
 msgstr "Tagság megújítása a(z) '%s' listán"
 
@@ -3253,15 +3240,16 @@ msgstr "Vissza a(z) %1 archívumhoz"
 
 #: src/List.pm:982
 msgid "Return-path of the REMIND command"
-msgstr ""
-
-#: web_tt2/list_menu.tt2:68
-msgid "Review"
-msgstr "Betekintés"
+msgstr "Az emlékeztetõ (REMIND) parancs visszatérési útvonala"
 
 #: web_tt2/serveradmin.tt2:25
 msgid "Review lists from this family"
 msgstr "A családba tartozó listák áttekintése"
+
+#: web_tt2/list_menu.tt2:72
+#, fuzzy
+msgid "Review members"
+msgstr "Betekintés"
 
 #. (review)
 #: mail_tt2/info_report.tt2:13
@@ -3365,7 +3353,7 @@ msgstr "Változatok (scenario) kipróbálása"
 
 #: web_tt2/edit_template.tt2:9
 msgid "Scope"
-msgstr ""
+msgstr "Hatókör"
 
 #: src/etc/mhonarc-ressources.tt2:52 web_tt2/arcsearch_form.tt2:15
 #: web_tt2/arcsearch_form.tt2:22 web_tt2/review.tt2:59
@@ -3439,7 +3427,7 @@ msgstr "Küldés/fogadás"
 msgid "Serial number of the config"
 msgstr "A beállítás sorozatszáma"
 
-#: web_tt2/rss.tt2:28 web_tt2/rss.tt2:7
+#: web_tt2/rss.tt2:15 web_tt2/rss.tt2:5
 msgid "Server error"
 msgstr "Szerver hiba"
 
@@ -3470,12 +3458,11 @@ msgid "Shared document directory size"
 msgstr "Megosztott dokumentumok mérete"
 
 # nlsref 16,70
-#: src/List.pm:1055 web_tt2/list_menu.tt2:60 web_tt2/list_menu.tt2:62
+#: src/List.pm:1055 web_tt2/list_menu.tt2:64 web_tt2/list_menu.tt2:66
 msgid "Shared documents"
 msgstr "Megosztott dokumentumok"
 
 #: web_tt2/help_user_options.tt2:18
-#, fuzzy
 msgid ""
 "Similar to the Digest option in that the subscriber will periodically \n"
 "receive batched messages in a Digest. With DigestPlain the Digest is sent in "
@@ -3490,7 +3477,7 @@ msgstr ""
 "formájában lesz kézbesítve, minden csatolmány nélkül. A digestplain "
 "hasznos,\n"
 "ha az e-mail programja nem kezeli rendesen a többrészes/kivonat (multipart/"
-"digest) formátumú leveleket.\n"
+"digest) formátumú leveleket."
 
 #: web_tt2/modindex.tt2:23 web_tt2/modindex.tt2:82
 msgid "Size"
@@ -3501,17 +3488,15 @@ msgid "Size (Kb)"
 msgstr "Méret (Kb)"
 
 #: web_tt2/serveradmin.tt2:80
-#, fuzzy
 msgid "Skins administration page"
-msgstr "Lista adminisztrációs oldal"
+msgstr "Kinézet adminisztrációs oldal"
 
 #: web_tt2/serveradmin.tt2:79
 msgid "Skins, CSS and colors"
-msgstr ""
+msgstr "Kinézetek, CSS és színek"
 
 # nlsref 6,260
-#: src/List.pm:8813
-#, fuzzy
+#: src/List.pm:8827
 msgid ""
 "Someone (hopefully you) asked for your e-mail address\n"
 "to be added to list '%s'.\n"
@@ -3538,11 +3523,10 @@ msgstr ""
 " - kattintson ide %s .\n"
 " \n"
 "Ha nem akar feliratkozni, akkor egyszerûen hagyja figyelmen\n"
-"kívül ezt a levelet.\n"
+"kívül ezt a levelet."
 
 # nlsref 6,260
-#: src/List.pm:8806
-#, fuzzy
+#: src/List.pm:8820
 msgid ""
 "Someone (hopefully you) asked for your e-mail address\n"
 "to be removed from list '%s'.\n"
@@ -3569,10 +3553,10 @@ msgstr ""
 " - kattintson ide %s címre.\n"
 " \n"
 "Ha nem akar leiratkozni, akkor egyszerûen hagyja figyelmen\n"
-"kívül ezt a levelet.\n"
+"kívül ezt a levelet."
 
 # nlsref 6,39
-#: src/List.pm:8818 src/List.pm:8823
+#: src/List.pm:8832 src/List.pm:8837
 msgid ""
 "Someone (hopefully you) requested a user of list %s to be\n"
 "added or removed.\n"
@@ -3596,7 +3580,7 @@ msgstr ""
 "figyelmenkívül ezt a levelet.\n"
 
 # nlsref 6,48
-#: src/Commands.pm:2059
+#: src/Commands.pm:2061
 msgid ""
 "Someone (hopefully you) requested that the subscribers to the list\n"
 "'%s' for more than %d days have to confirm their subscription.\n"
@@ -3707,13 +3691,12 @@ msgid "Subscribers:"
 msgstr "Tagok száma:"
 
 #: web_tt2/help_editfile.tt2:20
-#, fuzzy
 msgid ""
 "Subscribing invitation message : it is sent to a person if some user  \n"
 "use the INVITE command to invite someone for subscription."
 msgstr ""
 "Felkérõ levél a feliratkozásra: elküldésre kerül, ha feliratkozásra\n"
-"kérünk fel valakit az INVITE paranccsal.\n"
+"kérünk fel valakit az INVITE paranccsal."
 
 #. (subscribe)
 #: mail_tt2/info_report.tt2:10
@@ -3731,7 +3714,7 @@ msgid "Subscription reminder sent to each of %d %s subscribers\n"
 msgstr "Listatagsági emlékeztetõ elküldve összesen %d %s tagnak\n"
 
 # nlsref 8,2
-#: src/List.pm:2288
+#: src/List.pm:2289
 msgid "Subscription request to list %s"
 msgstr "Feliratkozási kérelem a(z) %s listára"
 
@@ -3740,17 +3723,16 @@ msgstr "Feliratkozási kérelem a(z) %s listára"
 msgid "Subscription summary"
 msgstr "Feliratkozási összesítés"
 
-#: web_tt2/list_admin_menu.tt2:78
-#, fuzzy
+#: web_tt2/list_admin_menu.tt2:75
 msgid "Subscriptions"
-msgstr "Tag beállításai"
+msgstr "Feliratkozások"
 
 #: web_tt2/help_user_options.tt2:22
 msgid "Summary"
 msgstr "Summary (összegzés)"
 
 # nlsref 8,31
-#: src/List.pm:3239
+#: src/List.pm:3240
 msgid "Summary of list %s"
 msgstr "Összefoglaló a(z) %s listáról"
 
@@ -3825,13 +3807,12 @@ msgstr ""
 "lehet, hogy az adatbázis vagy az LDAP könyvtár nem érhetõ el."
 
 #: mail_tt2/listmaster_notification.tt2:36
-#, fuzzy
 msgid ""
 "Sympa could not include subscribers from external data sources ; the\n"
 "database or LDAP directory might be unreachable."
 msgstr ""
 "A Sympa nem tudta lekérdezni a tagok listáját a külsõ adatforrásból;\n"
-"lehet, hogy az adatbázis vagy az LDAP könyvtár nem érhetõ el.\n"
+"lehet, hogy az adatbázis vagy az LDAP könyvtár nem érhetõ el."
 
 #. (param0,param1)
 #: mail_tt2/listmaster_notification.tt2:83
@@ -3848,13 +3829,12 @@ msgid "Sympa could not modify list %1 (Family %2)"
 msgstr "A Sympa nem tudta módosítani a(z) %1 listát (%2 család)"
 
 #: web_tt2/javascript.tt2:108
-#, fuzzy
 msgid ""
 "Sympa could not set a cookie for login.\n"
 " Your should setup your navigator to accept cookies"
 msgstr ""
 "A Sympa nem tudott sütit (cookie) beállítani bejelentkezéshez.\n"
-"Engedélyezze böngészõjében a sütik elfogadását.\n"
+"Engedélyezze böngészõjében a sütik elfogadását."
 
 #: web_tt2/tt2_error.tt2:22
 msgid "Sympa error - could not display web page"
@@ -3880,23 +3860,21 @@ msgstr "A tagok szinkronizálása az adatforrásokkal"
 msgid "Syntax errors with the following parameters : %1"
 msgstr "Hibásan megadott parancs: %1"
 
-#: mail_tt2/digest.tt2:12 mail_tt2/digest_plain.tt2:10 src/List.pm:3100
+#: mail_tt2/digest.tt2:12 mail_tt2/digest_plain.tt2:10 src/List.pm:3101
 msgid "Table of contents:"
 msgstr "Tartalomjegyzék:"
 
 #: web_tt2/edit_template.tt2:3
 msgid "Template edition system"
-msgstr ""
+msgstr "Sablon szerkesztõ rendszer"
 
 #: web_tt2/edit_template.tt2:6
-#, fuzzy
 msgid "Template name"
-msgstr "Sablonok"
+msgstr "Sablon neve"
 
 #: web_tt2/edit_template.tt2:39
-#, fuzzy
 msgid "Template saved"
-msgstr "Sablonok"
+msgstr "Sablon elmentve"
 
 #: web_tt2/serveradmin.tt2:47
 msgid "Templates"
@@ -3925,28 +3903,27 @@ msgstr ""
 "levelezési lista szerveren lett eltárolva."
 
 #. (count)
-#: web_tt2/rss.tt2:31
+#: web_tt2/rss.tt2:18
 msgid "The %1 latest created lists"
 msgstr "A(z) %1 legújabb lista"
 
 #. (count)
-#: web_tt2/rss.tt2:51
+#: web_tt2/rss.tt2:38
 msgid "The %1 latest messages"
 msgstr "A(z) %1 legújabb üzenet"
 
 # nlsref 16,70
 #. (count)
-#: web_tt2/rss.tt2:60
+#: web_tt2/rss.tt2:47
 msgid "The %1 latest shared documents"
 msgstr "A(z) %1 legújabb megosztott dokumentum"
 
 #. (count)
-#: web_tt2/rss.tt2:41
+#: web_tt2/rss.tt2:28
 msgid "The %1 most active lists"
 msgstr "A(z) %1 legaktívabb lista"
 
 #: web_tt2/help_editlist.tt2:37
-#, fuzzy
 msgid ""
 "The Bouncers_level1 paragraphs defines the automatic behavior of bounce "
 "management.<br />\n"
@@ -3954,10 +3931,9 @@ msgid ""
 msgstr ""
 "A bouncers_level1 bekezdés a visszapattanások automatikus kezelését adja meg."
 "<br />\n"
-"\tAz egyes szint a visszapattanások legalacsonyabb szintje.\n"
+"\tAz egyes szint a visszapattanások legalacsonyabb szintje."
 
 #: web_tt2/help_editlist.tt2:53
-#, fuzzy
 msgid ""
 "The Bouncers_levelX paragraphs defines the automatic behavior of bounce "
 "management.<br />\n"
@@ -3965,10 +3941,10 @@ msgid ""
 msgstr ""
 "A bouncers_levelX bekezdés a visszapattanások automatikus kezelését adja meg."
 "<br />\n"
-"\tAz kettes szint a visszapattanások legmagasabb szintje.\n"
+"\tAz kettes szint a visszapattanások legmagasabb szintje."
 
 # nlsref 6,47
-#: src/Commands.pm:1923 src/Commands.pm:2136 src/Commands.pm:2232
+#: src/Commands.pm:1925 src/Commands.pm:2138 src/Commands.pm:2234
 msgid ""
 "The EXPIRE, EXPIREINDEX and EXPIREDEL commands are restricted to the owners "
 "of the list.\n"
@@ -3979,7 +3955,7 @@ msgstr ""
 "Ön nincs a(z) %s lista tulajdonosai között.\n"
 
 # nlsref 6,46
-#: src/Commands.pm:2275
+#: src/Commands.pm:2277
 msgid "The MODINDEX command is restricted to moderators.\n"
 msgstr "A MODINDEX parancsot csak a moderátorok használhatják.\n"
 
@@ -3994,7 +3970,7 @@ msgstr "Hiba történt a következõ állomány vírusellenõrzésekor:"
 
 # nlsref 6,15
 #: src/Commands.pm:1110 src/Commands.pm:1243 src/Commands.pm:1411
-#: src/Commands.pm:1995 src/Commands.pm:466 src/Commands.pm:593
+#: src/Commands.pm:1997 src/Commands.pm:466 src/Commands.pm:593
 #: src/Commands.pm:733 src/Commands.pm:854 src/Commands.pm:990
 msgid ""
 "The authentication process failed\n"
@@ -4019,6 +3995,18 @@ msgstr "A hitelesítés tárgya:"
 #: src/alias_manager.pl:40
 msgid "The configuration file --CONFIG-- contains errors.\n"
 msgstr "A(z) --CONFIG-- konfigurációs állomány hibás.\n"
+
+#: web_tt2/skinsedit.tt2:44
+msgid "The css_path parameter is defined, value is"
+msgstr ""
+
+#: web_tt2/skinsedit.tt2:7
+msgid ""
+"The current version doesn't include a color editor, so you need to edit "
+"robot.conf (or sympa.conf) to change colors. Here are the colors as defined "
+"in the current robot in robot.conf. If you did install static CSS files, the "
+"colors in use may differ from this table."
+msgstr ""
 
 #: web_tt2/help_editlist.tt2:138
 msgid ""
@@ -4096,16 +4084,16 @@ msgstr ""
 msgid "The following virtual robots are running on this server :"
 msgstr "A következõ virtuális robotok érhetõk el a szerveren:"
 
-#: web_tt2/rss.tt2:33
+#: web_tt2/rss.tt2:20
 msgid "The latest created lists"
 msgstr "A legutoljára létrehozott listák"
 
-#: web_tt2/rss.tt2:53
+#: web_tt2/rss.tt2:40
 msgid "The latest messages"
 msgstr "A legutolsó üzenetek"
 
 # nlsref 16,70
-#: web_tt2/rss.tt2:62
+#: web_tt2/rss.tt2:49
 msgid "The latest shared documents"
 msgstr "A legutolsó megoszott dokumentumok"
 
@@ -4150,7 +4138,7 @@ msgstr ""
 msgid "The list's subject"
 msgstr "Amirõl a lista szól"
 
-#: web_tt2/rss.tt2:43
+#: web_tt2/rss.tt2:30
 msgid "The most active lists"
 msgstr "A legaktívabb listák"
 
@@ -4225,7 +4213,6 @@ msgstr "Ezek a tagok:\n"
 
 #. (process_id,loop_count,start_time)
 #: web_tt2/serveradmin.tt2:98
-#, fuzzy
 msgid "This FastCGI process (%1) has served %2 pages since %3."
 msgstr "Ez a FastCGI folyamat (%1) %3 óta %2 kérést szolgált ki."
 
@@ -4262,7 +4249,6 @@ msgid "This list's archives do not contain any file.\n"
 msgstr "A lista archívuma nem tartalmaz egyetlen levelet sem.\n"
 
 #: web_tt2/help_user_options.tt2:46
-#, fuzzy
 msgid ""
 "This mode is used when a subscriber does not want to receive attached files. "
 "The attached files are \n"
@@ -4271,17 +4257,16 @@ msgstr ""
 "Ez a mód akkor lehet hasznos, ha a egy tag nem akar a listáról csatolt "
 "állományokat fogadni.\n"
 "Ilyenkor az állomány helyett egy URL jelenik meg, ami az eredeti "
-"csatolmányhoz vezet.\n"
+"csatolmányhoz vezet."
 
 #: web_tt2/help_user_options.tt2:51
-#, fuzzy
 msgid ""
 "This mode is used when a subscriber does not want to receive copies of "
 "messages that he or she has sent to \n"
 "the list."
 msgstr ""
 "Ez a mód akkor lehet hasznos, ha egy tag nem akar másolatot kapni a listára "
-"küldött, tõle származó levelekrõl.\n"
+"küldött, tõle származó levelekrõl."
 
 #: web_tt2/help_user_options.tt2:31
 msgid ""
@@ -4297,7 +4282,6 @@ msgstr ""
 "küldhessen a listára."
 
 #: web_tt2/help_user_options.tt2:41
-#, fuzzy
 msgid ""
 "This mode is used when a subscriber wishes to receive mails sent in both "
 "HTML and plain text formats\n"
@@ -4306,10 +4290,9 @@ msgstr ""
 "Ez a mód akkor lehet hasznos, ha a felhasználó csak HTML formátumban "
 "szeretné megkapni az üzeneteket\n"
 "függetlenül attól, hogy azok a listára sima szöveges, vagy HMTL formátumban "
-"érkeztek.\n"
+"érkeztek."
 
 #: web_tt2/help_user_options.tt2:36
-#, fuzzy
 msgid ""
 "This mode is used when a subscriber wishes to receive mails sent in both "
 "HTML and plain text formats\n"
@@ -4318,10 +4301,9 @@ msgstr ""
 "Ez a mód akkor lehet hasznos, ha a felhasználó csak sima szöveges "
 "formátumban szeretné megkapni az üzeneteket\n"
 "függetlenül attól, hogy azok a listára sima szöveges, vagy HMTL formátumban "
-"érkeztek.\n"
+"érkeztek."
 
 #: web_tt2/help_user_options.tt2:56
-#, fuzzy
 msgid ""
 "This option is used mainly to cancel the nomail, summary or digest modes. If "
 "the subscriber was \n"
@@ -4331,10 +4313,9 @@ msgstr ""
 "Ezzel a beállítással a nomail, summary vagy digest módokat lehet "
 "megszüntetni. Ha a felhasználó\n"
 "nomail módban volt, akkor ezzel a beállítással ismét egyenként meg fogja "
-"kapnia lista leveleit.\n"
+"kapnia lista leveleit."
 
 #: web_tt2/pref.tt2:84
-#, fuzzy
 msgid ""
 "This other email address, that should be known by Sympa, will be recognized "
 "by Sympa as \n"
@@ -4345,7 +4326,7 @@ msgstr ""
 "Az itt megadott további e-mail címet a Sympa alternatív címként fogja "
 "kezelni.\n"
 "A különbözõ címrõl történõ feliratkozásokat az elsõdlegesen használt e-mail\n"
-"címmel ezentúl egységesen kezelheti.\n"
+"címmel ezentúl egységesen kezelheti."
 
 #: web_tt2/help_editlist.tt2:22
 msgid "This paragraph defines bounce management parameters:"
@@ -4581,23 +4562,23 @@ msgstr ""
 "végtelen ciklushoz vezet."
 
 #: web_tt2/sigrequest.tt2:43 web_tt2/subrequest.tt2:38
-#, fuzzy
 msgid ""
 "This password, associated to your email address, will\n"
 "\tallow you to access your custom environment."
 msgstr ""
 "A feliratkozási címéhez tartozó jelszóval az egyéni\n"
-"beállításait tudja módosítani.\n"
+"\tbeállításait tudja módosítani."
 
 #: web_tt2/rss_request.tt2:5
 msgid ""
 "This server provide various news via RSS. Choose parameters and pickup the "
 "RSS url"
 msgstr ""
+"A szerver különféle híreket szolgáltat RSS-en. Válassza ki a paramétereket "
+"és használja az RSS urlt."
 
 #. (conf.email,conf.host)
 #: web_tt2/home.tt2:5
-#, fuzzy
 msgid ""
 "This server provides you access to your environment on mailing list server %"
 "1@%2. Starting from this URL, you can perform subscription options, "
@@ -4607,7 +4588,7 @@ msgstr ""
 "Ezen az oldalon keresztül elérheti a(z) %1@%2 levelezésilista-szerveren\n"
 "nyilvántartott beállításait. Az oldalról elindulva kezdeményezhet fel- és \n"
 "leiratkozásokat, megtekintheti az archivumokat, kezelheti a listákat és \n"
-"egyéb módosításokat hajthat végre.\n"
+"egyéb módosításokat hajthat végre."
 
 #: src/etc/mhonarc-ressources.tt2:183 src/etc/mhonarc-ressources.tt2:281
 #: src/etc/mhonarc-ressources.tt2:363
@@ -4615,7 +4596,7 @@ msgid "Thread"
 msgstr "Témák szerint"
 
 # nlsref 6,61
-#: src/Commands.pm:1940
+#: src/Commands.pm:1942
 msgid "Thus, your message is sent back to you :\n"
 msgstr "Ezért az üzenetét visszaküldtük:\n"
 
@@ -4633,61 +4614,55 @@ msgid "To choose your password go to 'preferences', from the upper menu."
 msgstr "Jelszava módosításához válassza a felsõ menü 'Beállításaim' részét."
 
 #: web_tt2/subrequest.tt2:6
-#, fuzzy
 msgid ""
 "To confirm\n"
 "\tyour request, please click the button below :"
 msgstr ""
 "Feliratkozási kérelme megerõsítéséhez kattintson az\n"
-"alább található gombra:\n"
+"alább található gombra:"
 
 #: web_tt2/sigrequest.tt2:5
-#, fuzzy
 msgid ""
 "To confirm\n"
 "      your request, please click the button below :"
 msgstr ""
 "Leiratkozási kérelme megerõsítéséhez kattintson az\n"
-"alább található gombra:\n"
+"alább található gombra:"
 
 #: web_tt2/change_email.tt2:5
-#, fuzzy
 msgid ""
 "To confirm your email address change, please enter the password\n"
 "you received below :"
 msgstr ""
 "E-mail címe sikeres megváltoztatásához, kérem adja meg lent\n"
-"a korábban már megkapott jelszót:\n"
+"a korábban már megkapott jelszót:"
 
 #: web_tt2/subrequest.tt2:21
-#, fuzzy
 msgid ""
 "To confirm your identity and prevent anyone from subscribing you to \n"
 "\tthis list against your will, a message containing your password\n"
 "\twill be sent to you."
 msgstr ""
 "Azonosításához és hogy mások ne tudják akarata ellenére\n"
-"felvenni erre a listára, e-mailben megkapja a jelszavát.\n"
+"\tfelvenni erre a listára, e-mailben megkapja a jelszavát."
 
 #: web_tt2/sigrequest.tt2:27
-#, fuzzy
 msgid ""
 "To confirm your identity and prevent anyone from unsubscribing you from \n"
 "\tthis list against your will, a message containing an URL\n"
 "\twill be sent to you."
 msgstr ""
 "Azonosításához és hogy mások ne tudják akarata ellenére\n"
-"törölni errõl a listáról, e-mailben kapni fog egy URL-t.\n"
+"\ttörölni errõl a listáról, e-mailben kapni fog egy URL-t."
 
 #. (list)
 #: web_tt2/subrequest.tt2:54
-#, fuzzy
 msgid ""
 "To confirm your subscription to list %1, please enter\n"
 "\tyour password below :"
 msgstr ""
 "A(z) %1 listára történõ feliratkozás megerõsítéséhez\n"
-"kérem adja meg lent a jelszavát:\n"
+"\tkérem adja meg lent a jelszavát:"
 
 #: mail_tt2/sendpasswd.tt2:15
 msgid ""
@@ -4696,13 +4671,12 @@ msgstr "Feliratkozásának megerõsítéséhez a következõ jelszót kell megadnia"
 
 #. (list)
 #: web_tt2/sigrequest.tt2:60
-#, fuzzy
 msgid ""
 "To confirm your unsubscription from list %1, please enter\n"
 "\tyour password below :"
 msgstr ""
 "A(z) %1 listáról történõ leiratkozás megerõsítéséhez\n"
-"kérem adja meg lent a jelszavát:\n"
+"\tkérem adja meg lent a jelszavát:"
 
 #: web_tt2/help.tt2:58
 msgid "To contact this service administrator :"
@@ -4716,7 +4690,7 @@ msgstr ""
 "engedélyezheti:"
 
 # nlsref 8,12
-#: src/List.pm:2598
+#: src/List.pm:2599
 msgid ""
 "To distribute the attached message in list %s :\n"
 "mailto:%s?subject=CONFIRM%%20%s\n"
@@ -4745,7 +4719,6 @@ msgstr ""
 "szétküldése elõtt. A feladó címe a megadott e-mail címmel lesz helyettesítve."
 
 #: web_tt2/loginbanner.tt2:18
-#, fuzzy
 msgid ""
 "To login, select your organization authentication server below.<br />\n"
 "If it is not listed or if you don't have any, login using your email and "
@@ -4753,10 +4726,10 @@ msgid ""
 msgstr ""
 "Bejelentkezéshez válassza ki a szervezete azonosító szerverét alul.<br />\n"
 "Ha nincs felsorolva, vagy nincs Önnek, jelentkezzen be az e-mail címével és "
-"jelszavával a jobb oldali oszlopban.\n"
+"jelszavával a jobb oldali oszlopban."
 
 # nlsref 6,57
-#: src/Commands.pm:1982
+#: src/Commands.pm:1984
 msgid ""
 "To read the list of subscribers who haven't confirm their\n"
 "subscription : EXPIREINDEX %s\n"
@@ -4766,7 +4739,6 @@ msgstr ""
 
 #. (conf.email,conf.host)
 #: mail_tt2/certif_warning.tt2:12
-#, fuzzy
 msgid ""
 "To receive them again, renew your certificate with your certification "
 "authority\n"
@@ -4778,7 +4750,7 @@ msgstr ""
 "és\n"
 "küldjön egy hitelesített levelet az alábbi címre: %1@%2\n"
 "vagy\n"
-"kattintson ide:\n"
+"kattintson ide:"
 
 #: web_tt2/help.tt2:47
 msgid "To receive your password :"
@@ -4789,7 +4761,7 @@ msgid "To reject it (it will be removed):"
 msgstr "Visszautasításhoz (ez törlést jelent) használja a következõt:"
 
 # nlsref 6,53
-#: src/Commands.pm:1984 src/Commands.pm:2042
+#: src/Commands.pm:1986 src/Commands.pm:2044
 msgid "To stop the expiration process : EXPIREDEL %s\n"
 msgstr ""
 "A megerõsítési felszólítást a következõ paranccsal törölheti: EXPIREDEL %s\n"
@@ -4836,7 +4808,7 @@ msgstr "Feliratkozások száma: %1"
 
 #: web_tt2/edit_template.tt2:7
 msgid "Type"
-msgstr ""
+msgstr "Típus"
 
 #: mail_tt2/helpfile.tt2:29
 msgid "UNSubscribe * <EMAIL>       * To quit all lists."
@@ -4851,7 +4823,7 @@ msgstr ""
 "opcionális e-mail cím, ami akkor kell, ha különbözik a \"Feladó:\" címtõl."
 
 # nlsref 8,24
-#: src/List.pm:2300
+#: src/List.pm:2301
 msgid "UNsubscription request from list %s"
 msgstr "Leiratkozási kérelem a(z) %s listán"
 
@@ -4865,7 +4837,7 @@ msgid "Unable to access directory %s : %m"
 msgstr "A(z) %s könyvtár nem elérhetõ: %m"
 
 # nlsref 6,41
-#: src/Commands.pm:1731 src/Commands.pm:1851
+#: src/Commands.pm:1732 src/Commands.pm:1853
 msgid ""
 "Unable to access the moderated message on list %s with key %s.\n"
 "This message may already have been sent by one of the list's moderators\n"
@@ -4874,7 +4846,7 @@ msgstr ""
 "A levélrõl valószínûleg az egyik moderátor már gondoskodott.\n"
 
 # nlsref 6,68
-#: src/Commands.pm:1723
+#: src/Commands.pm:1724
 msgid "Unable to access to the message authenticated with key %s.\n"
 msgstr "A(z) %s kulccsal azonosított üzenetet nem elérhetõ.\n"
 
@@ -4885,20 +4857,18 @@ msgstr "Nem sikerült csatornát létrehozni az smptto-ban: %m"
 
 # nlsref 6,41
 #: src/Commands.pm:1656
-#, fuzzy
 msgid ""
 "Unable to find the message of the list %s locked by the key %s.\n"
 "Warning : this message could have ever been send by another editor"
 msgstr ""
 "A(z) %s listán a(z) %s jelzésû moderált levelet nem lehet elérni.\n"
-"Figyelem: lehet, hogy a levélrõl az egyik moderátor már gondoskodott.\n"
+"Figyelem: lehet, hogy a levélrõl az egyik moderátor már gondoskodott."
 
 #: web_tt2/remove_arc.tt2:11
 msgid "Unable to find the message to delete"
 msgstr "A törlésre szánt üzenet nem található"
 
 #: web_tt2/remove_arc.tt2:9
-#, fuzzy
 msgid ""
 "Unable to find the message to delete, probably this message\n"
 "was received without Message-Id. Please refer to listmaster with\n"
@@ -4906,7 +4876,7 @@ msgid ""
 msgstr ""
 "Nem sikerült megtalálni a törlendõ üzenetet, valószínüleg az üzenet\n"
 "Message-Id azonosító nélkül érkezett. Kérem forduljon a listamasterhez\n"
-"a törlésre szánt üzenet teljes hivatkozási címével (URL).\n"
+"a törlésre szánt üzenet teljes hivatkozási címével (URL)."
 
 #. (error.path)
 #: web_tt2/error.tt2:40
@@ -4932,7 +4902,7 @@ msgid "Unsubscribe"
 msgstr "Leiratkozás"
 
 # nlsref 6,71
-#: soap/sympasoap.pm:553 src/Commands.pm:946 wwsympa/wwsympa.fcgi:3526
+#: soap/sympasoap.pm:553 src/Commands.pm:946 wwsympa/wwsympa.fcgi:3531
 msgid "Unsubscribe from list %s"
 msgstr "Leiratkozás a(z) %s listáról"
 
@@ -4956,23 +4926,21 @@ msgid "Unsubscription from %1"
 msgstr "Leiratkozás a(z) %1 levelezési listáról"
 
 #: web_tt2/help_editfile.tt2:8
-#, fuzzy
 msgid ""
 "Unsubscription message : This message is sent when users leave the list\n"
 "using the UNSUBSCRIBE command."
 msgstr ""
 "Leiratkozási üzenet: Az üzenet elküldésre kerül, ha a tag az UNSUBSCRIBE\n"
-"paranccsal leiratkozik a listáról.\n"
+"paranccsal leiratkozik a listáról."
 
 #. (param0)
 #: mail_tt2/listmaster_notification.tt2:30
-#, fuzzy
 msgid ""
 "Until then we recommend your remove %1 ;\n"
 "default configuration will be used."
 msgstr ""
 "Addig is javasoljuk, hogy törölje a(z) %1 állományt;\n"
-"ezáltal az alapértelmezett beállítások lépnek életbe.\n"
+"ezáltal az alapértelmezett beállítások lépnek életbe."
 
 #. (visible_path)
 #: web_tt2/d_read.tt2:377
@@ -4994,9 +4962,8 @@ msgid "Update"
 msgstr "Frissít"
 
 #: web_tt2/rss_request.tt2:28
-#, fuzzy
 msgid "Update RSS URL"
-msgstr "Frissít"
+msgstr "RSS URL frissítése"
 
 #: src/etc/list_task_models/sync_include.ttl.task:1
 msgid "Update of list members based on the TTL"
@@ -5042,9 +5009,8 @@ msgstr "Felhasználói kézikönyv"
 
 # nlsref 6,81
 #: web_tt2/d_read.tt2:11 web_tt2/d_read.tt2:15
-#, fuzzy
 msgid "User mode"
-msgstr "Felhasználói kézikönyv"
+msgstr "Felhasználói mód"
 
 #: mail_tt2/helpfile.tt2:10
 msgid "User's Guide"
@@ -5079,9 +5045,12 @@ msgstr "A lista láthatósága"
 msgid "Visibility of the subscriber with the REVIEW command."
 msgstr "A tag láthatósága megtekintés (REVIEW) parancs esetén."
 
+#: web_tt2/skinsedit.tt2:61
+msgid "W3C CSS validation tools"
+msgstr ""
+
 # nlsref 8,23
-#: src/List.pm:2279
-#, fuzzy
+#: src/List.pm:2280
 msgid ""
 "WARNING : %s %s failed to unsubscribe from %s because his address was not "
 "found in the list\n"
@@ -5089,10 +5058,10 @@ msgid ""
 msgstr ""
 "FIGYELMEZTETÉS: %s %s nem tudott leiratkozni a(z) %s listáról, mert a címe "
 "nincs fent a listán\n"
-"(Segíthet neki)\n"
+"(Segíthet neki)"
 
 # nlsref 8,28
-#: src/List.pm:2308
+#: src/List.pm:2309
 msgid "WARNING: bounce rate too high in list %s"
 msgstr "FIGYELMEZTETÉS: a visszapattanási arány túl magas a(z) %s listán"
 
@@ -5133,19 +5102,18 @@ msgid "Welcome message"
 msgstr "Üdvözlõ szöveg"
 
 #: web_tt2/help_editfile.tt2:5
-#, fuzzy
 msgid ""
 "Welcome message: This message is sent to new subscribers. It can be\n"
 "a full MIME structured message (only for MIME gurus)."
 msgstr ""
 "Üdvözlõ szöveg: Az új tagoknak elküldésre kerülõ szöveg. Ez a levél\n"
-"MIME felépítésû is lehet (csak MIME guruknak).\n"
+"MIME felépítésû is lehet (csak MIME guruknak)."
 
 # nlsref 8,6
 #: soap/sympasoap.pm:701 soap/sympasoap.pm:702 src/Commands.pm:1062
 #: src/Commands.pm:1063 src/Commands.pm:685 src/Commands.pm:686
-#: wwsympa/wwsympa.fcgi:3297 wwsympa/wwsympa.fcgi:3298
-#: wwsympa/wwsympa.fcgi:4240 wwsympa/wwsympa.fcgi:4241
+#: wwsympa/wwsympa.fcgi:3302 wwsympa/wwsympa.fcgi:3303
+#: wwsympa/wwsympa.fcgi:4245 wwsympa/wwsympa.fcgi:4246
 msgid "Welcome on list %s"
 msgstr "Üdvözöljük a(z) %s levelezési listán"
 
@@ -5325,7 +5293,7 @@ msgstr ""
 "html üzenetet használ, a levél tárgyában lévõ parancsok fel lesznek ismerve."
 
 # nlsref 6,58
-#: src/Commands.pm:2183
+#: src/Commands.pm:2185
 msgid ""
 "You can remove these subscriber from the list by using the following "
 "commands :\n"
@@ -5343,7 +5311,7 @@ msgstr ""
 "jelszavát"
 
 # nlsref 6,38
-#: wwsympa/wwsympa.fcgi:3527 wwsympa/wwsympa.fcgi:4346
+#: wwsympa/wwsympa.fcgi:3532 wwsympa/wwsympa.fcgi:4351
 msgid "You have been removed from list %s.\n"
 msgstr "Törölve lett a(z) %s listáról.\n"
 
@@ -5379,28 +5347,26 @@ msgid "You have logged in with email address %1"
 msgstr "%1 e-mail címmel jelentkezett be"
 
 # nlsref 6,55
-#: src/Commands.pm:2239
+#: src/Commands.pm:2241
 msgid "You just stopped the expiration process for list %s\n"
 msgstr "A megerõsítési felszólítást törölte a(z) %s listán.\n"
 
 #: web_tt2/sigrequest.tt2:19
-#, fuzzy
 msgid ""
 "You might have subscribed with another address.\n"
 "      Please contact the list owner to help you unsubscribe :"
 msgstr ""
 "Lehet, hogy egy másik címmel iratkozott fel a listára.\n"
 "        Kérem, keresse fel a lista tulajdonosát, hogy segítsen a "
-"leiratkozásban:\n"
+"leiratkozásban:"
 
 #: web_tt2/choosepasswd.tt2:4
-#, fuzzy
 msgid ""
 "You need to choose a password for your WWSympa environment.\n"
 "You will need this password to perform privileged operations."
 msgstr ""
-"A WWSympa használatához jelszóval kell rendelkeznie. Csak a\n"
-"jelszó ismeretében tud fontos mûveleteket végrehajtani.\n"
+"A WWSympa használatához jelszóval kell rendelkeznie.\n"
+"Csak a jelszó ismeretében tud fontos mûveleteket végrehajtani."
 
 #: web_tt2/error.tt2:16
 msgid "You need to login"
@@ -5418,16 +5384,15 @@ msgstr ""
 # nlsref 6,16
 #: src/Commands.pm:1111 src/Commands.pm:1412 src/Commands.pm:594
 #: src/Commands.pm:855 src/Commands.pm:991
-#, fuzzy
 msgid ""
 "You probably confirmed your subscription using a different\n"
 "email address. Please try subscribing using your canonical address."
 msgstr ""
-"Feliratkozását valószínûleg egy másik e-mail címrõl erõsítette\n"
-"meg. Kérem, próbáljon meg feliratkozni az általában használt e-mailcímérõl.\n"
+"Feliratkozását valószínûleg egy másik e-mail címrõl erõsítettemeg.\n"
+"Kérem, próbáljon meg feliratkozni az általában használt e-mailcímérõl."
 
 # nlsref 6,79
-#: src/List.pm:8828 src/List.pm:8835
+#: src/List.pm:8842 src/List.pm:8849
 msgid ""
 "You requested a subscription reminder to be sent\n"
 "to each subscriber of list %s\n"
@@ -5495,13 +5460,11 @@ msgstr ""
 "Nincs jogosultsága INDEX.HTML állomány feltöltésére a(z) %1 könyvtárba."
 
 #: web_tt2/your_lists.tt2:7
-#, fuzzy
 msgid "Your Lists"
-msgstr "Listák"
+msgstr "Az ön listái"
 
 #. (user.email,list.name,list.host)
 #: mail_tt2/expire_deletion.tt2:6
-#, fuzzy
 msgid ""
 "Your address (%1) has been removed from list\n"
 "%2@%3\n"
@@ -5509,11 +5472,10 @@ msgid ""
 msgstr ""
 "E-mail címe (%1) törölve lett a(z)\n"
 "%2@%3 listáról,\n"
-"mert nem erõsítette meg a listatagságát.\n"
+"mert nem erõsítette meg a listatagságát."
 
 #. (user.email,list.name,list.host)
 #: mail_tt2/removed.tt2:6
-#, fuzzy
 msgid ""
 "Your address (%1) has been removed from list\n"
 "%2@%3, probably because we received\n"
@@ -5521,7 +5483,7 @@ msgid ""
 msgstr ""
 "Az e-mail címe (%1) törölve lett a(z) %2@%3\n"
 "levelezési listáról, valószínüleg azért,\n"
-"mert néhány levelet nem sikerült kézbesíteni a címére.\n"
+"mert néhány levelet nem sikerült kézbesíteni a címére."
 
 # nlsref 6,77
 #. (list.name,list.host,user.email,user.password)
@@ -5530,7 +5492,6 @@ msgid "Your are subscriber of list %1@%2 with  email %3"
 msgstr "A(z) %1@%2 listán %3 e-mail címmel van nyilvántartva"
 
 #: web_tt2/help.tt2:43
-#, fuzzy
 msgid ""
 "Your are therefore not registered in Sympa user database and you can't "
 "login.\n"
@@ -5538,7 +5499,7 @@ msgid ""
 msgstr ""
 "Mivel a Sympa adatbázisában nincs nyilvántartva, ezért nem tud "
 "bejelentkezni.\n"
-"Ha feliratkozik egy listára, a WWSympa adni fog Önnek egy kezdeti jelszót.\n"
+"Ha feliratkozik egy listára, a WWSympa adni fog Önnek egy kezdeti jelszót."
 
 #. (expiration_date)
 #: mail_tt2/certif_warning.tt2:4
@@ -5558,24 +5519,22 @@ msgstr "A(z) %s listán a beállításai frissítve lettek.\n"
 # nlsref 4,38
 #. (filename,list.name,list.host,rejected_by)
 #: mail_tt2/d_reject_shared.tt2:5
-#, fuzzy
 msgid ""
 "Your document %1  for list %2@%3\n"
 "has been rejected by %4 list editor."
 msgstr ""
 "A(z) %2@%3 listára küldött %1 dokumentumának\n"
-"megjelenését %4 szerkesztõ visszautasította.\n"
+"megjelenését %4 szerkesztõ visszautasította."
 
 # nlsref 4,38
 #. (filename,list.name,list.host,installed_by)
 #: mail_tt2/d_install_shared.tt2:5
-#, fuzzy
 msgid ""
 "Your document %1 for list %2@%3\n"
 "has been installed by %4 list editor."
 msgstr ""
 "A %2@%3 listára küldött %1 dokumentumának\n"
-"megjelenését %4 szerkesztõ elfogadta.\n"
+"megjelenését %4 szerkesztõ elfogadta."
 
 #: mail_tt2/d_install_shared.tt2:2
 msgid "Your document has been installed."
@@ -5591,13 +5550,12 @@ msgstr "E-mail cím"
 
 # nlsref 6,30
 #: src/Commands.pm:909
-#, fuzzy
 msgid ""
 "Your e-mail address %s has not been found in the list %s. Maybe\n"
 "you subscribed from a different e-mail address ?\n"
 msgstr ""
-"A(z) %s listán nem található az e-mail címe. Lehet, hogy egy\n"
-"másik e-mail címmel iratkozott fel?\n"
+"%s e-mail címe nem található meg a(z) %s listán.\n"
+"Lehet, hogy egy másik e-mail címmel iratkozott fel?\n"
 
 #: web_tt2/sigrequest.tt2:49
 msgid "Your e-mail address :"
@@ -5609,7 +5567,6 @@ msgid "Your email address (%1) has been removed from list %2@%3"
 msgstr "E-mail címe (%1) törölve lett a(z) %2@%3 listáról"
 
 #: web_tt2/create_list.tt2:24
-#, fuzzy
 msgid ""
 "Your list creation request is registered. You can now  modify its\n"
 "configuration using the admin button but the list will be unusable until the "
@@ -5617,7 +5574,7 @@ msgid ""
 msgstr ""
 "Regisztráltuk a lista létrehozási kérelmét. A lista beállításait\n"
 "az adminisztrációs gombra kattintva módosíthatja, azonban a lista csak\n"
-"a listmaster jóváhagyása után fog mûködni.\n"
+"a listmaster jóváhagyása után fog mûködni."
 
 #: web_tt2/create_list.tt2:4
 msgid "Your list is created."
@@ -5635,21 +5592,20 @@ msgstr ""
 # nlsref 4,38
 #. (list.name,list.host,rejected_by)
 #: mail_tt2/reject.tt2:5
-#, fuzzy
 msgid ""
 "Your message for list %1@%2\n"
 "has been rejected by the moderator (%3)."
 msgstr ""
 "A(z) %1@%2 listára küldött levelének\n"
-"megjelenését a szerkesztõ (%3) visszautasította.\n"
+"megjelenését a szerkesztõ (%3) visszautasította."
 
 # nlsref 4,38
-#: src/List.pm:2425
+#: src/List.pm:2426
 msgid "Your message for list %s has been forwarded to editor(s)\n"
 msgstr "A(z) %s listára küldött levele a szerkesztõ(k)höz lett továbbítva\n"
 
 # nlsref 4,15
-#: src/Commands.pm:1776 src/sympa.pl:1356
+#: src/Commands.pm:1777 src/sympa.pl:1356
 msgid ""
 "Your message for list %s has been rejected.\n"
 "The message is thus sent back to you.\n"
@@ -5671,13 +5627,12 @@ msgid "Your message signature was succesfuly verified using S/MIME"
 msgstr "A levélben található aláírása S/MIME-mal sikeresen azonosítva"
 
 # nlsref 4,11
-#: src/Commands.pm:1772 src/sympa.pl:1276 src/sympa.pl:1352
+#: src/Commands.pm:1773 src/sympa.pl:1276 src/sympa.pl:1352
 msgid "Your message to %s has been rejected"
 msgstr "A(z) %s listára küldött levele vissza lett utasítva"
 
 # nlsref 6,263
 #: src/Commands.pm:549
-#, fuzzy
 msgid ""
 "Your message was not a multipart/signed message or Sympa could not\n"
 "verify the signature (be aware that Sympa can't check signature if you use "
@@ -5685,7 +5640,7 @@ msgid ""
 msgstr ""
 "A levele nem többrészes/aláírt formátumú vagy a Sympa nem tudja\n"
 "azonosítani az aláírását (a Sympa nem tudja az aláírást ellenõrizni, ha a "
-"levél tárgy mezõjében parancs van megadva).\n"
+"levél tárgy mezõjében parancs van megadva)."
 
 #: web_tt2/pref.tt2:52
 msgid "Your other email addresses"
@@ -5713,7 +5668,6 @@ msgstr ""
 "elküldeni Önnek a jelszóemlékeztetõt."
 
 #: web_tt2/login_menu.tt2:31
-#, fuzzy
 msgid "Your preferences"
 msgstr "Beállításaim"
 
@@ -5750,7 +5704,7 @@ msgid "Your subscription email is %1"
 msgstr "Ezzel az e-mailcímmel iratkozott fel: %1"
 
 # nlsref 6,18
-#: src/Commands.pm:1484 wwsympa/wwsympa.fcgi:4345
+#: src/Commands.pm:1484 wwsympa/wwsympa.fcgi:4350
 msgid "Your subscription to list %s has been removed."
 msgstr "A(z) %s listáról törölték."
 
@@ -5778,24 +5732,6 @@ msgstr "[ Kép%s ]"
 #: src/PlainDigest.pm:327
 msgid "[ Text converted from HTML ]\n"
 msgstr "[ A szöveg HTML-bõl lett átalakítva ]\n"
-
-#: web_tt2/main.tt2:16 web_tt2/main.tt2:19
-msgid "\"RSS Active lists\""
-msgstr "\"RSS Aktív listák\""
-
-# nlsref 16,70
-#: web_tt2/main.tt2:12
-#, fuzzy
-msgid "\"RSS Latest documents\""
-msgstr "\"RSS Legutolsó dokumentumok\""
-
-#: web_tt2/main.tt2:15 web_tt2/main.tt2:18
-msgid "\"RSS Latest lists\""
-msgstr "\"RSS Legújabb listák\""
-
-#: web_tt2/main.tt2:11
-msgid "\"RSS Latest messages\""
-msgstr "\"RSS Legújabb üzenetek\""
 
 #: src/PlainDigest.pm:296 src/PlainDigest.pm:317
 msgid ""
@@ -5832,7 +5768,7 @@ msgstr ""
 "-----Kézbesítési állapotjelentés-----\n"
 
 # nlsref 6,49
-#: src/Commands.pm:1981 src/Commands.pm:2164
+#: src/Commands.pm:1983 src/Commands.pm:2166
 msgid ""
 "\n"
 "An EXPIRE command is currently running for list %s.\n"
@@ -5851,7 +5787,7 @@ msgstr ""
 "A megerõsítési határidõ %d nap (%s) múlva letelik.\n"
 
 # nlsref 6,56
-#: src/Commands.pm:2022
+#: src/Commands.pm:2024
 msgid ""
 "\n"
 "An expiration process for list %s has been started. This process\n"
@@ -5867,7 +5803,7 @@ msgstr ""
 "Ezeket a tagokat a törlés (DEL) paranccsal törölheti a listáról.\n"
 
 # nlsref 8,3
-#: src/List.pm:2290
+#: src/List.pm:2291
 msgid ""
 "\n"
 "Dear owner of list %s,\n"
@@ -5903,7 +5839,7 @@ msgstr ""
 "Mûködteti a Sympa %s : http://www.sympa.org/\n"
 
 # nlsref 6,60
-#: src/Commands.pm:1938
+#: src/Commands.pm:1940
 msgid ""
 "\n"
 "The EXPIRE command couldn't be run. It must followed by an explication\n"
@@ -5940,7 +5876,7 @@ msgstr ""
 "[ ** Nem lehet feldolgozni a HTML üzenetrészt ** ]\n"
 
 # nlsref 6,73
-#: src/Commands.pm:2382
+#: src/Commands.pm:2384
 msgid ""
 "\n"
 "\n"
@@ -5953,7 +5889,7 @@ msgstr ""
 "\n"
 
 # nlsref 6,72
-#: src/Commands.pm:2374
+#: src/Commands.pm:2376
 msgid ""
 "\n"
 "\n"
@@ -5979,10 +5915,9 @@ msgstr "Hozzáférési jogosultságok"
 msgid "action for this population"
 msgstr "Ezeken a tagokon végrehajtandó mûvelet"
 
-#: web_tt2/rss_request.tt2:46
-#, fuzzy
+#: web_tt2/rss_request.tt2:48
 msgid "active lists"
-msgstr "Inaktív listák"
+msgstr "aktív listák"
 
 #: src/etc/scenari/add.closed:1
 msgid "add impossible"
@@ -6052,10 +5987,6 @@ msgstr "bárki a helyi tartományból"
 msgid "anyone with previous md5 authentication"
 msgstr "bárki, korábbi md5 azonosítással"
 
-#: src/etc/scenari/unsubscribe.open.~1.8.~:1
-msgid "anyone without authentication"
-msgstr "bárki, azonosítás nélkül"
-
 #: src/etc/scenari/subscribe.open_quiet:1
 msgid "anyone, no welcome message"
 msgstr "bárki, üdvözlõ szöveg nélkül"
@@ -6107,14 +6038,17 @@ msgstr "Jogosultságok megváltoztatása"
 
 #: src/etc/mhonarc-ressources.tt2:182 src/etc/mhonarc-ressources.tt2:280
 #: src/etc/mhonarc-ressources.tt2:362 src/etc/mhonarc-ressources.tt2:366
-#, fuzzy
 msgid "chronological"
-msgstr "Idõrendben"
+msgstr "idõrendben"
 
 #: src/etc/scenari/access_web_archive.closed:1 src/etc/scenari/invite.closed:1
 #: src/etc/scenari/send.closed:1
 msgid "closed"
 msgstr "senki"
+
+#: web_tt2/skinsedit.tt2:14 web_tt2/skinsedit.tt2:18
+msgid "color effet"
+msgstr ""
 
 #: src/etc/scenari/visibility.secret:1
 msgid "conceal even for subscribers"
@@ -6133,9 +6067,8 @@ msgid "conceal unless user is logged in"
 msgstr "elrejtve amíg a felhasználó be nem lépett"
 
 #: wwsympa/wwslib.pm:57
-#, fuzzy
 msgid "concealed"
-msgstr "nincs elrejtés"
+msgstr "elrejtve"
 
 # nlsref 16,94
 #: src/List.pm:835
@@ -6184,14 +6117,12 @@ msgid "database type"
 msgstr "Adatbázis típusa"
 
 #: src/List.pm:535 src/List.pm:951
-#, fuzzy
 msgid "datasource parameters"
-msgstr "Hibás paraméterek"
+msgstr "adatforrás paraméterek"
 
 #: src/List.pm:1110 src/List.pm:893
-#, fuzzy
 msgid "date"
-msgstr "Frissít"
+msgstr "dátum"
 
 # nlsref 16,23
 #: src/List.pm:476
@@ -6226,11 +6157,11 @@ msgstr "csak a lista tulajdonosai, azonosítás szükséges"
 
 #: wwsympa/wwslib.pm:36
 msgid "digest MIME format"
-msgstr ""
+msgstr "kivonat MIME formátum"
 
 #: wwsympa/wwslib.pm:37
 msgid "digest plain text format"
-msgstr ""
+msgstr "kivonat sima szöveg formátum"
 
 # nlsref 15,10
 #: wwsympa/wwslib.pm:70
@@ -6247,13 +6178,12 @@ msgid "edit"
 msgstr "szerkeszt"
 
 #: mail_tt2/listmaster_notification.tt2:26
-#, fuzzy
 msgid ""
 "edit_list.conf format has changed :\n"
 "'default' is no more accepted for a population."
 msgstr ""
 "Az edit_list.conf állomány felépítése megváltozott:\n"
-"A 'default' beállítás a továbbiakban nem használható.\n"
+"A 'default' beállítás a továbbiakban nem használható."
 
 # nlsref 15,7
 #: wwsympa/wwslib.pm:67
@@ -6289,9 +6219,8 @@ msgid "environment variables for database connexion"
 msgstr "Környezeti változók az adatbázis kapcsolathoz"
 
 #: src/List.pm:1105 src/List.pm:889
-#, fuzzy
 msgid "epoch date"
-msgstr "Frissít"
+msgstr "epoch dátuma"
 
 #: mail_tt2/listmaster_notification.tt2:68
 msgid "errors in param_constraint.conf file"
@@ -6350,6 +6279,18 @@ msgstr "Egyes szintû kiválasztás"
 msgid "first-level suffix"
 msgstr "Egyes szintû utótag"
 
+#. (for)
+#: web_tt2/rss.tt2:23 web_tt2/rss.tt2:33
+#, fuzzy
+msgid "for %1 days"
+msgstr " %1 napig "
+
+#. (for)
+#: web_tt2/rss.tt2:43 web_tt2/rss.tt2:52
+#, fuzzy
+msgid "for %1 days "
+msgstr " %1 napig "
+
 #: src/etc/scenari/info.open:1
 msgid "for anyone"
 msgstr "bárki"
@@ -6398,7 +6339,7 @@ msgstr "Óra"
 
 #: wwsympa/wwslib.pm:41
 msgid "html only mode"
-msgstr ""
+msgstr "csak html mód"
 
 #: src/etc/scenari/unsubscribe.closed:1
 msgid "impossible"
@@ -6413,9 +6354,8 @@ msgid "insensitive"
 msgstr "nem számítanak"
 
 #: web_tt2/skinsedit.tt2:52
-#, fuzzy
 msgid "install static css"
-msgstr "intranet elérés"
+msgstr "statikus css telepítése"
 
 #: src/etc/scenari/visibility.intranet:1
 msgid "intranet access"
@@ -6434,26 +6374,22 @@ msgid "just for listmaster"
 msgstr "csak a listmaster"
 
 #: web_tt2/edit_template.tt2:19
-#, fuzzy
 msgid "language"
-msgstr "Nyelv: "
+msgstr "nyelv"
 
 # nlsref 16,4
-#: web_tt2/rss_request.tt2:36
-#, fuzzy
+#: web_tt2/rss_request.tt2:38
 msgid "latest arc"
-msgstr "Szöveges archívumok"
+msgstr "legújabb archívum"
 
 # nlsref 16,70
-#: web_tt2/rss_request.tt2:41
-#, fuzzy
+#: web_tt2/rss_request.tt2:43
 msgid "latest document"
-msgstr "\"RSS Legutolsó dokumentumok\""
+msgstr "Legújabb dokumentum"
 
-#: web_tt2/rss_request.tt2:51
-#, fuzzy
+#: web_tt2/rss_request.tt2:53
 msgid "latest lists"
-msgstr "Legújabb listák"
+msgstr "legújabb listák"
 
 #. (param0)
 #: mail_tt2/listmaster_notification.tt2:101
@@ -6488,13 +6424,12 @@ msgid "list description"
 msgstr "lista leírása"
 
 #: web_tt2/close_list.tt2:4
-#, fuzzy
 msgid ""
 "list has been closed. Its subscribers have been deleted from\n"
 "the subscriber database. The list is no more public on the site."
 msgstr ""
 "A lista be lett zárva. A tagok törölve lettek az adatbázisból.\n"
-"A lista többé nem elérhetõ ezen a kiszolgálón.\n"
+"A lista többé nem elérhetõ ezen a kiszolgálón."
 
 # nlsref 15,14
 #: wwsympa/wwslib.pm:74
@@ -6507,7 +6442,6 @@ msgstr "A lista neve"
 
 # nlsref 15,10
 #: web_tt2/menu.tt2:17
-#, fuzzy
 msgid "list of lists"
 msgstr "listák felsorolása"
 
@@ -6523,13 +6457,12 @@ msgstr "A lista tárgya"
 
 # nlsref 15,18
 #: web_tt2/ls_templates.tt2:31
-#, fuzzy
 msgid "list templates"
-msgstr "lista bejegyzések sablonja"
+msgstr "lista sablonok"
 
 #: wwsympa/wwslib.pm:56
 msgid "listed in the list review page"
-msgstr ""
+msgstr "kilistázva a lista megtekintése oldalon"
 
 #: src/etc/scenari/access_web_archive.listmaster:1
 msgid "listmaster"
@@ -6545,9 +6478,8 @@ msgstr "helyi felhasználók, vagy tulajdonos által engedélyezettek"
 
 #: src/etc/mhonarc-ressources.tt2:178 src/etc/mhonarc-ressources.tt2:276
 #: src/etc/mhonarc-ressources.tt2:63
-#, fuzzy
 msgid "mails"
-msgstr "E-mail"
+msgstr "levelek"
 
 # nlsref 15,4
 #: wwsympa/wwslib.pm:64
@@ -6600,7 +6532,7 @@ msgstr "nincs elrejtés"
 
 #: wwsympa/wwslib.pm:43
 msgid "no mail (usefull for vacations)"
-msgstr ""
+msgstr "nincs kézbesítés (hasznos szabadság esetén)"
 
 #: web_tt2/help_editlist.tt2:152
 msgid "no protection against spammer."
@@ -6611,9 +6543,8 @@ msgid "nobody can review"
 msgstr "senki"
 
 #: wwsympa/wwslib.pm:39
-#, fuzzy
 msgid "notice mode"
-msgstr "egész szó"
+msgstr "értesítés mód"
 
 #: src/List.pm:382 src/List.pm:403
 msgid "notification"
@@ -6647,11 +6578,11 @@ msgstr "csak a lista tagjai írhatnak"
 
 #: src/etc/scenari/unsubscribe.open:1
 msgid "open"
-msgstr ""
+msgstr "megnyitás"
 
 #: src/etc/scenari/unsubscribe.open_notify:1
 msgid "open with mail confirmation, owner is notified"
-msgstr ""
+msgstr "megnyitás leveles megerõsítéssel, a tulajdonos értesítést kap"
 
 # nlsref 16,92
 #: src/List.pm:1003
@@ -6663,20 +6594,27 @@ msgid "owners approval"
 msgstr "bárki, a tulajdonosok engedélyezése után"
 
 #: web_tt2/review.tt2:23
-#, fuzzy
 msgid "page"
-msgstr "honlap"
+msgstr "oldal"
 
 #. ($PAGENUM$,$NUMOFPAGES$)
 #: src/etc/mhonarc-ressources.tt2:185 src/etc/mhonarc-ressources.tt2:283
-#, fuzzy
 msgid "page # %1/%2"
-msgstr "%1.-ik oldal %2 oldalból"
+msgstr "oldal # %1/%2"
 
 #. (page,total_page)
 #: web_tt2/reviewbouncing.tt2:115 web_tt2/reviewbouncing.tt2:49
 msgid "page %1 / %2"
 msgstr "%1.-ik oldal %2 oldalból"
+
+#: web_tt2/skinsedit.tt2:12 web_tt2/skinsedit.tt2:16
+#, fuzzy
+msgid "parameter"
+msgstr "adatforrás paraméterek"
+
+#: web_tt2/skinsedit.tt2:13 web_tt2/skinsedit.tt2:17
+msgid "parameter value"
+msgstr ""
 
 #: web_tt2/arcsearch_form.tt2:42
 msgid "part of word"
@@ -6759,7 +6697,7 @@ msgid "purge of orphan entries in user table every month"
 msgstr "a felhasználói tábla elárvult bejegyzéseinek havi törlése"
 
 #: web_tt2/add_request.tt2:12 web_tt2/editsubscriber.tt2:40
-#: web_tt2/review.tt2:231 web_tt2/review.tt2:50 web_tt2/review.tt2:75
+#: web_tt2/review.tt2:231 web_tt2/review.tt2:49 web_tt2/review.tt2:75
 #: web_tt2/reviewbouncing.tt2:107 web_tt2/reviewbouncing.tt2:31
 msgid "quiet"
 msgstr "nincs értesítés"
@@ -6899,14 +6837,12 @@ msgid "results by page"
 msgstr "találat oldalanként"
 
 #: web_tt2/edit_template.tt2:36
-#, fuzzy
 msgid "save"
-msgstr "Mentés"
+msgstr "mentés"
 
 #: web_tt2/edit_list_request.tt2:30
-#, fuzzy
 msgid "scenario source"
-msgstr "Változatok (scenario) kipróbálása"
+msgstr "változat (scenario) forrása"
 
 # nlsref 16,97
 #: src/List.pm:653
@@ -6979,6 +6915,12 @@ msgstr "Az adatforrás rövid neve"
 
 #: wwsympa/wwslib.pm:35
 msgid "standard (direct reception)"
+msgstr "hagyományos (közvetlen kézbesítés)"
+
+#: web_tt2/skinsedit.tt2:41
+msgid ""
+"static css installation succeed. Reload the current page and/or check sympa "
+"logs  to be sure that static css a really in use."
 msgstr ""
 
 #: web_tt2/set_pending_list_request.tt2:25 web_tt2/subrequest.tt2:47
@@ -7025,9 +6967,8 @@ msgstr "összefoglaló szöveg"
 
 # nlsref 15,12
 #: wwsympa/wwslib.pm:38
-#, fuzzy
 msgid "summary mode"
-msgstr "összefoglaló szöveg"
+msgstr "összefoglaló mód"
 
 #: src/etc/mhonarc-ressources.tt2:418
 msgid "tag this mail for deletion"
@@ -7035,9 +6976,8 @@ msgstr "törölni kívánt levél megjelölése"
 
 # nlsref 16,19
 #: wwsympa/wwslib.pm:40
-#, fuzzy
 msgid "text only mode"
-msgstr "Levélkézbesítési mód"
+msgstr "csak szöveg mód"
 
 #: web_tt2/help_editlist.tt2:151
 msgid "the @ char is replaced by the string \" AT \"."
@@ -7051,11 +6991,14 @@ msgstr ""
 "a cím javascripttel lesz elrejtve. Azok a felhasználók, akik engedélyezik a "
 "javascriptet egy levélcímet láthatnak ott, ahol mások semmit"
 
+#: web_tt2/skinsedit.tt2:45
+msgid "the current definition for css location (css_url parameter) is"
+msgstr ""
+
 # nlsref 16,81
 #: src/List.pm:531 src/List.pm:946
-#, fuzzy
 msgid "the datasource"
-msgstr "Felhasználók adatainak forrása"
+msgstr "Az adatforrás"
 
 #. (shortname)
 #: web_tt2/d_upload.tt2:1
@@ -7075,20 +7018,22 @@ msgid ""
 "this template is defined for all lists of robot [%robot %] unless it is "
 "redefined for some particular list"
 msgstr ""
+"ez a sablon van beállítva az [%robot%] robot minden listájának, kivéve, ha "
+"felül van definiálva egyes listákon"
 
 #: web_tt2/edit_template.tt2:15
 msgid ""
 "this template is defined for all robots unless  it is redefined for some "
 "particular robot"
 msgstr ""
+"ez a sablon van beállítva minden robotnak, kivéve, ha felül van definiálva "
+"egyes robotoknál"
 
 #: web_tt2/edit_template.tt2:10
-#, fuzzy
 msgid "this template is defined for list"
-msgstr "Nincs megadva tulajdonos a(z) %1 listához. "
+msgstr "ez a forrás a listához van definiálva"
 
 #: src/etc/mhonarc-ressources.tt2:366
-#, fuzzy
 msgid "thread"
 msgstr "Témák szerint"
 
@@ -7115,9 +7060,8 @@ msgstr "leiratkozási üzenet"
 
 # nlsref 6,81
 #: wwsympa/wwslib.pm:42
-#, fuzzy
 msgid "urlize mode"
-msgstr "Felhasználói kézikönyv"
+msgstr "urlize mód"
 
 # nlsref 16,91
 #: src/List.pm:998 web_tt2/help_editlist.tt2:130
@@ -7126,7 +7070,7 @@ msgstr "Érték"
 
 #: web_tt2/serveradmin.tt2:74
 msgid "view translations"
-msgstr ""
+msgstr "fordítások mutatása"
 
 # nlsref 15,17
 #: wwsympa/wwslib.pm:77
@@ -7150,24 +7094,17 @@ msgstr "üdvözlõ szöveg"
 
 # nlsref 16,53
 #: src/List.pm:898
-#, fuzzy
 msgid "who ran the instantiation"
-msgstr "Ki tekintheti meg a lista információit"
+msgstr "ki végezte a példányosítást"
 
 # nlsref 16,77
 #: src/List.pm:1116
-#, fuzzy
 msgid "who updated the config"
-msgstr "Beállítások utolsó módosításának ideje"
-
-#: src/etc/scenari/unsubscribe.open_notify.~1.9.~:1
-msgid "without authentication, notification is sent to owners"
-msgstr "azonosítás nélkül, a tulajdonosok értesítve lesznek"
+msgstr "ki frissítette a beállításokat"
 
 #: wwsympa/wwslib.pm:44
-#, fuzzy
 msgid "you do not receive your own posts"
-msgstr "A jelszavát itt kérheti le:"
+msgstr "nem kapja meg a saját leveleit"
 
 #: web_tt2/error.tt2:18
 msgid "you need to login"
@@ -7184,394 +7121,15 @@ msgid "your password : %1"
 msgstr "jelszava      : %1"
 
 #, fuzzy
-#~ msgid "-Rename list"
-#~ msgstr "Lista átnevezése"
-
-#~ msgid "Rename list"
-#~ msgstr "Lista átnevezése"
-
-#~ msgid "impossible, closed at the moment"
-#~ msgstr "nem lehet, a lista jelenleg nem mûködik"
-
-#~ msgid ""
-#~ "<strong>Moderate</strong> : reject and accept messages and documents for "
-#~ "distribution."
-#~ msgstr ""
-#~ "<strong>Moderálás</strong>: a levelek és dokumentumok megjelenésének "
-#~ "visszautasítása vagy engedélyezésé"
-
-#~ msgid ""
-#~ "<strong>Subscribers</strong> : subscribers management, add, del, search, "
-#~ "bounces, etc..."
-#~ msgstr ""
-#~ "<strong>Listatagok</strong>: tagok kezelése, úgymint hozzáadás, törlés, "
-#~ "keresés, visszapattanások figyelése stb."
-
-# nlsref 16,65
-#~ msgid "Remind return-path"
-#~ msgstr "Emlékeztetõ válasz cím"
-
-#~ msgid "Shared web"
-#~ msgstr "Megosztott mappák"
+#~ msgid "Do you really want to remove [% file.value.listname %] ?"
+#~ msgstr "Tényleg törölni akarja a(z) %1 könyvtárat?"
 
 #, fuzzy
-#~ msgid "Admin"
-#~ msgstr "admin"
+#~ msgid "Do you really want to remove [% file.value.robot %] ?"
+#~ msgstr "Tényleg törölni akarja a(z) %1 könyvtárat?"
 
-#, fuzzy
-#~ msgid " chronological "
-#~ msgstr "Idõrendben"
+#~ msgid "anyone without authentication"
+#~ msgstr "bárki, azonosítás nélkül"
 
-#, fuzzy
-#~ msgid "First"
-#~ msgstr "Listák"
-
-#, fuzzy
-#~ msgid "Last"
-#~ msgstr "Listák"
-
-# nlsref 15,4
-#~ msgid "Message count"
-#~ msgstr "Üzenetek száma"
-
-#, fuzzy
-#~ msgid "Next"
-#~ msgstr "Következõ oldal"
-
-#, fuzzy
-#~ msgid "Previous"
-#~ msgstr "Elõzõ oldal"
-
-#~ msgid "Bounced email rate:"
-#~ msgstr "Visszapattanó levelek aránya:"
-
-#~ msgid "Create a new folder inside the folder SHARED"
-#~ msgstr "Új könyvtár létrehozása a MEGOSZTOTT MAPPÁN belül"
-
-#~ msgid "Create a new subdirectory"
-#~ msgstr "Új könyvtár létrehozása"
-
-#~ msgid "Messages to moderate :"
-#~ msgstr "Moderálásra váró levelek száma:"
-
-#~ msgid "No message to moderate"
-#~ msgstr "Nincs moderálásra váró levél"
-
-#~ msgid "%1@%2 - %3"
-#~ msgstr "%1@%2 - %3"
-
-#~ msgid "%1@%2 : %3 messages - %4 by day "
-#~ msgstr "%1@%2 : %3 üzenet - %4 naponta"
-
-#~ msgid "404"
-#~ msgstr "404"
-
-#~ msgid "ALL"
-#~ msgstr "Mind"
-
-#~ msgid "Archive not found"
-#~ msgstr "Nem található meg az archívum"
-
-#~ msgid "Cannot find any database. WWSympa requires a RDBMS to run."
-#~ msgstr ""
-#~ "Nem sikerült adatbázist találni. A WWSympánal szüksége van egy RDBMS-re a "
-#~ "mûködéshez."
-
-#~ msgid "Cannot find certificate for this list"
-#~ msgstr "Nem sikerült megtalálni a tanusítványt a listához"
-
-#~ msgid "Cannot read file %1"
-#~ msgstr "Nem sikerült beolvasni a(z) %1 állományt"
-
-# nlsref 16,77
-#~ msgid "Cannot save config"
-#~ msgstr "Nem sikerült elmenteni a beállításokat"
-
-#~ msgid "Change"
-#~ msgstr "Megváltoztat"
-
-#~ msgid ""
-#~ "Could not change your subscription address for the list '%1%'\n"
-#~ "because you are not allowed to unsubscribe.\n"
-#~ msgstr ""
-#~ "A(z) '%1%' listán nem sikerült megváltoztatni az e-mail címét,\n"
-#~ "mert nincs jogosultsága a listáról való leiratkozáshoz.\n"
-
-#~ msgid "Could not rename deleted message"
-#~ msgstr "Nem sikerült átnevezni a törölt üzenetet"
-
-#~ msgid "Could not rename the archive"
-#~ msgstr "Nem sikerült átnevezni az archívumot"
-
-#~ msgid "Could not rename the bounces directory"
-#~ msgstr ""
-#~ "Nem sikerült átnevezni a visszapattanásokat tartalmazó bounces könyvtárt"
-
-#~ msgid "Didn't really change the status, nothing to do"
-#~ msgstr "Nem változott meg az állapot, nincs semmi teendõ"
-
-#~ msgid "Do you really want to unsubscribe ALL selected subscribers ?"
-#~ msgstr "Tényleg törölni akarja az ÖSSZES kijelölt tagot?"
-
-#~ msgid "Documents to moderate :"
-#~ msgstr "Moderálásra váró dokumentumok száma: "
-
-#~ msgid "Extended search"
-#~ msgstr "Külsõ gépeken"
-
-#~ msgid "Failed to add user"
-#~ msgstr "Hiba a felhasználó felvételekor"
-
-#~ msgid "Failed to include members"
-#~ msgstr "Nem sikerült beágyazni a tagokat"
-
-#~ msgid "Failed to install aliases"
-#~ msgstr "Hiba a listabejegyzések (aliasok) telepítése közben"
-
-#, fuzzy
-#~ msgid "Failed to open the file. Someone else already removed it"
-#~ msgstr "Nem sikerült megnyitni az állományt. Valaki más már törölte."
-
-#~ msgid "Failed to remove aliases"
-#~ msgstr "Nem sikerült törölni a listabejegyzéseket (aliasokat)"
-
-#~ msgid "Incorrect server config: wrong wwsympa UID"
-#~ msgstr "Hibás szerverbeállítás: hibás wwsympa UID"
-
-#~ msgid "Internal error in scenario create_list"
-#~ msgstr "Belsõ hiba a create_list scenarioban"
-
-#, fuzzy
-#~ msgid "Internal server error"
-#~ msgstr "Szerver hiba"
-
-#~ msgid "List admin"
-#~ msgstr "Lista adminisztráció"
-
-#~ msgid "List info"
-#~ msgstr "Információk a listáról"
-
-#~ msgid "Local"
-#~ msgstr "Helyben"
-
-#, fuzzy
-#~ msgid "Login failed, no authentication service was provided"
-#~ msgstr "Ismeretlen azonosító szolgáltatás"
-
-#~ msgid "Mailing lists"
-#~ msgstr "Levelezési listák"
-
-#~ msgid "May not create the deleted directory"
-#~ msgstr "Nem lehet létrehozni a törölt elemeket tároló deleted könyvtárat"
-
-#~ msgid "May not remove archive"
-#~ msgstr "Nem sikerült törölni az archívumot"
-
-# nlsref 16,68
-#~ msgid "May not send the message"
-#~ msgstr "Nem sikerült elküldeni a levelet"
-
-#~ msgid "Missing argument: %1"
-#~ msgstr "Hiányzó argumentum: %1"
-
-#, fuzzy
-#~ msgid "No SOAP service available on this server"
-#~ msgstr ": a szerveren mûködõ nyilvános levelezõlisták"
-
-#~ msgid "No document to moderate"
-#~ msgstr "Nincs moderálásra váró dokumentum"
-
-#~ msgid "No entry found with email %1"
-#~ msgstr "Nincs bejegyzés %1 emailcímmel"
-
-#~ msgid "No message found in archives matching Message-ID"
-#~ msgstr ""
-#~ "Nem található megfelelõ Message-ID azonosítójú üzenet az archívumban"
-
-#~ msgid "Pref"
-#~ msgstr "Beállításaim"
-
-#~ msgid "Scenari test module"
-#~ msgstr "Változatok (scenario) kipróbálása"
-
-#~ msgid "Selected month not found"
-#~ msgstr "A kiválasztott hónap nem található"
-
-#~ msgid "Send me a password"
-#~ msgstr "Küldj egy jelszót"
-
-#~ msgid "Show expert commands"
-#~ msgstr "Haladó parancsok mutatása"
-
-#~ msgid "Show user page "
-#~ msgstr "Felhasználói oldal megjelenítése"
-
-#~ msgid "Sort by author"
-#~ msgstr "Szerzõ szerint"
-
-#~ msgid "Sort by date"
-#~ msgstr "Dátum szerint"
-
-#~ msgid "Sort by name"
-#~ msgstr "Név szerint"
-
-#~ msgid "Sort by size"
-#~ msgstr "Méret szerint"
-
-#~ msgid "Subscriber %s not found"
-#~ msgstr "%s tag nem található"
-
-# nlsref 16,205
-#~ msgid "Subscribers will be updated soon"
-#~ msgstr "A tagok listája hamarosan frissítve lesz"
-
-#~ msgid "Sympa in your language:"
-#~ msgstr "Sympa az Ön nyelvén:"
-
-#~ msgid "The archive is empty"
-#~ msgstr "Az archívum üres"
-
-# nlsref 6,15
-#, fuzzy
-#~ msgid "The authentication process failed"
-#~ msgstr ""
-#~ "Hiba az azonosításkor!\n"
-#~ "\n"
-
-#, fuzzy
-#~ msgid "The document %1 is awaiting moderation1"
-#~ msgstr "A(z) %1 állomány moderálásra vár"
-
-#~ msgid "The exportation failed"
-#~ msgstr "Nem sikerült az exportálás"
-
-#~ msgid "The list already exists"
-#~ msgstr "A lista már létezik"
-
-#~ msgid "The list has been closed"
-#~ msgstr "A lista zárva van"
-
-#~ msgid "The list has been purged (closing a pending list makes it purged)"
-#~ msgstr ""
-#~ "A lista véglegesen törölve lett (egy függõben lévõ lista bezárása "
-#~ "végleges törlést jelent)"
-
-#~ msgid "The list has been restored"
-#~ msgstr "Lista helyreállítva"
-
-#~ msgid "The list is already closed"
-#~ msgstr "A lista már zárva van"
-
-#~ msgid "The list is not closed"
-#~ msgstr "A lista nincs zárva"
-
-#~ msgid "The list parameter is missing"
-#~ msgstr "Hiányzik a lista paraméter"
-
-#, fuzzy
-#~ msgid "The requested action will be performed soon"
-#~ msgstr "Hamarosan végrehajtva"
-
-# nlsref 4,26
-#~ msgid "The subscribers have been updated"
-#~ msgstr "A tagok listája frissítve lett"
-
-#~ msgid ""
-#~ "There isn't any message or document waiting for moderation on list %1"
-#~ msgstr "A(z) %1 listán nincs moderálásra váró levél vagy dokumentum"
-
-#~ msgid "This reception mode is not allowed"
-#~ msgstr "Ez a levélfogadási mód nem engedélyezett"
-
-# nlsref 3,1
-#~ msgid "Unable to change directory"
-#~ msgstr "Nem sikerült könyvtárat váltani"
-
-# nlsref 11,2
-#~ msgid "Unable to check list using smtp"
-#~ msgstr "Nem sikerült ellenõrizni a listát smtp-vel"
-
-# nlsref 3,1
-#~ msgid "Unable to create directory"
-#~ msgstr "Nem sikerült létrehozni a könyvtárat"
-
-# nlsref 6,2
-#~ msgid "Unable to load the list of topics"
-#~ msgstr "Nem sikerült betölteni a témakörök listáját"
-
-#~ msgid "Unable to load the templates required to create a list"
-#~ msgstr "Nem sikerült betölteni a listalétrehozáshoz szükséges sablonokat"
-
-# nlsref 3,1
-#~ msgid "Unable to open the scenari directory"
-#~ msgstr "Nem sikerült megnyitni a scenari könyvtárat"
-
-# nlsref 6,2
-#~ msgid "Unable to read spool"
-#~ msgstr "Nem sikerült olvasni a moderálási sort"
-
-#~ msgid "Unknown authentication service"
-#~ msgstr "Ismeretlen azonosító szolgáltatás"
-
-#~ msgid "Update failed"
-#~ msgstr "Sikertelen frissítés"
-
-#, fuzzy
-#~ msgid "You don't have required privileges to perform this action"
-#~ msgstr "Nincs jogosultsága a mûvelethez"
-
-#~ msgid "You have been authenticated"
-#~ msgstr "Sikeres azonosítás"
-
-#~ msgid "You may not remove archive"
-#~ msgstr "Nem törölhet az archívumból"
-
-#~ msgid "Your environment"
-#~ msgstr "Beállítások"
-
-#~ msgid "mails, page # %1/%2"
-#~ msgstr "levél, %1. oldal mutatva %2 oldalból"
-
-#~ msgid "security info"
-#~ msgstr "biztonsági információ"
-
-#~ msgid "view all lists"
-#~ msgstr "mutasd az összes listát"
-
-#~ msgid ""
-#~ "In order to authenticate on the web interface(%1)\n"
-#~ "use your e-mail %2 and your password %3\n"
-#~ msgstr ""
-#~ "A webes felületen (%1) keresztüli bejelentkezéshez\n"
-#~ "használja a(z) %2 e-mail címet és %3 jelszót!\n"
-
-#~ msgid "Your password : %1"
-#~ msgstr "Jelszava: %1"
-
-#~ msgid "Your password: %1."
-#~ msgstr "Az Ön jelszava: %1"
-
-#~ msgid "Cannot identify the user"
-#~ msgstr "Nem sikerült azonosítani a felhasználót"
-
-#~ msgid "Done"
-#~ msgstr "Kész"
-
-#~ msgid "Error: missing argumentlist"
-#~ msgstr "Hiányzó argumentumlista"
-
-#~ msgid "Internal error during processing the Zip file"
-#~ msgstr "Belsõ hiba a Zip állomány feldolgozása közben"
-
-#~ msgid "No HTML version of the message available"
-#~ msgstr "Nem érhetõ el az üzenet HTML változata"
-
-#~ msgid "No SOAP service was defined in sympa.conf (soap_url parameter)"
-#~ msgstr ""
-#~ "Nincs SOAP szolgáltatás megadva a sympa.conf-ban (soap_url paraméter)"
-
-#~ msgid "No reception"
-#~ msgstr "Hiányzó kézbesítési beállítás"
-
-#~ msgid "To moderate %1"
-#~ msgstr "Moderáláshoz: %1"
+#~ msgid "without authentication, notification is sent to owners"
+#~ msgstr "azonosítás nélkül, a tulajdonosok értesítve lesznek"

@@ -72,7 +72,7 @@
             \label {fig:#1}
         \end {figure}
     }
-    \newcommand {\version} {5.1b.1}
+    \newcommand {\version} {5.1}
 
     \newcommand {\samplelist} {mylist}
 
@@ -126,13 +126,13 @@
 
 \begin {document}
 
-    \title {\Huge\bf Sympa \\ \huge\bf Mailing Lists Management Software \\ version 5.1b.1\\}
+    \title {\Huge\bf Sympa \\ \huge\bf Mailing Lists Management Software \\ version 5.1\\}
     \author {
         Serge Aumont,
         Olivier Sala\"un,
         Christophe Wolfhugel,
          }
-    \date {03 August 2005}
+    \date {30 September 2005}
 \begin {htmlonly}
 For printing purpose, use the 
 \htmladdnormallink {postscript format version} {sympa.ps} of this documentation.
@@ -1770,14 +1770,6 @@ listmaster-test: 	"| /home/sympa/bin/queue listmaster@\samplerobot"
 
         \example {wwsympa\_url https://my.server/sympa}
 
-\subsection {\cfkeyword {rss\_url}}  
-
-	 \default {http://\texttt{<}host\texttt{>}/sympa/rss}
-
-	This is the root URL of \WWSympa's rss channel.
-
-        \example {wwsympa\_url https://my.server/sympa/rss}
-
 \subsection {\cfkeyword {soap\_url}}  
 
 	This is the root URL of Sympa's SOAP server. Sympa's WSDL document refer to this URL in its \texttt {service} section.
@@ -1903,8 +1895,8 @@ files. The server admin module include a CSS administration page that can help y
 
         This is the local directory for configuration files (such as
 	\file {edit\_list.conf}. It contains 5 subdirectories:
-	\dir {scenari} for local authorization scenarios; \dir {templates}
-	for the site's local templates and default list templates; \dir {wws\_templates}
+	\dir {scenari} for local authorization scenarios; \dir {mail\_tt2}
+	for the site's local mail templates and default list templates; \dir {web\_tt2}
         for the site's local html templates; \dir {global\_task\_models} for local
 	global task models; and \dir {list\_task\_models} for local list task models
 
@@ -5268,13 +5260,22 @@ FastCgiServer /usr/local/sympa-os/bin/wwsympa.fcgi -processes 3 -idle-timeout 12
 \end{verbatim}
 \end {quote}
 
-\item Create a \file {robot.conf} for the virtual robot (current web interface does
-not provide Virtual robot creation yet).
+\item Create a \file {/usr/local/sympa-os/etc/your.virtual.domain/robot.conf} configuration file for the virtual robot. Its format is a subset of \file {sympa.conf} and is described in the next section ; a sample \file {robot.conf} is provided.
+
+\item Create a \dir {/usr/local/sympa-os/expl/your.virtual.domain/} directory that will contain the virtual robot mailing lists directories. This directory should have the  \textit {sympa} user as its owner and must have read and write access for this user.
+
+\begin {quote}
+\begin{verbatim}
+# su sympa -c 'mkdir /usr/local/sympa-os/expl/your.virtual.domain'
+# chmod 750 /usr/local/sympa-os/expl/your.virtual.domain
+\end{verbatim}
+\end {quote}
+
 
 \end {itemize}
 
 \section {robot.conf}
-A robot is named by its domain, let's say \samplerobot and defined by a directory 
+A robot is named by its domain, let's say \samplerobot  and defined by a directory 
 \dir {/usr/local/sympa-os/etc/\samplerobot}. This directory must contain at least a 
 \file {robot.conf} file. This files has the same format as  \file {/usr/local/sympa-os/etc/sympa.conf}
 (have a look at robot.conf in the sample dir).
@@ -5342,8 +5343,8 @@ In order to customize the web look and feel, you may edit the CSS definition. CS
 
 In addition, if needed, you can customize each virtual robot using its set of templates and authorization scenarios. 
 
-\dir {/usr/local/sympa-os/etc/\samplerobot/wws\_templates/},
-\dir {/usr/local/sympa-os/etc/\samplerobot/templates/}, 
+\dir {/usr/local/sympa-os/etc/\samplerobot/web\_tt2/},
+\dir {/usr/local/sympa-os/etc/\samplerobot/mail\_tt2/}, 
 \dir {/usr/local/sympa-os/etc/\samplerobot/scenari/} directories are searched when
 loading templates or scenari before searching into \dir {/usr/local/sympa-os/etc} and  \dir {/usr/local/sympa-os/bin/etc}. This allows to define different privileges and a different GUI for a Virtual Robot.
 
@@ -8175,12 +8176,6 @@ Predefined authorization scenarios are :
      \item \lparam {unsubscribe} \texttt {open} 
 	\begin {htmlonly}
 	  (\htmladdnormallink {view} {http://www.sympa.org/distribution/current/src/etc/scenari/unsubscribe.open})
-	\end {htmlonly}\\
-	
-
-     \item \lparam {unsubscribe} \texttt {o} 
-	\begin {htmlonly}
-	  (\htmladdnormallink {view} {http://www.sympa.org/distribution/current/src/etc/scenari/unsubscribe.o})
 	\end {htmlonly}\\
 	
 

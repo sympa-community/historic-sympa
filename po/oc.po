@@ -69,11 +69,32 @@ msgstr "Los darrièrs messatges"
 msgid " The latest shared documents "
 msgstr "Los darrièrs documents "
 
+#: web_tt2/rss.tt2:7
+#, fuzzy
+msgid " active lists "
+msgstr "Tièras inactivas"
+
 #. (for)
 #: web_tt2/active_lists.tt2:12 web_tt2/latest_arc.tt2:12
 #: web_tt2/latest_d_read.tt2:12 web_tt2/latest_lists.tt2:12
 msgid " for %1 days "
 msgstr " dempuèi %1 jorns "
+
+# nlsref 16,70
+#: web_tt2/rss.tt2:9
+#, fuzzy
+msgid " latest documents "
+msgstr "\"RSS : los documents nòus\""
+
+#: web_tt2/rss.tt2:6
+#, fuzzy
+msgid " latest lists "
+msgstr "Darrièras tièras"
+
+#: web_tt2/rss.tt2:8
+#, fuzzy
+msgid " latest messages "
+msgstr "Los darrièrs messatges"
 
 #. (list_request_date)
 #: web_tt2/set_pending_list_request.tt2:10
@@ -171,7 +192,7 @@ msgstr ""
 
 # nlsref 17,6
 #. (l.average)
-#: web_tt2/rss.tt2:98
+#: web_tt2/rss.tt2:72
 #, fuzzy
 msgid "%1 by day "
 msgstr "1 jorn"
@@ -222,7 +243,7 @@ msgid "%1: action failed"
 msgstr "%1 : l'operacion a abocat"
 
 #. (l.name,l.host,l.subject,l.msg_count)
-#: web_tt2/rss.tt2:98
+#: web_tt2/rss.tt2:72
 #, fuzzy
 msgid "%1@%2 - %3 : %4 messages"
 msgstr "%1@%2 : %3 messatges"
@@ -257,7 +278,7 @@ msgid "%Image(%s)"
 msgstr "[ Imatge %s ]"
 
 # nlsref 6,52
-#: src/Commands.pm:2166
+#: src/Commands.pm:2168
 msgid "%s did not receive confirmation for the following addresses :\n"
 msgstr "%s a pas recebut de confirmacion per las adreiças seguentas :\n"
 
@@ -267,7 +288,7 @@ msgid "%s mailing list does not provide subscriber preferences.\n"
 msgstr "La tièra %s prepausa pas d'opcion d'abonament.\n"
 
 # nlsref 6,69
-#: src/Commands.pm:2023
+#: src/Commands.pm:2025
 msgid "%s posted your expiration message to the following addresses :\n"
 msgstr "%s mandèt vòstre messatge d'expiracion a las adreiças seguentas :\n"
 
@@ -527,7 +548,7 @@ msgstr "Dresches d'accès al document %1"
 msgid "Account"
 msgstr "Compte"
 
-#: web_tt2/d_read.tt2:347 web_tt2/review.tt2:50
+#: web_tt2/d_read.tt2:347 web_tt2/review.tt2:49
 msgid "Add"
 msgstr "Apondre"
 
@@ -585,7 +606,7 @@ msgstr ""
 "Objèt del messatge : %2\n"
 
 # nlsref 6,56
-#: src/Commands.pm:2041
+#: src/Commands.pm:2043
 msgid ""
 "An expiration process for list %s has been started. This process\n"
 "will end in %d days. You will then receive the list of subscribers \n"
@@ -617,7 +638,7 @@ msgstr "Per tota informacion a prepaus d'aquesta tièra :"
 msgid "Apply"
 msgstr "Aplicar"
 
-#: web_tt2/list_menu.tt2:41 web_tt2/list_menu.tt2:43
+#: web_tt2/list_menu.tt2:45 web_tt2/list_menu.tt2:47
 msgid "Archive"
 msgstr "Archius"
 
@@ -676,7 +697,7 @@ msgid "Auth method"
 msgstr "Biais de s'autentificar"
 
 # nlsref 8,16
-#: src/List.pm:2587
+#: src/List.pm:2588
 msgid "Authentication requested"
 msgstr "Autentificacion demandada"
 
@@ -750,7 +771,7 @@ msgid "Body"
 msgstr "Contengut del messatge"
 
 #. (d.anchor)
-#: web_tt2/rss.tt2:113
+#: web_tt2/rss.tt2:88
 msgid "Bookmark %1"
 msgstr "Marcapagina %1"
 
@@ -763,7 +784,7 @@ msgid "Bounce Settings"
 msgstr "Gestion de las errors"
 
 # nlsref 8,27
-#: src/List.pm:2309
+#: src/List.pm:2310
 #, fuzzy
 msgid ""
 "Bounce rate in list %s is %d%%.\n"
@@ -940,7 +961,7 @@ msgid "Command not understood: ignoring end of message.\n"
 msgstr "Comanda pas entenduda : s'ignora la fin del messatge.\n"
 
 # nlsref 6,13
-#: src/Commands.pm:1210 src/Commands.pm:1899 src/Commands.pm:813
+#: src/Commands.pm:1210 src/Commands.pm:1901 src/Commands.pm:813
 msgid "Command syntax error.\n"
 msgstr "Error de sintaxi.\n"
 
@@ -967,7 +988,7 @@ msgstr "Confirmar"
 msgid "Connexion expiration period"
 msgstr "Expiracion de la connexion"
 
-#: web_tt2/list_menu.tt2:33
+#: web_tt2/list_menu.tt2:34 web_tt2/list_menu.tt2:36
 #, fuzzy
 msgid "Contact owners"
 msgstr "Notificar al proprietari"
@@ -1043,6 +1064,17 @@ msgstr "Creacion de la tièra"
 msgid "Current password :"
 msgstr "Mot de santa Clara actual :"
 
+#. (cssurl)
+#: web_tt2/skinsedit.tt2:57
+msgid ""
+"Currently you didn't define css_path parameter. <strong>You should edit the "
+"robot.conf configuration file </strong> (or if not using virtual robot sympa."
+"conf) and set this parameter so you could use this page to install static "
+"CSS and <strong>make sympa faster</strong>. Don't forget to set parameter "
+"css_url, it must be the URL for the directory where css are stored (current "
+"value is <a target=\"test\" href=\"%1\">%1</a>)."
+msgstr ""
+
 # nlsref 16,16
 #: src/List.pm:446
 msgid "Custom header field"
@@ -1088,7 +1120,7 @@ msgid "Date"
 msgstr "Data"
 
 # nlsref 8,25
-#: src/List.pm:2302
+#: src/List.pm:2303
 msgid ""
 "Dear owner of list %s,\n"
 "\n"
@@ -1262,6 +1294,15 @@ msgstr "Sètz segur(a) de voler suprimir los archius seleccionats ?"
 msgid "Do you really want to delete this message ?"
 msgstr "Sètz segur(a) de voler suprimir aquel messatge ?"
 
+#. (file.value.site)
+#. (file.value.robot)
+#. (file.value.listname)
+#: web_tt2/ls_templates.tt2:109 web_tt2/ls_templates.tt2:79
+#: web_tt2/ls_templates.tt2:93
+#, fuzzy
+msgid "Do you really want to remove %1 ?"
+msgstr "Sètz segur(a) de voler suprimir %1 ?"
+
 #: web_tt2/rename_list_request.tt2:14
 msgid "Do you really want to rename this list?"
 msgstr "Sètz segur(a) de voler renommar aquela tièra ?"
@@ -1312,7 +1353,7 @@ msgstr "Volètz suprimir lo fichièr ancian %1 ?"
 msgid "Do you want to rename your file %1 ?"
 msgstr "Volètz renommar vòstre fichièr %1 ?"
 
-#: web_tt2/d_read.tt2:54 web_tt2/d_read.tt2:56 web_tt2/list_admin_menu.tt2:72
+#: web_tt2/d_read.tt2:54 web_tt2/d_read.tt2:56 web_tt2/list_admin_menu.tt2:70
 msgid "Document"
 msgstr "Document"
 
@@ -1497,7 +1538,7 @@ msgid "Extend search field"
 msgstr "Espandida de la recerca"
 
 # nlsref 8,22
-#: src/List.pm:2324
+#: src/List.pm:2325
 msgid ""
 "FYI command %s list %s from %s %s \n"
 " (no action needed)\n"
@@ -1506,7 +1547,7 @@ msgstr ""
 "(pas cap d'accion requista)\n"
 
 # nlsref 8,26
-#: src/List.pm:2322
+#: src/List.pm:2323
 msgid ""
 "FYI command %s list %s from %s %s validated by %s\n"
 " (no action needed)\n"
@@ -1515,7 +1556,7 @@ msgstr ""
 "(pas cap d'accion requista)\n"
 
 # nlsref 8,21
-#: src/List.pm:2278 src/List.pm:2320
+#: src/List.pm:2279 src/List.pm:2321
 msgid "FYI: %s list %s from %s %s"
 msgstr "Per informacion %s tièra %s de %s %s"
 
@@ -1574,7 +1615,7 @@ msgid "Family name"
 msgstr "Familhas"
 
 # nlsref 8,7
-#: src/List.pm:6243
+#: src/List.pm:6259
 msgid "File"
 msgstr "Fichièr"
 
@@ -1705,7 +1746,7 @@ msgid "Help on Sympa: %1%2"
 msgstr "Ajuda de Sympa : %1%2"
 
 # nlsref 6,67
-#: src/Commands.pm:2364
+#: src/Commands.pm:2366
 msgid ""
 "Here are the lists you are currently subscribe to :\n"
 "\n"
@@ -2082,15 +2123,15 @@ msgstr ""
 "tièra es pas cambiada.\n"
 
 # nlsref 6,54
-#: src/Commands.pm:2200 src/Commands.pm:2244
+#: src/Commands.pm:2202 src/Commands.pm:2246
 msgid "List %s is not currently running an expiration process.\n"
 msgstr "La tièra %s a pas cap d'expiracion en cors.\n"
 
 # nlsref 6,5
 #: src/Commands.pm:1097 src/Commands.pm:1221 src/Commands.pm:1294
 #: src/Commands.pm:1398 src/Commands.pm:1550 src/Commands.pm:1633
-#: src/Commands.pm:1821 src/Commands.pm:1910 src/Commands.pm:2121
-#: src/Commands.pm:2219 src/Commands.pm:2263 src/Commands.pm:263
+#: src/Commands.pm:1823 src/Commands.pm:1912 src/Commands.pm:2123
+#: src/Commands.pm:2221 src/Commands.pm:2265 src/Commands.pm:263
 #: src/Commands.pm:319 src/Commands.pm:364 src/Commands.pm:410
 #: src/Commands.pm:451 src/Commands.pm:573 src/Commands.pm:718
 #: src/Commands.pm:841 src/Commands.pm:977
@@ -2378,14 +2419,21 @@ msgid "Message"
 msgstr "Messatge incorrècte"
 
 # nlsref 6,44
-#: src/Commands.pm:1684 src/Commands.pm:1793
+#: src/Commands.pm:1684 src/Commands.pm:1794
 msgid "Message %s for list %s has been distributed.\n"
 msgstr "Lo messatge %s per la tièra %s es estat distribuit.\n"
 
 # nlsref 6,43
-#: src/Commands.pm:1857
+#: src/Commands.pm:1859
 msgid "Message %s for list %s has been rejected.\n"
 msgstr "Lo messatge %s per la tièra %s es estat rejetat.\n"
+
+# nlsref 6,44
+#: src/Commands.pm:1689 src/Commands.pm:1799
+#, fuzzy
+msgid ""
+"Message %s for list %s has been validated ; it will be distributed soon.\n"
+msgstr "Lo messatge %s per la tièra %s es estat distribuit.\n"
 
 #: web_tt2/help_editfile.tt2:35
 #, fuzzy
@@ -2475,7 +2523,7 @@ msgid "Moderated, with editor confirmation"
 msgstr "Moderada, amb confirmacion del moderator"
 
 # nlsref 4,40
-#: src/List.pm:2424
+#: src/List.pm:2425
 msgid "Moderating your message"
 msgstr "Moderacion de vòstre messatge"
 
@@ -2816,7 +2864,7 @@ msgid "Owners defined in an external datasource"
 msgstr ""
 
 # nlsref 8,1
-#: src/List.pm:2274 src/List.pm:2289 src/List.pm:2301
+#: src/List.pm:2275 src/List.pm:2290 src/List.pm:2302
 msgid "Owners of list %s"
 msgstr "Proprietaris de la tièra %s"
 
@@ -2898,7 +2946,7 @@ msgstr ""
 "Per adobar aquel problèma, mandatz corrièr electronic signat\n"
 "a l'adreiça %1@%2.\n"
 
-#: web_tt2/list_menu.tt2:49 web_tt2/list_menu.tt2:51
+#: web_tt2/list_menu.tt2:53 web_tt2/list_menu.tt2:55
 msgid "Post"
 msgstr "Postar"
 
@@ -3034,9 +3082,30 @@ msgstr ""
 msgid "RFC 2369 Header fields"
 msgstr "Camps d'encap compatibles RFC 2369"
 
-#: web_tt2/list_menu.tt2:55
+#: web_tt2/list_menu.tt2:59
 msgid "RSS"
 msgstr ""
+
+#: web_tt2/main.tt2:16 web_tt2/main.tt2:19
+#, fuzzy
+msgid "RSS Active lists"
+msgstr "\"RSS : las tièras activas\""
+
+# nlsref 16,70
+#: web_tt2/main.tt2:12
+#, fuzzy
+msgid "RSS Latest documents"
+msgstr "\"RSS : los documents nòus\""
+
+#: web_tt2/main.tt2:15 web_tt2/main.tt2:18
+#, fuzzy
+msgid "RSS Latest lists"
+msgstr "\"RSS : las tièras nòvas\""
+
+#: web_tt2/main.tt2:11
+#, fuzzy
+msgid "RSS Latest messages"
+msgstr "\"RSS : los darrièrs messatges\""
 
 #: web_tt2/rss_request.tt2:3
 msgid "RSS channel"
@@ -3184,7 +3253,7 @@ msgid "Rename this list"
 msgstr "Renommar aquela tièra"
 
 # nlsref 6,21
-#: src/Commands.pm:2035
+#: src/Commands.pm:2037
 msgid "Renewal of your subscription to list '%s'"
 msgstr "Renovelar vòstre abonament a la tièra '%s'"
 
@@ -3263,13 +3332,13 @@ msgstr "Tornar als archius %1"
 msgid "Return-path of the REMIND command"
 msgstr ""
 
-#: web_tt2/list_menu.tt2:68
-msgid "Review"
-msgstr "Los abonats"
-
 #: web_tt2/serveradmin.tt2:25
 msgid "Review lists from this family"
 msgstr "Veire las tièras d'aquela familha"
+
+#: web_tt2/list_menu.tt2:72
+msgid "Review members"
+msgstr "Los abonats"
 
 #. (review)
 #: mail_tt2/info_report.tt2:13
@@ -3450,7 +3519,7 @@ msgstr "Configuracion Mandar/Recebre"
 msgid "Serial number of the config"
 msgstr "Numèro de sèria de la configuracion"
 
-#: web_tt2/rss.tt2:28 web_tt2/rss.tt2:7
+#: web_tt2/rss.tt2:15 web_tt2/rss.tt2:5
 msgid "Server error"
 msgstr "Error del servidor"
 
@@ -3480,7 +3549,7 @@ msgid "Shared document directory size"
 msgstr "Talha del repertòri de documents partejats"
 
 # nlsref 16,70
-#: src/List.pm:1055 web_tt2/list_menu.tt2:60 web_tt2/list_menu.tt2:62
+#: src/List.pm:1055 web_tt2/list_menu.tt2:64 web_tt2/list_menu.tt2:66
 msgid "Shared documents"
 msgstr "Documents partejats"
 
@@ -3518,7 +3587,7 @@ msgid "Skins, CSS and colors"
 msgstr ""
 
 # nlsref 6,260
-#: src/List.pm:8813
+#: src/List.pm:8827
 #, fuzzy
 msgid ""
 "Someone (hopefully you) asked for your e-mail address\n"
@@ -3547,7 +3616,7 @@ msgstr ""
 "Se desiratz pas vos abonar, basta d'ignorar aqueste messatge.\n"
 
 # nlsref 6,260
-#: src/List.pm:8806
+#: src/List.pm:8820
 #, fuzzy
 msgid ""
 "Someone (hopefully you) asked for your e-mail address\n"
@@ -3577,7 +3646,7 @@ msgstr ""
 "Se desiratz pas vos desabonar, basta d'ignorar aqueste messatge.\n"
 
 # nlsref 6,39
-#: src/List.pm:8818 src/List.pm:8823
+#: src/List.pm:8832 src/List.pm:8837
 msgid ""
 "Someone (hopefully you) requested a user of list %s to be\n"
 "added or removed.\n"
@@ -3600,7 +3669,7 @@ msgstr ""
 "Se desiratz pas far aquela accion, basta d'ignorar aqueste messatge.\n"
 
 # nlsref 6,48
-#: src/Commands.pm:2059
+#: src/Commands.pm:2061
 msgid ""
 "Someone (hopefully you) requested that the subscribers to the list\n"
 "'%s' for more than %d days have to confirm their subscription.\n"
@@ -3735,7 +3804,7 @@ msgid "Subscription reminder sent to each of %d %s subscribers\n"
 msgstr "Rampèl d'abonament mandat als %d abonats de %s.\n"
 
 # nlsref 8,2
-#: src/List.pm:2288
+#: src/List.pm:2289
 msgid "Subscription request to list %s"
 msgstr "Demanda d'abonament a la tièra %s"
 
@@ -3744,7 +3813,7 @@ msgstr "Demanda d'abonament a la tièra %s"
 msgid "Subscription summary"
 msgstr "Sintèsi de vòstres abonaments"
 
-#: web_tt2/list_admin_menu.tt2:78
+#: web_tt2/list_admin_menu.tt2:75
 #, fuzzy
 msgid "Subscriptions"
 msgstr "Opcions pels abonats"
@@ -3754,7 +3823,7 @@ msgid "Summary"
 msgstr "Resumit"
 
 # nlsref 8,31
-#: src/List.pm:3239
+#: src/List.pm:3240
 msgid "Summary of list %s"
 msgstr "Resumit de la tièra %s"
 
@@ -3884,7 +3953,7 @@ msgstr "Sincronizar los membres amb las sorças de donadas"
 msgid "Syntax errors with the following parameters : %1"
 msgstr "Errors de sintaxi amb los paramètres seguents : %1"
 
-#: mail_tt2/digest.tt2:12 mail_tt2/digest_plain.tt2:10 src/List.pm:3100
+#: mail_tt2/digest.tt2:12 mail_tt2/digest_plain.tt2:10 src/List.pm:3101
 msgid "Table of contents:"
 msgstr "Ensenhador :"
 
@@ -3928,23 +3997,23 @@ msgstr ""
 "Lo servidor de tièras a gardat lo fichièr %1 qu'èra jonch a aquel messatge:"
 
 #. (count)
-#: web_tt2/rss.tt2:31
+#: web_tt2/rss.tt2:18
 msgid "The %1 latest created lists"
 msgstr "Las %1 darrièras tièras creadas"
 
 #. (count)
-#: web_tt2/rss.tt2:51
+#: web_tt2/rss.tt2:38
 msgid "The %1 latest messages"
 msgstr "Los %1 darrièrs messatges"
 
 # nlsref 16,70
 #. (count)
-#: web_tt2/rss.tt2:60
+#: web_tt2/rss.tt2:47
 msgid "The %1 latest shared documents"
 msgstr "Los %1 darrièrs documents publicats"
 
 #. (count)
-#: web_tt2/rss.tt2:41
+#: web_tt2/rss.tt2:28
 msgid "The %1 most active lists"
 msgstr "Las %1 tièras mai activas"
 
@@ -3971,7 +4040,7 @@ msgstr ""
 "\tLo nivèl 2 correspond al nivèl d'error mai bèl.\n"
 
 # nlsref 6,47
-#: src/Commands.pm:1923 src/Commands.pm:2136 src/Commands.pm:2232
+#: src/Commands.pm:1925 src/Commands.pm:2138 src/Commands.pm:2234
 msgid ""
 "The EXPIRE, EXPIREINDEX and EXPIREDEL commands are restricted to the owners "
 "of the list.\n"
@@ -3982,7 +4051,7 @@ msgstr ""
 "Sètz pas proprietari de la tièra %s.\n"
 
 # nlsref 6,46
-#: src/Commands.pm:2275
+#: src/Commands.pm:2277
 msgid "The MODINDEX command is restricted to moderators.\n"
 msgstr "La comanda MODINDEX es reservada als moderators.\n"
 
@@ -3997,7 +4066,7 @@ msgstr "La verificacion del fichièr seguent per l'antivirus a abocat :"
 
 # nlsref 6,15
 #: src/Commands.pm:1110 src/Commands.pm:1243 src/Commands.pm:1411
-#: src/Commands.pm:1995 src/Commands.pm:466 src/Commands.pm:593
+#: src/Commands.pm:1997 src/Commands.pm:466 src/Commands.pm:593
 #: src/Commands.pm:733 src/Commands.pm:854 src/Commands.pm:990
 msgid ""
 "The authentication process failed\n"
@@ -4022,6 +4091,19 @@ msgstr "L'identitat del certificat es :"
 #: src/alias_manager.pl:40
 msgid "The configuration file --CONFIG-- contains errors.\n"
 msgstr "Lo fichièr de configuracion --CONFIG-- cap d'errors.\n"
+
+#: web_tt2/skinsedit.tt2:44
+#, fuzzy
+msgid "The css_path parameter is defined, value is"
+msgstr "Lo paramètre tièra es a mancar"
+
+#: web_tt2/skinsedit.tt2:7
+msgid ""
+"The current version doesn't include a color editor, so you need to edit "
+"robot.conf (or sympa.conf) to change colors. Here are the colors as defined "
+"in the current robot in robot.conf. If you did install static CSS files, the "
+"colors in use may differ from this table."
+msgstr ""
 
 #: web_tt2/help_editlist.tt2:138
 msgid ""
@@ -4100,16 +4182,16 @@ msgstr ""
 msgid "The following virtual robots are running on this server :"
 msgstr "Çai sota la tièra dels robòts virtuals gerits a aqueste servidor :"
 
-#: web_tt2/rss.tt2:33
+#: web_tt2/rss.tt2:20
 msgid "The latest created lists"
 msgstr "Las darrièras listas creadas"
 
-#: web_tt2/rss.tt2:53
+#: web_tt2/rss.tt2:40
 msgid "The latest messages"
 msgstr "Los darrièrs messatges"
 
 # nlsref 16,70
-#: web_tt2/rss.tt2:62
+#: web_tt2/rss.tt2:49
 msgid "The latest shared documents"
 msgstr "Los darrièrs documents publicats"
 
@@ -4155,7 +4237,7 @@ msgstr ""
 msgid "The list's subject"
 msgstr "L'objècte de la tièra"
 
-#: web_tt2/rss.tt2:43
+#: web_tt2/rss.tt2:30
 msgid "The most active lists"
 msgstr "Las tièras mai activas"
 
@@ -4620,7 +4702,7 @@ msgid "Thread"
 msgstr "Seguit de conversacion"
 
 # nlsref 6,61
-#: src/Commands.pm:1940
+#: src/Commands.pm:1942
 msgid "Thus, your message is sent back to you :\n"
 msgstr "Vòstre messatge vos es doncas tornat :\n"
 
@@ -4723,7 +4805,7 @@ msgid "To distribute the attached message in list %1:"
 msgstr "Per diffusir lo messatge çai jonch a la tièra %1,"
 
 # nlsref 8,12
-#: src/List.pm:2598
+#: src/List.pm:2599
 msgid ""
 "To distribute the attached message in list %s :\n"
 "mailto:%s?subject=CONFIRM%%20%s\n"
@@ -4765,7 +4847,7 @@ msgstr ""
 "drecha.\n"
 
 # nlsref 6,57
-#: src/Commands.pm:1982
+#: src/Commands.pm:1984
 msgid ""
 "To read the list of subscribers who haven't confirm their\n"
 "subscription : EXPIREINDEX %s\n"
@@ -4797,7 +4879,7 @@ msgid "To reject it (it will be removed):"
 msgstr "Per refusar que siá difusit (serà escafat), clicatz aicí  :"
 
 # nlsref 6,53
-#: src/Commands.pm:1984 src/Commands.pm:2042
+#: src/Commands.pm:1986 src/Commands.pm:2044
 msgid "To stop the expiration process : EXPIREDEL %s\n"
 msgstr "Per arrestar lo procès d'expiracion : EXPIREDEL %s\n"
 
@@ -4862,7 +4944,7 @@ msgstr ""
 "qu'emplegatz per mandar lo messatge ( vòstre camp \"De:\"(From:)."
 
 # nlsref 8,24
-#: src/List.pm:2300
+#: src/List.pm:2301
 msgid "UNsubscription request from list %s"
 msgstr "Demanda de desabonament de la tièra %s"
 
@@ -4876,7 +4958,7 @@ msgid "Unable to access directory %s : %m"
 msgstr "Impossible d'accedir al repertòri %s : %m"
 
 # nlsref 6,41
-#: src/Commands.pm:1731 src/Commands.pm:1851
+#: src/Commands.pm:1732 src/Commands.pm:1853
 msgid ""
 "Unable to access the moderated message on list %s with key %s.\n"
 "This message may already have been sent by one of the list's moderators\n"
@@ -4885,7 +4967,7 @@ msgstr ""
 "Tan plan un moderator de la tièra aurà ja difusit aquel messatge. \n"
 
 # nlsref 6,68
-#: src/Commands.pm:1723
+#: src/Commands.pm:1724
 msgid "Unable to access to the message authenticated with key %s.\n"
 msgstr "Se pòt pas accedir al messatge autentificat amb la clau %s.\n"
 
@@ -4945,7 +5027,7 @@ msgid "Unsubscribe"
 msgstr "Se desabonar"
 
 # nlsref 6,71
-#: soap/sympasoap.pm:553 src/Commands.pm:946 wwsympa/wwsympa.fcgi:3526
+#: soap/sympasoap.pm:553 src/Commands.pm:946 wwsympa/wwsympa.fcgi:3531
 msgid "Unsubscribe from list %s"
 msgstr "Se desabonar de la tièra %s"
 
@@ -5092,8 +5174,12 @@ msgstr "Visibilitat de la tièra"
 msgid "Visibility of the subscriber with the REVIEW command."
 msgstr "Visibilitat de l'abonat dins la tièra dels abonats (comaanda REVIEW)."
 
+#: web_tt2/skinsedit.tt2:61
+msgid "W3C CSS validation tools"
+msgstr ""
+
 # nlsref 8,23
-#: src/List.pm:2279
+#: src/List.pm:2280
 #, fuzzy
 msgid ""
 "WARNING : %s %s failed to unsubscribe from %s because his address was not "
@@ -5104,7 +5190,7 @@ msgstr ""
 "(Vos caldriá benlèu ajudar aquela persona)\n"
 
 # nlsref 8,28
-#: src/List.pm:2308
+#: src/List.pm:2309
 msgid "WARNING: bounce rate too high in list %s"
 msgstr "ATENCION: taus d'errors tròp naut a la tièra %s"
 
@@ -5158,8 +5244,8 @@ msgstr ""
 # nlsref 8,6
 #: soap/sympasoap.pm:701 soap/sympasoap.pm:702 src/Commands.pm:1062
 #: src/Commands.pm:1063 src/Commands.pm:685 src/Commands.pm:686
-#: wwsympa/wwsympa.fcgi:3297 wwsympa/wwsympa.fcgi:3298
-#: wwsympa/wwsympa.fcgi:4240 wwsympa/wwsympa.fcgi:4241
+#: wwsympa/wwsympa.fcgi:3302 wwsympa/wwsympa.fcgi:3303
+#: wwsympa/wwsympa.fcgi:4245 wwsympa/wwsympa.fcgi:4246
 msgid "Welcome on list %s"
 msgstr "Benvenguda a la tièra %s"
 
@@ -5341,7 +5427,7 @@ msgstr ""
 "messatge."
 
 # nlsref 6,58
-#: src/Commands.pm:2183
+#: src/Commands.pm:2185
 msgid ""
 "You can remove these subscriber from the list by using the following "
 "commands :\n"
@@ -5361,7 +5447,7 @@ msgstr ""
 "santa Clara inicial "
 
 # nlsref 6,38
-#: wwsympa/wwsympa.fcgi:3527 wwsympa/wwsympa.fcgi:4346
+#: wwsympa/wwsympa.fcgi:3532 wwsympa/wwsympa.fcgi:4351
 msgid "You have been removed from list %s.\n"
 msgstr "Sètz estat(/ada) desabonat(/ada) de la tièra %s.\n"
 
@@ -5399,7 +5485,7 @@ msgid "You have logged in with email address %1"
 msgstr "Sètz identificat(/ada) amb l'adreiça %1"
 
 # nlsref 6,55
-#: src/Commands.pm:2239
+#: src/Commands.pm:2241
 msgid "You just stopped the expiration process for list %s\n"
 msgstr "Venètz d'arrestar lo procès d'expiracion en cors a la tièra %s\n"
 
@@ -5448,7 +5534,7 @@ msgstr ""
 "Tornatz ensajar de vos abonar en utilizar vòstra adreiça canonica.\n"
 
 # nlsref 6,79
-#: src/List.pm:8828 src/List.pm:8835
+#: src/List.pm:8842 src/List.pm:8849
 msgid ""
 "You requested a subscription reminder to be sent\n"
 "to each subscriber of list %s\n"
@@ -5664,12 +5750,12 @@ msgstr ""
 "es estat refusat per %3, moderator de la tièra.\n"
 
 # nlsref 4,38
-#: src/List.pm:2425
+#: src/List.pm:2426
 msgid "Your message for list %s has been forwarded to editor(s)\n"
 msgstr "Vòstre messatge es estat transmés al(s) moderator(s) de la tièra %s\n"
 
 # nlsref 4,15
-#: src/Commands.pm:1776 src/sympa.pl:1356
+#: src/Commands.pm:1777 src/sympa.pl:1356
 msgid ""
 "Your message for list %s has been rejected.\n"
 "The message is thus sent back to you.\n"
@@ -5691,7 +5777,7 @@ msgid "Your message signature was succesfuly verified using S/MIME"
 msgstr "La vòstra signatura es estada verificada amb succès per S/MIME"
 
 # nlsref 4,11
-#: src/Commands.pm:1772 src/sympa.pl:1276 src/sympa.pl:1352
+#: src/Commands.pm:1773 src/sympa.pl:1276 src/sympa.pl:1352
 msgid "Your message to %s has been rejected"
 msgstr "Vòstre messatge a %s es estat refusat."
 
@@ -5773,7 +5859,7 @@ msgid "Your subscription email is %1"
 msgstr "Sètz abonat(/ada) amb l'adreiça %1"
 
 # nlsref 6,18
-#: src/Commands.pm:1484 wwsympa/wwsympa.fcgi:4345
+#: src/Commands.pm:1484 wwsympa/wwsympa.fcgi:4350
 msgid "Your subscription to list %s has been removed."
 msgstr "Sètz desabonat(/ada) de la tièra %s"
 
@@ -5802,23 +5888,6 @@ msgstr "[ Imatge %s ]"
 #: src/PlainDigest.pm:327
 msgid "[ Text converted from HTML ]\n"
 msgstr "[ Tèxt convertit a partir del format HTML ]\n"
-
-#: web_tt2/main.tt2:16 web_tt2/main.tt2:19
-msgid "\"RSS Active lists\""
-msgstr "\"RSS : las tièras activas\""
-
-# nlsref 16,70
-#: web_tt2/main.tt2:12
-msgid "\"RSS Latest documents\""
-msgstr "\"RSS : los documents nòus\""
-
-#: web_tt2/main.tt2:15 web_tt2/main.tt2:18
-msgid "\"RSS Latest lists\""
-msgstr "\"RSS : las tièras nòvas\""
-
-#: web_tt2/main.tt2:11
-msgid "\"RSS Latest messages\""
-msgstr "\"RSS : los darrièrs messatges\""
 
 #: src/PlainDigest.pm:296 src/PlainDigest.pm:317
 msgid ""
@@ -5855,7 +5924,7 @@ msgstr ""
 "-----Rapòrt de distribucion-----\n"
 
 # nlsref 6,49
-#: src/Commands.pm:1981 src/Commands.pm:2164
+#: src/Commands.pm:1983 src/Commands.pm:2166
 msgid ""
 "\n"
 "An EXPIRE command is currently running for list %s.\n"
@@ -5875,7 +5944,7 @@ msgstr ""
 "s'acabarà dins %d jorn(s) (%s).\n"
 
 # nlsref 6,56
-#: src/Commands.pm:2022
+#: src/Commands.pm:2024
 msgid ""
 "\n"
 "An expiration process for list %s has been started. This process\n"
@@ -5891,7 +5960,7 @@ msgstr ""
 "Poiretz suprimir vos-meteis aquelas adreiças en emplegar la comanda DEL.\n"
 
 # nlsref 8,3
-#: src/List.pm:2290
+#: src/List.pm:2291
 msgid ""
 "\n"
 "Dear owner of list %s,\n"
@@ -5925,7 +5994,7 @@ msgstr ""
 "Servici rendut per Sympa %s : http://www.sympa.org/\n"
 
 # nlsref 6,60
-#: src/Commands.pm:1938
+#: src/Commands.pm:1940
 msgid ""
 "\n"
 "The EXPIRE command couldn't be run. It must followed by an explication\n"
@@ -5962,7 +6031,7 @@ msgstr ""
 "[ **  La part HTML del messatge se poguèt pas tractar **]\n"
 
 # nlsref 6,73
-#: src/Commands.pm:2382
+#: src/Commands.pm:2384
 msgid ""
 "\n"
 "\n"
@@ -5975,7 +6044,7 @@ msgstr ""
 "\n"
 
 # nlsref 6,72
-#: src/Commands.pm:2374
+#: src/Commands.pm:2376
 msgid ""
 "\n"
 "\n"
@@ -6001,7 +6070,7 @@ msgstr "Dreches d'accès"
 msgid "action for this population"
 msgstr "accion per aquela populacion"
 
-#: web_tt2/rss_request.tt2:46
+#: web_tt2/rss_request.tt2:48
 #, fuzzy
 msgid "active lists"
 msgstr "Tièras inactivas"
@@ -6077,10 +6146,6 @@ msgstr "quin membre del domèni local que siá"
 msgid "anyone with previous md5 authentication"
 msgstr "qual se vòl mas amb una autenficacion md5 prealabla"
 
-#: src/etc/scenari/unsubscribe.open.~1.8.~:1
-msgid "anyone without authentication"
-msgstr "qual se vòl sens cap d'autentificacion"
-
 #: src/etc/scenari/subscribe.open_quiet:1
 msgid "anyone, no welcome message"
 msgstr "qual se vòl, pas cap de messatge de benvenguda"
@@ -6140,6 +6205,10 @@ msgstr "Cronologic"
 #: src/etc/scenari/send.closed:1
 msgid "closed"
 msgstr "barrat"
+
+#: web_tt2/skinsedit.tt2:14 web_tt2/skinsedit.tt2:18
+msgid "color effet"
+msgstr ""
 
 #: src/etc/scenari/visibility.secret:1
 msgid "conceal even for subscribers"
@@ -6378,6 +6447,18 @@ msgstr "seleccion (1r nivèl)"
 msgid "first-level suffix"
 msgstr "sufixe (1r nivèl)"
 
+#. (for)
+#: web_tt2/rss.tt2:23 web_tt2/rss.tt2:33
+#, fuzzy
+msgid "for %1 days"
+msgstr " dempuèi %1 jorns "
+
+#. (for)
+#: web_tt2/rss.tt2:43 web_tt2/rss.tt2:52
+#, fuzzy
+msgid "for %1 days "
+msgstr " dempuèi %1 jorns "
+
 #: src/etc/scenari/info.open:1
 msgid "for anyone"
 msgstr "per qual se vòl"
@@ -6466,17 +6547,17 @@ msgstr "sonque per l'administrator (listmaster)"
 msgid "language"
 msgstr "Lenga"
 
-#: web_tt2/rss_request.tt2:36
+#: web_tt2/rss_request.tt2:38
 msgid "latest arc"
 msgstr ""
 
 # nlsref 16,70
-#: web_tt2/rss_request.tt2:41
+#: web_tt2/rss_request.tt2:43
 #, fuzzy
 msgid "latest document"
 msgstr "\"RSS : los documents nòus\""
 
-#: web_tt2/rss_request.tt2:51
+#: web_tt2/rss_request.tt2:53
 #, fuzzy
 msgid "latest lists"
 msgstr "Darrièras tièras"
@@ -6704,6 +6785,15 @@ msgstr "pagina %1 de %2"
 msgid "page %1 / %2"
 msgstr "pagina %1 de %2"
 
+#: web_tt2/skinsedit.tt2:12 web_tt2/skinsedit.tt2:16
+#, fuzzy
+msgid "parameter"
+msgstr "Paramètres incorrèctes"
+
+#: web_tt2/skinsedit.tt2:13 web_tt2/skinsedit.tt2:17
+msgid "parameter value"
+msgstr ""
+
 #: web_tt2/arcsearch_form.tt2:42
 msgid "part of word"
 msgstr "partida de mot"
@@ -6786,7 +6876,7 @@ msgid "purge of orphan entries in user table every month"
 msgstr "cada mes, s'escafa a la taula dels usancièrs las intradas orfanèlas "
 
 #: web_tt2/add_request.tt2:12 web_tt2/editsubscriber.tt2:40
-#: web_tt2/review.tt2:231 web_tt2/review.tt2:50 web_tt2/review.tt2:75
+#: web_tt2/review.tt2:231 web_tt2/review.tt2:49 web_tt2/review.tt2:75
 #: web_tt2/reviewbouncing.tt2:107 web_tt2/reviewbouncing.tt2:31
 msgid "quiet"
 msgstr "sens avisar"
@@ -7012,6 +7102,12 @@ msgstr "nom brac per aquela sorça"
 msgid "standard (direct reception)"
 msgstr ""
 
+#: web_tt2/skinsedit.tt2:41
+msgid ""
+"static css installation succeed. Reload the current page and/or check sympa "
+"logs  to be sure that static css a really in use."
+msgstr ""
+
 #: web_tt2/set_pending_list_request.tt2:25 web_tt2/subrequest.tt2:47
 msgid "submit"
 msgstr "validar"
@@ -7082,6 +7178,10 @@ msgstr ""
 "l'adreiça de messatjariá s'escond en emplegar javascript. L'usancièr que ten "
 "javascript d'activat a son navigador vei las adreiças de messatjariá "
 "s'afichar normalament."
+
+#: web_tt2/skinsedit.tt2:45
+msgid "the current definition for css location (css_url parameter) is"
+msgstr ""
 
 # nlsref 16,81
 #: src/List.pm:531 src/List.pm:946
@@ -7190,11 +7290,6 @@ msgstr "Qual pòt cosultar las informacions de la tièra"
 msgid "who updated the config"
 msgstr "Darrièra actualizacion de la configuracion"
 
-#: src/etc/scenari/unsubscribe.open_notify.~1.9.~:1
-msgid "without authentication, notification is sent to owners"
-msgstr ""
-"sens autentificacion (un messatge de notificacion se manda als proprietaris)"
-
 #: wwsympa/wwslib.pm:44
 #, fuzzy
 msgid "you do not receive your own posts"
@@ -7213,6 +7308,22 @@ msgstr "vòstra adreiça electronica : %1"
 #: mail_tt2/sendpasswd.tt2:30
 msgid "your password : %1"
 msgstr "vòstre mot de santa Clara         : %1"
+
+#, fuzzy
+#~ msgid "Do you really want to remove [% file.value.listname %] ?"
+#~ msgstr "Sètz segur(a) de voler suprimir %1 ?"
+
+#, fuzzy
+#~ msgid "Do you really want to remove [% file.value.robot %] ?"
+#~ msgstr "Sètz segur(a) de voler suprimir %1 ?"
+
+#~ msgid "anyone without authentication"
+#~ msgstr "qual se vòl sens cap d'autentificacion"
+
+#~ msgid "without authentication, notification is sent to owners"
+#~ msgstr ""
+#~ "sens autentificacion (un messatge de notificacion se manda als "
+#~ "proprietaris)"
 
 #, fuzzy
 #~ msgid "-Rename list"
@@ -7459,9 +7570,6 @@ msgstr "vòstre mot de santa Clara         : %1"
 
 #~ msgid "The list is not closed"
 #~ msgstr "La tièra es pas barrada"
-
-#~ msgid "The list parameter is missing"
-#~ msgstr "Lo paramètre tièra es a mancar"
 
 #~ msgid "The message could not be found on the server"
 #~ msgstr "Aquel messatge se tròba pas pel servidor"

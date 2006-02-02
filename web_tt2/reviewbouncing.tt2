@@ -13,7 +13,7 @@
 </td>
 <td>
   <form method="post" action="[% path_cgi %]">
-    <input class="MainMenuLinks" type="submit" value="[%|loc%]Remind all subscribers[%END%]" name="action_remind" onclick="return request_confirm('[%|loc(total)%]Do you really want to send a subscription remind message to the %1 subscribers[%END%]')" />
+    <input class="MainMenuLinks" type="submit" value="[%|loc%]Remind all subscribers[%END%]" name="action_remind" onclick="return request_confirm('[% FILTER escape_quote %][%|loc(total)%]Do you really want to send a subscription remind message to the %1 subscribers[%END%][%END%]')" />
     <input type="hidden" name="action" value="remind" />
     <input type="hidden" name="list" value="[% list %]" />
   </form>	
@@ -57,10 +57,10 @@
     </table>
 
     <table border="1">
-      <tr style="background-color: [% error_color %]; white-space: nowrap;">
-	<th><span style="color: [% bg_color %];">X</span></th>
-        <th><span style="color: [% bg_color %];">[%|loc%]Email[%END%]</span></th>
-	<th><span style="color: [% bg_color %];">[%|loc%]bounce score[%END%]</span></th>
+      <tr>
+	<th>X</th>
+        <th>[%|loc%]Email[%END%]</th>
+	<th>[%|loc%]bounce score[%END%]</th>
       </tr>
       
       [% FOREACH u = members %]

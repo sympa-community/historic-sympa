@@ -1774,14 +1774,6 @@ listmaster-test: 	"| /home/sympa/bin/queue listmaster@\samplerobot"
 
         \example {wwsympa\_url https://my.server/sympa}
 
-\subsection {\cfkeyword {rss\_url}}  
-
-	 \default {http://\texttt{<}host\texttt{>}/sympa/rss}
-
-	This is the root URL of \WWSympa's rss channel.
-
-        \example {wwsympa\_url https://my.server/sympa/rss}
-
 \subsection {\cfkeyword {soap\_url}}  
 
 	This is the root URL of Sympa's SOAP server. Sympa's WSDL document refer to this URL in its \texttt {service} section.
@@ -1907,8 +1899,8 @@ files. The server admin module include a CSS administration page that can help y
 
         This is the local directory for configuration files (such as
 	\file {edit\_list.conf}. It contains 5 subdirectories:
-	\dir {scenari} for local authorization scenarios; \dir {templates}
-	for the site's local templates and default list templates; \dir {wws\_templates}
+	\dir {scenari} for local authorization scenarios; \dir {mail\_tt2}
+	for the site's local mail templates and default list templates; \dir {web\_tt2}
         for the site's local html templates; \dir {global\_task\_models} for local
 	global task models; and \dir {list\_task\_models} for local list task models
 
@@ -2050,11 +2042,11 @@ files. The server admin module include a CSS administration page that can help y
 
         Arguments passed to SMTP message transfer agent
 
-\subsection {\cfkeyword {sendmail\_alias}} 
+\subsection {\cfkeyword {sendmail\_aliases}} 
 
-	\default {defined by makefile, sendmail\_aliases}
+	\default {defined by makefile, sendmail\_aliaseses}
 
-        Path of the alias file that contain all lists related aliases. It is recommended to create a spécific alias file so Sympa never overright the standard alias file but only a dedicated file.You must refer to this aliases file in your \file {sendmail.mc} :
+        Path of the alias file that contain all lists related aliases. It is recommended to create a specific alias file so Sympa never overright the standard alias file but only a dedicated file.You must refer to this aliases file in your \file {sendmail.mc} :
 
 \subsection {\cfkeyword {rfc2369\_header\_fields}} 
 
@@ -4626,13 +4618,22 @@ FastCgiServer [CGIDIR]/wwsympa.fcgi -processes 3 -idle-timeout 120
 \end{verbatim}
 \end {quote}
 
-\item Create a \file {robot.conf} for the virtual robot (current web interface does
-not provide Virtual robot creation yet).
+\item Create a \file {[ETCDIR]/your.virtual.domain/robot.conf} configuration file for the virtual robot. Its format is a subset of \file {sympa.conf} and is described in the next section ; a sample \file {robot.conf} is provided.
+
+\item Create a \dir {[EXPL_DIR]/your.virtual.domain/} directory that will contain the virtual robot mailing lists directories. This directory should have the  \textit {sympa} user as its owner and must have read and write access for this user.
+
+\begin {quote}
+\begin{verbatim}
+# su sympa -c 'mkdir [EXPL_DIR]/your.virtual.domain'
+# chmod 750 [EXPL_DIR]/your.virtual.domain
+\end{verbatim}
+\end {quote}
+
 
 \end {itemize}
 
 \section {robot.conf}
-A robot is named by its domain, let's say \samplerobot and defined by a directory 
+A robot is named by its domain, let's say \samplerobot  and defined by a directory 
 \dir {[ETCDIR]/\samplerobot}. This directory must contain at least a 
 \file {robot.conf} file. This files has the same format as  \file {[CONFIG]}
 (have a look at robot.conf in the sample dir).
@@ -4700,8 +4701,8 @@ In order to customize the web look and feel, you may edit the CSS definition. CS
 
 In addition, if needed, you can customize each virtual robot using its set of templates and authorization scenarios. 
 
-\dir {[ETCDIR]/\samplerobot/wws\_templates/},
-\dir {[ETCDIR]/\samplerobot/templates/}, 
+\dir {[ETCDIR]/\samplerobot/web\_tt2/},
+\dir {[ETCDIR]/\samplerobot/mail\_tt2/}, 
 \dir {[ETCDIR]/\samplerobot/scenari/} directories are searched when
 loading templates or scenari before searching into \dir {[ETCDIR]} and  \dir {[ETCBINDIR]}. This allows to define different privileges and a different GUI for a Virtual Robot.
 

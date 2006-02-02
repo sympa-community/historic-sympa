@@ -179,7 +179,7 @@ warning:
 	echo "## because of the 'make test'), try downloading them from the"; \
 	echo "## CPAN website (http://search.cpan.org) and install them manually."; \
 	echo "#############################################################"; \
-	read rep;
+	if [ "$(DESTDIR)" = "" ]; then read rep; fi
 
 checkperl:
 	@if [ $(PERL_VERSION) = '5.006' ]; then \
@@ -191,21 +191,21 @@ checkperl:
 	echo "## If your Perl version is 5.6.0 AND if your system is Solaris :"; \
 	echo "## See also http://bugs.perl.org/perlbug.cgi?req=bidmids&bidmids=20000522.003"; \
 	echo "#############################################################################"; \
-	read rep; \
+	if [ "$(DESTDIR)" = "" ]; then read rep; fi \
 	fi
 	@if [ ! -f $(SUIDPERL) ]; then \
 		echo "##################################"; \
 		echo "## You don't have suidperl installed."; \
 		echo "## Suidperl is required to run WWSympa with SetUID."; \
 		echo "#####################################################"; \
-		read rep; \
+		if [ "$(DESTDIR)" = "" ]; then read rep; fi \
 	fi
 	@if [ ! -f $(MSGFMT) ]; then \
 		echo "##################################"; \
 		echo "## You don't have msgfmt installed. It is required to build message catalogues"; \
 		echo "## msgfmt is provided with a 'gettest' package on most systems..."; \
 		echo "#####################################################"; \
-		read rep; \
+		if [ "$(DESTDIR)" = "" ]; then read rep; fi \
 	fi
 
 
@@ -253,11 +253,15 @@ clean:
 install: importantchanges installsrc installwws installwebtt2 installmailtt2 installlocale installman installscript installsample installdir installconfig installdoc installsoap
 
 importantchanges:
-	@( 	PERL=$(PERL); export PERL; \
+	( 	PERL=$(PERL); export PERL; \
 		UMASK=0600; export UMASK; \
+		DESTDIR=$(DESTDIR); export DESTDIR; \
 		BINDIR=$(SBINDIR); export BINDIR; \
 		SBINDIR=$(SBINDIR); export SBINDIR; \
 		LIBDIR=$(LIBDIR); export LIBDIR; \
+		ETCDIR=$(ETCDIR); export ETCDIR;\
+		USER=$(USER); export USER;\
+		GROUP=$(GROUP); export GROUP;\
 		SYMPA_VERSION=$(SYMPA_VERSION); export SYMPA_VERSION; \
 		$(PERL) ./important_changes.pl \
 	) ;
@@ -267,7 +271,7 @@ locale:
 	$(MAKE) SH='${SH}' CC='${CC}' CFLAGS='${CFLAGS}' PERL='${PERL}' \
 	DIR='${DIR}' LOCALEDIR='${LOCALEDIR}' ETCBINDIR='${ETCBINDIR}' \
 	DESTDIR='${DESTDIR}' CONFIG='${CONFIG}' WWSCONFIG='${WWSCONFIG}' \
-	LOCALEDIR='${prefix}/locale' SCRIPTDIR='${SCRIPTDIR}' \
+	SCRIPTDIR='${SCRIPTDIR}' \
 	USER='${USER}' GROUP='${GROUP}') || exit 1;
 
 installlocale:
@@ -275,7 +279,6 @@ installlocale:
 	$(MAKE) SH='${SH}' CC='${CC}' CFLAGS='${CFLAGS}' PERL='${PERL}' \
 	DIR='${DIR}' LOCALEDIR='${LOCALEDIR}' ETCBINDIR='${ETCBINDIR}' \
 	DESTDIR='${DESTDIR}' CONFIG='${CONFIG}' WWSCONFIG='${WWSCONFIG}' \
-	LOCALEDIR='${prefix}/locale' \
 	USER='${USER}' GROUP='${GROUP}' install) || exit 1;
 
 updatelocale:
@@ -283,7 +286,7 @@ updatelocale:
 	$(MAKE) SH='${SH}' CC='${CC}' CFLAGS='${CFLAGS}' PERL='${PERL}' \
 	DIR='${DIR}' LOCALEDIR='${LOCALEDIR}' ETCBINDIR='${ETCBINDIR}' \
 	DESTDIR='${DESTDIR}' CONFIG='${CONFIG}' WWSCONFIG='${WWSCONFIG}' \
-	LOCALEDIR='${prefix}/locale' SCRIPTDIR='${SCRIPTDIR}' \
+	SCRIPTDIR='${SCRIPTDIR}' \
 	USER='${USER}' GROUP='${GROUP}' update-po) || exit 1;
 
 installsrc:
