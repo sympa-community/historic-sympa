@@ -1,3 +1,51 @@
+2006-02-02 17:03  sympa-authors
+
+	* src/Language.pm: [O.Lacroix] Fix: dashless var still had the dash
+
+2006-01-20 16:32  sympa-authors
+
+	* src/List.pm: [BugID 608] Fix:  If multiple edit_list.conf files
+	  exist, the first one loaded is always used for that domain
+
+2006-01-20 13:43  sympa-authors
+
+	* src/Language.pm: Fix: prevents case problem with locale names
+
+2006-01-19 15:30  sympa-authors
+
+	* wwsympa/wwslib.pm: [reported by H.Brunet] Fix: apache-ssl does
+	  not set SSL_PROTOCOL env variable but SSL_PROTOCOL_VERSION
+	  instead
+
+2006-01-13 09:23  sympa-authors
+
+	* wwsympa/wwsympa.fcgi: [BugID 596] Fix: 'Your Lists' shows no
+	  lists on login
+
+2006-01-09 09:17  sympa-authors
+
+	* wwsympa/Auth.pm: [F.Jammes] Fix: wrong variable used in do_log()
+
+2005-12-30 09:42  sympa-authors
+
+	* src/List.pm: [BugID 589] Fix: remove duplicate
+	  get_editors_email() subroutine
+
+2005-12-30 09:27  sympa-authors
+
+	* soap/sympasoap.pm: [BugID 591] Fix typo iun which()
+
+2005-12-29 14:19  sympa-authors
+
+	* ChangeLog, wwsympa/wwsympa.fcgi: Skip CAS authentication in RSS
+	  context
+
+2005-12-28 17:30  sympa-authors
+
+	* wwsympa/wwsympa.fcgi: [reported by H.Brunet] Fix: moved the RSS
+	  code before the redirect_to code to prevent CAS redirection in
+	  RSS context
+
 2005-12-28 13:44  sympa-authors
 
 	* src/List.pm: [reported by M.Schoeb] Fix:
