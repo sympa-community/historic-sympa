@@ -1,3 +1,34 @@
+2006-02-24 15:36  sympa-authors
+
+	* soap/sympa_soap_server.fcgi, src/task_manager.pl,
+	  wwsympa/archived.pl, wwsympa/bounced.pl, wwsympa/wwsympa.fcgi:
+	  [requested by JC Delepine] Call List::probe_db() only from
+	  sympa.pl to prevent conflicts in the DB upgrade
+
+2006-02-24 14:04  sympa-authors
+
+	* Makefile.am, Makefile.in: [ID 528] Added a "Please hit enter"
+	  notice
+
+2006-02-09 16:19  sympa-authors
+
+	* doc/man8/Makefile: [proposed by JC Delepine] chown not required
+
+2006-02-09 16:14  sympa-authors
+
+	* src/etc/script/tpl2tt2.pl: Change: old customized web templates
+	  are translated but should not be used because they will not fit
+	  the new CSS/XHTML web structure
+
+2006-02-09 16:01  sympa-authors
+
+	* src/Language.pm: [BugID 597] Fix: use LOCALEDIR var instead of
+	  DIR/locale
+
+2006-02-08 17:24  sympa-authors
+
+	* ChangeLog: update
+
 2006-02-02 17:03  sympa-authors
 
 	* src/Language.pm: [O.Lacroix] Fix: dashless var still had the dash
