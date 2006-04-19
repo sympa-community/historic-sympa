@@ -10976,7 +10976,6 @@ sub probe_db {
 		## drop previous primary key
 		unless ($dbh->do("ALTER TABLE $t DROP PRIMARY KEY")) {
 		    &do_log('err', 'Could not drop PRIMARY KEY, table\'%s\'.', $t);
-		    return undef;
 		}
 		push @report, sprintf('Table %s, PRIMARY KEY dropped', $t);
 		&do_log('info', 'Table %s, PRIMARY KEY dropped', $t);
