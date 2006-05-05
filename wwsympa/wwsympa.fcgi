@@ -944,6 +944,14 @@ if ($wwsconf->{'use_fast_cgi'}) {
 	     ## Add lists information to 'which_info'
 	     foreach my $l (@{$param->{'get_which'}}) {
 		 my $list = new List ($l);
+
+		 next unless (&List::request_action ('visibility', $param->{'auth_method'}, $robot,
+						     {'listname' =>  $l,
+						      'sender' =>$param->{'user'}{'email'} ,
+						      'remote_host' => $param->{'remote_host'},
+						      'remote_addr' => $param->{'remote_addr'}}) =~ /do_it/);
+
+
 		 $param->{'which_info'}{$l}{'subject'} = $list->{'admin'}{'subject'};
 		 $param->{'which_info'}{$l}{'host'} = $list->{'admin'}{'host'};
 		 $param->{'which_info'}{$l}{'info'} = 1;
