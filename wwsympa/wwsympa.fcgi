@@ -985,6 +985,13 @@ if ($wwsconf->{'use_fast_cgi'}) {
 
 	     ## Add lists information to 'which_info'
 	     foreach my $list (@{$param->{'get_which'}}) {
+		 ## Evaluate AuthZ scenario first
+		 my $result = $list->check_list_authz('visibility', $param->{'auth_method'},
+						      {'sender' =>$param->{'user'}{'email'} ,
+						       'remote_host' => $param->{'remote_host'},
+						       'remote_addr' => $param->{'remote_addr'}});
+		 next unless (ref($result) eq 'HASH' && $result->{'action'} eq 'do_it');
+
 		 my $l = $list->{'name'};
 
 		 $param->{'which_info'}{$l}{'subject'} = $list->{'admin'}{'subject'};
