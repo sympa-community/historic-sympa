@@ -3,6 +3,46 @@
 
 (See Changelog file for the full changes log)
 
+5.2.1		22 May 2006
+
+   New features :
+
+	src/List.pm, src/task_manager.pl wwsympa/archived.pl, wwsympa/bounced.pl, wwsympa/wwsympa.fcgi:
+	[BugID 709] prevent any process to run before data structure have been updated.  
+	This prevents "duplicate entries error" in DB tables
+
+	mail_tt2/listmaster_notification.tt2, src/List.pm:  notify listmaster if upgrade procedure failed
+
+   Changes :
+
+	src/List.pm: Sympa now check if the DBD is available ; otherwise processes would die
+
+	src/List.pm: Change: hide closed lists, even to listmasters
+
+	wwsympa/bounce-lib.pl: analyze the 'Original-recipient' entries of message/delivery-status MIME parts
+
+	po/: it.po: [G.Donnini, Univ Milano] Updated Italian translations for Sympa 5.2
+
+   Bug fixes :
+
+	src/List.pm: ignore case where PRIMARY KEY cannot be dropped
+
+	wwsympa/wwsympa.fcgi: [reported by J.Beretta, France Telecom] a renamed list would keep its previous domain name
+
+	web_tt2/review.tt2: Don't show bouncing status to other members
+
+	important_changes.pl: [reported by C.Peck, Univ William and Mary] on Solaris, chown does not like the '.' separator
+
+	src/etc/mhonarc-ressources.tt2: [proposed by E.Hood] now using $FROMADDRNAME$@$FROMADDRDOMAIN$ instead of $FROMADDR$. 
+	See https://savannah.nongnu.org/bugs/index.php?func=detailitem&item_id=11759
+
+	src/List.pm: [BugID 750] include_sql_query requests would fail with Oracle.  
+	Apparently the ->rows() method does not return the number of rows.  We now use fetchrow_arrayref() to get rows,
+	thus allowing to differenciate an empty field an the last row.
+
+	wwsympa/wwsympa.fcgi: [reported by JM.Bourdin, IUFM Dijon] : visibility authorization scenario was not evaluated to compute
+	  the "your lists" box.
+
 5.2		11 April 2006
 
    New features :
