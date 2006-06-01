@@ -1,3 +1,12 @@
+2006-06-01 15:14  sympa-authors
+
+	* wwsympa/wwsympa.fcgi: Fix: report an error if a subscriber email
+	  is changed and the new address is already subscribed
+
+2006-05-23 16:30  sympa-authors
+
+	* .version, ChangeLog, Makefile.in, NEWS: Preparing 5.2.1
+
 2006-05-11 14:28  sympa-authors
 
 	* src/List.pm: Incorrect error message
