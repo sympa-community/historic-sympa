@@ -1286,6 +1286,13 @@ sub db_connect {
 	}
     }
 
+    ## Check if DBD is installed
+     unless (eval "require DBD::$Conf{'db_type'}") {
+	do_log('err',"No Database Driver installed for $Conf{'db_type'} ; you should download and install DBD::$Conf{'db_type'} from CPAN");
+	&send_notify_to_listmaster('missing_dbd', $Conf{'domain'},{'db_type' => $Conf{'db_type'}});
+	return undef;
+    }   
+
     ## Used by Oracle (ORACLE_HOME)
     if ($Conf{'db_env'}) {
 	foreach my $env (split /;/, $Conf{'db_env'}) {
@@ -1782,7 +1789,7 @@ sub load {
     }elsif (lc($robot) eq lc($Conf{'host'})) {
  	$self->{'dir'} = "$Conf{'home'}/$name";
     }else {
-	&do_log('err', 'No such list %s', $name) unless ($options->{'just_try'});
+	&do_log('err', 'No such robot (virtual domain) %s', $robot) unless ($options->{'just_try'});
 	return undef ;
     }
     
@@ -8916,6 +8923,12 @@ sub _include_users_sql {
     my ($dbh, $sth);
     my $connect_string;
 
+    unless (eval "require DBD::$db_type") {
+	do_log('err',"No Database Driver installed for $db_type ; you should download and install DBD::$db_type from CPAN");
+	&send_notify_to_listmaster('missing_dbd', $Conf{'domain'},{'db_type' => $db_type});
+	return undef;
+    }
+
     if ($f_dir) {
 	$connect_string = "DBI:CSV:f_dir=$f_dir";
     }elsif ($db_type eq 'Oracle') {
@@ -8971,10 +8984,11 @@ sub _include_users_sql {
     my $total = 0;
     
     ## Process the SQL results
-    my $email;
-    my $rows = $sth->rows;
-    foreach (1..$rows) { ## This way we don't stop at the first NULL entry found
-	$email = $sth->fetchrow;
+    # my $rows = $sth->rows;
+    # foreach (1..$rows) { ## This way we don't stop at the first NULL entry found
+    while (defined (my $row = $sth->fetchrow_arrayref)) {
+	
+	my $email = $row->[0]; ## only get first field
 	## Empty value
 	next if ($email =~ /^\s*$/);
 
@@ -10383,8 +10397,7 @@ sub get_which {
 	# next unless (($list->{'admin'}{'host'} eq $robot) || ($robot eq '*')) ;
 
 	## Skip closed lists unless the user is Listmaster
-	if ($list->{'admin'}{'status'} =~ /closed/ &&
-	    ! &is_listmaster($email, $robot)) {
+	if ($list->{'admin'}{'status'} =~ /closed/) {
 	    next;
 	}
 
@@ -10964,7 +10977,6 @@ sub probe_db {
 		## drop previous primary key
 		unless ($dbh->do("ALTER TABLE $t DROP PRIMARY KEY")) {
 		    &do_log('err', 'Could not drop PRIMARY KEY, table\'%s\'.', $t);
-		    return undef;
 		}
 		push @report, sprintf('Table %s, PRIMARY KEY dropped', $t);
 		&do_log('info', 'Table %s, PRIMARY KEY dropped', $t);
@@ -10989,10 +11001,10 @@ sub probe_db {
 		}
 
 		if ($success) {
-		    push @report, sprintf('Table %s, PRIMARY KEY dropped', $t);
-		    &do_log('info', 'Table %s, PRIMARY KEY dropped', $t);
+		    push @report, sprintf('Table %s, INDEX dropped', $t);
+		    &do_log('info', 'Table %s, INDEX dropped', $t);
 		}else {
-		    &do_log('err', 'Could not drop PRINDEX, table\'%s\'.', $t);
+		    &do_log('err', 'Could not drop INDEX, table\'%s\'.', $t);
 		}
 
 		## Add INDEX
@@ -11096,6 +11108,36 @@ sub create_db {
 
     return 1;
 }
+
+## Check if data structures are uptodate
+## If not, no operation should be performed before the upgrade process is run
+sub data_structure_uptodate {
+     my $version_file = "$Conf{'etc'}/data_structure.version";
+     my $data_structure_version;
+
+     if (-f $version_file) {
+	 unless (open VFILE, $version_file) {
+	     do_log('err', "Unable to open %s : %s", $version_file, $!);
+	     return undef;
+	 }
+	 while (<VFILE>) {
+	     next if /^\s*$/;
+	     next if /^\s*\#/;
+	     chomp;
+	     $data_structure_version = $_;
+	     last;
+	 }
+	 close VFILE;
+     }
+
+     if (defined $data_structure_version &&
+	 $data_structure_version ne $Version::Version) {
+	 &do_log('err', "Data structure (%s) is not uptodate for current release (%s)", $data_structure_version, $Version::Version);
+	 return 0;
+     }
+
+     return 1;
+ }
 
 ## Update DB structure or content if required
 sub maintenance {
@@ -11307,6 +11349,7 @@ sub upgrade {
 		    unless ($dbh->do($statement)) {
 			do_log('err','Unable to execute SQL statement "%s" : %s', 
 			       $statement, $dbh->errstr);
+			&send_notify_to_listmaster('upgrade_failed', $Conf{'domain'},{'error' => $dbh->errstr});
 			return undef;
 		    }
 		}
