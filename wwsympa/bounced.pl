@@ -92,6 +92,9 @@ $main::options{'foreground'} = 1 if ($main::options{'debug'});
 my $wwsympa_conf = "--WWSCONFIG--";
 my $sympa_conf_file = '--CONFIG--';
 
+my $daemon_name = &Log::set_daemon($0);
+my $ip = $ENV{'REMOTE_HOST'};
+
 my $wwsconf = {};
 
 # Load WWSympa configuration

@@ -65,6 +65,9 @@ srand (time());
 
 my $version_string = "Sympa version is $Version\n";
 
+my $daemon_name = &Log::set_daemon($0);
+my $ip = $ENV{'REMOTE_HOST'};
+
 my $usage_string = "Usage:
    $0 [OPTIONS]
 
@@ -1229,7 +1232,9 @@ sub DoSendMessage {
     }
 
     &do_log('info', "Message for %s sent", $rcpt);
-
+    unless(&Log::db_log({'robot' => $robot,'list' => $rcpt,'action' => 'sendMessage','parameters' => $msg_id.','.$robot,'target_email' => '','msg_id' => $msg_id,'status' => 'succes','error_type' => '','user_email' => $sender,'client' => $ip,'daemon' => $daemon_name})) {
+	&do_log('error','doSendMessage: unable to log event');
+    }
     return 1;
 }
 

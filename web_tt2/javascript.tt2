@@ -210,6 +210,39 @@ function hide(div){
 [% END %]
 
 
+//to hide menu
+
+function afficheId(baliseId,baliseId2)
+  {
+  if (document.getElementById && document.getElementById(baliseId) != null)
+    {
+    document.getElementById(baliseId).style.visibility='visible';
+    document.getElementById(baliseId).style.display='block';
+    }
+  if (document.getElementById(baliseId2) != null)
+    {
+    document.getElementById(baliseId2).style.margin='0 0 0 25%';
+    }
+  }
+
+function cacheId(baliseId,baliseId2)
+  {
+  if (document.getElementById && document.getElementById(baliseId) != null)
+    {
+    document.getElementById(baliseId).style.visibility='hidden';
+    document.getElementById(baliseId).style.display='none';
+    }
+  if (document.getElementById(baliseId2) != null)
+    {
+    document.getElementById(baliseId2).style.margin='0 0 0 0';
+    }
+  
+  }
+
+cacheId('contenu','Stretcher');
+// if JavaScript is available, hide the content on the page load.
+// Without JavaScript, content will be display.
+
 // end browsers -->
 </script>
 

@@ -26,11 +26,15 @@ package Log;
 require Exporter;
 use Sys::Syslog;
 use Carp;
+use POSIX qw/mktime/;
+
 
 @ISA = qw(Exporter);
 @EXPORT = qw(fatal_err do_log do_openlog $log_level);
 
-my ($log_facility, $log_socket_type, $log_service);
+my ($log_facility, $log_socket_type, $log_service,$sth,@sth_stack);
+
+
 local $log_level |= 0;
 
 sub fatal_err {
@@ -106,6 +110,294 @@ sub do_connect {
     # close log may be usefull : if parent processus did open log child process inherit the openlog with parameters from parent process 
     closelog ; 
     openlog("$log_service\[$$\]", 'ndelay', $log_facility);
+}
+
+# return the name of the used daemon
+sub set_daemon {
+    my $daemon_tmp = shift;
+    my @path = split(/\//, $daemon_tmp);
+    my $daemon = $path[$#path];
+    $daemon =~ s/(\.[^\.]+)$//; 
+    return $daemon;
+}
+
+sub get_log_date {
+    my $date_from,
+    my $date_to;
+ 
+    my $dbh = &List::db_get_handler();
+
+    ## Check database connection
+    unless ($dbh and $dbh->ping) {
+	return undef unless &db_connect();
+    }
+
+    my $statement;
+    my @dates;
+    foreach my $query('MIN','MAX') {
+	$statement = "SELECT $query(date) FROM logs_table";
+	push @sth_stack, $sth;
+	unless($sth = $dbh->prepare($statement)) { 
+	    do_log('err','Get_log_date: Unable to prepare SQL statement : %s %s',$statement, $dbh->errstr);
+	    return undef;
+	}
+	unless($sth->execute) {
+	    do_log('err','Get_log_date: Unable to execute SQL statement %s %s',$statement, $dbh->errstr);
+	    return undef;
+	}
+	while (my $d = ($sth->fetchrow_array) [0]) {
+	    push @dates, $d;
+	    &do_log('info','get_log_date :'.$d);
+	}
+    }
+    $sth->finish();
+    $sth = pop @sth_stack;
+    
+    return @dates;
+}
+    
+       
+# add log in RDBMS 
+sub db_log {
+    my $arg = shift;
+    
+    my $list = $arg->{'list'};
+    my $robot = $arg->{'robot'};
+    my $action = $arg->{'action'};
+    my $parameters = &tools::clean_msg_id($arg->{'parameters'});
+    my $target_email = $arg->{'target_email'};
+    my $msg_id = &tools::clean_msg_id($arg->{'msg_id'});
+    my $status = $arg->{'status'};
+    my $error_type = $arg->{'error_type'};
+    my $user_email = &tools::clean_msg_id($arg->{'user_email'});
+    my $client = $arg->{'client'};
+    my $daemon = $arg->{'daemon'};
+    my $date=time;
+    my $random = int(rand(1000));
+    my $id = $date*1000+$random;
+
+    unless($user_email) {
+	$user_email = 'anonymous';
+    }
+    unless($list) {
+	$list = '';
+    }
+    #remove the robot name of the list name
+    if($list =~ /(.+)\@(.+)/) {
+	$list = $1;
+	unless($robot) {
+	    $robot = $2;
+	}
+    }
+
+    &do_log ('info',"db_log (ID = $id, DATE = $date, ROBOT = $robot, LIST = $list, ACTION = $action, PARAM = $parameters, TARGET_EMAIL = $target_email, MSG_ID = $msg_id, STATUS = $status, ERROR_TYPE = $error_type, USER_EMAIL = $user_email, CLIENT = $client, DAEMON = $daemon)");
+    
+    my $dbh = &List::db_get_handler();
+
+    ## Check database connection
+    unless ($dbh and $dbh->ping) {
+	return undef unless &db_connect();
+    }
+
+    unless ($daemon =~ /^((task)|(archived)|(sympa)|(wwsympa)|(bounced)|(sympa_soap))$/) {
+	do_log ('err',"Internal_error : incorrect process value $daemon");
+	return undef;
+    }
+    
+    ## Insert in log_table
+
+    my $statement = 'INSERT INTO logs_table (id,date,robot,list,action,parameters,target_email,msg_id,status,error_type,user_email,client,daemon) ';
+    
+    my $statement_value = sprintf "VALUES (%s,%d,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)",$id,$date,$dbh->quote($robot),$dbh->quote($list),$dbh->quote($action),$dbh->quote($parameters),$dbh->quote($target_email),$dbh->quote($msg_id),$dbh->quote($status),$dbh->quote($error_type),$dbh->quote($user_email),$dbh->quote($client),$dbh->quote($daemon);		    
+    $statement = $statement.$statement_value;
+    
+    unless ($dbh->do($statement)) {
+	do_log('err','Unable to execute SQL statement "%s", %s', $statement, $dbh->errstr);
+	return undef;
+    }
+      
+}
+
+# Scan log_table with appropriate select 
+sub get_first_db_log {
+    my $dbh = &List::db_get_handler();
+    my $select = shift;
+
+    my @message = ('reject','distribute','arc_delete','arc_download','sendMessage','remove');
+    my @auth = ('login','logout','loginrequest','sendpasswd');
+    my @subscription = ('set','subscribe','add','del');
+    my @list = ('create_list','rename_list','edit_list_request','close_list','edit_mist','admin');
+    my @bounced = ();
+    my @preferences = ('setpref','pref','change_email','setpasswd','record_email');
+    my @shared = ('unzip','upload','read','delete','savefile','overwrite','create_dir','set_owner','change_access','describe','rename','edit_file','admin');
+   
+
+    my %action_type = ('message' => \@message,
+		       'auth' => \@auth,
+		       'subscription' => \@subscription,
+		       'list' => \@list,
+		       'bounced' => \@bounced,
+		       'preferences' => \@preferences,
+		       'shared' => \@shared,
+		       );
+		       
+    ## Check database connection
+    unless ($dbh and $dbh->ping) {
+	return undef unless &db_connect();
+    }
+
+    my $statement; 
+
+    if ($Conf{'db_type'} eq 'Oracle') {
+	## "AS" not supported by Oracle
+	$statement = "SELECT date \"date\", robot \"robot\", list \"list\", action \"action\", parameters \"parameters\", target_email \"target_email\", msg_id \"msg_id\", status \"status\", error_type \"error_type\", user_email \"user_email\", client \"client\", daemon \"daemon\" FROM logs_table WHERE 1 ";
+    }else{
+	$statement = "SELECT date AS date, robot AS robot, list AS list, action AS action, parameters AS parameters, target_email AS target_email,msg_id AS msg_id, status AS status, error_type AS error_type, user_email AS user_email, client AS client, daemon AS daemon FROM logs_table WHERE 1 ";	
+    }
+    #If the checkbox is checked, the other parameters of research are not taken into account.
+    unless($select->{'all'} eq 'on') {
+	my $anything = 'false'; #Indicate if research comprises parameters. If not, nothing is display.
+	my $robot_selected = 'false'; #Indicate if a robot is selected. If not, use the current robot on the statement.
+	
+        #if a list is specified -just for owner or above-
+	if ($select->{'list'}) {
+	    if($select->{'list'} eq 'all_list') {
+		my $first = 'false';
+		my $what_list;
+		if($select->{'privilege'} eq 'owner') {
+		    $what_list = 'alllists_owner';
+		}
+		if($select->{'privilege'} eq 'listmaster') {
+		    $statement .= sprintf "AND list = '' ";
+		    $what_list = 'alllists';
+		    $first = 'true';
+		}
+		foreach my $alllists(@{$select->{$what_list}}) {
+		    #if it is the first list, put AND on the statement
+		    if($first eq 'false') {
+			$statement .= sprintf "AND list = '%s' ",$alllists;
+			$first = 'true';
+		    }
+		    #else, put OR
+		    else {
+			$statement .= sprintf "OR list = '%s' ",$alllists;
+		    }
+		}
+		$anything = 'true';
+	    }
+	    else {
+		$select->{'list'} = lc ($select->{'list'});
+		$statement .= sprintf "AND list = '%s' ",$select->{'list'};
+		$anything = 'true';
+	    }
+	}
+	#if a robot is specified -just for listmaster or above-
+	if ($select->{'robot'}) {
+	    if($select->{'current_robot'} ne $select->{'robot'}) {
+		$select->{'robot'} = lc ($select->{'robot'});
+		$statement .= sprintf "AND robot = '%s' ",$select->{'robot'}; 
+		$anything = 'true';
+		$robot_selected = 'true';
+	    }
+	}
+	#if a type of target and a target are specified
+	if (($select->{'type_target'}) && ($select->{'type_target'} ne 'none')) {
+	    if($select->{'target'}) {
+		$select->{'type_target'} = lc ($select->{'type_target'});
+		$select->{'target'} = lc ($select->{'target'});
+		$statement .= sprintf "AND %s = '%s' ",$select->{'type_target'},$select->{'target'};
+		$anything = 'true';
+	    }
+	}
+	#if the search is between two date
+	if ($select->{'date_from'}) {
+	    if($select->{'date_to'}) {
+		my @tab_date_from = split(/\//,$select->{'date_from'});
+		my @tab_date_to = split(/\//,$select->{'date_to'});
+		my $date_from = mktime(0,0,-1,$tab_date_from[0],$tab_date_from[1]-1,$tab_date_from[2]-1900);
+		my $date_to = mktime(0,0,25,$tab_date_to[0],$tab_date_to[1]-1,$tab_date_to[2]-1900);
+		
+		$statement .= sprintf "AND date BETWEEN '%s' AND '%s' ",$date_from, $date_to;
+		$anything = 'true';
+	    }
+	}
+	#if the search is on a precise type
+	if ($select->{'type'}) {
+	    if($select->{'type'} ne 'none') {
+		my $first = 'false';
+		foreach my $type(@{$action_type{$select->{'type'}}}) {
+		    if($first eq 'false') {
+			#if it is the first action, put AND on the statement
+			$statement .= sprintf "AND action = '%s' ",$type;
+			$first = 'true';
+		    }
+		    #else, put OR
+		    else {
+			$statement .= sprintf "OR action = '%s' ",$type;
+		    }
+		}
+		&do_log('info','statement: '.$statement);
+		$anything = 'true';
+	    }
+	    
+	}
+	
+	#if the search is on the actor of the action
+	if ($select->{'user_email'}) {
+	    $select->{'user_email'} = lc ($select->{'user_email'});
+	    $statement .= sprintf "AND user_email = '%s' ",$select->{'user_email'}; 
+	    $anything = 'true';
+	}
+
+	#the search must be on the current list and robot by default
+	if ($anything eq 'true') {
+	    unless($robot_selected eq 'true') {
+		$statement .= sprintf "AND robot = '%s' ",$select->{'robot'};
+	    }
+	}
+
+	unless($anything eq 'true') {
+	    $statement = "SELECT date AS date, robot AS robot, list AS list, action AS action, parameters AS parameters, target_email AS target_email,msg_id AS msg_id, status AS status, error_type AS error_type, user_email AS user_email, client AS client, daemon AS daemon FROM logs_table WHERE 0 ";
+	}
+    }
+    else {
+	#an editor has just an access on the current list and robot
+	if($select->{'privilege'} eq 'editor') {
+	    $statement .= sprintf "AND robot = '%s' AND list = '%s' ",$select->{'robot'},$select->{'list'}; 
+	}
+	if($select->{'privilege'} eq 'owner') {
+	    $statement .= sprintf "AND robot = '%s' ",$select->{'robot'}; 
+	}
+	#on the current robot to the listmaster
+	if($select->{'privilege'} eq 'listmaster') {
+	    $statement .= sprintf "AND robot = '%s' ",$select->{'robot'};
+	}
+    }
+    $statement .= sprintf "GROUP BY date "; 
+    &do_log('info','statement: '.$statement);
+
+    push @sth_stack, $sth;
+    unless ($sth = $dbh->prepare($statement)) {
+	do_log('err','Unable to prepare SQL statement : %s', $dbh->errstr);
+	return undef;
+    }
+    unless ($sth->execute) {
+	do_log('err','Unable to execute SQL statement "%s" : %s', $statement, $dbh->errstr);
+	return undef;
+    }
+    return ($sth->fetchrow_hashref);
+    
+}
+
+sub get_next_db_log {
+
+    my $log = $sth->fetchrow_hashref;
+    
+    unless (defined $log) {
+	$sth->finish;
+	$sth = pop @sth_stack;
+    }
+    return $log;
 }
 
 1;

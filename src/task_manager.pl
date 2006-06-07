@@ -46,6 +46,8 @@ my $opt_d;
 my $opt_F;
 my %options;
 
+my $daemon_name = &List::set_daemon($0);
+
 &GetOptions(\%main::options, 'dump=s', 'debug|d', 'log_level=s', 'foreground', 'config|f=s', 
 	    'lang|l=s', 'mail|m', 'keepcopy|k=s', 'help', 'version', 'import=s', 'lowercase');
 
