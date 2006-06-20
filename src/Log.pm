@@ -32,7 +32,7 @@ use POSIX qw/mktime/;
 @ISA = qw(Exporter);
 @EXPORT = qw(fatal_err do_log do_openlog $log_level);
 
-my ($log_facility, $log_socket_type, $log_service,$sth,@sth_stack);
+my ($log_facility, $log_socket_type, $log_service,$sth,@sth_stack,$rows_nb);
 
 
 local $log_level |= 0;
@@ -147,7 +147,6 @@ sub get_log_date {
 	}
 	while (my $d = ($sth->fetchrow_array) [0]) {
 	    push @dates, $d;
-	    &do_log('info','get_log_date :'.$d);
 	}
     }
     $sth->finish();
@@ -218,6 +217,21 @@ sub db_log {
       
 }
 
+# delete logs in RDBMS
+sub db_log_del {
+    my $date = shift;
+
+    my $dbh = &List::db_get_handler();
+
+    my $statement = "DELETE FROM logs_table WHERE (date <= %s)", $dbh->quote($date);
+
+    unless ($dbh->do($statement)) {
+	&do_log('err','Unable to execute SQL statement "%s" : %s',$statement, $dbh->errstr);
+	return undef;
+    }
+
+}
+
 # Scan log_table with appropriate select 
 sub get_first_db_log {
     my $dbh = &List::db_get_handler();
@@ -226,14 +240,14 @@ sub get_first_db_log {
     my @message = ('reject','distribute','arc_delete','arc_download','sendMessage','remove');
     my @auth = ('login','logout','loginrequest','sendpasswd');
     my @subscription = ('set','subscribe','add','del');
-    my @list = ('create_list','rename_list','edit_list_request','close_list','edit_mist','admin');
+    my @list = ('create_list','rename_list','close_list','edit_mist','admin');
     my @bounced = ();
     my @preferences = ('setpref','pref','change_email','setpasswd','record_email');
-    my @shared = ('unzip','upload','read','delete','savefile','overwrite','create_dir','set_owner','change_access','describe','rename','edit_file','admin');
+    my @shared = ('unzip','upload','read','delete','savefile','overwrite','create_dir','set_owner','change_access','describe','rename','edit_file','d_admin');
    
 
     my %action_type = ('message' => \@message,
-		       'auth' => \@auth,
+		       'authentification' => \@auth,
 		       'subscription' => \@subscription,
 		       'list' => \@list,
 		       'bounced' => \@bounced,
@@ -258,24 +272,25 @@ sub get_first_db_log {
     unless($select->{'all'} eq 'on') {
 	my $anything = 'false'; #Indicate if research comprises parameters. If not, nothing is display.
 	my $robot_selected = 'false'; #Indicate if a robot is selected. If not, use the current robot on the statement.
+	my $list_selected = 'false'; #like $robot_selected, for a list.
 	
         #if a list is specified -just for owner or above-
 	if ($select->{'list'}) {
 	    if($select->{'list'} eq 'all_list') {
 		my $first = 'false';
-		my $what_list;
+		my $which_list;
 		if($select->{'privilege'} eq 'owner') {
-		    $what_list = 'alllists_owner';
+		    $which_list = 'alllists_owner';
 		}
 		if($select->{'privilege'} eq 'listmaster') {
 		    $statement .= sprintf "AND list = '' ";
-		    $what_list = 'alllists';
+		    $which_list = 'alllists';
 		    $first = 'true';
 		}
-		foreach my $alllists(@{$select->{$what_list}}) {
+		foreach my $alllists(@{$select->{$which_list}}) {
 		    #if it is the first list, put AND on the statement
 		    if($first eq 'false') {
-			$statement .= sprintf "AND list = '%s' ",$alllists;
+			$statement .= sprintf "AND (list = '%s' ",$alllists;
 			$first = 'true';
 		    }
 		    #else, put OR
@@ -283,22 +298,25 @@ sub get_first_db_log {
 			$statement .= sprintf "OR list = '%s' ",$alllists;
 		    }
 		}
+		$statement .= sprintf ")";
+		$list_selected = 'true';
 		$anything = 'true';
 	    }
 	    else {
-		$select->{'list'} = lc ($select->{'list'});
-		$statement .= sprintf "AND list = '%s' ",$select->{'list'};
-		$anything = 'true';
+		if($select->{'list'} ne 'none') {
+		    $select->{'list'} = lc ($select->{'list'});
+		    $statement .= sprintf "AND list = '%s' ",$select->{'list'};
+		    $list_selected = 'true';
+		    $anything = 'true';
+		}
 	    }
 	}
 	#if a robot is specified -just for listmaster or above-
 	if ($select->{'robot'}) {
-	    if($select->{'current_robot'} ne $select->{'robot'}) {
-		$select->{'robot'} = lc ($select->{'robot'});
-		$statement .= sprintf "AND robot = '%s' ",$select->{'robot'}; 
-		$anything = 'true';
-		$robot_selected = 'true';
-	    }
+	    $select->{'robot'} = lc ($select->{'robot'});
+	    $statement .= sprintf "AND robot = '%s' ",$select->{'robot'}; 
+	    $anything = 'true';
+	    $robot_selected = 'true';
 	}
 	#if a type of target and a target are specified
 	if (($select->{'type_target'}) && ($select->{'type_target'} ne 'none')) {
@@ -311,10 +329,15 @@ sub get_first_db_log {
 	}
 	#if the search is between two date
 	if ($select->{'date_from'}) {
+	    my @tab_date_from = split(/\//,$select->{'date_from'});
+	    my $date_from = mktime(0,0,-1,$tab_date_from[0],$tab_date_from[1]-1,$tab_date_from[2]-1900);
+	    unless($select->{'date_to'}) {
+		my $date_from2 = mktime(0,0,25,$tab_date_from[0],$tab_date_from[1]-1,$tab_date_from[2]-1900);
+		$statement .= sprintf "AND date BETWEEN '%s' AND '%s' ",$date_from, $date_from2;
+		$anything = 'true';
+	    }
 	    if($select->{'date_to'}) {
-		my @tab_date_from = split(/\//,$select->{'date_from'});
 		my @tab_date_to = split(/\//,$select->{'date_to'});
-		my $date_from = mktime(0,0,-1,$tab_date_from[0],$tab_date_from[1]-1,$tab_date_from[2]-1900);
 		my $date_to = mktime(0,0,25,$tab_date_to[0],$tab_date_to[1]-1,$tab_date_to[2]-1900);
 		
 		$statement .= sprintf "AND date BETWEEN '%s' AND '%s' ",$date_from, $date_to;
@@ -328,18 +351,23 @@ sub get_first_db_log {
 		foreach my $type(@{$action_type{$select->{'type'}}}) {
 		    if($first eq 'false') {
 			#if it is the first action, put AND on the statement
-			$statement .= sprintf "AND action = '%s' ",$type;
+			$statement .= sprintf "AND (logs_table.action = '%s' ",$type;
 			$first = 'true';
 		    }
 		    #else, put OR
 		    else {
-			$statement .= sprintf "OR action = '%s' ",$type;
+			$statement .= sprintf "OR logs_table.action = '%s' ",$type;
 		    }
 		}
-		&do_log('info','statement: '.$statement);
+		$statement .= sprintf ")";
 		$anything = 'true';
 	    }
 	    
+	}
+	#if the listmaster want to make a search by an IP adress.
+	if($select->{'ip'}) {
+	    $statement .= sprintf "AND client = '%s'",$select->{'ip'};
+	    $anything = 'true';
 	}
 	
 	#if the search is on the actor of the action
@@ -352,7 +380,10 @@ sub get_first_db_log {
 	#the search must be on the current list and robot by default
 	if ($anything eq 'true') {
 	    unless($robot_selected eq 'true') {
-		$statement .= sprintf "AND robot = '%s' ",$select->{'robot'};
+		$statement .= sprintf "AND robot = '%s' ",$select->{'current_robot'};
+	    }
+	    unless($list_selected eq 'true') {
+		$statement .= sprintf "AND list = '%s' ",$select->{'current_list'};
 	    }
 	}
 
@@ -363,14 +394,28 @@ sub get_first_db_log {
     else {
 	#an editor has just an access on the current list and robot
 	if($select->{'privilege'} eq 'editor') {
-	    $statement .= sprintf "AND robot = '%s' AND list = '%s' ",$select->{'robot'},$select->{'list'}; 
+	    $statement .= sprintf "AND robot = '%s' AND list = '%s' ",$select->{'current_robot'},$select->{'list'}; 
 	}
 	if($select->{'privilege'} eq 'owner') {
-	    $statement .= sprintf "AND robot = '%s' ",$select->{'robot'}; 
+	    $statement .= sprintf "AND robot = '%s' ",$select->{'current_robot'}; 
+	    my $first = 'false';
+	    foreach my $alllists(@{$select->{'alllists_owner'}}) {
+		#if it is the first list, put AND on the statement
+		if($first eq 'false') {
+		    $statement .= sprintf "AND (list = '%s' ",$alllists;
+		    $first = 'true';
+		}
+		#else, put OR
+		else {
+		    $statement .= sprintf "OR list = '%s' ",$alllists;
+		}
+	    }
+	    $statement .= sprintf ")";
+
 	}
 	#on the current robot to the listmaster
 	if($select->{'privilege'} eq 'listmaster') {
-	    $statement .= sprintf "AND robot = '%s' ",$select->{'robot'};
+	    $statement .= sprintf "AND robot = '%s' ",$select->{'current_robot'};
 	}
     }
     $statement .= sprintf "GROUP BY date "; 
@@ -385,10 +430,13 @@ sub get_first_db_log {
 	do_log('err','Unable to execute SQL statement "%s" : %s', $statement, $dbh->errstr);
 	return undef;
     }
+    $rows_nb = $sth->rows;
     return ($sth->fetchrow_hashref);
     
 }
-
+sub return_rows_nb {
+    return $rows_nb;
+}
 sub get_next_db_log {
 
     my $log = $sth->fetchrow_hashref;

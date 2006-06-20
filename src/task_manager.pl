@@ -1089,6 +1089,13 @@ sub exec_cmd {
     
     return 1;
 }
+sub purge_logs_table {
+    my ($task, $Rarguments, $context) = @_;
+    my $date;
+    my $execution_date = $task->{'date'};
+
+
+}
 
 sub purge_user_table {
     my ($task, $Rarguments, $context) = @_;
