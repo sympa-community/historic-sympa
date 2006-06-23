@@ -46,7 +46,10 @@ my $opt_d;
 my $opt_F;
 my %options;
 
-my $daemon_name = &List::set_daemon($0);
+my $daemon_name = &Log::set_daemon($0);
+my $ip;
+$ip = $ENV{'REMOTE_HOST'};
+$ip = $ENV{'REMOTE_ADDR'} unless ($ip);
 
 &GetOptions(\%main::options, 'dump=s', 'debug|d', 'log_level=s', 'foreground', 'config|f=s', 
 	    'lang|l=s', 'mail|m', 'keepcopy|k=s', 'help', 'version', 'import=s', 'lowercase');
@@ -173,6 +176,7 @@ my %global_models = (#'crl_update_task' => 'crl_update',
 		     #'chk_cert_expiration_task' => 'chk_cert_expiration',
 		     'expire_bounce_task' => 'expire_bounce',
 		     'purge_user_table_task' => 'purge_user_table',
+		     'purge_logs_table_task' => 'purge_logs_table',
 		     'purge_orphan_bounces_task' => 'purge_orphan_bounces',
 		     'eval_bouncers_task' => 'eval_bouncers',
 		     'process_bouncers_task' =>'process_bouncers',
@@ -208,10 +212,11 @@ my %commands = ('next'                  => ['date', '\w*'],
 		                           #template  date
 		'sync_include'          => [],
 		'purge_user_table'      => [],
+		'purge_logs_table'      => [],
 		'purge_orphan_bounces'  => [],
 		'eval_bouncers'         => [],
 		'process_bouncers'      => []
-		);
+		);  
 
 # commands which use a variable. If you add such a command, the first parameter must be the variable
 my %var_commands = ('delete_subs'      => ['var'],
@@ -793,6 +798,7 @@ sub cmd_process {
     return update_crl ($task, $Rarguments, \%context) if ($command eq 'update_crl');
     return expire_bounce ($task, $Rarguments, \%context) if ($command eq 'expire_bounce');
     return purge_user_table ($task, \%context) if ($command eq 'purge_user_table');
+    return purge_logs_table ($task, \%context) if ($command eq 'purge_logs_table');
     return sync_include($task, \%context) if ($command eq 'sync_include');
     return purge_orphan_bounces ($task, \%context) if ($command eq 'purge_orphan_bounces');
     return eval_bouncers ($task, \%context) if ($command eq 'eval_bouncers');
@@ -1090,11 +1096,18 @@ sub exec_cmd {
     return 1;
 }
 sub purge_logs_table {
+    # If a log is older then $list->get_latest_distribution_date()-$delai expire the log
     my ($task, $Rarguments, $context) = @_;
     my $date;
     my $execution_date = $task->{'date'};
 
-
+    do_log('debug2','purge_logs_table()');
+    unless(&Log::db_log_del()) {
+	&do_log('err','purge_logs_table(): Failed to delete logs');
+	return undef;
+    }
+    &do_log('notice','purge_logs_table(): logs purged');
+    return 1;
 }
 
 sub purge_user_table {

@@ -257,6 +257,12 @@ my @params = ({'title' => 'Directories and file location'},
 	       'query' => 'Task name for expiration of old bounces',
 	       'file' => 'sympa.conf',
 	       'advice' => '' },
+
+	      {'name' => 'purge_logs_table_task',
+	       'sample' => 'daily',
+	       'query' => 'Task name for expiration of old logs',
+	       'file' => 'sympa.conf',
+	       'advise' => ''},
 	      
 	      {'name'  => 'welcome_return_path',
 	       'sample' => 'unique',

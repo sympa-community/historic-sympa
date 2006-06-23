@@ -48,7 +48,7 @@
 
 [% IF is_priv || is_listmaster %]
 [% IF action == 'viewlogs' %][% SET class = 'menuLinksCurrentPage' %][% ELSE %][% SET class = 'menuLinks' %][% END %]
-<li><a class="[% class %]" href="[% path_cgi %]/viewlogs/[% list %]" >[%|loc%]Logs[%END%]</a></li>
+<li><a class="[% class %]" href="[% path_cgi %]/viewlogs/[% list %]/first" >[%|loc%]Logs[%END%]</a></li>
 [% END %]
 
 [% IF shared == 'none' %]
