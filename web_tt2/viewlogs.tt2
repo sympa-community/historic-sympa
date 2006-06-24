@@ -237,19 +237,14 @@
       <div id="log_disp">
       [% FOREACH l = log_entries %]
 	[% IF dark == '1' %]
-	  [% IF l.error_type == 'error' %]
-	    <tr background="[% error_color %]">
-	  [% ELSE %]
 	    <tr>
-	  [% END %]
 	[% ELSE %]
-	  [% IF l.error_type == 'error' %]
-	    <tr background="[% error_color %]">
-	  [% ELSE %]
             <tr style="background-color: [% color_0 %];">
-	  [% END %]
 	[% END %]
 	
+	[% IF l.status == 'error' %]
+	  <tr style="background-color: [% error_color %];">
+	[% END %]
 	  <td>
 	    <span style="font-size: smaller;">
 	    [% l.date %]
