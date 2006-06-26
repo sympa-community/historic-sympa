@@ -238,9 +238,9 @@ sub get_first_db_log {
     my $select = shift;
 
     ## Dump vars
-    open TMP, ">/tmp/logs.dump";
-    &tools::dump_var($select, 0, \*TMP);
-    close TMP;
+    #open TMP, ">/tmp/logs.dump";
+    #&tools::dump_var($select, 0, \*TMP);
+    #close TMP;
 
     my @message = ('reject','distribute','arc_delete','arc_download','sendMessage','remove','record_email','send_me','d_remove_arc','rebuildarc','remind','send_mail','DoFile','sendMessage','DoForward','DoMessage','DoCommand','SendDigest');
     my @auth = ('login','logout','loginrequest','sendpasswd','ssologin','ssologin_succeses','remindpasswd','change_identity');
@@ -394,7 +394,6 @@ sub get_first_db_log {
 	}
     }
     $statement .= sprintf "GROUP BY date_logs "; 
-    do_log('info','statement: '.$statement);
 
     push @sth_stack, $sth;
     unless ($sth = $dbh->prepare($statement)) {

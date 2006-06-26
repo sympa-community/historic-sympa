@@ -10741,6 +10741,20 @@ sub probe_db {
 						      'serviceid_netidmap' => 'varchar(100)',
 						      'email_netidmap' => 'varchar(100)',
 						      'robot_netidmap' => 'varchar(80)'},
+				 'logs_table' => {'id_logs' => 'bigint(20)',
+						  'date_logs' => 'int(11)',
+						  'robot_logs' => 'varchar(80)',
+						  'list_logs' => 'varchar(50)',
+						  'action_logs' => 'varchar(50)',
+						  'parameters_logs' => 'varchar(100)',
+						  'target_email_logs' => 'varchar(100)',
+						  'user_email_logs' => 'varchar(100)',
+						  'msg_id_logs' => 'varchar(255)',
+						  'status_logs' => 'varchar(10)',
+						  'error_type_logs' => 'varchar(150)',
+						  'client_logs' => 'varchar(100)',
+						  'daemon_logs' => 'varchar(10)'						  
+						  },				 
 			     },
 		     'SQLite' => {'user_table' => {'email_user' => 'varchar(100)',
 						   'gecos_user' => 'varchar(150)',
@@ -10780,6 +10794,21 @@ sub probe_db {
 						       'serviceid_netidmap' => 'varchar(100)',
 						       'email_netidmap' => 'varchar(100)',
 						       'robot_netidmap' => 'varchar(80)'},
+				  'logs_table' => {'id_logs' => 'integer',
+						   'date_logs' => 'integer',
+						   'robot_logs' => 'varchar(80)',
+						   'list_logs' => 'varchar(50)',
+						   'action_logs' => 'varchar(50)',
+						   'parameters_logs' => 'varchar(100)',
+						   'target_email_logs' => 'varchar(100)',
+						   'user_email_logs' => 'varchar(100)',
+						   'msg_id_logs' => 'varchar(255)',
+						   'status_logs' => 'varchar(10)',
+						   'error_type_logs' => 'varchar(150)',
+						   'client_logs' => 'varchar(100)',
+						   'daemon_logs' => 'varchar(10)'						  
+						  },				 
+
 			      },
 		     );
     
@@ -10795,13 +10824,19 @@ sub probe_db {
 		    'date_admin' => 1,
 		    'netid_netidmap' => 1,
 		    'serviceid_netidmap' => 1,
-		    'robot_netidmap' => 1
+		    'robot_netidmap' => 1,
+		    'id_logs' => 1,
+		    'date_logs' => 1,
+		    'action_logs' => 1,
+		    'status_logs' => 1,
+		    'daemon_logs' => 1
 		    );
     
     my %primary = ('user_table' => ['email_user'],
 		   'subscriber_table' => ['list_subscriber','robot_subscriber','user_subscriber'],
 		   'admin_table' => ['list_admin','robot_admin','user_admin','role_admin'],
-		   'netidmap_table' => ['netid_netidmap','serviceid_netidmap','robot_netidmap']
+		   'netidmap_table' => ['netid_netidmap','serviceid_netidmap','robot_netidmap'],
+		   'logs_table' => ['id_logs']
 		   );
     
     ## Report changes to listmaster
