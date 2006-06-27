@@ -36,21 +36,21 @@
 <input type="hidden" name="action" value="viewlogs" />
   <table>
     <tr>
-       <th align= "left">Search by :</th>
+       <th align= "left">[%|loc%]Search by :[%END%]</th>
        <td><select name="target_type"/>
 
        [% IF type_target_s  == 'target_email' %]
-	 <OPTION value="[% type_target_s %]">Email</OPTION>
+	 <OPTION value="[% type_target_s %]">[%|loc%]Email[%END%]</OPTION>
 	 <OPTION value="none">-----------</OPTION>
        [% ELSE %] 
 	 [% IF type_target_s == 'msg_id' %]
-	   <OPTION value="[% type_target_s %]">Message Id</OPTION>
+	   <OPTION value="[% type_target_s %]">[%|loc%]Message Id[%END%]</OPTION>
 	   <OPTION value="none">-----------</OPTION>
          [% END %]
        [% END %]
 
-       <OPTION value="target_email">Email</OPTION>
-       <OPTION value="msg_id">Message Id</OPTION>
+       <OPTION value="target_email">[%|loc%]Email[%END%]</OPTION>
+       <OPTION value="msg_id">[%|loc%]Message Id[%END%]</OPTION>
        <OPTION value="none">-----------</OPTION>
        </select>
        </td>
@@ -65,26 +65,26 @@
    </tr>
    <tr><td></td></tr>
    <tr>
-       <th align= "left">Search by type :</th>
+       <th align= "left">[%|loc%]Search by type :[%END%]</th>
        <td><select name="type_searched"/>
        [% IF type_searched_s %]
 	 [% IF type_searched_s == 'all_actions' %]
-	   <OPTION value="all_actions">All</OPTION>
+	   <OPTION value="all_actions">[%|loc%]All[%END%]</OPTION>
 	   <OPTION value="none">------------</OPTION>
 	 [% ELSE %]
            <OPTION value="[% type_searched_s %]">[% type_searched_s %]</OPTION>
 	   <OPTION value="none">------------</OPTION>
 	 [% END %]
        [% END %]
-       <OPTION value="all_actions">All</OPTION>
+       <OPTION value="all_actions">[%|loc%]All[%END%]</OPTION>
        <OPTION value="none">------------</OPTION>
-       <OPTION value="authentification">[%|loc%]Authentification[%END%]</OPTION>
-       <OPTION value="bounced">[%|loc%]Bounced[%END%]</OPTION>
+       <OPTION value="authentication">[%|loc%]Authentication[%END%]</OPTION>
+       <OPTION value="bounced">[%|loc%]Bounces management[%END%]</OPTION>
        <OPTION value="list_management">[%|loc%]List Management[%END%]</OPTION>
        <OPTION value="message">[%|loc%]Message[%END%]</OPTION>
-       <OPTION value="preferences">[%|loc%]Preferences[%END%]</OPTION>
-       <OPTION value="subscription">[%|loc%]Subscription[%END%]</OPTION>
-       <OPTION value="shared">[%|loc%]Shared[%END%]</OPTION>
+       <OPTION value="preferences">[%|loc%]User preferences[%END%]</OPTION>
+       <OPTION value="subscription">[%|loc%]User management[%END%]</OPTION>
+       <OPTION value="shared">[%|loc%]Web documents management[%END%]</OPTION>
        <OPTION value="none">------------</OPTION>
        </select>
        </td>
@@ -117,7 +117,7 @@
          [% IF is_owner %]
            [% FOREACH ol = owner_lists %]
 	     [% IF ol.name != list %]
-               <OPTION value="[% ol.name %]">[%|loc%][% ol.name %][%END%]</OPTION>
+               <OPTION value="[% ol.name %]">[% ol.name %]</OPTION>
 	     [% END %]	
            [% END %]
          [% END %]
@@ -141,7 +141,7 @@
    <tr><td></td></tr>
 
    <tr>
-       <td><input type="submit" name="action_viewlogs" value="[%|loc%]Submit[%END%]" />
+       <td><input type="submit" name="action_viewlogs" value="[%|loc%]View[%END%]" />
        &nbsp;&nbsp;
        <input type="button" value="[%|loc%]Reset[%END%]" OnClick="javascript:clear_log_form()"/>
        &nbsp;&nbsp;
@@ -153,14 +153,14 @@
 
 
 
-<h7>[%|loc%]Logs have been created between <strong> [% date_from %]</strong> and  <strong>[% date_to %]</strong>.[%END%]</h7><br />
-<h7>[%|loc%]Research was carried out in the list <strong>[% current_list %]</strong>.[%END%]</h7><br />
+<h7>[%|loc(date_from,date_to)%]Logs have been created between <strong>%1</strong> and  <strong>%2</strong>.[%END%]</h7><br />
+<h7>[%|loc(current_list)%]Research was carried out in the list <strong>%1</strong>.[%END%]</h7><br />
 [% IF is_listmaster %]
-  <h7>[%|loc%]Research was carried out in the robot <strong>[% current_robot %]</strong>.[%END%]</h7>
+  <h7>[%|loc(current_robot)%]Research was carried out in the robot <strong>%1</strong>.[%END%]</h7>
 [% END %]
 [% IF rows_nb %]
   <br />
-  <h7>[% rows_nb %] [%|loc%]results[%END%].</h7
+  <h7>[%|loc(rows_nb)%]%1 results[%END%].</h7
 [% END %]
 
 <table class="listOfItems" >

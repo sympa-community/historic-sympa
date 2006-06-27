@@ -203,10 +203,20 @@ sub db_log {
     
     ## Insert in log_table
 
-    my $statement = 'INSERT INTO logs_table (id_logs,date_logs,robot_logs,list_logs,action_logs,parameters_logs,target_email_logs,msg_id_logs,status_logs,error_type_logs,user_email_logs,client_logs,daemon_logs) ';
-    
-    my $statement_value = sprintf "VALUES (%s,%d,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)",$id,$date,$dbh->quote($robot),$dbh->quote($list),$dbh->quote($action),$dbh->quote($parameters),$dbh->quote($target_email),$dbh->quote($msg_id),$dbh->quote($status),$dbh->quote($error_type),$dbh->quote($user_email),$dbh->quote($client),$dbh->quote($daemon);		    
-    $statement = $statement.$statement_value;
+    my $statement = sprintf 'INSERT INTO logs_table (id_logs,date_logs,robot_logs,list_logs,action_logs,parameters_logs,target_email_logs,msg_id_logs,status_logs,error_type_logs,user_email_logs,client_logs,daemon_logs) VALUES (%s,%d,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)',
+    $id, 
+    $date, 
+    $dbh->quote($robot), 
+    $dbh->quote($list), 
+    $dbh->quote($action), 
+    $dbh->quote($parameters),
+    $dbh->quote($target_email),
+    $dbh->quote($msg_id),
+    $dbh->quote($status),
+    $dbh->quote($error_type),
+    $dbh->quote($user_email),
+    $dbh->quote($client),
+    $dbh->quote($daemon);		    
     
     unless ($dbh->do($statement)) {
 	do_log('err','Unable to execute SQL statement "%s", %s', $statement, $dbh->errstr);
@@ -217,9 +227,8 @@ sub db_log {
 
 # delete logs in RDBMS
 sub db_log_del {
-    my $current_date = time;
-    my $exp = &Conf::get_robot_conf($Conf{'host'},'logs_expiration_days');
-    my $date = $current_date - mktime(0,0,-1,1,$exp,70);
+    my $exp = &Conf::get_robot_conf($Conf{'host'},'logs_expiration_period');
+    my $date = time - ($exp * 24 * 60 * 60);
 
     my $dbh = &List::db_get_handler();
 
@@ -242,22 +251,29 @@ sub get_first_db_log {
     #&tools::dump_var($select, 0, \*TMP);
     #close TMP;
 
-    my @message = ('reject','distribute','arc_delete','arc_download','sendMessage','remove','record_email','send_me','d_remove_arc','rebuildarc','remind','send_mail','DoFile','sendMessage','DoForward','DoMessage','DoCommand','SendDigest');
-    my @auth = ('login','logout','loginrequest','sendpasswd','ssologin','ssologin_succeses','remindpasswd','change_identity');
-    my @subscription = ('subscribe','signoff','add','del','ignoresub','subindex','choosepasswd');
-    my @list_management = ('create_list','rename_list','close_list','edit_list','admin','blacklist','install_pending_list','purge_list','edit_template','copy_template','remove_template');
-    my @bounced = ('resetbounce');
-    my @preferences = ('set','setpref','pref','change_email','setpasswd','record_email','editsubscriber');
-    my @shared = ('d_unzip','d_upload','d_read','d_delete','d_savefile','d_overwrite','d_create_dir','d_set_owner','d_change_access','d_describe','d_rename','d_editfile','d_admin','d_install_shared','d_reject_shared','d_properties','creation_shared_file','d_unzip_shared_file','install_file_hierarchy','d_copy_rec_dir','d_copy_file','change_email','set_lang','new_d_read','d_control');
-   
-
-    my %action_type = ('message' => \@message,
-		       'authentification' => \@auth,
-		       'subscription' => \@subscription,
-		       'list_management' => \@list_management,
-		       'bounced' => \@bounced,
-		       'preferences' => \@preferences,
-		       'shared' => \@shared,
+    my %action_type = ('message' => ['reject','distribute','arc_delete','arc_download',
+				     'sendMessage','remove','record_email','send_me',
+				     'd_remove_arc','rebuildarc','remind','send_mail',
+				     'DoFile','sendMessage','DoForward','DoMessage',
+				     'DoCommand','SendDigest'],
+		       'authentication' => ['login','logout','loginrequest','sendpasswd',
+					    'ssologin','ssologin_succeses','remindpasswd',
+					    'change_identity','choosepasswd'],
+		       'subscription' => ['subscribe','signoff','add','del','ignoresub',
+					  'subindex'],
+		       'list_management' => ['create_list','rename_list','close_list',
+					     'edit_list','admin','blacklist','install_pending_list',
+					     'purge_list','edit_template','copy_template',
+					     'remove_template'],
+		       'bounced' => ['resetbounce','get_bounce'],
+		       'preferences' => ['set','setpref','pref','change_email','setpasswd','record_email','editsubscriber'],
+		       'shared' => ['d_unzip','d_upload','d_read','d_delete','d_savefile',
+				    'd_overwrite','d_create_dir','d_set_owner','d_change_access',
+				    'd_describe','d_rename','d_editfile','d_admin',
+				    'd_install_shared','d_reject_shared','d_properties',
+				    'creation_shared_file','d_unzip_shared_file',
+				    'install_file_hierarchy','d_copy_rec_dir','d_copy_file',
+				    'change_email','set_lang','new_d_read','d_control'],
 		       );
 		       
     ## Check database connection
@@ -265,7 +281,7 @@ sub get_first_db_log {
 	return undef unless &db_connect();
     }
 
-    my $statement = sprintf "SELECT date_logs AS date, robot_logs AS robot, list_logs AS list, action_logs AS action, parameters_logs AS parameters, target_email_logs AS target_email,msg_id_logs AS msg_id, status_logs AS status, error_type_logs AS error_type, user_email_logs AS user_email, client_logs AS client, daemon_logs AS daemon FROM logs_table WHERE 1 AND robot_logs=%s ", $dbh->quote($select->{'robot'});	
+    my $statement = sprintf "SELECT date_logs AS date, robot_logs AS robot, list_logs AS list, action_logs AS action, parameters_logs AS parameters, target_email_logs AS target_email,msg_id_logs AS msg_id, status_logs AS status, error_type_logs AS error_type, user_email_logs AS user_email, client_logs AS client, daemon_logs AS daemon FROM logs_table WHERE robot_logs=%s ", $dbh->quote($select->{'robot'});	
 
     #If the checkbox is checked, the other parameters of research are not taken into account.
     unless ($select->{'all'} eq 'on') {
@@ -284,14 +300,14 @@ sub get_first_db_log {
 	#if the search is between two date
 	if ($select->{'date_from'}) {
 	    my @tab_date_from = split(/\//,$select->{'date_from'});
-	    my $date_from = mktime(0,0,-1,$tab_date_from[0],$tab_date_from[1]-1,$tab_date_from[2]-1900);
+	    my $date_from = &POSIX::mktime(0,0,-1,$tab_date_from[0],$tab_date_from[1]-1,$tab_date_from[2]-1900);
 	    unless($select->{'date_to'}) {
-		my $date_from2 = mktime(0,0,25,$tab_date_from[0],$tab_date_from[1]-1,$tab_date_from[2]-1900);
+		my $date_from2 = &POSIX::mktime(0,0,25,$tab_date_from[0],$tab_date_from[1]-1,$tab_date_from[2]-1900);
 		$statement .= sprintf "AND date_logs BETWEEN '%s' AND '%s' ",$date_from, $date_from2;
 	    }
 	    if($select->{'date_to'}) {
 		my @tab_date_to = split(/\//,$select->{'date_to'});
-		my $date_to = mktime(0,0,25,$tab_date_to[0],$tab_date_to[1]-1,$tab_date_to[2]-1900);
+		my $date_to = &POSIX::mktime(0,0,25,$tab_date_to[0],$tab_date_to[1]-1,$tab_date_to[2]-1900);
 		
 		$statement .= sprintf "AND date_logs BETWEEN '%s' AND '%s' ",$date_from, $date_to;
 	    }

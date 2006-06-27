@@ -46,11 +46,6 @@ my $opt_d;
 my $opt_F;
 my %options;
 
-my $daemon_name = &Log::set_daemon($0);
-my $ip;
-$ip = $ENV{'REMOTE_HOST'};
-$ip = $ENV{'REMOTE_ADDR'} unless ($ip);
-
 &GetOptions(\%main::options, 'dump=s', 'debug|d', 'log_level=s', 'foreground', 'config|f=s', 
 	    'lang|l=s', 'mail|m', 'keepcopy|k=s', 'help', 'version', 'import=s', 'lowercase');
 
@@ -1100,7 +1095,7 @@ sub purge_logs_table {
     my ($task, $Rarguments, $context) = @_;
     my $date;
     my $execution_date = $task->{'date'};
-
+    
     do_log('debug2','purge_logs_table()');
     unless(&Log::db_log_del()) {
 	&do_log('err','purge_logs_table(): Failed to delete logs');
