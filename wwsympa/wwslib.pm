@@ -154,7 +154,7 @@ sub load_config {
 			viewlogs_page_size => 25,
 			task_manager_pidfile => '--PIDDIR--/task_manager.pid',
 			title => 'Mailing Lists Service',
-			use_fast_cgi => 1,
+			exec_mode => 'fastcgi', ## fastcgi OR mod_perl OR cgi
 			default_home => 'home',
 			log_facility => '',
 			robots => '',
