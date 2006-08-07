@@ -3277,7 +3277,7 @@ apache ALL = (sympa)  NOPASSWD: [CGIDIR]/wwsympa.fcgi
 \end {quote}
 
 \item Dedicated Apache server : run a dedicated Apache server with sympa.sympa as uid.gid (The Apache default
-      is apache.apache).
+      is apache.apache). \textbf {When using wwsympa with mod\_perl, this is the only way to have things work properly.}
 
 \item Apache suExec : use an Apache virtual host with sympa.sympa as uid.gid ; Apache
       needs to be compiled with suexec. Be aware that the Apache suexec usually define a lowest
@@ -3310,9 +3310,10 @@ int main(int argn, char **argv, char **envp) {
 \end {quote}
 \end{itemize}
 
-\subsection {Installing wwsympa.fcgi in your Apache server}
+\subsection {Installing wwsympa in your Apache server}
 
-     You first need to set an alias to the directory where Sympa stores static contents (CSS, members pictures, documentation) directly delivered by Apache
+     You first need to set an alias to the directory where Sympa stores static contents (CSS, members pictures, documentation) 
+     directly delivered by Apache
 
 
 \begin {quote}
@@ -3321,6 +3322,8 @@ int main(int argn, char **argv, char **envp) {
        	Alias /sympa_static [DIR]/static_content
 \end{verbatim}
 \end {quote}
+
+\subsubsection {wwsympa as a simple CGI}
 
      If you chose to run \file {wwsympa.fcgi} as a simple CGI, you simply need to
      script alias it. 
@@ -3331,6 +3334,8 @@ int main(int argn, char **argv, char **envp) {
        	ScriptAlias /sympa [CGIDIR]/wwsympa.fcgi
 \end{verbatim}
 \end {quote}
+
+\subsubsection {wwsympa with FastCGI}
 
      Running  FastCGI will provide much faster responses from your server and 
      reduce load (to understand why, read 
@@ -3356,14 +3361,13 @@ If you are using \textbf {sudo} (see evious subsection), then replace \file {wws
 If you run virtual hosts, then each FastCgiServer(s) can serve multiple hosts. 
 Therefore you need to define it in the common section of your Apache configuration file.
 
-\subsection {Using FastCGI}
 
 \htmladdnormallink {FastCGI} {http://www.fastcgi.com/} is an extention to CGI that provides persistency for CGI programs. It is extemely useful
 with \WWSympa since source code interpretation and all initialisation tasks are performed only once, at server startup ; then
 file {wwsympa.fcgi} instances are waiting for clients requests. 
 
-\WWSympa can also work without FastCGI, depending on the \textbf {use\_fast\_cgi} parameter 
-(see \ref {use-fastcgi}, page~\pageref {use-fastcgi}).
+\WWSympa can also work without FastCGI, depending on the \textbf {exec\_mode} parameter 
+(see \ref {exec-mode}, page~\pageref {exec-mode}).
 
 To run \WWSympa with FastCGI, you need to install :
 \begin{itemize}
@@ -3373,6 +3377,35 @@ To run \WWSympa with FastCGI, you need to install :
 \item \perlmodule {FCGI} : the Perl module used by \WWSympa
 
 \end{itemize}
+
+\subsubsection {wwsympa with mod\_perl}
+
+This mode is only available with Apache2 (mod\_perl1 is not supported).
+You can run \WWSympa as an Apache module using mod\_perl. The wwsympa.pm package will then be used to generate the http response
+of Apache. Like with FastCGI, the code is persistent, and initializations happen only once. Therefore the performances about
+speed and load are far much better than with the CGI mode.
+The main advantage of using mod\_perl rather than using FastCGI, is that you can use the multi-threading capabilities
+of Apache2. Then you need less RAM memory to run a (high-loaded) wwsympa server, and may have a faster execution too.
+To run \WWSympa using mod\_perl, you must first be sure that the location of the WWSympa perl module is known by the 
+perl interpreter. So that you can use such a perl command (usually stored in /etc/httpd/startup.pl):
+\begin {quote}
+\begin{verbatim}
+  use lib qw{[LIBDIR]};
+\end{verbatim}
+\end {quote}
+
+Then you need to have an entry like the one below in your Apache configuration file.
+\begin {quote}
+\begin{verbatim}
+  PerlRequire /etc/httpd/startup.pl   # Path to the WWSympa perl module
+  PerlModule wwsympa
+  <Location /my-sympa-server >
+    PerlResponseHandler wwsympa       # Using the WWSympa module to generate the HTTP response
+    PerlSendHeader On                 # To handle properly the HTTP headers
+  </Location>
+\end{verbatim}
+\end {quote}
+
 
 \section {wwsympa.conf parameters}
 
@@ -3470,15 +3503,17 @@ To run \WWSympa with FastCGI, you need to install :
 	The name of your mailing list service. It will appear in
 	the Title section of WWSympa.
 
-	\subsection {use\_fast\_cgi   0 | 1}
+	\subsection {use\_fast\_cgi   0 | 1}  (OBSOLETE) 
 	\label{use-fastcgi}
-	\default {1} \\
-	Choice of whether or not to use FastCGI. On listes.cru.fr, using FastCGI 
-        increases WWSympa performance by as much as a factor of 10. Refer to 
-       	\htmladdnormallink {http://www.fastcgi.com/} {http://www.fastcgi.com/}
-	and the Apache config section of this document for details about 
-	FastCGI.
+	Check the new \cfkeyword {exec\_mode} parameter.
 
+	\subsection {exec\_mode   mod\_perl | fastcgi | cgi}
+	\label{exec-mode}
+	\default {fastcgi} \\
+	You can run \file {wwsympa.fcgi} as a normal CGI but you might have poor performances, especially when hosting lots of
+	mailing lists. To increase the performances you can either use the FastCGI technology 
+	(see \htmladdnormallink {http://www.fastcgi.com/} {http://www.fastcgi.com/}) or run wwsympa as an Apache module, using 
+	\textindex{mod\_perl} (see \htmladdnormallink {http://perl.apache.org/} {http://perl.apache.org/}).
 
 \section {MhOnArc}
  

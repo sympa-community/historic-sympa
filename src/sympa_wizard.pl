@@ -413,12 +413,12 @@ my @params = ({'title' => 'Directories and file location'},
 
 	      {'title' => 'Web interface'},
 
-	      {'name' => 'use_fast_cgi',
-	       'default' => '1',
-	       'query' => 'Is fast_cgi module for Apache (or Roxen) installed (0 | 1)',
+	      {'name' => 'exec_mode',
+	       'default' => 'fastcgi',
+	       'query' => 'What mode to run wwsympa should be used (mod_perl | fastcgi | cgi)',
 	       'file' => 'wwsympa.conf','edit' => '1',
-	       'advice' =>'This module provide much faster web interface'},
-
+	       'advice' =>'mod_perl and fastcgi provide much faster web interface than cgi'},
+	      
 	      {'name' => 'wwsympa_url',
 	       'default' => 'http://--HOST--/sympa',
 	       'query' => "Sympa\'s main page URL",
