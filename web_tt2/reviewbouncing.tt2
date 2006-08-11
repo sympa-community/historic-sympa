@@ -1,6 +1,6 @@
 <!-- RCS Identication ; $Revision$ ; $Date$ -->
 
-<table style="width: auto;" border="0">
+<table class="preferences">
 <tr><td>
     <form action="[% path_cgi %]" method="post"> 
       <input type="hidden" name="previous_action" value="reviewbouncing" />
@@ -36,15 +36,15 @@
   </form>
    </td>
 
- <td style="text-align: right;">
+ <td class="text_right">
         [% IF prev_page %]
-	  <a href="[% path_cgi %]/reviewbouncing/[% list %]/[% prev_page %]/[% size %]"><img src="[% icons_url %]/left.png" style="border: 0px;" alt="[%|loc%]Previous page[%END%]"></a>
+	  <a href="[% path_cgi %]/reviewbouncing/[% list %]/[% prev_page %]/[% size %]"><img src="[% icons_url %]/left.png" alt="[%|loc%]Previous page[%END%]"></a>
         [% END %]
         [% IF page %]
   	  [%|loc(page,total_page)%]page %1 / %2[%END%]
         [% END %]
         [% IF next_page %]
-	  <a href="[% path_cgi %]/reviewbouncing/[% list %]/[% next_page %]/[% size %]"><img src="[% icons_url %]/right.png" style="border: 0px;" alt="[%|loc%]Next page[%END%]"></a>
+	  <a href="[% path_cgi %]/reviewbouncing/[% list %]/[% next_page %]/[% size %]"><img src="[% icons_url %]/right.png" alt="[%|loc%]Next page[%END%]"></a>
         [% END %]
     </td></tr>
     </table>
@@ -64,21 +64,21 @@
 	[% IF dark == '1' %]
 	  <tr>
 	[% ELSE %]
-	  <tr style="background-color: [% color_0 %];">
+	  <tr class="color0">
 	[% END %]
 
 	  <td>
 	    <input type="checkbox" name="email" value="[% u.escaped_email %]" />
 	  </td>
-	  <td style="white-space: nowrap;">
+	  <td>
 	      <a href="[% path_cgi %]/editsubscriber/[% list %]/[% u.escaped_email %]/reviewbouncing">[% u.email %]</a>
 
 	  </td>
-          <td style="text-align: center;
+          <td class="text_center 
 	  [% IF u.bounce_level == '2' %]
-            background-color: #FF0000;
+            bounce_level2
 	  [% ELSIF u.bounce_level == '1' %]
-	    background-color: #FF8C00;
+	    bounce_level1
 	  [% END %]
 	  ">
   	      [% u.bounce_score %]
@@ -95,23 +95,23 @@
 
 
       </table>
-    <table style="width: auto;" border="0">
-    <tr><td style="text-align: left; white-space: nowrap;">
+    <table class="preferences">
+    <tr><td>
       [% IF is_owner %]
         <br />
         <input class="MainMenuLinks" type="submit" name="action_del" value="[%|loc%]Delete selected email addresses[%END%]" />
         <input type="checkbox" name="quiet" /> [%|loc%]quiet[%END%]
 	<input class="MainMenuLinks" type="submit" name="action_resetbounce" value="[%|loc%]Reset errors for selected users[%END%]" />
       [% END %]
-    </td><td style="text-align: right; white-space: nowrap;">
+    </td><td class="text_right">
         [% IF prev_page %]
-	  <a href="[% path_cgi %]/reviewbouncing/[% list %]/[% prev_page %]/[% size %]"><img src="[% icons_url %]/left.png" style="border: 0px;" alt="[%|loc%]Previous page[%END%]" /></a>
+	  <a href="[% path_cgi %]/reviewbouncing/[% list %]/[% prev_page %]/[% size %]"><img src="[% icons_url %]/left.png" alt="[%|loc%]Previous page[%END%]" /></a>
         [% END %]
         [% IF page %]
   	  [%|loc(page,total_page)%]page %1 / %2[%END%]
         [% END %]
         [% IF next_page %]
-	  <a href="[% path_cgi %]/reviewbouncing/[% list %]/[% next_page %]/[% size %]"><img src="[% icons_url %]/right.png" style="border: 0px;" alt="[%|loc%]Next page[%END%]" /></a>
+	  <a href="[% path_cgi %]/reviewbouncing/[% list %]/[% next_page %]/[% size %]"><img src="[% icons_url %]/right.png" alt="[%|loc%]Next page[%END%]" /></a>
         [% END %]
     </td></tr>
     <tr><td><input class="MainMenuLinks" type="button" value="[%|loc%]Toggle Selection[%END%]" onclick="toggle_selection(document.myform.email)" />

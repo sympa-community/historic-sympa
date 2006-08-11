@@ -15,24 +15,24 @@
 
 <br /> 
 
-<table style="border: solid 1px; width: auto; margin: 10px">
-<tr style="background-color: [% color_4 %];">
-   <th style="padding: 3px; white-space: nowrap; border: solid 1px;"><strong>[%|loc%]List name[%END%]</strong></th>
-   <th style="padding: 3px; white-space: nowrap; border: solid 1px;"><strong>[%|loc%]# message[%END%]</strong></th>	
-   <th style="padding: 3px; white-space: nowrap; border: solid 1px;"><strong>[%|loc%]Average by day[%END%]</strong></th>	
-   <th style="padding: 3px; white-space: nowrap; border: solid 1px;"><strong>[%|loc%]Creation date[%END%]</strong></th>
-   <th style="padding: 3px; white-space: nowrap; border: solid 1px;"><strong>[%|loc%]Subject[%END%]</strong></th>
+<table class="listOfItems">
+<tr class="color4">
+   <th><strong>[%|loc%]List name[%END%]</strong></th>
+   <th><strong>[%|loc%]# message[%END%]</strong></th>	
+   <th><strong>[%|loc%]Average by day[%END%]</strong></th>	
+   <th><strong>[%|loc%]Creation date[%END%]</strong></th>
+   <th><strong>[%|loc%]Subject[%END%]</strong></th>
  </tr>
 
 [% SET dark = '0' %]
 [% FOREACH l = active_lists %]
-  [% IF dark == '1' %]<tr valign="top">[% SET dark = '0' %][% ELSE %]<tr style="background-color: [% color_0 %];" valign="top">[% SET dark = '1' %][% END %]
+  [% IF dark == '1' %]<tr>[% SET dark = '0' %][% ELSE %]<tr class="color0">[% SET dark = '1' %][% END %]
 
    <td>
      <a href="[% path_cgi %]/info/[% l.name %]" ><strong>[% hidden_head %][% l.name %][% hidden_at %][% l.host %][% hidden_end %]</strong></a>
    </td>
-  <td style="text-align: center;"> [% l.msg_count %] </td>
-  <td style="text-align: center;"> [% l.average %] </td>
+  <td class="text_center"> [% l.msg_count %] </td>
+  <td class="text_center"> [% l.average %] </td>
   <td> [% l.date %] </td>
   <td> [% l.subject %] </td>
  </tr>

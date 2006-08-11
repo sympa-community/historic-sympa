@@ -1,12 +1,12 @@
 <form action="[% path_cgi %]" method="post"> 
 <input type="hidden" name="list" value="[% list %]" />
 
-    <table style="border: solid 1px; width: auto; margin: 10px">
-      <tr style="background-color: [% color_4 %];">
-          <th style="padding: 3px; white-space: nowrap; border: solid 1px;">X</th>
-          <th style="padding: 3px; white-space: nowrap; border: solid 1px;" colspan="2">[%|loc%]Email[%END%]</th>
-          <th style="padding: 3px; white-space: nowrap; border: solid 1px;">[%|loc%]Name[%END%]</th>
-          <th style="padding: 3px; white-space: nowrap; border: solid 1px;">[%|loc%]Date[%END%]</th>
+    <table class="listOfItems">
+      <tr>
+          <th>X</th>
+          <th colspan="2">[%|loc%]Email[%END%]</th>
+          <th>[%|loc%]Name[%END%]</th>
+          <th>[%|loc%]Date[%END%]</th>
       </tr>
       
       [% IF subscriptions %]
@@ -14,22 +14,22 @@
       [% FOREACH sub = subscriptions %]
 
 	[% IF dark == '1' %]
-	  <tr valign="top">
+	  <tr>
 	[% ELSE %]
-          <tr style="background-color: [% color_0 %];" valign="top">
+          <tr class="color0">
 	[% END %]
 	    <td>
            <input type="checkbox" name="pending_email" value="[% sub.key %],[% sub.value.gecos %]" />
 	    </td>
-	  <td colspan="2" style="white-space: nowrap;"><span style="font-size: smaller;">
+	  <td colspan="2"><span class="smaller">
 	        [% sub.key %]
 	  </span></td>
 	  <td>
-             <span style="font-size: smaller;">
+             <span class="smaller">
 	        [% sub.value.gecos %]&nbsp;
 	     </span>
           </td>
-	    <td style="text-align: center; white-space: nowrap;"><span style="font-size: smaller;">
+	    <td class="text_center"><span class="smaller">
 	      [% sub.value.date %]
 	    </span></td>
         </tr>

@@ -23,13 +23,13 @@
 
  [% IF action == 'which' %]
   [% IF ! which %]
-   &nbsp;&nbsp;<span style="color: [% dark_color %];">[%|loc(user.email)%]No subscriptions with address <strong>%1</strong>![%END%]</span>
+   &nbsp;&nbsp;<span class="color_dark">[%|loc(user.email)%]No subscriptions with address <strong>%1</strong>![%END%]</span>
    <br />
   [% END %]
 
   [% IF unique != '1' %]
    <table>
-   &nbsp;&nbsp;<span style="color: [% dark_color %];">[%|loc%]See your subscriptions with the following email addresses[%END%]</span><br />
+   &nbsp;&nbsp;<span class="color_dark">[%|loc%]See your subscriptions with the following email addresses[%END%]</span><br />
    <br /><br />
 
    <tr> 
@@ -48,8 +48,8 @@
 
    <table>
    <tr>
-   &nbsp;&nbsp;<span style="color: [% dark_color %];">[%|loc%]Unify your subscriptions with the email[%END%] <strong>[% user.email %]</strong></span><br /> 
-   &nbsp;&nbsp;<span style="color: [% dark_color %];">[%|loc%]That is to say using a unique email address in Sympa for your subscriptions and preferences[%END%]</span>
+   &nbsp;&nbsp;<span class="color_dark">[%|loc%]Unify your subscriptions with the email[%END%] <strong>[% user.email %]</strong></span><br /> 
+   &nbsp;&nbsp;<span class="color_dark">[%|loc%]That is to say using a unique email address in Sympa for your subscriptions and preferences[%END%]</span>
 
    <tr>
    <td>

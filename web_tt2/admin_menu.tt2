@@ -1,7 +1,7 @@
 <!-- $Id$ -->
 
 <!-- begin admin_menu.tt2 -->
-    <td style="background: [% selected_color %]; text-align: center;" colspan="9">
+    <td style="background: [% selected_color %]; text-align: center;" colspan="9"> 
 	  <span style="color: [% bg_color %]"><strong>[%|loc%]List Administration Panel[%END%]</strong></span>
     </td>
     </tr>

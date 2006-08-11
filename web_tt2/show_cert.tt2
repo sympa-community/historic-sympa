@@ -1,8 +1,8 @@
 <!-- $Id$ -->
 
 <br />
-<table border="1">
-<tr><td style="text-align: center;"><strong>[%|loc%]HTTPS authentication information[%END%]</strong></td></tr>
+<table class="table_style">
+<tr><td class="text_center"><strong>[%|loc%]HTTPS authentication information[%END%]</strong></td></tr>
 <tr><td>
 <table>
 <tr><td>[%|loc%]User certificate belong to[%END%] </td><td>[% ssl_client_s_dn %]</td></tr>

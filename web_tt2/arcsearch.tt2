@@ -1,11 +1,11 @@
 <!-- $Id$ -->
 
 <h2>[%|loc%]Result of your search in the archive[%END%] 
-<a href="[% path_cgi %]/arc/[% list %]/[% archive_name %]"><span style="color: [% dark_color %];">[% list %]</span></a> : </h2>
+<a href="[% path_cgi %]/arc/[% list %]/[% archive_name %]"><span class="color_dark">[% list %]</span></a> : </h2>
 
 <p>[%|loc%]Search field :[%END%] 
 [% FOREACH u = directories %]
- <a href="[% path_cgi %]/arc/[% list %]/[% u %]"><span style="color: [% dark_color %];">[% u %]</font></a> - 
+ <a href="[% path_cgi %]/arc/[% list %]/[% u %]"><span class="color_dark">[% u %]</font></a> - 
 [% END %]
 </p>
 <p>

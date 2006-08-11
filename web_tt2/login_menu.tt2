@@ -15,7 +15,7 @@
 
 
 [% IF auth_method == 'md5' %]
-  <form style="text-align: center" action="[% path_cgi %]" method="post">
+  <form class="text_center" action="[% path_cgi %]" method="post">
   <input type="hidden" name="action" value="logout" />
   [% IF referer %]
           <input type="hidden" name="referer" value="[% referer %]" />

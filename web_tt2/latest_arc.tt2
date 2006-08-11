@@ -14,8 +14,8 @@
 </strong> </h2> 	
 <br /> 
  
-<table style="width: auto;">
- <tr style="background-color: [% light_color %]">
+<table>
+ <tr class="color_light">
    <th><strong>[%|loc%]Date[%END%]</strong></th>
    <th><strong>[%|loc%]Subject[%END%]</strong></th>
    <th><strong>[%|loc%]From[%END%]</strong></th>

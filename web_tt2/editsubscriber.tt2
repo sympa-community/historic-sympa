@@ -6,7 +6,7 @@
 <table>
 <tr>
   <td><input type="hidden" name="previous_action" value="[% previous_action %]" /><input type="hidden" name="list" value="[% list %]" /><input type="hidden" name="email" value="[% current_subscriber.escaped_email %]" />
-  <table border="0" style="text-align: left;">
+  <table class="preferences">
    <tr><th><label for="new_email">[%|loc%]Email :[%END%]</label></th>
        <td><input type="text" name="new_email" id="new_email" value="[% current_subscriber.escaped_email %]" size="25" />
       </td>
@@ -57,11 +57,11 @@
 </td></tr>
 
 [% IF current_subscriber.bounce %]
-<tr><th style="background: [% error_color %];">
-<span style="color: [% bg_color %];">[%|loc%]Bouncing address[%END%]</span>
+<tr><th class="bg_color_error">
+<span class="color_bg">[%|loc%]Bouncing address[%END%]</span>
 </th></tr>
 <tr><td>
-<table border="0">
+<table class="preferences">
 
 [% IF current_subscriber.escaped_bounce_address  %]
  <tr><th> [%|loc%]Address detected via VERP technologie[%END%]</th><td>[% current_subscriber.escaped_bounce_address %]</td></tr>

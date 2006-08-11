@@ -1,15 +1,9 @@
 <!-- $Id$ -->
 
-
+<h3>[%|loc%]Scenario test module[%END%]</h3><br />
 <form action="[% path_cgi %]" method="post">
     <input type="hidden" name="action" value="scenario_test" />
-    <div style="margin-left: auto; margin-right: auto; text-align: center;">
-    <table border="0" cellpadding="10" style="text-align: left;">
-      <tr valign="top">
-        <td colspan="2" style="white-space: nowrap;">
-    	<div style="color: [% dark_color %]; text-align: center;"><strong>[%|loc%]Scenario test module[%END%]</strong></div><br />
-        </td>
-      </tr>
+    <table class="preferences">
       <tr>
         <td>[%|loc%]Scenari name[%END%]</td>
         <td>
@@ -68,18 +62,17 @@
     <tr>
 
 	<td><input class="MainMenuLinks" type="submit" name="action_scenario_test" value="[%|loc%]get matched rule[%END%]" /></td>
-        <td style="background-color: [% dark_color %];">
+        <td class="bg_color_dark">
           [% IF scenario_action %]
              <code>[% scenario_condition %], [% scenario_auth_method %] -> [% scenario_action %]</code>
           [% ELSE %]
-          <div style="text-align: center;">-</div>
+          <div class="text_center">-</div>
           [% END %]
         </td>
 
       </tr>
 
     </table>
-    </div>
     </form>
 
 

@@ -4,25 +4,25 @@
 <form action="[% path_cgi %]" method="post">
 
 
-<table style="width: auto;">
+<table>
  <tr>
-   <th style="text-align: left; white-space: nowrap;"><label for="listname"><strong>[%|loc%]List name:[%END%]</strong></label></th>
+   <th><label for="listname"><strong>[%|loc%]List name:[%END%]</strong></label></th>
    <td><input type="text" id="listname" name="listname" size="30" value="[% saved.listname %]" /></td>
    <td><img src="[% icons_url %]/unknown.png" alt="?" title="[%|loc%]the list name ; be careful, not its address ![%END%]" /></td>
  </tr>
  
  <tr>
-   <th style="text-align: left; white-space: nowrap;"><strong>[%|loc%]Owner:[%END%]</strong></th>
+   <th><strong>[%|loc%]Owner:[%END%]</strong></th>
    <td><em>[% user.email %]</em></td>
    <td><img src="[% icons_url %]/unknown.png" alt="?" title="[%|loc%]You are the privileged owner of this list[%END%]" /></td>
  </tr>
 
  <tr>
-   <th valign="top" style="text-align: left; white-space: nowrap;"><strong>[%|loc%]List type :[%END%]</strong></th>
+   <th class="align_top"><strong>[%|loc%]List type :[%END%]</strong></th>
    <td>
      <ul>
   [% FOREACH template = list_list_tpl %]
-      <li style="margin: 1em;">
+      <li class="create_list">
       <dl>
       <dt>
      <label><input type="radio" name="template" value="[% template.key %]"
@@ -42,15 +42,15 @@
   [% END %]
      </ul>
     </td>
-    <td valign="top"><img src="[% icons_url %]/unknown.png" alt="?" title="[%|loc%]The list type is a set of parameters' profile. Parameters will be editable, once the list created[%END%]" /></td>
+    <td class="align_top"><img src="[% icons_url %]/unknown.png" alt="?" title="[%|loc%]The list type is a set of parameters' profile. Parameters will be editable, once the list created[%END%]" /></td>
  </tr>
  <tr>
-   <th style="text-align: left; white-space: nowrap;"><label for="subject"><strong>[%|loc%]Subject:[%END%]</strong></label></th>
+   <th><label for="subject"><strong>[%|loc%]Subject:[%END%]</strong></label></th>
    <td><input type="text" name="subject" id="subject" size="60" value="[% saved.subject %]" /></td>
    <td><img src="[% icons_url %]/unknown.png" alt="?" title="[%|loc%]The list's subject[%END%]" /></td>
  </tr>
  <tr>
-   <th style="text-align: left; white-space: nowrap;"><label for="topics"><strong>[%|loc%]Topics:[%END%]</strong></label></th>
+   <th><label for="topics"><strong>[%|loc%]Topics:[%END%]</strong></label></th>
    <td><select id="topics" name="topics">
 	<option value="">[%|loc%]--Select a topic--[%END%]</option>
 	[% FOREACH topic = list_of_topics %]
@@ -68,20 +68,20 @@
 	<option value="other">[%|loc%]Other[%END%]</option>
      </select>
    </td>
-   <td valign="top"><img src="[% icons_url %]/unknown.png" alt="?" title="[%|loc%]List classification in the directory[%END%]" /></td>
+   <td><img src="[% icons_url %]/unknown.png" alt="?" title="[%|loc%]List classification in the directory[%END%]" /></td>
  </tr>
 
  <tr>
-   <th valign="top" style="text-align: left; white-space: nowrap;"><label for="info"><strong>[%|loc%]Description:[%END%]</strong></label></th>
+   <th><label for="info"><strong>[%|loc%]Description:[%END%]</strong></label></th>
    <td><textarea cols="80" rows="10" name="info">[% saved.info %]</textarea></td>
-   <td valign="top"><img src="[% icons_url %]/unknown.png" alt="?" title="[%|loc%]A few lines describing the list[%END%]" /></td>
+   <td class="align_top"><img src="[% icons_url %]/unknown.png" alt="?" title="[%|loc%]A few lines describing the list[%END%]" /></td>
  </tr>
 
  <tr>
-   <td colspan="2" style="text-align: left; text-align: center;">
+   <td colspan="2" class="text_center">
     <table>
      <tr>
-      <td style="background: [% light_color %];">
+      <td class="color_light">
 <input class="MainMenuLinks" type="submit" name="action_create_list" value="[%|loc%]Submit your creation request[%END%]" />
       </td>
      </tr></table>

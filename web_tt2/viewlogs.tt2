@@ -17,13 +17,13 @@
   </form>
 <br />
    [% IF prev_page %]
-    <a href="[% path_cgi %]/viewlogs/[% list %]/[% prev_page %]/[% size %]/[% sortby %]"><img src="[% icons_url %]/left.png" style="border: 0px;" alt="[%|loc%]Previous page[%END%]" /></a>
+    <a href="[% path_cgi %]/viewlogs/[% list %]/[% prev_page %]/[% size %]/[% sortby %]"><img src="[% icons_url %]/left.png" alt="[%|loc%]Previous page[%END%]" /></a>
    [% END %]
    [% IF page %]
      [%|loc%]page[%END%] [% page %] / [% total_page %]
    [% END %]
    [% IF next_page %]
-     <a href="[% path_cgi %]/viewlogs/[% list %]/[% next_page %]/[% size %]/[% sortby %]"><img src="[% icons_url %]/right.png" style="border: 0px;" alt="[%|loc%]Next page[%END%]" /></a>
+     <a href="[% path_cgi %]/viewlogs/[% list %]/[% next_page %]/[% size %]/[% sortby %]"><img src="[% icons_url %]/right.png" alt="[%|loc%]Next page[%END%]" /></a>
    [% END %]
 
 
@@ -163,10 +163,10 @@
   <h7>[%|loc(rows_nb)%]%1 results[%END%].</h7
 [% END %]
 
-<table class="listOfItems" >
+<table class="listOfItems smaller">
       <tr>
 	[% IF sortby == 'date' %]
-  	    <th style="background-color: [% color_6 %];">
+  	    <th class="sortby">
 	    [%|loc%]Sub date[%END%]
 	[% ELSE %]
 	    <th>
@@ -176,7 +176,7 @@
 
 	[% IF is_listmaster || is_owner %]
 	[% IF sortby == 'list' %]
-  	    <th style="background-color: [% color_6 %];">
+  	    <th class="sortby">
 	    [%|loc%]List[%END%]
 	[% ELSE %]
 	    <th>
@@ -186,7 +186,7 @@
 	[% END %]
 
 	[% IF sortby == 'action' %]
-  	    <th style="background-color: [% color_6 %];">
+  	    <th class="sortby">
 	    [%|loc%]Action[%END%]
 	[% ELSE %]
 	    <th>
@@ -215,7 +215,7 @@
 	</th>
 
 	[% IF sortby == 'email' %]
-  	    <th style="background-color: [% color_6 %];">
+  	    <th class="sortby">
 	    [%|loc%]User Email[%END%]
 	[% ELSE %]
 	    <th>	    
@@ -234,78 +234,57 @@
 	</th>
         
       </tr>
-      <div id="log_disp">
+ 
       [% FOREACH l = log_entries %]
 	[% IF dark == '1' %]
 	    <tr>
 	[% ELSE %]
-            <tr style="background-color: [% color_0 %];">
+            <tr class="color0">
 	[% END %]
 	
 	[% IF l.status == 'error' %]
-	  <tr style="background-color: [% error_color %];">
+	  <tr class="bg_color_error">
 	[% END %]
 	  <td>
-	    <span style="font-size: smaller;">
-	    [% l.date %]
-	    </span>
+	    <span class="smaller">[% l.date %]</span>
 	  </td>
 	 [% IF is_listmaster || is_owner %]
 	  <td>
-  	    <span style="font-size: smaller;">
-  	      [% l.list %]
-	  </span></td>
+  	     <span class="smaller">[% l.list %]</span>
+	  </td>
 	  [% END %]
 	  <td>
-  	    <span style="font-size: smaller;">
-  	      [% l.action %]
-	  </span></td>
-
+  	     <span class="smaller">[% l.action %]</span>
+	  </td>
 	  <td>
-	    <span style="font-size: smaller;">
-  	      [% l.parameters %]
-	  </span></td>
-
+  	     <span class="smaller">[% l.parameters %]</span>
+	  </td>
 	  <td>
-  	    <span style="font-size: smaller;">
-  	      [% l.target_email %]
-	  </span></td>
-
+  	     <span class="smaller">[% l.target_email %]</span>
+	  </td>
 	  <td>
-  	    <span style="font-size: smaller;">
 	      [% IF l.msg_id %]
-  	        <a href="javascript:searched_by_msgId('[% l.msg_id %]')" style="font-size: 1em;" title="[%|loc%]view other events related to this message id.[%END%]">[%|loc%]Other events[%END%]</a>
+  	        <a href="javascript:searched_by_msgId('[% l.msg_id %]')" title="[%|loc%]view other events related to this message id.[%END%]"><span class="smaller">[%|loc%]Other events[%END%]</span></a>
 	      [% END %]
-	  </span></td>
-
+	  </td>
 	  <td>
-	    <span style="font-size: smaller;">
-	     [% l.status %]
-	  </span></td>
-
+	     <span class="smaller">[% l.status %]</span>
+	  </td>
 	  <td>
-  	    <span style="font-size: smaller;">
-  	      [% l.error_type %]
-	  </span></td>
-
+  	      <span class="smaller">[% l.error_type %]</span>
+	  </td>
 	  <td>
-  	    <span style="font-size: smaller;">
-  	      [% l.user_email %]
-	  </span></td>
-
+  	      <span class="smaller">[% l.user_email %]</span>
+	  </td>
 	  [% IF is_listmaster || is_owner %]
 	  <td>
-  	    <span style="font-size: smaller;">
-  	      [% l.client %]
-	  </span></td>
+  	      <span class="smaller">[% l.client %]</span>
+	  </td>
 	  [% END %]
-
 	  <td>
-  	    <span style="font-size: smaller;">
-  	      [% l.daemon %]
-	  </span></td>
+  	      <span class="smaller">[% l.daemon %]</span>
+	  </td>
 	</tr>
-
       	[% IF dark == '1' %]
 	  [% SET dark = 0 %]
 	[% ELSE %]
@@ -313,6 +292,5 @@
 	[% END %]
 
       [% END %]
-      </div>
-
+     
 </table>

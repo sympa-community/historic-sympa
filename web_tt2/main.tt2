@@ -37,11 +37,6 @@
 
 [% IF base %] <base href="[% base %]" /> [% END %]
 <!--[if IE]>
-<style>
-.ContentBlock {
-	margin: -7px 0px 0px 0px;
-}
-</style>
 <![endif]-->
 </head>
 

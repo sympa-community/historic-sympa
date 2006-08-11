@@ -1,8 +1,8 @@
 <!-- $Id$ -->
 
 
-<table style="width: 100%;">
- <tr style="background: [% color_4 %];">
+<table>
+ <tr class="color4">
    <th><strong>[%|loc%]Status[%END%]</strong></th>
    <th><strong>[%|loc%]Listname[%END%]</strong></th>
    <th><strong>[%|loc%]Instantiation date[%END%]</strong></th>

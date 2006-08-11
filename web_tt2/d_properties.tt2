@@ -1,7 +1,7 @@
 <!-- $Id$ -->
 
 
-<span style="float: right"><a class="actionMenuLinks" href="[% path_cgi %]/d_read/[% list %]/[% escaped_father %]">[%|loc%]Up to higher level directory[%END%]</a></span>
+<span class="search_form"><a class="actionMenuLinks" href="[% path_cgi %]/d_read/[% list %]/[% escaped_father %]">[%|loc%]Up to higher level directory[%END%]</a></span>
 
   [% IF url %]
   <h2>[%|loc(visible_path)%]Properties of the bookmark %1[%END%]</h2>

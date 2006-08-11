@@ -4,7 +4,7 @@
 <!-- moderation of messages -->
   <form action="[% path_cgi %]" method="post" name="moderate_mails">
   <input type="hidden" name="list" value="[% list %]" />
-<p><span style="padding: 3px; font-size: 2em;">[%|loc%]Listing messages to moderate[%END%]</span></p>
+<h1>[%|loc%]Listing messages to moderate[%END%]</h1>
 <table>
 <tr><td>
  [%- IF topic_required -%]
@@ -35,19 +35,19 @@
  <table class="listOfItems">
       <tr>
 
-	<th style="padding: 3px; border: solid 1px;"><span style="text-align: center;">X</span></th>
-        <th style="padding: 3px; border: solid 1px;"><span style="text-align: center;">[%|loc%]Date[%END%]</span></th>
-	<th style="padding: 3px; border: solid 1px;"><span style="text-align: center;">[%|loc%]Author[%END%]</span></th>
-	<th style="padding: 3px; border: solid 1px;"><span style="text-align: center;">[%|loc%]Subject[%END%]</span></th>
-	<th style="padding: 3px; border: solid 1px;"><span style="text-align: center;">[%|loc%]Size[%END%]</span></th>
+	<th>X</span></th>
+        <th>[%|loc%]Date[%END%]</span></th>
+	<th>[%|loc%]Author[%END%]</span></th>
+	<th>[%|loc%]Subject[%END%]</span></th>
+	<th>[%|loc%]Size[%END%]</span></th>
       </tr>	 
       [% FOREACH msg = spool %]
         [% IF dark == '1' %]
 	  [% dark = '0' %]
-	  <tr valign="top">
+	  <tr>
 	[% ELSE %]
 	  [% dark = '1' %]
-          <tr style="background-color: [% color_0 %];" valign="top">
+          <tr class="color0">
 	[% END %]
 
          <td>
@@ -55,20 +55,20 @@
 	 </td>
 	  <td>
 	    [% IF msg.value.date %]
-	      <span style="font-size: smaller;">[% msg.value.date %]</span>
+	      <span class="smaller">[% msg.value.date %]</span>
 	    [% ELSE %]
 	      &nbsp;
 	    [% END %]
 	  </td>
-	  <td><span style="font-size: smaller;">[% msg.value.from %]</span></td>
+	  <td><span class="smaller">[% msg.value.from %]</span></td>
 	  <td>
 	    [% IF msg.value.subject == 'no_subject' %]
-	      <a href="[% path_cgi %]/viewmod/[% list %]/[% msg.key %]"><span style="font-size: smaller;">[%|loc%]No subject[%END%]</span></a>
+	      <a href="[% path_cgi %]/viewmod/[% list %]/[% msg.key %]"><span class="smaller">[%|loc%]No subject[%END%]</span></a>
 	    [% ELSE %]
-	      <a href="[% path_cgi %]/viewmod/[% list %]/[% msg.key %]"><span style="font-size: smaller;">[% msg.value.subject %]</span></a>
+	      <a href="[% path_cgi %]/viewmod/[% list %]/[% msg.key %]"><span class="smaller">[% msg.value.subject %]</span></a>
 	    [% END %]
 	  </td>
-	  <td><span style="font-size: smaller;">[% msg.value.size %] kb</span></td>
+	  <td><span class="smaller">[% msg.value.size %] kb</span></td>
 	</tr>
       [% END %] 
     </table>
@@ -103,11 +103,11 @@
 </td></tr></table>  
     <table class=listOfItems">
       <tr>
-	<th><span style="color: [% bg_color %];">X</span></th>
-        <th><span style="color: [% bg_color %];">[%|loc%]Date[%END%]</span></th>
-	<th><span style="color: [% bg_color %];">[%|loc%]Author[%END%]</span></th>
-	<th><span style="color: [% bg_color %];">[%|loc%]Path[%END%]</span></th>
-	<th><span style="color: [% bg_color %];">[%|loc%]Size[%END%]</span></th>
+	<th><span class="color_bg">X</span></th>
+        <th><span class="color_bg">[%|loc%]Date[%END%]</span></th>
+	<th><span class="color_bg">[%|loc%]Author[%END%]</span></th>
+	<th><span class="color_bg">[%|loc%]Path[%END%]</span></th>
+	<th><span class="color_bg">[%|loc%]Size[%END%]</span></th>
       </tr>	 
       [% FOREACH f = info_doc_mod %]
         <tr>
@@ -116,16 +116,16 @@
 	 </td>
 	  <td>
 	    [% IF f.date %]
-	      <span style="font-size: smaller;">[% f.date %]</span>
+	      <span class="smaller">[% f.date %]</span>
 	    [% ELSE %]
 	      &nbsp;
 	    [% END %]
 	  </td>
-	  <td><span style="font-size: smaller;">[% f.author %]</span></td>
+	  <td><span class="smaller">[% f.author %]</span></td>
 	  <td>
-	    <a href="[% path_cgi %]/d_read/[% list %][% f.visible_path %][% f.fname %]"><span style="font-size: smaller;">[% f.visible_path %][% f.visible_fname %]</span></a>
+	    <a href="[% path_cgi %]/d_read/[% list %][% f.visible_path %][% f.fname %]"><span class="smaller">[% f.visible_path %][% f.visible_fname %]</span></a>
 	  </td>
-	  <td><span style="font-size: smaller;">[% f.size %] kb</span></td>
+	  <td><span class="smaller">[% f.size %] kb</span></td>
 	</tr>
       [% END %] 
     </table>

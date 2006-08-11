@@ -2,29 +2,29 @@
 
  <form action="[% path_cgi %]" method="post">
 
-   <table cellspacing="15">
+   <table class="preferences">
     <tr> 
-     <td style="text-align: right;" valign="bottom">
+     <td>
       [%|loc(shortname)%]Do you want to delete the old file %1 ?[%END%]
      </td>
-     <td style="text-align: left;" valign="bottom">
+     <td>
       <input class="MainMenuLinks" type="submit" name="mode_delete" value="[%|loc%]Delete[%END%]" />
      </td>
     </tr>
     <tr>
-     <td style="text-align: right;" valign="bottom">
+     <td>
       [%|loc(shortname)%]Do you want to rename your file %1 ?[%END%] <br />
-      <input size="50" maxlength="100" name="new_name" />
+      <input size="40" maxlength="100" name="new_name" />
      </td>
-     <td style="text-align: left;" valign="bottom">
-      <input  class="MainMenuLinks" size="20" maxlength="50" type="submit" name="mode_rename" value="[%|loc%]Rename[%END%]" />
+     <td>
+      <input  class="MainMenuLinks" size="20" maxlength="40" type="submit" name="mode_rename" value="[%|loc%]Rename[%END%]" />
      </td>
     </tr>
     <tr> 
-     <td style="text-align: right;" valign="bottom">
+     <td>
       [%|loc%]Do you want to cancel the upload ?[%END%]
      </td>
-     <td style="text-align: left;" valign="bottom">
+     <td>
       <input class="MainMenuLinks" type="submit" name="mode_cancel" value="[%|loc%]Cancel[%END%]" />
      </td>
     </tr>

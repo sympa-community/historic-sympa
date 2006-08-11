@@ -4,7 +4,7 @@
   [% INSERT $file IF file %]
 [% ELSE %]
 
-[% IF path %]  <span style="float: right"> <a class="actionMenuLinks" href="[% path_cgi %]/d_read/[% list %]/[% escaped_father %]">[%|loc%]Up to higher level directory[%END%]</a></span>
+[% IF path %]  <span class="search_form"> <a class="actionMenuLinks" href="[% path_cgi %]/d_read/[% list %]/[% escaped_father %]">[%|loc%]Up to higher level directory[%END%]</a></span>
 [% END %]
 
 [% IF expert_page %]
@@ -19,10 +19,10 @@
 
 [% IF path %]  
 
-<p><span style="padding: 3px; font-size: 2em;">[%|loc%]Listing of folder[%END%] [% visible_path %]</span></p>
+<h1>[%|loc%]Listing of folder[%END%] [% visible_path %]</h1>
 
     [% IF expert_page %]
-    <span style="float: right">
+    <span class="search_form">
       [% IF may_edit %]
     <a class="actionMenuLinks" href="[% path_cgi %]/d_delete/[% list %]/[% escaped_path %]" onclick="request_confirm_link('[% path_cgi %]/d_delete/[% list %]/[% escaped_path %]', '[% FILTER escape_quote %][%|loc(visible_path)%]Do you really want to delete %1 ?[%END%][%END%]'); return false;">[%|loc%]delete[%END%]</a> 
 	 <a class="actionMenuLinks"  href="[% path_cgi %]/d_properties/[% list %]/[% escaped_path %]">[%|loc%]properties[%END%]</a>
@@ -44,58 +44,58 @@
     <br />  
   [% ELSE %]
      
-   <p> <span style="padding: 3px; font-size: 2em;">[%|loc%]Listing of root folder[%END%]</span></p>
+  <h1>[%|loc%]Listing of root folder[%END%]</h1>
   [% END %]   
 
-  <table style="border: solid 1px; width: auto; margin-right: 10px">
-  <tr style="background-color: [% color_4 %];">
+  <table class="listOfItems">
+  <tr>
   
   [% IF order_by != 'order_by_doc' %]  
-	<th style="padding: 3px; border: solid 1px; background: [% color_4 %]"><a href="[% path_cgi %]/d_read/[% list %]/[% escaped_path %]?order=order_by_doc">[%|loc%]Document[%END%]</a> </th>
+	<th><a href="[% path_cgi %]/d_read/[% list %]/[% escaped_path %]?order=order_by_doc">[%|loc%]Document[%END%]</a> </th>
   [% ELSE %]  
-        <th style="padding: 3px; border: solid 1px; background: [% color_6 %]">[%|loc%]Document[%END%]</th>
+        <th class="sortby">[%|loc%]Document[%END%]</th>
   [% END %]
   [% IF order_by != 'order_by_author' %]  
-	<th style="padding: 3px; border: solid 1px; background: [% color_4 %]"><a href="[% path_cgi %]/d_read/[% list %]/[% escaped_path %]?order=order_by_author">[%|loc%]Author[%END%]</a> </th>
+	<th><a href="[% path_cgi %]/d_read/[% list %]/[% escaped_path %]?order=order_by_author">[%|loc%]Author[%END%]</a> </th>
   [% ELSE %]  	
-        <th style="padding: 3px; border: solid 1px; background: [% color_6 %]">[%|loc%]Author[%END%]</span></td>
+        <th class="sortby">[%|loc%]Author[%END%]</span></td>
   [% END %]
   [% IF order_by != 'order_by_size' %] 
-	<th style="padding: 3px; border: solid 1px; background: [% color_4 %]"><a href="[% path_cgi %]/d_read/[% list %]/[% escaped_path %]?order=order_by_size">[%|loc%]Size (Kb)[%END%]</a> </th>
+	<th><a href="[% path_cgi %]/d_read/[% list %]/[% escaped_path %]?order=order_by_size">[%|loc%]Size (Kb)[%END%]</a> </th>
   [% ELSE %]  
-        <th style="padding: 3px; border: solid 1px; background: [% color_6 %]">[%|loc%]Size (Kb)[%END%]</th> 
+        <th class="sortby">[%|loc%]Size (Kb)[%END%]</th> 
   [% END %]
   [% IF order_by != 'order_by_date' %]
-	<th style="padding: 3px; border: solid 1px; background: [% color_4 %]"><a href="[% path_cgi %]/d_read/[% list %]/[% escaped_path %]?order=order_by_date">[%|loc%]Last update[%END%]</a> </th>
+	<th><a href="[% path_cgi %]/d_read/[% list %]/[% escaped_path %]?order=order_by_date">[%|loc%]Last update[%END%]</a> </th>
   [% ELSE %]  
-        <th style="padding: 3px; border: solid 1px; background: [% color_6 %]">[%|loc%]Last update[%END%]</span></td>
+        <th class="sortby">[%|loc%]Last update[%END%]</span></td>
   [% END %]
 
   [% IF expert_page %]
-   <th style="padding: 3px; border: solid 1px; background: [% color_4 %]">[%|loc%]Edit[%END%]</th> 
-   <th style="padding: 3px; border: solid 1px; background: [% color_4 %]">[%|loc%]Delete[%END%]</th>
-   <th style="padding: 3px; border: solid 1px; background: [% color_4 %]">[%|loc%]Access[%END%]</th>
-   <th style="padding: 3px; border: solid 1px; background: [% color_4 %]">[%|loc%]Properties[%END%]</th>
+   <th>[%|loc%]Edit[%END%]</th> 
+   <th>[%|loc%]Delete[%END%]</th>
+   <th>[%|loc%]Access[%END%]</th>
+   <th>[%|loc%]Properties[%END%]</th>
    [% IF is_editor %]
-     <th style="padding: 3px; border: solid 1px; background: [% color_4 %]">[%|loc%]Moderation[%END%]</th>
+     <th>[%|loc%]Moderation[%END%]</th>
    [% END %]
   [% END %]
   </tr>
       
   [% IF empty %]
-    <tr style="background: [% color_0 %]; vertical-align: top;">
-    <td colspan="9" style="text-align: center;"> [%|loc%]Empty folder[%END%] </td>
+    <tr class="color0">
+    <td class="text_center" colspan="9"> [%|loc%]Empty folder[%END%] </td>
     </tr>
   [% ELSE %]   
     [% IF sort_subdirs %]
       [% FOREACH s = sort_subdirs %]
-        <tr style="background: [% color_0 %];">        
+        <tr class="color0">
 	[% IF escaped_path %]
-	  <td style="white-space: nowrap;"> <a href="[% path_cgi %]/d_read/[% list %]/[% escaped_path %]/[% s.escaped_doc %]/"> 
+	  <td> <a href="[% path_cgi %]/d_read/[% list %]/[% escaped_path %]/[% s.escaped_doc %]/"> 
 	[% ELSE %]
-	  <td style="white-space: nowrap;"> <a href="[% path_cgi %]/d_read/[% list %]/[% s.escaped_doc %]/"> 
+	  <td> <a href="[% path_cgi %]/d_read/[% list %]/[% s.escaped_doc %]/"> 
 	[% END %]
-	<img style="vertical-align: bottom; border: 0px;" src="[% s.icon %]" alt="[% s.escaped_title %]" /> [% s.doc %]</a></td>
+	<img src="[% s.icon %]" alt="[% s.escaped_title %]" /> [% s.doc %]</a></td>
 	<td>
 	[% IF s.author_known %] 
 	  [% s.author_mailto %]  
@@ -104,14 +104,14 @@
 	[% END %]
 	</td>	    
 	<td>&nbsp;</td>
-	<td style="white-space: nowrap;"> [% s.date %] </td>
+	<td> [% s.date %] </td>
 		
 
 	[% IF expert_page %]
 
 	  [% IF s.edit %]
             <td>&nbsp; </td>
-	  <td style="text-align: center; font-size: smaller;">
+	  <td class="review_cels">
 	    [% IF escaped_path %]
 	      <a href="[% path_cgi %]/d_delete/[% list %]/[% escaped_path %]/[% s.escaped_doc %]" onclick="request_confirm_link('[% path_cgi %]/d_delete/[% list %]/[% escaped_path %]/[% s.escaped_doc %]', '[% FILTER escape_quote %][%|loc(visible_path,s.doc)%]Do you really want to delete %1%2 ?[%END%][%END%]'); return false;">[%|loc%]delete[%END%]</a>
             [% ELSE %]
@@ -124,7 +124,7 @@
 	[% END %]
 	
 	[% IF s.control %]
-	  <td style="text-align: center; font-size: smaller;">
+	  <td class="review_cels">
 	    [% IF escaped_path %]
 	        <a href="[% path_cgi %]/d_control/[% list %]/[% escaped_path %]/[% s.escaped_doc %]">[%|loc%]access[%END%]</a>
 	    [% ELSE %]
@@ -136,7 +136,7 @@
 	  [% END %]
       
           [% IF s.edit %]
-	    <td style="text-align: center; font-size: smaller;">
+	    <td class="review_cels">
 	    [% IF escaped_path %]
 	      <a href="[% path_cgi %]/d_properties/[% list %]/[% escaped_path %]/[% s.escaped_doc %]">[%|loc%]properties[%END%]</a>
 	    [% ELSE %] 
@@ -159,10 +159,10 @@
       [% FOREACH f = sort_files %]
 	[% IF f.moderate %]
 	  [% IF expert_page %]
-         <tr style="background: [% bg_color %];">
+         <tr class="bg_color_bg">
 	  [% END %]
 	[% ELSE %]
-         <tr style="background: [% color_0 %];"> 
+         <tr class="color0">
         [% END %]
         
         [% IF f.html %]
@@ -172,12 +172,12 @@
 	  [% ELSE %]
             <a href="[% path_cgi %]/d_read/[% list %]/[% f.escaped_doc %]" target="html_window">
 	  [% END %]	  
-	  <img style="vertical-align: bottom; border: 0px;" src="[% f.icon %]" alt="[% f.escaped_title %]" /> [% f.doc %] </a>
+	  <img src="[% f.icon %]" alt="[% f.escaped_title %]" /> [% f.doc %] </a>
 	  </td>
 	[% ELSIF f.url %]
 	  <td>
 	  <a href="[% f.url %]" target="html_window">
-	  <img style="vertical-align: bottom; border: 0px;" src="[% f.icon %]" alt="[% f.escaped_title %]" /> [% f.anchor %] </a>
+	  <img src="[% f.icon %]" alt="[% f.escaped_title %]" /> [% f.anchor %] </a>
 	  </td>
 	[% ELSE %]
 	  [% IF f.moderate %]
@@ -188,7 +188,7 @@
 	      [% ELSE %]
                 <a href="[% path_cgi %]/d_read/[% list %]/[% f.escaped_doc %]">
 	      [% END %]
-	  <img style="text-align: bottom; border: 0px;" src="[% f.icon %]" alt="[% f.escaped_title %]" /> [% f.doc %] </a>
+	  <img src="[% f.icon %]" alt="[% f.escaped_title %]" /> [% f.doc %] </a>
 	      </td>
         [% END %] 
 	  [% ELSE %]
@@ -198,7 +198,7 @@
 	    [% ELSE %]
               <a href="[% path_cgi %]/d_read/[% list %]/[% f.escaped_doc %]">
 	    [% END %]
-	    <img style="text-align: bottom; border: 0px;" src="[% f.icon %]" alt="[% f.escaped_title %]" /> [% f.doc %] </a>
+	    <img src="[% f.icon %]" alt="[% f.escaped_title %]" /> [% f.doc %] </a>
 	</td>  
 	  [% END %]
      
@@ -222,33 +222,33 @@
 	 
 	[% IF f.moderate %]
 	  [% IF expert_page %]
-   	     <td style="white-space: nowrap;">&nbsp;
+   	     <td>&nbsp;
 	     [% IF !f.url %]
 	       [% f.size %] 
 	     [% END %]
 	     </td>
-	     <td style="white-space: nowrap;"> [% f.date %] </td>
+	     <td> [% f.date %] </td>
 	  [% END %]
 	[% ELSE %]
-	  <td style="white-space: nowrap;">&nbsp;
+	  <td>&nbsp;
 	  [% IF !f.url %]
 	    [% f.size %] 
 	  [% END %]
 	  </td>
-	  <td style="white-space: nowrap;"> [% f.date %] </td>
+	  <td> [% f.date %] </td>
 	[% END %]
 
 	 
 	[% IF expert_page %] 
 	[% IF f.edit %]
-	<td style="text-align: center; font-size: smaller;">
+	<td class="review_cels">
 	    [% IF escaped_path %]
 	      <a href="[% path_cgi %]/d_editfile/[% list %]/[% escaped_path %]/[% f.escaped_doc %]">[%|loc%]edit[%END%]</a>
 	    [% ELSE %]
   	      <a href="[% path_cgi %]/d_editfile/[% list %]/[% f.escaped_doc %]">[%|loc%]edit[%END%]</a>
 	    [% END %]	  
 	</td>
-	<td style="text-align: center; font-size: smaller;">
+	<td class="review_cels">
 	    [% IF escaped_path %]
               <a href="[% path_cgi %]/d_delete/[% list %]/[% escaped_path %]/[% f.escaped_doc %]" onclick="request_confirm_link('[% path_cgi %]/d_delete/[% list %]/[% escaped_path %]/[% f.escaped_doc %]', '[% FILTER escape_quote %][%|loc(visible_path,f.doc,f.size)%]Do you really want to delete %1%2 (%3 Kb) ?[%END%][%END%]'); return false;">[%|loc%]delete[%END%]</a>
 	    [% ELSE %]
@@ -260,7 +260,7 @@
 	[% END %]
 		 
 	[% IF f.control %]
-	  <td style="text-align: center; font-size: smaller;">
+	  <td class="review_cels">
 	    [% IF escaped_path %]
 	      <a href="[% path_cgi %]/d_control/[% list %]/[% escaped_path %]/[% f.escaped_doc %]">[%|loc%]access[%END%]</a>
 	    [% ELSE %]
@@ -272,7 +272,7 @@
 	  [% END %]
         
 	  [% IF f.edit %]
-	    <td style="text-align: center; font-size: smaller;">
+	    <td class="review_cels">
 	    [% IF escaped_path %]
 	      <a href="[% path_cgi %]/d_properties/[% list %]/[% escaped_path %]/[% f.escaped_doc %]">[%|loc%]properties[%END%]</a>
 	    [% ELSE %]	    
@@ -286,7 +286,7 @@
         [% IF is_editor %]
           [% IF f.moderate %]
 	  [% IF expert_page %]
-          <td style="text-align: center; font-size: smaller;">
+          <td class="review_cels">
           <a href="[% path_cgi %]/modindex/[% list %]"> [%|loc%]moderate[%END%]</a>
           </td>
 	  [% END %]

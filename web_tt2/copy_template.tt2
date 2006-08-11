@@ -3,33 +3,31 @@
 <h2>[%|loc%]Copying template[%END%]</h2><br />
 <p>
 <form action="[% path_cgi %]/copy_template" method="post">
-<table style="border: solid 1px; width: 100%; margin-right: 10px">
-<tr style="background-color: [% color_4 %];">
-<th style="padding: 3px; border: solid 1px; background: [% color_4 %]; text-align: center;">[%|loc%]Input template[%END%]</th>
-<th style="padding: 3px; border: solid 1px; background: [% color_4 %]; text-align: center;">[%|loc%]Output template[%END%]</th>
+<table class="listOfItems">
+<tr class="color4">
+<th>[%|loc%]Input template[%END%]</th>
+<th>[%|loc%]Output template[%END%]</th>
 </tr>
-<tr style="background-color: [% color_0 %];" valign="top">
+<tr class="color0">
 <td>[%|loc%]Name : [%END%]<strong> [% template_name %] </strong></td>
 <td>[%|loc%]New template name : [%END%]<input type="text" name="template_name_out" value="[% template_name %]" /></td></tr>
-<tr style="background-color: [% color_0 %];" valign="top">
+<tr class="color0">
 <td>[%|loc%]Scope : [%END%]<strong> [% scope %] </strong></td>
-<td>
-[%|loc%]Scope : [%END%]<select name="scope_out">
+<td>[%|loc%]Scope : [%END%]<select name="scope_out">
 	<option value="site" [% IF scope == 'site' %]option="selected"[% END %]>[%|loc%]site[%END%]</option>
 	[% UNLESS default_robot %]<option value="robot" [% IF scope == 'robot' %]option="selected"[% END %]>[%|loc%]robot[%END%]</option>[%END%]
         <option value="list" [% IF scope == 'list' %]option="selected"[% END %]>[%|loc%]list[%END%]</option>
 </td></tr>
-<tr style="background-color: [% color_0 %];" valign="top">
+<tr class="color0">
 <td>[%|loc%]Language : [%END%]<strong> [% tpl_lang %] </strong></td>
-<td>
-[%|loc%]Language : [%END%]<select name="tpl_lang_out">
+<td>[%|loc%]Language : [%END%]<select name="tpl_lang_out">
 	<option value="default" option="selected">[%|loc%]default[%END%]</option>
 	[% FOREACH lg = languages %]
         <option value="[%lg.key%]">[%lg.value.complete%]</option>
 	[%END%]
 	</select>
 </td></tr>
-<tr style="background-color: [% color_0 %];" valign="top">
+<tr class="color0">
 <td>
 [% list %]
 </td>

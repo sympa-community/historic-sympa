@@ -12,16 +12,15 @@
  	   <input type="hidden" name="list" value="[% list %]" /><br /><br />
  	 </form>
  	 [% IF pictures_url %]
- 	   <table border="0" cellpadding="2" cellspacing="0" >
+ 	   <table class="preferences text_center">
  	   <tr>
- 	     <td align=center valign=bottom width="50%">
- 	       <a href="[%pictures_url%]" title="[%pictures_url%]" target="pictures">
- 	       <img src="[%pictures_url%]" height="80" alt="" /></a></td>
- 	     <td align=center valign=bottom width="50%">
+ 	     <td>
+ 	       <a href="[%pictures_url%]" title="[%pictures_url%]" target="pictures"><img src="[%pictures_url%]" height="80" alt="" /></a></td>
+ 	     <td>
  	       <img src="[%pictures_url%]" height="30" alt="" /></td>
  	   <tr>
- 	     <td align=center valign=bottom width="50%"> [%|loc%]Your picture[%END%]</td>
- 	     <td align=center valign=bottom width="50%">[%|loc%]In the subscribers list[%END%]</td></tr>
+ 	     <td> [%|loc%]Your picture[%END%]</td>
+ 	     <td>[%|loc%]In the subscribers list[%END%]</td></tr>
  	   </table>
  	 [%END%]
  	 </div>

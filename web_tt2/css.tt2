@@ -49,7 +49,13 @@ ol { margin: 0 0 0 1em }
 #Search input.textbox {width: 90%;}
 #Logo {text-align: left; padding-top: 5px; padding-left: 5px;}
 #Logo a {font-size: 72px;}
-#Title {}
+/*Robot title*/
+#Title {
+text-align: center;
+font-size:18px; 
+font-weight: bold;
+padding:10px;
+}
 .menuInactive {padding-left: 20px}
 .menuInactive2 {font-size: 14px; text-decoration: none;}
 #FormLabel {font-size: 12px; font-weight: bold;}
@@ -69,23 +75,206 @@ ul#MainMenuLinks li {list-style: none; display: inline;}
 td.adminmenu { 
 background: [% selected_color %]; 
 text-align: center;
-colspan="9";
+/*colspan="9";*/
 }
 
-span.list_admin_menu { 
+td.text_left { 
+text-align: left;
+}
+td.text_right { 
+text-align: right;
+}
+.text_center { 
+text-align: center;
+}
+.text_justify { 
+text-align: justify;
+}
+#list_admin_menu { 
 font-size: 14px; 
 font-weight: bold;
 }
-#Footer {
-	background: [% color_3 %];
-	border: 1px solid [% color_2 %];
-	clear: both;
-	font-size: 10px;
-	padding: 2px;
-	padding-left: 8px;
-	padding-right: 8px;
-	text-align: center;
+img { 
+border: 0px;
 }
+
+/* Font */
+.smaller { 
+font-size: smaller;
+}
+.larger { 
+font-size: larger;
+}
+
+span.center { 
+text-align: center;
+}
+td.review_cels { 
+text-align: center;
+font-size: smaller;
+}
+td.review_cels_mail { 
+text-align: left;
+font-size: smaller;
+}
+.search_form, #home_rss_news, .edit_list_request_help { 
+float: right;
+}
+#home_search_list { 
+clear: both;
+}
+.edit_list_request_enum{ 
+margin: 1em;
+padding-left: 1em;
+}
+                         
+/* menu button which allowed to manage your list*/ 
+.list_admin { 
+font-size: 10px;
+}
+/*colors*/
+.color0 { 
+background-color: [% color_0 %];
+}
+.color4 { 
+background-color: [% color_4 %];
+}
+.color7 { 
+background-color: [% color_7 %];
+}
+.color_light { 
+background-color: [% light_color %];
+}
+.color_dark { 
+color: [% dark_color %];
+}
+.bg_color_dark { 
+background-color: [% dark_color %]; 
+}
+.color_bg { 
+color: [% bg_color %];
+}
+.bg_color_bg { 
+background-color: [% bg_color %];
+}
+.bg_color_error { 
+background-color: [% error_color %];
+}
+
+.list_menu_links { 
+font-weight: bold;
+font-size: 11px;
+}
+#home_container { 
+padding: 10px;
+margin: 0;
+border: 1px dashed [% color_2 %];
+}
+
+.mailing_lists_menu { 
+padding: 10px;
+margin: 5px 25px 5px 25px;
+float: left;
+}
+ul.no_style { 
+list-style: none;
+}
+li.create_list { 
+margin: 2px;
+}
+.align_top { 
+vertical-align: top;
+}
+/*explanation bloc of the template "ls_template.tt2"*/
+#template_editor { 
+margin-top: 10px;
+}
+#template_editor ul {
+padding-left: 5px;
+}
+#template_editor li {
+margin: 2px;
+}
+
+/*block of the color table*/
+#color_table { 
+border: 1px dotted;
+padding-top: 3px;
+padding-left: 3px;
+padding-bottom: 4px;
+}
+#color_table th { 
+border: solid 1px; 
+text-align: center; 
+padding: 1px; 
+}
+#color_table td { 
+border: 1px solid;
+padding-left: 10px;
+}
+#color_table .separator { 
+border: none; 
+padding: 0px;
+background-color: #fff;
+}
+#color_table tr#color_table_title th { 
+background-color: [% color_4 %];
+}
+/*ul of the "help.tt2" template*/
+#help {
+padding-left: 10px;
+padding-top: 5px;
+margin-bottom: 20px;
+}
+#help li { 
+padding: 1px;
+}
+
+/** menu "ul" "li" style **/
+#help_editfile, #blaklist { 
+margin: 1em;
+}
+#help_editfile ul, #blacklist ul {
+padding-left: 1em;
+margin-top: 0.5em;
+margin-bottom: 0.5em;
+}
+
+/*bounce level color*/
+.bounce_level2 { 
+background-color: #F00;
+}
+.bounce_level1 { 
+background-color: #FF8C00;
+}
+
+/* set_pending_list_request.tt2 template*/
+ul#set_pending_radio { 
+display: inline;
+list-style-type: none;
+}
+ul#set_pending_radio li {
+display: inline; 
+margin-right: 1em; 
+margin-left: 1em;
+} 
+
+/* pre */
+pre.code { 
+font-family: monospace;
+}
+
+#Footer {
+background: [% color_3 %];
+border: 1px solid [% color_2 %];
+clear: both;
+font-size: 10px;
+padding: 2px;
+padding-left: 8px;
+padding-right: 8px;
+text-align: center;
+}
+
 #Identity {text-align: left; font-size: 12px; font-weight: bold; overflow: hidden;}
 
 .Help {display: none; position: absolute; border: 1px dotted [% color_2 %]; z-index: 1000; background: [% color_13 %]; }
@@ -103,14 +292,18 @@ font-weight: bold;
 }
 
 .MenuBlock {
-	background: [% color_5 %];
-	padding: 5px;
-	border: 1px solid [% color_2 %];
-	text-align: left;
-	margin-bottom: 10px;
+background: [% color_5 %];
+padding: 5px;
+border: 1px solid [% color_2 %];
+text-align: left;
+margin-bottom: 10px;
 }
 .MenuBlock h1 {text-indent: 0px; font-size: 16px; padding-bottom:10px;}
 .MenuBlock strong {text-indent: 0px; font-size: 16px; padding-bottom:10px;}
+.MenuBlock span.list_panel { 
+font-weight: bold;
+font-size: 10px;
+}
 .ContentBlock {
 	margin: -3px 0px 0px 0px;
 	background: [% color_5 %];
@@ -133,14 +326,18 @@ font-weight: bold;
 .ContentBlock * a img {border: 0px;}
 
 a img.Pictures {
-border:0px;
 height:30px;
 }
 
 a:hover img.Pictures {
 height: 80px;
 }
-
+.sub_pictures { 
+margin: 2em;
+}
+#picture_block { 
+display: inline;
+}
 .navBar {margin: 0px 0px 0px 250px;}
 
 .displayNone {display: none;height:0px;width:0px;}
@@ -161,8 +358,7 @@ a.dingbat {text-align: center;}
 
 /* ########## Elements ########## */
 
-img {}
-.MainMenuLinks {border: 1px solid [% color_2 %]; background: [% color_1 %]; text-decoration: none; padding: 0px 10px 0px 10px;}
+.MainMenuLinks {border: 1px solid [% color_2 %]; background: [% color_1 %]; text-decoration: none; padding: 0px 10px 0px 10px; margin-top: 3px;}
 a.MainMenuLinks {border: 1px solid [% color_2 %]; background: [% color_1 %]; text-decoration: none; padding: 0px 10px 0px 10px;}
 a.MainMenuLinks:link {border: 1px solid [% color_2 %]; background: [% color_1 %]; text-decoration: none; padding: 0px 10px 0px 10px;}
 a.MainMenuLinks:visited {border: 1px solid [% color_2 %]; background: [% color_1 %]; text-decoration: none; padding: 0px 10px 0px 10px;}
@@ -193,7 +389,7 @@ a.ArcMenuLinksInactive { border-bottom: 1px solid [% color_2 %]; border-right:  
 a.ArcMenuLinksInactive:hover { border-bottom: 1px solid [% color_2 %]; border-right:  1px solid [% color_10 %]; border-top: 1px solid [% color_10 %]; border-left: 1px solid [% color_10 %]; color: [% color_10 %]; text-decoration: none; padding: 0px 10px 0px 10px;}
 #ArcMenuLinksInactive {border: 0px solid [% color_2 %]; text-decoration: none; padding: 0px 0px 0px 3px;}
 
-a.actionMenuLinks {border: 1px solid [% color_2 %]; background:[% color_4 %] ; text-decoration: none; padding: 0px 10px 0px 10px;}
+a.actionMenuLinks { border: 1px solid [% color_2 %]; background:[% color_4 %] ; text-decoration: none; padding: 0px 10px 0px 10px;}
 a.actionMenuLinks:link {border: 1px solid [% color_2 %]; background: [% color_4 %]; text-decoration: none; padding: 0px 10px 0px 10px;}
 a.actionMenuLinks:visited {border: 1px solid [% color_2 %]; background: [% color_4 %];  text-decoration: none; padding: 0px 10px 0px 10px;}
 a.actionMenuLinks:hover {border: 1px solid [% color_2 %]; background: [% color_6 %]; color: [% color_11 %]; text-decoration: none; padding: 0px 10px 0px 10px;}
@@ -202,6 +398,7 @@ a.actionMenuLinksCurrentPage {border: 1px solid [% color_2 %]; background: [% co
 a.actionMenuLinksCurrentPage:hover {border: 1px solid [% color_2 %]; background: [% color_6 %]; text-decoration: none; padding: 0px 10px 0px 10px;}
 a.actionMenuLinksInactive { border-bottom: 1px solid [% color_2 %]; border-right:  1px solid [% color_10 %]; border-top: 1px solid [% color_10 %]; border-left: 1px solid [% color_10 %]; color: [% color_10 %]; text-decoration: none; padding: 0px 10px 0px 10px;}
 a.actionMenuLinksInactive:hover { border-bottom: 1px solid [% color_2 %]; border-right:  1px solid [% color_10 %]; border-top: 1px solid [% color_10 %]; border-left: 1px solid [% color_10 %]; color: [% color_10 %]; text-decoration: none; padding: 0px 10px 0px 10px;}
+li.listenum a.actionMenuLinks {font-size:10px;padding-top:1px;padding-bottom:1px;}
 #actionnuLinksInactive {border: 0px solid [% color_2 %]; text-decoration: none; padding: 0px 0px 0px 3px;}
 
 .block {border: 1px dotted [% color_2 %]; padding: 7px;}
@@ -211,6 +408,11 @@ h3.block {text-align: center; background: [% color_4 %];}
 h4.block {text-align: center; background: [% color_4 %];}
 h5.block {text-align: center; background: [% color_4 %];}
 h6.block {text-align: center; background: [% color_4 %];}
+.block span.default { 
+color: [% color_1 %];
+padding-left: 2em;
+font-weight: bold;
+}
 h7 {
 	font-size: 0.8em;
 	font-style: italic;
@@ -281,7 +483,7 @@ h1 {text-indent: 0px; margin-top: 10px; font-size: 20px;}
 h2 {color: [% color_11 %]; text-indent: 0px; margin-top: 10px; font-size: 16px;}
 h3 {color: [% color_11 %]; text-indent: 10px; margin-top: 10px; font-size: 14px;}
 h4 {color: [% color_11 %]; text-indent: 20px; margin-top: 10px; font-size: 14px;}
-h5 {color: [% color_11 %]; text-indent: 30px; margin-top: 10px; font-size: 12px;}
+h5 {color: [% color_11 %]; text-indent: 30px; margin-top: 15px; margin-bottom: 2px; font-size: 12px;}
 h6 {color: [% color_11 %]; text-indent: 40px; margin-top: 10px; font-size: 12px;}
 /* strong {text-indent: 30px; font-size: 16px; padding-bottom:10px;} */
 /* strong {text-indent: 30px; font-size: 16px;} */
@@ -300,15 +502,62 @@ input.button { background:[% color_4 %] !important; border: 1px solid; padding: 
 input.button:hover {background: [% color_4 %]; border-top-color: [% color_1 %]; border-right-color: [% color_6 %]; border-bottom-color: [% color_6 %]; border-left-color: [% color_1 %];}
 
 /* Tables */
-table.listOfItems {
-	border: solid 1px;
-	width: auto;
-	margin: 10px;
+
+/* default table style */
+table.table_style, table.listOfItems { 
+border: 1px solid;
+width: auto;
+margin: 10px;
 }
 
-table.listOfItems th {background: [% color_4 %]; padding: 3px; border:solid 1px; text-align: center;white-space: nowrap;}
-table.listOfItems tr { valign: top}
+table.listOfItems th {
+background-color: [% color_4 %];
+padding: 3px;
+border:solid 1px;
+text-align: center;
+white-space: nowrap;
+}
+
+table.listOfItems th.sortby { 
+background-color: [% color_6 %];
+}
+
+table.pending_lists { 
+border: 1px solid;
+width: auto;
+margin: 10px;
+}
+table.pending_lists th { 
+padding: 3px;
+border: 1px solid;
+}
+table.pending_lists th.title_pending { 
+padding: 10px;
+}
+
+table.ls_template { 
+border: 1px solid;
+width: auto;
+margin: 10px;
+}
+table.ls_template th { 
+padding: 3px; 
+border: solid 1px; 
+background: [% color_4 %]; 
+text-align: center;
+}
+
+/*pref.tt2 template - maybe to delete*/ 
+table.preferences { 
+border: none;
+border-spacing: 0.5em;
+}  
+table.preferences th { 
+font-weight: normal;
+white-space: nowrap;
+}             
 
 }
+
 /* EOF */
 [% END %]
