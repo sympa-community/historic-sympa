@@ -29,6 +29,7 @@
 ##           Olivier Salaün <os AT cru.fr>
 
 use wwsympa;
+print "plop";
 
 #unless ( $wwsconf->{'exec_mode'} eq 'mod_perl' ) {
 #    #Main loop for FastCgi or Cgi

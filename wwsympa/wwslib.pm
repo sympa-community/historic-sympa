@@ -254,6 +254,7 @@ sub load_mime_types {
 
 ## Returns user information extracted from the cookie
 sub get_email_from_cookie {
+    my $robot = shift;
 #    &Log::do_log('debug', 'get_email_from_cookie');
     my $secret = shift;
     my ($email, $auth) ;
