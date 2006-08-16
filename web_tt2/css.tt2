@@ -3,11 +3,12 @@
 * {
 	border: 0px solid [% color_1 %];
 	color: [% color_2 %];
-	font-size: 12px; font-family: "Trebuchet MS", "Bitstream Vera Sans", verdana, lucida, arial, helvetica, sans-serif;
+	font-family: "Trebuchet MS", "Bitstream Vera Sans", verdana,lucida, arial, helvetica, sans-serif;
 	padding: 0px;
 	margin: 0px;
 }
 body {
+font-size: 62.5%;
 	background: [% color_4 %];
 	text-align: center;
 }
@@ -30,14 +31,14 @@ ol { margin: 0 0 0 1em }
 #Header {
 	background: [% color_3 %];
 	border: 1px solid [% color_2 %];
-	font-size: 10px;
+	font-size: 1em;
 	text-align: left;
-	vertical-align: top; 
+
 }
 #ActionHeader {
 	background: [% color_4 %];
 	border: 1px solid [% color_2 %];
-	font-size: 10px;
+	font-size: 1em;
 	text-align: left;
 	vertical-align: top;
 	padding-bottom: 0px; padding-top: 3px; padding-left: 3px; padding-right: 3px; 
@@ -52,13 +53,13 @@ ol { margin: 0 0 0 1em }
 /*Robot title*/
 #Title {
 text-align: center;
-font-size:18px; 
+font-size:1.8em; 
 font-weight: bold;
 padding:10px;
 }
 .menuInactive {padding-left: 20px}
-.menuInactive2 {font-size: 14px; text-decoration: none;}
-#FormLabel {font-size: 12px; font-weight: bold;}
+.menuInactive2 {font-size: 1.4em; text-decoration: none;}
+#FormLabel {font-size: 1.2em; font-weight: bold;}
 #ArcCalendar {padding-bottom: 10px;}
 /* #SITELINKS {position: relative; text-align: center;} */
 ul#MainMenuLinks li {list-style: none; display: inline;}
@@ -91,7 +92,7 @@ text-align: center;
 text-align: justify;
 }
 #list_admin_menu { 
-font-size: 14px; 
+font-size: 1.4em; 
 font-weight: bold;
 }
 img { 
@@ -130,7 +131,7 @@ padding-left: 1em;
                          
 /* menu button which allowed to manage your list*/ 
 .list_admin { 
-font-size: 10px;
+font-size: 1em;
 }
 /*colors*/
 .color0 { 
@@ -163,7 +164,7 @@ background-color: [% error_color %];
 
 .list_menu_links { 
 font-weight: bold;
-font-size: 11px;
+font-size: 1.2em;
 }
 #home_container { 
 padding: 10px;
@@ -175,6 +176,7 @@ border: 1px dashed [% color_2 %];
 padding: 10px;
 margin: 5px 25px 5px 25px;
 float: left;
+font-size: 1.1em;
 }
 ul.no_style { 
 list-style: none;
@@ -259,6 +261,19 @@ margin-right: 1em;
 margin-left: 1em;
 } 
 
+/* list_panel.tt2 block*/
+.list_panel { 
+font-size: 1.2em;
+background: [% color_5 %];
+padding: 5px;
+border: 1px solid [% color_2 %];
+text-align: left;
+margin-bottom: 10px;
+}
+.list_panel span { 
+font-weight: bold;
+}
+
 /* pre */
 pre.code { 
 font-family: monospace;
@@ -268,14 +283,14 @@ font-family: monospace;
 background: [% color_3 %];
 border: 1px solid [% color_2 %];
 clear: both;
-font-size: 10px;
+font-size: 1.2em;
 padding: 2px;
 padding-left: 8px;
 padding-right: 8px;
 text-align: center;
 }
 
-#Identity {text-align: left; font-size: 12px; font-weight: bold; overflow: hidden;}
+#Identity {text-align: left; font-size: 1.2em; font-weight: bold; overflow: hidden;}
 
 .Help {display: none; position: absolute; border: 1px dotted [% color_2 %]; z-index: 1000; background: [% color_13 %]; }
 
@@ -298,13 +313,13 @@ border: 1px solid [% color_2 %];
 text-align: left;
 margin-bottom: 10px;
 }
-.MenuBlock h1 {text-indent: 0px; font-size: 16px; padding-bottom:10px;}
-.MenuBlock strong {text-indent: 0px; font-size: 16px; padding-bottom:10px;}
-.MenuBlock span.list_panel { 
-font-weight: bold;
-font-size: 10px;
-}
+.MenuBlock p strong { font-size: 1.4em; }
+.MenuBlock h1 {text-indent: 0px; font-size: 1.4em; padding-bottom:10px;}
+.MenuBlock strong {text-indent: 0px; font-size: 1.2em; padding-bottom:10px;}
+
+
 .ContentBlock {
+font-size: 1.2em;
 	margin: -3px 0px 0px 0px;
 	background: [% color_5 %];
 	border: 1px solid [% color_2 %];
@@ -312,7 +327,7 @@ font-size: 10px;
 	text-align: left;
 	height: 100%;
 }
-.ContentBlock p {padding: 10px;}
+.ContentBlock p {padding: 10px;font-size: 1.1em;}
 .ContentBlock > * {
 	padding: 0px;
 	border-bottom: 0px dotted [% color_1 %];
@@ -335,14 +350,29 @@ height: 80px;
 .sub_pictures { 
 margin: 2em;
 }
-#picture_block { 
-display: inline;
+
+/* pictures block on the suboptions form*/
+#pictures_block { 
+text-align: center;
+height: 120px ;
 }
-.navBar {margin: 0px 0px 0px 250px;}
+#pictures_block div {
+margin: 1em;
+float: left;
+}
+#pictures_block #large img{
+height: 80px;
+}
+#pictures_block #small img{
+height: 30px;
+margin-top: 50px;
+}
+
+.navBar {margin: 0px 0px 0px 250px;font-size: 1.2em;}
 
 .displayNone {display: none;height:0px;width:0px;}
 .printNone {}
-.title {position: absolute; top: 60px; font-size: 16px; text-indent: 30px;}
+.title {position: absolute; top: 60px; font-size: 1.6em; text-indent: 30px;}
 .customMenu {text-indent: 0px; }
 a.dingbat {text-align: center;}
 .dingbat {text-indent: 0px; text-align: center; font-family: serif; font-weight: 100;}
@@ -350,11 +380,11 @@ a.dingbat {text-align: center;}
 .button { background:[% color_4 %] !important; border: 3px solid; padding: 0px  2px  0px 2px; margin:2px; border-top-color: [% color_6 %]; border-right-color: [% color_1 %];border-bottom-color: [% color_1 %]; border-left-color: [% color_6 %];}
 .button:hover {background: [% color_4 %]; border-top-color: [% color_1 %]; border-right-color: [% color_6 %]; border-bottom-color: [% color_6 %]; border-left-color: [% color_1 %];}
 
-.smalltext {font-size: 10px;}
-.smalltext a {font-size: 10px;}
-.smallblacktext {color: [% color_12 %]; font-size: 12px;}
-.mediumtext {font-size: 12px;}
-.largetext {font-size: 16px;}
+.smalltext {font-size: 1em;}
+.smalltext a {font-size: 1em;}
+.smallblacktext {color: [% color_12 %]; font-size: 1.2em;}
+.mediumtext {font-size: 1.2em;}
+.largetext {font-size: 1.6em;}
 
 /* ########## Elements ########## */
 
@@ -366,7 +396,9 @@ a.MainMenuLinks:hover {border: 1px solid [% color_2 %]; background: [% color_6 %
 a.MainMenuLinks:active {border: 1px solid [% color_2 %]; background: [% color_6 %]; color: [% color_11 %]; text-decoration: none; padding: 0px 10px 0px 10px;}
 a.MainMenuLinksCurrentPage {border: 1px solid [% color_2 %]; background: [% color_4 %]; border-bottom: 1px solid [% color_4 %]; color: [% color_11 %]; text-decoration: none; padding: 0px 10px 0px 10px;}
 a.MainMenuLinksCurrentPage:hover {border: 1px solid [% color_2 %]; background: [% color_4 %]; border-bottom: 1px solid [% color_4 %]; color: [% color_11 %]; text-decoration: none; padding: 0px 10px 0px 10px;}
-
+input.MainMenuLinks { 
+font-size: 1.2em;
+}
 
 a.ActionMenuLinks {border: 1px solid [% color_2 %]; background: [% color_1 %]; text-decoration: none; padding: 0px 10px 0px 10px;}
 a.ActionMenuLinks:link {border: 1px solid [% color_2 %]; background: [% color_1 %]; text-decoration: none; padding: 0px 10px 0px 10px;}
@@ -398,7 +430,7 @@ a.actionMenuLinksCurrentPage {border: 1px solid [% color_2 %]; background: [% co
 a.actionMenuLinksCurrentPage:hover {border: 1px solid [% color_2 %]; background: [% color_6 %]; text-decoration: none; padding: 0px 10px 0px 10px;}
 a.actionMenuLinksInactive { border-bottom: 1px solid [% color_2 %]; border-right:  1px solid [% color_10 %]; border-top: 1px solid [% color_10 %]; border-left: 1px solid [% color_10 %]; color: [% color_10 %]; text-decoration: none; padding: 0px 10px 0px 10px;}
 a.actionMenuLinksInactive:hover { border-bottom: 1px solid [% color_2 %]; border-right:  1px solid [% color_10 %]; border-top: 1px solid [% color_10 %]; border-left: 1px solid [% color_10 %]; color: [% color_10 %]; text-decoration: none; padding: 0px 10px 0px 10px;}
-li.listenum a.actionMenuLinks {font-size:10px;padding-top:1px;padding-bottom:1px;}
+li.listenum a.actionMenuLinks {font-size:1.2em;padding-top:1px;padding-bottom:1px;}
 #actionnuLinksInactive {border: 0px solid [% color_2 %]; text-decoration: none; padding: 0px 0px 0px 3px;}
 
 .block {border: 1px dotted [% color_2 %]; padding: 7px;}
@@ -420,16 +452,16 @@ h7 {
 h7 strong {
 	font-size: 1em;
 }	
-.listTitle {text-align: center; border: solid 1px [% color_2 %]; padding: 5px; background: [% color_5 %];}
+.listTitle {text-align: center; border: solid 1px [% color_2 %]; padding: 5px; background: [% color_5 %];font-size:1.3em; }
 
-.ErrorBlock {border: 1px solid [% color_2 %]; font-size: 14px; background: [% color_7 %]; padding: 10px; text-decoration: underline overline; }
+.ErrorBlock {border: 1px solid [% color_2 %]; font-size: 1.4em; background: [% color_7 %]; padding: 10px; text-decoration: underline overline; }
 
 ul.listenum {list-style: none; margin: 0 0 0 1em}
 ul li.listenum {padding : 5px;} 
 
 ul.menuLinks {list-style-type: none;}
-ul.menuLinks li {font-size: 14px; list-style-type: none;}
-ul li.menuLinks {font-size: 14px; list-style-type: none;}
+ul.menuLinks li {font-size: 1.4em; list-style-type: none;}
+ul li.menuLinks {font-size: 1.4em; list-style-type: none;}
 a.menuLinks {padding: 0px 10px 0px 0px; text-decoration: none;}
 a.menuLinks:link {text-decoration: none;}
 a.menuLinks:visited {text-decoration: none;}
@@ -439,16 +471,16 @@ a.menuLinksCurrentPage {border: 1px solid [% color_9 %]; background: [% color_6 
 a.menuLinksCurrentPage:hover  {border: 1px solid [% color_9 %]; background: [% color_6 %]; padding: 0px 10px 0px 0px; text-decoration: none;}
 
 
-strong a.menuLinks {font-size: 14px;}
-strong a.menuLinksCurrentPage {font-size: 14px; border: 1px solid [% color_9 %]; background: [% color_6 %];}
-strong a.menuLinksCurrentPage:hover  {font-size: 14px; border: 1px solid [% color_9 %]; background: [% color_6 %]; text-decoration: none;}
+strong a.menuLinks {font-size: 1.2em;}
+strong a.menuLinksCurrentPage {font-size: 1.2em; border: 1px solid [% color_9 %]; background: [% color_6 %];}
+strong a.menuLinksCurrentPage:hover  {font-size: 1.2em; border: 1px solid [% color_9 %]; background: [% color_6 %]; text-decoration: none;}
 ul a.menuLinks {padding: 0px 10px 0px 20px;}
 ul a.menuLinksCurrentPage {padding: 0px 10px 0px 20px; font-weight: bold;}
 ul a.menuLinksCurrentPage:hover {padding: 0px 10px 0px 20px; font-weight: bold; text-decoration: none;}
 
 
-ul.calendar a {font-size: 10px;}
-ul.calendar li {list-style: none; display: inline; padding: 0px 1px 0px 2px; font-size: 10px; text-decoration: none; border: 1px solid [% color_2 %];}
+ul.calendar a {font-size: 1em;}
+ul.calendar li {list-style: none; display: inline; padding: 0px 1px 0px 2px; font-size: 1em; text-decoration: none; border: 1px solid [% color_2 %];}
 ul li.calendarLinks {background: [% color_13 %];}
 ul li.calendarLinks:hover {background: [% color_6 %]; color: [% color_11 %]; }
 ul li.calendarLinksCurrentPage {background: [% color_6 %];}
@@ -465,11 +497,14 @@ abbr, acronym, .info {
 	border-bottom: 1px dotted [% color_8 %];
 	cursor: help;
 }
-h1 a:hover {text-indent: 30px; font-size: 16px; padding-bottom:10px;}
+h1 a:hover {text-indent: 30px; font-size: 1.6em; padding-bottom:10px;}
 p a:hover {text-indent: 30px;}
-p a:first-letter {font-size: 16px; font-weight: bold;}
+p a:first-letter {font-size: 1.6em; font-weight: bold;}
  
 p {text-indent: 0px;}
+p.spacer { 
+clear: both;
+}
 code {font-weight: bold;}
 
 .retraitita {
@@ -479,12 +514,12 @@ code {font-weight: bold;}
         margin: 5px 5px 5px 5px;
 }
 
-h1 {text-indent: 0px; margin-top: 10px; font-size: 20px;}
-h2 {color: [% color_11 %]; text-indent: 0px; margin-top: 10px; font-size: 16px;}
-h3 {color: [% color_11 %]; text-indent: 10px; margin-top: 10px; font-size: 14px;}
-h4 {color: [% color_11 %]; text-indent: 20px; margin-top: 10px; font-size: 14px;}
-h5 {color: [% color_11 %]; text-indent: 30px; margin-top: 15px; margin-bottom: 2px; font-size: 12px;}
-h6 {color: [% color_11 %]; text-indent: 40px; margin-top: 10px; font-size: 12px;}
+h1 {text-indent: 0px; margin-top: 10px; font-size: 1.8em;}
+h2 {color: [% color_11 %]; text-indent: 0px; margin-top: 10px; font-size: 1.4em;}
+h3 {color: [% color_11 %]; text-indent: 10px; margin-top: 10px; font-size: 1.2em;}
+h4 {color: [% color_11 %]; text-indent: 20px; margin-top: 10px; font-size: 1.2em;}
+h5 {color: [% color_11 %]; text-indent: 30px; margin-top: 15px; margin-bottom: 2px; font-size: 1em;}
+h6 {color: [% color_11 %]; text-indent: 40px; margin-top: 10px; font-size: 1em;}
 /* strong {text-indent: 30px; font-size: 16px; padding-bottom:10px;} */
 /* strong {text-indent: 30px; font-size: 16px;} */
 
