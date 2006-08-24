@@ -2611,7 +2611,7 @@ bounce-test+*: 	"| /home/sympa/bin/queuebounce sympa@\samplerobot"
 	\default {none}
 
 If this parameter is set to binary\_file, then Sympa processes will maintain a binary version of the
-list config structure on disk (\file {config.bin} file}. This file is bypassed whenever the \file {config}
+list config structure on disk (\file {config.bin} file). This file is bypassed whenever the \file {config}
 file changes on disk. Thanks to this method, the startup of Sympa processes is much faster because it 
 saves the time for parse all config files. The drawback of this method is that the list config cache could 
 live for a long time (not recreated when Sympa process restart) ; Sympa processes could still use authorization 
