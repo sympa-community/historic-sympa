@@ -3471,7 +3471,7 @@ sub do_remindpasswd {
      $list->save();
      &report::notice_report_web('performed',{},$param->{'action'});
 
-     return 'suboptions';
+     return $in{'previous_action'} || 'suboptions';
  }
 
  ## Update of user preferences
