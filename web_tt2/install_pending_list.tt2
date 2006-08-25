@@ -3,10 +3,10 @@
 <br />
 
 <br />
-<table class="preferences">
+<table summary="" class="preferences">
 <tr class="color_light">
 <td>
-<table class="preferences">
+<table summary="" class="preferences">
 <tr class="color_light">
  <td><strong>[%|loc%]Listname :[%END%]</strong></td><td>[% list %]</td>
 </tr>
@@ -25,7 +25,7 @@
 [% IF auto_aliases %]
 [%|loc%]Aliases have been installed.[%END%]
 [% ELSE %]
-<table class="table_style">
+<table summary="" class="table_style">
 <tr class="color_light"><td class="text_center">[%|loc%]Aliases you should install in your mailer[%END%]</td></tr>
 <tr>
 <td>

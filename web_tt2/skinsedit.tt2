@@ -7,7 +7,7 @@
 [%|loc%]The current version doesn't include a color editor, so you need to edit robot.conf (or sympa.conf) to change colors. Here are the colors as defined for the current robot in robot.conf. If you did install statics CSS files, the colors in use may differ from this table.[%END%]
 </p>
 
-<table id="color_table">
+<table summary="[%|loc%]This table display every colors used in Sympa, with their hexadecimal code [%END%]" id="color_table">
 <tr id="color_table_title">
 <th>[%|loc%]parameter[%END%]</th>
 <th>[%|loc%]parameter value[%END%]</th>
@@ -26,10 +26,12 @@
 [% FOREACH row = table.rows %]
 <tr>
   [% FOREACH color = row %]
+    [% IF color %]
      <td>[% color %]</td>
      <td>[% $color %]</td>
-     <th style="background-color: [% $color %];" ></th>
+     <td style="background-color: [% $color %];" >&nbsp;</td>
      <td class="separator"></td>
+    [% END %]
   [% END %]
 </tr>
 [% END %]
@@ -49,9 +51,11 @@
 </ul><br />
 
 	<form action="[% path_cgi %]" method="post">
-	<input type="hidden" name="action" value="skinsedit" />
-        <input type="hidden" name="installcss" value="1" />
-        <input class="MainMenuLinks" type="submit" name="action_skinsedit" value="[%|loc%]install static css[%END%]" />
+	<fieldset>
+	  <input type="hidden" name="action" value="skinsedit" />
+          <input type="hidden" name="installcss" value="1" />
+          <input class="MainMenuLinks" type="submit" name="action_skinsedit" value="[%|loc%]install static css[%END%]" />
+	</fieldset>
 	</form>
 
 [% ELSE %]

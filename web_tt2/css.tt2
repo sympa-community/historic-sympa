@@ -9,8 +9,7 @@
 }
 body {
 font-size: 62.5%;
-	background: [% color_4 %];
-	text-align: center;
+background: [% color_4 %];
 }
 
 ul { margin: 0 0 0 1em }
@@ -18,12 +17,30 @@ ol { margin: 0 0 0 1em }
 
 /* ########## Blocks, id and class ########## */
 
-#Canvas {margin: 7px 7px 0px 7px;}
-#Stretcher {
-	/*margin: 0px 0px 0px 250px; */
-	margin-left: 25%;
-	text-align: left;
+/*Global container*/
+#Canvas {
+position: absolute;
+width: 98%;
+margin: 7px 7px 0px 7px;
 }
+
+/* Menus Block*/
+#Menus {
+float: left;
+width: 240px;
+border: 0px solid [% color_1 %];
+padding-top: 0px;
+text-align: left;
+}
+
+/*Content Block*/
+#Stretcher {
+/*position: relative;*/
+margin-left: 260px;
+/*min-width: 500px;*/
+text-align: left;
+}
+
 #Paint {
 	vertical-align:top;
 	text-align: center;
@@ -51,11 +68,18 @@ ol { margin: 0 0 0 1em }
 #Logo {text-align: left; padding-top: 5px; padding-left: 5px;}
 #Logo a {font-size: 72px;}
 /*Robot title*/
+
 #Title {
 text-align: center;
 font-size:1.8em; 
 font-weight: bold;
 padding:10px;
+}
+#error { 
+font-size: 1em;
+}
+select { 
+background-color: [% color_13 %]
 }
 .menuInactive {padding-left: 20px}
 .menuInactive2 {font-size: 1.4em; text-decoration: none;}
@@ -66,20 +90,16 @@ ul#MainMenuLinks li {list-style: none; display: inline;}
 
 /* #top {height:1px;width:1px;display: none;} */
 #toggleMenu {float: right; padding-right: 3px;}
-#Menus {
-	float: left;
-	width: 240px; /* width: 25%; nogo w/ ie yet */
-	border: 0px solid [% color_1 %];
-	padding-top: 0px;
-	text-align: left;
-}
+
+
+
 td.adminmenu { 
 background: [% selected_color %]; 
 text-align: center;
 /*colspan="9";*/
 }
 
-td.text_left { 
+.text_left { 
 text-align: left;
 }
 td.text_right { 
@@ -95,6 +115,15 @@ text-align: justify;
 font-size: 1.4em; 
 font-weight: bold;
 }
+/* list type on the list creation page */
+#list_type {
+margin-left: 5em;
+list-style-type: none;
+}
+#list_type dd {
+margin-left: 1em;
+}
+
 img { 
 border: 0px;
 }
@@ -110,23 +139,38 @@ font-size: larger;
 span.center { 
 text-align: center;
 }
+
+/* review.tt2 cels */
 td.review_cels { 
 text-align: center;
-font-size: smaller;
 }
 td.review_cels_mail { 
 text-align: left;
-font-size: smaller;
 }
-.search_form, #home_rss_news, .edit_list_request_help { 
+
+.search_form, .edit_list_request_help { 
+float: right;
+}
+#home_rss_news { 
 float: right;
 }
 #home_search_list { 
 clear: both;
 }
+#home_search_list form fieldset { 
+display: inline;
+vertical-align: top;
+}
+#home_container { 
+padding: 10px;
+margin: 0;
+border: 1px dashed [% color_2 %];
+}
 .edit_list_request_enum{ 
 margin: 1em;
 padding-left: 1em;
+text-align: left;
+font-size: 1em;
 }
                          
 /* menu button which allowed to manage your list*/ 
@@ -166,24 +210,19 @@ background-color: [% error_color %];
 font-weight: bold;
 font-size: 1.2em;
 }
-#home_container { 
-padding: 10px;
-margin: 0;
-border: 1px dashed [% color_2 %];
-}
+
 
 .mailing_lists_menu { 
 padding: 10px;
 margin: 5px 25px 5px 25px;
 float: left;
 font-size: 1.1em;
+text-align: left;
 }
 ul.no_style { 
 list-style: none;
 }
-li.create_list { 
-margin: 2px;
-}
+
 .align_top { 
 vertical-align: top;
 }
@@ -211,7 +250,7 @@ text-align: center;
 padding: 1px; 
 }
 #color_table td { 
-border: 1px solid;
+border: 1px solid #000;
 padding-left: 10px;
 }
 #color_table .separator { 
@@ -274,6 +313,53 @@ margin-bottom: 10px;
 font-weight: bold;
 }
 
+form { 
+line-height: 1.8em;
+}
+form input,form textarea,form select {
+margin: 4px 0px;
+padding: 1px;
+font-size: 1em;
+}
+
+form#logs_form label,form.bold_label label { 
+font-weight: bold;
+}
+form#bold_label input { 
+margin-left: 5px;
+margin-top: 5px;
+}
+
+#global_mailing_lists { 
+text-align: center;
+}
+#show_cert { 
+border: 1px solid;
+}
+#show_cert ul { 
+list-style-type: none;
+padding-top: 5px;
+margin-bottom: 5px;
+}
+#show_cert ul li { 
+line-height: 1em;
+padding-left: 3px;
+}
+#cp_template { 
+border: 1px solid;
+padding: 3px;
+background-color: [% color_0 %];
+width: 410px;
+}
+#cp_template fieldset { 
+display: inline;
+border: 1px solid;
+vertical-align: top;
+margin-left: 3px;
+}
+#cp_template legend,#cp_template label { 
+padding-left: 3px;
+}
 /* pre */
 pre.code { 
 font-family: monospace;
@@ -284,10 +370,9 @@ background: [% color_3 %];
 border: 1px solid [% color_2 %];
 clear: both;
 font-size: 1.2em;
-padding: 2px;
-padding-left: 8px;
-padding-right: 8px;
+padding: 2px 8px;
 text-align: center;
+width: auto;
 }
 
 #Identity {text-align: left; font-size: 1.2em; font-weight: bold; overflow: hidden;}
@@ -319,13 +404,14 @@ margin-bottom: 10px;
 
 
 .ContentBlock {
-font-size: 1.2em;
-	margin: -3px 0px 0px 0px;
-	background: [% color_5 %];
-	border: 1px solid [% color_2 %];
-	padding: 10px;
-	text-align: left;
-	height: 100%;
+position: relative;
+font-size: 1.1em;
+margin: 0px;
+background: [% color_5 %];
+border: 1px solid [% color_2 %];
+padding: 10px;
+text-align: left;
+height: 100%;
 }
 .ContentBlock p {padding: 10px;font-size: 1.1em;}
 .ContentBlock > * {
@@ -360,6 +446,9 @@ height: 120px ;
 margin: 1em;
 float: left;
 }
+#large_picture { 
+height: 80px;
+}
 #pictures_block #large img{
 height: 80px;
 }
@@ -368,7 +457,7 @@ height: 30px;
 margin-top: 50px;
 }
 
-.navBar {margin: 0px 0px 0px 250px;font-size: 1.2em;}
+.navBar {text-align: center;margin: 0px 0px 0px 0px;font-size: 1.2em;}
 
 .displayNone {display: none;height:0px;width:0px;}
 .printNone {}
@@ -388,7 +477,7 @@ a.dingbat {text-align: center;}
 
 /* ########## Elements ########## */
 
-.MainMenuLinks {border: 1px solid [% color_2 %]; background: [% color_1 %]; text-decoration: none; padding: 0px 10px 0px 10px; margin-top: 3px;}
+.MainMenuLinks {border: 1px solid [% color_2 %]; background: [% color_1 %]; text-decoration: none; padding: 0px 10px; margin-top: 3px;margin-bottom: 0}
 a.MainMenuLinks {border: 1px solid [% color_2 %]; background: [% color_1 %]; text-decoration: none; padding: 0px 10px 0px 10px;}
 a.MainMenuLinks:link {border: 1px solid [% color_2 %]; background: [% color_1 %]; text-decoration: none; padding: 0px 10px 0px 10px;}
 a.MainMenuLinks:visited {border: 1px solid [% color_2 %]; background: [% color_1 %]; text-decoration: none; padding: 0px 10px 0px 10px;}
@@ -397,7 +486,10 @@ a.MainMenuLinks:active {border: 1px solid [% color_2 %]; background: [% color_6 
 a.MainMenuLinksCurrentPage {border: 1px solid [% color_2 %]; background: [% color_4 %]; border-bottom: 1px solid [% color_4 %]; color: [% color_11 %]; text-decoration: none; padding: 0px 10px 0px 10px;}
 a.MainMenuLinksCurrentPage:hover {border: 1px solid [% color_2 %]; background: [% color_4 %]; border-bottom: 1px solid [% color_4 %]; color: [% color_11 %]; text-decoration: none; padding: 0px 10px 0px 10px;}
 input.MainMenuLinks { 
-font-size: 1.2em;
+font-size: 1em;
+padding: 0px 1px;
+vertical-align: top;
+margin-top: 4px;
 }
 
 a.ActionMenuLinks {border: 1px solid [% color_2 %]; background: [% color_1 %]; text-decoration: none; padding: 0px 10px 0px 10px;}
@@ -430,7 +522,7 @@ a.actionMenuLinksCurrentPage {border: 1px solid [% color_2 %]; background: [% co
 a.actionMenuLinksCurrentPage:hover {border: 1px solid [% color_2 %]; background: [% color_6 %]; text-decoration: none; padding: 0px 10px 0px 10px;}
 a.actionMenuLinksInactive { border-bottom: 1px solid [% color_2 %]; border-right:  1px solid [% color_10 %]; border-top: 1px solid [% color_10 %]; border-left: 1px solid [% color_10 %]; color: [% color_10 %]; text-decoration: none; padding: 0px 10px 0px 10px;}
 a.actionMenuLinksInactive:hover { border-bottom: 1px solid [% color_2 %]; border-right:  1px solid [% color_10 %]; border-top: 1px solid [% color_10 %]; border-left: 1px solid [% color_10 %]; color: [% color_10 %]; text-decoration: none; padding: 0px 10px 0px 10px;}
-li.listenum a.actionMenuLinks {font-size:1.2em;padding-top:1px;padding-bottom:1px;}
+ul.listenum li a.actionMenuLinks {font-size:1.2em;padding-top:1px;padding-bottom:1px;}
 #actionnuLinksInactive {border: 0px solid [% color_2 %]; text-decoration: none; padding: 0px 0px 0px 3px;}
 
 .block {border: 1px dotted [% color_2 %]; padding: 7px;}
@@ -452,16 +544,20 @@ h7 {
 h7 strong {
 	font-size: 1em;
 }	
-.listTitle {text-align: center; border: solid 1px [% color_2 %]; padding: 5px; background: [% color_5 %];font-size:1.3em; }
+.listTitle {height: 1%;text-align: center; border: solid 1px [% color_2 %]; padding: 5px 0px; background: [% color_5 %];font-size:1.3em; }
 
-.ErrorBlock {border: 1px solid [% color_2 %]; font-size: 1.4em; background: [% color_7 %]; padding: 10px; text-decoration: underline overline; }
+.ErrorBlock {border: 1px solid [% color_2 %]; font-size: 1.4em; background: [% color_7 %]; padding: 10px 0px; text-decoration: underline overline; }
 
 ul.listenum {list-style: none; margin: 0 0 0 1em}
-ul li.listenum {padding : 5px;} 
+ul.listenum li {padding : 4px;} 
+ul.listenum span { 
+display: block;
+margin-top: 2px;
+}
 
-ul.menuLinks {list-style-type: none;}
-ul.menuLinks li {font-size: 1.4em; list-style-type: none;}
-ul li.menuLinks {font-size: 1.4em; list-style-type: none;}
+ul.menuLinks {list-style-type: none; font-size: 1.2em;}
+ul.menuLinks li {list-style-type: none;}
+/*ul li.menuLinks {font-size: 1.4em; list-style-type: none;}*/
 a.menuLinks {padding: 0px 10px 0px 0px; text-decoration: none;}
 a.menuLinks:link {text-decoration: none;}
 a.menuLinks:visited {text-decoration: none;}
@@ -523,11 +619,27 @@ h6 {color: [% color_11 %]; text-indent: 40px; margin-top: 10px; font-size: 1em;}
 /* strong {text-indent: 30px; font-size: 16px; padding-bottom:10px;} */
 /* strong {text-indent: 30px; font-size: 16px;} */
 
-a.input {background: [% color_13 %]; border: 1px solid [% color_2 %]; padding: 3px; text-decoration: none;}
+/* input */
+a.input {
+background: [% color_13 %]; 
+border: 1px solid [% color_2 %]; 
+padding: 3px; 
+text-decoration: none;
+font-size: smaller;
+/* if IE zoom:1;*/
+zoom: 1;
+}
 input {background: [% color_13 %]; border: 1px solid [% color_2 %]; padding: 0px;}
 input:hover {background: [% color_13 %];}
+input[type="radio"], input[type="checkbox"] {
+margin-bottom: 0;
+}
+
+
+
 textarea {background: [% color_13 %]; border: 1px solid [% color_2 %]; padding: 3px;}
 textarea:hover {background: [% color_13 %];}
+textarea.desc { width: 75%;max-width: 500px; }
 
 textarea.textbox {background: [% color_6 %]; border: 1px solid [% color_2 %]; padding: 3px;}
 textarea.textbox:hover {background: [% color_6 %];}
@@ -539,15 +651,21 @@ input.button:hover {background: [% color_4 %]; border-top-color: [% color_1 %]; 
 /* Tables */
 
 /* default table style */
-table.table_style, table.listOfItems { 
+table.table_style, table.listOfItems,table.ls_template { 
 border: 1px solid;
 width: auto;
 margin: 10px;
+font-size: 1em;
 }
-
+table.listOfItems { 
+overflow: scroll;
+}
+table.listOfItems td{ 
+font-size: smaller;
+}
 table.listOfItems th {
 background-color: [% color_4 %];
-padding: 3px;
+padding:0 2px;
 border:solid 1px;
 text-align: center;
 white-space: nowrap;
@@ -570,10 +688,6 @@ table.pending_lists th.title_pending {
 padding: 10px;
 }
 
-table.ls_template { 
-border: 1px solid;
-width: auto;
-margin: 10px;
 }
 table.ls_template th { 
 padding: 3px; 
@@ -586,12 +700,15 @@ text-align: center;
 table.preferences { 
 border: none;
 border-spacing: 0.5em;
+font-size: 1em;
 }  
 table.preferences th { 
 font-weight: normal;
 white-space: nowrap;
 }             
-
+#table_container { 
+overflow: auto;
+}
 }
 
 /* EOF */

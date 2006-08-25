@@ -71,6 +71,7 @@
 </dl>
 
 <form method="post" action="[% path_cgi %]">
+<fieldset>
 <input type="hidden" name="list" value="[% list %]" />
 <input type="hidden" name="archive_name" value="[% archive_name %]" />
 <input type="hidden" name="key_word" value="[% key_word %]" />
@@ -110,6 +111,7 @@
 [% END %]
 
 <input class="MainMenuLinks" name="action_arcsearch_form" type="submit" value="[%|loc%]New search[%END%]" />
+</fieldset>
 </form>
 <hr />
 <p>[%|loc%]Based on <em><a href="http://www.mhonarc.org/contrib/marc-search/">Marc-Search</a></em>, search engine of MHonArc archives[%END%]</p>

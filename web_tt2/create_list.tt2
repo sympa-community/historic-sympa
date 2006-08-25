@@ -7,7 +7,7 @@
 [% IF auto_aliases %]
 [%|loc%]Aliases have been installed.[%END%]
 [% ELSE %]
- <table class="table_style">
+ <table summary="[%|loc%]Required aliases[%END%]" class="table_style">
  <tr class="color_light">
    <td class="text_center">[%|loc%]Required aliases[%END%]</td>
  </tr>

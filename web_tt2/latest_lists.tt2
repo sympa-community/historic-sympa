@@ -1,7 +1,7 @@
 <!-- $Id$ -->
 
 
-<h2 class="block">
+<h2>
  [% IF count %]
    [%|loc(count)%] The %1 latest lists [%END%] 
  [% ELSE %]
@@ -16,7 +16,7 @@
 <br /> 
 
 
-<table class="table_style">
+<table class="table_style" summary="[%|loc%] The latest lists of this robot[%END%] ">
 <tr class="color4">
    <th><strong>[%|loc%]Listname[%END%]</strong></th>
    <th><strong>[%|loc%]Creation date[%END%]</strong></th>

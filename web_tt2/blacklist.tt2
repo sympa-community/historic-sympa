@@ -27,6 +27,7 @@ Syntax :
 [% rows = '10' IF rows < 10 %]
 [% rows = rows+2 %]
 <form action="[% path_cgi %]/blacklist" method="post">
+<fieldset>
  <textarea name="blacklist" cols="80" rows="[% rows %]" />
 [% blacklist %]
 </textarea><br />
@@ -39,5 +40,6 @@ Syntax :
 [%|loc%]Template saved[%END%] ([% time %]) <br /><br />
 [% END %]
 
+</fieldset>
 </form>
 </div>

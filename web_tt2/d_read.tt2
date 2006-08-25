@@ -47,7 +47,7 @@
   <h1>[%|loc%]Listing of root folder[%END%]</h1>
   [% END %]   
 
-  <table class="listOfItems">
+  <table summary="[%|loc%]Listing of folder[%END%] [% visible_path %]" class="listOfItems">
   <tr>
   
   [% IF order_by != 'order_by_doc' %]  
@@ -91,12 +91,12 @@
       [% FOREACH s = sort_subdirs %]
         <tr class="color0">
 	[% IF escaped_path %]
-	  <td> <a href="[% path_cgi %]/d_read/[% list %]/[% escaped_path %]/[% s.escaped_doc %]/"> 
+	  <td class="review_cels_mail"> <a href="[% path_cgi %]/d_read/[% list %]/[% escaped_path %]/[% s.escaped_doc %]/"> 
 	[% ELSE %]
-	  <td> <a href="[% path_cgi %]/d_read/[% list %]/[% s.escaped_doc %]/"> 
+	  <td class="review_cels_mail"> <a href="[% path_cgi %]/d_read/[% list %]/[% s.escaped_doc %]/"> 
 	[% END %]
 	<img src="[% s.icon %]" alt="[% s.escaped_title %]" /> [% s.doc %]</a></td>
-	<td>
+	<td class="review_cels">
 	[% IF s.author_known %] 
 	  [% s.author_mailto %]  
         [% ELSE %]
@@ -104,7 +104,7 @@
 	[% END %]
 	</td>	    
 	<td>&nbsp;</td>
-	<td> [% s.date %] </td>
+	<td class="review_cels"> [% s.date %] </td>
 		
 
 	[% IF expert_page %]
@@ -166,23 +166,23 @@
         [% END %]
         
         [% IF f.html %]
-	  <td>&nbsp;
+	  <td class="review_cels_mail">
 	  [% IF escaped_path %]
-            <a href="[% path_cgi %]/d_read/[% list %]/[% escaped_path %]/[% f.escaped_doc %]" target="html_window">
+            <a href="[% path_cgi %]/d_read/[% list %]/[% escaped_path %]/[% f.escaped_doc %]" title="[%|loc%]Open in a new window[%END%]" target="html_window">
 	  [% ELSE %]
-            <a href="[% path_cgi %]/d_read/[% list %]/[% f.escaped_doc %]" target="html_window">
+            <a href="[% path_cgi %]/d_read/[% list %]/[% f.escaped_doc %]" title="[%|loc%]Open in a new window[%END%]" target="html_window">
 	  [% END %]	  
 	  <img src="[% f.icon %]" alt="[% f.escaped_title %]" /> [% f.doc %] </a>
 	  </td>
 	[% ELSIF f.url %]
-	  <td>
-	  <a href="[% f.url %]" target="html_window">
+	  <td class="review_cels_mail">
+	  <a href="[% f.url %]" title="[%|loc%]Open in a new window[%END%]" target="html_window">
 	  <img src="[% f.icon %]" alt="[% f.escaped_title %]" /> [% f.anchor %] </a>
 	  </td>
 	[% ELSE %]
 	  [% IF f.moderate %]
 	    [% IF expert_page %]
-	      <td>&nbsp;
+	      <td class="review_cels_mail">
 	      [% IF escaped_path %]
 	        <a href="[% path_cgi %]/d_read/[% list %]/[% escaped_path %]/[% f.escaped_doc %]">
 	      [% ELSE %]
@@ -192,7 +192,7 @@
 	      </td>
         [% END %] 
 	  [% ELSE %]
-	    <td>&nbsp;
+	    <td class="review_cels_mail">
 	    [% IF escaped_path %]
 	      <a href="[% path_cgi %]/d_read/[% list %]/[% escaped_path %]/[% f.escaped_doc %]">
 	    [% ELSE %]
@@ -208,10 +208,10 @@
 	 
 	[% IF f.moderate %]
 	  [% IF expert_page %]
-	    <td>[%|loc%]to moderate[%END%]</td>
+	    <td class="review_cels">[%|loc%]to moderate[%END%]</td>
           [% END %]
 	[% ELSE %]
-         <td>
+         <td class="review_cels">
 	 [% IF f.author_known %]
 	   [% f.author_mailto %]
  	 [% ELSE %]
@@ -222,20 +222,20 @@
 	 
 	[% IF f.moderate %]
 	  [% IF expert_page %]
-   	     <td>&nbsp;
+   	     <td class="review_cels">&nbsp;
 	     [% IF !f.url %]
 	       [% f.size %] 
 	     [% END %]
 	     </td>
-	     <td> [% f.date %] </td>
+	     <td class="review_cels"> [% f.date %] </td>
 	  [% END %]
 	[% ELSE %]
-	  <td>&nbsp;
+	  <td class="review_cels">&nbsp;
 	  [% IF !f.url %]
 	    [% f.size %] 
 	  [% END %]
 	  </td>
-	  <td> [% f.date %] </td>
+	  <td class="review_cels"> [% f.date %] </td>
 	[% END %]
 
 	 
@@ -308,6 +308,7 @@
    [% IF total_edit %]    
     <div class="block">
     <form method="post" action="[% path_cgi %]">
+    <fieldset>
     <strong>
     [% IF path %]
       [%|loc(visible_path)%]Create a new folder inside the folder %1[%END%]
@@ -315,53 +316,59 @@
       [%|loc%]Create a new folder inside the root folder[%END%]
     [% END %]
     </strong> <br />
-    <label>[%|loc%]Folder name[%END%] <input maxlength="30" type="text" name="name_doc" /></label>
+    <label for="name_doc">[%|loc%]Folder name[%END%]</label> <input id="name_doc" maxlength="30" type="text" name="name_doc" />
     <input class="MainMenuLinks" type="submit" value="[%|loc%]Create[%END%]" name="action_d_create_dir" />
     <input type="hidden" name="previous_action" value="d_read" />
     <input type="hidden" name="list" value="[% list %]" />
     <input type="hidden" name="path" value="[% path %]" />
     <input type="hidden" name="type" value="directory" />
     <input type="hidden" name="action" value="d_create_dir" />
+    </fieldset>
     </form>
     </div><br/>
     [% END %]
 
     <div class="block">
     <form method="post" action="[% path_cgi %]">
+    <fieldset>
     <strong> [%|loc%]Create a new file[%END%]</strong> <br />
-    <label>[%|loc%]File name[%END%] <input maxlength="30" type="text" name="name_doc" /></label>
+    <label for="name_doc">[%|loc%]File name[%END%]</label> <input id="name_doc" maxlength="30" type="text" name="name_doc" />
     <input class="MainMenuLinks" type="submit" value="[%|loc%]Create[%END%]" name="action_d_create_dir" />
     <input type="hidden" name="previous_action" value="d_read" />
     <input type="hidden" name="list" value="[% list %]" />
     <input type="hidden" name="path" value="[% path %]" />
     <input type="hidden" name="type" value="file" />
     <input type="hidden" name="action" value="d_create_dir" />
+    </fieldset>
     </form>
     </div>
 
     <br /><div class="block">
     <form method="post" action="[% path_cgi %]">
+    <fieldset>
     <strong>[%|loc%]Add a bookmark[%END%]</strong><br />
-    <label>[%|loc%]title[%END%] <input maxlength="100" size="25" type="text" name="name_doc" /></label><br />
-    <label>[%|loc%]URL[%END%] <input size="35" type="text" name="url" /></label>
+    <label for="name_doc">[%|loc%]title[%END%]</label> <input id="name_doc" maxlength="100" size="25" type="text" name="name_doc" /><br />
+    <label for="url">[%|loc%]URL[%END%]</label> <input id="url" size="35" type="text" name="url" />
     <input class="MainMenuLinks" type="submit" value="[%|loc%]Add[%END%]" name="action_d_savefile" />
     <input type="hidden" name="previous_action" value="d_read" />
     <input type="hidden" name="list" value="[% list %]" />
     <input type="hidden" name="path" value="[% path %]" />
     <input type="hidden" name="action" value="d_savefile" />
+    </fieldset>
     </form>
     </div><br/>
    <div class="block">
    <form method="post" action="[% path_cgi %]" enctype="multipart/form-data" >
-   <label>
+   <fieldset>
+   <label for="uploaded_file">
    <strong>
    [% IF path %]
      [%|loc(visible_path)%]Upload a file inside the folder %1[%END%]
    [% ELSE %]
      <strong> [%|loc%]Upload a file inside the folder SHARED[%END%]
    [% END %]
-   </strong><br />
-   <input type="file" name="uploaded_file"/></label>
+   </strong></label><br />
+   <input id="uploaded_file" type="file" name="uploaded_file"/>
    <input class="MainMenuLinks" type="submit" value="[%|loc%]Publish[%END%]" name="action_d_upload" />
    <input type="hidden" name="list" value="[% list %]" />
    <input type="hidden" name="path" value="[% path %]" />
@@ -371,19 +378,21 @@
       [% IF total_edit %]
         <div class="block">
         <form method="post" action="[% path_cgi %]" enctype="multipart/form-data" >
-	<label>
+	<fieldset>
+	<label for="unzipped_file">
         <strong>
  	[% IF path %]
            [%|loc(visible_path)%]Unzip a file inside the folder %1[%END%]
          [% ELSE %]
            [%|loc%]Unzip a file inside the folder SHARED[%END%]
          [% END %]
-        </strong><br />
-        <input type="file" name="unzipped_file"/></label>
+        </strong></label><br />
+        <input id="unzipped_file" type="file" name="unzipped_file"/>
 
         <input class="MainMenuLinks" type="submit" value="[%|loc%]Publish[%END%]" name="action_d_unzip" />
         <input type="hidden" name="list" value="[% list %]" />
         <input type="hidden" name="path" value="[% path %]" />
+	</fieldset>
         </form> 
         </div><br />
        

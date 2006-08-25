@@ -2,11 +2,9 @@
 
 
 <form action="[% path_cgi %]" method="post">
-
-<table class="pending_lists">
- <tr class="color4">
-   <th class="title_pending" colspan="4">[%|loc%]Pending lists[%END%]</td>
- </tr>
+<fiedlset>
+<strong>[%|loc%]Pending lists[%END%]</strong>
+<table summary="[%|loc%]Pending lists[%END%]" class="table_style">
  <tr class="color4">
    <th>[%|loc%]list name[%END%]</th>
    <th>[%|loc%]list subject[%END%]</th>
@@ -28,6 +26,7 @@
 </tr>
 [% END %]
 </table>
+</fieldseT>
 </form>
 
 

@@ -4,6 +4,7 @@
 <div id="page_size">
 [%|loc%]Page size[%END%]
   <form action="[% path_cgi %]">
+  <fieldset>
   <input type="hidden" name="sortby" value="[% sortby %]" />
   <input type="hidden" name="action" value="viewlogs" />
   <input type="hidden" name="list" value="[% list %]" />
@@ -14,6 +15,7 @@
           <option value="100">100</option>
 	  <option value="500">500</option>
   </select>
+  </fieldset>
   </form>
 <br />
    [% IF prev_page %]
@@ -31,89 +33,80 @@
 </div>
 [% END %]
 
-<form name="log_form" method="post" action="[% path_cgi %]">
-<input type="hidden" name="list" value="[% list %]" />
-<input type="hidden" name="action" value="viewlogs" />
-  <table>
-    <tr>
-       <th align= "left">[%|loc%]Search by :[%END%]</th>
-       <td><select name="target_type"/>
+<form id="logs_form" name="log_form" method="post" action="[% path_cgi %]">
+<fieldset>
+  <input type="hidden" name="list" value="[% list %]" />
+  <input type="hidden" name="action" value="viewlogs" />
 
-       [% IF type_target_s  == 'target_email' %]
-	 <OPTION value="[% type_target_s %]">[%|loc%]Email[%END%]</OPTION>
-	 <OPTION value="none">-----------</OPTION>
-       [% ELSE %] 
-	 [% IF type_target_s == 'msg_id' %]
-	   <OPTION value="[% type_target_s %]">[%|loc%]Message Id[%END%]</OPTION>
-	   <OPTION value="none">-----------</OPTION>
-         [% END %]
-       [% END %]
+  <label for="target_type">[%|loc%]Search by :[%END%]</label>
+    <select id="target_type" name="target_type"/>
 
-       <OPTION value="target_email">[%|loc%]Email[%END%]</OPTION>
-       <OPTION value="msg_id">[%|loc%]Message Id[%END%]</OPTION>
-       <OPTION value="none">-----------</OPTION>
-       </select>
-       </td>
-       <td><input type="text" name="target_searched" value="[% target_searched_s %]" size ="20"/><td>
-    </tr>
+    [% IF type_target_s  == 'target_email' %]
+      <OPTION value="[% type_target_s %]">[%|loc%]Email[%END%]</OPTION>
+      <OPTION value="none">-----------</OPTION>
+    [% ELSE %] 
+      [% IF type_target_s == 'msg_id' %]
+	<OPTION value="[% type_target_s %]">[%|loc%]Message Id[%END%]</OPTION>
+	<OPTION value="none">-----------</OPTION>
+      [% END %]
+    [% END %]
+    <OPTION value="target_email">[%|loc%]Email[%END%]</OPTION>
+    <OPTION value="msg_id">[%|loc%]Message Id[%END%]</OPTION>
+    <OPTION value="none">-----------</OPTION>
+    </select>
+    
+    <input id="target_type" type="text" name="target_searched" value="[% target_searched_s %]" size ="20"/><br />
+
+    <label for="date">[%|loc%]Search by date :[%END%]</label>
+      <input id="date" type="text" name="date_from" value="[% date_from_s %]" size ="10"/>&nbsp;to
+      <input id="date"type="text" name="date_to" value="[% date_to_s %]" size ="10"/>&nbsp; <h7>ex: 03/05/2006</h7><br />
+
+    <label for="type_searched">[%|loc%]Search by type :[%END%]</label>
+      <select id="type_searched" name="type_searched"/>
+        [% IF type_searched_s %]
+	  [% IF type_searched_s == 'all_actions' %]
+	    <OPTION value="all_actions">[%|loc%]All[%END%]</OPTION>
+	    <OPTION value="none">------------</OPTION>
+	  [% ELSE %]
+            <OPTION value="[% type_searched_s %]">[% type_searched_s %]</OPTION>
+	    <OPTION value="none">------------</OPTION>
+	  [% END %]
+        [% END %]
+        <OPTION value="all_actions">[%|loc%]All[%END%]</OPTION>
+        <OPTION value="none">------------</OPTION>
+        <OPTION value="authentication">[%|loc%]Authentication[%END%]</OPTION>
+        <OPTION value="bounced">[%|loc%]Bounces management[%END%]</OPTION>
+        <OPTION value="list_management">[%|loc%]List Management[%END%]</OPTION>
+        <OPTION value="message">[%|loc%]Message[%END%]</OPTION>
+        <OPTION value="preferences">[%|loc%]User preferences[%END%]</OPTION>
+        <OPTION value="subscription">[%|loc%]User management[%END%]</OPTION>
+        <OPTION value="shared">[%|loc%]Web documents management[%END%]</OPTION>
+        <OPTION value="none">------------</OPTION>
+        </select><br />
        
-   <tr><td></td></tr>
-   <tr>
-       <th align= "left">Search by date :</th>
-       <td><input type="text" name="date_from" value="[% date_from_s %]" size ="10"/>&nbsp;to</td>
-       <td><input type="text" name="date_to" value="[% date_to_s %]" size ="10"/>&nbsp; <h7>ex: 03/05/2006</h7></td>
-   </tr>
-   <tr><td></td></tr>
-   <tr>
-       <th align= "left">[%|loc%]Search by type :[%END%]</th>
-       <td><select name="type_searched"/>
-       [% IF type_searched_s %]
-	 [% IF type_searched_s == 'all_actions' %]
-	   <OPTION value="all_actions">[%|loc%]All[%END%]</OPTION>
-	   <OPTION value="none">------------</OPTION>
-	 [% ELSE %]
-           <OPTION value="[% type_searched_s %]">[% type_searched_s %]</OPTION>
-	   <OPTION value="none">------------</OPTION>
-	 [% END %]
-       [% END %]
-       <OPTION value="all_actions">[%|loc%]All[%END%]</OPTION>
-       <OPTION value="none">------------</OPTION>
-       <OPTION value="authentication">[%|loc%]Authentication[%END%]</OPTION>
-       <OPTION value="bounced">[%|loc%]Bounces management[%END%]</OPTION>
-       <OPTION value="list_management">[%|loc%]List Management[%END%]</OPTION>
-       <OPTION value="message">[%|loc%]Message[%END%]</OPTION>
-       <OPTION value="preferences">[%|loc%]User preferences[%END%]</OPTION>
-       <OPTION value="subscription">[%|loc%]User management[%END%]</OPTION>
-       <OPTION value="shared">[%|loc%]Web documents management[%END%]</OPTION>
-       <OPTION value="none">------------</OPTION>
-       </select>
-       </td>
-   </tr>
-   <tr><td></td></tr>
-   [% IF is_listmaster || is_owner %]
-   <tr>
-       <th align= "left">[%|loc%]Search on the list[%END%] :</th>
-       <td><select name="list_searched"/>
-       [% IF list_searched_s %]
-         [% IF list_searched_s == 'all_list'%]
-	     <OPTION value="[% list_searched_s %]">[%|loc%]All[%END%]</OPTION>
- 	     <OPTION value="none">------------</OPTION>
-         [% ELSE %]
-	     <OPTION value="[% list_searched_s %]">[% list_searched_s %]</OPTION>
-	     <OPTION value="none">------------</OPTION>	 
-         [% END %]
-       [% END %]
-       <OPTION value="[% list %]">[% list %]</OPTION>
-       <OPTION value="none">------------</OPTION>
-       <OPTION value="all_list">[%|loc%]All[%END%]</OPTION>
-       <OPTION value="none">------------</OPTION>
-       [% IF is_listmaster %]
-           [% FOREACH lol = list_of_lists %]
-	     [% IF lol.name != list %]
-	       <OPTION value="[% lol.name %]">[% lol.name %]</OPTION>
-	     [% END %]	
-           [% END %]
-       [% ELSE %]
+    [% IF is_listmaster || is_owner %]
+      <label for="list_searched">[%|loc%]Search on the list[%END%] :</label>
+        <select id="list_searched" name="list_searched"/>
+        [% IF list_searched_s %]
+          [% IF list_searched_s == 'all_list'%]
+	    <OPTION value="[% list_searched_s %]">[%|loc%]All[%END%]</OPTION>
+ 	    <OPTION value="none">------------</OPTION>
+          [% ELSE %]
+	    <OPTION value="[% list_searched_s %]">[% list_searched_s %]</OPTION>
+	    <OPTION value="none">------------</OPTION>	 
+          [% END %]
+        [% END %]
+        <OPTION value="[% list %]">[% list %]</OPTION>
+        <OPTION value="none">------------</OPTION>
+        <OPTION value="all_list">[%|loc%]All[%END%]</OPTION>
+        <OPTION value="none">------------</OPTION>
+        [% IF is_listmaster %]
+          [% FOREACH lol = list_of_lists %]
+	    [% IF lol.name != list %]
+	      <OPTION value="[% lol.name %]">[% lol.name %]</OPTION>
+	    [% END %]	
+          [% END %]
+        [% ELSE %]
          [% IF is_owner %]
            [% FOREACH ol = owner_lists %]
 	     [% IF ol.name != list %]
@@ -123,32 +116,22 @@
          [% END %]
        [% END %]
        <OPTION value="none">------------</OPTION>
-       </select>	 
-       </td>
-   </tr>
-   <tr><td></td></tr>
-   [% END %]
+       </select><br />	 
+    [% END %]
 
    [% IF is_listmaster %]
-   <tr>
-	<th align= "left">Search by IP :</th>
-	<td><input type="text" name="ip_searched" value="[% ip_searched_s %]"/></td>
-   </tr>
-   <tr><td></td></tr>	
 
+	<label for="ip_searched">Search by IP :</label>
+	  <input id="ip_searched" type="text" name="ip_searched" value="[% ip_searched_s %]"/><br />
    [% END %]
 
-   <tr><td></td></tr>
-
-   <tr>
-       <td><input type="submit" name="action_viewlogs" value="[%|loc%]View[%END%]" />
-       &nbsp;&nbsp;
-       <input type="button" value="[%|loc%]Reset[%END%]" OnClick="javascript:clear_log_form()"/>
-       &nbsp;&nbsp;
-       <input type="submit" name="action_viewlogs.all" value="[%|loc%]View all[%END%]" /></td>
-   </tr>
-   <tr><td></td></tr>
-</table>
+       <label for="submit"></label>
+	 <input id="submit" type="submit" name="action_viewlogs" value="[%|loc%]View[%END%]" />
+         &nbsp;&nbsp;
+         <input id="submit" type="button" value="[%|loc%]Reset[%END%]" OnClick="javascript:clear_log_form()"/>
+         &nbsp;&nbsp;
+         <input id="submit" type="submit" name="action_viewlogs.all" value="[%|loc%]View all[%END%]" /><br /><br />
+</fieldset>
 </form>
 
 
@@ -162,9 +145,9 @@
   <br />
   <h7>[%|loc(rows_nb)%]%1 results[%END%].</h7
 [% END %]
-
-<table class="listOfItems smaller">
-      <tr>
+<div id="table_container">
+<table class="listOfItems" summary="logs table">
+     <tr>
 	[% IF sortby == 'date' %]
   	    <th class="sortby">
 	    [%|loc%]Sub date[%END%]
@@ -246,43 +229,43 @@
 	  <tr class="bg_color_error">
 	[% END %]
 	  <td>
-	    <span class="smaller">[% l.date %]</span>
+	    [% l.date %]
 	  </td>
 	 [% IF is_listmaster || is_owner %]
 	  <td>
-  	     <span class="smaller">[% l.list %]</span>
+  	    [% l.list %]
 	  </td>
 	  [% END %]
 	  <td>
-  	     <span class="smaller">[% l.action %]</span>
+  	    [% l.action %]
 	  </td>
 	  <td>
-  	     <span class="smaller">[% l.parameters %]</span>
+  	    [% l.parameters %]
 	  </td>
 	  <td>
-  	     <span class="smaller">[% l.target_email %]</span>
+  	    [% l.target_email %]
 	  </td>
 	  <td>
 	      [% IF l.msg_id %]
-  	        <a href="javascript:searched_by_msgId('[% l.msg_id %]')" title="[%|loc%]view other events related to this message id.[%END%]"><span class="smaller">[%|loc%]Other events[%END%]</span></a>
+  	        <a href="javascript:searched_by_msgId('[% l.msg_id %]')" title="[%|loc%]view other events related to this message id.[%END%]">[%|loc%]Other events[%END%]</a>
 	      [% END %]
 	  </td>
 	  <td>
-	     <span class="smaller">[% l.status %]</span>
+	    [% l.status %]
 	  </td>
 	  <td>
-  	      <span class="smaller">[% l.error_type %]</span>
+  	    [% l.error_type %]
 	  </td>
 	  <td>
-  	      <span class="smaller">[% l.user_email %]</span>
+  	    [% l.user_email %]</span>
 	  </td>
 	  [% IF is_listmaster || is_owner %]
 	  <td>
-  	      <span class="smaller">[% l.client %]</span>
+  	    [% l.client %]
 	  </td>
 	  [% END %]
 	  <td>
-  	      <span class="smaller">[% l.daemon %]</span>
+  	    [% l.daemon %]
 	  </td>
 	</tr>
       	[% IF dark == '1' %]
@@ -292,5 +275,5 @@
 	[% END %]
 
       [% END %]
-     
 </table>
+</div>
