@@ -1,3 +1,103 @@
+2006-09-14 17:51  sympa-authors
+
+	* src/List.pm: [S.Amrani, Gend. Nationale] Fix: incorrectly closed
+	  file handle
+
+2006-08-29 13:24  sympa-authors
+
+	* wwsympa/archived.pl: Fix: sort archives directories before
+	  expiring ; otherwise latest months might expire.
+
+2006-08-28 17:48  sympa-authors
+
+	* src/List.pm: [S.Amrani, Gendarmerie Nat.] Fix: typo
+
+2006-08-25 17:25  sympa-authors
+
+	* wwsympa/wwsympa.fcgi: [reported by S.Amrani, Gendarmerie Nat.]
+	  Fix: After editing a subscriber email, the list owner might get a
+	  "not subscribed to list" error.  The bug happened because the
+	  do_set() is used by both list members and list owners. Wwsympa
+	  now used the previous_action information to bring the user back
+	  to the right page.
+
+2006-08-25 15:18  sympa-authors
+
+	* wwsympa/wwsympa.fcgi: [reported by P.Von Der Hagen, Karlsruhe
+	  Univ.] [ID 876] Fix:	sympa sends message "topics have changed"
+	  when owner is changed
+
+2006-08-25 14:06  sympa-authors
+
+	* mail_tt2/message_report.tt2: [reported by P.Von Der Hagen,
+	  Karlsruhe Univ.] [ID 878] Fix: used incorrect variable in mail
+	  report
+
+2006-08-24 17:33  sympa-authors
+
+	* doc/sympa.tex.tpl: Fix typo
+
+2006-08-24 17:05  sympa-authors
+
+	* doc/sympa.tex.tpl, src/Conf.pm, src/List.pm, src/sympa_wizard.pl:
+	  ***** Change: config.bin files are no more used unless the new
+	  cache_list_config sympa.conf parameter ***** is set to
+	  'binary_file'. This mode is only usefull if you manage lots of
+	  lists (1000+) to ***** have a faster startup of processes.
+
+2006-08-10 10:32  sympa-authors
+
+	* src/sympa.pl: [reported by S.Amrani, Gendarmerie Nat.] Fix:
+	  sympa.pl would die when processing a message for
+	  unknownlist-request.	The error message was : "Can't modify
+	  non-lvalue subroutine call" Fixed a buggy call to chomp.
+
+2006-08-03 15:30  sympa-authors
+
+	* po/en_US.po: Fixed charset and other metadata
+
+2006-08-02 16:32  sympa-authors
+
+	* web_tt2/: edit_template.tt2, editfile.tt2: [proposed by P.van der
+	  Hagen] Fix: wrap is non HTML-standard ; setting it to "off"
+
+2006-08-02 16:01  sympa-authors
+
+	* src/etc/script/: create_db.Oracle, create_db.Pg,
+	  create_db.SQLite, create_db.Sybase, create_db.mysql: [reported by
+	  P.Bricourt, Mongueurs] Fix: still refering to idp_netimap DB
+	  field
+
+2006-07-31 15:10  sympa-authors
+
+	* po/en_US.po: Fix: use sympa.pot as the default en_US.po
+
+2006-06-08 14:53  sympa-authors
+
+	* check_perl_modules.pl, po/en_US.po, src/Language.pm,
+	  wwsympa/wwsympa.fcgi: Fix: language names were incorrectly
+	  encoded in drop-down web menu. The reason is that each language
+	  name is encoded with the associated charset.	We now use the
+	  Encode module (added to the list of required modules) to decode
+	  and encode the language name
+
+2006-06-06 15:50  sympa-authors
+
+	* src/Language.pm: [reported by P.Maes, Univ. Louvain] Fix:
+	  localization failed on Solaris. The native Solaris gettext
+	  libraries failed to use the appropriate .mo file.  We're now
+	  using the "Pure Perl" implementation of gettext
+
+2006-06-06 11:06  sympa-authors
+
+	* src/: Conf.pm, List.pm: [reported by P.Maes, Univ. Louvain] Don't
+	  use chown user.group that fails on Solaris. Run separate chown
+	  and chgrp commands instead
+
+2006-06-01 16:56  sympa-authors
+
+	* ChangeLog, NEWS: Preparing 5.2.1
+
 2006-06-01 15:14  sympa-authors
 
 	* wwsympa/wwsympa.fcgi: Fix: report an error if a subscriber email
