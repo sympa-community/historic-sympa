@@ -312,7 +312,7 @@ my %action_args = ('default' => ['list'],
 		'resetbounce' => ['list','email'],
 		'review' => ['list','page','size','sortby'],
 		'reviewbouncing' => ['list','page','size'],
-		'arc' => ['list','month','arc_file'],
+		'arc' => ['list','month','@arc_file'],
 		'latest_arc' => ['list'],
 		'arc_manage' => ['list'],                                          
 		'arcsearch_form' => ['list','archive_name'],
@@ -459,7 +459,7 @@ my %in_regexp = (
 		 ## File names
 		 'file' => '[^<>\*\$]+',
 		 'template_path' => '[\w\-\.\/_]+',
-		 'arc_file' => '[\w\-\.]+', 
+		 'arc_file' => '[^<>\\\*\$]+',
 		 'path' => '[^<>\\\*\$]+',
 		 'uploaded_file' => '[^<>\*\$]+', # Could be precised (use of "'")
 		 'dir' => '[^<>\\\*\$]+',
