@@ -1400,7 +1400,7 @@ sub DoMessage{
 	return undef;
     }
 	
-    if ($msgid_table{$listname}{$messageid}) {
+    if ($msgid_table{$list->get_list_id()}{$messageid}) {
 	&do_log('notice', 'Found known Message-ID, ignoring message which would cause a loop');
 	return undef;
     }
@@ -1506,7 +1506,7 @@ sub DoMessage{
 	    my $numsmtp = $list->distribute_msg($message);
 	    
 	    ## Keep track of known message IDs...if any
-	    $msgid_table{$listname}{$messageid}++ if ($messageid);
+	    $msgid_table{$list->get_list_id()}{$messageid}++ if ($messageid);
 	    
 	    unless (defined($numsmtp)) {
 		&do_log('err','sympa::DoMessage(): Unable to send message to list %s', $listname);
@@ -1631,13 +1631,13 @@ sub DoCommand {
     my $sender = $message->{'sender'};
 
     ## Detect loops
-    if ($msgid_table{$robot}{$messageid}) {
+    if ($msgid_table{'sympa@'.$robot}{$messageid}) {
 	&do_log('notice', 'Found known Message-ID, ignoring command which would cause a loop');
 	return undef;
     }## Clean old files from spool
     
     ## Keep track of known message IDs...if any
-    $msgid_table{$robot}{$messageid}++
+    $msgid_table{'sympa@'.$robot}{$messageid}++
 	if ($messageid);
 
     ## If X-Sympa-To = <listname>-<subscribe|unsubscribe> parse as a unique command
