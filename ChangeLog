@@ -1,3 +1,26 @@
+2006-09-20 10:35  sympa-authors
+
+	* src/sympa.pl: [reported by P.Maes, Université Louvain] Fix: Sympa
+	  would improperly detect a loop if the same message is sent to 2
+	  lists with same local part. Now added list robot to %msgid_table
+	  keys.
+
+2006-09-15 17:25  sympa-authors
+
+	* mail_tt2/message_report.tt2, src/Commands.pm: [reported by
+	  D.Lamballais, IRISA] Fix: moderator was no more notified after
+	  message rejection
+
+2006-09-15 11:04  sympa-authors
+
+	* wwsympa/wwsympa.fcgi: Fix: attachement were not accessible though
+	  web archives Made the last arc_file parameter multiple (using the
+	  @ notation) and changed the associated regexp
+
+2006-09-14 17:51  sympa-authors
+
+	* ChangeLog: Update
+
 2006-09-14 17:51  sympa-authors
 
 	* src/List.pm: [S.Amrani, Gend. Nationale] Fix: incorrectly closed
