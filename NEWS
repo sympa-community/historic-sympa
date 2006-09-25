@@ -3,7 +3,103 @@
 
 (See Changelog file for the full changes log)
 
-5.2		5 April 2006
+5.2.2		25th September 2006
+
+   Changes :
+
+*****	doc/sympa.tex.tpl, src/Conf.pm, src/List.pm, src/sympa_wizard.pl: config.bin files are no more used unless the new
+*****	cache_list_config sympa.conf parameter is set to 'binary_file'. This mode is only usefull if you manage lots of
+*****	lists (1000+) to have a faster startup of processes.
+
+   Bug fixes :
+
+	src/sympa.pl: [reported by P.Maes, Université Louvain] Sympa would improperly detect a loop if the same message is 
+	sent to 2 lists with same local part. Now added list robot to %msgid_table keys.
+
+	mail_tt2/message_report.tt2, src/Commands.pm: [reported by D.Lamballais, IRISA] Moderator was no more notified after
+	message rejection
+
+	wwsympa/wwsympa.fcgi: Fix: attachement were not accessible though web archives Made the last arc_file parameter multiple 
+	(using the @ notation) and changed the associated regexp
+
+	src/List.pm: [S.Amrani, Gend. Nationale] incorrectly closed file handle. Could leed to include_admin_user.lock files not 
+	unlocked
+
+	wwsympa/archived.pl: sort archives directories before expiring ; otherwise latest months might expire.
+
+	wwsympa/wwsympa.fcgi: [reported by S.Amrani, Gendarmerie Nat.] After editing a subscriber email, the list owner might 
+	get a "not subscribed to list" error.  The bug happened because the do_set() is used by both list members and list owners. 
+	Wwsympa now used the previous_action information to bring the user back to the right page.
+
+	wwsympa/wwsympa.fcgi: [reported by P.Von Der Hagen, Karlsruhe Univ.] [ID 876] 
+	Sympa sends message "topics have changed" when owner is changed
+
+	mail_tt2/message_report.tt2: [reported by P.Von Der Hagen, Karlsruhe Univ.] [ID 878] 
+	Used incorrect variable in mail report
+
+	src/sympa.pl: [reported by S.Amrani, Gendarmerie Nat.] sympa.pl would die when processing a message for
+	unknownlist-request.	The error message was : "Can't modify non-lvalue subroutine call" Fixed a buggy call to chomp.
+
+	web_tt2/: edit_template.tt2, editfile.tt2: [proposed by P.van der Hagen] wrap is non HTML-standard ; setting it to "off"
+
+	src/etc/script/: create_db.Oracle, create_db.Pg, create_db.SQLite, create_db.Sybase, create_db.mysql: 
+	[reported by P.Bricourt, Mongueurs] Fix: still refering to idp_netimap DB field
+
+	po/en_US.po: use sympa.pot as the default en_US.po
+
+	check_perl_modules.pl, po/en_US.po, src/Language.pm, wwsympa/wwsympa.fcgi: language names were incorrectly
+	encoded in drop-down web menu. The reason is that each language name is encoded with the associated charset.	
+	We now use the Encode module (added to the list of required modules) to decode and encode the language name
+
+	src/Language.pm: [reported by P.Maes, Univ. Louvain] localization failed on Solaris. The native Solaris gettext
+	libraries failed to use the appropriate .mo file.  We're now using the "Pure Perl" implementation of gettext
+
+	src/: Conf.pm, List.pm: [reported by P.Maes, Univ. Louvain] Don't use chown user.group that fails on Solaris. 
+	Run separate chown and chgrp commands instead
+
+5.2.1		1st June 2006
+
+   New features :
+
+	src/List.pm, src/task_manager.pl wwsympa/archived.pl, wwsympa/bounced.pl, wwsympa/wwsympa.fcgi:
+	[BugID 709] prevent any process to run before data structure have been updated.  
+	This prevents "duplicate entries error" in DB tables
+
+	mail_tt2/listmaster_notification.tt2, src/List.pm:  notify listmaster if upgrade procedure failed
+
+   Changes :
+
+	src/List.pm: Sympa now check if the DBD is available ; otherwise processes would die
+
+	src/List.pm: Change: hide closed lists, even to listmasters
+
+	wwsympa/bounce-lib.pl: analyze the 'Original-recipient' entries of message/delivery-status MIME parts
+
+	po/: it.po: [G.Donnini, Univ Milano] Updated Italian translations for Sympa 5.2
+
+   Bug fixes :
+
+	wwsympa/wwsympa.fcgi: report an error if a subscriber email is changed and the new address is already subscribed
+
+	src/List.pm: ignore case where PRIMARY KEY cannot be dropped
+
+	wwsympa/wwsympa.fcgi: [reported by J.Beretta, France Telecom] a renamed list would keep its previous domain name
+
+	web_tt2/review.tt2: Don't show bouncing status to other members
+
+	important_changes.pl: [reported by C.Peck, Univ William and Mary] on Solaris, chown does not like the '.' separator
+
+	src/etc/mhonarc-ressources.tt2: [proposed by E.Hood] now using $FROMADDRNAME$@$FROMADDRDOMAIN$ instead of $FROMADDR$. 
+	See https://savannah.nongnu.org/bugs/index.php?func=detailitem&item_id=11759
+
+	src/List.pm: [BugID 750] include_sql_query requests would fail with Oracle.  
+	Apparently the ->rows() method does not return the number of rows.  We now use fetchrow_arrayref() to get rows,
+	thus allowing to differenciate an empty field an the last row.
+
+	wwsympa/wwsympa.fcgi: [reported by JM.Bourdin, IUFM Dijon] : visibility authorization scenario was not evaluated to compute
+	  the "your lists" box.
+
+5.2		11 April 2006
 
    New features :
 
@@ -18,6 +114,9 @@
 	src/sympa.pl: sympa.pl --reload_list_config is provided to recreate config.bin files
 
    Changes :
+
+	src/etc/mhonarc-ressources.tt2: Added Dkim-signature to hidden
+	SMTP header fields
 
 	wwsympa/wwsympa.fcgi: [BugID 482] keep track of first accessed URL in 'referer' variable.  
 	It is then possible to bring the user back to this URL at the end of the authentication
@@ -34,6 +133,17 @@
 	mail_tt2/command_report.tt2: no more provide the listmaster email address ; refer to the web site instead
 
    Bug fixes :
+
+	wwsympa/bounce-lib.pl: [reported by P.Young, Ac. Creteil] bounce-lib would not analyse correctly som kind of
+	message/delivery-status
+
+	src/Language.pm: [reported by P.Maes, Univ. Louvain] locales would not work with Solaris. 
+	Solaris requires that POSIX::setlocale() is run before Locale::Messages::textdomain()
+	and Messages::bindtextdomain()
+
+	wwsympa/Makefile: [C.Peck, William and Mary univ ] replaced == with =
+	
+	src/CAS.pm: [BugI 694] CAS ticket validation fails due tovirtualhost error
 
 	wwsympa/wwsympa.fcgi: [BugID 599] Language dropdown displays names in wrong codeset
 
