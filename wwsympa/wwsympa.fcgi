@@ -5651,6 +5651,11 @@ sub do_viewmod {
      my $latest;
      my $index = $wwsconf->{'archive_default_index'};
 
+     ## Clean arc_file
+     if ($in{'arc_file'} eq '/') {
+	 delete $in{'arc_file'};
+      }
+
      unless ($param->{'list'}) {
 	 &report::reject_report_web('user','missing_arg',{'argument' => 'list'},$param->{'action'});
 	 &wwslog('err','do_arc: no list');
@@ -5734,6 +5739,8 @@ sub do_viewmod {
 				    $robot);
 	 return undef;
      }
+
+     &do_log('notice', "ARC_FILE: $in{'arc_file'}");
 
      ## File type
      if ($in{'arc_file'} !~ /^(mail\d+|msg\d+|thrd\d+)\.html$/) {
