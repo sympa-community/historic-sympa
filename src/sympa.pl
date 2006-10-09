@@ -231,7 +231,7 @@ if ($signal ne 'hup') {
 	setpgrp(0, 0);
 	# start the main sympa.pl daemon
 
-	if (($Conf{'distribution_mode'} eq 'single') || ($main::daemon_usage eq 'command_and_message')){ 
+	if (($Conf{'distribution_mode'} eq 'single') || ($main::daemon_usage ne 'command_and_message')){ 
 	    printf STDERR "Starting server for $main::daemon_usage\n";
 	    do_log('debug', "Starting server for $main::daemon_usage");
 	    if ((my $child_pid = fork) != 0) {
