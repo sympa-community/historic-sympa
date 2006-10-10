@@ -1,3 +1,55 @@
+2006-10-05 10:09  olivier.salaun
+
+	* src/Commands.pm: [BugID 1071][reported by F.Guilleux, CRU] Fix:
+	  response to message confirmation did not include listname.
+	  Incorrect $which variable was used.
+
+2006-10-03 13:15  olivier.salaun
+
+	* src/tools.pl: [BugID 792] Fix: bug in tools.pl prevents per
+	  family customization of scenarios, mail_tt2 and web_tt2
+
+2006-10-03 11:09  olivier.salaun
+
+	* wwsympa/wwsympa.fcgi: [reported by V.Nilsen] Fix: links to
+	  archives month from calendar were broken. Now clean up the
+	  arc_file parameter
+
+2006-10-03 10:15  olivier.salaun
+
+	* wwsympa/wwsympa.fcgi: [M.Massar, univ Kaiserslautern] New
+	  feature: Sympa is now able to get the Email in SubjAltName.  As I
+	  was not able to find the mentioned patch to mod_ssl to get
+	  SSL_CLIENT_S_EMAIL exported, I wrote another patch based on
+	  SSL_CLIENT_CERT from "SSLOptions +ExportCertData"
+
+2006-09-25 13:48  olivier.salaun
+
+	* doc/: sympa.pdf, sympa.ps, sympa.tex, html/index.html,
+	  html/node1.html, html/node10.html, html/node11.html,
+	  html/node12.html, html/node13.html, html/node14.html,
+	  html/node15.html, html/node16.html, html/node17.html,
+	  html/node18.html, html/node19.html, html/node2.html,
+	  html/node20.html, html/node21.html, html/node22.html,
+	  html/node23.html, html/node24.html, html/node25.html,
+	  html/node26.html, html/node27.html, html/node28.html,
+	  html/node29.html, html/node3.html, html/node30.html,
+	  html/node31.html, html/node4.html, html/node5.html,
+	  html/node6.html, html/node7.html, html/node8.html,
+	  html/node9.html, html/sympa.html, html/sympa.ps: Update doc
+
+2006-09-25 11:34  sympa-authors
+
+	* doc/sympa.pdf: [no log message]
+
+2006-09-25 11:33  sympa-authors
+
+	* aclocal.m4: update documentation
+
+2006-09-25 10:56  sympa-authors
+
+	* .version, ChangeLog, NEWS: Preparing release 5.2.2
+
 2006-09-20 10:35  sympa-authors
 
 	* src/sympa.pl: [reported by P.Maes, Université Louvain] Fix: Sympa
