@@ -5294,7 +5294,7 @@ sub do_skinsedit {
     
      if (!$list_topics && $list->is_msg_topic_tagging_required()) {
 	 &report::reject_report_web('user','msg_topic_missing',{},$param->{'action'});
-	 &wwslog('info','do_distribute: message(s) without topic topic but in a required list');
+	 &wwslog('info','do_distribute: message(s) without topic but in a required list');
 	 return undef;
      } 
 
@@ -13055,7 +13055,7 @@ sub d_test_existing_and_rights {
 
      if (!$list_topics && $list->is_msg_topic_tagging_required()) {
 	 &report::reject_report_web('user','msg_topic_missing',{},$param->{'action'});
-	 &wwslog('info','do_send_mail: message(s) without topic topic but in a required list');
+	 &wwslog('info','do_send_mail: message(s) without topic but in a required list');
 	 return undef;
      }
 
