@@ -3,6 +3,27 @@
 
 (See Changelog file for the full changes log)
 
+5.2.3		19th October 2006
+
+   New features :
+
+	wwsympa/wwsympa.fcgi: [M.Massar, univ Kaiserslautern] Sympa is now able to get the Email in SubjAltName.  
+	As I was not able to find the mentioned patch to mod_ssl to get SSL_CLIENT_S_EMAIL exported, 
+	I wrote another patch based on SSL_CLIENT_CERT from "SSLOptions +ExportCertData"
+
+   Bug fixes :
+
+	mail_tt2/send_auth.tt2: [Reported by M.Larchet, Univ Nancy 2] subject of confirmation message was localized
+
+	src/sympa_wizard.pl: [BugID 1102][reported by R.Roessner] sympa_wizard.pl failed because of a typo
+
+	web_tt2/compose_mail.tt2, wwsympa/wwsympa.fcgi: [Reported by P.Farmer] topics tagging was not proposed from the "Post" page
+
+	src/tools.pl: [BugID 792] bug in tools.pl prevents per family customization of scenarios, mail_tt2 and web_tt2
+
+	wwsympa/wwsympa.fcgi: [reported by V.Nilsen] links to archives month from calendar were broken. Now clean up the
+	arc_file parameter
+
 5.2.2		25th September 2006
 
    Changes :
