@@ -59,6 +59,16 @@ use Mail::Address;
 require "--LIBDIR--/tools.pl";
 require "--LIBDIR--/time_utils.pl";
 
+my $crypt_openssl_x509_ok;
+BEGIN {
+    if (eval "require Crypt::OpenSSL::X509") {
+        require Crypt::OpenSSL::X509;
+        $crypt_openssl_x509_ok = 1;
+    } else {
+        $crypt_openssl_x509_ok = 0;
+    }
+};
+
 ## WWSympa librairies
 use wwslib;
 use cookielib;
@@ -266,6 +276,7 @@ my %comm = ('home' => 'do_home',
 	 'view_template' => 'do_view_template',
 	 'edit_template' => 'do_edit_template',
 	 'rss_request' => 'do_rss_request',
+	    'maintenance' => 'do_maintenance',
 	 );
 
 my %auth_action = ('logout' => 1,
@@ -311,7 +322,7 @@ my %action_args = ('default' => ['list'],
 		'resetbounce' => ['list','email'],
 		'review' => ['list','page','size','sortby'],
 		'reviewbouncing' => ['list','page','size'],
-		'arc' => ['list','month','arc_file'],
+		'arc' => ['list','month','@arc_file'],
 		'latest_arc' => ['list'],
 		'arc_manage' => ['list'],                                          
 		'arcsearch_form' => ['list','archive_name'],
@@ -458,7 +469,7 @@ my %in_regexp = (
 		 ## File names
 		 'file' => '[^<>\*\$]+',
 		 'template_path' => '[\w\-\.\/_]+',
-		 'arc_file' => '[\w\-\.]+', 
+		 'arc_file' => '[^<>\\\*\$]+',
 		 'path' => '[^<>\\\*\$]+',
 		 'uploaded_file' => '[^<>\*\$]+', # Could be precised (use of "'")
 		 'dir' => '[^<>\\\*\$]+',
@@ -540,6 +551,14 @@ $List::use_db = &List::check_db_connect();
 
 my $pinfo = &List::_apply_defaults();
 
+## Check that the data structure is uptodate
+## If not, set the web interface to maintenance mode
+my $maintenance_mode;
+unless (&List::data_structure_uptodate()) {
+    $maintenance_mode = 1;
+    &do_log('notice',"Web interface set to maintenance mode");
+}
+
 &tools::ciphersaber_installed();
 
 %::changed_params;
@@ -551,14 +570,13 @@ my $birthday = time ;
 ## If using fast_cgi, it is usefull to initialize all list context
 if ($wwsconf->{'use_fast_cgi'}) {
 
-    my $all_lists = &List::get_lists('*');
+    my $all_lists = &List::get_lists('*') unless ($maintenance_mode);
 }
 
  ## Main loop
  my $loop_count;
  my $start_time = &POSIX::strftime("%d %b %Y at %H:%M:%S", localtime(time));
  while ($query = &new_loop()) {
-
 
      undef %::changed_params;
      
@@ -586,6 +604,12 @@ if ($wwsconf->{'use_fast_cgi'}) {
      }
 
      &List::init_list_cache();
+
+     ## If in maintenance mode, check if the data structure is now uptodate
+     if ($maintenance_mode && &List::data_structure_uptodate()) {
+	 $maintenance_mode = undef;
+	 &do_log('notice',"Data structure seem updated, setting OFF maintenance mode");
+     }
 
      ## Get params in a hash
  #    foreach ($query->param) {
@@ -721,6 +745,11 @@ if ($wwsconf->{'use_fast_cgi'}) {
 	     }elsif ($ENV{'SSL_CLIENT_S_DN'} =~ /\+MAIL=([^\+\/]+)$/) {
 		 ## Compatibility issue with old a-sign.at certs
 		 $param->{'user'}{'email'} = lc($1);
+	     }elsif ($crypt_openssl_x509_ok and exists($ENV{SSL_CLIENT_CERT})) {
+		 ## this is the X509v3 SubjectAlternativeName, and does only
+		 ## require "SSLOptions +ExportCertData" without patching
+		 ## mod_ssl -- massar@unix-ag.uni-kl.de
+		 $param->{'user'}{'email'} = lc(Crypt::OpenSSL::X509->new_from_string($ENV{SSL_CLIENT_CERT})->email());
 	     }
 	     
 	     if($param->{user}{email}) {
@@ -857,69 +886,76 @@ if ($wwsconf->{'use_fast_cgi'}) {
      $param->{'htmlarea_url'} = $wwsconf->{'htmlarea_url'} ;
      # if ($wwsconf->{'export_topics'} =~ /all/i);
 
-     ## Session loop
-     while ($action) {
-         unless (&check_param_in()) {
-	     &report::reject_report_web('user','wrong_param',{},$action,$list);
-             &wwslog('info','Wrong parameters');
-             last;
-         }
-
-	 $param->{'host'} = $list->{'admin'}{'host'} if (ref($list) eq 'List');
-         $param->{'host'} ||= $robot;
-         $param->{'domain'} = $list->{'domain'} if (ref($list) eq 'List');
-
-         ## language ( $ENV{'HTTP_ACCEPT_LANGUAGE'} not used !)
-	 $param->{'list_lang'} = $list->{'admin'}{'lang'} if (ref($list) eq 'List');
-	 $param->{'user_lang'} = $param->{'user'}{'lang'} if (defined $param->{'user'});
-
-
-         $param->{'lang'} = $param->{'cookie_lang'} || $param->{'user_lang'} || 
-	     $param->{'list_lang'} || &Conf::get_robot_conf($robot, 'lang');
-         $param->{'locale'} = &Language::SetLang($param->{'lang'});
-
-	 &export_topics ($robot);
-
-         ## use default_home parameter
-         if ($action eq 'home') {
-             $action = $Conf{'robots'}{$robot}{'default_home'} || $wwsconf->{'default_home'};
-
-             if (! &tools::get_filename('etc', 'topics.conf', $robot) &&
-                 ($action eq 'home')) {
-                 $action = 'lists';
-             }
-         }
-
-         unless ($comm{$action}) {
-	     &report::reject_report_web('user','unknown_action',{},$action,$list);
-             &wwslog('info','unknown action %s', $action);
-             last;
-         }
-
-         $param->{'action'} = $action;
-
-         my $old_action = $action;
-
-         ## Execute the action ## 
-         $action = &{$comm{$action}}();
-
-         delete($param->{'action'}) if (! defined $action);
+     if ($in{'action'} eq 'css') {
+	 &do_css();
+	 $param->{'action'} = 'css';
+     }elsif ($maintenance_mode) {
+	 &do_maintenance();
+	 $param->{'action'} = 'maintenance';
+     }else {
+	 ## Session loop
+	 while ($action) {
+	     unless (&check_param_in()) {
+		 &report::reject_report_web('user','wrong_param',{},$action,$list);
+		 &wwslog('info','Wrong parameters');
+		 last;
+	     }
+	     
+	     $param->{'host'} = $list->{'admin'}{'host'} if (ref($list) eq 'List');
+	     $param->{'host'} ||= $robot;
+	     $param->{'domain'} = $list->{'domain'} if (ref($list) eq 'List');
+	     
+	     ## language ( $ENV{'HTTP_ACCEPT_LANGUAGE'} not used !)
+	     $param->{'list_lang'} = $list->{'admin'}{'lang'} if (ref($list) eq 'List');
+	     $param->{'user_lang'} = $param->{'user'}{'lang'} if (defined $param->{'user'});
+	     
+	     
+	     $param->{'lang'} = $param->{'cookie_lang'} || $param->{'user_lang'} || 
+		 $param->{'list_lang'} || &Conf::get_robot_conf($robot, 'lang');
+	     $param->{'locale'} = &Language::SetLang($param->{'lang'});
+	     
+	     &export_topics ($robot);
+	     
+	     ## use default_home parameter
+	     if ($action eq 'home') {
+		 $action = $Conf{'robots'}{$robot}{'default_home'} || $wwsconf->{'default_home'};
+		 
+		 if (! &tools::get_filename('etc', 'topics.conf', $robot) &&
+		     ($action eq 'home')) {
+		     $action = 'lists';
+		 }
+	     }
+	     
+	     unless ($comm{$action}) {
+		 &report::reject_report_web('user','unknown_action',{},$action,$list);
+		 &wwslog('info','unknown action %s', $action);
+		 last;
+	     }
+	     
+	     $param->{'action'} = $action;
 	 
-	 last if ($action =~ /redirect/) ; # after redirect do not send anything, it will crash fcgi lib
+	     my $old_action = $action;
+	     
+	     ## Execute the action ## 
+	     $action = &{$comm{$action}}();
+	 
+	     delete($param->{'action'}) if (! defined $action);
+	 
+	     last if ($action =~ /redirect/) ; # after redirect do not send anything, it will crash fcgi lib
 
+	     
+	     if ($action eq $old_action) {
+		 &wwslog('info','Stopping loop with %s action', $action);
+		 #undef $action;
+		 $action = 'home';
+	     }
 
-         if ($action eq $old_action) {
-             &wwslog('info','Stopping loop with %s action', $action);
-             #undef $action;
-             $action = 'home';
-         }
-
-         undef $action if ($action == 1);
+	     undef $action if ($action == 1);
+	 }
      }
 
      ## Prepare outgoing params
      &check_param_out();
-
 
      ## Params 
      $param->{'action_type'} = $action_type{$param->{'action'}};
@@ -945,9 +981,11 @@ if ($wwsconf->{'use_fast_cgi'}) {
      }
      $param->{'robot_title'} = &Conf::get_robot_conf($robot,'title');
 
-
      ## Do not manage cookies at this level if content was already sent
-     unless ($param->{'bypass'} eq 'extreme' || $param->{'action'} eq 'css' || $rss) {
+     unless ($param->{'bypass'} eq 'extreme' || 
+	     $param->{'action'} eq 'css' || 
+	     $maintenance_mode ||
+	     $rss) {
 
 	 ## Set cookies "your_subscribtions" unless in one list page
 	 if ($param->{'user'}{'email'} && ref($list) ne 'List') {
@@ -962,6 +1000,13 @@ if ($wwsconf->{'use_fast_cgi'}) {
 
 	     ## Add lists information to 'which_info'
 	     foreach my $list (@{$param->{'get_which'}}) {
+		 ## Evaluate AuthZ scenario first
+		 my $result = $list->check_list_authz('visibility', $param->{'auth_method'},
+						      {'sender' =>$param->{'user'}{'email'} ,
+						       'remote_host' => $param->{'remote_host'},
+						       'remote_addr' => $param->{'remote_addr'}});
+		 next unless (ref($result) eq 'HASH' && $result->{'action'} eq 'do_it');
+
 		 my $l = $list->{'name'};
 
 		 $param->{'which_info'}{$l}{'subject'} = $list->{'admin'}{'subject'};
@@ -1025,12 +1070,15 @@ if ($wwsconf->{'use_fast_cgi'}) {
 	 
      ## Available languages
      my $saved_lang = &Language::GetLang();
+
      # Recode the language strings to the correct codeset
      &Language::set_recode ($Conf{'web_recode_to'} || &Language::gettext('_charset_'));
      
      foreach my $l (@{&Language::GetSupportedLanguages($robot)}) {
 	 &Language::SetLang($l) || next;
-	 $param->{'languages'}{$l}{'complete'} = gettext("_language_");
+
+	 ## Decode from the language charset...later we will encode to the appropriate encoding
+	 $param->{'languages'}{$l}{'complete'} = &Encode::decode(gettext("_charset_"), gettext("_language_"));
 
 	 if ($param->{'locale'} eq $l) {
 	     $param->{'languages'}{$l}{'selected'} = 'selected="selected"';
@@ -1038,8 +1086,14 @@ if ($wwsconf->{'use_fast_cgi'}) {
 	     $param->{'languages'}{$l}{'selected'} = '';
 	 }
      }
-     &Language::set_recode ();
+     &Language::set_recode (); ## Unset recoding
      &Language::SetLang($saved_lang);
+
+     ## Encode language names to the current charset
+     foreach my $l (keys %{$param->{'languages'}}) {
+	 $param->{'languages'}{$l}{'complete'} = &Encode::encode(gettext("_charset_"), $param->{'languages'}{$l}{'complete'});
+     }
+
      # if bypass is defined select the content-type from various vars
      if ($param->{'bypass'}) {
 
@@ -3369,6 +3423,13 @@ sub do_remindpasswd {
 	     return undef;
 	 }
 
+	 ## Check if new email is already subscribed
+	 if ($list->is_user($in{'new_email'})) {
+	     &report::reject_report_web('user','already_subscriber', {'list' => $list->{'name'}},$param->{'action'},$list);
+	     &wwslog('info','do_set: %s already subscriber', $in{'new_email'});
+	     return undef;
+	 }
+
 	 ## Duplicate entry in user_table
 	 unless (&List::is_user_db($in{'new_email'})) {
 
@@ -3425,7 +3486,7 @@ sub do_remindpasswd {
      $list->save();
      &report::notice_report_web('performed',{},$param->{'action'});
 
-     return 'suboptions';
+     return $in{'previous_action'} || 'suboptions';
  }
 
  ## Update of user preferences
@@ -5233,7 +5294,7 @@ sub do_skinsedit {
     
      if (!$list_topics && $list->is_msg_topic_tagging_required()) {
 	 &report::reject_report_web('user','msg_topic_missing',{},$param->{'action'});
-	 &wwslog('info','do_distribute: message(s) without topic topic but in a required list');
+	 &wwslog('info','do_distribute: message(s) without topic but in a required list');
 	 return undef;
      } 
 
@@ -5590,6 +5651,11 @@ sub do_viewmod {
      my $latest;
      my $index = $wwsconf->{'archive_default_index'};
 
+     ## Clean arc_file
+     if ($in{'arc_file'} eq '/') {
+	 delete $in{'arc_file'};
+      }
+
      unless ($param->{'list'}) {
 	 &report::reject_report_web('user','missing_arg',{'argument' => 'list'},$param->{'action'});
 	 &wwslog('err','do_arc: no list');
@@ -5673,6 +5739,8 @@ sub do_viewmod {
 				    $robot);
 	 return undef;
      }
+
+     &do_log('notice', "ARC_FILE: $in{'arc_file'}");
 
      ## File type
      if ($in{'arc_file'} !~ /^(mail\d+|msg\d+|thrd\d+)\.html$/) {
@@ -7573,7 +7641,7 @@ sub do_edit_list {
     }
 
     ## For changed msg_topic.name
-    if ($list->modifying_msg_topic_for_subscribers($new_admin->{'msg_topic'})) {
+    if (defined $new_admin->{'msg_topic'} && $list->modifying_msg_topic_for_subscribers($new_admin->{'msg_topic'})) {
 	&report::notice_report_web('subscribers_noticed_deleted_topics',{},$param->{'action'});
     }
 
@@ -8466,7 +8534,7 @@ sub _restrict_values {
      ## Install new aliases
      $in{'listname'} = $in{'new_listname'};
      
-     unless ($list = new List ($in{'new_listname'}, $in{'new_robot'})) {
+     unless ($list = new List ($in{'new_listname'}, $in{'new_robot'},{'reload_config' => 1})) {
 	 &wwslog('info',"do_rename_list : unable to load $in{'new_listname'} while renamming");
 	 &report::reject_report_web('intern','list_reload',{'new_listname' => $in{'new_listname'}},$param->{'action'},$list,$param->{'user'}{'email'},$robot);
 	 return undef;
@@ -12987,7 +13055,7 @@ sub d_test_existing_and_rights {
 
      if (!$list_topics && $list->is_msg_topic_tagging_required()) {
 	 &report::reject_report_web('user','msg_topic_missing',{},$param->{'action'});
-	 &wwslog('info','do_send_mail: message(s) without topic topic but in a required list');
+	 &wwslog('info','do_send_mail: message(s) without topic but in a required list');
 	 return undef;
      }
 
@@ -14329,4 +14397,10 @@ sub get_mime_type {
     my $type = shift;
 
     return $mime_types->{$type};
+}
+
+sub do_maintenance {
+    &wwslog('notice', 'do_maintenance()');
+    
+    return 1;
 }

@@ -235,6 +235,7 @@ if ($signal ne 'hup') {
 	    printf STDERR "Starting server for $main::daemon_usage\n";
 	    do_log('debug', "Starting server for $main::daemon_usage");
 	    if ((my $child_pid = fork) != 0) {
+		do_log('info', "Server started, pid $child_pid");
 		do_log('debug', "Server for $main::daemon_usage started, pid $child_pid, exiting from initial process");
 		exit(0);
 	    }
@@ -1259,7 +1260,8 @@ sub DoForward {
     }else {
 	unless ($list = new List ($name, $robot)) {
 	    &do_log('notice', "Message for %s-%s ignored, unknown list %s",$name, $function, $name );
-	    my $sender = chomp($hdr->get('From'));
+	    my $sender = $hdr->get('From');
+	    chomp $sender;
 	    my $sympa_email = &Conf::get_robot_conf($robot, 'sympa');
 	    unless (&List::send_global_file('list_unknown', $sender, $robot,
 					    {'list' => $name,
@@ -1399,7 +1401,7 @@ sub DoMessage{
 	return undef;
     }
 	
-    if ($msgid_table{$listname}{$messageid}) {
+    if ($msgid_table{$list->get_list_id()}{$messageid}) {
 	&do_log('notice', 'Found known Message-ID, ignoring message which would cause a loop');
 	return undef;
     }
@@ -1505,7 +1507,7 @@ sub DoMessage{
 	    my $numsmtp = $list->distribute_msg($message);
 	    
 	    ## Keep track of known message IDs...if any
-	    $msgid_table{$listname}{$messageid}++ if ($messageid);
+	    $msgid_table{$list->get_list_id()}{$messageid}++ if ($messageid);
 	    
 	    unless (defined($numsmtp)) {
 		&do_log('err','sympa::DoMessage(): Unable to send message to list %s', $listname);
@@ -1630,13 +1632,13 @@ sub DoCommand {
     my $sender = $message->{'sender'};
 
     ## Detect loops
-    if ($msgid_table{$robot}{$messageid}) {
+    if ($msgid_table{'sympa@'.$robot}{$messageid}) {
 	&do_log('notice', 'Found known Message-ID, ignoring command which would cause a loop');
 	return undef;
     }## Clean old files from spool
     
     ## Keep track of known message IDs...if any
-    $msgid_table{$robot}{$messageid}++
+    $msgid_table{'sympa@'.$robot}{$messageid}++
 	if ($messageid);
 
     ## If X-Sympa-To = <listname>-<subscribe|unsubscribe> parse as a unique command

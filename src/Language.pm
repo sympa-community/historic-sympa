@@ -32,6 +32,12 @@ use Version;
 use POSIX qw (setlocale);
 use Locale::Messages qw (:locale_h :libintl_h !gettext);
 
+BEGIN {
+    ## Using the Pure Perl implementation of gettext
+    ## This is required on Solaris : native implementation of gettext does not map ll_CC with ll
+    Locale::Messages->select_package ('gettext_pp');
+}
+
 my %msghash;     # Hash organization is like Messages file: File>>Sections>>Messages
 my %set_comment; #sets-of-messages comment   
 
@@ -75,7 +81,7 @@ my %lang2locale = ('cz' => 'cs_CZ',
 my %locale2charset = ('cs_CZ' => 'utf-8',
 		      'de_DE' => 'iso8859-1',
 		      'el_GR' => 'utf-8',
-		      'en_US' => 'us-ascii',
+		      'en_US' => 'utf-8',
 		      'es_ES' => 'iso8859-1',
 		      'et_EE' => 'iso8859-4',
 		      'fi_FI' => 'iso8859-1',
