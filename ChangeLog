@@ -1,3 +1,32 @@
+2006-10-16 16:37  olivier.salaun
+
+	* mail_tt2/send_auth.tt2: [Reported by M.Larchet, Univ Nancy 2]
+	  Fix: subject of confirmation message was localized
+
+2006-10-16 16:24  olivier.salaun
+
+	* src/sympa_wizard.pl: [BugID 1102][reported by R.Roessner] Fix:
+	  sympa_wizard.pl failed because of a typo
+
+2006-10-10 10:37  olivier.salaun
+
+	* web_tt2/compose_mail.tt2, wwsympa/wwsympa.fcgi: [Reported by
+	  P.Farmer] Fix: topics tagging was not proposed from the "Post"
+	  page.
+
+2006-10-10 10:33  olivier.salaun
+
+	* ChangeLog: uodate
+
+2006-10-09 14:33  olivier.salaun
+
+	* src/sympa.pl: Fix previous changes ; going backward
+
+2006-10-09 14:05  olivier.salaun
+
+	* src/sympa.pl: Fix: the --service command line option worked
+	  upside down (--service=message to have a generalist daemon)
+
 2006-10-05 10:09  olivier.salaun
 
 	* src/Commands.pm: [BugID 1071][reported by F.Guilleux, CRU] Fix:
