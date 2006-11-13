@@ -5276,7 +5276,7 @@ sub get_first_user {
 	    }elsif ($sortby eq 'sources') {
 		$statement .= " ORDER BY \"subscribed\" DESC,\"id\"";
 
-	    }elsif ($sortby eq 'email') {
+	    }elsif ($sortby eq 'name') {
 		$statement .= ' ORDER BY gecos';
 	    }
 	    
