@@ -1,3 +1,35 @@
+2006-12-04 13:25  olivier.salaun
+
+	* src/List.pm: [J.Schmalenbach, Barrett] Fix: empty
+	  'get_subscriber' when removing a list member
+
+2006-11-16 10:47  olivier.salaun
+
+	* check_perl_modules.pl: Fix: inactivity_timeout was not set
+
+2006-11-14 17:47  olivier.salaun
+
+	* web_tt2/login_menu.tt2: [reported by R.Cadwell] Fix: "forgot
+	  password" and "first password" buttons were shown regardless of
+	  auth.conf
+
+2006-11-14 10:31  olivier.salaun
+
+	* src/etc/script/load_subscribers.pl: Removed obsolete script
+
+2006-11-13 15:40  olivier.salaun
+
+	* src/List.pm: [A.Zamboni, Univ Strasbourg] Fix: sort by subscriber
+	  name failed with Pg
+
+2006-10-19 10:50  olivier.salaun
+
+	* .version, Makefile.in, NEWS: Preparing 5.2.3
+
+2006-10-19 10:31  olivier.salaun
+
+	* ChangeLog: Update
+
 2006-10-16 16:37  olivier.salaun
 
 	* mail_tt2/send_auth.tt2: [Reported by M.Larchet, Univ Nancy 2]
