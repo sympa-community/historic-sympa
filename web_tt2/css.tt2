@@ -15,7 +15,12 @@ ul { margin: 0 0 0 1em }
 ol { margin: 0 0 0 1em }
 /* ########## Blocks, id and class ########## */
 
-#Canvas {margin: 7px 7px 0px 7px;}
+#Canvas {
+ margin: 7px 7px 0px 7px;
+ position: relative;
+ width: 98%;
+}
+
 #Stretcher {margin: 0px 0px 0px 250px; text-align: left;}
 #Paint {
 	vertical-align:top;
