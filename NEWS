@@ -3,6 +3,34 @@
 
 (See Changelog file for the full changes log)
 
+5.2.4		6th February 2007
+
+   New features :
+
+   Bug fixes :
+
+	web_tt2/css.tt2: [O.Franco, INSA Lyon] both login form and language selector were not accessible with IE 7.
+
+	src/List.pm: [reported by F.Lachapelle] sync_include tasks were created for all lists, including those with no external data
+	sources The List::has_include_data_source() subroutine has been fixed to correctly check owner_include
+
+	src/mail.pm: Some service messages (moderation, topics tagging and reminder) delegated by wwsympa to sympa.pl would have
+	missing X-Sympa-From header field.  Now setting a default value for the return-path in mail.pm
+	
+	mail_tt2/request_auth.tt2: [Soji Ikeda] missing command parameter for SIG confirmation request
+
+	ChangeLog, mail_tt2/Makefile, wwsympa/wwslib.pm: [requested by S.Hornburg] Debian packaging requires that symbolic links
+	are not absolute links because of DESTDIR use.
+
+	src/List.pm: [J.Schmalenbach, Barrett] empty 'get_subscriber' when removing a list member
+
+	check_perl_modules.pl: inactivity_timeout was not set
+
+	web_tt2/login_menu.tt2: [reported by R.Cadwell] "forgot password" and "first password" buttons were shown regardless of
+	auth.conf
+
+	src/List.pm: [A.Zamboni, Univ Strasbourg] sort by subscriber name failed with Pg	
+
 5.2.3		19th October 2006
 
    New features :
