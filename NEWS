@@ -10,6 +10,7 @@
    Bug fixes :
 
 	web_tt2/css.tt2: [O.Franco, INSA Lyon] both login form and language selector were not accessible with IE 7.
+	If you have installed a static CSS, you need trigger an update (from the web admin interface) to use the new fixed CSS.
 
 	src/List.pm: [reported by F.Lachapelle] sync_include tasks were created for all lists, including those with no external data
 	sources The List::has_include_data_source() subroutine has been fixed to correctly check owner_include
