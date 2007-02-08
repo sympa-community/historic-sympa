@@ -2222,7 +2222,7 @@ sub confirm {
 		    &do_log('notice',"Commands::confirm(): Unable to send template 'message_report', entry 'message_distributed' to $sender");
 		}
 	    }
-	    &do_log('info', 'CONFIRM %s from %s for list %s accepted (%d seconds)', $key, $sender, $which, time-$time_command);
+	    &do_log('info', 'CONFIRM %s from %s for list %s accepted (%d seconds)', $key, $sender, $name, time-$time_command);
 
 	}else{
 	    # this message is to be distributed but this daemon is dedicated to commands -> move it to distribution spool
@@ -2232,7 +2232,7 @@ sub confirm {
 		return undef;
 	    }
 	    unless ($quiet || ($action =~ /quiet/i )) {
-		&report::notice_report_msg('message_in_distribution_spool',$sender,{'listname' => $which,'key' => $key},$robot,$list);
+		&report::notice_report_msg('message_in_distribution_spool',$sender,{'listname' => $name,'key' => $key},$robot,$list);
 	    }
 
 	    &do_log('info', 'Message for %s from %s moved in spool %s for distribution message-id=%s', $name, $sender, $Conf{'queuedistribute'},$hdr->get('Message-Id'));
@@ -2329,11 +2329,17 @@ sub reject {
 	$context{'rejected_by'} = $sender;
 	&do_log('debug2', 'message %s by %s rejected sender %s',$context{'subject'},$context{'rejected_by'},$rejected_sender);
 
+	## Notify author of message
 	unless ($list->send_file('reject', $rejected_sender, $robot, \%context)){
 	    &do_log('notice',"Unable to send template 'reject' to $rejected_sender");
-	    &report::reject_report_msg('intern_quiet','',$sender,{'listname'=> $list->{'name'}},$robot,'',$list);
-	    
+	    &report::reject_report_msg('intern_quiet','',$sender,{'listname'=> $list->{'name'}},$robot,'',$list);	    
 	}
+
+	## Notify list moderator
+	unless (&report::notice_report_msg('message_rejected', $sender, {'listname' => $which,'key' => $key}, $robot, $list)) {
+	    &do_log('err',"Commands::reject(): Unable to send template 'message_report', entry 'message_rejected' to $sender");
+	}
+
     }
     
     close(IN);

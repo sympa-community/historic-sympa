@@ -61,10 +61,6 @@ Warning : this message may already have been sent by one of the list's editor.[%
 [% ELSIF entry == 'wrong_format_message' -%]
 
 [%|loc(key)%]Unable to access the message authenticated with key %1 because of a wrong format.[%END%]
-[% ELSIF entry == 'message_rejected' -%]
-
-[%|loc(key,listname)%]Message %1 for list '%2' has been rejected.
-[%END%]
 [% END -%]
 [%|loc(list.name,list.host)%]For further information, please contact %1-request@%2[%END%]
 
@@ -80,7 +76,7 @@ Content-Transfer-Encoding: [%|loc%]_encoding_[%END%]
 --[% boundary %]
 Content-Type: text/plain; charset=[%|loc%]_charset_[%END%];
 
-[%|loc(conf.host)%]Your message for list '%1' (attached below) was rejected. 
+[%|loc(list.name)%]Your message for list '%1' (attached below) was rejected. 
 You are not allowed to send this message for the following reason :[%END%]
 
 [% SET reason = entry -%] [% PROCESS authorization_reject.tt2 %]
@@ -97,6 +93,10 @@ Content-Transfer-Encoding: [%|loc%]_encoding_[%END%]
 [% IF entry == 'moderating_message' -%]
 
 [%|loc(list.name)%]Your message for list %1 has been forwarded to editor(s)[%END%]
+
+[% ELSIF entry == 'message_rejected' -%]
+
+[%|loc(key,listname)%]Message %1 for list '%2' has been rejected.[%END%]
 
 [% ELSIF entry == 'message_distributed' -%]
 

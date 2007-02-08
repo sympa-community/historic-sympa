@@ -69,6 +69,7 @@ use CPAN;
 	     'DBI' => 'DBI',
 	     'DBD::mysql' => 'Msql-Mysql-modules',
 	     'Crypt::CipherSaber' => 'CipherSaber',
+	     'Encode' => 'Encode',
 	     );
 
 %opt_CPAN = ('DBD::Pg' => 'DBD-Pg',
@@ -193,7 +194,7 @@ sub install_module {
     my $answer = <STDIN>; chomp $answer;
     $answer ||= $default;
     next unless ($answer =~ /^y$/i);
-  CPAN::Shell->conf('inactivity_timeout', 4);
+    $CPAN::Config->{'inactivity_timeout'} = 4;
     CPAN::Shell->install($module);
 
     ## Restore lang
