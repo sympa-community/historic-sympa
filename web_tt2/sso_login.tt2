@@ -19,7 +19,6 @@
 	[% ELSE %]
 	  <input type="text" name="email" value="" />
 	[% END %]
-	[% END %]
         </label>&nbsp; &nbsp; &nbsp;<input type="submit" name="action_sso_login" value="[%|loc%]Send me a confirmation password[%END%]"/>
       </form>
 
