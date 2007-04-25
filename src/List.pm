@@ -10747,11 +10747,11 @@ sub probe_db {
 	## Get tables
 	@tables = $dbh->tables();
 	
-	## Clean table names that could be surrounded by `` (recent DBD::mysql release)
 	foreach my $t (@tables) {
-	    $t =~ s/^\`(.+)\`$/\1/;
+	    $t =~ s/^\`[^\`]+\`\.//;## Clean table names that would look like `databaseName`.`tableName` (mysql)
+	    $t =~ s/^\`(.+)\`$/\1/;## Clean table names that could be surrounded by `` (recent DBD::mysql release)
 	}
-	
+
 	unless (defined $#tables) {
 	    &do_log('info', 'Can\'t load tables list from database %s : %s', $Conf{'db_name'}, $dbh->errstr);
 	    return undef;
