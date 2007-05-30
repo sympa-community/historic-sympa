@@ -2388,11 +2388,11 @@ sub distribute_msg {
 	
 	## Add subject tag
 	$message->{'msg'}->head->delete('Subject');
-	my @parsed_tag;
-	&parser::parse_tpl({'list' => {'name' => $self->{'name'},
-				       'sequence' => $self->{'stats'}->[0]
-				       }},
-			   [$custom_subject], \@parsed_tag);
+	my $parsed_tag;
+	&tt2::parse_tt2({'list' => {'name' => $self->{'name'},
+				    'sequence' => $self->{'stats'}->[0]
+				    }},
+			[$custom_subject], \$parsed_tag);
 	
 	## If subject is tagged, replace it with new tag
 	$subject_field =~ s/\s*\[$tag_regexp\]//;
@@ -2401,16 +2401,23 @@ sub distribute_msg {
 	## Don't try to encode the subject if it was not originaly encoded non-ASCII.
 	if ($message->{'subject_charset'} or $subject_field !~ /[^\x00-\x7E]/) {
 	    $subject_field = MIME::EncWords::encode_mimewords([
-							       [Encode::decode('utf8', '['.$parsed_tag[0].'] '), &Language::GetCharset()],
+							       [Encode::decode('utf8', '['.$parsed_tag.'] '), &Language::GetCharset()],
 							       [Encode::decode('utf8', $subject_field), $message->{'subject_charset'}]
 							       ], Encoding=>'A', Field=>'Subject');
 	}else {
 	    $subject_field = MIME::EncWords::encode_mimewords([
-							       [Encode::decode('utf8', '['.$parsed_tag[0].']'), &Language::GetCharset()]
+							       [Encode::decode('utf8', '['.$parsed_tag.']'), &Language::GetCharset()]
 							       ], Encoding=>'A', Field=>'Subject') . ' ' . $subject_field;
 	}
 
 	$message->{'msg'}->head->add('Subject', $subject_field);
+    }
+    
+    ## Remove unwanted headers if present.
+    if ($Conf{'remove_headers'}) {
+        foreach my $field (@{$Conf{'remove_headers'}}) {
+            $hdr->delete($field);
+        }
     }
     
     ## Archives
@@ -2440,13 +2447,6 @@ sub distribute_msg {
 	    
 	    $hdr->add('Reply-To',$reply) if $reply;
 	}
-    }
-    
-    ## Remove unwanted headers if present.
-    if ($Conf{'remove_headers'}) {
-        foreach my $field (@{$Conf{'remove_headers'}}) {
-            $hdr->delete($field);
-        }
     }
     
     ## Add useful headers
@@ -11408,7 +11408,7 @@ sub _load_admin_file {
 
 	
     if (defined ($admin{'custom_subject'})) {
-	if ($admin{'custom_subject'} =~ /^\s*\[\s*(.+)\s*\]\s*$/) {
+	if ($admin{'custom_subject'} =~ /^\s*\[\s*(\w+)\s*\]\s*$/) {
 	    $admin{'custom_subject'} = $1;
 	}
     }
