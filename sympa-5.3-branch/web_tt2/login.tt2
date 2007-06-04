@@ -1,0 +1,3 @@
+<!-- $Id$ -->
+
+[%|loc(user.email)%]You have logged in with email address %1[%END%].<br />
