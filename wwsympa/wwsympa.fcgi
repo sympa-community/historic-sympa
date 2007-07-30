@@ -495,6 +495,9 @@ my %in_regexp = (
 		 'new_name' => '[^<>\\\*\$\n]+',
 		 'id' => '[^<>\\\*\$\n]+',
 
+		 ## Archives
+		 'month' => '\d{4}\-\d{2}',
+
 		 ## URL
 		 'referer' => '[^\\\$\*\"\'\`\^\|\<\>\n]+',
 		 'failure_referer' => '[^\\\$\*\"\'\`\^\|\<\>\n]+',
@@ -560,6 +563,13 @@ my %in_regexp = (
 		 'date_to' => '[\d\/]+',
 		 'ip' => &tools::get_regexp('host'),
 		 );
+
+## Regexp applied on incoming parameters (%in)
+## This regular expression defines forbidden expressions applied on all incoming parameters
+## Note that you can use the ^ and $ expressions to match beginning and ending of expressions
+my %in_negative_regexp = (
+			  'arc_file' => '^(arctxt|\.)'
+			  );
 
 ## List some required filtering of incoming parameters, depending on current action
 ## Like Q-encoding
@@ -1469,16 +1479,28 @@ sub get_header_field {
 
 	 my @tokens = split /\./, $p;
 	 my $pname = $tokens[0];
+
+	 ## Regular expressions applied on parameters
+
 	 my $regexp;
 	 if ($pname =~ /^additional_field/) {
 	     $regexp = $in_regexp{'additional_field'};
 	 }elsif ($in_regexp{$pname}) {
 	     $regexp = $in_regexp{$pname};
-	     }else {
-		 $regexp = $in_regexp{'*'};
-	     }
+	 }else {
+	     $regexp = $in_regexp{'*'};
+	 }
+	 
+	 my $negative_regexp;
+	 if ($pname =~ /^additional_field/) {
+	     $negative_regexp = $in_negative_regexp{'additional_field'};
+	 }elsif ($in_negative_regexp{$pname}) {
+	     $negative_regexp = $in_negative_regexp{$pname};
+	 }
+
 	 foreach my $one_p (split /\0/, $in{$p}) {
-	     unless ($one_p =~ /^$regexp$/s) {
+	     if ($one_p !~ /^$regexp$/s ||
+		 (defined $negative_regexp && $one_p =~ /$negative_regexp/s) ) {
 		 ## Dump parameters in a tmp file for later analysis
 		 my $dump_file =  &Conf::get_robot_conf($robot, 'tmpdir').'/sympa_dump.'.time.'.'.$$;
 		 unless (open DUMP, ">$dump_file") {
@@ -1488,7 +1510,7 @@ sub get_header_field {
 		 close DUMP;
 
 		 &report::reject_report_web('user','syntax_errors',{'params' => $p},'','');
-		 &wwslog('err','get_parameters: syntax error for parameter %s value \'%s\' not conform to regexp /^%s$/ ; dumped vars in %s', $pname, $one_p, $regexp,  $dump_file);
+		 &wwslog('err','get_parameters: syntax error for parameter %s value \'%s\' not conform to regexp ; dumped vars in %s', $pname, $one_p, $dump_file);
 		 $in{$p} = '';
 		 next;
 	     }
