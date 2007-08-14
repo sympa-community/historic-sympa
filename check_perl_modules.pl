@@ -87,7 +87,8 @@ use CPAN;
 	     'Net::SSLeay' => 'NET-SSLeay',
 	     'Bundle::LWP' => 'LWP',
 	     'SOAP::Lite' => 'SOAP-Lite',
-	     'File::NFSLock' => 'File-NFSLock');
+	     'File::NFSLock' => 'File-NFSLock',
+	     'Crypt::OpenSSL::X509' => 'Crypt-OpenSSL-X509');
 
 %opt_features = ('DBI' => 'a generic Database Driver, required by Sympa to access Subscriber information and User preferences. An additional Database Driver is required for each database type you wish to connect to.',
 		 'DBD::mysql' => 'Mysql database driver, required if you connect to a Mysql database.\nYou first need to install the Mysql server and have it started before installing the Perl DBD module.',
@@ -105,7 +106,8 @@ use CPAN;
 		 'Net::SSLeay' => 'required by the \'include_remote_sympa_list\' feature that includes members of a list on a remote server, using X509 authentication',
 		 'Bundle::LWP' => 'required by the \'include_remote_sympa_list\' feature that includes members of a list on a remote server, using X509 authentication',
 		 'SOAP::Lite' => 'required if you want to run the Sympa SOAP server that provides ML services via a "web service"',
-		 'File::NFSLock' => 'required to perform NFS lock ; see also lock_method sympa.conf parameter'
+		 'File::NFSLock' => 'required to perform NFS lock ; see also lock_method sympa.conf parameter',
+		 'Crypt::OpenSSL::X509' => 'required for HTTP x509 authentication (when using Email in SubjAltName)'
 		 );
 
 ### main:
