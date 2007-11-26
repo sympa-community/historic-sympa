@@ -3,6 +3,47 @@
 
 (See Changelog file for the full changes log)
 
+5.3.4		27 November 2007
+
+   Bug fixes :
+
+	src/tools.pl: [#3499][reported  by R.Morvan] Prevent sympa.pl to crash while processing malformed multipart command message.  Error message is "Can't call method "effective_type" on an undefined value".
+Now tools::as_singlepart() does not recurse with an undefined $msg parameter.
+
+	wwsympa/wwsympa.fcgi: [#3377] In messages composed in wwsympa, URL would be cut after their 80 first characters and a carriage return inserted, thus breaking the URL.
+
+	soap/sympasoap.pm, src/admin.pm, src/sympa.pl, wwsympa/wwsympa.fcgi: info and config files were not properly encoded when a list was created using the web or SOAP. fixed by adding the declaration of origin in create_list_old call and then testing this value to know how to handle encoding.
+
+	src/Language.pm: [#3269][Submitted by J. Å÷stman, Helsinki univ. of technology] sympa would take the LANGUAGE environment variable as its default instead of its lang parameter value, because this is Gettext default behaviour.
+
+	wwsympa/wwsympa.fcgi: [reported by C.Peck, wm.edu] Dump of bouncers would only return the first 25 entries.
+
+	soap/sympasoap.pm: [reported by O.Berger, INT] Typo in List::store_susbscription_request() would make sympa_soap_server.fcgi die while receiving a subscription request with moderated subscription. The "use strict" pragma has been added and many other typos have been fixed.
+
+	src/List.pm: [reported by Y.Blusseau] Include_remote_file feature was not supported to include owners or editors.
+
+	wwsympa/wwsympa.fcgi: 'send_me' feature was broken because of an incorrect regexp on 'month' parameter
+
+	src/Upgrade.pm: [reported by J.M.Martins de Cruz] Incorrect Language::SetLang() calls while migrating create_list_templates and families to UTF-8
+
+	po/check_locales.pl, src/Language.pm: [reported by JG.Pailloncy, O.Girard and JMM. da Cruz] Fix: setlocale() failed on FreeBSD because locales syntax were not standard (ll_CC.ISO8859-N instead of ll_CC.ISO-8859-N). Now using utf-8 as encoding, thus solving the problem. Also changed the algorithm used by check_locales.pl to be the same as Language::SetLang()
+
+	soap/sympasoap.pm: [reported by J.Schmalenbach] Using incorrect variable. Led to empty gecos while using SOAP add method.
+
+	soap/sympasoap.pm: [Reported by P. David, univ. Strasbourg] Fix: In some very rare occurences, the session identifier would be constituted of decimal numbers only AND start with at least one "0" (zero) character. In this case, this string was considered a number by sympasoap.pm and the zero removed, thus shortening - and invalidating - the id. This would prevent the user from being authorized to see pages in the wiki.
+
+	src/task_manager.pl: [#3142][submitted by Y. BLUSSEAU] A typo made the stop() command fail to remove tasks.
+
+
+  Changes:
+
+	check_perl_modules.pl: Require MIME-Tools 5.423. Actually only versions 5.421 and 5.422 would create problems, because the API of MIME::Entity::body() changed. This would make sympa.pl process die with error "Can't use string ("0") as an ARRAY ref while "strict refs""
+
+	src/Conf.pm: css_url default value is now static_content/css/current_robot. This make it possible to set a single Apache Alias directive for static_content, shared by all virtual hosts.
+
+	src/List.pm, src/Upgrade.pm, src/etc/script/arc2webarc.pl, src/etc/script/mod2html.pl, src/etc/script/p12topem.pl, src/sympa.pl, src/task_manager.pl, wwsympa/archived.pl, wwsympa/bounced.pl, wwsympa/wwsympa.fcgi: Now set List::use_db in Upgrade::Probe_db() and List::check_db_connect() to prevent "Sympa not setup for DBI" errors.
+
+
 5.3.3		7 August 2007
 
    Bug fixes :
