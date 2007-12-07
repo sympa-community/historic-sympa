@@ -664,6 +664,9 @@ if ($wwsconf->{'use_fast_cgi'}) {
 
      &Language::SetLang($Language::default_lang);
 
+     ## Empty cache of the List.pm module
+     &List::init_list_cache();
+
      ## Check effective ID
      unless ($> eq (getpwnam('--USER--'))[2]) {
 	 &report::reject_report_web('intern_quiet','incorrect_server_config',{},'','');
