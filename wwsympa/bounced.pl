@@ -369,11 +369,9 @@ while (!$end) {
 		}
 	    
 	    }else{
-		$forward = 'listmaster';
 		do_log ('err','ignoring Feedback Report %s : unknown format (feedback_type:%s, original_rcpt:%s, listname:%s)',$file, $feedback_type, $original_rcpt, $listname );		
 	    }
-	    $listname ||= 'sympa';
-	    &DoForward($listname, $forward, $robot, $entity) if (defined $forward);
+	    &List::send_notify_to_listmaster('intern_error',$Conf{'domain'},{'error' => "Ignoring Feedback Report %s : unknown format (feedback_type:$feedback_type, original_rcpt:$original_rcpt, listname:$listname)"});
 
 	    unlink("$queue/$file");
 	    next;		

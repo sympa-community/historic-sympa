@@ -217,6 +217,14 @@ selected by Sympa as severe bouncing addresses:[%END%]
 
 [%|loc%]Managing bouncing subscribers:[%END%] [% conf.wwsympa_url %]/reviewbouncing/[% list.name %]
 
+[% ELSIF type == 'intern_error' -%]
+Subject: [% FILTER qencode %][%|loc(list.name)%]Listmaster : internal server error [%END%][%END%]
+
+[%IF error%][%error%]
+[%END%]  
+
+[%|loc%]See logs for more details.[%END%]
+
 [%# INTERNAL SERVER ERROR  : MAIL -%]
 [% ELSIF type == 'mail_intern_error' -%]
 Subject: [% FILTER qencode %][%|loc(list.name)%]Listmaster : internal server error [%END%][%END%]
