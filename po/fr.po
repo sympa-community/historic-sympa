@@ -615,7 +615,7 @@ msgid ""
 msgstr ""
 "<UL><LI>couleur de bordure pour une action active (exemple d'action active : "
 "la section des options d'administration que vous êtes en train de consulter "
-"ou bien la bordure de l'en-tête de colonne suivant les valeurs de laquelle "
+"ou bien la bordure de l'entête de colonne suivant les valeurs de laquelle "
 "un tableau est trié) ;</LI><LI>couleur que prend la bordure des liens "
 "hypertextes correspondant à des actions quand le curseur de souris les "
 "parcourt ;</LI><LI>couleur de fond pour les liens cliqués (correspondant à "
@@ -719,7 +719,7 @@ msgid ""
 "needed below."
 msgstr ""
 "Un mot de passe de confirmation vous a été transmis à l'adresse email %"
-"1<br>Relevez votre boîte aux lettres pour renseigner votre mot de passe ci-"
+"1.<br>Relevez votre boîte aux lettres pour renseigner votre mot de passe ci-"
 "dessous."
 
 #: web_tt2/sso_login.tt2:4
@@ -730,7 +730,7 @@ msgid ""
 msgstr ""
 "Un mot de passe de confirmation va vous être envoyé à l'adresse email que "
 "vous avez fourni ; cliquez sur le bouton.\n"
-"Vous serez guidé vers la prochaine page pour vérifier que votre adresse "
+"Vous serez rediriger vers une nouvelle page pour vérifier que votre adresse "
 "email est opérationnelle."
 
 #. (u_err.path)
@@ -1091,7 +1091,7 @@ msgstr "Gestion des erreurs"
 # nlsref 16,7
 #: src/List.pm:373
 msgid "Bounces management"
-msgstr "Gestion des bounces"
+msgstr "Gestion des erreurs"
 
 #: web_tt2/editsubscriber.tt2:64
 msgid "Bouncing address"
@@ -1243,7 +1243,7 @@ msgid ""
 msgstr ""
 "Relevez votre boîte aux lettres pour renseigner votre mot de passe. Cela "
 "confirmera\n"
-"votre demande d'abbonnement à la liste %1."
+"votre demande d'abonnement à la liste %1."
 
 #. (list)
 #: web_tt2/sigrequest.tt2:32
@@ -1462,7 +1462,7 @@ msgstr "DISTribute <liste> <clé>        * Modération : valider un message"
 
 #: src/etc/global_task_models/eval_bouncers.daily.task:1
 msgid "Daily evaluation of bouncing users"
-msgstr " Notation quotidienne des abonnés en erreur"
+msgstr "Notation quotidienne des abonnés en erreur"
 
 #: web_tt2/admin_menu.tt2:165
 msgid "Data Source"
@@ -1519,7 +1519,7 @@ msgstr ""
 "Cher propriétaire de la liste %1,\n"
 "\n"
 "Un utilisateur a demandé à être désabonné de votre liste. Pour valider cette "
-"demande, vous voudrez bien cliquez sur ce lien :"
+"demande, veuillez cliquer sur ce lien :"
 
 # nlsref 8,3
 #. (list.name)-)
@@ -1533,7 +1533,7 @@ msgstr ""
 "Cher propriétaire de la liste %1,\n"
 "\n"
 "Un utilisateur a demandé à être abonné à votre liste. Pour valider cette\n"
-"demande, vous voudrez bien cliquer sur ce lien :"
+"demande, veuillez cliquer sur ce lien :"
 
 #: web_tt2/help_editlist.tt2:130 web_tt2/help_editlist.tt2:137
 #: web_tt2/help_editlist.tt2:30 web_tt2/help_editlist.tt2:40
@@ -1545,15 +1545,15 @@ msgstr "Valeur par défaut :"
 
 #: web_tt2/help_editlist.tt2:27
 msgid "Default value: bounce_halt_rate robot parameter"
-msgstr "Valeur par défaut : paramètre global bounce_halt_rate"
+msgstr "Valeur par défaut : paramètre du robot bounce_halt_rate"
 
 #: web_tt2/help_editlist.tt2:24
 msgid "Default value: bounce_warn_rate robot parameter"
-msgstr "Valeur par défaut : paramètre global bounce_warn_rate"
+msgstr "Valeur par défaut : paramètre du robot bounce_warn_rate"
 
 #: src/List.pm:989
 msgid "Defines to which part of messages topic keywords are applied"
-msgstr "Sur quelle partie du message les mots clef sont recherchés"
+msgstr "Définit sur quelle partie du message les mots-clefs sont recherchés"
 
 #: web_tt2/help_editlist.tt2:169
 msgid "Defines who can access the web archive for the list."
@@ -1569,7 +1569,7 @@ msgid ""
 msgstr ""
 "Définition du mode compilation. Si ce paramètre est défini, les abonnés "
 "pourront sélectionner cette option pour recevoir la compilation (soit au "
-"format multipart/digest soit au format texte) plutôt que les messages "
+"format multipart/digest, soit au format texte) plutôt que les messages "
 "individuels. Les messages sont regroupés et envoyés aux abonnés à la "
 "fréquence définie par ce paramètre."
 
@@ -1728,7 +1728,7 @@ msgid ""
 "Do you really want to send a subscription reminder message to the %1 "
 "subscribers?"
 msgstr ""
-"Êtes-vous sûr de vouloir envoyer un rappel d\\'abonnement à chacun des %1 "
+"Êtes-vous sûr de vouloir envoyer un rappel d'abonnement à chacun des %1 "
 "abonnés ?"
 
 #. (list)
@@ -5651,7 +5651,7 @@ msgstr "Cette liste ne comporte aucun thème"
 #. (list.subject)
 #: mail_tt2/invite.tt2:5
 msgid "This list is about %1, so you are probably concerned."
-msgstr "Cette liste traite de %1, vous ê donc sûrement concerné."
+msgstr "Cette liste traite de %1, vous êtes donc sûrement concerné."
 
 #: web_tt2/request_topic.tt2:5
 msgid "This list is configured to require topic(s) foreach message."
@@ -10345,7 +10345,8 @@ msgstr "votre mot de passe         : %1"
 #~ msgstr "Voulez-vous vous désabonner de la liste %1"
 
 #~ msgid "May be it is usefull to check your system for viruses."
-#~ msgstr "Il peut être prudent de passez votre poste de travail à"
+#~ msgstr "Il serait prudent de passer un antivirus sur votre poste "
+#~ "de travail."
 
 #~ msgid ""
 #~ "Most mailing list features require your email. Some mailing lists are "
@@ -10440,10 +10441,10 @@ msgstr "votre mot de passe         : %1"
 #~ "Votre adresse a été retirée de la liste %s\n"
 #~ "par %s, gestionnnaire de cette liste.\n"
 #~ "\n"
-#~ "Cette opération est en générale le résultat des différentes opérations\n"
-#~ "de suppression de la liste des abonnés des adresses erronées.\n"
+#~ "Cette opération est en général le résultat de la suppression\n"
+#~ "des abonnés dont l'adresse a généré une erreur.\n"
 #~ "Il se peut cependant que votre adresse fonctionne correctement. Si tel "
-#~ "était\n"
+#~ "est\n"
 #~ "le cas, veuillez nous excuser du désagrément. et vous réabonner.\n"
 
 # nlsref 6,35
