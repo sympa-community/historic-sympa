@@ -28,6 +28,7 @@ use CPAN;
              'Net::LDAP' =>, '0.27', 
 	     'perl-ldap' => '0.10',
 	     'Mail::Internet' => '1.51', 
+	     'Crypt::OpenSSL::X509' => '0.5',
 	     'DBI' => '1.48',
 	     'DBD::Pg' => '0.90',
 	     'DBD::Sybase' => '0.90',
