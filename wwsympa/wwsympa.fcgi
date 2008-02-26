@@ -841,7 +841,9 @@ my $birthday = time ;
      
      &wwslog('info', "parameter css_url '%s' seems strange, it must be the url of a directory not a css file", $param->{'css_url'}) if ($param->{'css_url'} =~ /\.css$/);
 
-     $session = new SympaSession ($robot,&SympaSession::get_session_cookie($ENV{'HTTP_COOKIE'}));
+     $session = new SympaSession ($robot,{'cookie'=>&SympaSession::get_session_cookie($ENV{'HTTP_COOKIE'}),
+					  'action'=>$in{'action'},
+					  'rss'=>$rss});
 
      unless (defined $session) {
 	 &List::send_notify_to_listmaster('failed_to_create_web_session', $robot);
@@ -1087,12 +1089,13 @@ my $birthday = time ;
      ## store in session table this session contexte
      $session->store ;
 
+	 
+
      ## Do not manage cookies at this level if content was already sent
      unless ($param->{'bypass'} eq 'extreme' || 
 	     $param->{'action'} eq 'css' || 
 	     $maintenance_mode ||
 	     $rss) {
-
 
 	 my $delay = $param->{'user'}{'cookie_delay'};
 	 unless (defined $delay) {
@@ -1102,10 +1105,8 @@ my $birthday = time ;
 	 if ($delay == 0) {
 	     $delay = 'session';
 	 }
-	 
 	 unless ($session->set_cookie($param->{'cookie_domain'},$delay)) {
 	     &wwslog('notice', 'Could not set HTTP cookie');
-	     exit -1;
 	 }
 
 	 ## Set cookies "your_subscribtions" unless in one list page
@@ -1941,23 +1942,6 @@ Use it to create a List object and initialize output parameters.
      $param->{'start_time'} = $start_time;
      $param->{'process_id'} = $$;
 
-     ## Email addresses protection
-     if (&Conf::get_robot_conf($robot,'spam_protection') eq 'at') {
-	 $param->{'hidden_head'} = '';	$param->{'hidden_at'} = ' AT ';	$param->{'hidden_end'} = '';
-     }elsif(&Conf::get_robot_conf($robot,'spam_protection') eq 'javascript') {
-	 $param->{'protection_type'} = 'javascript';
-	 $param->{'hidden_head'} = '
- <script type="text/javascript">
- <!-- 
- document.write("';
-		 $param->{'hidden_at'} ='" + "@" + "';
-		 $param->{'hidden_end'} ='")
- // -->
- </script>';
-     }else {
-	 $param->{'hidden_head'} = '';	$param->{'hidden_at'} = '@';	$param->{'hidden_end'} = '';
-     }
-
      ## listmaster has owner and editor privileges for the list
      if (&List::is_listmaster($param->{'user'}{'email'},$robot)) {
 	 $param->{'is_listmaster'} = 1;
@@ -1975,6 +1959,42 @@ Use it to create a List object and initialize output parameters.
 	 }
      }
 
+     ## Email addresses protection
+
+     if (defined $list) {
+         if ($list->{'admin'}{'spam_protection'} eq 'at') {
+      	     $param->{'hidden_head'} = '';	$param->{'hidden_at'} = ' AT ';	$param->{'hidden_end'} = '';
+         }elsif($list->{'admin'}{'spam_protection'} eq 'javascript') {
+	     $param->{'protection_type'} = 'javascript';
+	     $param->{'hidden_head'} = '
+ <script type="text/javascript">
+ <!-- 
+ document.write("';
+	     $param->{'hidden_at'} ='" + "@" + "';
+	     $param->{'hidden_end'} ='")
+ // -->
+ </script>';
+         }else {
+	     $param->{'hidden_head'} = '';	$param->{'hidden_at'} = '@';	$param->{'hidden_end'} = '';
+         }
+     }else {
+         if (&Conf::get_robot_conf($robot,'spam_protection') eq 'at') {
+      	     $param->{'hidden_head'} = '';	$param->{'hidden_at'} = ' AT ';	$param->{'hidden_end'} = '';
+         }elsif(&Conf::get_robot_conf($robot,'spam_protection') eq 'javascript') {
+	     $param->{'protection_type'} = 'javascript';
+	     $param->{'hidden_head'} = '
+ <script type="text/javascript">
+ <!-- 
+ document.write("';
+	     $param->{'hidden_at'} ='" + "@" + "';
+	     $param->{'hidden_end'} ='")
+ // -->
+ </script>';
+         }else {
+	     $param->{'hidden_head'} = '';	$param->{'hidden_at'} = '@';	$param->{'hidden_end'} = '';
+         }
+     }
+     
      if ($list->{'name'}) {
 	 &wwslog('debug2', "list-name $list->{'name'}");
 
@@ -7839,6 +7859,13 @@ Creates a list using a list template
 	     return undef;
 	 }
      }
+
+     ## Lowercase listname if required
+     if ($in{'listname'} =~ /[A-Z]/) {
+       $in{'listname'} = lc($in{'listname'});
+       &report::notice_report_web('listname_lowercased',{},$param->{'action'});
+     }
+
      ## Check that a user is logged in
      unless ($param->{'user'}{'email'}) {
 	 &report::reject_report_web('user','no_user',{},$param->{'action'});
@@ -7929,6 +7956,12 @@ Creates a list using a list template
 
      ## notify listmaster
      my $list = new List $in{'listname'};
+     unless (defined $list) {
+       &wwslog('info',"failed to create list object for list '%s'",$in{'listname'});
+       &report::reject_report_web('intern','create_list',{},$param->{'action'},'',$param->{'user'}{'email'},$robot);
+       return undef;
+     }
+
      if ($param->{'create_action'} =~ /notify/) {
 	 &wwslog('info','notify listmaster');
 	 unless (&List::send_notify_to_listmaster('request_list_creation',$robot, 
@@ -13941,9 +13974,9 @@ sub d_test_existing_and_rights {
 
      if (-f $desc_file) {
 	 if ($moderate){
-	     $new_desc_file =~ s/$document/\.$in{'new_name'}\.moderate/;
+	     $new_desc_file =~ s/\Q$document/\.$in{'new_name'}\.moderate/;
 	 }else {
-	     $new_desc_file =~ s/$document/$in{'new_name'}/;   
+	     $new_desc_file =~ s/\Q$document/$in{'new_name'}/;   
 	 }
 	 unless (rename $desc_file, $new_desc_file) {
 	     &report::reject_report_web('intern','rename_file',{'old'=>$desc_file,
@@ -14911,12 +14944,12 @@ sub do_delete_pictures {
 
 	     if ($sub_is !~ /do_it/) {	
 		 &report::reject_report_web('auth',$reason_sub,{'change_email_failed'=> 1},$param->{'action'},$list);
-		 &wwslog('info', "do_change_email: could not change email for list %s because subscribe not allowed");
+		 &wwslog('info', 'do_change_email: could not change email for list %s because subscribe not allowed',$list->{'name'});
 		 &web_db_log({'robot' => $robot,'list' => $list->{'name'},'action' => $param->{'action'},'parameters' => "$in{'email'}",'target_email' => "$in{'email'}",'msg_id' => '','status' => 'error','error_type' => 'authorization','user_email' => $param->{'user'}{'email'},'client' => $ip,'daemon' => $daemon_name});
 		 next;
 	     }elsif($unsub_is !~ /do_it/) {	
 		 &report::reject_report_web('auth',$reason_unsub,{'change_email_failed'=> 1},$param->{'action'},$list);
-		 &wwslog('info', "do_change_email : could not change email for list %s because unsubscribe not allowed");
+		 &wwslog('info', 'do_change_email : could not change email for list %s because unsubscribe not allowed',$list->{'name'});
 		 &web_db_log({'robot' => $robot,'list' => $list->{'name'},'action' => $param->{'action'},'parameters' => "$in{'email'}",'target_email' => "$in{'email'}",'msg_id' => '','status' => 'error','error_type' => 'authorization','user_email' => $param->{'user'}{'email'},'client' => $ip,'daemon' => $daemon_name});
 		 next;
 	     }
@@ -15892,7 +15925,10 @@ sub do_dump_scenario {
      }
 
      ## Access control
-     return undef unless (defined &check_authz('do_dump', 'review'));
+     unless (defined &check_authz('do_dump', 'review')) {
+	 undef $param->{'bypass'};
+	 return undef;
+     }
 
      $list->dump();
      $param->{'file'} = $list->{'dir'}.'/subscribers.db.dump';

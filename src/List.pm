@@ -1793,8 +1793,9 @@ sub save_config {
     
     ## Also update the binary version of the data structure
     if (&Conf::get_robot_conf($self->{'robot'}, 'cache_list_config') eq 'binary_file') {
-	unless (&Storable::store($self->{'admin'},"$self->{'dir'}/config.bin")) {
-	    &do_log('err', 'Failed to save the binary config %s', "$self->{'dir'}/config.bin");
+	eval {&Storable::store($self->{'admin'},"$self->{'dir'}/config.bin")};
+	if ($@) {
+	    &do_log('err', 'Failed to save the binary config %s. error: %s', "$self->{'dir'}/config.bin",$@);
 	}
     }
 
@@ -1885,11 +1886,12 @@ sub load {
 
 	## Load a binary version of the data structure
 	## unless config is more recent than config.bin
-	unless ($admin = &Storable::retrieve("$self->{'dir'}/config.bin")) {
-	    &do_log('err', 'Failed to load the binary config %s', "$self->{'dir'}/config.bin");
+	eval {$admin = &Storable::retrieve("$self->{'dir'}/config.bin")};
+	if ($@) {
+	    &do_log('err', 'Failed to load the binary config %s, error: %s', "$self->{'dir'}/config.bin",$@);
 	    $lock->unlock();
 	    return undef;
-	}
+	}	    
 
 	$config_reloaded = 1;
 	$m1 = $time_config_bin;
@@ -1912,10 +1914,11 @@ sub load {
 
 	## update the binary version of the data structure
 	if (&Conf::get_robot_conf($self->{'domain'}, 'cache_list_config') eq 'binary_file') {
-		unless (&Storable::store($admin,"$self->{'dir'}/config.bin")) {
-		    &do_log('err', 'Failed to save the binary config %s', "$self->{'dir'}/config.bin");
-		}
+	    eval {&Storable::store($admin,"$self->{'dir'}/config.bin")};
+	    if ($@) {
+		&do_log('err', 'Failed to save the binary config %s. error: %s', "$self->{'dir'}/config.bin",$@);
 	    }
+	}
 
 	$config_reloaded = 1;
  	unless (defined $admin) {
@@ -3952,7 +3955,7 @@ sub send_notify_to_owner {
     my $robot = $self->{'domain'};
 
     unless (@to) {
-	do_log('warning', 'No owner defined or all of them use nomail option in list %s ; using listmasters as default', $self->{'name'} );
+	do_log('notice', 'No owner defined or all of them use nomail option in list %s ; using listmasters as default', $self->{'name'} );
 	@to = split /,/, &Conf::get_robot_conf($robot, 'listmaster');
     }
     unless (defined $operation) {
@@ -9233,7 +9236,9 @@ sub set_netidtoemail_db {
     return 1;
 }
 
-## List of lists where $1 (an email) is $3 (owner, editor or subscriber)
+## &get_which(<email>,<robot>,<type>)
+## Get lists of lists where <email> assumes this <type> (owner, editor or member) of
+## function to any list in <robot>.
 sub get_which {
     my $email = shift;
     my $robot =shift;
@@ -10937,6 +10942,7 @@ sub get_subscription_requests {
 
 	## First line of the file contains the user email address + his/her name
 	my $line = <REQUEST>;
+	close REQUEST;
 	my ($email, $gecos);
 	if ($line =~ /^((\S+|\".*\")\@\S+)\s*([^\t]*)\t(.*)$/) {
 	    ($email, $gecos) = ($1, $3); 
@@ -10946,6 +10952,15 @@ sub get_subscription_requests {
 	    next;
 	}
 
+	my $user_entry = $self->get_subscriber($email);
+	 
+	if ( defined($user_entry) && ($user_entry->{'subscribed'} == 1)) {
+	    &do_log('err','User %s is subscribed to %s already. Deleting subscription request.', $email, $self->{'name'});
+	    unless (unlink "$Conf{'queuesubscribe'}/$filename") {
+		&do_log('err', 'Could not delete file %s', $filename);
+	    }
+	    next;
+	}
 	## Following lines may contain custom attributes in an XML format
 	my %xml = &parseCustomAttribute(\*REQUEST) ;
 	
@@ -10960,7 +10975,6 @@ sub get_subscription_requests {
 
 	$filename =~ /^$self->{'name'}(\@$self->{'domain'})?\.(\d+)\.\d+$/;
 	$subscriptions{$email}{'date'} = $2;
-	close REQUEST;
     }
     closedir SPOOL;
 
@@ -10989,43 +11003,43 @@ sub get_subscription_request_count {
 
 sub delete_subscription_request {
     my ($self, @list_of_email) = @_;
-    do_log('debug2', 'List::delete_subscription_request(%s, %s)', $self->{'name'}, join(',',@list_of_email));
+    &do_log('debug2', 'List::delete_subscription_request(%s, %s)', $self->{'name'}, join(',',@list_of_email));
 
+    my $removed_file = 0;
+    my $email_regexp = &tools::get_regexp('email');
+    
     unless (opendir SPOOL, $Conf{'queuesubscribe'}) {
 	&do_log('info', 'Unable to read spool %s', $Conf{'queuesubscribe'});
 	return undef;
     }
 
-    my $removed_file = 0;
+    foreach my $filename (sort grep(/^$self->{'name'}(\@$self->{'domain'})?\.\d+\.\d+$/, readdir SPOOL)) {
+	
+	unless (open REQUEST, "$Conf{'queuesubscribe'}/$filename") {
+	    &do_log('notice', 'Could not open %s', $filename);
+	    next;
+	}
+	my $line = <REQUEST>;
+	close REQUEST;
 
-    foreach my $email (@list_of_email) {
+	foreach my $email (@list_of_email) {
 
-	foreach my $filename (sort grep(/^$self->{'name'}(\@$self->{'domain'})?\.\d+\.\d+$/, readdir SPOOL)) {
-	    unless (open REQUEST, "$Conf{'queuesubscribe'}/$filename") {
-		do_log('notice', 'Could not open %s', $filename);
-		closedir SPOOL;
-		return undef;
-	    }
-	    my $line = <REQUEST>;
-	    my $email_regexp = &tools::get_regexp('email');
-	    unless ($line =~ /^($email_regexp)\s*/ &&
-		    ($1 eq $email)) {
+	    unless ($line =~ /^($email_regexp)\s*/ && ($1 eq $email)) {
 		next;
 	    }
-	    
-	    close REQUEST;
 	    
 	    unless (unlink "$Conf{'queuesubscribe'}/$filename") {
-		do_log('err', 'Could not delete file %s', $filename);
-		next;
+		&do_log('err', 'Could not delete file %s', $filename);
+		last;
 	    }
 	    $removed_file++;
 	}
     }
+
     closedir SPOOL;
     
     unless ($removed_file > 0) {
-	do_log('err', 'No pending subscription was found for users %s', join(',',@list_of_email));
+	&do_log('err', 'No pending subscription was found for users %s', join(',',@list_of_email));
 	return undef;
     }
 
