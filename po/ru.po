@@ -8,8 +8,8 @@ msgstr ""
 "Project-Id-Version: sympa\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
 "POT-Creation-Date: 2002-07-16 17:27+0800\n"
-"PO-Revision-Date: 2008-01-25 07:56+0100\n"
-"Last-Translator: chernysh <chernysh@riseup.net>\n"
+"PO-Revision-Date: 2008-02-21 13:32+0100\n"
+"Last-Translator: chernysh <mail33@gmail.com>\n"
 "Language-Team: Russian <ru@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -3885,53 +3885,53 @@ msgstr "Параметры"
 
 #: web_tt2/viewlogs.tt2:146
 msgid "Target Email"
-msgstr ""
+msgstr "E-mail назначения"
 
 #: web_tt2/viewlogs.tt2:150
-#, fuzzy
 msgid "Message ID"
-msgstr "# сообщение"
+msgstr "Идентификатор сообщения"
 
 #: web_tt2/viewlogs.tt2:158
 msgid "Error type"
-msgstr ""
+msgstr "Ошибка типа"
 
 #: web_tt2/viewlogs.tt2:163 web_tt2/viewlogs.tt2:166
 msgid "User Email"
-msgstr ""
+msgstr "E-mail пользователя"
 
 #: web_tt2/viewlogs.tt2:172
 msgid "User IP"
-msgstr ""
+msgstr "IP-адрес пользователя"
 
 #: web_tt2/viewlogs.tt2:177
 msgid "Service"
-msgstr ""
+msgstr "Сервис"
 
 #: web_tt2/viewlogs.tt2:211
 msgid "view other events related to this message id."
 msgstr ""
+"просмотреть другие события, связанные с этим идентификатором сообщения. "
 
 #: web_tt2/viewlogs.tt2:211
 msgid "Other events"
-msgstr ""
+msgstr "Другие события"
 
 #: web_tt2/view_template.tt2:7
 msgid "Template name : "
-msgstr ""
+msgstr "Имя шаблона : "
 
 #: web_tt2/view_template.tt2:8
 msgid "Type : "
-msgstr ""
+msgstr "Тип :"
 
 #: web_tt2/view_template.tt2:9
 msgid "Path : "
-msgstr ""
+msgstr "Путь :"
 
 #. (list,robot)
 #: web_tt2/view_template.tt2:12
 msgid "( this template is defined for list %1@%2 )"
-msgstr ""
+msgstr "( этот шаблон задан для рассылки %1@%2 )"
 
 #. (robot)
 #: web_tt2/view_template.tt2:15
@@ -3939,248 +3939,281 @@ msgid ""
 "( this template is the default for all lists of robot %1 unless it is "
 "redefined for a specific list )"
 msgstr ""
+"( этот шаблон задан по умолчанию для всех рассылок робота %1, за исключением "
+"тех, для которых шаблон задан отдельно )"
 
 #: web_tt2/view_template.tt2:17
 msgid ""
 "( this template is the default used by all robots unless redefined for a "
 "specific robot )"
 msgstr ""
+"( этот шаблон задан по умолчанию для всех роботов, за исключением тех, для "
+"которых он задан отдельно )"
 
 #: mail_tt2/authorization_reject.tt2:5
 msgid "Web archives are closed."
-msgstr ""
+msgstr "Web-архивы закрыты."
 
 #: mail_tt2/authorization_reject.tt2:8
 msgid "Web archives are restricted to list subscribers and local domain users."
 msgstr ""
+"Использование web-архивов разрешено только подписчикам рассылок и локальным "
+"пользователям домена."
 
 #: mail_tt2/authorization_reject.tt2:11
 msgid "Web archives are restricted to listmaster."
-msgstr "Использование web-архивов запрещено глобальным администратором."
+msgstr "Использование web-архивов разрешено только глобальному администратору."
 
 #: mail_tt2/authorization_reject.tt2:14
 msgid "Web archives are restricted to list owners."
-msgstr ""
+msgstr "Использование web-архивов разрешено только владельцам рассылок."
 
 #: mail_tt2/authorization_reject.tt2:17
 msgid "Web archives are restricted to list subscribers."
-msgstr ""
+msgstr "Использование web-архивов разрешено только подписчикам рассылок. "
 
 #: mail_tt2/authorization_reject.tt2:20
 msgid "Adding a user to the list is restricted to list owners."
 msgstr ""
+"Добавление пользователя в список рассылки разрешено только владельцам "
+"рассылки."
 
 #: mail_tt2/authorization_reject.tt2:23
 msgid "Adding a user to the list is not allowed."
-msgstr ""
+msgstr "Добавлять пользователя в этот список рассылки нельзя. "
 
 #: mail_tt2/authorization_reject.tt2:26
 msgid "List creation is restricted to local domain users."
-msgstr ""
+msgstr "Создание рассылок разрешено только локальным пользователям домена. "
 
 #: mail_tt2/authorization_reject.tt2:29
 msgid "List creation is restricted to listmaster."
-msgstr "Создание рассылки запрещено глобальным администратором. "
+msgstr "Создание рассылок разрешено только глобальному администратору. "
 
 #: mail_tt2/authorization_reject.tt2:32
 msgid "Shared document edition is restricted to list subscribers."
-msgstr ""
+msgstr "Редактирование общих документов разрешено только подписчикам рассылки. "
 
 #: mail_tt2/authorization_reject.tt2:35
 msgid "Shared document edition is restricted to list owners."
-msgstr ""
+msgstr "Редактирование общих документов разрешено только владельцам рассылки. "
 
 #: mail_tt2/authorization_reject.tt2:38
 msgid ""
 "Shared document edition is restricted to list subscribers authenticated with "
 "user certificate."
 msgstr ""
+"Редактирование общих документов разрешено только подписчикам рассылки, "
+"аутентифицированным с помощью пользовательского сертификата. "
 
 #: mail_tt2/authorization_reject.tt2:41
 msgid "Deleting a user from the list is restricted to list owners."
 msgstr ""
+"Удаление пользователя из списка рассылки разрешено только владельцам "
+"рассылки."
 
 #: mail_tt2/authorization_reject.tt2:44
 msgid "It is not possible to delete a user from the list."
-msgstr ""
+msgstr "Невозможно удалить пользователя из списка рассылки. "
 
 #: mail_tt2/authorization_reject.tt2:47
 msgid "Shared document reading is restricted to list owners."
-msgstr ""
+msgstr "Чтение общих документов разрешено только владельцам рассылки. "
 
 #: mail_tt2/authorization_reject.tt2:50
 msgid "Shared document reading is restricted to list subscribers."
-msgstr ""
+msgstr "Чтение общих документов разрешено только подписчикам рассылки. "
 
 #: mail_tt2/authorization_reject.tt2:53
 msgid ""
 "Shared document reading is restricted to list subscribers authenticated with "
 "user certificat."
 msgstr ""
+"Чтение общих документов разрешено только подписчикам рассылки, "
+"аутентифицированным с помощью пользовательского сертификата."
 
 #: mail_tt2/authorization_reject.tt2:56
-#, fuzzy
 msgid "you are not allowed to edit list parameters."
-msgstr "%1 уже подписан на список %2"
+msgstr "вы не можете редактировать параметры рассылки. "
 
 #: mail_tt2/authorization_reject.tt2:59
 msgid "List parameter editing is restricted to list owners."
 msgstr ""
+"Редактирование параметров рассылки разрешено только владельцам рассылки. "
 
 #: mail_tt2/authorization_reject.tt2:62
 msgid "The 'global remind' feature is restricted to listmaster."
 msgstr ""
-"Использование функции \"общее напоминание\" запрещено глобальным "
-"администратором."
+"Использование функции \"общее напоминание\" разрешено только глобальному "
+"администратору."
 
 #: mail_tt2/authorization_reject.tt2:65
 msgid "List information is restricted to list subscribers."
-msgstr ""
+msgstr "Информация о рассылке доступна только подписчикам рассылки."
 
 #: mail_tt2/authorization_reject.tt2:68
 msgid "The 'invite' feature is unavailable."
-msgstr ""
+msgstr "Функция \"приглашение\" недоступна."
 
 #: mail_tt2/authorization_reject.tt2:71
 msgid "The 'invite' feature is restricted to list owners."
-msgstr ""
+msgstr "Функция \"приглашение\" доступна только владельцам рассылки. "
 
 #: mail_tt2/authorization_reject.tt2:74
 msgid "The 'invite' feature is restricted to list subscribers."
-msgstr ""
+msgstr "Функция \"приглашение\" доступна только подписчикам рассылки. "
 
 #: mail_tt2/authorization_reject.tt2:77
 msgid "The 'remind' feature is restricted to listmaster."
-msgstr ""
+msgstr "Функция \"напоминание\" доступна только глобальному администратору."
 
 #: mail_tt2/authorization_reject.tt2:80
 msgid "The 'remind' feature is restricted to list owners."
-msgstr ""
+msgstr "Функция \"напоминание\" доступна только владельцам рассылки."
 
 #: mail_tt2/authorization_reject.tt2:83
 msgid "The 'review' feature is unavailable."
-msgstr ""
+msgstr "Функция \"просмотр\" недоступна."
 
 #: mail_tt2/authorization_reject.tt2:86
 msgid ""
 "The 'review' feature is restricted to list subscribers and local domain "
 "users."
 msgstr ""
+"Функция \"просмотр\" доступна только подписчиками рассылки и локальным "
+"пользователям домена. "
 
 #: mail_tt2/authorization_reject.tt2:89
 msgid "The 'review' feature is restricted to listmaster."
-msgstr ""
+msgstr "Функция \"просмотр\" доступна только глобальному администратору."
 
 #: mail_tt2/authorization_reject.tt2:92
 msgid "The 'review' feature is restricted to list owners."
-msgstr ""
+msgstr "Функция \"просмотр\" доступна только владельцам рассылки."
 
 #: mail_tt2/authorization_reject.tt2:95
 msgid "The 'review' feature is restricted to list subscribers."
-msgstr ""
+msgstr "Функция \"просмотр\" доступна только подписчикам рассылки."
 
 #: mail_tt2/authorization_reject.tt2:98
 msgid "Message distribution in this list is not allowed."
-msgstr ""
+msgstr "Распространение сообщений в этом списке рассылки запрещено. "
 
 #: mail_tt2/authorization_reject.tt2:101
 msgid "Message distribution in the list is restricted to local domain users."
 msgstr ""
+"Распространение сообщений в этом списке рассылки разрешено только локальным "
+"пользователям домена. "
 
 #: mail_tt2/authorization_reject.tt2:104
 msgid ""
 "Message distribution for this list is restricted to list subscribers and "
 "local domain users."
 msgstr ""
+"Распространение сообщений в этом списке рассылки разрешено только "
+"подписчикам рассылки и локальным пользователям домена."
 
 #: mail_tt2/authorization_reject.tt2:107
 msgid "Message distribution for this list is restricted to list moderators."
 msgstr ""
+"Распространение сообщений в этом списке рассылки разрешено только "
+"модераторам рассылки. "
 
 #: mail_tt2/authorization_reject.tt2:110
 msgid "Multipart messages are not allowed in this list."
-msgstr ""
+msgstr "Сообщения с вложениями в этой рассылке запрещены."
 
 #: mail_tt2/authorization_reject.tt2:113
 msgid "Message distribution in the list is restricted to list subscribers."
 msgstr ""
+"Распространение сообщений в этом списке рассылки разрешено только "
+"подписчикам рассылки."
 
 #: mail_tt2/authorization_reject.tt2:116
+#, fuzzy
 msgid ""
 "Message distribution for this list is restricted to list subscribers check S/"
 "MIME signature."
 msgstr ""
+"Распространение сообщений в этом списке рассылки разрешено только "
+"подписчикам рассылки с проверенной сигнатурой S/MIME."
 
 #: mail_tt2/authorization_reject.tt2:119
-#, fuzzy
 msgid "You are not allowed to subscribe to this list."
-msgstr "%1 уже подписан на список %2"
+msgstr "Вы не можете быть подписаны на эту рассылку. "
 
 #: mail_tt2/authorization_reject.tt2:122
 msgid "Subscription to this list is restricted to local domain users."
 msgstr ""
+"Подписка на эту рассылку разрешена только локальным пользователям домена."
 
 #: mail_tt2/authorization_reject.tt2:125
 msgid "Subscription to this list requires S/MIME signature."
-msgstr ""
+msgstr "Для подписки на эту рассылку необходима сигнатура S/MIME."
 
 #: mail_tt2/authorization_reject.tt2:128
 msgid "Topics visibility is restricted to listmaster."
-msgstr ""
+msgstr "Просмотр тем разрешён только глобальному администратору."
 
 #: mail_tt2/authorization_reject.tt2:131
 msgid "Topics visibility is restricted to identified users."
-msgstr ""
+msgstr "Просмотр тем разрешён только идентифицированным пользователям. "
 
 #: mail_tt2/authorization_reject.tt2:134
 msgid "It is not possible to unsubscribe from this list."
-msgstr ""
+msgstr "Невозможно отписаться от этой рассылки."
 
 #: mail_tt2/authorization_reject.tt2:137
 msgid "List is Private : You can not read the archives."
-msgstr ""
+msgstr "Рассылка конфиденциальна: Вы не можете читать архивы. "
 
 #: mail_tt2/authorization_reject.tt2:140
 msgid "List is Private : You can not browse available files."
-msgstr ""
+msgstr "Рассылка конфиденциальна: Вы не можете просматривать доступные файлы. "
 
 #: mail_tt2/authorization_reject.tt2:143
 msgid "The MODINDEX command is restricted to moderators."
-msgstr ""
+msgstr "Команда MODINDEX доступна только модераторам. "
 
 #: mail_tt2/authorization_reject.tt2:146
 msgid "This action is restricted to list owners or moderators."
-msgstr ""
+msgstr "Это действие разрешено только владельцам рассылки или модераторам. "
 
 #: mail_tt2/authorization_reject.tt2:149
 msgid "This action is restricted to moderators."
-msgstr ""
+msgstr "Это действие разрешено только модераторам. "
 
 #: mail_tt2/authorization_reject.tt2:152
 msgid "This action is restricted to list owners."
-msgstr ""
+msgstr "Это действие разрешено только владельцам рассылки."
 
 #: mail_tt2/authorization_reject.tt2:155
 msgid "This action is restricted to listmasters."
-msgstr ""
+msgstr "Это действие разрешено только глобальным администраторам."
 
 #: mail_tt2/authorization_reject.tt2:158
 msgid "This action is restricted to listmasters or list owners."
 msgstr ""
+"Это действие разрешено только глобальным администраторам или владельцам "
+"рассылки. "
 
 #: mail_tt2/authorization_reject.tt2:161
 msgid "This action is restricted to listmasters or privileged list owners."
 msgstr ""
+"Это действие разрешено только глобальным администраторам или "
+"привилегированным владельцам рассылки."
 
 #: mail_tt2/authorization_reject.tt2:164
 msgid ""
 "This action is restricted to document author, listmasters or privileged list "
 "owners."
 msgstr ""
+"Это действие разрешено только автору документа, глобальным администраторам "
+"или привилегированным владельцам рассылки."
 
 #: mail_tt2/authorization_reject.tt2:167
 msgid "This action is restricted to privileged list owners."
-msgstr ""
+msgstr "Это действие разрешено только привилегированным владельцам рассылки."
 
 #. (role,right)
 #: mail_tt2/authorization_reject.tt2:170
@@ -4190,12 +4223,14 @@ msgstr ""
 #. (role,right)
 #: mail_tt2/authorization_reject.tt2:173
 msgid "You need to login."
-msgstr ""
+msgstr "Вам необходимо войти."
 
 #. (role,right)
 #: mail_tt2/authorization_reject.tt2:176
 msgid "This action is impossible because editing is a moderated function."
 msgstr ""
+"Это действие невозможно, потому что редактирование является модерируемой "
+"функцией."
 
 #. (role,right)
 #: mail_tt2/authorization_reject.tt2:179
@@ -4203,46 +4238,47 @@ msgid ""
 "This action is impossible for directories because editing is a moderated "
 "function."
 msgstr ""
+"Это действие невозможно для директорий, потому что редактирование является "
+"модерируемой функцией."
 
 #: mail_tt2/authorization_reject.tt2:182
 msgid "The list is closed."
-msgstr ""
+msgstr "Эта рассылка закрыта."
 
 #: mail_tt2/authorization_reject.tt2:185
 msgid "you are not allowed to perform this action."
-msgstr ""
+msgstr "вы не можете произвести это действие."
 
 #. (list.name)
 #: mail_tt2/bye.tt2:2
-#, fuzzy
 msgid "Unsubscribed from %1"
-msgstr "%1 отказ от подписки на %2"
+msgstr "Отписан от %1"
 
 #. (user.email,list.name,list.host)
 #: mail_tt2/bye.tt2:4
 msgid "Your email address (%1) has been removed from list %2@%3"
-msgstr ""
+msgstr "Ваш электронный адрес (%1) был удалён из списка рассылки %2@%3 "
 
 #: mail_tt2/bye.tt2:5
 msgid "bye !"
-msgstr ""
+msgstr "пока ! "
 
 #: mail_tt2/certif_warning.tt2:2
 msgid "near expiration of your certificate"
-msgstr ""
+msgstr "срок действия вашего сертификата истекает"
 
 #. (expiration_date)
 #: mail_tt2/certif_warning.tt2:4
 msgid "Your authentification certificate will expire on %1."
-msgstr ""
+msgstr "Срок действия вашего аутентификационного сертификата истекает %1. "
 
 #: mail_tt2/certif_warning.tt2:5
 msgid "The certificate subject is :"
-msgstr ""
+msgstr "Тема сертификата : "
 
 #: mail_tt2/certif_warning.tt2:8
 msgid "You won't receive the signed messages from your lists."
-msgstr ""
+msgstr "Вы не получите подписанные сообщения из ваших рассылок. "
 
 #. (conf.email,conf.host)
 #: mail_tt2/certif_warning.tt2:12
@@ -4253,22 +4289,28 @@ msgid ""
 "or\n"
 "click : "
 msgstr ""
+"Чтобы вновь получать их, обновите ваш сертификат в центре сертификации\n"
+" и отправьте подписанное сообщение в %1@%2\n"
+" или \n"
+" щёлкните мышью : "
 
 #: mail_tt2/command_report.tt2:3
 msgid "Results of your commands"
-msgstr ""
+msgstr "Результаты ваших команд"
 
 #: mail_tt2/command_report.tt2:10
 msgid "Command has been performed :"
-msgstr ""
+msgstr "Команда была выполнена :"
 
 #: mail_tt2/command_report.tt2:12
 msgid "These commands have been performed :"
-msgstr ""
+msgstr "Эти команды были выполнены :"
 
 #: mail_tt2/command_report.tt2:19
 msgid "Your message signature was successfully verified using S/MIME."
 msgstr ""
+"Ваша цифровая подпись сообщения была успешно верифицирована с помощью "
+"S/MIME."
 
 #: mail_tt2/command_report.tt2:24
 msgid ""
@@ -4276,41 +4318,44 @@ msgid ""
 "owners for approval. You will receive a notification when you have\n"
 "been subscribed (or unsubscribed) to the list."
 msgstr ""
+"Ваш запрос на подписку/отписку был отправлен владельцам рассылки\n"
+" для подтверждения. Вы получите уведомление, если Вас\n"
+" подпишут (или отпишут) на рассылку. "
 
 #. (notice.email,notice.listname)
 #: mail_tt2/command_report.tt2:27
 msgid "Information regarding user %1 has been updated for list %2."
-msgstr ""
+msgstr "Информация, касающаяся пользователя %1, была обновлена в рассылке %2. "
 
 #. (notice.email,notice.listname)
 #: mail_tt2/command_report.tt2:30
 msgid "User %1 is now subscriber of list %2."
-msgstr ""
+msgstr "Пользователь %1 теперь является подписчиком рассылки %2."
 
 #. (notice.email,notice.listname)
 #: mail_tt2/command_report.tt2:33
 msgid "User %1 has been invited to subscribe in list %2."
-msgstr ""
+msgstr "Пользователь %1 был приглашён подписаться на рассылку %2."
 
 #. (notice.total,notice.listname)
 #: mail_tt2/command_report.tt2:36
 msgid "Subscription reminder sent to each of %1 %2 subscribers."
-msgstr ""
+msgstr "Напоминание о подписке было отправлено каждому из %1 подписчиков %2."
 
 #. (notice.count)
 #: mail_tt2/command_report.tt2:39
 msgid "The Reminder has been sent to %1 users."
-msgstr ""
+msgstr "Напоминание было отправлено %1 пользователям. "
 
 #. (notice.email,notice.listname)
 #: mail_tt2/command_report.tt2:42
 msgid "The user %1 has been removed from the list %2."
-msgstr ""
+msgstr "Пользователь %1 был удалён из списка рассылки %2. "
 
 #. (notice.listname)
 #: mail_tt2/command_report.tt2:45
 msgid "Your configuration regarding list %1 has been updated."
-msgstr ""
+msgstr "Ваша конфигурация, относящаяся к рассылке %1, была обновлена. "
 
 #. (notice.cmd)
 #: mail_tt2/command_report.tt2:48
@@ -4320,23 +4365,23 @@ msgstr ""
 #. (notice.listname)
 #: mail_tt2/command_report.tt2:51
 msgid "There is no message to moderate for list '%1'."
-msgstr ""
+msgstr "В рассылке '%1' нет сообщений, подлежащих модерации."
 
 #: mail_tt2/command_report.tt2:63
 msgid "Command has been rejected :"
-msgstr ""
+msgstr "Команда было отвергнута :"
 
 #: mail_tt2/command_report.tt2:65
 msgid "These commands have been rejected :"
-msgstr ""
+msgstr "Эти команды были отвергнуты :"
 
 #: mail_tt2/command_report.tt2:81
 msgid "Command has failed :"
-msgstr ""
+msgstr "Выполнить команду не удалось :"
 
 #: mail_tt2/command_report.tt2:83
 msgid "These commands have failed :"
-msgstr ""
+msgstr "Выполнить эти команды не удалось :"
 
 #: mail_tt2/command_report.tt2:90
 msgid "Command not understood: ignoring end of message."
@@ -4349,10 +4394,13 @@ msgid ""
 "(be aware that Sympa can't check signature if you use the subject header to "
 "write a command)."
 msgstr ""
+"Ваше сообщение не было подписано либо Sympa не смогла проверить сигнатуру \n"
+" (помните, что Sympa не может проверить сигнатуру, если Вы используете "
+"заголовок \"subject\" (\"тема\"), чтобы написать команду). "
 
 #: mail_tt2/command_report.tt2:97
 msgid "Command syntax error."
-msgstr ""
+msgstr "Синтаксическая ошибка в команде."
 
 #. (u_err.listname)
 #. (glob.listname)
@@ -4360,7 +4408,7 @@ msgstr ""
 #: mail_tt2/command_report.tt2:100 mail_tt2/command_report.tt2:174
 #: mail_tt2/message_report.tt2:55
 msgid "List '%1' does not exist."
-msgstr ""
+msgstr "Рассылка '%1' не существует."
 
 #. (u_err.listname)
 #: mail_tt2/command_report.tt2:103
@@ -4373,11 +4421,13 @@ msgid ""
 "Your e-mail address %1 has not been found in the list %2. Maybe\n"
 "you subscribed from a different e-mail address ?"
 msgstr ""
+"Ваш электронный адрес %1 не был найден в рассылке %2. Может быть, \n"
+" Вы подписаны другим электронным адресом ? "
 
 #. (u_err.email,u_err.listname)
 #: mail_tt2/command_report.tt2:110
 msgid "E-mail address %1 has not been found in the list %2."
-msgstr ""
+msgstr "Электронный адрес %1 не был найден в рассылке %2. "
 
 #. (u_err.listname)
 #: mail_tt2/command_report.tt2:114
@@ -4385,29 +4435,32 @@ msgid ""
 "List %1 does not accept the DIGEST mode. \n"
 "Your configuration regarding this command has not been updated."
 msgstr ""
+"В рассылке %1 не поддерживается режим дайджестов (DIGEST). \n"
+" Ваша конфигурация не была обновлена для выполнения этой команды. "
 
 #. (u_err.listname,u_err.modes)
 #: mail_tt2/command_report.tt2:117
 msgid "List %1 allows only these reception modes : %2"
 msgstr ""
+"В рассылке %1 поддерживаются только следующие режимы получения почты: %2"
 
 #: mail_tt2/command_report.tt2:120
 msgid "This list archive is empty."
-msgstr ""
+msgstr "Архив этой рассылки пуст."
 
 #: mail_tt2/command_report.tt2:123
 msgid "Required file does not exist."
-msgstr ""
+msgstr "Запрошенного файла не существует. "
 
 #. (u_err.listname)
 #: mail_tt2/command_report.tt2:126
 msgid "List %1 has no subscriber."
-msgstr ""
+msgstr "Рассылка %1 не имеет подписчиков."
 
 #. (u_err.email,u_err.listname)
 #: mail_tt2/command_report.tt2:129
 msgid "The User '%1' is already subscriber of list '%2'."
-msgstr ""
+msgstr "Пользователь '%1' уже является подписчиком рассылки '%2'. "
 
 #. (u_err.command)
 #: mail_tt2/command_report.tt2:134
@@ -4416,14 +4469,18 @@ msgid ""
 "You probably confirmed your %1 using a different\n"
 "email address. Please try using your canonical address."
 msgstr ""
+"Процесс аутентификации не удался.\n"
+" Возможно, Вы пытались подтвердить учётную запись %1 с помощью\n"
+" другого электронного адреса. Пожалуйста, попробуйте использовать Ваш "
+"обычный адрес. "
 
 #: mail_tt2/command_report.tt2:146
 msgid "Command has failed because of an internal server error :"
-msgstr ""
+msgstr "Команда не была выполнена из-за внутренней ошибки сервера :"
 
 #: mail_tt2/command_report.tt2:148
 msgid "These commands have failed because of an internal server error :"
-msgstr ""
+msgstr "Эти команды не были выполнены из-за внутренней ошибки сервера :"
 
 #: mail_tt2/command_report.tt2:165
 msgid ""
@@ -4433,7 +4490,7 @@ msgstr ""
 
 #: mail_tt2/command_report.tt2:168
 msgid "No command found in message."
-msgstr ""
+msgstr "Команд в сообщении не обнаружено."
 
 #: mail_tt2/command_report.tt2:171
 msgid "Ignoring message because of an internal server error."
@@ -4442,7 +4499,7 @@ msgstr ""
 #. (conf.wwsympa_url)
 #: mail_tt2/command_report.tt2:181
 msgid "For further information, check the mailing list web site %1"
-msgstr ""
+msgstr "Дальнейшую информацию ищите на web-сайте рассылки %1"
 
 #. (list.name,date)
 #: mail_tt2/digest_plain.tt2:4 mail_tt2/digest_plain.tt2:6
@@ -4452,12 +4509,12 @@ msgstr "%1 Дайджест %2"
 #: mail_tt2/digest.tt2:11 mail_tt2/digest_plain.tt2:8
 #: mail_tt2/get_archive.tt2:10 src/List.pm:2686
 msgid "Table of contents:"
-msgstr ""
+msgstr "Содержание: "
 
 #. (list.name,date)
 #: mail_tt2/digest_plain.tt2:26
 msgid "End of %1 Digest %2"
-msgstr ""
+msgstr "Конец дайджеста %1 %2"
 
 #. (list.name)
 #: mail_tt2/digest.tt2:4

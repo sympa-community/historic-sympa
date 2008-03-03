@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fr\n"
 "POT-Creation-Date: 2002-07-16 17:27+0800\n"
-"PO-Revision-Date: 2008-01-09 08:10+0100\n"
-"Last-Translator: David Verdin <david.verdin@cru.fr>\n"
+"PO-Revision-Date: 2008-02-16 04:08+0100\n"
+"Last-Translator: Daniel Viñar Ulriksen <dani@belvil.net>\n"
 "Language-Team: Français\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -1366,7 +1366,8 @@ msgstr " Décompresser un fichier d'archive à la racine"
 #: web_tt2/dump_scenario.tt2:5
 msgid "scenario is created but not loaded in the list config"
 msgstr ""
-"Le scénario est créé mais la configuration de la list n'a pas été mise à jour"
+"Le scénario est créé mais la configuration de la liste n'a pas été mise à "
+"jour"
 
 #: web_tt2/dump_scenario.tt2:7
 msgid ""
@@ -4188,7 +4189,7 @@ msgstr ""
 
 #: mail_tt2/authorization_reject.tt2:107
 msgid "Message distribution for this list is restricted to list moderators."
-msgstr "La diffusion de message est réservée aux modérateurs"
+msgstr "La diffusion de message est réservée aux modérateurs."
 
 #: mail_tt2/authorization_reject.tt2:110
 msgid "Multipart messages are not allowed in this list."
@@ -4355,7 +4356,7 @@ msgstr "L'identité du certificat est :"
 msgid "You won't receive the signed messages from your lists."
 msgstr ""
 "Vous ne recevrez plus les messages signés des listes auxquelles vous êtes "
-"inscrits."
+"inscrit/e."
 
 #. (conf.email,conf.host)
 #: mail_tt2/certif_warning.tt2:12
