@@ -1,4 +1,234 @@
 ------------------------------------------------------------------------
+r4861 | david.verdin | 2008-02-29 12:34:07 +0100 (Fri, 29 Feb 2008) | 4 lines
+Changed paths:
+   M /branches/sympa-5.4-branch/wwsympa/wwsympa.fcgi
+
+[#3790][Reported by R. Tassoni, National Library of Australia and T. Danel] Fix: When displaying a message to moderate in the web interface, if a document was attached to the message, the link to display the message lead to empty documents.
+This was because we didn't take into account the fact that MHonArc put the file in a subdirectory.
+Fixed by changing the kind of ergument file passed from scalar to vector.
+
+------------------------------------------------------------------------
+r4856 | david.verdin | 2008-02-27 15:03:03 +0100 (Wed, 27 Feb 2008) | 2 lines
+Changed paths:
+   M /branches/sympa-5.4-branch/important_changes.pl
+   M /branches/sympa-5.4-branch/src/Upgrade.pm
+
+Fix: Upgrade process failed to spot version number due to new use of strict vars, and a character cas problem occured while parsing the database structure.
+
+------------------------------------------------------------------------
+r4854 | david.verdin | 2008-02-26 12:04:15 +0100 (Tue, 26 Feb 2008) | 2 lines
+Changed paths:
+   A /branches/sympa-5.4-branch (from /trunk:4853)
+
+Creating the stabilisation branch for version 5.4 of Sympa
+
+------------------------------------------------------------------------
+r4852 | olivier.salaun | 2008-02-13 16:04:53 +0100 (Wed, 13 Feb 2008) | 2 lines
+Changed paths:
+   M /trunk/src/SQLSource.pm
+
+[M.Redinger]Change: reported problems with field names upper cased with Oracle. Now forcing lower cased field names.
+
+------------------------------------------------------------------------
+r4851 | olivier.salaun | 2008-02-13 15:56:47 +0100 (Wed, 13 Feb 2008) | 2 lines
+Changed paths:
+   M /trunk/src/etc/scenari/access_web_archive.intranet
+   M /trunk/src/etc/scenari/review.intranet
+   M /trunk/src/etc/scenari/visibility.intranet
+
+[#3744]Fix: [remote_addr] variable might not be available for a scenario. [env->remote_addr] should be used instead
+
+------------------------------------------------------------------------
+r4850 | olivier.salaun | 2008-02-13 14:15:20 +0100 (Wed, 13 Feb 2008) | 2 lines
+Changed paths:
+   M /trunk/src/Conf.pm
+
+[reported by S.Kristoffersen] Fix: The default value for wwsympa_url paramater was still http_host/wws. It has been changed to http_host/sympa
+
+------------------------------------------------------------------------
+r4849 | olivier.salaun | 2008-02-13 10:18:15 +0100 (Wed, 13 Feb 2008) | 2 lines
+Changed paths:
+   M /trunk/web_tt2/notice.tt2
+   M /trunk/wwsympa/wwsympa.fcgi
+
+Fix: create_list notification failed if listname contained uppercased chars
+
+------------------------------------------------------------------------
+r4848 | olivier.salaun | 2008-02-12 17:52:34 +0100 (Tue, 12 Feb 2008) | 2 lines
+Changed paths:
+   M /trunk/src/Archive.pm
+
+Remove trace
+
+------------------------------------------------------------------------
+r4847 | olivier.salaun | 2008-02-12 15:14:23 +0100 (Tue, 12 Feb 2008) | 2 lines
+Changed paths:
+   M /trunk/wwsympa/SympaSession.pm
+
+Fix: user could get logged out if he subscribed to the RSS feed. Now we skip session management in RSS context
+
+------------------------------------------------------------------------
+r4845 | david.verdin | 2008-02-08 18:05:22 +0100 (Fri, 08 Feb 2008) | 2 lines
+Changed paths:
+   M /trunk/wwsympa/wwsympa.fcgi
+
+[#1809][Reported by P. von der Hagen, univ. Karlsruhe] Fix: Files in the shared directory with regexp special characters could not be renamed. Fixed by using "\Q" escape signal at the beginning of the regexp (s/\Q$strtofind/strtosubst/).
+
+------------------------------------------------------------------------
+r4843 | david.verdin | 2008-02-08 16:39:58 +0100 (Fri, 08 Feb 2008) | 2 lines
+Changed paths:
+   M /trunk/src/Lock.pm
+
+Removing development traces.
+
+------------------------------------------------------------------------
+r4841 | david.verdin | 2008-02-08 16:22:51 +0100 (Fri, 08 Feb 2008) | 2 lines
+Changed paths:
+   M /trunk/wwsympa/SympaSession.pm
+
+Fix: "$rss" used instead of "$action eq 'rss'".
+
+------------------------------------------------------------------------
+r4839 | david.verdin | 2008-02-08 16:12:35 +0100 (Fri, 08 Feb 2008) | 3 lines
+Changed paths:
+   M /trunk/src/Lock.pm
+
+[#3229][#3237][#3518][Reported by T. Berry, NASA and D. Lalot, univ. Aix-Marseille] Fix: Lock failed when two processes were reading the same file, then one of them switched to write mode. It could then modify the file while the other process was reading, leading to uncomplete informations gathered from reading. Fixed by changing behaviour: Now if a process wants to switch to or from write mode, it first release the file lock at the filesystem level, then tries to put a new one. this way, switching to write mode is controlled by the filesystem.
+
+
+------------------------------------------------------------------------
+r4838 | serge.aumont | 2008-02-07 17:02:34 +0100 (Thu, 07 Feb 2008) | 4 lines
+Changed paths:
+   M /trunk/wwsympa/SympaSession.pm
+   M /trunk/wwsympa/wwsympa.fcgi
+
+Fix a bug related to session lost when RSS access comes from the same browser as web browser.
+
+
+
+------------------------------------------------------------------------
+r4837 | david.verdin | 2008-02-07 10:30:01 +0100 (Thu, 07 Feb 2008) | 2 lines
+Changed paths:
+   M /trunk/src/List.pm
+
+[#3721][Submitted by M.Keisler, mitsein.net] Fix: Misleading comment in List.pm
+
+------------------------------------------------------------------------
+r4836 | david.verdin | 2008-02-06 16:19:28 +0100 (Wed, 06 Feb 2008) | 2 lines
+Changed paths:
+   M /trunk/wwsympa/wwsympa.fcgi
+
+[#3719][Reported by O. Berger, INT] Fix: Used List object insted of list name to display list name in logs.
+
+------------------------------------------------------------------------
+r4835 | david.verdin | 2008-02-06 14:12:56 +0100 (Wed, 06 Feb 2008) | 2 lines
+Changed paths:
+   M /trunk/src/PlainDigest.pm
+
+[#3702][Reported by A. Bernstein, electricembers.net] [CORRECTION TO THE PREVIOUS REVISION (4834)] Fix: Some malformed headers caused Sympa to crash by calling a method on an undefined MIME::Entity object. Fixed by testing the definition of this object before calling the method.
+
+------------------------------------------------------------------------
+r4834 | david.verdin | 2008-02-06 13:57:00 +0100 (Wed, 06 Feb 2008) | 2 lines
+Changed paths:
+   M /trunk/src/PlainDigest.pm
+
+[#3702][Reported by A. Bernstein, electricembers.net] Fix: Some malformed headers caused Sympa to crash by calling a method on an undefined MIME::Entity::head object. Fixed by testing the definition of this object before calling the method.
+
+------------------------------------------------------------------------
+r4833 | david.verdin | 2008-02-06 12:28:42 +0100 (Wed, 06 Feb 2008) | 2 lines
+Changed paths:
+   M /trunk/src/List.pm
+
+[#3713][Reported by A. Bernstein, electricembers.net]Fix: Call to functions in the Storage CPAN module could lead to Sympa processes dying because these functions could issue "croak" message. Fixed by enclosing these call into eval{} blocks.
+
+------------------------------------------------------------------------
+r4832 | david.verdin | 2008-02-06 10:32:32 +0100 (Wed, 06 Feb 2008) | 2 lines
+Changed paths:
+   M /trunk/wwsympa/wwsympa.fcgi
+
+[#3719][Submitted by O. Berger, INT] Fix: A parameter was missing in logs, leading to uncomplete log message.
+
+------------------------------------------------------------------------
+r4831 | david.verdin | 2008-02-06 09:19:09 +0100 (Wed, 06 Feb 2008) | 2 lines
+Changed paths:
+   M /trunk/src/List.pm
+   M /trunk/src/mail.pm
+
+Changed 'warning' log level to 'notice' in order to be coherent with the rest of the application.
+
+------------------------------------------------------------------------
+r4830 | david.verdin | 2008-02-05 17:03:42 +0100 (Tue, 05 Feb 2008) | 2 lines
+Changed paths:
+   M /trunk/src/etc/script/create_db.Pg
+
+[Reported by S. Kristoffersen, univ. Oslo] Fix: Missing "DROP TABLE session_table;" line in Pg creation script.
+
+------------------------------------------------------------------------
+r4829 | david.verdin | 2008-02-05 16:43:49 +0100 (Tue, 05 Feb 2008) | 2 lines
+Changed paths:
+   M /trunk/src/etc/script/create_db.Pg
+
+[Reported by S. Kristoffersen, univ. Oslo] Fix: Field id_session in table session_table had the type "int4" which was too small for the size of session id. Fixed by changing type to int8.
+
+------------------------------------------------------------------------
+r4828 | david.verdin | 2008-02-05 15:49:12 +0100 (Tue, 05 Feb 2008) | 3 lines
+Changed paths:
+   M /trunk/wwsympa/wwsympa.fcgi
+
+[#3479]Fix: http://listes.mydomain.fr/sympa/dump/mylist/light returned an error if authentication was required and not satisfied.
+Now Sympa asks for authentification instead.
+
+------------------------------------------------------------------------
+r4827 | david.verdin | 2008-02-05 12:11:02 +0100 (Tue, 05 Feb 2008) | 3 lines
+Changed paths:
+   M /trunk/src/Commands.pm
+
+bug # 3554 finally closed: content incorporated in a feature request.
+Removing preparatory works.
+
+------------------------------------------------------------------------
+r4826 | david.verdin | 2008-02-05 11:46:36 +0100 (Tue, 05 Feb 2008) | 2 lines
+Changed paths:
+   M /trunk/mail_tt2/invite.tt2
+   M /trunk/src/Commands.pm
+
+Preparing code for resolving bug #3554.
+
+------------------------------------------------------------------------
+r4825 | david.verdin | 2008-02-04 17:40:06 +0100 (Mon, 04 Feb 2008) | 2 lines
+Changed paths:
+   M /trunk/wwsympa/wwsympa.fcgi
+
+Remove traces.
+
+------------------------------------------------------------------------
+r4824 | david.verdin | 2008-02-04 16:42:16 +0100 (Mon, 04 Feb 2008) | 2 lines
+Changed paths:
+   M /trunk/wwsympa/wwsympa.fcgi
+
+[#3596]Fix: "spam_protection" list parameter was not used. Just the robot parameter value.
+
+------------------------------------------------------------------------
+r4823 | david.verdin | 2008-02-04 15:17:07 +0100 (Mon, 04 Feb 2008) | 3 lines
+Changed paths:
+   M /trunk/src/Commands.pm
+   M /trunk/src/List.pm
+   M /trunk/src/report.pm
+
+[#3636] Fix: When accepting multiple subscription requests, the list of pending subscription was not updated. This was due to two loops over email addresses one the one hand and over files on the other hand which were embedded in the wrong order, causing only the first file to be parsed.
+Change: when an authorized subscription request is received, if the sender is subscribed already, the request is rejected.
+
+------------------------------------------------------------------------
+r4820 | david.verdin | 2008-01-31 12:10:43 +0100 (Thu, 31 Jan 2008) | 2 lines
+Changed paths:
+   M /trunk/.version
+   M /trunk/ChangeLog
+   M /trunk/NEWS
+   M /trunk/doc/sympa.pdf
+
+Preparing version 5.4b.1
+
+------------------------------------------------------------------------
 r4819 | david.verdin | 2008-01-30 18:28:31 +0100 (Wed, 30 Jan 2008) | 9 lines
 Changed paths:
    M /trunk/src/Conf.pm
