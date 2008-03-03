@@ -84,7 +84,6 @@ if (($previous_version eq $current_version) ||
 }
 
 print "You are upgrading from Sympa $previous_version\nYou should read CAREFULLY the changes listed below ; they might be incompatible changes :\n<RETURN>";
-print "\nVersion: $previous_version\n";
 my $wait = <STDIN>;
 
 ## Extracting Important changes from release notes
