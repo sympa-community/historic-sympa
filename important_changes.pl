@@ -40,8 +40,8 @@ unless (open VERSION, "$ENV{'DESTDIR'}$ENV{'BINDIR'}/Version.pm") {
 
 unless ($first_install) {
     while (<VERSION>) {
-	if (/^our \$Version = \'(\S+)\'\;/) {
-	    $previous_version = $1;
+	if (/^(our )?\$Version = \'(\S+)\'\;/) {
+	    $previous_version = $2;
 	    last;
 	}
     }
@@ -90,7 +90,6 @@ my $wait = <STDIN>;
 open NOTES, 'NEWS';
 my ($current, $ok);
 while (<NOTES>) {
-    
     if (/^([\w_.]+)\s/) {
 	my $v = $1;
 	if ($v eq $previous_version  || 
