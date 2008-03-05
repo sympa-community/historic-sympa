@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "POT-Creation-Date: 2002-07-16 17:27+0800\n"
-"PO-Revision-Date: 2008-03-05 15:54+0100\n"
+"PO-Revision-Date: 2008-03-05 16:07+0100\n"
 "Last-Translator: David Verdin <david.verdin@cru.fr>\n"
 "Language-Team: English <LL@li.org>\n"
 "MIME-Version: 1.0\n"
@@ -4855,9 +4855,8 @@ msgstr "To subscribe just hit the following mailto url :"
 
 #. (conf.sympa,subject)
 #: mail_tt2/invite.tt2:10
-#, fuzzy
 msgid "Or send a message to %1 with subject: \"sub %2\""
-msgstr "Or send a message to %1@%2 with the following subject :"
+msgstr "Or send a message to %1 with subject: \"sub %2\""
 
 #: mail_tt2/invite.tt2:12
 msgid "If you don't want to subscribe just ignore this message."
@@ -5061,7 +5060,6 @@ msgstr "The value for parameter %1 was badly defined: %2"
 
 #. (action)
 #: mail_tt2/listmaster_notification.tt2:107
-#, fuzzy
 msgid "%1 impossible."
 msgstr "%1 impossible."
 

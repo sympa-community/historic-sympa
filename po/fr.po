@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fr\n"
 "POT-Creation-Date: 2002-07-16 17:27+0800\n"
-"PO-Revision-Date: 2008-03-05 15:44+0100\n"
+"PO-Revision-Date: 2008-03-05 16:08+0100\n"
 "Last-Translator: David Verdin <david.verdin@cru.fr>\n"
 "Language-Team: Français\n"
 "MIME-Version: 1.0\n"
@@ -5040,7 +5040,6 @@ msgstr ""
 
 #. (conf.sympa,subject)
 #: mail_tt2/invite.tt2:10
-#, fuzzy
 msgid "Or send a message to %1 with subject: \"sub %2\""
 msgstr ""
 "ou\n"
