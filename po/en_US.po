@@ -3,17 +3,17 @@
 # This file is distributed under the same license as the PACKAGE package.
 # FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
 #
-#, fuzzy
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "POT-Creation-Date: 2002-07-16 17:27+0800\n"
-"PO-Revision-Date: 2006-11-15 10:43+0100\n"
-"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"PO-Revision-Date: 2008-03-05 15:54+0100\n"
+"Last-Translator: David Verdin <david.verdin@cru.fr>\n"
 "Language-Team: English <LL@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+"X-Generator: Pootle 1.0.2\n"
 
 #. (conf.email,conf.host)
 #: web_tt2/home.tt2:5
@@ -791,7 +791,6 @@ msgstr "The current blacklist is empty"
 
 #. (rows)
 #: web_tt2/blacklist.tt2:21
-#, fuzzy
 msgid "The current blacklist contains %1 line(s)"
 msgstr "The current blacklist contains %1 line(s)"
 
@@ -2509,6 +2508,10 @@ msgid ""
 msgstr ""
 "List has been set to the pending status ; listmaster need to validate it"
 
+#: web_tt2/notice.tt2:77
+msgid "List name has been lowercased"
+msgstr "List name has been lowercased"
+
 #: web_tt2/picture_upload.tt2:4
 msgid "Setting your picture for this list"
 msgstr "Setting your picture for this list"
@@ -2528,9 +2531,8 @@ msgid "Your picture"
 msgstr "Your picture"
 
 #: web_tt2/picture_upload.tt2:23
-#, fuzzy
 msgid "Your picture in the subscribers list"
-msgstr "You are not subscribed to list %1"
+msgstr "Your picture in the subscribers list"
 
 #: web_tt2/picture_upload.tt2:24
 msgid "In the members page"
@@ -2774,9 +2776,8 @@ msgid "Multiple add"
 msgstr "Multiple add"
 
 #: web_tt2/review.tt2:73
-#, fuzzy
 msgid "Search user by e-mail: "
-msgstr "Search user by email"
+msgstr "Search user by email:"
 
 #: web_tt2/review.tt2:74
 msgid "Search user by email"
@@ -3128,7 +3129,6 @@ msgid "Customize templates"
 msgstr "Customize templates"
 
 #: web_tt2/serveradmin.tt2:134
-#, fuzzy
 msgid ""
 "When customizing Sympa web templates, it is needed to known which variables "
 "can be processed by the tt2 parser.This button is for controlling tt2 vars "
@@ -3136,7 +3136,7 @@ msgid ""
 msgstr ""
 "When customizing Sympa web templates, it is needed to known which variables "
 "can be processed by the tt2 parser.This button is for controlling tt2 vars "
-"dump feature : "
+"dump feature :"
 
 #: web_tt2/serveradmin.tt2:137
 msgid "Unset template vars dump"
@@ -3192,9 +3192,8 @@ msgid "This FastCGI process (%1) has served %2 pages since %3."
 msgstr "This FastCGI process (%1) has served %2 pages since %3."
 
 #: web_tt2/setlang.tt2:9
-#, fuzzy
 msgid "Language selection"
-msgstr "Toggle Selection"
+msgstr "Language Selection"
 
 #. (list_request_date)
 #: web_tt2/set_pending_list_request.tt2:10
@@ -3764,14 +3763,12 @@ msgid "Message Id"
 msgstr "Message Id"
 
 #: web_tt2/viewlogs.tt2:67
-#, fuzzy
 msgid "Search by date from:"
-msgstr "Search by date :"
+msgstr "Search by date from:"
 
 #: web_tt2/viewlogs.tt2:69
-#, fuzzy
 msgid "to:"
-msgstr "to"
+msgstr "to:"
 
 #: web_tt2/viewlogs.tt2:70
 msgid "ex: 24/05/2006"
@@ -3825,7 +3822,7 @@ msgstr "Search period: "
 #. (date_to_formated)
 #. This entry is a date/time format
 #. Check the strftime manpage for format details : http://docs.freebsd.org/info/gawk/gawk.info.Time_Functions.html
-#: web_tt2/viewlogs.tt2:110 wwsympa/wwsympa.fcgi:16105
+#: web_tt2/viewlogs.tt2:110 wwsympa/wwsympa.fcgi:16141
 msgid "%d %b %Y %H:%M:%S"
 msgstr "%d %b %Y %H:%M:%S"
 
@@ -4456,7 +4453,7 @@ msgid "%1 Digest %2"
 msgstr "%1 Digest %2"
 
 #: mail_tt2/digest.tt2:11 mail_tt2/digest_plain.tt2:8
-#: mail_tt2/get_archive.tt2:10 src/List.pm:2686
+#: mail_tt2/get_archive.tt2:10 src/List.pm:2689
 msgid "Table of contents:"
 msgstr "Table of contents:"
 
@@ -4553,7 +4550,7 @@ msgstr "Unsubscription :"
 msgid "Archive of %1, file %2"
 msgstr "Archive of %1, file %2"
 
-#: mail_tt2/global_remind.tt2:2 src/Commands.pm:1623
+#: mail_tt2/global_remind.tt2:2 src/Commands.pm:1633
 msgid "Subscription summary"
 msgstr "Subscription summary"
 
@@ -4853,15 +4850,13 @@ msgid "This list is about %1, so you are probably concerned."
 msgstr "This list is about %1, so you are probably concerned."
 
 #: mail_tt2/invite.tt2:7
-#, fuzzy
 msgid "To subscribe just hit the following mailto url :"
-msgstr ""
-"To subscribe just reply to this message or hit the following mailto url :"
+msgstr "To subscribe just hit the following mailto url :"
 
-#. (conf.sympa,list.name)
+#. (conf.sympa,subject)
 #: mail_tt2/invite.tt2:10
 #, fuzzy
-msgid "Or send a message to %1 with subject: \"sub %2\""
+msgid "Or send a message to %1 with subject: \"%2\""
 msgstr "Or send a message to %1@%2 with the following subject :"
 
 #: mail_tt2/invite.tt2:12
@@ -5056,21 +5051,19 @@ msgid "The returned error message :"
 msgstr "The returned error message :"
 
 #: mail_tt2/listmaster_notification.tt2:104
-#, fuzzy
 msgid "Parameter error"
-msgstr "Parameters"
+msgstr "Parameter error"
 
 #. (par_name,par_value)
 #: mail_tt2/listmaster_notification.tt2:106
-#, fuzzy
 msgid "The value for parameter %1 was badly defined: %2"
-msgstr "Wrong value for parameter %1"
+msgstr "The value for parameter %1 was badly defined: %2"
 
 #. (action)
 #: mail_tt2/listmaster_notification.tt2:107
 #, fuzzy
 msgid "%1 impossible."
-msgstr "impossible"
+msgstr "%1 impossible."
 
 #: mail_tt2/listmaster_notification.tt2:108
 #: mail_tt2/listmaster_notification.tt2:114
@@ -5083,15 +5076,13 @@ msgid "See logs for more details."
 msgstr "See logs for more details."
 
 #: mail_tt2/listmaster_notification.tt2:111
-#, fuzzy
 msgid "Unable to create directory"
-msgstr "Unable to create directory '%1'."
+msgstr "Unable to create directory"
 
 #. (dir)
 #: mail_tt2/listmaster_notification.tt2:113
-#, fuzzy
 msgid "Sympa could not create directory %1"
-msgstr "Unable to create directory '%1'."
+msgstr "Sympa could not create directory %1"
 
 #: mail_tt2/listmaster_notification.tt2:117
 msgid "A message archiving failed"
@@ -5103,9 +5094,8 @@ msgid "Sympa could not archive message '%1'. Moving it into directory '%2'."
 msgstr "Sympa could not archive message '%1'. Moving it into directory '%2'."
 
 #: mail_tt2/listmaster_notification.tt2:123
-#, fuzzy
 msgid "A bounce management failed"
-msgstr "Bounce management"
+msgstr "A bounce management failed"
 
 #. (file,bad)
 #: mail_tt2/listmaster_notification.tt2:125
@@ -5116,9 +5106,8 @@ msgstr ""
 
 #. (error)
 #: mail_tt2/listmaster_notification.tt2:127
-#, fuzzy
 msgid "Error: %1"
-msgstr "Errors:"
+msgstr "Error: %1"
 
 #: mail_tt2/listmaster_notification.tt2:131
 msgid "incorrect format of edit_list.conf"
@@ -5744,9 +5733,8 @@ msgstr ""
 
 #. (list.name)
 #: mail_tt2/listowner_notification.tt2:61
-#, fuzzy
 msgid "Subscription request to list %1"
-msgstr "UNsubscription request from list %1"
+msgstr "Subscription request to list %1"
 
 #. (list.name)-)
 #: mail_tt2/listowner_notification.tt2:66
@@ -5950,11 +5938,8 @@ msgstr ""
 "reason :"
 
 #: mail_tt2/message_report.tt2:32
-#, fuzzy
 msgid "Impossible to distribute your message for the following reason :"
-msgstr ""
-"Impossible to distribute your message for list '%1' for the following "
-"reason :"
+msgstr "Impossible to distribute your message for the following reason :"
 
 #. (list.name,conf.sympa,list.host)
 #: mail_tt2/message_report.tt2:48
@@ -6012,23 +5997,21 @@ msgstr ""
 
 #. (key)
 #: mail_tt2/message_report.tt2:65
-#, fuzzy
 msgid ""
 "Unable to access the message authenticated with key %1. The message may "
 "already been confirmed."
 msgstr ""
-"Unable to access the message authenticated with key %1 because of a wrong "
-"format."
+"Unable to access the message authenticated with key %1. The message may "
+"already been confirmed."
 
 #. (key)
 #: mail_tt2/message_report.tt2:68
-#, fuzzy
 msgid ""
 "Unable to access the message authenticated with key %1 because of a wrong "
 "format. The message may already been confirmed."
 msgstr ""
 "Unable to access the message authenticated with key %1 because of a wrong "
-"format."
+"format. The message may already been confirmed."
 
 #. (conf.host)
 #: mail_tt2/message_report.tt2:73
@@ -6930,9 +6913,8 @@ msgid "<em>Message not available</em>"
 msgstr "<em>Message not available</em>"
 
 #: src/etc/mhonarc-ressources.tt2:447
-#, fuzzy
 msgid "picture"
-msgstr "Picture"
+msgstr "picture"
 
 #: src/etc/mhonarc-ressources.tt2:469
 msgid "Reply to sender"
@@ -6943,9 +6925,8 @@ msgid "to list"
 msgstr "to list"
 
 #: src/etc/mhonarc-ressources.tt2:473
-#, fuzzy
 msgid "to both"
-msgstr "robot"
+msgstr "to both"
 
 #: src/etc/mhonarc-ressources.tt2:476
 msgid "Reply"
@@ -7122,7 +7103,7 @@ msgstr "The configuration file --CONFIG-- contains errors.\n"
 
 #. This entry is a date/time format
 #. Check the strftime manpage for format details : http://docs.freebsd.org/info/gawk/gawk.info.Time_Functions.html
-#: src/Commands.pm:942 wwsympa/wwsympa.fcgi:9443
+#: src/Commands.pm:952 wwsympa/wwsympa.fcgi:9476
 msgid "%A"
 msgstr "%A"
 
@@ -7255,9 +7236,8 @@ msgid "Subject tagging"
 msgstr "Subject tagging"
 
 #: src/List.pm:521
-#, fuzzy
 msgid "custom parameters"
-msgstr "Wrong parameters"
+msgstr "custom parameters"
 
 #: src/List.pm:1094 src/List.pm:1134 src/List.pm:533 src/List.pm:596
 #: src/List.pm:631
@@ -7658,14 +7638,12 @@ msgid "percentage of list members in VERP mode"
 msgstr "percentage of list members in VERP mode"
 
 #: src/List.pm:512
-#, fuzzy
 msgid "var name"
-msgstr "name"
+msgstr "var name"
 
 #: src/List.pm:517
-#, fuzzy
 msgid "var value"
-msgstr "value"
+msgstr "var value"
 
 #: src/List.pm:1119 src/List.pm:616
 msgid "the datasource"
@@ -7733,29 +7711,29 @@ msgstr "who updated the config"
 
 #. This entry is a date/time format
 #. Check the strftime manpage for format details : http://docs.freebsd.org/info/gawk/gawk.info.Time_Functions.html
-#: src/List.pm:2789
+#: src/List.pm:2792
 msgid "%a, %d %b %Y %H:%M:%S"
 msgstr "%a, %d %b %Y %H:%M:%S"
 
 #. This entry is a date/time format
 #. Check the strftime manpage for format details : http://docs.freebsd.org/info/gawk/gawk.info.Time_Functions.html
-#: src/List.pm:2790
+#: src/List.pm:2793
 msgid "%a, %d %b %Y"
 msgstr "%a, %d %b %Y"
 
 #. This entry is a date/time format
 #. Check the strftime manpage for format details : http://docs.freebsd.org/info/gawk/gawk.info.Time_Functions.html
-#: src/List.pm:2973 src/List.pm:2974 src/List.pm:2978
-#: wwsympa/wwsympa.fcgi:10860 wwsympa/wwsympa.fcgi:10929
-#: wwsympa/wwsympa.fcgi:11131 wwsympa/wwsympa.fcgi:11473
-#: wwsympa/wwsympa.fcgi:15570 wwsympa/wwsympa.fcgi:16444
-#: wwsympa/wwsympa.fcgi:16445 wwsympa/wwsympa.fcgi:4404
-#: wwsympa/wwsympa.fcgi:4405 wwsympa/wwsympa.fcgi:5837
-#: wwsympa/wwsympa.fcgi:7021 wwsympa/wwsympa.fcgi:7539
-#: wwsympa/wwsympa.fcgi:7589 wwsympa/wwsympa.fcgi:7591
-#: wwsympa/wwsympa.fcgi:8104 wwsympa/wwsympa.fcgi:8105
-#: wwsympa/wwsympa.fcgi:8139 wwsympa/wwsympa.fcgi:8140
-#: wwsympa/wwsympa.fcgi:8353 wwsympa/wwsympa.fcgi:8354
+#: src/List.pm:2976 src/List.pm:2977 src/List.pm:2981
+#: wwsympa/wwsympa.fcgi:10893 wwsympa/wwsympa.fcgi:10962
+#: wwsympa/wwsympa.fcgi:11164 wwsympa/wwsympa.fcgi:11506
+#: wwsympa/wwsympa.fcgi:15603 wwsympa/wwsympa.fcgi:16480
+#: wwsympa/wwsympa.fcgi:16481 wwsympa/wwsympa.fcgi:4424
+#: wwsympa/wwsympa.fcgi:4425 wwsympa/wwsympa.fcgi:5857
+#: wwsympa/wwsympa.fcgi:7041 wwsympa/wwsympa.fcgi:7559
+#: wwsympa/wwsympa.fcgi:7609 wwsympa/wwsympa.fcgi:7611
+#: wwsympa/wwsympa.fcgi:8137 wwsympa/wwsympa.fcgi:8138
+#: wwsympa/wwsympa.fcgi:8172 wwsympa/wwsympa.fcgi:8173
+#: wwsympa/wwsympa.fcgi:8386 wwsympa/wwsympa.fcgi:8387
 msgid "%d %b %Y"
 msgstr "%d %b %Y"
 
@@ -7775,18 +7753,25 @@ msgstr ""
 msgid "Unable to create a channel in smtpto: %m"
 msgstr "Unable to create a channel in smtpto: %m"
 
-#: src/PlainDigest.pm:189
-#, fuzzy
+#: src/PlainDigest.pm:163
+msgid ""
+"----- Malformed message ignored -----\n"
+"\n"
+msgstr ""
+"----- Malformed message ignored -----\n"
+"\n"
+
+#: src/PlainDigest.pm:194
 msgid ""
 "\n"
 "[Attached message follows]\n"
 "-----Original message-----\n"
 msgstr ""
 "\n"
-"%Attached( message follows)\n"
+"[Attached message follows]\n"
 "-----Original message-----\n"
 
-#: src/PlainDigest.pm:199
+#: src/PlainDigest.pm:204
 msgid ""
 "-----End of original message from %s-----\n"
 "\n"
@@ -7794,7 +7779,7 @@ msgstr ""
 "-----End of original message from %s-----\n"
 "\n"
 
-#: src/PlainDigest.pm:238
+#: src/PlainDigest.pm:243
 msgid ""
 "** Warning: Message part originally used character set %s\n"
 "    Some characters may be lost or incorrect **\n"
@@ -7804,16 +7789,15 @@ msgstr ""
 "    Some characters may be lost or incorrect **\n"
 "\n"
 
-#: src/PlainDigest.pm:250
-#, fuzzy
+#: src/PlainDigest.pm:255
 msgid ""
 "\n"
 "[An attachment of type %s was included here]\n"
 msgstr ""
 "\n"
-"%An( attachment of type %s was included here)\n"
+"[An attachment of type %s was included here]\n"
 
-#: src/PlainDigest.pm:256
+#: src/PlainDigest.pm:261
 msgid ""
 "\n"
 "-----Delivery Status Report-----\n"
@@ -7821,20 +7805,19 @@ msgstr ""
 "\n"
 "-----Delivery Status Report-----\n"
 
-#: src/PlainDigest.pm:258
+#: src/PlainDigest.pm:263
 msgid "-----End of Delivery Status Report-----\n"
 msgstr "-----End of Delivery Status Report-----\n"
 
-#: src/PlainDigest.pm:296 src/PlainDigest.pm:317
-#, fuzzy
+#: src/PlainDigest.pm:301 src/PlainDigest.pm:322
 msgid ""
 "\n"
 "[** Unable to process HTML message part **]\n"
 msgstr ""
 "\n"
-"[ ** Unable to process HTML message part **]\n"
+"[** Unable to process HTML message part **]\n"
 
-#: src/PlainDigest.pm:323
+#: src/PlainDigest.pm:328
 msgid ""
 "\n"
 "[ ** Unable to process HTML message part **]\n"
@@ -7842,11 +7825,11 @@ msgstr ""
 "\n"
 "[ ** Unable to process HTML message part **]\n"
 
-#: src/PlainDigest.pm:327
+#: src/PlainDigest.pm:332
 msgid "[ Text converted from HTML ]\n"
 msgstr "[ Text converted from HTML ]\n"
 
-#: src/PlainDigest.pm:334
+#: src/PlainDigest.pm:339
 msgid ""
 "\n"
 "[ ** Unable to process HTML message part ** ]\n"
@@ -7854,14 +7837,13 @@ msgstr ""
 "\n"
 "[ ** Unable to process HTML message part ** ]\n"
 
-#: src/PlainDigest.pm:353
+#: src/PlainDigest.pm:358
 msgid "[ Image%s ]"
 msgstr "[ Image%s ]"
 
-#: src/PlainDigest.pm:353
-#, fuzzy
+#: src/PlainDigest.pm:358
 msgid "[Image%s]"
-msgstr "[ Image%s ]"
+msgstr "[Image%s]"
 
 #: src/sympa.pl:2057
 msgid "Unable to access directory %s : %m"
@@ -7879,15 +7861,15 @@ msgstr "%H:%M:%S"
 
 #. This entry is a date/time format
 #. Check the strftime manpage for format details : http://docs.freebsd.org/info/gawk/gawk.info.Time_Functions.html
-#: wwsympa/SympaSession.pm:330 wwsympa/SympaSession.pm:331
-#: wwsympa/wwsympa.fcgi:11707 wwsympa/wwsympa.fcgi:11850
-#: wwsympa/wwsympa.fcgi:14272 wwsympa/wwsympa.fcgi:7474
+#: wwsympa/SympaSession.pm:339 wwsympa/SympaSession.pm:340
+#: wwsympa/wwsympa.fcgi:11740 wwsympa/wwsympa.fcgi:11883
+#: wwsympa/wwsympa.fcgi:14305 wwsympa/wwsympa.fcgi:7494
 msgid "%d %b %y  %H:%M"
 msgstr "%d %b %y  %H:%M"
 
 #. This entry is a date/time format
 #. Check the strftime manpage for format details : http://docs.freebsd.org/info/gawk/gawk.info.Time_Functions.html
-#: wwsympa/wwsympa.fcgi:16050 wwsympa/wwsympa.fcgi:16051
+#: wwsympa/wwsympa.fcgi:16086 wwsympa/wwsympa.fcgi:16087
 msgid "%Y/%m/%d/%H/%M/%S"
 msgstr "%Y/%m/%d/%H/%M/%S"
 

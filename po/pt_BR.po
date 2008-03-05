@@ -29,10 +29,10 @@ msgid ""
 "unsubscription,\n"
 "archives, list management and so on."
 msgstr ""
-"Este sítio fornece acesso à sua área de trabalho no servidor de listas "
-"%1@%2. A partir deste endereço web, você pode editar suas opções de "
-"inscrições em listas de discussão, se desincrever, gerenciar suas listas e "
-"solicitar outros serviços."
+"Este sítio fornece acesso à sua área de trabalho no servidor de listas %1@%"
+"2. A partir deste endereço web, você pode editar suas opções de inscrições "
+"em listas de discussão, se desincrever, gerenciar suas listas e solicitar "
+"outros serviços."
 
 # Digite um nome para a lista
 #: web_tt2/home.tt2:9
@@ -2295,7 +2295,8 @@ msgstr ""
 "<li>SENÃO aplique modelo definido por robô, se existir</li>\n"
 "<li>SENÃO aplique modelo definido localmente, se existir</li>\n"
 "<li>SENÃO aplique modelo incluído na distribuição (estes não podem ser "
-"editados porque a atualização do Sympa irá sobrescrever esses arquivos)</li>\n"
+"editados porque a atualização do Sympa irá sobrescrever esses arquivos)</"
+"li>\n"
 "</ul>"
 
 #: web_tt2/ls_templates.tt2:17
@@ -2532,6 +2533,11 @@ msgid ""
 msgstr ""
 "A lista foi ajustada para o status 'pendente'; o Gerente Geral de Listas "
 "precisa validá-la"
+
+#: web_tt2/notice.tt2:77
+#, fuzzy
+msgid "List name has been lowercased"
+msgstr "A lista foi removida"
 
 #: web_tt2/picture_upload.tt2:4
 msgid "Setting your picture for this list"
@@ -3443,10 +3449,10 @@ msgid ""
 "for the current robot in robot.conf. If you did install statics CSS files, "
 "the colors in use may differ from this table."
 msgstr ""
-"A versão atual não inclui edição de cores, então você precisa editar o "
-"robot.conf (ou sympa.conf) para alterar as cores. Aqui estão as cores como "
-"estão definidas para o robô atual em robot.conf. Se você não instalou "
-"arquivos de CSS estáticos, as cores podem diferir dessa tabela."
+"A versão atual não inclui edição de cores, então você precisa editar o robot."
+"conf (ou sympa.conf) para alterar as cores. Aqui estão as cores como estão "
+"definidas para o robô atual em robot.conf. Se você não instalou arquivos de "
+"CSS estáticos, as cores podem diferir dessa tabela."
 
 #: web_tt2/skinsedit.tt2:40
 msgid ""
@@ -3495,9 +3501,9 @@ msgid ""
 "are &lt;TD/&gt; borders; exceptions for fonts are links, buttons and some "
 "titles.</LI></UL>"
 msgstr ""
-"cor de fonte e borda para:<UL><LI> quase tudo. Exceções para bordas são "
-"&lt;TD/&gt; bordas; exceções para fontes são links, butões e alguns "
-"títulos.</LI></UL>"
+"cor de fonte e borda para:<UL><LI> quase tudo. Exceções para bordas são &lt;"
+"TD/&gt; bordas; exceções para fontes são links, butões e alguns títulos.</"
+"LI></UL>"
 
 #: web_tt2/skinsedit.tt2:71
 msgid "background color of:<UL><LI>top box;</LI><LI>footer box.</LI></UL>"
@@ -3582,8 +3588,8 @@ msgstr ""
 msgid ""
 "font color for:<UL><LI>the class smallblack. Not sure it is used.</LI></UL>"
 msgstr ""
-"cor da fonte para:<UL><LI>a classe smallblack. Não há certeza é "
-"utilizada.</LI></UL>"
+"cor da fonte para:<UL><LI>a classe smallblack. Não há certeza é utilizada.</"
+"LI></UL>"
 
 #: web_tt2/skinsedit.tt2:131
 msgid ""
@@ -3591,8 +3597,8 @@ msgid ""
 "lists, ...);</LI><LI>the rest of hovered buttons (those corresponding to the "
 "MainMenuLinks CSS class).</LI></UL>"
 msgstr ""
-"cor de fundo de:<UL><LI>áreas editáveis (caixas de texto, seleção, listas, "
-"...);</LI><LI>o resto dos botões com o cursor em cima (aqueles "
+"cor de fundo de:<UL><LI>áreas editáveis (caixas de texto, seleção, "
+"listas, ...);</LI><LI>o resto dos botões com o cursor em cima (aqueles "
 "correspondendo à classeCSS MainMenuLinks).</LI></UL>"
 
 #: web_tt2/skinsedit.tt2:137 web_tt2/skinsedit.tt2:143
@@ -3861,7 +3867,7 @@ msgstr "Procurar período:"
 #. (date_to_formated)
 #. This entry is a date/time format
 #. Check the strftime manpage for format details : http://docs.freebsd.org/info/gawk/gawk.info.Time_Functions.html
-#: web_tt2/viewlogs.tt2:110 wwsympa/wwsympa.fcgi:16105
+#: web_tt2/viewlogs.tt2:110 wwsympa/wwsympa.fcgi:16141
 msgid "%d %b %Y %H:%M:%S"
 msgstr "%d %b %Y %H:%M:%S"
 
@@ -4495,7 +4501,7 @@ msgid "%1 Digest %2"
 msgstr "'%1' Índice %2"
 
 #: mail_tt2/digest.tt2:11 mail_tt2/digest_plain.tt2:8
-#: mail_tt2/get_archive.tt2:10 src/List.pm:2686
+#: mail_tt2/get_archive.tt2:10 src/List.pm:2689
 msgid "Table of contents:"
 msgstr "Tabela de conteúdo:"
 
@@ -4593,7 +4599,7 @@ msgstr "Cancelamento de inscrição :"
 msgid "Archive of %1, file %2"
 msgstr "Arquivo de '%1', documento %2"
 
-#: mail_tt2/global_remind.tt2:2 src/Commands.pm:1623
+#: mail_tt2/global_remind.tt2:2 src/Commands.pm:1633
 msgid "Subscription summary"
 msgstr "Sumário de inscrições"
 
@@ -4769,8 +4775,8 @@ msgstr "QUIT * indica o fim dos comandos (para ignorar uma assinatura)"
 msgid ""
 "The following commands are available only for lists owners or moderators:"
 msgstr ""
-"Os seguintes comandos estão disponíveis apenas para donos/as ou "
-"moderadores/as:"
+"Os seguintes comandos estão disponíveis apenas para donos/as ou moderadores/"
+"as:"
 
 #: mail_tt2/helpfile.tt2:49
 msgid "ADD <list> user@host Full name  * To add a user to a list"
@@ -4903,10 +4909,10 @@ msgstr "Essa lista é sobre %1, então você provavelmente se interessa."
 msgid "To subscribe just hit the following mailto url :"
 msgstr "Ver suas inscrições com o seguinte endereço de email"
 
-#. (conf.sympa,list.name)
+#. (conf.sympa,subject)
 #: mail_tt2/invite.tt2:10
 #, fuzzy
-msgid "Or send a message to %1 with subject: \"sub %2\""
+msgid "Or send a message to %1 with subject: \"%2\""
 msgstr "Ou mande uma mensagem para %1@%2 com o seguinte assunto:"
 
 #: mail_tt2/invite.tt2:12
@@ -5056,8 +5062,8 @@ msgstr "Os procedimentos de atualização falharam"
 msgid ""
 "Sympa encountered the following error while running upgrade procedures : "
 msgstr ""
-"O Sympa encontrou os seguintes erros durante os procedimentos de atualização "
-":"
+"O Sympa encontrou os seguintes erros durante os procedimentos de "
+"atualização :"
 
 #: mail_tt2/listmaster_notification.tt2:58
 msgid "Database structure updated"
@@ -5407,8 +5413,8 @@ msgid ""
 "auth.conf error : either email_http_header or ldap_host/"
 "ldap_get_email_by_uid_filter entries should be defined."
 msgstr ""
-"erro em auth.conf : tanto as entradas de email_http_header ou "
-"ldap_host/ldap_get_email_by_uid_filter devem estár definidas."
+"erro em auth.conf : tanto as entradas de email_http_header ou ldap_host/"
+"ldap_get_email_by_uid_filter devem estár definidas."
 
 #. (name)
 #: mail_tt2/listmaster_notification.tt2:278
@@ -5510,7 +5516,8 @@ msgstr "Não foi possível apagar o arquivo '%1'."
 #. (from,list.name)
 #: mail_tt2/listmaster_notification.tt2:296
 msgid "Unable to send command DISTRIBUTE from '%1' to list '%2'."
-msgstr "Não foi possível enviar o comando DISTRIBUTE de '%1' para a lista '%2'."
+msgstr ""
+"Não foi possível enviar o comando DISTRIBUTE de '%1' para a lista '%2'."
 
 #. (dir)
 #: mail_tt2/listmaster_notification.tt2:297
@@ -5681,8 +5688,8 @@ msgstr "Não foi possível escrever o arquivo zip '%1'."
 #: mail_tt2/listmaster_notification.tt2:332
 msgid "Unable to create a SharedDocument with path '%1' for list '%2'."
 msgstr ""
-"Não foi possível criar um SharedDocument com o caminho '%1' para a lista "
-"'%2'."
+"Não foi possível criar um SharedDocument com o caminho '%1' para a lista '%"
+"2'."
 
 #: mail_tt2/listmaster_notification.tt2:333
 msgid "Parameter cookie undefined, authentication failure."
@@ -6223,7 +6230,8 @@ msgstr "Você solicitou que seu endereço de email seja removido da lista '%1'."
 #. (list.name)-)
 #: mail_tt2/request_auth.tt2:10
 msgid "You asked for your e-mail address to be added to list '%1'."
-msgstr "Você solicitou que seu endereço de e-mail seja adicionado à lista '%1'."
+msgstr ""
+"Você solicitou que seu endereço de e-mail seja adicionado à lista '%1'."
 
 #. (list.name)-)
 #: mail_tt2/request_auth.tt2:13
@@ -7043,8 +7051,8 @@ msgid ""
 "daily delete sessions older than sympa.conf/session_expiration_period "
 "parameter"
 msgstr ""
-"remover diariamente sessões mais velhas que "
-"sympa.conf/session_expiration_period parameter"
+"remover diariamente sessões mais velhas que sympa.conf/"
+"session_expiration_period parameter"
 
 #: src/etc/global_task_models/purge_user_table.monthly.task:1
 msgid "purge of orphan entries in user table every month"
@@ -7153,7 +7161,7 @@ msgstr "O arquivo de configuração -- config -- contem erros.\n"
 
 #. This entry is a date/time format
 #. Check the strftime manpage for format details : http://docs.freebsd.org/info/gawk/gawk.info.Time_Functions.html
-#: src/Commands.pm:942 wwsympa/wwsympa.fcgi:9443
+#: src/Commands.pm:952 wwsympa/wwsympa.fcgi:9476
 msgid "%A"
 msgstr "%A"
 
@@ -7762,29 +7770,29 @@ msgstr "quem atualizou a configuração"
 
 #. This entry is a date/time format
 #. Check the strftime manpage for format details : http://docs.freebsd.org/info/gawk/gawk.info.Time_Functions.html
-#: src/List.pm:2789
+#: src/List.pm:2792
 msgid "%a, %d %b %Y %H:%M:%S"
 msgstr "%a, %d %b %Y %H:%M:%S"
 
 #. This entry is a date/time format
 #. Check the strftime manpage for format details : http://docs.freebsd.org/info/gawk/gawk.info.Time_Functions.html
-#: src/List.pm:2790
+#: src/List.pm:2793
 msgid "%a, %d %b %Y"
 msgstr "%a, %d %b %Y"
 
 #. This entry is a date/time format
 #. Check the strftime manpage for format details : http://docs.freebsd.org/info/gawk/gawk.info.Time_Functions.html
-#: src/List.pm:2973 src/List.pm:2974 src/List.pm:2978
-#: wwsympa/wwsympa.fcgi:10860 wwsympa/wwsympa.fcgi:10929
-#: wwsympa/wwsympa.fcgi:11131 wwsympa/wwsympa.fcgi:11473
-#: wwsympa/wwsympa.fcgi:15570 wwsympa/wwsympa.fcgi:16444
-#: wwsympa/wwsympa.fcgi:16445 wwsympa/wwsympa.fcgi:4404
-#: wwsympa/wwsympa.fcgi:4405 wwsympa/wwsympa.fcgi:5837
-#: wwsympa/wwsympa.fcgi:7021 wwsympa/wwsympa.fcgi:7539
-#: wwsympa/wwsympa.fcgi:7589 wwsympa/wwsympa.fcgi:7591
-#: wwsympa/wwsympa.fcgi:8104 wwsympa/wwsympa.fcgi:8105
-#: wwsympa/wwsympa.fcgi:8139 wwsympa/wwsympa.fcgi:8140
-#: wwsympa/wwsympa.fcgi:8353 wwsympa/wwsympa.fcgi:8354
+#: src/List.pm:2976 src/List.pm:2977 src/List.pm:2981
+#: wwsympa/wwsympa.fcgi:10893 wwsympa/wwsympa.fcgi:10962
+#: wwsympa/wwsympa.fcgi:11164 wwsympa/wwsympa.fcgi:11506
+#: wwsympa/wwsympa.fcgi:15603 wwsympa/wwsympa.fcgi:16480
+#: wwsympa/wwsympa.fcgi:16481 wwsympa/wwsympa.fcgi:4424
+#: wwsympa/wwsympa.fcgi:4425 wwsympa/wwsympa.fcgi:5857
+#: wwsympa/wwsympa.fcgi:7041 wwsympa/wwsympa.fcgi:7559
+#: wwsympa/wwsympa.fcgi:7609 wwsympa/wwsympa.fcgi:7611
+#: wwsympa/wwsympa.fcgi:8137 wwsympa/wwsympa.fcgi:8138
+#: wwsympa/wwsympa.fcgi:8172 wwsympa/wwsympa.fcgi:8173
+#: wwsympa/wwsympa.fcgi:8386 wwsympa/wwsympa.fcgi:8387
 msgid "%d %b %Y"
 msgstr "%d %b %Y"
 
@@ -7805,7 +7813,16 @@ msgstr ""
 msgid "Unable to create a channel in smtpto: %m"
 msgstr "Não foi possível criar um canal em smtoto: %m"
 
-#: src/PlainDigest.pm:189
+#: src/PlainDigest.pm:163
+#, fuzzy
+msgid ""
+"----- Malformed message ignored -----\n"
+"\n"
+msgstr ""
+"-----Fim da mensagem original de %s-----\n"
+"\n"
+
+#: src/PlainDigest.pm:194
 msgid ""
 "\n"
 "[Attached message follows]\n"
@@ -7815,7 +7832,7 @@ msgstr ""
 "[Mensagem anexada segue]\n"
 "-----Mensagem original-----\n"
 
-#: src/PlainDigest.pm:199
+#: src/PlainDigest.pm:204
 msgid ""
 "-----End of original message from %s-----\n"
 "\n"
@@ -7823,7 +7840,7 @@ msgstr ""
 "-----Fim da mensagem original de %s-----\n"
 "\n"
 
-#: src/PlainDigest.pm:238
+#: src/PlainDigest.pm:243
 msgid ""
 "** Warning: Message part originally used character set %s\n"
 "    Some characters may be lost or incorrect **\n"
@@ -7834,7 +7851,7 @@ msgstr ""
 "**\n"
 "\n"
 
-#: src/PlainDigest.pm:250
+#: src/PlainDigest.pm:255
 msgid ""
 "\n"
 "[An attachment of type %s was included here]\n"
@@ -7842,7 +7859,7 @@ msgstr ""
 "\n"
 "[Um anexo de tipo %s foi incluído aqui]\n"
 
-#: src/PlainDigest.pm:256
+#: src/PlainDigest.pm:261
 msgid ""
 "\n"
 "-----Delivery Status Report-----\n"
@@ -7850,11 +7867,11 @@ msgstr ""
 "\n"
 "----- Relatório de Estado da Entrega -----\n"
 
-#: src/PlainDigest.pm:258
+#: src/PlainDigest.pm:263
 msgid "-----End of Delivery Status Report-----\n"
 msgstr "-----Fim do Relatório de Estado de Distribuição-----\n"
 
-#: src/PlainDigest.pm:296 src/PlainDigest.pm:317
+#: src/PlainDigest.pm:301 src/PlainDigest.pm:322
 msgid ""
 "\n"
 "[** Unable to process HTML message part **]\n"
@@ -7862,7 +7879,7 @@ msgstr ""
 "\n"
 "[ ** Impossível processar porção HTML da mensagem ** ]\n"
 
-#: src/PlainDigest.pm:323
+#: src/PlainDigest.pm:328
 msgid ""
 "\n"
 "[ ** Unable to process HTML message part **]\n"
@@ -7870,11 +7887,11 @@ msgstr ""
 "\n"
 "[ ** Impossível processar parte  HTML da mensagem ** ]\n"
 
-#: src/PlainDigest.pm:327
+#: src/PlainDigest.pm:332
 msgid "[ Text converted from HTML ]\n"
 msgstr "[ Texto convertido do HTML ]\n"
 
-#: src/PlainDigest.pm:334
+#: src/PlainDigest.pm:339
 msgid ""
 "\n"
 "[ ** Unable to process HTML message part ** ]\n"
@@ -7882,11 +7899,11 @@ msgstr ""
 "\n"
 "[ ** Impossível processar parte  HTML da mensagem ** ]\n"
 
-#: src/PlainDigest.pm:353
+#: src/PlainDigest.pm:358
 msgid "[ Image%s ]"
 msgstr "[ Imagem%s ]"
 
-#: src/PlainDigest.pm:353
+#: src/PlainDigest.pm:358
 msgid "[Image%s]"
 msgstr "[ Imagem%s ]"
 
@@ -7906,15 +7923,15 @@ msgstr "%H:%M:%S"
 
 #. This entry is a date/time format
 #. Check the strftime manpage for format details : http://docs.freebsd.org/info/gawk/gawk.info.Time_Functions.html
-#: wwsympa/SympaSession.pm:330 wwsympa/SympaSession.pm:331
-#: wwsympa/wwsympa.fcgi:11707 wwsympa/wwsympa.fcgi:11850
-#: wwsympa/wwsympa.fcgi:14272 wwsympa/wwsympa.fcgi:7474
+#: wwsympa/SympaSession.pm:339 wwsympa/SympaSession.pm:340
+#: wwsympa/wwsympa.fcgi:11740 wwsympa/wwsympa.fcgi:11883
+#: wwsympa/wwsympa.fcgi:14305 wwsympa/wwsympa.fcgi:7494
 msgid "%d %b %y  %H:%M"
 msgstr "%d %b %y  %H:%M"
 
 #. This entry is a date/time format
 #. Check the strftime manpage for format details : http://docs.freebsd.org/info/gawk/gawk.info.Time_Functions.html
-#: wwsympa/wwsympa.fcgi:16050 wwsympa/wwsympa.fcgi:16051
+#: wwsympa/wwsympa.fcgi:16086 wwsympa/wwsympa.fcgi:16087
 msgid "%Y/%m/%d/%H/%M/%S"
 msgstr ""
 "%Y/%m/%d/%H/%M/%SEsta entrada é no formato data/hora.Para detalhes sobre "

@@ -2655,6 +2655,12 @@ msgid ""
 msgstr ""
 "Liście został ustawiony status oczekiwania ; listmaster musi ją zatwierdzić"
 
+# nlsref 6,43
+#: web_tt2/notice.tt2:77
+#, fuzzy
+msgid "List name has been lowercased"
+msgstr "Lista została zamknięta"
+
 # nlsref 16,74
 #: web_tt2/picture_upload.tt2:4
 msgid "Setting your picture for this list"
@@ -4004,7 +4010,7 @@ msgstr "Szukaj Użytkownika"
 #. (date_to_formated)
 #. This entry is a date/time format
 #. Check the strftime manpage for format details : http://docs.freebsd.org/info/gawk/gawk.info.Time_Functions.html
-#: web_tt2/viewlogs.tt2:110 wwsympa/wwsympa.fcgi:16105
+#: web_tt2/viewlogs.tt2:110 wwsympa/wwsympa.fcgi:16141
 msgid "%d %b %Y %H:%M:%S"
 msgstr ""
 
@@ -4719,7 +4725,7 @@ msgid "%1 Digest %2"
 msgstr "%1 Paczka wiadomości %2"
 
 #: mail_tt2/digest.tt2:11 mail_tt2/digest_plain.tt2:8
-#: mail_tt2/get_archive.tt2:10 src/List.pm:2686
+#: mail_tt2/get_archive.tt2:10 src/List.pm:2689
 msgid "Table of contents:"
 msgstr "Spis treści:"
 
@@ -4822,7 +4828,7 @@ msgid "Archive of %1, file %2"
 msgstr "Archiwum %1, plik %2"
 
 # nlsref 6,83
-#: mail_tt2/global_remind.tt2:2 src/Commands.pm:1623
+#: mail_tt2/global_remind.tt2:2 src/Commands.pm:1633
 msgid "Subscription summary"
 msgstr "Podsumowanie zapisania"
 
@@ -5139,10 +5145,10 @@ msgstr ""
 "Aby subskrybować odpowiedz tylko na tą wiadomość albo wciśnij następujący "
 "adres mailto :"
 
-#. (conf.sympa,list.name)
+#. (conf.sympa,subject)
 #: mail_tt2/invite.tt2:10
 #, fuzzy
-msgid "Or send a message to %1 with subject: \"sub %2\""
+msgid "Or send a message to %1 with subject: \"%2\""
 msgstr "Lub wyślij wiadomość do %1@%2 z następującym tematem :"
 
 #: mail_tt2/invite.tt2:12
@@ -7546,7 +7552,7 @@ msgstr "Plik konfiguracyjny --CONFIG-- zawiera błędy.\n"
 
 #. This entry is a date/time format
 #. Check the strftime manpage for format details : http://docs.freebsd.org/info/gawk/gawk.info.Time_Functions.html
-#: src/Commands.pm:942 wwsympa/wwsympa.fcgi:9443
+#: src/Commands.pm:952 wwsympa/wwsympa.fcgi:9476
 msgid "%A"
 msgstr ""
 
@@ -8279,29 +8285,29 @@ msgstr "który zaktualizował konfigurację"
 
 #. This entry is a date/time format
 #. Check the strftime manpage for format details : http://docs.freebsd.org/info/gawk/gawk.info.Time_Functions.html
-#: src/List.pm:2789
+#: src/List.pm:2792
 msgid "%a, %d %b %Y %H:%M:%S"
 msgstr ""
 
 #. This entry is a date/time format
 #. Check the strftime manpage for format details : http://docs.freebsd.org/info/gawk/gawk.info.Time_Functions.html
-#: src/List.pm:2790
+#: src/List.pm:2793
 msgid "%a, %d %b %Y"
 msgstr ""
 
 #. This entry is a date/time format
 #. Check the strftime manpage for format details : http://docs.freebsd.org/info/gawk/gawk.info.Time_Functions.html
-#: src/List.pm:2973 src/List.pm:2974 src/List.pm:2978
-#: wwsympa/wwsympa.fcgi:10860 wwsympa/wwsympa.fcgi:10929
-#: wwsympa/wwsympa.fcgi:11131 wwsympa/wwsympa.fcgi:11473
-#: wwsympa/wwsympa.fcgi:15570 wwsympa/wwsympa.fcgi:16444
-#: wwsympa/wwsympa.fcgi:16445 wwsympa/wwsympa.fcgi:4404
-#: wwsympa/wwsympa.fcgi:4405 wwsympa/wwsympa.fcgi:5837
-#: wwsympa/wwsympa.fcgi:7021 wwsympa/wwsympa.fcgi:7539
-#: wwsympa/wwsympa.fcgi:7589 wwsympa/wwsympa.fcgi:7591
-#: wwsympa/wwsympa.fcgi:8104 wwsympa/wwsympa.fcgi:8105
-#: wwsympa/wwsympa.fcgi:8139 wwsympa/wwsympa.fcgi:8140
-#: wwsympa/wwsympa.fcgi:8353 wwsympa/wwsympa.fcgi:8354
+#: src/List.pm:2976 src/List.pm:2977 src/List.pm:2981
+#: wwsympa/wwsympa.fcgi:10893 wwsympa/wwsympa.fcgi:10962
+#: wwsympa/wwsympa.fcgi:11164 wwsympa/wwsympa.fcgi:11506
+#: wwsympa/wwsympa.fcgi:15603 wwsympa/wwsympa.fcgi:16480
+#: wwsympa/wwsympa.fcgi:16481 wwsympa/wwsympa.fcgi:4424
+#: wwsympa/wwsympa.fcgi:4425 wwsympa/wwsympa.fcgi:5857
+#: wwsympa/wwsympa.fcgi:7041 wwsympa/wwsympa.fcgi:7559
+#: wwsympa/wwsympa.fcgi:7609 wwsympa/wwsympa.fcgi:7611
+#: wwsympa/wwsympa.fcgi:8137 wwsympa/wwsympa.fcgi:8138
+#: wwsympa/wwsympa.fcgi:8172 wwsympa/wwsympa.fcgi:8173
+#: wwsympa/wwsympa.fcgi:8386 wwsympa/wwsympa.fcgi:8387
 msgid "%d %b %Y"
 msgstr ""
 
@@ -8323,7 +8329,17 @@ msgstr ""
 msgid "Unable to create a channel in smtpto: %m"
 msgstr "Nie mogę stworzyć kanału w smtptp: %m"
 
-#: src/PlainDigest.pm:189
+# nlsref 5,4
+#: src/PlainDigest.pm:163
+#, fuzzy
+msgid ""
+"----- Malformed message ignored -----\n"
+"\n"
+msgstr ""
+"------Koniec oryginalnej wiadomości od %s------\n"
+"\n"
+
+#: src/PlainDigest.pm:194
 msgid ""
 "\n"
 "[Attached message follows]\n"
@@ -8331,7 +8347,7 @@ msgid ""
 msgstr ""
 
 # nlsref 5,4
-#: src/PlainDigest.pm:199
+#: src/PlainDigest.pm:204
 msgid ""
 "-----End of original message from %s-----\n"
 "\n"
@@ -8339,7 +8355,7 @@ msgstr ""
 "------Koniec oryginalnej wiadomości od %s------\n"
 "\n"
 
-#: src/PlainDigest.pm:238
+#: src/PlainDigest.pm:243
 msgid ""
 "** Warning: Message part originally used character set %s\n"
 "    Some characters may be lost or incorrect **\n"
@@ -8349,13 +8365,13 @@ msgstr ""
 "    Niektóre znaki mogły zostać utracone lub są niepoprawne **\n"
 "\n"
 
-#: src/PlainDigest.pm:250
+#: src/PlainDigest.pm:255
 msgid ""
 "\n"
 "[An attachment of type %s was included here]\n"
 msgstr ""
 
-#: src/PlainDigest.pm:256
+#: src/PlainDigest.pm:261
 msgid ""
 "\n"
 "-----Delivery Status Report-----\n"
@@ -8363,11 +8379,11 @@ msgstr ""
 "\n"
 "-----Raport Statusu Doręczenia-----\n"
 
-#: src/PlainDigest.pm:258
+#: src/PlainDigest.pm:263
 msgid "-----End of Delivery Status Report-----\n"
 msgstr "-----Koniec Raportu Statusu Doręczenia-----\n"
 
-#: src/PlainDigest.pm:296 src/PlainDigest.pm:317
+#: src/PlainDigest.pm:301 src/PlainDigest.pm:322
 #, fuzzy
 msgid ""
 "\n"
@@ -8376,7 +8392,7 @@ msgstr ""
 "\n"
 "[ ** Nie można przetworzyć części HTML wiadomości ** ]\n"
 
-#: src/PlainDigest.pm:323
+#: src/PlainDigest.pm:328
 msgid ""
 "\n"
 "[ ** Unable to process HTML message part **]\n"
@@ -8384,11 +8400,11 @@ msgstr ""
 "\n"
 "[ ** Nie można przetworzyć części HTML wiadomości ** ]\n"
 
-#: src/PlainDigest.pm:327
+#: src/PlainDigest.pm:332
 msgid "[ Text converted from HTML ]\n"
 msgstr "[ Tekst przekonwertowany z HTML ]\n"
 
-#: src/PlainDigest.pm:334
+#: src/PlainDigest.pm:339
 msgid ""
 "\n"
 "[ ** Unable to process HTML message part ** ]\n"
@@ -8396,11 +8412,11 @@ msgstr ""
 "\n"
 "[ ** Nie można przetworzyć części HTML wiadomości ** ]\n"
 
-#: src/PlainDigest.pm:353
+#: src/PlainDigest.pm:358
 msgid "[ Image%s ]"
 msgstr ""
 
-#: src/PlainDigest.pm:353
+#: src/PlainDigest.pm:358
 msgid "[Image%s]"
 msgstr ""
 
@@ -8422,15 +8438,15 @@ msgstr ""
 
 #. This entry is a date/time format
 #. Check the strftime manpage for format details : http://docs.freebsd.org/info/gawk/gawk.info.Time_Functions.html
-#: wwsympa/SympaSession.pm:330 wwsympa/SympaSession.pm:331
-#: wwsympa/wwsympa.fcgi:11707 wwsympa/wwsympa.fcgi:11850
-#: wwsympa/wwsympa.fcgi:14272 wwsympa/wwsympa.fcgi:7474
+#: wwsympa/SympaSession.pm:339 wwsympa/SympaSession.pm:340
+#: wwsympa/wwsympa.fcgi:11740 wwsympa/wwsympa.fcgi:11883
+#: wwsympa/wwsympa.fcgi:14305 wwsympa/wwsympa.fcgi:7494
 msgid "%d %b %y  %H:%M"
 msgstr ""
 
 #. This entry is a date/time format
 #. Check the strftime manpage for format details : http://docs.freebsd.org/info/gawk/gawk.info.Time_Functions.html
-#: wwsympa/wwsympa.fcgi:16050 wwsympa/wwsympa.fcgi:16051
+#: wwsympa/wwsympa.fcgi:16086 wwsympa/wwsympa.fcgi:16087
 msgid "%Y/%m/%d/%H/%M/%S"
 msgstr ""
 
