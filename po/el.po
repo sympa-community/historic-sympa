@@ -4943,7 +4943,7 @@ msgstr "Παρουσίαση των συνδρομών σας με τις ακό
 #. (conf.sympa,subject)
 #: mail_tt2/invite.tt2:10
 #, fuzzy
-msgid "Or send a message to %1 with subject: \"%2\""
+msgid "Or send a message to %1 with subject: \"sub %2\""
 msgstr "Ή αποστολή του μηνύματος στη διεύθυνση %1@%2 με το ακόλουθο θέμα :"
 
 #: mail_tt2/invite.tt2:12

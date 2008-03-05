@@ -4912,7 +4912,7 @@ msgstr "Ver suas inscrições com o seguinte endereço de email"
 #. (conf.sympa,subject)
 #: mail_tt2/invite.tt2:10
 #, fuzzy
-msgid "Or send a message to %1 with subject: \"%2\""
+msgid "Or send a message to %1 with subject: \"sub %2\""
 msgstr "Ou mande uma mensagem para %1@%2 com o seguinte assunto:"
 
 #: mail_tt2/invite.tt2:12

@@ -4892,7 +4892,7 @@ msgstr ""
 #. (conf.sympa,subject)
 #: mail_tt2/invite.tt2:10
 #, fuzzy
-msgid "Or send a message to %1 with subject: \"%2\""
+msgid "Or send a message to %1 with subject: \"sub %2\""
 msgstr ""
 "あるいは、%1@%2 宛てに、 \n"
 "下記の表題 (subject) でメッセージを送ってください:"

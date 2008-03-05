@@ -4777,7 +4777,7 @@ msgstr ""
 
 #. (conf.sympa,subject)
 #: mail_tt2/invite.tt2:10
-msgid "Or send a message to %1 with subject: \"%2\""
+msgid "Or send a message to %1 with subject: \"sub %2\""
 msgstr ""
 
 #: mail_tt2/invite.tt2:12

@@ -4732,7 +4732,7 @@ msgstr "订阅只要回复这则邮件或点击以下的mailto URL："
 #. (conf.sympa,subject)
 #: mail_tt2/invite.tt2:10
 #, fuzzy
-msgid "Or send a message to %1 with subject: \"%2\""
+msgid "Or send a message to %1 with subject: \"sub %2\""
 msgstr "或用以下标题发送一则邮件到%1@%2："
 
 #: mail_tt2/invite.tt2:12

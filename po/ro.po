@@ -5379,7 +5379,7 @@ msgstr ""
 #. (conf.sympa,subject)
 #: mail_tt2/invite.tt2:10
 #, fuzzy
-msgid "Or send a message to %1 with subject: \"%2\""
+msgid "Or send a message to %1 with subject: \"sub %2\""
 msgstr "sau trimite un mesaj la %1@%2 cu urmatorul subiect :"
 
 #: mail_tt2/invite.tt2:12

@@ -4806,7 +4806,7 @@ msgstr ""
 #. (conf.sympa,subject)
 #: mail_tt2/invite.tt2:10
 #, fuzzy
-msgid "Or send a message to %1 with subject: \"%2\""
+msgid "Or send a message to %1 with subject: \"sub %2\""
 msgstr "다음 제목에 %1@%2 에 또는 메시지를 %2 전송합니다 :"
 
 #: mail_tt2/invite.tt2:12

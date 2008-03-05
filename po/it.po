@@ -5234,7 +5234,7 @@ msgstr "Per iscriverti rispondi a questo messaggio o segui questo urlmailto:"
 #. (conf.sympa,subject)
 #: mail_tt2/invite.tt2:10
 #, fuzzy
-msgid "Or send a message to %1 with subject: \"%2\""
+msgid "Or send a message to %1 with subject: \"sub %2\""
 msgstr "O invia un messaggio a %1@%2 con il seguente Subject:"
 
 #: mail_tt2/invite.tt2:12

@@ -5034,7 +5034,7 @@ msgstr "Zvu Vás k přihlášení do konference :"
 #. (conf.sympa,subject)
 #: mail_tt2/invite.tt2:10
 #, fuzzy
-msgid "Or send a message to %1 with subject: \"%2\""
+msgid "Or send a message to %1 with subject: \"sub %2\""
 msgstr "Nebo zaslete zpravu na %1@%2 s timto predmetem :"
 
 #: mail_tt2/invite.tt2:12

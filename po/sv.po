@@ -4881,7 +4881,7 @@ msgstr "<strong>%1</strong> prenumererar på följande e-postlistor"
 #. (conf.sympa,subject)
 #: mail_tt2/invite.tt2:10
 #, fuzzy
-msgid "Or send a message to %1 with subject: \"%2\""
+msgid "Or send a message to %1 with subject: \"sub %2\""
 msgstr "Eller skicka ett meddelande till %1@%2 med följande ämnesrad :"
 
 #: mail_tt2/invite.tt2:12

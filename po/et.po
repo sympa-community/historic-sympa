@@ -5011,7 +5011,7 @@ msgstr "Listiga liitumiseks vasta sellele kirjale või klikka järgnevat linki:"
 #. (conf.sympa,subject)
 #: mail_tt2/invite.tt2:10
 #, fuzzy
-msgid "Or send a message to %1 with subject: \"%2\""
+msgid "Or send a message to %1 with subject: \"sub %2\""
 msgstr "Või saada kiri aadressile %1@%2 järgmise pealkirjaga:"
 
 #: mail_tt2/invite.tt2:12
