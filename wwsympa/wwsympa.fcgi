@@ -6874,7 +6874,10 @@ sub do_viewmod {
 
      my @stat = stat ($arc_file_path);
      $param->{'date'} = $stat[9];
-     $param->{'header_date'} = $stat[9];
+     # send page as static if client is a bot. That's prevent crawling all archices every weeks by google, yahoo and others bots
+     if ($session->{'is_a_crawler'}) {       
+	 $param->{'header_date'} = $stat[9];
+     }
      $param->{'base'} = sprintf "%s%s/arc/%s/%s/", $param->{'base_url'}, $param->{'path_cgi'}, $param->{'list'}, $in{'month'};
      $param->{'archive_name'} = $in{'month'};
 
