@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fr\n"
 "POT-Creation-Date: 2002-07-16 17:27+0800\n"
-"PO-Revision-Date: 2008-03-05 16:08+0100\n"
+"PO-Revision-Date: 2008-03-07 11:43+0100\n"
 "Last-Translator: David Verdin <david.verdin@cru.fr>\n"
 "Language-Team: Français\n"
 "MIME-Version: 1.0\n"
@@ -3286,14 +3286,12 @@ msgid "Language selection"
 msgstr "Sélectionner la langue"
 
 #: web_tt2/setlang.tt2:17
-#, fuzzy
 msgid "Validate your language selection"
-msgstr "Sélectionner la langue"
+msgstr "Validez la langue sélectionnée"
 
 #: web_tt2/setlang.tt2:17
-#, fuzzy
 msgid "Set language"
-msgstr "Langue"
+msgstr "Valider"
 
 #. (list_request_date)
 #: web_tt2/set_pending_list_request.tt2:10
