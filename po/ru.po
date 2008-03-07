@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: sympa\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
 "POT-Creation-Date: 2002-07-16 17:27+0800\n"
-"PO-Revision-Date: 2008-02-21 13:32+0100\n"
+"PO-Revision-Date: 2008-03-07 06:27+0100\n"
 "Last-Translator: chernysh <mail33@gmail.com>\n"
 "Language-Team: Russian <ru@li.org>\n"
 "MIME-Version: 1.0\n"
@@ -4524,16 +4524,16 @@ msgstr "Конец дайджеста %1 %2"
 #. (list.name)
 #: mail_tt2/digest.tt2:4
 msgid "Digest for list %1"
-msgstr ""
+msgstr "Дайджест рассылки %1"
 
 #. (list.name,date)
 #: mail_tt2/digest.tt2:37 mail_tt2/get_archive.tt2:36
 msgid "End of digest for list %1 - %2"
-msgstr ""
+msgstr "Конец дайджеста рассылки %1 - %2"
 
 #: mail_tt2/d_install_shared.tt2:2
 msgid "Your document has been installed."
-msgstr ""
+msgstr "Ваш документ был установлен."
 
 #. (filename,list.name,list.host,installed_by)
 #: mail_tt2/d_install_shared.tt2:5
@@ -4541,6 +4541,8 @@ msgid ""
 "Your document %1 for list %2@%3\n"
 "has been installed by %4 list editor."
 msgstr ""
+"Ваш документ %1 для рассылки %2@%3\n"
+" был установлен редактором рассылки %4. "
 
 #. (conf.wwsympa_url,list.name)
 #: mail_tt2/d_install_shared.tt2:7
