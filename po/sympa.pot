@@ -2898,6 +2898,14 @@ msgstr ""
 msgid "Language selection"
 msgstr ""
 
+#: web_tt2/setlang.tt2:17
+msgid "Validate your language selection"
+msgstr ""
+
+#: web_tt2/setlang.tt2:17
+msgid "Set language"
+msgstr ""
+
 #: web_tt2/set_pending_list_request.tt2:10
 #. (list_request_date)
 msgid " on %1"
@@ -3358,7 +3366,7 @@ msgstr ""
 msgid "Search period: "
 msgstr ""
 
-#: web_tt2/viewlogs.tt2:110 wwsympa/wwsympa.fcgi:16141
+#: web_tt2/viewlogs.tt2:110 wwsympa/wwsympa.fcgi:16144
 #. (date_from_formated)
 #. (date_to_formated)
 #. This entry is a date/time format
@@ -6197,7 +6205,7 @@ msgid ""
 "The configuration file --CONFIG-- contains errors.\n"
 msgstr ""
 
-#: src/Commands.pm:952 wwsympa/wwsympa.fcgi:9476
+#: src/Commands.pm:952 wwsympa/wwsympa.fcgi:9479
 #. This entry is a date/time format
 #. Check the strftime manpage for format details : http://docs.freebsd.org/info/gawk/gawk.info.Time_Functions.html
 msgid "%A"
@@ -6813,7 +6821,7 @@ msgstr ""
 msgid "%a, %d %b %Y"
 msgstr ""
 
-#: src/List.pm:2976 src/List.pm:2977 src/List.pm:2981 wwsympa/wwsympa.fcgi:10893 wwsympa/wwsympa.fcgi:10962 wwsympa/wwsympa.fcgi:11164 wwsympa/wwsympa.fcgi:11506 wwsympa/wwsympa.fcgi:15603 wwsympa/wwsympa.fcgi:16480 wwsympa/wwsympa.fcgi:16481 wwsympa/wwsympa.fcgi:4424 wwsympa/wwsympa.fcgi:4425 wwsympa/wwsympa.fcgi:5857 wwsympa/wwsympa.fcgi:7041 wwsympa/wwsympa.fcgi:7559 wwsympa/wwsympa.fcgi:7609 wwsympa/wwsympa.fcgi:7611 wwsympa/wwsympa.fcgi:8137 wwsympa/wwsympa.fcgi:8138 wwsympa/wwsympa.fcgi:8172 wwsympa/wwsympa.fcgi:8173 wwsympa/wwsympa.fcgi:8386 wwsympa/wwsympa.fcgi:8387
+#: src/List.pm:2976 src/List.pm:2977 src/List.pm:2981 wwsympa/wwsympa.fcgi:10896 wwsympa/wwsympa.fcgi:10965 wwsympa/wwsympa.fcgi:11167 wwsympa/wwsympa.fcgi:11509 wwsympa/wwsympa.fcgi:15606 wwsympa/wwsympa.fcgi:16483 wwsympa/wwsympa.fcgi:16484 wwsympa/wwsympa.fcgi:4424 wwsympa/wwsympa.fcgi:4425 wwsympa/wwsympa.fcgi:5857 wwsympa/wwsympa.fcgi:7044 wwsympa/wwsympa.fcgi:7562 wwsympa/wwsympa.fcgi:7612 wwsympa/wwsympa.fcgi:7614 wwsympa/wwsympa.fcgi:8140 wwsympa/wwsympa.fcgi:8141 wwsympa/wwsympa.fcgi:8175 wwsympa/wwsympa.fcgi:8176 wwsympa/wwsympa.fcgi:8389 wwsympa/wwsympa.fcgi:8390
 #. This entry is a date/time format
 #. Check the strftime manpage for format details : http://docs.freebsd.org/info/gawk/gawk.info.Time_Functions.html
 msgid "%d %b %Y"
@@ -6910,13 +6918,13 @@ msgstr ""
 msgid "%H:%M:%S"
 msgstr ""
 
-#: wwsympa/SympaSession.pm:339 wwsympa/SympaSession.pm:340 wwsympa/wwsympa.fcgi:11740 wwsympa/wwsympa.fcgi:11883 wwsympa/wwsympa.fcgi:14305 wwsympa/wwsympa.fcgi:7494
+#: wwsympa/SympaSession.pm:339 wwsympa/SympaSession.pm:340 wwsympa/wwsympa.fcgi:11743 wwsympa/wwsympa.fcgi:11886 wwsympa/wwsympa.fcgi:14308 wwsympa/wwsympa.fcgi:7497
 #. This entry is a date/time format
 #. Check the strftime manpage for format details : http://docs.freebsd.org/info/gawk/gawk.info.Time_Functions.html
 msgid "%d %b %y  %H:%M"
 msgstr ""
 
-#: wwsympa/wwsympa.fcgi:16086 wwsympa/wwsympa.fcgi:16087
+#: wwsympa/wwsympa.fcgi:16089 wwsympa/wwsympa.fcgi:16090
 #. This entry is a date/time format
 #. Check the strftime manpage for format details : http://docs.freebsd.org/info/gawk/gawk.info.Time_Functions.html
 msgid "%Y/%m/%d/%H/%M/%S"

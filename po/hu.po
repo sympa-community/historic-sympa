@@ -3403,6 +3403,16 @@ msgstr "Ez a FastCGI folyamat (%1) %3 óta %2 kérést szolgált ki."
 msgid "Language selection"
 msgstr "Kijelölés megfordítása"
 
+#: web_tt2/setlang.tt2:17
+#, fuzzy
+msgid "Validate your language selection"
+msgstr "Kijelölés megfordítása"
+
+#: web_tt2/setlang.tt2:17
+#, fuzzy
+msgid "Set language"
+msgstr "nyelv"
+
 #. (list_request_date)
 #: web_tt2/set_pending_list_request.tt2:10
 msgid " on %1"
@@ -4007,7 +4017,7 @@ msgstr "Felhasználó keresése"
 #. (date_to_formated)
 #. This entry is a date/time format
 #. Check the strftime manpage for format details : http://docs.freebsd.org/info/gawk/gawk.info.Time_Functions.html
-#: web_tt2/viewlogs.tt2:110 wwsympa/wwsympa.fcgi:16141
+#: web_tt2/viewlogs.tt2:110 wwsympa/wwsympa.fcgi:16144
 msgid "%d %b %Y %H:%M:%S"
 msgstr "%Y. %b. %-d., %H.%M.%S"
 
@@ -7597,7 +7607,7 @@ msgstr "A(z) --CONFIG-- konfigurációs állomány hibás.\n"
 
 #. This entry is a date/time format
 #. Check the strftime manpage for format details : http://docs.freebsd.org/info/gawk/gawk.info.Time_Functions.html
-#: src/Commands.pm:952 wwsympa/wwsympa.fcgi:9476
+#: src/Commands.pm:952 wwsympa/wwsympa.fcgi:9479
 msgid "%A"
 msgstr ""
 
@@ -8343,16 +8353,16 @@ msgstr "%Y. %b. %-d., %A"
 #. This entry is a date/time format
 #. Check the strftime manpage for format details : http://docs.freebsd.org/info/gawk/gawk.info.Time_Functions.html
 #: src/List.pm:2976 src/List.pm:2977 src/List.pm:2981
-#: wwsympa/wwsympa.fcgi:10893 wwsympa/wwsympa.fcgi:10962
-#: wwsympa/wwsympa.fcgi:11164 wwsympa/wwsympa.fcgi:11506
-#: wwsympa/wwsympa.fcgi:15603 wwsympa/wwsympa.fcgi:16480
-#: wwsympa/wwsympa.fcgi:16481 wwsympa/wwsympa.fcgi:4424
+#: wwsympa/wwsympa.fcgi:10896 wwsympa/wwsympa.fcgi:10965
+#: wwsympa/wwsympa.fcgi:11167 wwsympa/wwsympa.fcgi:11509
+#: wwsympa/wwsympa.fcgi:15606 wwsympa/wwsympa.fcgi:16483
+#: wwsympa/wwsympa.fcgi:16484 wwsympa/wwsympa.fcgi:4424
 #: wwsympa/wwsympa.fcgi:4425 wwsympa/wwsympa.fcgi:5857
-#: wwsympa/wwsympa.fcgi:7041 wwsympa/wwsympa.fcgi:7559
-#: wwsympa/wwsympa.fcgi:7609 wwsympa/wwsympa.fcgi:7611
-#: wwsympa/wwsympa.fcgi:8137 wwsympa/wwsympa.fcgi:8138
-#: wwsympa/wwsympa.fcgi:8172 wwsympa/wwsympa.fcgi:8173
-#: wwsympa/wwsympa.fcgi:8386 wwsympa/wwsympa.fcgi:8387
+#: wwsympa/wwsympa.fcgi:7044 wwsympa/wwsympa.fcgi:7562
+#: wwsympa/wwsympa.fcgi:7612 wwsympa/wwsympa.fcgi:7614
+#: wwsympa/wwsympa.fcgi:8140 wwsympa/wwsympa.fcgi:8141
+#: wwsympa/wwsympa.fcgi:8175 wwsympa/wwsympa.fcgi:8176
+#: wwsympa/wwsympa.fcgi:8389 wwsympa/wwsympa.fcgi:8390
 msgid "%d %b %Y"
 msgstr "%Y. %b. %-d."
 
@@ -8492,14 +8502,14 @@ msgstr ""
 #. This entry is a date/time format
 #. Check the strftime manpage for format details : http://docs.freebsd.org/info/gawk/gawk.info.Time_Functions.html
 #: wwsympa/SympaSession.pm:339 wwsympa/SympaSession.pm:340
-#: wwsympa/wwsympa.fcgi:11740 wwsympa/wwsympa.fcgi:11883
-#: wwsympa/wwsympa.fcgi:14305 wwsympa/wwsympa.fcgi:7494
+#: wwsympa/wwsympa.fcgi:11743 wwsympa/wwsympa.fcgi:11886
+#: wwsympa/wwsympa.fcgi:14308 wwsympa/wwsympa.fcgi:7497
 msgid "%d %b %y  %H:%M"
 msgstr "%Y. %b. %-d., %H.%M"
 
 #. This entry is a date/time format
 #. Check the strftime manpage for format details : http://docs.freebsd.org/info/gawk/gawk.info.Time_Functions.html
-#: wwsympa/wwsympa.fcgi:16086 wwsympa/wwsympa.fcgi:16087
+#: wwsympa/wwsympa.fcgi:16089 wwsympa/wwsympa.fcgi:16090
 msgid "%Y/%m/%d/%H/%M/%S"
 msgstr ""
 
@@ -9821,9 +9831,6 @@ msgstr "nem kapja meg a saját leveleit"
 #~ "text/plain, ugyanakkor olyan levelező programnál, ami mindig többrészes "
 #~ "vagy text/html üzenetet használ, a levél tárgyában lévő parancsok fel "
 #~ "lesznek ismerve."
-
-#~ msgid "language"
-#~ msgstr "nyelv"
 
 #, fuzzy
 #~ msgid "There is not any owner defined for the list"
