@@ -4198,6 +4198,16 @@ sub check_custom_attribute {
 	 return undef;
      }
 
+     if ($param->{'is_subscriber'} && 
+	      ($param->{'subscriber'}{'subscribed'} == 1)) {
+	 &report::reject_report_web('user','already_subscriber', {'list' => $list->{'name'}},$param->{'action'},$list);
+	 &wwslog('info','do_subscribe: %s already subscriber', $param->{'user'}{'email'});
+	 &web_db_log({'parameters' => $in{'email'},
+		      'status' => 'error',
+		      'error_type' => 'already_subscriber'});		      
+	 return undef;
+     }
+
      ## Not authenticated
      unless (defined $param->{'user'} && $param->{'user'}{'email'}) {
 	 ## no email 
@@ -4214,16 +4224,6 @@ sub check_custom_attribute {
 	     return 'subrequest';
 	 }
 
-     }
-
-     if ($param->{'is_subscriber'} && 
-	      ($param->{'subscriber'}{'subscribed'} == 1)) {
-	 &report::reject_report_web('user','already_subscriber', {'list' => $list->{'name'}},$param->{'action'},$list);
-	 &wwslog('info','do_subscribe: %s already subscriber', $param->{'user'}{'email'});
-	 &web_db_log({'parameters' => $in{'email'},
-		      'status' => 'error',
-		      'error_type' => 'already_subscriber'});		      
-	 return undef;
      }
      
      my @keys = sort keys (%{$list->{'admin'}}) ;
