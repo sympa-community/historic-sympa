@@ -1552,17 +1552,17 @@ sub get_parameters {
 	 }
 
 	 # If we are editing an HTML file in the shared, allow HTML but prevent XSS.
-	 if ($pname eq 'content' && $in{'action'} eq 'd_savefile' && $in{'path'} =~ $list->{'dir'}.'/shared' && lc($in{'path'}) =~ /\.html?/) {
-	     my $tmpparam = $in{$p};
-	     $tmpparam = &tools::sanitize_html('robot' => $robot,
-					       'string' => $in{$p});
-	     if (defined $tmpparam) {
-		 $in{$p} = $tmpparam;
-	     }
-	     else {
-		 &do_log('err','Unable to sanitize parameter %s',$pname);
-	     }
-	 }
+#	 if ($pname eq 'content' && $in{'action'} eq 'd_savefile' && $in{'path'} =~ $list->{'dir'}.'/shared' && lc($in{'path'}) =~ /\.html?/) {
+#	     my $tmpparam = $in{$p};
+#	     $tmpparam = &tools::sanitize_html('robot' => $robot,
+#					       'string' => $in{$p});
+#	     if (defined $tmpparam) {
+#		 $in{$p} = $tmpparam;
+#	     }
+#	     else {
+#		 &do_log('err','Unable to sanitize parameter %s',$pname);
+#	     }
+#	 }
 	 foreach my $one_p (split /\0/, $in{$p}) {
 	     if ($one_p !~ /^$regexp$/s ||
 		 (defined $negative_regexp && $one_p =~ /$negative_regexp/s) ) {
@@ -4198,6 +4198,16 @@ sub check_custom_attribute {
 	 return undef;
      }
 
+     if ($param->{'is_subscriber'} && 
+	      ($param->{'subscriber'}{'subscribed'} == 1)) {
+	 &report::reject_report_web('user','already_subscriber', {'list' => $list->{'name'}},$param->{'action'},$list);
+	 &wwslog('info','do_subscribe: %s already subscriber', $param->{'user'}{'email'});
+	 &web_db_log({'parameters' => $in{'email'},
+		      'status' => 'error',
+		      'error_type' => 'already_subscriber'});		      
+	 return undef;
+     }
+
      ## Not authenticated
      unless (defined $param->{'user'} && $param->{'user'}{'email'}) {
 	 ## no email 
@@ -4214,16 +4224,6 @@ sub check_custom_attribute {
 	     return 'subrequest';
 	 }
 
-     }
-
-     if ($param->{'is_subscriber'} && 
-	      ($param->{'subscriber'}{'subscribed'} == 1)) {
-	 &report::reject_report_web('user','already_subscriber', {'list' => $list->{'name'}},$param->{'action'},$list);
-	 &wwslog('info','do_subscribe: %s already subscriber', $param->{'user'}{'email'});
-	 &web_db_log({'parameters' => $in{'email'},
-		      'status' => 'error',
-		      'error_type' => 'already_subscriber'});		      
-	 return undef;
      }
      
      my @keys = sort keys (%{$list->{'admin'}}) ;
@@ -6874,7 +6874,10 @@ sub do_viewmod {
 
      my @stat = stat ($arc_file_path);
      $param->{'date'} = $stat[9];
-     $param->{'header_date'} = $stat[9];
+     # send page as static if client is a bot. That's prevent crawling all archices every weeks by google, yahoo and others bots
+     if ($session->{'is_a_crawler'}) {       
+	 $param->{'header_date'} = $stat[9];
+     }
      $param->{'base'} = sprintf "%s%s/arc/%s/%s/", $param->{'base_url'}, $param->{'path_cgi'}, $param->{'list'}, $in{'month'};
      $param->{'archive_name'} = $in{'month'};
 
@@ -13065,18 +13068,18 @@ sub creation_shared_file {
     close FILE;
 
     ## XSS Protection for HTML files.
-    if (lc($fname) =~ /\.html?/) {
-	my $sanitized_file = &tools::sanitize_html_file('robot' => $robot,
-							'file' => "$shareddir/$path/$fname");
-	if (defined $sanitized_file) {
-	    open HTMLFILE,  ">:bytes", "$shareddir/$path/$fname";
-	    print HTMLFILE $sanitized_file;
-	    close HTMLFILE;
-	}
-	else {
-	    &do_log('err','Unable to sanitize file %s',$fname);
-	}
-    }
+#    if (lc($fname) =~ /\.html?/) {
+#	my $sanitized_file = &tools::sanitize_html_file('robot' => $robot,
+#							'file' => "$shareddir/$path/$fname");
+#	if (defined $sanitized_file) {
+#	    open HTMLFILE,  ">:bytes", "$shareddir/$path/$fname";
+#	    print HTMLFILE $sanitized_file;
+#	    close HTMLFILE;
+#	}
+#	else {
+#	    &do_log('err','Unable to sanitize file %s',$fname);
+#	}
+#    }
     
 }
 
@@ -13644,18 +13647,18 @@ sub d_copy_file {
 	close DEST_FILE;
 
 	## XSS Protection for HTML files.
-	if (lc($fname) =~ /\.html?/) {
-	    my $sanitized_file = &tools::sanitize_html_file('robot' => $robot,
-							    'file' => "$dest_dir/$fname");
-	    if (defined $sanitized_file) {
-		open HTMLFILE,  ">:bytes", "$dest_dir/$fname";
-		print HTMLFILE $sanitized_file;
-		close HTMLFILE;
-	    }
-	    else {
-		&do_log('err','Unable to sanitize file %s',$fname);
-	    }
-	}
+#	if (lc($fname) =~ /\.html?/) {
+#	    my $sanitized_file = &tools::sanitize_html_file('robot' => $robot,
+#							    'file' => "$dest_dir/$fname");
+#	    if (defined $sanitized_file) {
+#		open HTMLFILE,  ">:bytes", "$dest_dir/$fname";
+#		print HTMLFILE $sanitized_file;
+#		close HTMLFILE;
+#	    }
+#	    else {
+#		&do_log('err','Unable to sanitize file %s',$fname);
+#	    }
+#	}
 	
 	## desc file creation
 	unless (open (DESC,">$dest_dir/.desc.$fname")) {

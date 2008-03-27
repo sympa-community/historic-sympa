@@ -828,7 +828,6 @@ msgstr "再次輸入新口令："
 
 #: web_tt2/choosepasswd.tt2:20 web_tt2/picture_upload.tt2:11
 #: web_tt2/pref.tt2:17 web_tt2/pref.tt2:29 web_tt2/pref.tt2:40
-#: web_tt2/pref.tt2:66
 msgid "Submit"
 msgstr "提交"
 
@@ -2462,6 +2461,11 @@ msgid ""
 "List has been set to the pending status ; listmaster need to validate it"
 msgstr "郵件列表被配置成等待狀態；郵件列表管理員需要確認它"
 
+#: web_tt2/notice.tt2:77
+#, fuzzy
+msgid "List name has been lowercased"
+msgstr "郵件關閉了"
+
 #: web_tt2/picture_upload.tt2:4
 msgid "Setting your picture for this list"
 msgstr "為這張郵件列表配置圖片"
@@ -2517,28 +2521,6 @@ msgstr "改變您的口令"
 #: web_tt2/pref.tt2:39
 msgid "Re-enter your new password :"
 msgstr "重新輸入新口令："
-
-#: web_tt2/pref.tt2:47
-msgid "Your other email addresses"
-msgstr "您的其它郵件地址"
-
-#: web_tt2/pref.tt2:64
-msgid "Other email address :"
-msgstr "其它郵件地址："
-
-#: web_tt2/pref.tt2:65
-msgid "Password :"
-msgstr "口令："
-
-#: web_tt2/pref.tt2:71
-msgid ""
-"Another email address, that should be known by Sympa and will be recognized "
-"by Sympa as an alternate email address for you. All your email addressed "
-"will also be grouped by Sympa with your primary email address to unify your "
-"subscriptions"
-msgstr ""
-"另一個郵件地址，Sympa應該知道並將作為一個您的供選擇的郵地址由Sympa識別出。您"
-"所有的郵件地址也將由Sympa同您的主郵件一起編組來統一訂閱"
 
 #: web_tt2/remindpasswd.tt2:5
 msgid ""
@@ -3125,6 +3107,16 @@ msgstr "從%3起這個FastCGI過程（%1）已經提供%2頁的服務。"
 #, fuzzy
 msgid "Language selection"
 msgstr "切換選項"
+
+#: web_tt2/setlang.tt2:17
+#, fuzzy
+msgid "Validate your language selection"
+msgstr "切換選項"
+
+#: web_tt2/setlang.tt2:17
+#, fuzzy
+msgid "Set language"
+msgstr "語言"
 
 #. (list_request_date)
 #: web_tt2/set_pending_list_request.tt2:10
@@ -3729,7 +3721,7 @@ msgstr "查找間隔："
 #. (date_to_formated)
 #. This entry is a date/time format
 #. Check the strftime manpage for format details : http://docs.freebsd.org/info/gawk/gawk.info.Time_Functions.html
-#: web_tt2/viewlogs.tt2:110 wwsympa/wwsympa.fcgi:16105
+#: web_tt2/viewlogs.tt2:110 wwsympa/wwsympa.fcgi:16144
 msgid "%d %b %Y %H:%M:%S"
 msgstr "%Y年%m月%d日 %H:%M:%S"
 
@@ -4341,7 +4333,7 @@ msgid "%1 Digest %2"
 msgstr "%1郵件摘要%2"
 
 #: mail_tt2/digest.tt2:11 mail_tt2/digest_plain.tt2:8
-#: mail_tt2/get_archive.tt2:10 src/List.pm:2686
+#: mail_tt2/get_archive.tt2:10 src/List.pm:2689
 msgid "Table of contents:"
 msgstr "目錄表："
 
@@ -4436,7 +4428,7 @@ msgstr "退訂："
 msgid "Archive of %1, file %2"
 msgstr "歸檔%1，文件%2"
 
-#: mail_tt2/global_remind.tt2:2 src/Commands.pm:1623
+#: mail_tt2/global_remind.tt2:2 src/Commands.pm:1633
 msgid "Subscription summary"
 msgstr "訂閱概要"
 
@@ -4724,7 +4716,7 @@ msgstr "這張郵件列表是關于%1，因此您也許與此有關。"
 msgid "To subscribe just hit the following mailto url :"
 msgstr "訂閱只要回復這則郵件或點擊以下的mailto URL："
 
-#. (conf.sympa,list.name)
+#. (conf.sympa,subject)
 #: mail_tt2/invite.tt2:10
 #, fuzzy
 msgid "Or send a message to %1 with subject: \"sub %2\""
@@ -6921,7 +6913,7 @@ msgstr "配置文件--CONFIG--包含錯誤。\n"
 
 #. This entry is a date/time format
 #. Check the strftime manpage for format details : http://docs.freebsd.org/info/gawk/gawk.info.Time_Functions.html
-#: src/Commands.pm:942 wwsympa/wwsympa.fcgi:9443
+#: src/Commands.pm:952 wwsympa/wwsympa.fcgi:9479
 msgid "%A"
 msgstr "%A"
 
@@ -7534,29 +7526,29 @@ msgstr "配置的最近更新人"
 
 #. This entry is a date/time format
 #. Check the strftime manpage for format details : http://docs.freebsd.org/info/gawk/gawk.info.Time_Functions.html
-#: src/List.pm:2789
+#: src/List.pm:2792
 msgid "%a, %d %b %Y %H:%M:%S"
 msgstr "%Y年%m月%d日（%a）%H:%M:%S"
 
 #. This entry is a date/time format
 #. Check the strftime manpage for format details : http://docs.freebsd.org/info/gawk/gawk.info.Time_Functions.html
-#: src/List.pm:2790
+#: src/List.pm:2793
 msgid "%a, %d %b %Y"
 msgstr "%Y年%m月%d日（%a）"
 
 #. This entry is a date/time format
 #. Check the strftime manpage for format details : http://docs.freebsd.org/info/gawk/gawk.info.Time_Functions.html
-#: src/List.pm:2973 src/List.pm:2974 src/List.pm:2978
-#: wwsympa/wwsympa.fcgi:10860 wwsympa/wwsympa.fcgi:10929
-#: wwsympa/wwsympa.fcgi:11131 wwsympa/wwsympa.fcgi:11473
-#: wwsympa/wwsympa.fcgi:15570 wwsympa/wwsympa.fcgi:16444
-#: wwsympa/wwsympa.fcgi:16445 wwsympa/wwsympa.fcgi:4404
-#: wwsympa/wwsympa.fcgi:4405 wwsympa/wwsympa.fcgi:5837
-#: wwsympa/wwsympa.fcgi:7021 wwsympa/wwsympa.fcgi:7539
-#: wwsympa/wwsympa.fcgi:7589 wwsympa/wwsympa.fcgi:7591
-#: wwsympa/wwsympa.fcgi:8104 wwsympa/wwsympa.fcgi:8105
-#: wwsympa/wwsympa.fcgi:8139 wwsympa/wwsympa.fcgi:8140
-#: wwsympa/wwsympa.fcgi:8353 wwsympa/wwsympa.fcgi:8354
+#: src/List.pm:2976 src/List.pm:2977 src/List.pm:2981
+#: wwsympa/wwsympa.fcgi:10896 wwsympa/wwsympa.fcgi:10965
+#: wwsympa/wwsympa.fcgi:11167 wwsympa/wwsympa.fcgi:11509
+#: wwsympa/wwsympa.fcgi:15606 wwsympa/wwsympa.fcgi:16483
+#: wwsympa/wwsympa.fcgi:16484 wwsympa/wwsympa.fcgi:4424
+#: wwsympa/wwsympa.fcgi:4425 wwsympa/wwsympa.fcgi:5857
+#: wwsympa/wwsympa.fcgi:7044 wwsympa/wwsympa.fcgi:7562
+#: wwsympa/wwsympa.fcgi:7612 wwsympa/wwsympa.fcgi:7614
+#: wwsympa/wwsympa.fcgi:8140 wwsympa/wwsympa.fcgi:8141
+#: wwsympa/wwsympa.fcgi:8175 wwsympa/wwsympa.fcgi:8176
+#: wwsympa/wwsympa.fcgi:8389 wwsympa/wwsympa.fcgi:8390
 msgid "%d %b %Y"
 msgstr "%Y年%m月%d日"
 
@@ -7575,7 +7567,16 @@ msgstr ""
 msgid "Unable to create a channel in smtpto: %m"
 msgstr "無法在smtpto：%m中創建渠道"
 
-#: src/PlainDigest.pm:189
+#: src/PlainDigest.pm:163
+#, fuzzy
+msgid ""
+"----- Malformed message ignored -----\n"
+"\n"
+msgstr ""
+"－－－－－%s發送的原來的郵件的結尾－－－－－\n"
+"\n"
+
+#: src/PlainDigest.pm:194
 #, fuzzy
 msgid ""
 "\n"
@@ -7586,7 +7587,7 @@ msgstr ""
 "%附有（郵件跟隨）\n"
 "－－－－－原始郵件－－－－－\n"
 
-#: src/PlainDigest.pm:199
+#: src/PlainDigest.pm:204
 msgid ""
 "-----End of original message from %s-----\n"
 "\n"
@@ -7594,7 +7595,7 @@ msgstr ""
 "－－－－－%s發送的原來的郵件的結尾－－－－－\n"
 "\n"
 
-#: src/PlainDigest.pm:238
+#: src/PlainDigest.pm:243
 msgid ""
 "** Warning: Message part originally used character set %s\n"
 "    Some characters may be lost or incorrect **\n"
@@ -7604,7 +7605,7 @@ msgstr ""
 "有些字符也許丟失或不正確 ＊＊\n"
 "\n"
 
-#: src/PlainDigest.pm:250
+#: src/PlainDigest.pm:255
 #, fuzzy
 msgid ""
 "\n"
@@ -7613,7 +7614,7 @@ msgstr ""
 "\n"
 "%（類型s%的附件是包含在這裡的）\n"
 
-#: src/PlainDigest.pm:256
+#: src/PlainDigest.pm:261
 msgid ""
 "\n"
 "-----Delivery Status Report-----\n"
@@ -7621,11 +7622,11 @@ msgstr ""
 "\n"
 "－－－－－遞交情況報告－－－－－\n"
 
-#: src/PlainDigest.pm:258
+#: src/PlainDigest.pm:263
 msgid "-----End of Delivery Status Report-----\n"
 msgstr "－－－－－發送狀態報告的結尾－－－－－\n"
 
-#: src/PlainDigest.pm:296 src/PlainDigest.pm:317
+#: src/PlainDigest.pm:301 src/PlainDigest.pm:322
 #, fuzzy
 msgid ""
 "\n"
@@ -7634,7 +7635,7 @@ msgstr ""
 "\n"
 "﹝ ＊＊ 無法處理HTML郵件部分 ＊＊ ﹞\n"
 
-#: src/PlainDigest.pm:323
+#: src/PlainDigest.pm:328
 msgid ""
 "\n"
 "[ ** Unable to process HTML message part **]\n"
@@ -7642,11 +7643,11 @@ msgstr ""
 "\n"
 "﹝ ＊＊ 無法處理HTML郵件部分 ＊＊ ﹞\n"
 
-#: src/PlainDigest.pm:327
+#: src/PlainDigest.pm:332
 msgid "[ Text converted from HTML ]\n"
 msgstr "﹝從HTML轉換的文本﹞\n"
 
-#: src/PlainDigest.pm:334
+#: src/PlainDigest.pm:339
 msgid ""
 "\n"
 "[ ** Unable to process HTML message part ** ]\n"
@@ -7654,11 +7655,11 @@ msgstr ""
 "\n"
 "﹝ ＊＊ 無法處理HTML郵件部分 ＊＊ ﹞\n"
 
-#: src/PlainDigest.pm:353
+#: src/PlainDigest.pm:358
 msgid "[ Image%s ]"
 msgstr "﹝圖象%s﹞"
 
-#: src/PlainDigest.pm:353
+#: src/PlainDigest.pm:358
 #, fuzzy
 msgid "[Image%s]"
 msgstr "﹝圖象%s﹞"
@@ -7679,15 +7680,15 @@ msgstr ""
 
 #. This entry is a date/time format
 #. Check the strftime manpage for format details : http://docs.freebsd.org/info/gawk/gawk.info.Time_Functions.html
-#: wwsympa/SympaSession.pm:330 wwsympa/SympaSession.pm:331
-#: wwsympa/wwsympa.fcgi:11707 wwsympa/wwsympa.fcgi:11850
-#: wwsympa/wwsympa.fcgi:14272 wwsympa/wwsympa.fcgi:7474
+#: wwsympa/SympaSession.pm:339 wwsympa/SympaSession.pm:340
+#: wwsympa/wwsympa.fcgi:11743 wwsympa/wwsympa.fcgi:11886
+#: wwsympa/wwsympa.fcgi:14308 wwsympa/wwsympa.fcgi:7497
 msgid "%d %b %y  %H:%M"
 msgstr "%Y年%m月%d日　%H:%M"
 
 #. This entry is a date/time format
 #. Check the strftime manpage for format details : http://docs.freebsd.org/info/gawk/gawk.info.Time_Functions.html
-#: wwsympa/wwsympa.fcgi:16050 wwsympa/wwsympa.fcgi:16051
+#: wwsympa/wwsympa.fcgi:16089 wwsympa/wwsympa.fcgi:16090
 msgid "%Y/%m/%d/%H/%M/%S"
 msgstr ""
 
@@ -7838,6 +7839,24 @@ msgstr "不接收郵件（用于假期）"
 #: wwsympa/wwslib.pm:44
 msgid "you do not receive your own posts"
 msgstr "不接收自己發的郵件"
+
+#~ msgid "Your other email addresses"
+#~ msgstr "您的其它郵件地址"
+
+#~ msgid "Other email address :"
+#~ msgstr "其它郵件地址："
+
+#~ msgid "Password :"
+#~ msgstr "口令："
+
+#~ msgid ""
+#~ "Another email address, that should be known by Sympa and will be "
+#~ "recognized by Sympa as an alternate email address for you. All your email "
+#~ "addressed will also be grouped by Sympa with your primary email address "
+#~ "to unify your subscriptions"
+#~ msgstr ""
+#~ "另一個郵件地址，Sympa應該知道並將作為一個您的供選擇的郵地址由Sympa識別出。"
+#~ "您所有的郵件地址也將由Sympa同您的主郵件一起編組來統一訂閱"
 
 #~ msgid "%Image(%s)"
 #~ msgstr "%圖象（%s）"

@@ -75,10 +75,9 @@ msgid ""
 "to the <a href=\"%1/help/faqadmin\">administrators <acronym title="
 "\"Frequently asked questions\">FAQ</acronym></a>."
 msgstr ""
-"Se você tiver qualquer problema, favor verifique a <a "
-"href=\"%1/help/faquser\"><acronym title=\"Frequently asked "
-"questions\">FAQ</acronym> de usuários/as</a> ou as <a "
-"href=\"%1/help/faqadmin\"><acronym title=\"Frequently asked "
+"Se você tiver qualquer problema, favor verifique a <a href=\"%1/help/faquser"
+"\"><acronym title=\"Frequently asked questions\">FAQ</acronym> de usuários/"
+"as</a> ou as <a href=\"%1/help/faqadmin\"><acronym title=\"Frequently asked "
 "questions\">FAQ</acronym> de administradores </a>."
 
 #: web_tt2/help_introduction.tt2:2
@@ -217,8 +216,8 @@ msgstr ""
 "<em>Newsletters></em>: revistas eletrônicas. serviços diários (horóscopo do "
 "dia,  previsão do tempo do dia, alertas de segurança etc), informes sobre "
 "atualizações em um sítio da internet etc. Com esse tipo de lista, a "
-"informação vem de um/a único/a remetente para um grande número de "
-"receptores/as."
+"informação vem de um/a único/a remetente para um grande número de receptores/"
+"as."
 
 #: web_tt2/help_introduction.tt2:29
 msgid ""
@@ -293,8 +292,8 @@ msgid ""
 "change your <a href=\"%1/help/user#options\">subscriber options</a> list by "
 "list,"
 msgstr ""
-"altere suas <a href=\"%1/help/user#options\">opções de assiante</a> lista por "
-"lista,"
+"altere suas <a href=\"%1/help/user#options\">opções de assiante</a> lista "
+"por lista,"
 
 #. (path_cgi)
 #: web_tt2/help_introduction.tt2:45
@@ -318,9 +317,9 @@ msgid ""
 "you are not subscribed</a> if that archive is public and if your personal "
 "rights allow you to access those lists,"
 msgstr ""
-"leia o <a href=\"%1/help/arc\">arquivo de mensagens online de listas que você "
-"não está inscrito</a>. Se o arquivo for público e se você tiver privilégios "
-"de acesso a essas listas."
+"leia o <a href=\"%1/help/arc\">arquivo de mensagens online de listas que "
+"você não está inscrito</a>. Se o arquivo for público e se você tiver "
+"privilégios de acesso a essas listas."
 
 #. (path_cgi)
 #: web_tt2/help_introduction.tt2:50
@@ -328,8 +327,8 @@ msgid ""
 "read the <a href=\"%1/help/arc\">archive of lists to which you are "
 "subscribed</a>,"
 msgstr ""
-"leia o <a href=\"%1/help/arc\">arquivo das listas que você está "
-"inscrito/a</a>,"
+"leia o <a href=\"%1/help/arc\">arquivo das listas que você está inscrito/a</"
+"a>,"
 
 #. (path_cgi)
 #: web_tt2/help_introduction.tt2:51
@@ -343,8 +342,8 @@ msgid ""
 "<a href=\"%1/help/sendmsg\">send messages</a> to lists to which you are "
 "subscribed,"
 msgstr ""
-"<a href=\"%1/help/sendmsg\">envie mensagens</a> para listas as quais você está "
-"inscrito/a,"
+"<a href=\"%1/help/sendmsg\">envie mensagens</a> para listas as quais você "
+"está inscrito/a,"
 
 #. (path_cgi)
 #: web_tt2/help_introduction.tt2:53
@@ -374,13 +373,14 @@ msgid ""
 "<a href=\"%1/help/admin#create_list\">create new lists</a> (restricted "
 "access) - subject to authorization,"
 msgstr ""
-"<a href=\"%1/help/admin#create_list\">criar novas listas</a> (acesso restrito) "
-"- sujeito a autorização,"
+"<a href=\"%1/help/admin#create_list\">criar novas listas</a> (acesso "
+"restrito) - sujeito a autorização,"
 
 #. (path_cgi)
 #: web_tt2/help_introduction.tt2:59
 msgid "<a href=\"%1/help/admin#edit_list\">configure lists</a> you own,"
-msgstr "<a href=\"%1/help/admin#edit_list\">configurar listas</a> que você tem,"
+msgstr ""
+"<a href=\"%1/help/admin#edit_list\">configurar listas</a> que você tem,"
 
 #. (path_cgi)
 #: web_tt2/help_introduction.tt2:60
@@ -393,8 +393,8 @@ msgid ""
 "<a href=\"%1/help/admin#manage_shared\">manage the shared document web "
 "space</a>,"
 msgstr ""
-"<a href=\"%1/help/admin#manage_shared\">gerenciar os documentos compartilhados "
-"na web</a>,"
+"<a href=\"%1/help/admin#manage_shared\">gerenciar os documentos "
+"compartilhados na web</a>,"
 
 #. (path_cgi)
 #: web_tt2/help_introduction.tt2:62
@@ -406,7 +406,8 @@ msgstr ""
 
 #: web_tt2/help_introduction.tt2:66
 msgid "How the mailing list service works: roles and responsibilities"
-msgstr "Como o serviço de listas de emails funciona: regras e responsabilidades"
+msgstr ""
+"Como o serviço de listas de emails funciona: regras e responsabilidades"
 
 #: web_tt2/help_introduction.tt2:68
 msgid "A mailing list service involves four types of roles:"
@@ -460,8 +461,7 @@ msgstr ""
 msgid ""
 "<strong>define the general orientations of the mailing list service</strong>:"
 msgstr ""
-"<strong>define as orientações gerais do serviço de listas de "
-"emails</strong>:"
+"<strong>define as orientações gerais do serviço de listas de emails</strong>:"
 
 # nao entendi direito se é isso
 #: web_tt2/help_introduction.tt2:83
@@ -490,9 +490,9 @@ msgid ""
 "<strong>document those rules through providing charters</strong> to "
 "subscribers, moderators and owners;"
 msgstr ""
-"<strong>defina a forma que o serviço de lista de emais deverá ser "
-"usado</strong> e <strong>documente essas regras definindo CHARTERS</strong> "
-"para assinantes, moderadores/as e donos/as;"
+"<strong>defina a forma que o serviço de lista de emais deverá ser usado</"
+"strong> e <strong>documente essas regras definindo CHARTERS</strong> para "
+"assinantes, moderadores/as e donos/as;"
 
 #: web_tt2/help_introduction.tt2:89
 msgid "<strong>approve of requests of mailing list creations</strong>;"
@@ -1293,8 +1293,8 @@ msgid ""
 "<strong>browse the different sections</strong> displayed on the <a href=\"%1/"
 "home\">list environment homepage</a>;"
 msgstr ""
-"<strong>navegue pelas diferentes seções</strong> exibidas no <a "
-"href=\"%1/home\">página do ambiente de listas</a>;"
+"<strong>navegue pelas diferentes seções</strong> exibidas no <a href=\"%1/"
+"home\">página do ambiente de listas</a>;"
 
 #: web_tt2/help_user.tt2:147
 msgid ""
@@ -1324,12 +1324,12 @@ msgid ""
 "However you can subscribe to a list that does not display if you know its "
 "name. To do this, <a href=\"#subscribe\">use your email client</a>."
 msgstr ""
-"De acordo com o domínio o qual seu endereço pertence (exemplo: <em "
-"class=\"example\">cru.fr</em>, <em class=\"example\">fai.com</em>, etc.) e a "
+"De acordo com o domínio o qual seu endereço pertence (exemplo: <em class="
+"\"example\">cru.fr</em>, <em class=\"example\">fai.com</em>, etc.) e a "
 "localização de onde você se conecta, você não terá acesso às mesmas listas. "
 "No entanto, você pode se inscrever em uma lista que não apareça caso você "
-"saiba o seu nome. Para fazer isso, <a href=\"#subscribe\">utilize seu cliente "
-"de email</a>."
+"saiba o seu nome. Para fazer isso, <a href=\"#subscribe\">utilize seu "
+"cliente de email</a>."
 
 #: web_tt2/help_user.tt2:152
 msgid "Reading a list archive online"
@@ -1341,8 +1341,8 @@ msgid ""
 "Please refer to the <a href=\"%1/help/arc\"><strong>archive documentation</"
 "strong></a>."
 msgstr ""
-"Favor consultar o <a href=\"%1/help/arc\"><strong>arquivo de "
-"documentações</strong></a>."
+"Favor consultar o <a href=\"%1/help/arc\"><strong>arquivo de documentações</"
+"strong></a>."
 
 #: web_tt2/help_sendmsg.tt2:2 web_tt2/help_user.tt2:155
 msgid "Sending a message"
@@ -1415,7 +1415,8 @@ msgstr ""
 
 #: web_tt2/help_user.tt2:173
 msgid "<strong>In the left menu, click on the 'Unsubscribe' link</strong>."
-msgstr "<strong>No menu esquerdo, clique no link \"Cancelar inscrição\"</strong>."
+msgstr ""
+"<strong>No menu esquerdo, clique no link \"Cancelar inscrição\"</strong>."
 
 #: web_tt2/help_admin.tt2:2
 msgid "Mailing lists - Owner and moderator guide"
@@ -1427,7 +1428,8 @@ msgstr "Introdução: quem está responsável de gerenciar as listas de email?"
 
 #: web_tt2/help_admin.tt2:5
 msgid "Reminder: a mailing list service involves four types of roles:"
-msgstr "Lembrete: um serviço de listas de email envolve quatro tipos de papéis:"
+msgstr ""
+"Lembrete: um serviço de listas de email envolve quatro tipos de papéis:"
 
 #: web_tt2/help_admin.tt2:7
 msgid "listmaster;"
@@ -1451,8 +1453,8 @@ msgid ""
 "Refer to the <a href=\"%1/help/introduction#roles\">description of each "
 "role</a> to know more about this."
 msgstr ""
-"Consulte a <a href=\"%1/help/introduction#roles\">descrição de cada papel</a> "
-"para saber mais a respeito."
+"Consulte a <a href=\"%1/help/introduction#roles\">descrição de cada papel</"
+"a> para saber mais a respeito."
 
 #: web_tt2/help_admin.tt2:14
 msgid "Requesting the creation of a mailing list"

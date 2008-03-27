@@ -878,7 +878,6 @@ msgstr "Yeni şifre tekrarı :"
 
 #: web_tt2/choosepasswd.tt2:20 web_tt2/picture_upload.tt2:11
 #: web_tt2/pref.tt2:17 web_tt2/pref.tt2:29 web_tt2/pref.tt2:40
-#: web_tt2/pref.tt2:66
 msgid "Submit"
 msgstr "Gönder"
 
@@ -2620,6 +2619,11 @@ msgid ""
 "List has been set to the pending status ; listmaster need to validate it"
 msgstr ""
 
+#: web_tt2/notice.tt2:77
+#, fuzzy
+msgid "List name has been lowercased"
+msgstr "%1 listesi kapatıldı"
+
 #: web_tt2/picture_upload.tt2:4
 #, fuzzy
 msgid "Setting your picture for this list"
@@ -2676,26 +2680,6 @@ msgstr "Şifre değişikliği"
 #: web_tt2/pref.tt2:39
 msgid "Re-enter your new password :"
 msgstr "Şifrenizi tekrar girin"
-
-#: web_tt2/pref.tt2:47
-msgid "Your other email addresses"
-msgstr ""
-
-#: web_tt2/pref.tt2:64
-msgid "Other email address :"
-msgstr "Diğer email adresi :"
-
-#: web_tt2/pref.tt2:65
-msgid "Password :"
-msgstr "Şifre :"
-
-#: web_tt2/pref.tt2:71
-msgid ""
-"Another email address, that should be known by Sympa and will be recognized "
-"by Sympa as an alternate email address for you. All your email addressed "
-"will also be grouped by Sympa with your primary email address to unify your "
-"subscriptions"
-msgstr ""
 
 #: web_tt2/remindpasswd.tt2:5
 msgid ""
@@ -3320,6 +3304,16 @@ msgstr ""
 msgid "Language selection"
 msgstr "Dil :"
 
+#: web_tt2/setlang.tt2:17
+#, fuzzy
+msgid "Validate your language selection"
+msgstr "Dil :"
+
+#: web_tt2/setlang.tt2:17
+#, fuzzy
+msgid "Set language"
+msgstr "Dil"
+
 #. (list_request_date)
 #: web_tt2/set_pending_list_request.tt2:10
 msgid " on %1"
@@ -3890,7 +3884,7 @@ msgstr "Kullanıcı Ara"
 #. (date_to_formated)
 #. This entry is a date/time format
 #. Check the strftime manpage for format details : http://docs.freebsd.org/info/gawk/gawk.info.Time_Functions.html
-#: web_tt2/viewlogs.tt2:110 wwsympa/wwsympa.fcgi:16105
+#: web_tt2/viewlogs.tt2:110 wwsympa/wwsympa.fcgi:16144
 msgid "%d %b %Y %H:%M:%S"
 msgstr ""
 
@@ -4556,7 +4550,7 @@ msgid "%1 Digest %2"
 msgstr "%1 Digest %2"
 
 #: mail_tt2/digest.tt2:11 mail_tt2/digest_plain.tt2:8
-#: mail_tt2/get_archive.tt2:10 src/List.pm:2686
+#: mail_tt2/get_archive.tt2:10 src/List.pm:2689
 msgid "Table of contents:"
 msgstr "İçerik tablosu:"
 
@@ -4645,7 +4639,7 @@ msgstr ""
 msgid "Archive of %1, file %2"
 msgstr ""
 
-#: mail_tt2/global_remind.tt2:2 src/Commands.pm:1623
+#: mail_tt2/global_remind.tt2:2 src/Commands.pm:1633
 msgid "Subscription summary"
 msgstr "Kayıtlanma özeti"
 
@@ -4943,7 +4937,7 @@ msgid "To subscribe just hit the following mailto url :"
 msgstr ""
 "Belirtilmiş email adresleri ile yapmış olduğunuz kayıtlarınızı görüntüleyin:"
 
-#. (conf.sympa,list.name)
+#. (conf.sympa,subject)
 #: mail_tt2/invite.tt2:10
 msgid "Or send a message to %1 with subject: \"sub %2\""
 msgstr ""
@@ -7136,7 +7130,7 @@ msgstr ""
 
 #. This entry is a date/time format
 #. Check the strftime manpage for format details : http://docs.freebsd.org/info/gawk/gawk.info.Time_Functions.html
-#: src/Commands.pm:942 wwsympa/wwsympa.fcgi:9443
+#: src/Commands.pm:952 wwsympa/wwsympa.fcgi:9479
 msgid "%A"
 msgstr ""
 
@@ -7760,29 +7754,29 @@ msgstr "Ayarın son güncellemesi"
 
 #. This entry is a date/time format
 #. Check the strftime manpage for format details : http://docs.freebsd.org/info/gawk/gawk.info.Time_Functions.html
-#: src/List.pm:2789
+#: src/List.pm:2792
 msgid "%a, %d %b %Y %H:%M:%S"
 msgstr ""
 
 #. This entry is a date/time format
 #. Check the strftime manpage for format details : http://docs.freebsd.org/info/gawk/gawk.info.Time_Functions.html
-#: src/List.pm:2790
+#: src/List.pm:2793
 msgid "%a, %d %b %Y"
 msgstr ""
 
 #. This entry is a date/time format
 #. Check the strftime manpage for format details : http://docs.freebsd.org/info/gawk/gawk.info.Time_Functions.html
-#: src/List.pm:2973 src/List.pm:2974 src/List.pm:2978
-#: wwsympa/wwsympa.fcgi:10860 wwsympa/wwsympa.fcgi:10929
-#: wwsympa/wwsympa.fcgi:11131 wwsympa/wwsympa.fcgi:11473
-#: wwsympa/wwsympa.fcgi:15570 wwsympa/wwsympa.fcgi:16444
-#: wwsympa/wwsympa.fcgi:16445 wwsympa/wwsympa.fcgi:4404
-#: wwsympa/wwsympa.fcgi:4405 wwsympa/wwsympa.fcgi:5837
-#: wwsympa/wwsympa.fcgi:7021 wwsympa/wwsympa.fcgi:7539
-#: wwsympa/wwsympa.fcgi:7589 wwsympa/wwsympa.fcgi:7591
-#: wwsympa/wwsympa.fcgi:8104 wwsympa/wwsympa.fcgi:8105
-#: wwsympa/wwsympa.fcgi:8139 wwsympa/wwsympa.fcgi:8140
-#: wwsympa/wwsympa.fcgi:8353 wwsympa/wwsympa.fcgi:8354
+#: src/List.pm:2976 src/List.pm:2977 src/List.pm:2981
+#: wwsympa/wwsympa.fcgi:10896 wwsympa/wwsympa.fcgi:10965
+#: wwsympa/wwsympa.fcgi:11167 wwsympa/wwsympa.fcgi:11509
+#: wwsympa/wwsympa.fcgi:15606 wwsympa/wwsympa.fcgi:16483
+#: wwsympa/wwsympa.fcgi:16484 wwsympa/wwsympa.fcgi:4424
+#: wwsympa/wwsympa.fcgi:4425 wwsympa/wwsympa.fcgi:5857
+#: wwsympa/wwsympa.fcgi:7044 wwsympa/wwsympa.fcgi:7562
+#: wwsympa/wwsympa.fcgi:7612 wwsympa/wwsympa.fcgi:7614
+#: wwsympa/wwsympa.fcgi:8140 wwsympa/wwsympa.fcgi:8141
+#: wwsympa/wwsympa.fcgi:8175 wwsympa/wwsympa.fcgi:8176
+#: wwsympa/wwsympa.fcgi:8389 wwsympa/wwsympa.fcgi:8390
 msgid "%d %b %Y"
 msgstr ""
 
@@ -7798,14 +7792,23 @@ msgstr ""
 msgid "Unable to create a channel in smtpto: %m"
 msgstr ""
 
-#: src/PlainDigest.pm:189
+#: src/PlainDigest.pm:163
+#, fuzzy
+msgid ""
+"----- Malformed message ignored -----\n"
+"\n"
+msgstr ""
+"-----%s'in orjinal mesajının sonu-----\n"
+"\n"
+
+#: src/PlainDigest.pm:194
 msgid ""
 "\n"
 "[Attached message follows]\n"
 "-----Original message-----\n"
 msgstr ""
 
-#: src/PlainDigest.pm:199
+#: src/PlainDigest.pm:204
 msgid ""
 "-----End of original message from %s-----\n"
 "\n"
@@ -7813,7 +7816,7 @@ msgstr ""
 "-----%s'in orjinal mesajının sonu-----\n"
 "\n"
 
-#: src/PlainDigest.pm:238
+#: src/PlainDigest.pm:243
 msgid ""
 "** Warning: Message part originally used character set %s\n"
 "    Some characters may be lost or incorrect **\n"
@@ -7823,49 +7826,49 @@ msgstr ""
 "    Bazı karakterler kaybolabilir veya hatalı olabilir**\n"
 "\n"
 
-#: src/PlainDigest.pm:250
+#: src/PlainDigest.pm:255
 msgid ""
 "\n"
 "[An attachment of type %s was included here]\n"
 msgstr ""
 
-#: src/PlainDigest.pm:256
+#: src/PlainDigest.pm:261
 msgid ""
 "\n"
 "-----Delivery Status Report-----\n"
 msgstr ""
 
-#: src/PlainDigest.pm:258
+#: src/PlainDigest.pm:263
 msgid "-----End of Delivery Status Report-----\n"
 msgstr "-----İletim Durumu Raporunun Sonu-----\n"
 
-#: src/PlainDigest.pm:296 src/PlainDigest.pm:317
+#: src/PlainDigest.pm:301 src/PlainDigest.pm:322
 msgid ""
 "\n"
 "[** Unable to process HTML message part **]\n"
 msgstr ""
 
-#: src/PlainDigest.pm:323
+#: src/PlainDigest.pm:328
 msgid ""
 "\n"
 "[ ** Unable to process HTML message part **]\n"
 msgstr ""
 
-#: src/PlainDigest.pm:327
+#: src/PlainDigest.pm:332
 msgid "[ Text converted from HTML ]\n"
 msgstr ""
 
-#: src/PlainDigest.pm:334
+#: src/PlainDigest.pm:339
 msgid ""
 "\n"
 "[ ** Unable to process HTML message part ** ]\n"
 msgstr ""
 
-#: src/PlainDigest.pm:353
+#: src/PlainDigest.pm:358
 msgid "[ Image%s ]"
 msgstr ""
 
-#: src/PlainDigest.pm:353
+#: src/PlainDigest.pm:358
 #, fuzzy
 msgid "[Image%s]"
 msgstr "%Image(%s)"
@@ -7887,15 +7890,15 @@ msgstr ""
 
 #. This entry is a date/time format
 #. Check the strftime manpage for format details : http://docs.freebsd.org/info/gawk/gawk.info.Time_Functions.html
-#: wwsympa/SympaSession.pm:330 wwsympa/SympaSession.pm:331
-#: wwsympa/wwsympa.fcgi:11707 wwsympa/wwsympa.fcgi:11850
-#: wwsympa/wwsympa.fcgi:14272 wwsympa/wwsympa.fcgi:7474
+#: wwsympa/SympaSession.pm:339 wwsympa/SympaSession.pm:340
+#: wwsympa/wwsympa.fcgi:11743 wwsympa/wwsympa.fcgi:11886
+#: wwsympa/wwsympa.fcgi:14308 wwsympa/wwsympa.fcgi:7497
 msgid "%d %b %y  %H:%M"
 msgstr ""
 
 #. This entry is a date/time format
 #. Check the strftime manpage for format details : http://docs.freebsd.org/info/gawk/gawk.info.Time_Functions.html
-#: wwsympa/wwsympa.fcgi:16050 wwsympa/wwsympa.fcgi:16051
+#: wwsympa/wwsympa.fcgi:16089 wwsympa/wwsympa.fcgi:16090
 msgid "%Y/%m/%d/%H/%M/%S"
 msgstr ""
 
@@ -8049,6 +8052,12 @@ msgstr ""
 #: wwsympa/wwslib.pm:44
 msgid "you do not receive your own posts"
 msgstr ""
+
+#~ msgid "Other email address :"
+#~ msgstr "Diğer email adresi :"
+
+#~ msgid "Password :"
+#~ msgstr "Şifre :"
 
 #~ msgid "Service messages description :"
 #~ msgstr "Servis mesajları tanımı :"
@@ -8520,10 +8529,6 @@ msgstr ""
 
 #~ msgid "Sympa could not load the list config file."
 #~ msgstr "Sympa, liste ayar dosyasını yükleyemedi"
-
-#, fuzzy
-#~ msgid "language"
-#~ msgstr "Dil"
 
 #, fuzzy
 #~ msgid "There is not any owner defined for the list"

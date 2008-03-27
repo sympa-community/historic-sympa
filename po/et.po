@@ -866,7 +866,6 @@ msgstr "Uus parool uuesti:"
 
 #: web_tt2/choosepasswd.tt2:20 web_tt2/picture_upload.tt2:11
 #: web_tt2/pref.tt2:17 web_tt2/pref.tt2:29 web_tt2/pref.tt2:40
-#: web_tt2/pref.tt2:66
 msgid "Submit"
 msgstr "Lisa"
 
@@ -2588,6 +2587,11 @@ msgid ""
 "List has been set to the pending status ; listmaster need to validate it"
 msgstr ""
 
+#: web_tt2/notice.tt2:77
+#, fuzzy
+msgid "List name has been lowercased"
+msgstr "List on suletud"
+
 # nlsref 16,74
 #: web_tt2/picture_upload.tt2:4
 #, fuzzy
@@ -2644,29 +2648,6 @@ msgstr "Parooli muutmine"
 #: web_tt2/pref.tt2:39
 msgid "Re-enter your new password :"
 msgstr "Uus parool veelkord:"
-
-#: web_tt2/pref.tt2:47
-msgid "Your other email addresses"
-msgstr "Sinu teine e-posti aadress"
-
-#: web_tt2/pref.tt2:64
-msgid "Other email address :"
-msgstr "Teine e-posti aadress:"
-
-#: web_tt2/pref.tt2:65
-msgid "Password :"
-msgstr "Parool:"
-
-#: web_tt2/pref.tt2:71
-msgid ""
-"Another email address, that should be known by Sympa and will be recognized "
-"by Sympa as an alternate email address for you. All your email addressed "
-"will also be grouped by Sympa with your primary email address to unify your "
-"subscriptions"
-msgstr ""
-"Teine e-posti aadress, mis peaks oleme teada Sympale ja mida Sympa kasutab "
-"sinu alternatiivse aadressina. Kõik sinu e-posti aadressi gruppeeritakse "
-"Sympa poolt sinu peamise e-posti aadressi all."
 
 #: web_tt2/remindpasswd.tt2:5
 msgid ""
@@ -3300,6 +3281,16 @@ msgstr "See FastCGI protsess (%1) on täitnud %2 päringut alates %3."
 msgid "Language selection"
 msgstr "Pööra valik ringi"
 
+#: web_tt2/setlang.tt2:17
+#, fuzzy
+msgid "Validate your language selection"
+msgstr "Pööra valik ringi"
+
+#: web_tt2/setlang.tt2:17
+#, fuzzy
+msgid "Set language"
+msgstr "Keel"
+
 #. (list_request_date)
 #: web_tt2/set_pending_list_request.tt2:10
 msgid " on %1"
@@ -3885,7 +3876,7 @@ msgstr "Otsi kasutajat"
 #. (date_to_formated)
 #. This entry is a date/time format
 #. Check the strftime manpage for format details : http://docs.freebsd.org/info/gawk/gawk.info.Time_Functions.html
-#: web_tt2/viewlogs.tt2:110 wwsympa/wwsympa.fcgi:16105
+#: web_tt2/viewlogs.tt2:110 wwsympa/wwsympa.fcgi:16144
 msgid "%d %b %Y %H:%M:%S"
 msgstr "%d %b %Y %H:%M:%S"
 
@@ -4602,7 +4593,7 @@ msgid "%1 Digest %2"
 msgstr "Kokkuvõte"
 
 #: mail_tt2/digest.tt2:11 mail_tt2/digest_plain.tt2:8
-#: mail_tt2/get_archive.tt2:10 src/List.pm:2686
+#: mail_tt2/get_archive.tt2:10 src/List.pm:2689
 #, fuzzy
 msgid "Table of contents:"
 msgstr "Sisukord:"
@@ -4702,7 +4693,7 @@ msgid "Archive of %1, file %2"
 msgstr "Arhiiv %1, fail %2"
 
 # nlsref 6,83
-#: mail_tt2/global_remind.tt2:2 src/Commands.pm:1623
+#: mail_tt2/global_remind.tt2:2 src/Commands.pm:1633
 msgid "Subscription summary"
 msgstr "Liikmestaatuse kokkuvõte"
 
@@ -5003,7 +4994,7 @@ msgstr ""
 msgid "To subscribe just hit the following mailto url :"
 msgstr "Listiga liitumiseks vasta sellele kirjale või klikka järgnevat linki:"
 
-#. (conf.sympa,list.name)
+#. (conf.sympa,subject)
 #: mail_tt2/invite.tt2:10
 #, fuzzy
 msgid "Or send a message to %1 with subject: \"sub %2\""
@@ -7339,7 +7330,7 @@ msgstr "Seadete fail sisaldab vigu.\n"
 
 #. This entry is a date/time format
 #. Check the strftime manpage for format details : http://docs.freebsd.org/info/gawk/gawk.info.Time_Functions.html
-#: src/Commands.pm:942 wwsympa/wwsympa.fcgi:9443
+#: src/Commands.pm:952 wwsympa/wwsympa.fcgi:9479
 msgid "%A"
 msgstr "%A"
 
@@ -8078,29 +8069,29 @@ msgstr "viimati muutis"
 
 #. This entry is a date/time format
 #. Check the strftime manpage for format details : http://docs.freebsd.org/info/gawk/gawk.info.Time_Functions.html
-#: src/List.pm:2789
+#: src/List.pm:2792
 msgid "%a, %d %b %Y %H:%M:%S"
 msgstr "%a, %d %b %Y %H:%M:%S"
 
 #. This entry is a date/time format
 #. Check the strftime manpage for format details : http://docs.freebsd.org/info/gawk/gawk.info.Time_Functions.html
-#: src/List.pm:2790
+#: src/List.pm:2793
 msgid "%a, %d %b %Y"
 msgstr "%a, %d %b %Y"
 
 #. This entry is a date/time format
 #. Check the strftime manpage for format details : http://docs.freebsd.org/info/gawk/gawk.info.Time_Functions.html
-#: src/List.pm:2973 src/List.pm:2974 src/List.pm:2978
-#: wwsympa/wwsympa.fcgi:10860 wwsympa/wwsympa.fcgi:10929
-#: wwsympa/wwsympa.fcgi:11131 wwsympa/wwsympa.fcgi:11473
-#: wwsympa/wwsympa.fcgi:15570 wwsympa/wwsympa.fcgi:16444
-#: wwsympa/wwsympa.fcgi:16445 wwsympa/wwsympa.fcgi:4404
-#: wwsympa/wwsympa.fcgi:4405 wwsympa/wwsympa.fcgi:5837
-#: wwsympa/wwsympa.fcgi:7021 wwsympa/wwsympa.fcgi:7539
-#: wwsympa/wwsympa.fcgi:7589 wwsympa/wwsympa.fcgi:7591
-#: wwsympa/wwsympa.fcgi:8104 wwsympa/wwsympa.fcgi:8105
-#: wwsympa/wwsympa.fcgi:8139 wwsympa/wwsympa.fcgi:8140
-#: wwsympa/wwsympa.fcgi:8353 wwsympa/wwsympa.fcgi:8354
+#: src/List.pm:2976 src/List.pm:2977 src/List.pm:2981
+#: wwsympa/wwsympa.fcgi:10896 wwsympa/wwsympa.fcgi:10965
+#: wwsympa/wwsympa.fcgi:11167 wwsympa/wwsympa.fcgi:11509
+#: wwsympa/wwsympa.fcgi:15606 wwsympa/wwsympa.fcgi:16483
+#: wwsympa/wwsympa.fcgi:16484 wwsympa/wwsympa.fcgi:4424
+#: wwsympa/wwsympa.fcgi:4425 wwsympa/wwsympa.fcgi:5857
+#: wwsympa/wwsympa.fcgi:7044 wwsympa/wwsympa.fcgi:7562
+#: wwsympa/wwsympa.fcgi:7612 wwsympa/wwsympa.fcgi:7614
+#: wwsympa/wwsympa.fcgi:8140 wwsympa/wwsympa.fcgi:8141
+#: wwsympa/wwsympa.fcgi:8175 wwsympa/wwsympa.fcgi:8176
+#: wwsympa/wwsympa.fcgi:8389 wwsympa/wwsympa.fcgi:8390
 msgid "%d %b %Y"
 msgstr "%d %b %Y"
 
@@ -8122,7 +8113,17 @@ msgstr ""
 msgid "Unable to create a channel in smtpto: %m"
 msgstr "Unable to create a channel in smtpto: %m"
 
-#: src/PlainDigest.pm:189
+# nlsref 5,4
+#: src/PlainDigest.pm:163
+#, fuzzy
+msgid ""
+"----- Malformed message ignored -----\n"
+"\n"
+msgstr ""
+"---- Algse kirja lõpp aadressilt %s----\n"
+"\n"
+
+#: src/PlainDigest.pm:194
 msgid ""
 "\n"
 "[Attached message follows]\n"
@@ -8130,7 +8131,7 @@ msgid ""
 msgstr ""
 
 # nlsref 5,4
-#: src/PlainDigest.pm:199
+#: src/PlainDigest.pm:204
 msgid ""
 "-----End of original message from %s-----\n"
 "\n"
@@ -8138,7 +8139,7 @@ msgstr ""
 "---- Algse kirja lõpp aadressilt %s----\n"
 "\n"
 
-#: src/PlainDigest.pm:238
+#: src/PlainDigest.pm:243
 msgid ""
 "** Warning: Message part originally used character set %s\n"
 "    Some characters may be lost or incorrect **\n"
@@ -8147,49 +8148,49 @@ msgstr ""
 "** Hoiatus: kirjas kasutati algselt %s kooditabelit\n"
 "    Mõned tähed võivad olla kadunud või valed **\n"
 
-#: src/PlainDigest.pm:250
+#: src/PlainDigest.pm:255
 msgid ""
 "\n"
 "[An attachment of type %s was included here]\n"
 msgstr ""
 
-#: src/PlainDigest.pm:256
+#: src/PlainDigest.pm:261
 msgid ""
 "\n"
 "-----Delivery Status Report-----\n"
 msgstr ""
 
-#: src/PlainDigest.pm:258
+#: src/PlainDigest.pm:263
 msgid "-----End of Delivery Status Report-----\n"
 msgstr "------Kirja kohaletoimetamise raporti lõpp-----\n"
 
-#: src/PlainDigest.pm:296 src/PlainDigest.pm:317
+#: src/PlainDigest.pm:301 src/PlainDigest.pm:322
 msgid ""
 "\n"
 "[** Unable to process HTML message part **]\n"
 msgstr ""
 
-#: src/PlainDigest.pm:323
+#: src/PlainDigest.pm:328
 msgid ""
 "\n"
 "[ ** Unable to process HTML message part **]\n"
 msgstr ""
 
-#: src/PlainDigest.pm:327
+#: src/PlainDigest.pm:332
 msgid "[ Text converted from HTML ]\n"
 msgstr ""
 
-#: src/PlainDigest.pm:334
+#: src/PlainDigest.pm:339
 msgid ""
 "\n"
 "[ ** Unable to process HTML message part ** ]\n"
 msgstr ""
 
-#: src/PlainDigest.pm:353
+#: src/PlainDigest.pm:358
 msgid "[ Image%s ]"
 msgstr ""
 
-#: src/PlainDigest.pm:353
+#: src/PlainDigest.pm:358
 #, fuzzy
 msgid "[Image%s]"
 msgstr "%Image(%s)"
@@ -8211,15 +8212,15 @@ msgstr "%H:%M:%S"
 
 #. This entry is a date/time format
 #. Check the strftime manpage for format details : http://docs.freebsd.org/info/gawk/gawk.info.Time_Functions.html
-#: wwsympa/SympaSession.pm:330 wwsympa/SympaSession.pm:331
-#: wwsympa/wwsympa.fcgi:11707 wwsympa/wwsympa.fcgi:11850
-#: wwsympa/wwsympa.fcgi:14272 wwsympa/wwsympa.fcgi:7474
+#: wwsympa/SympaSession.pm:339 wwsympa/SympaSession.pm:340
+#: wwsympa/wwsympa.fcgi:11743 wwsympa/wwsympa.fcgi:11886
+#: wwsympa/wwsympa.fcgi:14308 wwsympa/wwsympa.fcgi:7497
 msgid "%d %b %y  %H:%M"
 msgstr "%d %b %y  %H:%M"
 
 #. This entry is a date/time format
 #. Check the strftime manpage for format details : http://docs.freebsd.org/info/gawk/gawk.info.Time_Functions.html
-#: wwsympa/wwsympa.fcgi:16050 wwsympa/wwsympa.fcgi:16051
+#: wwsympa/wwsympa.fcgi:16089 wwsympa/wwsympa.fcgi:16090
 msgid "%Y/%m/%d/%H/%M/%S"
 msgstr ""
 
@@ -8402,6 +8403,25 @@ msgstr ""
 #: wwsympa/wwslib.pm:44
 msgid "you do not receive your own posts"
 msgstr "teile ei tule enda saadetud kirjad"
+
+#~ msgid "Your other email addresses"
+#~ msgstr "Sinu teine e-posti aadress"
+
+#~ msgid "Other email address :"
+#~ msgstr "Teine e-posti aadress:"
+
+#~ msgid "Password :"
+#~ msgstr "Parool:"
+
+#~ msgid ""
+#~ "Another email address, that should be known by Sympa and will be "
+#~ "recognized by Sympa as an alternate email address for you. All your email "
+#~ "addressed will also be grouped by Sympa with your primary email address "
+#~ "to unify your subscriptions"
+#~ msgstr ""
+#~ "Teine e-posti aadress, mis peaks oleme teada Sympale ja mida Sympa "
+#~ "kasutab sinu alternatiivse aadressina. Kõik sinu e-posti aadressi "
+#~ "gruppeeritakse Sympa poolt sinu peamise e-posti aadressi all."
 
 # nlsref 6,68
 #, fuzzy
@@ -8726,10 +8746,6 @@ msgstr "teile ei tule enda saadetud kirjad"
 
 #~ msgid "Sympa could not load the list config file."
 #~ msgstr "Sympa ei saanud lugeda listi seadetefaili."
-
-#, fuzzy
-#~ msgid "language"
-#~ msgstr "Keel"
 
 #, fuzzy
 #~ msgid "There is not any owner defined for the list"
