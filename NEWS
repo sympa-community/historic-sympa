@@ -3,9 +3,15 @@
 
 (See Changelog file for the full changes log)
 
-5.4		03 March 2008
+5.4		27 March 2008
 
    Bug fixes :
+
+   /wwsympa/wwsympa.fcgi: While processing a subscription request, first check if user is member of the list
+
+   /wwsympa/bounced.pl: When a bounce file could not be created, nothing was done, so at the next bounced.pl iteration, the faulty report was still present. In such a case, the bounce report is now moved to bad.
+
+   /wwsympa/wwsympa.fcgi: Anybody loading a page from the web archives would presented a HTTP header for the page expiration corresponding to the last time the archive file was modified (this was introduced to limit multiple harvesting of hte same page by web crawlers). The drawback was that, when browsing archives, all the page is not staitc, just the part related to archives. This posed problems for session management. Fixed by testing if a user is a crawler prior to define the expiration header.
 
    /wwsympa/wwsympa.fcgi: [#3790][Reported by R. Tassoni, National Library of Australia and T. Danel] When displaying a message to moderate in the web interface, if a document was attached to the message, the link to display the message lead to empty documents. This was because we didn't take into account the fact that MHonArc put the file in a subdirectory. Fixed by changing the kind of ergument file passed from scalar to vector.
 
