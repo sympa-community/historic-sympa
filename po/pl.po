@@ -896,7 +896,6 @@ msgstr "Powtórz nowe hasło :"
 
 #: web_tt2/choosepasswd.tt2:20 web_tt2/picture_upload.tt2:11
 #: web_tt2/pref.tt2:17 web_tt2/pref.tt2:29 web_tt2/pref.tt2:40
-#: web_tt2/pref.tt2:66
 msgid "Submit"
 msgstr "Zatwierdź"
 
@@ -2719,30 +2718,6 @@ msgstr "Zmiana hasła"
 #: web_tt2/pref.tt2:39
 msgid "Re-enter your new password :"
 msgstr "Wpisz ponownie swoje nowe hasło :"
-
-#: web_tt2/pref.tt2:47
-msgid "Your other email addresses"
-msgstr "innAlternatywny adres email"
-
-#: web_tt2/pref.tt2:64
-msgid "Other email address :"
-msgstr "Alternatywny adres email :"
-
-#: web_tt2/pref.tt2:65
-msgid "Password :"
-msgstr "Hasło :"
-
-#: web_tt2/pref.tt2:71
-msgid ""
-"Another email address, that should be known by Sympa and will be recognized "
-"by Sympa as an alternate email address for you. All your email addressed "
-"will also be grouped by Sympa with your primary email address to unify your "
-"subscriptions"
-msgstr ""
-"Inny adres email, który powinien być znany przez Sympę i będzie przez nią "
-"rozpoznawany jako twój adres alternatywny. Każdy z twoich emaili "
-"adresowanych będzie pogrupowany przez Sympę według twojego podstawowego "
-"adresu email, aby ujednolicić twoje subskrypcje."
 
 #: web_tt2/remindpasswd.tt2:5
 msgid ""
@@ -8636,6 +8611,26 @@ msgstr "żadnej poczty (przydatne na urlop)"
 #: wwsympa/wwslib.pm:44
 msgid "you do not receive your own posts"
 msgstr "nie otrzymujesz swoich własnych postów"
+
+#~ msgid "Your other email addresses"
+#~ msgstr "innAlternatywny adres email"
+
+#~ msgid "Other email address :"
+#~ msgstr "Alternatywny adres email :"
+
+#~ msgid "Password :"
+#~ msgstr "Hasło :"
+
+#~ msgid ""
+#~ "Another email address, that should be known by Sympa and will be "
+#~ "recognized by Sympa as an alternate email address for you. All your email "
+#~ "addressed will also be grouped by Sympa with your primary email address "
+#~ "to unify your subscriptions"
+#~ msgstr ""
+#~ "Inny adres email, który powinien być znany przez Sympę i będzie przez nią "
+#~ "rozpoznawany jako twój adres alternatywny. Każdy z twoich emaili "
+#~ "adresowanych będzie pogrupowany przez Sympę według twojego podstawowego "
+#~ "adresu email, aby ujednolicić twoje subskrypcje."
 
 # nlsref 6,68
 #~ msgid "Unable to access the message authenticated with key %1."

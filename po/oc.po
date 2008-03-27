@@ -871,7 +871,6 @@ msgstr "Confirmar lomot de santa Clara nòu :"
 
 #: web_tt2/choosepasswd.tt2:20 web_tt2/picture_upload.tt2:11
 #: web_tt2/pref.tt2:17 web_tt2/pref.tt2:29 web_tt2/pref.tt2:40
-#: web_tt2/pref.tt2:66
 msgid "Submit"
 msgstr "Validar"
 
@@ -2637,29 +2636,6 @@ msgstr "Cambiament de mot de santa Clara"
 #: web_tt2/pref.tt2:39
 msgid "Re-enter your new password :"
 msgstr "Tornatz intrar lo mot de santa Clara nòu :"
-
-#: web_tt2/pref.tt2:47
-msgid "Your other email addresses"
-msgstr "Vòstras adreiças electronicas alternativas"
-
-#: web_tt2/pref.tt2:64
-msgid "Other email address :"
-msgstr "Autra adreiça electronica :"
-
-#: web_tt2/pref.tt2:65
-msgid "Password :"
-msgstr "Mot de santa Clara :"
-
-#: web_tt2/pref.tt2:71
-msgid ""
-"Another email address, that should be known by Sympa and will be recognized "
-"by Sympa as an alternate email address for you. All your email addressed "
-"will also be grouped by Sympa with your primary email address to unify your "
-"subscriptions"
-msgstr ""
-"Aquela autra adreiça electronica, que Sympa deu conéisser, serà reconeguda "
-"coma una adreça alternativa. Poiretz tanben unificar vòstres abonament amb "
-"vòstra adreça principala."
 
 #: web_tt2/remindpasswd.tt2:5
 msgid ""
@@ -8443,6 +8419,25 @@ msgstr "Copar la recepcion dels messatges (es util pendent las vacanças)"
 #: wwsympa/wwslib.pm:44
 msgid "you do not receive your own posts"
 msgstr "per recebre pas los vòstres messatges"
+
+#~ msgid "Your other email addresses"
+#~ msgstr "Vòstras adreiças electronicas alternativas"
+
+#~ msgid "Other email address :"
+#~ msgstr "Autra adreiça electronica :"
+
+#~ msgid "Password :"
+#~ msgstr "Mot de santa Clara :"
+
+#~ msgid ""
+#~ "Another email address, that should be known by Sympa and will be "
+#~ "recognized by Sympa as an alternate email address for you. All your email "
+#~ "addressed will also be grouped by Sympa with your primary email address "
+#~ "to unify your subscriptions"
+#~ msgstr ""
+#~ "Aquela autra adreiça electronica, que Sympa deu conéisser, serà "
+#~ "reconeguda coma una adreça alternativa. Poiretz tanben unificar vòstres "
+#~ "abonament amb vòstra adreça principala."
 
 # nlsref 6,68
 #~ msgid "Unable to access the message authenticated with key %1."

@@ -866,7 +866,6 @@ msgstr "Uus parool uuesti:"
 
 #: web_tt2/choosepasswd.tt2:20 web_tt2/picture_upload.tt2:11
 #: web_tt2/pref.tt2:17 web_tt2/pref.tt2:29 web_tt2/pref.tt2:40
-#: web_tt2/pref.tt2:66
 msgid "Submit"
 msgstr "Lisa"
 
@@ -2649,29 +2648,6 @@ msgstr "Parooli muutmine"
 #: web_tt2/pref.tt2:39
 msgid "Re-enter your new password :"
 msgstr "Uus parool veelkord:"
-
-#: web_tt2/pref.tt2:47
-msgid "Your other email addresses"
-msgstr "Sinu teine e-posti aadress"
-
-#: web_tt2/pref.tt2:64
-msgid "Other email address :"
-msgstr "Teine e-posti aadress:"
-
-#: web_tt2/pref.tt2:65
-msgid "Password :"
-msgstr "Parool:"
-
-#: web_tt2/pref.tt2:71
-msgid ""
-"Another email address, that should be known by Sympa and will be recognized "
-"by Sympa as an alternate email address for you. All your email addressed "
-"will also be grouped by Sympa with your primary email address to unify your "
-"subscriptions"
-msgstr ""
-"Teine e-posti aadress, mis peaks oleme teada Sympale ja mida Sympa kasutab "
-"sinu alternatiivse aadressina. Kõik sinu e-posti aadressi gruppeeritakse "
-"Sympa poolt sinu peamise e-posti aadressi all."
 
 #: web_tt2/remindpasswd.tt2:5
 msgid ""
@@ -8427,6 +8403,25 @@ msgstr ""
 #: wwsympa/wwslib.pm:44
 msgid "you do not receive your own posts"
 msgstr "teile ei tule enda saadetud kirjad"
+
+#~ msgid "Your other email addresses"
+#~ msgstr "Sinu teine e-posti aadress"
+
+#~ msgid "Other email address :"
+#~ msgstr "Teine e-posti aadress:"
+
+#~ msgid "Password :"
+#~ msgstr "Parool:"
+
+#~ msgid ""
+#~ "Another email address, that should be known by Sympa and will be "
+#~ "recognized by Sympa as an alternate email address for you. All your email "
+#~ "addressed will also be grouped by Sympa with your primary email address "
+#~ "to unify your subscriptions"
+#~ msgstr ""
+#~ "Teine e-posti aadress, mis peaks oleme teada Sympale ja mida Sympa "
+#~ "kasutab sinu alternatiivse aadressina. Kõik sinu e-posti aadressi "
+#~ "gruppeeritakse Sympa poolt sinu peamise e-posti aadressi all."
 
 # nlsref 6,68
 #, fuzzy

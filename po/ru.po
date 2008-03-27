@@ -860,7 +860,6 @@ msgstr "Новый пароль ещё раз :"
 
 #: web_tt2/choosepasswd.tt2:20 web_tt2/picture_upload.tt2:11
 #: web_tt2/pref.tt2:17 web_tt2/pref.tt2:29 web_tt2/pref.tt2:40
-#: web_tt2/pref.tt2:66
 msgid "Submit"
 msgstr "Отправить"
 
@@ -2608,30 +2607,6 @@ msgstr "Изменение пароля"
 #: web_tt2/pref.tt2:39
 msgid "Re-enter your new password :"
 msgstr "Введите Ваш новый пароль ещё раз :"
-
-#: web_tt2/pref.tt2:47
-msgid "Your other email addresses"
-msgstr "Ваши запасные электронные адреса"
-
-#: web_tt2/pref.tt2:64
-msgid "Other email address :"
-msgstr "Запасной электронный адрес :"
-
-#: web_tt2/pref.tt2:65
-msgid "Password :"
-msgstr "Пароль :"
-
-#: web_tt2/pref.tt2:71
-msgid ""
-"Another email address, that should be known by Sympa and will be recognized "
-"by Sympa as an alternate email address for you. All your email addressed "
-"will also be grouped by Sympa with your primary email address to unify your "
-"subscriptions"
-msgstr ""
-"Ещё один электронный адрес, который будет известен Sympa и будет "
-"распознаваться Sympa в качестве альтернативного электронного адреса для Вас. "
-"Все Ваши электронные адреса будут сгруппированы Sympa c основным электронным "
-"адресом, чтобы унифицировать Ваши подписки "
 
 #: web_tt2/remindpasswd.tt2:5
 msgid ""
@@ -4639,7 +4614,6 @@ msgstr ""
 msgid "For each list here is a mail address to use if you want to unsubscribe."
 msgstr ""
 "В каждой рассылке приводится адрес, по которому Вы можете от нее отписаться. "
-""
 
 #: mail_tt2/helpfile.tt2:2 src/Commands.pm:197 src/Commands.pm:213
 msgid "User guide"
@@ -4681,7 +4655,8 @@ msgstr "HELp                                              * Этот файл п
 
 #: mail_tt2/helpfile.tt2:19
 msgid "INFO <list>                 * Information about a list"
-msgstr "INFO <рассылка>                                 * Информация о рассылке"
+msgstr ""
+"INFO <рассылка>                                 * Информация о рассылке"
 
 #: mail_tt2/helpfile.tt2:20
 msgid "LISts                       * Directory of lists managed on this node"
@@ -4750,7 +4725,8 @@ msgstr "SET <paccылка>|* SUMMARY            * Получить только 
 
 #: mail_tt2/helpfile.tt2:32
 msgid "SET <list>|* NOTICE         * Receiving message subject only"
-msgstr "SET <paccылка>|* NOTICE                * Получить только темы сообщений"
+msgstr ""
+"SET <paccылка>|* NOTICE                * Получить только темы сообщений"
 
 #: mail_tt2/helpfile.tt2:33
 msgid "SET <list>|* MAIL           * <list> reception in normal mode"
@@ -4784,8 +4760,7 @@ msgstr ""
 msgid ""
 "LAST <list>                 * Used to received the last message from <list>"
 msgstr ""
-"LAST <рассылка>                  * Получить последнее сообщение из "
-"<рассылки>"
+"LAST <рассылка>                  * Получить последнее сообщение из <рассылки>"
 
 #: mail_tt2/helpfile.tt2:41
 msgid "INVITE <list> <email>       * Invite <email> for subscription in <list>"
@@ -4812,11 +4787,13 @@ msgstr ""
 #: mail_tt2/helpfile.tt2:47
 msgid ""
 "The following commands are available only for lists owners or moderators:"
-msgstr "Следующие команды доступны только владельцам или модераторам рассылок: "
+msgstr ""
+"Следующие команды доступны только владельцам или модераторам рассылок: "
 
 #: mail_tt2/helpfile.tt2:49
 msgid "ADD <list> user@host Full name  * To add a user to a list"
-msgstr "ADD <рассылка> user@host Полное Имя  * Добавить пользователя в рассылку"
+msgstr ""
+"ADD <рассылка> user@host Полное Имя  * Добавить пользователя в рассылку"
 
 #: mail_tt2/helpfile.tt2:50
 msgid "DEL <list> user@host            * To delete a user from a list"
@@ -7935,6 +7912,26 @@ msgstr ""
 #: wwsympa/wwslib.pm:44
 msgid "you do not receive your own posts"
 msgstr ""
+
+#~ msgid "Your other email addresses"
+#~ msgstr "Ваши запасные электронные адреса"
+
+#~ msgid "Other email address :"
+#~ msgstr "Запасной электронный адрес :"
+
+#~ msgid "Password :"
+#~ msgstr "Пароль :"
+
+#~ msgid ""
+#~ "Another email address, that should be known by Sympa and will be "
+#~ "recognized by Sympa as an alternate email address for you. All your email "
+#~ "addressed will also be grouped by Sympa with your primary email address "
+#~ "to unify your subscriptions"
+#~ msgstr ""
+#~ "Ещё один электронный адрес, который будет известен Sympa и будет "
+#~ "распознаваться Sympa в качестве альтернативного электронного адреса для "
+#~ "Вас. Все Ваши электронные адреса будут сгруппированы Sympa c основным "
+#~ "электронным адресом, чтобы унифицировать Ваши подписки "
 
 #, fuzzy
 #~ msgid " The latest messages "

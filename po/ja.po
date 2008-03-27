@@ -855,7 +855,6 @@ msgstr "新しいパスワード(確認):"
 
 #: web_tt2/choosepasswd.tt2:20 web_tt2/picture_upload.tt2:11
 #: web_tt2/pref.tt2:17 web_tt2/pref.tt2:29 web_tt2/pref.tt2:40
-#: web_tt2/pref.tt2:66
 msgid "Submit"
 msgstr "設定"
 
@@ -2589,30 +2588,6 @@ msgstr "パスワードの変更"
 #: web_tt2/pref.tt2:39
 msgid "Re-enter your new password :"
 msgstr "パスワードの再入力:"
-
-#: web_tt2/pref.tt2:47
-msgid "Your other email addresses"
-msgstr "他の電子メールアドレス"
-
-#: web_tt2/pref.tt2:64
-msgid "Other email address :"
-msgstr "他の電子メールアドレス:"
-
-#: web_tt2/pref.tt2:65
-msgid "Password :"
-msgstr "パスワード:"
-
-#: web_tt2/pref.tt2:71
-msgid ""
-"Another email address, that should be known by Sympa and will be recognized "
-"by Sympa as an alternate email address for you. All your email addressed "
-"will also be grouped by Sympa with your primary email address to unify your "
-"subscriptions"
-msgstr ""
-"ここで、他の電子メールアドレスを知らせておけば、メーリングリストシステムはそ"
-"れもあなたの電子メールアドレスだとわかってくれます。また、いくつものアドレス"
-"でいろいろなメーリングリストに読者登録している場合、メインの電子メールアドレ"
-"スに読者登録を一本化することもできます。"
 
 #: web_tt2/remindpasswd.tt2:5
 msgid ""
@@ -8112,6 +8087,26 @@ msgstr "受け取らない (休暇のときなどに便利)"
 #: wwsympa/wwslib.pm:44
 msgid "you do not receive your own posts"
 msgstr "自分が投稿したものは受け取らない"
+
+#~ msgid "Your other email addresses"
+#~ msgstr "他の電子メールアドレス"
+
+#~ msgid "Other email address :"
+#~ msgstr "他の電子メールアドレス:"
+
+#~ msgid "Password :"
+#~ msgstr "パスワード:"
+
+#~ msgid ""
+#~ "Another email address, that should be known by Sympa and will be "
+#~ "recognized by Sympa as an alternate email address for you. All your email "
+#~ "addressed will also be grouped by Sympa with your primary email address "
+#~ "to unify your subscriptions"
+#~ msgstr ""
+#~ "ここで、他の電子メールアドレスを知らせておけば、メーリングリストシステムは"
+#~ "それもあなたの電子メールアドレスだとわかってくれます。また、いくつものアド"
+#~ "レスでいろいろなメーリングリストに読者登録している場合、メインの電子メール"
+#~ "アドレスに読者登録を一本化することもできます。"
 
 #~ msgid "Unable to access the message authenticated with key %1."
 #~ msgstr "キー %1 で本人確認されたメッセージにアクセスできません。"

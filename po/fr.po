@@ -859,7 +859,6 @@ msgstr "Confirmation nouveau mot de passe :"
 
 #: web_tt2/choosepasswd.tt2:20 web_tt2/picture_upload.tt2:11
 #: web_tt2/pref.tt2:17 web_tt2/pref.tt2:29 web_tt2/pref.tt2:40
-#: web_tt2/pref.tt2:66
 msgid "Submit"
 msgstr "Valider"
 
@@ -2634,29 +2633,6 @@ msgstr "Changement de mot de passe"
 #: web_tt2/pref.tt2:39
 msgid "Re-enter your new password :"
 msgstr "Ressaisissez le nouveau mot de passe :"
-
-#: web_tt2/pref.tt2:47
-msgid "Your other email addresses"
-msgstr "Vos autres adresses e-mail"
-
-#: web_tt2/pref.tt2:64
-msgid "Other email address :"
-msgstr "Autre adresse e-mail :"
-
-#: web_tt2/pref.tt2:65
-msgid "Password :"
-msgstr "Mot de passe :"
-
-#: web_tt2/pref.tt2:71
-msgid ""
-"Another email address, that should be known by Sympa and will be recognized "
-"by Sympa as an alternate email address for you. All your email addressed "
-"will also be grouped by Sympa with your primary email address to unify your "
-"subscriptions"
-msgstr ""
-"Cette autre adresse e-mail, qui doit être connue de Sympa, sera reconnue "
-"comme une adresse alternative. Vous pourrez unifier vos abonnements avec "
-"votre adresse principale."
 
 #: web_tt2/remindpasswd.tt2:5
 msgid ""
@@ -8438,6 +8414,25 @@ msgstr "interrompre la réception des messages (utile pendant les vacances)"
 #: wwsympa/wwslib.pm:44
 msgid "you do not receive your own posts"
 msgstr "pour ne pas recevoir ses propres messages"
+
+#~ msgid "Your other email addresses"
+#~ msgstr "Vos autres adresses e-mail"
+
+#~ msgid "Other email address :"
+#~ msgstr "Autre adresse e-mail :"
+
+#~ msgid "Password :"
+#~ msgstr "Mot de passe :"
+
+#~ msgid ""
+#~ "Another email address, that should be known by Sympa and will be "
+#~ "recognized by Sympa as an alternate email address for you. All your email "
+#~ "addressed will also be grouped by Sympa with your primary email address "
+#~ "to unify your subscriptions"
+#~ msgstr ""
+#~ "Cette autre adresse e-mail, qui doit être connue de Sympa, sera reconnue "
+#~ "comme une adresse alternative. Vous pourrez unifier vos abonnements avec "
+#~ "votre adresse principale."
 
 # nlsref 6,68
 #~ msgid "Unable to access the message authenticated with key %1."

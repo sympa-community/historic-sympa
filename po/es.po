@@ -869,7 +869,6 @@ msgstr "Contraseña nueva (repetir):"
 
 #: web_tt2/choosepasswd.tt2:20 web_tt2/picture_upload.tt2:11
 #: web_tt2/pref.tt2:17 web_tt2/pref.tt2:29 web_tt2/pref.tt2:40
-#: web_tt2/pref.tt2:66
 msgid "Submit"
 msgstr "Aceptar"
 
@@ -2603,30 +2602,6 @@ msgstr "Cambiar su contraseña"
 #: web_tt2/pref.tt2:39
 msgid "Re-enter your new password :"
 msgstr "Vuelve a ingresar tu nueva contraseña:"
-
-#: web_tt2/pref.tt2:47
-msgid "Your other email addresses"
-msgstr "Tus otras direcciones de correo"
-
-#: web_tt2/pref.tt2:64
-msgid "Other email address :"
-msgstr "Otra dirección de correo:"
-
-#: web_tt2/pref.tt2:65
-msgid "Password :"
-msgstr "Contraseña:"
-
-#: web_tt2/pref.tt2:71
-msgid ""
-"Another email address, that should be known by Sympa and will be recognized "
-"by Sympa as an alternate email address for you. All your email addressed "
-"will also be grouped by Sympa with your primary email address to unify your "
-"subscriptions"
-msgstr ""
-"alguna direccion de correo electronico, que deberia ser conocido por Sympa y "
-"ser reconocido por Sympa es uan alternativa de direccion electronica para "
-"ti. todas tu direcciones de correo pueden ser agrupadas por Sympa con su "
-"direccion primaria para unificar a los subcriptores"
 
 #: web_tt2/remindpasswd.tt2:5
 msgid ""
@@ -8186,6 +8161,26 @@ msgstr "no mail (útil para las vacaciones)"
 #: wwsympa/wwslib.pm:44
 msgid "you do not receive your own posts"
 msgstr "no recibes tus propios mensajes"
+
+#~ msgid "Your other email addresses"
+#~ msgstr "Tus otras direcciones de correo"
+
+#~ msgid "Other email address :"
+#~ msgstr "Otra dirección de correo:"
+
+#~ msgid "Password :"
+#~ msgstr "Contraseña:"
+
+#~ msgid ""
+#~ "Another email address, that should be known by Sympa and will be "
+#~ "recognized by Sympa as an alternate email address for you. All your email "
+#~ "addressed will also be grouped by Sympa with your primary email address "
+#~ "to unify your subscriptions"
+#~ msgstr ""
+#~ "alguna direccion de correo electronico, que deberia ser conocido por "
+#~ "Sympa y ser reconocido por Sympa es uan alternativa de direccion "
+#~ "electronica para ti. todas tu direcciones de correo pueden ser agrupadas "
+#~ "por Sympa con su direccion primaria para unificar a los subcriptores"
 
 #~ msgid "Unable to access the message authenticated with key %1."
 #~ msgstr "Imposible acceder al mensaje autenticado con la clave %1."

@@ -884,7 +884,6 @@ msgstr "Új jelszó még egyszer:"
 
 #: web_tt2/choosepasswd.tt2:20 web_tt2/picture_upload.tt2:11
 #: web_tt2/pref.tt2:17 web_tt2/pref.tt2:29 web_tt2/pref.tt2:40
-#: web_tt2/pref.tt2:66
 msgid "Submit"
 msgstr "Mentés"
 
@@ -2743,31 +2742,6 @@ msgstr "Jelszó megváltoztatása"
 #: web_tt2/pref.tt2:39
 msgid "Re-enter your new password :"
 msgstr "Új jelszó még egyszer:"
-
-#: web_tt2/pref.tt2:47
-msgid "Your other email addresses"
-msgstr "További e-mail címeim"
-
-#: web_tt2/pref.tt2:64
-msgid "Other email address :"
-msgstr "Másik e-mail cím:"
-
-#: web_tt2/pref.tt2:65
-msgid "Password :"
-msgstr "Jelszó:"
-
-#: web_tt2/pref.tt2:71
-#, fuzzy
-msgid ""
-"Another email address, that should be known by Sympa and will be recognized "
-"by Sympa as an alternate email address for you. All your email addressed "
-"will also be grouped by Sympa with your primary email address to unify your "
-"subscriptions"
-msgstr ""
-"Az itt megadott további e-mail címet a Sympa alternatív címként fogja "
-"kezelni.\n"
-"A különböző címről történő feliratkozásokat az elsődlegesen használt e-mail\n"
-"címmel ezentúl egységesen kezelheti."
 
 #: web_tt2/remindpasswd.tt2:5
 msgid ""
@@ -8690,6 +8664,28 @@ msgstr "nincs kézbesítés (hasznos szabadság esetén)"
 #: wwsympa/wwslib.pm:44
 msgid "you do not receive your own posts"
 msgstr "nem kapja meg a saját leveleit"
+
+#~ msgid "Your other email addresses"
+#~ msgstr "További e-mail címeim"
+
+#~ msgid "Other email address :"
+#~ msgstr "Másik e-mail cím:"
+
+#~ msgid "Password :"
+#~ msgstr "Jelszó:"
+
+#, fuzzy
+#~ msgid ""
+#~ "Another email address, that should be known by Sympa and will be "
+#~ "recognized by Sympa as an alternate email address for you. All your email "
+#~ "addressed will also be grouped by Sympa with your primary email address "
+#~ "to unify your subscriptions"
+#~ msgstr ""
+#~ "Az itt megadott további e-mail címet a Sympa alternatív címként fogja "
+#~ "kezelni.\n"
+#~ "A különböző címről történő feliratkozásokat az elsődlegesen használt e-"
+#~ "mail\n"
+#~ "címmel ezentúl egységesen kezelheti."
 
 # nlsref 6,68
 #, fuzzy

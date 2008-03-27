@@ -860,7 +860,6 @@ msgstr "Nova senha, novamente :"
 
 #: web_tt2/choosepasswd.tt2:20 web_tt2/picture_upload.tt2:11
 #: web_tt2/pref.tt2:17 web_tt2/pref.tt2:29 web_tt2/pref.tt2:40
-#: web_tt2/pref.tt2:66
 msgid "Submit"
 msgstr "Enviar"
 
@@ -2595,30 +2594,6 @@ msgstr "Alterando sua senha"
 #: web_tt2/pref.tt2:39
 msgid "Re-enter your new password :"
 msgstr "Digite novamente sua senha :"
-
-#: web_tt2/pref.tt2:47
-msgid "Your other email addresses"
-msgstr "Seu email alternativo"
-
-#: web_tt2/pref.tt2:64
-msgid "Other email address :"
-msgstr "Endereço de email alternativo :"
-
-#: web_tt2/pref.tt2:65
-msgid "Password :"
-msgstr "Senha :"
-
-#: web_tt2/pref.tt2:71
-msgid ""
-"Another email address, that should be known by Sympa and will be recognized "
-"by Sympa as an alternate email address for you. All your email addressed "
-"will also be grouped by Sympa with your primary email address to unify your "
-"subscriptions"
-msgstr ""
-"Outro endereço de e-mail, que deve ser conhecido pelo servidor Sympa e será "
-"como um endereço de e-mail alternativo para você. Todos seus endereços de e-"
-"mail serão agrupados pelo Sympa com seu endereço de e-mail primário, "
-"unificando suas inscrições em listas."
 
 #: web_tt2/remindpasswd.tt2:5
 msgid ""
@@ -8095,6 +8070,26 @@ msgstr "sem correio (útil em caso de férias)"
 #: wwsympa/wwslib.pm:44
 msgid "you do not receive your own posts"
 msgstr "você não recebe suas próprias mensagens"
+
+#~ msgid "Your other email addresses"
+#~ msgstr "Seu email alternativo"
+
+#~ msgid "Other email address :"
+#~ msgstr "Endereço de email alternativo :"
+
+#~ msgid "Password :"
+#~ msgstr "Senha :"
+
+#~ msgid ""
+#~ "Another email address, that should be known by Sympa and will be "
+#~ "recognized by Sympa as an alternate email address for you. All your email "
+#~ "addressed will also be grouped by Sympa with your primary email address "
+#~ "to unify your subscriptions"
+#~ msgstr ""
+#~ "Outro endereço de e-mail, que deve ser conhecido pelo servidor Sympa e "
+#~ "será como um endereço de e-mail alternativo para você. Todos seus "
+#~ "endereços de e-mail serão agrupados pelo Sympa com seu endereço de e-mail "
+#~ "primário, unificando suas inscrições em listas."
 
 #~ msgid "Service messages description :"
 #~ msgstr "Serviço de descrição das mensagens :"

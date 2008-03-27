@@ -841,7 +841,6 @@ msgstr "다시 새 패스워드 :"
 
 #: web_tt2/choosepasswd.tt2:20 web_tt2/picture_upload.tt2:11
 #: web_tt2/pref.tt2:17 web_tt2/pref.tt2:29 web_tt2/pref.tt2:40
-#: web_tt2/pref.tt2:66
 msgid "Submit"
 msgstr "전송"
 
@@ -2565,30 +2564,6 @@ msgstr "당신의 패스워드 바꾸기"
 #: web_tt2/pref.tt2:39
 msgid "Re-enter your new password :"
 msgstr "새 패스워드를 다시 입력하십시오 :"
-
-#: web_tt2/pref.tt2:47
-msgid "Your other email addresses"
-msgstr "다른 이메일 주소"
-
-#: web_tt2/pref.tt2:64
-msgid "Other email address :"
-msgstr "다른 이메일 주소 :"
-
-#: web_tt2/pref.tt2:65
-msgid "Password :"
-msgstr "패스워드 :"
-
-#: web_tt2/pref.tt2:71
-msgid ""
-"Another email address, that should be known by Sympa and will be recognized "
-"by Sympa as an alternate email address for you. All your email addressed "
-"will also be grouped by Sympa with your primary email address to unify your "
-"subscriptions"
-msgstr ""
-"또 다른 이메일주소는 사용자를 위한 선택적인 이메일 주소로, Sympa 시스템에 의"
-"해 알려 졌 있거나 인식되어져 있는 이메일 이어야 합니다.모든 사용자 이메일은 "
-"사용자의 가입구독에 기본적으로 사용되는 기본(Primary) 이메일과 함께 Sympa시스"
-"템에 의해 그룹화 될 것입니다."
 
 #: web_tt2/remindpasswd.tt2:5
 msgid ""
@@ -7980,6 +7955,26 @@ msgstr "메일 없음 (휴가 동안 유용한)"
 #: wwsympa/wwslib.pm:44
 msgid "you do not receive your own posts"
 msgstr "사용자의 포스트를 받지 않습니다"
+
+#~ msgid "Your other email addresses"
+#~ msgstr "다른 이메일 주소"
+
+#~ msgid "Other email address :"
+#~ msgstr "다른 이메일 주소 :"
+
+#~ msgid "Password :"
+#~ msgstr "패스워드 :"
+
+#~ msgid ""
+#~ "Another email address, that should be known by Sympa and will be "
+#~ "recognized by Sympa as an alternate email address for you. All your email "
+#~ "addressed will also be grouped by Sympa with your primary email address "
+#~ "to unify your subscriptions"
+#~ msgstr ""
+#~ "또 다른 이메일주소는 사용자를 위한 선택적인 이메일 주소로, Sympa 시스템에 "
+#~ "의해 알려 졌 있거나 인식되어져 있는 이메일 이어야 합니다.모든 사용자 이메"
+#~ "일은 사용자의 가입구독에 기본적으로 사용되는 기본(Primary) 이메일과 함께 "
+#~ "Sympa시스템에 의해 그룹화 될 것입니다."
 
 #~ msgid ""
 #~ "(Default value: reception mail,notice,digest,digestplain,summary,nomail)"

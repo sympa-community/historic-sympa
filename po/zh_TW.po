@@ -828,7 +828,6 @@ msgstr "再次輸入新口令："
 
 #: web_tt2/choosepasswd.tt2:20 web_tt2/picture_upload.tt2:11
 #: web_tt2/pref.tt2:17 web_tt2/pref.tt2:29 web_tt2/pref.tt2:40
-#: web_tt2/pref.tt2:66
 msgid "Submit"
 msgstr "提交"
 
@@ -2522,28 +2521,6 @@ msgstr "改變您的口令"
 #: web_tt2/pref.tt2:39
 msgid "Re-enter your new password :"
 msgstr "重新輸入新口令："
-
-#: web_tt2/pref.tt2:47
-msgid "Your other email addresses"
-msgstr "您的其它郵件地址"
-
-#: web_tt2/pref.tt2:64
-msgid "Other email address :"
-msgstr "其它郵件地址："
-
-#: web_tt2/pref.tt2:65
-msgid "Password :"
-msgstr "口令："
-
-#: web_tt2/pref.tt2:71
-msgid ""
-"Another email address, that should be known by Sympa and will be recognized "
-"by Sympa as an alternate email address for you. All your email addressed "
-"will also be grouped by Sympa with your primary email address to unify your "
-"subscriptions"
-msgstr ""
-"另一個郵件地址，Sympa應該知道並將作為一個您的供選擇的郵地址由Sympa識別出。您"
-"所有的郵件地址也將由Sympa同您的主郵件一起編組來統一訂閱"
 
 #: web_tt2/remindpasswd.tt2:5
 msgid ""
@@ -7862,6 +7839,24 @@ msgstr "不接收郵件（用于假期）"
 #: wwsympa/wwslib.pm:44
 msgid "you do not receive your own posts"
 msgstr "不接收自己發的郵件"
+
+#~ msgid "Your other email addresses"
+#~ msgstr "您的其它郵件地址"
+
+#~ msgid "Other email address :"
+#~ msgstr "其它郵件地址："
+
+#~ msgid "Password :"
+#~ msgstr "口令："
+
+#~ msgid ""
+#~ "Another email address, that should be known by Sympa and will be "
+#~ "recognized by Sympa as an alternate email address for you. All your email "
+#~ "addressed will also be grouped by Sympa with your primary email address "
+#~ "to unify your subscriptions"
+#~ msgstr ""
+#~ "另一個郵件地址，Sympa應該知道並將作為一個您的供選擇的郵地址由Sympa識別出。"
+#~ "您所有的郵件地址也將由Sympa同您的主郵件一起編組來統一訂閱"
 
 #~ msgid "%Image(%s)"
 #~ msgstr "%圖象（%s）"

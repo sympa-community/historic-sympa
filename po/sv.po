@@ -854,7 +854,6 @@ msgstr "Nytt lösenord igen :"
 
 #: web_tt2/choosepasswd.tt2:20 web_tt2/picture_upload.tt2:11
 #: web_tt2/pref.tt2:17 web_tt2/pref.tt2:29 web_tt2/pref.tt2:40
-#: web_tt2/pref.tt2:66
 msgid "Submit"
 msgstr "Skicka"
 
@@ -2605,26 +2604,6 @@ msgstr "Ändrar ditt lösenord"
 #: web_tt2/pref.tt2:39
 msgid "Re-enter your new password :"
 msgstr "Repetera ditt nya lösenord :"
-
-#: web_tt2/pref.tt2:47
-msgid "Your other email addresses"
-msgstr ""
-
-#: web_tt2/pref.tt2:64
-msgid "Other email address :"
-msgstr "Annan e-postaddress :"
-
-#: web_tt2/pref.tt2:65
-msgid "Password :"
-msgstr "Lösenord :"
-
-#: web_tt2/pref.tt2:71
-msgid ""
-"Another email address, that should be known by Sympa and will be recognized "
-"by Sympa as an alternate email address for you. All your email addressed "
-"will also be grouped by Sympa with your primary email address to unify your "
-"subscriptions"
-msgstr ""
 
 #: web_tt2/remindpasswd.tt2:5
 msgid ""
@@ -8009,6 +7988,12 @@ msgstr "ingen e-post (användbar för semestrar)"
 #: wwsympa/wwslib.pm:44
 msgid "you do not receive your own posts"
 msgstr "du kommer inte ta mot dina egna postningar"
+
+#~ msgid "Other email address :"
+#~ msgstr "Annan e-postaddress :"
+
+#~ msgid "Password :"
+#~ msgstr "Lösenord :"
 
 #~ msgid ""
 #~ "List description : This text is sent as an answer to the mail command\n"

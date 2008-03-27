@@ -825,7 +825,6 @@ msgstr ""
 
 #: web_tt2/choosepasswd.tt2:20 web_tt2/picture_upload.tt2:11
 #: web_tt2/pref.tt2:17 web_tt2/pref.tt2:29 web_tt2/pref.tt2:40
-#: web_tt2/pref.tt2:66
 msgid "Submit"
 msgstr ""
 
@@ -2495,26 +2494,6 @@ msgstr ""
 
 #: web_tt2/pref.tt2:39
 msgid "Re-enter your new password :"
-msgstr ""
-
-#: web_tt2/pref.tt2:47
-msgid "Your other email addresses"
-msgstr ""
-
-#: web_tt2/pref.tt2:64
-msgid "Other email address :"
-msgstr ""
-
-#: web_tt2/pref.tt2:65
-msgid "Password :"
-msgstr ""
-
-#: web_tt2/pref.tt2:71
-msgid ""
-"Another email address, that should be known by Sympa and will be recognized "
-"by Sympa as an alternate email address for you. All your email addressed "
-"will also be grouped by Sympa with your primary email address to unify your "
-"subscriptions"
 msgstr ""
 
 #: web_tt2/remindpasswd.tt2:5

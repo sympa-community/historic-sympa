@@ -877,7 +877,6 @@ msgstr "Noch einmal neues Passwort :"
 
 #: web_tt2/choosepasswd.tt2:20 web_tt2/picture_upload.tt2:11
 #: web_tt2/pref.tt2:17 web_tt2/pref.tt2:29 web_tt2/pref.tt2:40
-#: web_tt2/pref.tt2:66
 msgid "Submit"
 msgstr "Absenden"
 
@@ -2674,30 +2673,6 @@ msgstr "Passwort ändern"
 #: web_tt2/pref.tt2:39
 msgid "Re-enter your new password :"
 msgstr "Passwort erneut eingeben :"
-
-#: web_tt2/pref.tt2:47
-msgid "Your other email addresses"
-msgstr "Ihre andere E-Mail Adresse"
-
-#: web_tt2/pref.tt2:64
-msgid "Other email address :"
-msgstr "Andere E-Mail Adresse :"
-
-#: web_tt2/pref.tt2:65
-msgid "Password :"
-msgstr "Passwort :"
-
-#: web_tt2/pref.tt2:71
-msgid ""
-"Another email address, that should be known by Sympa and will be recognized "
-"by Sympa as an alternate email address for you. All your email addressed "
-"will also be grouped by Sympa with your primary email address to unify your "
-"subscriptions"
-msgstr ""
-"Eine andere E-Mail-Adresse, die Sympa als alternative E-Mail-Adresse von "
-"Ihnen erkennen soll.\n"
-"Alle Ihre E-Mail-Adressen werden von Sympa zu Ihrer primären E-Mail-Adresse "
-"gruppiert, um Ihre Abonnements zu vereinigen."
 
 #: web_tt2/remindpasswd.tt2:5
 msgid ""
@@ -8351,6 +8326,26 @@ msgstr "keine Nachricht (nützlich für die Urlaube)"
 #: wwsympa/wwslib.pm:44
 msgid "you do not receive your own posts"
 msgstr "Sie empfangen Ihre eigenen Nachrichten nicht"
+
+#~ msgid "Your other email addresses"
+#~ msgstr "Ihre andere E-Mail Adresse"
+
+#~ msgid "Other email address :"
+#~ msgstr "Andere E-Mail Adresse :"
+
+#~ msgid "Password :"
+#~ msgstr "Passwort :"
+
+#~ msgid ""
+#~ "Another email address, that should be known by Sympa and will be "
+#~ "recognized by Sympa as an alternate email address for you. All your email "
+#~ "addressed will also be grouped by Sympa with your primary email address "
+#~ "to unify your subscriptions"
+#~ msgstr ""
+#~ "Eine andere E-Mail-Adresse, die Sympa als alternative E-Mail-Adresse von "
+#~ "Ihnen erkennen soll.\n"
+#~ "Alle Ihre E-Mail-Adressen werden von Sympa zu Ihrer primären E-Mail-"
+#~ "Adresse gruppiert, um Ihre Abonnements zu vereinigen."
 
 #~ msgid "Unable to access the message authenticated with key %1."
 #~ msgstr ""

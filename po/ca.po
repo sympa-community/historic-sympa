@@ -860,7 +860,6 @@ msgstr "Repeteix la nova contrasenya :"
 
 #: web_tt2/choosepasswd.tt2:20 web_tt2/picture_upload.tt2:11
 #: web_tt2/pref.tt2:17 web_tt2/pref.tt2:29 web_tt2/pref.tt2:40
-#: web_tt2/pref.tt2:66
 msgid "Submit"
 msgstr "Acceptar"
 
@@ -2598,30 +2597,6 @@ msgstr "Canviant la seva contrasenya"
 #: web_tt2/pref.tt2:39
 msgid "Re-enter your new password :"
 msgstr "Torneu a introduir la nova contrasenya :"
-
-#: web_tt2/pref.tt2:47
-msgid "Your other email addresses"
-msgstr "L'altre adreça electrònica seva "
-
-#: web_tt2/pref.tt2:64
-msgid "Other email address :"
-msgstr "Un altre adreça electrònica :"
-
-#: web_tt2/pref.tt2:65
-msgid "Password :"
-msgstr "Contrasenya :"
-
-#: web_tt2/pref.tt2:71
-#, fuzzy
-msgid ""
-"Another email address, that should be known by Sympa and will be recognized "
-"by Sympa as an alternate email address for you. All your email addressed "
-"will also be grouped by Sympa with your primary email address to unify your "
-"subscriptions"
-msgstr ""
-"Una altre adreça electrònica que serà considerada una adreça alternativa. "
-"Tot el correu serà agrupat a la seva adreça principal per tal d'unificar les "
-"subscripcions"
 
 #: web_tt2/remindpasswd.tt2:5
 msgid ""
@@ -7756,3 +7731,23 @@ msgstr ""
 #: wwsympa/wwslib.pm:44
 msgid "you do not receive your own posts"
 msgstr ""
+
+#~ msgid "Your other email addresses"
+#~ msgstr "L'altre adreça electrònica seva "
+
+#~ msgid "Other email address :"
+#~ msgstr "Un altre adreça electrònica :"
+
+#~ msgid "Password :"
+#~ msgstr "Contrasenya :"
+
+#, fuzzy
+#~ msgid ""
+#~ "Another email address, that should be known by Sympa and will be "
+#~ "recognized by Sympa as an alternate email address for you. All your email "
+#~ "addressed will also be grouped by Sympa with your primary email address "
+#~ "to unify your subscriptions"
+#~ msgstr ""
+#~ "Una altre adreça electrònica que serà considerada una adreça alternativa. "
+#~ "Tot el correu serà agrupat a la seva adreça principal per tal d'unificar "
+#~ "les subscripcions"
