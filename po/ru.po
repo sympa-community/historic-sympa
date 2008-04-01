@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: sympa\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
 "POT-Creation-Date: 2002-07-16 17:27+0800\n"
-"PO-Revision-Date: 2008-03-24 08:46+0100\n"
+"PO-Revision-Date: 2008-03-27 15:17+0100\n"
 "Last-Translator: chernysh <mail33@gmail.com>\n"
 "Language-Team: Russian <ru@li.org>\n"
 "MIME-Version: 1.0\n"
@@ -4798,10 +4798,14 @@ msgstr ""
 #: mail_tt2/helpfile.tt2:50
 msgid "DEL <list> user@host            * To delete a user from a list"
 msgstr ""
+"DEL <рассылка> user@host                   * Удалить пользователя из "
+"рассылки"
 
 #: mail_tt2/helpfile.tt2:51
 msgid "STATS <list>                    * To consult the statistics for <list>"
 msgstr ""
+"STATS <рассылка>                                 * Обратиться к статистике "
+"<рассылки>"
 
 #: mail_tt2/helpfile.tt2:53
 msgid ""
