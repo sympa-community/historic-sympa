@@ -7,11 +7,11 @@
 
 Bug fixes:
 
-[Reported by J.M. Beuken, univ. cat. Louvain] When copying a template through the web interface, HTML was not unescaped before writing the file. c onsequently, the file used to reload the page for template edition had escaped HTML. for critical files such as main.tt2 or title.tt2, this caused the web page diaply to choke on tt2 parse errors.
+  /wwsympa/wwsympa.fcgi: [Reported by J.M. Beuken, univ. cat. Louvain] When copying a template through the web interface, HTML was not unescaped before writing the file. c onsequently, the file used to reload the page for template edition had escaped HTML. for critical files such as main.tt2 or title.tt2, this caused the web page diaply to choke on tt2 parse errors.
 
 Changes:
 
-Increasing log levels in low level functions of Log.pm.
+  src/Lock.pm: Increasing log levels in low level functions of Lock.pm.
 
 5.4		27 March 2008
 
