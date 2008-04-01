@@ -4798,8 +4798,7 @@ msgstr ""
 #: mail_tt2/helpfile.tt2:50
 msgid "DEL <list> user@host            * To delete a user from a list"
 msgstr ""
-"DEL <рассылка> user@host                   * Удалить пользователя из "
-"рассылки"
+"DEL <рассылка> user@host                   * Удалить пользователя из рассылки"
 
 #: mail_tt2/helpfile.tt2:51
 msgid "STATS <list>                    * To consult the statistics for <list>"
