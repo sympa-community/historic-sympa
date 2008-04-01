@@ -1,4 +1,44 @@
 ------------------------------------------------------------------------
+r4928 | sympa-authors | 2008-04-01 12:16:14 +0200 (mar, 01 avr 2008) | 1 line
+Chemins modifiés :
+   M /branches/sympa-5.4-branch/po/ru.po
+
+Committing updated catalogues from Pootle
+------------------------------------------------------------------------
+r4927 | sympa-authors | 2008-04-01 12:14:04 +0200 (mar, 01 avr 2008) | 1 line
+Chemins modifiés :
+   M /branches/sympa-5.4-branch/po/ru.po
+
+Committing latest translations from Pootle
+------------------------------------------------------------------------
+r4926 | sympa-authors | 2008-04-01 11:53:08 +0200 (mar, 01 avr 2008) | 2 lines
+Chemins modifiés :
+   M /branches/sympa-5.4-branch/wwsympa/wwsympa.fcgi
+
+[Reported by J.M. Beuken, univ. cat. Louvain] Fix: When copying a template through the web interface, HTML was not unescaped before writing the file. c onsequently, the file used to reload the page for template edition had escaped HTML. for critical files such as main.tt2 or title.tt2, this caused the web page diaply to choke on tt2 parse errors.
+
+------------------------------------------------------------------------
+r4922 | sympa-authors | 2008-03-28 11:12:36 +0100 (ven, 28 mar 2008) | 2 lines
+Chemins modifiés :
+   M /branches/sympa-5.4-branch/src/Lock.pm
+
+Increasing log levels in low level functions of Log.pm.
+
+------------------------------------------------------------------------
+r4918 | sympa-authors | 2008-03-27 17:41:49 +0100 (jeu, 27 mar 2008) | 2 lines
+Chemins modifiés :
+   M /branches/sympa-5.4-branch/check_perl_modules.pl
+
+[#3898][Submitted by M. Keisler, mitsein.net] Fix: When checking perl version, Sympa was using human readable version notation (5.8.8 for example) instead of the format returned by $] (5.008008 for example).
+
+------------------------------------------------------------------------
+r4916 | sympa-authors | 2008-03-27 12:07:47 +0100 (jeu, 27 mar 2008) | 1 line
+Chemins modifiés :
+   M /branches/sympa-5.4-branch/ChangeLog
+   M /branches/sympa-5.4-branch/NEWS
+
+Preparing version 5.4
+------------------------------------------------------------------------
 r4915 | sympa-authors | 2008-03-27 12:04:27 +0100 (jeu, 27 mar 2008) | 1 line
 Chemins modifiés :
    M /branches/sympa-5.4-branch/po/af.po
