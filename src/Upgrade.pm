@@ -730,7 +730,8 @@ sub probe_db {
 							 'included_subscriber' => "boolean",
 							 'include_sources_subscriber' => 'varchar(50)',
 							 'bounce_score_subscriber' => 'integer',
-							 'bounce_address_subscriber' => 'varchar(100)'},
+							 'bounce_address_subscriber' => 'varchar(100)',
+							 'custom_attribute_subscriber' => 'text'},
 				  'admin_table' => {'list_admin' => 'varchar(50)',
 						    'user_admin' => 'varchar(100)',
 						    'robot_admin' => 'varchar(80)',
@@ -751,7 +752,7 @@ sub probe_db {
 						       'robot_netidmap' => 'varchar(80)'},
 				  'session_table' => {'id_session' => 'varchar(30)',
 						     'start_date_session' => 'integer',
-						     'date_session' => 'int(11)',
+						     'date_session' => 'integer',
 						     'remote_addr_session' => 'varchar(60)',
 						     'robot_session'  => 'varchar(80)',
 						     'email_session'  => 'varchar(100)',
@@ -925,6 +926,7 @@ sub probe_db {
 		next;
 	    }
 	    foreach my $field (@$res) {
+	    	$field->[2] =~ s/\s+//g;
 		$real_struct{$t}{$field->[1]} = $field->[2];
 	    }
 	}
