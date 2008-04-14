@@ -3,6 +3,27 @@
 
 (See Changelog file for the full changes log)
 
+5.4.2		14 April 2008
+
+Features:
+
+   po/zh_CN.po: [Submitted by Li Xuejiang, Yahoo!] Traditional Chinese is now fully translated.
+
+Changes:
+
+   src/List.pm, src/Upgrade.pm: [Reported by L. Gentis, IUFM Lorraine]When updating a config file while the upgrade process, the "email" parameter value of the "update" paragraph was set to 'listmaster'. However, this value was validated against a regexp for emails. this produced an error log, as 'listmaster' is not a valid email address. Fixed by allowing 'listamster' and 'automatic' strings in this regexp. 'automatic will be used to designate updates done by processes instead of users.
+
+Bug fixes:
+
+   wwsympa/wwsympa.fcgi: [#3947][Reported by S. costard Univ. Haute Bretagne] In the case of CAS authentication, a CAS ticket was requested for any request in the web interface. Fixed by ensuring that the user email is attached to the session.
+
+   src/List.pm: [Submitted by W. Werner, Fraunhofer-Institut SIT] The path that Sympa used to look for encryption keys had '.enc' instead of a '@enc' in the file name.
+
+   src/List.pm: [Submitted by W. Werner, Fraunhofer-Institut SIT] Message signature verification didn't work if user used different certificate for signing and encrypting AND didn't send both in each message, like Kmail does.
+
+   src/Upgrade.pm, src/etc/script/create_db.SQLite: [#3915][Submitted by M. Deranek, slonko.net] SQLite support was broken for the session table.
+   
+
 5.4.1		01 April 2008
 
 Bug fixes:

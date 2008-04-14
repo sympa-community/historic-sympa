@@ -1,4 +1,134 @@
 ------------------------------------------------------------------------
+r4965 | sympa-authors | 2008-04-14 15:26:05 +0200 (lun, 14 avr 2008) | 1 line
+Chemins modifiés :
+   M /branches/sympa-5.4-branch/po/af.po
+   M /branches/sympa-5.4-branch/po/ar.po
+   M /branches/sympa-5.4-branch/po/bg.po
+   M /branches/sympa-5.4-branch/po/br.po
+   M /branches/sympa-5.4-branch/po/ca.po
+   M /branches/sympa-5.4-branch/po/cs.po
+   M /branches/sympa-5.4-branch/po/de.po
+   M /branches/sympa-5.4-branch/po/el.po
+   M /branches/sympa-5.4-branch/po/en_US.po
+   M /branches/sympa-5.4-branch/po/es.po
+   M /branches/sympa-5.4-branch/po/et.po
+   M /branches/sympa-5.4-branch/po/eu.po
+   M /branches/sympa-5.4-branch/po/fi.po
+   M /branches/sympa-5.4-branch/po/fr.po
+   M /branches/sympa-5.4-branch/po/hu.po
+   M /branches/sympa-5.4-branch/po/id.po
+   M /branches/sympa-5.4-branch/po/it.po
+   M /branches/sympa-5.4-branch/po/ja.po
+   M /branches/sympa-5.4-branch/po/ko.po
+   M /branches/sympa-5.4-branch/po/ml.po
+   M /branches/sympa-5.4-branch/po/nb_NO.po
+   M /branches/sympa-5.4-branch/po/nl.po
+   M /branches/sympa-5.4-branch/po/nn_NO.po
+   M /branches/sympa-5.4-branch/po/oc.po
+   M /branches/sympa-5.4-branch/po/pl.po
+   M /branches/sympa-5.4-branch/po/pt.po
+   M /branches/sympa-5.4-branch/po/pt_BR.po
+   M /branches/sympa-5.4-branch/po/ro.po
+   M /branches/sympa-5.4-branch/po/ru.po
+   M /branches/sympa-5.4-branch/po/sv.po
+   M /branches/sympa-5.4-branch/po/sympa.pot
+   M /branches/sympa-5.4-branch/po/tr.po
+   M /branches/sympa-5.4-branch/po/vi.po
+   M /branches/sympa-5.4-branch/po/zh_CN.po
+   M /branches/sympa-5.4-branch/po/zh_TW.po
+
+Committing updated catalogues from Pootle
+------------------------------------------------------------------------
+r4964 | sympa-authors | 2008-04-14 15:23:55 +0200 (lun, 14 avr 2008) | 1 line
+Chemins modifiés :
+   M /branches/sympa-5.4-branch/po/zh_CN.po
+
+Committing latest translations from Pootle
+------------------------------------------------------------------------
+r4963 | david.verdin | 2008-04-11 11:42:53 +0200 (ven, 11 avr 2008) | 2 lines
+Chemins modifiés :
+   M /branches/sympa-5.4-branch/wwsympa/wwsympa.fcgi
+
+[bug][#3947][Reported by S. costard Univ. Haute Bretagne] In the case of CAS authentication, a CAS ticket was requested for any request in the web interface. Fixed by ensuring that the user email is attached to the session.
+
+------------------------------------------------------------------------
+r4958 | sympa-authors | 2008-04-10 11:26:52 +0200 (jeu, 10 avr 2008) | 2 lines
+Chemins modifiés :
+   M /branches/sympa-5.4-branch/src/List.pm
+   M /branches/sympa-5.4-branch/src/Upgrade.pm
+
+[change][Reported by L. Gentis, IUFM Lorraine]When updating a config file while the upgrade process, the "email" parameter value of the "update" paragraph was set to 'listmaster'. However, this value was validated against a regexp for emails. this produced an error log, as 'listmaster' is not a valid email address. Fixed by allowing 'listamster' and 'automatic' strings in this regexp. 'automatic will be used to designate updates done by processes instead of users.
+
+------------------------------------------------------------------------
+r4945 | sympa-authors | 2008-04-08 17:31:30 +0200 (mar, 08 avr 2008) | 2 lines
+Chemins modifiés :
+   M /branches/sympa-5.4-branch/wwsympa/archived.pl
+   M /branches/sympa-5.4-branch/wwsympa/bounced.pl
+
+[bug][Submitted by M. deranek, slonko.net] The gentoo distribution generates files starting with dots. These files generated error messages from Sympa daemons using spools.
+
+------------------------------------------------------------------------
+r4943 | sympa-authors | 2008-04-08 15:18:17 +0200 (mar, 08 avr 2008) | 3 lines
+Chemins modifiés :
+   M /branches/sympa-5.4-branch/src/tools.pl
+
+[bug][Submitted by W. Werner, Fraunhofer-Institut SIT] Message signature verification didn't work if user used different certificate for signing and encrypting AND didn't send both in each message, like Kmail does.
+
+
+------------------------------------------------------------------------
+r4942 | sympa-authors | 2008-04-08 15:06:29 +0200 (mar, 08 avr 2008) | 3 lines
+Chemins modifiés :
+   M /branches/sympa-5.4-branch/src/List.pm
+
+[bug][Submitted by W. Werner, Fraunhofer-Institut SIT] The path that Sympa used to look for encryption keys had '.enc' instead of a '@enc' in the file name.
+
+
+------------------------------------------------------------------------
+r4940 | sympa-authors | 2008-04-03 14:11:41 +0200 (jeu, 03 avr 2008) | 3 lines
+Chemins modifiés :
+   M /branches/sympa-5.4-branch/src/Upgrade.pm
+
+[#3915][Submitted by M. Deranek, slonko.net]Fix: inconsistency between Upgrade .pm and create_db.SQLite for custom_attribute_subscriber field.
+
+
+------------------------------------------------------------------------
+r4938 | sympa-authors | 2008-04-03 13:52:19 +0200 (jeu, 03 avr 2008) | 2 lines
+Chemins modifiés :
+   M /branches/sympa-5.4-branch/src/Upgrade.pm
+   M /branches/sympa-5.4-branch/src/etc/script/create_db.SQLite
+
+[#3915][Submitted by M. Deranek, slonko.net]Fix: SQLite support was broken for the session table.
+
+------------------------------------------------------------------------
+r4936 | sympa-authors | 2008-04-02 09:19:32 +0200 (mer, 02 avr 2008) | 3 lines
+Chemins modifiés :
+   M /branches/sympa-5.4-branch/src/task_manager.pl
+
+[Reported by O. Eyb]Fix: task_manager.pl didn't check that the bounces/OTHER direcory existed prior to clean it, leading to numerous logs from the CleanSpool function claiming that it couldn't open this directory.
+
+
+------------------------------------------------------------------------
+r4932 | sympa-authors | 2008-04-01 17:18:34 +0200 (mar, 01 avr 2008) | 2 lines
+Chemins modifiés :
+   M /branches/sympa-5.4-branch/NEWS
+
+Updating NEWS file.
+
+------------------------------------------------------------------------
+r4931 | sympa-authors | 2008-04-01 17:13:52 +0200 (mar, 01 avr 2008) | 2 lines
+Chemins modifiés :
+   M /branches/sympa-5.4-branch/NEWS
+
+Updating the NEWS file.
+
+------------------------------------------------------------------------
+r4929 | sympa-authors | 2008-04-01 12:16:23 +0200 (mar, 01 avr 2008) | 1 line
+Chemins modifiés :
+   M /branches/sympa-5.4-branch/.version
+   M /branches/sympa-5.4-branch/ChangeLog
+
+Preparing version 5.4.1
+------------------------------------------------------------------------
 r4928 | sympa-authors | 2008-04-01 12:16:14 +0200 (mar, 01 avr 2008) | 1 line
 Chemins modifiés :
    M /branches/sympa-5.4-branch/po/ru.po
@@ -563,7 +693,6 @@ Chemins modifiés :
    M /trunk/.version
    M /trunk/ChangeLog
    M /trunk/NEWS
-   M /trunk/doc/sympa.pdf
 
 Preparing version 5.4b.1
 
@@ -3331,7 +3460,6 @@ Chemins modifiés :
    M /trunk/.version
    M /trunk/ChangeLog
    M /trunk/NEWS
-   M /trunk/doc/sympa.pdf
 
 Preparing new version 5.3.2
 
@@ -3534,13 +3662,6 @@ Chemins modifiés :
    M /trunk/src/Upgrade.pm
 
 Avoiding subscriber vanishing when updating from older Sympa version. Modified version number control to be sure to include any version likely to have neither "included_subscriber" nor "subscribed_subscriber" set.
-
-------------------------------------------------------------------------
-r4414 | david.verdin | 2007-05-30 10:27:43 +0200 (mer, 30 mai 2007) | 2 lines
-Chemins modifiés :
-   M /trunk/doc/sympa.pdf
-
-Updated PDF documentation.
 
 ------------------------------------------------------------------------
 r4413 | david.verdin | 2007-05-30 09:47:53 +0200 (mer, 30 mai 2007) | 2 lines
@@ -5608,7 +5729,6 @@ Chemins modifiés :
    M /trunk/doc/html/sympa.html
    M /trunk/doc/html/sympa.ps
    M /trunk/doc/parse_tex.pl
-   M /trunk/doc/sympa.pdf
    M /trunk/doc/sympa.ps
    M /trunk/doc/sympa.tex
 
@@ -6095,7 +6215,6 @@ Chemins modifiés :
    M /trunk/doc/html/node9.html
    M /trunk/doc/html/sympa.html
    M /trunk/doc/html/sympa.ps
-   M /trunk/doc/sympa.pdf
    M /trunk/doc/sympa.ps
    M /trunk/doc/sympa.tex
 
@@ -6263,7 +6382,6 @@ Chemins modifiés :
    M /trunk/doc/html/node8.html
    M /trunk/doc/html/node9.html
    M /trunk/doc/html/sympa.ps
-   M /trunk/doc/sympa.pdf
    M /trunk/doc/sympa.ps
    M /trunk/doc/sympa.tex
    M /trunk/doc/sympa.tex.tpl
@@ -6312,7 +6430,6 @@ Chemins modifiés :
    M /trunk/doc/html/node9.html
    M /trunk/doc/html/sympa.html
    M /trunk/doc/html/sympa.ps
-   M /trunk/doc/sympa.pdf
    M /trunk/doc/sympa.ps
    M /trunk/doc/sympa.tex
    M /trunk/doc/sympa.tex.tpl
@@ -6640,7 +6757,6 @@ Chemins modifiés :
    M /trunk/doc/html/node9.html
    M /trunk/doc/html/sympa.html
    M /trunk/doc/html/sympa.ps
-   M /trunk/doc/sympa.pdf
    M /trunk/doc/sympa.ps
    M /trunk/doc/sympa.tex
    M /trunk/doc/sympa.tex.tpl
@@ -6732,7 +6848,6 @@ Chemins modifiés :
    M /trunk/doc/html/node9.html
    M /trunk/doc/html/sympa.html
    M /trunk/doc/html/sympa.ps
-   M /trunk/doc/sympa.pdf
    M /trunk/doc/sympa.ps
    M /trunk/doc/sympa.tex
    M /trunk/doc/sympa.tex.tpl
@@ -6798,7 +6913,6 @@ updated
 ------------------------------------------------------------------------
 r3914 | sympa-authors | 2006-09-29 14:30:21 +0200 (ven, 29 sep 2006) | 2 lines
 Chemins modifiés :
-   M /trunk/doc/sympa.pdf
    M /trunk/doc/sympa.ps
    M /trunk/doc/sympa.tex
    M /trunk/doc/sympa.tex.tpl
@@ -6843,7 +6957,6 @@ Chemins modifiés :
    M /trunk/doc/html/node9.html
    M /trunk/doc/html/sympa.html
    M /trunk/doc/html/sympa.ps
-   M /trunk/doc/sympa.pdf
    M /trunk/doc/sympa.ps
    M /trunk/doc/sympa.tex
    M /trunk/doc/sympa.tex.tpl
@@ -6857,7 +6970,6 @@ r3912 | sympa-authors | 2006-09-26 15:18:39 +0200 (mar, 26 sep 2006) | 2 lines
 Chemins modifiés :
    M /trunk/doc/html/node15.html
    M /trunk/doc/html/sympa.ps
-   M /trunk/doc/sympa.pdf
    M /trunk/doc/sympa.ps
    M /trunk/doc/sympa.tex
    M /trunk/doc/sympa.tex.tpl
@@ -6916,7 +7028,6 @@ Chemins modifiés :
    M /trunk/doc/html/node9.html
    M /trunk/doc/html/sympa.html
    M /trunk/doc/html/sympa.ps
-   M /trunk/doc/sympa.pdf
    M /trunk/doc/sympa.ps
    M /trunk/doc/sympa.tex
    M /trunk/doc/sympa.tex.tpl
@@ -7124,7 +7235,6 @@ Chemins modifiés :
    M /trunk/doc/html/node9.html
    M /trunk/doc/html/sympa.html
    M /trunk/doc/html/sympa.ps
-   M /trunk/doc/sympa.pdf
    M /trunk/doc/sympa.ps
    M /trunk/doc/sympa.tex
    M /trunk/doc/sympa.tex.tpl
@@ -7205,7 +7315,6 @@ Chemins modifiés :
    M /trunk/doc/html/node9.html
    M /trunk/doc/html/sympa.html
    M /trunk/doc/html/sympa.ps
-   M /trunk/doc/sympa.pdf
    M /trunk/doc/sympa.ps
    M /trunk/doc/sympa.tex
    M /trunk/doc/sympa.tex.tpl
@@ -7249,7 +7358,6 @@ Chemins modifiés :
    M /trunk/doc/html/node9.html
    M /trunk/doc/html/sympa.html
    M /trunk/doc/html/sympa.ps
-   M /trunk/doc/sympa.pdf
    M /trunk/doc/sympa.ps
    M /trunk/doc/sympa.tex
    M /trunk/doc/sympa.tex.tpl
@@ -7337,7 +7445,6 @@ Chemins modifiés :
    M /trunk/doc/html/node9.html
    M /trunk/doc/html/sympa.html
    M /trunk/doc/html/sympa.ps
-   M /trunk/doc/sympa.pdf
    M /trunk/doc/sympa.ps
    M /trunk/doc/sympa.tex
    M /trunk/doc/sympa.tex.tpl
@@ -7448,7 +7555,6 @@ Chemins modifiés :
    M /trunk/doc/html/node9.html
    M /trunk/doc/html/sympa.html
    M /trunk/doc/html/sympa.ps
-   M /trunk/doc/sympa.pdf
    M /trunk/doc/sympa.ps
    M /trunk/doc/sympa.tex
 
@@ -7603,7 +7709,6 @@ Chemins modifiés :
    M /trunk/doc/html/sympa.html
    M /trunk/doc/html/sympa.ps
    M /trunk/doc/man8/alias_manager.pod
-   M /trunk/doc/sympa.pdf
    M /trunk/doc/sympa.ps
    M /trunk/doc/sympa.tex
    M /trunk/doc/sympa.tex.tpl
@@ -7674,7 +7779,6 @@ Chemins modifiés :
    M /trunk/doc/html/node9.html
    M /trunk/doc/html/sympa.html
    M /trunk/doc/html/sympa.ps
-   M /trunk/doc/sympa.pdf
    M /trunk/doc/sympa.ps
    M /trunk/doc/sympa.tex
    M /trunk/doc/sympa.tex.tpl
@@ -7804,7 +7908,6 @@ Chemins modifiés :
    M /trunk/doc/html/node9.html
    M /trunk/doc/html/sympa.html
    M /trunk/doc/html/sympa.ps
-   M /trunk/doc/sympa.pdf
    M /trunk/doc/sympa.ps
    M /trunk/doc/sympa.tex
    M /trunk/doc/sympa.tex.tpl
@@ -8280,7 +8383,6 @@ Chemins modifiés :
    M /trunk/doc/html/node9.html
    M /trunk/doc/html/sympa.html
    M /trunk/doc/html/sympa.ps
-   M /trunk/doc/sympa.pdf
    M /trunk/doc/sympa.ps
    M /trunk/doc/sympa.tex
    M /trunk/doc/sympa.tex.tpl
@@ -8372,7 +8474,6 @@ Chemins modifiés :
    M /trunk/doc/html/node9.html
    M /trunk/doc/html/sympa.html
    M /trunk/doc/html/sympa.ps
-   M /trunk/doc/sympa.pdf
    M /trunk/doc/sympa.ps
    M /trunk/doc/sympa.tex
    M /trunk/doc/sympa.tex.tpl
@@ -8426,7 +8527,6 @@ Chemins modifiés :
    M /trunk/doc/html/node9.html
    M /trunk/doc/html/sympa.html
    M /trunk/doc/html/sympa.ps
-   M /trunk/doc/sympa.pdf
    M /trunk/doc/sympa.ps
    M /trunk/doc/sympa.tex
    M /trunk/doc/sympa.tex.tpl
@@ -8485,7 +8585,6 @@ We now use the Encode module (added to the list of required modules) to decode a
 ------------------------------------------------------------------------
 r3758 | sympa-authors | 2006-06-08 14:41:43 +0200 (jeu, 08 jun 2006) | 2 lines
 Chemins modifiés :
-   M /trunk/doc/sympa.pdf
    M /trunk/doc/sympa.ps
    M /trunk/doc/sympa.tex
 
@@ -8609,7 +8708,6 @@ Chemins modifiés :
    M /trunk/doc/html/node9.html
    M /trunk/doc/html/sympa.html
    M /trunk/doc/html/sympa.ps
-   M /trunk/doc/sympa.pdf
    M /trunk/doc/sympa.ps
    M /trunk/doc/sympa.tex
    M /trunk/doc/sympa.tex.tpl
@@ -8683,7 +8781,6 @@ Chemins modifiés :
    M /trunk/doc/html/node9.html
    M /trunk/doc/html/sympa.html
    M /trunk/doc/html/sympa.ps
-   M /trunk/doc/sympa.pdf
    M /trunk/doc/sympa.ps
    M /trunk/doc/sympa.tex
    M /trunk/doc/sympa.tex.tpl
@@ -9019,7 +9116,6 @@ Chemins modifiés :
    M /trunk/doc/html/node9.html
    M /trunk/doc/html/sympa.html
    M /trunk/doc/html/sympa.ps
-   M /trunk/doc/sympa.pdf
    M /trunk/doc/sympa.ps
    M /trunk/doc/sympa.tex
    M /trunk/doc/sympa.tex.tpl
@@ -9141,7 +9237,6 @@ Chemins modifiés :
    M /trunk/doc/html/node9.html
    M /trunk/doc/html/sympa.html
    M /trunk/doc/html/sympa.ps
-   M /trunk/doc/sympa.pdf
    M /trunk/doc/sympa.ps
    M /trunk/doc/sympa.tex
    M /trunk/doc/sympa.tex.tpl
@@ -9374,7 +9469,6 @@ Chemins modifiés :
    M /trunk/doc/html/node9.html
    M /trunk/doc/html/sympa.html
    M /trunk/doc/html/sympa.ps
-   M /trunk/doc/sympa.pdf
    M /trunk/doc/sympa.ps
    M /trunk/doc/sympa.tex
    M /trunk/doc/sympa.tex.tpl
@@ -9548,7 +9642,6 @@ Chemins modifiés :
    M /trunk/doc/html/node8.html
    M /trunk/doc/html/node9.html
    M /trunk/doc/html/sympa.ps
-   M /trunk/doc/sympa.pdf
    M /trunk/doc/sympa.ps
    M /trunk/doc/sympa.tex
 
@@ -9660,7 +9753,6 @@ Chemins modifiés :
    M /trunk/doc/html/node9.html
    M /trunk/doc/html/sympa.html
    M /trunk/doc/html/sympa.ps
-   M /trunk/doc/sympa.pdf
    M /trunk/doc/sympa.ps
    M /trunk/doc/sympa.tex
 
@@ -9794,7 +9886,6 @@ Chemins modifiés :
    M /trunk/doc/html/node9.html
    M /trunk/doc/html/sympa.html
    M /trunk/doc/html/sympa.ps
-   M /trunk/doc/sympa.pdf
    M /trunk/doc/sympa.ps
    M /trunk/doc/sympa.tex
    M /trunk/doc/sympa.tex.tpl
@@ -9924,7 +10015,6 @@ Chemins modifiés :
    M /trunk/doc/html/node9.html
    M /trunk/doc/html/sympa.html
    M /trunk/doc/html/sympa.ps
-   M /trunk/doc/sympa.pdf
    M /trunk/doc/sympa.ps
    M /trunk/doc/sympa.tex
 
@@ -10098,7 +10188,6 @@ Chemins modifiés :
    M /trunk/doc/html/node9.html
    M /trunk/doc/html/sympa.html
    M /trunk/doc/html/sympa.ps
-   M /trunk/doc/sympa.pdf
    M /trunk/doc/sympa.ps
    M /trunk/doc/sympa.tex
    M /trunk/doc/sympa.tex.tpl
@@ -10206,7 +10295,6 @@ Chemins modifiés :
    M /trunk/doc/html/node9.html
    M /trunk/doc/html/sympa.html
    M /trunk/doc/html/sympa.ps
-   M /trunk/doc/sympa.pdf
    M /trunk/doc/sympa.ps
    M /trunk/doc/sympa.tex
 
@@ -10646,7 +10734,6 @@ Chemins modifiés :
    M /trunk/doc/html/node9.html
    M /trunk/doc/html/sympa.html
    M /trunk/doc/html/sympa.ps
-   M /trunk/doc/sympa.pdf
    M /trunk/doc/sympa.ps
 
 Added missing HTML
@@ -10891,7 +10978,6 @@ Chemins modifiés :
    M /trunk/doc/html/node9.html
    M /trunk/doc/html/sympa.html
    M /trunk/doc/html/sympa.ps
-   M /trunk/doc/sympa.pdf
    M /trunk/doc/sympa.ps
    M /trunk/doc/sympa.tex
    M /trunk/doc/sympa.tex.tpl
@@ -11053,7 +11139,6 @@ Chemins modifiés :
    M /trunk/doc/html/node9.html
    M /trunk/doc/html/sympa.html
    M /trunk/doc/html/sympa.ps
-   M /trunk/doc/sympa.pdf
    M /trunk/doc/sympa.ps
    M /trunk/doc/sympa.tex
    M /trunk/doc/sympa.tex.tpl
@@ -11151,7 +11236,6 @@ Chemins modifiés :
    M /trunk/doc/html/node9.html
    M /trunk/doc/html/sympa.html
    M /trunk/doc/html/sympa.ps
-   M /trunk/doc/sympa.pdf
    M /trunk/doc/sympa.ps
    M /trunk/doc/sympa.tex
 
@@ -12200,7 +12284,6 @@ Chemins modifiés :
    M /branches/sympa-5_1-branch/doc/html/node9.html
    M /branches/sympa-5_1-branch/doc/html/sympa.html
    M /branches/sympa-5_1-branch/doc/html/sympa.ps
-   M /branches/sympa-5_1-branch/doc/sympa.pdf
    M /branches/sympa-5_1-branch/doc/sympa.ps
    M /branches/sympa-5_1-branch/doc/sympa.tex
    M /branches/sympa-5_1-branch/doc/sympa.tex.tpl
@@ -12234,7 +12317,6 @@ Chemins modifiés :
    M /trunk/doc/html/node9.html
    M /trunk/doc/html/sympa.html
    M /trunk/doc/html/sympa.ps
-   M /trunk/doc/sympa.pdf
    M /trunk/doc/sympa.ps
    M /trunk/doc/sympa.tex
    M /trunk/doc/sympa.tex.tpl
@@ -12807,7 +12889,6 @@ Chemins modifiés :
    M /trunk/doc/html/node9.html
    M /trunk/doc/html/sympa.html
    M /trunk/doc/html/sympa.ps
-   M /trunk/doc/sympa.pdf
    M /trunk/doc/sympa.ps
    M /trunk/doc/sympa.tex
    M /trunk/doc/sympa.tex.tpl
@@ -12867,7 +12948,6 @@ Chemins modifiés :
    M /trunk/doc/html/node9.html
    M /trunk/doc/html/sympa.html
    M /trunk/doc/html/sympa.ps
-   M /trunk/doc/sympa.pdf
    M /trunk/doc/sympa.ps
    M /trunk/doc/sympa.tex
    M /trunk/doc/sympa.tex.tpl
@@ -13192,7 +13272,6 @@ Chemins modifiés :
    M /trunk/doc/html/node9.html
    M /trunk/doc/html/sympa.html
    M /trunk/doc/html/sympa.ps
-   M /trunk/doc/sympa.pdf
    M /trunk/doc/sympa.ps
    M /trunk/doc/sympa.tex
    M /trunk/doc/sympa.tex.tpl
@@ -13271,7 +13350,6 @@ Chemins modifiés :
    M /trunk/doc/html/node9.html
    M /trunk/doc/html/sympa.html
    M /trunk/doc/html/sympa.ps
-   M /trunk/doc/sympa.pdf
    M /trunk/doc/sympa.ps
    M /trunk/doc/sympa.tex
    M /trunk/doc/sympa.tex.tpl
@@ -13560,7 +13638,6 @@ Chemins modifiés :
    M /trunk/doc/html/node9.html
    M /trunk/doc/html/sympa.html
    M /trunk/doc/html/sympa.ps
-   M /trunk/doc/sympa.pdf
    M /trunk/doc/sympa.ps
    M /trunk/doc/sympa.tex
 
@@ -13699,7 +13776,6 @@ Chemins modifiés :
    M /trunk/doc/html/node9.html
    M /trunk/doc/html/sympa.html
    M /trunk/doc/html/sympa.ps
-   M /trunk/doc/sympa.pdf
    M /trunk/doc/sympa.ps
    M /trunk/doc/sympa.tex
 
@@ -14210,7 +14286,6 @@ Chemins modifiés :
    M /trunk/doc/html/node9.html
    M /trunk/doc/html/sympa.html
    M /trunk/doc/html/sympa.ps
-   M /trunk/doc/sympa.pdf
    M /trunk/doc/sympa.ps
    M /trunk/doc/sympa.tex
    M /trunk/doc/sympa.tex.tpl
@@ -14276,7 +14351,6 @@ Chemins modifiés :
    M /trunk/doc/html/node9.html
    M /trunk/doc/html/sympa.html
    M /trunk/doc/html/sympa.ps
-   M /trunk/doc/sympa.pdf
    M /trunk/doc/sympa.ps
    M /trunk/doc/sympa.tex
    M /trunk/doc/sympa.tex.tpl
@@ -14942,7 +15016,6 @@ Chemins modifiés :
    M /trunk/doc/html/node9.html
    M /trunk/doc/html/sympa.html
    M /trunk/doc/html/sympa.ps
-   M /trunk/doc/sympa.pdf
    M /trunk/doc/sympa.ps
    M /trunk/doc/sympa.tex
    M /trunk/doc/sympa.tex.tpl
@@ -15486,7 +15559,6 @@ Chemins modifiés :
    M /trunk/doc/html/node9.html
    M /trunk/doc/html/sympa.html
    M /trunk/doc/html/sympa.ps
-   M /trunk/doc/sympa.pdf
    M /trunk/doc/sympa.ps
    M /trunk/doc/sympa.tex
 
@@ -15812,7 +15884,6 @@ Chemins modifiés :
    M /trunk/doc/html/node9.html
    M /trunk/doc/html/sympa.html
    M /trunk/doc/html/sympa.ps
-   M /trunk/doc/sympa.pdf
    M /trunk/doc/sympa.ps
    M /trunk/doc/sympa.tex
 
@@ -15989,7 +16060,6 @@ Chemins modifiés :
    M /trunk/doc/html/node9.html
    M /trunk/doc/html/sympa.html
    M /trunk/doc/html/sympa.ps
-   M /trunk/doc/sympa.pdf
    M /trunk/doc/sympa.ps
    M /trunk/doc/sympa.tex
 
@@ -16222,7 +16292,6 @@ Chemins modifiés :
    M /trunk/doc/html/node9.html
    M /trunk/doc/html/sympa.html
    M /trunk/doc/html/sympa.ps
-   M /trunk/doc/sympa.pdf
    M /trunk/doc/sympa.ps
    M /trunk/doc/sympa.tex
    M /trunk/doc/sympa.tex.tpl
@@ -16738,7 +16807,6 @@ Chemins modifiés :
    M /trunk/doc/html/node9.html
    M /trunk/doc/html/sympa.html
    M /trunk/doc/html/sympa.ps
-   M /trunk/doc/sympa.pdf
    M /trunk/doc/sympa.ps
    M /trunk/doc/sympa.tex
    M /trunk/doc/sympa.tex.tpl
@@ -16783,7 +16851,6 @@ Chemins modifiés :
    M /trunk/doc/html/node9.html
    M /trunk/doc/html/sympa.html
    M /trunk/doc/html/sympa.ps
-   M /trunk/doc/sympa.pdf
    M /trunk/doc/sympa.ps
    M /trunk/doc/sympa.tex
 
@@ -16841,7 +16908,6 @@ Chemins modifiés :
    M /trunk/doc/html/node9.html
    M /trunk/doc/html/sympa.html
    M /trunk/doc/html/sympa.ps
-   M /trunk/doc/sympa.pdf
    M /trunk/doc/sympa.ps
    M /trunk/doc/sympa.tex
    M /trunk/doc/sympa.tex.tpl
@@ -16991,7 +17057,6 @@ Chemins modifiés :
    M /trunk/doc/html/node9.html
    M /trunk/doc/html/sympa.html
    M /trunk/doc/html/sympa.ps
-   M /trunk/doc/sympa.pdf
    M /trunk/doc/sympa.ps
    M /trunk/doc/sympa.tex
    M /trunk/doc/sympa.tex.tpl
@@ -17165,7 +17230,6 @@ Chemins modifiés :
    M /trunk/doc/html/node8.html
    M /trunk/doc/html/node9.html
    M /trunk/doc/html/sympa.ps
-   M /trunk/doc/sympa.pdf
    M /trunk/doc/sympa.ps
    M /trunk/doc/sympa.tex
    M /trunk/doc/sympa.tex.tpl
@@ -17210,7 +17274,6 @@ Chemins modifiés :
    M /trunk/doc/html/node9.html
    M /trunk/doc/html/sympa.html
    M /trunk/doc/html/sympa.ps
-   M /trunk/doc/sympa.pdf
    M /trunk/doc/sympa.ps
    M /trunk/doc/sympa.tex
    M /trunk/doc/sympa.tex.tpl
@@ -17330,7 +17393,6 @@ Chemins modifiés :
    M /trunk/doc/html/node8.html
    M /trunk/doc/html/node9.html
    M /trunk/doc/html/sympa.ps
-   M /trunk/doc/sympa.pdf
    M /trunk/doc/sympa.ps
    M /trunk/doc/sympa.tex
    M /trunk/doc/sympa.tex.tpl
@@ -17372,7 +17434,6 @@ Chemins modifiés :
    M /trunk/doc/html/node8.html
    M /trunk/doc/html/node9.html
    M /trunk/doc/html/sympa.ps
-   M /trunk/doc/sympa.pdf
    M /trunk/doc/sympa.ps
    M /trunk/doc/sympa.tex
    M /trunk/doc/sympa.tex.tpl
@@ -17423,7 +17484,6 @@ Chemins modifiés :
    M /trunk/doc/html/node9.html
    M /trunk/doc/html/sympa.html
    M /trunk/doc/html/sympa.ps
-   M /trunk/doc/sympa.pdf
    M /trunk/doc/sympa.ps
    M /trunk/doc/sympa.tex
    M /trunk/doc/sympa.tex.tpl
@@ -17511,7 +17571,6 @@ Chemins modifiés :
    M /trunk/doc/html/node9.html
    M /trunk/doc/html/sympa.html
    M /trunk/doc/html/sympa.ps
-   M /trunk/doc/sympa.pdf
    M /trunk/doc/sympa.ps
    M /trunk/doc/sympa.tex
    M /trunk/doc/sympa.tex.tpl
@@ -17693,7 +17752,6 @@ Chemins modifiés :
    M /trunk/doc/html/node9.html
    M /trunk/doc/html/sympa.html
    M /trunk/doc/html/sympa.ps
-   M /trunk/doc/sympa.pdf
    M /trunk/doc/sympa.ps
    M /trunk/doc/sympa.tex
    M /trunk/doc/sympa.tex.tpl
@@ -17775,7 +17833,6 @@ Chemins modifiés :
    M /trunk/doc/html/node9.html
    M /trunk/doc/html/sympa.html
    M /trunk/doc/html/sympa.ps
-   M /trunk/doc/sympa.pdf
    M /trunk/doc/sympa.ps
    M /trunk/doc/sympa.tex
    M /trunk/doc/sympa.tex.tpl
@@ -17888,7 +17945,6 @@ Chemins modifiés :
    M /trunk/doc/html/node9.html
    M /trunk/doc/html/sympa.html
    M /trunk/doc/html/sympa.ps
-   M /trunk/doc/sympa.pdf
    M /trunk/doc/sympa.ps
    M /trunk/doc/sympa.tex
    M /trunk/doc/sympa.tex.tpl
@@ -17958,7 +18014,6 @@ Chemins modifiés :
    M /trunk/doc/html/node9.html
    M /trunk/doc/html/sympa.html
    M /trunk/doc/html/sympa.ps
-   M /trunk/doc/sympa.pdf
    M /trunk/doc/sympa.ps
    M /trunk/doc/sympa.tex
    M /trunk/doc/sympa.tex.tpl
@@ -18037,7 +18092,6 @@ Chemins modifiés :
    M /trunk/doc/html/node9.html
    M /trunk/doc/html/sympa.html
    M /trunk/doc/html/sympa.ps
-   M /trunk/doc/sympa.pdf
    M /trunk/doc/sympa.ps
    M /trunk/doc/sympa.tex
    M /trunk/doc/sympa.tex.tpl
@@ -18256,7 +18310,6 @@ Chemins modifiés :
    M /trunk/doc/html/node9.html
    M /trunk/doc/html/sympa.html
    M /trunk/doc/html/sympa.ps
-   M /trunk/doc/sympa.pdf
    M /trunk/doc/sympa.ps
    M /trunk/doc/sympa.tex
    M /trunk/doc/sympa.tex.tpl
@@ -18322,7 +18375,6 @@ Chemins modifiés :
    M /trunk/doc/html/node9.html
    M /trunk/doc/html/sympa.html
    M /trunk/doc/html/sympa.ps
-   M /trunk/doc/sympa.pdf
    M /trunk/doc/sympa.ps
    M /trunk/doc/sympa.tex
    M /trunk/doc/sympa.tex.tpl
@@ -18382,7 +18434,6 @@ Chemins modifiés :
    M /trunk/doc/html/node9.html
    M /trunk/doc/html/sympa.html
    M /trunk/doc/html/sympa.ps
-   M /trunk/doc/sympa.pdf
    M /trunk/doc/sympa.ps
    M /trunk/doc/sympa.tex
    M /trunk/doc/sympa.tex.tpl
@@ -18651,7 +18702,6 @@ Chemins modifiés :
    M /trunk/doc/html/node9.html
    M /trunk/doc/html/sympa.html
    M /trunk/doc/html/sympa.ps
-   M /trunk/doc/sympa.pdf
    M /trunk/doc/sympa.ps
    M /trunk/doc/sympa.tex
    M /trunk/doc/sympa.tex.tpl
@@ -18805,7 +18855,6 @@ Chemins modifiés :
    M /trunk/doc/html/node9.html
    M /trunk/doc/html/sympa.html
    M /trunk/doc/html/sympa.ps
-   M /trunk/doc/sympa.pdf
    M /trunk/doc/sympa.ps
    M /trunk/doc/sympa.tex
    M /trunk/doc/sympa.tex.tpl
@@ -18892,7 +18941,6 @@ Chemins modifiés :
    M /trunk/doc/html/node9.html
    M /trunk/doc/html/sympa.html
    M /trunk/doc/html/sympa.ps
-   M /trunk/doc/sympa.pdf
    M /trunk/doc/sympa.ps
    M /trunk/doc/sympa.tex
    M /trunk/doc/sympa.tex.tpl
@@ -18903,7 +18951,6 @@ Update documentation for TT2 and PO
 ------------------------------------------------------------------------
 r2520 | sympa-authors | 2004-08-13 12:30:30 +0200 (ven, 13 aoû 2004) | 2 lines
 Chemins modifiés :
-   M /trunk/doc/sympa.pdf
    M /trunk/doc/sympa.ps
 
 Update doc
@@ -19600,7 +19647,6 @@ Chemins modifiés :
    M /trunk/doc/html/node9.html
    M /trunk/doc/html/sympa.html
    M /trunk/doc/html/sympa.ps
-   M /trunk/doc/sympa.pdf
    M /trunk/doc/sympa.ps
    M /trunk/doc/sympa.tex
 
@@ -19740,7 +19786,6 @@ Chemins modifiés :
    M /trunk/doc/html/node9.html
    M /trunk/doc/html/sympa.html
    M /trunk/doc/html/sympa.ps
-   M /trunk/doc/sympa.pdf
    M /trunk/doc/sympa.ps
    M /trunk/doc/sympa.tex
    M /trunk/doc/sympa.tex.tpl
@@ -19817,7 +19862,6 @@ Chemins modifiés :
    M /trunk/doc/html/node9.html
    M /trunk/doc/html/sympa.html
    M /trunk/doc/html/sympa.ps
-   M /trunk/doc/sympa.pdf
    M /trunk/doc/sympa.ps
    M /trunk/doc/sympa.tex
    M /trunk/doc/sympa.tex.tpl
@@ -20155,7 +20199,6 @@ Chemins modifiés :
    M /trunk/doc/html/node9.html
    M /trunk/doc/html/sympa.html
    M /trunk/doc/html/sympa.ps
-   M /trunk/doc/sympa.pdf
    M /trunk/doc/sympa.ps
    M /trunk/doc/sympa.tex
    M /trunk/doc/sympa.tex.tpl
@@ -20431,7 +20474,6 @@ Chemins modifiés :
    M /trunk/doc/html/node8.html
    M /trunk/doc/html/node9.html
    M /trunk/doc/html/sympa.ps
-   M /trunk/doc/sympa.pdf
    M /trunk/doc/sympa.ps
    M /trunk/doc/sympa.tex
    M /trunk/doc/sympa.tex.tpl
@@ -20509,7 +20551,6 @@ Chemins modifiés :
    M /trunk/doc/html/node9.html
    M /trunk/doc/html/sympa.html
    M /trunk/doc/html/sympa.ps
-   M /trunk/doc/sympa.pdf
    M /trunk/doc/sympa.ps
    M /trunk/doc/sympa.tex
    M /trunk/doc/sympa.tex.tpl
@@ -21558,7 +21599,6 @@ Chemins modifiés :
    M /trunk/doc/html/node9.html
    M /trunk/doc/html/sympa.html
    M /trunk/doc/html/sympa.ps
-   M /trunk/doc/sympa.pdf
    M /trunk/doc/sympa.ps
    M /trunk/doc/sympa.tex
 
@@ -21849,7 +21889,6 @@ Chemins modifiés :
    M /branches/sympa-4_1-branch/doc/html/node9.html
    M /branches/sympa-4_1-branch/doc/html/sympa.html
    M /branches/sympa-4_1-branch/doc/html/sympa.ps
-   M /branches/sympa-4_1-branch/doc/sympa.pdf
    M /branches/sympa-4_1-branch/doc/sympa.ps
    M /branches/sympa-4_1-branch/doc/sympa.tex
    M /branches/sympa-4_1-branch/doc/sympa.tex.tpl
@@ -21881,7 +21920,6 @@ Chemins modifiés :
    M /trunk/doc/html/node9.html
    M /trunk/doc/html/sympa.html
    M /trunk/doc/html/sympa.ps
-   M /trunk/doc/sympa.pdf
    M /trunk/doc/sympa.ps
    M /trunk/doc/sympa.tex
    M /trunk/doc/sympa.tex.tpl
@@ -21947,7 +21985,6 @@ Chemins modifiés :
    M /trunk/doc/html/node9.html
    M /trunk/doc/html/sympa.html
    M /trunk/doc/html/sympa.ps
-   M /trunk/doc/sympa.pdf
    M /trunk/doc/sympa.ps
    M /trunk/doc/sympa.tex
    M /trunk/doc/sympa.tex.tpl
@@ -22344,7 +22381,6 @@ Chemins modifiés :
    M /trunk/doc/html/node9.html
    M /trunk/doc/html/sympa.html
    M /trunk/doc/html/sympa.ps
-   M /trunk/doc/sympa.pdf
    M /trunk/doc/sympa.ps
    M /trunk/doc/sympa.tex
    M /trunk/doc/sympa.tex.tpl
@@ -22422,7 +22458,6 @@ Chemins modifiés :
    M /trunk/doc/html/node9.html
    M /trunk/doc/html/sympa.html
    M /trunk/doc/html/sympa.ps
-   M /trunk/doc/sympa.pdf
    M /trunk/doc/sympa.ps
    M /trunk/doc/sympa.tex
 
@@ -22623,7 +22658,6 @@ Chemins modifiés :
    M /trunk/doc/html/node9.html
    M /trunk/doc/html/sympa.html
    M /trunk/doc/html/sympa.ps
-   M /trunk/doc/sympa.pdf
    M /trunk/doc/sympa.ps
    M /trunk/doc/sympa.tex
    M /trunk/doc/sympa.tex.tpl
@@ -22784,7 +22818,6 @@ Chemins modifiés :
    M /trunk/doc/html/node9.html
    M /trunk/doc/html/sympa.html
    M /trunk/doc/html/sympa.ps
-   M /trunk/doc/sympa.pdf
    M /trunk/doc/sympa.ps
    M /trunk/doc/sympa.tex
    M /trunk/doc/sympa.tex.tpl
@@ -22833,7 +22866,6 @@ Chemins modifiés :
    M /trunk/doc/html/node9.html
    M /trunk/doc/html/sympa.html
    M /trunk/doc/html/sympa.ps
-   M /trunk/doc/sympa.pdf
    M /trunk/doc/sympa.ps
    M /trunk/doc/sympa.tex
    M /trunk/doc/sympa.tex.tpl
@@ -22951,7 +22983,6 @@ Chemins modifiés :
    M /trunk/doc/html/node9.html
    M /trunk/doc/html/sympa.html
    M /trunk/doc/html/sympa.ps
-   M /trunk/doc/sympa.pdf
    M /trunk/doc/sympa.ps
    M /trunk/doc/sympa.tex
    M /trunk/doc/sympa.tex.tpl
@@ -23022,7 +23053,6 @@ Chemins modifiés :
    M /trunk/doc/html/node9.html
    M /trunk/doc/html/sympa.html
    M /trunk/doc/html/sympa.ps
-   M /trunk/doc/sympa.pdf
    M /trunk/doc/sympa.ps
    M /trunk/doc/sympa.tex
 
@@ -23121,7 +23151,6 @@ Chemins modifiés :
    M /trunk/doc/html/node9.html
    M /trunk/doc/html/sympa.html
    M /trunk/doc/html/sympa.ps
-   M /trunk/doc/sympa.pdf
    M /trunk/doc/sympa.ps
    M /trunk/doc/sympa.tex
    M /trunk/doc/sympa.tex.tpl
@@ -23181,7 +23210,6 @@ Chemins modifiés :
    M /trunk/doc/html/sympa.html
    M /trunk/doc/html/sympa.ps
    M /trunk/doc/parse_tex.pl
-   M /trunk/doc/sympa.pdf
    M /trunk/doc/sympa.ps
    M /trunk/doc/sympa.tex
    M /trunk/doc/sympa.tex.tpl
@@ -23454,7 +23482,6 @@ Chemins modifiés :
    M /trunk/doc/html/node9.html
    M /trunk/doc/html/sympa.html
    M /trunk/doc/html/sympa.ps
-   M /trunk/doc/sympa.pdf
    M /trunk/doc/sympa.ps
    M /trunk/doc/sympa.tex
    M /trunk/doc/sympa.tex.tpl
@@ -23592,7 +23619,6 @@ Chemins modifiés :
    M /trunk/doc/html/node9.html
    M /trunk/doc/html/sympa.html
    M /trunk/doc/html/sympa.ps
-   M /trunk/doc/sympa.pdf
    M /trunk/doc/sympa.ps
    M /trunk/doc/sympa.tex
    M /trunk/doc/sympa.tex.tpl
@@ -23636,7 +23662,6 @@ Chemins modifiés :
    M /trunk/doc/html/node9.html
    M /trunk/doc/html/sympa.html
    M /trunk/doc/html/sympa.ps
-   M /trunk/doc/sympa.pdf
    M /trunk/doc/sympa.ps
    M /trunk/doc/sympa.tex
    M /trunk/doc/sympa.tex.tpl
@@ -23722,7 +23747,6 @@ Chemins modifiés :
    M /trunk/doc/html/node9.html
    M /trunk/doc/html/sympa.html
    M /trunk/doc/html/sympa.ps
-   M /trunk/doc/sympa.pdf
    M /trunk/doc/sympa.ps
    M /trunk/doc/sympa.tex
    M /trunk/doc/sympa.tex.tpl
@@ -24035,7 +24059,6 @@ Chemins modifiés :
    M /trunk/doc/html/node9.html
    M /trunk/doc/html/sympa.html
    M /trunk/doc/html/sympa.ps
-   M /trunk/doc/sympa.pdf
    M /trunk/doc/sympa.ps
    M /trunk/doc/sympa.tex
    M /trunk/doc/sympa.tex.tpl
@@ -24367,7 +24390,6 @@ Chemins modifiés :
    M /trunk/doc/html/node9.html
    M /trunk/doc/html/sympa.html
    M /trunk/doc/html/sympa.ps
-   M /trunk/doc/sympa.pdf
    M /trunk/doc/sympa.ps
    M /trunk/doc/sympa.tex
    M /trunk/doc/sympa.tex.tpl
@@ -24451,7 +24473,6 @@ Chemins modifiés :
    M /trunk/doc/html/node9.html
    M /trunk/doc/html/sympa.html
    M /trunk/doc/html/sympa.ps
-   M /trunk/doc/sympa.pdf
    M /trunk/doc/sympa.ps
    M /trunk/doc/sympa.tex
    M /trunk/doc/sympa.tex.tpl
@@ -24575,7 +24596,6 @@ Chemins modifiés :
    M /trunk/doc/html/node9.html
    M /trunk/doc/html/sympa.html
    M /trunk/doc/html/sympa.ps
-   M /trunk/doc/sympa.pdf
    M /trunk/doc/sympa.ps
    M /trunk/doc/sympa.tex
    M /trunk/doc/sympa.tex.tpl
@@ -24739,7 +24759,6 @@ Chemins modifiés :
    M /trunk/doc/html/node9.html
    M /trunk/doc/html/sympa.html
    M /trunk/doc/html/sympa.ps
-   M /trunk/doc/sympa.pdf
    M /trunk/doc/sympa.ps
    M /trunk/doc/sympa.tex
    M /trunk/doc/sympa.tex.tpl
@@ -24778,7 +24797,6 @@ Chemins modifiés :
    M /trunk/doc/html/sympa.ps
    M /trunk/doc/man8/sympa.8
    M /trunk/doc/man8/sympa.pod
-   M /trunk/doc/sympa.pdf
    M /trunk/doc/sympa.ps
    M /trunk/doc/sympa.tex
    M /trunk/doc/sympa.tex.tpl
@@ -24858,7 +24876,6 @@ Chemins modifiés :
    M /trunk/doc/html/node8.html
    M /trunk/doc/html/node9.html
    M /trunk/doc/html/sympa.ps
-   M /trunk/doc/sympa.pdf
    M /trunk/doc/sympa.ps
    M /trunk/doc/sympa.tex
    M /trunk/doc/sympa.tex.tpl
@@ -24899,7 +24916,6 @@ Chemins modifiés :
    M /trunk/doc/html/node9.html
    M /trunk/doc/html/sympa.html
    M /trunk/doc/html/sympa.ps
-   M /trunk/doc/sympa.pdf
    M /trunk/doc/sympa.ps
    M /trunk/doc/sympa.tex
    M /trunk/doc/sympa.tex.tpl
@@ -24942,7 +24958,6 @@ Chemins modifiés :
    M /trunk/doc/html/node9.html
    M /trunk/doc/html/sympa.html
    M /trunk/doc/html/sympa.ps
-   M /trunk/doc/sympa.pdf
    M /trunk/doc/sympa.ps
    M /trunk/doc/sympa.tex
    M /trunk/doc/sympa.tex.tpl
@@ -24977,7 +24992,6 @@ Chemins modifiés :
    M /branches/sympa-3_4-branch/doc/html/node9.html
    M /branches/sympa-3_4-branch/doc/html/sympa.html
    M /branches/sympa-3_4-branch/doc/html/sympa.ps
-   M /branches/sympa-3_4-branch/doc/sympa.pdf
    M /branches/sympa-3_4-branch/doc/sympa.ps
    M /branches/sympa-3_4-branch/doc/sympa.tex
    M /branches/sympa-3_4-branch/doc/sympa.tex.tpl
@@ -25005,7 +25019,6 @@ Chemins modifiés :
    M /trunk/doc/html/node9.html
    M /trunk/doc/html/sympa.html
    M /trunk/doc/html/sympa.ps
-   M /trunk/doc/sympa.pdf
    M /trunk/doc/sympa.ps
    M /trunk/doc/sympa.tex
    M /trunk/doc/sympa.tex.tpl
@@ -25405,7 +25418,6 @@ Chemins modifiés :
    M /trunk/check_perl_modules.pl
    M /trunk/configure
    M /trunk/configure.in
-   M /trunk/doc/sympa.pdf
    M /trunk/doc/sympa.ps
    M /trunk/doc/sympa.tex
    M /trunk/doc/sympa.tex.tpl
@@ -25571,7 +25583,6 @@ Reported by sympa_bug_report@nmhq.net , fixe bug when validate a message for a e
 ------------------------------------------------------------------------
 r1803 | salaun | 2003-03-07 17:05:16 +0100 (ven, 07 mar 2003) | 2 lines
 Chemins modifiés :
-   M /trunk/doc/sympa.pdf
    M /trunk/doc/sympa.ps
    M /trunk/doc/sympa.tex
 
@@ -25837,7 +25848,6 @@ Fix: get_total() failed with lists in 'include' mode
 ------------------------------------------------------------------------
 r1755 | salaun | 2003-01-27 10:52:27 +0100 (lun, 27 jan 2003) | 7 lines
 Chemins modifiés :
-   M /trunk/doc/sympa.pdf
    M /trunk/doc/sympa.ps
    M /trunk/doc/sympa.tex
    M /trunk/doc/sympa.tex.tpl
@@ -25936,7 +25946,6 @@ Chemins modifiés :
 ------------------------------------------------------------------------
 r1738 | salaun | 2003-01-22 17:29:05 +0100 (mer, 22 jan 2003) | 2 lines
 Chemins modifiés :
-   M /trunk/doc/sympa.pdf
    M /trunk/doc/sympa.ps
    M /trunk/doc/sympa.tex
 
@@ -26034,7 +26043,6 @@ Chemins modifiés :
 ------------------------------------------------------------------------
 r1719 | salaun | 2002-12-24 09:50:24 +0100 (mar, 24 déc 2002) | 6 lines
 Chemins modifiés :
-   M /trunk/doc/sympa.pdf
    M /trunk/doc/sympa.ps
    M /trunk/doc/sympa.tex
    M /trunk/doc/sympa.tex.tpl
@@ -26152,7 +26160,6 @@ Chemins modifiés :
    M /trunk/Makefile.in
    M /trunk/doc/Makefile
    M /trunk/doc/parse_tex.pl
-   M /trunk/doc/sympa.pdf
    M /trunk/doc/sympa.ps
    M /trunk/doc/sympa.tex
    M /trunk/doc/sympa.tex.tpl
@@ -26176,7 +26183,6 @@ Chemins modifiés :
    M /trunk/configure
    M /trunk/configure.in
    M /trunk/doc/Makefile
-   M /trunk/doc/sympa.pdf
    M /trunk/doc/sympa.ps
    M /trunk/doc/sympa.tex
    M /trunk/doc/sympa.tex.tpl
@@ -26345,7 +26351,6 @@ not recently updated.
 ------------------------------------------------------------------------
 r1678 | salaun | 2002-12-06 10:22:09 +0100 (ven, 06 déc 2002) | 3 lines
 Chemins modifiés :
-   M /trunk/doc/sympa.pdf
    M /trunk/doc/sympa.ps
    M /trunk/doc/sympa.tex
    M /trunk/doc/sympa.tex.tpl
@@ -26358,7 +26363,6 @@ New 'use_ssl', 'ssl_version' and 'ssl_ciphers' parameters in auth.conf
 ------------------------------------------------------------------------
 r1677 | salaun | 2002-12-05 17:06:13 +0100 (jeu, 05 déc 2002) | 2 lines
 Chemins modifiés :
-   M /trunk/doc/sympa.pdf
    M /trunk/doc/sympa.ps
    M /trunk/doc/sympa.tex
    M /trunk/doc/sympa.tex.tpl
@@ -26397,7 +26401,6 @@ Fix: only rebuild archives of the current VRobot
 ------------------------------------------------------------------------
 r1671 | salaun | 2002-11-27 16:33:46 +0100 (mer, 27 nov 2002) | 2 lines
 Chemins modifiés :
-   M /trunk/doc/sympa.pdf
    M /trunk/doc/sympa.ps
    M /trunk/doc/sympa.tex
    M /trunk/doc/sympa.tex.tpl
@@ -26564,7 +26567,6 @@ Add comment
 r1649 | salaun | 2002-11-14 14:40:35 +0100 (jeu, 14 nov 2002) | 2 lines
 Chemins modifiés :
    M /trunk/Makefile.in
-   M /trunk/doc/sympa.pdf
    M /trunk/doc/sympa.ps
    M /trunk/doc/sympa.tex
    M /trunk/doc/sympa.tex.tpl
@@ -26608,7 +26610,6 @@ Fix: wwsympa would die under certain circumstances if LDAP Bind failed with erro
 ------------------------------------------------------------------------
 r1640 | salaun | 2002-11-13 11:06:57 +0100 (mer, 13 nov 2002) | 2 lines
 Chemins modifiés :
-   M /trunk/doc/sympa.pdf
    M /trunk/doc/sympa.ps
    M /trunk/doc/sympa.tex
    M /trunk/doc/sympa.tex.tpl
@@ -26685,7 +26686,6 @@ Changes: Require recent Mailtools because of mailx security problems
 ------------------------------------------------------------------------
 r1629 | salaun | 2002-11-05 12:04:24 +0100 (mar, 05 nov 2002) | 2 lines
 Chemins modifiés :
-   M /trunk/doc/sympa.pdf
    M /trunk/doc/sympa.ps
    M /trunk/doc/sympa.tex
    M /trunk/doc/sympa.tex.tpl
@@ -26875,7 +26875,6 @@ missing "you MUST rebuild archives"
 ------------------------------------------------------------------------
 r1596 | salaun | 2002-10-21 11:12:39 +0200 (lun, 21 oct 2002) | 2 lines
 Chemins modifiés :
-   M /trunk/doc/sympa.pdf
    M /trunk/doc/sympa.ps
    M /trunk/doc/sympa.tex
    M /trunk/doc/sympa.tex.tpl
@@ -27168,7 +27167,6 @@ r1553 | salaun | 2002-09-23 14:55:57 +0200 (lun, 23 sep 2002) | 2 lines
 Chemins modifiés :
    M /trunk/doc/man8/sympa.8
    M /trunk/doc/man8/sympa.pod
-   M /trunk/doc/sympa.pdf
    M /trunk/doc/sympa.ps
    M /trunk/doc/sympa.tex
    M /trunk/doc/sympa.tex.tpl
@@ -27178,7 +27176,6 @@ Add documentation for --make_alias_file option
 ------------------------------------------------------------------------
 r1552 | salaun | 2002-09-23 12:15:04 +0200 (lun, 23 sep 2002) | 3 lines
 Chemins modifiés :
-   M /trunk/doc/sympa.pdf
    M /trunk/doc/sympa.ps
    M /trunk/doc/sympa.tex
    M /trunk/doc/sympa.tex.tpl
@@ -27260,7 +27257,6 @@ Preparing 3.3.6b.4
 ------------------------------------------------------------------------
 r1542 | salaun | 2002-09-19 16:48:14 +0200 (jeu, 19 sep 2002) | 2 lines
 Chemins modifiés :
-   M /trunk/doc/sympa.pdf
    M /trunk/doc/sympa.ps
    M /trunk/doc/sympa.tex
    M /trunk/doc/sympa.tex.tpl
@@ -27364,7 +27360,6 @@ Changes: alias management related
 ------------------------------------------------------------------------
 r1529 | salaun | 2002-09-18 14:20:51 +0200 (mer, 18 sep 2002) | 2 lines
 Chemins modifiés :
-   M /trunk/doc/sympa.pdf
    M /trunk/doc/sympa.ps
    M /trunk/doc/sympa.tex
    M /trunk/doc/sympa.tex.tpl
@@ -27669,7 +27664,6 @@ Fix log entry
 ------------------------------------------------------------------------
 r1513 | salaun | 2002-09-12 10:20:34 +0200 (jeu, 12 sep 2002) | 2 lines
 Chemins modifiés :
-   M /trunk/doc/sympa.pdf
    M /trunk/doc/sympa.ps
    M /trunk/doc/sympa.tex
    M /trunk/doc/sympa.tex.tpl
@@ -27716,7 +27710,6 @@ Ajust name of vars
 ------------------------------------------------------------------------
 r1507 | salaun | 2002-09-11 11:30:46 +0200 (mer, 11 sep 2002) | 3 lines
 Chemins modifiés :
-   M /trunk/doc/sympa.pdf
    M /trunk/doc/sympa.ps
    M /trunk/doc/sympa.tex
    M /trunk/doc/sympa.tex.tpl
@@ -27820,7 +27813,6 @@ as soon as ther use openssl perl module instead of openssl commands.
 r1494 | salaun | 2002-08-26 17:25:25 +0200 (lun, 26 aoû 2002) | 3 lines
 Chemins modifiés :
    M /trunk/check_perl_modules.pl
-   M /trunk/doc/sympa.pdf
    M /trunk/doc/sympa.ps
    M /trunk/doc/sympa.tex
    M /trunk/nls/fr.msg
@@ -27912,7 +27904,6 @@ Chemins modifiés :
    M /trunk/ChangeLog
    M /trunk/Makefile.in
    M /trunk/aclocal.m4
-   M /trunk/doc/sympa.pdf
    M /trunk/doc/sympa.ps
    M /trunk/doc/sympa.tex
    M /trunk/doc/sympa.tex.tpl
@@ -27960,7 +27951,6 @@ Serge
 ------------------------------------------------------------------------
 r1483 | salaun | 2002-08-13 15:56:46 +0200 (mar, 13 aoû 2002) | 2 lines
 Chemins modifiés :
-   M /trunk/doc/sympa.pdf
    M /trunk/doc/sympa.ps
    M /trunk/doc/sympa.tex
    M /trunk/doc/sympa.tex.tpl
@@ -28053,7 +28043,6 @@ Correct
 ------------------------------------------------------------------------
 r1471 | salaun | 2002-08-07 10:49:00 +0200 (mer, 07 aoû 2002) | 2 lines
 Chemins modifiés :
-   M /trunk/doc/sympa.pdf
    M /trunk/doc/sympa.ps
    M /trunk/doc/sympa.tex
    M /trunk/doc/sympa.tex.tpl
@@ -28586,7 +28575,6 @@ Fix subroutine names store_susbscription_request(), delete_susbscription_request
 ------------------------------------------------------------------------
 r1403 | salaun | 2002-07-02 11:17:23 +0200 (mar, 02 jui 2002) | 2 lines
 Chemins modifiés :
-   M /trunk/doc/sympa.pdf
    M /trunk/doc/sympa.ps
    M /trunk/doc/sympa.tex
    M /trunk/doc/sympa.tex.tpl
@@ -28617,7 +28605,6 @@ r1399 | salaun | 2002-06-26 14:07:05 +0200 (mer, 26 jun 2002) | 2 lines
 Chemins modifiés :
    M /trunk/ChangeLog
    M /trunk/NEWS
-   M /trunk/doc/sympa.pdf
    M /trunk/doc/sympa.ps
    M /trunk/doc/sympa.tex
 
@@ -28670,7 +28657,6 @@ New feature: Sympa working with Clam antivirus (http://clamav.elektrapro.com/)
 ------------------------------------------------------------------------
 r1393 | salaun | 2002-06-21 14:53:28 +0200 (ven, 21 jun 2002) | 2 lines
 Chemins modifiés :
-   M /trunk/doc/sympa.pdf
    M /trunk/doc/sympa.ps
    M /trunk/doc/sympa.tex
    M /trunk/doc/sympa.tex.tpl
@@ -29192,7 +29178,6 @@ log Typo
 ------------------------------------------------------------------------
 r1336 | salaun | 2002-05-15 11:10:08 +0200 (mer, 15 mai 2002) | 2 lines
 Chemins modifiés :
-   M /trunk/doc/sympa.pdf
    M /trunk/doc/sympa.ps
    M /trunk/doc/sympa.tex
 
@@ -29289,7 +29274,6 @@ Do not add 'topics' parameter if not defined
 ------------------------------------------------------------------------
 r1324 | salaun | 2002-05-14 14:38:45 +0200 (mar, 14 mai 2002) | 2 lines
 Chemins modifiés :
-   A /trunk/doc/sympa.pdf
    A /trunk/doc/sympa.ps
    A /trunk/doc/sympa.tex
 
