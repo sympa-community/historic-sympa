@@ -1658,7 +1658,8 @@ msgid ""
 "Failed creating list '%1'. The list might already exist or listname might "
 "include forbidden characters."
 msgstr ""
-"「%1」というリストの作成が失敗しました。すでにそういうリストがあるのかもしれません。または、リスト名に使えない文字が入っているのかもしれません。"
+"「%1」というリストの作成が失敗しました。すでにそういうリストがあるのかもしれ"
+"ません。または、リスト名に使えない文字が入っているのかもしれません。"
 
 #. (s_err.action)
 #: web_tt2/error.tt2:32
@@ -3071,8 +3072,9 @@ msgid ""
 "As listmaster, you can change your identity and act as someone else. This is "
 "may be usefull when providing assistance or to test users privileges"
 msgstr ""
-"リストシステム管理者は、ID切り替えによって、他の人のように振舞うことができます。これは、他の人を手助けしたり、その人の権限をテストしたりしたいときに役"
-"立ちます。"
+"リストシステム管理者は、ID切り替えによって、他の人のように振舞うことができま"
+"す。これは、他の人を手助けしたり、その人の権限をテストしたりしたいときに役立"
+"ちます。"
 
 #: web_tt2/serveradmin.tt2:80
 msgid "change identity as : "
@@ -7047,7 +7049,9 @@ msgstr "毎月、登録解除したメールアドレスが配送エラーを起
 msgid ""
 "daily delete sessions older than sympa.conf/session_expiration_period "
 "parameter"
-msgstr "毎日、sympa.conf の session_expiration_period パラメータで指定したよりも古いセッションを消す"
+msgstr ""
+"毎日、sympa.conf の session_expiration_period パラメータで指定したよりも古い"
+"セッションを消す"
 
 #: src/etc/global_task_models/purge_user_table.monthly.task:1
 msgid "purge of orphan entries in user table every month"
