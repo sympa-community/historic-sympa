@@ -10,6 +10,7 @@ DEPENDON = $(shell cd .. ; ls src/*.p? wwsympa/wwsympa.fcgi wwsympa/*.p? web_tt2
 
 MSGMERGE = msgmerge
 MSGFMT   = msgfmt
+MSGCAT   = msgcat
 MSGATTRIB = msgattrib
 XGETTEXT = po/xgettext.pl
 
