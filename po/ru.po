@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: sympa\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
 "POT-Creation-Date: 2002-07-16 17:27+0800\n"
-"PO-Revision-Date: 2008-03-27 15:17+0100\n"
+"PO-Revision-Date: 2008-04-23 13:12+0200\n"
 "Last-Translator: chernysh <mail33@gmail.com>\n"
 "Language-Team: Russian <ru@li.org>\n"
 "MIME-Version: 1.0\n"
@@ -4811,29 +4811,38 @@ msgid ""
 "REMIND <list>                   * Send a reminder message to each subscriber "
 "(this is a way to inform anyone what is his real subscribing email)."
 msgstr ""
+"REMIND <рассылка>                                  * Отправить напоминание "
+"каждому подписчику (это способ информировать каждого о его подписанном "
+"электронном адресе)."
 
 #: mail_tt2/helpfile.tt2:57
 msgid "DISTribute <list> <key>        * Moderation: to validate a message"
 msgstr ""
+"DISTribute <рассылка> <ключ>                 * Модерация: для утверждения "
+"сообщения"
 
 #: mail_tt2/helpfile.tt2:58
 msgid "REJect <list> <key>            * Moderation: to reject a message"
 msgstr ""
+"REJect <рассылка> <ключ>                       * Модерация: для отклонения "
+"сообщения"
 
 #: mail_tt2/helpfile.tt2:59
 msgid ""
 "MODINDEX <list>                 * Moderation: to view the list of messages "
 "to moderate"
 msgstr ""
+"MODINDEX <рассылка>                              * Модерация: для просмотра "
+"списка модерируемых сообщений"
 
 #: mail_tt2/helpfile.tt2:62
 msgid "Powered by Sympa"
-msgstr ""
+msgstr "Работает на Sympa"
 
 #. (list.name)
 #: mail_tt2/index_archive.tt2:2
 msgid "Archives index of list %1"
-msgstr ""
+msgstr "Индекс архива рассылки %1"
 
 #. (list.name)
 #: mail_tt2/info_report.tt2:2
@@ -4843,119 +4852,114 @@ msgstr ""
 #. (list.name,list.host)
 #: mail_tt2/info_report.tt2:4
 msgid "Information regarding list %1@%2"
-msgstr ""
+msgstr "Информация о рассылке %1@%2"
 
 #. (list.subject)
 #: mail_tt2/info_report.tt2:6
 msgid "Subject            : %1"
-msgstr ""
+msgstr "Тема            : %1"
 
 #. (o.gecos)
 #: mail_tt2/info_report.tt2:9
 msgid "Owner              : %1"
-msgstr ""
+msgstr "Владелец              : %1"
 
 #. (e.gecos)
 #: mail_tt2/info_report.tt2:14
 msgid "Moderator          : %1"
-msgstr ""
+msgstr "Модератор          : %1"
 
 #. (subscribe)
 #: mail_tt2/info_report.tt2:17
 msgid "Subscription       : %1"
-msgstr ""
+msgstr "Подписка       : %1"
 
 #. (unsubscribe)
 #: mail_tt2/info_report.tt2:18
 msgid "Unsubscription     : %1"
-msgstr ""
+msgstr "Отписка     : %1"
 
 #. (send)
 #: mail_tt2/info_report.tt2:19
 msgid "Sending messages   : %1"
-msgstr ""
+msgstr "Отправка сообщений   : %1"
 
 #. (review)
 #: mail_tt2/info_report.tt2:20
 msgid "Review subscribers : %1"
-msgstr ""
+msgstr "Список подписчиков : %1"
 
 #. (reply_to)
 #: mail_tt2/info_report.tt2:21
 msgid "Reply to           : %1"
-msgstr ""
+msgstr "Ответить           : %1"
 
 #. (max_size)
 #: mail_tt2/info_report.tt2:22
 msgid "Maximum size       : %1"
-msgstr ""
+msgstr "Максимальный размер       : %1"
 
 #. (digest)
 #: mail_tt2/info_report.tt2:24
 msgid "Digest             : %1"
-msgstr ""
+msgstr "Дайджест             : %1"
 
 #. (available_reception_mode)
 #: mail_tt2/info_report.tt2:26
 msgid "Receiving modes    : %1"
-msgstr ""
+msgstr "Режимы получения    : %1"
 
 #. (url)
 #: mail_tt2/info_report.tt2:27
 msgid "Homepage           : %1"
-msgstr ""
+msgstr "Домашняя страница           : %1"
 
 #. (list.name)
 #: mail_tt2/invite.tt2:3
 msgid "Invitation to join list %1"
-msgstr ""
+msgstr "Приглашение присоединиться к списку рассылки %1"
 
 #. (list.subject)
 #: mail_tt2/invite.tt2:5
 msgid "This list is about %1, so you are probably concerned."
-msgstr ""
+msgstr "Эта рассылка о %1, возможно касается и Вас."
 
 #: mail_tt2/invite.tt2:7
-#, fuzzy
 msgid "To subscribe just hit the following mailto url :"
-msgstr "Ваши подписки со следующим электронным адресом"
+msgstr "Чтобы подписаться, просто щёлкните на эту ссылку для отправки письма: "
 
 #. (conf.sympa,subject)
 #: mail_tt2/invite.tt2:10
-#, fuzzy
 msgid "Or send a message to %1 with subject: \"sub %2\""
-msgstr ""
-"\n"
-"или отошлите письмо по адресу %1 с такой темой\n"
-"AUTH %2 DEL %3 %4\n"
+msgstr "Или отправьте письмо на адрес %1 с темой \"sub %2\""
 
 #: mail_tt2/invite.tt2:12
 msgid "If you don't want to subscribe just ignore this message."
-msgstr ""
+msgstr "Если Вы не хотите подписываться, просто игнорируйте это сообщение. "
 
 #. (list.name)
 #: mail_tt2/list_created.tt2:2
 msgid "%1 mailing list creation"
-msgstr "%1 создание списка рассылки"
+msgstr "создание списка рассылки %1 "
 
 #. (list.name,list.host)
 #: mail_tt2/list_created.tt2:4
 msgid "%1@%2 mailing list has been activated by listmaster."
-msgstr ""
+msgstr "Список рассылки %1@%2 был активирован глобальным администратором. "
 
 #: mail_tt2/list_created.tt2:6
 msgid "homepage"
-msgstr ""
+msgstr "домашняя страница"
 
 #. (list.name)
 #: mail_tt2/list_created.tt2:9
 msgid "%1 admin page"
-msgstr "%1 страница администратора"
+msgstr "страница администратора %1 "
 
 #. (list.name)
 #: mail_tt2/listeditor_notification.tt2:4
 msgid "Shared document to be approved for %1"
-msgstr ""
+msgstr "Общие документы на утверждение для %1"
 
 #. (list.name,filename,who,conf.wwsympa_url)
 #: mail_tt2/listeditor_notification.tt2:13
@@ -4968,6 +4972,13 @@ msgid ""
 "To moderate these document : \n"
 "%4/modindex/%1"
 msgstr ""
+"В рассылке %1 есть новые общие документы:\n"
+"\t%2\n"
+"\n"
+"\tот %3\n"
+"\n"
+"Модерировать эти документы:\n"
+"%4/modindex/%1"
 
 #. (list.name,filename,who,conf.wwsympa_url)
 #: mail_tt2/listeditor_notification.tt2:21
@@ -4979,6 +4990,11 @@ msgid ""
 "%4/modindex/%1\n"
 " "
 msgstr ""
+"В рассылке %1 есть новый общий документ:\n"
+"\t%2 от %3\n"
+"\n"
+"Модерировать этот документ:\n"
+"%4/modindex/%1"
 
 #. (list.name,type)
 #: mail_tt2/listeditor_notification.tt2:24
@@ -4988,37 +5004,36 @@ msgstr ""
 #. (list.name)
 #: mail_tt2/listmaster_notification.tt2:4
 msgid "List \"%1\" creation request"
-msgstr ""
+msgstr "Запрос на создание рассылки \"%1\""
 
 #. (email,list.name)
 #: mail_tt2/listmaster_notification.tt2:6
-#, fuzzy
 msgid "%1 requested creation of list \"%2\""
 msgstr "%1 запросил создание листа \"%2\""
 
 #: mail_tt2/listmaster_notification.tt2:12
 #: mail_tt2/listmaster_notification.tt2:21
 msgid "To activate/delete this mailing list :"
-msgstr ""
+msgstr "Чтобы активировать удалить этот список рассылки: "
 
 #. (list.name)
 #: mail_tt2/listmaster_notification.tt2:17
 msgid "List \"%1\" renaming"
-msgstr ""
+msgstr "Переименование рассылки \"%1\""
 
 #. (email,list.name,new_listname)
 #: mail_tt2/listmaster_notification.tt2:19
 msgid "%1 has renamed list \"%2\" to \"%3\""
-msgstr ""
+msgstr "%1 переименовал рассылку \"%2\" в \"%3\""
 
 #: mail_tt2/listmaster_notification.tt2:25
 msgid "No DataBase"
-msgstr ""
+msgstr "Отсутствует база данных"
 
 #. (db_name)
 #: mail_tt2/listmaster_notification.tt2:27
 msgid "Cannot connect to database %1, still trying..."
-msgstr ""
+msgstr "Невозможно соединиться  с базой данных %1, повторяю попытку... "
 
 #. (db_type)
 #: mail_tt2/listmaster_notification.tt2:31
