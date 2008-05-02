@@ -1,4 +1,76 @@
 ------------------------------------------------------------------------
+r4989 | sympa-authors | 2008-05-02 15:01:56 +0200 (ven, 02 mai 2008) | 2 lines
+Chemins modifiés :
+   M /branches/sympa-5.4-branch/po/Makefile
+
+[bug] the "update-po" target tried to use the ${MSGCAT} var which was not initialized. Fixed by setting this variable's value.
+
+------------------------------------------------------------------------
+r4988 | sympa-authors | 2008-05-02 14:49:07 +0200 (ven, 02 mai 2008) | 1 line
+Chemins modifiés :
+   M /branches/sympa-5.4-branch/po/ja.po
+   M /branches/sympa-5.4-branch/po/web_help_ja.po
+
+Committing updated catalogues from Pootle
+------------------------------------------------------------------------
+r4987 | sympa-authors | 2008-05-02 14:47:03 +0200 (ven, 02 mai 2008) | 1 line
+Chemins modifiés :
+   M /branches/sympa-5.4-branch/po/ja.po
+   M /branches/sympa-5.4-branch/po/ru.po
+   M /branches/sympa-5.4-branch/po/web_help_fr.po
+   M /branches/sympa-5.4-branch/po/web_help_ja.po
+
+Committing latest translations from Pootle
+------------------------------------------------------------------------
+r4986 | david.verdin | 2008-05-02 12:06:30 +0200 (ven, 02 mai 2008) | 2 lines
+Chemins modifiés :
+   M /branches/sympa-5.4-branch/wwsympa/archived.pl
+
+[bug][Reported by M. Kretchner, INRIA] It was impossible to remove a message from web archvives or to rebuild them. this was due to a regexp to prevent archived.pl from using dot-starting files added by some Linux distribution (as Gentoo). Fixed by extending the regexp.
+
+------------------------------------------------------------------------
+r4984 | david.verdin | 2008-05-02 10:31:47 +0200 (ven, 02 mai 2008) | 2 lines
+Chemins modifiés :
+   M /branches/sympa-5.4-branch/src/Commands.pm
+
+[#3990][Submitted by A. Berstein, electricembers.net] The quiet option had been deactivated from the "reject" mail command.
+
+------------------------------------------------------------------------
+r4974 | sympa-authors | 2008-04-17 08:50:01 +0200 (jeu, 17 avr 2008) | 3 lines
+Chemins modifiés :
+   M /branches/sympa-5.4-branch/check_perl_modules.pl
+
+[bug][Reported by M. Gorecka-Wolniewicz, Nicolaus Copernicus univ., Torun] In some cases, CAS logout didn't work, due to a value of "0" transformed into an empty string in the session cookie. Fixed by upgrading CGI version.
+
+
+------------------------------------------------------------------------
+r4972 | sympa-authors | 2008-04-16 11:27:37 +0200 (mer, 16 avr 2008) | 3 lines
+Chemins modifiés :
+   M /branches/sympa-5.4-branch
+   M /branches/sympa-5.4-branch/doc
+   M /branches/sympa-5.4-branch/src/task_manager.pl
+   M /branches/sympa-5.4-branch/wwsympa/archived.pl
+   M /branches/sympa-5.4-branch/wwsympa/bounced.pl
+
+[#3957][Reported by O. Berger, Telecom & Management SudParis] When launching Sympa daemons (other than sympa.pl) with an unknown option, the daemon was still launched instead of failing to launch.
+
+
+------------------------------------------------------------------------
+r4970 | sympa-authors | 2008-04-15 09:54:01 +0200 (mar, 15 avr 2008) | 2 lines
+Chemins modifiés :
+   M /branches/sympa-5.4-branch/NEWS
+
+Confusion between traditional and simplified Chinese.
+
+------------------------------------------------------------------------
+r4966 | sympa-authors | 2008-04-14 15:35:06 +0200 (lun, 14 avr 2008) | 1 line
+Chemins modifiés :
+   M /branches/sympa-5.4-branch/.version
+   M /branches/sympa-5.4-branch/ChangeLog
+   M /branches/sympa-5.4-branch/NEWS
+
+Preparing version 5.4.2
+------------------------------------------------------------------------
 r4965 | sympa-authors | 2008-04-14 15:26:05 +0200 (lun, 14 avr 2008) | 1 line
 Chemins modifiés :
    M /branches/sympa-5.4-branch/po/af.po

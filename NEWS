@@ -3,6 +3,25 @@
 
 (See Changelog file for the full changes log)
 
+5.4.3		05 May 2008
+
+Features:
+
+  po/ja.po, po/web_help_ja.po: Introduction of the huge work in progress by Soji Ikeda to update the Japanese translation of the user interface and translate the online help in Japanese.
+
+  po/ru.po: Updated Russian translation.
+
+  src/Commands.pm: [#3990][Submitted by A. Berstein, electricembers.net] The quiet option has been reactivated for the "reject" mail command.
+
+Bug fixes:
+
+  wwsympa/archived.pl: [Reported by M. Kretchner, INRIA] It was impossible to remove a message from web archives or rebuild these archives. This was due to a regexp to prevent archived.pl from using dot-starting files added by some Linux distribution (as Gentoo). Fixed by extending the regexp.
+
+  check_perl_modules.pl: [Reported by M. Gorecka-Wolniewicz, Nicolaus Copernicus univ., Torun] In some cases, CAS logout didn't work, due to a value of "0" transformed into an empty string in the session cookie. Fixed by upgrading CGI version.
+
+  src/task_manager.pl, wwsympa/archived.pl, wwsympa/bounced.pl: [#3957][Reported by O. Berger, Telecom & Management SudParis] When launching Sympa daemons (other than sympa.pl) with an unknown option, the daemon was still launched instead of failing to launch.
+
+
 5.4.2		14 April 2008
 
 Features:
