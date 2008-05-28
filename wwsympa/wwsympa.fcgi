@@ -2629,6 +2629,7 @@ sub do_sso_login {
 	}
 	
 	$param->{'user'}{'email'} = $email;
+	$session->{'email'} = $email;
 	$session->{'auth'} = 'generic_sso' ;
 	
 	&wwslog('notice', 'User identified as %s', $email);
