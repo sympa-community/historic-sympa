@@ -243,7 +243,7 @@ sub _parse_scenario {
 sub request_action {
     my $operation = shift;
     my $auth_method = shift;
-    my $robot=shift;
+    my $robot = shift;
     my $context = shift;
     my $debug = shift;
     do_log('debug', 'List::request_action %s,%s,%s',$operation,$auth_method,$robot);
@@ -781,6 +781,7 @@ sub verify {
 	    do_log('err', "error rule syntaxe : failed to parse netmask '$args[0]'");
 	    return undef;
 	}
+
 	if ($block->match ($ENV{'REMOTE_ADDR'})) {
 	    return $negation;
 	}else{

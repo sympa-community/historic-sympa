@@ -1,0 +1,24 @@
+
+<form action="[% path_cgi %]" method="post" name="create_templates">
+<fieldset>
+
+<p>
+<B>Write your message here and then click 'Save Template'</B>
+</p>
+<p>
+[%|loc(template_title)%]Template Name :  %1 [%END%]
+</P>
+<P>
+<TEXTAREA NAME="template_content" COLS="50" ROWS="10" WRAP=SOFT>
+[% content %] 
+</TEXTAREA>
+<input type="hidden" name="template_path" value="[% new_template_path %]"/>
+<input type="hidden" name="list" value="[% list %]"/>
+</p>
+<p>
+<input class="MainMenuLinks" type="submit" name="action_save_template" value="[%|loc%]Save Template[%END%]" />
+<input class="MainMenuLinks" type="submit" name="action_modindex" value="[%|loc%]Cancel[%END%]" />
+</p>
+
+</fieldset>
+</form>

@@ -1,0 +1,17 @@
+
+<form action="[% path_cgi %]" method="post" name="save_templates">
+<fieldset>
+
+<p>
+<B>Write your message here and then click 'Save Template'</B>
+</p>
+<p>
+[%|loc(template_title)%]Your template (%1)  has been saved. [%END%]
+</p>
+<p>
+
+<input class="MainMenuLinks" type="submit" name="action_modindex" value="[%|loc%]Return[%END%]" />
+</p>
+
+</fieldset>
+</form>

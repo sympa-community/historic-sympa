@@ -306,7 +306,9 @@ my %comm = ('home' => 'do_home',
 	 'maintenance' => 'do_maintenance',
 	 'blacklist' => 'do_blacklist',
 	 'edit_attributes' => 'do_edit_attributes',
-	 'ticket' => 'do_ticket'
+	 'ticket' => 'do_ticket',
+	 'manage_template' => 'do_manage_template',
+	 'save_template' => 'do_save_template',
 	 );
 
 my %auth_action = ('logout' => 1,
@@ -430,10 +432,10 @@ my %action_args = ('default' => ['list'],
 ## Parameter names refer to the %in structure of to $param if mentionned as 'param.x'
 ## This structure is used to determine if any parameter is missing
 ## The list of parameters is not ordered
-## There are some reserved keywards : param.list and param.user.email
-## Alternate parameteres can be defined with the '|' character
-## Limits of this structure : it does not define optional parameters (a or b)
-## Limit : it does not allow to have a specific error message and redirect to a given page if the parameter is missing
+## Some keywords are reserved: param.list and param.user.email
+## Alternate parameters can be defined with the '|' character
+## Limits of this structure: it does not define optional parameters (a or b)
+## Limit : it does not allow to have a specific error message and redirect to a given page if the parameter is missing
 my %required_args = ('active_lists' => ['for|count'],
 		     'admin' => ['param.list','param.user.email'],
 		     'add' => ['param.list','param.user.email'],
@@ -685,6 +687,7 @@ my %in_regexp = (
 		 'multiple_param' => '.+',
 
 		 ## Textarea content
+		 'template_content' => '.+',
 		 'content' => '.+',
 		 'body' => '.+',
 		 'info' => '.+',
@@ -2778,7 +2781,7 @@ sub do_ticket {
     
     return 1 unless ($param->{'ticket_context'}{'result'} eq 'success');
     
-    # if the ricket is related to someone which is not loggued perform sames opération as for a login
+    # if the ricket is related to someone which is not logged perform sames operation as for a login
     unless ($session->{'email'} eq lc($param->{'ticket_context'}{'email'})) {
 	$session->{'email'} = lc($param->{'ticket_context'}{'email'});
 	$param->{'user'} =  &List::get_user_db($session->{'email'});
@@ -5241,7 +5244,7 @@ sub do_restore_email {
     return 'home';
 }
 
-## list availible templates
+## list available templates
 sub do_ls_templates  {
     &wwslog('info', 'do_ls_templates');
 
@@ -5352,7 +5355,7 @@ sub do_view_template {
 }
 
 ##  template copy
-sub do_copy_template  {
+sub do_copy_template {
     &wwslog('info', 'do_copy_template');
     
     
@@ -5422,6 +5425,130 @@ sub do_copy_template  {
     return ('edit_template');    
 }
 
+
+## create a new template
+sub do_manage_template {
+    &wwslog('info', 'do_manage_template');
+    my  $template_regexp = &tools::get_regexp('template_name');
+    
+    if ($in{'create'}) {
+
+	## verify template name
+	unless  ($in{'template_name'} =~ /^$template_regexp/g) {
+	    &wwslog('err','do_manage_template : template name unacceptable `%s`', $in{'template_name'});
+	    &report::reject_report_web('user','invalid_filename',{'filename' => $in{'template_name'}},$param->{'action'},$list);
+	    return undef;
+	}
+	my @available_files = &tools::get_list_templates_list('mail','list',$list);
+	foreach my $file (@available_files) {
+	    $file =~ s/.tt2//g;
+	    if ($in{'template_name'} eq $file) {
+		&report::reject_report_web('user','template_exists',{'argument' => $file},'','');
+		return undef;
+	    }
+	}
+	
+	## check the list associated with the template
+	if (defined $list) {
+	    unless ($list->am_i('owner', $param->{'user'}{'email'})) {
+		&report::reject_report_web('auth','action_owner',{},$param->{'action'},$list);
+		&wwslog('err','do_savefile: not allowed');
+		&web_db_log({'parameters' => $in{'file'},
+			     'status' => 'error',
+			     'error_type' => 'authorization'});
+		return undef;
+	    }
+	}
+	
+	## get the path for the template
+	$param->{'new_template_path'} = &tools::get_template_path('mail',$robot,'list','reject_'.$in{'template_name'}.'.tt2',$in{'tpl_lang'},$list);
+	$param->{'template_title'} = $in{'template_name'};
+	
+    }elsif ($in{'modify'} || $in{'delete'}) {
+
+	# Template name verification
+	unless  ($in{'message_template'} =~ /^$template_regexp/g) {
+	    &wwslog('err','do_manage_template : template name unacceptable `%s`', $in{'message_template'});
+	    &report::reject_report_web('user','invalid_filename',{'filename' => $in{'message_template'}},$param->{'action'},$list);
+	    return undef;
+	}
+	$param->{'template_title'} = $in{'message_template'};
+	$param->{'template_title'}=~  s/reject_//g;
+	$param->{'new_template_path'} = &tools::get_template_path('mail',$robot,'list', ,$in{'message_template'}.'.tt2',$in{'tpl_lang'},$list);
+	
+	if ($in{'modify'}) {
+	    
+	    my $chosen_file = $param->{'new_template_path'};
+	    unless(open (FILE, $chosen_file)){
+		&report::reject_report_web('intern','cannot_open_file',{'path' => $param->{'new_template_path'}},$param->{'action'},'',$param->{'user'}{'email'},$robot);
+		&wwslog('err',"can't open file %s : %s", $param->{'new_template_path'}, $!);
+		&web_db_log({'parameters' => $param->{'new_template_path'},
+			     'status' => 'error',
+			     'error_type' => 'internal'});
+		return undef;
+	    }
+	    my $file_content;
+	    while (<FILE>){
+		$file_content .= $_;
+	    }
+	    $param->{'content'} = $file_content;
+	    $param->{'content'} = &tools::escape_html($param->{'content'});
+	    close FILE;
+	}
+	elsif ($in{'delete'}) {
+	    unless(unlink $param->{'new_template_path'}) {
+		&report::reject_report_web('intern','cannot_delete',{'file_del' => $param->{'new_template_path'}},'','','',$robot);
+		&wwslog('err',"can't open file %s : %s", $param->{'new_template_path'}, $!);
+		&web_db_log({'parameters' => $param->{'new_template_path'},
+			     'status' => 'error',
+			     'error_type' => 'internal'});
+		return undef;
+	    }
+	    return ('modindex');
+	}
+    }
+    else{
+	&report::reject_report_web('user','unknown_action',{},'','','',$robot);
+	&wwslog('err','unknown action %s', $in{'action'});
+	return undef;
+    }
+    return 1;
+}
+
+
+
+
+## save template
+sub do_save_template {
+    my $template_path = $in{'template_path'};
+  
+    ## create the parent directory if it doesn't already exist
+    unless (&tools::mk_parent_dir($template_path)) {
+	&report::reject_report_web('intern','cannot_open_file',{'path' => $template_path},$param->{'action'},'',$param->{'user'}{'email'},$robot);
+	&wwslog('err',"can't create parent directory for %s : %s", $template_path, $!);
+	&web_db_log({'parameters' => $param->{'template_name'},
+		     'status' => 'error',
+		     'error_type' => 'internal'});
+	return undef;
+    }
+
+    ## open the template
+    unless (open (TPLOUT ,'>' ,$template_path)) {
+	&report::reject_report_web('intern','cannot_open_file',{'path' => $template_path},$param->{'action'},'',$param->{'user'}{'email'},$robot);
+	&wwslog('err',"can't open file %s : %s", $template_path, $!);
+	&web_db_log({'parameters' => $in{'template_name'},
+		     'status' => 'error',
+		     'error_type' => 'internal'});
+	return undef;
+    }
+
+    ##  save template contents
+    print TPLOUT $in{'template_content'};
+    close TPLOUT;
+
+return ('modindex');
+}
+
 ## online template edition
 sub do_edit_template  {
 
@@ -5478,7 +5605,7 @@ sub do_edit_template  {
 }    
 
 
-   ## Server show colors, and install static css in futur edit colors etc
+   ## Server show colors, and install static css in future edit colors etc
 sub do_skinsedit {
     &wwslog('info', 'do_skinsedit');
     my $f;
@@ -5916,9 +6043,19 @@ sub do_skinsedit {
 	 $param->{'topic_required'} = $list->is_msg_topic_tagging_required();
      }
 
+##     if (defined my $default_file = &tools::get_template_path('mail',$robot,
 
 
-     ##  document shared awaiting for moderation
+
+
+     my @available_files = &tools::get_list_templates_list('mail','mail',$list);
+     foreach my $file (@available_files) {
+	 $file =~ s/reject_//g;
+         $file =~ s/.tt2//g;
+	 push (@{$param->{'available_files'}},$file); 
+ }
+
+     ## shared documents awaiting moderation
      foreach my $d (@{$param->{'doc_mod_list'}}) {
 	 
          $d =~ /^(([^\/]*\/)*)([^\/]+)(\/?)$/;
@@ -6162,10 +6299,11 @@ sub do_skinsedit {
 ####################################################
  sub do_reject {
 
-     # toggle selection javascript have a distinction of spam and ham base on the checkbox name . It is not usefull here so join id list and idspam list. 
+     # toggle selection javascript have a distinction of spam and ham base on the checkbox name . It is not useful here so join id list and idspam list. 
      $in{'id'} .= ','.$in{'idspam'} if ($in{'idspam'});
      $in{'id'} =~ s/^,//;
      $in{'id'} =~ s/\0/,/g;
+     $in{'message_template'};
 
     &wwslog('info', 'do_reject(%s)', $in{'id'});
      my ($msg, $file);
@@ -6189,6 +6327,8 @@ sub do_skinsedit {
 			  'error_type' => 'internal'});
 	     next;
 	 }
+
+
          #  extract sender address is needed to report reject to sender and in case the sender is to be added in blacklist
 	 if (($in{'quiet'} ne '1')||($in{'blacklist'})) {
 	     my $msg;
@@ -6197,7 +6337,12 @@ sub do_skinsedit {
 	     unless ($msg = $parser->read(\*IN)) {
 		 &wwslog('err', 'Unable to parse message %s', $file);
 		 next;
-	     }	     
+	     }	   
+
+
+
+  
+
 	     my @sender_hdr = Mail::Address->parse($msg->head->get('From'));
 	     unless  ($#sender_hdr == -1) {
 		 my $rejected_sender = $sender_hdr[0]->address;
@@ -6206,8 +6351,12 @@ sub do_skinsedit {
 		     $context{'subject'} = &MIME::EncWords::decode_mimewords($msg->head->get('subject'), Charset=>'utf8');
 		     chomp $context{'subject'};
 		     $context{'rejected_by'} = $param->{'user'}{'email'};
-		     unless ($list->send_file('reject', $rejected_sender, $robot, \%context)) {
-			 &wwslog('notice',"Unable to send template 'reject' to $rejected_sender");
+		     $context{'template_used'} = $in{'message_template'};
+
+
+
+		     unless ($list->send_file($in{'message_template'}, $rejected_sender, $robot, \%context)) {
+			 &wwslog('notice',"Unable to send template $in{'message_template'} to $rejected_sender");
 		     }
 		 }		 
 		 if ($in{'blacklist'}) {
@@ -6656,7 +6805,7 @@ sub do_viewmod {
      &report::notice_report_web('performed',{},$param->{'action'});
 
  #    undef $in{'file'};
- #    undef $param->{'file'};
+ #    undef $param->{'file'};  
      return 'editfile';
  }
 
@@ -7748,7 +7897,7 @@ Creates a list using a list template
      }elsif ($param->{'create_action'} =~ /listmaster/i) {
 	 $param->{'status'} = 'pending' ;
 
-     ## If the action is plainly authorized, note that it will be excuted.
+     ## If the action is plainly authorized, note that it will be executed.
      }elsif  ($param->{'create_action'} =~ /do_it/i) {
 	 $param->{'status'} = 'open' ;
 
@@ -15971,6 +16120,7 @@ sub do_maintenance {
     
     return 1;
 }
+
 =pod 
 
 =head1 AUTHORS 
