@@ -6050,8 +6050,8 @@ sub do_skinsedit {
 
      my @available_files = &tools::get_list_templates_list('mail','mail',$list);
      foreach my $file (@available_files) {
-	 $file =~ s/reject_//g;
-         $file =~ s/.tt2//g;
+	 $file =~ s/^reject_//g;
+         $file =~ s/.tt2$//g;
 	 push (@{$param->{'available_files'}},$file); 
  }
 
