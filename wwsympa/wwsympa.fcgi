@@ -5426,7 +5426,7 @@ sub do_copy_template {
 }
 
 
-## create a new template
+## manage the rejection templates
 sub do_manage_template {
     &wwslog('info', 'do_manage_template');
     my  $template_regexp = &tools::get_regexp('template_name');
@@ -5459,16 +5459,39 @@ sub do_manage_template {
 		return undef;
 	    }
 	}
-	
+	my $tt2_include_path = &tools::make_tt2_include_path($robot,'mail_tt2',$in{'tpl_lang'},$list);
+	foreach my $d (@{$tt2_include_path}) {
+	    &tt2::add_include_path($d);
+	}
+	my @path = &tt2::get_include_path();
+	my $default_file = &tools::find_file('reject.tt2',@path);
+	unless(open (FILE, $default_file)){
+	    &report::reject_report_web('intern','cannot_open_file',{'path' => $default_file},$param->{'action'},'',$param->{'user'}{'email'},$robot);
+	    &wwslog('err',"can't open file %s : %s", $default_file, $!);
+	    &web_db_log({'parameters' => $default_file,
+			 'status' => 'error',
+			 'error_type' => 'internal'});
+	    return undef;
+	}
+	my $file_content;
+	while (<FILE>){
+	    $file_content .= $_;
+	}
+	$param->{'content'} = $file_content;
+	$param->{'content'} = &tools::escape_html($param->{'content'});
+	close FILE;
+
 	## get the path for the template
 	$param->{'new_template_path'} = &tools::get_template_path('mail',$robot,'list','reject_'.$in{'template_name'}.'.tt2',$in{'tpl_lang'},$list);
 	$param->{'template_title'} = $in{'template_name'};
-	
     }elsif ($in{'modify'} || $in{'delete'}) {
-
+	# Useless if the default option is selected.
+	if($in{'message_template'} eq 'reject'){
+	    return modindex;
+	}
 	# Template name verification
 	unless  ($in{'message_template'} =~ /^$template_regexp/g) {
-	    &wwslog('err','do_manage_template : template name unacceptable `%s`', $in{'message_template'});
+	    &wwslog('err','do_manage_template : template name unacceptable 10 `%s`', $in{'message_template'});
 	    &report::reject_report_web('user','invalid_filename',{'filename' => $in{'message_template'}},$param->{'action'},$list);
 	    return undef;
 	}
@@ -5520,7 +5543,7 @@ sub do_manage_template {
 
 ## save template
 sub do_save_template {
-    my $template_path = $in{'template_path'};
+    my $template_path = &tools::get_template_path('mail',$robot,'list','reject_'.$in{'template_title'}.'.tt2',$in{'tpl_lang'},$list);
   
     ## create the parent directory if it doesn't already exist
     unless (&tools::mk_parent_dir($template_path)) {
@@ -6050,8 +6073,9 @@ sub do_skinsedit {
 
      my @available_files = &tools::get_list_templates_list('mail','mail',$list);
      foreach my $file (@available_files) {
-	 $file =~ s/^reject_//g;
-         $file =~ s/.tt2$//g;
+	 next unless($file =~ /^reject_/);
+	 $file =~ s/^reject_//;
+         $file =~ s/.tt2$//;
 	 push (@{$param->{'available_files'}},$file); 
  }
 
@@ -6339,10 +6363,6 @@ sub do_skinsedit {
 		 next;
 	     }	   
 
-
-
-  
-
 	     my @sender_hdr = Mail::Address->parse($msg->head->get('From'));
 	     unless  ($#sender_hdr == -1) {
 		 my $rejected_sender = $sender_hdr[0]->address;
@@ -6352,9 +6372,6 @@ sub do_skinsedit {
 		     chomp $context{'subject'};
 		     $context{'rejected_by'} = $param->{'user'}{'email'};
 		     $context{'template_used'} = $in{'message_template'};
-
-
-
 		     unless ($list->send_file($in{'message_template'}, $rejected_sender, $robot, \%context)) {
 			 &wwslog('notice',"Unable to send template $in{'message_template'} to $rejected_sender");
 		     }

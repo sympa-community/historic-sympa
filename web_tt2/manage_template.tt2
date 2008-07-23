@@ -6,19 +6,19 @@
 <B>Write your message here and then click 'Save Template'</B>
 </p>
 <p>
-[%|loc(template_title)%]Template Name :  %1 [%END%]
+[%|loc()%]Template Name :[%END%]<input type="text" name="template_title" value="[% template_title %]">
 </P>
 <P>
 <TEXTAREA NAME="template_content" COLS="50" ROWS="10" WRAP=SOFT>
 [% content %] 
 </TEXTAREA>
-<input type="hidden" name="template_path" value="[% new_template_path %]"/>
 <input type="hidden" name="list" value="[% list %]"/>
 </p>
 <p>
 <input class="MainMenuLinks" type="submit" name="action_save_template" value="[%|loc%]Save Template[%END%]" />
 <input class="MainMenuLinks" type="submit" name="action_modindex" value="[%|loc%]Cancel[%END%]" />
+<input class="MainMenuLinks" type="submit" name="action_manage_template.delete" onclick="return getConfirmation()"  value="[%|loc%]Delete Template[%END%]" />
+<input type="hidden" name="message_template" value="reject_[% template_title %]"/>
 </p>
-
 </fieldset>
 </form>

@@ -22,6 +22,7 @@
 <p>
  <input class="MainMenuLinks" type="submit" name="action_reject" value="[%|loc%]Notified reject[%END%]" onclick="return check_reject_spams(moderate_mails,'[%|loc %]You should probably not reject message detected as spam with notification because the message sender is probably spoofed. Do you really want to reject those messages with notification ?[%END%]')" />  
   <select  name="message_template">
+  <option  value="reject">[%|loc %]Default rejection message[%END%]</option> 
    [% FOREACH file = available_files %]
   <option  value="reject_[%  file  %]"> [%  file  %]</option> 
  [%- END- %]
