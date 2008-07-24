@@ -5,7 +5,7 @@
 <form action="[% path_cgi %]" method="post" name="moderate_mails">
 <fieldset>
   <input type="hidden" name="list" value="[% list %]" />
-<h2>[%|loc%]Listing messages to moderate[%END%]</h2>
+<h2>[%|loc%]Message Moderation[%END%]</h2>
 
 <p>
  [%- IF topic_required -%]
@@ -18,7 +18,7 @@
   <input class="MainMenuLinks" type="submit" name="action_blacklist" value="[%|loc%]edit blacklist[%END%]" />
   <input class="MainMenuLinks" type="submit" name="action_reject.quiet" value="[%|loc%]Reject Quiet[%END%]" />
 </p>
-<h2>[%|loc%]Management of Reject Messages[%END%]</h2>
+<h2>[%|loc%]Management of Rejection Messages[%END%]</h2>
 <p>
  <input class="MainMenuLinks" type="submit" name="action_reject" value="[%|loc%]Notified reject[%END%]" onclick="return check_reject_spams(moderate_mails,'[%|loc %]You should probably not reject message detected as spam with notification because the message sender is probably spoofed. Do you really want to reject those messages with notification ?[%END%]')" />  
   <select  name="message_template">
@@ -30,7 +30,7 @@
 <input class="MainMenuLinks" type="submit" name="action_manage_template.modify" value="[%|loc%]Modify Template[%END%]" />
 <input class="MainMenuLinks" type="submit" name="action_manage_template.delete" onclick="return getConfirmation()"  value="[%|loc%]Delete Template[%END%]" />
 </p>
-<h2>[%|loc%]Creation of Reject Messages[%END%]</h2>
+<h2>[%|loc%]Creation of Rejection Messages[%END%]</h2>
 <p>
 [%|loc%]*Write the name of the Reject Message you wish to create and then click Confirm Creation[%END%]<br/>
 [%|loc%] (No spaces or special characters)[%END%]
@@ -39,8 +39,9 @@
 <input class="MainMenuLinks" type="submit" name="action_manage_template.create" value="[%|loc%]Confirm Creation[%END%]" />
 </p>
 
+<h2>[%|loc%]List of Messages for Moderation[%END%]</h2>
+
 [% END %]
-<br />
  [%- IF request_topic -%]
  <br />
  [%|loc%]This list is configured to require topic(s).[%END%]
