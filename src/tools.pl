@@ -593,6 +593,7 @@ sub get_templates_list {
     my $type = shift;
     my $robot = shift;
     my $list = shift;
+    my $options = shift;
 
     my $listdir;
 
@@ -606,10 +607,14 @@ sub get_templates_list {
     my $robot_dir = $Conf{'etc'}.'/'.$robot.'/'.$type.'_tt2';
 
     my @try;
-    push @try, $distrib_dir ;
-    push @try, $site_dir ;
-    push @try, $robot_dir;
-    
+
+    ## The 'ignore_global' option allows to look for files at list level only
+    unless ($options->{'ignore_global'}) {
+	push @try, $distrib_dir ;
+	push @try, $site_dir ;
+	push @try, $robot_dir;
+    }    
+
     if (defined $list) {
 	$listdir = $list->{'dir'}.'/'.$type.'_tt2';	
 	push @try, $listdir ;

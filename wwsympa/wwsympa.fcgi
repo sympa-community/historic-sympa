@@ -308,7 +308,6 @@ my %comm = ('home' => 'do_home',
 	 'edit_attributes' => 'do_edit_attributes',
 	 'ticket' => 'do_ticket',
 	 'manage_template' => 'do_manage_template',
-	 'save_template' => 'do_save_template',
 	 );
 
 my %auth_action = ('logout' => 1,
@@ -498,6 +497,7 @@ my %required_args = ('active_lists' => ['for|count'],
 		     'latest_lists' => ['for|count'],
 		     'load_cert' => ['param.list'],
 		     'logout' => ['param.user.email'],
+		     'manage_template' => ['param.list','param.user.email'],
 		     'modindex' => ['param.list','param.user.email'],
 		     'multiple_subscribe' => ['param.list'],		     
 		     'pref' => ['param.user.email'],
@@ -578,6 +578,7 @@ my %required_privileges = ('admin' => ['owner','editor'],
 			   'ignoresub' => ['owner'],
 			   'install_pending_list' => ['listmaster'],
 			   'ls_templates' => ['listmaster'],
+			   'manage_template' => ['owner'],
 			   'modindex' => ['editor'],
 			   'purge_list' => ['privileged_owner'],
 			   'rebuildallarc' => ['listmaster'],
@@ -721,6 +722,7 @@ my %in_regexp = (
 		 'shortname' => '[^<>\\\*\$\n]+',
 		 'new_name' => '[^<>\\\*\$\n]+',
 		 'id' => '[^<>\\\*\$\n]+',
+		 'template_name' => &tools::get_regexp('template_name'),
 
 		 ## Archives
 		 'month' => '\d{2}|\d{4}\-\d{2}', ## format is yyyy-mm for 'arc' and mm for 'send_me'
@@ -1722,11 +1724,11 @@ sub get_parameters {
 	 }
 	 foreach my $p (keys %in) {
 	     do_log('debug2',"POST key $p value $in{$p}");
-	     if ($p =~ /^action_(\w+)((\.\w+)*)$/) {
+	     if ($p =~ /^((\w*)action)_(\w+)((\.\w+)*)$/) {
 		 
-		 $in{'action'} = $1;
-		 if ($2) {
-		     foreach my $v (split /\./, $2) {
+		 $in{$1} = $3;
+		 if ($4) {
+		     foreach my $v (split /\./, $4) {
 			 $v =~ s/^\.?(\w+)\.?/$1/;
 			 $in{$v} = 1;
 		     }
@@ -5253,7 +5255,7 @@ sub do_ls_templates  {
     if (defined $list) {
 	$param->{'templates'} = &tools::get_templates_list($in{'webormail'},$robot,$list);
     }else{
-	$param->{'templates'} = &tools::get_templates_list($in{'webormail'},$robot);
+	$param->{'templates'} = &tools::get_templates_list($in{'webormail'},$robot, undef);
     }
     
     ## List of lang per type
@@ -5428,148 +5430,116 @@ sub do_copy_template {
 
 ## manage the rejection templates
 sub do_manage_template {
-    &wwslog('info', 'do_manage_template');
-    my  $template_regexp = &tools::get_regexp('template_name');
+    &wwslog('info', '(%s,%s)', $in{'subaction'}, $in{'message_template'});
     
-    if ($in{'create'}) {
+    if ($in{'message_template'}) {
+	$param->{'template_path'} = &tools::get_template_path('mail',$robot,'list', ,'reject_'.$in{'message_template'}.'.tt2','',$list);
+    }
+    
+    my $tt2_include_path = &tools::make_tt2_include_path($robot,'mail_tt2','',$list);
+    my $default_file = &tools::find_file('reject.tt2',@{$tt2_include_path});
 
-	## verify template name
-	unless  ($in{'template_name'} =~ /^$template_regexp/g) {
-	    &wwslog('err','do_manage_template : template name unacceptable `%s`', $in{'template_name'});
-	    &report::reject_report_web('user','invalid_filename',{'filename' => $in{'template_name'}},$param->{'action'},$list);
-	    return undef;
-	}
-	my @available_files = &tools::get_list_templates_list('mail','list',$list);
-	foreach my $file (@available_files) {
-	    $file =~ s/.tt2//g;
-	    if ($in{'template_name'} eq $file) {
-		&report::reject_report_web('user','template_exists',{'argument' => $file},'','');
-		return undef;
-	    }
-	}
+    if ($in{'subaction'} eq 'default') {
 	
-	## check the list associated with the template
-	if (defined $list) {
-	    unless ($list->am_i('owner', $param->{'user'}{'email'})) {
-		&report::reject_report_web('auth','action_owner',{},$param->{'action'},$list);
-		&wwslog('err','do_savefile: not allowed');
-		&web_db_log({'parameters' => $in{'file'},
-			     'status' => 'error',
-			     'error_type' => 'authorization'});
-		return undef;
-	    }
-	}
-	my $tt2_include_path = &tools::make_tt2_include_path($robot,'mail_tt2',$in{'tpl_lang'},$list);
-	foreach my $d (@{$tt2_include_path}) {
-	    &tt2::add_include_path($d);
-	}
-	my @path = &tt2::get_include_path();
-	my $default_file = &tools::find_file('reject.tt2',@path);
+	## Check if the file can be accessed
 	unless(open (FILE, $default_file)){
-	    &report::reject_report_web('intern','cannot_open_file',{'path' => $default_file},$param->{'action'},'',$param->{'user'}{'email'},$robot);
+	    &report::reject_report_web('intern','cannot_open_file',{'path' => $default_file},$param->{'subaction'},'',$param->{'user'}{'email'},$robot);
 	    &wwslog('err',"can't open file %s : %s", $default_file, $!);
 	    &web_db_log({'parameters' => $default_file,
 			 'status' => 'error',
 			 'error_type' => 'internal'});
 	    return undef;
 	}
-	my $file_content;
+	
 	while (<FILE>){
-	    $file_content .= $_;
+	    $param->{'content'} .= $_;
 	}
-	$param->{'content'} = $file_content;
+	$param->{'content'} = &tools::escape_html($param->{'content'});
+	close FILE;
+   
+    }elsif ($in{'subaction'} eq 'save') {
+
+	## verify that the template name doesn't already exist
+	if (-f $param->{'template_path'}) {
+	     &report::reject_report_web('user','template_exists',{'argument' => $param->{'template_path'}},$param->{'action'},'',$param->{'user'}{'email'},$robot);
+	     &wwslog('err',"This template already exists: use 'Modify' function %s ", $param->{'template_path'});
+	     &web_db_log({'parameters' => $param->{'template_name'},
+			  'status' => 'error',
+			  'error_type' => 'user'});
+	    return undef;
+	}
+	
+	## create the parent directory if it doesn't already exist
+	unless (&tools::mk_parent_dir($param->{'template_path'})) {
+	    &report::reject_report_web('intern','cannot_open_file',{'path' => $param->{'template_path'}},$param->{'action'},'',$param->{'user'}{'email'},$robot);
+	    &wwslog('err',"can't create parent directory for %s : %s", $param->{'template_path'}, $!);
+	    &web_db_log({'parameters' => $param->{'template_name'},
+			 'status' => 'error',
+			 'error_type' => 'internal'});
+	    return undef;
+	}
+	
+	## open the template
+	unless (open (TPLOUT ,'>' ,$param->{'template_path'})) {
+	    &report::reject_report_web('intern','cannot_open_file',{'path' => $param->{'template_path'}},$param->{'action'},'',$param->{'user'}{'email'},$robot);
+	    &wwslog('err',"can't open file %s : %s", $param->{'template_path'}, $!);
+	    &web_db_log({'parameters' => $in{'template_name'},
+			 'status' => 'error',
+			 'error_type' => 'internal'});
+	    return undef;
+	}
+	
+	##  save template contents
+	print TPLOUT $in{'template_content'};
+	close TPLOUT;
+
+	&report::notice_report_web('performed',{},$in{'subaction'});
+
+	$param->{'content'} = $in{'template_content'};
+	$param->{'message_template'} = $in{'message_template'};
+	
+    }elsif ($in{'subaction'} eq 'modify') {
+	    
+	unless(open (FILE, $param->{'template_path'})){
+	    &report::reject_report_web('intern','cannot_open_file',{'path' => $param->{'template_path'}},$param->{'action'},'',$param->{'user'}{'email'},$robot);
+	    &wwslog('err',"can't open file %s : %s", $param->{'template_path'}, $!);
+	    &web_db_log({'parameters' => $param->{'template_path'},
+			 'status' => 'error',
+			 'error_type' => 'internal'});
+	    return undef;
+	}
+
+	while (<FILE>){
+	    $param->{'content'} .= $_;
+	}
 	$param->{'content'} = &tools::escape_html($param->{'content'});
 	close FILE;
 
-	## get the path for the template
-	$param->{'new_template_path'} = &tools::get_template_path('mail',$robot,'list','reject_'.$in{'template_name'}.'.tt2',$in{'tpl_lang'},$list);
-	$param->{'template_title'} = $in{'template_name'};
-    }elsif ($in{'modify'} || $in{'delete'}) {
-	# Useless if the default option is selected.
-	if($in{'message_template'} eq 'reject'){
-	    return modindex;
-	}
-	# Template name verification
-	unless  ($in{'message_template'} =~ /^$template_regexp/g) {
-	    &wwslog('err','do_manage_template : template name unacceptable 10 `%s`', $in{'message_template'});
-	    &report::reject_report_web('user','invalid_filename',{'filename' => $in{'message_template'}},$param->{'action'},$list);
+	$param->{'message_template'} = $in{'message_template'};
+
+    }elsif ($in{'subaction'} eq 'delete') {
+	
+	unless(unlink $param->{'template_path'}) {
+	    &report::reject_report_web('intern','cannot_delete',{'file_del' => $param->{'template_path'}},'','','',$robot);
+	    &wwslog('err',"can't open file %s : %s", $param->{'template_path'}, $!);
+	    &web_db_log({'parameters' => $param->{'template_path'},
+			 'status' => 'error',
+			 'error_type' => 'internal'});
 	    return undef;
 	}
-	$param->{'template_title'} = $in{'message_template'};
-	$param->{'template_title'}=~  s/reject_//g;
-	$param->{'new_template_path'} = &tools::get_template_path('mail',$robot,'list', ,$in{'message_template'}.'.tt2',$in{'tpl_lang'},$list);
-	
-	if ($in{'modify'}) {
-	    
-	    my $chosen_file = $param->{'new_template_path'};
-	    unless(open (FILE, $chosen_file)){
-		&report::reject_report_web('intern','cannot_open_file',{'path' => $param->{'new_template_path'}},$param->{'action'},'',$param->{'user'}{'email'},$robot);
-		&wwslog('err',"can't open file %s : %s", $param->{'new_template_path'}, $!);
-		&web_db_log({'parameters' => $param->{'new_template_path'},
-			     'status' => 'error',
-			     'error_type' => 'internal'});
-		return undef;
-	    }
-	    my $file_content;
-	    while (<FILE>){
-		$file_content .= $_;
-	    }
-	    $param->{'content'} = $file_content;
-	    $param->{'content'} = &tools::escape_html($param->{'content'});
-	    close FILE;
-	}
-	elsif ($in{'delete'}) {
-	    unless(unlink $param->{'new_template_path'}) {
-		&report::reject_report_web('intern','cannot_delete',{'file_del' => $param->{'new_template_path'}},'','','',$robot);
-		&wwslog('err',"can't open file %s : %s", $param->{'new_template_path'}, $!);
-		&web_db_log({'parameters' => $param->{'new_template_path'},
-			     'status' => 'error',
-			     'error_type' => 'internal'});
-		return undef;
-	    }
-	    return ('modindex');
-	}
+	&report::notice_report_web('performed',{},$in{'subaction'});
     }
-    else{
-	&report::reject_report_web('user','unknown_action',{},'','','',$robot);
-	&wwslog('err','unknown action %s', $in{'action'});
-	return undef;
+
+    ## Build the list of available templates
+    my $available_files = &tools::get_templates_list('mail','',$list, {'ignore_global' => 1});
+    foreach my $file (keys %$available_files) {
+	next unless($file =~ /^reject_/);
+	$file =~ s/^reject_//;
+	$file =~ s/.tt2$//;
+	push (@{$param->{'available_files'}},$file);
     }
+    
     return 1;
-}
-
-
-
-
-## save template
-sub do_save_template {
-    my $template_path = &tools::get_template_path('mail',$robot,'list','reject_'.$in{'template_title'}.'.tt2',$in{'tpl_lang'},$list);
-  
-    ## create the parent directory if it doesn't already exist
-    unless (&tools::mk_parent_dir($template_path)) {
-	&report::reject_report_web('intern','cannot_open_file',{'path' => $template_path},$param->{'action'},'',$param->{'user'}{'email'},$robot);
-	&wwslog('err',"can't create parent directory for %s : %s", $template_path, $!);
-	&web_db_log({'parameters' => $param->{'template_name'},
-		     'status' => 'error',
-		     'error_type' => 'internal'});
-	return undef;
-    }
-
-    ## open the template
-    unless (open (TPLOUT ,'>' ,$template_path)) {
-	&report::reject_report_web('intern','cannot_open_file',{'path' => $template_path},$param->{'action'},'',$param->{'user'}{'email'},$robot);
-	&wwslog('err',"can't open file %s : %s", $template_path, $!);
-	&web_db_log({'parameters' => $in{'template_name'},
-		     'status' => 'error',
-		     'error_type' => 'internal'});
-	return undef;
-    }
-
-    ##  save template contents
-    print TPLOUT $in{'template_content'};
-    close TPLOUT;
-
-return ('modindex');
 }
 
 ## online template edition
@@ -6071,8 +6041,8 @@ sub do_skinsedit {
 
 
 
-     my @available_files = &tools::get_list_templates_list('mail','mail',$list);
-     foreach my $file (@available_files) {
+     my $available_files = &tools::get_templates_list('mail','',$list, {'ignore_global' => 1});
+     foreach my $file (keys %$available_files) {
 	 next unless($file =~ /^reject_/);
 	 $file =~ s/^reject_//;
          $file =~ s/.tt2$//;
@@ -6329,6 +6299,16 @@ sub do_skinsedit {
      $in{'id'} =~ s/\0/,/g;
      $in{'message_template'};
 
+     ## The quiet information might either be provided by the 'quiet' variable 
+     ## or by the 'quiet' value of the 'message_template' variable
+     if ($in{'message_template'} eq 'quiet') {
+	 $in{'quiet'} = 1;
+	 delete $in{'message_template'};
+     }
+     if ($in{'blacklist'}) {
+	 $in{'quiet'} = 1;
+     }     
+     
     &wwslog('info', 'do_reject(%s)', $in{'id'});
      my ($msg, $file);
 
@@ -6353,7 +6333,7 @@ sub do_skinsedit {
 	 }
 
 
-         #  extract sender address is needed to report reject to sender and in case the sender is to be added in blacklist
+         #  extract sender address is needed to report reject to sender and in case the sender is to be added to the blacklist
 	 if (($in{'quiet'} ne '1')||($in{'blacklist'})) {
 	     my $msg;
 	     my $parser = new MIME::Parser;
@@ -6533,9 +6513,18 @@ sub do_skinsedit {
 ####################################################
 sub do_viewmod {
      &wwslog('info', 'do_viewmod(%s,%s)', $in{'id'},$in{'file'});
-     my $msg;
 
+     my $msg;
      my $tmp_dir;
+
+     my $available_files = &tools::get_templates_list('mail','',$list, {'ignore_global' => 1});
+     foreach my $file (keys %$available_files) {
+	 next unless($file =~ /^reject_/);
+	 $file =~ s/^reject_//;
+         $file =~ s/.tt2$//;
+	 push (@{$param->{'available_files'}},$file); 
+     }
+
      ## For compatibility concerns
      foreach my $list_id ($list->get_list_id(),$list->{'name'}) {
 	 $tmp_dir = $Conf{'queuemod'}.'/.'.$list_id.'_'.$in{'id'};
@@ -12144,7 +12133,7 @@ sub do_d_savefile {
      }
 
      if (-e "$shareddir/$dir.desc.$file"){
-	 # if description file already exists : open it and modify it
+	 # if description file already exists: open it and modify it
 	 my %desc_hash = &get_desc_file ("$shareddir/$dir.desc.$file");
 
 	 open DESC,">$shareddir/$dir.desc.$file"; 
