@@ -8239,6 +8239,8 @@ Sends back the list creation edition form.
 	 $param->{'additional_fields'} = \%data;
      }
 
+     $param->{'previous_action'} = $in{'previous_action'};
+
      return 1;
  }
 
