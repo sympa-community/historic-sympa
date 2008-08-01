@@ -3353,7 +3353,7 @@ sub do_sso_login_succeeded {
 
      $user = &List::get_user_db($in{'new_alternative_email'});
      $user->{'password'} ||= &tools::tmp_passwd($in{'new_alternative_email'});	
-     unless($in{'new_password'} eq $user->{'password'}){
+     unless(&Auth::password_fingerprint($in{'new_password'}) eq $user->{'password'}){
 	 &report::reject_report_web('user','incorrect_passwd',{},$param->{'action'});
 	 &wwslog('info','do_record_email: incorrect password for user %s', $in{'new_alternative_email'});
 	 &web_db_log({'parameters' => $in{'new_alternative_email'}, 
