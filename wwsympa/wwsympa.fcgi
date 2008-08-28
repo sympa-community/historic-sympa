@@ -7783,6 +7783,15 @@ Creates a list using a list template
 
 
      ## create liste
+     if (my $testlist = &List::new($in{'listname'})){
+	  &report::reject_report_web('user','create_list',{},$param->{'action'},'',$param->{'user'}{'email'},$robot);
+	  &wwslog('info','do_create_list: requested list %s already exist (from %s)',$in{'listname'},$param->{'user'}{'email'});
+	  &web_db_log({'parameters' => $in{'listname'},
+		       'list' => $in{'listname'},
+		       'status' => 'error',
+		       'error_type' => 'user'});
+	  return undef
+      }
      my $resul = &admin::create_list_old($parameters,$in{'template'},$robot,"web");
      unless(defined $resul) {
 	 &report::reject_report_web('intern','create_list',{},$param->{'action'},'',$param->{'user'}{'email'},$robot);
