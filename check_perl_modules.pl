@@ -77,7 +77,7 @@ use CPAN;
 	     'MIME::EncWords' => 'MIME-EncWords',
 	     'HTML::StripScripts::Parser' => 'HTML-StripScripts-Parser',
 	     'HTML::TreeBuilder' => 'HTML-Tree',
-	     'HTML:FormatText' => 'HTML-Format',
+	     'HTML::FormatText' => 'HTML-Format',
 	     );
 
 %opt_CPAN = ('DBD::Pg' => 'DBD-Pg',
