@@ -23,9 +23,6 @@
 [%END%]
 
 
-<h3>[%|loc%]login[%END%]</h3>
 
-[%|loc%]You may request a new authentication url.[%END%]  
-[% PROCESS remindpasswd.tt2 %]
 
 

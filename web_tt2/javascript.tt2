@@ -294,14 +294,19 @@ cacheId('contenu','Stretcher');
 </script>
 
 <script language="JavaScript" type="text/javascript">
-function getConfirmation() {
-if (confirm("Do you really want to delete this reject message?")){
+function getConfirmation(file) {
+if (confirm(file)){
 	return(true)
 }
 else{
 	return(false)
 }
 }
+
+
+
+
+
 </script>
 
 <!-- end javascript.tt2 -->
