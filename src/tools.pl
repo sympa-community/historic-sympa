@@ -654,32 +654,6 @@ sub get_templates_list {
 }
 
 
-## Obtains a list of all templates at the level of a list
-sub get_list_templates_list {
-
-    my $type = shift;
-    my $robot = shift;
-    my $list = shift;
-    my $listdir;
-    my @try;
-    
-    if (defined $list) {
-	$listdir = $list->{'dir'}.'/'.$type.'_tt2';	
-	push @try, $listdir ;
-    }
-    
-    my $dirname = &get_template_path('mail',$robot,'list','','',$list);
-    unless (opendir DIR, $dirname) {
-	&do_log('err', 'ERROR in opendir');
-	return undef;
-    }
-    my @tmpdir =(sort grep(/^[^\.].+\.tt2$/,readdir DIR)); 
-    closedir DIR;
-    return @tmpdir;
-    
-}
-
-
 # return the path for a specific template
 sub get_template_path {
 
