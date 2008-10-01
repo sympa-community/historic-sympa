@@ -1,0 +1,49 @@
+<!-- $Id$ -->
+
+
+[% IF action == 'search_list' %]
+  [%|loc(occurrence)%]%1 occurrence(s) found[%END%]<br /><br />
+[% ELSIF action == 'search_user' %]
+  [%|loc(email)%]<strong>%1</strong> is subscribed to the following mailing lists[%END%]
+[% END %]
+
+[% IF which %]
+[% letters = ['a','b','c','d','e','f','g','h','i','j','k','l','m','n','o','p','q','r','s','t','u','v','w','x','y','z','others' ] %]
+<p align="center">
+[% FOREACH letter IN letters %]
+  [% IF orderedlist.$letter.0 %]
+    <a href="#[%letter%]">[%letter%]</a>&nbsp;
+  [% ELSE %]
+    [%letter%]&nbsp;
+ [% END %] 
+[% END %] 
+</p>
+
+[% FOREACH letter IN letters %]
+[% IF orderedlist.$letter.0 %]
+<a name="[% letter %]" />
+[% END %] 
+<ul class="listenum" >
+ [% FOREACH listname IN  orderedlist.$letter %]
+ <li class="listenum">
+  [% IF which.$listname.admin %]<a class="actionMenuLinks" href="[% path_cgi %]/admin/[% listname %]" >[%|loc%]admin[%END%]</a>[% END %] 
+  <a href="[% path_cgi %]/info/[% listname %]" ><strong>[% hidden_head %][% listname %][% hidden_at %][% which.$listname.host %][% hidden_end %]</strong></a><br />
+  <span>[% which.$listname.subject %]</span><br />
+  </li>
+ [% END %] 
+</ul>
+[% END %] 
+
+ <br />
+
+ [% IF action == 'which' %]
+  [% IF ! which %]
+   &nbsp;&nbsp;<span class="color_dark">[%|loc(user.email)%]No subscriptions with address <strong>%1</strong>![%END%]</span>
+   <br />
+  [% END %]
+
+ [% END %]
+[% ELSE %]
+<p>[%|loc%]No mailing list available.[%END%]</p>
+[% END %]
+

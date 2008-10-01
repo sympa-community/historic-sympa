@@ -1,0 +1,27 @@
+<h3>[%|loc%]Sorry, this operation can't be performed[%END%]</h3>
+
+
+[% IF ticket_context.date %]
+ [%|loc(ticket_context.printable_date) %]On %1 an authentication ticket was generated and sent to you. [%END%]
+ [% IF ticket_context.remote_addr %]
+   [%|loc(ticket_context.remote_addr) %](the ticket was requested from host %1) [%END%]
+ [%END%]
+[%END%]
+
+<h3>[%|loc%]reason[%END%]</h3>
+[% IF ticket_context.result == 'closed' -%]
+[%|loc(ticket_context.status)%]The validation ticket has already been validated from host %1 .If you did not perform this validation, please report this confidentiality issue to your mail services administrator.[%END%] 
+[%END%]
+
+[% IF ticket_context.result == 'expired' -%]
+[%|loc(ticket_context.printable_date)%]The requested ticket has expired[%END%].
+[%|loc%]Please use your password or request a new ticket[%END%]
+[%END%]
+[% IF ticket_context.result == 'not_found' -%]
+[%|loc(ticket_context.printable_date)%]The requested authentication ticket has an unknow format or is expired[%END%].
+[%|loc%]Please use your password or request a new ticket[%END%]
+[%END%]
+
+
+
+
