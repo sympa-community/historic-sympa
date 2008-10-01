@@ -348,7 +348,7 @@ msgstr ""
 msgid "<strong>answer questions from subscribers and potential subscribers about the list;</strong>"
 msgstr ""
 
-#: web_tt2/help_admin.tt2:248 web_tt2/help_introduction.tt2:103
+#: web_tt2/help_admin.tt2:252 web_tt2/help_introduction.tt2:103
 msgid "etc."
 msgstr ""
 
@@ -1381,7 +1381,7 @@ msgid "You can <strong>perform moderating tasks</strong> either <strong>by email
 msgstr ""
 
 #: web_tt2/help_admin.tt2:185
-msgid "You have <strong>three options</strong>:"
+msgid "You have <strong>two options</strong>:"
 msgstr ""
 
 #: web_tt2/help_admin.tt2:187
@@ -1389,189 +1389,193 @@ msgid "<strong>authorize the message distribution</strong> on the list;"
 msgstr ""
 
 #: web_tt2/help_admin.tt2:188
-msgid "<strong>reject the message</strong>;"
-msgstr ""
-
-#: web_tt2/help_admin.tt2:189
 msgid "<strong>reject the message and notify sender</strong>: when you reject a message, it is better to notify its sender..."
 msgstr ""
 
 #: web_tt2/help_admin.tt2:190
-msgid "Be careful: rejecting a message and notifying its sender is only available through the mailing list web interface."
-msgstr ""
-
-#: web_tt2/help_admin.tt2:192
 msgid "All moderators can decide to distribute a message or not. However, <strong>the first moderator to process the message will carry the day</strong>. You will be notified by Sympa if you try to process a message that has already been moderated. When there are several moderators, it is <strong>easier to moderate messages from the mailing list web interface</strong>: thus, you will be able to view all messages remaining to be moderated."
 msgstr ""
 
-#: web_tt2/help_admin.tt2:193
+#: web_tt2/help_admin.tt2:191
 msgid "<strong>Whatever the date and time of moderation, the date and time of sending of the message do not change</strong>. Thus, if the distribution of the message is allowed with a lot of delay, it is possible to receive a message dated January 1st on December 31st!"
 msgstr ""
 
-#: web_tt2/help_admin.tt2:194
+#: web_tt2/help_admin.tt2:192
 msgid "In case the message was rejected with a notice, the subscriber who had sent it is notified by email. You can <a href=\"#customize\">customize the message he/she gets</a>."
 msgstr ""
 
+#: web_tt2/help_admin.tt2:194
+msgid "Checking the '<strong>Reject without notification</strong>' checkbox allows you to prevent the message author from receiving a notification."
+msgstr ""
+
 #: web_tt2/help_admin.tt2:196
+msgid "Checking the '<strong>Add to blacklist</strong>' checkbox both skip the rejection notification and adds the message author to the list own blacklist. You can manage the blacklist via the '<strong>edit blacklist</strong>' button at the bottom of the page."
+msgstr ""
+
+#: web_tt2/help_admin.tt2:198
+msgid "If you wish to customize the rejection message that is sent to a message author, you can do so via the '<strong>Manage rejection messages</strong>' button. The message management page will let define a set of rejection messages and define the default one."
+msgstr ""
+
+#: web_tt2/help_admin.tt2:200
 #. (path_cgi)
 msgid "<strong>Reminder</strong>: you can <a href=\"%1/help/listconfig#description\">add or remove moderators</a> through the list administration module. To do that, from the list information page, click on '<strong>Admin</strong>', on '<strong>Edit list config</strong>', and then on '<strong>List definition</strong>'."
 msgstr ""
 
-#: web_tt2/help_admin.tt2:197
+#: web_tt2/help_admin.tt2:201
 #. (path_cgi)
 msgid "It is also possible to <strong>process messages after their distribution on the list</strong>; this can be useful when a list is not moderated. If you want to <strong>delete a message</strong>, <a href=\"%1/help/arc#arcsearch\">search for it in the online message archive</a> and click on the '<strong>Tag this mail for deletion</strong>' button in the upper right corner of the message. A confirmation message displays; click on 'OK'. The message will be deleted after a few seconds. <strong>Be careful: this operation is irreversible!!! If you delete a message, you will not be able to retrieve it.</strong>"
 msgstr ""
 
-#: web_tt2/help_admin.tt2:200
+#: web_tt2/help_admin.tt2:204
 msgid "Managing the message archive"
 msgstr ""
 
-#: web_tt2/help_admin.tt2:201
+#: web_tt2/help_admin.tt2:205
 msgid "The mailing list management robot Sympa can generate <strong>downloadable compressed archives (.ZIP format) of the messages sent to the list</strong>. To download those archives, <strong>select the months</strong> that interest you in the list and click on the '<strong>Download Zip file</strong>' button."
 msgstr ""
 
-#: web_tt2/help_admin.tt2:202
+#: web_tt2/help_admin.tt2:206
 msgid "Tip: in the 'Archive selection' list, to select all months during which messages have been sent, click on the first month, hold down the SHIFT key and click on the last month of the list."
 msgstr ""
 
-#: web_tt2/help_admin.tt2:203
+#: web_tt2/help_admin.tt2:207
 msgid "You will receive a file of the type '<strong>nameofthelist_archive.zip</strong>' containing <strong>folders named 'nameofthelist_year-month'</strong> (example: <em class=\"example\">list_example_2005-06</em>) for each month. Inside each folder, <strong>the file names are numbers</strong> representing their position in the chronology of the messages sent (example: the file named '1' contains the first message sent in the month). The message files have <strong>no extension</strong>; use the text editor of your choice (Notepad, WordPad, Vim, etc.) to open them. <strong>Each file represents an entire message (full header)</strong>."
 msgstr ""
 
-#: web_tt2/help_admin.tt2:204
+#: web_tt2/help_admin.tt2:208
 msgid "From the 'Manage archive' page, you can also <strong>delete messages</strong> (deletion month by month and not message by message). To do that, <strong>select the months</strong> that interest you in the list and click on the '<strong>Delete selected months</strong>' button."
 msgstr ""
 
-#: web_tt2/help_admin.tt2:205
+#: web_tt2/help_admin.tt2:209
 msgid "<strong>Be careful: this operation is irreversible!!! When you click on 'Delete selected months', keep in mind that you are not only deleting an archive file, but also the entire message archive of the selected month!!!</strong>"
 msgstr ""
 
-#: web_tt2/help_admin.tt2:208
+#: web_tt2/help_admin.tt2:212
 msgid "Renaming the list"
 msgstr ""
 
-#: web_tt2/help_admin.tt2:209
+#: web_tt2/help_admin.tt2:213
 msgid "In the <strong>list administration module</strong>, click on '<strong>Rename list</strong>'. Enter the name of your choice and click on the 'Rename this list' button. A confirmation message displays; click on 'OK'."
 msgstr ""
 
-#: web_tt2/help_admin.tt2:210
+#: web_tt2/help_admin.tt2:214
 msgid "If you change your mind, you will only have to redo the inverse operation in order to retrieve the former list name."
 msgstr ""
 
-#: web_tt2/help_admin.tt2:211
+#: web_tt2/help_admin.tt2:215
 msgid "Be careful: when you rename a list, you have to let the listmasters know; otherwise, the change will not be effective</strong>."
 msgstr ""
 
-#: web_tt2/help_admin.tt2:212
+#: web_tt2/help_admin.tt2:216
 msgid "A few tips to name your lists:"
 msgstr ""
 
-#: web_tt2/help_admin.tt2:214
+#: web_tt2/help_admin.tt2:218
 msgid "<strong>Do not use any spaces, accents or specials characters</strong> in list names: those characters might cause problems."
 msgstr ""
 
-#: web_tt2/help_admin.tt2:215
+#: web_tt2/help_admin.tt2:219
 msgid "Choose an <strong>explicit yet short name</strong>: think of the subscribers who will have to type this name every time they will send a message to the list!"
 msgstr ""
 
-#: web_tt2/help_admin.tt2:216
+#: web_tt2/help_admin.tt2:220
 #. (conf.host)
 msgid "If you manage a set of lists, you can <strong>prefix your lists' names with a common prefix</strong>; thus they will be sorted together and will be easily recognizable (example: <em class=\"example\">xx-users@%1, xx-hotline@%1.fr</em>, etc.)."
 msgstr ""
 
-#: web_tt2/help_admin.tt2:220
+#: web_tt2/help_admin.tt2:224
 msgid "Deleting the list"
 msgstr ""
 
-#: web_tt2/help_admin.tt2:221
+#: web_tt2/help_admin.tt2:225
 msgid "In the <strong>list administration module</strong>, click on '<strong>Remove list</strong>'. A confirmation message displays; click on 'OK'."
 msgstr ""
 
-#: web_tt2/help_admin.tt2:222
+#: web_tt2/help_admin.tt2:226
 msgid "<strong>Be careful: if you delete the list, you will not be able to reopen it yourself!!! If you want to reopen the list, you will have to ask the listmasters.</strong>"
 msgstr ""
 
-#: web_tt2/help_admin.tt2:224
+#: web_tt2/help_admin.tt2:228
 msgid "In real terms, what are the <strong>consequences</strong> of a list deletion?"
 msgstr ""
 
-#: web_tt2/help_admin.tt2:226
+#: web_tt2/help_admin.tt2:230
 msgid "<strong>All subscribers are immediately unsubscribed</strong> automatically (including owners and moderators)."
 msgstr ""
 
-#: web_tt2/help_admin.tt2:227
+#: web_tt2/help_admin.tt2:231
 msgid "<strong>The message archive is preserved</strong> but no one can access it anymore."
 msgstr ""
 
-#: web_tt2/help_admin.tt2:228
+#: web_tt2/help_admin.tt2:232
 msgid "<strong>The documents published in the shared document web space are preserved</strong> but no one can access them anymore."
 msgstr ""
 
-#: web_tt2/help_admin.tt2:229
+#: web_tt2/help_admin.tt2:233
 msgid "<strong>Only the listmasters have the power to reopen the list</strong>; if they do, the former list subscribers will automatically be subscribed again."
 msgstr ""
 
-#: web_tt2/help_admin.tt2:231
+#: web_tt2/help_admin.tt2:235
 msgid "Be careful: due to a slight latency, the list pages remain accessible for a while if you know their addresses. Then they will become fully unavailable."
 msgstr ""
 
-#: web_tt2/help_admin.tt2:233
+#: web_tt2/help_admin.tt2:237
 msgid "<strong>If you want the list and all the associated files to be deleted permanently</strong>, you will have to ask the listmasters."
 msgstr ""
 
-#: web_tt2/help_admin.tt2:235 web_tt2/help_sendmsg.tt2:39
+#: web_tt2/help_admin.tt2:239 web_tt2/help_sendmsg.tt2:39
 msgid "Good practices"
 msgstr ""
 
-#: web_tt2/help_admin.tt2:236
+#: web_tt2/help_admin.tt2:240
 msgid "In order to have dynamic lists, <strong>you must be deeply involved</strong> in their exchanges: if a list is neither controlled nor enlivened by its owners, it may result in a loss of quality in its messages and it might even end up vanishing..."
 msgstr ""
 
-#: web_tt2/help_admin.tt2:237
+#: web_tt2/help_admin.tt2:241
 msgid "<strong>The use of email in general and for mailing lists is bound by a set of precise rules necessary to share pleasant exchanges: the \"Netiquette\"</strong>. As a list owner or moderator, it is your role to have subscribers respect it. You will find the general principles of the Netiquette, as well as many links on the <a target=\"_blank\" href=\"http://en.wikipedia.org/wiki/Netiquette\">page of the Wikipedia dedicated to the Netiquette</a>."
 msgstr ""
 
-#: web_tt2/help_admin.tt2:238
+#: web_tt2/help_admin.tt2:242
 msgid "You should <strong>write a charter for your list</strong> to define all the rules that apply to its use:"
 msgstr ""
 
-#: web_tt2/help_admin.tt2:240
+#: web_tt2/help_admin.tt2:244
 msgid "allowed, tolerated and forbidden topics;"
 msgstr ""
 
-#: web_tt2/help_admin.tt2:241
+#: web_tt2/help_admin.tt2:245
 msgid "writing rules (for example to specify the languages in which the subscribers are to post, to ban \"<acronym lang=\"en\" xml:lang=\"en\" title=\"Short Message Service\">SMS</acronym> language\", etc.);"
 msgstr ""
 
-#: web_tt2/help_admin.tt2:242
+#: web_tt2/help_admin.tt2:246
 msgid "rules applying when sending messages (frequency, attachments, etc.);"
 msgstr ""
 
-#: web_tt2/help_admin.tt2:243
+#: web_tt2/help_admin.tt2:247
 msgid "liabilities of subscribers regarding the netiquette;"
 msgstr ""
 
-#: web_tt2/help_admin.tt2:244
+#: web_tt2/help_admin.tt2:248
 msgid "rights and responsibilities of the subscribers;"
 msgstr ""
 
-#: web_tt2/help_admin.tt2:245
+#: web_tt2/help_admin.tt2:249
 msgid "information about retention of the messages sent to the list;"
 msgstr ""
 
-#: web_tt2/help_admin.tt2:246
+#: web_tt2/help_admin.tt2:250
 msgid "legal information and privacy policy;"
 msgstr ""
 
-#: web_tt2/help_admin.tt2:247
+#: web_tt2/help_admin.tt2:251
 msgid "sanctions applying to those who would not respect the list charter;"
 msgstr ""
 
-#: web_tt2/help_admin.tt2:251
+#: web_tt2/help_admin.tt2:255
 msgid "In order to have all subscribers read the list charter, you should include it in the welcome message they get after subscribing. To do that, you need to <a href=\"#customize\">customize that message</a> through the 'Customize' page of the list administration module."
 msgstr ""
 
-#: web_tt2/help_admin.tt2:252
+#: web_tt2/help_admin.tt2:256
 msgid "When available, the <a target=\"_blank\" title=\"Example of charter aimed at owners and moderators (French)\" href=\"http://listes.cru.fr/cnil/charte.proprio.html\">Owner and moderator charter</a> provides list owners and moderators with all the necessary information to carry out their roles. This Charter involves all the rights and responsibilities of owners and moderators."
 msgstr ""
 

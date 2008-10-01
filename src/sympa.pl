@@ -77,6 +77,7 @@ Options:
    -d, --debug                           : sets Sympa in debug mode 
    -f, --config=FILE                     : uses an alternative configuration file
    --import=list\@dom                    : import subscribers (read from STDIN)
+   --foreground                          : the process remains attached to the TTY
    -k, --keepcopy=dir                    : keep a copy of incoming message
    -l, --lang=LANG                       : use a language catalog for Sympa
    -m, --mail                            : log calls to sendmail
@@ -405,16 +406,16 @@ if ($main::options{'dump'}) {
     exit 0;
 }elsif ($main::options{'make_alias_file'}) {
     my $all_lists = &List::get_lists('*');
-    unless (open TMP, ">/tmp/sympa_aliases.$$") {
-	printf STDERR "Unable to create tmp/sympa_aliases.$$, exiting\n";
+    unless (open TMP, ">$Conf{'tmpdir'}/sympa_aliases.$$") {
+	printf STDERR "Unable to create $Conf{'tmpdir'}/sympa_aliases.$$, exiting\n";
 	exit;
     }
     printf TMP "#\n#\tAliases for all Sympa lists open (but not for robots)\n#\n";
     close TMP;
     foreach my $list (@$all_lists) {
-	system ("$Conf{'alias_manager'} add $list->{'name'} $list->{'domain'} /tmp/sympa_aliases.$$") if ($list->{'admin'}{'status'} eq 'open');
+	system ("$Conf{'alias_manager'} add $list->{'name'} $list->{'domain'} $Conf{'tmpdir'}/sympa_aliases.$$") if ($list->{'admin'}{'status'} eq 'open');
     }
-    printf ("Sympa aliases file is /tmp/sympa_aliases.$$ file made, you probably need to installed it in your SMTP engine\n");
+    printf ("Sympa aliases file is $Conf{'tmpdir'}/sympa_aliases.$$ file made, you probably need to installed it in your SMTP engine\n");
     
     exit 0;
 }elsif ($main::options{'version'}) {
@@ -1872,7 +1873,7 @@ sub DoMessage{
 
 	&do_log('info', 'Key %s for list %s from %s sent to editors, %s', $key, $listname, $sender, $message->{'filename'});
 	
-	# do not report to the sender if the message was tagued as a spam
+	# do not report to the sender if the message was tagged as a spam
 	unless (($2 eq 'quiet')||($message->{'spam_status'} eq 'spam')) {
 	    unless (&report::notice_report_msg('moderating_message',$sender,{'message' => $message},$robot,$list)) {
 		&do_log('notice',"sympa::DoMessage(): Unable to send template 'message_report', entry 'moderating_message' to $sender");
@@ -1891,7 +1892,7 @@ sub DoMessage{
 
 	&do_log('info', 'Message for %s from %s sent to editors', $listname, $sender);
 	
-	# do not report to the sender if the message was tagued as a spam
+	# do not report to the sender if the message was tagged as a spam
 	unless (($2 eq 'quiet')||($message->{'spam_status'} eq 'spam')) {
 	    unless (&report::notice_report_msg('moderating_message',$sender,{'message' => $message},$robot,$list)) {
 		&do_log('notice',"sympa::DoMessage(): Unable to send template 'message_report', type 'success', entry 'moderating_message' to $sender");
@@ -1962,7 +1963,7 @@ sub DoCommand {
     my $sender = $message->{'sender'};
 
     if ($msg->{'spam_status'} eq 'spam'){
-	&do_log('notice', "Message for robot %s@%s ignored, because tagued as spam (Message-id: %s)",$rcpt,$robot,$messageid);
+	&do_log('notice', "Message for robot %s@%s ignored, because tagged as spam (Message-id: %s)",$rcpt,$robot,$messageid);
 	return undef;
     }
 

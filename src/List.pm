@@ -294,7 +294,8 @@ my %alias = ('reply-to' => 'reply_to',
 ## scenario :    tells that the parameter is a scenario, providing its name
 ## default :     Default value for the param ; may be a configuration parameter (conf)
 ## synonym :     Defines synonyms for parameter values (for compatibility reasons)
-## unit :        Unit of the parameter ; this is used in web forms
+## gettext_unit :Unit of the parameter ; this is used in web forms and refers to translated
+##               strings in PO catalogs
 ## occurrence :  Occurerence of the parameter in the config file
 ##               possible values: 0-1 | 1 | 0-n | 1-n
 ##               example : a list may have multiple owner 
@@ -355,14 +356,14 @@ my %alias = ('reply-to' => 'reply_to',
 
 	    'bounce' => {'format' => {'warn_rate' => {'format' => '\d+',
 						      'length' => 3,
-						      'unit' => '%',
+						      'gettext_unit' => '%',
 						      'default' => {'conf' => 'bounce_warn_rate'},
 						      'gettext_id' => "warn rate",
 						      'order' => 1
 						  },
 				      'halt_rate' => {'format' => '\d+',
 						      'length' => 3,
-						      'unit' => '%',
+						      'gettext_unit' => '%',
 						      'default' => {'conf' => 'bounce_halt_rate'},
 						      'gettext_id' => "halt rate",
 						      'order' => 2
@@ -373,7 +374,7 @@ my %alias = ('reply-to' => 'reply_to',
 		     },
 	    'bouncers_level1' => {'format' => {'rate' => {'format' => '\d+',
 								 'length' => 2,
-								 'unit' => 'Points',
+								 'gettext_unit' => 'points',
 								 'default' => {'conf' => 'default_bounce_level1_rate'},
 								 'gettext_id' => "threshold",
 								 'order' => 1
@@ -394,7 +395,7 @@ my %alias = ('reply-to' => 'reply_to',
 				  },
 	     'bouncers_level2' => {'format' => {'rate' => {'format' => '\d+',
 								 'length' => 2,
-								 'unit' => 'Points',
+								 'gettext_unit' => 'points',
 								 'default' => {'conf' => 'default_bounce_level2_rate'},
 								 'gettext_id' => "threshold",
 								 'order' => 1
@@ -415,7 +416,7 @@ my %alias = ('reply-to' => 'reply_to',
 				  },
 	    'clean_delay_queuemod' => {'format' => '\d+',
 				       'length' => 3,
-				       'unit' => 'days',
+				       'gettext_unit' => 'days',
 				       'default' => {'conf' => 'clean_delay_queuemod'},
 				       'gettext_id' => "Expiration of unmoderated messages",
 				       'group' => 'other'
@@ -564,7 +565,7 @@ my %alias = ('reply-to' => 'reply_to',
 
 	    'digest_max_size' => {'format' => '\d+',
 				  'length' => 2,
-				  'unit' => 'messages',
+				  'gettext_unit' => 'messages',
 				  'default' => 25,
 				  'gettext_id' => "Digest maximum number of messages",
 				  'group' => 'sending'
@@ -572,7 +573,7 @@ my %alias = ('reply-to' => 'reply_to',
 
 	    'distribution_ttl' => {'format' => '\d+',
 		      'length' => 6,
-		      'unit' => 'seconds',
+		      'gettext_unit' => 'seconds',
 		      'gettext_id' => "Inclusions timeout for message distribution",
 		      'group' => 'data_source'
 		      },
@@ -742,7 +743,7 @@ my %alias = ('reply-to' => 'reply_to',
 							      },
 						  'timeout' => {'format' => '\w+',
 								'default' => 30,
-								'unit' => 'seconds',
+								'gettext_unit' => 'seconds',
 								'gettext_id' => "connection timeout",
 								'order' => 6
 								},
@@ -822,7 +823,7 @@ my %alias = ('reply-to' => 'reply_to',
 							      },
 						  'timeout1' => {'format' => '\w+',
 								'default' => 30,
-								'unit' => 'seconds',
+								'gettext_unit' => 'seconds',
 								'gettext_id' => "first-level connection timeout",
 								'order' => 6
 								},
@@ -860,7 +861,7 @@ my %alias = ('reply-to' => 'reply_to',
 							      },
 						  'timeout2' => {'format' => '\w+',
 								'default' => 30,
-								'unit' => 'seconds',
+								'gettext_unit' => 'seconds',
 								'gettext_id' => "second-level connection timeout",
 								'order' => 13
 								},
@@ -1034,7 +1035,7 @@ my %alias = ('reply-to' => 'reply_to',
 					},
 	    'max_size' => {'format' => '\d+',
 			   'length' => 8,
-			   'unit' => 'bytes',
+			   'gettext_unit' => 'bytes',
 			   'default' => {'conf' => 'max_size'},
 			   'gettext_id' => "Maximum message size",
 			   'group' => 'sending'
@@ -1235,7 +1236,7 @@ my %alias = ('reply-to' => 'reply_to',
 					  'quota' => {'format' => '\d+',
 						      'default' => {'conf' => 'default_shared_quota'},
 						      'length' => 8,
-						      'unit' => 'Kbytes',
+						      'gettext_unit' => 'Kbytes',
 						      'gettext_id' => "quota",
 						      'order' => 3
 						      }
@@ -1278,7 +1279,7 @@ my %alias = ('reply-to' => 'reply_to',
 			 },
 	    'ttl' => {'format' => '\d+',
 		      'length' => 6,
-		      'unit' => 'seconds',
+		      'gettext_unit' => 'seconds',
 		      'default' => 3600,
 		      'gettext_id' => "Inclusions timeout",
 		      'group' => 'data_source'
@@ -1334,7 +1335,7 @@ my %alias = ('reply-to' => 'reply_to',
 					    'quota' => {'format' => '\d+',
 							'default' => {'conf' => 'default_archive_quota'},
 							'length' => 8,
-							'unit' => 'Kbytes',
+							'gettext_unit' => 'Kbytes',
 							'gettext_id' => "quota",
 							'order' => 2
 							},
@@ -2850,7 +2851,7 @@ sub send_msg_digest {
 #  
 # IN : -$tpl (+): template file name (file.tt2),
 #         without tt2 extension
-#      -$who (+): SCALAR |ref(ARRAY) - recepient(s)
+#      -$who (+): SCALAR |ref(ARRAY) - recipient(s)
 #      -$robot (+): robot
 #      -$context : ref(HASH) - for the $data set up 
 #         to parse file tt2, keys can be :
@@ -2927,13 +2928,13 @@ sub send_global_file {
 #  Find the tt2 file according to $tpl, set up 
 #  $data for the next parsing (with $context and
 #  configuration)
-#  Message is signed if the list as a key and a 
-#  certificat
+#  Message is signed if the list has a key and a 
+#  certificate
 #  
 # IN : -$self (+): ref(List)
 #      -$tpl (+): template file name (file.tt2),
 #         without tt2 extension
-#      -$who (+): SCALAR |ref(ARRAY) - recepient(s)
+#      -$who (+): SCALAR |ref(ARRAY) - recipient(s)
 #      -$robot (+): robot
 #      -$context : ref(HASH) - for the $data set up 
 #         to parse file tt2, keys can be :
@@ -2954,14 +2955,14 @@ sub send_file {
 
     my $data = $context;
 
-    ## Any recepients
+    ## Any recipients
     if ((ref ($who) && ($#{$who} < 0)) ||
 	(!ref ($who) && ($who eq ''))) {
 	&do_log('err', 'No recipient for sending %s', $tpl);
 	return undef;
     }
     
-    ## Unless multiple recepients
+    ## Unless multiple recipients
     unless (ref ($who)) {
 	unless ($data->{'user'}) {
 	    unless ($data->{'user'} = &get_user_db($who)) {
@@ -6083,6 +6084,21 @@ sub update_user {
 	unless ($dbh->do($statement)) {
 	    do_log('err','Unable to execute SQL statement "%s" : %s', $statement, $dbh->errstr);
 	    return undef;
+	}
+    }
+
+    ## Rename picture on disk if user email changed
+    if ($values->{'email'}) {
+	my $file_name = &tools::md5_fingerprint($who);
+	my $picture_file_path = &Conf::get_robot_conf($self->{'domain'},'pictures_path').'/'.$self->{'name'}.'@'.$self->{'domain'};
+
+	foreach my $extension ('gif','png','jpg','jpeg') {
+	    if (-f $picture_file_path.'/'.$file_name.'.'.$extension) {
+		my $new_file_name = &tools::md5_fingerprint($values->{'email'});
+		unless (rename $picture_file_path.'/'.$file_name.'.'.$extension, $picture_file_path.'/'.$new_file_name.'.'.$extension) {
+		    &do_log('err', "Failed to rename %s to %s : %s", $picture_file_path.'/'.$file_name.'.'.$extension, $picture_file_path.'/'.$new_file_name.'.'.$extension, $!);
+		}
+	    }
 	}
     }
     
@@ -9314,7 +9330,7 @@ sub get_which {
 	@{$requested_lists} = keys %{$db_which->{$robot}};
     }
 
-    ## This call is required to 
+    ## This call is required too 
     my $all_lists = &get_lists($robot, {}, $requested_lists);
 
     foreach my $list (@$all_lists){
@@ -11144,6 +11160,26 @@ sub search_datasource {
     }
 
     return undef;
+}
+
+## Return the names of datasources, given a coma-separated list of source ids
+# IN : -$class 
+#      -$id : datasource ids (coma-separated)
+# OUT : -$name : datasources names (scalar)
+sub get_datasource_name {
+    my ($self, $id) = @_;
+    &do_log('debug2','(%s,%s)', $self->{'name'}, $id);
+    my %sources;
+
+    my @ids = split /,/,$id;
+    foreach my $id (@ids) {
+	## User may come twice from the same datasource
+	unless (defined ($sources{$id})) {
+	    $sources{$id} = $self->search_datasource($id);
+	}
+    }
+    
+    return join(', ', values %sources);
 }
 
 ## Remove a task in the tasks spool

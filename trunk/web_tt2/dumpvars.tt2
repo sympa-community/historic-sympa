@@ -1,5 +1,0 @@
-<div class="block">
-<hr />
-[% html_dumpvars %]
-<hr />
-</div>

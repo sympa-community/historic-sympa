@@ -107,9 +107,9 @@ msgstr "Acuèlh"
 #: web_tt2/d_properties.tt2:11 web_tt2/d_properties.tt2:7
 #: web_tt2/d_properties.tt2:9 web_tt2/d_read.tt2:22 web_tt2/d_read.tt2:47
 #: web_tt2/edit_list_request.tt2:3 web_tt2/edit_list_request.tt2:37
-#: web_tt2/editfile.tt2:3 web_tt2/menu.tt2:23 web_tt2/modindex.tt2:8
-#: web_tt2/pref.tt2:3 web_tt2/rename_list_request.tt2:2 web_tt2/review.tt2:6
-#: web_tt2/reviewbouncing.tt2:3 web_tt2/suboptions.tt2:18
+#: web_tt2/editfile.tt2:3 web_tt2/menu.tt2:23 web_tt2/modindex.tt2:134
+#: web_tt2/modindex.tt2:8 web_tt2/pref.tt2:3 web_tt2/rename_list_request.tt2:2
+#: web_tt2/review.tt2:6 web_tt2/reviewbouncing.tt2:3 web_tt2/suboptions.tt2:18
 msgid "Help"
 msgstr "Ajuda"
 
@@ -127,7 +127,7 @@ msgid "Privileged owner"
 msgstr "Gestionari privilegiat"
 
 # nlsref 16,57
-#: src/List.pm:1111 web_tt2/login_menu.tt2:16
+#: src/List.pm:1112 web_tt2/login_menu.tt2:16
 msgid "Owner"
 msgstr "Proprietari"
 
@@ -152,44 +152,6 @@ msgstr "Se desconnectar"
 msgid "Your preferences"
 msgstr "Las vòstras preferéncias"
 
-#: web_tt2/login_menu.tt2:59 web_tt2/loginbanner.tt2:53
-msgid "Choose your authentication server"
-msgstr "Causir vòstre servidor d'autentificacion"
-
-#: web_tt2/login_menu.tt2:65 web_tt2/loginbanner.tt2:57
-msgid "Go"
-msgstr "Validar"
-
-# nlsref 16,27
-#: src/List.pm:1081 src/List.pm:583 web_tt2/login_menu.tt2:80
-#: web_tt2/loginbanner.tt2:72 web_tt2/sso_login.tt2:45
-msgid "email address"
-msgstr "adreiça de messatjariá"
-
-#: web_tt2/login_menu.tt2:82 web_tt2/loginbanner.tt2:73
-#: web_tt2/sigrequest.tt2:37 web_tt2/sigrequest.tt2:69
-#: web_tt2/sso_login.tt2:47 web_tt2/subrequest.tt2:59
-msgid "password"
-msgstr "mot de santa Clara"
-
-#: web_tt2/login_menu.tt2:84 web_tt2/loginbanner.tt2:74
-msgid "Login"
-msgstr "S'identificar"
-
-# nlsref 6,15
-#: web_tt2/login_menu.tt2:92
-#, fuzzy
-msgid "Authentication help"
-msgstr "Autentificacion"
-
-#: web_tt2/login_menu.tt2:94
-msgid "First login ?"
-msgstr "Primièra identificacion ?"
-
-#: web_tt2/login_menu.tt2:95
-msgid "Lost password ?"
-msgstr "Mot de santa Clara perdut ?"
-
 #: web_tt2/your_lists.tt2:7
 msgid "Your Lists"
 msgstr "Las tièras vòstras"
@@ -198,7 +160,7 @@ msgstr "Las tièras vòstras"
 msgid "admin"
 msgstr "administrar"
 
-#: web_tt2/lists.tt2:84 web_tt2/search_user.tt2:75 web_tt2/your_lists.tt2:22
+#: web_tt2/lists.tt2:47 web_tt2/search_user.tt2:75 web_tt2/your_lists.tt2:22
 msgid "No mailing list available."
 msgstr "Pas cap de tièra disponibla"
 
@@ -242,7 +204,7 @@ msgid "RSS"
 msgstr "RSS"
 
 # nlsref 16,70
-#: src/List.pm:1243 web_tt2/list_menu.tt2:57 web_tt2/list_menu.tt2:59
+#: src/List.pm:1244 web_tt2/list_menu.tt2:57 web_tt2/list_menu.tt2:59
 msgid "Shared documents"
 msgstr "Documents partejats"
 
@@ -272,7 +234,7 @@ msgid "Owners"
 msgstr "Proprietaris"
 
 # nlsref 16,26
-#: src/List.pm:608 web_tt2/list_panel.tt2:21
+#: src/List.pm:609 web_tt2/list_panel.tt2:21
 msgid "Moderators"
 msgstr "Moderators"
 
@@ -392,9 +354,9 @@ msgstr "Personalizar"
 msgid "Manage Subscribers"
 msgstr "Gerir los Abonats"
 
-#: web_tt2/list_admin_menu.tt2:36
-msgid "-Blacklist"
-msgstr "-Liste nègra"
+#: web_tt2/list_admin_menu.tt2:36 web_tt2/review.tt2:46
+msgid "Blacklist"
+msgstr "Lista nègra"
 
 #: web_tt2/admin_menu.tt2:68 web_tt2/admin_menu.tt2:74
 #: web_tt2/list_admin_menu.tt2:41
@@ -406,7 +368,7 @@ msgstr "Gerir los archius"
 msgid "Bounces"
 msgstr "Errors"
 
-#: web_tt2/list_admin_menu.tt2:51 web_tt2/serveradmin.tt2:91
+#: web_tt2/list_admin_menu.tt2:51 web_tt2/serveradmin.tt2:108
 msgid "Logs"
 msgstr "S'identificar"
 
@@ -503,7 +465,7 @@ msgstr "Data de creacion"
 #: web_tt2/active_lists.tt2:24 web_tt2/arcsearch_form.tt2:47
 #: web_tt2/get_inactive_lists.tt2:9 web_tt2/get_latest_lists.tt2:8
 #: web_tt2/latest_arc.tt2:20 web_tt2/latest_lists.tt2:23
-#: web_tt2/modindex.tt2:44 web_tt2/review_family.tt2:9
+#: web_tt2/modindex.tt2:69 web_tt2/review_family.tt2:9
 msgid "Subject"
 msgstr "Objècte"
 
@@ -520,7 +482,7 @@ msgid "Add subscribers"
 msgstr "Apondre d'abonats"
 
 #: web_tt2/add_request.tt2:12 web_tt2/editsubscriber.tt2:62
-#: web_tt2/review.tt2:279 web_tt2/review.tt2:64 web_tt2/review.tt2:97
+#: web_tt2/review.tt2:280 web_tt2/review.tt2:65 web_tt2/review.tt2:98
 #: web_tt2/reviewbouncing.tt2:129
 msgid "quiet"
 msgstr "sens avisar"
@@ -546,7 +508,7 @@ msgid "Privileges"
 msgstr "Dreches d'accès"
 
 #: web_tt2/admin_menu.tt2:152 web_tt2/edit_list_request.tt2:12
-#: web_tt2/serveradmin.tt2:69
+#: web_tt2/serveradmin.tt2:86
 msgid "Archives"
 msgstr "Los archius"
 
@@ -580,8 +542,9 @@ msgstr "Gestion dels archius"
 #: web_tt2/edit_list_request.tt2:3 web_tt2/edit_list_request.tt2:37
 #: web_tt2/editfile.tt2:3 web_tt2/editsubscriber.tt2:37
 #: web_tt2/latest_d_read.tt2:30 web_tt2/latest_d_read.tt2:33
-#: web_tt2/modindex.tt2:8 web_tt2/picture_upload.tt2:19 web_tt2/pref.tt2:3
-#: web_tt2/rename_list_request.tt2:2 web_tt2/review.tt2:208
+#: web_tt2/modindex.tt2:134 web_tt2/modindex.tt2:8
+#: web_tt2/picture_upload.tt2:19 web_tt2/pref.tt2:3
+#: web_tt2/rename_list_request.tt2:2 web_tt2/review.tt2:209
 #: web_tt2/review.tt2:6 web_tt2/reviewbouncing.tt2:3 web_tt2/suboptions.tt2:17
 msgid "Open in a new window"
 msgstr "Dobrir dins una fenèstra novèla"
@@ -634,7 +597,7 @@ msgid "Search field :"
 msgstr "Recercar entre :"
 
 #: src/etc/mhonarc-ressources.tt2:52 web_tt2/arcsearch_form.tt2:15
-#: web_tt2/arcsearch_form.tt2:18 web_tt2/review.tt2:79
+#: web_tt2/arcsearch_form.tt2:18 web_tt2/review.tt2:80
 #: web_tt2/reviewbouncing.tt2:13
 msgid "Search"
 msgstr "Recercar"
@@ -705,7 +668,7 @@ msgid "Sender"
 msgstr "Expeditor"
 
 #: web_tt2/arcsearch_form.tt2:48 web_tt2/latest_arc.tt2:19
-#: web_tt2/modindex.tt2:122 web_tt2/modindex.tt2:42 web_tt2/subindex.tt2:10
+#: web_tt2/modindex.tt2:163 web_tt2/modindex.tt2:67 web_tt2/subindex.tt2:10
 #: web_tt2/viewlogs.tt2:124
 msgid "Date"
 msgstr "Data"
@@ -869,26 +832,32 @@ msgstr "salvar"
 msgid "Template saved"
 msgstr "Lo garbi salvagardat"
 
-#: web_tt2/change_email.tt2:3
-msgid "You will receive an email, reminding you your password."
-msgstr "Anatz recebre un messatge de rampèl de vòstre mot de santa Clara."
-
-#: web_tt2/change_email.tt2:5
+#: web_tt2/change_email_request.tt2:3
 msgid ""
-"To confirm your email address change, please enter the password\n"
-"you received below :"
+"Changing your email address is a sensitive operation so we need to verify "
+"that it is really your email."
+msgstr ""
+
+#. (new_email)
+#: web_tt2/change_email_request.tt2:4
+msgid ""
+"To this end we have sent you an email to this address : %1 with a "
+"confirmation ticket."
+msgstr ""
+
+#: web_tt2/change_email.tt2:4 web_tt2/change_email_request.tt2:5
+#, fuzzy
+msgid ""
+"To confirm your email address change, go to your email account and click on "
+"the ticket"
 msgstr ""
 "Per confirmar vòstre cambiament d'adreiça, mercés de sasir \n"
 "çai jos lo mot de santa Clara qu'avètz recebut per corrièr electronic :"
 
-#. (email)
-#: web_tt2/change_email.tt2:10
-msgid "Password for %1"
-msgstr "Mot de santa Clara per %1"
-
-#: web_tt2/change_email.tt2:12
-msgid "Change my email address"
-msgstr "Cambiar mon adreiça electronica"
+#: web_tt2/change_email.tt2:3
+#, fuzzy
+msgid "You will receive an email, with a confirmation ticket."
+msgstr "Anatz recebre un messatge de rampèl de vòstre mot de santa Clara."
 
 #: web_tt2/choosepasswd.tt2:4
 msgid ""
@@ -899,7 +868,7 @@ msgstr ""
 "de tièras de difusion Sympa. Auretz de besonh d'aquel mot de santa Clara per "
 "realizar las accions que demandan una autorizacion."
 
-#: web_tt2/choosepasswd.tt2:11 web_tt2/pref.tt2:41
+#: web_tt2/choosepasswd.tt2:11 web_tt2/pref.tt2:40
 msgid "New password :"
 msgstr "Mot de santa Clara nòu :"
 
@@ -908,8 +877,7 @@ msgid "New password again :"
 msgstr "Confirmar lomot de santa Clara nòu :"
 
 #: web_tt2/choosepasswd.tt2:13 web_tt2/picture_upload.tt2:11
-#: web_tt2/pref.tt2:20 web_tt2/pref.tt2:32 web_tt2/pref.tt2:43
-#: web_tt2/pref.tt2:69
+#: web_tt2/pref.tt2:19 web_tt2/pref.tt2:42
 msgid "Submit"
 msgstr "Validar"
 
@@ -953,7 +921,7 @@ msgstr "Objècte :"
 msgid "Send this mail"
 msgstr "Mandar aquel messatge"
 
-#: web_tt2/compose_mail.tt2:31 web_tt2/modindex.tt2:24 web_tt2/viewmod.tt2:17
+#: web_tt2/compose_mail.tt2:31 web_tt2/modindex.tt2:49 web_tt2/viewmod.tt2:32
 msgid "This list is configured to require topic(s)."
 msgstr "Aquesta lista es configurada per utilizar de tèmas."
 
@@ -1128,11 +1096,7 @@ msgstr ""
 msgid "Aliases have been installed."
 msgstr "Los aliasses son plan estats installats"
 
-#: web_tt2/create_list.tt2:10 web_tt2/create_list.tt2:12
-msgid "Required aliases"
-msgstr "Los àlias d'installar"
-
-#: web_tt2/create_list.tt2:26
+#: web_tt2/create_list.tt2:13
 msgid ""
 "Your list creation request is registered. You can now  modify its\n"
 "configuration using the admin button but the list will be unusable until the "
@@ -1240,6 +1204,7 @@ msgid "Confirm"
 msgstr "Confirmar"
 
 #: web_tt2/d_install_shared.tt2:13 web_tt2/d_upload.tt2:15
+#: web_tt2/manage_template.tt2:68
 msgid "Cancel"
 msgstr "Anullar"
 
@@ -1302,7 +1267,7 @@ msgid "Do you really want to delete %1 ?"
 msgstr "Sètz segur(a) de voler suprimir %1 ?"
 
 #: web_tt2/d_read.tt2:116 web_tt2/d_read.tt2:118 web_tt2/d_read.tt2:253
-#: web_tt2/d_read.tt2:255 web_tt2/d_read.tt2:27
+#: web_tt2/d_read.tt2:255 web_tt2/d_read.tt2:27 web_tt2/search_user.tt2:54
 msgid "delete"
 msgstr "suprimir"
 
@@ -1321,7 +1286,7 @@ msgid "Listing of root folder"
 msgstr "Contengut del dorsièr raiç"
 
 #: web_tt2/d_read.tt2:59 web_tt2/d_read.tt2:61 web_tt2/latest_d_read.tt2:21
-#: web_tt2/modindex.tt2:123 web_tt2/modindex.tt2:43
+#: web_tt2/modindex.tt2:164 web_tt2/modindex.tt2:68
 msgid "Author"
 msgstr "Autor"
 
@@ -1330,16 +1295,21 @@ msgid "Size (Kb)"
 msgstr "Talha (Ko)"
 
 #: web_tt2/d_read.tt2:69 web_tt2/d_read.tt2:71 web_tt2/latest_d_read.tt2:19
-#: web_tt2/review.tt2:157
+#: web_tt2/review.tt2:158
 msgid "Last update"
 msgstr "Darrièra actualizacion"
 
-#: web_tt2/d_read.tt2:75 web_tt2/editfile.tt2:26 web_tt2/serveradmin.tt2:115
-#: web_tt2/serveradmin.tt2:128
+#: web_tt2/d_read.tt2:75 web_tt2/editfile.tt2:29 web_tt2/editfile.tt2:30
+#: web_tt2/editfile.tt2:35 web_tt2/editfile.tt2:36 web_tt2/editfile.tt2:37
+#: web_tt2/editfile.tt2:39 web_tt2/editfile.tt2:44 web_tt2/editfile.tt2:45
+#: web_tt2/editfile.tt2:49 web_tt2/editfile.tt2:50
+#: web_tt2/manage_template.tt2:35 web_tt2/manage_template.tt2:56
+#: web_tt2/serveradmin.tt2:132 web_tt2/serveradmin.tt2:145
 msgid "Edit"
 msgstr "Editar"
 
-#: web_tt2/d_read.tt2:76 web_tt2/d_upload.tt2:6 web_tt2/picture_upload.tt2:12
+#: web_tt2/d_read.tt2:76 web_tt2/d_upload.tt2:6 web_tt2/manage_template.tt2:38
+#: web_tt2/picture_upload.tt2:12
 msgid "Delete"
 msgstr "Suprimir"
 
@@ -1530,9 +1500,29 @@ msgstr "modèl d'àlias de tièra"
 msgid "Save"
 msgstr "Salvar"
 
-#: web_tt2/editfile.tt2:17
+#: web_tt2/editfile.tt2:22
 msgid "You can edit several messages/files associated with your list :"
 msgstr "Podètz editar los messatges/fichièrs associats a vòstra tièra :"
+
+#: web_tt2/editfile.tt2:27
+msgid "HTML pages"
+msgstr ""
+
+#: web_tt2/editfile.tt2:33
+#, fuzzy
+msgid "Automatic messages"
+msgstr "messatges mai ancians "
+
+# nlsref 16,68
+#: web_tt2/editfile.tt2:42
+#, fuzzy
+msgid "Added in distributed messages"
+msgstr "Qual pòt difusir de messatges"
+
+#: web_tt2/editfile.tt2:47
+#, fuzzy
+msgid "More"
+msgstr "Moderar"
 
 # nlsref 16,12
 #: web_tt2/edit_list_request.tt2:3
@@ -1655,7 +1645,7 @@ msgstr "Nom del garbi"
 msgid "Type"
 msgstr "Tipe"
 
-#: web_tt2/edit_template.tt2:8 web_tt2/modindex.tt2:124
+#: web_tt2/edit_template.tt2:8 web_tt2/modindex.tt2:165
 msgid "Path"
 msgstr "Camin"
 
@@ -1714,12 +1704,12 @@ msgid "Archives from %1 are not accessible"
 msgstr "Los archius de la tièra %1 son pas accessibles"
 
 # nlsref 6,2
-#: mail_tt2/listmaster_notification.tt2:312 web_tt2/error.tt2:11
+#: mail_tt2/listmaster_notification.tt2:320 web_tt2/error.tt2:11
 msgid "Unable to load list topics."
 msgstr "es pas possible de cargar la tièra de los tèmas."
 
 # nlsref 6,2
-#: mail_tt2/listmaster_notification.tt2:313 web_tt2/error.tt2:12
+#: mail_tt2/listmaster_notification.tt2:321 web_tt2/error.tt2:12
 msgid "Unable to load create_list templates."
 msgstr "Impossible de cargar los garbis de listas"
 
@@ -1741,7 +1731,7 @@ msgid "The exportation failed for list '%1'"
 msgstr "L'exportacion a abocat per la lista '%1'"
 
 #. (name)
-#: mail_tt2/listmaster_notification.tt2:326 web_tt2/error.tt2:17
+#: mail_tt2/listmaster_notification.tt2:334 web_tt2/error.tt2:17
 msgid "Cannot unzip file '%1'."
 msgstr "Impossible de descomprimir lo fichièr %1"
 
@@ -1753,7 +1743,7 @@ msgstr "Se pòt pas accedir al messatge autentificat amb la clau %1"
 
 #. (i_err.key)
 #. (zipfile)
-#: mail_tt2/listmaster_notification.tt2:334 web_tt2/error.tt2:19
+#: mail_tt2/listmaster_notification.tt2:342 web_tt2/error.tt2:19
 msgid "File not found."
 msgstr "Lo fichièr existís pas."
 
@@ -1847,7 +1837,7 @@ msgstr "%1 : paramètre mancant"
 msgid "Wrong value for parameter %1"
 msgstr "Valor incorrècta per lo paramètre %1"
 
-#: web_tt2/error.tt2:135 web_tt2/error.tt2:53
+#: web_tt2/error.tt2:141 web_tt2/error.tt2:53
 msgid "You need to login"
 msgstr "Vos cal identificar"
 
@@ -2030,147 +2020,184 @@ msgstr ""
 "L'adreiça de la lista incorrecta '%1' : i a un conflicte amb una adreiça de "
 "servici."
 
-#. (u_err.path)
+#. (u_err.listname)
 #: web_tt2/error.tt2:92
+#, fuzzy
+msgid "Failed to remove list aliases for list %1"
+msgstr "Es pas possible de sincronisar los administrators de la lista '%1'"
+
+#. (u_err.path)
+#: web_tt2/error.tt2:93
 msgid "%1 : No such file or directory"
 msgstr "%1 : document o repertòri inexistent"
 
 #. (u_err.path)
-#: web_tt2/error.tt2:93
+#: web_tt2/error.tt2:94
 msgid "Unable to read %1 : empty document"
 msgstr "Impossible de legir %1 : document void"
 
 # nlsref 16,70
-#: web_tt2/error.tt2:94
+#: web_tt2/error.tt2:95
 msgid "There is no shared documents"
 msgstr "I a pas de documents partajats "
 
 # nlsref 16,70
-#: web_tt2/error.tt2:95
+#: web_tt2/error.tt2:96
 msgid "The shared document space is empty"
 msgstr "L'espaci del document partajat es vuèg"
 
-#: web_tt2/error.tt2:96
+#: web_tt2/error.tt2:97
 msgid "The shared directory cannot have any description"
 msgstr "Lo dorsièr partajat a pas de descripcion"
 
-#: web_tt2/error.tt2:97
+#: web_tt2/error.tt2:98
 msgid "No description specified"
 msgstr "Pas cap de descripcion disponibla"
 
 #. (u_err.path)
-#: web_tt2/error.tt2:98
+#: web_tt2/error.tt2:99
 msgid "Unable to describe, the document '%1' does not exist"
 msgstr "Es pas possible de descriure lo document '%1'; existís pas"
 
-#: web_tt2/error.tt2:99
+#: web_tt2/error.tt2:100
 msgid "Data has changed on disk. Cannot apply your changes"
 msgstr ""
 "Las donadas an cambiat sul disc. Se pòdon pas aplicar vòstras modificacions "
 
 #. (u_err.name)
-#: web_tt2/error.tt2:100
+#: web_tt2/error.tt2:101
 msgid "%1 : incorrect name"
 msgstr "%1 : nom incorrècte"
 
-#: web_tt2/error.tt2:101
+#: web_tt2/error.tt2:102
 msgid "Failed : your content is empty"
 msgstr "Falhida : vòstra zòna d'edicion es vuèja"
 
 #. (u_err.path)
-#: web_tt2/error.tt2:102
+#: web_tt2/error.tt2:103
 msgid "Cannot overwrite file %1"
 msgstr "Impossible d'espotir lo fichièr %1"
 
 #. (u_err.path)
-#: web_tt2/error.tt2:103
+#: web_tt2/error.tt2:104
 msgid "A directory named '%1' already exists"
 msgstr "lo repertòri %1 existís ja"
 
 #. (u_err.name)
-#: web_tt2/error.tt2:104
+#: web_tt2/error.tt2:105
 msgid "This is an already existing document : '%1'"
 msgstr "Lo document existís ja : '%1'"
 
-#: web_tt2/error.tt2:105
+#: web_tt2/error.tt2:106
 msgid "No name specified"
 msgstr "Avètz pas precisat cap de nom"
 
-#: web_tt2/error.tt2:106
+#: web_tt2/error.tt2:107
 msgid "The document repository exceed disk quota."
 msgstr "La qüòta d'espaci disc es subrepassada."
 
 #. (u_err.path)
-#: web_tt2/error.tt2:107
+#: web_tt2/error.tt2:108
 msgid "Cannot upload file %1"
 msgstr "Impossible de descargar lo fichièr %1"
 
 #. (u_err.dir)
-#: web_tt2/error.tt2:108
+#: web_tt2/error.tt2:109
 msgid "You're not authorized to upload an INDEX.HTML in %1"
 msgstr "Avètz pas la permission d'encargar un fichièr INDEX.HTML a %1"
 
-#: web_tt2/error.tt2:109
+#: web_tt2/error.tt2:110
 msgid "The upload failed, try it again"
 msgstr "Lo telecargament a pas capitat. Tornatz assajar"
 
 #. (u_err.name,u_err.reason)
-#: web_tt2/error.tt2:110
+#: web_tt2/error.tt2:111
 msgid "Directory %1 and its contents could not be copied : %2"
 msgstr "Lo repertòri %1 e son contengut se poguèron pas copiar"
 
 #. (u_err.name,u_err.reason)
-#: web_tt2/error.tt2:111
+#: web_tt2/error.tt2:112
 msgid "File %1 was not copied : %2 "
 msgstr "Lo fichièr %1 es pas copiat"
 
 #. (u_err.directory)
-#: web_tt2/error.tt2:112
+#: web_tt2/error.tt2:113
 msgid "Failed : %1 not empty"
 msgstr "Falhida : lo repertòri %1 es pas vuèg"
 
-#: web_tt2/error.tt2:113
+#: web_tt2/error.tt2:114
 msgid "No certificate for this list"
 msgstr "Cap de certificat es pas disponible per aquela tièra"
 
-#: web_tt2/error.tt2:114
+#: web_tt2/error.tt2:115
 msgid "This list has no message topic"
 msgstr "Aquesta lista a pas de tèma"
 
-#: web_tt2/error.tt2:115
+#: web_tt2/error.tt2:116
 msgid "Tag message with topic is required for this list"
 msgstr "Lo marcatge dels messatges es una obligacion per aquesta lista."
 
 #. (u_err.email)
-#: web_tt2/error.tt2:116
+#: web_tt2/error.tt2:117
 msgid "No entry for user '%1'"
 msgstr "Cap d'intrada per l'usancièr %1 "
 
-#: web_tt2/error.tt2:117
+#: web_tt2/error.tt2:118
 msgid "Please select archive months"
 msgstr "Seleccionar los meses d'archiu"
 
-#: web_tt2/error.tt2:118
+#: web_tt2/error.tt2:119
 msgid "No SOAP service"
 msgstr "Pas cap de servici SOAP"
 
 # nlsref 6,15
-#: web_tt2/error.tt2:119
+#: web_tt2/error.tt2:120
 msgid "Authentication failed"
 msgstr "L'autentificacion a pas capitat"
 
 #. (u_err.status)
-#: web_tt2/error.tt2:120
+#: web_tt2/error.tt2:121
 msgid "Cannot add subscribers when list status is '%1'"
 msgstr ""
 
+#. (u_err.argument)
+#: web_tt2/error.tt2:122
+#, fuzzy
+msgid "This Template '%1' already exists"
+msgstr "lo fichièr %1 existís ja"
+
+#. (u_err.file_del)
+#: web_tt2/error.tt2:123
+#, fuzzy
+msgid "Cannot delete this file '%1'"
+msgstr "Impossible d'accedir a %1"
+
+# nlsref 6,2
+#. (u_err.filename)
+#: web_tt2/error.tt2:124
+#, fuzzy
+msgid "Invalid filename: '%1'"
+msgstr "Impossible de legir lo fichièr : '%1'"
+
+#. (u_err.listname)
+#: web_tt2/error.tt2:125
+msgid ""
+"Failed to update member email in list '%1', list owner has been notified."
+msgstr ""
+
+#. (u_err.listname)
+#: web_tt2/error.tt2:126
+msgid ""
+"Failed to update admin email in list '%1', list owner has been notified."
+msgstr ""
+
 #. (auth.action)
-#: web_tt2/error.tt2:129
+#: web_tt2/error.tt2:135
 msgid "AUTHORIZATION REJECT (%1)"
 msgstr "AUTORIZACION REFUSADA (%1)"
 
 #. (auth.listname)
-#: web_tt2/error.tt2:131
+#: web_tt2/error.tt2:137
 msgid ""
 "Could not change your subscription address for the list '%1' \n"
 "     because your new address is not allowed to subscribe/unsubscribe :"
@@ -2194,6 +2221,13 @@ msgstr "Subjècte de la tièra"
 #: web_tt2/get_closed_lists.tt2:12 web_tt2/get_pending_lists.tt2:11
 msgid "Requested by"
 msgstr "Demandada per"
+
+#: src/etc/mhonarc-ressources.tt2:212 src/etc/mhonarc-ressources.tt2:328
+#: web_tt2/get_closed_lists.tt2:29 web_tt2/modindex.tt2:124
+#: web_tt2/modindex.tt2:193 web_tt2/review.tt2:278
+#: web_tt2/reviewbouncing.tt2:133
+msgid "Toggle Selection"
+msgstr "Inversar la Seleccion"
 
 #: web_tt2/get_closed_lists.tt2:30
 msgid "Purge selected lists"
@@ -2244,10 +2278,6 @@ msgstr "Demandada per"
 msgid "on %1"
 msgstr "A : %1"
 
-#: web_tt2/install_pending_list.tt2:29
-msgid "Aliases you should install in your mailer"
-msgstr "Los aliasses d'installar"
-
 #: web_tt2/javascript.tt2:147
 msgid ""
 "Sympa could not set a cookie for login.\n"
@@ -2291,8 +2321,8 @@ msgstr "Los documents partajats los mai recents "
 msgid "Most recent documents for this list "
 msgstr "Los darrièrs documents per la lista"
 
-#: web_tt2/latest_d_read.tt2:20 web_tt2/pref.tt2:9 web_tt2/review.tt2:129
-#: web_tt2/review.tt2:132 web_tt2/subindex.tt2:9
+#: web_tt2/latest_d_read.tt2:20 web_tt2/pref.tt2:9 web_tt2/review.tt2:130
+#: web_tt2/review.tt2:133 web_tt2/subindex.tt2:9
 msgid "Name"
 msgstr "Nom"
 
@@ -2314,7 +2344,7 @@ msgid " The latest lists of this robot"
 msgstr "Las darrièras tièras creadas"
 
 #. (occurrence)
-#: web_tt2/lists.tt2:5 web_tt2/review.tt2:82
+#: web_tt2/lists.tt2:5 web_tt2/review.tt2:83
 msgid "%1 occurrence(s) found"
 msgstr "%1 ocurréncia(s) trobada(s)"
 
@@ -2328,27 +2358,46 @@ msgstr "<strong>%1</strong> es abonat a las tièras seguentas"
 msgid "No subscriptions with address <strong>%1</strong>!"
 msgstr "Pas d'abonaments amb l'adreiça <strong>%1</strong> !"
 
-#: web_tt2/lists.tt2:47
-msgid "See your subscriptions with the following email addresses"
-msgstr "Veire vòstres abonaments amb las adreiças seguentas"
+#: web_tt2/loginbanner.tt2:18
+#, fuzzy
+msgid "To login, select your organization authentication server below:"
+msgstr "Causir vòstre servidor d'autentificacion"
 
-#: web_tt2/lists.tt2:67
-msgid "Unify your subscriptions with the email"
-msgstr "Unificar vòstre abonaments amb l'adreiça"
-
-#: web_tt2/lists.tt2:68
-msgid ""
-"That is to say you are using a unique email address in Sympa for your "
-"subscriptions and preferences"
-msgstr ""
-"Valent a dire emplegar una adreiça unenca a Sympa per totes vòstres "
-"abonaments vòstras preferéncias"
-
-#: web_tt2/lists.tt2:74
-msgid "Validate"
+#: web_tt2/loginbanner.tt2:24
+msgid "Go"
 msgstr "Validar"
 
-#: web_tt2/loginbanner.tt2:6
+# nlsref 16,27
+#: src/List.pm:1082 src/List.pm:584 web_tt2/loginbanner.tt2:39
+#: web_tt2/sso_login.tt2:45
+msgid "email address"
+msgstr "adreiça de messatjariá"
+
+#: web_tt2/loginbanner.tt2:41 web_tt2/sigrequest.tt2:37
+#: web_tt2/sigrequest.tt2:69 web_tt2/sso_login.tt2:47
+#: web_tt2/subrequest.tt2:59
+msgid "password"
+msgstr "mot de santa Clara"
+
+#: web_tt2/loginbanner.tt2:43
+msgid "Login"
+msgstr "S'identificar"
+
+# nlsref 6,15
+#: web_tt2/loginbanner.tt2:51
+#, fuzzy
+msgid "Authentication help"
+msgstr "Autentificacion"
+
+#: web_tt2/loginbanner.tt2:53
+msgid "First login ?"
+msgstr "Primièra identificacion ?"
+
+#: web_tt2/loginbanner.tt2:54
+msgid "Lost password ?"
+msgstr "Mot de santa Clara perdut ?"
+
+#: web_tt2/loginrequest.tt2:3
 #, fuzzy
 msgid ""
 "In order to perform a privileged operation (one that requires your email "
@@ -2356,40 +2405,6 @@ msgid ""
 msgstr ""
 "Vos cal vos identificar per accedir a vòstre entorn personalizat o far una "
 "accion que demanda autorizacion."
-
-#: web_tt2/loginbanner.tt2:9
-msgid ""
-"Most mailing list features require your email. Some mailing lists are hidden "
-"to  unidentified persons.<br />\n"
-" In order to benefit from the full services provided by this server, you "
-"probably need to identify yourself first."
-msgstr ""
-"La màger part dels servicis demandan vòstra adreiça electronica. D'unas "
-"tièras demòran escondudas tant que sètz pas identificat(/ada)<br /> \n"
-"Per aprofechar l'accès complet als servicis que prepausa aquel servidor, "
-"vos\n"
-"es plan probable que vos calga d'en primièr vos identificar."
-
-#: web_tt2/loginbanner.tt2:14
-msgid ""
-"To login, select your organization authentication server below.<br />\n"
-"If it is not listed or if you don't have any, login using your email and "
-"password on the right column."
-msgstr ""
-"Per vos identificar, seleccionatz çai sota lo servidor d'autentificacion de "
-"vòstre organisme.<br> \n"
-"Siá pas prepausat aquí, o n'ajatz pas cap, vos podètz identificar en bailar "
-"vòstra adreiça de messatjariá e vòstre mot de santa Clara a la colomna de "
-"drecha."
-
-#: web_tt2/loginbanner.tt2:19
-msgid ""
-"Login with you email address and password. You can request a password "
-"reminder."
-msgstr ""
-"Identificatz-vos en sasir vòstra adreiça electronica e vòstre mot de santa "
-"Clara. Podètz demandar un messatge per vos remembrar vòstre mot de santa "
-"Clara."
 
 #: web_tt2/ls_templates.tt2:7
 msgid ""
@@ -2481,73 +2496,165 @@ msgstr ""
 "Lo servidor de lista es en mantenença, cap d'operacion son fachas d'aquel "
 "temps."
 
-#: web_tt2/modindex.tt2:35 web_tt2/modindex.tt2:8
+# nlsref 15,7
+#: web_tt2/manage_template.tt2:3
+#, fuzzy
+msgid "Modify or delete existing rejection messages"
+msgstr "messatge de refús pel moderator"
+
+# nlsref 15,7
+#: web_tt2/manage_template.tt2:9
+#, fuzzy
+msgid "Listing rejection message"
+msgstr "messatge de refús pel moderator"
+
+# nlsref 15,3
+#: web_tt2/manage_template.tt2:10
+#, fuzzy
+msgid "Rejection message"
+msgstr "messatge de supression"
+
+#: web_tt2/manage_template.tt2:11
+#, fuzzy
+msgid "Use as default"
+msgstr "predefinit"
+
+#: web_tt2/manage_template.tt2:11
+#, fuzzy
+msgid "Message name"
+msgstr "Nom del tèma"
+
+# nlsref 16,26
+#: web_tt2/manage_template.tt2:11
+#, fuzzy
+msgid "Operation"
+msgstr "Moderacion"
+
+#. (file)
+#: web_tt2/manage_template.tt2:38
+#, fuzzy
+msgid "Do you really want to delete message %1?"
+msgstr "Sètz segur(a) de voler suprimir aquel messatge ?"
+
+#: web_tt2/manage_template.tt2:46
+msgid "There are currently no Rejection Messages available"
+msgstr ""
+
+#: web_tt2/manage_template.tt2:59
+#, fuzzy
+msgid "Message Name :"
+msgstr "Messatge "
+
+# nlsref 15,18
+#: web_tt2/manage_template.tt2:60
+#, fuzzy
+msgid "Default Message"
+msgstr "Garbi sorga"
+
+#: web_tt2/manage_template.tt2:67
+#, fuzzy
+msgid "Save Message"
+msgstr "Messatge "
+
+#: web_tt2/manage_template.tt2:78
+#, fuzzy
+msgid "Create new rejection messages"
+msgstr "Los darrièrs messatges"
+
+#: web_tt2/manage_template.tt2:85
+#, fuzzy
+msgid "create"
+msgstr "Crear"
+
+#: web_tt2/modindex.tt2:60 web_tt2/modindex.tt2:8
 msgid "Listing messages to moderate"
 msgstr "Tièra dels messatges en espèra d'aprobacion"
 
-#: web_tt2/modindex.tt2:11 web_tt2/modindex.tt2:13 web_tt2/modindex.tt2:87
-#: web_tt2/modindex.tt2:89 web_tt2/viewmod.tt2:11 web_tt2/viewmod.tt2:9
+#: web_tt2/modindex.tt2:112 web_tt2/modindex.tt2:114 web_tt2/modindex.tt2:13
+#: web_tt2/modindex.tt2:18 web_tt2/viewmod.tt2:10 web_tt2/viewmod.tt2:12
 msgid "Distribute"
 msgstr "Distribuar"
 
-#: web_tt2/modindex.tt2:116 web_tt2/modindex.tt2:15 web_tt2/modindex.tt2:152
-#: web_tt2/modindex.tt2:91 web_tt2/viewmod.tt2:13
+#: web_tt2/modindex.tt2:116 web_tt2/modindex.tt2:157 web_tt2/modindex.tt2:196
+#: web_tt2/modindex.tt2:24 web_tt2/viewmod.tt2:14
 msgid "Reject"
 msgstr "Refusar"
 
-#: web_tt2/modindex.tt2:117 web_tt2/modindex.tt2:153 web_tt2/modindex.tt2:16
-#: web_tt2/modindex.tt2:92 web_tt2/viewmod.tt2:14
-msgid "Notified reject"
-msgstr "Regetar"
-
-#: web_tt2/modindex.tt2:16
+#: web_tt2/modindex.tt2:24
 msgid ""
 "You should probably not reject message detected as spam with notification "
 "because the message sender is probably spoofed. Do you really want to reject "
-"thoses messages with notification ?"
+"those messages with notification ?"
 msgstr ""
 
-#: web_tt2/modindex.tt2:18 web_tt2/modindex.tt2:94
-msgid "Reject and blacklist sender"
-msgstr "Refusar e apondre a la lista nègra"
+# nlsref 15,7
+#: web_tt2/modindex.tt2:30
+#, fuzzy
+msgid "Server default rejection message"
+msgstr "messatge de refús pel moderator"
 
-#: web_tt2/modindex.tt2:19
-msgid "edit blacklist"
+#: web_tt2/modindex.tt2:38
+#, fuzzy
+msgid "Reject without notification "
+msgstr "qual se vòl sens cap d'autentificacion"
+
+#: web_tt2/modindex.tt2:40
+#, fuzzy
+msgid "Add to blacklist"
 msgstr "editar la lista nègra"
 
-#: web_tt2/modindex.tt2:26
+#: web_tt2/modindex.tt2:51
+#, fuzzy
 msgid ""
-"Please select one or more topic(s) that corresponds to the messages you wish "
+"Please select one or more topic(s) that correspond to the messages you wish "
 "to distribute :"
 msgstr "Seleccionatz un o mai d'un tèma per descriure lo messatge vòstre :"
 
-#: web_tt2/modindex.tt2:125 web_tt2/modindex.tt2:45
+#: web_tt2/modindex.tt2:166 web_tt2/modindex.tt2:70
 msgid "Size"
 msgstr "Talha"
 
-#: web_tt2/modindex.tt2:76
+#: web_tt2/modindex.tt2:101
 msgid "No subject"
 msgstr "Pas de subjècte"
 
-#: src/etc/mhonarc-ressources.tt2:212 src/etc/mhonarc-ressources.tt2:328
-#: web_tt2/modindex.tt2:149 web_tt2/modindex.tt2:98 web_tt2/review.tt2:277
-#: web_tt2/reviewbouncing.tt2:133
-msgid "Toggle Selection"
-msgstr "Inversar la Seleccion"
+#: web_tt2/modindex.tt2:117 web_tt2/modindex.tt2:158 web_tt2/modindex.tt2:197
+msgid "Notified reject"
+msgstr "Regetar"
 
-#: web_tt2/modindex.tt2:100
+#: web_tt2/modindex.tt2:119
+msgid "Reject and blacklist sender"
+msgstr "Refusar e apondre a la lista nègra"
+
+#: web_tt2/modindex.tt2:127
 msgid "Toggle spams"
 msgstr ""
 
-#: web_tt2/modindex.tt2:113
+# nlsref 16,7
+#: web_tt2/modindex.tt2:134
+#, fuzzy
+msgid "Moderation management"
+msgstr "Gestion dels abonats"
+
+#: web_tt2/modindex.tt2:141 web_tt2/modindex.tt2:191
+msgid "edit blacklist"
+msgstr "editar la lista nègra"
+
+# nlsref 15,7
+#: web_tt2/modindex.tt2:143
+#, fuzzy
+msgid "Manage rejection messages"
+msgstr "messatge de refús pel moderator"
+
+#: web_tt2/modindex.tt2:154
 msgid "Listing of shared documents to moderate"
 msgstr "Tièra dels documents partejats en espera d'aprobacion"
 
-#: web_tt2/modindex.tt2:115 web_tt2/modindex.tt2:151
+#: web_tt2/modindex.tt2:156 web_tt2/modindex.tt2:195
 msgid "Install"
 msgstr "Installar"
 
-#: web_tt2/modindex.tt2:119
+#: web_tt2/modindex.tt2:160
 msgid "Listing of documents shared to moderate"
 msgstr "Tièra dels documents partejats en espera d'aprobacion"
 
@@ -2715,7 +2822,7 @@ msgstr "Dins la lista dels membres"
 msgid "User preferences"
 msgstr "Preferéncias del usancièr"
 
-#: web_tt2/pref.tt2:8 web_tt2/review.tt2:108 web_tt2/review.tt2:111
+#: web_tt2/pref.tt2:8 web_tt2/review.tt2:109 web_tt2/review.tt2:112
 #: web_tt2/reviewbouncing.tt2:63 web_tt2/subindex.tt2:8
 #: web_tt2/viewlogs.tt2:51 web_tt2/viewlogs.tt2:60
 msgid "Email"
@@ -2729,44 +2836,33 @@ msgstr "Lenga"
 msgid "Connection expiration period"
 msgstr "Expiracion de la connexion"
 
-#: web_tt2/pref.tt2:27
+#: web_tt2/pref.tt2:25
 msgid "Changing your email address"
 msgstr "Cambiament d'adreiça electronica"
 
-#: web_tt2/pref.tt2:31
+#: web_tt2/pref.tt2:27
+msgid ""
+"You can update your email address for all your list memberships at once. If "
+"you are also list owner or list moderator your email address for these roles "
+"will also be updated."
+msgstr ""
+
+#: web_tt2/pref.tt2:30
 msgid "New email address :"
 msgstr "Adreiça electronica nòva :"
 
-#: web_tt2/pref.tt2:37
+#: web_tt2/pref.tt2:31
+#, fuzzy
+msgid "Change Email"
+msgstr "Mandar aquel messatge"
+
+#: web_tt2/pref.tt2:36
 msgid "Changing your password"
 msgstr "Cambiament de mot de santa Clara"
 
-#: web_tt2/pref.tt2:42
+#: web_tt2/pref.tt2:41
 msgid "Re-enter your new password :"
 msgstr "Tornatz intrar lo mot de santa Clara nòu :"
-
-#: web_tt2/pref.tt2:50
-msgid "Your other email addresses"
-msgstr "Vòstras adreiças electronicas alternativas"
-
-#: web_tt2/pref.tt2:67
-msgid "Other email address :"
-msgstr "Autra adreiça electronica :"
-
-#: web_tt2/pref.tt2:68
-msgid "Password :"
-msgstr "Mot de santa Clara :"
-
-#: web_tt2/pref.tt2:74
-msgid ""
-"Another email address, that should be known by Sympa and will be recognized "
-"by Sympa as an alternate email address for you. All your email addressed "
-"will also be grouped by Sympa with your primary email address to unify your "
-"subscriptions"
-msgstr ""
-"Aquela autra adreiça electronica, que Sympa deu conéisser, serà reconeguda "
-"coma una adreça alternativa. Poiretz tanben unificar vòstres abonament amb "
-"vòstra adreça principala."
 
 #: web_tt2/remove_arc.tt2:5
 msgid ""
@@ -2899,7 +2995,7 @@ msgid "This list is configured to require topic(s) foreach message."
 msgstr ""
 "Aquesta lista es configurada per utilizar los tèmas, per cada messatge."
 
-#: web_tt2/request_topic.tt2:7 web_tt2/viewmod.tt2:19
+#: web_tt2/request_topic.tt2:7 web_tt2/viewmod.tt2:34
 msgid ""
 "Please select one or more topic(s) that corresponds to your message below :"
 msgstr ""
@@ -2946,7 +3042,7 @@ msgstr ""
 "Sètz segur(a) de voler mandar un rampèl d\\'abonament a cadun dels %1 "
 "abonats ?"
 
-#: web_tt2/review.tt2:265 web_tt2/review.tt2:28 web_tt2/reviewbouncing.tt2:117
+#: web_tt2/review.tt2:266 web_tt2/review.tt2:28 web_tt2/reviewbouncing.tt2:117
 #: web_tt2/reviewbouncing.tt2:46 web_tt2/viewlogs.tt2:28
 msgid "Previous page"
 msgstr "Pagina precedenta"
@@ -2956,7 +3052,7 @@ msgstr "Pagina precedenta"
 msgid "page %1 / %2"
 msgstr "pagina %1 / %2"
 
-#: web_tt2/review.tt2:271 web_tt2/review.tt2:34 web_tt2/reviewbouncing.tt2:123
+#: web_tt2/review.tt2:272 web_tt2/review.tt2:34 web_tt2/reviewbouncing.tt2:123
 #: web_tt2/reviewbouncing.tt2:52 web_tt2/viewlogs.tt2:34
 msgid "Next page"
 msgstr "Pagina seguenta"
@@ -2990,7 +3086,7 @@ msgstr "Darrièra error"
 msgid "no score"
 msgstr "taus d'error"
 
-#: web_tt2/review.tt2:278 web_tt2/review.tt2:96 web_tt2/reviewbouncing.tt2:128
+#: web_tt2/review.tt2:279 web_tt2/review.tt2:97 web_tt2/reviewbouncing.tt2:128
 msgid "Delete selected email addresses"
 msgstr "Desabonar las adreiças seleccionadas"
 
@@ -3019,7 +3115,7 @@ msgstr "Tièras de difusion"
 msgid "Page size"
 msgstr "Talha de la pagina"
 
-#: web_tt2/review.tt2:268 web_tt2/review.tt2:31 web_tt2/viewlogs.tt2:31
+#: web_tt2/review.tt2:269 web_tt2/review.tt2:31 web_tt2/viewlogs.tt2:31
 msgid "page"
 msgstr "pagina"
 
@@ -3035,65 +3131,61 @@ msgstr "Abonaments en espèra"
 msgid "Remind all"
 msgstr "Rampelar tot"
 
-#: web_tt2/review.tt2:46
-msgid "Blacklist"
-msgstr "Lista nègra"
-
 #: web_tt2/review.tt2:62
 msgid "Add an user: "
 msgstr ""
 
-#: web_tt2/review.tt2:65
+#: web_tt2/review.tt2:66
 msgid "Multiple add"
 msgstr "Abonaments multiples"
 
-#: web_tt2/review.tt2:77
+#: web_tt2/review.tt2:78
 #, fuzzy
 msgid "Search user by e-mail: "
 msgstr "Recercar un usancièr per son corrièr electronic"
 
-#: web_tt2/review.tt2:78
+#: web_tt2/review.tt2:79
 msgid "Search user by email"
 msgstr "Recercar un usancièr per son corrièr electronic"
 
-#: web_tt2/review.tt2:84
+#: web_tt2/review.tt2:85
 msgid "Selection too wide, can not show selection"
 msgstr "La seleccion es tròp larga, impossible d'affichar la seleccion"
 
-#: web_tt2/review.tt2:100
+#: web_tt2/review.tt2:101
 msgid "List members"
 msgstr "Los abonats"
 
-#: web_tt2/review.tt2:116 web_tt2/review.tt2:119
+#: web_tt2/review.tt2:117 web_tt2/review.tt2:120
 msgid "Domain"
 msgstr "Domèni"
 
-#: web_tt2/review.tt2:124
+#: web_tt2/review.tt2:125
 msgid "Picture"
 msgstr "Avatar"
 
-#: web_tt2/review.tt2:137
+#: web_tt2/review.tt2:138
 msgid "Reception"
 msgstr "Recepcion"
 
-#: web_tt2/review.tt2:142 web_tt2/review.tt2:145
+#: web_tt2/review.tt2:143 web_tt2/review.tt2:146
 msgid "Sources"
 msgstr "Sorças"
 
-#: web_tt2/review.tt2:151 web_tt2/review.tt2:154 web_tt2/viewlogs.tt2:121
+#: web_tt2/review.tt2:152 web_tt2/review.tt2:155 web_tt2/viewlogs.tt2:121
 msgid "Sub date"
 msgstr "Abonat dempuèi"
 
-#: web_tt2/review.tt2:191
+#: web_tt2/review.tt2:192
 msgid "bouncing"
 msgstr "en error"
 
 #. (u.email)
-#: web_tt2/review.tt2:208
+#: web_tt2/review.tt2:209
 msgid "%1's picture"
 msgstr "Avatar de %1"
 
-#: web_tt2/review.tt2:276
+#: web_tt2/review.tt2:277
 msgid "Do you really want to unsubscribe ALL selected subscribers?"
 msgstr "Sètz segur(a) de voler desabonar TOTES los abonats seleccionats ?"
 
@@ -3275,17 +3367,18 @@ msgid "bounce"
 msgstr "error"
 
 #: web_tt2/search_user.tt2:33
-msgid "editor"
-msgstr "moderator"
+#, fuzzy
+msgid "member"
+msgstr "Los abonats"
 
 # nlsref 16,57
-#: web_tt2/search_user.tt2:35
+#: web_tt2/search_user.tt2:34
 msgid "owner"
 msgstr "proprietari"
 
-#: web_tt2/search_user.tt2:54
-msgid "del"
-msgstr "suprimir"
+#: web_tt2/search_user.tt2:35
+msgid "editor"
+msgstr "moderator"
 
 #: web_tt2/serveradmin.tt2:4
 msgid "Virtual Robots"
@@ -3353,105 +3446,130 @@ msgstr ""
 msgid "Show only connected users"
 msgstr ""
 
+#: web_tt2/serveradmin.tt2:69
+#, fuzzy
+msgid "You can change your users email address here :"
+msgstr "Cambiament d'adreiça electronica"
+
 #: web_tt2/serveradmin.tt2:71
+msgid ""
+"Changing a user's email address will apply the change his memberships but it "
+"will also apply to his ownerships if he is owner of some lists."
+msgstr ""
+
+#: web_tt2/serveradmin.tt2:76
+#, fuzzy
+msgid "Current user email address : "
+msgstr "Autra adreiça electronica :"
+
+#: web_tt2/serveradmin.tt2:78
+#, fuzzy
+msgid "New user email address : "
+msgstr "Adreiça electronica nòva :"
+
+#: web_tt2/serveradmin.tt2:80
+msgid "Update user memberships"
+msgstr ""
+
+#: web_tt2/serveradmin.tt2:88
 msgid "Rebuild HTML archives using \"arctxt\" directories as input."
 msgstr "Tornar bastir los archius HTML en emplegar los repertòris \"arctxt\""
 
-#: web_tt2/serveradmin.tt2:74
+#: web_tt2/serveradmin.tt2:91
 msgid "listname : "
 msgstr "nom de la tièra :"
 
-#: web_tt2/serveradmin.tt2:74
+#: web_tt2/serveradmin.tt2:91
 msgid "Rebuild archive"
 msgstr "Tornar bastir los archius"
 
-#: web_tt2/serveradmin.tt2:75
+#: web_tt2/serveradmin.tt2:92
 msgid "Rebuild all"
 msgstr "Tornar bastir toto"
 
-#: web_tt2/serveradmin.tt2:75
+#: web_tt2/serveradmin.tt2:92
 msgid "  May take a lot of CPU time,  be careful !"
 msgstr "Atencion, aquò pòt prene fòrça temps CPU !"
 
-#: web_tt2/serveradmin.tt2:81
+#: web_tt2/serveradmin.tt2:98
 msgid "Change identity"
 msgstr ""
 
-#: web_tt2/serveradmin.tt2:83
+#: web_tt2/serveradmin.tt2:100
 msgid ""
 "As listmaster, you can change your identity and act as someone else. This is "
 "may be usefull when providing assistance or to test users privileges"
 msgstr ""
 
-#: web_tt2/serveradmin.tt2:86
+#: web_tt2/serveradmin.tt2:103
 msgid "change identity as : "
 msgstr ""
 
-#: web_tt2/serveradmin.tt2:93
+#: web_tt2/serveradmin.tt2:110
 msgid ""
 "You can increase the log level specified by configuration only for your "
 "current session. On a production server, this allow to keep logs rather "
 "small and to test some features with the maximum log level. "
 msgstr ""
 
-#: web_tt2/serveradmin.tt2:96
+#: web_tt2/serveradmin.tt2:113
 msgid "Log level"
 msgstr ""
 
-#: web_tt2/serveradmin.tt2:102
+#: web_tt2/serveradmin.tt2:119
 msgid "Set log level"
 msgstr ""
 
-#: web_tt2/serveradmin.tt2:106
+#: web_tt2/serveradmin.tt2:123
 msgid "Templates"
 msgstr "Los garbis"
 
-#: web_tt2/serveradmin.tt2:111
+#: web_tt2/serveradmin.tt2:128
 msgid "Setting defaults list templates"
 msgstr "Editar los garbis predefinits de las listas"
 
-#: web_tt2/serveradmin.tt2:124
+#: web_tt2/serveradmin.tt2:141
 msgid "Setting site templates"
 msgstr "Editar los garbis del servidor"
 
-#: web_tt2/serveradmin.tt2:135
+#: web_tt2/serveradmin.tt2:152
 msgid "view translations"
 msgstr "visualizar las reviradas"
 
-#: web_tt2/serveradmin.tt2:136
+#: web_tt2/serveradmin.tt2:153
 msgid "Customize templates"
 msgstr "Veire las traduccions de las \"esqueletas\" (templates)"
 
-#: web_tt2/serveradmin.tt2:140
+#: web_tt2/serveradmin.tt2:157
 msgid ""
 "When customizing Sympa web templates, it is needed to known which variables "
 "can be processed by the tt2 parser.This button is for controlling tt2 vars "
 "dump feature :"
 msgstr ""
 
-#: web_tt2/serveradmin.tt2:143
+#: web_tt2/serveradmin.tt2:160
 msgid "Unset template vars dump"
 msgstr ""
 
 # nlsref 15,18
-#: web_tt2/serveradmin.tt2:145
+#: web_tt2/serveradmin.tt2:162
 #, fuzzy
 msgid "Set template vars dump"
 msgstr "Seleccionar un tipe de garbi"
 
-#: web_tt2/serveradmin.tt2:151
+#: web_tt2/serveradmin.tt2:168
 msgid "Skins, CSS and colors"
 msgstr "Skins, fuèlas d'estil e colors"
 
-#: web_tt2/serveradmin.tt2:153
+#: web_tt2/serveradmin.tt2:170
 msgid "Skins administration page"
 msgstr "Administracion de las sisas (skins)"
 
-#: web_tt2/serveradmin.tt2:156
+#: web_tt2/serveradmin.tt2:173
 msgid "Translating Sympa"
 msgstr "Revirar Sympa"
 
-#: web_tt2/serveradmin.tt2:158
+#: web_tt2/serveradmin.tt2:175
 msgid ""
 "Sympa is designed to allow easy internationalization of its user interface "
 "(service mail messages and web interface). All translations for one language "
@@ -3463,7 +3581,7 @@ msgstr ""
 "son regropadas dins un fichièr unic al format PO, que se pòt editar amb "
 "d'espleches estandards GNU. "
 
-#: web_tt2/serveradmin.tt2:162
+#: web_tt2/serveradmin.tt2:179
 msgid ""
 "Check our translation FAQ if you wish to translate Sympa GUI in your native "
 "language : "
@@ -3471,16 +3589,16 @@ msgstr ""
 "Vos cal consultar la FAQ pels reviraires se desiratz traduire Sympa dins "
 "vòstra lenga :"
 
-#: web_tt2/serveradmin.tt2:165
+#: web_tt2/serveradmin.tt2:182
 msgid "Submitting a bug, a feature request"
 msgstr "Sometre un problèma, una demanda de foncionalitat"
 
-#: web_tt2/serveradmin.tt2:167
+#: web_tt2/serveradmin.tt2:184
 msgid "You can submit a problem or request a new feature : "
 msgstr "Podètz sometre un problèma o una demanda de fonccionalitat:"
 
 #. (process_id,loop_count,start_time)
-#: web_tt2/serveradmin.tt2:173
+#: web_tt2/serveradmin.tt2:190
 msgid "This FastCGI process (%1) has served %2 pages since %3."
 msgstr "Aquel procès FastCGI (%1) tractèt %2 demandas dempuèi %3."
 
@@ -4189,7 +4307,7 @@ msgstr "Recercar dins un periòde"
 #. (date_to_formated)
 #. This entry is a date/time format
 #. Check the strftime manpage for format details : http://docs.freebsd.org/info/gawk/gawk.info.Time_Functions.html
-#: web_tt2/viewlogs.tt2:110 wwsympa/wwsympa.fcgi:15442
+#: web_tt2/viewlogs.tt2:110 wwsympa/wwsympa.fcgi:15640
 msgid "%d %b %Y %H:%M:%S"
 msgstr "%d %b %Y %H:%M:%S"
 
@@ -4251,6 +4369,16 @@ msgstr "visualizar mai d'eveniments ligats a aqueste messatge."
 #: web_tt2/viewlogs.tt2:211
 msgid "Other events"
 msgstr "Autres eveniments"
+
+# nlsref 15,7
+#: web_tt2/viewmod.tt2:17
+#, fuzzy
+msgid "Default rejection message"
+msgstr "messatge de refús pel moderator"
+
+#: web_tt2/viewmod.tt2:18
+msgid "Do Not Notify"
+msgstr ""
 
 #: web_tt2/view_template.tt2:7
 msgid "Template name : "
@@ -4861,7 +4989,7 @@ msgid "%1 Digest %2"
 msgstr "Compilacion del %2, tièra %1"
 
 #: mail_tt2/digest.tt2:11 mail_tt2/digest_plain.tt2:8
-#: mail_tt2/get_archive.tt2:10 src/List.pm:2686
+#: mail_tt2/get_archive.tt2:10 src/List.pm:2687
 msgid "Table of contents:"
 msgstr "Ensenhador :"
 
@@ -5509,9 +5637,9 @@ msgstr "es pas possible"
 #: mail_tt2/listmaster_notification.tt2:117
 #: mail_tt2/listmaster_notification.tt2:123
 #: mail_tt2/listmaster_notification.tt2:131
-#: mail_tt2/listmaster_notification.tt2:269
-#: mail_tt2/listmaster_notification.tt2:340
-#: mail_tt2/listmaster_notification.tt2:352
+#: mail_tt2/listmaster_notification.tt2:277
+#: mail_tt2/listmaster_notification.tt2:348
+#: mail_tt2/listmaster_notification.tt2:360
 msgid "See logs for more details."
 msgstr "Consultatz los jornals (logs) per mai de detalhs"
 
@@ -5616,12 +5744,12 @@ msgstr ""
 
 #. (param0)
 #: mail_tt2/listmaster_notification.tt2:158
-#: mail_tt2/listmaster_notification.tt2:175
 #: mail_tt2/listmaster_notification.tt2:183
-#: mail_tt2/listmaster_notification.tt2:190
-#: mail_tt2/listmaster_notification.tt2:218
-#: mail_tt2/listmaster_notification.tt2:225
-#: mail_tt2/listmaster_notification.tt2:232
+#: mail_tt2/listmaster_notification.tt2:191
+#: mail_tt2/listmaster_notification.tt2:198
+#: mail_tt2/listmaster_notification.tt2:226
+#: mail_tt2/listmaster_notification.tt2:233
+#: mail_tt2/listmaster_notification.tt2:240
 msgid "list %1 in status error_config"
 msgstr "tièra %1 a l'estatut error_config"
 
@@ -5631,24 +5759,24 @@ msgid "No owner is defined for list %1."
 msgstr "Cap de proprietari es pas definit per la tièra %1"
 
 #: mail_tt2/listmaster_notification.tt2:161
-#: mail_tt2/listmaster_notification.tt2:178
 #: mail_tt2/listmaster_notification.tt2:186
-#: mail_tt2/listmaster_notification.tt2:193
-#: mail_tt2/listmaster_notification.tt2:221
-#: mail_tt2/listmaster_notification.tt2:228
-#: mail_tt2/listmaster_notification.tt2:235
+#: mail_tt2/listmaster_notification.tt2:194
+#: mail_tt2/listmaster_notification.tt2:201
+#: mail_tt2/listmaster_notification.tt2:229
+#: mail_tt2/listmaster_notification.tt2:236
+#: mail_tt2/listmaster_notification.tt2:243
 msgid "The list status has been set to error_config."
 msgstr "L'estatut de la tièra es estat posicionat a error_config."
 
 #: mail_tt2/listmaster_notification.tt2:162
-#: mail_tt2/listmaster_notification.tt2:179
 #: mail_tt2/listmaster_notification.tt2:187
-#: mail_tt2/listmaster_notification.tt2:194
-#: mail_tt2/listmaster_notification.tt2:201
-#: mail_tt2/listmaster_notification.tt2:208
-#: mail_tt2/listmaster_notification.tt2:222
-#: mail_tt2/listmaster_notification.tt2:229
-#: mail_tt2/listmaster_notification.tt2:236
+#: mail_tt2/listmaster_notification.tt2:195
+#: mail_tt2/listmaster_notification.tt2:202
+#: mail_tt2/listmaster_notification.tt2:209
+#: mail_tt2/listmaster_notification.tt2:216
+#: mail_tt2/listmaster_notification.tt2:230
+#: mail_tt2/listmaster_notification.tt2:237
+#: mail_tt2/listmaster_notification.tt2:244
 msgid "Check Sympa log files for more precise information."
 msgstr "Consultatz los fichièrs jornals (logs) de Sympa per mai de precisions"
 
@@ -5660,79 +5788,95 @@ msgstr ""
 #. (previous_email,new_email)
 #: mail_tt2/listmaster_notification.tt2:168
 msgid ""
-"User %1 has changed his owner/editor email address to %2. This changed has "
-"been performed to the following lists :"
+"Member %1 has changed his owner/editor email address to %2. This change has "
+"been performed for the following lists :"
+msgstr ""
+
+#. (list.name)
+#: mail_tt2/listmaster_notification.tt2:175
+#, fuzzy
+msgid "List %1 : Failed to change admin email address"
+msgstr "Cambiar mon adreiça electronica"
+
+#. (current_email,new_email,datasource)
+#: mail_tt2/listmaster_notification.tt2:179
+msgid ""
+"Admin %1 could not change his admin email address (new email address is %2) "
+"because he is included via a the following data sources: %3.\n"
+"\n"
+"If you are able to do so, you should probably update these data sources with "
+"this person's new email address."
 msgstr ""
 
 #. (param0,param1)
-#: mail_tt2/listmaster_notification.tt2:177
+#: mail_tt2/listmaster_notification.tt2:185
 msgid "Errors occured while copying family %2 file in list %1 directory."
 msgstr ""
 "Error en copiar lo fichièr %2 de la familha dins lo repertòri de la tièra %1."
 
 #. (param0,param1)
-#: mail_tt2/listmaster_notification.tt2:185
+#: mail_tt2/listmaster_notification.tt2:193
 msgid "List %1 configuration does not respect family %2 rules."
 msgstr ""
 "La configuracion de la tièra %1 respecta pas las règlas de la familha %2."
 
 #. (param0,param1)
-#: mail_tt2/listmaster_notification.tt2:192
+#: mail_tt2/listmaster_notification.tt2:200
 msgid ""
 "Sympa could not check family %2 rules with list %1 param_constraint.conf "
 "file."
 msgstr ""
 "Sympa poguèt pas verificar las règlas de la familha %2 per la tièra %1."
 
-#: mail_tt2/listmaster_notification.tt2:198
-#: mail_tt2/listmaster_notification.tt2:205
+#: mail_tt2/listmaster_notification.tt2:206
+#: mail_tt2/listmaster_notification.tt2:213
 msgid "errors in param_constraint.conf file"
 msgstr "errors al fichièr param_constraint.conf"
 
 #. (param0)
-#: mail_tt2/listmaster_notification.tt2:200
-#: mail_tt2/listmaster_notification.tt2:207
+#: mail_tt2/listmaster_notification.tt2:208
+#: mail_tt2/listmaster_notification.tt2:215
 msgid "Error(s) found in the file %1."
 msgstr "Error(s) al fichièr %1"
 
-#: mail_tt2/listmaster_notification.tt2:211
+#: mail_tt2/listmaster_notification.tt2:219
 msgid "File removed"
 msgstr "Fichièr levat"
 
 #. (param0)
-#: mail_tt2/listmaster_notification.tt2:213
+#: mail_tt2/listmaster_notification.tt2:221
 msgid "The following file has been removed : %1"
 msgstr "Lo fichièr ancian %1 foguèt suprimit"
 
 #. (param1)
-#: mail_tt2/listmaster_notification.tt2:214
+#: mail_tt2/listmaster_notification.tt2:222
 msgid "A backup of the file has been made : %1"
 msgstr "La salvagarda d'aqueste fichièr es facha : %1"
 
 #. (param0,param1)
-#: mail_tt2/listmaster_notification.tt2:220
+#: mail_tt2/listmaster_notification.tt2:228
 msgid "Sympa could not load family %2 for list %1."
 msgstr "Sympa a pas pogut cargar la familha %2 per la tièra %1."
 
 #. (param0,param1)
-#: mail_tt2/listmaster_notification.tt2:227
+#: mail_tt2/listmaster_notification.tt2:235
 msgid "Failed to instantiate family %2 for list %1"
 msgstr "L'instanciacion de la familha %2 per la tièra %1 a fach fogassa"
 
 #. (param0,param1)
-#: mail_tt2/listmaster_notification.tt2:234
+#: mail_tt2/listmaster_notification.tt2:242
 msgid "Sympa could not modify list %1 (Family %2)"
 msgstr "Sympa a pas pogut modificar la tièra %1 (familha %2)"
 
 # nlsref 16,7
 #. (list.name)
-#: mail_tt2/listmaster_notification.tt2:240
+#: mail_tt2/listmaster_notification.tt2:248
 #: mail_tt2/listowner_notification.tt2:41
 msgid "List %1 automatic bounce management"
 msgstr "Gestion de las adreiças en error per la tièra %1"
 
 #. (total,list.name)
-#: mail_tt2/listmaster_notification.tt2:244
+#: mail_tt2/listmaster_notification.tt2:252
 msgid ""
 "Because we received MANY non-delivery reports, the %1 subscribers listed "
 "below have been\n"
@@ -5743,7 +5887,7 @@ msgstr ""
 "tièra %2 :"
 
 #. (total,list.name)
-#: mail_tt2/listmaster_notification.tt2:247
+#: mail_tt2/listmaster_notification.tt2:255
 msgid ""
 "Because we received MANY non-delivery reports, the %1 subscribers listed "
 "below have been\n"
@@ -5754,7 +5898,7 @@ msgstr ""
 "son estats quitats de la tièra %2 :"
 
 #. (total,list.name)
-#: mail_tt2/listmaster_notification.tt2:250
+#: mail_tt2/listmaster_notification.tt2:258
 msgid ""
 "Because we received MANY non-delivery reports, the %1 subscribers listed "
 "below have been\n"
@@ -5764,38 +5908,38 @@ msgstr ""
 "Sympa a notat los %1 abonats seguents\n"
 "coma d'adreiças gravament en error :"
 
-#: mail_tt2/listmaster_notification.tt2:257
+#: mail_tt2/listmaster_notification.tt2:265
 #: mail_tt2/listowner_notification.tt2:58
 msgid "Managing bouncing subscribers:"
 msgstr "Gestion dels abonats en error"
 
 #. (list.name)
-#: mail_tt2/listmaster_notification.tt2:261
-#: mail_tt2/listmaster_notification.tt2:273
+#: mail_tt2/listmaster_notification.tt2:269
+#: mail_tt2/listmaster_notification.tt2:281
 msgid "Listmaster : internal server error "
 msgstr "Responsable : Error interna del servidor"
 
 #. (who)
-#: mail_tt2/listmaster_notification.tt2:263
-#: mail_tt2/listmaster_notification.tt2:275
+#: mail_tt2/listmaster_notification.tt2:271
+#: mail_tt2/listmaster_notification.tt2:283
 msgid " User %1 has encountered an internal server error"
 msgstr "L'usancièr %1 a encontrat una error del servidor"
 
-#: mail_tt2/listmaster_notification.tt2:276
-#: mail_tt2/listmaster_notification.tt2:347
+#: mail_tt2/listmaster_notification.tt2:284
+#: mail_tt2/listmaster_notification.tt2:355
 msgid "Web interface"
 msgstr "interfàcia web"
 
 # nlsref 3,1
-#: mail_tt2/listmaster_notification.tt2:278
+#: mail_tt2/listmaster_notification.tt2:286
 msgid "Unable to change directory."
 msgstr "Impossible de cambiar de repertòri"
 
-#: mail_tt2/listmaster_notification.tt2:279
+#: mail_tt2/listmaster_notification.tt2:287
 msgid "The authentication server name is not defined."
 msgstr "Causir vòstre servidor d'autentificacion"
 
-#: mail_tt2/listmaster_notification.tt2:280
+#: mail_tt2/listmaster_notification.tt2:288
 msgid ""
 "auth.conf error : either email_http_header or ldap_host/"
 "ldap_get_email_by_uid_filter entries should be defined."
@@ -5804,271 +5948,271 @@ msgstr ""
 "ldap_get_email_by_uid_filter"
 
 #. (name)
-#: mail_tt2/listmaster_notification.tt2:281
+#: mail_tt2/listmaster_notification.tt2:289
 msgid "Unkown authentication service %1."
 msgstr "Lo servici d'autentificacion %1 es inconegut"
 
 #. (user)
-#: mail_tt2/listmaster_notification.tt2:282
+#: mail_tt2/listmaster_notification.tt2:290
 msgid "Add user '%1' in DB failed."
 msgstr "L'apondi de l'usancièr '%1' dins la basa de donadas a pas capitat."
 
 #. (user)
-#: mail_tt2/listmaster_notification.tt2:283
+#: mail_tt2/listmaster_notification.tt2:291
 msgid "Update user '%1' in DB failed"
 msgstr "L'actualizacion del abonnat '%1' dins la basa a fach meuca"
 
 #. (old_email)
-#: mail_tt2/listmaster_notification.tt2:283
-#: mail_tt2/listmaster_notification.tt2:285
+#: mail_tt2/listmaster_notification.tt2:291
+#: mail_tt2/listmaster_notification.tt2:293
 msgid " (old email : %1)"
 msgstr "(corrièr electronic vielh : %1)"
 
 #. (sub)
-#: mail_tt2/listmaster_notification.tt2:284
+#: mail_tt2/listmaster_notification.tt2:292
 msgid "Add subscriber '%1' in DB failed."
 msgstr "L'apondi de l'abonat '%1' dins la basa de donadas a pas capitat."
 
 #. (sub,old_email)
-#: mail_tt2/listmaster_notification.tt2:285
+#: mail_tt2/listmaster_notification.tt2:293
 msgid "Update subscriber '%1' in DB failed"
 msgstr "L'actualizacion de l'abonnat(ada)  '%1' dins la basa capitèt pas"
 
 #. (sub)
-#: mail_tt2/listmaster_notification.tt2:286
+#: mail_tt2/listmaster_notification.tt2:294
 msgid "Delete subscriber '%1' in DB failed."
 msgstr "La supression de l'abonnat '%1' de la basa capitèt pas."
 
 #. (old_email)
-#: mail_tt2/listmaster_notification.tt2:287
+#: mail_tt2/listmaster_notification.tt2:295
 msgid "Delete user in DB for old email '%1' failed."
 msgstr ""
 "La supression de l'adreiça electronica anciana de l'usancièr '%1' capitèt "
 "pas."
 
 #. (email,list.name)
-#: mail_tt2/listmaster_notification.tt2:288
+#: mail_tt2/listmaster_notification.tt2:296
 msgid "Subscriber '%1' is not found in list %2."
 msgstr "L'abonat '%1' es pas trapat dins la lista %2"
 
 # nlsref 6,2
 #. (filepath)
-#: mail_tt2/listmaster_notification.tt2:289
+#: mail_tt2/listmaster_notification.tt2:297
 msgid "Unable to read file : '%1'."
 msgstr "Impossible de legir lo fichièr : '%1'"
 
 # nlsref 6,2
 #. (filepath)
-#: mail_tt2/listmaster_notification.tt2:290
+#: mail_tt2/listmaster_notification.tt2:298
 msgid "Unable to write file : '%1'."
 msgstr "Es pas possible d'escriure lo fichièr : '%1'"
 
 # nlsref 6,2
 #. (file)
-#: mail_tt2/listmaster_notification.tt2:291
+#: mail_tt2/listmaster_notification.tt2:299
 msgid "Unable to open file '%1'."
 msgstr "Es pas possible de legir lo fichièr '%1'"
 
 # nlsref 3,1
 #. (directory)
-#: mail_tt2/listmaster_notification.tt2:292
+#: mail_tt2/listmaster_notification.tt2:300
 msgid "Unable to open directory '%1'."
 msgstr "Es pas possible de dobrir lo repertòri '%1."
 
 # nlsref 3,1
 #. (dir)
-#: mail_tt2/listmaster_notification.tt2:293
+#: mail_tt2/listmaster_notification.tt2:301
 msgid "Unable to create directory '%1'."
 msgstr "Es pas possible de crear lo repertòri"
 
 # nlsref 6,2
 #. (spool)
-#: mail_tt2/listmaster_notification.tt2:294
+#: mail_tt2/listmaster_notification.tt2:302
 msgid "Unable to open spool '%1'."
 msgstr "Impossible de legir çò en espèra '%1'"
 
 #. (msg)
-#: mail_tt2/listmaster_notification.tt2:295
+#: mail_tt2/listmaster_notification.tt2:303
 msgid "Unable to get message '%1'."
 msgstr "Impossible de trobar lo messatge '%1'."
 
 # nlsref 6,2
 #. (old,new)
-#: mail_tt2/listmaster_notification.tt2:296
+#: mail_tt2/listmaster_notification.tt2:304
 msgid "Unable to rename file '%1' into '%2'."
 msgstr "Impossible de tornar nomenar lo fichièr '%1' ne '%2'."
 
 # nlsref 3,1
 #. (old,new)
-#: mail_tt2/listmaster_notification.tt2:297
+#: mail_tt2/listmaster_notification.tt2:305
 msgid "Unable to rename directory '%1' into '%2'."
 msgstr "Impossible de tornar nomenar lo repertòri de '%1' per '%2'"
 
 # nlsref 6,2
 #. (file)
-#: mail_tt2/listmaster_notification.tt2:298
+#: mail_tt2/listmaster_notification.tt2:306
 msgid "Unable to erase file '%1'."
 msgstr "es pas possible de suprimir lo fichièr '%1'"
 
 #. (from,list.name)
-#: mail_tt2/listmaster_notification.tt2:299
+#: mail_tt2/listmaster_notification.tt2:307
 msgid "Unable to send command DISTRIBUTE from '%1' to list '%2'."
 msgstr "Error d'execucion de la comanda DISTRIBUTE de '%1' per la lista '%2'."
 
 #. (dir)
-#: mail_tt2/listmaster_notification.tt2:300
+#: mail_tt2/listmaster_notification.tt2:308
 msgid "No HTML version of the message available in '%1'."
 msgstr "Pas cap de version HTML del messatge disponible dins '%1'"
 
 #. (list.name)
-#: mail_tt2/listmaster_notification.tt2:301
+#: mail_tt2/listmaster_notification.tt2:309
 msgid "Unable to update file config_changes for list '%1'."
 msgstr ""
 "Es pas possible d'actualizar lo fichièr config_changes per la lista '%1'."
 
 # nlsref 6,2
 #. (month,list.name)
-#: mail_tt2/listmaster_notification.tt2:302
+#: mail_tt2/listmaster_notification.tt2:310
 msgid "Unable to find month '%1' for list '%2'"
 msgstr "Es pas possible de trapar lo mes '%1' de la lista '%2'"
 
 # nlsref 6,2
 #. (dir)
 #. (path)
-#: mail_tt2/listmaster_notification.tt2:302
-#: mail_tt2/listmaster_notification.tt2:303
-#: mail_tt2/listmaster_notification.tt2:304
+#: mail_tt2/listmaster_notification.tt2:310
+#: mail_tt2/listmaster_notification.tt2:311
+#: mail_tt2/listmaster_notification.tt2:312
 msgid " : unable to read '%1'."
 msgstr "Es pas possible de legir '%1'."
 
 #. (arc_file,list.name,path)
-#: mail_tt2/listmaster_notification.tt2:303
+#: mail_tt2/listmaster_notification.tt2:311
 msgid "Unable to find archive '%1' for list '%2'"
 msgstr "Es pas possible de trapar los archius '%1' per la lista '%2'"
 
 #. (list.name)
-#: mail_tt2/listmaster_notification.tt2:304
+#: mail_tt2/listmaster_notification.tt2:312
 msgid "Unable to find archive for list '%1'"
 msgstr "Es pas possible de trapar l'archiu per la lista '%1'"
 
-#: mail_tt2/listmaster_notification.tt2:305
+#: mail_tt2/listmaster_notification.tt2:313
 msgid "Unable to send archive : no message id found."
 msgstr "Impossible de mandar l'archiu : i a pas cap de messatge."
 
 #. (msgid)
-#: mail_tt2/listmaster_notification.tt2:306
+#: mail_tt2/listmaster_notification.tt2:314
 msgid "No message found in archives matching Message-ID '%1'."
 msgstr ""
 "Cap de messatge trapats dins los archius que correspond  a vòstra recèrca"
 
 # nlsref 16,77
 #. (list.name)
-#: mail_tt2/listmaster_notification.tt2:307
+#: mail_tt2/listmaster_notification.tt2:315
 msgid "Cannot save config file for list '%1'."
 msgstr ""
 "Es pas possible de salvagardar lo fichièr de configuracion de la lista '%1'."
 
-#: mail_tt2/listmaster_notification.tt2:308
+#: mail_tt2/listmaster_notification.tt2:316
 msgid "Failed to install aliases."
 msgstr "Impossible d'installar los àlias de messatjariá"
 
-#: mail_tt2/listmaster_notification.tt2:309
+#: mail_tt2/listmaster_notification.tt2:317
 msgid "Failed to remove aliases."
 msgstr "Impossible de supprimir los àlias de messatjariá"
 
-#: mail_tt2/listmaster_notification.tt2:310
+#: mail_tt2/listmaster_notification.tt2:318
 msgid "Internal scenario error for 'create_list'."
 msgstr "Error del servidor dins lo scenari 'create_list'."
 
 # nlsref 3,1
-#: mail_tt2/listmaster_notification.tt2:311
+#: mail_tt2/listmaster_notification.tt2:319
 msgid "Unable to create list."
 msgstr "Es pas possible de crear la lista"
 
 #. (list.name)
-#: mail_tt2/listmaster_notification.tt2:314
+#: mail_tt2/listmaster_notification.tt2:322
 msgid "Unable to get family for list '%1'."
 msgstr "Es pas possible de trapar de familha per la lista '%1'."
 
 # nlsref 6,2
 #. (new_listname)
-#: mail_tt2/listmaster_notification.tt2:315
+#: mail_tt2/listmaster_notification.tt2:323
 msgid "Unable to reload list with new listname '%1'."
 msgstr "Es pas possible de tornar cargar la lista amb lo nom novèl '%1'."
 
 # nlsref 3,1
-#: mail_tt2/listmaster_notification.tt2:315
+#: mail_tt2/listmaster_notification.tt2:323
 msgid "Unable to reload list"
 msgstr "Impossible de tornar cargar la lista"
 
 #. (list.name)
-#: mail_tt2/listmaster_notification.tt2:316
+#: mail_tt2/listmaster_notification.tt2:324
 msgid "Failed to inlude members for list '%1'"
 msgstr "Es pas possible de crear los abonats de la lista '%1'"
 
 #. (list.name)
-#: mail_tt2/listmaster_notification.tt2:317
+#: mail_tt2/listmaster_notification.tt2:325
 msgid "Failed to include list admins for list '%1'"
 msgstr "Es pas possible de sincronisar los administrators de la lista '%1'"
 
-#: mail_tt2/listmaster_notification.tt2:318
+#: mail_tt2/listmaster_notification.tt2:326
 msgid "No owner is defined for the list '%1'"
 msgstr "Cap de proprietari es pas definit per la tièra '%1'"
 
 #. (list.name)
-#: mail_tt2/listmaster_notification.tt2:319
+#: mail_tt2/listmaster_notification.tt2:327
 msgid "The exportation to an Ldap directory failed for list '%1'"
 msgstr "L'exportacion de la lista '%1' cap al repertòri Ldap, a abocat"
 
 # nlsref 11,2
 #. (new_listname)
-#: mail_tt2/listmaster_notification.tt2:320
+#: mail_tt2/listmaster_notification.tt2:328
 msgid "Unable to check listname '%1' on SMTP server"
 msgstr "Impossible de verificar la tièra '%1' al nivèl del servidor SMTP"
 
 #. (list.name)
-#: mail_tt2/listmaster_notification.tt2:321
+#: mail_tt2/listmaster_notification.tt2:329
 msgid "Cannot create shared for list '%1'."
 msgstr "Es pas possible de crear l'espaci documents per la lista '%1'."
 
 #. (list.name)
-#: mail_tt2/listmaster_notification.tt2:322
+#: mail_tt2/listmaster_notification.tt2:330
 msgid "Cannot restore shared for list '%1'."
 msgstr "Es pas possible de restaurar l'espaci del documents de la lista '%1'"
 
 #. (list.name)
-#: mail_tt2/listmaster_notification.tt2:323
+#: mail_tt2/listmaster_notification.tt2:331
 msgid "Cannot delete shared for list '%1'."
 msgstr "Es pas possible de suprimir l'espaci documents per la lista '%1'."
 
-#: mail_tt2/listmaster_notification.tt2:324
+#: mail_tt2/listmaster_notification.tt2:332
 msgid "Impossible to browse shared documents for list '%1'."
 msgstr "Es pas possible d'accedir a l'espaci documents de la lista '%1' "
 
 #. (path)
-#: mail_tt2/listmaster_notification.tt2:325
+#: mail_tt2/listmaster_notification.tt2:333
 msgid "Cannot upload file '%1'."
 msgstr "Impossible de descargar lo fichièr %1."
 
 #. (name)
-#: mail_tt2/listmaster_notification.tt2:327
+#: mail_tt2/listmaster_notification.tt2:335
 msgid "Errors while unzipping file '%1'."
 msgstr "problèmas en descomprimir lo fichièr %1"
 
 #. (from,list.name)
-#: mail_tt2/listmaster_notification.tt2:328
+#: mail_tt2/listmaster_notification.tt2:336
 msgid "Unable to send command REMIND from '%1' to list '%2'."
 msgstr "Error d'execucion de la comanda REMIND de '%1' per la lista '%2'."
 
 #. (from,list.name)
-#: mail_tt2/listmaster_notification.tt2:329
+#: mail_tt2/listmaster_notification.tt2:337
 msgid "Unable to send mail from '%1' to list '%2'."
 msgstr ""
 "Lo mandadís del corrièr electronic de '%1' a la lista '%2' capitèt pas."
 
 # nlsref 6,68
 #. (key,list.name)
-#: mail_tt2/listmaster_notification.tt2:330
+#: mail_tt2/listmaster_notification.tt2:338
 msgid "Unable to access the message authenticated with key '%1' for list '%2'."
 msgstr ""
 "Se pòt pas accedir al messatge autentificat amb la clau '%1' per la lista '%"
@@ -6076,43 +6220,43 @@ msgstr ""
 
 # nlsref 8,24
 #. (sub)
-#: mail_tt2/listmaster_notification.tt2:331
+#: mail_tt2/listmaster_notification.tt2:339
 msgid "Unable to delete subscription request for user '%1'."
 msgstr "Es pas possible d'escafar la demanda d'abonament per l'utilizador '%1'"
 
 # nlsref 6,2
 #. (file)
-#: mail_tt2/listmaster_notification.tt2:332
+#: mail_tt2/listmaster_notification.tt2:340
 msgid "Unable to add file '%1' to archives."
 msgstr "L'apondi del fichier '%1' dins los archius es pas possible."
 
 # nlsref 6,2
 #. (zipfile)
-#: mail_tt2/listmaster_notification.tt2:333
+#: mail_tt2/listmaster_notification.tt2:341
 msgid "Unable to write file zip '%1'."
 msgstr "Es pas possible d'escriure lo fichièr zip : '%1'"
 
 #. (path,list.name)
-#: mail_tt2/listmaster_notification.tt2:335
+#: mail_tt2/listmaster_notification.tt2:343
 msgid "Unable to create a SharedDocument with path '%1' for list '%2'."
 msgstr "Es pas possible de crear un document partejat '%1' dins la lista '%2'"
 
-#: mail_tt2/listmaster_notification.tt2:336
+#: mail_tt2/listmaster_notification.tt2:344
 msgid "Parameter cookie undefined, authentication failure."
 msgstr "Lo paramètre \"cookie\" es pas definit, mèuca d'autentificacion."
 
 #. (env)
-#: mail_tt2/listmaster_notification.tt2:337
+#: mail_tt2/listmaster_notification.tt2:345
 msgid "Cookie error : '%1' undefined, authentication failure."
 msgstr "L'error es ligada al cookie: %1 pas definit, mèuca d'autentificacion."
 
 #. (list.name)
-#: mail_tt2/listmaster_notification.tt2:344
+#: mail_tt2/listmaster_notification.tt2:352
 msgid "Listmaster : system error "
 msgstr "Responsable : error sistèma"
 
 #. (who)
-#: mail_tt2/listmaster_notification.tt2:346
+#: mail_tt2/listmaster_notification.tt2:354
 msgid " User %1 has encountered a system error"
 msgstr "Usancièr %1 a encontrat una error dins lo sistèma "
 
@@ -6361,31 +6505,35 @@ msgstr "Avètz pas besonh de faire quicòm"
 
 #. (who)
 #: mail_tt2/listowner_notification.tt2:117
+#: mail_tt2/listowner_notification.tt2:129
 msgid "FYI: automatic removal of user %1"
 msgstr "Informacion : suppression automatica de l'usancièr  %1"
 
 # nlsref 6,38
 #. (who,list.name)
 #: mail_tt2/listowner_notification.tt2:119
+#: mail_tt2/listowner_notification.tt2:131
 msgid "User \"%1\" has been automatically removed from list %2. "
 msgstr "L'usancièr %1 es estat quitat de %2"
 
 #. (list.name)
-#: mail_tt2/listowner_notification.tt2:128
-msgid "List %1 : Named filter error"
-msgstr "Lista %1 : Error de filtre"
+#: mail_tt2/listowner_notification.tt2:140
+#, fuzzy
+msgid "List %1 : Failed to change member email address"
+msgstr "Cambiar mon adreiça electronica"
 
-#. (filter,list.name)
-#: mail_tt2/listowner_notification.tt2:130
+#. (current_email,new_email,datasource)
+#: mail_tt2/listowner_notification.tt2:144
 msgid ""
-"The %1 named filter could not be evaluated. The list %2 is using it for some "
-"authorization scenario."
+"User %1 could not change his member email address (new email address is %2) "
+"because he is included via a the following data sources: %3.\n"
+"\n"
+"If you are able to do so, you should probably update these data sources with "
+"this person's new email address."
 msgstr ""
-"Lo filtre a pas pogut èsser avalorat. La lista %2 utiliza aqueste filtre "
-"dins un scenari d'autorizacion."
 
 #. (list.name,type)
-#: mail_tt2/listowner_notification.tt2:133
+#: mail_tt2/listowner_notification.tt2:147
 msgid "List %1 / %2"
 msgstr "Tièra %1 / %2"
 
@@ -6642,8 +6790,9 @@ msgid "One new message from list %1 from %2 arrived. "
 msgstr "Messatge criptat per la tièra %1@%2"
 
 #: mail_tt2/moderate.tt2:16
-msgid "This message as been tagued as a spam"
-msgstr ""
+#, fuzzy
+msgid "This message as been tagged as spam"
+msgstr "Autre (messatges non etiquetats)"
 
 #. (mod_spool_size)
 #: mail_tt2/moderate.tt2:18
@@ -7047,6 +7196,17 @@ msgstr "pagina d'acuèlh de la tièra"
 #. (conf.wwsympa_url)
 #: mail_tt2/user_notification.tt2:36
 msgid "Owner and moderator guide: %1/help/admin"
+msgstr ""
+
+#: mail_tt2/user_notification.tt2:40
+#, fuzzy
+msgid "Changing your subscriber email address"
+msgstr "Cambiament d'adreiça electronica"
+
+#: mail_tt2/user_notification.tt2:42
+msgid ""
+"You have requested to change your subscriber email address. To confirm your "
+"new email address with the SYMPA server, please click the link below :"
 msgstr ""
 
 #. (list.name)
@@ -7759,7 +7919,7 @@ msgstr "Lo fichièr de configuracion --CONFIG-- cap d'errors.\n"
 
 #. This entry is a date/time format
 #. Check the strftime manpage for format details : http://docs.freebsd.org/info/gawk/gawk.info.Time_Functions.html
-#: src/Commands.pm:963 wwsympa/wwsympa.fcgi:9238
+#: src/Commands.pm:963 wwsympa/wwsympa.fcgi:9412
 msgid "%A"
 msgstr "%A"
 
@@ -7770,746 +7930,775 @@ msgstr "Error linha %d : %s"
 
 #. This entry is a date/time format
 #. Check the strftime manpage for format details : http://docs.freebsd.org/info/gawk/gawk.info.Time_Functions.html
-#: src/Family.pm:2586 src/Family.pm:385 src/Family.pm:662 src/List.pm:1782
-#: wwsympa/Auth.pm:487 wwsympa/wwsympa.fcgi:2777 wwsympa/wwsympa.fcgi:993
+#: src/Family.pm:2586 src/Family.pm:385 src/Family.pm:662 src/List.pm:1783
+#: wwsympa/Auth.pm:487 wwsympa/wwsympa.fcgi:2784 wwsympa/wwsympa.fcgi:999
 msgid "%d %b %Y at %H:%M:%S"
 msgstr "%d %b %Y a %H:%M:%S"
 
 # nlsref 16,1
-#: src/List.pm:315
+#: src/List.pm:316
 msgid "Account"
 msgstr "Compte"
 
 # nlsref 16,2
-#: src/List.pm:319
+#: src/List.pm:320
 msgid "Who can add subscribers"
 msgstr "Qual pòt apondre d'abonats"
 
 # nlsref 16,3
-#: src/List.pm:323
+#: src/List.pm:324
 msgid "Anonymous sender"
 msgstr "Autor anonim"
 
 # nlsref 16,5
-#: src/List.pm:328
+#: src/List.pm:329
 msgid "frequency"
 msgstr "frequéncia"
 
 # nlsref 16,6
-#: src/List.pm:1331 src/List.pm:333
+#: src/List.pm:1332 src/List.pm:334
 msgid "access right"
 msgstr "Dreches d'accès"
 
 # nlsref 16,4
-#: src/List.pm:337
+#: src/List.pm:338
 msgid "Text archives"
 msgstr "Archius textuals"
 
 # nlsref 16,212
-#: src/List.pm:342
+#: src/List.pm:343
 msgid "Archive encrypted mails as cleartext"
 msgstr "Archivatge dels messatges criptats"
 
 # nlsref 16,19
-#: src/List.pm:1086 src/List.pm:1126 src/List.pm:349 src/List.pm:525
-#: src/List.pm:588 src/List.pm:623
+#: src/List.pm:1087 src/List.pm:1127 src/List.pm:350 src/List.pm:526
+#: src/List.pm:589 src/List.pm:624
 msgid "reception mode"
 msgstr "biais de recebre"
 
 # nlsref 16,88
-#: src/List.pm:352
+#: src/List.pm:353
 msgid "Available subscription options"
 msgstr "Opcions d'abonament disponiblas"
 
 # nlsref 16,8
-#: src/List.pm:360
+#: src/List.pm:361
 msgid "warn rate"
 msgstr "sulhet d'alèrta"
 
 # nlsref 16,9
-#: src/List.pm:367
+#: src/List.pm:368
 msgid "halt rate"
 msgstr "sulhet d'interrupcion"
 
 # nlsref 16,7
-#: src/List.pm:371
+#: src/List.pm:372
 msgid "Bounces management"
 msgstr "Gestion de las errors"
 
-#: src/List.pm:378 src/List.pm:399
+#: src/List.pm:379 src/List.pm:400
 msgid "threshold"
 msgstr "sulhet"
 
-#: src/List.pm:383 src/List.pm:404
+#: src/List.pm:384 src/List.pm:405
 msgid "action for this population"
 msgstr "accion per aquela populacion"
 
-#: src/List.pm:388 src/List.pm:409
+#: src/List.pm:389 src/List.pm:410
 msgid "notification"
 msgstr "notificacion"
 
-#: src/List.pm:392
+#: src/List.pm:393
 msgid "Management of bouncers, 1st level"
 msgstr "Gestion dels abonats en error, 1r nivèl"
 
-#: src/List.pm:413
+#: src/List.pm:414
 msgid "Management of bouncers, 2nd level"
 msgstr "Gestion dels abonats en error, 2nd nivèl"
 
 # nlsref 16,10
-#: src/List.pm:420
+#: src/List.pm:421
 msgid "Expiration of unmoderated messages"
 msgstr "Expiracion dels messatges non moderats"
 
 # nlsref 16,11
-#: src/List.pm:426
+#: src/List.pm:427
 msgid "Secret string for generating unique keys"
 msgstr "Cadena secreta per congrear de claus unencas"
 
 # nlsref 16,12
-#: src/List.pm:444
+#: src/List.pm:445
 msgid "Creation of the list"
 msgstr "Creacion de la tièra"
 
-#: src/List.pm:455
+#: src/List.pm:456
 msgid "internal identifier"
 msgstr ""
 
-#: src/List.pm:463
+#: src/List.pm:464
 msgid "label"
 msgstr ""
 
-#: src/List.pm:469
+#: src/List.pm:470
 msgid "additional comment"
 msgstr ""
 
-#: src/List.pm:476
+#: src/List.pm:477
 #, fuzzy
 msgid "type"
 msgstr "Tipe"
 
-#: src/List.pm:482
+#: src/List.pm:483
 msgid "possible attribute values (if enum is used)"
 msgstr ""
 
-#: src/List.pm:487
+#: src/List.pm:488
 msgid "is the attribute optionnal ?"
 msgstr ""
 
-#: src/List.pm:493
+#: src/List.pm:494
 msgid "Custom user attributes"
 msgstr ""
 
 # nlsref 16,16
-#: src/List.pm:499
+#: src/List.pm:500
 msgid "Custom header field"
 msgstr "Camps d'encap personalizats"
 
 # nlsref 16,17
-#: src/List.pm:504
+#: src/List.pm:505
 msgid "Subject tagging"
 msgstr "Marquage du sujet des messages"
 
-#: src/List.pm:518
+#: src/List.pm:519
 #, fuzzy
 msgid "custom parameters"
 msgstr "Paramètres incorrèctes"
 
 # nlsref 16,20
-#: src/List.pm:1091 src/List.pm:1131 src/List.pm:530 src/List.pm:593
-#: src/List.pm:628
+#: src/List.pm:1092 src/List.pm:1132 src/List.pm:531 src/List.pm:594
+#: src/List.pm:629
 msgid "visibility"
 msgstr "visibilitat"
 
 # nlsref 16,18
-#: src/List.pm:534
+#: src/List.pm:535
 msgid "Subscription profile"
 msgstr "Perfil d'abonament"
 
 # nlsref 16,21
-#: src/List.pm:538
+#: src/List.pm:539
 msgid "Who can delete subscribers"
 msgstr "Qual pòt suprimir d'abonats"
 
 # nlsref 16,23
-#: src/List.pm:545
+#: src/List.pm:419 src/List.pm:546
 msgid "days"
 msgstr "jorns"
 
 # nlsref 16,24
-#: src/List.pm:551
+#: src/List.pm:552
 msgid "hour"
 msgstr "ora"
 
 # nlsref 16,25
-#: src/List.pm:557
+#: src/List.pm:558
 msgid "minute"
 msgstr "minuta"
 
 # nlsref 16,22
-#: src/List.pm:561
+#: src/List.pm:562
 msgid "Digest frequency"
 msgstr "Frequéncia de las compilacions"
 
-#: src/List.pm:569
+#: src/List.pm:570
 msgid "Digest maximum number of messages"
 msgstr "Nombre maximum de messatges per compilacion"
 
 # nlsref 15,4
-#: src/List.pm:576
+#: src/List.pm:577
 #, fuzzy
 msgid "Inclusions timeout for message distribution"
 msgstr "Difusion de messatge"
 
 # nlsref 16,29
-#: src/List.pm:1096 src/List.pm:598
+#: src/List.pm:1097 src/List.pm:599
 msgid "name"
 msgstr "nom"
 
 # nlsref 16,30
-#: src/List.pm:603
+#: src/List.pm:604
 msgid "private information"
 msgstr "informacion privada"
 
 # nlsref 16,88
-#: src/List.pm:638
+#: src/List.pm:639
 msgid "Periodical subscription expiration task"
 msgstr "Prètzfach periodic d'expiracion dels abonaments"
 
 # nlsref 16,31
-#: src/List.pm:649
+#: src/List.pm:650
 msgid "Attachment type"
 msgstr "Mena d'estacament"
 
 # nlsref 16,32
-#: src/List.pm:653
+#: src/List.pm:654
 msgid "Forced reply address"
 msgstr "Adreiça de response forçada"
 
 # nlsref 16,33
-#: src/List.pm:659
+#: src/List.pm:660
 msgid "Internet domain"
 msgstr "Domèni internet"
 
 # nlsref 16,34
-#: src/List.pm:665
+#: src/List.pm:666
 msgid "File inclusion"
 msgstr "Inclusion d'un fichièr"
 
-#: src/List.pm:669
+#: src/List.pm:670
 msgid "data location URL"
 msgstr "URL de las donadas"
 
 # nlsref 16,38
-#: src/List.pm:675 src/List.pm:708 src/List.pm:789 src/List.pm:967
+#: src/List.pm:676 src/List.pm:709 src/List.pm:790 src/List.pm:968
 msgid "remote user"
 msgstr "usancièr distant"
 
 # nlsref 16,39
-#: src/List.pm:682 src/List.pm:714 src/List.pm:795 src/List.pm:972
+#: src/List.pm:683 src/List.pm:715 src/List.pm:796 src/List.pm:973
 msgid "remote password"
 msgstr "mot de santa Clara distant"
 
 # nlsref 16,209
-#: src/List.pm:687 src/List.pm:750 src/List.pm:874 src/List.pm:928
-#: src/List.pm:986
+#: src/List.pm:688 src/List.pm:751 src/List.pm:875 src/List.pm:929
+#: src/List.pm:987
 msgid "short name for this source"
 msgstr "nom brac per aquela sorça"
 
 # nlsref 16,206
-#: src/List.pm:692
+#: src/List.pm:693
 msgid "Remote file inclusion"
 msgstr "Inclusion d'un fichièr distant"
 
 # nlsref 16,36
-#: src/List.pm:698 src/List.pm:779 src/List.pm:906 src/List.pm:945
+#: src/List.pm:699 src/List.pm:780 src/List.pm:907 src/List.pm:946
 msgid "remote host"
 msgstr "servidor distant"
 
 # nlsref 16,37
-#: src/List.pm:703 src/List.pm:784 src/List.pm:912
+#: src/List.pm:704 src/List.pm:785 src/List.pm:913
 msgid "remote port"
 msgstr "pòrt distant"
 
 # nlsref 16,40
-#: src/List.pm:718
+#: src/List.pm:719
 msgid "suffix"
 msgstr "sufixe"
 
 # nlsref 16,41
-#: src/List.pm:724
+#: src/List.pm:725
 msgid "filter"
 msgstr "filtre"
 
 # nlsref 16,42
-#: src/List.pm:730
+#: src/List.pm:731
 msgid "extracted attribute"
 msgstr "atribut de traire"
 
 # nlsref 16,43
-#: src/List.pm:735
+#: src/List.pm:736
 msgid "selection (if multiple)"
 msgstr "seleccion (se multipla)"
 
 # nlsref 16,97
-#: src/List.pm:740
+#: src/List.pm:741
 msgid "search scope"
 msgstr "portada de la recèrca"
 
 # nlsref 16,98
-#: src/List.pm:746
+#: src/List.pm:747
 msgid "connection timeout"
 msgstr "relambi de connexion (timeout)"
 
 # nlsref 16,35
-#: src/List.pm:774
+#: src/List.pm:775
 msgid "LDAP query inclusion"
 msgstr "Inclusion d'una requista LDAP "
 
 # nlsref 16,140
-#: src/List.pm:799
+#: src/List.pm:800
 msgid "first-level suffix"
 msgstr "sufixe (1r nivèl)"
 
 # nlsref 16,141
-#: src/List.pm:805
+#: src/List.pm:806
 msgid "first-level filter"
 msgstr "filtre (1r nivèl)"
 
 # nlsref 16,142
-#: src/List.pm:810
+#: src/List.pm:811
 msgid "first-level extracted attribute"
 msgstr "atribut de traire (1r nivèl)"
 
 # nlsref 16,143
-#: src/List.pm:815
+#: src/List.pm:816
 msgid "first-level selection"
 msgstr "seleccion (1r nivèl)"
 
 # nlsref 16,197
-#: src/List.pm:820
+#: src/List.pm:821
 msgid "first-level search scope"
 msgstr "portada de la recèrca (1r nivèl)"
 
 # nlsref 16,198
-#: src/List.pm:826
+#: src/List.pm:827
 msgid "first-level connection timeout"
 msgstr "relambi de connexion (1r nivèl)"
 
 # nlsref 16,201
-#: src/List.pm:832
+#: src/List.pm:833
 msgid "first-level regular expression"
 msgstr "expression regulara (1r nivèl)"
 
 # nlsref 16,144
-#: src/List.pm:836
+#: src/List.pm:837
 msgid "second-level suffix template"
 msgstr "sufixe (2nd nivèl)"
 
 # nlsref 16,145
-#: src/List.pm:842
+#: src/List.pm:843
 msgid "second-level filter template"
 msgstr "filtre (2nd nivèl)"
 
 # nlsref 16,146
-#: src/List.pm:848
+#: src/List.pm:849
 msgid "second-level extracted attribute"
 msgstr "atribut de traire (2nd nivèl)"
 
 # nlsref 16,147
-#: src/List.pm:853
+#: src/List.pm:854
 msgid "second-level selection"
 msgstr "seleccion (2nd nivèl)"
 
 # nlsref 16,199
-#: src/List.pm:858
+#: src/List.pm:859
 msgid "second-level search scope"
 msgstr "portada de la recèrca (2nd nivèl)"
 
 # nlsref 16,200
-#: src/List.pm:864
+#: src/List.pm:865
 msgid "second-level connection timeout"
 msgstr "Relambi de connexion (2nd nivèl)"
 
 # nlsref 16,202
-#: src/List.pm:870
+#: src/List.pm:871
 msgid "second-level regular expression"
 msgstr "expression regulara (2nd niveau)"
 
 # nlsref 16,135
-#: src/List.pm:896
+#: src/List.pm:897
 msgid "LDAP 2-level query inclusion"
 msgstr "Inclusion d'una requista LDAP (nivèl 2)"
 
 # nlsref 16,44
-#: src/List.pm:901
+#: src/List.pm:902
 msgid "List inclusion"
 msgstr "Inclusion d'una tièra"
 
 # nlsref 16,207
-#: src/List.pm:918
+#: src/List.pm:919
 msgid "remote path of sympa list dump"
 msgstr "adreiça distanta ont se còpia la tièra sympa"
 
 # nlsref 16,208
-#: src/List.pm:923
+#: src/List.pm:924
 msgid "certificate for authentication by remote Sympa"
 msgstr "Certificat per autentificacion de la connexion"
 
 # nlsref 16,206
-#: src/List.pm:935
+#: src/List.pm:936
 msgid "remote list inclusion"
 msgstr "inclusion de tièra distanta"
 
 # nlsref 16,46
-#: src/List.pm:940
+#: src/List.pm:941
 msgid "database type"
 msgstr "mena de basa"
 
 # nlsref 16,46
-#: src/List.pm:949
+#: src/List.pm:950
 msgid "database port"
 msgstr "pòrt de la basa"
 
 # nlsref 16,48
-#: src/List.pm:954
+#: src/List.pm:955
 msgid "database name"
 msgstr "nom de la basa"
 
 # nlsref 16,94
-#: src/List.pm:958
+#: src/List.pm:959
 msgid "connection options"
 msgstr "paramètres de connexion"
 
 # nlsref 16,148
-#: src/List.pm:963
+#: src/List.pm:964
 msgid "environment variables for database connexion"
 msgstr "variablas d'entorn per se connectar a la basa de donadas"
 
 # nlsref 16,51
-#: src/List.pm:978
+#: src/List.pm:979
 msgid "SQL query"
 msgstr "requista SQL"
 
-#: src/List.pm:982
+#: src/List.pm:983
 msgid "Directory where the database is stored (used for DBD::CSV only)"
 msgstr "Repertòri ont es registrada la basa de donadas (sonque amb DBD::CSV)"
 
 # nlsref 16,45
-#: src/List.pm:993
+#: src/List.pm:994
 msgid "SQL query inclusion"
 msgstr "Inclusion d'una requista SQL"
 
 # nlsref 16,53
-#: src/List.pm:997
+#: src/List.pm:998
 msgid "Who can view list information"
 msgstr "Qual pòt cosultar las informacions de la tièra"
 
 # nlsref 16,54
-#: src/List.pm:1001
+#: src/List.pm:1002
 msgid "Who can invite people"
 msgstr "Qual pòt convidar a s'abonar"
 
 # nlsref 16,55
-#: src/List.pm:1007
+#: src/List.pm:1008
 msgid "Language of the list"
 msgstr "Lenga de la tièra"
 
-#: src/List.pm:1032
+#: src/List.pm:1033
 msgid "Regular expression applied to prevent loops with robots"
 msgstr ""
 "Expression regulara aplicada per evitar las boclas amb lo robòt de las listas"
 
 # nlsref 16,56
-#: src/List.pm:1039
+#: src/List.pm:1040
 msgid "Maximum message size"
 msgstr "Talha maxima dels messatges"
 
-#: src/List.pm:1045
+#: src/List.pm:1046
 msgid "Message topic name"
 msgstr "Nom del tèma"
 
-#: src/List.pm:1050
+#: src/List.pm:1051
 msgid "Message topic keywords"
 msgstr "Mots clau per l'identificacion dels messatges"
 
-#: src/List.pm:1056
+#: src/List.pm:1057
 msgid "Message topic title"
 msgstr "Títol del tèma"
 
 # nlsref 16,74
-#: src/List.pm:1061
+#: src/List.pm:1062
 msgid "Topics for message categorization"
 msgstr "Tèmas per categorizar los messatges"
 
-#: src/List.pm:1067
+#: src/List.pm:1068
 msgid "Defines to which part of messages topic keywords are applied"
 msgstr ""
 "Vos cal definir ont volètz que los mots-claus sián cercats dins los messatges"
 
 # nlsref 15,4
-#: src/List.pm:1074
+#: src/List.pm:1075
 msgid "Message tagging"
 msgstr "Marcatge dels messatges (tèmas)"
 
 # nlsref 16,61
-#: src/List.pm:1101
+#: src/List.pm:1102
 msgid "private informations"
 msgstr "informacions privadas"
 
 # nlsref 16,62
-#: src/List.pm:1106 src/List.pm:1136
+#: src/List.pm:1107 src/List.pm:1137
 msgid "profile"
 msgstr "perfil"
 
 # nlsref 16,63
-#: src/List.pm:1147
+#: src/List.pm:1148
 msgid "Priority"
 msgstr "Prioritat de la tièra"
 
 # nlsref 16,64
-#: src/List.pm:1151
+#: src/List.pm:1152
 msgid "Who can start a remind process"
 msgstr "Qual pòt amodar un procès de rampèl dels abonaments"
 
-#: src/List.pm:1156
+#: src/List.pm:1157
 msgid "Return-path of the REMIND command"
 msgstr "Adreça de retorn per la comanda REMIND"
 
 # nlsref 16,66
-#: src/List.pm:1180 src/List.pm:1200
+#: src/List.pm:1181 src/List.pm:1201
 msgid "Reply address"
 msgstr "Adreiça de responsa"
 
 # nlsref 16,91
-#: src/List.pm:1186
+#: src/List.pm:1187
 msgid "value"
 msgstr "valor"
 
 # nlsref 16,92
-#: src/List.pm:1191
+#: src/List.pm:1192
 msgid "other email address"
 msgstr "autra adreiça de messatjariá"
 
 # nlsref 16,93
-#: src/List.pm:1196
+#: src/List.pm:1197
 msgid "respect of existing header field"
 msgstr "respectar lo camp d'encap existent"
 
 # nlsref 16,67
-#: src/List.pm:1205
+#: src/List.pm:1206
 msgid "Who can review subscribers"
 msgstr "Qual pòt consultar la tièra dels abonats"
 
 # nlsref 16,16
-#: src/List.pm:1212
+#: src/List.pm:1213
 msgid "RFC 2369 Header fields"
 msgstr "Camps d'encap compatibles RFC 2369"
 
 # nlsref 16,68
-#: src/List.pm:1216
+#: src/List.pm:1217
 msgid "Who can send messages"
 msgstr "Qual pòt difusir de messatges"
 
 # nlsref 16,69
-#: src/List.pm:1223
+#: src/List.pm:1224
 msgid "Serial number of the config"
 msgstr "Numèro de sèria de la configuracion"
 
 # nlsref 16,86
-#: src/List.pm:1228
+#: src/List.pm:1229
 msgid "Who can view"
 msgstr "Qual pòt consultar"
 
 # nlsref 16,87
-#: src/List.pm:1232
+#: src/List.pm:1233
 msgid "Who can edit"
 msgstr "Qual pòt editar"
 
 # nlsref 16,203
-#: src/List.pm:1239 src/List.pm:1338
+#: src/List.pm:1240 src/List.pm:1339
 msgid "quota"
 msgstr "qüòta"
 
 # nlsref 16,205
-#: src/List.pm:1248 src/List.pm:1253
+#: src/List.pm:1249 src/List.pm:1254
 msgid "email address protection method"
 msgstr "biais d'aparar las adreiças (contra los spam)"
 
 # nlsref 16,71
-#: src/List.pm:1259
+#: src/List.pm:1260
 msgid "Status of the list"
 msgstr "Estatut de la tièra"
 
 # nlsref 16,72
-#: src/List.pm:1266
+#: src/List.pm:1267
 msgid "Subject of the list"
 msgstr "Objècte de la tièra"
 
 # nlsref 16,73
-#: src/List.pm:1270
+#: src/List.pm:1271
 msgid "Who can subscribe to the list"
 msgstr "Qual se pòt abonar"
 
 # nlsref 16,74
-#: src/List.pm:1276
+#: src/List.pm:1277
 msgid "Topics for the list"
 msgstr "Categoria de la tièra"
 
 # nlsref 16,75
-#: src/List.pm:1283
+#: src/List.pm:1284
 msgid "Inclusions timeout"
 msgstr "Expiracion de las inclusions"
 
 # nlsref 16,76
-#: src/List.pm:1287
+#: src/List.pm:1288
 msgid "Who can unsubscribe"
 msgstr "Qual se pòt desabonar"
 
 # nlsref 16,77
-#: src/List.pm:1308
+#: src/List.pm:1309
 msgid "Last update of config"
 msgstr "Darrièra actualizacion de la configuracion"
 
 # nlsref 16,81
-#: src/List.pm:1315
+#: src/List.pm:1316
 msgid "User data source"
 msgstr "Sorça de donadas"
 
-#: src/List.pm:1321
+#: src/List.pm:1322
 msgid "Allow picture display ? (must be enabled for the current robot)"
 msgstr "Activar los avatars ? (una activacion al nivèl del site es obligatòri)"
 
 # nlsref 16,82
-#: src/List.pm:1327
+#: src/List.pm:1328
 msgid "Visibility of the list"
 msgstr "Visibilitat de la tièra"
 
-#: src/List.pm:1343
+#: src/List.pm:1344
 msgid "Maximum number of month archived"
 msgstr "Nombre maximum de meses d'archius"
 
 # nlsref 16,83
-#: src/List.pm:1348
+#: src/List.pm:1349
 msgid "Web archives"
 msgstr "Archius web"
 
 # nlsref 16,85
-#: src/List.pm:1354
+#: src/List.pm:1355
 msgid "Welcome return-path"
 msgstr "Adreiça de retorn del messatge de benvenguda (Welcome return-path)"
 
-#: src/List.pm:1359
+#: src/List.pm:1360
 msgid "percentage of list members in VERP mode"
 msgstr "percentatge dels abonats en mòde VERP"
 
+#: src/List.pm:359 src/List.pm:366
+#, fuzzy
+msgid "%"
+msgstr "%A"
+
+#: src/List.pm:377 src/List.pm:398
+msgid "points"
+msgstr ""
+
 # nlsref 16,29
-#: src/List.pm:509
+#: src/List.pm:510
 #, fuzzy
 msgid "var name"
 msgstr "nom"
 
 # nlsref 16,91
-#: src/List.pm:514
+#: src/List.pm:515
 #, fuzzy
 msgid "var value"
 msgstr "valor"
 
+# nlsref 15,6
+#: src/List.pm:568
+#, fuzzy
+msgid "messages"
+msgstr "# message"
+
+#: src/List.pm:1282 src/List.pm:576 src/List.pm:746 src/List.pm:826
+#: src/List.pm:864
+msgid "seconds"
+msgstr ""
+
 # nlsref 16,81
-#: src/List.pm:1116 src/List.pm:613
+#: src/List.pm:1117 src/List.pm:614
 msgid "the datasource"
 msgstr "font de las donadas"
 
-#: src/List.pm:1121 src/List.pm:618
+#: src/List.pm:1122 src/List.pm:619
 msgid "datasource parameters"
 msgstr "Paramètres de la font de donadas"
 
-#: src/List.pm:634
+#: src/List.pm:635
 msgid "Moderators defined in an external datasource"
 msgstr "Los moderators son definits via una sorga de donadas extèrna."
 
 # nlsref 8,7
-#: src/List.pm:643
+#: src/List.pm:644
 msgid "Family name"
 msgstr "Nom de la familha"
 
-#: src/List.pm:756 src/List.pm:880
+#: src/List.pm:757 src/List.pm:881
 msgid "use SSL (LDAPS)"
 msgstr "Se servir de SSL (LDAPS)"
 
 # nlsref 16,45
-#: src/List.pm:761 src/List.pm:885
+#: src/List.pm:762 src/List.pm:886
 msgid "SSL version"
 msgstr "Version de SSL"
 
-#: src/List.pm:766 src/List.pm:890
+#: src/List.pm:767 src/List.pm:891
 msgid "SSL ciphers used"
 msgstr "Algorismes de chiframent utilizats"
 
-#: src/List.pm:1012 src/List.pm:1293
+#: src/List.pm:1013 src/List.pm:1294
 msgid "epoch date"
 msgstr "data importanta"
 
-#: src/List.pm:1016 src/List.pm:1298
+#: src/List.pm:1017 src/List.pm:1299
 msgid "date"
 msgstr "data"
 
 # nlsref 16,53
-#: src/List.pm:1021
+#: src/List.pm:1022
 msgid "who ran the instantiation"
 msgstr "qual a fach una instància de la lista"
 
-#: src/List.pm:1025
+#: src/List.pm:1026
 msgid "Latest family instantiation"
 msgstr "Darrièra representacion (instanciacion) de la familha"
 
-#: src/List.pm:1141
+#: src/List.pm:1038
+#, fuzzy
+msgid "bytes"
+msgstr "Al se reveire !"
+
+#: src/List.pm:1142
 msgid "Owners defined in an external datasource"
 msgstr "Los  proprietaris son definits via una sorga de donadas"
 
 # nlsref 16,88
-#: src/List.pm:1160
+#: src/List.pm:1161
 msgid "Periodical subscription reminder task"
 msgstr "Prètzfach periodic de rampèl dels abonaments"
 
-#: src/List.pm:1165
+#: src/List.pm:1166
 msgid "Incoming SMTP headers fields to be removed"
 msgstr ""
 
-#: src/List.pm:1172
+#: src/List.pm:1173
 msgid "Outgoing SMTP headers fields to be removed"
 msgstr ""
 
+#: src/List.pm:1239 src/List.pm:1338
+msgid "Kbytes"
+msgstr ""
+
 # nlsref 16,77
-#: src/List.pm:1304
+#: src/List.pm:1305
 msgid "who updated the config"
 msgstr "qual a actualizar lo fichièr de configuracion"
 
 #. This entry is a date/time format
 #. Check the strftime manpage for format details : http://docs.freebsd.org/info/gawk/gawk.info.Time_Functions.html
-#: src/List.pm:2789
+#: src/List.pm:2790
 msgid "%a, %d %b %Y %H:%M:%S"
 msgstr "%a, %d %b %Y %H:%M:%S"
 
 #. This entry is a date/time format
 #. Check the strftime manpage for format details : http://docs.freebsd.org/info/gawk/gawk.info.Time_Functions.html
-#: src/List.pm:2790
+#: src/List.pm:2791
 msgid "%a, %d %b %Y"
 msgstr "%a, %d %b %Y"
 
 #. This entry is a date/time format
 #. Check the strftime manpage for format details : http://docs.freebsd.org/info/gawk/gawk.info.Time_Functions.html
-#: src/List.pm:2976 src/List.pm:2977 src/List.pm:2981
-#: wwsympa/wwsympa.fcgi:10605 wwsympa/wwsympa.fcgi:10674
-#: wwsympa/wwsympa.fcgi:10876 wwsympa/wwsympa.fcgi:11206
-#: wwsympa/wwsympa.fcgi:15005 wwsympa/wwsympa.fcgi:15742
-#: wwsympa/wwsympa.fcgi:15743 wwsympa/wwsympa.fcgi:4786
-#: wwsympa/wwsympa.fcgi:4787 wwsympa/wwsympa.fcgi:5947
-#: wwsympa/wwsympa.fcgi:6943 wwsympa/wwsympa.fcgi:7477
-#: wwsympa/wwsympa.fcgi:7514 wwsympa/wwsympa.fcgi:7516
-#: wwsympa/wwsympa.fcgi:7966 wwsympa/wwsympa.fcgi:7967
-#: wwsympa/wwsympa.fcgi:8001 wwsympa/wwsympa.fcgi:8002
-#: wwsympa/wwsympa.fcgi:8181 wwsympa/wwsympa.fcgi:8182
+#: src/List.pm:2977 src/List.pm:2978 src/List.pm:2982
+#: wwsympa/wwsympa.fcgi:10779 wwsympa/wwsympa.fcgi:10848
+#: wwsympa/wwsympa.fcgi:11050 wwsympa/wwsympa.fcgi:11387
+#: wwsympa/wwsympa.fcgi:15226 wwsympa/wwsympa.fcgi:15940
+#: wwsympa/wwsympa.fcgi:15941 wwsympa/wwsympa.fcgi:4701
+#: wwsympa/wwsympa.fcgi:4702 wwsympa/wwsympa.fcgi:6083
+#: wwsympa/wwsympa.fcgi:7103 wwsympa/wwsympa.fcgi:7637
+#: wwsympa/wwsympa.fcgi:7674 wwsympa/wwsympa.fcgi:7676
+#: wwsympa/wwsympa.fcgi:8140 wwsympa/wwsympa.fcgi:8141
+#: wwsympa/wwsympa.fcgi:8175 wwsympa/wwsympa.fcgi:8176
+#: wwsympa/wwsympa.fcgi:8355 wwsympa/wwsympa.fcgi:8356
 msgid "%d %b %Y"
 msgstr "%d %b %Y"
 
@@ -8628,31 +8817,31 @@ msgid "[Image%s]"
 msgstr "[ Imatge %s ]"
 
 # nlsref 3,1
-#: src/sympa.pl:2092
+#: src/sympa.pl:2093
 msgid "Unable to access directory %s : %m"
 msgstr "Impossible d'accedir al repertòri %s : %m"
 
-#: src/tt2.pl:224
+#: src/tt2.pl:213
 msgid "(unknown date)"
 msgstr "(data inconeguda)"
 
 #. This entry is a date/time format
 #. Check the strftime manpage for format details : http://docs.freebsd.org/info/gawk/gawk.info.Time_Functions.html
-#: wwsympa/wwsympa.fcgi:994
+#: wwsympa/wwsympa.fcgi:1000
 msgid "%H:%M:%S"
 msgstr "%H:%M:%S"
 
 #. This entry is a date/time format
 #. Check the strftime manpage for format details : http://docs.freebsd.org/info/gawk/gawk.info.Time_Functions.html
-#: wwsympa/SympaSession.pm:392 wwsympa/SympaSession.pm:393
-#: wwsympa/wwsympa.fcgi:11430 wwsympa/wwsympa.fcgi:11563
-#: wwsympa/wwsympa.fcgi:13876 wwsympa/wwsympa.fcgi:7437
+#: wwsympa/SympaSession.pm:435 wwsympa/SympaSession.pm:436
+#: wwsympa/wwsympa.fcgi:11611 wwsympa/wwsympa.fcgi:11744
+#: wwsympa/wwsympa.fcgi:14057 wwsympa/wwsympa.fcgi:7597
 msgid "%d %b %y  %H:%M"
 msgstr "%d %b %y  %H:%M"
 
 #. This entry is a date/time format
 #. Check the strftime manpage for format details : http://docs.freebsd.org/info/gawk/gawk.info.Time_Functions.html
-#: wwsympa/wwsympa.fcgi:15387 wwsympa/wwsympa.fcgi:15388
+#: wwsympa/wwsympa.fcgi:15585 wwsympa/wwsympa.fcgi:15586
 msgid "%Y/%m/%d/%H/%M/%S"
 msgstr "%d/%m/%Y/%H/%M/%S"
 
@@ -8831,6 +9020,65 @@ msgstr "Copar la recepcion dels messatges (es util pendent las vacanças)"
 msgid "you do not receive your own posts"
 msgstr "per recebre pas los vòstres messatges"
 
+#: web_tt2/change_email.tt2:3
+msgid "You will receive an email, reminding you your password."
+msgstr "Anatz recebre un messatge de rampèl de vòstre mot de santa Clara."
+
+#: web_tt2/change_email.tt2:5
+msgid ""
+"To confirm your email address change, please enter the password\n"
+"you received below :"
+msgstr ""
+"Per confirmar vòstre cambiament d'adreiça, mercés de sasir \n"
+"çai jos lo mot de santa Clara qu'avètz recebut per corrièr electronic :"
+
+#: web_tt2/change_email.tt2:12
+msgid "Change my email address"
+msgstr "Cambiar mon adreiça electronica"
+
+# nlsref 15,7
+#: web_tt2/manage_template.tt2:4
+#, fuzzy
+msgid "Modify or Delete existing messages"
+msgstr "messatge de refús pel moderator"
+
+#: web_tt2/manage_template.tt2:27
+#, fuzzy
+msgid "Create New Reject Messages"
+msgstr "Los darrièrs messatges"
+
+# nlsref 15,18
+#: web_tt2/manage_template.tt2:31
+#, fuzzy
+msgid "Default Template"
+msgstr "Garbi sorga"
+
+#: web_tt2/modindex.tt2:40
+msgid "Click Here"
+msgstr ""
+
+#: web_tt2/pref.tt2:67
+msgid "Other email address :"
+msgstr "Autra adreiça electronica :"
+
+#. (previous_email,new_email)
+#: mail_tt2/listmaster_notification.tt2:168
+msgid ""
+"User %1 has changed his owner/editor email address to %2. This changed has "
+"been performed to the following lists :"
+msgstr ""
+
+#: mail_tt2/moderate.tt2:16
+msgid "This message as been tagued as a spam"
+msgstr ""
+
+#: web_tt2/modindex.tt2:16
+msgid ""
+"You should probably not reject message detected as spam with notification "
+"because the message sender is probably spoofed. Do you really want to reject "
+"thoses messages with notification ?"
+msgstr ""
+
 #: web_tt2/create_list_request.tt2:6
 msgid ""
 "You can create a list, using an existing list as a template ; the list "
@@ -8845,18 +9093,6 @@ msgid ""
 "choose a list template that will preset most of the list parameters "
 "according to the list usage you plans. "
 msgstr ""
-
-#. (replyto,keyauth,list.name,who,gecos)-)
-#: mail_tt2/listowner_notification.tt2:73
-#, fuzzy
-msgid ""
-"\n"
-"If prefered, you can accept this subscription request sending an email to %1 "
-"with the following subject :\n"
-"AUTH %2 ADD %3 %4 %5\n"
-msgstr ""
-"\n"
-"o mandatz un corrièr a %1@%2 amb lo subjècte seguent :\n"
 
 #. (ticket_context.status)
 #: web_tt2/ticket.tt2:13
@@ -8878,6 +9114,132 @@ msgid ""
 "Someone, probably you, requested to allocate or renew your password for your "
 "list server account %1. (This request cames from host %2 at %3)."
 msgstr ""
+
+#~ msgid "Password for %1"
+#~ msgstr "Mot de santa Clara per %1"
+
+#~ msgid "See your subscriptions with the following email addresses"
+#~ msgstr "Veire vòstres abonaments amb las adreiças seguentas"
+
+#~ msgid "Unify your subscriptions with the email"
+#~ msgstr "Unificar vòstre abonaments amb l'adreiça"
+
+#~ msgid ""
+#~ "That is to say you are using a unique email address in Sympa for your "
+#~ "subscriptions and preferences"
+#~ msgstr ""
+#~ "Valent a dire emplegar una adreiça unenca a Sympa per totes vòstres "
+#~ "abonaments vòstras preferéncias"
+
+#~ msgid "Validate"
+#~ msgstr "Validar"
+
+#, fuzzy
+#~ msgid "Do you really want to delete this reject message?"
+#~ msgstr "Sètz segur(a) de voler suprimir aquel messatge ?"
+
+#, fuzzy
+#~ msgid "Delete Template"
+#~ msgstr "Los garbis"
+
+#, fuzzy
+#~ msgid "Modify Template"
+#~ msgstr "Los garbis"
+
+#, fuzzy
+#~ msgid "Template Name :"
+#~ msgstr "Nom del garbi :"
+
+#, fuzzy
+#~ msgid "Save Template"
+#~ msgstr "Los garbis"
+
+#~ msgid "Your other email addresses"
+#~ msgstr "Vòstras adreiças electronicas alternativas"
+
+#~ msgid "Password :"
+#~ msgstr "Mot de santa Clara :"
+
+#~ msgid ""
+#~ "Another email address, that should be known by Sympa and will be "
+#~ "recognized by Sympa as an alternate email address for you. All your email "
+#~ "addressed will also be grouped by Sympa with your primary email address "
+#~ "to unify your subscriptions"
+#~ msgstr ""
+#~ "Aquela autra adreiça electronica, que Sympa deu conéisser, serà "
+#~ "reconeguda coma una adreça alternativa. Poiretz tanben unificar vòstres "
+#~ "abonament amb vòstra adreça principala."
+
+#~ msgid "del"
+#~ msgstr "suprimir"
+
+#~ msgid "List %1 : Named filter error"
+#~ msgstr "Lista %1 : Error de filtre"
+
+#~ msgid ""
+#~ "The %1 named filter could not be evaluated. The list %2 is using it for "
+#~ "some authorization scenario."
+#~ msgstr ""
+#~ "Lo filtre a pas pogut èsser avalorat. La lista %2 utiliza aqueste filtre "
+#~ "dins un scenari d'autorizacion."
+
+#~ msgid "Choose your authentication server"
+#~ msgstr "Causir vòstre servidor d'autentificacion"
+
+#~ msgid "-Blacklist"
+#~ msgstr "-Liste nègra"
+
+#~ msgid "Required aliases"
+#~ msgstr "Los àlias d'installar"
+
+#~ msgid "Aliases you should install in your mailer"
+#~ msgstr "Los aliasses d'installar"
+
+#~ msgid ""
+#~ "Most mailing list features require your email. Some mailing lists are "
+#~ "hidden to  unidentified persons.<br />\n"
+#~ " In order to benefit from the full services provided by this server, you "
+#~ "probably need to identify yourself first."
+#~ msgstr ""
+#~ "La màger part dels servicis demandan vòstra adreiça electronica. D'unas "
+#~ "tièras demòran escondudas tant que sètz pas identificat(/ada)<br /> \n"
+#~ "Per aprofechar l'accès complet als servicis que prepausa aquel servidor, "
+#~ "vos\n"
+#~ "es plan probable que vos calga d'en primièr vos identificar."
+
+#~ msgid ""
+#~ "To login, select your organization authentication server below.<br />\n"
+#~ "If it is not listed or if you don't have any, login using your email and "
+#~ "password on the right column."
+#~ msgstr ""
+#~ "Per vos identificar, seleccionatz çai sota lo servidor d'autentificacion "
+#~ "de vòstre organisme.<br> \n"
+#~ "Siá pas prepausat aquí, o n'ajatz pas cap, vos podètz identificar en "
+#~ "bailar vòstra adreiça de messatjariá e vòstre mot de santa Clara a la "
+#~ "colomna de drecha."
+
+#~ msgid ""
+#~ "Login with you email address and password. You can request a password "
+#~ "reminder."
+#~ msgstr ""
+#~ "Identificatz-vos en sasir vòstra adreiça electronica e vòstre mot de "
+#~ "santa Clara. Podètz demandar un messatge per vos remembrar vòstre mot de "
+#~ "santa Clara."
+
+#~ msgid ""
+#~ "Please select one or more topic(s) that corresponds to the messages you "
+#~ "wish to distribute :"
+#~ msgstr "Seleccionatz un o mai d'un tèma per descriure lo messatge vòstre :"
+
+#, fuzzy
+#~ msgid ""
+#~ "\n"
+#~ "If prefered, you can accept this subscription request sending an email to "
+#~ "%1 with the following subject :\n"
+#~ "AUTH %2 ADD %3 %4 %5\n"
+#~ msgstr ""
+#~ "\n"
+#~ "o mandatz un corrièr a %1@%2 amb lo subjècte seguent :\n"
 
 #~ msgid "bounce score"
 #~ msgstr "taus d'error"
@@ -10727,9 +11089,6 @@ msgstr ""
 #~ msgid "add need authentication"
 #~ msgstr "apondre un abonament (add) demanda una autentificacion "
 
-#~ msgid "anyone without authentication"
-#~ msgstr "qual se vòl sens cap d'autentificacion"
-
 #~ msgid "without authentication, notification is sent to owners"
 #~ msgstr ""
 #~ "sens autentificacion (un messatge de notificacion se manda als "
@@ -10954,3 +11313,6 @@ msgstr ""
 #~ "Sympa vos a mandat un corrièr electronic. Intratz çai jos lo \n"
 #~ "\tmot de santa Clara qu'avètz recebut. Aquò confirmarà vòstre abonament a "
 #~ "la tièra %1 \n"
+
+#~ msgid "anyone without authentication"
+#~ msgstr "qual se vòl sens cap d'autentificacion"
