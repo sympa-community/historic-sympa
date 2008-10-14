@@ -51,7 +51,7 @@ my @valid_options = qw(
 		       db_options db_passwd db_type db_user db_port db_additional_subscriber_fields db_additional_user_fields
 		       default_shared_quota default_archive_quota default_list_priority distribution_mode edit_list email etc
 		       global_remind home host ignore_x_no_archive_header_feature domain lang listmaster listmaster_email localedir log_socket_type log_level 
-		       logo_html_definition 
+		       logo_html_definition logs_expiration_period
                        main_menu_custom_button_1_title main_menu_custom_button_1_url main_menu_custom_button_1_target 
                        main_menu_custom_button_2_title main_menu_custom_button_2_url main_menu_custom_button_2_target 
                        main_menu_custom_button_3_title main_menu_custom_button_3_url main_menu_custom_button_3_target  
