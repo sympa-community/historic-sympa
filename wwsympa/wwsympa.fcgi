@@ -1089,9 +1089,6 @@ my $birthday = time ;
      }
      $param->{'robot_title'} = &Conf::get_robot_conf($robot,'title');
 
-     ## store in session table this session contexte
-     $session->store ;
-
 	 
 
      ## Do not manage cookies at this level if content was already sent
@@ -1108,6 +1105,10 @@ my $birthday = time ;
 	 if ($delay == 0) {
 	     $delay = 'session';
 	 }
+
+	 ## store in session table this session contexte
+	 $session->store ;
+	 
 	 unless ($session->set_cookie($param->{'cookie_domain'},$delay)) {
 	     &wwslog('notice', 'Could not set HTTP cookie');
 	 }
