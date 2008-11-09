@@ -161,8 +161,6 @@ LOG_SOCKET_TYPE	=	unix
 
 all:	warning checkperl checkcpan sources wrapper soap_wrapper man locale
 
-rpm: build_rh_rpm build_mdk_rpm
-
 warning:
 	@echo "######################## W A R N I N G ######################"; \
 	echo "## If it is the first time you install Sympa on this server :"; \
@@ -486,85 +484,6 @@ installconfig:
 	DESTDIR=$(DESTDIR); export DESTDIR; \
 	$(PERL) -I $(DESTDIR)$(LIBDIR) $(DESTDIR)$(SBINDIR)/sympa_wizard.pl; \
 	fi
-
-build_rh_rpm: clean
-	@echo "Building RedHat RPM in $(RPMTOPDIR) ..."
-	@( \
-		cd src/etc/script/ ; \
-		PERL=$(PERL); export PERL; \
-		UMASK=0600; export UMASK; \
-		INSTALLDIR=$(RPMTOPDIR)/SPECS; export INSTALLDIR; \
-		SUFFIX=''; export SUFFIX; \
-		ZIPEXT='gz'; export ZIPEXT; \
-		APPGROUP='System Environment/Daemons'; export APPGROUP; \
-		MTA='smtpdaemon'; export MTA; \
-		HOMEDIR='/var/sympa'; export HOMEDIR; \
-		PIDDIR='/var/run/sympa'; export PIDDIR; \
-		VERSION=$(SYMPA_VERSION); export VERSION; \
-                CONFDIR='/etc'; export CONFDIR; \
-                SENDMAIL_ALIASES='/etc/mail/sympa_aliases'; export SENDMAIL_ALIASES; \
-                MAILERPROGDIR='/etc/smrsh'; export MAILERPROGDIR; \
-		INITDIR='/etc/rc.d/init.d';  export INITDIR; \
-                SPOOLDIR='/var/sympa/spool'; export SPOOLDIR; \
-                BINDIR='/etc/smrsh'; export BINDIR; \
-                SBINDIR='/var/sympa/sbin'; export SBINDIR; \
-                DATADIR='/usr/share/sympa'; export DATADIR; \
-                EXPLDIR='/var/sympa/expl'; export EXPLDIR; \
-                LIBDIR='/usr/lib/sympa/bin'; export LIBDIR; \
-                CGIDIR='/var/www/cgi-bin'; export CGIDIR; \
-                LOCALEDIR='/usr/lib/sympa/locale'; export LOCALEDIR; \
-		SCRIPTDIR='/var/sympa/bin'; export SCRIPTDIR; \
-		LIBEXECDIR='/var/sympa/bin'; export LIBEXECDIR; \
-		SAMPLEDIR='/usr/share/sympa/examples'; export SAMPLEDIR; \
-                ETCDIR='/etc/sympa'; export ETCDIR; \
-		$(PERL) ../../../subst.pl sympa.spec.rh80 \
-	)
-	mv $(RPMTOPDIR)/SPECS/sympa.spec.rh80 $(RPMTOPDIR)/SPECS/sympa.spec
-	@( \
-		cd ..; \
-		tar -cvf $(RPMTOPDIR)/SOURCES/sympa-$(SYMPA_VERSION).tar sympa-$(SYMPA_VERSION); \
-		gzip $(RPMTOPDIR)/SOURCES/sympa-$(SYMPA_VERSION).tar; \
-	)
-	rpmbuild  -ba $(RPMTOPDIR)/SPECS/sympa.spec
-
-build_mdk_rpm: clean
-	@echo "Building Mandrake RPM in $(RPMTOPDIR) ..."
-	@( \
-		cd src/etc/script/ ; \
-		PERL=$(PERL); export PERL; \
-		UMASK=0600; export UMASK; \
-		INSTALLDIR=$(RPMTOPDIR)/SPECS; export INSTALLDIR; \
-		SUFFIX='mdk'; export SUFFIX; \
-		ZIPEXT='bz2'; export ZIPEXT; \
-		APPGROUP='System/Servers'; export APPGROUP; \
-		MTA='MailTransportAgent'; export MTA; \
-		HOMEDIR='/var/lib/sympa'; export HOMEDIR; \
-		VERSION=$(SYMPA_VERSION); export VERSION; \
-                CONFDIR='/etc/sympa'; export CONFDIR; \
-                SENDMAIL_ALIASES='/etc/mail/sympa_aliases'; export SENDMAIL_ALIASES; \
-                MAILERPROGDIR='/usr/lib/sympa/bin'; export MAILERPROGDIR; \
-                PIDDIR='/var/run/sympa'; export PIDDIR; \
-		INITDIR='/etc/rc.d/init.d';  export INITDIR; \
-                SPOOLDIR='/var/spool/sympa'; export SPOOLDIR; \
-                BINDIR='/usr/lib/sympa/bin'; export BINDIR; \
-                SBINDIR='/usr/lib/sympa/bin'; export SBINDIR; \
-                DATADIR='/usr/share/sympa'; export DATADIR; \
-                EXPLDIR='/var/lib/sympa/expl'; export EXPLDIR; \
-                LIBDIR='/usr/lib/sympa/bin'; export LIBDIR; \
-                CGIDIR='/var/www/cgi-bin'; export CGIDIR; \
-                LOCALEDIR='/usr/lib/sympa/locale'; export LOCALEDIR; \
-		SCRIPTDIR='/usr/lib/sympa/bin'; export SCRIPTDIR; \
-		LIBEXECDIR='/usr/lib/sympa/bin'; export LIBEXECDIR; \
-		SAMPLEDIR='/usr/share/sympa/examples'; export SAMPLEDIR; \
-                ETCDIR='/etc/sympa'; export ETCDIR; \
-		$(PERL) ../../../subst.pl sympa.spec \
-	)
-	@( \
-		cd ..; \
-		tar -cvf $(RPMTOPDIR)/SOURCES/sympa-$(SYMPA_VERSION).tar sympa-$(SYMPA_VERSION); \
-		bzip2 $(RPMTOPDIR)/SOURCES/sympa-$(SYMPA_VERSION).tar; \
-	)
-	rpmbuild -ba $(RPMTOPDIR)/SPECS/sympa.spec
 
 tag:	ChangeLog
 	@if [ ! $(NEW_VERSION) ]; then \

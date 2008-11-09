@@ -1,22 +1,17 @@
-%define name sympa
-%define version --VERSION--
-%define release 8--SUFFIX--
-%define home_s --HOMEDIR--
-%define data_s --DATADIR--
-%define conf_s --CONFDIR--
-%define etc_s --ETCDIR--
-%define spoo_s --SPOOLDIR--
+%define name    sympa
+%define version 6.0a.2
+%define release 1
 
-Summary:  Sympa is a powerful multilingual List Manager - LDAP and SQL features.
-Summary(fr): Sympa est un gestionnaire de listes électroniques. 
-Name:  %{name}
+Name:     %{name}
 Version:  %{version}
 Release:  %{release}
-Copyright:  GPL
-Group: --APPGROUP--
-Source:  http://www.sympa.org/distribution/%{name}-%{version}.tar.--ZIPEXT--
-URL: http://www.sympa.org/
-Requires: --MTA--
+Summary:  Sympa is a powerful multilingual List Manager
+Summary(fr): Sympa est un gestionnaire de listes électroniques
+License:  GPL
+Group:    System Environment/Daemons
+URL:      http://www.sympa.org/
+Source:   http://www.sympa.org/distribution/%{name}-%{version}.tar.gz
+Requires: smtpdaemon
 Requires: perl >= 0:5.005
 Requires: perl-MailTools >= 1.14
 Requires: perl-MIME-Base64   >= 1.0
@@ -27,10 +22,6 @@ Requires: perl-DBI    >= 1.06
 Requires: perl-DB_File    >= 1.73
 Requires: perl-ldap >= 0.10
 Requires: perl-CipherSaber >= 0.50
-## Also requires a DBD for the DBMS : we choose MySQL 
-## (perl-DBD-Pg or Perl- Msql-Mysql-modules)
-Requires: MySQL
-Requires: perl-Mysql
 Requires: perl-FCGI    >= 0.48
 Requires: perl-Digest-MD5
 Requires: perl-Convert-ASN1
@@ -46,45 +37,42 @@ Prereq: /usr/sbin/useradd
 Prereq: /usr/sbin/groupadd
 BuildRoot: %{_tmppath}/%{name}-%{version}
 #BuildRequires: openssl-devel >= 0.9.5a
-Prefix: %{_prefix}
 
 %description
-Sympa is scalable and highly customizable mailing list manager. It can cope with big lists
-(200,000 subscribers) and comes with a complete (user and admin) Web interface. It is
-internationalized, and supports the us, fr, de, es, it, fi, and chinese locales. A scripting
-language allows you to extend the behavior of commands. Sympa can be linked to an
-LDAP directory or an RDBMS to create dynamic mailing lists. Sympa provides
-S/MIME-based authentication and encryption.
+Sympa is scalable and highly customizable mailing list manager. It can cope
+with big lists (200,000 subscribers) and comes with a complete (user and admin)
+Web interface. It is internationalized, and supports the us, fr, de, es, it,
+fi, and chinese locales. A scripting language allows you to extend the behavior
+of commands. Sympa can be linked to an LDAP directory or an RDBMS to create
+dynamic mailing lists. Sympa provides S/MIME-based authentication and
+encryption.
 
 Documentation is available under HTML and Latex (source) formats. 
 
 
 %prep
-rm -rf $RPM_BUILD_ROOT
-
 %setup -q
 
 %build
-
 ./configure \
---prefix=--HOMEDIR-- \
---with-confdir=--CONFDIR-- \
---with-etcdir=--ETCDIR-- \
---with-cgidir=--CGIDIR-- \
---with-iconsdir=--ICONSDIR-- \
---with-bindir=--BINDIR-- \
---with-sbindir=--SBINDIR-- \
---with-mandir=%{_mandir} \
---with-libexecdir=--SCRIPTDIR-- \
---with-libdir=--LIBDIR-- \
---with-datadir=--DATADIR-- \
---with-expldir=--EXPLDIR-- \
---with-piddir=--PIDDIR-- \
---with-localedir=--LOCALEDIR-- \
---with-scriptdir=--SCRIPTDIR-- \
---with-sampledir=--SAMPLEDIR-- \
---with-spooldir=--SPOOLDIR-- \
-;make sources 
+    --prefix=/var/sympa \
+    --with-confdir=/etc \
+    --with-etcdir=/etc/sympa \
+    --with-cgidir=/var/www/cgi-bin \
+    --with-iconsdir=--ICONSDIR-- \
+    --with-bindir=/etc/smrsh \
+    --with-sbindir=/var/sympa/sbin \
+    --with-mandir=%{_mandir} \
+    --with-libexecdir=/var/sympa/bin \
+    --with-libdir=/usr/lib/sympa/bin \
+    --with-datadir=/usr/share/sympa \
+    --with-expldir=/var/sympa/expl \
+    --with-piddir=/var/run/sympa \
+    --with-localedir=/usr/lib/sympa/locale \
+    --with-scriptdir=/var/sympa/bin \
+    --with-sampledir=/usr/share/sympa/examples \
+    --with-spooldir=/var/sympa/spool
+make sources 
 
 %install
 rm -rf $RPM_BUILD_ROOT
@@ -133,11 +121,11 @@ fi
 ## Setting Runlevels
 for I in 0 1 2 6; do
         mkdir -p $RPM_BUILD_ROOT/etc/rc.d/rc$I.d
-        ln -s $RPM_BUILD_ROOT--INITDIR--/%{name} $RPM_BUILD_ROOT/etc/rc.d/rc$I.d/K25%{name}
+        ln -s $RPM_BUILD_ROOT/etc/rc.d/init.d/%{name} $RPM_BUILD_ROOT/etc/rc.d/rc$I.d/K25%{name}
 done
 for I in 3 5; do
         mkdir -p $RPM_BUILD_ROOT/etc/rc.d/rc$I.d
-        ln -s $RPM_BUILD_ROOT--INITDIR--/%{name} $RPM_BUILD_ROOT/etc/rc.d/rc$I.d/S95%{name}
+        ln -s $RPM_BUILD_ROOT/etc/rc.d/init.d/%{name} $RPM_BUILD_ROOT/etc/rc.d/rc$I.d/S95%{name}
 done
 
 if [ -e "/var/log/sympa" ] && [ ! -f "/var/log/sympa" ]; then
@@ -182,17 +170,17 @@ if [ -d /etc/logrotate.d ] ;then
 fi
 
 #the directory where sendmail can call queue and bouncequeue
-bin_queue=--BINDIR--
+bin_queue=/etc/smrsh
 
 # eventually, add queue and bouncequeue to sendmail security shell
 if [ -d /etc/smrsh ]; then
   bin_queue=/etc/smrsh
   if [ ! -e /etc/smrsh/queue ]; then
-    ln -s --BINDIR--/queue /etc/smrsh/queue
+    ln -s /etc/smrsh/queue /etc/smrsh/queue
   fi
  
   if [ ! -e /etc/smrsh/bouncequeue ]; then
-    ln -s --BINDIR--/bouncequeue /etc/smrsh/bouncequeue
+    ln -s /etc/smrsh/bouncequeue /etc/smrsh/bouncequeue
   fi
 fi
 
@@ -233,8 +221,8 @@ fi
 # reset the default cookie
 typeset -x secret
 secret=`perl -e "print int(rand(time))"`
-perl -pi -e "s|'cookie',\n|'cookie',|" --SBINDIR--/sympa_wizard.pl
-perl -pi -e "s|'cookie',.*\n|'cookie', 'default' => '${secret}',\n|" --SBINDIR--/sympa_wizard.pl
+perl -pi -e "s|'cookie',\n|'cookie',|" /var/sympa/sbin/sympa_wizard.pl
+perl -pi -e "s|'cookie',.*\n|'cookie', 'default' => '${secret}',\n|" /var/sympa/sbin/sympa_wizard.pl
 
 
 %postun
@@ -276,7 +264,7 @@ done
 %dir %{home_s}
 
 # Where to store the data & config files of the lists
-%dir --EXPLDIR--
+%dir /var/sympa/expl
  
 # Documentation
 %doc %attr(-,root,root) INSTALL README AUTHORS COPYING NEWS ChangeLog
@@ -315,14 +303,14 @@ done
 # Binaries
 # We use a configure where BINDIR = SBINDIR = LIBDIR = LIBEXECDIR
 # aliaswrapper is owned by root, don't change it
-%attr(-,-,-) --BINDIR--/*
-%attr(-,-,-) --SBINDIR--/*
-%attr(-,-,-) --LIBDIR--/*
-%attr(-,-,-) --LIBEXECDIR--/*
+%attr(-,-,-) /etc/smrsh/*
+%attr(-,-,-) /var/sympa/sbin/*
+%attr(-,-,-) /usr/lib/sympa/bin/*
+%attr(-,-,-) /var/sympa/bin/*
 
 # Locales
 #%dir --LOCALEDIR--
---LOCALEDIR--/
+/usr/lib/sympa/locale/
 
 # ATTENTION A VOIR %{_libdir}/sympa/locale/*.po
  
@@ -348,12 +336,12 @@ done
 #%{data_s}/global_task_models/*
  
 # Icons and binaries for Apache
---CGIDIR--/wwsympa.fcgi
---CGIDIR--/sympa_soap_server.fcgi
+/var/www/cgi-bin/wwsympa.fcgi
+/var/www/cgi-bin/sympa_soap_server.fcgi
 --ICONSDIR--/
  
 # Init scripts
-%config(noreplace) %attr(0755,root,root) --INITDIR--/sympa
+%config(noreplace) %attr(0755,root,root) /etc/rc.d/init.d/sympa
 
 # Examples
 #%dir --SAMPLEDIR--
