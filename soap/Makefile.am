@@ -29,6 +29,8 @@ lib_SUBST	=	sympasoap.pm SympaTransport.pm
 
 SRC		=	sympa.wsdl
 
+SYMPASOAP = $(CGIDIR)/sympa_soap_server.fcgi'
+
 all:	sympa_soap_server-wrapper.fcgi
 
 clean: 

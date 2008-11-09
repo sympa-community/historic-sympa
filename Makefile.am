@@ -1,4 +1,4 @@
-# Makefile.am - Top-level Makefile.am for Sympa
+ # Makefile.am - Top-level Makefile.am for Sympa
 # RCS Identication ; $Revision$ ; $Date$ 
 #
 # Sympa - SYsteme de Multi-Postage Automatique
@@ -22,19 +22,10 @@
 #SUBDIRS = src doc wwsympa nls
 
 ## For preparing samples
-HOST		=	`$(PERL) -MSys::Hostname -e "printf '%s', Sys::Hostname::hostname();"`
 COOKIE		=	`$(PERL) -e " print int(rand ( time ))  "`
 PERL_VERSION	=	`$(PERL) -e ' print $$]'`
 
-## Settings used in src/etc/scripts/sympa
-PIDPRE		=	pidof -x
-PIDPOST		=	
-
-CFLAGS	=	-g
-
 main_SRC	=	AUTHORS COPYING ChangeLog INSTALL KNOWNBUGS NEWS README
-
-LOG_SOCKET_TYPE	=	unix
 
 all:	warning checkperl checkcpan sources wrapper soap_wrapper man locale
 
@@ -92,19 +83,17 @@ sources: src/Makefile src/queue.c src/bouncequeue.c src/aliaswrapper.c
 	@echo "Making src"
 	@(cd src && echo "making in src..." && \
 	$(MAKE) \
-	PIDPRE='${PIDPRE}' \
-	PIDPOST='${PIDPOST}' \
 	);
 
 wrapper: src/Makefile src/queue.c src/bouncequeue.c src/aliaswrapper.c
 	@echo "Making wwsympa"
 	@(cd wwsympa && echo "making in wwsympa..." && \
-	$(MAKE) WWSYMPA='${CGIDIR}/wwsympa.fcgi');
+	$(MAKE));
 
 soap_wrapper: src/Makefile src/queue.c src/bouncequeue.c src/aliaswrapper.c
 	@echo "Making sympa_soap"
 	@(cd soap && echo "making in soap..." && \
-	$(MAKE) SYMPASOAP='${CGIDIR}/sympa_soap_server.fcgi');
+	$(MAKE));
 
 documentation: doc/sympa.tex.tpl doc/Makefile 
 	@echo "Making documentation"
@@ -173,10 +162,7 @@ updatelocale:
 installsrc:
 	@(cd src && echo "making in src..." && \
 	$(MAKE) \
-	HOST='${HOST}' \
 	COOKIE='${COOKIE}' \
-	LOG_SOCKET_TYPE='${LOG_SOCKET_TYPE}' \
-	PODIR='${prefix}/po' \
 	newinstall) || exit 1;
 
 installdoc:
@@ -208,8 +194,7 @@ installsoap:
 
 installsample:
 	@(cd src/etc/sample && echo "making in src/etc/sample..." && \
-	$(MAKE) LOG_SOCKET_TYPE='${LOG_SOCKET_TYPE}' \
-	HOST='${HOST}' \
+	$(MAKE) \
 	COOKIE='${COOKIE}' \
 	install) || exit 1;
 
@@ -224,8 +209,6 @@ installscript:
 	$(MAKE) \
 	HOST='${HOST}' \
 	COOKIE='${COOKIE}' \
-	PIDPRE='${PIDPRE}' \
-	PIDPOST='${PIDPOST}' \
 	install) || exit 1;
 
 installdir:

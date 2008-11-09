@@ -28,6 +28,9 @@ INITSRC		=	sympa
 #SCRIPTDIR	=	../../../script
 SCRIPTDIR	=	$(SBINDIR)
 
+PIDPRE		=	pidof -x
+PIDPOST		=
+
 all:	
 
 install: makedir installsrc installsubstsrc installinit

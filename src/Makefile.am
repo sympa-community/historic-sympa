@@ -218,7 +218,7 @@ subst:
 		UMASK=0755; export UMASK;\
 		USER=$(USER); export USER;\
 		GROUP=$(GROUP); export GROUP;\
-		HOST=$(HOST); export HOST;\
+		HOST=`hostname`; export HOST;\
 		DIR=$(prefix); export DIR;\
 		DESTDIR=$(DESTDIR); export DESTDIR;\
 		PIDDIR=$(PIDDIR); export PIDDIR;\

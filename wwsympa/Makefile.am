@@ -29,6 +29,8 @@ lib_SUBST	=	wwslib.pm cookielib.pm bounce-lib.pl Marc.pm Auth.pm SharedDocument.
 
 SRC		=	mime.types 
 
+WWSYMPA = $(CGIDIR)/wwsympa.fcgi
+
 all:	wwsympa-wrapper.fcgi
 
 clean: 
