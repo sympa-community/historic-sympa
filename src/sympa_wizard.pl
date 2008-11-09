@@ -37,8 +37,8 @@ my $new_sympa_conf = '/tmp/sympa.conf';
 my $wwsconf = {};
 
 ## Change to your wwsympa.conf location
-my $wwsympa_conf = "$ENV{'DESTDIR'}--WWSCONFIG--";
-my $sympa_conf = "$ENV{'DESTDIR'}--CONFIG--";
+my $wwsympa_conf = "--WWSCONFIG--";
+my $sympa_conf = "--CONFIG--";
 my $somechange = 0;
 
 ## parameters that can be edited with this script
