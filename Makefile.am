@@ -25,7 +25,7 @@ PERL_VERSION	=	`$(PERL) -e ' print $$]'`
 
 main_SRC	=	AUTHORS COPYING ChangeLog INSTALL KNOWNBUGS NEWS README
 
-all:	warning checkperl checkcpan sources wrapper soap_wrapper man locale
+all:	warning checkperl sources wrapper soap_wrapper man locale
 
 warning:
 	@echo "######################## W A R N I N G ######################"; \
@@ -91,18 +91,6 @@ documentation: doc/sympa.tex.tpl doc/Makefile
 
 man: doc/man8/Makefile
 	@(cd doc/man8 && echo "making in doc/man8..." && $(MAKE));
-
-checkcpan: 
-	@echo "Checking needed CPAN modules ..."
-	$(PERL) ./check_perl_modules.pl
-
-clean:
-	find . \( -name ".#*" -o -name "*~" -o -name ".*~" -o -name "#*#" \) -exec  rm -f {} \;
-	@for i in src wwsympa src/etc/sample;\
-	do \
-	(cd $$i && echo "making clean in $$i..." && \
-	$(MAKE) PERL='${PERL}' clean) || exit 1; \
-	done;
 
 install: importantchanges installdir installsrc installwws installwebtt2 installmailtt2 installlocale installman installscript installsample installdoc installsoap nextstep
 
