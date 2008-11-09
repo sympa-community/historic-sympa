@@ -24,8 +24,8 @@ default: none
 install: makedir installtemplates installmod
 
 installmod:
-	chown $(USER) $(DESTDIR)$(ETCBINDIR)/web_tt2/*
-	chgrp $(GROUP) $(DESTDIR)$(ETCBINDIR)/web_tt2/*
+	-chown $(USER) $(DESTDIR)$(ETCBINDIR)/web_tt2/*
+	-chgrp $(GROUP) $(DESTDIR)$(ETCBINDIR)/web_tt2/*
 	chmod 755 $(DESTDIR)$(ETCBINDIR)/web_tt2
 
 makedir:

@@ -44,28 +44,28 @@ install: makedir $(sbin_SUBST) $(cgi_SUBST) $(cgi_SRC) $(lib_SUBST) substcgi sub
 
 installmod:
 	@for i in $(SRC) ; do \
-	chown $(USER) $(DESTDIR)$(ETCBINDIR)/$$i; \
-	chgrp $(GROUP) $(DESTDIR)$(ETCBINDIR)/$$i; \
+	chown $(USER) $(DESTDIR)$(ETCBINDIR)/$$i || /bin/true; \
+	chgrp $(GROUP) $(DESTDIR)$(ETCBINDIR)/$$i || /bin/true; \
 	done
 	@for i in $(sbin_SUBST) ; do \
-	chown $(USER) $(DESTDIR)$(SBINDIR)/$$i; \
-	chgrp $(GROUP) $(DESTDIR)$(SBINDIR)/$$i; \
+	chown $(USER) $(DESTDIR)$(SBINDIR)/$$i || /bin/true; \
+	chgrp $(GROUP) $(DESTDIR)$(SBINDIR)/$$i || /bin/true; \
 	done
 	@for i in $(cgi_SUBST) ; do \
-	chown $(USER) $(DESTDIR)$(CGIDIR)/$$i; \
-	chgrp $(GROUP) $(DESTDIR)$(CGIDIR)/$$i; \
+	chown $(USER) $(DESTDIR)$(CGIDIR)/$$i || /bin/true; \
+	chgrp $(GROUP) $(DESTDIR)$(CGIDIR)/$$i || /bin/true; \
 	done
 	@for i in $(cgi_SRC) ; do \
-	chown $(USER) $(DESTDIR)$(CGIDIR)/$$i; \
-	chgrp $(GROUP) $(DESTDIR)$(CGIDIR)/$$i; \
+	chown $(USER) $(DESTDIR)$(CGIDIR)/$$i || /bin/true; \
+	chgrp $(GROUP) $(DESTDIR)$(CGIDIR)/$$i || /bin/true; \
 	done
 	echo "Setting SetUID bit on wwsympa-wrapper.fcgi..."; \
 	chmod u+s $(DESTDIR)$(CGIDIR)/wwsympa-wrapper.fcgi; \
 	chmod g+s $(DESTDIR)$(CGIDIR)/wwsympa-wrapper.fcgi; \
 	chmod 755 $(DESTDIR)$(LIBDIR)/Marc
 	@for i in $(lib_SUBST) Marc/Search.pm; do \
-	chown $(USER) $(DESTDIR)$(LIBDIR)/$$i; \
-	chgrp $(GROUP) $(DESTDIR)$(LIBDIR)/$$i; \
+	chown $(USER) $(DESTDIR)$(LIBDIR)/$$i || /bin/true; \
+	chgrp $(GROUP) $(DESTDIR)$(LIBDIR)/$$i || /bin/true; \
 	chmod 644 $(DESTDIR)$(LIBDIR)/$$i; \
 	done
 
