@@ -184,11 +184,11 @@ importantchanges:
 
 locale:
 	@(cd po && echo "making in po/...." && \
-	$(MAKE) SH='${SH}' CC='${CC}' CFLAGS='${CFLAGS}' PERL='${PERL}' \
-	DIR='${DIR}' LOCALEDIR='${LOCALEDIR}' ETCBINDIR='${ETCBINDIR}' \
-	DESTDIR='${DESTDIR}' CONFIG='${CONFIG}' WWSCONFIG='${WWSCONFIG}' \
-	SCRIPTDIR='${SCRIPTDIR}' \
-	USER='${USER}' GROUP='${GROUP}') || exit 1;
+	$(MAKE) \
+	ETCBINDIR='${ETCBINDIR}' \
+	CONFIG='${CONFIG}' \
+	WWSCONFIG='${WWSCONFIG}' \
+	) || exit 1;
 
 installlocale:
 	@(cd po && echo "making install in po/...." && \
