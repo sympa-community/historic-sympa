@@ -104,7 +104,7 @@ clean:
 	$(MAKE) PERL='${PERL}' clean) || exit 1; \
 	done;
 
-install: importantchanges installdir installsrc installwws installwebtt2 installmailtt2 installlocale installman installscript installsample installconfig installdoc installsoap nextstep
+install: importantchanges installdir installsrc installwws installwebtt2 installmailtt2 installlocale installman installscript installsample installdoc installsoap nextstep
 
 nextstep: 
 	@echo ""
@@ -235,30 +235,6 @@ installdir:
 			-chgrp $(GROUP) $(DESTDIR)$(prefix)/$$dir; \
 		fi \
 	done \
-	fi
-
-
-installconfig:
-	mkdir -p $(DESTDIR)$(CONFDIR)
-	@INITCONF='0'
-	@for cfile in sympa.conf wwsympa.conf ; do \
-	if [ ! -f $(DESTDIR)$(CONFDIR)/$$cfile ] ; then \
-	echo "Installing sample config file $$cfile..."; \
-	DESTDIR=$(DESTDIR); export DESTDIR; \
-	$(PERL) -I $(DESTDIR)$(LIBDIR) $(DESTDIR)$(SBINDIR)/sympa_wizard.pl -c $$cfile; \
-	-chown $(USER) $(DESTDIR)$(CONFDIR)/$$cfile; \
-	-chgrp $(GROUP) $(DESTDIR)$(CONFDIR)/$$cfile; \
-	if [ "$(DESTDIR)" = "" ]; then \
-	INITCONF='1'; \
-	fi \
-	fi \
-	done; \
-	if [ "$$INITCONF" ] ; then \
-	echo "###############################################"; \
-	echo "It seems to be your first installation of Sympa"; \
-	echo "The following wizard will help you create your $(CONFDIR)/sympa.conf and $(CONFDIR)/wwsympa.conf :"; \
-	DESTDIR=$(DESTDIR); export DESTDIR; \
-	$(PERL) -I $(DESTDIR)$(LIBDIR) $(DESTDIR)$(SBINDIR)/sympa_wizard.pl; \
 	fi
 
 ChangeLog:

@@ -52,7 +52,7 @@ clean:
 		rm virtualwrapper ; \
 	fi
 
-install: makedir subst $(sbin_SRC) $(lib_SRC) installqueue installwrapper installscenari installtask_models installetc installlisttemplates installmod installgeneral_task_models info
+install: makedir subst $(sbin_SRC) $(lib_SRC) installqueue installwrapper installscenari installtask_models installconfig installetc installlisttemplates installmod installgeneral_task_models info
 
 
 installtask_models:
@@ -63,9 +63,41 @@ installgeneral_task_models:
 	@echo "Installing general task models ..."
 	cp -pR etc/global_task_models/* $(DESTDIR)$(ETCBINDIR)/global_task_models
 
+installconfig:
+	@echo "Installing basic configuration ..."
+	cp etc/sympa.conf etc/wwsympa.conf $(DESTDIR)$(CONFDIR)
+	@( \
+		UMASK=0664; export UMASK;\
+		INSTALLDIR=$(CONFDIR); export INSTALLDIR;\
+		DESTDIR=$(DESTDIR); export DESTDIR;\
+		HOST=`hostname`; export HOST;\
+		prefix=$(prefix); export prefix;\
+		PIDDIR=$(PIDDIR); export PIDDIR;\
+		LIBDIR=$(LIBDIR); export LIBDIR;\
+		NLSDIR=$(NLSDIR); export NLSDIR;\
+		ETCBINDIR=$(ETCBINDIR); export ETCBINDIR;\
+		ETCDIR=$(ETCDIR); export ETCDIR;\
+		EXPLDIR=$(EXPLDIR); export EXPLDIR;\
+		CONFIG=$(CONFIG); export CONFIG;\
+		WWSCONFIG=$(WWSCONFIG); export WWSCONFIG;\
+		SENDMAIL_ALIASES=$(SENDMAIL_ALIASES); export SENDMAIL_ALIASES;\
+		VIRTUAL_ALIASES=$(VIRTUAL_ALIASES); export VIRTUAL_ALIASES;\
+		SPOOLDIR=$(SPOOLDIR); export SPOOLDIR;\
+		COOKIE=$(COOKIE); export COOKIE;\
+		OPENSSL=$(OPENSSL); export OPENSSL;\
+		SSLCERTDIR=$(SSLCERTDIR); export SSLCERTDIR; \
+		cd etc; \
+		$(PERL) ../../subst.pl sympa.conf wwsympa.conf \
+	)
+
 installetc:
 	@echo "Installing default configuration ..."
-	cp etc/*.conf etc/*.crt $(DESTDIR)$(ETCBINDIR)/
+	cp \
+		etc/topics.conf etc/nrcpt_by_domain.conf \
+		etc/ldap_alias_manager.conf etc/nrcpt_by_domain.conf \
+		etc/ldap_alias_manager.conf etc/edit_list.conf \
+		etc/create_list.conf etc/crawlers_detection.conf etc/auth.conf \
+		etc/ca-bundle.crt $(DESTDIR)$(ETCBINDIR)/
 	@( \
 		UMASK=0664; export UMASK;\
 		INSTALLDIR=$(ETCBINDIR); export INSTALLDIR;\
@@ -190,6 +222,7 @@ installmod:
 		-chgrp $(GROUP) $(DESTDIR)$(LIBEXECDIR)/$$file; \
 		chmod 4750 $(DESTDIR)$(LIBEXECDIR)/$$file; \
 	done
+
 
 queue: queue.c Makefile ../Makefile
 	$(CC) $(CFLAGS) $(CDEFS) -o queue queue.c
