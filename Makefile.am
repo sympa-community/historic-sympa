@@ -170,7 +170,7 @@ installsample:
 		$(MAKE) install) || exit 1;
 
 installman:
-	@(cd doc/man8 && echo "making install in doc/man8..." && 
+	@(cd doc/man8 && echo "making install in doc/man8..." && \
 		$(MAKE) install) || exit 1;
 
 installscript:
