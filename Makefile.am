@@ -108,16 +108,15 @@ checkperl:
 sources: src/Makefile src/queue.c src/bouncequeue.c src/aliaswrapper.c
 	@echo "Making src"
 	@(cd src && echo "making in src..." && \
-	$(MAKE) SH='${SH}' CC='${CC}' CFLAGS='${CFLAGS}' PERL='${PERL}' \
-	DIR='${DIR}' BINDIR='${BINDIR}' SBINDIR='${SBINDIR}' LIBDIR='${LIBDIR}' WWSBINDIR='${WWSBINDIR}' \
-	MAILERPROGDIR='${MAILERPROGDIR}' ETCBINDIR='${ETCBINDIR}' ETCDIR='${ETCDIR}' \
-	CONFIG='${CONFIG}' WWSCONFIG='${WWSCONFIG}' \
-	USER='${USER}' GROUP='${GROUP}' \
-	SENDMAIL_ALIASES='${SENDMAIL_ALIASES}' \
-	VIRTUAL_ALIASES='${VIRTUAL_ALIASES}' \
-	NEWALIASES='${NEWALIASES}' NEWALIASES_ARG='${NEWALIASES_ARG}' \
-	POSTMAP='${POSTMAP}' POSTMAP_ARG='${POSTMAP_ARG}' \
-	PIDPRE='${PIDPRE}' PIDPOST='${PIDPOST}' LOCKDIR='${LOCKDIR}');
+	$(MAKE) \
+	WWSBINDIR='${WWSBINDIR}' \
+	MAILERPROGDIR='${MAILERPROGDIR}' \
+	ETCBINDIR='${ETCBINDIR}'\
+	CONFIG='${CONFIG}' \
+	WWSCONFIG='${WWSCONFIG}' \
+	PIDPRE='${PIDPRE}' \
+	PIDPOST='${PIDPOST}' \
+	);
 
 wrapper: src/Makefile src/queue.c src/bouncequeue.c src/aliaswrapper.c
 	@echo "Making wwsympa"
