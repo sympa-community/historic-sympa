@@ -163,16 +163,16 @@ makedir:
 installmod:
 	@echo "Setting group and owner for $(DESTDIR)$(SBINDIR)..."
 	@for file in $(sbin_SRC) ; do \
-		chown $(USER) $(DESTDIR)$(SBINDIR)/$$file; \
-		chgrp $(GROUP) $(DESTDIR)$(SBINDIR)/$$file; \
+		-chown $(USER) $(DESTDIR)$(SBINDIR)/$$file; \
+		-chgrp $(GROUP) $(DESTDIR)$(SBINDIR)/$$file; \
 	done
 	@echo "Setting group and owner for $(DESTDIR)$(LIBDIR)..."
 	@for file in $(lib_SRC) ; do \
-		chown $(USER) $(DESTDIR)$(LIBDIR)/$$file; \
-		chgrp $(GROUP) $(DESTDIR)$(LIBDIR)/$$file; \
+		-chown $(USER) $(DESTDIR)$(LIBDIR)/$$file; \
+		-chgrp $(GROUP) $(DESTDIR)$(LIBDIR)/$$file; \
 	done
-	chown -R $(USER) $(DESTDIR)$(ETCBINDIR)
-	chgrp -R $(GROUP) $(DESTDIR)$(ETCBINDIR)
+	-chown -R $(USER) $(DESTDIR)$(ETCBINDIR)
+	-chgrp -R $(GROUP) $(DESTDIR)$(ETCBINDIR)
 	@echo "Setting privileges..."
 	chmod 755 $(DESTDIR)$(SBINDIR) $(DESTDIR)$(ETCBINDIR) 
 	chmod 755 $(DESTDIR)$(ETCBINDIR)/scenari $(DESTDIR)$(ETCBINDIR)/list_task_models $(DESTDIR)$(ETCBINDIR)/global_task_models
@@ -181,13 +181,13 @@ installmod:
 	chmod 644 $(DESTDIR)$(ETCBINDIR)/*.conf $(DESTDIR)$(ETCBINDIR)/*.crt 
 	chmod 600 $(DESTDIR)$(ETCBINDIR)/ca-bundle.crt
 	@for file in $(bin_SRC) ; do \
-		chown $(USER) $(DESTDIR)$(MAILERPROGDIR)/$$file; \
-		chgrp $(GROUP) $(DESTDIR)$(MAILERPROGDIR)/$$file; \
+		-chown $(USER) $(DESTDIR)$(MAILERPROGDIR)/$$file; \
+		-chgrp $(GROUP) $(DESTDIR)$(MAILERPROGDIR)/$$file; \
 		chmod 4755 $(DESTDIR)$(MAILERPROGDIR)/$$file; \
 	done
 	@for file in $(libexec_SRC) ; do \
-		chown root $(DESTDIR)$(LIBEXECDIR)/$$file; \
-		chgrp $(GROUP) $(DESTDIR)$(LIBEXECDIR)/$$file; \
+		-chown root $(DESTDIR)$(LIBEXECDIR)/$$file; \
+		-chgrp $(GROUP) $(DESTDIR)$(LIBEXECDIR)/$$file; \
 		chmod 4750 $(DESTDIR)$(LIBEXECDIR)/$$file; \
 	done
 

@@ -183,8 +183,8 @@ installdir:
 		if [ ! -d $(DESTDIR)$$dir ] ; then \
 			echo "Creating $(DESTDIR)$$dir"; \
 			mkdir -p $(DESTDIR)$$dir; \
-			chown $(USER) $(DESTDIR)$$dir; \
-			chgrp $(GROUP) $(DESTDIR)$$dir; \
+			-chown $(USER) $(DESTDIR)$$dir; \
+			-chgrp $(GROUP) $(DESTDIR)$$dir; \
 			chmod 755 $(DESTDIR)$$dir; \
 		fi \
 	done
@@ -195,8 +195,8 @@ installdir:
 		if [ ! -d $(DESTDIR)$(ETCDIR)/$$dir ] ; then \
 			echo "Creating $(DESTDIR)$(ETCDIR)/$$dir"; \
 			mkdir -p $(DESTDIR)$(ETCDIR)/$$dir; \
-			chown $(USER) $(DESTDIR)$(ETCDIR)/$$dir; \
-			chgrp $(GROUP) $(DESTDIR)$(ETCDIR)/$$dir; \
+			-chown $(USER) $(DESTDIR)$(ETCDIR)/$$dir; \
+			-chgrp $(GROUP) $(DESTDIR)$(ETCDIR)/$$dir; \
 		fi \
 	done; \
 	( \
@@ -219,8 +219,8 @@ installdir:
 		if [ ! -d $(DESTDIR)$$dir ] ; then \
 			echo "Creating $(DESTDIR)$$dir"; \
 			mkdir -p $(DESTDIR)$$dir; \
-			chown $(USER) $(DESTDIR)$$dir; \
-			chgrp $(GROUP) $(DESTDIR)$$dir; \
+			-chown $(USER) $(DESTDIR)$$dir; \
+			-chgrp $(GROUP) $(DESTDIR)$$dir; \
 			chmod 770 $(DESTDIR)$$dir; \
 		fi \
 	done \
@@ -231,8 +231,8 @@ installdir:
 		if [ ! -d $(DESTDIR)$(prefix)/$$dir ] ; then \
 			echo "Creating $(DESTDIR)$(prefix)/$$dir"; \
 			mkdir -p $(DESTDIR)$(prefix)/$$dir; \
-			chown $(USER) $(DESTDIR)$(prefix)/$$dir; \
-			chgrp $(GROUP) $(DESTDIR)$(prefix)/$$dir; \
+			-chown $(USER) $(DESTDIR)$(prefix)/$$dir; \
+			-chgrp $(GROUP) $(DESTDIR)$(prefix)/$$dir; \
 		fi \
 	done \
 	fi
@@ -246,8 +246,8 @@ installconfig:
 	echo "Installing sample config file $$cfile..."; \
 	DESTDIR=$(DESTDIR); export DESTDIR; \
 	$(PERL) -I $(DESTDIR)$(LIBDIR) $(DESTDIR)$(SBINDIR)/sympa_wizard.pl -c $$cfile; \
-	chown $(USER) $(DESTDIR)$(CONFDIR)/$$cfile; \
-	chgrp $(GROUP) $(DESTDIR)$(CONFDIR)/$$cfile; \
+	-chown $(USER) $(DESTDIR)$(CONFDIR)/$$cfile; \
+	-chgrp $(GROUP) $(DESTDIR)$(CONFDIR)/$$cfile; \
 	if [ "$(DESTDIR)" = "" ]; then \
 	INITCONF='1'; \
 	fi \
