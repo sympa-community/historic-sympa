@@ -23,7 +23,7 @@ newinstall: makedir
 		( \
 			PERL=$(PERL); export PERL; \
 			UMASK=0644; export UMASK; \
-			DIR=$(DIR); export DIR; \
+			DIR=$(prefix); export DIR; \
 			INSTALLDIR=$(MANDIR)/man8; export INSTALLDIR; \
 			DESTDIR=$(DESTDIR); export DESTDIR; \
 			SYMPA_VERSION=$(PACKAGE_VERSION); export SYMPA_VERSION; \
