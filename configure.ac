@@ -29,12 +29,12 @@ AC_PREFIX_DEFAULT(/home/sympa)
 ## for main config files
 
 ## location of main config files
-CONFDIR='/etc'
+CONFDIR='${prefix}/etc'
 AC_ARG_WITH(
     confdir,
     AS_HELP_STRING(
 	[--with-confdir=DIR],
-	[Sympa main configuration files in DIR (default /etc)]
+	[Sympa main configuration files in DIR (default ${prefix}/etc)]
     ),
     [CONFDIR="$withval"]
 )
