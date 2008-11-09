@@ -223,12 +223,11 @@ installsrc:
 
 installdoc:
 	@(cd doc && echo "make install in doc..." && \
-	$(MAKE) SH='${SH}' CC='${CC}' CFLAGS='${CFLAGS}' PERL='${PERL}' \
-	DIR='${DIR}' DOCDIR='${DOCDIR}' ETCBINDIR='${ETCBINDIR}' \
-	DESTDIR='${DESTDIR}' CONFIG='${CONFIG}' WWSCONFIG='${WWSCONFIG}' \
-	SENDMAIL_ALIASES='${SENDMAIL_ALIASES}' \
-	VIRTUAL_ALIASES='${VIRTUAL_ALIASES}' \
-	USER='${USER}' GROUP='${GROUP}' install) || exit 1;
+	$(MAKE) \
+	ETCBINDIR='${ETCBINDIR}' \
+	CONFIG='${CONFIG}' \
+	WWSCONFIG='${WWSCONFIG}' \
+	install) || exit 1;
 
 installwws:
 	@(cd wwsympa && echo "making in wwsympa..." && \
