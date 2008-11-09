@@ -171,7 +171,7 @@ installsample:
 
 installman:
 	@(cd doc/man8 && echo "making install in doc/man8..." && 
-		$(MAKE) UMASK='${UMASK}' newinstall) || exit 1;
+		$(MAKE) newinstall) || exit 1;
 
 installscript:
 	@(cd src/etc/script && echo "making install in src/etc/script..." && \
