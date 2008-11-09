@@ -2,6 +2,12 @@
 %define version 6.0a.2
 %define release 1
 
+%define home_s /var/lib/sympa
+%define data_s /usr/share/sympa
+%define conf_s /etc/sympa
+%define etc_s  /etc/sympa
+%define spoo_s /var/spool/sympa
+
 Name:     %{name}
 Version:  %{version}
 Release:  %{release}
