@@ -40,10 +40,7 @@ clean:
 	fi
 
 
-install: 
-	echo "Please use the main Makefile for installing WWSympa."
-
-newinstall: makedir $(sbin_SUBST) $(cgi_SUBST) $(cgi_SRC) $(lib_SUBST) substcgi substsbin substlib installicons installsrc installwrapper installmod
+install: makedir $(sbin_SUBST) $(cgi_SUBST) $(cgi_SRC) $(lib_SUBST) substcgi substsbin substlib installicons installsrc installwrapper installmod
 
 installmod:
 	@for i in $(SRC) ; do \

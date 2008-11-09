@@ -39,10 +39,7 @@ clean:
 		rm -f sympa_soap_server-wrapper.fcgi ; \
 	fi
 
-install: 
-	echo "Please use the main Makefile for installing soapSympa."
-
-newinstall: makedir $(cgi_SUBST) $(lib_SUBST) substcgi substlib substscript installsrc installwrapper installmod
+install: makedir $(cgi_SUBST) $(lib_SUBST) substcgi substlib substscript installsrc installwrapper installmod
 
 installmod:
 	@for i in $(SRC) ; do \

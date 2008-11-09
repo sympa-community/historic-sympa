@@ -21,10 +21,7 @@
 
 default: none
 
-install:
-	echo "Please use the main Makefile for installing WWSympa."
-
-newinstall: makedir installtemplates installmod
+install: makedir installtemplates installmod
 
 installmod:
 	chown $(USER) $(DESTDIR)$(ETCBINDIR)/web_tt2/*

@@ -143,7 +143,7 @@ updatelocale:
 
 installsrc:
 	@(cd src && echo "making install in src..." && \
-		$(MAKE) newinstall) || exit 1;
+		$(MAKE) install) || exit 1;
 
 installdoc:
 	@(cd doc && echo "making install in doc..." && \
@@ -151,19 +151,19 @@ installdoc:
 
 installwws:
 	@(cd wwsympa && echo "making install in wwsympa..." && \
-		$(MAKE) newinstall) || exit 1;
+		$(MAKE) install) || exit 1;
 
 installwebtt2:
 	@(cd web_tt2 && echo "making install in web_tt2..." && \
-		$(MAKE) newinstall) || exit 1;
+		$(MAKE) install) || exit 1;
 
 installmailtt2:
 	@(cd mail_tt2 && echo "making install in mail_tt2..." && \
-		$(MAKE) newinstall) || exit 1;
+		$(MAKE) install) || exit 1;
 
 installsoap:
 	@(cd soap && echo "making install in soap..." && \
-		$(MAKE) newinstall) || exit 1;
+		$(MAKE) install) || exit 1;
 
 installsample:
 	@(cd src/etc/sample && echo "making install in src/etc/sample..." && \
@@ -171,7 +171,7 @@ installsample:
 
 installman:
 	@(cd doc/man8 && echo "making install in doc/man8..." && 
-		$(MAKE) newinstall) || exit 1;
+		$(MAKE) install) || exit 1;
 
 installscript:
 	@(cd src/etc/script && echo "making install in src/etc/script..." && \

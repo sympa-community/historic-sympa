@@ -52,10 +52,7 @@ clean:
 		rm virtualwrapper ; \
 	fi
 
-install: 
-	echo "Please use the main Makefile for installing sources."
-
-newinstall: makedir subst $(sbin_SRC) $(lib_SRC) installqueue installwrapper installscenari installtask_models installetc installlisttemplates installmod installgeneral_task_models info
+install: makedir subst $(sbin_SRC) $(lib_SRC) installqueue installwrapper installscenari installtask_models installetc installlisttemplates installmod installgeneral_task_models info
 
 
 installtask_models:

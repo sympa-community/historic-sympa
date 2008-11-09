@@ -14,10 +14,7 @@ all:	$(MAN8)
 clean:
 	rm -f *.8
 
-install: 
-	echo "Please use the main Makefile for installing MAN Page."
-
-newinstall: makedir 
+install: makedir 
 	@for manfile in $(MAN8); do \
 		echo "Installing man pages...$(DESTDIR)$(MANDIR)/man8/$$manfile"; \
 		( \
