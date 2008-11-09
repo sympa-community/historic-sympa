@@ -200,11 +200,11 @@ installlocale:
 
 updatelocale:
 	@(cd po && echo "make update-po in po/...." && \
-	$(MAKE) SH='${SH}' CC='${CC}' CFLAGS='${CFLAGS}' PERL='${PERL}' \
-	DIR='${DIR}' LOCALEDIR='${LOCALEDIR}' ETCBINDIR='${ETCBINDIR}' \
-	DESTDIR='${DESTDIR}' CONFIG='${CONFIG}' WWSCONFIG='${WWSCONFIG}' \
-	SCRIPTDIR='${SCRIPTDIR}' \
-	USER='${USER}' GROUP='${GROUP}' update-po) || exit 1;
+	$(MAKE) \
+	ETCBINDIR='${ETCBINDIR}' \
+	CONFIG='${CONFIG}' \
+	WWSCONFIG='${WWSCONFIG}' \
+	update-po) || exit 1;
 
 installsrc:
 	@(cd src && echo "making in src..." && \
