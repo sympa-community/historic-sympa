@@ -78,31 +78,19 @@ checkperl:
 
 
 sources: src/Makefile src/queue.c src/bouncequeue.c src/aliaswrapper.c
-	@echo "Making src"
-	@(cd src && echo "making in src..." && \
-	$(MAKE) \
-	);
+	@(cd src && echo "making in src..." && $(MAKE));
 
 wrapper: src/Makefile src/queue.c src/bouncequeue.c src/aliaswrapper.c
-	@echo "Making wwsympa"
-	@(cd wwsympa && echo "making in wwsympa..." && \
-	$(MAKE));
+	@(cd wwsympa && echo "making in wwsympa..." && $(MAKE));
 
 soap_wrapper: src/Makefile src/queue.c src/bouncequeue.c src/aliaswrapper.c
-	@echo "Making sympa_soap"
-	@(cd soap && echo "making in soap..." && \
-	$(MAKE));
+	@(cd soap && echo "making in soap..." && $(MAKE));
 
 documentation: doc/sympa.tex.tpl doc/Makefile 
-	@echo "Making documentation"
-	@(cd doc && echo "making in doc/..." && \
-	$(MAKE) \
-	);
+	@(cd doc && echo "making in doc..." && $(MAKE));
 
 man: doc/man8/Makefile
-	@echo "Making man"
-	@(cd doc/man8 && echo "making in doc/man8/..." && \
-	$(MAKE));
+	@(cd doc/man8 && echo "making in doc/man8..." && $(MAKE));
 
 checkcpan: 
 	@echo "Checking needed CPAN modules ..."
@@ -143,67 +131,51 @@ importantchanges:
 	) ;
 
 locale:
-	@(cd po && echo "making in po/...." && \
-	$(MAKE) \
-	) || exit 1;
+	@(cd po && echo "making in po..." && $(MAKE))
 
 installlocale:
-	@(cd po && echo "making install in po/...." && \
-	$(MAKE) \
-	install) || exit 1;
+	@(cd po && echo "making install in po..." && \
+		$(MAKE) install) || exit 1;
 
 updatelocale:
-	@(cd po && echo "make update-po in po/...." && \
-	$(MAKE) \
-	update-po) || exit 1;
+	@(cd po && echo "making update-po in po..." && \
+		$(MAKE) update-po) || exit 1;
 
 installsrc:
-	@(cd src && echo "making in src..." && \
-	$(MAKE) \
-	newinstall) || exit 1;
+	@(cd src && echo "making install in src..." && \
+		$(MAKE) newinstall) || exit 1;
 
 installdoc:
-	@(cd doc && echo "make install in doc..." && \
-	$(MAKE) \
-	install) || exit 1;
+	@(cd doc && echo "making install in doc..." && \
+		$(MAKE) install) || exit 1;
 
 installwws:
-	@(cd wwsympa && echo "making in wwsympa..." && \
-	$(MAKE) \
-	newinstall) || exit 1;
+	@(cd wwsympa && echo "making install in wwsympa..." && \
+		$(MAKE) newinstall) || exit 1;
 
 installwebtt2:
-	@(cd web_tt2 && echo "making in web_tt2..." && \
-	$(MAKE) \
-	newinstall) || exit 1;
+	@(cd web_tt2 && echo "making install in web_tt2..." && \
+		$(MAKE) newinstall) || exit 1;
 
 installmailtt2:
-	@(cd mail_tt2 && echo "making in mail_tt2..." && \
-	$(MAKE) \
-	newinstall) || exit 1;
+	@(cd mail_tt2 && echo "making install in mail_tt2..." && \
+		$(MAKE) newinstall) || exit 1;
 
 installsoap:
-	@(cd soap && echo "making in soap/..." && \
-	$(MAKE) \
-	newinstall) || exit 1;
+	@(cd soap && echo "making install in soap..." && \
+		$(MAKE) newinstall) || exit 1;
 
 installsample:
-	@(cd src/etc/sample && echo "making in src/etc/sample..." && \
-	$(MAKE) \
-	install) || exit 1;
+	@(cd src/etc/sample && echo "making install in src/etc/sample..." && \
+		$(MAKE) install) || exit 1;
 
 installman:
-	@(cd doc/man8 && \
-	$(MAKE)  \
-	UMASK='${UMASK}' \
-	newinstall) || exit 1;
+	@(cd doc/man8 && echo "making install in doc/man8..." && 
+		$(MAKE) UMASK='${UMASK}' newinstall) || exit 1;
 
 installscript:
-	@(cd src/etc/script && echo "making in src/etc/script..." && \
-	$(MAKE) \
-	HOST='${HOST}' \
-	COOKIE='${COOKIE}' \
-	install) || exit 1;
+	@(cd src/etc/script && echo "making install in src/etc/script..." && \
+		$(MAKE) install) || exit 1;
 
 installdir:
 	@echo "Creating required directories"
