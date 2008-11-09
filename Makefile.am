@@ -29,8 +29,6 @@ HOST		=	`$(PERL) -MSys::Hostname -e "printf '%s', Sys::Hostname::hostname();"`
 COOKIE		=	`$(PERL) -e " print int(rand ( time ))  "`
 PERL_VERSION	=	`$(PERL) -e ' print $$]'`
 
-SYMPA_VERSION	=	@VERSION@
-
 ## Root directory for Sympa ; use absolute path.
 ## Binaries are located under $DIR/bin ; this directory needs to be
 ## readable for everyone ; `queue' needs to be executable 
@@ -163,7 +161,7 @@ documentation: doc/sympa.tex.tpl doc/Makefile
 man: doc/man8/Makefile
 	@echo "Making man"
 	@(cd doc/man8 && echo "making in doc/man8/..." && \
-	$(MAKE) SYMPA_VERSION='$(SYMPA_VERSION)');
+	$(MAKE) SYMPA_VERSION='$(PACKAGE_VERSION)');
 
 checkcpan: 
 	@echo "Checking needed CPAN modules ..."
@@ -199,7 +197,7 @@ importantchanges:
 		ETCDIR=$(ETCDIR); export ETCDIR;\
 		USER=$(USER); export USER;\
 		GROUP=$(GROUP); export GROUP;\
-		SYMPA_VERSION=$(SYMPA_VERSION); export SYMPA_VERSION; \
+		SYMPA_VERSION=$(PACKAGE_VERSION); export SYMPA_VERSION; \
 		$(PERL) ./important_changes.pl \
 	) ;
 
@@ -228,7 +226,7 @@ updatelocale:
 
 installsrc:
 	@(cd src && echo "making in src..." && \
-	$(MAKE) SH='${SH}' CC='${CC}' CFLAGS='${CFLAGS}' PERL='${PERL}' SYMPA_VERSION='${SYMPA_VERSION}' \
+	$(MAKE) SH='${SH}' CC='${CC}' CFLAGS='${CFLAGS}' PERL='${PERL}' SYMPA_VERSION='$(PACKAGE_VERSION)' \
 	DIR='${DIR}' BINDIR='${BINDIR}' SBINDIR='${SBINDIR}' LIBDIR='${LIBDIR}' WWSBINDIR='${WWSBINDIR}' \
 	DESTDIR='${DESTDIR}' MAILERPROGDIR='${MAILERPROGDIR}' EXPL_DIR='${EXPL_DIR}' LIBEXECDIR='${LIBEXECDIR}' \
 	PIDDIR='${PIDDIR}' CONFIG='${CONFIG}' WWSCONFIG='${WWSCONFIG}' LOCALEDIR='${LOCALEDIR}' SCRIPTDIR='${SCRIPTDIR}' \
@@ -297,7 +295,7 @@ installsample:
 
 installman:
 	@(cd doc/man8 && \
-	$(MAKE) PERL='${PERL}' DIR='${DIR}' DESTDIR='${DESTDIR}' SYMPA_VERSION='${SYMPA_VERSION}' MANDIR='${MANDIR}' \
+	$(MAKE) PERL='${PERL}' DIR='${DIR}' DESTDIR='${DESTDIR}' SYMPA_VERSION='$(PACKAGE_VERSION)' MANDIR='${MANDIR}' \
 	USER='${USER}' GROUP='${GROUP}' \
 	CONFDIR='${CONFDIR}' SENDMAIL_ALIASES='${SENDMAIL_ALIASES}' VIRTUAL_ALIASES='${VIRTUAL_ALIASES}' UMASK='${UMASK}'  \
 	MAILERPROGDIR='${MAILERPROGDIR}' PIDDIR='${PIDDIR}' SPOOLDIR='${SPOOLDIR}' PIDDIR='${PIDDIR}' ETCBINDIR='${ETCBINDIR}' \
