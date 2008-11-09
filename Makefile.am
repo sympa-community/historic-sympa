@@ -179,7 +179,7 @@ installscript:
 
 installdir:
 	@echo "Creating required directories"
-	@for dir in $(prefix) $(EXPLDIR) $(CONFDIR) $(SAMPLEDIR) $(ETCDIR) $(BINDIR) $(LOCALEDIR) $(DOCDIR) $(prefix)/static_content $(prefix)/static_content/icons ; do \
+	@for dir in $(prefix) $(EXPLDIR) $(CONFDIR) $(SAMPLEDIR) $(ETCDIR) $(BINDIR) $(LOCALEDIR) $(DOCDIR) $(ETCBINDIR) $(prefix)/static_content $(prefix)/static_content/icons ; do \
 		if [ ! -d $(DESTDIR)$$dir ] ; then \
 			echo "Creating $(DESTDIR)$$dir"; \
 			mkdir -p $(DESTDIR)$$dir; \
