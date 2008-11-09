@@ -30,92 +30,163 @@ AC_PREFIX_DEFAULT(/home/sympa)
 
 ## location of main config files
 CONFDIR='/etc'
-AC_ARG_WITH(confdir, [  --with-confdir=DIR     Sympa main configuration files in DIR  (default /etc)], [CONFDIR="$withval"])
+AC_ARG_WITH(
+    confdir,
+    [  --with-confdir=DIR     Sympa main configuration files in DIR  (default /etc)],
+    [CONFDIR="$withval"]
+)
 AC_SUBST(CONFDIR)
 
 ## location of CGIs
 CGIDIR='${prefix}/bin'
-AC_ARG_WITH(cgidir, [  --with-cgidir=DIR     CGIs in DIR  (default ${prefix}/bin)], [CGIDIR="$withval"])
+AC_ARG_WITH(
+    cgidir,
+    [  --with-cgidir=DIR     CGIs in DIR  (default ${prefix}/bin)],
+    [CGIDIR="$withval"]
+)
 AC_SUBST(CGIDIR)
 
 ## location of user executables
 BINDIR='${prefix}/bin'
-AC_ARG_WITH(bindir, [  --with-bindir=DIR     user executables in DIR (default ${prefix}/bin). queue and bouncequeue programs will be installed in this directory. If sendmail is configured to use smrsh (check the mailer prog definition in your sendmail.cf), this should point to /etc/smrsh. This is probably the case if you are using Linux], [BINDIR="$withval"])
+AC_ARG_WITH(
+    bindir,
+    [  --with-bindir=DIR     user executables in DIR (default ${prefix}/bin). queue and bouncequeue programs will be installed in this directory. If sendmail is configured to use smrsh (check the mailer prog definition in your sendmail.cf), this should point to /etc/smrsh. This is probably the case if you are using Linux],
+    [BINDIR="$withval"]
+)
 AC_SUBST(BINDIR)
 
 ## location of system admin executables
 SBINDIR='${prefix}/bin'
-AC_ARG_WITH(sbindir, [  --with-sbindir=DIR     system admin executables in DIR (default ${prefix}/bin)], [SBINDIR="$withval"])
+AC_ARG_WITH(
+    sbindir,
+    [  --with-sbindir=DIR     system admin executables in DIR (default ${prefix}/bin)],
+    [SBINDIR="$withval"]
+)
 AC_SUBST(SBINDIR)
 
 ## location of program executables
 LIBEXECDIR='${prefix}/bin'
-AC_ARG_WITH(libexecdir, [  --with-libexecdir=DIR     program executables in DIR (default ${prefix}/bin)], [LIBEXECDIR="$withval"])
+AC_ARG_WITH(
+    libexecdir,
+    [  --with-libexecdir=DIR     program executables in DIR (default ${prefix}/bin)],
+    [LIBEXECDIR="$withval"]
+)
 AC_SUBST(LIBEXECDIR)
 
 ## location of Perl modules
 LIBDIR='${prefix}/bin'
-AC_ARG_WITH(libdir, [  --with-libdir=DIR     Perl modules in DIR (default ${prefix}/bin)], [LIBDIR="$withval"])
+AC_ARG_WITH(
+    libdir,
+    [  --with-libdir=DIR     Perl modules in DIR (default ${prefix}/bin)], [LIBDIR="$withval"]
+)
 AC_SUBST(LIBDIR)
 
 ## location of default *read-only* data files
 DATADIR='${prefix}/bin/etc'
-AC_ARG_WITH(datadir, [  --with-datadir=DIR     default *read-only* data files in DIR (default ${prefix}/bin/etc)], [DATADIR="$withval"])
+AC_ARG_WITH(
+    datadir,
+    [  --with-datadir=DIR     default *read-only* data files in DIR (default ${prefix}/bin/etc)],
+    [DATADIR="$withval"]
+)
 AC_SUBST(DATADIR)
 
 ## location of modifiable data files
 EXPLDIR='${prefix}/expl'
-AC_ARG_WITH(expldir, [  --with-expldir=DIR     modifiable data files in DIR (default ${prefix}/expl)], [EXPLDIR="$withval"])
+AC_ARG_WITH(
+    expldir,
+    [  --with-expldir=DIR     modifiable data files in DIR (default ${prefix}/expl)],
+    [EXPLDIR="$withval"]
+)
 AC_SUBST(EXPLDIR)
 
 ## location of documentation
 MANDIR='/usr/local/man'
-AC_ARG_WITH(mandir, [  --with-mandir=DIR     documentation in DIR (default /usr/local/man)], [MANDIR="$withval"])
+AC_ARG_WITH(
+    mandir,
+    [  --with-mandir=DIR     documentation in DIR (default /usr/local/man)],
+    [MANDIR="$withval"]
+)
 AC_SUBST(MANDIR)
 
 ## SYS V init scripts directory
 INITDIR=/etc/rc.d/init.d
-AC_ARG_WITH(initdir, [  --with-initdir=DIR     install System V init script in DIR  (default /etc/rc.d/init.d)], [INITDIR="$withval"])
+AC_ARG_WITH(
+    initdir,
+    [  --with-initdir=DIR     install System V init script in DIR  (default /etc/rc.d/init.d)],
+    [INITDIR="$withval"]
+)
 AC_SUBST(INITDIR)
 
 ## Lock directory
 LOCKDIR=/var/lock/subsys
-AC_ARG_WITH(lockdir, [  --with-lockdir=DIR     create lock files in DIR  (default /var/lock/subsys)], [LOCKDIR="$withval"])
+AC_ARG_WITH(
+    lockdir,
+    [  --with-lockdir=DIR     create lock files in DIR  (default /var/lock/subsys)],
+    [LOCKDIR="$withval"]
+)
 AC_SUBST(LOCKDIR)
 
 ## directory for storing .pid files
 PIDDIR='${prefix}'
-AC_ARG_WITH(piddir, [  --with-piddir=DIR     create .pid files in DIR  (default ${prefix})], [PIDDIR="$withval"])
+AC_ARG_WITH(
+    piddir,
+    [  --with-piddir=DIR     create .pid files in DIR  (default ${prefix})],
+    [PIDDIR="$withval"]
+)
 AC_SUBST(PIDDIR)
 
 ## directory for Config directories populated by the user
 ETCDIR='${prefix}/etc'
-AC_ARG_WITH(etcdir, [  --with-etcdir=DIR     Config directories populated by the user are in DIR  (default ${prefix}/etc)], [ETCDIR="$withval"])
+AC_ARG_WITH(
+    etcdir,
+    [  --with-etcdir=DIR     Config directories populated by the user are in DIR  (default ${prefix}/etc)],
+    [ETCDIR="$withval"]
+)
 AC_SUBST(ETCDIR)
 
 ## directory for language files
 LOCALEDIR='${prefix}/locale'
-AC_ARG_WITH(localedir, [  --with-localedir=DIR     create language files in DIR  (default ${prefix}/locale)], [LOCALEDIR="$withval"])
+AC_ARG_WITH(
+    localedir,
+    [  --with-localedir=DIR     create language files in DIR  (default ${prefix}/locale)],
+    [LOCALEDIR="$withval"]
+)
 AC_SUBST(LOCALEDIR)
 
 ## directory for Documentation files
 DOCDIR='${prefix}/doc'
-AC_ARG_WITH(docdir, [  --with-docdir=DIR     create documentation files in DIR  (default ${prefix}/doc)], [DOCDIR="$withval"])
+AC_ARG_WITH(
+    docdir,
+    [  --with-docdir=DIR     create documentation files in DIR  (default ${prefix}/doc)],
+    [DOCDIR="$withval"]
+)
 AC_SUBST(DOCDIR)
 
 ## directory for script files
 SCRIPTDIR='${prefix}/bin'
-AC_ARG_WITH(scriptdir, [  --with-scriptdir=DIR     create script files in DIR  (default ${prefix}/bin)], [SCRIPTDIR="$withval"])
+AC_ARG_WITH(
+    scriptdir,
+    [  --with-scriptdir=DIR     create script files in DIR  (default ${prefix}/bin)],
+    [SCRIPTDIR="$withval"]
+)
 AC_SUBST(SCRIPTDIR)
 
 ## directory for sample files
 SAMPLEDIR='${prefix}/sample'
-AC_ARG_WITH(sampledir, [  --with-sampledir=DIR     create sample files in DIR  (default ${prefix}/sample)], [SAMPLEDIR="$withval"])
+AC_ARG_WITH(
+    sampledir,
+    [  --with-sampledir=DIR     create sample files in DIR  (default ${prefix}/sample)],
+    [SAMPLEDIR="$withval"]
+)
 AC_SUBST(SAMPLEDIR)
 
 ## directory for sample files
 SPOOLDIR='${prefix}/spool'
-AC_ARG_WITH(spooldir, [  --with-spooldir=DIR     spool directory is DIR  (default ${prefix}/spool)], [SPOOLDIR="$withval"])
+AC_ARG_WITH(
+    spooldir,
+    [  --with-spooldir=DIR     spool directory is DIR  (default ${prefix}/spool)],
+    [SPOOLDIR="$withval"]
+)
 AC_SUBST(SPOOLDIR)
 
 ## Both queue and bouncequeue are lunched by sendmail. If sendmail
