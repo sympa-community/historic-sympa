@@ -192,10 +192,11 @@ locale:
 
 installlocale:
 	@(cd po && echo "making install in po/...." && \
-	$(MAKE) SH='${SH}' CC='${CC}' CFLAGS='${CFLAGS}' PERL='${PERL}' \
-	DIR='${DIR}' LOCALEDIR='${LOCALEDIR}' ETCBINDIR='${ETCBINDIR}' \
-	DESTDIR='${DESTDIR}' CONFIG='${CONFIG}' WWSCONFIG='${WWSCONFIG}' \
-	USER='${USER}' GROUP='${GROUP}' install) || exit 1;
+	$(MAKE) \
+	ETCBINDIR='${ETCBINDIR}' \
+	CONFIG='${CONFIG}' \
+	WWSCONFIG='${WWSCONFIG}' \
+	install) || exit 1;
 
 updatelocale:
 	@(cd po && echo "make update-po in po/...." && \
