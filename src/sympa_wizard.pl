@@ -55,7 +55,7 @@ my $somechange = 0;
 
 my @params = ({'title' => 'Directories and file location'},
 	      {'name' => 'home',
-	       'default' => '--EXPL_DIR--',
+	       'default' => '--EXPLDIR--',
 	       'query' => 'Directory containing mailing lists subdirectories',
 	       'file' => 'sympa.conf','edit' => '1',
                'advice' =>''},

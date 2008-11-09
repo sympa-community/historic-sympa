@@ -46,7 +46,7 @@ my $tmp_alias_file = $Conf{'tmpdir'}.'/sympa_aliases.'.time;
 
 
 my $alias_wrapper = '--MAILERPROGDIR--/aliaswrapper';
-my $lock_file = '--EXPL_DIR--/alias_manager.lock';
+my $lock_file = '--EXPLDIR--/alias_manager.lock';
 my $default_domain;
 my $path_to_queue = '--MAILERPROGDIR--/queue';
 my $path_to_bouncequeue = '--MAILERPROGDIR--/bouncequeue';

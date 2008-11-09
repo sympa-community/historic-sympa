@@ -95,11 +95,11 @@ my %valid_options = ();
 map { $valid_options{$_}++; } @valid_options;
 
 my %Default_Conf = 
-    ('home'    => '--EXPL_DIR--',
+    ('home'    => '--EXPLDIR--',
      'etc'     => '--ETCDIR--',
      'key_passwd' => '',
-     'ssl_cert_dir' => '--EXPL_DIR--/X509-user-certs',
-     'crl_dir' => '--EXPL_DIR--/crl',
+     'ssl_cert_dir' => '--EXPLDIR--/X509-user-certs',
+     'crl_dir' => '--EXPLDIR--/crl',
      'umask'   => '022',
      'syslog'  => 'LOCAL1',
      'log_level'  => 0,
