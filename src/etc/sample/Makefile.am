@@ -23,7 +23,7 @@ SRC	=	README trusted_applications.conf
 
 SUBSTSRC	=	robot.conf *.ldap
 
-SAMPLEDIR	=	$(DIR)/sample
+SAMPLEDIR	=	$(prefix)/sample
 
 all:	
 
@@ -42,7 +42,7 @@ installsubstsrc:
 	@( \
 		PERL=$(PERL); export PERL; \
 		UMASK=0600; export UMASK; \
-		DIR=$(DIR); export DIR; \
+		DIR=$(prefix); export DIR; \
 		PIDDIR=$(PIDDIR); export PIDDIR; \
 		SPOOLDIR=$(SPOOLDIR); export SPOOLDIR; \
 		INSTALLDIR=$(SAMPLEDIR); export INSTALLDIR; \
