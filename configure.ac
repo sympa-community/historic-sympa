@@ -211,6 +211,10 @@ AC_ARG_WITH(
 )
 AC_SUBST(SENDMAIL_ALIASES)
 
+## The postfix virtual file we use. Better use a seperate one for sympa.
+## Of course an extra alias file must be generated with proper permissions
+## (owner sympa, write access for sympa, no write access for anyone else)
+## and declared in main.cf!
 VIRTUAL_ALIASES=/etc/mail/sympa_virtual
 AC_ARG_WITH(
     [virtual_aliases],

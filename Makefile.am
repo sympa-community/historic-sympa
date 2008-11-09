@@ -24,16 +24,6 @@
 ChangeLog:
 	@CVS2CL@
 
-## User Id and Group for Sympa (your httpd should have the same uid.gid)
-USER	=	@USER@
-GROUP	=	@GROUP@
-
-## configuration file
-CONFDIR	=	@CONFDIR@
-
-##  Perl path
-PERL	=	@PERL@
-
 ## For preparing samples
 HOST		=	`$(PERL) -MSys::Hostname -e "printf '%s', Sys::Hostname::hostname();"`
 COOKIE		=	`$(PERL) -e " print int(rand ( time ))  "`
@@ -50,41 +40,12 @@ DIR	=	${prefix}
 
 EXPL_DIR	=	@EXPLDIR@
 
-## PID location
-PIDDIR	=	@PIDDIR@
-
 ## Both queue and bouncequeue are lunched by sendmail. If sendmail
 ## is configured to used smrsh (check the mailer prog definition), thoses
 ## files needs to be installed in /etc/smrsh.  
 MAILERPROGDIR	=	@BINDIR@
 
 RPMTOPDIR	=	`rpm --eval %_topdir`
-
-MANDIR		=	@MANDIR@
-
-## SYSV init scripts directory
-INITDIR		=	@INITDIR@
-
-BINDIR		=	@BINDIR@
-
-SBINDIR		=	@SBINDIR@
-
-CGIDIR		=	@CGIDIR@
-
-LIBDIR		=	@LIBDIR@
-
-LOCALEDIR	=	@LOCALEDIR@
-
-DOCDIR		=	@DOCDIR@
-
-ETCDIR		=	@ETCDIR@
-
-SCRIPTDIR	=	@SCRIPTDIR@
-
-SAMPLEDIR	=	@SAMPLEDIR@
-
-## Spools directory
-SPOOLDIR	=	@SPOOLDIR@
 
 ## Directory for installing WWSympa
 WWSBINDIR	=	$(BINDIR)
@@ -94,40 +55,9 @@ WWSBINDIR	=	$(BINDIR)
 ## Settings used in src/etc/scripts/sympa
 PIDPRE		=	pidof -x
 PIDPOST		=	
-LOCKDIR		=	@LOCKDIR@
 
-## Path to newaliases command (or what else may be called to rebuild
-## Mail aliases database)
-NEWALIASES	=	@NEWALIASES@
-
-## Argument to newaliases command
-# NEWALIASES_ARG	=	hash:/etc/mail/sympa_aliases
-NEWALIASES_ARG	=	@NEWALIASES_ARG@
-
-## Path to postmap command (or what else may be called to rebuild
-## Mail virtual database)
-POSTMAP		=	@POSTMAP@
-
-## Argument to postmap command
-POSTMAP_ARG	=	@POSTMAP_ARG@
-
-## The sendmail aliases file we use. Better use a seperate one for sympa.
-## Of course an extra alias file must be generated with proper permissions
-## (owner sympa, write access for sympa, no write access for anyone else)
-## and declared in sendmail.cf!
-SENDMAIL_ALIASES=	@SENDMAIL_ALIASES@
-
-## The postfix virtual file we use. Better use a seperate one for sympa.
-## Of course an extra alias file must be generated with proper permissions
-## (owner sympa, write access for sympa, no write access for anyone else)
-## and declared in main.cf!
-VIRTUAL_ALIASES=	@VIRTUAL_ALIASES@
-
-## Path to OpenSSL
-OPENSSL	=	@OPENSSL@
 SSLCERTDIR =	$(EXPL_DIR)/X509-user-certs
 
-CC	=	@CC@
 CFLAGS	=	-g
 
 ##---------- STOP ---------- STOP ---------- STOP ---------- STOP ----------
