@@ -21,8 +21,6 @@
 
 #SUBDIRS = src doc wwsympa nls
 
-## For preparing samples
-COOKIE		=	`$(PERL) -e " print int(rand ( time ))  "`
 PERL_VERSION	=	`$(PERL) -e ' print $$]'`
 
 main_SRC	=	AUTHORS COPYING ChangeLog INSTALL KNOWNBUGS NEWS README
@@ -162,7 +160,6 @@ updatelocale:
 installsrc:
 	@(cd src && echo "making in src..." && \
 	$(MAKE) \
-	COOKIE='${COOKIE}' \
 	newinstall) || exit 1;
 
 installdoc:
@@ -195,7 +192,6 @@ installsoap:
 installsample:
 	@(cd src/etc/sample && echo "making in src/etc/sample..." && \
 	$(MAKE) \
-	COOKIE='${COOKIE}' \
 	install) || exit 1;
 
 installman:

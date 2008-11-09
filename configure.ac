@@ -138,6 +138,7 @@ AC_SUBST(CONFIG)
 WWSCONFIG=$CONFDIR/wwsympa.conf
 AC_SUBST(WWSCONFIG)
 
+
 ## to run wwsympa.fcgi without setuidperl
 AC_ARG_ENABLE(
     [secure],
@@ -289,6 +290,9 @@ AC_ARG_WITH(
     [POSTMAP_ARG="$withval"]
 )
 AC_SUBST(POSTMAP_ARG)
+
+COOKIE=`$PERL -e 'print int(rand(time))'`
+AC_SUBST(COOKIE)
 
 AC_CONFIG_FILES([
     Makefile
