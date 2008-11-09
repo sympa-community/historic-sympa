@@ -126,7 +126,7 @@ wrapper: src/Makefile src/queue.c src/bouncequeue.c src/aliaswrapper.c
 soap_wrapper: src/Makefile src/queue.c src/bouncequeue.c src/aliaswrapper.c
 	@echo "Making sympa_soap"
 	@(cd soap && echo "making in soap..." && \
-	$(MAKE) SH='${SH}' CC='${CC}' CFLAGS='${CFLAGS}' SYMPASOAP='${CGIDIR}/sympa_soap_server.fcgi');
+	$(MAKE) SYMPASOAP='${CGIDIR}/sympa_soap_server.fcgi');
 
 documentation: doc/sympa.tex.tpl doc/Makefile 
 	@echo "Making documentation"
