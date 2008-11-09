@@ -243,12 +243,13 @@ installwws:
 
 installwebtt2:
 	@(cd web_tt2 && echo "making in web_tt2..." && \
-	$(MAKE) SH='${SH}' CC='${CC}' CFLAGS='${CFLAGS}' PERL='${PERL}' \
-	DIR='${DIR}' BINDIR='${BINDIR}' SBINDIR='${SBINDIR}' LIBDIR='${LIBDIR}' \
-	USER='${USER}' GROUP='${GROUP}' \
-	CGIDIR='${CGIDIR}' WWSBINDIR='${WWSBINDIR}' MAILERPROGDIR='${MAILERPROGDIR}' \
-	PIDDIR='${PIDDIR}' CONFIG='${CONFIG}' WWSCONFIG='${WWSCONFIG}' ETCBINDIR='${ETCBINDIR}' \
-	DESTDIR='${DESTDIR}' USER='${USER}' GROUP='${GROUP}' newinstall) || exit 1;
+	$(MAKE) \
+	WWSBINDIR='${WWSBINDIR}' \
+	MAILERPROGDIR='${MAILERPROGDIR}' \
+	CONFIG='${CONFIG}' \
+	WWSCONFIG='${WWSCONFIG}' \
+	ETCBINDIR='${ETCBINDIR}' \
+	newinstall) || exit 1;
 
 installmailtt2:
 	@(cd mail_tt2 && echo "making in mail_tt2..." && \
