@@ -295,16 +295,17 @@ installman:
 
 installscript:
 	@(cd src/etc/script && echo "making in src/etc/script..." && \
-	$(MAKE) SH='${SH}' CC='${CC}' CFLAGS='${CFLAGS}' PERL='${PERL}' \
-	DIR='${DIR}' DESTDIR='${DESTDIR}' SCRIPTDIR='${SCRIPTDIR}' \
-	BINDIR='${BINDIR}' SBINDIR='${SBINDIR}' LIBDIR='${LIBDIR}' \
-	WWSBINDIR='${WWSBINDIR}' HOST='${HOST}' \
-	CONFIG='${CONFIG}' WWSCONFIG='${WWSCONFIG}' ETCBINDIR='${ETCBINDIR}' \
-	MAILERPROGDIR='${MAILERPROGDIR}' PIDDIR='${PIDDIR}' \
-	COOKIE='${COOKIE}' INITDIR='${INITDIR}' \
-	PIDPRE='${PIDPRE}' PIDPOST='${PIDPOST}' LOCKDIR='${LOCKDIR}' \
-	OPENSSL='@OPENSSL@' USER='${USER}' GROUP='${GROUP}' install) || exit 1;
-
+	$(MAKE) \
+	WWSBINDIR='${WWSBINDIR}' \
+	HOST='${HOST}' \
+	CONFIG='${CONFIG}' \
+	WWSCONFIG='${WWSCONFIG}' \
+	ETCBINDIR='${ETCBINDIR}' \
+	MAILERPROGDIR='${MAILERPROGDIR}' \
+	COOKIE='${COOKIE}' \
+	PIDPRE='${PIDPRE}' \
+	PIDPOST='${PIDPOST}' \
+	install) || exit 1;
 
 installdir:
 	@echo "Creating required directories"
