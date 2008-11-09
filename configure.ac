@@ -133,6 +133,11 @@ AC_SUBST(ETCBINDIR)
 SSLCERTDIR=$EXPLDIR/X509-user-certs
 AC_SUBST(SSLCERTDIR)
 
+CONFIG=$CONFDIR/sympa.conf
+AC_SUBST(CONFIG)
+WWSCONFIG=$CONFDIR/wwsympa.conf
+AC_SUBST(WWSCONFIG)
+
 ## to run wwsympa.fcgi without setuidperl
 AC_ARG_ENABLE(
     [secure],

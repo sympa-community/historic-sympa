@@ -32,9 +32,6 @@ PIDPOST		=
 
 CFLAGS	=	-g
 
-CONFIG		=	$(CONFDIR)/sympa.conf
-WWSCONFIG	=	$(CONFDIR)/wwsympa.conf
-
 main_SRC	=	AUTHORS COPYING ChangeLog INSTALL KNOWNBUGS NEWS README
 
 LOG_SOCKET_TYPE	=	unix
@@ -95,8 +92,6 @@ sources: src/Makefile src/queue.c src/bouncequeue.c src/aliaswrapper.c
 	@echo "Making src"
 	@(cd src && echo "making in src..." && \
 	$(MAKE) \
-	CONFIG='${CONFIG}' \
-	WWSCONFIG='${WWSCONFIG}' \
 	PIDPRE='${PIDPRE}' \
 	PIDPOST='${PIDPOST}' \
 	);
@@ -115,8 +110,6 @@ documentation: doc/sympa.tex.tpl doc/Makefile
 	@echo "Making documentation"
 	@(cd doc && echo "making in doc/..." && \
 	$(MAKE) \
-	CONFIG='${CONFIG}' \
-	WWSCONFIG='${WWSCONFIG}' \
 	);
 
 man: doc/man8/Makefile
@@ -165,29 +158,21 @@ importantchanges:
 locale:
 	@(cd po && echo "making in po/...." && \
 	$(MAKE) \
-	CONFIG='${CONFIG}' \
-	WWSCONFIG='${WWSCONFIG}' \
 	) || exit 1;
 
 installlocale:
 	@(cd po && echo "making install in po/...." && \
 	$(MAKE) \
-	CONFIG='${CONFIG}' \
-	WWSCONFIG='${WWSCONFIG}' \
 	install) || exit 1;
 
 updatelocale:
 	@(cd po && echo "make update-po in po/...." && \
 	$(MAKE) \
-	CONFIG='${CONFIG}' \
-	WWSCONFIG='${WWSCONFIG}' \
 	update-po) || exit 1;
 
 installsrc:
 	@(cd src && echo "making in src..." && \
 	$(MAKE) \
-	CONFIG='${CONFIG}' \
-	WWSCONFIG='${WWSCONFIG}' \
 	HOST='${HOST}' \
 	COOKIE='${COOKIE}' \
 	LOG_SOCKET_TYPE='${LOG_SOCKET_TYPE}' \
@@ -197,8 +182,6 @@ installsrc:
 installdoc:
 	@(cd doc && echo "make install in doc..." && \
 	$(MAKE) \
-	CONFIG='${CONFIG}' \
-	WWSCONFIG='${WWSCONFIG}' \
 	install) || exit 1;
 
 installwws:
@@ -206,37 +189,27 @@ installwws:
 	$(MAKE) \
 	SUDO='${SUDO}' \
 	enable_secure='${enable_secure}' \
-	CONFIG='${CONFIG}' \
-	WWSCONFIG='${WWSCONFIG}' \
 	newinstall) || exit 1;
 
 installwebtt2:
 	@(cd web_tt2 && echo "making in web_tt2..." && \
 	$(MAKE) \
-	CONFIG='${CONFIG}' \
-	WWSCONFIG='${WWSCONFIG}' \
 	newinstall) || exit 1;
 
 installmailtt2:
 	@(cd mail_tt2 && echo "making in mail_tt2..." && \
 	$(MAKE) \
-	CONFIG='${CONFIG}' \
-	WWSCONFIG='${WWSCONFIG}' \
 	newinstall) || exit 1;
 
 installsoap:
 	@(cd soap && echo "making in soap/..." && \
 	$(MAKE) \
-	CONFIG='${CONFIG}' \
-	WWSCONFIG='${WWSCONFIG}' \
 	newinstall) || exit 1;
 
 installsample:
 	@(cd src/etc/sample && echo "making in src/etc/sample..." && \
 	$(MAKE) LOG_SOCKET_TYPE='${LOG_SOCKET_TYPE}' \
 	HOST='${HOST}' \
-	CONFIG='${CONFIG}' \
-	WWSCONFIG='${WWSCONFIG}' \
 	COOKIE='${COOKIE}' \
 	install) || exit 1;
 
@@ -250,8 +223,6 @@ installscript:
 	@(cd src/etc/script && echo "making in src/etc/script..." && \
 	$(MAKE) \
 	HOST='${HOST}' \
-	CONFIG='${CONFIG}' \
-	WWSCONFIG='${WWSCONFIG}' \
 	COOKIE='${COOKIE}' \
 	PIDPRE='${PIDPRE}' \
 	PIDPOST='${PIDPOST}' \
