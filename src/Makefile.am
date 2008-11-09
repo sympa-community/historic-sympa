@@ -163,13 +163,13 @@ makedir:
 installmod:
 	@echo "Setting group and owner for $(DESTDIR)$(SBINDIR)..."
 	@for file in $(sbin_SRC) ; do \
-		-chown $(USER) $(DESTDIR)$(SBINDIR)/$$file; \
-		-chgrp $(GROUP) $(DESTDIR)$(SBINDIR)/$$file; \
+		chown $(USER) $(DESTDIR)$(SBINDIR)/$$file || /bin/true; \
+		chgrp $(GROUP) $(DESTDIR)$(SBINDIR)/$$file || /bin/true; \
 	done
 	@echo "Setting group and owner for $(DESTDIR)$(LIBDIR)..."
 	@for file in $(lib_SRC) ; do \
-		-chown $(USER) $(DESTDIR)$(LIBDIR)/$$file; \
-		-chgrp $(GROUP) $(DESTDIR)$(LIBDIR)/$$file; \
+		chown $(USER) $(DESTDIR)$(LIBDIR)/$$file || /bin/true; \
+		chgrp $(GROUP) $(DESTDIR)$(LIBDIR)/$$file || /bin/true; \
 	done
 	-chown -R $(USER) $(DESTDIR)$(ETCBINDIR)
 	-chgrp -R $(GROUP) $(DESTDIR)$(ETCBINDIR)

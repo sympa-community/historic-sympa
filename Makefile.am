@@ -183,8 +183,8 @@ installdir:
 		if [ ! -d $(DESTDIR)$$dir ] ; then \
 			echo "Creating $(DESTDIR)$$dir"; \
 			mkdir -p $(DESTDIR)$$dir; \
-			-chown $(USER) $(DESTDIR)$$dir; \
-			-chgrp $(GROUP) $(DESTDIR)$$dir; \
+			chown $(USER) $(DESTDIR)$$dir || /bin/true; \
+			chgrp $(GROUP) $(DESTDIR)$$dir || /bin/true; \
 			chmod 755 $(DESTDIR)$$dir; \
 		fi \
 	done
@@ -195,8 +195,8 @@ installdir:
 		if [ ! -d $(DESTDIR)$(ETCDIR)/$$dir ] ; then \
 			echo "Creating $(DESTDIR)$(ETCDIR)/$$dir"; \
 			mkdir -p $(DESTDIR)$(ETCDIR)/$$dir; \
-			-chown $(USER) $(DESTDIR)$(ETCDIR)/$$dir; \
-			-chgrp $(GROUP) $(DESTDIR)$(ETCDIR)/$$dir; \
+			chown $(USER) $(DESTDIR)$(ETCDIR)/$$dir || /bin/true; \
+			chgrp $(GROUP) $(DESTDIR)$(ETCDIR)/$$dir || /bin/true; \
 		fi \
 	done; \
 	( \
@@ -219,8 +219,8 @@ installdir:
 		if [ ! -d $(DESTDIR)$$dir ] ; then \
 			echo "Creating $(DESTDIR)$$dir"; \
 			mkdir -p $(DESTDIR)$$dir; \
-			-chown $(USER) $(DESTDIR)$$dir; \
-			-chgrp $(GROUP) $(DESTDIR)$$dir; \
+			chown $(USER) $(DESTDIR)$$dir || /bin/true; \
+			chgrp $(GROUP) $(DESTDIR)$$dir || /bin/true; \
 			chmod 770 $(DESTDIR)$$dir; \
 		fi \
 	done \
