@@ -32,7 +32,10 @@ AC_PREFIX_DEFAULT(/home/sympa)
 CONFDIR='/etc'
 AC_ARG_WITH(
     confdir,
-    [  --with-confdir=DIR     Sympa main configuration files in DIR  (default /etc)],
+    AS_HELP_STRING(
+	[--with-confdir=DIR],
+	[Sympa main configuration files in DIR (default /etc)]
+    ),
     [CONFDIR="$withval"]
 )
 AC_SUBST(CONFDIR)
@@ -41,7 +44,10 @@ AC_SUBST(CONFDIR)
 CGIDIR='${prefix}/bin'
 AC_ARG_WITH(
     cgidir,
-    [  --with-cgidir=DIR     CGIs in DIR  (default ${prefix}/bin)],
+    AS_HELP_STRING(
+	[--with-cgidir=DIR],
+	[CGIs in DIR (default ${prefix}/bin)]
+    ),
     [CGIDIR="$withval"]
 )
 AC_SUBST(CGIDIR)
@@ -50,7 +56,10 @@ AC_SUBST(CGIDIR)
 BINDIR='${prefix}/bin'
 AC_ARG_WITH(
     bindir,
-    [  --with-bindir=DIR     user executables in DIR (default ${prefix}/bin). queue and bouncequeue programs will be installed in this directory. If sendmail is configured to use smrsh (check the mailer prog definition in your sendmail.cf), this should point to /etc/smrsh. This is probably the case if you are using Linux],
+    AS_HELP_STRING(
+	[--with-bindir=DIR],
+	[user executables in DIR (default ${prefix}/bin). queue and bouncequeue programs will be installed in this directory. If sendmail is configured to use smrsh (check the mailer prog definition in your sendmail.cf), this should point to /etc/smrsh. This is probably the case if you are using Linux]
+    ),
     [BINDIR="$withval"]
 )
 AC_SUBST(BINDIR)
@@ -59,7 +68,10 @@ AC_SUBST(BINDIR)
 SBINDIR='${prefix}/bin'
 AC_ARG_WITH(
     sbindir,
-    [  --with-sbindir=DIR     system admin executables in DIR (default ${prefix}/bin)],
+    AS_HELP_STRING(
+	[--with-sbindir=DIR],
+	[system admin executables in DIR (default ${prefix}/bin)]
+    ),
     [SBINDIR="$withval"]
 )
 AC_SUBST(SBINDIR)
@@ -68,7 +80,10 @@ AC_SUBST(SBINDIR)
 LIBEXECDIR='${prefix}/bin'
 AC_ARG_WITH(
     libexecdir,
-    [  --with-libexecdir=DIR     program executables in DIR (default ${prefix}/bin)],
+    AS_HELP_STRING(
+	[--with-libexecdir=DIR],
+	[program executables in DIR (default ${prefix}/bin)]
+    ),
     [LIBEXECDIR="$withval"]
 )
 AC_SUBST(LIBEXECDIR)
@@ -77,7 +92,11 @@ AC_SUBST(LIBEXECDIR)
 LIBDIR='${prefix}/bin'
 AC_ARG_WITH(
     libdir,
-    [  --with-libdir=DIR     Perl modules in DIR (default ${prefix}/bin)], [LIBDIR="$withval"]
+    AS_HELP_STRING(
+	[--with-libdir=DIR]
+	[Perl modules in DIR (default ${prefix}/bin)]
+    ),
+    [LIBDIR="$withval"]
 )
 AC_SUBST(LIBDIR)
 
@@ -85,7 +104,10 @@ AC_SUBST(LIBDIR)
 DATADIR='${prefix}/bin/etc'
 AC_ARG_WITH(
     datadir,
-    [  --with-datadir=DIR     default *read-only* data files in DIR (default ${prefix}/bin/etc)],
+    AS_HELP_STRING(
+	[--with-datadir=DIR]
+	[default *read-only* data files in DIR (default ${prefix}/bin/etc)]
+    ),
     [DATADIR="$withval"]
 )
 AC_SUBST(DATADIR)
@@ -94,7 +116,10 @@ AC_SUBST(DATADIR)
 EXPLDIR='${prefix}/expl'
 AC_ARG_WITH(
     expldir,
-    [  --with-expldir=DIR     modifiable data files in DIR (default ${prefix}/expl)],
+    AS_HELP_STRING(
+	[--with-expldir=DIR],
+	[modifiable data files in DIR (default ${prefix}/expl)]
+    ),
     [EXPLDIR="$withval"]
 )
 AC_SUBST(EXPLDIR)
@@ -103,7 +128,10 @@ AC_SUBST(EXPLDIR)
 MANDIR='/usr/local/man'
 AC_ARG_WITH(
     mandir,
-    [  --with-mandir=DIR     documentation in DIR (default /usr/local/man)],
+    AS_HELP_STRING(
+	[--with-mandir=DIR],
+	[documentation in DIR (default /usr/local/man)]
+    ),
     [MANDIR="$withval"]
 )
 AC_SUBST(MANDIR)
@@ -112,7 +140,10 @@ AC_SUBST(MANDIR)
 INITDIR=/etc/rc.d/init.d
 AC_ARG_WITH(
     initdir,
-    [  --with-initdir=DIR     install System V init script in DIR  (default /etc/rc.d/init.d)],
+    AS_HELP_STRING(
+	[--with-initdir=DIR],
+	[install System V init script in DIR  (default /etc/rc.d/init.d)]
+    ),
     [INITDIR="$withval"]
 )
 AC_SUBST(INITDIR)
@@ -121,7 +152,10 @@ AC_SUBST(INITDIR)
 LOCKDIR=/var/lock/subsys
 AC_ARG_WITH(
     lockdir,
-    [  --with-lockdir=DIR     create lock files in DIR  (default /var/lock/subsys)],
+    AS_HELP_STRING(
+	[--with-lockdir=DIR],
+	[create lock files in DIR  (default /var/lock/subsys)]
+    ),
     [LOCKDIR="$withval"]
 )
 AC_SUBST(LOCKDIR)
@@ -130,7 +164,10 @@ AC_SUBST(LOCKDIR)
 PIDDIR='${prefix}'
 AC_ARG_WITH(
     piddir,
-    [  --with-piddir=DIR     create .pid files in DIR  (default ${prefix})],
+    AS_HELP_STRING(
+	[--with-piddir=DIR],
+	[create .pid files in DIR (default ${prefix})]
+    ),
     [PIDDIR="$withval"]
 )
 AC_SUBST(PIDDIR)
@@ -139,7 +176,10 @@ AC_SUBST(PIDDIR)
 ETCDIR='${prefix}/etc'
 AC_ARG_WITH(
     etcdir,
-    [  --with-etcdir=DIR     Config directories populated by the user are in DIR  (default ${prefix}/etc)],
+    AS_HELP_STRING(
+	[--with-etcdir=DIR],
+	[Config directories populated by the user are in DIR (default ${prefix}/etc)]
+    ),
     [ETCDIR="$withval"]
 )
 AC_SUBST(ETCDIR)
@@ -148,7 +188,10 @@ AC_SUBST(ETCDIR)
 LOCALEDIR='${prefix}/locale'
 AC_ARG_WITH(
     localedir,
-    [  --with-localedir=DIR     create language files in DIR  (default ${prefix}/locale)],
+    AS_HELP_STRING(
+	[--with-localedir=DIR],
+	[create language files in DIR  (default ${prefix}/locale)]
+    ),
     [LOCALEDIR="$withval"]
 )
 AC_SUBST(LOCALEDIR)
@@ -157,7 +200,10 @@ AC_SUBST(LOCALEDIR)
 DOCDIR='${prefix}/doc'
 AC_ARG_WITH(
     docdir,
-    [  --with-docdir=DIR     create documentation files in DIR  (default ${prefix}/doc)],
+    AS_HELP_STRING(
+	[--with-docdir=DIR],
+	[create documentation files in DIR  (default ${prefix}/doc)]
+    ),
     [DOCDIR="$withval"]
 )
 AC_SUBST(DOCDIR)
@@ -166,7 +212,10 @@ AC_SUBST(DOCDIR)
 SCRIPTDIR='${prefix}/bin'
 AC_ARG_WITH(
     scriptdir,
-    [  --with-scriptdir=DIR     create script files in DIR  (default ${prefix}/bin)],
+    AS_HELP_STRING(
+	[--with-scriptdir=DIR],
+	[create script files in DIR  (default ${prefix}/bin)]
+    ),
     [SCRIPTDIR="$withval"]
 )
 AC_SUBST(SCRIPTDIR)
@@ -175,7 +224,10 @@ AC_SUBST(SCRIPTDIR)
 SAMPLEDIR='${prefix}/sample'
 AC_ARG_WITH(
     sampledir,
-    [  --with-sampledir=DIR     create sample files in DIR  (default ${prefix}/sample)],
+    AS_HELP_STRING(
+	[--with-sampledir=DIR],
+	[create sample files in DIR  (default ${prefix}/sample)]
+    ),
     [SAMPLEDIR="$withval"]
 )
 AC_SUBST(SAMPLEDIR)
@@ -184,7 +236,10 @@ AC_SUBST(SAMPLEDIR)
 SPOOLDIR='${prefix}/spool'
 AC_ARG_WITH(
     spooldir,
-    [  --with-spooldir=DIR     spool directory is DIR  (default ${prefix}/spool)],
+    AS_HELP_STRING(
+	[--with-spooldir=DIR],
+	[spool directory is DIR  (default ${prefix}/spool)]
+    ),
     [SPOOLDIR="$withval"]
 )
 AC_SUBST(SPOOLDIR)
