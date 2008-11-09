@@ -21,9 +21,6 @@
 
 #SUBDIRS = src doc wwsympa nls
 
-ChangeLog:
-	@CVS2CL@
-
 ## For preparing samples
 HOST		=	`$(PERL) -MSys::Hostname -e "printf '%s', Sys::Hostname::hostname();"`
 COOKIE		=	`$(PERL) -e " print int(rand ( time ))  "`
@@ -393,6 +390,9 @@ installconfig:
 	DESTDIR=$(DESTDIR); export DESTDIR; \
 	$(PERL) -I $(DESTDIR)$(LIBDIR) $(DESTDIR)$(SBINDIR)/sympa_wizard.pl; \
 	fi
+
+ChangeLog:
+	$(CVS2CL)
 
 tag:	ChangeLog
 	@if [ ! $(NEW_VERSION) ]; then \
