@@ -15,7 +15,7 @@ MSGATTRIB = msgattrib
 XGETTEXT = po/xgettext.pl
 
 ## Available catalogues (languages)
-.SUFFIXES: .po .mo
+SUFFIXES = .po .mo
 
 .mo:   .po
 

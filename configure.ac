@@ -424,5 +424,6 @@ AC_CONFIG_FILES([
     web_tt2/Makefile
     wwsympa/Makefile
     mail_tt2/Makefile
+    po/Makefile
 ])
 AC_OUTPUT
