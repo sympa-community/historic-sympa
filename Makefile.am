@@ -26,13 +26,6 @@ HOST		=	`$(PERL) -MSys::Hostname -e "printf '%s', Sys::Hostname::hostname();"`
 COOKIE		=	`$(PERL) -e " print int(rand ( time ))  "`
 PERL_VERSION	=	`$(PERL) -e ' print $$]'`
 
-## Root directory for Sympa ; use absolute path.
-## Binaries are located under $DIR/bin ; this directory needs to be
-## readable for everyone ; `queue' needs to be executable 
-## You can also set DESTDIR to the place where everything should be
-## installed (usefull for packagers of Sympa)
-DIR	=	${prefix}
-
 ## Both queue and bouncequeue are lunched by sendmail. If sendmail
 ## is configured to used smrsh (check the mailer prog definition), thoses
 ## files needs to be installed in /etc/smrsh.  
@@ -304,7 +297,7 @@ installscript:
 
 installdir:
 	@echo "Creating required directories"
-	@for dir in $(DIR) $(EXPLDIR) $(CONFDIR) $(SAMPLEDIR) $(ETCDIR) $(BINDIR) $(LOCALEDIR) $(DOCDIR) $(DIR)/static_content $(DIR)/static_content/icons ; do \
+	@for dir in $(prefix) $(EXPLDIR) $(CONFDIR) $(SAMPLEDIR) $(ETCDIR) $(BINDIR) $(LOCALEDIR) $(DOCDIR) $(prefix)/static_content $(prefix)/static_content/icons ; do \
 		if [ ! -d $(DESTDIR)$$dir ] ; then \
 			echo "Creating $(DESTDIR)$$dir"; \
 			mkdir -p $(DESTDIR)$$dir; \
@@ -353,11 +346,11 @@ installdir:
 	@if [ ! -f $(DESTDIR)$(CONFDIR)/sympa.conf ] ; then \
 	echo "First installation : creating archives and bounce directories..."; \
 	for dir in bounce arc ; do \
-		if [ ! -d $(DESTDIR)$(DIR)/$$dir ] ; then \
-			echo "Creating $(DESTDIR)$(DIR)/$$dir"; \
-			mkdir -p $(DESTDIR)$(DIR)/$$dir; \
-			chown $(USER) $(DESTDIR)$(DIR)/$$dir; \
-			chgrp $(GROUP) $(DESTDIR)$(DIR)/$$dir; \
+		if [ ! -d $(DESTDIR)$(prefix)/$$dir ] ; then \
+			echo "Creating $(DESTDIR)$(prefix)/$$dir"; \
+			mkdir -p $(DESTDIR)$(prefix)/$$dir; \
+			chown $(USER) $(DESTDIR)$(prefix)/$$dir; \
+			chgrp $(GROUP) $(DESTDIR)$(prefix)/$$dir; \
 		fi \
 	done \
 	fi
