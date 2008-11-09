@@ -26,23 +26,9 @@ HOST		=	`$(PERL) -MSys::Hostname -e "printf '%s', Sys::Hostname::hostname();"`
 COOKIE		=	`$(PERL) -e " print int(rand ( time ))  "`
 PERL_VERSION	=	`$(PERL) -e ' print $$]'`
 
-## Both queue and bouncequeue are lunched by sendmail. If sendmail
-## is configured to used smrsh (check the mailer prog definition), thoses
-## files needs to be installed in /etc/smrsh.  
-MAILERPROGDIR	=	@BINDIR@
-
-## Directory for installing WWSympa
-WWSBINDIR	=	$(BINDIR)
-
-ETCBINDIR	=	@DATADIR@
-
-## Web interface colors are now defined in sympa.conf
-
 ## Settings used in src/etc/scripts/sympa
 PIDPRE		=	pidof -x
 PIDPOST		=	
-
-SSLCERTDIR =	$(EXPLDIR)/X509-user-certs
 
 CFLAGS	=	-g
 
@@ -109,9 +95,6 @@ sources: src/Makefile src/queue.c src/bouncequeue.c src/aliaswrapper.c
 	@echo "Making src"
 	@(cd src && echo "making in src..." && \
 	$(MAKE) \
-	WWSBINDIR='${WWSBINDIR}' \
-	MAILERPROGDIR='${MAILERPROGDIR}' \
-	ETCBINDIR='${ETCBINDIR}'\
 	CONFIG='${CONFIG}' \
 	WWSCONFIG='${WWSCONFIG}' \
 	PIDPRE='${PIDPRE}' \
@@ -132,9 +115,6 @@ documentation: doc/sympa.tex.tpl doc/Makefile
 	@echo "Making documentation"
 	@(cd doc && echo "making in doc/..." && \
 	$(MAKE) \
-	WWSBINDIR='${WWSBINDIR}' \
-	MAILERPROGDIR='${MAILERPROGDIR}' \
-	ETCBINDIR='${ETCBINDIR}' \
 	CONFIG='${CONFIG}' \
 	WWSCONFIG='${WWSCONFIG}' \
 	);
@@ -185,7 +165,6 @@ importantchanges:
 locale:
 	@(cd po && echo "making in po/...." && \
 	$(MAKE) \
-	ETCBINDIR='${ETCBINDIR}' \
 	CONFIG='${CONFIG}' \
 	WWSCONFIG='${WWSCONFIG}' \
 	) || exit 1;
@@ -193,7 +172,6 @@ locale:
 installlocale:
 	@(cd po && echo "making install in po/...." && \
 	$(MAKE) \
-	ETCBINDIR='${ETCBINDIR}' \
 	CONFIG='${CONFIG}' \
 	WWSCONFIG='${WWSCONFIG}' \
 	install) || exit 1;
@@ -201,7 +179,6 @@ installlocale:
 updatelocale:
 	@(cd po && echo "make update-po in po/...." && \
 	$(MAKE) \
-	ETCBINDIR='${ETCBINDIR}' \
 	CONFIG='${CONFIG}' \
 	WWSCONFIG='${WWSCONFIG}' \
 	update-po) || exit 1;
@@ -209,22 +186,17 @@ updatelocale:
 installsrc:
 	@(cd src && echo "making in src..." && \
 	$(MAKE) \
-	WWSBINDIR='${WWSBINDIR}' \
-	MAILERPROGDIR='${MAILERPROGDIR}' \
 	CONFIG='${CONFIG}' \
 	WWSCONFIG='${WWSCONFIG}' \
-	ETCBINDIR='${ETCBINDIR}' \
 	HOST='${HOST}' \
 	COOKIE='${COOKIE}' \
 	LOG_SOCKET_TYPE='${LOG_SOCKET_TYPE}' \
-	SSLCERTDIR='${SSLCERTDIR}' \
 	PODIR='${prefix}/po' \
 	newinstall) || exit 1;
 
 installdoc:
 	@(cd doc && echo "make install in doc..." && \
 	$(MAKE) \
-	ETCBINDIR='${ETCBINDIR}' \
 	CONFIG='${CONFIG}' \
 	WWSCONFIG='${WWSCONFIG}' \
 	install) || exit 1;
@@ -234,74 +206,52 @@ installwws:
 	$(MAKE) \
 	SUDO='${SUDO}' \
 	enable_secure='${enable_secure}' \
-	WWSBINDIR='${WWSBINDIR}' \
-	MAILERPROGDIR='${MAILERPROGDIR}' \
 	CONFIG='${CONFIG}' \
 	WWSCONFIG='${WWSCONFIG}' \
-	ETCBINDIR='${ETCBINDIR}' \
 	newinstall) || exit 1;
 
 installwebtt2:
 	@(cd web_tt2 && echo "making in web_tt2..." && \
 	$(MAKE) \
-	WWSBINDIR='${WWSBINDIR}' \
-	MAILERPROGDIR='${MAILERPROGDIR}' \
 	CONFIG='${CONFIG}' \
 	WWSCONFIG='${WWSCONFIG}' \
-	ETCBINDIR='${ETCBINDIR}' \
 	newinstall) || exit 1;
 
 installmailtt2:
 	@(cd mail_tt2 && echo "making in mail_tt2..." && \
 	$(MAKE) \
-	WWSBINDIR='${WWSBINDIR}' \
-	MAILERPROGDIR='${MAILERPROGDIR}' \
 	CONFIG='${CONFIG}' \
 	WWSCONFIG='${WWSCONFIG}' \
-	ETCBINDIR='${ETCBINDIR}' \
 	newinstall) || exit 1;
 
 installsoap:
 	@(cd soap && echo "making in soap/..." && \
 	$(MAKE) \
-	WWSBINDIR='${WWSBINDIR}' \
-	MAILERPROGDIR='${MAILERPROGDIR}' \
 	CONFIG='${CONFIG}' \
 	WWSCONFIG='${WWSCONFIG}' \
-	ETCBINDIR='${ETCBINDIR}' \
 	newinstall) || exit 1;
 
 installsample:
 	@(cd src/etc/sample && echo "making in src/etc/sample..." && \
 	$(MAKE) LOG_SOCKET_TYPE='${LOG_SOCKET_TYPE}' \
-	WWSBINDIR='${WWSBINDIR}' \
 	HOST='${HOST}' \
 	CONFIG='${CONFIG}' \
 	WWSCONFIG='${WWSCONFIG}' \
-	ETCBINDIR='${ETCBINDIR}' \
-	MAILERPROGDIR='${MAILERPROGDIR}' \
 	COOKIE='${COOKIE}' \
-	SSLCERTDIR='${SSLCERTDIR}' \
 	install) || exit 1;
 
 installman:
 	@(cd doc/man8 && \
 	$(MAKE)  \
-	CONFDIR='${CONFDIR}' \
 	UMASK='${UMASK}' \
-	MAILERPROGDIR='${MAILERPROGDIR}' \
-	ETCBINDIR='${ETCBINDIR}' \
 	newinstall) || exit 1;
 
 installscript:
 	@(cd src/etc/script && echo "making in src/etc/script..." && \
 	$(MAKE) \
-	WWSBINDIR='${WWSBINDIR}' \
 	HOST='${HOST}' \
 	CONFIG='${CONFIG}' \
 	WWSCONFIG='${WWSCONFIG}' \
-	ETCBINDIR='${ETCBINDIR}' \
-	MAILERPROGDIR='${MAILERPROGDIR}' \
 	COOKIE='${COOKIE}' \
 	PIDPRE='${PIDPRE}' \
 	PIDPOST='${PIDPOST}' \

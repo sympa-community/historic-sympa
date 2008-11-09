@@ -118,6 +118,21 @@ SPOOLDIR='${prefix}/spool'
 AC_ARG_WITH(spooldir, [  --with-spooldir=DIR     spool directory is DIR  (default ${prefix}/spool)], [SPOOLDIR="$withval"])
 AC_SUBST(SPOOLDIR)
 
+## Both queue and bouncequeue are lunched by sendmail. If sendmail
+## is configured to used smrsh (check the mailer prog definition), thoses
+## files needs to be installed in /etc/smrsh.  
+MAILERPROGDIR=$BINDIR
+AC_SUBST(MAILERPROGDIR)
+## Directory for installing WWSympa
+WWSBINDIR=$BINDIR
+AC_SUBST(WWSBINDIR)
+# what for ?
+ETCBINDIR=$DATADIR
+AC_SUBST(ETCBINDIR)
+# SSL certs dir
+SSLCERTDIR=$EXPLDIR/X509-user-certs
+AC_SUBST(SSLCERTDIR)
+
 ## to run wwsympa.fcgi without setuidperl
 AC_ARG_ENABLE(
     [secure],
