@@ -59,7 +59,6 @@ PIDDIR	=	@PIDDIR@
 MAILERPROGDIR	=	@BINDIR@
 
 RPMTOPDIR	=	`rpm --eval %_topdir`
-#RPMTOPDIR	=	/usr/src/redhat
 
 MANDIR		=	@MANDIR@
 
@@ -110,7 +109,6 @@ NEWALIASES_ARG	=	@NEWALIASES_ARG@
 POSTMAP		=	@POSTMAP@
 
 ## Argument to postmap command
-# POSTMAP_ARG	=	hash:/etc/mail/sympa_virtual
 POSTMAP_ARG	=	@POSTMAP_ARG@
 
 ## The sendmail aliases file we use. Better use a seperate one for sympa.
@@ -131,19 +129,6 @@ SSLCERTDIR =	$(EXPL_DIR)/X509-user-certs
 
 CC	=	@CC@
 CFLAGS	=	-g
-
-# Aix4.2 (and some others unix), use gnu make !
-#MAKE	=	@MAKE@
-
-# FreeBSD hier(7) structure and locations
-# by Autrijus Tang 2001/10/11
-#ifeq ($(shell uname), FreeBSD)
-#	PIDPRE	= 	ps -ax | grep
-#	PIDPOST	= 	| grep perl | head -n 1 | cut -f 2 -d " "
-#	LOCKDIR	= 	/var/spool/lock
-#	RPMTOPDIR	=	/usr/local/src/redhat
-#	OPENSSL	=	/usr/bin/openssl
-#endif
 
 ##---------- STOP ---------- STOP ---------- STOP ---------- STOP ----------
 
