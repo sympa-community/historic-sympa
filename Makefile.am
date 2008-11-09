@@ -41,6 +41,8 @@ MAILERPROGDIR	=	@BINDIR@
 ## Directory for installing WWSympa
 WWSBINDIR	=	$(BINDIR)
 
+ETCBINDIR	=	@DATADIR@
+
 ## Web interface colors are now defined in sympa.conf
 
 ## Settings used in src/etc/scripts/sympa
@@ -51,19 +53,12 @@ SSLCERTDIR =	$(EXPLDIR)/X509-user-certs
 
 CFLAGS	=	-g
 
-##---------- STOP ---------- STOP ---------- STOP ---------- STOP ----------
-
 CONFIG		=	$(CONFDIR)/sympa.conf
 WWSCONFIG	=	$(CONFDIR)/wwsympa.conf
-ETCBINDIR	=	@DATADIR@
 
 main_SRC	=	AUTHORS COPYING ChangeLog INSTALL KNOWNBUGS NEWS README
 
-#ifeq ($(shell uname), Linux)
-#	LOG_SOCKET_TYPE="inet"
-#else
 LOG_SOCKET_TYPE	=	unix
-#endif
 
 all:	warning checkperl checkcpan sources wrapper soap_wrapper man locale
 
