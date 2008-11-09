@@ -121,7 +121,7 @@ sources: src/Makefile src/queue.c src/bouncequeue.c src/aliaswrapper.c
 wrapper: src/Makefile src/queue.c src/bouncequeue.c src/aliaswrapper.c
 	@echo "Making wwsympa"
 	@(cd wwsympa && echo "making in wwsympa..." && \
-	$(MAKE) SH='${SH}' CC='${CC}' CFLAGS='${CFLAGS}' WWSYMPA='${CGIDIR}/wwsympa.fcgi');
+	$(MAKE) WWSYMPA='${CGIDIR}/wwsympa.fcgi');
 
 soap_wrapper: src/Makefile src/queue.c src/bouncequeue.c src/aliaswrapper.c
 	@echo "Making sympa_soap"
