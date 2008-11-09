@@ -43,28 +43,28 @@ install: makedir $(cgi_SUBST) $(lib_SUBST) substcgi substlib substscript install
 
 installmod:
 	@for i in $(SRC) ; do \
-	chown $(USER) $(DESTDIR)$(ETCBINDIR)/$$i; \
-	chgrp $(GROUP) $(DESTDIR)$(ETCBINDIR)/$$i; \
+	chown $(USER) $(DESTDIR)$(ETCBINDIR)/$$i || /bin/true; \
+	chgrp $(GROUP) $(DESTDIR)$(ETCBINDIR)/$$i || /bin/true; \
 	done
 	@for i in $(script_SUBST) ; do \
-	chown $(USER) $(DESTDIR)$(SCRIPTDIR)/$$i; \
-	chgrp $(GROUP) $(DESTDIR)$(SCRIPTDIR)/$$i; \
+	chown $(USER) $(DESTDIR)$(SCRIPTDIR)/$$i || /bin/true; \
+	chgrp $(GROUP) $(DESTDIR)$(SCRIPTDIR)/$$i || /bin/true; \
 	chmod a+x $(DESTDIR)$(SCRIPTDIR)/$$i; \
 	done
 	@for i in $(cgi_SUBST) ; do \
-	chown $(USER) $(DESTDIR)$(CGIDIR)/$$i; \
-	chgrp $(GROUP) $(DESTDIR)$(CGIDIR)/$$i; \
+	chown $(USER) $(DESTDIR)$(CGIDIR)/$$i || /bin/true; \
+	chgrp $(GROUP) $(DESTDIR)$(CGIDIR)/$$i || /bin/true; \
 	done
 	@for i in $(cgi_SRC) ; do \
-	chown $(USER) $(DESTDIR)$(CGIDIR)/$$i; \
-	chgrp $(GROUP) $(DESTDIR)$(CGIDIR)/$$i; \
+	chown $(USER) $(DESTDIR)$(CGIDIR)/$$i || /bin/true; \
+	chgrp $(GROUP) $(DESTDIR)$(CGIDIR)/$$i || /bin/true; \
 	done
 	@echo "Setting SetUID bit on sympa_soap_server-wrapper.fcgi..."
 	chmod u+s $(DESTDIR)$(CGIDIR)/sympa_soap_server-wrapper.fcgi
 	chmod g+s $(DESTDIR)$(CGIDIR)/sympa_soap_server-wrapper.fcgi
 	@for i in $(lib_SUBST) ; do \
-	chown $(USER) $(DESTDIR)$(LIBDIR)/$$i; \
-	chgrp $(GROUP) $(DESTDIR)$(LIBDIR)/$$i; \
+	chown $(USER) $(DESTDIR)$(LIBDIR)/$$i || /bin/true; \
+	chgrp $(GROUP) $(DESTDIR)$(LIBDIR)/$$i || /bin/true; \
 	chmod 644 $(DESTDIR)$(LIBDIR)/$$i; \
 	done
 
