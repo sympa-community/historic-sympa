@@ -142,7 +142,7 @@ documentation: doc/sympa.tex.tpl doc/Makefile
 man: doc/man8/Makefile
 	@echo "Making man"
 	@(cd doc/man8 && echo "making in doc/man8/..." && \
-	$(MAKE) SYMPA_VERSION='$(PACKAGE_VERSION)');
+	$(MAKE));
 
 checkcpan: 
 	@echo "Checking needed CPAN modules ..."
