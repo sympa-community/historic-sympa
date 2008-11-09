@@ -263,12 +263,13 @@ installmailtt2:
 
 installsoap:
 	@(cd soap && echo "making in soap/..." && \
-	$(MAKE) SH='${SH}' CC='${CC}' CFLAGS='${CFLAGS}' PERL='${PERL}' \
-	DIR='${DIR}' BINDIR='${BINDIR}' SBINDIR='${SBINDIR}' LIBDIR='${LIBDIR}' \
-	USER='${USER}' GROUP='${GROUP}' SCRIPTDIR='${SCRIPTDIR}' \
-	CGIDIR='${CGIDIR}' WWSBINDIR='${WWSBINDIR}' MAILERPROGDIR='${MAILERPROGDIR}' \
-	PIDDIR='${PIDDIR}' CONFIG='${CONFIG}' WWSCONFIG='${WWSCONFIG}' ETCBINDIR='${ETCBINDIR}' \
-	DESTDIR='${DESTDIR}' USER='${USER}' GROUP='${GROUP}' newinstall) || exit 1;
+	$(MAKE) \
+	WWSBINDIR='${WWSBINDIR}' \
+	MAILERPROGDIR='${MAILERPROGDIR}' \
+	CONFIG='${CONFIG}' \
+	WWSCONFIG='${WWSCONFIG}' \
+	ETCBINDIR='${ETCBINDIR}' \
+	newinstall) || exit 1;
 
 installsample:
 	@(cd src/etc/sample && echo "making in src/etc/sample..." && \
