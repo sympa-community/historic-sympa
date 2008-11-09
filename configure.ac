@@ -289,13 +289,10 @@ AC_ARG_WITH(
     ),
     [PERL="$withval"]
 )
-AC_SUBST(PERL)
 
 AC_PATH_PROG(SUIDPERL, suidperl, /usr/bin/suidperl)
-AC_SUBST(SUIDPERL)
 
 AC_PATH_PROG(SUDO, sudo, /usr/bin/sudo)
-AC_SUBST(SUDO)
 
 AC_PATH_PROG(MHONARC, mhonarc, /usr/bin/mhonarc)
 AC_ARG_WITH(
@@ -306,7 +303,6 @@ AC_ARG_WITH(
     ),
     [MHONARC="$withval"]
 )
-AC_SUBST(MHONARC)
 
 AC_PATH_PROG(OPENSSL, openssl, /usr/local/ssl/bin)
 AC_ARG_WITH(
@@ -317,13 +313,10 @@ AC_ARG_WITH(
     ),
     [OPENSSL="$withval"]
 )
-AC_SUBST(OPENSSL)
 
 AC_PATH_PROG(CVS2CL, cvs2cl.pl, /usr/local/bin)
-AC_SUBST(CVS2CL)
 
 AC_PATH_PROG(MSGFMT, msgfmt, /usr/bin/msgfmt)
-AC_SUBST(MSGFMT)
 
 USER=sympa
 AC_ARG_WITH(
