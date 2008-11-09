@@ -41,8 +41,6 @@ DIR	=	${prefix}
 ## files needs to be installed in /etc/smrsh.  
 MAILERPROGDIR	=	@BINDIR@
 
-RPMTOPDIR	=	`rpm --eval %_topdir`
-
 ## Directory for installing WWSympa
 WWSBINDIR	=	$(BINDIR)
 
