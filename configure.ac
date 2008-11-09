@@ -125,12 +125,12 @@ AC_ARG_WITH(
 AC_SUBST(EXPLDIR)
 
 ## location of documentation
-MANDIR='/usr/local/man'
+MANDIR='${prefix}/man'
 AC_ARG_WITH(
     mandir,
     AS_HELP_STRING(
 	[--with-mandir=DIR],
-	[documentation in DIR (default /usr/local/man)]
+	[documentation in DIR (default ${prefix}/man)]
     ),
     [MANDIR="$withval"]
 )
