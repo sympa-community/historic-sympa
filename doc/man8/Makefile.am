@@ -7,7 +7,7 @@ SUFFIXES:	.8 .pod
 
 .pod.8:
 	rm -f $@
-	pod2man --section=8 --center="sympa $(SYMPA_VERSION)" --lax --release="$(SYMPA_VERSION)" $< $@
+	pod2man --section=8 --center="sympa $(PACKAGE_VERSION)" --lax --release="$(PACKAGE_VERSION)" $< $@
 
 all:	$(MAN8)
 
@@ -26,7 +26,7 @@ newinstall: makedir
 			DIR=$(DIR); export DIR; \
 			INSTALLDIR=$(MANDIR)/man8; export INSTALLDIR; \
 			DESTDIR=$(DESTDIR); export DESTDIR; \
-			SYMPA_VERSION=$(SYMPA_VERSION); export SYMPA_VERSION; \
+			SYMPA_VERSION=$(PACKAGE_VERSION); export SYMPA_VERSION; \
 			CONFDIR=$(CONFDIR); export CONFDIR; \
 			SENDMAIL_ALIASES=$(SENDMAIL_ALIASES); export SENDMAIL_ALIASES; \
 			VIRTUAL_ALIASES=$(VIRTUAL_ALIASES); export VIRTUAL_ALIASES; \
