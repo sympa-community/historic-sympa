@@ -170,8 +170,6 @@ installdoc:
 installwws:
 	@(cd wwsympa && echo "making in wwsympa..." && \
 	$(MAKE) \
-	SUDO='${SUDO}' \
-	enable_secure='${enable_secure}' \
 	newinstall) || exit 1;
 
 installwebtt2:
