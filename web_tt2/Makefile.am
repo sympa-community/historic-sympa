@@ -54,4 +54,4 @@ installtemplates:
 		); \
 	$(PERL) ../set_symlinks.pl web_tt2 $(DESTDIR)$(ETCBINDIR)/web_tt2
 	find $(DESTDIR)$(ETCBINDIR) -type d -exec chmod 755 {} \;
-	find $(DESTDIR)$(ETCBINDIR) -type f -exec chmod 444 {} \;
+	find $(DESTDIR)$(ETCBINDIR) -type f -exec chmod 644 {} \;
