@@ -36,8 +36,6 @@ PERL_VERSION	=	`$(PERL) -e ' print $$]'`
 ## installed (usefull for packagers of Sympa)
 DIR	=	${prefix}
 
-EXPL_DIR	=	@EXPLDIR@
-
 ## Both queue and bouncequeue are lunched by sendmail. If sendmail
 ## is configured to used smrsh (check the mailer prog definition), thoses
 ## files needs to be installed in /etc/smrsh.  
@@ -54,7 +52,7 @@ WWSBINDIR	=	$(BINDIR)
 PIDPRE		=	pidof -x
 PIDPOST		=	
 
-SSLCERTDIR =	$(EXPL_DIR)/X509-user-certs
+SSLCERTDIR =	$(EXPLDIR)/X509-user-certs
 
 CFLAGS	=	-g
 
@@ -154,7 +152,7 @@ documentation: doc/sympa.tex.tpl doc/Makefile
 	$(MAKE) SH='${SH}' CC='${CC}' CFLAGS='${CFLAGS}' PERL='${PERL}' CGIDIR='${CGIDIR}' \
 	DIR='${DIR}' BINDIR='${BINDIR}' SBINDIR='${SBINDIR}' LIBDIR='${LIBDIR}' WWSBINDIR='${WWSBINDIR}' \
 	MAILERPROGDIR='${MAILERPROGDIR}' ETCBINDIR='${ETCBINDIR}' ETCDIR='${ETCDIR}' PIDDIR='${PIDDIR}' \
-	CONFIG='${CONFIG}' WWSCONFIG='${WWSCONFIG}' EXPL_DIR='${EXPL_DIR}' LOCALEDIR='${LOCALEDIR}' SPOOLDIR='${SPOOLDIR}' \
+	CONFIG='${CONFIG}' WWSCONFIG='${WWSCONFIG}' EXPL_DIR='$(EXPLDIR)' LOCALEDIR='${LOCALEDIR}' SPOOLDIR='${SPOOLDIR}' \
 	SCRIPTDIR='${SCRIPTDIR}' \
 	USER='${USER}' GROUP='${GROUP}');
 
@@ -228,7 +226,7 @@ installsrc:
 	@(cd src && echo "making in src..." && \
 	$(MAKE) SH='${SH}' CC='${CC}' CFLAGS='${CFLAGS}' PERL='${PERL}' SYMPA_VERSION='$(PACKAGE_VERSION)' \
 	DIR='${DIR}' BINDIR='${BINDIR}' SBINDIR='${SBINDIR}' LIBDIR='${LIBDIR}' WWSBINDIR='${WWSBINDIR}' \
-	DESTDIR='${DESTDIR}' MAILERPROGDIR='${MAILERPROGDIR}' EXPL_DIR='${EXPL_DIR}' LIBEXECDIR='${LIBEXECDIR}' \
+	DESTDIR='${DESTDIR}' MAILERPROGDIR='${MAILERPROGDIR}' EXPL_DIR='$(EXPLDIR)' LIBEXECDIR='${LIBEXECDIR}' \
 	PIDDIR='${PIDDIR}' CONFIG='${CONFIG}' WWSCONFIG='${WWSCONFIG}' LOCALEDIR='${LOCALEDIR}' SCRIPTDIR='${SCRIPTDIR}' \
 	ETCBINDIR='${ETCBINDIR}' ETCDIR='${ETCDIR}' SENDMAIL_ALIASES='${SENDMAIL_ALIASES}' \
 	VIRTUAL_ALIASES='${VIRTUAL_ALIASES}'  HOST='${HOST}' COOKIE='${COOKIE}' \
@@ -287,7 +285,7 @@ installsample:
 	$(MAKE) SH='${SH}' CC='${CC}' CFLAGS='${CFLAGS}' PERL='${PERL}' LOG_SOCKET_TYPE='${LOG_SOCKET_TYPE}' \
 	DESTDIR='${DESTDIR}' DIR='${DIR}' SAMPLEDIR='${SAMPLEDIR}' \
 	BINDIR='${BINDIR}' SBINDIR='${SBINDIR}' LIBDIR='${LIBDIR}' \
-	EXPL_DIR='${EXPL_DIR}' WWSBINDIR='${WWSBINDIR}' HOST='${HOST}' \
+	EXPL_DIR='$(EXPLDIR)' WWSBINDIR='${WWSBINDIR}' HOST='${HOST}' \
 	CONFIG='${CONFIG}' WWSCONFIG='${WWSCONFIG}' ETCBINDIR='${ETCBINDIR}' MAILERPROGDIR='${MAILERPROGDIR}' \
 	COOKIE='${COOKIE}' OPENSSL='@OPENSSL@' SSLCERTDIR='${SSLCERTDIR}' \
 	SPOOLDIR='${SPOOLDIR}' USER='${USER}' GROUP='${GROUP}' PIDDIR='${PIDDIR}' install) || exit 1;
@@ -316,7 +314,7 @@ installscript:
 
 installdir:
 	@echo "Creating required directories"
-	@for dir in $(DIR) $(EXPL_DIR) $(CONFDIR) $(SAMPLEDIR) $(ETCDIR) $(BINDIR) $(LOCALEDIR) $(DOCDIR) $(DIR)/static_content $(DIR)/static_content/icons ; do \
+	@for dir in $(DIR) $(EXPLDIR) $(CONFDIR) $(SAMPLEDIR) $(ETCDIR) $(BINDIR) $(LOCALEDIR) $(DOCDIR) $(DIR)/static_content $(DIR)/static_content/icons ; do \
 		if [ ! -d $(DESTDIR)$$dir ] ; then \
 			echo "Creating $(DESTDIR)$$dir"; \
 			mkdir -p $(DESTDIR)$$dir; \
