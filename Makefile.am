@@ -131,12 +131,13 @@ soap_wrapper: src/Makefile src/queue.c src/bouncequeue.c src/aliaswrapper.c
 documentation: doc/sympa.tex.tpl doc/Makefile 
 	@echo "Making documentation"
 	@(cd doc && echo "making in doc/..." && \
-	$(MAKE) SH='${SH}' CC='${CC}' CFLAGS='${CFLAGS}' PERL='${PERL}' CGIDIR='${CGIDIR}' \
-	DIR='${DIR}' BINDIR='${BINDIR}' SBINDIR='${SBINDIR}' LIBDIR='${LIBDIR}' WWSBINDIR='${WWSBINDIR}' \
-	MAILERPROGDIR='${MAILERPROGDIR}' ETCBINDIR='${ETCBINDIR}' ETCDIR='${ETCDIR}' PIDDIR='${PIDDIR}' \
-	CONFIG='${CONFIG}' WWSCONFIG='${WWSCONFIG}' EXPL_DIR='$(EXPLDIR)' LOCALEDIR='${LOCALEDIR}' SPOOLDIR='${SPOOLDIR}' \
-	SCRIPTDIR='${SCRIPTDIR}' \
-	USER='${USER}' GROUP='${GROUP}');
+	$(MAKE) \
+	WWSBINDIR='${WWSBINDIR}' \
+	MAILERPROGDIR='${MAILERPROGDIR}' \
+	ETCBINDIR='${ETCBINDIR}' \
+	CONFIG='${CONFIG}' \
+	WWSCONFIG='${WWSCONFIG}' \
+	);
 
 man: doc/man8/Makefile
 	@echo "Making man"
