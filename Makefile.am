@@ -231,12 +231,15 @@ installdoc:
 
 installwws:
 	@(cd wwsympa && echo "making in wwsympa..." && \
-	$(MAKE) SH='${SH}' CC='${CC}' CFLAGS='${CFLAGS}' PERL='${PERL}' \
-	DIR='${DIR}' BINDIR='${BINDIR}' SBINDIR='${SBINDIR}' LIBDIR='${LIBDIR}' \
-	USER='${USER}' GROUP='${GROUP}' SUDO='${SUDO}' enable_secure='${enable_secure}' \
-	CGIDIR='${CGIDIR}' WWSBINDIR='${WWSBINDIR}' MAILERPROGDIR='${MAILERPROGDIR}' \
-	PIDDIR='${PIDDIR}' CONFIG='${CONFIG}' WWSCONFIG='${WWSCONFIG}' ETCBINDIR='${ETCBINDIR}' \
-	DESTDIR='${DESTDIR}' USER='${USER}' GROUP='${GROUP}' newinstall) || exit 1;
+	$(MAKE) \
+	SUDO='${SUDO}' \
+	enable_secure='${enable_secure}' \
+	WWSBINDIR='${WWSBINDIR}' \
+	MAILERPROGDIR='${MAILERPROGDIR}' \
+	CONFIG='${CONFIG}' \
+	WWSCONFIG='${WWSCONFIG}' \
+	ETCBINDIR='${ETCBINDIR}' \
+	newinstall) || exit 1;
 
 installwebtt2:
 	@(cd web_tt2 && echo "making in web_tt2..." && \
