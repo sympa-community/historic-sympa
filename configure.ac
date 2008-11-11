@@ -277,8 +277,6 @@ AC_SUBST(enable_secure)
 
 dnl Checks for programs.
 AC_PROG_CC
-AC_PROG_MAKE_SET
-AC_AIX
 
 AC_PATH_PROG(PERL, perl, /usr/bin/perl)
 AC_ARG_WITH(
