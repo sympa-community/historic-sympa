@@ -17,9 +17,30 @@
 # along with this program; if not, write to the Free Software
 # Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
 
-## Authors :
-##           Serge Aumont <sa@cru.fr>
-##           Olivier Salaün <os@cru.fr>
+=head1 NAME
+
+sympa_wizard.pl - help perform sympa initial setup
+
+=head1 USAGE
+
+sympa_wizard.pl [options]
+
+Options:
+
+    --create <file> create given configuration file
+    --check         check CPAN modules
+
+=head1 AUTHORS
+
+=over
+
+=item Serge Aumont <sa@cru.fr>
+
+=item Olivier Salaün <os@cru.fr>
+
+=back
+
+=cut
 
 ## Change this to point to your Sympa bin directory
 use lib '--LIBDIR--';
