@@ -24,7 +24,7 @@
 ## Change this to point to your Sympa bin directory
 use lib '--LIBDIR--';
 
-use strict vars;
+use strict;
 use POSIX;
 use Getopt::Long;
 require 'tools.pl';
