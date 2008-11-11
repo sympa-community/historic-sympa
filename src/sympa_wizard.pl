@@ -556,12 +556,12 @@ sub edit_configuration {
     require 'Conf.pm';
 
     ## Load config 
-    unless ($wwsconf = &wwslib::load_config($wwsympa_conf)) {
+    unless ($wwsconf = wwslib::load_config($wwsympa_conf)) {
         die("Unable to load config file $wwsympa_conf");
     }
 
     ## Load sympa config
-    unless (&Conf::load( $sympa_conf )) {
+    unless (Conf::load( $sympa_conf )) {
         die("Unable to load sympa config file $sympa_conf");
     }
 
@@ -650,7 +650,7 @@ sub edit_configuration {
 
     if ($somechange) {
 
-        my $date = &POSIX::strftime("%d.%b.%Y-%H.%M.%S", localtime(time));
+        my $date = POSIX::strftime("%d.%b.%Y-%H.%M.%S", localtime(time));
 
         ## Keep old config files
         unless (rename $wwsympa_conf, $wwsympa_conf.'.'.$date) {
@@ -791,9 +791,9 @@ sub check_cpan {
     }
 
     print "\nChecking for REQUIRED modules:\n------------------------------------------\n";
-    &check_modules('y', \%req_CPAN, \%versions, \%opt_features);
+    check_modules('y', \%req_CPAN, \%versions, \%opt_features);
     print "\nChecking for OPTIONAL modules:\n------------------------------------------\n";
-    &check_modules('n', \%opt_CPAN, \%versions, \%opt_features);
+    check_modules('n', \%opt_CPAN, \%versions, \%opt_features);
 
     print <<EOM;
 ******* NOTE *******
@@ -815,7 +815,7 @@ sub check_modules {
     foreach my $mod (sort keys %$todo) {
         printf ("%-20s %-15s", $mod, $todo->{$mod});
 
-        my $status = &test_module($mod);
+        my $status = test_module($mod);
         if ($status == 1) {
             $vs = "$mod" . "::VERSION";
 
@@ -830,13 +830,13 @@ sub check_modules {
             }else {
                 print "version is too old ($v < $rv).\n";
                 print ">>>>>>> You must update \"$todo->{$mod}\" to version \"$versions->{$todo->{$mod}}\" <<<<<<.\n";
-                &install_module($mod, {'default' => $default}, $opt_features);
+                install_module($mod, {'default' => $default}, $opt_features);
             }
         } elsif ($status eq "nofile") {
             ### not installed
             print "was not found on this system.\n";
 
-            &install_module($mod, {'default' => $default});
+            install_module($mod, {'default' => $default});
 
         } elsif ($status eq "pb_retval") {
             ### doesn't return 1;
@@ -896,7 +896,7 @@ sub install_module {
     CPAN::Shell->install($module); ## Could use CPAN::Shell->force('install') if make test failed
 
     ## Check if module has been successfuly installed
-    unless (&test_module($module) == 1) {
+    unless (test_module($module) == 1) {
 
         ## Prevent recusive calls if already in force mode
         if ($options->{'force'}) {
@@ -906,7 +906,7 @@ sub install_module {
             print  "Installation of $module FAILED. Do you want to force the installation of this module? (y/N) ";
             my $answer = <STDIN>; chomp $answer;
             if ($answer =~ /^y/i) {
-                &install_module($module, {'force' => 1});
+                install_module($module, {'force' => 1});
             }
         }
     }
