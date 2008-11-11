@@ -264,17 +264,6 @@ AC_SUBST(CONFIG)
 WWSCONFIG=$CONFDIR/wwsympa.conf
 AC_SUBST(WWSCONFIG)
 
-
-## to run wwsympa.fcgi without setuidperl
-AC_ARG_ENABLE(
-    [secure],
-    AS_HELP_STRING(
-	[--enable-secure],
-	[install wwsympa to be run in a secure mode, without suidperl (default disabled)]
-    )
-)
-AC_SUBST(enable_secure)
-
 dnl Checks for programs.
 AC_PROG_CC
 
@@ -287,10 +276,6 @@ AC_ARG_WITH(
     ),
     [PERL="$withval"]
 )
-
-AC_PATH_PROG(SUIDPERL, suidperl, /usr/bin/suidperl)
-
-AC_PATH_PROG(SUDO, sudo, /usr/bin/sudo)
 
 AC_PATH_PROG(CVS2CL, cvs2cl.pl, /usr/local/bin)
 
