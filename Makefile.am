@@ -21,10 +21,6 @@
 
 #SUBDIRS = src doc wwsympa nls
 
-PERL_VERSION	=	`$(PERL) -e ' print $$]'`
-
-main_SRC	=	AUTHORS COPYING ChangeLog INSTALL KNOWNBUGS NEWS README
-
 all:	sources wrapper soap_wrapper man locale
 
 sources: src/Makefile src/queue.c src/bouncequeue.c src/aliaswrapper.c
