@@ -170,13 +170,3 @@ installdir:
 		fi \
 	done \
 	fi
-
-ChangeLog:
-	$(CVS2CL)
-
-tag:	ChangeLog
-	@if [ ! $(NEW_VERSION) ]; then \
-	echo "Current version is $(VERSION)"; \
-	echo "You need to define NEW_VERSION"; \
-	else echo $(NEW_VERSION) > .version; cvs ci -m 'preparing $(NEW_VERSION)' .version ChangeLog; cvs tag -F `echo sympa-$(NEW_VERSION)|sed 's/\./_/g'`; \
-	fi

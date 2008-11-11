@@ -277,8 +277,6 @@ AC_ARG_WITH(
     [PERL="$withval"]
 )
 
-AC_PATH_PROG(CVS2CL, cvs2cl.pl, /usr/local/bin)
-
 AC_PATH_PROG(MSGFMT, msgfmt, /usr/bin/msgfmt)
 
 USER=sympa
