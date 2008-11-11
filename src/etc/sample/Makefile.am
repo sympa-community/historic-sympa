@@ -25,9 +25,6 @@ SUBSTSRC	=	robot.conf *.ldap
 
 SAMPLEDIR	=	$(prefix)/sample
 
-LOG_SOCKET_TYPE	=	unix
-
-
 all:	
 
 install: makedir installsrc installsubstsrc installsamplelist
@@ -53,7 +50,6 @@ installsubstsrc:
 		BINDIR=$(BINDIR); export BINDIR; \
 		ETCBINDIR=$(ETCBINDIR); export ETCBINDIR; \
 		CONFIG=$(CONFIG); export CONFIG; \
-		LOG_SOCKET_TYPE=$(LOG_SOCKET_TYPE); export LOG_SOCKET_TYPE; \
 		COOKIE=$(COOKIE); export COOKIE; \
 		OPENSSL=$(OPENSSL); export OPENSSL ; \
 		SSLCERTDIR=$(SSLCERTDIR); export SSLCERTDIR ; \
