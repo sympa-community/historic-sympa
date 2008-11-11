@@ -53,7 +53,6 @@ installsubstsrc:
 		COOKIE=$(COOKIE); export COOKIE; \
 		OPENSSL=$(OPENSSL); export OPENSSL ; \
 		SSLCERTDIR=$(SSLCERTDIR); export SSLCERTDIR ; \
-		HOST=`hostname`; export HOST; \
 		$(PERL) ../../../subst.pl $(SUBSTSRC) \
 	)
 

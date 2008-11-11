@@ -70,7 +70,6 @@ installconfig:
 		UMASK=0664; export UMASK;\
 		INSTALLDIR=$(CONFDIR); export INSTALLDIR;\
 		DESTDIR=$(DESTDIR); export DESTDIR;\
-		HOST=`hostname`; export HOST;\
 		prefix=$(prefix); export prefix;\
 		PIDDIR=$(PIDDIR); export PIDDIR;\
 		LIBDIR=$(LIBDIR); export LIBDIR;\
@@ -247,7 +246,6 @@ subst:
 		UMASK=0755; export UMASK;\
 		USER=$(USER); export USER;\
 		GROUP=$(GROUP); export GROUP;\
-		HOST=`hostname`; export HOST;\
 		DIR=$(prefix); export DIR;\
 		DESTDIR=$(DESTDIR); export DESTDIR;\
 		PIDDIR=$(PIDDIR); export PIDDIR;\
