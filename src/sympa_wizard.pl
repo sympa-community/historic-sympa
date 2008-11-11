@@ -21,7 +21,7 @@
 
 sympa_wizard.pl - help perform sympa initial setup
 
-=head1 USAGE
+=head1 SYNOPSIS
 
 sympa_wizard.pl [options]
 
@@ -29,6 +29,7 @@ Options:
 
     --create <file> create given configuration file
     --check         check CPAN modules
+    --help          display help
 
 =head1 AUTHORS
 
@@ -48,6 +49,7 @@ use lib '--LIBDIR--';
 use strict;
 use POSIX;
 use Getopt::Long;
+use Pod::Usage;
 require 'tools.pl';
 
 ## Configuration
@@ -501,10 +503,13 @@ my %options;
 GetOptions(
     \%options, 
     'create=s',
-    'check'
+    'check',
+    'help'
 );
 
-if ($options{create}) {
+if ($options{help}) {
+    pod2usage();
+} elsif ($options{create}) {
     create_configuration($options{create});
 } elsif ($options{check}) {
     check_cpan();
