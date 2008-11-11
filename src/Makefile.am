@@ -84,7 +84,6 @@ installconfig:
 		VIRTUAL_ALIASES=$(VIRTUAL_ALIASES); export VIRTUAL_ALIASES;\
 		SPOOLDIR=$(SPOOLDIR); export SPOOLDIR;\
 		COOKIE=$(COOKIE); export COOKIE;\
-		OPENSSL=$(OPENSSL); export OPENSSL;\
 		SSLCERTDIR=$(SSLCERTDIR); export SSLCERTDIR; \
 		cd etc; \
 		$(PERL) ../../subst.pl sympa.conf wwsympa.conf \

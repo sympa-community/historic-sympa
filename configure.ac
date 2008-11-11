@@ -304,16 +304,6 @@ AC_ARG_WITH(
     [MHONARC="$withval"]
 )
 
-AC_PATH_PROG(OPENSSL, openssl, /usr/local/ssl/bin)
-AC_ARG_WITH(
-    [openssl],
-    AS_HELP_STRING(
-	[--with-openssl=FULLPATH],
-	[set path to OpenSSL (default /usr/local/ssl/bin/openssl)]
-    ),
-    [OPENSSL="$withval"]
-)
-
 AC_PATH_PROG(CVS2CL, cvs2cl.pl, /usr/local/bin)
 
 AC_PATH_PROG(MSGFMT, msgfmt, /usr/bin/msgfmt)
