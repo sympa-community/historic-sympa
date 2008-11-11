@@ -267,7 +267,7 @@ AC_SUBST(WWSCONFIG)
 dnl Checks for programs.
 AC_PROG_CC
 
-AC_PATH_PROG(PERL, perl, /usr/bin/perl)
+AC_PATH_PROG(PERL, perl)
 AC_ARG_WITH(
     [perl],
     AS_HELP_STRING(
@@ -277,7 +277,7 @@ AC_ARG_WITH(
     [PERL="$withval"]
 )
 
-AC_PATH_PROG(MSGFMT, msgfmt, /usr/bin/msgfmt)
+AC_PATH_PROG(MSGFMT, msgfmt)
 
 USER=sympa
 AC_ARG_WITH(
