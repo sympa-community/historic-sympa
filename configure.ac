@@ -294,16 +294,6 @@ AC_PATH_PROG(SUIDPERL, suidperl, /usr/bin/suidperl)
 
 AC_PATH_PROG(SUDO, sudo, /usr/bin/sudo)
 
-AC_PATH_PROG(MHONARC, mhonarc, /usr/bin/mhonarc)
-AC_ARG_WITH(
-    [mhonarc],
-    AS_HELP_STRING(
-	[--with-mhonarc=FULLPATH],
-	[set full path to MhOnArc mail archiving system (default /usr/bin/mhonarc)]
-    ),
-    [MHONARC="$withval"]
-)
-
 AC_PATH_PROG(CVS2CL, cvs2cl.pl, /usr/local/bin)
 
 AC_PATH_PROG(MSGFMT, msgfmt, /usr/bin/msgfmt)
