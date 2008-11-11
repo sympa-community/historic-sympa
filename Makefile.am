@@ -25,57 +25,7 @@ PERL_VERSION	=	`$(PERL) -e ' print $$]'`
 
 main_SRC	=	AUTHORS COPYING ChangeLog INSTALL KNOWNBUGS NEWS README
 
-all:	warning checkperl sources wrapper soap_wrapper man locale
-
-warning:
-	@echo "######################## W A R N I N G ######################"; \
-	echo "## If it is the first time you install Sympa on this server :"; \
-	echo "##        It may take a while...."; \
-	echo "## The reason is that Sympa requires many Perl modules that"; \
-	echo "## are not distributed with the standard Perl distribution."; \
-	echo "## We'll try to install these modules automatically..."; \
-	echo "## If some modules cannot be installed automatically, (probably" ; \
-	echo "## because of the 'make test'), try downloading them from the"; \
-	echo "## CPAN website (http://search.cpan.org) and install them manually."; \
-	echo "#############################################################"; \
-	echo -n "Please hit <Enter> to proceed"; \
-	if [ "$(DESTDIR)" = "" ]; then read rep; fi
-
-checkperl:
-	@if [ $(PERL_VERSION) = '5.006' ]; then \
-	echo "##################################"; \
-	echo "## You are using Perl version $(PERL_VERSION) :"; \
-	echo "## You need to patch your syslog.pm "; \
-	echo "## See http://bugs.perl.org/perlbug.cgi?req=bidmids&bidmids=20000712.003"; \
-	echo "##"; \
-	echo "## If your Perl version is 5.6.0 AND if your system is Solaris :"; \
-	echo "## See also http://bugs.perl.org/perlbug.cgi?req=bidmids&bidmids=20000522.003"; \
-	echo "#############################################################################"; \
-	if [ "$(DESTDIR)" = "" ]; then read rep; fi \
-	fi
-	@if [ ! -f $(SUIDPERL) ]; then \
-		echo "#################################################################################"; \
-		echo "## wwsympa.fcgi that provides Sympa's web interface needs to run as user $(USER)"; \
-		echo "## There are many options to do so : "; \
-		echo "##  1/ Installing 'suidperl' to run wwsympa.fcgi with SetUID. This is the default method,"; \
-		echo "##     but it might be insecure."; \
-		echo "##  2/ Use 'sudo' to run wwsympa.fcgi as user $(USER). Your Apache configuration should use wwsympa_sudo_wrapper.pl"; \
-		echo "##     You should edit your /etc/sudoers file (with visudo command) as follows :"; \
-		echo "##     apache ALL = ($(USER))  NOPASSWD: $(CGIDIR)/wwsympa.fcgi"; \
-		echo "##  3/ Use Apache's suExec mode."; \
-		echo "## For (2) and (3) you should run Sympa's 'configure' with the '--enable-secure' option"; \
-		echo "#######################################################################################"; \
-		echo -n "Please hit <Enter> to continue"; \
-		if [ "$(DESTDIR)" = "" ]; then read rep; fi \
-	fi
-	@if [ ! -f $(MSGFMT) ]; then \
-		echo "##################################"; \
-		echo "## You don't have msgfmt installed. It is required to build message catalogues"; \
-		echo "## msgfmt is provided with a 'gettext' package on most systems..."; \
-		echo "#####################################################"; \
-		if [ "$(DESTDIR)" = "" ]; then read rep; fi \
-	fi
-
+all:	sources wrapper soap_wrapper man locale
 
 sources: src/Makefile src/queue.c src/bouncequeue.c src/aliaswrapper.c
 	@(cd src && echo "making in src..." && $(MAKE));
