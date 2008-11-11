@@ -268,15 +268,6 @@ dnl Checks for programs.
 AC_PROG_CC
 
 AC_PATH_PROG(PERL, perl)
-AC_ARG_WITH(
-    [perl],
-    AS_HELP_STRING(
-	[--with-perl=FULLPATH],
-	[set full path to Perl interpreter (default /usr/bin/perl)]
-    ),
-    [PERL="$withval"]
-)
-
 AC_PATH_PROG(MSGFMT, msgfmt)
 
 USER=sympa
