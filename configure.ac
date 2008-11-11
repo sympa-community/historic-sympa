@@ -268,7 +268,15 @@ dnl Checks for programs.
 AC_PROG_CC
 
 AC_PATH_PROG(PERL, perl)
+if test -z "$PERL"; then
+    AC_MSG_ERROR([perl required])
+fi
+
 AC_PATH_PROG(MSGFMT, msgfmt)
+if test -z "$MSGFMT"; then
+    AC_MSG_ERROR([msgfmt required])
+fi
+
 
 USER=sympa
 AC_ARG_WITH(
