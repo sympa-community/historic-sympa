@@ -232,7 +232,7 @@ my @params = ({'title' => 'Directories and file location'},
         'advice' =>''},
 
     {'name' => 'cookie',
-        'default' => '--COOKIE--',
+        'default' => '123456789',
         'query' => 'Secret used by Sympa to make MD5 fingerprint in web cookies secure',
         'file' => 'sympa.conf',
         'advice' =>'Should not be changed ! May invalid all user password'},

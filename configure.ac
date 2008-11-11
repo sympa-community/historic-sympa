@@ -371,9 +371,6 @@ AC_ARG_WITH(
 )
 AC_SUBST(POSTMAP_ARG)
 
-COOKIE=`$PERL -e 'print int(rand(time))'`
-AC_SUBST(COOKIE)
-
 AC_CONFIG_FILES([
     Makefile
     src/etc/sample/Makefile
