@@ -165,8 +165,8 @@ installdir:
 		if [ ! -d $(DESTDIR)$(prefix)/$$dir ] ; then \
 			echo "Creating $(DESTDIR)$(prefix)/$$dir"; \
 			mkdir -p $(DESTDIR)$(prefix)/$$dir; \
-			-chown $(USER) $(DESTDIR)$(prefix)/$$dir; \
-			-chgrp $(GROUP) $(DESTDIR)$(prefix)/$$dir; \
+			chown $(USER) $(DESTDIR)$(prefix)/$$dir || /bin/true; \
+			chgrp $(GROUP) $(DESTDIR)$(prefix)/$$dir || /bin/true; \
 		fi \
 	done \
 	fi
