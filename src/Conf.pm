@@ -323,7 +323,7 @@ sub load {
     while (<IN>) {
         $line_num++;
         next if (/^\s*$/ || /^[#;]/);
-        if (/^(\S+)\s+(.+)$/i) {
+        if (/^(\S+)\s+(.+)$/) {
             my ($keyword, $value) = ($1, $2);
             $value =~ s/\s*$//;
             ##  'tri' is a synonyme for 'sort'
