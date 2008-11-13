@@ -338,7 +338,7 @@ sub load {
 	    }
 	    $o{$keyword} = [ $value, $line_num ];
 	}else {
-	    printf STDERR gettext("Error at line %d : %s"), $line_num, $config, $_;
+	    printf STDERR gettext("Error at line %d : %s\n"), $line_num, $config, $_;
 	    $config_err++;
 	}
     }
