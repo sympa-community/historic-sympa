@@ -317,30 +317,32 @@ sub load {
     
     ## Open the configuration file or return and read the lines.
     unless (open(IN, $config)) {
-	printf STDERR  "load: Unable to open %s: %s\n", $config, $!;
-	return undef;
+        printf STDERR  "load: Unable to open %s: %s\n", $config, $!;
+        return undef;
     }
     while (<IN>) {
-	$line_num++;
-	next if (/^\s*$/o || /^[\#\;]/o);
-#	if (/^(\S+)\s+(\S+|\`.*\`)\s*$/io) {
-	if (/^(\S+)\s+(.+)$/io) {
-	    my($keyword, $value) = ($1, $2);
-	    $value =~ s/\s*$//;
-	    ##  'tri' is a synonime for 'sort' (for compatibily with old versions)
-	    $keyword = 'sort' if ($keyword eq 'tri');
-	    ##  'key_password' is a synonime for 'key_passwd' (for compatibily with old versions)
-	    $keyword = 'key_passwd' if ($keyword eq 'key_password');
-	    ## Special case: `command`
-	    if ($value =~ /^\`(.*)\`$/) {
-		$value = qx/$1/;
-		chomp($value);
-	    }
-	    $o{$keyword} = [ $value, $line_num ];
-	}else {
-	    printf STDERR gettext("Error at line %d : %s\n"), $line_num, $config, $_;
-	    $config_err++;
-	}
+        $line_num++;
+        next if (/^\s*$/o || /^[\#\;]/o);
+        if (/^(\S+)\s+(.+)$/io) {
+            my ($keyword, $value) = ($1, $2);
+            $value =~ s/\s*$//;
+            ##  'tri' is a synonyme for 'sort'
+            ## (for compatibily with old versions)
+            $keyword = 'sort' if ($keyword eq 'tri');
+            ##  'key_password' is a synonyme for 'key_passwd'
+            ## (for compatibily with old versions)
+            $keyword = 'key_passwd' if ($keyword eq 'key_password');
+            ## Special case: `command`
+            if ($value =~ /^\`(.*)\`$/) {
+                $value = qx/$1/;
+                chomp($value);
+            }
+            $o{$keyword} = [ $value, $line_num ];
+        } else {
+            printf STDERR
+                gettext("Error at line %d : %s\n"), $line_num, $config, $_;
+            $config_err++;
+        }
     }
     close(IN);
 
