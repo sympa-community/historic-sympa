@@ -73,7 +73,7 @@ installconfig:
 		prefix=$(prefix); export prefix;\
 		PIDDIR=$(PIDDIR); export PIDDIR;\
 		LIBDIR=$(LIBDIR); export LIBDIR;\
-		NLSDIR=$(NLSDIR); export NLSDIR;\
+		LOCALEDIR=$(LOCALEDIR); export LOCALEDIR;\
 		ETCBINDIR=$(ETCBINDIR); export ETCBINDIR;\
 		ETCDIR=$(ETCDIR); export ETCDIR;\
 		EXPLDIR=$(EXPLDIR); export EXPLDIR;\
