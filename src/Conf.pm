@@ -325,7 +325,7 @@ sub load {
         # skip empty or commented lines
         next if (/^\s*$/ || /^[#;]/);
         # match "keyword value" pattern
-        if (/^(\S+)\s+(\S+)?$/) {
+        if (/^(\S+)\s+(.+)$/) {
             my ($keyword, $value) = ($1, $2);
             $value =~ s/\s*$//;
             ##  'tri' is a synonyme for 'sort'
