@@ -27,9 +27,9 @@ sympa_wizard.pl [options]
 
 Options:
 
-    --create <file> create given configuration file
-    --check         check CPAN modules
-    --help          display help
+    --create <sympa.conf|wwsympa.conf> create given configuration file
+    --check                            check CPAN modules
+    --help                             display help
 
 =head1 AUTHORS
 
@@ -528,8 +528,7 @@ sub create_configuration {
     }elsif ($file eq 'wwsympa.conf') {
         $conf = $wwsympa_conf;
     }else {
-        print STDERR "$file is not a valid argument\n";
-        print STDERR "Usage: $0 --create sympa.conf | wwsympa.conf\n";
+        pod2usage("$file is not a valid argument");
         exit 1;
     }
 
