@@ -47,7 +47,7 @@ Options:
 use lib '--LIBDIR--';
 
 use strict;
-use POSIX;
+use POSIX qw(strftime);
 use English qw(-no_match_vars);
 use Getopt::Long;
 use Pod::Usage;
@@ -243,7 +243,7 @@ sub edit_configuration {
 
     if ($somechange) {
 
-        my $date = POSIX::strftime("%d.%b.%Y-%H.%M.%S", localtime(time));
+        my $date = strftime("%d.%b.%Y-%H.%M.%S", localtime(time));
 
         ## Keep old config files
         unless (rename $wwsympa_conf, $wwsympa_conf.'.'.$date) {
