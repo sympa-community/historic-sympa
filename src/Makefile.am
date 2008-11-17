@@ -246,13 +246,13 @@ subst:
 		UMASK=0755; export UMASK;\
 		USER=$(USER); export USER;\
 		GROUP=$(GROUP); export GROUP;\
-		DIR=$(prefix); export DIR;\
+		prefix=$(prefix); export prefix;\
 		DESTDIR=$(DESTDIR); export DESTDIR;\
 		PIDDIR=$(PIDDIR); export PIDDIR;\
 		INSTALLDIR=$(SBINDIR); export INSTALLDIR;\
 		SBINDIR=$(SBINDIR); export SBINDIR;\
 		LIBDIR=$(LIBDIR); export LIBDIR;\
-		NLSDIR=$(NLSDIR); export NLSDIR;\
+		LOCALEDIR=$(LOCALEDIR); export LOCALEDIR;\
 		ETCBINDIR=$(ETCBINDIR); export ETCBINDIR;\
 		ETCDIR=$(ETCDIR); export ETCDIR;\
 		EXPLDIR=$(EXPLDIR); export EXPLDIR;\
@@ -262,8 +262,6 @@ subst:
 		SENDMAIL_ALIASES=$(SENDMAIL_ALIASES); export SENDMAIL_ALIASES;\
 		VIRTUAL_ALIASES=$(VIRTUAL_ALIASES); export VIRTUAL_ALIASES;\
 		SPOOLDIR=$(SPOOLDIR); export SPOOLDIR;\
-		COOKIE=$(COOKIE); export COOKIE;\
-		OPENSSL=$(OPENSSL); export OPENSSL;\
 		$(PERL) ../subst.pl $(sbin_SRC) \
 	)
 	@echo "Doing multiple substitutions while installing libraries ..."
@@ -272,19 +270,23 @@ subst:
 		UMASK=0644; export UMASK;\
 		USER=$(USER); export USER;\
 		GROUP=$(GROUP); export GROUP;\
-		DIR=$(prefix); export DIR;\
+		prefix=$(prefix); export prefix;\
 		DESTDIR=$(DESTDIR); export DESTDIR;\
 		PIDDIR=$(PIDDIR); export PIDDIR;\
 		INSTALLDIR=$(LIBDIR); export INSTALLDIR;\
 		SCRIPTDIR=$(SCRIPTDIR); export SCRIPTDIR;\
 		SBINDIR=$(SBINDIR); export SBINDIR;\
 		LIBDIR=$(LIBDIR); export LIBDIR;\
+		LOCALEDIR=$(LOCALEDIR); export LOCALEDIR;\
 		ETCBINDIR=$(ETCBINDIR); export ETCBINDIR;\
 		ETCDIR=$(ETCDIR); export ETCDIR;\
+		EXPLDIR=$(EXPLDIR); export EXPLDIR;\
 		CONFIG=$(CONFIG); export CONFIG;\
+		WWSCONFIG=$(WWSCONFIG); export WWSCONFIG;\
 		SYMPA_VERSION=$(PACKAGE_VERSION); export SYMPA_VERSION;\
 		SENDMAIL_ALIASES=$(SENDMAIL_ALIASES); export SENDMAIL_ALIASES;\
 		VIRTUAL_ALIASES=$(VIRTUAL_ALIASES); export VIRTUAL_ALIASES;\
+		SPOOLDIR=$(SPOOLDIR); export SPOOLDIR;\
 		$(PERL) ../subst.pl $(lib_SRC) \
 	)
 
