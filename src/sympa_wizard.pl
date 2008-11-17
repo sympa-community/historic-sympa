@@ -52,17 +52,9 @@ use Getopt::Long;
 use Pod::Usage;
 require 'tools.pl';
 
-## Configuration
-
-my $new_wwsympa_conf = '/tmp/wwsympa.conf';
-my $new_sympa_conf = '/tmp/sympa.conf';
-
-my $wwsconf = {};
-
-## Change to your wwsympa.conf location
+## sympa configuration files
 my $wwsympa_conf = "--WWSCONFIG--";
 my $sympa_conf = "--CONFIG--";
-my $somechange = 0;
 
 my %options;
 GetOptions(
@@ -145,9 +137,13 @@ EOF
     print STDERR "$conf file has been created\n";
 }
 
-
 sub edit_configuration {
     require Conf;
+
+    my $new_wwsympa_conf = '/tmp/wwsympa.conf';
+    my $new_sympa_conf = '/tmp/sympa.conf';
+    my $wwsconf = {};
+    my $somechange = 0;
 
     ## Load config 
     unless ($wwsconf = wwslib::load_config($wwsympa_conf)) {
