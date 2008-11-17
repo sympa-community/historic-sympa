@@ -486,7 +486,7 @@ sub install_module {
     CPAN::Shell->install($module); ## Could use CPAN::Shell->force('install') if make test failed
 
     ## Check if module has been successfuly installed
-    unless (test_module($module) == 1) {
+    unless ($module->require()) {
 
         ## Prevent recusive calls if already in force mode
         if ($options->{'force'}) {
@@ -504,16 +504,4 @@ sub install_module {
     ## Restore lang
     $ENV{'LANG'} = $lang if (defined $lang);
 
-}
-
-###--------------------------
-# test if module is there
-# (from man perlfunc ...)
-###--------------------------
-sub test_module {
-    my ($module) = @_;
-
-    require UNIVERSAL::require;
-
-    return $module->require();
 }
