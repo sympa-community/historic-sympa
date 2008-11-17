@@ -60,6 +60,7 @@ my $sympa_conf = "--CONFIG--";
 my %options;
 GetOptions(
     \%options, 
+    'target=s',
     'create=s',
     'check',
     'help'
@@ -68,7 +69,7 @@ GetOptions(
 if ($options{help}) {
     pod2usage();
 } elsif ($options{create}) {
-    create_configuration($options{create});
+    create_configuration();
 } elsif ($options{check}) {
     check_cpan();
 } else {
@@ -78,17 +79,15 @@ if ($options{help}) {
 exit 0;
 
 sub create_configuration {
-    my ($file) = @_;
-
     require Conf;
 
     my $conf;
-    if ($file eq 'sympa.conf') {
-        $conf = $sympa_conf;
-    }elsif ($file eq 'wwsympa.conf') {
-        $conf = $wwsympa_conf;
-    }else {
-        pod2usage("$file is not a valid argument");
+    if ($options{create} eq 'sympa.conf') {
+        $conf = $options{target} ? $options{target} : $sympa_conf;
+    } elsif ($options{create} eq 'wwsympa.conf') {
+        $conf = $options{target} ? $options{target} : $wwsympa_conf;
+    } else {
+        pod2usage("$options{create} is not a valid argument");
         exit 1;
     }
 
@@ -101,7 +100,7 @@ sub create_configuration {
         die "Unable to open $conf : $!";
     };
 
-    if ($file eq 'sympa.conf') {
+    if ($options{create} eq 'sympa.conf') {
         print NEWF <<EOF
 ## Configuration file for Sympa
 ## many parameters are optional
@@ -117,7 +116,7 @@ EOF
             next;
         }
 
-        next unless ($param->{'file'} eq $file);
+        next unless ($param->{'file'} eq $options{create});
 
         next unless (defined $param->{'default'} || defined $param->{'sample'});
 

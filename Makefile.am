@@ -38,7 +38,7 @@ documentation: doc/sympa.tex.tpl doc/Makefile
 man: doc/man8/Makefile
 	@(cd doc/man8 && echo "making in doc/man8..." && $(MAKE));
 
-install: importantchanges installdir installsrc installwws installwebtt2 installmailtt2 installlocale installman installscript installsample installdoc installsoap nextstep
+install: importantchanges installdir installsrc installwws installwebtt2 installmailtt2 installlocale installman installscript installsample installdoc installsoap installconfig nextstep
 
 nextstep: 
 	@echo ""
@@ -170,3 +170,10 @@ installdir:
 		fi \
 	done \
 	fi
+
+installconfig:
+	@echo "Installing basic configuration ..."
+	-$(DESTDIR)$(BINDIR)/sympa_wizard.pl \
+		--create sympa.conf --target $(DESTDIR)$(ETCDIR)/sympa.conf
+	-$(DESTDIR)$(BINDIR)/sympa_wizard.pl \
+		--create wwsympa.conf --target $(DESTDIR)$(ETCDIR)/wwsympa.conf
