@@ -48,6 +48,7 @@ use lib '--LIBDIR--';
 
 use strict;
 use POSIX;
+use English qw(-no_match_vars);
 use Getopt::Long;
 use Pod::Usage;
 require 'tools.pl';
@@ -454,7 +455,7 @@ sub install_module {
     my $lang = $ENV{'LANG'};
     $ENV{'LANG'} = 'C' if ($ENV{'LANG'} =~ /UTF\-8/);
 
-    unless ($> == 0) {
+    unless ($EUID == 0) {
         print "\#\# You need root privileges to install $module module. \#\#\n";
         print "\#\# Press the Enter key to continue checking modules. \#\#\n";
         my $t = <STDIN>;
