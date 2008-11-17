@@ -52,7 +52,7 @@ clean:
 		rm virtualwrapper ; \
 	fi
 
-install: makedir subst $(sbin_SRC) $(lib_SRC) installqueue installwrapper installscenari installtask_models installetc installlisttemplates installmod installgeneral_task_models info
+install: makedir subst $(sbin_SRC) $(lib_SRC) installqueue installwrapper installscenari installtask_models installconfig installetc installlisttemplates installmod installgeneral_task_models info
 
 
 installtask_models:
@@ -62,6 +62,31 @@ installtask_models:
 installgeneral_task_models:
 	@echo "Installing general task models ..."
 	cp -pR etc/global_task_models/* $(DESTDIR)$(ETCBINDIR)/global_task_models
+
+installconfig:
+	@echo "Installing basic configuration ..."
+	cp etc/sympa.conf etc/wwsympa.conf $(DESTDIR)$(CONFDIR)
+	@( \
+		UMASK=0664; export UMASK;\
+		INSTALLDIR=$(CONFDIR); export INSTALLDIR;\
+		DESTDIR=$(DESTDIR); export DESTDIR;\
+		prefix=$(prefix); export prefix;\
+		PIDDIR=$(PIDDIR); export PIDDIR;\
+		LIBDIR=$(LIBDIR); export LIBDIR;\
+		LOCALEDIR=$(LOCALEDIR); export LOCALEDIR;\
+		ETCBINDIR=$(ETCBINDIR); export ETCBINDIR;\
+		ETCDIR=$(ETCDIR); export ETCDIR;\
+		EXPLDIR=$(EXPLDIR); export EXPLDIR;\
+		CONFIG=$(CONFIG); export CONFIG;\
+		WWSCONFIG=$(WWSCONFIG); export WWSCONFIG;\
+		SENDMAIL_ALIASES=$(SENDMAIL_ALIASES); export SENDMAIL_ALIASES;\
+		VIRTUAL_ALIASES=$(VIRTUAL_ALIASES); export VIRTUAL_ALIASES;\
+		SPOOLDIR=$(SPOOLDIR); export SPOOLDIR;\
+		COOKIE=$(COOKIE); export COOKIE;\
+		SSLCERTDIR=$(SSLCERTDIR); export SSLCERTDIR; \
+		cd etc; \
+		$(PERL) ../../subst.pl sympa.conf wwsympa.conf \
+	)
 
 installetc:
 	@echo "Installing default configuration ..."
