@@ -43,43 +43,6 @@ sub DAEMON_COMMAND {2};
 sub DAEMON_CREATION {4};
 sub DAEMON_ALL {7};
 
-my @valid_options = qw(
-		       allow_subscribe_if_pending avg alias_manager bounce_warn_rate bounce_halt_rate bounce_email_prefix chk_cert_expiration_task expire_bounce_task
-		       cache_list_config
-		       clean_delay_queue clean_delay_queueauth clean_delay_queuemod clean_delay_queuesubscribe clean_delay_queueautomatic clean_delay_queuetopic clean_delay_queuebounce clean_delay_queueoutgoing clean_delay_tmpdir default_remind_task
-		       cookie cookie_cas_expire create_list automatic_list_feature automatic_list_creation automatic_list_removal crl_dir crl_update_task db_host db_env db_name db_timeout
-		       db_options db_passwd db_type db_user db_port db_additional_subscriber_fields db_additional_user_fields
-		       default_shared_quota default_archive_quota default_list_priority distribution_mode edit_list email etc
-		       global_remind home host ignore_x_no_archive_header_feature domain lang listmaster listmaster_email localedir log_socket_type log_level
-		       logo_html_definition 
-                       main_menu_custom_button_1_title main_menu_custom_button_1_url main_menu_custom_button_1_target 
-                       main_menu_custom_button_2_title main_menu_custom_button_2_url main_menu_custom_button_2_target 
-                       main_menu_custom_button_3_title main_menu_custom_button_3_url main_menu_custom_button_3_target  
-                       misaddressed_commands misaddressed_commands_regexp max_size maxsmtp nrcpt 
-		       owner_priority pidfile pidfile_distribute pidfile_creation
-		       spool queue queuedistribute queueauth queuetask queuebounce queuedigest queueautomatic
-		       queuemod queuetopic queuesubscribe queueoutgoing tmpdir lock_method
-		       loop_command_max loop_command_sampling_delay loop_command_decrease_factor loop_prevention_regex
-		       purge_user_table_task purge_logs_table_task 
-		       purge_session_table_task session_table_ttl anonymous_session_table_ttl 
-                       purge_one_time_ticket_table_task one_time_ticket_table_ttl
-                       purge_orphan_bounces_task eval_bouncers_task process_bouncers_task
-		       minimum_bouncing_count minimum_bouncing_period bounce_delay 
-		       default_bounce_level1_rate default_bounce_level2_rate 
-		       remind_return_path request_priority return_path_suffix rfc2369_header_fields sendmail sendmail_args sleep 
-		       sort sympa_priority supported_lang syslog log_smtp log_module log_condition umask verp_rate welcome_return_path wwsympa_url
-                       openssl capath cafile  key_passwd ssl_cert_dir remove_headers remove_outgoing_headers
-		       antivirus_path antivirus_args antivirus_notify anonymous_header_fields sendmail_aliases
-		       dark_color light_color text_color bg_color error_color selected_color shaded_color
-		       color_0 color_1 color_2 color_3 color_4 color_5 color_6 color_7 color_8 color_9 color_10 color_11 color_12 color_13 color_14 color_15
- 		       css_url css_path static_content_path static_content_url pictures_max_size pictures_feature
-		       ldap_export_name ldap_export_host ldap_export_suffix ldap_export_password
-		       ldap_export_dnmanager ldap_export_connection_timeout update_db_field_types urlize_min_size
-		       list_check_smtp list_check_suffixes filesystem_encoding spam_protection web_archive_spam_protection soap_url
-		       use_blacklist 
-		       antispam_feature antispam_tag_header_name antispam_tag_header_spam_regexp antispam_tag_header_ham_regexp
-);
-
 my %old_options = ('trusted_ca_options' => 'capath,cafile',
 		   'msgcat' => 'localedir',
 		   'queueexpire' => '',
@@ -90,9 +53,6 @@ my %old_options = ('trusted_ca_options' => 'capath,cafile',
 ## Customized value can be accessed though as %Ignored_Conf
 my %Ignored_Conf;
 my %hardcoded_options = ('filesystem_encoding' => 'utf8');
-
-my %valid_options = ();
-map { $valid_options{$_}++; } @valid_options;
 
 ## This defines the parameters to be edited :
 ##   title  : Title for the group of parameters following
@@ -1168,7 +1128,11 @@ our @params = (
     }
 );
 
-my %Default_Conf = map { $_->{name} => $_->{default} } @params;
+# parameters hash, keyed by parameter name
+my %params =
+    map  { $_->{name} => $_ }
+    grep { $_->{name} }
+    @params;
 
 my %trusted_applications = ('trusted_application' => {'occurrence' => '0-n',
 						'format' => { 'name' => {'format' => '\S*',
@@ -1252,7 +1216,7 @@ sub load {
 	$o{'cafile'}[0] = '--ETCBINDIR--/ca-bundle.crt';
     }   
 
-    my $spool = $o{'spool'}[0] || $Default_Conf{'spool'};
+    my $spool = $o{'spool'}[0] || $params{'spool'}->{'default'};
 
     unless (defined $o{'queueautomatic'}) {
       $o{'queueautomatic'}[0] = "$spool/automatic";
@@ -1288,7 +1252,7 @@ sub load {
 
     ## Check if we have unknown values.
     foreach $i (sort keys %o) {
-	next if ($valid_options{$i});
+	next if (exists $params{$i});
 	if (defined $old_options{$i}) {
 	    if ($old_options{$i}) {
 		printf STDERR  "Line %d of sympa.conf, parameter %s is no more available, read documentation for new parameter(s) %s\n", $o{$i}[1], $i, $old_options{$i};
@@ -1302,13 +1266,13 @@ sub load {
 	$config_err++;
     }
     ## Do we have all required values ?
-    foreach $i (keys %valid_options) {
-	unless (defined $o{$i} or defined $Default_Conf{$i}) {
+    foreach $i (keys %params) {
+	unless (defined $o{$i} or defined $params{$i}->{'default'}) {
 	    printf "Required field not found in sympa.conf: %s\n", $i;
 	    $config_err++;
 	    next;
 	}
-	$Conf{$i} = $o{$i}[0] || $Default_Conf{$i};
+	$Conf{$i} = $o{$i}[0] || $params{$i}->{'default'};
     }
 
     ## Some parameters depend on others
@@ -1835,7 +1799,7 @@ sub checkfiles {
 	
 	## Get colors for parsing
 	my $param = {};
-	foreach my $p (@valid_options) {
+	foreach my $p (%params) {
 	    $param->{$p} = &Conf::get_robot_conf($robot, $p) if (($p =~ /_color$/)|| ($p =~ /color_/));
 	}
 
