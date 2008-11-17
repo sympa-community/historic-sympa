@@ -389,7 +389,7 @@ sub check_cpan {
 
     print <<EOM;
 ******* NOTE *******
-You can retrive all theses modules from any CPAN server
+You can retrieve all theses modules from any CPAN server
 (for example ftp://ftp.pasteur.fr/pub/computing/CPAN/CPAN.html)
 EOM
 ###--------------------------
@@ -403,11 +403,12 @@ sub check_modules {
     print "perl module          from CPAN       STATUS\n"; 
     print "-----------          ---------       ------\n";
 
+    require UNIVERSAL::require;
+
     foreach my $mod (sort keys %$todo) {
         printf ("%-20s %-15s", $mod, $todo->{$mod});
 
-        my $status = test_module($mod);
-        if ($status == 1) {
+        if ($mod->require()) {
             my $vs = "$mod" . "::VERSION";
 
             $vs = 'mhonarc::VERSION' if $mod =~ /^mhonarc/i;
@@ -427,18 +428,12 @@ sub check_modules {
                 print ">>>>>>> You must update \"$todo->{$mod}\" to version \"$versions->{$todo->{$mod}}\" <<<<<<.\n";
                 install_module($mod, {'default' => $default}, $opt_features);
             }
-        } elsif ($status eq "nofile") {
+        } else {
             ### not installed
             print "was not found on this system.\n";
-
             install_module($mod, {'default' => $default});
 
-        } elsif ($status eq "pb_retval") {
-            ### doesn't return 1;
-            print "$mod doesn't return 1 (check it).\n";
-        } else {
-            print "$status\n";
-        }
+        } 
     }
 }
 
@@ -516,27 +511,9 @@ sub install_module {
 # (from man perlfunc ...)
 ###--------------------------
 sub test_module {
-    my($filename) = @_;
-    my($realfilename, $result);
+    my ($module) = @_;
 
-    $filename =~ s/::/\//g;
-    $filename .= ".pm";
+    require UNIVERSAL::require;
 
-    ## Exception for mhonarc
-    $filename = 'mhamain.pl' if $filename =~ /^mhonarc/i;
-
-    return 1 if $INC{$filename};
-
-    ITER: {
-        foreach my $prefix (@INC) {
-            $realfilename = "$prefix/$filename";
-            if (-f $realfilename) {
-                $result = do $realfilename;
-                last ITER;
-            }
-        }
-        return "nofile";
-    }
-    return "pb_retval" unless $result;
-    return $result;
+    return $module->require();
 }
