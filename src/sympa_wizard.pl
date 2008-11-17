@@ -399,7 +399,6 @@ EOM
 
 sub check_modules {
     my($default, $todo, $versions, $opt_features) = @_;
-    my($vs, $v, $rv, $status);
 
     print "perl module          from CPAN       STATUS\n"; 
     print "-----------          ---------       ------\n";
@@ -409,17 +408,21 @@ sub check_modules {
 
         my $status = test_module($mod);
         if ($status == 1) {
-            $vs = "$mod" . "::VERSION";
+            my $vs = "$mod" . "::VERSION";
 
             $vs = 'mhonarc::VERSION' if $mod =~ /^mhonarc/i;
 
-            $v = $$vs;
+            my $v;
+            {
+                no strict 'refs';
+                $v = $$vs;
+            }
             my $rv = $versions->{$mod} || "1.0" ;
             ### OK: check version
             if ($v ge $rv) {
                 printf ("OK (%-6s >= %s)\n", $v, $rv);
                 next;
-            }else {
+            } else {
                 print "version is too old ($v < $rv).\n";
                 print ">>>>>>> You must update \"$todo->{$mod}\" to version \"$versions->{$todo->{$mod}}\" <<<<<<.\n";
                 install_module($mod, {'default' => $default}, $opt_features);
