@@ -43,16 +43,6 @@ sub DAEMON_COMMAND {2};
 sub DAEMON_CREATION {4};
 sub DAEMON_ALL {7};
 
-my %old_options = ('trusted_ca_options' => 'capath,cafile',
-		   'msgcat' => 'localedir',
-		   'queueexpire' => '',
-		   'clean_delay_queueother' => '',
-		   'web_recode_to' => 'filesystem_encoding',
-		   );
-## These parameters now have a hard-coded value
-## Customized value can be accessed though as %Ignored_Conf
-my %Ignored_Conf;
-my %hardcoded_options = ('filesystem_encoding' => 'utf8');
 
 ## This defines the parameters to be edited :
 ##   title  : Title for the group of parameters following
@@ -1134,6 +1124,21 @@ my %params =
     grep { $_->{name} }
     @params;
 
+my %old_params = (
+    trusted_ca_options     => 'capath,cafile',
+    msgcat                 => 'localedir',
+    queueexpire            => '',
+    clean_delay_queueother => '',
+    web_recode_to          => 'filesystem_encoding',
+);
+
+## These parameters now have a hard-coded value
+## Customized value can be accessed though as %Ignored_Conf
+my %Ignored_Conf;
+my %hardcoded_params = (
+    filesystem_encoding => 'utf8'
+);
+
 my %trusted_applications = ('trusted_application' => {'occurrence' => '0-n',
 						'format' => { 'name' => {'format' => '\S*',
 									 'occurrence' => '1',
@@ -1196,9 +1201,9 @@ sub load {
     close(IN);
 
     ## Hardcoded values
-    foreach my $p (keys %hardcoded_options) {
+    foreach my $p (keys %hardcoded_params) {
 	$Ignored_Conf{$p} = $o{$p}[0] if (defined $o{$p});
-	$o{$p}[0] = $hardcoded_options{$p};
+	$o{$p}[0] = $hardcoded_params{$p};
     }
 
     ## Defaults
@@ -1253,9 +1258,9 @@ sub load {
     ## Check if we have unknown values.
     foreach $i (sort keys %o) {
 	next if (exists $params{$i});
-	if (defined $old_options{$i}) {
-	    if ($old_options{$i}) {
-		printf STDERR  "Line %d of sympa.conf, parameter %s is no more available, read documentation for new parameter(s) %s\n", $o{$i}[1], $i, $old_options{$i};
+	if (defined $old_params{$i}) {
+	    if ($old_params{$i}) {
+		printf STDERR  "Line %d of sympa.conf, parameter %s is no more available, read documentation for new parameter(s) %s\n", $o{$i}[1], $i, $old_params{$i};
 	    }else {
 		printf STDERR  "Line %d of sympa.conf, parameter %s is now obsolete\n", $o{$i}[1], $i;
 		next;
