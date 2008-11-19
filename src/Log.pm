@@ -1,5 +1,3 @@
-#! --PERL--
-
 # Log.pm - This module includes all Logging-related functions
 # RCS Identication ; $Revision$ ; $Date$ 
 #
