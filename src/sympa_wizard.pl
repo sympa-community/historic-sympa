@@ -23,13 +23,25 @@ sympa_wizard.pl - help perform sympa initial setup
 
 =head1 SYNOPSIS
 
-sympa_wizard.pl [options]
+=over
 
-Options:
+=item sympa_wizard.pl
 
-    --create <sympa.conf|wwsympa.conf> create given configuration file
-    --check                            check CPAN modules
-    --help                             display help
+Edit current sympa configuration
+
+=item sympa_wizard.pl [--target file] --create <sympa.conf|wwsympa.conf>
+
+Creates a new sympa or wwsympa configuration file
+
+=item sympa_wizard.pl --check
+
+check CPAN modules needed for running sympa
+
+=item sympa_wizard.pl --help
+
+Display usage instructions
+
+=back
 
 =head1 AUTHORS
 
