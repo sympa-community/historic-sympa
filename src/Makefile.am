@@ -21,19 +21,19 @@
 
 SUBDIRS = etc
 
-CDEFS	=	-DCONFIG=\"$(CONFIG)\"
+CDEFS = -DCONFIG=\"$(CONFIG)\"
 
-sbin_SRC	=	sympa.pl alias_manager.pl task_manager.pl sympa_wizard.pl
+sbin_SRC = sympa.pl alias_manager.pl task_manager.pl sympa_wizard.pl
 
-bin_SRC		=	queue bouncequeue familyqueue
+bin_SRC	= queue bouncequeue familyqueue
 
-lib_SRC		=	admin.pm Archive.pm Commands.pm Conf.pm CAS.pm Config_XML.pm \
-			Family.pm Language.pm List.pm Log.pm mail.pm Ldap.pm Upgrade.pm \
-			tools.pl Version.pm Fetch.pm Message.pm Task.pm Datasource.pm SQLSource.pm \
-			LDAPSource.pm Scenario.pm \
-			PlainDigest.pm tt2.pl parser.pl report.pm time_utils.pl Lock.pm
+lib_SRC	= admin.pm Archive.pm Commands.pm Conf.pm CAS.pm Config_XML.pm \
+	  Family.pm Language.pm List.pm Log.pm mail.pm Ldap.pm Upgrade.pm \
+	  Lock.pm Version.pm Fetch.pm Message.pm Task.pm Datasource.pm \
+	  SQLSource.pm LDAPSource.pm Scenario.pm PlainDigest.pm \
+	  tools.pl tt2.pl parser.pl report.pm time_utils.pl
 
-libexec_SRC	=	aliaswrapper virtualwrapper
+libexec_SRC = aliaswrapper virtualwrapper
 
 all:	queue bouncequeue familyqueue aliaswrapper virtualwrapper
 
