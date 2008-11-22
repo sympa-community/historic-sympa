@@ -267,9 +267,36 @@ AC_SUBST(WWSCONFIG)
 dnl Checks for programs.
 AC_PROG_CC
 
-AC_PATH_PROG(PERL, perl)
-if test -z "$PERL"; then
-    AC_MSG_ERROR([perl required])
+AC_ARG_WITH(
+    [perl],
+    AS_HELP_STRING(
+	[--with-perl=FULLPATH],
+        [set full path to Perl interpreter]
+    ),
+    [PERL="$withval"]
+)
+if test -n "$PERL"; then
+    # user-supplied value
+    AC_MSG_CHECKING([user-supplied perl interpreter])
+    if test -f "$PERL"; then
+	:
+    else
+	AC_MSG_RESULT([non-existing])
+	AC_MSG_ERROR([invalid value $PERL for perl interpreter])
+    fi
+    if test -x "$PERL"; then
+	:
+    else
+	AC_MSG_RESULT([non-executable])
+	AC_MSG_ERROR([invalid value $PERL for perl interpreter])
+    fi
+    AC_MSG_RESULT([$PERL])
+else
+    # check in PATH
+    AC_PATH_PROG(PERL, perl)
+    if test -z "$PERL"; then
+	AC_MSG_ERROR([perl required])
+    fi
 fi
 
 AC_PATH_PROG(MSGFMT, msgfmt)
