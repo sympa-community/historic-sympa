@@ -6995,7 +6995,7 @@ sub load_scenario_list {
     my %list_of_scenario;
     my %skip_scenario;
 
-    foreach my $dir ("$directory/scenari", "$Conf{'etc'}/$robot/scenari", "$Conf{'etc'}/scenari", "--ETCBINDIR--/scenari") {
+    foreach my $dir ("$directory/scenari", "$Conf{'etc'}/$robot/scenari", "$Conf{'etc'}/scenari", "--DATADIR--/scenari") {
 
 	next unless (-d $dir);
 	
@@ -7046,7 +7046,7 @@ sub load_task_list {
     my $directory = "$self->{'dir'}";
     my %list_of_task;
     
-    foreach my $dir ("$directory/list_task_models", "$Conf{'etc'}/$robot/list_task_models", "$Conf{'etc'}/list_task_models", "--ETCBINDIR--/list_task_models") {
+    foreach my $dir ("$directory/list_task_models", "$Conf{'etc'}/$robot/list_task_models", "$Conf{'etc'}/list_task_models", "--DATADIR--/list_task_models") {
 
 	next unless (-d $dir);
 
@@ -7108,7 +7108,7 @@ sub load_data_sources_list {
     my $directory = "$self->{'dir'}";
     my %list_of_data_sources;
 
-    foreach my $dir ("$directory/data_sources", "$Conf{'etc'}/$robot/data_sources", "$Conf{'etc'}/data_sources", "--ETCBINDIR--/data_sources") {
+    foreach my $dir ("$directory/data_sources", "$Conf{'etc'}/$robot/data_sources", "$Conf{'etc'}/data_sources", "--DATADIR--/data_sources") {
 
 	next unless (-d $dir);
 	

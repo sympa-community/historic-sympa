@@ -49,7 +49,6 @@ installtemplates:
 		CGIDIR=$(CGIDIR); export CGIDIR; \
 		LIBDIR=$(LIBDIR); export LIBDIR; \
 		DESTDIR=$(DESTDIR); export DESTDIR; \
-		ETCBINDIR=$(DATADIR); export ETCBINDIR; \
 		$(PERL) ../subst.pl *.tt2; \
 		); \
 	$(PERL) ../set_symlinks.pl web_tt2 $(DESTDIR)$(DATADIR)/web_tt2

@@ -49,7 +49,6 @@ installtemplates:
 		CGIDIR=$(CGIDIR); export CGIDIR; \
 		LIBDIR=$(LIBDIR); export LIBDIR; \
 		DESTDIR=$(DESTDIR); export DESTDIR; \
-		ETCBINDIR=$(DATADIR); export ETCBINDIR; \
 		COL1=5; export COL1; \
 		COL2=40; export COL2; \
 		COL3=30; export COL3; \

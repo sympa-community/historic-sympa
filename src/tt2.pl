@@ -259,7 +259,7 @@ sub get_error {
 
 sub parse_tt2 {
     my ($data, $template, $output, $include_path, $options) = @_;
-    $include_path ||= ['--ETCBINDIR--'];
+    $include_path ||= ['--DATADIR--'];
 
     ## Add directories that may have been added
     push @{$include_path}, @other_include_path;

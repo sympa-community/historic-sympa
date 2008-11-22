@@ -1218,7 +1218,7 @@ sub load {
     $o{'domain'} = $o{'host'} if (defined $o{'host'}) ;
     
     unless ( (defined $o{'cafile'}) || (defined $o{'capath'} )) {
-	$o{'cafile'}[0] = '--ETCBINDIR--/ca-bundle.crt';
+	$o{'cafile'}[0] = '--DATADIR--/ca-bundle.crt';
     }   
 
     my $spool = $o{'spool'}[0] || $params{'spool'}->{'default'};
@@ -1826,7 +1826,7 @@ sub checkfiles {
 
 	    ## Update the CSS if it is missing or if a new css.tt2 was installed
 	    if (! -f $dir.'/'.$css ||
-		(stat('--ETCBINDIR--/web_tt2/css.tt2'))[9] > (stat($dir.'/'.$css))[9]) {
+		(stat('--DATADIR--/web_tt2/css.tt2'))[9] > (stat($dir.'/'.$css))[9]) {
 		&do_log('notice',"Updating static CSS file $dir/$css ; previous file renamed");
 		
 		## Keep copy of previous file
@@ -2139,7 +2139,7 @@ sub load_crawlers_detection {
 	$config = $Conf{'etc'}.'/'.$robot.'/crawlers_detection.conf';
     }else{
 	$config = $Conf{'etc'}.'/crawlers_detection.conf' ;
-	$config = '--ETCBINDIR--/crawlers_detection.conf' unless (-f $config);
+	$config = '--DATADIR--/crawlers_detection.conf' unless (-f $config);
     }
 
     return undef unless  (-r $config);

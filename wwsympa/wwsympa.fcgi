@@ -8069,9 +8069,9 @@ Sends back the list creation edition form.
      &wwslog('info', 'do_scenario_test');
 
      ## List available scenarii
-     unless (opendir SCENARI, "--ETCBINDIR--/scenari/"){
-	 &report::reject_report_web('intern','cannot_open_dir',{'dir' => "--ETCBINDIR--/scenari/"},$param->{'action'},$list,$param->{'user'}{'email'},$robot);
-	 &wwslog('info',"do_scenario_test : unable to open --ETCBINDIR--/scenari");
+     unless (opendir SCENARI, "--DATADIR--/scenari/"){
+	 &report::reject_report_web('intern','cannot_open_dir',{'dir' => "--DATADIR--/scenari/"},$param->{'action'},$list,$param->{'user'}{'email'},$robot);
+	 &wwslog('info',"do_scenario_test : unable to open --DATADIR--/scenari");
 	 return undef;
      }
 
@@ -15574,7 +15574,7 @@ sub do_rss_request {
 sub do_wsdl {
   
     &wwslog('info', "do_wsdl ()");
-    my $sympawsdl = '--ETCBINDIR--/sympa.wsdl';
+    my $sympawsdl = '--DATADIR--/sympa.wsdl';
 
     unless (-r $sympawsdl){
       	&report::reject_report_web('intern','err_404',{},$param->{'action'});
@@ -15594,7 +15594,7 @@ sub do_wsdl {
     
    $param->{'conf'}{'soap_url'}  = $soap_url;
 
-    &tt2::parse_tt2($param, 'sympa.wsdl' , \*STDOUT, ['--ETCBINDIR--']);
+    &tt2::parse_tt2($param, 'sympa.wsdl' , \*STDOUT, ['--DATADIR--']);
     
 #    unless (open (WSDL,$sympawsdl)) {
 # 	&error_message('404');
