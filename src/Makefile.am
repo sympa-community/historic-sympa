@@ -89,7 +89,7 @@ installetc:
 	@( \
 		UMASK=0664; export UMASK;\
 		INSTALLDIR=$(ETCBINDIR); export INSTALLDIR;\
-		MAILERPROGDIR=$(MAILERPROGDIR); export MAILERPROGDIR;\
+		MAILERPROGDIR=$(BINDIR); export MAILERPROGDIR;\
 		cd etc;\
 		$(PERL) ../../subst.pl list_aliases.tt2 \
 	)
@@ -109,11 +109,11 @@ installscenari:
 
 installqueue:
 	@echo "Installing Queue binary..."
-	cp queue $(DESTDIR)$(MAILERPROGDIR)/
+	cp queue $(DESTDIR)$(BINDIR)/
 	@echo "Installing BounceQueue binary..."
-	cp bouncequeue $(DESTDIR)$(MAILERPROGDIR)/
+	cp bouncequeue $(DESTDIR)$(BINDIR)/
 	@echo "Installing FamilyQueue binary..."
-	cp familyqueue $(DESTDIR)$(MAILERPROGDIR)/
+	cp familyqueue $(DESTDIR)$(BINDIR)/
 
 installwrapper:
 	@echo "Installing AliasWrapper binary..."
@@ -122,9 +122,9 @@ installwrapper:
 	cp virtualwrapper $(DESTDIR)$(LIBEXECDIR)/
 
 makedir:
-	@if [ ! -d $(DESTDIR)$(MAILERPROGDIR) ]; then \
-		echo "Creating required directory $(DESTDIR)$(MAILERPROGDIR)"; \
-		mkdir -p $(DESTDIR)$(MAILERPROGDIR); \
+	@if [ ! -d $(DESTDIR)$(BINDIR) ]; then \
+		echo "Creating required directory $(DESTDIR)$(BINDIR)"; \
+		mkdir -p $(DESTDIR)$(BINDIR); \
 	fi
 	@if [ ! -d $(DESTDIR)$(LIBEXECDIR) ]; then \
 		echo "Creating required directory $(DESTDIR)$(LIBEXECDIR)"; \
@@ -188,9 +188,9 @@ installmod:
 	chmod 644 $(DESTDIR)$(ETCBINDIR)/*.conf $(DESTDIR)$(ETCBINDIR)/*.crt 
 	chmod 600 $(DESTDIR)$(ETCBINDIR)/ca-bundle.crt
 	@for file in $(bin_SRC) ; do \
-		-chown $(USER) $(DESTDIR)$(MAILERPROGDIR)/$$file; \
-		-chgrp $(GROUP) $(DESTDIR)$(MAILERPROGDIR)/$$file; \
-		chmod 4755 $(DESTDIR)$(MAILERPROGDIR)/$$file; \
+		-chown $(USER) $(DESTDIR)$(BINDIR)/$$file; \
+		-chgrp $(GROUP) $(DESTDIR)$(BINDIR)/$$file; \
+		chmod 4755 $(DESTDIR)$(BINDIR)/$$file; \
 	done
 	@for file in $(libexec_SRC) ; do \
 		-chown root $(DESTDIR)$(LIBEXECDIR)/$$file; \

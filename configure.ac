@@ -244,11 +244,6 @@ AC_ARG_WITH(
 )
 AC_SUBST(SPOOLDIR)
 
-## Both queue and bouncequeue are lunched by sendmail. If sendmail
-## is configured to used smrsh (check the mailer prog definition), thoses
-## files needs to be installed in /etc/smrsh.  
-MAILERPROGDIR=$BINDIR
-AC_SUBST(MAILERPROGDIR)
 ## Directory for installing WWSympa
 WWSBINDIR=$BINDIR
 AC_SUBST(WWSBINDIR)
