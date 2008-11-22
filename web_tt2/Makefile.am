@@ -24,18 +24,18 @@ default: none
 install: makedir installtemplates installmod
 
 installmod:
-	-chown $(USER) $(DESTDIR)$(ETCBINDIR)/web_tt2/*
-	-chgrp $(GROUP) $(DESTDIR)$(ETCBINDIR)/web_tt2/*
-	chmod 755 $(DESTDIR)$(ETCBINDIR)/web_tt2
+	-chown $(USER) $(DESTDIR)$(DATADIR)/web_tt2/*
+	-chgrp $(GROUP) $(DESTDIR)$(DATADIR)/web_tt2/*
+	chmod 755 $(DESTDIR)$(DATADIR)/web_tt2
 
 makedir:
-	@if [ ! -d $(DESTDIR)$(ETCBINDIR) ]; then \
-		echo "Creating required directory $(DESTDIR)$(ETCBINDIR)"; \
-		mkdir -p $(DESTDIR)$(ETCBINDIR); \
+	@if [ ! -d $(DESTDIR)$(DATADIR) ]; then \
+		echo "Creating required directory $(DESTDIR)$(DATADIR)"; \
+		mkdir -p $(DESTDIR)$(DATADIR); \
 	fi
-	@if [ ! -d $(DESTDIR)$(ETCBINDIR)/web_tt2 ]; then \
-		echo "Creating required directory $(DESTDIR)$(ETCBINDIR)/web_tt2"; \
-		mkdir $(DESTDIR)$(ETCBINDIR)/web_tt2; \
+	@if [ ! -d $(DESTDIR)$(DATADIR)/web_tt2 ]; then \
+		echo "Creating required directory $(DESTDIR)$(DATADIR)/web_tt2"; \
+		mkdir $(DESTDIR)$(DATADIR)/web_tt2; \
 	fi
 
 installtemplates:
@@ -44,14 +44,14 @@ installtemplates:
 		@( \
 		PERL=$(PERL); export PERL; \
 		UMASK=0644; export UMASK; \
-		INSTALLDIR=$(ETCBINDIR)/web_tt2; export INSTALLDIR; \
+		INSTALLDIR=$(DATADIR)/web_tt2; export INSTALLDIR; \
 		SBINDIR=$(SBINDIR); export SBINDIR; \
 		CGIDIR=$(CGIDIR); export CGIDIR; \
 		LIBDIR=$(LIBDIR); export LIBDIR; \
 		DESTDIR=$(DESTDIR); export DESTDIR; \
-		ETCBINDIR=$(ETCBINDIR); export ETCBINDIR; \
+		ETCBINDIR=$(DATADIR); export ETCBINDIR; \
 		$(PERL) ../subst.pl *.tt2; \
 		); \
-	$(PERL) ../set_symlinks.pl web_tt2 $(DESTDIR)$(ETCBINDIR)/web_tt2
-	find $(DESTDIR)$(ETCBINDIR) -type d -exec chmod 755 {} \;
-	find $(DESTDIR)$(ETCBINDIR) -type f -exec chmod 644 {} \;
+	$(PERL) ../set_symlinks.pl web_tt2 $(DESTDIR)$(DATADIR)/web_tt2
+	find $(DESTDIR)$(DATADIR) -type d -exec chmod 755 {} \;
+	find $(DESTDIR)$(DATADIR) -type f -exec chmod 644 {} \;

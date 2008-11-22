@@ -24,18 +24,18 @@ default: none
 install: makedir installtemplates installmod
 
 installmod:
-	-chown $(USER) $(DESTDIR)$(ETCBINDIR)/mail_tt2/*
-	-chgrp $(GROUP) $(DESTDIR)$(ETCBINDIR)/mail_tt2/*
-	chmod 755 $(DESTDIR)$(ETCBINDIR)/mail_tt2
+	-chown $(USER) $(DESTDIR)$(DATADIR)/mail_tt2/*
+	-chgrp $(GROUP) $(DESTDIR)$(DATADIR)/mail_tt2/*
+	chmod 755 $(DESTDIR)$(DATADIR)/mail_tt2
 
 makedir:
-	@if [ ! -d $(DESTDIR)$(ETCBINDIR) ]; then \
-		echo "Creating required directory $(DESTDIR)$(ETCBINDIR)"; \
-		mkdir -p $(DESTDIR)$(ETCBINDIR); \
+	@if [ ! -d $(DESTDIR)$(DATADIR) ]; then \
+		echo "Creating required directory $(DESTDIR)$(DATADIR)"; \
+		mkdir -p $(DESTDIR)$(DATADIR); \
 	fi
-	@if [ ! -d $(DESTDIR)$(ETCBINDIR)/mail_tt2 ]; then \
-		echo "Creating required directory $(DESTDIR)$(ETCBINDIR)/mail_tt2"; \
-		mkdir $(DESTDIR)$(ETCBINDIR)/mail_tt2; \
+	@if [ ! -d $(DESTDIR)$(DATADIR)/mail_tt2 ]; then \
+		echo "Creating required directory $(DESTDIR)$(DATADIR)/mail_tt2"; \
+		mkdir $(DESTDIR)$(DATADIR)/mail_tt2; \
 	fi
 
 installtemplates:
@@ -44,12 +44,12 @@ installtemplates:
 		@( \
 		PERL=$(PERL); export PERL; \
 		UMASK=0644; export UMASK; \
-		INSTALLDIR=$(ETCBINDIR)/mail_tt2; export INSTALLDIR; \
+		INSTALLDIR=$(DATADIR)/mail_tt2; export INSTALLDIR; \
 		SBINDIR=$(SBINDIR); export SBINDIR; \
 		CGIDIR=$(CGIDIR); export CGIDIR; \
 		LIBDIR=$(LIBDIR); export LIBDIR; \
 		DESTDIR=$(DESTDIR); export DESTDIR; \
-		ETCBINDIR=$(ETCBINDIR); export ETCBINDIR; \
+		ETCBINDIR=$(DATADIR); export ETCBINDIR; \
 		COL1=5; export COL1; \
 		COL2=40; export COL2; \
 		COL3=30; export COL3; \
@@ -60,8 +60,8 @@ installtemplates:
 		COL234=110; export COL234; \
 		$(PERL) ../subst.pl *.tt2; \
 		); \
-	$(PERL) ../set_symlinks.pl mail_tt2 $(DESTDIR)$(ETCBINDIR)/mail_tt2
-	find $(DESTDIR)$(ETCBINDIR) -type d -exec chmod 755 {} \;
-	find $(DESTDIR)$(ETCBINDIR) -type f -exec chmod 644 {} \;
-	rm -f $(DESTDIR)$(ETCBINDIR)/web_tt2/authorization_reject.tt2 ; \
-	(cd $(DESTDIR)$(ETCBINDIR)/web_tt2 ; ln -s ../mail_tt2/authorization_reject.tt2 authorization_reject.tt2)
+	$(PERL) ../set_symlinks.pl mail_tt2 $(DESTDIR)$(DATADIR)/mail_tt2
+	find $(DESTDIR)$(DATADIR) -type d -exec chmod 755 {} \;
+	find $(DESTDIR)$(DATADIR) -type f -exec chmod 644 {} \;
+	rm -f $(DESTDIR)$(DATADIR)/web_tt2/authorization_reject.tt2 ; \
+	(cd $(DESTDIR)$(DATADIR)/web_tt2 ; ln -s ../mail_tt2/authorization_reject.tt2 authorization_reject.tt2)

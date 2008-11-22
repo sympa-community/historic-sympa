@@ -25,7 +25,7 @@ install-data-hook: installdir installconfig nextstep importantchanges
 
 installdir:
 	@echo "Creating required directories"
-	@for dir in $(prefix) $(EXPLDIR) $(CONFDIR) $(SAMPLEDIR) $(ETCDIR) $(BINDIR) $(LOCALEDIR) $(DOCDIR) $(ETCBINDIR) $(prefix)/static_content $(prefix)/static_content/icons ; do \
+	@for dir in $(prefix) $(EXPLDIR) $(CONFDIR) $(SAMPLEDIR) $(ETCDIR) $(BINDIR) $(LOCALEDIR) $(DOCDIR) $(DATADIR) $(prefix)/static_content $(prefix)/static_content/icons ; do \
 		if [ ! -d $(DESTDIR)$$dir ] ; then \
 			echo "Creating $(DESTDIR)$$dir"; \
 			mkdir -p $(DESTDIR)$$dir; \
@@ -53,7 +53,7 @@ installdir:
 		GROUP=$(GROUP); export GROUP;\
 		INSTALLNAME='README'; export INSTALLNAME; \
                 ETCDIR=$(ETCDIR); export ETCDIR; \
-                ETCBINDIR=$(ETCBINDIR); export ETCBINDIR; \
+                ETCBINDIR=$(DATADIR); export ETCBINDIR; \
 		$(PERL) ./subst.pl src/etc/README_etc \
 	) \
 	fi

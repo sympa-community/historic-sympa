@@ -59,11 +59,11 @@ install: makedir subst $(sbin_SRC) $(lib_SRC) installqueue installwrapper instal
 
 installtask_models:
 	@echo "Installing default task models ..."
-	cp -pR etc/list_task_models/* $(DESTDIR)$(ETCBINDIR)/list_task_models
+	cp -pR etc/list_task_models/* $(DESTDIR)$(DATADIR)/list_task_models
 
 installgeneral_task_models:
 	@echo "Installing general task models ..."
-	cp -pR etc/global_task_models/* $(DESTDIR)$(ETCBINDIR)/global_task_models
+	cp -pR etc/global_task_models/* $(DESTDIR)$(DATADIR)/global_task_models
 
 installetc:
 	@echo "Installing default configuration ..."
@@ -72,10 +72,10 @@ installetc:
 		etc/ldap_alias_manager.conf etc/nrcpt_by_domain.conf \
 		etc/ldap_alias_manager.conf etc/edit_list.conf \
 		etc/create_list.conf etc/crawlers_detection.conf etc/auth.conf \
-		etc/ca-bundle.crt $(DESTDIR)$(ETCBINDIR)/
+		etc/ca-bundle.crt $(DESTDIR)$(DATADIR)/
 	@( \
 		UMASK=0664; export UMASK;\
-		INSTALLDIR=$(ETCBINDIR); export INSTALLDIR;\
+		INSTALLDIR=$(DATADIR); export INSTALLDIR;\
 		DESTDIR=$(DESTDIR); export DESTDIR;\
 		DARK_COLOR=$(DARK_COLOR); export DARK_COLOR;\
 		LIGHT_COLOR=$(LIGHT_COLOR); export LIGHT_COLOR;\
@@ -88,7 +88,7 @@ installetc:
 	)
 	@( \
 		UMASK=0664; export UMASK;\
-		INSTALLDIR=$(ETCBINDIR); export INSTALLDIR;\
+		INSTALLDIR=$(DATADIR); export INSTALLDIR;\
 		MAILERPROGDIR=$(BINDIR); export MAILERPROGDIR;\
 		cd etc;\
 		$(PERL) ../../subst.pl list_aliases.tt2 \
@@ -96,16 +96,16 @@ installetc:
 
 installlisttemplates:
 	@echo "Installing default list templates ..."
-	cp -pR etc/create_list_templates/* $(DESTDIR)$(ETCBINDIR)/create_list_templates
+	cp -pR etc/create_list_templates/* $(DESTDIR)$(DATADIR)/create_list_templates
 
 installfamilies:
 	@echo "Installing default list families ..."
-	cp -pR etc/families/* $(DESTDIR)$(ETCBINDIR)/families
+	cp -pR etc/families/* $(DESTDIR)$(DATADIR)/families
 
 installscenari:
 	@echo "Installing default scenari..."
-	cp etc/scenari/*.* $(DESTDIR)$(ETCBINDIR)/scenari
-	$(PERL) ../set_symlinks.pl scenari $(DESTDIR)$(ETCBINDIR)/scenari
+	cp etc/scenari/*.* $(DESTDIR)$(DATADIR)/scenari
+	$(PERL) ../set_symlinks.pl scenari $(DESTDIR)$(DATADIR)/scenari
 
 installqueue:
 	@echo "Installing Queue binary..."
@@ -142,29 +142,29 @@ makedir:
 		echo "Creating required directory $(DESTDIR)$(LIBDIR)"; \
 		mkdir -p $(DESTDIR)$(LIBDIR); \
 	fi
-	@if [ ! -d $(DESTDIR)$(ETCBINDIR) ]; then \
-		echo "Creating required directory $(DESTDIR)$(ETCBINDIR)/etc"; \
-		mkdir -p $(DESTDIR)$(ETCBINDIR); \
+	@if [ ! -d $(DESTDIR)$(DATADIR) ]; then \
+		echo "Creating required directory $(DESTDIR)$(DATADIR)/etc"; \
+		mkdir -p $(DESTDIR)$(DATADIR); \
 	fi
-	@if [ ! -d $(DESTDIR)$(ETCBINDIR)/scenari ]; then \
-		echo "Creating required directory $(DESTDIR)$(ETCBINDIR)/scenari"; \
-		mkdir $(DESTDIR)$(ETCBINDIR)/scenari; \
+	@if [ ! -d $(DESTDIR)$(DATADIR)/scenari ]; then \
+		echo "Creating required directory $(DESTDIR)$(DATADIR)/scenari"; \
+		mkdir $(DESTDIR)$(DATADIR)/scenari; \
 	fi
-	@if [ ! -d $(DESTDIR)$(ETCBINDIR)/create_list_templates ]; then \
-		echo "Creating required directory $(DESTDIR)$(ETCBINDIR)/create_list_templates"; \
-		mkdir $(DESTDIR)$(ETCBINDIR)/create_list_templates; \
+	@if [ ! -d $(DESTDIR)$(DATADIR)/create_list_templates ]; then \
+		echo "Creating required directory $(DESTDIR)$(DATADIR)/create_list_templates"; \
+		mkdir $(DESTDIR)$(DATADIR)/create_list_templates; \
 	fi
-	@if [ ! -d $(DESTDIR)$(ETCBINDIR)/families ]; then \
-		echo "Creating required directory $(DESTDIR)$(ETCBINDIR)/families"; \
-		mkdir $(DESTDIR)$(ETCBINDIR)/families; \
+	@if [ ! -d $(DESTDIR)$(DATADIR)/families ]; then \
+		echo "Creating required directory $(DESTDIR)$(DATADIR)/families"; \
+		mkdir $(DESTDIR)$(DATADIR)/families; \
 	fi
-	@if [ ! -d $(DESTDIR)$(ETCBINDIR)/list_task_models ]; then \
-		echo "Creating required directory $(DESTDIR)$(ETCBINDIR)/list_task_models"; \
-		mkdir $(DESTDIR)$(ETCBINDIR)/list_task_models; \
+	@if [ ! -d $(DESTDIR)$(DATADIR)/list_task_models ]; then \
+		echo "Creating required directory $(DESTDIR)$(DATADIR)/list_task_models"; \
+		mkdir $(DESTDIR)$(DATADIR)/list_task_models; \
 	fi
-	@if [ ! -d $(DESTDIR)$(ETCBINDIR)/global_task_models ]; then \
-		echo "Creating required directory $(DESTDIR)$(ETCBINDIR)/global_task_models"; \
-		mkdir $(DESTDIR)$(ETCBINDIR)/global_task_models; \
+	@if [ ! -d $(DESTDIR)$(DATADIR)/global_task_models ]; then \
+		echo "Creating required directory $(DESTDIR)$(DATADIR)/global_task_models"; \
+		mkdir $(DESTDIR)$(DATADIR)/global_task_models; \
 	fi
 
 installmod:
@@ -178,15 +178,15 @@ installmod:
 		chown $(USER) $(DESTDIR)$(LIBDIR)/$$file || /bin/true; \
 		chgrp $(GROUP) $(DESTDIR)$(LIBDIR)/$$file || /bin/true; \
 	done
-	-chown -R $(USER) $(DESTDIR)$(ETCBINDIR)
-	-chgrp -R $(GROUP) $(DESTDIR)$(ETCBINDIR)
+	-chown -R $(USER) $(DESTDIR)$(DATADIR)
+	-chgrp -R $(GROUP) $(DESTDIR)$(DATADIR)
 	@echo "Setting privileges..."
-	chmod 755 $(DESTDIR)$(SBINDIR) $(DESTDIR)$(ETCBINDIR) 
-	chmod 755 $(DESTDIR)$(ETCBINDIR)/scenari $(DESTDIR)$(ETCBINDIR)/list_task_models $(DESTDIR)$(ETCBINDIR)/global_task_models
-	chmod 755 $(DESTDIR)$(ETCBINDIR)/create_list_templates
-	chmod 755 $(DESTDIR)$(ETCBINDIR)/families
-	chmod 644 $(DESTDIR)$(ETCBINDIR)/*.conf $(DESTDIR)$(ETCBINDIR)/*.crt 
-	chmod 600 $(DESTDIR)$(ETCBINDIR)/ca-bundle.crt
+	chmod 755 $(DESTDIR)$(SBINDIR) $(DESTDIR)$(DATADIR) 
+	chmod 755 $(DESTDIR)$(DATADIR)/scenari $(DESTDIR)$(DATADIR)/list_task_models $(DESTDIR)$(DATADIR)/global_task_models
+	chmod 755 $(DESTDIR)$(DATADIR)/create_list_templates
+	chmod 755 $(DESTDIR)$(DATADIR)/families
+	chmod 644 $(DESTDIR)$(DATADIR)/*.conf $(DESTDIR)$(DATADIR)/*.crt 
+	chmod 600 $(DESTDIR)$(DATADIR)/ca-bundle.crt
 	@for file in $(bin_SRC) ; do \
 		-chown $(USER) $(DESTDIR)$(BINDIR)/$$file; \
 		-chgrp $(GROUP) $(DESTDIR)$(BINDIR)/$$file; \
@@ -230,7 +230,7 @@ subst:
 		SBINDIR=$(SBINDIR); export SBINDIR;\
 		LIBDIR=$(LIBDIR); export LIBDIR;\
 		LOCALEDIR=$(LOCALEDIR); export LOCALEDIR;\
-		ETCBINDIR=$(ETCBINDIR); export ETCBINDIR;\
+		ETCBINDIR=$(DATADIR); export ETCBINDIR;\
 		ETCDIR=$(ETCDIR); export ETCDIR;\
 		EXPLDIR=$(EXPLDIR); export EXPLDIR;\
 		CONFIG=$(CONFIG); export CONFIG;\
@@ -255,7 +255,7 @@ subst:
 		SBINDIR=$(SBINDIR); export SBINDIR;\
 		LIBDIR=$(LIBDIR); export LIBDIR;\
 		LOCALEDIR=$(LOCALEDIR); export LOCALEDIR;\
-		ETCBINDIR=$(ETCBINDIR); export ETCBINDIR;\
+		ETCBINDIR=$(DATADIR); export ETCBINDIR;\
 		ETCDIR=$(ETCDIR); export ETCDIR;\
 		EXPLDIR=$(EXPLDIR); export EXPLDIR;\
 		CONFIG=$(CONFIG); export CONFIG;\

@@ -44,8 +44,8 @@ install: makedir $(sbin_SUBST) $(cgi_SUBST) $(cgi_SRC) $(lib_SUBST) substcgi sub
 
 installmod:
 	@for i in $(SRC) ; do \
-	chown $(USER) $(DESTDIR)$(ETCBINDIR)/$$i || /bin/true; \
-	chgrp $(GROUP) $(DESTDIR)$(ETCBINDIR)/$$i || /bin/true; \
+	chown $(USER) $(DESTDIR)$(DATADIR)/$$i || /bin/true; \
+	chgrp $(GROUP) $(DESTDIR)$(DATADIR)/$$i || /bin/true; \
 	done
 	@for i in $(sbin_SUBST) ; do \
 	chown $(USER) $(DESTDIR)$(SBINDIR)/$$i || /bin/true; \
@@ -82,9 +82,9 @@ makedir:
 		echo "Creating required directory $(DESTDIR)$(LIBDIR)"; \
 		mkdir -p $(DESTDIR)$(LIBDIR); \
 	fi
-	@if [ ! -d $(DESTDIR)$(ETCBINDIR) ]; then \
-		echo "Creating required directory $(DESTDIR)$(ETCBINDIR)"; \
-		mkdir -p $(DESTDIR)$(ETCBINDIR); \
+	@if [ ! -d $(DESTDIR)$(DATADIR) ]; then \
+		echo "Creating required directory $(DESTDIR)$(DATADIR)"; \
+		mkdir -p $(DESTDIR)$(DATADIR); \
 	fi
 	@if [ ! -d $(DESTDIR)$(LIBDIR)/Marc ]; then \
 		echo "Creating required directory $(DESTDIR)$(LIBDIR)/Marc"; \
@@ -102,7 +102,7 @@ makedir:
 installsrc:
 	@echo
 	@echo "Installing sources..."
-	cp $(SRC) $(DESTDIR)$(ETCBINDIR)
+	cp $(SRC) $(DESTDIR)$(DATADIR)
 	cp Marc/Search.pm $(DESTDIR)$(LIBDIR)/Marc
 
 installicons:
@@ -127,7 +127,7 @@ substlib:
 		PIDDIR=$(PIDDIR); export PIDDIR;\
 		LIBDIR=$(LIBDIR); export LIBDIR; \
 		DESTDIR=$(DESTDIR); export DESDIR; \
-		ETCBINDIR=$(ETCBINDIR); export ETCBINDIR; \
+		ETCBINDIR=$(DATADIR); export ETCBINDIR; \
 		MAILERPROGDIR=$(BINDIR); export MAILERPROGDIR; \
 		WWSCONFIG=$(WWSCONFIG); export WWSCONFIG; \
 		CONFIG=$(CONFIG); export CONFIG; \
@@ -147,7 +147,7 @@ substsbin:
 		PIDDIR=$(PIDDIR); export PIDDIR;\
 		LIBDIR=$(LIBDIR); export LIBDIR; \
 		DESTDIR=$(DESTDIR); export DESDIR; \
-		ETCBINDIR=$(ETCBINDIR); export ETCBINDIR; \
+		ETCBINDIR=$(DATADIR); export ETCBINDIR; \
 		MAILERPROGDIR=$(BINDIR); export MAILERPROGDIR; \
 		WWSCONFIG=$(WWSCONFIG); export WWSCONFIG; \
 		CONFIG=$(CONFIG); export CONFIG; \
@@ -167,7 +167,7 @@ substcgi:
 		PIDDIR=$(PIDDIR); export PIDDIR;\
 		LIBDIR=$(LIBDIR); export LIBDIR; \
 		DESTDIR=$(DESTDIR); export DESDIR; \
-		ETCBINDIR=$(ETCBINDIR); export ETCBINDIR; \
+		ETCBINDIR=$(DATADIR); export ETCBINDIR; \
 		MAILERPROGDIR=$(BINDIR); export MAILERPROGDIR; \
 		WWSCONFIG=$(WWSCONFIG); export WWSCONFIG; \
 		CONFIG=$(CONFIG); export CONFIG; \
