@@ -90,6 +90,14 @@ makedir:
 		echo "Creating required directory $(DESTDIR)$(LIBDIR)/Marc"; \
 		mkdir $(DESTDIR)$(LIBDIR)/Marc; \
 	fi
+	@if [ ! -d $(DESTDIR)$(prefix)/static_content ]; then \
+		echo "Creating required directory $(DESTDIR)$(prefix)/static_content"; \
+		mkdir $(DESTDIR)$(prefix)/static_content; \
+	fi
+	@if [ ! -d $(DESTDIR)$(prefix)/static_content/icons ]; then \
+		echo "Creating required directory $(DESTDIR)$(prefix)/static_content/icons"; \
+		mkdir $(DESTDIR)$(prefix)/static_content/icons; \
+	fi
 
 installsrc:
 	@echo
