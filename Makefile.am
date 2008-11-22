@@ -19,97 +19,9 @@
 # along with this program; if not, write to the Free Software
 # Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
 
-#SUBDIRS = src doc wwsympa nls
+SUBDIRS = src wwsympa soap web_tt2 mail_tt2 doc po
 
-all:	sources wrapper soap_wrapper man locale
-
-sources: src/Makefile src/queue.c src/bouncequeue.c src/aliaswrapper.c
-	@(cd src && echo "making in src..." && $(MAKE));
-
-wrapper: src/Makefile src/queue.c src/bouncequeue.c src/aliaswrapper.c
-	@(cd wwsympa && echo "making in wwsympa..." && $(MAKE));
-
-soap_wrapper: src/Makefile src/queue.c src/bouncequeue.c src/aliaswrapper.c
-	@(cd soap && echo "making in soap..." && $(MAKE));
-
-documentation: doc/sympa.tex.tpl doc/Makefile 
-	@(cd doc && echo "making in doc..." && $(MAKE));
-
-man: doc/man8/Makefile
-	@(cd doc/man8 && echo "making in doc/man8..." && $(MAKE));
-
-install: importantchanges installdir installsrc installwws installwebtt2 installmailtt2 installlocale installman installscript installsample installdoc installsoap installconfig nextstep
-
-nextstep: 
-	@echo ""
-	@echo "#########################################################"
-	@echo "# If you install Sympa for the first time on this server"
-	@echo "# you should check the INSTALL file."
-	@echo "#"
-	@echo "# If you are upgrading, you now need to run"
-	@echo "#    $(SBINDIR)/sympa.pl --upgrade"
-	@echo "#######################################################"
-
-importantchanges:
-	@( 	PERL=$(PERL); export PERL; \
-		UMASK=0600; export UMASK; \
-		DESTDIR=$(DESTDIR); export DESTDIR; \
-		BINDIR=$(SBINDIR); export BINDIR; \
-		SBINDIR=$(SBINDIR); export SBINDIR; \
-		LIBDIR=$(LIBDIR); export LIBDIR; \
-		ETCDIR=$(ETCDIR); export ETCDIR;\
-		USER=$(USER); export USER;\
-		GROUP=$(GROUP); export GROUP;\
-		SYMPA_VERSION=$(PACKAGE_VERSION); export SYMPA_VERSION; \
-		$(PERL) ./important_changes.pl \
-	) ;
-
-locale:
-	@(cd po && echo "making in po..." && $(MAKE))
-
-installlocale:
-	@(cd po && echo "making install in po..." && \
-		$(MAKE) install) || exit 1;
-
-updatelocale:
-	@(cd po && echo "making update-po in po..." && \
-		$(MAKE) update-po) || exit 1;
-
-installsrc:
-	@(cd src && echo "making install in src..." && \
-		$(MAKE) install) || exit 1;
-
-installdoc:
-	@(cd doc && echo "making install in doc..." && \
-		$(MAKE) install) || exit 1;
-
-installwws:
-	@(cd wwsympa && echo "making install in wwsympa..." && \
-		$(MAKE) install) || exit 1;
-
-installwebtt2:
-	@(cd web_tt2 && echo "making install in web_tt2..." && \
-		$(MAKE) install) || exit 1;
-
-installmailtt2:
-	@(cd mail_tt2 && echo "making install in mail_tt2..." && \
-		$(MAKE) install) || exit 1;
-
-installsoap:
-	@(cd soap && echo "making install in soap..." && \
-		$(MAKE) install) || exit 1;
-
-installsample:
-	@(cd src/etc/sample && echo "making install in src/etc/sample..." && \
-		$(MAKE) install) || exit 1;
-
-installman:
-	@(cd doc/man8 && echo "making install in doc/man8..." && \
-		$(MAKE) install) || exit 1;
-
-installscript:
-	@(cd src/etc/script && echo "making install in src/etc/script..." && \
-		$(MAKE) install) || exit 1;
+install-data-hook: installdir installconfig nextstep importantchanges
 
 installdir:
 	@echo "Creating required directories"
@@ -177,3 +89,27 @@ installconfig:
 		--create sympa.conf --target $(DESTDIR)$(ETCDIR)/sympa.conf
 	-$(DESTDIR)$(BINDIR)/sympa_wizard.pl \
 		--create wwsympa.conf --target $(DESTDIR)$(ETCDIR)/wwsympa.conf
+
+nextstep: 
+	@echo ""
+	@echo "#########################################################"
+	@echo "# If you install Sympa for the first time on this server"
+	@echo "# you should check the INSTALL file."
+	@echo "#"
+	@echo "# If you are upgrading, you now need to run"
+	@echo "#    $(SBINDIR)/sympa.pl --upgrade"
+	@echo "#######################################################"
+
+importantchanges:
+	@( 	PERL=$(PERL); export PERL; \
+		UMASK=0600; export UMASK; \
+		DESTDIR=$(DESTDIR); export DESTDIR; \
+		BINDIR=$(SBINDIR); export BINDIR; \
+		SBINDIR=$(SBINDIR); export SBINDIR; \
+		LIBDIR=$(LIBDIR); export LIBDIR; \
+		ETCDIR=$(ETCDIR); export ETCDIR;\
+		USER=$(USER); export USER;\
+		GROUP=$(GROUP); export GROUP;\
+		SYMPA_VERSION=$(PACKAGE_VERSION); export SYMPA_VERSION; \
+		$(PERL) ./important_changes.pl \
+	) ;

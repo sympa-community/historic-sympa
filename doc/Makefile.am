@@ -29,7 +29,8 @@
 #   1999/04/18 : pda@prism.uvsq.fr : added index generation
 #   1999/06/24 : os@cru.fr         : icons are duplicated with html (-local_icons)
 #   2007/05/31 : os@cru.fr         : the source is now the sympa.org wiki
-#
+
+SUBDIRS = man8
 
 all:	
 	@echo "Since Sympa 5.3 the documentation is only provided in PDF format. The source being http://www.sympa.org/wiki/manual"
