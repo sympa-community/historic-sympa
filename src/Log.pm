@@ -30,7 +30,7 @@ use POSIX qw/mktime/;
 use Encode;
 
 our @ISA = qw(Exporter);
-our @EXPORT = qw(fatal_err do_log do_openlog $log_level);
+our @EXPORT = qw(fatal_err do_log do_openlog $log_level %levels);
 
 my ($log_facility, $log_socket_type, $log_service,$sth,@sth_stack,$rows_nb);
 # When logs are not available, period of time to wait before sending another warning to listmaster.
@@ -39,6 +39,16 @@ my $warning_timeout = 600;
 my $warning_date = 0;
 
 our $log_level = 0;
+
+our %levels = (
+    err    => 0,
+    info   => 0,
+    notice => 0,
+    trace  => 0
+    debug  => 1,
+    debug2 => 2,
+    debug3 => 3,
+);
 
 sub fatal_err {
     my $m  = shift;
@@ -71,22 +81,11 @@ sub fatal_err {
 sub do_log {
     my $fac = shift;
 
-    my $level;
-
-    if ($fac eq 'debug') {
-        $level = 1;
-    } elsif ($fac eq 'debug2') {
-        $level = 2;
-        $fac   = 'debug';
-    } elsif ($fac eq 'debug3') {
-        $level = 3;
-        $fac   = 'debug';
-    } else {
-        $level = 0;
-    }
-
     # do not log if log level if too high regarding the log requested by user 
-    return if ($level > $log_level)  ;
+    return if ($levels{$fac} > $log_level)  ;
+
+    # map to standard syslog facility if needed
+    $facility = 'debug' if $facility eq 'debug2' || $facility eq 'debug3';
 
     my $m = shift;
     my @param = @_;

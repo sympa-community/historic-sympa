@@ -64,6 +64,7 @@ use admin;
 use SharedDocument;
 use report;
 use SympaSession;
+use Log;
 
 #use open ':utf8'; ## Default is to consider files utf8 
 
@@ -1532,6 +1533,10 @@ my $birthday = time ;
  ## Write to log
  sub wwslog {
      my $facility = shift;
+
+     # do not log if log level if too high regarding the log requested by user 
+     return if ($Log::levels{$fac} > $Log::log_level);
+
      my $msg = shift;
 
      my $remote = $ENV{'REMOTE_HOST'} || $ENV{'REMOTE_ADDR'};
