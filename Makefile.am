@@ -24,27 +24,27 @@ SUBDIRS = src wwsympa soap web_tt2 mail_tt2 doc po
 install-data-hook: installdir installconfig nextstep importantchanges
 
 installdir:
-	@echo "Creating required directories"
-	@for dir in $(EXPLDIR); do \
+	@echo "Creating writable directories"
+	@for dir in $(EXPLDIR) $(SPOOLDIR) $(SPOOLDIR)/msg $(SPOOLDIR)/digest \
+		$(SPOOLDIR)/moderation $(SPOOLDIR)/expire $(SPOOLDIR)/auth \
+		$(SPOOLDIR)/outgoing $(SPOOLDIR)/tmp \ $(SPOOLDIR)/task \
+		$(prefix)/bounce $(prefix)/arc; do \
 		if [ ! -d $(DESTDIR)$$dir ] ; then \
 			echo "Creating $(DESTDIR)$$dir"; \
-			mkdir -p $(DESTDIR)$$dir; \
+			install -d -m 755 $(DESTDIR)$$dir; \
 			chown $(USER) $(DESTDIR)$$dir || /bin/true; \
 			chgrp $(GROUP) $(DESTDIR)$$dir || /bin/true; \
-			chmod 755 $(DESTDIR)$$dir; \
 		fi \
 	done
-	@if [ ! -f $(DESTDIR)$(CONFDIR)/sympa.conf ] ; then \
-	echo "First installation : installing conf directories..."; \
-	for dir in create_list_templates mail_tt2 web_tt2 scenari \
-	task_models general_task_models; do \
+	@echo "Creating non-writable directories"
+	@for dir in $(ETCDIR)/create_list_templates $(ETCDIR)/mail_tt2 \
+		$(ETCDIR)/web_tt2 $(ETCDIR)/scenari $(ETCDIR)/task_models \
+		$(ETCDIR)/general_task_models; do \
 		if [ ! -d $(DESTDIR)$(ETCDIR)/$$dir ] ; then \
-			echo "Creating $(DESTDIR)$(ETCDIR)/$$dir"; \
-			mkdir -p $(DESTDIR)$(ETCDIR)/$$dir; \
-			chown $(USER) $(DESTDIR)$(ETCDIR)/$$dir || /bin/true; \
-			chgrp $(GROUP) $(DESTDIR)$(ETCDIR)/$$dir || /bin/true; \
+			echo "Creating $(DESTDIR)/$$dir"; \
+			install -d -m 755 $(DESTDIR)$$dir; \
 		fi \
-	done; \
+	done
 	( \
 		PERL=$(PERL); export PERL; \
 		UMASK=0600; export UMASK; \
@@ -55,33 +55,7 @@ installdir:
                 ETCDIR=$(ETCDIR); export ETCDIR; \
                 ETCBINDIR=$(DATADIR); export ETCBINDIR; \
 		$(PERL) ./subst.pl src/etc/README_etc \
-	) \
-	fi
-	@if [ ! -f $(DESTDIR)$(CONFDIR)/sympa.conf ] ; then \
-	echo "First installation : installing spool directories..."; \
-	for dir in $(SPOOLDIR) $(SPOOLDIR)/msg $(SPOOLDIR)/digest $(SPOOLDIR)/moderation \
-	$(SPOOLDIR)/expire $(SPOOLDIR)/auth $(SPOOLDIR)/outgoing $(SPOOLDIR)/tmp \
-	$(SPOOLDIR)/task ; do \
-		if [ ! -d $(DESTDIR)$$dir ] ; then \
-			echo "Creating $(DESTDIR)$$dir"; \
-			mkdir -p $(DESTDIR)$$dir; \
-			chown $(USER) $(DESTDIR)$$dir || /bin/true; \
-			chgrp $(GROUP) $(DESTDIR)$$dir || /bin/true; \
-			chmod 770 $(DESTDIR)$$dir; \
-		fi \
-	done \
-	fi
-	@if [ ! -f $(DESTDIR)$(CONFDIR)/sympa.conf ] ; then \
-	echo "First installation : creating archives and bounce directories..."; \
-	for dir in bounce arc ; do \
-		if [ ! -d $(DESTDIR)$(prefix)/$$dir ] ; then \
-			echo "Creating $(DESTDIR)$(prefix)/$$dir"; \
-			mkdir -p $(DESTDIR)$(prefix)/$$dir; \
-			chown $(USER) $(DESTDIR)$(prefix)/$$dir || /bin/true; \
-			chgrp $(GROUP) $(DESTDIR)$(prefix)/$$dir || /bin/true; \
-		fi \
-	done \
-	fi
+	)
 
 installconfig:
 	@echo "Installing basic configuration ..."
