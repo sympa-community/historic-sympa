@@ -33,22 +33,10 @@
 SUBDIRS = man8
 
 all:	
-	@echo "Since Sympa 5.3 the documentation is only provided in PDF format. The source being http://www.sympa.org/wiki/manual"
 
-makedir:
-	@if [ ! -d $(DESTDIR)$(DOCDIR) ]; then \
-		echo "Creating required directory $(DESTDIR)$(DOCDIR)"; \
-		mkdir -p $(DESTDIR)$(DOCDIR); \
-	fi
-
-install-data-local: makedir 
-#	@for f in sympa.pdf; do \
-#		echo "Installing documentation...$(DESTDIR)$(DOCDIR)/$$f"; \
-#		cp $$f $(DESTDIR)$(DOCDIR); \
-#	done
-	@if [  -d $(DESTDIR)$(DOCDIR)/sympa ]; then \
-		rm -rf $(DESTDIR)$(DOCDIR)/sympa; \
-	fi
+install-data-local:
+	install -d -m 755 $(DESTDIR)$(DOCDIR)
+	install -m 644 sympa.pdf $(DESTDIR)$(DOCDIR)
 
 
 
