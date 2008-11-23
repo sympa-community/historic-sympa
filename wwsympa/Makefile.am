@@ -19,14 +19,12 @@
 # along with this program; if not, write to the Free Software
 # Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
 
-sbin_SRC = bounced.pl archived.pl
-
-cgi_SRC	= wwsympa-wrapper.fcgi wwsympa.fcgi wwsympa_sudo_wrapper.pl
-
-lib_SRC	= wwslib.pm cookielib.pm bounce-lib.pl Marc.pm Auth.pm \
-	  SharedDocument.pm SympaSession.pm
-
-data_SRC = mime.types 
+sbin_SRC	= bounced.pl archived.pl
+perl_cgi_SRC	= wwsympa.fcgi wwsympa_sudo_wrapper.pl
+wrapper_cgi_SRC	= wwsympa-wrapper.fcgi
+lib_SRC		= wwslib.pm cookielib.pm bounce-lib.pl Marc.pm Auth.pm \
+		  SharedDocument.pm SympaSession.pm
+data_SRC	= mime.types 
 
 all:	wwsympa-wrapper.fcgi
 
@@ -36,13 +34,15 @@ clean:
 	fi
 
 
-install-exec-local: installcgi installicons installdata installwrapper installmodules installdaemons
+install-exec-local: installwrappercgi
+install-data-local: installperlcgi installdata installlib installsbin \
+		    installicons
 
 installdata:
 	install -d -m 755 $(DESTDIR)$(DATADIR)
 	install -m 644 $(data_SRC) $(DESTDIR)$(DATADIR)
 
-installmodules:
+installlib:
 	install -d -m 755 $(DESTDIR)$(LIBDIR)
 	install -m 644 $(lib_SRC) $(DESTDIR)$(LIBDIR)
 	sed -i \
@@ -75,13 +75,13 @@ installicons:
 	install -d -m 755 $(DESTDIR)$(prefix)/static_content/icons
 	install -m 644 icons/*.png $(DESTDIR)$(prefix)/static_content/icons
 
-installwrapper:
-	@echo "Installing wwsympa-wrapper binary..."
-	install -m 6755 wwsympa-wrapper.fcgi $(DESTDIR)$(CGIDIR)
+installwrappercgi:
+	install -d -m 755 $(DESTDIR)$(CGIDIR)
+	install -m 6755 $(wrapper_cgi_SRC) $(DESTDIR)$(CGIDIR)
 	-chown $(USER) $(DESTDIR)$(CGIDIR)/wwsympa-wrapper.fcgi
 	-chgrp $(GROUP) $(DESTDIR)$(CGIDIR)/wwsympa-wrapper.fcgi
 
-installdaemons:
+installsbin:
 	install -d -m 755 $(DESTDIR)$(SBINDIR)
 	install -m 755 $(sbin_SRC) $(DESTDIR)$(SBINDIR)
 	sed -i \
@@ -106,10 +106,9 @@ installdaemons:
 		-e 's|--SPOOLDIR--|$(SPOOLDIR)|' \
 		$(DESTDIR)$(SBINDIR)/*.pl 
 
-installcgi:
+installperlcgi:
 	install -d -m 755 $(DESTDIR)$(CGIDIR)
-	install -m 755 wwsympa.fcgi $(DESTDIR)$(CGIDIR)
-	install -m 755 wwsympa_sudo_wrapper.pl $(DESTDIR)$(CGIDIR)
+	install -m 755 $(perl_cgi_SRC) $(DESTDIR)$(CGIDIR)
 	sed -i \
 		-e 's|--PERL--|$(PERL)|' \
 		-e 's|--USER--|$(USER)|' \
