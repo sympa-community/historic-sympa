@@ -59,21 +59,26 @@ install-exec-local: makedir $(sbin_SRC) $(lib_SRC) installqueue installwrapper i
 installqueue:
 	@echo "Installing Queue binary..."
 	install -m 4755 queue $(DESTDIR)$(BINDIR)
-	-chown $(USER).$(GROUP) $(DESTDIR)$(BINDIR)/queue
+	-chown $(USER) $(DESTDIR)$(BINDIR)/queue
+	-chgrp $(GROUP) $(DESTDIR)$(BINDIR)/queue
 	@echo "Installing BounceQueue binary..."
 	install -m 4755 bouncequeue $(DESTDIR)$(BINDIR)
-	-chown $(USER).$(GROUP) $(DESTDIR)$(BINDIR)/bouncequeue
+	-chown $(USER) $(DESTDIR)$(BINDIR)/bouncequeue
+	-chgrp $(GROUP) $(DESTDIR)$(BINDIR)/bouncequeue
 	@echo "Installing FamilyQueue binary..."
 	install -m 4755 familyqueue $(DESTDIR)$(BINDIR)
-	-chown $(USER).$(GROUP) $(DESTDIR)$(BINDIR)/familyqueue
+	-chown $(USER) $(DESTDIR)$(BINDIR)/familyqueue
+	-chgrp $(GROUP) $(DESTDIR)$(BINDIR)/familyqueue
 
 installwrapper:
 	@echo "Installing AliasWrapper binary..."
 	install -m 4750 aliaswrapper $(DESTDIR)$(LIBEXECDIR)
-	-chown root.$(GROUP) $(DESTDIR)$(LIBEXECDIR)/aliaswrapper
+	-chown root $(DESTDIR)$(LIBEXECDIR)/aliaswrapper
+	-chgrp $(GROUP) $(DESTDIR)$(LIBEXECDIR)/aliaswrapper
 	@echo "Installing VirtualWrapper binary..."
 	install -m 4750 virtualwrapper $(DESTDIR)$(LIBEXECDIR)
-	-chown root.$(GROUP) $(DESTDIR)$(LIBEXECDIR)/virtualwrapper
+	-chown root $(DESTDIR)$(LIBEXECDIR)/virtualwrapper
+	-chgrp $(GROUP) $(DESTDIR)$(LIBEXECDIR)/virtualwrapper
 
 installmodules:
 	install -m 644 $(lib_SRC) $(DESTDIR)$(LIBDIR)
