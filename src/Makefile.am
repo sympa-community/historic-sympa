@@ -188,13 +188,13 @@ installmod:
 	chmod 644 $(DESTDIR)$(DATADIR)/*.conf $(DESTDIR)$(DATADIR)/*.crt 
 	chmod 600 $(DESTDIR)$(DATADIR)/ca-bundle.crt
 	@for file in $(bin_SRC) ; do \
-		-chown $(USER) $(DESTDIR)$(BINDIR)/$$file; \
-		-chgrp $(GROUP) $(DESTDIR)$(BINDIR)/$$file; \
+		chown $(USER) $(DESTDIR)$(BINDIR)/$$file || /bin/true; \
+		chgrp $(GROUP) $(DESTDIR)$(BINDIR)/$$file || /bin/true; \
 		chmod 4755 $(DESTDIR)$(BINDIR)/$$file; \
 	done
 	@for file in $(libexec_SRC) ; do \
-		-chown root $(DESTDIR)$(LIBEXECDIR)/$$file; \
-		-chgrp $(GROUP) $(DESTDIR)$(LIBEXECDIR)/$$file; \
+		chown root $(DESTDIR)$(LIBEXECDIR)/$$file || /bin/true; \
+		chgrp $(GROUP) $(DESTDIR)$(LIBEXECDIR)/$$file || /bin/true; \
 		chmod 4750 $(DESTDIR)$(LIBEXECDIR)/$$file; \
 	done
 
