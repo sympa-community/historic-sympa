@@ -19,17 +19,6 @@
 # along with this program; if not, write to the Free Software
 # Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
 
-# Available targets:
-#   - all: generates .ps and .html files
-#
-# Needs:
-#
-# History
-#   1999/04/13 : pda@prism.uvsq.fr : design of this makefile
-#   1999/04/18 : pda@prism.uvsq.fr : added index generation
-#   1999/06/24 : os@cru.fr         : icons are duplicated with html (-local_icons)
-#   2007/05/31 : os@cru.fr         : the source is now the sympa.org wiki
-
 SUBDIRS = man8
 
 all:	
