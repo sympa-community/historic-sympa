@@ -23,40 +23,24 @@ install-data-local: makedir installscenari installtask_models installetc install
 makedir:
 	@if [ ! -d $(DESTDIR)$(DATADIR) ]; then \
 		echo "Creating required directory $(DESTDIR)$(DATADIR)/etc"; \
-		mkdir -p $(DESTDIR)$(DATADIR); \
-	fi
-	@if [ ! -d $(DESTDIR)$(DATADIR)/scenari ]; then \
-		echo "Creating required directory $(DESTDIR)$(DATADIR)/scenari"; \
-		mkdir $(DESTDIR)$(DATADIR)/scenari; \
-	fi
-	@if [ ! -d $(DESTDIR)$(DATADIR)/create_list_templates ]; then \
-		echo "Creating required directory $(DESTDIR)$(DATADIR)/create_list_templates"; \
-		mkdir $(DESTDIR)$(DATADIR)/create_list_templates; \
-	fi
-	@if [ ! -d $(DESTDIR)$(DATADIR)/families ]; then \
-		echo "Creating required directory $(DESTDIR)$(DATADIR)/families"; \
-		mkdir $(DESTDIR)$(DATADIR)/families; \
-	fi
-	@if [ ! -d $(DESTDIR)$(DATADIR)/list_task_models ]; then \
-		echo "Creating required directory $(DESTDIR)$(DATADIR)/list_task_models"; \
-		mkdir $(DESTDIR)$(DATADIR)/list_task_models; \
-	fi
-	@if [ ! -d $(DESTDIR)$(DATADIR)/global_task_models ]; then \
-		echo "Creating required directory $(DESTDIR)$(DATADIR)/global_task_models"; \
-		mkdir $(DESTDIR)$(DATADIR)/global_task_models; \
+		install -d -m 755 $(DESTDIR)$(DATADIR); \
 	fi
 
 installtask_models:
 	@echo "Installing default task models ..."
-	cp -pR list_task_models/* $(DESTDIR)$(DATADIR)/list_task_models
+	install -d -m 755 $(DESTDIR)$(DATADIR)/list_task_models
+	install -m 644 list_task_models/* \
+		$(DESTDIR)$(DATADIR)/list_task_models
 
 installgeneral_task_models:
 	@echo "Installing general task models ..."
-	cp -pR global_task_models/* $(DESTDIR)$(DATADIR)/global_task_models
+	install -d -m 755 $(DESTDIR)$(DATADIR)/global_task_models
+	install -m 644 global_task_models/* \
+		$(DESTDIR)$(DATADIR)/global_task_models
 
 installetc:
 	@echo "Installing default configuration ..."
-	cp \
+	install -m 644 \
 		topics.conf nrcpt_by_domain.conf \
 		ldap_alias_manager.conf edit_list.conf \
 		create_list.conf crawlers_detection.conf auth.conf \
@@ -82,13 +66,46 @@ installetc:
 
 installlisttemplates:
 	@echo "Installing default list templates ..."
-	cp -pR create_list_templates/* $(DESTDIR)$(DATADIR)/create_list_templates
+	install -d -m 755 $(DESTDIR)$(DATADIR)/create_list_templates
+	install -d -m 755 \
+		$(DESTDIR)$(DATADIR)/create_list_templates/discussion_list
+	install -m 644 create_list_templates/discussion_list/* \
+		$(DESTDIR)$(DATADIR)/create_list_templates/discussion_list
+	install -d -m 755 \
+		$(DESTDIR)$(DATADIR)/create_list_templates/hotline
+	install -m 644 create_list_templates/hotline/* \
+		$(DESTDIR)$(DATADIR)/create_list_templates/hotline
+	install -d -m 755 \
+		$(DESTDIR)$(DATADIR)/create_list_templates/html-news-letter
+	install -m 644 create_list_templates/html-news-letter/* \
+		$(DESTDIR)$(DATADIR)/create_list_templates/html-news-letter
+	install -d -m 755 \
+		$(DESTDIR)$(DATADIR)/create_list_templates/intranet_list
+	install -m 644 create_list_templates/intranet_list/* \
+		$(DESTDIR)$(DATADIR)/create_list_templates/intranet_list
+	install -d -m 755 \
+		$(DESTDIR)$(DATADIR)/create_list_templates/news-letter
+	install -m 644 create_list_templates/news-letter/* \
+		$(DESTDIR)$(DATADIR)/create_list_templates/news-letter
+	install -d -m 755 \
+		$(DESTDIR)$(DATADIR)/create_list_templates/private_working_group/
+	install -m 644 create_list_templates/private_working_group/* \
+		$(DESTDIR)$(DATADIR)/create_list_templates/private_working_group/
+	install -d -m 755 \
+		$(DESTDIR)$(DATADIR)/create_list_templates/public_web_forum
+	install -m 644 create_list_templates/public_web_forum/* \
+		$(DESTDIR)$(DATADIR)/create_list_templates/public_web_forum
 
 installfamilies:
 	@echo "Installing default list families ..."
-	cp -pR families/* $(DESTDIR)$(DATADIR)/families
+	install -d -m 755 $(DESTDIR)$(DATADIR)/families
+	install -d -m 755 $(DESTDIR)$(DATADIR)/families/sample-auto
+	install -m 644 families/sample-auto/* \
+		$(DESTDIR)$(DATADIR)/families/sample-auto
 
 installscenari:
 	@echo "Installing default scenari..."
-	cp scenari/*.* $(DESTDIR)$(DATADIR)/scenari
+	install -d -m 755 $(DESTDIR)$(DATADIR)/scenari
+	install -m 644 scenari/* \
+		$(DESTDIR)$(DATADIR)/scenari
 	$(PERL) ../../set_symlinks.pl scenari $(DESTDIR)$(DATADIR)/scenari
