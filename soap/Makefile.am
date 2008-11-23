@@ -25,7 +25,7 @@ cgi_SRC		= 	sympa_soap_server-wrapper.fcgi
 
 script_SUBST	=	sympa_soap_client.pl
 
-lib_SUBST	=	sympasoap.pm SympaTransport.pm
+lib_SRC	= sympasoap.pm SympaTransport.pm
 
 data_SRC = sympa.wsdl
 
@@ -36,7 +36,7 @@ clean:
 		rm -f sympa_soap_server-wrapper.fcgi ; \
 	fi
 
-install-exec-local: makedir $(cgi_SUBST) $(lib_SUBST) substcgi substlib substscript installdata installwrapper installmod
+install-exec-local: makedir $(cgi_SUBST) $(lib_SUBST) substcgi installmodules substscript installdata installwrapper installmod
 
 installmod:
 	@for i in $(SRC) ; do \
@@ -52,11 +52,6 @@ installmod:
 	chown $(USER) $(DESTDIR)$(CGIDIR)/$$i || /bin/true; \
 	chgrp $(GROUP) $(DESTDIR)$(CGIDIR)/$$i || /bin/true; \
 	done
-	@for i in $(lib_SUBST) ; do \
-	chown $(USER) $(DESTDIR)$(LIBDIR)/$$i || /bin/true; \
-	chgrp $(GROUP) $(DESTDIR)$(LIBDIR)/$$i || /bin/true; \
-	chmod 644 $(DESTDIR)$(LIBDIR)/$$i; \
-	done
 
 makedir:
 	@if [ ! -d $(DESTDIR)$(CGIDIR) ]; then \
@@ -67,46 +62,41 @@ makedir:
 		echo "Creating required directory $(DESTDIR)$(SCRIPTDIR)"; \
 		mkdir -p $(DESTDIR)$(SCRIPTDIR); \
 	fi
-	@if [ ! -d $(DESTDIR)$(LIBDIR) ]; then \
-		echo "Creating required directory $(DESTDIR)$(LIBDIR)"; \
-		mkdir -p $(DESTDIR)$(LIBDIR); \
-	fi
-	@if [ ! -d $(DESTDIR)$(DATADIR) ]; then \
-		echo "Creating required directory $(DESTDIR)$(DATADIR)"; \
-		mkdir -p $(DESTDIR)$(DATADIR); \
-	fi
-	@if [ ! -d $(DESTDIR)$(LIBDIR)/Marc ]; then \
-		echo "Creating required directory $(DESTDIR)$(LIBDIR)/Marc"; \
-		mkdir $(DESTDIR)$(LIBDIR)/Marc; \
-	fi
 
 installdata:
 	install -d -m 755 $(DESTDIR)$(DATADIR)
 	install -m 644 $(data_SRC) $(DESTDIR)$(DATADIR)
+
+installmodules:
+	install -d -m 755 $(DESTDIR)$(LIBDIR)
+	install -m 644 $(lib_SRC) $(DESTDIR)$(LIBDIR)
+	sed -i \
+		-e 's|--USER--|$(USER)|' \
+		-e 's|--GROUP--|$(GROUP)|' \
+		-e 's|--SYMPA_VERSION--|$(PKG_VERSION)|' \
+		-e 's|--SENDMAIL_ALIASES--|$(SENDMAIL_ALIASES)|' \
+		-e 's|--VIRTUAL_ALIASES--|$(VIRTUAL_ALIASES)|' \
+		-e 's|--CONFIG--|$(CONFIG)|' \
+		-e 's|--WWSCONFIG--|$(WWSCONFIG)|' \
+		-e 's|--prefix--|$(prefix)|' \
+		-e 's|--PIDDIR--|$(PIDDIR)|' \
+		-e 's|--INSTALLDIR--|$(INSTALLDIR)|' \
+		-e 's|--SCRIPTDIR--|$(SCRIPTDIR)|' \
+		-e 's|--BINDIR--|$(BINDIR)|' \
+		-e 's|--SBINDIR--|$(SBINDIR)|' \
+		-e 's|--LIBDIR--|$(LIBDIR)|' \
+		-e 's|--LOCALEDIR--|$(LOCALEDIR)|' \
+		-e 's|--DATADIR--|$(DATADIR)|' \
+		-e 's|--ETCDIR--|$(ETCDIR)|' \
+		-e 's|--EXPLDIR--|$(EXPLDIR)|' \
+		-e 's|--SPOOLDIR--|$(SPOOLDIR)|' \
+		$(DESTDIR)$(LIBDIR)/*.pm
 
 installwrapper:
 	@echo "Installing sympa_soap_server-wrapper binary..."
 	install -m 6755 sympa_soap_server-wrapper.fcgi $(DESTDIR)$(CGIDIR)
 	-chown $(USER) $(DESTDIR)$(CGIDIR)/sympa_soap_server-wrapper.fcgi
 	-chgrp $(GROUP) $(DESTDIR)$(CGIDIR)/sympa_soap_server-wrapper.fcgi
-
-substlib:
-	@echo "Doing multiple substitutions while installing librairies..."
-	@( \
-		PERL=$(PERL); export PERL; \
-		UMASK=0644; export UMASK; \
-		INSTALLDIR=$(LIBDIR); export INSTALLDIR; \
-		SBINDIR=$(SBINDIR); export SBINDIR; \
-		CGIDIR=$(CGIDIR); export CGIDIR; \
-		PIDDIR=$(PIDDIR); export PIDDIR;\
-		LIBDIR=$(LIBDIR); export LIBDIR; \
-		DESTDIR=$(DESTDIR); export DESDIR; \
-		MAILERPROGDIR=$(BINDIR); export MAILERPROGDIR; \
-		ICONSDIR=$(ICONSDIR); export ICONSDIR; \
-		WWSCONFIG=$(WWSCONFIG); export WWSCONFIG; \
-		CONFIG=$(CONFIG); export CONFIG; \
-		$(PERL) ../subst.pl $(lib_SUBST) \
-	)
 
 substscript:
 	@echo "Doing multiple substitutions while installing scripts..."
