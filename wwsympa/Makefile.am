@@ -31,7 +31,6 @@ data_SRC = mime.types
 all:	wwsympa-wrapper.fcgi
 
 clean: 
-	rm -rf $(DESTDIR)$(SBINDIR)
 	@if [ -f ./wwsympa-wrapper.fcgi ]; then \
 		rm -f wwsympa-wrapper.fcgi ; \
 	fi
