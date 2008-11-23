@@ -58,17 +58,22 @@ install-exec-local: makedir subst $(sbin_SRC) $(lib_SRC) installqueue installwra
 
 installqueue:
 	@echo "Installing Queue binary..."
-	cp queue $(DESTDIR)$(BINDIR)/
+	install -m 4755 queue $(DESTDIR)$(BINDIR)
+	-chown $(USER).$(GROUP) $(DESTDIR)$(BINDIR)/queue
 	@echo "Installing BounceQueue binary..."
-	cp bouncequeue $(DESTDIR)$(BINDIR)/
+	install -m 4755 bouncequeue $(DESTDIR)$(BINDIR)
+	-chown $(USER).$(GROUP) $(DESTDIR)$(BINDIR)/bouncequeue
 	@echo "Installing FamilyQueue binary..."
-	cp familyqueue $(DESTDIR)$(BINDIR)/
+	install -m 4755 familyqueue $(DESTDIR)$(BINDIR)
+	-chown $(USER).$(GROUP) $(DESTDIR)$(BINDIR)/familyqueue
 
 installwrapper:
 	@echo "Installing AliasWrapper binary..."
-	cp aliaswrapper $(DESTDIR)$(LIBEXECDIR)/
+	install -m 4750 aliaswrapper $(DESTDIR)$(LIBEXECDIR)
+	-chown root.$(GROUP) $(DESTDIR)$(LIBEXECDIR)/aliaswrapper
 	@echo "Installing VirtualWrapper binary..."
-	cp virtualwrapper $(DESTDIR)$(LIBEXECDIR)/
+	install -m 4750 virtualwrapper $(DESTDIR)$(LIBEXECDIR)
+	-chown root.$(GROUP) $(DESTDIR)$(LIBEXECDIR)/virtualwrapper
 
 makedir:
 	@if [ ! -d $(DESTDIR)$(BINDIR) ]; then \
@@ -91,38 +96,6 @@ makedir:
 		echo "Creating required directory $(DESTDIR)$(LIBDIR)"; \
 		mkdir -p $(DESTDIR)$(LIBDIR); \
 	fi
-
-installmod:
-	@echo "Setting group and owner for $(DESTDIR)$(SBINDIR)..."
-	@for file in $(sbin_SRC) ; do \
-		chown $(USER) $(DESTDIR)$(SBINDIR)/$$file || /bin/true; \
-		chgrp $(GROUP) $(DESTDIR)$(SBINDIR)/$$file || /bin/true; \
-	done
-	@echo "Setting group and owner for $(DESTDIR)$(LIBDIR)..."
-	@for file in $(lib_SRC) ; do \
-		chown $(USER) $(DESTDIR)$(LIBDIR)/$$file || /bin/true; \
-		chgrp $(GROUP) $(DESTDIR)$(LIBDIR)/$$file || /bin/true; \
-	done
-	-chown -R $(USER) $(DESTDIR)$(DATADIR)
-	-chgrp -R $(GROUP) $(DESTDIR)$(DATADIR)
-	@echo "Setting privileges..."
-	chmod 755 $(DESTDIR)$(SBINDIR) $(DESTDIR)$(DATADIR) 
-	chmod 755 $(DESTDIR)$(DATADIR)/scenari $(DESTDIR)$(DATADIR)/list_task_models $(DESTDIR)$(DATADIR)/global_task_models
-	chmod 755 $(DESTDIR)$(DATADIR)/create_list_templates
-	chmod 755 $(DESTDIR)$(DATADIR)/families
-	chmod 644 $(DESTDIR)$(DATADIR)/*.conf $(DESTDIR)$(DATADIR)/*.crt 
-	chmod 600 $(DESTDIR)$(DATADIR)/ca-bundle.crt
-	@for file in $(bin_SRC) ; do \
-		chown $(USER) $(DESTDIR)$(BINDIR)/$$file || /bin/true; \
-		chgrp $(GROUP) $(DESTDIR)$(BINDIR)/$$file || /bin/true; \
-		chmod 4755 $(DESTDIR)$(BINDIR)/$$file; \
-	done
-	@for file in $(libexec_SRC) ; do \
-		chown root $(DESTDIR)$(LIBEXECDIR)/$$file || /bin/true; \
-		chgrp $(GROUP) $(DESTDIR)$(LIBEXECDIR)/$$file || /bin/true; \
-		chmod 4750 $(DESTDIR)$(LIBEXECDIR)/$$file; \
-	done
-
 
 queue: queue.c Makefile ../Makefile
 	$(CC) $(CFLAGS) $(CDEFS) -o queue queue.c
