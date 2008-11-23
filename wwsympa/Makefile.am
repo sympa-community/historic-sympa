@@ -90,14 +90,6 @@ makedir:
 		echo "Creating required directory $(DESTDIR)$(LIBDIR)/Marc"; \
 		mkdir $(DESTDIR)$(LIBDIR)/Marc; \
 	fi
-	@if [ ! -d $(DESTDIR)$(prefix)/static_content ]; then \
-		echo "Creating required directory $(DESTDIR)$(prefix)/static_content"; \
-		mkdir $(DESTDIR)$(prefix)/static_content; \
-	fi
-	@if [ ! -d $(DESTDIR)$(prefix)/static_content/icons ]; then \
-		echo "Creating required directory $(DESTDIR)$(prefix)/static_content/icons"; \
-		mkdir $(DESTDIR)$(prefix)/static_content/icons; \
-	fi
 
 installsrc:
 	@echo
@@ -106,9 +98,9 @@ installsrc:
 	cp Marc/Search.pm $(DESTDIR)$(LIBDIR)/Marc
 
 installicons:
-	@echo "Installing icons..."
-	@echo $(prefix)/static_content/icons
-	cp icons/*.png $(prefix)/static_content/icons
+	install -d -m 755 $(DESTDIR)$(prefix)/static_content
+	install -d -m 755 $(DESTDIR)$(prefix)/static_content/icons
+	install -m 644 icons/*.png $(DESTDIR)$(prefix)/static_content/icons
 
 installwrapper:
 	@echo "Installing wwsympa-wrapper binary..."
