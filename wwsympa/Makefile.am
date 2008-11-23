@@ -40,7 +40,7 @@ clean:
 	fi
 
 
-install-exec-local: makedir $(sbin_SUBST) $(cgi_SUBST) $(cgi_SRC) $(lib_SUBST) substcgi substsbin substlib installicons installsrc installwrapper installmod
+install-exec-local: makedir $(sbin_SUBST) $(cgi_SUBST) $(cgi_SRC) $(lib_SUBST) substcgi substsbin installicons installsrc installwrapper installmod installmodules
 
 installmod:
 	@for i in $(SRC) ; do \
@@ -60,14 +60,8 @@ installmod:
 	chgrp $(GROUP) $(DESTDIR)$(CGIDIR)/$$i || /bin/true; \
 	done
 	echo "Setting SetUID bit on wwsympa-wrapper.fcgi..."; \
-	chmod u+s $(DESTDIR)$(CGIDIR)/wwsympa-wrapper.fcgi; \
-	chmod g+s $(DESTDIR)$(CGIDIR)/wwsympa-wrapper.fcgi; \
-	chmod 755 $(DESTDIR)$(LIBDIR)/Marc
-	@for i in $(lib_SUBST) Marc/Search.pm; do \
-	chown $(USER) $(DESTDIR)$(LIBDIR)/$$i || /bin/true; \
-	chgrp $(GROUP) $(DESTDIR)$(LIBDIR)/$$i || /bin/true; \
-	chmod 644 $(DESTDIR)$(LIBDIR)/$$i; \
-	done
+	chmod u+s $(DESTDIR)$(CGIDIR)/wwsympa-wrapper.fcgi;\
+	chmod g+s $(DESTDIR)$(CGIDIR)/wwsympa-wrapper.fcgi;
 
 makedir:
 	@if [ ! -d $(DESTDIR)$(SBINDIR) ]; then \
@@ -78,24 +72,43 @@ makedir:
 		echo "Creating required directory $(DESTDIR)$(CGIDIR)"; \
 		mkdir -p $(DESTDIR)$(CGIDIR); \
 	fi
-	@if [ ! -d $(DESTDIR)$(LIBDIR) ]; then \
-		echo "Creating required directory $(DESTDIR)$(LIBDIR)"; \
-		mkdir -p $(DESTDIR)$(LIBDIR); \
-	fi
 	@if [ ! -d $(DESTDIR)$(DATADIR) ]; then \
 		echo "Creating required directory $(DESTDIR)$(DATADIR)"; \
 		mkdir -p $(DESTDIR)$(DATADIR); \
-	fi
-	@if [ ! -d $(DESTDIR)$(LIBDIR)/Marc ]; then \
-		echo "Creating required directory $(DESTDIR)$(LIBDIR)/Marc"; \
-		mkdir $(DESTDIR)$(LIBDIR)/Marc; \
 	fi
 
 installsrc:
 	@echo
 	@echo "Installing sources..."
 	cp $(SRC) $(DESTDIR)$(DATADIR)
-	cp Marc/Search.pm $(DESTDIR)$(LIBDIR)/Marc
+
+installmodules:
+	install -d -m 755 $(DESTDIR)$(LIBDIR)
+	install -m 644 $(lib_SUBST) $(DESTDIR)$(LIBDIR)
+	sed -i \
+		-e 's|--USER--|$(USER)|' \
+		-e 's|--GROUP--|$(GROUP)|' \
+		-e 's|--SYMPA_VERSION--|$(PKG_VERSION)|' \
+		-e 's|--SENDMAIL_ALIASES--|$(SENDMAIL_ALIASES)|' \
+		-e 's|--VIRTUAL_ALIASES--|$(VIRTUAL_ALIASES)|' \
+		-e 's|--CONFIG--|$(CONFIG)|' \
+		-e 's|--WWSCONFIG--|$(WWSCONFIG)|' \
+		-e 's|--prefix--|$(prefix)|' \
+		-e 's|--PIDDIR--|$(PIDDIR)|' \
+		-e 's|--INSTALLDIR--|$(INSTALLDIR)|' \
+		-e 's|--SCRIPTDIR--|$(SCRIPTDIR)|' \
+		-e 's|--BINDIR--|$(BINDIR)|' \
+		-e 's|--SBINDIR--|$(SBINDIR)|' \
+		-e 's|--LIBDIR--|$(LIBDIR)|' \
+		-e 's|--LOCALEDIR--|$(LOCALEDIR)|' \
+		-e 's|--DATADIR--|$(DATADIR)|' \
+		-e 's|--ETCDIR--|$(ETCDIR)|' \
+		-e 's|--EXPLDIR--|$(EXPLDIR)|' \
+		-e 's|--SPOOLDIR--|$(SPOOLDIR)|' \
+		$(DESTDIR)$(LIBDIR)/*.pm $(DESTDIR)$(LIBDIR)/*.pl
+
+	install -d -m 755 $(DESTDIR)$(LIBDIR)/Marc
+	install -m 644 Marc/Search.pm $(DESTDIR)$(LIBDIR)/Marc
 
 installicons:
 	install -d -m 755 $(DESTDIR)$(prefix)/static_content
@@ -105,26 +118,6 @@ installicons:
 installwrapper:
 	@echo "Installing wwsympa-wrapper binary..."
 	cp wwsympa-wrapper.fcgi $(DESTDIR)$(CGIDIR)/
-
-substlib:
-	@echo "Doing multiple substitutions while installing librairies..."
-	@( \
-		PERL=$(PERL); export PERL; \
-		UMASK=0644; export UMASK; \
-		INSTALLDIR=$(LIBDIR); export INSTALLDIR; \
-		SBINDIR=$(SBINDIR); export SBINDIR; \
-		CGIDIR=$(CGIDIR); export CGIDIR; \
-		USER=$(USER); export USER; \
-		GROUP=$(GROUP); export GROUP; \
-		PIDDIR=$(PIDDIR); export PIDDIR;\
-		LIBDIR=$(LIBDIR); export LIBDIR; \
-		DESTDIR=$(DESTDIR); export DESDIR; \
-		DATADIR=$(DATADIR); export DATADIR; \
-		MAILERPROGDIR=$(BINDIR); export MAILERPROGDIR; \
-		WWSCONFIG=$(WWSCONFIG); export WWSCONFIG; \
-		CONFIG=$(CONFIG); export CONFIG; \
-		$(PERL) ../subst.pl $(lib_SUBST) \
-	)
 
 substsbin:
 	@echo "Doing multiple substitutions while installing binaries..."
