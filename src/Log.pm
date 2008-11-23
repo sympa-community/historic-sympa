@@ -82,53 +82,57 @@ sub do_log {
     my $facility = shift;
 
     # do not log if log level if too high regarding the log requested by user 
-    return if ($levels{$facility} > $log_level)  ;
+    return if ($levels{$facility} > $log_level);
 
-    # map to standard syslog facility if needed
-    $facility = 'debug' if $facility eq 'debug2' || $facility eq 'debug3';
-
-    my $m = shift;
+    my $message = shift;
     my @param = @_;
 
     my $errno = $!;
-    my $debug = 0;
 
     ## Do not display variables which are references.
     foreach my $i (0..$#param) {
-	if(ref($param[$i])){
-	    $param[$i]=ref($param[$i])
-	}
+        if (ref($param[$i])){
+            $param[$i] = ref($param[$i])
+        }
     }
 
     ## Determine calling function and parameters
     my @call = caller(1);
     ## wwslog already adds this information
     unless ($call[3] =~ /wwslog$/) {
-	$m = $call[3].'() ' . $m if ($call[3]);
+        $message = $call[3] . '() ' . $message if ($call[3]);
     }
 
+    # map to standard syslog facility if needed
     if ($facility eq 'trace' ) {
-    $m = "###### TRACE MESSAGE ######:  " . $m;
-    $facility = 'notice';
+        $message = "###### TRACE MESSAGE ######:  " . $message;
+        $facility = 'notice';
+    } elsif ($facility eq 'debug2' || $facility eq 'debug3') {
+        $facility = 'debug';
     }
+
     eval {
-	unless (syslog($facility, $m, @param)) {
-	    &do_connect();
-	    syslog($facility, $m, @param);
-	}
+        unless (syslog($facility, $message, @param)) {
+            &do_connect();
+            syslog($facility, $message, @param);
+        }
     };
-    if($@ && ($warning_date < time - $warning_timeout)) {
-	$warning_date = time + $warning_timeout;
-	unless(&List::send_notify_to_listmaster('logs_failed', $Conf::Conf{'host'}, [$@])) {
-	}
+
+    if ($@ && ($warning_date < time - $warning_timeout)) {
+        $warning_date = time + $warning_timeout;
+        &List::send_notify_to_listmaster(
+            'logs_failed', $Conf::Conf{'host'}, [$@]
+        );
     };
 
     if ($main::options{'foreground'}) {
-	if ($main::options{'log_to_stderr'} || 
-	    ($main::options{'batch'} && $facility eq 'err')) {
-	    $m =~ s/%m/$errno/g;
-	    printf STDERR "$m\n", @param;
-	}
+        if (
+            $main::options{'log_to_stderr'} ||
+            ($main::options{'batch'} && $facility eq 'err')
+        ) {
+            $message =~ s/%m/$errno/g;
+            printf STDERR "$message\n", @param;
+        }
     }    
 }
 
