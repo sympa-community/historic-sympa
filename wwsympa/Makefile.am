@@ -25,9 +25,10 @@ cgi_SUBST	=	wwsympa.fcgi wwsympa_sudo_wrapper.pl
 
 cgi_SRC		=	wwsympa-wrapper.fcgi
 
-lib_SUBST	=	wwslib.pm cookielib.pm bounce-lib.pl Marc.pm Auth.pm SharedDocument.pm SympaSession.pm
+lib_SRC	= wwslib.pm cookielib.pm bounce-lib.pl Marc.pm Auth.pm \
+	  SharedDocument.pm SympaSession.pm
 
-SRC		=	mime.types 
+data_SRC = mime.types 
 
 WWSYMPA = $(CGIDIR)/wwsympa.fcgi
 
@@ -40,7 +41,7 @@ clean:
 	fi
 
 
-install-exec-local: makedir $(cgi_SUBST) $(cgi_SRC) $(lib_SUBST) substcgi installicons installsrc installwrapper installmod installmodules installdaemons
+install-exec-local: makedir $(cgi_SUBST) $(cgi_SRC) substcgi installicons instaldata installwrapper installmod installmodules installdaemons
 
 installmod:
 	@for i in $(cgi_SUBST) ; do \
@@ -65,13 +66,13 @@ makedir:
 		mkdir -p $(DESTDIR)$(CGIDIR); \
 	fi
 
-installsrc:
+installdata:
 	install -d -m 755 $(DESTDIR)$(DATADIR)
-	install -m 644 mime.types $(DESTDIR)$(DATADIR)
+	install -m 644 $(data_SRC) $(DESTDIR)$(DATADIR)
 
 installmodules:
 	install -d -m 755 $(DESTDIR)$(LIBDIR)
-	install -m 644 $(lib_SUBST) $(DESTDIR)$(LIBDIR)
+	install -m 644 $(lib_SRC) $(DESTDIR)$(LIBDIR)
 	sed -i \
 		-e 's|--USER--|$(USER)|' \
 		-e 's|--GROUP--|$(GROUP)|' \
