@@ -54,7 +54,7 @@ clean:
 		rm virtualwrapper ; \
 	fi
 
-install-exec-local: makedir subst $(sbin_SRC) $(lib_SRC) installqueue installwrapper  info
+install-exec-local: makedir subst $(sbin_SRC) $(lib_SRC) installqueue installwrapper
 
 installqueue:
 	@echo "Installing Queue binary..."
@@ -171,15 +171,3 @@ queue:		queue.c Makefile
 bouncequeue:	bouncequeue.c Makefile
 
 familyqueue:	familyqueue.c Makefile
-
-info:
-	@echo ""
-	@echo "If you wish, you can contact the authors sympa-users-request@cru.fr"
-	@echo "Thanks to provide release number, operating system and langage used."
-	@echo ""
-
-
-
-
-
-
