@@ -32,9 +32,6 @@ all:
 
 install-data-local: makedir installsrc installsubstsrc installinit
 
-clean:
-	rm -rf $(DESTDIR)$(SCRIPTDIR)
-
 makedir:
 	@if [ ! -d $(DESTDIR)$(SCRIPTDIR) ]; then \
 		mkdir -p $(DESTDIR)$(SCRIPTDIR); \

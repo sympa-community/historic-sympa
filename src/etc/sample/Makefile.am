@@ -27,9 +27,6 @@ all:
 
 install-data-local: makedir installsrc installsubstsrc installsamplelist
 
-clean:
-	rm -rf $(DESTDIR)$(SAMPLEDIR)
-
 makedir:
 	@if [ ! -d $(DESTDIR)$(SAMPLEDIR) ]; then \
 		mkdir -p $(DESTDIR)$(SAMPLEDIR); \
