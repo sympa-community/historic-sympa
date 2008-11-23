@@ -133,4 +133,6 @@ installperlcgi:
 		$(DESTDIR)$(CGIDIR)/wwsympa_sudo_wrapper.pl
 
 wwsympa-wrapper.fcgi: wwsympa-wrapper.fcgi.c Makefile
-	$(CC) $(CFLAGS) -DWWSYMPA=\"$(CGIDIR)/wwsympa.fcgi\" -o wwsympa-wrapper.fcgi wwsympa-wrapper.fcgi.c
+	$(CC) $(CFLAGS) -DWWSYMPA=\"$(CGIDIR)/wwsympa.fcgi\" \
+		-o wwsympa-wrapper.fcgi \
+		wwsympa-wrapper.fcgi.c
