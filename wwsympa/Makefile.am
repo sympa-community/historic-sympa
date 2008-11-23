@@ -19,7 +19,7 @@
 # along with this program; if not, write to the Free Software
 # Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
 
-sbin_SUBST	=	bounced.pl archived.pl
+sbin_SRC = bounced.pl archived.pl
 
 cgi_SUBST	=	wwsympa.fcgi wwsympa_sudo_wrapper.pl
 
@@ -40,13 +40,9 @@ clean:
 	fi
 
 
-install-exec-local: makedir $(sbin_SUBST) $(cgi_SUBST) $(cgi_SRC) $(lib_SUBST) substcgi substsbin installicons installsrc installwrapper installmod installmodules
+install-exec-local: makedir $(cgi_SUBST) $(cgi_SRC) $(lib_SUBST) substcgi installicons installsrc installwrapper installmod installmodules installdaemons
 
 installmod:
-	@for i in $(sbin_SUBST) ; do \
-	chown $(USER) $(DESTDIR)$(SBINDIR)/$$i || /bin/true; \
-	chgrp $(GROUP) $(DESTDIR)$(SBINDIR)/$$i || /bin/true; \
-	done
 	@for i in $(cgi_SUBST) ; do \
 	chown $(USER) $(DESTDIR)$(CGIDIR)/$$i || /bin/true; \
 	chgrp $(GROUP) $(DESTDIR)$(CGIDIR)/$$i || /bin/true; \
@@ -110,25 +106,30 @@ installwrapper:
 	@echo "Installing wwsympa-wrapper binary..."
 	cp wwsympa-wrapper.fcgi $(DESTDIR)$(CGIDIR)/
 
-substsbin:
-	@echo "Doing multiple substitutions while installing binaries..."
-	@( \
-		PERL=$(PERL); export PERL; \
-		UMASK=0755; export UMASK; \
-		INSTALLDIR=$(SBINDIR); export INSTALLDIR; \
-		SBINDIR=$(SBINDIR); export SBINDIR; \
-		CGIDIR=$(CGIDIR); export CGIDIR; \
-		USER=$(USER); export USER; \
-		GROUP=$(GROUP); export GROUP; \
-		PIDDIR=$(PIDDIR); export PIDDIR;\
-		LIBDIR=$(LIBDIR); export LIBDIR; \
-		DESTDIR=$(DESTDIR); export DESDIR; \
-		ETCBINDIR=$(DATADIR); export ETCBINDIR; \
-		MAILERPROGDIR=$(BINDIR); export MAILERPROGDIR; \
-		WWSCONFIG=$(WWSCONFIG); export WWSCONFIG; \
-		CONFIG=$(CONFIG); export CONFIG; \
-		$(PERL) ../subst.pl $(sbin_SUBST) \
-	)
+installdaemons:
+	install -d -m 755 $(DESTDIR)$(SBINDIR)
+	install -m 755 $(sbin_SRC) $(DESTDIR)$(SBINDIR)
+	sed -i \
+		-e 's|--PERL--|$(PERL)|' \
+		-e 's|--USER--|$(USER)|' \
+		-e 's|--GROUP--|$(GROUP)|' \
+		-e 's|--SYMPA_VERSION--|$(PKG_VERSION)|' \
+		-e 's|--SENDMAIL_ALIASES--|$(SENDMAIL_ALIASES)|' \
+		-e 's|--VIRTUAL_ALIASES--|$(VIRTUAL_ALIASES)|' \
+		-e 's|--CONFIG--|$(CONFIG)|' \
+		-e 's|--WWSCONFIG--|$(WWSCONFIG)|' \
+		-e 's|--prefix--|$(prefix)|' \
+		-e 's|--PIDDIR--|$(PIDDIR)|' \
+		-e 's|--SCRIPTDIR--|$(SCRIPTDIR)|' \
+		-e 's|--BINDIR--|$(BINDIR)|' \
+		-e 's|--SBINDIR--|$(SBINDIR)|' \
+		-e 's|--LIBDIR--|$(LIBDIR)|' \
+		-e 's|--LOCALEDIR--|$(LOCALEDIR)|' \
+		-e 's|--DATADIR--|$(DATADIR)|' \
+		-e 's|--ETCDIR--|$(ETCDIR)|' \
+		-e 's|--EXPLDIR--|$(EXPLDIR)|' \
+		-e 's|--SPOOLDIR--|$(SPOOLDIR)|' \
+		$(DESTDIR)$(SBINDIR)/*.pl 
 
 substcgi:
 	@echo "Doing multiple substitutions while installing CGIs..."
