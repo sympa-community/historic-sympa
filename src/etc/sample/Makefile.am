@@ -23,8 +23,6 @@ SRC	=	README trusted_applications.conf
 
 SUBSTSRC	=	robot.conf *.ldap
 
-SAMPLEDIR	=	$(prefix)/sample
-
 all:	
 
 install-data-local: makedir installsrc installsubstsrc installsamplelist

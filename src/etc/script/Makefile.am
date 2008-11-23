@@ -25,9 +25,6 @@ SUBSTSRC	=	arc2webarc.pl testldap.pl p12topem.pl init_comment.pl crypt_passwd.pl
 
 INITSRC		=	sympa
 
-#SCRIPTDIR	=	../../../script
-SCRIPTDIR	=	$(SBINDIR)
-
 PIDPRE		=	pidof -x
 PIDPOST		=
 
