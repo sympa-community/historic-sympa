@@ -89,6 +89,7 @@ installmodules:
 		-e 's|--PIDDIR--|$(PIDDIR)|' \
 		-e 's|--INSTALLDIR--|$(INSTALLDIR)|' \
 		-e 's|--SCRIPTDIR--|$(SCRIPTDIR)|' \
+		-e 's|--BINDIR--|$(BINDIR)|' \
 		-e 's|--SBINDIR--|$(SBINDIR)|' \
 		-e 's|--LIBDIR--|$(LIBDIR)|' \
 		-e 's|--LOCALEDIR--|$(LOCALEDIR)|' \

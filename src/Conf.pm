@@ -663,7 +663,7 @@ our @params = (
     },
     {
         name    => 'wwsympa_url',
-        default => 'http://--HOST--/sympa',
+        default => 'http://host.domain.tld/sympa',
         query   => "Sympa\'s main page URL",
         file    => 'sympa.conf',
         edit    => '1',
@@ -1076,7 +1076,7 @@ our @params = (
     },
     {
         name    => 'static_content_path',
-        default => '--DIR--/static_content'
+        default => '--prefix--/static_content'
     },
     {
         name    => 'filesystem_encoding',
