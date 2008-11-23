@@ -36,19 +36,7 @@ clean:
 		rm -f sympa_soap_server-wrapper.fcgi ; \
 	fi
 
-install-exec-local: makedir $(cgi_SUBST) $(lib_SUBST) substcgi installmodules installscripts installdata installwrapper installmod
-
-installmod:
-	@for i in $(cgi_SUBST) ; do \
-	chown $(USER) $(DESTDIR)$(CGIDIR)/$$i || /bin/true; \
-	chgrp $(GROUP) $(DESTDIR)$(CGIDIR)/$$i || /bin/true; \
-	done
-
-makedir:
-	@if [ ! -d $(DESTDIR)$(CGIDIR) ]; then \
-		echo "Creating required directory $(DESTDIR)$(CGIDIR)"; \
-		mkdir -p $(DESTDIR)$(CGIDIR); \
-	fi
+install-exec-local: installmodules installscripts installdata installwrapper installcgi
 
 installdata:
 	install -d -m 755 $(DESTDIR)$(DATADIR)
@@ -110,23 +98,30 @@ installscripts:
 		-e 's|--SPOOLDIR--|$(SPOOLDIR)|' \
 		$(DESTDIR)$(SCRIPTDIR)/*.pl
 
-substcgi:
-	@echo "Doing multiple substitutions while installing CGIs..."
-	@( \
-		PERL=$(PERL); export PERL; \
-		UMASK=0755; export UMASK; \
-		INSTALLDIR=$(CGIDIR); export INSTALLDIR; \
-		SBINDIR=$(SBINDIR); export SBINDIR; \
-		CGIDIR=$(CGIDIR); export CGIDIR; \
-		PIDDIR=$(PIDDIR); export PIDDIR;\
-		LIBDIR=$(LIBDIR); export LIBDIR; \
-		DESTDIR=$(DESTDIR); export DESDIR; \
-		MAILERPROGDIR=$(BINDIR); export MAILERPROGDIR; \
-		ICONSDIR=$(ICONSDIR); export ICONSDIR; \
-		WWSCONFIG=$(WWSCONFIG); export WWSCONFIG; \
-		CONFIG=$(CONFIG); export CONFIG; \
-		$(PERL) ../subst.pl $(cgi_SUBST) \
-	)
+installcgi:
+	install -d -m 755 $(DESTDIR)$(CGIDIR)
+	install -m 755 sympa_soap_server.fcgi $(DESTDIR)$(CGIDIR)
+	sed -i \
+		-e 's|--USER--|$(USER)|' \
+		-e 's|--GROUP--|$(GROUP)|' \
+		-e 's|--SYMPA_VERSION--|$(PKG_VERSION)|' \
+		-e 's|--SENDMAIL_ALIASES--|$(SENDMAIL_ALIASES)|' \
+		-e 's|--VIRTUAL_ALIASES--|$(VIRTUAL_ALIASES)|' \
+		-e 's|--CONFIG--|$(CONFIG)|' \
+		-e 's|--WWSCONFIG--|$(WWSCONFIG)|' \
+		-e 's|--prefix--|$(prefix)|' \
+		-e 's|--PIDDIR--|$(PIDDIR)|' \
+		-e 's|--INSTALLDIR--|$(INSTALLDIR)|' \
+		-e 's|--SCRIPTDIR--|$(SCRIPTDIR)|' \
+		-e 's|--BINDIR--|$(BINDIR)|' \
+		-e 's|--SBINDIR--|$(SBINDIR)|' \
+		-e 's|--LIBDIR--|$(LIBDIR)|' \
+		-e 's|--LOCALEDIR--|$(LOCALEDIR)|' \
+		-e 's|--DATADIR--|$(DATADIR)|' \
+		-e 's|--ETCDIR--|$(ETCDIR)|' \
+		-e 's|--EXPLDIR--|$(EXPLDIR)|' \
+		-e 's|--SPOOLDIR--|$(SPOOLDIR)|' \
+		$(DESTDIR)$(SCRIPTDIR)/*.fcgi
 
-sympa_soap_server-wrapper.fcgi: sympa_soap_server-wrapper.fcgi.c Makefile
+Sympa_soap_server-wrapper.fcgi: sympa_soap_server-wrapper.fcgi.c Makefile
 	$(CC) $(CFLAGS) -DSYMPASOAP=\"$(CGIDIR)/sympa_soap_server.fcgi\" -o sympa_soap_server-wrapper.fcgi sympa_soap_server-wrapper.fcgi.c
