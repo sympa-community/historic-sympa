@@ -54,7 +54,8 @@ clean:
 		rm virtualwrapper ; \
 	fi
 
-install-exec-local: installqueue installwrapper installmodules installdaemons
+install-exec-local: installqueue installwrapper
+install-data-local: installlib installsbin
 
 installqueue:
 	@echo "Installing Queue binary..."
@@ -82,7 +83,7 @@ installwrapper:
 	-chown root $(DESTDIR)$(LIBEXECDIR)/virtualwrapper
 	-chgrp $(GROUP) $(DESTDIR)$(LIBEXECDIR)/virtualwrapper
 
-installmodules:
+installlib:
 	install -d -m 755 $(DESTDIR)$(LIBDIR)
 	install -m 644 $(lib_SRC) $(DESTDIR)$(LIBDIR)
 	sed -i \
@@ -107,7 +108,7 @@ installmodules:
 		-e 's|--SPOOLDIR--|$(SPOOLDIR)|' \
 		$(addprefix $(DESTDIR)$(LIBDIR)/, $(lib_SRC))
 
-installdaemons:
+installsbin:
 	install -d -m 755 $(DESTDIR)$(SBINDIR)
 	install -m 755 $(sbin_SRC) $(DESTDIR)$(SBINDIR)
 	sed -i \
