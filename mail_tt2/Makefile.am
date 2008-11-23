@@ -21,46 +21,12 @@
 
 default: none
 
-install-data-local: makedir installtemplates installmod
-
-installmod:
-	-chown $(USER) $(DESTDIR)$(DATADIR)/mail_tt2/*
-	-chgrp $(GROUP) $(DESTDIR)$(DATADIR)/mail_tt2/*
-	chmod 755 $(DESTDIR)$(DATADIR)/mail_tt2
-
-makedir:
-	@if [ ! -d $(DESTDIR)$(DATADIR) ]; then \
-		echo "Creating required directory $(DESTDIR)$(DATADIR)"; \
-		mkdir -p $(DESTDIR)$(DATADIR); \
-	fi
-	@if [ ! -d $(DESTDIR)$(DATADIR)/mail_tt2 ]; then \
-		echo "Creating required directory $(DESTDIR)$(DATADIR)/mail_tt2"; \
-		mkdir $(DESTDIR)$(DATADIR)/mail_tt2; \
-	fi
+install-data-local: installtemplates
 
 installtemplates:
-	@echo
-	@echo "Installing mail templates..."
-		@( \
-		PERL=$(PERL); export PERL; \
-		UMASK=0644; export UMASK; \
-		INSTALLDIR=$(DATADIR)/mail_tt2; export INSTALLDIR; \
-		SBINDIR=$(SBINDIR); export SBINDIR; \
-		CGIDIR=$(CGIDIR); export CGIDIR; \
-		LIBDIR=$(LIBDIR); export LIBDIR; \
-		DESTDIR=$(DESTDIR); export DESTDIR; \
-		COL1=5; export COL1; \
-		COL2=40; export COL2; \
-		COL3=30; export COL3; \
-		COL4=40; export COL4; \
-		COL12=45; export COL12; \
-		COL23=70; export COL23; \
-		COL34=70; export COL34; \
-		COL234=110; export COL234; \
-		$(PERL) ../subst.pl *.tt2; \
-		); \
+	install -d -m 755 $(DESTDIR)$(DATADIR)
+	install -d -m 755 $(DESTDIR)$(DATADIR)/mail_tt2
+	install -m 644 *.tt2 $(DESTDIR)$(DATADIR)/mail_tt2
 	$(PERL) ../set_symlinks.pl mail_tt2 $(DESTDIR)$(DATADIR)/mail_tt2
-	find $(DESTDIR)$(DATADIR) -type d -exec chmod 755 {} \;
-	find $(DESTDIR)$(DATADIR) -type f -exec chmod 644 {} \;
 	rm -f $(DESTDIR)$(DATADIR)/web_tt2/authorization_reject.tt2 ; \
 	(cd $(DESTDIR)$(DATADIR)/web_tt2 ; ln -s ../mail_tt2/authorization_reject.tt2 authorization_reject.tt2)
