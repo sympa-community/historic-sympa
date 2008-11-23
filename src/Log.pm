@@ -71,11 +71,18 @@ sub fatal_err {
 sub do_log {
     my $fac = shift;
 
-    my $level = 0;
+    my $level;
 
-    if ($fac =~ /debug(\d)?/ ) {
-	$level = $1 || 1;
-	$fac = 'debug';
+    if ($fac eq 'debug') {
+        $level = 1;
+    } elsif ($fac eq 'debug2') {
+        $level = 2;
+        $fac   = 'debug';
+    } elsif ($fac eq 'debug3') {
+        $level = 3;
+        $fac   = 'debug';
+    } else {
+        $level = 0;
     }
 
     # do not log if log level if too high regarding the log requested by user 
