@@ -27,7 +27,7 @@ script_SUBST	=	sympa_soap_client.pl
 
 lib_SUBST	=	sympasoap.pm SympaTransport.pm
 
-SRC		=	sympa.wsdl
+data_SRC = sympa.wsdl
 
 SYMPASOAP = $(CGIDIR)/sympa_soap_server.fcgi
 
@@ -38,7 +38,7 @@ clean:
 		rm -f sympa_soap_server-wrapper.fcgi ; \
 	fi
 
-install-exec-local: makedir $(cgi_SUBST) $(lib_SUBST) substcgi substlib substscript installsrc installwrapper installmod
+install-exec-local: makedir $(cgi_SUBST) $(lib_SUBST) substcgi substlib substscript installdata installwrapper installmod
 
 installmod:
 	@for i in $(SRC) ; do \
@@ -89,10 +89,9 @@ makedir:
 		mkdir $(DESTDIR)$(LIBDIR)/Marc; \
 	fi
 
-installsrc:
-	@echo
-	@echo "Installing sources..."
-	cp $(SRC) $(DESTDIR)$(DATADIR)
+installdata:
+	install -d -m 755 $(DESTDIR)$(DATADIR)
+	install -m 644 $(data_SRC) $(DESTDIR)$(DATADIR)
 
 installwrapper:
 	@echo "Installing sympa_soap_server-wrapper binary..."
