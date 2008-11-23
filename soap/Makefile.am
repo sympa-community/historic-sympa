@@ -29,8 +29,6 @@ lib_SUBST	=	sympasoap.pm SympaTransport.pm
 
 data_SRC = sympa.wsdl
 
-SYMPASOAP = $(CGIDIR)/sympa_soap_server.fcgi
-
 all:	sympa_soap_server-wrapper.fcgi
 
 clean: 
@@ -54,13 +52,6 @@ installmod:
 	chown $(USER) $(DESTDIR)$(CGIDIR)/$$i || /bin/true; \
 	chgrp $(GROUP) $(DESTDIR)$(CGIDIR)/$$i || /bin/true; \
 	done
-	@for i in $(cgi_SRC) ; do \
-	chown $(USER) $(DESTDIR)$(CGIDIR)/$$i || /bin/true; \
-	chgrp $(GROUP) $(DESTDIR)$(CGIDIR)/$$i || /bin/true; \
-	done
-	@echo "Setting SetUID bit on sympa_soap_server-wrapper.fcgi..."
-	chmod u+s $(DESTDIR)$(CGIDIR)/sympa_soap_server-wrapper.fcgi
-	chmod g+s $(DESTDIR)$(CGIDIR)/sympa_soap_server-wrapper.fcgi
 	@for i in $(lib_SUBST) ; do \
 	chown $(USER) $(DESTDIR)$(LIBDIR)/$$i || /bin/true; \
 	chgrp $(GROUP) $(DESTDIR)$(LIBDIR)/$$i || /bin/true; \
@@ -95,7 +86,9 @@ installdata:
 
 installwrapper:
 	@echo "Installing sympa_soap_server-wrapper binary..."
-	cp sympa_soap_server-wrapper.fcgi $(DESTDIR)$(CGIDIR)/
+	install -m 6755 sympa_soap_server-wrapper.fcgi $(DESTDIR)$(CGIDIR)
+	-chown $(USER) $(DESTDIR)$(CGIDIR)/sympa_soap_server-wrapper.fcgi
+	-chgrp $(GROUP) $(DESTDIR)$(CGIDIR)/sympa_soap_server-wrapper.fcgi
 
 substlib:
 	@echo "Doing multiple substitutions while installing librairies..."
