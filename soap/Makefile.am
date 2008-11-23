@@ -152,5 +152,5 @@ substcgi:
 		$(PERL) ../subst.pl $(cgi_SUBST) \
 	)
 
-sympa_soap_server-wrapper.fcgi: sympa_soap_server-wrapper.fcgi.c Makefile ../Makefile
-	$(CC) $(CFLAGS) -DSYMPASOAP=\"$(SYMPASOAP)\" -o sympa_soap_server-wrapper.fcgi sympa_soap_server-wrapper.fcgi.c
+sympa_soap_server-wrapper.fcgi: sympa_soap_server-wrapper.fcgi.c Makefile
+	$(CC) $(CFLAGS) -DSYMPASOAP=\"$(CGIDIR)/sympa_soap_server.fcgi\" -o sympa_soap_server-wrapper.fcgi sympa_soap_server-wrapper.fcgi.c
