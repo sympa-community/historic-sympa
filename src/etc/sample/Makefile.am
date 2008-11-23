@@ -19,57 +19,36 @@
 # along with this program; if not, write to the Free Software
 # Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
 
-SRC	=	README trusted_applications.conf
-
-SUBSTSRC	=	robot.conf *.ldap
+sample_SRC	= README trusted_applications.conf robot.conf employees.ldap
 
 all:	
 
-install-data-local: makedir installsrc installsubstsrc installsamplelist
+install-data-local: installsample installsamplelist
 
-makedir:
-	@if [ ! -d $(DESTDIR)$(SAMPLEDIR) ]; then \
-		mkdir -p $(DESTDIR)$(SAMPLEDIR); \
-	fi
-
-installsubstsrc:
-	@echo "Doing multiple substitutions while installing ..."
-	@( \
-		PERL=$(PERL); export PERL; \
-		UMASK=0600; export UMASK; \
-		DIR=$(prefix); export DIR; \
-		PIDDIR=$(PIDDIR); export PIDDIR; \
-		SPOOLDIR=$(SPOOLDIR); export SPOOLDIR; \
-		INSTALLDIR=$(SAMPLEDIR); export INSTALLDIR; \
-		DESTDIR=$(DESTDIR); export DESTDIR; \
-		BINDIR=$(BINDIR); export BINDIR; \
-		ETCBINDIR=$(ETCBINDIR); export ETCBINDIR; \
-		CONFIG=$(CONFIG); export CONFIG; \
-		COOKIE=$(COOKIE); export COOKIE; \
-		OPENSSL=$(OPENSSL); export OPENSSL ; \
-		SSLCERTDIR=$(SSLCERTDIR); export SSLCERTDIR ; \
-		$(PERL) ../../../subst.pl $(SUBSTSRC) \
-	)
-
-
-installsrc:
-	@for c in $(SRC); do \
-	cp $$c $(DESTDIR)$(SAMPLEDIR); \
-	done
+installsample:
+	install -d -m 755 $(DESTDIR)$(SAMPLEDIR)
+	install -m 644 $(sample_SRC) $(DESTDIR)$(SAMPLEDIR)
+	sed -i \
+		-e 's|--USER--|$(USER)|' \
+		-e 's|--GROUP--|$(GROUP)|' \
+		-e 's|--SYMPA_VERSION--|$(PKG_VERSION)|' \
+		-e 's|--SENDMAIL_ALIASES--|$(SENDMAIL_ALIASES)|' \
+		-e 's|--VIRTUAL_ALIASES--|$(VIRTUAL_ALIASES)|' \
+		-e 's|--CONFIG--|$(CONFIG)|' \
+		-e 's|--WWSCONFIG--|$(WWSCONFIG)|' \
+		-e 's|--prefix--|$(prefix)|' \
+		-e 's|--PIDDIR--|$(PIDDIR)|' \
+		-e 's|--SCRIPTDIR--|$(SCRIPTDIR)|' \
+		-e 's|--BINDIR--|$(BINDIR)|' \
+		-e 's|--SBINDIR--|$(SBINDIR)|' \
+		-e 's|--LIBDIR--|$(LIBDIR)|' \
+		-e 's|--LOCALEDIR--|$(LOCALEDIR)|' \
+		-e 's|--DATADIR--|$(DATADIR)|' \
+		-e 's|--ETCDIR--|$(ETCDIR)|' \
+		-e 's|--EXPLDIR--|$(EXPLDIR)|' \
+		-e 's|--SPOOLDIR--|$(SPOOLDIR)|' \
+		$(addprefix $(DESTDIR)$(SAMPLEDIR)/, $(sample_SRC))
 
 installsamplelist:
-	@if [ ! -d $(DESTDIR)$(SAMPLEDIR)/sample-list ]; then \
-		echo "Installing sample list ..."; \
-		mkdir -p $(DESTDIR)$(SAMPLEDIR)/sample-list; \
-		cd test; \
-		for f in * ; do \
-			cp $$f $(DESTDIR)$(SAMPLEDIR)/sample-list/; \
-			chown $(USER) $(DESTDIR)$(SAMPLEDIR)/sample-list/$$f; \
-			chgrp $(GROUP) $(DESTDIR)$(SAMPLEDIR)/sample-list/$$f; \
-		done; \
-		cd ..; \
-	fi
-
-
-
-
+	install -d -m 755 $(DESTDIR)$(SAMPLEDIR)/sample-list
+	install -m 644 test/* $(DESTDIR)$(SAMPLEDIR)/sample-list
