@@ -105,7 +105,7 @@ installmodules:
 		-e 's|--ETCDIR--|$(ETCDIR)|' \
 		-e 's|--EXPLDIR--|$(EXPLDIR)|' \
 		-e 's|--SPOOLDIR--|$(SPOOLDIR)|' \
-		$(DESTDIR)$(LIBDIR)/*.pm $(DESTDIR)$(LIBDIR)/*.pl 
+		$(addprefix $(DESTDIR)$(LIBDIR)/, $(lib_SRC))
 
 installdaemons:
 	install -d -m 755 $(DESTDIR)$(SBINDIR)
@@ -130,7 +130,7 @@ installdaemons:
 		-e 's|--ETCDIR--|$(ETCDIR)|' \
 		-e 's|--EXPLDIR--|$(EXPLDIR)|' \
 		-e 's|--SPOOLDIR--|$(SPOOLDIR)|' \
-		$(DESTDIR)$(SBINDIR)/*.pl 
+		$(addprefix $(DESTDIR)$(SBINDIR)/, $(sbin_SRC))
 
 queue: queue.c Makefile ../Makefile
 	$(CC) $(CFLAGS) $(CDEFS) -o queue queue.c

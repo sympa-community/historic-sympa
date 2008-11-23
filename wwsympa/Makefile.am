@@ -65,7 +65,7 @@ installlib:
 		-e 's|--ETCDIR--|$(ETCDIR)|' \
 		-e 's|--EXPLDIR--|$(EXPLDIR)|' \
 		-e 's|--SPOOLDIR--|$(SPOOLDIR)|' \
-		$(DESTDIR)$(LIBDIR)/*.pm $(DESTDIR)$(LIBDIR)/*.pl
+		$(addprefix $(DESTDIR)$(LIBDIR)/, $(lib_SRC))
 
 	install -d -m 755 $(DESTDIR)$(LIBDIR)/Marc
 	install -m 644 Marc/Search.pm $(DESTDIR)$(LIBDIR)/Marc
@@ -104,7 +104,7 @@ installsbin:
 		-e 's|--ETCDIR--|$(ETCDIR)|' \
 		-e 's|--EXPLDIR--|$(EXPLDIR)|' \
 		-e 's|--SPOOLDIR--|$(SPOOLDIR)|' \
-		$(DESTDIR)$(SBINDIR)/*.pl 
+		$(addprefix $(DESTDIR)$(SBINDIR)/, $(sbin_SRC))
 
 installperlcgi:
 	install -d -m 755 $(DESTDIR)$(CGIDIR)
@@ -129,8 +129,7 @@ installperlcgi:
 		-e 's|--ETCDIR--|$(ETCDIR)|' \
 		-e 's|--EXPLDIR--|$(EXPLDIR)|' \
 		-e 's|--SPOOLDIR--|$(SPOOLDIR)|' \
-		$(DESTDIR)$(CGIDIR)/wwsympa.fcgi \
-		$(DESTDIR)$(CGIDIR)/wwsympa_sudo_wrapper.pl
+		$(addprefix $(DESTDIR)$(CGIDIR)/, $(perl_cgi_SRC))
 
 wwsympa-wrapper.fcgi: wwsympa-wrapper.fcgi.c Makefile
 	$(CC) $(CFLAGS) -DWWSYMPA=\"$(CGIDIR)/wwsympa.fcgi\" \

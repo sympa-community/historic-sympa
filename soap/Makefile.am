@@ -62,7 +62,7 @@ installlib:
 		-e 's|--ETCDIR--|$(ETCDIR)|' \
 		-e 's|--EXPLDIR--|$(EXPLDIR)|' \
 		-e 's|--SPOOLDIR--|$(SPOOLDIR)|' \
-		$(DESTDIR)$(LIBDIR)/*.pm
+		$(addprefix $(DESTDIR)$(LIBDIR)/, $(lib_SRC))
 
 installwrappercgi:
 	install -d -m 755 $(DESTDIR)$(CGIDIR)
@@ -93,7 +93,7 @@ installscript:
 		-e 's|--ETCDIR--|$(ETCDIR)|' \
 		-e 's|--EXPLDIR--|$(EXPLDIR)|' \
 		-e 's|--SPOOLDIR--|$(SPOOLDIR)|' \
-		$(DESTDIR)$(SCRIPTDIR)/*.pl
+		$(addprefix $(DESTDIR)$(SCRIPTDIR)/, $(script_SRC))
 
 installperlcgi:
 	install -d -m 755 $(DESTDIR)$(CGIDIR)
@@ -118,7 +118,7 @@ installperlcgi:
 		-e 's|--ETCDIR--|$(ETCDIR)|' \
 		-e 's|--EXPLDIR--|$(EXPLDIR)|' \
 		-e 's|--SPOOLDIR--|$(SPOOLDIR)|' \
-		$(DESTDIR)$(SCRIPTDIR)/*.fcgi
+		$(addprefix $(DESTDIR)$(CGIDIR)/, $(perl_cgi_SRC))
 
 Sympa_soap_server-wrapper.fcgi: sympa_soap_server-wrapper.fcgi.c Makefile
 	$(CC) $(CFLAGS) -DSYMPASOAP=\"$(CGIDIR)/sympa_soap_server.fcgi\" \
