@@ -44,7 +44,7 @@ our %levels = (
     err    => 0,
     info   => 0,
     notice => 0,
-    trace  => 0
+    trace  => 0,
     debug  => 1,
     debug2 => 2,
     debug3 => 3,
@@ -79,10 +79,10 @@ sub fatal_err {
 }
 
 sub do_log {
-    my $fac = shift;
+    my $facility = shift;
 
     # do not log if log level if too high regarding the log requested by user 
-    return if ($levels{$fac} > $log_level)  ;
+    return if ($levels{$facility} > $log_level)  ;
 
     # map to standard syslog facility if needed
     $facility = 'debug' if $facility eq 'debug2' || $facility eq 'debug3';
@@ -107,14 +107,14 @@ sub do_log {
 	$m = $call[3].'() ' . $m if ($call[3]);
     }
 
-    if ($fac eq 'trace' ) {
-	$m = "###### TRACE MESSAGE ######:  " . $m;
-	$fac = 'notice';
+    if ($facility eq 'trace' ) {
+    $m = "###### TRACE MESSAGE ######:  " . $m;
+    $facility = 'notice';
     }
     eval {
-	unless (syslog($fac, $m, @param)) {
+	unless (syslog($facility, $m, @param)) {
 	    &do_connect();
-	    syslog($fac, $m, @param);
+	    syslog($facility, $m, @param);
 	}
     };
     if($@ && ($warning_date < time - $warning_timeout)) {
@@ -125,7 +125,7 @@ sub do_log {
 
     if ($main::options{'foreground'}) {
 	if ($main::options{'log_to_stderr'} || 
-	    ($main::options{'batch'} && $fac eq 'err')) {
+	    ($main::options{'batch'} && $facility eq 'err')) {
 	    $m =~ s/%m/$errno/g;
 	    printf STDERR "$m\n", @param;
 	}
