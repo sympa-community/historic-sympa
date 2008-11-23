@@ -19,75 +19,66 @@
 # along with this program; if not, write to the Free Software
 # Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
 
-SRC	=	create_db.Pg create_db.mysql create_db.Oracle create_db.Sybase create_db.SQLite 
-
-SUBSTSRC	=	arc2webarc.pl testldap.pl p12topem.pl init_comment.pl crypt_passwd.pl testlogs.pl mod2html.pl tpl2tt2.pl ldap_alias_manager.pl mysql_alias_manager.pl
-
-INITSRC		=	sympa
-
-PIDPRE		=	pidof -x
-PIDPOST		=
+script_SRC	= create_db.Pg create_db.mysql create_db.Oracle \
+		  create_db.Sybase create_db.SQLite \ 
+		  arc2webarc.pl testldap.pl p12topem.pl init_comment.pl \
+		  crypt_passwd.pl testlogs.pl mod2html.pl tpl2tt2.pl \
+		  ldap_alias_manager.pl mysql_alias_manager.pl
+init_SRC	= sympa
 
 all:	
 
-install-data-local: makedir installsrc installsubstsrc installinit
+install-data-local: installscript installinit
 
-makedir:
-	@if [ ! -d $(DESTDIR)$(SCRIPTDIR) ]; then \
-		mkdir -p $(DESTDIR)$(SCRIPTDIR); \
-	fi
-
-installsubstsrc:
-	@echo "Doing multiple substitutions while installing ..."
-	@( \
-		PERL=$(PERL); export PERL; \
-		SH=$(SH); export SH; \
-		USER=$(USER); export USER; \
-		UMASK=0755; export UMASK; \
-		DIR=$(DIR); export DIR; \
-		DESTDIR=$(DESTDIR); export DESTDIR; \
-		INITDIR=$(INITDIR); export INITDIR; \
-		INSTALLDIR=$(SCRIPTDIR); export INSTALLDIR; \
-		BINDIR=$(BINDIR); export BINDIR; \
-		ETCBINDIR=$(ETCBINDIR); export ETCBINDIR; \
-		CONFIG=$(CONFIG); export CONFIG; \
-		WWSCONFIG=$(WWSCONFIG); export WWSCONFIG; \
-		COOKIE=$(COOKIE); export COOKIE; \
-		HOST=$(HOST); export HOST; \
-		OPENSSL=$(OPENSSL); export OPENSSL; \
-		PIDPRE='$(PIDPRE)'; export PIDPRE; \
-		PIDPOST='$(PIDPOST)'; export PIDPOST; \
-		LOCKDIR=$(LOCKDIR); export LOCKDIR; \
-		$(PERL) ../../../subst.pl $(SUBSTSRC) \
-	)
-
-installsrc:
-	@for c in $(SRC); do \
-	cp $$c $(DESTDIR)$(SCRIPTDIR); \
-	done
-
+installscript:
+	install -d -m 755 $(DESTDIR)$(SCRIPTDIR)
+	install -m 755 $(script_SRC) $(DESTDIR)$(SCRIPTDIR)
+	sed -i \
+		-e 's|--USER--|$(USER)|' \
+		-e 's|--GROUP--|$(GROUP)|' \
+		-e 's|--SYMPA_VERSION--|$(PKG_VERSION)|' \
+		-e 's|--SENDMAIL_ALIASES--|$(SENDMAIL_ALIASES)|' \
+		-e 's|--VIRTUAL_ALIASES--|$(VIRTUAL_ALIASES)|' \
+		-e 's|--CONFIG--|$(CONFIG)|' \
+		-e 's|--WWSCONFIG--|$(WWSCONFIG)|' \
+		-e 's|--prefix--|$(prefix)|' \
+		-e 's|--PIDDIR--|$(PIDDIR)|' \
+		-e 's|--SCRIPTDIR--|$(SCRIPTDIR)|' \
+		-e 's|--BINDIR--|$(BINDIR)|' \
+		-e 's|--SBINDIR--|$(SBINDIR)|' \
+		-e 's|--LIBDIR--|$(LIBDIR)|' \
+		-e 's|--LOCALEDIR--|$(LOCALEDIR)|' \
+		-e 's|--DATADIR--|$(DATADIR)|' \
+		-e 's|--ETCDIR--|$(ETCDIR)|' \
+		-e 's|--EXPLDIR--|$(EXPLDIR)|' \
+		-e 's|--SPOOLDIR--|$(SPOOLDIR)|' \
+		$(addprefix $(DESTDIR)$(SCRIPTDIR)/, $(script_SRC))
 
 installinit:
-	mkdir -p $(DESTDIR)$(INITDIR)
-	@echo "Installing SYSV init script in $(DESTDIR)$(INITDIR)..."
-	@( \
-		PERL=$(PERL); export PERL; \
-		SH=$(SH); export SH; \
-		USER=$(USER); export USER; \
-		UMASK=0755; export UMASK; \
-		DIR=$(DIR); export DIR; \
-		DESTDIR=$(DESTDIR); export DESTDIR; \
-		INITDIR=$(INITDIR); export INITDIR; \
-		INSTALLDIR=$(INITDIR); export INSTALLDIR; \
-		BINDIR=$(BINDIR); export BINDIR; \
-		PIDDIR=$(PIDDIR); export PIDDIR; \
-		ETCBINDIR=$(ETCBINDIR); export ETCBINDIR; \
-		CONFIG=$(CONFIG); export CONFIG; \
-		WWSCONFIG=$(WWSCONFIG); export WWSCONFIG; \
-		COOKIE=$(COOKIE); export COOKIE; \
-		HOST=$(HOST); export HOST; \
-		$(PERL) ../../../subst.pl $(INITSRC) \
-	)
+	install -d -m 755 $(DESTDIR)$(INITDIR)
+	install -m 755 $(init_SRC) $(DESTDIR)$(INITDIR)
+	sed -i \
+		-e 's|--USER--|$(USER)|' \
+		-e 's|--GROUP--|$(GROUP)|' \
+		-e 's|--SYMPA_VERSION--|$(PKG_VERSION)|' \
+		-e 's|--SENDMAIL_ALIASES--|$(SENDMAIL_ALIASES)|' \
+		-e 's|--VIRTUAL_ALIASES--|$(VIRTUAL_ALIASES)|' \
+		-e 's|--CONFIG--|$(CONFIG)|' \
+		-e 's|--WWSCONFIG--|$(WWSCONFIG)|' \
+		-e 's|--prefix--|$(prefix)|' \
+		-e 's|--PIDDIR--|$(PIDDIR)|' \
+		-e 's|--SCRIPTDIR--|$(SCRIPTDIR)|' \
+		-e 's|--BINDIR--|$(BINDIR)|' \
+		-e 's|--SBINDIR--|$(SBINDIR)|' \
+		-e 's|--LIBDIR--|$(LIBDIR)|' \
+		-e 's|--LOCALEDIR--|$(LOCALEDIR)|' \
+		-e 's|--DATADIR--|$(DATADIR)|' \
+		-e 's|--ETCDIR--|$(ETCDIR)|' \
+		-e 's|--EXPLDIR--|$(EXPLDIR)|' \
+		-e 's|--SPOOLDIR--|$(SPOOLDIR)|' \
+		-e 's|--INITDIR--|$(INITDIR)|' \
+		-e 's|--LOCKDIR--|$(LOCKDIR)|' \
+		$(addprefix $(DESTDIR)$(INITDIR)/, $(init_SRC))
 
 
 
