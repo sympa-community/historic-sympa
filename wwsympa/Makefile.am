@@ -38,19 +38,6 @@ clean:
 
 install-exec-local: installcgi installicons installdata installwrapper installmodules installdaemons
 
-installmod:
-	@for i in $(cgi_SUBST) ; do \
-	chown $(USER) $(DESTDIR)$(CGIDIR)/$$i || /bin/true; \
-	chgrp $(GROUP) $(DESTDIR)$(CGIDIR)/$$i || /bin/true; \
-	done
-	@for i in $(cgi_SRC) ; do \
-	chown $(USER) $(DESTDIR)$(CGIDIR)/$$i || /bin/true; \
-	chgrp $(GROUP) $(DESTDIR)$(CGIDIR)/$$i || /bin/true; \
-	done
-	echo "Setting SetUID bit on wwsympa-wrapper.fcgi..."; \
-	chmod u+s $(DESTDIR)$(CGIDIR)/wwsympa-wrapper.fcgi;\
-	chmod g+s $(DESTDIR)$(CGIDIR)/wwsympa-wrapper.fcgi;
-
 installdata:
 	install -d -m 755 $(DESTDIR)$(DATADIR)
 	install -m 644 $(data_SRC) $(DESTDIR)$(DATADIR)
@@ -91,6 +78,8 @@ installicons:
 installwrapper:
 	@echo "Installing wwsympa-wrapper binary..."
 	install -m 6755 wwsympa-wrapper.fcgi $(DESTDIR)$(CGIDIR)
+	-chown $(USER) $(DESTDIR)$(CGIDIR)/wwsympa-wrapper.fcgi
+	-chgrp $(GROUP) $(DESTDIR)$(CGIDIR)/wwsympa-wrapper.fcgi
 
 installdaemons:
 	install -d -m 755 $(DESTDIR)$(SBINDIR)
