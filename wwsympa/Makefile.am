@@ -21,16 +21,12 @@
 
 sbin_SRC = bounced.pl archived.pl
 
-cgi_SUBST	=	wwsympa.fcgi wwsympa_sudo_wrapper.pl
-
-cgi_SRC		=	wwsympa-wrapper.fcgi
+cgi_SRC	= wwsympa-wrapper.fcgi wwsympa.fcgi wwsympa_sudo_wrapper.pl
 
 lib_SRC	= wwslib.pm cookielib.pm bounce-lib.pl Marc.pm Auth.pm \
 	  SharedDocument.pm SympaSession.pm
 
 data_SRC = mime.types 
-
-WWSYMPA = $(CGIDIR)/wwsympa.fcgi
 
 all:	wwsympa-wrapper.fcgi
 
@@ -41,7 +37,7 @@ clean:
 	fi
 
 
-install-exec-local: makedir $(cgi_SUBST) $(cgi_SRC) substcgi installicons instaldata installwrapper installmod installmodules installdaemons
+install-exec-local: $(cgi_SUBST) $(cgi_SRC) installcgi installicons installdata installwrapper installmodules installdaemons
 
 installmod:
 	@for i in $(cgi_SUBST) ; do \
@@ -55,16 +51,6 @@ installmod:
 	echo "Setting SetUID bit on wwsympa-wrapper.fcgi..."; \
 	chmod u+s $(DESTDIR)$(CGIDIR)/wwsympa-wrapper.fcgi;\
 	chmod g+s $(DESTDIR)$(CGIDIR)/wwsympa-wrapper.fcgi;
-
-makedir:
-	@if [ ! -d $(DESTDIR)$(SBINDIR) ]; then \
-		echo "Creating required directory $(DESTDIR)$(SBINDIR)"; \
-		mkdir -p $(DESTDIR)$(SBINDIR); \
-	fi
-	@if [ ! -d $(DESTDIR)$(CGIDIR) ]; then \
-		echo "Creating required directory $(DESTDIR)$(CGIDIR)"; \
-		mkdir -p $(DESTDIR)$(CGIDIR); \
-	fi
 
 installdata:
 	install -d -m 755 $(DESTDIR)$(DATADIR)
@@ -105,7 +91,7 @@ installicons:
 
 installwrapper:
 	@echo "Installing wwsympa-wrapper binary..."
-	cp wwsympa-wrapper.fcgi $(DESTDIR)$(CGIDIR)/
+	install -m 6755 wwsympa-wrapper.fcgi $(DESTDIR)$(CGIDIR)
 
 installdaemons:
 	install -d -m 755 $(DESTDIR)$(SBINDIR)
@@ -132,26 +118,32 @@ installdaemons:
 		-e 's|--SPOOLDIR--|$(SPOOLDIR)|' \
 		$(DESTDIR)$(SBINDIR)/*.pl 
 
-substcgi:
-	@echo "Doing multiple substitutions while installing CGIs..."
-	@( \
-		PERL=$(PERL); export PERL; \
-		UMASK=0755; export UMASK; \
-		INSTALLDIR=$(CGIDIR); export INSTALLDIR; \
-		USER=$(USER); export USER; \
-		SUDO=$(SUDO); export SUDO; \
-		SBINDIR=$(SBINDIR); export SBINDIR; \
-		CGIDIR=$(CGIDIR); export CGIDIR; \
-		PIDDIR=$(PIDDIR); export PIDDIR;\
-		LIBDIR=$(LIBDIR); export LIBDIR; \
-		DESTDIR=$(DESTDIR); export DESDIR; \
-		ETCBINDIR=$(DATADIR); export ETCBINDIR; \
-		MAILERPROGDIR=$(BINDIR); export MAILERPROGDIR; \
-		WWSCONFIG=$(WWSCONFIG); export WWSCONFIG; \
-		CONFIG=$(CONFIG); export CONFIG; \
-		PERLOPT="-U"; export PERLOPT; \
-		$(PERL) ../subst.pl $(cgi_SUBST) \
-	)
+installcgi:
+	install -d -m 755 $(DESTDIR)$(CGIDIR)
+	install -m 755 wwsympa.fcgi $(DESTDIR)$(CGIDIR)
+	install -m 755 wwsympa_sudo_wrapper.pl $(DESTDIR)$(CGIDIR)
+	sed -i \
+		-e 's|--PERL--|$(PERL)|' \
+		-e 's|--USER--|$(USER)|' \
+		-e 's|--GROUP--|$(GROUP)|' \
+		-e 's|--SYMPA_VERSION--|$(PKG_VERSION)|' \
+		-e 's|--SENDMAIL_ALIASES--|$(SENDMAIL_ALIASES)|' \
+		-e 's|--VIRTUAL_ALIASES--|$(VIRTUAL_ALIASES)|' \
+		-e 's|--CONFIG--|$(CONFIG)|' \
+		-e 's|--WWSCONFIG--|$(WWSCONFIG)|' \
+		-e 's|--prefix--|$(prefix)|' \
+		-e 's|--PIDDIR--|$(PIDDIR)|' \
+		-e 's|--SCRIPTDIR--|$(SCRIPTDIR)|' \
+		-e 's|--BINDIR--|$(BINDIR)|' \
+		-e 's|--SBINDIR--|$(SBINDIR)|' \
+		-e 's|--LIBDIR--|$(LIBDIR)|' \
+		-e 's|--LOCALEDIR--|$(LOCALEDIR)|' \
+		-e 's|--DATADIR--|$(DATADIR)|' \
+		-e 's|--ETCDIR--|$(ETCDIR)|' \
+		-e 's|--EXPLDIR--|$(EXPLDIR)|' \
+		-e 's|--SPOOLDIR--|$(SPOOLDIR)|' \
+		$(DESTDIR)$(CGIDIR)/wwsympa.fcgi \
+		$(DESTDIR)$(CGIDIR)/wwsympa_sudo_wrapper.pl
 
 wwsympa-wrapper.fcgi: wwsympa-wrapper.fcgi.c Makefile ../Makefile
-	$(CC) $(CFLAGS) -DWWSYMPA=\"$(WWSYMPA)\" -o wwsympa-wrapper.fcgi wwsympa-wrapper.fcgi.c
+	$(CC) $(CFLAGS) -DWWSYMPA=\"$(CGIDIR)/wwsympa.fcgi\" -o wwsympa-wrapper.fcgi wwsympa-wrapper.fcgi.c
