@@ -36,7 +36,7 @@ clean:
 	fi
 
 
-install-exec-local: $(cgi_SUBST) $(cgi_SRC) installcgi installicons installdata installwrapper installmodules installdaemons
+install-exec-local: installcgi installicons installdata installwrapper installmodules installdaemons
 
 installmod:
 	@for i in $(cgi_SUBST) ; do \
@@ -144,5 +144,5 @@ installcgi:
 		$(DESTDIR)$(CGIDIR)/wwsympa.fcgi \
 		$(DESTDIR)$(CGIDIR)/wwsympa_sudo_wrapper.pl
 
-wwsympa-wrapper.fcgi: wwsympa-wrapper.fcgi.c Makefile ../Makefile
+wwsympa-wrapper.fcgi: wwsympa-wrapper.fcgi.c Makefile
 	$(CC) $(CFLAGS) -DWWSYMPA=\"$(CGIDIR)/wwsympa.fcgi\" -o wwsympa-wrapper.fcgi wwsympa-wrapper.fcgi.c

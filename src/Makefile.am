@@ -54,7 +54,7 @@ clean:
 		rm virtualwrapper ; \
 	fi
 
-install-exec-local: $(sbin_SRC) $(lib_SRC) installqueue installwrapper installmodules installdaemons
+install-exec-local: installqueue installwrapper installmodules installdaemons
 
 installqueue:
 	@echo "Installing Queue binary..."
