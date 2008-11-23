@@ -43,10 +43,6 @@ clean:
 install-exec-local: makedir $(sbin_SUBST) $(cgi_SUBST) $(cgi_SRC) $(lib_SUBST) substcgi substsbin installicons installsrc installwrapper installmod installmodules
 
 installmod:
-	@for i in $(SRC) ; do \
-	chown $(USER) $(DESTDIR)$(DATADIR)/$$i || /bin/true; \
-	chgrp $(GROUP) $(DESTDIR)$(DATADIR)/$$i || /bin/true; \
-	done
 	@for i in $(sbin_SUBST) ; do \
 	chown $(USER) $(DESTDIR)$(SBINDIR)/$$i || /bin/true; \
 	chgrp $(GROUP) $(DESTDIR)$(SBINDIR)/$$i || /bin/true; \
@@ -72,15 +68,10 @@ makedir:
 		echo "Creating required directory $(DESTDIR)$(CGIDIR)"; \
 		mkdir -p $(DESTDIR)$(CGIDIR); \
 	fi
-	@if [ ! -d $(DESTDIR)$(DATADIR) ]; then \
-		echo "Creating required directory $(DESTDIR)$(DATADIR)"; \
-		mkdir -p $(DESTDIR)$(DATADIR); \
-	fi
 
 installsrc:
-	@echo
-	@echo "Installing sources..."
-	cp $(SRC) $(DESTDIR)$(DATADIR)
+	install -d -m 755 $(DESTDIR)$(DATADIR)
+	install -m 644 mime.types $(DESTDIR)$(DATADIR)
 
 installmodules:
 	install -d -m 755 $(DESTDIR)$(LIBDIR)
