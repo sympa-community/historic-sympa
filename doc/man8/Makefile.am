@@ -1,5 +1,4 @@
-## Available catalogues (languages)
-MAN8	=	archived.8 bounced.8 alias_manager.8 sympa.8 
+man8_SRC	= archived.8 bounced.8 alias_manager.8 sympa.8 
 
 SUFFIXES:	.8 .pod
 
@@ -14,45 +13,7 @@ all:	$(MAN8)
 clean:
 	rm -f *.8
 
-install-data-local: makedir 
-	@for manfile in $(MAN8); do \
-		echo "Installing man pages...$(DESTDIR)$(MANDIR)/man8/$$manfile"; \
-		( \
-			PERL=$(PERL); export PERL; \
-			UMASK=0644; export UMASK; \
-			DIR=$(prefix); export DIR; \
-			INSTALLDIR=$(MANDIR)/man8; export INSTALLDIR; \
-			DESTDIR=$(DESTDIR); export DESTDIR; \
-			SYMPA_VERSION=$(PACKAGE_VERSION); export SYMPA_VERSION; \
-			CONFDIR=$(CONFDIR); export CONFDIR; \
-			SENDMAIL_ALIASES=$(SENDMAIL_ALIASES); export SENDMAIL_ALIASES; \
-			VIRTUAL_ALIASES=$(VIRTUAL_ALIASES); export VIRTUAL_ALIASES; \
-			MAILERPROGDIR=$(MAILERPROGDIR); export MAILERPROGDIR; \
-			PIDDIR=$(PIDDIR); export PIDDIR; \
-			SPOOLDIR=$(SPOOLDIR); export SPOOLDIR; \
-			PIDDIR=$(PIDDIR); export PIDDIR; \
-			ETCBINDIR=$(ETCBINDIR); export ETCBINDIR; \
-			$(PERL) ../../subst.pl $$manfile \
-		) ;\
-	done
-makedir:
-	@if [ ! -d $(DESTDIR)$(MANDIR) ]; then \
-		echo "Creating required directory $(DESTDIR)$(MANDIR)"; \
-		mkdir -p $(DESTDIR)$(MANDIR); \
-	fi
-	@if [ ! -d $(DESTDIR)$(MANDIR)/man8 ]; then \
-		echo "Creating required directory $(DESTDIR)$(MANDIR)/man8"; \
-		mkdir -p $(DESTDIR)$(MANDIR)/man8; \
-	fi
-
-
-
-
-
-
-
-
-
-
-
-
+install-data-local:
+	install -d -m 755 $(DESTDIR)$(MANDIR)
+	install -d -m 755 $(DESTDIR)$(MANDIR)/man8
+	install -m 644 $(man8_SRC) $(DESTDIR)$(MANDIR)/man8
