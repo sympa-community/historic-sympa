@@ -137,7 +137,7 @@ AC_ARG_WITH(
 AC_SUBST(MANDIR)
 
 ## SYS V init scripts directory
-INITDIR=/etc/rc.d/init.d
+INITDIR='${prefix}/etc/rc.d/init.d'
 AC_ARG_WITH(
     initdir,
     AS_HELP_STRING(
