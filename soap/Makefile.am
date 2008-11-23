@@ -52,7 +52,6 @@ installlib:
 		-e 's|--WWSCONFIG--|$(WWSCONFIG)|' \
 		-e 's|--prefix--|$(prefix)|' \
 		-e 's|--PIDDIR--|$(PIDDIR)|' \
-		-e 's|--INSTALLDIR--|$(INSTALLDIR)|' \
 		-e 's|--SCRIPTDIR--|$(SCRIPTDIR)|' \
 		-e 's|--BINDIR--|$(BINDIR)|' \
 		-e 's|--SBINDIR--|$(SBINDIR)|' \
@@ -83,7 +82,6 @@ installscript:
 		-e 's|--WWSCONFIG--|$(WWSCONFIG)|' \
 		-e 's|--prefix--|$(prefix)|' \
 		-e 's|--PIDDIR--|$(PIDDIR)|' \
-		-e 's|--INSTALLDIR--|$(INSTALLDIR)|' \
 		-e 's|--SCRIPTDIR--|$(SCRIPTDIR)|' \
 		-e 's|--BINDIR--|$(BINDIR)|' \
 		-e 's|--SBINDIR--|$(SBINDIR)|' \
@@ -108,7 +106,6 @@ installperlcgi:
 		-e 's|--WWSCONFIG--|$(WWSCONFIG)|' \
 		-e 's|--prefix--|$(prefix)|' \
 		-e 's|--PIDDIR--|$(PIDDIR)|' \
-		-e 's|--INSTALLDIR--|$(INSTALLDIR)|' \
 		-e 's|--SCRIPTDIR--|$(SCRIPTDIR)|' \
 		-e 's|--BINDIR--|$(BINDIR)|' \
 		-e 's|--SBINDIR--|$(SBINDIR)|' \
