@@ -34,7 +34,6 @@ SYMPASOAP = $(CGIDIR)/sympa_soap_server.fcgi
 all:	sympa_soap_server-wrapper.fcgi
 
 clean: 
-	rm -rf $(DESTDIR)$(SBINDIR)
 	@if [ -f ./sympa_soap_server-wrapper.fcgi ]; then \
 		rm -f sympa_soap_server-wrapper.fcgi ; \
 	fi
