@@ -120,7 +120,7 @@ installperlcgi:
 		-e 's|--SPOOLDIR--|$(SPOOLDIR)|' \
 		$(addprefix $(DESTDIR)$(CGIDIR)/, $(perl_cgi_SRC))
 
-Sympa_soap_server-wrapper.fcgi: sympa_soap_server-wrapper.fcgi.c Makefile
+sympa_soap_server-wrapper.fcgi: sympa_soap_server-wrapper.fcgi.c Makefile
 	$(CC) $(CFLAGS) -DSYMPASOAP=\"$(CGIDIR)/sympa_soap_server.fcgi\" \
 		-o sympa_soap_server-wrapper.fcgi \
 		sympa_soap_server-wrapper.fcgi.c
