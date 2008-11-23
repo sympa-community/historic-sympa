@@ -54,7 +54,7 @@ clean:
 		rm virtualwrapper ; \
 	fi
 
-install-exec-local: makedir subst $(sbin_SRC) $(lib_SRC) installqueue installwrapper installmodules
+install-exec-local: makedir $(sbin_SRC) $(lib_SRC) installqueue installwrapper installmodules installdaemons
 
 installqueue:
 	@echo "Installing Queue binary..."
@@ -99,6 +99,30 @@ installmodules:
 		-e 's|--SPOOLDIR--|$(SPOOLDIR)|' \
 		$(DESTDIR)$(LIBDIR)/*.pm $(DESTDIR)$(LIBDIR)/*.pl 
 
+installdaemons:
+	install -m 755 $(sbin_SRC) $(DESTDIR)$(SBINDIR)
+	sed -i \
+		-e 's|--PERL--|$(PERL)|' \
+		-e 's|--USER--|$(USER)|' \
+		-e 's|--GROUP--|$(GROUP)|' \
+		-e 's|--SYMPA_VERSION--|$(PKG_VERSION)|' \
+		-e 's|--SENDMAIL_ALIASES--|$(SENDMAIL_ALIASES)|' \
+		-e 's|--VIRTUAL_ALIASES--|$(VIRTUAL_ALIASES)|' \
+		-e 's|--CONFIG--|$(CONFIG)|' \
+		-e 's|--WWSCONFIG--|$(WWSCONFIG)|' \
+		-e 's|--prefix--|$(prefix)|' \
+		-e 's|--PIDDIR--|$(PIDDIR)|' \
+		-e 's|--SCRIPTDIR--|$(SCRIPTDIR)|' \
+		-e 's|--BINDIR--|$(BINDIR)|' \
+		-e 's|--SBINDIR--|$(SBINDIR)|' \
+		-e 's|--LIBDIR--|$(LIBDIR)|' \
+		-e 's|--LOCALEDIR--|$(LOCALEDIR)|' \
+		-e 's|--DATADIR--|$(DATADIR)|' \
+		-e 's|--ETCDIR--|$(ETCDIR)|' \
+		-e 's|--EXPLDIR--|$(EXPLDIR)|' \
+		-e 's|--SPOOLDIR--|$(SPOOLDIR)|' \
+		$(DESTDIR)$(SBINDIR)/*.pl 
+
 makedir:
 	@if [ ! -d $(DESTDIR)$(BINDIR) ]; then \
 		echo "Creating required directory $(DESTDIR)$(BINDIR)"; \
@@ -137,32 +161,6 @@ aliaswrapper: aliaswrapper.c Makefile ../Makefile
 virtualwrapper: virtualwrapper.c Makefile ../Makefile
 	$(CC) $(CFLAGS) $(CDEFS) -DPOSTMAP=\"${POSTMAP}\" \
 		-DPOSTMAP_ARG=\"${POSTMAP_ARG}\" -o virtualwrapper virtualwrapper.c
-
-subst:
-	@echo "Doing multiple substitutions while installing binaries..."
-	@( \
-		PERL=$(PERL); export PERL;\
-		UMASK=0755; export UMASK;\
-		USER=$(USER); export USER;\
-		GROUP=$(GROUP); export GROUP;\
-		prefix=$(prefix); export prefix;\
-		DESTDIR=$(DESTDIR); export DESTDIR;\
-		PIDDIR=$(PIDDIR); export PIDDIR;\
-		INSTALLDIR=$(SBINDIR); export INSTALLDIR;\
-		SBINDIR=$(SBINDIR); export SBINDIR;\
-		LIBDIR=$(LIBDIR); export LIBDIR;\
-		LOCALEDIR=$(LOCALEDIR); export LOCALEDIR;\
-		DATADIR=$(DATADIR); export DATADIR;\
-		ETCDIR=$(ETCDIR); export ETCDIR;\
-		EXPLDIR=$(EXPLDIR); export EXPLDIR;\
-		CONFIG=$(CONFIG); export CONFIG;\
-		WWSCONFIG=$(WWSCONFIG); export WWSCONFIG;\
-		SYMPA_VERSION=$(PACKAGE_VERSION); export SYMPA_VERSION;\
-		SENDMAIL_ALIASES=$(SENDMAIL_ALIASES); export SENDMAIL_ALIASES;\
-		VIRTUAL_ALIASES=$(VIRTUAL_ALIASES); export VIRTUAL_ALIASES;\
-		SPOOLDIR=$(SPOOLDIR); export SPOOLDIR;\
-		$(PERL) ../subst.pl $(sbin_SRC) \
-	)
 
 ## Dépendances
 queue:		queue.c Makefile
