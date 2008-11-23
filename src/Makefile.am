@@ -54,10 +54,11 @@ clean:
 		rm virtualwrapper ; \
 	fi
 
-install-exec-local: makedir $(sbin_SRC) $(lib_SRC) installqueue installwrapper installmodules installdaemons
+install-exec-local: $(sbin_SRC) $(lib_SRC) installqueue installwrapper installmodules installdaemons
 
 installqueue:
 	@echo "Installing Queue binary..."
+	install -d -m 755 $(DESTDIR)$(BINDIR)
 	install -m 4755 queue $(DESTDIR)$(BINDIR)
 	-chown $(USER) $(DESTDIR)$(BINDIR)/queue
 	-chgrp $(GROUP) $(DESTDIR)$(BINDIR)/queue
@@ -72,6 +73,7 @@ installqueue:
 
 installwrapper:
 	@echo "Installing AliasWrapper binary..."
+	install -d -m 755 $(DESTDIR)$(LIBEXECDIR)
 	install -m 4750 aliaswrapper $(DESTDIR)$(LIBEXECDIR)
 	-chown root $(DESTDIR)$(LIBEXECDIR)/aliaswrapper
 	-chgrp $(GROUP) $(DESTDIR)$(LIBEXECDIR)/aliaswrapper
@@ -81,6 +83,7 @@ installwrapper:
 	-chgrp $(GROUP) $(DESTDIR)$(LIBEXECDIR)/virtualwrapper
 
 installmodules:
+	install -d -m 755 $(DESTDIR)$(LIBDIR)
 	install -m 644 $(lib_SRC) $(DESTDIR)$(LIBDIR)
 	sed -i \
 		-e 's|--USER--|$(USER)|' \
@@ -105,6 +108,7 @@ installmodules:
 		$(DESTDIR)$(LIBDIR)/*.pm $(DESTDIR)$(LIBDIR)/*.pl 
 
 installdaemons:
+	install -d -m 755 $(DESTDIR)$(SBINDIR)
 	install -m 755 $(sbin_SRC) $(DESTDIR)$(SBINDIR)
 	sed -i \
 		-e 's|--PERL--|$(PERL)|' \
@@ -127,28 +131,6 @@ installdaemons:
 		-e 's|--EXPLDIR--|$(EXPLDIR)|' \
 		-e 's|--SPOOLDIR--|$(SPOOLDIR)|' \
 		$(DESTDIR)$(SBINDIR)/*.pl 
-
-makedir:
-	@if [ ! -d $(DESTDIR)$(BINDIR) ]; then \
-		echo "Creating required directory $(DESTDIR)$(BINDIR)"; \
-		mkdir -p $(DESTDIR)$(BINDIR); \
-	fi
-	@if [ ! -d $(DESTDIR)$(LIBEXECDIR) ]; then \
-		echo "Creating required directory $(DESTDIR)$(LIBEXECDIR)"; \
-		mkdir -p $(DESTDIR)$(LIBEXECDIR); \
-	fi
-	@if [ ! -d $(DESTDIR)$(BINDIR) ]; then \
-		echo "Creating required directory $(DESTDIR)$(BINDIR)"; \
-		mkdir -p $(DESTDIR)$(BINDIR); \
-	fi
-	@if [ ! -d $(DESTDIR)$(SBINDIR) ]; then \
-		echo "Creating required directory $(DESTDIR)$(SBINDIR)"; \
-		mkdir -p $(DESTDIR)$(SBINDIR); \
-	fi
-	@if [ ! -d $(DESTDIR)$(LIBDIR) ]; then \
-		echo "Creating required directory $(DESTDIR)$(LIBDIR)"; \
-		mkdir -p $(DESTDIR)$(LIBDIR); \
-	fi
 
 queue: queue.c Makefile ../Makefile
 	$(CC) $(CFLAGS) $(CDEFS) -o queue queue.c
