@@ -21,7 +21,7 @@
 
 default: none
 
-install: makedir installtemplates installmod
+install-data-local: makedir installtemplates installmod
 
 installmod:
 	-chown $(USER) $(DESTDIR)$(DATADIR)/web_tt2/*

@@ -14,7 +14,7 @@ all:	$(MAN8)
 clean:
 	rm -f *.8
 
-install: makedir 
+install-data-local: makedir 
 	@for manfile in $(MAN8); do \
 		echo "Installing man pages...$(DESTDIR)$(MANDIR)/man8/$$manfile"; \
 		( \

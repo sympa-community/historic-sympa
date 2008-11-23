@@ -39,7 +39,7 @@ clean:
 		rm -f sympa_soap_server-wrapper.fcgi ; \
 	fi
 
-install: makedir $(cgi_SUBST) $(lib_SUBST) substcgi substlib substscript installsrc installwrapper installmod
+install-exec-local: makedir $(cgi_SUBST) $(lib_SUBST) substcgi substlib substscript installsrc installwrapper installmod
 
 installmod:
 	@for i in $(SRC) ; do \

@@ -33,7 +33,7 @@ PIDPOST		=
 
 all:	
 
-install: makedir installsrc installsubstsrc installinit
+install-data-local: makedir installsrc installsubstsrc installinit
 
 clean:
 	rm -rf $(DESTDIR)$(SCRIPTDIR)

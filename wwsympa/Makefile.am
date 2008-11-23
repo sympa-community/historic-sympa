@@ -40,7 +40,7 @@ clean:
 	fi
 
 
-install: makedir $(sbin_SUBST) $(cgi_SUBST) $(cgi_SRC) $(lib_SUBST) substcgi substsbin substlib installicons installsrc installwrapper installmod
+install-exec-local: makedir $(sbin_SUBST) $(cgi_SUBST) $(cgi_SRC) $(lib_SUBST) substcgi substsbin substlib installicons installsrc installwrapper installmod
 
 installmod:
 	@for i in $(SRC) ; do \

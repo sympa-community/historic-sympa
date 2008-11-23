@@ -54,7 +54,7 @@ clean:
 		rm virtualwrapper ; \
 	fi
 
-install: makedir subst $(sbin_SRC) $(lib_SRC) installqueue installwrapper installscenari installtask_models installetc installlisttemplates installmod installgeneral_task_models info
+install-exec-local: makedir subst $(sbin_SRC) $(lib_SRC) installqueue installwrapper installscenari installtask_models installetc installlisttemplates installmod installgeneral_task_models info
 
 
 installtask_models:

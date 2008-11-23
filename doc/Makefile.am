@@ -41,7 +41,7 @@ makedir:
 		mkdir -p $(DESTDIR)$(DOCDIR); \
 	fi
 
-install: makedir 
+install-data-local: makedir 
 #	@for f in sympa.pdf; do \
 #		echo "Installing documentation...$(DESTDIR)$(DOCDIR)/$$f"; \
 #		cp $$f $(DESTDIR)$(DOCDIR); \

@@ -27,7 +27,7 @@ SAMPLEDIR	=	$(prefix)/sample
 
 all:	
 
-install: makedir installsrc installsubstsrc installsamplelist
+install-data-local: makedir installsrc installsubstsrc installsamplelist
 
 clean:
 	rm -rf $(DESTDIR)$(SAMPLEDIR)
