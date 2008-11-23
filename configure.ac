@@ -253,7 +253,6 @@ AC_SUBST(CONFIG)
 WWSCONFIG=$CONFDIR/wwsympa.conf
 AC_SUBST(WWSCONFIG)
 
-dnl Checks for programs.
 AC_PROG_CC
 
 AC_ARG_WITH(
