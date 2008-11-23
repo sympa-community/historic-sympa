@@ -45,17 +45,6 @@ installdir:
 			install -d -m 755 $(DESTDIR)$$dir; \
 		fi \
 	done
-	( \
-		PERL=$(PERL); export PERL; \
-		UMASK=0600; export UMASK; \
-		INSTALLDIR=$(ETCDIR); export INSTALLDIR; \
-		USER=$(USER); export USER;\
-		GROUP=$(GROUP); export GROUP;\
-		INSTALLNAME='README'; export INSTALLNAME; \
-                ETCDIR=$(ETCDIR); export ETCDIR; \
-                ETCBINDIR=$(DATADIR); export ETCBINDIR; \
-		$(PERL) ./subst.pl src/etc/README_etc \
-	)
 
 installconfig:
 	@echo "Installing basic configuration ..."

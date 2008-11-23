@@ -55,7 +55,7 @@ installetc:
 		TEXT_COLOR=$(TEXT_COLOR); export TEXT_COLOR;\
 		ERROR_COLOR=$(ERROR_COLOR); export ERROR_COLOR;\
 		SHADED_COLOR=$(SHADED_COLOR); export SHADED_COLOR;\
-		$(PERL) ../../subst.pl mhonarc-ressources.tt2 README \
+		$(PERL) ../../subst.pl mhonarc-ressources.tt2 \
 	)
 	@( \
 		UMASK=0664; export UMASK;\
