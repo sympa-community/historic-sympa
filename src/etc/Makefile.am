@@ -44,25 +44,10 @@ installetc:
 		topics.conf nrcpt_by_domain.conf \
 		ldap_alias_manager.conf edit_list.conf \
 		create_list.conf crawlers_detection.conf auth.conf \
-		ca-bundle.crt $(DESTDIR)$(DATADIR)/
-	@( \
-		UMASK=0664; export UMASK;\
-		INSTALLDIR=$(DATADIR); export INSTALLDIR;\
-		DESTDIR=$(DESTDIR); export DESTDIR;\
-		DARK_COLOR=$(DARK_COLOR); export DARK_COLOR;\
-		LIGHT_COLOR=$(LIGHT_COLOR); export LIGHT_COLOR;\
-		BG_COLOR=$(BG_COLOR); export BG_COLOR;\
-		TEXT_COLOR=$(TEXT_COLOR); export TEXT_COLOR;\
-		ERROR_COLOR=$(ERROR_COLOR); export ERROR_COLOR;\
-		SHADED_COLOR=$(SHADED_COLOR); export SHADED_COLOR;\
-		$(PERL) ../../subst.pl mhonarc-ressources.tt2 \
-	)
-	@( \
-		UMASK=0664; export UMASK;\
-		INSTALLDIR=$(DATADIR); export INSTALLDIR;\
-		MAILERPROGDIR=$(BINDIR); export MAILERPROGDIR;\
-		$(PERL) ../../subst.pl list_aliases.tt2 \
-	)
+		ca-bundle.crt mhonarc-ressources.tt2 list_aliases.tt2 \
+		$(DESTDIR)$(DATADIR)
+	sed -i -e 's|--MAILERPROGDIR--|$(BINDIR)|' \
+		$(DESTDIR)$(DATADIR)/list_aliases.tt2
 
 installlisttemplates:
 	@echo "Installing default list templates ..."
