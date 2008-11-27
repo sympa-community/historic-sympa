@@ -84,16 +84,19 @@ our @params = (
     },
     {
         name   => 'archived_pidfile',
+        default => '--PIDDIR--/archived.pid',
         query  => 'File containing archived PID while running.',
         file   => 'wwsympa.conf',
     },
     {
         name   => 'bounced_pidfile',
+        default => '--PIDDIR--/bounced.pid',
         query  => 'File containing bounced PID while running.',
         file   => 'wwsympa.conf',
     },
     {
         name  => 'task_manager_pidfile',
+        default => '--PIDDIR--/task_manager.pid',
         query => 'File containing task_manager PID while running.',
         file  => 'wwsympa.conf'
     },
@@ -207,6 +210,7 @@ our @params = (
     },
     {
         name   => 'log_facility',
+        default => 'MAIL',
         query  => 'The syslog facility for wwsympa, archived and bounced',
         file   => 'wwsympa.conf',
         edit   => '1',
@@ -221,7 +225,7 @@ our @params = (
     },
     { 
         name    => 'log_smtp',
-        default => '',
+        default => 'off',
     },
     { 
         name    => 'log_module',
@@ -299,7 +303,8 @@ our @params = (
         sample  => '123456789',
         query   => 'Secret used by Sympa to make MD5 fingerprint in web cookies secure',
         file   => 'sympa.conf',
-        advice => 'Should not be changed ! May invalid all user password'
+        advice => 'Should not be changed ! May invalid all user password',
+        optional => '1'
     },
     {
         name    => 'cookie_cas_expire',
@@ -307,17 +312,20 @@ our @params = (
     },
     {
         name   => 'password_case',
+        default => 'insensitive',
         query  => 'Password case (insensitive | sensitive)',
         file   => 'wwsympa.conf',
         advice => 'Should not be changed ! May invalid all user password'
     },
     {
         name  => 'cookie_expire',
+        default => '0',
         query => 'HTTP cookies lifetime',
         file  => 'wwsympa.conf',
     },
     {
         name  => 'cookie_domain',
+        default => 'localhost',
         query => 'HTTP cookies validity domain',
         file  => 'wwsympa.conf',
     },
@@ -330,11 +338,11 @@ our @params = (
     },
     {
         name    => 'use_blacklist',
-        query   => 'comma separated list of operation for which blacklist filter is applyed', 
+        query   => 'comma separated list of operations for which blacklist filter is applied', 
         default => 'send,create_list',
         file    => 'sympa.conf',
         edit    => '1',
-        advice  => 'set this parameter to "none" hidde blacklist feature'
+        advice  => 'Setting this parameter to "none" will hide the blacklist feature'
     },
     {
         name    => 'rfc2369_header_fields',
@@ -482,6 +490,7 @@ our @params = (
     { title => 'Plugin' },
     {
         name   => 'antivirus_path',
+        optional => '1',
         sample => '/usr/local/uvscan/uvscan',
         query  => 'Path to the antivirus scanner engine',
         file   => 'sympa.conf',
@@ -490,6 +499,7 @@ our @params = (
     },
     {
         name   => 'antivirus_args',
+        optional => '1',
         sample => '--secure --summary --dat /usr/local/uvscan',
         query  => 'Antivirus pluggin command argument',
         file   => 'sympa.conf',
@@ -514,10 +524,12 @@ our @params = (
         query  => 'Path to OpenSSL',
         file   => 'sympa.conf',
         edit   => '1',
-        advice => 'Sympa knowns S/MIME if openssl is installed'
+        advice => 'Sympa knowns S/MIME if openssl is installed',
+	optional => '1'
     },
     {
         name   => 'capath',
+        optional => '1',
         sample => '--ETCDIR--/ssl.crt',
         query  => 'The directory path use by OpenSSL for trusted CA certificates',
         file   => 'sympa.conf',
@@ -547,6 +559,7 @@ our @params = (
         query  => 'Password used to crypt lists private keys',
         file   => 'sympa.conf',
         edit   => '1',
+        optional   => '1',
     },
     {
         name    => 'chk_cert_expiration_task',
@@ -599,6 +612,7 @@ our @params = (
     },
     {
         name   => 'db_host',
+        default => 'localhost',
         sample => 'localhost',
         query  => 'The host hosting your sympa database',
         file   => 'sympa.conf',
@@ -606,11 +620,13 @@ our @params = (
     },
     {
         name   => 'db_port',
+        default => '3306',
         query  => 'The database port',
         file   => 'sympa.conf',
     },
     {
         name   => 'db_user',
+        default => 'user_name',
         sample => 'sympa',
         query  => 'Database user for connexion',
         file   => 'sympa.conf',
@@ -618,6 +634,7 @@ our @params = (
     },
     {
         name   => 'db_passwd',
+        default => 'user_password',
         sample => 'your_passwd',
         query  => 'Database password (associated to the db_user)',
         file   => 'sympa.conf',
@@ -628,29 +645,32 @@ our @params = (
         name   => 'db_env',
         query  => 'Environment variables setting for database',
         file   => 'sympa.conf',
-        advice => 'This is usefull for definign ORACLE_HOME '
+        advice => 'This is usefull for definign ORACLE_HOME ',
+        optional => '1',
     },
     {
         name   => 'db_additional_user_fields',
         sample => 'age,address',
         query  => 'Database private extention to user table',
         file   => 'sympa.conf',
-        advice => 'You need to extend the database format with these fields'
+        advice => 'You need to extend the database format with these fields',
+        optional => '1',
     },
     {
         name   => 'db_additional_subscriber_fields',
         sample => 'billing_delay,subscription_expiration',
         query  => 'Database private extention to subscriber table',
         file   => 'sympa.conf',
-        advice => 'You need to extend the database format with these fields'
+        advice => 'You need to extend the database format with these fields',
+        optional => '1',
     },
     {
         name    => 'db_options',
-        default => '',
+        optional => '1',
     },
     {
         name    => 'db_timeout',
-        default => '',
+        optional => '1',
     },
     { title => 'Web interface' },
     {
@@ -677,7 +697,7 @@ our @params = (
     },
     {
         name   => 'default_home',
-        sample => 'lists',
+        default => 'home',
         query  => 'Main page type (lists | home)',
         file   => 'wwsympa.conf',
         edit   => '1',
@@ -1272,7 +1292,7 @@ sub load {
     }
     ## Do we have all required values ?
     foreach $i (keys %params) {
-	unless (defined $o{$i} or defined $params{$i}->{'default'}) {
+	unless (defined $o{$i} or defined $params{$i}->{'default'} or defined $params{$i}->{'optional'}) {
 	    printf "Required field not found in sympa.conf: %s\n", $i;
 	    $config_err++;
 	    next;
