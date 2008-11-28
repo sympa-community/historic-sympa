@@ -2597,7 +2597,7 @@ sub distribute_msg {
     foreach my $i (@{$self->{'admin'}{'custom_header'}}) {
 	$hdr->add($1, $2) if ($i=~/^([\S\-\:]*)\s(.*)$/);
     }
-    
+
     ## Add RFC 2919 header field
     if ($hdr->get('List-Id')) {
 	&do_log('notice', 'Found List-Id: %s', $hdr->get('List-Id'));
