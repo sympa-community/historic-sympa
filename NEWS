@@ -3,6 +3,34 @@
 
 (See Changelog file for the full changes log)
 
+5.4.4		18 Dec 2008
+
+Bugs:
+
+  web_tt2/admin.tt2, web_tt2/list_admin_menu.tt2, web_tt2/review.tt2: [#4577][Reported by F. Guilleux] the W3C gives recommendations for the use of GET and POST: http://www.w3.org/2001/tag/doc/whenToUseGet.html#checklist. Sympa was not fully compliant to these recommendations, leading for example to possible unwanted list deletion by administrators using prefetching tools. Fixed by replacing all the threatening GET requests by POST requests.
+
+  src/List.pm: [#4672][Submitted by O. Menkens, Fraunhofer IAIS] Wrong error handling of LDAP searches caused Sympa to be unable to sychronize sources. Some attributes in the LDAP search were not correctly passed to the function.
+
+  src/List.pm, wwsympa/SympaSession.pm: [reported by T. Retout] SQL injection threat removed by using place holders instead of direct sprint in a query.
+
+  wwsympa/Auth.pm: [reported by S. Bilbeau, univ. Rennes 1] For trusted applications, when declaring an application in trusted_applicaitons.conf, if the app name contained a higher case character, the application was not found, because Sympa compared the app name to its lower-cased version. Fixed by comparing two lower case strings, thus making the app name completely case insensitive for Sympa.
+
+  src/Conf.pm: 'logs_expiration_period' sympa.conf parameter was not loaded. As a result DB logs were expired every day.
+
+  src/sympa.pl: [reported by Micah Anderson, Riseup] No more force $/ and $* variables. This had been introduced in 1999 to fix a bug on Solaris platform.
+
+  src/Conf.pm, wwsympa/Auth.pm: [#4543] When multiple "ldap" entries were defined in the auth.conf file, only the first one was queried. Also fixed a bug with the default scope being "base", now "sub".
+
+  src/Log.pm: [submitted by Peter Langhans, univ Zurich] fixed oracle-related issues :
+  * $parameter longer than 100 chars would make errors
+  * "date" is a reserved keyword with Oracle
+
+  src/sympa_wizard.pl, src/tools.pl: [#4439] [#4440] [reported by O.Berger] security vulnerability which use a file in /tmp.
+
+  wwsympa/wwsympa.fcgi: web authentication using the generic_sso method was broken because session was not properly initialized
+
+  wwsympa/bounced.pl: [reported by H.Rousseau]: bounced.pl would fail to create files in OTHER/ if From contained incorrect chars. The bounced.pl process would loop on these files. Now such bounce files are moved to the bad/ subdirectory.
+
 5.4.3		05 May 2008
 
 Features:
