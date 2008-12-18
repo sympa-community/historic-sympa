@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fr\n"
 "POT-Creation-Date: 2002-07-16 17:27+0800\n"
-"PO-Revision-Date: 2008-12-18 10:35+0100\n"
+"PO-Revision-Date: 2008-12-18 11:29+0100\n"
 "Last-Translator: David Verdin <david.verdin@cru.fr>\n"
 "Language-Team: Français\n"
 "MIME-Version: 1.0\n"
@@ -300,7 +300,8 @@ msgstr "Liste noire"
 #: web_tt2/admin.tt2:11
 msgid "Handles the set of black-listed mail addresses for this list."
 msgstr ""
-"Permet de consulter et modifier les adresse en liste noire pour cette liste."
+"Permet de consulter et modifier les adresses en liste noire pour cette "
+"liste."
 
 #: web_tt2/admin.tt2:14
 msgid "Manage archives"
@@ -326,7 +327,7 @@ msgstr "Journaux"
 
 #: web_tt2/admin.tt2:20
 msgid "A tool for exploring the list logs."
-msgstr "Un outil d'explorations du journal d'événements de cette liste."
+msgstr "Un outil d'exploration du journal d'événements de cette liste."
 
 # nlsref 16,61
 #: web_tt2/admin.tt2:25
