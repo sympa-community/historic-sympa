@@ -100,9 +100,8 @@ if ($operation eq 'add') {
     }
 
     foreach my $alias (@aliases) {
-	if ($alias =~ /^\#/) {
-	    next;
-	}
+	next if ($alias =~ /^\#/);
+	next if  ($alias =~ /^\s*$/);
 	
 	$alias =~ /^([^:]+):\s*(\".*\")$/;
 	my $alias_value = $1;
