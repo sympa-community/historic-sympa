@@ -150,7 +150,7 @@
                                             <input type="password" name="single_param.[% p.name %].[% o_INDEX %].[% key.name %]" id="single_param.[% p.name %].[% o_INDEX %].[% key.name %]" value="[% key.value %]" size="[% key.length %]" />
                                           [% ELSE %]
                                             <input type="text" name="single_param.[% p.name %].[% o_INDEX %].[% key.name %]" id="single_param.[% p.name %].[% o_INDEX %].[% key.name %]" value="[% key.value %]" size="[% key.length %]" />
-                                          [% END %]<br />
+                                          [% END %]
                                         [% ELSIF key.may_edit == 'read' %]
                                           [% IF key.field_type == 'password' %]
                                             [% key.hidden_field %]
@@ -159,20 +159,19 @@
                                           [% END %]
                                           <input type="hidden" name="single_param.[% p.name %].[% o_INDEX %].[% key.name %]" value="[% key.value %]" />
                                         [% END %]
-                                        [% key.unit %]
+                                        [% key.unit %]<br />
                                       [% END %]
                                    
                                 [% END %]
                               [% END %]
                             [% ELSE %]
                               <!-- Scalar -->
-                              <br />
                                   [% IF p.may_edit == 'write' %]
                                     <input type="text" name="single_param.[% p.name %].[% o_INDEX %]" id="single_param.[% p.name %].[% o_INDEX %].[% key.name %]" value="[% o.value %]" size="[% o.length %]" />
                                   [% ELSIF p.may_edit == 'read' %]
                                     [% o.value %]
                                   [% END %]
-                                  [% o.unit %]
+                                  [% o.unit %]<br />
                             [% END %]
                             [% o_INDEX = o_INDEX + 1 %]
                           [% END %]
@@ -397,7 +396,7 @@
                             [% ELSIF p.may_edit == 'read' %]
                               [% p.value %]
                             [% END %]
-                            [% p.unit %]
+                            [% p.unit %]<br />
                           [% END %]
 
                       [% END %]
