@@ -1,4 +1,79 @@
 ------------------------------------------------------------------------
+r5442 | sympa-authors | 2009-01-16 16:13:23 +0100 (Fri, 16 Jan 2009) | 2 lines
+Changed paths:
+   M /branches/sympa-5.4-branch/src/List.pm
+
+[bug][Reported by F. Perrichon, univ. Lille 2 and C. Zimmer, univ. Nice Sophia Antipolis] LDAP 2 level queries failed as soon as one of the queries failed during the second passe. Sympa now just issues a warning in the logs, specifying that a part of the second passe was not successful.
+
+------------------------------------------------------------------------
+r5440 | sympa-authors | 2009-01-16 16:08:32 +0100 (Fri, 16 Jan 2009) | 2 lines
+Changed paths:
+   M /branches/sympa-5.4-branch/web_tt2/edit_list_request.tt2
+
+[bug] Parameters units were not on the right line in the web edition page of the list configuration. Also removed spare "br/> tags.
+
+------------------------------------------------------------------------
+r5432 | sympa-authors | 2009-01-07 17:38:14 +0100 (Wed, 07 Jan 2009) | 2 lines
+Changed paths:
+   M /branches/sympa-5.4-branch/wwsympa/wwsympa.fcgi
+
+[bug][#4430][Reported by O. Berger, IT Sud Paris] Some development traces remained in wwsympa.fcgi, by which the process wrote in the /tmp directory, leading to potential data loss due to symlink attacks.
+
+------------------------------------------------------------------------
+r5431 | sympa-authors | 2009-01-07 16:33:31 +0100 (Wed, 07 Jan 2009) | 2 lines
+Changed paths:
+   M /branches/sympa-5.4-branch/src/task_manager.pl
+
+[bug] When removing the last data source by manual edition of the config file, the task manager didn't do the last synchronization needed to remove the last included subscribers. Fixed by checking if a data source still exist after each synchronization (instead of before).
+
+------------------------------------------------------------------------
+r5429 | sympa-authors | 2009-01-07 10:43:29 +0100 (Wed, 07 Jan 2009) | 3 lines
+Changed paths:
+   M /branches/sympa-5.4-branch/src/task_manager.pl
+
+[bug] Restoring controls for sync_include task creations to avoid overwhelming number of task creations ins the spools.
+
+
+------------------------------------------------------------------------
+r5427 | sympa-authors | 2009-01-06 15:53:07 +0100 (Tue, 06 Jan 2009) | 1 line
+Changed paths:
+   M /branches/sympa-5.4-branch/src/task_manager.pl
+   M /branches/sympa-5.4-branch/wwsympa/wwsympa.fcgi
+
+[bug][Reported by V. Mathieu, univ. Nancy 2] When deleting the last data source, the subscribers list was not correctly updated. Fixed by restoring a faulty test in wwsympa.fcgi.
+------------------------------------------------------------------------
+r5423 | sympa-authors | 2009-01-05 15:18:02 +0100 (Mon, 05 Jan 2009) | 3 lines
+Changed paths:
+   M /branches/sympa-5.4-branch/src/etc/script/ldap_alias_manager.pl
+
+[bug] fix a bug related to empty lines in list_aliases.tt2 when processing it with ldap_alias_manager.pl
+
+
+------------------------------------------------------------------------
+r5422 | sympa-authors | 2009-01-05 08:20:34 +0100 (Mon, 05 Jan 2009) | 3 lines
+Changed paths:
+   M /branches/sympa-5.4-branch/wwsympa/wwsympa.fcgi
+
+[bug] Fix a bug in blacklist edition (see http://sourcesup.cru.fr/tracker/?func=detail&atid=167&aid=5203&group_id=23)
+
+
+------------------------------------------------------------------------
+r5412 | sympa-authors | 2008-12-18 14:00:26 +0100 (Thu, 18 Dec 2008) | 2 lines
+Changed paths:
+   M /branches/sympa-5.4-branch/.version
+   M /branches/sympa-5.4-branch/ChangeLog
+   M /branches/sympa-5.4-branch/NEWS
+
+[-feature]Preparing version 5.4.4
+
+------------------------------------------------------------------------
+r5411 | sympa-authors | 2008-12-18 13:54:08 +0100 (Thu, 18 Dec 2008) | 2 lines
+Changed paths:
+   M /branches/sympa-5.4-branch/po/fr.po
+
+[-bug] Fixing typos in french translations.
+
+------------------------------------------------------------------------
 r5410 | sympa-authors | 2008-12-18 11:22:50 +0100 (Thu, 18 Dec 2008) | 2 lines
 Changed paths:
    M /branches/sympa-5.4-branch/po/af.po

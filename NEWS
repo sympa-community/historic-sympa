@@ -3,6 +3,25 @@
 
 (See Changelog file for the full changes log)
 
+5.4.5		20 Jan 2009
+
+Bugs:
+
+  src/List.pm: [Reported by F. Perrichon, univ. Lille 2 and C. Zimmer, univ. Nice Sophia Antipolis] LDAP 2 level queries failed as soon as one of the queries failed during the second passe. Sympa now just issues a warning in the logs, specifying that a part of the second passe was not successful.
+
+  wwsympa/wwsympa.fcgi: [#5203][Reported by A. Bendzsák] Bug in blacklist edition (see http://sourcesup.cru.fr/tracker/?func=detail&atid=167&aid=5203&group_id=23)
+
+  src/task_manager.pl, wwsympa/wwsympa.fcgi: [Reported by V. Mathieu, univ. Nancy 2] When removing the last data source by manual edition of the config file, the task manager didn't do the last synchronization needed to remove the last included subscribers. Fixed by checking if a data source still exist *after* each synchronization (instead of before).
+
+  /wwsympa/wwsympa.fcgi: [#4430][Reported by O. Berger, IT Sud Paris] Some development traces remained in wwsympa.fcgi, by which the process wrote in the /tmp directory, leading to potential data loss due to symlink attacks.
+
+Changes:
+
+  Updated translations for 
+    * English, thanks to A. Epstein
+    * Nederlands, thanks to R. E. Sonneveld
+    * Finn, thanks to J.P. Paloposki
+
 5.4.4		18 Dec 2008
 
 Bugs:

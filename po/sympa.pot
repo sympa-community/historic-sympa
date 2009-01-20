@@ -893,7 +893,7 @@ msgstr ""
 msgid "list"
 msgstr ""
 
-#: web_tt2/copy_template.tt2:25 web_tt2/edit_list_request.tt2:406
+#: web_tt2/copy_template.tt2:25 web_tt2/edit_list_request.tt2:405
 msgid "default"
 msgstr ""
 
@@ -1049,7 +1049,7 @@ msgstr ""
 msgid "Replace the file %1 with your file"
 msgstr ""
 
-#: web_tt2/d_editfile.tt2:38 web_tt2/edit_list_request.tt2:417 web_tt2/editsubscriber.tt2:60 web_tt2/suboptions.tt2:62
+#: web_tt2/d_editfile.tt2:38 web_tt2/edit_list_request.tt2:416 web_tt2/editsubscriber.tt2:60 web_tt2/suboptions.tt2:62
 msgid "Update"
 msgstr ""
 
@@ -3405,7 +3405,7 @@ msgstr ""
 msgid "Search period: "
 msgstr ""
 
-#: web_tt2/viewlogs.tt2:110 wwsympa/wwsympa.fcgi:16186
+#: web_tt2/viewlogs.tt2:110 wwsympa/wwsympa.fcgi:16187
 #. (date_from_formated)
 #. (date_to_formated)
 #. This entry is a date/time format
@@ -6860,7 +6860,7 @@ msgstr ""
 msgid "%a, %d %b %Y"
 msgstr ""
 
-#: src/List.pm:2973 src/List.pm:2974 src/List.pm:2978 wwsympa/wwsympa.fcgi:10938 wwsympa/wwsympa.fcgi:11007 wwsympa/wwsympa.fcgi:11209 wwsympa/wwsympa.fcgi:11551 wwsympa/wwsympa.fcgi:15648 wwsympa/wwsympa.fcgi:16525 wwsympa/wwsympa.fcgi:16526 wwsympa/wwsympa.fcgi:4447 wwsympa/wwsympa.fcgi:4448 wwsympa/wwsympa.fcgi:5880 wwsympa/wwsympa.fcgi:7067 wwsympa/wwsympa.fcgi:7585 wwsympa/wwsympa.fcgi:7635 wwsympa/wwsympa.fcgi:7637 wwsympa/wwsympa.fcgi:8163 wwsympa/wwsympa.fcgi:8164 wwsympa/wwsympa.fcgi:8198 wwsympa/wwsympa.fcgi:8199 wwsympa/wwsympa.fcgi:8414 wwsympa/wwsympa.fcgi:8415
+#: src/List.pm:2973 src/List.pm:2974 src/List.pm:2978 wwsympa/wwsympa.fcgi:10938 wwsympa/wwsympa.fcgi:11007 wwsympa/wwsympa.fcgi:11209 wwsympa/wwsympa.fcgi:11551 wwsympa/wwsympa.fcgi:15648 wwsympa/wwsympa.fcgi:16526 wwsympa/wwsympa.fcgi:16527 wwsympa/wwsympa.fcgi:4447 wwsympa/wwsympa.fcgi:4448 wwsympa/wwsympa.fcgi:5880 wwsympa/wwsympa.fcgi:7067 wwsympa/wwsympa.fcgi:7585 wwsympa/wwsympa.fcgi:7635 wwsympa/wwsympa.fcgi:7637 wwsympa/wwsympa.fcgi:8163 wwsympa/wwsympa.fcgi:8164 wwsympa/wwsympa.fcgi:8198 wwsympa/wwsympa.fcgi:8199 wwsympa/wwsympa.fcgi:8414 wwsympa/wwsympa.fcgi:8415
 #. This entry is a date/time format
 #. Check the strftime manpage for format details : http://docs.freebsd.org/info/gawk/gawk.info.Time_Functions.html
 msgid "%d %b %Y"
@@ -6963,7 +6963,7 @@ msgstr ""
 msgid "%d %b %y  %H:%M"
 msgstr ""
 
-#: wwsympa/wwsympa.fcgi:16131 wwsympa/wwsympa.fcgi:16132
+#: wwsympa/wwsympa.fcgi:16132 wwsympa/wwsympa.fcgi:16133
 #. This entry is a date/time format
 #. Check the strftime manpage for format details : http://docs.freebsd.org/info/gawk/gawk.info.Time_Functions.html
 msgid "%Y/%m/%d/%H/%M/%S"
