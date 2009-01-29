@@ -109,6 +109,7 @@ installperlcgi:
 	install -d -m 755 $(DESTDIR)$(CGIDIR)
 	install -m 755 $(perl_cgi_SRC) $(DESTDIR)$(CGIDIR)
 	sed -i \
+		-e 's|--PERLOPT--|-U|' \
 		-e 's|--PERL--|$(PERL)|' \
 		-e 's|--USER--|$(USER)|' \
 		-e 's|--GROUP--|$(GROUP)|' \
