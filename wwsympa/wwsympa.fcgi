@@ -1535,7 +1535,7 @@ my $birthday = time ;
      my $facility = shift;
 
      # do not log if log level if too high regarding the log requested by user 
-     return if ($Log::levels{$fac} > $Log::log_level);
+     return if ($Log::levels{$facility} > $Log::log_level);
 
      my $msg = shift;
 
