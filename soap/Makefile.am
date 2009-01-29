@@ -66,8 +66,9 @@ installlib:
 installwrappercgi:
 	install -d -m 755 $(DESTDIR)$(CGIDIR)
 	install -m 6755 $(wrapper_cgi_SRC) $(DESTDIR)$(CGIDIR)
-	-chown $(USER) $(DESTDIR)$(CGIDIR)/sympa_soap_server-wrapper.fcgi
-	-chgrp $(GROUP) $(DESTDIR)$(CGIDIR)/sympa_soap_server-wrapper.fcgi
+	-chown $(USER) $(DESTDIR)$(CGIDIR)/$(wrapper_cgi_SRC)
+	-chgrp $(GROUP) $(DESTDIR)$(CGIDIR)/$(wrapper_cgi_SRC)
+	-chmod 6755 $(DESTDIR)$(CGIDIR)/$(wrapper_cgi_SRC)
 
 installscript:
 	install -d -m 755 $(DESTDIR)$(SCRIPTDIR)
