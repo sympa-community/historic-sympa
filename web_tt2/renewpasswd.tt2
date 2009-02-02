@@ -2,16 +2,12 @@
 
 <!-- begin renewpasswd.tt2 -->
       <p>
+
 [% IF account_creation %]
       [%|loc%]You request for an account creation on this list server.[%END%]
 [% ELSIF login_error == 'wrong_password' %]
-      [%|loc%]<h3>Wrong password</H3>[%END%]
       [%|loc%]The password you submit is wrong. May be you forgot it ?[%END%]
-[% ELSIF login_error == 'too_many_wrong_attempt' %]
-      [%|loc%]<h3>Too many wrong login attempt</H3>[%END%]
-      [%|loc%]Someone (may be not you) did too many login attempt with a wrong password. In order to prevent you account to be compromised, login is now locked. You must request for password renewal to unlock your account.[%END%]
 [% ELSIF login_error == 'missing_password' %]
-      [%|loc%]<h3>Missing password</H3>[%END%]
       [%|loc%]You miss the password, please submit again. May be you forgot it ?[%END%]
 [% ELSIF login_error == 'ticket_sent' %]
       [%|loc%]You will receive an email in order to be able to choose your password.[%END%]

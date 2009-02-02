@@ -156,6 +156,7 @@ sub store {
 
     my $self = shift;
     do_log('debug', 'SympaSession::store()');
+
     return undef unless ($self->{'id_session'});
     return if ($self->{'is_a_crawler'}); # do not create a session in session table for crawlers; 
     return if ($self->{'passive_session'}); # do not create a session in session table for action such as RSS or CSS or wsdlthat do not require this sophistication; 
@@ -175,16 +176,33 @@ sub store {
 	return undef unless &List::db_connect();
     }	   
 
+#    my $count_statement = sprintf "SELECT count(*) FROM session_table WHERE (id_session=%s)",$self->{'id_session'};
+#    
+#    unless ($sth = $dbh->prepare($count_statement)) {
+#      	do_log('err','Unable to prepare SQL statement %s : %s',$count_statement, $dbh->errstr);
+#	return undef;
+#    }
+#    
+#    unless ($sth->execute) {
+#	do_log('err','Unable to execute SQL statement "%s" : %s', $count_statement, $dbh->errstr);
+#	return undef;
+#    }    
+#    my $total =  $sth->fetchrow;
+#    if ($total != 0) {
+#	my $del_statement = sprintf "DELETE FROM session_table WHERE (id_session=%s)",$self->{'id_session'};
+#	do_log('debug3', 'SympaSession::store() : removing existing Session del_statement = %s',$del_statement);	
+#	unless ($dbh->do($del_statement)) {
+#	    do_log('info','SympaSession::store unable to remove existing session %s to update it',$self->{'id_session'});
+#	    return undef;
+#	}	
+#    }
+
     my $del_statement = sprintf "DELETE FROM session_table WHERE (id_session=%s)",$self->{'id_session'};
     unless ($dbh->do($del_statement)) {
 	    do_log('debug3','SympaSession::store unable to remove session %s, new session ?',$self->{'id_session'});
 	}	 
     # in order to prevent session hijacking, the session_id (used as http cookie) is renewed for each clic
-    # renew session ID may brake sessions if users clic a new page before receiving the previous one. So renew is done only if not using SSL 
-    
-    unless ($self->{'use_ssl'}){
-	$self->{'id_session'} = &get_random();
-    }
+    $self->{'id_session'} = &get_random();
 
     my $add_statement = sprintf "INSERT INTO session_table (id_session, date_session, remote_addr_session, robot_session, email_session, start_date_session, hit_session, data_session) VALUES ('%s','%s','%s','%s','%s','%s','%s','%s')",$self->{'id_session'},time,$ENV{'REMOTE_ADDR'},$self->{'robot'},$self->{'email'},$self->{'start_date'},$self->{'hit'}, $data_string;
     unless ($dbh->do($add_statement)) {
@@ -406,9 +424,9 @@ sub get_session_cookie {
 ## Generic subroutine to set a cookie
 ## Set user $email cookie, ckecksum use $secret, expire=(now|session|#sec) domain=(localhost|<a domain>)
 sub set_cookie {
-    my ($self, $http_domain, $expires,$use_ssl) = @_ ;
-    do_log('debug','Session::set_cookie(%s,%s,%s)',$http_domain, $expires,$use_ssl );
-    
+    my ($self, $http_domain, $expires) = @_ ;
+    do_log('debug','Session::set_cookie(%s,%s)',$http_domain, $expires);
+
     my $expiration;
     if ($expires =~ /now/i) {
 	## 10 years ago
@@ -426,18 +444,14 @@ sub set_cookie {
 	$cookie = new CGI::Cookie (-name    => 'sympa_session',
 				   -value   => $self->{'id_session'},
 				   -domain  => $http_domain,
-				   -path    => '/',
-				   -secure => $use_ssl,
-				   -httponly => 1 
+				   -path    => '/'
 				   );
     }else {
 	$cookie = new CGI::Cookie (-name    => 'sympa_session',
 				   -value   => $self->{'id_session'},
 				   -expires => $expiration,
 				   -domain  => $http_domain,
-				   -path    => '/',
-				   -secure => $use_ssl,
-				   -httponly => 1 
+				   -path    => '/'
 				   );
     }
 

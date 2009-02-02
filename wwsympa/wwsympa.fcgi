@@ -1056,10 +1056,7 @@ my $birthday = time ;
 
      $session = new SympaSession ($robot,{'cookie'=>&SympaSession::get_session_cookie($ENV{'HTTP_COOKIE'}),
 					  'action'=>$in{'action'},
-					  'rss'=>$rss,
-					  'use_ssl'=>$param->{'use_ssl'}
-				      }
-				  );
+					  'rss'=>$rss});
 
      unless (defined $session) {
 	 &List::send_notify_to_listmaster('failed_to_create_web_session', $robot);
@@ -1342,7 +1339,7 @@ my $birthday = time ;
 	 if ($delay == 0) {
 	     $delay = 'session';
 	 }
-	 unless ($session->set_cookie($param->{'cookie_domain'},$delay,$param->{'use_ssl'})) {
+	 unless ($session->set_cookie($param->{'cookie_domain'},$delay)) {
 	     &wwslog('notice', 'Could not set HTTP cookie');
 	 }
 
@@ -2867,16 +2864,15 @@ sub do_ticket {
      }
 
      ##authentication of the sender
-     my $data = &Auth::check_auth($robot, $in{'email'},$in{'passwd'});
-
-     if($data->{'error'}) {
+     my $data;
+     unless($data = &Auth::check_auth($robot, $in{'email'},$in{'passwd'})){
 	 &do_log('notice', "Authentication failed\n");
 	 &web_db_log({'parameters' => $in{'email'},
 		      'target_email' => $in{'email'},
 		      'status' => 'error',
 		      'error_type' => 'authentication'});
-	 $param->{'login_error'} = $data->{'error'};
-	 undef $data;
+	
+	 $param->{'login_error'} = 'wrong_password';
 
 	 if ($in{'previous_action'}) {
 	     delete $in{'passwd'};
@@ -4857,7 +4853,7 @@ sub do_subrequest {
 	    return undef;
 	}
 	$param->{'status'} = 'auth';
-    }else{
+    }else {
 	## Provided email parameter ?
 	unless ($in{'email'}) {
 	    $param->{'status'} = 'notauth_noemail';
@@ -4872,21 +4868,21 @@ sub do_subrequest {
 	$user = &List::get_user_db($in{'email'})
 	    if &List::is_user_db($in{'email'});
 	
-	## Need to send a ticket for authentication
-	#if ((!&List::is_user_db($in{'email'}) || !$user->{'password'} ) && !$ldap_user) {
-	$param->{'one_time_ticket'} = &Auth::create_one_time_ticket($in{'email'},$robot,'subscribe/'.$list->{'name'},$ip);
-	$param->{'login_error'}='ticket_sent';
-	unless (&List::send_global_file('sendpasswd', $in{'email'}, $robot, $param)) {
-	    &wwslog('notice',"Unable to send template 'sendpasswd' to $in{'email'}");
-	    $param->{'login_error'}='unable_to_send_ticket';
-	}
-	# &do_requestpasswd();
-	$param->{'status'} = 'notauth_passwordsent';
+	## Need to send a password by email
+	if ((!&List::is_user_db($in{'email'}) || !$user->{'password'} ) && !$ldap_user) {
+	    $param->{'one_time_ticket'} = &Auth::create_one_time_ticket($in{'email'},$robot,'subscribe/'.$list->{'name'},$ip);
+	    $param->{'login_error'}='ticket_sent';
+	    unless (&List::send_global_file('sendpasswd', $in{'email'}, $robot, $param)) {
+		&wwslog('notice',"Unable to send template 'sendpasswd' to $in{'email'}");
+		$param->{'login_error'}='unable_to_send_ticket';
+	    }
+	    # &do_requestpasswd();
+	    $param->{'status'} = 'notauth_passwordsent';
 	    
 	    return 1;
-	#}
-	#$param->{'email'} = $in{'email'};
-	#$param->{'status'} = 'notauth';
+	}
+	$param->{'email'} = $in{'email'};
+	$param->{'status'} = 'notauth';
     }
     
     return 1;
@@ -5081,7 +5077,7 @@ sub do_subrequest {
      }
 
      if (&List::is_user_db($param->{'user'}{'email'})) {
-	 unless ( &List::update_user_db($param->{'user'}{'email'}, {'password' => $in{'newpasswd1'}, 'bad_attempt_count'=> 0} )) {
+	 unless ( &List::update_user_db($param->{'user'}{'email'}, {'password' => $in{'newpasswd1'}} )) {
 	     &report::reject_report_web('intern','update_user_db_failed',{'user'=>$param->{'user'}{'email'}},$param->{'action'},'',$param->{'user'}{'email'},$robot);
 	     &wwslog('info','do_setpasswd: update failed');
 	     &web_db_log({'status' => 'error',

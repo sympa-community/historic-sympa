@@ -50,8 +50,6 @@ use CPAN;
 	     'MIME::Charset' => '0.04.1',
 	     'MIME::EncWords' => '0.040',
 	     'File::Copy::Recursive' => '0.36',
-	     'Mail::DKIM' => '0.32',
-	     'Crypt::OpenSSL::RSA' => '0.25',
 	     );
 
 ### key:left "module" used by SYMPA, 
@@ -95,8 +93,6 @@ use CPAN;
 	     'SOAP::Lite' => 'SOAP-Lite',
 	     'File::NFSLock' => 'File-NFSLock',
 	     'File::Copy::Recursive' => 'File-Copy-Recursive',
-	     'Mail::DKIM' => 'Mail-DKIM',
-	     'Crypt::OpenSSL::RSA' => 'Crypt-OpenSSL-RSA',
 	     );
 
 %opt_features = ('DBI' => 'a generic Database Driver, required by Sympa to access Subscriber information and User preferences. An additional Database Driver is required for each database type you wish to connect to.',
@@ -115,9 +111,7 @@ use CPAN;
 		 'Net::SSLeay' => 'required by the \'include_remote_sympa_list\' feature that includes members of a list on a remote server, using X509 authentication',
 		 'Bundle::LWP' => 'required by the \'include_remote_sympa_list\' feature that includes members of a list on a remote server, using X509 authentication',
 		 'SOAP::Lite' => 'required if you want to run the Sympa SOAP server that provides ML services via a "web service"',
-		 'File::NFSLock' => 'required to perform NFS lock ; see also lock_method sympa.conf parameter',
-		 'Mail::DKIM' => 'required if using DKIM signature features',
-		 'Crypt::OpenSSL::RSA' => 'required if using DKIM signature features',
+		 'File::NFSLock' => 'required to perform NFS lock ; see also lock_method sympa.conf parameter'
 		 );
 
 ### main:
