@@ -130,11 +130,13 @@ AC_ARG_WITH(
     mandir,
     AS_HELP_STRING(
 	[--with-mandir=DIR],
-	[documentation in DIR (default ${prefix}/man)]
+	[obsolete option, use --mandir instead]
     ),
-    [MANDIR="$withval"]
+    [
+     AC_MSG_WARN([obsolete --with-mandir option used])
+     mandir="$withval"
+     ]
 )
-AC_SUBST(MANDIR)
 
 ## SYS V init scripts directory
 INITDIR='${prefix}/etc/rc.d/init.d'

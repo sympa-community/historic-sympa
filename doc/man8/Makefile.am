@@ -1,18 +1,8 @@
-man8_SRC	= archived.8 bounced.8 alias_manager.8 sympa.8 
+man8_MANS = archived.8 bounced.8 alias_manager.8 sympa.8 
 
-SUFFIXES:	.8 .pod
+EXTRA_DIST = archived.pod bounced.pod alias_manager.pod sympa.pod
 
-.8:	.pod
-
-all:	$(man8_SRC)
-
-clean:
-	rm -f $(man8_SRC)
-
-install-data-local:
-	install -d -m 755 $(DESTDIR)$(MANDIR)
-	install -d -m 755 $(DESTDIR)$(MANDIR)/man8
-	install -m 644 $(man8_SRC) $(DESTDIR)$(MANDIR)/man8
+CLEANFILES = $(man8_MANS)
 
 .pod.8:
 	rm -f $@
