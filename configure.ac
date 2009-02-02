@@ -125,7 +125,6 @@ AC_ARG_WITH(
 AC_SUBST(EXPLDIR)
 
 ## location of documentation
-MANDIR='${prefix}/man'
 AC_ARG_WITH(
     mandir,
     AS_HELP_STRING(
