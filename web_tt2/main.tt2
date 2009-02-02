@@ -7,8 +7,14 @@
 <meta name="generator" content="Sympa" />
 
 <title> [% main_title %] - [% action %] </title>
-<link rel="stylesheet" href="[% css_url %]/style.css" type="text/css" media="screen" title="Derived from style Blank Canvas by tw3k AT tw3k.tw3k.q3machines.net" />
 
+[% IF custom_css || session.custom_css %]
+<style type="text/css">
+[% PROCESS css.tt2 %]
+</style>
+[% ELSE %]
+<link rel="stylesheet" href="[% css_url %]/style.css" type="text/css" media="screen" title="Sympa CSS" />
+[% END %]
 <!-- RSS chanel -->
    [% IF list -%] 
      [% IF arc_public_access %]<link rel="alternate" type="application/xml" title="[%|loc%]RSS Latest messages[%END%]" href="[% base_url%][% path_cgi %]/rss/latest_arc/[%list%]?count=20"/>[% END -%]
@@ -36,7 +42,7 @@
 <![endif]-->
 </head>
 
-<body onload="[% IF use_htmlarea %] HTMLArea.replaceAll();[% END %][% IF cookie_set %] check_cookie();[% END %][% IF back_to_mom %] setTimeout('refresh_mom_and_die()',1000);[% END %]">
+<body onload="[% IF use_htmlarea %] HTMLArea.replaceAll();[% END %][% IF back_to_mom %] setTimeout('refresh_mom_and_die()',1000);[% END %]">
 <noscript><em>[%|loc%]Please activate JavaScript in your web browser[%END%]</em></noscript>
 
 

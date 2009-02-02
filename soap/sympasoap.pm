@@ -168,7 +168,7 @@ sub login {
     &do_log('debug', 'call check_auth(%s,%s)',$robot,$email);
     my $user = &Auth::check_auth($robot,$email,$passwd);
 
-    unless($user){
+    unless ($user->{'error'}) {
 	&do_log('notice', "SOAP : login authentication failed");
 	die SOAP::Fault->faultcode('Server')
 	    ->faultstring('Authentification failed')

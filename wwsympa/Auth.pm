@@ -59,7 +59,6 @@ sub password_fingerprint{
 
      if( &tools::valid_email($auth)) {
 	 return &authentication($robot, $auth,$pwd);
-
      }else{
 	 ## This is an UID
 	 if ($canonic = &ldap_authentication($robot, $auth,$pwd,'uid_filter')){
@@ -70,9 +69,8 @@ sub password_fingerprint{
 	     return {'user' => $user,
 		     'auth' => 'ldap',
 		     'alt_emails' => {$canonic => 'ldap'}
-		 };
-	     
-	 }else{
+		 };	     
+	 }else{	     
 	     &report::reject_report_web('user','incorrect_passwd',{}) unless ($ENV{'SYMPA_SOAP'});
 	     &do_log('err', "Incorrect Ldap password");
 	     return undef;
@@ -107,14 +105,13 @@ sub authentication {
     my ($user,$canonic);
     &do_log('debug', 'Auth::authentication(%s)', $email);
 
-
     unless ($user = &List::get_user_db($email)) {
 	$user = {'email' => $email };
     }    
     unless ($user->{'password'}) {
 	$user->{'password'} = '';
     }
-    
+
     foreach my $auth_service (@{$Conf{'auth_services'}{$robot}}){
 	next if ($auth_service->{'auth_type'} eq 'authentication_info_url');
 	next if ($email !~ /$auth_service->{'regexp'}/i);
@@ -123,19 +120,31 @@ sub authentication {
 	## Only 'user_table' and 'ldap' backends will need that Sympa collects the user passwords
 	## Other backends are Single Sign-On solutions
 	if ($auth_service->{'auth_type'} eq 'user_table') {
+	    # if using Sympa internal password, do not check password if max wrong attempt reached
+	    if ($user->{'bad_attempt_count'} >=  6) {
+		&do_log('notice','too many wrong login attempt for %s', $email);
+		return ({'error' =>'too_many_wrong_attempt'});
+	    }   
+
 	    my $fingerprint = &password_fingerprint ($pwd);
 	    
 	    if ($fingerprint eq $user->{'password'}) {
+		&List::update_user_db($email,{bad_attempt_count=>0}) ;# reset count of wrong password submission
 		return {'user' => $user,
 			'auth' => 'classic',
 			'alt_emails' => {$email => 'classic'}
 			};
+	    }else{
+		&List::update_user_db($email,{last_login_date =>time(),bad_attempt_count=>$user->{'bad_attempt_count'}+1 }) ;   
 	    }
 	}elsif($auth_service->{'auth_type'} eq 'ldap') {
 	    if ($canonic = &ldap_authentication($robot, $email,$pwd,'email_filter')){
 		unless($user = &List::get_user_db($canonic)){
 		    $user = {'email' => $canonic};
 		}
+                # reset count of wrong password submission both for $email and $canonic to unlock the login
+		&List::update_user_db($email,{bad_attemp_count=>0}) ;
+		&List::update_user_db($canonic,{bad_attemp_count=>0}) if ($email ne $canonic) ;
 		return {'user' => $user,
 			'auth' => 'ldap',
 			'alt_emails' => {$email => 'ldap'}
@@ -143,29 +152,13 @@ sub authentication {
 	    }
 	}
     }
-
-    ## If web context and password has never been changed
-    ## Then prompt user
-    # xxxxxxxxxxxxx to be removed
-#    unless ($ENV{'SYMPA_SOAP'}) {
-#	foreach my $auth_service (@{$Conf{'auth_services'}{$robot}}){
-#	    next unless ($email !~ /$auth_service->{'regexp'}/i);
-#	    next unless (($email =~ /$auth_service->{'negative_regexp'}/i)&&($auth_service->{'negative_regexp'}));
-#	    if ($auth_service->{'auth_type'} eq 'user_table') {
-#		if ($user->{'password'} =~ /^init/i) {
-#		    &report::reject_report_web('user','init_passwd',{});
-#		    last;
-#		}
-#	    }
-#	}
-#    }
     
     &report::reject_report_web('user','incorrect_passwd',{}) unless ($ENV{'SYMPA_SOAP'});
     &do_log('err','authentication: incorrect password for user %s', $email);
 
     $param->{'init_email'} = $email;
     $param->{'escaped_init_email'} = &tools::escape_chars($email);
-    return undef;
+    return ({'error' =>'wrong_password'});
 }
 
 
