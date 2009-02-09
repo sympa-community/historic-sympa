@@ -5,7 +5,7 @@
 
 5.4.5		20 Jan 2009
 
-Bugs:
+  Bugs:
 
   src/List.pm: [Reported by F. Perrichon, univ. Lille 2 and C. Zimmer, univ. Nice Sophia Antipolis] LDAP 2 level queries failed as soon as one of the queries failed during the second passe. Sympa now just issues a warning in the logs, specifying that a part of the second passe was not successful.
 
@@ -15,7 +15,7 @@ Bugs:
 
   /wwsympa/wwsympa.fcgi: [#4430][Reported by O. Berger, IT Sud Paris] Some development traces remained in wwsympa.fcgi, by which the process wrote in the /tmp directory, leading to potential data loss due to symlink attacks.
 
-Changes:
+  Changes:
 
   Updated translations for 
     * English, thanks to A. Epstein
@@ -24,7 +24,7 @@ Changes:
 
 5.4.4		18 Dec 2008
 
-Bugs:
+  Bugs:
 
   web_tt2/admin.tt2, web_tt2/list_admin_menu.tt2, web_tt2/review.tt2: [#4577][Reported by F. Guilleux] the W3C gives recommendations for the use of GET and POST: http://www.w3.org/2001/tag/doc/whenToUseGet.html#checklist. Sympa was not fully compliant to these recommendations, leading for example to possible unwanted list deletion by administrators using prefetching tools. Fixed by replacing all the threatening GET requests by POST requests.
 
@@ -52,7 +52,7 @@ Bugs:
 
 5.4.3		05 May 2008
 
-Features:
+  Features:
 
   po/ja.po, po/web_help_ja.po: Introduction of the huge work in progress by Soji Ikeda to update the Japanese translation of the user interface and translate the online help in Japanese.
 
@@ -60,7 +60,7 @@ Features:
 
   src/Commands.pm: [#3990][Submitted by A. Berstein, electricembers.net] The quiet option has been reactivated for the "reject" mail command.
 
-Bug fixes:
+  Bugs:
 
   wwsympa/archived.pl: [Reported by M. Kretchner, INRIA] It was impossible to remove a message from web archives or rebuild these archives. This was due to a regexp to prevent archived.pl from using dot-starting files added by some Linux distribution (as Gentoo). Fixed by extending the regexp.
 
@@ -71,15 +71,15 @@ Bug fixes:
 
 5.4.2		14 April 2008
 
-Features:
+  Features:
 
    po/zh_CN.po: [Submitted by Li Xuejiang, Zhao Yongming, Yahoo!] Simplified Chinese is now fully translated.
 
-Changes:
+  Changes:
 
    src/List.pm, src/Upgrade.pm: [Reported by L. Gentis, IUFM Lorraine]When updating a config file while the upgrade process, the "email" parameter value of the "update" paragraph was set to 'listmaster'. However, this value was validated against a regexp for emails. this produced an error log, as 'listmaster' is not a valid email address. Fixed by allowing 'listamster' and 'automatic' strings in this regexp. 'automatic will be used to designate updates done by processes instead of users.
 
-Bug fixes:
+  Bugs:
 
    wwsympa/wwsympa.fcgi: [#3947][Reported by S. costard Univ. Haute Bretagne] In the case of CAS authentication, a CAS ticket was requested for any request in the web interface. Fixed by ensuring that the user email is attached to the session.
 
@@ -92,17 +92,17 @@ Bug fixes:
 
 5.4.1		01 April 2008
 
-Bug fixes:
+  Bugs:
 
   /wwsympa/wwsympa.fcgi: [Reported by J.M. Beuken, univ. cat. Louvain] When copying a template through the web interface, HTML was not unescaped before writing the file. c onsequently, the file used to reload the page for template edition had escaped HTML. for critical files such as main.tt2 or title.tt2, this caused the web page diaply to choke on tt2 parse errors.
 
-Changes:
+  Changes:
 
   src/Lock.pm: Increasing log levels in low level functions of Lock.pm.
 
 5.4		27 March 2008
 
-   Bug fixes :
+   Bugs :
 
    /wwsympa/wwsympa.fcgi: While processing a subscription request, first check if user is member of the list
 
