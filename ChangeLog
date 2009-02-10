@@ -1,4 +1,178 @@
 ------------------------------------------------------------------------
+r5494 | sympa-authors | 2009-02-09 17:50:56 +0100 (Mon, 09 Feb 2009) | 2 lines
+Changed paths:
+   M /branches/sympa-5.4-branch/NEWS
+
+[bug] Bad syntax in NEWs file caused important_changes.pl to stop parsing this file before its end. Consequently, important configuration warnings were not issued to people intalling Sympa.
+
+------------------------------------------------------------------------
+r5493 | sympa-authors | 2009-02-09 17:49:52 +0100 (Mon, 09 Feb 2009) | 2 lines
+Changed paths:
+   M /branches/sympa-5.4-branch/wwsympa/Makefile
+
+[bug] DESTDIR variable was exported as DESDIR. Fat chance it was usable in the install process.
+
+------------------------------------------------------------------------
+r5472 | sympa-authors | 2009-02-02 14:07:40 +0100 (Mon, 02 Feb 2009) | 3 lines
+Changed paths:
+   M /branches/sympa-5.4-branch/wwsympa/wwsympa.fcgi
+
+[bug] HTML character escaping was made on reference on the main hash containing all the data, including list config. as a result, after execution of the first action, all the data were HTML escaped, including possible double quotes in SQL queries. Though never saved in the config file, these data were responsible for synchronisation problems. Fixed by using a copy of the $param hash for XSS protection and TT2 parsing.
+
+
+------------------------------------------------------------------------
+r5445 | sympa-authors | 2009-01-20 12:06:55 +0100 (Tue, 20 Jan 2009) | 2 lines
+Changed paths:
+   M /branches/sympa-5.4-branch/.version
+   M /branches/sympa-5.4-branch/ChangeLog
+   M /branches/sympa-5.4-branch/NEWS
+   M /branches/sympa-5.4-branch/po/af.po
+   M /branches/sympa-5.4-branch/po/ar.po
+   M /branches/sympa-5.4-branch/po/bg.po
+   M /branches/sympa-5.4-branch/po/br.po
+   M /branches/sympa-5.4-branch/po/ca.po
+   M /branches/sympa-5.4-branch/po/cs.po
+   M /branches/sympa-5.4-branch/po/de.po
+   M /branches/sympa-5.4-branch/po/el.po
+   M /branches/sympa-5.4-branch/po/en_US.po
+   M /branches/sympa-5.4-branch/po/es.po
+   M /branches/sympa-5.4-branch/po/et.po
+   M /branches/sympa-5.4-branch/po/eu.po
+   M /branches/sympa-5.4-branch/po/fi.po
+   M /branches/sympa-5.4-branch/po/fr.po
+   M /branches/sympa-5.4-branch/po/hu.po
+   M /branches/sympa-5.4-branch/po/id.po
+   M /branches/sympa-5.4-branch/po/it.po
+   M /branches/sympa-5.4-branch/po/ja.po
+   M /branches/sympa-5.4-branch/po/ko.po
+   M /branches/sympa-5.4-branch/po/ml.po
+   M /branches/sympa-5.4-branch/po/nb_NO.po
+   M /branches/sympa-5.4-branch/po/nl.po
+   M /branches/sympa-5.4-branch/po/nn_NO.po
+   M /branches/sympa-5.4-branch/po/oc.po
+   M /branches/sympa-5.4-branch/po/pl.po
+   M /branches/sympa-5.4-branch/po/pt.po
+   M /branches/sympa-5.4-branch/po/pt_BR.po
+   M /branches/sympa-5.4-branch/po/ro.po
+   M /branches/sympa-5.4-branch/po/ru.po
+   M /branches/sympa-5.4-branch/po/sv.po
+   M /branches/sympa-5.4-branch/po/sympa.pot
+   M /branches/sympa-5.4-branch/po/tr.po
+   M /branches/sympa-5.4-branch/po/vi.po
+   M /branches/sympa-5.4-branch/po/web_help_af.po
+   M /branches/sympa-5.4-branch/po/web_help_ar.po
+   M /branches/sympa-5.4-branch/po/web_help_bg.po
+   M /branches/sympa-5.4-branch/po/web_help_br.po
+   M /branches/sympa-5.4-branch/po/web_help_ca.po
+   M /branches/sympa-5.4-branch/po/web_help_cs.po
+   M /branches/sympa-5.4-branch/po/web_help_de.po
+   M /branches/sympa-5.4-branch/po/web_help_el.po
+   M /branches/sympa-5.4-branch/po/web_help_en_US.po
+   M /branches/sympa-5.4-branch/po/web_help_es.po
+   M /branches/sympa-5.4-branch/po/web_help_et.po
+   M /branches/sympa-5.4-branch/po/web_help_eu.po
+   M /branches/sympa-5.4-branch/po/web_help_fi.po
+   M /branches/sympa-5.4-branch/po/web_help_fr.po
+   M /branches/sympa-5.4-branch/po/web_help_hu.po
+   M /branches/sympa-5.4-branch/po/web_help_id.po
+   M /branches/sympa-5.4-branch/po/web_help_it.po
+   M /branches/sympa-5.4-branch/po/web_help_ja.po
+   M /branches/sympa-5.4-branch/po/web_help_ko.po
+   M /branches/sympa-5.4-branch/po/web_help_ml.po
+   M /branches/sympa-5.4-branch/po/web_help_nb_NO.po
+   M /branches/sympa-5.4-branch/po/web_help_nl.po
+   M /branches/sympa-5.4-branch/po/web_help_nn_NO.po
+   M /branches/sympa-5.4-branch/po/web_help_oc.po
+   M /branches/sympa-5.4-branch/po/web_help_pl.po
+   M /branches/sympa-5.4-branch/po/web_help_pt.po
+   M /branches/sympa-5.4-branch/po/web_help_pt_BR.po
+   M /branches/sympa-5.4-branch/po/web_help_ro.po
+   M /branches/sympa-5.4-branch/po/web_help_ru.po
+   M /branches/sympa-5.4-branch/po/web_help_sv.po
+   M /branches/sympa-5.4-branch/po/web_help_tr.po
+   M /branches/sympa-5.4-branch/po/web_help_vi.po
+   M /branches/sympa-5.4-branch/po/web_help_zh_CN.po
+   M /branches/sympa-5.4-branch/po/web_help_zh_TW.po
+   M /branches/sympa-5.4-branch/po/zh_CN.po
+   M /branches/sympa-5.4-branch/po/zh_TW.po
+
+[-feature] Preparing version 5.4.5.
+
+------------------------------------------------------------------------
+r5444 | sympa-authors | 2009-01-20 10:41:57 +0100 (Tue, 20 Jan 2009) | 2 lines
+Changed paths:
+   M /branches/sympa-5.4-branch/po/af.po
+   M /branches/sympa-5.4-branch/po/ar.po
+   M /branches/sympa-5.4-branch/po/bg.po
+   M /branches/sympa-5.4-branch/po/br.po
+   M /branches/sympa-5.4-branch/po/ca.po
+   M /branches/sympa-5.4-branch/po/cs.po
+   M /branches/sympa-5.4-branch/po/de.po
+   M /branches/sympa-5.4-branch/po/el.po
+   M /branches/sympa-5.4-branch/po/en_US.po
+   M /branches/sympa-5.4-branch/po/es.po
+   M /branches/sympa-5.4-branch/po/et.po
+   M /branches/sympa-5.4-branch/po/eu.po
+   M /branches/sympa-5.4-branch/po/fi.po
+   M /branches/sympa-5.4-branch/po/fr.po
+   M /branches/sympa-5.4-branch/po/hu.po
+   M /branches/sympa-5.4-branch/po/id.po
+   M /branches/sympa-5.4-branch/po/it.po
+   M /branches/sympa-5.4-branch/po/ja.po
+   M /branches/sympa-5.4-branch/po/ko.po
+   M /branches/sympa-5.4-branch/po/ml.po
+   M /branches/sympa-5.4-branch/po/nb_NO.po
+   M /branches/sympa-5.4-branch/po/nl.po
+   M /branches/sympa-5.4-branch/po/nn_NO.po
+   M /branches/sympa-5.4-branch/po/oc.po
+   M /branches/sympa-5.4-branch/po/pl.po
+   M /branches/sympa-5.4-branch/po/pt.po
+   M /branches/sympa-5.4-branch/po/pt_BR.po
+   M /branches/sympa-5.4-branch/po/ro.po
+   M /branches/sympa-5.4-branch/po/ru.po
+   M /branches/sympa-5.4-branch/po/sv.po
+   M /branches/sympa-5.4-branch/po/tr.po
+   M /branches/sympa-5.4-branch/po/vi.po
+   M /branches/sympa-5.4-branch/po/web_help_af.po
+   M /branches/sympa-5.4-branch/po/web_help_ar.po
+   M /branches/sympa-5.4-branch/po/web_help_bg.po
+   M /branches/sympa-5.4-branch/po/web_help_br.po
+   M /branches/sympa-5.4-branch/po/web_help_ca.po
+   M /branches/sympa-5.4-branch/po/web_help_cs.po
+   M /branches/sympa-5.4-branch/po/web_help_de.po
+   M /branches/sympa-5.4-branch/po/web_help_el.po
+   M /branches/sympa-5.4-branch/po/web_help_en_US.po
+   M /branches/sympa-5.4-branch/po/web_help_es.po
+   M /branches/sympa-5.4-branch/po/web_help_et.po
+   M /branches/sympa-5.4-branch/po/web_help_eu.po
+   M /branches/sympa-5.4-branch/po/web_help_fi.po
+   M /branches/sympa-5.4-branch/po/web_help_fr.po
+   M /branches/sympa-5.4-branch/po/web_help_hu.po
+   M /branches/sympa-5.4-branch/po/web_help_id.po
+   M /branches/sympa-5.4-branch/po/web_help_it.po
+   M /branches/sympa-5.4-branch/po/web_help_ja.po
+   M /branches/sympa-5.4-branch/po/web_help_ko.po
+   M /branches/sympa-5.4-branch/po/web_help_ml.po
+   M /branches/sympa-5.4-branch/po/web_help_nb_NO.po
+   M /branches/sympa-5.4-branch/po/web_help_nl.po
+   M /branches/sympa-5.4-branch/po/web_help_nn_NO.po
+   M /branches/sympa-5.4-branch/po/web_help_oc.po
+   M /branches/sympa-5.4-branch/po/web_help_pl.po
+   M /branches/sympa-5.4-branch/po/web_help_pt.po
+   M /branches/sympa-5.4-branch/po/web_help_pt_BR.po
+   M /branches/sympa-5.4-branch/po/web_help_ro.po
+   M /branches/sympa-5.4-branch/po/web_help_ru.po
+   M /branches/sympa-5.4-branch/po/web_help_sv.po
+   M /branches/sympa-5.4-branch/po/web_help_tr.po
+   M /branches/sympa-5.4-branch/po/web_help_vi.po
+   M /branches/sympa-5.4-branch/po/web_help_zh_CN.po
+   M /branches/sympa-5.4-branch/po/web_help_zh_TW.po
+   M /branches/sympa-5.4-branch/po/zh_CN.po
+   M /branches/sympa-5.4-branch/po/zh_TW.po
+
+[-feature] Retrieving latest pootle translations.
+
+------------------------------------------------------------------------
 r5442 | sympa-authors | 2009-01-16 16:13:23 +0100 (Fri, 16 Jan 2009) | 2 lines
 Changed paths:
    M /branches/sympa-5.4-branch/src/List.pm
