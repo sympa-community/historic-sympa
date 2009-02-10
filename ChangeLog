@@ -3,7 +3,7 @@ r5494 | sympa-authors | 2009-02-09 17:50:56 +0100 (Mon, 09 Feb 2009) | 2 lines
 Changed paths:
    M /branches/sympa-5.4-branch/NEWS
 
-[bug] Bad syntax in NEWs file caused important_changes.pl to stop parsing this file before its end. Consequently, important configuration warnings were not issued to people intalling Sympa.
+[bug] [Reported by J.P. barrière, ENIT] Bad syntax in NEWs file caused important_changes.pl to stop parsing this file before its end. Consequently, important configuration warnings were not issued to people intalling Sympa.
 
 ------------------------------------------------------------------------
 r5493 | sympa-authors | 2009-02-09 17:49:52 +0100 (Mon, 09 Feb 2009) | 2 lines
