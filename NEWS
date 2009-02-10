@@ -3,6 +3,14 @@
 
 (See Changelog file for the full changes log)
 
+5.4.6		10 Feb 2009
+
+  Bugs:
+
+  NEWS: [Reported by J.P. barrière, ENIT] Bad syntax in NEWs file caused important_changes.pl to stop parsing this file before its end. Consequently, important configuration warnings were not issued to people intalling Sympa.
+
+  wwsympa/wwsympa.fcgi: HTML character escaping was made on reference on the main hash containing all the data, including list config. as a result, after execution of the first action, all the data were HTML escaped, including possible double quotes in SQL queries. Though never saved in the config file, these data were responsible for synchronisation problems. Fixed by using a copy of the $param hash for XSS protection and TT2 parsing.
+
 5.4.5		20 Jan 2009
 
   Bugs:
