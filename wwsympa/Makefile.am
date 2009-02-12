@@ -39,8 +39,8 @@ install-data-local: installperlcgi installdata installlib installsbin \
 		    installicons
 
 installdata:
-	install -d -m 755 $(DESTDIR)$(DATADIR)
-	install -m 644 $(data_SRC) $(DESTDIR)$(DATADIR)
+	install -d -m 755 $(DESTDIR)$(datadir)/sympa/etc
+	install -m 644 $(data_SRC) $(DESTDIR)$(datadir)/sympa/etc
 
 installlib:
 	install -d -m 755 $(DESTDIR)$(LIBDIR)
@@ -60,7 +60,7 @@ installlib:
 		-e 's|--SBINDIR--|$(SBINDIR)|' \
 		-e 's|--LIBDIR--|$(LIBDIR)|' \
 		-e 's|--LOCALEDIR--|$(LOCALEDIR)|' \
-		-e 's|--DATADIR--|$(DATADIR)|' \
+		-e 's|--DATADIR--|$(datadir)/sympa/etc|' \
 		-e 's|--ETCDIR--|$(ETCDIR)|' \
 		-e 's|--EXPLDIR--|$(EXPLDIR)|' \
 		-e 's|--SPOOLDIR--|$(SPOOLDIR)|' \
@@ -100,7 +100,7 @@ installsbin:
 		-e 's|--SBINDIR--|$(SBINDIR)|' \
 		-e 's|--LIBDIR--|$(LIBDIR)|' \
 		-e 's|--LOCALEDIR--|$(LOCALEDIR)|' \
-		-e 's|--DATADIR--|$(DATADIR)|' \
+		-e 's|--DATADIR--|$(datadir)/sympa/etc|' \
 		-e 's|--ETCDIR--|$(ETCDIR)|' \
 		-e 's|--EXPLDIR--|$(EXPLDIR)|' \
 		-e 's|--SPOOLDIR--|$(SPOOLDIR)|' \
@@ -126,7 +126,7 @@ installperlcgi:
 		-e 's|--SBINDIR--|$(SBINDIR)|' \
 		-e 's|--LIBDIR--|$(LIBDIR)|' \
 		-e 's|--LOCALEDIR--|$(LOCALEDIR)|' \
-		-e 's|--DATADIR--|$(DATADIR)|' \
+		-e 's|--DATADIR--|$(datadir)/sympa/etc|' \
 		-e 's|--ETCDIR--|$(ETCDIR)|' \
 		-e 's|--EXPLDIR--|$(EXPLDIR)|' \
 		-e 's|--SPOOLDIR--|$(SPOOLDIR)|' \

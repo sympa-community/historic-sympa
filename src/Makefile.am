@@ -101,7 +101,7 @@ installlib:
 		-e 's|--SBINDIR--|$(SBINDIR)|' \
 		-e 's|--LIBDIR--|$(LIBDIR)|' \
 		-e 's|--LOCALEDIR--|$(LOCALEDIR)|' \
-		-e 's|--DATADIR--|$(DATADIR)|' \
+		-e 's|--DATADIR--|$(datadir)/sympa/etc|' \
 		-e 's|--ETCDIR--|$(ETCDIR)|' \
 		-e 's|--EXPLDIR--|$(EXPLDIR)|' \
 		-e 's|--SPOOLDIR--|$(SPOOLDIR)|' \
@@ -126,7 +126,7 @@ installsbin:
 		-e 's|--SBINDIR--|$(SBINDIR)|' \
 		-e 's|--LIBDIR--|$(LIBDIR)|' \
 		-e 's|--LOCALEDIR--|$(LOCALEDIR)|' \
-		-e 's|--DATADIR--|$(DATADIR)|' \
+		-e 's|--DATADIR--|$(datadir)/sympa/etc|' \
 		-e 's|--ETCDIR--|$(ETCDIR)|' \
 		-e 's|--EXPLDIR--|$(EXPLDIR)|' \
 		-e 's|--SPOOLDIR--|$(SPOOLDIR)|' \

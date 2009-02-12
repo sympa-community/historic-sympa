@@ -24,7 +24,7 @@ default: none
 install-data-local: installtemplates
 
 installtemplates:
-	install -d -m 755 $(DESTDIR)$(DATADIR)
-	install -d -m 755 $(DESTDIR)$(DATADIR)/web_tt2
-	install -m 644 *.tt2 $(DESTDIR)$(DATADIR)/web_tt2
-	$(PERL) ../set_symlinks.pl web_tt2 $(DESTDIR)$(DATADIR)/web_tt2
+	install -d -m 755 $(DESTDIR)$(datadir)/sympa
+	install -d -m 755 $(DESTDIR)$(datadir)/sympa/web_tt2
+	install -m 644 *.tt2 $(DESTDIR)$(datadir)/sympa/web_tt2
+	$(PERL) ../set_symlinks.pl web_tt2 $(DESTDIR)$(datadir)/sympa/web_tt2
