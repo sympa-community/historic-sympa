@@ -89,16 +89,16 @@ AC_ARG_WITH(
 AC_SUBST(LIBEXECDIR)
 
 ## location of Perl modules
-LIBDIR='${prefix}/bin'
 AC_ARG_WITH(
     libdir,
     AS_HELP_STRING(
 	[--with-libdir=DIR]
-	[Perl modules in DIR (default ${prefix}/bin)]
+	[obsolete option, perl modules are now installed with data]
     ),
-    [LIBDIR="$withval"]
+    [
+	AC_MSG_WARN([obsolete --with-libdir option used])
+    ]
 )
-AC_SUBST(LIBDIR)
 
 ## location of default *read-only* data files
 AC_ARG_WITH(
