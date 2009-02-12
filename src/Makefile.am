@@ -34,7 +34,11 @@ virtualwrapper_CPPFLAGS = $(AM_CPPFLAGS) \
 			  -DPOSTMAP=\"${POSTMAP}\" \
 			  -DPOSTMAP_ARG=\"${POSTMAP_ARG}\"
 
-bin_SRC	= queue bouncequeue familyqueue
+libexec_PROGRAMS = queue bouncequeue familyqueue
+queue_SOURCES = queue.c
+bouncequeue_SOURCES = bouncequeue.c
+familyqueue_SOURCES = familyqueue.c
+
 
 modulesdir = $(pkgdatadir)/lib
 modules_DATA = admin.pm Archive.pm Commands.pm Conf.pm CAS.pm Config_XML.pm \
@@ -42,19 +46,6 @@ modules_DATA = admin.pm Archive.pm Commands.pm Conf.pm CAS.pm Config_XML.pm \
 	       Lock.pm Version.pm Fetch.pm Message.pm Task.pm Datasource.pm \
 	       SQLSource.pm LDAPSource.pm Scenario.pm PlainDigest.pm \
 	       tools.pl tt2.pl parser.pl report.pm time_utils.pl
-
-oldall:	queue bouncequeue familyqueue
-
-oldclean:
-	@if [ -f ./queue ]; then \
-		rm queue ; \
-	fi	
-	@if [ -f ./bouncequeue ]; then \
-		rm bouncequeue ; \
-	fi
-	@if [ -f ./familyqueue ]; then \
-		rm familyqueue ; \
-	fi
 
 install-exec-local: installqueue installwrapper
 install-data-hook: installlib installsbin
@@ -129,19 +120,3 @@ installsbin:
 		-e 's|--EXPLDIR--|$(EXPLDIR)|' \
 		-e 's|--SPOOLDIR--|$(SPOOLDIR)|' \
 		$(addprefix $(DESTDIR)$(sbindir)/, $(sbin_SCRIPTS))
-
-queue: queue.c Makefile ../Makefile
-	$(CC) $(CFLAGS) $(CDEFS) -o queue queue.c
-
-bouncequeue: bouncequeue.c Makefile ../Makefile
-	$(CC) $(CFLAGS) $(CDEFS) -o bouncequeue bouncequeue.c
-
-familyqueue: familyqueue.c Makefile ../Makefile
-	$(CC) $(CFLAGS) $(CDEFS) -o familyqueue familyqueue.c
-
-## Dépendances
-queue:		queue.c Makefile
-
-bouncequeue:	bouncequeue.c Makefile
-
-familyqueue:	familyqueue.c Makefile
