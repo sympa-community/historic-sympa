@@ -101,16 +101,17 @@ AC_ARG_WITH(
 AC_SUBST(LIBDIR)
 
 ## location of default *read-only* data files
-DATADIR='${prefix}/bin/etc'
 AC_ARG_WITH(
     datadir,
     AS_HELP_STRING(
 	[--with-datadir=DIR]
-	[default *read-only* data files in DIR (default ${prefix}/bin/etc)]
+	[obsolete option, use --datadir instead]
     ),
-    [DATADIR="$withval"]
+    [
+	AC_MSG_WARN([obsolete --with-datadir option used])
+	datadir="$withval"
+    ]
 )
-AC_SUBST(DATADIR)
 
 ## location of modifiable data files
 EXPLDIR='${prefix}/expl'
