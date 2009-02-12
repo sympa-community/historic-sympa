@@ -53,7 +53,7 @@ installlib:
 		-e 's|--prefix--|$(prefix)|' \
 		-e 's|--PIDDIR--|$(PIDDIR)|' \
 		-e 's|--SCRIPTDIR--|$(SCRIPTDIR)|' \
-		-e 's|--BINDIR--|$(BINDIR)|' \
+		-e 's|--BINDIR--|$(libexecdir)|' \
 		-e 's|--SBINDIR--|$(sbindir)|' \
 		-e 's|--LIBDIR--|$(datadir)/sympa/lib|' \
 		-e 's|--LOCALEDIR--|$(LOCALEDIR)|' \
@@ -84,7 +84,7 @@ installscript:
 		-e 's|--prefix--|$(prefix)|' \
 		-e 's|--PIDDIR--|$(PIDDIR)|' \
 		-e 's|--SCRIPTDIR--|$(SCRIPTDIR)|' \
-		-e 's|--BINDIR--|$(BINDIR)|' \
+		-e 's|--BINDIR--|$(libexecdir)|' \
 		-e 's|--SBINDIR--|$(sbindir)|' \
 		-e 's|--LIBDIR--|$(datadir)/sympa/lib|' \
 		-e 's|--LOCALEDIR--|$(LOCALEDIR)|' \

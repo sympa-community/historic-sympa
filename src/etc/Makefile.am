@@ -46,7 +46,7 @@ installetc:
 		create_list.conf crawlers_detection.conf auth.conf \
 		ca-bundle.crt mhonarc-ressources.tt2 list_aliases.tt2 \
 		$(DESTDIR)$(datadir)/sympa/etc
-	sed -i -e 's|--MAILERPROGDIR--|$(BINDIR)|' \
+	sed -i -e 's|--MAILERPROGDIR--|$(libexecdir)|' \
 		$(DESTDIR)$(datadir)/sympa/etc/list_aliases.tt2
 
 installlisttemplates:
