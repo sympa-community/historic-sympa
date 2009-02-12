@@ -23,7 +23,7 @@ SUBDIRS = etc
 
 CDEFS = -DCONFIG=\"$(CONFIG)\"
 
-sbin_SRC = sympa.pl alias_manager.pl task_manager.pl sympa_wizard.pl
+sbin_SCRIPTS = sympa.pl alias_manager.pl task_manager.pl sympa_wizard.pl
 
 bin_SRC	= queue bouncequeue familyqueue
 
@@ -97,7 +97,7 @@ installlib:
 		-e 's|--PIDDIR--|$(PIDDIR)|' \
 		-e 's|--SCRIPTDIR--|$(SCRIPTDIR)|' \
 		-e 's|--BINDIR--|$(BINDIR)|' \
-		-e 's|--SBINDIR--|$(SBINDIR)|' \
+		-e 's|--SBINDIR--|$(sbindir)|' \
 		-e 's|--LIBDIR--|$(datadir)/sympa/lib|' \
 		-e 's|--LOCALEDIR--|$(LOCALEDIR)|' \
 		-e 's|--DATADIR--|$(datadir)/sympa/etc|' \
@@ -107,8 +107,6 @@ installlib:
 		$(addprefix $(DESTDIR)$(datadir)/sympa/lib/, $(modules_DATA))
 
 installsbin:
-	install -d -m 755 $(DESTDIR)$(SBINDIR)
-	install -m 755 $(sbin_SRC) $(DESTDIR)$(SBINDIR)
 	sed -i \
 		-e 's|--PERL--|$(PERL)|' \
 		-e 's|--USER--|$(USER)|' \
@@ -122,14 +120,14 @@ installsbin:
 		-e 's|--PIDDIR--|$(PIDDIR)|' \
 		-e 's|--SCRIPTDIR--|$(SCRIPTDIR)|' \
 		-e 's|--BINDIR--|$(BINDIR)|' \
-		-e 's|--SBINDIR--|$(SBINDIR)|' \
+		-e 's|--SBINDIR--|$(sbindir)|' \
 		-e 's|--LIBDIR--|$(datadir)/sympa/lib|' \
 		-e 's|--LOCALEDIR--|$(LOCALEDIR)|' \
 		-e 's|--DATADIR--|$(datadir)/sympa/etc|' \
 		-e 's|--ETCDIR--|$(ETCDIR)|' \
 		-e 's|--EXPLDIR--|$(EXPLDIR)|' \
 		-e 's|--SPOOLDIR--|$(SPOOLDIR)|' \
-		$(addprefix $(DESTDIR)$(SBINDIR)/, $(sbin_SRC))
+		$(addprefix $(DESTDIR)$(sbindir)/, $(sbin_SCRIPTS))
 
 queue: queue.c Makefile ../Makefile
 	$(CC) $(CFLAGS) $(CDEFS) -o queue queue.c

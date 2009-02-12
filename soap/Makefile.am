@@ -54,7 +54,7 @@ installlib:
 		-e 's|--PIDDIR--|$(PIDDIR)|' \
 		-e 's|--SCRIPTDIR--|$(SCRIPTDIR)|' \
 		-e 's|--BINDIR--|$(BINDIR)|' \
-		-e 's|--SBINDIR--|$(SBINDIR)|' \
+		-e 's|--SBINDIR--|$(sbindir)|' \
 		-e 's|--LIBDIR--|$(datadir)/sympa/lib|' \
 		-e 's|--LOCALEDIR--|$(LOCALEDIR)|' \
 		-e 's|--DATADIR--|$(datadir)/sympa/etc|' \
@@ -85,7 +85,7 @@ installscript:
 		-e 's|--PIDDIR--|$(PIDDIR)|' \
 		-e 's|--SCRIPTDIR--|$(SCRIPTDIR)|' \
 		-e 's|--BINDIR--|$(BINDIR)|' \
-		-e 's|--SBINDIR--|$(SBINDIR)|' \
+		-e 's|--SBINDIR--|$(sbindir)|' \
 		-e 's|--LIBDIR--|$(datadir)/sympa/lib|' \
 		-e 's|--LOCALEDIR--|$(LOCALEDIR)|' \
 		-e 's|--DATADIR--|$(datadir)/sympa/etc|' \
@@ -109,7 +109,7 @@ installperlcgi:
 		-e 's|--PIDDIR--|$(PIDDIR)|' \
 		-e 's|--SCRIPTDIR--|$(SCRIPTDIR)|' \
 		-e 's|--BINDIR--|$(BINDIR)|' \
-		-e 's|--SBINDIR--|$(SBINDIR)|' \
+		-e 's|--SBINDIR--|$(sbindir)|' \
 		-e 's|--LIBDIR--|$(datadir)/sympa/lib|' \
 		-e 's|--LOCALEDIR--|$(LOCALEDIR)|' \
 		-e 's|--DATADIR--|$(datadir)/sympa/etc|' \

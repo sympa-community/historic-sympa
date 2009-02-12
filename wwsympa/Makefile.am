@@ -19,7 +19,7 @@
 # along with this program; if not, write to the Free Software
 # Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
 
-sbin_SRC	= bounced.pl archived.pl
+sbin_SCRIPTS	= bounced.pl archived.pl
 perl_cgi_SRC	= wwsympa.fcgi wwsympa_sudo_wrapper.pl
 wrapper_cgi_SRC	= wwsympa-wrapper.fcgi
 
@@ -58,7 +58,7 @@ installlib:
 		-e 's|--PIDDIR--|$(PIDDIR)|' \
 		-e 's|--SCRIPTDIR--|$(SCRIPTDIR)|' \
 		-e 's|--BINDIR--|$(BINDIR)|' \
-		-e 's|--SBINDIR--|$(SBINDIR)|' \
+		-e 's|--SBINDIR--|$(sbindir)|' \
 		-e 's|--LIBDIR--|$(datadir)/sympa/lib|' \
 		-e 's|--LOCALEDIR--|$(LOCALEDIR)|' \
 		-e 's|--DATADIR--|$(datadir)/sympa/etc|' \
@@ -80,8 +80,6 @@ installwrappercgi:
 	-chmod 6755 $(DESTDIR)$(CGIDIR)/$(wrapper_cgi_SRC)
 
 installsbin:
-	install -d -m 755 $(DESTDIR)$(SBINDIR)
-	install -m 755 $(sbin_SRC) $(DESTDIR)$(SBINDIR)
 	sed -i \
 		-e 's|--PERL--|$(PERL)|' \
 		-e 's|--USER--|$(USER)|' \
@@ -95,14 +93,14 @@ installsbin:
 		-e 's|--PIDDIR--|$(PIDDIR)|' \
 		-e 's|--SCRIPTDIR--|$(SCRIPTDIR)|' \
 		-e 's|--BINDIR--|$(BINDIR)|' \
-		-e 's|--SBINDIR--|$(SBINDIR)|' \
+		-e 's|--SBINDIR--|$(sbindir)|' \
 		-e 's|--LIBDIR--|$(datadir)/sympa/lib|' \
 		-e 's|--LOCALEDIR--|$(LOCALEDIR)|' \
 		-e 's|--DATADIR--|$(datadir)/sympa/etc|' \
 		-e 's|--ETCDIR--|$(ETCDIR)|' \
 		-e 's|--EXPLDIR--|$(EXPLDIR)|' \
 		-e 's|--SPOOLDIR--|$(SPOOLDIR)|' \
-		$(addprefix $(DESTDIR)$(SBINDIR)/, $(sbin_SRC))
+		$(addprefix $(DESTDIR)$(sbindir)/, $(sbin_SCRIPTS))
 
 installperlcgi:
 	install -d -m 755 $(DESTDIR)$(CGIDIR)
