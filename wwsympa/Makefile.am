@@ -22,8 +22,11 @@
 sbin_SRC	= bounced.pl archived.pl
 perl_cgi_SRC	= wwsympa.fcgi wwsympa_sudo_wrapper.pl
 wrapper_cgi_SRC	= wwsympa-wrapper.fcgi
-lib_SRC		= wwslib.pm cookielib.pm bounce-lib.pl Marc.pm Auth.pm \
-		  SharedDocument.pm SympaSession.pm
+
+modulesdir = $(pkgdatadir)/lib
+nobase_modules_DATA = wwslib.pm cookielib.pm bounce-lib.pl Marc.pm Auth.pm \
+		      SharedDocument.pm SympaSession.pm Marc/Search.pm
+
 data_SRC	= mime.types 
 
 all:	wwsympa-wrapper.fcgi
@@ -35,7 +38,7 @@ clean:
 
 
 install-exec-local: installwrappercgi
-install-data-local: installperlcgi installdata installlib installsbin \
+install-data-hook: installperlcgi installdata installlib installsbin \
 		    installicons
 
 installdata:
@@ -43,8 +46,6 @@ installdata:
 	install -m 644 $(data_SRC) $(DESTDIR)$(datadir)/sympa/etc
 
 installlib:
-	install -d -m 755 $(DESTDIR)$(datadir)/sympa/lib
-	install -m 644 $(lib_SRC) $(DESTDIR)$(datadir)/sympa/lib
 	sed -i \
 		-e 's|--USER--|$(USER)|' \
 		-e 's|--GROUP--|$(GROUP)|' \
@@ -64,10 +65,7 @@ installlib:
 		-e 's|--ETCDIR--|$(ETCDIR)|' \
 		-e 's|--EXPLDIR--|$(EXPLDIR)|' \
 		-e 's|--SPOOLDIR--|$(SPOOLDIR)|' \
-		$(addprefix $(DESTDIR)$(datadir)/sympa/lib/, $(lib_SRC))
-
-	install -d -m 755 $(DESTDIR)$(datadir)/sympa/lib/Marc
-	install -m 644 Marc/Search.pm $(DESTDIR)$(datadir)/sympa/lib/Marc
+		$(addprefix $(DESTDIR)$(datadir)/sympa/lib/, $(nobase_modules_DATA))
 
 installicons:
 	install -d -m 755 $(DESTDIR)$(prefix)/static_content

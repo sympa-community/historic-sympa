@@ -27,11 +27,12 @@ sbin_SRC = sympa.pl alias_manager.pl task_manager.pl sympa_wizard.pl
 
 bin_SRC	= queue bouncequeue familyqueue
 
-lib_SRC	= admin.pm Archive.pm Commands.pm Conf.pm CAS.pm Config_XML.pm \
-	  Family.pm Language.pm List.pm Log.pm mail.pm Ldap.pm Upgrade.pm \
-	  Lock.pm Version.pm Fetch.pm Message.pm Task.pm Datasource.pm \
-	  SQLSource.pm LDAPSource.pm Scenario.pm PlainDigest.pm \
-	  tools.pl tt2.pl parser.pl report.pm time_utils.pl
+modulesdir = $(pkgdatadir)/lib
+modules_DATA = admin.pm Archive.pm Commands.pm Conf.pm CAS.pm Config_XML.pm \
+	       Family.pm Language.pm List.pm Log.pm mail.pm Ldap.pm Upgrade.pm \
+	       Lock.pm Version.pm Fetch.pm Message.pm Task.pm Datasource.pm \
+	       SQLSource.pm LDAPSource.pm Scenario.pm PlainDigest.pm \
+	       tools.pl tt2.pl parser.pl report.pm time_utils.pl
 
 libexec_SRC = aliaswrapper virtualwrapper
 
@@ -55,7 +56,7 @@ clean:
 	fi
 
 install-exec-local: installqueue installwrapper
-install-data-local: installlib installsbin
+install-data-hook: installlib installsbin
 
 installqueue:
 	@echo "Installing Queue binary..."
@@ -84,8 +85,6 @@ installwrapper:
 	-chgrp $(GROUP) $(DESTDIR)$(LIBEXECDIR)/virtualwrapper
 
 installlib:
-	install -d -m 755 $(DESTDIR)$(datadir)/sympa/lib
-	install -m 644 $(lib_SRC) $(DESTDIR)$(datadir)/sympa/lib
 	sed -i \
 		-e 's|--USER--|$(USER)|' \
 		-e 's|--GROUP--|$(GROUP)|' \
@@ -105,7 +104,7 @@ installlib:
 		-e 's|--ETCDIR--|$(ETCDIR)|' \
 		-e 's|--EXPLDIR--|$(EXPLDIR)|' \
 		-e 's|--SPOOLDIR--|$(SPOOLDIR)|' \
-		$(addprefix $(DESTDIR)$(datadir)/sympa/lib/, $(lib_SRC))
+		$(addprefix $(DESTDIR)$(datadir)/sympa/lib/, $(modules_DATA))
 
 installsbin:
 	install -d -m 755 $(DESTDIR)$(SBINDIR)
