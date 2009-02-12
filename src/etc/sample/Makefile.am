@@ -19,36 +19,7 @@
 # along with this program; if not, write to the Free Software
 # Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
 
-sample_SRC	= README trusted_applications.conf robot.conf employees.ldap
-
-all:	
-
-install-data-local: installsample installsamplelist
-
-installsample:
-	install -d -m 755 $(DESTDIR)$(SAMPLEDIR)
-	install -m 644 $(sample_SRC) $(DESTDIR)$(SAMPLEDIR)
-	sed -i \
-		-e 's|--USER--|$(USER)|' \
-		-e 's|--GROUP--|$(GROUP)|' \
-		-e 's|--SYMPA_VERSION--|$(PKG_VERSION)|' \
-		-e 's|--SENDMAIL_ALIASES--|$(SENDMAIL_ALIASES)|' \
-		-e 's|--VIRTUAL_ALIASES--|$(VIRTUAL_ALIASES)|' \
-		-e 's|--CONFIG--|$(CONFIG)|' \
-		-e 's|--WWSCONFIG--|$(WWSCONFIG)|' \
-		-e 's|--prefix--|$(prefix)|' \
-		-e 's|--PIDDIR--|$(PIDDIR)|' \
-		-e 's|--SCRIPTDIR--|$(SCRIPTDIR)|' \
-		-e 's|--BINDIR--|$(BINDIR)|' \
-		-e 's|--SBINDIR--|$(SBINDIR)|' \
-		-e 's|--LIBDIR--|$(LIBDIR)|' \
-		-e 's|--LOCALEDIR--|$(LOCALEDIR)|' \
-		-e 's|--DATADIR--|$(DATADIR)|' \
-		-e 's|--ETCDIR--|$(ETCDIR)|' \
-		-e 's|--EXPLDIR--|$(EXPLDIR)|' \
-		-e 's|--SPOOLDIR--|$(SPOOLDIR)|' \
-		$(addprefix $(DESTDIR)$(SAMPLEDIR)/, $(sample_SRC))
-
-installsamplelist:
-	install -d -m 755 $(DESTDIR)$(SAMPLEDIR)/sample-list
-	install -m 644 test/* $(DESTDIR)$(SAMPLEDIR)/sample-list
+sampledir = $(docdir)/sample
+nobase_sample_DATA = README \
+		     trusted_applications.conf robot.conf employees.ldap \
+		     test/config test/info test/message.footer test/welcome.tpl
