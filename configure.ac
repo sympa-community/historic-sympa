@@ -25,10 +25,7 @@ AM_INIT_AUTOMAKE
 
 AC_PREFIX_DEFAULT(/home/sympa)
 
-## Directories setup
-## for main config files
-
-## location of main config files
+# configuration
 CONFDIR='${prefix}/etc'
 AC_ARG_WITH(
     confdir,
@@ -40,19 +37,18 @@ AC_ARG_WITH(
 )
 AC_SUBST(CONFDIR)
 
-## location of CGIs
-CGIDIR='${prefix}/bin'
+ETCDIR='${prefix}/etc'
 AC_ARG_WITH(
-    cgidir,
+    etcdir,
     AS_HELP_STRING(
-	[--with-cgidir=DIR],
-	[CGIs in DIR (default ${prefix}/bin)]
+	[--with-etcdir=DIR],
+	[Config directories populated by the user are in DIR (default ${prefix}/etc)]
     ),
-    [CGIDIR="$withval"]
+    [ETCDIR="$withval"]
 )
-AC_SUBST(CGIDIR)
+AC_SUBST(ETCDIR)
 
-## location of user executables
+# binaries
 AC_ARG_WITH(
     bindir,
     AS_HELP_STRING(
@@ -62,7 +58,6 @@ AC_ARG_WITH(
     [AC_MSG_WARN([obsolete --with-sampledir option used])]
 )
 
-## location of system admin executables
 AC_ARG_WITH(
     sbindir,
     AS_HELP_STRING(
@@ -75,7 +70,6 @@ AC_ARG_WITH(
     ]
 )
 
-## location of program executables
 AC_ARG_WITH(
     libexecdir,
     AS_HELP_STRING(
@@ -88,19 +82,19 @@ AC_ARG_WITH(
     ]
 )
 
-## location of Perl modules
+# web files
+CGIDIR='${prefix}/bin'
 AC_ARG_WITH(
-    libdir,
+    cgidir,
     AS_HELP_STRING(
-	[--with-libdir=DIR]
-	[obsolete option, perl modules are now installed with data]
+	[--with-cgidir=DIR],
+	[CGIs in DIR (default ${prefix}/bin)]
     ),
-    [
-	AC_MSG_WARN([obsolete --with-libdir option used])
-    ]
+    [CGIDIR="$withval"]
 )
+AC_SUBST(CGIDIR)
 
-## location of default *read-only* data files
+# data
 AC_ARG_WITH(
     datadir,
     AS_HELP_STRING(
@@ -113,19 +107,42 @@ AC_ARG_WITH(
     ]
 )
 
-## location of modifiable data files
-EXPLDIR='${prefix}/expl'
+SCRIPTDIR='${prefix}/bin'
 AC_ARG_WITH(
-    expldir,
+    scriptdir,
     AS_HELP_STRING(
-	[--with-expldir=DIR],
-	[modifiable data files in DIR (default ${prefix}/expl)]
+	[--with-scriptdir=DIR],
+	[create script files in DIR  (default ${prefix}/bin)]
     ),
-    [EXPLDIR="$withval"]
+    [SCRIPTDIR="$withval"]
 )
-AC_SUBST(EXPLDIR)
+AC_SUBST(SCRIPTDIR)
 
-## location of documentation
+AC_ARG_WITH(
+    libdir,
+    AS_HELP_STRING(
+	[--with-libdir=DIR]
+	[obsolete option, perl modules are now installed with data]
+    ),
+    [
+	AC_MSG_WARN([obsolete --with-libdir option used])
+    ]
+)
+
+# locales
+LOCALEDIR='${prefix}/locale'
+AC_ARG_WITH(
+    localedir,
+    AS_HELP_STRING(
+	[--with-localedir=DIR],
+	[create language files in DIR  (default ${prefix}/locale)]
+    ),
+    [LOCALEDIR="$withval"]
+)
+AC_SUBST(LOCALEDIR)
+
+
+# documentation
 AC_ARG_WITH(
     mandir,
     AS_HELP_STRING(
@@ -138,67 +155,6 @@ AC_ARG_WITH(
      ]
 )
 
-## SYS V init scripts directory
-INITDIR='${prefix}/etc/rc.d/init.d'
-AC_ARG_WITH(
-    initdir,
-    AS_HELP_STRING(
-	[--with-initdir=DIR],
-	[install System V init script in DIR  (default /etc/rc.d/init.d)]
-    ),
-    [INITDIR="$withval"]
-)
-AC_SUBST(INITDIR)
-
-## Lock directory
-LOCKDIR=/var/lock/subsys
-AC_ARG_WITH(
-    lockdir,
-    AS_HELP_STRING(
-	[--with-lockdir=DIR],
-	[create lock files in DIR  (default /var/lock/subsys)]
-    ),
-    [LOCKDIR="$withval"]
-)
-AC_SUBST(LOCKDIR)
-
-## directory for storing .pid files
-PIDDIR='${prefix}'
-AC_ARG_WITH(
-    piddir,
-    AS_HELP_STRING(
-	[--with-piddir=DIR],
-	[create .pid files in DIR (default ${prefix})]
-    ),
-    [PIDDIR="$withval"]
-)
-AC_SUBST(PIDDIR)
-
-## directory for Config directories populated by the user
-ETCDIR='${prefix}/etc'
-AC_ARG_WITH(
-    etcdir,
-    AS_HELP_STRING(
-	[--with-etcdir=DIR],
-	[Config directories populated by the user are in DIR (default ${prefix}/etc)]
-    ),
-    [ETCDIR="$withval"]
-)
-AC_SUBST(ETCDIR)
-
-## directory for language files
-LOCALEDIR='${prefix}/locale'
-AC_ARG_WITH(
-    localedir,
-    AS_HELP_STRING(
-	[--with-localedir=DIR],
-	[create language files in DIR  (default ${prefix}/locale)]
-    ),
-    [LOCALEDIR="$withval"]
-)
-AC_SUBST(LOCALEDIR)
-
-## directory for Documentation files
 AC_ARG_WITH(
     docdir,
     AS_HELP_STRING(
@@ -211,19 +167,6 @@ AC_ARG_WITH(
     ]
 )
 
-## directory for script files
-SCRIPTDIR='${prefix}/bin'
-AC_ARG_WITH(
-    scriptdir,
-    AS_HELP_STRING(
-	[--with-scriptdir=DIR],
-	[create script files in DIR  (default ${prefix}/bin)]
-    ),
-    [SCRIPTDIR="$withval"]
-)
-AC_SUBST(SCRIPTDIR)
-
-## directory for sample files
 AC_ARG_WITH(
     sampledir,
     AS_HELP_STRING(
@@ -235,7 +178,19 @@ AC_ARG_WITH(
     ]
 )
 
-## directory for sample files
+# variable content
+EXPLDIR='${prefix}/expl'
+AC_ARG_WITH(
+    expldir,
+    AS_HELP_STRING(
+	[--with-expldir=DIR],
+	[modifiable data files in DIR (default ${prefix}/expl)]
+    ),
+    [EXPLDIR="$withval"]
+)
+AC_SUBST(EXPLDIR)
+
+
 SPOOLDIR='${prefix}/spool'
 AC_ARG_WITH(
     spooldir,
@@ -246,6 +201,40 @@ AC_ARG_WITH(
     [SPOOLDIR="$withval"]
 )
 AC_SUBST(SPOOLDIR)
+
+
+INITDIR='${prefix}/etc/rc.d/init.d'
+AC_ARG_WITH(
+    initdir,
+    AS_HELP_STRING(
+	[--with-initdir=DIR],
+	[install System V init script in DIR  (default /etc/rc.d/init.d)]
+    ),
+    [INITDIR="$withval"]
+)
+AC_SUBST(INITDIR)
+
+LOCKDIR=/var/lock/subsys
+AC_ARG_WITH(
+    lockdir,
+    AS_HELP_STRING(
+	[--with-lockdir=DIR],
+	[create lock files in DIR  (default /var/lock/subsys)]
+    ),
+    [LOCKDIR="$withval"]
+)
+AC_SUBST(LOCKDIR)
+
+PIDDIR='${prefix}'
+AC_ARG_WITH(
+    piddir,
+    AS_HELP_STRING(
+	[--with-piddir=DIR],
+	[create .pid files in DIR (default ${prefix})]
+    ),
+    [PIDDIR="$withval"]
+)
+AC_SUBST(PIDDIR)
 
 # SSL certs dir
 SSLCERTDIR=$EXPLDIR/X509-user-certs
