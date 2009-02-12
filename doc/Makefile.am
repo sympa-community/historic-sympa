@@ -21,11 +21,4 @@
 
 SUBDIRS = man8
 
-all:	
-
-install-data-local:
-	install -d -m 755 $(DESTDIR)$(DOCDIR)
-	install -m 644 sympa.pdf $(DESTDIR)$(DOCDIR)
-
-
-
+pdf_DATA = sympa.pdf
