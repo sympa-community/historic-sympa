@@ -47,7 +47,6 @@ modules_DATA = admin.pm Archive.pm Commands.pm Conf.pm CAS.pm Config_XML.pm \
 	       SQLSource.pm LDAPSource.pm Scenario.pm PlainDigest.pm \
 	       tools.pl tt2.pl parser.pl report.pm time_utils.pl
 
-install-data-hook: installlib installsbin
 
 install-exec-hook:
 	chmod 4755 $(DESTDIR)$(libexecdir)/queue
@@ -70,29 +69,7 @@ install-exec-hook:
 	-chown root $(DESTDIR)$(sbindir)/virtualwrapper
 	-chgrp $(GROUP) $(DESTDIR)$(sbindir)/virtualwrapper
 
-installlib:
-	sed -i \
-		-e 's|--USER--|$(USER)|' \
-		-e 's|--GROUP--|$(GROUP)|' \
-		-e 's|--SYMPA_VERSION--|$(PKG_VERSION)|' \
-		-e 's|--SENDMAIL_ALIASES--|$(SENDMAIL_ALIASES)|' \
-		-e 's|--VIRTUAL_ALIASES--|$(VIRTUAL_ALIASES)|' \
-		-e 's|--CONFIG--|$(CONFIG)|' \
-		-e 's|--WWSCONFIG--|$(WWSCONFIG)|' \
-		-e 's|--prefix--|$(prefix)|' \
-		-e 's|--PIDDIR--|$(PIDDIR)|' \
-		-e 's|--SCRIPTDIR--|$(SCRIPTDIR)|' \
-		-e 's|--BINDIR--|$(BINDIR)|' \
-		-e 's|--SBINDIR--|$(sbindir)|' \
-		-e 's|--LIBDIR--|$(datadir)/sympa/lib|' \
-		-e 's|--LOCALEDIR--|$(LOCALEDIR)|' \
-		-e 's|--DATADIR--|$(datadir)/sympa/etc|' \
-		-e 's|--ETCDIR--|$(ETCDIR)|' \
-		-e 's|--EXPLDIR--|$(EXPLDIR)|' \
-		-e 's|--SPOOLDIR--|$(SPOOLDIR)|' \
-		$(addprefix $(DESTDIR)$(datadir)/sympa/lib/, $(modules_DATA))
-
-installsbin:
+install-data-hook:
 	sed -i \
 		-e 's|--PERL--|$(PERL)|' \
 		-e 's|--USER--|$(USER)|' \
@@ -113,4 +90,5 @@ installsbin:
 		-e 's|--ETCDIR--|$(ETCDIR)|' \
 		-e 's|--EXPLDIR--|$(EXPLDIR)|' \
 		-e 's|--SPOOLDIR--|$(SPOOLDIR)|' \
+		$(addprefix $(DESTDIR)$(datadir)/sympa/lib/, $(modules_DATA)) \
 		$(addprefix $(DESTDIR)$(sbindir)/, $(sbin_SCRIPTS))
