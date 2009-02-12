@@ -198,16 +198,17 @@ AC_ARG_WITH(
 AC_SUBST(LOCALEDIR)
 
 ## directory for Documentation files
-DOCDIR='${prefix}/doc'
 AC_ARG_WITH(
     docdir,
     AS_HELP_STRING(
 	[--with-docdir=DIR],
-	[create documentation files in DIR  (default ${prefix}/doc)]
+	[obsolete option, use --docdir instead]
     ),
-    [DOCDIR="$withval"]
+    [
+	AC_MSG_WARN([obsolete --with-docdir option used])
+	docdir="$withval"
+    ]
 )
-AC_SUBST(DOCDIR)
 
 ## directory for script files
 SCRIPTDIR='${prefix}/bin'
