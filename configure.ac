@@ -78,16 +78,17 @@ AC_ARG_WITH(
 )
 
 ## location of program executables
-LIBEXECDIR='${prefix}/bin'
 AC_ARG_WITH(
     libexecdir,
     AS_HELP_STRING(
 	[--with-libexecdir=DIR],
-	[program executables in DIR (default ${prefix}/bin)]
+	[obsolete option, use --libexecdir instead]
     ),
-    [LIBEXECDIR="$withval"]
+    [
+	AC_MSG_WARN([obsolete --with-libexecdir option used])
+	libexecdir="$withval"
+    ]
 )
-AC_SUBST(LIBEXECDIR)
 
 ## location of Perl modules
 AC_ARG_WITH(
