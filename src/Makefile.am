@@ -84,8 +84,8 @@ installwrapper:
 	-chgrp $(GROUP) $(DESTDIR)$(LIBEXECDIR)/virtualwrapper
 
 installlib:
-	install -d -m 755 $(DESTDIR)$(LIBDIR)
-	install -m 644 $(lib_SRC) $(DESTDIR)$(LIBDIR)
+	install -d -m 755 $(DESTDIR)$(datadir)/sympa/lib
+	install -m 644 $(lib_SRC) $(DESTDIR)$(datadir)/sympa/lib
 	sed -i \
 		-e 's|--USER--|$(USER)|' \
 		-e 's|--GROUP--|$(GROUP)|' \
@@ -99,13 +99,13 @@ installlib:
 		-e 's|--SCRIPTDIR--|$(SCRIPTDIR)|' \
 		-e 's|--BINDIR--|$(BINDIR)|' \
 		-e 's|--SBINDIR--|$(SBINDIR)|' \
-		-e 's|--LIBDIR--|$(LIBDIR)|' \
+		-e 's|--LIBDIR--|$(datadir)/sympa/lib|' \
 		-e 's|--LOCALEDIR--|$(LOCALEDIR)|' \
 		-e 's|--DATADIR--|$(datadir)/sympa/etc|' \
 		-e 's|--ETCDIR--|$(ETCDIR)|' \
 		-e 's|--EXPLDIR--|$(EXPLDIR)|' \
 		-e 's|--SPOOLDIR--|$(SPOOLDIR)|' \
-		$(addprefix $(DESTDIR)$(LIBDIR)/, $(lib_SRC))
+		$(addprefix $(DESTDIR)$(datadir)/sympa/lib/, $(lib_SRC))
 
 installsbin:
 	install -d -m 755 $(DESTDIR)$(SBINDIR)
@@ -124,7 +124,7 @@ installsbin:
 		-e 's|--SCRIPTDIR--|$(SCRIPTDIR)|' \
 		-e 's|--BINDIR--|$(BINDIR)|' \
 		-e 's|--SBINDIR--|$(SBINDIR)|' \
-		-e 's|--LIBDIR--|$(LIBDIR)|' \
+		-e 's|--LIBDIR--|$(datadir)/sympa/lib|' \
 		-e 's|--LOCALEDIR--|$(LOCALEDIR)|' \
 		-e 's|--DATADIR--|$(datadir)/sympa/etc|' \
 		-e 's|--ETCDIR--|$(ETCDIR)|' \

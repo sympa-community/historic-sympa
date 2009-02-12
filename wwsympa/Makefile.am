@@ -43,8 +43,8 @@ installdata:
 	install -m 644 $(data_SRC) $(DESTDIR)$(datadir)/sympa/etc
 
 installlib:
-	install -d -m 755 $(DESTDIR)$(LIBDIR)
-	install -m 644 $(lib_SRC) $(DESTDIR)$(LIBDIR)
+	install -d -m 755 $(DESTDIR)$(datadir)/sympa/lib
+	install -m 644 $(lib_SRC) $(DESTDIR)$(datadir)/sympa/lib
 	sed -i \
 		-e 's|--USER--|$(USER)|' \
 		-e 's|--GROUP--|$(GROUP)|' \
@@ -58,16 +58,16 @@ installlib:
 		-e 's|--SCRIPTDIR--|$(SCRIPTDIR)|' \
 		-e 's|--BINDIR--|$(BINDIR)|' \
 		-e 's|--SBINDIR--|$(SBINDIR)|' \
-		-e 's|--LIBDIR--|$(LIBDIR)|' \
+		-e 's|--LIBDIR--|$(datadir)/sympa/lib|' \
 		-e 's|--LOCALEDIR--|$(LOCALEDIR)|' \
 		-e 's|--DATADIR--|$(datadir)/sympa/etc|' \
 		-e 's|--ETCDIR--|$(ETCDIR)|' \
 		-e 's|--EXPLDIR--|$(EXPLDIR)|' \
 		-e 's|--SPOOLDIR--|$(SPOOLDIR)|' \
-		$(addprefix $(DESTDIR)$(LIBDIR)/, $(lib_SRC))
+		$(addprefix $(DESTDIR)$(datadir)/sympa/lib/, $(lib_SRC))
 
-	install -d -m 755 $(DESTDIR)$(LIBDIR)/Marc
-	install -m 644 Marc/Search.pm $(DESTDIR)$(LIBDIR)/Marc
+	install -d -m 755 $(DESTDIR)$(datadir)/sympa/lib/Marc
+	install -m 644 Marc/Search.pm $(DESTDIR)$(datadir)/sympa/lib/Marc
 
 installicons:
 	install -d -m 755 $(DESTDIR)$(prefix)/static_content
@@ -98,7 +98,7 @@ installsbin:
 		-e 's|--SCRIPTDIR--|$(SCRIPTDIR)|' \
 		-e 's|--BINDIR--|$(BINDIR)|' \
 		-e 's|--SBINDIR--|$(SBINDIR)|' \
-		-e 's|--LIBDIR--|$(LIBDIR)|' \
+		-e 's|--LIBDIR--|$(datadir)/sympa/lib|' \
 		-e 's|--LOCALEDIR--|$(LOCALEDIR)|' \
 		-e 's|--DATADIR--|$(datadir)/sympa/etc|' \
 		-e 's|--ETCDIR--|$(ETCDIR)|' \
@@ -124,7 +124,7 @@ installperlcgi:
 		-e 's|--SCRIPTDIR--|$(SCRIPTDIR)|' \
 		-e 's|--BINDIR--|$(BINDIR)|' \
 		-e 's|--SBINDIR--|$(SBINDIR)|' \
-		-e 's|--LIBDIR--|$(LIBDIR)|' \
+		-e 's|--LIBDIR--|$(datadir)/sympa/lib|' \
 		-e 's|--LOCALEDIR--|$(LOCALEDIR)|' \
 		-e 's|--DATADIR--|$(datadir)/sympa/etc|' \
 		-e 's|--ETCDIR--|$(ETCDIR)|' \

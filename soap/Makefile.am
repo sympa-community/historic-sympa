@@ -40,8 +40,8 @@ installdata:
 	install -m 644 $(data_SRC) $(DESTDIR)$(datadir)/sympa/etc
 
 installlib:
-	install -d -m 755 $(DESTDIR)$(LIBDIR)
-	install -m 644 $(lib_SRC) $(DESTDIR)$(LIBDIR)
+	install -d -m 755 $(DESTDIR)$(datadir)/sympa/lib
+	install -m 644 $(lib_SRC) $(DESTDIR)$(datadir)/sympa/lib
 	sed -i \
 		-e 's|--USER--|$(USER)|' \
 		-e 's|--GROUP--|$(GROUP)|' \
@@ -55,13 +55,13 @@ installlib:
 		-e 's|--SCRIPTDIR--|$(SCRIPTDIR)|' \
 		-e 's|--BINDIR--|$(BINDIR)|' \
 		-e 's|--SBINDIR--|$(SBINDIR)|' \
-		-e 's|--LIBDIR--|$(LIBDIR)|' \
+		-e 's|--LIBDIR--|$(datadir)/sympa/lib|' \
 		-e 's|--LOCALEDIR--|$(LOCALEDIR)|' \
 		-e 's|--DATADIR--|$(datadir)/sympa/etc|' \
 		-e 's|--ETCDIR--|$(ETCDIR)|' \
 		-e 's|--EXPLDIR--|$(EXPLDIR)|' \
 		-e 's|--SPOOLDIR--|$(SPOOLDIR)|' \
-		$(addprefix $(DESTDIR)$(LIBDIR)/, $(lib_SRC))
+		$(addprefix $(DESTDIR)$(datadir)/sympa/lib/, $(lib_SRC))
 
 installwrappercgi:
 	install -d -m 755 $(DESTDIR)$(CGIDIR)
@@ -86,7 +86,7 @@ installscript:
 		-e 's|--SCRIPTDIR--|$(SCRIPTDIR)|' \
 		-e 's|--BINDIR--|$(BINDIR)|' \
 		-e 's|--SBINDIR--|$(SBINDIR)|' \
-		-e 's|--LIBDIR--|$(LIBDIR)|' \
+		-e 's|--LIBDIR--|$(datadir)/sympa/lib|' \
 		-e 's|--LOCALEDIR--|$(LOCALEDIR)|' \
 		-e 's|--DATADIR--|$(datadir)/sympa/etc|' \
 		-e 's|--ETCDIR--|$(ETCDIR)|' \
@@ -110,7 +110,7 @@ installperlcgi:
 		-e 's|--SCRIPTDIR--|$(SCRIPTDIR)|' \
 		-e 's|--BINDIR--|$(BINDIR)|' \
 		-e 's|--SBINDIR--|$(SBINDIR)|' \
-		-e 's|--LIBDIR--|$(LIBDIR)|' \
+		-e 's|--LIBDIR--|$(datadir)/sympa/lib|' \
 		-e 's|--LOCALEDIR--|$(LOCALEDIR)|' \
 		-e 's|--DATADIR--|$(datadir)/sympa/etc|' \
 		-e 's|--ETCDIR--|$(ETCDIR)|' \
