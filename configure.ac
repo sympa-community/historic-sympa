@@ -65,16 +65,17 @@ AC_ARG_WITH(
 AC_SUBST(BINDIR)
 
 ## location of system admin executables
-SBINDIR='${prefix}/bin'
 AC_ARG_WITH(
     sbindir,
     AS_HELP_STRING(
 	[--with-sbindir=DIR],
-	[system admin executables in DIR (default ${prefix}/bin)]
+	[obsolete option, use --sbindir instead]
     ),
-    [SBINDIR="$withval"]
+    [
+	AC_MSG_WARN([obsolete --with-sbindir option used])
+	sbindir="$withval"
+    ]
 )
-AC_SUBST(SBINDIR)
 
 ## location of program executables
 LIBEXECDIR='${prefix}/bin'
