@@ -223,16 +223,16 @@ AC_ARG_WITH(
 AC_SUBST(SCRIPTDIR)
 
 ## directory for sample files
-SAMPLEDIR='${prefix}/sample'
 AC_ARG_WITH(
     sampledir,
     AS_HELP_STRING(
 	[--with-sampledir=DIR],
-	[create sample files in DIR  (default ${prefix}/sample)]
+	[obsolete option, samples are now installed with documentation]
     ),
-    [SAMPLEDIR="$withval"]
+    [
+	AC_MSG_WARN([obsolete --with-sampledir option used])
+    ]
 )
-AC_SUBST(SAMPLEDIR)
 
 ## directory for sample files
 SPOOLDIR='${prefix}/spool'
