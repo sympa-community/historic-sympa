@@ -53,16 +53,14 @@ AC_ARG_WITH(
 AC_SUBST(CGIDIR)
 
 ## location of user executables
-BINDIR='${prefix}/bin'
 AC_ARG_WITH(
     bindir,
     AS_HELP_STRING(
 	[--with-bindir=DIR],
-	[user executables in DIR (default ${prefix}/bin). queue and bouncequeue programs will be installed in this directory. If sendmail is configured to use smrsh (check the mailer prog definition in your sendmail.cf), this should point to /etc/smrsh. This is probably the case if you are using Linux]
+	[obsolete option, those binaries are now installed in libexecdir]
     ),
-    [BINDIR="$withval"]
+    [AC_MSG_WARN([obsolete --with-sampledir option used])]
 )
-AC_SUBST(BINDIR)
 
 ## location of system admin executables
 AC_ARG_WITH(
