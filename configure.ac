@@ -391,11 +391,11 @@ AC_CONFIG_FILES([
     Makefile
     src/Makefile
     src/etc/Makefile
-    src/etc/sample/Makefile
     src/etc/script/Makefile
     soap/Makefile
     doc/Makefile
     doc/man8/Makefile
+    doc/sample/Makefile
     web_tt2/Makefile
     wwsympa/Makefile
     mail_tt2/Makefile
