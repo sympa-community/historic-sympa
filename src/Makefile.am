@@ -21,9 +21,18 @@
 
 SUBDIRS = etc
 
-CDEFS = -DCONFIG=\"$(CONFIG)\"
+AM_CPPFLAGS = -DCONFIG=\"$(CONFIG)\"
 
 sbin_SCRIPTS = sympa.pl alias_manager.pl task_manager.pl sympa_wizard.pl
+sbin_PROGRAMS = aliaswrapper virtualwrapper
+aliaswrapper_SOURCES = aliaswrapper.c
+aliaswrapper_CPPFLAGS = $(AM_CPPFLAGS) \
+			-DNEWALIASES=\"${NEWALIASES}\" \
+			-DNEWALIASES_ARG=\"${NEWALIASES_ARG}\"
+virtualwrapper_SOURCES = virtualwrapper.c
+virtualwrapper_CPPFLAGS = $(AM_CPPFLAGS) \
+			  -DPOSTMAP=\"${POSTMAP}\" \
+			  -DPOSTMAP_ARG=\"${POSTMAP_ARG}\"
 
 bin_SRC	= queue bouncequeue familyqueue
 
@@ -34,11 +43,9 @@ modules_DATA = admin.pm Archive.pm Commands.pm Conf.pm CAS.pm Config_XML.pm \
 	       SQLSource.pm LDAPSource.pm Scenario.pm PlainDigest.pm \
 	       tools.pl tt2.pl parser.pl report.pm time_utils.pl
 
-libexec_SRC = aliaswrapper virtualwrapper
+oldall:	queue bouncequeue familyqueue
 
-all:	queue bouncequeue familyqueue aliaswrapper virtualwrapper
-
-clean:
+oldclean:
 	@if [ -f ./queue ]; then \
 		rm queue ; \
 	fi	
@@ -47,12 +54,6 @@ clean:
 	fi
 	@if [ -f ./familyqueue ]; then \
 		rm familyqueue ; \
-	fi
-	@if [ -f ./aliaswrapper ]; then \
-		rm aliaswrapper ; \
-	fi
-	@if [ -f ./virtualwrapper ]; then \
-		rm virtualwrapper ; \
 	fi
 
 install-exec-local: installqueue installwrapper
@@ -137,14 +138,6 @@ bouncequeue: bouncequeue.c Makefile ../Makefile
 
 familyqueue: familyqueue.c Makefile ../Makefile
 	$(CC) $(CFLAGS) $(CDEFS) -o familyqueue familyqueue.c
-
-aliaswrapper: aliaswrapper.c Makefile ../Makefile
-	$(CC) $(CFLAGS) $(CDEFS) -DNEWALIASES=\"${NEWALIASES}\" \
-		-DNEWALIASES_ARG=\"${NEWALIASES_ARG}\" -o aliaswrapper aliaswrapper.c
-
-virtualwrapper: virtualwrapper.c Makefile ../Makefile
-	$(CC) $(CFLAGS) $(CDEFS) -DPOSTMAP=\"${POSTMAP}\" \
-		-DPOSTMAP_ARG=\"${POSTMAP_ARG}\" -o virtualwrapper virtualwrapper.c
 
 ## Dépendances
 queue:		queue.c Makefile
