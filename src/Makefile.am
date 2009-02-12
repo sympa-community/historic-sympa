@@ -47,34 +47,28 @@ modules_DATA = admin.pm Archive.pm Commands.pm Conf.pm CAS.pm Config_XML.pm \
 	       SQLSource.pm LDAPSource.pm Scenario.pm PlainDigest.pm \
 	       tools.pl tt2.pl parser.pl report.pm time_utils.pl
 
-install-exec-local: installqueue installwrapper
 install-data-hook: installlib installsbin
 
-installqueue:
-	@echo "Installing Queue binary..."
-	install -d -m 755 $(DESTDIR)$(BINDIR)
-	install -m 4755 queue $(DESTDIR)$(BINDIR)
-	-chown $(USER) $(DESTDIR)$(BINDIR)/queue
-	-chgrp $(GROUP) $(DESTDIR)$(BINDIR)/queue
-	@echo "Installing BounceQueue binary..."
-	install -m 4755 bouncequeue $(DESTDIR)$(BINDIR)
-	-chown $(USER) $(DESTDIR)$(BINDIR)/bouncequeue
-	-chgrp $(GROUP) $(DESTDIR)$(BINDIR)/bouncequeue
-	@echo "Installing FamilyQueue binary..."
-	install -m 4755 familyqueue $(DESTDIR)$(BINDIR)
-	-chown $(USER) $(DESTDIR)$(BINDIR)/familyqueue
-	-chgrp $(GROUP) $(DESTDIR)$(BINDIR)/familyqueue
+install-exec-hook:
+	chmod 4755 $(DESTDIR)$(libexecdir)/queue
+	-chown $(USER) $(DESTDIR)$(libexecdir)/queue
+	-chgrp $(GROUP) $(DESTDIR)$(libexecdir)/queue
 
-installwrapper:
-	@echo "Installing AliasWrapper binary..."
-	install -d -m 755 $(DESTDIR)$(LIBEXECDIR)
-	install -m 4750 aliaswrapper $(DESTDIR)$(LIBEXECDIR)
-	-chown root $(DESTDIR)$(LIBEXECDIR)/aliaswrapper
-	-chgrp $(GROUP) $(DESTDIR)$(LIBEXECDIR)/aliaswrapper
-	@echo "Installing VirtualWrapper binary..."
-	install -m 4750 virtualwrapper $(DESTDIR)$(LIBEXECDIR)
-	-chown root $(DESTDIR)$(LIBEXECDIR)/virtualwrapper
-	-chgrp $(GROUP) $(DESTDIR)$(LIBEXECDIR)/virtualwrapper
+	chmod 4755 $(DESTDIR)$(libexecdir)/bouncequeue
+	-chown $(USER) $(DESTDIR)$(libexecdir)/bouncequeue
+	-chgrp $(GROUP) $(DESTDIR)$(libexecdir)/bouncequeue
+
+	chmod 4755 $(DESTDIR)$(libexecdir)/familyqueue
+	-chown $(USER) $(DESTDIR)$(libexecdir)/familyqueue
+	-chgrp $(GROUP) $(DESTDIR)$(libexecdir)/familyqueue
+
+	chmod 4750 aliaswrapper $(DESTDIR)$(sbindir)/aliaswrapper
+	-chown root $(DESTDIR)$(sbindir)/aliaswrapper
+	-chgrp $(GROUP) $(DESTDIR)$(sbindir)/aliaswrapper
+
+	chmod 4750 $(DESTDIR)$(sbindir)/virtualwrapper
+	-chown root $(DESTDIR)$(sbindir)/virtualwrapper
+	-chgrp $(GROUP) $(DESTDIR)$(sbindir)/virtualwrapper
 
 installlib:
 	sed -i \
