@@ -100,8 +100,8 @@ installsrc:
 
 installicons:
 	@echo "Installing icons..."
-	@echo $(DIR)/static_content/icons
-	cp icons/*.png $(DIR)/static_content/icons
+	@echo $(DESTDIR)$(DIR)/static_content/icons
+	cp icons/*.png $(DESTDIR)$(DIR)/static_content/icons
 
 installwrapper:
 	@echo "Installing wwsympa-wrapper binary..."
