@@ -19,26 +19,32 @@
 # along with this program; if not, write to the Free Software
 # Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
 
-sbin_SCRIPTS = bounced.pl archived.pl
-cgi_SCRIPTS  = wwsympa.fcgi wwsympa_sudo_wrapper.pl
-cgi_PROGRAMS = wwsympa-wrapper.fcgi
-wwsympa_wrapper_fcgi_SOURCES = wwsympa-wrapper.fcgi.c
-wwsympa_wrapper_fcgi_CPPFLAGS = -DWWSYMPA=\"$(cgidir)/wwsympa.fcgi\"
-
-modulesdir = $(pkgdatadir)/lib
-nobase_modules_DATA = wwslib.pm cookielib.pm bounce-lib.pl Marc.pm Auth.pm \
-		      SharedDocument.pm SympaSession.pm Marc/Search.pm
-
+sbin_SRC	= bounced.pl archived.pl
+perl_cgi_SRC	= wwsympa.fcgi wwsympa_sudo_wrapper.pl
+wrapper_cgi_SRC	= wwsympa-wrapper.fcgi
+lib_SRC		= wwslib.pm cookielib.pm bounce-lib.pl Marc.pm Auth.pm \
+		  SharedDocument.pm SympaSession.pm
 data_SRC	= mime.types 
 
-install-data-hook: installperlcgi installdata installlib installsbin \
+all:	wwsympa-wrapper.fcgi
+
+clean: 
+	@if [ -f ./wwsympa-wrapper.fcgi ]; then \
+		rm -f wwsympa-wrapper.fcgi ; \
+	fi
+
+
+install-exec-local: installwrappercgi
+install-data-local: installperlcgi installdata installlib installsbin \
 		    installicons
 
 installdata:
-	install -d -m 755 $(DESTDIR)$(datadir)/sympa/etc
-	install -m 644 $(data_SRC) $(DESTDIR)$(datadir)/sympa/etc
+	install -d -m 755 $(DESTDIR)$(DATADIR)
+	install -m 644 $(data_SRC) $(DESTDIR)$(DATADIR)
 
 installlib:
+	install -d -m 755 $(DESTDIR)$(LIBDIR)
+	install -m 644 $(lib_SRC) $(DESTDIR)$(LIBDIR)
 	sed -i \
 		-e 's|--USER--|$(USER)|' \
 		-e 's|--GROUP--|$(GROUP)|' \
@@ -50,27 +56,33 @@ installlib:
 		-e 's|--prefix--|$(prefix)|' \
 		-e 's|--PIDDIR--|$(PIDDIR)|' \
 		-e 's|--SCRIPTDIR--|$(SCRIPTDIR)|' \
-		-e 's|--BINDIR--|$(libexecdir)|' \
-		-e 's|--SBINDIR--|$(sbindir)|' \
-		-e 's|--LIBDIR--|$(datadir)/sympa/lib|' \
+		-e 's|--BINDIR--|$(BINDIR)|' \
+		-e 's|--SBINDIR--|$(SBINDIR)|' \
+		-e 's|--LIBDIR--|$(LIBDIR)|' \
 		-e 's|--LOCALEDIR--|$(LOCALEDIR)|' \
-		-e 's|--DATADIR--|$(datadir)/sympa/etc|' \
+		-e 's|--DATADIR--|$(DATADIR)|' \
 		-e 's|--ETCDIR--|$(ETCDIR)|' \
 		-e 's|--EXPLDIR--|$(EXPLDIR)|' \
 		-e 's|--SPOOLDIR--|$(SPOOLDIR)|' \
-		$(addprefix $(DESTDIR)$(datadir)/sympa/lib/, $(nobase_modules_DATA))
+		$(addprefix $(DESTDIR)$(LIBDIR)/, $(lib_SRC))
+
+	install -d -m 755 $(DESTDIR)$(LIBDIR)/Marc
+	install -m 644 Marc/Search.pm $(DESTDIR)$(LIBDIR)/Marc
 
 installicons:
 	install -d -m 755 $(DESTDIR)$(prefix)/static_content
 	install -d -m 755 $(DESTDIR)$(prefix)/static_content/icons
 	install -m 644 icons/*.png $(DESTDIR)$(prefix)/static_content/icons
 
-install-exec-hook:
-	chmod 6755 $(DESTDIR)$(cgidir)/wwsympa-wrapper.fcgi
-	-chown $(USER) $(DESTDIR)$(cgidir)/wwsympa-wrapper.fcgi
-	-chgrp $(GROUP) $(DESTDIR)$(cgidir)/wwsympa-wrapper.fcgi
+installwrappercgi:
+	install -d -m 755 $(DESTDIR)$(CGIDIR)
+	install -m 6755 $(wrapper_cgi_SRC) $(DESTDIR)$(CGIDIR)
+	-chown $(USER) $(DESTDIR)$(CGIDIR)/wwsympa-wrapper.fcgi
+	-chgrp $(GROUP) $(DESTDIR)$(CGIDIR)/wwsympa-wrapper.fcgi
 
 installsbin:
+	install -d -m 755 $(DESTDIR)$(SBINDIR)
+	install -m 755 $(sbin_SRC) $(DESTDIR)$(SBINDIR)
 	sed -i \
 		-e 's|--PERL--|$(PERL)|' \
 		-e 's|--USER--|$(USER)|' \
@@ -83,17 +95,19 @@ installsbin:
 		-e 's|--prefix--|$(prefix)|' \
 		-e 's|--PIDDIR--|$(PIDDIR)|' \
 		-e 's|--SCRIPTDIR--|$(SCRIPTDIR)|' \
-		-e 's|--BINDIR--|$(libexecdir)|' \
-		-e 's|--SBINDIR--|$(sbindir)|' \
-		-e 's|--LIBDIR--|$(datadir)/sympa/lib|' \
+		-e 's|--BINDIR--|$(BINDIR)|' \
+		-e 's|--SBINDIR--|$(SBINDIR)|' \
+		-e 's|--LIBDIR--|$(LIBDIR)|' \
 		-e 's|--LOCALEDIR--|$(LOCALEDIR)|' \
-		-e 's|--DATADIR--|$(datadir)/sympa/etc|' \
+		-e 's|--DATADIR--|$(DATADIR)|' \
 		-e 's|--ETCDIR--|$(ETCDIR)|' \
 		-e 's|--EXPLDIR--|$(EXPLDIR)|' \
 		-e 's|--SPOOLDIR--|$(SPOOLDIR)|' \
-		$(addprefix $(DESTDIR)$(sbindir)/, $(sbin_SCRIPTS))
+		$(addprefix $(DESTDIR)$(SBINDIR)/, $(sbin_SRC))
 
 installperlcgi:
+	install -d -m 755 $(DESTDIR)$(CGIDIR)
+	install -m 755 $(perl_cgi_SRC) $(DESTDIR)$(CGIDIR)
 	sed -i \
 		-e 's|--PERLOPT--|-U|' \
 		-e 's|--PERL--|$(PERL)|' \
@@ -107,12 +121,17 @@ installperlcgi:
 		-e 's|--prefix--|$(prefix)|' \
 		-e 's|--PIDDIR--|$(PIDDIR)|' \
 		-e 's|--SCRIPTDIR--|$(SCRIPTDIR)|' \
-		-e 's|--BINDIR--|$(libexecdir)|' \
-		-e 's|--SBINDIR--|$(sbindir)|' \
-		-e 's|--LIBDIR--|$(datadir)/sympa/lib|' \
+		-e 's|--BINDIR--|$(BINDIR)|' \
+		-e 's|--SBINDIR--|$(SBINDIR)|' \
+		-e 's|--LIBDIR--|$(LIBDIR)|' \
 		-e 's|--LOCALEDIR--|$(LOCALEDIR)|' \
-		-e 's|--DATADIR--|$(datadir)/sympa/etc|' \
+		-e 's|--DATADIR--|$(DATADIR)|' \
 		-e 's|--ETCDIR--|$(ETCDIR)|' \
 		-e 's|--EXPLDIR--|$(EXPLDIR)|' \
 		-e 's|--SPOOLDIR--|$(SPOOLDIR)|' \
-		$(addprefix $(DESTDIR)$(cgidir)/, $(cgi_SCRIPTS))
+		$(addprefix $(DESTDIR)$(CGIDIR)/, $(perl_cgi_SRC))
+
+wwsympa-wrapper.fcgi: wwsympa-wrapper.fcgi.c Makefile
+	$(CC) $(CFLAGS) -DWWSYMPA=\"$(CGIDIR)/wwsympa.fcgi\" \
+		-o wwsympa-wrapper.fcgi \
+		wwsympa-wrapper.fcgi.c
