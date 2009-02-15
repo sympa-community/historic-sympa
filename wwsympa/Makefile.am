@@ -39,12 +39,12 @@ install-data-local: installperlcgi installdata installlib installsbin \
 		    installicons
 
 installdata:
-	install -d -m 755 $(DESTDIR)$(DATADIR)
-	install -m 644 $(data_SRC) $(DESTDIR)$(DATADIR)
+	install -d -m 755 $(DESTDIR)$(datadir)/sympa/etc
+	install -m 644 $(data_SRC) $(DESTDIR)$(datadir)/sympa/etc
 
 installlib:
-	install -d -m 755 $(DESTDIR)$(LIBDIR)
-	install -m 644 $(lib_SRC) $(DESTDIR)$(LIBDIR)
+	install -d -m 755 $(DESTDIR)$(datadir)/sympa/lib
+	install -m 644 $(lib_SRC) $(DESTDIR)$(datadir)/sympa/lib
 	sed -i \
 		-e 's|--USER--|$(USER)|' \
 		-e 's|--GROUP--|$(GROUP)|' \
@@ -56,18 +56,18 @@ installlib:
 		-e 's|--prefix--|$(prefix)|' \
 		-e 's|--PIDDIR--|$(PIDDIR)|' \
 		-e 's|--SCRIPTDIR--|$(SCRIPTDIR)|' \
-		-e 's|--BINDIR--|$(BINDIR)|' \
-		-e 's|--SBINDIR--|$(SBINDIR)|' \
-		-e 's|--LIBDIR--|$(LIBDIR)|' \
+		-e 's|--BINDIR--|$(bindir)|' \
+		-e 's|--SBINDIR--|$(sbindir)|' \
+		-e 's|--LIBDIR--|$(datadir)/sympa/lib|' \
 		-e 's|--LOCALEDIR--|$(LOCALEDIR)|' \
-		-e 's|--DATADIR--|$(DATADIR)|' \
+		-e 's|--DATADIR--|$(datadir)/sympa/etc|' \
 		-e 's|--ETCDIR--|$(ETCDIR)|' \
 		-e 's|--EXPLDIR--|$(EXPLDIR)|' \
 		-e 's|--SPOOLDIR--|$(SPOOLDIR)|' \
-		$(addprefix $(DESTDIR)$(LIBDIR)/, $(lib_SRC))
+		$(addprefix $(DESTDIR)$(datadir)/sympa/lib/, $(lib_SRC))
 
-	install -d -m 755 $(DESTDIR)$(LIBDIR)/Marc
-	install -m 644 Marc/Search.pm $(DESTDIR)$(LIBDIR)/Marc
+	install -d -m 755 $(DESTDIR)$(datadir)/sympa/lib/Marc
+	install -m 644 Marc/Search.pm $(DESTDIR)$(datadir)/sympa/lib/Marc
 
 installicons:
 	install -d -m 755 $(DESTDIR)$(prefix)/static_content
@@ -81,8 +81,8 @@ installwrappercgi:
 	-chgrp $(GROUP) $(DESTDIR)$(CGIDIR)/wwsympa-wrapper.fcgi
 
 installsbin:
-	install -d -m 755 $(DESTDIR)$(SBINDIR)
-	install -m 755 $(sbin_SRC) $(DESTDIR)$(SBINDIR)
+	install -d -m 755 $(DESTDIR)$(sbindir)
+	install -m 755 $(sbin_SRC) $(DESTDIR)$(sbindir)
 	sed -i \
 		-e 's|--PERL--|$(PERL)|' \
 		-e 's|--USER--|$(USER)|' \
@@ -95,15 +95,15 @@ installsbin:
 		-e 's|--prefix--|$(prefix)|' \
 		-e 's|--PIDDIR--|$(PIDDIR)|' \
 		-e 's|--SCRIPTDIR--|$(SCRIPTDIR)|' \
-		-e 's|--BINDIR--|$(BINDIR)|' \
-		-e 's|--SBINDIR--|$(SBINDIR)|' \
-		-e 's|--LIBDIR--|$(LIBDIR)|' \
+		-e 's|--BINDIR--|$(bindir)|' \
+		-e 's|--SBINDIR--|$(sbindir)|' \
+		-e 's|--LIBDIR--|$(datadir)/sympa/lib|' \
 		-e 's|--LOCALEDIR--|$(LOCALEDIR)|' \
-		-e 's|--DATADIR--|$(DATADIR)|' \
+		-e 's|--DATADIR--|$(datadir)/sympa/etc|' \
 		-e 's|--ETCDIR--|$(ETCDIR)|' \
 		-e 's|--EXPLDIR--|$(EXPLDIR)|' \
 		-e 's|--SPOOLDIR--|$(SPOOLDIR)|' \
-		$(addprefix $(DESTDIR)$(SBINDIR)/, $(sbin_SRC))
+		$(addprefix $(DESTDIR)$(sbindir)/, $(sbin_SRC))
 
 installperlcgi:
 	install -d -m 755 $(DESTDIR)$(CGIDIR)
@@ -121,11 +121,11 @@ installperlcgi:
 		-e 's|--prefix--|$(prefix)|' \
 		-e 's|--PIDDIR--|$(PIDDIR)|' \
 		-e 's|--SCRIPTDIR--|$(SCRIPTDIR)|' \
-		-e 's|--BINDIR--|$(BINDIR)|' \
-		-e 's|--SBINDIR--|$(SBINDIR)|' \
-		-e 's|--LIBDIR--|$(LIBDIR)|' \
+		-e 's|--BINDIR--|$(bindir)|' \
+		-e 's|--SBINDIR--|$(sbindir)|' \
+		-e 's|--LIBDIR--|$(datadir)/sympa/lib|' \
 		-e 's|--LOCALEDIR--|$(LOCALEDIR)|' \
-		-e 's|--DATADIR--|$(DATADIR)|' \
+		-e 's|--DATADIR--|$(datadir)/sympa/etc|' \
 		-e 's|--ETCDIR--|$(ETCDIR)|' \
 		-e 's|--EXPLDIR--|$(EXPLDIR)|' \
 		-e 's|--SPOOLDIR--|$(SPOOLDIR)|' \
