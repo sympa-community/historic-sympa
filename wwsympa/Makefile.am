@@ -19,9 +19,11 @@
 # along with this program; if not, write to the Free Software
 # Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
 
-sbin_SCRIPTS	= bounced.pl archived.pl
-perl_cgi_SRC	= wwsympa.fcgi wwsympa_sudo_wrapper.pl
-wrapper_cgi_SRC	= wwsympa-wrapper.fcgi
+sbin_SCRIPTS = bounced.pl archived.pl
+cgi_SCRIPTS  = wwsympa.fcgi wwsympa_sudo_wrapper.pl
+cgi_PROGRAMS = wwsympa-wrapper.fcgi
+wwsympa_wrapper_fcgi_SOURCES = wwsympa-wrapper.fcgi.c
+wwsympa_wrapper_fcgi_CPPFLAGS = -DWWSYMPA=\"$(cgidir)/wwsympa.fcgi\"
 
 modulesdir = $(pkgdatadir)/lib
 nobase_modules_DATA = wwslib.pm cookielib.pm bounce-lib.pl Marc.pm Auth.pm \
@@ -29,15 +31,6 @@ nobase_modules_DATA = wwslib.pm cookielib.pm bounce-lib.pl Marc.pm Auth.pm \
 
 data_SRC	= mime.types 
 
-all:	wwsympa-wrapper.fcgi
-
-clean: 
-	@if [ -f ./wwsympa-wrapper.fcgi ]; then \
-		rm -f wwsympa-wrapper.fcgi ; \
-	fi
-
-
-install-exec-local: installwrappercgi
 install-data-hook: installperlcgi installdata installlib installsbin \
 		    installicons
 
@@ -72,12 +65,10 @@ installicons:
 	install -d -m 755 $(DESTDIR)$(prefix)/static_content/icons
 	install -m 644 icons/*.png $(DESTDIR)$(prefix)/static_content/icons
 
-installwrappercgi:
-	install -d -m 755 $(DESTDIR)$(CGIDIR)
-	install -m 6755 $(wrapper_cgi_SRC) $(DESTDIR)$(CGIDIR)
-	-chown $(USER) $(DESTDIR)$(CGIDIR)/$(wrapper_cgi_SRC)
-	-chgrp $(GROUP) $(DESTDIR)$(CGIDIR)/$(wrapper_cgi_SRC)
-	-chmod 6755 $(DESTDIR)$(CGIDIR)/$(wrapper_cgi_SRC)
+install-exec-hook:
+	chmod 6755 $(DESTDIR)$(cgidir)/wwsympa-wrapper.fcgi
+	-chown $(USER) $(DESTDIR)$(cgidir)/wwsympa-wrapper.fcgi
+	-chgrp $(GROUP) $(DESTDIR)$(cgidir)/wwsympa-wrapper.fcgi
 
 installsbin:
 	sed -i \
@@ -103,8 +94,6 @@ installsbin:
 		$(addprefix $(DESTDIR)$(sbindir)/, $(sbin_SCRIPTS))
 
 installperlcgi:
-	install -d -m 755 $(DESTDIR)$(CGIDIR)
-	install -m 755 $(perl_cgi_SRC) $(DESTDIR)$(CGIDIR)
 	sed -i \
 		-e 's|--PERLOPT--|-U|' \
 		-e 's|--PERL--|$(PERL)|' \
@@ -126,9 +115,4 @@ installperlcgi:
 		-e 's|--ETCDIR--|$(ETCDIR)|' \
 		-e 's|--EXPLDIR--|$(EXPLDIR)|' \
 		-e 's|--SPOOLDIR--|$(SPOOLDIR)|' \
-		$(addprefix $(DESTDIR)$(CGIDIR)/, $(perl_cgi_SRC))
-
-wwsympa-wrapper.fcgi: wwsympa-wrapper.fcgi.c Makefile
-	$(CC) $(CFLAGS) -DWWSYMPA=\"$(CGIDIR)/wwsympa.fcgi\" \
-		-o wwsympa-wrapper.fcgi \
-		wwsympa-wrapper.fcgi.c
+		$(addprefix $(DESTDIR)$(cgidir)/, $(cgi_SCRIPTS))
