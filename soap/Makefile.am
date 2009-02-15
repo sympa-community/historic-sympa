@@ -19,20 +19,21 @@
 # along with this program; if not, write to the Free Software
 # Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
 
-perl_cgi_SRC	= sympa_soap_server.fcgi
-wrapper_cgi_SRC	= sympa_soap_server-wrapper.fcgi
+execcgi_SCRIPTS	 = sympa_soap_server.fcgi
+execcgi_PROGRAMS = sympa_soap_server-wrapper.fcgi
+sympa_soap_server_wrapper_fcgi_SOURCES = sympa_soap_server-wrapper.fcgi.c
+sympa_soap_server_wrapper_fcgi_CPPFLAGS = \
+			  -DSYMPASOAP=\"$(execcgidir)/sympa_soap_server.fcgi\"
+
 script_SRC	= sympa_soap_client.pl
 lib_SRC		= sympasoap.pm SympaTransport.pm
 data_SRC	= sympa.wsdl
 
-all:	sympa_soap_server-wrapper.fcgi
+install-exec-hook:
+	chmod 6755 $(DESTDIR)$(execcgidir)/sympa_soap_server-wrapper.fcgi
+	-chown $(USER) $(DESTDIR)$(execcgidir)/sympa_soap_server-wrapper.fcgi
+	-chgrp $(GROUP) $(DESTDIR)$(execcgidir)/sympa_soap_server-wrapper.fcgi
 
-clean: 
-	@if [ -f ./sympa_soap_server-wrapper.fcgi ]; then \
-		rm -f sympa_soap_server-wrapper.fcgi ; \
-	fi
-
-install-exec-local: installwrappercgi
 install-data-local: installperlcgi installdata installlib installscript
 
 installdata:
@@ -63,13 +64,6 @@ installlib:
 		-e 's|--SPOOLDIR--|$(SPOOLDIR)|' \
 		$(addprefix $(DESTDIR)$(datadir)/sympa/lib/, $(lib_SRC))
 
-installwrappercgi:
-	install -d -m 755 $(DESTDIR)$(CGIDIR)
-	install -m 6755 $(wrapper_cgi_SRC) $(DESTDIR)$(CGIDIR)
-	-chown $(USER) $(DESTDIR)$(CGIDIR)/$(wrapper_cgi_SRC)
-	-chgrp $(GROUP) $(DESTDIR)$(CGIDIR)/$(wrapper_cgi_SRC)
-	-chmod 6755 $(DESTDIR)$(CGIDIR)/$(wrapper_cgi_SRC)
-
 installscript:
 	install -d -m 755 $(DESTDIR)$(datadir)/sympa/bin
 	install -m 755 $(script_SRC) $(DESTDIR)$(datadir)/sympa/bin
@@ -95,8 +89,6 @@ installscript:
 		$(addprefix $(DESTDIR)$(datadir)/sympa/bin/, $(script_SRC))
 
 installperlcgi:
-	install -d -m 755 $(DESTDIR)$(CGIDIR)
-	install -m 755 $(perl_cgi_SRC) $(DESTDIR)$(CGIDIR)
 	sed -i \
 		-e 's|--USER--|$(USER)|' \
 		-e 's|--GROUP--|$(GROUP)|' \
@@ -116,9 +108,4 @@ installperlcgi:
 		-e 's|--ETCDIR--|$(ETCDIR)|' \
 		-e 's|--EXPLDIR--|$(EXPLDIR)|' \
 		-e 's|--SPOOLDIR--|$(SPOOLDIR)|' \
-		$(addprefix $(DESTDIR)$(CGIDIR)/, $(perl_cgi_SRC))
-
-sympa_soap_server-wrapper.fcgi: sympa_soap_server-wrapper.fcgi.c Makefile
-	$(CC) $(CFLAGS) -DSYMPASOAP=\"$(CGIDIR)/sympa_soap_server.fcgi\" \
-		-o sympa_soap_server-wrapper.fcgi \
-		sympa_soap_server-wrapper.fcgi.c
+		$(addprefix $(DESTDIR)$(execcgidir)/, $(execcgi_SCRIPTS))

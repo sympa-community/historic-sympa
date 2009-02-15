@@ -20,21 +20,21 @@
 # Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
 
 sbin_SRC	= bounced.pl archived.pl
-perl_cgi_SRC	= wwsympa.fcgi wwsympa_sudo_wrapper.pl
-wrapper_cgi_SRC	= wwsympa-wrapper.fcgi
+
+execcgi_SCRIPTS = wwsympa.fcgi wwsympa_sudo_wrapper.pl
+execcgi_PROGRAMS = wwsympa-wrapper.fcgi
+wwsympa_wrapper_fcgi_SOURCES = wwsympa-wrapper.fcgi.c
+wwsympa_wrapper_fcgi_CPPFLAGS = -DWWSYMPA=\"$(execcgidir)/wwsympa.fcgi\"
+
 lib_SRC		= wwslib.pm cookielib.pm bounce-lib.pl Marc.pm Auth.pm \
 		  SharedDocument.pm SympaSession.pm
 data_SRC	= mime.types 
 
-all:	wwsympa-wrapper.fcgi
+install-exec-hook:
+	chmod 6755 $(DESTDIR)$(execcgidir)/wwsympa-wrapper.fcgi
+	-chown $(USER) $(DESTDIR)$(execcgidir)/wwsympa-wrapper.fcgi
+	-chgrp $(GROUP) $(DESTDIR)$(execcgidir)/wwsympa-wrapper.fcgi
 
-clean: 
-	@if [ -f ./wwsympa-wrapper.fcgi ]; then \
-		rm -f wwsympa-wrapper.fcgi ; \
-	fi
-
-
-install-exec-local: installwrappercgi
 install-data-local: installperlcgi installdata installlib installsbin \
 		    installicons
 
@@ -74,12 +74,6 @@ installicons:
 	install -d -m 755 $(DESTDIR)$(prefix)/static_content/icons
 	install -m 644 icons/*.png $(DESTDIR)$(prefix)/static_content/icons
 
-installwrappercgi:
-	install -d -m 755 $(DESTDIR)$(CGIDIR)
-	install -m 6755 $(wrapper_cgi_SRC) $(DESTDIR)$(CGIDIR)
-	-chown $(USER) $(DESTDIR)$(CGIDIR)/wwsympa-wrapper.fcgi
-	-chgrp $(GROUP) $(DESTDIR)$(CGIDIR)/wwsympa-wrapper.fcgi
-
 installsbin:
 	install -d -m 755 $(DESTDIR)$(sbindir)
 	install -m 755 $(sbin_SRC) $(DESTDIR)$(sbindir)
@@ -106,8 +100,6 @@ installsbin:
 		$(addprefix $(DESTDIR)$(sbindir)/, $(sbin_SRC))
 
 installperlcgi:
-	install -d -m 755 $(DESTDIR)$(CGIDIR)
-	install -m 755 $(perl_cgi_SRC) $(DESTDIR)$(CGIDIR)
 	sed -i \
 		-e 's|--PERLOPT--|-U|' \
 		-e 's|--PERL--|$(PERL)|' \
@@ -129,9 +121,4 @@ installperlcgi:
 		-e 's|--ETCDIR--|$(ETCDIR)|' \
 		-e 's|--EXPLDIR--|$(EXPLDIR)|' \
 		-e 's|--SPOOLDIR--|$(SPOOLDIR)|' \
-		$(addprefix $(DESTDIR)$(CGIDIR)/, $(perl_cgi_SRC))
-
-wwsympa-wrapper.fcgi: wwsympa-wrapper.fcgi.c Makefile
-	$(CC) $(CFLAGS) -DWWSYMPA=\"$(CGIDIR)/wwsympa.fcgi\" \
-		-o wwsympa-wrapper.fcgi \
-		wwsympa-wrapper.fcgi.c
+		$(addprefix $(DESTDIR)$(execcgidir)/, $(execcgi_SCRIPTS))
