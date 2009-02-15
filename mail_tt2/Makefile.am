@@ -19,15 +19,55 @@
 # along with this program; if not, write to the Free Software
 # Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
 
-default: none
+mailtemplatedir = $(pkgdatadir)/mail_tt2
+mailtemplate_DATA = authorization_reject.tt2
+		    bye.tt2 certif_warning.tt2 \
+		    command_report.tt2 \
+		    digest_plain.tt2 \
+		    digest.tt2 \
+		    d_install_shared.tt2 \
+		    d_reject_shared.tt2 \
+		    expire_deletion.tt2 \
+		    expire_warning1.tt2 \
+		    expire_warning2.tt2 \
+		    get_archive.tt2 \
+		    global_remind.tt2 \
+		    helpfile.tt2 \
+		    index_archive.tt2 \
+		    info_report.tt2 \
+		    invite.tt2 \
+		    list_created.tt2 \
+		    listeditor_notification.tt2 \
+		    listmaster_notification.tt2 \
+		    listowner_notification.tt2 \
+		    list_rejected.tt2 \
+		    lists.tt2 \
+		    list_unknown.tt2 \
+		    Makefile
+		    Makefile.am
+		    Makefile.in
+		    message_report.tt2 \
+		    moderate.tt2 \
+		    modindex.tt2 \
+		    reject.tt2 \
+		    remind.tt2 \
+		    removed.tt2 \
+		    request_auth.tt2 \
+		    review.tt2 \
+		    send_auth.tt2 \
+		    sendpasswd.tt2 \
+		    sendssopasswd.tt2 \
+		    stats_report.tt2 \
+		    summary.tt2 \
+		    urlized_part.tt2 \
+		    user_notification.tt2 \
+		    welcome.tt2 \
+		    which.tt2 \
+		    x509-user-cert-missing.tt2 \
+		    your_infected_msg.tt2
 
-install-data-local: installtemplates
-
-installtemplates:
-	install -d -m 755 $(DESTDIR)$(datadir)/sympa
-	install -d -m 755 $(DESTDIR)$(datadir)/sympa/mail_tt2
-	install -m 644 *.tt2 $(DESTDIR)$(datadir)/sympa/mail_tt2
-	$(PERL) ../set_symlinks.pl mail_tt2 $(DESTDIR)$(datadir)/sympa/mail_tt2
-	(cd $(DESTDIR)$(datadir)/sympa/web_tt2 ; \
+install-data-hook:
+	$(PERL) ../set_symlinks.pl mail_tt2 $(DESTDIR)$(pkgdatadir)/mail_tt2
+	(cd $(DESTDIR)$(pkgdatadir)/web_tt2; \
 		rm -f authorization_reject.tt2; \
-		ln -s ../mail_tt2/authorization_reject.tt2 .)
+		ln -s ../mail_tt2/authorization_reject.tt2)
