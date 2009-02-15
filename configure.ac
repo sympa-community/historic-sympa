@@ -107,16 +107,14 @@ AC_ARG_WITH(
     ]
 )
 
-SCRIPTDIR='${prefix}/bin'
 AC_ARG_WITH(
     scriptdir,
     AS_HELP_STRING(
 	[--with-scriptdir=DIR],
-	[create script files in DIR  (default ${prefix}/bin)]
+	[obsolete option, scripts modules are now installed with data]
     ),
-    [SCRIPTDIR="$withval"]
+    [AC_MSG_WARN([obsolete --with-scriptdir option used])]
 )
-AC_SUBST(SCRIPTDIR)
 
 AC_ARG_WITH(
     libdir,
