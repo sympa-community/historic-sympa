@@ -52,7 +52,7 @@ installlib:
 		-e 's|--WWSCONFIG--|$(WWSCONFIG)|' \
 		-e 's|--prefix--|$(prefix)|' \
 		-e 's|--PIDDIR--|$(PIDDIR)|' \
-		-e 's|--SCRIPTDIR--|$(SCRIPTDIR)|' \
+		-e 's|--DIR--|$(datadir)/sympa/bin|' \
 		-e 's|--BINDIR--|$(libexecdir)|' \
 		-e 's|--SBINDIR--|$(sbindir)|' \
 		-e 's|--LIBDIR--|$(datadir)/sympa/lib|' \
@@ -71,8 +71,8 @@ installwrappercgi:
 	-chmod 6755 $(DESTDIR)$(CGIDIR)/$(wrapper_cgi_SRC)
 
 installscript:
-	install -d -m 755 $(DESTDIR)$(SCRIPTDIR)
-	install -m 755 $(script_SRC) $(DESTDIR)$(SCRIPTDIR)
+	install -d -m 755 $(DESTDIR)$(datadir)/sympa/bin
+	install -m 755 $(script_SRC) $(DESTDIR)$(datadir)/sympa/bin
 	sed -i \
 		-e 's|--USER--|$(USER)|' \
 		-e 's|--GROUP--|$(GROUP)|' \
@@ -83,7 +83,7 @@ installscript:
 		-e 's|--WWSCONFIG--|$(WWSCONFIG)|' \
 		-e 's|--prefix--|$(prefix)|' \
 		-e 's|--PIDDIR--|$(PIDDIR)|' \
-		-e 's|--SCRIPTDIR--|$(SCRIPTDIR)|' \
+		-e 's|--DIR--|$(datadir)/sympa/bin|' \
 		-e 's|--BINDIR--|$(libexecdir)|' \
 		-e 's|--SBINDIR--|$(sbindir)|' \
 		-e 's|--LIBDIR--|$(datadir)/sympa/lib|' \
@@ -92,7 +92,7 @@ installscript:
 		-e 's|--ETCDIR--|$(ETCDIR)|' \
 		-e 's|--EXPLDIR--|$(EXPLDIR)|' \
 		-e 's|--SPOOLDIR--|$(SPOOLDIR)|' \
-		$(addprefix $(DESTDIR)$(SCRIPTDIR)/, $(script_SRC))
+		$(addprefix $(DESTDIR)$(datadir)/sympa/bin/, $(script_SRC))
 
 installperlcgi:
 	install -d -m 755 $(DESTDIR)$(CGIDIR)
@@ -107,7 +107,7 @@ installperlcgi:
 		-e 's|--WWSCONFIG--|$(WWSCONFIG)|' \
 		-e 's|--prefix--|$(prefix)|' \
 		-e 's|--PIDDIR--|$(PIDDIR)|' \
-		-e 's|--SCRIPTDIR--|$(SCRIPTDIR)|' \
+		-e 's|--DIR--|$(datadir)/sympa/bin|' \
 		-e 's|--BINDIR--|$(BINDIR)|' \
 		-e 's|--SBINDIR--|$(sbindir)|' \
 		-e 's|--LIBDIR--|$(datadir)/sympa/lib|' \

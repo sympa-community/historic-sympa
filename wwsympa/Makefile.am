@@ -52,10 +52,10 @@ installlib:
 		-e 's|--SENDMAIL_ALIASES--|$(SENDMAIL_ALIASES)|' \
 		-e 's|--VIRTUAL_ALIASES--|$(VIRTUAL_ALIASES)|' \
 		-e 's|--CONFIG--|$(CONFIG)|' \
-		-e 's|--WWSCONFIG--|$(WWSCONFIG)|' \
+		-e 's|--WWONFIG--|$(WWSCONFIG)|' \
 		-e 's|--prefix--|$(prefix)|' \
 		-e 's|--PIDDIR--|$(PIDDIR)|' \
-		-e 's|--SCRIPTDIR--|$(SCRIPTDIR)|' \
+		-e 's|--SCRIPTDIR--|$(datadir)/sympa/bin|' \
 		-e 's|--BINDIR--|$(bindir)|' \
 		-e 's|--SBINDIR--|$(sbindir)|' \
 		-e 's|--LIBDIR--|$(datadir)/sympa/lib|' \
@@ -91,10 +91,10 @@ installsbin:
 		-e 's|--SENDMAIL_ALIASES--|$(SENDMAIL_ALIASES)|' \
 		-e 's|--VIRTUAL_ALIASES--|$(VIRTUAL_ALIASES)|' \
 		-e 's|--CONFIG--|$(CONFIG)|' \
-		-e 's|--WWSCONFIG--|$(WWSCONFIG)|' \
+		-e 's|--WWONFIG--|$(WWSCONFIG)|' \
 		-e 's|--prefix--|$(prefix)|' \
 		-e 's|--PIDDIR--|$(PIDDIR)|' \
-		-e 's|--SCRIPTDIR--|$(SCRIPTDIR)|' \
+		-e 's|--SCRIPTDIR--|$(datadir)/sympa/bin|' \
 		-e 's|--BINDIR--|$(bindir)|' \
 		-e 's|--SBINDIR--|$(sbindir)|' \
 		-e 's|--LIBDIR--|$(datadir)/sympa/lib|' \
@@ -117,10 +117,10 @@ installperlcgi:
 		-e 's|--SENDMAIL_ALIASES--|$(SENDMAIL_ALIASES)|' \
 		-e 's|--VIRTUAL_ALIASES--|$(VIRTUAL_ALIASES)|' \
 		-e 's|--CONFIG--|$(CONFIG)|' \
-		-e 's|--WWSCONFIG--|$(WWSCONFIG)|' \
+		-e 's|--WWONFIG--|$(WWSCONFIG)|' \
 		-e 's|--prefix--|$(prefix)|' \
 		-e 's|--PIDDIR--|$(PIDDIR)|' \
-		-e 's|--SCRIPTDIR--|$(SCRIPTDIR)|' \
+		-e 's|--SCRIPTDIR--|$(datadir)/sympa/bin|' \
 		-e 's|--BINDIR--|$(bindir)|' \
 		-e 's|--SBINDIR--|$(sbindir)|' \
 		-e 's|--LIBDIR--|$(datadir)/sympa/lib|' \

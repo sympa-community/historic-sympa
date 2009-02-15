@@ -19,20 +19,17 @@
 # along with this program; if not, write to the Free Software
 # Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
 
-script_SRC	= create_db.Pg create_db.mysql create_db.Oracle \
-		  create_db.Sybase create_db.SQLite \
-		  arc2webarc.pl testldap.pl p12topem.pl init_comment.pl \
-		  crypt_passwd.pl testlogs.pl mod2html.pl tpl2tt2.pl \
-		  ldap_alias_manager.pl mysql_alias_manager.pl
+scriptdir = $(pkgdatadir)/bin
+script_SCRIPTS = create_db.Pg create_db.mysql create_db.Oracle \
+		 create_db.Sybase create_db.SQLite \
+		 arc2webarc.pl testldap.pl p12topem.pl init_comment.pl \
+		 crypt_passwd.pl testlogs.pl mod2html.pl tpl2tt2.pl \
+		 ldap_alias_manager.pl mysql_alias_manager.pl
 init_SRC	= sympa
 
-all:	
-
-install-data-local: installscript installinit
+install-data-hook: installscript installinit
 
 installscript:
-	install -d -m 755 $(DESTDIR)$(SCRIPTDIR)
-	install -m 755 $(script_SRC) $(DESTDIR)$(SCRIPTDIR)
 	sed -i \
 		-e 's|--USER--|$(USER)|' \
 		-e 's|--GROUP--|$(GROUP)|' \
@@ -43,7 +40,7 @@ installscript:
 		-e 's|--WWSCONFIG--|$(WWSCONFIG)|' \
 		-e 's|--prefix--|$(prefix)|' \
 		-e 's|--PIDDIR--|$(PIDDIR)|' \
-		-e 's|--SCRIPTDIR--|$(SCRIPTDIR)|' \
+		-e 's|--SCRIPTDIR--|$(datadir)/sympa/bin|' \
 		-e 's|--BINDIR--|$(BINDIR)|' \
 		-e 's|--SBINDIR--|$(SBINDIR)|' \
 		-e 's|--LIBDIR--|$(LIBDIR)|' \
@@ -52,7 +49,7 @@ installscript:
 		-e 's|--ETCDIR--|$(ETCDIR)|' \
 		-e 's|--EXPLDIR--|$(EXPLDIR)|' \
 		-e 's|--SPOOLDIR--|$(SPOOLDIR)|' \
-		$(addprefix $(DESTDIR)$(SCRIPTDIR)/, $(script_SRC))
+		$(addprefix $(DESTDIR)$(datadir)/sympa/bin/, $(script_SCRIPTS))
 
 installinit:
 	install -d -m 755 $(DESTDIR)$(INITDIR)
@@ -67,7 +64,7 @@ installinit:
 		-e 's|--WWSCONFIG--|$(WWSCONFIG)|' \
 		-e 's|--prefix--|$(prefix)|' \
 		-e 's|--PIDDIR--|$(PIDDIR)|' \
-		-e 's|--SCRIPTDIR--|$(SCRIPTDIR)|' \
+		-e 's|--SCRIPTDIR--|$(datadir)/sympa/bin|' \
 		-e 's|--BINDIR--|$(BINDIR)|' \
 		-e 's|--SBINDIR--|$(SBINDIR)|' \
 		-e 's|--LIBDIR--|$(LIBDIR)|' \
