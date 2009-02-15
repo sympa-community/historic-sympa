@@ -82,19 +82,19 @@ AC_ARG_WITH(
     ]
 )
 
-# web files
-CGIDIR='${prefix}/bin'
+# arch-dependant files
+execcgidir='${libdir}/sympa/cgi'
 AC_ARG_WITH(
     cgidir,
     AS_HELP_STRING(
 	[--with-cgidir=DIR],
-	[CGIs in DIR (default ${prefix}/bin)]
+	[CGIs in DIR (default ${libdir}/sympa/cgi)]
     ),
-    [CGIDIR="$withval"]
+    [execcgidir="$withval"]
 )
-AC_SUBST(CGIDIR)
+AC_SUBST(execcgidir)
 
-# data
+# arch-independant files
 AC_ARG_WITH(
     datadir,
     AS_HELP_STRING(
