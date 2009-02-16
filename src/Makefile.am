@@ -47,6 +47,7 @@ modules_DATA = admin.pm Archive.pm Commands.pm Conf.pm CAS.pm Config_XML.pm \
 	       SQLSource.pm LDAPSource.pm Scenario.pm PlainDigest.pm \
 	       tools.pl tt2.pl parser.pl report.pm time_utils.pl
 
+EXTRA_DIST = $(modules_DATA) $(sbin_SCRIPTS)
 
 install-exec-hook:
 	chmod 4755 $(DESTDIR)$(libexecdir)/queue

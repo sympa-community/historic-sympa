@@ -66,6 +66,8 @@ mailtemplate_DATA = authorization_reject.tt2
 		    x509-user-cert-missing.tt2 \
 		    your_infected_msg.tt2
 
+EXTRA_DIST = $(mailtemplate_DATA)
+
 install-data-hook:
 	$(PERL) ../set_symlinks.pl mail_tt2 $(DESTDIR)$(pkgdatadir)/mail_tt2
 	(cd $(DESTDIR)$(pkgdatadir)/web_tt2; \

@@ -143,6 +143,8 @@ nobase_default_DATA = list_task_models/expire.yearly.task \
 		      scenari/visibility.noconceal \
 		      scenari/visibility.secret
 
+EXTRA_DIST = $(nobase_default_DATA)
+
 install-data-hook:
 	sed -i -e 's|--MAILERPROGDIR--|$(libexecdir)|' \
 		$(DESTDIR)$(datadir)/sympa/etc/list_aliases.tt2

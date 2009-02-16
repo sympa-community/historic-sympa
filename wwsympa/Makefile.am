@@ -32,6 +32,9 @@ nobase_modules_DATA = wwslib.pm cookielib.pm bounce-lib.pl Marc.pm Auth.pm \
 defaultdir = $(pkgdatadir)/etc
 default_DATA = mime.types 
 
+EXTRA_DIST = $(default_DATA) $(nobase_modules_DATA) \
+	     $(sbin_SCRIPTS) $(execcgi_SCRIPTS)
+
 install-exec-hook:
 	chmod 6755 $(DESTDIR)$(execcgidir)/wwsympa-wrapper.fcgi
 	-chown $(USER) $(DESTDIR)$(execcgidir)/wwsympa-wrapper.fcgi
