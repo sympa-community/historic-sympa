@@ -37,21 +37,20 @@ installdir:
 		fi \
 	done
 	@echo "Creating non-writable directories"
-	@for dir in $(ETCDIR)/create_list_templates $(ETCDIR)/mail_tt2 \
-		$(ETCDIR)/web_tt2 $(ETCDIR)/scenari $(ETCDIR)/task_models \
-		$(ETCDIR)/general_task_models; do \
-		if [ ! -d $(DESTDIR)$(ETCDIR)/$$dir ] ; then \
-			echo "Creating $(DESTDIR)/$$dir"; \
-			install -d -m 755 $(DESTDIR)$$dir; \
+	@for dir in create_list_templates mail_tt2 web_tt2 scenari \
+		task_models general_task_models; do \
+		if [ ! -d $(DESTDIR)$(sysconfdir)/$$dir ] ; then \
+			echo "Creating $(DESTDIR)$(sysconfdir)/$$dir"; \
+			install -d -m 755 $(DESTDIR)$(sysconfdir)/$$dir; \
 		fi \
 	done
 
 installconfig:
 	@echo "Installing basic configuration ..."
-	-$(DESTDIR)$(BINDIR)/sympa_wizard.pl \
-		--create sympa.conf --target $(DESTDIR)$(ETCDIR)/sympa.conf
-	-$(DESTDIR)$(BINDIR)/sympa_wizard.pl \
-		--create wwsympa.conf --target $(DESTDIR)$(ETCDIR)/wwsympa.conf
+	-$(DESTDIR)$(sbindir)/sympa_wizard.pl \
+		--create sympa.conf --target $(DESTDIR)$(sysconfdir)/sympa.conf
+	-$(DESTDIR)$(sbindir)/sympa_wizard.pl \
+		--create wwsympa.conf --target $(DESTDIR)$(sysconfdir)/wwsympa.conf
 
 nextstep: 
 	@echo ""
@@ -60,17 +59,17 @@ nextstep:
 	@echo "# you should check the INSTALL file."
 	@echo "#"
 	@echo "# If you are upgrading, you now need to run"
-	@echo "#    $(SBINDIR)/sympa.pl --upgrade"
+	@echo "#    $(sbindir)/sympa.pl --upgrade"
 	@echo "#######################################################"
 
 importantchanges:
 	@( 	PERL=$(PERL); export PERL; \
 		UMASK=0600; export UMASK; \
 		DESTDIR=$(DESTDIR); export DESTDIR; \
-		BINDIR=$(SBINDIR); export BINDIR; \
-		SBINDIR=$(SBINDIR); export SBINDIR; \
-		LIBDIR=$(LIBDIR); export LIBDIR; \
-		ETCDIR=$(ETCDIR); export ETCDIR;\
+		BINDIR=$(libexecdir); export BINDIR; \
+		SBINDIR=$(sbindir); export SBINDIR; \
+		LIBDIR=$(datadir)/sympa/etc; export LIBDIR; \
+		ETCDIR=$(sysconfdir); export ETCDIR;\
 		USER=$(USER); export USER;\
 		GROUP=$(GROUP); export GROUP;\
 		SYMPA_VERSION=$(PACKAGE_VERSION); export SYMPA_VERSION; \

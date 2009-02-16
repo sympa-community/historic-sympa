@@ -46,7 +46,7 @@ install-data-hook:
 	sed -i \
 		-e 's|--USER--|$(USER)|' \
 		-e 's|--GROUP--|$(GROUP)|' \
-		-e 's|--SYMPA_VERSION--|$(PKG_VERSION)|' \
+		-e 's|--SYMPA_VERSION--|$(PACKAGE_VERSION)|' \
 		-e 's|--SENDMAIL_ALIASES--|$(SENDMAIL_ALIASES)|' \
 		-e 's|--VIRTUAL_ALIASES--|$(VIRTUAL_ALIASES)|' \
 		-e 's|--CONFIG--|$(CONFIG)|' \
@@ -59,7 +59,7 @@ install-data-hook:
 		-e 's|--LIBDIR--|$(datadir)/sympa/lib|' \
 		-e 's|--LOCALEDIR--|$(LOCALEDIR)|' \
 		-e 's|--DATADIR--|$(datadir)/sympa/etc|' \
-		-e 's|--ETCDIR--|$(ETCDIR)|' \
+		-e 's|--ETCDIR--|$(sysconfdir)|' \
 		-e 's|--EXPLDIR--|$(EXPLDIR)|' \
 		-e 's|--SPOOLDIR--|$(SPOOLDIR)|' \
 		$(addprefix $(DESTDIR)$(datadir)/sympa/lib/, $(modules_DATA)) \

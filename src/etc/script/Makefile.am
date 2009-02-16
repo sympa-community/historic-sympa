@@ -33,7 +33,7 @@ installscript:
 	sed -i \
 		-e 's|--USER--|$(USER)|' \
 		-e 's|--GROUP--|$(GROUP)|' \
-		-e 's|--SYMPA_VERSION--|$(PKG_VERSION)|' \
+		-e 's|--SYMPA_VERSION--|$(PACKAGE_VERSION)|' \
 		-e 's|--SENDMAIL_ALIASES--|$(SENDMAIL_ALIASES)|' \
 		-e 's|--VIRTUAL_ALIASES--|$(VIRTUAL_ALIASES)|' \
 		-e 's|--CONFIG--|$(CONFIG)|' \
@@ -41,12 +41,12 @@ installscript:
 		-e 's|--prefix--|$(prefix)|' \
 		-e 's|--PIDDIR--|$(PIDDIR)|' \
 		-e 's|--SCRIPTDIR--|$(datadir)/sympa/bin|' \
-		-e 's|--BINDIR--|$(BINDIR)|' \
-		-e 's|--SBINDIR--|$(SBINDIR)|' \
-		-e 's|--LIBDIR--|$(LIBDIR)|' \
+		-e 's|--BINDIR--|$(libexecdir)|' \
+		-e 's|--SBINDIR--|$(sbindir)|' \
+		-e 's|--LIBDIR--|$(datadir)/sympa/lib|' \
 		-e 's|--LOCALEDIR--|$(LOCALEDIR)|' \
-		-e 's|--DATADIR--|$(DATADIR)|' \
-		-e 's|--ETCDIR--|$(ETCDIR)|' \
+		-e 's|--DATADIR--|$(datadir)/sympa/etc|' \
+		-e 's|--ETCDIR--|$(sysconfdir)|' \
 		-e 's|--EXPLDIR--|$(EXPLDIR)|' \
 		-e 's|--SPOOLDIR--|$(SPOOLDIR)|' \
 		$(addprefix $(DESTDIR)$(datadir)/sympa/bin/, $(script_SCRIPTS))
@@ -65,12 +65,12 @@ installinit:
 		-e 's|--prefix--|$(prefix)|' \
 		-e 's|--PIDDIR--|$(PIDDIR)|' \
 		-e 's|--SCRIPTDIR--|$(datadir)/sympa/bin|' \
-		-e 's|--BINDIR--|$(BINDIR)|' \
-		-e 's|--SBINDIR--|$(SBINDIR)|' \
-		-e 's|--LIBDIR--|$(LIBDIR)|' \
+		-e 's|--BINDIR--|$(libexecdir)|' \
+		-e 's|--SBINDIR--|$(sbindir)|' \
+		-e 's|--LIBDIR--|$(datadir)/sympa/lib|' \
 		-e 's|--LOCALEDIR--|$(LOCALEDIR)|' \
-		-e 's|--DATADIR--|$(DATADIR)|' \
-		-e 's|--ETCDIR--|$(ETCDIR)|' \
+		-e 's|--DATADIR--|$(datadir)/sympa/etc|' \
+		-e 's|--ETCDIR--|$(sysconfdir)|' \
 		-e 's|--EXPLDIR--|$(EXPLDIR)|' \
 		-e 's|--SPOOLDIR--|$(SPOOLDIR)|' \
 		-e 's|--INITDIR--|$(INITDIR)|' \
