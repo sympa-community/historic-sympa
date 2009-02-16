@@ -26,27 +26,26 @@ AM_INIT_AUTOMAKE
 AC_PREFIX_DEFAULT(/home/sympa)
 
 # configuration
-CONFDIR='${prefix}/etc'
 AC_ARG_WITH(
     confdir,
     AS_HELP_STRING(
 	[--with-confdir=DIR],
-	[Sympa main configuration files in DIR (default ${prefix}/etc)]
+	[obsolete option, use --sysconfdir instead]
     ),
-    [CONFDIR="$withval"]
+    [
+	AC_MSG_WARN([obsolete --with-confdir option used])
+	sysconfdir="$withval"
+    ]
 )
-AC_SUBST(CONFDIR)
 
-ETCDIR='${prefix}/etc'
 AC_ARG_WITH(
     etcdir,
     AS_HELP_STRING(
 	[--with-etcdir=DIR],
-	[Config directories populated by the user are in DIR (default ${prefix}/etc)]
+	[obsolete option, use --sysconfdir instead]
     ),
-    [ETCDIR="$withval"]
+    [AC_MSG_WARN([obsolete --with-etcdir option used])]
 )
-AC_SUBST(ETCDIR)
 
 # binaries
 AC_ARG_WITH(
