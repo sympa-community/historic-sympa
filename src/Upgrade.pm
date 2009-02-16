@@ -893,7 +893,7 @@ sub probe_db {
 		return undef;
 	    }
 	    
-	    while (my $ref = $sth->fetchrow_hashref()) {
+	    while (my $ref = $sth->fetchrow_hashref('NAME_lc')) {
 		$real_struct{$t}{$ref->{'field'}} = $ref->{'type'};
 	    }
 	    
