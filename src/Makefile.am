@@ -82,12 +82,10 @@ install-data-hook:
 		-e 's|--WWSCONFIG--|$(WWSCONFIG)|' \
 		-e 's|--prefix--|$(prefix)|' \
 		-e 's|--PIDDIR--|$(PIDDIR)|' \
-		-e 's|--SCRIPTDIR--|$(datadir)/sympa/bin|' \
 		-e 's|--BINDIR--|$(libexecdir)|' \
 		-e 's|--SBINDIR--|$(sbindir)|' \
-		-e 's|--LIBDIR--|$(datadir)/sympa/lib|' \
 		-e 's|--LOCALEDIR--|$(LOCALEDIR)|' \
-		-e 's|--DATADIR--|$(datadir)/sympa/etc|' \
+		-e 's|--datadir--|$(datadir)|' \
 		-e 's|--ETCDIR--|$(sysconfdir)|' \
 		-e 's|--EXPLDIR--|$(EXPLDIR)|' \
 		-e 's|--SPOOLDIR--|$(SPOOLDIR)|' \

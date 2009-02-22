@@ -104,7 +104,7 @@ sub get_available_families {
 
     my %families;
 
-    foreach my $dir ('--DATADIR--/families',
+    foreach my $dir ('--datadir--/sympa/etc/families',
 		     $Conf{'etc'}.'/families',
 		     $Conf{'etc'}.'/'.$robot.'/families') {
 	next unless (-d $dir);
@@ -1765,7 +1765,7 @@ sub _get_directory {
 
     my @try = ("$Conf{'etc'}/$robot".'/families',
 	       $Conf{'etc'}.'/families',
-	       '--DATADIR--'.'/families');
+	       '--datadir--/sympa/etc/families');
 
     foreach my $d (@try) {
 	if (-d "$d/$name") {

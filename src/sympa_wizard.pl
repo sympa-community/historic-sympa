@@ -56,7 +56,7 @@ Display usage instructions
 =cut
 
 ## Change this to point to your Sympa bin directory
-use lib '--LIBDIR--';
+use lib '--datadir--/sympa/lib';
 
 use strict;
 use POSIX qw(strftime);

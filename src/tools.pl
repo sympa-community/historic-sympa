@@ -417,7 +417,7 @@ sub load_create_list_conf {
     
     $file = &tools::get_filename('etc',{}, 'create_list.conf', $robot);
     unless ($file) {
-	&do_log('info','unable to read --DATADIR--/create_list.conf');
+	&do_log('info','unable to read --datadir--/sympa/etc/create_list.conf');
 	return undef;
     }
 
@@ -463,7 +463,7 @@ sub get_list_list_tpl {
 	return undef;
     }
     
-    foreach my $dir ('--DATADIR--/create_list_templates', "$Conf{'etc'}/create_list_templates",
+    foreach my $dir ('--datadir--/sympa/etc/create_list_templates', "$Conf{'etc'}/create_list_templates",
 		     "$Conf{'etc'}/$robot/create_list_templates") {
 	if (opendir(DIR, $dir)) {
 	    foreach my $template ( sort grep (!/^\./,readdir(DIR))) {
@@ -600,7 +600,7 @@ sub get_templates_list {
 	do_log('info', 'get_templates_list () : internal error incorrect parameter');
     }
 
-    my $distrib_dir = '--DATADIR--/'.$type.'_tt2';
+    my $distrib_dir = '--datadir--/sympa/etc/'.$type.'_tt2';
     my $site_dir = $Conf{'etc'}.'/'.$type.'_tt2';
     my $robot_dir = $Conf{'etc'}.'/'.$robot.'/'.$type.'_tt2';
 
@@ -668,7 +668,7 @@ sub get_template_path {
 	do_log('info', 'get_templates_path () : internal error incorrect parameter');
     }
 
-    my $distrib_dir = '--DATADIR--/'.$type.'_tt2';
+    my $distrib_dir = '--datadir--/sympa/etc/'.$type.'_tt2';
     my $site_dir = $Conf{'etc'}.'/'.$type.'_tt2';
     $site_dir .= '/'.$lang unless ($lang eq 'default');
     my $robot_dir = $Conf{'etc'}.'/'.$robot.'/'.$type.'_tt2';
@@ -1993,12 +1993,12 @@ sub get_filename {
 		    "$Conf{'etc'}/$robot".'/'.$default_name,
 		    $Conf{'etc'}.'/'.$name,
 		    $Conf{'etc'}.'/'.$default_name,
-		    '--DATADIR--'.'/'.$name,
-		    '--DATADIR--'.'/'.$default_name);
+		    '--datadir--/sympa/etc/'.$name,
+		    '--datadir--/sympa/etc/'.$default_name);
 	}else {
 	    @try = ("$Conf{'etc'}/$robot".'/'.$name,
 		    $Conf{'etc'}.'/'.$name,
-		    '--DATADIR--'.'/'.$name);
+		    '--datadir--/sympa/etc/'.$name);
 	}
 	
 	if ($family) {
@@ -2063,7 +2063,7 @@ sub make_tt2_include_path {
     my $path_family; ## optional
 
     if ($dir) {
-	$path_etcbindir = "--DATADIR--/".$dir;
+	$path_etcbindir = "--datadir--/sympa/etc/".$dir;
 	$path_etcdir = "$Conf{'etc'}/".$dir;
 	$path_robot = "$Conf{'etc'}/".$robot.'/'.$dir if (lc($robot) ne lc($Conf{'host'}));
 	if (ref($list) eq 'List'){
@@ -2074,7 +2074,7 @@ sub make_tt2_include_path {
 	    }
 	} 
     }else {
-	$path_etcbindir = "--DATADIR--";
+	$path_etcbindir = "--datadir--/sympa/etc/";
 	$path_etcdir = "$Conf{'etc'}";
 	$path_robot = "$Conf{'etc'}/".$robot if (lc($robot) ne lc($Conf{'host'}));
 	if (ref($list) eq 'List') {

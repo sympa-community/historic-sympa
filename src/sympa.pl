@@ -23,7 +23,7 @@
 
 use strict;
 
-use lib '--LIBDIR--';
+use lib '--datadir--/sympa/lib';
 #use Getopt::Std;
 use Getopt::Long;
 
