@@ -75,9 +75,8 @@ install-data-hook:
 		-e 's|--PERL--|$(PERL)|' \
 		-e 's|--USER--|$(USER)|' \
 		-e 's|--GROUP--|$(GROUP)|' \
-		-e 's|--SYMPA_VERSION--|$(PACKAGE_VERSION)|' \
+		-e 's|--VERSION--|$(VERSION)|' \
 		-e 's|--SENDMAIL_ALIASES--|$(SENDMAIL_ALIASES)|' \
-		-e 's|--VIRTUAL_ALIASES--|$(VIRTUAL_ALIASES)|' \
 		-e 's|--CONFIG--|$(CONFIG)|' \
 		-e 's|--WWSCONFIG--|$(WWSCONFIG)|' \
 		-e 's|--prefix--|$(prefix)|' \
