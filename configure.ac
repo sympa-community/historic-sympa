@@ -211,27 +211,27 @@ AC_ARG_WITH(
 )
 AC_SUBST(initdir)
 
-LOCKDIR=/var/lock/subsys
+lockdir='${localstatedir}/lock/subsys'
 AC_ARG_WITH(
     lockdir,
     AS_HELP_STRING(
 	[--with-lockdir=DIR],
-	[create lock files in DIR  (default /var/lock/subsys)]
+	[create lock files in DIR  (default ${localstatedir}/lock/subsys)]
     ),
-    [LOCKDIR="$withval"]
+    [lockdir="$withval"]
 )
-AC_SUBST(LOCKDIR)
+AC_SUBST(lockdir)
 
-PIDDIR='${prefix}'
+piddir='${localstatedir}/run'
 AC_ARG_WITH(
     piddir,
     AS_HELP_STRING(
 	[--with-piddir=DIR],
-	[create .pid files in DIR (default ${prefix})]
+	[create .pid files in DIR (default ${localstatedir}/run)]
     ),
-    [PIDDIR="$withval"]
+    [piddir="$withval"]
 )
-AC_SUBST(PIDDIR)
+AC_SUBST(piddir)
 
 # SSL certs dir
 SSLCERTDIR=$EXPLDIR/X509-user-certs
