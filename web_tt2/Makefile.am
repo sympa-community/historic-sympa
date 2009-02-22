@@ -48,7 +48,7 @@ webtemplate_DATA = active_lists.tt2 \
 		   dump_scenario.tt2 \
 		   dumpvars.tt2 \
 		   d_upload.tt2 \
-		   edit_attributes.tt2*
+		   edit_attributes.tt2 \
 		   editfile.tt2 \
 		   edit_list_request.tt2 \
 		   editsubscriber.tt2 \
