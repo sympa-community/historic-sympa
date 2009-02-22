@@ -80,7 +80,7 @@ install-data-hook:
 		-e 's|--CONFIG--|$(CONFIG)|' \
 		-e 's|--WWSCONFIG--|$(WWSCONFIG)|' \
 		-e 's|--prefix--|$(prefix)|' \
-		-e 's|--PIDDIR--|$(PIDDIR)|' \
+		-e 's|--piddir--|$(piddir)|' \
 		-e 's|--libexecdir--|$(libexecdir)|' \
 		-e 's|--sbindir--|$(sbindir)|' \
 		-e 's|--LOCALEDIR--|$(LOCALEDIR)|' \

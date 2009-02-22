@@ -69,34 +69,34 @@ our @params = (
     },
     {
         name    => 'pidfile',
-        default => '--PIDDIR--/sympa.pid',
+        default => '--piddir--/sympa.pid',
         query   => 'File containing Sympa PID while running.',
         file    => 'sympa.conf',
         advice  => 'Sympa also locks this file to ensure that it is not running more than once. Caution : user sympa need to write access without special privilegee.'
     },
     { 
         name    => 'pidfile_distribute',
-        default => '--PIDDIR--/sympa-distribute.pid',
+        default => '--piddir--/sympa-distribute.pid',
     },
     { 
         name    => 'pidfile_creation',
-        default => '--PIDDIR--/sympa-creation.pid',
+        default => '--piddir--/sympa-creation.pid',
     },
     {
         name   => 'archived_pidfile',
-        default => '--PIDDIR--/archived.pid',
+        default => '--piddir--/archived.pid',
         query  => 'File containing archived PID while running.',
         file   => 'wwsympa.conf',
     },
     {
         name   => 'bounced_pidfile',
-        default => '--PIDDIR--/bounced.pid',
+        default => '--piddir--/bounced.pid',
         query  => 'File containing bounced PID while running.',
         file   => 'wwsympa.conf',
     },
     {
         name  => 'task_manager_pidfile',
-        default => '--PIDDIR--/task_manager.pid',
+        default => '--piddir--/task_manager.pid',
         query => 'File containing task_manager PID while running.',
         file  => 'wwsympa.conf'
     },
