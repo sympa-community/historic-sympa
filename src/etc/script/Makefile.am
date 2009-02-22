@@ -27,7 +27,7 @@ script_SCRIPTS = create_db.Pg create_db.mysql create_db.Oracle \
 		 ldap_alias_manager.pl mysql_alias_manager.pl
 init_SCRIPTS = sympa
 
-EXTRA_DISTS = $(script_SCRIPTS ) $(init_SCRIPTS)
+EXTRA_DIST = $(script_SCRIPTS) $(init_SCRIPTS)
 
 install-data-hook:
 	sed -i \
