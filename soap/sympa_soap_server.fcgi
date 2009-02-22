@@ -7,7 +7,7 @@ use SOAP::Lite;
 #use SOAP::Lite +trace;
 use SOAP::Transport::HTTP;
 
-use lib '--LIBDIR--';
+use lib '--datadir--/sympa/lib';
 
 ## Defines SOAP::Transport::HTTP::FCGI::Sympa with a modified handle()
 use SympaTransport;
@@ -80,7 +80,7 @@ foreach my $list (@$all_lists){
 my $server = SOAP::Transport::HTTP::FCGI::Sympa->new(); 
 
 #$server->dispatch_with({'urn:Sympa' => 'sympasoap'});
-$server->dispatch_to('--LIBDIR--/bin','sympasoap');
+$server->dispatch_to('--datadir--/sympa/lib','sympasoap');
 
 $server->handle($birthday);
 
