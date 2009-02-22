@@ -22,3 +22,5 @@
 SUBDIRS = man8 sample
 
 pdf_DATA = sympa.pdf
+
+EXTRA_DIST = $(pdf_DATA)
