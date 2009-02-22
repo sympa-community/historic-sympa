@@ -44,22 +44,11 @@ install-data-hook:
 	sed -i \
 		-e 's|--USER--|$(USER)|' \
 		-e 's|--GROUP--|$(GROUP)|' \
-		-e 's|--SYMPA_VERSION--|$(PACKAGE_VERSION)|' \
-		-e 's|--SENDMAIL_ALIASES--|$(SENDMAIL_ALIASES)|' \
-		-e 's|--VIRTUAL_ALIASES--|$(VIRTUAL_ALIASES)|' \
 		-e 's|--CONFIG--|$(CONFIG)|' \
-		-e 's|--WWONFIG--|$(WWSCONFIG)|' \
-		-e 's|--prefix--|$(prefix)|' \
+		-e 's|--WWSCONFIG--|$(WWSCONFIG)|' \
 		-e 's|--PIDDIR--|$(PIDDIR)|' \
-		-e 's|--SCRIPTDIR--|$(datadir)/sympa/bin|' \
-		-e 's|--BINDIR--|$(bindir)|' \
-		-e 's|--SBINDIR--|$(sbindir)|' \
-		-e 's|--LIBDIR--|$(datadir)/sympa/lib|' \
-		-e 's|--LOCALEDIR--|$(LOCALEDIR)|' \
-		-e 's|--DATADIR--|$(datadir)/sympa/etc|' \
-		-e 's|--ETCDIR--|$(sysconfdir)|' \
-		-e 's|--EXPLDIR--|$(EXPLDIR)|' \
-		-e 's|--SPOOLDIR--|$(SPOOLDIR)|' \
+		-e 's|--datadir--|$(datadir)|' \
+		-e 's|--execcgidir--|$(execcgidi)|' \
 		$(addprefix $(DESTDIR)$(datadir)/sympa/lib/, $(nobase_modules_DATA)) \
 		$(addprefix $(DESTDIR)$(sbindir)/, $(sbin_SCRIPTS)) \
 		$(addprefix $(DESTDIR)$(execcgidir)/, $(execcgi_SCRIPTS))
