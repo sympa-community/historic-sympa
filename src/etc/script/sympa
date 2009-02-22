@@ -46,7 +46,7 @@ fi
 
 # Sympa parameters
 # Sympa binaries directory
-sympadir="--SBINDIR--"
+sympadir="--sbindir--"
 
 # Sympa config files directory
 sympaconf="--CONFIG--"

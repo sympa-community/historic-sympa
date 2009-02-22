@@ -970,11 +970,11 @@ sub install_aliases {
 
 	 ## build a list of required aliases the listmaster should install
 	 $aliases = "#----------------- $list->{'name'}\n";
-	 $aliases .= "$list->{'name'}: \"| --BINDIR--/queue $list->{'name'}\"\n";
-	 $aliases .= "$list->{'name'}-request: \"| --BINDIR--/queue $list->{'name'}-request\"\n";
-	 $aliases .= "$list->{'name'}$suffix: \"| --BINDIR--/bouncequeue $list->{'name'}\"\n";
-	 $aliases .= "$list->{'name'}-unsubscribe: \"| --BINDIR--/queue $list->{'name'}-unsubscribe\"\n";
-	 $aliases .= "# $list->{'name'}-subscribe: \"| --BINDIR--/queue $list->{'name'}-subscribe\"\n";
+	 $aliases .= "$list->{'name'}: \"| --libexecdir--/queue $list->{'name'}\"\n";
+	 $aliases .= "$list->{'name'}-request: \"| --libexecdir--/queue $list->{'name'}-request\"\n";
+	 $aliases .= "$list->{'name'}$suffix: \"| --libexecdir--/bouncequeue $list->{'name'}\"\n";
+	 $aliases .= "$list->{'name'}-unsubscribe: \"| --libexecdir--/queue $list->{'name'}-unsubscribe\"\n";
+	 $aliases .= "# $list->{'name'}-subscribe: \"| --libexecdir--/queue $list->{'name'}-subscribe\"\n";
 	 
 	 return $aliases;
      }

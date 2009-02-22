@@ -45,11 +45,11 @@ unless (Conf::load('--CONFIG--')) {
 my $tmp_alias_file = $Conf{'tmpdir'}.'/sympa_aliases.'.time;
 
 
-my $alias_wrapper = '--BINDIR--/aliaswrapper';
+my $alias_wrapper = '--sbindir--/aliaswrapper';
 my $lock_file = '--EXPLDIR--/alias_manager.lock';
 my $default_domain;
-my $path_to_queue = '--BINDIR--/queue';
-my $path_to_bouncequeue = '--BINDIR--/bouncequeue';
+my $path_to_queue = '--libexecdir--/queue';
+my $path_to_bouncequeue = '--libexecdir--/bouncequeue';
 my $sympa_conf_file = '--CONFIG--';
 
 my ($operation, $listname, $domain, $file) = @ARGV;

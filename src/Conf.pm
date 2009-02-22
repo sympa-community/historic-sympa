@@ -63,7 +63,7 @@ our @params = (
     },
     {
         name    => 'etc',
-        default => '--ETCDIR--',
+        default => '--sysconfdir--',
         query   => 'Directory for configuration files ; it also contains scenari/ and templates/ directories',
         file    => 'sympa.conf'
     },
@@ -530,7 +530,7 @@ our @params = (
     {
         name   => 'capath',
         optional => '1',
-        sample => '--ETCDIR--/ssl.crt',
+        sample => '--sysconfdir--/ssl.crt',
         query  => 'The directory path use by OpenSSL for trusted CA certificates',
         file   => 'sympa.conf',
         edit   => '1'
@@ -1118,7 +1118,7 @@ our @params = (
     },
     {
         name    => 'alias_manager',
-        default => '--SBINDIR--/alias_manager.pl'
+        default => '--sbindir--/alias_manager.pl'
     },
     {
         name    => 'antispam_feature',
