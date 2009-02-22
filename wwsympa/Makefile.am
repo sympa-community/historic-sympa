@@ -47,7 +47,7 @@ install-data-hook:
 		-e 's|--GROUP--|$(GROUP)|' \
 		-e 's|--CONFIG--|$(CONFIG)|' \
 		-e 's|--WWSCONFIG--|$(WWSCONFIG)|' \
-		-e 's|--PIDDIR--|$(PIDDIR)|' \
+		-e 's|--piddir--|$(piddir)|' \
 		-e 's|--datadir--|$(datadir)|' \
 		-e 's|--execcgidir--|$(execcgidir)|' \
 		$(addprefix $(DESTDIR)$(datadir)/sympa/lib/, $(nobase_modules_DATA)) \
