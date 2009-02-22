@@ -83,7 +83,7 @@ install-data-hook:
 		-e 's|--piddir--|$(piddir)|' \
 		-e 's|--libexecdir--|$(libexecdir)|' \
 		-e 's|--sbindir--|$(sbindir)|' \
-		-e 's|--LOCALEDIR--|$(LOCALEDIR)|' \
+		-e 's|--localedir--|$(localedir)|' \
 		-e 's|--datadir--|$(datadir)|' \
 		-e 's|--sysconfdir--|$(sysconfdir)|' \
 		-e 's|--EXPLDIR--|$(EXPLDIR)|' \

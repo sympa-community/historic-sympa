@@ -122,7 +122,7 @@ our @params = (
     },
     {
         name    => 'localedir',
-        default => '--LOCALEDIR--',
+        default => '--localedir--',
         query   => 'Directory containing available NLS catalogues (Message internationalization)',
         file    => 'sympa.conf',
     },

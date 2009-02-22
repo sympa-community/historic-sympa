@@ -39,7 +39,7 @@ pot:
 
 install-data-local: $(MOFILES)
 	@( \
-	targetdir='$(DESTDIR)$(LOCALEDIR)'; \
+	targetdir='$(DESTDIR)$(localedir)'; \
 	languages='$(LINGUAS)'; \
 	for lang in $$languages; do \
 		mkdir -p "$$targetdir/$$lang/LC_MESSAGES" || exit 1; \

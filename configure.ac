@@ -127,17 +127,17 @@ AC_ARG_WITH(
 )
 
 # locales
-LOCALEDIR='${prefix}/locale'
 AC_ARG_WITH(
     localedir,
     AS_HELP_STRING(
 	[--with-localedir=DIR],
-	[create language files in DIR  (default ${prefix}/locale)]
+	[obsolete option, use --localedir instead]
     ),
-    [LOCALEDIR="$withval"]
+    [
+     AC_MSG_WARN([obsolete --with-localedir option used])
+     localedir="$withval"
+    ]
 )
-AC_SUBST(LOCALEDIR)
-
 
 # documentation
 AC_ARG_WITH(
