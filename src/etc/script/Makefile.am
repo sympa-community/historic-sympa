@@ -25,11 +25,9 @@ script_SCRIPTS = create_db.Pg create_db.mysql create_db.Oracle \
 		 arc2webarc.pl testldap.pl p12topem.pl init_comment.pl \
 		 crypt_passwd.pl testlogs.pl mod2html.pl tpl2tt2.pl \
 		 ldap_alias_manager.pl mysql_alias_manager.pl
-init_SRC	= sympa
+init_SCRIPTS = sympa
 
-install-data-hook: installscript installinit
-
-installscript:
+install-data-hook:
 	sed -i \
 		-e 's|--USER--|$(USER)|' \
 		-e 's|--GROUP--|$(GROUP)|' \
@@ -49,33 +47,5 @@ installscript:
 		-e 's|--ETCDIR--|$(sysconfdir)|' \
 		-e 's|--EXPLDIR--|$(EXPLDIR)|' \
 		-e 's|--SPOOLDIR--|$(SPOOLDIR)|' \
-		$(addprefix $(DESTDIR)$(datadir)/sympa/bin/, $(script_SCRIPTS))
-
-installinit:
-	install -d -m 755 $(DESTDIR)$(INITDIR)
-	install -m 755 $(init_SRC) $(DESTDIR)$(INITDIR)
-	sed -i \
-		-e 's|--USER--|$(USER)|' \
-		-e 's|--GROUP--|$(GROUP)|' \
-		-e 's|--SYMPA_VERSION--|$(PKG_VERSION)|' \
-		-e 's|--SENDMAIL_ALIASES--|$(SENDMAIL_ALIASES)|' \
-		-e 's|--VIRTUAL_ALIASES--|$(VIRTUAL_ALIASES)|' \
-		-e 's|--CONFIG--|$(CONFIG)|' \
-		-e 's|--WWSCONFIG--|$(WWSCONFIG)|' \
-		-e 's|--prefix--|$(prefix)|' \
-		-e 's|--PIDDIR--|$(PIDDIR)|' \
-		-e 's|--SCRIPTDIR--|$(datadir)/sympa/bin|' \
-		-e 's|--BINDIR--|$(libexecdir)|' \
-		-e 's|--SBINDIR--|$(sbindir)|' \
-		-e 's|--LIBDIR--|$(datadir)/sympa/lib|' \
-		-e 's|--LOCALEDIR--|$(LOCALEDIR)|' \
-		-e 's|--DATADIR--|$(datadir)/sympa/etc|' \
-		-e 's|--ETCDIR--|$(sysconfdir)|' \
-		-e 's|--EXPLDIR--|$(EXPLDIR)|' \
-		-e 's|--SPOOLDIR--|$(SPOOLDIR)|' \
-		-e 's|--INITDIR--|$(INITDIR)|' \
-		-e 's|--LOCKDIR--|$(LOCKDIR)|' \
-		$(addprefix $(DESTDIR)$(INITDIR)/, $(init_SRC))
-
-
-
+		$(addprefix $(DESTDIR)$(datadir)/sympa/bin/, $(script_SCRIPTS)) \
+		$(addprefix $(DESTDIR)$(initdir)/, $(init_SCRIPTS))

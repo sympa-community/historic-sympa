@@ -200,16 +200,16 @@ AC_ARG_WITH(
 AC_SUBST(SPOOLDIR)
 
 
-INITDIR='${prefix}/etc/rc.d/init.d'
+initdir='${sysconfdir}/rc.d/init.d'
 AC_ARG_WITH(
     initdir,
     AS_HELP_STRING(
 	[--with-initdir=DIR],
-	[install System V init script in DIR  (default /etc/rc.d/init.d)]
+	[install System V init script in DIR  (default ${sysconfdir}/rc.d/init.d)]
     ),
-    [INITDIR="$withval"]
+    [initdir="$withval"]
 )
-AC_SUBST(INITDIR)
+AC_SUBST(initdir)
 
 LOCKDIR=/var/lock/subsys
 AC_ARG_WITH(
