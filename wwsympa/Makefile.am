@@ -42,6 +42,7 @@ install-exec-hook:
 
 install-data-hook:
 	sed -i \
+		-e 's|--PERL--|$(PERL)|' \
 		-e 's|--USER--|$(USER)|' \
 		-e 's|--GROUP--|$(GROUP)|' \
 		-e 's|--CONFIG--|$(CONFIG)|' \

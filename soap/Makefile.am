@@ -44,6 +44,7 @@ install-exec-hook:
 
 install-data-hook:
 	sed -i \
+		-e 's|--PERL--|$(PERL)|' \
 		-e 's|--CONFIG--|$(CONFIG)|' \
 		-e 's|--WWSCONFIG--|$(WWSCONFIG)|' \
 		-e 's|--datadir--|$(datadir)|' \
