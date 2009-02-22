@@ -41,7 +41,7 @@ use Conf;
 use Language;
 use Log;
 
-require '--datadir--/sympa/lib/tools.pl';
+require 'tools.pl';
 
 
 =pod 

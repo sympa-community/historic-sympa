@@ -31,7 +31,7 @@ require Fetch;
 require Exporter;
 require Encode;
 require 'tools.pl';
-require '--datadir--/sympa/lib/tt2.pl';
+require 'tt2.pl';
 
 my @ISA = qw(Exporter);
 my @EXPORT = qw(%list_of_lists);
