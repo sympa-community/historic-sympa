@@ -243,6 +243,11 @@ AC_SUBST(CONFIG)
 WWSCONFIG=$CONFDIR/wwsympa.conf
 AC_SUBST(WWSCONFIG)
 
+AC_PATH_PROG(XGETTEXT_PL, xgettext.pl)
+if test -z "$XGETTEXT_PL"; then
+    AC_MSG_ERROR([perl xgettext.pl required])
+fi
+
 AC_PROG_CC
 # needed for using per-target flags
 AM_PROG_CC_C_O
@@ -279,10 +284,6 @@ else
     fi
 fi
 
-AC_PATH_PROG(MSGFMT, msgfmt)
-if test -z "$MSGFMT"; then
-    AC_MSG_ERROR([msgfmt required])
-fi
 
 
 USER=sympa
