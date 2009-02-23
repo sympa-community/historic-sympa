@@ -244,9 +244,6 @@ WWSCONFIG=$CONFDIR/wwsympa.conf
 AC_SUBST(WWSCONFIG)
 
 AC_PATH_PROG(XGETTEXT_PL, xgettext.pl)
-if test -z "$XGETTEXT_PL"; then
-    AC_MSG_ERROR([perl xgettext.pl required])
-fi
 
 AC_PROG_CC
 # needed for using per-target flags
