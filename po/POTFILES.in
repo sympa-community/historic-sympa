@@ -35,9 +35,7 @@ soap/sympa_soap_client.pl
 soap/sympasoap.pm
 soap/SympaTransport.pm
 soap/sympa_soap_server.fcgi
-soap/sympa_soap_server-wrapper.fcgi
 wwsympa/wwsympa.fcgi
-wwsympa/wwsympa-wrapper.fcgi
 wwsympa/archived.pl
 wwsympa/Auth.pm
 wwsympa/bounced.pl
