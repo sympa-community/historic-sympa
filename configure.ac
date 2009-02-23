@@ -22,6 +22,7 @@
 AC_PREREQ(2.59)
 AC_INIT(sympa, 6.0a.8, sympa-authors@cru.fr)
 AM_INIT_AUTOMAKE
+AM_PO_SUBDIRS
 
 AC_PREFIX_DEFAULT(/home/sympa)
 
@@ -388,6 +389,7 @@ AC_CONFIG_FILES([
     web_tt2/Makefile
     wwsympa/Makefile
     mail_tt2/Makefile
-    po/Makefile
+    po/Makefile.in
+    po-wwsympa/Makefile.in
 ])
 AC_OUTPUT
