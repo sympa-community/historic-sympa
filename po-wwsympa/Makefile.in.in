@@ -146,6 +146,8 @@ POTFILES.pl: $(srcdir)/POTFILES.in
 $(DOMAIN).pot-update: $(POTFILES) POTFILES.pl remove-potcdate.sed
 	$(XGETTEXT) -u \
 	  --default-domain=$(DOMAIN) \
+	  --plugin perl=pl,pm \
+	  --plugin tt2=tt2 \
 	  --files-from=POTFILES.pl
 	test ! -f $(DOMAIN).po || { \
 	  if test -f $(srcdir)/$(DOMAIN).pot; then \
