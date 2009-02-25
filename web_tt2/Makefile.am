@@ -134,4 +134,7 @@ webtemplate_DATA = active_lists.tt2 \
 EXTRA_DIST = $(webtemplate_DATA)
 
 install-data-hook:
-	$(PERL) ../set_symlinks.pl web_tt2 $(DESTDIR)$(pkgdatadir)/web_tt2
+	cd  $(DESTDIR)$(pkgdatadir)/web_tt2; \
+	ln -sf review.tt2 search.tt2; \
+	ln -sf lists.tt2 which.tt2; \
+	ln -sf lists.tt2 search_list.tt2
