@@ -43,9 +43,6 @@ mailtemplate_DATA = authorization_reject.tt2 \
 		    list_rejected.tt2 \
 		    lists.tt2 \
 		    list_unknown.tt2 \
-		    Makefile
-		    Makefile.am
-		    Makefile.in
 		    message_report.tt2 \
 		    moderate.tt2 \
 		    modindex.tt2 \
