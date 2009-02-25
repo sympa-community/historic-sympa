@@ -160,7 +160,7 @@ DEFAULT_SCENARIOS = add.owner \
 		    visibility.conceal
 
 install-data-hook:
-	sed -i -e 's|--MAILERPROGDIR--|$(libexecdir)|' \
+	sed -i -e 's|--libexecdir--|$(libexecdir)|' \
 		$(DESTDIR)$(datadir)/sympa/etc/list_aliases.tt2
 	cd  $(DESTDIR)$(datadir)/sympa/etc/scenari; \
 	for file in $(DEFAULT_SCENARIOS); do \
