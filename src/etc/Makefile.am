@@ -145,7 +145,24 @@ nobase_default_DATA = list_task_models/expire.yearly.task \
 
 EXTRA_DIST = $(nobase_default_DATA)
 
+DEFAULT_SCENARIOS = add.owner \
+		    d_edit.owner \
+		    d_read.private \
+		    del.owner \
+		    info.open \
+		    invite.private \
+		    remind.owner \
+		    review.owner \
+		    send.private \
+		    subscribe.open \
+		    topics_visibility.noconceal \
+		    unsubscribe.open \
+		    visibility.conceal
+
 install-data-hook:
 	sed -i -e 's|--MAILERPROGDIR--|$(libexecdir)|' \
 		$(DESTDIR)$(datadir)/sympa/etc/list_aliases.tt2
-	$(PERL) ../../set_symlinks.pl scenari $(DESTDIR)$(datadir)/sympa/etc/scenari
+	cd  $(DESTDIR)$(datadir)/sympa/etc/scenari; \
+	for file in $(DEFAULT_SCENARIOS); do \
+		ln -sf $$file `echo $$file | sed -e 's/\.[^.]\+$$/.default/'`; \
+	done
