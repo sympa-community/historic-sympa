@@ -20,7 +20,7 @@
 # Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
 
 mailtemplatedir = $(pkgdatadir)/mail_tt2
-mailtemplate_DATA = authorization_reject.tt2
+mailtemplate_DATA = authorization_reject.tt2 \
 		    bye.tt2 certif_warning.tt2 \
 		    command_report.tt2 \
 		    digest_plain.tt2 \
