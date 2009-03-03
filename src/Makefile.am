@@ -84,7 +84,7 @@ install-data-hook:
 		-e 's|--libexecdir--|$(libexecdir)|' \
 		-e 's|--sbindir--|$(sbindir)|' \
 		-e 's|--localedir--|$(localedir)|' \
-		-e 's|--datadir--|$(datadir)|' \
+		-e 's|--pkgdatadir--|$(pkgdatadir)|' \
 		-e 's|--sysconfdir--|$(sysconfdir)|' \
 		-e 's|--EXPLDIR--|$(EXPLDIR)|' \
 		-e 's|--SPOOLDIR--|$(SPOOLDIR)|' \

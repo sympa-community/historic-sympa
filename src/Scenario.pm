@@ -71,7 +71,7 @@ sub new {
 	
     }else {
 	## We can't use &tools::get_filename() because we don't have a List object yet ; it's being constructed
-	my @dirs = ($Conf{'etc'}.'/'.$parameters{'robot'}, $Conf{'etc'}, '--datadir--/sympa/etc');
+	my @dirs = ($Conf{'etc'}.'/'.$parameters{'robot'}, $Conf{'etc'}, '--pkgdatadir--/etc');
 	unshift @dirs, $parameters{'directory'} if (defined $parameters{'directory'});
 	foreach my $dir (@dirs) {
 	    my $tmp_path = $dir.'/scenari/'.$parameters{'function'}.'.'.$parameters{'name'};

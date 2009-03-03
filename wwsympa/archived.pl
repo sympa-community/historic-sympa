@@ -38,7 +38,7 @@ This script must be run along with sympa. It regularly checks the 'outgoing' spo
 =cut 
 
 ## Change this to point to your Sympa bin directory
-use lib '--datadir--/sympa/lib';
+use lib '--pkgdatadir--/lib';
 
 use List;
 use Conf;

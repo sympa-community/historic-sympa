@@ -21,7 +21,7 @@
 
 
 package wwslib;
-use lib '--datadir--/sympa/lib';
+use lib '--pkgdatadir--/lib';
 
 use Exporter;
 @ISA = ('Exporter');

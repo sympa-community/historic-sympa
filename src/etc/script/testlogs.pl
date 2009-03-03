@@ -2,7 +2,7 @@
 
 use strict;
 
-use lib '--datadir--/sympa/lib';
+use lib '--pkgdatadir--/lib';
 use Getopt::Long;
 use Conf;
 use Log;

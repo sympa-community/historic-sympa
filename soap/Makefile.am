@@ -47,7 +47,7 @@ install-data-hook:
 		-e 's|--PERL--|$(PERL)|' \
 		-e 's|--CONFIG--|$(CONFIG)|' \
 		-e 's|--WWSCONFIG--|$(WWSCONFIG)|' \
-		-e 's|--datadir--|$(datadir)|' \
+		-e 's|--pkgdatadir--|$(pkgdatadir)|' \
 		$(addprefix $(DESTDIR)$(datadir)/sympa/lib/, $(modules_DATA)) \
 		$(addprefix $(DESTDIR)$(execcgidir)/, $(execcgi_SCRIPTS)) \
 		$(addprefix $(DESTDIR)$(datadir)/sympa/bin/, $(script_SCRIPTS))

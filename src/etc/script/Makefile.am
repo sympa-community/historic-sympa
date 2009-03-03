@@ -40,6 +40,6 @@ install-data-hook:
 		-e 's|--lockdir--|$(lockdir)|' \
 		-e 's|--initdir--|$(initdir)|' \
 		-e 's|--sbindir--|$(sbindir)|' \
-		-e 's|--datadir--|$(datadir)|' \
+		-e 's|--pkgdatadir--|$(pkgdatadir)|' \
 		$(addprefix $(DESTDIR)$(datadir)/sympa/bin/, $(script_SCRIPTS)) \
 		$(addprefix $(DESTDIR)$(initdir)/, $(init_SCRIPTS))

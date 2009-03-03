@@ -201,7 +201,7 @@ sub help {
 	    &report::reject_report_cmd('intern_quiet','',{},$cmd_line,$sender,$robot);
 	}
 
-    }elsif (-r "--datadir--/sympa/etc/mail_tt2/helpfile.tt2") {
+    }elsif (-r "--pkgdatadir--/etc/mail_tt2/helpfile.tt2") {
 
 	my $data = {};
 

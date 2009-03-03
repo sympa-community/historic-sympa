@@ -20,7 +20,7 @@ use HTTP::Cookies;
 use URI;
 use Getopt::Long;
 
-use lib '--datadir--/sympa/lib';
+use lib '--pkgdatadir--/lib';
 # use Conf;
 require 'tools.pl';
 

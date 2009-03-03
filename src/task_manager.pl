@@ -25,7 +25,7 @@
 ##         :  d		-> debug -d is equiv to -dF
 
 ## Change this to point to your Sympa bin directory
-use lib '--datadir--/sympa/lib';
+use lib '--pkgdatadir--/lib';
 use strict vars;
 
 use Task;

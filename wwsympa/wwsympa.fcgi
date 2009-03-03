@@ -39,7 +39,7 @@ This fcgi script completely handles all aspects of the Sympa web interface
 =cut 
 
 ## Change this to point to your Sympa bin directory
-use lib '--datadir--/sympa/lib';
+use lib '--pkgdatadir--/lib';
 
 use Getopt::Long;
 use Archive::Zip;
@@ -8074,9 +8074,9 @@ Sends back the list creation edition form.
      &wwslog('info', 'do_scenario_test');
 
      ## List available scenarii
-     unless (opendir SCENARI, "--datadir--/sympa/etc/scenari/"){
-	 &report::reject_report_web('intern','cannot_open_dir',{'dir' => "--datadir--/sympa/etc/scenari/"},$param->{'action'},$list,$param->{'user'}{'email'},$robot);
-	 &wwslog('info',"do_scenario_test : unable to open --datadir--/sympa/etc/scenari");
+     unless (opendir SCENARI, "--pkgdatadir--/etc/scenari/"){
+	 &report::reject_report_web('intern','cannot_open_dir',{'dir' => "--pkgdatadir--/etc/scenari/"},$param->{'action'},$list,$param->{'user'}{'email'},$robot);
+	 &wwslog('info',"do_scenario_test : unable to open --pkgdatadir--/etc/scenari");
 	 return undef;
      }
 
@@ -15579,7 +15579,7 @@ sub do_rss_request {
 sub do_wsdl {
   
     &wwslog('info', "do_wsdl ()");
-    my $sympawsdl = '--datadir--/sympa/etc/sympa.wsdl';
+    my $sympawsdl = '--pkgdatadir--/etc/sympa.wsdl';
 
     unless (-r $sympawsdl){
       	&report::reject_report_web('intern','err_404',{},$param->{'action'});
@@ -15599,7 +15599,7 @@ sub do_wsdl {
     
    $param->{'conf'}{'soap_url'}  = $soap_url;
 
-    &tt2::parse_tt2($param, 'sympa.wsdl' , \*STDOUT, ['--datadir--/sympa/etc']);
+    &tt2::parse_tt2($param, 'sympa.wsdl' , \*STDOUT, ['--pkgdatadir--/etc']);
     
 #    unless (open (WSDL,$sympawsdl)) {
 # 	&error_message('404');
