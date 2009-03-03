@@ -77,3 +77,7 @@ importantchanges:
 		SYMPA_VERSION=$(PACKAGE_VERSION); export SYMPA_VERSION; \
 		$(PERL) $(top_srcdir)/important_changes.pl \
 	) ;
+
+uninstall-hook:
+	rm -f $(DESTDIR)$(sysconfdir)/sympa.conf
+	rm -f $(DESTDIR)$(sysconfdir)/wwsympa.conf
