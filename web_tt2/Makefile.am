@@ -19,7 +19,6 @@
 # along with this program; if not, write to the Free Software
 # Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
 
-webtemplatedir = $(pkgdatadir)/web_tt2
 webtemplate_DATA = active_lists.tt2 \
 		   add_request.tt2 \
 		   admin_menu.tt2 \

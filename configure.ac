@@ -188,7 +188,6 @@ AC_ARG_WITH(
 )
 AC_SUBST(EXPLDIR)
 
-
 SPOOLDIR='${prefix}/spool'
 AC_ARG_WITH(
     spooldir,
@@ -199,7 +198,6 @@ AC_ARG_WITH(
     [SPOOLDIR="$withval"]
 )
 AC_SUBST(SPOOLDIR)
-
 
 initdir='${sysconfdir}/rc.d/init.d'
 AC_ARG_WITH(
@@ -233,6 +231,19 @@ AC_ARG_WITH(
     [piddir="$withval"]
 )
 AC_SUBST(piddir)
+
+# various subdirectories
+pkgdatadir=$datadir/sympa
+modulesdir=$pkgdatadir/lib
+defaultdir=$pkgdatadir/etc
+scriptdir=$pkgdatadir/bin
+mailtemplatedir=$pkgdatadir/mail_tt2
+webtemplatedir=$pkgdatadir/web_tt2
+AC_SUBST(modulesdir)
+AC_SUBST(defaultdir)
+AC_SUBST(scriptdir)
+AC_SUBST(mailtemplatedir)
+AC_SUBST(webtemplatedir)
 
 # SSL certs dir
 SSLCERTDIR=$EXPLDIR/X509-user-certs
@@ -280,8 +291,6 @@ else
 	AC_MSG_ERROR([perl required])
     fi
 fi
-
-
 
 USER=sympa
 AC_ARG_WITH(

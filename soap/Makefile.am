@@ -25,13 +25,10 @@ sympa_soap_server_wrapper_fcgi_SOURCES = sympa_soap_server-wrapper.fcgi.c
 sympa_soap_server_wrapper_fcgi_CPPFLAGS = \
 			  -DSYMPASOAP=\"$(execcgidir)/sympa_soap_server.fcgi\"
 
-scriptdir = $(pkgdatadir)/bin
 script_SCRIPTS = sympa_soap_client.pl
 
-modulesdir = $(pkgdatadir)/lib
 modules_DATA = sympasoap.pm SympaTransport.pm
 
-defaultdir = $(pkgdatadir)/etc
 default_DATA = sympa.wsdl
 
 EXTRA_DIST = $(default_DATA) $(modules_DATA) \

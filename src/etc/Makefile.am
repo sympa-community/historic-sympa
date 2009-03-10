@@ -18,7 +18,6 @@
 
 SUBDIRS = script
 
-defaultdir = $(pkgdatadir)/etc
 nobase_default_DATA = list_task_models/expire.yearly.task \
 		      list_task_models/remind.2month.task \
 		      list_task_models/remind.monthly.task \
