@@ -58,7 +58,13 @@ installconfig:
 		--create wwsympa.conf \
 		--target $(DESTDIR)$(sysconfdir)/wwsympa.conf \
 		|| /bin/true
-
+	if [ ! -f $(DESTDIR)$(sysconfdir)/data_structure.version ]; then \
+		cd $(DESTDIR)$(sysconfdir); \
+		echo "# automatically created file" >> data_structure.version; \
+		echo "# you should not modify it" >> data_structure.version; \
+		echo $(VERSION) >> data_structure.version; \
+		chown $(USER).$(GROUP) data_structure.version || /bin/true; \
+	fi
 
 nextstep: 
 	@echo ""
@@ -71,18 +77,12 @@ nextstep:
 	@echo "#######################################################"
 
 importantchanges:
-	@( 	PERL=$(PERL); export PERL; \
-		UMASK=0600; export UMASK; \
-		DESTDIR=$(DESTDIR); export DESTDIR; \
-		BINDIR=$(libexecdir); export BINDIR; \
-		SBINDIR=$(sbindir); export SBINDIR; \
-		LIBDIR=$(datadir)/sympa/etc; export LIBDIR; \
-		ETCDIR=$(sysconfdir); export ETCDIR;\
-		USER=$(USER); export USER;\
-		GROUP=$(GROUP); export GROUP;\
-		SYMPA_VERSION=$(VERSION); export SYMPA_VERSION; \
-		$(PERL) $(top_srcdir)/important_changes.pl \
-	) ;
+	if [ -f $(DESTDIR)$(modulesdir)/Version.pm ]; then \
+		previous=`perl -Mlib=$(DESTDIR)$(modulesdir) -MVersion -e 'print $$Version::Version'`; \
+	fi; \
+	$(PERL) $(top_srcdir)/important_changes.pl \
+		--current $(VERSION) \
+		--previous $${previous}
 
 uninstall-hook:
 	rm -f $(DESTDIR)$(sysconfdir)/sympa.conf
