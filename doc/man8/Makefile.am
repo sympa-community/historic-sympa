@@ -7,3 +7,14 @@ CLEANFILES = $(man8_MANS)
 .pod.8:
 	rm -f $@
 	pod2man --section=8 --center="sympa $(PACKAGE_VERSION)" --lax --release="$(PACKAGE_VERSION)" $< $@
+
+install-data-hook:
+	sed -i \
+		-e 's|--piddir--|$(piddir)|' \
+		-e 's|--libexecdir--|$(libexecdir)|' \
+		-e 's|--sysconfdir--|$(sysconfdir)|' \
+		-e 's|--defaultdir--|$(defaultdir)|' \
+		-e 's|--expldir--|$(expldir)|' \
+		-e 's|--spooldir--|$(spooldir)|' \
+		-e 's|--docdir--|$(docdir)|' \
+		$(addprefix $(DESTDIR)$(man8dir)/, $(man8_MANS))
