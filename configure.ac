@@ -245,10 +245,6 @@ AC_SUBST(scriptdir)
 AC_SUBST(mailtemplatedir)
 AC_SUBST(webtemplatedir)
 
-# SSL certs dir
-SSLCERTDIR=$EXPLDIR/X509-user-certs
-AC_SUBST(SSLCERTDIR)
-
 CONFIG=$CONFDIR/sympa.conf
 AC_SUBST(CONFIG)
 WWSCONFIG=$CONFDIR/wwsympa.conf
