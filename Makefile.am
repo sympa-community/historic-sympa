@@ -74,7 +74,7 @@ importantchanges:
 		ETCDIR=$(sysconfdir); export ETCDIR;\
 		USER=$(USER); export USER;\
 		GROUP=$(GROUP); export GROUP;\
-		SYMPA_VERSION=$(PACKAGE_VERSION); export SYMPA_VERSION; \
+		SYMPA_VERSION=$(VERSION); export SYMPA_VERSION; \
 		$(PERL) $(top_srcdir)/important_changes.pl \
 	) ;
 

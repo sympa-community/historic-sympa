@@ -6,7 +6,7 @@ CLEANFILES = $(man8_MANS)
 
 .pod.8:
 	rm -f $@
-	pod2man --section=8 --center="sympa $(PACKAGE_VERSION)" --lax --release="$(PACKAGE_VERSION)" $< $@
+	pod2man --section=8 --center="sympa $(VERSION)" --lax --release="$(VERSION)" $< $@
 
 install-data-hook:
 	sed -i \
