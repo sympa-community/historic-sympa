@@ -29,7 +29,7 @@ installdir:
 	@echo "Creating writable directories"
 	@for dir in $(expldir) $(spooldir) $(spooldir)/msg $(spooldir)/digest \
 		$(spooldir)/moderation $(spooldir)/expire $(spooldir)/auth \
-		$(spooldir)/outgoing $(spooldir)/tmp \ $(spooldir)/task \
+		$(spooldir)/outgoing $(spooldir)/tmp $(spooldir)/task \
 		$(prefix)/bounce $(prefix)/arc; do \
 		if [ ! -d $(DESTDIR)$$dir ] ; then \
 			echo "Creating $(DESTDIR)$$dir"; \
@@ -49,10 +49,16 @@ installdir:
 
 installconfig:
 	@echo "Installing basic configuration ..."
-	-$(DESTDIR)$(sbindir)/sympa_wizard.pl \
-		--create sympa.conf --target $(DESTDIR)$(sysconfdir)/sympa.conf
-	-$(DESTDIR)$(sbindir)/sympa_wizard.pl \
-		--create wwsympa.conf --target $(DESTDIR)$(sysconfdir)/wwsympa.conf
+	export PERL5LIB=$(DESTDIR)$(modulesdir); \
+	$(DESTDIR)$(sbindir)/sympa_wizard.pl \
+		--create sympa.conf \
+		--target $(DESTDIR)$(sysconfdir)/sympa.conf \
+		|| /bin/true; \
+	$(DESTDIR)$(sbindir)/sympa_wizard.pl \
+		--create wwsympa.conf \
+		--target $(DESTDIR)$(sysconfdir)/wwsympa.conf \
+		|| /bin/true
+
 
 nextstep: 
 	@echo ""
