@@ -177,27 +177,27 @@ AC_ARG_WITH(
 )
 
 # variable content
-EXPLDIR='${prefix}/expl'
+expldir='${prefix}/expl'
 AC_ARG_WITH(
     expldir,
     AS_HELP_STRING(
 	[--with-expldir=DIR],
-	[modifiable data files in DIR (default ${prefix}/expl)]
+	[variable state directory is DIR (default ${prefix}/expl)]
     ),
-    [EXPLDIR="$withval"]
+    [expldir="$withval"]
 )
-AC_SUBST(EXPLDIR)
+AC_SUBST(expldir)
 
-SPOOLDIR='${prefix}/spool'
+spooldir='${prefix}/spool'
 AC_ARG_WITH(
     spooldir,
     AS_HELP_STRING(
 	[--with-spooldir=DIR],
-	[spool directory is DIR  (default ${prefix}/spool)]
+	[application spool directory is DIR (default ${prefix}/spool)]
     ),
-    [SPOOLDIR="$withval"]
+    [spooldir="$withval"]
 )
-AC_SUBST(SPOOLDIR)
+AC_SUBST(spooldir)
 
 initdir='${sysconfdir}/rc.d/init.d'
 AC_ARG_WITH(

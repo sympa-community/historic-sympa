@@ -27,9 +27,9 @@ install-data-hook: installdir installconfig nextstep importantchanges
 
 installdir:
 	@echo "Creating writable directories"
-	@for dir in $(EXPLDIR) $(SPOOLDIR) $(SPOOLDIR)/msg $(SPOOLDIR)/digest \
-		$(SPOOLDIR)/moderation $(SPOOLDIR)/expire $(SPOOLDIR)/auth \
-		$(SPOOLDIR)/outgoing $(SPOOLDIR)/tmp \ $(SPOOLDIR)/task \
+	@for dir in $(expldir) $(spooldir) $(spooldir)/msg $(spooldir)/digest \
+		$(spooldir)/moderation $(spooldir)/expire $(spooldir)/auth \
+		$(spooldir)/outgoing $(spooldir)/tmp \ $(spooldir)/task \
 		$(prefix)/bounce $(prefix)/arc; do \
 		if [ ! -d $(DESTDIR)$$dir ] ; then \
 			echo "Creating $(DESTDIR)$$dir"; \

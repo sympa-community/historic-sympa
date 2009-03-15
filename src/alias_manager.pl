@@ -46,7 +46,7 @@ my $tmp_alias_file = $Conf{'tmpdir'}.'/sympa_aliases.'.time;
 
 
 my $alias_wrapper = '--sbindir--/aliaswrapper';
-my $lock_file = '--EXPLDIR--/alias_manager.lock';
+my $lock_file = '--expldir--/alias_manager.lock';
 my $default_domain;
 my $path_to_queue = '--libexecdir--/queue';
 my $path_to_bouncequeue = '--libexecdir--/bouncequeue';

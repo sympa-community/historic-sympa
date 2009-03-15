@@ -56,7 +56,7 @@ our @params = (
     { title => 'Directories and file location' },
     {
         name    => 'home',
-        default => '--EXPLDIR--',
+        default => '--expldir--',
         query   => 'Directory containing mailing lists subdirectories',
         file    => 'sympa.conf',
         edit    => '1',
@@ -128,20 +128,20 @@ our @params = (
     },
     {
         name    => 'spool',
-        default => '--SPOOLDIR--',
+        default => '--spooldir--',
         query   => 'The main spool containing various specialized spools',
         file    => 'sympa.conf',
         advice => 'All spool are created at runtime by sympa.pl'
     },
     {
         name    => 'queue',
-        default => '--SPOOLDIR--/msg',
+        default => '--spooldir--/msg',
         query   => 'Incoming spool',
         file    => 'sympa.conf',
     },
     {
         name    => 'queuebounce',
-        default => '--SPOOLDIR--/bounce',
+        default => '--spooldir--/bounce',
         query   => 'Bounce incoming spool',
         file    => 'sympa.conf',
     },
@@ -544,13 +544,13 @@ our @params = (
     },
     {
         name    => 'ssl_cert_dir',
-        default => '--EXPLDIR--/X509-user-certs',
+        default => '--expldir--/X509-user-certs',
         query   => 'User CERTs directory',
         file    => 'sympa.conf'
     },
     {
         name    => 'crl_dir',
-        default => '--EXPLDIR--/crl',
+        default => '--expldir--/crl',
         file    => 'sympa.conf'
     },
     {
