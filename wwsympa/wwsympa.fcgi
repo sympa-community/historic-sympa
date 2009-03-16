@@ -10515,7 +10515,7 @@ sub _restrict_values {
      my %desc_hash;
      my $user = $param->{'user'}{'email'} || 'nobody';
       
-     while ($current_path ne "") {
+     while ($current_path ne "" && $current_path ne '/') {
 	 # no description file found yet
 	 my $def_desc_file = 0;
 	 my $desc_file;
