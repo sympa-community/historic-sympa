@@ -144,10 +144,12 @@ POTFILES.pl: $(srcdir)/POTFILES.in
 # This target rebuilds $(DOMAIN).pot; it is an expensive operation.
 # Note that $(DOMAIN).pot is not touched if it doesn't need to be changed.
 $(DOMAIN).pot-update: $(POTFILES) POTFILES.pl remove-potcdate.sed
+	export PERL5LIB=$(top_srcdir)/src:$(PERL5LIB); \
 	$(XGETTEXT) -u \
 	  --default-domain=$(DOMAIN) \
 	  --plugin perl=pl,pm \
 	  --plugin tt2=tt2 \
+	  --plugin Sympa::Extractor='*' \
 	  --files-from=POTFILES.pl
 	test ! -f $(DOMAIN).po || { \
 	  if test -f $(srcdir)/$(DOMAIN).pot; then \
