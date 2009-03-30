@@ -1,9 +1,240 @@
 ------------------------------------------------------------------------
+r5636 | sympa-authors | 2009-03-30 12:09:46 +0200 (Mon, 30 Mar 2009) | 1 line
+Changed paths:
+   M /branches/sympa-5.4-branch/po/af.po
+   M /branches/sympa-5.4-branch/po/ar.po
+   M /branches/sympa-5.4-branch/po/bg.po
+   M /branches/sympa-5.4-branch/po/br.po
+   M /branches/sympa-5.4-branch/po/ca.po
+   M /branches/sympa-5.4-branch/po/cs.po
+   M /branches/sympa-5.4-branch/po/de.po
+   M /branches/sympa-5.4-branch/po/el.po
+   M /branches/sympa-5.4-branch/po/en_US.po
+   M /branches/sympa-5.4-branch/po/es.po
+   M /branches/sympa-5.4-branch/po/et.po
+   M /branches/sympa-5.4-branch/po/eu.po
+   M /branches/sympa-5.4-branch/po/fi.po
+   M /branches/sympa-5.4-branch/po/fr.po
+   M /branches/sympa-5.4-branch/po/hu.po
+   M /branches/sympa-5.4-branch/po/id.po
+   M /branches/sympa-5.4-branch/po/it.po
+   M /branches/sympa-5.4-branch/po/ja.po
+   M /branches/sympa-5.4-branch/po/ko.po
+   M /branches/sympa-5.4-branch/po/ml.po
+   M /branches/sympa-5.4-branch/po/nb_NO.po
+   M /branches/sympa-5.4-branch/po/nl.po
+   M /branches/sympa-5.4-branch/po/nn_NO.po
+   M /branches/sympa-5.4-branch/po/oc.po
+   M /branches/sympa-5.4-branch/po/pl.po
+   M /branches/sympa-5.4-branch/po/pt.po
+   M /branches/sympa-5.4-branch/po/pt_BR.po
+   M /branches/sympa-5.4-branch/po/ro.po
+   M /branches/sympa-5.4-branch/po/ru.po
+   M /branches/sympa-5.4-branch/po/sv.po
+   M /branches/sympa-5.4-branch/po/sympa.pot
+   M /branches/sympa-5.4-branch/po/tr.po
+   M /branches/sympa-5.4-branch/po/vi.po
+   M /branches/sympa-5.4-branch/po/web_help_af.po
+   M /branches/sympa-5.4-branch/po/web_help_ar.po
+   M /branches/sympa-5.4-branch/po/web_help_bg.po
+   M /branches/sympa-5.4-branch/po/web_help_br.po
+   M /branches/sympa-5.4-branch/po/web_help_ca.po
+   M /branches/sympa-5.4-branch/po/web_help_cs.po
+   M /branches/sympa-5.4-branch/po/web_help_de.po
+   M /branches/sympa-5.4-branch/po/web_help_el.po
+   M /branches/sympa-5.4-branch/po/web_help_en_US.po
+   M /branches/sympa-5.4-branch/po/web_help_es.po
+   M /branches/sympa-5.4-branch/po/web_help_et.po
+   M /branches/sympa-5.4-branch/po/web_help_eu.po
+   M /branches/sympa-5.4-branch/po/web_help_fi.po
+   M /branches/sympa-5.4-branch/po/web_help_fr.po
+   M /branches/sympa-5.4-branch/po/web_help_hu.po
+   M /branches/sympa-5.4-branch/po/web_help_id.po
+   M /branches/sympa-5.4-branch/po/web_help_it.po
+   M /branches/sympa-5.4-branch/po/web_help_ja.po
+   M /branches/sympa-5.4-branch/po/web_help_ko.po
+   M /branches/sympa-5.4-branch/po/web_help_ml.po
+   M /branches/sympa-5.4-branch/po/web_help_nb_NO.po
+   M /branches/sympa-5.4-branch/po/web_help_nl.po
+   M /branches/sympa-5.4-branch/po/web_help_nn_NO.po
+   M /branches/sympa-5.4-branch/po/web_help_oc.po
+   M /branches/sympa-5.4-branch/po/web_help_pl.po
+   M /branches/sympa-5.4-branch/po/web_help_pt.po
+   M /branches/sympa-5.4-branch/po/web_help_pt_BR.po
+   M /branches/sympa-5.4-branch/po/web_help_ro.po
+   M /branches/sympa-5.4-branch/po/web_help_ru.po
+   M /branches/sympa-5.4-branch/po/web_help_sv.po
+   M /branches/sympa-5.4-branch/po/web_help_tr.po
+   M /branches/sympa-5.4-branch/po/web_help_vi.po
+   M /branches/sympa-5.4-branch/po/web_help_zh_CN.po
+   M /branches/sympa-5.4-branch/po/web_help_zh_TW.po
+   M /branches/sympa-5.4-branch/po/zh_CN.po
+   M /branches/sympa-5.4-branch/po/zh_TW.po
+
+[-feature] Updating catalogues with latest Sympa modifications.
+------------------------------------------------------------------------
+r5635 | sympa-authors | 2009-03-30 12:06:33 +0200 (Mon, 30 Mar 2009) | 1 line
+Changed paths:
+   M /branches/sympa-5.4-branch/po/af.po
+   M /branches/sympa-5.4-branch/po/ar.po
+   M /branches/sympa-5.4-branch/po/bg.po
+   M /branches/sympa-5.4-branch/po/br.po
+   M /branches/sympa-5.4-branch/po/ca.po
+   M /branches/sympa-5.4-branch/po/cs.po
+   M /branches/sympa-5.4-branch/po/de.po
+   M /branches/sympa-5.4-branch/po/el.po
+   M /branches/sympa-5.4-branch/po/en_US.po
+   M /branches/sympa-5.4-branch/po/es.po
+   M /branches/sympa-5.4-branch/po/et.po
+   M /branches/sympa-5.4-branch/po/eu.po
+   M /branches/sympa-5.4-branch/po/fi.po
+   M /branches/sympa-5.4-branch/po/fr.po
+   M /branches/sympa-5.4-branch/po/hu.po
+   M /branches/sympa-5.4-branch/po/id.po
+   M /branches/sympa-5.4-branch/po/it.po
+   M /branches/sympa-5.4-branch/po/ja.po
+   M /branches/sympa-5.4-branch/po/ko.po
+   M /branches/sympa-5.4-branch/po/ml.po
+   M /branches/sympa-5.4-branch/po/nb_NO.po
+   M /branches/sympa-5.4-branch/po/nl.po
+   M /branches/sympa-5.4-branch/po/nn_NO.po
+   M /branches/sympa-5.4-branch/po/oc.po
+   M /branches/sympa-5.4-branch/po/pl.po
+   M /branches/sympa-5.4-branch/po/pt.po
+   M /branches/sympa-5.4-branch/po/pt_BR.po
+   M /branches/sympa-5.4-branch/po/ro.po
+   M /branches/sympa-5.4-branch/po/ru.po
+   M /branches/sympa-5.4-branch/po/sv.po
+   M /branches/sympa-5.4-branch/po/tr.po
+   M /branches/sympa-5.4-branch/po/vi.po
+   M /branches/sympa-5.4-branch/po/web_help_af.po
+   M /branches/sympa-5.4-branch/po/web_help_ar.po
+   M /branches/sympa-5.4-branch/po/web_help_bg.po
+   M /branches/sympa-5.4-branch/po/web_help_br.po
+   M /branches/sympa-5.4-branch/po/web_help_ca.po
+   M /branches/sympa-5.4-branch/po/web_help_cs.po
+   M /branches/sympa-5.4-branch/po/web_help_de.po
+   M /branches/sympa-5.4-branch/po/web_help_el.po
+   M /branches/sympa-5.4-branch/po/web_help_en_US.po
+   M /branches/sympa-5.4-branch/po/web_help_es.po
+   M /branches/sympa-5.4-branch/po/web_help_et.po
+   M /branches/sympa-5.4-branch/po/web_help_eu.po
+   M /branches/sympa-5.4-branch/po/web_help_fi.po
+   M /branches/sympa-5.4-branch/po/web_help_fr.po
+   M /branches/sympa-5.4-branch/po/web_help_hu.po
+   M /branches/sympa-5.4-branch/po/web_help_id.po
+   M /branches/sympa-5.4-branch/po/web_help_it.po
+   M /branches/sympa-5.4-branch/po/web_help_ja.po
+   M /branches/sympa-5.4-branch/po/web_help_ko.po
+   M /branches/sympa-5.4-branch/po/web_help_ml.po
+   M /branches/sympa-5.4-branch/po/web_help_nb_NO.po
+   M /branches/sympa-5.4-branch/po/web_help_nl.po
+   M /branches/sympa-5.4-branch/po/web_help_nn_NO.po
+   M /branches/sympa-5.4-branch/po/web_help_oc.po
+   M /branches/sympa-5.4-branch/po/web_help_pl.po
+   M /branches/sympa-5.4-branch/po/web_help_pt.po
+   M /branches/sympa-5.4-branch/po/web_help_pt_BR.po
+   M /branches/sympa-5.4-branch/po/web_help_ro.po
+   M /branches/sympa-5.4-branch/po/web_help_ru.po
+   M /branches/sympa-5.4-branch/po/web_help_sv.po
+   M /branches/sympa-5.4-branch/po/web_help_tr.po
+   M /branches/sympa-5.4-branch/po/web_help_vi.po
+   M /branches/sympa-5.4-branch/po/web_help_zh_CN.po
+   M /branches/sympa-5.4-branch/po/web_help_zh_TW.po
+   M /branches/sympa-5.4-branch/po/zh_CN.po
+   M /branches/sympa-5.4-branch/po/zh_TW.po
+
+[-feature] Retrieving latest translations from Pootle.
+------------------------------------------------------------------------
+r5634 | sympa-authors | 2009-03-30 11:06:18 +0200 (Mon, 30 Mar 2009) | 3 lines
+Changed paths:
+   M /branches/sympa-5.4-branch/web_tt2/add_request.tt2
+   M /branches/sympa-5.4-branch/web_tt2/javascript.tt2
+
+[bug][Reported by S. Costard, Univ. Haute Bretagne] When using the multiple add form, it was difficult to create a list by copy / paste, because a javascript erased any data in the textarea on click event. Fixed by modifying said javascript.
+
+
+------------------------------------------------------------------------
+r5633 | sympa-authors | 2009-03-25 10:57:23 +0100 (Wed, 25 Mar 2009) | 2 lines
+Changed paths:
+   M /branches/sympa-5.4-branch/web_tt2/javascript.tt2
+
+[bug][#5905][Reported by A. Stephens, Bristol University] A [% list %] TT2 var was trailing after e return directive in javascript.
+
+------------------------------------------------------------------------
+r5626 | sympa-authors | 2009-03-16 09:41:33 +0100 (Mon, 16 Mar 2009) | 3 lines
+Changed paths:
+   M /branches/sympa-5.4-branch/wwsympa/wwsympa.fcgi
+
+[bug][#5872][Submitted by H. Moa] When accessing an rss-feed for the shared files of a list upgraded from 5.2b, wwsympa entered a tight-loop, load went up to 100%, the webfrontend failed making the webserver reply with 500 and a single-processor system had to be rebooted. The list in question had no shared files. Fixed by checking that we don't use double slashes in the path to the shared directory.
+
+
+------------------------------------------------------------------------
+r5569 | sympa-authors | 2009-02-19 17:03:17 +0100 (Thu, 19 Feb 2009) | 2 lines
+Changed paths:
+   M /branches/sympa-5.4-branch/src/Makefile
+
+[*change] parser.pl is now completely removed from Sympa. It was still used in one single task model : sync_include.ttl.task. So if you have a custom version of this task model, please replace any occurence of [list->ttl] by [list.ttl].
+
+------------------------------------------------------------------------
+r5565 | sympa-authors | 2009-02-19 15:43:33 +0100 (Thu, 19 Feb 2009) | 2 lines
+Changed paths:
+   M /branches/sympa-5.4-branch/src/etc/list_task_models/sync_include.ttl.task
+   D /branches/sympa-5.4-branch/src/parser.pl
+   M /branches/sympa-5.4-branch/src/sympa.pl
+   M /branches/sympa-5.4-branch/src/task_manager.pl
+
+[bug] [Reported by JM Martins da Cruz] Removing definitively parser.pl. Its usage caused rencet perl to issue errors at Sympa startup.
+
+------------------------------------------------------------------------
+r5562 | sympa-authors | 2009-02-18 16:21:52 +0100 (Wed, 18 Feb 2009) | 2 lines
+Changed paths:
+   M /branches/sympa-5.4-branch/src/etc/script/sympa
+
+[bug][Reported by JM Martins da Cruz, ENSMP] Sympa startup script was broken on Solaris.
+
+------------------------------------------------------------------------
+r5556 | sympa-authors | 2009-02-16 14:30:38 +0100 (Mon, 16 Feb 2009) | 2 lines
+Changed paths:
+   M /branches/sympa-5.4-branch/src/List.pm
+   M /branches/sympa-5.4-branch/src/Log.pm
+   M /branches/sympa-5.4-branch/src/Upgrade.pm
+   M /branches/sympa-5.4-branch/src/etc/script/crypt_passwd.pl
+   M /branches/sympa-5.4-branch/src/etc/script/init_comment.pl
+   M /branches/sympa-5.4-branch/wwsympa/Challenge.pm
+   M /branches/sympa-5.4-branch/wwsympa/SympaSession.pm
+
+[bug][#5820][Reported by M. Jozsef, Budapest University of Technology and Economics] When fetching queries result into a hash, the case of each key string was unsure, as some RDMS could return higher cased field name, for example. This led to aparetnly empty queries result when trying to acces a lower case field value that had been returned with a higher case name. Fixed by systematically lowercasing the field name when fetching results in a hash.
+
+------------------------------------------------------------------------
+r5544 | sympa-authors | 2009-02-13 09:29:32 +0100 (Fri, 13 Feb 2009) | 2 lines
+Changed paths:
+   M /branches/sympa-5.4-branch/wwsympa/Makefile
+
+[bug][#5815] wwsympa Makefile no longer used $(DESTDIR). Its was replaced by a simple $(DIR) which made icons install break for people (packagers) using the $(DESTDIR) variable.
+
+------------------------------------------------------------------------
+r5498 | sympa-authors | 2009-02-10 11:23:43 +0100 (Tue, 10 Feb 2009) | 2 lines
+Changed paths:
+   M /branches/sympa-5.4-branch/ChangeLog
+   M /branches/sympa-5.4-branch/NEWS
+
+[-feature] Finishing 5.4.6 preparation.
+
+------------------------------------------------------------------------
+r5495 | sympa-authors | 2009-02-10 11:14:37 +0100 (Tue, 10 Feb 2009) | 2 lines
+Changed paths:
+   M /branches/sympa-5.4-branch/.version
+   M /branches/sympa-5.4-branch/ChangeLog
+
+[-feature] Preparing version 5.4.6
+
+------------------------------------------------------------------------
 r5494 | sympa-authors | 2009-02-09 17:50:56 +0100 (Mon, 09 Feb 2009) | 2 lines
 Changed paths:
    M /branches/sympa-5.4-branch/NEWS
 
-[bug] [Reported by J.P. barrière, ENIT] Bad syntax in NEWs file caused important_changes.pl to stop parsing this file before its end. Consequently, important configuration warnings were not issued to people intalling Sympa.
+[bug] Bad syntax in NEWs file caused important_changes.pl to stop parsing this file before its end. Consequently, important configuration warnings were not issued to people intalling Sympa.
 
 ------------------------------------------------------------------------
 r5493 | sympa-authors | 2009-02-09 17:49:52 +0100 (Mon, 09 Feb 2009) | 2 lines

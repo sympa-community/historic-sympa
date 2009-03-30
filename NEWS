@@ -3,6 +3,35 @@
 
 (See Changelog file for the full changes log)
 
+5.4.7		30 Mar 2009
+
+  Bugs:
+
+  web_tt2/add_request.tt2, web_tt2/javascript.tt2: [#5913][Reported by S. Costard, Univ. Haute Bretagne] When using the multiple add form, it was difficult to create a list by copy / paste, because a javascript erased any data in the textarea on click event. Fixed by modifying said javascript.
+
+  wwsympa/wwsympa.fcgi: [#5872][Submitted by H. Moa] When accessing an rss-feed for the shared files of a list upgraded from 5.2b, wwsympa entered a tight-loop, load went up to 100%, the webfrontend failed making the webserver reply with 500 and a single-processor system had to be rebooted. The list in question had no shared files. Fixed by checking that we don't use double slashes in the path to the shared directory.
+
+***** 'parser.pl' is now completely removed from Sympa. It was still used in one single task model : sync_include.ttl.task. So if you have a custom version of this task model, please replace any occurence of [list->ttl] by [list.ttl].
+  
+  src/etc/list_task_models/sync_include.ttl.task, src/parser.pl, src/sympa.pl, src/task_manager.pl: [Reported by JM Martins da Cruz, ENSMP] Removing definitively parser.pl. Its usage caused rencet perl to issue errors at Sympa startup.
+
+  /src/List.pm, src/Log.pm, src/Upgrade.pm, src/etc/script/crypt_passwd.pl, src/etc/script/init_comment.pl, wwsympa/Challenge.pm, wwsympa/SympaSession.pm: [#5820][Repoted by M. Jozsef, Budapest University of Technology and Economics] When fetching queries result into a hash, the case of each key string was unsure, as some RDMS could return higher cased field name, for example. This led to aparetnly empty queries result when trying to acces a lower case field value that had been returned with a higher case name. Fixed by systematically lowercasing the field name when fetching results in a hash.
+
+
+  Changes:
+
+  Japanese, Vietnamese and Spanish are now 100% translated! Our special thanks to the translators!
+
+  More generaly speaking, here is the list of updated translations:
+    * Catalan, thanks to J. Giralt
+    * English, thanks to M. Radford
+    * Estonian, thanks to U. Buhvestov
+    * Finn, thanks to J.P. Paloposki
+    * Japanese, thanks to S. Ikeda
+    * Russian, thanks to Chernysh
+    * Spanish, thanks to D. Viñar Ulriksen
+    * Vietnamese, thanks to C. Siddall
+
 5.4.6		10 Feb 2009
 
   Bugs:
