@@ -1,4 +1,27 @@
 ------------------------------------------------------------------------
+r5639 | sympa-authors | 2009-03-30 15:31:10 +0200 (Mon, 30 Mar 2009) | 8 lines
+Changed paths:
+   M /branches/sympa-5.4-branch/src/Conf.pm
+   M /branches/sympa-5.4-branch/src/sympa_wizard.pl
+
+[feature] Four new languages are now available by default in Sympa:
+  - Bokmål (B. C. Aasgaard)
+  - Polish (L. Zygmanski)
+  - Finn (J.P. Paloposki)
+  - Vietnamese (C. Siddall)
+Thanks to the translators for their efforts!
+
+
+------------------------------------------------------------------------
+r5637 | sympa-authors | 2009-03-30 15:01:48 +0200 (Mon, 30 Mar 2009) | 2 lines
+Changed paths:
+   M /branches/sympa-5.4-branch/.version
+   M /branches/sympa-5.4-branch/ChangeLog
+   M /branches/sympa-5.4-branch/NEWS
+
+[-feature]Preparing version 5.4.7.
+
+------------------------------------------------------------------------
 r5636 | sympa-authors | 2009-03-30 12:09:46 +0200 (Mon, 30 Mar 2009) | 1 line
 Changed paths:
    M /branches/sympa-5.4-branch/po/af.po

@@ -32,6 +32,15 @@
     * Spanish, thanks to D. Viñar Ulriksen
     * Vietnamese, thanks to C. Siddall
 
+  Features:
+
+  Four new languages are now available by default in Sympa:
+  - Bokmal (B. C. Aasgaard)
+  - Polish (L. Zygmanski)
+  - Finn (J.P. Paloposki)
+  - Vietnamese (C. Siddall)
+  Thanks to the translators for their efforts!
+
 5.4.6		10 Feb 2009
 
   Bugs:
