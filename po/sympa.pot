@@ -457,19 +457,19 @@ msgstr ""
 msgid "Subject"
 msgstr ""
 
-#: web_tt2/add_request.tt2:6
+#: web_tt2/add_request.tt2:7
 msgid "email1@dom1 Name1"
 msgstr ""
 
-#: web_tt2/add_request.tt2:7
+#: web_tt2/add_request.tt2:8
 msgid "email2@dom2 Name2"
 msgstr ""
 
-#: web_tt2/add_request.tt2:11
+#: web_tt2/add_request.tt2:12
 msgid "Add subscribers"
 msgstr ""
 
-#: web_tt2/add_request.tt2:12 web_tt2/editsubscriber.tt2:62 web_tt2/review.tt2:101 web_tt2/review.tt2:287 web_tt2/review.tt2:68 web_tt2/reviewbouncing.tt2:112
+#: web_tt2/add_request.tt2:13 web_tt2/editsubscriber.tt2:62 web_tt2/review.tt2:101 web_tt2/review.tt2:287 web_tt2/review.tt2:68 web_tt2/reviewbouncing.tt2:112
 msgid "quiet"
 msgstr ""
 
@@ -6169,7 +6169,7 @@ msgstr ""
 msgid "remind message sent to subscribers every year"
 msgstr ""
 
-#: src/etc/list_task_models/sync_include.ttl.task:1
+#: src/etc/list_task_models/sync_include.ttl.task:1 src/etc/list_task_models/sync_include.ttl.task~:1
 msgid "Update of list members based on the TTL"
 msgstr ""
 
@@ -6943,7 +6943,7 @@ msgstr ""
 msgid "[Image%s]"
 msgstr ""
 
-#: src/sympa.pl:2053
+#: src/sympa.pl:2052
 msgid "Unable to access directory %s : %m"
 msgstr ""
 

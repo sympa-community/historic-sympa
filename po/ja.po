@@ -21,11 +21,12 @@ msgstr ""
 "X-Generator: Pootle 1.0.2\n"
 
 #. (conf.email,conf.host)
-#: web_tt2/home.tt2:4
+#: web_tt2/home.tt2:5
 msgid ""
-"This server provides you access to your mailing list environment. Starting "
-"from this web page, you can perform subscription options, unsubscription, "
-"archive, list moderation, list configuration."
+"This server provides you access to your environment on mailing list server %"
+"1@%2. Starting from this web page, you can perform subscription options, "
+"unsubscription,\n"
+"archives, list management and so on."
 msgstr ""
 "このサーバでは、メーリングリストサーバ %1@%2 の個人用ページにアクセスできま"
 "す。このページから、個人設定、登録解除、投稿保管庫、リスト管理などへ進むこと"
@@ -124,11 +125,6 @@ msgstr "吟味役"
 msgid "Subscriber"
 msgstr "読者"
 
-#. (last_login_host,last_login_date)
-#: web_tt2/login_menu.tt2:21
-msgid "last login from %1 <br />(%2)</span>"
-msgstr "前回のログインは %1 からでした<br />(%2)</span>"
-
 #: web_tt2/login_menu.tt2:32
 msgid "Logout"
 msgstr "ログアウト"
@@ -136,6 +132,38 @@ msgstr "ログアウト"
 #: web_tt2/login_menu.tt2:39
 msgid "Your preferences"
 msgstr "個人設定"
+
+#: web_tt2/login_menu.tt2:57 web_tt2/loginbanner.tt2:57
+msgid "Choose your authentication server"
+msgstr "認証サーバを選択してください"
+
+#: web_tt2/login_menu.tt2:63 web_tt2/loginbanner.tt2:61
+msgid "Go"
+msgstr "実行"
+
+#: src/List.pm:1081 src/List.pm:583 web_tt2/login_menu.tt2:77
+#: web_tt2/loginbanner.tt2:76 web_tt2/sso_login.tt2:45
+msgid "email address"
+msgstr "電子メールアドレス"
+
+#: web_tt2/login_menu.tt2:79 web_tt2/loginbanner.tt2:77
+#: web_tt2/sigrequest.tt2:37 web_tt2/sigrequest.tt2:69
+#: web_tt2/sso_login.tt2:47 web_tt2/subrequest.tt2:43
+#: web_tt2/subrequest.tt2:81
+msgid "password"
+msgstr "パスワード"
+
+#: web_tt2/login_menu.tt2:81 web_tt2/loginbanner.tt2:78
+msgid "Login"
+msgstr "ログイン"
+
+#: web_tt2/login_menu.tt2:88
+msgid "First login ?"
+msgstr "まだログインしたことがない"
+
+#: web_tt2/login_menu.tt2:89
+msgid "Lost password ?"
+msgstr "パスワードを忘れた"
 
 #: web_tt2/your_lists.tt2:7
 msgid "Your Lists"
@@ -242,7 +270,8 @@ msgid ""
 "Use it with care : it allows you to modify some of the list parameters. The "
 "list of the parameters you can modify depends on your privileges."
 msgstr ""
-"これは注意してお使いください。リストのパラメータを変更できてしまいます。どのパラメータを変更できるかは、あなたがもっている権限によって変わります。"
+"これは注意してお使いください。リストのパラメータを変更できてしまいます。どの"
+"パラメータを変更できるかは、あなたがもっている権限によって変わります。"
 
 #: web_tt2/admin.tt2:8 web_tt2/admin_menu.tt2:53 web_tt2/admin_menu.tt2:59
 #: web_tt2/list_admin_menu.tt2:25
@@ -329,7 +358,8 @@ msgstr "%1メーリングリストは閉鎖されてしまいますが、それ�
 msgid ""
 "Completely removes the current list. Listmaster privileges are required to "
 "restore a list."
-msgstr "このリストを閉鎖します。再開するにはリストシステム管理者権限が必要です。"
+msgstr ""
+"このリストを閉鎖します。再開するにはリストシステム管理者権限が必要です。"
 
 #: web_tt2/admin.tt2:45 web_tt2/admin_menu.tt2:130 web_tt2/admin_menu.tt2:132
 msgid "Rename List"
@@ -341,7 +371,8 @@ msgid ""
 "be relabeled according to the new name, including the mail aliases and the "
 "web archives."
 msgstr ""
-"このリストの名前を変えることができます。リストに関係するもの (メールアドレスや投稿保管庫の URL など) はすべて、新しい名前に変わります。"
+"このリストの名前を変えることができます。リストに関係するもの (メールアドレス"
+"や投稿保管庫の URL など) はすべて、新しい名前に変わります。"
 
 #: web_tt2/admin.tt2:58 web_tt2/admin_menu.tt2:97 web_tt2/admin_menu.tt2:99
 msgid "Create Shared"
@@ -363,7 +394,9 @@ msgstr "共有文書は削除されてしまいますが、それでよいので
 msgid ""
 "Closes the shared document web space. It can be restored using \"Restore "
 "shared\" button."
-msgstr "共有文書を置くウェブスペースを閉鎖します。\"共有文書置き場の再開\" ボタンで元に戻せます。"
+msgstr ""
+"共有文書を置くウェブスペースを閉鎖します。\"共有文書置き場の再開\" ボタンで元"
+"に戻せます。"
 
 #: web_tt2/admin.tt2:66
 msgid "Restore Shared"
@@ -476,19 +509,19 @@ msgstr "作成日"
 msgid "Subject"
 msgstr "表題"
 
-#: web_tt2/add_request.tt2:6
+#: web_tt2/add_request.tt2:7
 msgid "email1@dom1 Name1"
 msgstr "1人めの@電子メール.アドレス 1人めの名前"
 
-#: web_tt2/add_request.tt2:7
+#: web_tt2/add_request.tt2:8
 msgid "email2@dom2 Name2"
 msgstr "2人めの@電子メール.アドレス 2人めの名前"
 
-#: web_tt2/add_request.tt2:11
+#: web_tt2/add_request.tt2:12
 msgid "Add subscribers"
 msgstr "読者を追加"
 
-#: web_tt2/add_request.tt2:12 web_tt2/editsubscriber.tt2:62
+#: web_tt2/add_request.tt2:13 web_tt2/editsubscriber.tt2:62
 #: web_tt2/review.tt2:101 web_tt2/review.tt2:287 web_tt2/review.tt2:68
 #: web_tt2/reviewbouncing.tt2:112
 msgid "quiet"
@@ -548,14 +581,6 @@ msgstr ""
 msgid "Archive Management"
 msgstr "投稿保管庫の管理"
 
-#: web_tt2/d_read.tt2:171 web_tt2/d_read.tt2:173 web_tt2/d_read.tt2:179
-#: web_tt2/edit_list_request.tt2:34 web_tt2/editsubscriber.tt2:37
-#: web_tt2/latest_d_read.tt2:30 web_tt2/latest_d_read.tt2:33
-#: web_tt2/picture_upload.tt2:19 web_tt2/review.tt2:214
-#: web_tt2/suboptions.tt2:17
-msgid "Open in a new window"
-msgstr "別ウィンドウで開く"
-
 #: web_tt2/arc_manage.tt2:5
 msgid ""
 "Select below Archives months you want to delete or download (ZiP format):"
@@ -591,10 +616,6 @@ msgid ""
 msgstr ""
 "このボタンは、スパム送信用に電子メールアドレスを収集するソフトウェアから、"
 "メーリングリストの投稿保管庫を保護することを目的としています。"
-
-#: web_tt2/arcsearch_form.tt2:3
-msgid "Advanced archive search"
-msgstr "高度な検索"
 
 #: web_tt2/arcsearch.tt2:6 web_tt2/arcsearch_form.tt2:9
 msgid "Search field :"
@@ -771,10 +792,6 @@ msgstr ""
 msgid "Return to archive %1"
 msgstr "%1の投稿保管庫へ戻る"
 
-#: web_tt2/arc.tt2:3
-msgid "List archive"
-msgstr "リストの投稿保管庫"
-
 #: web_tt2/blacklist.tt2:3
 msgid "Blacklist management"
 msgstr "ブラックリスト管理"
@@ -830,32 +847,27 @@ msgstr "保存"
 msgid "Template saved"
 msgstr "テンプレートを保存しました"
 
-#: web_tt2/change_email_request.tt2:3
-msgid ""
-"Changing your email address is a sensitive operation so we need to verify "
-"your email."
-msgstr "電子メールアドレスの変更は慎重に進めなければなりません。あなたの電子メールアドレスを確認します。"
-
-#. (new_email)
-#: web_tt2/change_email_request.tt2:4
-msgid ""
-"To this end we have sent you an email to this address : %1 with a validation "
-"link."
-msgstr "そこで、%1 というアドレスに確認用リンクの入った電子メールを送りました。"
-
-#: web_tt2/change_email_request.tt2:5
-msgid "You shoukd check your mailbox now."
-msgstr "メールボックスの新着メールを確認してください。"
-
 #: web_tt2/change_email.tt2:3
-msgid "You will receive a n email, with a confirmation link."
-msgstr "確認リンクの入った電子メールをお送りします。"
+msgid "You will receive an email, reminding you your password."
+msgstr "あなたにパスワードを知らせる電子メールをお送りします。"
 
-#: web_tt2/change_email.tt2:4
+#: web_tt2/change_email.tt2:5
 msgid ""
-"To confirm your email address change, go to your email account and click on "
-"the provided link"
-msgstr "電子メールアドレスの変更を確認するために、メールを受け取って、そこに書いてあるリンクをクリックしてください"
+"To confirm your email address change, please enter the password\n"
+"you received below :"
+msgstr ""
+"読者登録メールアドレスの変更を確認するために、以下にメールで受け取ったパス"
+"ワード\n"
+"を入力してください:"
+
+#. (email)
+#: web_tt2/change_email.tt2:10
+msgid "Password for %1"
+msgstr "%1 のパスワード"
+
+#: web_tt2/change_email.tt2:12
+msgid "Change my email address"
+msgstr "電子メールアドレスを変更する"
 
 #: web_tt2/choosepasswd.tt2:4
 msgid ""
@@ -864,6 +876,11 @@ msgid ""
 msgstr ""
 "ウェブでご利用になるにはパスワードを決める必要があります。\n"
 "これは、権限を必要とする操作を行うために必要となります。"
+
+#: web_tt2/choosepasswd.tt2:14
+#, fuzzy
+msgid "Current password :"
+msgstr "新しいパスワード:"
 
 #: web_tt2/choosepasswd.tt2:18 web_tt2/pref.tt2:38
 msgid "New password :"
@@ -894,10 +911,6 @@ msgstr "リストのエイリアスを削除しました。"
 msgid "You should remove list aliases manually"
 msgstr "リストのエイリアスは手作業で削除しなければなりません"
 
-#: web_tt2/compose_mail.tt2:3
-msgid "Sendind a message to the list"
-msgstr "リストへメッセージを送信"
-
 #. (user.email)
 #. (from)
 #: web_tt2/compose_mail.tt2:5 web_tt2/request_topic.tt2:27
@@ -913,10 +926,6 @@ msgstr "送信先: %1"
 msgid "Subject:"
 msgstr "表題:"
 
-#: web_tt2/compose_mail.tt2:42
-msgid "Send this mail"
-msgstr "このメールを送信する"
-
 #: web_tt2/compose_mail.tt2:27 web_tt2/modindex.tt2:24 web_tt2/viewmod.tt2:17
 msgid "This list is configured to require topic(s)."
 msgstr ""
@@ -925,6 +934,10 @@ msgstr ""
 #: web_tt2/compose_mail.tt2:29
 msgid "Please select one or more topic(s) that corresponds to your message :"
 msgstr "メッセージに関連するトピックを選んでください (複数可):"
+
+#: web_tt2/compose_mail.tt2:42
+msgid "Send this mail"
+msgstr "このメールを送信する"
 
 #: web_tt2/copy_template.tt2:3
 msgid "Copying template"
@@ -978,46 +991,6 @@ msgstr "リスト名を入力:"
 #: web_tt2/copy_template.tt2:43 web_tt2/d_properties.tt2:37
 msgid "Apply"
 msgstr "適用"
-
-#: web_tt2/create_list_request.tt2:4
-msgid "Copy an existing list."
-msgstr "すでにあるリストを複写する。"
-
-#: web_tt2/create_list_request.tt2:6
-msgid ""
-"You can create a list, using an existing list as a template ; the list "
-"configuration of the source list will be copied to create the new one. Note "
-"that neither list members, nor archives or shared documents are duplicated. "
-"The source lists you can use are limited to lists you own."
-msgstr ""
-"既にあるリストを雛形にして別のリストを作成できます。もとのリストの設定を新しいリストに複写します。なお、リストのメンバ、投稿保管庫、共有文書は複製しませ"
-"ん。もとのリストに使えるのは、自分がオーナーになっているリストだけです。"
-
-#: web_tt2/create_list_request.tt2:26 web_tt2/create_list_request.tt2:7
-msgid ""
-"After the list is created, you will be able to adjust it's configuration."
-msgstr "リストを作成したあとで、設定を調整することもできます。"
-
-#: web_tt2/rename_list_request.tt2:5
-msgid "New list name:"
-msgstr "新リスト名:"
-
-#: web_tt2/create_list_request.tt2:17
-msgid "copy list configuration"
-msgstr "リストの設定を複写"
-
-#: web_tt2/create_list_request.tt2:23
-msgid "Create a list using a template"
-msgstr "雛型を使ってリストを作成"
-
-#: web_tt2/create_list_request.tt2:25
-msgid ""
-"You can request a new list creation with the following form.You will have to "
-"choose a list template that will preset most of the list parameters "
-"according to the list usage you plan. "
-msgstr ""
-"以下の欄に記入すれば、リストの作成を申し込めます。ほとんどのパラメータをあらかじめ設定した雛形を用意してありますから、自分が考えているリストの利用方法に"
-"合いそうなものを選んでください。"
 
 #: web_tt2/create_list_request.tt2:6
 msgid "the list name ; be careful, not its address !"
@@ -1092,13 +1065,18 @@ msgstr "横の運営ボタンで設定することができます"
 msgid "Aliases have been installed."
 msgstr "エイリアスを登録しました。"
 
+#: web_tt2/create_list.tt2:10 web_tt2/create_list.tt2:12
+msgid "Required aliases"
+msgstr "必要なエイリアス"
+
 #: web_tt2/create_list.tt2:26
 msgid ""
 "Your list creation request is registered. You can now  modify its\n"
 "configuration using the admin button but the list will be unusable until the "
 "listmaster validates it."
 msgstr ""
-"リスト作成の申込を受け付けました。運営ボタンで設定を変更することができますが、リストシステム管理者が承認するまではこのリストはご利用になれません。"
+"リスト作成の申込を受け付けました。運営ボタンで設定を変更することができます"
+"が、リストシステム管理者が承認するまではこのリストはご利用になれません。"
 
 #: web_tt2/d_control.tt2:4 web_tt2/d_editfile.tt2:6 web_tt2/d_properties.tt2:4
 #: web_tt2/d_read.tt2:7
@@ -1324,6 +1302,14 @@ msgstr "不明"
 msgid "Do you really want to delete %1%2 ?"
 msgstr "本当に %1%2を削除してよいのですか。"
 
+#: web_tt2/d_read.tt2:171 web_tt2/d_read.tt2:173 web_tt2/d_read.tt2:179
+#: web_tt2/edit_list_request.tt2:34 web_tt2/editsubscriber.tt2:37
+#: web_tt2/latest_d_read.tt2:30 web_tt2/latest_d_read.tt2:33
+#: web_tt2/picture_upload.tt2:19 web_tt2/review.tt2:214
+#: web_tt2/suboptions.tt2:17
+msgid "Open in a new window"
+msgstr "別ウィンドウで開く"
+
 #: web_tt2/d_read.tt2:211
 msgid "to moderate"
 msgstr "吟味する"
@@ -1472,10 +1458,6 @@ msgstr ""
 msgid "Required element"
 msgstr "必須の要素"
 
-#: web_tt2/editfile.tt2:3
-msgid "Edit list templates"
-msgstr "リスト専用のテンプレートを変更"
-
 #: web_tt2/editfile.tt2:12
 msgid "Save"
 msgstr "保存"
@@ -1483,26 +1465,6 @@ msgstr "保存"
 #: web_tt2/editfile.tt2:15
 msgid "You can edit several messages/files associated with your list :"
 msgstr "リストから発信するメッセージやファイルを変更できます:"
-
-#: web_tt2/editfile.tt2:27
-msgid "HTML pages"
-msgstr "HTML ページ"
-
-#: web_tt2/editfile.tt2:33
-msgid "Automatic messages"
-msgstr "自動送信されるメッセージ"
-
-#: web_tt2/editfile.tt2:42
-msgid "Added in distributed messages"
-msgstr "配信するメッセージに追加するもの"
-
-#: web_tt2/editfile.tt2:47
-msgid "More"
-msgstr "その他"
-
-#: web_tt2/edit_list_request.tt2:3
-msgid "Configuring the list"
-msgstr "リストの設定"
 
 #: web_tt2/edit_list_request.tt2:4
 msgid "You can choose below a subset of parameters to edit :"
@@ -1710,10 +1672,6 @@ msgstr "ファイル '%1' を展開できません。"
 msgid "Unable to access the message authenticated with key %1"
 msgstr "キー %1 で本人確認されたメッセージにアクセスできません"
 
-#: web_tt2/error.tt2:19
-msgid "Failed to get your email address from the authentication service."
-msgstr "あなたの電子メールアドレスを認証サービスから取得するのに失敗しました。"
-
 #. (i_err.key)
 #. (zipfile)
 #: mail_tt2/listmaster_notification.tt2:331 web_tt2/error.tt2:19
@@ -1740,8 +1698,8 @@ msgid ""
 "Failed creating list '%1'. The list might already exist or listname might "
 "include forbidden characters."
 msgstr ""
-"'%1' "
-"メーリングリストの作成が失敗しました。同じ名前のリストか既にあるのかもしれません。あるいは、リストの名前に使えない文字が入っているのかもしれません。"
+"'%1' メーリングリストの作成が失敗しました。同じ名前のリストか既にあるのかもし"
+"れません。あるいは、リストの名前に使えない文字が入っているのかもしれません。"
 
 #. (s_err.action)
 #: web_tt2/error.tt2:32
@@ -1791,8 +1749,9 @@ msgid ""
 "You can not get a password reminder ; probably because your password is "
 "managed outside Sympa (Single Sign-On system or LDAP directory)."
 msgstr ""
-"パスワードのお知らせを送れません。おそらく、パスワードを Sympa 以外のシステム (シングルサインオンシステムや LDAP ディレクトリ) "
-"で管理しているためでしょう。"
+"パスワードのお知らせを送れません。おそらく、パスワードを Sympa 以外のシステ"
+"ム (シングルサインオンシステムや LDAP ディレクトリ) で管理しているためでしょ"
+"う。"
 
 #: web_tt2/error.tt2:50
 msgid "Please provide email address"
@@ -1937,10 +1896,6 @@ msgstr "%1 は配送エラーを起こしていません"
 msgid "List has no bouncing subscribers"
 msgstr "このリストに配送エラーを起こしている読者はいません"
 
-#: web_tt2/error.tt2:83
-msgid "No parameter was edited"
-msgstr "パラメータの変更はありませんでした"
-
 #. (u_err.email)
 #: web_tt2/error.tt2:82
 msgid "Config file has been modified by %1. Cannot apply your changes"
@@ -1949,11 +1904,6 @@ msgstr "%1 が設定ファイルを書き換えたため、変更することが
 #: web_tt2/error.tt2:83
 msgid "Topic \"other\" is a reserved word"
 msgstr "トピックに \"other\" は使えません。これは予約ずみの言葉です"
-
-#. (u_err.p_name)
-#: web_tt2/error.tt2:86
-msgid "Parameter '%1' is mandatory. Ignoring deletion."
-msgstr "パラメータ '%1' は必須です。削除しません。"
 
 #. (u_err.param)
 #: web_tt2/error.tt2:84
@@ -1991,11 +1941,6 @@ msgid "Incorrect listname '%1' : matches one of service aliases"
 msgstr ""
 "'%1' というリスト名は正しくありません: サービス用のエイリアス名と合致していま"
 "す"
-
-#. (u_err.listname)
-#: web_tt2/error.tt2:94
-msgid "Failed to remove list aliases for list %1"
-msgstr "%1 メーリングリストのリストエイリアスを削除するのに失敗しました"
 
 #. (u_err.path)
 #: web_tt2/error.tt2:91
@@ -2127,33 +2072,6 @@ msgstr "ログイン失敗"
 msgid "Cannot add subscribers when list status is '%1'"
 msgstr "リストの状態が '%1' のときは、読者を追加できません"
 
-#. (u_err.argument)
-#: web_tt2/error.tt2:124
-msgid "This Template '%1' already exists"
-msgstr "この %1 というテンプレートはすでに存在します"
-
-#. (u_err.file_del)
-#: web_tt2/error.tt2:125
-msgid "Cannot delete this file '%1'"
-msgstr "この '%1' というファイルが削除できません"
-
-#. (u_err.filename)
-#: web_tt2/error.tt2:126
-msgid "Invalid filename: '%1'"
-msgstr "このファイル名は使えません: '%1'"
-
-#. (u_err.listname)
-#: web_tt2/error.tt2:127
-msgid ""
-"Failed to update member email in list '%1', list owner has been notified."
-msgstr "'%1' メーリングリストのメンバ電子メールアドレスの更新に失敗しました。リストオーナーに知らせました。"
-
-#. (u_err.listname)
-#: web_tt2/error.tt2:128
-msgid ""
-"Failed to update admin email in list '%1', list owner has been notified."
-msgstr "'%1' メーリングリストの運営電子メールアドレスの更新に失敗しました。リストオーナーに知らせました。"
-
 #. (auth.action)
 #: web_tt2/error.tt2:128
 msgid "AUTHORIZATION REJECT (%1)"
@@ -2185,12 +2103,6 @@ msgstr "リストの表題"
 #: web_tt2/get_closed_lists.tt2:12 web_tt2/get_pending_lists.tt2:11
 msgid "Requested by"
 msgstr "申し込んだ人:"
-
-#: src/etc/mhonarc-ressources.tt2:212 src/etc/mhonarc-ressources.tt2:328
-#: web_tt2/modindex.tt2:136 web_tt2/modindex.tt2:89 web_tt2/review.tt2:285
-#: web_tt2/reviewbouncing.tt2:116
-msgid "Toggle Selection"
-msgstr "選択を逆転"
 
 #: web_tt2/get_closed_lists.tt2:30
 msgid "Purge selected lists"
@@ -2239,6 +2151,18 @@ msgstr "作成者"
 #: web_tt2/install_pending_list.tt2:17
 msgid "on %1"
 msgstr "%1"
+
+#: web_tt2/install_pending_list.tt2:29
+msgid "Aliases you should install in your mailer"
+msgstr "登録する必要があるエイリアス"
+
+#: web_tt2/javascript.tt2:147
+msgid ""
+"Sympa could not set a cookie for login.\n"
+" Your should configure your browser to accept cookies"
+msgstr ""
+"ログインのためのクッキーを設定できませんでした。ブラウザでクッキーを受け取れ"
+"るように設定してください"
 
 #. (count)
 #: web_tt2/latest_arc.tt2:6
@@ -2309,49 +2233,74 @@ msgstr ""
 "<strong>%1</strong> というアドレスで読者登録しているメーリングリストはありま"
 "せんね"
 
-#: web_tt2/loginbanner.tt2:18
-msgid "To login, select your organization authentication server below:"
-msgstr "ログインするには、以下から自分の組織の認証サーバを選択してください"
+#: web_tt2/lists.tt2:31
+msgid "See your subscriptions with the following email addresses"
+msgstr "以下の電子メールアドレスでの読者登録情報を見る"
 
-#: web_tt2/login_menu.tt2:63 web_tt2/loginbanner.tt2:61
-msgid "Go"
-msgstr "実行"
+#: web_tt2/lists.tt2:51
+msgid "Unify your subscriptions with the email"
+msgstr "すべてのアドレスの読者登録情報をこの電子メールアドレスに一本化する:"
 
-#: src/List.pm:1081 src/List.pm:583 web_tt2/login_menu.tt2:77
-#: web_tt2/loginbanner.tt2:76 web_tt2/sso_login.tt2:45
-msgid "email address"
-msgstr "電子メールアドレス"
-
-#: web_tt2/login_menu.tt2:79 web_tt2/loginbanner.tt2:77
-#: web_tt2/sigrequest.tt2:37 web_tt2/sigrequest.tt2:69
-#: web_tt2/sso_login.tt2:47 web_tt2/subrequest.tt2:43
-#: web_tt2/subrequest.tt2:81
-msgid "password"
-msgstr "パスワード"
-
-#: web_tt2/login_menu.tt2:81 web_tt2/loginbanner.tt2:78
-msgid "Login"
-msgstr "ログイン"
-
-#: web_tt2/loginbanner.tt2:51
-msgid "Authentication help"
-msgstr "認証の使いかた"
-
-#: web_tt2/login_menu.tt2:88
-msgid "First login ?"
-msgstr "まだログインしたことがない"
-
-#: web_tt2/login_menu.tt2:89
-msgid "Lost password ?"
-msgstr "パスワードを忘れた"
-
-#: web_tt2/loginrequest.tt2:3
+#: web_tt2/lists.tt2:52
 msgid ""
-"In order to perform a privileged operation (one that requires your email "
-"address), you need to login."
+"That is to say you are using a unique email address in Sympa for your "
+"subscriptions and preferences"
+msgstr ""
+"一本化すると、当メーリングリストシステムでの読者登録と個人設定を一つの電子"
+"メールアドレスで行なえます。"
+
+#: web_tt2/lists.tt2:58
+msgid "Validate"
+msgstr "確認する"
+
+#. (init_email)
+#: web_tt2/loginbanner.tt2:5
+#, fuzzy
+msgid ""
+"Your password has been sent to your email address %1.<br />Please check your "
+"e-mail box to provide your password below."
+msgstr ""
+"確認パスワードをあなたの電子メールアドレス %1 に送りました。<br />電子メール"
+"が届いたら、下の欄に、メールに書いてある確認パスワードを入れてください。"
+
+#: web_tt2/loginbanner.tt2:10
+#, fuzzy
+msgid ""
+"You need to login to access your custom WWSympa environment or to perform a "
+"privileged operation (one that requires your email address)."
 msgstr ""
 "個人用ページにアクセスし、そこで権限の必要な操作 (電子メールアドレスが必要な"
 "もの) をするためには、ログインする必要があります。"
+
+#: web_tt2/loginbanner.tt2:13
+msgid ""
+"Most mailing list features require your email. Some mailing lists are hidden "
+"to  unidentified persons.<br />\n"
+" In order to benefit from the full services provided by this server, you "
+"probably need to identify yourself first."
+msgstr ""
+"ほとんどのメーリングリスト機能の利用には電子メールアドレスが必要です。メーリ"
+"ングリストの中には、ログインしていない人には見えないものもあります。<br/>全て"
+"の機能をご利用になりたければ、まずログインしてください。"
+
+#: web_tt2/loginbanner.tt2:18
+msgid ""
+"To login, select your organization authentication server below.<br />\n"
+"If it is not listed or if you don't have any, login using your email and "
+"password on the right column."
+msgstr ""
+"ログインするにあたって、あなたの組織の認証サーバを以下より選択してください。"
+"<br />\n"
+"認証サーバが一覧に表示されないか、認証サーバをお使いでない場合、右側でメール"
+"アドレスとパスワードを入力して、ログインしてください。"
+
+#: web_tt2/loginbanner.tt2:23
+msgid ""
+"Login with you email address and password. You can request a password "
+"reminder."
+msgstr ""
+"電子メールアドレスとパスワードを入力してログインしてください。 忘れてしまった"
+"場合にはパスワードを取り寄せることもできます。"
 
 #: web_tt2/ls_templates.tt2:7
 msgid ""
@@ -2446,59 +2395,6 @@ msgstr ""
 "メーリングリストサーバはメンテナンス中です。メンテナンス中は、一切の操作がで"
 "きません。"
 
-#: web_tt2/manage_template.tt2:3
-msgid "Modify or delete existing rejection messages"
-msgstr "存在する拒否メッセージの変更、削除"
-
-#: web_tt2/manage_template.tt2:10 web_tt2/manage_template.tt2:9
-msgid "Listing rejection messages"
-msgstr "拒否メッセージの一覧"
-
-#: web_tt2/manage_template.tt2:11
-msgid "Use as default"
-msgstr "初期値にする"
-
-#: web_tt2/manage_template.tt2:11
-msgid "Message name"
-msgstr "メッセージの名前"
-
-#: web_tt2/manage_template.tt2:11
-msgid "Operation"
-msgstr "操作"
-
-#. (file)
-#: web_tt2/manage_template.tt2:38
-msgid "Do you really want to delete message %1?"
-msgstr "本当にこのメッセージ %1 を削除してよいのですか。"
-
-#: web_tt2/manage_template.tt2:46
-msgid "There are currently no Rejection Messages available"
-msgstr "現在、ご利用になれる拒否メッセージはありません"
-
-#: web_tt2/manage_template.tt2:59
-msgid "Message Name :"
-msgstr "メッセージの名前:"
-
-#: web_tt2/manage_template.tt2:60
-msgid "Default Message"
-msgstr "メッセージの初期値"
-
-#: web_tt2/manage_template.tt2:67
-msgid "Save Message"
-msgstr "メッセージの保存"
-
-#: web_tt2/manage_template.tt2:78
-msgid "Create new rejection messages"
-msgstr "新たな拒否メッセージの作成"
-
-#: web_tt2/manage_template.tt2:85
-msgid "New message name:"
-msgstr "新たなメッセージの名前:"
-
-#: web_tt2/manage_template.tt2:85
-msgid "create"
-msgstr "作成"
-
 #: web_tt2/modindex.tt2:35 web_tt2/modindex.tt2:8
 msgid "Listing messages to moderate"
 msgstr "吟味待ちメッセージの一覧"
@@ -2513,30 +2409,22 @@ msgstr "配送"
 msgid "Reject"
 msgstr "拒否"
 
-#: web_tt2/modindex.tt2:24
+#: web_tt2/modindex.tt2:104 web_tt2/modindex.tt2:140 web_tt2/modindex.tt2:16
+#: web_tt2/modindex.tt2:82 web_tt2/viewmod.tt2:14
+msgid "Notified reject"
+msgstr "拒否してそれを知らせる"
+
+#: web_tt2/modindex.tt2:18 web_tt2/modindex.tt2:84
+msgid "Reject and blacklist sender"
+msgstr "配信拒否とブラックリスト"
+
+#: web_tt2/modindex.tt2:19
+msgid "edit blacklist"
+msgstr "ブラックリストの変更"
+
+#: web_tt2/modindex.tt2:26
 msgid ""
-"You should probably not reject message detected as spam with notification "
-"because the message sender is probably spoofed. Do you really want to reject "
-"those messages with notification ?"
-msgstr ""
-"スパムはメッセージの送信元を騙っていることがありますから、スパム検出でメッセージを拒否するときは送信元に知らせるべきではないかもしれません。このメッセー"
-"ジを拒否することを、本当に知らせていいのでしょうか。"
-
-#: web_tt2/modindex.tt2:30
-msgid "Server default rejection message"
-msgstr "拒否メッセージのサイト全体での初期値"
-
-#: web_tt2/modindex.tt2:38
-msgid "Reject without notification "
-msgstr "知らせずに拒否"
-
-#: web_tt2/modindex.tt2:40
-msgid "Add to blacklist"
-msgstr "ブラックリストに追加"
-
-#: web_tt2/modindex.tt2:51
-msgid ""
-"Please select one or more topic(s) that correspond to the messages you wish "
+"Please select one or more topic(s) that corresponds to the messages you wish "
 "to distribute :"
 msgstr ""
 "配信したいメッセージに関係のあるトピックをなにか選んでください (複数可):"
@@ -2549,18 +2437,11 @@ msgstr "サイズ"
 msgid "No subject"
 msgstr "表題なし"
 
-#: web_tt2/modindex.tt2:104 web_tt2/modindex.tt2:140 web_tt2/modindex.tt2:16
-#: web_tt2/modindex.tt2:82 web_tt2/viewmod.tt2:14
-msgid "Notified reject"
-msgstr "拒否してそれを知らせる"
-
-#: web_tt2/modindex.tt2:18 web_tt2/modindex.tt2:84
-msgid "Reject and blacklist sender"
-msgstr "配信拒否とブラックリスト"
-
-#: web_tt2/modindex.tt2:127
-msgid "Toggle spams"
-msgstr "スパム/非スパム"
+#: src/etc/mhonarc-ressources.tt2:212 src/etc/mhonarc-ressources.tt2:328
+#: web_tt2/modindex.tt2:136 web_tt2/modindex.tt2:89 web_tt2/review.tt2:285
+#: web_tt2/reviewbouncing.tt2:116
+msgid "Toggle Selection"
+msgstr "選択を逆転"
 
 #: web_tt2/modindex.tt2:100
 msgid "Listing of shared documents to moderate"
@@ -2573,23 +2454,6 @@ msgstr "採用"
 #: web_tt2/modindex.tt2:106
 msgid "Listing of documents shared to moderate"
 msgstr "吟味を待っている共有文書の一覧"
-
-#: web_tt2/modindex.tt2:19
-msgid "edit blacklist"
-msgstr "ブラックリストの変更"
-
-#: web_tt2/modindex.tt2:191
-msgid "Moderation management"
-msgstr "吟味"
-
-#: web_tt2/modindex.tt2:200
-msgid "Manage rejection messages"
-msgstr "拒否メッセージの管理"
-
-#. (last_login_host,last_login_date)
-#: web_tt2/notice.tt2:6
-msgid "last login from %1 (%2)"
-msgstr "前回のログインは %1 からでした (%2)"
 
 #: web_tt2/notice.tt2:5
 msgid "Your request has been forwarded to the list owner"
@@ -2706,11 +2570,6 @@ msgstr ""
 msgid "List name has been lowercased"
 msgstr "リスト名を小文字にしました"
 
-#. (notice.notified_user)
-#: web_tt2/notice.tt2:86
-msgid "User %1 has been notified"
-msgstr "%1に知らせました"
-
 #: web_tt2/picture_upload.tt2:4
 msgid "Setting your picture for this list"
 msgstr "このリスト用のピクチャを設定"
@@ -2737,10 +2596,6 @@ msgstr "読者一覧に出すピクチャ"
 msgid "In the members page"
 msgstr "読者一覧での見えかた"
 
-#: web_tt2/viewlogs.tt2:89
-msgid "User preferences"
-msgstr "個人設定"
-
 #: web_tt2/pref.tt2:5 web_tt2/review.tt2:112 web_tt2/review.tt2:115
 #: web_tt2/reviewbouncing.tt2:60 web_tt2/subindex.tt2:8
 #: web_tt2/viewlogs.tt2:51 web_tt2/viewlogs.tt2:60
@@ -2759,22 +2614,9 @@ msgstr "接続の有効期間"
 msgid "Changing your email address"
 msgstr "電子メールアドレスの変更"
 
-#: web_tt2/pref.tt2:27
-msgid ""
-"You can update your email address for all your list memberships at once. If "
-"you are also list owner or list moderator your email address for these roles "
-"will also be updated."
-msgstr ""
-"登録している全リストの電子メールアドレスをまとめて変えることもできます。リストのオーナーや吟味役になっているのなら、その役目の電子メールアドレスもいっし"
-"ょに変わります。"
-
 #: web_tt2/pref.tt2:28
 msgid "New email address :"
 msgstr "新しい電子メールアドレス:"
-
-#: web_tt2/pref.tt2:31
-msgid "Change Email"
-msgstr "電子メールアドレスの変更"
 
 #: mail_tt2/sendpasswd.tt2:31 web_tt2/pref.tt2:34
 msgid "Changing your password"
@@ -2783,6 +2625,25 @@ msgstr "パスワードの変更"
 #: web_tt2/pref.tt2:39
 msgid "Re-enter your new password :"
 msgstr "パスワードの再入力:"
+
+#: web_tt2/remindpasswd.tt2:5
+#, fuzzy
+msgid ""
+"You have forgotten your password, or you've never had any password related "
+"to this server"
+msgstr "パスワードを忘れてしまったのなら、パスワードを作り直してください。"
+
+#: web_tt2/remindpasswd.tt2:6
+msgid "it will be sent to you by email :"
+msgstr "電子メールでお送りします。"
+
+#: web_tt2/remindpasswd.tt2:12 web_tt2/subrequest.tt2:60
+msgid "Your e-mail address"
+msgstr "あなたの電子メールアドレス"
+
+#: web_tt2/remindpasswd.tt2:14 web_tt2/sigrequest.tt2:76
+msgid "Send me my password"
+msgstr "自分宛てにパスワードを送信する"
 
 #: web_tt2/remove_arc.tt2:5
 msgid ""
@@ -2814,9 +2675,9 @@ msgstr ""
 "メッセージの削除中にエラーが発生しました。メッセージのURLを付けて\n"
 "リストシステム管理者にお問い合わせください。"
 
-#: web_tt2/rename_list_request.tt2:3
-msgid "Renaming the list"
-msgstr "リストの移動"
+#: web_tt2/rename_list_request.tt2:5
+msgid "New list name:"
+msgstr "新リスト名:"
 
 #: web_tt2/rename_list_request.tt2:16
 msgid "Rename this list"
@@ -2825,76 +2686,6 @@ msgstr "このリストを移動"
 #: web_tt2/rename_list_request.tt2:16
 msgid "Do you really want to rename this list?"
 msgstr "本当にこのリストを移動してよいのですか。"
-
-#: web_tt2/renewpasswd.tt2:5
-msgid "You request for an account creation on this list server."
-msgstr "あなたは当メーリングリストサーバでアカウント作成を申し込みました。"
-
-#: web_tt2/renewpasswd.tt2:7
-msgid "The password you submit is wrong. May be you forgot it ?"
-msgstr ""
-"入力したパスワードは間違っています。もしかして、パスワードを忘れたのでは?"
-
-#: web_tt2/renewpasswd.tt2:9
-msgid "You miss the password, please submit again. May be you forgot it ?"
-msgstr ""
-"入力したパスワードは間違っています。もしかして、パスワードを忘れたのでは?"
-
-#: web_tt2/renewpasswd.tt2:11
-msgid "You will receive an email that will allow you to choose your password."
-msgstr ""
-"あなたに電子メールをお送りします。それを見てパスワードを決めてください。"
-
-#: web_tt2/renewpasswd.tt2:14
-msgid "In order to use Sympa, you will need to define a password."
-msgstr "Sympa を使うためには、パスワードを決めなければなりません。"
-
-#: web_tt2/renewpasswd.tt2:16
-msgid "You have forgotten your password, so you have to  renew it."
-msgstr "パスワードを忘れてしまったのなら、パスワードを作り直してください。"
-
-#: web_tt2/renewpasswd.tt2:19
-msgid ""
-"Please submit your email address, you will receive a message that give you "
-"access to the appropriate form in order to choose your password."
-msgstr ""
-"自分の電子メールアドレスを入力してください。ここに電子メールを送ります。それには、パスワードを決めるためのフォームへのアクセスのしかたが書いてあります。"
-
-#: web_tt2/remindpasswd.tt2:12 web_tt2/subrequest.tt2:60
-msgid "Your e-mail address"
-msgstr "あなたの電子メールアドレス"
-
-#: web_tt2/renewpasswd.tt2:29
-msgid "Request first password"
-msgstr "初期パスワードの取り寄せ"
-
-#: web_tt2/renewpasswd.tt2:31
-msgid "Request new password"
-msgstr "新たなパスワードの取り寄せ"
-
-#: web_tt2/requestpasswd.tt2:4
-msgid "Message sent"
-msgstr "メッセージを送りました"
-
-#: web_tt2/requestpasswd.tt2:6
-msgid ""
-"We've sent you an email that will allow you choose your password. Please "
-"check your mailbox."
-msgstr "パスワードを決める方法を書いた電子メールを送りました。自分のメールボックスを確認してください。"
-
-#: web_tt2/requestpasswd.tt2:10
-msgid "We were not able to send you a validation message."
-msgstr "確認メッセージを送ることができませんでした。"
-
-#: web_tt2/requestpasswd.tt2:14
-msgid ""
-"Internal error : could not build a validation link, please contact the "
-"service administrator"
-msgstr "内部エラー: 確認用リンクを作成できませんでした。サービス管理者に連絡してください"
-
-#: web_tt2/requestpasswd.tt2:18
-msgid "Unkown error."
-msgstr "原因不明のエラーが発生しました。"
 
 #: web_tt2/request_topic.tt2:5
 msgid "This list is configured to require topic(s) foreach message."
@@ -2925,10 +2716,6 @@ msgstr "最終更新: %1"
 #: web_tt2/request_topic.tt2:31
 msgid "Subject : %1"
 msgstr "表題 (Subject): %1"
-
-#: web_tt2/reviewbouncing.tt2:3
-msgid "Manage bouncing list members"
-msgstr "配送エラーを起こしている読者の管理"
 
 #: web_tt2/review.tt2:43 web_tt2/review.tt2:45 web_tt2/reviewbouncing.tt2:3
 msgid "Dump"
@@ -2964,29 +2751,9 @@ msgstr "次ページ"
 msgid "Table which display list bounces"
 msgstr "リストの配送エラーを表示する表"
 
-#: web_tt2/reviewbouncing.tt2:62
-msgid "Bounce score"
+#: web_tt2/reviewbouncing.tt2:61
+msgid "bounce score"
 msgstr "配送エラーの点数"
-
-#: web_tt2/reviewbouncing.tt2:63
-msgid "Details"
-msgstr "詳細"
-
-#: web_tt2/reviewbouncing.tt2:66
-msgid "# of bounces"
-msgstr "配送エラー数"
-
-#: web_tt2/reviewbouncing.tt2:67
-msgid "First bounce"
-msgstr "最初の配送エラー"
-
-#: web_tt2/reviewbouncing.tt2:68
-msgid "Last bounce"
-msgstr "最後の配送エラー"
-
-#: web_tt2/reviewbouncing.tt2:95
-msgid "no score"
-msgstr "点数なし"
 
 #: web_tt2/review.tt2:100 web_tt2/review.tt2:286
 #: web_tt2/reviewbouncing.tt2:111
@@ -3008,10 +2775,6 @@ msgstr "状況"
 #: web_tt2/review_family.tt2:8
 msgid "Instantiation date"
 msgstr "設定族に入れた日"
-
-#: web_tt2/review.tt2:6
-msgid "Manage list members"
-msgstr "リスト登録状況の管理"
 
 #: web_tt2/review.tt2:9 web_tt2/viewlogs.tt2:5
 msgid "Page size"
@@ -3261,16 +3024,16 @@ msgid "bounce"
 msgstr "配送エラー"
 
 #: web_tt2/search_user.tt2:33
-msgid "member"
-msgstr "読者"
+msgid "editor"
+msgstr "吟味役"
 
 #: web_tt2/search_user.tt2:35
 msgid "owner"
 msgstr "オーナー"
 
-#: web_tt2/search_user.tt2:33
-msgid "editor"
-msgstr "吟味役"
+#: web_tt2/search_user.tt2:54
+msgid "del"
+msgstr "削除"
 
 #: web_tt2/serveradmin.tt2:4
 msgid "Virtual Robots"
@@ -3296,21 +3059,10 @@ msgstr "この設定族に入っているリストの一覧を参照"
 msgid "Lists"
 msgstr "リスト"
 
-#: web_tt2/serveradmin.tt2:34
-msgid "Manage lists"
-msgstr "リストの管理"
-
-#: web_tt2/serveradmin.tt2:39
-msgid "Consult lists"
-msgstr "リストの調査"
-
-#: web_tt2/serveradmin.tt2:41
-msgid "Lists sorted by creation date"
-msgstr "作成日順"
-
-#: web_tt2/serveradmin.tt2:42
-msgid "Lists sorted by last message date"
-msgstr "最終投稿日順"
+#: web_tt2/serveradmin.tt2:36
+#, fuzzy
+msgid "Inactive lists"
+msgstr "活発でないリスト"
 
 #: web_tt2/serveradmin.tt2:40
 msgid "Users"
@@ -3331,28 +3083,6 @@ msgstr "セッションを待つ時間 (分)"
 #: web_tt2/serveradmin.tt2:57
 msgid "Show only connected users"
 msgstr "接続している人だけ表示"
-
-#: web_tt2/serveradmin.tt2:69
-msgid "You can change your users email address here :"
-msgstr "自分の電子メールアドレスを変えるには: "
-
-#: web_tt2/serveradmin.tt2:71
-msgid ""
-"Changing a user's email address will apply the change his memberships but it "
-"will also apply to his ownerships if he is owner of some lists."
-msgstr "電子メールアドレスを変更すると、リストの登録アドレスも変わりますが、それだけではなくオーナーをしているリストのアドレスも変わります。"
-
-#: web_tt2/serveradmin.tt2:76
-msgid "Current user email address : "
-msgstr "現在の電子メールアドレス:"
-
-#: web_tt2/serveradmin.tt2:78
-msgid "New user email address : "
-msgstr "新しい電子メールアドレス:"
-
-#: web_tt2/serveradmin.tt2:80
-msgid "Update user memberships"
-msgstr "登録状況を更新"
 
 #: web_tt2/serveradmin.tt2:65
 msgid "Rebuild HTML archives using \"arctxt\" directories as input."
@@ -3383,7 +3113,8 @@ msgid ""
 "As listmaster, you can change your identity and act as someone else. This is "
 "may be usefull when providing assistance or to test users privileges"
 msgstr ""
-"リストシステム管理者は、他人になってその人の権限で操作をすることができます。これは、誰かの手伝いをしたり、利用者権限のテストをしたりするときに便利でしょ"
+"リストシステム管理者は、他人になってその人の権限で操作をすることができます。"
+"これは、誰かの手伝いをしたり、利用者権限のテストをしたりするときに便利でしょ"
 "う"
 
 #: web_tt2/serveradmin.tt2:80
@@ -3396,7 +3127,8 @@ msgid ""
 "current session. On a production server, this allow to keep logs rather "
 "small and to test some features with the maximum log level. "
 msgstr ""
-"現在のセッションが終了するまでの間だけ、設定してあるよりも記録レベルを上げることができます。これにより、本番稼働しているサーバでも、運用記録の分量を抑え"
+"現在のセッションが終了するまでの間だけ、設定してあるよりも記録レベルを上げる"
+"ことができます。これにより、本番稼働しているサーバでも、運用記録の分量を抑え"
 "ながら特定の機能だけを最大の記録レベルでテストできます。"
 
 #: web_tt2/serveradmin.tt2:90
@@ -3433,8 +3165,8 @@ msgid ""
 "can be processed by the tt2 parser.This button is for controlling tt2 vars "
 "dump feature :"
 msgstr ""
-"Sympaのウェブテンプレートをカスタマイズするには、tt2構文解析機能で処理できる変数がわからなければなりません。このボタンで、tt2変数表示機能を制"
-"御できます。"
+"Sympaのウェブテンプレートをカスタマイズするには、tt2構文解析機能で処理できる"
+"変数がわからなければなりません。このボタンで、tt2変数表示機能を制御できます。"
 
 #: web_tt2/serveradmin.tt2:137
 msgid "Unset template vars dump"
@@ -3585,55 +3317,75 @@ msgstr ""
 
 #. (list)
 #: web_tt2/sigrequest.tt2:25
+msgid "You requested unsubscription from list %1"
+msgstr "あなたは %1 メーリングリストの登録解除を申し込みました"
+
+#: web_tt2/sigrequest.tt2:29
 msgid ""
-"We need to check your identity before validating your unsubscription request "
-"for list %1. If you have a user account you should login or create an "
-"account. <br/>Otherwise we can send you an email with a validation link "
-"inside ; please provide your email address below to receive this validation "
-"link."
+"To confirm your identity and prevent anyone from unsubscribing you from \n"
+"\tthis list against your will, a message containing an URL\n"
+"\twill be sent to you."
 msgstr ""
-"%1 リストの登録解除申込を承認する前に、あなたが本人であることを確認する必要があります。アカウントを持っていればログインしてください。持っていなければ"
-"アカウントを作成してください。<br/>どちらもうまくできないようなら、確認用のリンクの入った電子メールを送りますので、下の欄にあなたの電子メールアドレ"
-"スを入れてください。"
+"あなたが実在の人物であることを確認するため、また、誰かがあなたの意思に反して"
+"このメー\n"
+"\tリングリストの登録解除を申し込んでしまうのを防ぐため、これから確認用の\n"
+"\tURL を書いたメッセージをあなたに送ります。"
+
+#. (list)
+#: web_tt2/sigrequest.tt2:32
+msgid ""
+"Check your mailbox for new messages and examine the message from Sympa to "
+"find your password.\n"
+"  Enter that password, below. This wil confirm your request to be "
+"unsubscribed from list %1."
+msgstr ""
+"メールボックスの新着メッセージを確認して、SYMPA から届くメッセージを見てくだ"
+"さい。\n"
+"\t届いたメッセージに書いてあるパスワードを下の欄に入力してください。\n"
+"\tこれで、%1 メーリングリストの登録解除申し込みを確認できます。"
+
+#: web_tt2/sigrequest.tt2:36 web_tt2/sigrequest.tt2:68
+#: web_tt2/subrequest.tt2:38 web_tt2/subrequest.tt2:80
+msgid "e-mail address"
+msgstr "電子メールアドレス"
+
+#: web_tt2/sigrequest.tt2:45
+msgid ""
+"This password, associated with your email address, will allow you to access "
+"your custom environment."
+msgstr ""
+"このパスワードはあなたの電子メールアドレス専用です。これを使うと自分専用の"
+"ページにアクセスできます。"
+
+#. (list)
+#: web_tt2/sigrequest.tt2:48
+msgid ""
+"Please provide your email address for your unsubscription request from list %"
+"1."
+msgstr ""
+"%1 メーリングリストの登録解除をする電子メールアドレスを入力してください。"
 
 #: web_tt2/sigrequest.tt2:52
 msgid "Your e-mail address :"
 msgstr "あなたの電子メールアドレス:"
 
-#: web_tt2/sigrequest.tt2:33
-msgid "Send me a validation link"
-msgstr "確認リンクの取り寄せ"
-
-#: web_tt2/sigrequest.tt2:40
+#. (list)
+#: web_tt2/sigrequest.tt2:64
 msgid ""
-"We've sent you an email including a validation link. You should check your "
-"mailbox to read this email and use this validation link."
-msgstr "確認用リンクの入った電子メールを送りました。自分のメールボックスを確認してその電子メールにある確認用リンクを使ってください。"
+"To confirm your unsubscription from list %1, please enter\n"
+"\tyour password below :"
+msgstr ""
+"%1 メーリングリストの登録解除申し込みを確認するため、以下に\n"
+"\tパスワードを入力してください:"
+
+#: web_tt2/sigrequest.tt2:76
+msgid ""
+"If you've never had a password from that server or if you don't remember it :"
+msgstr "まだパスワードを持っていない、またはパスワードを忘れてしまった:"
 
 #: web_tt2/skinsedit.tt2:5
 msgid "Cascading Style Sheet"
 msgstr "カスケーディングスタイルシート (CSS)"
-
-#: web_tt2/skinsedit.tt2:8
-msgid ""
-"When not using css_url parameters, sympa deliver a dynamic CSS which is "
-"created using a template name css.tt2. Usually this template is comming from "
-"Sympa distribution tar. Using this CSS is not a good solution because for "
-"each clic, Sympa fcgi server is requested twice. If you use  css_url "
-"parameters the style sheet are delivered by your http server. When you "
-"install a new Sympa version and start it at the first time, the different "
-"CSS files are installed in the directory specified by css_path parameter. So "
-"if you want to preserve some site customization from being overwriten when "
-"starting a new sympa version, css_path and css_url should not point to the "
-"same directory ."
-msgstr ""
-"css_url パラメータを使っていなければ、Sympa は css.tt2 テンプレートを使って動的に CSS "
-"を生成して送出します。このテンプレートは通常は、Sympa 配布物のアーカイブに入っているのと同じものです。この CSS "
-"を使いつづけるのはあまりよい考えとは言えません。というのは、アクセスがあるたびに Sympa の FCGI サーバが 2 "
-"度づつ呼び出されてしまうからです。css_url パラメータを使っていれば、スタイルシートは HTTP サーバが送出します。Sympa "
-"の新版をインストールして起動すると、最初に css_path パラメータで指定されたディレクトリにある別の CSS "
-"ファイルをインストールします。ご自分のサイトで CSS をカスタマイズしているのなら、Sympa "
-"の新版を起動したときにそれが上書きされてしまわないよう、css_path と css_url が同じディレクトリを指さないようにしておきましょう。"
 
 #: web_tt2/skinsedit.tt2:8
 msgid ""
@@ -3665,70 +3417,32 @@ msgid ""
 "forget to set parameter css_url, it must be the URL for the directory where "
 "css are stored (current value is <a target=\"test\" href=\"%1\">%1</a>)."
 msgstr ""
-"現在、css_path を決めていません。<strong>robot.conf 設定ファイルを変更しなければなりません</strong> "
-"(仮想ロボットを使っていないのなら sympa.conf)。css_path "
-"パラメータを設定して、静的CSSを設置できるようにし、<strong>Sympaがより速く動作するようにしましょう</strong>。css_url "
-"パラメータを設定することも忘れないように。これは、CSSを置く場所の URL です (現在の値は <a target=\"test\" "
-"href=\"%1\">%1</a>)。"
+"現在、css_path を決めていません。<strong>robot.conf 設定ファイルを変更しなけ"
+"ればなりません</strong> (仮想ロボットを使っていないのなら sympa.conf)。"
+"css_path パラメータを設定して、静的CSSを設置できるようにし、<strong>Sympaがよ"
+"り速く動作するようにしましょう</strong>。css_url パラメータを設定することも忘"
+"れないように。これは、CSSを置く場所の URL です (現在の値は <a target=\"test"
+"\" href=\"%1\">%1</a>)。"
+
+#: web_tt2/skinsedit.tt2:31
+msgid "W3C CSS validation tools"
+msgstr "W3C CSS検証ツール"
 
 #: web_tt2/skinsedit.tt2:35
 msgid "Colors"
 msgstr "色"
 
-#: web_tt2/skinsedit.tt2:38
+#: web_tt2/skinsedit.tt2:37
 msgid ""
-"If you are not using css_path and css_url parameters, colors are defined in "
-"the robot.conf configuration file. Otherwise, colors are defined in the "
-"static CSS. Colors can be changed on your current session using the "
-"following color editor. When finished, you may copy the result a new CCS "
-"static file. The target is specified by css_path parameter."
+"The current version doesn't include a color editor, so you need to edit "
+"robot.conf (or sympa.conf) to change colors. Here are the colors as defined "
+"for the current robot in robot.conf. If you did install statics CSS files, "
+"the colors in use may differ from this table."
 msgstr ""
-"css_path パラメータと css_url パラメータを使っていないのなら、色は robot.conf "
-"設定ファイルで決まります。使っているのなら、色は静的 CSS "
-"で決まります。以下の色エディタで色を変えられますが、これは現在のセッションが終わるともとに戻ってしまいます。変更が終わったら、結果を新たな静的 CSS "
-"ファイルにコピーできます。コピー先は css_path パラメータで指定しています。"
-
-#: web_tt2/skinsedit.tt2:45
-msgid ""
-"\n"
-"Be carreful : the CSS file is overwritten using css.tt2 template, usually "
-"this file is comming from Sympa distribution so your CSS customization may "
-"be erased when doing this.\n"
-"</p>\n"
-"<p>\n"
-"Use the color editor in orer to change defined colors. First select the "
-"color you want to change and pick a color,then apply it using the test "
-"button. The new color is not really installed but it is used only for your "
-"own session. When happy with the different colors you choosen, you may save "
-"them in a new static CSS.\n"
-msgstr ""
-"\n"
-"ご注意ください。CSS ファイルを css.tt2 テンプレート (通常は Sympa の配布物に入っていたものと同じ) を使って上書きします。CSS "
-"にカスタマイズを加えていたのなら、それは消えてしまいます。\n"
-"</p>\n"
-"<p>\n"
-"決まっている色を変えるには色エディタを使います。まず、変えたい色を選択し、色を選び、テストボタンを使って適用します。新しい色は実際にはインストールされず"
-"、セッションが終わるまでだけ有効です。選んだ色あいが気に入ったら、それを新たな静的 CSS に保存します。\n"
-
-#: web_tt2/skinsedit.tt2:51
-msgid " pick the color you want to test. "
-msgstr "テストする色を選びます。"
-
-#: web_tt2/skinsedit.tt2:56
-msgid "Select the parameter you want to change : "
-msgstr "変えたい色パラメータを選択: "
-
-#: web_tt2/skinsedit.tt2:64
-msgid "test this color in my session"
-msgstr "セッション中に色をテスト"
-
-#: web_tt2/skinsedit.tt2:65
-msgid "reset colors in my session"
-msgstr "セッション中の色をリセット"
-
-#: web_tt2/skinsedit.tt2:66
-msgid "Install my session colors in a new static CSS"
-msgstr "現在のセッションの色を新たな静的 CSS へインストール"
+"現バージョンでは、色の変更を簡単にできるようになっていません。色を変えるに"
+"は、robot.conf (あるいは sympa.conf) を編集する必要があります。ここでは現在"
+"の robot.conf のロボットで決まっている色を挙げておきます。静的CSSファイルを設"
+"置しているのであれば、使っている色はこの表とは違ってくるかもしれません。"
 
 #: web_tt2/skinsedit.tt2:40
 msgid ""
@@ -3757,16 +3471,16 @@ msgid ""
 "color_5. It is intended to be the darkest shade, as color_5 has other uses.</"
 "LI></UL>"
 msgstr ""
-"次の箇所の背景色:<ul><li>表の列で、color_5と交互に色を変えるときの暗いほうの色。color_5には他の用途もあります。</li></ul"
-">"
+"次の箇所の背景色:<ul><li>表の列で、color_5と交互に色を変えるときの暗いほうの"
+"色。color_5には他の用途もあります。</li></ul>"
 
 #: web_tt2/skinsedit.tt2:59
 msgid ""
 "background color of:<UL><LI>main navigation tabs;</LI><LI> most of the "
 "buttons (those corresponding to the MainMenuLinks CSS class).</LI></UL>"
 msgstr ""
-"次の箇所の背景色:<ul><li>画面上部のタブ。</li><li>ほとんどのボタン "
-"(CSSのMainMenuLinksクラスを付与されている)。</li></ul>"
+"次の箇所の背景色:<ul><li>画面上部のタブ。</li><li>ほとんどのボタン (CSSの"
+"MainMenuLinksクラスを付与されている)。</li></ul>"
 
 #: web_tt2/skinsedit.tt2:65
 msgid ""
@@ -3774,8 +3488,8 @@ msgid ""
 "are &lt;TD/&gt; borders; exceptions for fonts are links, buttons and some "
 "titles.</LI></UL>"
 msgstr ""
-"次の箇所の文字色と境界色:<ul><li>ほとんどすべて。ただし、&lt;TD/&gt;による境界と、リンクやボタンなどの文字を除く。</li></ul"
-">"
+"次の箇所の文字色と境界色:<ul><li>ほとんどすべて。ただし、&lt;TD/&gt;による境"
+"界と、リンクやボタンなどの文字を除く。</li></ul>"
 
 #: web_tt2/skinsedit.tt2:71
 msgid "background color of:<UL><LI>top box;</LI><LI>footer box.</LI></UL>"
@@ -3787,14 +3501,17 @@ msgid ""
 "the buttons (which are in fact hyperlinks, corresponding to the "
 "actionMenuLinks CSS class).</LI></UL>"
 msgstr ""
-"次の箇所の背景色:<ul><li>ページ。</li><li>表見出し。</li><li>ボタンの一部 "
-"(実際にはハイパーリンクで、CSSのactionMenuLinksクラスを付与されている)。</li></ul>"
+"次の箇所の背景色:<ul><li>ページ。</li><li>表見出し。</li><li>ボタンの一部 (実"
+"際にはハイパーリンクで、CSSのactionMenuLinksクラスを付与されている)。</li></"
+"ul>"
 
 #: web_tt2/skinsedit.tt2:83
 msgid ""
 "background color of:<UL><LI>all the main interface boxes;</LI><LI>the "
 "lightest color for the table lines, contrasting with color_0.</LI></UL>"
-msgstr "次の箇所の背景色:<ul><li>インタフェースの箱。</li><li>表の行の明るいほうの色。color_0と逆。</li></ul>"
+msgstr ""
+"次の箇所の背景色:<ul><li>インタフェースの箱。</li><li>表の行の明るいほうの"
+"色。color_0と逆。</li></ul>"
 
 #: web_tt2/skinsedit.tt2:89
 msgid ""
@@ -3804,15 +3521,19 @@ msgid ""
 "</LI><LI>hovered buttons corresponding to the actionMenuLinks CSS class;</"
 "LI><LI>hovered navigation tabs.</LI></UL>"
 msgstr ""
-"次の箇所の背景色:<ul><li>実行中の操作項目 (たとえば、管理オプションのうち現在見ているセクション。データの見出しのうち、現在並べ替えしている項"
-"目)。</li><li>マウスカーソルのある操作項目。</li><li>マウスカーソルのあるボタン "
-"(CSSのactionMenuLinksクラスを付与されている)。</li><li>画面上部のタブでマウスカーソルのあるもの。</li></ul>"
+"次の箇所の背景色:<ul><li>実行中の操作項目 (たとえば、管理オプションのうち現在"
+"見ているセクション。データの見出しのうち、現在並べ替えしている項目)。</"
+"li><li>マウスカーソルのある操作項目。</li><li>マウスカーソルのあるボタン (CSS"
+"のactionMenuLinksクラスを付与されている)。</li><li>画面上部のタブでマウスカー"
+"ソルのあるもの。</li></ul>"
 
 #: web_tt2/skinsedit.tt2:95
 msgid ""
 "background color of:<UL><LI>error messages;</LI><LI>just edited area in the "
 "administrative management section.</LI></UL>"
-msgstr "次の箇所の背景色:<ul><li>エラーメッセージ。</li><li>運用管理の項目でいま変更したところ。</li></ul>"
+msgstr ""
+"次の箇所の背景色:<ul><li>エラーメッセージ。</li><li>運用管理の項目でいま変更"
+"したところ。</li></ul>"
 
 #: web_tt2/skinsedit.tt2:101
 msgid "doted underscore color of:<UL><LI>hyperlinks.</LI></UL>"
@@ -3826,9 +3547,12 @@ msgid ""
 "hovered hyperlinks corresponding to actions;</LI><LI>background color for "
 "clicked links (corresponding to the .active state in a CSS).</LI></UL>"
 msgstr ""
-"次の箇所の境界色:<ul><li>実行中の操作項目 (たとえば、管理オプションのうち現在見\n"
-"ているセクション。データの見出しのうち、現在並べ替えしている項目)。</li><li>操作に関係あるハイパーリンクでマウスカーソルのあるもの。</li>"
-"</ul>次の箇所の背景色:<ul><li>クリックしたリンク (CSSのactive擬似クラスが付与されている)。</li></ul>"
+"次の箇所の境界色:<ul><li>実行中の操作項目 (たとえば、管理オプションのうち現在"
+"見\n"
+"ているセクション。データの見出しのうち、現在並べ替えしている項目)。</li><li>"
+"操作に関係あるハイパーリンクでマウスカーソルのあるもの。</li></ul>次の箇所の"
+"背景色:<ul><li>クリックしたリンク (CSSのactive擬似クラスが付与されている)。</"
+"li></ul>"
 
 #: web_tt2/skinsedit.tt2:113
 msgid "inactive buttons color. Rarely used."
@@ -3840,9 +3564,10 @@ msgid ""
 "LI><LI>hovered links;</LI><LI>some hovered buttons action(which are in fact "
 "hyperlinks, corresponding to the actionMenuLinks CSS class).</LI></UL>"
 msgstr ""
-"次の箇所の文字色:<ul><li>有効な画面上部のタブ。</li><li>&lt;H2/&gt; "
-"見出し。</li><li>マウスカーソルのあるリンク。</li><li>マウスカーソルのある一部のボタン "
-"(実際にはハイパーリンクで、CSSのactionMenuLinksクラスを付与されている)。</li></ul>"
+"次の箇所の文字色:<ul><li>有効な画面上部のタブ。</li><li>&lt;H2/&gt; 見出し。"
+"</li><li>マウスカーソルのあるリンク。</li><li>マウスカーソルのある一部のボタ"
+"ン (実際にはハイパーリンクで、CSSのactionMenuLinksクラスを付与されている)。</"
+"li></ul>"
 
 #: web_tt2/skinsedit.tt2:125
 msgid ""
@@ -3855,8 +3580,9 @@ msgid ""
 "lists, ...);</LI><LI>the rest of hovered buttons (those corresponding to the "
 "MainMenuLinks CSS class).</LI></UL>"
 msgstr ""
-"次の箇所の背景色:<ul><li>フォームの項目で変更できるところ (テキストエリア、選択ボックス、など)。</li><li>その他のボタン "
-"(CSSのMainMenuLinksクラスを付与されている)。</li></ul>"
+"次の箇所の背景色:<ul><li>フォームの項目で変更できるところ (テキストエリア、選"
+"択ボックス、など)。</li><li>その他のボタン (CSSのMainMenuLinksクラスを付与さ"
+"れている)。</li></ul>"
 
 #: web_tt2/skinsedit.tt2:137 web_tt2/skinsedit.tt2:143
 msgid "unused"
@@ -3867,10 +3593,6 @@ msgstr "未使用"
 #: web_tt2/skinsedit.tt2:173 web_tt2/skinsedit.tt2:179
 msgid "deprecated"
 msgstr "廃用"
-
-#: web_tt2/skinsedit.tt2:31
-msgid "W3C CSS validation tools"
-msgstr "W3C CSS検証ツール"
 
 #: web_tt2/sso_login.tt2:3
 msgid ""
@@ -3999,100 +3721,58 @@ msgstr "下の欄に必要事項を入力して、確認ボタンをクリック
 msgid "I subscribe to list %1"
 msgstr "%1 メーリングリストに読者登録する"
 
-#: web_tt2/subrequest.tt2:31
-msgid ""
-"To confirm your identity and prevent anyone from subscribing you to\n"
-"        this list against your will, a message containing an validation link "
-"was sent to the e-mail address you provided."
-msgstr ""
-"あなたが実在の人物であることを確認します。これによって、誰かがあなたの意思に反してこのメーリングリストの登録解除を申し込んでしまうのを防ぎます。これから"
-"確認用の URL を書いたメッセージをあなたに送ります。"
-
-#. (list)
 #: web_tt2/subrequest.tt2:32
 msgid ""
-"Check your mailbox for new messages and click this link. This will confirm "
-"your subscription to list %1."
+"To confirm your identity and prevent anyone from subscribing you to\n"
+"        this list against your will, a message containing your password\n"
+"        will be sent to you."
 msgstr ""
-"メールボックスの新着メッセージを確認してください。それに書いてあるリンクをクリックしてください。これで、%1 "
-"メーリングリストへの読者登録申込を確認できます。"
+"あなたが実在の人物であることを確認するため、また、誰かがあなたの意志に反し"
+"て\n"
+"\tこのリストへの読者登録を申し込んでしまうのを防ぐため、これから確認用パ\n"
+"\tスワードを書いたメッセージをあなたに送ります。"
+
+#. (list)
+#: web_tt2/subrequest.tt2:34
+msgid ""
+"Check your mailbox for new messages and examine the message from Sympa to "
+"find your password.\n"
+"\tEnter that password below. This will confirm your subscription to list %1."
+msgstr ""
+"メールボックスの新着メッセージを確認して、SYMPA から届いたメッセージを見てく"
+"ださい。\n"
+"\t届いたメッセージに書いてあるパスワードを下の欄に入力してください。\n"
+"\tこれで、%1 メーリングリストの登録解除申し込みを確認できます。"
+
+#: web_tt2/subrequest.tt2:54
+msgid ""
+"This password, associated with your email address, willallow you to access "
+"your custom environment."
+msgstr ""
+"このパスワードはあなたの電子メールアドレス専用です。\n"
+"\tこれを使うと自分専用のページにアクセスできます。"
 
 #. (list)
 #: web_tt2/subrequest.tt2:73
 msgid ""
 "To confirm your subscription to list %1, please enter\n"
 "        your password below"
-msgstr "%1 メーリングリストへのあなたの読者登録申込を確認するため、下の欄にあなたのパスワードを入力してください。"
+msgstr ""
+"%1 メーリングリストへのあなたの読者登録申込を確認するため、下の欄にあなたのパ"
+"スワードを入力してください。"
 
 #: web_tt2/subrequest.tt2:75
 msgid ", in addition to the personnal informations requested."
 msgstr " (パスワード以外にも個人情報を入力しなければならない場合があります)。"
-
-#: web_tt2/sigrequest.tt2:36 web_tt2/sigrequest.tt2:68
-#: web_tt2/subrequest.tt2:38 web_tt2/subrequest.tt2:80
-msgid "e-mail address"
-msgstr "電子メールアドレス"
 
 #: web_tt2/subrequest.tt2:91
 msgid "My password ?"
 msgstr "パスワードがわからない"
 
 #. (list)
-#: web_tt2/subrequest.tt2:75
-msgid "You are already subscribed to list %1"
-msgstr "すでに %1 メーリングリストに読者登録しています"
-
-#: web_tt2/ticket.tt2:4
-msgid "The link you used is unvalid"
-msgstr "お使いのリンクは使えません"
-
-#: web_tt2/ticket.tt2:6
-msgid "Sorry, this operation can't be performed"
-msgstr "申し訳ありません。その操作は実施できません。"
-
-#. (ticket_context.printable_date)
-#: web_tt2/ticket.tt2:10
-msgid "A validation link was sent to you on %1. "
-msgstr "%1 に、確認リンクをお送りしました。"
-
-#. (ticket_context.remote_addr)
-#: web_tt2/ticket.tt2:12
-msgid "(the validation link was requested from host %1) "
-msgstr "(ホスト %1 より確認リンクへのアクセスあり) "
-
-#: web_tt2/ticket.tt2:16
-msgid "reason"
-msgstr "理由"
-
-#. (ticket_context.status)
-#: web_tt2/ticket.tt2:18
-msgid ""
-"The validation link has already been validated from host %1 .If you did not "
-"perform this validation, please report this confidentiality issue to your "
-"mail services administrator."
-msgstr ""
-"確認リンクは、すでにホスト %1 "
-"から確認されています。この確認を自分で実施した覚えがないのであれば、守秘性に関わる事案としてメールシステム管理者に報告してください。"
-
-#: web_tt2/ticket.tt2:20 web_tt2/ticket.tt2:27 web_tt2/ticket.tt2:36
-msgid ""
-"However, as you are logged in already, you can probably perform the action "
-"you requested anyway."
-msgstr "ですが、すでにログインできているのであれば、おそらく自分ですでに確認を実施していたのでしょう。"
-
-#. (ticket_context.printable_date)
-#: web_tt2/ticket.tt2:25
-msgid "The validation link has expired"
-msgstr "確認リンクが期限切れになっています"
-
-#: web_tt2/ticket.tt2:29 web_tt2/ticket.tt2:38
-msgid "Please login or request a new validation link"
-msgstr "ログインしてください。できないときは、新たに確認リンクを申し込んでください"
-
-#. (ticket_context.printable_date)
-#: web_tt2/ticket.tt2:34
-msgid "The validation link has an unknow format or has expired"
-msgstr "そういう確認リンクは知りません。あるいは、確認リンクが期限切れになったのかもしれません"
+#: web_tt2/subrequest.tt2:97
+msgid "You are already subscriber of list %1"
+msgstr "%1 メーリングリストにはすでに読者登録しています"
 
 #: web_tt2/tt2_error.tt2:7
 msgid "Sympa error - could not display web page"
@@ -4145,6 +3825,10 @@ msgstr "ログイン"
 #: web_tt2/viewlogs.tt2:87
 msgid "List Management"
 msgstr "リスト管理"
+
+#: web_tt2/viewlogs.tt2:89
+msgid "User preferences"
+msgstr "個人設定"
 
 #: web_tt2/viewlogs.tt2:90
 msgid "User management"
@@ -4235,14 +3919,6 @@ msgstr "このメッセージIDに関する他の事象を見る"
 #: web_tt2/viewlogs.tt2:211
 msgid "Other events"
 msgstr "その他の事象"
-
-#: web_tt2/viewmod.tt2:17
-msgid "Default rejection message"
-msgstr "拒否メッセージの初期値"
-
-#: web_tt2/viewmod.tt2:18
-msgid "Do Not Notify"
-msgstr "知らせない"
 
 #: web_tt2/view_template.tt2:7
 msgid "Template name : "
@@ -4822,8 +4498,8 @@ msgstr ""
 msgid "%1 Digest %2"
 msgstr "%1 - %2のまとめ読み"
 
-#: mail_tt2/digest.tt2:10 mail_tt2/digest_plain.tt2:8
-#: mail_tt2/get_archive.tt2:9 src/List.pm:2686
+#: mail_tt2/digest.tt2:11 mail_tt2/digest_plain.tt2:8
+#: mail_tt2/get_archive.tt2:10 src/List.pm:2686
 msgid "Table of contents:"
 msgstr "目次:"
 
@@ -4838,7 +4514,7 @@ msgid "Digest for list %1"
 msgstr "%1 メーリングリストのまとめ読み"
 
 #. (list.name,date)
-#: mail_tt2/digest.tt2:34 mail_tt2/get_archive.tt2:33
+#: mail_tt2/digest.tt2:37 mail_tt2/get_archive.tt2:36
 msgid "End of digest for list %1 - %2"
 msgstr "%1 メーリングリスト - %2のまとめ読み終わり"
 
@@ -5250,8 +4926,8 @@ msgstr ""
 "思います。"
 
 #: mail_tt2/invite.tt2:7
-msgid "To subscribe just hit the following link :"
-msgstr "読者登録は、次のリンクをクリックするだけでできます:"
+msgid "To subscribe just hit the following mailto url :"
+msgstr "読者登録は、以下の mailto URL をクリックするだけでできます:"
 
 #. (conf.sympa,subject)
 #: mail_tt2/invite.tt2:10
@@ -5267,7 +4943,6 @@ msgstr ""
 "てかまいません。"
 
 #. (list.name)
-#. (new_listname)
 #: mail_tt2/list_created.tt2:2
 msgid "%1 mailing list creation"
 msgstr "%1 メーリングリストを作成しました"
@@ -5333,10 +5008,11 @@ msgstr ""
 msgid "Moderators List %1 / %2"
 msgstr "%1 メーリングリストでの吟味 / %2"
 
-#. (list.name,list.host,email)
+#. (list.name)
 #: mail_tt2/listmaster_notification.tt2:4
-msgid "List \"%1@%2\" creation request from %3"
-msgstr "%3 からのメーリングリスト \"%1@%2\" 作成申込"
+#, fuzzy
+msgid "List \"%1\" creation request"
+msgstr "%3 からのメーリングリスト \"%1@%2\" 作成申し込み"
 
 #. (email,list.name)
 #: mail_tt2/listmaster_notification.tt2:6
@@ -5347,11 +5023,6 @@ msgstr "%1 から、\"%2\" というリスト作成の申込がありました�
 #: mail_tt2/listmaster_notification.tt2:21
 msgid "To activate/delete this mailing list :"
 msgstr "このメーリングリストを 有効にしたり削除したりするには:"
-
-#. (email,list.name,new_listname)
-#: mail_tt2/listmaster_notification.tt2:19
-msgid "%1 has copied list \"%2\" as a new list \"%3\""
-msgstr "%1 がメーリングリスト \"%2\" を新リスト \"%3\" へ複写しました"
 
 #. (list.name)
 #: mail_tt2/listmaster_notification.tt2:17
@@ -5440,19 +5111,6 @@ msgstr "データベースへの接続が再開"
 msgid "Connection to database %1 restored."
 msgstr "データベース %1 への接続が再開しました。"
 
-#: mail_tt2/listmaster_notification.tt2:77
-msgid "Bulk mailer error"
-msgstr "一括メール送信機能のエラー"
-
-#. (listname)
-#: mail_tt2/listmaster_notification.tt2:79
-msgid ""
-"Sympa failed to store a message for list %1 in the bulk mailer. You should "
-"check log files !!"
-msgstr ""
-"Sympa が %1 メーリングリストのメッセージを一括メール送信機能に蓄積するの\n"
-"に失敗しました。運用記録を確認する必要があります。"
-
 #: mail_tt2/listmaster_notification.tt2:72
 msgid "Loop detected"
 msgstr "メールループ検出"
@@ -5513,7 +5171,9 @@ msgstr "メッセージ保管の失敗"
 #. (file,bad)
 #: mail_tt2/listmaster_notification.tt2:119
 msgid "Sympa could not archive message '%1'. Moving it into directory '%2'."
-msgstr "Sympa がメッセージ '%1' を保管できませんでした。メッセージを '%2' ディレクトリの下へ移動します。"
+msgstr ""
+"Sympa がメッセージ '%1' を保管できませんでした。メッセージを '%2' ディレクト"
+"リの下へ移動します。"
 
 #: mail_tt2/listmaster_notification.tt2:123
 msgid "A bounce management failed"
@@ -5633,34 +5293,13 @@ msgid "List owner/editor email changes"
 msgstr "リストオーナー/吟味役の電子メールアドレス変更"
 
 #. (previous_email,new_email)
-#: mail_tt2/listmaster_notification.tt2:176
+#: mail_tt2/listmaster_notification.tt2:165
 msgid ""
-"Member %1 has changed his owner/editor email address to %2. This change has "
-"been performed for the following lists :"
+"User %1 has changed his owner/editor email address to %2. This changed has "
+"been performed to the following lists :"
 msgstr ""
-"%1 のオーナーか吟味役の電子メールアドレスを %2 に変更しました。この変更\n"
-"は、以下のリストで実施しました:"
-
-#. (list.name)
-#: mail_tt2/listmaster_notification.tt2:183
-msgid "List %1 : Failed to change admin email address"
-msgstr "%1 メーリングリスト: 管理者電子メールアドレスの変更に失敗しました"
-
-#. (current_email,new_email,datasource)
-#: mail_tt2/listmaster_notification.tt2:187
-msgid ""
-"Admin %1 could not change his admin email address (new email address is %2) "
-"because he is included via a the following data sources: %3.\n"
-"\n"
-"If you are able to do so, you should probably update these data sources with "
-"this person's new email address."
-msgstr ""
-"管理者 %1 の電子メールアドレスを変更できませんでした (変更先は\n"
-"%2)。\n"
-"次のデータソースから取り込まれているためです: %3\n"
-"\n"
-"可能なら、データソースでこの人の電子メールアドレスを新しいものに更新して\n"
-"みてください。"
+"%1 のオーナーまたは吟味役の電子メールアドレスを %2 に変えました。この変\n"
+"更を実行したリストは次のとおりです:"
 
 #. (param0,param1)
 #: mail_tt2/listmaster_notification.tt2:174
@@ -6183,36 +5822,6 @@ msgstr ""
 "     パラメータ: %4\n"
 "\n"
 
-#. (total,list.name)
-#: mail_tt2/listowner_notification.tt2:45
-msgid ""
-"Because we received many non-delivery reports, the %1 subscribers listed "
-"below have been\n"
-"notified that they might be removed from list %2:"
-msgstr ""
-"多くの配信不能報告を受け取ったため、以下に挙げる %1 名の読者に対して \n"
-"%2 メーリングリストから削除されるかもしれないというお知らせをしました:"
-
-#. (total,list.name)
-#: mail_tt2/listowner_notification.tt2:48
-msgid ""
-"Because we received many non-delivery reports, the %1 subscribers listed "
-"below have been\n"
-"removed from list %2:"
-msgstr ""
-"多くの配信不能報告を受け取ったため、以下に挙げる %1 名の読者を \n"
-"%2 メーリングリストから削除しました:"
-
-#. (total,list.name)
-#: mail_tt2/listowner_notification.tt2:51
-msgid ""
-"Because we received many non-delivery reports, the %1 subscribers listed "
-"below have been\n"
-"selected by Sympa as severe bouncing addresses:"
-msgstr ""
-"多くの配信不能報告を受け取ったため、以下に挙げる %1 名の読者を、 \n"
-"ひどく配送エラーを起こすメールアドレスに選定しました:"
-
 #. (list.name)
 #: mail_tt2/listowner_notification.tt2:61
 msgid "Subscription request to list %1"
@@ -6223,29 +5832,26 @@ msgstr "%1 メーリングリストへの読者登録申込"
 msgid ""
 "Dear owner of list %1,\n"
 " \n"
-"A user asked to be added as a subscriber to your list. In order to list and "
-"manage\n"
-"pending subscription requests you should click on the following link :"
+"A user asked to be added as a subscriber to your list. If this is OK \n"
+"with you, you should click the following URL :"
 msgstr ""
 "%1 メーリングリストのオーナーさんへ\n"
 " \n"
-"ある人から、あなたがオーナーをしているリストに読者として追加してほしい  \n"
-"との申し出がありました。保留中の読者登録申込を見て処理するには、下記の  \n"
-"リンクをクリックして ください:"
+"ある人から、あなたがオーナーをしているリストに読者として追加してほしい \n"
+"との申し出がありました。構わないのであれば、下記の URL をクリックして \n"
+"ください:"
 
-#. (replyto,keyauth,list.name,who,gecos)
-#: mail_tt2/listowner_notification.tt2:72
+#. (replyto,keyauth,list.name,who,gecos)-)
+#: mail_tt2/listowner_notification.tt2:73
 msgid ""
-"If prefered, you can accept this subscription request sending an email to %1 "
-"with the following subject :\n"
+"\n"
+"or send an email to %1 with the following subject :\n"
 "AUTH %2 ADD %3 %4 %5\n"
 msgstr ""
-"問題なければ、%1 宛てに、下記の表題 (Subject) で電子メールを送って読者登録申込を受け付けてください:\n"
+"\n"
+"あるいは、%1 宛てに、 \n"
+"下記の表題 (Subject) で電子メールを送ってください:\n"
 "AUTH %2 ADD %3 %4 %5\n"
-
-#: mail_tt2/listowner_notification.tt2:74
-msgid "That can be done using this mailto link :"
-msgstr "この mailto URL リンクを使えばできます:"
 
 #: mail_tt2/listowner_notification.tt2:76
 msgid "The user has provided the following informations:"
@@ -6257,17 +5863,17 @@ msgid "UNsubscription request from list %1"
 msgstr "%1 メーリングリストの登録解除申込"
 
 #. (list.name)-)
-#: mail_tt2/listowner_notification.tt2:89
+#: mail_tt2/listowner_notification.tt2:88
 msgid ""
 "Dear owner of list %1,\n"
 "\n"
 "A user asked to be deleted from your list. If this is OK \n"
-"with you, you should click on the following link :"
+"with you, you should click the following URL :"
 msgstr ""
 "%1 メーリングリストのオーナーさんへ\n"
 "\n"
 "ある人から、あなたがオーナーをしているリストから削除してほしいとの申し \n"
-"出がありました。構わないのであれば、下記のリンクをクリックしてくださ \n"
+"出がありました。構わないのであれば、下記の URL をクリックしてくださ \n"
 "い:"
 
 #. (sympa,keyauth,list.name,who)-)
@@ -6330,25 +5936,18 @@ msgid "User \"%1\" has been automatically removed from list %2. "
 msgstr "%1 を %2 メーリングリストから自動的に削除しました。"
 
 #. (list.name)
-#: mail_tt2/listowner_notification.tt2:140
-msgid "List %1 : Failed to change member email address"
-msgstr "%1 メーリングリスト: 読者電子メールアドレスの変更に失敗しました"
+#: mail_tt2/listowner_notification.tt2:127
+msgid "List %1 : Named filter error"
+msgstr "%1 メーリングリスト: 名前つきフィルタのエラー"
 
-#. (current_email,new_email,datasource)
-#: mail_tt2/listowner_notification.tt2:144
+#. (filter,list.name)
+#: mail_tt2/listowner_notification.tt2:129
 msgid ""
-"User %1 could not change his member email address (new email address is %2) "
-"because he is included via a the following data sources: %3.\n"
-"\n"
-"If you are able to do so, you should probably update these data sources with "
-"this person's new email address."
+"The %1 named filter could not be evaluated. The list %2 is using it for some "
+"authorization scenario."
 msgstr ""
-"%1 が、登録している電子メールアドレスを変更できませんでした\n"
-"(変更先は %2)。\n"
-"次のデータソースから取り込まれているためです: %3\n"
-"\n"
-"可能なら、データソースを更新してこの人の電子メールアドレスを変えてみてく\n"
-"ださい。"
+"%1 名前つきフィルタを実行できませんでした。\n"
+"%2 メーリングリストでは、これを認可シナリオに使っています。"
 
 #. (list.name,type)
 #: mail_tt2/listowner_notification.tt2:132
@@ -6373,21 +5972,21 @@ msgstr "以下が %1@%2 のリスト一覧です"
 msgid "List unknown"
 msgstr "そういうリストは知りません"
 
-#: mail_tt2/list_unknown.tt2:10
+#: mail_tt2/list_unknown.tt2:11
 msgid "This is an automatic response sent by Sympa Mailing Lists Manager."
 msgstr "このメールは、Sympa メーリングリスト管理システムからの自動応答です。"
 
-#: mail_tt2/list_unknown.tt2:12
+#: mail_tt2/list_unknown.tt2:13
 msgid "The following address is not a known mailing list :"
 msgstr "以下のアドレスは、メーリングリストとして登録されていません:"
 
-#: mail_tt2/list_unknown.tt2:16
+#: mail_tt2/list_unknown.tt2:17
 msgid ""
 "To find out the correct listname, ask for this server's lists directory :"
 msgstr "正確なリスト名を探すには、当サーバのリスト一覧をご覧ください:"
 
 #. (conf.listmaster_email,conf.host)
-#: mail_tt2/list_unknown.tt2:20
+#: mail_tt2/list_unknown.tt2:21
 msgid "For further information, please contact %1@%2"
 msgstr "詳しいことは、%1@%2 にお問い合わせください"
 
@@ -6530,19 +6129,19 @@ msgid "Message distribution"
 msgstr "メッセージのゆくえ"
 
 #. (list.name)
-#: mail_tt2/message_report.tt2:99
+#: mail_tt2/message_report.tt2:101
 msgid "Your message for list %1 has been forwarded to editor(s)"
 msgstr ""
 "あなたが %1 メーリングリスト宛てに送ったメッセージを、 \n"
 "吟味役(たち)に回送しました"
 
 #. (key,list.name)
-#: mail_tt2/message_report.tt2:103
+#: mail_tt2/message_report.tt2:105
 msgid "Message %1 for list '%2' has been distributed."
 msgstr "%2 メーリングリスト宛てのメッセージ %1 を配送しました。"
 
 #. (key,list.name)
-#: mail_tt2/message_report.tt2:107
+#: mail_tt2/message_report.tt2:109
 msgid ""
 "Message %1 for list '%2' has been validated ; it will be distributed soon."
 msgstr ""
@@ -6550,19 +6149,19 @@ msgstr ""
 "まもなく配送します。"
 
 #. (key,list.name)
-#: mail_tt2/message_report.tt2:111
+#: mail_tt2/message_report.tt2:113
 msgid "Message %1 for list '%2' has been rejected."
 msgstr "%2 メーリングリスト宛てのメッセージ %1 を拒否しました。"
 
 #. (key,list.name)
-#: mail_tt2/message_report.tt2:115
+#: mail_tt2/message_report.tt2:117
 msgid ""
 "Your message for list '%2' with the %1 ID has been confirmed and distributed."
 msgstr ""
 "%2 メーリングリスト宛てでメッセージIDが %1 のメッセージを配送しました。"
 
 #. (key,list.name)
-#: mail_tt2/message_report.tt2:119
+#: mail_tt2/message_report.tt2:121
 msgid ""
 "Your message for list '%2' with the %1 ID has been confirmed ; it will be "
 "distributed soon."
@@ -6578,37 +6177,15 @@ msgstr "トピックの印が要る投稿 (%2 から %1 メーリングリスト
 
 #. (list.name,msg_from)
 #: mail_tt2/moderate.tt2:4
-msgid "Message for list %1 from %2 to be approved"
-msgstr "承認が必要な %1 メーリングリスト宛てメッセージ (%2 から)"
-
-#. (list.name,msg_from)
-#: mail_tt2/moderate.tt2:15
-msgid "One new message from list %1 from %2 arrived. "
-msgstr "%2 から %1 メーリングリストに新たなメッセージが届きました。"
-
-#: mail_tt2/moderate.tt2:16
-msgid "This message has been tagged as spam"
-msgstr "このメッセージにスパムの印をつけました"
-
-#. (mod_spool_size)
-#: mail_tt2/moderate.tt2:18
-msgid "They are %1 messages awaiting moderation."
-msgstr "このリストで吟味を待っているメッセージが %1 通あります。"
-
-#. (conf.wwsympa_url,one_time_ticket)
-#: mail_tt2/moderate.tt2:19
-msgid ""
-"To browse the awaiting messages, you should click on the following link : %1/"
-"ticket/%2"
-msgstr ""
-"保留メッセージを見るには、次のリンクをクリックしてください:\n"
-"    %1/ticket/%2"
+#, fuzzy
+msgid "Article to be approved for list %1 from %2"
+msgstr "トピックの印が要る投稿 (%2 から %1 メーリングリスト宛て)"
 
 #. (list.name,conf.wwsympa_url,modkey)
-#: mail_tt2/moderate.tt2:25
+#: mail_tt2/moderate.tt2:17
+#, fuzzy
 msgid ""
-"To tag the message in list %1 for the appropriate topic, please use the "
-"following link :\n"
+"To tag the attached message in list %1 go to the following page :\n"
 "\n"
 "%2/viewmod/%1/%3\n"
 msgstr ""
@@ -6618,27 +6195,26 @@ msgstr ""
 "%2/viewmod/%1/%3\n"
 
 #. (list.name)
-#: mail_tt2/moderate.tt2:18
+#: mail_tt2/moderate.tt2:19
 msgid "To distribute the attached message in list %1:"
 msgstr "添付のメッセージを %1 メーリングリストに配送するには:"
 
 #. (conf.email,conf.host)
-#: mail_tt2/moderate.tt2:20 mail_tt2/moderate.tt2:25
+#: mail_tt2/moderate.tt2:21 mail_tt2/moderate.tt2:26
 msgid "Or send a message to %1@%2 with the following subject :"
 msgstr ""
 "あるいは、%1@%2 宛てに、 \n"
 "下記の表題 (subject) でメッセージを送ってください:"
 
-#: mail_tt2/moderate.tt2:23
+#: mail_tt2/moderate.tt2:24
 msgid "To reject it (it will be removed):"
 msgstr "拒否するには (削除されます):"
 
-#. (conf.wwsympa_url)
-#: mail_tt2/moderate.tt2:41 mail_tt2/modindex.tt2:11
-msgid "The messages moderating documentation: %1/help/admin#moderate"
-msgstr ""
-"メッセージの吟味についての説明:\n"
-"    %1/help/admin#moderate"
+#. (mod_spool_size)
+#: mail_tt2/moderate.tt2:31
+#, fuzzy
+msgid "Number of messages awaiting moderation for this list : %1"
+msgstr "%1 メーリングリストには、吟味を待っているメッセージはありません。"
 
 #. (list.name)
 #: mail_tt2/modindex.tt2:2
@@ -6646,7 +6222,7 @@ msgid "Moderation spool for list %1"
 msgstr "%1 メーリングリストの吟味用スプール"
 
 #. (total,list.name,list.host)
-#: mail_tt2/modindex.tt2:8
+#: mail_tt2/modindex.tt2:9
 msgid "There are %1 messages to be moderated for list %2@%3"
 msgstr ""
 "メーリングリスト %2@%3 には、吟味を待っているメッセージが \n"
@@ -6826,22 +6402,22 @@ msgstr "%1 / %2 の登録解除"
 msgid "%1 / your environment"
 msgstr "%1 / あなたのパスワード"
 
-#. (list,conf.host,request_from_host)
-#: mail_tt2/sendpasswd.tt2:13
-msgid ""
-"Someone, probably you, requested to subscribe to list %1@%2. (This request "
-"came from host %3)."
-msgstr ""
-"だれか (おそらくあなた) が、%1@%2 メーリングリストに\n"
-"読者登録を申し込みました (申込送信元ホストは %3)。"
+#. (list)
+#: mail_tt2/sendpasswd.tt2:12
+msgid "You asked to be subscribed to %1 mailing list."
+msgstr "あなたは %1 メーリングリストへの読者登録を申し込みました。"
 
 #: mail_tt2/sendpasswd.tt2:14
 msgid ""
-"You may ignore this subscription request or click on the following link in "
-"order to confirm it "
+"To confirm your subscription, you need to provide the following password"
 msgstr ""
-"読者登録したくなければ、このメッセージは無視してください。読者登録したけ\n"
-"れば、次のリンクをクリックして確認をしてください "
+"あなたの読者登録を確認するために、以下のパスワードを入力する必要があり \n"
+"ます。"
+
+#. (newuser.password)
+#: mail_tt2/sendpasswd.tt2:16 mail_tt2/sendpasswd.tt2:23
+msgid "password: %1"
+msgstr "パスワード: %1"
 
 #. (list)
 #: mail_tt2/sendpasswd.tt2:19
@@ -6854,29 +6430,19 @@ msgid ""
 msgstr ""
 "リストの登録解除をするために、以下のパスワードを入力する必要があります。"
 
-#. (newuser.password)
-#: mail_tt2/sendpasswd.tt2:16 mail_tt2/sendpasswd.tt2:23
-msgid "password: %1"
-msgstr "パスワード: %1"
-
-#. (conf.host,request_from_host)
-#: mail_tt2/sendpasswd.tt2:25
-msgid ""
-"Someone, probably you, requested to allocate or renew your password for your "
-"list server account %1. (This request came from host %2)."
-msgstr ""
-"だれか (おそらくあなた) が、メーリングリストサーバのアカウント\n"
-"%1 のパスワードの設定か再設定を申し込みました\n"
-"(申込送信元ホストは %2)。"
-
 #: mail_tt2/sendpasswd.tt2:26
-msgid ""
-"You may ignore this request or click on the following link in order to "
-"choose your password. "
-msgstr ""
-"なにもしたくなければ、このメッセージは無視してください。したければ、以下\n"
-"のリンクをクリックしてパスワードを決めてください。\n"
-"    "
+msgid "To access your personal environment, you need to login first"
+msgstr "個人用ページにアクセスするためには、まずログインする必要があります"
+
+#. (newuser.email)
+#: mail_tt2/sendpasswd.tt2:28 mail_tt2/sendssopasswd.tt2:9
+msgid "your email address    : %1"
+msgstr "電子メールアドレス: %1"
+
+#. (newuser.password)
+#: mail_tt2/sendpasswd.tt2:29 mail_tt2/sendssopasswd.tt2:10
+msgid "your password : %1"
+msgstr "パスワード: %1"
 
 #. (base_url,path_cgi)
 #: mail_tt2/sendpasswd.tt2:38 mail_tt2/sendssopasswd.tt2:14
@@ -6893,16 +6459,6 @@ msgstr ""
 "あなたが入れたアドレスが実際に使える電子メールアドレスかどうか確認する \n"
 "と、アカウント設定の操作は完了です。以下の電子メールとパスワードをセッ \n"
 "トアップウィザードに入力して、アカウント設定を完了してください。"
-
-#. (newuser.email)
-#: mail_tt2/sendpasswd.tt2:28 mail_tt2/sendssopasswd.tt2:9
-msgid "your email address    : %1"
-msgstr "電子メールアドレス: %1"
-
-#. (newuser.password)
-#: mail_tt2/sendpasswd.tt2:29 mail_tt2/sendssopasswd.tt2:10
-msgid "your password : %1"
-msgstr "パスワード: %1"
 
 #. (list.name)
 #: mail_tt2/stats_report.tt2:4
@@ -6935,7 +6491,7 @@ msgid "Summary of list %1"
 msgstr "%1 メーリングリストメッセージの一覧"
 
 #. (file_name)
-#: mail_tt2/urlized_part.tt2:3
+#: mail_tt2/urlized_part.tt2:4
 msgid ""
 "The %1 file that was initially attached to this message has been stored on "
 "the mailing lists server:"
@@ -6991,79 +6547,23 @@ msgstr ""
 "%1"
 
 #. (list.name)
-#: mail_tt2/user_notification.tt2:27
-msgid "Management of list %1"
-msgstr "%1 メーリングリストの管理"
-
-#. (delegator,list.name,list.host)
-#: mail_tt2/user_notification.tt2:30
-msgid ""
-"You have been delegate the responsability of list owner by %1 for list %2@%3."
-msgstr "あなたは、%1 から %2@%3 メーリングリストのオーナーに指名されました"
-
-#. (delegator,list.name,list.host)
-#: mail_tt2/user_notification.tt2:32
-msgid ""
-"You have been delegate the responsability of list moderator by %1 for list %"
-"2@%3."
-msgstr "あなたは、%1 から %2@%3 メーリングリストの吟味役に指名されました。"
-
-#. (conf.wwsympa_url,list.name)
-#: mail_tt2/user_notification.tt2:35 mail_tt2/welcome.tt2:12
-msgid "The list homepage: %1/info/%2"
-msgstr "リストのホームページ: %1/info/%2"
-
-#. (conf.wwsympa_url)
-#: mail_tt2/user_notification.tt2:36
-msgid "Owner and moderator guide: %1/help/admin"
-msgstr "オーナーと吟味役の手引き: %1/help/admin"
-
-#: mail_tt2/user_notification.tt2:40
-msgid "Changing your subscriber email address"
-msgstr "読者電子メールアドレスの変更"
-
-#: mail_tt2/user_notification.tt2:42
-msgid ""
-"You have requested to change your subscriber email address. To confirm your "
-"new email address with the SYMPA server, please click the link below :"
-msgstr ""
-"読者電子メールアドレスを変更するよう申込がありました。ご自分の新しい電子  \n"
-"メールアドレスを Sympa サーバで確認するため、以下のリンクをクリックしてく  \n"
-"ださい:"
-
-#. (list.name)
-#: mail_tt2/user_notification.tt2:47
-msgid "Unsubscribing from list %1"
-msgstr "%1 メーリングリストの登録解除"
-
-#. (list.name)
-#: mail_tt2/user_notification.tt2:49
-msgid ""
-"You have requested to removed from list %1. To confirm and get removed from "
-"the list, please click the link below: "
-msgstr ""
-"%1 メーリングリストからの登録解除の申込がありました。確認  \n"
-"して解除するために、以下のリンクをクリックしてください: "
-
-#. (list.name)
 #: mail_tt2/welcome.tt2:2
 msgid "Welcome to list %1"
 msgstr "%1 メーリングリストへようこそ"
 
 #. (list.name,list.host)
-#: mail_tt2/welcome.tt2:25 mail_tt2/welcome.tt2:28 mail_tt2/welcome.tt2:8
+#: mail_tt2/welcome.tt2:26 mail_tt2/welcome.tt2:29 mail_tt2/welcome.tt2:9
 msgid "Welcome to list %1@%2"
 msgstr "%1@%2 メーリングリストへようこそ"
 
 #. (user.email)
-#: mail_tt2/welcome.tt2:29 mail_tt2/welcome.tt2:9
+#: mail_tt2/welcome.tt2:10 mail_tt2/welcome.tt2:30
 msgid "Your subscription email is %1"
 msgstr "読者登録した電子メールアドレスは %1 です"
 
-#. (conf.wwsympa_url)
-#: mail_tt2/welcome.tt2:13
-msgid "General informations about mailing lists: %1/help/introduction"
-msgstr "メーリングリストについての一般的な説明: %1/help/introduction"
+#: mail_tt2/welcome.tt2:17 mail_tt2/welcome.tt2:40
+msgid "Everything about this list:"
+msgstr "このメーリングリストについては:"
 
 #: mail_tt2/which.tt2:2
 msgid "Result of your command"
@@ -7562,10 +7062,6 @@ msgstr "このメールに削除の印をつける"
 msgid "Do you really want to delete this message ?"
 msgstr "本当にこのメッセージを削除してよいのですか。"
 
-#: src/etc/mhonarc-ressources.tt2:486
-msgid "view source"
-msgstr "ソースを見る"
-
 #. ("$YYYYMMDD$")
 #. This entry is a date/time format
 #. Check the strftime manpage for format details : http://docs.freebsd.org/info/gawk/gawk.info.Time_Functions.html
@@ -7600,14 +7096,8 @@ msgid "Daily evaluation of bouncing users"
 msgstr "毎日、配送エラーを起こしている人に対する処理を実行"
 
 #: src/etc/global_task_models/purge_logs_table.daily.task:1
-msgid "daily delete logs "
-msgstr "毎日、運用記録を消去する"
-
-#: src/etc/global_task_models/purge_one_time_ticket_table.daily.task:1
-msgid ""
-"daily delete tickets older than sympa.conf/one_time_ticket_table_ttl "
-"parameter"
-msgstr "毎日、sympa.conf の one_time_ticket_table_ttl パラメータの期間を過ぎたチケットを削除"
+msgid "daily delete logs older than 3 months"
+msgstr "毎日、3ヶ月を過ぎた運用記録を消去する"
 
 #: src/etc/global_task_models/purge_orphan_bounces.monthly.task:1
 msgid "delete monthly bounces for unsubscribed addresses"
@@ -7617,11 +7107,9 @@ msgstr "毎月、登録解除したメールアドレスが配送エラーを起
 msgid ""
 "daily delete sessions older than sympa.conf/session_expiration_period "
 "parameter"
-msgstr "毎日、sympa.conf の session_expiration_period パラメータの期間を過ぎたセッションを削除"
-
-#: src/etc/global_task_models/purge_tables.daily.task:1
-msgid "daily delete unusefull item from any table"
-msgstr "毎日、テーブルの不要な項目を削除"
+msgstr ""
+"毎日、sympa.conf の session_expiration_period パラメータの期間を過ぎたセッ"
+"ションを削除"
 
 #: src/etc/global_task_models/purge_user_table.monthly.task:1
 msgid "purge of orphan entries in user table every month"
@@ -7644,6 +7132,7 @@ msgid "remind message sent to subscribers every year"
 msgstr "毎年、登録確認を読者に送る"
 
 #: src/etc/list_task_models/sync_include.ttl.task:1
+#: src/etc/list_task_models/sync_include.ttl.task~:1
 msgid "Update of list members based on the TTL"
 msgstr "TTL に基いたリストのメンバ更新"
 
@@ -7731,7 +7220,7 @@ msgstr "設定ファイル --CONFIG-- には間違いがあります。\n"
 msgid "%A"
 msgstr "%a"
 
-#: src/Conf.pm:330 src/Conf.pm:576
+#: src/Conf.pm:330 src/Conf.pm:537
 msgid "Error at line %d : %s"
 msgstr "間違いがあります (%d 行目): %s"
 
@@ -7875,10 +7364,6 @@ msgstr "読者の初期設定"
 #: src/List.pm:538
 msgid "Who can delete subscribers"
 msgstr "読者を削除できるのは"
-
-#: src/List.pm:545
-msgid "Delivery time (hh:mm)"
-msgstr "配送時刻 (hh:mm)"
 
 #: src/List.pm:545
 msgid "days"
@@ -8097,10 +7582,6 @@ msgstr "データベース格納ディレクトリ (DBD::CSVの場合のみ)"
 msgid "SQL query inclusion"
 msgstr "SQLクエリでの取り込み"
 
-#: src/List.pm:1007
-msgid "Notify subscribers when they are included from a data source?"
-msgstr "データソースから取り込んだらその読者に知らせるか"
-
 #: src/List.pm:997
 msgid "Who can view list information"
 msgstr "リストの案内を見ることができるのは"
@@ -8271,14 +7752,6 @@ msgstr "歓迎メッセージの送信元"
 msgid "percentage of list members in VERP mode"
 msgstr "リストのメンバへ配送するメッセージのうち、VERP 方式で送るものの割合"
 
-#: src/List.pm:360 src/List.pm:367
-msgid "%"
-msgstr "パーセント"
-
-#: src/List.pm:378 src/List.pm:399
-msgid "points"
-msgstr "点"
-
 #: src/List.pm:509
 msgid "var name"
 msgstr "変数名"
@@ -8286,16 +7759,6 @@ msgstr "変数名"
 #: src/List.pm:514
 msgid "var value"
 msgstr "値"
-
-# unit
-#: src/List.pm:575
-msgid "messages"
-msgstr "通"
-
-#: src/List.pm:1295 src/List.pm:583 src/List.pm:753 src/List.pm:833
-#: src/List.pm:871
-msgid "seconds"
-msgstr "秒"
 
 #: src/List.pm:1116 src/List.pm:613
 msgid "the datasource"
@@ -8341,10 +7804,6 @@ msgstr "設定族の変更を実行した人"
 msgid "Latest family instantiation"
 msgstr "最近の設定族変更"
 
-#: src/List.pm:1051
-msgid "bytes"
-msgstr "バイト"
-
 #: src/List.pm:1141
 msgid "Owners defined in an external datasource"
 msgstr "オーナーを外部データソースで決める"
@@ -8360,10 +7819,6 @@ msgstr "メッセージを受け取ったときに削除するヘッダフィー
 #: src/List.pm:1172
 msgid "Outgoing SMTP headers fields to be removed"
 msgstr "メッセージを送り出すときに削除するヘッダフィールド"
-
-#: src/List.pm:1252 src/List.pm:1351
-msgid "Kbytes"
-msgstr "キロバイト"
 
 #: src/List.pm:1304
 msgid "who updated the config"
@@ -8504,7 +7959,7 @@ msgstr "[ 画像%s ]"
 msgid "[Image%s]"
 msgstr "[画像%s]"
 
-#: src/sympa.pl:2053
+#: src/sympa.pl:2052
 msgid "Unable to access directory %s : %m"
 msgstr "ディレクトリ %s にアクセスできません: %m"
 
@@ -8680,481 +8135,672 @@ msgstr "受け取らない (休暇のときなどに便利)"
 msgid "you do not receive your own posts"
 msgstr "自分が投稿したものは受け取らない"
 
-#. (list,conf.host,request_from_host,date)
-#: mail_tt2/sendpasswd.tt2:13
-msgid ""
-"Someone, probably you, requested to subscribe to list %1@%2. (This request "
-"came from host %3 at %4)."
-msgstr ""
-"だれか (おそらくあなた) が、%1@%2 メーリングリストへの\n"
-"読者登録を申し込みました (申込送信元ホストは %4 の %3)。"
-
-#. (conf.host,request_from_host,date)
-#: mail_tt2/sendpasswd.tt2:25
-msgid ""
-"Someone, probably you, requested to allocate or renew your password for your "
-"list server account %1. (This request came from host %2 at %3)."
-msgstr ""
-"だれか (おそらくあなた) が、メーリングリストサーバのアカウント\n"
-"%1 のパスワード設定か再設定を申し込みました\n"
-"(申込送信元ホストは %3 の %2)。"
-
-#: web_tt2/remindpasswd.tt2:6
-msgid "it will be sent to you by email :"
-msgstr "電子メールでお送りします。"
-
-#. (previous_email,new_email)
-#: mail_tt2/listmaster_notification.tt2:165
-msgid ""
-"User %1 has changed his owner/editor email address to %2. This changed has "
-"been performed to the following lists :"
-msgstr ""
-"%1 のオーナーまたは吟味役の電子メールアドレスを %2 に変えました。この変\n"
-"更を実行したリストは次のとおりです:"
-
-#: mail_tt2/sendpasswd.tt2:26
-msgid "To access your personal environment, you need to login first"
-msgstr "個人用ページにアクセスするためには、まずログインする必要があります"
-
-#. (conf.wwsympa_url,one_time_ticket)
-#: mail_tt2/moderate.tt2:19
-msgid ""
-"To browse the awaiting messages, yshould click on the following link : %1/"
-"ticket/%2"
-msgstr ""
-"保留メッセージを見るには、次のリンクをクリックします:\n"
-"    %1/ticket/%2"
-
-#: web_tt2/change_email_request.tt2:3
-msgid ""
-"Changing your email address is a sensitive operation so we need to verify "
-"that it is really your email."
-msgstr ""
-"電子メールアドレスの変更は慎重に行わなければなりません。これが本当にあな\n"
-"たの電子メールアドレスであるかどうか確認します。"
-
-#. (new_email)
-#: web_tt2/change_email_request.tt2:4
-msgid ""
-"To this end we have sent you an email to this address : %1 with a "
-"confirmation ticket."
-msgstr ""
-"このために、このアドレス %1 に確認チケットの入った\n"
-"電子メールを送りました。"
-
-#: web_tt2/requestpasswd.tt2:10
-msgid "The system was not able to send you the appropriate message."
-msgstr "システムからあなたにうまくメッセージを送れませんでした。"
-
-#: web_tt2/requestpasswd.tt2:14
-msgid ""
-"Internal error : could not create a ticket, please contact the service "
-"administrator"
-msgstr "内部エラー: チケットを作成できません。リストシステム管理者に連絡してください"
-
-#. (ticket_context.printable_date)
-#: web_tt2/ticket.tt2:5
-msgid "On %1 an authentication ticket was generated and sent to you. "
-msgstr "%1 に認証チケットを生成し、あなたに送付しました。"
-
-#. (ticket_context.remote_addr)
-#: web_tt2/ticket.tt2:7
-msgid "(the ticket was requested from host %1) "
-msgstr "(チケット申込元ホストは %1) "
-
-#. (ticket_context.status)
-#: web_tt2/ticket.tt2:13
-msgid ""
-"The validation ticket has already been validated from host %1 .If you did "
-"not perform this validation, please report this confidentiality issue to "
-"your mail services administrator."
-msgstr ""
-"確認チケットはすでにホスト %1 から確認されています。\n"
-"ご自分でこの確認を実施した覚えがないのでしたら、このことを守秘性に\n"
-"関わる事案としてメールシステム管理者に報告してください。"
-
-#. (ticket_context.printable_date)
-#: web_tt2/ticket.tt2:17
-msgid "The requested ticket has expired"
-msgstr "そのチケットは期限切れになっています"
-
-#: web_tt2/ticket.tt2:18 web_tt2/ticket.tt2:22
-msgid "Please use your password or request a new ticket"
-msgstr "パスワードを使ってログインしてください。できないときは、新たにチケットを申し込んでください"
-
-#. (ticket_context.printable_date)
-#: web_tt2/ticket.tt2:21
-msgid "The requested authentication ticket has an unknow format or is expired"
-msgstr "そのような認証チケットは知りません。あるいは、チケットが期限切れになっているのかもしれません"
-
-#. (conf.wwsympa_url,one_time_ticket)
-#: mail_tt2/moderate.tt2:19
-msgid "You can browse and accept or refuse them by web : %1/ticket/%2"
-msgstr ""
-"ウェブ上でこれを見て、受け付けるか拒否するかを選べます:\n"
-"    %1/ticket/%2"
-
-#: mail_tt2/sendpasswd.tt2:14
-msgid ""
-"You may ignore this subscription request or hit the following url in order "
-"to confirm it "
-msgstr ""
-"読者登録したくなければ、このメッセージは無視してください。登録したけれ\n"
-"ば、次の URL をクリックして確認に進んでください "
-
-#: mail_tt2/sendpasswd.tt2:26
-msgid ""
-"You may ignore this request or hit the following url in order to choose your "
-"password. "
-msgstr ""
-"パスワードを設定したくなければ、このメッセージは無視してかまいません。\n"
-"設定したければ、次の URL をクリックしてパスワードを決めてください。"
-
-#: mail_tt2/moderate.tt2:16
-msgid "This message as been tagued as a spam"
-msgstr "このメッセージにはスパムの印がついています"
-
-#: web_tt2/modindex.tt2:16
-msgid ""
-"You should probably not reject message detected as spam with notification "
-"because the message sender is probably spoofed. Do you really want to reject "
-"thoses messages with notification ?"
-msgstr ""
-"スパムではメッセージの送信元が騙られていることがありますから、スパムと認識されたメッセージを拒否したことを送信元に知らせないほうがよいかもしれません。本"
-"当にこれらのメッセージを拒否することを知らせてよいのでしょうか。"
-
-#: web_tt2/create_list_request.tt2:6
-msgid ""
-"You can create a list, using an existing list as a template ; the list "
-"configuration of the source list will be copied to create the ew one. Note "
-"that neither list members, nor archives or shared documents are duplicated. "
-"The source lists you can use are limited to lists you own."
-msgstr ""
-"すでにあるリストを雛形にして別のリストを作成できます。もとのリスとの設定を複写して新たに作成します。なお、リストの登録状況、投稿保管庫、共有文書は複製さ"
-"れません。もとのリストは、自分がオーナーになっているものでなければなりません。"
-
-#: web_tt2/create_list_request.tt2:25
-msgid ""
-"You can request a new list creation with the following form.You will have to "
-"choose a list template that will preset most of the list parameters "
-"according to the list usage you plans. "
-msgstr ""
-"以下のフォームで新たなリストの作成を申し込めます。自分の考えているリストの使いかたに合わせて、リストの雛形を選んでください。リストのパラメータのほとんど"
-"は、雛形にあるものを使います。"
-
-#. (ticket_context.status)
-#: web_tt2/ticket.tt2:13
-msgid ""
-"Someone (may be yourself) has allready used this validation ticket from host "
-"%1 .If this user is not you, you may report a to your mail services "
-"administrator a confidentiality issue : probably someone else can access to "
-"your messages "
-msgstr ""
-"だれか (おそらくあなた) が、すでにこの確認チケットを使っています\n"
-"(使ったホストは %1)。\n"
-"そのユーザがあなたでないのなら、このことを守秘性にかかわる事案としてメールシステム管理者に報告すべきかもしれません。だれかがあなたのメッセージを見ている"
-"のかもしれませんから"
-
-#. (ticket_context.printable_date)
-#: web_tt2/ticket.tt2:17
-msgid "The requested ticket is expired"
-msgstr "そのチケットは期限切れになっています"
-
-#. (conf.host,request_from_host,date)
-#: mail_tt2/sendpasswd.tt2:27
-msgid ""
-"Someone, probably you, requested to allocate or renew your password for your "
-"list server account %1. (This request cames from host %2 at %3)."
-msgstr ""
-"だれか (おそらくあなた) が、リストサーバのアカウント %1\n"
-"のパスワードの設定か再設定を申し込みました (申込元ホストは\n"
-"%3 の %2)。"
-
-#, fuzzy
-#~ msgid "Notify subscribers when they are subscribed to the list?"
-#~ msgstr "すでに %1 メーリングリストに読者登録しています"
-
 #~ msgid ""
-#~ "Sympa could not set a cookie for login.\n"
-#~ " Your should configure your browser to accept cookies"
-#~ msgstr ""
-#~ "ログインのためのクッキーを設定できませんでした。ブラウザでクッキーを受け取"
-#~ "れるように設定してください"
-
-#~ msgid ""
-#~ "This server provides you access to your environment on mailing list "
-#~ "server %1@%2. Starting from this web page, you can perform subscription "
-#~ "options, unsubscription,\n"
-#~ "archives, list management and so on."
+#~ "This server provides you access to your mailing list environment. "
+#~ "Starting from this web page, you can perform subscription options, "
+#~ "unsubscription, archive, list moderation, list configuration."
 #~ msgstr ""
 #~ "このサーバでは、メーリングリストサーバ %1@%2 の個人用ページにアクセスでき"
 #~ "ます。このページから、個人設定、登録解除、投稿保管庫、リスト管理などへ進む"
 #~ "ことができます。"
 
-#~ msgid "Choose your authentication server"
-#~ msgstr "認証サーバを選択してください"
+#~ msgid "last login from %1 <br />(%2)</span>"
+#~ msgstr "前回のログインは %1 からでした<br />(%2)</span>"
 
-#~ msgid "You will receive an email, reminding you your password."
-#~ msgstr "あなたにパスワードを知らせる電子メールをお送りします。"
+#~ msgid "Advanced archive search"
+#~ msgstr "高度な検索"
+
+#~ msgid "List archive"
+#~ msgstr "リストの投稿保管庫"
 
 #~ msgid ""
-#~ "To confirm your email address change, please enter the password\n"
-#~ "you received below :"
+#~ "Changing your email address is a sensitive operation so we need to verify "
+#~ "your email."
 #~ msgstr ""
-#~ "読者登録メールアドレスの変更を確認するために、以下にメールで受け取ったパス"
-#~ "ワード\n"
-#~ "を入力してください:"
-
-#~ msgid "Password for %1"
-#~ msgstr "%1 のパスワード"
-
-#~ msgid "Change my email address"
-#~ msgstr "電子メールアドレスを変更する"
-
-#, fuzzy
-#~ msgid "Current password :"
-#~ msgstr "新しいパスワード:"
-
-#~ msgid "Required aliases"
-#~ msgstr "必要なエイリアス"
-
-#~ msgid "Aliases you should install in your mailer"
-#~ msgstr "登録する必要があるエイリアス"
-
-#~ msgid "See your subscriptions with the following email addresses"
-#~ msgstr "以下の電子メールアドレスでの読者登録情報を見る"
-
-#~ msgid "Unify your subscriptions with the email"
-#~ msgstr "すべてのアドレスの読者登録情報をこの電子メールアドレスに一本化する:"
+#~ "電子メールアドレスの変更は慎重に進めなければなりません。あなたの電子メール"
+#~ "アドレスを確認します。"
 
 #~ msgid ""
-#~ "That is to say you are using a unique email address in Sympa for your "
-#~ "subscriptions and preferences"
+#~ "To this end we have sent you an email to this address : %1 with a "
+#~ "validation link."
 #~ msgstr ""
-#~ "一本化すると、当メーリングリストシステムでの読者登録と個人設定を一つの電子"
-#~ "メールアドレスで行なえます。"
+#~ "そこで、%1 というアドレスに確認用リンクの入った電子メールを送りました。"
 
-#~ msgid "Validate"
-#~ msgstr "確認する"
+#~ msgid "You shoukd check your mailbox now."
+#~ msgstr "メールボックスの新着メールを確認してください。"
 
-#, fuzzy
+#~ msgid "You will receive a n email, with a confirmation link."
+#~ msgstr "確認リンクの入った電子メールをお送りします。"
+
 #~ msgid ""
-#~ "Your password has been sent to your email address %1.<br />Please check "
-#~ "your e-mail box to provide your password below."
+#~ "To confirm your email address change, go to your email account and click "
+#~ "on the provided link"
 #~ msgstr ""
-#~ "確認パスワードをあなたの電子メールアドレス %1 に送りました。<br />電子メー"
-#~ "ルが届いたら、下の欄に、メールに書いてある確認パスワードを入れてください。"
+#~ "電子メールアドレスの変更を確認するために、メールを受け取って、そこに書いて"
+#~ "あるリンクをクリックしてください"
 
-#, fuzzy
+#~ msgid "Sendind a message to the list"
+#~ msgstr "リストへメッセージを送信"
+
+#~ msgid "Copy an existing list."
+#~ msgstr "すでにあるリストを複写する。"
+
 #~ msgid ""
-#~ "You need to login to access your custom WWSympa environment or to perform "
-#~ "a privileged operation (one that requires your email address)."
+#~ "You can create a list, using an existing list as a template ; the list "
+#~ "configuration of the source list will be copied to create the new one. "
+#~ "Note that neither list members, nor archives or shared documents are "
+#~ "duplicated. The source lists you can use are limited to lists you own."
+#~ msgstr ""
+#~ "既にあるリストを雛形にして別のリストを作成できます。もとのリストの設定を新"
+#~ "しいリストに複写します。なお、リストのメンバ、投稿保管庫、共有文書は複製し"
+#~ "ません。もとのリストに使えるのは、自分がオーナーになっているリストだけで"
+#~ "す。"
+
+#~ msgid ""
+#~ "After the list is created, you will be able to adjust it's configuration."
+#~ msgstr "リストを作成したあとで、設定を調整することもできます。"
+
+#~ msgid "copy list configuration"
+#~ msgstr "リストの設定を複写"
+
+#~ msgid "Create a list using a template"
+#~ msgstr "雛型を使ってリストを作成"
+
+#~ msgid ""
+#~ "You can request a new list creation with the following form.You will have "
+#~ "to choose a list template that will preset most of the list parameters "
+#~ "according to the list usage you plan. "
+#~ msgstr ""
+#~ "以下の欄に記入すれば、リストの作成を申し込めます。ほとんどのパラメータをあ"
+#~ "らかじめ設定した雛形を用意してありますから、自分が考えているリストの利用方"
+#~ "法に合いそうなものを選んでください。"
+
+#~ msgid "Edit list templates"
+#~ msgstr "リスト専用のテンプレートを変更"
+
+#~ msgid "HTML pages"
+#~ msgstr "HTML ページ"
+
+#~ msgid "Automatic messages"
+#~ msgstr "自動送信されるメッセージ"
+
+#~ msgid "Added in distributed messages"
+#~ msgstr "配信するメッセージに追加するもの"
+
+#~ msgid "More"
+#~ msgstr "その他"
+
+#~ msgid "Configuring the list"
+#~ msgstr "リストの設定"
+
+#~ msgid "Failed to get your email address from the authentication service."
+#~ msgstr ""
+#~ "あなたの電子メールアドレスを認証サービスから取得するのに失敗しました。"
+
+#~ msgid "No parameter was edited"
+#~ msgstr "パラメータの変更はありませんでした"
+
+#~ msgid "Parameter '%1' is mandatory. Ignoring deletion."
+#~ msgstr "パラメータ '%1' は必須です。削除しません。"
+
+#~ msgid "Failed to remove list aliases for list %1"
+#~ msgstr "%1 メーリングリストのリストエイリアスを削除するのに失敗しました"
+
+#~ msgid "This Template '%1' already exists"
+#~ msgstr "この %1 というテンプレートはすでに存在します"
+
+#~ msgid "Cannot delete this file '%1'"
+#~ msgstr "この '%1' というファイルが削除できません"
+
+#~ msgid "Invalid filename: '%1'"
+#~ msgstr "このファイル名は使えません: '%1'"
+
+#~ msgid ""
+#~ "Failed to update member email in list '%1', list owner has been notified."
+#~ msgstr ""
+#~ "'%1' メーリングリストのメンバ電子メールアドレスの更新に失敗しました。リス"
+#~ "トオーナーに知らせました。"
+
+#~ msgid ""
+#~ "Failed to update admin email in list '%1', list owner has been notified."
+#~ msgstr ""
+#~ "'%1' メーリングリストの運営電子メールアドレスの更新に失敗しました。リスト"
+#~ "オーナーに知らせました。"
+
+#~ msgid "To login, select your organization authentication server below:"
+#~ msgstr "ログインするには、以下から自分の組織の認証サーバを選択してください"
+
+#~ msgid "Authentication help"
+#~ msgstr "認証の使いかた"
+
+#~ msgid ""
+#~ "In order to perform a privileged operation (one that requires your email "
+#~ "address), you need to login."
 #~ msgstr ""
 #~ "個人用ページにアクセスし、そこで権限の必要な操作 (電子メールアドレスが必要"
 #~ "なもの) をするためには、ログインする必要があります。"
 
-#~ msgid ""
-#~ "Most mailing list features require your email. Some mailing lists are "
-#~ "hidden to  unidentified persons.<br />\n"
-#~ " In order to benefit from the full services provided by this server, you "
-#~ "probably need to identify yourself first."
-#~ msgstr ""
-#~ "ほとんどのメーリングリスト機能の利用には電子メールアドレスが必要です。メー"
-#~ "リングリストの中には、ログインしていない人には見えないものもあります。<br/"
-#~ ">全ての機能をご利用になりたければ、まずログインしてください。"
+#~ msgid "Modify or delete existing rejection messages"
+#~ msgstr "存在する拒否メッセージの変更、削除"
+
+#~ msgid "Listing rejection messages"
+#~ msgstr "拒否メッセージの一覧"
+
+#~ msgid "Use as default"
+#~ msgstr "初期値にする"
+
+#~ msgid "Message name"
+#~ msgstr "メッセージの名前"
+
+#~ msgid "Operation"
+#~ msgstr "操作"
+
+#~ msgid "Do you really want to delete message %1?"
+#~ msgstr "本当にこのメッセージ %1 を削除してよいのですか。"
+
+#~ msgid "There are currently no Rejection Messages available"
+#~ msgstr "現在、ご利用になれる拒否メッセージはありません"
+
+#~ msgid "Message Name :"
+#~ msgstr "メッセージの名前:"
+
+#~ msgid "Default Message"
+#~ msgstr "メッセージの初期値"
+
+#~ msgid "Save Message"
+#~ msgstr "メッセージの保存"
+
+#~ msgid "Create new rejection messages"
+#~ msgstr "新たな拒否メッセージの作成"
+
+#~ msgid "New message name:"
+#~ msgstr "新たなメッセージの名前:"
+
+#~ msgid "create"
+#~ msgstr "作成"
 
 #~ msgid ""
-#~ "To login, select your organization authentication server below.<br />\n"
-#~ "If it is not listed or if you don't have any, login using your email and "
-#~ "password on the right column."
+#~ "You should probably not reject message detected as spam with notification "
+#~ "because the message sender is probably spoofed. Do you really want to "
+#~ "reject those messages with notification ?"
 #~ msgstr ""
-#~ "ログインするにあたって、あなたの組織の認証サーバを以下より選択してくださ"
-#~ "い。<br />\n"
-#~ "認証サーバが一覧に表示されないか、認証サーバをお使いでない場合、右側でメー"
-#~ "ルアドレスとパスワードを入力して、ログインしてください。"
+#~ "スパムはメッセージの送信元を騙っていることがありますから、スパム検出でメッ"
+#~ "セージを拒否するときは送信元に知らせるべきではないかもしれません。このメッ"
+#~ "セージを拒否することを、本当に知らせていいのでしょうか。"
+
+#~ msgid "Server default rejection message"
+#~ msgstr "拒否メッセージのサイト全体での初期値"
+
+#~ msgid "Reject without notification "
+#~ msgstr "知らせずに拒否"
+
+#~ msgid "Add to blacklist"
+#~ msgstr "ブラックリストに追加"
 
 #~ msgid ""
-#~ "Login with you email address and password. You can request a password "
-#~ "reminder."
-#~ msgstr ""
-#~ "電子メールアドレスとパスワードを入力してログインしてください。 忘れてし"
-#~ "まった場合にはパスワードを取り寄せることもできます。"
-
-#~ msgid ""
-#~ "Please select one or more topic(s) that corresponds to the messages you "
+#~ "Please select one or more topic(s) that correspond to the messages you "
 #~ "wish to distribute :"
 #~ msgstr ""
 #~ "配信したいメッセージに関係のあるトピックをなにか選んでください (複数可):"
 
-#, fuzzy
+#~ msgid "Toggle spams"
+#~ msgstr "スパム/非スパム"
+
+#~ msgid "Moderation management"
+#~ msgstr "吟味"
+
+#~ msgid "Manage rejection messages"
+#~ msgstr "拒否メッセージの管理"
+
+#~ msgid "last login from %1 (%2)"
+#~ msgstr "前回のログインは %1 からでした (%2)"
+
+#~ msgid "User %1 has been notified"
+#~ msgstr "%1に知らせました"
+
 #~ msgid ""
-#~ "You have forgotten your password, or you've never had any password "
-#~ "related to this server"
+#~ "You can update your email address for all your list memberships at once. "
+#~ "If you are also list owner or list moderator your email address for these "
+#~ "roles will also be updated."
+#~ msgstr ""
+#~ "登録している全リストの電子メールアドレスをまとめて変えることもできます。リ"
+#~ "ストのオーナーや吟味役になっているのなら、その役目の電子メールアドレスも"
+#~ "いっしょに変わります。"
+
+#~ msgid "Change Email"
+#~ msgstr "電子メールアドレスの変更"
+
+#~ msgid "Renaming the list"
+#~ msgstr "リストの移動"
+
+#~ msgid "You request for an account creation on this list server."
+#~ msgstr "あなたは当メーリングリストサーバでアカウント作成を申し込みました。"
+
+#~ msgid "The password you submit is wrong. May be you forgot it ?"
+#~ msgstr ""
+#~ "入力したパスワードは間違っています。もしかして、パスワードを忘れたのでは?"
+
+#~ msgid "You miss the password, please submit again. May be you forgot it ?"
+#~ msgstr ""
+#~ "入力したパスワードは間違っています。もしかして、パスワードを忘れたのでは?"
+
+#~ msgid ""
+#~ "You will receive an email that will allow you to choose your password."
+#~ msgstr ""
+#~ "あなたに電子メールをお送りします。それを見てパスワードを決めてください。"
+
+#~ msgid "In order to use Sympa, you will need to define a password."
+#~ msgstr "Sympa を使うためには、パスワードを決めなければなりません。"
+
+#~ msgid "You have forgotten your password, so you have to  renew it."
 #~ msgstr "パスワードを忘れてしまったのなら、パスワードを作り直してください。"
 
-#~ msgid "Send me my password"
-#~ msgstr "自分宛てにパスワードを送信する"
+#~ msgid ""
+#~ "Please submit your email address, you will receive a message that give "
+#~ "you access to the appropriate form in order to choose your password."
+#~ msgstr ""
+#~ "自分の電子メールアドレスを入力してください。ここに電子メールを送ります。そ"
+#~ "れには、パスワードを決めるためのフォームへのアクセスのしかたが書いてありま"
+#~ "す。"
 
-#~ msgid "bounce score"
+#~ msgid "Request first password"
+#~ msgstr "初期パスワードの取り寄せ"
+
+#~ msgid "Request new password"
+#~ msgstr "新たなパスワードの取り寄せ"
+
+#~ msgid "Message sent"
+#~ msgstr "メッセージを送りました"
+
+#~ msgid ""
+#~ "We've sent you an email that will allow you choose your password. Please "
+#~ "check your mailbox."
+#~ msgstr ""
+#~ "パスワードを決める方法を書いた電子メールを送りました。自分のメールボックス"
+#~ "を確認してください。"
+
+#~ msgid "We were not able to send you a validation message."
+#~ msgstr "確認メッセージを送ることができませんでした。"
+
+#~ msgid ""
+#~ "Internal error : could not build a validation link, please contact the "
+#~ "service administrator"
+#~ msgstr ""
+#~ "内部エラー: 確認用リンクを作成できませんでした。サービス管理者に連絡してく"
+#~ "ださい"
+
+#~ msgid "Unkown error."
+#~ msgstr "原因不明のエラーが発生しました。"
+
+#~ msgid "Manage bouncing list members"
+#~ msgstr "配送エラーを起こしている読者の管理"
+
+#~ msgid "Bounce score"
 #~ msgstr "配送エラーの点数"
 
-#~ msgid "del"
-#~ msgstr "削除"
+#~ msgid "Details"
+#~ msgstr "詳細"
 
-#, fuzzy
-#~ msgid "Inactive lists"
-#~ msgstr "活発でないリスト"
+#~ msgid "# of bounces"
+#~ msgstr "配送エラー数"
 
-#~ msgid "You requested unsubscription from list %1"
-#~ msgstr "あなたは %1 メーリングリストの登録解除を申し込みました"
+#~ msgid "First bounce"
+#~ msgstr "最初の配送エラー"
+
+#~ msgid "Last bounce"
+#~ msgstr "最後の配送エラー"
+
+#~ msgid "no score"
+#~ msgstr "点数なし"
+
+#~ msgid "Manage list members"
+#~ msgstr "リスト登録状況の管理"
+
+#~ msgid "member"
+#~ msgstr "読者"
+
+#~ msgid "Manage lists"
+#~ msgstr "リストの管理"
+
+#~ msgid "Consult lists"
+#~ msgstr "リストの調査"
+
+#~ msgid "Lists sorted by creation date"
+#~ msgstr "作成日順"
+
+#~ msgid "Lists sorted by last message date"
+#~ msgstr "最終投稿日順"
+
+#~ msgid "You can change your users email address here :"
+#~ msgstr "自分の電子メールアドレスを変えるには: "
 
 #~ msgid ""
-#~ "To confirm your identity and prevent anyone from unsubscribing you from \n"
-#~ "\tthis list against your will, a message containing an URL\n"
-#~ "\twill be sent to you."
+#~ "Changing a user's email address will apply the change his memberships but "
+#~ "it will also apply to his ownerships if he is owner of some lists."
 #~ msgstr ""
-#~ "あなたが実在の人物であることを確認するため、また、誰かがあなたの意思に反し"
-#~ "てこのメー\n"
-#~ "\tリングリストの登録解除を申し込んでしまうのを防ぐため、これから確認用の\n"
-#~ "\tURL を書いたメッセージをあなたに送ります。"
+#~ "電子メールアドレスを変更すると、リストの登録アドレスも変わりますが、それだ"
+#~ "けではなくオーナーをしているリストのアドレスも変わります。"
+
+#~ msgid "Current user email address : "
+#~ msgstr "現在の電子メールアドレス:"
+
+#~ msgid "New user email address : "
+#~ msgstr "新しい電子メールアドレス:"
+
+#~ msgid "Update user memberships"
+#~ msgstr "登録状況を更新"
 
 #~ msgid ""
-#~ "Check your mailbox for new messages and examine the message from Sympa to "
-#~ "find your password.\n"
-#~ "  Enter that password, below. This wil confirm your request to be "
-#~ "unsubscribed from list %1."
+#~ "We need to check your identity before validating your unsubscription "
+#~ "request for list %1. If you have a user account you should login or "
+#~ "create an account. <br/>Otherwise we can send you an email with a "
+#~ "validation link inside ; please provide your email address below to "
+#~ "receive this validation link."
 #~ msgstr ""
-#~ "メールボックスの新着メッセージを確認して、SYMPA から届くメッセージを見てく"
-#~ "ださい。\n"
-#~ "\t届いたメッセージに書いてあるパスワードを下の欄に入力してください。\n"
-#~ "\tこれで、%1 メーリングリストの登録解除申し込みを確認できます。"
+#~ "%1 リストの登録解除申込を承認する前に、あなたが本人であることを確認する必"
+#~ "要があります。アカウントを持っていればログインしてください。持っていなけれ"
+#~ "ばアカウントを作成してください。<br/>どちらもうまくできないようなら、確認"
+#~ "用のリンクの入った電子メールを送りますので、下の欄にあなたの電子メールアド"
+#~ "レスを入れてください。"
+
+#~ msgid "Send me a validation link"
+#~ msgstr "確認リンクの取り寄せ"
 
 #~ msgid ""
-#~ "This password, associated with your email address, will allow you to "
-#~ "access your custom environment."
+#~ "We've sent you an email including a validation link. You should check "
+#~ "your mailbox to read this email and use this validation link."
 #~ msgstr ""
-#~ "このパスワードはあなたの電子メールアドレス専用です。これを使うと自分専用の"
-#~ "ページにアクセスできます。"
+#~ "確認用リンクの入った電子メールを送りました。自分のメールボックスを確認して"
+#~ "その電子メールにある確認用リンクを使ってください。"
 
 #~ msgid ""
-#~ "Please provide your email address for your unsubscription request from "
-#~ "list %1."
+#~ "When not using css_url parameters, sympa deliver a dynamic CSS which is "
+#~ "created using a template name css.tt2. Usually this template is comming "
+#~ "from Sympa distribution tar. Using this CSS is not a good solution "
+#~ "because for each clic, Sympa fcgi server is requested twice. If you use  "
+#~ "css_url parameters the style sheet are delivered by your http server. "
+#~ "When you install a new Sympa version and start it at the first time, the "
+#~ "different CSS files are installed in the directory specified by css_path "
+#~ "parameter. So if you want to preserve some site customization from being "
+#~ "overwriten when starting a new sympa version, css_path and css_url should "
+#~ "not point to the same directory ."
 #~ msgstr ""
-#~ "%1 メーリングリストの登録解除をする電子メールアドレスを入力してください。"
+#~ "css_url パラメータを使っていなければ、Sympa は css.tt2 テンプレートを使っ"
+#~ "て動的に CSS を生成して送出します。このテンプレートは通常は、Sympa 配布物"
+#~ "のアーカイブに入っているのと同じものです。この CSS を使いつづけるのはあま"
+#~ "りよい考えとは言えません。というのは、アクセスがあるたびに Sympa の FCGI "
+#~ "サーバが 2 度づつ呼び出されてしまうからです。css_url パラメータを使ってい"
+#~ "れば、スタイルシートは HTTP サーバが送出します。Sympa の新版をインストール"
+#~ "して起動すると、最初に css_path パラメータで指定されたディレクトリにある別"
+#~ "の CSS ファイルをインストールします。ご自分のサイトで CSS をカスタマイズし"
+#~ "ているのなら、Sympa の新版を起動したときにそれが上書きされてしまわないよ"
+#~ "う、css_path と css_url が同じディレクトリを指さないようにしておきましょ"
+#~ "う。"
 
 #~ msgid ""
-#~ "To confirm your unsubscription from list %1, please enter\n"
-#~ "\tyour password below :"
+#~ "If you are not using css_path and css_url parameters, colors are defined "
+#~ "in the robot.conf configuration file. Otherwise, colors are defined in "
+#~ "the static CSS. Colors can be changed on your current session using the "
+#~ "following color editor. When finished, you may copy the result a new CCS "
+#~ "static file. The target is specified by css_path parameter."
 #~ msgstr ""
-#~ "%1 メーリングリストの登録解除申し込みを確認するため、以下に\n"
-#~ "\tパスワードを入力してください:"
+#~ "css_path パラメータと css_url パラメータを使っていないのなら、色は robot."
+#~ "conf 設定ファイルで決まります。使っているのなら、色は静的 CSS で決まりま"
+#~ "す。以下の色エディタで色を変えられますが、これは現在のセッションが終わると"
+#~ "もとに戻ってしまいます。変更が終わったら、結果を新たな静的 CSS ファイルに"
+#~ "コピーできます。コピー先は css_path パラメータで指定しています。"
 
 #~ msgid ""
-#~ "If you've never had a password from that server or if you don't remember "
-#~ "it :"
-#~ msgstr "まだパスワードを持っていない、またはパスワードを忘れてしまった:"
-
-#~ msgid ""
-#~ "The current version doesn't include a color editor, so you need to edit "
-#~ "robot.conf (or sympa.conf) to change colors. Here are the colors as "
-#~ "defined for the current robot in robot.conf. If you did install statics "
-#~ "CSS files, the colors in use may differ from this table."
+#~ "\n"
+#~ "Be carreful : the CSS file is overwritten using css.tt2 template, usually "
+#~ "this file is comming from Sympa distribution so your CSS customization "
+#~ "may be erased when doing this.\n"
+#~ "</p>\n"
+#~ "<p>\n"
+#~ "Use the color editor in orer to change defined colors. First select the "
+#~ "color you want to change and pick a color,then apply it using the test "
+#~ "button. The new color is not really installed but it is used only for "
+#~ "your own session. When happy with the different colors you choosen, you "
+#~ "may save them in a new static CSS.\n"
 #~ msgstr ""
-#~ "現バージョンでは、色の変更を簡単にできるようになっていません。色を変えるに"
-#~ "は、robot.conf (あるいは sympa.conf) を編集する必要があります。ここでは現"
-#~ "在の robot.conf のロボットで決まっている色を挙げておきます。静的CSSファイ"
-#~ "ルを設置しているのであれば、使っている色はこの表とは違ってくるかもしれませ"
-#~ "ん。"
+#~ "\n"
+#~ "ご注意ください。CSS ファイルを css.tt2 テンプレート (通常は Sympa の配布物"
+#~ "に入っていたものと同じ) を使って上書きします。CSS にカスタマイズを加えてい"
+#~ "たのなら、それは消えてしまいます。\n"
+#~ "</p>\n"
+#~ "<p>\n"
+#~ "決まっている色を変えるには色エディタを使います。まず、変えたい色を選択し、"
+#~ "色を選び、テストボタンを使って適用します。新しい色は実際にはインストールさ"
+#~ "れず、セッションが終わるまでだけ有効です。選んだ色あいが気に入ったら、それ"
+#~ "を新たな静的 CSS に保存します。\n"
+
+#~ msgid " pick the color you want to test. "
+#~ msgstr "テストする色を選びます。"
+
+#~ msgid "Select the parameter you want to change : "
+#~ msgstr "変えたい色パラメータを選択: "
+
+#~ msgid "test this color in my session"
+#~ msgstr "セッション中に色をテスト"
+
+#~ msgid "reset colors in my session"
+#~ msgstr "セッション中の色をリセット"
+
+#~ msgid "Install my session colors in a new static CSS"
+#~ msgstr "現在のセッションの色を新たな静的 CSS へインストール"
 
 #~ msgid ""
 #~ "To confirm your identity and prevent anyone from subscribing you to\n"
-#~ "        this list against your will, a message containing your password\n"
-#~ "        will be sent to you."
+#~ "        this list against your will, a message containing an validation "
+#~ "link was sent to the e-mail address you provided."
 #~ msgstr ""
-#~ "あなたが実在の人物であることを確認するため、また、誰かがあなたの意志に反し"
-#~ "て\n"
-#~ "\tこのリストへの読者登録を申し込んでしまうのを防ぐため、これから確認用パ\n"
-#~ "\tスワードを書いたメッセージをあなたに送ります。"
+#~ "あなたが実在の人物であることを確認します。これによって、誰かがあなたの意思"
+#~ "に反してこのメーリングリストの登録解除を申し込んでしまうのを防ぎます。これ"
+#~ "から確認用の URL を書いたメッセージをあなたに送ります。"
 
 #~ msgid ""
-#~ "Check your mailbox for new messages and examine the message from Sympa to "
-#~ "find your password.\n"
-#~ "\tEnter that password below. This will confirm your subscription to list %"
-#~ "1."
+#~ "Check your mailbox for new messages and click this link. This will "
+#~ "confirm your subscription to list %1."
 #~ msgstr ""
-#~ "メールボックスの新着メッセージを確認して、SYMPA から届いたメッセージを見て"
-#~ "ください。\n"
-#~ "\t届いたメッセージに書いてあるパスワードを下の欄に入力してください。\n"
-#~ "\tこれで、%1 メーリングリストの登録解除申し込みを確認できます。"
+#~ "メールボックスの新着メッセージを確認してください。それに書いてあるリンクを"
+#~ "クリックしてください。これで、%1 メーリングリストへの読者登録申込を確認で"
+#~ "きます。"
+
+#~ msgid "You are already subscribed to list %1"
+#~ msgstr "すでに %1 メーリングリストに読者登録しています"
+
+#~ msgid "The link you used is unvalid"
+#~ msgstr "お使いのリンクは使えません"
+
+#~ msgid "Sorry, this operation can't be performed"
+#~ msgstr "申し訳ありません。その操作は実施できません。"
+
+#~ msgid "A validation link was sent to you on %1. "
+#~ msgstr "%1 に、確認リンクをお送りしました。"
+
+#~ msgid "(the validation link was requested from host %1) "
+#~ msgstr "(ホスト %1 より確認リンクへのアクセスあり) "
+
+#~ msgid "reason"
+#~ msgstr "理由"
 
 #~ msgid ""
-#~ "This password, associated with your email address, willallow you to "
-#~ "access your custom environment."
+#~ "The validation link has already been validated from host %1 .If you did "
+#~ "not perform this validation, please report this confidentiality issue to "
+#~ "your mail services administrator."
 #~ msgstr ""
-#~ "このパスワードはあなたの電子メールアドレス専用です。\n"
-#~ "\tこれを使うと自分専用のページにアクセスできます。"
+#~ "確認リンクは、すでにホスト %1 から確認されています。この確認を自分で実施し"
+#~ "た覚えがないのであれば、守秘性に関わる事案としてメールシステム管理者に報告"
+#~ "してください。"
 
-#~ msgid "You are already subscriber of list %1"
-#~ msgstr "%1 メーリングリストにはすでに読者登録しています"
+#~ msgid ""
+#~ "However, as you are logged in already, you can probably perform the "
+#~ "action you requested anyway."
+#~ msgstr ""
+#~ "ですが、すでにログインできているのであれば、おそらく自分ですでに確認を実施"
+#~ "していたのでしょう。"
 
-#~ msgid "To subscribe just hit the following mailto url :"
-#~ msgstr "読者登録は、以下の mailto URL をクリックするだけでできます:"
+#~ msgid "The validation link has expired"
+#~ msgstr "確認リンクが期限切れになっています"
 
-#, fuzzy
-#~ msgid "List \"%1\" creation request"
-#~ msgstr "%3 からのメーリングリスト \"%1@%2\" 作成申し込み"
+#~ msgid "Please login or request a new validation link"
+#~ msgstr ""
+#~ "ログインしてください。できないときは、新たに確認リンクを申し込んでください"
+
+#~ msgid "The validation link has an unknow format or has expired"
+#~ msgstr ""
+#~ "そういう確認リンクは知りません。あるいは、確認リンクが期限切れになったのか"
+#~ "もしれません"
+
+#~ msgid "Default rejection message"
+#~ msgstr "拒否メッセージの初期値"
+
+#~ msgid "Do Not Notify"
+#~ msgstr "知らせない"
+
+#~ msgid "To subscribe just hit the following link :"
+#~ msgstr "読者登録は、次のリンクをクリックするだけでできます:"
+
+#~ msgid "List \"%1@%2\" creation request from %3"
+#~ msgstr "%3 からのメーリングリスト \"%1@%2\" 作成申込"
+
+#~ msgid "%1 has copied list \"%2\" as a new list \"%3\""
+#~ msgstr "%1 がメーリングリスト \"%2\" を新リスト \"%3\" へ複写しました"
+
+#~ msgid "Bulk mailer error"
+#~ msgstr "一括メール送信機能のエラー"
+
+#~ msgid ""
+#~ "Sympa failed to store a message for list %1 in the bulk mailer. You "
+#~ "should check log files !!"
+#~ msgstr ""
+#~ "Sympa が %1 メーリングリストのメッセージを一括メール送信機能に蓄積するの\n"
+#~ "に失敗しました。運用記録を確認する必要があります。"
+
+#~ msgid ""
+#~ "Member %1 has changed his owner/editor email address to %2. This change "
+#~ "has been performed for the following lists :"
+#~ msgstr ""
+#~ "%1 のオーナーか吟味役の電子メールアドレスを %2 に変更しました。この変更\n"
+#~ "は、以下のリストで実施しました:"
+
+#~ msgid "List %1 : Failed to change admin email address"
+#~ msgstr "%1 メーリングリスト: 管理者電子メールアドレスの変更に失敗しました"
+
+#~ msgid ""
+#~ "Admin %1 could not change his admin email address (new email address is %"
+#~ "2) because he is included via a the following data sources: %3.\n"
+#~ "\n"
+#~ "If you are able to do so, you should probably update these data sources "
+#~ "with this person's new email address."
+#~ msgstr ""
+#~ "管理者 %1 の電子メールアドレスを変更できませんでした (変更先は\n"
+#~ "%2)。\n"
+#~ "次のデータソースから取り込まれているためです: %3\n"
+#~ "\n"
+#~ "可能なら、データソースでこの人の電子メールアドレスを新しいものに更新して\n"
+#~ "みてください。"
+
+#~ msgid ""
+#~ "Because we received many non-delivery reports, the %1 subscribers listed "
+#~ "below have been\n"
+#~ "notified that they might be removed from list %2:"
+#~ msgstr ""
+#~ "多くの配信不能報告を受け取ったため、以下に挙げる %1 名の読者に対して \n"
+#~ "%2 メーリングリストから削除されるかもしれないというお知らせをしました:"
+
+#~ msgid ""
+#~ "Because we received many non-delivery reports, the %1 subscribers listed "
+#~ "below have been\n"
+#~ "removed from list %2:"
+#~ msgstr ""
+#~ "多くの配信不能報告を受け取ったため、以下に挙げる %1 名の読者を \n"
+#~ "%2 メーリングリストから削除しました:"
+
+#~ msgid ""
+#~ "Because we received many non-delivery reports, the %1 subscribers listed "
+#~ "below have been\n"
+#~ "selected by Sympa as severe bouncing addresses:"
+#~ msgstr ""
+#~ "多くの配信不能報告を受け取ったため、以下に挙げる %1 名の読者を、 \n"
+#~ "ひどく配送エラーを起こすメールアドレスに選定しました:"
 
 #~ msgid ""
 #~ "Dear owner of list %1,\n"
 #~ " \n"
-#~ "A user asked to be added as a subscriber to your list. If this is OK \n"
-#~ "with you, you should click the following URL :"
+#~ "A user asked to be added as a subscriber to your list. In order to list "
+#~ "and manage\n"
+#~ "pending subscription requests you should click on the following link :"
 #~ msgstr ""
 #~ "%1 メーリングリストのオーナーさんへ\n"
 #~ " \n"
-#~ "ある人から、あなたがオーナーをしているリストに読者として追加してほしい \n"
-#~ "との申し出がありました。構わないのであれば、下記の URL をクリックして \n"
-#~ "ください:"
+#~ "ある人から、あなたがオーナーをしているリストに読者として追加してほしい  \n"
+#~ "との申し出がありました。保留中の読者登録申込を見て処理するには、下記の  \n"
+#~ "リンクをクリックして ください:"
 
 #~ msgid ""
-#~ "\n"
-#~ "or send an email to %1 with the following subject :\n"
+#~ "If prefered, you can accept this subscription request sending an email to "
+#~ "%1 with the following subject :\n"
 #~ "AUTH %2 ADD %3 %4 %5\n"
 #~ msgstr ""
-#~ "\n"
-#~ "あるいは、%1 宛てに、 \n"
-#~ "下記の表題 (Subject) で電子メールを送ってください:\n"
+#~ "問題なければ、%1 宛てに、下記の表題 (Subject) で電子メールを送って読者登録"
+#~ "申込を受け付けてください:\n"
 #~ "AUTH %2 ADD %3 %4 %5\n"
+
+#~ msgid "That can be done using this mailto link :"
+#~ msgstr "この mailto URL リンクを使えばできます:"
 
 #~ msgid ""
 #~ "Dear owner of list %1,\n"
 #~ "\n"
 #~ "A user asked to be deleted from your list. If this is OK \n"
-#~ "with you, you should click the following URL :"
+#~ "with you, you should click on the following link :"
 #~ msgstr ""
 #~ "%1 メーリングリストのオーナーさんへ\n"
 #~ "\n"
 #~ "ある人から、あなたがオーナーをしているリストから削除してほしいとの申し \n"
-#~ "出がありました。構わないのであれば、下記の URL をクリックしてくださ \n"
+#~ "出がありました。構わないのであれば、下記のリンクをクリックしてくださ \n"
 #~ "い:"
 
-#~ msgid "List %1 : Named filter error"
-#~ msgstr "%1 メーリングリスト: 名前つきフィルタのエラー"
+#~ msgid "List %1 : Failed to change member email address"
+#~ msgstr "%1 メーリングリスト: 読者電子メールアドレスの変更に失敗しました"
 
 #~ msgid ""
-#~ "The %1 named filter could not be evaluated. The list %2 is using it for "
-#~ "some authorization scenario."
+#~ "User %1 could not change his member email address (new email address is %"
+#~ "2) because he is included via a the following data sources: %3.\n"
+#~ "\n"
+#~ "If you are able to do so, you should probably update these data sources "
+#~ "with this person's new email address."
 #~ msgstr ""
-#~ "%1 名前つきフィルタを実行できませんでした。\n"
-#~ "%2 メーリングリストでは、これを認可シナリオに使っています。"
+#~ "%1 が、登録している電子メールアドレスを変更できませんでした\n"
+#~ "(変更先は %2)。\n"
+#~ "次のデータソースから取り込まれているためです: %3\n"
+#~ "\n"
+#~ "可能なら、データソースを更新してこの人の電子メールアドレスを変えてみてく\n"
+#~ "ださい。"
 
-#, fuzzy
-#~ msgid "Article to be approved for list %1 from %2"
-#~ msgstr "トピックの印が要る投稿 (%2 から %1 メーリングリスト宛て)"
+#~ msgid "Message for list %1 from %2 to be approved"
+#~ msgstr "承認が必要な %1 メーリングリスト宛てメッセージ (%2 から)"
 
-#, fuzzy
+#~ msgid "One new message from list %1 from %2 arrived. "
+#~ msgstr "%2 から %1 メーリングリストに新たなメッセージが届きました。"
+
+#~ msgid "This message has been tagged as spam"
+#~ msgstr "このメッセージにスパムの印をつけました"
+
+#~ msgid "They are %1 messages awaiting moderation."
+#~ msgstr "このリストで吟味を待っているメッセージが %1 通あります。"
+
 #~ msgid ""
-#~ "To tag the attached message in list %1 go to the following page :\n"
+#~ "To browse the awaiting messages, you should click on the following link : "
+#~ "%1/ticket/%2"
+#~ msgstr ""
+#~ "保留メッセージを見るには、次のリンクをクリックしてください:\n"
+#~ "    %1/ticket/%2"
+
+#~ msgid ""
+#~ "To tag the message in list %1 for the appropriate topic, please use the "
+#~ "following link :\n"
 #~ "\n"
 #~ "%2/viewmod/%1/%3\n"
 #~ msgstr ""
@@ -9163,24 +8809,280 @@ msgstr ""
 #~ "\n"
 #~ "%2/viewmod/%1/%3\n"
 
-#, fuzzy
-#~ msgid "Number of messages awaiting moderation for this list : %1"
-#~ msgstr "%1 メーリングリストには、吟味を待っているメッセージはありません。"
-
-#~ msgid "You asked to be subscribed to %1 mailing list."
-#~ msgstr "あなたは %1 メーリングリストへの読者登録を申し込みました。"
+#~ msgid "The messages moderating documentation: %1/help/admin#moderate"
+#~ msgstr ""
+#~ "メッセージの吟味についての説明:\n"
+#~ "    %1/help/admin#moderate"
 
 #~ msgid ""
-#~ "To confirm your subscription, you need to provide the following password"
+#~ "Someone, probably you, requested to subscribe to list %1@%2. (This "
+#~ "request came from host %3)."
 #~ msgstr ""
-#~ "あなたの読者登録を確認するために、以下のパスワードを入力する必要があり \n"
-#~ "ます。"
+#~ "だれか (おそらくあなた) が、%1@%2 メーリングリストに\n"
+#~ "読者登録を申し込みました (申込送信元ホストは %3)。"
 
-#~ msgid "Everything about this list:"
-#~ msgstr "このメーリングリストについては:"
+#~ msgid ""
+#~ "You may ignore this subscription request or click on the following link "
+#~ "in order to confirm it "
+#~ msgstr ""
+#~ "読者登録したくなければ、このメッセージは無視してください。読者登録したけ\n"
+#~ "れば、次のリンクをクリックして確認をしてください "
 
-#~ msgid "daily delete logs older than 3 months"
-#~ msgstr "毎日、3ヶ月を過ぎた運用記録を消去する"
+#~ msgid ""
+#~ "Someone, probably you, requested to allocate or renew your password for "
+#~ "your list server account %1. (This request came from host %2)."
+#~ msgstr ""
+#~ "だれか (おそらくあなた) が、メーリングリストサーバのアカウント\n"
+#~ "%1 のパスワードの設定か再設定を申し込みました\n"
+#~ "(申込送信元ホストは %2)。"
+
+#~ msgid ""
+#~ "You may ignore this request or click on the following link in order to "
+#~ "choose your password. "
+#~ msgstr ""
+#~ "なにもしたくなければ、このメッセージは無視してください。したければ、以下\n"
+#~ "のリンクをクリックしてパスワードを決めてください。\n"
+#~ "    "
+
+#~ msgid "Management of list %1"
+#~ msgstr "%1 メーリングリストの管理"
+
+#~ msgid ""
+#~ "You have been delegate the responsability of list owner by %1 for list %2@"
+#~ "%3."
+#~ msgstr "あなたは、%1 から %2@%3 メーリングリストのオーナーに指名されました"
+
+#~ msgid ""
+#~ "You have been delegate the responsability of list moderator by %1 for "
+#~ "list %2@%3."
+#~ msgstr "あなたは、%1 から %2@%3 メーリングリストの吟味役に指名されました。"
+
+#~ msgid "The list homepage: %1/info/%2"
+#~ msgstr "リストのホームページ: %1/info/%2"
+
+#~ msgid "Owner and moderator guide: %1/help/admin"
+#~ msgstr "オーナーと吟味役の手引き: %1/help/admin"
+
+#~ msgid "Changing your subscriber email address"
+#~ msgstr "読者電子メールアドレスの変更"
+
+#~ msgid ""
+#~ "You have requested to change your subscriber email address. To confirm "
+#~ "your new email address with the SYMPA server, please click the link "
+#~ "below :"
+#~ msgstr ""
+#~ "読者電子メールアドレスを変更するよう申込がありました。ご自分の新しい電"
+#~ "子  \n"
+#~ "メールアドレスを Sympa サーバで確認するため、以下のリンクをクリックして"
+#~ "く  \n"
+#~ "ださい:"
+
+#~ msgid "Unsubscribing from list %1"
+#~ msgstr "%1 メーリングリストの登録解除"
+
+#~ msgid ""
+#~ "You have requested to removed from list %1. To confirm and get removed "
+#~ "from the list, please click the link below: "
+#~ msgstr ""
+#~ "%1 メーリングリストからの登録解除の申込がありました。確認  \n"
+#~ "して解除するために、以下のリンクをクリックしてください: "
+
+#~ msgid "General informations about mailing lists: %1/help/introduction"
+#~ msgstr "メーリングリストについての一般的な説明: %1/help/introduction"
+
+#~ msgid "view source"
+#~ msgstr "ソースを見る"
+
+#~ msgid "daily delete logs "
+#~ msgstr "毎日、運用記録を消去する"
+
+#~ msgid ""
+#~ "daily delete tickets older than sympa.conf/one_time_ticket_table_ttl "
+#~ "parameter"
+#~ msgstr ""
+#~ "毎日、sympa.conf の one_time_ticket_table_ttl パラメータの期間を過ぎたチ"
+#~ "ケットを削除"
+
+#~ msgid "daily delete unusefull item from any table"
+#~ msgstr "毎日、テーブルの不要な項目を削除"
+
+#~ msgid "Delivery time (hh:mm)"
+#~ msgstr "配送時刻 (hh:mm)"
+
+#~ msgid "Notify subscribers when they are included from a data source?"
+#~ msgstr "データソースから取り込んだらその読者に知らせるか"
+
+#~ msgid "%"
+#~ msgstr "パーセント"
+
+#~ msgid "points"
+#~ msgstr "点"
+
+# unit
+#~ msgid "messages"
+#~ msgstr "通"
+
+#~ msgid "seconds"
+#~ msgstr "秒"
+
+#~ msgid "bytes"
+#~ msgstr "バイト"
+
+#~ msgid "Kbytes"
+#~ msgstr "キロバイト"
+
+#~ msgid ""
+#~ "Someone, probably you, requested to subscribe to list %1@%2. (This "
+#~ "request came from host %3 at %4)."
+#~ msgstr ""
+#~ "だれか (おそらくあなた) が、%1@%2 メーリングリストへの\n"
+#~ "読者登録を申し込みました (申込送信元ホストは %4 の %3)。"
+
+#~ msgid ""
+#~ "Someone, probably you, requested to allocate or renew your password for "
+#~ "your list server account %1. (This request came from host %2 at %3)."
+#~ msgstr ""
+#~ "だれか (おそらくあなた) が、メーリングリストサーバのアカウント\n"
+#~ "%1 のパスワード設定か再設定を申し込みました\n"
+#~ "(申込送信元ホストは %3 の %2)。"
+
+#~ msgid ""
+#~ "To browse the awaiting messages, yshould click on the following link : %1/"
+#~ "ticket/%2"
+#~ msgstr ""
+#~ "保留メッセージを見るには、次のリンクをクリックします:\n"
+#~ "    %1/ticket/%2"
+
+#~ msgid ""
+#~ "Changing your email address is a sensitive operation so we need to verify "
+#~ "that it is really your email."
+#~ msgstr ""
+#~ "電子メールアドレスの変更は慎重に行わなければなりません。これが本当にあな\n"
+#~ "たの電子メールアドレスであるかどうか確認します。"
+
+#~ msgid ""
+#~ "To this end we have sent you an email to this address : %1 with a "
+#~ "confirmation ticket."
+#~ msgstr ""
+#~ "このために、このアドレス %1 に確認チケットの入った\n"
+#~ "電子メールを送りました。"
+
+#~ msgid "The system was not able to send you the appropriate message."
+#~ msgstr "システムからあなたにうまくメッセージを送れませんでした。"
+
+#~ msgid ""
+#~ "Internal error : could not create a ticket, please contact the service "
+#~ "administrator"
+#~ msgstr ""
+#~ "内部エラー: チケットを作成できません。リストシステム管理者に連絡してくださ"
+#~ "い"
+
+#~ msgid "On %1 an authentication ticket was generated and sent to you. "
+#~ msgstr "%1 に認証チケットを生成し、あなたに送付しました。"
+
+#~ msgid "(the ticket was requested from host %1) "
+#~ msgstr "(チケット申込元ホストは %1) "
+
+#~ msgid ""
+#~ "The validation ticket has already been validated from host %1 .If you did "
+#~ "not perform this validation, please report this confidentiality issue to "
+#~ "your mail services administrator."
+#~ msgstr ""
+#~ "確認チケットはすでにホスト %1 から確認されています。\n"
+#~ "ご自分でこの確認を実施した覚えがないのでしたら、このことを守秘性に\n"
+#~ "関わる事案としてメールシステム管理者に報告してください。"
+
+#~ msgid "The requested ticket has expired"
+#~ msgstr "そのチケットは期限切れになっています"
+
+#~ msgid "Please use your password or request a new ticket"
+#~ msgstr ""
+#~ "パスワードを使ってログインしてください。できないときは、新たにチケットを申"
+#~ "し込んでください"
+
+#~ msgid ""
+#~ "The requested authentication ticket has an unknow format or is expired"
+#~ msgstr ""
+#~ "そのような認証チケットは知りません。あるいは、チケットが期限切れになってい"
+#~ "るのかもしれません"
+
+#~ msgid "You can browse and accept or refuse them by web : %1/ticket/%2"
+#~ msgstr ""
+#~ "ウェブ上でこれを見て、受け付けるか拒否するかを選べます:\n"
+#~ "    %1/ticket/%2"
+
+#~ msgid ""
+#~ "You may ignore this subscription request or hit the following url in "
+#~ "order to confirm it "
+#~ msgstr ""
+#~ "読者登録したくなければ、このメッセージは無視してください。登録したけれ\n"
+#~ "ば、次の URL をクリックして確認に進んでください "
+
+#~ msgid ""
+#~ "You may ignore this request or hit the following url in order to choose "
+#~ "your password. "
+#~ msgstr ""
+#~ "パスワードを設定したくなければ、このメッセージは無視してかまいません。\n"
+#~ "設定したければ、次の URL をクリックしてパスワードを決めてください。"
+
+#~ msgid "This message as been tagued as a spam"
+#~ msgstr "このメッセージにはスパムの印がついています"
+
+#~ msgid ""
+#~ "You should probably not reject message detected as spam with notification "
+#~ "because the message sender is probably spoofed. Do you really want to "
+#~ "reject thoses messages with notification ?"
+#~ msgstr ""
+#~ "スパムではメッセージの送信元が騙られていることがありますから、スパムと認識"
+#~ "されたメッセージを拒否したことを送信元に知らせないほうがよいかもしれませ"
+#~ "ん。本当にこれらのメッセージを拒否することを知らせてよいのでしょうか。"
+
+#~ msgid ""
+#~ "You can create a list, using an existing list as a template ; the list "
+#~ "configuration of the source list will be copied to create the ew one. "
+#~ "Note that neither list members, nor archives or shared documents are "
+#~ "duplicated. The source lists you can use are limited to lists you own."
+#~ msgstr ""
+#~ "すでにあるリストを雛形にして別のリストを作成できます。もとのリスとの設定を"
+#~ "複写して新たに作成します。なお、リストの登録状況、投稿保管庫、共有文書は複"
+#~ "製されません。もとのリストは、自分がオーナーになっているものでなければなり"
+#~ "ません。"
+
+#~ msgid ""
+#~ "You can request a new list creation with the following form.You will have "
+#~ "to choose a list template that will preset most of the list parameters "
+#~ "according to the list usage you plans. "
+#~ msgstr ""
+#~ "以下のフォームで新たなリストの作成を申し込めます。自分の考えているリストの"
+#~ "使いかたに合わせて、リストの雛形を選んでください。リストのパラメータのほと"
+#~ "んどは、雛形にあるものを使います。"
+
+#~ msgid ""
+#~ "Someone (may be yourself) has allready used this validation ticket from "
+#~ "host %1 .If this user is not you, you may report a to your mail services "
+#~ "administrator a confidentiality issue : probably someone else can access "
+#~ "to your messages "
+#~ msgstr ""
+#~ "だれか (おそらくあなた) が、すでにこの確認チケットを使っています\n"
+#~ "(使ったホストは %1)。\n"
+#~ "そのユーザがあなたでないのなら、このことを守秘性にかかわる事案としてメール"
+#~ "システム管理者に報告すべきかもしれません。だれかがあなたのメッセージを見て"
+#~ "いるのかもしれませんから"
+
+#~ msgid "The requested ticket is expired"
+#~ msgstr "そのチケットは期限切れになっています"
+
+#~ msgid ""
+#~ "Someone, probably you, requested to allocate or renew your password for "
+#~ "your list server account %1. (This request cames from host %2 at %3)."
+#~ msgstr ""
+#~ "だれか (おそらくあなた) が、リストサーバのアカウント %1\n"
+#~ "のパスワードの設定か再設定を申し込みました (申込元ホストは\n"
+#~ "%3 の %2)。"
+
+#, fuzzy
+#~ msgid "Notify subscribers when they are subscribed to the list?"
+#~ msgstr "すでに %1 メーリングリストに読者登録しています"
 
 #~ msgid ""
 #~ "<strong>Edit list config</strong>:  must be used with care : it allows "
