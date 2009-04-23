@@ -71,7 +71,7 @@ sympa_status() {
         return 1
     fi
  
-    if [ ${OSTYPE} != "Slack" -a ${OSTYPE} != "FreeBSD" -a ${OSTYPE} != "SunOS" -a ${OSTYPE} != "darwin7.0"  -a ${OSTYPE} != "Debian" -a ${OSTYPE} != "Suse" ]; then
+    if [ ${OSTYPE} != "Slack" -a ${OSTYPE} != "FreeBSD" -a ${OSTYPE} != "SunOS" -a ${OSTYPE} != "darwin7.0"  -a ${OSTYPE} != "Debian" -a ${OSTYPE} != "Suse" -a ${OSTYPE} != "linux" -a ${OSTYPE} != "linux-gnu" ]; then
 
       status $1.pl
 
@@ -137,7 +137,7 @@ sympa_start() {
 			fi
 			;;
 		1) 
-			echo $echo_opt "Starting $1, overwritting old pid file."
+			echo $echo_opt "Starting $1, overwriting old pid file."
 			sympa_module_start $1
 			if [ ${OSTYPE} = "IRIX" -o ${OSTYPE} = "SunOS" ]; then
 				if [ $? -eq 0 ]; then
