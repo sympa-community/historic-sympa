@@ -57,7 +57,7 @@ my @valid_options = qw(
 		       db_options db_passwd db_type db_user db_port db_additional_subscriber_fields db_additional_user_fields
 		       default_shared_quota default_archive_quota default_list_priority distribution_mode edit_list email etc
 		       global_remind home host ignore_x_no_archive_header_feature domain lang listmaster listmaster_email localedir log_socket_type log_level
-		       logo_html_definition 
+		       logo_html_definition legacy_character_support_feature
                        main_menu_custom_button_1_title main_menu_custom_button_1_url main_menu_custom_button_1_target 
                        main_menu_custom_button_2_title main_menu_custom_button_2_url main_menu_custom_button_2_target 
                        main_menu_custom_button_3_title main_menu_custom_button_3_url main_menu_custom_button_3_target  
@@ -73,7 +73,7 @@ my @valid_options = qw(
 		       minimum_bouncing_count minimum_bouncing_period bounce_delay 
 		       default_bounce_level1_rate default_bounce_level2_rate 
 		       remind_return_path request_priority return_path_suffix rfc2369_header_fields sendmail sendmail_args sleep 
-		       sort sympa_priority supported_lang syslog log_smtp log_module log_condition umask verp_rate welcome_return_path wwsympa_url
+		       sort sympa_priority sympa_packet_priority supported_lang syslog log_smtp log_module log_condition umask verp_rate welcome_return_path wwsympa_url
                        openssl capath cafile  key_passwd ssl_cert_dir remove_headers remove_outgoing_headers
 		       antivirus_path antivirus_args antivirus_notify anonymous_header_fields sendmail_aliases
 		       dark_color light_color text_color bg_color error_color selected_color shaded_color
@@ -185,7 +185,7 @@ my %Default_Conf =
      'email'   => 'sympa',
      'pidfile' => '--PIDDIR--/sympa.pid',
      'pidfile_distribute' => '--PIDDIR--/sympa-distribute.pid',
-     'pidfile_bulk' => '--PIDDIR--/sympa-bulk.pid',
+     'pidfile_bulk' => '--PIDDIR--/bulk.pid',
      'pidfile_creation' => '--PIDDIR--/sympa-creation.pid',
      'localedir'  => '--LOCALEDIR--',
      'sort'    => 'fr,ca,be,ch,uk,edu,*,com',
@@ -221,6 +221,7 @@ my %Default_Conf =
      'log_smtp'      => '',
      'log_module'      => '',
      'log_condition'      => '',
+     'legacy_character_support_feature' => '',
      'remind_return_path' => 'owner',
      'welcome_return_path' => 'owner',
      'db_type' => '',
@@ -239,6 +240,7 @@ my %Default_Conf =
      'listmaster_email' => 'listmaster',
      'default_list_priority' => 5,
      'sympa_priority' => 1,
+     'sympa_packet_priority' => 5,
      'request_priority' => 0,
      'owner_priority' => 9,
      'lang' => 'en_US',
@@ -275,21 +277,21 @@ my %Default_Conf =
      'error_color' => '#ff6666',
      'selected_color' => 'silver',
      'shaded_color' => '#66cccc',
-     'color_0' => '#F0F0F0', # very light grey use in tables
+     'color_0' => '#ffcd9d', # very light grey use in tables
      'color_1' => '#999', # main menu button color                       
      'color_2' => '#333', # font color                                   
-     'color_3' => '#929292', # top boxe and footer box bacground color   
-     'color_4' => 'silver', #  page backgound color                      
+     'color_3' => '#ccccff', # top boxe and footer box bacground color   
+     'color_4' => '#f77d18', #  page backgound color                      
      'color_5' => '#fff', # ??                                           
      'color_6' => '#99ccff', # list menu current button                  
      'color_7' => '#ff99cc', # eroorbackground color,          
      'color_8' => '#3366CC', #                                           
-     'color_9' => '#DEE7F7',
+     'color_9' => '#dee7f7',
      'color_10' => '#777777', # inactive button
-     'color_11' => '#3366CC', #                                          
+     'color_11' => '#ccc', #                                          
      'color_12' => '#000',
-     'color_13' => '#ffffcc',                                        # input backgound  | transparent
-     'color_14' => '#000',
+     'color_13' => '#ffffce',                                        # input backgound  | transparent
+     'color_14' => '#f4f4f4',
      'color_15' => '#000',
      'chk_cert_expiration_task' => '',
      'crl_update_task' => '',
@@ -520,6 +522,13 @@ sub load {
 	}
     }
 
+    ## Load charset.conf file if necessary.
+    if($Conf{'legacy_character_support_feature'} eq 'on'){
+	my $charset_conf = &load_charset;
+	$Conf{'locale2charset'} = $charset_conf;
+    }else{
+	$Conf{'locale2charset'} = {};
+    }
 
     unless ($no_db){
 	#load parameter from database if database value as prioprity over conf file
@@ -627,6 +636,41 @@ sub load {
 
     return 1;
 }    
+
+## load charset.conf file (charset mapping for service messages)
+sub load_charset {
+    my $charset = {};
+
+    my $config = $Conf{'etc'}.'/charset.conf' ;
+    $config = '--ETCBINDIR--/charset.conf' unless -f $config;
+    if (-f $config) {
+	unless (open CONFIG, $config) {
+	    printf STDERR 'unable to read configuration file %s: %s\n',$config, $!;
+	    return {};
+	}
+	while (<CONFIG>) {
+	    chomp $_;
+	    s/\s*#.*//;
+	    s/^\s+//;
+	    next unless /\S/;
+	    my ($locale, $cset) = split(/\s+/, $_);
+	    unless ($cset) {
+		printf STDERR 'charset name is missing in configuration file %s line %d\n',$config, $.;
+		next;
+	    }
+	    unless ($locale =~ s/^([a-z]+)_([a-z]+)/lc($1).'_'.uc($2).$'/ei) { #'
+		printf STDERR 'illegal locale name in configuration file %s line %d\n',$config, $.;
+		next;
+	    }
+	    $charset->{$locale} = $cset;
+	
+	}
+	close CONFIG;
+    }
+
+    return $charset;
+}
+
 
 ## load nrcpt file (limite receipient par domain
 sub load_nrcpt_by_domain {
