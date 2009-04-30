@@ -1,4 +1,536 @@
 ------------------------------------------------------------------------
+r5684 | david.verdin | 2009-04-30 11:15:34 +0200 (Thu, 30 Apr 2009) | 3 lines
+Changed paths:
+   M /branches/stage-julien-branche/check_perl_modules.pl
+   M /branches/stage-julien-branche/src/List.pm
+   M /branches/stage-julien-branche/src/mail.pm
+   M /branches/stage-julien-branche/web_tt2/compose_mail.tt2
+   M /branches/stage-julien-branche/web_tt2/nav.tt2
+   M /branches/stage-julien-branche/wwsympa/wwsympa.fcgi
+
+[feature] The user can send an html page to a list.
+She can also test its message by sending it to herself.
+
+------------------------------------------------------------------------
+r5679 | david.verdin | 2009-04-28 16:52:11 +0200 (Tue, 28 Apr 2009) | 1 line
+Changed paths:
+   M /branches/stage-julien-branche/web_tt2/compose_mail.tt2
+   A /branches/stage-julien-branche/web_tt2/menu_search.tt2 (from /trunk/web_tt2/menu_search.tt2:5678)
+   A /branches/stage-julien-branche/web_tt2/nav.tt2 (from /trunk/web_tt2/nav.tt2:5678)
+   A /branches/stage-julien-branche/wwsympa/icons/logo_sympa.png (from /trunk/wwsympa/icons/logo_sympa.png:5678)
+   A /branches/stage-julien-branche/wwsympa/icons/top.png (from /trunk/wwsympa/icons/top.png:5678)
+
+[change] Apply last trunk version
+------------------------------------------------------------------------
+r5678 | david.verdin | 2009-04-28 16:49:11 +0200 (Tue, 28 Apr 2009) | 1 line
+Changed paths:
+   A /branches/stage-julien-branche/README.charset (from /trunk/README.charset:5675)
+
+[-change] add README.charset
+------------------------------------------------------------------------
+r5677 | david.verdin | 2009-04-28 16:47:14 +0200 (Tue, 28 Apr 2009) | 1 line
+Changed paths:
+   M /branches/stage-julien-branche/mail_tt2/digest.tt2
+   M /branches/stage-julien-branche/mail_tt2/get_archive.tt2
+   M /branches/stage-julien-branche/mail_tt2/list_unknown.tt2
+   M /branches/stage-julien-branche/mail_tt2/listeditor_notification.tt2
+   M /branches/stage-julien-branche/mail_tt2/listmaster_notification.tt2
+   M /branches/stage-julien-branche/mail_tt2/message_report.tt2
+   M /branches/stage-julien-branche/mail_tt2/moderate.tt2
+   M /branches/stage-julien-branche/mail_tt2/modindex.tt2
+   M /branches/stage-julien-branche/mail_tt2/send_auth.tt2
+   M /branches/stage-julien-branche/mail_tt2/urlized_part.tt2
+   M /branches/stage-julien-branche/src/Bulk.pm
+   M /branches/stage-julien-branche/src/Conf.pm
+   M /branches/stage-julien-branche/src/Language.pm
+   M /branches/stage-julien-branche/src/Upgrade.pm
+   M /branches/stage-julien-branche/src/bulk.pl
+   A /branches/stage-julien-branche/src/etc/charset.conf (from /trunk/src/etc/charset.conf:5675)
+   M /branches/stage-julien-branche/src/etc/script/create_db.Oracle
+   M /branches/stage-julien-branche/src/etc/script/create_db.Pg
+   M /branches/stage-julien-branche/src/etc/script/create_db.SQLite
+   M /branches/stage-julien-branche/src/etc/script/create_db.Sybase
+   M /branches/stage-julien-branche/src/etc/script/create_db.mysql
+   M /branches/stage-julien-branche/src/mail.pm
+   M /branches/stage-julien-branche/web_tt2/arc.tt2
+   M /branches/stage-julien-branche/web_tt2/arc_manage.tt2
+   M /branches/stage-julien-branche/web_tt2/blacklist.tt2
+   M /branches/stage-julien-branche/web_tt2/compose_mail.tt2
+   M /branches/stage-julien-branche/web_tt2/create_list.tt2
+   M /branches/stage-julien-branche/web_tt2/create_list_request.tt2
+   M /branches/stage-julien-branche/web_tt2/css.tt2
+   M /branches/stage-julien-branche/web_tt2/edit_list_request.tt2
+   M /branches/stage-julien-branche/web_tt2/editfile.tt2
+   M /branches/stage-julien-branche/web_tt2/error.tt2
+   M /branches/stage-julien-branche/web_tt2/footer.tt2
+   M /branches/stage-julien-branche/web_tt2/help.tt2
+   M /branches/stage-julien-branche/web_tt2/home.tt2
+   M /branches/stage-julien-branche/web_tt2/info.tt2
+   M /branches/stage-julien-branche/web_tt2/javascript.tt2
+   M /branches/stage-julien-branche/web_tt2/list_menu.tt2
+   M /branches/stage-julien-branche/web_tt2/lists.tt2
+   M /branches/stage-julien-branche/web_tt2/login_menu.tt2
+   M /branches/stage-julien-branche/web_tt2/loginbanner.tt2
+   M /branches/stage-julien-branche/web_tt2/main.tt2
+   M /branches/stage-julien-branche/web_tt2/modindex.tt2
+   M /branches/stage-julien-branche/web_tt2/notice.tt2
+   M /branches/stage-julien-branche/web_tt2/picture_upload.tt2
+   M /branches/stage-julien-branche/web_tt2/pref.tt2
+   M /branches/stage-julien-branche/web_tt2/review.tt2
+   M /branches/stage-julien-branche/web_tt2/rss_request.tt2
+   M /branches/stage-julien-branche/web_tt2/search_user.tt2
+   M /branches/stage-julien-branche/web_tt2/serveradmin.tt2
+   M /branches/stage-julien-branche/web_tt2/setlang.tt2
+   M /branches/stage-julien-branche/web_tt2/skinsedit.tt2
+   M /branches/stage-julien-branche/web_tt2/subindex.tt2
+   M /branches/stage-julien-branche/web_tt2/suboptions.tt2
+   M /branches/stage-julien-branche/web_tt2/title.tt2
+   M /branches/stage-julien-branche/web_tt2/viewlogs.tt2
+
+[change] Apply last trunk version
+------------------------------------------------------------------------
+r5669 | david.verdin | 2009-04-23 11:34:04 +0200 (Thu, 23 Apr 2009) | 1 line
+Changed paths:
+   A /branches/stage-julien-branche (from /trunk:5668)
+
+[-change] recreating a branch for Julien
+------------------------------------------------------------------------
+r5667 | david.verdin | 2009-04-22 17:44:27 +0200 (Wed, 22 Apr 2009) | 4 lines
+Changed paths:
+   M /trunk/src/Conf.pm
+   M /trunk/src/bulk.pl
+   M /trunk/src/etc/script/sympa
+   M /trunk/src/tools.pl
+   M /trunk/web_tt2/compose_mail.tt2
+
+[feature] New parameter: bulk_sleep : the time a bulk process waits for when befor starting a new loop when it didn't find a packet to send.
+[change] The bulk_ttl parameter is now named bulk_lazytime: it is the time a slave bulk process waits before terminating after its last packet sending.
+[bug] Modified the sympa init script to be able to start and stop the bulk mailer.
+
+------------------------------------------------------------------------
+r5666 | david.verdin | 2009-04-20 17:20:56 +0200 (Mon, 20 Apr 2009) | 2 lines
+Changed paths:
+   M /trunk/src/etc/script/sympa
+
+[-bug] Missed a test for fedora.
+
+------------------------------------------------------------------------
+r5665 | david.verdin | 2009-04-20 17:15:51 +0200 (Mon, 20 Apr 2009) | 2 lines
+Changed paths:
+   M /trunk/src/etc/script/sympa
+
+[-bug] Missed a test for defining Fedora systems.
+
+------------------------------------------------------------------------
+r5664 | david.verdin | 2009-04-20 15:02:33 +0200 (Mon, 20 Apr 2009) | 2 lines
+Changed paths:
+   M /trunk/src/etc/script/sympa
+
+[bug] Sympa start and stop script used the "status" command for system whose OSTYPE was 'linux-gnu'. These systems don't seem to have such a command.
+
+------------------------------------------------------------------------
+r5662 | david.verdin | 2009-04-15 16:47:30 +0200 (Wed, 15 Apr 2009) | 11 lines
+Changed paths:
+   M /trunk/configure.ac
+   M /trunk/src/Bulk.pm
+   M /trunk/src/Conf.pm
+   M /trunk/src/bulk.pl
+   M /trunk/src/etc/script/sympa
+   M /trunk/src/tools.pl
+
+[feature] The bulk mailer is now separated into two different categories of processes: master and slave. When lauched, only one bulk mailer process runs : the master. If the number of packets to be sent grows too large, it forks to several slave processes, that will auto-destroy after some time. four parameters are used:
+
+- bulk_fork_threshold	the number of waiting packets that, once reached, triggers the slaves creation
+
+- bulk_max_count	the total number of bulk processes allowed.
+
+- bulk_ttl		the time to live for slave processes (in seconds)
+
+- bulk_wait_to_fork	the number of seconds that elapse before the master bulk process check if the number of packet is too large and slave creation is neccessary. Note the this check implies a query to the database.
+
+
+------------------------------------------------------------------------
+r5661 | david.verdin | 2009-04-14 18:33:18 +0200 (Tue, 14 Apr 2009) | 2 lines
+Changed paths:
+   M /trunk/wwsympa/wwsympa.fcgi
+
+[bug] A var name seemed to have been cropped. Fixed.
+
+------------------------------------------------------------------------
+r5660 | david.verdin | 2009-04-14 17:35:54 +0200 (Tue, 14 Apr 2009) | 2 lines
+Changed paths:
+   M /trunk/src/Conf.pm
+   M /trunk/src/sympa.pl
+   M /trunk/src/sympa_wizard.pl
+
+[bug] Sympa was trying to use the database config before this database was created, at first startup. Fixed by forcing to load only the config file before probing the database structure.
+
+------------------------------------------------------------------------
+r5659 | david.verdin | 2009-04-10 16:47:00 +0200 (Fri, 10 Apr 2009) | 3 lines
+Changed paths:
+   M /trunk/wwsympa/wwsympa.fcgi
+
+[change] Fixe incorrect return in purge_list action : now return to get_closed_lists
+[bug] fixe incorrect requiered_privilege definition for purge_lists action
+
+------------------------------------------------------------------------
+r5658 | david.verdin | 2009-04-10 16:45:22 +0200 (Fri, 10 Apr 2009) | 2 lines
+Changed paths:
+   D /trunk/web_tt2/list_admin_menu.tt2
+
+[change] list_admin_menu.tt2 is not anymore usefull thank to new Sympa skin
+
+------------------------------------------------------------------------
+r5657 | david.verdin | 2009-04-10 16:43:20 +0200 (Fri, 10 Apr 2009) | 2 lines
+Changed paths:
+   M /trunk/web_tt2/list_menu.tt2
+
+[change] change list_menu in order to never display admin menu but always display editor menu
+
+------------------------------------------------------------------------
+r5656 | david.verdin | 2009-04-09 16:28:07 +0200 (Thu, 09 Apr 2009) | 2 lines
+Changed paths:
+   M /trunk/src/Family.pm
+   M /trunk/src/List.pm
+   M /trunk/src/Message.pm
+   M /trunk/src/SQLSource.pm
+   M /trunk/src/Scenario.pm
+   M /trunk/src/Upgrade.pm
+   M /trunk/src/admin.pm
+   M /trunk/src/mail.pm
+   M /trunk/src/tools.pl
+
+[bug] improper reference to $Conf replaced bu $Conf::Conf
+
+------------------------------------------------------------------------
+r5655 | david.verdin | 2009-04-09 13:23:43 +0200 (Thu, 09 Apr 2009) | 2 lines
+Changed paths:
+   M /trunk/src/sympa_wizard.pl
+
+[bug] Missing library lead to uneffective sympa_wizard.pl
+
+------------------------------------------------------------------------
+r5654 | david.verdin | 2009-04-08 17:00:48 +0200 (Wed, 08 Apr 2009) | 2 lines
+Changed paths:
+   M /trunk/src/Conf.pm
+
+[bug] Missing 'use List' pragma in Conf.pm.
+
+------------------------------------------------------------------------
+r5653 | david.verdin | 2009-04-08 16:56:30 +0200 (Wed, 08 Apr 2009) | 2 lines
+Changed paths:
+   M /trunk/src/Conf.pm
+
+[bug] loading database conf for virtual robots
+
+------------------------------------------------------------------------
+r5652 | david.verdin | 2009-04-08 09:34:58 +0200 (Wed, 08 Apr 2009) | 2 lines
+Changed paths:
+   M /trunk/wwsympa/wwsympa.fcgi
+
+[bug] better error handling when creating a list with already exist
+
+------------------------------------------------------------------------
+r5651 | david.verdin | 2009-04-08 09:15:36 +0200 (Wed, 08 Apr 2009) | 3 lines
+Changed paths:
+   M /trunk/wwsympa/wwsympa.fcgi
+
+[feature] Now http://server/sympa/<a valid listname> is redirect to http://server/sympa/info/<a valid listname> insteed of "unkown action" error 
+
+
+------------------------------------------------------------------------
+r5650 | david.verdin | 2009-04-08 08:27:54 +0200 (Wed, 08 Apr 2009) | 2 lines
+Changed paths:
+   M /trunk/wwsympa/wwsympa.fcgi
+
+[bug] Partial solution for incorrect redirection after login. This patch is not perfect because it does not clean Sympa from all previous way to do it.
+
+------------------------------------------------------------------------
+r5649 | david.verdin | 2009-04-07 16:33:38 +0200 (Tue, 07 Apr 2009) | 3 lines
+Changed paths:
+   M /trunk/src/Conf.pm
+   M /trunk/src/Upgrade.pm
+   M /trunk/src/etc/script/create_db.Oracle
+   M /trunk/src/etc/script/create_db.Pg
+   M /trunk/src/etc/script/create_db.SQLite
+   M /trunk/src/etc/script/create_db.mysql
+   M /trunk/web_tt2/javascript.tt2
+   M /trunk/web_tt2/skinsedit.tt2
+   M /trunk/wwsympa/wwsympa.fcgi
+
+[feature] new table in order to store robot config parameters that can be edited inline. This feature is used for color edition in sympa admin/skinsedit
+
+
+------------------------------------------------------------------------
+r5648 | david.verdin | 2009-04-07 14:15:27 +0200 (Tue, 07 Apr 2009) | 2 lines
+Changed paths:
+   M /trunk/src/mail.pm
+
+[-bug] Improving the test that verifies that a message that must be forwarded is not a reference.
+
+------------------------------------------------------------------------
+r5647 | david.verdin | 2009-04-06 14:37:31 +0200 (Mon, 06 Apr 2009) | 2 lines
+Changed paths:
+   M /trunk/src/etc/script/sympa
+
+[bug] Error in the status check for plain gnu-linux stystems.
+
+------------------------------------------------------------------------
+r5643 | david.verdin | 2009-04-02 18:31:57 +0200 (Thu, 02 Apr 2009) | 2 lines
+Changed paths:
+   M /trunk/mail_tt2/listmaster_notification.tt2
+   M /trunk/wwsympa/wwsympa.fcgi
+
+[bug] When notifying the listamaster that an owner had changed her/his mail address, the message was croped. Only on affected list nam was displayed instead of the full list. this was due to a bad parameter sending to the tté engine and to a bad syntax in TT2 FOREACH directive.
+
+------------------------------------------------------------------------
+r5642 | david.verdin | 2009-04-02 16:11:57 +0200 (Thu, 02 Apr 2009) | 2 lines
+Changed paths:
+   M /trunk/wwsympa/wwsympa.fcgi
+
+[bug][Reported by M.P. Laisne, Rennes Academy] email change through the user preferences in the web interface was our of order. This was due to a bad initialization of old and new email parameters. Fixed by using values associated to the ticket.
+
+------------------------------------------------------------------------
+r5638 | david.verdin | 2009-03-30 15:30:53 +0200 (Mon, 30 Mar 2009) | 8 lines
+Changed paths:
+   M /trunk/src/Conf.pm
+   M /trunk/src/sympa_wizard.pl
+
+[feature] Four new languages are now available by default in Sympa:
+  - Bokmål (B. C. Aasgaard)
+  - Polish (L. Zygmanski)
+  - Finn (J.P. Paloposki)
+  - Vietnamese (C. Siddall)
+Thanks to the translators for their efforts!
+
+
+------------------------------------------------------------------------
+r5632 | david.verdin | 2009-03-25 10:57:20 +0100 (Wed, 25 Mar 2009) | 2 lines
+Changed paths:
+   M /trunk/web_tt2/javascript.tt2
+
+[bug][#5905][Reported by A. Stephens, Bristol University] A [% list %] TT2 var was trailing after e return directive in javascript.
+
+------------------------------------------------------------------------
+r5630 | david.verdin | 2009-03-23 15:00:23 +0100 (Mon, 23 Mar 2009) | 2 lines
+Changed paths:
+   M /trunk/wwsympa/archived.pl
+
+[change] Fixing a problem in custom archiver : now the custom archiver MUSt accept two parameters : list and filename. Both parameters are filled by archived.pl at execution time. wwsympa.conf must contain the absolute path to the custom archiver script if admins to use this feature.
+
+------------------------------------------------------------------------
+r5629 | david.verdin | 2009-03-20 15:59:12 +0100 (Fri, 20 Mar 2009) | 3 lines
+Changed paths:
+   M /trunk/wwsympa/archived.pl
+   M /trunk/wwsympa/wwslib.pm
+
+[feature] new 'custom_archiver' parameter. allows to define a charcter string corresponding to a script that is excuted instead of mhonarc when archiving a message. This script must end with the argument for the message file to archive. example : "myscript.pl --file=".
+
+
+------------------------------------------------------------------------
+r5628 | david.verdin | 2009-03-18 11:48:04 +0100 (Wed, 18 Mar 2009) | 2 lines
+Changed paths:
+   M /trunk/src/Scenario.pm
+   M /trunk/src/tools.pl
+
+[feature][#930][Submitted by S. Amrani, gendarmerie nationale] New scenario test : less_than. Allows to compare two values. Is true if the first one is less than the second one. Works with strings, too, if you like.
+
+------------------------------------------------------------------------
+r5627 | david.verdin | 2009-03-17 16:26:01 +0100 (Tue, 17 Mar 2009) | 2 lines
+Changed paths:
+   M /trunk/web_tt2/edit_attributes.tt2
+
+[bug] removinf uneffective sort in the attribute edition form.
+
+------------------------------------------------------------------------
+r5625 | david.verdin | 2009-03-16 09:41:04 +0100 (Mon, 16 Mar 2009) | 2 lines
+Changed paths:
+   M /trunk/wwsympa/wwsympa.fcgi
+
+[bug][#5872][Submitted by H. Moa] When accessing an rss-feed for the shared files of a list upgraded from 5.2b, wwsympa entered a tight-loop, load went up to 100%, the webfrontend failed making the webserver reply with 500 and a single-processor system had to be rebooted. The list in question had no shared files. Fixed by checking that we don't use double slashes in the path to the shared directory.
+
+------------------------------------------------------------------------
+r5614 | david.verdin | 2009-03-04 09:50:24 +0100 (Wed, 04 Mar 2009) | 2 lines
+Changed paths:
+   M /trunk/src/Bulk.pm
+
+[bug] fix a crash of bulk.pm when mysql is stoped
+
+------------------------------------------------------------------------
+r5603 | david.verdin | 2009-02-25 09:14:25 +0100 (Wed, 25 Feb 2009) | 2 lines
+Changed paths:
+   M /trunk/check_perl_modules.pl
+   M /trunk/src/Bulk.pm
+   M /trunk/src/sympa.pl
+
+[feature] Added a progress bar and progress informations to the 'sympa.pl --test_database_message_buffer' operation.
+
+------------------------------------------------------------------------
+r5602 | david.verdin | 2009-02-24 11:09:25 +0100 (Tue, 24 Feb 2009) | 2 lines
+Changed paths:
+   M /trunk/po/af.po
+   M /trunk/po/ar.po
+   M /trunk/po/bg.po
+   M /trunk/po/br.po
+   M /trunk/po/ca.po
+   M /trunk/po/cs.po
+   M /trunk/po/de.po
+   M /trunk/po/el.po
+   M /trunk/po/en_US.po
+   M /trunk/po/es.po
+   M /trunk/po/et.po
+   M /trunk/po/eu.po
+   M /trunk/po/fi.po
+   M /trunk/po/fr.po
+   M /trunk/po/hu.po
+   M /trunk/po/id.po
+   M /trunk/po/it.po
+   M /trunk/po/ja.po
+   M /trunk/po/ko.po
+   M /trunk/po/ml.po
+   M /trunk/po/nb_NO.po
+   M /trunk/po/nl.po
+   M /trunk/po/nn_NO.po
+   M /trunk/po/oc.po
+   M /trunk/po/pl.po
+   M /trunk/po/pt.po
+   M /trunk/po/pt_BR.po
+   M /trunk/po/ro.po
+   M /trunk/po/ru.po
+   M /trunk/po/sv.po
+   M /trunk/po/sympa.pot
+   M /trunk/po/tr.po
+   M /trunk/po/vi.po
+   M /trunk/po/zh_CN.po
+   M /trunk/po/zh_TW.po
+
+[-feature] Updating catalogues with latest Sympa modifications.
+
+------------------------------------------------------------------------
+r5601 | david.verdin | 2009-02-24 11:05:32 +0100 (Tue, 24 Feb 2009) | 2 lines
+Changed paths:
+   M /trunk/po/es.po
+   M /trunk/po/fr.po
+   M /trunk/po/vi.po
+
+[-feature] Retrieving latest translations from Pootle.
+
+------------------------------------------------------------------------
+r5600 | david.verdin | 2009-02-24 08:43:05 +0100 (Tue, 24 Feb 2009) | 4 lines
+Changed paths:
+   M /trunk/src/Bulk.pm
+   M /trunk/src/List.pm
+   M /trunk/src/sympa.pl
+
+[feature] now sympa.pl --test_database_message_buffer can be used in order to verify database capacity to store messages spool (dirty output a nicer is needed ;-)
+
+
+
+------------------------------------------------------------------------
+r5570 | david.verdin | 2009-02-20 13:28:47 +0100 (Fri, 20 Feb 2009) | 2 lines
+Changed paths:
+   M /trunk/src/mail.pm
+
+[bug] mail_forward was unable to use a message which was transfered as a simple string. Fixed by testing that the $msg param is not a ref.
+
+------------------------------------------------------------------------
+r5568 | olivier.salaun | 2009-02-19 16:55:56 +0100 (Thu, 19 Feb 2009) | 1 line
+Changed paths:
+   M /trunk/src/mail.pm
+
+[bug] catch error if Bulk::store() fails and notify listmaster\n***** If you are using mysql, you should set the my.cnf 'max_allowed_packet' to reasonably high value ('32M' for example).\n***** This is required because Sympa now stores emails in its database and might reach the mysql limits for buffer size of SQL queries.
+------------------------------------------------------------------------
+r5567 | olivier.salaun | 2009-02-19 16:50:51 +0100 (Thu, 19 Feb 2009) | 2 lines
+Changed paths:
+   M /trunk/src/bulk.pl
+
+[-feature] Add a --mail option to bulk.pl
+
+------------------------------------------------------------------------
+r5566 | olivier.salaun | 2009-02-19 16:50:22 +0100 (Thu, 19 Feb 2009) | 2 lines
+Changed paths:
+   M /trunk/mail_tt2/listmaster_notification.tt2
+   M /trunk/src/mail.pm
+
+[bug] catch error if Bulk::store() fails and notify listmaster
+
+------------------------------------------------------------------------
+r5564 | olivier.salaun | 2009-02-19 10:38:51 +0100 (Thu, 19 Feb 2009) | 3 lines
+Changed paths:
+   M /trunk/mail_tt2/sendpasswd.tt2
+   M /trunk/wwsympa/Auth.pm
+   M /trunk/wwsympa/wwsympa.fcgi
+
+[-bug] client IP address was incorrect in message sent when a subscription ticket was created.
+Also removed the date that was not set ; since it is not useful (date is the date of the mail)
+
+------------------------------------------------------------------------
+r5557 | david.verdin | 2009-02-16 15:34:18 +0100 (Mon, 16 Feb 2009) | 2 lines
+Changed paths:
+   M /trunk/src/admin.pm
+
+[bug][#5812] When duplicating a list, the list creation and update date, as well as creation email and serail number were written to the original file instead of the new file.
+
+------------------------------------------------------------------------
+r5555 | david.verdin | 2009-02-16 14:30:24 +0100 (Mon, 16 Feb 2009) | 2 lines
+Changed paths:
+   M /trunk/src/Bulk.pm
+   M /trunk/src/List.pm
+   M /trunk/src/Log.pm
+   M /trunk/src/Upgrade.pm
+   M /trunk/src/etc/script/crypt_passwd.pl
+   M /trunk/src/etc/script/init_comment.pl
+   M /trunk/wwsympa/Auth.pm
+   M /trunk/wwsympa/Challenge.pm
+   M /trunk/wwsympa/SympaSession.pm
+
+[bug][#5820][Reported by M. Jozsef, Budapest University of Technology and Economics] When fetching queries result into a hash, the case of each key string was unsure, as some RDMS could return higher cased field name, for example. This led to aparetnly empty queries result when trying to acces a lower case field value that had been returned with a higher case name. Fixed by systematically lowercasing the field name when fetching results in a hash.
+
+------------------------------------------------------------------------
+r5545 | david.verdin | 2009-02-13 16:14:24 +0100 (Fri, 13 Feb 2009) | 2 lines
+Changed paths:
+   M /trunk/src/mail.pm
+
+[bug] remove unused subroutine
+
+------------------------------------------------------------------------
+r5518 | david.verdin | 2009-02-12 17:42:53 +0100 (Thu, 12 Feb 2009) | 2 lines
+Changed paths:
+   M /trunk/configure.ac
+
+[bug] version number
+
+------------------------------------------------------------------------
+r5515 | david.verdin | 2009-02-12 17:30:38 +0100 (Thu, 12 Feb 2009) | 2 lines
+Changed paths:
+   M /trunk/src/Bulk.pm
+   M /trunk/src/mail.pm
+
+[bug] fix wrong priority managment
+
+------------------------------------------------------------------------
+r5514 | david.verdin | 2009-02-12 16:52:14 +0100 (Thu, 12 Feb 2009) | 2 lines
+Changed paths:
+   M /trunk/src/bulk.pl
+
+[change] bulk.pl now waits only 1 second between two loops of inactivity.
+
+------------------------------------------------------------------------
+r5512 | david.verdin | 2009-02-12 15:58:50 +0100 (Thu, 12 Feb 2009) | 2 lines
+Changed paths:
+   M /trunk/wwsympa/Makefile.am
+
+[bug] Removing install bug in installicons directive.
+
+------------------------------------------------------------------------
+r5509 | david.verdin | 2009-02-12 15:40:10 +0100 (Thu, 12 Feb 2009) | 2 lines
+Changed paths:
+   M /trunk/ChangeLog
+   M /trunk/configure.ac
+
+[-feature] Preparing version 6.0a.10
+
+------------------------------------------------------------------------
 r5508 | david.verdin | 2009-02-12 15:35:49 +0100 (Thu, 12 Feb 2009) | 2 lines
 Changed paths:
    M /trunk/wwsympa/Makefile.am
