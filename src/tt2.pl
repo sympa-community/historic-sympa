@@ -265,10 +265,9 @@ sub parse_tt2 {
 
     my $config = {
 	# ABSOLUTE => 1,
-	INCLUDE_PATH => $include_path,
 #	PRE_CHOMP  => 1,
 	UNICODE => 0, # Prevent BOM auto-detection
-	
+	DEFAULT => '/usr/local/sympa-jj/bin/etc/test.tt2',
 	FILTERS => {
 	    unescape => \&CGI::Util::unescape,
 	    l => [\&tt2::maketext, 1],
@@ -283,19 +282,20 @@ sub parse_tt2 {
 	    encode_utf8 => [\&encode_utf8, 0]
 	    }
     };
-    
+    unless($options->{'is_not_template'}){
+	$config->{'INCLUDE_PATH'} = $include_path;
+    }
     if ($allow_absolute) {
 	$config->{'ABSOLUTE'} = 1;
 	$allow_absolute = 0;
     }
 
-    my $tt2 = Template->new($config) or die "Template error: ".Template->error();
 
+    my $tt2 = Template->new($config) or die "Template error: ".Template->error();
     unless ($tt2->process($template, $data, $output)) {
 	$last_error = $tt2->error();
 	&do_log('err', 'Failed to parse %s : %s', $template, $tt2->error());
 	&do_log('err', 'Looking for TT2 files in %s', join(',',@{$include_path}));
-
 
 	return undef;
     } 

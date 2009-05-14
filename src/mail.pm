@@ -150,7 +150,7 @@ sub mail_file {
        
     ## ## Does the message include headers ?
     if ($header_possible) {
-	
+
 	foreach my $line (split(/\n/,$message)) {
 	    last if ($line=~/^\s*$/);
        

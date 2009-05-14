@@ -4747,86 +4747,124 @@ sub get_all_user_db {
 
 ## Returns a subscriber of the list.
 sub get_subscriber {
-    my  $self= shift;
-    my  $email = &tools::clean_email(shift);
-    
-    do_log('debug2', 'List::get_subscriber(%s)', $email);
+  
+    my $self= shift;
+    my $email = shift;
+    &do_log('debug2', 'List::get_subscriber(%s)', $email);
 
-    my $name = $self->{'name'};
+    $email = &tools::clean_email($email);
+    
+    ## Use session cache
+    if (defined $list_cache{'get_subscriber'}{$self->{'domain'}}{$self->{'name'}}{$email}) {
+	return $list_cache{'get_subscriber'}{$self->{'domain'}}{$self->{'name'}}{$email};
+    }
+
+    my $options;
+    $options->{'email'} = $email;
+    $options->{'name'} = $self->{'name'};
+    $options->{'domain'} = $self->{'domain'};
+
+    my $user = &get_subscriber_no_object($options);
+
+    unless($user){
+	do_log('err','Unable to retrieve information from database for user %s', $email);
+	return undef;
+    }
+    $user->{'reception'} = $self->{'admin'}{'default_user_options'}{'reception'}
+    unless ($self->is_available_reception_mode($user->{'reception'}));
+    ## In case it was not set in the database
+    $user->{'subscribed'} = 1 if ($self->{'admin'}{'user_data_source'} eq 'database');	
+
+    ## Set session cache
+    $list_cache{'get_subscriber'}{$self->{'domain'}}{$self->{'name'}}{$email} = $user;
+
+    return $user;
+}
+
+######################################################################
+###  get_subscriber_no_object                                        #
+## Get details regarding a subscriber.                               #
+# IN:                                                                #
+#   - a single reference to a hash with the following keys:          #
+#     * email : the subscriber email                                 #
+#     * listname: the name of the list                               #
+#     * domain: the virtual host under which the list is installed.  #
+# OUT:                                                               #
+#   - undef if something went wrong.                                 #
+#   - a hash containing the user details otherwise                   #
+######################################################################
+
+sub get_subscriber_no_object {
+    my $options = shift;
+    &do_log('debug2', 'List::get_subscriber_no_object(%s, %s, %s)', $options->{'name'}, $options->{'email'}, $options->{'domain'});
+
+    my $name = $options->{'name'};
+    
+    my $email = &tools::clean_email($options->{'email'});
+    
     my $statement;
     my $date_field = sprintf $date_format{'read'}{$Conf::Conf{'db_type'}}, 'date_subscriber', 'date_subscriber';
     my $update_field = sprintf $date_format{'read'}{$Conf::Conf{'db_type'}}, 'update_subscriber', 'update_subscriber';	
     
     ## Use session cache
-    if (defined $list_cache{'get_subscriber'}{$self->{'domain'}}{$name}{$email}) {
-	return $list_cache{'get_subscriber'}{$self->{'domain'}}{$name}{$email};
+    if (defined $list_cache{'get_subscriber'}{$options->{'domain'}}{$name}{$email}) {
+	return $list_cache{'get_subscriber'}{$options->{'domain'}}{$name}{$email};
     }
-    
+
     ## Check database connection
     unless ($dbh and $dbh->ping) {
 	return undef unless &db_connect();
     }
-    
     ## Additional subscriber fields
     my $additional;
     if ($Conf::Conf{'db_additional_subscriber_fields'}) {
 	$additional = ',' . $Conf::Conf{'db_additional_subscriber_fields'};
     }
-    
     $statement = sprintf "SELECT user_subscriber AS email, comment_subscriber AS gecos, bounce_subscriber AS bounce, bounce_score_subscriber AS bounce_score, bounce_address_subscriber AS bounce_address, reception_subscriber AS reception,  topics_subscriber AS topics, visibility_subscriber AS visibility, %s AS date, %s AS update_date, subscribed_subscriber AS subscribed, included_subscriber AS included, include_sources_subscriber AS id, custom_attribute_subscriber AS custom_attribute %s FROM subscriber_table WHERE (user_subscriber = %s AND list_subscriber = %s AND robot_subscriber = %s)", 
-      $date_field, 
-	$update_field, 
-	  $additional, 
-	    $dbh->quote($email), 
-	      $dbh->quote($name),
-		$dbh->quote($self->{'domain'});
+    $date_field, 
+    $update_field, 
+    $additional, 
+    $dbh->quote($email), 
+    $dbh->quote($name),
+    $dbh->quote($options->{'domain'});
     
     push @sth_stack, $sth;
-    
     unless ($sth = $dbh->prepare($statement)) {
 	do_log('err','Unable to prepare SQL statement : %s', $dbh->errstr);
 	return undef;
     }
-    
     unless ($sth->execute) {
 	do_log('err','Unable to execute SQL statement "%s" : %s', $statement, $dbh->errstr);
 	return undef;
     }
-    
     my $user = $sth->fetchrow_hashref('NAME_lc');
-    
     if (defined $user) {
+	
 	$user->{'reception'} ||= 'mail';
-	$user->{'reception'} = $self->{'admin'}{'default_user_options'}{'reception'}
-	unless ($self->is_available_reception_mode($user->{'reception'}));
-	
 	$user->{'update_date'} ||= $user->{'date'};
-	
-	## In case it was not set in the database
-	$user->{'subscribed'} = 1 if ($self->{'admin'}{'user_data_source'} eq 'database');	
-	
-	do_log('debug2', 'List::get_subscriber custom_attribute  = (%s)', $user->{custom_attribute});
+	do_log('debug2', 'custom_attribute  = (%s)', $user->{custom_attribute});
 	if (defined $user->{custom_attribute}) {
 	    do_log('debug2', '1. custom_attribute  = (%s)', $user->{custom_attribute});
 	    my %custom_attr = &parseCustomAttribute($user->{'custom_attribute'});
 	    $user->{'custom_attribute'} = \%custom_attr ;
 	    do_log('debug2', '2. custom_attribute  = (%s)', %custom_attr);
-	    	do_log('debug2', '3. custom_attribute  = (%s)', $user->{custom_attribute});
+	    do_log('debug2', '3. custom_attribute  = (%s)', $user->{custom_attribute});
 	    my @k = sort keys %custom_attr ;
 	    do_log('debug2', "keys custom_attribute  = @k");
 	}
 
     }
-    
+ 
     $sth->finish();
 
     $sth = pop @sth_stack;
     
     ## Set session cache
-    $list_cache{'get_subscriber'}{$self->{'domain'}}{$name}{$email} = $user;
-    
+    $list_cache{'get_subscriber'}{$options->{'domain'}}{$name}{$email} = $user;
+
     return $user;
 }
+
 ## Returns an array of all users in User table hash for a given user
 sub get_subscriber_by_bounce_address {
 

@@ -96,6 +96,7 @@
 [% END %]
 [% END %]
 
+
 [% IF action == 'compose_mail' %]
 <div id="nav">
   <ul>

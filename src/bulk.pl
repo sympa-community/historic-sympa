@@ -164,6 +164,7 @@ my $last_check_date = time();
 $options->{'multiple_process'} = 1;
 
 while (!$end) {
+    &List::init_list_cache();
     my $bulk;
     ## Create slave bulks if too much packets are waiting to be sent in the bulk_mailer table.
     if (($main::daemon_usage eq 'DAEMON_MASTER') && (time() - $last_check_date > $timeout)){
@@ -202,22 +203,74 @@ while (!$end) {
 		&do_log('err',"internal error : current packet 'messagekey= %s contain a ref to a null message",$bulk->{'messagekey'});
 	    }
 	}
+
+	############### BEGIN VERP AND MERGE ##############
+	my $data;
+	my $options;
+	$options->{'is_not_template'} = 1;
+	
+	# Initialization of the HASH : $data. It will be used by parse_tt2 to personalized messages.
+	$data->{'listname'} = $bulk->{'listname'};
+	$data->{'robot'} = $bulk->{'robot'};
+	$data->{'to'} = $bulk->{'receipients'};
+
+	my $rcpt;
 	my @rcpts = split /,/,$bulk->{'receipients'};
-	if ($bulk->{'verp'}){   
-	    foreach my $rcpt (@rcpts) {
+	## Use an intermediate handler to encode to filesystem_encoding
+	my $output = '';
+	my $message_output = new IO::Scalar \$output;
+	my $user;
+
+	# Test if use verp
+	if ($bulk->{'verp'}){
+            # Test if use merge
+	    foreach $rcpt (@rcpts) {
 		$return_path = $rcpt;
 		$return_path =~ s/\@/\=\=a\=\=/; 
 		$return_path = "$Conf::Conf{'bounce_email_prefix'}+$return_path\=\=$bulk->{'listname'}\@$bulk->{'robot'}"; # xxxxxxxxxxxxx verp cassé si pas de listename (message de sympa)
+		
+		if (1==1) { #-------- it will be : if ($bulk->{'merge'}) { ------------#
+		    # Parse the TT2 in the message 
+		    &tt2::parse_tt2($data,\$messageasstring, $message_output, '', $options);
+		}
+		
 		*SMTP = &mail::smtpto($return_path, \$rcpt, $bulk->{'robot'});
+		# Message with custom data
+		print SMTP $message_output;
+		close SMTP;
+	    }
+	}else{
+	    # Test if use merge
+	    if ( 1==1 ) { #-------- it will be : if ($bulk->{'merge'}) { ------------#
+			
+		foreach $rcpt (@rcpts) {
+
+		    my $user_details;
+		    $user_details->{'email'} = $rcpt;
+		    $user_details->{'name'} = $bulk->{'listname'};
+		    $user_details->{'domain'} = $bulk->{'robot'};
+
+		    $user = &List::get_subscriber_no_object($user_details);
+		    # Parse the TT2 in the message 
+		    $data->{'custom_attribute'} = $user->{'custom_attribute'};
+		    open TMP, ">/tmp/userdump"; &tools::dump_var($data, 0, \*TMP); close TMP;
+		    &tt2::parse_tt2($data,\$messageasstring, $message_output, '', $options);
+		    open TMP, ">>/tmp/userdump"; &tools::dump_var($data, 0, \*TMP); close TMP;
+		    
+		    *SMTP = &mail::smtpto($bulk->{'returnpath'}, \$rcpt, $bulk->{'robot'});
+		    # Message with custom data
+		    print SMTP $message_output;
+		    close SMTP;
+		}
+	    }
+	    else{
+		*SMTP = &mail::smtpto($bulk->{'returnpath'}, \@rcpts, $bulk->{'robot'});
 		print SMTP $messageasstring;
 		close SMTP;
 	    }
-
-	}else{
-	    *SMTP = &mail::smtpto($bulk->{'returnpath'}, \@rcpts, $bulk->{'robot'});
-	    print SMTP $messageasstring;
-	    close SMTP;
 	}
+	############### END VERP AND MERGE ##############
+	
 	&Bulk::remove($bulk->{'messagekey'},$bulk->{'packetid'});
 	if($bulk->{'priority_packet'} == $Conf::Conf{'sympa_packet_priority'} + 1){
 	    &do_log('notice','Done sending message %s to list %s@%s (priority %s) in %s seconds since scheduled expedition date. Now sending VERP.', $bulk->{'messagekey'}, $bulk->{'listname'}, $bulk->{'robot'}, $bulk->{'priority_message'}, time() - $bulk->{'delivery_date'});
