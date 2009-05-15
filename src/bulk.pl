@@ -253,9 +253,7 @@ while (!$end) {
 		    $user = &List::get_subscriber_no_object($user_details);
 		    # Parse the TT2 in the message 
 		    $data->{'custom_attribute'} = $user->{'custom_attribute'};
-		    open TMP, ">/tmp/userdump"; &tools::dump_var($data, 0, \*TMP); close TMP;
 		    &tt2::parse_tt2($data,\$messageasstring, $message_output, '', $options);
-		    open TMP, ">>/tmp/userdump"; &tools::dump_var($data, 0, \*TMP); close TMP;
 		    
 		    *SMTP = &mail::smtpto($bulk->{'returnpath'}, \$rcpt, $bulk->{'robot'});
 		    # Message with custom data

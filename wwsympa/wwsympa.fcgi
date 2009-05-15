@@ -15123,7 +15123,6 @@ sub do_compose_mail {
 	   $Text::Wrap::columns = 80;
 	   $Text::Wrap::huge = 'overflow';
 	   $in{'body'} = &Text::Wrap::wrap ('','',$in{'body'});
-
 	   my @body = split /\0/, $in{'body'};
    }
 
@@ -15146,7 +15145,6 @@ sub do_compose_mail {
 	 &web_db_log({'robot' => $robot,'list' => $list->{'name'},'action' => $param->{'action'},'parameters' => "",'target_email' => "",'msg_id' => '','status' => 'error','error_type' => 'internal','user_email' => $param->{'user'}{'email'},'client' => $ip,'daemon' => $daemon_name});
 	 return undef;
      }
-
 
      &report::notice_report_web('performed',{},$param->{'action'});
      &web_db_log({'robot' => $robot,'list' => $list->{'name'},'action' => $param->{'action'},'parameters' => "",'target_email' => "",'msg_id' => '','status' => 'success','error_type' => '','user_email' => $param->{'user'}{'email'},'client' => $ip,'daemon' => $daemon_name});

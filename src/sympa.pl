@@ -1472,13 +1472,12 @@ sub DoSendMessage {
     my $msg = shift;
     my $robot = shift;
     &do_log('debug', 'DoSendMessage()');
-
     my $hdr = $msg->head;
     
     my ($chksum, $rcpt, $from) = ($hdr->get('X-Sympa-Checksum'), $hdr->get('X-Sympa-To'), $hdr->get('X-Sympa-From'));
     chomp $rcpt; chomp $chksum; chomp $from;
 
-    do_log('info', "Processing web message for %s", $rcpt);
+    &do_log('info', "Processing web message for %s", $rcpt);
     
     my $string = $msg->as_string;
     my $msg_id = $hdr->get('Message-ID');

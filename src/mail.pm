@@ -117,7 +117,6 @@ sub mail_file {
     &do_log('debug2', 'mail::mail_file(%s, %s, %s)', $filename, $rcpt, $sign_mode);
 
     my ($to,$message);
-
     ## boolean
     $header_possible = 0 unless (defined $header_possible);
     my %header_ok;           # hash containing no missing headers
@@ -143,7 +142,6 @@ sub mail_file {
 	&Language::PopLang() if (defined $data->{'lang'});
 	$message .= join('',$output);
 	$header_possible = 1;
-
     }else { # or not
 	$message .= $data->{'body'};
        }
@@ -170,7 +168,6 @@ sub mail_file {
 	    }
 	}
    }
-   
     ## ADD MISSING HEADERS
     my $headers="";
 
@@ -259,7 +256,6 @@ sub mail_file {
 	push @msgs, join('', <IN>);
 	close IN;
     }
-
     my $listname = ''; 
     if (ref($data->{'list'}) eq "HASH") {
 	$listname = $data->{'list'}{'name'};
@@ -270,10 +266,8 @@ sub mail_file {
     unless ($message = &reformat_message("$headers"."$message", \@msgs, $data->{'charset'})) {
 	&do_log('err', "mail::mail_file: Failed to reformat message");
     }
-
     ## Set it in case it was not set
     $data->{'return_path'} ||= &Conf::get_robot_conf($robot, 'request');
-    
     ## SENDING
     unless (defined &sending('msg' => $message,
 			     'rcpt' => $rcpt,
@@ -608,7 +602,6 @@ sub sending {
     my $sympa_file;
     my $fh;
     my $signed_msg; # if signing
-
     if ($sign_mode eq 'smime') {
 	my $parser = new MIME::Parser;
 	$parser->output_to_core(1);
@@ -680,7 +673,7 @@ sub sending {
 	printf TMP "X-Sympa-To: %s\n", $all_rcpt;
 	printf TMP "X-Sympa-From: %s\n", $from;
 	printf TMP "X-Sympa-Checksum: %s\n", &tools::sympa_checksum($all_rcpt);
-	printf TMP $messageasstring;
+	print TMP $messageasstring;
 	close TMP;
 	my $new_file = $sympa_file;
 	$new_file =~ s/T\.//g;
@@ -696,7 +689,7 @@ sub sending {
 	    &do_log('err', 'could not close safefork to sendmail');
 	    return undef;
 	};
-    }	
+    }
     return 1;
 }
 
