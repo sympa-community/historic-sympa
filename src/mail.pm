@@ -109,30 +109,30 @@ sub set_send_spool {
 # OUT : 1 | undef
 ####################################################
 sub mail_file {
-   
+    
     my ($filename, $rcpt, $data, $robot) = @_;
     my $header_possible = $data->{'header_possible'};
     my $sign_mode = $data->{'sign_mode'};
-
+    
     &do_log('debug2', 'mail::mail_file(%s, %s, %s)', $filename, $rcpt, $sign_mode);
-
+    
     my ($to,$message);
     ## boolean
     $header_possible = 0 unless (defined $header_possible);
     my %header_ok;           # hash containing no missing headers
     my $existing_headers = 0;# the message already contains headers
-   
-    ## We may receive a list a recepients
-    if (ref ($rcpt)) {
-	unless (ref ($rcpt) eq 'ARRAY') {
-	    &do_log('notice', 'Wrong type of reference for rcpt');
-	    return undef;
+	
+	## We may receive a list a recepients
+	if (ref ($rcpt)) {
+	    unless (ref ($rcpt) eq 'ARRAY') {
+		&do_log('notice', 'Wrong type of reference for rcpt');
+		return undef;
+	    }
 	}
-    }
-
+    
     ## Charset for encoding
     $data->{'charset'} ||= &Language::GetCharset();
-
+    
     ## TT2 file parsing 
     if ($filename =~ /\.tt2$/) {
 	my $output;
@@ -144,14 +144,14 @@ sub mail_file {
 	$header_possible = 1;
     }else { # or not
 	$message .= $data->{'body'};
-       }
-       
+    }
+    
     ## ## Does the message include headers ?
     if ($header_possible) {
-
+	
 	foreach my $line (split(/\n/,$message)) {
 	    last if ($line=~/^\s*$/);
-       
+	    
 	    if ($line=~/^[\w-]+:\s*/) { ## A header field
 		$existing_headers=1;
 	    }elsif ($existing_headers && ($line =~ /^\s/)) { ## Following of a header field
@@ -159,7 +159,7 @@ sub mail_file {
 	    }else{
 		last;
 	    }
-		
+	    
 	    foreach my $header ('to','from','subject','reply-to','mime-version', 'content-type','content-transfer-encoding') {
 		if ($line=~/^$header:/i) {
 		    $header_ok{$header} = 1;
@@ -167,12 +167,12 @@ sub mail_file {
 		}
 	    }
 	}
-   }
+    }
     ## ADD MISSING HEADERS
     my $headers="";
-
+    
     unless ($header_ok{'to'}) {
-
+	
 	if (ref ($rcpt)) {
 	    if ($data->{'to'}) {
 		$to = $data->{'to'};
@@ -183,41 +183,41 @@ sub mail_file {
 	    $to = $rcpt;
 	}   
 	$headers .= "To: ".MIME::EncWords::encode_mimewords(
-	    Encode::decode('utf8', $to),
-	    'Encoding' => 'A', 'Charset' => $data->{'charset'}, 'Field' => 'To'
-	    )."\n"; 
+							    Encode::decode('utf8', $to),
+							    'Encoding' => 'A', 'Charset' => $data->{'charset'}, 'Field' => 'To'
+							    )."\n"; 
     }     
     unless ($header_ok{'from'}) {
 	if ($data->{'from'} eq 'sympa') {
 	    $headers .= "From: ".MIME::EncWords::encode_mimewords(
-		sprintf("SYMPA <%s>",&Conf::get_robot_conf($robot, 'sympa')),
-		'Encoding' => 'A', 'Charset' => "US-ASCII", 'Field' => 'From'
-		)."\n";
+								  sprintf("SYMPA <%s>",&Conf::get_robot_conf($robot, 'sympa')),
+								  'Encoding' => 'A', 'Charset' => "US-ASCII", 'Field' => 'From'
+								  )."\n";
 	} else {
 	    $headers .= "From: ".MIME::EncWords::encode_mimewords(
-		Encode::decode('utf8', $data->{'from'}),
-		'Encoding' => 'A', 'Charset' => $data->{'charset'}, 'Field' => 'From'
-		)."\n"; 
+								  Encode::decode('utf8', $data->{'from'}),
+								  'Encoding' => 'A', 'Charset' => $data->{'charset'}, 'Field' => 'From'
+								  )."\n"; 
 	}
-   }
+    }
     unless ($header_ok{'subject'}) {
 	$headers .= "Subject: ".MIME::EncWords::encode_mimewords(
-	    Encode::decode('utf8', $data->{'subject'}),
-	    'Encoding' => 'A', 'Charset' => $data->{'charset'}, 'Field' => 'Subject'
-	    )."\n";
-   }
+								 Encode::decode('utf8', $data->{'subject'}),
+								 'Encoding' => 'A', 'Charset' => $data->{'charset'}, 'Field' => 'Subject'
+								 )."\n";
+    }
     unless ($header_ok{'reply-to'}) { 
 	$headers .= "Reply-to: ".MIME::EncWords::encode_mimewords(
-	    Encode::decode('utf8', $data->{'replyto'}),
+								  Encode::decode('utf8', $data->{'replyto'}),
 	    'Encoding' => 'A', 'Charset' => $data->{'charset'}, 'Field' => 'Reply-to'
-	    )."\n" if ($data->{'replyto'})
-    }
+								  )."\n" if ($data->{'replyto'})
+	}
     if ($data->{'headers'}) {
 	foreach my $field (keys %{$data->{'headers'}}) {
 	    $headers .= $field.': '.MIME::EncWords::encode_mimewords(
-		Encode::decode('utf8', $data->{'headers'}{$field}),
+								     Encode::decode('utf8', $data->{'headers'}{$field}),
 		'Encoding' => 'A', 'Charset' => $data->{'charset'}, 'Field' => $field
-		)."\n";
+								     )."\n";
 	}
     }
     unless ($header_ok{'mime-version'}) {
@@ -239,8 +239,8 @@ sub mail_file {
     #}
     unless ($existing_headers) {
 	$headers .= "\n";
-   }
-   
+    }
+    
     ## All these data provide mail attachements in service messages
     my @msgs = ();
     if (ref($data->{'msg_list'}) eq 'ARRAY') {
@@ -262,20 +262,25 @@ sub mail_file {
     } elsif ($data->{'list'}) {
 	$listname = $data->{'list'};
     }
-     
+    
     unless ($message = &reformat_message("$headers"."$message", \@msgs, $data->{'charset'})) {
 	&do_log('err', "mail::mail_file: Failed to reformat message");
     }
+    
     ## Set it in case it was not set
     $data->{'return_path'} ||= &Conf::get_robot_conf($robot, 'request');
-    ## SENDING
+    
+    ## ------- SENDING --------------------
     unless (defined &sending('msg' => $message,
 			     'rcpt' => $rcpt,
 			     'from' => $data->{'return_path'},
 			     'robot' => $robot,
 			     'listname' => $listname,
 			     'priority' => &Conf::get_robot_conf($robot,'sympa_priority'),
-			     'sign_mode' => $sign_mode)) {
+			     'sign_mode' => $sign_mode,
+			     'use_bulk' => $data->{'use_bulk'},
+			     )
+	    ){
 	return undef;
     }
    return 1;
@@ -412,6 +417,7 @@ sub mail_message {
 #
 ####################################################
 sub mail_forward {
+    
     my($msg,$from,$rcpt,$robot)=@_;
     &do_log('debug2', "mail::mail_forward($from,$rcpt)");
     
@@ -624,7 +630,6 @@ sub sending {
 	}
     }
 
-
     my $messageasstring ;
 
     #if (ref($signed_msg) eq "MIME::Entity") {	
@@ -638,22 +643,24 @@ sub sending {
     my $verpfeature = ($verp eq 'on');
 
     if ($use_bulk){ # in that case use bulk tables to prepare message distribution 
-      my $bulk_code = &Bulk::store('msg' => $messageasstring,
-				   'rcpts' => $rcpt,
-				   'from' => $from,
-				   'robot' => $robot,
-				   'listname' => $listname,
-				   'priority_message' => $priority_message,
-				   'priority_packet' => $priority_packet,
-				   'delivery_date' => $delivery_date,
-				   'verp' => $verpfeature);
-      unless (defined $bulk_code) {
-	&do_log('err', 'Failed to store message for list %s', $listname);
-	&List::send_notify_to_listmaster('bulk_error',  $robot, {'listname' => $listname});
-	return undef;
-      }
 
+	my $bulk_code = &Bulk::store('msg' => $messageasstring,
+				     'rcpts' => $rcpt,
+				     'from' => $from,
+				     'robot' => $robot,
+				     'listname' => $listname,
+				     'priority_message' => $priority_message,
+				     'priority_packet' => $priority_packet,
+				     'delivery_date' => $delivery_date,
+				     'verp' => $verpfeature);
+	unless (defined $bulk_code) {
+	    &do_log('err', 'Failed to store message for list %s', $listname);
+	    &List::send_notify_to_listmaster('bulk_error',  $robot, {'listname' => $listname});
+	    return undef;
+	}
+	
     }elsif(defined $send_spool) { # in context wwsympa.fcgi do note send message to reciepients but copy it to standard spool 
+
 	$sympa_email = &Conf::get_robot_conf($robot, 'sympa');	
 	$sympa_file = "$send_spool/T.$sympa_email.".time.'.'.int(rand(10000));
 	unless (open TMP, ">$sympa_file") {

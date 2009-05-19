@@ -100,17 +100,17 @@ my $is_main_bulk = 0;
 
 ## Put ourselves in background if not in debug mode. 
 unless ($main::options{'debug'} || $main::options{'foreground'}) {
-   open(STDERR, ">> /dev/null");
-   open(STDOUT, ">> /dev/null");
-   if (open(TTY, "/dev/tty")) {
-      ioctl(TTY, $TIOCNOTTY, 0);
-      close(TTY);
-   }
-   setpgrp(0, 0);
-   if ((my $child_pid = fork) != 0) {
-       do_log('info',"Starting bulk master daemon, pid %s",$child_pid);
-       exit(0);
-   }
+    open(STDERR, ">> /dev/null");
+    open(STDOUT, ">> /dev/null");
+    if (open(TTY, "/dev/tty")) {
+	ioctl(TTY, $TIOCNOTTY, 0);
+	close(TTY);
+    }
+    setpgrp(0, 0);
+    if ((my $child_pid = fork) != 0) {
+	do_log('info',"Starting bulk master daemon, pid %s",$child_pid);
+	exit(0);
+    }
 }
 do_openlog($Conf::Conf{'syslog'}, $Conf::Conf{'log_socket_type'}, 'bulk');
 ## If process is running in foreground, don't write STDERR to a dedicated file
@@ -158,7 +158,7 @@ my $fh = 'fh0000000000';	## File handle for the stream.
 my $messagekey;       # the key of the current message in the message_table   
 my $messageasstring;  # the current message as a string
 
-my $timeout = $Conf::Conf{'bulk_wait_to_fork'};
+ my $timeout = $Conf::Conf{'bulk_wait_to_fork'};
 my $last_check_date = time();
 
 $options->{'multiple_process'} = 1;
@@ -203,9 +203,10 @@ while (!$end) {
 		&do_log('err',"internal error : current packet 'messagekey= %s contain a ref to a null message",$bulk->{'messagekey'});
 	    }
 	}
-
-	############### BEGIN VERP AND MERGE ##############
-	my $data;
+	#--------------------------------------------------
+	#------------- BEGIN VERP AND MERGE ---------------
+        #--------------------------------------------------
+	my $data; #HASH which will contain the attributes of the subscriber
 	my $options;
 	$options->{'is_not_template'} = 1;
 	
@@ -213,9 +214,9 @@ while (!$end) {
 	$data->{'listname'} = $bulk->{'listname'};
 	$data->{'robot'} = $bulk->{'robot'};
 	$data->{'to'} = $bulk->{'receipients'};
-
-	my $rcpt;
-	my @rcpts = split /,/,$bulk->{'receipients'};
+	
+	my $rcpt; # It is the email of a subscriber, use it in the foreach
+	my @rcpts = split /,/,$bulk->{'receipients'}; # Contain all the subscribers
 	## Use an intermediate handler to encode to filesystem_encoding
 	my $output = '';
 	my $message_output = new IO::Scalar \$output;
@@ -223,38 +224,51 @@ while (!$end) {
 
 	# Test if use verp
 	if ($bulk->{'verp'}){
-            # Test if use merge
+
 	    foreach $rcpt (@rcpts) {
 		$return_path = $rcpt;
 		$return_path =~ s/\@/\=\=a\=\=/; 
 		$return_path = "$Conf::Conf{'bounce_email_prefix'}+$return_path\=\=$bulk->{'listname'}\@$bulk->{'robot'}"; # xxxxxxxxxxxxx verp cassé si pas de listename (message de sympa)
-		
+
+		# Test if use merge
 		if (1==1) { #-------- it will be : if ($bulk->{'merge'}) { ------------#
+		    my $user_details;
+		    $user_details->{'email'} = $rcpt;
+		    $user_details->{'name'} = $bulk->{'listname'};
+		    $user_details->{'domain'} = $bulk->{'robot'};
+		    
+		    # get_subscriber_no_object() return the user's details with the custom attributes
+		    $user = &List::get_subscriber_no_object($user_details);
+		    $data->{'custom_attribute'} = $user->{'custom_attribute'};
+	
 		    # Parse the TT2 in the message 
 		    &tt2::parse_tt2($data,\$messageasstring, $message_output, '', $options);
 		}
 		
 		*SMTP = &mail::smtpto($return_path, \$rcpt, $bulk->{'robot'});
-		# Message with custom data
+		
+                # Message with custom data
 		print SMTP $message_output;
 		close SMTP;
 	    }
 	}else{
 	    # Test if use merge
 	    if ( 1==1 ) { #-------- it will be : if ($bulk->{'merge'}) { ------------#
-			
-		foreach $rcpt (@rcpts) {
 
+		foreach $rcpt (@rcpts) {
 		    my $user_details;
 		    $user_details->{'email'} = $rcpt;
+
 		    $user_details->{'name'} = $bulk->{'listname'};
 		    $user_details->{'domain'} = $bulk->{'robot'};
-
-		    $user = &List::get_subscriber_no_object($user_details);
-		    # Parse the TT2 in the message 
-		    $data->{'custom_attribute'} = $user->{'custom_attribute'};
-		    &tt2::parse_tt2($data,\$messageasstring, $message_output, '', $options);
 		    
+		    # get_subscriber_no_object() return the user's details with the custom attributes
+		    $user = &List::get_subscriber_no_object($user_details);
+		    $data->{'custom_attribute'} = $user->{'custom_attribute'};
+
+                    # Parse the TT2 in the message : replace the tags and the parameters by the corresponding values
+		    &tt2::parse_tt2($data,\$messageasstring, $message_output, '', $options);
+
 		    *SMTP = &mail::smtpto($bulk->{'returnpath'}, \$rcpt, $bulk->{'robot'});
 		    # Message with custom data
 		    print SMTP $message_output;
@@ -267,7 +281,9 @@ while (!$end) {
 		close SMTP;
 	    }
 	}
-	############### END VERP AND MERGE ##############
+	#--------------------------------------------------
+	#------------- END VERP AND MERGE -----------------
+        #--------------------------------------------------
 	
 	&Bulk::remove($bulk->{'messagekey'},$bulk->{'packetid'});
 	if($bulk->{'priority_packet'} == $Conf::Conf{'sympa_packet_priority'} + 1){
