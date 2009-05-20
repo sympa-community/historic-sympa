@@ -1,8 +1,13 @@
 <!-- $Id$ -->
+<div class="block">
+
+<h2>[%|loc%]Configuring the list[%END%] <a class="input" href="[% path_cgi %]/nomenu/help/listconfig" title="[%|loc%]Open in a new window[%END%]" onclick="window.open('','wws_help','toolbar=no,location=no,directories=no,status=no,menubar=no,scrollbars=yes,resizable=yes,copyhistory=no,width=400,height=200')" target="wws_help">[%|loc%]Help[%END%]</a></h2>
+<br />
 
 [% IF !group %]
   [%|loc%]You can choose below a subset of parameters to edit :[%END%] 
   <ul>
+[% IF GROUP == 'description' %][% SET class = 'menuLinksCurrentPage' %][% ELSE %][% SET class = 'menuLinks' %][% END %]
     <li><a href="[% path_cgi %]/edit_list_request/[% list %]/description" >[%|loc%]List definition[%END%]</a></li>
     <li><a href="[% path_cgi %]/edit_list_request/[% list %]/sending" >[%|loc%]Sending/receiving setup[%END%]</a></li>
     <li><a href="[% path_cgi %]/edit_list_request/[% list %]/command" >[%|loc%]Privileges[%END%]</a></li>
@@ -20,7 +25,7 @@
         [% IF p.may_edit != 'hidden' %]
 
           [% IF p.changed == '1' %]
-  	    <div class="ErrorBlock">
+  	    <div class="CurrentBlock">
           [% ELSE %]
             <div class="block">
           [% END %]
@@ -150,7 +155,7 @@
                                             <input type="password" name="single_param.[% p.name %].[% o_INDEX %].[% key.name %]" id="single_param.[% p.name %].[% o_INDEX %].[% key.name %]" value="[% key.value %]" size="[% key.length %]" />
                                           [% ELSE %]
                                             <input type="text" name="single_param.[% p.name %].[% o_INDEX %].[% key.name %]" id="single_param.[% p.name %].[% o_INDEX %].[% key.name %]" value="[% key.value %]" size="[% key.length %]" />
-                                          [% END %]<br />
+                                          [% END %]
                                         [% ELSIF key.may_edit == 'read' %]
                                           [% IF key.field_type == 'password' %]
                                             [% key.hidden_field %]
@@ -159,20 +164,19 @@
                                           [% END %]
                                           <input type="hidden" name="single_param.[% p.name %].[% o_INDEX %].[% key.name %]" value="[% key.value %]" />
                                         [% END %]
-                                        [% key.unit %]
+                                        [% key.unit %]<br />
                                       [% END %]
                                    
                                 [% END %]
                               [% END %]
                             [% ELSE %]
                               <!-- Scalar -->
-                              <br />
                                   [% IF p.may_edit == 'write' %]
                                     <input type="text" name="single_param.[% p.name %].[% o_INDEX %]" id="single_param.[% p.name %].[% o_INDEX %].[% key.name %]" value="[% o.value %]" size="[% o.length %]" />
                                   [% ELSIF p.may_edit == 'read' %]
                                     [% o.value %]
                                   [% END %]
-                                  [% o.unit %]
+                                  [% o.unit %]<br />
                             [% END %]
                             [% o_INDEX = o_INDEX + 1 %]
                           [% END %]
@@ -397,7 +401,7 @@
                             [% ELSIF p.may_edit == 'read' %]
                               [% p.value %]
                             [% END %]
-                            [% p.unit %]
+                            [% p.unit %]<br />
                           [% END %]
 
                       [% END %]
@@ -420,4 +424,5 @@
   </form>
 [% END %]
 
-
+</div >
+<!-- end edit_list_request.tt2 -->

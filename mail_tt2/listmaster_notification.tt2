@@ -12,12 +12,14 @@ Subject: [% FILTER qencode %][%|loc(list.name,list.host,email)%]List "%1@%2" cre
 [%|loc%]To activate/delete this mailing list :[%END%]
 [% conf.wwsympa_url %]/ticket/[%one_time_ticket%]
 
-[% ELSIF type == 'request_list_renaming' -%]
+[%- ELSIF type == 'request_list_renaming' -%]
+[%- IF is_a_copy -%]
+Subject: [% FILTER qencode %][%|loc(new_listname)%]%1 mailing list creation[%END%][%END%]
+
+[%|loc(email,list.name,new_listname)%]%1 has copied list "%2" as a new list "%3"[%END-%]
+[%- ELSE -%]
 Subject: [% FILTER qencode %][%|loc(list.name)%]List "%1" renaming[%END%][%END%]
 
-[% IF is_a_copy %]
-[%|loc(email,list.name,new_listname)%]%1 has copied list "%2" as a new list "%3"[%END%]
-[% ELSE %]
 [%|loc(email,list.name,new_listname)%]%1 has renamed list "%2" to "%3"[%END%]
 [% END %]
 
@@ -61,7 +63,7 @@ Subject: [% FILTER qencode %][%|loc%]Upgrade procedures failed[%END%][%END%]
 Subject: [% FILTER qencode %][%|loc%]Database structure updated[%END%][%END%]
 
 [%|loc(db_name)%]The database structure has been updated ; check log file for further details : [%END%]
-[% FOREACH report_item = report -%]
+[% FOREACH report_item IN report -%]
   [% report_item %]
 [% END %]
 
@@ -71,14 +73,19 @@ Subject: [% FILTER qencode %][%|loc%]DataBase connection restored[%END%][%END%]
 [%|loc(db_name)%]Connection to database %1 restored.[%END%]
 
 
+[% ELSIF type == 'bulk_error' -%]
+Subject: [% FILTER qencode %][%|loc%]Bulk mailer error[%END%][%END%]
+
+[%|loc(listname)%]Sympa failed to store a message for list %1 in the bulk mailer. You should check log files !![%END%]
+
+
 [% ELSIF type == 'loop_command' -%]
 Subject: [% FILTER qencode %][%|loc%]Loop detected[%END%][%END%]
 MIME-Version: 1.0
 Content-Type: multipart/mixed; boundary="[% boundary %]"
 
 --[% boundary %]
-Content-Type: text/plain
-Content-Transfer-Encoding: 8bit
+Content-Disposition: inline
 
 [%|loc%]A loop has been detected with the following message[%END%]
 
@@ -165,10 +172,18 @@ Subject: [% FILTER qencode %][%|loc(param0)%]list %1 in status error_config[%END
 [% ELSIF type == 'listowner_email_changed' -%]
 Subject: [% FILTER qencode %][%|loc(param0)%]List owner/editor email changes[%END%][%END%]
 
-[%|loc(previous_email,new_email)%]User %1 has changed his owner/editor email address to %2. This changed has been performed to the following lists :[%END%]
-[% FOREACH updated_list = updated_lists -%]
+[%|loc(previous_email,new_email)%]Member %1 has changed his owner/editor email address to %2. This change has been performed for the following lists :[%END%]
+[% FOREACH updated_list IN updated_lists -%]
 [% updated_list %]
 [% END %]
+
+
+[% ELSIF type == 'failed_to_change_included_admin' -%]
+Subject: [% FILTER qencode %][%|loc(list.name)%]List %1 : Failed to change admin email address[%END%][%END%]
+
+[%|loc(current_email,new_email,datasource)%]Admin %1 could not change his admin email address (new email address is %2) because he is included via a the following data sources: %3.
+
+If you are able to do so, you should probably update these data sources with this person's new email address.[%END%]
 
 
 [% ELSIF type == 'error_copy_file' -%]
@@ -250,7 +265,7 @@ removed from list %2:[%END%]
 selected by Sympa as severe bouncing addresses:[%END%]
 [%END%]
 
-[% FOREACH user = user_list -%]
+[% FOREACH user IN user_list -%]
 [% user %]
 [% END %]
 

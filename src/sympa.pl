@@ -47,9 +47,9 @@ use Family;
 use report;
 use File::Copy;
 
+
 require 'tools.pl';
 require 'tt2.pl';
-require 'parser.pl';
 
 # durty global variables
 my $is_signed = {}; 
@@ -77,6 +77,7 @@ Options:
    -d, --debug                           : sets Sympa in debug mode 
    -f, --config=FILE                     : uses an alternative configuration file
    --import=list\@dom                    : import subscribers (read from STDIN)
+   --foreground                          : the process remains attached to the TTY
    -k, --keepcopy=dir                    : keep a copy of incoming message
    -l, --lang=LANG                       : use a language catalog for Sympa
    -m, --mail                            : log calls to sendmail
@@ -107,8 +108,10 @@ Options:
    --reload_list_config --list=mylist\@mydom  : recreates all config.bin files. You should run this command if you edit 
                                                 authorization scenarios. The list parameter is optional.
    --upgrade [--from=X] [--to=Y]             : runs Sympa maintenance script to upgrade from version X to version Y
+   --upgrade_shared  --[listname=X] --[robot=Y] : rename files in shared.
    --log_level=LEVEL                     : sets Sympa log level
    --md5_digest=password                 : output a MD5 digest of a password (usefull for SOAP client trusted application)
+   --test_database_message_buffer        : test the database message buffer size
    -h, --help                            : print this help
    -v, --version                         : print version number
 
@@ -123,7 +126,7 @@ my %options;
 unless (&GetOptions(\%main::options, 'dump=s', 'debug|d', ,'log_level=s','foreground', 'service=s','config|f=s', 
 		    'lang|l=s', 'mail|m', 'keepcopy|k=s', 'help', 'version', 'import=s','make_alias_file','lowercase','md5_encode_password',
 		    'close_list=s','purge_list=s','create_list','instantiate_family=s','robot=s','add_list=s','modify_list=s','close_family=s','md5_digest=s',
-		    'input_file=s','sync_include=s','upgrade','from=s','to=s','reload_list_config','list=s','quiet','close_unknown')) {
+		    'input_file=s','sync_include=s','upgrade','upgrade_shared','from=s','to=s','reload_list_config','list=s','quiet','close_unknown','test_database_message_buffer')) {
     &fatal_err("Unknown options.");
 }
 
@@ -148,6 +151,8 @@ $main::options{'batch'} = 1 if ($main::options{'dump'} ||
 				$main::options{'md5_digest'} || 
 				$main::options{'sync_include'} ||
 				$main::options{'upgrade'} ||
+				$main::options{'upgrade_shared'} ||
+				$main::options{'test_database_message_buffer'} || 
 				$main::options{'reload_list_config'}
 				 );
 
@@ -155,9 +160,8 @@ $main::options{'batch'} = 1 if ($main::options{'dump'} ||
 $main::options{'foreground'} = 1 if ($main::options{'debug'} || $main::options{'batch'});
 
 $main::options{'log_to_stderr'} = 1 unless ($main::options{'batch'});
-$main::options{'log_to_stderr'} = 1 if ($main::options{'upgrade'} || $main::options{'reload_list_config'});
+$main::options{'log_to_stderr'} = 1 if ($main::options{'upgrade'} || $main::options{'reload_list_config'} || $main::options{'test_database_message_buffer'});
 
-my @parser_param = ($*, $/);
 my %loop_info;
 my %msgid_table;
 
@@ -169,8 +173,9 @@ local $main::daemon_usage;
 while ($signal ne 'term') { #as long as a SIGTERM is not received }
 
 my $config_file = $main::options{'config'} || '--CONFIG--';
-## Load configuration file
-unless (Conf::load($config_file)) {
+
+## Load configuration file. Ignoring database config for now: it avoids trying to load a database that could not exist yet.
+unless (Conf::load($config_file,1)) {
    &fatal_err("Configuration file $config_file has errors.");
    
 }
@@ -190,8 +195,14 @@ if ($main::options{'log_level'}) {
 ## Probe Db if defined
 if ($Conf{'db_name'} and $Conf{'db_type'}) {
     unless (&Upgrade::probe_db()) {
-	&fatal_err('Database %s defined in sympa.conf has not the right structure or is unreachable. If you don\'t use any database, comment db_xxx parameters in sympa.conf', $Conf{'db_name'});
+	&fatal_err('Database %s defined in sympa.conf has not the right structure or is unreachable. verify db_xxx parameters in sympa.conf', $Conf{'db_name'});
     }
+}
+
+## Now trying to load full config (including database)
+unless (Conf::load($config_file)) {
+   &fatal_err("Configuration file $config_file has errors.");
+   
 }
 
 ## Apply defaults to %List::pinfo
@@ -405,16 +416,16 @@ if ($main::options{'dump'}) {
     exit 0;
 }elsif ($main::options{'make_alias_file'}) {
     my $all_lists = &List::get_lists('*');
-    unless (open TMP, ">/tmp/sympa_aliases.$$") {
-	printf STDERR "Unable to create tmp/sympa_aliases.$$, exiting\n";
+    unless (open TMP, ">$Conf{'tmpdir'}/sympa_aliases.$$") {
+	printf STDERR "Unable to create $Conf{'tmpdir'}/sympa_aliases.$$, exiting\n";
 	exit;
     }
     printf TMP "#\n#\tAliases for all Sympa lists open (but not for robots)\n#\n";
     close TMP;
     foreach my $list (@$all_lists) {
-	system ("$Conf{'alias_manager'} add $list->{'name'} $list->{'domain'} /tmp/sympa_aliases.$$") if ($list->{'admin'}{'status'} eq 'open');
+	system ("$Conf{'alias_manager'} add $list->{'name'} $list->{'domain'} $Conf{'tmpdir'}/sympa_aliases.$$") if ($list->{'admin'}{'status'} eq 'open');
     }
-    printf ("Sympa aliases file is /tmp/sympa_aliases.$$ file made, you probably need to installed it in your SMTP engine\n");
+    printf ("Sympa aliases file is $Conf{'tmpdir'}/sympa_aliases.$$ file made, you probably need to installed it in your SMTP engine\n");
     
     exit 0;
 }elsif ($main::options{'version'}) {
@@ -549,8 +560,18 @@ if ($main::options{'dump'}) {
     printf STDOUT "List %s has been closed, aliases have been removed\n", $list->{'name'};
     
     exit 0;
-}elsif ($main::options{'create_list'}) {
+}elsif ($main::options{'test_database_message_buffer'}) {
+    my $size = 0;   
+    printf "Sympa is going to store messages bigger and bigger to test the limit with its database. This may be very long \n";
+    $size = &Bulk::store_test(21000); ## will test message until a 21 Mo message.
+    if ($size == 21000) {
+	printf "The maximum message size ($size Ko) testing was successful \n";
+    }else{
+	printf "maximun message size that can be stored in database : $size Ko\n";
+    }
+    exit 1;
     
+}elsif ($main::options{'create_list'}) {    
     my $robot = $main::options{'robot'} || $Conf{'host'};
     
     unless ($main::options{'input_file'}) {
@@ -717,7 +738,48 @@ if ($main::options{'dump'}) {
 
     exit 0;
 
-## Reload binary list config files
+## rename file names that may be incorrectly encoded because of previous Sympa versions
+}elsif ($main::options{'upgrade_shared'}) {
+    
+    &do_log('notice', "Upgrade shared process...");
+
+    my $listname; my $robot;
+
+    unless (($main::options{'list'}) || ($main::options{'robot'})){
+	&do_log('err', "listname and domain are required, use --list= --robot= options");
+	exit 0;
+    }
+    $listname = $main::options{'list'} ;
+    $robot = $main::options{'robot'} ;
+
+    &do_log('notice', "Upgrading share for list=%s robot=%s",$listname,$robot);
+    
+
+    my $list = new List ($listname,$robot);
+    
+    unless (defined $list) {
+	printf STDERR "Incorrect list or domain name : %s %s\n",$listname,$robot;
+	exit 1;
+    }
+
+    if (-d $list->{'dir'}.'/shared') {
+	&do_log('notice','  Processing list %s...', $list->get_list_address());
+	
+	## Determine default lang for this list
+	## It should tell us what character encoding was used for filenames
+	&Language::SetLang($list->{'admin'}{'lang'});
+	my $list_encoding = &Language::GetCharset();
+	
+	my $count = &tools::qencode_hierarchy($list->{'dir'}.'/shared', $list_encoding);
+	
+	if ($count) {
+	    &do_log('notice', 'List %s : %d filenames has been changed', $list->{'name'}, $count);
+	}
+    }
+    &do_log('notice', "Upgrade_shared process finished.");    
+
+    exit 0;
+
 }elsif ($main::options{'reload_list_config'}) {
 
     if ($main::options{'list'}) {
@@ -899,9 +961,6 @@ while (!$signal) {
 	my $list;
 	my ($t_listname, $t_robot);
 	
-	# trying to fix a bug (perl bug ??) of solaris version
-	($*, $/) = @parser_param;
-
 	## test ever if it is an old bad file
 	if ($t_filename =~ /^BAD\-/i){
  	    if ((stat "$t_spool/$t_filename")[9] < (time - &Conf::get_robot_conf($robot, 'clean_delay_queue')*86400) ){
@@ -1271,13 +1330,12 @@ sub DoFile {
 	#}
     }
     
-    ## Content-Identifier: Auto-replied is generated by some non standard 
-    ## X400 mailer
-    if ($hdr->get('Content-Identifier') =~ /Auto-replied/i) {
-	do_log('notice', "Ignoring message which would cause a loop (Content-Identifier: Auto-replied)");
-	return undef;
-    }elsif ($hdr->get('X400-Content-Identifier') =~ /Auto Reply to/i) {
-	do_log('notice', "Ignoring message which would cause a loop (X400-Content-Identifier: Auto Reply to)");
+    ## Ignore messages that would cause a loop
+    ## Content-Identifier: Auto-replied is generated by some non standard X400 mailer
+    if ($hdr->get('Content-Identifier') =~ /Auto-replied/i ||
+	$hdr->get('X400-Content-Identifier') =~ /Auto Reply to/i ||
+	($hdr->get('Auto-Submitted') && $hdr->get('Auto-Submitted') ne 'no')) {
+	do_log('notice', "Ignoring message which would cause a loop");
 	return undef;
     }
 
@@ -1302,7 +1360,8 @@ sub DoFile {
 	if ( &Conf::get_robot_conf($robot,'antivirus_notify') eq 'sender') {
 	    unless (&List::send_global_file('your_infected_msg', $sender, $robot, {'virus_name' => $rc,
 										   'recipient' => $list_address,
-										   'lang' => $Language::default_lang})) {
+										   'lang' => $Language::default_lang,
+										   'auto_submitted' => 'auto-replied'})) {
 		&do_log('notice',"Unable to send template 'your infected_msg' to $sender");
 	    }
 	}
@@ -1545,7 +1604,8 @@ sub DoForward {
 					    {'list' => $name,
 					     'date' => &POSIX::strftime("%d %b %Y  %H:%M", localtime(time)),
 					     'boundary' => $sympa_email.time,
-					     'header' => $hdr->as_string()
+					     'header' => $hdr->as_string(),
+					     'auto_submitted' => 'auto-replied'
 					     })) {
 		&do_log('notice',"Unable to send template 'list_unknown' to $sender");
 	    }
@@ -1684,7 +1744,8 @@ sub DoMessage{
 					{'list' => $which,
 					 'date' => &POSIX::strftime("%d %b %Y  %H:%M", localtime(time)),
 					 'boundary' => $sympa_email.time,
-					 'header' => $hdr->as_string()
+					 'header' => $hdr->as_string(),
+					 'auto_submitted' => 'auto-replied'
 					 })) {
 	    &do_log('notice',"Unable to send template 'list_unknown' to $sender");
 	}
@@ -1870,7 +1931,7 @@ sub DoMessage{
 
 	&do_log('info', 'Key %s for list %s from %s sent to editors, %s', $key, $listname, $sender, $message->{'filename'});
 	
-	# do not report to the sender if the message was tagued as a spam
+	# do not report to the sender if the message was tagged as a spam
 	unless (($2 eq 'quiet')||($message->{'spam_status'} eq 'spam')) {
 	    unless (&report::notice_report_msg('moderating_message',$sender,{'message' => $message},$robot,$list)) {
 		&do_log('notice',"sympa::DoMessage(): Unable to send template 'message_report', entry 'moderating_message' to $sender");
@@ -1889,7 +1950,7 @@ sub DoMessage{
 
 	&do_log('info', 'Message for %s from %s sent to editors', $listname, $sender);
 	
-	# do not report to the sender if the message was tagued as a spam
+	# do not report to the sender if the message was tagged as a spam
 	unless (($2 eq 'quiet')||($message->{'spam_status'} eq 'spam')) {
 	    unless (&report::notice_report_msg('moderating_message',$sender,{'message' => $message},$robot,$list)) {
 		&do_log('notice',"sympa::DoMessage(): Unable to send template 'message_report', type 'success', entry 'moderating_message' to $sender");
@@ -1903,7 +1964,7 @@ sub DoMessage{
 	# do not report to the sender if the message was tagued as a spam
 	unless (($2 eq 'quiet')||($message->{'spam_status'} eq 'spam')) {
 	    if (defined $result->{'tt2'}) {
-		unless ($list->send_file($result->{'tt2'}, $sender, $robot, {})) {
+		unless ($list->send_file($result->{'tt2'}, $sender, $robot, {'auto_submitted' => 'auto-replied'})) {
 		    &do_log('notice',"sympa::DoMessage(): Unable to send template '$result->{'tt2'}' to $sender");
 		}
 	    }else {
@@ -1960,7 +2021,7 @@ sub DoCommand {
     my $sender = $message->{'sender'};
 
     if ($msg->{'spam_status'} eq 'spam'){
-	&do_log('notice', "Message for robot %s@%s ignored, because tagued as spam (Message-id: %s)",$rcpt,$robot,$messageid);
+	&do_log('notice', "Message for robot %s@%s ignored, because tagged as spam (Message-id: %s)",$rcpt,$robot,$messageid);
 	return undef;
     }
 

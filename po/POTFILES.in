@@ -2,9 +2,12 @@
 src/admin.pm
 src/alias_manager.pl
 src/Archive.pm
+src/Bulk.pm
+src/bulk.pl
 src/CAS.pm
 src/Commands.pm
 src/Config_XML.pm
+src/confdef.pm
 src/Conf.pm
 src/Datasource.pm
 src/Family.pm
@@ -17,7 +20,6 @@ src/Lock.pm
 src/Log.pm
 src/mail.pm
 src/Message.pm
-src/parser.pl
 src/PlainDigest.pm
 src/report.pm
 src/Scenario.pm
@@ -107,7 +109,6 @@ web_tt2/javascript.tt2
 web_tt2/latest_arc.tt2
 web_tt2/latest_d_read.tt2
 web_tt2/latest_lists.tt2
-web_tt2/list_admin_menu.tt2
 web_tt2/list_button_footer.tt2
 web_tt2/list_button_header.tt2
 web_tt2/list_menu.tt2
@@ -122,6 +123,7 @@ web_tt2/maintenance.tt2
 web_tt2/main.tt2
 web_tt2/menu.tt2
 web_tt2/modindex.tt2
+web_tt2/nav.tt2
 web_tt2/notice.tt2
 web_tt2/picture_upload.tt2
 web_tt2/pref.tt2

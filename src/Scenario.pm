@@ -30,6 +30,8 @@ my @EXPORT = qw();
 use List;
 use Log;
 use Conf;
+use Net::Netmask;
+
 
 my %all_scenarios;
 my %persistent_cache;
@@ -38,7 +40,7 @@ my %persistent_cache;
 ## Supported parameters : function, robot, name, directory, file_path, options
 ## Output object has the following entries : name, file_path, rules, date, title, struct, data
 sub new {
-    my($pkg, @args) = @_;
+   my($pkg, @args) = @_;
     my %parameters = @args;
     &do_log('debug2', '');
  
@@ -71,7 +73,7 @@ sub new {
 	
     }else {
 	## We can't use &tools::get_filename() because we don't have a List object yet ; it's being constructed
-	my @dirs = ($Conf{'etc'}.'/'.$parameters{'robot'}, $Conf{'etc'}, '--pkgdatadir--/etc');
+	my @dirs = ($Conf::Conf{'etc'}.'/'.$parameters{'robot'}, $Conf::Conf{'etc'}, '--pkgdatadir--/etc');
 	unshift @dirs, $parameters{'directory'} if (defined $parameters{'directory'});
 	foreach my $dir (@dirs) {
 	    my $tmp_path = $dir.'/scenari/'.$parameters{'function'}.'.'.$parameters{'name'};
@@ -191,7 +193,6 @@ sub _parse_scenario {
 #	$rule->{action} = \@actions;
 	       
 	push(@scenario,$rule);
-#	do_log('debug3', "load rule 1: $rule->{'condition'} $rule->{'auth_method'} ->$rule->{'action'}");
 
 	## Duplicate the rule for each mentionned authentication method
         my $auth_list = $3 ; 
@@ -264,14 +265,14 @@ sub request_action {
     my (@rules, $name, $scenario) ;
 
     my $log_it ; # this var is defined to control if log scenario is activated or not
-    if ($Conf{'loging_for_module'}{'scenario'} == 1){
-	$log_it = 1 unless ($Conf{'loging_condition'});                                    #activate log if no condition is defined
-	$log_it = 1 if ($Conf{'loging_condition'}{'ip'} =~ /$context->{'remote_addr'}/);   #activate log if ip match
-	$log_it = 1 if ($Conf{'loging_condition'}{'email'}=~ /$context->{'email'}/i);      #activate log if email match
+    if ($Conf::Conf{'loging_for_module'}{'scenario'} == 1){
+	$log_it = 1 unless ($Conf::Conf{'loging_condition'});                                    #activate log if no condition is defined
+	$log_it = 1 if ($Conf::Conf{'loging_condition'}{'ip'} =~ /$context->{'remote_addr'}/);   #activate log if ip match
+	$log_it = 1 if ($Conf::Conf{'loging_condition'}{'email'}=~ /$context->{'email'}/i);      #activate log if email match
     }
 
     ## Include a Blacklist rules if configured for this action
-    if ($Conf{'blacklist'}{$operation}) {
+    if ($Conf::Conf{'blacklist'}{$operation}) {
 	foreach my $auth ('smtp','md5','pgp','smime'){
 	    my $blackrule = {'condition' => "search('blacklist.txt',[sender])",
 			     'action' => 'reject,quiet',
@@ -525,20 +526,20 @@ sub request_action {
 sub verify {
     my ($context, $condition) = @_;
     &do_log('debug2', '(%s)', $condition);
-
+    
     my $robot = $context->{'robot_domain'};
-
+    
 #    while (my($k,$v) = each %{$context}) {
 #	do_log('debug3',"verify: context->{$k} = $v");
 #    }
-
+    
     unless (defined($context->{'sender'} )) {
 	do_log('info',"internal error, no sender find in List::verify, report authors");
 	return undef;
     }
-
+    
     $context->{'execution_date'} = time unless ( defined ($context->{'execution_date'}) );
-
+    
     if (defined ($context->{'msg'})) {
 	my $header = $context->{'msg'}->head;
 	unless (($header->get('to') && ($header->get('to') =~ /$context->{'listname'}/i)) || 
@@ -556,15 +557,15 @@ sub verify {
 	    return undef ;
 	}
     }    
-
+    
     if (defined ($context->{'list_object'})) {
 	$list = $context->{'list_object'};
 	$context->{'listname'} = $list->{'name'};
-
+	
 	$context->{'host'} = $list->{'admin'}{'host'};
     }
-
-    unless ($condition =~ /(\!)?\s*(true|is_listmaster|is_editor|is_owner|is_subscriber|match|equal|message|older|newer|all|search|customcondition\:\:\w+)\s*\(\s*(.*)\s*\)\s*/i) {
+    
+    unless ($condition =~ /(\!)?\s*(true|is_listmaster|verify_netmask|is_editor|is_owner|is_subscriber|less_than|match|equal|message|older|newer|all|search|customcondition\:\:\w+)\s*\(\s*(.*)\s*\)\s*/i) {
 	&do_log('err', "error rule syntaxe: unknown condition $condition");
 	return undef;
     }
@@ -572,13 +573,13 @@ sub verify {
     if ($1 eq '!') {
 	$negation = -1 ;
     }
-
+    
     my $condition_key = lc($2);
     my $arguments = $3;
     my @args;
-
+    
     ## The expression for regexp is tricky because we don't allow the '/' character (that indicates the end of the regexp
-    ## but we allow any number of \/ escape sequence
+    ## but we allow any number of \/ escape sequence)
     while ($arguments =~ s/^\s*(
 				\[\w+(\-\>[\w\-]+)?\]
 				|
@@ -593,7 +594,7 @@ sub verify {
 				|(\w+)\.sql
 				)\s*,?//x) {
 	my $value=$1;
-
+	
 	## Custom vars
 	if ($value =~ /\[custom_vars\-\>([\w\-]+)\]/i) {
 	    $value =~ s/\[custom_vars\-\>([\w\-]+)\]/$context->{'custom_vars'}{$1}/;
@@ -608,9 +609,8 @@ sub verify {
 		do_log('debug',"undefine variable context $value in rule $condition");
 		# a condition related to a undefined context variable is always false
 		return -1 * $negation;
- #		return undef;
 	    }
-
+	    
 	    ## List param
 	}elsif ($value =~ /\[list\-\>([\w\-]+)\]/i) {
 	    if ($1 =~ /^name|total$/) {
@@ -621,27 +621,27 @@ sub verify {
 		do_log('err','Unknown list parameter %s in rule %s', $value, $condition);
 		return undef;
 	    }
-
+	    
 	}elsif ($value =~ /\[env\-\>([\w\-]+)\]/i) {
 	    
 	    $value =~ s/\[env\-\>([\w\-]+)\]/$ENV{$1}/;
-
+	    
 	    ## Sender's user/subscriber attributes (if subscriber)
 	}elsif ($value =~ /\[user\-\>([\w\-]+)\]/i) {
-
+	    
 	    $context->{'user'} ||= &List::get_user_db($context->{'sender'});	    
 	    $value =~ s/\[user\-\>([\w\-]+)\]/$context->{'user'}{$1}/;
-
+	    
 	}elsif ($value =~ /\[user_attributes\-\>([\w\-]+)\]/i) {
 	    
 	    $context->{'user'} ||= &List::get_user_db($context->{'sender'});
 	    $value =~ s/\[user_attributes\-\>([\w\-]+)\]/$context->{'user'}{'attributes'}{$1}/;
-
+	    
 	}elsif (($value =~ /\[subscriber\-\>([\w\-]+)\]/i) && defined ($context->{'sender'} ne 'nobody')) {
 	    
 	    $context->{'subscriber'} ||= $list->get_subscriber($context->{'sender'});
 	    $value =~ s/\[subscriber\-\>([\w\-]+)\]/$context->{'subscriber'}{$1}/;
-
+	    
 	    ## SMTP Header field
 	}elsif ($value =~ /\[(msg_header|header)\-\>([\w\-]+)\]/i) {
 	    my $field_name = $2;
@@ -665,9 +665,9 @@ sub verify {
 	    return -1 * $negation unless (defined ($context->{'msg'}));
 	    return -1 * $negation unless (defined ($context->{'msg'}->effective_type() =~ /^text/));
 	    return -1 * $negation unless (defined $context->{'msg'}->bodyhandle);
-
+	    
 	    $value = $context->{'msg'}->bodyhandle->as_string();
-
+	    
 	}elsif ($value =~ /\[msg_part\-\>body\]/i) {
 	    return -1 * $negation unless (defined ($context->{'msg'}));
 	    
@@ -678,11 +678,11 @@ sub verify {
 	    foreach my $i (0..$#parts) {
 		next unless ($parts[$i]->effective_type() =~ /^text/);
 		next unless (defined $parts[$i]->bodyhandle);
-
+		
 		push @bodies, $parts[$i]->bodyhandle->as_string();
 	    }
 	    $value = \@bodies;
-
+	    
 	}elsif ($value =~ /\[msg_part\-\>type\]/i) {
 	    return -1 * $negation unless (defined ($context->{'msg'}));
 	    
@@ -725,7 +725,7 @@ sub verify {
 	    return undef ;
 	}
 	# condition that require 1 argument
-    }elsif ($condition_key eq 'is_listmaster') {
+    }elsif ($condition_key =~ /^is_listmaster|verify_netmask$/) {
 	unless ($#args == 0) { 
 	     do_log('err',"error rule syntaxe : incorrect argument number for condition $condition_key") ; 
 	    return undef ;
@@ -737,7 +737,7 @@ sub verify {
 	    return undef ;
 	}
 	# condition that require 2 args
-    }elsif ($condition_key =~ /^is_owner|is_editor|is_subscriber|match|equal|message|newer|older$/o) {
+    }elsif ($condition_key =~ /^is_owner|is_editor|is_subscriber|less_than|match|equal|message|newer|older$/o) {
 	unless ($#args == 1) {
 	    do_log('err',"error rule syntaxe : incorrect argument number (%d instead of %d) for condition $condition_key", $#args+1, 2) ; 
 	    return undef ;
@@ -766,6 +766,26 @@ sub verify {
 	}
     }
 
+    ##### condition verify_netmask
+    if ($condition_key eq 'verify_netmask') {       	
+
+	## Check that the IP address of the client is available
+	## Means we are in a web context
+	unless (defined $ENV{'REMOTE_ADDR'}) {
+	    return -1; ## always skip this rule because we can't evaluate it
+	}
+	my $block;
+	unless ($block = new2 Net::Netmask ($args[0])) { 
+	    do_log('err', "error rule syntaxe : failed to parse netmask '$args[0]'");
+	    return undef;
+	}
+	if ($block->match ($ENV{'REMOTE_ADDR'})) {
+	    return $negation;
+	}else{
+	    return -1 * $negation;
+	}
+    }
+
     ##### condition older
     if ($condition_key =~ /^older|newer$/) {
 	 
@@ -773,7 +793,7 @@ sub verify {
  	my $arg0 = &tools::epoch_conv($args[0]);
  	my $arg1 = &tools::epoch_conv($args[1]);
  
-	&do_log('debug4', '%s(%d, %d)', $condition_key, $arg0, $arg1);
+	&do_log('debug3', '%s(%d, %d)', $condition_key, $arg0, $arg1);
  	if ($arg0 <= $arg1 ) {
  	    return $negation;
  	}else{
@@ -894,6 +914,23 @@ sub verify {
     	my $res = &verify_custom($condition, \@args, $robot, $list);
 	return undef unless defined $res;
 	return $res * $negation ;
+    }
+    
+    ## less_than
+    if ($condition_key eq 'less_than') {
+	if (ref($args[0])) {
+	    foreach my $arg (@{$args[0]}) {
+		&do_log('debug3', 'ARG: %s', $arg);
+		return $negation 
+		    if (&tools::smart_lessthan($arg, $args[1]));
+	    }
+	}else {
+	    if (&tools::smart_lessthan($args[0], $args[1])) {
+		return $negation ;
+	    }
+	}
+	
+	return -1 * $negation ;
     }
     return undef;
 }

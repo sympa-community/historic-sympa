@@ -207,7 +207,7 @@ sub create_list_old{
     unless (defined $res) {
 	&do_log('err', "admin::create_list_old : can't check list %.128s on %.128s",
 		$param->{'listname'},
-		$Conf{'list_check_smtp'});
+		$Conf::Conf{'list_check_smtp'});
 	return undef;
     }
     
@@ -233,16 +233,16 @@ sub create_list_old{
      my $list_dir;
 
      # a virtual robot
-     if (-d "$Conf{'home'}/$robot") {
-	 unless (-d $Conf{'home'}.'/'.$robot) {
-	     unless (mkdir ($Conf{'home'}.'/'.$robot,0777)) {
-		 &do_log('err', 'admin::create_list_old : unable to create %s/%s : %s',$Conf{'home'},$robot,$?);
+     if (-d "$Conf::Conf{'home'}/$robot") {
+	 unless (-d $Conf::Conf{'home'}.'/'.$robot) {
+	     unless (mkdir ($Conf::Conf{'home'}.'/'.$robot,0777)) {
+		 &do_log('err', 'admin::create_list_old : unable to create %s/%s : %s',$Conf::Conf{'home'},$robot,$?);
 		 return undef;
 	     }    
 	 }
-	 $list_dir = $Conf{'home'}.'/'.$robot.'/'.$param->{'listname'};
+	 $list_dir = $Conf::Conf{'home'}.'/'.$robot.'/'.$param->{'listname'};
      }else {
-	 $list_dir = $Conf{'home'}.'/'.$param->{'listname'};
+	 $list_dir = $Conf::Conf{'home'}.'/'.$param->{'listname'};
      }
 
     ## Check the privileges on the list directory
@@ -287,7 +287,7 @@ sub create_list_old{
     my $config = '';
     my $fd = new IO::Scalar \$config;    
     &tt2::parse_tt2($param, 'config.tt2', $fd, $tt2_include_path);
-#    Encode::from_to($config, 'utf8', $Conf{'filesystem_encoding'});
+#    Encode::from_to($config, 'utf8', $Conf::Conf{'filesystem_encoding'});
     print CONFIG $config;
 
     close CONFIG;
@@ -311,7 +311,7 @@ sub create_list_old{
 	}
     }
     if (defined $param->{'description'}) {
-	Encode::from_to($param->{'description'}, 'utf8', $Conf{'filesystem_encoding'});
+	Encode::from_to($param->{'description'}, 'utf8', $Conf::Conf{'filesystem_encoding'});
 	print INFO $param->{'description'};
     }
     close INFO;
@@ -417,7 +417,7 @@ sub create_list{
     unless (defined $res) {
 	&do_log('err', "admin::create_list : can't check list %.128s on %.128s",
 		$param->{'listname'},
-		$Conf{'list_check_smtp'});
+		$Conf::Conf{'list_check_smtp'});
 	return undef;
     }
 
@@ -447,16 +447,16 @@ sub create_list{
      ## Create the list directory
      my $list_dir;
 
-    if (-d "$Conf{'home'}/$robot") {
-	unless (-d $Conf{'home'}.'/'.$robot) {
-	    unless (mkdir ($Conf{'home'}.'/'.$robot,0777)) {
-		&do_log('err', 'admin::create_list : unable to create %s/%s : %s',$Conf{'home'},$robot,$?);
+    if (-d "$Conf::Conf{'home'}/$robot") {
+	unless (-d $Conf::Conf{'home'}.'/'.$robot) {
+	    unless (mkdir ($Conf::Conf{'home'}.'/'.$robot,0777)) {
+		&do_log('err', 'admin::create_list : unable to create %s/%s : %s',$Conf::Conf{'home'},$robot,$?);
 		return undef;
 	    }    
 	}
-	$list_dir = $Conf{'home'}.'/'.$robot.'/'.$param->{'listname'};
+	$list_dir = $Conf::Conf{'home'}.'/'.$robot.'/'.$param->{'listname'};
     }else {
-	$list_dir = $Conf{'home'}.'/'.$param->{'listname'};
+	$list_dir = $Conf::Conf{'home'}.'/'.$param->{'listname'};
     }
 
      unless (-r $list_dir || mkdir ($list_dir,0777)) {
@@ -672,50 +672,64 @@ sub clone_list_as_empty {
 
     my $list;
     unless ($list = new List ($source_list_name, $source_robot)) {
-	&dolog('err','Admin::clone_list_as_empty : new list failed %s %s',$source_list_name, $source_robot);
+	&do_log('err','Admin::clone_list_as_empty : new list failed %s %s',$source_list_name, $source_robot);
 	return undef;;
     }    
     
     &do_log('info',"Admin::clone_list_as_empty ($source_list_name, $source_robot,$new_listname,$new_robot,$email)");
     
     my $new_dir;
-    if (-d $Conf{'home'}.'/'.$new_robot) {
-	$new_dir = $Conf{'home'}.'/'.$new_robot.'/'.$new_listname;
-    }elsif ($new_robot eq $Conf{'host'}) {
-	$new_dir = $Conf{'home'}.'/'.$new_listname;
+    if (-d $Conf::Conf{'home'}.'/'.$new_robot) {
+	$new_dir = $Conf::Conf{'home'}.'/'.$new_robot.'/'.$new_listname;
+    }elsif ($new_robot eq $Conf::Conf{'host'}) {
+	$new_dir = $Conf::Conf{'home'}.'/'.$new_listname;
     }else {
-	&dolog('err',"Admin::clone_list_as_empty : unknown robot $new_robot");
+	&do_log('err',"Admin::clone_list_as_empty : unknown robot $new_robot");
 	return undef;
     }
     
     unless (mkdir $new_dir, 0775) {
-	&dolog('err','Admin::clone_list_as_empty : failed to create directory %s : %s',$new_dir, $!);
+	&do_log('err','Admin::clone_list_as_empty : failed to create directory %s : %s',$new_dir, $!);
 	return undef;;
     }
     chmod 0775, $new_dir;
     foreach my $subdir ('etc','web_tt2','mail_tt2','data_sources' ) {
 	if (-d $new_dir.'/'.$subdir) {
 	    unless (&tools::copy_dir($list->{'dir'}.'/'.$subdir, $new_dir.'/'.$subdir)) {
-		&dolog('err','Admin::clone_list_as_empty :  failed to copy_directory %s : %s',$new_dir.'/'.$subdir, $!);
+		&do_log('err','Admin::clone_list_as_empty :  failed to copy_directory %s : %s',$new_dir.'/'.$subdir, $!);
 		return undef;
 	    }
 	}
     }
-    unless (&File::Copy::copy ($list->{'dir'}.'/config', $new_dir.'/config')) {
-	&dolog('err','Admin::clone_list_as_empty : failed to copy %s : %s',$new_dir.'/config', $!);
-	return undef;
+    # copy mandatory files
+    foreach my $file ('config') {
+	    unless (&File::Copy::copy ($list->{'dir'}.'/'.$file, $new_dir.'/'.$file)) {
+		&do_log('err','Admin::clone_list_as_empty : failed to copy %s : %s',$new_dir.'/'.$file, $!);
+		return undef;
+	    }
     }
+    # copy optional files
+    foreach my $file ('message.footer','message.header','info') {
+	if (-f $list->{'dir'}.'/'.$file) {
+	    unless (&File::Copy::copy ($list->{'dir'}.'/'.$file, $new_dir.'/'.$file)) {
+		&do_log('err','Admin::clone_list_as_empty : failed to copy %s : %s',$new_dir.'/'.$file, $!);
+		return undef;
+	    }
+	}
+    }
+
+    my $new_list;
     # now switch List object to new list, update some values
-    unless (my $list = new List ($new_listname, $new_robot,{'reload_config' => 1})) {
-	&dolog('info',"Admin::clone_list_as_empty : unable to load $new_listname while renamming");
+    unless ($new_list = new List ($new_listname, $new_robot,{'reload_config' => 1})) {
+	&do_log('info',"Admin::clone_list_as_empty : unable to load $new_listname while renamming");
 	return undef;
     }
-    $list->{'admin'}{'serial'} = 0 ;
-    $list->{'admin'}{'creation_email'} = $email if ($email);
-    $list->{'admin'}{'creation'}{'date_epoch'} = time;
-    $list->{'admin'}{'creation'}{'date'} = gettext_strftime "%d %b %y  %H:%M", localtime($list->{'admin'}{'creation'}{'date_epoch'});
-    $list->save_config($email);
-    return $list;
+    $new_list->{'admin'}{'serial'} = 0 ;
+    $new_list->{'admin'}{'creation'}{'email'} = $email if ($email);
+    $new_list->{'admin'}{'creation'}{'date_epoch'} = time;
+    $new_list->{'admin'}{'creation'}{'date'} = gettext_strftime "%d %b %y at %H:%M:%S", localtime(time);
+    $new_list->save_config($email);
+    return $new_list;
 }
 
 
@@ -832,8 +846,8 @@ sub check_owner_defined {
      my $smtp;
      my (@suf, @addresses);
 
-     my $smtp_relay = $Conf{'robots'}{$robot}{'list_check_smtp'} || $Conf{'list_check_smtp'};
-     my $suffixes = $Conf{'robots'}{$robot}{'list_check_suffixes'} || $Conf{'list_check_suffixes'};
+     my $smtp_relay = $Conf::Conf{'robots'}{$robot}{'list_check_smtp'} || $Conf::Conf{'list_check_smtp'};
+     my $suffixes = $Conf::Conf{'robots'}{$robot}{'list_check_suffixes'} || $Conf::Conf{'list_check_suffixes'};
      return 0 
 	 unless ($smtp_relay && $suffixes);
      my $domain = &Conf::get_robot_conf($robot, 'host');
@@ -871,9 +885,8 @@ sub check_owner_defined {
 #
 # IN  : - $list : object list
 #       - $robot : the list's robot
-# OUT : - undef if not applicable
+# OUT : - undef if not applicable or aliases not installed
 #         1 (if ok) or
-#         $resul : concated string of alias not installed 
 ##########################################################
 sub install_aliases {
     my $list = shift;
@@ -881,10 +894,10 @@ sub install_aliases {
     &do_log('debug', "admin::install_aliases($list->{'name'},$robot)");
 
     return 1
-	if ($Conf{'sendmail_aliases'} =~ /^none$/i);
+	if ($Conf::Conf{'sendmail_aliases'} =~ /^none$/i);
 
     my $alias_installed = 0;
-    my $alias_manager = $Conf{'alias_manager' };
+    my $alias_manager = $Conf::Conf{'alias_manager' };
     &do_log('debug2',"admin::install_aliases : $alias_manager add $list->{'name'} $list->{'admin'}{'host'}");
      if (-x $alias_manager) {
 	 system ("$alias_manager add $list->{'name'} $list->{'admin'}{'host'}") ;
@@ -921,21 +934,7 @@ sub install_aliases {
 	 &do_log('err','admin::install_aliases : Failed to install aliases: %s', $!);
      }
     
-    unless ($alias_installed) {
-	my $aliases ;
-	my %data;
-	$data{'list'}{'domain'} = $data{'robot'} = $robot;
-	$data{'list'}{'name'} = $list->{'name'};
-	$data{'default_domain'} = $Conf{'domain'};
-	$data{'is_default_domain'} = 1 if ($robot == $Conf{'domain'});
-	$data{'return_path_suffix'} = &Conf::get_robot_conf($robot, 'return_path_suffix');
-
-	my $tt2_include_path = &tools::make_tt2_include_path($robot,'','','');
-
-	&tt2::parse_tt2 (\%data,'list_aliases.tt2',\$aliases, $tt2_include_path);
-	
-	return $aliases;
-    }
+    return undef unless ($alias_installed);
 
     return 1;
 }
@@ -959,7 +958,7 @@ sub install_aliases {
      &do_log('info', "_remove_aliases($list->{'name'},$robot");
 
     return 1
-	if ($Conf{'sendmail_aliases'} =~ /^none$/i);
+	if ($Conf::Conf{'sendmail_aliases'} =~ /^none$/i);
 
      my $status = $list->remove_aliases();
      my $suffix = &Conf::get_robot_conf($robot, 'return_path_suffix');

@@ -23,7 +23,7 @@ SUBDIRS = etc
 
 AM_CPPFLAGS = -DCONFIG=\"$(CONFIG)\"
 
-sbin_SCRIPTS = sympa.pl alias_manager.pl task_manager.pl sympa_wizard.pl
+sbin_SCRIPTS = sympa.pl bulk.pl alias_manager.pl task_manager.pl sympa_wizard.pl
 sbin_PROGRAMS = aliaswrapper virtualwrapper
 aliaswrapper_SOURCES = aliaswrapper.c
 aliaswrapper_CPPFLAGS = $(AM_CPPFLAGS) \
@@ -40,11 +40,11 @@ bouncequeue_SOURCES = bouncequeue.c
 familyqueue_SOURCES = familyqueue.c
 
 
-modules_DATA = admin.pm Archive.pm Commands.pm Conf.pm CAS.pm Config_XML.pm \
+modules_DATA = admin.pm Archive.pm Bulk.pm Commands.pm confdef.pm Conf.pm CAS.pm Config_XML.pm \
 	       Family.pm Language.pm List.pm Log.pm mail.pm Ldap.pm Upgrade.pm \
 	       Lock.pm Version.pm Fetch.pm Message.pm Task.pm Datasource.pm \
 	       SQLSource.pm LDAPSource.pm Scenario.pm PlainDigest.pm \
-	       tools.pl tt2.pl parser.pl report.pm time_utils.pl
+	       tools.pl tt2.pl report.pm time_utils.pl
 
 EXTRA_DIST = $(modules_DATA) $(sbin_SCRIPTS)
 
@@ -87,5 +87,5 @@ install-data-hook:
 		-e 's|--sysconfdir--|$(sysconfdir)|' \
 		-e 's|--expldir--|$(expldir)|' \
 		-e 's|--spooldir--|$(spooldir)|' \
-		$(addprefix $(DESTDIR)$(datadir)/sympa/lib/, $(modules_DATA)) \
+		$(addprefix $(DESTDIR)$(modulesdir)/, $(modules_DATA)) \
 		$(addprefix $(DESTDIR)$(sbindir)/, $(sbin_SCRIPTS))

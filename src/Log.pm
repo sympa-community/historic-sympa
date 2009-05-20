@@ -265,7 +265,7 @@ sub db_log {
     $dbh->quote($robot), 
     $dbh->quote($list), 
     $dbh->quote($action), 
-    $dbh->quote($parameters),
+    $dbh->quote(substr($parameters,0,100)),
     $dbh->quote($target_email),
     $dbh->quote($msg_id),
     $dbh->quote($status),
@@ -283,7 +283,7 @@ sub db_log {
 
 # delete logs in RDBMS
 sub db_log_del {
-    my $exp = &Conf::get_robot_conf($Conf::Conf{'host'},'logs_expiration_period');
+    my $exp = &Conf::get_robot_conf('*','logs_expiration_period');
     my $date = time - ($exp * 30 * 24 * 60 * 60);
 
     my $dbh = &List::db_get_handler();
@@ -321,7 +321,7 @@ sub get_first_db_log {
 				     'DoCommand','SendDigest'],
 		       'authentication' => ['login','logout','loginrequest','sendpasswd',
 					    'ssologin','ssologin_succeses','remindpasswd',
-					    'change_identity','choosepasswd'],
+					    'choosepasswd'],
 		       'subscription' => ['subscribe','signoff','add','del','ignoresub',
 					  'subindex'],
 		       'list_management' => ['create_list','rename_list','close_list',
@@ -329,7 +329,7 @@ sub get_first_db_log {
 					     'purge_list','edit_template','copy_template',
 					     'remove_template'],
 		       'bounced' => ['resetbounce','get_bounce'],
-		       'preferences' => ['set','setpref','pref','change_email','setpasswd','record_email','editsubscriber'],
+		       'preferences' => ['set','setpref','pref','change_email','setpasswd','editsubscriber'],
 		       'shared' => ['d_unzip','d_upload','d_read','d_delete','d_savefile',
 				    'd_overwrite','d_create_dir','d_set_owner','d_change_access',
 				    'd_describe','d_rename','d_editfile','d_admin',
@@ -345,7 +345,7 @@ sub get_first_db_log {
 	$dbh = &List::db_get_handler();
     }
 
-    my $statement = sprintf "SELECT date_logs AS date, robot_logs AS robot, list_logs AS list, action_logs AS action, parameters_logs AS parameters, target_email_logs AS target_email,msg_id_logs AS msg_id, status_logs AS status, error_type_logs AS error_type, user_email_logs AS user_email, client_logs AS client, daemon_logs AS daemon FROM logs_table WHERE robot_logs=%s ", $dbh->quote($select->{'robot'});	
+    my $statement = sprintf "SELECT date_logs, robot_logs AS robot, list_logs AS list, action_logs AS action, parameters_logs AS parameters, target_email_logs AS target_email,msg_id_logs AS msg_id, status_logs AS status, error_type_logs AS error_type, user_email_logs AS user_email, client_logs AS client, daemon_logs AS daemon FROM logs_table WHERE robot_logs=%s ", $dbh->quote($select->{'robot'});	
 
     #if a type of target and a target are specified
     if (($select->{'target_type'}) && ($select->{'target_type'} ne 'none')) {
@@ -428,7 +428,12 @@ sub get_first_db_log {
     if ($rows_nb == 0) {
 	return {};
     }
-    return ($sth->fetchrow_hashref);
+
+    my $log = $sth->fetchrow_hashref('NAME_lc');
+    ## We can't use the "AS date" directive in the SELECT statement because "date" is a reserved keywork with Oracle
+    $log->{date} = $log->{date_logs} if defined($log->{date_logs});
+    return $log;
+
     
 }
 sub return_rows_nb {
@@ -436,12 +441,16 @@ sub return_rows_nb {
 }
 sub get_next_db_log {
 
-    my $log = $sth->fetchrow_hashref;
+    my $log = $sth->fetchrow_hashref('NAME_lc');
     
     unless (defined $log) {
 	$sth->finish;
 	$sth = pop @sth_stack;
     }
+
+    ## We can't use the "AS date" directive in the SELECT statement because "date" is a reserved keywork with Oracle
+    $log->{date} = $log->{date_logs} if defined($log->{date_logs});
+
     return $log;
 }
 

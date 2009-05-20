@@ -34,9 +34,9 @@ EXTRA_DIST = $(default_DATA) $(nobase_modules_DATA) \
 	     $(sbin_SCRIPTS) $(execcgi_SCRIPTS)
 
 install-exec-hook:
-	chmod 6755 $(DESTDIR)$(execcgidir)/wwsympa-wrapper.fcgi
 	-chown $(USER) $(DESTDIR)$(execcgidir)/wwsympa-wrapper.fcgi
 	-chgrp $(GROUP) $(DESTDIR)$(execcgidir)/wwsympa-wrapper.fcgi
+	chmod 6755 $(DESTDIR)$(execcgidir)/wwsympa-wrapper.fcgi
 
 install-data-hook:
 	sed -i \
@@ -48,7 +48,7 @@ install-data-hook:
 		-e 's|--piddir--|$(piddir)|' \
 		-e 's|--pkgdatadir--|$(pkgdatadir)|' \
 		-e 's|--execcgidir--|$(execcgidir)|' \
-		$(addprefix $(DESTDIR)$(datadir)/sympa/lib/, $(nobase_modules_DATA)) \
+		$(addprefix $(DESTDIR)$(modulesdir)/, $(nobase_modules_DATA)) \
 		$(addprefix $(DESTDIR)$(sbindir)/, $(sbin_SCRIPTS)) \
 		$(addprefix $(DESTDIR)$(execcgidir)/, $(execcgi_SCRIPTS))
 

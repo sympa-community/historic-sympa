@@ -8,15 +8,14 @@ Reply-To: [% conf.email %]@[% conf.host %]
 Content-Type: multipart/mixed; boundary="[% boundary %]"
 
 --[% boundary %]
+Content-Disposition: inline
 [% END -%]
-Content-Type: text/plain; charset="UTF-8";
-Content-Transfer-Encoding: 8bit
 
 [%|loc(list.name,msg_from)%]One new message from list %1 from %2 arrived. [%END%]
-[%- IF spam_status == 'spam' -%][%|loc%]This message as been tagued as a spam[%END%][% END %]
+[%- IF spam_status == 'spam' -%][%|loc%]This message has been tagged as spam[%END%][% END %]
 
 [%|loc(mod_spool_size)%]They are %1 messages awaiting moderation.[%END%] 
-[%|loc(conf.wwsympa_url,one_time_ticket) %]You can browse and accept or refuse them by web : %1/ticket/%2[%END%] 
+[%|loc(conf.wwsympa_url,one_time_ticket) %]To browse the awaiting messages, you should click on the following link : %1/ticket/%2[%END%] 
 
 [% IF method == 'md5' -%]
 [% IF request_topic -%][%|loc(list.name,conf.wwsympa_url,modkey)%]To tag the message in list %1 for the appropriate topic, please use the following link :
@@ -38,6 +37,7 @@ DISTRIBUTE [% list.name %] [% modkey %]
 [%|loc(conf.email,conf.host)%]Or send a message to %1@%2 with the following subject :[%END%]
 REJECT [% list.name %] [% modkey %]
 
+[%|loc(conf.wwsympa_url)%]The messages moderating documentation: %1/help/admin#moderate[%END%]
 
 --[% boundary %]
 Content-Type: message/rfc822

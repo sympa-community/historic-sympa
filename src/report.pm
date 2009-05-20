@@ -79,6 +79,7 @@ sub reject_report_msg {
     chomp($user);
     $param->{'to'} = $user;
     $param->{'msg'} = $msg_string;
+    $param->{'auto_submitted'} = 'auto-replied';
 
     if ($type eq 'user') {
 	$param->{'entry'} = $error;
@@ -190,7 +191,7 @@ sub notice_report_msg {
     $param->{'to'} = $user;
     $param->{'type'} = 'success';   
     $param->{'entry'} = $entry;
-    
+    $param->{'auto_submitted'} = 'auto-replied';
 
     unless ($user){
 	&do_log('err',"report::notice_report_msg(): unable to send template message_report.tt2 : no user to notify");
@@ -747,7 +748,6 @@ sub reject_report_web {
     if (ref($list) eq 'List'){
 	$listname = $list->{'name'};
     }
-
 
     ## Notify listmaster for internal or system errors
     if ($type eq 'intern'|| $type eq 'system') {

@@ -21,6 +21,7 @@
 package List;
 
 use strict;
+use POSIX;
 use Datasource;
 use SQLSource qw(create_db %date_format);
 use Upgrade;
@@ -240,6 +241,7 @@ use Message;
 use Family;
 use PlainDigest;
 
+
 ## Database and SQL statement handlers
 my ($dbh, $sth, $db_connected, @sth_stack, $use_db);
 
@@ -261,7 +263,7 @@ my %default = ('occurrence' => '0-1',
 	       );
 
 my @param_order = qw (subject visibility info subscribe add unsubscribe del owner owner_include
-		      send editor editor_include account topics 
+		      send editor editor_include delivery_time account topics 
 		      host lang web_archive archive digest digest_max_size available_user_options 
 		      default_user_options msg_topic msg_topic_keywords_apply_on msg_topic_tagging reply_to_header reply_to forced_reply_to * 
 		      verp_rate welcome_return_path remind_return_path user_data_source include_file include_remote_file 
@@ -294,7 +296,8 @@ my %alias = ('reply-to' => 'reply_to',
 ## scenario :    tells that the parameter is a scenario, providing its name
 ## default :     Default value for the param ; may be a configuration parameter (conf)
 ## synonym :     Defines synonyms for parameter values (for compatibility reasons)
-## unit :        Unit of the parameter ; this is used in web forms
+## gettext_unit :Unit of the parameter ; this is used in web forms and refers to translated
+##               strings in PO catalogs
 ## occurrence :  Occurerence of the parameter in the config file
 ##               possible values: 0-1 | 1 | 0-n | 1-n
 ##               example : a list may have multiple owner 
@@ -355,14 +358,14 @@ my %alias = ('reply-to' => 'reply_to',
 
 	    'bounce' => {'format' => {'warn_rate' => {'format' => '\d+',
 						      'length' => 3,
-						      'unit' => '%',
+						      'gettext_unit' => '%',
 						      'default' => {'conf' => 'bounce_warn_rate'},
 						      'gettext_id' => "warn rate",
 						      'order' => 1
 						  },
 				      'halt_rate' => {'format' => '\d+',
 						      'length' => 3,
-						      'unit' => '%',
+						      'gettext_unit' => '%',
 						      'default' => {'conf' => 'bounce_halt_rate'},
 						      'gettext_id' => "halt rate",
 						      'order' => 2
@@ -373,7 +376,7 @@ my %alias = ('reply-to' => 'reply_to',
 		     },
 	    'bouncers_level1' => {'format' => {'rate' => {'format' => '\d+',
 								 'length' => 2,
-								 'unit' => 'Points',
+								 'gettext_unit' => 'points',
 								 'default' => {'conf' => 'default_bounce_level1_rate'},
 								 'gettext_id' => "threshold",
 								 'order' => 1
@@ -394,7 +397,7 @@ my %alias = ('reply-to' => 'reply_to',
 				  },
 	     'bouncers_level2' => {'format' => {'rate' => {'format' => '\d+',
 								 'length' => 2,
-								 'unit' => 'Points',
+								 'gettext_unit' => 'points',
 								 'default' => {'conf' => 'default_bounce_level2_rate'},
 								 'gettext_id' => "threshold",
 								 'order' => 1
@@ -415,7 +418,7 @@ my %alias = ('reply-to' => 'reply_to',
 				  },
 	    'clean_delay_queuemod' => {'format' => '\d+',
 				       'length' => 3,
-				       'unit' => 'days',
+				       'gettext_unit' => 'days',
 				       'default' => {'conf' => 'clean_delay_queuemod'},
 				       'gettext_id' => "Expiration of unmoderated messages",
 				       'group' => 'other'
@@ -520,7 +523,7 @@ my %alias = ('reply-to' => 'reply_to',
 			      'group' => 'other'
 			      },			      
 
-        'default_user_options' => {'format' => {'reception' => {'format' => ['digest','digestplain','mail','nomail','summary','notice','txt','html','urlize','not_me'],
+            'default_user_options' => {'format' => {'reception' => {'format' => ['digest','digestplain','mail','nomail','summary','notice','txt','html','urlize','not_me'],
 								    'default' => 'mail',
 								    'gettext_id' => "reception mode",
 								    'order' => 1
@@ -537,6 +540,12 @@ my %alias = ('reply-to' => 'reply_to',
 	    'del' => {'scenario' => 'del',
 		      'gettext_id' => "Who can delete subscribers",
 		      'group' => 'command'
+		      },
+	    'delivery_time' => {'format' => '[0-2]?\d\:[0-6]\d',
+				'length' => 5,
+				'gettext_id' => "Delivery time (hh:mm)",
+				'occurrence' => '0-1',
+				'group' => 'sending'
 		      },
 	    'digest' => {'file_format' => '\d+(\s*,\s*\d+)*\s+\d+:\d+',
 			 'format' => {'days' => {'format' => [0..6],
@@ -564,7 +573,7 @@ my %alias = ('reply-to' => 'reply_to',
 
 	    'digest_max_size' => {'format' => '\d+',
 				  'length' => 2,
-				  'unit' => 'messages',
+				  'gettext_unit' => 'messages',
 				  'default' => 25,
 				  'gettext_id' => "Digest maximum number of messages",
 				  'group' => 'sending'
@@ -572,7 +581,7 @@ my %alias = ('reply-to' => 'reply_to',
 
 	    'distribution_ttl' => {'format' => '\d+',
 		      'length' => 6,
-		      'unit' => 'seconds',
+		      'gettext_unit' => 'seconds',
 		      'gettext_id' => "Inclusions timeout for message distribution",
 		      'group' => 'data_source'
 		      },
@@ -742,7 +751,7 @@ my %alias = ('reply-to' => 'reply_to',
 							      },
 						  'timeout' => {'format' => '\w+',
 								'default' => 30,
-								'unit' => 'seconds',
+								'gettext_unit' => 'seconds',
 								'gettext_id' => "connection timeout",
 								'order' => 6
 								},
@@ -822,7 +831,7 @@ my %alias = ('reply-to' => 'reply_to',
 							      },
 						  'timeout1' => {'format' => '\w+',
 								'default' => 30,
-								'unit' => 'seconds',
+								'gettext_unit' => 'seconds',
 								'gettext_id' => "first-level connection timeout",
 								'order' => 6
 								},
@@ -860,7 +869,7 @@ my %alias = ('reply-to' => 'reply_to',
 							      },
 						  'timeout2' => {'format' => '\w+',
 								'default' => 30,
-								'unit' => 'seconds',
+								'gettext_unit' => 'seconds',
 								'gettext_id' => "second-level connection timeout",
 								'order' => 13
 								},
@@ -993,6 +1002,12 @@ my %alias = ('reply-to' => 'reply_to',
 				    'gettext_id' => "SQL query inclusion",
 				    'group' => 'data_source'
 				    },
+	    'inclusion_notification_feature' => {'format' => ['on','off'],
+						 'occurence' => '0-1',
+						 'default' => 'off',
+						 'gettext_id' => "Notify subscribers when they are included from a data source?",
+						 'group' => 'data_source',
+					     },
 	    'info' => {'scenario' => 'info',
 		       'gettext_id' => "Who can view list information",
 		       'group' => 'command'
@@ -1034,12 +1049,12 @@ my %alias = ('reply-to' => 'reply_to',
 					},
 	    'max_size' => {'format' => '\d+',
 			   'length' => 8,
-			   'unit' => 'bytes',
+			   'gettext_unit' => 'bytes',
 			   'default' => {'conf' => 'max_size'},
 			   'gettext_id' => "Maximum message size",
 			   'group' => 'sending'
 		       },
-	    'msg_topic' => {'format' => {'name' => {'format' => '\w+',
+	    'msg_topic' => {'format' => {'name' => {'format' => '[\-\w]+',
 						    'length' => 15,
 						    'occurrence' => '1',
 						    'gettext_id' => "Message topic name",
@@ -1107,7 +1122,7 @@ my %alias = ('reply-to' => 'reply_to',
 						   'order' => 4
 						   }
 				 },
-			'occurrence' => '0-n',
+			'occurrence' => '1-n',
 			'gettext_id' => "Owner",
 			'group' => 'description'
 			},
@@ -1235,7 +1250,7 @@ my %alias = ('reply-to' => 'reply_to',
 					  'quota' => {'format' => '\d+',
 						      'default' => {'conf' => 'default_shared_quota'},
 						      'length' => 8,
-						      'unit' => 'Kbytes',
+						      'gettext_unit' => 'Kbytes',
 						      'gettext_id' => "quota",
 						      'order' => 3
 						      }
@@ -1270,7 +1285,7 @@ my %alias = ('reply-to' => 'reply_to',
 			    'gettext_id' => "Who can subscribe to the list",
 			    'group' => 'command'
 			    },
-	    'topics' => {'format' => '\w+(\/\w+)?',
+	    'topics' => {'format' => '[\-\w]+(\/[\-\w]+)?',
 			 'split_char' => ',',
 			 'occurrence' => '0-n',
 			 'gettext_id' => "Topics for the list",
@@ -1278,7 +1293,7 @@ my %alias = ('reply-to' => 'reply_to',
 			 },
 	    'ttl' => {'format' => '\d+',
 		      'length' => 6,
-		      'unit' => 'seconds',
+		      'gettext_unit' => 'seconds',
 		      'default' => 3600,
 		      'gettext_id' => "Inclusions timeout",
 		      'group' => 'data_source'
@@ -1334,7 +1349,7 @@ my %alias = ('reply-to' => 'reply_to',
 					    'quota' => {'format' => '\d+',
 							'default' => {'conf' => 'default_archive_quota'},
 							'length' => 8,
-							'unit' => 'Kbytes',
+							'gettext_unit' => 'Kbytes',
 							'gettext_id' => "quota",
 							'order' => 2
 							},
@@ -1392,11 +1407,11 @@ sub db_connect {
 
     ## We keep trying to connect if this is the first attempt
     ## Unless in a web context, because we can't afford long response time on the web interface
-    unless ( $dbh = &SQLSource::connect(\%Conf, {'keep_trying'=>($option ne 'just_try' && ( !$db_connected && !$ENV{'HTTP_HOST'})),
+    unless ( $dbh = &SQLSource::connect(\%Conf::Conf, {'keep_trying'=>($option ne 'just_try' && ( !$db_connected && !$ENV{'HTTP_HOST'})),
 						 'warn'=>1 } )) {
     	return undef;
     }
-    do_log('debug3','Connected to Database %s',$Conf{'db_name'});
+    do_log('debug3','Connected to Database %s',$Conf::Conf{'db_name'});
     $db_connected = 1;
 
     return 1;
@@ -1407,7 +1422,7 @@ sub db_disconnect {
     do_log('debug3', 'List::db_disconnect');
 
     unless ($dbh->disconnect()) {
-	do_log('notice','Can\'t disconnect from Database %s : %s',$Conf{'db_name'}, $dbh->errstr);
+	do_log('notice','Can\'t disconnect from Database %s : %s',$Conf::Conf{'db_name'}, $dbh->errstr);
 	return undef;
     }
 
@@ -1509,12 +1524,12 @@ sub search_list_among_robots {
     }
     
     ## Search in default robot
-    if (-d $Conf{'home'}.'/'.$listname) {
- 	return $Conf{'host'};
+    if (-d $Conf::Conf{'home'}.'/'.$listname) {
+ 	return $Conf::Conf{'host'};
     }
     
-     foreach my $r (keys %{$Conf{'robots'}}) {
-	 if (-d $Conf{'home'}.'/'.$r.'/'.$listname) {
+     foreach my $r (keys %{$Conf::Conf{'robots'}}) {
+	 if (-d $Conf::Conf{'home'}.'/'.$r.'/'.$listname) {
 	     return $r;
 	 }
      }
@@ -1818,8 +1833,8 @@ sub load {
 
 	## Search robot if none was provided
 	unless ($robot) {
-	    foreach my $r (keys %{$Conf{'robots'}}) {
-		if (-d "$Conf{'home'}/$r/$name") {
+	    foreach my $r (keys %{$Conf::Conf{'robots'}}) {
+		if (-d "$Conf::Conf{'home'}/$r/$name") {
 		    $robot=$r;
 		    last;
 		}
@@ -1827,16 +1842,16 @@ sub load {
 	    
 	    ## Try default robot
 	    unless ($robot) {
-		if (-d "$Conf{'home'}/$name") {
-		    $robot = $Conf{'host'};
+		if (-d "$Conf::Conf{'home'}/$name") {
+		    $robot = $Conf::Conf{'host'};
 		}
 	    }
 	}
 	
-	if ($robot && (-d "$Conf{'home'}/$robot")) {
-	    $self->{'dir'} = "$Conf{'home'}/$robot/$name";
-	}elsif (lc($robot) eq lc($Conf{'host'})) {
-	    $self->{'dir'} = "$Conf{'home'}/$name";
+	if ($robot && (-d "$Conf::Conf{'home'}/$robot")) {
+	    $self->{'dir'} = "$Conf::Conf{'home'}/$robot/$name";
+	}elsif (lc($robot) eq lc($Conf::Conf{'host'})) {
+	    $self->{'dir'} = "$Conf::Conf{'home'}/$name";
 	}else {
 	    &do_log('err', 'No such robot (virtual domain) %s', $robot) unless ($options->{'just_try'});
 	    return undef ;
@@ -2386,7 +2401,7 @@ sub get_param_value {
 #  the single value can be a ref on a list when the parameter value is a list
 sub _get_single_param_value {
     my ($p,$key,$k) = @_;
-    &do_log('debug4', 'List::_get_single_value(%s %s)',$key,$k);
+    &do_log('debug3', 'List::_get_single_value(%s %s)',$key,$k);
 
     if (defined ($::pinfo{$key}{'scenario'}) ||
         defined ($::pinfo{$key}{'task'})) {
@@ -2475,7 +2490,7 @@ sub distribute_msg {
     ## Hide the sender if the list is anonymoused
     if ( $self->{'admin'}{'anonymous_sender'} ) {
 
-	foreach my $field (@{$Conf{'anonymous_header_fields'}}) {
+	foreach my $field (@{$Conf::Conf{'anonymous_header_fields'}}) {
 	    $hdr->delete($field);
 	}
 	
@@ -2675,10 +2690,10 @@ sub send_msg_digest {
     
     my $filename;
     ## Backward compatibility concern
-    if (-f "$Conf{'queuedigest'}/$listname") {
- 	$filename = "$Conf{'queuedigest'}/$listname";
+    if (-f "$Conf::Conf{'queuedigest'}/$listname") {
+ 	$filename = "$Conf::Conf{'queuedigest'}/$listname";
     }else {
- 	$filename = $Conf{'queuedigest'}.'/'.$self->get_list_id();
+ 	$filename = $Conf::Conf{'queuedigest'}.'/'.$self->get_list_id();
     }
     
     my $param = {'replyto' => "$self->{'name'}-request\@$self->{'admin'}{'host'}",
@@ -2735,7 +2750,7 @@ sub send_msg_digest {
 	$parser->output_to_core(1);
 	$parser->extract_uuencode(1);  
 	$parser->extract_nested_messages(1);
-#   $parser->output_dir($Conf{'spool'} ."/tmp");    
+#   $parser->output_dir($Conf::Conf{'spool'} ."/tmp");    
 	my $mail = $parser->parse_data(\@text);
 	
 	next unless (defined $mail);
@@ -2805,6 +2820,7 @@ sub send_msg_digest {
 	
 	$param->{'current_group'}++;
 	$param->{'msg_list'} = $group;
+	$param->{'auto_submitted'} = 'auto-forwarded';
 	
 	## Prepare Digest
 	if (@tabrcpt) {
@@ -2849,7 +2865,7 @@ sub send_msg_digest {
 #  
 # IN : -$tpl (+): template file name (file.tt2),
 #         without tt2 extension
-#      -$who (+): SCALAR |ref(ARRAY) - recepient(s)
+#      -$who (+): SCALAR |ref(ARRAY) - recipient(s)
 #      -$robot (+): robot
 #      -$context : ref(HASH) - for the $data set up 
 #         to parse file tt2, keys can be :
@@ -2857,6 +2873,7 @@ sub send_msg_digest {
 #           -email
 #           -lang
 #           -password
+#         -auto_submitted auto-generated|auto-replied|auto-forwarded
 #         -...
 #      -$options : ref(HASH) - options
 # OUT : 1 | undef
@@ -2925,13 +2942,13 @@ sub send_global_file {
 #  Find the tt2 file according to $tpl, set up 
 #  $data for the next parsing (with $context and
 #  configuration)
-#  Message is signed if the list as a key and a 
-#  certificat
+#  Message is signed if the list has a key and a 
+#  certificate
 #  
 # IN : -$self (+): ref(List)
 #      -$tpl (+): template file name (file.tt2),
 #         without tt2 extension
-#      -$who (+): SCALAR |ref(ARRAY) - recepient(s)
+#      -$who (+): SCALAR |ref(ARRAY) - recipient(s)
 #      -$robot (+): robot
 #      -$context : ref(HASH) - for the $data set up 
 #         to parse file tt2, keys can be :
@@ -2939,6 +2956,7 @@ sub send_global_file {
 #           -email
 #           -lang
 #           -password
+#         -auto_submitted auto-generated|auto-replied|auto-forwarded
 #         -...
 # OUT : 1 | undef
 ####################################################
@@ -2951,14 +2969,14 @@ sub send_file {
 
     my $data = $context;
 
-    ## Any recepients
+    ## Any recipients
     if ((ref ($who) && ($#{$who} < 0)) ||
 	(!ref ($who) && ($who eq ''))) {
 	&do_log('err', 'No recipient for sending %s', $tpl);
 	return undef;
     }
     
-    ## Unless multiple recepients
+    ## Unless multiple recipients
     unless (ref ($who)) {
 	unless ($data->{'user'}) {
 	    unless ($data->{'user'} = &get_user_db($who)) {
@@ -2988,7 +3006,7 @@ sub send_file {
 	    (($self->{'admin'}{'remind_return_path'} eq 'unique') && ($tpl eq 'remind')))  {
 	    my $escapercpt = $who ;
 	    $escapercpt =~ s/\@/\=\=a\=\=/;
-	    $data->{'return_path'} = "$Conf{'bounce_email_prefix'}+$escapercpt\=\=$name";
+	    $data->{'return_path'} = "$Conf::Conf{'bounce_email_prefix'}+$escapercpt\=\=$name";
 	    $data->{'return_path'} .= '==w' if ($tpl eq 'welcome');
 	    $data->{'return_path'} .= '==r' if ($tpl eq 'remind');
 	    $data->{'return_path'} .= "\@$self->{'domain'}";
@@ -3041,7 +3059,7 @@ sub send_file {
     $data->{'list'}{'dir'} = $self->{'dir'};
 
     ## Sign mode
-    if ($Conf{'openssl'} &&
+    if ($Conf::Conf{'openssl'} &&
 	(-r $self->{'dir'}.'/cert.pem') && (-r $self->{'dir'}.'/private_key')) {
 	$sign_mode = 'smime';
     }
@@ -3061,7 +3079,9 @@ sub send_file {
 
     $data->{'boundary'} = '----------=_'.&tools::get_message_id($robot) unless ($data->{'boundary'});
 
-    unless (&mail::mail_file($filename, $who, $data, $self->{'domain'}, $sign_mode)) {
+    $data->{'sign_mode'} = $sign_mode;
+    
+    unless (&mail::mail_file($filename, $who, $data, $self->{'domain'})) {
 	&do_log('err',"List::send_file, could not send template $filename to $who");
 	return undef;
     }
@@ -3159,11 +3179,12 @@ sub send_msg {
 		push @tabrcpt_url, $user->{'email'};
 	    }
 	} elsif ($message->{'smime_crypted'} && 
-		 (! -r $Conf{'ssl_cert_dir'}.'/'.&tools::escape_chars($user->{'email'}) &&
-		  ! -r $Conf{'ssl_cert_dir'}.'/'.&tools::escape_chars($user->{'email'}.'@enc' ))) {
+		 (! -r $Conf::Conf{'ssl_cert_dir'}.'/'.&tools::escape_chars($user->{'email'}) &&
+		  ! -r $Conf::Conf{'ssl_cert_dir'}.'/'.&tools::escape_chars($user->{'email'}.'@enc' ))) {
 	    ## Missing User certificate
 	    unless ($self->send_file('x509-user-cert-missing', $user->{'email'}, $robot, {'mail' => {'subject' => $message->{'msg'}->head->get('Subject'),
-												     'sender' => $message->{'msg'}->head->get('From')}})) {
+												     'sender' => $message->{'msg'}->head->get('From')},
+											  'auto_submitted' => 'auto-generated'})) {
 	    &do_log('notice',"Unable to send template 'x509-user-cert-missing' to $user->{'email'}");
 	    }
 	}else{
@@ -3415,7 +3436,7 @@ sub send_to_editor {
    my $name = $self->{'name'};
    my $host = $admin->{'host'};
    my $robot = $self->{'domain'};
-   my $modqueue = $Conf{'queuemod'};
+   my $modqueue = $Conf::Conf{'queuemod'};
    return unless ($name && $admin);
   
    my @now = localtime(time);
@@ -3463,7 +3484,7 @@ sub send_to_editor {
 	   print MSG <ARCMOD>;
 	   close MSG;
 	   close ARCMOD;
-	   chdir $Conf{'home'};
+	   chdir $Conf::Conf{'home'};
        }
    }
 
@@ -3503,7 +3524,7 @@ sub send_to_editor {
 
        foreach my $recipient (@rcpt) {
        if ($encrypt eq 'smime_crypted') {	       
-	   ## $msg->body_as_string respecte-t-il le Base64 ??
+	   ## is $msg->body_as_string respect base64 number of char per line ??
 	   my $cryptedmsg = &tools::smime_encrypt($msg->head, $msg->body_as_string, $recipient); 
 	   unless ($cryptedmsg) {
 	       &do_log('notice', 'Failed encrypted message for moderator');
@@ -3511,7 +3532,7 @@ sub send_to_editor {
 	       return undef;
 	   }
 
-	   my $crypted_file = $Conf{'tmpdir'}.'/'.$self->get_list_id().'.moderate.'.$$;
+	   my $crypted_file = $Conf::Conf{'tmpdir'}.'/'.$self->get_list_id().'.moderate.'.$$;
 	   unless (open CRYPTED, ">$crypted_file") {
 	       &do_log('notice', 'Could not create file %s', $crypted_file);
 	       return undef;
@@ -3531,6 +3552,8 @@ sub send_to_editor {
 	   &do_log('notice',"ticket : $param->{'one_time_ticket'}");
        }
        &tt2::allow_absolute_path();
+       $param->{'auto_submitted'} = 'auto-forwarded';
+
        unless ($self->send_file('moderate', $recipient, $self->{'domain'}, $param)) {
 	   &do_log('notice',"Unable to send template 'moderate' to $recipient");
 	   return undef;
@@ -3546,14 +3569,14 @@ sub send_to_editor {
 #	   $param->{'one_time_ticket'} = &Auth::create_one_time_ticket($in{'email'},$robot,'modindex/'.$name,$ip)
 #
 #	   ## $msg->body_as_string respecte-t-il le Base64 ??
-#	   my $cryptedmsg = &tools::smime_encrypt($msg->head, $msg->body_as_string, $recipient); 
+#	   my $cryptedmsg = &tools::smime_encrypt($msg->head, $msg->body_as_string, $recipient); #
 #	   unless ($cryptedmsg) {
 #	       &do_log('notice', 'Failed encrypted message for moderator');
 #	       # xxxx send a generic error message : X509 cert missing
 #	       return undef;
 #	   }
 #
-#	   my $crypted_file = $Conf{'tmpdir'}.'/'.$self->get_list_id().'.moderate.'.$$;
+#	   my $crypted_file = $Conf::Conf{'tmpdir'}.'/'.$self->get_list_id().'.moderate.'.$$;
 #	   unless (open CRYPTED, ">$crypted_file") {
 #	       &do_log('notice', 'Could not create file %s', $crypted_file);
 #	       return undef;
@@ -3612,7 +3635,7 @@ sub send_auth {
    my $name = $self->{'name'};
    my $host = $admin->{'host'};
    my $robot = $self->{'domain'};
-   my $authqueue = $Conf{'queueauth'};
+   my $authqueue = $Conf::Conf{'queueauth'};
    return undef unless ($name && $admin);
   
 
@@ -3646,6 +3669,7 @@ sub send_auth {
    }
 
    &tt2::allow_absolute_path();
+   $param->{'auto_submitted'} = 'auto-replied';
    unless ($self->send_file('send_auth',$sender,$robot,$param)) {
        &do_log('notice',"Unable to send template 'send_auth' to $sender");
        return undef;
@@ -3730,6 +3754,7 @@ sub request_auth {
 	}
 
 	$data->{'command_escaped'} = &tt2::escape_url($data->{'command'});
+	$data->{'auto_submitted'} = 'auto-replied';
 	unless ($self->send_file('request_auth',$email,$robot,$data)) {
 	    &do_log('notice',"Unable to send template 'request_auth' to $email");
 	    return undef;
@@ -3742,7 +3767,7 @@ sub request_auth {
 	    $data->{'command_escaped'} = &tt2::escape_url($data->{'command'});
 	    $data->{'type'} = 'remind';
 	}
-
+	$data->{'auto_submitted'} = 'auto-replied';
 	unless (&send_global_file('request_auth',$email,$robot,$data)) {
 	    &do_log('notice',"Unable to send template 'request_auth' to $email");
 	    return undef;
@@ -3785,7 +3810,7 @@ sub archive_send {
    $param->{'from'} = &Conf::get_robot_conf($self->{'domain'},'sympa');
 
 #    open TMP2, ">/tmp/digdump"; &tools::dump_var($param, 0, \*TMP2); close TMP2;
-
+$param->{'auto_submitted'} = 'auto-replied';
    unless ($self->send_file('get_archive',$who,$self->{'domain'},$param)) {
 	   &do_log('notice',"Unable to send template 'archive_send' to $who");
 	   return undef;
@@ -3840,7 +3865,7 @@ sub archive_send_last {
    $param->{'boundary1'} = &tools::get_message_id($self->{'domain'});
    $param->{'boundary2'} = &tools::get_message_id($self->{'domain'});
    $param->{'from'} = &Conf::get_robot_conf($self->{'domain'},'sympa');
-
+   $param->{'auto_submitted'} = 'auto-replied';
 #    open TMP2, ">/tmp/digdump"; &tools::dump_var($param, 0, \*TMP2); close TMP2;
 
    unless ($self->send_file('get_archive',$who,$self->{'domain'},$param)) {
@@ -3887,12 +3912,13 @@ sub send_notify_to_listmaster {
     }
     my $host = &Conf::get_robot_conf($robot, 'host');
     my $listmaster = &Conf::get_robot_conf($robot, 'listmaster');
-    my $to = "$Conf{'listmaster_email'}\@$host";
+    my $to = "$Conf::Conf{'listmaster_email'}\@$host";
     my $options = {}; ## options for send_global_file()
 
     if ($operation eq 'logs_failed') {
 	my $data = {'to' => $to,
-		    'type' => $operation};
+		    'type' => $operation,
+		    'auto_submitted' => 'auto-generated'};
 	for my $i(0..$#{$param}) {
 	    $data->{"param$i"} = $param->[$i];
 	}
@@ -3906,6 +3932,7 @@ sub send_notify_to_listmaster {
 
 	$param->{'to'} = $to;
 	$param->{'type'} = $operation;
+	$param->{'auto_submitted'} = 'auto-generated';
 
 	## Prepare list-related data
 	if ($param->{'list'} && ref($param->{'list'}) eq 'List') {
@@ -3958,7 +3985,8 @@ sub send_notify_to_listmaster {
     }elsif(ref($param) eq 'ARRAY') {
 	
 	my $data = {'to' => $to,
-		    'type' => $operation};
+		    'type' => $operation,
+		    'auto_submitted' => 'auto-generated'};
 	for my $i(0..$#{$param}) {
 	    $data->{"param$i"} = $param->[$i];
 	}
@@ -3996,6 +4024,7 @@ sub send_notify_to_owner {
     my $host = $self->{'admin'}{'host'};
     my @to = $self->get_owners_email();
     my $robot = $self->{'domain'};
+    $param->{'auto_submitted'} = 'auto-generated';
 
     unless (@to) {
 	do_log('notice', 'No owner defined or all of them use nomail option in list %s ; using listmasters as default', $self->{'name'} );
@@ -4018,7 +4047,7 @@ sub send_notify_to_owner {
 	    $param->{'escaped_who'} =~ s/\s/\%20/g;
 	    foreach my $owner (@to) {
 		$param->{'one_time_ticket'} = &Auth::create_one_time_ticket($owner,$robot,'subindex/'.$self->{'name'},$param->{'ip'});
-		unless ($self->send_file('listowner_notification',$owner, $robot,$param)) {
+		unless ($self->send_file('listowner_notification',[$owner], $robot,$param)) {
 		    &do_log('notice',"Unable to send template 'listowner_notification' to $self->{'name'} list owner $owner");		    
 		}
 	    }
@@ -4115,8 +4144,9 @@ sub send_notify_to_editor {
 
     my @to = $self->get_editors_email();
     my $robot = $self->{'domain'};
-
-    unless (@to) {
+    $param->{'auto_submitted'} = 'auto-generated';
+      
+      unless (@to) {
 	do_log('notice', 'Warning : no editor or owner defined or all of them use nomail option in list %s', $self->{'name'} );
 	return undef;
     }
@@ -4177,7 +4207,8 @@ sub send_notify_to_user{
 
     my $host = $self->{'admin'}->{'host'};
     my $robot = $self->{'domain'};
-    
+    $param->{'auto_submitted'} = 'auto-generated';
+
     unless (defined $operation) {
 	&do_log('err','List::send_notify_to_user(%s) : missing incoming parameter "$operation"', $self->{'name'});
 	return undef;
@@ -4249,9 +4280,9 @@ sub compute_auth {
 
     if ($self){
 	$listname = $self->{'name'};
-        $cookie = $self->get_cookie() || $Conf{'cookie'};
+        $cookie = $self->get_cookie() || $Conf::Conf{'cookie'};
     }else {
-	$cookie = $Conf{'cookie'};
+	$cookie = $Conf::Conf{'cookie'};
     }
     
     $key = substr(Digest::MD5::md5_hex(join('/', $cookie, $listname, $email, $cmd)), -8) ;
@@ -4270,8 +4301,8 @@ sub add_parts {
     my ($header, $headermime);
     foreach my $file ("$listdir/message.header", 
 		      "$listdir/message.header.mime",
-		      "$Conf{'etc'}/mail_tt2/message.header", 
-		      "$Conf{'etc'}/mail_tt2/message.header.mime") {
+		      "$Conf::Conf{'etc'}/mail_tt2/message.header", 
+		      "$Conf::Conf{'etc'}/mail_tt2/message.header.mime") {
 	if (-f $file) {
 	    unless (-r $file) {
 		&do_log('notice', 'Cannot read %s', $file);
@@ -4285,8 +4316,8 @@ sub add_parts {
     my ($footer, $footermime);
     foreach my $file ("$listdir/message.footer", 
 		      "$listdir/message.footer.mime",
-		      "$Conf{'etc'}/mail_tt2/message.footer", 
-		      "$Conf{'etc'}/mail_tt2/message.footer.mime") {
+		      "$Conf::Conf{'etc'}/mail_tt2/message.footer", 
+		      "$Conf::Conf{'etc'}/mail_tt2/message.footer.mime") {
 	if (-f $file) {
 	    unless (-r $file) {
 		&do_log('notice', 'Cannot read %s', $file);
@@ -4624,16 +4655,11 @@ sub get_user_db {
 
     ## Additional subscriber fields
     my $additional;
-    if ($Conf{'db_additional_user_fields'}) {
-	$additional = ',' . $Conf{'db_additional_user_fields'};
+    if ($Conf::Conf{'db_additional_user_fields'}) {
+	$additional = ',' . $Conf::Conf{'db_additional_user_fields'};
     }
 
-    if ($Conf{'db_type'} eq 'Oracle') {
-	## "AS" not supported by Oracle
-	$statement = sprintf "SELECT email_user \"email\", gecos_user \"gecos\", password_user \"password\", cookie_delay_user \"cookie_delay\", lang_user \"lang\", attributes_user \"attributes\" %s,data_user \"data\", last_login_date_user \"last_login_date\", last_login_host_user \"last_login_host\" FROM user_table WHERE email_user = %s ", $additional, $dbh->quote($who);
-    }else {
-	$statement = sprintf "SELECT email_user AS email, gecos_user AS gecos, password_user AS password, cookie_delay_user AS cookie_delay, lang_user AS lang %s, attributes_user AS attributes, data_user AS data, last_login_date_user AS last_login_date, last_login_host_user AS last_login_host FROM user_table WHERE email_user = %s ", $additional, $dbh->quote($who);
-    }
+    $statement = sprintf "SELECT email_user AS email, gecos_user AS gecos, password_user AS password, cookie_delay_user AS cookie_delay, lang_user AS lang %s, attributes_user AS attributes, data_user AS data, last_login_date_user AS last_login_date, last_login_host_user AS last_login_host FROM user_table WHERE email_user = %s ", $additional, $dbh->quote($who);
     
     push @sth_stack, $sth;
 
@@ -4647,7 +4673,7 @@ sub get_user_db {
 	return undef;
     }
     
-    my $user = $sth->fetchrow_hashref;
+    my $user = $sth->fetchrow_hashref('NAME_lc');
  
     $sth->finish();
 
@@ -4728,8 +4754,8 @@ sub get_subscriber {
 
     my $name = $self->{'name'};
     my $statement;
-    my $date_field = sprintf $date_format{'read'}{$Conf{'db_type'}}, 'date_subscriber', 'date_subscriber';
-    my $update_field = sprintf $date_format{'read'}{$Conf{'db_type'}}, 'update_subscriber', 'update_subscriber';	
+    my $date_field = sprintf $date_format{'read'}{$Conf::Conf{'db_type'}}, 'date_subscriber', 'date_subscriber';
+    my $update_field = sprintf $date_format{'read'}{$Conf::Conf{'db_type'}}, 'update_subscriber', 'update_subscriber';	
     
     ## Use session cache
     if (defined $list_cache{'get_subscriber'}{$self->{'domain'}}{$name}{$email}) {
@@ -4743,28 +4769,17 @@ sub get_subscriber {
     
     ## Additional subscriber fields
     my $additional;
-    if ($Conf{'db_additional_subscriber_fields'}) {
-	$additional = ',' . $Conf{'db_additional_subscriber_fields'};
+    if ($Conf::Conf{'db_additional_subscriber_fields'}) {
+	$additional = ',' . $Conf::Conf{'db_additional_subscriber_fields'};
     }
     
-    if ($Conf{'db_type'} eq 'Oracle') {
-	## "AS" not supported by Oracle
-	$statement = sprintf "SELECT user_subscriber \"email\", comment_subscriber \"gecos\", bounce_subscriber \"bounce\", bounce_score_subscriber \"bounce_score\", bounce_address_subscriber \"bounce_address\", reception_subscriber \"reception\", topics_subscriber \"topics\", visibility_subscriber \"visibility\", %s \"date\", %s \"update_date\", subscribed_subscriber \"subscribed\", included_subscriber \"included\", include_sources_subscriber \"id\", custom_attribute_subscriber \"custom_attribute\  %s FROM subscriber_table WHERE (user_subscriber = %s AND list_subscriber = %s AND robot_subscriber = %s)", 
-	$date_field, 
+    $statement = sprintf "SELECT user_subscriber AS email, comment_subscriber AS gecos, bounce_subscriber AS bounce, bounce_score_subscriber AS bounce_score, bounce_address_subscriber AS bounce_address, reception_subscriber AS reception,  topics_subscriber AS topics, visibility_subscriber AS visibility, %s AS date, %s AS update_date, subscribed_subscriber AS subscribed, included_subscriber AS included, include_sources_subscriber AS id, custom_attribute_subscriber AS custom_attribute %s FROM subscriber_table WHERE (user_subscriber = %s AND list_subscriber = %s AND robot_subscriber = %s)", 
+      $date_field, 
 	$update_field, 
-	$additional, 
-	$dbh->quote($email), 
-	$dbh->quote($name),
-	$dbh->quote($self->{'domain'});
-    }else {
-	$statement = sprintf "SELECT user_subscriber AS email, comment_subscriber AS gecos, bounce_subscriber AS bounce, bounce_score_subscriber AS bounce_score, bounce_address_subscriber AS bounce_address, reception_subscriber AS reception,  topics_subscriber AS topics, visibility_subscriber AS visibility, %s AS date, %s AS update_date, subscribed_subscriber AS subscribed, included_subscriber AS included, include_sources_subscriber AS id, custom_attribute_subscriber AS custom_attribute %s FROM subscriber_table WHERE (user_subscriber = %s AND list_subscriber = %s AND robot_subscriber = %s)", 
-	$date_field, 
-	$update_field, 
-	$additional, 
-	$dbh->quote($email), 
-	$dbh->quote($name),
-	$dbh->quote($self->{'domain'});
-    }
+	  $additional, 
+	    $dbh->quote($email), 
+	      $dbh->quote($name),
+		$dbh->quote($self->{'domain'});
     
     push @sth_stack, $sth;
     
@@ -4778,7 +4793,7 @@ sub get_subscriber {
 	return undef;
     }
     
-    my $user = $sth->fetchrow_hashref;
+    my $user = $sth->fetchrow_hashref('NAME_lc');
     
     if (defined $user) {
 	$user->{'reception'} ||= 'mail';
@@ -4788,8 +4803,7 @@ sub get_subscriber {
 	$user->{'update_date'} ||= $user->{'date'};
 	
 	## In case it was not set in the database
-	$user->{'subscribed'} = 1
-	    if ($self->{'admin'}{'user_data_source'} eq 'database');
+	$user->{'subscribed'} = 1 if ($self->{'admin'}{'user_data_source'} eq 'database');	
 	
 	do_log('debug2', 'List::get_subscriber custom_attribute  = (%s)', $user->{custom_attribute});
 	if (defined $user->{custom_attribute}) {
@@ -4852,7 +4866,7 @@ sub get_subscriber_by_bounce_address {
 	do_log('err','Unable to execute SQL statement "%s" : %s', $statement, $dbh->errstr);
 	return undef;
     }
-    while (my $subscriber = $sth->fetchrow_hashref) {
+    while (my $subscriber = $sth->fetchrow_hashref('NAME_lc')) {
 	push @subscribers, $subscriber;
     }
     $sth->finish();
@@ -4871,8 +4885,8 @@ sub get_admin_user {
 
     my $name = $self->{'name'};
     my $statement;
-    my $date_field = sprintf $date_format{'read'}{$Conf{'db_type'}}, 'date_admin', 'date_admin';
-    my $update_field = sprintf $date_format{'read'}{$Conf{'db_type'}}, 'update_admin', 'update_admin';	
+    my $date_field = sprintf $date_format{'read'}{$Conf::Conf{'db_type'}}, 'date_admin', 'date_admin';
+    my $update_field = sprintf $date_format{'read'}{$Conf::Conf{'db_type'}}, 'update_admin', 'update_admin';	
 
     ## Use session cache
     if (defined $list_cache{'get_admin_user'}{$self->{'domain'}}{$name}{$role}{$email}) {
@@ -4884,24 +4898,13 @@ sub get_admin_user {
 	return undef unless &db_connect();
     }
 
-    if ($Conf{'db_type'} eq 'Oracle') {
-	## "AS" not supported by Oracle
-	$statement = sprintf "SELECT user_admin \"email\", comment_admin \"gecos\", reception_admin \"reception\", visibility_admin \"visibility\",%s \"date\", %s \"update_date\", info_admin \"info\", profile_admin \"profile\",  subscribed_admin \"subscribed\", included_admin \"included\", include_sources_admin \"id\"  FROM admin_table WHERE (user_admin = %s AND list_admin = %s AND robot_admin = %s AND role_admin = %s)", 
-	$date_field, 
+    $statement = sprintf "SELECT user_admin AS email, comment_admin AS gecos, reception_admin AS reception, visibility_admin AS visibility, %s AS date, %s AS update_date, info_admin AS info, profile_admin AS profile, subscribed_admin AS subscribed, included_admin AS included, include_sources_admin AS id FROM admin_table WHERE (user_admin = %s AND list_admin = %s AND robot_admin = %s AND role_admin = %s)", 
+      $date_field, 
 	$update_field, 
-	$dbh->quote($email), 
-	$dbh->quote($name), 
-	$dbh->quote($self->{'domain'}),
- 	$dbh->quote($role);
-    }else {
-	$statement = sprintf "SELECT user_admin AS email, comment_admin AS gecos, reception_admin AS reception, visibility_admin AS visibility, %s AS date, %s AS update_date, info_admin AS info, profile_admin AS profile, subscribed_admin AS subscribed, included_admin AS included, include_sources_admin AS id FROM admin_table WHERE (user_admin = %s AND list_admin = %s AND robot_admin = %s AND role_admin = %s)", 
-	$date_field, 
-	$update_field, 
-	$dbh->quote($email), 
-	$dbh->quote($name), 
-	$dbh->quote($self->{'domain'}),
-	$dbh->quote($role);
-    }
+	  $dbh->quote($email), 
+	    $dbh->quote($name), 
+	      $dbh->quote($self->{'domain'}),
+		$dbh->quote($role);
     
     push @sth_stack, $sth;
 
@@ -4915,15 +4918,14 @@ sub get_admin_user {
 	return undef;
     }
     
-    my $admin_user = $sth->fetchrow_hashref;
+    my $admin_user = $sth->fetchrow_hashref('NAME_lc');
 
     if (defined $admin_user) {
 	$admin_user->{'reception'} ||= 'mail';
 	$admin_user->{'update_date'} ||= $admin_user->{'date'};
 	
 	## In case it was not set in the database
-	$admin_user->{'subscribed'} = 1
-	    if ($self->{'admin'}{'user_data_source'} eq 'database');
+	$admin_user->{'subscribed'} = 1 if ($self->{'admin'}{'user_data_source'} eq 'database');
     }
     
     $sth->finish();
@@ -4966,8 +4968,8 @@ sub get_first_user {
     
     my $name = $self->{'name'};
     my $statement;
-    my $date_field = sprintf $date_format{'read'}{$Conf{'db_type'}}, 'date_subscriber', 'date_subscriber';
-    my $update_field = sprintf $date_format{'read'}{$Conf{'db_type'}}, 'update_subscriber', 'update_subscriber';
+    my $date_field = sprintf $date_format{'read'}{$Conf::Conf{'db_type'}}, 'date_subscriber', 'date_subscriber';
+    my $update_field = sprintf $date_format{'read'}{$Conf::Conf{'db_type'}}, 'update_subscriber', 'update_subscriber';
     
     ## Check database connection
     unless ($dbh and $dbh->ping) {
@@ -4983,12 +4985,12 @@ sub get_first_user {
     
     ## Additional subscriber fields
     my $additional;
-    if ($Conf{'db_additional_subscriber_fields'}) {
-	$additional = ',' . $Conf{'db_additional_subscriber_fields'};
+    if ($Conf::Conf{'db_additional_subscriber_fields'}) {
+	$additional = ',' . $Conf::Conf{'db_additional_subscriber_fields'};
     }
     
     ## Oracle
-    if ($Conf{'db_type'} eq 'Oracle') {
+    if ($Conf::Conf{'db_type'} eq 'Oracle') {
 	
 	$statement = sprintf "SELECT user_subscriber \"email\", comment_subscriber \"gecos\", reception_subscriber \"reception\", topics_subscriber \"topics\", visibility_subscriber \"visibility\", bounce_subscriber \"bounce\", bounce_score_subscriber \"bounce_score\", bounce_address_subscriber \"bounce_address\", %s \"date\", %s \"update_date\", subscribed_subscriber \"subscribed\", included_subscriber \"included\", include_sources_subscriber \"id\", custom_attribute_subscriber \"custom_attribute\" %s FROM subscriber_table WHERE (list_subscriber = %s AND robot_subscriber = %s %s)", 
 	$date_field, 
@@ -5021,7 +5023,7 @@ sub get_first_user {
 	} 
 	
 	## Sybase
-    }elsif ($Conf{'db_type'} eq 'Sybase'){
+    }elsif ($Conf::Conf{'db_type'} eq 'Sybase'){
 	
 	$statement = sprintf "SELECT user_subscriber \"email\", comment_subscriber \"gecos\", reception_subscriber \"reception\", topics_subscriber \"topics\", visibility_subscriber \"visibility\", bounce_subscriber \"bounce\", bounce_score_subscriber \"bounce_score\", bounce_address_subscriber \"bounce_address\", %s \"date\", %s \"update_date\", subscribed_subscriber \"subscribed\", included_subscriber \"included\", include_sources_subscriber \"id\", custom_attribute_subscriber \"custom_attribute\" %s FROM subscriber_table WHERE (list_subscriber = %s AND robot_subscriber = %s %s)", 
 	$date_field, 
@@ -5055,7 +5057,7 @@ sub get_first_user {
 	
 	
 	## mysql
-    }elsif ($Conf{'db_type'} eq 'mysql') {
+    }elsif ($Conf::Conf{'db_type'} eq 'mysql') {
 	
 	$statement = sprintf "SELECT user_subscriber AS email, comment_subscriber AS gecos, reception_subscriber AS reception, topics_subscriber AS topics, visibility_subscriber AS visibility, bounce_subscriber AS bounce, bounce_score_subscriber AS bounce_score, bounce_address_subscriber AS bounce_address,  %s AS date, %s AS update_date, subscribed_subscriber AS subscribed, included_subscriber AS included, include_sources_subscriber AS id, custom_attribute_subscriber AS custom_attribute %s FROM subscriber_table WHERE (list_subscriber = %s AND robot_subscriber = %s %s)", 
 	$date_field, 
@@ -5096,7 +5098,7 @@ sub get_first_user {
 	}
 	
 	## SQLite
-    }elsif ($Conf{'db_type'} eq 'SQLite') {
+    }elsif ($Conf::Conf{'db_type'} eq 'SQLite') {
 	
 	$statement = sprintf "SELECT user_subscriber AS email, comment_subscriber AS gecos, reception_subscriber AS reception, visibility_subscriber AS visibility, bounce_subscriber AS bounce, bounce_score_subscriber AS bounce_score, bounce_address_subscriber AS bounce_address, %s AS date, %s AS update_date, subscribed_subscriber AS subscribed, included_subscriber AS included, include_sources_subscriber AS id, custom_attribute_subscriber AS custom_attribute %s FROM subscriber_table WHERE (list_subscriber = %s AND robot_subscriber = %s %s)", 
 	$date_field, 
@@ -5188,7 +5190,7 @@ sub get_first_user {
 	return undef;
     }
     
-    my $user = $sth->fetchrow_hashref;
+    my $user = $sth->fetchrow_hashref('NAME_lc');
     if (defined $user) {
 	&do_log('err','Warning: entry with empty email address in list %s', $self->{'name'}) 
 	    if (! $user->{'email'});
@@ -5198,8 +5200,7 @@ sub get_first_user {
 	$user->{'update_date'} ||= $user->{'date'};
 	
 	## In case it was not set in the database
-	$user->{'subscribed'} = 1
-	    if (defined($user) && ($self->{'admin'}{'user_data_source'} eq 'database'));
+	$user->{'subscribed'} = 1 if (defined($user) && ($self->{'admin'}{'user_data_source'} eq 'database'));
 
 	############################################################################	    
 	if (defined $user->{custom_attribute}) {
@@ -5314,8 +5315,8 @@ sub get_first_admin_user {
     my $name = $self->{'name'};
     my $statement;
     
-    my $date_field = sprintf $date_format{'read'}{$Conf{'db_type'}}, 'date_admin', 'date_admin';
-    my $update_field = sprintf $date_format{'read'}{$Conf{'db_type'}}, 'update_admin', 'update_admin';
+    my $date_field = sprintf $date_format{'read'}{$Conf::Conf{'db_type'}}, 'date_admin', 'date_admin';
+    my $update_field = sprintf $date_format{'read'}{$Conf::Conf{'db_type'}}, 'update_admin', 'update_admin';
     
     ## Check database connection
     unless ($dbh and $dbh->ping) {
@@ -5331,7 +5332,7 @@ sub get_first_admin_user {
     
      ## Oracle
 # and ok ?
-    if ($Conf{'db_type'} eq 'Oracle') {
+    if ($Conf::Conf{'db_type'} eq 'Oracle') {
 	
 	$statement = sprintf "SELECT user_admin \"email\", comment_admin \"gecos\", reception_admin \"reception\", visibility_admin \"visibility\", %s \"date\", %s \"update_date\", info_admin \"info\", profile_admin \"profile\", subscribed_admin \"subscribed\", included_admin \"included\", include_sources_admin \"id\" FROM admin_table WHERE (list_admin = %s AND robot_admin = %s %s AND role_admin = %s)", 
 	$date_field, 
@@ -5364,7 +5365,7 @@ sub get_first_admin_user {
 	} 
 	
 	## Sybase
-    }elsif ($Conf{'db_type'} eq 'Sybase'){
+    }elsif ($Conf::Conf{'db_type'} eq 'Sybase'){
 	
 	$statement = sprintf "SELECT user_admin \"email\", comment_admin \"gecos\", reception_admin \"reception\", visibility_admin \"visibility\", %s \"date\", %s \"update_date\", info_admin \"info\", profile_admin \"profile\", subscribed_admin \"subscribed\", included_admin \"included\", include_sources_admin \"id\" FROM admin_table WHERE (list_admin = %s AND robot_admin = %s %s AND role_admin = %s)", 
 	$date_field, 
@@ -5397,7 +5398,7 @@ sub get_first_admin_user {
 	
 	
 	## mysql
-    }elsif ($Conf{'db_type'} eq 'mysql') {
+    }elsif ($Conf::Conf{'db_type'} eq 'mysql') {
 	
 	$statement = sprintf "SELECT user_admin AS email, comment_admin AS gecos, reception_admin AS reception, visibility_admin AS visibility, %s AS date, %s AS update_date, info_admin AS info, profile_admin AS profile, subscribed_admin AS subscribed, included_admin AS included, include_sources_admin AS id  FROM admin_table WHERE (list_admin = %s AND robot_admin = %s %s AND role_admin = %s)", 
 	$date_field, 
@@ -5438,7 +5439,7 @@ sub get_first_admin_user {
 	}
 	
 	## SQLite
-    }elsif ($Conf{'db_type'} eq 'SQLite') {
+    }elsif ($Conf::Conf{'db_type'} eq 'SQLite') {
 	
 	$statement = sprintf "SELECT user_admin AS email, comment_admin AS gecos, reception_admin AS reception, visibility_admin AS visibility, %s AS date, %s AS update_date, info_admin AS info, profile_admin AS profile, subscribed_admin AS subscribed, included_admin AS included, include_sources_admin AS id  FROM admin_table WHERE (list_admin = %s AND robot_admin = %s %s AND role_admin = %s)", 
 	$date_field, 
@@ -5532,7 +5533,7 @@ sub get_first_admin_user {
 	return undef;
     }
     
-    my $admin_user = $sth->fetchrow_hashref;
+    my $admin_user = $sth->fetchrow_hashref('NAME_lc');
     if (defined $admin_user) {
 	&do_log('err','Warning: entry with empty email address in list %s', $self->{'name'}) 
 	    if (! $admin_user->{'email'});
@@ -5540,8 +5541,7 @@ sub get_first_admin_user {
 	$admin_user->{'update_date'} ||= $admin_user->{'date'};
 
 	## In case it was not set in the database
-	$admin_user->{'subscribed'} = 1
-	    if (defined($admin_user) && ($self->{'admin'}{'user_data_source'} eq 'database'));
+	$admin_user->{'subscribed'} = 1 if (defined($admin_user) && ($self->{'admin'}{'user_data_source'} eq 'database'));
 
     }else {
 	$sth->finish;
@@ -5572,7 +5572,7 @@ sub get_next_user {
 	return undef;
     }
     
-    my $user = $sth->fetchrow_hashref;
+    my $user = $sth->fetchrow_hashref('NAME_lc');
     
     if (defined $user) {
 	&do_log('err','Warning: entry with empty email address in list %s', $self->{'name'}) 
@@ -5584,8 +5584,7 @@ sub get_next_user {
 	$user->{'update_date'} ||= $user->{'date'};
 	
 	## In case it was not set in the database
-	$user->{'subscribed'} = 1
-	    if (defined($user) && ($self->{'admin'}{'user_data_source'} eq 'database'));
+	$user->{'subscribed'} = 1 if (defined($user) && ($self->{'admin'}{'user_data_source'} eq 'database'));
 
 	do_log('debug2', '(email = %s)', $user->{'email'});
 	if (defined $user->{custom_attribute}) {
@@ -5631,7 +5630,7 @@ sub get_next_admin_user {
 	return undef;
     }
     
-    my $admin_user = $sth->fetchrow_hashref;
+    my $admin_user = $sth->fetchrow_hashref('NAME_lc');
 
     if (defined $admin_user) {
 	&do_log('err','Warning: entry with empty email address in list %s', $self->{'name'}) 
@@ -5640,8 +5639,7 @@ sub get_next_admin_user {
 	$admin_user->{'update_date'} ||= $admin_user->{'date'};
 	
 	## In case it was not set in the database
-	$admin_user->{'subscribed'} = 1
-	    if (defined($admin_user) && ($self->{'admin'}{'user_data_source'} eq 'database'));
+	$admin_user->{'subscribed'} = 1 if (defined($admin_user) && ($self->{'admin'}{'user_data_source'} eq 'database'));
     }
     else {
 	$sth->finish;
@@ -5683,8 +5681,8 @@ sub get_first_bouncing_user {
 
     my $name = $self->{'name'};
     my $statement;
-    my $date_field = sprintf $date_format{'read'}{$Conf{'db_type'}}, 'date_subscriber', 'date_subscriber';
-    my $update_field = sprintf $date_format{'read'}{$Conf{'db_type'}}, 'update_subscriber', 'update_subscriber';
+    my $date_field = sprintf $date_format{'read'}{$Conf::Conf{'db_type'}}, 'date_subscriber', 'date_subscriber';
+    my $update_field = sprintf $date_format{'read'}{$Conf::Conf{'db_type'}}, 'update_subscriber', 'update_subscriber';
     
     ## Check database connection
     unless ($dbh and $dbh->ping) {
@@ -5693,26 +5691,16 @@ sub get_first_bouncing_user {
 
     ## Additional subscriber fields
     my $additional;
-    if ($Conf{'db_additional_subscriber_fields'}) {
-	$additional = ',' . $Conf{'db_additional_subscriber_fields'};
+    if ($Conf::Conf{'db_additional_subscriber_fields'}) {
+	$additional = ',' . $Conf::Conf{'db_additional_subscriber_fields'};
     }
 
-    if ($Conf{'db_type'} eq 'Oracle') {
-	## "AS" not supported by Oracle
-	$statement = sprintf "SELECT user_subscriber \"email\", reception_subscriber \"reception\", topics_subscriber \"topics\", visibility_subscriber \"visibility\", bounce_subscriber \"bounce\",bounce_score_subscriber \"bounce_score\", %s \"date\", %s \"update_date\" %s FROM subscriber_table WHERE (list_subscriber = %s AND robot_subscriber = %s AND bounce_subscriber is not NULL)", 
-	$date_field, 
+    $statement = sprintf "SELECT user_subscriber AS email, reception_subscriber AS reception, topics_subscriber AS topics, visibility_subscriber AS visibility, bounce_subscriber AS bounce,bounce_score_subscriber AS bounce_score, %s AS date, %s AS update_date %s FROM subscriber_table WHERE (list_subscriber = %s AND robot_subscriber = %s AND bounce_subscriber is not NULL)", 
+      $date_field, 
 	$update_field, 
-	$additional, 
-	$dbh->quote($name),
-	$dbh->quote($self->{'domain'});
-    }else {
-	$statement = sprintf "SELECT user_subscriber AS email, reception_subscriber AS reception, topics_subscriber AS topics, visibility_subscriber AS visibility, bounce_subscriber AS bounce,bounce_score_subscriber AS bounce_score, %s AS date, %s AS update_date %s FROM subscriber_table WHERE (list_subscriber = %s AND robot_subscriber = %s AND bounce_subscriber is not NULL)", 
-	$date_field, 
-	$update_field, 
-	$additional, 
-	$dbh->quote($name),
-	$dbh->quote($self->{'domain'});
-    }
+	  $additional, 
+	    $dbh->quote($name),
+	      $dbh->quote($self->{'domain'});
 
     push @sth_stack, $sth;
 
@@ -5726,15 +5714,14 @@ sub get_first_bouncing_user {
 	return undef;
     }
     
-    my $user = $sth->fetchrow_hashref;
+    my $user = $sth->fetchrow_hashref('NAME_lc');
 	    
     if (defined $user) {
 	&do_log('err','Warning: entry with empty email address in list %s', $self->{'name'}) 
 	    if (! $user->{'email'});
 	
 	## In case it was not set in the database
-	$user->{'subscribed'} = 1
-	    if (defined ($user) && ($self->{'admin'}{'user_data_source'} eq 'database'));    
+	$user->{'subscribed'} = 1 if (defined ($user) && ($self->{'admin'}{'user_data_source'} eq 'database'));    
 
     }else {
 	$sth->finish;
@@ -5758,15 +5745,14 @@ sub get_next_bouncing_user {
 	return undef;
     }
     
-    my $user = $sth->fetchrow_hashref;
+    my $user = $sth->fetchrow_hashref('NAME_lc');
     
     if (defined $user) {
 	&do_log('err','Warning: entry with empty email address in list %s', $self->{'name'}) 
 	    if (! $user->{'email'});
 	
 	## In case it was not set in the database
-	$user->{'subscribed'} = 1
-	    if (defined ($user) && ($self->{'admin'}{'user_data_source'} eq 'database'));    
+	$user->{'subscribed'} = 1 if (defined ($user) && ($self->{'admin'}{'user_data_source'} eq 'database'));    
 	if (defined $user->{custom_attribute}) {
 	    	my %custom_attr = &parseCustomAttribute($user->{'custom_attribute'});
 	    	$user->{'custom_attribute'} = \%custom_attr ;
@@ -5984,25 +5970,25 @@ sub update_user {
 		      );
     
     ## additional DB fields
-    if (defined $Conf{'db_additional_subscriber_fields'}) {
-	foreach my $f (split ',', $Conf{'db_additional_subscriber_fields'}) {
+    if (defined $Conf::Conf{'db_additional_subscriber_fields'}) {
+	foreach my $f (split ',', $Conf::Conf{'db_additional_subscriber_fields'}) {
 	    $map_table{$f} = 'subscriber_table';
 	    $map_field{$f} = $f;
 	}
     }
     
-    if (defined $Conf{'db_additional_user_fields'}) {
-	foreach my $f (split ',', $Conf{'db_additional_user_fields'}) {
+    if (defined $Conf::Conf{'db_additional_user_fields'}) {
+	foreach my $f (split ',', $Conf::Conf{'db_additional_user_fields'}) {
 	    $map_table{$f} = 'user_table';
 	    $map_field{$f} = $f;
 	}
     }
     
-    do_log('debug2', " custom_attribute id: $Conf{'custom_attribute'}");
+    do_log('debug2', " custom_attribute id: $Conf::Conf{'custom_attribute'}");
     ## custom attributes
-    if (defined $Conf{'custom_attribute'}){
-	foreach my $f (sort keys %{$Conf{'custom_attribute'}}){
-	    do_log('debug2', "List::update_user custom_attribute id: $Conf{'custom_attribute'}{id} name: $Conf{'custom_attribute'}{name} type: $Conf{'custom_attribute'}{type} ");
+    if (defined $Conf::Conf{'custom_attribute'}){
+	foreach my $f (sort keys %{$Conf::Conf{'custom_attribute'}}){
+	    do_log('debug2', "List::update_user custom_attribute id: $Conf::Conf{'custom_attribute'}{id} name: $Conf::Conf{'custom_attribute'}{name} type: $Conf::Conf{'custom_attribute'}{type} ");
 	    	
 	}
     }
@@ -6025,11 +6011,11 @@ sub update_user {
 	    
 	    if ($map_table{$field} eq $table) {
 		if ($field eq 'date') {
-		    $value = sprintf $date_format{'write'}{$Conf{'db_type'}}, $value, $value;
+		    $value = sprintf $date_format{'write'}{$Conf::Conf{'db_type'}}, $value, $value;
 		}elsif ($field eq 'update_date') {
-		    $value = sprintf $date_format{'write'}{$Conf{'db_type'}}, $value, $value;
+		    $value = sprintf $date_format{'write'}{$Conf::Conf{'db_type'}}, $value, $value;
 		}elsif ($value eq 'NULL'){
-		    if ($Conf{'db_type'} eq 'mysql') {
+		    if ($Conf::Conf{'db_type'} eq 'mysql') {
 			$value = '\N';
 		    }
 		}else {
@@ -6069,6 +6055,21 @@ sub update_user {
 	unless ($dbh->do($statement)) {
 	    do_log('err','Unable to execute SQL statement "%s" : %s', $statement, $dbh->errstr);
 	    return undef;
+	}
+    }
+
+    ## Rename picture on disk if user email changed
+    if ($values->{'email'}) {
+	my $file_name = &tools::md5_fingerprint($who);
+	my $picture_file_path = &Conf::get_robot_conf($self->{'domain'},'pictures_path').'/'.$self->{'name'}.'@'.$self->{'domain'};
+
+	foreach my $extension ('gif','png','jpg','jpeg') {
+	    if (-f $picture_file_path.'/'.$file_name.'.'.$extension) {
+		my $new_file_name = &tools::md5_fingerprint($values->{'email'});
+		unless (rename $picture_file_path.'/'.$file_name.'.'.$extension, $picture_file_path.'/'.$new_file_name.'.'.$extension) {
+		    &do_log('err', "Failed to rename %s to %s : %s", $picture_file_path.'/'.$file_name.'.'.$extension, $picture_file_path.'/'.$new_file_name.'.'.$extension, $!);
+		}
+	    }
 	}
     }
     
@@ -6123,8 +6124,8 @@ sub update_admin_user {
 		      );
 #### ??
     ## additional DB fields
-#    if (defined $Conf{'db_additional_user_fields'}) {
-#	foreach my $f (split ',', $Conf{'db_additional_user_fields'}) {
+#    if (defined $Conf::Conf{'db_additional_user_fields'}) {
+#	foreach my $f (split ',', $Conf::Conf{'db_additional_user_fields'}) {
 #	    $map_table{$f} = 'user_table';
 #	    $map_field{$f} = $f;
 #	}
@@ -6148,11 +6149,11 @@ sub update_admin_user {
 	    
 	    if ($map_table{$field} eq $table) {
 		if ($field eq 'date') {
-		    $value = sprintf $date_format{'write'}{$Conf{'db_type'}}, $value, $value;
+		    $value = sprintf $date_format{'write'}{$Conf::Conf{'db_type'}}, $value, $value;
 		}elsif ($field eq 'update_date') {
-		    $value = sprintf $date_format{'write'}{$Conf{'db_type'}}, $value, $value;
+		    $value = sprintf $date_format{'write'}{$Conf::Conf{'db_type'}}, $value, $value;
 		}elsif ($value eq 'NULL'){
-		    if ($Conf{'db_type'} eq 'mysql') {
+		    if ($Conf::Conf{'db_type'} eq 'mysql') {
 			$value = '\N';
 		    }
 		}else {
@@ -6368,8 +6369,8 @@ sub add_user {
 	$new_user->{'custom_attribute'} ||= &createXMLCustomAttribute(\%custom_attr) ;
 	do_log('debug2', 'List::add_user custom_attribute = %s', $new_user->{'custom_attribute'});
 
-	my $date_field = sprintf $date_format{'write'}{$Conf{'db_type'}}, $new_user->{'date'}, $new_user->{'date'};
-	my $update_field = sprintf $date_format{'write'}{$Conf{'db_type'}}, $new_user->{'update_date'}, $new_user->{'update_date'};
+	my $date_field = sprintf $date_format{'write'}{$Conf::Conf{'db_type'}}, $new_user->{'date'}, $new_user->{'date'};
+	my $update_field = sprintf $date_format{'write'}{$Conf::Conf{'db_type'}}, $new_user->{'update_date'}, $new_user->{'update_date'};
 	
 	## Crypt password if it was not crypted
 	unless ($new_user->{'password'} =~ /^crypt/) {
@@ -6453,8 +6454,8 @@ sub add_admin_user {
 	$new_admin_user->{'date'} ||= time;
 	$new_admin_user->{'update_date'} ||= $new_admin_user->{'date'};
 	    
-	my $date_field = sprintf $date_format{'write'}{$Conf{'db_type'}}, $new_admin_user->{'date'}, $new_admin_user->{'date'};
-	my $update_field = sprintf $date_format{'write'}{$Conf{'db_type'}}, $new_admin_user->{'update_date'}, $new_admin_user->{'update_date'};
+	my $date_field = sprintf $date_format{'write'}{$Conf::Conf{'db_type'}}, $new_admin_user->{'date'}, $new_admin_user->{'date'};
+	my $update_field = sprintf $date_format{'write'}{$Conf::Conf{'db_type'}}, $new_admin_user->{'update_date'}, $new_admin_user->{'update_date'};
 	    
 	$list_cache{'is_admin_user'}{$self->{'domain'}}{$name}{$who} = undef;
 	    
@@ -6567,13 +6568,13 @@ sub is_listmaster {
 
     return 0 unless ($who);
 
-    if ($robot && (defined $Conf{'robots'}{$robot}) && $Conf{'robots'}{$robot}{'listmasters'}) {
-	foreach my $listmaster (@{$Conf{'robots'}{$robot}{'listmasters'}}){
+    if ($robot && (defined $Conf::Conf{'robots'}{$robot}) && $Conf::Conf{'robots'}{$robot}{'listmasters'}) {
+	foreach my $listmaster (@{$Conf::Conf{'robots'}{$robot}{'listmasters'}}){
 	    return 1 if (lc($listmaster) eq lc($who));
 	} 
     }
 	
-    foreach my $listmaster (@{$Conf{'listmasters'}}){
+    foreach my $listmaster (@{$Conf::Conf{'listmasters'}}){
 	    return 1 if (lc($listmaster) eq lc($who));
 	}    
 
@@ -6902,7 +6903,7 @@ sub archive_msg {
     my $is_archived = $self->is_archived();
     Archive::store_last($self, $msg) if ($is_archived);
 
-    Archive::outgoing("$Conf{'queueoutgoing'}",$self->get_list_id(),$msg) 
+    Archive::outgoing("$Conf::Conf{'queueoutgoing'}",$self->get_list_id(),$msg) 
       if ($self->is_web_archived());
 }
 
@@ -6946,8 +6947,8 @@ sub get_nextdigest {
 
     ## Reverse compatibility concerns
     my $filename;
-    foreach my $f ("$Conf{'queuedigest'}/$listname",
- 		   $Conf{'queuedigest'}.'/'.$self->get_list_id()) {
+    foreach my $f ("$Conf::Conf{'queuedigest'}/$listname",
+ 		   $Conf::Conf{'queuedigest'}.'/'.$self->get_list_id()) {
  	$filename = $f if (-f $f);
     }
     
@@ -6995,8 +6996,7 @@ sub load_scenario_list {
     my %list_of_scenario;
     my %skip_scenario;
 
-    foreach my $dir ("$directory/scenari", "$Conf{'etc'}/$robot/scenari", "$Conf{'etc'}/scenari", "--pkgdatadir--/etc/scenari") {
-
+    foreach my $dir ("$directory/scenari", "$Conf::Conf{'etc'}/$robot/scenari", "$Conf::Conf{'etc'}/scenari", "--pkgdatadir--/etc/scenari") {
 	next unless (-d $dir);
 	
 	my $scenario_regexp = &tools::get_regexp('scenario');
@@ -7046,7 +7046,7 @@ sub load_task_list {
     my $directory = "$self->{'dir'}";
     my %list_of_task;
     
-    foreach my $dir ("$directory/list_task_models", "$Conf{'etc'}/$robot/list_task_models", "$Conf{'etc'}/list_task_models", "--pkgdatadir--/etc/list_task_models") {
+    foreach my $dir ("$directory/list_task_models", "$Conf::Conf{'etc'}/$robot/list_task_models", "$Conf::Conf{'etc'}/list_task_models", "--pkgdatadir--/etc/list_task_models") {
 
 	next unless (-d $dir);
 
@@ -7108,7 +7108,7 @@ sub load_data_sources_list {
     my $directory = "$self->{'dir'}";
     my %list_of_data_sources;
 
-    foreach my $dir ("$directory/data_sources", "$Conf{'etc'}/$robot/data_sources", "$Conf{'etc'}/data_sources", "--pkgdatadir--/etc/data_sources") {
+    foreach my $dir ("$directory/data_sources", "$Conf::Conf{'etc'}/$robot/data_sources", "$Conf::Conf{'etc'}/data_sources", "--pkgdatadir--/etc/data_sources") {
 
 	next unless (-d $dir);
 	
@@ -7268,9 +7268,9 @@ sub _include_users_remote_sympa_list {
     my $email ;
 
 
-    foreach my $line ( &Fetch::get_https($host,$port,$path,$cert_file,$key_file,{'key_passwd' => $Conf{'key_passwd'},
-                                                                               'cafile'    => $Conf{'cafile'},
-                                                                               'capath' => $Conf{'capath'}})
+    foreach my $line ( &Fetch::get_https($host,$port,$path,$cert_file,$key_file,{'key_passwd' => $Conf::Conf{'key_passwd'},
+                                                                               'cafile'    => $Conf::Conf{'cafile'},
+                                                                               'capath' => $Conf::Conf{'capath'}})
 		){	
 	chomp $line;
 
@@ -7295,14 +7295,14 @@ sub _include_users_remote_sympa_list {
 	my %u;
 	## Check if user has already been included
 	if ($users->{$email}) {
-	    do_log('debug4',"ignore $email because already member");
+	    do_log('debug3',"ignore $email because already member");
 	    if ($tied) {
 		%u = split "\n",$users->{$email};
 	    }else {
 		%u = %{$users->{$email}};
 	    }
 	}else{
-	    do_log('debug4',"add new subscriber $email");
+	    do_log('debug3',"add new subscriber $email");
 	    %u = %{$default_user_options};
 	    $total++;
 	}	    
@@ -7567,9 +7567,6 @@ sub _include_users_ldap {
     my $ldap_attrs = $param->{'attrs'};
     my $ldap_select = $param->{'select'};
     
-#    my $default_reception = $admin->{'default_user_options'}{'reception'};
-#    my $default_visibility = $admin->{'default_user_options'}{'visibility'};
-
     ## LDAP and query handler
     my ($ldaph, $fetch);
 
@@ -7590,16 +7587,11 @@ sub _include_users_ldap {
     
     do_log('debug2', 'Searching on server %s ; suffix %s ; filter %s ; attrs: %s', $param->{'host'}, $ldap_suffix, $ldap_filter, $ldap_attrs);
     $fetch = $ldaph->search ( base => "$ldap_suffix",
-                                      filter => "$ldap_filter",
-				      attrs => "$ldap_attrs",
-				      scope => "$param->{'scope'}");
-    unless ($fetch) {
-        do_log('err',"Unable to perform LDAP search in $ldap_suffix for $ldap_filter : $@");
-        return undef;
-    }
-    
-    unless ($fetch->code == 0) {
-	do_log('err','Ldap search failed : %s (searching on server %s ; suffix %s ; filter %s ; attrs: %s)', 
+			      filter => "$ldap_filter",
+			      attrs => [ "$ldap_attrs" ],
+			      scope => "$param->{'scope'}");
+    if ($fetch->code()) {
+	do_log('err','Ldap search (single level) failed : %s (searching on server %s ; suffix %s ; filter %s ; attrs: %s)', 
 	       $fetch->error(), $param->{'host'}, $ldap_suffix, $ldap_filter, $ldap_attrs);
         return undef;
     }
@@ -7705,10 +7697,8 @@ sub _include_users_ldap_2level {
     my $ldap_select2 = $param->{'select2'};
     my $ldap_scope2 = $param->{'scope2'};
     my $ldap_regex2 = $param->{'regex2'};
+    my @sync_errors = ();
     
-#    my $default_reception = $admin->{'default_user_options'}{'reception'};
-#    my $default_visibility = $admin->{'default_user_options'}{'visibility'};
-
     ## LDAP and query handler
     my ($ldaph, $fetch);
 
@@ -7725,11 +7715,13 @@ sub _include_users_ldap_2level {
 	}
     
     do_log('debug2', 'Searching on server %s ; suffix %s ; filter %s ; attrs: %s', $param->{'host'}, $ldap_suffix1, $ldap_filter1, $ldap_attrs1) ;
-    unless ($fetch = $ldaph->search ( base => "$ldap_suffix1",
-                                      filter => "$ldap_filter1",
-				      attrs => "$ldap_attrs1",
-				      scope => "$ldap_scope1")) {
-        do_log('err',"Unable to perform LDAP search in $ldap_suffix1 for $ldap_filter1 : $@");
+    $fetch = $ldaph->search ( base => "$ldap_suffix1",
+			      filter => "$ldap_filter1",
+			      attrs => [ "$ldap_attrs1" ],
+			      scope => "$ldap_scope1");
+    if ($fetch->code()) {
+	do_log('err','LDAP search (1st level) failed : %s (searching on server %s ; suffix %s ; filter %s ; attrs: %s)', 
+	       $fetch->error(), $param2->{'host'}, $ldap_suffix1, $ldap_filter1, $ldap_attrs1);
         return undef;
     }
     
@@ -7744,7 +7736,6 @@ sub _include_users_ldap_2level {
  
     while (my $e = $fetch->shift_entry) {
 	my $entry = $e->get_value($ldap_attrs1, asref => 1);
-	
 	## Multiple values
 	if (ref($entry) eq 'ARRAY') {
 	    foreach my $attr (@{$entry}) {
@@ -7766,12 +7757,14 @@ sub _include_users_ldap_2level {
 	($filter2 = $ldap_filter2) =~ s/\[attrs1\]/$attr/g;
 
 	do_log('debug2', 'Searching on server %s ; suffix %s ; filter %s ; attrs: %s', $param->{'host'}, $suffix2, $filter2, $ldap_attrs2);
-	unless ($fetch = $ldaph->search ( base => "$suffix2",
-					filter => "$filter2",
-					attrs => "$ldap_attrs2",
-					scope => "$ldap_scope2")) {
-	    do_log('err',"Unable to perform LDAP search in $suffix2 for $filter2 : $@");
-	    return undef;
+	$fetch = $ldaph->search ( base => "$suffix2",
+				  filter => "$filter2",
+				  attrs => [ "$ldap_attrs2" ],
+				  scope => "$ldap_scope2");
+	if ($fetch->code()) {
+	    do_log('err','LDAP search (2nd level) failed : %s. Node: %s (searching on server %s ; suffix %s ; filter %s ; attrs: %s)', 
+		   $fetch->error(), $attr, $param->{'host'}, $suffix2, $filter2, $ldap_attrs2);
+	    push @sync_errors, {'error',$fetch->error(), 'host', $param->{'host'}, 'suffix2', $suffix2, 'fliter2', $filter2,'ldap_attrs2', $ldap_attrs2};
 	}
 
 	## returns a reference to a HASH where the keys are the DNs
@@ -7842,7 +7835,10 @@ sub _include_users_ldap_2level {
     do_log('debug2',"unbinded from LDAP server %s ", $param->{'host'}) ;
     do_log('debug2','%d new users included from LDAP query',$total);
 
-    return $total;
+    my $result;
+    $result->{'total'} = $total;
+    if ($#sync_errors > -1) {$result->{'errors'} = \@sync_errors;}
+    return $result;
 }
 
 ## Returns a list of subscribers extracted from an remote Database
@@ -7963,7 +7959,15 @@ sub _load_users_include {
 		}elsif ($type eq 'include_ldap_query') {
 		    $included = _include_users_ldap(\%users, $incl, $admin->{'default_user_options'}, 'tied');
 		}elsif ($type eq 'include_ldap_2level_query') {
-		    $included = _include_users_ldap_2level(\%users, $incl, $admin->{'default_user_options'}, 'tied');
+		    my $result = _include_users_ldap_2level(\%users, $incl, $admin->{'default_user_options'}, 'tied');
+		    if (defined $result) {
+			$included = $result->{'total'};
+			if (defined $result->{'errors'}){
+			    &do_log('error', 'Errors occurred during the second LDAP passe for list %s, source "%s"', $self->{'name'}, );
+			}
+		    }else{
+			$included = undef;
+		    }
 		}elsif ($type eq 'include_list') {
 		    $depend_on->{$name} = 1 ;
 		    if (&_inclusion_loop ($name,$incl,$depend_on)) {
@@ -7982,8 +7986,7 @@ sub _load_users_include {
 		}
 		unless (defined $included) {
 		    &do_log('err', 'Inclusion %s failed in list %s', $type, $name);
-		    $total = undef;
-		    last;
+		    next;
 		}
 		
 		$total += $included;
@@ -8077,7 +8080,15 @@ sub _load_users_include2 {
 	    }elsif ($type eq 'include_ldap_query') {
 		$included = _include_users_ldap(\%users, $incl, $admin->{'default_user_options'});
 	    }elsif ($type eq 'include_ldap_2level_query') {
-		$included = _include_users_ldap_2level(\%users, $incl, $admin->{'default_user_options'});
+		my $result = _include_users_ldap_2level(\%users, $incl, $admin->{'default_user_options'});
+		if (defined $result) {
+		    $included = $result->{'total'};
+		    if (defined $result->{'errors'}){
+			&do_log('err', 'Errors occurred during the second LDAP passe');
+		    }
+		}else{
+		    $included = undef;
+		}
 	    }elsif ($type eq 'include_remote_sympa_list') {
 		$included = $self->_include_users_remote_sympa_list(\%users, $incl, $dir,$admin->{'domain'},$admin->{'default_user_options'});
 	    }elsif ($type eq 'include_list') {
@@ -8090,9 +8101,6 @@ sub _load_users_include2 {
 		}
 	    }elsif ($type eq 'include_file') {
 		$included = _include_users_file (\%users, $incl, $admin->{'default_user_options'});
-#	    }elsif ($type eq 'include_admin') {
-#		$included = _include_users_admin (\\%users, $incl, $admin->{'default_user_options'});
-#	    }
 	    }elsif ($type eq 'include_remote_file') {
 		$included = _include_users_remote_file (\%users, $incl, $admin->{'default_user_options'});
 	    }
@@ -8182,7 +8190,15 @@ sub _load_admin_users_include {
 		}elsif ($type eq 'include_ldap_query') {
 		    $included = _include_users_ldap(\%admin_users, $incl,\%option); 
 		}elsif ($type eq 'include_ldap_2level_query') {
-		    $included = _include_users_ldap_2level(\%admin_users, $incl,\%option); 
+		    my $result = _include_users_ldap_2level(\%admin_users, $incl,\%option); 
+		    if (defined $result) {
+			$included = $result->{'total'};
+			if (defined $result->{'errors'}){
+			    &do_log('err', 'Errors occurred during the second LDAP passe. Please verify your LDAP query.');
+			}
+		    }else{
+			$included = undef;
+		    }
 		}elsif ($type eq 'include_remote_sympa_list') {
 		    $included = $self->_include_users_remote_sympa_list(\%admin_users, $incl, $dir,$list_admin->{'domain'},\%option);
 		}elsif ($type eq 'include_list') {
@@ -8200,8 +8216,7 @@ sub _load_admin_users_include {
 		}
 		unless (defined $included) {
 		    &do_log('err', 'Inclusion %s %s failed in list %s', $role, $type, $name);
-		    $total = undef;
-		    last;
+		    next;
 		}
 		$total += $included;
 	    }
@@ -8462,6 +8477,7 @@ sub sync_include {
 
     ## Go through new users
     my @add_tab;
+    my $users_added = 0;
     foreach my $email (keys %{$new_subscribers}) {
 	if (defined($old_subscribers{$email}) ) {	   
 	    if ($old_subscribers{$email}{'included'}) {
@@ -8498,24 +8514,31 @@ sub sync_include {
 	    my $u = $new_subscribers->{$email};
 	    $u->{'included'} = 1;
 	    $u->{'date'} = time;
-	    push @add_tab, $u;
-	}
-    }
-
-    if ($#add_tab >= 0) {
-	unless( $users_added = $self->add_user( @add_tab ) ) {
-	    &do_log('err', 'List:sync_include(%s): Failed to add new users', $name);
-	    return undef;
+	    @add_tab = ($u);
+	    my $user_added = 0;
+	    unless( $user_added = $self->add_user( @add_tab ) ) {
+		&do_log('err', 'List:sync_include(%s): Failed to add new users', $name);
+		return undef;
+	    }
+	    if ($user_added) {
+		$users_added++;
+		## Send notification if the list config authorizes it only.
+		if ($self->{'admin'}{'inclusion_notification_feature'} eq 'on') {
+		    unless ($self->send_file('welcome', $u->{'email'}, $self->{'domain'},{})) {
+			&do_log('err',"Unable to send template 'welcome' to $u->{'email'}");
+		    }
+		}
+	    }
 	}
     }
 
     if ($users_added) {
-        &do_log('notice', 'List:sync_include(%s): %d users added',
-		$name, $users_added);
+        &do_log('notice', 'List:sync_include(%s): %d users added', $name, $users_added);
     }
 
     ## Go though previous list of users
     my $users_removed = 0;
+    my $user_removed;
     my @deltab;
     foreach my $email (keys %old_subscribers) {
 	unless( defined($new_subscribers->{$email}) ) {
@@ -8533,18 +8556,26 @@ sub sync_include {
 
 		## Tag user for deletion
 	    }else {
-		push(@deltab, $email);
+		&do_log('debug3', 'List:sync_include: removing %s from list %s', $email, $name);
+		@deltab = ($email);
+		unless($user_removed = $self->delete_user(@deltab)) {
+		    &do_log('err', 'List:sync_include(%s): Failed to delete %s', $name, $user_removed);
+		    return undef;
+		}
+		if ($user_removed) {
+		    $users_removed++;
+		    ## Send notification if the list config authorizes it only.
+		    if ($self->{'admin'}{'inclusion_notification_feature'} eq 'on') {
+			unless ($self->send_file('removed', $email, $self->{'domain'},{})) {
+			    &do_log('err',"Unable to send template 'removed' to $email");
+			}
+		    }
+		}
 	    }
 	}
     }
-    if ($#deltab >= 0) {
-	unless($users_removed = $self->delete_user(@deltab)) {
-	    &do_log('err', 'List:sync_include(%s): Failed to delete %s',
-		    $name, $users_removed);
-	    return undef;
-        }
-        &do_log('notice', 'List:sync_include(%s): %d users removed',
-		$name, $users_removed);
+    if ($users_removed > 0) {
+	&do_log('notice', 'List:sync_include(%s): %d users removed', $name, $users_removed);
     }
     &do_log('notice', 'List:sync_include(%s): %d users updated', $name, $users_updated);
 
@@ -9001,17 +9032,17 @@ sub store_digest {
     my($filename, $newfile);
     my $separator = &tools::get_separator();  
 
-    unless ( -d "$Conf{'queuedigest'}") {
+    unless ( -d "$Conf::Conf{'queuedigest'}") {
 	return;
     }
     
     my @now  = localtime(time);
 
     ## Reverse compatibility concern
-    if (-f "$Conf{'queuedigest'}/$self->{'name'}") {
-  	$filename = "$Conf{'queuedigest'}/$self->{'name'}";
+    if (-f "$Conf::Conf{'queuedigest'}/$self->{'name'}") {
+  	$filename = "$Conf::Conf{'queuedigest'}/$self->{'name'}";
     }else {
- 	$filename = $Conf{'queuedigest'}.'/'.$self->get_list_id();
+ 	$filename = $Conf::Conf{'queuedigest'}.'/'.$self->get_list_id();
     }
 
     $newfile = !(-e $filename);
@@ -9058,8 +9089,8 @@ sub get_lists {
 	if (defined $list_cache{'get_lists'}{$robot}) {
 	    push @lists, @{$list_cache{'get_lists'}{$robot}};
 	}else {
-	    my $robot_dir =  $Conf{'home'}.'/'.$robot ;
-	    $robot_dir = $Conf{'home'}  unless ((-d $robot_dir) || ($robot ne $Conf{'host'}));
+	    my $robot_dir =  $Conf::Conf{'home'}.'/'.$robot ;
+	    $robot_dir = $Conf::Conf{'home'}  unless ((-d $robot_dir) || ($robot ne $Conf::Conf{'host'}));
 	    
 	    unless (-d $robot_dir) {
 		do_log('err',"unknown robot $robot, Unable to open $robot_dir");
@@ -9108,20 +9139,20 @@ sub get_robots {
     my(@robots, $r);
     do_log('debug2', 'List::get_robots()');
 
-    unless (opendir(DIR, $Conf{'etc'})) {
-	do_log('err',"Unable to open $Conf{'etc'}");
+    unless (opendir(DIR, $Conf::Conf{'etc'})) {
+	do_log('err',"Unable to open $Conf::Conf{'etc'}");
 	return undef;
     }
     my $use_default_robot = 1 ;
     foreach $r (sort readdir(DIR)) {
-	next unless (($r !~ /^\./o) && (-d "$Conf{'home'}/$r"));
-	next unless (-r "$Conf{'etc'}/$r/robot.conf");
+	next unless (($r !~ /^\./o) && (-d "$Conf::Conf{'home'}/$r"));
+	next unless (-r "$Conf::Conf{'etc'}/$r/robot.conf");
 	push @robots, $r;
-	undef $use_default_robot if ($r eq $Conf{'host'});
+	undef $use_default_robot if ($r eq $Conf::Conf{'host'});
     }
     closedir DIR;
 
-    push @robots, $Conf{'host'} if ($use_default_robot);
+    push @robots, $Conf::Conf{'host'} if ($use_default_robot);
     return @robots ;
 }
 
@@ -9161,7 +9192,7 @@ sub get_which_db {
 	    return undef;
 	}
 
-	while ($l = $sth->fetchrow_hashref) {
+	while ($l = $sth->fetchrow_hashref('NAME_lc')) {
 	    my ($name, $robot) = ($l->{'list_subscriber'}, $l->{'robot_subscriber'});
 	    $name =~ s/\s*$//;  ## usefull for PostgreSQL
 	    $which{$robot}{$name}{'member'} = 1;
@@ -9193,7 +9224,7 @@ sub get_which_db {
 	    return undef;
 	}
 	
-	while ($l = $sth->fetchrow_hashref) {
+	while ($l = $sth->fetchrow_hashref('NAME_lc')) {
 	    $which{$l->{'robot_admin'}}{$l->{'list_admin'}}{$l->{'role_admin'}} = 1;
 	}
 	
@@ -9295,12 +9326,12 @@ sub get_which {
     my $db_which = {};
     my $requested_lists;
 
-    if (defined $Conf{'db_type'} && $List::use_db) {
+    if (defined $Conf::Conf{'db_type'} && $List::use_db) {
 	$db_which = &get_which_db($email,  $function);
 	@{$requested_lists} = keys %{$db_which->{$robot}};
     }
 
-    ## This call is required to 
+    ## This call is required too 
     my $all_lists = &get_lists($robot, {}, $requested_lists);
 
     foreach my $list (@$all_lists){
@@ -9367,8 +9398,8 @@ sub get_mod_spool_size {
     do_log('debug3', 'List::get_mod_spool_size()');    
     my @msg;
     
-    unless (opendir SPOOL, $Conf{'queuemod'}) {
-	&do_log('err', 'Unable to read spool %s', $Conf{'queuemod'});
+    unless (opendir SPOOL, $Conf::Conf{'queuemod'}) {
+	&do_log('err', 'Unable to read spool %s', $Conf::Conf{'queuemod'});
 	return undef;
     }
 
@@ -9458,10 +9489,10 @@ sub sort_dir_to_get_mod {
 sub get_db_field_type {
     my ($table, $field) = @_;
 
-    return undef unless ($Conf{'db_type'} eq 'mysql');
+    return undef unless ($Conf::Conf{'db_type'} eq 'mysql');
 
     ## Is the Database defined
-    unless ($Conf{'db_name'}) {
+    unless ($Conf::Conf{'db_name'}) {
 	&do_log('info', 'No db_name defined in configuration file');
 	return undef;
     }
@@ -9480,7 +9511,7 @@ sub get_db_field_type {
 	return undef;
     }
 	    
-    while (my $ref = $sth->fetchrow_hashref()) {
+    while (my $ref = $sth->fetchrow_hashref('NAME_lc')) {
 	next unless ($ref->{'Field'} eq $field);
 
 	return $ref->{'Type'};
@@ -9493,7 +9524,7 @@ sub get_db_field_type {
 sub check_db_connect {
     
     ## Is the Database defined
-    unless ($Conf{'db_name'}) {
+    unless ($Conf::Conf{'db_name'}) {
 	&do_log('err', 'No db_name defined in configuration file');
 	return undef;
     }
@@ -9534,7 +9565,7 @@ sub lowercase_field {
 	return undef;
     }
 
-    while (my $user = $sth->fetchrow_hashref) {
+    while (my $user = $sth->fetchrow_hashref('NAME_lc')) {
 	my $lower_cased = lc($user->{$field});
 	next if ($lower_cased eq $user->{$field});
 
@@ -9588,8 +9619,8 @@ sub load_topics {
 	my $index = 0;
 	my (@raugh_data, $topic);
 	while (<FILE>) {
-	    Encode::from_to($_, $Conf{'filesystem_encoding'}, 'utf8');
-	    if (/^([\w\/]+)\s*$/) {
+	    Encode::from_to($_, $Conf::Conf{'filesystem_encoding'}, 'utf8');
+	    if (/^([\-\w\/]+)\s*$/) {
 		$index++;
 		$topic = {'name' => $1,
 			  'order' => $index
@@ -9616,7 +9647,7 @@ sub load_topics {
 	$mtime{'topics'}{$robot} = (stat($conf_file))[9];
 
 	unless ($#raugh_data > -1) {
-	    &do_log('notice', 'No topic defined in %s/topics.conf', $Conf{'etc'});
+	    &do_log('notice', 'No topic defined in %s/topics.conf', $Conf::Conf{'etc'});
 	    return undef;
 	}
 
@@ -9822,7 +9853,7 @@ sub _apply_defaults {
 ## Save a parameter
 sub _save_list_param {
     my ($key, $p, $defaults, $fd) = @_;
-    &do_log('debug4', '_save_list_param(%s)', $key);
+    &do_log('debug3', '_save_list_param(%s)', $key);
 
     ## Ignore default value
     return 1 if ($defaults == 1);
@@ -9886,7 +9917,7 @@ sub _save_list_param {
 ## Load a single line
 sub _load_list_param {
     my ($robot,$key, $value, $p, $directory) = @_;
-    &do_log('debug4','_load_list_param(%s,\'%s\',\'%s\')', $robot,$key, $value);
+    &do_log('debug3','_load_list_param(%s,\'%s\',\'%s\')', $robot,$key, $value);
     
     ## Empty value
     if ($value =~ /^\s*$/) {
@@ -9988,8 +10019,8 @@ sub get_cert {
 	}
 	close CERT ;
     }elsif ($format eq 'der') {
-	unless (open CERT, "$Conf{'openssl'} x509 -in $certs -outform DER|") {
-	    do_log('err', "$Conf{'openssl'} x509 -in $certs -outform DER|");
+	unless (open CERT, "$Conf::Conf{'openssl'} x509 -in $certs -outform DER|") {
+	    do_log('err', "$Conf::Conf{'openssl'} x509 -in $certs -outform DER|");
 	    do_log('err', "List::get_cert(): Unable to open get $certs in DER format: $!");
 	    return undef;
 	}
@@ -10622,7 +10653,7 @@ sub compute_topic {
 ####################################################
 sub tag_topic {
     my ($self,$msg_id,$topic_list,$method) = @_;
-    &do_log('debug4','tag_topic(%s,%s,"%s",%s)',$self->{'name'},$msg_id,$topic_list,$method);
+    &do_log('debug3','tag_topic(%s,%s,"%s",%s)',$self->{'name'},$msg_id,$topic_list,$method);
 
     my $robot = $self->{'domain'};
     my $queuetopic = &Conf::get_robot_conf($robot, 'queuetopic');
@@ -10667,7 +10698,7 @@ sub tag_topic {
 sub load_msg_topic_file {
     my ($self,$msg_id,$robot) = @_;
     $msg_id = &tools::clean_msg_id($msg_id);
-    &do_log('debug4','List::load_msg_topic_file(%s,%s)',$self->{'name'},$msg_id);
+    &do_log('debug3','List::load_msg_topic_file(%s,%s)',$self->{'name'},$msg_id);
     
     my $queuetopic = &Conf::get_robot_conf($robot, 'queuetopic');
     my $list_id = $self->get_list_id();
@@ -10727,7 +10758,7 @@ sub load_msg_topic_file {
 ##################################################### 
 sub modifying_msg_topic_for_subscribers(){
     my ($self,$new_msg_topic) = @_;
-    &do_log('debug4',"List::modifying_msg_topic_for_subscribers($self->{'name'}");
+    &do_log('debug3',"List::modifying_msg_topic_for_subscribers($self->{'name'}");
     my $deleted = 0;
 
     my @old_msg_topic_name;
@@ -10890,7 +10921,7 @@ sub _urlize_part {
     my $size = (-s $file);
 
     ## Only URLize files with a moderate size
-    if ($size < $Conf{'urlize_min_size'}) {
+    if ($size < $Conf::Conf{'urlize_min_size'}) {
 	unlink "$expl/$dir/$filename";
 	return undef;
     }
@@ -10926,10 +10957,10 @@ sub store_subscription_request {
     my ($self, $email, $gecos, $custom_attr) = @_;
     &do_log('debug2', '(%s, %s, %s)', $self->{'name'}, $email, $gecos, $custom_attr);
 
-    my $filename = $Conf{'queuesubscribe'}.'/'.$self->get_list_id().'.'.time.'.'.int(rand(1000));
+    my $filename = $Conf::Conf{'queuesubscribe'}.'/'.$self->get_list_id().'.'.time.'.'.int(rand(1000));
 
-    unless (opendir SUBSPOOL, "$Conf{'queuesubscribe'}") {
-	&do_log('err', 'Could not open %s', $Conf{'queuesubscribe'});
+    unless (opendir SUBSPOOL, "$Conf::Conf{'queuesubscribe'}") {
+	&do_log('err', 'Could not open %s', $Conf::Conf{'queuesubscribe'});
 	return undef;
     }
     
@@ -10940,7 +10971,7 @@ sub store_subscription_request {
 
     foreach my $file (@req_files) {
 	next unless ($file =~ /$listaddr\..*/) ;
-	unless (open OLDREQUEST, "$Conf{'queuesubscribe'}/$file") {
+	unless (open OLDREQUEST, "$Conf::Conf{'queuesubscribe'}/$file") {
 	    &do_log('err', 'Could not open %s for verification', $file);
 	    return undef;
 	}
@@ -10975,13 +11006,13 @@ sub get_subscription_requests {
 
     my %subscriptions;
 
-    unless (opendir SPOOL, $Conf{'queuesubscribe'}) {
-	&do_log('info', 'Unable to read spool %s', $Conf{'queuesubscribe'});
+    unless (opendir SPOOL, $Conf::Conf{'queuesubscribe'}) {
+	&do_log('info', 'Unable to read spool %s', $Conf::Conf{'queuesubscribe'});
 	return undef;
     }
 
     foreach my $filename (sort grep(/^$self->{'name'}(\@$self->{'domain'})?\.\d+\.\d+$/, readdir SPOOL)) {
-	unless (open REQUEST, "<:bytes", "$Conf{'queuesubscribe'}/$filename") {
+	unless (open REQUEST, "<:bytes", "$Conf::Conf{'queuesubscribe'}/$filename") {
 	    do_log('err', 'Could not open %s', $filename);
 	    closedir SPOOL;
 	    next;
@@ -11002,7 +11033,7 @@ sub get_subscription_requests {
 	 
 	if ( defined($user_entry) && ($user_entry->{'subscribed'} == 1)) {
 	    &do_log('err','User %s is subscribed to %s already. Deleting subscription request.', $email, $self->{'name'});
-	    unless (unlink "$Conf{'queuesubscribe'}/$filename") {
+	    unless (unlink "$Conf::Conf{'queuesubscribe'}/$filename") {
 		&do_log('err', 'Could not delete file %s', $filename);
 	    }
 	    next;
@@ -11035,8 +11066,8 @@ sub get_subscription_request_count {
     my %subscriptions;
     my $i = 0 ;
 
-    unless (opendir SPOOL, $Conf{'queuesubscribe'}) {
-	&do_log('info', 'Unable to read spool %s', $Conf{'queuesubscribe'});
+    unless (opendir SPOOL, $Conf::Conf{'queuesubscribe'}) {
+	&do_log('info', 'Unable to read spool %s', $Conf::Conf{'queuesubscribe'});
 	return undef;
     }
 
@@ -11055,14 +11086,14 @@ sub delete_subscription_request {
     my $removed_file = 0;
     my $email_regexp = &tools::get_regexp('email');
     
-    unless (opendir SPOOL, $Conf{'queuesubscribe'}) {
-	&do_log('info', 'Unable to read spool %s', $Conf{'queuesubscribe'});
+    unless (opendir SPOOL, $Conf::Conf{'queuesubscribe'}) {
+	&do_log('info', 'Unable to read spool %s', $Conf::Conf{'queuesubscribe'});
 	return undef;
     }
 
     foreach my $filename (sort grep(/^$self->{'name'}(\@$self->{'domain'})?\.\d+\.\d+$/, readdir SPOOL)) {
 	
-	unless (open REQUEST, "$Conf{'queuesubscribe'}/$filename") {
+	unless (open REQUEST, "$Conf::Conf{'queuesubscribe'}/$filename") {
 	    &do_log('notice', 'Could not open %s', $filename);
 	    next;
 	}
@@ -11075,7 +11106,7 @@ sub delete_subscription_request {
 		next;
 	    }
 	    
-	    unless (unlink "$Conf{'queuesubscribe'}/$filename") {
+	    unless (unlink "$Conf::Conf{'queuesubscribe'}/$filename") {
 		&do_log('err', 'Could not delete file %s', $filename);
 		last;
 	    }
@@ -11107,6 +11138,38 @@ sub get_arc_size {
     return tools::get_dir_size($dir.'/'.$self->get_list_id());
 }
 
+# return the date epoch for next delivery planified for a list
+sub  get_next_delivery_date {
+    my $self = shift;
+
+    my $dtime = $self->{'admin'}{'delivery_time'} ;
+    unless ($dtime =~ /(\d?\d)\:(\d\d)/ ) {
+	# if delivery _time if not defined, the delivery time right now
+	return time();
+    }
+    my $h = $1;
+    my $m = $2;
+    unless ((($h == 24)&&($m == 0))||(($h <= 23)&&($m <= 60))){
+	&do_log('err',"ignoring wrong parameter format delivery_time, delivery_tile must be smaller than 24:00");
+	return time();
+    }
+    my $date = time();
+
+    my ($sec,$min,$hour,$mday,$mon,$year,$wday,$yday,$isdst) =  localtime($date);
+
+    my $plannified_time = (($h*60)+$m)*60;       # plannified time in sec
+    my $now_time = ((($hour*60)+$min)*60)+$sec;  # Now #sec since to day 00:00
+    
+    my $result = $date - $now_time + $plannified_time;
+    my ($sec,$min,$hour,$mday,$mon,$year,$wday,$yday,$isdst) =  localtime($result);
+
+    if ($now_time <= $plannified_time ) {
+	return ( $date - $now_time + $plannified_time) ;
+    }else{
+	return ( $date - $now_time + $plannified_time + (24*3600)); # plannified time is past so report to tomorrow
+    }
+}
+
 
 ## Searches the include datasource corresponding to the provided ID
 sub search_datasource {
@@ -11132,13 +11195,33 @@ sub search_datasource {
     return undef;
 }
 
+## Return the names of datasources, given a coma-separated list of source ids
+# IN : -$class 
+#      -$id : datasource ids (coma-separated)
+# OUT : -$name : datasources names (scalar)
+sub get_datasource_name {
+    my ($self, $id) = @_;
+    &do_log('debug2','(%s,%s)', $self->{'name'}, $id);
+    my %sources;
+
+    my @ids = split /,/,$id;
+    foreach my $id (@ids) {
+	## User may come twice from the same datasource
+	unless (defined ($sources{$id})) {
+	    $sources{$id} = $self->search_datasource($id);
+	}
+    }
+    
+    return join(', ', values %sources);
+}
+
 ## Remove a task in the tasks spool
 sub remove_task {
     my $self = shift;
     my $task = shift;
 
-    unless (opendir(DIR, $Conf{'queuetask'})) {
-	&do_log ('err', "error : can't open dir %s: %s", $Conf{'queuetask'}, $!);
+    unless (opendir(DIR, $Conf::Conf{'queuetask'})) {
+	&do_log ('err', "error : can't open dir %s: %s", $Conf::Conf{'queuetask'}, $!);
 	return undef;
     }
     my @tasks = grep !/^\.\.?$/, readdir DIR;
@@ -11146,7 +11229,7 @@ sub remove_task {
 
     foreach my $task_file (@tasks) {
 	if ($task_file =~ /^(\d+)\.\w*\.$task\.$self->{'name'}\@$self->{'domain'}$/) {
-	    unless (unlink("$Conf{'queuetask'}/$task_file")) {
+	    unless (unlink("$Conf::Conf{'queuetask'}/$task_file")) {
 		&do_log('err', 'Unable to remove task file %s : %s', $task_file, $!);
 		return undef;
 	    }
@@ -11215,7 +11298,7 @@ sub purge {
 	unless ($self && ($list_of_lists{$self->{'domain'}}{$self->{'name'}}));
     
     ## Remove tasks for this list
-    &Task::list_tasks($Conf{'queuetask'});
+    &Task::list_tasks($Conf::Conf{'queuetask'});
     foreach my $task (&Task::get_tasks_by_list($self->get_list_id())) {
 	unlink $task->{'filepath'};
     }
@@ -11240,9 +11323,9 @@ sub remove_aliases {
 
     return undef 
 	unless ($self && ($list_of_lists{$self->{'domain'}}{$self->{'name'}})
-		&& ($Conf{'sendmail_aliases'} !~ /^none$/i));
+		&& ($Conf::Conf{'sendmail_aliases'} !~ /^none$/i));
     
-    my $alias_manager = $Conf{'alias_manager'};
+    my $alias_manager = $Conf::Conf{'alias_manager'};
     
     unless (-x $alias_manager) {
 	&do_log('err','Cannot run alias_manager %s', $alias_manager);
@@ -11339,7 +11422,7 @@ sub move_message {
     my ($self, $file, $queue) = @_;
     &do_log('debug2', "List::move_message($file, $self->{'name'}, $queue)");
 
-    my $dir = $queue || $Conf{'queuedistribute'};    
+    my $dir = $queue || $Conf::Conf{'queuedistribute'};    
     my $filename = $self->get_list_id().'.'.time.'.'.int(rand(999));
 
     unless (open OUT, ">$dir/T.$filename") {
@@ -11401,16 +11484,16 @@ sub new {
     my $robot = {'name' => $name};
     &Log::do_log('debug2', '');
     
-    unless (defined $name && $Conf::Conf{'robots'}{$name}) {
+    unless (defined $name && $Conf::Conf::Conf{'robots'}{$name}) {
 	&Log::do_log('err',"Unknown robot '$name'");
 	return undef;
     }
 
     ## The default robot
-    if ($name eq $Conf::Conf{'host'}) {
-	$robot->{'home'} = $Conf{'home'};
+    if ($name eq $Conf::Conf::Conf{'host'}) {
+	$robot->{'home'} = $Conf::Conf{'home'};
     }else {
-	$robot->{'home'} = $Conf{'home'}.'/'.$name;
+	$robot->{'home'} = $Conf::Conf{'home'}.'/'.$name;
 	unless (-d $robot->{'home'}) {
 	    &Log::do_log('err', "Missing directory '$robot->{'home'}' for robot '$name'");
 	    return undef;

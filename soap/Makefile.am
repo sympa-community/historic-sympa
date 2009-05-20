@@ -35,9 +35,9 @@ EXTRA_DIST = $(default_DATA) $(modules_DATA) \
 	     $(script_SCRIPTS) $(execcgi_SCRIPTS)
 
 install-exec-hook:
-	chmod 6755 $(DESTDIR)$(execcgidir)/sympa_soap_server-wrapper.fcgi
 	-chown $(USER) $(DESTDIR)$(execcgidir)/sympa_soap_server-wrapper.fcgi
 	-chgrp $(GROUP) $(DESTDIR)$(execcgidir)/sympa_soap_server-wrapper.fcgi
+	chmod 6755 $(DESTDIR)$(execcgidir)/sympa_soap_server-wrapper.fcgi
 
 install-data-hook:
 	sed -i \
@@ -45,6 +45,6 @@ install-data-hook:
 		-e 's|--CONFIG--|$(CONFIG)|' \
 		-e 's|--WWSCONFIG--|$(WWSCONFIG)|' \
 		-e 's|--pkgdatadir--|$(pkgdatadir)|' \
-		$(addprefix $(DESTDIR)$(datadir)/sympa/lib/, $(modules_DATA)) \
+		$(addprefix $(DESTDIR)$(modulesdir)/, $(modules_DATA)) \
 		$(addprefix $(DESTDIR)$(execcgidir)/, $(execcgi_SCRIPTS)) \
-		$(addprefix $(DESTDIR)$(datadir)/sympa/bin/, $(script_SCRIPTS))
+		$(addprefix $(DESTDIR)$(scriptdir)/, $(script_SCRIPTS))

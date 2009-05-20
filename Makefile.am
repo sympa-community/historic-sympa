@@ -30,7 +30,7 @@ installdir:
 	@for dir in $(expldir) $(spooldir) $(spooldir)/msg $(spooldir)/digest \
 		$(spooldir)/moderation $(spooldir)/expire $(spooldir)/auth \
 		$(spooldir)/outgoing $(spooldir)/tmp $(spooldir)/task \
-		$(prefix)/bounce $(prefix)/arc; do \
+		$(prefix)/bounce $(prefix)/arc $(piddir); do \
 		if [ ! -d $(DESTDIR)$$dir ] ; then \
 			echo "Creating $(DESTDIR)$$dir"; \
 			install -d -m 755 $(DESTDIR)$$dir; \
@@ -67,6 +67,9 @@ installconfig:
 	fi
 
 nextstep: 
+	@echo ""
+	@echo "** You can find documentation at:"
+	@echo "** http://www.sympa.org/documentation/manual/sympa-$(SYMPA_VERSION).pdf"
 	@echo ""
 	@echo "#########################################################"
 	@echo "# If you install Sympa for the first time on this server"

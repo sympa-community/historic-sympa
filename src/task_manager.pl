@@ -37,11 +37,11 @@ use Time::Local;
 use Digest::MD5;
 use Scenario;
 use SympaSession;
+use Bulk;
 use mail;
 use wwslib;
  
 require 'tt2.pl';
-require 'parser.pl';
 require 'tools.pl';
 
 my $opt_d;
@@ -178,6 +178,7 @@ my %global_models = (#'crl_update_task' => 'crl_update',
 		     'purge_user_table_task' => 'purge_user_table',
 		     'purge_logs_table_task' => 'purge_logs_table',
 		     'purge_session_table_task' => 'purge_session_table',
+		     'purge_tables_task' => 'purge_tables',
 		     'purge_one_time_ticket_table_task' => 'purge_one_time_ticket_table',
 		     'purge_orphan_bounces_task' => 'purge_orphan_bounces',
 		     'eval_bouncers_task' => 'eval_bouncers',
@@ -216,6 +217,7 @@ my %commands = ('next'                  => ['date', '\w*'],
 		'purge_user_table'      => [],
 		'purge_logs_table'      => [],
 		'purge_session_table'   => [],
+		'purge_tables'   => [],
 		'purge_one_time_ticket_table'   => [],
 		'purge_orphan_bounces'  => [],
 		'eval_bouncers'         => [],
@@ -309,7 +311,7 @@ while (!$end) {
 			next unless (($list->{'admin'}{'user_data_source'} eq 'include2') &&
 				     $list->has_include_data_sources() &&
 				     ($list->{'admin'}{'status'} eq 'open'));
-			
+
 			create ($current_date, 'INIT', $model, 'ttl', \%data);
 			
 		    }elsif (defined $list->{'admin'}{$model_task_parameter} && 
@@ -359,9 +361,7 @@ while (!$end) {
 	    
 	    ## Skip if parameter is not defined
 	    if ( $task->{'model'} eq 'sync_include') {
-		unless (($list->{'admin'}{'user_data_source'} eq 'include2') &&
-			$list->has_include_data_sources() &&
-			($list->{'admin'}{'status'} eq 'open')) {
+		unless ($list->{'admin'}{'status'} eq 'open') {
 		    &do_log('notice','Removing task file %s', $task_file);
 		    unless (unlink $task_file) {
 			&do_log('err', 'Unable to remove task file %s : %s', $task_file, $!);
@@ -455,7 +455,11 @@ sub create {
 
     ## creation
     open (TASK, ">$task_file");
-    &parser::parse_tpl($Rdata, $model_file, \*TASK);
+    my $tt2 = Template->new({'START_TAG' => quotemeta('['),'END_TAG' => quotemeta(']'), 'ABSOLUTE' => 1});
+    unless (defined $tt2 && $tt2->process($model_file, $Rdata, \*TASK)) {
+      &do_log('err', "Failed to parse task template '%s' : %s", $model_file, $tt2->error());
+    }
+    #&parser::parse_tpl($Rdata, $model_file, \*TASK);
     close (TASK);
     
     # special checking for list whose user_data_source config parmater is include. The task won't be created if there is a delete_subs command
@@ -763,7 +767,7 @@ sub execute {
 	# processing of the commands
 	if ($result{'nature'} eq 'command') {
 	    $status = &cmd_process ($result{'command'}, $result{'Rarguments'}, $task, \%vars, $lnb);
-	    last unless defined($status);
+	    last unless (defined($status) && $status >= 0);
 	}
     } 
 
@@ -776,6 +780,13 @@ sub execute {
 	    return undef;
 	}
 	return undef;
+    }
+    unless ($status >= 0) {
+	&do_log('notice', 'The task %s is now useless. Removing it.', $task_file);
+	unless (unlink($task_file)) {
+	    &do_log('err', 'Unable to remove task file %s : %s', $task_file, $!);
+	    return undef;
+	}
     }
 
     return 1;
@@ -809,6 +820,7 @@ sub cmd_process {
     return purge_user_table ($task, \%context) if ($command eq 'purge_user_table');
     return purge_logs_table ($task, \%context) if ($command eq 'purge_logs_table');
     return purge_session_table ($task, \%context) if ($command eq 'purge_session_table');
+    return purge_tables ($task, \%context) if ($command eq 'purge_tables');
     return purge_one_time_ticket_table ($task, \%context) if ($command eq 'purge_one_time_ticket_table');
     return sync_include($task, \%context) if ($command eq 'sync_include');
     return purge_orphan_bounces ($task, \%context) if ($command eq 'purge_orphan_bounces');
@@ -1133,6 +1145,19 @@ sub purge_session_table {
     return 1;
 }
 
+## remove messages from bulkspool table when no more packet have any pointer to this message
+sub purge_tables {    
+
+    do_log('info','task_manager::purge_tables()');
+    my $removed = &Bulk::purge_bulkspool();
+    unless(defined $removed) {
+	&do_log('err','Failed to purge bulkspool');
+	return undef;
+    }
+    &do_log('notice','%s rows removed in bulkspool_table',$removed);
+    return 1;
+}
+
 ## remove one time ticket table if older than $Conf{'one_time_ticket_table_ttl'}
 sub purge_one_time_ticket_table {    
 
@@ -1415,7 +1440,7 @@ sub purge_orphan_bounces {
 	     do_log ('notice', "id : $id");
 	     $tpl_context{'expiration_date'} = &tools::adate ($expiration_date);
 	     $tpl_context{'certificate_id'} = $id;
-
+	     $tpl_context{'auto_submitted'} = 'auto-generated';
 	     
 	     if (!$log) {
 		 unless (&List::send_global_file ($template, $_,'', \%tpl_context)) {
@@ -1780,13 +1805,12 @@ sub sync_include {
 	return undef;                                                          
     }
  
-    if (! $list->has_include_data_sources() &&
-	(!$list->{'last_sync'} || ($list->{'last_sync'} > (stat("$list->{'dir'}/config"))[9]))) {
-	&do_log('notice', "List $list->{'name'} no more require sync_include task");
-	return undef;	
-    }    
-
     $list->sync_include();
     $list->sync_include_admin();
-    }
 
+    if (! $list->has_include_data_sources() &&
+	(!$list->{'last_sync'} || ($list->{'last_sync'} > (stat("$list->{'dir'}/config"))[9]))) {
+	&do_log('debug1', "List $list->{'name'} no more require sync_include task");
+	return -1;	
+    }    
+}

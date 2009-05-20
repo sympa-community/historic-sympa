@@ -63,12 +63,11 @@ Subject: [% FILTER qencode %][%|loc(list.name)%]Subscription request to list %1[
 [%|loc(list.name)-%]Dear owner of list %1,
  
 A user asked to be added as a subscriber to your list. In order to list and manage
-pending subscription requests you should click the following URL :[%END%]
+pending subscription requests you should click on the following link :[%END%]
 
 [% conf.wwsympa_url %]/ticket/[% one_time_ticket %]
 
-[%|loc(replyto,keyauth,list.name,who,gecos)-%]
-If prefered, you can accept this subscription request sending an email to %1 with the following subject :
+[%|loc(replyto,keyauth,list.name,who,gecos)%]If prefered, you can accept this subscription request sending an email to %1 with the following subject :
 AUTH %2 ADD %3 %4 %5
 [%END%]
 
@@ -87,7 +86,7 @@ Subject: [% FILTER qencode %][%|loc(list.name)%]UNsubscription request from list
 [%|loc(list.name)-%]Dear owner of list %1,
 
 A user asked to be deleted from your list. If this is OK 
-with you, you should click the following URL :[% END %]
+with you, you should click on the following link :[% END %]
 
 [% FILTER escape_url %]mailto:[%sympa%]?subject=auth [%keyauth%] DEL [%list.name%] [%escaped_who%][% END %]
  
@@ -125,10 +124,24 @@ Subject: [% FILTER qencode %][%|loc(who)%]FYI: automatic removal of user %1[%END
 [%END%]
 (no action needed)
 
-[% ELSIF type == 'named_filter' -%]
-Subject: [% FILTER qencode %][%|loc(list.name)%]List %1 : Named filter error[%END%][%END%]
 
-[%|loc(filter,list.name)%]The %1 named filter could not be evaluated. The list %2 is using it for some authorization scenario.[%END%]
+[% ELSIF type == 'automatic_del' -%]
+Subject: [% FILTER qencode %][%|loc(who)%]FYI: automatic removal of user %1[%END%][%END%]
+
+[%|loc(who,list.name)%]User "%1" has been automatically removed from list %2. [%END%]
+[% IF reason == 'arf' -%]
+ The user complain to abuse service about a message from the list using email feedback reports format.
+[% ELSIF  reason == 'welcome' -%]
+ The welcome message (or a subscription remind) sent to the user has triggered a non-delivery report. The user email address might be incorrect.
+[%END%]
+(no action needed)
+
+[% ELSIF type == 'failed_to_change_included_member' -%]
+Subject: [% FILTER qencode %][%|loc(list.name)%]List %1 : Failed to change member email address[%END%][%END%]
+
+[%|loc(current_email,new_email,datasource)%]User %1 could not change his member email address (new email address is %2) because he is included via a the following data sources: %3.
+
+If you are able to do so, you should probably update these data sources with this person's new email address.[%END%]
 
 [% ELSE -%]
 Subject: [% FILTER qencode %][%|loc(list.name,type)%]List %1 / %2[%END%][%END%]

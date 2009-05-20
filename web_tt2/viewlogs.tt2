@@ -1,4 +1,7 @@
 <!-- $Id$ -->
+<div class="block">
+
+<h2>[%|loc%]Logs view[%END%]</h2>
 
 [% IF action != 'search' %]
 <div id="page_size">
@@ -99,9 +102,9 @@
    [% END %]
 
        <label for="submit"></label>
-	 <input id="submit" type="submit" name="action_viewlogs" value="[%|loc%]View[%END%]" />
+	 <input  class="MainMenuLinks" id="submit" type="submit" name="action_viewlogs" value="[%|loc%]View[%END%]" />
        &nbsp;&nbsp;
-         <input id="reset" type="button" value="[%|loc%]Reset[%END%]" onclick="javascript:clear_log_form()"/>
+         <input  class="MainMenuLinks" id="reset" type="button" value="[%|loc%]Reset[%END%]" onclick="javascript:clear_log_form()"/>
 </fieldset>
 </form>
 
@@ -238,3 +241,6 @@
       [% END %]
 </table>
 </div>
+
+</div>
+<!-- end viewlogs.tt2 -->

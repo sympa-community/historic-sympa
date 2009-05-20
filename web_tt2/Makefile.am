@@ -79,7 +79,6 @@ webtemplate_DATA = active_lists.tt2 \
 		   latest_arc.tt2 \
 		   latest_d_read.tt2 \
 		   latest_lists.tt2 \
-		   list_admin_menu.tt2 \
 		   list_button_footer.tt2 \
 		   list_button_header.tt2 \
 		   list_menu.tt2 \
@@ -93,7 +92,9 @@ webtemplate_DATA = active_lists.tt2 \
 		   maintenance.tt2 \
 		   main.tt2 \
 		   menu.tt2 \
+		   menu_search.tt2 \
 		   modindex.tt2 \
+		   nav.tt2 \
 		   notice.tt2 \
 		   picture_upload.tt2 \
 		   pref.tt2 \
@@ -133,7 +134,7 @@ webtemplate_DATA = active_lists.tt2 \
 EXTRA_DIST = $(webtemplate_DATA)
 
 install-data-hook:
-	cd  $(DESTDIR)$(pkgdatadir)/web_tt2; \
+	cd $(DESTDIR)$(webtemplatedir); \
 	ln -sf review.tt2 search.tt2; \
 	ln -sf lists.tt2 which.tt2; \
 	ln -sf lists.tt2 search_list.tt2

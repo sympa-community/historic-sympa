@@ -52,10 +52,7 @@ MSGFMT_ = @MSGFMT@
 MSGFMT_no = @MSGFMT@
 MSGFMT_yes = @MSGFMT_015@
 MSGFMT = $(MSGFMT_$(USE_MSGCTXT))
-XGETTEXT_ = @XGETTEXT_PL@
-XGETTEXT_no = @XGETTEXT_PL@
-XGETTEXT_yes = @XGETTEXT_PL@
-XGETTEXT = $(XGETTEXT_$(USE_MSGCTXT))
+XGETTEXT = ./xgettext.pl
 MSGMERGE = msgmerge
 MSGMERGE_UPDATE = @MSGMERGE@ --update
 MSGINIT = msginit
@@ -104,8 +101,7 @@ all-no:
 # Ensure that the gettext macros and this Makefile.in.in are in sync.
 check-macro-version:
 	@test "$(GETTEXT_MACRO_VERSION)" = "@GETTEXT_MACRO_VERSION@" \
-	  || { echo "*** error: gettext infrastructure mismatch: using a Makefile.in.in from gettext version $(GETTEXT_MACRO_VERSION) but the autoconf macros are from gettext version @GETTEXT_MACRO_VERSION@" 1>&2; \
-	       #exit 1; \
+	  || { echo "*** warning: gettext infrastructure mismatch: using a Makefile.in.in from gettext version $(GETTEXT_MACRO_VERSION) but the autoconf macros are from gettext version @GETTEXT_MACRO_VERSION@" 1>&2; \
 	     }
 
 # $(srcdir)/$(DOMAIN).pot is only created when needed. When xgettext finds no
@@ -146,11 +142,8 @@ POTFILES.pl: $(srcdir)/POTFILES.in
 $(DOMAIN).pot-update: $(POTFILES) POTFILES.pl remove-potcdate.sed
 	export PERL5LIB=$(top_srcdir)/src:$(PERL5LIB); \
 	$(XGETTEXT) -u \
-	  --default-domain=$(DOMAIN) \
-	  --plugin perl=pl,pm \
-	  --plugin tt2=tt2 \
-	  --plugin Sympa::Extractor='*' \
-	  --files-from=POTFILES.pl
+	  -o $(DOMAIN).pot \
+	  \../src/*.pl ../src/*.pm ../soap/*.pl ../soap/*.pm ../soap/*.fcgi ../wwsympa/wwsympa.fcgi ../wwsympa/*.pl ../wwsympa/*.pm ../web_tt2/*.tt2 ../mail_tt2/*.tt2 ../src/etc/mhonarc-ressources.tt2 ../src/etc/scenari/* ../src/etc/global_task_models/* ../src/etc/list_task_models/* ../src/etc/create_list_templates/*/*;\
 	test ! -f $(DOMAIN).po || { \
 	  if test -f $(srcdir)/$(DOMAIN).pot; then \
 	    sed -f remove-potcdate.sed < $(srcdir)/$(DOMAIN).pot > $(DOMAIN).1po && \

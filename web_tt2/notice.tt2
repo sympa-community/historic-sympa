@@ -1,8 +1,10 @@
-<!-- begin notice.tt2 -->
-<div class="ContentBlock"> <strong>
+<!-- $Id$ -->
+<div id="noticeBlock"></div>
+
+<div id="noticeMsg">
 
 [% IF last_login_date %]
-[%|loc(last_login_host,last_login_date)%]last login from %1 (%2)[%END%]
+[%|loc(last_login_host,last_login_date)%]last login from %1 (%2)[%END%]<br/>
 [%END%]
 
 [% FOREACH notice = notices %]
@@ -81,12 +83,22 @@
 [% ELSIF notice.msg == 'listname_lowercased' %]
 [%|loc%]List name has been lowercased[%END%]
 
+[% ELSIF notice.msg == 'user_notified' %]
+[%|loc(notice.notified_user)%]User %1 has been notified[%END%]
+
 [% ELSE %]
 [% notice.msg %]
 
 [% END %]
-<br />
+
 [% END %]
-</strong>
+
+<form >
+<fieldset>
+<input  class="MainMenuLinks" type="button" value="Close" onclick="hideNotice();">
+
+</fieldset>
+</form>
+
 </div>
 <!-- end notice.tt2 -->

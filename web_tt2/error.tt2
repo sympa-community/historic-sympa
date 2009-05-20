@@ -1,6 +1,7 @@
 <!-- $Id$ -->
-<!-- begin error.tt2 -->
-<div class="ErrorBlock"> <strong>
+
+<div id="ErrorBlock"></div>
+<div id="ErrorMsg">
 [%###################-%]
 [%#### INTERN  ERROR -%]
 [%###################-%]
@@ -16,6 +17,7 @@
   [% ELSIF i_err.msg == 'exportation_failed' %][%|loc(i_err.listname)%]The exportation failed for list '%1'[%END%] 
   [% ELSIF i_err.msg == 'cannot_unzip' %][%|loc(name)%]Cannot unzip file '%1'.[%END%] 
   [% ELSIF i_err.msg == 'auth_msg_failed' %][%|loc(i_err.key)%]Unable to access the message authenticated with key %1[%END%]
+  [% ELSIF i_err.msg == 'no_identified_user' %][%|loc%]Failed to get your email address from the authentication service.[%END%]
   [% ELSIF i_err.msg == 'err_404' %][%|loc(i_err.key)%]File not found.[%END%]
   [% ELSIF i_err.msg == 'db_error' %][%|loc%]Database error.[%END%]
   [% ELSIF i_err.msg == 'db_update_failed' %][%|loc(i_err.key)%]Failed to update database.[%END%]
@@ -23,7 +25,7 @@
   [% ELSIF i_err.msg == 'create_list' %][%|loc(i_err.listname)%]Failed creating list '%1'. The list might already exist or listname might include forbidden characters.[%END%]
 
 [% END %]
-<br />		
+	
 [% END %]
 [%###################-%]
 [%#### SYSTEM  ERROR -%]
@@ -32,7 +34,7 @@
 [%|loc(s_err.action)%]SYSTEM ERROR (%1)[%END-%]   
   [% IF s_err.msg == 'a' %]
   [% END %]
-<br />		
+	
 [% END %]
 [%###################-%]
 [%#### USER  ERROR   -%]
@@ -79,8 +81,10 @@
   [% ELSIF u_err.msg == 'didnt_change_anything' %][%|loc%]You did not select an action to perform[%END%]
   [% ELSIF u_err.msg == 'no_bounce_user' %][%|loc(u_err.email)%]No bounce for user  %1[%END%]
   [% ELSIF u_err.msg == 'no_bounce_subscriber' %][%|loc%]List has no bouncing subscribers[%END%]
+  [% ELSIF u_err.msg == 'no_parameter_edited' %][%|loc%]No parameter was edited[%END%]
   [% ELSIF u_err.msg == 'config_changed' %][%|loc(u_err.email)%]Config file has been modified by %1. Cannot apply your changes[%END%]
   [% ELSIF u_err.msg == 'topic_other' %][%|loc%]Topic "other" is a reserved word[%END%]
+  [% ELSIF u_err.msg == 'mandatory_parameter' %][%|loc(u_err.p_name)%]Parameter '%1' is mandatory. Ignoring deletion.[%END%]
   [% ELSIF u_err.msg == 'p_family_controlled' %][%|loc(u_err.param)%]Parameter '%1' must have values[%END%]
   [% ELSIF u_err.msg == 'p_family_wrong' %][%|loc(u_err.param,u_err.val)%]Parameter '%1' has got wrong value : '%2'[%END%]
   [% ELSIF u_err.msg == 'already_closed' %][%|loc(u_err.listname)%]The list '%1' is already closed[%END%]
@@ -88,6 +92,7 @@
   [% ELSIF u_err.msg == 'incorrect_listname' %][%|loc(u_err.bad_listname)%]'%1' : bad listname[%END%]
   [% ELSIF u_err.msg == 'list_already_exists' %][%|loc(u_err.new_listname)%]'%1' list already exists[%END%]
   [% ELSIF u_err.msg == 'listname_matches_aliases' %][%|loc(u_err.new_listname)%]Incorrect listname '%1' : matches one of service aliases[%END%]
+  [% ELSIF u_err.msg == 'failed_to_install_aliases' %][%|loc(u_err.listname)%]Failed to remove list aliases for list %1[%END%] 
   [% ELSIF u_err.msg == 'no_such_document' %][%|loc(u_err.path)%]%1 : No such file or directory[%END%] 
   [% ELSIF u_err.msg == 'empty_document' %] [%|loc(u_err.path)%]Unable to read %1 : empty document[%END%]
   [% ELSIF u_err.msg == 'no_shared' %] [%|loc%]There is no shared documents[%END%]
@@ -117,9 +122,14 @@
   [% ELSIF u_err.msg == 'no_soap_service' %][%|loc%]No SOAP service[%END%]
   [% ELSIF u_err.msg == 'auth_failed' %][%|loc%]Authentication failed[%END%]
   [% ELSIF u_err.msg == 'list_not_open' %][%|loc(u_err.status)%]Cannot add subscribers when list status is '%1'[%END%]
+  [% ELSIF u_err.msg == 'template_exists' %][%|loc(u_err.argument)%]This Template '%1' already exists[%END%]
+  [% ELSIF u_err.msg == 'cannot_delete' %][%|loc(u_err.file_del)%]Cannot delete this file '%1'[%END%]
+  [% ELSIF u_err.msg == 'invalid_filename' %][%|loc(u_err.filename)%]Invalid filename: '%1'[%END%]
+  [% ELSIF u_err.msg == 'change_member_email_failed_included' %][%|loc(u_err.listname)%]Failed to update member email in list '%1', list owner has been notified.[%END%]
+  [% ELSIF u_err.msg == 'change_admin_email_failed_included' %][%|loc(u_err.listname)%]Failed to update admin email in list '%1', list owner has been notified.[%END%]
   [% ELSIF u_err.msg %][%u_err.msg%]
   [% END %]
-<br />		
+	
 [% END %]
 [%#####################-%]
 [%# AUTHORIZATION ERROR-%]
@@ -132,9 +142,16 @@
   [% IF reason == 'edit_right' %][% SET role = auth.role -%][% SET right = auth.right -%][% END -%] 	 
   [% PROCESS authorization_reject.tt2 -%]	
   [% IF auth.login %]<br />[%|loc%]You need to login[%END%][% END %]
-<br />	
+
 [% END %]
-</strong>
+
+<form >
+<fieldset>
+<input  class="MainMenuLinks" type="button" value="Close" onclick="hideError();">
+
+</fieldset>
+</form>
+
 </div>
-<br />
+
 <!-- end error.tt2 -->
