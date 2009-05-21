@@ -38,6 +38,8 @@ our @EXPORT = qw(
     SYSCONFDIR
     PIDDIR
     LOCALEDIR
+    LIBEXECDIR
+    SBINDIR
 );
 
 use constant VERSION => '--VERSION--';
@@ -53,5 +55,7 @@ use constant SPOOLDIR   => '--spooldir--';
 use constant SYSCONFDIR => '--sysconfdir--';
 use constant PIDDIR     => '--piddir--';
 use constant LOCALEDIR  => '--localedir--';
+use constant LIBEXECDIR => '--libexecdir--';
+use constant SBINDIR    => '--sbindir--';
 
 1;
