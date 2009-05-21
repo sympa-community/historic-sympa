@@ -49,8 +49,7 @@ use mail;
 use Version;
 use Bulk;
 use List;
-
-require 'tools.pl';
+use tools;
 
 my $daemon_name = &Log::set_daemon($0);
 my $date_of_last_activity = time();

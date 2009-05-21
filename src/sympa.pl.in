@@ -46,10 +46,8 @@ use Config_XML;
 use Family;
 use report;
 use File::Copy;
-
-
-require 'tools.pl';
-require 'tt2.pl';
+use tools;
+use tt2;
 
 # durty global variables
 my $is_signed = {}; 

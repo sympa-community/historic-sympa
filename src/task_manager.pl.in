@@ -40,9 +40,8 @@ use SympaSession;
 use Bulk;
 use mail;
 use wwslib;
- 
-require 'tt2.pl';
-require 'tools.pl';
+use tt2;
+use tools;
 
 my $opt_d;
 my $opt_F;
