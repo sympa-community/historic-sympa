@@ -47,8 +47,8 @@ use mail;
 use Getopt::Long;
 use POSIX;
 
-require 'tt2.pl';
-require 'tools.pl';
+use tt2;
+use tools;
 
 ## Equivalents relative to RFC 1893
 my %equiv = ( "user unknown" => '5.1.1',

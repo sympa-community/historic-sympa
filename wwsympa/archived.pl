@@ -53,8 +53,8 @@ use wwslib;
 use mail;
 use Version;
 
-require 'tt2.pl';
-require 'tools.pl';
+use tt2;
+use tools;
 
 my $daemon_name = &Log::set_daemon($0);
 my $ip = $ENV{'REMOTE_HOST'};
