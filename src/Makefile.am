@@ -69,10 +69,16 @@ install-exec-hook:
 	-chown root $(DESTDIR)$(sbindir)/virtualwrapper
 	-chgrp $(GROUP) $(DESTDIR)$(sbindir)/virtualwrapper
 
-sympa.pl bulk.pl alias_manager.pl task_manager.pl sympa_wizard.pl: Makefile
+alias_manager.pl bulk.pl task_manager.pl sympa.pl sympa_wizard.pl: Makefile
 	rm -f $@
 	sed \
 		-e 's|--PERL--|$(PERL)|' \
 		-e 's|--pkgdatadir--|$(pkgdatadir)|' \
 		< $@.in > $@
 	chmod +x $@
+
+alias_manager.pl: $(srcdir)/alias_manager.pl.in
+bulk.pl: $(srcdir)/bulk.pl.in
+sympa.pl: $(srcdir)/sympa.pl.in
+sympa_wizard.pl: $(srcdir)/sympa_wizard.pl.in
+task_manager.pl: $(srcdir)/task_manager.pl.in
