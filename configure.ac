@@ -428,6 +428,7 @@ AC_CONFIG_FILES([
     doc/sample/Makefile
     web_tt2/Makefile
     wwsympa/Makefile
+    wwsympa/icons/Makefile
     mail_tt2/Makefile
     po/Makefile.in
     po-wwsympa/Makefile.in
