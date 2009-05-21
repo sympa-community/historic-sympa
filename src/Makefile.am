@@ -39,7 +39,14 @@ queue_SOURCES = queue.c
 bouncequeue_SOURCES = bouncequeue.c
 familyqueue_SOURCES = familyqueue.c
 
-EXTRA_DIST = $(modules_DATA) $(sbin_SCRIPTS)
+EXTRA_DIST = $(modules_DATA)
+	     bulk.pl.in \
+	     alias_manager.pl.in \
+	     sympa.pl.in \
+	     sympa_wizard.pl.in \
+	     task_manager.pl.in
+
+CLEANFILES = $(sbin_SCRIPTS)
 
 install-exec-hook:
 	chmod 4755 $(DESTDIR)$(libexecdir)/queue
@@ -62,23 +69,10 @@ install-exec-hook:
 	-chown root $(DESTDIR)$(sbindir)/virtualwrapper
 	-chgrp $(GROUP) $(DESTDIR)$(sbindir)/virtualwrapper
 
-install-data-hook:
-	sed -i \
+sympa.pl bulk.pl alias_manager.pl task_manager.pl sympa_wizard.pl: Makefile
+	rm -f $@
+	sed \
 		-e 's|--PERL--|$(PERL)|' \
-		-e 's|--USER--|$(USER)|' \
-		-e 's|--GROUP--|$(GROUP)|' \
-		-e 's|--VERSION--|$(VERSION)|' \
-		-e 's|--SENDMAIL_ALIASES--|$(SENDMAIL_ALIASES)|' \
-		-e 's|--CONFIG--|$(CONFIG)|' \
-		-e 's|--WWSCONFIG--|$(WWSCONFIG)|' \
-		-e 's|--prefix--|$(prefix)|' \
-		-e 's|--piddir--|$(piddir)|' \
-		-e 's|--libexecdir--|$(libexecdir)|' \
-		-e 's|--sbindir--|$(sbindir)|' \
-		-e 's|--localedir--|$(localedir)|' \
 		-e 's|--pkgdatadir--|$(pkgdatadir)|' \
-		-e 's|--sysconfdir--|$(sysconfdir)|' \
-		-e 's|--expldir--|$(expldir)|' \
-		-e 's|--spooldir--|$(spooldir)|' \
-		$(addprefix $(DESTDIR)$(modulesdir)/, $(modules_DATA)) \
-		$(addprefix $(DESTDIR)$(sbindir)/, $(sbin_SCRIPTS))
+		< $@.in > $@
+	chmod +x $@
