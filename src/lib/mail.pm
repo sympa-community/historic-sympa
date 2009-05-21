@@ -37,9 +37,9 @@ use Log;
 use Language;
 use List;
 use Bulk;
+use tools;
 
 use strict;
-require 'tools.pl';
 
 #use strict;
 

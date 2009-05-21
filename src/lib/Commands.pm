@@ -30,14 +30,13 @@ use List;
 use Version;
 use Message;
 use report;
+use tools;
 
 use Digest::MD5;
 use Fcntl;
 use DB_File;
 use Time::Local;
 use MIME::EncWords;
-
-require 'tools.pl';
 
 use Exporter;
 @ISA = ('Exporter');

@@ -23,7 +23,7 @@ package Scenario;
 
 use strict;
 require Exporter;
-require 'tools.pl';
+use tools;
 my @ISA = qw(Exporter);
 my @EXPORT = qw();
 

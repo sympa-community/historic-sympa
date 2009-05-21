@@ -24,7 +24,7 @@ package SQLSource;
 
 use strict;
 require Exporter;
-require 'tools.pl';
+use tools;
 require 'tt2.pl';
 our @ISA = qw(Exporter);
 our @EXPORT = qw(%date_format);

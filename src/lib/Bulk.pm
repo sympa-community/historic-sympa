@@ -27,7 +27,7 @@ use Task;
 require Fetch;
 require Exporter;
 require Encode;
-require 'tools.pl';
+use tools;
 require 'tt2.pl';
 use Time::HiRes qw(time);
 

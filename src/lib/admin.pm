@@ -40,9 +40,7 @@ use List;
 use Conf;
 use Language;
 use Log;
-
-require 'tools.pl';
-
+use tools;
 
 =pod 
 

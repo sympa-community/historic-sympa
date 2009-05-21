@@ -31,6 +31,7 @@ use Language;
 use wwslib;
 use AuthCAS;
 use confdef;
+use tools;
 
 require Exporter;
 use Carp;
@@ -38,7 +39,6 @@ use Carp;
 our @ISA = qw(Exporter);
 our @EXPORT = qw(%Conf DAEMON_MESSAGE DAEMON_COMMAND DAEMON_CREATION DAEMON_ALL);
 
-require 'tools.pl';
 
 sub DAEMON_MESSAGE {1};
 sub DAEMON_COMMAND {2};

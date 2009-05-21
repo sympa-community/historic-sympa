@@ -24,7 +24,6 @@ package Lock;
 
 use strict;
 require Exporter;
-#require 'tools.pl';
 my @ISA = qw(Exporter);
 my @EXPORT = qw();
 
