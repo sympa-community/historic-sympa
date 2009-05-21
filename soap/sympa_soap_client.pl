@@ -22,7 +22,7 @@ use Getopt::Long;
 
 use lib '--pkgdatadir--/lib';
 # use Conf;
-require 'tools.pl';
+use tools;
 
 use strict;
 

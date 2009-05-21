@@ -16,7 +16,7 @@ use Getopt::Long;
 use strict;
 
 ## Sympa API
-require 'tt2.pl';
+use tt2;
 use List;
 use mail;
 use Conf;
