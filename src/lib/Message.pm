@@ -37,7 +37,7 @@ package Message;
 use strict;
 require Exporter;
 use tools;
-require 'tt2.pl';
+use tt2;
 my @ISA = qw(Exporter);
 my @EXPORT = qw();
 

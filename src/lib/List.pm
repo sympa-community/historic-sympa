@@ -32,7 +32,7 @@ require Fetch;
 require Exporter;
 require Encode;
 use tools;
-require 'tt2.pl';
+use tt2;
 
 my @ISA = qw(Exporter);
 my @EXPORT = qw(%list_of_lists);

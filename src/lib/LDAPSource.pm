@@ -25,7 +25,7 @@ package LDAPSource;
 use strict;
 require Exporter;
 use tools;
-require 'tt2.pl';
+use tt2;
 our @ISA = qw(Exporter);
 our @EXPORT = qw(%date_format);
 our @EXPORT_OK = qw(connect query disconnect fetch ping quote);
