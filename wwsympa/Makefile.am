@@ -33,23 +33,25 @@ nobase_modules_DATA = wwslib.pm cookielib.pm Bounce.pm Marc.pm Auth.pm \
 default_DATA = mime.types 
 
 EXTRA_DIST = $(default_DATA) $(nobase_modules_DATA) \
-	     $(sbin_SCRIPTS) $(execcgi_SCRIPTS)
+	     archived.pl.in \
+	     bounced.pl \
+	     wwsympa.fcgi.in
+
+CLEANFILES = $(sbin_SCRIPTS) $(execcgi_SCRIPTS)
 
 install-exec-hook:
 	-chown $(USER) $(DESTDIR)$(execcgidir)/wwsympa-wrapper.fcgi
 	-chgrp $(GROUP) $(DESTDIR)$(execcgidir)/wwsympa-wrapper.fcgi
 	chmod 6755 $(DESTDIR)$(execcgidir)/wwsympa-wrapper.fcgi
 
-install-data-hook:
-	sed -i \
+archived.pl bounced.pl wwsympa.fcgi: Makefile
+	rm -f $@
+	sed \
 		-e 's|--PERL--|$(PERL)|' \
-		-e 's|--USER--|$(USER)|' \
-		-e 's|--GROUP--|$(GROUP)|' \
-		-e 's|--CONFIG--|$(CONFIG)|' \
-		-e 's|--WWSCONFIG--|$(WWSCONFIG)|' \
-		-e 's|--piddir--|$(piddir)|' \
 		-e 's|--pkgdatadir--|$(pkgdatadir)|' \
-		-e 's|--execcgidir--|$(execcgidir)|' \
-		$(addprefix $(DESTDIR)$(modulesdir)/, $(nobase_modules_DATA)) \
-		$(addprefix $(DESTDIR)$(sbindir)/, $(sbin_SCRIPTS)) \
-		$(addprefix $(DESTDIR)$(execcgidir)/, $(execcgi_SCRIPTS))
+		< $@.in > $@
+	chmod +x $@
+
+archived.pl: $(srcdir)/archived.pl.in
+bounced.pl: $(srcdir)/bounced.pl.in
+wwsympa.fcgi: $(srcdir)/wwsympa.fcgi.in
