@@ -134,7 +134,6 @@ stamp-po: $(srcdir)/$(DOMAIN).pot
 # This target rebuilds $(DOMAIN).pot; it is an expensive operation.
 # Note that $(DOMAIN).pot is not touched if it doesn't need to be changed.
 $(DOMAIN).pot-update: $(POTFILES) $(srcdir)/POTFILES.in remove-potcdate.sed
-	export PERL5LIB=$(top_srcdir)/src:$(PERL5LIB); \
 	$(XGETTEXT) -u \
 	  -o $(DOMAIN).pot \
 	  -t helploc \
