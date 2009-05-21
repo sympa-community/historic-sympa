@@ -20,7 +20,7 @@
 # Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
 
 sbin_SCRIPTS = bounced.pl archived.pl
-execcgi_SCRIPTS = wwsympa.fcgi wwsympa_sudo_wrapper.pl
+execcgi_SCRIPTS = wwsympa.fcgi
 execcgi_PROGRAMS = wwsympa-wrapper.fcgi
 wwsympa_wrapper_fcgi_SOURCES = wwsympa-wrapper.fcgi.c
 wwsympa_wrapper_fcgi_CPPFLAGS = -DWWSYMPA=\"$(execcgidir)/wwsympa.fcgi\"
