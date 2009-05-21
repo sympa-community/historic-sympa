@@ -36,20 +36,21 @@ use Conf;
 use POSIX;
 use tools;
 use tt2;
+use Sympa::Constants;
 
-unless (Conf::load('--CONFIG--')) {
-   print STDERR gettext("The configuration file --CONFIG-- contains errors.\n");
+my $sympa_conf_file = Sympa::Constants::CONFIG;
+unless (Conf::load($sympa_conf_file)) {
+   print STDERR gettext("The configuration file $sympa_conf_file contains errors.\n");
    exit(1);
 }
 my $tmp_alias_file = $Conf{'tmpdir'}.'/sympa_aliases.'.time;
 
 
-my $alias_wrapper = '--sbindir--/aliaswrapper';
-my $lock_file = '--expldir--/alias_manager.lock';
 my $default_domain;
-my $path_to_queue = '--libexecdir--/queue';
-my $path_to_bouncequeue = '--libexecdir--/bouncequeue';
-my $sympa_conf_file = '--CONFIG--';
+my $alias_wrapper       = Sympa::Constants::SBINDIR . '/aliaswrapper';
+my $lock_file           = Sympa::Constants::EXPLDIR . '/alias_manager.lock';
+my $path_to_queue       = Sympa::Constants::LIBEXECDIR . '/queue';
+my $path_to_bouncequeue = Sympa::Constants::LIBEXECDIR .'/bouncequeue';
 
 my ($operation, $listname, $domain, $file) = @ARGV;
 
@@ -62,7 +63,7 @@ if (($operation !~ /^(add)|(del)$/) || ($#ARGV < 2)) {
 $default_domain = $Conf{'domain'};
 
 my $alias_file;
-$alias_file = $Conf{'sendmail_aliases'} || '--SENDMAIL_ALIASES--';
+$alias_file = $Conf{'sendmail_aliases'} || Sympa::Constants::SENDMAIL_ALIASES;
 $alias_file = $file if ($file);
 
 unless (-w "$alias_file") {

@@ -62,10 +62,11 @@ use POSIX qw(strftime);
 use English qw(-no_match_vars);
 use Getopt::Long;
 use Pod::Usage;
+use Sympa::Constants;
 
 ## sympa configuration files
-my $wwsympa_conf = "--WWSCONFIG--";
-my $sympa_conf = "--CONFIG--";
+my $wwsympa_conf    = Sympa::Constants::WWSCONFIG;
+my $sympa_conf_file = Sympa::Constants::CONFIG;
 
 my %options;
 GetOptions(
