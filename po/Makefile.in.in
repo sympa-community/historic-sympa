@@ -137,7 +137,7 @@ $(DOMAIN).pot-update: $(POTFILES) $(srcdir)/POTFILES.in remove-potcdate.sed
 	export PERL5LIB=$(top_srcdir)/src:$(PERL5LIB); \
 	$(XGETTEXT) -u \
 	  -o $(DOMAIN).pot \
-	  \../src/*.pl ../src/*.pm ../soap/*.pl ../soap/*.pm ../soap/*.fcgi ../wwsympa/wwsympa.fcgi ../wwsympa/*.pl ../wwsympa/*.pm ../web_tt2/*.tt2 ../mail_tt2/*.tt2 ../src/etc/mhonarc-ressources.tt2 ../src/etc/scenari/* ../src/etc/global_task_models/* ../src/etc/list_task_models/* ../src/etc/create_list_templates/*/*;\
+	  \../src/*.pl ../src/lib/*.pm ../soap/*.pl ../soap/*.pm ../soap/*.fcgi ../wwsympa/wwsympa.fcgi ../wwsympa/*.pl ../wwsympa/*.pm ../web_tt2/*.tt2 ../mail_tt2/*.tt2 ../src/etc/mhonarc-ressources.tt2 ../src/etc/scenari/* ../src/etc/global_task_models/* ../src/etc/list_task_models/* ../src/etc/create_list_templates/*/*;\
 	test ! -f $(DOMAIN).po || { \
 	  if test -f $(srcdir)/$(DOMAIN).pot; then \
 	    sed -f remove-potcdate.sed < $(srcdir)/$(DOMAIN).pot > $(DOMAIN).1po && \
