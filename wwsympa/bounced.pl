@@ -73,7 +73,7 @@ my %equiv = ( "user unknown" => '5.1.1',
 	      "User's Disk Quota Exceeded:" => '4.2.2');
 
 
-require "bounce-lib.pl";
+use Bounce;
 use wwslib;
 
 #getopts('dF');
