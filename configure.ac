@@ -24,9 +24,6 @@ AC_INIT(sympa, 6.0a.13, sympa-authors@cru.fr)
 AM_INIT_AUTOMAKE([foreign -Wall -Werror])
 AM_PO_SUBDIRS
 
-# Setup the VERSION variable
-AC_SUBST(VERSION,AC_PACKAGE_VERSION)
-
 AC_PREFIX_DEFAULT(/home/sympa)
 
 # configuration
