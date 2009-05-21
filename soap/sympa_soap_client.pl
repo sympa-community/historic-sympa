@@ -30,25 +30,36 @@ use strict;
 my ($reponse, @ret, $val, %fault);
 
 
-my $usage = "\n$0 is a perl soap client for Sympa for TEST ONLY. Use it to illustrate how to code access to features of Sympa soap server. Authentication can be done via user/password or user cookie or as a trusted remote application\n\n";
-$usage .= "Usage: $0 <with the following options:>\n\n";
-$usage .= "--soap_url=<soap sympa server url>\n";
-$usage .= "--service=<a sympa service>\n";
-$usage .= "--trusted_application=<app name>\n";
-$usage .= "--trusted_application_password=<password>\n";
-$usage .= "--proxy_vars=<id=value,id2=value2>\n";
-$usage .= "--service_parameters=<value1,value2,value3>\n\n\n";
-$usage .= "OR usage: $0 <with the following options:>\n\n";
-$usage .= "--soap_url=<soap sympa server url>\n";
-$usage .= "--user_email=<email>\n";
-$usage .= "--user_password=<password>\n";
-$usage .= "--session_id=<sessionid>\n";
-$usage .= "--service=<a sympa service>\n";
-$usage .= "--service_parameters=<value1,value2,value3>\n\n\n";
-$usage .= "OR usage: $0 <with the following options:>\n\n";
-$usage .= "--soap_url=<soap sympa server url>\n";
-$usage .= "--cookie=<sympauser cookie string>\n\n\n";
-$usage .= "Example: \n\n$0 --soap_url=<soap sympa server url> --cookie=sympauser=someone\@cru.fr%3A8be58b86\n\n";
+my $usage = <<EOF;
+$0 is a perl soap client for Sympa for TEST ONLY. Use it to illustrate how to
+code access to features of Sympa soap server. Authentication can be done via
+user/password or user cookie or as a trusted remote application
+
+Usage: $0 <with the following options:>
+--soap_url=<soap sympa server url>
+--service=<a sympa service>
+--trusted_application=<app name>
+--trusted_application_password=<password>
+--proxy_vars=<id=value,id2=value2>
+--service_parameters=<value1,value2,value3>
+
+
+OR usage: $0 <with the following options:>
+--soap_url=<soap sympa server url>
+--user_email=<email>
+--user_password=<password>
+--session_id=<sessionid>
+--service=<a sympa service>
+--service_parameters=<value1,value2,value3>
+
+
+OR usage: $0 <with the following options:>
+--soap_url=<soap sympa server url>
+--cookie=<sympauser cookie string>
+
+Example:
+$0 --soap_url=<soap sympa server url> --cookie=sympauser=someone\@cru.fr%3A8be58b86o
+EOF
 
 my %options;
 unless (&GetOptions(\%main::options, 'soap_url=s', 'service=s', 'trusted_application=s', 'trusted_application_password=s','user_email=s', 'user_password=s','cookie=s','proxy_vars=s','service_parameters=s','session_id=s')) {
