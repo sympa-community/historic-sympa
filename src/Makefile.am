@@ -19,7 +19,7 @@
 # along with this program; if not, write to the Free Software
 # Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
 
-SUBDIRS = etc
+SUBDIRS = etc lib
 
 AM_CPPFLAGS = -DCONFIG=\"$(CONFIG)\"
 
@@ -38,13 +38,6 @@ libexec_PROGRAMS = queue bouncequeue familyqueue
 queue_SOURCES = queue.c
 bouncequeue_SOURCES = bouncequeue.c
 familyqueue_SOURCES = familyqueue.c
-
-
-modules_DATA = admin.pm Archive.pm Bulk.pm Commands.pm confdef.pm Conf.pm CAS.pm Config_XML.pm \
-	       Family.pm Language.pm List.pm Log.pm mail.pm Ldap.pm Upgrade.pm \
-	       Lock.pm Version.pm Fetch.pm Message.pm Task.pm Datasource.pm \
-	       SQLSource.pm LDAPSource.pm Scenario.pm PlainDigest.pm \
-	       tools.pl tt2.pl report.pm time_utils.pl
 
 EXTRA_DIST = $(modules_DATA) $(sbin_SCRIPTS)
 

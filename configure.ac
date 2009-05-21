@@ -422,6 +422,7 @@ AC_CONFIG_FILES([
     src/Makefile
     src/etc/Makefile
     src/etc/script/Makefile
+    src/lib/Makefile
     soap/Makefile
     doc/Makefile
     doc/man8/Makefile
