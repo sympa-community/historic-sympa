@@ -1,5 +1,3 @@
-#!--PERL--
-
 # tools.pl - This module provides various tools for Sympa
 # RCS Identication ; $Revision$ ; $Date$ 
 #
