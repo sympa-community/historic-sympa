@@ -26,7 +26,57 @@ AM_PO_SUBDIRS
 
 AC_PREFIX_DEFAULT(/home/sympa)
 
-# configuration
+# for upgrade, set default values to match previously used locations
+if test -f /etc/sympa.conf; then
+    # $prefix variable initialisation seems to be tricky
+    if test "$prefix" = "NONE"; then
+	prefix=$ac_default_prefix
+    fi
+
+    # standard variables
+    sbindir=$prefix/bin
+    libexecdir=/etc/smrsh
+
+    # custom variables
+    initdir=/etc/rc.d/init.d
+    piddir=$prefix
+    lockdir=$localstatedir/lock/subsys
+    modulesdir=$prefix/bin
+    scriptdir=$prefix/bin
+    defaultdir=$datadir/sympa/etc
+    mailtemplatedir=$defaultdir/mail_tt2
+    webtemplatedir=$defaultdir/web_tt2
+    execcgidir=$prefix/bin
+    expldir=$prefix/expl
+    spooldir=$prefix/spool
+else
+    initdir=$sysconfdir/rc.d/init.d
+    piddir=$localstatedir/run
+    lockdir=$localstatedir/lock/subsys
+    modulesdir=$datadir/sympa/lib
+    scriptdir=$datadir/sympa/bin
+    defaultdir=$datadir/sympa/etc
+    mailtemplatedir=$defaultdir/mail_tt2
+    webtemplatedir=$defaultdir/web_tt2
+    execcgidir=$libdir/sympa/cgi
+    expldir=$localstatedir/lib/sympa
+    spooldir=$localstatedir/spool/sympa
+fi
+
+# substitute custom variables
+AC_SUBST(initdir)
+AC_SUBST(piddir)
+AC_SUBST(lockdir)
+AC_SUBST(modulesdir)
+AC_SUBST(scriptdir)
+AC_SUBST(defaultdir)
+AC_SUBST(mailtemplatedir)
+AC_SUBST(webtemplatedir)
+AC_SUBST(execcgidir)
+AC_SUBST(expldir)
+AC_SUBST(spooldir)
+
+# allow user to redefine some of them
 AC_ARG_WITH(
     confdir,
     AS_HELP_STRING(
@@ -82,8 +132,6 @@ AC_ARG_WITH(
     ]
 )
 
-# arch-dependant files
-execcgidir='${libdir}/sympa/cgi'
 AC_ARG_WITH(
     cgidir,
     AS_HELP_STRING(
@@ -92,9 +140,7 @@ AC_ARG_WITH(
     ),
     [execcgidir="$withval"]
 )
-AC_SUBST(execcgidir)
 
-# arch-independant files
 AC_ARG_WITH(
     datadir,
     AS_HELP_STRING(
@@ -118,8 +164,6 @@ AC_ARG_WITH(
     ]
 )
 
-# locales
-localedir='${prefix}/locale'
 AC_ARG_WITH(
     localedir,
     AS_HELP_STRING(
@@ -131,7 +175,6 @@ AC_ARG_WITH(
      localedir="$withval"
     ]
 )
-AC_SUBST(localedir)
 
 # documentation
 AC_ARG_WITH(
@@ -169,8 +212,6 @@ AC_ARG_WITH(
     ]
 )
 
-# variable content
-expldir='${prefix}/expl'
 AC_ARG_WITH(
     expldir,
     AS_HELP_STRING(
@@ -179,9 +220,7 @@ AC_ARG_WITH(
     ),
     [expldir="$withval"]
 )
-AC_SUBST(expldir)
 
-spooldir='${prefix}/spool'
 AC_ARG_WITH(
     spooldir,
     AS_HELP_STRING(
@@ -190,9 +229,7 @@ AC_ARG_WITH(
     ),
     [spooldir="$withval"]
 )
-AC_SUBST(spooldir)
 
-initdir='${sysconfdir}/rc.d/init.d'
 AC_ARG_WITH(
     initdir,
     AS_HELP_STRING(
@@ -201,9 +238,7 @@ AC_ARG_WITH(
     ),
     [initdir="$withval"]
 )
-AC_SUBST(initdir)
 
-lockdir='${localstatedir}/lock/subsys'
 AC_ARG_WITH(
     lockdir,
     AS_HELP_STRING(
@@ -212,9 +247,7 @@ AC_ARG_WITH(
     ),
     [lockdir="$withval"]
 )
-AC_SUBST(lockdir)
 
-piddir='${localstatedir}/run'
 AC_ARG_WITH(
     piddir,
     AS_HELP_STRING(
@@ -223,12 +256,7 @@ AC_ARG_WITH(
     ),
     [piddir="$withval"]
 )
-AC_SUBST(piddir)
 
-# various subdirectories
-pkgdatadir=$datadir/sympa
-
-modulesdir=$pkgdatadir/lib
 AC_ARG_WITH(
     modulesdir,
     AS_HELP_STRING(
@@ -237,9 +265,7 @@ AC_ARG_WITH(
     ),
     [modulesdir="$withval"]
 )
-AC_SUBST(modulesdir)
 
-defaultdir=$pkgdatadir/etc
 AC_ARG_WITH(
     defaultdir,
     AS_HELP_STRING(
@@ -248,12 +274,7 @@ AC_ARG_WITH(
     ),
     [defaultdir="$withval"]
 )
-AC_SUBST(defaultdir)
 
-mailtemplatedir=$defaultdir/mail_tt2
-webtemplatedir=$defaultdir/web_tt2
-
-scriptdir=$pkgdatadir/bin
 AC_ARG_WITH(
     scriptdir,
     AS_HELP_STRING(
@@ -262,11 +283,6 @@ AC_ARG_WITH(
     ),
     [scriptdir="$withval"]
 )
-AC_SUBST(scriptdir)
-
-
-AC_SUBST(mailtemplatedir)
-AC_SUBST(webtemplatedir)
 
 CONFIG=$sysconfdir/sympa.conf
 AC_SUBST(CONFIG)
