@@ -25,3 +25,5 @@ icons_DATA = back.png \
 	     text.png \
 	     top.png \
 	     unknown.png
+
+EXTRA_DIST = $(icons_DATA)

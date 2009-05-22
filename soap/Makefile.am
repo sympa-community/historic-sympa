@@ -32,10 +32,10 @@ modules_DATA = sympasoap.pm SympaTransport.pm
 default_DATA = sympa.wsdl
 
 EXTRA_DIST = $(default_DATA) $(modules_DATA) \
-	     sympa_soap_client.pl.in
+	     sympa_soap_client.pl.in \
 	     sympa_soap_server.fcgi.in
 
-CLEANFILES = $(sbin_SCRIPTS) $(execcgi_SCRIPTS)
+CLEANFILES = $(script_SCRIPTS) $(execcgi_SCRIPTS)
 
 install-exec-hook:
 	-chown $(USER) $(DESTDIR)$(execcgidir)/sympa_soap_server-wrapper.fcgi
@@ -47,7 +47,7 @@ sympa_soap_client.pl sympa_soap_server.fcgi: Makefile
 	sed \
 		-e 's|--PERL--|$(PERL)|' \
 		-e 's|--modulesdir--|$(modulesdir)|' \
-		< $@.in > $@
+		< $(srcdir)/$@.in > $@
 	chmod +x $@
 
 sympa_soap_client.pl: $(srcdir)/sympa_soap_client.pl.in

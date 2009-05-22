@@ -39,7 +39,7 @@ queue_SOURCES = queue.c
 bouncequeue_SOURCES = bouncequeue.c
 familyqueue_SOURCES = familyqueue.c
 
-EXTRA_DIST = $(modules_DATA)
+EXTRA_DIST = $(modules_DATA) \
 	     bulk.pl.in \
 	     alias_manager.pl.in \
 	     sympa.pl.in \
@@ -74,7 +74,7 @@ alias_manager.pl bulk.pl task_manager.pl sympa.pl sympa_wizard.pl: Makefile
 	sed \
 		-e 's|--PERL--|$(PERL)|' \
 		-e 's|--modulesdir--|$(modulesdir)|' \
-		< $@.in > $@
+		< $(srcdir)/$@.in > $@
 	chmod +x $@
 
 alias_manager.pl: $(srcdir)/alias_manager.pl.in

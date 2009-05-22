@@ -34,7 +34,7 @@ default_DATA = mime.types
 
 EXTRA_DIST = $(default_DATA) $(nobase_modules_DATA) \
 	     archived.pl.in \
-	     bounced.pl \
+	     bounced.pl.in \
 	     wwsympa.fcgi.in
 
 CLEANFILES = $(sbin_SCRIPTS) $(execcgi_SCRIPTS)
@@ -49,7 +49,7 @@ archived.pl bounced.pl wwsympa.fcgi: Makefile
 	sed \
 		-e 's|--PERL--|$(PERL)|' \
 		-e 's|--modulesdir--|$(modulesdir)|' \
-		< $@.in > $@
+		< $(srcdir)/$@.in > $@
 	chmod +x $@
 
 archived.pl: $(srcdir)/archived.pl.in
