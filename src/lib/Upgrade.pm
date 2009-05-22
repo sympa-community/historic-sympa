@@ -31,6 +31,7 @@ use Carp;
 
 use Conf;
 use Log;
+use Sympa::Constants;
 
 ## Return the previous Sympa version, ie the one listed in data_structure.version
 sub get_previous_version {
@@ -66,7 +67,7 @@ sub update_version {
 	return undef;
     }
     printf VFILE "# This file is automatically created by sympa.pl after installation\n# Unless you know what you are doing, you should not modify it\n";
-    printf VFILE "%s\n", $Version::Version;
+    printf VFILE "%s\n", Sympa::Constants::VERSION;
     close VFILE;
     
     return 1;
@@ -107,8 +108,9 @@ sub upgrade {
 
 	&do_log('notice','Migrating templates to TT2 format...');	
 	
-	unless (open EXEC, '--pkgdatadir--/bin/tpl2tt2.pl|') {
-	    &do_log('err','Unable to run --pkgdatadir--/bin/tpl2tt2.pl');
+    my $tpl_script = Sympa::Constants::SCRIPTDIR . '/tpl2tt2.pl';
+	unless (open EXEC, "$tpl_script|") {
+	    &do_log('err', "Unable to run $tpl_script");
 	    return undef;
 	}
 	close EXEC;
@@ -507,7 +509,12 @@ sub upgrade {
 	    }
 	}
 
-	foreach my $f ('--CONFIG--','--WWSCONFIG--',$Conf::Conf{'etc'}.'/'.'topics.conf',$Conf::Conf{'etc'}.'/'.'auth.conf') {
+	foreach my $f (
+        Sympa::Constants::CONFIG,
+        Sympa::Constants::WWSCONFIG,
+        $Conf::Conf{'etc'}.'/'.'topics.conf',
+        $Conf::Conf{'etc'}.'/'.'auth.conf'
+    ) {
 	    if (-f $f) {
 		push @files, [$f, $Conf::Conf{'lang'}];
 	    }
@@ -1330,8 +1337,10 @@ sub probe_db {
 	}
 	## Try to run the create_db.XX script
     }elsif ($found_tables == 0) {
-	unless (open SCRIPT, "--pkgdatadir--/bin/create_db.$Conf::Conf{'db_type'}") {
-	    &do_log('err', "Failed to open '%s' file : %s", "--pkgdatadir--/bin/create_db.$Conf::Conf{'db_type'}", $!);
+        my $db_script =
+            Sympa::Constants::SCRIPTDIR . "/create_db.$Conf::Conf{'db_type'}";
+	unless (open SCRIPT, $db_script) {
+	    &do_log('err', "Failed to open '%s' file : %s", $db_script, $!);
 	    return undef;
 	}
 	my $script;
@@ -1341,12 +1350,14 @@ sub probe_db {
 	close SCRIPT;
 	my @scripts = split /;\n/,$script;
 
-	push @report, sprintf("Running the '%s' script...", "--pkgdatadir--/bin/create_db.$Conf::Conf{'db_type'}");
-	&do_log('notice', "Running the '%s' script...", "--pkgdatadir--/bin/create_db.$Conf::Conf{'db_type'}");
+    my $db_script =
+        Sympa::Constants::SCRIPTDIR . "/create_db.$Conf::Conf{'db_type'}";
+	push @report, sprintf("Running the '%s' script...", $db_script);
+	&do_log('notice', "Running the '%s' script...", $db_script);
 	foreach my $sc (@scripts) {
 	    next if ($sc =~ /^\#/);
 	    unless ($dbh->do($sc)) {
-		&do_log('err', "Failed to run script '%s' : %s", "--pkgdatadir--/bin/create_db.$Conf::Conf{'db_type'}", $dbh->errstr);
+		&do_log('err', "Failed to run script '%s' : %s", $db_script, $dbh->errstr);
 		return undef;
 	    }
 	}
@@ -1355,9 +1366,9 @@ sub probe_db {
 	##           the normal file access permissions of the underlying operating system
 	if (($Conf::Conf{'db_type'} eq 'SQLite') &&  (-f $Conf::Conf{'db_name'})) {
 	    unless (&tools::set_file_rights(file => $Conf::Conf{'db_name'},
-					    user => '--USER--',
-					    group => '--GROUP--',
-					    mode => 0664,
+					    user  => Sympa::Constants::USER,
+					    group => Sympa::Constants::GROUP,
+					    mode  => 0664,
 					    ))
 	    {
 		&do_log('err','Unable to set rights on %s',$Conf::Conf{'db_name'});
@@ -1401,8 +1412,8 @@ sub data_structure_uptodate {
      }
 
      if (defined $data_structure_version &&
-	 $data_structure_version ne $Version::Version) {
-	 &do_log('err', "Data structure (%s) is not uptodate for current release (%s)", $data_structure_version, $Version::Version);
+	 $data_structure_version ne Sympa::Constants::VERSION) {
+	 &do_log('err', "Data structure (%s) is not uptodate for current release (%s)", $data_structure_version, Sympa::Constants::VERSION);
 	 return 0;
      }
 
@@ -1521,9 +1532,9 @@ sub to_utf8 {
 	print TEMPLATE $text;
 	close TEMPLATE;
 	unless (&tools::set_file_rights(file => $file,
-					user => '--USER--',
-					group => '--GROUP--',
-					mode => 0644,
+					user =>  Sympa::Constants::USER,
+					group => Sympa::Constants::GROUP,
+					mode =>  0644,
 					))
 	{
 	    &do_log('err','Unable to set rights on %s',$Conf::Conf{'db_name'});

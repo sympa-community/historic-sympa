@@ -28,7 +28,6 @@ use Carp;
 
 use strict;
 use Log;
-use Version;
 use POSIX qw (setlocale);
 use Locale::Messages qw (:locale_h :libintl_h !gettext);
 

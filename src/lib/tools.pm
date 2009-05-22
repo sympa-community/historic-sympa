@@ -30,6 +30,8 @@ use Mail::Header;
 use Conf;
 use Language;
 use Log;
+use Sympa::Constants;
+
 use Time::Local;
 use File::Find;
 use Digest::MD5;
@@ -417,7 +419,7 @@ sub load_create_list_conf {
     
     $file = &tools::get_filename('etc',{}, 'create_list.conf', $robot);
     unless ($file) {
-	&do_log('info','unable to read --pkgdatadir--/etc/create_list.conf');
+	&do_log('info', 'unable to read %s', Sympa::Constants::DEFAULTDIR . '/create_list.conf');
 	return undef;
     }
 
@@ -463,8 +465,11 @@ sub get_list_list_tpl {
 	return undef;
     }
     
-    foreach my $dir ('--pkgdatadir--/etc/create_list_templates', "$Conf::Conf{'etc'}/create_list_templates",
-		     "$Conf::Conf{'etc'}/$robot/create_list_templates") {
+    foreach my $dir (
+        Sympa::Constants::DEFAULTDIR . '/create_list_templates',
+        "$Conf::Conf{'etc'}/create_list_templates",
+        "$Conf::Conf{'etc'}/$robot/create_list_templates"
+    ) {
 	if (opendir(DIR, $dir)) {
 	    foreach my $template ( sort grep (!/^\./,readdir(DIR))) {
 
@@ -601,7 +606,7 @@ sub get_templates_list {
 	do_log('info', 'get_templates_list () : internal error incorrect parameter');
     }
 
-    my $distrib_dir = '--pkgdatadir--/etc/'.$type.'_tt2';
+    my $distrib_dir = Sympa::Constants::DEFAULTDIR . "/$type_tt2";
     my $site_dir = $Conf::Conf{'etc'}.'/'.$type.'_tt2';
     my $robot_dir = $Conf::Conf{'etc'}.'/'.$robot.'/'.$type.'_tt2';
 
@@ -674,7 +679,7 @@ sub get_template_path {
 	do_log('info', 'get_templates_path () : internal error incorrect parameter');
     }
 
-    my $distrib_dir = '--pkgdatadir--/etc/'.$type.'_tt2';
+    my $distrib_dir = Sympa::Constants::DEFAULTDIR . "/$type_tt2";
     my $site_dir = $Conf::Conf{'etc'}.'/'.$type.'_tt2';
     $site_dir .= '/'.$lang unless ($lang eq 'default');
     my $robot_dir = $Conf::Conf{'etc'}.'/'.$robot.'/'.$type.'_tt2';
@@ -1998,16 +2003,19 @@ sub get_filename {
 	if ($name =~ /^(\S+)\.([^\s\/]+)\.tt2$/) {
 	    $default_name = $1.'.tt2';
 	    
-	    @try = ("$Conf::Conf{'etc'}/$robot".'/'.$name,
-		    "$Conf::Conf{'etc'}/$robot".'/'.$default_name,
-		    $Conf::Conf{'etc'}.'/'.$name,
-		    $Conf::Conf{'etc'}.'/'.$default_name,
-		    '--pkgdatadir--/etc/'.$name,
-		    '--pkgdatadir--/etc/'.$default_name);
+	    @try = (
+            $Conf::Conf{'etc'} . "/$robot/$name",
+		    $Conf::Conf{'etc'} . "/$robot/$default_name",
+		    $Conf::Conf{'etc'} . "/$name",
+		    $Conf::Conf{'etc'} . "/$default_name",
+		    Sympa::Constants::DEFAULTDIR . "/$name",
+		    Sympa::Constants::DEFAULTDIR . "/$default_name");
 	}else {
-	    @try = ("$Conf::Conf{'etc'}/$robot".'/'.$name,
-		    $Conf::Conf{'etc'}.'/'.$name,
-		    '--pkgdatadir--/etc/'.$name);
+	    @try = (
+            $Conf::Conf{'etc'} . "/$robot/$name",
+		    $Conf::Conf{'etc'} . "$name",
+		    Sympa::Constants::DEFAULTDIR . "/$name"
+        );
 	}
 	
 	if ($family) {
@@ -2072,7 +2080,7 @@ sub make_tt2_include_path {
     my $path_family; ## optional
 
     if ($dir) {
-	$path_etcbindir = "--pkgdatadir--/etc/".$dir;
+	$path_etcbindir = Sympa::Constants::DEFAULTDIR . "/$dir";
 	$path_etcdir = "$Conf::Conf{'etc'}/".$dir;
 	$path_robot = "$Conf::Conf{'etc'}/".$robot.'/'.$dir if (lc($robot) ne lc($Conf::Conf{'host'}));
 	if (ref($list) eq 'List'){
@@ -2083,7 +2091,7 @@ sub make_tt2_include_path {
 	    }
 	} 
     }else {
-	$path_etcbindir = "--pkgdatadir--/etc/";
+	$path_etcbindir = Sympa::Constants::DEFAULTDIR;
 	$path_etcdir = "$Conf::Conf{'etc'}";
 	$path_robot = "$Conf::Conf{'etc'}/".$robot if (lc($robot) ne lc($Conf::Conf{'host'}));
 	if (ref($list) eq 'List') {
@@ -2299,8 +2307,8 @@ sub write_pid {
     }
     
     unless (&tools::set_file_rights(file => $piddir,
-				    user => '--USER--',
-				    group => '--GROUP--',
+				    user  => Sympa::Constants::USER,
+				    group => Sympa::Constants::GROUP,
 				    ))
     {
 	&do_log('err','Unable to set rights on %s',$Conf::Conf{'db_name'});
@@ -2360,8 +2368,8 @@ sub write_pid {
 	close(LCK);
     }
     unless (&tools::set_file_rights(file => $pidfile,
-				    user => '--USER--',
-				    group => '--GROUP--',
+				    user  => Sympa::Constants::USER,
+				    group => Sympa::Constants::GROUP,
 				    ))
     {
 	&do_log('err','Unable to set rights on %s',$Conf::Conf{'db_name'});
@@ -2373,8 +2381,8 @@ sub write_pid {
     unless ($options->{'stderr_to_tty'}) {
       open(STDERR, '>>',  $Conf::Conf{'tmpdir'}.'/'.$pid.'.stderr') unless ($main::options{'foreground'});
       unless (&tools::set_file_rights(file => $Conf::Conf{'tmpdir'}.'/'.$pid.'.stderr',
-				      user => '--USER--',
-				      group => '--GROUP--',
+				      user  => Sympa::Constants::USER,
+				      group => Sympa::Constants::GROUP,
 				     ))
 	{
 	  &do_log('err','Unable to set rights on %s',$Conf::Conf{'db_name'});

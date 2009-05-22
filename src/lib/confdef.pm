@@ -22,6 +22,7 @@
 package confdef;
 
 use strict "vars";
+use Sympa::Constants;
 
 our @ISA = qw(Exporter);
 
@@ -40,51 +41,51 @@ our @params = (
     { title => 'Directories and file location' },
     {
         name    => 'home',
-        default => '--expldir--',
+        default => Sympa::Constants::EXPLDIR,
         query   => 'Directory containing mailing lists subdirectories',
         file    => 'sympa.conf',
         edit    => '1',
     },
     {
         name    => 'etc',
-        default => '--sysconfdir--',
+        default => Sympa::Constants::SYSCONFDIR,
         query   => 'Directory for configuration files ; it also contains scenari/ and templates/ directories',
         file    => 'sympa.conf',
     },
     {
         name    => 'pidfile',
-        default => '--piddir--/sympa.pid',
+        default => Sympa::Constants::PIDDIR . '/sympa.pid',
         query   => 'File containing Sympa PID while running.',
         file    => 'sympa.conf',
         advice  => 'Sympa also locks this file to ensure that it is not running more than once. Caution : user sympa need to write access without special privilegee.',
     },
     { 
         name    => 'pidfile_distribute',
-        default => '--piddir--/sympa-distribute.pid',
+        default => Sympa::Constants::PIDDIR . '/sympa-distribute.pid',
     },
     { 
         name    => 'pidfile_creation',
-        default => '--piddir--/sympa-creation.pid',
+        default => Sympa::Constants::PIDDIR . '/sympa-creation.pid',
     },
     { 
         name    => 'pidfile_bulk',
-        default => '--piddir--/bulk.pid',
+        default => Sympa::Constants::PIDDIR . '/bulk.pid',
     },
     {
         name   => 'archived_pidfile',
-        default => '--piddir--/archived.pid',
+        default => Sympa::Constants::PIDDIR . '/archived.pid',
         query  => 'File containing archived PID while running.',
         file   => 'wwsympa.conf',
     },
     {
         name   => 'bounced_pidfile',
-        default => '--piddir--/bounced.pid',
+        default => Sympa::Constants::PIDDIR . '/bounced.pid',
         query  => 'File containing bounced PID while running.',
         file   => 'wwsympa.conf',
     },
     {
         name  => 'task_manager_pidfile',
-        default => '--piddir--/task_manager.pid',
+        default => Sympa::Constants::PIDDIR . '/task_manager.pid',
         query => 'File containing task_manager PID while running.',
         file  => 'wwsympa.conf',
     },
@@ -96,40 +97,40 @@ our @params = (
     },
     {
         name    => 'arc_path',
-        default => '--prefix--/arc',
+        default => Sympa::Constants::ARCDIR . '/arc',
         query   => 'Where to store HTML archives',
         file    => 'wwsympa.conf',edit => '1',
         advice  =>'Better if not in a critical partition',
     },
     {
         name    => 'bounce_path',
-        default => '--prefix--/bounce',
+        default => Sympa::Constants::BOUNCEDIR . '/bounce',
         query   => 'Where to store bounces',
         file    => 'wwsympa.conf',
         advice  => 'Better if not in a critical partition',
     },
     {
         name    => 'localedir',
-        default => '--localedir--',
+        default => Sympa::Constants::LOCALEDIR,
         query   => 'Directory containing available NLS catalogues (Message internationalization)',
         file    => 'sympa.conf',
     },
     {
         name    => 'spool',
-        default => '--spooldir--',
+        default => Sympa::Constants::SPOOLDIR,
         query   => 'The main spool containing various specialized spools',
         file    => 'sympa.conf',
         advice => 'All spool are created at runtime by sympa.pl',
     },
     {
         name    => 'queue',
-        default => '--spooldir--/msg',
+        default => Sympa::Constants::SPOOLDIR . '/msg',
         query   => 'Incoming spool',
         file    => 'sympa.conf',
     },
     {
         name    => 'queuebounce',
-        default => '--spooldir--/bounce',
+        default => Sympa::Constants::SPOOLDIR . '/bounce',
         query   => 'Bounce incoming spool',
         file    => 'sympa.conf',
     },
@@ -171,7 +172,7 @@ our @params = (
     },
     {
         name    => 'static_content_path',
-        default => '--prefix--/static_content',
+        default => Sympa::Constants::EXPLDIR/static_content,
         query   => 'The directory where Sympa stores static contents (CSS, members pictures, documentation) directly delivered by Apache',
 	vhost   => '1',
         file    => 'sympa.conf',
@@ -531,7 +532,7 @@ our @params = (
     },
     {
         name => 'sendmail_aliases',
-        default => '--SENDMAIL_ALIASES--',
+        default => Sympa::Constants::SENDMAIL_ALIASES,
     },
     {
         name    => 'nrcpt',
@@ -595,7 +596,7 @@ our @params = (
     {
         name   => 'capath',
         optional => '1',
-        sample => '--sysconfdir--/ssl.crt',
+        sample => Sympa::Constants::SYSCONFDIR . '/ssl.crt',
         query  => 'The directory path use by OpenSSL for trusted CA certificates',
         file   => 'sympa.conf',
         edit   => '1',
@@ -609,13 +610,13 @@ our @params = (
     },
     {
         name    => 'ssl_cert_dir',
-        default => '--expldir--/X509-user-certs',
+        default => Sympa::Constants::EXPLDIR . '/X509-user-certs',
         query   => 'User CERTs directory',
         file    => 'sympa.conf',
     },
     {
         name    => 'crl_dir',
-        default => '--expldir--/crl',
+        default => Sympa::Constants::EXPLDIR . '/crl',
         file    => 'sympa.conf',
     },
     {
@@ -1250,7 +1251,7 @@ our @params = (
     },
     {
         name    => 'static_content_path',
-        default => '--prefix--/static_content',
+        default => Sympa::Constants::EXPLDIR . '/static_content',
     },
     {
         name    => 'filesystem_encoding',
@@ -1272,7 +1273,7 @@ our @params = (
     },
     {
         name    => 'alias_manager',
-        default => '--sbindir--/alias_manager.pl',
+        default => Sympa::Constants::SBINDIR- . '/alias_manager.pl',
     },
 );
 

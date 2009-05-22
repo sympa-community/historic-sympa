@@ -41,6 +41,7 @@ use Conf;
 use Language;
 use Log;
 use tools;
+use Sympa::Constants;
 
 =pod 
 
@@ -904,7 +905,7 @@ sub install_aliases {
 	     &do_log('err','admin::install_aliases : Aliases installed successfully') ;
 	     $alias_installed = 1;
 	 }elsif ($status == '1') {
-	     &do_log('err','admin::install_aliases : Configuration file --CONFIG-- has errors');
+	     &do_log('err','admin::install_aliases : Configuration file %s has errors', Sympa::Constants::CONFIG);
 	 }elsif ($status == '2')  {
 	     &do_log('err','admin::install_aliases : Internal error : Incorrect call to alias_manager');
 	 }elsif ($status == '3')  {
@@ -966,12 +967,15 @@ sub install_aliases {
 	 &do_log('err','Failed to remove aliases for list %s', $list->{'name'});
 
 	 ## build a list of required aliases the listmaster should install
-	 $aliases = "#----------------- $list->{'name'}\n";
-	 $aliases .= "$list->{'name'}: \"| --libexecdir--/queue $list->{'name'}\"\n";
-	 $aliases .= "$list->{'name'}-request: \"| --libexecdir--/queue $list->{'name'}-request\"\n";
-	 $aliases .= "$list->{'name'}$suffix: \"| --libexecdir--/bouncequeue $list->{'name'}\"\n";
-	 $aliases .= "$list->{'name'}-unsubscribe: \"| --libexecdir--/queue $list->{'name'}-unsubscribe\"\n";
-	 $aliases .= "# $list->{'name'}-subscribe: \"| --libexecdir--/queue $list->{'name'}-subscribe\"\n";
+     my $libexecdir = Sympa::Constants::LIBEXECDIR;
+	 $aliases = <<EOF;
+#----------------- $list->{'name'}
+$list->{'name'}: "$libexecdir/queue $list->{'name'}"
+$list->{'name'}-request: "|$libexecdir/queue $list->{'name'}-request"
+$list->{'name'}$suffix: "|$libexecdir/bouncequeue $list->{'name'}"
+$list->{'name'}-unsubscribe: "|$libexecdir/queue $list->{'name'}-unsubscribe"
+# $list->{'name'}-subscribe: "|$libexecdir/queue $list->{'name'}-subscribe"
+EOF
 	 
 	 return $aliases;
      }

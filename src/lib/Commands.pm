@@ -27,10 +27,10 @@ use Conf;
 use Language;
 use Log;
 use List;
-use Version;
 use Message;
 use report;
 use tools;
+use Sympa::Constants;
 
 use Digest::MD5;
 use Fcntl;
@@ -201,7 +201,7 @@ sub help {
 	    &report::reject_report_cmd('intern_quiet','',{},$cmd_line,$sender,$robot);
 	}
 
-    }elsif (-r "--pkgdatadir--/etc/mail_tt2/helpfile.tt2") {
+    }elsif (-r Sympa::Constants::DEFAULTDIR . '/mail_tt2/helpfile.tt2') {
 
 	my $data = {};
 

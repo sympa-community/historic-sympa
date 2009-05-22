@@ -33,6 +33,7 @@ require Exporter;
 require Encode;
 use tools;
 use tt2;
+use Sympa::Constants;
 
 my @ISA = qw(Exporter);
 my @EXPORT = qw(%list_of_lists);
@@ -6996,7 +6997,12 @@ sub load_scenario_list {
     my %list_of_scenario;
     my %skip_scenario;
 
-    foreach my $dir ("$directory/scenari", "$Conf::Conf{'etc'}/$robot/scenari", "$Conf::Conf{'etc'}/scenari", "--pkgdatadir--/etc/scenari") {
+    foreach my $dir (
+        "$directory/scenari",
+        "$Conf::Conf{'etc'}/$robot/scenari",
+        "$Conf::Conf{'etc'}/scenari",
+        Sympa::Constants::DEFAULTDIR . '/scenari'
+    ) {
 	next unless (-d $dir);
 	
 	my $scenario_regexp = &tools::get_regexp('scenario');
@@ -7046,7 +7052,12 @@ sub load_task_list {
     my $directory = "$self->{'dir'}";
     my %list_of_task;
     
-    foreach my $dir ("$directory/list_task_models", "$Conf::Conf{'etc'}/$robot/list_task_models", "$Conf::Conf{'etc'}/list_task_models", "--pkgdatadir--/etc/list_task_models") {
+    foreach my $dir (
+        "$directory/list_task_models",
+        "$Conf::Conf{'etc'}/$robot/list_task_models",
+        "$Conf::Conf{'etc'}/list_task_models",
+        Sympa::Constants::DEFAULTDIR . '/list_task_models'
+    ) {
 
 	next unless (-d $dir);
 
@@ -7108,7 +7119,12 @@ sub load_data_sources_list {
     my $directory = "$self->{'dir'}";
     my %list_of_data_sources;
 
-    foreach my $dir ("$directory/data_sources", "$Conf::Conf{'etc'}/$robot/data_sources", "$Conf::Conf{'etc'}/data_sources", "--pkgdatadir--/etc/data_sources") {
+    foreach my $dir (
+        "$directory/data_sources",
+        "$Conf::Conf{'etc'}/$robot/data_sources",
+        "$Conf::Conf{'etc'}/data_sources",
+        Sympa::Constants::DEFAULTDIR . '/data_sources'
+    ) {
 
 	next unless (-d $dir);
 	
@@ -7483,7 +7499,7 @@ sub _include_users_remote_file {
 
     ## WebAgent package is part of Fetch.pm and inherites from LWP::UserAgent
 
-    my $fetch = WebAgent->new (agent => 'Sympa/'.$Version::Version);
+    my $fetch = WebAgent->new (agent => 'Sympa/'. Sympa::Constants::VERSION);
 
     my $req = HTTP::Request->new(GET => $url);
     

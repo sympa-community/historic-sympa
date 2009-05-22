@@ -44,6 +44,7 @@ use Log;
 use admin;
 use Config_XML;
 use File::Copy;
+use Sympa::Constants;
 
 my %list_of_families;
 my @uncompellable_param = ('msg_topic.keywords','owner_include.source_parameters', 'editor_include.source_parameters');
@@ -104,9 +105,11 @@ sub get_available_families {
 
     my %families;
 
-    foreach my $dir ('--pkgdatadir--/etc/families',
-		     $Conf::Conf{'etc'}.'/families',
-		     $Conf::Conf{'etc'}.'/'.$robot.'/families') {
+    foreach my $dir (
+        Sympa::Constants::DEFAULTDIR . "/families",
+        $Conf::Conf{'etc'}           . "/families",
+        $Conf::Conf{'etc'}           . "/$robot/families"
+     ) {
 	next unless (-d $dir);
 
 	unless (opendir FAMILIES, $dir) {
@@ -1763,9 +1766,11 @@ sub _get_directory {
     my $name = $self->{'name'};
     &do_log('debug3','Family::_get_directory(%s)',$name);
 
-    my @try = ("$Conf::Conf{'etc'}/$robot".'/families',
-	       $Conf::Conf{'etc'}.'/families',
-	       '--pkgdatadir--/etc/families');
+    my @try = (
+        $Conf::Conf{'etc'}           . "/$robot/families",
+        $Conf::Conf{'etc'}           . "/families",
+	    Sympa::Constants::DEFAULTDIR . "/families"
+    );
 
     foreach my $d (@try) {
 	if (-d "$d/$name") {

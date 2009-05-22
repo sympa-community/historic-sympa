@@ -32,6 +32,7 @@ use wwslib;
 use AuthCAS;
 use confdef;
 use tools;
+use Sympa::Constants;
 
 require Exporter;
 use Carp;
@@ -156,7 +157,7 @@ sub load {
     $o{'domain'} = $o{'host'} if (defined $o{'host'}) ;
     
     unless ( (defined $o{'cafile'}) || (defined $o{'capath'} )) {
-	$o{'cafile'}[0] = '--pkgdatadir--/etc/ca-bundle.crt';
+	$o{'cafile'}[0] = Sympa::Constants::DEFAULTDIR . '/ca-bundle.crt';
     }   
 
     my $spool = $o{'spool'}[0] || $params{'spool'}->{'default'};
@@ -357,7 +358,7 @@ sub load_charset {
     my $charset = {};
 
     my $config = $Conf{'etc'}.'/charset.conf' ;
-    $config = '--ETCBINDIR--/charset.conf' unless -f $config;
+    $config = Sympa::Constants::DEFAULTDIR . '/charset.conf' unless -f $config;
     if (-f $config) {
 	unless (open CONFIG, $config) {
 	    printf STDERR 'unable to read configuration file %s: %s\n',$config, $!;
@@ -428,8 +429,9 @@ sub load_robots {
     my $robot_conf ;
 
     ## Load wwsympa.conf
-    unless ($wwsconf = &wwslib::load_config('--WWSCONFIG--')) {
-	print STDERR "Unable to load config file --WWSCONFIG--\n";
+    unless ($wwsconf = &wwslib::load_config(Sympa::Constants::WWSCONFIG)) {
+        printf STDERR 
+            "Unable to load config file %s\n", Sympa::Constants::WWSCONFIG;
     }
 
     unless (opendir DIR,$Conf{'etc'} ) {
@@ -689,9 +691,9 @@ sub checkfiles_as_root {
 	close ALIASES;
 	&do_log('notice', "Created missing file %s", $Conf{'sendmail_aliases'});
 	unless (&tools::set_file_rights(file => $Conf{'sendmail_aliases'},
-					user => '--USER--',
-					group => '--GROUP--',
-					mode => 0644,
+					user  => Sympa::Constants::USER,
+					group => Sympa::Constants::GROUP,
+					mode  => 0644,
 					))
 	{
 	    &do_log('err','Unable to set rights on %s',$Conf{'db_name'});
@@ -711,8 +713,8 @@ sub checkfiles_as_root {
 	    }
 
 	    unless (&tools::set_file_rights(file => $dir,
-					    user => '--USER--',
-					    group => '--GROUP--',
+					    user  => Sympa::Constants::USER,
+					    group => Sympa::Constants::GROUP,
 					    ))
 	    {
 		&do_log('err','Unable to set rights on %s',$Conf{'db_name'});
@@ -889,7 +891,7 @@ sub checkfiles {
 
 	    ## Update the CSS if it is missing or if a new css.tt2 was installed
 	    if (! -f $dir.'/'.$css ||
-		(stat('--pkgdatadir--/etc/web_tt2/css.tt2'))[9] > (stat($dir.'/'.$css))[9]) {
+		(stat(Sympa::Constants::DEFAULTDIR . '/web_tt2/css.tt2'))[9] > (stat($dir.'/'.$css))[9]) {
 		&do_log('notice',"Updating static CSS file $dir/$css ; previous file renamed");
 		
 		## Keep copy of previous file
@@ -1204,7 +1206,7 @@ sub load_crawlers_detection {
 	$config = $Conf{'etc'}.'/'.$robot.'/crawlers_detection.conf';
     }else{
 	$config = $Conf{'etc'}.'/crawlers_detection.conf' ;
-	$config = '--pkgdatadir--/etc/crawlers_detection.conf' unless (-f $config);
+	$config = Sympa::Constants::DEFAULTDIR .'/crawlers_detection.conf' unless (-f $config);
     }
 
     return undef unless  (-r $config);

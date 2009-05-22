@@ -31,13 +31,13 @@ use POSIX;
 use Mail::Internet;
 use MIME::Charset;
 use MIME::Tools;
-use Version;
 use Conf;
 use Log;
 use Language;
 use List;
 use Bulk;
 use tools;
+use Sympa::Constants;
 
 use strict;
 
@@ -922,7 +922,7 @@ sub reformat_message($;$$) {
 
     $msg->head->delete("X-Mailer");
     $msg = &fix_part($msg, $parser, $attachments, $defcharset);
-    $msg->head->add("X-Mailer", sprintf "Sympa %s", $Version::Version);
+    $msg->head->add("X-Mailer", sprintf "Sympa %s", Sympa::Constants::VERSION);
     return $msg->as_string;
 }
 

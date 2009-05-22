@@ -99,6 +99,7 @@ use CGI::Util;
 use MIME::EncWords; 
 use Log;
 use Language;
+use Sympa::Constants;
 
 my $current_lang;
 my $last_error;
@@ -248,7 +249,7 @@ sub get_error {
 
 sub parse_tt2 {
     my ($data, $template, $output, $include_path, $options) = @_;
-    $include_path ||= ['--pkgdatadir--/etc'];
+    $include_path ||= [Sympa::Constants::DEFAULTDIR];
 
     ## Add directories that may have been added
     push @{$include_path}, @other_include_path;
