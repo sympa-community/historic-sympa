@@ -49,6 +49,9 @@ if test -f /etc/sympa.conf; then
     execcgidir=$prefix/bin
     expldir=$prefix/expl
     spooldir=$prefix/spool
+    staticdir=$prefix/static_content
+    arcdir=$prefix/arc
+    bouncedir=$prefix/bounce
 else
     initdir=$sysconfdir/rc.d/init.d
     piddir=$localstatedir/run
@@ -61,6 +64,9 @@ else
     execcgidir=$libdir/sympa/cgi
     expldir=$localstatedir/lib/sympa
     spooldir=$localstatedir/spool/sympa
+    staticdir=$expldir/static_content
+    arcdir=$expldir/arc
+    bouncedir=$expldir/bounce
 fi
 
 # substitute custom variables
@@ -75,6 +81,9 @@ AC_SUBST(webtemplatedir)
 AC_SUBST(execcgidir)
 AC_SUBST(expldir)
 AC_SUBST(spooldir)
+AC_SUBST(staticdir)
+AC_SUBST(arcdir)
+AC_SUBST(bouncedir)
 
 # allow user to redefine some of them
 AC_ARG_WITH(
@@ -98,7 +107,6 @@ AC_ARG_WITH(
     [AC_MSG_WARN([obsolete --with-etcdir option used])]
 )
 
-# binaries
 AC_ARG_WITH(
     bindir,
     AS_HELP_STRING(
@@ -176,7 +184,6 @@ AC_ARG_WITH(
     ]
 )
 
-# documentation
 AC_ARG_WITH(
     mandir,
     AS_HELP_STRING(

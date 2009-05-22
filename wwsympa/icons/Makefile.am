@@ -1,4 +1,4 @@
-iconsdir = $(expldir)/static_content/icons
+iconsdir = $(staticdir)/icons
 icons_DATA = back.png \
 	     begin.png \
 	     binary.png \
