@@ -21,7 +21,6 @@
 
 
 package wwslib;
-use lib '--pkgdatadir--/lib';
 
 use Exporter;
 @ISA = ('Exporter');
