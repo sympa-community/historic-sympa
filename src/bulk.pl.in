@@ -46,7 +46,6 @@ use Commands;
 use Getopt::Long;
 
 use mail;
-use Version;
 use Bulk;
 use List;
 use tools;
@@ -145,7 +144,7 @@ unless (chdir($Conf::Conf{'home'})) {
 
 my $pinfo = &List::_apply_defaults();
 
-do_log('notice', "bulkd $Version::Version Started");
+do_log('notice', "bulkd %s Started", Sympa::Constants::VERSION);
 
 
 ## Catch SIGTERM, in order to exit cleanly, whenever possible.

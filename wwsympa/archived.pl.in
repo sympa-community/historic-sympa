@@ -51,10 +51,10 @@ use Digest::MD5;
 
 use wwslib;
 use mail;
-use Version;
 
 use tt2;
 use tools;
+use Sympa::Constants;
 
 my $daemon_name = &Log::set_daemon($0);
 my $ip = $ENV{'REMOTE_HOST'};
@@ -180,7 +180,7 @@ my $pinfo = &List::_apply_defaults();
 
 $Language::default_lang = $Conf{'lang'};
 
-do_log('notice', "archived $Version::Version Started");
+do_log('notice', "archived %s Started", Sympa::Constants::VERSION);
 
 
 ## Catch SIGTERM, in order to exit cleanly, whenever possible.

@@ -36,7 +36,6 @@ use Auth;
 use SympaSession;
 use Language;
 use Log;
-use Version;
 use mail;
 use MIME::QuotedPrint;
 use List;
@@ -62,7 +61,8 @@ my $digestsleep = 5;
 ## Init random engine
 srand (time());
 
-my $version_string = "Sympa version is $Version\n";
+my $version_string =
+    sprintf("Sympa version is %s\n", Sympa::Constants::VERSION);
 
 my $daemon_name = &Log::set_daemon($0);
 my $ip;
@@ -361,9 +361,9 @@ if ($signal ne 'hup') {
     umask(oct($Conf{'umask'}));
 
  ## Most initializations have now been done.
-    do_log('notice', "Sympa $Version started");
+    do_log('notice', "Sympa %s started", Sympa::Constants::VERSION);
 }else{
-    do_log('notice', "Sympa $Version reload config");
+    do_log('notice', "Sympa %s reload config", Sympa::Constants::VERSION);
     $signal = '0';
 }
 
@@ -718,7 +718,7 @@ if ($main::options{'dump'}) {
     &do_log('notice', "Upgrade process...");
 
     $main::options{'from'} ||= &Upgrade::get_previous_version();
-    $main::options{'to'} ||= $Version::Version;
+    $main::options{'to'} ||= Sympa::Constants::VERSION;
 
     if ($main::options{'from'} eq $main::options{'to'}) {
 	&do_log('err', "Current version : %s ; no upgrade is required.", $main::options{'to'});
