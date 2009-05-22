@@ -49,6 +49,7 @@ use POSIX;
 
 use tt2;
 use tools;
+use Sympa::Constants;
 
 ## Equivalents relative to RFC 1893
 my %equiv = ( "user unknown" => '5.1.1',
@@ -93,8 +94,8 @@ $main::options{'foreground'} = 1 if ($main::options{'debug'});
 $main::options{'log_to_stderr'} = 1 if ($main::options{'debug'} || $main::options{'foreground'});
 
 
-my $wwsympa_conf = "--WWSCONFIG--";
-my $sympa_conf_file = '--CONFIG--';
+my $wwsympa_conf    = Sympa::Constants::WWSCONFIG;
+my $sympa_conf_file = Sympa::Constants::CONFIG;
 
 my $daemon_name = &Log::set_daemon($0);
 my $ip = $ENV{'REMOTE_HOST'};
@@ -157,15 +158,15 @@ $wwsconf->{'log_facility'}||= $Conf{'syslog'};
 do_openlog($wwsconf->{'log_facility'}, $Conf{'log_socket_type'}, 'bounced');
 
 ## Set the UserID & GroupID for the process
-$( = $) = (getgrnam('--GROUP--'))[2];
-$< = $> = (getpwnam('--USER--'))[2];
+$( = $) = (getgrnam(Sympa::Constants::GROUP))[2];
+$< = $> = (getpwnam(Sympa::Constants::USER))[2];
 
 ## Required on FreeBSD to change ALL IDs(effective UID + real UID + saved UID)
-&POSIX::setuid((getpwnam('--USER--'))[2]);
-&POSIX::setgid((getgrnam('--GROUP--'))[2]);
+&POSIX::setuid((getpwnam(Sympa::Constants::USER))[2]);
+&POSIX::setgid((getgrnam(Sympa::Constants::GROUP))[2]);
 
 ## Check if the UID has correctly been set (usefull on OS X)
-unless (($( == (getgrnam('--GROUP--'))[2]) && ($< == (getpwnam('--USER--'))[2])) {
+unless (($( == (getgrnam(Sympa::Constants::GROUP))[2]) && ($< == (getpwnam(Sympa::Constants::USER))[2])) {
     &fatal_err("Failed to change process userID and groupID. Note that on some OS Perl scripts can't change their real UID. In such circumstances Sympa should be run via SUDO.");
 }
 

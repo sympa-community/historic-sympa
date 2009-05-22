@@ -74,8 +74,8 @@ if ($main::options{'debug'}) {
 $main::options{'foreground'} = 1 if ($main::options{'debug'});
 $main::options{'log_to_stderr'} = 1 if ($main::options{'debug'} || $main::options{'foreground'});
 
-$wwsympa_conf = "--WWSCONFIG--";
-$sympa_conf_file = '--CONFIG--';
+$wwsympa_conf    = Sympa::Constants::WWSCONFIG;
+$sympa_conf_file = Sympa::Constants::CONFIG;
 
 $wwsconf = {};
 $adrlist = {};
@@ -97,9 +97,9 @@ if ($wwsconf->{'arc_path'}) {
 	printf STDERR "Creating missing %s directory\n", $wwsconf->{'arc_path'};
 	mkdir $wwsconf->{'arc_path'}, 0775;
 	unless (&tools::set_file_rights(file => $wwsconf->{'arc_path'},
-					 user => '--USER--',
-					 group => '--GROUP--',
-					 mode => 0775,
+					 user  => Sympa::Constants::USER,
+					 group => Sympa::Constants::GROUP,
+					 mode  => 0775,
 					 ))
 	{
 	    &do_log('err','Unable to set rights on %s',$Conf{'db_name'});
@@ -149,16 +149,16 @@ $wwsconf->{'log_facility'}||= $Conf{'syslog'};
 do_openlog($wwsconf->{'log_facility'}, $Conf{'log_socket_type'}, 'archived');
 
 ## Set the UserID & GroupID for the process
-$( = $) = (getgrnam('--GROUP--'))[2];
-$< = $> = (getpwnam('--USER--'))[2];
+$( = $) = (getgrnam(Sympa::Constants::GROUP))[2];
+$< = $> = (getpwnam(Sympa::Constants::USER))[2];
 
 
 ## Required on FreeBSD to change ALL IDs(effective UID + real UID + saved UID)
-&POSIX::setuid((getpwnam('--USER--'))[2]);
-&POSIX::setgid((getgrnam('--GROUP--'))[2]);
+&POSIX::setuid((getpwnam(Sympa::Constants::USER))[2]);
+&POSIX::setgid((getgrnam(Sympa::Constants::GROUP))[2]);
 
 ## Check if the UID has correctly been set (usefull on OS X)
-unless (($( == (getgrnam('--GROUP--'))[2]) && ($< == (getpwnam('--USER--'))[2])) {
+unless (($( == (getgrnam(Sympa::Constants::GROUP))[2]) && ($< == (getpwnam(Sympa::Constants::USER))[2])) {
     &fatal_err("Failed to change process userID and groupID. Note that on some OS Perl scripts can't change their real UID. In such circumstances Sympa should be run via SUDO.");
 }
 

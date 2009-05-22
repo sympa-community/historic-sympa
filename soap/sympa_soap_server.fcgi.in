@@ -23,6 +23,7 @@ use Conf;
 use Log;
 use Language;
 use sympasoap;
+use Sympa::Constants;
 
 ## WWSympa librairies
 use cookielib;
@@ -33,8 +34,8 @@ my $birthday = time ;
 my $wwsconf = {};
 
 ## Change to your wwsympa.conf location
-my $conf_file = '--WWSCONFIG--';
-my $sympa_conf_file = '--CONFIG--';
+my $conf_file       = Sympa::Constants::WWSCONFIG;
+my $sympa_conf_file = Sympa::Constants::CONFIG;
 
 ## Load config 
 unless ($wwsconf = &wwslib::load_config($conf_file)) {
