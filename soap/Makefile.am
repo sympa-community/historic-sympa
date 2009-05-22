@@ -46,7 +46,7 @@ sympa_soap_client.pl sympa_soap_server.fcgi: Makefile
 	rm -f $@
 	sed \
 		-e 's|--PERL--|$(PERL)|' \
-		-e 's|--pkgdatadir--|$(pkgdatadir)|' \
+		-e 's|--modulesdir--|$(modulesdir)|' \
 		< $@.in > $@
 	chmod +x $@
 

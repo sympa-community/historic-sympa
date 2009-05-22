@@ -37,8 +37,7 @@ This fcgi script completely handles all aspects of the Sympa web interface
 
 =cut 
 
-## Change this to point to your Sympa bin directory
-use lib '--pkgdatadir--/lib';
+use lib '--modulesdir--';
 
 use Getopt::Long;
 use Archive::Zip;

@@ -24,8 +24,7 @@
 ## Options :  F         -> do not detach TTY
 ##         :  d		-> debug -d is equiv to -dF
 
-## Change this to point to your Sympa bin directory
-use lib '--pkgdatadir--/lib';
+use lib '--modulesdir--';
 use strict vars;
 
 use Task;

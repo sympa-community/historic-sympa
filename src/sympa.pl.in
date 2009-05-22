@@ -23,7 +23,7 @@
 
 use strict;
 
-use lib '--pkgdatadir--/lib';
+use lib '--modulesdir--';
 #use Getopt::Std;
 use Getopt::Long;
 

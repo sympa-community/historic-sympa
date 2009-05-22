@@ -55,8 +55,7 @@ Display usage instructions
 
 =cut
 
-## Change this to point to your Sympa bin directory
-use lib '--pkgdatadir--/lib';
+use lib '--modulesdir--';
 use strict;
 use POSIX qw(strftime);
 use English qw(-no_match_vars);

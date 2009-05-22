@@ -48,7 +48,7 @@ archived.pl bounced.pl wwsympa.fcgi: Makefile
 	rm -f $@
 	sed \
 		-e 's|--PERL--|$(PERL)|' \
-		-e 's|--pkgdatadir--|$(pkgdatadir)|' \
+		-e 's|--modulesdir--|$(modulesdir)|' \
 		< $@.in > $@
 	chmod +x $@
 

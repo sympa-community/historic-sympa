@@ -20,7 +20,7 @@ use HTTP::Cookies;
 use URI;
 use Getopt::Long;
 
-use lib '--pkgdatadir--/lib';
+use lib '--modulesdir--';
 # use Conf;
 use tools;
 
