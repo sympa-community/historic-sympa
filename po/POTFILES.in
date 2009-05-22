@@ -32,7 +32,6 @@ src/lib/time_utils.pm
 src/lib/tools.pm
 src/lib/tt2.pm
 src/lib/Upgrade.pm
-src/lib/Version.pm
 soap/sympa_soap_client.pl
 soap/sympasoap.pm
 soap/SympaTransport.pm
