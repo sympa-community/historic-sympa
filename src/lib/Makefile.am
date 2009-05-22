@@ -13,20 +13,23 @@ CLEANFILES = Sympa/Constants.pm
 Sympa/Constants.pm: Sympa/Constants.pm.in Makefile
 	rm -f $@
 	sed \
-		-e 's|--PERL--|$(PERL)|' \
+		-e 's|--VERSION--|$(VERSION)|' \
 		-e 's|--USER--|$(USER)|' \
 		-e 's|--GROUP--|$(GROUP)|' \
-		-e 's|--VERSION--|$(VERSION)|' \
-		-e 's|--SENDMAIL_ALIASES--|$(SENDMAIL_ALIASES)|' \
 		-e 's|--CONFIG--|$(CONFIG)|' \
 		-e 's|--WWSCONFIG--|$(WWSCONFIG)|' \
-		-e 's|--prefix--|$(prefix)|' \
+		-e 's|--SENDMAIL_ALIASES--|$(SENDMAIL_ALIASES)|' \
 		-e 's|--piddir--|$(piddir)|' \
-		-e 's|--libexecdir--|$(libexecdir)|' \
-		-e 's|--sbindir--|$(sbindir)|' \
-		-e 's|--localedir--|$(localedir)|' \
-		-e 's|--pkgdatadir--|$(pkgdatadir)|' \
-		-e 's|--sysconfdir--|$(sysconfdir)|' \
 		-e 's|--expldir--|$(expldir)|' \
 		-e 's|--spooldir--|$(spooldir)|' \
+		-e 's|--sysconfdir--|$(sysconfdir)|' \
+		-e 's|--localedir--|$(localedir)|' \
+		-e 's|--libexecdir--|$(libexecdir)|' \
+		-e 's|--sbindir--|$(sbindir)|' \
+		-e 's|--scriptdir--|$(scriptdir)|' \
+		-e 's|--modulesdir--|$(modulesdir)|' \
+		-e 's|--defaultdir--|$(defaultdir)|' \
+		-e 's|--staticdir--|$(staticdir)|' \
+		-e 's|--arcdir--|$(arcdir)|' \
+		-e 's|--bouncedir--|$(bouncedir)|' \
 		< $< > $@
