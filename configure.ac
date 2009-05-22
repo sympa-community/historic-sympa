@@ -43,7 +43,7 @@ if test -f /etc/sympa.conf; then
     lockdir=$localstatedir/lock/subsys
     modulesdir=$prefix/bin
     scriptdir=$prefix/bin
-    defaultdir=$datadir/sympa/etc
+    defaultdir=$datadir/sympa/default
     mailtemplatedir=$defaultdir/mail_tt2
     webtemplatedir=$defaultdir/web_tt2
     execcgidir=$prefix/bin
@@ -58,7 +58,7 @@ else
     lockdir=$localstatedir/lock/subsys
     modulesdir=$datadir/sympa/lib
     scriptdir=$datadir/sympa/bin
-    defaultdir=$datadir/sympa/etc
+    defaultdir=$datadir/sympa/default
     mailtemplatedir=$defaultdir/mail_tt2
     webtemplatedir=$defaultdir/web_tt2
     execcgidir=$libdir/sympa/cgi
