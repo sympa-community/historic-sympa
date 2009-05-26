@@ -199,20 +199,10 @@ sub merge_msg {
     
     # get_subscriber_no_object() return the user's details with the custom attributes
     my $user = &List::get_subscriber_no_object($user_details);
-    
+    $user->{'friendly_date'} = &POSIX::strftime("%d %b %Y  %H:%M", localtime($user->{'date'}));
+
     $data = {
-	'custom_attribute' => $user->{'custom_attribute'},
-	'email' => $user->{'email'},
-	'gecos' => $user->{'gecos'},
-	'bounce' => $user->{'bounce'},
-	'bounce_score' => $user->{'bounce_score'},
-	'bounce_address' => $user->{'bounce_address'},
-	'reception' => $user->{'reception'},
-	'topics' => $user->{'topics'},
-	'date' => &POSIX::strftime("%d %b %Y  %H:%M", localtime($user->{'date'})),
-	'update_date' => $user->{'update_date'},
-	'subscribed' => $user->{'subscribed'},
-	'id' => $user->{'id'},
+	'user' => $user,
 	'robot' => $robot,
 	'listname' => $listname, 
     };

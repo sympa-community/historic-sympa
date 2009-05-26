@@ -3180,21 +3180,160 @@ sub unlock {
     
     return 1;
 }
+=pod
+############################################################
+#  get_fingerprint                                         #
+############################################################
+#  Used in 2 cases :                                       #
+#  - check the md5 in the url                              #
+#  - create an md5 to put in a url                         #
+#                                                          #
+#  Use : get_db_random()                                   #
+#        init_db_random()                                  #
+#        md5_fingerprint()                                 #
+#                                                          #  
+# IN : $email : email of the subscriber                    #
+#      $fingerprint : the fingerprint in the url (1st case)#
+#                                                          # 
+# OUT : $fingerprint : a md5 for create an url             #
+#     | 1 : if the md5 in the url is true                  #
+#     | undef                                              #
+#                                                          #
+############################################################
+sub get_fingerprint {
+    
+    my $email = shift;
+    my $fingerprint = shift;
+    my $random;
+    my $random_email;
+    
+    unless($random = &get_db_random()){ # si un random existe : get_db_random
+	$random = &init_db_random(); # sinon init_db_random
+    }
+    
+    $random_email = ($random.$email);
+    
+    if( $fingerprint ) { #si on veut vérifier le fingerprint dans l'url
 
-## input a string
-## output md5 digest
+	if($fingerprint eq &md5_fingerprint($random_email)){
+	    return 1;
+	}else{
+	    return undef;
+	}
+
+    }else{ #si on veut créer une url de type http://.../sympa/unsub/$list/$email/&get_fingerprint($email)
+
+	$fingerprint = &md5_fingerprint($random_email);
+	return $fingerprint;
+
+    }
+}
+=cut
+
+############################################################
+#  md5_fingerprint                                         #
+############################################################
+#  The algorithm MD5 (Message Digest 5) is a cryptographic #
+#  hash function which permit to obtain                    #
+#  the fingerprint of a file/data                          #
+#                                                          #
+# IN : a string                                            #
+#                                                          #
+# OUT : md5 digest                                         #
+#     | undef                                              #
+#                                                          #
+############################################################
 sub md5_fingerprint {
     
     my $input_string = shift;
+
     return undef unless (defined $input_string);
     chomp $input_string;
     
     my $digestmd5 = new Digest::MD5;
     $digestmd5->reset;
     $digestmd5->add($input_string);
+
     return (unpack("H*", $digestmd5->digest));
 }
+=pod
+############################################################
+#  get_db_random                                           #
+############################################################
+#  This function returns $random                           #
+#  which is stored in the database                         #
+#                                                          #  
+# IN : -                                                   #
+#                                                          #
+# OUT : $random : the random stored in the database        #
+#     | undef                                              #
+#                                                          #
+############################################################
+sub get_db_random {
+    
+    ## Check database connection
+    unless ($dbh and $dbh->ping) {
+	return undef unless &db_connect();
+    }
+    $statement = sprintf "SELECT * FROM fingerprint_table";
+    
+    push @sth_stack, $sth;
+    unless ($sth = $dbh->prepare($statement)) {
+	do_log('err','Unable to prepare SQL statement : %s', $dbh->errstr);
+	return undef;
+    }
+    unless ($sth->execute) {
+	do_log('err','Unable to execute SQL statement "%s" : %s', $statement, $dbh->errstr);
+	return undef;
+    }
+    my $random = $sth->fetchrow_hashref('NAME_lc');
+    
+    $sth->finish();
+    $sth = pop @sth_stack;
 
+    return $random;
+
+}
+
+############################################################
+#  init_db_random                                          #
+############################################################
+#  This function initializes $random used in               #
+#  get_fingerprint if there is no value in the database    #
+#                                                          #  
+# IN : -                                                   #
+#                                                          #
+# OUT : $random : the random initialized in the database   #
+#     | undef                                              #
+#                                                          #
+############################################################
+sub init_db_random {
+
+    my $random = 1;
+    ## Check database connection
+    unless ($dbh and $dbh->ping) {
+	return undef unless &db_connect();
+    }
+    $statement = sprintf "INSERT INTO `fingerprint_table` VALUES(%d);", $random;
+    
+    push @sth_stack, $sth;
+    unless ($sth = $dbh->prepare($statement)) {
+	do_log('err','Unable to prepare SQL statement : %s', $dbh->errstr);
+	return undef;
+    }
+    unless ($sth->execute) {
+	do_log('err','Unable to execute SQL statement "%s" : %s', $statement, $dbh->errstr);
+	return undef;
+    }
+    my $result = $sth->fetchrow_hashref('NAME_lc');
+       
+    $sth->finish();
+    $sth = pop @sth_stack;
+
+    return $random;
+
+}
+=cut
 sub get_separator {
     return $separator;
 }

@@ -56,19 +56,31 @@
  	[%  END %]
 
 	[% IF !subaction %]
-  		<textarea name="body" cols="80" rows="25"></textarea>
+  		<textarea name="body" cols="80" rows="25">
+
+
+
+
+
+
+
+
+
+
+
+Unsubscribe : http://[% robot %]/[% path_cgi %]/[% list %]/[% user.email %]?[% fingerprint %]</textarea>
 		<br />
 		<br />
 		<b>Personnalisation de messages : (on rajoute les balises TT2 : [ %  et  % ])</b><br />
-		email : destinataire <br />
+		user.email : destinataire <br />
 		listname : nom de la liste <br />
 		robot : serveur utilisé <br /><br />
-		custom_attribute.civility.value : civilité (Mr, ...) <br />
-		custom_attribute.name.value :  nom <br />
-		custom_attribute.surname.value : prénom <br />
+		user.custom_attribute.civility.value : civilité (Mr, ...) <br />
+		user.custom_attribute.name.value :  nom <br />
+		user.custom_attribute.surname.value : prénom <br />
 		--- Il suffit de remplacer le paramètre du milieu par le nom donné au paramètre personnalisé <br /><br />
-		date : abonné depuis le <br />
-		gecos : nom prénom par défaut, surnom donné dans les paramètres utilisateurs sinon <br />
+		user.friendly_date : abonné depuis le <br />
+		user.gecos : nom prénom par défaut, surnom donné dans les paramètres utilisateurs sinon <br />
 		etc ...
 	[%  END %]
 	[% IF subaction == "html_news_letter" %]

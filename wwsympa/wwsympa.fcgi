@@ -4884,32 +4884,48 @@ sub do_subrequest {
  sub do_signoff {
      &wwslog('info', 'do_signoff');
 
+     my $authenticated_email_address;
+
      unless ($param->{'user'}{'email'}) {
 	 unless ($in{'email'}) {
 	     return 'sigrequest';
 	 }
 
-	 ## Perform login first
-	 if ($in{'passwd'}) {
-	     $in{'previous_action'} = 'signoff';
-	     $in{'previous_list'} = $param->{'list'};
-	     return 'login';
+	 if ($in{'fingerprint'}) {
+
+
+	     ## We don't set $param->{'user'}{'email'} because we don't want the user to be authenticated 
+	     ## to prevent the cookie from being set
+	     $authenticated_email_address = $in{'email'};
+
+	 }else {
+	     
+	     ## Perform login first
+	     if ($in{'passwd'}) {
+		 $in{'previous_action'} = 'signoff';
+		 $in{'previous_list'} = $param->{'list'};
+		 return 'login';
+	     }
+	     
+	     if ( &List::is_user_db($in{'email'}) ) {
+		 &report::reject_report_web('user','no_user',{},$param->{'action'});
+		 &wwslog('info','do_signoff: need auth for user %s', $in{'email'});
+		 &web_db_log({'target_email' => $in{'email'},
+			      'status' => 'error',
+			      'error_type' => 'authentication'});
+		 return undef;
+	     }
+	     
+	     ## No passwd
+	     &init_passwd($in{'email'}, {'lang' => $param->{'lang'} });
+	     
+	     $param->{'user'}{'email'} = $in{'email'};
+	     $authenticated_email_address = $in{'email'};
 	 }
 
-	 if ( &List::is_user_db($in{'email'}) ) {
-	     &report::reject_report_web('user','no_user',{},$param->{'action'});
-	     &wwslog('info','do_signoff: need auth for user %s', $in{'email'});
-	     &web_db_log({'target_email' => $in{'email'},
-			  'status' => 'error',
-			  'error_type' => 'authentication'});
-	     return undef;
-	 }
-
-	 ## No passwd
-	 &init_passwd($in{'email'}, {'lang' => $param->{'lang'} });
-
-	 $param->{'user'}{'email'} = $in{'email'};
      }
+
+     
 
      unless ($list->is_user($param->{'user'}{'email'})) {
 	 &report::reject_report_web('user','not_subscriber',{'list'=>$list->{'name'}},$param->{'action'},$list);
