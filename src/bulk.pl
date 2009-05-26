@@ -207,9 +207,7 @@ while (!$end) {
 	#------------- BEGIN VERP AND MERGE ---------------
         #--------------------------------------------------
 	my $data; #HASH which will contain the attributes of the subscriber
-	my $options;
-	$options->{'is_not_template'} = 1;
-	
+		
 	# Initialization of the HASH : $data. It will be used by parse_tt2 to personalized messages.
 	$data->{'listname'} = $bulk->{'listname'};
 	$data->{'robot'} = $bulk->{'robot'};
@@ -232,22 +230,19 @@ while (!$end) {
 
 		# Test if use merge
 		if (1==1) { #-------- it will be : if ($bulk->{'merge'}) { ------------#
-		    my $user_details;
-		    $user_details->{'email'} = $rcpt;
-		    $user_details->{'name'} = $bulk->{'listname'};
-		    $user_details->{'domain'} = $bulk->{'robot'};
 		    
-		    # get_subscriber_no_object() return the user's details with the custom attributes
-		    $user = &List::get_subscriber_no_object($user_details);
-		    $data->{'custom_attribute'} = $user->{'custom_attribute'};
-	
-		    # Parse the TT2 in the message 
-		    &tt2::parse_tt2($data,\$messageasstring, $message_output, '', $options);
+		    &Bulk::merge_msg('rcpt' => $rcpt,
+			       'listname' => $bulk->{'listname'},
+			       'robot' => $bulk->{'robot'},
+			       'data' => $data,
+			       'messageasstring' => $messageasstring,
+			       'message_output' => $message_output,
+			       );
 		}
 		
 		*SMTP = &mail::smtpto($return_path, \$rcpt, $bulk->{'robot'});
 		
-                # Message with custom data
+                # Message with customized data
 		print SMTP $message_output;
 		close SMTP;
 	    }
@@ -256,21 +251,17 @@ while (!$end) {
 	    if ( 1==1 ) { #-------- it will be : if ($bulk->{'merge'}) { ------------#
 
 		foreach $rcpt (@rcpts) {
-		    my $user_details;
-		    $user_details->{'email'} = $rcpt;
 
-		    $user_details->{'name'} = $bulk->{'listname'};
-		    $user_details->{'domain'} = $bulk->{'robot'};
+		    &Bulk::merge_msg('rcpt' => $rcpt,
+			       'listname' => $bulk->{'listname'},
+			       'robot' => $bulk->{'robot'},
+			       'data' => $data,
+			       'messageasstring' => $messageasstring,
+			       'message_output' => $message_output,
+			       );
 		    
-		    # get_subscriber_no_object() return the user's details with the custom attributes
-		    $user = &List::get_subscriber_no_object($user_details);
-		    $data->{'custom_attribute'} = $user->{'custom_attribute'};
-
-                    # Parse the TT2 in the message : replace the tags and the parameters by the corresponding values
-		    &tt2::parse_tt2($data,\$messageasstring, $message_output, '', $options);
-
 		    *SMTP = &mail::smtpto($bulk->{'returnpath'}, \$rcpt, $bulk->{'robot'});
-		    # Message with custom data
+		    # Message with customized data
 		    print SMTP $message_output;
 		    close SMTP;
 		}
@@ -307,4 +298,3 @@ sub sigterm {
     &do_log('notice', 'signal TERM received, still processing current task');
     $end = 1;
 }
-

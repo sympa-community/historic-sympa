@@ -59,7 +59,17 @@
   		<textarea name="body" cols="80" rows="25"></textarea>
 		<br />
 		<br />
-		Test de personnalisation de messages : (on rajoute les balises TT2 : [ %  et  % ]<br />to : [% user.email %] <br />nameoflist ou listname : [% list %] <br />robot : [% robot %]
+		<b>Personnalisation de messages : (on rajoute les balises TT2 : [ %  et  % ])</b><br />
+		email : destinataire <br />
+		listname : nom de la liste <br />
+		robot : serveur utilisé <br /><br />
+		custom_attribute.civility.value : civilité (Mr, ...) <br />
+		custom_attribute.name.value :  nom <br />
+		custom_attribute.surname.value : prénom <br />
+		--- Il suffit de remplacer le paramètre du milieu par le nom donné au paramètre personnalisé <br /><br />
+		date : abonné depuis le <br />
+		gecos : nom prénom par défaut, surnom donné dans les paramètres utilisateurs sinon <br />
+		etc ...
 	[%  END %]
 	[% IF subaction == "html_news_letter" %]
    		<label for="url">[%|loc%]Url :[%END%] <input id="url" type="text" size="45" name="url" value="[% url %]" /></label>	

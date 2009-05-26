@@ -158,6 +158,71 @@ sub messageasstring {
 
     return( MIME::Base64::decode($messageasstring->{'message'}) );
 }
+
+############################################################
+#  merge_msg                                               #
+############################################################
+#  This function retrieves the customized data of the      #
+#  users then parse the message. It returns the message    #
+#  personalized to bulk.pl                                 #
+#  It uses the method parse_tt2                            #
+#  It uses the method get_subscriber_no_object             #
+#                                                          #
+# IN : - rcpt : the receipient email                       #
+#      - listname : the name of the list                   #
+#      - robot : the host                                  #
+#      - data : HASH with many data                        #
+#      - messageasstring : message with the TT2            #
+#      - message_output : object, IO::Scalar               #
+#                                                          #
+# OUT : - message_output : customized message              #
+#     | undef                                              #
+#                                                          #
+############################################################ 
+sub merge_msg {
+
+    my %params = @_;
+    my $rcpt = $params{'rcpt'},
+    my $listname = $params{'listname'},
+    my $robot = $params{'robot'},
+    my $data = $params{'data'},
+    my $messageasstring = $params{'messageasstring'},
+    my $message_output = $params{'message_output'},
+    
+    my $options;
+    $options->{'is_not_template'} = 1;
+    
+    my $user_details;
+    $user_details->{'email'} = $rcpt;
+    $user_details->{'name'} = $listname;
+    $user_details->{'domain'} = $robot;
+    
+    # get_subscriber_no_object() return the user's details with the custom attributes
+    my $user = &List::get_subscriber_no_object($user_details);
+    
+    $data = {
+	'custom_attribute' => $user->{'custom_attribute'},
+	'email' => $user->{'email'},
+	'gecos' => $user->{'gecos'},
+	'bounce' => $user->{'bounce'},
+	'bounce_score' => $user->{'bounce_score'},
+	'bounce_address' => $user->{'bounce_address'},
+	'reception' => $user->{'reception'},
+	'topics' => $user->{'topics'},
+	'date' => &POSIX::strftime("%d %b %Y  %H:%M", localtime($user->{'date'})),
+	'update_date' => $user->{'update_date'},
+	'subscribed' => $user->{'subscribed'},
+	'id' => $user->{'id'},
+	'robot' => $robot,
+	'listname' => $listname, 
+    };
+
+    # Parse the TT2 in the message : replace the tags and the parameters by the corresponding values
+    &tt2::parse_tt2($data,\$messageasstring, $message_output, '', $options);
+    
+    return $message_output;
+}
+
 ## 
 sub store { 
     my %data = @_;
