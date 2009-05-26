@@ -21,7 +21,9 @@
 
 SUBDIRS = src wwsympa soap web_tt2 mail_tt2 doc po po-wwsympa
 
-EXTRA_DIST = important_changes.pl
+EXTRA_DIST = important_changes.pl \
+	     sympa.spec.in \
+	     sympa.spec
 
 install-data-hook: installdir installconfig nextstep importantchanges
 
