@@ -440,5 +440,6 @@ AC_CONFIG_FILES([
     mail_tt2/Makefile
     po/Makefile.in
     po-wwsympa/Makefile.in
+    sympa.spec
 ])
 AC_OUTPUT
