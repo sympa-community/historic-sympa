@@ -64,8 +64,8 @@ use Pod::Usage;
 use Sympa::Constants;
 
 ## sympa configuration files
-my $wwsympa_conf    = Sympa::Constants::WWSCONFIG;
-my $sympa_conf_file = Sympa::Constants::CONFIG;
+my $wwsympa_conf = Sympa::Constants::WWSCONFIG;
+my $sympa_conf   = Sympa::Constants::CONFIG;
 
 my %options;
 GetOptions(

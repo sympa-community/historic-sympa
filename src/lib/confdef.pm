@@ -172,7 +172,7 @@ our @params = (
     },
     {
         name    => 'static_content_path',
-        default => Sympa::Constants::EXPLDIR/static_content,
+        default => Sympa::Constants::EXPLDIR . '/static_content',
         query   => 'The directory where Sympa stores static contents (CSS, members pictures, documentation) directly delivered by Apache',
 	vhost   => '1',
         file    => 'sympa.conf',
@@ -1273,7 +1273,7 @@ our @params = (
     },
     {
         name    => 'alias_manager',
-        default => Sympa::Constants::SBINDIR- . '/alias_manager.pl',
+        default => Sympa::Constants::SBINDIR . '/alias_manager.pl',
     },
 );
 
