@@ -97,7 +97,7 @@ our @params = (
     },
     {
         name    => 'arc_path',
-        default => Sympa::Constants::ARCDIR . '/arc',
+        default => Sympa::Constants::ARCDIR,
         query   => 'Where to store HTML archives',
         file    => 'wwsympa.conf',edit => '1',
         advice  =>'Better if not in a critical partition',
@@ -171,10 +171,18 @@ our @params = (
         default => 'undef',
     },
     {
+        name    => 'http_host',
+        default => 'http://domain.tld',
+        query   => 'URL to a virtual host.',
+	vhost   => '1',
+        file    => 'sympa.conf',
+    },	      
+    {
         name    => 'static_content_path',
         default => Sympa::Constants::EXPLDIR . '/static_content',
         query   => 'The directory where Sympa stores static contents (CSS, members pictures, documentation) directly delivered by Apache',
 	vhost   => '1',
+        edit    => '1',
         file    => 'sympa.conf',
     },	      
     {
@@ -182,6 +190,7 @@ our @params = (
         default => '/static-sympa',
         query   => 'The URL mapped with the static_content_path directory defined above',
 	vhost   => '1',
+        edit    => '1',
         file    => 'sympa.conf',
     },	      
     { title => 'Syslog' },
@@ -247,6 +256,7 @@ our @params = (
         default => 'your_email_address@domain.tld',
         query   => 'Listmasters email list comma separated',
         file    => 'sympa.conf',
+        vhost   => '1',
         edit    => '1',
         advice  => 'Sympa will associate listmaster privileges to these email addresses (mail and web interfaces). Some error reports may also be sent to these addresses.',
     },
@@ -311,7 +321,6 @@ our @params = (
         default => '1',
         query   => 'The minimum number of packets in database before the bulk forks to increase sending rate',
         file    => 'sympa.conf',
-        edit    => '1',
         advice  => '',
     },
     {
@@ -319,7 +328,6 @@ our @params = (
         default => '3',
         query   => 'The max number of bulks that will run on the same server.',
         file    => 'sympa.conf',
-        edit    => '1',
         advice  => '',
     },
     {
@@ -327,7 +335,6 @@ our @params = (
         default => '600',
         query   => 'the number of seconds a slave bulk will remain running without processing a message before it spontaneously dies.',
         file    => 'sympa.conf',
-        edit    => '1',
         advice  => '',
     },
     {
@@ -335,7 +342,6 @@ our @params = (
         default => '10',
         query   => 'The number of seconds a master bulk waits between two packets number checks.',
         file    => 'sympa.conf',
-        edit    => '1',
         advice  => 'Keep it small if you expect brutal increases in the message sending load.',
     },
     {

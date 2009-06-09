@@ -6,14 +6,14 @@
 ## This version of alias_manager.pl has been customized by Ludovic Marcotte, Kazuo Moriwaka and Francis Lachapelle
 ## Modified by Philippe Baumgart:
 ## Added  Optional LDAPS support
-## Added LDAP configuration stored in a separate config file --pkgdatadir--/etc/ldap_alias_manager.conf
+## Added LDAP configuration stored in a separate config file --defaultdir--/ldap_alias_manager.conf
 #
 # Modified by Roland Hopferwieser:
 #   Use template for entry definition
 #   Added simulation mode
 #	Bugfix for ldap_ssl = 0
 #Purpose: It has the ability to add/remove list aliases in an LDAP directory
-# You should edit all the --pkgdatadir--/etc/ldap_alias_manager.conf to use your own LDAP directory
+# You should edit all the --defaultdir--/ldap_alias_manager.conf to use your own LDAP directory
 
 $ENV{'PATH'} = '';
 
@@ -21,11 +21,11 @@ my $SYMPA_CONF = '--CONFIG--';
 
 ## Load Sympa.conf
 use strict;
-use lib '--pkgdatadir--/lib';
+use lib '--modulesdir';
 use Conf;
 use POSIX;
-require "tools.pl";
-require "tt2.pl";
+require tools;
+require tt2;
 
 use Net::LDAP;
 use Net::LDAPS;
@@ -35,7 +35,7 @@ unless (Conf::load($SYMPA_CONF)) {
    exit(1);
 }
 
-my $manager_conf_file = '--pkgdatadir--/etc/ldap_alias_manager.conf';
+my $manager_conf_file = $Conf{etc}.'/ldap_alias_manager.conf';
 
 ## LDAP configuration
 my %ldap_params;

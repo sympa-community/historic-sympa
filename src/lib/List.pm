@@ -31,9 +31,9 @@ use Scenario;
 require Fetch;
 require Exporter;
 require Encode;
-use tools;
 use tt2;
 use Sympa::Constants;
+require (Sympa::Constants::MODULEDIR.'/tools.pm');
 
 my @ISA = qw(Exporter);
 my @EXPORT = qw(%list_of_lists);
@@ -8727,7 +8727,7 @@ sub sync_include_admin {
 		    
 		# add a new included and subscribed admin user 
 		}else {
-		    &do_log('debug2 ', 'List:sync_include_admin: adding %s %s to list %s',$email,$role, $name);
+		    &do_log('debug2', 'List:sync_include_admin: adding %s %s to list %s',$email,$role, $name);
 		    
 		    foreach my $key (keys %{$param}) {  
 			$new_admin_users_config->{$email}{$key} = $param->{$key};
@@ -8768,7 +8768,7 @@ sub sync_include_admin {
 		    }
 		# add a new included admin user 
 		}else {
-		    &do_log('debug2 ', 'List:sync_include_admin: adding %s %s to list %s', $role, $email, $name);
+		    &do_log('debug2', 'List:sync_include_admin: adding %s %s to list %s', $role, $email, $name);
 		    
 		    foreach my $key (keys %{$param}) {  
 			$new_admin_users_include->{$email}{$key} = $param->{$key};
@@ -8807,7 +8807,7 @@ sub sync_include_admin {
 		}
 	    # add a new subscribed admin user 
 	    }else {
-		&do_log('debug2 ', 'List:sync_include_admin: adding %s %s to list %s', $role, $email, $name);
+		&do_log('debug2', 'List:sync_include_admin: adding %s %s to list %s', $role, $email, $name);
 		
 		foreach my $key (keys %{$param}) {  
 		    $new_admin_users_config->{$email}{$key} = $param->{$key};
@@ -8837,7 +8837,7 @@ sub sync_include_admin {
 	
 	foreach my $email (keys %$old_admin_users) {
 	    unless (defined($new_admin_users_include->{$email}) || defined($new_admin_users_config->{$email})) {
-		&do_log('debug2 ', 'List:sync_include_admin: removing %s %s to list %s', $role, $email, $name);
+		&do_log('debug2', 'List:sync_include_admin: removing %s %s to list %s', $role, $email, $name);
 		push(@deltab, $email);
 	    }
 	}
@@ -11500,13 +11500,13 @@ sub new {
     my $robot = {'name' => $name};
     &Log::do_log('debug2', '');
     
-    unless (defined $name && $Conf::Conf::Conf{'robots'}{$name}) {
+    unless (defined $name && $Conf::Conf{'robots'}{$name}) {
 	&Log::do_log('err',"Unknown robot '$name'");
 	return undef;
     }
 
     ## The default robot
-    if ($name eq $Conf::Conf::Conf{'host'}) {
+    if ($name eq $Conf::Conf{'host'}) {
 	$robot->{'home'} = $Conf::Conf{'home'};
     }else {
 	$robot->{'home'} = $Conf::Conf{'home'}.'/'.$name;

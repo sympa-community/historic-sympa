@@ -47,15 +47,9 @@ use Time::Local;
 use Text::Wrap;
 use MIME::Lite::HTML;
 use MIME::Lite;
-#use POSIX;
-#use CGI;
-
-## Template parser
-require "tt2.pl";
 
 ## Sympa API
 use List;
-use mail;
 use mail;
 use Conf;
 use Commands;
@@ -67,14 +61,17 @@ use SharedDocument;
 use report;
 use SympaSession;
 use Log;
+use tools;
+use time_utils;
+use Sympa::Constants;
+use wwslib;
+use cookielib;
+use tt2;
 
 #use open ':utf8'; ## Default is to consider files utf8 
 
 use Mail::Header;
 use Mail::Address;
-
-require "tools.pl";
-require "time_utils.pl";
 
 my $crypt_openssl_x509_ok;
 BEGIN {
@@ -87,16 +84,14 @@ BEGIN {
 };
 
 ## WWSympa librairies
-use wwslib;
-use cookielib;
 my %options;
 
 ## Configuration
 my $wwsconf = {};
 
 ## Change to your wwsympa.conf location
-my $conf_file = '--WWSCONFIG--';
-my $sympa_conf_file = '--CONFIG--';
+my $conf_file = Sympa::Constants::WWSCONFIG;
+my $sympa_conf_file = Sympa::Constants::CONFIG;
 
 
 
@@ -439,7 +434,7 @@ my %action_args = ('default' => ['list'],
 ## Some keywords are reserved: param.list and param.user.email
 ## Alternate parameters can be defined with the '|' character
 ## Limits of this structure: it does not define optional parameters (a or b)
-## Limit : it does not allow to have a specific error message and redirect to a given page if the parameter is missing
+## Limit: it does not allow to have a specific error message and redirect to a given page if the parameter is missing
 my %required_args = ('active_lists' => ['for|count'],
 		     'admin' => ['param.list','param.user.email'],
 		     'add' => ['param.list','param.user.email'],
@@ -935,10 +930,10 @@ my $birthday = time ;
      &List::init_list_cache();
 
      ## Check effective ID
-     unless ($> eq (getpwnam('--USER--'))[2]) {
+     unless ($> eq (getpwnam(Sympa::Constants::USER))[2]) {
 	 $maintenance_mode = 1;
 	 &report::reject_report_web('intern_quiet','incorrect_server_config',{},'','');
-	 &wwslog('err','Config error: wwsympa should run with UID %s (instead of %s). *** Switching to maintenance mode. ***', (getpwnam('--USER--'))[2], $>);
+	 &wwslog('err','Config error: wwsympa should run with UID %s (instead of %s). *** Switching to maintenance mode. ***', (getpwnam(Sympa::Constants::USER))[2], $>);
      }
 
      unless (&List::check_db_connect()) {
@@ -947,7 +942,7 @@ my $birthday = time ;
      }
 
      ## If in maintenance mode, check if the data structure is now uptodate
-     if ($maintenance_mode && (&Upgrade::data_structure_uptodate() && ($> eq (getpwnam('--USER--'))[2]))) {
+     if ($maintenance_mode && (&Upgrade::data_structure_uptodate() && ($> eq (getpwnam(Sympa::Constants::USER))[2]))) {
 	 $maintenance_mode = undef;
 	 &do_log('notice',"Data structure seem updated, setting OFF maintenance mode");
      }
@@ -8386,9 +8381,9 @@ Sends back the list creation edition form.
      &wwslog('info', 'do_scenario_test');
 
      ## List available scenarii
-     unless (opendir SCENARI, "--pkgdatadir--/etc/scenari/"){
-	 &report::reject_report_web('intern','cannot_open_dir',{'dir' => "--pkgdatadir--/etc/scenari/"},$param->{'action'},$list,$param->{'user'}{'email'},$robot);
-	 &wwslog('info',"do_scenario_test : unable to open --pkgdatadir--/etc/scenari");
+     unless (opendir SCENARI, Sympa::Constants::DEFAULTDIR.'/scenari/'){
+	 &report::reject_report_web('intern','cannot_open_dir',{'dir' => Sympa::Constants::DEFAULTDIR.'/scenari/'},$param->{'action'},$list,$param->{'user'}{'email'},$robot);
+	 &wwslog('info',"do_scenario_test : unable to open %s/scenari", Sympa::Constants::DEFAULTDIR);
 	 return undef;
      }
 
@@ -16118,7 +16113,7 @@ sub do_rss_request {
 sub do_wsdl {
   
     &wwslog('info', "do_wsdl ()");
-    my $sympawsdl = '--pkgdatadir--/etc/sympa.wsdl';
+    my $sympawsdl = &tools::get_filename('etc',{}, 'sympa.wsdl', $robot);
 
     unless (-r $sympawsdl){
       	&report::reject_report_web('intern','err_404',{},$param->{'action'});
@@ -16137,8 +16132,12 @@ sub do_wsdl {
     printf "Content-type: text/xml\n\n";
     
    $param->{'conf'}{'soap_url'}  = $soap_url;
+    
+    ## Get the directory path, without the file name
+    my $wsdl_path = $sympawsdl;
+    $wsdl_path =~ s/\/sympa.wsdl//;
 
-    &tt2::parse_tt2($param, 'sympa.wsdl' , \*STDOUT, ['--pkgdatadir--/etc']);
+    &tt2::parse_tt2($param, 'sympa.wsdl' , \*STDOUT, [$wsdl_path]);
     
 #    unless (open (WSDL,$sympawsdl)) {
 # 	&error_message('404');
