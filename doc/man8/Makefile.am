@@ -15,9 +15,10 @@ archived.pod bounced.pod alias_manager.pod: Makefile
 		-e 's|--libexecdir--|$(libexecdir)|' \
 		-e 's|--sysconfdir--|$(sysconfdir)|' \
 		-e 's|--defaultdir--|$(defaultdir)|' \
-		-e 's|--expldir--|$(expldir)|' \
 		-e 's|--spooldir--|$(spooldir)|' \
 		-e 's|--docdir--|$(docdir)|' \
+		-e 's|--WWSCONFIG--|$(WWSCONFIG)|' \
+		-e 's|--SENDMAIL_ALIASES--|$(SENDMAIL_ALIASES)|' \
 		< $(srcdir)/$@.in > $@
 
 archived.pod: $(srcdir)/archived.pod.in
