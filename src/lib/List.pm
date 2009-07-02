@@ -32,7 +32,7 @@ use Upgrade;
 use Lock;
 use Task;
 use Scenario;
-require Fetch;
+use Fetch;
 use Exporter;
 use tt2;
 use Sympa::Constants;

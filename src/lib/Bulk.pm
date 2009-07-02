@@ -41,7 +41,7 @@ use Datasource;
 use SQLSource qw(create_db %date_format);
 use Lock;
 use Task;
-require Fetch;
+use Fetch;
 use tools;
 use tt2;
 use Language;
