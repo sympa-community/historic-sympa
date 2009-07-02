@@ -56,7 +56,7 @@ sub create {
     }
 
     $challenge->{'id_challenge'} = &get_random();
-    $challenge->{'email'} = $email
+    $challenge->{'email'} = $email;
     $challenge->{'date'} = time;
     $challenge->{'robot'} = $robot; 
     $challenge->{'data'} = $context;
