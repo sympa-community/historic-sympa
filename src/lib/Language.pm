@@ -21,7 +21,7 @@
 
 package Language;
 
-require Exporter;
+use Exporter;
 use Carp;
 our @ISA = qw(Exporter);
 our @EXPORT = qw(&gettext gettext_strftime);

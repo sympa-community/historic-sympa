@@ -23,7 +23,7 @@
 package LDAPSource;
 
 use strict;
-require Exporter;
+use Exporter;
 use tools;
 use tt2;
 our @ISA = qw(Exporter);

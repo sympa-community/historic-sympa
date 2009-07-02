@@ -33,7 +33,7 @@ use confdef;
 use tools;
 use Sympa::Constants;
 
-require Exporter;
+use Exporter;
 use Carp;
 
 our @ISA = qw(Exporter);

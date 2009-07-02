@@ -23,7 +23,7 @@ package Log;
 
 use strict "vars";
 
-require Exporter;
+use Exporter;
 use Sys::Syslog;
 use Carp;
 use POSIX qw/mktime/;

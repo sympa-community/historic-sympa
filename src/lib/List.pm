@@ -29,7 +29,7 @@ use Lock;
 use Task;
 use Scenario;
 require Fetch;
-require Exporter;
+use Exporter;
 require Encode;
 use tt2;
 use Sympa::Constants;
