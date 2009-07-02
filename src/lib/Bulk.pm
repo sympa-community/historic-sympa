@@ -25,13 +25,10 @@ use SQLSource qw(create_db %date_format);
 use Lock;
 use Task;
 require Fetch;
-require Exporter;
 require Encode;
 use tools;
 use tt2;
 use Time::HiRes qw(time);
-
-my @ISA = qw(Exporter);
 
 use Fcntl qw(LOCK_SH LOCK_EX LOCK_NB LOCK_UN);
 
