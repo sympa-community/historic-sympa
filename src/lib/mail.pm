@@ -23,8 +23,8 @@ package mail;
 
 require Exporter;
 use Carp;
-@ISA = qw(Exporter);
-@EXPORT = qw(mail_file mail_message mail_forward set_send_spool);
+our @ISA = qw(Exporter);
+our @EXPORT = qw(mail_file mail_message mail_forward set_send_spool);
 
 #use strict;
 use POSIX;

@@ -23,8 +23,8 @@ package Language;
 
 require Exporter;
 use Carp;
-@ISA = qw(Exporter);
-@EXPORT = qw(&gettext gettext_strftime);
+our @ISA = qw(Exporter);
+our @EXPORT = qw(&gettext gettext_strftime);
 
 use strict;
 use Log;

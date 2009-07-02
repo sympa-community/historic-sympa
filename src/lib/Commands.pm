@@ -39,8 +39,8 @@ use Time::Local;
 use MIME::EncWords;
 
 use Exporter;
-@ISA = ('Exporter');
-@EXPORT_OK=('$sender');
+our @ISA = ('Exporter');
+our @EXPORT_OK=('$sender');
 
 my %comms =  ('add' =>			   	     'add',
 	      'con|confirm' =>	                     'confirm',

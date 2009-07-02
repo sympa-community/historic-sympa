@@ -3,8 +3,8 @@ package CAS;
 
 use strict;
 
-my @ISA = qw(Exporter);
-my @EXPORT = qw($errors);
+our @ISA = qw(Exporter);
+our @EXPORT = qw($errors);
 
 my $errors;
 

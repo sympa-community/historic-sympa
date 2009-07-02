@@ -35,8 +35,8 @@ use tt2;
 use Sympa::Constants;
 require (Sympa::Constants::MODULEDIR.'/tools.pm');
 
-my @ISA = qw(Exporter);
-my @EXPORT = qw(%list_of_lists);
+our @ISA = qw(Exporter);
+our @EXPORT = qw(%list_of_lists);
 
 use Fcntl qw(LOCK_SH LOCK_EX LOCK_NB LOCK_UN);
 

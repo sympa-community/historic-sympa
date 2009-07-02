@@ -62,7 +62,7 @@
  
  package PlainDigest;
 
- @ISA = qw(MIME::Entity);
+ our @ISA = qw(MIME::Entity);
  use Mail::Internet;
  use Mail::Address;
  use MIME::Parser;
@@ -347,7 +347,7 @@
  # This is a subclass of the HTML::FormatText object. 
  # This subclassing is done to allow internationalisation of some strings
  
- @ISA = qw(HTML::FormatText);
+ our @ISA = qw(HTML::FormatText);
      
  use Language;
  use strict;
