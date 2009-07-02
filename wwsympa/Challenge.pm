@@ -103,7 +103,7 @@ sub load {
     unless ($challenge) {
 	return 'not_found';
     }
-    my $challenge_datas
+    my $challenge_datas;
 
     my %datas= &tools::string_2_hash($challenge->{'data'});
     foreach my $key (keys %datas) {$challenge_datas->{$key} = $datas{$key};} 
