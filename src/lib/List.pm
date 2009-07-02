@@ -36,7 +36,7 @@ use Fetch;
 use Exporter;
 use tt2;
 use Sympa::Constants;
-require (Sympa::Constants::MODULEDIR.'/tools.pm');
+use tools;
 
 our @ISA = qw(Exporter);
 our @EXPORT = qw(%list_of_lists);
