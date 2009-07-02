@@ -21,7 +21,7 @@ package Bulk;
 
 use strict;
 
-require Encode;
+use Encode;
 use Fcntl qw(LOCK_SH LOCK_EX LOCK_NB LOCK_UN);
 use Carp;
 use IO::Scalar;

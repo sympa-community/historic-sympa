@@ -24,7 +24,7 @@ use strict;
 
 use POSIX;
 use Fcntl qw(LOCK_SH LOCK_EX LOCK_NB LOCK_UN);
-require Encode;
+use Encode;
 
 use Datasource;
 use SQLSource qw(create_db %date_format);
