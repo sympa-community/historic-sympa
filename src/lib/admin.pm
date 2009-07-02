@@ -1015,10 +1015,6 @@ sub check_topics {
     return undef;
 }
 
-
-########################################""
-return 1;
-
 =pod 
 
 =head1 AUTHORS 
@@ -1032,3 +1028,5 @@ return 1;
 =back 
 
 =cut 
+
+1;

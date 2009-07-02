@@ -2823,5 +2823,4 @@ sub _load_param_constraint_conf {
 
 =cut
 
-###################################
-return 1;
+1;

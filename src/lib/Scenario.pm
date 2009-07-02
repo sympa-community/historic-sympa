@@ -1198,6 +1198,4 @@ sub dump_all_scenarios {
     close TMP;
 }
 
-
-#### Module should return 1 #####
-return 1;
+1;
