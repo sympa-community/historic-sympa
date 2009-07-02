@@ -22,10 +22,7 @@
 package Scenario;
 
 use strict;
-require Exporter;
 use tools;
-my @ISA = qw(Exporter);
-my @EXPORT = qw();
 
 use List;
 use Log;

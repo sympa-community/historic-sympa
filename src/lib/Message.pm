@@ -35,11 +35,8 @@ While processing a message in Sympa, we need to link informations to rhe message
 package Message;
 
 use strict;
-require Exporter;
 use tools;
 use tt2;
-my @ISA = qw(Exporter);
-my @EXPORT = qw();
 
 use Carp;
 

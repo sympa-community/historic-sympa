@@ -23,9 +23,6 @@
 package Upgrade;
 
 use strict;
-require Exporter;
-my @ISA = qw(Exporter);
-my @EXPORT = qw();
 
 use Carp;
 

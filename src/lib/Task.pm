@@ -23,10 +23,7 @@
 package Task;
 
 use strict;
-require Exporter;
 use tools;
-my @ISA = qw(Exporter);
-my @EXPORT = qw();
 
 use Carp;
 

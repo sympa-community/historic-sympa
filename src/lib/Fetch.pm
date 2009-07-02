@@ -44,10 +44,6 @@ sub set_basic_credentials {
 
 package Fetch;
 
-require Exporter;
-our @ISA = qw(Exporter);
-our @EXPORT = qw();
-
 use Log;
 
 # request a document using https, return status and content
