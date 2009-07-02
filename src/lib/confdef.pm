@@ -24,8 +24,6 @@ package confdef;
 use strict "vars";
 use Sympa::Constants;
 
-our @ISA = qw(Exporter);
-
 ## This defines the parameters to be edited :
 ##   title  : Title for the group of parameters following
 ##   name   : Name of the parameter
