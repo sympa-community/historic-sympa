@@ -22,7 +22,7 @@ package List;
 
 use strict;
 
-use POSIX;
+use POSIX qw(strftime);
 use Fcntl qw(LOCK_SH LOCK_EX LOCK_NB LOCK_UN);
 use Encode;
 
@@ -2793,7 +2793,7 @@ sub send_msg_digest {
 	$msg->{'plain_body'} = $mail->PlainDigest::plain_body_as_string();
 	#$msg->{'body'} = $mail->bodyhandle->as_string();
 	chomp $msg->{'from'};
-	$msg->{'month'} = &POSIX::strftime("%Y-%m", localtime(time)); ## Should be extracted from Date:
+	$msg->{'month'} = strftime("%Y-%m", localtime(time)); ## Should be extracted from Date:
 	$msg->{'message_id'} = &tools::clean_msg_id($mail->head->get('Message-Id'));
 	
 	## Clean up Message-ID
@@ -9070,7 +9070,7 @@ sub store_digest {
     if ($newfile) {
 	## create header
 	printf OUT "\nThis digest for list has been created on %s\n\n",
-      POSIX::strftime("%a %b %e %H:%M:%S %Y", @now);
+      strftime("%a %b %e %H:%M:%S %Y", @now);
 	print OUT "------- THIS IS A RFC934 COMPLIANT DIGEST, YOU CAN BURST IT -------\n\n";
 	printf OUT "\n%s\n\n", &tools::get_separator();
 

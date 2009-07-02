@@ -25,6 +25,7 @@ package Upgrade;
 use strict;
 
 use Carp;
+use POSIX qw(strftime);
 
 use Conf;
 use Log;
@@ -1517,7 +1518,7 @@ sub to_utf8 {
 	
 	next unless $modified;
 	
-	my $date = &POSIX::strftime("%Y.%m.%d-%H.%M.%S", localtime(time));
+	my $date = strftime("%Y.%m.%d-%H.%M.%S", localtime(time));
 	unless (rename $file, $file.'@'.$date) {
 	    do_log('err', "Cannot rename old template %s", $file);
 	    next;

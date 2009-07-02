@@ -24,7 +24,6 @@ package Archive;
 use strict;
 
 use Mail::Internet;
-use POSIX;
 
 use Log;
 

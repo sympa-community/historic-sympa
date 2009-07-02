@@ -25,7 +25,7 @@ use strict;
 
 use Exporter;
 use Carp;
-use POSIX qw (setlocale);
+use POSIX qw(setlocale strftime);
 use Locale::Messages qw (:locale_h :libintl_h !gettext);
 
 use Log;
@@ -347,10 +347,10 @@ sub gettext {
 
 sub gettext_strftime {
     my $format = shift;
-    return &POSIX::strftime($format, @_) unless $current_charset;
+    return strftime($format, @_) unless $current_charset;
 
     $format = gettext($format);
-    my $datestr = &POSIX::strftime($format, @_);
+    my $datestr = strftime($format, @_);
     return $datestr;
 }
 
