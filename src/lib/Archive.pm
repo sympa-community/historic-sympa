@@ -21,10 +21,12 @@
 
 package Archive;
 
+use strict;
+
 use Mail::Internet;
 use POSIX;
+
 use Log;
-use strict;
 
 my $serial_number = 0; # incremented on each archived mail
 

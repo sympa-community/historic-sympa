@@ -23,23 +23,22 @@ package tools;
 
 use strict;
 
-use POSIX;
-use Sys::Hostname;
-use Mail::Internet;
-use Mail::Header;
-use Conf;
-use Language;
-use Log;
-use Sympa::Constants;
-
 use Time::Local;
 use File::Find;
 use Digest::MD5;
 use HTML::StripScripts::Parser;
 use File::Copy::Recursive;
-
+use POSIX;
+use Sys::Hostname;
+use Mail::Internet;
+use Mail::Header;
 use Encode::Guess; ## Usefull when encoding should be guessed
 use Encode::MIME::Header;
+
+use Conf;
+use Language;
+use Log;
+use Sympa::Constants;
 
 ## RCS identification.
 #my $id = '@(#)$Id$';

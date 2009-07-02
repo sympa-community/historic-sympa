@@ -21,16 +21,18 @@
 
 package Language;
 
+use strict;
+
 use Exporter;
 use Carp;
-our @ISA = qw(Exporter);
-our @EXPORT = qw(&gettext gettext_strftime);
-
-use strict;
-use Log;
 use POSIX qw (setlocale);
 use Locale::Messages qw (:locale_h :libintl_h !gettext);
+
+use Log;
 use Sympa::Constants;
+
+our @ISA = qw(Exporter);
+our @EXPORT = qw(&gettext gettext_strftime);
 
 BEGIN {
     ## Using the Pure Perl implementation of gettext

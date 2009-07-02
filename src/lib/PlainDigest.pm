@@ -62,13 +62,15 @@
  
  package PlainDigest;
 
- our @ISA = qw(MIME::Entity);
  use Mail::Internet;
  use Mail::Address;
  use MIME::Parser;
  use Text::Wrap;
  use MIME::WordDecoder;
+
  use Language;
+
+ our @ISA = qw(MIME::Entity);
  
  sub plain_body_as_string {
  

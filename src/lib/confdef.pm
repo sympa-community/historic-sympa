@@ -22,6 +22,7 @@
 package confdef;
 
 use strict "vars";
+
 use Sympa::Constants;
 
 ## This defines the parameters to be edited :

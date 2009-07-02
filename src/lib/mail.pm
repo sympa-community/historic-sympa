@@ -21,16 +21,15 @@
 
 package mail;
 
+use strict;
+
 use Exporter;
 use Carp;
-our @ISA = qw(Exporter);
-our @EXPORT = qw(mail_file mail_message mail_forward set_send_spool);
-
-#use strict;
 use POSIX;
 use Mail::Internet;
 use MIME::Charset;
 use MIME::Tools;
+
 use Conf;
 use Log;
 use Language;
@@ -39,9 +38,9 @@ use Bulk;
 use tools;
 use Sympa::Constants;
 
-use strict;
+our @ISA = qw(Exporter);
+our @EXPORT = qw(mail_file mail_message mail_forward set_send_spool);
 
-#use strict;
 
 ## RCS identification.
 #my $id = '@(#)$Id$';

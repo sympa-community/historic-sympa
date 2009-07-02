@@ -23,13 +23,13 @@
 package Task;
 
 use strict;
-use tools;
 
 use Carp;
 
 use List;
 use Conf;
 use Log;
+use tools;
 
 my @task_list;
 my %task_by_list;

@@ -21,7 +21,11 @@
 package List;
 
 use strict;
+
 use POSIX;
+use Fcntl qw(LOCK_SH LOCK_EX LOCK_NB LOCK_UN);
+require Encode;
+
 use Datasource;
 use SQLSource qw(create_db %date_format);
 use Upgrade;
@@ -30,7 +34,6 @@ use Task;
 use Scenario;
 require Fetch;
 use Exporter;
-require Encode;
 use tt2;
 use Sympa::Constants;
 require (Sympa::Constants::MODULEDIR.'/tools.pm');
@@ -38,7 +41,6 @@ require (Sympa::Constants::MODULEDIR.'/tools.pm');
 our @ISA = qw(Exporter);
 our @EXPORT = qw(%list_of_lists);
 
-use Fcntl qw(LOCK_SH LOCK_EX LOCK_NB LOCK_UN);
 
 =head1 CONSTRUCTOR
 

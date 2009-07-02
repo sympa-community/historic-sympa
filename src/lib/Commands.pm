@@ -23,6 +23,13 @@ package Commands;
 
 use strict 'subs';
 
+use Exporter;
+use Digest::MD5;
+use Fcntl;
+use DB_File;
+use Time::Local;
+use MIME::EncWords;
+
 use Conf;
 use Language;
 use Log;
@@ -32,13 +39,6 @@ use report;
 use tools;
 use Sympa::Constants;
 
-use Digest::MD5;
-use Fcntl;
-use DB_File;
-use Time::Local;
-use MIME::EncWords;
-
-use Exporter;
 our @ISA = qw(Exporter);
 our @EXPORT_OK = qw($sender);
 

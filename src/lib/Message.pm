@@ -35,18 +35,18 @@ While processing a message in Sympa, we need to link informations to rhe message
 package Message;
 
 use strict;
-use tools;
-use tt2;
 
 use Carp;
-
 use Mail::Header;
 use Mail::Internet;
 use Mail::Address;
-use List;
 use MIME::Entity;
 use MIME::EncWords;
 use MIME::Parser;
+
+use List;
+use tools;
+use tt2;
 use Conf;
 use Log;
 

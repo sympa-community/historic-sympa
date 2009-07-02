@@ -3,12 +3,12 @@ package CAS;
 
 use strict;
 
+use Carp;
+
 our @ISA = qw(Exporter);
 our @EXPORT = qw($errors);
 
 my $errors;
-
-use Carp;
 
 sub new {
     my($pkg, %param) = @_;

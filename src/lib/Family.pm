@@ -34,9 +34,9 @@ Sympa allows lists creation and management by sets. These are the families, sets
 package Family;
 
 use strict;
+
 use XML::LibXML;
 
-## Sympa API
 use List;
 use Conf;
 use Language;

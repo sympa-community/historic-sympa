@@ -22,12 +22,13 @@
 package Scenario;
 
 use strict;
-use tools;
 
+use Net::Netmask;
+
+use tools;
 use List;
 use Log;
 use Conf;
-use Net::Netmask;
 use Sympa::Constants;
 
 my %all_scenarios;

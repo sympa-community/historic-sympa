@@ -35,7 +35,6 @@ package admin;
 
 use strict;
 
-## Sympa API
 use List;
 use Conf;
 use Language;
