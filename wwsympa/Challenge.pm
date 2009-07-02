@@ -21,7 +21,8 @@
 
 package Challenge;
 
-use strict ;
+use strict;
+no strict "vars";
 
 use Digest::MD5;
 use POSIX;
