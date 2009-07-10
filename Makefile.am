@@ -53,15 +53,15 @@ installdir:
 installconfig:
 	@echo "Installing basic configuration ..."
 	export PERL5LIB=$(DESTDIR)$(modulesdir); \
-	if [ ! -f  $(DESTDIR)$(sysconfdir)/sympa.conf ]; then \
+	if [ ! -f  $(DESTDIR)$(confdir)/sympa.conf ]; then \
 		echo "This looks like your first Sympa installation. The following wizard will assit you to create your first Sympa configuration.";\
 		$(DESTDIR)$(sbindir)/sympa_wizard.pl \
 			--create sympa.conf \
-			--target $(DESTDIR)$(sysconfdir)/sympa.conf \
+			--target $(DESTDIR)$(confdir)/sympa.conf \
 			|| /bin/true; \
 		$(DESTDIR)$(sbindir)/sympa_wizard.pl \
 			--create wwsympa.conf \
-			--target $(DESTDIR)$(sysconfdir)/wwsympa.conf \
+			--target $(DESTDIR)$(confdir)/wwsympa.conf \
 			|| /bin/true; \
 		$(DESTDIR)$(sbindir)/sympa_wizard.pl || /bin/true;\
 	fi
@@ -73,7 +73,8 @@ installconfig:
 		echo "# automatically created file" >> data_structure.version; \
 		echo "# you should not modify it" >> data_structure.version; \
 		echo $(VERSION) >> data_structure.version; \
-		chown $(USER).$(GROUP) data_structure.version || /bin/true; \
+		chown $(USER) data_structure.version || /bin/true; \
+		chgrp $(GROUP) data_structure.version || /bin/true; \
 	fi
 
 nextstep: 
@@ -90,13 +91,15 @@ nextstep:
 	@echo "#######################################################"
 
 importantchanges:
-	if [ -f $(DESTDIR)$(modulesdir)/Version.pm ]; then \
-		previous=`perl -Mlib=$(DESTDIR)$(modulesdir) -MVersion -e 'print $$Version::Version'`; \
+	if [ -f $(DESTDIR)$(modulesdir)/Constants.pm ]; then \
+		previous=`perl -Mlib=$(DESTDIR)$(modulesdir) -MVersion -e 'print Sympa::Constants::VERSION'`; \
+        elif [ -f $(DESTDIR)$(bindir)/Version.pm ]; then \
+                previous=`perl -Mlib=$(DESTDIR)$(bindir) -MVersion -e 'print $$Version::Version'`; \
 	fi; \
 	$(PERL) $(top_srcdir)/important_changes.pl \
 		--current $(VERSION) \
-		--previous $${previous}
+		--previous $${previous};
 
 uninstall-hook:
-	rm -f $(DESTDIR)$(sysconfdir)/sympa.conf
-	rm -f $(DESTDIR)$(sysconfdir)/wwsympa.conf
+	rm -f $(DESTDIR)$(confdir)/sympa.conf
+	rm -f $(DESTDIR)$(confdir)/wwsympa.conf

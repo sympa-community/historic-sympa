@@ -61,14 +61,17 @@ our @params = (
     { 
         name    => 'pidfile_distribute',
         default => Sympa::Constants::PIDDIR . '/sympa-distribute.pid',
+        file    => 'sympa.conf',
     },
     { 
         name    => 'pidfile_creation',
         default => Sympa::Constants::PIDDIR . '/sympa-creation.pid',
+	file    => 'sympa.conf',
     },
     { 
         name    => 'pidfile_bulk',
         default => Sympa::Constants::PIDDIR . '/bulk.pid',
+	file    => 'sympa.conf',
     },
     {
         name   => 'archived_pidfile',
@@ -98,12 +101,13 @@ our @params = (
         name    => 'arc_path',
         default => Sympa::Constants::ARCDIR,
         query   => 'Where to store HTML archives',
-        file    => 'wwsympa.conf',edit => '1',
+        file    => 'wwsympa.conf',
+	edit => '1',
         advice  =>'Better if not in a critical partition',
     },
     {
         name    => 'bounce_path',
-        default => Sympa::Constants::BOUNCEDIR . '/bounce',
+        default => Sympa::Constants::BOUNCEDIR ,
         query   => 'Where to store bounces',
         file    => 'wwsympa.conf',
         advice  => 'Better if not in a critical partition',
@@ -135,39 +139,48 @@ our @params = (
     },
     {
         name    => 'queuedistribute',
-        default => 'undef,'
+        default => 'undef,',
+	file    => 'sympa.conf'
     },
     {
         name    => 'queueautomatic',
         default => 'undef',
+	file    => 'sympa.conf'
     },
     {
         name    => 'queuedigest',
         default => 'undef',
+	file    => 'sympa.conf'
     },
     {
         name    => 'queuemod',
         default => 'undef',
+	file    => 'sympa.conf'
     },
     {
         name    => 'queuetopic',
         default => 'undef',
+	file    => 'sympa.conf'
     },
     {
         name    => 'queueauth',
         default => 'undef',
+	file    => 'sympa.conf'
     },
     {
         name    => 'queueoutgoing',
         default => 'undef',
+	file    => 'sympa.conf'
     },
     {
         name    => 'queuetask',
         default => 'undef',
+	file    => 'sympa.conf'
     },
     {
         name    => 'queuesubscribe',
         default => 'undef',
+	file    => 'sympa.conf'
     },
     {
         name    => 'http_host',
@@ -178,7 +191,7 @@ our @params = (
     },	      
     {
         name    => 'static_content_path',
-        default => Sympa::Constants::EXPLDIR . '/static_content',
+        default => Sympa::Constants::STATICDIR,
         query   => 'The directory where Sympa stores static contents (CSS, members pictures, documentation) directly delivered by Apache',
 	vhost   => '1',
         edit    => '1',
@@ -227,21 +240,25 @@ our @params = (
         name    => 'log_smtp',
         default => 'off',
 	vhost   => '1',
+        file    => 'sympa.conf',
     },
     { 
         name    => 'log_module',
         default => '',
-	vhost   => '1',
+	vhost   => '1', 
+	file    => 'wwsympa.conf',
     },
     { 
         name    => 'log_condition',
         default => '',
 	vhost   => '1',
+	file    => 'wwsympa.conf',
     },
     { 
         name    => 'logs_expiration_period',
         query   => 'Number of months that elapse before a log is expired.',
         default => '3',
+        file    => 'sympa.conf',
     },
     { title => 'General definition' },
     {
@@ -279,6 +296,7 @@ our @params = (
     {
         name    => 'edit_list',
         default => 'owner',
+	file    => 'sympa.conf',
     },
     { title => 'Tuning' },
     {
@@ -302,6 +320,18 @@ our @params = (
         default => '5',
     },
     {
+        name  => 'default_ttl',
+        query => 'Default timeout between two scheduled synchronizations of list members with data sources.',
+        file  => 'sympa.conf',
+        default => '3600',
+    },
+    {
+        name  => 'default_distribution_ttl',
+        query => 'Default timeout between two action-triggered synchronizations of list members with data sources.',
+        file  => 'sympa.conf',
+        default => '300',
+    },
+    {
         name  => 'sympa_packet_priority',
         query => 'Default priority for a packet to be sent by bulk.',
         file  => 'sympa.conf',
@@ -310,10 +340,12 @@ our @params = (
     {
         name    => 'request_priority',
         default => '0',
+	file  => 'sympa.conf',
     },
     {
         name    => 'owner_priority',
         default => '9',
+	file  => 'sympa.conf',
     },
     {
         name    => 'bulk_fork_threshold',
@@ -362,6 +394,7 @@ our @params = (
     {
         name    => 'cookie_cas_expire',
         default => '6',
+	file   => 'wwsympa.conf',
     },
     {
         name   => 'legacy_character_support_feature',
@@ -836,19 +869,19 @@ our @params = (
     },
     {
         name    => 'clean_delay_queue',
-        default => '1',
-    },
-    {
-        name    => 'clean_delay_queuemod',
-        default => '10',
-    },
-    {
-        name    => 'clean_delay_queuetopic',
         default => '7',
     },
     {
+        name    => 'clean_delay_queuemod',
+        default => '30',
+    },
+    {
+        name    => 'clean_delay_queuetopic',
+        default => '30',
+    },
+    {
         name    => 'clean_delay_queuesubscribe',
-        default => '10',
+        default => '30',
     },
     {
         name    => 'clean_delay_queueautomatic',
@@ -856,15 +889,15 @@ our @params = (
     },
     {
         name    => 'clean_delay_queueauth',
-        default => '3',
+        default => '30',
     },
     {
         name    => 'clean_delay_queuebounce',
-        default => '10',
+        default => '7',
     },
     {
         name    => 'clean_delay_queueoutgoing',
-        default => '1',
+        default => '7',
     },
     {
         name    => 'clean_delay_tmpdir',

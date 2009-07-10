@@ -2237,6 +2237,8 @@ sub dump_encoding {
 sub remove_pid {
     my ($pidfile, $pid, $options) = @_;
 
+    ## If in multi_process mode (bulk.pl for instance can have child processes)
+    ## Then the pidfile contains a list of space-separated PIDs on a single line
     if($options->{'multiple_process'}){
 	unless (open(PFILE, $pidfile)) {
 	    fatal_err('Could not open %s, exiting', $pidfile);
@@ -2244,6 +2246,8 @@ sub remove_pid {
 	my $previous_pid = <PFILE>; chomp $previous_pid;
 	close PFILE;
 	$previous_pid =~ s/$pid//g;
+
+	## If no PID left, then remove the file
 	if ($previous_pid =~ /^\s*$/){
 	    ## Release the lock
 	    unless (unlink $pidfile) {

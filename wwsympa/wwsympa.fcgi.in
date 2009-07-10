@@ -1034,7 +1034,7 @@ my $birthday = time ;
 
      $param->{'path_cgi'} = $ENV{'SCRIPT_NAME'};
      $param->{'path_cgi'} =~ s/\/\//\//g; ## Replace '//' with '/' because it would break navigation     
-     $param->{'version'} = $Version::Version;
+     $param->{'version'} = Sympa::Constants::VERSION;
      $param->{'date'} = gettext_strftime "%d %b %Y at %H:%M:%S", localtime(time);
      $param->{'time'} = gettext_strftime "%H:%M:%S", localtime(time);
 
@@ -5926,8 +5926,11 @@ sub do_skinsedit {
      $list->delete_subscription_request(@added_users);
 
      &report::notice_report_web('add_performed', {'total' => $total},$param->{'action'});
-     &web_db_log({'target_email' => $in{'email'}||$in{'pending_email'},
-		  'status' => 'success'});
+     
+     foreach my $email (@added_users) {
+       &web_db_log({'target_email' => $email,
+		    'status' => 'success'});
+     }
      
      $in{'list'} = $in{'previous_list'} if ($in{'previous_list'});
      return $in{'previous_action'} || 'review';
@@ -8874,7 +8877,6 @@ sub do_edit_list {
 		## Remove if empty
 		if ($new_admin->{$pname} =~ /^\s*$/) {
 		    delete $new_admin->{$pname};
-		    next; # Go directly to the next parameter.
 		}
 	    }
 	    
