@@ -44,9 +44,9 @@ installdir:
 	@echo "Creating non-writable directories"
 	@for dir in create_list_templates mail_tt2 web_tt2 scenari \
 		task_models general_task_models; do \
-		if [ ! -d $(DESTDIR)$(sysconfdir)/$$dir ] ; then \
-			echo "Creating $(DESTDIR)$(sysconfdir)/$$dir"; \
-			install -d -m 755 $(DESTDIR)$(sysconfdir)/$$dir; \
+		if [ ! -d $(DESTDIR)$(sysconfdir)/sympa/$$dir ] ; then \
+			echo "Creating $(DESTDIR)$(sysconfdir)/sympa/$$dir"; \
+			install -d -m 755 $(DESTDIR)$(sysconfdir)/sympa/$$dir; \
 		fi \
 	done
 
@@ -64,8 +64,8 @@ installconfig:
 			--target $(DESTDIR)$(confdir)/wwsympa.conf \
 			|| /bin/true; \
 	fi
-	if [ ! -f $(DESTDIR)$(sysconfdir)/data_structure.version ]; then \
-		cd $(DESTDIR)$(sysconfdir); \
+	if [ ! -f $(DESTDIR)$(sysconfdir)/sympa/data_structure.version ]; then \
+		cd $(DESTDIR)$(sysconfdir)/sympa; \
 		echo "# automatically created file" >> data_structure.version; \
 		echo "# you should not modify it" >> data_structure.version; \
 		echo $(VERSION) >> data_structure.version; \
