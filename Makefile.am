@@ -63,11 +63,7 @@ installconfig:
 			--create wwsympa.conf \
 			--target $(DESTDIR)$(confdir)/wwsympa.conf \
 			|| /bin/true; \
-		$(DESTDIR)$(sbindir)/sympa_wizard.pl || /bin/true;\
 	fi
-	$(DESTDIR)$(sbindir)/sympa_wizard.pl \
-		--check \
-		|| /bin/true; \
 	if [ ! -f $(DESTDIR)$(sysconfdir)/data_structure.version ]; then \
 		cd $(DESTDIR)$(sysconfdir); \
 		echo "# automatically created file" >> data_structure.version; \
@@ -83,11 +79,16 @@ nextstep:
 	@echo "** http://www.sympa.org/documentation/manual/sympa-$(VERSION).pdf"
 	@echo ""
 	@echo "#########################################################"
-	@echo "# If you install Sympa for the first time on this server"
-	@echo "# you should check the INSTALL file."
+	@echo "# If you are installing, you should check the INSTALL file"
+	@echo "# and run the installation wizard:"
+	@echo "# $(sbindir)/sympa.pl"
 	@echo "#"
-	@echo "# If you are upgrading, you now need to run"
-	@echo "#    $(sbindir)/sympa.pl --upgrade"
+	@echo "# If you are upgrading, you just need to run"
+	@echo "# $(sbindir)/sympa.pl --upgrade"
+	@echo "#"
+	@echo "# In both case, you should run the wizard to check you"
+	@echo "# have all perl modules needed:"
+	@echo "# $(sbindir)/sympa_wizard.pl --check"
 	@echo "#######################################################"
 
 importantchanges:
