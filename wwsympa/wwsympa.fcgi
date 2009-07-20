@@ -4886,13 +4886,18 @@ sub do_subrequest {
 
      my $authenticated_email_address;
 
-     unless ($param->{'user'}{'email'}) {
+     unless ($authenticated_email_address) {
 	 unless ($in{'email'}) {
 	     return 'sigrequest';
 	 }
 
 	 if ($in{'fingerprint'}) {
 
+	     unless(&tools::get_fingerprint($in{'email'}, $in{'fingerprint'})){
+		 &report::reject_report_web('user','cannot_do_signoff');
+		 &wwslog('err','do_signoff: failed to unsubscribe user %s', $in{'email'});
+		 return undef;
+	     }
 
 	     ## We don't set $param->{'user'}{'email'} because we don't want the user to be authenticated 
 	     ## to prevent the cookie from being set
@@ -4927,16 +4932,16 @@ sub do_subrequest {
 
      
 
-     unless ($list->is_user($param->{'user'}{'email'})) {
+     unless ($list->is_user($authenticated_email_address)) {
 	 &report::reject_report_web('user','not_subscriber',{'list'=>$list->{'name'}},$param->{'action'},$list);
-	 &wwslog('info','do_signoff: %s not subscribed to %s',$param->{'user'}{'email'}, $param->{'list'} );
+	 &wwslog('info','do_signoff: %s not subscribed to %s',$authenticated_email_address, $param->{'list'} );
 	 &web_db_log({'status' => 'error',
 		      'error_type' => 'not_subscriber'});
 	 return undef;
      }
 
      my $result = $list->check_list_authz('unsubscribe',$param->{'auth_method'},
-					  {'sender' => $param->{'user'}{'email'},
+					  {'sender' => $authenticated_email_address,
 					   'remote_host' => $param->{'remote_host'},
 					   'remote_addr' => $param->{'remote_addr'}});
      my $sig_is;
@@ -4951,13 +4956,13 @@ sub do_subrequest {
      if ($sig_is =~ /reject/) {
 	 &report::reject_report_web('auth',$reason,{},$param->{'action'},$list);
 	 &wwslog('info', 'do_signoff: %s may not signoff from %s'
-		 , $param->{'user'}{'email'}, $param->{'list'});
+		 , $authenticated_email_address, $param->{'list'});
 	 &web_db_log({'status' => 'error',
 		      'error_type' => 'authorization'});
 	 return undef;
      }elsif ($sig_is =~ /owner/) {
-	 unless ($list->send_notify_to_owner('sigrequest',{'who' => $param->{'user'}{'email'},
-							   'keyauth' => $list->compute_auth($param->{'user'}{'email'}, 'del')})) {
+	 unless ($list->send_notify_to_owner('sigrequest',{'who' => $authenticated_email_address,
+							   'keyauth' => $list->compute_auth($authenticated_email_address, 'del')})) {
 	     &wwslog('notice',"Unable to send notify 'sigrequest' to $list->{'name'} list owner");
 	 }
 	 &report::notice_report_web('sent_to_owner',{},$param->{'action'});
@@ -4965,18 +4970,18 @@ sub do_subrequest {
 	 return undef;
      }else {
 	 if ($param->{'subscriber'}{'included'}) {
-	     unless ($list->update_user($param->{'user'}{'email'}, 
+	     unless ($list->update_user($authenticated_email_address, 
 					{'subscribed' => 0,
 					 'update_date' => time})) {
-		 &report::reject_report_web('intern','update_subscriber_db_failed',{'sub'=>$param->{'user'}{'email'}},$param->{'action'},$list,$param->{'user'}{'email'},$robot);
+		 &report::reject_report_web('intern','update_subscriber_db_failed',{'sub'=>$authenticated_email_address},$param->{'action'},$list,$authenticated_email_address,$robot);
 		 &wwslog('info', 'do_signoff: update failed');
 		 &web_db_log({'status' => 'error',
 			      'error_type' => 'internal'});
 		 return undef;
 	     }
 	 }else {
-	     unless ($list->delete_user($param->{'user'}{'email'})) {
-		 &report::reject_report_web('intern','delete_subscriber_db_failed',{'sub'=>$param->{'user'}{'email'}},$param->{'action'},$list,$param->{'user'}{'email'},$robot);
+	     unless ($list->delete_user($authenticated_email_address)) {
+		 &report::reject_report_web('intern','delete_subscriber_db_failed',{'sub'=>$authenticated_email_address},$param->{'action'},$list,$authenticated_email_address,$robot);
 		 &wwslog('info', 'do_signoff: signoff failed');
 		 &web_db_log({'status' => 'error',
 			      'error_type' => 'internal'});
@@ -4986,7 +4991,7 @@ sub do_subrequest {
 	 }
 
 	 if ($sig_is =~ /notify/) {
-	     unless ($list->send_notify_to_owner('notice',{'who' => $param->{'user'}{'email'},
+	     unless ($list->send_notify_to_owner('notice',{'who' => $authenticated_email_address,
 					  'gecos' => '', 
 							   'command' => 'signoff'})) {
 		 &wwslog('notice',"Unable to send notify 'notice' to $list->{'name'} list owner");
@@ -4994,10 +4999,10 @@ sub do_subrequest {
 	 }
 
 	 ## perform which to update your_subscribtions cookie ;
-	 @{$param->{'get_which'}} = &List::get_which($param->{'user'}{'email'},$robot,'member') ; 
+	 @{$param->{'get_which'}} = &List::get_which($authenticated_email_address,$robot,'member') ; 
 
-	 unless ($list->send_file('bye', $param->{'user'}{'email'}, $robot, {})) {
-	     &wwslog('notice',"Unable to send template 'bye' to $param->{'user'}{'email'}");
+	 unless ($list->send_file('bye', $authenticated_email_address, $robot, {})) {
+	     &wwslog('notice',"Unable to send template 'bye' to $authenticated_email_address");
 	 }
      }
      &report::notice_report_web('performed',{},$param->{'action'});
@@ -15127,7 +15132,7 @@ sub do_compose_mail {
 	     return undef;
 	 }
 	 
-	 $Text::Wrap::columns = 80;
+	 $Text::Wrap::columns = 100;
 	 $Text::Wrap::huge = 'overflow';
 	 $in{'body'} = &Text::Wrap::wrap ('','',$in{'body'});
 	 my @body = split /\0/, $in{'body'};

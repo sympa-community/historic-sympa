@@ -4809,7 +4809,7 @@ sub get_subscriber_no_object {
     my $name = $options->{'name'};
     
     my $email = &tools::clean_email($options->{'email'});
-    
+
     my $statement;
     my $date_field = sprintf $date_format{'read'}{$Conf::Conf{'db_type'}}, 'date_subscriber', 'date_subscriber';
     my $update_field = sprintf $date_format{'read'}{$Conf::Conf{'db_type'}}, 'update_subscriber', 'update_subscriber';	

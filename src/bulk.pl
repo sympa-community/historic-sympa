@@ -156,7 +156,7 @@ my $opensmtp = 0 ;
 my $fh = 'fh0000000000';	## File handle for the stream.
 
 my $messagekey;       # the key of the current message in the message_table   
-my $messageasstring;  # the current message as a string
+my $messageasstring_init;  # the current message as a string
 
  my $timeout = $Conf::Conf{'bulk_wait_to_fork'};
 my $last_check_date = time();
@@ -198,8 +198,8 @@ while (!$end) {
 	if ($bulk->{'messagekey'} ne $messagekey) {
 	    # current packet is no related to the same message as the previous packet
             # so it is needed to fetch the new message from message_table 
-	    $messageasstring = &Bulk::messageasstring($bulk->{'messagekey'});
-	    unless ( $messageasstring ) {
+	    $messageasstring_init = &Bulk::messageasstring($bulk->{'messagekey'});
+	    unless ( $messageasstring_init ) {
 		&do_log('err',"internal error : current packet 'messagekey= %s contain a ref to a null message",$bulk->{'messagekey'});
 	    }
 	}
@@ -212,63 +212,66 @@ while (!$end) {
 	$data->{'listname'} = $bulk->{'listname'};
 	$data->{'robot'} = $bulk->{'robot'};
 	$data->{'to'} = $bulk->{'receipients'};
+	$data->{'wwsympa_url'} = $Conf{'wwsympa_url'};
 	
 	my $rcpt; # It is the email of a subscriber, use it in the foreach
 	my @rcpts = split /,/,$bulk->{'receipients'}; # Contain all the subscribers
 	## Use an intermediate handler to encode to filesystem_encoding
-	my $output = '';
-	my $message_output = new IO::Scalar \$output;
 	my $user;
-
-	# Test if use verp
+	
+	#____ Test if use verp ______
 	if ($bulk->{'verp'}){
-
+	    
 	    foreach $rcpt (@rcpts) {
+		
 		$return_path = $rcpt;
 		$return_path =~ s/\@/\=\=a\=\=/; 
 		$return_path = "$Conf::Conf{'bounce_email_prefix'}+$return_path\=\=$bulk->{'listname'}\@$bulk->{'robot'}"; # xxxxxxxxxxxxx verp cassé si pas de listename (message de sympa)
 
-		# Test if use merge
+		#____ Test if use merge ______
 		if (1==1) { #-------- it will be : if ($bulk->{'merge'}) { ------------#
 		    
-		    &Bulk::merge_msg('rcpt' => $rcpt,
-			       'listname' => $bulk->{'listname'},
-			       'robot' => $bulk->{'robot'},
-			       'data' => $data,
-			       'messageasstring' => $messageasstring,
-			       'message_output' => $message_output,
-			       );
+		    ### Parse an MIME::Entity message
+		    my $parser = new MIME::Parser;
+		    my $entity = $parser->parse_data($messageasstring_init); ## Retrouver la méthode qui correspond
+		    
+		    unless(&Bulk::merge_msg ($entity, $rcpt, $bulk, $data)){
+			&do_log('err', 'Erreur d appel &Bulk::merge_msg');
+		    }
+
+		    my $messageasstring = $entity->as_string;
 		}
 		
 		*SMTP = &mail::smtpto($return_path, \$rcpt, $bulk->{'robot'});
-		
-                # Message with customized data
-		print SMTP $message_output;
+		# Message with customized data
+		print SMTP $messageasstring;
 		close SMTP;
 	    }
 	}else{
-	    # Test if use merge
+
+	    #____ Test if use merge ______
 	    if ( 1==1 ) { #-------- it will be : if ($bulk->{'merge'}) { ------------#
 
 		foreach $rcpt (@rcpts) {
+		    ### Parse an MIME::Entity message
+		    my $parser = new MIME::Parser;
+		    my $entity = $parser->parse_data($messageasstring_init);
 
-		    &Bulk::merge_msg('rcpt' => $rcpt,
-			       'listname' => $bulk->{'listname'},
-			       'robot' => $bulk->{'robot'},
-			       'data' => $data,
-			       'messageasstring' => $messageasstring,
-			       'message_output' => $message_output,
-			       );
-		    
+		    unless(&Bulk::merge_msg ($entity, $rcpt, $bulk, $data)){
+			&do_log('err', 'Erreur d appel &Bulk::merge_msg');
+		    }
+		    my $messageasstring = $entity->as_string;
+
 		    *SMTP = &mail::smtpto($bulk->{'returnpath'}, \$rcpt, $bulk->{'robot'});
 		    # Message with customized data
-		    print SMTP $message_output;
+		    print SMTP $messageasstring;
 		    close SMTP;
 		}
-	    }
-	    else{
+	    }else{
+
 		*SMTP = &mail::smtpto($bulk->{'returnpath'}, \@rcpts, $bulk->{'robot'});
-		print SMTP $messageasstring;
+		# Initial message
+		print SMTP $messageasstring_init;
 		close SMTP;
 	    }
 	}

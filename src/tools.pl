@@ -3180,7 +3180,7 @@ sub unlock {
     
     return 1;
 }
-=pod
+
 ############################################################
 #  get_fingerprint                                         #
 ############################################################
@@ -3206,13 +3206,13 @@ sub get_fingerprint {
     my $fingerprint = shift;
     my $random;
     my $random_email;
-    
+     
     unless($random = &get_db_random()){ # si un random existe : get_db_random
 	$random = &init_db_random(); # sinon init_db_random
     }
-    
+ 
     $random_email = ($random.$email);
-    
+ 
     if( $fingerprint ) { #si on veut vérifier le fingerprint dans l'url
 
 	if($fingerprint eq &md5_fingerprint($random_email)){
@@ -3228,7 +3228,7 @@ sub get_fingerprint {
 
     }
 }
-=cut
+
 
 ############################################################
 #  md5_fingerprint                                         #
@@ -3246,17 +3246,16 @@ sub get_fingerprint {
 sub md5_fingerprint {
     
     my $input_string = shift;
-
     return undef unless (defined $input_string);
     chomp $input_string;
-    
+
     my $digestmd5 = new Digest::MD5;
     $digestmd5->reset;
     $digestmd5->add($input_string);
 
     return (unpack("H*", $digestmd5->digest));
 }
-=pod
+
 ############################################################
 #  get_db_random                                           #
 ############################################################
@@ -3271,19 +3270,25 @@ sub md5_fingerprint {
 ############################################################
 sub get_db_random {
     
+    ## Database and SQL statement handlers
+    my ($dbh, $sth, @sth_stack);
+
+    $dbh = &List::db_get_handler();
+
     ## Check database connection
     unless ($dbh and $dbh->ping) {
-	return undef unless &db_connect();
+	return undef unless &List::db_connect();
+	$dbh = &List::db_get_handler();
     }
-    $statement = sprintf "SELECT * FROM fingerprint_table";
+    my $statement = sprintf "SELECT random FROM fingerprint_table;";
     
     push @sth_stack, $sth;
     unless ($sth = $dbh->prepare($statement)) {
-	do_log('err','Unable to prepare SQL statement : %s', $dbh->errstr);
+	&do_log('err','Unable to prepare SQL statement : %s', $dbh->errstr);
 	return undef;
     }
     unless ($sth->execute) {
-	do_log('err','Unable to execute SQL statement "%s" : %s', $statement, $dbh->errstr);
+	&do_log('err','Unable to execute SQL statement "%s" : %s', $statement, $dbh->errstr);
 	return undef;
     }
     my $random = $sth->fetchrow_hashref('NAME_lc');
@@ -3291,7 +3296,7 @@ sub get_db_random {
     $sth->finish();
     $sth = pop @sth_stack;
 
-    return $random;
+    return $random->{'random'};
 
 }
 
@@ -3309,31 +3314,32 @@ sub get_db_random {
 ############################################################
 sub init_db_random {
 
-    my $random = 1;
+    my $range = 89999999999999999999;
+    my $minimum = 10000000000000000000;
+
+    my $random = int(rand($range)) + $minimum;
+
+    ## Database and SQL statement handlers
+    my ($dbh, $sth, @sth_stack);
+
     ## Check database connection
     unless ($dbh and $dbh->ping) {
-	return undef unless &db_connect();
+	return undef unless &List::db_connect();
     }
-    $statement = sprintf "INSERT INTO `fingerprint_table` VALUES(%d);", $random;
+    my $statement = sprintf "INSERT INTO fingerprint_table VALUES (%d);", $random;
     
     push @sth_stack, $sth;
-    unless ($sth = $dbh->prepare($statement)) {
-	do_log('err','Unable to prepare SQL statement : %s', $dbh->errstr);
+    
+    unless ($dbh->do($statement)) {
+	&do_log('err','Unable to execute SQL statement "%s" : %s', $statement, $dbh->errstr);
 	return undef;
     }
-    unless ($sth->execute) {
-	do_log('err','Unable to execute SQL statement "%s" : %s', $statement, $dbh->errstr);
-	return undef;
-    }
-    my $result = $sth->fetchrow_hashref('NAME_lc');
        
-    $sth->finish();
-    $sth = pop @sth_stack;
-
     return $random;
 
 }
-=cut
+
+## return $separator
 sub get_separator {
     return $separator;
 }

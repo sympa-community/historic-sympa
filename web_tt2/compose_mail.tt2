@@ -56,23 +56,13 @@
  	[%  END %]
 
 	[% IF !subaction %]
-  		<textarea name="body" cols="80" rows="25">
-
-
-
-
-
-
-
-
-
-
-
-Unsubscribe : http://[% robot %]/[% path_cgi %]/[% list %]/[% user.email %]?[% fingerprint %]</textarea>
+		[% balise_email = '['_'%'_' user.email '_'%'_']' %]
+		[% balise_fingerprint = '['_'%'_' user.fingerprint '_'%'_']' %]
+  		<textarea name="body" cols="80" rows="25"></textarea>
 		<br />
 		<br />
 		<b>Personnalisation de messages : (on rajoute les balises TT2 : [ %  et  % ])</b><br />
-		user.email : destinataire <br />
+		user.email : destinataire par exemple, [% balise_email %]<br />
 		listname : nom de la liste <br />
 		robot : serveur utilisé <br /><br />
 		user.custom_attribute.civility.value : civilité (Mr, ...) <br />
