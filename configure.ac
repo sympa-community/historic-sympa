@@ -74,6 +74,7 @@ else
     spooldir=$localstatedir/spool/sympa
     arcdir=$localstatedir/lib/sympa/arc
     bouncedir=$localstatedir/lib/sympa/bounce
+    localedir=$datadir/sympa/locale
     confdir=$sysconfdir
 fi
 
