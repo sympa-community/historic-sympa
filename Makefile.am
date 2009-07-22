@@ -33,13 +33,13 @@ installdir:
 	@for dir in $(expldir) $(spooldir) $(spooldir)/msg $(spooldir)/digest \
 		$(spooldir)/moderation $(spooldir)/expire $(spooldir)/auth \
 		$(spooldir)/outgoing $(spooldir)/tmp $(spooldir)/task \
-		$(bouncedir) $(arcdir) $(piddir); do \
+		$(bouncedir) $(arcdir) $(piddir) $(staticdir); do \
 		if [ ! -d $(DESTDIR)$$dir ] ; then \
 			echo "Creating $(DESTDIR)$$dir"; \
 			install -d -m 755 $(DESTDIR)$$dir; \
-			chown $(USER) $(DESTDIR)$$dir || /bin/true; \
-			chgrp $(GROUP) $(DESTDIR)$$dir || /bin/true; \
-		fi \
+		fi; \
+		chown $(USER) $(DESTDIR)$$dir || /bin/true; \
+		chgrp $(GROUP) $(DESTDIR)$$dir || /bin/true; \
 	done
 	@echo "Creating non-writable directories"
 	@for dir in create_list_templates mail_tt2 web_tt2 scenari \
