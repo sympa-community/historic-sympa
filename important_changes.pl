@@ -23,81 +23,52 @@
 ## Print important changes in Sympa since last install
 ## It is based on the NEWS ***** entries
 
-my ($first_install, $current_version, $previous_version);
+use strict;
+use Getopt::Long;
 
-$current_version = $ENV{'SYMPA_VERSION'};
+my %options;
+GetOptions(
+    \%options,
+    'current=s',
+    'previous=s',
+);
 
-unless ($current_version) {
-    print STDERR "Could not get current Sympa version\n";
-    exit -1;
-}
+die "no current given version, aborting" unless $options{current};
 
-## Get previous installed version of Sympa
-unless (open VERSION, "$ENV{'DESTDIR'}$ENV{'BINDIR'}/Version.pm") {
-    print STDERR "Could not find previous install of Sympa ; assuming first install\n";
+if (!$options{previous}) {
+    print STDERR "No previous version given, assuming first installation";
     exit 0;
 }
 
-unless ($first_install) {
-    while (<VERSION>) {
-	if (/^our \$Version = \'(\S+)\'\;/) {
-	    $previous_version = $1;
-	    last;
-	}
-    }
-}
-close VERSION;
+my $previous_version = $options{previous};
+my $current_version = $options{current};
 
-## Create the data_structure.version file if none exists
-my $version_file = "$ENV{'ETCDIR'}/data_structure.version";
-if ($ENV{'ETCDIR'} && ! -f $version_file) {
-    ## Create missing directory
-    unless (-d $ENV{'ETCDIR'}) {
-	print STDERR "Creating missing directory %s...\n", $ENV{'ETCDIR'};
-	unless (mkdir $ENV{'ETCDIR'}, 0770) {
-	    print STDERR "Failed to create $ENV{'ETCDIR'} directory : $!\n";
-	    exit -1;
-	}
-    }
-    
-    print STDERR "Creating missing $version_file\n";
-    
-    unless (open VFILE, ">$version_file") {
-	printf STDERR "Unable to write %s ; sympa.pl needs write access on %s directory : %s\n", $version_file, $ENV{'ETCDIR'}, $!;
-	return undef;
-    }
-    printf VFILE "# This file is automatically created by sympa.pl after installation\n# Unless you know what you are doing, you should not modify it\n";
-    if ($previous_version) {
-	printf VFILE "%s\n", $previous_version;
-    }else { 
-	printf VFILE "%s\n", $current_version;
-    }
-    close VFILE;
-}
-
-`chown $ENV{'USER'} $version_file`;
-`chgrp $ENV{'GROUP'} $version_file`;
-
+# exit immediatly if previous version is higher or equal
 if (($previous_version eq $current_version) ||
     &higher($previous_version,$current_version)){
     exit 0;
 }
 
-print "You are upgrading from Sympa $previous_version\nYou should read CAREFULLY the changes listed below ; they might be incompatible changes :\n<RETURN>";
+print <<EOF;
+You are upgrading from Sympa $previous_version
+You should read CAREFULLY the changes listed below
+They might be incompatible changes:
+<RETURN>
+EOF
+
 my $wait = <STDIN>;
 
 ## Extracting Important changes from release notes
 open NOTES, 'NEWS';
 my ($current, $ok);
 while (<NOTES>) {
-    
     if (/^([\w_.]+)\s/) {
 	my $v = $1;
 	if ($v eq $previous_version  || 
 	    &higher($previous_version,$v)
 	    ) {
 	    last;
-	}elsif ($v eq $current_version) {
+	}else{
 	    $ok = 1;
 	}
     }
@@ -115,7 +86,7 @@ while (<NOTES>) {
 }
 close NOTES;
 print "<RETURN>";
-my $wait = <STDIN> unless ($ENV{'DESTDIR'}); ## required for package building
+my $wait = <STDIN>;
 
 sub higher {
     my ($v1, $v2) = @_;
@@ -127,7 +98,7 @@ sub higher {
     my $max = $#tab1;
     $max = $#tab2 if ($#tab2 > $#tab1);
 
-    for $i (0..$max) {
+    for my $i (0..$max) {
     
         if ($tab1[0] =~ /^(\d*)a$/) {
             $tab1[0] = $1 - 0.5;

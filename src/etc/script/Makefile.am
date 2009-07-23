@@ -19,78 +19,53 @@
 # along with this program; if not, write to the Free Software
 # Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
 
-SRC	=	create_db.Pg create_db.mysql create_db.Oracle create_db.Sybase create_db.SQLite 
+dbscripts = create_db.Pg create_db.mysql create_db.Oracle \
+	    create_db.Sybase create_db.SQLite
 
-SUBSTSRC	=	arc2webarc.pl testldap.pl p12topem.pl init_comment.pl crypt_passwd.pl testlogs.pl mod2html.pl tpl2tt2.pl ldap_alias_manager.pl mysql_alias_manager.pl
+perlscripts = arc2webarc.pl testldap.pl p12topem.pl init_comment.pl \
+	      crypt_passwd.pl testlogs.pl mod2html.pl tpl2tt2.pl \
+	      ldap_alias_manager.pl mysql_alias_manager.pl
 
-INITSRC		=	sympa
+script_SCRIPTS = $(dbscripts) $(perlscripts)
+init_SCRIPTS = sympa
 
-#SCRIPTDIR	=	../../../script
-SCRIPTDIR	=	$(SBINDIR)
+EXTRA_DIST = $(dbscripts) \
+	     arc2webarc.pl.in crypt_passwd.pl.in init_comment.pl.in \
+	     ldap_alias_manager.pl.in mod2html.pl.in mysql_alias_manager.pl.in \
+	     p12topem.pl.in testldap.pl.in testlogs.pl.in tpl2tt2.pl.in \
+	     sympa.in
 
-all:	
+CLEANFILES = $(perlscripts) $(init_SCRIPTS)
 
-install: makedir installsrc installsubstsrc installinit
+arc2webarc.pl crypt_passwd.pl init_comment.pl ldap_alias_manager.pl mod2html.pl mysql_alias_manager.pl p12topem.pl testldap.pl testlogs.pl tpl2tt2.pl: Makefile
+	rm -f $@
+	sed \
+		-e 's|--PERL--|$(PERL)|' \
+		-e 's|--modulesdir--|$(modulesdir)|' \
+		< $(srcdir)/$@.in > $@
+	chmod +x $@
 
-clean:
-	rm -rf $(DESTDIR)$(SCRIPTDIR)
+sympa: Makefile
+	rm -f $@
+	sed \
+		-e 's|--CONFIG--|$(CONFIG)|' \
+		-e 's|--WWSCONFIG--|$(WWSCONFIG)|' \
+		-e 's|--sbindir--|$(sbindir)|' \
+		-e 's|--initdir--|$(initdir)|' \
+		-e 's|--piddir--|$(piddir)|' \
+		-e 's|--lockdir--|$(lockdir)|' \
+		< $(srcdir)/$@.in > $@
+	chmod +x $@
 
-makedir:
-	@if [ ! -d $(DESTDIR)$(SCRIPTDIR) ]; then \
-		mkdir -p $(DESTDIR)$(SCRIPTDIR); \
-	fi
+arc2webarc.pl: arc2webarc.pl.in
+crypt_passwd.pl: crypt_passwd.pl.in
+init_comment.pl: init_comment.pl.in
+ldap_alias_manager.pl: ldap_alias_manager.pl.in
+mod2html.pl: mod2html.pl.in
+mysql_alias_manager.pl: mysql_alias_manager.pl.in
+p12topem.pl: p12topem.pl.in
+testldap.pl: testldap.pl.in
+testlogs.pl: testlogs.pl.in
+tpl2tt2.pl: tpl2tt2.pl.in
 
-installsubstsrc:
-	@echo "Doing multiple substitutions while installing ..."
-	@( \
-		PERL=$(PERL); export PERL; \
-		SH=$(SH); export SH; \
-		USER=$(USER); export USER; \
-		UMASK=0755; export UMASK; \
-		DIR=$(DIR); export DIR; \
-		DESTDIR=$(DESTDIR); export DESTDIR; \
-		INITDIR=$(INITDIR); export INITDIR; \
-		INSTALLDIR=$(SCRIPTDIR); export INSTALLDIR; \
-		BINDIR=$(BINDIR); export BINDIR; \
-		ETCBINDIR=$(ETCBINDIR); export ETCBINDIR; \
-		CONFIG=$(CONFIG); export CONFIG; \
-		WWSCONFIG=$(WWSCONFIG); export WWSCONFIG; \
-		COOKIE=$(COOKIE); export COOKIE; \
-		HOST=$(HOST); export HOST; \
-		OPENSSL=$(OPENSSL); export OPENSSL; \
-		PIDPRE='$(PIDPRE)'; export PIDPRE; \
-		PIDPOST='$(PIDPOST)'; export PIDPOST; \
-		LOCKDIR=$(LOCKDIR); export LOCKDIR; \
-		$(PERL) ../../../subst.pl $(SUBSTSRC) \
-	)
-
-installsrc:
-	@for c in $(SRC); do \
-	cp $$c $(DESTDIR)$(SCRIPTDIR); \
-	done
-
-
-installinit:
-	mkdir -p $(DESTDIR)$(INITDIR)
-	@echo "Installing SYSV init script in $(DESTDIR)$(INITDIR)..."
-	@( \
-		PERL=$(PERL); export PERL; \
-		SH=$(SH); export SH; \
-		USER=$(USER); export USER; \
-		UMASK=0755; export UMASK; \
-		DIR=$(DIR); export DIR; \
-		DESTDIR=$(DESTDIR); export DESTDIR; \
-		INITDIR=$(INITDIR); export INITDIR; \
-		INSTALLDIR=$(INITDIR); export INSTALLDIR; \
-		BINDIR=$(BINDIR); export BINDIR; \
-		PIDDIR=$(PIDDIR); export PIDDIR; \
-		ETCBINDIR=$(ETCBINDIR); export ETCBINDIR; \
-		CONFIG=$(CONFIG); export CONFIG; \
-		WWSCONFIG=$(WWSCONFIG); export WWSCONFIG; \
-		COOKIE=$(COOKIE); export COOKIE; \
-		HOST=$(HOST); export HOST; \
-		$(PERL) ../../../subst.pl $(INITSRC) \
-	)
-
-
-
+sympa: sympa.in
