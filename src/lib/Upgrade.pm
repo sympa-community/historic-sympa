@@ -23,11 +23,9 @@
 package Upgrade;
 
 use strict;
-require Exporter;
-my @ISA = qw(Exporter);
-my @EXPORT = qw();
 
 use Carp;
+use POSIX qw(strftime);
 
 use Conf;
 use Log;
@@ -1520,7 +1518,7 @@ sub to_utf8 {
 	
 	next unless $modified;
 	
-	my $date = &POSIX::strftime("%Y.%m.%d-%H.%M.%S", localtime(time));
+	my $date = strftime("%Y.%m.%d-%H.%M.%S", localtime(time));
 	unless (rename $file, $file.'@'.$date) {
 	    do_log('err', "Cannot rename old template %s", $file);
 	    next;
@@ -1580,7 +1578,7 @@ sub md5_encode_password {
     while (my $user = $sth->fetchrow_hashref('NAME_lc')) {
 
 	my $clear_password ;
-	if ($user->{'password_user'} =~ /^[1-9a-f]{32}/){
+	if ($user->{'password_user'} =~ /^[0-9a-f]{32}/){
 	    do_log('info','password from %s already encoded as md5 fingerprint',$user->{'email_user'});
 	    $total_md5++ ;
 	    next;

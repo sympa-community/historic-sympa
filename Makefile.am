@@ -19,7 +19,7 @@
 # along with this program; if not, write to the Free Software
 # Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
 
-SUBDIRS = src wwsympa soap web_tt2 mail_tt2 doc po po-wwsympa
+SUBDIRS = src wwsympa soap web_tt2 mail_tt2 doc po po-wwsympa t
 
 EXTRA_DIST = important_changes.pl \
 	     sympa.spec.in \
@@ -33,20 +33,20 @@ installdir:
 	@for dir in $(expldir) $(spooldir) $(spooldir)/msg $(spooldir)/digest \
 		$(spooldir)/moderation $(spooldir)/expire $(spooldir)/auth \
 		$(spooldir)/outgoing $(spooldir)/tmp $(spooldir)/task \
-		$(bouncedir) $(arcdir) $(piddir); do \
+		$(bouncedir) $(arcdir) $(piddir) $(staticdir); do \
 		if [ ! -d $(DESTDIR)$$dir ] ; then \
 			echo "Creating $(DESTDIR)$$dir"; \
 			install -d -m 755 $(DESTDIR)$$dir; \
-			chown $(USER) $(DESTDIR)$$dir || /bin/true; \
-			chgrp $(GROUP) $(DESTDIR)$$dir || /bin/true; \
-		fi \
+		fi; \
+		chown $(USER) $(DESTDIR)$$dir || /bin/true; \
+		chgrp $(GROUP) $(DESTDIR)$$dir || /bin/true; \
 	done
 	@echo "Creating non-writable directories"
 	@for dir in create_list_templates mail_tt2 web_tt2 scenari \
 		task_models general_task_models; do \
-		if [ ! -d $(DESTDIR)$(sysconfdir)/$$dir ] ; then \
-			echo "Creating $(DESTDIR)$(sysconfdir)/$$dir"; \
-			install -d -m 755 $(DESTDIR)$(sysconfdir)/$$dir; \
+		if [ ! -d $(DESTDIR)$(sysconfdir)/sympa/$$dir ] ; then \
+			echo "Creating $(DESTDIR)$(sysconfdir)/sympa/$$dir"; \
+			install -d -m 755 $(DESTDIR)$(sysconfdir)/sympa/$$dir; \
 		fi \
 	done
 
@@ -63,17 +63,14 @@ installconfig:
 			--create wwsympa.conf \
 			--target $(DESTDIR)$(confdir)/wwsympa.conf \
 			|| /bin/true; \
-		$(DESTDIR)$(sbindir)/sympa_wizard.pl || /bin/true;\
 	fi
-	$(DESTDIR)$(sbindir)/sympa_wizard.pl \
-		--check \
-		|| /bin/true; \
-	if [ ! -f $(DESTDIR)$(sysconfdir)/data_structure.version ]; then \
-		cd $(DESTDIR)$(sysconfdir); \
+	if [ ! -f $(DESTDIR)$(sysconfdir)/sympa/data_structure.version ]; then \
+		cd $(DESTDIR)$(sysconfdir)/sympa; \
 		echo "# automatically created file" >> data_structure.version; \
 		echo "# you should not modify it" >> data_structure.version; \
 		echo $(VERSION) >> data_structure.version; \
-		chown $(USER).$(GROUP) data_structure.version || /bin/true; \
+		chown $(USER) data_structure.version || /bin/true; \
+		chgrp $(GROUP) data_structure.version || /bin/true; \
 	fi
 
 nextstep: 
@@ -82,11 +79,16 @@ nextstep:
 	@echo "** http://www.sympa.org/documentation/manual/sympa-$(VERSION).pdf"
 	@echo ""
 	@echo "#########################################################"
-	@echo "# If you install Sympa for the first time on this server"
-	@echo "# you should check the INSTALL file."
+	@echo "# If you are installing, you should check the INSTALL file"
+	@echo "# and run the installation wizard:"
+	@echo "# $(sbindir)/sympa.pl"
 	@echo "#"
-	@echo "# If you are upgrading, you now need to run"
-	@echo "#    $(sbindir)/sympa.pl --upgrade"
+	@echo "# If you are upgrading, you just need to run"
+	@echo "# $(sbindir)/sympa.pl --upgrade"
+	@echo "#"
+	@echo "# In both case, you should run the wizard to check you"
+	@echo "# have all perl modules needed:"
+	@echo "# $(sbindir)/sympa_wizard.pl --check"
 	@echo "#######################################################"
 
 importantchanges:

@@ -66,6 +66,7 @@ use time_utils;
 use Sympa::Constants;
 use wwslib;
 use cookielib;
+use Robot;
 use tt2;
 
 #use open ':utf8'; ## Default is to consider files utf8 
@@ -5926,8 +5927,11 @@ sub do_skinsedit {
      $list->delete_subscription_request(@added_users);
 
      &report::notice_report_web('add_performed', {'total' => $total},$param->{'action'});
-     &web_db_log({'target_email' => $in{'email'}||$in{'pending_email'},
-		  'status' => 'success'});
+     
+     foreach my $email (@added_users) {
+       &web_db_log({'target_email' => $email,
+		    'status' => 'success'});
+     }
      
      $in{'list'} = $in{'previous_list'} if ($in{'previous_list'});
      return $in{'previous_action'} || 'review';
@@ -8874,7 +8878,6 @@ sub do_edit_list {
 		## Remove if empty
 		if ($new_admin->{$pname} =~ /^\s*$/) {
 		    delete $new_admin->{$pname};
-		    next; # Go directly to the next parameter.
 		}
 	    }
 	    
