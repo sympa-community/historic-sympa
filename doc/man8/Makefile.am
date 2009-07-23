@@ -1,61 +1,26 @@
-## Available catalogues (languages)
-MAN8	=	archived.8 bounced.8 alias_manager.8 sympa.8 
+man8_MANS = archived.8 bounced.8 alias_manager.8 sympa.8 
 
-SUFFIXES =	.8 .pod
+EXTRA_DIST = archived.pod.in bounced.pod.in alias_manager.pod.in sympa.pod
 
-.8:	.pod
+CLEANFILES = $(man8_MANS) archived.pod bounced.pod alias_manager.pod
 
 .pod.8:
 	rm -f $@
-	pod2man --section=8 --center="sympa $(SYMPA_VERSION)" --lax --release="$(SYMPA_VERSION)" $< $@
+	pod2man --section=8 --center="sympa $(VERSION)" --lax --release="$(VERSION)" $< $@
 
-all:	$(MAN8)
+archived.pod bounced.pod alias_manager.pod: Makefile
+	rm -f $@
+	sed \
+		-e 's|--piddir--|$(piddir)|' \
+		-e 's|--libexecdir--|$(libexecdir)|' \
+		-e 's|--sysconfdir--|$(sysconfdir)|' \
+		-e 's|--defaultdir--|$(defaultdir)|' \
+		-e 's|--spooldir--|$(spooldir)|' \
+		-e 's|--docdir--|$(docdir)|' \
+		-e 's|--WWSCONFIG--|$(WWSCONFIG)|' \
+		-e 's|--SENDMAIL_ALIASES--|$(SENDMAIL_ALIASES)|' \
+		< $(srcdir)/$@.in > $@
 
-clean:
-	rm -f *.8
-
-install: 
-	echo "Please use the main Makefile for installing MAN Page."
-
-newinstall: makedir 
-	@for manfile in $(MAN8); do \
-		echo "Installing man pages...$(DESTDIR)$(MANDIR)/man8/$$manfile"; \
-		( \
-			PERL=$(PERL); export PERL; \
-			UMASK=0644; export UMASK; \
-			DIR=$(DIR); export DIR; \
-			INSTALLDIR=$(MANDIR)/man8; export INSTALLDIR; \
-			DESTDIR=$(DESTDIR); export DESTDIR; \
-			SYMPA_VERSION=$(SYMPA_VERSION); export SYMPA_VERSION; \
-			CONFDIR=$(CONFDIR); export CONFDIR; \
-			SENDMAIL_ALIASES=$(SENDMAIL_ALIASES); export SENDMAIL_ALIASES; \
-			VIRTUAL_ALIASES=$(VIRTUAL_ALIASES); export VIRTUAL_ALIASES; \
-			MAILERPROGDIR=$(MAILERPROGDIR); export MAILERPROGDIR; \
-			PIDDIR=$(PIDDIR); export PIDDIR; \
-			SPOOLDIR=$(SPOOLDIR); export SPOOLDIR; \
-			PIDDIR=$(PIDDIR); export PIDDIR; \
-			ETCBINDIR=$(ETCBINDIR); export ETCBINDIR; \
-			$(PERL) ../../subst.pl $$manfile \
-		) ;\
-	done
-makedir:
-	@if [ ! -d $(DESTDIR)$(MANDIR) ]; then \
-		echo "Creating required directory $(DESTDIR)$(MANDIR)"; \
-		mkdir -p $(DESTDIR)$(MANDIR); \
-	fi
-	@if [ ! -d $(DESTDIR)$(MANDIR)/man8 ]; then \
-		echo "Creating required directory $(DESTDIR)$(MANDIR)/man8"; \
-		mkdir -p $(DESTDIR)$(MANDIR)/man8; \
-	fi
-
-
-
-
-
-
-
-
-
-
-
-
+archived.pod: $(srcdir)/archived.pod.in
+bounced.pod: $(srcdir)/bounced.pod.in
+alias_manager.pod: $(srcdir)/alias_manager.pod.in

@@ -19,16 +19,11 @@
 # along with this program; if not, write to the Free Software
 # Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
 
-
 package wwslib;
-use lib '--LIBDIR--';
-
-use Exporter;
-@ISA = ('Exporter');
-@EXPORT = ();
 
 use Log;
 use Conf;
+use Sympa::Constants;
 
 %reception_mode = ('mail' => {'gettext_id' => 'standard (direct reception)'},
 		   'digest' => {'gettext_id' => 'digest MIME format'},
@@ -142,16 +137,16 @@ sub load_config {
     ## Valid params
     my %default_conf = (arc_path => '/home/httpd/html/arc',
 			archive_default_index => 'thrd',
-			archived_pidfile => '--PIDDIR--/archived.pid',		  
+			archived_pidfile => Sympa::Constants::PIDDIR . '/archived.pid',
 			bounce_path => '/var/bounce',
-			bounced_pidfile => '--PIDDIR--/bounced.pid',
+			bounced_pidfile => Sympa::Constants::PIDDIR . '/bounced.pid',
 			cookie_domain => 'localhost',
 			cookie_expire => 0,
 			custom_archiver => '',
 			mhonarc => '/usr/bin/mhonarc',
 			review_page_size => 25,
 			viewlogs_page_size => 25,
-			task_manager_pidfile => '--PIDDIR--/task_manager.pid',
+			task_manager_pidfile => Sympa::Constants::PIDDIR . '/task_manager.pid',
 			title => 'Mailing Lists Service',
 			use_fast_cgi => 1,
 			default_home => 'home',
@@ -355,10 +350,3 @@ sub get_my_url {
 
 
 1;
-
-
-
-
-
-
-

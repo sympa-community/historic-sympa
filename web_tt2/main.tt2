@@ -12,9 +12,16 @@
 <style type="text/css">
 [% PROCESS css.tt2 %]
 </style>
+
 [% ELSE %]
 <link rel="stylesheet" href="[% css_url %]/style.css" type="text/css" media="screen" title="Sympa CSS" />
 [% END %]
+
+
+[% PROCESS css_ie.tt2 %]
+
+
+
 <!-- RSS chanel -->
    [% IF list -%] 
      [% IF arc_public_access %]<link rel="alternate" type="application/xml" title="[%|loc%]RSS Latest messages[%END%]" href="[% base_url%][% path_cgi %]/rss/latest_arc/[%list%]?count=20"/>[% END -%]
@@ -35,16 +42,44 @@
 <!-- <link rel="alternative stylesheet" href="[% css_url %]/fullPage.css" type="text/css" media="screen" title="View Full Page" />     -->
 <!-- <link rel="alternative stylesheet" href="[% css_url %]/print-preview.css" type="text/css" media="screen" title="Print Preview" /> -->
 
-<link rel="shortcut icon" href="/lumineau/favicon_sympa.png" />
+<link rel="shortcut icon" href="[% icons_url %]/favicon_sympa.png" />
 
 [% PROCESS javascript.tt2 %]
 
 [% IF base %] <base href="[% base %]" /> [% END %]
 <!--[if IE]>
 <![endif]-->
+
+
+<noscript>
+<style type="text/css">
+<!--
+#ErrorBlock,
+#noticeBlock {
+	       height:0%!important;
+               position:relative!important;
+               }
+
+#ErrorMsg,
+#noticeMsg { 
+             position:relative!important;
+             width:80%!important;
+             margin :1em auto!important;
+             border:none!important;
+ }
+
+-->
+</style>
+</noscript>
+
+
+
+
 </head>
 
 <body onload="[% IF use_htmlarea %] HTMLArea.replaceAll();[% END %][% IF back_to_mom %] setTimeout('refresh_mom_and_die()',1000);[% END %]">
+
+
 
 <a name="top"></a>
 
@@ -60,10 +95,9 @@
 
        [% PROCESS error.tt2 IF errors %]
        [% PROCESS notice.tt2 IF notices %]
-
+ [% PROCESS login_menu.tt2 %]
 <div id="Canvas">
 
- [% PROCESS login_menu.tt2 %]
   <div id="Header">
     
 	<!-- a href="javascript:afficheId('contenu','Stretcher')">ouvrir</a>
@@ -87,8 +121,9 @@
      <div id="Paint">
 
        [% IF list %]
-	<div class="listTitle"><strong><a class="menuLinksCurrentPage" href="[% path_cgi %]/info/[% list %]">[% list_protected_email %]</a></strong><br />
-         [% IF list_title %][% list_title %][% END %]</div><br />
+	<div class="listTitle"><a href="[% path_cgi %]/info/[% list %]">[% list_protected_email %]</a>&nbsp;</div>
+        <div class="listTitle description">
+	[% IF list_title %] <span> [% list_title %] </span> [% END %]</div><br />
        [% END %]
 
 	 [% PROCESS nav.tt2 %]
@@ -97,12 +132,16 @@
 	 [% IF action == 'edit_list_request' %]<br /><br />[% END %]
          [% PROCESS "${action}.tt2" IF action %]
        </div><!-- End div ContentBlock -->
-      <div class="top"><a href="#top" title="Top of Page"><img src="/lumineau/top.png" alt="Top of page" /></a></div>
+      <div class="top"><a href="#top" title="Top of Page"><img src="[% icons_url %]/top.png" alt="Top of page" /></a></div>
      </div><!-- End div Paint -->
   </div><!-- end div Stretcher -->
-  [% PROCESS footer.tt2 %]
+
+
   [% PROCESS dumpvars.tt2 IF dumpvars == 'true'%]
+
 </div> <!-- end div canvas -->
+
+  [% PROCESS footer.tt2 %]
 [% END %]
 </body>
 <!-- end main.tt2 -->

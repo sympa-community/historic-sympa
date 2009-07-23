@@ -22,18 +22,13 @@
 
 package cookielib;
 
-use Exporter;
-@ISA = ('Exporter');
-@EXPORT = ();
-
+use strict vars;
 
 use Digest::MD5;
 use POSIX;
 use CGI::Cookie;
+
 use Log;
-
-use strict vars;
-
 
 ## Generic subroutine to set a cookie
 sub generic_set_cookie {
@@ -86,7 +81,7 @@ sub set_cookie_soap {
 sub get_mac {
         my $email = shift ;
 	my $secret = shift ;	
-	&do_log('debug4', "get_mac($email, $secret)");
+	&do_log('debug3', "get_mac($email, $secret)");
 
 	unless ($secret) {
 	    &do_log('err', 'get_mac : failure missing server secret for cookie MD5 digest');
