@@ -1,4 +1,4 @@
-TESTS = modules.t
+TESTS = modules.t podfiles.t
 
 TESTS_ENVIRONMENT = $(PERL)
 
