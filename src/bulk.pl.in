@@ -157,6 +157,7 @@ my $fh = 'fh0000000000';	## File handle for the stream.
 
 my $messagekey;       # the key of the current message in the message_table   
 my $messageasstring;  # the current message as a string
+my $last_check_date = 0;
 
 my $timeout = $Conf::Conf{'bulk_wait_to_fork'};
 
@@ -225,7 +226,7 @@ while (!$end) {
 		my @rcpts = split /,/,$bulk->{'receipients'};
 		if ($bulk->{'verp'}){   
 			foreach my $rcpt (@rcpts) {
-				$return_path = $rcpt;
+				my $return_path = $rcpt;
 				$return_path =~ s/\@/\=\=a\=\=/; 
 				$return_path = "$Conf::Conf{'bounce_email_prefix'}+$return_path\=\=$bulk->{'listname'}\@$bulk->{'robot'}"; # VERP broken if no listname is provided
 				*SMTP = &mail::smtpto($return_path, \$rcpt, $bulk->{'robot'});
