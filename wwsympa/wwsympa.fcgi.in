@@ -68,7 +68,7 @@ use wwslib;
 use cookielib;
 use Robot;
 use tt2;
-
+#use DateTime;
 #use open ':utf8'; ## Default is to consider files utf8 
 
 use Mail::Header;
@@ -306,6 +306,8 @@ my %comm = ('home' => 'do_home',
 	 'ticket' => 'do_ticket',
 	 'manage_template' => 'do_manage_template',
 	 'send_newsletter' => 'do_send_newsletter',
+	 'suspend_request' => 'do_suspend_request',
+	 'suspend_request_action' => 'do_suspend_request_action',
 	 );
 
 my %auth_action = ('logout' => 1,
@@ -426,6 +428,7 @@ my %action_args = ('default' => ['list'],
 		'manage_template' => ['subaction','list','message_template'],   
 		'send_newsletter' => [],
 		'compose_mail' => ['list','subaction'],
+                'suspend_request' => ['subaction'], ## ???
 		);
 
 ## Define the required parameters for each action
@@ -543,6 +546,8 @@ my %required_args = ('active_lists' => ['for|count'],
 		     'subrequest' => ['param.list'],
 		     'subscribe' => ['param.list'],
 		     'subscriber_count' => ['param.list'],
+		     'suspend_request' => [], ## ???
+		     'suspend_request_action' => [], ## ???
 		     'sync_include' => ['param.list','param.user.email'],
 		     'tag_topic_by_sender' => ['param.list'],
 		     'upload_pictures' => ['param.user.email','param.list'],
@@ -14972,6 +14977,139 @@ sub do_change_email {
      return 'pref';
     
  }
+
+####################################################
+#  do_suspend_request                           
+####################################################
+#                                                  #
+#                                                  #
+#                                                  #                         
+####################################################
+sub do_suspend_request {
+
+    &wwslog('info', 'do_suspend_request', $in{'action'}); #Action = suspend_request
+    my $sub_action = $in{'sub_action'};
+    my $day1 = $in{'day1'};
+    my $month1 = $in{'month1'};
+    
+    
+    ## Si aucun enregistrement afficher le formulaire
+    ## my $data = &list::get_subscriber_no_object();C
+    ## if $data->{'suspend_option'}{'start'} > d-day
+    ## or if $data->{'suspend_option'}{'end'} < d-day
+    if(1==1){
+    }
+    ## S'il y a déjà un enregistrement, afficher le récapitulatif
+    ## if if $data->{'suspend_option'}{'start'} <= d-day
+    ## et if $data->{'suspend_option'}{'end'} >= d-day
+    ## pour date infinie on compare d-day+1 avec d-day while !STOP
+    if(1==1){
+    }
+
+    return 1;
+}
+
+####################################################
+#  do_suspend_request_action                           
+####################################################
+#                                                  #
+#                                                  #
+#                                                  #                         
+####################################################
+sub do_suspend_request_action {
+
+    &wwslog('info', 'do_suspend_request_action', $in{'action'});
+    
+    my $day1;
+    my $month1;
+    my $year1;
+    my $day2;
+    my $month2;
+    my $year2;
+    my $end_date;
+
+    if ($in{'list'}){
+	# param('list') returns a list of the selected checkboxes
+	my @list =  $in{'list'}; # param('list');
+	foreach my $list1 (@list) {
+	    #&wwslog('trace', 'You picked1 : "%s"', $list1);
+	}
+	
+    }else{
+	&wwslog('err','suspend_request: must picked one or more list(s)');
+	return undef;
+    }
+
+    #day1 : 01-31, month1 : 01-12, year1 : 2000-....
+    if (($in{'day1'}) && ($in{'month1'}) && ($in{'year1'})){
+	$day1 = $in{'day1'};
+	$month1 = $in{'month1'};
+	$year1 = $in{'year1'};
+	
+	if (($in{'day2'}) && ($in{'month2'}) && ($in{'year2'}) && (!$in{'indefinite'})){
+	    $day2 = $in{'day2'};
+	    $month2 = $in{'month2'};
+	    $year2 = $in{'year2'};
+            my $cmp = 0;
+            ## compare les deux dates
+	    #my $dt1 = DateTime->new(year   => $year1,
+	#			    month  => $month1,
+	#			    day    => $day1,
+	#			    );
+	 #   my $dt2 = DateTime->new(year   => $year2,
+		#		    month  => $month2,
+			#	    day    => $day2,
+				#    );
+	    # $cmp vaut -1, 0, ou 1 selon que $dt1 est <, ==, or > à $dt2 respectivement
+	    #my $cmp = DateTime->compare($dt1, $dt2);
+	    	    
+	    #if($cmp == -1){
+		
+	    #}elsif($cmp == 0){
+		
+	    #}elsif($cmp == 1){
+		
+		#return undef;
+	    #}
+	    
+	}elsif((!$in{'day2'}) && (!$in{'month2'}) && (!$in{'year2'}) && ($in{'indefinite'})){
+	    $end_date = 0;
+	}else{
+	    &wwslog('err','suspend_request: missing argument for the end date OR syntax error : dd/mm/yyyy OR must choose a end date or indefinite end date');
+	    return undef;
+	}
+    }else{
+	&wwslog('err','suspend_request: missing argument for the start date OR syntax error : dd/mm/yyyy');
+	return undef;
+    }
+
+    # Sauvegarder la suspension d'abonnement
+    # ou l'arrêter
+    # ou la modifier
+    if($in{'sub_action'} eq 'suspendsave'){ 
+	
+	# On sauvegarde les données dans la BDD
+	# On compare avec la d-day pour savoir si on pose l'option suspend sur 'on'
+	# A ce stade on a les dates et les listes.
+	
+	## &List::add_user_db(); # Pour enregistrer les data
+
+    }elsif(($in{'sub_action'} eq 'suspendstop') || ($in{'sub_action'} eq 'suspendmodify')){
+	
+	## Retour au formulaire et suppression des data
+	## &List::add_user_db(); # Pour supprimer les data
+
+    }else{
+	&wwslog('err', 'do_suspend_request_action: sub_action doesn\'t exist');
+	return undef;
+    }
+    
+    #open (DUMP, "> /tmp/dump2"); print DUMP $list2; close DUMP;
+    &report::notice_report_web('performed',{},$in{'action'});
+    #&web_db_log({'robot' => $robot,'list' => $list->{'name'},'action' => $param->{'action'},'parameters' => "",'target_email' => "",'msg_id' => '','status' => 'success','error_type' => '','user_email' => $param->{'user'}{'email'},'client' => $ip,'daemon' => $daemon_name});
+    
+    return 'suspend_request';
+}
 
 ####################################################
 #  do_compose_mail                           

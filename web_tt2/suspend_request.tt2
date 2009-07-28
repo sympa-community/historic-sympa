@@ -1,0 +1,87 @@
+<!-- $Id: suspend_request.tt2 5973 2009-07-20 10:29:53Z jourdan $ -->
+
+[% IF sub_action == "suspendsave" %]
+<div class="block">
+  <h2>[%|loc%]Récapitulatif[%END%] <a class="input" href="[% path_cgi %]/nomenu/help/sendmsg" title="[%|loc%]Open in a new window[%END%]" onclick="window.open('','wws_help','toolbar=no,location=no,directories=no,status=no,menubar=no,scrollbars=yes,resizable=yes,copyhistory=no,width=400,height=200')" target="wws_help">[%|loc%]Help[%END%]</a></h2>
+  <br />
+
+  <form class="noborder" action="[% path_cgi %]" method="options" name="suspend_request">
+    <fieldset>
+      <h3>[%|loc%]Vous avez suspendu votre abonnement pour les listes suivantes :[%END%]</h3>
+      <ul class="listenum" >
+        <li>
+          [% list %]<br />
+        </li>
+      </ul>
+      
+      <br />
+      du [%|loc(day1)%]%1[%END%]/[% month1 %]/[% year1 %]<br />
+      [% IF indefinite %]
+        pour une durée indéterminée.
+      [% ELSE %]
+        au [% day2 %]/[% month2 %]/[% year2 %].
+      [% END %] 
+      <br /><br />
+      <input type="hidden" name="action" value="suspend_request_action"/>
+        <input class="MainMenuLinks" type="submit" name="sub_action_suspendmodify" value="[%|loc%]Modifier[%END%]"/>
+        <input class="MainMenuLinks" type="submit" name="sub_action_suspendstop" value="[%|loc%]Arrêter[%END%]"/>
+    </fieldset>
+  </form>
+
+</div>
+
+[% ELSE %]
+
+<div class="block">
+
+  <h2>[%|loc%]Suspend my subscription[%END%] <a class="input" href="[% path_cgi %]/nomenu/help/sendmsg" title="[%|loc%]Open in a new window[%END%]" onclick="window.open('','wws_help','toolbar=no,location=no,directories=no,status=no,menubar=no,scrollbars=yes,resizable=yes,copyhistory=no,width=400,height=200')" target="wws_help">[%|loc%]Help[%END%]</a></h2>
+  <br />
+  <form class="noborder" action="[% path_cgi %]" method="post" name="suspend_request">
+    <fieldset>
+      <h3>[%|loc%]Lists :[%END%]</h3>
+      [% IF user.email %]
+        [% IF which_info %]
+          <ul class="listenum" >
+            [% FOREACH l = which_info %]
+              <li>
+                [% FOREACH list = l.key %]
+                  <input type="checkbox" name="list" value="[% list %]"/> [% hidden_head %][% list %][% hidden_end %]<br />
+                [% END %]
+              </li>
+            [% END %]
+          </ul>
+        [% ELSE %]
+          <p>[%|loc%]No mailing list available.[%END%]</p>
+        [% END %]
+      [% END %] 
+      <br />
+
+      <h3>[%|loc%]Start date : (DD/MM/YYYY)[%END%]</h3>
+      <label for="day1">[%|loc%]Day[%END%]</label>
+      <input type="integer" size="2" id="day1" name="day1" value="[% day1 %]" />
+      <label for="month1">[%|loc%]Month[%END%]</label>
+      <input type="integer" size="2" id="month1" name="month1" value="[% month1 %]" />
+      <label for="year1">[%|loc%]Year[%END%]</label>
+      <input type="integer" size="4" id="year1" name="year1" value="[% year1 %]" />
+      <br /><br />
+
+      <h3>[%|loc%]End date : (DD/MM/YYYY)[%END%]</h3>
+      <label for="day2">[%|loc%]Day[%END%]</label>
+      <input type="integer" size="2" id="day2" name="day2" value="[% day2 %]" />
+      <label for="month2">[%|loc%]Month[%END%]</label>
+      <input type="integer" size="2" id="month2" name="month2" value="[% month2 %]" />
+      <label for="year2">[%|loc%]Year[%END%]</label>
+      <input type="integer" size="4" id="year2" name="year2" value="[% year2 %]" /><br />
+      <br />
+      [%|loc%]Or select the checkbox for an indefinite end date.[%END%]<br />
+      <input id="indefinite" type="checkbox" name="indefinite" /> <label for="indefinite">[%|loc%]Indefinite end date[%END%]</label>
+      <br /><br />
+      <input type="hidden" name="action" value="suspend_request_action"/>
+        <!-- <input class="MainMenuLinks" type="submit" name="sub_action_homepage" value="[%|loc%]Cancel[%END%]"/> -->
+        <input class="MainMenuLinks" type="submit" name="sub_action_suspendsave" value="[%|loc%]Save[%END%]"/>
+    </fieldset>
+  </form>
+</div>
+
+[% END %]
+<!-- end suspend_request.tt2 -->

@@ -1,7 +1,7 @@
 <!-- $Id$ -->
 
 [% IF user.email %]
-<div class="MenuBlock without_padding">
+<div class="MenuBlock">
 
 [% IF which_info %]
 <p class="text_center"><strong> [%|loc%]Your Lists[%END%] </strong></p>
@@ -21,8 +21,13 @@
 [% ELSE %]
 <p>[%|loc%]No mailing list available.[%END%]</p>
 [% END %]
-</div>
 
+<div id="list_admin_menu">
+<ul>
+<a href="[% path_cgi %]/suspend_request" >[%|loc%]Subscriber Options[%END%]</a>
+</ul>
+</div>
+</div>
 [% END %]
 
 <!-- end login_menu.tt2 -->

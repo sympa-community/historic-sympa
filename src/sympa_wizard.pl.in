@@ -321,7 +321,7 @@ sub check_cpan {
 	'MIME::Lite::HTML' => '1.23',
   	'Term::ProgressBar' => '2.09',
 	'Time::HiRes' => '1.9719',
-
+	#'DateTime' => '0.50',
     );
 
     ### key:left "module" used by SYMPA, 
@@ -359,6 +359,7 @@ sub check_cpan {
 	'HTML::FormatText' => 'HTML-Format',
 	'Term::ProgressBar' => 'Term-ProgressBar',
 	'Time::HiRes' => 'Time-HiRes',
+	#'DateTime' => 'DateTime',
    );
 
     my %opt_CPAN = (
