@@ -63,7 +63,7 @@ installconfig:
 			--create wwsympa.conf \
 			--target $(DESTDIR)$(confdir)/wwsympa.conf \
 			|| /bin/true; \
-	fi
+	fi; \
 	if [ ! -f $(DESTDIR)$(sysconfdir)/sympa/data_structure.version ]; then \
 		cd $(DESTDIR)$(sysconfdir)/sympa; \
 		echo "# automatically created file" >> data_structure.version; \
