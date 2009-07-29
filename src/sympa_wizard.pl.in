@@ -321,6 +321,7 @@ sub check_cpan {
 	'MIME::Lite::HTML' => '1.23',
   	'Term::ProgressBar' => '2.09',
 	'Time::HiRes' => '1.9719',
+	'Mail::DKIM' => '0.36',
 
     );
 
@@ -377,6 +378,7 @@ sub check_cpan {
         'File::NFSLock' => 'File-NFSLock',
         'File::Copy::Recursive' => 'File-Copy-Recursive',
         'Crypt::CipherSaber' => 'CipherSaber',
+	'mail::DKIM' =>'Mail-DKIM',
     );
 
     my %opt_features = (
@@ -397,7 +399,8 @@ sub check_cpan {
         'Net::SSLeay' => 'required by the \'include_remote_sympa_list\' feature that includes members of a list on a remote server, using X509 authentication',
         'Bundle::LWP' => 'required by the \'include_remote_sympa_list\' feature that includes members of a list on a remote server, using X509 authentication',
         'SOAP::Lite' => 'required if you want to run the Sympa SOAP server that provides ML services via a "web service"',
-        'File::NFSLock' => 'required to perform NFS lock ; see also lock_method sympa.conf parameter'
+        'File::NFSLock' => 'required to perform NFS lock ; see also lock_method sympa.conf parameter',
+	'mail::DKIM' => 'requiered in order to use Sympa DKIM features, both for signature verification, signature removal and signature insertion. it should be used event if you do not want your server to add signature !',
     );
 
     ### main:

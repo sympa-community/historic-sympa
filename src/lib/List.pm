@@ -590,6 +590,49 @@ my %alias = ('reply-to' => 'reply_to',
 		      'group' => 'data_source'
 		      },
 
+	    'dkim_feature' => {'format' => ['on','off'],
+			      'occurence' => '0-1',
+			      'default' => {'conf' => 'dkim_feature'},
+			      'gettext_id' => "Insert DKIM signature to messages sent to the list",
+			      'group' => 'secure messaging',
+			  },
+	    'dkim_parameters'=> {'format' => {'private_key_path'=> {'format' => '\S+',
+		                         			  'occurence' => '0-1',
+			                                          'default' => {'conf' => 'dkim_private_key_path'},
+			                                          'gettext_id' => "file path for list DKIM private key",
+								  'order' => 1
+					                         },
+					     'signer_selector' => { 'format' => '\S+',
+		                         			  'occurence' => '0-1',
+			                                          'default' => {'conf' => 'dkim_signer_selector'},
+			                                          'gettext_id' => "Selector for DNS lookup of DKIM public key",
+								  'order' => 2
+                                                                  },
+							          
+					     'header_list'=>      { 'format' => '\S+',
+		                         			  'occurence' => '0-1',
+			                                          'default' => {'conf' => 'dkim_header_list'},
+			                                          'gettext_id' => 'list of headers to be included ito the message for signature',
+								  'order' => 3
+                                                                  },
+					     'signer_domain' =>   {'format' => '\S+',
+		                         			  'occurence' => '0-1',
+			                                          'default' => {'conf' => 'dkim_signer_selector'},
+			                                          'gettext_id' => 'DKIM "d=" tag, you should probably use the default value !',
+								  'order' => 4
+								 },
+                                             'signer_identity'=>  {'format' => '\S+',
+		                         			  'occurence' => '0-1',
+			                                          'default' => {'conf' => 'dkim_signer_identity'},
+			                                          'gettext_id' => "DKIM \"i=\" tag, you should probably not use this parameter",
+								  'order' => 5
+								 },
+					     },
+			      'group' => 'secure messaging',
+			      'occurrence' => '0-1',
+			      'gettext_id' => "DKIM configuration",
+			  },
+			      
 	    'editor' => {'format' => {'email' => {'format' => &tools::get_regexp('email'),
 						  'length' => 30,
 						  'occurrence' => '1',
@@ -2930,6 +2973,10 @@ sub send_global_file {
     $data->{'robot_domain'} = $robot;
     $data->{'return_path'} = &Conf::get_robot_conf($robot, 'request');
     $data->{'boundary'} = '----------=_'.&tools::get_message_id($robot) unless ($data->{'boundary'});
+
+    if (&Conf::get_robot_conf($robot, 'dkim_feature') eq 'on'){	
+	$data->{'dkim_signer'} = $robot;
+    }
 
     unless (&mail::mail_file($filename, $who, $data, $robot)) {
 	&do_log('err',"List::send_global_file, could not send template $filename to $who");

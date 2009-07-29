@@ -34,6 +34,7 @@ use Mail::Internet;
 use Mail::Header;
 use Encode::Guess; ## Usefull when encoding should be guessed
 use Encode::MIME::Header;
+use Mail::DKIM::Signer;
 
 use Conf;
 use Language;
@@ -702,6 +703,79 @@ sub get_template_path {
 
     return undef;
 }
+
+# input object msg and listname, output signed message object
+sub dkim_sign {
+    my $in_msg = shift;
+    my $robot = shift;
+    my $list = shift;
+
+    do_log('debug2', 'tools::dkim_sign (%s,%s)',$in_msg,$list);
+
+    my $self = new List($list, $robot);
+
+    my $selector =  &Conf::get_robot_conf($robot, 'dkim_selector');
+    my $keyfile =  &Conf::get_robot_conf($robot, 'dkim_key_file');
+    unless ($selector) {
+	do_log('err',"DKIM selector is undefined, could not sign message");
+	return undef;
+    }
+    unless ($keyfile) {
+	do_log('err',"DKIM key file is undefined, could not sign message");
+	return undef;
+    }
+    unless (-f $keyfile) {
+	do_log('err',"Could not read DKIM key file %s",$keyfile);
+	return undef;
+    }
+
+    # create a signer object
+    my $dkim = Mail::DKIM::Signer->new(
+				       Algorithm => "rsa-sha1",
+				       Method => "relaxed",
+				       Domain => $robot,
+				       Selector => $selector,
+				       KeyFile => $keyfile,
+				       );
+    
+    ## dump the incomming message.
+    my $dup_msg = $in_msg->dup;
+    # my $temporary_file = $Conf{'tmpdir'}."/".$self->get_list_id().".dkim.".$$ ;  
+    my $temporary_file = $Conf::Conf{'tmpdir'}."/dkim.".$$ ;  
+    if (!open(MSGDUMP,"> $temporary_file")) {
+	&do_log('err', 'Can\'t store message in file %s', $temporary_file);
+	return undef;
+    }
+    $dup_msg->print(\*MSGDUMP);
+    close(MSGDUMP);
+
+    unless (open (MSGDUMP , $temporary_file)){
+	&do_log('err', 'Can\'t read temporary file %s', $temporary_file);
+	return undef;
+    }
+
+    $dkim->load(\*MSGDUMP);
+
+    close (MSGDUMP);
+    unless ($dkim->CLOSE) {
+	&do_log('err', 'Cannot sign (DKIM) message');
+	return undef;
+    }
+
+    if ($main::options{'debug'}) {
+	do_log('debug',"temporary file is $temporary_file");
+    }else{
+	unlink ($temporary_file);
+    }
+    $dkim->signature->headerlist("Message-ID:Date:From:To:Subject:Sender");
+    $dkim->signature->prettify;
+    #    $in_msg->head->add('DKIM-Signature',$dkim->signature->as_string) ;
+    
+    my $messageasstring = $in_msg->as_string ;
+
+    return $in_msg;
+}
+
 
 # input object msg and listname, output signed message object
 sub smime_sign {
