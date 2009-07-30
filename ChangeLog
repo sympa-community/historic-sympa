@@ -1,4 +1,26 @@
 ------------------------------------------------------------------------
+r6038 | david.verdin | 2009-07-30 14:59:53 +0200 (jeu 30 jui 2009) | 2 lignes
+Chemins modifiés :
+   M /branches/sympa-6.0-branch/src/sympa_wizard.pl.in
+
+[bug] Removing useless warning when the 'file' parameter is not indicated in the confdef.pm parameter definition. This 'file' parameter is used only when we want to write a value by default in the config file. Otherwise default value will be used.
+
+------------------------------------------------------------------------
+r6037 | david.verdin | 2009-07-30 14:42:38 +0200 (jeu 30 jui 2009) | 2 lignes
+Chemins modifiés :
+   M /branches/sympa-6.0-branch/src/etc/script/ldap_alias_manager.pl.in
+
+[bug] --modulesdir-- placeholder was badly spelled in ldap_alias_manager.pl, cauing it not to be replaced by its real value at install time.
+
+------------------------------------------------------------------------
+r6036 | david.verdin | 2009-07-30 14:20:35 +0200 (jeu 30 jui 2009) | 2 lignes
+Chemins modifiés :
+   M /branches/sympa-6.0-branch/ChangeLog
+   M /branches/sympa-6.0-branch/NEWS
+
+[-feature] Preparing Sympa 6.0b.2
+
+------------------------------------------------------------------------
 r6035 | david.verdin | 2009-07-30 10:40:07 +0200 (jeu 30 jui 2009) | 2 lignes
 Chemins modifiés :
    M /branches/sympa-6.0-branch

@@ -76,6 +76,13 @@
 	src/etc/script/create_db.SQLite, src/lib/Upgrade.pm: [Submitted by M. deranek, slonko.net]
 	SQLite support was broken in Sympa, due to syntax errors.
 
+	src/etc/script/ldap_alias_manager.pl.in: --modulesdir-- placeholder was badly spelled in
+	ldap_alias_manager.pl, cauing it not to be replaced by its real value at install time.
+
+	src/sympa_wizard.pl.in: Removing useless warning when the 'file' parameter is not indicated
+	in the confdef.pm parameter definition. This 'file' parameter is used only when we want to 
+	write a value by default in the config file. Otherwise default value will be used.
+
 
 6.0b.1		16 June 2009
 
