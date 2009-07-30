@@ -86,13 +86,42 @@ sub next {
     my $lock = &tools::get_lockname();
 
     my $order;
+    my $limit_oracle='';
+    my $limit_sybase='';
 	## Only the first record found is locked, thanks to the "LIMIT 1" clause
-    $order = 'ORDER BY priority_message_bulkmailer ASC, priority_packet_bulkmailer ASC, reception_date_bulkmailer ASC, verp_bulkmailer ASC LIMIT 1';
+    $order = 'ORDER BY priority_message_bulkmailer ASC, priority_packet_bulkmailer ASC, reception_date_bulkmailer ASC, verp_bulkmailer ASC';
+    if (lc($Conf::Conf{'db_type'}) eq 'mysql' || lc($Conf::Conf{'db_type'}) eq 'pg' || lc($Conf::Conf{'db_type'}) eq 'sqlite'){
+	$order.=' LIMIT 1';
+    }elsif (lc($Conf::Conf{'db_type'}) eq 'oracle'){
+	$limit_oracle = 'AND rownum<=1';
+    }elsif (lc($Conf::Conf{'db_type'}) eq 'sybase'){
+	$limit_sybase = 'TOP 1';
+    }
+
+    my $statement;
+    # Select the most prioritary packet to lock.
+    $statement = sprintf "SELECT %s messagekey_bulkmailer AS messagekey, packetid_bulkmailer AS packetid FROM bulkmailer_table WHERE lock_bulkmailer IS NULL AND delivery_date_bulkmailer <= %d %s %s", $limit_sybase, time(), $limit_oracle, $order;
+
+    unless ($sth = $dbh->prepare($statement)) {
+	do_log('err','Unable to prepare SQL statement : %s', $dbh->errstr);
+	return undef;
+    }
     
-    my $statement = sprintf "UPDATE bulkmailer_table SET lock_bulkmailer=%s WHERE lock_bulkmailer IS NULL AND delivery_date_bulkmailer <= %d",$dbh->quote($lock), time();
+    unless ($sth->execute) {
+	do_log('err','Unable to select a packet to lock: "%s" : %s', $statement, $dbh->errstr);
+	return undef;
+    }
+    my $packet;
+    unless($packet = $sth->fetchrow_hashref('NAME_lc')){
+	return undef;
+    }
+    $sth->finish();
+
+    # Lock the packet previously selected.
+    $statement = sprintf "UPDATE bulkmailer_table SET lock_bulkmailer=%s WHERE messagekey_bulkmailer='%s' AND packetid_bulkmailer='%s'",$dbh->quote($lock), $packet->{'messagekey'}, $packet->{'packetid'};
 
     unless ($dbh->do($statement)) {
-	do_log('err','Unable to select and lock bulk packet  SQL statement "%s"; error : %s', $statement, $dbh->errstr);
+	do_log('err','Unable to lock bulk packet  SQL statement "%s"; error : %s', $statement, $dbh->errstr);
 	return undef;
     }
 
