@@ -1,4 +1,20 @@
 ------------------------------------------------------------------------
+r6043 | david.verdin | 2009-07-31 17:10:42 +0200 (ven 31 jui 2009) | 2 lignes
+Chemins modifiés :
+   M /branches/sympa-6.0-branch/NEWS
+   M /branches/sympa-6.0-branch/configure.ac
+
+[-bug] Typo: Wrote "fsh" instead of "fhs". Fixed.
+
+------------------------------------------------------------------------
+r6042 | david.verdin | 2009-07-31 16:13:04 +0200 (ven 31 jui 2009) | 2 lignes
+Chemins modifiés :
+   M /branches/sympa-6.0-branch/ChangeLog
+   M /branches/sympa-6.0-branch/NEWS
+
+[-feature] Preparing Sympa 6.0b.2 (the real true end).
+
+------------------------------------------------------------------------
 r6041 | david.verdin | 2009-07-31 15:55:07 +0200 (ven 31 jui 2009) | 2 lignes
 Chemins modifiés :
    M /branches/sympa-6.0-branch/Makefile.am
