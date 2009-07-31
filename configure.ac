@@ -59,12 +59,12 @@ bouncedir=$prefix/bounce
 localedir=$prefix/locale
 confdir=/etc
 
-## If installer wants to use the FSH standard, change 
+## If installer wants to use the FHS standard, change 
 AC_ARG_ENABLE(
-	fsh,
+	fhs,
 	AS_HELP_STRING(
-	[--enable-fsh],
-	[use standard FSH files and directories locations and naming (default is no)]
+	[--enable-fhs],
+	[use standard FHS files and directories locations and naming (default is no)]
 	),
 	[
 	if test $enableval = 'yes';then
