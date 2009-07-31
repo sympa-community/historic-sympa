@@ -1,4 +1,26 @@
 ------------------------------------------------------------------------
+r6041 | david.verdin | 2009-07-31 15:55:07 +0200 (ven 31 jui 2009) | 2 lignes
+Chemins modifiés :
+   M /branches/sympa-6.0-branch/Makefile.am
+
+[-bug] The 'etc' directory was not created at install time as no file is located  there by default. Creation forced during the make install and all rights granted to the Sympa user.
+
+------------------------------------------------------------------------
+r6040 | david.verdin | 2009-07-31 15:13:35 +0200 (ven 31 jui 2009) | 2 lignes
+Chemins modifiés :
+   M /branches/sympa-6.0-branch/configure.ac
+
+[change] Sympa supports two kinds of fuiles hierarchies. The historical one, where by default all is gathered in the Sympa directry, and also the FSH recommended hierarchy. Now if the '--enable-fsh' configure option is set, Sympa is installed according to the FSH. Otherwise, it is installed using the historical paths.
+
+------------------------------------------------------------------------
+r6039 | david.verdin | 2009-07-30 15:05:05 +0200 (jeu 30 jui 2009) | 2 lignes
+Chemins modifiés :
+   M /branches/sympa-6.0-branch/ChangeLog
+   M /branches/sympa-6.0-branch/NEWS
+
+[-feature] Preparing version 6.0b.2 (the end).
+
+------------------------------------------------------------------------
 r6038 | david.verdin | 2009-07-30 14:59:53 +0200 (jeu 30 jui 2009) | 2 lignes
 Chemins modifiés :
    M /branches/sympa-6.0-branch/src/sympa_wizard.pl.in

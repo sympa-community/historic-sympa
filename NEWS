@@ -3,7 +3,7 @@
 
 (See Changelog file for the full changes log)
 
-6.0b.2		30 July 2009
+6.0b.2		31 July 2009
 
   Features:
 
@@ -22,7 +22,7 @@
 *****	is now "default", under the root installation directory. In the previous release, it was
 *****	share/sympa/default. You should remove this directory now to avoid confusion.
 
-
+	New configure option: '--enable-fsh'. Sympa supports two kinds of fuiles hierarchies. The historical one, where by default all is gathered in the Sympa directry, and also the FSH recommended hierarchy. Now if the '--enable-fsh' configure option is set, Sympa is installed according to the FSH. Otherwise, it is installed using the historical paths.
 
  Bug fixes:
 
