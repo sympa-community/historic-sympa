@@ -43,6 +43,9 @@ create table subscriber_table
     subscribed_subscriber  numeric		  null    ,
     included_subscriber    numeric                null    ,
     include_sources_subscriber varchar(50)        null    ,
+    suspend_subscriber     numeric                null    ,
+    startdate_subscriber   numeric                null    ,
+    enddate_subscriber     numeric                null    ,
     constraint ind_subscriber primary key (list_subscriber, user_subscriber, robot_subscriber)
 )
 go

@@ -35,6 +35,9 @@ CREATE TABLE subscriber_table (
 	subscribed_subscriber 	int(1),
 	included_subscriber 	int(1),
 	include_sources_subscriber varchar(50),
+	suspend_subscriber	int(1),
+	startdate_subscriber	int(11),
+	enddate_subscriber	int(11),
 	PRIMARY KEY (robot_subscriber, list_subscriber, user_subscriber),
 	INDEX user_index (user_subscriber)
 );

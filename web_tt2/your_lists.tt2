@@ -22,11 +22,6 @@
 <p>[%|loc%]No mailing list available.[%END%]</p>
 [% END %]
 
-<div id="list_admin_menu">
-<ul>
-<a href="[% path_cgi %]/suspend_request" >[%|loc%]Subscriber Options[%END%]</a>
-</ul>
-</div>
 </div>
 [% END %]
 

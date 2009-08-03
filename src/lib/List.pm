@@ -4756,8 +4756,174 @@ sub get_all_user_db {
     return @users;
 }
 
+######################################################################
+###  suspend_subscribe                                               #
+## Suspend an user from list(s)                                      #
+######################################################################
+# IN:                                                                #
+#   - email : the subscriber email                                   #
+#   - list : the name of the list                                    #
+#   - data : start_date and end_date                                 #
+#   - robot : domain                                                 #
+# OUT:                                                               #
+#   - undef if something went wrong.                                 #
+#   - 1 if user is suspended from the list                           #
+######################################################################
+sub suspend_subscribe {
+    
+    my $email = shift;
+    my $list = shift;
+    my $data = shift;
+    my $robot = shift;
+    &do_log('debug2', 'List::suspend_subscribe("%s", "%s", "%s" )', $email, $list, $data);
 
-## Returns a subscriber of the list.
+    ## Check database connection
+    unless ($dbh and $dbh->ping) {
+	return undef unless &db_connect();
+    }
+
+    my $statement = sprintf "UPDATE subscriber_table SET suspend_subscriber='1', startdate_subscriber=%s, enddate_subscriber=%s WHERE (user_subscriber=%s AND list_subscriber=%s AND robot_subscriber = %s )", 
+    $dbh->quote($data->{'startdate'}), 
+    $dbh->quote($data->{'enddate'}), 
+    $dbh->quote($email), 
+    $dbh->quote($list),
+    $dbh->quote($robot);
+
+    unless ($dbh->do($statement)) {
+	do_log('err','Unable to execute SQL statement "%s" : %s', $statement, $dbh->errstr);
+	return undef;
+    }
+    
+    return 1;
+}
+
+######################################################################
+###  restore_subscribe                                               #
+## Restore the subscription of an user from list(s)                  #
+######################################################################
+# IN:                                                                #
+#   - email : the subscriber email                                   #
+#   - list : the name of the list                                    #
+#   - robot : domain                                                 #
+# OUT:                                                               #
+#   - undef if something went wrong.                                 #
+#   - 1 if his/her subscription is restored                          #
+######################################################################
+sub restore_subscribe {
+
+    my $email = shift;
+    my $list = shift;
+    my $robot = shift;
+    &do_log('debug2', 'List::restore_subscribe("%s", "%s", "%s")', $email, $list, $robot);
+    
+    ## Check database connection
+    unless ($dbh and $dbh->ping) {
+	return undef unless &db_connect();
+    }
+
+    my $statement = sprintf "UPDATE subscriber_table SET suspend_subscriber='0', startdate_subscriber=NULL, enddate_subscriber=NULL WHERE (user_subscriber=%s AND list_subscriber=%s AND robot_subscriber = %s )",  
+    $dbh->quote($email), 
+    $dbh->quote($list),
+    $dbh->quote($robot);
+
+    unless ($dbh->do($statement)) {
+	do_log('err','Unable to execute SQL statement "%s" : %s', $statement, $dbh->errstr);
+	return undef;
+    }
+    
+    return 1;
+}
+
+######################################################################
+###  get_list_subscriber                                             #
+## Restore the subscription of an user from list(s)                  #
+######################################################################
+# IN:                                                                #
+#   - email : the subscriber email                                   #
+#   - robot : domain                                                 #
+# OUT:                                                               #
+#   - undef if something went wrong.                                 #
+#   - @list : lists where user is subscribe                          #
+######################################################################
+sub get_list_subscriber {
+
+    my $email = shift;
+    my $robot = shift;
+
+    ## Check database connection
+    unless ($dbh and $dbh->ping) {
+	return undef unless &db_connect();
+    }
+    my $statement = sprintf "SELECT list_subscriber AS list FROM subscriber_table WHERE robot_subscriber =%s AND user_subscriber = %s",
+    $dbh->quote($robot),
+    $dbh->quote($email);
+    
+    push @sth_stack, $sth;
+    unless ($sth = $dbh->prepare($statement)) {
+	do_log('err','Unable to prepare SQL statement : %s', $dbh->errstr);
+	return undef;
+    }
+    unless ($sth->execute) {
+	do_log('err','Unable to execute SQL statement "%s" : %s', $statement, $dbh->errstr);
+	return undef;
+    }
+    
+    my @enr;
+    my @lists;
+    while (@enr = $sth->fetchrow_array) {
+	push @lists, @enr; 
+    }
+    
+    $sth->finish();
+    $sth = pop @sth_stack;
+
+    return @lists;
+}
+
+######################################################################
+###  get_suspend_data                                                #
+## Return the suspend data of the subscribers                        #
+######################################################################
+# IN:                                                                #
+#   - email : the subscriber email                                   #
+#   - robot : domain                                                 #
+# OUT:                                                               #
+#   - undef if something went wrong.                                 #
+#   - @list : suspend data : startdate, enddate, lists suspended     #
+######################################################################
+sub get_suspend_data {
+
+    my $email = shift;
+    my $robot = shift;
+
+    ## Check database connection
+    unless ($dbh and $dbh->ping) {
+	return undef unless &db_connect();
+    }
+    my $statement = sprintf "SELECT startdate_subscriber AS startdate, enddate_subscriber AS enddate, list_subscriber AS list FROM subscriber_table WHERE suspend_subscriber='1' AND robot_subscriber=%s AND user_subscriber = %s",$dbh->quote($robot), $dbh->quote($email);
+    
+    push @sth_stack, $sth;
+    unless ($sth = $dbh->prepare($statement)) {
+	&do_log('err','Unable to prepare SQL statement : %s', $dbh->errstr);
+	return undef;
+    }
+    unless ($sth->execute) {
+	&do_log('err','Unable to execute SQL statement "%s" : %s', $statement, $dbh->errstr);
+	return undef;
+    }
+    
+    my $data = $sth->fetchrow_hashref;
+    	    
+    $sth->finish();
+    $sth = pop @sth_stack;
+
+    return $data;
+}
+
+######################################################################
+###  get_subscriber                                                  #
+## Returns a subscriber of the list.                                 #
+######################################################################
 sub get_subscriber {
     my  $self= shift;
     my  $email = &tools::clean_email(shift);
@@ -4802,7 +4968,7 @@ sub get_subscriber {
 # IN:                                                                #
 #   - a single reference to a hash with the following keys:          #
 #     * email : the subscriber email                                 #
-#     * listname: the name of the list                               #
+#     * name: the name of the list                                   #
 #     * domain: the virtual host under which the list is installed.  #
 # OUT:                                                               #
 #   - undef if something went wrong.                                 #

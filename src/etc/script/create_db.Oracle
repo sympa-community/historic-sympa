@@ -44,6 +44,9 @@ CREATE TABLE subscriber_table (
 	subscribed_subscriber 	number NULL    constraint  cons_subscribed_subscriber CHECK (subscribed_subscriber in (0,1)),
 	included_subscriber 	number NULL    constraint  cons_included_subscriber CHECK (included_subscriber in (0,1)),
 	include_sources_subscriber varchar2(50),
+	suspend_subscriber      number,
+	startdate_subscriber    number,
+	enddate_subscriber      number,
         CONSTRAINT ind_subscriber PRIMARY KEY (list_subscriber,user_subscriber,robot_subscriber)
 );
 CREATE TABLE admin_table (

@@ -694,7 +694,10 @@ sub probe_db {
 							'include_sources_subscriber' => 'varchar(50)',
 							'bounce_score_subscriber' => 'smallint(6)',
 							'bounce_address_subscriber' => 'varchar(100)',
-							'custom_attribute_subscriber' => 'text'},
+							'custom_attribute_subscriber' => 'text',
+							'suspend_subscriber' => "int(1)",
+							'startdate_subscriber' => 'int(11)',
+							'enddate_subscriber' => 'int(11)'},
 				 'admin_table' => {'list_admin' => 'varchar(50)',
 						   'user_admin' => 'varchar(100)',
 						   'robot_admin' => 'varchar(80)',
@@ -784,7 +787,11 @@ sub probe_db {
 							 'include_sources_subscriber' => 'varchar(50)',
 							 'bounce_score_subscriber' => 'integer',
 							 'bounce_address_subscriber' => 'varchar(100)',
-							 'custom_attribute_subscriber' => 'varchar(500)'},
+							 'custom_attribute_subscriber' => 'varchar(500)',
+							 'suspend_subscriber' => "boolean",
+							 'startdate_subscriber' => 'integer',
+							 'enddate_subscriber' => 'integer'},
+						     },
 				  'admin_table' => {'list_admin' => 'varchar(50)',
 						    'user_admin' => 'varchar(100)',
 						    'robot_admin' => 'varchar(80)',
@@ -850,9 +857,9 @@ sub probe_db {
 				  'conf_table' => {'robot_conf' => 'varchar(80)',
 						   'label_conf' => 'varchar(80)',
 						   'value_conf' => 'varchar(300)'}
-			      },
-		     );
-    
+   
+    );
+
     my %not_null = ('email_user' => 1,
 		    'list_subscriber' => 1,
 		    'robot_subscriber' => 1,

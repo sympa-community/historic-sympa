@@ -47,4 +47,6 @@
 
 </div>
 
+[% INCLUDE suspend_request.tt2 %]
+
 <!-- end pref.tt2 -->

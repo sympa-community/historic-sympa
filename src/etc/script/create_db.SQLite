@@ -29,6 +29,9 @@ CREATE TABLE subscriber_table (
 	included_subscriber 	boolean,
 	include_sources_subscriber varchar(50),
 	bounce_score_subscriber integer,
+	suspend_subscriber	boolean,
+	startdate_subscriber	integer,
+	enddate_subscriber	integer,	
 	PRIMARY KEY (list_subscriber, user_subscriber, robot_subscriber)
 );
 CREATE INDEX subscriber_idx ON subscriber_table (user_subscriber,list_subscriber,robot_subscriber);
