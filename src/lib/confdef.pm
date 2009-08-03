@@ -1288,6 +1288,10 @@ our @params = (
         default => 'on',
     },
     {
+        name    => 'merge_feature',
+	default => 'off',
+    },
+    {
         name    => 'use_blacklist',
         default => 'send,subscribe',
     },
@@ -1321,5 +1325,6 @@ our @params = (
         name    => 'alias_manager',
         default => Sympa::Constants::SBINDIR . '/alias_manager.pl',
     },
+
 );
 
