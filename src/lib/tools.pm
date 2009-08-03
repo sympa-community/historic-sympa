@@ -3380,7 +3380,7 @@ sub get_db_random {
     $sth->finish();
     $sth = pop @sth_stack;
 
-    return $random->{'random'};
+    return $random;
 
 }
 
@@ -3410,7 +3410,7 @@ sub init_db_random {
     unless ($dbh and $dbh->ping) {
 	return undef unless &List::db_connect();
     }
-    my $statement = sprintf "INSERT INTO fingerprint_table VALUES (%d);", $random;
+    my $statement = sprintf "INSERT INTO fingerprint_table VALUES (%d)", $random;
     
     push @sth_stack, $sth;
     
@@ -3420,7 +3420,6 @@ sub init_db_random {
     }
        
     return $random;
-
 }
 
 sub get_separator {

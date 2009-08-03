@@ -440,7 +440,6 @@ sub load_robots {
 	printf STDERR "Unable to open directory $Conf{'etc'} for virtual robots config\n" ;
 	return undef;
     }
-    my $exiting = 0 ;
     my $exiting = 0;
     ## Set the defaults based on sympa.conf and wwsympa.conf first
     foreach my $key (keys %valid_robot_key_words) {
@@ -455,7 +454,7 @@ sub load_robots {
 	    }
 	}
     }
-    return undef unless ($exiting);
+    return undef if ($exiting);
 
     foreach my $robot (readdir(DIR)) {
 	next unless (-d "$Conf{'etc'}/$robot");
