@@ -5,60 +5,68 @@
   <h2>[%|loc%]Suspend my subscription[%END%] <a class="input" href="[% path_cgi %]/nomenu/help/sendmsg" title="[%|loc%]Open in a new window[%END%]" onclick="window.open('','wws_help','toolbar=no,location=no,directories=no,status=no,menubar=no,scrollbars=yes,resizable=yes,copyhistory=no,width=400,height=200')" target="wws_help">[%|loc%]Help[%END%]</a></h2>
   <br />
   <form class="noborder" action="[% path_cgi %]" method="post" name="suspend_request">
-    <fieldset>
-      
-      <h3>[%|loc%]Start date : (DD/MM/YYYY)[%END%]</h3>
-      <label for="day1">[%|loc%]Day[%END%]</label>
-      <input type="integer" size="2" id="day1" name="day1" value="[% suspend_request.day1 %]" />
-      <label for="month1">[%|loc%]Month[%END%]</label>
-      <input type="integer" size="2" id="month1" name="month1" value="[% suspend_request.month1 %]" />
-      <label for="year1">[%|loc%]Year[%END%]</label>
-      <input type="integer" size="4" id="year1" name="year1" value="[% suspend_request.year1 %]" />
-      <br /><br />
-
-      <h3>[%|loc%]End date : (DD/MM/YYYY)[%END%]</h3>
-      <label for="day2">[%|loc%]Day[%END%]</label>
-      <input type="integer" size="2" id="day2" name="day2" value="[% suspend_request.day2 %]" />
-      <label for="month2">[%|loc%]Month[%END%]</label>
-      <input type="integer" size="2" id="month2" name="month2" value="[%suspend_request.month2 %]" />
-      <label for="year2">[%|loc%]Year[%END%]</label>
-      <input type="integer" size="4" id="year2" name="year2" value="[% suspend_request.year2 %]" /><br />
+      <h3>[%|loc%]Date[%END%]</h3>
+	<b>
+ 	  [%|loc%]From : <noscript>[%|loc%](dd-mm-yyyy) [%END%]</noscript>[%END%]<input type="text" id="date_deb" name="date_deb" maxlength="10" size="10" value="[% d_day %]" onfocus="visuCal(this,param_ddeb);" onblur="masqueCal(this);" >
+          [%|loc%] to [%END%]<input type="text" id="date_fin" name="date_fin" maxlength="10" size="10" onfocus="visuCal(this,param_dfin)" onblur="masqueCal(this)" >      
+      	</b>
       <br />
-      <label for="duration">[%|loc%]Until[%END%] : </label>
+	<input type="checkbox" name="indefinite" /> [%|loc%]Select the checkbox for an indefinite end date. [%END%]
+      <br />
+
+     <!-- <label for="duration">[%|loc%]For[%END%] : </label> Ne fonctionne pas encore !  
       <select id="duration" name="duration">
         <option value="[%|loc%]A week[%END%]">[%|loc%]A week[%END%]</option>
         <option value="[%|loc%]2 weeks[%END%]">[%|loc%]2 weeks[%END%]</option>
         <option value="[%|loc%]3 weeks[%END%]">[%|loc%]3 weeks[%END%]</option>
         <option value="[%|loc%]1 month[%END%]">[%|loc%]1 month[%END%]</option>
         <option value="[%|loc%]2 months[%END%]">[%|loc%]2 months[%END%]</option>
-      </select><br />
-      [%|loc%]Or select the checkbox for an indefinite end date.[%END%]<br />
-      <input type="checkbox" name="indefinite" [% suspend_request.indefinite %]" /> [%|loc%]Indefinite end date[%END%]
-      <br />
+      </select><br /> -->
+ 
+      <h3>[%|loc%]Lists[%END%]</h3>
 
-      <h3>[%|loc%]Lists :[%END%]</h3>
+    <table summary="[%|loc%]Lists[%END%]" class="listOfItems">
+      <tr>
+	<th>[%|loc%]Lists[%END%]</th>
+        <th>[%|loc%]Domain[%END%]</th>
+	<th>[%|loc%]Reception[%END%]</th>   
+	<th>[%|loc%]Suspend Reception[%END%]</th>
+	<th>[%|loc%]From[%END%]</th>
+	<th>[%|loc%]To[%END%]</th>
+      </tr>
+
       [% IF user.email %]
-        [% IF which_info %]
-          <ul class="listenum" >
-	    <input class="MainMenuLinks" type="button" value="[%|loc%]Toogle selection[%END%]" onclick="toggle_selection(document.suspend_request.list)" /><br />
-	    [% FOREACH l = which_info %]
-              <li>
-		[% FOREACH list = l.key %]
-                  <input type="checkbox" name="[% list %]" value="[% list %]"/> [% hidden_head %][% list %][% hidden_end %]<br />
-                [% END %]
-              </li>
-            [% END %]
-          </ul>
-        [% ELSE %]
-          <p>[%|loc%]No mailing list available.[%END%]</p>
+        [% IF suspend_list %]
+          [% FOREACH sub = suspend_list %] 
+            <tr>
+              <td><input type="checkbox" name="listname" value="[% sub.listname %]" /> [% hidden_head %][% sub.listname %][% hidden_end %]&nbsp;</td>
+	      <td>&nbsp;[% sub.listdomain %]&nbsp;</td>
+	      [% IF sub.listsuspend %]
+	        <td></td>
+	        <td>&nbsp;[%|loc%]suspended[%END%]&nbsp;</td>
+	        <td>&nbsp;[% sub.liststartdate %]&nbsp;</td>
+	        [% IF sub.listenddate %]
+	          <td>&nbsp;[% sub.listenddate %]&nbsp;</td>
+	        [% ELSE %]
+	          <td>&nbsp;[%|loc%]indefinite[%END%]&nbsp;</td>
+	        [% END %]
+	      [% ELSE %]
+	        <td>&nbsp;[% sub.listreception %]&nbsp;</td>
+	        <td></td>
+	        <td></td>
+	        <td></td>
+	      [% END %]
+            </tr>
+	  [% END %]
+	[% ELSE %]
+          <p>[%|loc%]No subscription.[% END %]</p>
         [% END %]
-      [% END %] 
-      <br />
-
-      <input type="hidden" name="action" value="suspend_request_action"/>
+      [% END %]
+    </table>
+    <input class="MainMenuLinks" type="button" value="[%|loc%]Toogle selection[%END%]" onclick="toggle_selection(document.suspend_request.list)" />
+    <input type="hidden" name="action" value="suspend_request_action"/>
         <input class="MainMenuLinks" type="submit" name="sub_action_suspendstop" value="[%|loc%]ReStart[%END%]"/>
         <input class="MainMenuLinks" type="submit" name="sub_action_suspendsave" value="[%|loc%]Submit[%END%]"/>
-    </fieldset>
   </form>
 </div>
 

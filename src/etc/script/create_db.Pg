@@ -38,8 +38,8 @@ CREATE TABLE subscriber_table (
 	included_subscriber 	smallint,
 	include_sources_subscriber varchar(50),
 	suspend_subscriber      smallint,
-	startdate_subscriber    int4,
-	enddate_subscriber      int4,
+	suspend_start_date_subscriber    int4,
+	suspend_end_date_subscriber      int4,
 	CONSTRAINT ind_subscriber PRIMARY KEY (robot_subscriber,list_subscriber,user_subscriber)
 );
 CREATE INDEX subscriber_idx ON subscriber_table (robot_subscriber,list_subscriber,user_subscriber);

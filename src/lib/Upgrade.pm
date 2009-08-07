@@ -696,8 +696,8 @@ sub probe_db {
 							'bounce_address_subscriber' => 'varchar(100)',
 							'custom_attribute_subscriber' => 'text',
 							'suspend_subscriber' => "int(1)",
-							'startdate_subscriber' => 'int(11)',
-							'enddate_subscriber' => 'int(11)'},
+							'suspend_start_date_subscriber' => 'int(11)',
+							'suspend_end_date_subscriber' => 'int(11)'},
 				 'admin_table' => {'list_admin' => 'varchar(50)',
 						   'user_admin' => 'varchar(100)',
 						   'robot_admin' => 'varchar(80)',
@@ -789,8 +789,8 @@ sub probe_db {
 							 'bounce_address_subscriber' => 'text',
 							 'custom_attribute_subscriber' => 'text',
 							 'suspend_subscriber' => "boolean",
-							 'startdate_subscriber' => 'integer',
-							 'enddate_subscriber' => 'integer'},
+							 'suspend_start_date_subscriber' => 'integer',
+							 'suspend_end_date_subscriber' => 'integer'},
 				  'admin_table' => {'list_admin' => 'text',
 						    'user_admin' => 'text',
 						    'robot_admin' => 'text',
@@ -855,9 +855,7 @@ sub probe_db {
 							'lock_bulkspool' => 'integer'},
 				  'conf_table' => {'robot_conf' => 'text',
 						   'label_conf' => 'text',
-						   'value_conf' => 'text'}
-   
-    );
+						   'value_conf' => 'text'}});
 
     my %not_null = ('email_user' => 1,
 		    'list_subscriber' => 1,

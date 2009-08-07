@@ -4266,22 +4266,7 @@ sub do_renewpasswd {
 
      $param->{'previous_list'} = $in{'previous_list'};
      $param->{'previous_action'} = $in{'previous_action'};
-     open TMP2, ">/tmp/digdump1"; &tools::dump_var(\%in, 0, \*TMP2); close TMP2;
-     my $data;
-     if($data = &do_suspend_request()){
-	 ## On défini par défaut les valeurs de la BDD si elles existent
-	 $param->{'list'} =  $data->{'list'};
-	 $param->{'suspend_request'}{'day1'} = $data->{'day1'};
-	 $param->{'suspend_request'}{'month1'} = $data->{'month1'}+1;
-	 $param->{'suspend_request'}{'year1'} = $data->{'year1'} + 1900;
-	 if($data->{'day2'} && $data->{'month2'} && $data->{'year2'}){
-	     $param->{'suspend_request'}{'day2'} = $data->{'day2'};
-	     $param->{'suspend_request'}{'month2'} = $data->{'month2'}+1;
-	     $param->{'suspend_request'}{'year2'} = $data->{'year2'} + 1900;
-	 }else{
-	     $param->{'suspend_request'}{'indefinite'}= $data->{'indefinite'};
-	 }
-     }
+     
      return 1;
  }
 
@@ -15013,34 +14998,52 @@ sub do_suspend_request {
     my $email = $param->{'user'}{'email'};
     my $data;
 
-    ## Permet d'afficher dans le formulaire les données enregistrées dans la BDD si existantes
-    if ($data = &List::get_suspend_data($email, $robot)){
+    ## Initialise à la date d'aujourd'hui le champ date de début
+    my @d_day = localtime(time);
+    $param->{'d_day'} = ($d_day[3])."-".($d_day[4]+1)."-".($d_day[5]+1900);
+    
+    ## On affiche dans le tableau les listes de l'abonné et l'état dans lequel elles sont.
+    ## reception : nomail/digest/mail
+    ## reception : - . suspend : 1 . du XX/XX/XXXX au XX/XX/XXXX
+    my @lists = &List::get_which($email, $robot, 'member');
 
-	my @startdate = localtime($data->{'startdate'});
-	$data->{'day1'} = $startdate[3];
-	$data->{'month1'} = $startdate[4];
-	$data->{'year1'} = $startdate[5];
-
-	if(defined $data->{'enddate'}){
-	    my @enddate = localtime($data->{'enddate'});
-	    $data->{'day2'} = $enddate[3];
-	    $data->{'month2'} = $enddate[4];
-	    $data->{'year2'} = $enddate[5];
-
-	}elsif($data->{'startdate'} && !$data->{'enddate'}){
-	    $data->{'indefinite'}='checked';
+    foreach my $list (@lists) {
+	my $member_info = $list->get_subscriber($param->{'user'}{'email'});
+	if(($member_info->{'enddate'} < time) && ($member_info->{'enddate'})){
+	    ## If end date is < time, update the BDD by deleting the suspending's data
+	    &List::restore_suspended_subscription($param->{'user'}{'email'},$list->{'name'},$list->{'domain'});
 	}
+	my @startdate = localtime($member_info->{'startdate'});
+	my $final_start_date = ($startdate[3])." - ".($startdate[4]+1)." - ".($startdate[5]+1900);
+	my $final_end_date;
+	if($member_info->{'enddate'}){
+	    my @enddate = localtime($member_info->{'enddate'});
+	    $final_end_date = ($enddate[3])." - ".($enddate[4]+1)." - ".($enddate[5]+1900);
+	}else{
+	    $final_end_date = undef;
+	}
+	my $subscription = {'listname' => $list->{'name'},
+			    'listdomain' => $list->{'domain'},
+			    'listreception' => $member_info->{'reception'},
+			    'listsuspend' => $member_info->{'suspend'},
+			    'liststartdate' =>$final_start_date,
+			    'listenddate' => $final_end_date,
+			};
+	push @{$param->{'suspend_list'}}, $subscription;
     }
-
-    return $data;
+        
+    return 1;
 }
 
 ####################################################
 #  do_suspend_request_action                           
 ####################################################
+#  Suspend a subscription for lists.               #
+#  Action from the suspend form.                   #
 #                                                  #
-#                                                  #
-#                                                  #                         
+#  IN : %in : HASH with the form's values          #
+#  OUT : 'pref' : action                           #
+#      | 'info' | undef                            #                        
 ####################################################
 sub do_suspend_request_action {
 
@@ -15054,32 +15057,33 @@ sub do_suspend_request_action {
     my $year2;
     my $date1;
     my $date2;
-    my @list;
+    my @list_selected;
     my $user = $param->{'user'}{'email'};
     my $data;
-
-    open TMP2, ">/tmp/digdump2"; &tools::dump_var(\%in, 0, \*TMP2); close TMP2;
-
-    # pour récupérer ses listes d'abonnement
-    my @lists = &List::get_list_subscriber($user, $robot);
+    my @lists;
+    
 
     if($in{'sub_action'} eq 'suspendsave'){
 
-	foreach my $list1 (@lists){
-	    push @list, $in{$list1};
+	# pour récupérer les listes sélectionnées
+	@lists = split /\0/, $in{'listname'};
+	
+	foreach my $list (@lists){
+	    unless($list eq ''){
+		push @list_selected, $list;
+	    }
 	}
 	
-	if($list[0] eq ''){
+	if($list_selected[0] eq ''){
 	    &report::reject_report_web('user','missing_arg',{'argument' => 'must picked one or more list(s) you are subscribed'}, $param->{'action'});
 	    &wwslog('info','suspend_request: must picked one or more list(s) you are subscribed');
-	    return 'pref';
+	    return 'suspend_request';
 	}
 	
-	if (($in{'day1'}) && ($in{'month1'}) && ($in{'year1'})){
-	    $day1 = $in{'day1'};
-	    $month1 = $in{'month1'}-1;
-	    $year1 = $in{'year1'};
-	  
+	if ($in{'date_deb'}){
+	    ($day1, $month1, $year1) = split(/\-/, $in{'date_deb'});
+	    $month1 = $month1-1;
+
 	    if (($day1 =~ /([0-9]*)/) && ($month1 =~ /([0-9]*)/) && ($year1 =~ /([0-9]*)/)){
 		if (((1<=$day1) && ($day1<=31)) && ((0<=$month1) && ($month1<=11)) && (1900<=$year1)){
 		    ## Return an epoch date
@@ -15088,18 +15092,17 @@ sub do_suspend_request_action {
 		}else{
 		    &report::reject_report_web('user','missing_arg',{'argument' => 'Start Date doesn\'t exist.'}, $param->{'action'});
 		    &wwslog('info','suspend_request: Date doesn\'t exist.');
-		    return 'pref';
+		    return 'suspend_request';
 		}
 	    }else{
 		&report::reject_report_web('user','missing_arg',{'argument' => 'Start Date doesn\'t exist.'}, $param->{'action'});
 		&wwslog('info','suspend_request: Date doesn\'t exist.');
-		return 'pref';
+		return 'suspend_request';
 	    }
 	    	    
-	    if (($in{'day2'}) && ($in{'month2'}) && ($in{'year2'}) && (!$in{'indefinite'})){
-		$day2 = $in{'day2'};
-		$month2 = $in{'month2'}-1;
-		$year2 = $in{'year2'};
+	    if (($in{'date_fin'}) && (!$in{'indefinite'})){
+		($day2, $month2, $year2) = split(/\-/, $in{'date_fin'});
+		$month2 = $month2-1;
 		
 		if (($day2 =~ /([0-9]*)/) && ($month2 =~ /([0-9]*)/) && ($year2 =~ /([0-9]*)/)){
 		    if (((1<=$day2) && ($day2<=31)) && ((0<=$month2) && ($month2<=11)) && (1900<=$year2)){
@@ -15109,46 +15112,50 @@ sub do_suspend_request_action {
 		    }else{
 			&report::reject_report_web('user','missing_arg',{'argument' => 'End Date doesn\'t exist.'}, $param->{'action'});
 			&wwslog('info','suspend_request: Date doesn\'t exist.');
-			return 'pref';
+			return 'suspend_request';
 		    }
 		}else{
 		    &report::reject_report_web('user','missing_arg',{'argument' => 'End Date doesn\'t exist.'}, $param->{'action'});
 		    &wwslog('info','suspend_request: Date doesn\'t exist.');
-		    return 'pref';
+		    return 'suspend_request';
 		}
 
 		unless($date1 <= $date2){
 		    &report::reject_report_web('user','missing_arg',{'argument' => 'The start date must be less than the end date.'}, $param->{'action'});
 		    &wwslog('info','suspend_request: The start date must be less than the end date.');
-		    return 'pref';
+		    return 'suspend_request';
 		} 
 		
-	    }elsif((!$in{'day2'}) && (!$in{'month2'}) && (!$in{'year2'}) && ($in{'indefinite'})){
+	    }elsif((!$in{'date_fin'}) && ($in{'indefinite'})){
 		$date2 = undef;
 	    }else{
 		&report::reject_report_web('user','missing_arg',{'argument' => 'Choose end date (dd/mm/yyyy) or indefinite end date'}, $param->{'action'});
 		&wwslog('info','suspend_request: missing argument for the end date or syntax error : dd/mm/yyyy or must choose a end date or indefinite end date');
-		return 'pref';
+		return 'suspend_request';
 	    }
 	}else{
 	    &report::reject_report_web('user','missing_arg',{'argument' => 'Miss start date (dd/mm/yyyy)'}, $param->{'action'});
 	    &wwslog('info','suspend_request: missing argument for the start date or syntax error : dd/mm/yyyy');
-	    return 'pref';
+	    return 'suspend_request';
 	}
 	
-	## Suspend subscribe
-	foreach my $list (@list){
-	    &List::suspend_subscribe($user, $list, $data, $robot);
+	## Suspend subscription
+	foreach my $list (@list_selected){
+	    unless(&List::suspend_subscription($user, $list, $data, $robot)){
+		&wwslog('info','Can\'t do List suspend_subscription');
+		return 'suspend_request';
+	    }
 	}
 	
 	&report::notice_report_web('performed',{},$in{'sub_action'});
     }
-    ## Restore subscribe
+    ## Restore suspended subscription
     elsif($in{'sub_action'} eq 'suspendstop'){
 
-	# pour réabonner toutes ses listes
+	# pour réabonner les listes sélectionnées
+	@lists = split /\0/, $in{'listname'};
 	foreach my $line (@lists) {
-	    &List::restore_subscribe($user, $line, $robot); 
+	    &List::restore_suspended_subscription($user, $line, $robot); 
 	}
 	&report::notice_report_web('performed',{},$in{'sub_action'});
 		
@@ -15158,7 +15165,7 @@ sub do_suspend_request_action {
 	return undef;
     }
     
-    return 'pref';
+    return 'suspend_request';
 }
 
 ####################################################
@@ -16046,8 +16053,8 @@ sub do_viewlogs {
     my $sortby = $in{'sortby'} || 'email';
     my @date = &Log::get_log_date();
        
-    $param->{'date_from_formated'} = gettext_strftime "%Y/%m/%d/%H/%M/%S", localtime($date[0]);
-    $param->{'date_to_formated'} = gettext_strftime "%Y/%m/%d/%H/%M/%S", localtime($date[1]);
+    $param->{'date_from_formated'} = gettext_strftime "%Y-%m-%d-%H-%M-%S", localtime($date[0]);
+    $param->{'date_to_formated'} = gettext_strftime "%Y-%m-%d-%H-%M-%S", localtime($date[1]);
 
     $param->{'total'} = '17';
     
@@ -16085,7 +16092,7 @@ sub do_viewlogs {
     $select->{'robot'} = $robot;
     $select->{'list'} = $param->{'list'};
     
-    foreach my $p ('target_type','target','date_from','date_to','type','ip') {
+    foreach my $p ('target_type','target','date_deb','date_fin','type','ip') {
 	$param->{$p} = $in{$p};
 	$select->{$p} = $in{$p};
     }
