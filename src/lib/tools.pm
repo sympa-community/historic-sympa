@@ -40,6 +40,7 @@ use Conf;
 use Language;
 use Log;
 use Sympa::Constants;
+use Message;
 
 ## RCS identification.
 #my $id = '@(#)$Id$';
@@ -704,49 +705,97 @@ sub get_template_path {
     return undef;
 }
 
+sub get_dkim_parameters {
+
+    my $params = shift;
+
+    my $robot = $params->{'robot'};
+    my $listname = $params->{'listname'};
+
+    my $data ; my $keyfile ;
+    if ($listname) {
+	# fetch dkim parameter in list context
+	my $list = List::new($listname,$robot);
+	$data->{'d'} = $list->{'admin'}{'dkim_parameters'}{'signer_domain'};
+	$data->{'i'} = $list->{'admin'}{'dkim_parameters'}{'signer_identity'};
+	$data->{'header_list'} = $list->{'admin'}{'dkim_parameters'}{'header_list'};
+	$data->{'selector'} = $list->{'admin'}{'dkim_parameters'}{'selector'};
+	$keyfile = $list->{'admin'}{'dkim_parameters'}{'private_key_path'};
+    }else{
+	# in robot context
+	$data->{'d'} = &Conf::get_robot_conf($robot, 'dkim_signer_domain');
+	$data->{'i'} = &Conf::get_robot_conf($robot, 'dkim_signer_identity');
+	$data->{'header_list'} = &Conf::get_robot_conf($robot, 'dkim_header_list');
+	$data->{'selector'} = &Conf::get_robot_conf($robot, 'dkim_selector');
+	$keyfile = &Conf::get_robot_conf($robot, 'dkim_private_key_path');
+    }
+    unless (open (KEY, $keyfile)) {
+	do_log('err',"Could not read dkim private key %s",&Conf::get_robot_conf($robot, 'dkim_signer_selector'));
+	return undef;
+    }
+    while (<KEY>){
+	$data->{'private_key'} .= $_;
+    }
+    close (KEY);
+    do_log ('trace',"private key $data->{'private_key'}");
+    return $data;
+}
+
+
 # input object msg and listname, output signed message object
 sub dkim_sign {
-    my $in_msg = shift;
-    my $robot = shift;
-    my $list = shift;
+    my $msg_as_string = shift;
+    my $data = shift;
+    my $dkim_d = $data->{'dkim_d'};    
+    my $dkim_i = $data->{'dkim_i'};
+    my $dkim_selector = $data->{'dkim_selector'};
+    my $dkim_privatekey = $data->{'dkim_privatekey'};
+    my $dkim_header_list = $data->{'dkim_header_list'};
 
-    do_log('debug2', 'tools::dkim_sign (%s,%s)',$in_msg,$list);
+    foreach my $dkimp (keys %{$data}){
+	do_log ('trace',"%s : %s",$dkimp,$data->{$dkimp});
+    }
 
-    my $self = new List($list, $robot);
+    do_log('debug2', 'tools::dkim_sign (msg:%s,dkim_d:%s,dkim_i%s,dkim_selector:%s,dkim_header_list:%s,dkim_privatekey:%s)',substr($msg_as_string,0,30),$dkim_d,$data->{'dkim_i'},$data->{'dkim_selector'},$data->{'dkim_header_list'}, substr($data->{'dkim_privatekey'},0,30));
 
-    my $selector =  &Conf::get_robot_conf($robot, 'dkim_selector');
-    my $keyfile =  &Conf::get_robot_conf($robot, 'dkim_key_file');
-    unless ($selector) {
+    unless ($dkim_selector) {
 	do_log('err',"DKIM selector is undefined, could not sign message");
-	return undef;
+	return $msg_as_string;
     }
-    unless ($keyfile) {
+    unless ($dkim_privatekey) {
 	do_log('err',"DKIM key file is undefined, could not sign message");
+	return $msg_as_string;
+    }
+    unless ($dkim_d) {
+	do_log('err',"DKIM d= tag is undefined, could not sign message");
+	return $msg_as_string;
+    }
+
+    
+    my $temporary_keyfile = $Conf::Conf{'tmpdir'}."/dkimkey.".$$ ;  
+    if (!open(MSGDUMP,"> $temporary_keyfile")) {
+	&do_log('err', 'Can\'t store key in file %s', $temporary_keyfile);
 	return undef;
     }
-    unless (-f $keyfile) {
-	do_log('err',"Could not read DKIM key file %s",$keyfile);
-	return undef;
-    }
+    print MSGDUMP $dkim_privatekey ;
+    close(MSGDUMP);
+    do_log('trace',"$temporary_keyfile");
 
     # create a signer object
     my $dkim = Mail::DKIM::Signer->new(
 				       Algorithm => "rsa-sha1",
 				       Method => "relaxed",
-				       Domain => $robot,
-				       Selector => $selector,
-				       KeyFile => $keyfile,
+				       Domain => $dkim_d,
+				       Selector => $dkim_selector,
+				       KeyFile => $temporary_keyfile,
 				       );
     
-    ## dump the incomming message.
-    my $dup_msg = $in_msg->dup;
-    # my $temporary_file = $Conf{'tmpdir'}."/".$self->get_list_id().".dkim.".$$ ;  
     my $temporary_file = $Conf::Conf{'tmpdir'}."/dkim.".$$ ;  
     if (!open(MSGDUMP,"> $temporary_file")) {
 	&do_log('err', 'Can\'t store message in file %s', $temporary_file);
 	return undef;
     }
-    $dup_msg->print(\*MSGDUMP);
+    print MSGDUMP $msg_as_string ;
     close(MSGDUMP);
 
     unless (open (MSGDUMP , $temporary_file)){
@@ -761,21 +810,28 @@ sub dkim_sign {
 	&do_log('err', 'Cannot sign (DKIM) message');
 	return undef;
     }
+    my $message = new Message($temporary_file,'noxsympato');
+    unless ($message){
+	do_log('err',"unable to load $temporary_file as a message objet");
+	return undef;
+    }
 
     if ($main::options{'debug'}) {
 	do_log('debug',"temporary file is $temporary_file");
     }else{
 	unlink ($temporary_file);
     }
-    $dkim->signature->headerlist("Message-ID:Date:From:To:Subject:Sender");
+    unlink ($temporary_keyfile);
+#    $dkim->signature->headerlist("Message-ID:Date:From:To:Subject:Sender");
+    $dkim->signature->headerlist($dkim_header_list);
     $dkim->signature->prettify;
-    #    $in_msg->head->add('DKIM-Signature',$dkim->signature->as_string) ;
+    do_log('trace',"DKIM-Signature',$dkim->signature->as_string" ) ;
     
-    my $messageasstring = $in_msg->as_string ;
+    
+    $message->{'msg'}->head->add('DKIM-signature',$dkim->signature->as_string);
 
-    return $in_msg;
+    return $message->{'msg'}->as_string ;
 }
-
 
 # input object msg and listname, output signed message object
 sub smime_sign {

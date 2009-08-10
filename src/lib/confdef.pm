@@ -1345,7 +1345,7 @@ our @params = (
 	file   => 'sympa.conf',
     },
     {
-        name => 'dkim_signer_selector',
+        name => 'dkim_selector',
 	vhost => '1',
         query   => 'the selector', 
 	optional => '1',

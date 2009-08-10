@@ -602,7 +602,7 @@ my %alias = ('reply-to' => 'reply_to',
 			                                          'gettext_id' => "file path for list DKIM private key",
 								  'order' => 1
 					                         },
-					     'signer_selector' => { 'format' => '\S+',
+					     'selector' => { 'format' => '\S+',
 		                         			  'occurence' => '0-1',
 			                                          'default' => {'conf' => 'dkim_signer_selector'},
 			                                          'gettext_id' => "Selector for DNS lookup of DKIM public key",
@@ -2711,6 +2711,11 @@ sub distribute_msg {
 	$self->on_the_fly_sync_include('use_ttl' => 1);
     }
 
+    # prepare dkim signature parameter if needed
+    my $dkim_parameters;
+    if (1) {
+	do_log ('trace',"apply dkim signature is hardcoded, the condition should be performed by scenari or list parameters");
+    }
     ## Blindly send the message to all users.
     my $numsmtp = $self->send_msg($message);
     unless (defined ($numsmtp)) {
@@ -2937,6 +2942,7 @@ sub send_global_file {
     do_log('debug2', 'List::send_global_file(%s, %s, %s)', $tpl, $who, $robot);
 
     my $data = $context;
+    do_log('trace', 'List::send_global_file(alarm : %s)',$data->{'alarm'});
 
     unless ($data->{'user'}) {
 	$data->{'user'} = &get_user_db($who) unless ($options->{'skip_db'});
@@ -2980,10 +2986,11 @@ sub send_global_file {
     $data->{'return_path'} = &Conf::get_robot_conf($robot, 'request');
     $data->{'boundary'} = '----------=_'.&tools::get_message_id($robot) unless ($data->{'boundary'});
 
-    if (&Conf::get_robot_conf($robot, 'dkim_feature') eq 'on'){	
-	$data->{'dkim_signer'} = $robot;
+    if ((&Conf::get_robot_conf($robot, 'dkim_feature') eq 'on')&&(&Conf::get_robot_conf($robot, 'dkim_add_signature_to')=~/robot/)){
+	$data->{'dkim'} = &tools::get_dkim_parameters({'robot' => $robot});
     }
-
+    
+    $data->{'use_bulk'} = 1  unless ($data->{'alarm'}) ; # use verp excepted for alarms. We should make this configurable in order to support Sympa server on a machine without any MTA service
     unless (&mail::mail_file($filename, $who, $data, $robot)) {
 	&do_log('err',"List::send_global_file, could not send template $filename to $who");
 	return undef;
@@ -3339,6 +3346,7 @@ sub send_msg {
 	$nbr_verp += $result;
 
     }
+    # my $dkim_parameters = &tools::get_dkim_parameters({'robot' => $robot,'list' => $self->{'name'}});
 
     ##Prepare and send message for txt reception mode
     if (@tabrcpt_txt) {
@@ -3831,6 +3839,7 @@ sub request_auth {
 	    $data->{'command'} = "auth $keyauth $cmd *";
 	    $data->{'command_escaped'} = &tt2::escape_url($data->{'command'});
 	    $data->{'type'} = 'remind';
+	    
 	}
 	$data->{'auto_submitted'} = 'auto-replied';
 	unless (&send_global_file('request_auth',$email,$robot,$data)) {
@@ -3978,12 +3987,15 @@ sub send_notify_to_listmaster {
     my $host = &Conf::get_robot_conf($robot, 'host');
     my $listmaster = &Conf::get_robot_conf($robot, 'listmaster');
     my $to = "$Conf::Conf{'listmaster_email'}\@$host";
-    my $options = {}; ## options for send_global_file()
+    my $options = {}; ## options for send_global_file()    
 
     if ($operation eq 'logs_failed') {
 	my $data = {'to' => $to,
 		    'type' => $operation,
-		    'auto_submitted' => 'auto-generated'};
+		    'auto_submitted' => 'auto-generated',
+		    'alarm' => 1, # bypass bulk
+		};
+	
 	for my $i(0..$#{$param}) {
 	    $data->{"param$i"} = $param->[$i];
 	}
@@ -4004,7 +4016,8 @@ sub send_notify_to_listmaster {
 	  my $list = $param->{'list'};
 	  $param->{'list'} = {'name' => $list->{'name'},
 			      'host' => $list->{'domain'},
-			      'subject' => $list->{'admin'}{'subject'}};
+			      'subject' => $list->{'admin'}{'subject'},
+			  };
 	}
 
 	## Automatic action done on bouncing adresses
@@ -4039,7 +4052,7 @@ sub send_notify_to_listmaster {
 		if (($operation eq 'request_list_creation')or($operation eq 'request_list_renaming')) {
 		    $param->{'one_time_ticket'} = &Auth::create_one_time_ticket($email,$robot,'get_pending_lists',$param->{'ip'});
 		}
-		
+		$param->{'alarm'} = 1;
 		unless (&send_global_file('listmaster_notification', $email, $robot, $param, $options)) {
 		    &do_log('notice',"Unable to send template 'listmaster_notification' to $listmaster");
 		    return undef;
@@ -4051,7 +4064,9 @@ sub send_notify_to_listmaster {
 	
 	my $data = {'to' => $to,
 		    'type' => $operation,
-		    'auto_submitted' => 'auto-generated'};
+		    'auto_submitted' => 'auto-generated',
+		    'alarm' => 1
+		    };
 	for my $i(0..$#{$param}) {
 	    $data->{"param$i"} = $param->[$i];
 	}
