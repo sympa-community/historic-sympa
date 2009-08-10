@@ -905,6 +905,7 @@ function htmNavChk(dateA,dateB,src,srcId,mm,yy,txt)
     "<td onclick=\"\">&nbsp;</td>" : ("<td class=\"zoneNav\" onclick=\"return generateCal('"+src+"','"+srcId+"',"+mm+","+yy+")\">"+txt+"</td>");
 }
 
+/* Balises html <tr> et <td> pour la création du calendrier */
 /* génère le calendrier */
 function generateCal(src,srcId,mm,yy) 
 {
@@ -958,7 +959,8 @@ function generateCal(src,srcId,mm,yy)
   
   while(avantFinMois) /*boucle jusqu'a la fin du mois */
     {
-      htm+=(idx%7==0)?"<tr><td class=\"nSemaine\" >"+idxSem+"</td>":""; /*affiche le numero de semaine*/
+      /* Si on veut afficher les numeros de semaines : htm+=(idx%7==0)?"<tr><td class=\"nSemaine\" >"+idxSem+"</td>":""; */ /*affiche le numero de semaine*/
+	htm+=(idx%7==0)?"<tr><td class='nSemaine' >"+""+"</td>":""; /* supprime la colonne numero de semaine*/
       if (dateBefore(dateX,dateMax(ddeb,param["dateMin"]))||dateBefore(dateMin(dfin,param["dateMax"]),dateX))
 	htm+="<td style=\"text-decoration:line-through;\"><a class=\"tdx\" href=\"#\">"+subDiv(param,idx,dateX,mm,aa,0)+"</b></td>";
       else
@@ -1051,6 +1053,8 @@ function decodeDate(val,format,defaut)
   return new Date(aa,mm,jj);
 }
 
+/* Initialise des paramètres pour le calendrier : position d'affichage, création des div, ... */
+/* Permet la visualisation du calendrier quand on clique sur l'input */
 function visuCal(src,paramX)
 {
   if (src.id=="")         /*si il n'y pas d'ID on en créé un*/
@@ -1077,7 +1081,7 @@ function visuCal(src,paramX)
       div = document.createElement('div');
       div.setAttribute('id',srcId);
       div.style.position = 'absolute';
-      div.style.top = (pos_[1] + 18) + 'px';
+      div.style.top = (pos_[1] + 18) + 'px'; /* 18 correspond à la hauteur d'un input */
       div.style.left = pos_[0] + 'px';  /*this.deltaG = 0; */
       div.className = 'divCal';
       div.parametre = param;
@@ -1093,6 +1097,7 @@ function visuCal(src,paramX)
   
 }
 
+/* permet de masquer le calendrier */
 function masqueCal(src)
 {
   tempo[src.id+"_cal"]=window.setTimeout("_('"+src.id+"_cal').style.display='none'",500);

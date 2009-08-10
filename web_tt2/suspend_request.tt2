@@ -14,7 +14,8 @@
 	<input type="checkbox" name="indefinite" /> [%|loc%]Select the checkbox for an indefinite end date. [%END%]
       <br />
 
-     <!-- <label for="duration">[%|loc%]For[%END%] : </label> Ne fonctionne pas encore !  
+     <!-- Fonctionnalité à rajouter si besoin
+      <label for="duration">[%|loc%]For[%END%] : </label>
       <select id="duration" name="duration">
         <option value="[%|loc%]A week[%END%]">[%|loc%]A week[%END%]</option>
         <option value="[%|loc%]2 weeks[%END%]">[%|loc%]2 weeks[%END%]</option>

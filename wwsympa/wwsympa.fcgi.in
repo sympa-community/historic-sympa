@@ -14998,11 +14998,11 @@ sub do_suspend_request {
     my $email = $param->{'user'}{'email'};
     my $data;
 
-    ## Initialise à la date d'aujourd'hui le champ date de début
+    ## Sets the date of the field "start date" to "today"
     my @d_day = localtime(time);
     $param->{'d_day'} = ($d_day[3])."-".($d_day[4]+1)."-".($d_day[5]+1900);
     
-    ## On affiche dans le tableau les listes de l'abonné et l'état dans lequel elles sont.
+    ## We display in the table the lists of the subscriber and the state in which they are.
     ## reception : nomail/digest/mail
     ## reception : - . suspend : 1 . du XX/XX/XXXX au XX/XX/XXXX
     my @lists = &List::get_which($email, $robot, 'member');
@@ -15065,7 +15065,7 @@ sub do_suspend_request_action {
 
     if($in{'sub_action'} eq 'suspendsave'){
 
-	# pour récupérer les listes sélectionnées
+	# to retrieve the selected list
 	@lists = split /\0/, $in{'listname'};
 	
 	foreach my $list (@lists){
@@ -15099,7 +15099,7 @@ sub do_suspend_request_action {
 		&wwslog('info','suspend_request: Date doesn\'t exist.');
 		return 'suspend_request';
 	    }
-	    	    
+	    ## Case 1 : Start date & End date (without indefinite)	    
 	    if (($in{'date_fin'}) && (!$in{'indefinite'})){
 		($day2, $month2, $year2) = split(/\-/, $in{'date_fin'});
 		$month2 = $month2-1;
@@ -15125,7 +15125,7 @@ sub do_suspend_request_action {
 		    &wwslog('info','suspend_request: The start date must be less than the end date.');
 		    return 'suspend_request';
 		} 
-		
+		## Case 2 : Start date & without indefinite (without end date)	
 	    }elsif((!$in{'date_fin'}) && ($in{'indefinite'})){
 		$date2 = undef;
 	    }else{
@@ -15152,12 +15152,18 @@ sub do_suspend_request_action {
     ## Restore suspended subscription
     elsif($in{'sub_action'} eq 'suspendstop'){
 
-	# pour réabonner les listes sélectionnées
+	# to renew membership lists selected
 	@lists = split /\0/, $in{'listname'};
 	foreach my $line (@lists) {
 	    &List::restore_suspended_subscription($user, $line, $robot); 
 	}
-	&report::notice_report_web('performed',{},$in{'sub_action'});
+
+	if($lists[0] eq ''){
+	    &report::reject_report_web('user','missing_arg',{'argument' => 'must picked one or more list(s)'}, $param->{'action'});
+	    &wwslog('info','suspend_request: must picked one or more list(s)');
+	    return 'suspend_request';
+	}
+	&report::notice_report_web('performed',{},"ReStart the subscription for the list(s)");
 		
     }else{
 	&wwslog('info', 'do_suspend_request_action: sub_action doesn\'t exist');
