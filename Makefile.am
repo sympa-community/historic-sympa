@@ -1,4 +1,4 @@
- # Makefile.am - Top-level Makefile.am for Sympa
+# Makefile.am - Top-level Makefile.am for Sympa
 # RCS Identication ; $Revision$ ; $Date$ 
 #
 # Sympa - SYsteme de Multi-Postage Automatique
@@ -46,7 +46,7 @@ installconfig:
 	@echo "Installing basic configuration ..."
 	export PERL5LIB=$(DESTDIR)$(modulesdir); \
 	if [ ! -f  $(DESTDIR)$(confdir)/sympa.conf ]; then \
-		echo "This looks like your first Sympa installation. The following wizard will assit you to create your first Sympa configuration.";\
+		echo "This looks like your first Sympa installation. The following wizard will assist you to create your first Sympa configuration.";\
 		$(DESTDIR)$(sbindir)/sympa_wizard.pl \
 			--create sympa.conf \
 			--target $(DESTDIR)$(confdir)/sympa.conf \
@@ -90,8 +90,8 @@ importantchanges:
                 previous=`perl -Mlib=$(DESTDIR)$(bindir) -MVersion -e 'print $$Version::Version'`; \
 	fi; \
 	$(PERL) $(top_srcdir)/important_changes.pl \
-		--current $(VERSION) \
-		--previous $${previous};
+		--current=$(VERSION) \
+		--previous=$${previous};
 
 uninstall-hook:
 	rm -f $(DESTDIR)$(confdir)/sympa.conf
