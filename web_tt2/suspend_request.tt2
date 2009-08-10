@@ -2,7 +2,7 @@
 
 <div class="block">
 
-  <h2>[%|loc%]Suspend my subscription[%END%] <a class="input" href="[% path_cgi %]/nomenu/help/sendmsg" title="[%|loc%]Open in a new window[%END%]" onclick="window.open('','wws_help','toolbar=no,location=no,directories=no,status=no,menubar=no,scrollbars=yes,resizable=yes,copyhistory=no,width=400,height=200')" target="wws_help">[%|loc%]Help[%END%]</a></h2>
+  <h2>[%|loc%]Suspend my subscription[%END%]</h2>
   <br />
   <form class="noborder" action="[% path_cgi %]" method="post" name="suspend_request">
       <h3>[%|loc%]Date[%END%]</h3>
@@ -69,6 +69,24 @@
         <input class="MainMenuLinks" type="submit" name="sub_action_suspendstop" value="[%|loc%]ReStart[%END%]"/>
         <input class="MainMenuLinks" type="submit" name="sub_action_suspendsave" value="[%|loc%]Submit[%END%]"/>
   </form>
+	<br />
+</div>
+
+<div class="block">
+  <h3>[%|helploc%]How the suspension works[%END%]<a class="input" href="[% path_cgi %]/help/user#options">[%|loc%]Help[%END%]</a></h3>
+	<p>[%|helploc%]In order to <strong>suspend your subscription</strong> to one or more lists, follow these steps:[%END%]</p>
+	<ul>
+		<li>[%|helploc%]Select a start date through the calendar that appears when you click on the field of start date;[%END%]</li>
+		<li>[%|helploc%]Select in the same way an end date to resume your subscription. You can click on "indefinite." (In this latter case, you will have to return to this page to resume your subscription);[%END%]</li>
+		<li>[%|helploc%]Select the lists you want to unsubscribe. "Toogle" button allows you to invert the selection;[%END%]</li>
+		<li>[%|helploc%]Click on "Submit" to confirm the suspension.[%END%]</li>
+	</ul>
+	<p>[%|helploc%]<strong>To resume your subscription</strong> to one or more lists, follow these steps:[%END%]</p>
+	<ul>
+		<li>[%|helploc%]Select the list(s) you want to renew membership. "Toogle" button allows you to invert the selection;[%END%]</li>
+		<li>[%|helploc%]Click "Restart" to confirm the resumption of the subscription.[%END%]</li>
+	</ul>
+
 </div>
 
 <!-- end suspend_request.tt2 -->
