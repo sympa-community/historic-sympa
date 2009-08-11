@@ -594,7 +594,7 @@ my %alias = ('reply-to' => 'reply_to',
 			      'occurence' => '0-1',
 			      'default' => {'conf' => 'dkim_feature'},
 			      'gettext_id' => "Insert DKIM signature to messages sent to the list",
-			      'group' => 'secure messaging',
+			      'group' => 'other',
 			  },
 	    'dkim_parameters'=> {'format' => {'private_key_path'=> {'format' => '\S+',
 		                         			  'occurence' => '0-1',
@@ -604,7 +604,7 @@ my %alias = ('reply-to' => 'reply_to',
 					                         },
 					     'selector' => { 'format' => '\S+',
 		                         			  'occurence' => '0-1',
-			                                          'default' => {'conf' => 'dkim_signer_selector'},
+			                                          'default' => {'conf' => 'dkim_selector'},
 			                                          'gettext_id' => "Selector for DNS lookup of DKIM public key",
 								  'order' => 2
                                                                   },
@@ -617,7 +617,7 @@ my %alias = ('reply-to' => 'reply_to',
                                                                   },
 					     'signer_domain' =>   {'format' => '\S+',
 		                         			  'occurence' => '0-1',
-			                                          'default' => {'conf' => 'dkim_signer_selector'},
+			                                          'default' => {'conf' => 'dkim_signer_domain'},
 			                                          'gettext_id' => 'DKIM "d=" tag, you should probably use the default value !',
 								  'order' => 4
 								 },
@@ -628,7 +628,7 @@ my %alias = ('reply-to' => 'reply_to',
 								  'order' => 5
 								 },
 					     },
-			      'group' => 'secure messaging',
+			      'group' => 'other',
 			      'occurrence' => '0-1',
 			      'gettext_id' => "DKIM configuration",
 			  },
@@ -2712,10 +2712,6 @@ sub distribute_msg {
     }
 
     # prepare dkim signature parameter if needed
-    my $dkim_parameters;
-    if (1) {
-	do_log ('trace',"apply dkim signature is hardcoded, the condition should be performed by scenari or list parameters");
-    }
     ## Blindly send the message to all users.
     my $numsmtp = $self->send_msg($message);
     unless (defined ($numsmtp)) {
@@ -3282,6 +3278,12 @@ sub send_msg {
     my $verp_rate =  $self->{'admin'}{'verp_rate'};
     my $xsequence =  $self->{'stats'}->[0] ;
 
+    my $dkim_parameters ;
+    # prepare dkim parameters
+    if (1) {
+	do_log ('trace',"TO BE CHANGED, at this step, insertion of a DKIM signature is hardcoded");
+	$dkim_parameters = &tools::get_dkim_parameters({'robot'=>$self->{'domain'}, 'listname'=>$self->{'name'}});
+    }
     ##Send message for normal reception mode
     if (@tabrcpt) {
 	## Add a footer
@@ -3304,14 +3306,21 @@ sub send_msg {
 	my @verp_selected_tabrcpt = &extract_verp_rcpt($verp_rate, $xsequence,\@selected_tabrcpt, \@tabrcpt_verp);
 
 
-	my $result = &mail::mail_message($message, $self, {'enable' => 'off'}, @selected_tabrcpt);
+	my $result = &mail::mail_message('message'=>$message, 
+					 'rcpt'=> \@selected_tabrcpt, 
+					 'list'=>$self, 
+					 'verp' => 'off', 
+					 'dkim_parameters'=>$dkim_parameters);
 	unless (defined $result) {
 	    &do_log('err',"List::send_msg, could not send message to distribute from $from (verp desabled)");
 	    return undef;
 	}
 	$nbr_smtp = $result;
 	
-	$result = &mail::mail_message($message, $self, {'enable' => 'on'}, @verp_selected_tabrcpt);
+	$result = &mail::mail_message('message'=> $message, 
+				      'rcpt'=> \@verp_selected_tabrcpt, 
+				      'list'=> $self, 'verp' => 'on',
+				      'dkim_parameters'=>$dkim_parameters);
 	unless (defined $result) {
 	    &do_log('err',"List::send_msg, could not send message to distribute from $from (verp enabled)");
 	    return undef;
@@ -3330,14 +3339,22 @@ sub send_msg {
 	
 	my @verp_tabrcpt_notice = &extract_verp_rcpt($verp_rate, $xsequence,\@tabrcpt_notice, \@tabrcpt_notice_verp);
 
-	my $result = &mail::mail_message($new_message, $self, {'enable' => 'off'}, @tabrcpt_notice);
+	my $result = &mail::mail_message('message'=>$new_message, 
+					 'rcpt'=>\@tabrcpt_notice, 
+					 'list'=>$self, 
+					 'verp' => 'off',
+					 'dkim_parameters'=>$dkim_parameters);
 	unless (defined $result) {
 	    &do_log('err',"List::send_msg, could not send message to distribute from $from (verp desabled)");
 	    return undef;
 	}
 	$nbr_smtp += $result;
 
-	$result = &mail::mail_message($new_message, $self , {'enable' => 'on'}, @verp_tabrcpt_notice);
+	$result = &mail::mail_message('message'=>$new_message, 
+				      'rcpt'=>\@verp_tabrcpt_notice,
+				      'list'=>$self ,
+				      'verp' => 'on', 
+				      'dkim_parameters'=>$dkim_parameters);
 	unless (defined $result) {
 	    &do_log('err',"List::send_msg, could not send message to distribute from $from  (verp enabled)");
 	    return undef;
@@ -3346,7 +3363,6 @@ sub send_msg {
 	$nbr_verp += $result;
 
     }
-    # my $dkim_parameters = &tools::get_dkim_parameters({'robot' => $robot,'list' => $self->{'name'}});
 
     ##Prepare and send message for txt reception mode
     if (@tabrcpt_txt) {
@@ -3364,14 +3380,22 @@ sub send_msg {
 
 	my @verp_tabrcpt_txt = &extract_verp_rcpt($verp_rate, $xsequence,\@tabrcpt_txt, \@tabrcpt_txt_verp);
 	
-	my $result = &mail::mail_message($new_message, $self,  {'enable' => 'off'}, @tabrcpt_txt);
+	my $result = &mail::mail_message('message'=>$new_message, 
+					 'rcpt'=>\@tabrcpt_txt,
+					 'list'=>$self, 
+					 'verp' => 'off',
+					 'dkim_parameters'=>$dkim_parameters);
 	unless (defined $result) {
 	    &do_log('err',"List::send_msg, could not send message to distribute from $from  (verp desabled)");
 	    return undef;
 	}
 	$nbr_smtp += $result;
 
-	$result = &mail::mail_message($new_message, $self , {'enable' => 'on'}, @verp_tabrcpt_txt);
+	$result = &mail::mail_message('message'=>$new_message, 
+				       'rcpt'=>\@verp_tabrcpt_txt, 
+				       'list'=>$self, 
+				       'verp' => 'on',
+				       'dkim_parameters'=>$dkim_parameters);
 	unless (defined $result) {
 	    &do_log('err',"List::send_msg, could not send message to distribute from $from  (verp enabled)");
 	    return undef;
@@ -3396,14 +3420,22 @@ sub send_msg {
 
 	my @verp_tabrcpt_html = &extract_verp_rcpt($verp_rate, $xsequence,\@tabrcpt_html, \@tabrcpt_html_verp);
 
-	my $result = &mail::mail_message($new_message, $self , {'enable' => 'off'}, @tabrcpt_html);
+	my $result = &mail::mail_message('message'=>$new_message, 
+					 'rcpt'=>\@tabrcpt_html,
+					 'list'=>$self,
+					 'verp' => 'off',
+					 'dkim_parameters'=>$dkim_parameters);
 	unless (defined $result) {
 	    &do_log('err',"List::send_msg, could not send message to distribute from $from  (verp desabled)");
 	    return undef;
 	}
 	$nbr_smtp += $result;
 
-	$result = &mail::mail_message($new_message, $self , {'enable' => 'on'}, @verp_tabrcpt_html);
+	$result = &mail::mail_message('message'=>$new_message, 
+				      'rcpt'=>\@verp_tabrcpt_html,
+				      'list'=>$self,
+				      'verp' => 'on',
+				      'dkim_parameters'=>$dkim_parameters);
 	unless (defined $result) {
 	    &do_log('err',"List::send_msg, could not send message to distribute from $from  (verp enabled)");
 	    return undef;
@@ -3457,14 +3489,22 @@ sub send_msg {
 
 	my @verp_tabrcpt_url = &extract_verp_rcpt($verp_rate, $xsequence,\@tabrcpt_url, \@tabrcpt_url_verp);
 
-	my $result = &mail::mail_message($new_message, $self , {'enable' => 'off'}, @tabrcpt_url);
+	my $result = &mail::mail_message('message'=>$new_message,
+					 'rcpt'=>\@tabrcpt_url, 
+					 'list'=>$self ,
+					 'verp' => 'off',
+					 'dkim_parameters'=>$dkim_parameters);
 	unless (defined $result) {
 	    &do_log('err',"List::send_msg, could not send message to distribute from $from  (verp desabled)");
 	    return undef;
 	}
 	$nbr_smtp += $result;
 
-	$result = &mail::mail_message($new_message, $self , {'enable' => 'on'}, @verp_tabrcpt_url);
+	$result = &mail::mail_message('message'=>$new_message,
+				      'rcpt'=>\@verp_tabrcpt_url,
+				      'list'=>$self ,
+				      'verp' => 'on', 
+				      'dkim_parameters'=>$dkim_parameters);
 	unless (defined $result) {
 	    &do_log('err',"List::send_msg, could not send message to distribute from $from  (verp enabled)");
 	    return undef;

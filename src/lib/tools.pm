@@ -711,11 +711,17 @@ sub get_dkim_parameters {
 
     my $robot = $params->{'robot'};
     my $listname = $params->{'listname'};
+    do_log('trace',"get_dkim_parameters (%s,%s)",$robot, $listname);
 
     my $data ; my $keyfile ;
     if ($listname) {
 	# fetch dkim parameter in list context
-	my $list = List::new($listname,$robot);
+	my $list = new List ($listname,$robot);
+	unless ($list){
+	    do_log('err',"Could not load list %s@%s",$listname, $robot);
+	    return undef;
+	}
+
 	$data->{'d'} = $list->{'admin'}{'dkim_parameters'}{'signer_domain'};
 	$data->{'i'} = $list->{'admin'}{'dkim_parameters'}{'signer_identity'};
 	$data->{'header_list'} = $list->{'admin'}{'dkim_parameters'}{'header_list'};

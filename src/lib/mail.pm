@@ -313,8 +313,13 @@ sub mail_file {
 #       
 ####################################################
 sub mail_message {
-    my($message, $list, $verp, @rcpt) = @_;
-   
+
+    my %params = @_;
+    my $message =  $params{'message'};
+    my $list =  $params{'list'};
+    my $verp = $params{'verp'};
+    my @rcpt =  @{$params{'rcpt'}};
+    my $dkim  =  $params{'dkim_parameters'};
 
     my $host = $list->{'admin'}{'host'};
     my $robot = $list->{'domain'};
@@ -322,7 +327,7 @@ sub mail_message {
     # normal return_path (ie used if verp is not enabled)
     my $from = $list->{'name'}.&Conf::get_robot_conf($robot, 'return_path_suffix').'@'.$host;
 
-    do_log('debug', 'mail::mail_message(from: %s, , file:%s, %s, verp->%s, %d rcpt)', $from, $message->{'filename'}, $message->{'smime_crypted'}, $verp->{'enable'}, $#rcpt+1);
+    do_log('debug', 'mail::mail_message(from: %s, , file:%s, %s, verp->%s, %d rcpt)', $from, $message->{'filename'}, $message->{'smime_crypted'}, $verp, $#rcpt+1);
     
     my($i, $j, $nrcpt, $size); 
     my $numsmtp = 0;
@@ -413,7 +418,8 @@ sub mail_message {
 				'robot' => $robot,
 				'encrypt' => $message->{'smime_crypted'},
 				'use_bulk' => 1,
-				'verp' => $verp->{'enable'},
+				'verp' => $verp,
+				'dkim' => $dkim,
 				'merge' => $list->{'admin'}{'merge_feature'} ));
 }
 
@@ -532,6 +538,7 @@ sub sendto {
     my $encrypt = $params{'encrypt'};
     my $verp = $params{'verp'};
     my $merge = $params{'merge'};
+    my $dkim = $params{'dkim'};
     my $use_bulk = $params{'use_bulk'};
 
     do_log('debug', 'mail::sendto(from : %s,listname: %s, encrypt : %s, verp : %s, priority = %s', $from, $listname, $encrypt, $verp, $priority);
@@ -540,12 +547,6 @@ sub sendto {
     $delivery_date = time() unless $delivery_date; # if not specified, delivery tile is right now (used for sympa messages etc)
 
     my $msg;
-    my $dkim_signature_parameter;
-
-    #if ($params->{'dkim_signer'}) {
-    #	# prepare DKIM signature parameters. 
-    #	$dkim_signature_parameter= &tools::get_dkim_parameters ({'robot'=> $robot, 'listname'=>$listname});
-    #}
 
     if ($encrypt eq 'smime_crypted') {
         # encrypt message for each rcpt and send the message
@@ -583,7 +584,7 @@ sub sendto {
 				  'verp' => $verp,
 				  'merge' => $merge,
 				  'use_bulk' => $use_bulk,
-				  'dkim' => $params{'dkim'} );
+				  'dkim' => $dkim );
 	    return $result;
 	}else{
 	    return undef;
