@@ -1338,6 +1338,13 @@ our @params = (
 	file   => 'sympa.conf',
     },
     {
+        name    => 'dkim_signature_apply_on',
+        default => 'md5_authenticated_messages,smime_authenticated_messages,dkim_authenticated_messages,editor_validated_messages', 
+	advice  => 'Type of message that receive a DKIM signature before distribution to subscribers.Possible value are "none", "any" or a list of the following keywords : "md5_authenticated_messages,smime_authenticated_messages,dkim_authenticated_message,editor_validated_message".',
+        vhost => '1',
+	file   => 'sympa.conf',
+    },    
+    {
         name => 'dkim_private_key_path',
 	vhost => '1',
         query   => 'location of the file where DKIM private key is stored',

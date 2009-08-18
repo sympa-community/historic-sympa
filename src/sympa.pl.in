@@ -1876,9 +1876,19 @@ sub DoMessage{
 
     if (($action =~ /^do_it/) || ($main::daemon_usage == DAEMON_MESSAGE)) {
 
-
 	if (($main::daemon_usage == DAEMON_MESSAGE) || ($main::daemon_usage == DAEMON_ALL)) {
-	    my $numsmtp = $list->distribute_msg($message);
+
+	    my $apply_dkim_signature = 'off';
+	    do_log('trace'," list->{'admin'}{'dkim_signature_apply_on'}  $list->{'admin'}{'dkim_signature_apply_on'} ");
+
+	    $apply_dkim_signature = 'on' if &tools::is_in_array($list->{'admin'}{'dkim_signature_apply_on'},'any');
+	    $apply_dkim_signature = 'on' if (&tools::is_in_array($list->{'admin'}{'dkim_signature_apply_on'},'smime_authenticated_messages') && ($is_signed->{'body'}));
+	    $apply_dkim_signature = 'on' if &tools::is_in_array($list->{'admin'}{'dkim_signature_apply_on'},'dkim_authenticated_messages');
+	    do_log('trace',"a FAIRE : tester si le message est sigé dkim passe");
+
+	    do_log('trace'," apply_dkim_signature  $apply_dkim_signature ");
+	    my $numsmtp =$list->distribute_msg('message'=> $message,
+					       'apply_dkim_signature'=>$apply_dkim_signature);
 	    
 	    ## Keep track of known message IDs...if any
 	    $msgid_table{$list->get_list_id()}{$messageid}++ if ($messageid);
@@ -2160,7 +2170,9 @@ sub SendDigest{
  	my ($listname, $listrobot) = split /\@/, $listaddress;
  	my $list = new List ($listname, $listrobot);
 	unless ($list) {
-	    &do_log('info', 'Unknown list, deleting digest file %s', $filename);
+	    &do_log('info', 'Unknown list %s, (robot %s), deleting digest file %s', $filename,$listname, $listrobot )
+	    &do_log('trace', 'Unknown list %s, (robot %s), deleting digest file %s', $filename,$listname, $listrobot )
+
 	    &Log::db_log({'robot' => $listrobot,'list' => $list->{'name'},'action' => 'SendDigest','parameters' => "$filename",'target_email' => '','msg_id' => '','status' => 'error','error_type' => 'unknown_list','user_email' => '','client' => $ip,'daemon' => $daemon_name});
 	    unlink $filename;
 	    return undef;

@@ -596,6 +596,13 @@ my %alias = ('reply-to' => 'reply_to',
 			      'gettext_id' => "Insert DKIM signature to messages sent to the list",
 			      'group' => 'other',
 			  },
+	    'dkim_signature_apply_on'=> {'format' => ['md5_authenticated_messages','smime_authenticated_messages','dkim_authenticated_messages','editor_validated_messages','none','any'],
+					 'occurrence' => '0-n',
+					 'split_char' => ',',
+					 'default' => {'conf' => 'dkim_signature_apply_on'},
+					 'gettext_id' => "Type of list message where a DKIM signature is added",
+					 'group' => 'other',
+					 },
 	    'dkim_parameters'=> {'format' => {'private_key_path'=> {'format' => '\S+',
 		                         			  'occurence' => '0-1',
 			                                          'default' => {'conf' => 'dkim_private_key_path'},
@@ -1135,8 +1142,7 @@ my %alias = ('reply-to' => 'reply_to',
 				      'default' => 'optional',
 				      'gettext_id' => "Message tagging",
 				      'group' => 'sending'
-				      },    
-						   
+				      },    	       				   
 	    'owner' => {'format' => {'email' => {'format' => &tools::get_regexp('email'),
 						 'length' =>30,
 						 'occurrence' => '1',
@@ -2486,8 +2492,6 @@ sub _get_single_param_value {
 
 
 
-
-
 ########################################################################################
 #                       FUNCTIONS FOR MESSAGE SENDING                                  #
 ########################################################################################
@@ -2514,11 +2518,17 @@ sub _get_single_param_value {
 #  
 # IN : -$self (+): ref(List)
 #      -$message (+): ref(Message)
+#      -$apply_dkim_signature : on | off
 # OUT : -$numsmtp : number of sendmail process
 ####################################################
 sub distribute_msg {
-    my($self, $message) = @_;
-    do_log('debug2', 'List::distribute_msg(%s, %s, %s, %s, %s)', $self->{'name'}, $message->{'msg'}, $message->{'size'}, $message->{'filename'}, $message->{'smime_crypted'});
+    my $self = shift;
+    my %param = @_;
+
+    my $message = $param{'message'};
+    my $apply_dkim_signature = $param{'apply_dkim_signature'};
+
+    do_log('debug2', 'List::distribute_msg(%s, %s, %s, %s, %s, %s, apply_dkim_signature=%s)', $self->{'name'}, $message->{'msg'}, $message->{'size'}, $message->{'filename'}, $message->{'smime_crypted'}, $apply_dkim_signature );
 
     my $hdr = $message->{'msg'}->head;
     my ($name, $host) = ($self->{'name'}, $self->{'admin'}{'host'});
@@ -2711,9 +2721,8 @@ sub distribute_msg {
 	$self->on_the_fly_sync_include('use_ttl' => 1);
     }
 
-    # prepare dkim signature parameter if needed
     ## Blindly send the message to all users.
-    my $numsmtp = $self->send_msg($message);
+    my $numsmtp = $self->send_msg('message'=> $message, 'apply_dkim_signature'=>$apply_dkim_signature);
     unless (defined ($numsmtp)) {
 	return $numsmtp;
     }
@@ -3136,11 +3145,14 @@ sub send_file {
     }
 
     $data->{'from'} = $data->{'fromlist'} unless ($data->{'from'});
-
     $data->{'boundary'} = '----------=_'.&tools::get_message_id($robot) unless ($data->{'boundary'});
-
     $data->{'sign_mode'} = $sign_mode;
     
+    if ((&Conf::get_robot_conf($self->{'domain'}, 'dkim_feature') eq 'on')&&(&Conf::get_robot_conf($self->{'domain'}, 'dkim_add_signature_to')=~/robot/)){
+	$data->{'dkim'} = &tools::get_dkim_parameters({'robot' => $self->{'domain'}});
+    } 
+    $data->{'use_bulk'} = 1  unless ($data->{'alarm'}) ; # use verp excepted for alarms. We should make this configurable in order to support Sympa server on a machine without any MTA service
+    do_log('trace',"mail_file $filename domain : $self->{'domain'}");
     unless (&mail::mail_file($filename, $who, $data, $self->{'domain'})) {
 	&do_log('err',"List::send_file, could not send template $filename to $who");
 	return undef;
@@ -3166,8 +3178,14 @@ sub send_file {
 #       | undef 
 ####################################################
 sub send_msg {
-    my($self, $message) = @_;
-    do_log('debug2', 'List::send_msg(%s, %s)', $message->{'filename'}, $message->{'smime_crypted'});
+
+    my $self = shift;
+    my %param = @_;
+
+    my $message = $param{'message'};
+    my $apply_dkim_signature = $param{'apply_dkim_signature'};
+
+    do_log('debug2', 'List::send_msg(filname = %s, smime_crypted = %s,apply_dkim_signature = %s )', $message->{'filename'}, $message->{'smime_crypted'},$apply_dkim_signature);
     
     my $hdr = $message->{'msg'}->head;
     my $name = $self->{'name'};
@@ -3280,8 +3298,7 @@ sub send_msg {
 
     my $dkim_parameters ;
     # prepare dkim parameters
-    if (1) {
-	do_log ('trace',"TO BE CHANGED, at this step, insertion of a DKIM signature is hardcoded");
+    if ($apply_dkim_signature eq 'on') {
 	$dkim_parameters = &tools::get_dkim_parameters({'robot'=>$self->{'domain'}, 'listname'=>$self->{'name'}});
     }
     ##Send message for normal reception mode

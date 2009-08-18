@@ -2079,8 +2079,13 @@ sub distribute {
 
     ## Distribute the message
     if (($main::daemon_usage == DAEMON_MESSAGE) || ($main::daemon_usage == DAEMON_ALL)) {
+	my $numsmtp;
+	my $apply_dkim_signature = 'off';
+	$apply_dkim_signature = 'on' if &tools::is_in_array($list->{'admin'}{'dkim_signature_apply_on'},'any');
+        $apply_dkim_signature = 'on' if &tools::is_in_array($list->{'admin'}{'dkim_signature_apply_on'},'editor_validated_messages');
 
-	my $numsmtp =$list->distribute_msg($message);
+	$numsmtp =$list->distribute_msg('message'=> $message,
+					'apply_dkim_signature'=>$apply_dkim_signature);
 	unless (defined $numsmtp) {
 	    &do_log('err','Commands::distribute(): Unable to send message to list %s', $name);
 	    &report::reject_report_msg('intern','',$sender,{'msg_id' => $msg_id},$robot,$msg_string,$list);
@@ -2258,7 +2263,13 @@ sub confirm {
 	
 	## Distribute the message
 	if (($main::daemon_usage == DAEMON_MESSAGE) || ($main::daemon_usage == DAEMON_ALL)) {
-	    my $numsmtp = $list->distribute_msg($message);
+	    my $numsmtp;
+	    my $apply_dkim_signature = 'off'; 
+	    $apply_dkim_signature = 'on' if &tools::is_in_array($list->{'admin'}{'dkim_signature_apply_on'},'any');
+	    $apply_dkim_signature = 'on' if &tools::is_in_array($list->{'admin'}{'dkim_signature_apply_on'},'md5_authenticated_messages');
+
+	    $numsmtp =$list->distribute_msg('message'=> $message,
+					    'apply_dkim_signature'=>$apply_dkim_signature);
 
 	    unless (defined $numsmtp) {
 		&do_log('err','Commands::confirm(): Unable to send message to list %s', $list->{'name'});

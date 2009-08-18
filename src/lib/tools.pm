@@ -711,6 +711,7 @@ sub get_dkim_parameters {
 
     my $robot = $params->{'robot'};
     my $listname = $params->{'listname'};
+    do_log('debug2',"get_dkim_parameters (%s,%s)",$robot, $listname);
     do_log('trace',"get_dkim_parameters (%s,%s)",$robot, $listname);
 
     my $data ; my $keyfile ;
@@ -743,7 +744,7 @@ sub get_dkim_parameters {
 	$data->{'private_key'} .= $_;
     }
     close (KEY);
-    do_log ('trace',"private key $data->{'private_key'}");
+
     return $data;
 }
 
@@ -3064,6 +3065,28 @@ sub diff_on_arrays {
     return $result;
     
 } 
+
+####################################################
+# is_on_array                     
+####################################################
+# Test if a value is on an array
+# 
+# IN : -$setA : ref(ARRAY) - set
+#      -$value : a serached value
+#
+# OUT : boolean
+#######################################################    
+sub is_in_array {
+    my ($set,$value) = @_;
+    
+    foreach my $elt (@$set) {
+	do_log ('trace', 'elt = "%s", value = "%s"',$elt,$value); 
+	return 1 if ($elt eq $value);
+	do_log ('trace', "not good continue");
+    }
+    do_log ('trace', "finish");
+    return undef;
+}
 
 ####################################################
 # clean_msg_id
