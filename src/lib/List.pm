@@ -2193,7 +2193,7 @@ sub get_family {
 	return undef;
     }
         
-    my $family_name = $self->{'admin'}{'family_name'};
+    $family_name = $self->{'admin'}{'family_name'};
 	    
     my $family;
     unless ($family = new Family($family_name,$robot) ) {
@@ -3431,7 +3431,6 @@ sub send_msg {
 sub send_to_editor {
    my($self, $method, $message) = @_;
    my ($msg, $file, $encrypt) = ($message->{'msg'}, $message->{'filename'});
-   my $encrypt;
 
    $encrypt = 'smime_crypted' if ($message->{'smime_crypted'}); 
    do_log('debug3', "List::send_to_editor, msg: $msg, file: $file method : $method, encrypt : $encrypt");
@@ -4101,12 +4100,11 @@ sub delete_user_picture {
     my ($self,$email) = @_;    
     do_log('debug2', 'delete_user_picture(%s)', $email);
     
-    my $fullfilename;
+    my $fullfilename = undef;
     my $filename = &tools::md5_fingerprint($email);
     my $name = $self->{'name'};
     my $robot = $self->{'domain'};
     
-    my $fullfilename = undef;
     foreach my $ext ('.gif','.jpg','.jpeg','.png') {
   	if(-f &Conf::get_robot_conf($robot,'pictures_path').'/'.$name.'@'.$robot.'/'.$filename.$ext) {
   	    my $file = &Conf::get_robot_conf($robot,'pictures_path').'/'.$name.'@'.$robot.'/'.$filename.$ext;
@@ -7993,7 +7991,7 @@ sub _load_users_include {
 		    if (&_inclusion_loop ($name,$incl,$depend_on)) {
 			do_log('err','loop detection in list inclusion : could not include again %s in %s',$incl,$name);
 		    }else{
-			$depend_on->{$incl};
+			$depend_on->{$incl} = 1;
 			$included = _include_users_list (\%users, $incl, $self->{'domain'}, $admin->{'default_user_options'}, 'tied');
 
 		    }
@@ -8116,7 +8114,7 @@ sub _load_users_include2 {
 		if (&_inclusion_loop ($name,$incl,$depend_on)) {
 		    do_log('err','loop detection in list inclusion : could not include again %s in %s',$incl,$name);
 		}else{
-		    $depend_on->{$incl};
+		    $depend_on->{$incl} = 1;
 		    $included = _include_users_list (\%users, $incl, $self->{'domain'}, $admin->{'default_user_options'});
 		}
 	    }elsif ($type eq 'include_file') {
@@ -8226,7 +8224,7 @@ sub _load_admin_users_include {
 		    if (&_inclusion_loop ($name,$incl,$depend_on)) {
 			do_log('err','loop detection in list inclusion : could not include again %s in %s',$incl,$name);
 		    }else{
-			$depend_on->{$incl};
+			$depend_on->{$incl} = 1;
 			$included = _include_users_list (\%admin_users, $incl, $self->{'domain'}, \%option);
 		    }
 		}elsif ($type eq 'include_file') {
@@ -8497,7 +8495,7 @@ sub sync_include {
 
     ## Go through new users
     my @add_tab;
-    my $users_added = 0;
+    $users_added = 0;
     foreach my $email (keys %{$new_subscribers}) {
 	if (defined($old_subscribers{$email}) ) {	   
 	    if ($old_subscribers{$email}{'included'}) {
@@ -11181,7 +11179,7 @@ sub  get_next_delivery_date {
     my $now_time = ((($hour*60)+$min)*60)+$sec;  # Now #sec since to day 00:00
     
     my $result = $date - $now_time + $plannified_time;
-    my ($sec,$min,$hour,$mday,$mon,$year,$wday,$yday,$isdst) =  localtime($result);
+    ($sec,$min,$hour,$mday,$mon,$year,$wday,$yday,$isdst) =  localtime($result);
 
     if ($now_time <= $plannified_time ) {
 	return ( $date - $now_time + $plannified_time) ;
