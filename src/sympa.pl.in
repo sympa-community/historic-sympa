@@ -1847,16 +1847,17 @@ sub DoMessage{
 	
     ## Call scenarii : auth_method MD5 do not have any sense in send
     ## scenarii because auth is perfom by distribute or reject command.
-    
+	
     my $action;
     my $result;	
-    if ($is_signed->{'body'}) {
-	$result = $list->check_list_authz('send', 'smime',$context);
-	$action = $result->{'action'} if (ref($result) eq 'HASH');
-    }else{
-	$result = $list->check_list_authz('send', 'smtp',$context);
-	$action = $result->{'action'} if (ref($result) eq 'HASH');
-    } 
+
+    # the order of the following 3 lines is important ! SMIME > DKIM > SMTP
+    my $auth_method = 'smtp';   
+    $auth_method = 'dkim' if ($message->{'dkim_pass'});
+    $auth_method = 'smime' if ($is_signed->{'body'}) ;
+    
+    $result = $list->check_list_authz('send',$auth_method,$context);
+    $action = $result->{'action'} if (ref($result) eq 'HASH');
 
     unless (defined $action) {
 	&do_log('err', 'sympa::DoMessage(): message (%s) ignored because unable to evaluate scenario "send" for list %s',$messageid,$listname);
@@ -1867,7 +1868,6 @@ sub DoMessage{
 	return undef ;
     }
 	
-
     ## message topic context	
     if (($action =~ /^do_it/) && ($context->{'topic_needed'})) {
         $action = 'editorkey' if ($list->{'admin'}{'msg_topic_tagging'} eq 'required_moderator');

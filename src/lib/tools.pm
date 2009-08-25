@@ -30,11 +30,11 @@ use HTML::StripScripts::Parser;
 use File::Copy::Recursive;
 use POSIX qw(strftime mkfifo strtod);
 use Sys::Hostname;
-use Mail::Internet;
 use Mail::Header;
 use Encode::Guess; ## Usefull when encoding should be guessed
 use Encode::MIME::Header;
 use Mail::DKIM::Signer;
+use Mail::DKIM::Verifier;
 
 use Conf;
 use Language;
@@ -748,6 +748,49 @@ sub get_dkim_parameters {
     return $data;
 }
 
+# input a msg as string, output the dkim status
+sub dkim_verifier {
+    my $msg_as_string = shift;
+    my $dkim = Mail::DKIM::Verifier->new();
+    
+   
+    my $temporary_file = $Conf::Conf{'tmpdir'}."/dkim.".$$ ;  
+    if (!open(MSGDUMP,"> $temporary_file")) {
+	&do_log('err', 'Can\'t store message in file %s', $temporary_file);
+	return undef;
+    }
+    print MSGDUMP $msg_as_string ;
+
+    unless (close(MSGDUMP)){ 
+	do_log('err',"unable to dump message in temporary file $temporary_file"); 
+	return undef; 
+    }
+
+    unless (open (MSGDUMP, "$temporary_file")) {
+	&do_log('err', 'Can\'t read message in file %s', $temporary_file);
+	return undef;
+    }
+
+    do_log('trace',"dump dans $temporary_file");
+    # this documented method is pretty but dont validate signatures, why ?
+    # $dkim->load(\*MSGDUMP);
+    while (<MSGDUMP>){
+	chomp;
+	s/\015$//;
+	$dkim->PRINT("$_\015\012");
+    }
+
+    $dkim->CLOSE;
+    close(MSGDUMP);
+    unlink ($temporary_file);
+    
+    foreach my $signature ($dkim->signatures) {
+	my $trace = $signature->result_detail;
+        do_log('trace', " verif de signature $trace");
+	return 1 if  ($trace eq "pass");
+    }    
+    return undef;
+}
 
 # input object msg and listname, output signed message object
 sub dkim_sign {
@@ -2396,7 +2439,7 @@ sub remove_pid {
 		unless (open(PFILE, ">$pidfile")) {
 		    fatal_err('Could not open %s, exiting', $pidfile);
 		}
-		print PFILE "$previous_pid";
+		print PFILE "$previous_pid\n";
 		close(PFILE);
 	    }else{
 		&do_log('notice','pidfile %s does not exist. Nothing to do.',$pidfile);
@@ -2464,11 +2507,15 @@ sub write_pid {
     }
 
     ## If we can have multiple options for the process.
+    ## Print other pids + this one
     if($options->{'multiple_process'}){
-	unless (open(LCK, ">> $pidfile")) {
+	unless (open(LCK, "> $pidfile")) {
 	    fatal_err('Could not open %s, exiting', $pidfile);
 	}
-	print LCK "$pid ";
+
+	## Print other pids + this one
+	print LCK "$other_pid $pid\n";
+
 	close(LCK);
     }else{
 	## Create and write the pidfile
@@ -2504,7 +2551,7 @@ sub write_pid {
 	    fatal_err('Could not truncate %s, exiting.', $pidfile);
 	}
 	
-	print LCK "$pid ";
+	print LCK "$pid\n";
 	close(LCK);
     }
     unless (&tools::set_file_rights(file => $pidfile,
@@ -2618,11 +2665,6 @@ sub remove_dir {
     do_log('debug2','remove_dir()');
     
     foreach my $current_dir (@_){
-	my @tree = split /\//, $current_dir ;
-	if ($#tree < 4) {
-	    do_log('err',"$current_dir not removed (not enough / in directory name)");
-	    next;
-	}
 	finddepth({wanted => \&del, no_chdir => 1},$current_dir);
     }
     sub del {
