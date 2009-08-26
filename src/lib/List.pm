@@ -4535,13 +4535,21 @@ sub delete_user_db {
 }
 
 ## Delete the indicate users from the list.
+## IN : - ref to array 
+##      - option exclude
+##
+## $list->delete_user('users' => \@u, 'exclude' => 1)
+## $list->delete_user('users' => [$email], 'exclude' => 1)
 sub delete_user {
-    my($self, @u) = @_;
-    do_log('debug2', 'List::delete_user');
+    my $self = shift;
+    my %param = @_;
+    my @u = @{$param{'users'}};
+    my $exclude = $param{'exclude'};
+    &do_log('debug2', 'List::delete_user');
 
     my $name = $self->{'name'};
     my $total = 0;
-    
+
     ## Check database connection
     unless ($dbh and $dbh->ping) {
 	return undef unless &db_connect();
@@ -4549,8 +4557,15 @@ sub delete_user {
     
     foreach my $who (@u) {
 	$who = &tools::clean_email($who);
+
 	my $statement;
-	
+	## Include in exclusion_table only if option is set.
+	if($exclude == 1){
+	    ## Insert in exclusion_table if $user->{'included'} eq '1'
+	    &insert_delete_exclusion($who, $name, $self->{'domain'}, 'insert');
+	    
+	}
+
 	$list_cache{'is_user'}{$self->{'domain'}}{$name}{$who} = undef;    
 	$list_cache{'get_subscriber'}{$self->{'domain'}}{$name}{$who} = undef;    
 	
@@ -4857,7 +4872,7 @@ sub restore_suspended_subscription {
     unless ($dbh and $dbh->ping) {
 	return undef unless &db_connect();
     }
-
+    ## Update field
     my $statement = sprintf "UPDATE subscriber_table SET suspend_subscriber='0', suspend_start_date_subscriber=NULL, suspend_end_date_subscriber=NULL WHERE (user_subscriber=%s AND list_subscriber=%s AND robot_subscriber = %s )",  
     $dbh->quote($email), 
     $dbh->quote($list),
@@ -4869,6 +4884,141 @@ sub restore_suspended_subscription {
     }
     
     return 1;
+}
+
+######################################################################
+###  insert_delete_exclusion                                         #
+## Update the exclusion_table                                        #
+######################################################################
+# IN:                                                                #
+#   - email : the subscriber email                                   #
+#   - list : the name of the list                                    #
+#   - robot : the name of the domain                                 #
+#   - action : insert or delete                                      #
+# OUT:                                                               #
+#   - undef if something went wrong.                                 #
+#   - 1                                                              #
+######################################################################
+sub insert_delete_exclusion {
+
+    my $email = shift;
+    my $list = shift;
+    my $robot = shift;
+    my $action = shift;
+    &do_log('info', 'List::insert_delete_exclusion("%s", "%s", "%s", "%s")', $email, $list, $robot, $action);
+
+    ## Check database connection
+    unless ($dbh and $dbh->ping) {
+	return undef unless &db_connect();
+    }
+    my $statement;
+    if($action eq 'insert'){
+	## INSERT only if $user->{'included'} eq '1'
+
+	my $options;
+	$options->{'email'} = $email;
+	$options->{'name'} = $list;
+	$options->{'domain'} = $robot;
+	my $user = &get_subscriber_no_object($options);
+	my $date = time;
+
+	if ($user->{'included'} eq '1') {
+	    ## Insert : list, user and date
+	    $statement = sprintf "INSERT INTO exclusion_table (list_exclusion, user_exclusion, date_exclusion) VALUES (%s, %s, %s)",  
+	    $dbh->quote($list), 
+	    $dbh->quote($email),
+	    $dbh->quote($date);
+	    
+	    unless ($dbh->do($statement)) {
+		&do_log('err','Unable to execute SQL statement "%s" : %s', $statement, $dbh->errstr);
+		return undef;
+	    }
+	}
+	
+    }elsif($action eq 'delete') {
+	## If $email is in exclusion_table, delete it.
+	my $data_excluded = &get_exclusion($list);
+	my @users_excluded;
+
+	my $key =0;
+	while ($data_excluded->{'emails'}->[$key]){
+	    push @users_excluded, $data_excluded->{'emails'}->[$key];
+	    $key = $key + 1;
+	}
+
+	foreach my $users (@users_excluded) {
+	    if($email eq $users){
+		## Delete : list, user and date
+		$statement = sprintf "DELETE FROM exclusion_table WHERE (list_exclusion = %s AND user_exclusion = %s)",
+		$dbh->quote($list),
+		$dbh->quote($email);
+
+		unless ($dbh->do($statement)) {
+		    &do_log('err','Unable to execute SQL statement "%s" : %s', $statement, $dbh->errstr);
+		    return undef;
+		}
+	    }
+	}
+
+    }else{
+	&do_log('err','You must choose an action');
+	return undef;
+    }
+   
+    return 1;
+}
+
+######################################################################
+###  get_exclusion                                                   #
+## Returns a hash with those excluded from the list and the date.    #
+##                                                                   # 
+# IN:  - name : the name of the list                                 #
+# OUT: - data_exclu : * %data_exclu->{'emails'}->[]                  #
+#                     * %data_exclu->{'date'}->[]                    # 
+######################################################################
+sub get_exclusion {
+    
+    my  $name= shift;
+    &do_log('debug2', 'List::get_exclusion(%s)', $name);
+   
+    ## Check database connection
+    unless ($dbh and $dbh->ping) {
+	return undef unless &db_connect();
+    }
+    ## the query return the email and the date in a hash
+    my $statement = sprintf "SELECT user_exclusion AS email, date_exclusion AS date FROM exclusion_table WHERE list_exclusion = %s", 
+    $dbh->quote($name); 
+  
+    push @sth_stack, $sth;
+    unless ($sth = $dbh->prepare($statement)) {
+	&do_log('err','Unable to prepare SQL statement : %s', $dbh->errstr);
+	return undef;
+    }
+    unless ($sth->execute) {
+	&do_log('err','Unable to execute SQL statement "%s" : %s', $statement, $dbh->errstr);
+	return undef;
+    }
+
+    my @users;
+    my @date;
+    my $data;
+    while ($data = $sth->fetchrow_hashref){
+	push @users, $data->{'email'};
+	push @date, $data->{'date'};
+    }
+    ## in order to use the data, we add the emails and dates in differents array
+    my $data_exclu = {"emails" => \@users,
+		      "date"   => \@date
+		      };
+    
+    $sth->finish();
+    $sth = pop @sth_stack;
+   
+    unless($data_exclu){
+	&do_log('err','Unable to retrieve information from database for list %s', $name);
+	return undef;
+    }
+    return $data_exclu;
 }
 
 ######################################################################
@@ -4933,7 +5083,6 @@ sub get_subscriber_no_object {
     my $name = $options->{'name'};
     
     my $email = &tools::clean_email($options->{'email'});
-
     my $statement;
     my $date_field = sprintf $date_format{'read'}{$Conf::Conf{'db_type'}}, 'date_subscriber', 'date_subscriber';
     my $update_field = sprintf $date_format{'read'}{$Conf::Conf{'db_type'}}, 'update_subscriber', 'update_subscriber';	
@@ -4990,7 +5139,6 @@ sub get_subscriber_no_object {
     $sth->finish();
 
     $sth = pop @sth_stack;
-    
     ## Set session cache
     $list_cache{'get_subscriber'}{$options->{'domain'}}{$name}{$email} = $user;
     return $user;
@@ -6520,7 +6668,7 @@ sub add_user_db {
 ## Adds a new user, no overwrite.
 sub add_user {
     my($self, @new_users) = @_;
-    do_log('debug2', 'List::add_user');
+    &do_log('debug2', 'List::add_user');
     
     my $name = $self->{'name'};
     my $total = 0;
@@ -6534,9 +6682,11 @@ sub add_user {
     
     foreach my $new_user (@new_users) {
 	my $who = &tools::clean_email($new_user->{'email'});
-	
 	next unless $who;
 	
+	# Delete from exclusion_table if new_user is in.
+	&insert_delete_exclusion($who, $name, $self->{'domain'}, 'delete');
+
 	$new_user->{'date'} ||= time;
 	$new_user->{'update_date'} ||= $new_user->{'date'};
 	
@@ -8615,7 +8765,7 @@ sub sync_include {
     my $option = shift;
     my $name=$self->{'name'};
     &do_log('debug', 'List:sync_include(%s)', $name);
-
+    
     my %old_subscribers;
     my $total=0;
 
@@ -8636,7 +8786,7 @@ sub sync_include {
 
 	$total++;
     }
-
+    
     ## Load a hash with the new subscriber list
     my $new_subscribers;
     unless ($option eq 'purge') {
@@ -8653,6 +8803,19 @@ sub sync_include {
 	}
     }
 
+    my $data_exclu;
+    my @subscriber_exclusion;
+
+    ## Récupérer un array d'emails pour une liste donnée in 'exclusion_table'
+    $data_exclu = &get_exclusion($name);
+
+    my $key =0;
+    while ($data_exclu->{'emails'}->[$key]){
+	push @subscriber_exclusion, $data_exclu->{'emails'}->[$key];
+	$key = $key + 1;
+    }
+    
+
     my $users_added = 0;
     my $users_updated = 0;
 
@@ -8663,7 +8826,6 @@ sub sync_include {
 	return undef;
     }
     $lock->set_timeout(10*60); 
-
     unless ($lock->lock('write')) {
 	return undef;
     }
@@ -8672,7 +8834,8 @@ sub sync_include {
     my @add_tab;
     my $users_added = 0;
     foreach my $email (keys %{$new_subscribers}) {
-	if (defined($old_subscribers{$email}) ) {	   
+	if (defined($old_subscribers{$email}) ) {
+
 	    if ($old_subscribers{$email}{'included'}) {
 
 	      ## If one user attribute has changed, then we should update the user entry
@@ -8687,7 +8850,6 @@ sub sync_include {
 		  $users_updated++;
 		}
 	      }
-	      
 		## User was already subscribed, update include_sources_subscriber in DB
 	    }else {
 		&do_log('debug', 'List:sync_include: updating %s to list %s', $email, $name);
@@ -8703,6 +8865,19 @@ sub sync_include {
 
 	    ## Add new included user
 	}else {
+	    my $compare = 0;
+	    foreach my $sub_exclu (@subscriber_exclusion){
+		unless ($compare eq '1'){
+		    if ($email eq $sub_exclu){
+			$compare = 1;
+		    }else{
+			next;
+		    }
+		}
+	    }
+	    if($compare eq '1'){
+		next;
+	    }
 	    &do_log('debug3', 'List:sync_include: adding %s to list %s', $email, $name);
 	    my $u = $new_subscribers->{$email};
 	    $u->{'included'} = 1;
@@ -8751,7 +8926,7 @@ sub sync_include {
 	    }else {
 		&do_log('debug3', 'List:sync_include: removing %s from list %s', $email, $name);
 		@deltab = ($email);
-		unless($user_removed = $self->delete_user(@deltab)) {
+		unless($user_removed = $self->delete_user('users' => \@deltab)) {
 		    &do_log('err', 'List:sync_include(%s): Failed to delete %s', $name, $user_removed);
 		    return undef;
 		}
@@ -11450,7 +11625,7 @@ sub close {
     for ( my $user = $self->get_first_user(); $user; $user = $self->get_next_user() ){
 	push @users, $user->{'email'};
     }
-    $self->delete_user(@users);
+    $self->delete_user('users' => \@users);
 
     ## Remove entries from admin_table
     foreach my $role ('owner','editor') {
@@ -11554,8 +11729,8 @@ sub remove_bouncers {
 	&do_log('notice','Removing bouncing subsrciber of list %s : %s', $self->{'name'}, $bouncer);
     }
 
-    unless (&delete_user($self,@$reftab)){
-      &do_log('info','error while caling sub delete_users');
+    unless ($self->delete_user('users' => $reftab, 'exclude' =>' 1')){
+      &do_log('info','error while calling sub delete_users');
       return undef;
     }
     return 1;

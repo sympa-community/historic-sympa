@@ -55,6 +55,14 @@ CREATE TABLE admin_table (
 );
 CREATE	INDEX admin_idx ON admin_table(list_admin, user_admin, robot_admin, role_admin);
 
+CREATE TABLE exclusion_table (
+	list_exclusion 		text,
+ 	user_exclusion 		text,
+	date_exclusion 		integer,
+	PRIMARY KEY (list_exclusion, user_exclusion)
+);
+CREATE	INDEX exclusion_idx ON exclusion_table(list_exclusion, user_exclusion);
+
 CREATE TABLE netidmap_table (
         netid_netidmap		text NOT NULL,
 	serviceid_netidmap	text NOT NULL,

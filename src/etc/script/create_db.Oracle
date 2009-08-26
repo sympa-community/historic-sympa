@@ -67,6 +67,13 @@ CREATE TABLE admin_table (
        CONSTRAINT ind_admin PRIMARY KEY (list_admin,user_admin,robot_admin,role_admin)
 );
 
+CREATE TABLE exclusion_table (
+	list_exclusion 		varchar2(50),
+ 	user_exclusion 		varchar2(100),
+	date_exclusion 		date,
+       CONSTRAINT ind_exclusion PRIMARY KEY (list_exclusion,user_exclusion)
+);
+
 CREATE TABLE netidmap_table (
         netid_netidmap              varchar2 (100) NOT NULL,
 	serviceid_netidmap	    varchar2 (100) NOT NULL,
