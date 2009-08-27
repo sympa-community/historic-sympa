@@ -33,8 +33,8 @@ use Sys::Hostname;
 use Mail::Header;
 use Encode::Guess; ## Usefull when encoding should be guessed
 use Encode::MIME::Header;
-use Mail::DKIM::Signer;
-use Mail::DKIM::Verifier;
+#use Mail::DKIM::Signer;
+#use Mail::DKIM::Verifier;
 
 use Conf;
 use Language;
@@ -751,8 +751,17 @@ sub get_dkim_parameters {
 # input a msg as string, output the dkim status
 sub dkim_verifier {
     my $msg_as_string = shift;
-    my $dkim = Mail::DKIM::Verifier->new();
+    my $dkim;
+    eval "require Mail::DKIM::verifier";
+    if ($@) {
+            &do_log('err', "Failed to load Mail::DKIM::verifier perl module, ignoring DKIM signature");
+            return undef;
+        }
     
+    unless ( $dkim = Mail::DKIM::Verifier->new() ){
+	&do_log('err', 'Could not create Mail::DKIM::Verifier');
+	return undef;
+    }
    
     my $temporary_file = $Conf::Conf{'tmpdir'}."/dkim.".$$ ;  
     if (!open(MSGDUMP,"> $temporary_file")) {
@@ -831,6 +840,12 @@ sub dkim_sign {
     close(MSGDUMP);
     do_log('trace',"$temporary_keyfile");
 
+    eval "require Mail::DKIM::signer";
+    if ($@) {
+            &do_log('err', "Failed to load Mail::DKIM::signer perl module, ignoring DKIM signature");
+            return undef;
+        }
+    
     # create a signer object
     my $dkim = Mail::DKIM::Signer->new(
 				       Algorithm => "rsa-sha1",
@@ -840,6 +855,10 @@ sub dkim_sign {
 				       KeyFile => $temporary_keyfile,
 				       );
     
+    unless ($dkim) {
+	&do_log('err', 'Can\'t create Mail::DKIM::Signer');
+	return undef;
+    }    
     my $temporary_file = $Conf::Conf{'tmpdir'}."/dkim.".$$ ;  
     if (!open(MSGDUMP,"> $temporary_file")) {
 	&do_log('err', 'Can\'t store message in file %s', $temporary_file);

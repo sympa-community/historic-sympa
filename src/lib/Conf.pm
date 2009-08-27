@@ -232,11 +232,17 @@ sub load {
     if ($Conf{'lock_method'} eq 'nfs') {
         eval "require File::NFSLock";
         if ($@) {
-            &do_log(
-                'err',
-                "Failed to load File::NFSLock perl module ; setting 'lock_method' to 'flock'"
-            );
+            &do_log('err',"Failed to load File::NFSLock perl module ; setting 'lock_method' to 'flock'" );
             $Conf{'lock_method'} = 'flock';
+        }
+    }
+
+    ## Some parameters require CPAN modules
+    if ($Conf{'DKIM_feature'} eq 'on') {
+        eval "require Mail::DKIM";
+        if ($@) {
+            &do_log('err', "Failed to load Mail::DKIM perl module ; setting 'DKIM_feature' to 'off'");
+            $Conf{'DKIM_feature'} = 'off';
         }
     }
 
