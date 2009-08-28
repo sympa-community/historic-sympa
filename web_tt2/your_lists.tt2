@@ -6,7 +6,7 @@
 [% IF which_info %]
 <ul class="listenum" >
   <li>
-    <a class="actionMenuLinks" href="[% path_cgi %]/suspend_request" >[%|loc%]Manage your lists[%END%]</a><br />
+    <a class="input" href="[% path_cgi %]/suspend_request" >[%|loc%]Manage your subscriptions[%END%]</a><br />
   </li>
  [% FOREACH l = which_info %]
 <li>

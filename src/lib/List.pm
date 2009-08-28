@@ -4924,10 +4924,7 @@ sub insert_delete_exclusion {
 
 	if ($user->{'included'} eq '1') {
 	    ## Insert : list, user and date
-	    $statement = sprintf "INSERT INTO exclusion_table (list_exclusion, user_exclusion, date_exclusion) VALUES (%s, %s, %s)",  
-	    $dbh->quote($list), 
-	    $dbh->quote($email),
-	    $dbh->quote($date);
+	    $statement = sprintf "INSERT INTO exclusion_table (list_exclusion, user_exclusion, date_exclusion) VALUES (%s, %s, %s)", $dbh->quote($list), $dbh->quote($email), $dbh->quote($date);
 	    
 	    unless ($dbh->do($statement)) {
 		&do_log('err','Unable to execute SQL statement "%s" : %s', $statement, $dbh->errstr);
@@ -4949,9 +4946,7 @@ sub insert_delete_exclusion {
 	foreach my $users (@users_excluded) {
 	    if($email eq $users){
 		## Delete : list, user and date
-		$statement = sprintf "DELETE FROM exclusion_table WHERE (list_exclusion = %s AND user_exclusion = %s)",
-		$dbh->quote($list),
-		$dbh->quote($email);
+		$statement = sprintf "DELETE FROM exclusion_table WHERE (list_exclusion = %s AND user_exclusion = %s)",	$dbh->quote($list), $dbh->quote($email);
 
 		unless ($dbh->do($statement)) {
 		    &do_log('err','Unable to execute SQL statement "%s" : %s', $statement, $dbh->errstr);

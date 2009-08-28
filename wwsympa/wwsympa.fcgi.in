@@ -4496,6 +4496,7 @@ sub do_pref {
      &web_db_log({'parameters' => "$in{'reception'},$in{'visibility'}",
 		  'status' => 'success',
 	      });
+
      return $in{'previous_action'} || 'suboptions';
  }
  
@@ -4813,7 +4814,7 @@ sub do_suboptions {
     
     unless($s = $list->get_subscriber($param->{'user'}{'email'})) {
 	&report::reject_report_web('intern','subscriber_not_found',{'email' => $param->{'user'}{'email'}},$param->{'action'},$list,$param->{'user'}{'email'},$robot);
-	&wwslog('info', 'do_sub_options: subscriber %s not found', $param->{'user'}{'email'});
+	&wwslog('info',  'do_sub_options: subscriber %s not found', $param->{'user'}{'email'});
 	return undef;
     }
     
@@ -14993,7 +14994,8 @@ sub do_suspend_request {
     ## Sets the date of the field "start date" to "today"
     my @d_day = localtime(time);
     $param->{'d_day'} = ($d_day[3])."-".($d_day[4]+1)."-".($d_day[5]+1900);
-    
+    my $display_resume = 0;
+
     ## We display in the table the lists of the subscriber and the state in which they are.
     ## reception : - nomail/digest/mail ||
     ##             - . suspended  From XX/XX/XXXX To XX/XX/XXXX
@@ -15005,20 +15007,40 @@ sub do_suspend_request {
 	    ## If end date is < time, update the BDD by deleting the suspending's data
 	    &List::restore_suspended_subscription($param->{'user'}{'email'},$list->{'name'},$list->{'domain'});
 	}
- 
 	my $final_start_date = gettext_strftime "%d %b %Y", localtime($member_info->{'startdate'});
 	my $final_end_date;
+
+	if($member_info->{'suspend'} == 1){
+	    $display_resume = 1;
+	}
 	if($member_info->{'enddate'}){
 	    $final_end_date = gettext_strftime "%d %b %Y", localtime($member_info->{'enddate'});
 	}else{
 	    $final_end_date = undef;
 	}
+
+	$member_info->{'reception'} ||= 'mail';
+	$member_info->{'visibility'} ||= 'noconceal';
+	foreach my $mode (keys %wwslib::reception_mode) {
+	    if ($list->is_available_reception_mode($mode)) {
+		$param->{'reception'}{$list->{'name'}}{$mode}{'description'} = sprintf(gettext($wwslib::reception_mode{$mode}->{'gettext_id'}));
+		if ($member_info->{'reception'} eq $mode) {
+		    $param->{'reception'}{$list->{'name'}}{$mode}{'selected'} = 'selected="selected"';
+		}else {
+		    $param->{'reception'}{$list->{'name'}}{$mode}{'selected'} = '';
+		}
+	    }
+	}
+	
 	my $subscription = {'listname' => $list->{'name'},
 			    'listdomain' => $list->{'domain'},
 			    'listreception' => $member_info->{'reception'},
 			    'listsuspend' => $member_info->{'suspend'},
 			    'liststartdate' =>$final_start_date,
 			    'listenddate' => $final_end_date,
+			    'display' => $display_resume,
+			    'visibility' => $member_info->{'visibility'},
+			    'reception' => $param->{'reception'}{$list->{'name'}},
 			};
 	push @{$param->{'suspend_list'}}, $subscription;
     }
@@ -15147,14 +15169,37 @@ sub do_suspend_request_action {
 	    &wwslog('info','suspend_request: must picked one or more list(s)');
 	    return 'suspend_request';
 	}
-	&report::notice_report_web('performed',{},"Restart the subscription for the list(s)");
+	&report::notice_report_web('performed',{},"Resume the subscription for the list(s)");
 		
+    }
+    ## Unsubscribe from the selected lists
+    elsif($in{'sub_action'} eq 'signoff'){
+
+	# lists selected
+	@lists = split /\0/, $in{'listname'};
+	foreach my $line (@lists) {
+
+	    my $unsub_list = new List ($line, $robot);
+	    unless ($unsub_list) {
+		&wwslog('info', 'List %s unknown' , $unsub_list);
+		return undef;
+	    }
+
+	    $unsub_list->delete_user('users' => [$param->{'user'}{'email'}],'exclude' => 1 ); 
+	}
+	if($lists[0] eq ''){
+	    &report::reject_report_web('user','missing_arg',{'argument' => 'must picked one or more list(s)'}, $param->{'action'});
+	    &wwslog('info','suspend_request: must picked one or more list(s)');
+	    return 'suspend_request';
+	}
+	
+	&report::notice_report_web('performed',{},"You are unsubscribe from the list(s)");
     }else{
-	&wwslog('info', 'do_suspend_request_action: sub_action doesn\'t exist');
-	&report::reject_report_web('user','unknown_action',,);
+	&report::reject_report_web('user','unknown_action',{},$in{'sub_action'},$list);
+	&wwslog('info','unknown action %s', $in{'sub_action'});
 	return undef;
     }
-    
+
     return 'suspend_request';
 }
 

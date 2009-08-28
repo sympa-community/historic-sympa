@@ -829,9 +829,9 @@ myAddEventListener(window, 'load', makeColorSelectors);
 
 /***********************************************************************
 * script MICRO-CAL (V4.2) par Amroune Selim (amrounix@gmail.com)
-* toutes copies, diffusions,modifications ou améliorations sont autorisées
+* all copies, releases, modifications or improvements are allowed.
 ************************************************************************
-* Utilisation du script pour gérer le calendrier
+* Using script to manage the calendar.
 * Used by suspend_request.tt2
 * Select a start date and end date.
 *************************************************************************/
@@ -839,7 +839,7 @@ myAddEventListener(window, 'load', makeColorSelectors);
 var param_ddeb = {"dfin" : "date_fin", "titre" : "[%|loc%]Start date[%END%]" };
 var param_dfin = {"ddeb" : "date_deb", "titre" : "[%|loc%]End date[%END%]"  };
 
-/* variable globale */
+/* vars */
 var pDefaut = { 
 	"mois" : new Array("[%|loc%]January[%END%]","[%|loc%]February[%END%]","[%|loc%]March[%END%]","[%|loc%]April[%END%]","[%|loc%]May[%END%]","[%|loc%]June[%END%]","[%|loc%]July[%END%]","[%|loc%]August[%END%]","[%|loc%]September[%END%]","[%|loc%]October[%END%]","[%|loc%]November[%END%]","[%|loc%]December[%END%]"),
 	"jour" : new Array("[%|loc%]Su[%END%]","[%|loc%]Mo[%END%]","[%|loc%]Tu[%END%]","[%|loc%]We[%END%]","[%|loc%]Th[%END%]","[%|loc%]Fr[%END%]","[%|loc%]Sa[%END%]"),
@@ -860,13 +860,13 @@ var tempo = new Array(); /*gestion de la fermeture des calendriers quand on perd
 var nomove={"TR":0,"CENTER":0,"B":0,"P":0,"U":0,"I":0,"DIV":0,"A":0,"FONT":0,"LI":0,"PRE":0,"SPAN":0,"SUB":0,"SUP":0,"FORM":0};
 //var nomove={"TD":0,"TABLE":0};
 
-/* simplification des appels */
+/* simplification calls */
 function _(x) 
 {
   return document.getElementById(x);
 }
 
-/* Retourne le nombre de jour depuis le 1er janvier (pr le num de semaine) */
+/* Returns the number of days since January 1 (for number of the week)*/
 function nbJ(dateX) 
 {
   var j_mois=[0,31,59,90,120,151,181,212,243,273,304,334];
@@ -891,22 +891,21 @@ function dateMax(dateA,dateB)
 				      ))) ? dateA:dateB
     }
 
-/* compare 2 dates et retourne true si dateA<=dateB */
+/* compare two dates and return true if dateA<=dateB */
 function dateBefore(dateA,dateB) 
 {
   return dateA!=null&&dateB!=null&&(dateA.getFullYear()<dateB.getFullYear()||(dateA.getFullYear()==dateB.getFullYear()&&dateA.getMonth()<dateB.getMonth())||
 				    (dateA.getFullYear()==dateB.getFullYear()&&dateA.getMonth()==dateB.getMonth()&&dateA.getDate()<dateB.getDate()));
 }
 
-/* methode pour afficher les infos de navigation */
+/* function to display the navigation informations */
 function htmNavChk(dateA,dateB,src,srcId,mm,yy,txt) 
 {
   return (dateBefore(dateA,dateB)) ? 
     "<td onclick=\"\">&nbsp;</td>" : ("<td class=\"zoneNav\" onclick=\"return generateCal('"+src+"','"+srcId+"',"+mm+","+yy+")\">"+txt+"</td>");
 }
 
-/* Balises html <tr> et <td> pour la création du calendrier */
-/* génère le calendrier */
+/* create the calendar */
 function generateCal(src,srcId,mm,yy) 
 {
   if (tempo!=null&&tempo[srcId]!=null)
@@ -933,7 +932,7 @@ function generateCal(src,srcId,mm,yy)
   if (param["titre"]!= null )
     {htm+="<tr><td colspan=\"8\" class=\"zoneTitre\" >"+param["titre"]+"</td></tr>";}
   
-  /*zone de navigation*/
+  /*navigation area*/
   htm+="<tr><td colspan=\"8\"><table width=\"100%\" cellpadding=\"0\" cellspacing=\"0\" ><tr>";
   htm+=htmNavChk(new Date(yy-1,mm,1),dateMax(ddeb,param["dateMin"]),src,srcId,mm,yy-1,param["anneeMoins"]);
   htm+=htmNavChk(new Date(yy,mm,0),dateMax(ddeb,param["dateMin"]),src,srcId,mm-1,yy,param["moisMoins"]);
@@ -942,14 +941,14 @@ function generateCal(src,srcId,mm,yy)
   htm+=htmNavChk(dateMin(dfin,param["dateMax"]),new Date(yy+1,mm,1),src,srcId,mm,yy+1,param["anneePlus"]);
   htm+="</tr></table></td></tr>";
   
-  /*jours de la semaine*/
+  /* day of the week*/
   htm+="<tr><td></td>";
   pJs = param["debutSemaine"];
-  pJm = new Date(yy,mm,1).getDay(); /*jour du 1ere du mois*/
+  pJm = new Date(yy,mm,1).getDay(); /*day of the 1st of the month*/
   pjT = 1-pJm+pJs;
   pjT-=(pjT>1)?7:0;
   dateX = new Date(yy,mm,pjT);
-  for (j=0;j<7;j++)                 /*affiche les jours de la semaine*/
+  for (j=0;j<7;j++)                 /*display the days of the week*/
     {
       htm+="<td>"+param["jour"][(j+pJs)%7]+"</td>";
     }
@@ -957,10 +956,10 @@ function generateCal(src,srcId,mm,yy)
   avantFinMois=true;idx=0;
   idxSem=parseInt(nbJ(new Date(yy,mm,1))/7+1,10); /*index de la semaine*/
   
-  while(avantFinMois) /*boucle jusqu'a la fin du mois */
+  while(avantFinMois) /*loop until the end month */
     {
-      /* Si on veut afficher les numeros de semaines : htm+=(idx%7==0)?"<tr><td class=\"nSemaine\" >"+idxSem+"</td>":""; */ /*affiche le numero de semaine*/
-	htm+=(idx%7==0)?"<tr><td class='nSemaine' >"+""+"</td>":""; /* supprime la colonne numero de semaine*/
+      /* If we want to display the number of weeks : htm+=(idx%7==0)?"<tr><td class=\"nSemaine\" >"+idxSem+"</td>":""; */
+	htm+=(idx%7==0)?"<tr><td class='nSemaine' >"+""+"</td>":""; /* delete the number of weeks*/
       if (dateBefore(dateX,dateMax(ddeb,param["dateMin"]))||dateBefore(dateMin(dfin,param["dateMax"]),dateX))
 	htm+="<td style=\"text-decoration:line-through;\"><a class=\"tdx\" href=\"#\">"+subDiv(param,idx,dateX,mm,aa,0)+"</b></td>";
       else
@@ -977,14 +976,14 @@ function generateCal(src,srcId,mm,yy)
     htm+="<a class=\"tdxNow\" href=\"#\" onclick=\"javascript:choix("+dnow.getFullYear()+","+dnow.getMonth()+","+dnow.getDate()+",'"+srcId+"','"+src+"')\" >"+param["aujourdhui"]+"</a>";
   else htm+="&nbsp;"
     
-    /*annee*/
+    /*year*/
     htm+="</td><td colspan=\"2\" class=\"zoneAnnee\">"+yy+"</td></tr></table>";
   //alert(htm);
   _(srcId).innerHTML=htm;
   return false;
 }
 
-/* ajoute un zero devant */
+/* add a zero before */
 function addZero(val) 
 { return ((val<10)?"0":"")+val;}
 
@@ -1053,11 +1052,11 @@ function decodeDate(val,format,defaut)
   return new Date(aa,mm,jj);
 }
 
-/* Initialise des paramètres pour le calendrier : position d'affichage, création des div, ... */
-/* Permet la visualisation du calendrier quand on clique sur l'input */
+/* Initialisation of the parameters for the calendar : display position, create div, ... */
+/* Let you see the calendar when you click on the input */
 function visuCal(src,paramX)
 {
-  if (src.id=="")         /*si il n'y pas d'ID on en créé un*/
+  if (src.id=="")         /*if not ID, create one*/
     {
       cpt=0;
       while(_("microcal"+cpt) != null) 
@@ -1066,9 +1065,9 @@ function visuCal(src,paramX)
     }
   pos_ = new Array();
   pos_ = getOffsets(_(src.id)); 
-  srcId = src.id+"_cal";  /*id du div du calendrier*/
+  srcId = src.id+"_cal";  /*id div for calendar*/
   dnow= new Date();
-  if (_(srcId)==null)     /*si il existe pas on le créé*/
+  if (_(srcId)==null)     /*if doesn't exist create one*/
     {
       param={}
       for (e in pDefaut) {
@@ -1081,7 +1080,7 @@ function visuCal(src,paramX)
       div = document.createElement('div');
       div.setAttribute('id',srcId);
       div.style.position = 'absolute';
-      div.style.top = (pos_[1] + 18) + 'px'; /* 18 correspond à la hauteur d'un input */
+      div.style.top = (pos_[1] + 18) + 'px'; /* 18 : high of the input */
       div.style.left = pos_[0] + 'px';  /*this.deltaG = 0; */
       div.className = 'divCal';
       div.parametre = param;
@@ -1090,20 +1089,20 @@ function visuCal(src,paramX)
     } else
     {
       div = _(src.id+"_cal");
-      div.style.display='inline';      /*affiche le calendrier*/
+      div.style.display='inline';      /*display calendar*/
       div.style.top = (pos_[1] + 18) + 'px'; 
       div.style.left = pos_[0] + 'px';  /*this.deltaG = 0; */
     }
   
 }
 
-/* permet de masquer le calendrier */
+/* hide the calendar  */
 function masqueCal(src)
 {
   tempo[src.id+"_cal"]=window.setTimeout("_('"+src.id+"_cal').style.display='none'",500);
 }
 
-/* retourne la position en {x,y} d'un element sous forme de tableau */
+/* return the position (x, y) of an element in an array */
 function getOffsets(obj) {
     var offsetTop = obj.offsetTop;
     var offsetLeft = obj.offsetLeft;
