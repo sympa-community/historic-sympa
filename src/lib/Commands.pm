@@ -87,7 +87,7 @@ my $quiet;
 # IN :-$sender (+): the command sender
 #     -$robot (+): robot
 #     -$i (+): command line
-#     -$sign_mod : 'smime'| -
+#     -$sign_mod : 'smime'| 'dkim' -
 #
 # OUT : $status |'unknown_cmd'
 #      
@@ -100,6 +100,7 @@ sub parse {
    my $message = shift;
 
    &do_log('debug2', 'Commands::parse(%s, %s, %s, %s, %s)', $sender, $robot, $i, $sign_mod, $message );
+   &do_log('trace', 'Commands::parse(%s, %s, %s, %s, %s)', $sender, $robot, $i, $sign_mod, $message );
 
    my $j;
    $cmd_line = '';
@@ -255,10 +256,11 @@ sub lists {
     my $lists = {};
 
     my $all_lists =  &List::get_lists($robot);
+    
     foreach my $list ( @$all_lists ) {
 	my $l = $list->{'name'};
-
-	my $result = $list->check_list_authz('visibility','smtp',
+	
+	my $result = $list->check_list_authz('visibility','smtp', # 'smtp' isn't it a bug ? 
 					     {'sender' => $sender,
 					      'message' => $message, });
 
@@ -304,7 +306,7 @@ sub lists {
 # 
 # IN : -$listname (+): list name
 #      -$robot (+): robot 
-#      -$sign_mod : 'smime' | -
+#      -$sign_mod : 'smime' | 'dkim'|  -
 #
 # OUT : 'unknown_list'|'not_allowed'|1  | undef
 #      
@@ -560,6 +562,7 @@ sub review {
     my $message = shift ;
 
     &do_log('debug', 'Commands::review(%s,%s,%s)', $listname,$robot,$sign_mod );
+    &do_log('trace', 'Commands::review(%s,%s,%s)', $listname,$robot,$sign_mod );
 
     my $sympa = &Conf::get_robot_conf($robot, 'sympa');
 
@@ -660,7 +663,7 @@ sub review {
 #
 # IN : -$listname (+): list name
 #      -$robot (+): robot 
-#      -$sign_mod : 'smime'| -
+#      -$sign_mod : 'smime'| 'dkim' | -
 #
 # OUT : 1
 #
@@ -2624,10 +2627,10 @@ sub which {
 #        -type : for message_report.tt2 parsing
 #        -data : ref(HASH) for message_report.tt2 parsing
 #        -msg : for do_log
-#     -$sign_mod (+): 'smime'| -
+#     -$sign_mod (+): 'smime'| 'dkim' | -
 #     -$list : ref(List) | -
 #
-# OUT : 'smime'|'md5'|'smtp' if authentification OK, undef else
+# OUT : 'smime'|'md5'|'dkim'|'smtp' if authentification OK, undef else
 #       | undef   
 ##########################################################
 sub get_auth_method {
@@ -2637,7 +2640,7 @@ sub get_auth_method {
     my $auth_method;
 
     if ($sign_mod eq 'smime') {
-	$auth_method='smime';
+	$auth_method ='smime';
 
     }elsif ($auth ne '') {
 	&do_log('debug',"auth received from $sender : $auth");	
@@ -2650,7 +2653,7 @@ sub get_auth_method {
 	    $compute= &List::compute_auth($email,$cmd);	    
 	}
 	if ($auth eq $compute) {
-	    $auth_method='md5' ;
+	    $auth_method = 'md5' ;
 	}else{           
 	    &do_log('debug2', 'auth should be %s',$compute);
 	    if ($error->{'type'} eq 'auth_failed'){
@@ -2661,8 +2664,9 @@ sub get_auth_method {
 	    &do_log('info', '%s refused, auth failed',$error->{'msg'});
 	    return undef;
 	}
-    }else {
-	$auth_method='smtp';
+    }else {	
+	$auth_method = 'smtp';
+	$auth_method = 'dkim' if ($sign_mod eq 'dkim');
     }
  
     return $auth_method;

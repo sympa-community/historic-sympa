@@ -752,7 +752,8 @@ sub get_dkim_parameters {
 sub dkim_verifier {
     my $msg_as_string = shift;
     my $dkim;
-    eval "require Mail::DKIM::verifier";
+
+    eval "require Mail::DKIM::Verifier";
     if ($@) {
             &do_log('err', "Failed to load Mail::DKIM::verifier perl module, ignoring DKIM signature");
             return undef;
