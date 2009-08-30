@@ -10,7 +10,7 @@ CLEANFILES = $(man8_MANS) archived.pod bounced.pod alias_manager.pod
 
 archived.pod bounced.pod alias_manager.pod: Makefile
 	rm -f $@
-	sed \
+	$(AM_V_GEN)$(SED) \
 		-e 's|--piddir--|$(piddir)|' \
 		-e 's|--libexecdir--|$(libexecdir)|' \
 		-e 's|--sysconfdir--|$(sysconfdir)|' \
