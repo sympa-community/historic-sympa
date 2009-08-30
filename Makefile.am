@@ -36,7 +36,7 @@ installdir:
 		$(bouncedir) $(arcdir) $(piddir) $(staticdir); do \
 		if [ ! -d $(DESTDIR)$$dir ] ; then \
 			echo "Creating $(DESTDIR)$$dir"; \
-			install -d -m 755 $(DESTDIR)$$dir; \
+			$(INSTALL) -d -m 755 $(DESTDIR)$$dir; \
 		fi; \
 		chown $(USER) $(DESTDIR)$$dir || /bin/true; \
 		chgrp $(GROUP) $(DESTDIR)$$dir || /bin/true; \
@@ -46,7 +46,7 @@ installdir:
 		task_models general_task_models; do \
 		if [ ! -d $(DESTDIR)$(sysconfdir)/sympa/$$dir ] ; then \
 			echo "Creating $(DESTDIR)$(sysconfdir)/sympa/$$dir"; \
-			install -d -m 755 $(DESTDIR)$(sysconfdir)/sympa/$$dir; \
+			$(INSTALL) -d -m 755 $(DESTDIR)$(sysconfdir)/sympa/$$dir; \
 		fi \
 	done
 
