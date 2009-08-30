@@ -170,7 +170,7 @@ DEFAULT_SCENARIOS = add.owner \
 
 list_aliases.tt2: Makefile list_aliases.tt2.in
 	rm -f $@
-	sed \
+	$(SED) \
 		-e 's|--libexecdir--|$(libexecdir)|' \
 		< $(srcdir)/$@.in > $@
 
