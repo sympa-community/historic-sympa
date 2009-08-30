@@ -138,6 +138,6 @@ EXTRA_DIST = $(webtemplate_DATA)
 
 install-data-hook:
 	cd $(DESTDIR)$(webtemplatedir); \
-	ln -sf review.tt2 search.tt2; \
-	ln -sf lists.tt2 which.tt2; \
-	ln -sf lists.tt2 search_list.tt2
+	$(LN_S) review.tt2 search.tt2; \
+	$(LN_S) lists.tt2 which.tt2; \
+	$(LN_S) lists.tt2 search_list.tt2
