@@ -22,6 +22,7 @@
 AC_PREREQ(2.59)
 AC_INIT(sympa, 6.0b, sympa-authors@cru.fr)
 AM_INIT_AUTOMAKE([foreign -Wall -Werror])
+m4_ifdef([AM_SILENT_RULES], [AM_SILENT_RULES])
 AM_PO_SUBDIRS
 
 AC_PREFIX_DEFAULT(/home/sympa)
