@@ -347,6 +347,11 @@ else
     fi
 fi
 
+AC_PATH_PROG(POD2MAN, pod2man)
+if test -z "$POD2MAN"; then
+    AC_MSG_ERROR([pod2man required])
+fi
+
 USER=sympa
 AC_ARG_WITH(
     [user],
