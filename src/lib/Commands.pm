@@ -679,10 +679,15 @@ sub verify {
     
     &Language::SetLang($list->{'admin'}{'lang'});
     
-    if ($sign_mod eq 'smime') {
-	$auth_method='smime';
+    if  ($sign_mod) {
 	&do_log('info', 'VERIFY successfull from %s', $sender,time-$time_command);
-	&report::notice_report_cmd('smime',{},$cmd_line); 
+	if ($sign_mod eq 'smime') {
+	    $auth_method='smime';
+	    &report::notice_report_cmd('smime',{},$cmd_line); 
+	}elsif($sign_mod eq 'dkim') {
+	    $auth_method='dkim';
+	    &report::notice_report_cmd('dkim',{},$cmd_line); 
+	}
     }else{
 	&do_log('info', 'VERIFY from %s : could not find correct s/mime signature', $sender,time-$time_command);
 	&report::reject_report_cmd('user','no_verify_sign',{},$cmd_line);

@@ -724,7 +724,13 @@ sub get_dkim_parameters {
 	}
 
 	$data->{'d'} = $list->{'admin'}{'dkim_parameters'}{'signer_domain'};
-	$data->{'i'} = $list->{'admin'}{'dkim_parameters'}{'signer_identity'};
+	if ($list->{'admin'}{'dkim_parameters'}{'signer_identity'}) {
+	    $data->{'i'} = $list->{'admin'}{'dkim_parameters'}{'signer_identity'};
+	}else{
+	    # RFC 4871 (page 21) 
+	    $data->{'i'} = $list->{'name'}.'-request@'.$robot;
+	}
+	
 	$data->{'header_list'} = $list->{'admin'}{'dkim_parameters'}{'header_list'};
 	$data->{'selector'} = $list->{'admin'}{'dkim_parameters'}{'selector'};
 	$keyfile = $list->{'admin'}{'dkim_parameters'}{'private_key_path'};
