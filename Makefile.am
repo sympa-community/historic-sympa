@@ -42,7 +42,7 @@ installdir:
 		chgrp $(GROUP) $(DESTDIR)$$dir || /bin/true; \
 	done
 
-installconfig:
+installconfig: installdir
 	@echo "Installing basic configuration ..."
 	export PERL5LIB=$(DESTDIR)$(modulesdir); \
 	if [ ! -f  $(DESTDIR)$(confdir)/sympa.conf ]; then \
@@ -84,8 +84,8 @@ nextstep:
 	@echo "#######################################################"
 
 importantchanges:
-	if [ -f $(DESTDIR)$(modulesdir)/Constants.pm ]; then \
-		previous=`perl -Mlib=$(DESTDIR)$(modulesdir) -MVersion -e 'print Sympa::Constants::VERSION'`; \
+	if [ -f $(DESTDIR)$(modulesdir)/Sympa/Constants.pm ]; then \
+		previous=`perl -Mlib=$(DESTDIR)$(modulesdir) -MSympa::Constants -e 'print Sympa::Constants::VERSION'`; \
         elif [ -f $(DESTDIR)$(bindir)/Version.pm ]; then \
                 previous=`perl -Mlib=$(DESTDIR)$(bindir) -MVersion -e 'print $$Version::Version'`; \
 	fi; \

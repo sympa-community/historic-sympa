@@ -46,7 +46,6 @@ use strict 'vars';
 use Time::Local;
 use Text::LineFold;
 use MIME::Lite::HTML;
-use MIME::Lite;
 
 ## Sympa API
 use List;
@@ -845,6 +844,9 @@ my %in_regexp = (
 		 
 		 ## Templates
 		 'scope' => 'distrib|robot|family|list|site',
+
+                 ## Custom Inputs from create_list_request.tt2
+                 'custom_input' => '.*',
 		 );
 
 ## Regexp applied on incoming parameters (%in)
@@ -1067,14 +1069,6 @@ my $birthday = time ;
 				 'homepage_content' => 1,
 				 'info_content' => 1,
 				 };
-     
-     my $tmp_lang = &Language::GetLang();
-     &Language::SetLang('en_US');
-     $param->{'RFC822_date'} = &POSIX::strftime("%a, %d %b %Y %H:%M:%S %z", localtime(time));
-     &Language::SetLang($tmp_lang);
-     
-     my @tmp_split = split(/_/,$tmp_lang);
-     $param->{'ISO639_language'} = $tmp_split[0];
      
      ## Change to list root
      unless (chdir($Conf{'home'})) {
@@ -1816,6 +1810,7 @@ sub get_parameters {
      }
 
      my $custom_attribute ;
+     my $custom_input;
      
      ## Check parameters format
      foreach my $p (keys %in) {
@@ -1843,7 +1838,12 @@ sub get_parameters {
 	     do_log ('debug2', "get_parameters (custom_attribute) : ($p)($key) $pname $in{$p} $Conf{$key}{type}");
 	     $custom_attribute->{$key} = {value=>$in{$p}} ;
 	     undef $in{$p} ;
-
+	 }elsif ($pname =~ /^custom_input(.*)$/) {
+	     my $key = $tokens[1];
+	     $regexp = $in_regexp{'custom_input'};
+	     do_log ('debug2', "get_parameters (custom_input) : ($p)($key) $pname $in{$p} $Conf{$key}{type}");
+	     $custom_input->{$key} = $in{$p};
+             undef $in{$p};
 	 }elsif ($in_regexp{$pname}) {
 	     $regexp = $in_regexp{$pname};
 	 }else {
@@ -1889,6 +1889,7 @@ sub get_parameters {
      }
      
      $in{custom_attribute} = $custom_attribute ;
+     $in{custom_input} = $custom_input;
      
      ## For shared-related actions, Q-encode filenames
      ## This required for filenames that include non ascii characters
@@ -3122,7 +3123,9 @@ sub do_sso_login {
 	    
 	    ## get email from authN module
 	    if (defined $Conf{'auth_services'}{$robot}[$sso_id]{'email_http_header'} && ! $email_is_trusted) {
-		$email = lc($ENV{$Conf{'auth_services'}{$robot}[$sso_id]{'email_http_header'}});
+	      my @email_list = split(/$Conf{'auth_services'}{$robot}[$sso_id]{'http_header_value_separator'}/, 
+				     lc($ENV{$Conf{'auth_services'}{$robot}[$sso_id]{'email_http_header'}}));
+	      $email = $email_list[0]; ## Only get the first occurence if multi-valued
 	    }
 	    
 	    ## Start the email validation process
@@ -3238,7 +3241,10 @@ sub do_sso_login {
  	}else {
 	    ##
 	    if (defined $Conf{'auth_services'}{$robot}[$sso_id]{'email_http_header'}) {
-		$email = lc($ENV{$Conf{'auth_services'}{$robot}[$sso_id]{'email_http_header'}});
+	      my @email_list = split($Conf{'auth_services'}{$robot}[$sso_id]{'http_header_value_separator'}, 
+				     lc($ENV{$Conf{'auth_services'}{$robot}[$sso_id]{'email_http_header'}}));
+	      $email = $email_list[0]; ## Only get the first occurence if multi-valued
+
 	    }else {
 		unless (defined $Conf{'auth_services'}{$robot}[$sso_id]{'ldap_host'} &&
 			defined $Conf{'auth_services'}{$robot}[$sso_id]{'ldap_get_email_by_uid_filter'}) {
@@ -3270,14 +3276,30 @@ sub do_sso_login {
 	$session->{'auth'} = 'generic_sso' ;
 	
 	&wwslog('notice', 'User identified as %s', $email);
-	my $prefix = $Conf{'auth_services'}{$robot}[$sso_id]{'http_header_prefix'};
-	
+
+	## There are two ways to list the attributes that Sympa will cache for the user
+	## Either with a defined header prefix (http_header_prefix)
+	## Or with an explicit list of header fields (http_header_list)
 	my @sso_attr;
-	foreach my $k (keys %ENV) {
-	    if ($k =~ /^$prefix/) {
-		push @sso_attr, "$k=$ENV{$k}";
+	if ($Conf{'auth_services'}{$robot}[$sso_id]{'http_header_list'}) {
+	  my $list_of_headers = $Conf{'auth_services'}{$robot}[$sso_id]{'http_header_list'};
+	  
+	  foreach my $field (split(/,/, $list_of_headers)) {
+	    if (defined $ENV{$field}) {
+	      push @sso_attr, "$field=$ENV{$field}";
 	    }
-	}
+	  }
+	  
+	}elsif ($Conf{'auth_services'}{$robot}[$sso_id]{'http_header_list'}) {
+	  
+	  my $prefix = $Conf{'auth_services'}{$robot}[$sso_id]{'http_header_prefix'};
+	  
+	  foreach my $k (keys %ENV) {
+	    if ($k =~ /^$prefix/) {
+	      push @sso_attr, "$k=$ENV{$k}";
+	    }
+	  }
+	}	
 	
 	my $all_sso_attr = join ';', @sso_attr;
 	
@@ -8101,9 +8123,8 @@ Creates a list using a list template
      $parameters->{'status'} = $param->{'status'};
      $parameters->{'topics'} = $in{'topics'};
      $parameters->{'description'} = $in{'info'};
-     foreach my $input (keys %in) {
-	 $parameters->{'custom_input'}{$input} = $in{$input};
-     }
+     $parameters->{'custom_input'} = $in{'custom_input'};
+
      ## create liste
      if (my $testlist = new List($in{'listname'},$robot)){
 	  &report::reject_report_web('user','create_list : requested list '.$in{'listname'}.' already exist',{},$param->{'action'},'',$param->{'user'}{'email'},$robot);

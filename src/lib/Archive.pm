@@ -23,8 +23,6 @@ package Archive;
 
 use strict;
 
-use Mail::Internet;
-
 use Log;
 
 my $serial_number = 0; # incremented on each archived mail
@@ -247,7 +245,7 @@ sub last_path {
     my $list = shift;
 
     &do_log('debug', 'Archived::last_path(%s)', $list->{'name'});
-  my $file = $list->{'dir'}.'/archives/last_message';
+
     return undef unless ($list->is_archived());
     my $file = $list->{'dir'}.'/archives/last_message';
 

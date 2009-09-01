@@ -11,7 +11,7 @@ For detailed installation / setup information, refer to the reference manual :
 Installing Sympa from sources
 =============================
 
-(If you get sources from cvs tree first run: aclocal ; autoconf; automake --add-missing)
+(If you get sources from cvs tree first run: autoreconf -i)
 
 Create a dedicated user sympa.sympa (and it's home directory) and  run 
 
@@ -32,7 +32,6 @@ Sympa requires other applications to run :
   * apache (or another web server)
   * mod_fastcgi or mod_fcgid
   * libxml 2 <http://xmlsoft.org/> is required by the LibXML Perl module;
-  * the gettext-devel library;
   * many perl modules : they are automatically installed at 'make' time
   * some Perl modules require additionnal libraries :
     - XML::LibXML requires libxml2 and libxml2 sources
