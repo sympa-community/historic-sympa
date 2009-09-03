@@ -338,8 +338,8 @@ sub upgrade {
 		    ## 2 to 1
 		    &do_log('notice', 'Fixing DB field %s ; turning 2 to 1...', $field);
 		    
-		    my $statement = sprintf "UPDATE %s SET %s=%d WHERE (%s=%d)", $check{$field}, $field, 1, $field, 2;
-		    my $rows;
+		    $statement = sprintf "UPDATE %s SET %s=%d WHERE (%s=%d)", $check{$field}, $field, 1, $field, 2;
+		    $rows;
 		    unless ($rows = $dbh->do($statement)) {
 			do_log('err','Unable to execute SQL statement "%s" : %s', $statement, $dbh->errstr);
 			return undef;
@@ -350,7 +350,7 @@ sub upgrade {
 		}
 
 		## Set 'subscribed' data field to '1' is none of 'subscribed' and 'included' is set		
-		my $statement = "UPDATE subscriber_table SET subscribed_subscriber=1 WHERE ((included_subscriber IS NULL OR included_subscriber!=1) AND (subscribed_subscriber IS NULL OR subscribed_subscriber!=1))";
+		$statement = "UPDATE subscriber_table SET subscribed_subscriber=1 WHERE ((included_subscriber IS NULL OR included_subscriber!=1) AND (subscribed_subscriber IS NULL OR subscribed_subscriber!=1))";
 		
 		&do_log('notice','Updating subscribed field of the subscriber table...');
 		my $rows = $dbh->do($statement);
@@ -946,7 +946,7 @@ sub probe_db {
 	
 	foreach my $t (@tables) {
 	    $t =~ s/^\`[^\`]+\`\.//;## Clean table names that would look like `databaseName`.`tableName` (mysql)
-	    $t =~ s/^\`(.+)\`$/\1/;## Clean table names that could be surrounded by `` (recent DBD::mysql release)
+	    $t =~ s/^\`(.+)\`$/$1/;## Clean table names that could be surrounded by `` (recent DBD::mysql release)
 	}
 	
 	unless (defined $#tables) {
@@ -1011,7 +1011,7 @@ sub probe_db {
  	}
 	
  	foreach my $t (@tables) {
- 	    $t =~ s/^\"(.+)\"$/\1/;
+ 	    $t =~ s/^\"(.+)\"$/$1/;
  	}
 	
 	foreach my $t (@tables) {
@@ -1255,7 +1255,7 @@ sub probe_db {
 		}
 		
 		## drop previous index if this index is not a primary key and was defined by a previous Sympa version
-		my $test_request_result = $dbh->selectall_hashref('SHOW INDEX FROM '.$t,'key_name');
+		$test_request_result = $dbh->selectall_hashref('SHOW INDEX FROM '.$t,'key_name');
 		my %index_columns;
 		
 		foreach my $indexName ( keys %$test_request_result ) {
@@ -1372,7 +1372,7 @@ sub probe_db {
 	close SCRIPT;
 	my @scripts = split /;\n/,$script;
 
-    my $db_script =
+	$db_script =
         Sympa::Constants::SCRIPTDIR . "/create_db.$Conf::Conf{'db_type'}";
 	push @report, sprintf("Running the '%s' script...", $db_script);
 	&do_log('notice', "Running the '%s' script...", $db_script);
@@ -1596,7 +1596,7 @@ sub md5_encode_password {
 	return undef;
     }
 
-    my $total = 0;
+    $total = 0;
     my $total_md5 = 0 ;
 
     while (my $user = $sth->fetchrow_hashref('NAME_lc')) {

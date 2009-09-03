@@ -121,10 +121,6 @@ sub mail_file {
 
     &do_log('debug2', 'mail::mail_file(%s, %s, %s)', $filename, $rcpt, $sign_mode);
 
-    foreach my $key ($data->{'dkim'}){
-	do_log('trace',"dkim parameters : $key $data->{'dkim'}{$key}");
-    }
-
     my ($to,$message);
 
     ## boolean
@@ -284,7 +280,6 @@ sub mail_file {
     $data->{'return_path'} ||= &Conf::get_robot_conf($robot, 'request');
     
     ## SENDING
-    do_log('trace',"appel de sending");
     unless (defined &sending('msg' => $message,
 			     'rcpt' => $rcpt,
 			     'from' => $data->{'return_path'},
@@ -696,7 +691,7 @@ sub sending {
 	}
 	
     }elsif(defined $send_spool) { # in context wwsympa.fcgi do note send message to reciepients but copy it to standard spool 
-	do_log('trace',"NOT USING BULK");
+	do_log('debug',"NOT USING BULK");
 
 	$sympa_email = &Conf::get_robot_conf($robot, 'sympa');	
 	$sympa_file = "$send_spool/T.$sympa_email.".time.'.'.int(rand(10000));
@@ -727,7 +722,7 @@ sub sending {
 	    return undef;
 	}
     }else{ # send it now
-	do_log('trace',"NOT USING BULK");
+	do_log('debug',"NOT USING BULK");
 	*SMTP = &smtpto($from, $rcpt, $robot);	
 	print SMTP $messageasstring;	
 	unless (close SMTP) {

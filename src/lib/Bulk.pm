@@ -182,7 +182,14 @@ sub messageasstring {
     my $messageasstring = $sth->fetchrow_hashref('NAME_lc') ;
     $sth->finish;
 
-    return( MIME::Base64::decode($messageasstring->{'message'}) );
+    unless ($messageasstring ){
+	do_log('err',"could not fetch message $messagekey from spool"); 
+    }
+    my $msg = MIME::Base64::decode($messageasstring->{'message'});
+    unless ($msg){
+	do_log('err',"could not decode message $messagekey extrated from spool (base64)"); 
+    }
+    return( $msg );
 }
 #################################"
 # fetch message from bulkspool_table by key 
@@ -193,8 +200,6 @@ sub message_from_spool {
     
     my $statement = sprintf "SELECT message_bulkspool AS message, dkim_d_bulkspool AS  dkim_d,  dkim_i_bulkspool AS  dkim_i, dkim_privatekey_bulkspool AS dkim_privatekey, dkim_selector_bulkspool AS dkim_selector,dkim_header_list_bulkspool AS dkim_header_list FROM bulkspool_table WHERE messagekey_bulkspool = %s",$dbh->quote($messagekey);
 
-    &do_log('trace', 'statement : %s',$statement);
-    
     unless ($dbh and $dbh->ping) {
 	return undef unless &List::db_connect();
     }
@@ -209,11 +214,6 @@ sub message_from_spool {
     }
     my $message_from_spool = $sth->fetchrow_hashref('NAME_lc') ;
     $sth->finish;
-
-    
-    foreach my $dk ('message','dkim_d','dkim_i','dkim_selector','dkim_privatekey','dkim_header_list') {
-	do_log('trace','%s : %s',$dk,substr($message_from_spool->{$dk},0,90));
-    }
 
     return({'messageasstring'=> MIME::Base64::decode($message_from_spool->{'message'}),
 	    'dkim_d' => $message_from_spool->{'dkim_d'},
@@ -394,11 +394,6 @@ sub store {
 
     &do_log('debug', 'Bulk::store(<msg>,<rcpts>,from = %s,robot = %s,listname= %s,priority_message = %s, priority_packet = %s,delivery_date= %s,verp = %s, merge = %s, dkim: d= %s i=%s)',$from,$robot,$listname,$priority_message,$priority_packet,$delivery_date,$verp,$merge,$dkim->{'d'},$dkim->{'i'});
 
-    foreach my $dkimparameter (keys %{$dkim}) {
-	&do_log('trace',"dkim : $dkimparameter = $dkim->{$dkimparameter}");
-    }
-
-
     $dbh = &List::db_get_handler();
 
     $priority_message = &Conf::get_robot_conf($robot,'sympa_priority') unless ($priority_message);
@@ -440,11 +435,13 @@ sub store {
 	    my $statement      = sprintf "INSERT INTO bulkspool_table (messagekey_bulkspool, message_bulkspool, lock_bulkspool, dkim_d_bulkspool,dkim_i_bulkspool,dkim_selector_bulkspool, dkim_privatekey_bulkspool,dkim_header_list_bulkspool) VALUES (%s, %s, '1', %s, %s, %s ,%s ,%s)",$dbh->quote($messagekey),$dbh->quote($msg),$dbh->quote($dkim->{d}), $dbh->quote($dkim->{i}),$dbh->quote($dkim->{selector}),$dbh->quote($dkim->{private_key}), $dbh->quote($dkim->{header_list}); 
 
 	    my $statementtrace = sprintf "INSERT INTO bulkspool_table (messagekey_bulkspool, message_bulkspool, lock_bulkspool, dkim_d_bulkspool, dkim_i_bulkspool, dkim_selector_bulkspool, dkim_privatekey_bulkspool, dkim_header_list_bulkspool) VALUES (%s, %s, '1', %s ,%s ,%s, %s, %s)",$dbh->quote($messagekey),$dbh->quote(substr($msg, 0, 100)), $dbh->quote($dkim->{d}), $dbh->quote($dkim->{i}),$dbh->quote($dkim->{selector}),$dbh->quote(substr($dkim->{private_key},0,30)), $dbh->quote($dkim->{header_list});  
+	    # do_log('debug',"insert : $statement_trace");
+
 		unless ($dbh->do($statement)) {
 		    do_log('err','Unable to add message in bulkspool_table "%s"; error : %s', $statementtrace, $dbh->errstr);
 		    return undef;
 		}
-	    do_log('trace',"insert : $statementtrace");
+
 	    $message_fingerprint = $messagekey;
 	}
     }
@@ -636,39 +633,6 @@ sub store_test {
     $progress->update($barmax)
 	if $barmax >= $next_update;
     return $result;
-}
-
-## remove file that are not referenced by any packet
-sub purge_bulkspool {
-    &do_log('debug', 'purge_bulkspool');
-
-    my $dbh = &List::db_get_handler();
-    my $sth;
-
-    unless ($dbh and $dbh->ping) {
-	return undef unless &List::db_connect();
-    }
-    my $statement = "SELECT messagekey_bulkspool AS messagekey FROM bulkspool_table LEFT JOIN bulkmailer_table ON messagekey_bulkspool = messagekey_bulkmailer WHERE messagekey_bulkmailer IS NULL AND lock_bulkspool = 0";
-    unless ($sth = $dbh->prepare($statement)) {
-	do_log('err','Unable to prepare SQL statement : %s', $dbh->errstr);
-	return undef;
-    }
-    
-    unless ($sth->execute) {
-	do_log('err','Unable to execute SQL statement "%s" : %s', $statement, $dbh->errstr);
-	return undef;
-    }
-
-    my $count = 0;
-    while (my $key = $sth->fetchrow_hashref('NAME_lc')) {	
-	if ( &Bulk::remove_bulkspool_message('bulkspool',$key->{'messagekey'}) ) {
-	    $count++;
-	}else{
-	    &do_log('err','Unable to remove message (key = %s) from bulkspool_table',$key->{'messagekey'});	    
-	}
-   }
-    $sth->finish;
-    return $count;
 }
 
 ## Return the number of remaining packets in the bulkmailer table.

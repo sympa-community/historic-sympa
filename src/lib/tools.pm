@@ -33,8 +33,8 @@ use Sys::Hostname;
 use Mail::Header;
 use Encode::Guess; ## Usefull when encoding should be guessed
 use Encode::MIME::Header;
-#use Mail::DKIM::Signer;
-#use Mail::DKIM::Verifier;
+use Mail::DKIM::Signer;
+use Mail::DKIM::Verifier;
 
 use Conf;
 use Language;
@@ -712,7 +712,6 @@ sub get_dkim_parameters {
     my $robot = $params->{'robot'};
     my $listname = $params->{'listname'};
     do_log('debug2',"get_dkim_parameters (%s,%s)",$robot, $listname);
-    do_log('trace',"get_dkim_parameters (%s,%s)",$robot, $listname);
 
     my $data ; my $keyfile ;
     if ($listname) {
@@ -759,11 +758,10 @@ sub dkim_verifier {
     my $msg_as_string = shift;
     my $dkim;
 
-    eval "require Mail::DKIM::Verifier";
-    if ($@) {
-            &do_log('err', "Failed to load Mail::DKIM::verifier perl module, ignoring DKIM signature");
-            return undef;
-        }
+    unless (eval "require Mail::DKIM::Verifier") {
+	&do_log('err', "Failed to load Mail::DKIM::verifier perl module, ignoring DKIM signature");
+	return undef;
+    }
     
     unless ( $dkim = Mail::DKIM::Verifier->new() ){
 	&do_log('err', 'Could not create Mail::DKIM::Verifier');
@@ -787,7 +785,6 @@ sub dkim_verifier {
 	return undef;
     }
 
-    do_log('trace',"dump dans $temporary_file");
     # this documented method is pretty but dont validate signatures, why ?
     # $dkim->load(\*MSGDUMP);
     while (<MSGDUMP>){
@@ -801,15 +798,14 @@ sub dkim_verifier {
     unlink ($temporary_file);
     
     foreach my $signature ($dkim->signatures) {
-	my $trace = $signature->result_detail;
-        do_log('trace', " verif de signature $trace");
-	return 1 if  ($trace eq "pass");
+	return 1 if  ($signature->result_detail eq "pass");
     }    
     return undef;
 }
 
 # input object msg and listname, output signed message object
 sub dkim_sign {
+    # in case of any error, this proc MUST return $msg_as_string NOT undef ; this would cause Sympa to send empty mail 
     my $msg_as_string = shift;
     my $data = shift;
     my $dkim_d = $data->{'dkim_d'};    
@@ -817,10 +813,6 @@ sub dkim_sign {
     my $dkim_selector = $data->{'dkim_selector'};
     my $dkim_privatekey = $data->{'dkim_privatekey'};
     my $dkim_header_list = $data->{'dkim_header_list'};
-
-    foreach my $dkimp (keys %{$data}){
-	do_log ('trace',"%s : %s",$dkimp,$data->{$dkimp});
-    }
 
     do_log('debug2', 'tools::dkim_sign (msg:%s,dkim_d:%s,dkim_i%s,dkim_selector:%s,dkim_header_list:%s,dkim_privatekey:%s)',substr($msg_as_string,0,30),$dkim_d,$data->{'dkim_i'},$data->{'dkim_selector'},$data->{'dkim_header_list'}, substr($data->{'dkim_privatekey'},0,30));
 
@@ -836,40 +828,47 @@ sub dkim_sign {
 	do_log('err',"DKIM d= tag is undefined, could not sign message");
 	return $msg_as_string;
     }
-
     
     my $temporary_keyfile = $Conf::Conf{'tmpdir'}."/dkimkey.".$$ ;  
     if (!open(MSGDUMP,"> $temporary_keyfile")) {
 	&do_log('err', 'Can\'t store key in file %s', $temporary_keyfile);
-	return undef;
+	return $msg_as_string;
     }
     print MSGDUMP $dkim_privatekey ;
     close(MSGDUMP);
-    do_log('trace',"$temporary_keyfile");
 
-    eval "require Mail::DKIM::signer";
-    if ($@) {
-            &do_log('err', "Failed to load Mail::DKIM::signer perl module, ignoring DKIM signature");
-            return undef;
-        }
-    
+    unless (eval "require Mail::DKIM::Signer") {
+	&do_log('err', "Failed to load Mail::DKIM::signer perl module, ignoring DKIM signature");
+	return ($msg_as_string); 
+    }
+    my $dkim ;
+    if ($dkim_i) {
     # create a signer object
-    my $dkim = Mail::DKIM::Signer->new(
-				       Algorithm => "rsa-sha1",
-				       Method => "relaxed",
-				       Domain => $dkim_d,
-				       Selector => $dkim_selector,
-				       KeyFile => $temporary_keyfile,
-				       );
-    
+	$dkim = Mail::DKIM::Signer->new(
+					Algorithm => "rsa-sha1",
+					Method    => "relaxed",
+					Domain    => $dkim_d,
+					Identity  => $dkim_i,
+					Selector  => $dkim_selector,
+					KeyFile   => $temporary_keyfile,
+					);
+    }else{
+	$dkim = Mail::DKIM::Signer->new(
+					Algorithm => "rsa-sha1",
+					Method    => "relaxed",
+					Domain    => $dkim_d,
+					Selector  => $dkim_selector,
+					KeyFile   => $temporary_keyfile,
+					);
+    }
     unless ($dkim) {
 	&do_log('err', 'Can\'t create Mail::DKIM::Signer');
-	return undef;
+	return ($msg_as_string); 
     }    
     my $temporary_file = $Conf::Conf{'tmpdir'}."/dkim.".$$ ;  
     if (!open(MSGDUMP,"> $temporary_file")) {
 	&do_log('err', 'Can\'t store message in file %s', $temporary_file);
-	return undef;
+	return ($msg_as_string); 
     }
     print MSGDUMP $msg_as_string ;
     close(MSGDUMP);
@@ -884,12 +883,12 @@ sub dkim_sign {
     close (MSGDUMP);
     unless ($dkim->CLOSE) {
 	&do_log('err', 'Cannot sign (DKIM) message');
-	return undef;
+	return ($msg_as_string); 
     }
     my $message = new Message($temporary_file,'noxsympato');
     unless ($message){
 	do_log('err',"unable to load $temporary_file as a message objet");
-	return undef;
+	return ($msg_as_string); 
     }
 
     if ($main::options{'debug'}) {
@@ -901,8 +900,6 @@ sub dkim_sign {
 #    $dkim->signature->headerlist("Message-ID:Date:From:To:Subject:Sender");
     $dkim->signature->headerlist($dkim_header_list);
     $dkim->signature->prettify;
-    do_log('trace',"DKIM-Signature',$dkim->signature->as_string" ) ;
-    
     
     $message->{'msg'}->head->add('DKIM-signature',$dkim->signature->as_string);
 
@@ -3148,11 +3145,8 @@ sub is_in_array {
     my ($set,$value) = @_;
     
     foreach my $elt (@$set) {
-	do_log ('trace', 'elt = "%s", value = "%s"',$elt,$value); 
 	return 1 if ($elt eq $value);
-	do_log ('trace', "not good continue");
     }
-    do_log ('trace', "finish");
     return undef;
 }
 
