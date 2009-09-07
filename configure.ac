@@ -47,8 +47,7 @@ localstatedir=/var
 lockdir=$localstatedir/lock/subsys
 modulesdir=$prefix/bin
 scriptdir=$prefix/bin
-datadir=$prefix/default
-defaultdir=$datadir
+defaultdir=$prefix/default
 mailtemplatedir=$defaultdir/mail_tt2
 webtemplatedir=$defaultdir/web_tt2
 execcgidir=$prefix/bin
@@ -57,7 +56,6 @@ spooldir=$prefix/spool
 staticdir=$prefix/static_content
 arcdir=$prefix/arc
 bouncedir=$prefix/bounce
-localedir=$prefix/locale
 confdir=/etc
 
 ## If installer wants to use the FHS standard, change 
@@ -70,7 +68,7 @@ AC_ARG_ENABLE(
 	[
 	if test $enableval = 'yes';then
 		initdir=$sysconfdir/rc.d/init.d
-		piddir=$localstatedir/run
+		piddir=$localstatedir/run/sympa
 		lockdir=$localstatedir/lock/subsys
 		modulesdir=$datadir/sympa/lib
 		scriptdir=$datadir/sympa/bin
@@ -83,7 +81,6 @@ AC_ARG_ENABLE(
 		spooldir=$localstatedir/spool/sympa
 		arcdir=$localstatedir/lib/sympa/arc
 		bouncedir=$localstatedir/lib/sympa/bounce
-		localedir=$datadir/sympa/locale
 		confdir=$sysconfdir
 	fi
 	],
