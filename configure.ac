@@ -51,12 +51,13 @@ defaultdir=$prefix/default
 mailtemplatedir=$defaultdir/mail_tt2
 webtemplatedir=$defaultdir/web_tt2
 execcgidir=$prefix/bin
-expldir=$prefix/expl
+expldir=$prefix/list_data
 spooldir=$prefix/spool
 staticdir=$prefix/static_content
 arcdir=$prefix/arc
 bouncedir=$prefix/bounce
 confdir=/etc
+localedir=$prefix/locale
 
 ## If installer wants to use the FHS standard, change 
 AC_ARG_ENABLE(

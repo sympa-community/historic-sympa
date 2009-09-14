@@ -3,6 +3,15 @@
 
 (See Changelog file for the full changes log)
 
+6.0
+
+  Changes:
+
+***** The expl directory has been renamed "list_data". This name better reflects the actual directory content.
+***** If you are upgrading from a previous version, you SHOULD:
+*****    1- rename you "/home/sympa/expl" directory to "/home/sympa/list_data" to reflect this change.
+*****    2- set the "home" sympa.conf parameter to "/home/sympa/list_data".
+
 6.0b.2		31 July 2009
 
   Features:
