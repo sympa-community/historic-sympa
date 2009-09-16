@@ -277,7 +277,8 @@ while (!$end) {
                         }
 		    }
 		    else {
-                         &do_log('notice', "TEST BULK MSG VERP NO CORRELATION: %s ", $rcpt );
+                         &do_log('notice', "BULK MSG VERP NO CORRELATION: %s ", $rcpt );
+                         my $msgid = &correlation::extract_msgid($messageasstring);
                          $return_path = $rcpt;
                          $return_path =~ s/\@/\=\=a\=\=/;
                          $return_path = "$Conf::Conf{'bounce_email_prefix'}+$return_path\=\=$bulk->{'listname'}\@$bulk->{'robot'}"; # VERP broken if no listname is provided
