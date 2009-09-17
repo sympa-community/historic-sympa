@@ -197,6 +197,7 @@ sub store {
     my $priority_packet = $data{'priority_packet'};
     my $delivery_date = $data{'delivery_date'};
     my $verp  = $data{'verp'};
+    $verp=0 unless($verp);
     
     &do_log('debug', 'Bulk::store(<msg>,<rcpts>,from = %s,robot = %s,listname= %s,priority_message = %s, priority_packet = %s,delivery_date= %s,verp = %s)',$from,$robot,$listname,$priority_message,$priority_packet,$delivery_date,$verp);
 
