@@ -249,7 +249,7 @@ sub store {
 	}
     }
 
-    my $current_date = time; 
+    my $current_date = int(time);
     
     # second : create each receipient packet in bulkmailer_table
     my $type = ref $rcpts;
