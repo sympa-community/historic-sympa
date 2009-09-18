@@ -14918,7 +14918,7 @@ sub do_change_email {
 
 	     ## Go through owners/editors of the list
 	     foreach my $admin (@{$list->{'admin'}{$role}}) {
-		 next unless ($admin->{'email'} eq $old_email);
+		 next unless (lc($admin->{'email'}) eq lc($old_email));
 		 
 		 ## Update entry with new email address
 		 $admin->{'email'} = $new_email;
