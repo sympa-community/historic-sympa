@@ -14787,7 +14787,8 @@ sub do_change_email_request {
     $param->{'new_email'} = $in{'new_email'};
     my $tt2_param = {'type' => 'ticket_to_send', 
 		     'one_time_ticket' => $param->{'one_time_ticket'},
-		     'email' => $param->{'user'}{'email'}};
+		     'to' => $in{'new_email'},
+		 };
     unless (&List::send_global_file('user_notification', $in{'new_email'}, $robot, $tt2_param)) {
 	&do_log('notice',"Unable to send template 'user_notification' to $in{'new_email'}");
 	return undef;
