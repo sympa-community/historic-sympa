@@ -5814,7 +5814,7 @@ sub do_skinsedit {
      my $email_regexp = &tools::get_regexp('email');
      if ($in{'dump'}) {
 	 foreach (split /\n/, $in{'dump'}) {
-	     if (/^($email_regexp)(\s+(.*))?\s*$/) {
+	     if (/^\s*($email_regexp)(\s+(.*))?\s*$/) {
 		 $user{&tools::get_canonical_email($1)} = $5;
 	     }
 	 }
