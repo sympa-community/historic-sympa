@@ -1876,9 +1876,13 @@ sub DoMessage{
 
    # &do_log('notice', "subject : %s date : %s msgid : %s\n from : %s\n robot : %s\n list : %s\n which : %s\n message string : \n\n%s\n\n", $hdr->get('subject'),$hdr->get('date'), $messageid, $sender, $robot, $list->{'name'}, $which, $msg_string);
 
-    if(($Conf::Conf{'correlation'}) && ($Conf::Conf{'verp_rate'} eq 100)){
-      &do_log('notice', "Correlation enable verp rate : %s ", $Conf::Conf{'verp_rate'});
-      &correlation::db_insert_message($message, $robot, $list);
+    if($list->{'admin'}{'correlation'} eq "on"){
+	if($list->{'admin'}{'verp_rate'} != "100%"){
+	    &do_log('err', "The verp_rate parameter in sympa.conf need to have a value to 100% in order to use activate the correlation; current verp_rate value : %s ", $list->{'admin'}{'verp_rate'});
+	}
+	else{
+ 	    &do_log('notice', "Correlation enable verp rate : %s ", $list->{'admin'}{'verp_rate'});
+            &correlation::db_insert_message($message, $robot, $list);
     }
 #########################################################################################################################
 

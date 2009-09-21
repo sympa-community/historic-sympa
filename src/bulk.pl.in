@@ -254,7 +254,7 @@ while (!$end) {
 		if ($bulk->{'verp'}) {
 ##########################################################################################
 ## Ajout modification correlation
-		    if($Conf::Conf{'correlation'}){
+		    if($list->{'admin'}{'correlation'} eq "on"){
 
                         my $msgid = &correlation::extract_msgid($messageasstring);
                         my $key = &correlation::find_msg_key($msgid, $bulk->{'listname'});
@@ -306,8 +306,10 @@ while (!$end) {
 
 	    }
 	}else{ # message dont needs personalization, they can be sent by packet
+	    my $msgid = &correlation::extract_msgid($messageasstring);
+	    my $key = &correlation::find_msg_key($msgid, $bulk->{'listname'});
 ##	    *SMTP = &mail::smtpto($bulk->{'returnpath'}, \@rcpts, $bulk->{'robot'});
-            *SMTP = &mail::smtpto($bulk->{'returnpath'}, \@rcpts, $bulk->{'robot'}, $msgid);
+            *SMTP = &mail::smtpto($bulk->{'returnpath'}, \@rcpts, $bulk->{'robot'}, $key);
 	    # Initial message
 	    print SMTP $messageasstring_init;
 	    close SMTP;

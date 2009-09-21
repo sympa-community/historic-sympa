@@ -346,7 +346,18 @@ while (!$end) {
 ##################################################################################################
 ## Correlation
 # If the DSN notification is correct and the correlation mode is enable, it will be inserted in the database
-	if(($head->get('Content-type') =~ /multipart\/report/) && ($head->get('Content-type') =~ /report\-type\=delivery-status/i) && ($Conf::Conf{'correlation'}) && ($Conf::Conf{'verp_rate'} eq 100)) {
+        my $list = new List ($listname, $robot);
+        unless($list) {
+            do_log('notice','Skipping bouncefile %s for unknown list %s@%s',$file,$listname,$robot);
+            &ignore_bounce({'file' => $file,
+                 'robot' => $robot,
+                 'queue' => $queue,
+                 });
+            unlink("$queue/$file");
+            next;
+        }
+
+	if(($head->get('Content-type') =~ /multipart\/report/) && ($head->get('Content-type') =~ /report\-type\=delivery-status/i) && ($list->{'admin'}{'verp_rate'} eq "100%") && ($list->{'admin'}{'correlation'} eq "on")) {
 
 	    do_log ('notice',"processing  DSN Report");
 	    
@@ -435,45 +446,19 @@ while (!$end) {
 
 		    }
 		}
-#		}elsif ($content =~ /.*rfc.*/) {
-#	      	   do_log ('notice',"MESSAGE THIRD PART");
-#
-#		   my @subparts = $p->parts();
-#		   foreach my $subp (@subparts) {
-#			do_log ('notice',"subparts");
-#			my $subph =  $subp->head;
-#			$listname = $subph->get('X-Loop');
-#	      	   	do_log ('notice',"ListName : %s", $listname);
-#			$listname = lc($listname);
-#                        chomp $listname ;
-#			$orig_msg_id = $subph->get('Message-Id');
-#			$orig_msg_id = lc($orig_msg_id);
- #                       chomp $orig_msg_id;
-#		   }
-#		}
 	    }
-#	    if($orig_msg_id =~ /<(\S+\@\S+)>/){
-#              	($orig_msg_id)= $orig_msg_id =~ /<(\S+\@\S+)>/;
-#            }
+
 	    if($original_rcpt =~ /<(\S+\@\S+)>/){
                	($original_rcpt)= $original_rcpt =~ /<(\S+\@\S+)>/;
             }
             if($msg_id =~ /<(\S+\@\S+)>/){
                 ($msg_id)= $msg_id =~ /<(\S+\@\S+)>/;
             }
-            #$listname =~ /(.*)\@(.*)/;
-            #$listname = $1;
-            #$robot = $2;
 
 	    do_log ('notice',"DSN Action Detected, value : %s", $dsn_status);
 	    do_log ('notice',"DSN Recipient Detected, value : %s", $original_rcpt);
 	    do_log ('notice',"DSN Message-Id Detected, value : %s", $msg_id);
-#	    do_log ('notice',"DSN Original Message-Id Detected, value : %s", $orig_msg_id);
-#	    do_log ('notice',"DSN List Name Detected, value : %s", $listname);
 	    do_log ('notice',"DSN Arrival Date Detected, value : %s", $arrival_date);
-#	    do_log ('notice',"DSN Robot Name Detected, value : %s", $robot);
-            
-	    #my $list = new List ($listname, $robot);
 	     
 	    unless ($id) {
                     &do_log('notice', "error: Id not found in to address %s, will ignore",$to);
@@ -495,8 +480,6 @@ while (!$end) {
  	            unlink("$queue/$file");
                     next;
 	    }
-
-	#   if ($list->is_user($original_rcpt)) {
              
             &do_log('notice', "Save in database...");
 	    unless (&correlation::db_insert_notification($id, 'DSN', $original_rcpt, $msg_id, $dsn_status, $arrival_date )) {
@@ -510,7 +493,8 @@ while (!$end) {
 
 
 # If the MDN notification is correct and the correlation mode is enable, it will be inserted in the database
-	if(($head->get('Content-type') =~ /multipart\/report/) && ($head->get('Content-type') =~ /report\-type\=disposition-notification/i) && ($Conf::Conf{'correlation'}) && ($Conf::Conf{'verp_rate'} eq 100)) {
+	if(($head->get('Content-type') =~ /multipart\/report/) && ($head->get('Content-type') =~ /report\-type\=disposition-notification/i) && ($list->{'admin'}{'verp_rate'} eq "100%") && ($list->{'admin'}{'correlation'} eq "on")) {
+
 
 	    do_log ('notice',"processing MDN Report");
 
@@ -593,42 +577,19 @@ while (!$end) {
 
 		    }
 		}
-#		}elsif ($content =~ /.*rfc.*/) {
-#	      	   do_log ('notice',"MESSAGE THIRD PART");
-#
-#		   my @subparts = $p->parts();
-#		   foreach my $subp (@subparts) {
-#			do_log ('notice',"subparts");
-#			my $subph =  $subp->head;
-#			$listname = $subph->get('X-Loop');
-#	      	   	do_log ('notice',"ListName : %s", $listname);
-#			$listname = lc($listname);
-#                        chomp $listname ;
-#			$orig_msg_id = $subph->get('Message-Id');
-#			$orig_msg_id = lc($orig_msg_id);
-#                        chomp $orig_msg_id;
-#		   }
-#		}
 	    }
-#	    if($orig_msg_id =~ /<(\S+\@\S+)>/){
-#              	($orig_msg_id)= $orig_msg_id =~ /<(\S+\@\S+)>/;
-#            }
+
 	    if($original_rcpt =~ /<(\S+\@\S+)>/){
                	($original_rcpt)= $original_rcpt =~ /<(\S+\@\S+)>/;
             }
             if($msg_id =~ /<(\S+\@\S+)>/){
                 ($msg_id)= $msg_id =~ /<(\S+\@\S+)>/;
             }
-            #$listname =~ /(.*)\@(.*)/;
-            #$listname = $1;
-            #$robot = $2;
 
 	    do_log ('notice',"MDN Disposition Detected, value : %s", $mdn_status);
 	    do_log ('notice',"MDN Recipient Detected, value : %s", $original_rcpt);
 	    do_log ('notice',"MDN Message-Id Detected, value : %s", $msg_id);
 	    do_log ('notice',"MDN Date Detected, value : %s", $date);
-            
-	    #my $list = new List ($listname, $robot);
 	     
 	    unless ($id) {
                     &do_log('notice', "error: Id not found in to address %s, will ignore",$to);

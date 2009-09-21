@@ -1325,6 +1325,14 @@ our @params = (
         name    => 'alias_manager',
         default => Sympa::Constants::SBINDIR . '/alias_manager.pl',
     },
+#####################################################################
+# Correlation
+    {
+        name    => 'correlation',
+        default => 'off',
+#####################################################################
+    },
+
 
 );
 

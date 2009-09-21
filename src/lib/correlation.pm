@@ -423,6 +423,7 @@ sub store_message_DB{
         	&do_log('err','Unable to execute SQL statement "%s" : %s', $request, $dbh->errstr);
         	return undef;
 	}
+        $sth->finish();
 	return 1; 
 }
 
@@ -678,7 +679,9 @@ sub extract_msgid {
     my $msgID;
     my $tmp_msgID = $email->header('Message-ID');
 
+    &do_log('notice', "Start MessageID extraction recup : %s", $_[0]);
     &do_log('notice', "Find MessageId : %s", $tmp_msgID);
+
     if ($tmp_msgID =~ /<(\S+@\S+)>/){
         ($msgID) = $tmp_msgID =~ /<(\S+@\S+)>/;
         }
@@ -744,16 +747,19 @@ sub change_mdn_receiver{
 
 	my ($msg_string, $receiver) = @_;
 
-	&do_log('notice', 'Message string : %s', $msg_string);
-  	my $email = Email::Simple->new($msg_string);
   	my $mdn_header;
-	unless ($mdn_header = $email->header("Disposition-Notification-To") ) {
-		&do_log('err', 'Disposition-Notification-To header not found');
-		return undef;
+  	my $email = Email::Simple->new($msg_string);
+	
+	&do_log('notice', 'Will change Disposition-Notification value to : %s', $receiver);
+	if(undef($mdn_header = $email->header("Disposition-Notification-To")) ) {
+	    &do_log('err', 'Disposition-Notification-To header not found');
+	    return undef;
 	}
-  	$email->header_set("Disposition-Notification-To", "$receiver");
-
-  	return $email->as_string;
+	else {
+   	    $email->header_set("Disposition-Notification-To", "$receiver");
+	    &do_log('notice', 'NEW e-mail Ready to be sent : %s', $email->as_string);
+  	    return $email->as_string;
+	}
 }
 
 ##############################################
@@ -791,14 +797,6 @@ sub get_delivered_info{
          return undef;
     }
 
-    #unless(@pk_notifs = get_pk_notifications($dbh, $pkmsg)){
-    #   &do_log('err', "Unable to get the pk identificators of the notifications for message : %s", $msgid);
-    #   return undef;
-    #}
-    #&do_log('notice', "PK notifications : %s", @pk_notifs);
-    #foreach my $pk_notif (@pk_notifs){
-    #   &do_log('notice', "PK notifications founded : %s", $pk_notif);
-    #}
     unless($nb_rcpt = get_recipients_number($dbh, $pkmsg)){
        &do_log('err', "Unable to get the number of recipients for message : %s", $msgid);
        return undef;
@@ -834,6 +832,7 @@ sub get_delivered_info{
 	}
     $infos .= "<strong>".$j."/".$nb_rcpt."</strong><br />".$tmp_infos;
     }
+    $dbh -> disconnect;
     return $infos;
  }
 
@@ -905,9 +904,114 @@ sub get_delivered_info_percent{
             $tmp_infos .= "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<li>ADDRESS : <em>".$recipient."</em></li>";
 	    $j++;
 	}
-    $j = ($j*100)/$nb_rcpt;
-    $infos .= "<strong>".$j."%</strong><br />".$tmp_infos;
+   	$j = ($j*100)/$nb_rcpt;
+   	$infos .= "<strong>".$j."%</strong><br />".$tmp_infos;
     }
+    $dbh -> disconnect;
     return $infos;
 }
+
+##############################################
+#   remove_message
+##############################################
+# Function use to remove the message and the corresponding notifications.
+# 
+# IN :-$msgid (+): the given message-id
+#     -$listname (+): the name of the list to which the mail has initially been sent.
+#
+# OUT : 1 | undef
+#      
+##############################################
+sub remove_message{
+    my $msgid = shift;
+    my $listname = shift;
+
+    my $pkmsg;
+    my @pk_notifs;
+
+   
+    unless($pkmsg = find_msg_key($msgid, $listname)) {
+       &do_log('err', "Unable to get the pk identificator of the message %s", $msgid);
+       return undef;
+    }
+    my $dbh = connection($Conf::Conf{'db_name'}, $Conf::Conf{'db_host'}, $Conf::Conf{'db_port'}, $Conf::Conf{'db_user'}, $Conf::Conf{'db_passwd'});
+    unless ($dbh and $dbh->ping) {
+         &do_log('notice', "Error : Can't join database");
+         return undef;
+    }
+    unless(@pk_notifs = get_pk_notifications($dbh, $pkmsg)) {
+        &do_log('err', "Unable to get the pk identificators of notifications corresponding to the message %s", $msgid);
+	return undef;
+    }
+    unless(remove_entry($dbh, "mail", $pkmsg)) {
+        &do_log('err', "Unable to remove %s", $pkmsg);
+	return undef;
+    }
+    unless(remove_entries($dbh, "notification", @pk_notifs)) {
+        &do_log('err', "Unable to remove %s", @pk_notifs);
+	return undef;
+    }
+    $dbh -> disconnect;
+    return 1;
+}
+
+##############################################
+#   remove_entry
+##############################################
+# Function use to remove the entry in argument to the given datatable
+# 
+# IN :-$dbh (+): the database connection
+#     -$table (+): the given table to update
+#     -$pk (+): the entry identifiant
+#
+# OUT : $sth | undef
+#      
+##############################################
+sub remove_entry{
+    my $dbh = shift;
+    my $table = shift;
+    my $pk = shift;
+
+    my $sth;
+    my $table_name = $table."_table";
+    my $pk_header = "pk_".$table;
+    my $request = "DELETE FROM $table_name WHERE `$pk_header` = '$pk'";
+
+    &do_log('notice', 'Request For Table : : %s', $request);
+    unless ($sth = $dbh->prepare($request)) {
+            &do_log('err','Unable to prepare SQL statement "%s": %s', $request, $dbh->errstr);
+            return undef;
+    }
+    unless ($sth->execute()) {
+            &do_log('err','Unable to execute SQL statement "%s" : %s', $request, $dbh->errstr);
+            return undef;
+    }
+    $sth -> finish;
+    return 1;
+}
+
+##############################################
+#   remove_entries
+##############################################
+# Function use to remove several entries in argument to the given datatable
+# 
+# IN :-$dbh (+): the database connection
+#     -$table (+): the given table to update
+#     -@pk (+): entry identifiants
+#
+# OUT : $sth | undef
+#      
+##############################################
+sub remove_entries{
+    my ($dbh, $table, @pks) = @_;
+
+    foreach my $pk (@pks) {
+    	unless(remove_entry($dbh, $table, $pk)){
+            &do_log('err','Unable to remove entries; error on "%s"', $pk);
+            return undef;
+	}
+    }
+    return 1;
+}
+
 1;
