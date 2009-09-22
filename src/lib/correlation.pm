@@ -116,7 +116,7 @@ sub find_list_user_address{
 	my @users;
  	## Create the list of subscribers
  	for (my $user = $list->get_first_user(); $user; $user = $list->get_next_user()) {
- 	    &do_log('notice', 'USER: %s', $user->{'email'});
+ 	    &do_log('debug2', 'USER: %s', $user->{'email'});
 	    
 	    my $address = $user->{'email'};
 	    ($address)= $address =~ /(\S+@\S+)/;			
@@ -180,7 +180,7 @@ sub get_pk_message {
 	my $pk;
 	my $request = "SELECT pk_mail FROM $table WHERE `message_id_mail` = '$id' AND `list_mail` = '$listname'";
 
-        &do_log('notice', 'Request For Message Table : : %s', $request);
+        &do_log('debug2', 'Request For Message Table : : %s', $request);
 
 	unless ($sth = $dbh->prepare($request)) {
                 &do_log('err','Unable to prepare SQL statement : %s', $dbh->errstr);
@@ -217,7 +217,7 @@ sub get_recipients_number {
         my $pk;
         my $request = "SELECT COUNT(*) FROM $notif_table WHERE `pk_mail_notification` = '$pk_mail' AND `type_notification` = 'DSN'";
 
-        &do_log('notice', 'Request For Message Table : : %s', $request);
+        &do_log('debug2', 'Request For Message Table : : %s', $request);
         unless ($sth = $dbh->prepare($request)) {
                 &do_log('err','Unable to prepare SQL statement : %s', $dbh->errstr);
                 return undef;
@@ -253,7 +253,7 @@ sub get_undelivered_recipients {
         my $pk;
         my $request = "SELECT recipient_notification, status_notification FROM $notif_table WHERE `pk_mail_notification` = '$pk_mail' AND `type_notification` = 'DSN' AND `status_notification` != 'delivered' ORDER BY `status_notification`";
 
-        &do_log('notice', 'Request For Message Table : : %s', $request);
+        &do_log('debug2', 'Request For Message Table : : %s', $request);
         unless ($sth = $dbh->prepare($request)) {
                 &do_log('err','Unable to prepare SQL statement : %s', $dbh->errstr);
                 return undef;
@@ -294,7 +294,7 @@ sub get_not_displayed_recipients {
         my $pk;
         my $request = "SELECT recipient_notification FROM $notif_table WHERE `pk_mail_notification` = '$pk_mail' AND `type_notification` = 'MDN' AND `status_notification` != 'displayed'";
 
-        &do_log('notice', 'Request For Message Table : : %s', $request);
+        &do_log('debug2', 'Request For Message Table : : %s', $request);
         unless ($sth = $dbh->prepare($request)) {
                 &do_log('err','Unable to prepare SQL statement : %s', $dbh->errstr);
                 return undef;
@@ -334,7 +334,7 @@ sub get_pk_notifications {
         my $pk;
         my $request = "SELECT pk_notification FROM $notif_table WHERE `pk_mail_notification` = '$pk_mail'";
 
-        &do_log('notice', 'Request For Message Table : : %s', $request);
+        &do_log('debug2', 'Request For Message Table : : %s', $request);
         unless ($sth = $dbh->prepare($request)) {
                 &do_log('err','Unable to prepare SQL statement : %s', $dbh->errstr);
                 return undef;
@@ -375,7 +375,7 @@ sub get_pk_notification {
         my $sth;
         my $pk;
         my $request = "SELECT pk_notification FROM $table WHERE `pk_mail_notification` = '$id' AND `recipient_notification` = '$recipient' AND `type_notification`= '$type'";
-        &do_log('notice', 'Request For Message Table : : %s', $request);
+        &do_log('debug2', 'Request For Message Table : : %s', $request);
         unless ($sth = $dbh->prepare($request)) {
                 &do_log('err','Unable to prepare SQL statement : %s', $dbh->errstr);
                 return undef;
@@ -414,7 +414,7 @@ sub store_message_DB{
 	my $sth;
 	my $request = "INSERT INTO $table VALUES ('', '$id', '$from', '$date','$subject', '$list->{'name'}')";
 	
-	&do_log('notice', 'Request For Message Table : : %s', $request);
+	&do_log('debug2', 'Request For Message Table : : %s', $request);
 	unless ($sth = $dbh->prepare($request)) {
 		&do_log('err','Unable to prepare SQL statement : %s', $dbh->errstr);
         	return undef;
@@ -455,7 +455,7 @@ sub store_notif_DB{
 	my $sth;
 	my $request = "INSERT INTO $table VALUES ('','$id', '', '$address', '$status','','$notif_type','$list->{'name'}')";
 	
-	&do_log('notice', 'Request For Notification Table : : %s', $request);
+	&do_log('debug2', 'Request For Notification Table : : %s', $request);
 	unless ($sth = $dbh->prepare($request)) {
                 &do_log('err','Unable to prepare SQL statement "%s": %s', $request, $dbh->errstr);
                 return undef;
@@ -495,7 +495,7 @@ sub update_notif_table{
 	my $sth;
         my $request = "UPDATE $table SET `message_id_notification` = '$msg_id', `status_notification` = '$status', `arrival_date_notification` = '$date' WHERE pk_notification = '$pk'";
 
-        &do_log('notice', 'Request For Notification Table : : %s', $request);
+        &do_log('debug2', 'Request For Notification Table : : %s', $request);
         unless ($sth = $dbh->prepare($request)) {
                 &do_log('err','Unable to prepare SQL statement "%s": %s', $request, $dbh->errstr);
                 return undef;
@@ -528,58 +528,58 @@ sub db_insert_message{
     my ($message, $robot, $list) = @_;
 
     my $rcpt;
-    my $hdr = $message->{'msg'}->head or &do_log('notice', "Error : Extract header failed");
+    my $hdr = $message->{'msg'}->head or &do_log('err', "Error : Extract header failed");
     my $cpt = $list->get_total();
     
-    &do_log('notice', "Message extracted  list name : %s  addresses number : %s", $list->{'name'}, $cpt);
+    &do_log('debug2', "Message extracted  list name : %s  addresses number : %s", $list->{'name'}, $cpt);
     my $subject = $hdr->get('subject');
     chomp($subject);
-    &do_log('notice', "Message extracted : %s", $subject);
+    &do_log('debug2', "Message extracted : %s", $subject);
 
     my $send_date = $hdr->get('date');
     chomp($send_date);
-    &do_log('notice', "Message extracted : %s", $send_date);
+    &do_log('debug2', "Message extracted : %s", $send_date);
 
     my $row_msgid = $hdr->get('Message-Id')or &do_log('notice', "Error : Extract msgID failed");
     chomp($row_msgid);
-    &do_log('notice', "Message extracted : %s", $row_msgid);
+    &do_log('debug2', "Message extracted : %s", $row_msgid);
 
     my $content_type = $hdr->get('Content-Type');
     chomp($content_type);
-    &do_log('notice', "Message extracted : %s", $content_type);
+    &do_log('debug2', "Message extracted : %s", $content_type);
  
     my $disposition_notif = $hdr->get('Disposition-Notification-To') or &do_log('notice', "Disposition-Notification Not Asked");
     chomp($disposition_notif);
-    &do_log('notice', "Message extracted : %s", $disposition_notif);
+    &do_log('debug2', "Message extracted : %s", $disposition_notif);
 
     my $cc = $hdr->get('Cc');
     chomp($cc);
-    &do_log('notice', "Message extracted : %s", $cc);
+    &do_log('debug2', "Message extracted : %s", $cc);
  
     my $row_from = $hdr->get('from');
     chomp($row_from);
-    &do_log('notice', "Message extracted : %s", $row_from);
+    &do_log('debug2', "Message extracted : %s", $row_from);
 
     my $msg_string = $message->{'msg'}->as_string;
-    &do_log('notice', 'string message : %s', $msg_string);
+    &do_log('debug2', 'string message : %s', $msg_string);
 
     unless($content_type =~ /.*delivery-status.*/){
 
-	&do_log('notice', 'Waiting....');
+	&do_log('debug2', 'Waiting....');
 	my $message_id = format_msg_id($row_msgid) or &do_log('notice', "Error : Format msgID failed"); 
 	return undef unless ($message_id);
-	&do_log('notice', 'Message-Id Formated : %s', $message_id);
+	&do_log('debug2', 'Message-Id Formated : %s', $message_id);
 	my $from_address = format_from_address($row_from) or &do_log('notice', "Error : Format From address failed"); 
-	&do_log('notice', 'From Address Formated : %s', $from_address);
+	&do_log('debug2', 'From Address Formated : %s', $from_address);
 	my ($to_addresses_nb, @to_addresses) = find_list_user_address($list) or &do_log('notice', "Error : Format To header failed"); 
 	return undef unless ($to_addresses_nb);
 	foreach my $to_address (@to_addresses) {
-		&do_log('notice', 'To Address Formated : %s', $to_address);
+		&do_log('debug2', 'To Address Formated : %s', $to_address);
 	}
 	
         my $dbh = connection($Conf::Conf{'db_name'}, $Conf::Conf{'db_host'}, $Conf::Conf{'db_port'}, $Conf::Conf{'db_user'}, $Conf::Conf{'db_passwd'});
 	unless ($dbh and $dbh->ping) {
-		&do_log('notice', "Error : Can't join database");
+		&do_log('err', "Error : Can't join database");
 		return undef;
 	}
 	unless (store_message_DB($dbh, $message_table, $message_id, $from_address, $send_date, $subject, $list)) {
@@ -595,7 +595,7 @@ sub db_insert_message{
 	my $sth;
 	foreach my $to (@to_addresses) {
 
-		&do_log('notice', 'Recipient Address :%s', $to );
+		&do_log('debug2', 'Recipient Address :%s', $to );
 		unless ($sth = store_notif_DB($dbh, $notif_table, $pk_message, $status, $to, $list, 'DSN')) {
                 	&do_log('err', 'Unable to execute message storage in notification table"%s"', $message_id);
                 	return undef;
@@ -642,7 +642,7 @@ sub db_insert_notification {
         my $dbh = connection($Conf::Conf{'db_name'}, $Conf::Conf{'db_host'}, $Conf::Conf{'db_port'}, $Conf::Conf{'db_user'}, $Conf::Conf{'db_passwd'});
 
         unless ($dbh and $dbh->ping) {
-                &do_log('notice', "Error : Can't join database");
+                &do_log('err', "Error : Can't join database");
                 return undef;
         }
 	my $pk_notif;
@@ -650,7 +650,7 @@ sub db_insert_notification {
                 &do_log('err', 'Unable to get notification identificator :  "%s"', $msg_id);
                 return undef;
         }
-        &do_log('notice', "pk_notif value founded : %s", $pk_notif);
+        &do_log('debug2', "pk_notif value founded : %s", $pk_notif);
         my $sth;
 
         unless ($sth = update_notif_table($dbh, $notif_table, $pk_notif, $msg_id, $status, $arrival_date) ) {
@@ -679,8 +679,8 @@ sub extract_msgid {
     my $msgID;
     my $tmp_msgID = $email->header('Message-ID');
 
-    &do_log('notice', "Start MessageID extraction recup : %s", $_[0]);
-    &do_log('notice', "Find MessageId : %s", $tmp_msgID);
+    &do_log('debug2', "Start MessageID extraction recup : %s", $_[0]);
+    &do_log('debug2', "Find MessageId : %s", $tmp_msgID);
 
     if ($tmp_msgID =~ /<(\S+@\S+)>/){
         ($msgID) = $tmp_msgID =~ /<(\S+@\S+)>/;
@@ -689,7 +689,7 @@ sub extract_msgid {
         ($msgID) = $tmp_msgID =~ /(\S+@\S+)/;
         }
 
-    &do_log('notice', "MessageId extracted : %s", $msgID);
+    &do_log('debug2', "MessageId extracted : %s", $msgID);
     return $msgID;
 }
 
@@ -715,11 +715,11 @@ sub find_msg_key{
     my $message_id = format_msg_id($msgid) or &do_log('notice', "Error : Format msgID failed");
 
     return undef unless ($message_id);
-    &do_log('notice', 'Message-Id Formated : %s', $message_id);
+    &do_log('debug2', 'Message-Id Formated : %s', $message_id);
 
     my $dbh = connection($Conf::Conf{'db_name'}, $Conf::Conf{'db_host'}, $Conf::Conf{'db_port'}, $Conf::Conf{'db_user'}, $Conf::Conf{'db_passwd'});
     unless ($dbh and $dbh->ping) {
-          &do_log('notice', "Error : Can't join database");
+          &do_log('err', "Error : Can't join database");
           return undef;
     }
     unless($pk = get_pk_message($dbh, "mail_table", $message_id, $listname)) {
@@ -757,7 +757,7 @@ sub change_mdn_receiver{
 	}
 	else {
    	    $email->header_set("Disposition-Notification-To", "$receiver");
-	    &do_log('notice', 'NEW e-mail Ready to be sent : %s', $email->as_string);
+	    &do_log('debug2', 'NEW e-mail Ready to be sent : %s', $email->as_string);
   	    return $email->as_string;
 	}
 }
@@ -793,7 +793,7 @@ sub get_delivered_info{
     }
     my $dbh = connection($Conf::Conf{'db_name'}, $Conf::Conf{'db_host'}, $Conf::Conf{'db_port'}, $Conf::Conf{'db_user'}, $Conf::Conf{'db_passwd'});
     unless ($dbh and $dbh->ping) {
-         &do_log('notice', "Error : Can't join database");
+         &do_log('err', "Error : Can't join database");
          return undef;
     }
 
@@ -809,11 +809,11 @@ sub get_delivered_info{
     my $i = 0;
     foreach my $recipient (@recipients){
 	if( ($i%2) == 0){
-		&do_log('notice', "recipient : %s", $recipient);
+		&do_log('debug2', "recipient : %s", $recipient);
 		$tmp_infos .= "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<li>ADDRESS : <em>".$recipient."</em>";
 	}
 	else{
-		&do_log('notice', "status : %s", $recipient);
+		&do_log('debug2', "status : %s", $recipient);
 		$tmp_infos .= "&nbsp;&nbsp;&nbsp;&nbsp;STATUS : <em>".$recipient."</em></li>";
 	} 
 	$i++;
@@ -826,7 +826,7 @@ sub get_delivered_info{
         $infos .= "<br /><br />Recipients who did not read the message yet (or which has refused to send back a notification) :    ";
 	$tmp_infos = "";
     	foreach my $recipient (@recipients2){
-            &do_log('notice', "recipient : %s", $recipient);
+            &do_log('debug2', "recipient : %s", $recipient);
             $tmp_infos .= "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<li>ADDRESS : <em>".$recipient."</em></li>";
 	    $j++;
 	}
@@ -867,7 +867,7 @@ sub get_delivered_info_percent{
     }
     my $dbh = connection($Conf::Conf{'db_name'}, $Conf::Conf{'db_host'}, $Conf::Conf{'db_port'}, $Conf::Conf{'db_user'}, $Conf::Conf{'db_passwd'});
     unless ($dbh and $dbh->ping) {
-         &do_log('notice', "Error : Can't join database");
+         &do_log('err', "Error : Can't join database");
          return undef;
     }
 
@@ -883,11 +883,11 @@ sub get_delivered_info_percent{
     my $i = 0;
     foreach my $recipient (@recipients){
 	if( ($i%2) == 0){
-		&do_log('notice', "recipient : %s", $recipient);
+		&do_log('debug2', "recipient : %s", $recipient);
 		$tmp_infos .= "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<li>ADDRESS : <em>".$recipient."</em>";
 	}
 	else{
-		&do_log('notice', "status : %s", $recipient);
+		&do_log('debug2', "status : %s", $recipient);
 		$tmp_infos .= "&nbsp;&nbsp;&nbsp;&nbsp;STATUS : <em>".$recipient."</em></li>";
 	} 
 	$i++;
@@ -900,7 +900,7 @@ sub get_delivered_info_percent{
         $infos .= "<br /><br />Recipients who did not read the message yet (or which has refused to send back a notification) :    ";
 	$tmp_infos = "";
     	foreach my $recipient (@recipients2){
-            &do_log('notice', "recipient : %s", $recipient);
+            &do_log('debug2', "recipient : %s", $recipient);
             $tmp_infos .= "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<li>ADDRESS : <em>".$recipient."</em></li>";
 	    $j++;
 	}
@@ -977,7 +977,7 @@ sub remove_entry{
     my $pk_header = "pk_".$table;
     my $request = "DELETE FROM $table_name WHERE `$pk_header` = '$pk'";
 
-    &do_log('notice', 'Request For Table : : %s', $request);
+    &do_log('debug2', 'Request For Table : : %s', $request);
     unless ($sth = $dbh->prepare($request)) {
             &do_log('err','Unable to prepare SQL statement "%s": %s', $request, $dbh->errstr);
             return undef;

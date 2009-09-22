@@ -258,11 +258,11 @@ while (!$end) {
 
                         my $msgid = &correlation::extract_msgid($messageasstring);
                         my $key = &correlation::find_msg_key($msgid, $bulk->{'listname'});
-                        &do_log('notice', "VERP CORRELATION FINDED Key: %s ", $key);
+                        &do_log('debug2', "VERP CORRELATION FINDED Key: %s ", $key);
                         $return_path = $rcpt;
                         $return_path =~ s/\@/\=\=a\=\=/;
                         $return_path = "$Conf::Conf{'bounce_email_prefix'}+$return_path\=\=$bulk->{'listname'}\=\=$key\@$bulk->{'robot'}";
-                        &do_log('notice', "MSG VERP return-path: %s ", $return_path);
+                        &do_log('debug2', "MSG VERP return-path: %s ", $return_path);
                         #Specify the return_path value for the Disposition-Notification-To header in order that
                         # mdn report returns to the sympa server for correlation treatment
                         my $msg_result;
@@ -277,7 +277,7 @@ while (!$end) {
                         }
 		    }
 		    else {
-                         &do_log('notice', "BULK MSG VERP NO CORRELATION: %s ", $rcpt );
+                         &do_log('debug2', "BULK MSG VERP NO CORRELATION: %s ", $rcpt );
                          my $msgid = &correlation::extract_msgid($messageasstring);
                          $return_path = $rcpt;
                          $return_path =~ s/\@/\=\=a\=\=/;

@@ -285,7 +285,7 @@ while (!$end) {
 		$id = $4;
 		$local_part =~ /^(.*)\=\=(.*)$/ ;
 		$local_part = $1;
-		&do_log('notice', 'ID PART : %s in the bounce for :%s  ',$id, $to);
+		&do_log('debug2', 'ID PART : %s in the bounce for :%s  ',$id, $to);
 	    }
 ##################################################################################################
 
@@ -348,7 +348,7 @@ while (!$end) {
 # If the DSN notification is correct and the correlation mode is enable, it will be inserted in the database
         my $list = new List ($listname, $robot);
         unless($list) {
-            do_log('notice','Skipping bouncefile %s for unknown list %s@%s',$file,$listname,$robot);
+            do_log('err','Skipping bouncefile %s for unknown list %s@%s',$file,$listname,$robot);
             &ignore_bounce({'file' => $file,
                  'robot' => $robot,
                  'queue' => $queue,
@@ -373,7 +373,7 @@ while (!$end) {
 
 	    my $msg_id = $head->get('Message-Id');
 	    chomp $msg_id;
-	    do_log ('notice',"Message-Id Detected, value : %s", $msg_id);
+	    do_log ('debug2',"Message-Id Detected, value : %s", $msg_id);
 
 
 	    foreach my $p (@parts) {
@@ -389,21 +389,16 @@ while (!$end) {
 			    $dsn_status = $1;
 			    chomp $dsn_status;
 			}
-	      	  	#do_log ('notice',"Current Line Content value : %s", $line);
 			
 # The final-recipient field is more appropriated than the original-recipient field because it HAVE TO be present in a dsn report.(rfc3464)
 			if ($line =~ /original\-recipient\:\s(.+)\s*$/i) {
 			    $original_rcpt = $1;
 			    chomp $original_rcpt;
 			    my @rcpt;
-	      	  	    #do_log ('notice',"0 original recipientvalue : %s", $original_rcpt);
 	       		    if($original_rcpt =~ /.*;.*/){
-	      	  	     #   do_log ('notice',"0.1 Original Recipientvalue : %s", $original_rcpt);
 				@rcpt = split /;\s*/,$original_rcpt;
 				foreach my $rcpt (@rcpt){
-	      	  	    #	    do_log ('notice',"0.1 Original Recipientvalue : %s", $rcpt);
 				    if($rcpt =~ /(\S+\@\S+)/){
-	      	  	    #	        do_log ('notice',"0.1 Original Recipientvalue ok : %s", $rcpt);
 					($rcpt)= $rcpt =~ /(\S+\@\S+)/;	
 					$original_rcpt = $rcpt;
 				    }
@@ -420,28 +415,25 @@ while (!$end) {
 	       		    if($original_rcpt =~ /.*;.*/){
 				@rcpt = split /;\s*/,$original_rcpt;
 				foreach my $rcpt (@rcpt){
-	      	  	    	#    do_log ('notice',"1.3 Final Recipientvalue : %s", $rcpt);
 				    if($rcpt =~ /(\S+\@\S+)/){
 					($rcpt)= $rcpt=~ /(\S+\@\S+)/;			
-				#	do_log ('notice',"1.3 Final Recipientvalue : %s", $rcpt);
 					$original_rcpt = $rcpt;
 				    }
 				}
 			    }
 			    else{
                                 ($original_rcpt)= $original_rcpt =~ /(\S+\@\S+)/;
-	      	  	    #	do_log ('notice',"2.3 Final Recipientvalue : %s", $original_rcpt);
 			    }	
 			}
 			if ( ($line =~ /original\-envelope\-id\:\s*(.+)/i) && (!$id) ) {
 			    $id = $1;
 			    chomp $id;
-	      	    	    do_log ('notice',"1 - Original Envelope-id Detected, value : %s", $id);
+	      	    	    do_log ('debug2',"1 - Original Envelope-id Detected, value : %s", $id);
 			}
                         if ($line =~ /arrival\-date\:\s*(.+)/i) {
                             $arrival_date = $1;
                             chomp $arrival_date;
-                            do_log ('notice',"1 - Arrival Date, value : %s", $arrival_date);
+                            do_log ('debug2',"1 - Arrival Date, value : %s", $arrival_date);
                         }
 
 		    }
@@ -455,39 +447,39 @@ while (!$end) {
                 ($msg_id)= $msg_id =~ /<(\S+\@\S+)>/;
             }
 
-	    do_log ('notice',"DSN Action Detected, value : %s", $dsn_status);
-	    do_log ('notice',"DSN Recipient Detected, value : %s", $original_rcpt);
-	    do_log ('notice',"DSN Message-Id Detected, value : %s", $msg_id);
-	    do_log ('notice',"DSN Arrival Date Detected, value : %s", $arrival_date);
+	    do_log ('debug2',"DSN Action Detected, value : %s", $dsn_status);
+	    do_log ('debug2',"DSN Recipient Detected, value : %s", $original_rcpt);
+	    do_log ('debug2',"DSN Message-Id Detected, value : %s", $msg_id);
+	    do_log ('debug2',"DSN Arrival Date Detected, value : %s", $arrival_date);
 	     
 	    unless ($id) {
-                    &do_log('notice', "error: Id not found in to address %s, will ignore",$to);
+                    &do_log('err', "error: Id not found in to address %s, will ignore",$to);
  	            unlink("$queue/$file");
                     next;
 	    }
 	    unless ($dsn_status) {
-                    &do_log('notice', "error: dsn status not found in dsn: %s, will ignore",$msg_id);
+                    &do_log('err', "error: dsn status not found in dsn: %s, will ignore",$msg_id);
  	            unlink("$queue/$file");
                     next;
 	    }
 	    unless ($original_rcpt) {
-                    &do_log('notice', "error: original recipient not found in dsn: %s, will ignore",$msg_id);
+                    &do_log('err', "error: original recipient not found in dsn: %s, will ignore",$msg_id);
  	            unlink("$queue/$file");
                     next;
 	    }
 	    unless ($msg_id) {
-                    &do_log('notice', "error: message_id not found in dsn will ignore");
+                    &do_log('err', "error: message_id not found in dsn will ignore");
  	            unlink("$queue/$file");
                     next;
 	    }
              
-            &do_log('notice', "Save in database...");
+            &do_log('debug2', "Save in database...");
 	    unless (&correlation::db_insert_notification($id, 'DSN', $original_rcpt, $msg_id, $dsn_status, $arrival_date )) {
                    do_log('err','Not able to fill database with notification data');
 	    }
             &do_log('notice', "DSN Correctly treated...");
             unlink("$queue/$file");
-            &do_log('notice', "DSN Correctly removed...");
+            &do_log('debug2', "DSN Correctly removed...");
             next;
 	}
 
@@ -512,7 +504,7 @@ while (!$end) {
 	    my $date = $head->get('Date');
 
 	    chomp $msg_id;
-	    do_log ('notice',"Message-Id Detected, value : %s", $msg_id);
+	    do_log ('debug2',"Message-Id Detected, value : %s", $msg_id);
 
 
 	    foreach my $p (@parts) {
@@ -532,7 +524,6 @@ while (!$end) {
 			    	chomp $mdn_status;
 			    }
 			}
-	      	  	#do_log ('notice',"Current Line Content value : %s", $line);
 			
 # The final-recipient field is less appropriated than the original-recipient field for the correlation but because of it HAVE TO be present in a mdn report(rfc3798), we search it if the original-recipient field is not present.
 			if ($line =~ /original\-recipient\:\s(.+)\s*$/i) {
@@ -572,7 +563,7 @@ while (!$end) {
 			if ( ($line =~ /original\-envelope\-id\:\s*(.+)/i) && (!$id) ) {
 			    $id = $1;
 			    chomp $id;
-	      	    	    do_log ('notice',"1 - Original Envelope-id Detected, value : %s", $id);
+	      	    	    do_log ('debug2',"1 - Original Envelope-id Detected, value : %s", $id);
 			}
 
 		    }
@@ -586,39 +577,39 @@ while (!$end) {
                 ($msg_id)= $msg_id =~ /<(\S+\@\S+)>/;
             }
 
-	    do_log ('notice',"MDN Disposition Detected, value : %s", $mdn_status);
-	    do_log ('notice',"MDN Recipient Detected, value : %s", $original_rcpt);
-	    do_log ('notice',"MDN Message-Id Detected, value : %s", $msg_id);
-	    do_log ('notice',"MDN Date Detected, value : %s", $date);
+	    do_log ('debug2',"MDN Disposition Detected, value : %s", $mdn_status);
+	    do_log ('debug2',"MDN Recipient Detected, value : %s", $original_rcpt);
+	    do_log ('debug2',"MDN Message-Id Detected, value : %s", $msg_id);
+	    do_log ('debug2',"MDN Date Detected, value : %s", $date);
 	     
 	    unless ($id) {
-                    &do_log('notice', "error: Id not found in to address %s, will ignore",$to);
+                    &do_log('err', "error: Id not found in to address %s, will ignore",$to);
  	            unlink("$queue/$file");
                     next;
 	    }
 	    unless ($original_rcpt) {
-                    &do_log('notice', "error: original recipient not found in dsn: %s, will ignore",$msg_id);
+                    &do_log('err', "error: original recipient not found in dsn: %s, will ignore",$msg_id);
  	            unlink("$queue/$file");
                     next;
 	    }
 	    unless ($msg_id) {
-                    &do_log('notice', "error: message_id not found in dsn will ignore");
+                    &do_log('err', "error: message_id not found in dsn will ignore");
  	            unlink("$queue/$file");
                     next;
 	    }
 	    unless ($mdn_status) {
-                    &do_log('notice', "error: dsn status not found in dsn: %s, will ignore",$msg_id);
+                    &do_log('err', "error: dsn status not found in dsn: %s, will ignore",$msg_id);
  	            unlink("$queue/$file");
                     next;
 	    }
              
-            &do_log('notice', "Save in database...");
+            &do_log('debug2', "Save in database...");
 	    unless (&correlation::db_insert_notification($id, 'MDN', $original_rcpt, $msg_id, $mdn_status, $date )) {
                    do_log('err','Not able to fill database with notification data');
 	    }
             &do_log('notice', "MDN Correctly treated...");
             unlink("$queue/$file");
-            &do_log('notice', "MDN Correctly removed...");
+            &do_log('debug2', "MDN Correctly removed...");
             next;
 	}
 
