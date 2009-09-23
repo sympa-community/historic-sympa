@@ -1276,24 +1276,9 @@ h7 strong {
                                  color:[% color_5 %]!important;
                                  }
 
-#noticeBlock {
-               margin:0;
-               padding:0;
-               position:absolute;
-               left:0;
-               top:0;
-               z-index:600;
-               background: [% color_9 %];
-               opacity:0.4;
-               width:100%;
-               height:100%;
-               }
-
 #noticeMsg { 
-             position:absolute;
-             width:60%;
-             margin:20% 19%;
-             z-index:610!important;
+             margin-top:1.5em;
+	     width:98%;
              border: 5px ridge [% color_12 %];
              font-family:serif;
              font-size: 1.6em;
