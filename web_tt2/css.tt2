@@ -131,7 +131,6 @@ dl {
          padding:1em 0;
          margin-top:0em;
          margin-left:5em;
-         /*text-shadow: 2px 2px 2px [% color_12 %];*/
          z-index:520;
          }
 
