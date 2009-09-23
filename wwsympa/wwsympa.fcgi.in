@@ -4056,6 +4056,7 @@ sub do_renewpasswd {
 	     $param->{'info_content'} .= $_;
 	 }
 	 close FILE;
+	 $param->{'info_content'} =~ s/\n/\<br\/\>/g;
      }
 
      &tt2::add_include_path($list->{'dir'});
