@@ -107,36 +107,34 @@ msgstr "Trợ giúp"
 msgid "Restore identity"
 msgstr "Phục hồi chứng minh"
 
-#: ../web_tt2/login_menu.tt2:13
-#, fuzzy
-msgid "[Listmaster]"
+#: ../mail_tt2/listmaster_notification.tt2:2 ../web_tt2/login_menu.tt2:13
+msgid "Listmaster"
 msgstr "Chủ hộp thư chung"
 
 #: ../web_tt2/login_menu.tt2:14
 #, fuzzy
-msgid "[Privileged owner]"
+msgid "Privileged owner"
 msgstr "Người sở hữu có quyền đặc biệt"
 
-#: ../web_tt2/login_menu.tt2:15
-#, fuzzy
-msgid "[Owner]"
+#: ../src/lib/List.pm:1131 ../web_tt2/login_menu.tt2:15
+msgid "Owner"
 msgstr "Người sở hữu"
 
 #: ../web_tt2/login_menu.tt2:16
 #, fuzzy
-msgid "[Editor]"
+msgid "Editor"
 msgstr "Người biên soạn"
 
 #: ../web_tt2/login_menu.tt2:17
 #, fuzzy
-msgid "[Subscriber]"
+msgid "Subscriber"
 msgstr "Người đăng ký"
 
-#. (last_login_host,last_login_date)
+#. (last_login_host)
 #: ../web_tt2/login_menu.tt2:21
 #, fuzzy
-msgid "last login from %1 &nbsp;&nbsp; (%2)</span>"
-msgstr "đăng nhập cuối từ %1 <br />(%2)</span>"
+msgid "last login from %1"
+msgstr "đăng nhập cuối từ %1 (%2)"
 
 #: ../web_tt2/login_menu.tt2:36
 msgid "Logout"
@@ -243,7 +241,7 @@ msgstr "Người đăng ký:"
 
 #: ../web_tt2/list_panel.tt2:12
 #, fuzzy
-msgid "Error rate:&nbsp;"
+msgid "Error rate:"
 msgstr "Tỷ lệ lỗi:"
 
 #: ../web_tt2/list_panel.tt2:13
@@ -403,9 +401,10 @@ msgstr "Sơ khởi vùng Web của tài liệu chia sẻ."
 msgid "Delete Shared"
 msgstr "Xoá vùng chia sẻ"
 
+#. (listname)
 #: ../web_tt2/admin.tt2:63
 #, fuzzy
-msgid "Are you sure you wish to delete the shared documents?"
+msgid "Are you sure you wish to delete the shared documents for list %1?"
 msgstr "Bạn có chắc muốn xoá các tài liệu chia sẻ không?"
 
 #: ../web_tt2/admin.tt2:63
@@ -2556,9 +2555,7 @@ msgstr "Không có người đăng ký với địa chỉ <strong>%1</strong> !"
 
 #: ../web_tt2/loginbanner.tt2:18
 #, fuzzy
-msgid ""
-"To login, select your organization authentication server below:&nbsp;&nbsp;"
-"&nbsp;&nbsp;"
+msgid "To login, select your organization authentication server below:"
 msgstr ""
 "Để đăng nhập thì chọn dưới đây máy phục vụ xác thực của tổ chức của bạn:"
 
@@ -4041,15 +4038,17 @@ msgstr ""
 "sao chép kết quả vào một tập tin CSS tĩnh mới. Đích được xác định theo tham "
 "số « css_path »."
 
-#: ../web_tt2/skinsedit.tt2:45
-#, fuzzy
+#: ../web_tt2/skinsedit.tt2:41
 msgid ""
 "\n"
 "Be careful: the CSS file is overwritten using css.tt2 template, usually this "
 "file is comming from Sympa distribution so your CSS customization may be "
-"erased when doing this.\n"
-"</p>\n"
-"<p>\n"
+"erased when doing this."
+msgstr ""
+
+#: ../web_tt2/skinsedit.tt2:45
+#, fuzzy
+msgid ""
 "Use the color editor in order to change defined colors. First select the "
 "color you want to change and pick a color,then apply it using the test "
 "button. The new color is not really installed but it is used only for your "
@@ -4192,7 +4191,7 @@ msgid "error messages."
 msgstr "thư"
 
 #: ../web_tt2/skinsedit.tt2:137
-msgid "hovered hyperlinks;"
+msgid "hovered links;"
 msgstr ""
 
 #: ../web_tt2/skinsedit.tt2:137
@@ -5796,10 +5795,6 @@ msgstr ""
 msgid "Moderators List %1 / %2"
 msgstr "Hộp thư chung của điều tiết viên %1 / %2"
 
-#: ../mail_tt2/listmaster_notification.tt2:2
-msgid "Listmaster"
-msgstr "Chủ hộp thư chung"
-
 #. (list.name,list.host,email)
 #: ../mail_tt2/listmaster_notification.tt2:4
 msgid "List \"%1@%2\" creation request from %3"
@@ -6728,13 +6723,12 @@ msgstr ""
 "một người dùng đã yêu cầu đăng ký với hộp thư chung này. Để liệt kê và quản "
 "lý các yêu cầu đăng ký bị hoãn, hãy nhấn vào liên kết theo đây:"
 
-#. (replyto,keyauth,list.name,who,gecos)
-#: ../mail_tt2/listowner_notification.tt2:72
+#. (replyto)
+#: ../mail_tt2/listowner_notification.tt2:70
 #, fuzzy
 msgid ""
 "If prefered, you can accept this subscription request sending an email to %1 "
-"with the following subject:\n"
-"AUTH %2 ADD %3 %4 %5\n"
+"with the following subject:"
 msgstr ""
 "Hoặc bạn có thể tán thành yêu cầu đăng ký này bằng cách gửi một thư cho %1 "
 "với chủ đề theo đây:\n"
@@ -6768,13 +6762,12 @@ msgstr ""
 "một người dùng đã yêu cầu được gỡ bỏ khỏi hộp thư chung này. Chủ cho phép "
 "thì hãy nhấn vào liên kết theo đây:"
 
-#. (sympa,keyauth,list.name,who)-)
-#: ../mail_tt2/listowner_notification.tt2:96
+#. (sympa)-)
+#: ../mail_tt2/listowner_notification.tt2:95
 #, fuzzy
 msgid ""
 "\n"
 "or send an email to %1 with the following subject:\n"
-"AUTH %2 DEL %3 %4\n"
 msgstr ""
 "\n"
 "hoặc gửi một thư có chủ đề theo đây:\n"
@@ -6785,14 +6778,13 @@ msgstr ""
 msgid "WARNING: bounce rate too high in list %1"
 msgstr "CẢNH BÁO : hộp thư chung %1 có quá nhiều thư bị nảy về"
 
-#. (list.name,rate,conf.wwsympa_url,list.name)
-#: ../mail_tt2/listowner_notification.tt2:106
+#. (list.name,rate)
+#: ../mail_tt2/listowner_notification.tt2:105
 #, fuzzy
 msgid ""
 "Bounce rate in list %1 is %2.\n"
 "\n"
 "You should delete bouncing subscribers: \n"
-"%3/reviewbouncing/%4\n"
 msgstr ""
 "Tỷ lệ thư nảy về hộp thư chung %1 là %2.\n"
 "\n"
@@ -7313,15 +7305,11 @@ msgid "To distribute the attached message in list %1, follow the link below:"
 msgstr ""
 "Để phân phối thư đính kèm trong hộp thư chung %1, theo liên kết dưới đây:"
 
-#. (conf.sympa,authkey)
-#: ../mail_tt2/send_auth.tt2:20
+#. (conf.sympa)
+#: ../mail_tt2/send_auth.tt2:19
 #, fuzzy
-msgid ""
-"Or send a message to %1 with the following subject:\n"
-"CONFIRM %2\n"
-msgstr ""
-"Hoặc gửi cho %1 một thư có chủ đề này:\n"
-"CONFIRM %2\n"
+msgid "Or send a message to %1 with the following subject:\n"
+msgstr "Hoặc gửi một thư cho %1@%2 với chủ đề này:"
 
 #. (conf.title,list)
 #: ../mail_tt2/sendpasswd.tt2:4
@@ -8694,10 +8682,6 @@ msgstr "Đặt thẻ thư"
 msgid "profile"
 msgstr "hồ sơ"
 
-#: ../src/lib/List.pm:1131
-msgid "Owner"
-msgstr "Người sở hữu"
-
 #: ../src/lib/List.pm:1167
 msgid "Priority"
 msgstr "Ưu tiên"
@@ -9230,6 +9214,30 @@ msgstr "không thư (có ích khi đi nghỉ)"
 #: ../wwsympa/wwslib.pm:37
 msgid "you do not receive your own posts"
 msgstr "bạn không nhận bài thư được mình gửi"
+
+#, fuzzy
+#~ msgid "[Listmaster]"
+#~ msgstr "Chủ hộp thư chung"
+
+#, fuzzy
+#~ msgid "[Owner]"
+#~ msgstr "Người sở hữu"
+
+#, fuzzy
+#~ msgid "[Subscriber]"
+#~ msgstr "Người đăng ký"
+
+#, fuzzy
+#~ msgid "last login from %1 &nbsp;&nbsp; (%2)</span>"
+#~ msgstr "đăng nhập cuối từ %1 <br />(%2)</span>"
+
+#, fuzzy
+#~ msgid ""
+#~ "Or send a message to %1 with the following subject:\n"
+#~ "CONFIRM %2\n"
+#~ msgstr ""
+#~ "Hoặc gửi cho %1 một thư có chủ đề này:\n"
+#~ "CONFIRM %2\n"
 
 #~ msgid "-List definition"
 #~ msgstr "~Xác định hộp"

@@ -113,34 +113,32 @@ msgstr "Nápověda"
 msgid "Restore identity"
 msgstr "Obnov konferenci"
 
-#: ../web_tt2/login_menu.tt2:13
-#, fuzzy
-msgid "[Listmaster]"
+#: ../mail_tt2/listmaster_notification.tt2:2 ../web_tt2/login_menu.tt2:13
+msgid "Listmaster"
 msgstr "Správce"
 
 #: ../web_tt2/login_menu.tt2:14
 #, fuzzy
-msgid "[Privileged owner]"
+msgid "Privileged owner"
 msgstr "Správce"
 
-#: ../web_tt2/login_menu.tt2:15
-#, fuzzy
-msgid "[Owner]"
+#: ../src/lib/List.pm:1131 ../web_tt2/login_menu.tt2:15
+msgid "Owner"
 msgstr "Vlastník"
 
 #: ../web_tt2/login_menu.tt2:16
 #, fuzzy
-msgid "[Editor]"
+msgid "Editor"
 msgstr "Editor"
 
 #: ../web_tt2/login_menu.tt2:17
 #, fuzzy
-msgid "[Subscriber]"
-msgstr "Člen"
+msgid "Subscriber"
+msgstr "Uživatelé"
 
-#. (last_login_host,last_login_date)
+#. (last_login_host)
 #: ../web_tt2/login_menu.tt2:21
-msgid "last login from %1 &nbsp;&nbsp; (%2)</span>"
+msgid "last login from %1"
 msgstr ""
 
 #: ../web_tt2/login_menu.tt2:36
@@ -252,7 +250,7 @@ msgstr "Celkem členů:"
 
 #: ../web_tt2/list_panel.tt2:12
 #, fuzzy
-msgid "Error rate:&nbsp;"
+msgid "Error rate:"
 msgstr "Chybovost:"
 
 #: ../web_tt2/list_panel.tt2:13
@@ -421,9 +419,10 @@ msgstr "<strong>Vytvoř sdílení</strong> : vytvoří místo pro sdílení doku
 msgid "Delete Shared"
 msgstr "Smazat Sdílené"
 
+#. (listname)
 #: ../web_tt2/admin.tt2:63
 #, fuzzy
-msgid "Are you sure you wish to delete the shared documents?"
+msgid "Are you sure you wish to delete the shared documents for list %1?"
 msgstr "Chcete opravdu uzavřít konferenci %1 ?"
 
 #: ../web_tt2/admin.tt2:63
@@ -2664,9 +2663,7 @@ msgstr "Nebylo nalezeno žádné přihlášení adresy <strong>%1</strong>!"
 
 #: ../web_tt2/loginbanner.tt2:18
 #, fuzzy
-msgid ""
-"To login, select your organization authentication server below:&nbsp;&nbsp;"
-"&nbsp;&nbsp;"
+msgid "To login, select your organization authentication server below:"
 msgstr "Zvolte autentikační server"
 
 #: ../web_tt2/loginbanner.tt2:24
@@ -4131,14 +4128,16 @@ msgid ""
 "static file. The target is specified by css_path parameter."
 msgstr ""
 
-#: ../web_tt2/skinsedit.tt2:45
+#: ../web_tt2/skinsedit.tt2:41
 msgid ""
 "\n"
 "Be careful: the CSS file is overwritten using css.tt2 template, usually this "
 "file is comming from Sympa distribution so your CSS customization may be "
-"erased when doing this.\n"
-"</p>\n"
-"<p>\n"
+"erased when doing this."
+msgstr ""
+
+#: ../web_tt2/skinsedit.tt2:45
+msgid ""
 "Use the color editor in order to change defined colors. First select the "
 "color you want to change and pick a color,then apply it using the test "
 "button. The new color is not really installed but it is used only for your "
@@ -4265,7 +4264,7 @@ msgid "error messages."
 msgstr "připomínací zpráva"
 
 #: ../web_tt2/skinsedit.tt2:137
-msgid "hovered hyperlinks;"
+msgid "hovered links;"
 msgstr ""
 
 #: ../web_tt2/skinsedit.tt2:137
@@ -5847,10 +5846,6 @@ msgstr ""
 msgid "Moderators List %1 / %2"
 msgstr "Moderatorum konference %1"
 
-#: ../mail_tt2/listmaster_notification.tt2:2
-msgid "Listmaster"
-msgstr "Správce"
-
 #. (list.name,list.host,email)
 #: ../mail_tt2/listmaster_notification.tt2:4
 #, fuzzy
@@ -6778,13 +6773,12 @@ msgid ""
 "pending subscription requests you should click on the following link:"
 msgstr ""
 
-#. (replyto,keyauth,list.name,who,gecos)
-#: ../mail_tt2/listowner_notification.tt2:72
+#. (replyto)
+#: ../mail_tt2/listowner_notification.tt2:70
 #, fuzzy
 msgid ""
 "If prefered, you can accept this subscription request sending an email to %1 "
-"with the following subject:\n"
-"AUTH %2 ADD %3 %4 %5\n"
+"with the following subject:"
 msgstr "Nebo zaslete zpravu na %1@%2 s timto predmetem :"
 
 #: ../mail_tt2/listowner_notification.tt2:74
@@ -6810,13 +6804,12 @@ msgid ""
 "with you, you should click on the following link:"
 msgstr ""
 
-#. (sympa,keyauth,list.name,who)-)
-#: ../mail_tt2/listowner_notification.tt2:96
+#. (sympa)-)
+#: ../mail_tt2/listowner_notification.tt2:95
 #, fuzzy
 msgid ""
 "\n"
 "or send an email to %1 with the following subject:\n"
-"AUTH %2 DEL %3 %4\n"
 msgstr "Nebo zaslete zpravu na %1@%2 s timto predmetem :"
 
 #. (list.name)
@@ -6824,13 +6817,12 @@ msgstr "Nebo zaslete zpravu na %1@%2 s timto predmetem :"
 msgid "WARNING: bounce rate too high in list %1"
 msgstr ""
 
-#. (list.name,rate,conf.wwsympa_url,list.name)
-#: ../mail_tt2/listowner_notification.tt2:106
+#. (list.name,rate)
+#: ../mail_tt2/listowner_notification.tt2:105
 msgid ""
 "Bounce rate in list %1 is %2.\n"
 "\n"
 "You should delete bouncing subscribers: \n"
-"%3/reviewbouncing/%4\n"
 msgstr ""
 
 #. (command,list.name,who,gecos)
@@ -7307,12 +7299,10 @@ msgstr ""
 msgid "To distribute the attached message in list %1, follow the link below:"
 msgstr "Pro rozeslani prilozene zpravy do konference %1:"
 
-#. (conf.sympa,authkey)
-#: ../mail_tt2/send_auth.tt2:20
+#. (conf.sympa)
+#: ../mail_tt2/send_auth.tt2:19
 #, fuzzy
-msgid ""
-"Or send a message to %1 with the following subject:\n"
-"CONFIRM %2\n"
+msgid "Or send a message to %1 with the following subject:\n"
 msgstr "Nebo zaslete zpravu na %1@%2 s timto predmetem :"
 
 #. (conf.title,list)
@@ -8673,10 +8663,6 @@ msgstr "Počet zpráv"
 msgid "profile"
 msgstr "profil"
 
-#: ../src/lib/List.pm:1131
-msgid "Owner"
-msgstr "Vlastník"
-
 #: ../src/lib/List.pm:1167
 msgid "Priority"
 msgstr "Priorita"
@@ -9205,6 +9191,24 @@ msgstr ""
 #, fuzzy
 msgid "you do not receive your own posts"
 msgstr "Pro získání hesla :"
+
+#, fuzzy
+#~ msgid "[Listmaster]"
+#~ msgstr "Správce"
+
+#, fuzzy
+#~ msgid "[Owner]"
+#~ msgstr "Vlastník"
+
+#, fuzzy
+#~ msgid "[Subscriber]"
+#~ msgstr "Člen"
+
+#, fuzzy
+#~ msgid ""
+#~ "Or send a message to %1 with the following subject:\n"
+#~ "CONFIRM %2\n"
+#~ msgstr "Nebo zaslete zpravu na %1@%2 s timto predmetem :"
 
 #~ msgid "-List definition"
 #~ msgstr "-Popis konference"

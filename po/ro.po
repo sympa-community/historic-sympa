@@ -124,21 +124,21 @@ msgstr "Ajutor"
 msgid "Restore identity"
 msgstr "Moderare"
 
-#: ../web_tt2/login_menu.tt2:13
+#: ../mail_tt2/listmaster_notification.tt2:2 ../web_tt2/login_menu.tt2:13
 #, fuzzy
-msgid "[Listmaster]"
+msgid "Listmaster"
 msgstr "denumire lista"
 
 #: ../web_tt2/login_menu.tt2:14
 #, fuzzy
-msgid "[Privileged owner]"
+msgid "Privileged owner"
 msgstr "Privileged owner"
 
 # #-#-#-#-#  ro.po (PACKAGE VERSION)  #-#-#-#-#
 # nlsref 16,57
-#: ../web_tt2/login_menu.tt2:15
+#: ../src/lib/List.pm:1131 ../web_tt2/login_menu.tt2:15
 #, fuzzy
-msgid "[Owner]"
+msgid "Owner"
 msgstr ""
 "#-#-#-#-#  ro.po (PACKAGE VERSION)  #-#-#-#-#\n"
 "Proprietar\n"
@@ -147,17 +147,17 @@ msgstr ""
 
 #: ../web_tt2/login_menu.tt2:16
 #, fuzzy
-msgid "[Editor]"
+msgid "Editor"
 msgstr "Editor"
 
 #: ../web_tt2/login_menu.tt2:17
 #, fuzzy
-msgid "[Subscriber]"
-msgstr "Subscriber"
+msgid "Subscriber"
+msgstr "Subscribers"
 
-#. (last_login_host,last_login_date)
+#. (last_login_host)
 #: ../web_tt2/login_menu.tt2:21
-msgid "last login from %1 &nbsp;&nbsp; (%2)</span>"
+msgid "last login from %1"
 msgstr ""
 
 #: ../web_tt2/login_menu.tt2:36
@@ -278,7 +278,7 @@ msgstr "Subscribers:"
 # nlsref 1,3
 #: ../web_tt2/list_panel.tt2:12
 #, fuzzy
-msgid "Error rate:&nbsp;"
+msgid "Error rate:"
 msgstr "Greseala în linia %d %s"
 
 #: ../web_tt2/list_panel.tt2:13
@@ -449,9 +449,10 @@ msgstr ""
 msgid "Delete Shared"
 msgstr ""
 
+#. (listname)
 #: ../web_tt2/admin.tt2:63
 #, fuzzy
-msgid "Are you sure you wish to delete the shared documents?"
+msgid "Are you sure you wish to delete the shared documents for list %1?"
 msgstr "Do you really want to delete %1 ?"
 
 #: ../web_tt2/admin.tt2:63
@@ -2810,9 +2811,7 @@ msgstr ""
 
 #: ../web_tt2/loginbanner.tt2:18
 #, fuzzy
-msgid ""
-"To login, select your organization authentication server below:&nbsp;&nbsp;"
-"&nbsp;&nbsp;"
+msgid "To login, select your organization authentication server below:"
 msgstr "La autentificare("
 
 #: ../web_tt2/loginbanner.tt2:24
@@ -4385,14 +4384,16 @@ msgid ""
 "static file. The target is specified by css_path parameter."
 msgstr ""
 
-#: ../web_tt2/skinsedit.tt2:45
+#: ../web_tt2/skinsedit.tt2:41
 msgid ""
 "\n"
 "Be careful: the CSS file is overwritten using css.tt2 template, usually this "
 "file is comming from Sympa distribution so your CSS customization may be "
-"erased when doing this.\n"
-"</p>\n"
-"<p>\n"
+"erased when doing this."
+msgstr ""
+
+#: ../web_tt2/skinsedit.tt2:45
+msgid ""
 "Use the color editor in order to change defined colors. First select the "
 "color you want to change and pick a color,then apply it using the test "
 "button. The new color is not really installed but it is used only for your "
@@ -4520,7 +4521,7 @@ msgid "error messages."
 msgstr "# mesaj"
 
 #: ../web_tt2/skinsedit.tt2:137
-msgid "hovered hyperlinks;"
+msgid "hovered links;"
 msgstr ""
 
 #: ../web_tt2/skinsedit.tt2:137
@@ -6226,11 +6227,6 @@ msgstr ""
 msgid "Moderators List %1 / %2"
 msgstr "Moderatorul listei %1"
 
-#: ../mail_tt2/listmaster_notification.tt2:2
-#, fuzzy
-msgid "Listmaster"
-msgstr "denumire lista"
-
 # nlsref 15,15
 #. (list.name,list.host,email)
 #: ../mail_tt2/listmaster_notification.tt2:4
@@ -7210,13 +7206,12 @@ msgstr ""
 "sau trimite un mail %s cu urmatorul subiect:\n"
 "AUTH %s ADD %s %s %s \n"
 
-#. (replyto,keyauth,list.name,who,gecos)
-#: ../mail_tt2/listowner_notification.tt2:72
+#. (replyto)
+#: ../mail_tt2/listowner_notification.tt2:70
 #, fuzzy
 msgid ""
 "If prefered, you can accept this subscription request sending an email to %1 "
-"with the following subject:\n"
-"AUTH %2 ADD %3 %4 %5\n"
+"with the following subject:"
 msgstr ""
 "\n"
 "sau trimite un mesaj la %1 cu urmatorul subiect:\n"
@@ -7257,13 +7252,12 @@ msgstr ""
 "sau trimite un email la %s cu urmatorul subiect:\n"
 "AUTH %s DEL %s %s \n"
 
-#. (sympa,keyauth,list.name,who)-)
-#: ../mail_tt2/listowner_notification.tt2:96
+#. (sympa)-)
+#: ../mail_tt2/listowner_notification.tt2:95
 #, fuzzy
 msgid ""
 "\n"
 "or send an email to %1 with the following subject:\n"
-"AUTH %2 DEL %3 %4\n"
 msgstr ""
 "\n"
 "sau trimite un mesaj la %1 cu urmatorul subiect:\n"
@@ -7277,14 +7271,13 @@ msgid "WARNING: bounce rate too high in list %1"
 msgstr "Avertizare:rata de retrimitere (bounced) in lista %s este prea mare"
 
 # nlsref 8,27
-#. (list.name,rate,conf.wwsympa_url,list.name)
-#: ../mail_tt2/listowner_notification.tt2:106
+#. (list.name,rate)
+#: ../mail_tt2/listowner_notification.tt2:105
 #, fuzzy
 msgid ""
 "Bounce rate in list %1 is %2.\n"
 "\n"
 "You should delete bouncing subscribers: \n"
-"%3/reviewbouncing/%4\n"
 msgstr ""
 "Rata de retrimitere (bounced) in lista %s este%d%%.\n"
 "\n"
@@ -7817,12 +7810,10 @@ msgstr ""
 msgid "To distribute the attached message in list %1, follow the link below:"
 msgstr "Pentru a distribui mesajul pe lista %1 apasa pe linkul:"
 
-#. (conf.sympa,authkey)
-#: ../mail_tt2/send_auth.tt2:20
+#. (conf.sympa)
+#: ../mail_tt2/send_auth.tt2:19
 #, fuzzy
-msgid ""
-"Or send a message to %1 with the following subject:\n"
-"CONFIRM %2\n"
+msgid "Or send a message to %1 with the following subject:\n"
 msgstr "sau trimite un mesaj la %1@%2 cu urmatorul subiect :"
 
 #. (conf.title,list)
@@ -9338,17 +9329,6 @@ msgstr "footer pentru mesaj"
 msgid "profile"
 msgstr "Profil"
 
-# #-#-#-#-#  ro.po (PACKAGE VERSION)  #-#-#-#-#
-# nlsref 16,57
-#: ../src/lib/List.pm:1131
-#, fuzzy
-msgid "Owner"
-msgstr ""
-"#-#-#-#-#  ro.po (PACKAGE VERSION)  #-#-#-#-#\n"
-"Proprietar\n"
-"#-#-#-#-#  ro.po (PACKAGE VERSION)  #-#-#-#-#\n"
-"Owner"
-
 # nlsref 16,63
 #: ../src/lib/List.pm:1167
 msgid "Priority"
@@ -9948,6 +9928,30 @@ msgstr ""
 #, fuzzy
 msgid "you do not receive your own posts"
 msgstr "Pentru a primi parola:"
+
+#, fuzzy
+#~ msgid "[Listmaster]"
+#~ msgstr "denumire lista"
+
+# #-#-#-#-#  ro.po (PACKAGE VERSION)  #-#-#-#-#
+# nlsref 16,57
+#, fuzzy
+#~ msgid "[Owner]"
+#~ msgstr ""
+#~ "#-#-#-#-#  ro.po (PACKAGE VERSION)  #-#-#-#-#\n"
+#~ "Proprietar\n"
+#~ "#-#-#-#-#  ro.po (PACKAGE VERSION)  #-#-#-#-#\n"
+#~ "Owner"
+
+#, fuzzy
+#~ msgid "[Subscriber]"
+#~ msgstr "Subscriber"
+
+#, fuzzy
+#~ msgid ""
+#~ "Or send a message to %1 with the following subject:\n"
+#~ "CONFIRM %2\n"
+#~ msgstr "sau trimite un mesaj la %1@%2 cu urmatorul subiect :"
 
 #, fuzzy
 #~ msgid "-List definition"

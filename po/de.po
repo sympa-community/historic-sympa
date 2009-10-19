@@ -7,7 +7,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: Jens Krehbiel-Graether <jens.krehbiel-graether@okg-"
 "computer.de>\n"
 "POT-Creation-Date: 2002-07-16 17:27+0800\n"
-"PO-Revision-Date: 2009-10-01 16:17+0200\n"
+"PO-Revision-Date: 2009-10-19 09:51+0200\n"
 "Last-Translator: Matthias Warkus <warkusm@hrz.uni-marburg.de>\n"
 "Language-Team: Deutsch\n"
 "MIME-Version: 1.0\n"
@@ -104,31 +104,31 @@ msgstr "Hilfe"
 msgid "Restore identity"
 msgstr "Identität wiederherstellen"
 
-#: ../web_tt2/login_menu.tt2:13
-msgid "[Listmaster]"
-msgstr "[Listmaster]"
+#: ../mail_tt2/listmaster_notification.tt2:2 ../web_tt2/login_menu.tt2:13
+msgid "Listmaster"
+msgstr "listmaster"
 
 #: ../web_tt2/login_menu.tt2:14
-msgid "[Privileged owner]"
-msgstr "[Privilegierter Eigentümer]"
+msgid "Privileged owner"
+msgstr "Privilegierter Eigentümer"
 
 # #-#-#-#-#  de.po (PACKAGE VERSION)  #-#-#-#-#
-#: ../web_tt2/login_menu.tt2:15
-msgid "[Owner]"
-msgstr "[Eigentümer]"
+#: ../src/lib/List.pm:1131 ../web_tt2/login_menu.tt2:15
+msgid "Owner"
+msgstr "Eigentümer"
 
 #: ../web_tt2/login_menu.tt2:16
-msgid "[Editor]"
-msgstr "[Moderator]"
+msgid "Editor"
+msgstr "Moderator"
 
 #: ../web_tt2/login_menu.tt2:17
-msgid "[Subscriber]"
-msgstr "[Abonnent]"
+msgid "Subscriber"
+msgstr "Abonnenten"
 
-#. (last_login_host,last_login_date)
+#. (last_login_host)
 #: ../web_tt2/login_menu.tt2:21
-msgid "last login from %1 &nbsp;&nbsp; (%2)</span>"
-msgstr "letzte Anmeldung von %1 &nbsp;&nbsp; (%2)</span>"
+msgid "last login from %1"
+msgstr "letzte Anmeldung von %1"
 
 #: ../web_tt2/login_menu.tt2:36
 msgid "Logout"
@@ -233,7 +233,7 @@ msgid "Subscribers:"
 msgstr "Abonnenten:"
 
 #: ../web_tt2/list_panel.tt2:12
-msgid "Error rate:&nbsp;"
+msgid "Error rate:"
 msgstr "Fehlerrate:&nbsp;"
 
 #: ../web_tt2/list_panel.tt2:13
@@ -392,8 +392,10 @@ msgstr "Initialisiert den Bereich für gemeinsame Dokumente."
 msgid "Delete Shared"
 msgstr "Gemeinsame Dokumente löschen"
 
+#. (listname)
 #: ../web_tt2/admin.tt2:63
-msgid "Are you sure you wish to delete the shared documents?"
+#, fuzzy
+msgid "Are you sure you wish to delete the shared documents for list %1?"
 msgstr "Sind Sie sicher, dass Sie die gemeinsamen Dokumente löschen wollen?"
 
 #: ../web_tt2/admin.tt2:63
@@ -2509,12 +2511,8 @@ msgid "No subscriptions with address <strong>%1</strong>!"
 msgstr "Keine Abonnenten mit der Adresse <strong>%1</strong>!"
 
 #: ../web_tt2/loginbanner.tt2:18
-msgid ""
-"To login, select your organization authentication server below:&nbsp;&nbsp;"
-"&nbsp;&nbsp;"
-msgstr ""
-"Wählen Sie, um sich anzumelden, den Legitimierungsserver Ihrer Organisation:"
-"&nbsp;&nbsp;&nbsp;&nbsp;"
+msgid "To login, select your organization authentication server below:"
+msgstr "Wählen Sie, um sich anzumelden, den Legitimierungsserver Ihrer Organisation:"
 
 #: ../web_tt2/loginbanner.tt2:24
 msgid "Go"
@@ -3957,32 +3955,22 @@ msgstr ""
 "das Resultat in eine neue statische CSS-Datei kopieren. Das Ziel wird durch "
 "den Parameter css_path angegeben."
 
-#: ../web_tt2/skinsedit.tt2:45
+#: ../web_tt2/skinsedit.tt2:41
 msgid ""
 "\n"
 "Be careful: the CSS file is overwritten using css.tt2 template, usually this "
 "file is comming from Sympa distribution so your CSS customization may be "
-"erased when doing this.\n"
-"</p>\n"
-"<p>\n"
+"erased when doing this."
+msgstr "\nSeien Sie vorsichtig: Die CSS-Datei wird mittels der Template css.tt2 überschrieben. Üblicherweise kommt diese Datei aus dem Sympa-Lieferumfang, so dass Ihre CSS-Anpassungen möglicherweise überschrieben werden."
+
+#: ../web_tt2/skinsedit.tt2:45
+msgid ""
 "Use the color editor in order to change defined colors. First select the "
 "color you want to change and pick a color,then apply it using the test "
 "button. The new color is not really installed but it is used only for your "
 "own session. When happy with the different colors you choosen, you may save "
 "them in a new static CSS.\n"
-msgstr ""
-"\n"
-"Seien Sie vorsichtig: Die CSS-Datei wird mittels der Template css.tt2 "
-"überschrieben. Üblicherweise kommt diese Datei aus dem Sympa-Lieferumfang, "
-"so dass Ihre CSS-Anpassungen möglicherweise überschrieben werden.\n"
-"</p>\n"
-"<p>\n"
-"Benutzen Sie den Farbeditor, um definierte Farben zu ändern. Wählen Sie "
-"zuerst die Farbeinstellung, die Sie ändern wollen und suchen Sie eine Farbe "
-"aus, dann wenden Sie sie mit dem Testknopf an. Die neue Farbe wird nicht "
-"wirklich installiert, sondern nur für Ihre eigene Sitzung verwendet. Wenn "
-"Sie mit den verschiedenen ausgewählten Farben zufrieden sind, können Sie sie "
-"in einem neuen statischen CSS speichern.\n"
+msgstr "Benutzen Sie den Farbeditor, um definierte Farben zu ändern. Wählen Sie zuerst die Farbeinstellung, die Sie ändern wollen und suchen Sie eine Farbe aus, dann wenden Sie sie mit dem Testknopf an. Die neue Farbe wird nicht wirklich installiert, sondern nur für Ihre eigene Sitzung verwendet. Wenn Sie mit den verschiedenen ausgewählten Farben zufrieden sind, können Sie sie in einem neuen statischen CSS speichern.\n"
 
 #: ../web_tt2/skinsedit.tt2:50
 msgid " pick the color you want to test. "
@@ -4061,7 +4049,9 @@ msgstr "Schrift- und Randfarbe von:"
 msgid ""
 "almost everything. Exceptions for borders are &lt;TD/&gt; borders; "
 "exceptions for fonts are links, buttons and some titles."
-msgstr "quasi allem. Ausnahmen für Rahmen sind &lt;TD/&gt;-Rahmen; Ausnahmen für Schriften sind Links, Knöpfe und einige Titel."
+msgstr ""
+"quasi allem. Ausnahmen für Rahmen sind &lt;TD/&gt;-Rahmen; Ausnahmen für "
+"Schriften sind Links, Knöpfe und einige Titel."
 
 #: ../web_tt2/skinsedit.tt2:107 ../web_tt2/skinsedit.tt2:179
 msgid "unused"
@@ -4100,8 +4090,8 @@ msgid "error messages."
 msgstr "Fehlermeldungen."
 
 #: ../web_tt2/skinsedit.tt2:137
-msgid "hovered hyperlinks;"
-msgstr "Hyperlinks unter dem Mauszeiger;"
+msgid "hovered links;"
+msgstr "Links unter dem Mauszeiger;"
 
 #: ../web_tt2/skinsedit.tt2:137
 msgid "background color of hovered buttons."
@@ -5649,10 +5639,6 @@ msgstr ""
 msgid "Moderators List %1 / %2"
 msgstr "Liste der Moderatoren %1 / %2"
 
-#: ../mail_tt2/listmaster_notification.tt2:2
-msgid "Listmaster"
-msgstr "listmaster"
-
 #. (list.name,list.host,email)
 #: ../mail_tt2/listmaster_notification.tt2:4
 msgid "List \"%1@%2\" creation request from %3"
@@ -5888,7 +5874,8 @@ msgstr "Aktualisierung der Abonnenten für die Liste %1 fehlgeschlagen"
 #: ../mail_tt2/listmaster_notification.tt2:153
 msgid ""
 "Sympa could not include subscribers from the following external data sources:"
-msgstr "Sympa konnte aus folgenden externen Datenquellen keine Abonnenten einbinden:"
+msgstr ""
+"Sympa konnte aus folgenden externen Datenquellen keine Abonnenten einbinden:"
 
 #. (e.name,e.type)
 #: ../mail_tt2/listmaster_notification.tt2:156
@@ -6560,16 +6547,12 @@ msgstr ""
 "Abonnementanträge\n"
 "anzusehen und zu bearbeiten, sollten Sie auf den folgenden Link klicken:"
 
-#. (replyto,keyauth,list.name,who,gecos)
-#: ../mail_tt2/listowner_notification.tt2:72
+#. (replyto)
+#: ../mail_tt2/listowner_notification.tt2:70
 msgid ""
 "If prefered, you can accept this subscription request sending an email to %1 "
-"with the following subject:\n"
-"AUTH %2 ADD %3 %4 %5\n"
-msgstr ""
-"Wenn Ihnen dies lieber ist, können Sie diesen Abonnementantrag auch "
-"annehmen, indem Sie eine Mail an %1 mit folgendem Betreff schicken:\n"
-"AUTH %2 ADD %3 %4 %5\n"
+"with the following subject:"
+msgstr "Wenn Ihnen dies lieber ist, können Sie diesen Abonnementantrag auch annehmen, indem Sie eine Mail an %1 mit folgendem Betreff schicken:"
 
 #: ../mail_tt2/listowner_notification.tt2:74
 msgid "That can be done using this mailto link:"
@@ -6597,34 +6580,28 @@ msgstr ""
 "ein Abonnent hat darum gebeten, von der Liste abgemeldet zu werden.\n"
 "Wenn dies in Ordnung ist, sollten Sie den folgenden Link anklicken:"
 
-#. (sympa,keyauth,list.name,who)-)
-#: ../mail_tt2/listowner_notification.tt2:96
+#. (sympa)-)
+#: ../mail_tt2/listowner_notification.tt2:95
 msgid ""
 "\n"
 "or send an email to %1 with the following subject:\n"
-"AUTH %2 DEL %3 %4\n"
-msgstr ""
-"\n"
-"oder senden Sie eine eMail an %1 mit dem folgenden Betreff:\n"
-"AUTH %2 DEL %4 %4\n"
+msgstr "\noder senden Sie eine eMail an %1 mit dem folgenden Betreff:\n"
 
 #. (list.name)
 #: ../mail_tt2/listowner_notification.tt2:100
 msgid "WARNING: bounce rate too high in list %1"
 msgstr "WARNUNG: Zustellfehlerrate zu hoch in Liste %1"
 
-#. (list.name,rate,conf.wwsympa_url,list.name)
-#: ../mail_tt2/listowner_notification.tt2:106
+#. (list.name,rate)
+#: ../mail_tt2/listowner_notification.tt2:105
 msgid ""
 "Bounce rate in list %1 is %2.\n"
 "\n"
 "You should delete bouncing subscribers: \n"
-"%3/reviewbouncing/%4\n"
 msgstr ""
 "Zustellfehlerrate der Liste %1 beträgt %2.\n"
 "\n"
 "Sie sollten nicht existierende Abonnenten löschen: \n"
-"%3/reviewbouncing/%4\n"
 
 #. (command,list.name,who,gecos)
 #: ../mail_tt2/listowner_notification.tt2:110
@@ -7113,14 +7090,10 @@ msgstr ""
 "Um die beigefügte Nachricht an die Liste %1 zu verteilen, folgen Sie bitte "
 "diesem Link:"
 
-#. (conf.sympa,authkey)
-#: ../mail_tt2/send_auth.tt2:20
-msgid ""
-"Or send a message to %1 with the following subject:\n"
-"CONFIRM %2\n"
-msgstr ""
-"Oder senden Sie eine Nachricht an %1 mit dem folgenden Betreff:\n"
-"CONFIRM %2\n"
+#. (conf.sympa)
+#: ../mail_tt2/send_auth.tt2:19
+msgid "Or send a message to %1 with the following subject:\n"
+msgstr "Oder senden Sie eine Nachricht an %1@%2 mit folgendem Betreff:\n"
 
 #. (conf.title,list)
 #: ../mail_tt2/sendpasswd.tt2:4
@@ -8486,11 +8459,6 @@ msgstr "Nachrichtenmarkierung"
 msgid "profile"
 msgstr "Profil"
 
-# #-#-#-#-#  de.po (PACKAGE VERSION)  #-#-#-#-#
-#: ../src/lib/List.pm:1131
-msgid "Owner"
-msgstr "Eigentümer"
-
 #: ../src/lib/List.pm:1167
 msgid "Priority"
 msgstr "Priorität"
@@ -9013,20 +8981,42 @@ msgstr "keine Nachricht (nützlich für Urlaube)"
 msgid "you do not receive your own posts"
 msgstr "Sie empfangen Ihre eigenen Nachrichten nicht"
 
-#: ../web_tt2/skinsedit.tt2:97
-msgid ""
-"font and border color of:<UL><LI> almost everything. Exceptions for borders "
-"are &lt;TD/&gt; borders; exceptions for fonts are links, buttons and some "
-"titles.</LI></UL>"
-msgstr ""
-"Schrift- und Rahmenfarbe von:<UL><LI> quasi allem. Ausnahmen für Rahmen sind "
-"&lt;TD/&gt;-Rahmen; Ausnahmen für Schriften sind Links, Knöpfe und einige "
-"Titel.</LI></UL>"
+#~ msgid "hovered hyperlinks;"
+#~ msgstr "Hyperlinks unter dem Mauszeiger;"
 
-#: ../mail_tt2/listmaster_notification.tt2:154
-msgid ""
-"Sympa could not include subscribers from external data sources; the\n"
-"database or LDAP directory might be unreachable."
-msgstr ""
-"Sympa konnte Abonnenten nicht aus einer externen Datenquelle einbinden.\n"
-"Die Datenbank oder das LDAP-Verzeichnis ist möglicherweise nicht erreichbar."
+#~ msgid "[Listmaster]"
+#~ msgstr "[Listmaster]"
+
+# #-#-#-#-#  de.po (PACKAGE VERSION)  #-#-#-#-#
+#~ msgid "[Owner]"
+#~ msgstr "[Eigentümer]"
+
+#~ msgid "[Subscriber]"
+#~ msgstr "[Abonnent]"
+
+#~ msgid "last login from %1 &nbsp;&nbsp; (%2)</span>"
+#~ msgstr "letzte Anmeldung von %1 &nbsp;&nbsp; (%2)</span>"
+
+#~ msgid ""
+#~ "Or send a message to %1 with the following subject:\n"
+#~ "CONFIRM %2\n"
+#~ msgstr ""
+#~ "Oder senden Sie eine Nachricht an %1 mit dem folgenden Betreff:\n"
+#~ "CONFIRM %2\n"
+
+#~ msgid ""
+#~ "font and border color of:<UL><LI> almost everything. Exceptions for "
+#~ "borders are &lt;TD/&gt; borders; exceptions for fonts are links, buttons "
+#~ "and some titles.</LI></UL>"
+#~ msgstr ""
+#~ "Schrift- und Rahmenfarbe von:<UL><LI> quasi allem. Ausnahmen für Rahmen "
+#~ "sind &lt;TD/&gt;-Rahmen; Ausnahmen für Schriften sind Links, Knöpfe und "
+#~ "einige Titel.</LI></UL>"
+
+#~ msgid ""
+#~ "Sympa could not include subscribers from external data sources; the\n"
+#~ "database or LDAP directory might be unreachable."
+#~ msgstr ""
+#~ "Sympa konnte Abonnenten nicht aus einer externen Datenquelle einbinden.\n"
+#~ "Die Datenbank oder das LDAP-Verzeichnis ist möglicherweise nicht "
+#~ "erreichbar."

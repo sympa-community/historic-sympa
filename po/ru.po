@@ -109,36 +109,34 @@ msgstr "Помощь"
 msgid "Restore identity"
 msgstr ""
 
-#: ../web_tt2/login_menu.tt2:13
-#, fuzzy
-msgid "[Listmaster]"
+#: ../mail_tt2/listmaster_notification.tt2:2 ../web_tt2/login_menu.tt2:13
+msgid "Listmaster"
 msgstr "Глобальный администратор"
 
 #: ../web_tt2/login_menu.tt2:14
 #, fuzzy
-msgid "[Privileged owner]"
+msgid "Privileged owner"
 msgstr "Привилегированный владелец"
 
-#: ../web_tt2/login_menu.tt2:15
-#, fuzzy
-msgid "[Owner]"
+#: ../src/lib/List.pm:1131 ../web_tt2/login_menu.tt2:15
+msgid "Owner"
 msgstr "Владелец"
 
 #: ../web_tt2/login_menu.tt2:16
 #, fuzzy
-msgid "[Editor]"
+msgid "Editor"
 msgstr "Редактор"
 
 #: ../web_tt2/login_menu.tt2:17
 #, fuzzy
-msgid "[Subscriber]"
-msgstr "Подписчик"
+msgid "Subscriber"
+msgstr "Подписчики"
 
-#. (last_login_host,last_login_date)
+#. (last_login_host)
 #: ../web_tt2/login_menu.tt2:21
 #, fuzzy
-msgid "last login from %1 &nbsp;&nbsp; (%2)</span>"
-msgstr "последний вход был с %1 <br />(%2)</span>"
+msgid "last login from %1"
+msgstr "последний вход с %1 (%2)"
 
 #: ../web_tt2/login_menu.tt2:36
 msgid "Logout"
@@ -244,7 +242,7 @@ msgstr "Подписчики:"
 
 #: ../web_tt2/list_panel.tt2:12
 #, fuzzy
-msgid "Error rate:&nbsp;"
+msgid "Error rate:"
 msgstr "Доля ошибок:"
 
 #: ../web_tt2/list_panel.tt2:13
@@ -410,9 +408,10 @@ msgstr "Инициализирует WEB-пространство для общ�
 msgid "Delete Shared"
 msgstr "Удалить общее пространство"
 
+#. (listname)
 #: ../web_tt2/admin.tt2:63
 #, fuzzy
-msgid "Are you sure you wish to delete the shared documents?"
+msgid "Are you sure you wish to delete the shared documents for list %1?"
 msgstr "Вы уверены, что хотите удалить общие документы? "
 
 #: ../web_tt2/admin.tt2:63
@@ -2567,9 +2566,7 @@ msgstr "Нет подписок с адресом <strong>%1</strong>! "
 
 #: ../web_tt2/loginbanner.tt2:18
 #, fuzzy
-msgid ""
-"To login, select your organization authentication server below:&nbsp;&nbsp;"
-"&nbsp;&nbsp;"
+msgid "To login, select your organization authentication server below:"
 msgstr "Чтобы войти, выберите Ваш сервер аутентификации ниже:"
 
 #: ../web_tt2/loginbanner.tt2:24
@@ -4064,15 +4061,17 @@ msgstr ""
 "следующего редактора цветов. После окончания Вы можете скопировать результат "
 "в новый файл статической CSS. Место назначения задаётся параметром css_path. "
 
-#: ../web_tt2/skinsedit.tt2:45
-#, fuzzy
+#: ../web_tt2/skinsedit.tt2:41
 msgid ""
 "\n"
 "Be careful: the CSS file is overwritten using css.tt2 template, usually this "
 "file is comming from Sympa distribution so your CSS customization may be "
-"erased when doing this.\n"
-"</p>\n"
-"<p>\n"
+"erased when doing this."
+msgstr ""
+
+#: ../web_tt2/skinsedit.tt2:45
+#, fuzzy
+msgid ""
 "Use the color editor in order to change defined colors. First select the "
 "color you want to change and pick a color,then apply it using the test "
 "button. The new color is not really installed but it is used only for your "
@@ -4217,7 +4216,7 @@ msgid "error messages."
 msgstr "# сообщение"
 
 #: ../web_tt2/skinsedit.tt2:137
-msgid "hovered hyperlinks;"
+msgid "hovered links;"
 msgstr ""
 
 #: ../web_tt2/skinsedit.tt2:137
@@ -5826,10 +5825,6 @@ msgstr ""
 msgid "Moderators List %1 / %2"
 msgstr "Список модераторов %1 / %2"
 
-#: ../mail_tt2/listmaster_notification.tt2:2
-msgid "Listmaster"
-msgstr "Глобальный администратор"
-
 #. (list.name,list.host,email)
 #: ../mail_tt2/listmaster_notification.tt2:4
 msgid "List \"%1@%2\" creation request from %3"
@@ -6757,13 +6752,12 @@ msgstr ""
 "просмотреть текущие запросы на подписку\n"
 " и принять решение, перейдите по следующей ссылке :"
 
-#. (replyto,keyauth,list.name,who,gecos)
-#: ../mail_tt2/listowner_notification.tt2:72
+#. (replyto)
+#: ../mail_tt2/listowner_notification.tt2:70
 #, fuzzy
 msgid ""
 "If prefered, you can accept this subscription request sending an email to %1 "
-"with the following subject:\n"
-"AUTH %2 ADD %3 %4 %5\n"
+"with the following subject:"
 msgstr ""
 "Кроме того, Вы можете подтвердить согласие на подписку, отправив письмо по "
 "адресу %1 со следующей темой :\n"
@@ -6797,13 +6791,12 @@ msgstr ""
 " От Вашей рассылки желает отписаться пользователь. Если Вы согласны,\n"
 "щёлкните по следующей ссылке :"
 
-#. (sympa,keyauth,list.name,who)-)
-#: ../mail_tt2/listowner_notification.tt2:96
+#. (sympa)-)
+#: ../mail_tt2/listowner_notification.tt2:95
 #, fuzzy
 msgid ""
 "\n"
 "or send an email to %1 with the following subject:\n"
-"AUTH %2 DEL %3 %4\n"
 msgstr ""
 "\n"
 " или отправьте письмо по адресу %1 со следующей темой :\n"
@@ -6814,14 +6807,13 @@ msgstr ""
 msgid "WARNING: bounce rate too high in list %1"
 msgstr "ВНИМАНИЕ: в рассылке %1 слишком много возвращающихся писем"
 
-#. (list.name,rate,conf.wwsympa_url,list.name)
-#: ../mail_tt2/listowner_notification.tt2:106
+#. (list.name,rate)
+#: ../mail_tt2/listowner_notification.tt2:105
 #, fuzzy
 msgid ""
 "Bounce rate in list %1 is %2.\n"
 "\n"
 "You should delete bouncing subscribers: \n"
-"%3/reviewbouncing/%4\n"
 msgstr ""
 "Доля возвращаемых писем в рассылке %1 составляет %2.\n"
 " \n"
@@ -7338,15 +7330,11 @@ msgstr ""
 "Чтобы распространить прикреплённое сообщение в рассылке %1, перейдите по "
 "ссылке ниже: "
 
-#. (conf.sympa,authkey)
-#: ../mail_tt2/send_auth.tt2:20
+#. (conf.sympa)
+#: ../mail_tt2/send_auth.tt2:19
 #, fuzzy
-msgid ""
-"Or send a message to %1 with the following subject:\n"
-"CONFIRM %2\n"
-msgstr ""
-"Или отправьте сообщение на %1 со следующей темой: \n"
-"CONFIRM %2\n"
+msgid "Or send a message to %1 with the following subject:\n"
+msgstr "Или отправьте сообщение на %1@%2 со следующей темой :"
 
 #. (conf.title,list)
 #: ../mail_tt2/sendpasswd.tt2:4
@@ -8717,10 +8705,6 @@ msgstr ""
 msgid "profile"
 msgstr "профиль"
 
-#: ../src/lib/List.pm:1131
-msgid "Owner"
-msgstr "Владелец"
-
 #: ../src/lib/List.pm:1167
 msgid "Priority"
 msgstr "Приоритет"
@@ -9244,6 +9228,30 @@ msgstr ""
 #: ../wwsympa/wwslib.pm:37
 msgid "you do not receive your own posts"
 msgstr ""
+
+#, fuzzy
+#~ msgid "[Listmaster]"
+#~ msgstr "Глобальный администратор"
+
+#, fuzzy
+#~ msgid "[Owner]"
+#~ msgstr "Владелец"
+
+#, fuzzy
+#~ msgid "[Subscriber]"
+#~ msgstr "Подписчик"
+
+#, fuzzy
+#~ msgid "last login from %1 &nbsp;&nbsp; (%2)</span>"
+#~ msgstr "последний вход был с %1 <br />(%2)</span>"
+
+#, fuzzy
+#~ msgid ""
+#~ "Or send a message to %1 with the following subject:\n"
+#~ "CONFIRM %2\n"
+#~ msgstr ""
+#~ "Или отправьте сообщение на %1 со следующей темой: \n"
+#~ "CONFIRM %2\n"
 
 #~ msgid "-List definition"
 #~ msgstr "-Описание рассылки"

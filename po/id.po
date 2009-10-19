@@ -108,34 +108,32 @@ msgstr "Bantuan"
 msgid "Restore identity"
 msgstr "Pemulihan Identitas"
 
-#: ../web_tt2/login_menu.tt2:13
-#, fuzzy
-msgid "[Listmaster]"
+#: ../mail_tt2/listmaster_notification.tt2:2 ../web_tt2/login_menu.tt2:13
+msgid "Listmaster"
 msgstr "Anggota Induk"
 
 #: ../web_tt2/login_menu.tt2:14
 #, fuzzy
-msgid "[Privileged owner]"
+msgid "Privileged owner"
 msgstr "hak isimewa pemilik"
 
-#: ../web_tt2/login_menu.tt2:15
-#, fuzzy
-msgid "[Owner]"
+#: ../src/lib/List.pm:1131 ../web_tt2/login_menu.tt2:15
+msgid "Owner"
 msgstr "pemilik"
 
 #: ../web_tt2/login_menu.tt2:16
 #, fuzzy
-msgid "[Editor]"
+msgid "Editor"
 msgstr "Penyunting"
 
 #: ../web_tt2/login_menu.tt2:17
 #, fuzzy
-msgid "[Subscriber]"
-msgstr "Penika bawah"
+msgid "Subscriber"
+msgstr "Daftar"
 
-#. (last_login_host,last_login_date)
+#. (last_login_host)
 #: ../web_tt2/login_menu.tt2:21
-msgid "last login from %1 &nbsp;&nbsp; (%2)</span>"
+msgid "last login from %1"
 msgstr ""
 
 #: ../web_tt2/login_menu.tt2:36
@@ -242,7 +240,7 @@ msgstr "Penika bawah:"
 
 #: ../web_tt2/list_panel.tt2:12
 #, fuzzy
-msgid "Error rate:&nbsp;"
+msgid "Error rate:"
 msgstr "Angka Kesalahan:"
 
 #: ../web_tt2/list_panel.tt2:13
@@ -402,9 +400,10 @@ msgstr ""
 msgid "Delete Shared"
 msgstr ""
 
+#. (listname)
 #: ../web_tt2/admin.tt2:63
 #, fuzzy
-msgid "Are you sure you wish to delete the shared documents?"
+msgid "Are you sure you wish to delete the shared documents for list %1?"
 msgstr "Apakah Anda benar-benar ingin daftar milis %1?"
 
 #: ../web_tt2/admin.tt2:63
@@ -2438,9 +2437,7 @@ msgstr ""
 
 #: ../web_tt2/loginbanner.tt2:18
 #, fuzzy
-msgid ""
-"To login, select your organization authentication server below:&nbsp;&nbsp;"
-"&nbsp;&nbsp;"
+msgid "To login, select your organization authentication server below:"
 msgstr "Pilih Server autentikasi Anda"
 
 #: ../web_tt2/loginbanner.tt2:24
@@ -3799,14 +3796,16 @@ msgid ""
 "static file. The target is specified by css_path parameter."
 msgstr ""
 
-#: ../web_tt2/skinsedit.tt2:45
+#: ../web_tt2/skinsedit.tt2:41
 msgid ""
 "\n"
 "Be careful: the CSS file is overwritten using css.tt2 template, usually this "
 "file is comming from Sympa distribution so your CSS customization may be "
-"erased when doing this.\n"
-"</p>\n"
-"<p>\n"
+"erased when doing this."
+msgstr ""
+
+#: ../web_tt2/skinsedit.tt2:45
+msgid ""
 "Use the color editor in order to change defined colors. First select the "
 "color you want to change and pick a color,then apply it using the test "
 "button. The new color is not really installed but it is used only for your "
@@ -3930,7 +3929,7 @@ msgid "error messages."
 msgstr "# pesan"
 
 #: ../web_tt2/skinsedit.tt2:137
-msgid "hovered hyperlinks;"
+msgid "hovered links;"
 msgstr ""
 
 #: ../web_tt2/skinsedit.tt2:137
@@ -5331,10 +5330,6 @@ msgstr ""
 msgid "Moderators List %1 / %2"
 msgstr ""
 
-#: ../mail_tt2/listmaster_notification.tt2:2
-msgid "Listmaster"
-msgstr "Anggota Induk"
-
 #. (list.name,list.host,email)
 #: ../mail_tt2/listmaster_notification.tt2:4
 msgid "List \"%1@%2\" creation request from %3"
@@ -6164,12 +6159,11 @@ msgid ""
 "pending subscription requests you should click on the following link:"
 msgstr ""
 
-#. (replyto,keyauth,list.name,who,gecos)
-#: ../mail_tt2/listowner_notification.tt2:72
+#. (replyto)
+#: ../mail_tt2/listowner_notification.tt2:70
 msgid ""
 "If prefered, you can accept this subscription request sending an email to %1 "
-"with the following subject:\n"
-"AUTH %2 ADD %3 %4 %5\n"
+"with the following subject:"
 msgstr ""
 
 #: ../mail_tt2/listowner_notification.tt2:74
@@ -6194,12 +6188,11 @@ msgid ""
 "with you, you should click on the following link:"
 msgstr ""
 
-#. (sympa,keyauth,list.name,who)-)
-#: ../mail_tt2/listowner_notification.tt2:96
+#. (sympa)-)
+#: ../mail_tt2/listowner_notification.tt2:95
 msgid ""
 "\n"
 "or send an email to %1 with the following subject:\n"
-"AUTH %2 DEL %3 %4\n"
 msgstr ""
 
 #. (list.name)
@@ -6207,13 +6200,12 @@ msgstr ""
 msgid "WARNING: bounce rate too high in list %1"
 msgstr ""
 
-#. (list.name,rate,conf.wwsympa_url,list.name)
-#: ../mail_tt2/listowner_notification.tt2:106
+#. (list.name,rate)
+#: ../mail_tt2/listowner_notification.tt2:105
 msgid ""
 "Bounce rate in list %1 is %2.\n"
 "\n"
 "You should delete bouncing subscribers: \n"
-"%3/reviewbouncing/%4\n"
 msgstr ""
 
 #. (command,list.name,who,gecos)
@@ -6631,11 +6623,9 @@ msgstr ""
 msgid "To distribute the attached message in list %1, follow the link below:"
 msgstr ""
 
-#. (conf.sympa,authkey)
-#: ../mail_tt2/send_auth.tt2:20
-msgid ""
-"Or send a message to %1 with the following subject:\n"
-"CONFIRM %2\n"
+#. (conf.sympa)
+#: ../mail_tt2/send_auth.tt2:19
+msgid "Or send a message to %1 with the following subject:\n"
 msgstr ""
 
 #. (conf.title,list)
@@ -7939,10 +7929,6 @@ msgstr ""
 msgid "profile"
 msgstr ""
 
-#: ../src/lib/List.pm:1131
-msgid "Owner"
-msgstr "pemilik"
-
 #: ../src/lib/List.pm:1167
 msgid "Priority"
 msgstr ""
@@ -8442,6 +8428,18 @@ msgstr ""
 #: ../wwsympa/wwslib.pm:37
 msgid "you do not receive your own posts"
 msgstr ""
+
+#, fuzzy
+#~ msgid "[Listmaster]"
+#~ msgstr "Anggota Induk"
+
+#, fuzzy
+#~ msgid "[Owner]"
+#~ msgstr "pemilik"
+
+#, fuzzy
+#~ msgid "[Subscriber]"
+#~ msgstr "Penika bawah"
 
 #~ msgid "-Sending/reception"
 #~ msgstr "-Pengiriman/Penerimaan"

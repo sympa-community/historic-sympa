@@ -117,35 +117,33 @@ msgstr "Ajuda"
 msgid "Restore identity"
 msgstr "Restaurar la tièra"
 
-#: ../web_tt2/login_menu.tt2:13
-#, fuzzy
-msgid "[Listmaster]"
+#: ../mail_tt2/listmaster_notification.tt2:2 ../web_tt2/login_menu.tt2:13
+msgid "Listmaster"
 msgstr "Responsable (listmaster)"
 
 #: ../web_tt2/login_menu.tt2:14
 #, fuzzy
-msgid "[Privileged owner]"
+msgid "Privileged owner"
 msgstr "Gestionari privilegiat"
 
 # nlsref 16,57
-#: ../web_tt2/login_menu.tt2:15
-#, fuzzy
-msgid "[Owner]"
+#: ../src/lib/List.pm:1131 ../web_tt2/login_menu.tt2:15
+msgid "Owner"
 msgstr "Proprietari"
 
 #: ../web_tt2/login_menu.tt2:16
 #, fuzzy
-msgid "[Editor]"
+msgid "Editor"
 msgstr "Moderator"
 
 #: ../web_tt2/login_menu.tt2:17
 #, fuzzy
-msgid "[Subscriber]"
-msgstr "Abonat(/ada)"
+msgid "Subscriber"
+msgstr "Abonats"
 
-#. (last_login_host,last_login_date)
+#. (last_login_host)
 #: ../web_tt2/login_menu.tt2:21
-msgid "last login from %1 &nbsp;&nbsp; (%2)</span>"
+msgid "last login from %1"
 msgstr ""
 
 #: ../web_tt2/login_menu.tt2:36
@@ -254,7 +252,7 @@ msgstr "Abonats :"
 # nlsref 1,3
 #: ../web_tt2/list_panel.tt2:12
 #, fuzzy
-msgid "Error rate:&nbsp;"
+msgid "Error rate:"
 msgstr "Taus d'error:"
 
 #: ../web_tt2/list_panel.tt2:13
@@ -430,9 +428,10 @@ msgstr ""
 msgid "Delete Shared"
 msgstr "Tancar l'espaci de documents partejats"
 
+#. (listname)
 #: ../web_tt2/admin.tt2:63
 #, fuzzy
-msgid "Are you sure you wish to delete the shared documents?"
+msgid "Are you sure you wish to delete the shared documents for list %1?"
 msgstr "Sètz a suprimir los documents partejats. Confirmar ?"
 
 #: ../web_tt2/admin.tt2:63
@@ -2658,9 +2657,7 @@ msgstr "Pas d'abonaments amb l'adreiça <strong>%1</strong> !"
 
 #: ../web_tt2/loginbanner.tt2:18
 #, fuzzy
-msgid ""
-"To login, select your organization authentication server below:&nbsp;&nbsp;"
-"&nbsp;&nbsp;"
+msgid "To login, select your organization authentication server below:"
 msgstr "Causir vòstre servidor d'autentificacion"
 
 #: ../web_tt2/loginbanner.tt2:24
@@ -4159,14 +4156,16 @@ msgid ""
 "static file. The target is specified by css_path parameter."
 msgstr ""
 
-#: ../web_tt2/skinsedit.tt2:45
+#: ../web_tt2/skinsedit.tt2:41
 msgid ""
 "\n"
 "Be careful: the CSS file is overwritten using css.tt2 template, usually this "
 "file is comming from Sympa distribution so your CSS customization may be "
-"erased when doing this.\n"
-"</p>\n"
-"<p>\n"
+"erased when doing this."
+msgstr ""
+
+#: ../web_tt2/skinsedit.tt2:45
+msgid ""
 "Use the color editor in order to change defined colors. First select the "
 "color you want to change and pick a color,then apply it using the test "
 "button. The new color is not really installed but it is used only for your "
@@ -4300,7 +4299,7 @@ msgid "error messages."
 msgstr "# message"
 
 #: ../web_tt2/skinsedit.tt2:137
-msgid "hovered hyperlinks;"
+msgid "hovered links;"
 msgstr ""
 
 #: ../web_tt2/skinsedit.tt2:137
@@ -5933,10 +5932,6 @@ msgstr ""
 msgid "Moderators List %1 / %2"
 msgstr "Moderators de la tièra %1 / %2"
 
-#: ../mail_tt2/listmaster_notification.tt2:2
-msgid "Listmaster"
-msgstr "Responsable (listmaster)"
-
 #. (list.name,list.host,email)
 #: ../mail_tt2/listmaster_notification.tt2:4
 #, fuzzy
@@ -6898,13 +6893,12 @@ msgstr ""
 "siá mandar un corrièr electronic a %s qu'aja coma subjècte :\n"
 "AUTH %s ADD %s %s %s"
 
-#. (replyto,keyauth,list.name,who,gecos)
-#: ../mail_tt2/listowner_notification.tt2:72
+#. (replyto)
+#: ../mail_tt2/listowner_notification.tt2:70
 #, fuzzy
 msgid ""
 "If prefered, you can accept this subscription request sending an email to %1 "
-"with the following subject:\n"
-"AUTH %2 ADD %3 %4 %5\n"
+"with the following subject:"
 msgstr ""
 "\n"
 "o mandatz un corrièr a %1@%2 amb lo subjècte seguent :\n"
@@ -6943,13 +6937,12 @@ msgstr ""
 "O  mandar un corrièr electronic a %s amb coma objècte :\n"
 "AUTH %s DEL %s %s"
 
-#. (sympa,keyauth,list.name,who)-)
-#: ../mail_tt2/listowner_notification.tt2:96
+#. (sympa)-)
+#: ../mail_tt2/listowner_notification.tt2:95
 #, fuzzy
 msgid ""
 "\n"
 "or send an email to %1 with the following subject:\n"
-"AUTH %2 DEL %3 %4\n"
 msgstr ""
 "\n"
 "o mandatz un corrièr a %1 amb lo subjècte seguent :AUTH %2 DEL %3 %4\n"
@@ -6961,14 +6954,13 @@ msgid "WARNING: bounce rate too high in list %1"
 msgstr "ATENCION: taus d'errors tròp naut per la tièra %s"
 
 # nlsref 8,27
-#. (list.name,rate,conf.wwsympa_url,list.name)
-#: ../mail_tt2/listowner_notification.tt2:106
+#. (list.name,rate)
+#: ../mail_tt2/listowner_notification.tt2:105
 #, fuzzy
 msgid ""
 "Bounce rate in list %1 is %2.\n"
 "\n"
 "You should delete bouncing subscribers: \n"
-"%3/reviewbouncing/%4\n"
 msgstr ""
 "Lo taus d'errors de tièra la liste %1 es de %2.Deuriatz suprimir los abonats "
 "en error :%3/reviewbouncing/%4\n"
@@ -7493,15 +7485,13 @@ msgstr ""
 msgid "To distribute the attached message in list %1, follow the link below:"
 msgstr "Per diffusir lo messatge çai jonch a la tièra %1,"
 
-#. (conf.sympa,authkey)
-#: ../mail_tt2/send_auth.tt2:20
+#. (conf.sympa)
+#: ../mail_tt2/send_auth.tt2:19
 #, fuzzy
-msgid ""
-"Or send a message to %1 with the following subject:\n"
-"CONFIRM %2\n"
+msgid "Or send a message to %1 with the following subject:\n"
 msgstr ""
 "o\n"
-"mandatz un corrièr a %1 amb lo subjècte seguent :CONFIRM %2\n"
+"mandatz un corrièr a %1@%2 amb lo subjècte seguent :"
 
 #. (conf.title,list)
 #: ../mail_tt2/sendpasswd.tt2:4
@@ -8971,11 +8961,6 @@ msgstr "Marcatge dels messatges (tèmas)"
 msgid "profile"
 msgstr "perfil"
 
-# nlsref 16,57
-#: ../src/lib/List.pm:1131
-msgid "Owner"
-msgstr "Proprietari"
-
 # nlsref 16,63
 #: ../src/lib/List.pm:1167
 msgid "Priority"
@@ -9576,6 +9561,27 @@ msgstr "Copar la recepcion dels messatges (es util pendent las vacanças)"
 #: ../wwsympa/wwslib.pm:37
 msgid "you do not receive your own posts"
 msgstr "per recebre pas los vòstres messatges"
+
+#, fuzzy
+#~ msgid "[Listmaster]"
+#~ msgstr "Responsable (listmaster)"
+
+# nlsref 16,57
+#, fuzzy
+#~ msgid "[Owner]"
+#~ msgstr "Proprietari"
+
+#, fuzzy
+#~ msgid "[Subscriber]"
+#~ msgstr "Abonat(/ada)"
+
+#, fuzzy
+#~ msgid ""
+#~ "Or send a message to %1 with the following subject:\n"
+#~ "CONFIRM %2\n"
+#~ msgstr ""
+#~ "o\n"
+#~ "mandatz un corrièr a %1 amb lo subjècte seguent :CONFIRM %2\n"
 
 #~ msgid "-List definition"
 #~ msgstr "-Définicion de la tièra"

@@ -85,29 +85,29 @@ msgstr ""
 msgid "Restore identity"
 msgstr ""
 
-#: ../web_tt2/login_menu.tt2:13
-msgid "[Listmaster]"
+#: ../mail_tt2/listmaster_notification.tt2:2 ../web_tt2/login_menu.tt2:13
+msgid "Listmaster"
 msgstr ""
 
 #: ../web_tt2/login_menu.tt2:14
-msgid "[Privileged owner]"
+msgid "Privileged owner"
 msgstr ""
 
-#: ../web_tt2/login_menu.tt2:15
-msgid "[Owner]"
+#: ../src/lib/List.pm:1131 ../web_tt2/login_menu.tt2:15
+msgid "Owner"
 msgstr ""
 
 #: ../web_tt2/login_menu.tt2:16
-msgid "[Editor]"
+msgid "Editor"
 msgstr ""
 
 #: ../web_tt2/login_menu.tt2:17
-msgid "[Subscriber]"
+msgid "Subscriber"
 msgstr ""
 
 #: ../web_tt2/login_menu.tt2:21
-#. (last_login_host,last_login_date)
-msgid "last login from %1 &nbsp;&nbsp; (%2)</span>"
+#. (last_login_host)
+msgid "last login from %1"
 msgstr ""
 
 #: ../web_tt2/login_menu.tt2:36
@@ -209,7 +209,7 @@ msgid "Subscribers:"
 msgstr ""
 
 #: ../web_tt2/list_panel.tt2:12
-msgid "Error rate:&nbsp;"
+msgid "Error rate:"
 msgstr ""
 
 #: ../web_tt2/list_panel.tt2:13
@@ -339,7 +339,8 @@ msgid "Delete Shared"
 msgstr ""
 
 #: ../web_tt2/admin.tt2:63
-msgid "Are you sure you wish to delete the shared documents?"
+#. (listname)
+msgid "Are you sure you wish to delete the shared documents for list %1?"
 msgstr ""
 
 #: ../web_tt2/admin.tt2:63
@@ -2190,7 +2191,7 @@ msgid "No subscriptions with address <strong>%1</strong>!"
 msgstr ""
 
 #: ../web_tt2/loginbanner.tt2:18
-msgid "To login, select your organization authentication server below:&nbsp;&nbsp;&nbsp;&nbsp;"
+msgid "To login, select your organization authentication server below:"
 msgstr ""
 
 #: ../web_tt2/loginbanner.tt2:24
@@ -3410,11 +3411,13 @@ msgstr ""
 msgid "If you are not using css_path and css_url parameters, colors are defined in the robot.conf configuration file. Otherwise, colors are defined in the static CSS. Colors can be changed on your current session using the following color editor. When finished, you may copy the result a new CCS static file. The target is specified by css_path parameter."
 msgstr ""
 
+#: ../web_tt2/skinsedit.tt2:41
+msgid ""
+"\nBe careful: the CSS file is overwritten using css.tt2 template, usually this file is comming from Sympa distribution so your CSS customization may be erased when doing this."
+msgstr ""
+
 #: ../web_tt2/skinsedit.tt2:45
 msgid ""
-"\nBe careful: the CSS file is overwritten using css.tt2 template, usually this file is comming from Sympa distribution so your CSS customization may be erased when doing this.\n"
-"</p>\n"
-"<p>\n"
 "Use the color editor in order to change defined colors. First select the color you want to change and pick a color,then apply it using the test button. The new color is not really installed but it is used only for your own session. When happy with the different colors you choosen, you may save them in a new static CSS.\n"
 msgstr ""
 
@@ -3527,7 +3530,7 @@ msgid "error messages."
 msgstr ""
 
 #: ../web_tt2/skinsedit.tt2:137
-msgid "hovered hyperlinks;"
+msgid "hovered links;"
 msgstr ""
 
 #: ../web_tt2/skinsedit.tt2:137
@@ -4835,10 +4838,6 @@ msgstr ""
 msgid "Moderators List %1 / %2"
 msgstr ""
 
-#: ../mail_tt2/listmaster_notification.tt2:2
-msgid "Listmaster"
-msgstr ""
-
 #: ../mail_tt2/listmaster_notification.tt2:4
 #. (list.name,list.host,email)
 msgid "List \"%1@%2\" creation request from %3"
@@ -5598,11 +5597,9 @@ msgid ""
 "pending subscription requests you should click on the following link:"
 msgstr ""
 
-#: ../mail_tt2/listowner_notification.tt2:72
-#. (replyto,keyauth,list.name,who,gecos)
-msgid ""
-"If prefered, you can accept this subscription request sending an email to %1 with the following subject:\n"
-"AUTH %2 ADD %3 %4 %5\n"
+#: ../mail_tt2/listowner_notification.tt2:70
+#. (replyto)
+msgid "If prefered, you can accept this subscription request sending an email to %1 with the following subject:"
 msgstr ""
 
 #: ../mail_tt2/listowner_notification.tt2:74
@@ -5626,11 +5623,10 @@ msgid ""
 "with you, you should click on the following link:"
 msgstr ""
 
-#: ../mail_tt2/listowner_notification.tt2:96
-#. (sympa,keyauth,list.name,who)-)
+#: ../mail_tt2/listowner_notification.tt2:95
+#. (sympa)-)
 msgid ""
 "\nor send an email to %1 with the following subject:\n"
-"AUTH %2 DEL %3 %4\n"
 msgstr ""
 
 #: ../mail_tt2/listowner_notification.tt2:100
@@ -5638,12 +5634,11 @@ msgstr ""
 msgid "WARNING: bounce rate too high in list %1"
 msgstr ""
 
-#: ../mail_tt2/listowner_notification.tt2:106
-#. (list.name,rate,conf.wwsympa_url,list.name)
+#: ../mail_tt2/listowner_notification.tt2:105
+#. (list.name,rate)
 msgid ""
 "Bounce rate in list %1 is %2.\n\n"
 "You should delete bouncing subscribers: \n"
-"%3/reviewbouncing/%4\n"
 msgstr ""
 
 #: ../mail_tt2/listowner_notification.tt2:110
@@ -6025,11 +6020,10 @@ msgstr ""
 msgid "To distribute the attached message in list %1, follow the link below:"
 msgstr ""
 
-#: ../mail_tt2/send_auth.tt2:20
-#. (conf.sympa,authkey)
+#: ../mail_tt2/send_auth.tt2:19
+#. (conf.sympa)
 msgid ""
 "Or send a message to %1 with the following subject:\n"
-"CONFIRM %2\n"
 msgstr ""
 
 #: ../mail_tt2/sendpasswd.tt2:4
@@ -7261,10 +7255,6 @@ msgstr ""
 
 #: ../src/lib/List.pm:1126 ../src/lib/List.pm:1156
 msgid "profile"
-msgstr ""
-
-#: ../src/lib/List.pm:1131
-msgid "Owner"
 msgstr ""
 
 #: ../src/lib/List.pm:1167

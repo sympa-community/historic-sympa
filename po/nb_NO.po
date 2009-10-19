@@ -111,36 +111,34 @@ msgstr "Hjelp"
 msgid "Restore identity"
 msgstr "Gjenopprett identitet"
 
-#: ../web_tt2/login_menu.tt2:13
-#, fuzzy
-msgid "[Listmaster]"
+#: ../mail_tt2/listmaster_notification.tt2:2 ../web_tt2/login_menu.tt2:13
+msgid "Listmaster"
 msgstr "Listesjef"
 
 #: ../web_tt2/login_menu.tt2:14
 #, fuzzy
-msgid "[Privileged owner]"
+msgid "Privileged owner"
 msgstr "Priviligert eier"
 
-#: ../web_tt2/login_menu.tt2:15
-#, fuzzy
-msgid "[Owner]"
+#: ../src/lib/List.pm:1131 ../web_tt2/login_menu.tt2:15
+msgid "Owner"
 msgstr "Eier"
 
 #: ../web_tt2/login_menu.tt2:16
 #, fuzzy
-msgid "[Editor]"
+msgid "Editor"
 msgstr "Redaktør"
 
 #: ../web_tt2/login_menu.tt2:17
 #, fuzzy
-msgid "[Subscriber]"
-msgstr "Abonnent"
+msgid "Subscriber"
+msgstr "Abonnenter"
 
-#. (last_login_host,last_login_date)
+#. (last_login_host)
 #: ../web_tt2/login_menu.tt2:21
 #, fuzzy
-msgid "last login from %1 &nbsp;&nbsp; (%2)</span>"
-msgstr "siste innlogging fra %1<br/>(%2)</span>"
+msgid "last login from %1"
+msgstr "siste innlogging fra %1 (%2)"
 
 #: ../web_tt2/login_menu.tt2:36
 msgid "Logout"
@@ -246,7 +244,7 @@ msgstr "Medlemmer:"
 
 #: ../web_tt2/list_panel.tt2:12
 #, fuzzy
-msgid "Error rate:&nbsp;"
+msgid "Error rate:"
 msgstr "Feilrate:"
 
 #: ../web_tt2/list_panel.tt2:13
@@ -419,9 +417,10 @@ msgstr ""
 msgid "Delete Shared"
 msgstr "Slett felles"
 
+#. (listname)
 #: ../web_tt2/admin.tt2:63
 #, fuzzy
-msgid "Are you sure you wish to delete the shared documents?"
+msgid "Are you sure you wish to delete the shared documents for list %1?"
 msgstr "Er du sikker på at du ønsker å slette de felles dokumentene ?"
 
 #: ../web_tt2/admin.tt2:63
@@ -2596,9 +2595,7 @@ msgstr "Ingen abonnementer med adressen <strong>%1</strong>!"
 
 #: ../web_tt2/loginbanner.tt2:18
 #, fuzzy
-msgid ""
-"To login, select your organization authentication server below:&nbsp;&nbsp;"
-"&nbsp;&nbsp;"
+msgid "To login, select your organization authentication server below:"
 msgstr "Velg din autentiseringstjener"
 
 #: ../web_tt2/loginbanner.tt2:24
@@ -4072,14 +4069,16 @@ msgid ""
 "static file. The target is specified by css_path parameter."
 msgstr ""
 
-#: ../web_tt2/skinsedit.tt2:45
+#: ../web_tt2/skinsedit.tt2:41
 msgid ""
 "\n"
 "Be careful: the CSS file is overwritten using css.tt2 template, usually this "
 "file is comming from Sympa distribution so your CSS customization may be "
-"erased when doing this.\n"
-"</p>\n"
-"<p>\n"
+"erased when doing this."
+msgstr ""
+
+#: ../web_tt2/skinsedit.tt2:45
+msgid ""
 "Use the color editor in order to change defined colors. First select the "
 "color you want to change and pick a color,then apply it using the test "
 "button. The new color is not really installed but it is used only for your "
@@ -4209,7 +4208,7 @@ msgid "error messages."
 msgstr "# melding"
 
 #: ../web_tt2/skinsedit.tt2:137
-msgid "hovered hyperlinks;"
+msgid "hovered links;"
 msgstr ""
 
 #: ../web_tt2/skinsedit.tt2:137
@@ -5698,10 +5697,6 @@ msgstr ""
 msgid "Moderators List %1 / %2"
 msgstr ""
 
-#: ../mail_tt2/listmaster_notification.tt2:2
-msgid "Listmaster"
-msgstr "Listesjef"
-
 #. (list.name,list.host,email)
 #: ../mail_tt2/listmaster_notification.tt2:4
 msgid "List \"%1@%2\" creation request from %3"
@@ -6559,13 +6554,12 @@ msgstr ""
 "er i orden\n"
 "for deg, så bør du gå til følgende URL :"
 
-#. (replyto,keyauth,list.name,who,gecos)
-#: ../mail_tt2/listowner_notification.tt2:72
+#. (replyto)
+#: ../mail_tt2/listowner_notification.tt2:70
 #, fuzzy
 msgid ""
 "If prefered, you can accept this subscription request sending an email to %1 "
-"with the following subject:\n"
-"AUTH %2 ADD %3 %4 %5\n"
+"with the following subject:"
 msgstr ""
 "\n"
 "eller send en e-post til %1 med følgende emne :\n"
@@ -6598,13 +6592,12 @@ msgstr ""
 "En bruker ber om å bli slettet fra din liste. Dersom dette er i orden for "
 "deg bes du om å klikke på følgende URL : "
 
-#. (sympa,keyauth,list.name,who)-)
-#: ../mail_tt2/listowner_notification.tt2:96
+#. (sympa)-)
+#: ../mail_tt2/listowner_notification.tt2:95
 #, fuzzy
 msgid ""
 "\n"
 "or send an email to %1 with the following subject:\n"
-"AUTH %2 DEL %3 %4\n"
 msgstr ""
 "\n"
 "eller send en epost til %1 med følgende emne :\n"
@@ -6615,13 +6608,12 @@ msgstr ""
 msgid "WARNING: bounce rate too high in list %1"
 msgstr ""
 
-#. (list.name,rate,conf.wwsympa_url,list.name)
-#: ../mail_tt2/listowner_notification.tt2:106
+#. (list.name,rate)
+#: ../mail_tt2/listowner_notification.tt2:105
 msgid ""
 "Bounce rate in list %1 is %2.\n"
 "\n"
 "You should delete bouncing subscribers: \n"
-"%3/reviewbouncing/%4\n"
 msgstr ""
 
 #. (command,list.name,who,gecos)
@@ -7062,15 +7054,11 @@ msgstr ""
 "\n"
 "%2/viewmod/%1/%3\n"
 
-#. (conf.sympa,authkey)
-#: ../mail_tt2/send_auth.tt2:20
+#. (conf.sympa)
+#: ../mail_tt2/send_auth.tt2:19
 #, fuzzy
-msgid ""
-"Or send a message to %1 with the following subject:\n"
-"CONFIRM %2\n"
-msgstr ""
-"Eller send en e-post til %1 med følgende emne :\n"
-"CONFIRM %2\n"
+msgid "Or send a message to %1 with the following subject:\n"
+msgstr "Eller send en e-post til %1@%2 med følgende emne :"
 
 #. (conf.title,list)
 #: ../mail_tt2/sendpasswd.tt2:4
@@ -8402,10 +8390,6 @@ msgstr "Meldingsmerking"
 msgid "profile"
 msgstr "profil"
 
-#: ../src/lib/List.pm:1131
-msgid "Owner"
-msgstr "Eier"
-
 #: ../src/lib/List.pm:1167
 msgid "Priority"
 msgstr "Prioritet"
@@ -8937,6 +8921,30 @@ msgstr "ingen e-post (praktisk ved ferie)"
 #: ../wwsympa/wwslib.pm:37
 msgid "you do not receive your own posts"
 msgstr "du mottar ikke selv dine egne meldinger"
+
+#, fuzzy
+#~ msgid "[Listmaster]"
+#~ msgstr "Listesjef"
+
+#, fuzzy
+#~ msgid "[Owner]"
+#~ msgstr "Eier"
+
+#, fuzzy
+#~ msgid "[Subscriber]"
+#~ msgstr "Abonnent"
+
+#, fuzzy
+#~ msgid "last login from %1 &nbsp;&nbsp; (%2)</span>"
+#~ msgstr "siste innlogging fra %1<br/>(%2)</span>"
+
+#, fuzzy
+#~ msgid ""
+#~ "Or send a message to %1 with the following subject:\n"
+#~ "CONFIRM %2\n"
+#~ msgstr ""
+#~ "Eller send en e-post til %1 med følgende emne :\n"
+#~ "CONFIRM %2\n"
 
 #~ msgid "-List definition"
 #~ msgstr "-Listedefinisjon"

@@ -113,37 +113,34 @@ msgstr "مساعدة"
 msgid "Restore identity"
 msgstr "استرجع المُعرِّف"
 
-#: ../web_tt2/login_menu.tt2:13
-#, fuzzy
-msgid "[Listmaster]"
+#: ../mail_tt2/listmaster_notification.tt2:2 ../web_tt2/login_menu.tt2:13
+msgid "Listmaster"
 msgstr "صاحب القائمة"
 
 #: ../web_tt2/login_menu.tt2:14
 #, fuzzy
-msgid "[Privileged owner]"
+msgid "Privileged owner"
 msgstr "مالك ذو صلاحيات"
 
-#: ../web_tt2/login_menu.tt2:15
-#, fuzzy
-msgid "[Owner]"
+#: ../src/lib/List.pm:1131 ../web_tt2/login_menu.tt2:15
+msgid "Owner"
 msgstr "مالك"
 
 # should be indefinite
 #: ../web_tt2/login_menu.tt2:16
 #, fuzzy
-msgid "[Editor]"
+msgid "Editor"
 msgstr "محرر"
 
 #: ../web_tt2/login_menu.tt2:17
 #, fuzzy
-msgid "[Subscriber]"
-msgstr "مشترك"
+msgid "Subscriber"
+msgstr "المشتركون"
 
-#. (last_login_host,last_login_date)
+#. (last_login_host)
 #: ../web_tt2/login_menu.tt2:21
-#, fuzzy
-msgid "last login from %1 &nbsp;&nbsp; (%2)</span>"
-msgstr "آخر ولوج من %1 <br />(%2)</span>"
+msgid "last login from %1"
+msgstr ""
 
 # vague
 #: ../web_tt2/login_menu.tt2:36
@@ -260,7 +257,7 @@ msgstr "المشتركون:"
 
 #: ../web_tt2/list_panel.tt2:12
 #, fuzzy
-msgid "Error rate:&nbsp;"
+msgid "Error rate:"
 msgstr "نسبة الأخطاء : "
 
 # invalid translation
@@ -422,9 +419,10 @@ msgstr ""
 msgid "Delete Shared"
 msgstr "حذف المشتركة"
 
+#. (listname)
 #: ../web_tt2/admin.tt2:63
 #, fuzzy
-msgid "Are you sure you wish to delete the shared documents?"
+msgid "Are you sure you wish to delete the shared documents for list %1?"
 msgstr "هل انت متأكد من انك تريد حذف الوثائق المشتركة؟"
 
 #: ../web_tt2/admin.tt2:63
@@ -2506,9 +2504,7 @@ msgstr ""
 
 #: ../web_tt2/loginbanner.tt2:18
 #, fuzzy
-msgid ""
-"To login, select your organization authentication server below:&nbsp;&nbsp;"
-"&nbsp;&nbsp;"
+msgid "To login, select your organization authentication server below:"
 msgstr "إختر الخادم المسؤول عن توثيق الدخول"
 
 #: ../web_tt2/loginbanner.tt2:24
@@ -3905,14 +3901,16 @@ msgid ""
 "static file. The target is specified by css_path parameter."
 msgstr ""
 
-#: ../web_tt2/skinsedit.tt2:45
+#: ../web_tt2/skinsedit.tt2:41
 msgid ""
 "\n"
 "Be careful: the CSS file is overwritten using css.tt2 template, usually this "
 "file is comming from Sympa distribution so your CSS customization may be "
-"erased when doing this.\n"
-"</p>\n"
-"<p>\n"
+"erased when doing this."
+msgstr ""
+
+#: ../web_tt2/skinsedit.tt2:45
+msgid ""
 "Use the color editor in order to change defined colors. First select the "
 "color you want to change and pick a color,then apply it using the test "
 "button. The new color is not really installed but it is used only for your "
@@ -4037,7 +4035,7 @@ msgid "error messages."
 msgstr "# رساله"
 
 #: ../web_tt2/skinsedit.tt2:137
-msgid "hovered hyperlinks;"
+msgid "hovered links;"
 msgstr ""
 
 #: ../web_tt2/skinsedit.tt2:137
@@ -5468,10 +5466,6 @@ msgstr ""
 msgid "Moderators List %1 / %2"
 msgstr ""
 
-#: ../mail_tt2/listmaster_notification.tt2:2
-msgid "Listmaster"
-msgstr "صاحب القائمة"
-
 #. (list.name,list.host,email)
 #: ../mail_tt2/listmaster_notification.tt2:4
 #, fuzzy
@@ -6313,13 +6307,12 @@ msgid ""
 "pending subscription requests you should click on the following link:"
 msgstr ""
 
-#. (replyto,keyauth,list.name,who,gecos)
-#: ../mail_tt2/listowner_notification.tt2:72
+#. (replyto)
+#: ../mail_tt2/listowner_notification.tt2:70
 #, fuzzy
 msgid ""
 "If prefered, you can accept this subscription request sending an email to %1 "
-"with the following subject:\n"
-"AUTH %2 ADD %3 %4 %5\n"
+"with the following subject:"
 msgstr ""
 "\n"
 "أو ارسل بريد إلى 2% بالعنوان التالي  \n"
@@ -6347,13 +6340,12 @@ msgid ""
 "with you, you should click on the following link:"
 msgstr ""
 
-#. (sympa,keyauth,list.name,who)-)
-#: ../mail_tt2/listowner_notification.tt2:96
+#. (sympa)-)
+#: ../mail_tt2/listowner_notification.tt2:95
 #, fuzzy
 msgid ""
 "\n"
 "or send an email to %1 with the following subject:\n"
-"AUTH %2 DEL %3 %4\n"
 msgstr ""
 "\n"
 "أو ارسل بريد  إلى 1%  بالعنوان التالي \n"
@@ -6364,13 +6356,12 @@ msgstr ""
 msgid "WARNING: bounce rate too high in list %1"
 msgstr ""
 
-#. (list.name,rate,conf.wwsympa_url,list.name)
-#: ../mail_tt2/listowner_notification.tt2:106
+#. (list.name,rate)
+#: ../mail_tt2/listowner_notification.tt2:105
 msgid ""
 "Bounce rate in list %1 is %2.\n"
 "\n"
 "You should delete bouncing subscribers: \n"
-"%3/reviewbouncing/%4\n"
 msgstr ""
 
 #. (command,list.name,who,gecos)
@@ -6795,12 +6786,10 @@ msgstr ""
 msgid "To distribute the attached message in list %1, follow the link below:"
 msgstr ""
 
-#. (conf.sympa,authkey)
-#: ../mail_tt2/send_auth.tt2:20
+#. (conf.sympa)
+#: ../mail_tt2/send_auth.tt2:19
 #, fuzzy
-msgid ""
-"Or send a message to %1 with the following subject:\n"
-"CONFIRM %2\n"
+msgid "Or send a message to %1 with the following subject:\n"
 msgstr ""
 "\n"
 "أو ارسل بريد  إلى 1%  بالعنوان التالي \n"
@@ -8116,10 +8105,6 @@ msgstr ""
 msgid "profile"
 msgstr "نبذة"
 
-#: ../src/lib/List.pm:1131
-msgid "Owner"
-msgstr "مالك"
-
 #: ../src/lib/List.pm:1167
 msgid "Priority"
 msgstr ""
@@ -8623,6 +8608,31 @@ msgstr ""
 #: ../wwsympa/wwslib.pm:37
 msgid "you do not receive your own posts"
 msgstr "لا تستلم الرسائل التي قمت بإرسالها"
+
+#, fuzzy
+#~ msgid "[Listmaster]"
+#~ msgstr "صاحب القائمة"
+
+#, fuzzy
+#~ msgid "[Owner]"
+#~ msgstr "مالك"
+
+#, fuzzy
+#~ msgid "[Subscriber]"
+#~ msgstr "مشترك"
+
+#, fuzzy
+#~ msgid "last login from %1 &nbsp;&nbsp; (%2)</span>"
+#~ msgstr "آخر ولوج من %1 <br />(%2)</span>"
+
+#, fuzzy
+#~ msgid ""
+#~ "Or send a message to %1 with the following subject:\n"
+#~ "CONFIRM %2\n"
+#~ msgstr ""
+#~ "\n"
+#~ "أو ارسل بريد  إلى 1%  بالعنوان التالي \n"
+#~ "AUTH %2 DEL %3 %4\n"
 
 #~ msgid "-List definition"
 #~ msgstr "- تعريفات القائمة "

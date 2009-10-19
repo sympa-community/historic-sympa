@@ -117,38 +117,35 @@ msgstr "Abi"
 msgid "Restore identity"
 msgstr "Taasta identiteet"
 
-#: ../web_tt2/login_menu.tt2:13
-#, fuzzy
-msgid "[Listmaster]"
+#: ../mail_tt2/listmaster_notification.tt2:2 ../web_tt2/login_menu.tt2:13
+msgid "Listmaster"
 msgstr "listiülem"
 
 #: ../web_tt2/login_menu.tt2:14
 #, fuzzy
-msgid "[Privileged owner]"
+msgid "Privileged owner"
 msgstr "Priviliigidega omanik"
 
 # #-#-#-#-#  et.po (PACKAGE VERSION)  #-#-#-#-#
 # nlsref 16,57
-#: ../web_tt2/login_menu.tt2:15
-#, fuzzy
-msgid "[Owner]"
+#: ../src/lib/List.pm:1131 ../web_tt2/login_menu.tt2:15
+msgid "Owner"
 msgstr "Omanik"
 
 #: ../web_tt2/login_menu.tt2:16
 #, fuzzy
-msgid "[Editor]"
+msgid "Editor"
 msgstr "Moderaator"
 
 #: ../web_tt2/login_menu.tt2:17
 #, fuzzy
-msgid "[Subscriber]"
-msgstr "Liige"
+msgid "Subscriber"
+msgstr "Liikmed"
 
-#. (last_login_host,last_login_date)
+#. (last_login_host)
 #: ../web_tt2/login_menu.tt2:21
-#, fuzzy
-msgid "last login from %1 &nbsp;&nbsp; (%2)</span>"
-msgstr "viimane sisselogimine arvutist %1 <br />(%2)</span>"
+msgid "last login from %1"
+msgstr ""
 
 #: ../web_tt2/login_menu.tt2:36
 msgid "Logout"
@@ -257,7 +254,7 @@ msgstr "Liikmeid:"
 # nlsref 1,3
 #: ../web_tt2/list_panel.tt2:12
 #, fuzzy
-msgid "Error rate:&nbsp;"
+msgid "Error rate:"
 msgstr "Vigade osakaal:"
 
 #: ../web_tt2/list_panel.tt2:13
@@ -432,9 +429,10 @@ msgstr ""
 msgid "Delete Shared"
 msgstr "Kustuta jagatud veebiruum"
 
+#. (listname)
 #: ../web_tt2/admin.tt2:63
 #, fuzzy
-msgid "Are you sure you wish to delete the shared documents?"
+msgid "Are you sure you wish to delete the shared documents for list %1?"
 msgstr "Kas olete kindel, et soovite sulgeda jagatud dokumendid ?"
 
 #: ../web_tt2/admin.tt2:63
@@ -2664,9 +2662,7 @@ msgstr "Aadress <B>%1</B> ei ole üheski listis!</"
 
 #: ../web_tt2/loginbanner.tt2:18
 #, fuzzy
-msgid ""
-"To login, select your organization authentication server below:&nbsp;&nbsp;"
-"&nbsp;&nbsp;"
+msgid "To login, select your organization authentication server below:"
 msgstr "Vali identifitseerimise server"
 
 #: ../web_tt2/loginbanner.tt2:24
@@ -4148,14 +4144,16 @@ msgid ""
 "static file. The target is specified by css_path parameter."
 msgstr ""
 
-#: ../web_tt2/skinsedit.tt2:45
+#: ../web_tt2/skinsedit.tt2:41
 msgid ""
 "\n"
 "Be careful: the CSS file is overwritten using css.tt2 template, usually this "
 "file is comming from Sympa distribution so your CSS customization may be "
-"erased when doing this.\n"
-"</p>\n"
-"<p>\n"
+"erased when doing this."
+msgstr ""
+
+#: ../web_tt2/skinsedit.tt2:45
+msgid ""
 "Use the color editor in order to change defined colors. First select the "
 "color you want to change and pick a color,then apply it using the test "
 "button. The new color is not really installed but it is used only for your "
@@ -4283,7 +4281,7 @@ msgid "error messages."
 msgstr "meeldetuletuskiri"
 
 #: ../web_tt2/skinsedit.tt2:137
-msgid "hovered hyperlinks;"
+msgid "hovered links;"
 msgstr ""
 
 #: ../web_tt2/skinsedit.tt2:137
@@ -5913,10 +5911,6 @@ msgstr ""
 msgid "Moderators List %1 / %2"
 msgstr "Listi moderaatoritele %1"
 
-#: ../mail_tt2/listmaster_notification.tt2:2
-msgid "Listmaster"
-msgstr "listiülem"
-
 #. (list.name,list.host,email)
 #: ../mail_tt2/listmaster_notification.tt2:4
 #, fuzzy
@@ -6866,13 +6860,12 @@ msgstr ""
 "1 kasutaja soovis liituda teie listiga. Kui te nõustute sellega, klikkige \n"
 "järgnevale URLile:"
 
-#. (replyto,keyauth,list.name,who,gecos)
-#: ../mail_tt2/listowner_notification.tt2:72
+#. (replyto)
+#: ../mail_tt2/listowner_notification.tt2:70
 #, fuzzy
 msgid ""
 "If prefered, you can accept this subscription request sending an email to %1 "
-"with the following subject:\n"
-"AUTH %2 ADD %3 %4 %5\n"
+"with the following subject:"
 msgstr ""
 "\n"
 "või saada kiri aadressile %1@%2 koos pealkirjaga:\n"
@@ -6908,13 +6901,12 @@ msgstr ""
 "Teie listist paluti kustutada üks kasutaja. Kui te nõustute\n"
 "selle sooviga, klikkige järgneval URLil:"
 
-#. (sympa,keyauth,list.name,who)-)
-#: ../mail_tt2/listowner_notification.tt2:96
+#. (sympa)-)
+#: ../mail_tt2/listowner_notification.tt2:95
 #, fuzzy
 msgid ""
 "\n"
 "or send an email to %1 with the following subject:\n"
-"AUTH %2 DEL %3 %4\n"
 msgstr ""
 "\n"
 "või saada kiri aadressile %1@%2 koos pealkirjaga:\n"
@@ -6928,14 +6920,13 @@ msgid "WARNING: bounce rate too high in list %1"
 msgstr "HOIATUS: vigade arv on liiga suur listis %s"
 
 # nlsref 8,27
-#. (list.name,rate,conf.wwsympa_url,list.name)
-#: ../mail_tt2/listowner_notification.tt2:106
+#. (list.name,rate)
+#: ../mail_tt2/listowner_notification.tt2:105
 #, fuzzy
 msgid ""
 "Bounce rate in list %1 is %2.\n"
 "\n"
 "You should delete bouncing subscribers: \n"
-"%3/reviewbouncing/%4\n"
 msgstr ""
 "Vigade hulk listis %1 on %2.\n"
 "\n"
@@ -7459,12 +7450,10 @@ msgstr ""
 "või saatke kiri aadressile %s järgneva teemareaga:\n"
 "CONFIRM %s\n"
 
-#. (conf.sympa,authkey)
-#: ../mail_tt2/send_auth.tt2:20
+#. (conf.sympa)
+#: ../mail_tt2/send_auth.tt2:19
 #, fuzzy
-msgid ""
-"Or send a message to %1 with the following subject:\n"
-"CONFIRM %2\n"
+msgid "Or send a message to %1 with the following subject:\n"
 msgstr "Või saada kiri aadressile %1@%2 järgmise pealkirjaga:"
 
 #. (conf.title,list)
@@ -8927,12 +8916,6 @@ msgstr "kirja jalus"
 msgid "profile"
 msgstr "profiil"
 
-# #-#-#-#-#  et.po (PACKAGE VERSION)  #-#-#-#-#
-# nlsref 16,57
-#: ../src/lib/List.pm:1131
-msgid "Owner"
-msgstr "Omanik"
-
 # nlsref 16,63
 #: ../src/lib/List.pm:1167
 msgid "Priority"
@@ -9527,6 +9510,30 @@ msgstr "ei saadeta maile (soovitav puhkuse ajaks)"
 #: ../wwsympa/wwslib.pm:37
 msgid "you do not receive your own posts"
 msgstr "teile ei tule enda saadetud kirjad"
+
+#, fuzzy
+#~ msgid "[Listmaster]"
+#~ msgstr "listiülem"
+
+# #-#-#-#-#  et.po (PACKAGE VERSION)  #-#-#-#-#
+# nlsref 16,57
+#, fuzzy
+#~ msgid "[Owner]"
+#~ msgstr "Omanik"
+
+#, fuzzy
+#~ msgid "[Subscriber]"
+#~ msgstr "Liige"
+
+#, fuzzy
+#~ msgid "last login from %1 &nbsp;&nbsp; (%2)</span>"
+#~ msgstr "viimane sisselogimine arvutist %1 <br />(%2)</span>"
+
+#, fuzzy
+#~ msgid ""
+#~ "Or send a message to %1 with the following subject:\n"
+#~ "CONFIRM %2\n"
+#~ msgstr "Või saada kiri aadressile %1@%2 järgmise pealkirjaga:"
 
 #~ msgid "-List definition"
 #~ msgstr "-Listi kirjeldus"

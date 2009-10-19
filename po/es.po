@@ -117,37 +117,35 @@ msgstr "Ayuda"
 msgid "Restore identity"
 msgstr "Restaurar la identidad"
 
-#: ../web_tt2/login_menu.tt2:13
-#, fuzzy
-msgid "[Listmaster]"
+#: ../mail_tt2/listmaster_notification.tt2:2 ../web_tt2/login_menu.tt2:13
+msgid "Listmaster"
 msgstr "Listmaster"
 
 #: ../web_tt2/login_menu.tt2:14
 #, fuzzy
-msgid "[Privileged owner]"
+msgid "Privileged owner"
 msgstr "Dueñ@ privilegiad@"
 
 # #-#-#-#-#  es.po (PACKAGE VERSION)  #-#-#-#-#
-#: ../web_tt2/login_menu.tt2:15
-#, fuzzy
-msgid "[Owner]"
+#: ../src/lib/List.pm:1131 ../web_tt2/login_menu.tt2:15
+msgid "Owner"
 msgstr "Dueñ@"
 
 #: ../web_tt2/login_menu.tt2:16
 #, fuzzy
-msgid "[Editor]"
+msgid "Editor"
 msgstr "Moderador/a"
 
 #: ../web_tt2/login_menu.tt2:17
 #, fuzzy
-msgid "[Subscriber]"
-msgstr "Suscriptor/a"
+msgid "Subscriber"
+msgstr "Suscriptores"
 
-#. (last_login_host,last_login_date)
+#. (last_login_host)
 #: ../web_tt2/login_menu.tt2:21
 #, fuzzy
-msgid "last login from %1 &nbsp;&nbsp; (%2)</span>"
-msgstr "Última conexión desde %1 <br/>(%2)</span>"
+msgid "last login from %1"
+msgstr "Última conexión desde %1 (%2)"
 
 #: ../web_tt2/login_menu.tt2:36
 msgid "Logout"
@@ -253,7 +251,7 @@ msgstr "Suscriptores:"
 
 #: ../web_tt2/list_panel.tt2:12
 #, fuzzy
-msgid "Error rate:&nbsp;"
+msgid "Error rate:"
 msgstr "Porcentaje de errores:"
 
 #: ../web_tt2/list_panel.tt2:13
@@ -420,9 +418,10 @@ msgstr "Crear un espacio de documentos compartidos."
 msgid "Delete Shared"
 msgstr "Clausurar el espacio de documentos"
 
+#. (listname)
 #: ../web_tt2/admin.tt2:63
 #, fuzzy
-msgid "Are you sure you wish to delete the shared documents?"
+msgid "Are you sure you wish to delete the shared documents for list %1?"
 msgstr ""
 "¿Estás seguro que deseas eliminar los documentos compartidos de la lista %1?"
 
@@ -2594,9 +2593,7 @@ msgstr "¡No hay suscripciones con la dirección <strong>%1</strong>!"
 
 #: ../web_tt2/loginbanner.tt2:18
 #, fuzzy
-msgid ""
-"To login, select your organization authentication server below:&nbsp;&nbsp;"
-"&nbsp;&nbsp;"
+msgid "To login, select your organization authentication server below:"
 msgstr ""
 "Para conectarte selecciona a continuación el servidor de autenticación de tu "
 "entidad:"
@@ -4090,15 +4087,17 @@ msgstr ""
 "crear una nueva hoja de estilos CSS estática. Se especifíca la ubicación del "
 "archivo de esta hoja de estilos mediante el parámetro « css_path »."
 
-#: ../web_tt2/skinsedit.tt2:45
-#, fuzzy
+#: ../web_tt2/skinsedit.tt2:41
 msgid ""
 "\n"
 "Be careful: the CSS file is overwritten using css.tt2 template, usually this "
 "file is comming from Sympa distribution so your CSS customization may be "
-"erased when doing this.\n"
-"</p>\n"
-"<p>\n"
+"erased when doing this."
+msgstr ""
+
+#: ../web_tt2/skinsedit.tt2:45
+#, fuzzy
+msgid ""
 "Use the color editor in order to change defined colors. First select the "
 "color you want to change and pick a color,then apply it using the test "
 "button. The new color is not really installed but it is used only for your "
@@ -4243,7 +4242,7 @@ msgid "error messages."
 msgstr "Mensajes"
 
 #: ../web_tt2/skinsedit.tt2:137
-msgid "hovered hyperlinks;"
+msgid "hovered links;"
 msgstr ""
 
 #: ../web_tt2/skinsedit.tt2:137
@@ -5831,10 +5830,6 @@ msgstr ""
 msgid "Moderators List %1 / %2"
 msgstr "lista de moderadores %1 / %2"
 
-#: ../mail_tt2/listmaster_notification.tt2:2
-msgid "Listmaster"
-msgstr "Listmaster"
-
 #. (list.name,list.host,email)
 #: ../mail_tt2/listmaster_notification.tt2:4
 msgid "List \"%1@%2\" creation request from %3"
@@ -6768,13 +6763,12 @@ msgstr ""
 "Una persona solicitó suscribir a esta lista. Para consultar todas las "
 "solicitudes en espera, visita este enlace:"
 
-#. (replyto,keyauth,list.name,who,gecos)
-#: ../mail_tt2/listowner_notification.tt2:72
+#. (replyto)
+#: ../mail_tt2/listowner_notification.tt2:70
 #, fuzzy
 msgid ""
 "If prefered, you can accept this subscription request sending an email to %1 "
-"with the following subject:\n"
-"AUTH %2 ADD %3 %4 %5\n"
+"with the following subject:"
 msgstr ""
 "También puedes aprobar esta solicitud enviando un mensaje a %1 con el "
 "siguiente \"Asunto\":\n"
@@ -6808,13 +6802,12 @@ msgstr ""
 "Una persona pidió ser dada de baja de esta lista. Para aprobar esta "
 "solicitud, visita este enlace:"
 
-#. (sympa,keyauth,list.name,who)-)
-#: ../mail_tt2/listowner_notification.tt2:96
+#. (sympa)-)
+#: ../mail_tt2/listowner_notification.tt2:95
 #, fuzzy
 msgid ""
 "\n"
 "or send an email to %1 with the following subject:\n"
-"AUTH %2 DEL %3 %4\n"
 msgstr ""
 "\n"
 "o envie un email a %1 con el siguiente \"Asunto:\"\n"
@@ -6825,14 +6818,13 @@ msgstr ""
 msgid "WARNING: bounce rate too high in list %1"
 msgstr "CUIDADO: tasa de rebotes demasiado alta en la lista %1"
 
-#. (list.name,rate,conf.wwsympa_url,list.name)
-#: ../mail_tt2/listowner_notification.tt2:106
+#. (list.name,rate)
+#: ../mail_tt2/listowner_notification.tt2:105
 #, fuzzy
 msgid ""
 "Bounce rate in list %1 is %2.\n"
 "\n"
 "You should delete bouncing subscribers: \n"
-"%3/reviewbouncing/%4\n"
 msgstr ""
 "lista de tarifa de rebotados %1 es %2. \n"
 "\n"
@@ -7355,15 +7347,11 @@ msgstr ""
 "Para distribuir el mensaje adjunto por la lista %1, visita el enlace a "
 "continuación:"
 
-#. (conf.sympa,authkey)
-#: ../mail_tt2/send_auth.tt2:20
+#. (conf.sympa)
+#: ../mail_tt2/send_auth.tt2:19
 #, fuzzy
-msgid ""
-"Or send a message to %1 with the following subject:\n"
-"CONFIRM %2\n"
-msgstr ""
-"O manda un mensaje a %1 con el asunto siguiente:\n"
-" CONFIRM %2\n"
+msgid "Or send a message to %1 with the following subject:\n"
+msgstr "O envía un mensaje a %1@%2 con el siguiente tema :"
 
 #. (conf.title,list)
 #: ../mail_tt2/sendpasswd.tt2:4
@@ -8747,11 +8735,6 @@ msgstr "marcando mensajes"
 msgid "profile"
 msgstr "perfil"
 
-# #-#-#-#-#  es.po (PACKAGE VERSION)  #-#-#-#-#
-#: ../src/lib/List.pm:1131
-msgid "Owner"
-msgstr "Dueñ@"
-
 #: ../src/lib/List.pm:1167
 msgid "Priority"
 msgstr "Prioridad"
@@ -9284,6 +9267,31 @@ msgstr "no mail (útil para las vacaciones)"
 #: ../wwsympa/wwslib.pm:37
 msgid "you do not receive your own posts"
 msgstr "no recibes tus propios mensajes"
+
+#, fuzzy
+#~ msgid "[Listmaster]"
+#~ msgstr "Listmaster"
+
+# #-#-#-#-#  es.po (PACKAGE VERSION)  #-#-#-#-#
+#, fuzzy
+#~ msgid "[Owner]"
+#~ msgstr "Dueñ@"
+
+#, fuzzy
+#~ msgid "[Subscriber]"
+#~ msgstr "Suscriptor/a"
+
+#, fuzzy
+#~ msgid "last login from %1 &nbsp;&nbsp; (%2)</span>"
+#~ msgstr "Última conexión desde %1 <br/>(%2)</span>"
+
+#, fuzzy
+#~ msgid ""
+#~ "Or send a message to %1 with the following subject:\n"
+#~ "CONFIRM %2\n"
+#~ msgstr ""
+#~ "O manda un mensaje a %1 con el asunto siguiente:\n"
+#~ " CONFIRM %2\n"
 
 #~ msgid "-List definition"
 #~ msgstr "Definición de la lista"

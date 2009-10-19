@@ -102,34 +102,32 @@ msgstr "幫助"
 msgid "Restore identity"
 msgstr "恢復郵件列表"
 
-#: ../web_tt2/login_menu.tt2:13
-#, fuzzy
-msgid "[Listmaster]"
+#: ../mail_tt2/listmaster_notification.tt2:2 ../web_tt2/login_menu.tt2:13
+msgid "Listmaster"
 msgstr "郵件列表管理員"
 
 #: ../web_tt2/login_menu.tt2:14
 #, fuzzy
-msgid "[Privileged owner]"
+msgid "Privileged owner"
 msgstr "特權所有者"
 
-#: ../web_tt2/login_menu.tt2:15
-#, fuzzy
-msgid "[Owner]"
+#: ../src/lib/List.pm:1131 ../web_tt2/login_menu.tt2:15
+msgid "Owner"
 msgstr "所有者"
 
 #: ../web_tt2/login_menu.tt2:16
 #, fuzzy
-msgid "[Editor]"
+msgid "Editor"
 msgstr "編輯者"
 
 #: ../web_tt2/login_menu.tt2:17
 #, fuzzy
-msgid "[Subscriber]"
+msgid "Subscriber"
 msgstr "訂閱者"
 
-#. (last_login_host,last_login_date)
+#. (last_login_host)
 #: ../web_tt2/login_menu.tt2:21
-msgid "last login from %1 &nbsp;&nbsp; (%2)</span>"
+msgid "last login from %1"
 msgstr ""
 
 #: ../web_tt2/login_menu.tt2:36
@@ -236,7 +234,7 @@ msgstr "訂閱者："
 
 #: ../web_tt2/list_panel.tt2:12
 #, fuzzy
-msgid "Error rate:&nbsp;"
+msgid "Error rate:"
 msgstr "誤差率："
 
 #: ../web_tt2/list_panel.tt2:13
@@ -401,9 +399,10 @@ msgstr "<strong>創建共享</strong>：初始化共享文檔的網頁空間。"
 msgid "Delete Shared"
 msgstr "刪除共享"
 
+#. (listname)
 #: ../web_tt2/admin.tt2:63
 #, fuzzy
-msgid "Are you sure you wish to delete the shared documents?"
+msgid "Are you sure you wish to delete the shared documents for list %1?"
 msgstr "您確定要刪除共享文檔嗎？"
 
 #: ../web_tt2/admin.tt2:63
@@ -2561,9 +2560,7 @@ msgstr "沒有來自<strong>%1</strong>的訂閱！"
 
 #: ../web_tt2/loginbanner.tt2:18
 #, fuzzy
-msgid ""
-"To login, select your organization authentication server below:&nbsp;&nbsp;"
-"&nbsp;&nbsp;"
+msgid "To login, select your organization authentication server below:"
 msgstr "選擇身份驗證服務器"
 
 #: ../web_tt2/loginbanner.tt2:24
@@ -4005,14 +4002,16 @@ msgid ""
 "static file. The target is specified by css_path parameter."
 msgstr ""
 
-#: ../web_tt2/skinsedit.tt2:45
+#: ../web_tt2/skinsedit.tt2:41
 msgid ""
 "\n"
 "Be careful: the CSS file is overwritten using css.tt2 template, usually this "
 "file is comming from Sympa distribution so your CSS customization may be "
-"erased when doing this.\n"
-"</p>\n"
-"<p>\n"
+"erased when doing this."
+msgstr ""
+
+#: ../web_tt2/skinsedit.tt2:45
+msgid ""
 "Use the color editor in order to change defined colors. First select the "
 "color you want to change and pick a color,then apply it using the test "
 "button. The new color is not really installed but it is used only for your "
@@ -4142,7 +4141,7 @@ msgid "error messages."
 msgstr "＃郵件"
 
 #: ../web_tt2/skinsedit.tt2:137
-msgid "hovered hyperlinks;"
+msgid "hovered links;"
 msgstr ""
 
 #: ../web_tt2/skinsedit.tt2:137
@@ -5658,10 +5657,6 @@ msgstr ""
 msgid "Moderators List %1 / %2"
 msgstr "監管員列表%1/ %2"
 
-#: ../mail_tt2/listmaster_notification.tt2:2
-msgid "Listmaster"
-msgstr "郵件列表管理員"
-
 #. (list.name,list.host,email)
 #: ../mail_tt2/listmaster_notification.tt2:4
 #, fuzzy
@@ -6560,13 +6555,12 @@ msgstr ""
 "有用戶請求作為訂閱者添加到您的郵件列表中。如果您接受的話，\n"
 "您可以單擊此連接下面的 URL："
 
-#. (replyto,keyauth,list.name,who,gecos)
-#: ../mail_tt2/listowner_notification.tt2:72
+#. (replyto)
+#: ../mail_tt2/listowner_notification.tt2:70
 #, fuzzy
 msgid ""
 "If prefered, you can accept this subscription request sending an email to %1 "
-"with the following subject:\n"
-"AUTH %2 ADD %3 %4 %5\n"
+"with the following subject:"
 msgstr ""
 "\n"
 "或用以下標題發郵件到%1：\n"
@@ -6599,13 +6593,12 @@ msgstr ""
 "有用戶要求退訂您的郵件列表。如果您接受的話，\n"
 "您可以單擊此連接下面的 URL："
 
-#. (sympa,keyauth,list.name,who)-)
-#: ../mail_tt2/listowner_notification.tt2:96
+#. (sympa)-)
+#: ../mail_tt2/listowner_notification.tt2:95
 #, fuzzy
 msgid ""
 "\n"
 "or send an email to %1 with the following subject:\n"
-"AUTH %2 DEL %3 %4\n"
 msgstr ""
 "\n"
 "或用以下標題發郵件到%1：\n"
@@ -6616,14 +6609,13 @@ msgstr ""
 msgid "WARNING: bounce rate too high in list %1"
 msgstr "警告：郵件列表%1的退信率太高"
 
-#. (list.name,rate,conf.wwsympa_url,list.name)
-#: ../mail_tt2/listowner_notification.tt2:106
+#. (list.name,rate)
+#: ../mail_tt2/listowner_notification.tt2:105
 #, fuzzy
 msgid ""
 "Bounce rate in list %1 is %2.\n"
 "\n"
 "You should delete bouncing subscribers: \n"
-"%3/reviewbouncing/%4\n"
 msgstr ""
 "郵件列表%1的退信率是 %2。\n"
 "\n"
@@ -7105,13 +7097,11 @@ msgstr "郵件列表%1允許您使用一套被定義的主題角注郵件。角�
 msgid "To distribute the attached message in list %1, follow the link below:"
 msgstr "在郵件列表%1分發附加的郵件的，用以下的鏈接："
 
-#. (conf.sympa,authkey)
-#: ../mail_tt2/send_auth.tt2:20
+#. (conf.sympa)
+#: ../mail_tt2/send_auth.tt2:19
 #, fuzzy
-msgid ""
-"Or send a message to %1 with the following subject:\n"
-"CONFIRM %2\n"
-msgstr "或用以下標題發送一則郵件到%1：證實%2\n"
+msgid "Or send a message to %1 with the following subject:\n"
+msgstr "或用以下標題發送一則郵件到%1@%2："
 
 #. (conf.title,list)
 #: ../mail_tt2/sendpasswd.tt2:4
@@ -8458,10 +8448,6 @@ msgstr "郵件角注"
 msgid "profile"
 msgstr "配置"
 
-#: ../src/lib/List.pm:1131
-msgid "Owner"
-msgstr "所有者"
-
 #: ../src/lib/List.pm:1167
 msgid "Priority"
 msgstr "優先級"
@@ -8998,6 +8984,24 @@ msgstr "不接收郵件（用于假期）"
 #: ../wwsympa/wwslib.pm:37
 msgid "you do not receive your own posts"
 msgstr "不接收自己發的郵件"
+
+#, fuzzy
+#~ msgid "[Listmaster]"
+#~ msgstr "郵件列表管理員"
+
+#, fuzzy
+#~ msgid "[Owner]"
+#~ msgstr "所有者"
+
+#, fuzzy
+#~ msgid "[Subscriber]"
+#~ msgstr "訂閱者"
+
+#, fuzzy
+#~ msgid ""
+#~ "Or send a message to %1 with the following subject:\n"
+#~ "CONFIRM %2\n"
+#~ msgstr "或用以下標題發送一則郵件到%1：證實%2\n"
 
 #~ msgid "-List definition"
 #~ msgstr "※　郵件列表定義"

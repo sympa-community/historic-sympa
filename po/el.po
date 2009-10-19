@@ -107,34 +107,32 @@ msgstr "Βοήθεια"
 msgid "Restore identity"
 msgstr "Αποκατάσταση λίστας"
 
-#: ../web_tt2/login_menu.tt2:13
-#, fuzzy
-msgid "[Listmaster]"
+#: ../mail_tt2/listmaster_notification.tt2:2 ../web_tt2/login_menu.tt2:13
+msgid "Listmaster"
 msgstr "Διαχειριστής λίστας"
 
 #: ../web_tt2/login_menu.tt2:14
 #, fuzzy
-msgid "[Privileged owner]"
+msgid "Privileged owner"
 msgstr "Προνομιούχος ιδιοκτήτης"
 
-#: ../web_tt2/login_menu.tt2:15
-#, fuzzy
-msgid "[Owner]"
+#: ../src/lib/List.pm:1131 ../web_tt2/login_menu.tt2:15
+msgid "Owner"
 msgstr "Ιδιοκτήτης"
 
 #: ../web_tt2/login_menu.tt2:16
 #, fuzzy
-msgid "[Editor]"
+msgid "Editor"
 msgstr "Συντάκτης"
 
 #: ../web_tt2/login_menu.tt2:17
 #, fuzzy
-msgid "[Subscriber]"
-msgstr "Συνδρομητής"
+msgid "Subscriber"
+msgstr "Συνδρομητές"
 
-#. (last_login_host,last_login_date)
+#. (last_login_host)
 #: ../web_tt2/login_menu.tt2:21
-msgid "last login from %1 &nbsp;&nbsp; (%2)</span>"
+msgid "last login from %1"
 msgstr ""
 
 #: ../web_tt2/login_menu.tt2:36
@@ -242,8 +240,9 @@ msgid "Subscribers:"
 msgstr "Συνδρομητές:"
 
 #: ../web_tt2/list_panel.tt2:12
-msgid "Error rate:&nbsp;"
-msgstr ""
+#, fuzzy
+msgid "Error rate:"
+msgstr "Σφάλμα στη γραμμή %d : %s"
 
 #: ../web_tt2/list_panel.tt2:13
 msgid "Owners"
@@ -413,9 +412,10 @@ msgstr ""
 msgid "Delete Shared"
 msgstr "Διαγραφή Διαμοιραζόμενων"
 
+#. (listname)
 #: ../web_tt2/admin.tt2:63
 #, fuzzy
-msgid "Are you sure you wish to delete the shared documents?"
+msgid "Are you sure you wish to delete the shared documents for list %1?"
 msgstr "Είστε σίγουρος για το κλείσιμο της λίστας %1;"
 
 #: ../web_tt2/admin.tt2:63
@@ -2620,9 +2620,7 @@ msgstr "Ανύπαρκτες συνδρομές με τη διεύθυνση <st
 
 #: ../web_tt2/loginbanner.tt2:18
 #, fuzzy
-msgid ""
-"To login, select your organization authentication server below:&nbsp;&nbsp;"
-"&nbsp;&nbsp;"
+msgid "To login, select your organization authentication server below:"
 msgstr "Επιλέξτε τον εξυπηρετητή ταυτοποίησης"
 
 #: ../web_tt2/loginbanner.tt2:24
@@ -4074,14 +4072,16 @@ msgid ""
 "static file. The target is specified by css_path parameter."
 msgstr ""
 
-#: ../web_tt2/skinsedit.tt2:45
+#: ../web_tt2/skinsedit.tt2:41
 msgid ""
 "\n"
 "Be careful: the CSS file is overwritten using css.tt2 template, usually this "
 "file is comming from Sympa distribution so your CSS customization may be "
-"erased when doing this.\n"
-"</p>\n"
-"<p>\n"
+"erased when doing this."
+msgstr ""
+
+#: ../web_tt2/skinsedit.tt2:45
+msgid ""
 "Use the color editor in order to change defined colors. First select the "
 "color you want to change and pick a color,then apply it using the test "
 "button. The new color is not really installed but it is used only for your "
@@ -4206,7 +4206,7 @@ msgid "error messages."
 msgstr "%Εικόνα(%s)"
 
 #: ../web_tt2/skinsedit.tt2:137
-msgid "hovered hyperlinks;"
+msgid "hovered links;"
 msgstr ""
 
 #: ../web_tt2/skinsedit.tt2:137
@@ -5780,10 +5780,6 @@ msgstr ""
 msgid "Moderators List %1 / %2"
 msgstr "Συντονιστές λίστας %1"
 
-#: ../mail_tt2/listmaster_notification.tt2:2
-msgid "Listmaster"
-msgstr "Διαχειριστής λίστας"
-
 #. (list.name,list.host,email)
 #: ../mail_tt2/listmaster_notification.tt2:4
 #, fuzzy
@@ -6715,13 +6711,12 @@ msgstr ""
 "ή αποστείλτε ένα μήνυμα στη %s με το ακόλουθο θέμα:\n"
 "AUTH %s DEL %s %s\n"
 
-#. (replyto,keyauth,list.name,who,gecos)
-#: ../mail_tt2/listowner_notification.tt2:72
+#. (replyto)
+#: ../mail_tt2/listowner_notification.tt2:70
 #, fuzzy
 msgid ""
 "If prefered, you can accept this subscription request sending an email to %1 "
-"with the following subject:\n"
-"AUTH %2 ADD %3 %4 %5\n"
+"with the following subject:"
 msgstr "Ή αποστολή του μηνύματος στη διεύθυνση %1@%2 με το ακόλουθο θέμα :"
 
 #: ../mail_tt2/listowner_notification.tt2:74
@@ -6757,13 +6752,12 @@ msgstr ""
 "ή αποστείλτε ένα μήνυμα στη %s με το ακόλουθο θέμα:\n"
 "AUTH %s DEL %s %s\n"
 
-#. (sympa,keyauth,list.name,who)-)
-#: ../mail_tt2/listowner_notification.tt2:96
+#. (sympa)-)
+#: ../mail_tt2/listowner_notification.tt2:95
 #, fuzzy
 msgid ""
 "\n"
 "or send an email to %1 with the following subject:\n"
-"AUTH %2 DEL %3 %4\n"
 msgstr "Ή αποστολή του μηνύματος στη διεύθυνση %1@%2 με το ακόλουθο θέμα :"
 
 #. (list.name)
@@ -6771,14 +6765,13 @@ msgstr "Ή αποστολή του μηνύματος στη διεύθυνση 
 msgid "WARNING: bounce rate too high in list %1"
 msgstr ""
 
-#. (list.name,rate,conf.wwsympa_url,list.name)
-#: ../mail_tt2/listowner_notification.tt2:106
+#. (list.name,rate)
+#: ../mail_tt2/listowner_notification.tt2:105
 #, fuzzy
 msgid ""
 "Bounce rate in list %1 is %2.\n"
 "\n"
 "You should delete bouncing subscribers: \n"
-"%3/reviewbouncing/%4\n"
 msgstr ""
 "Το ποστοστό bounce στη λίστα %s είναι%d%%.\n"
 "\n"
@@ -7285,12 +7278,10 @@ msgstr ""
 "Το λογισμικό Sympa δεν μπόρεσε να παραδώσει την αιτούμενη σελίδα για τους "
 "ακόλουθους λόγους: "
 
-#. (conf.sympa,authkey)
-#: ../mail_tt2/send_auth.tt2:20
+#. (conf.sympa)
+#: ../mail_tt2/send_auth.tt2:19
 #, fuzzy
-msgid ""
-"Or send a message to %1 with the following subject:\n"
-"CONFIRM %2\n"
+msgid "Or send a message to %1 with the following subject:\n"
 msgstr "Ή αποστολή του μηνύματος στη διεύθυνση %1@%2 με το ακόλουθο θέμα :"
 
 #. (conf.title,list)
@@ -8651,10 +8642,6 @@ msgstr "Αριθμός μηνύματος"
 msgid "profile"
 msgstr ""
 
-#: ../src/lib/List.pm:1131
-msgid "Owner"
-msgstr "Ιδιοκτήτης"
-
 #: ../src/lib/List.pm:1167
 msgid "Priority"
 msgstr "Προτεραιότητα"
@@ -9170,6 +9157,24 @@ msgstr ""
 #: ../wwsympa/wwslib.pm:37
 msgid "you do not receive your own posts"
 msgstr ""
+
+#, fuzzy
+#~ msgid "[Listmaster]"
+#~ msgstr "Διαχειριστής λίστας"
+
+#, fuzzy
+#~ msgid "[Owner]"
+#~ msgstr "Ιδιοκτήτης"
+
+#, fuzzy
+#~ msgid "[Subscriber]"
+#~ msgstr "Συνδρομητής"
+
+#, fuzzy
+#~ msgid ""
+#~ "Or send a message to %1 with the following subject:\n"
+#~ "CONFIRM %2\n"
+#~ msgstr "Ή αποστολή του μηνύματος στη διεύθυνση %1@%2 με το ακόλουθο θέμα :"
 
 #~ msgid "Send this mail"
 #~ msgstr "Αποστολή μηνύματος"
