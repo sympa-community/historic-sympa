@@ -4043,6 +4043,15 @@ msgstr ""
 msgid "Color chart"
 msgstr ""
 
+#: ../web_tt2/skinsedit.tt2:76
+msgid ""
+"Please note that these indications don't cover the exact usage of each color "
+"parameter, as it would be far too long to describe. What lies in this table "
+"should however give you a correct snapshot of what the color parameters are "
+"used for. For more details on rendering, feel free to try changing the "
+"colors in your session to see how well all that works."
+msgstr ""
+
 #: ../web_tt2/skinsedit.tt2:78
 msgid ""
 "This table display every colors used in Sympa, with their hexadecimal code "

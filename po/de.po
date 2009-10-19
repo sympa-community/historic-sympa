@@ -2512,7 +2512,8 @@ msgstr "Keine Abonnenten mit der Adresse <strong>%1</strong>!"
 
 #: ../web_tt2/loginbanner.tt2:18
 msgid "To login, select your organization authentication server below:"
-msgstr "Wählen Sie, um sich anzumelden, den Legitimierungsserver Ihrer Organisation:"
+msgstr ""
+"Wählen Sie, um sich anzumelden, den Legitimierungsserver Ihrer Organisation:"
 
 #: ../web_tt2/loginbanner.tt2:24
 msgid "Go"
@@ -3961,7 +3962,11 @@ msgid ""
 "Be careful: the CSS file is overwritten using css.tt2 template, usually this "
 "file is comming from Sympa distribution so your CSS customization may be "
 "erased when doing this."
-msgstr "\nSeien Sie vorsichtig: Die CSS-Datei wird mittels der Template css.tt2 überschrieben. Üblicherweise kommt diese Datei aus dem Sympa-Lieferumfang, so dass Ihre CSS-Anpassungen möglicherweise überschrieben werden."
+msgstr ""
+"\n"
+"Seien Sie vorsichtig: Die CSS-Datei wird mittels der Template css.tt2 "
+"überschrieben. Üblicherweise kommt diese Datei aus dem Sympa-Lieferumfang, "
+"so dass Ihre CSS-Anpassungen möglicherweise überschrieben werden."
 
 #: ../web_tt2/skinsedit.tt2:45
 msgid ""
@@ -3970,7 +3975,13 @@ msgid ""
 "button. The new color is not really installed but it is used only for your "
 "own session. When happy with the different colors you choosen, you may save "
 "them in a new static CSS.\n"
-msgstr "Benutzen Sie den Farbeditor, um definierte Farben zu ändern. Wählen Sie zuerst die Farbeinstellung, die Sie ändern wollen und suchen Sie eine Farbe aus, dann wenden Sie sie mit dem Testknopf an. Die neue Farbe wird nicht wirklich installiert, sondern nur für Ihre eigene Sitzung verwendet. Wenn Sie mit den verschiedenen ausgewählten Farben zufrieden sind, können Sie sie in einem neuen statischen CSS speichern.\n"
+msgstr ""
+"Benutzen Sie den Farbeditor, um definierte Farben zu ändern. Wählen Sie "
+"zuerst die Farbeinstellung, die Sie ändern wollen und suchen Sie eine Farbe "
+"aus, dann wenden Sie sie mit dem Testknopf an. Die neue Farbe wird nicht "
+"wirklich installiert, sondern nur für Ihre eigene Sitzung verwendet. Wenn "
+"Sie mit den verschiedenen ausgewählten Farben zufrieden sind, können Sie sie "
+"in einem neuen statischen CSS speichern.\n"
 
 #: ../web_tt2/skinsedit.tt2:50
 msgid " pick the color you want to test. "
@@ -3995,6 +4006,15 @@ msgstr "Farben meiner Sitzung in einem neuen statischen CSS niederlegen"
 #: ../web_tt2/skinsedit.tt2:74
 msgid "Color chart"
 msgstr "Farbtabelle"
+
+#: ../web_tt2/skinsedit.tt2:76
+msgid ""
+"Please note that these indications don't cover the exact usage of each color "
+"parameter, as it would be far too long to describe. What lies in this table "
+"should however give you a correct snapshot of what the color parameters are "
+"used for. For more details on rendering, feel free to try changing the "
+"colors in your session to see how well all that works."
+msgstr ""
 
 #: ../web_tt2/skinsedit.tt2:78
 msgid ""
@@ -6552,7 +6572,9 @@ msgstr ""
 msgid ""
 "If prefered, you can accept this subscription request sending an email to %1 "
 "with the following subject:"
-msgstr "Wenn Ihnen dies lieber ist, können Sie diesen Abonnementantrag auch annehmen, indem Sie eine Mail an %1 mit folgendem Betreff schicken:"
+msgstr ""
+"Wenn Ihnen dies lieber ist, können Sie diesen Abonnementantrag auch "
+"annehmen, indem Sie eine Mail an %1 mit folgendem Betreff schicken:"
 
 #: ../mail_tt2/listowner_notification.tt2:74
 msgid "That can be done using this mailto link:"
@@ -6585,7 +6607,9 @@ msgstr ""
 msgid ""
 "\n"
 "or send an email to %1 with the following subject:\n"
-msgstr "\noder senden Sie eine eMail an %1 mit dem folgenden Betreff:\n"
+msgstr ""
+"\n"
+"oder senden Sie eine eMail an %1 mit dem folgenden Betreff:\n"
 
 #. (list.name)
 #: ../mail_tt2/listowner_notification.tt2:100
