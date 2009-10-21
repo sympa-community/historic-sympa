@@ -447,20 +447,6 @@ AC_ARG_WITH(
     ),
     [POSTMAP="$withval"]
 )
-AC_MSG_CHECKING([postmap command])
-if test -f "$POSTMAP"; then
-    :
-else
-    AC_MSG_RESULT([non-existing])
-    AC_MSG_ERROR([invalid value $POSTMAP for postmap command])
-fi
-if test -x "$POSTMAP"; then
-    :
-else
-    AC_MSG_RESULT([non-executable])
-    AC_MSG_ERROR([invalid value $POSTMAP for postmap command])
-fi
-AC_MSG_RESULT([$POSTMAP])
 AC_SUBST(POSTMAP)
 
 POSTMAP_ARG=${VIRTUAL_ALIASES}
