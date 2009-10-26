@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: sympa\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
 "POT-Creation-Date: 2002-07-16 17:27+0800\n"
-"PO-Revision-Date: 2009-10-20 13:05+0200\n"
+"PO-Revision-Date: 2009-10-21 10:03+0200\n"
 "Last-Translator: Serguei S. Dukachev <iam@dukess.ru>\n"
 "Language-Team: Russian <ru@li.org>\n"
 "MIME-Version: 1.0\n"
@@ -8193,7 +8193,7 @@ msgstr "%A"
 
 #: ../src/lib/Conf.pm:136
 msgid "Error at line %d: %s\n"
-msgstr "Ошибка в строке %d: %s"
+msgstr "Ошибка в строке %d: %s\n"
 
 #: ../src/lib/Conf.pm:418
 #, fuzzy
