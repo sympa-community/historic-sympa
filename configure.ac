@@ -402,7 +402,6 @@ AC_ARG_WITH(
 )
 AC_SUBST(VIRTUAL_ALIASES)
 
-NEWALIASES=/usr/bin/newaliases
 AC_ARG_WITH(
     [newaliases],
     AS_HELP_STRING(
@@ -411,20 +410,26 @@ AC_ARG_WITH(
     ),
     [NEWALIASES="$withval"]
 )
-AC_MSG_CHECKING([newaliases command])
-if test -f "$NEWALIASES"; then
-    :
+if test -n "$NEWALIASES"; then
+    # user-supplied value
+    AC_MSG_CHECKING([user-supplied newaliases command])
+    if test -f "$NEWALIASES"; then
+	:
+    else
+	AC_MSG_RESULT([non-existing])
+	AC_MSG_ERROR([invalid value $NEWALIASES for newaliases command])
+    fi
+    if test -x "$NEWALIASES"; then
+	:
+    else
+	AC_MSG_RESULT([non-executable])
+	AC_MSG_ERROR([invalid value $NEWALIASES for newaliases command])
+    fi
+    AC_MSG_RESULT([$NEWALIASES])
 else
-    AC_MSG_RESULT([non-existing])
-    AC_MSG_ERROR([invalid value $NEWALIAS for newaliases command])
+    # default value
+    NEWALIASES=/usr/bin/newaliases
 fi
-if test -x "$NEWALIASES"; then
-    :
-else
-    AC_MSG_RESULT([non-executable])
-    AC_MSG_ERROR([invalid value $NEWALIAS for newaliases command])
-fi
-AC_MSG_RESULT([$NEWALIASES])
 AC_SUBST(NEWALIASES)
 
 NEWALIASES_ARG=
@@ -438,7 +443,6 @@ AC_ARG_WITH(
 )
 AC_SUBST(NEWALIASES_ARG)
 
-POSTMAP=/usr/sbin/postmap
 AC_ARG_WITH(
     [postmap],
     AS_HELP_STRING(
@@ -447,6 +451,26 @@ AC_ARG_WITH(
     ),
     [POSTMAP="$withval"]
 )
+if test -n "$POSTMAP"; then
+    # user-supplied value
+    AC_MSG_CHECKING([user-supplied postmap command])
+    if test -f "$POSTMAP"; then
+	:
+    else
+	AC_MSG_RESULT([non-existing])
+	AC_MSG_ERROR([invalid value $POSTMAP for postmap command])
+    fi
+    if test -x "$POSTMAP"; then
+	:
+    else
+	AC_MSG_RESULT([non-executable])
+	AC_MSG_ERROR([invalid value $POSTMAP for postmap command])
+    fi
+    AC_MSG_RESULT([$POSTMAP])
+else
+    # default value
+    POSTMAP=/usr/sbin/postmap
+fi
 AC_SUBST(POSTMAP)
 
 POSTMAP_ARG=${VIRTUAL_ALIASES}
