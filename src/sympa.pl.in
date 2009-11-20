@@ -1878,7 +1878,8 @@ sub DoMessage{
 
 
 	if (($main::daemon_usage == DAEMON_MESSAGE) || ($main::daemon_usage == DAEMON_ALL)) {
-	    my $numsmtp = $list->distribute_msg($message);
+	    my $numsmtp;
+	    eval { $numsmtp = $list->distribute_msg($message)};
 	    
 	    ## Keep track of known message IDs...if any
 	    $msgid_table{$list->get_list_id()}{$messageid}++ if ($messageid);
