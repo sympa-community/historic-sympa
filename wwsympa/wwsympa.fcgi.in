@@ -1175,7 +1175,7 @@ my $birthday = time ;
 		     
 		     
 		 }else{
-		     do_log('err',"CAS ticket validation failed : %s", &CAS::get_errors()); 
+		     do_log('err',"CAS ticket validation failed : %s", &AuthCAS::get_errors()); 
 		 }
 	     }else{
 		 do_log ('notice',"Internal error while receiving a CAS ticket $session->{'checked_cas'} ");
