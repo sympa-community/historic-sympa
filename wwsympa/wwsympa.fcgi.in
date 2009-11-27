@@ -10114,6 +10114,7 @@ sub do_rename_list {
 	 &List::send_notify_to_listmaster('request_list_renaming',$robot, 
 					  {'list' => $list,
 					   'new_listname' => $in{'new_listname'},
+					   'old_listname' => $old_listname,
 					   'email' => $param->{'user'}{'email'},
 				           'is_a_copy' => 'true'});
 	 &report::notice_report_web('pending_list',{},$param->{'action'},$list);
