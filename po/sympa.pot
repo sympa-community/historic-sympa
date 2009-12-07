@@ -3865,7 +3865,7 @@ msgstr ""
 msgid "Search period: "
 msgstr ""
 
-#: ../web_tt2/viewlogs.tt2:113 ../wwsympa/wwsympa.fcgi.in:15926
+#: ../web_tt2/viewlogs.tt2:113 ../wwsympa/wwsympa.fcgi.in:15927
 #. (date_from_formated)
 #. (date_to_formated)
 #. This entry is a date/time format
@@ -4857,7 +4857,7 @@ msgid "To activate/delete this mailing list:"
 msgstr ""
 
 #: ../mail_tt2/listmaster_notification.tt2:19
-#. (email,list.name,new_listname)
+#. (email,old_listname,new_listname)
 msgid "%1 has copied list \"%2\" as a new list \"%3\""
 msgstr ""
 
@@ -4867,7 +4867,7 @@ msgid "List \"%1\" renaming"
 msgstr ""
 
 #: ../mail_tt2/listmaster_notification.tt2:23
-#. (email,list.name,new_listname)
+#. (email,old_listname,new_listname)
 msgid "%1 has renamed list \"%2\" to \"%3\""
 msgstr ""
 
@@ -7493,7 +7493,7 @@ msgstr ""
 msgid "%a, %d %b %Y"
 msgstr ""
 
-#: ../src/lib/List.pm:2996 ../src/lib/List.pm:2997 ../src/lib/List.pm:3001 ../wwsympa/wwsympa.fcgi.in:10985 ../wwsympa/wwsympa.fcgi.in:11054 ../wwsympa/wwsympa.fcgi.in:11256 ../wwsympa/wwsympa.fcgi.in:11593 ../wwsympa/wwsympa.fcgi.in:15501 ../wwsympa/wwsympa.fcgi.in:16231 ../wwsympa/wwsympa.fcgi.in:16232 ../wwsympa/wwsympa.fcgi.in:4803 ../wwsympa/wwsympa.fcgi.in:4804 ../wwsympa/wwsympa.fcgi.in:6227 ../wwsympa/wwsympa.fcgi.in:7245 ../wwsympa/wwsympa.fcgi.in:7788 ../wwsympa/wwsympa.fcgi.in:7828 ../wwsympa/wwsympa.fcgi.in:7830 ../wwsympa/wwsympa.fcgi.in:8306 ../wwsympa/wwsympa.fcgi.in:8307 ../wwsympa/wwsympa.fcgi.in:8341 ../wwsympa/wwsympa.fcgi.in:8342 ../wwsympa/wwsympa.fcgi.in:8521 ../wwsympa/wwsympa.fcgi.in:8522
+#: ../src/lib/List.pm:2996 ../src/lib/List.pm:2997 ../src/lib/List.pm:3001 ../wwsympa/wwsympa.fcgi.in:10986 ../wwsympa/wwsympa.fcgi.in:11055 ../wwsympa/wwsympa.fcgi.in:11257 ../wwsympa/wwsympa.fcgi.in:11594 ../wwsympa/wwsympa.fcgi.in:15502 ../wwsympa/wwsympa.fcgi.in:16232 ../wwsympa/wwsympa.fcgi.in:16233 ../wwsympa/wwsympa.fcgi.in:4803 ../wwsympa/wwsympa.fcgi.in:4804 ../wwsympa/wwsympa.fcgi.in:6227 ../wwsympa/wwsympa.fcgi.in:7245 ../wwsympa/wwsympa.fcgi.in:7788 ../wwsympa/wwsympa.fcgi.in:7828 ../wwsympa/wwsympa.fcgi.in:7830 ../wwsympa/wwsympa.fcgi.in:8306 ../wwsympa/wwsympa.fcgi.in:8307 ../wwsympa/wwsympa.fcgi.in:8341 ../wwsympa/wwsympa.fcgi.in:8342 ../wwsympa/wwsympa.fcgi.in:8521 ../wwsympa/wwsympa.fcgi.in:8522
 #. This entry is a date/time format
 #. Check the strftime manpage for format details : http://docs.freebsd.org/info/gawk/gawk.info.Time_Functions.html
 msgid "%d %b %Y"
@@ -7578,13 +7578,13 @@ msgstr ""
 msgid "%H:%M:%S"
 msgstr ""
 
-#: ../wwsympa/SympaSession.pm:427 ../wwsympa/SympaSession.pm:428 ../wwsympa/wwsympa.fcgi.in:11817 ../wwsympa/wwsympa.fcgi.in:11950 ../wwsympa/wwsympa.fcgi.in:14263 ../wwsympa/wwsympa.fcgi.in:7742
+#: ../wwsympa/SympaSession.pm:427 ../wwsympa/SympaSession.pm:428 ../wwsympa/wwsympa.fcgi.in:11818 ../wwsympa/wwsympa.fcgi.in:11951 ../wwsympa/wwsympa.fcgi.in:14264 ../wwsympa/wwsympa.fcgi.in:7742
 #. This entry is a date/time format
 #. Check the strftime manpage for format details : http://docs.freebsd.org/info/gawk/gawk.info.Time_Functions.html
 msgid "%d %b %y  %H:%M"
 msgstr ""
 
-#: ../wwsympa/wwsympa.fcgi.in:15871 ../wwsympa/wwsympa.fcgi.in:15872
+#: ../wwsympa/wwsympa.fcgi.in:15872 ../wwsympa/wwsympa.fcgi.in:15873
 #. This entry is a date/time format
 #. Check the strftime manpage for format details : http://docs.freebsd.org/info/gawk/gawk.info.Time_Functions.html
 msgid "%Y/%m/%d/%H/%M/%S"
