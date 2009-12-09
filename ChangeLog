@@ -1,4 +1,354 @@
 ------------------------------------------------------------------------
+r6307 | david.verdin | 2009-12-08 16:09:08 +0100 (mar 08 déc 2009) | 2 lignes
+Chemins modifiés :
+   M /branches/sympa-6.0-branch/src/lib/List.pm
+   M /branches/sympa-6.0-branch/wwsympa/Auth.pm
+   M /branches/sympa-6.0-branch/wwsympa/Challenge.pm
+   M /branches/sympa-6.0-branch/wwsympa/SympaSession.pm
+
+[bug][Submitted by Wen Si] "date" is a reserved keywork with Oracle. Fixed by replacing all the occurrences of "AS date" by "AS \"date\".
+
+------------------------------------------------------------------------
+r6306 | david.verdin | 2009-12-07 10:48:31 +0100 (lun 07 déc 2009) | 2 lignes
+Chemins modifiés :
+   M /branches/sympa-6.0-branch/po/ar.po
+   M /branches/sympa-6.0-branch/po/bg.po
+   M /branches/sympa-6.0-branch/po/br.po
+   M /branches/sympa-6.0-branch/po/ca.po
+   M /branches/sympa-6.0-branch/po/cs.po
+   M /branches/sympa-6.0-branch/po/de.po
+   M /branches/sympa-6.0-branch/po/el.po
+   M /branches/sympa-6.0-branch/po/en_US.po
+   M /branches/sympa-6.0-branch/po/es.po
+   M /branches/sympa-6.0-branch/po/et.po
+   M /branches/sympa-6.0-branch/po/eu.po
+   M /branches/sympa-6.0-branch/po/fi.po
+   M /branches/sympa-6.0-branch/po/fr.po
+   M /branches/sympa-6.0-branch/po/hu.po
+   M /branches/sympa-6.0-branch/po/id.po
+   M /branches/sympa-6.0-branch/po/it.po
+   M /branches/sympa-6.0-branch/po/ja.po
+   M /branches/sympa-6.0-branch/po/ko.po
+   M /branches/sympa-6.0-branch/po/la.po
+   M /branches/sympa-6.0-branch/po/ml.po
+   M /branches/sympa-6.0-branch/po/nb_NO.po
+   M /branches/sympa-6.0-branch/po/nl.po
+   M /branches/sympa-6.0-branch/po/oc.po
+   M /branches/sympa-6.0-branch/po/pl.po
+   M /branches/sympa-6.0-branch/po/pt.po
+   M /branches/sympa-6.0-branch/po/pt_BR.po
+   M /branches/sympa-6.0-branch/po/ro.po
+   M /branches/sympa-6.0-branch/po/ru.po
+   M /branches/sympa-6.0-branch/po/sv.po
+   M /branches/sympa-6.0-branch/po/sympa.pot
+   M /branches/sympa-6.0-branch/po/tr.po
+   M /branches/sympa-6.0-branch/po/vi.po
+   M /branches/sympa-6.0-branch/po/zh_CN.po
+   M /branches/sympa-6.0-branch/po/zh_TW.po
+
+[feature][Submitted by Marcin Woloszyn, Silesian univ. of Poland] Updated polish translation.
+
+------------------------------------------------------------------------
+r6305 | david.verdin | 2009-11-27 16:09:17 +0100 (ven 27 nov 2009) | 2 lignes
+Chemins modifiés :
+   M /branches/sympa-6.0-branch/wwsympa/wwsympa.fcgi.in
+
+[bug][Submitted by T. Bellempois, ENS Lyon] In case of CAS error, wwsympa.fcgi crached, becaus it was calling a subroutine in the module CAS, which doesn't exist in Sympa, instead of AuthCAS.
+
+------------------------------------------------------------------------
+r6304 | david.verdin | 2009-11-27 10:09:44 +0100 (ven 27 nov 2009) | 2 lignes
+Chemins modifiés :
+   M /branches/sympa-6.0-branch/mail_tt2/listmaster_notification.tt2
+   M /branches/sympa-6.0-branch/wwsympa/wwsympa.fcgi.in
+
+[bug][Reported by P. Maes, univ. Louvain] The report sent to the listmaster wehn a user cloned a list said "<newlistname> was cloned as <newlistname>". the old listname was not used.
+
+------------------------------------------------------------------------
+r6303 | david.verdin | 2009-11-20 15:40:56 +0100 (ven 20 nov 2009) | 2 lignes
+Chemins modifiés :
+   M /branches/sympa-6.0-branch/src/sympa.pl.in
+
+[bug][Submitted by H. Moa] Some message could cause a sympa.pl crash. Fixed by embedding the dangerous part of the code in an eval statement.
+
+------------------------------------------------------------------------
+r6289 | david.verdin | 2009-10-27 10:34:37 +0100 (mar 27 oct 2009) | 2 lignes
+Chemins modifiés :
+   M /branches/sympa-6.0-branch/configure.ac
+
+[change][Submitted by G. rousse, INRIA] Check command path (both for postmap and newaliases) only if explicitely given by user, otherwise it revert to default values.
+
+------------------------------------------------------------------------
+r6287 | david.verdin | 2009-10-26 09:39:28 +0100 (lun 26 oct 2009) | 2 lignes
+Chemins modifiés :
+   M /branches/sympa-6.0-branch/po/ru.po
+
+[-feature] Updating Russian translation.
+
+------------------------------------------------------------------------
+r6286 | david.verdin | 2009-10-21 15:19:48 +0200 (mer 21 oct 2009) | 2 lignes
+Chemins modifiés :
+   M /branches/sympa-6.0-branch/src/etc/script/tpl2tt2.pl.in
+
+[bug][Reported by A. Schieber, AMUE] tt2.pl was still called by tpl2tt2.pl, though the former has been renamed to tt2.pm.
+
+------------------------------------------------------------------------
+r6285 | david.verdin | 2009-10-21 10:06:08 +0200 (mer 21 oct 2009) | 2 lignes
+Chemins modifiés :
+   M /branches/sympa-6.0-branch/configure.ac
+
+[bug] Existence of a postfix command was tested in the configure step. failing to find such a command caused the configure to stop. As postfix is not mandatory, such a behaviour is a bug. Fixed by removing the postfix command check.
+
+------------------------------------------------------------------------
+r6284 | david.verdin | 2009-10-21 09:23:04 +0200 (mer 21 oct 2009) | 2 lignes
+Chemins modifiés :
+   M /branches/sympa-6.0-branch/src/lib/Makefile.am
+
+[bug][Submitted by G. rousse, INRIA] $< is not portable in non-default rules
+
+------------------------------------------------------------------------
+r6282 | david.verdin | 2009-10-20 17:52:10 +0200 (mar 20 oct 2009) | 2 lignes
+Chemins modifiés :
+   M /branches/sympa-6.0-branch/configure.ac
+
+[bug][Submitted by G. Rousse, INRIA] Verifies in detail that the newaliases commnd exists and is executable by Sympa.
+
+------------------------------------------------------------------------
+r6281 | david.verdin | 2009-10-20 13:10:51 +0200 (mar 20 oct 2009) | 1 ligne
+Chemins modifiés :
+   M /branches/sympa-6.0-branch/po/ar.po
+   M /branches/sympa-6.0-branch/po/bg.po
+   M /branches/sympa-6.0-branch/po/br.po
+   M /branches/sympa-6.0-branch/po/ca.po
+   M /branches/sympa-6.0-branch/po/cs.po
+   M /branches/sympa-6.0-branch/po/de.po
+   M /branches/sympa-6.0-branch/po/el.po
+   M /branches/sympa-6.0-branch/po/en_US.po
+   M /branches/sympa-6.0-branch/po/es.po
+   M /branches/sympa-6.0-branch/po/et.po
+   M /branches/sympa-6.0-branch/po/eu.po
+   M /branches/sympa-6.0-branch/po/fi.po
+   M /branches/sympa-6.0-branch/po/fr.po
+   M /branches/sympa-6.0-branch/po/hu.po
+   M /branches/sympa-6.0-branch/po/id.po
+   M /branches/sympa-6.0-branch/po/it.po
+   M /branches/sympa-6.0-branch/po/ja.po
+   M /branches/sympa-6.0-branch/po/ko.po
+   M /branches/sympa-6.0-branch/po/la.po
+   M /branches/sympa-6.0-branch/po/ml.po
+   M /branches/sympa-6.0-branch/po/nb_NO.po
+   M /branches/sympa-6.0-branch/po/nl.po
+   M /branches/sympa-6.0-branch/po/oc.po
+   M /branches/sympa-6.0-branch/po/pl.po
+   M /branches/sympa-6.0-branch/po/pt.po
+   M /branches/sympa-6.0-branch/po/pt_BR.po
+   M /branches/sympa-6.0-branch/po/ro.po
+   M /branches/sympa-6.0-branch/po/ru.po
+   M /branches/sympa-6.0-branch/po/sv.po
+   M /branches/sympa-6.0-branch/po/tr.po
+   M /branches/sympa-6.0-branch/po/vi.po
+   M /branches/sympa-6.0-branch/po/zh_CN.po
+   M /branches/sympa-6.0-branch/po/zh_TW.po
+
+[-feature] Updating catalogues that were not properly reinitialized.
+------------------------------------------------------------------------
+r6280 | david.verdin | 2009-10-20 13:06:02 +0200 (mar 20 oct 2009) | 1 ligne
+Chemins modifiés :
+   M /branches/sympa-6.0-branch/po/ru.po
+
+[-feature] Retrieving latest translations from Pootle.
+------------------------------------------------------------------------
+r6279 | david.verdin | 2009-10-19 18:28:35 +0200 (lun 19 oct 2009) | 1 ligne
+Chemins modifiés :
+   M /branches/sympa-6.0-branch/po/de.po
+   M /branches/sympa-6.0-branch/po/fr.po
+   M /branches/sympa-6.0-branch/po-wwsympa/de.po
+
+[-feature] Updating catalogues with latest Sympa modifications.
+------------------------------------------------------------------------
+r6278 | david.verdin | 2009-10-19 17:59:08 +0200 (lun 19 oct 2009) | 1 ligne
+Chemins modifiés :
+   M /branches/sympa-6.0-branch/po/ar.po
+   M /branches/sympa-6.0-branch/po/bg.po
+   M /branches/sympa-6.0-branch/po/br.po
+   M /branches/sympa-6.0-branch/po/ca.po
+   M /branches/sympa-6.0-branch/po/cs.po
+   M /branches/sympa-6.0-branch/po/de.po
+   M /branches/sympa-6.0-branch/po/el.po
+   M /branches/sympa-6.0-branch/po/en_US.po
+   M /branches/sympa-6.0-branch/po/es.po
+   M /branches/sympa-6.0-branch/po/et.po
+   M /branches/sympa-6.0-branch/po/eu.po
+   M /branches/sympa-6.0-branch/po/fi.po
+   M /branches/sympa-6.0-branch/po/fr.po
+   M /branches/sympa-6.0-branch/po/hu.po
+   M /branches/sympa-6.0-branch/po/id.po
+   M /branches/sympa-6.0-branch/po/it.po
+   M /branches/sympa-6.0-branch/po/ja.po
+   M /branches/sympa-6.0-branch/po/ko.po
+   M /branches/sympa-6.0-branch/po/la.po
+   M /branches/sympa-6.0-branch/po/ml.po
+   M /branches/sympa-6.0-branch/po/nb_NO.po
+   M /branches/sympa-6.0-branch/po/nl.po
+   M /branches/sympa-6.0-branch/po/oc.po
+   M /branches/sympa-6.0-branch/po/pl.po
+   M /branches/sympa-6.0-branch/po/pt.po
+   M /branches/sympa-6.0-branch/po/pt_BR.po
+   M /branches/sympa-6.0-branch/po/ro.po
+   M /branches/sympa-6.0-branch/po/ru.po
+   M /branches/sympa-6.0-branch/po/sv.po
+   M /branches/sympa-6.0-branch/po/tr.po
+   M /branches/sympa-6.0-branch/po/vi.po
+   M /branches/sympa-6.0-branch/po/zh_CN.po
+   M /branches/sympa-6.0-branch/po/zh_TW.po
+   M /branches/sympa-6.0-branch/po-wwsympa/ar.po
+   M /branches/sympa-6.0-branch/po-wwsympa/bg.po
+   M /branches/sympa-6.0-branch/po-wwsympa/br.po
+   M /branches/sympa-6.0-branch/po-wwsympa/cs.po
+   M /branches/sympa-6.0-branch/po-wwsympa/de.po
+   M /branches/sympa-6.0-branch/po-wwsympa/el.po
+   M /branches/sympa-6.0-branch/po-wwsympa/en_US.po
+   M /branches/sympa-6.0-branch/po-wwsympa/es.po
+   M /branches/sympa-6.0-branch/po-wwsympa/et.po
+   M /branches/sympa-6.0-branch/po-wwsympa/eu.po
+   M /branches/sympa-6.0-branch/po-wwsympa/fi.po
+   M /branches/sympa-6.0-branch/po-wwsympa/fr.po
+   M /branches/sympa-6.0-branch/po-wwsympa/hu.po
+   M /branches/sympa-6.0-branch/po-wwsympa/id.po
+   M /branches/sympa-6.0-branch/po-wwsympa/it.po
+   M /branches/sympa-6.0-branch/po-wwsympa/ja.po
+   M /branches/sympa-6.0-branch/po-wwsympa/nb_NO.po
+   M /branches/sympa-6.0-branch/po-wwsympa/nl.po
+   M /branches/sympa-6.0-branch/po-wwsympa/oc.po
+   M /branches/sympa-6.0-branch/po-wwsympa/pl.po
+   M /branches/sympa-6.0-branch/po-wwsympa/pt.po
+   M /branches/sympa-6.0-branch/po-wwsympa/pt_BR.po
+   M /branches/sympa-6.0-branch/po-wwsympa/ro.po
+   M /branches/sympa-6.0-branch/po-wwsympa/ru.po
+   M /branches/sympa-6.0-branch/po-wwsympa/sv.po
+   M /branches/sympa-6.0-branch/po-wwsympa/tr.po
+   M /branches/sympa-6.0-branch/po-wwsympa/vi.po
+   M /branches/sympa-6.0-branch/po-wwsympa/zh_CN.po
+
+[-feature] Retrieving latest translations from Pootle.
+------------------------------------------------------------------------
+r6277 | david.verdin | 2009-10-19 17:54:53 +0200 (lun 19 oct 2009) | 1 ligne
+Chemins modifiés :
+   M /branches/sympa-6.0-branch/po/ar.po
+   M /branches/sympa-6.0-branch/po/bg.po
+   M /branches/sympa-6.0-branch/po/br.po
+   M /branches/sympa-6.0-branch/po/ca.po
+   M /branches/sympa-6.0-branch/po/cs.po
+   M /branches/sympa-6.0-branch/po/de.po
+   M /branches/sympa-6.0-branch/po/el.po
+   M /branches/sympa-6.0-branch/po/en_US.po
+   M /branches/sympa-6.0-branch/po/es.po
+   M /branches/sympa-6.0-branch/po/et.po
+   M /branches/sympa-6.0-branch/po/eu.po
+   M /branches/sympa-6.0-branch/po/fi.po
+   M /branches/sympa-6.0-branch/po/fr.po
+   M /branches/sympa-6.0-branch/po/hu.po
+   M /branches/sympa-6.0-branch/po/id.po
+   M /branches/sympa-6.0-branch/po/it.po
+   M /branches/sympa-6.0-branch/po/ja.po
+   M /branches/sympa-6.0-branch/po/ko.po
+   M /branches/sympa-6.0-branch/po/la.po
+   M /branches/sympa-6.0-branch/po/ml.po
+   M /branches/sympa-6.0-branch/po/nb_NO.po
+   M /branches/sympa-6.0-branch/po/nl.po
+   M /branches/sympa-6.0-branch/po/oc.po
+   M /branches/sympa-6.0-branch/po/pl.po
+   M /branches/sympa-6.0-branch/po/pt.po
+   M /branches/sympa-6.0-branch/po/pt_BR.po
+   M /branches/sympa-6.0-branch/po/ro.po
+   M /branches/sympa-6.0-branch/po/ru.po
+   M /branches/sympa-6.0-branch/po/sv.po
+   M /branches/sympa-6.0-branch/po/sympa.pot
+   M /branches/sympa-6.0-branch/po/tr.po
+   M /branches/sympa-6.0-branch/po/vi.po
+   M /branches/sympa-6.0-branch/po/zh_CN.po
+   M /branches/sympa-6.0-branch/po/zh_TW.po
+
+[-change] Updating i18n catalogues with the latest changes in Sympa.
+------------------------------------------------------------------------
+r6276 | david.verdin | 2009-10-19 17:49:38 +0200 (lun 19 oct 2009) | 2 lignes
+Chemins modifiés :
+   M /branches/sympa-6.0-branch/web_tt2/skinsedit.tt2
+
+[bug][#6467][Submitted by S. Dukachev, mfitness.ru] A message in the web interface was not embraced with internationalization tags. Then it did not appear in the catalogues.
+
+------------------------------------------------------------------------
+r6275 | david.verdin | 2009-10-19 10:51:28 +0200 (lun 19 oct 2009) | 2 lignes
+Chemins modifiés :
+   M /branches/sympa-6.0-branch/mail_tt2/listowner_notification.tt2
+   M /branches/sympa-6.0-branch/mail_tt2/send_auth.tt2
+   M /branches/sympa-6.0-branch/po/ar.po
+   M /branches/sympa-6.0-branch/po/bg.po
+   M /branches/sympa-6.0-branch/po/br.po
+   M /branches/sympa-6.0-branch/po/ca.po
+   M /branches/sympa-6.0-branch/po/cs.po
+   M /branches/sympa-6.0-branch/po/de.po
+   M /branches/sympa-6.0-branch/po/el.po
+   M /branches/sympa-6.0-branch/po/en_US.po
+   M /branches/sympa-6.0-branch/po/es.po
+   M /branches/sympa-6.0-branch/po/et.po
+   M /branches/sympa-6.0-branch/po/eu.po
+   M /branches/sympa-6.0-branch/po/fi.po
+   M /branches/sympa-6.0-branch/po/fr.po
+   M /branches/sympa-6.0-branch/po/hu.po
+   M /branches/sympa-6.0-branch/po/id.po
+   M /branches/sympa-6.0-branch/po/it.po
+   M /branches/sympa-6.0-branch/po/ja.po
+   M /branches/sympa-6.0-branch/po/ko.po
+   M /branches/sympa-6.0-branch/po/la.po
+   M /branches/sympa-6.0-branch/po/ml.po
+   M /branches/sympa-6.0-branch/po/nb_NO.po
+   M /branches/sympa-6.0-branch/po/nl.po
+   M /branches/sympa-6.0-branch/po/oc.po
+   M /branches/sympa-6.0-branch/po/pl.po
+   M /branches/sympa-6.0-branch/po/pt.po
+   M /branches/sympa-6.0-branch/po/pt_BR.po
+   M /branches/sympa-6.0-branch/po/ro.po
+   M /branches/sympa-6.0-branch/po/ru.po
+   M /branches/sympa-6.0-branch/po/sv.po
+   M /branches/sympa-6.0-branch/po/sympa.pot
+   M /branches/sympa-6.0-branch/po/tr.po
+   M /branches/sympa-6.0-branch/po/vi.po
+   M /branches/sympa-6.0-branch/po/zh_CN.po
+   M /branches/sympa-6.0-branch/po/zh_TW.po
+   M /branches/sympa-6.0-branch/web_tt2/admin.tt2
+   M /branches/sympa-6.0-branch/web_tt2/list_panel.tt2
+   M /branches/sympa-6.0-branch/web_tt2/login_menu.tt2
+   M /branches/sympa-6.0-branch/web_tt2/loginbanner.tt2
+   M /branches/sympa-6.0-branch/web_tt2/skinsedit.tt2
+
+[change] Updating internationalization catalogues : fully translated Franche and German, fixed templates with faulty i18n sequances.
+
+------------------------------------------------------------------------
+r6274 | david.verdin | 2009-10-15 16:46:57 +0200 (jeu 15 oct 2009) | 2 lignes
+Chemins modifiés :
+   M /branches/sympa-6.0-branch/po/de.po
+   M /branches/sympa-6.0-branch/po-wwsympa/de.po
+
+[change][Submitted by M. Warkus, univ. Karlsruhe] Updated german translations.
+
+------------------------------------------------------------------------
+r6272 | olivier.salaun | 2009-10-08 17:48:03 +0200 (jeu 08 oct 2009) | 2 lignes
+Chemins modifiés :
+   M /branches/sympa-6.0-branch
+   M /branches/sympa-6.0-branch/src/task_manager.pl.in
+
+[-bug] fixed wrong log facility
+
+------------------------------------------------------------------------
+r6255 | david.verdin | 2009-10-01 00:59:24 +0200 (jeu 01 oct 2009) | 2 lignes
+Chemins modifiés :
+   M /branches/sympa-6.0-branch/ChangeLog
+   M /branches/sympa-6.0-branch/NEWS
+   M /branches/sympa-6.0-branch/configure.ac
+
+[-feature] Preparing version 6.0 stable.
+
+------------------------------------------------------------------------
 r6254 | david.verdin | 2009-09-30 16:30:08 +0200 (mer 30 sep 2009) | 2 lignes
 Chemins modifiés :
    M /branches/sympa-6.0-branch/po/Makefile.in.in
