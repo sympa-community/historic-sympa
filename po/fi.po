@@ -13,7 +13,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "POT-Creation-Date: 2002-07-16 17:27+0800\n"
-"PO-Revision-Date: 2009-07-13 08:14+0200\n"
+"PO-Revision-Date: 2009-10-20 16:24+0300\n"
 "Last-Translator: Jyri-Petteri Paloposki <jyri-petteri.paloposki@iki.fi>\n"
 "Language-Team: Finnish\n"
 "MIME-Version: 1.0\n"
@@ -22,9 +22,8 @@ msgstr ""
 "X-Generator: Pootle 1.0.2\n"
 
 #: ../web_tt2/home.tt2:2
-#, fuzzy
 msgid "Mailing lists server"
-msgstr "Postituslistat"
+msgstr "Postituslistapalvelin"
 
 #. (conf.email,conf.host)
 #: ../web_tt2/home.tt2:4
@@ -119,9 +118,8 @@ msgid "Listmaster"
 msgstr "Ylläpitäjä"
 
 #: ../web_tt2/login_menu.tt2:14
-#, fuzzy
 msgid "Privileged owner"
-msgstr "Oikeutettu omistaja"
+msgstr "Etuoikeutettu omistaja"
 
 # #-#-#-#-#  fi.po (PACKAGE VERSION)  #-#-#-#-#
 # nlsref 16,57
@@ -130,20 +128,17 @@ msgid "Owner"
 msgstr "Omistaja"
 
 #: ../web_tt2/login_menu.tt2:16
-#, fuzzy
 msgid "Editor"
 msgstr "Toimittaja"
 
 #: ../web_tt2/login_menu.tt2:17
-#, fuzzy
 msgid "Subscriber"
-msgstr "Tilaajat"
+msgstr "Tilaaja"
 
 #. (last_login_host)
 #: ../web_tt2/login_menu.tt2:21
-#, fuzzy
 msgid "last login from %1"
-msgstr "viimeinen kirjautuminen osoitteesta %1 (%2)"
+msgstr "viimeisin kirjautuminen osoitteesta %1"
 
 #: ../web_tt2/login_menu.tt2:36
 msgid "Logout"
@@ -250,7 +245,6 @@ msgstr "Tilaajat:"
 
 # nlsref 1,3
 #: ../web_tt2/list_panel.tt2:12
-#, fuzzy
 msgid "Error rate:"
 msgstr "Virheiden määrä:"
 
@@ -1707,7 +1701,7 @@ msgstr "Lisää"
 
 #: ../web_tt2/editfile.tt2:50
 msgid "Unsubscribe message: This message is sent when users leave the list."
-msgstr ""
+msgstr "Poistumisviesti: Tämä viesti lähetetään kun käyttäjä poistuu listalta."
 
 #: ../web_tt2/editfile.tt2:52
 #, fuzzy
@@ -2449,6 +2443,7 @@ msgstr ""
 
 #. (auth.action)
 #: ../web_tt2/error.tt2:138
+#, fuzzy
 msgid "AUTHORIZATION REJECT (%1)"
 msgstr "AUTHORIZATION REJECT (%1)"
 
@@ -2977,7 +2972,7 @@ msgstr "muistutus viesti"
 
 #: ../web_tt2/nav.tt2:115
 msgid "Send an html page"
-msgstr ""
+msgstr "Lähetä HTML-sivu"
 
 #. (last_login_host,last_login_date)
 #: ../web_tt2/notice.tt2:5
@@ -4710,7 +4705,7 @@ msgstr "Hakujakso:"
 #. (date_to_formated)
 #. This entry is a date/time format
 #. Check the strftime manpage for format details : http://docs.freebsd.org/info/gawk/gawk.info.Time_Functions.html
-#: ../web_tt2/viewlogs.tt2:113 ../wwsympa/wwsympa.fcgi.in:15927
+#: ../web_tt2/viewlogs.tt2:113 ../wwsympa/wwsympa.fcgi.in:15926
 msgid "%d %b %Y %H:%M:%S"
 msgstr "%d.%m.%Y %H.%M.%S"
 
@@ -5932,7 +5927,7 @@ msgstr "%1 pyysi listan \"%2\" luomista"
 msgid "To activate/delete this mailing list:"
 msgstr "Aktivoidaksesi/poistaaksesi tämän listan:"
 
-#. (email,old_listname,new_listname)
+#. (email,list.name,new_listname)
 #: ../mail_tt2/listmaster_notification.tt2:19
 msgid "%1 has copied list \"%2\" as a new list \"%3\""
 msgstr "%1 on kopioinut listan \"%2\" uudeksi listaksi \"%3\""
@@ -5942,7 +5937,7 @@ msgstr "%1 on kopioinut listan \"%2\" uudeksi listaksi \"%3\""
 msgid "List \"%1\" renaming"
 msgstr "Listan \"%1\" uudelleen nimeäminen"
 
-#. (email,old_listname,new_listname)
+#. (email,list.name,new_listname)
 #: ../mail_tt2/listmaster_notification.tt2:23
 msgid "%1 has renamed list \"%2\" to \"%3\""
 msgstr "%1 on muutanut listan nimen \"%2\":sta muotoon \"%3\""
@@ -9246,10 +9241,10 @@ msgstr "%a, %d %b %Y"
 #. This entry is a date/time format
 #. Check the strftime manpage for format details : http://docs.freebsd.org/info/gawk/gawk.info.Time_Functions.html
 #: ../src/lib/List.pm:2996 ../src/lib/List.pm:2997 ../src/lib/List.pm:3001
-#: ../wwsympa/wwsympa.fcgi.in:10986 ../wwsympa/wwsympa.fcgi.in:11055
-#: ../wwsympa/wwsympa.fcgi.in:11257 ../wwsympa/wwsympa.fcgi.in:11594
-#: ../wwsympa/wwsympa.fcgi.in:15502 ../wwsympa/wwsympa.fcgi.in:16232
-#: ../wwsympa/wwsympa.fcgi.in:16233 ../wwsympa/wwsympa.fcgi.in:4803
+#: ../wwsympa/wwsympa.fcgi.in:10985 ../wwsympa/wwsympa.fcgi.in:11054
+#: ../wwsympa/wwsympa.fcgi.in:11256 ../wwsympa/wwsympa.fcgi.in:11593
+#: ../wwsympa/wwsympa.fcgi.in:15501 ../wwsympa/wwsympa.fcgi.in:16231
+#: ../wwsympa/wwsympa.fcgi.in:16232 ../wwsympa/wwsympa.fcgi.in:4803
 #: ../wwsympa/wwsympa.fcgi.in:4804 ../wwsympa/wwsympa.fcgi.in:6227
 #: ../wwsympa/wwsympa.fcgi.in:7245 ../wwsympa/wwsympa.fcgi.in:7788
 #: ../wwsympa/wwsympa.fcgi.in:7828 ../wwsympa/wwsympa.fcgi.in:7830
@@ -9365,14 +9360,14 @@ msgstr ""
 #. This entry is a date/time format
 #. Check the strftime manpage for format details : http://docs.freebsd.org/info/gawk/gawk.info.Time_Functions.html
 #: ../wwsympa/SympaSession.pm:427 ../wwsympa/SympaSession.pm:428
-#: ../wwsympa/wwsympa.fcgi.in:11818 ../wwsympa/wwsympa.fcgi.in:11951
-#: ../wwsympa/wwsympa.fcgi.in:14264 ../wwsympa/wwsympa.fcgi.in:7742
+#: ../wwsympa/wwsympa.fcgi.in:11817 ../wwsympa/wwsympa.fcgi.in:11950
+#: ../wwsympa/wwsympa.fcgi.in:14263 ../wwsympa/wwsympa.fcgi.in:7742
 msgid "%d %b %y  %H:%M"
 msgstr ""
 
 #. This entry is a date/time format
 #. Check the strftime manpage for format details : http://docs.freebsd.org/info/gawk/gawk.info.Time_Functions.html
-#: ../wwsympa/wwsympa.fcgi.in:15872 ../wwsympa/wwsympa.fcgi.in:15873
+#: ../wwsympa/wwsympa.fcgi.in:15871 ../wwsympa/wwsympa.fcgi.in:15872
 msgid "%Y/%m/%d/%H/%M/%S"
 msgstr ""
 
@@ -11748,6 +11743,98 @@ msgstr "et vastaanota lähettämiäsi viestejä"
 #~ msgid "The archive will be sent to you in a separate message.\n"
 #~ msgstr "Arkisto lähetetään sinulle erillisessä viestissä.\n"
 
+# #-#-#-#-#  fi.po (PACKAGE VERSION)  #-#-#-#-#
+# nlsref 16,57
+# nlsref 6,76
+# nlsref 16,72
+# nlsref 15,6
+# nlsref 16,62
+# nlsref 6,262
+# nlsref 6,74
+# nlsref 16,74
+# nlsref 15,14
+# nlsref 1,1
+# nlsref 3,1
+# nlsref 8,3
+# nlsref 8,25
+# nlsref 6,35
+# nlsref 15,7
+# nlsref 15,3
+# nlsref 6,68
+# nlsref 16,73
+# nlsref 16,19
+# nlsref 16,27
+# nlsref 8,2
+# nlsref 16,88
+# nlsref 16,70
+# nlsref 16,86
+# nlsref 4,17
+# nlsref 6,24
+# nlsref 8,24
+# nlsref 6,2
+# nlsref 8,26
+# nlsref 6,5
+# nlsref 6,7
+# nlsref 8,12
+# nlsref 6,52
+# nlsref 5,4
+# nlsref 4,28
+# nlsref 6,56
+# nlsref 8,16
+# nlsref 4,24
+# nlsref 8,22
+# nlsref 6,92
+# nlsref 8,7
+# nlsref 4,27
+# nlsref 6,54
+# nlsref 4,40
+# nlsref 8,1
+# nlsref 6,21
+# nlsref 5,2
+# nlsref 6,260
+# nlsref 6,39
+# nlsref 6,48
+# nlsref 6,47
+# nlsref 6,15
+# nlsref 4,26
+# nlsref 6,61
+# nlsref 6,57
+# nlsref 6,53
+# nlsref 6,41
+# nlsref 6,86
+# nlsref 8,6
+# nlsref 6,77
+# nlsref 6,80
+# nlsref 6,58
+# nlsref 6,38
+# nlsref 6,31
+# nlsref 6,55
+# nlsref 6,79
+# nlsref 4,15
+# nlsref 6,25
+# nlsref 6,18
+# nlsref 6,49
+# nlsref 6,70
+# nlsref 6,60
+# nlsref 16,65
+# nlsref 12,3
+# nlsref 12,2
+# nlsref 12,1
+# nlsref 16,26
+# nlsref 12,4
+# nlsref 6,261
+# nlsref 8,30
+# nlsref 14,1
+# nlsref 14,2
+# nlsref 1,102
+# nlsref 5,1
+# nlsref 6,11
+# nlsref 6,26
+# nlsref 6,27
+# nlsref 6,28
+# nlsref 6,29
+# nlsref 6,32
+# nlsref 6,34
 #, fuzzy
 #~ msgid "email, is your subscriber email address"
 #~ msgstr ", on tilaus osoite"

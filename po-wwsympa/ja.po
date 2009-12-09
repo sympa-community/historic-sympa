@@ -13,10 +13,10 @@
 # , fuzzy
 msgid ""
 msgstr ""
-"Project-Id-Version: Sympa-5.4.6, 6.0a.11\n"
+"Project-Id-Version: Sympa-5.4.6, 6.0\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2007-11-13 14:50+0200\n"
-"PO-Revision-Date: 2009-03-26 17:19+0100\n"
+"PO-Revision-Date: 2009-11-06 12:51+0900\n"
 "Last-Translator: IKEDA Soji <hatuka@nezumi.nu>\n"
 "Language-Team: 日本語\n"
 "MIME-Version: 1.0\n"
@@ -1017,7 +1017,6 @@ msgstr ""
 "をしてください。"
 
 #: ../web_tt2/help_user.tt2:62
-#, fuzzy
 msgid ""
 "<strong>If the unique authentication process does not apply to you, you can "
 "use your list password.</strong> In this case, log on through the classic "
@@ -1025,13 +1024,12 @@ msgid ""
 "list</strong> as a login and your <strong>list password</strong> in the "
 "'Password' field."
 msgstr ""
-"<strong>一括認証の手続きがなく、すでになにかリストに読者登録している、という"
-"とき</strong>は、あなたのリスト用のパスワードを使います。この場合、普通のやり"
-"かたでログインをします。つまり、<strong>自分が読者登録している電子メールアド"
-"レス</strong>と、<strong>リスト用のパスワード</strong>を打ち込みます。"
+"<strong>一括認証の手続きがなければ、あなたのリスト用のパスワードを使います</"
+"strong>。この場合、普通のやりかたでログインをします。つまり、<strong>自分が読"
+"者登録している電子メールアドレス</strong>と、<strong>リスト用のパスワード</"
+"strong>を打ち込みます。"
 
 #: ../web_tt2/help_user.tt2:63
-#, fuzzy
 msgid ""
 "If you do not remember your list password, click on 'Lost password?'. After "
 "you've provided your email address, a mail with a validation URL will be "
@@ -1042,18 +1040,16 @@ msgstr ""
 "URL の入った電子メールが送られてきます。"
 
 #: ../web_tt2/help_user.tt2:65
-#, fuzzy
 msgid ""
 "<strong>If the unique authentication process does not apply to you and you "
 "do no have a list password yet</strong>, click on '<strong>First login?</"
 "strong>' and type in your email address. A confirmation URL will be sent at "
 "that address. Then you will be able to choose your password."
 msgstr ""
-"<strong>一括認証の手続きがなく、リストのパスワードもまだもらっていない</"
-"strong>、というときは、「<strong>まだログインしたことがない</strong>」をク"
-"リックし、自分の電子メールアドレスを打ち込みます。すると、確認用 URL の入った"
-"電子メールがそのアドレスに届きます。そこで、パスワードを決めることができま"
-"す。"
+"<strong>一括認証の手続きがなく、リストのパスワードもまだない</strong>、という"
+"ときは、「<strong>まだログインしたことがない</strong>」をクリックし、自分の電"
+"子メールアドレスを打ち込みます。すると、確認用 URL の入った電子メールがそのア"
+"ドレスに届きます。そこで、パスワードを決めることができます。"
 
 #: ../web_tt2/help_user.tt2:68
 msgid ""
@@ -1455,6 +1451,8 @@ msgid ""
 "<strong>suspended</strong>: this mode allows you to suspend your "
 "subscription to one or more lists for a specified period or not."
 msgstr ""
+"<strong>休止中</strong>: このモードにすると、メッセージの受け取りを一定の期間"
+"休止できます。再開もできます。"
 
 # # "<strong>Référencé dans la liste des abonnés</strong> : vous serez visible "
 # # "dans la liste des abonnés (si l'accès à celle-ci est autorisé)."
@@ -4054,7 +4052,6 @@ msgstr ""
 "ら)。"
 
 #: ../web_tt2/help_editfile.tt2:9
-#, fuzzy
 msgid ""
 "Unsubscribe message: This message is sent when users leave the list\n"
 "using the UNSUBSCRIBE command."
@@ -4063,7 +4060,6 @@ msgstr ""
 "このメッセージを送ります。"
 
 #: ../web_tt2/help_editfile.tt2:13
-#, fuzzy
 msgid ""
 "Deletion message: This message is sent to users when you\n"
 "remove them from the list using the DEL command (unless you hit the\n"
@@ -4074,7 +4070,6 @@ msgstr ""
 "す。"
 
 #: ../web_tt2/help_editfile.tt2:18
-#, fuzzy
 msgid ""
 "Remind message: This message is sent to each subscriber\n"
 "when using the command  REMIND. It's very useful to help people who are\n"
@@ -4088,21 +4083,18 @@ msgstr ""
 "人に便利です。"
 
 #: ../web_tt2/help_editfile.tt2:21
-#, fuzzy
 msgid ""
 "Subscribing invitation message: sent to a person if someone  \n"
 "uses the INVITE command to invite someone to subscribe."
 msgstr ""
 "読者登録に招待するメッセージ: 誰かが INVITE コマンドを使って読者登録に招待す"
-"るときに、招待される人にこのメッセージを送ります。"
+"ると、招待された人にこのメッセージを送ります。"
 
 #: ../web_tt2/help_editfile.tt2:24
-#, fuzzy
 msgid "Other files/pages description:"
 msgstr "その他のファイルやページの説明:"
 
 #: ../web_tt2/help_editfile.tt2:28
-#, fuzzy
 msgid ""
 "List homepage: HTML text to describe the list. It is printed on the\n"
 "right-hand side of the main list page. (default for this is the list "
@@ -4114,7 +4106,6 @@ msgstr ""
 # # "List description : This text is sent as an answer to the mail command\n"
 # # "INFO. It can also be included in the <em>Welcome message</em>."
 #: ../web_tt2/help_editfile.tt2:31
-#, fuzzy
 msgid ""
 "List description: This text is sent as an answer to the mail command\n"
 "INFO. It can also be included in the <em>Welcome message</em>."
@@ -4131,7 +4122,6 @@ msgstr ""
 "セージの先頭にMIME のパートとして追加します。"
 
 #: ../web_tt2/help_editfile.tt2:37
-#, fuzzy
 msgid ""
 "Message footer: same as <em>Message header,</em> but attached at the\n"
 "end of the message."
@@ -4392,14 +4382,12 @@ msgstr ""
 "ないかは吟味役が決定します。"
 
 #: ../web_tt2/help_editlist.tt2:84
-#, fuzzy
 msgid ""
 "FYI: Defining editors will not make the list moderated; you will have to set "
 "the \"send\" parameter."
 msgstr ""
 "参考: 吟味役を決めただけで、リストへの投稿が吟味を受けるようになるわけではあ"
-"りません。\n"
-"\"send\" パラメータを設定しなければなりません。"
+"りません。「send」パラメータを設定しなければなりません。"
 
 #: ../web_tt2/help_editlist.tt2:85
 msgid ""
@@ -7608,7 +7596,6 @@ msgstr ""
 # # "une date ou une heure donnée, par exemple pour contrôler la remise de "
 # # "travaux par des étudiants."
 #: ../web_tt2/help_shared.tt2:102
-#, fuzzy
 msgid "by changing their access rights (read and write);"
 msgstr "アクセス権限 (読み出しと書き込み) を変える。"
 
@@ -8481,5 +8468,7 @@ msgstr ""
 # # "<strong>rejeter le message</strong> ;"
 # # "Attention : le rejet avec notification n'est disponible que via "
 # # "l'interface web du serveur de listes."
+# # "L'option '<strong>Cleartext</strong>' archive le message sous sa forme "
+# # "cryptée originale."
 #~ msgid "value"
 #~ msgstr "値"

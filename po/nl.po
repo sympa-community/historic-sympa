@@ -18,8 +18,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "POT-Creation-Date: 2002-07-16 17:27+0800\n"
-"PO-Revision-Date: 2009-01-24 00:05+0100\n"
-"Last-Translator: Rolf E. Sonneveld <R.E.Sonneveld@sonnection.nl>\n"
+"PO-Revision-Date: 2009-10-23 12:23+0200\n"
+"Last-Translator: Kwadro Naut <kwadronaut@autistici.org>\n"
 "Language-Team: Nederlands\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -143,14 +143,13 @@ msgid "Editor"
 msgstr "Editor"
 
 #: ../web_tt2/login_menu.tt2:17
-#, fuzzy
 msgid "Subscriber"
-msgstr "Abonnees"
+msgstr "Abonnee"
 
 #. (last_login_host)
 #: ../web_tt2/login_menu.tt2:21
 msgid "last login from %1"
-msgstr ""
+msgstr "laatste login van %1"
 
 #: ../web_tt2/login_menu.tt2:36
 msgid "Logout"
@@ -161,9 +160,8 @@ msgid "Your preferences"
 msgstr "Uw voorkeuren"
 
 #: ../web_tt2/your_lists.tt2:7
-#, fuzzy
 msgid "Your Lists"
-msgstr "Lijsten"
+msgstr "Uw lijsten"
 
 #: ../web_tt2/lists.tt2:27 ../web_tt2/your_lists.tt2:13
 msgid "admin"
@@ -271,9 +269,8 @@ msgstr "Eigenaren"
 
 # #-#-#-#-#  nl.po (PACKAGE VERSION)  #-#-#-#-#
 #: ../src/lib/List.pm:622 ../web_tt2/list_panel.tt2:20
-#, fuzzy
 msgid "Moderators"
-msgstr "Moderators"
+msgstr "Beheerders"
 
 #: ../web_tt2/list_panel.tt2:26
 msgid "Load certificate"
@@ -290,9 +287,8 @@ msgid "Casual administration"
 msgstr "Lijst Administratie Paneel"
 
 #: ../web_tt2/admin.tt2:7
-#, fuzzy
 msgid "Edit list config:"
-msgstr "Wijzig lijst configuratie"
+msgstr "Wijzig lijstconfiguratie"
 
 #: ../web_tt2/admin.tt2:7
 #, fuzzy
@@ -4729,7 +4725,7 @@ msgstr "Zoek Gebruiker"
 #. (date_to_formated)
 #. This entry is a date/time format
 #. Check the strftime manpage for format details : http://docs.freebsd.org/info/gawk/gawk.info.Time_Functions.html
-#: ../web_tt2/viewlogs.tt2:113 ../wwsympa/wwsympa.fcgi.in:15927
+#: ../web_tt2/viewlogs.tt2:113 ../wwsympa/wwsympa.fcgi.in:15926
 msgid "%d %b %Y %H:%M:%S"
 msgstr ""
 
@@ -5977,7 +5973,7 @@ msgstr "%1 heeft aanmaak van lijst \"%2\" gevraagd"
 msgid "To activate/delete this mailing list:"
 msgstr "Om deze lijst te activeren/verwijderen :"
 
-#. (email,old_listname,new_listname)
+#. (email,list.name,new_listname)
 #: ../mail_tt2/listmaster_notification.tt2:19
 #, fuzzy
 msgid "%1 has copied list \"%2\" as a new list \"%3\""
@@ -5989,7 +5985,7 @@ msgstr "%1 heeft de naam van lijst \"%2\" veranderd in \"%3\""
 msgid "List \"%1\" renaming"
 msgstr "List \"%1\" creation request"
 
-#. (email,old_listname,new_listname)
+#. (email,list.name,new_listname)
 #: ../mail_tt2/listmaster_notification.tt2:23
 msgid "%1 has renamed list \"%2\" to \"%3\""
 msgstr "%1 heeft de naam van lijst \"%2\" veranderd in \"%3\""
@@ -9157,10 +9153,10 @@ msgstr ""
 #. This entry is a date/time format
 #. Check the strftime manpage for format details : http://docs.freebsd.org/info/gawk/gawk.info.Time_Functions.html
 #: ../src/lib/List.pm:2996 ../src/lib/List.pm:2997 ../src/lib/List.pm:3001
-#: ../wwsympa/wwsympa.fcgi.in:10986 ../wwsympa/wwsympa.fcgi.in:11055
-#: ../wwsympa/wwsympa.fcgi.in:11257 ../wwsympa/wwsympa.fcgi.in:11594
-#: ../wwsympa/wwsympa.fcgi.in:15502 ../wwsympa/wwsympa.fcgi.in:16232
-#: ../wwsympa/wwsympa.fcgi.in:16233 ../wwsympa/wwsympa.fcgi.in:4803
+#: ../wwsympa/wwsympa.fcgi.in:10985 ../wwsympa/wwsympa.fcgi.in:11054
+#: ../wwsympa/wwsympa.fcgi.in:11256 ../wwsympa/wwsympa.fcgi.in:11593
+#: ../wwsympa/wwsympa.fcgi.in:15501 ../wwsympa/wwsympa.fcgi.in:16231
+#: ../wwsympa/wwsympa.fcgi.in:16232 ../wwsympa/wwsympa.fcgi.in:4803
 #: ../wwsympa/wwsympa.fcgi.in:4804 ../wwsympa/wwsympa.fcgi.in:6227
 #: ../wwsympa/wwsympa.fcgi.in:7245 ../wwsympa/wwsympa.fcgi.in:7788
 #: ../wwsympa/wwsympa.fcgi.in:7828 ../wwsympa/wwsympa.fcgi.in:7830
@@ -9273,14 +9269,14 @@ msgstr ""
 #. This entry is a date/time format
 #. Check the strftime manpage for format details : http://docs.freebsd.org/info/gawk/gawk.info.Time_Functions.html
 #: ../wwsympa/SympaSession.pm:427 ../wwsympa/SympaSession.pm:428
-#: ../wwsympa/wwsympa.fcgi.in:11818 ../wwsympa/wwsympa.fcgi.in:11951
-#: ../wwsympa/wwsympa.fcgi.in:14264 ../wwsympa/wwsympa.fcgi.in:7742
+#: ../wwsympa/wwsympa.fcgi.in:11817 ../wwsympa/wwsympa.fcgi.in:11950
+#: ../wwsympa/wwsympa.fcgi.in:14263 ../wwsympa/wwsympa.fcgi.in:7742
 msgid "%d %b %y  %H:%M"
 msgstr ""
 
 #. This entry is a date/time format
 #. Check the strftime manpage for format details : http://docs.freebsd.org/info/gawk/gawk.info.Time_Functions.html
-#: ../wwsympa/wwsympa.fcgi.in:15872 ../wwsympa/wwsympa.fcgi.in:15873
+#: ../wwsympa/wwsympa.fcgi.in:15871 ../wwsympa/wwsympa.fcgi.in:15872
 msgid "%Y/%m/%d/%H/%M/%S"
 msgstr ""
 
@@ -9317,9 +9313,8 @@ msgid "listed in the list review page"
 msgstr ""
 
 #: ../wwsympa/wwslib.pm:50
-#, fuzzy
 msgid "concealed"
-msgstr "niet verbergen"
+msgstr "verborgen"
 
 #: ../wwsympa/wwslib.pm:54
 msgid "welcome message"

@@ -15,14 +15,14 @@ msgstr ""
 "Project-Id-Version: sympa\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
 "POT-Creation-Date: 2007-11-13 14:50+0200\n"
-"PO-Revision-Date: 2009-10-16 14:11+0200\n"
+"PO-Revision-Date: 2009-10-21 11:31+0200\n"
 "Last-Translator: Serguei S. Dukachev <iam@dukess.ru>\n"
 "Language-Team: Russian <ru@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && "
-"n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
+"Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n%"
+"10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
 "X-Generator: Pootle 1.0.2\n"
 "X-Rosetta-Version: 0.1\n"
 
@@ -38,7 +38,8 @@ msgstr "В этой документации Вы найдёте:"
 #: ../web_tt2/help.tt2:15
 msgid ""
 "a <a href=\"%1/help/introduction\">general introduction</a> to mailing lists;"
-msgstr "<a href=\"%1/help/introduction\">введение в основы</a> списков рассылки;"
+msgstr ""
+"<a href=\"%1/help/introduction\">введение в основы</a> списков рассылки;"
 
 #. (path_cgi)
 #: ../web_tt2/help.tt2:16
@@ -70,11 +71,10 @@ msgid ""
 "to the <a href=\"%1/help/faqadmin\">administrators <acronym title="
 "\"Frequently asked questions\">FAQ</acronym></a>."
 msgstr ""
-"Если Вы столкнулись с проблемами, ознакомьтесь с <a "
-"href=\"%1/help/faquser\">пользовательским  <acronym title=\"Часто задаваемые "
-"Вопросы\">ЧаВо</acronym></a> или с <a "
-"href=\"%1/help/faqadmin\">администраторским <acronym title=\"Часто задаваемые "
-"Вопросы\">ЧаВо</acronym></</a>."
+"Если Вы столкнулись с проблемами, ознакомьтесь с <a href=\"%1/help/faquser"
+"\">пользовательским  <acronym title=\"Часто задаваемые Вопросы\">ЧаВо</"
+"acronym></a> или с <a href=\"%1/help/faqadmin\">администраторским <acronym "
+"title=\"Часто задаваемые Вопросы\">ЧаВо</acronym></</a>."
 
 #: ../web_tt2/help_introduction.tt2:3
 msgid "Mailing lists - General introduction"
@@ -357,58 +357,67 @@ msgstr ""
 
 #: ../web_tt2/help_introduction.tt2:69
 msgid "A mailing list service involves four types of roles:"
-msgstr ""
+msgstr "Сервис списков рассылки использует четыре типа ролей:"
 
 #: ../web_tt2/help_introduction.tt2:71
 msgid "<strong>listmaster;</strong>"
-msgstr ""
+msgstr "<strong>глобальный администратор;</strong>"
 
 #: ../web_tt2/help_introduction.tt2:72
 msgid "<strong>owner;</strong>"
-msgstr ""
+msgstr "<strong>владелец;</strong>"
 
 #: ../web_tt2/help_introduction.tt2:73
 msgid "<strong>moderator;</strong>"
-msgstr ""
+msgstr "<strong>модератор;</strong>"
 
 #: ../web_tt2/help_introduction.tt2:74
 msgid "<strong>subscriber.</strong>"
-msgstr ""
+msgstr "<strong>подписчик.</strong>"
 
 #: ../web_tt2/help_introduction.tt2:76
 msgid ""
 "It is possible to have several roles at once (for example, you can be an "
 "owner and a moderator of a list and be subscribed to several others)."
 msgstr ""
+"Возможно совмещение нескольких ролей (например, Вы можете быть владельцем и "
+"модератором одного списка рассылки и подписчиком в нескольких других)"
 
 #: ../web_tt2/help_introduction.tt2:78
 msgid "Listmasters"
-msgstr ""
+msgstr "Глобальные администраторы"
 
 #: ../web_tt2/help_introduction.tt2:79
 msgid ""
 "Listmasters are in charge of the <strong>management of the mailing list "
 "service</strong>. Their duties:"
 msgstr ""
+"Глобальные администраторы возглавляют <strong>управление службой списков "
+"рассылки</strong>. Их задачи: "
 
 #: ../web_tt2/help_introduction.tt2:81
 msgid ""
 "<strong>manage the mailing list server</strong> (deployment, maintenance, "
 "etc.);"
 msgstr ""
+"<strong>управление сервером списков рассылки</strong> (разработка, "
+"обслуживание, и так далее);"
 
 #: ../web_tt2/help_introduction.tt2:82
 msgid ""
 "<strong>define the general orientations of the mailing list service</strong>:"
 msgstr ""
+"<strong>определение основных направлений службы списков рассылки</strong>:"
 
 #: ../web_tt2/help_introduction.tt2:84
 msgid "who will be allowed to ask for the creation of a new list,"
-msgstr ""
+msgstr "кому может быть разрешено запрашивать создание списков рассылки,"
 
 #: ../web_tt2/help_introduction.tt2:85
 msgid "which options will be available to manage lists (scenario definition),"
 msgstr ""
+"какие настройки будут доступны для управления списками рассылки (определение "
+"сценариев),"
 
 #: ../web_tt2/help_introduction.tt2:86
 msgid "what the default files will contain (creation of templates),"
@@ -574,11 +583,11 @@ msgstr ""
 
 #: ../web_tt2/help_user.tt2:3
 msgid "Mailing lists - User Guide"
-msgstr ""
+msgstr "Списки рассылки - руководство пользователя"
 
 #: ../web_tt2/help_user.tt2:5
 msgid "How the mailing list service works"
-msgstr ""
+msgstr "Как работает служба списков рассылок"
 
 #: ../web_tt2/help_user.tt2:6
 msgid ""

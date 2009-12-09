@@ -17,8 +17,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: sympa-es\n"
 "POT-Creation-Date: 2002-07-16 17:27+0800\n"
-"PO-Revision-Date: 2009-09-11 13:07+0200\n"
-"Last-Translator: Alfonso Marin <amm44@alu.um.es>\n"
+"PO-Revision-Date: 2009-11-02 19:00+0100\n"
+"Last-Translator: Armando Ramos <armando@plural.net>\n"
 "Language-Team: Español <sympa-users@sympa.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -26,9 +26,8 @@ msgstr ""
 "X-Generator: Pootle 1.0.2\n"
 
 #: ../web_tt2/home.tt2:2
-#, fuzzy
 msgid "Mailing lists server"
-msgstr "Categorías de listas de correo"
+msgstr "Servidor de listas de correo"
 
 #. (conf.email,conf.host)
 #: ../web_tt2/home.tt2:4
@@ -37,10 +36,9 @@ msgid ""
 "from this web page, you can perform subscription options, unsubscription, "
 "archive, list moderation, list configuration."
 msgstr ""
-"Este servidor permite acceder a tu entorno de listas de correo en %1@%2. A "
-"través de esta página, puedes definir tus opciones de suscripción, darte de "
-"baja o de alta, acceder a los archivos de listas, administrar las listas que "
-"manejas, etc."
+"Este servidor te permite acceder a tu entorno de listas de correo. A través "
+"de esta página, puedes modificar tus opciones de suscripción, darte de baja "
+"o de alta, acceder a los archivos, moderar las listas o configurarlas."
 
 #: ../web_tt2/home.tt2:7
 msgid "Mailing lists categories"
@@ -54,10 +52,11 @@ msgstr "Otros"
 msgid "RSS news"
 msgstr "Noticias RSS"
 
+# "Ingresar" tiene connotaciones médicas en España 
 #. (user.email)
 #: ../web_tt2/login.tt2:3
 msgid "You have logged in with email address %1"
-msgstr "Ingresaste con la dirección de correo %1"
+msgstr "Has entrado con la dirección de correo %1"
 
 #: ../web_tt2/main.tt2:27
 msgid "RSS Latest messages"
@@ -4663,7 +4662,7 @@ msgstr "Período explorado:"
 #. (date_to_formated)
 #. This entry is a date/time format
 #. Check the strftime manpage for format details : http://docs.freebsd.org/info/gawk/gawk.info.Time_Functions.html
-#: ../web_tt2/viewlogs.tt2:113 ../wwsympa/wwsympa.fcgi.in:15927
+#: ../web_tt2/viewlogs.tt2:113 ../wwsympa/wwsympa.fcgi.in:15926
 msgid "%d %b %Y %H:%M:%S"
 msgstr "%d %b %Y %H:%M:%S"
 
@@ -5858,7 +5857,7 @@ msgstr "%1 requiere la creación de la lista \"%2\""
 msgid "To activate/delete this mailing list:"
 msgstr "Para activar/borrar esta lista de correo :"
 
-#. (email,old_listname,new_listname)
+#. (email,list.name,new_listname)
 #: ../mail_tt2/listmaster_notification.tt2:19
 msgid "%1 has copied list \"%2\" as a new list \"%3\""
 msgstr "%1 copió la lista \"%2\" como nueva lista \"%3\""
@@ -5868,7 +5867,7 @@ msgstr "%1 copió la lista \"%2\" como nueva lista \"%3\""
 msgid "List \"%1\" renaming"
 msgstr "renombramiento de la lista \"%1\""
 
-#. (email,old_listname,new_listname)
+#. (email,list.name,new_listname)
 #: ../mail_tt2/listmaster_notification.tt2:23
 msgid "%1 has renamed list \"%2\" to \"%3\""
 msgstr "%1 renombró la lista \"%2 a %3\""
@@ -8993,10 +8992,10 @@ msgstr "%a, %d/%b/%Y"
 #. This entry is a date/time format
 #. Check the strftime manpage for format details : http://docs.freebsd.org/info/gawk/gawk.info.Time_Functions.html
 #: ../src/lib/List.pm:2996 ../src/lib/List.pm:2997 ../src/lib/List.pm:3001
-#: ../wwsympa/wwsympa.fcgi.in:10986 ../wwsympa/wwsympa.fcgi.in:11055
-#: ../wwsympa/wwsympa.fcgi.in:11257 ../wwsympa/wwsympa.fcgi.in:11594
-#: ../wwsympa/wwsympa.fcgi.in:15502 ../wwsympa/wwsympa.fcgi.in:16232
-#: ../wwsympa/wwsympa.fcgi.in:16233 ../wwsympa/wwsympa.fcgi.in:4803
+#: ../wwsympa/wwsympa.fcgi.in:10985 ../wwsympa/wwsympa.fcgi.in:11054
+#: ../wwsympa/wwsympa.fcgi.in:11256 ../wwsympa/wwsympa.fcgi.in:11593
+#: ../wwsympa/wwsympa.fcgi.in:15501 ../wwsympa/wwsympa.fcgi.in:16231
+#: ../wwsympa/wwsympa.fcgi.in:16232 ../wwsympa/wwsympa.fcgi.in:4803
 #: ../wwsympa/wwsympa.fcgi.in:4804 ../wwsympa/wwsympa.fcgi.in:6227
 #: ../wwsympa/wwsympa.fcgi.in:7245 ../wwsympa/wwsympa.fcgi.in:7788
 #: ../wwsympa/wwsympa.fcgi.in:7828 ../wwsympa/wwsympa.fcgi.in:7830
@@ -9121,14 +9120,14 @@ msgstr "%H:%M:%S"
 #. This entry is a date/time format
 #. Check the strftime manpage for format details : http://docs.freebsd.org/info/gawk/gawk.info.Time_Functions.html
 #: ../wwsympa/SympaSession.pm:427 ../wwsympa/SympaSession.pm:428
-#: ../wwsympa/wwsympa.fcgi.in:11818 ../wwsympa/wwsympa.fcgi.in:11951
-#: ../wwsympa/wwsympa.fcgi.in:14264 ../wwsympa/wwsympa.fcgi.in:7742
+#: ../wwsympa/wwsympa.fcgi.in:11817 ../wwsympa/wwsympa.fcgi.in:11950
+#: ../wwsympa/wwsympa.fcgi.in:14263 ../wwsympa/wwsympa.fcgi.in:7742
 msgid "%d %b %y  %H:%M"
 msgstr "%d %b %y    %H:%M"
 
 #. This entry is a date/time format
 #. Check the strftime manpage for format details : http://docs.freebsd.org/info/gawk/gawk.info.Time_Functions.html
-#: ../wwsympa/wwsympa.fcgi.in:15872 ../wwsympa/wwsympa.fcgi.in:15873
+#: ../wwsympa/wwsympa.fcgi.in:15871 ../wwsympa/wwsympa.fcgi.in:15872
 #, fuzzy
 msgid "%Y/%m/%d/%H/%M/%S"
 msgstr "%Y/%m/%d/%H/%M/%S"
@@ -9262,14 +9261,12 @@ msgid "notice mode"
 msgstr "modo de notificación"
 
 #: ../wwsympa/wwslib.pm:33
-#, fuzzy
 msgid "text-only mode"
 msgstr "modo sólo texto "
 
 #: ../wwsympa/wwslib.pm:34
-#, fuzzy
 msgid "html-only mode"
-msgstr "modo HTML únicamente"
+msgstr "modo sólo HTML"
 
 #: ../wwsympa/wwslib.pm:35
 msgid "urlize mode"
