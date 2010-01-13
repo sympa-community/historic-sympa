@@ -198,10 +198,9 @@ AC_ARG_WITH(
     localedir,
     AS_HELP_STRING(
 	[--with-localedir=DIR],
-	[obsolete option, use --localedir instead]
+	[Internationalization catalogues directory @<:@LOCALSTATEDIR/locale@:>@]
     ),
     [
-     AC_MSG_WARN([obsolete --with-localedir option used])
      localedir="$withval"
     ]
 )
@@ -222,10 +221,9 @@ AC_ARG_WITH(
     docdir,
     AS_HELP_STRING(
 	[--with-docdir=DIR],
-	[obsolete option, use --docdir instead]
+	[man files]
     ),
     [
-	AC_MSG_WARN([obsolete --with-docdir option used])
 	docdir="$withval"
     ]
 )
