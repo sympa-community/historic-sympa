@@ -998,7 +998,7 @@ sub probe_db {
  	}
 	
  	foreach my $t (@tables) {
- 	    $t =~ s/^\"(.+)\"$/$1/;
+	    $t =~ s/^.*\"([^"]+)\"$/$1/;
  	}
 	
 	foreach my $t (@tables) {
