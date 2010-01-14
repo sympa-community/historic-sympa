@@ -12,7 +12,7 @@ msgstr ""
 "Project-Id-Version: Sympa-5.4.6, Sympa-6.0, Sympa-6.1a.1\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2002-07-16 17:27+0800\n"
-"PO-Revision-Date: 2009-12-07 14:02+0100\n"
+"PO-Revision-Date: 2009-12-15 08:22+0100\n"
 "Last-Translator: IKEDA Soji <hatuka@nezumi.nu>\n"
 "Language-Team: 日本語\n"
 "MIME-Version: 1.0\n"
@@ -863,7 +863,7 @@ msgstr "メールボックスの新着メールを確認してください。"
 
 #: ../web_tt2/change_email.tt2:3
 msgid "You will receive a n email, with a confirmation link."
-msgstr "確認リンクの入った電子メールをお送りします。"
+msgstr "確認用リンクの入った電子メールをお送りします。"
 
 #: ../web_tt2/change_email.tt2:4
 msgid ""
@@ -1720,7 +1720,7 @@ msgstr "ピクチャ: "
 
 #: ../web_tt2/editsubscriber.tt2:41
 msgid "Changing your picture for this list"
-msgstr "このリストでのピクチャを変更します"
+msgstr "このリストでのピクチャを変更"
 
 #: ../web_tt2/editsubscriber.tt2:61
 msgid "Unsubscribe the User"
@@ -2143,9 +2143,7 @@ msgstr "'%1' というリストはすでにあります"
 #. (u_err.new_listname)
 #: ../web_tt2/error.tt2:94
 msgid "Incorrect listname '%1': matches one of service aliases"
-msgstr ""
-"'%1' というリスト名は正しくありません。サービス用のエイリアス名と合致してしま"
-"います"
+msgstr "'%1' というリスト名は正しくありません。サービス用のエイリアス名と重複してしまいます"
 
 #. (u_err.listname)
 #: ../web_tt2/error.tt2:95
@@ -3545,13 +3543,15 @@ msgstr "この設定族に入っているリストの一覧を参照"
 msgid "Search User"
 msgstr "人を探す"
 
+# 仮訳です。
 #: ../web_tt2/serveradmin.tt2:69
 msgid "Delay for active sessions (minutes)"
-msgstr "セッションを待つ時間 (分)"
+msgstr "何分前のセッションまで表示するか"
 
+# 仮訳です。
 #: ../web_tt2/serveradmin.tt2:71
 msgid "Show only connected users"
-msgstr "接続している人だけ表示"
+msgstr "ログインした人だけ表示"
 
 #: ../web_tt2/serveradmin.tt2:73
 msgid "Show sessions"
@@ -4972,7 +4972,7 @@ msgstr "次のコマンドが失敗しました:"
 
 #: ../mail_tt2/command_report.tt2:90
 msgid "Command not understood: ignoring end of message."
-msgstr "コマンドの意味がわかりません: メッセージの残りは無視します。"
+msgstr "コマンドの意味がわかりません。メッセージの残りは無視します。"
 
 #: ../mail_tt2/command_report.tt2:94
 msgid ""
@@ -5649,7 +5649,7 @@ msgstr "データベースがありません"
 #. (db_name)
 #: ../mail_tt2/listmaster_notification.tt2:32
 msgid "Cannot connect to database %1, still trying..."
-msgstr "データベース %1 に接続できない...そのままもう少し待ってて..."
+msgstr "データベース %1 に接続できない...再試行中..."
 
 #. (db_type)
 #: ../mail_tt2/listmaster_notification.tt2:36
@@ -5869,8 +5869,7 @@ msgid ""
 "Sympa could not include admins from external data sources; the database or "
 "LDAP directory might be unreachable."
 msgstr ""
-"Sympaは外部データソースから管理情報を取り込むことができませんでした。データ"
-"ベースもしくはLDAPディレクトリへ接続できなかったようです。"
+"Sympaは外部データソースから管理者情報を取り込むことができませんでした。データベースもしくはLDAPディレクトリへ接続できなかったようです。"
 
 #. (param0)
 #: ../mail_tt2/listmaster_notification.tt2:169
@@ -8412,11 +8411,11 @@ msgstr "メッセージを分類するトピック"
 
 #: ../src/lib/List.pm:1087
 msgid "Defines to which part of messages topic keywords are applied"
-msgstr "メッセージのどの部分でトピックのキーワードを試すか決める"
+msgstr "メッセージのどの部分でトピックのキーワードを探すかの決定"
 
 #: ../src/lib/List.pm:1094
 msgid "Message tagging"
-msgstr "メッセージにトピックの印をつける"
+msgstr "メッセージへのトピックの印づけ"
 
 #: ../src/lib/List.pm:1126 ../src/lib/List.pm:1156
 msgid "profile"
