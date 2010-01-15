@@ -2545,12 +2545,11 @@ sub distribute_msg {
 	## The custom subject is not kept.
 	my $before_tag = '';
 	my $after_tag = $subject_field;
-	$after_tag =~ s/.*\[$tag_regexp\]//;
+	$after_tag =~ s/.*\[$tag_regexp\]\s*//;
+        $after_tag =~ s/\s*$//;
 
-	if($subject_field =~ /(.*)\s*\[$tag_regexp\](.*)/) {
+        if($subject_field =~ /(.*)\s*\[$tag_regexp\].*/) {
 	    $before_tag = $1;
-	    $after_tag = $2;
-	    $after_tag =~ s/^\s*(.*)\s*$/$1/; ## Remove leading and trailing blanks
 	}
 	
  	## Encode subject using initial charset
