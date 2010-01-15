@@ -1,4 +1,4 @@
- Upgrade.pm - This module gathers all subroutines used to upgrade Sympa data structures
+# Upgrade.pm - This module gathers all subroutines used to upgrade Sympa data structures
 #<!-- RCS Identication ; $Revision$ --> 
 
 #
