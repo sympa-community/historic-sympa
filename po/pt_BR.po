@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: sympa\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
 "POT-Creation-Date: 2002-07-16 17:27+0800\n"
-"PO-Revision-Date: 2009-02-07 08:04+0100\n"
+"PO-Revision-Date: 2010-01-20 11:25+0100\n"
 "Last-Translator: Jack Austin <jaque@texas.net>\n"
 "Language-Team: Portuguese (Brazil) <pt_BR@li.org>\n"
 "MIME-Version: 1.0\n"
@@ -27,16 +27,11 @@ msgstr "Categorias de listas de emails"
 
 # by PEMA 2007-05-07
 #: ../web_tt2/home.tt2:4
-#, fuzzy
 msgid ""
 "This server provides you access to your mailing list environment. Starting "
 "from this web page, you can perform subscription options, unsubscription, "
-"archive, list moderation, list configuration, etc."
-msgstr ""
-"Este sítio fornece acesso à sua área de trabalho no servidor de listas %1@%"
-"2. A partir deste endereço web, você pode editar suas opções de inscrições "
-"em listas de discussão, se desincrever, gerenciar suas listas e solicitar "
-"outros serviços."
+"archive, list moderation, list configuration."
+msgstr "Este sítio fornece acesso à sua área de trabalho no servidor de listas. A partir deste endereço web, você pode editar suas opções de inscrições em listas de discussão, se desincrever, gerenciar suas listas e solicitar outros serviços."
 
 #: ../web_tt2/home.tt2:7
 msgid "Mailing lists categories"

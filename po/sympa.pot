@@ -20,7 +20,7 @@ msgid "Mailing lists server"
 msgstr ""
 
 #: ../web_tt2/home.tt2:4
-msgid "This server provides you access to your mailing list environment. Starting from this web page, you can perform subscription options, unsubscription, archive, list moderation, list configuration, etc."
+msgid "This server provides you access to your mailing list environment. Starting from this web page, you can perform subscription options, unsubscription, archive, list moderation, list configuration."
 msgstr ""
 
 #: ../web_tt2/home.tt2:7
