@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Sympa 6.0\n"
 "POT-Creation-Date: 2002-07-16 17:27+0800\n"
-"PO-Revision-Date: 2009-12-02 14:48+0100\n"
+"PO-Revision-Date: 2010-01-20 17:03+0100\n"
 "Last-Translator: Marcin Wołoszyn <marcin.woloszyn@us.edu.pl>\n"
 "Language-Team: Polish\n"
 "MIME-Version: 1.0\n"
@@ -23,16 +23,11 @@ msgid "Mailing lists server"
 msgstr "Serwer list mailingowych"
 
 #: ../web_tt2/home.tt2:4
-#, fuzzy
 msgid ""
 "This server provides you access to your mailing list environment. Starting "
 "from this web page, you can perform subscription options, unsubscription, "
 "archive, list moderation, list configuration."
-msgstr ""
-"Ten serwer umożliwia Ci dostęp do Twojego środowiska list mailingowych %1@%"
-"2. Z tej strony możesz wykonywać takie operacje jak zmiana parametrów "
-"subskrypcji, wypisywać się z list, przeglądać archiwa list czy zarządzać "
-"listami."
+msgstr "Ten serwer umożliwia Ci dostęp do Twojego środowiska list mailingowych. Z tej strony możesz wykonywać takie operacje jak zmiana parametrów subskrypcji, wypisywać się z list, przeglądać archiwa list czy zarządzać listami."
 
 #: ../web_tt2/home.tt2:7
 msgid "Mailing lists categories"

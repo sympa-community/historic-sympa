@@ -10,7 +10,7 @@ msgstr ""
 "Project-Id-Version: nb\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
 "POT-Creation-Date: 2002-07-16 17:27+0800\n"
-"PO-Revision-Date: 2010-01-20 11:26+0100\n"
+"PO-Revision-Date: 2010-01-20 17:03+0100\n"
 "Last-Translator: Ingar <iv+sympa@usit.uio.no>\n"
 "Language-Team: Bokmål <en@li.org>\n"
 "MIME-Version: 1.0\n"
@@ -25,7 +25,6 @@ msgid "Mailing lists server"
 msgstr "E-postlistekategorier"
 
 #: ../web_tt2/home.tt2:4
-#, fuzzy
 msgid ""
 "This server provides you access to your mailing list environment. Starting "
 "from this web page, you can perform subscription options, unsubscription, "

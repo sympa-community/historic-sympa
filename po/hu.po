@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: hu\n"
 "POT-Creation-Date: 2002-07-16 17:27+0800\n"
-"PO-Revision-Date: 2009-11-04 10:59+0100\n"
+"PO-Revision-Date: 2010-01-20 17:04+0100\n"
 "Last-Translator: Akos <nakos60@yahoo.com>\n"
 "Language-Team: Magyar\n"
 "MIME-Version: 1.0\n"
@@ -22,7 +22,6 @@ msgid "Mailing lists server"
 msgstr "Levelezési lista kategóriák"
 
 #: ../web_tt2/home.tt2:4
-#, fuzzy
 msgid ""
 "This server provides you access to your mailing list environment. Starting "
 "from this web page, you can perform subscription options, unsubscription, "

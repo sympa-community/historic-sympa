@@ -12,7 +12,7 @@ msgstr ""
 "Project-Id-Version: Sympa-5.4.6, Sympa-6.0, Sympa-6.1a.1\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2002-07-16 17:27+0800\n"
-"PO-Revision-Date: 2010-01-20 11:27+0100\n"
+"PO-Revision-Date: 2010-01-20 17:04+0100\n"
 "Last-Translator: IKEDA Soji <hatuka@nezumi.nu>\n"
 "Language-Team: 日本語\n"
 "MIME-Version: 1.0\n"
@@ -25,7 +25,6 @@ msgid "Mailing lists server"
 msgstr "メーリングリストのサーバ"
 
 #: ../web_tt2/home.tt2:4
-#, fuzzy
 msgid ""
 "This server provides you access to your mailing list environment. Starting "
 "from this web page, you can perform subscription options, unsubscription, "

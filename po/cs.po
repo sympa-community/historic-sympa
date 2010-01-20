@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: 5.0\n"
 "POT-Creation-Date: 2002-07-16 17:27+0800\n"
-"PO-Revision-Date: 2010-01-20 11:28+0100\n"
+"PO-Revision-Date: 2010-01-20 17:05+0100\n"
 "Last-Translator: Ludek Mokry <ludek@mokry.cz>\n"
 "Language-Team: Czech\n"
 "MIME-Version: 1.0\n"
@@ -21,7 +21,6 @@ msgid "Mailing lists server"
 msgstr "Konference"
 
 #: ../web_tt2/home.tt2:4
-#, fuzzy
 msgid ""
 "This server provides you access to your mailing list environment. Starting "
 "from this web page, you can perform subscription options, unsubscription, "

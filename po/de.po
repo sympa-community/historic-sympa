@@ -7,7 +7,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: Jens Krehbiel-Graether <jens.krehbiel-graether@okg-"
 "computer.de>\n"
 "POT-Creation-Date: 2002-07-16 17:27+0800\n"
-"PO-Revision-Date: 2009-10-19 09:51+0200\n"
+"PO-Revision-Date: 2010-01-20 17:01+0100\n"
 "Last-Translator: Matthias Warkus <warkusm@hrz.uni-marburg.de>\n"
 "Language-Team: Deutsch\n"
 "MIME-Version: 1.0\n"
@@ -19,7 +19,6 @@ msgid "Mailing lists server"
 msgstr "Listenserver"
 
 #: ../web_tt2/home.tt2:4
-#, fuzzy
 msgid ""
 "This server provides you access to your mailing list environment. Starting "
 "from this web page, you can perform subscription options, unsubscription, "
