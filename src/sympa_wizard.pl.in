@@ -485,7 +485,7 @@ sub check_cpan {
 						usage => 'used while checking the RDBMS buffer size',
 					       },
 			'Time::HiRes' => {
-					  required_version =>'1.9719',
+					  required_version =>'1.29',
 					  package_name => 'Time-HiRes',
 					  mandatory => 1,
 					  usage => 'used by sympa.pl --test_database_message_buffer to test database performances',
