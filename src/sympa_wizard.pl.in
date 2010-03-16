@@ -338,7 +338,7 @@ sub check_cpan {
 					  usage => 'Sybase database driver, required if you connect to a Sybase database.',
 					 },
 			'DBD::mysql' => {
-					 required_version =>'2.0407',
+					 required_version =>'4.008',
 					 prerequisites => 'mysql-devel and myslq-server. mysql should be running for make test to succeed',
 					 package_name => 'Msql-Mysql-modules',
 					 mandatory => 1,
