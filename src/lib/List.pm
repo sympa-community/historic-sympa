@@ -7439,12 +7439,12 @@ sub _include_users_file {
     do_log('debug2','including file %s' , $filename);
 
     my $id = Datasource::_get_datasource_id($filename);
+    my $email_regexp = &tools::get_regexp('email');
     
     while (<INCLUDE>) {
 	next if /^\s*$/;
 	next if /^\s*\#/;
 
-	my $email_regexp = &tools::get_regexp('email');
 	unless (/^\s*($email_regexp)(\s*(\S.*))?\s*$/) {
 	    &do_log('notice', 'Not an email address: %s', $_);
 	}
