@@ -7513,13 +7513,13 @@ sub _include_users_remote_file {
     # check the outcome
     if ($res->is_success) {
 	my @remote_file = split(/\n/,$res->content);
+	my $email_regexp = &tools::get_regexp('email');
 
 	# forgot headers (all line before one that contain a email
 	foreach my $line (@remote_file) {
 	    next if ($line =~ /^\s*$/);
 	    next if ($line =~ /^\s*\#/);
 
-	    my $email_regexp = &tools::get_regexp('email');
 	    unless ( $line =~ /^\s*($email_regexp)(\s*(\S.*))?\s*$/) {
 		&do_log('err', 'Not an email address: %s', $_);
 	    }     
