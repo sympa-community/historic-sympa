@@ -7,7 +7,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2002-07-16 17:27+0800\n"
-"PO-Revision-Date: 2010-01-20 17:02+0100\n"
+"PO-Revision-Date: 2010-03-10 10:36+0100\n"
 "Last-Translator: Clytie Siddall <clytie@riverland.net.au>\n"
 "Language-Team: Vietnamese <LL@li.org>\n"
 "MIME-Version: 1.0\n"
@@ -17,10 +17,10 @@ msgstr ""
 "X-Generator: Pootle 1.0.2\n"
 
 #: ../web_tt2/home.tt2:2
-#, fuzzy
 msgid "Mailing lists server"
-msgstr "Loại hộp thư chung"
+msgstr "Máy phục vụ hộp thư chung"
 
+#. (conf.email,conf.host)
 #: ../web_tt2/home.tt2:4
 msgid ""
 "This server provides you access to your mailing list environment. Starting "
@@ -111,7 +111,6 @@ msgid "Listmaster"
 msgstr "Chủ hộp thư chung"
 
 #: ../web_tt2/login_menu.tt2:14
-#, fuzzy
 msgid "Privileged owner"
 msgstr "Người sở hữu có quyền đặc biệt"
 
@@ -120,20 +119,17 @@ msgid "Owner"
 msgstr "Người sở hữu"
 
 #: ../web_tt2/login_menu.tt2:16
-#, fuzzy
 msgid "Editor"
 msgstr "Người biên soạn"
 
 #: ../web_tt2/login_menu.tt2:17
-#, fuzzy
 msgid "Subscriber"
 msgstr "Người đăng ký"
 
 #. (last_login_host)
 #: ../web_tt2/login_menu.tt2:21
-#, fuzzy
 msgid "last login from %1"
-msgstr "đăng nhập cuối từ %1 (%2)"
+msgstr "đăng nhập cuối từ %1"
 
 #: ../web_tt2/login_menu.tt2:36
 msgid "Logout"
@@ -239,7 +235,6 @@ msgid "Subscribers:"
 msgstr "Người đăng ký:"
 
 #: ../web_tt2/list_panel.tt2:12
-#, fuzzy
 msgid "Error rate:"
 msgstr "Tỷ lệ lỗi:"
 
@@ -264,32 +259,28 @@ msgid "Casual administration"
 msgstr "Quản trị thân mặt"
 
 #: ../web_tt2/admin.tt2:7
-#, fuzzy
 msgid "Edit list config:"
-msgstr "Sửa cấu hình hộp thư"
+msgstr "Sửa cấu hình hộp thư chung:"
 
 #: ../web_tt2/admin.tt2:7
-#, fuzzy
 msgid ""
 "Use it with care: it allows you to modify some of the list parameters. The "
 "list of the parameters you can modify depends on your privileges."
 msgstr ""
 "Hãy sử dụng cẩn thận: nó cho phép bạn sửa đổi một số tham số về hộp thư "
-"chung (phụ thuộc vào quyền hạn)."
+"chung (phụ thuộc vào quyền truy cập)."
 
 #: ../web_tt2/admin.tt2:9
-#, fuzzy
 msgid "Customizing: "
-msgstr "Tùy chỉnh"
+msgstr "Đang tùy chỉnh:"
 
 #: ../web_tt2/admin.tt2:9
 msgid "Editing of various files and messages attached to your list."
 msgstr "Chỉnh sửa các tập tin và bài viết liên quan đến hộp thư chung này."
 
 #: ../web_tt2/admin.tt2:10
-#, fuzzy
 msgid "Manage subscribers:"
-msgstr "Quản lý người đăng ký"
+msgstr "Quản lý người đăng ký:"
 
 #: ../web_tt2/admin.tt2:10
 msgid ""
@@ -298,36 +289,32 @@ msgid ""
 msgstr "Cho phép bạn thêm hay xoá người đăng ký, điều tiết sự đăng ký v.v."
 
 #: ../web_tt2/admin.tt2:12
-#, fuzzy
 msgid "Blacklist:"
-msgstr "Danh sách cấm"
+msgstr "Danh sách cấm:"
 
 #: ../web_tt2/admin.tt2:12
 msgid "Handles the set of black-listed mail addresses for this list."
 msgstr "Quản lý tập hợp các địa chỉ thư bị cấm đối với hộp thư chung này."
 
 #: ../web_tt2/admin.tt2:15
-#, fuzzy
 msgid "Manage archives:"
-msgstr "Quản lý kho thư"
+msgstr "Quản lý kho thư :"
 
 #: ../web_tt2/admin.tt2:15
 msgid "Allows you to download and delete list archives."
 msgstr "Cho phép bạn tải xuống và xoá kho lưu của hộp thư chung."
 
 #: ../web_tt2/admin.tt2:18
-#, fuzzy
 msgid "Bounces:"
-msgstr "Nảy về"
+msgstr "Nảy về:"
 
 #: ../web_tt2/admin.tt2:18
 msgid "Manages non-delivery reports (also called bounces)."
 msgstr "Quản lý các báo cáo không phát được (cũng được gọi là « nảy về »)."
 
 #: ../web_tt2/admin.tt2:21
-#, fuzzy
 msgid "Logs:"
-msgstr "Bản ghi"
+msgstr "Sổ theo dõi:"
 
 #: ../web_tt2/admin.tt2:21
 msgid "A tool for exploring the list logs."
@@ -344,7 +331,6 @@ msgstr "Phục hồi hộp"
 
 #. (list)
 #: ../web_tt2/admin.tt2:33
-#, fuzzy
 msgid "Are you sure you wish to restore list %1?"
 msgstr "Bạn có chắc muốn phục hồi hộp thư chung %1 không?"
 
@@ -402,9 +388,8 @@ msgstr "Xoá vùng chia sẻ"
 
 #. (listname)
 #: ../web_tt2/admin.tt2:63
-#, fuzzy
 msgid "Are you sure you wish to delete the shared documents for list %1?"
-msgstr "Bạn có chắc muốn xoá các tài liệu chia sẻ không?"
+msgstr "Bạn có chắc muốn xoá các tài liệu chia sẻ cho hộp thư chung %1 không?"
 
 #: ../web_tt2/admin.tt2:63
 msgid ""
@@ -4600,7 +4585,7 @@ msgstr "Kỳ tìm: "
 #. (date_to_formated)
 #. This entry is a date/time format
 #. Check the strftime manpage for format details : http://docs.freebsd.org/info/gawk/gawk.info.Time_Functions.html
-#: ../web_tt2/viewlogs.tt2:113 ../wwsympa/wwsympa.fcgi.in:15931
+#: ../web_tt2/viewlogs.tt2:113 ../wwsympa/wwsympa.fcgi.in:15927
 msgid "%d %b %Y %H:%M:%S"
 msgstr "%d %b %Y %H:%M:%S"
 
@@ -5295,7 +5280,7 @@ msgid "%1 Digest %2"
 msgstr "%1 Bó thư %2"
 
 #: ../mail_tt2/digest.tt2:10 ../mail_tt2/digest_plain.tt2:8
-#: ../mail_tt2/get_archive.tt2:9 ../src/lib/List.pm:2705
+#: ../mail_tt2/get_archive.tt2:9 ../src/lib/List.pm:2706
 msgid "Table of contents:"
 msgstr "Mục Lục: "
 
@@ -8257,7 +8242,7 @@ msgstr ""
 
 #. This entry is a date/time format
 #. Check the strftime manpage for format details : http://docs.freebsd.org/info/gawk/gawk.info.Time_Functions.html
-#: ../src/lib/Commands.pm:958 ../wwsympa/wwsympa.fcgi.in:9622
+#: ../src/lib/Commands.pm:958 ../wwsympa/wwsympa.fcgi.in:9618
 msgid "%A"
 msgstr "%A"
 
@@ -8926,29 +8911,29 @@ msgstr "ai đã cập nhật cấu hình"
 
 #. This entry is a date/time format
 #. Check the strftime manpage for format details : http://docs.freebsd.org/info/gawk/gawk.info.Time_Functions.html
-#: ../src/lib/List.pm:2808
+#: ../src/lib/List.pm:2809
 msgid "%a, %d %b %Y %H:%M:%S"
 msgstr "%a, %d %b %Y %H:%M:%S"
 
 #. This entry is a date/time format
 #. Check the strftime manpage for format details : http://docs.freebsd.org/info/gawk/gawk.info.Time_Functions.html
-#: ../src/lib/List.pm:2809
+#: ../src/lib/List.pm:2810
 msgid "%a, %d %b %Y"
 msgstr "%a, %d %b %Y"
 
 #. This entry is a date/time format
 #. Check the strftime manpage for format details : http://docs.freebsd.org/info/gawk/gawk.info.Time_Functions.html
-#: ../src/lib/List.pm:2995 ../src/lib/List.pm:2996 ../src/lib/List.pm:3000
-#: ../wwsympa/wwsympa.fcgi.in:10990 ../wwsympa/wwsympa.fcgi.in:11059
-#: ../wwsympa/wwsympa.fcgi.in:11261 ../wwsympa/wwsympa.fcgi.in:11598
-#: ../wwsympa/wwsympa.fcgi.in:15506 ../wwsympa/wwsympa.fcgi.in:16236
-#: ../wwsympa/wwsympa.fcgi.in:16237 ../wwsympa/wwsympa.fcgi.in:4807
-#: ../wwsympa/wwsympa.fcgi.in:4808 ../wwsympa/wwsympa.fcgi.in:6231
-#: ../wwsympa/wwsympa.fcgi.in:7249 ../wwsympa/wwsympa.fcgi.in:7792
-#: ../wwsympa/wwsympa.fcgi.in:7832 ../wwsympa/wwsympa.fcgi.in:7834
-#: ../wwsympa/wwsympa.fcgi.in:8310 ../wwsympa/wwsympa.fcgi.in:8311
-#: ../wwsympa/wwsympa.fcgi.in:8345 ../wwsympa/wwsympa.fcgi.in:8346
-#: ../wwsympa/wwsympa.fcgi.in:8525 ../wwsympa/wwsympa.fcgi.in:8526
+#: ../src/lib/List.pm:2996 ../src/lib/List.pm:2997 ../src/lib/List.pm:3001
+#: ../wwsympa/wwsympa.fcgi.in:10986 ../wwsympa/wwsympa.fcgi.in:11055
+#: ../wwsympa/wwsympa.fcgi.in:11257 ../wwsympa/wwsympa.fcgi.in:11594
+#: ../wwsympa/wwsympa.fcgi.in:15502 ../wwsympa/wwsympa.fcgi.in:16232
+#: ../wwsympa/wwsympa.fcgi.in:16233 ../wwsympa/wwsympa.fcgi.in:4803
+#: ../wwsympa/wwsympa.fcgi.in:4804 ../wwsympa/wwsympa.fcgi.in:6227
+#: ../wwsympa/wwsympa.fcgi.in:7245 ../wwsympa/wwsympa.fcgi.in:7788
+#: ../wwsympa/wwsympa.fcgi.in:7828 ../wwsympa/wwsympa.fcgi.in:7830
+#: ../wwsympa/wwsympa.fcgi.in:8306 ../wwsympa/wwsympa.fcgi.in:8307
+#: ../wwsympa/wwsympa.fcgi.in:8341 ../wwsympa/wwsympa.fcgi.in:8342
+#: ../wwsympa/wwsympa.fcgi.in:8521 ../wwsympa/wwsympa.fcgi.in:8522
 msgid "%d %b %Y"
 msgstr "%d %b %Y"
 
@@ -9067,14 +9052,14 @@ msgstr "%H:%M:%S"
 #. This entry is a date/time format
 #. Check the strftime manpage for format details : http://docs.freebsd.org/info/gawk/gawk.info.Time_Functions.html
 #: ../wwsympa/SympaSession.pm:427 ../wwsympa/SympaSession.pm:428
-#: ../wwsympa/wwsympa.fcgi.in:11822 ../wwsympa/wwsympa.fcgi.in:11955
-#: ../wwsympa/wwsympa.fcgi.in:14268 ../wwsympa/wwsympa.fcgi.in:7746
+#: ../wwsympa/wwsympa.fcgi.in:11818 ../wwsympa/wwsympa.fcgi.in:11951
+#: ../wwsympa/wwsympa.fcgi.in:14264 ../wwsympa/wwsympa.fcgi.in:7742
 msgid "%d %b %y  %H:%M"
 msgstr "%d %b %y  %H:%M"
 
 #. This entry is a date/time format
 #. Check the strftime manpage for format details : http://docs.freebsd.org/info/gawk/gawk.info.Time_Functions.html
-#: ../wwsympa/wwsympa.fcgi.in:15876 ../wwsympa/wwsympa.fcgi.in:15877
+#: ../wwsympa/wwsympa.fcgi.in:15872 ../wwsympa/wwsympa.fcgi.in:15873
 #, fuzzy
 msgid "%Y/%m/%d/%H/%M/%S"
 msgstr "%Y/%m/%d/%H/%M/%S"
@@ -9228,11 +9213,6 @@ msgstr "không thư (có ích khi đi nghỉ)"
 #: ../wwsympa/wwslib.pm:37
 msgid "you do not receive your own posts"
 msgstr "bạn không nhận bài thư được mình gửi"
-
-# Danh từ hay động từ ? Giả sử danh từ.
-#, fuzzy
-#~ msgid "Prout"
-#~ msgstr "Bài viết"
 
 #, fuzzy
 #~ msgid "[Listmaster]"

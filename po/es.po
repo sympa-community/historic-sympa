@@ -17,8 +17,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: sympa-es\n"
 "POT-Creation-Date: 2002-07-16 17:27+0800\n"
-"PO-Revision-Date: 2010-01-20 17:05+0100\n"
-"Last-Translator: Armando Ramos <armando@plural.net>\n"
+"PO-Revision-Date: 2010-02-16 13:02+0100\n"
+"Last-Translator: Alfonso Marin <amm44@alu.um.es>\n"
 "Language-Team: Español <sympa-users@sympa.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -29,6 +29,7 @@ msgstr ""
 msgid "Mailing lists server"
 msgstr "Servidor de listas de correo"
 
+#. (conf.email,conf.host)
 #: ../web_tt2/home.tt2:4
 msgid ""
 "This server provides you access to your mailing list environment. Starting "
@@ -311,9 +312,8 @@ msgstr ""
 "etc."
 
 #: ../web_tt2/admin.tt2:12
-#, fuzzy
 msgid "Blacklist:"
-msgstr "Lista negra"
+msgstr "Lista negra:"
 
 #: ../web_tt2/admin.tt2:12
 msgid "Handles the set of black-listed mail addresses for this list."
@@ -331,9 +331,8 @@ msgid "Allows you to download and delete list archives."
 msgstr "Descarga y supresión los archivos de la lista."
 
 #: ../web_tt2/admin.tt2:18
-#, fuzzy
 msgid "Bounces:"
-msgstr "Gestión de errores"
+msgstr "Rebotes:"
 
 #: ../web_tt2/admin.tt2:18
 msgid "Manages non-delivery reports (also called bounces)."
@@ -528,7 +527,7 @@ msgstr "Gestión de archivos"
 #: ../web_tt2/lists.tt2:42 ../web_tt2/nav.tt2:79 ../web_tt2/nav.tt2:99
 #: ../web_tt2/review.tt2:45
 msgid "Bounces"
-msgstr "Gestión de errores"
+msgstr "Rebotes"
 
 #: ../web_tt2/admin_menu.tt2:102
 msgid "Restore shared"
@@ -745,7 +744,7 @@ msgstr "Contenido del mensaje"
 #: ../web_tt2/arcsearch_form.tt2:54
 #, fuzzy
 msgid "Extend search field:"
-msgstr "Etensión de la búsqueda"
+msgstr "Extensión de la búsqueda"
 
 #: ../web_tt2/arcsearch.tt2:4
 msgid "Result of your search in the archive"
@@ -981,6 +980,10 @@ msgid ""
 "email address <b>%1@%2</b> using your favourite email client. We also "
 "provide a form below to compose an email through the web interface."
 msgstr ""
+"La mejor manera de enviar un correo a la lista es escribiendo a la dirección "
+"de la lista <b>%1@%2</b> usando su cliente de correo favorito. También "
+"proporcionamos abajo un formulario para componer un correo a través de la "
+"interface web."
 
 #: ../web_tt2/compose_mail.tt2:17
 #, fuzzy
@@ -1630,22 +1633,30 @@ msgid ""
 "List homepage: HTML text to describe the list. It is printed on the right-"
 "hand side of the main list page. (default for this is the list description)"
 msgstr ""
+"Página de inicio de la lista: Texto en HTML para describir la lista. Este es "
+"impreso en el lado derecho de la página principal de la lista. )por "
+"defecto, es la descripción de la lista)"
 
 #: ../web_tt2/editfile.tt2:32
 msgid ""
 "List description: This text is sent as an answer to the mail command\n"
 "INFO. It can also be included in the <em>Welcome message</em>."
 msgstr ""
+"Descripción de la lista: Este texto se envía como respuesta a un comando\n"
+"INFO. También puede ser incluído en el <em>Mensaje de Bienvenida</em>."
 
 #: ../web_tt2/editfile.tt2:34
 msgid "Automatic messages"
 msgstr "Mensajes automáticos"
 
 #: ../web_tt2/editfile.tt2:36
+#, fuzzy
 msgid ""
 "Welcome message: This message is sent to new subscribers. It can be a full "
 "MIME structured message (only for MIME gurus)."
 msgstr ""
+"Mensaje de Bienvenida: Este mensaje se envía a los nuevos subscriptores. "
+"Puede ser un mensaje estructurado en MIME (sólo para gurúes de MIME)"
 
 #: ../web_tt2/editfile.tt2:37
 msgid ""
@@ -1653,6 +1664,9 @@ msgid ""
 "can be sent to the original author. You may prepare various rejection "
 "messages."
 msgstr ""
+"Mensaje de rechazo: cuando un mensaje es rechazado por el editor de la "
+"lista, puede ser enviado una notificación al autor. Puedes preparar varios "
+"mensajes de rechazo."
 
 #: ../web_tt2/editfile.tt2:39
 msgid ""
@@ -1719,7 +1733,7 @@ msgstr "Configurar Envío/Recepción"
 # #-#-#-#-#  es.po (PACKAGE VERSION)  #-#-#-#-#
 #: ../web_tt2/edit_list_request.tt2:15 ../web_tt2/viewlogs.tt2:89
 msgid "Bounce management"
-msgstr "Gestión de errores"
+msgstr "Gestión de rebotes"
 
 #: ../web_tt2/edit_list_request.tt2:16 ../web_tt2/nav.tt2:101
 msgid "Data sources setup"
@@ -1809,7 +1823,7 @@ msgstr "Status:"
 #: ../web_tt2/editsubscriber.tt2:74
 #, fuzzy
 msgid "Bounce count:"
-msgstr "Número de errores:"
+msgstr "Número de rebotes:"
 
 #: ../web_tt2/editsubscriber.tt2:75
 #, fuzzy
@@ -2347,7 +2361,7 @@ msgstr "El archivo %1 no fue copiado: %2"
 #: ../web_tt2/error.tt2:116
 #, fuzzy
 msgid "Failed: %1 not empty"
-msgstr "Fracaso: la carpeta %1 no está vacía"
+msgstr "Fallo: la carpeta %1 no está vacía"
 
 #: ../web_tt2/error.tt2:117
 msgid "No certificate for this list"
@@ -3335,7 +3349,7 @@ msgstr "Correo"
 
 #: ../web_tt2/reviewbouncing.tt2:62
 msgid "Bounce score"
-msgstr "Tasa de errores"
+msgstr "Tasa de errores (rebotes)"
 
 #: ../web_tt2/reviewbouncing.tt2:63
 msgid "Details"
@@ -4661,7 +4675,7 @@ msgstr "Período explorado:"
 #. (date_to_formated)
 #. This entry is a date/time format
 #. Check the strftime manpage for format details : http://docs.freebsd.org/info/gawk/gawk.info.Time_Functions.html
-#: ../web_tt2/viewlogs.tt2:113 ../wwsympa/wwsympa.fcgi.in:15931
+#: ../web_tt2/viewlogs.tt2:113 ../wwsympa/wwsympa.fcgi.in:15927
 msgid "%d %b %Y %H:%M:%S"
 msgstr "%d %b %Y %H:%M:%S"
 
@@ -5335,7 +5349,7 @@ msgid "%1 Digest %2"
 msgstr "Compilación del %2, lista %1 "
 
 #: ../mail_tt2/digest.tt2:10 ../mail_tt2/digest_plain.tt2:8
-#: ../mail_tt2/get_archive.tt2:9 ../src/lib/List.pm:2705
+#: ../mail_tt2/get_archive.tt2:9 ../src/lib/List.pm:2706
 msgid "Table of contents:"
 msgstr "Tabla de contenido:"
 
@@ -8302,7 +8316,7 @@ msgstr ""
 
 #. This entry is a date/time format
 #. Check the strftime manpage for format details : http://docs.freebsd.org/info/gawk/gawk.info.Time_Functions.html
-#: ../src/lib/Commands.pm:958 ../wwsympa/wwsympa.fcgi.in:9622
+#: ../src/lib/Commands.pm:958 ../wwsympa/wwsympa.fcgi.in:9618
 msgid "%A"
 msgstr "%A"
 
@@ -8388,11 +8402,11 @@ msgstr "notificación"
 
 #: ../src/lib/List.pm:399
 msgid "Management of bouncers, 1st level"
-msgstr "Manejo de errores a 1er. nivel"
+msgstr "Gestión de rebotes, 1er. nivel"
 
 #: ../src/lib/List.pm:420
 msgid "Management of bouncers, 2nd level"
-msgstr "manejo de errores, 2nd nivel "
+msgstr "Gestión de rebotes, 2º nivel "
 
 #: ../src/lib/List.pm:427
 msgid "Expiration of unmoderated messages"
@@ -8978,29 +8992,29 @@ msgstr "quien acutalizó la configuración"
 
 #. This entry is a date/time format
 #. Check the strftime manpage for format details : http://docs.freebsd.org/info/gawk/gawk.info.Time_Functions.html
-#: ../src/lib/List.pm:2808
+#: ../src/lib/List.pm:2809
 msgid "%a, %d %b %Y %H:%M:%S"
 msgstr "%a, %d/%b/%Y %H:%M:%S"
 
 #. This entry is a date/time format
 #. Check the strftime manpage for format details : http://docs.freebsd.org/info/gawk/gawk.info.Time_Functions.html
-#: ../src/lib/List.pm:2809
+#: ../src/lib/List.pm:2810
 msgid "%a, %d %b %Y"
 msgstr "%a, %d/%b/%Y"
 
 #. This entry is a date/time format
 #. Check the strftime manpage for format details : http://docs.freebsd.org/info/gawk/gawk.info.Time_Functions.html
-#: ../src/lib/List.pm:2995 ../src/lib/List.pm:2996 ../src/lib/List.pm:3000
-#: ../wwsympa/wwsympa.fcgi.in:10990 ../wwsympa/wwsympa.fcgi.in:11059
-#: ../wwsympa/wwsympa.fcgi.in:11261 ../wwsympa/wwsympa.fcgi.in:11598
-#: ../wwsympa/wwsympa.fcgi.in:15506 ../wwsympa/wwsympa.fcgi.in:16236
-#: ../wwsympa/wwsympa.fcgi.in:16237 ../wwsympa/wwsympa.fcgi.in:4807
-#: ../wwsympa/wwsympa.fcgi.in:4808 ../wwsympa/wwsympa.fcgi.in:6231
-#: ../wwsympa/wwsympa.fcgi.in:7249 ../wwsympa/wwsympa.fcgi.in:7792
-#: ../wwsympa/wwsympa.fcgi.in:7832 ../wwsympa/wwsympa.fcgi.in:7834
-#: ../wwsympa/wwsympa.fcgi.in:8310 ../wwsympa/wwsympa.fcgi.in:8311
-#: ../wwsympa/wwsympa.fcgi.in:8345 ../wwsympa/wwsympa.fcgi.in:8346
-#: ../wwsympa/wwsympa.fcgi.in:8525 ../wwsympa/wwsympa.fcgi.in:8526
+#: ../src/lib/List.pm:2996 ../src/lib/List.pm:2997 ../src/lib/List.pm:3001
+#: ../wwsympa/wwsympa.fcgi.in:10986 ../wwsympa/wwsympa.fcgi.in:11055
+#: ../wwsympa/wwsympa.fcgi.in:11257 ../wwsympa/wwsympa.fcgi.in:11594
+#: ../wwsympa/wwsympa.fcgi.in:15502 ../wwsympa/wwsympa.fcgi.in:16232
+#: ../wwsympa/wwsympa.fcgi.in:16233 ../wwsympa/wwsympa.fcgi.in:4803
+#: ../wwsympa/wwsympa.fcgi.in:4804 ../wwsympa/wwsympa.fcgi.in:6227
+#: ../wwsympa/wwsympa.fcgi.in:7245 ../wwsympa/wwsympa.fcgi.in:7788
+#: ../wwsympa/wwsympa.fcgi.in:7828 ../wwsympa/wwsympa.fcgi.in:7830
+#: ../wwsympa/wwsympa.fcgi.in:8306 ../wwsympa/wwsympa.fcgi.in:8307
+#: ../wwsympa/wwsympa.fcgi.in:8341 ../wwsympa/wwsympa.fcgi.in:8342
+#: ../wwsympa/wwsympa.fcgi.in:8521 ../wwsympa/wwsympa.fcgi.in:8522
 msgid "%d %b %Y"
 msgstr "%d/%b/%Y"
 
@@ -9119,14 +9133,14 @@ msgstr "%H:%M:%S"
 #. This entry is a date/time format
 #. Check the strftime manpage for format details : http://docs.freebsd.org/info/gawk/gawk.info.Time_Functions.html
 #: ../wwsympa/SympaSession.pm:427 ../wwsympa/SympaSession.pm:428
-#: ../wwsympa/wwsympa.fcgi.in:11822 ../wwsympa/wwsympa.fcgi.in:11955
-#: ../wwsympa/wwsympa.fcgi.in:14268 ../wwsympa/wwsympa.fcgi.in:7746
+#: ../wwsympa/wwsympa.fcgi.in:11818 ../wwsympa/wwsympa.fcgi.in:11951
+#: ../wwsympa/wwsympa.fcgi.in:14264 ../wwsympa/wwsympa.fcgi.in:7742
 msgid "%d %b %y  %H:%M"
 msgstr "%d %b %y    %H:%M"
 
 #. This entry is a date/time format
 #. Check the strftime manpage for format details : http://docs.freebsd.org/info/gawk/gawk.info.Time_Functions.html
-#: ../wwsympa/wwsympa.fcgi.in:15876 ../wwsympa/wwsympa.fcgi.in:15877
+#: ../wwsympa/wwsympa.fcgi.in:15872 ../wwsympa/wwsympa.fcgi.in:15873
 #, fuzzy
 msgid "%Y/%m/%d/%H/%M/%S"
 msgstr "%Y/%m/%d/%H/%M/%S"
@@ -9278,10 +9292,6 @@ msgstr "no mail (útil para las vacaciones)"
 #: ../wwsympa/wwslib.pm:37
 msgid "you do not receive your own posts"
 msgstr "no recibes tus propios mensajes"
-
-#, fuzzy
-#~ msgid "Prout"
-#~ msgstr "Redactar"
 
 #, fuzzy
 #~ msgid "[Listmaster]"
