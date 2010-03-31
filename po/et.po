@@ -15,7 +15,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: et\n"
 "POT-Creation-Date: 2002-07-16 17:27+0800\n"
-"PO-Revision-Date: 2010-03-17 09:58+0100\n"
+"PO-Revision-Date: 2010-01-20 17:05+0100\n"
 "Last-Translator: Urmas Buhvestov <urmas@tamme.tartu.ee>\n"
 "Language-Team: Estonian\n"
 "MIME-Version: 1.0\n"
@@ -24,8 +24,9 @@ msgstr ""
 "X-Generator: Pootle 1.0.2\n"
 
 #: ../web_tt2/home.tt2:2
+#, fuzzy
 msgid "Mailing lists server"
-msgstr "Listide server"
+msgstr "Listid"
 
 #: ../web_tt2/home.tt2:4
 msgid ""
@@ -33,9 +34,8 @@ msgid ""
 "from this web page, you can perform subscription options, unsubscription, "
 "archive, list moderation, list configuration."
 msgstr ""
-"See server võimaldab ligipääsu listidele läbi veebiliidese. \n"
-"Selle veebilehe vahendusel saate liituda listidega,  lahkuda listidest,  "
-"vaadata listide arhiive, muuta enda tellimuste seadeid, hallata liste jne."
+"See server võimaldab ligipääsu oma keskkonnale e-posti listide serveris. Sellelt veebilehelt saab liituda listidega / lahkuda listidest \n"
+" vaadata listide arhiive, hallata liste jne."
 
 #: ../web_tt2/home.tt2:7
 msgid "Mailing lists categories"
@@ -73,7 +73,7 @@ msgstr "Aktiivsed RSS listid"
 
 #: ../web_tt2/main.tt2:59
 msgid "Please activate JavaScript in your web browser"
-msgstr "Palun aktiveerige JavaScript oma veebibrauseris"
+msgstr "Pead aktiveerima JavaScripti oma veebibrauseris"
 
 #: ../web_tt2/menu.tt2:7
 msgid "Create list"
@@ -93,7 +93,7 @@ msgid "Home"
 msgstr "Esilehele"
 
 #: ../web_tt2/arc.tt2:4 ../web_tt2/arc_manage.tt2:4
-#: ../web_tt2/arcsearch_form.tt2:4 ../web_tt2/compose_mail.tt2:12
+#: ../web_tt2/arcsearch_form.tt2:4 ../web_tt2/compose_mail.tt2:17
 #: ../web_tt2/compose_mail.tt2:5 ../web_tt2/create_list_request.tt2:26
 #: ../web_tt2/create_list_request.tt2:33 ../web_tt2/create_list_request.tt2:38
 #: ../web_tt2/create_list_request.tt2:42 ../web_tt2/create_list_request.tt2:68
@@ -105,9 +105,8 @@ msgstr "Esilehele"
 #: ../web_tt2/edit_list_request.tt2:39 ../web_tt2/edit_list_request.tt2:4
 #: ../web_tt2/editfile.tt2:4 ../web_tt2/menu.tt2:22
 #: ../web_tt2/modindex.tt2:192 ../web_tt2/modindex.tt2:9 ../web_tt2/pref.tt2:4
-#: ../web_tt2/rename_list_request.tt2:3 ../web_tt2/review.tt2:5
+#: ../web_tt2/rename_list_request.tt2:3 ../web_tt2/review.tt2:6
 #: ../web_tt2/reviewbouncing.tt2:3 ../web_tt2/suboptions.tt2:21
-#: ../web_tt2/suspend_request.tt2:64
 msgid "Help"
 msgstr "Abi"
 
@@ -120,27 +119,30 @@ msgid "Listmaster"
 msgstr "listiülem"
 
 #: ../web_tt2/login_menu.tt2:14
+#, fuzzy
 msgid "Privileged owner"
-msgstr "[Eriõigustega omanik]"
+msgstr "[Priviligeeritud omanik]"
 
 # #-#-#-#-#  et.po (PACKAGE VERSION)  #-#-#-#-#
 # nlsref 16,57
-#: ../src/lib/List.pm:1188 ../web_tt2/login_menu.tt2:15
+#: ../src/lib/List.pm:1131 ../web_tt2/login_menu.tt2:15
 msgid "Owner"
 msgstr "Omanik"
 
 #: ../web_tt2/login_menu.tt2:16
+#, fuzzy
 msgid "Editor"
 msgstr "[Muutja]"
 
 #: ../web_tt2/login_menu.tt2:17
+#, fuzzy
 msgid "Subscriber"
-msgstr "Tellija"
+msgstr "Liikmed"
 
 #. (last_login_host)
 #: ../web_tt2/login_menu.tt2:21
 msgid "last login from %1"
-msgstr "viimati sisse logitud arvutist %1"
+msgstr ""
 
 #: ../web_tt2/login_menu.tt2:36
 msgid "Logout"
@@ -150,17 +152,16 @@ msgstr "Logi välja"
 msgid "Your preferences"
 msgstr "Eelistused"
 
-# nlsref 6,76
-#: ../web_tt2/suspend_request.tt2:5 ../web_tt2/your_lists.tt2:9
-msgid "Manage your subscriptions"
-msgstr "Liitumiste haldamine"
+#: ../web_tt2/your_lists.tt2:7
+msgid "Your Lists"
+msgstr "Sinu Listid"
 
-#: ../web_tt2/lists.tt2:27 ../web_tt2/your_lists.tt2:14
+#: ../web_tt2/lists.tt2:27 ../web_tt2/your_lists.tt2:13
 msgid "admin"
 msgstr "Halda"
 
 #: ../web_tt2/lists.tt2:68 ../web_tt2/search_user.tt2:77
-#: ../web_tt2/your_lists.tt2:23
+#: ../web_tt2/your_lists.tt2:22
 msgid "No mailing list available."
 msgstr "Listi pole saadaval."
 
@@ -175,7 +176,6 @@ msgstr "Oled kindel, et soovid lahkuda listist %1?"
 
 # Peab olema erinev välja logimisest
 #: ../web_tt2/list_menu.tt2:15 ../web_tt2/list_menu.tt2:25
-#: ../web_tt2/suspend_request.tt2:57
 msgid "Unsubscribe"
 msgstr "Tühista tellimus"
 
@@ -227,7 +227,7 @@ msgid "RSS"
 msgstr "RSS"
 
 # nlsref 16,70
-#: ../src/lib/List.pm:1320 ../web_tt2/list_menu.tt2:80
+#: ../src/lib/List.pm:1263 ../web_tt2/list_menu.tt2:80
 #: ../web_tt2/list_menu.tt2:82
 msgid "Shared documents"
 msgstr "Jagatud dokumendid"
@@ -250,8 +250,9 @@ msgstr "Liikmeid:"
 
 # nlsref 1,3
 #: ../web_tt2/list_panel.tt2:12
+#, fuzzy
 msgid "Error rate:"
-msgstr "Vigade osakaal: "
+msgstr "Vigade osakaal:"
 
 #: ../web_tt2/list_panel.tt2:13
 msgid "Owners"
@@ -259,7 +260,7 @@ msgstr "Omanikud"
 
 # #-#-#-#-#  et.po (PACKAGE VERSION)  #-#-#-#-#
 # nlsref 16,26
-#: ../src/lib/List.pm:680 ../web_tt2/list_panel.tt2:20
+#: ../src/lib/List.pm:622 ../web_tt2/list_panel.tt2:20
 msgid "Moderators"
 msgstr "Moderaatorid"
 
@@ -272,42 +273,49 @@ msgid "Contact owners"
 msgstr "Teavita omanikku"
 
 #: ../web_tt2/admin.tt2:4
+#, fuzzy
 msgid "Casual administration"
 msgstr "Listi haldamine"
 
 #: ../web_tt2/admin.tt2:7
+#, fuzzy
 msgid "Edit list config:"
-msgstr "Listi seadete muutmine"
+msgstr "Muuda listi seadeid"
 
 #: ../web_tt2/admin.tt2:7
+#, fuzzy
 msgid ""
 "Use it with care: it allows you to modify some of the list parameters. The "
 "list of the parameters you can modify depends on your privileges."
 msgstr ""
-"Saate muuta mõningaid listi seadeid vastavalt oma kasutajaõigustele. "
-"Kasutage ettevaatlikult."
+"<strong>Muuda listi seadeid</strong>: kasuta ettevaatlikult: siin sa võid "
+"muuta mõningaid listi parameetreid vastavalt oma kasutajaõigustele."
 
 #: ../web_tt2/admin.tt2:9
+#, fuzzy
 msgid "Customizing: "
-msgstr "Kohandamine"
+msgstr "Kohanda"
 
 #: ../web_tt2/admin.tt2:9
+#, fuzzy
 msgid "Editing of various files and messages attached to your list."
 msgstr ""
-"Saate muuta mitmeid oma listiga seotuid konfiguratsioonifaile (kujundus, "
-"automaattekstid, kirjade mallid)"
+"<strong>Kohanda</strong>  : muuda mitmeid faile ja kirju mis on lisatud sinu "
+"listi"
 
 #: ../web_tt2/admin.tt2:10
+#, fuzzy
 msgid "Manage subscribers:"
-msgstr "Tellijate haldamine:"
+msgstr "Manageeri tellijaid"
 
 #: ../web_tt2/admin.tt2:10
 msgid ""
 "Allows you to add or delete list subscribers, moderate subscriptions and so "
 "on."
-msgstr "Lubab lisada või kustutada tellijaid, muuta tellijate seadistusi jne."
+msgstr "Lubab lisada või kustutada tellijaid, modereerida liitumisi jne."
 
 #: ../web_tt2/admin.tt2:12
+#, fuzzy
 msgid "Blacklist:"
 msgstr "Must nimekiri"
 
@@ -316,22 +324,30 @@ msgid "Handles the set of black-listed mail addresses for this list."
 msgstr "Käitleb antud listi musta nimekirja."
 
 #: ../web_tt2/admin.tt2:15
+#, fuzzy
 msgid "Manage archives:"
-msgstr "Arhiive haldus:"
+msgstr "Halda arhiive"
 
 #: ../web_tt2/admin.tt2:15
+#, fuzzy
 msgid "Allows you to download and delete list archives."
-msgstr "Võimaldab listi arhiive alla laadida ja kustutada."
+msgstr ""
+"<strong>Arhiivide haldus</strong>: võimaldab listi arhiive alla laadida ja "
+"kustutada."
 
 #: ../web_tt2/admin.tt2:18
+#, fuzzy
 msgid "Bounces:"
 msgstr "Toimetamata kirjad"
 
 #: ../web_tt2/admin.tt2:18
 msgid "Manages non-delivery reports (also called bounces)."
-msgstr "võimaldab tegeleda kohale toimetamata kirjadega (bounces)"
+msgstr ""
+"<strong>Toimetamata kirjad</strong>: võimaldab tegeleda kohale toimetamata "
+"kirjadega (bounces)"
 
 #: ../web_tt2/admin.tt2:21
+#, fuzzy
 msgid "Logs:"
 msgstr "Logi"
 
@@ -341,8 +357,9 @@ msgstr "vahend listi logide uurimiseks"
 
 # nlsref 16,61
 #: ../web_tt2/admin.tt2:26
+#, fuzzy
 msgid "Drastic operations"
-msgstr "Äärmuslikud vahendid"
+msgstr "isiklik informatsioon"
 
 #: ../web_tt2/admin.tt2:33 ../web_tt2/admin_menu.tt2:117
 #: ../web_tt2/admin_menu.tt2:119
@@ -351,16 +368,15 @@ msgstr "Taasta list"
 
 #. (list)
 #: ../web_tt2/admin.tt2:33
+#, fuzzy
 msgid "Are you sure you wish to restore list %1?"
-msgstr "Kas olete kindel, et soovite taastada listi %1 ?"
+msgstr "Kas oled kindel, et soovid sulgeda listi %1 ?"
 
 #: ../web_tt2/admin.tt2:33
 msgid ""
 "This list is currently closed. Clicking this button will make it active "
 "again."
 msgstr ""
-"See list on momendil suletud. Kliksides nupule saate ta uuesti aktiivseks "
-"muuta."
 
 #: ../web_tt2/admin.tt2:36 ../web_tt2/admin_menu.tt2:122
 #: ../web_tt2/admin_menu.tt2:124
@@ -369,14 +385,18 @@ msgstr "Eemalda list"
 
 #. (list)
 #: ../web_tt2/admin.tt2:36
+#, fuzzy
 msgid "Are you sure you wish to close list %1?"
-msgstr "Kas olete kindel, et soovite sulgeda listi %1 ?"
+msgstr "Kas oled kindel, et soovid sulgeda listi %1 ?"
 
 #: ../web_tt2/admin.tt2:36
+#, fuzzy
 msgid ""
 "Completely removes the current list. Listmaster privileges are required to "
 "restore a list."
-msgstr "Eemaldab täielikult selle listi. Ainult listiülem saab listi taastada."
+msgstr ""
+"<strong>Sulge list</strong> : eemaldab täielikult selle listi. Ainult "
+"listiülem saab listi taastada"
 
 #: ../web_tt2/admin.tt2:46 ../web_tt2/admin_menu.tt2:129
 #: ../web_tt2/admin_menu.tt2:131
@@ -389,7 +409,6 @@ msgid ""
 "be relabeled according to the new name, including the mail aliases and the "
 "web archives."
 msgstr ""
-"Võimaldab teil muuta listi nime. Ümber nimetatakse ka aliased ja arhiiv."
 
 #: ../web_tt2/admin.tt2:59 ../web_tt2/admin_menu.tt2:96
 #: ../web_tt2/admin_menu.tt2:98
@@ -397,33 +416,42 @@ msgid "Create Shared"
 msgstr "Loo jagatud kaust"
 
 #: ../web_tt2/admin.tt2:59
+#, fuzzy
 msgid "Initializes the shared document web space."
-msgstr "Tekitab veebikeskkonda jagatud kausta dokumentidele."
+msgstr ""
+"<strong>Loo jagatud kaust</strong> : tekitab avaliku kausta dokumentide "
+"jaoks."
 
 #: ../web_tt2/admin.tt2:63 ../web_tt2/admin_menu.tt2:105
 msgid "Delete Shared"
-msgstr "Kustuta jagatud kaust"
+msgstr "Kustuta jagatud veebiruum"
 
 #. (listname)
 #: ../web_tt2/admin.tt2:63
+#, fuzzy
 msgid "Are you sure you wish to delete the shared documents for list %1?"
-msgstr "Kas olete kindel, et soovite kustutada listi %1 jagatud dokumendid?"
+msgstr "Kas olete kindel, et soovite sulgeda jagatud dokumendid ?"
 
 #: ../web_tt2/admin.tt2:63
+#, fuzzy
 msgid ""
 "Closes the shared document web space. It can be restored using \"Restore "
 "shared\" button."
 msgstr ""
-"Sulgeb jagatud kausta. Seda saab hiljem taastada kasutades tegevust \"Taasta "
-"jagatud\"."
+"<strong>Kustuta jagatud</strong>. Sa saad need taastada kasutades \"Taasta "
+"jagatud\" nuppu"
 
 #: ../web_tt2/admin.tt2:67
+#, fuzzy
 msgid "Restore Shared"
-msgstr "Taasta jagatud"
+msgstr "Taasta jagatud veeb"
 
 #: ../web_tt2/admin.tt2:67
+#, fuzzy
 msgid "Restores the previously closed shared document web space."
-msgstr "Taastab varem suletud veebikeskkonna jagatud kausta"
+msgstr ""
+"<strong>Loo jagatud kaust</strong> : tekitab avaliku kausta dokumentide "
+"jaoks."
 
 #. (count)
 #: ../web_tt2/active_lists.tt2:17 ../web_tt2/active_lists.tt2:5
@@ -446,12 +474,14 @@ msgid "List name"
 msgstr "Listi nimi:"
 
 #: ../web_tt2/active_lists.tt2:20
+#, fuzzy
 msgid "Number of messages"
-msgstr "Kirjade arv"
+msgstr "Kokkuvõte maksimaalne kirjade arv"
 
 #: ../web_tt2/active_lists.tt2:21
+#, fuzzy
 msgid "Average per day"
-msgstr "Keskmiselt päevas"
+msgstr "Päeva keskmine"
 
 #: ../web_tt2/active_lists.tt2:22 ../web_tt2/get_inactive_lists.tt2:6
 #: ../web_tt2/get_latest_lists.tt2:6 ../web_tt2/latest_lists.tt2:21
@@ -467,19 +497,19 @@ msgstr "Teema"
 
 #: ../web_tt2/add_request.tt2:7
 msgid "email1@dom1 Name1"
-msgstr "email1@domeen1 nimi1"
+msgstr "email1@dom1 name1"
 
 #: ../web_tt2/add_request.tt2:8
 msgid "email2@dom2 Name2"
-msgstr "email2@domeen2 nimi2"
+msgstr "email2@dom2 name2"
 
 #: ../web_tt2/add_request.tt2:12
 msgid "Add subscribers"
-msgstr "Lisa tellijaid"
+msgstr "Lisa liikmed"
 
 #: ../web_tt2/add_request.tt2:13 ../web_tt2/editsubscriber.tt2:62
-#: ../web_tt2/review.tt2:106 ../web_tt2/review.tt2:140
-#: ../web_tt2/review.tt2:74 ../web_tt2/reviewbouncing.tt2:127
+#: ../web_tt2/review.tt2:106 ../web_tt2/review.tt2:288
+#: ../web_tt2/review.tt2:73 ../web_tt2/reviewbouncing.tt2:127
 msgid "quiet"
 msgstr "teavituseta"
 
@@ -489,26 +519,26 @@ msgstr "Listi haldamine"
 
 #: ../web_tt2/admin_menu.tt2:10 ../web_tt2/admin_menu.tt2:16
 msgid "Subscribers"
-msgstr "Tellijad"
+msgstr "Liikmed"
 
 #: ../web_tt2/admin_menu.tt2:24 ../web_tt2/admin_menu.tt2:29
-#: ../web_tt2/lists.tt2:36 ../web_tt2/nav.tt2:64
+#: ../web_tt2/lists.tt2:36 ../web_tt2/nav.tt2:62
 msgid "Edit List Config"
 msgstr "Muuda listi seadeid"
 
 #: ../web_tt2/admin_menu.tt2:52 ../web_tt2/admin_menu.tt2:58
-#: ../web_tt2/lists.tt2:37 ../web_tt2/nav.tt2:67
+#: ../web_tt2/lists.tt2:37 ../web_tt2/nav.tt2:65
 msgid "Customizing"
 msgstr "Kohanda"
 
 #: ../web_tt2/admin_menu.tt2:67 ../web_tt2/admin_menu.tt2:73
-#: ../web_tt2/nav.tt2:77
+#: ../web_tt2/nav.tt2:75
 msgid "Manage Archives"
 msgstr "Manageeri Arhiive"
 
 #: ../web_tt2/admin_menu.tt2:81 ../web_tt2/admin_menu.tt2:87
-#: ../web_tt2/lists.tt2:42 ../web_tt2/nav.tt2:101 ../web_tt2/nav.tt2:81
-#: ../web_tt2/review.tt2:44
+#: ../web_tt2/lists.tt2:42 ../web_tt2/nav.tt2:79 ../web_tt2/nav.tt2:99
+#: ../web_tt2/review.tt2:45
 msgid "Bounces"
 msgstr "Toimetamata kirjad"
 
@@ -518,8 +548,9 @@ msgstr "Taasta jagatud veeb"
 
 #. (list)
 #: ../web_tt2/admin_menu.tt2:122 ../web_tt2/admin_menu.tt2:124
+#, fuzzy
 msgid "Are you sure you wish to close %1 list?"
-msgstr "Kas olete kindel, et soovite sulgeda listi %1?"
+msgstr "Kas oled kindel, et soovid sulgeda listi %1 ?"
 
 #: ../web_tt2/admin_menu.tt2:139
 msgid "List Definition"
@@ -530,12 +561,12 @@ msgid "Sending/Receiving"
 msgstr "Saatmine/saamine"
 
 #: ../web_tt2/admin_menu.tt2:147 ../web_tt2/edit_list_request.tt2:13
-#: ../web_tt2/nav.tt2:97
+#: ../web_tt2/nav.tt2:95
 msgid "Privileges"
-msgstr "Õigused"
+msgstr "Privileegid"
 
 #: ../web_tt2/admin_menu.tt2:151 ../web_tt2/edit_list_request.tt2:14
-#: ../web_tt2/nav.tt2:19 ../web_tt2/nav.tt2:99 ../web_tt2/serveradmin.tt2:109
+#: ../web_tt2/nav.tt2:19 ../web_tt2/nav.tt2:97 ../web_tt2/serveradmin.tt2:109
 msgid "Archives"
 msgstr "Arhiivid"
 
@@ -544,7 +575,7 @@ msgid "Bounce Settings"
 msgstr "Kohalejõudmata kirjade seaded"
 
 #: ../web_tt2/admin_menu.tt2:160 ../web_tt2/edit_list_request.tt2:17
-#: ../web_tt2/nav.tt2:107
+#: ../web_tt2/nav.tt2:103
 msgid "Miscellaneous"
 msgstr "Muud"
 
@@ -563,7 +594,7 @@ msgid "Archive Management"
 msgstr "Arhiivi haldamine"
 
 #: ../web_tt2/arc.tt2:4 ../web_tt2/arc_manage.tt2:4
-#: ../web_tt2/arcsearch_form.tt2:4 ../web_tt2/compose_mail.tt2:12
+#: ../web_tt2/arcsearch_form.tt2:4 ../web_tt2/compose_mail.tt2:17
 #: ../web_tt2/compose_mail.tt2:5 ../web_tt2/create_list_request.tt2:26
 #: ../web_tt2/d_control.tt2:5 ../web_tt2/d_editfile.tt2:12
 #: ../web_tt2/d_editfile.tt2:14 ../web_tt2/d_properties.tt2:10
@@ -575,9 +606,9 @@ msgstr "Arhiivi haldamine"
 #: ../web_tt2/latest_d_read.tt2:29 ../web_tt2/latest_d_read.tt2:32
 #: ../web_tt2/modindex.tt2:192 ../web_tt2/modindex.tt2:9
 #: ../web_tt2/picture_upload.tt2:21 ../web_tt2/pref.tt2:4
-#: ../web_tt2/rename_list_request.tt2:3 ../web_tt2/review.tt2:5
-#: ../web_tt2/reviewbouncing.tt2:3 ../web_tt2/suboptions.tt2:20
-#: ../web_tt2/subscriber_table.tt2:108
+#: ../web_tt2/rename_list_request.tt2:3 ../web_tt2/review.tt2:217
+#: ../web_tt2/review.tt2:6 ../web_tt2/reviewbouncing.tt2:3
+#: ../web_tt2/suboptions.tt2:20
 msgid "Open in a new window"
 msgstr "Ava uues aknas"
 
@@ -619,29 +650,33 @@ msgstr "See nupp kaitseb liste aadresside kogumise robotite eest."
 
 # nlsref 16,4
 #: ../web_tt2/arc.tt2:4 ../web_tt2/arcsearch_form.tt2:3
+#, fuzzy
 msgid "List archive"
-msgstr "Arhiiv"
+msgstr "Tekstipõhised arhiivid"
 
 #: ../web_tt2/arcsearch_form.tt2:4
+#, fuzzy
 msgid "Advanced archive search"
-msgstr "Täpsustatud otsing "
+msgstr "Põhjalikum otsing"
 
 #: ../web_tt2/arcsearch.tt2:7 ../web_tt2/arcsearch_form.tt2:12
+#, fuzzy
 msgid "Search field:"
-msgstr "Otsinguväli"
+msgstr "Otsitakse aegadest:"
 
 #: ../src/etc/mhonarc-ressources.tt2:52 ../web_tt2/arcsearch_form.tt2:16
-#: ../web_tt2/review.tt2:89 ../web_tt2/reviewbouncing.tt2:13
+#: ../web_tt2/review.tt2:88 ../web_tt2/reviewbouncing.tt2:13
 msgid "Search"
 msgstr "Otsi"
 
 #: ../web_tt2/arcsearch_form.tt2:19
+#, fuzzy
 msgid "Search:"
-msgstr "Otsingu tüüp:"
+msgstr "Otsi"
 
 #: ../web_tt2/arcsearch_form.tt2:20
 msgid "this sentence"
-msgstr "lause"
+msgstr "see lause"
 
 #: ../web_tt2/arcsearch_form.tt2:21
 msgid "all of these words"
@@ -652,6 +687,7 @@ msgid "one of these words"
 msgstr "üks sõnadest"
 
 #: ../web_tt2/arcsearch_form.tt2:25
+#, fuzzy
 msgid "Prefer:"
 msgstr "Ajaline järjestus:"
 
@@ -664,8 +700,9 @@ msgid "oldest messages"
 msgstr "Vanemad kirjad eespool"
 
 #: ../web_tt2/arcsearch_form.tt2:30
+#, fuzzy
 msgid "Case:"
-msgstr "Suur ja väiketähed:"
+msgstr "Tõstutundlikkus"
 
 #: ../web_tt2/arcsearch_form.tt2:31
 msgid "insensitive"
@@ -676,8 +713,9 @@ msgid "sensitive"
 msgstr "tõstutundlik"
 
 #: ../web_tt2/arcsearch_form.tt2:35
+#, fuzzy
 msgid "Check:"
-msgstr "Täpsus:"
+msgstr "Kontrolli"
 
 #: ../web_tt2/arcsearch_form.tt2:36
 msgid "part of word"
@@ -688,8 +726,9 @@ msgid "entire word"
 msgstr "kogu sõna"
 
 #: ../web_tt2/arcsearch_form.tt2:40
+#, fuzzy
 msgid "Layout:"
-msgstr "Paigutus:"
+msgstr "Välimus"
 
 #: ../web_tt2/arcsearch_form.tt2:41 ../web_tt2/arcsearch_form.tt2:42
 #: ../web_tt2/arcsearch_form.tt2:43
@@ -697,8 +736,9 @@ msgid "results by page"
 msgstr "kirja lehel"
 
 #: ../web_tt2/arcsearch_form.tt2:46
+#, fuzzy
 msgid "Search area:"
-msgstr "Otsingu koht:"
+msgstr "Otsinguväli"
 
 #: ../web_tt2/arcsearch_form.tt2:47
 msgid "Sender"
@@ -715,8 +755,9 @@ msgid "Body"
 msgstr "Sisu"
 
 #: ../web_tt2/arcsearch_form.tt2:54
+#, fuzzy
 msgid "Extend search field:"
-msgstr "Vaata ka alljärgnevatest arhiividest:"
+msgstr "Laienda otsingut"
 
 #: ../web_tt2/arcsearch.tt2:4
 msgid "Result of your search in the archive"
@@ -724,20 +765,21 @@ msgstr "Otsingu tulemused:"
 
 #. (key_word)
 #: ../web_tt2/arcsearch.tt2:13
+#, fuzzy
 msgid "Parameters of these search make on <strong> &quot;%1&quot;:</strong>"
-msgstr "Otsiti <b> &quot;%1&quot;</b>"
+msgstr "Parameters of these search make on <b> &quot;%1&quot;</b>"
 
 #: ../web_tt2/arcsearch.tt2:17
 msgid "(This sentence,"
-msgstr "(lause,"
+msgstr "(See lause,"
 
 #: ../web_tt2/arcsearch.tt2:19
 msgid "(All of these words,"
-msgstr "(üks sõnadest,"
+msgstr "(Üks sõnadest,"
 
 #: ../web_tt2/arcsearch.tt2:21
 msgid "(Each of these words,"
-msgstr "(kõik sõnad,"
+msgstr "(Kõik sõnad,"
 
 #: ../web_tt2/arcsearch.tt2:25
 msgid "case insensitive"
@@ -776,7 +818,7 @@ msgstr "%1 vastet kirja teemarealt"
 #. (from_count)
 #: ../web_tt2/arcsearch.tt2:65
 msgid " %1 hits on message From field"
-msgstr "%1 vastet kirja saatja realt"
+msgstr "%1 vastet From realt"
 
 #. (date_count)
 #: ../web_tt2/arcsearch.tt2:69
@@ -785,7 +827,7 @@ msgstr "%1 vastet kuupäeva realt"
 
 #: ../web_tt2/arcsearch.tt2:111
 msgid "Continue search"
-msgstr "Järgmised tulemused"
+msgstr "Jätka otsinguga"
 
 #: ../web_tt2/arcsearch.tt2:114
 msgid "New search"
@@ -797,7 +839,7 @@ msgid ""
 "Search</a></em>, search engine of MHonArc archives"
 msgstr ""
 "Põhineb <em><a href=\"http://www.mhonarc.org/contrib/marc-search/\">Marc-"
-"Search</a></em> otsimootoril"
+"Search</a></em>, otsimootoril"
 
 #. (archive_name)
 #: ../web_tt2/arcsearch.tt2:122
@@ -811,17 +853,19 @@ msgid "Blacklist management"
 msgstr "Mustanimekirja haldus"
 
 #: ../web_tt2/blacklist.tt2:8
+#, fuzzy
 msgid ""
 "Operation requested by users which email is listed in the blacklist file are "
 "rejected. The\n"
 "blacklist is in use for the following operation:"
 msgstr ""
-"Tegevustest, mille sooritaja e-post on mustas nimekirjas, keeldutakse. \n"
+"Tegevustest, mille sooritaja epost on mustas nimekirjas, keeldutakse. \n"
 "Musta nimekirja kasutatakse järgmisteks tegevusteks"
 
 #: ../web_tt2/blacklist.tt2:10
+#, fuzzy
 msgid "Syntax:"
-msgstr "Reeglid"
+msgstr "Olek :"
 
 #: ../web_tt2/blacklist.tt2:12
 msgid "only one email or expression by line"
@@ -832,11 +876,12 @@ msgid "char # introduce a comment"
 msgstr "märk # tähistab kommentaari algust"
 
 #: ../web_tt2/blacklist.tt2:14
+#, fuzzy
 msgid ""
 "char * match any string. Example: \"*@spammer-domain.com\" match any sender "
 "from that exact domain"
 msgstr ""
-"märk * asendab suvalise arvu märke. Näiteks: \"*@domeen.ee\" tähistab kõiki "
+"märk * asendab suvalise arvu märke. Näiteks: \"*@domeen.ee\" leiab kõik "
 "kasutajad sellest konkreetsest domeenist"
 
 #: ../web_tt2/blacklist.tt2:15
@@ -872,6 +917,7 @@ msgstr ""
 
 #. (new_email)
 #: ../web_tt2/change_email_request.tt2:4
+#, fuzzy
 msgid ""
 "To this end we have sent you an email to this address: %1 with a validation "
 "link."
@@ -879,13 +925,11 @@ msgstr "Selleks saatis süsteem Teile emaili aadressil %1 koos kinnitusviitega."
 
 #: ../web_tt2/change_email_request.tt2:5
 msgid "You shoukd check your mailbox now."
-msgstr "Te peaksite vaatama enda postkasti."
+msgstr "Te peaksite vaatama enda postkasti"
 
 #: ../web_tt2/change_email.tt2:3
 msgid "You will receive a n email, with a confirmation link."
-msgstr ""
-"Teile peaks saabuma kiri, kinnitusviitega (vajadusel vaadake läbi rämpsposti "
-"kaust)."
+msgstr "Teile saadetakse kiri, kinnitusviitega."
 
 #: ../web_tt2/change_email.tt2:4
 msgid ""
@@ -893,28 +937,31 @@ msgid ""
 "the provided link"
 msgstr ""
 "Oma e-posti aadressi muutmiseks minge oma postkasti ja klikkige "
-"kinnitusviitele."
+"kinnitusviitele"
 
 #: ../web_tt2/choosepasswd.tt2:4
+#, fuzzy
 msgid ""
 "You need to choose a password for your WWSympa environment.\n"
 "You will need this password to perform privileged operations."
 msgstr ""
-"Te peate valima salasõna Sympa veebikeskkonna jaoks.\n"
-"Seda salasõna läheb vaja isikustatud operatsioonide täitmiseks."
+"Te peate valima salasõnaSympa keskkonna jaoks.\n"
+"Seda parooli läheb vaja veebikeskonna kasutamiseks"
 
 #: ../web_tt2/choosepasswd.tt2:11 ../web_tt2/pref.tt2:41
+#, fuzzy
 msgid "New password:"
-msgstr "Uus salasõna:"
+msgstr "Uus parool:"
 
 #: ../web_tt2/choosepasswd.tt2:12
+#, fuzzy
 msgid "New password again:"
-msgstr "Uue salasõna kordus:"
+msgstr "Uus parool uuesti:"
 
 #: ../web_tt2/choosepasswd.tt2:13 ../web_tt2/picture_upload.tt2:13
 #: ../web_tt2/pref.tt2:20 ../web_tt2/pref.tt2:43
 msgid "Submit"
-msgstr "Kinnitan muutused"
+msgstr "Lisa"
 
 #: ../web_tt2/close_list.tt2:4
 msgid ""
@@ -934,117 +981,117 @@ msgstr "Eemaldage ka aliased"
 
 #: ../web_tt2/compose_mail.tt2:5
 #, fuzzy
-msgid "Sending a message to the list"
-msgstr "Kirjade saatmine: "
+msgid "Sendind a message to the list"
+msgstr "Kirjade saatmine   : %1"
 
-#: ../web_tt2/compose_mail.tt2:12
+#. (list,host)
+#: ../web_tt2/compose_mail.tt2:10
+msgid ""
+"The best way to post an email to the list is to compose an email to the list "
+"email address <b>%1@%2</b> using your favourite email client. We also "
+"provide a form below to compose an email through the web interface."
+msgstr ""
+
+#: ../web_tt2/compose_mail.tt2:17
+#, fuzzy
 msgid "Sending an html page to the list "
-msgstr "HTML vormingus kirja listi saatmine"
+msgstr "Kirjade saatmine   : %1"
 
 #. (user.email)
 #. (from)
-#: ../web_tt2/compose_mail.tt2:19 ../web_tt2/request_topic.tt2:27
+#: ../web_tt2/compose_mail.tt2:22 ../web_tt2/request_topic.tt2:27
 msgid "From: %1"
 msgstr "Kellelt: %1"
 
 #. (mailto)
-#: ../web_tt2/compose_mail.tt2:20 ../web_tt2/request_topic.tt2:28
+#: ../web_tt2/compose_mail.tt2:23 ../web_tt2/request_topic.tt2:28
 msgid "To: %1"
 msgstr "Kellele: %1"
 
-#: ../web_tt2/compose_mail.tt2:21 ../web_tt2/create_list_request.tt2:69
+#: ../web_tt2/compose_mail.tt2:24 ../web_tt2/create_list_request.tt2:69
 #: ../web_tt2/install_pending_list.tt2:14
 #: ../web_tt2/set_pending_list_request.tt2:8
 msgid "Subject:"
 msgstr "Teema:"
 
-# nlsref 16,72
-#: ../web_tt2/compose_mail.tt2:26
-#, fuzzy
-msgid "Send to selected receipient"
-msgstr "Listi teema"
-
-# nlsref 15,6
-#: ../web_tt2/compose_mail.tt2:27
-#, fuzzy
-msgid "Send to me"
-msgstr "meeldetuletuskiri"
-
-#: ../web_tt2/compose_mail.tt2:47 ../web_tt2/modindex.tt2:50
+#: ../web_tt2/compose_mail.tt2:50 ../web_tt2/modindex.tt2:50
 #: ../web_tt2/viewmod.tt2:32
 msgid "This list is configured to require topic(s)."
-msgstr "See list nõuab teemasid."
-
-#: ../web_tt2/compose_mail.tt2:49
-msgid "Please select one or more topic(s) that corresponds to your message:"
-msgstr "Palun valige üks või mitu teemat, mis vastab teie kirja sisule."
-
-#: ../web_tt2/compose_mail.tt2:64
-msgid ""
-">Messages personalization: use the TT2 <a href=\"http://www.tt2.org"
-"\">template syntax TT2 </a>:"
 msgstr ""
 
-#: ../web_tt2/compose_mail.tt2:79
+#: ../web_tt2/compose_mail.tt2:52
+msgid "Please select one or more topic(s) that corresponds to your message:"
+msgstr ""
+
+#: ../web_tt2/compose_mail.tt2:65
+#, fuzzy
 msgid "URL:"
-msgstr "URL:"
+msgstr "link"
 
 #: ../web_tt2/copy_template.tt2:3
 msgid "Copying template"
-msgstr "Malli kopeerimine"
+msgstr "Mallide kohandamine"
 
 #: ../web_tt2/copy_template.tt2:7
 msgid "Input template"
-msgstr "Alusmall"
+msgstr "Mallide kohandamine"
 
 #: ../web_tt2/copy_template.tt2:8
+#, fuzzy
 msgid "Name: "
 msgstr "Nimi:"
 
 #: ../web_tt2/copy_template.tt2:10 ../web_tt2/copy_template.tt2:17
 #: ../web_tt2/copy_template.tt2:9 ../web_tt2/view_template.tt2:10
 msgid "Scope: "
-msgstr "Kasutusala:"
+msgstr ""
 
 #: ../web_tt2/copy_template.tt2:11 ../web_tt2/copy_template.tt2:23
+#, fuzzy
 msgid "Language: "
-msgstr "Keel:"
+msgstr "Keel :"
 
 #: ../web_tt2/copy_template.tt2:15
+#, fuzzy
 msgid "Output template"
-msgstr "Uus mall"
+msgstr "Mallide kohandamine"
 
 #: ../web_tt2/copy_template.tt2:16
+#, fuzzy
 msgid "New template name: "
-msgstr "Uue malli nimi:"
+msgstr "Mallid"
 
 #: ../web_tt2/copy_template.tt2:19 ../web_tt2/ls_templates.tt2:41
+#, fuzzy
 msgid "site"
-msgstr "server"
+msgstr "URL"
 
 #: ../web_tt2/copy_template.tt2:20 ../web_tt2/ls_templates.tt2:42
+#, fuzzy
 msgid "robot"
-msgstr "saatja"
+msgstr "Kellelt: %1"
 
 #: ../web_tt2/copy_template.tt2:21 ../web_tt2/search_user.tt2:9
+#, fuzzy
 msgid "list"
-msgstr "list"
+msgstr "Uus list"
 
 #: ../web_tt2/copy_template.tt2:25 ../web_tt2/edit_list_request.tt2:410
 msgid "default"
 msgstr "vaikeseade"
 
 #: ../web_tt2/copy_template.tt2:31
+#, fuzzy
 msgid "Enter list name: "
 msgstr "Listi nimi:"
 
 #: ../web_tt2/copy_template.tt2:43 ../web_tt2/d_properties.tt2:36
 msgid "Apply"
-msgstr "Rakenda"
+msgstr "Rakenda kirjeldus\""
 
 #: ../web_tt2/create_list_request.tt2:6 ../web_tt2/nav.tt2:5
 msgid "Copy an existing list."
-msgstr "Olemasolevast listist koopia tegemine."
+msgstr ""
 
 #: ../web_tt2/create_list_request.tt2:9
 msgid ""
@@ -1061,19 +1108,20 @@ msgstr ""
 #: ../web_tt2/create_list_request.tt2:10 ../web_tt2/create_list_request.tt2:29
 msgid ""
 "After the list is created, you will be able to adjust it's configuration."
-msgstr "Kui olete listi loonud, siis saate hiljem seda ümber seadistada."
+msgstr ""
 
 #: ../web_tt2/create_list_request.tt2:18 ../web_tt2/rename_list_request.tt2:8
 msgid "New list name:"
-msgstr "Uue listi nimi:"
+msgstr "Listi nimi:"
 
 #: ../web_tt2/create_list_request.tt2:20
 msgid "copy list configuration"
-msgstr "listi seadistuste kopeerimine"
+msgstr ""
 
 #: ../web_tt2/create_list_request.tt2:26 ../web_tt2/nav.tt2:6
+#, fuzzy
 msgid "Create a list using a template"
-msgstr "Uue listi loomine malli järgi"
+msgstr "Veebimallide kohandamine"
 
 #: ../web_tt2/create_list_request.tt2:28
 msgid ""
@@ -1081,12 +1129,11 @@ msgid ""
 "choose a list template that will preset most of the list parameters "
 "according to the list usage you plan. "
 msgstr ""
-"Te võite taotleda uue listi tegemist täites järgneva vormi. Te peate valima "
-"valmis malli, mis kõige paremini kirjeldab teis soove."
 
 #: ../web_tt2/create_list_request.tt2:33
+#, fuzzy
 msgid "the list name; be careful, not its address!"
-msgstr "Listi nimi. Tähelepanu, see ei ole listi aadress!"
+msgstr "listi nimi ; tähelepanu, see ei ole listi aadress !"
 
 #: ../web_tt2/create_list_request.tt2:34
 msgid "List name:"
@@ -1109,6 +1156,7 @@ msgstr ""
 "tehtud, saab neid kõiki parameetreid muuta"
 
 #: ../web_tt2/create_list_request.tt2:43
+#, fuzzy
 msgid "List type:"
 msgstr "Listi tüüp:"
 
@@ -1149,8 +1197,9 @@ msgid "Your list is created."
 msgstr "List loodi."
 
 #: ../web_tt2/create_list.tt2:7
+#, fuzzy
 msgid "You can configure it via the admin button beside."
-msgstr "Saate hiljem listi hallata <b>listi haldamine</b> lingist."
+msgstr "Saate listi hallata <b>listi haldamine</b> lingist."
 
 #: ../web_tt2/create_list.tt2:10 ../web_tt2/install_pending_list.tt2:26
 msgid "Aliases have been installed."
@@ -1180,12 +1229,14 @@ msgstr "Õigused dokumendile %1"
 #. (doc_owner)
 #: ../web_tt2/d_control.tt2:9 ../web_tt2/d_editfile.tt2:17
 #: ../web_tt2/d_properties.tt2:15 ../web_tt2/d_read.tt2:38
+#, fuzzy
 msgid "Owner: %1"
 msgstr "Omanik: %1"
 
 #. (doc_date)
 #: ../web_tt2/d_control.tt2:10 ../web_tt2/d_editfile.tt2:18
 #: ../web_tt2/d_properties.tt2:16 ../web_tt2/d_read.tt2:39
+#, fuzzy
 msgid "Last update: %1"
 msgstr "Viimane uuendus: %1"
 
@@ -1193,6 +1244,7 @@ msgstr "Viimane uuendus: %1"
 #. (desc)
 #: ../web_tt2/d_control.tt2:11 ../web_tt2/d_editfile.tt2:19
 #: ../web_tt2/d_properties.tt2:17 ../web_tt2/d_read.tt2:41
+#, fuzzy
 msgid "Description: %1"
 msgstr "Kirjeldus: %1"
 
@@ -1206,7 +1258,7 @@ msgstr "Redigeerimisõigus"
 
 #: ../web_tt2/d_control.tt2:37
 msgid "change access"
-msgstr "muuda õigusi"
+msgstr "change access"
 
 #. (visible_path)
 #: ../web_tt2/d_control.tt2:49
@@ -1233,8 +1285,9 @@ msgstr "Järjehoidja URL"
 
 #. (visible_path)
 #: ../web_tt2/d_editfile.tt2:33
+#, fuzzy
 msgid "Replace the file %1 with your file"
-msgstr "Asenda fail %1 teie failiga"
+msgstr "Asenda fail %1 teise failiga"
 
 #: ../web_tt2/d_editfile.tt2:38 ../web_tt2/edit_list_request.tt2:421
 #: ../web_tt2/editsubscriber.tt2:60 ../web_tt2/suboptions.tt2:65
@@ -1244,7 +1297,7 @@ msgstr "Uuenda"
 #: ../web_tt2/d_editfile.tt2:40 ../web_tt2/d_editfile.tt2:65
 #: ../web_tt2/d_read.tt2:372 ../web_tt2/d_read.tt2:392
 msgid "Publish"
-msgstr "Avalikusta"
+msgstr "Saada"
 
 #. (visible_path)
 #: ../web_tt2/d_editfile.tt2:58
@@ -1252,6 +1305,7 @@ msgid "Edit the file %1"
 msgstr "Faili %1 redigeerimine"
 
 #: ../web_tt2/d_install_shared.tt2:10
+#, fuzzy
 msgid ""
 "already exist(s), do you want to confirm the install and erase the old file"
 "(s) or cancel the install?"
@@ -1270,23 +1324,26 @@ msgstr "Tühista"
 
 #. (visible_path)
 #: ../web_tt2/d_properties.tt2:6
+#, fuzzy
 msgid "Properties of the bookmark %1"
-msgstr "Järjehoidja %1 omadused"
+msgstr "Järjehoidja %1 redigeerimine"
 
 #. (visible_path)
 #: ../web_tt2/d_properties.tt2:8
+#, fuzzy
 msgid "Properties of the directory %1"
-msgstr "Kausta %1 omadused"
+msgstr "Kataloogi %1 redigeerimine"
 
 #. (visible_path)
 #: ../web_tt2/d_properties.tt2:10
+#, fuzzy
 msgid "Properties of the file %1"
-msgstr "Faili %1 omadused"
+msgstr "Faili %1 redigeerimine"
 
 #. (fname)
 #: ../web_tt2/d_properties.tt2:26
 msgid "Describe directory '%1'"
-msgstr "Kirjelda kausta %1"
+msgstr "Kirjelda kataloogi %1"
 
 #. (fname)
 #: ../web_tt2/d_properties.tt2:28
@@ -1296,7 +1353,7 @@ msgstr "Kirjelda faili %1"
 #. (fname)
 #: ../web_tt2/d_properties.tt2:47
 msgid "Rename directory %1"
-msgstr "Muuda kausta %1 nime"
+msgstr "Muuda kataloogi %1 nime"
 
 #. (fname)
 #: ../web_tt2/d_properties.tt2:49
@@ -1310,21 +1367,23 @@ msgstr "Nimeta ümber"
 
 # nlsref 6,81
 #: ../web_tt2/d_read.tt2:11 ../web_tt2/d_read.tt2:15
+#, fuzzy
 msgid "User mode"
-msgstr "Tavakasutaja režiim"
+msgstr "Kasutajajuhend"
 
 #: ../web_tt2/d_read.tt2:12 ../web_tt2/d_read.tt2:16
 msgid "Expert mode"
-msgstr "Asjatundja režiim"
+msgstr "Asjatundja reziim"
 
 #: ../web_tt2/d_read.tt2:22 ../web_tt2/d_read.tt2:50
 msgid "Listing of folder"
-msgstr "Kausta sisu"
+msgstr "Kataloog SHARED"
 
 #. (visible_path)
 #: ../web_tt2/d_read.tt2:27
+#, fuzzy
 msgid "Do you really want to delete %1?"
-msgstr "Olete kindel, et soovite kustutada %1?"
+msgstr "Oled kindel, et soovid kustutada %1 ?"
 
 #: ../web_tt2/d_read.tt2:116 ../web_tt2/d_read.tt2:118
 #: ../web_tt2/d_read.tt2:253 ../web_tt2/d_read.tt2:255
@@ -1345,8 +1404,9 @@ msgid "access"
 msgstr "vaata"
 
 #: ../web_tt2/d_read.tt2:47
+#, fuzzy
 msgid "Listing of root folder"
-msgstr "Juurkausta sisu"
+msgstr "Kataloog SHARED"
 
 #: ../web_tt2/d_read.tt2:59 ../web_tt2/d_read.tt2:61
 #: ../web_tt2/latest_d_read.tt2:20 ../web_tt2/modindex.tt2:153
@@ -1359,7 +1419,7 @@ msgid "Size (Kb)"
 msgstr "Suurus (Kb)"
 
 #: ../web_tt2/d_read.tt2:69 ../web_tt2/d_read.tt2:71
-#: ../web_tt2/latest_d_read.tt2:18 ../web_tt2/subscriber_table.tt2:61
+#: ../web_tt2/latest_d_read.tt2:18 ../web_tt2/review.tt2:166
 msgid "Last update"
 msgstr "Viimati uuendatud"
 
@@ -1390,12 +1450,13 @@ msgstr "Atribuudid"
 # #-#-#-#-#  et.po (PACKAGE VERSION)  #-#-#-#-#
 # nlsref 16,26
 #: ../web_tt2/d_read.tt2:80
+#, fuzzy
 msgid "Moderation"
-msgstr "Modereerimine"
+msgstr "Moderaatorid"
 
 #: ../web_tt2/d_read.tt2:87
 msgid "Empty folder"
-msgstr "Tühi kaust"
+msgstr "Tühi kataloog"
 
 #: ../web_tt2/d_read.tt2:103 ../web_tt2/d_read.tt2:218
 #: ../web_tt2/latest_d_read.tt2:42
@@ -1404,8 +1465,9 @@ msgstr "Autor teadmata"
 
 #. (visible_path,s.doc)
 #: ../web_tt2/d_read.tt2:116 ../web_tt2/d_read.tt2:118
+#, fuzzy
 msgid "Do you really want to delete %1%2?"
-msgstr "Olete kindel, et soovite kustutada %1%2?"
+msgstr "Oled kindel, et soovid kustutada %1%2 ?"
 
 #: ../web_tt2/d_read.tt2:211
 msgid "to moderate"
@@ -1419,21 +1481,22 @@ msgstr "muuda"
 
 #. (visible_path,f.doc,f.size)
 #: ../web_tt2/d_read.tt2:253 ../web_tt2/d_read.tt2:255
+#, fuzzy
 msgid "Do you really want to delete %1%2 (%3 Kb)?"
-msgstr "Olete kindel, et soovite kustutada %1%2 (%3 Kb)?"
+msgstr "Oled kindel, et soovid kustutada %1%2 (%3 Kb)?"
 
 #: ../web_tt2/d_read.tt2:290
 msgid "moderate"
-msgstr "modereeri"
+msgstr ""
 
 #. (visible_path)
 #: ../web_tt2/d_read.tt2:314
 msgid "Create a new folder inside folder %1"
-msgstr "Loo uus alamkaust kausta %1"
+msgstr "Loo uus kataloog kataloogi %1"
 
 #: ../web_tt2/d_read.tt2:316
 msgid "Create a new folder inside root folder"
-msgstr "Loo uus alamkaust juurkausta"
+msgstr "Loo uus kataloog kataloogi %1"
 
 # nlsref 8,7
 #: ../web_tt2/d_read.tt2:319
@@ -1459,114 +1522,118 @@ msgstr "Lisa järjehoidja"
 
 #: ../web_tt2/d_read.tt2:350
 msgid "title"
-msgstr "pealkiri"
+msgstr "URL"
 
 #: ../web_tt2/d_read.tt2:351
 msgid "URL"
-msgstr "URL"
+msgstr "link"
 
-#: ../web_tt2/d_read.tt2:352 ../web_tt2/review.tt2:73
+#: ../web_tt2/d_read.tt2:352 ../web_tt2/review.tt2:72
 msgid "Add"
 msgstr "Lisa"
 
 #. (visible_path)
 #: ../web_tt2/d_read.tt2:366
+#, fuzzy
 msgid "Upload a file inside folder %1"
-msgstr "Lae fail kausta %1"
+msgstr "Lae fail kataloogi %1"
 
 #: ../web_tt2/d_read.tt2:368
+#, fuzzy
 msgid "Upload a file inside folder SHARED"
-msgstr "Lae fail kausta SHARED"
+msgstr "Lae fail kataloogi SHARED"
 
 #. (visible_path)
 #: ../web_tt2/d_read.tt2:385
+#, fuzzy
 msgid "Unzip a file inside the folder %1"
-msgstr "Paki zip-arhiiv lahti kausta %1"
+msgstr "Lae fail kataloogi %1"
 
 #: ../web_tt2/d_read.tt2:387
+#, fuzzy
 msgid "Unzip a file inside the folder SHARED"
-msgstr "Paki zip-arhiiv lahti kausta SHARED"
+msgstr "Lae fail kataloogi SHARED"
 
 #: ../web_tt2/dump_scenario.tt2:6
+#, fuzzy
 msgid "scenario is created but not loaded in the list config"
-msgstr "scenario loodi, kuid Sympa ei saanud lugeda listi seadetefaili."
+msgstr "Sympa ei saanud lugeda listi seadetefaili."
 
 #: ../web_tt2/dump_scenario.tt2:8
 msgid ""
 "new scenario is created but not loaded in the list config. Edit list config "
 "if you need to apply it for that list"
 msgstr ""
-"Uus scenario on loodud aga seda ei kasutata listi seadistustes. Vajadusel "
-"muutke listi seadistusi."
 
 #: ../web_tt2/dump_scenario.tt2:10
 msgid "new scenario is equal to previous one. Nothing done."
-msgstr "Uus skeem on vanaga samasugune. Midagi ei tehtud."
+msgstr ""
 
 #: ../web_tt2/dump_scenario.tt2:17
+#, fuzzy
 msgid "path:"
-msgstr "Asukoht:"
+msgstr "Asukoht"
 
 #: ../web_tt2/dump_scenario.tt2:29
 msgid "scope:"
-msgstr "kasutusala:"
+msgstr ""
 
 #. (robot)
 #: ../web_tt2/dump_scenario.tt2:31
+#, fuzzy
 msgid "robot %1"
 msgstr "Kellelt: %1"
 
 #. (list)
 #: ../web_tt2/dump_scenario.tt2:32 ../web_tt2/ls_templates.tt2:43
+#, fuzzy
 msgid "list %1"
-msgstr "list %1"
+msgstr "lk %1 / %2"
 
 #: ../web_tt2/dump_scenario.tt2:36
+#, fuzzy
 msgid "scenario name:"
-msgstr "Scenario nimi:"
+msgstr "Scenari name"
 
 #. (shortname)
 #: ../web_tt2/d_upload.tt2:2
 msgid "the file %1 already exists"
-msgstr "fail %1 on juba olemas"
+msgstr ""
 
 #. (shortname)
 #: ../web_tt2/d_upload.tt2:6
+#, fuzzy
 msgid "Do you want to delete the old file %1?"
-msgstr "Olete kindel, et soovite kustutada vana faili %1?"
+msgstr "Oled kindel, et soovid kustutada %1 ?"
 
 #. (shortname)
 #: ../web_tt2/d_upload.tt2:9
+#, fuzzy
 msgid "Do you want to rename your file %1?"
-msgstr "Olete kindel, et soovite ümber nimetada faili %1?"
+msgstr "Oled kindel, et soovid ümber nimetada faili %1 ?"
 
 #: ../web_tt2/d_upload.tt2:15
+#, fuzzy
 msgid "Do you want to cancel the upload?"
-msgstr "Olete kindel, et soovite tühistada üleslaadimise?"
+msgstr "Oled kindel, et soovid tühistada üleslaadimist ?"
 
 # nlsref 16,30
 #: ../web_tt2/edit_attributes.tt2:4 ../web_tt2/subindex.tt2:14
+#, fuzzy
 msgid "Additional information"
-msgstr "Lisainfo"
+msgstr "isiklik informatsioon"
 
 #: ../web_tt2/edit_attributes.tt2:7
 msgid "[% k.name %]:"
-msgstr "[% k.name %]:"
-
-#: ../web_tt2/edit_attributes.tt2:24
-msgid "*: Required element"
-msgstr "*: kohustuslik element"
-
-#: ../web_tt2/edit_config.tt2:2
-#, fuzzy
-msgid "Edit robot config"
-msgstr "Listi seadete muutmine"
-
-#: ../web_tt2/edit_config.tt2:35 ../web_tt2/serveradmin.tt2:213
-msgid "Set"
 msgstr ""
 
+#: ../web_tt2/edit_attributes.tt2:24
+#, fuzzy
+msgid "*: Required element"
+msgstr "Vajalikud aliased"
+
 #: ../web_tt2/editfile.tt2:4
+#, fuzzy
 msgid "Edit list templates"
 msgstr "Veebimallide kohandamine"
 
@@ -1576,29 +1643,26 @@ msgstr "Salvesta"
 
 #: ../web_tt2/editfile.tt2:23
 msgid "You can edit several messages/files associated with your list:"
-msgstr "Te saate muuta erinevaid teateid/seadefaile, mis on seotud listiga"
+msgstr ""
 
 #: ../web_tt2/editfile.tt2:28
 msgid "HTML pages"
-msgstr "HTML lehed"
+msgstr ""
 
 #: ../web_tt2/editfile.tt2:30
 msgid ""
 "List homepage: HTML text to describe the list. It is printed on the right-"
 "hand side of the main list page. (default for this is the list description)"
 msgstr ""
-"Listi koduleht: HTML tekst listi kirjeldamiseks. See kuvatakse listi pealehe "
-"(vaikeväärtuseks listi kirjeldus)."
 
 #: ../web_tt2/editfile.tt2:32
 msgid ""
 "List description: This text is sent as an answer to the mail command\n"
 "INFO. It can also be included in the <em>Welcome message</em>."
 msgstr ""
-"Listi kirjeldus: Tekst mis saadetakse vastuseks e-mailiga saadetud käsule \n"
-"INFO. Seda teksti võib lisada ka <em>tervituskirjale</em>."
 
 #: ../web_tt2/editfile.tt2:34
+#, fuzzy
 msgid "Automatic messages"
 msgstr "Vanemad kirjad eespool"
 
@@ -1606,7 +1670,7 @@ msgstr "Vanemad kirjad eespool"
 msgid ""
 "Welcome message: This message is sent to new subscribers. It can be a full "
 "MIME structured message (only for MIME gurus)."
-msgstr "Tervitustekst: See tekst saadetakse uutele tellijatele."
+msgstr ""
 
 #: ../web_tt2/editfile.tt2:37
 msgid ""
@@ -1614,9 +1678,6 @@ msgid ""
 "can be sent to the original author. You may prepare various rejection "
 "messages."
 msgstr ""
-"Tagasilükkamis kiri: Teade, mis saadetakse kirja originaalautorile, kui kiri "
-"lükateakse listi moderaatori poolt tagasi. Võite ette valmistada mitu "
-"erinevat tagasilükkamise kirja."
 
 #: ../web_tt2/editfile.tt2:39
 msgid ""
@@ -1625,48 +1686,39 @@ msgid ""
 "confused about their own subscription emails or people who are not able to "
 "unsubscribe themselves."
 msgstr ""
-"Meeldetuletuskiri: Teade, mis saadetakse kõigile tellijatele käsu REMAIND "
-"peale. On väga kasulik aidatamaks inimestele, kes on segaduses oma "
-"tellimustest või kes ei oska listist iseseisvalt lahkuda."
 
 #: ../web_tt2/editfile.tt2:41
 msgid ""
 "Subscribing invitation message: sent to a person if someone  \n"
 "uses the INVITE command to invite someone to subscribe."
 msgstr ""
-"Liitumiskutse: Saadetakse inimesele, kelle aadressi kasutatakse INVITE "
-"käsus, kutsumaks teda listi tellijaks."
 
 # nlsref 16,68
 #: ../web_tt2/editfile.tt2:43
+#, fuzzy
 msgid "Added in distributed messages"
-msgstr "Lisati edasisaadetud kirjade hulka"
+msgstr "Kes võib kirju saata"
 
 #: ../web_tt2/editfile.tt2:45
 msgid ""
 "Message footer: If this file is not empty, it is added as a MIME attachment "
 "at the end of each message distributed to the list."
 msgstr ""
-"Kirja jalus: Kui see fail ei ole tühi, lisatakse ta MIME manusena iga listi "
-"kirja lõppu."
 
 #: ../web_tt2/editfile.tt2:46
 msgid ""
 "Message header: If this file is not empty, it is added as a MIME attachment "
 "at the beginning of each message distributed to the list."
 msgstr ""
-"Kirja päis: Kui see fail ei ole tühi, lisatakse ta MIME manusena iga listi "
-"kirja algusesse."
 
 #: ../web_tt2/editfile.tt2:48
 #, fuzzy
 msgid "More"
-msgstr "Rohkem"
+msgstr "Modereeri"
 
 #: ../web_tt2/editfile.tt2:50
 msgid "Unsubscribe message: This message is sent when users leave the list."
 msgstr ""
-"Lahkumise kiri: See teade saadetakse kui kasutaja lõpetab listi tellimuse."
 
 #: ../web_tt2/editfile.tt2:52
 #, fuzzy
@@ -1690,11 +1742,11 @@ msgstr "Listi loomine"
 msgid "You can choose below a subset of parameters to edit:"
 msgstr "Listi seaded on jagatud jägnevateks alamjaotusteks:"
 
-#: ../web_tt2/edit_list_request.tt2:11 ../web_tt2/nav.tt2:95
+#: ../web_tt2/edit_list_request.tt2:11 ../web_tt2/nav.tt2:93
 msgid "List definition"
 msgstr "Listi kirjeldus"
 
-#: ../web_tt2/edit_list_request.tt2:12 ../web_tt2/nav.tt2:96
+#: ../web_tt2/edit_list_request.tt2:12 ../web_tt2/nav.tt2:94
 msgid "Sending/receiving setup"
 msgstr "Saatmise/saamise seaded"
 
@@ -1704,7 +1756,7 @@ msgstr "Saatmise/saamise seaded"
 msgid "Bounce management"
 msgstr "Kohalejõudmata kirjade haldus"
 
-#: ../web_tt2/edit_list_request.tt2:16 ../web_tt2/nav.tt2:103
+#: ../web_tt2/edit_list_request.tt2:16 ../web_tt2/nav.tt2:101
 msgid "Data sources setup"
 msgstr "Andmeallikate seadistamine"
 
@@ -1715,14 +1767,14 @@ msgstr "stsenaarium lähtetekstina"
 #: ../mail_tt2/helpfile.tt2:62 ../mail_tt2/listmaster_notification.tt2:283
 #: ../mail_tt2/listmaster_notification.tt2:295
 #: ../mail_tt2/listmaster_notification.tt2:366
-#: ../mail_tt2/listowner_notification.tt2:81 ../mail_tt2/lists.tt2:7
+#: ../mail_tt2/listowner_notification.tt2:79 ../mail_tt2/lists.tt2:7
 #: ../mail_tt2/summary.tt2:4 ../web_tt2/edit_list_request.tt2:102
 #: ../web_tt2/edit_list_request.tt2:104 ../web_tt2/edit_list_request.tt2:260
 #: ../web_tt2/edit_list_request.tt2:262 ../web_tt2/editsubscriber.tt2:47
 #: ../web_tt2/editsubscriber.tt2:55 ../web_tt2/error.tt2:104
 #: ../web_tt2/rss.tt2:4 ../web_tt2/subindex.tt2:39
 msgid ":"
-msgstr ":"
+msgstr ""
 
 #: ../web_tt2/editsubscriber.tt2:5
 msgid "Subscriber information"
@@ -1922,9 +1974,8 @@ msgid "Unable to access the message authenticated with key %1"
 msgstr "Ei leia kirja, mille autentimisvõti on  %s.\n"
 
 #: ../web_tt2/error.tt2:20
-#, fuzzy
 msgid "Failed to get your email address from the authentication service."
-msgstr "Ei õnnestunud saada teie e-posti aadressi autoriseerimisteenuselt."
+msgstr ""
 
 #. (i_err.key)
 #. (zipfile)
@@ -1953,8 +2004,6 @@ msgid ""
 "Failed creating list '%1'. The list might already exist or listname might "
 "include forbidden characters."
 msgstr ""
-"Listi '%1' loomine ebaõnnestus. Sellise nimega list võib juba olemas olla "
-"või leidub listi nimes keelatud sümboleid."
 
 #. (s_err.action)
 #: ../web_tt2/error.tt2:34
@@ -2158,21 +2207,22 @@ msgstr "Selle listi arhiivid on tühjad"
 
 #: ../web_tt2/error.tt2:81
 msgid "You did not select an action to perform"
-msgstr "Te ei valinud ühtegi tegevust."
+msgstr ""
 
 #. (u_err.email)
 #: ../web_tt2/error.tt2:82
 #, fuzzy
 msgid "No bounce for user  %1"
-msgstr "Aadressil %1 ei ole kohalejõudmata kirju."
+msgstr "Aadressil %1 ei ole vigu"
 
 #: ../web_tt2/error.tt2:83
 msgid "List has no bouncing subscribers"
 msgstr "Listis ei ole vigadega liikmeid"
 
 #: ../web_tt2/error.tt2:84
+#, fuzzy
 msgid "No parameter was edited"
-msgstr "Ühtegi seadet ei muudetud."
+msgstr "Valed parameetrid"
 
 #. (u_err.email)
 #: ../web_tt2/error.tt2:85
@@ -2180,25 +2230,23 @@ msgid "Config file has been modified by %1. Cannot apply your changes"
 msgstr "Seadetefaili muutis %1. Ei saa rakendada sinu muudatusi."
 
 #: ../web_tt2/error.tt2:86
-#, fuzzy
 msgid "Topic \"other\" is a reserved word"
-msgstr "Teemad \"muud\" ja \"other\" on keelatud."
+msgstr ""
 
 #. (u_err.p_name)
 #: ../web_tt2/error.tt2:87
-#, fuzzy
 msgid "Parameter '%1' is mandatory. Ignoring deletion."
-msgstr "Parameeter '%1' on kohustuslik. Kustutamist ignoreeritakse."
+msgstr ""
 
 #. (u_err.param)
 #: ../web_tt2/error.tt2:88
 msgid "Parameter '%1' must have values"
-msgstr "Parameetril '%1' peab olema väärtus."
+msgstr ""
 
 #. (u_err.param,u_err.val)
 #: ../web_tt2/error.tt2:89
 msgid "Parameter '%1' has got wrong value: '%2'"
-msgstr "Parameetril '%1' on vigane väärtus: '%2'"
+msgstr ""
 
 # nlsref 16,70
 #. (u_err.listname)
@@ -2227,136 +2275,156 @@ msgstr "List '%1' on juba olemas"
 #. (u_err.new_listname)
 #: ../web_tt2/error.tt2:94
 msgid "Incorrect listname '%1': matches one of service aliases"
-msgstr "Vigane listi nimi '%1'. See ühtib kasutuses oleva aliasega."
+msgstr ""
 
 #. (u_err.listname)
 #: ../web_tt2/error.tt2:95
+#, fuzzy
 msgid "Failed to remove list aliases for list %1"
-msgstr "Listi '%1' aliaste eemaldamine ebaõnnestus"
+msgstr "Ei saanud lisada listi administraatorit listile '%1'"
 
 #. (u_err.path)
 #: ../web_tt2/error.tt2:96
+#, fuzzy
 msgid "%1: No such file or directory"
-msgstr "%1 : Sellist faili või kataloogi ei ole"
+msgstr "%1 : Seda faili või kataloogi ei ole"
 
 #. (u_err.path)
 #: ../web_tt2/error.tt2:97
+#, fuzzy
 msgid "Unable to read %1: empty document"
 msgstr "Ei saa lugeda faili %1 : tühi dokument"
 
 # nlsref 16,70
 #: ../web_tt2/error.tt2:98
+#, fuzzy
 msgid "There is no shared documents"
-msgstr "Jagatud dokumente ei ole"
+msgstr "Jagatud dokumendid"
 
 # nlsref 16,70
 #: ../web_tt2/error.tt2:99
+#, fuzzy
 msgid "The shared document space is empty"
-msgstr "Jagatud dokumentidele ei ole ruumi"
+msgstr "Jagatud dokumendid"
 
 #: ../web_tt2/error.tt2:100
 msgid "The shared directory cannot have any description"
-msgstr "Jagatud kaustal ei saa olla kirjeldust"
+msgstr ""
 
 #: ../web_tt2/error.tt2:101
+#, fuzzy
 msgid "No description specified"
-msgstr "Kirjeldus puudu"
+msgstr "Kirjeldust ei ole"
 
 #. (u_err.path)
 #: ../web_tt2/error.tt2:102
 msgid "Unable to describe, the document '%1' does not exist"
-msgstr "Pole võimalik kirjeldada, kuna dokumenti '%1'  ei ole"
+msgstr ""
 
 #: ../web_tt2/error.tt2:103
 msgid "Data has changed on disk. Cannot apply your changes"
-msgstr "Salvestatud andmed on muutunud. Ei saa rakendada teie muudatusi."
+msgstr "Salvestatud andmed muutusid. Ei saa rakendada teie muudatusi."
 
 #. (u_err.name)
 #: ../web_tt2/error.tt2:104
+#, fuzzy
 msgid "%1: incorrect name"
 msgstr "%1 : ebakorrektne nimi"
 
 #: ../web_tt2/error.tt2:105
+#, fuzzy
 msgid "Failed: your content is empty"
-msgstr "Viga: Sisu ei ole"
+msgstr "Sisu ei ole"
 
 #. (u_err.path)
 #: ../web_tt2/error.tt2:106
+#, fuzzy
 msgid "Cannot overwrite file %1:"
 msgstr "Ei saa faili %1 üle kirjutada"
 
 #. (u_err.path)
 #: ../web_tt2/error.tt2:107
+#, fuzzy
 msgid "A directory named '%1' already exists:"
-msgstr "Kaust nimega '%1' on juba olemas"
+msgstr "Kaust nimega '%1' juba eksisteerib"
 
 #. (u_err.name)
 #: ../web_tt2/error.tt2:108
 msgid "This is an already existing document: '%1'"
-msgstr "Dokument nimega '%1' on juba olemas"
+msgstr ""
 
 #: ../web_tt2/error.tt2:109
+#, fuzzy
 msgid "No name specified"
-msgstr "Nimi määramata"
+msgstr "Nime ei ole"
 
 #: ../web_tt2/error.tt2:110
 msgid "The document repository exceed disk quota."
-msgstr "Dokumendi suurus ületab ketta kasutuse mahu piiranguid."
+msgstr ""
 
 #. (u_err.path)
 #: ../web_tt2/error.tt2:111
+#, fuzzy
 msgid "Cannot upload file %1:"
 msgstr "Ei saa faili %1 üles laadida"
 
 #. (u_err.dir)
 #: ../web_tt2/error.tt2:112
+#, fuzzy
 msgid "You're not authorized to upload an INDEX.HTML in %1"
 msgstr "Teil ei ole lubatud laadida faili INDEX.HTML kataloogi %1"
 
 #: ../web_tt2/error.tt2:113
 msgid "The upload failed, try it again"
-msgstr "Üleslaadimine ebaõnnestus. Palun proovige mõne aja pärast uuesti."
+msgstr ""
 
 #. (u_err.name,u_err.reason)
 #: ../web_tt2/error.tt2:114
+#, fuzzy
 msgid "Directory %1 and its contents could not be copied: %2"
-msgstr "Kataloogi %1 ja selle sisu ei kopeerida %2"
+msgstr "Kataloogi %1 ja selle sisu ei kopeeritud"
 
 #. (u_err.name,u_err.reason)
 #: ../web_tt2/error.tt2:115
+#, fuzzy
 msgid "File %1 was not copied: %2 "
-msgstr "Faili %1 ei kopeeritud: %2"
+msgstr "Faili %1 ei kopeeritud"
 
 #. (u_err.directory)
 #: ../web_tt2/error.tt2:116
+#, fuzzy
 msgid "Failed: %1 not empty"
-msgstr "Viga: kataloog %1 ei ole tühi"
+msgstr "Ei saa: kataloog %1 ei ole tühi"
 
 # nlsref 16,74
 #: ../web_tt2/error.tt2:117
+#, fuzzy
 msgid "No certificate for this list"
-msgstr "Listil puudub sertifikaat"
+msgstr "Listi teemad"
 
 #: ../web_tt2/error.tt2:118
+#, fuzzy
 msgid "This list has no message topic"
-msgstr "Listil ei ole teemasid"
+msgstr "List taastati"
 
 #: ../web_tt2/error.tt2:119
 msgid "Tag message with topic is required for this list"
-msgstr "Antud list nõuab teemat"
+msgstr ""
 
 #. (u_err.email)
 #: ../web_tt2/error.tt2:120
+#, fuzzy
 msgid "No entry for user '%1'"
-msgstr "Kasutaja %1 andmed puuduvad"
+msgstr "Aadressil %1 ei ole vigu"
 
 #: ../web_tt2/error.tt2:121
+#, fuzzy
 msgid "Please select archive months"
-msgstr "Valige sobivad kuud"
+msgstr "Vali soovitud kuud"
 
 #: ../web_tt2/error.tt2:122
 msgid "No SOAP service"
-msgstr "Teenus SOAP ei tööta"
+msgstr ""
 
 # nlsref 6,15
 #: ../web_tt2/error.tt2:123
@@ -2365,52 +2433,54 @@ msgstr "Autoriseerimine ei õnnestunud"
 
 #. (u_err.status)
 #: ../web_tt2/error.tt2:124
-msgid "Service unavailable because list status is '%1'"
+msgid "Cannot add subscribers when list status is '%1'"
 msgstr ""
 
 #. (u_err.argument)
 #: ../web_tt2/error.tt2:125
+#, fuzzy
 msgid "This Template '%1' already exists"
-msgstr "Mall  '%1' on juba olemas"
+msgstr "Kaust nimega '%1' juba eksisteerib"
 
 #. (u_err.file_del)
 #: ../web_tt2/error.tt2:126
+#, fuzzy
 msgid "Cannot delete this file '%1'"
-msgstr "Ei saa kustutada faili '%1'"
+msgstr "Ei saa avada faili '%1'"
 
 # nlsref 6,2
 #. (u_err.filename)
 #: ../web_tt2/error.tt2:127
+#, fuzzy
 msgid "Invalid filename: '%1'"
-msgstr "Vigane failinimi : %1"
+msgstr "Ei saa hakkama abifaili lugemisega : %s\n"
 
 #. (u_err.listname)
 #: ../web_tt2/error.tt2:128
 msgid ""
 "Failed to update member email in list '%1', list owner has been notified."
 msgstr ""
-"Tellija e-maili muutmine ebaõnnestus. Listi '%1' omaniku teavitati veast."
 
 #. (u_err.listname)
 #: ../web_tt2/error.tt2:129
 msgid ""
 "Failed to update admin email in list '%1', list owner has been notified."
 msgstr ""
-"Haldaja e-maili muutmine ebaõnnestus. Listi '%1' omaniku teavitati veast."
 
 #. (auth.action)
 #: ../web_tt2/error.tt2:138
 msgid "AUTHORIZATION REJECT (%1)"
-msgstr "AUTORISEERIMINE EBAÕNNESTUS (%1)"
+msgstr "AUTORISEERIMINE EBAÕNNESTUS"
 
 #. (auth.listname)
 #: ../web_tt2/error.tt2:140
+#, fuzzy
 msgid ""
 "Could not change your subscription address for the list '%1' \n"
 "     because your new address is not allowed to subscribe/unsubscribe:"
 msgstr ""
-"Ei saanud muuta Teie e-posti aadress listis %1,\n"
-"kuna Teie uuel aadressil pole lubatud seda teha."
+"Ei saanud muuta sinu e-posti aadress listis %1,\n"
+"kuna sul pole lubatud seda teha."
 
 #: ../web_tt2/get_closed_lists.tt2:6 ../web_tt2/get_closed_lists.tt2:7
 #: ../web_tt2/serveradmin.tt2:10
@@ -2431,7 +2501,7 @@ msgstr "listi soovis"
 
 #: ../src/etc/mhonarc-ressources.tt2:212 ../src/etc/mhonarc-ressources.tt2:328
 #: ../web_tt2/get_closed_lists.tt2:29 ../web_tt2/modindex.tt2:125
-#: ../web_tt2/modindex.tt2:182 ../web_tt2/review.tt2:138
+#: ../web_tt2/modindex.tt2:182 ../web_tt2/review.tt2:286
 #: ../web_tt2/reviewbouncing.tt2:131
 msgid "Toggle Selection"
 msgstr "Pööra valik ringi"
@@ -2446,8 +2516,9 @@ msgstr "Mitteaktiivsed listid"
 
 # nlsref 16,68
 #: ../web_tt2/get_inactive_lists.tt2:7
+#, fuzzy
 msgid "Most recent message"
-msgstr "Viimane kiri"
+msgstr "Ei saa kirju saata"
 
 #: ../web_tt2/get_inactive_lists.tt2:8 ../web_tt2/get_latest_lists.tt2:7
 #: ../web_tt2/latest_lists.tt2:20 ../web_tt2/review_family.tt2:7
@@ -2455,12 +2526,13 @@ msgid "Listname"
 msgstr "Listi nimi"
 
 #: ../web_tt2/get_inactive_lists.tt2:23
+#, fuzzy
 msgid "none so far"
-msgstr "seni veel mitte ühtegi"
+msgstr "vigade arv"
 
 #: ../web_tt2/get_latest_lists.tt2:4
 msgid "Latests Lists"
-msgstr "Uusimad listid"
+msgstr "Uuemad listid"
 
 #: ../web_tt2/get_pending_lists.tt2:6 ../web_tt2/get_pending_lists.tt2:7
 #: ../web_tt2/serveradmin.tt2:9
@@ -2468,16 +2540,19 @@ msgid "Pending lists"
 msgstr "Tegemisel listid"
 
 #: ../web_tt2/get_pending_lists.tt2:12
+#, fuzzy
 msgid "Requested date"
-msgstr "taotluse kuupäev"
+msgstr "listi soovis"
 
 # nlsref 16,61
 #: ../web_tt2/info.tt2:8
+#, fuzzy
 msgid "List informations"
-msgstr "listi info"
+msgstr "isiklik informatsioon"
 
 #: ../web_tt2/install_pending_list.tt2:11 ../web_tt2/scenario_test.tt2:13
 #: ../web_tt2/set_pending_list_request.tt2:7
+#, fuzzy
 msgid "Listname:"
 msgstr "Listi nimi:"
 
@@ -2488,155 +2563,9 @@ msgstr "Listi soovis"
 
 #. (list_request_date)
 #: ../web_tt2/install_pending_list.tt2:17
+#, fuzzy
 msgid "on %1"
-msgstr "%1"
-
-#: ../web_tt2/javascript.tt2:833
-#, fuzzy
-msgid "Start date"
-msgstr "Sorteeri kuupäeva järgi"
-
-#: ../web_tt2/javascript.tt2:834
-#, fuzzy
-msgid "End date"
-msgstr "kuupäev"
-
-#: ../web_tt2/javascript.tt2:838
-msgid "January"
-msgstr ""
-
-#: ../web_tt2/javascript.tt2:838
-msgid "February"
-msgstr ""
-
-#: ../web_tt2/javascript.tt2:838
-#, fuzzy
-msgid "March"
-msgstr "Otsi"
-
-# nlsref 16,62
-#: ../web_tt2/javascript.tt2:838
-#, fuzzy
-msgid "April"
-msgstr "profiil"
-
-#: ../web_tt2/javascript.tt2:838
-msgid "May"
-msgstr ""
-
-#: ../web_tt2/javascript.tt2:838
-msgid "June"
-msgstr ""
-
-#: ../web_tt2/javascript.tt2:838
-msgid "July"
-msgstr ""
-
-#: ../web_tt2/javascript.tt2:838
-msgid "August"
-msgstr ""
-
-#: ../web_tt2/javascript.tt2:838
-#, fuzzy
-msgid "September"
-msgstr "Listi liikmed"
-
-#: ../web_tt2/javascript.tt2:838
-#, fuzzy
-msgid "October"
-msgstr "Muu"
-
-#: ../web_tt2/javascript.tt2:838
-#, fuzzy
-msgid "November"
-msgstr "Listi liikmed"
-
-#: ../web_tt2/javascript.tt2:838
-#, fuzzy
-msgid "December"
-msgstr "Listi liikmed"
-
-#: ../web_tt2/javascript.tt2:839
-msgid "Su"
-msgstr ""
-
-#: ../web_tt2/javascript.tt2:839
-#, fuzzy
-msgid "Mo"
-msgstr "Modereeri"
-
-#: ../web_tt2/javascript.tt2:839
-msgid "Tu"
-msgstr ""
-
-#: ../web_tt2/javascript.tt2:839
-msgid "We"
-msgstr ""
-
-#: ../web_tt2/javascript.tt2:839
-msgid "Th"
-msgstr ""
-
-#: ../web_tt2/javascript.tt2:839
-#, fuzzy
-msgid "Fr"
-msgstr "saatja aadressil"
-
-#: ../web_tt2/javascript.tt2:839
-#, fuzzy
-msgid "Sa"
-msgstr "Salvesta"
-
-#: ../web_tt2/javascript.tt2:840
-#, fuzzy
-msgid "Sunday"
-msgstr "Kokkuvõte"
-
-#: ../web_tt2/javascript.tt2:840
-#, fuzzy
-msgid "Monday"
-msgstr "Sisu"
-
-#: ../web_tt2/javascript.tt2:840
-#, fuzzy
-msgid "Tuesday"
-msgstr "Kokkuvõte"
-
-#: ../web_tt2/javascript.tt2:840
-msgid "Wednesday"
-msgstr ""
-
-#: ../web_tt2/javascript.tt2:840
-msgid "Thursday"
-msgstr ""
-
-#: ../web_tt2/javascript.tt2:840
-msgid "Friday"
-msgstr ""
-
-#: ../web_tt2/javascript.tt2:840
-#, fuzzy
-msgid "Saturday"
-msgstr "Kokkuvõte"
-
-#: ../web_tt2/javascript.tt2:841
-msgid "Calendar"
-msgstr ""
-
-#: ../web_tt2/javascript.tt2:842
-#, fuzzy
-msgid "today"
-msgstr "Sisu"
-
-#. (+cpt)
-#: ../web_tt2/javascript.tt2:1056
-#, fuzzy
-msgid "microcal"
-msgstr "Kohalik"
-
-#: ../web_tt2/javascript.tt2:1096
-msgid "\"+src.id+\"_cal"
-msgstr ""
+msgstr "Kellele: %1"
 
 #. (count)
 #: ../web_tt2/latest_arc.tt2:6
@@ -2645,7 +2574,7 @@ msgstr "%1 uuemat kirja"
 
 #: ../web_tt2/latest_arc.tt2:8
 msgid " Recent messages "
-msgstr "Viimased kirjad"
+msgstr "Uuemad kirjad"
 
 #: ../web_tt2/latest_arc.tt2:17
 msgid " The most recent messages for this list "
@@ -2653,7 +2582,7 @@ msgstr "Selle listi uusimad kirjad"
 
 #: ../web_tt2/latest_arc.tt2:21
 msgid "From"
-msgstr "Saatja"
+msgstr "saatja aadressil"
 
 # nlsref 16,70
 #. (count)
@@ -2664,64 +2593,69 @@ msgstr "%1 viimati jagatud dokumenti"
 # nlsref 16,70
 #: ../web_tt2/latest_d_read.tt2:7
 msgid " Most recent shared documents "
-msgstr "Viimased jagatud dokumendid"
+msgstr "Enim jagatud dokumendid"
 
 # nlsref 16,70
 #: ../web_tt2/latest_d_read.tt2:16
+#, fuzzy
 msgid "Most recent documents for this list "
-msgstr "Viimased selle listi dokumendid"
+msgstr "Jagatud dokumendid"
 
-#: ../web_tt2/latest_d_read.tt2:19 ../web_tt2/subindex.tt2:12
-#: ../web_tt2/subscriber_table.tt2:33 ../web_tt2/subscriber_table.tt2:36
+#: ../web_tt2/latest_d_read.tt2:19 ../web_tt2/review.tt2:138
+#: ../web_tt2/review.tt2:141 ../web_tt2/subindex.tt2:12
 msgid "Name"
 msgstr "Nimi"
 
 #: ../web_tt2/latest_d_read.tt2:21
 msgid "Directory"
-msgstr "Kaust"
+msgstr "Kataloog"
 
 #. (count)
 #: ../web_tt2/latest_lists.tt2:5
+#, fuzzy
 msgid "The %1 newest lists"
 msgstr "%1 uuemat listi"
 
 #: ../web_tt2/latest_lists.tt2:7 ../web_tt2/rss.tt2:20
+#, fuzzy
 msgid "New lists"
-msgstr "Uued listid"
+msgstr "Listi nimi:"
 
 #: ../web_tt2/latest_lists.tt2:18
 msgid " The latest lists of this robot"
-msgstr "Viimased listid"
+msgstr "Uuemad listid"
 
 #. (occurrence)
-#: ../web_tt2/lists.tt2:7 ../web_tt2/review.tt2:109
+#: ../web_tt2/lists.tt2:7 ../web_tt2/review.tt2:91
 msgid "%1 occurrence(s) found"
-msgstr "leiti %1 vastavust"
+msgstr "%1 vastavust leitud"
 
 #. (email)
 #: ../web_tt2/lists.tt2:9
 msgid "<strong>%1</strong> is subscribed to the following mailing lists"
-msgstr "Tellija <strong>%1</strong> on järgnevate listide liige"
+msgstr "Aadress <strong>%1</strong> on järgnevate listide liige"
 
-#: ../web_tt2/lists.tt2:38 ../web_tt2/nav.tt2:69
+#: ../web_tt2/lists.tt2:38 ../web_tt2/nav.tt2:67
 msgid "Manage Subscribers"
 msgstr "Manageeri tellijaid"
 
-#: ../web_tt2/lists.tt2:40 ../web_tt2/nav.tt2:73 ../web_tt2/review.tt2:42
+#: ../web_tt2/lists.tt2:40 ../web_tt2/nav.tt2:71 ../web_tt2/review.tt2:43
 msgid "Blacklist"
 msgstr "Must nimekiri"
 
-#: ../web_tt2/lists.tt2:44 ../web_tt2/nav.tt2:21 ../web_tt2/nav.tt2:85
+#: ../web_tt2/lists.tt2:44 ../web_tt2/nav.tt2:21 ../web_tt2/nav.tt2:83
 #: ../web_tt2/serveradmin.tt2:123
 msgid "Logs"
 msgstr "Logi"
 
 #. (user.email)
 #: ../web_tt2/lists.tt2:62
+#, fuzzy
 msgid "No subscriptions with address <strong>%1</strong>!"
-msgstr "Tellija <strong>%1</strong> ei kuulu ühtegi listi!"
+msgstr "Aadress <B>%1</B> ei ole üheski listis!</"
 
 #: ../web_tt2/loginbanner.tt2:18
+#, fuzzy
 msgid "To login, select your organization authentication server below:"
 msgstr "Vali identifitseerimise server"
 
@@ -2731,41 +2665,45 @@ msgstr "Mine"
 
 # nlsref 16,27
 #: ../web_tt2/loginbanner.tt2:39 ../web_tt2/sso_login.tt2:46
+#, fuzzy
 msgid "email address:"
 msgstr "e-posti aadress"
 
 #: ../web_tt2/loginbanner.tt2:41 ../web_tt2/sso_login.tt2:48
+#, fuzzy
 msgid "password:"
-msgstr "salasõnal:"
+msgstr "parool"
 
 #: ../web_tt2/loginbanner.tt2:43
 msgid "Login"
-msgstr "Sisse logimine"
+msgstr "Logi sisse"
 
 # nlsref 6,15
 #: ../web_tt2/loginbanner.tt2:51
+#, fuzzy
 msgid "Authentication help"
-msgstr "Abi"
+msgstr "Autoriseerima"
 
 #: ../web_tt2/loginbanner.tt2:55
+#, fuzzy
 msgid "First login?"
-msgstr "Kas logite sisse esimest korda?"
+msgstr "Esmane sisselogimine?"
 
 #: ../web_tt2/loginbanner.tt2:56
+#, fuzzy
 msgid "Lost password?"
-msgstr "Olete unustanud salasõna?"
+msgstr "Minu parool ?"
 
 #: ../web_tt2/loginrequest.tt2:4
 msgid ""
 "In order to perform a privileged operation (one that requires your email "
 "address), you need to login."
-msgstr "Selleks, et sooritada rohkem tegevusi peate te sisse logima."
+msgstr ""
 
 #: ../web_tt2/ls_templates.tt2:7
 msgid ""
 "This page is suggested in order to edit or create mail or web tt2 templates."
 msgstr ""
-"Seda lehte saate kasutada erinevate mallide loomiseks ja parandamiseks."
 
 #: ../web_tt2/ls_templates.tt2:15
 msgid ""
@@ -2778,14 +2716,6 @@ msgid ""
 "edited because Sympa's update will over write these files)</li>\n"
 "</ul>"
 msgstr ""
-"Mallide kasutamise järjekord\n"
-"<ul\n"
-"<li>kui kontekst on defineeritud, rakendatakse listi mall (kui see on olemas)"
-"</li><li> muidu rakendatakse serveri mall (kui see on olemas)</li><li>muidu "
-"rakendatakse lokaalne mall (kui see on olemas)</li><li>muidu rakendatakse "
-"Sympa originaalmallid (neid ei tohiks muuta, kuna need kirjutatakse tarkvara "
-"uuendamisel üle)</li>\n"
-"</ul>"
 
 #: ../web_tt2/ls_templates.tt2:17
 msgid ""
@@ -2794,51 +2724,54 @@ msgid ""
 "list. You will then have an oportunity to copy and edit templates for the "
 "current robot or the named list."
 msgstr ""
-"Kõigepealt saate valida malli tüübi.  Loetelu peab sisaldama vaikemalli aga "
-"võib sisaldada ka vaid sellele listile iseloomuliku malli. Selleks on teil "
-"võimalus kopeerida ja parandada serveri või listi malle "
 
 #: ../web_tt2/ls_templates.tt2:22
+#, fuzzy
 msgid "Select templates type:"
-msgstr "Valige malli tüüp"
+msgstr "Mallide kohandamine"
 
 #: ../web_tt2/ls_templates.tt2:26
+#, fuzzy
 msgid "Select a list:"
-msgstr "Valige list"
+msgstr "Uuemad listid"
 
 #: ../web_tt2/ls_templates.tt2:27
 msgid "Reload"
-msgstr "Uuenda loetelu"
+msgstr "Taaslae"
 
 #: ../web_tt2/ls_templates.tt2:37
 msgid "This table contain all templates you can copy or see"
-msgstr "Selles tabelis on mallid mida saab vaadata ja kopeerida"
+msgstr ""
 
 #: ../web_tt2/ls_templates.tt2:39
+#, fuzzy
 msgid "template name"
-msgstr "malli nimi"
+msgstr "Mallid"
 
 #: ../web_tt2/ls_templates.tt2:40
+#, fuzzy
 msgid "distrib"
-msgstr "Sympa"
+msgstr "Saada"
 
 #: ../web_tt2/ls_templates.tt2:84
 msgid "view"
-msgstr "Vaatan"
+msgstr "vaade"
 
 #: ../web_tt2/ls_templates.tt2:104 ../web_tt2/ls_templates.tt2:126
 #: ../web_tt2/ls_templates.tt2:148 ../web_tt2/ls_templates.tt2:85
 msgid "cp"
-msgstr "kopeerin"
+msgstr ""
 
 #: ../web_tt2/ls_templates.tt2:105 ../web_tt2/ls_templates.tt2:127
 #: ../web_tt2/ls_templates.tt2:149
+#, fuzzy
 msgid "rm"
-msgstr "kustutan"
+msgstr "saatja aadressil"
 
 #. (lang.value)
 #: ../web_tt2/ls_templates.tt2:105 ../web_tt2/ls_templates.tt2:127
 #: ../web_tt2/ls_templates.tt2:149
+#, fuzzy
 msgid "Do you really want to remove %1?"
 msgstr "Oled kindel, et soovid kustutada %1 ?"
 
@@ -2847,76 +2780,87 @@ msgid ""
 "The mailing list server is in maintenance mode, no operation can be "
 "performed during this period."
 msgstr ""
-"Listserver on hooldusrežiimis. Veebilehe võimalusi ei saa seniks kasutada."
 
 # nlsref 15,7
 #: ../web_tt2/manage_template.tt2:3
+#, fuzzy
 msgid "Modify or delete existing rejection messages"
-msgstr "Paranda või kustuta olemasolev äraütlemiskiri"
+msgstr "kiri toimetaja keeldumisest"
 
 # nlsref 15,7
 #: ../web_tt2/manage_template.tt2:10 ../web_tt2/manage_template.tt2:9
+#, fuzzy
 msgid "Listing rejection messages"
-msgstr "Äraütlemiskirjade loetelu"
+msgstr "kiri toimetaja keeldumisest"
 
 #: ../web_tt2/manage_template.tt2:11
+#, fuzzy
 msgid "Use as default"
-msgstr "Kasuta vaikimisi"
+msgstr "vaikeseade"
 
 #: ../web_tt2/manage_template.tt2:11
+#, fuzzy
 msgid "Message name"
-msgstr "Teate nimi"
+msgstr "Modereeritavaid kirju:"
 
 # #-#-#-#-#  et.po (PACKAGE VERSION)  #-#-#-#-#
 # nlsref 16,26
 #: ../web_tt2/manage_template.tt2:11
+#, fuzzy
 msgid "Operation"
-msgstr "Tegevused"
+msgstr "Moderaatorid"
 
 #. (file)
 #: ../web_tt2/manage_template.tt2:38
+#, fuzzy
 msgid "Do you really want to delete message %1?"
-msgstr "Oled kindel, et soovid seda teate %1 kustutada ?"
+msgstr "Oled kindel, et soovid seda kirja kustutada ?"
 
 #: ../web_tt2/manage_template.tt2:46
 msgid "There are currently no Rejection Messages available"
-msgstr "Äraütlemiskirju ei ole"
+msgstr ""
 
 #: ../web_tt2/manage_template.tt2:59
+#, fuzzy
 msgid "Message Name:"
-msgstr "nimi"
+msgstr "kiri"
 
 #: ../web_tt2/manage_template.tt2:60
+#, fuzzy
 msgid "Default Message"
-msgstr "Vaikimisi"
+msgstr "Mallide kohandamine"
 
 #: ../web_tt2/manage_template.tt2:67
+#, fuzzy
 msgid "Save Message"
-msgstr "Salvesta"
+msgstr "kiri"
 
 #: ../web_tt2/manage_template.tt2:78
+#, fuzzy
 msgid "Create new rejection messages"
-msgstr "Loo uus äraütlemiskiri"
+msgstr "Uuemad kirjad"
 
 #: ../web_tt2/manage_template.tt2:85
+#, fuzzy
 msgid "New message name:"
-msgstr "Uus nimi:"
+msgstr "Modereeritavaid kirju:"
 
 #: ../web_tt2/manage_template.tt2:85
+#, fuzzy
 msgid "create"
-msgstr "Loo"
+msgstr "Uus list"
 
-#: ../web_tt2/menu_search.tt2:5
+#: ../web_tt2/menu_search.tt2:6
 msgid "Enter a list name"
 msgstr "Listi nimi:"
 
-#: ../web_tt2/menu_search.tt2:7
+#: ../web_tt2/menu_search.tt2:8
 msgid "Search lists"
 msgstr "Otsi liste"
 
 #: ../web_tt2/modindex.tt2:61 ../web_tt2/modindex.tt2:9
 msgid "Listing messages to moderate"
-msgstr "Modereeritavate kirjade loetelu"
+msgstr "Modereeritavaid kirju:"
 
 #: ../web_tt2/modindex.tt2:113 ../web_tt2/modindex.tt2:115
 #: ../web_tt2/modindex.tt2:14 ../web_tt2/modindex.tt2:19
@@ -2928,7 +2872,7 @@ msgstr "Saada"
 #: ../web_tt2/modindex.tt2:185 ../web_tt2/modindex.tt2:25
 #: ../web_tt2/viewmod.tt2:14
 msgid "Reject"
-msgstr "Lükka tagasi"
+msgstr "Eemalda"
 
 #: ../web_tt2/modindex.tt2:25
 msgid ""
@@ -2936,28 +2880,28 @@ msgid ""
 "because the message sender is probably spoofed. Do you really want to reject "
 "those messages with notification?"
 msgstr ""
-"Te ei tohiks tagasi lükkama kirja, mis on tuvastatud kui rämpskiri, kuna "
-"saatja aadress on tõenäoliselt võltsitud. Kas Te tõesti tahate kirja tagasi "
-"lükata koos teatamisega autorile?"
 
 # nlsref 15,7
 #: ../web_tt2/modindex.tt2:31
+#, fuzzy
 msgid "Server default rejection message"
-msgstr "Serveri vaikekiri kirja listi edasitoimetamisest keeldumisest"
+msgstr "kiri toimetaja keeldumisest"
 
 #: ../web_tt2/modindex.tt2:39
+#, fuzzy
 msgid "Reject without notification "
-msgstr "Äraütlemine teateta"
+msgstr "ilma autentimata"
 
 #: ../web_tt2/modindex.tt2:41
+#, fuzzy
 msgid "Add to blacklist"
-msgstr "Lisada musta nimekirja"
+msgstr "Uus list"
 
 #: ../web_tt2/modindex.tt2:52
 msgid ""
 "Please select one or more topic(s) that correspond to the messages you wish "
 "to distribute:"
-msgstr "Paluge üks või enam teemat mis vastab Teie kirja sisule"
+msgstr ""
 
 #: ../web_tt2/modindex.tt2:155 ../web_tt2/modindex.tt2:71
 msgid "Size"
@@ -2965,7 +2909,7 @@ msgstr "Suurus"
 
 #: ../web_tt2/modindex.tt2:102
 msgid "No subject"
-msgstr "Teema puudub"
+msgstr "teema puudub"
 
 #: ../web_tt2/modindex.tt2:118 ../web_tt2/modindex.tt2:147
 #: ../web_tt2/modindex.tt2:186
@@ -2974,45 +2918,48 @@ msgstr "Eemalda teavitusega"
 
 #: ../web_tt2/modindex.tt2:120
 msgid "Reject and blacklist sender"
-msgstr "Eemalda ja pane saatja musta nimekirja"
+msgstr ""
 
 #: ../web_tt2/modindex.tt2:128
 msgid "Toggle spams"
-msgstr "Märgi rämpspostiks"
+msgstr ""
 
 #: ../web_tt2/modindex.tt2:143
+#, fuzzy
 msgid "Listing of shared documents to moderate"
-msgstr "Modereeritavate jagatud dokumentide loetelu"
+msgstr "Modereeritavaid kirju ei ole"
 
 #: ../web_tt2/modindex.tt2:145 ../web_tt2/modindex.tt2:184
 msgid "Install"
-msgstr "Paigalda"
+msgstr "Käivita"
 
 #: ../web_tt2/modindex.tt2:149
 msgid "Listing of documents shared to moderate"
-msgstr "Modereeritavate jagatud dokumentide loetelu"
+msgstr ""
 
 #: ../web_tt2/modindex.tt2:154
 msgid "Path"
 msgstr "Asukoht"
 
 #: ../web_tt2/modindex.tt2:180 ../web_tt2/modindex.tt2:199
+#, fuzzy
 msgid "edit blacklist"
-msgstr "muuda musta nimekirja"
+msgstr "Uus list"
 
 # #-#-#-#-#  et.po (PACKAGE VERSION)  #-#-#-#-#
 # nlsref 16,7
 #: ../web_tt2/modindex.tt2:192
+#, fuzzy
 msgid "Moderation management"
-msgstr "Modereerimise haldus"
+msgstr "Vigade haldus"
 
 # nlsref 15,7
 #: ../web_tt2/modindex.tt2:201
+#, fuzzy
 msgid "Manage rejection messages"
-msgstr "Äraütlemiskirjade haldus"
+msgstr "kiri toimetaja keeldumisest"
 
 #: ../web_tt2/nav.tt2:15 ../web_tt2/serveradmin.tt2:5
-#: ../web_tt2/suspend_request.tt2:11 ../web_tt2/suspend_request.tt2:9
 msgid "Lists"
 msgstr "Listid"
 
@@ -3024,7 +2971,7 @@ msgstr "Kasutajad"
 msgid "Templates"
 msgstr "Mallid"
 
-#: ../web_tt2/nav.tt2:25 ../web_tt2/serveradmin.tt2:186
+#: ../web_tt2/nav.tt2:25 ../web_tt2/serveradmin.tt2:188
 msgid "Skins, CSS and colors"
 msgstr "Kest, CSS ja värvid"
 
@@ -3032,45 +2979,38 @@ msgstr "Kest, CSS ja värvid"
 msgid "Virtual Robots"
 msgstr "Virtuaalsed serverid"
 
-#: ../web_tt2/nav.tt2:30
-#, fuzzy
-msgid "Edit Robot Config"
-msgstr "Muuda listi seadeid"
-
 # nlsref 8,7
-#: ../web_tt2/nav.tt2:34 ../web_tt2/serveradmin.tt2:38
+#: ../web_tt2/nav.tt2:32 ../web_tt2/serveradmin.tt2:38
 msgid "Families"
 msgstr "Grupid"
 
-#: ../web_tt2/nav.tt2:37 ../web_tt2/serveradmin.tt2:229
+#: ../web_tt2/nav.tt2:35 ../web_tt2/serveradmin.tt2:195
 msgid "Translating Sympa"
-msgstr "Sympa tõlkimine"
-
-#: ../web_tt2/nav.tt2:39 ../web_tt2/serveradmin.tt2:239
-msgid "Submitting a bug, a feature request"
-msgstr "Teavita vigadest või uute võimaluste soovist"
-
-#: ../web_tt2/nav.tt2:105
-msgid "DKIM"
 msgstr ""
 
-# nlsref 15,6
-#: ../web_tt2/nav.tt2:117
-msgid "Send a message"
-msgstr "Saada kiri"
+#: ../web_tt2/nav.tt2:37 ../web_tt2/serveradmin.tt2:205
+#, fuzzy
+msgid "Submitting a bug, a feature request"
+msgstr "Saada listisoov"
 
-#: ../web_tt2/nav.tt2:119
+# nlsref 15,6
+#: ../web_tt2/nav.tt2:113
+#, fuzzy
+msgid "Send a message"
+msgstr "meeldetuletuskiri"
+
+#: ../web_tt2/nav.tt2:115
 msgid "Send an html page"
-msgstr "Saada veebileht"
+msgstr ""
 
 #. (last_login_host,last_login_date)
 #: ../web_tt2/notice.tt2:5
 msgid "last login from %1 (%2)"
-msgstr "viimane sisselogimine arvutist %1 (%2)"
+msgstr ""
 
 #: ../web_tt2/notice.tt2:10
 msgid "Your request has been forwarded to the list owner"
-msgstr "Teie soov saadeti listiomanikele edasi"
+msgstr "Teie soov saadeti listiomanikele"
 
 #. (notice.total)
 #: ../web_tt2/notice.tt2:13
@@ -3121,7 +3061,7 @@ msgstr "Fail %1 pakiti lahti"
 #. (notice.path)
 #: ../web_tt2/notice.tt2:43
 msgid "Old file %1 has been erased"
-msgstr "Vana fail %1 kustutati"
+msgstr ""
 
 #. (notice.path)
 #: ../web_tt2/notice.tt2:46
@@ -3143,16 +3083,18 @@ msgstr "Parooli muutmiseks valige 'eelistused' ülevalt menüüst"
 
 #. (notice.list)
 #: ../web_tt2/notice.tt2:58
+#, fuzzy
 msgid "No message and no document to moderate for list %1"
-msgstr "Listis %1 ei ole modereeritavaid kirju ega dokumente"
+msgstr "Listis %1 ei ole modereeritavaid kirju"
 
 #: ../web_tt2/notice.tt2:61
+#, fuzzy
 msgid "The list of list members have been built/updated."
-msgstr "Listi tellijate nimekiri värskendati"
+msgstr "Listis [% notice.list %] ei ole modereeritavaid kirju"
 
 #: ../web_tt2/notice.tt2:64
 msgid "The list of list members will be built/updated soon (a few minutes)."
-msgstr "Listi tellijate nimekiri värskendakse mõne minuti jooksul."
+msgstr "Listis [% notice.list %] ei ole modereeritavaid kirju"
 
 # nlsref 4,26
 #: ../web_tt2/notice.tt2:67
@@ -3175,21 +3117,24 @@ msgstr "Fail '%1' nimetati ümber: '%2'"
 
 #: ../web_tt2/notice.tt2:79
 msgid "List has been set to the pending status; listmaster need to validate it"
-msgstr "Listi olekuks märgiti \"ootel\"; listiülem peab selle üle vaatama."
+msgstr ""
 
 #: ../web_tt2/notice.tt2:82
+#, fuzzy
 msgid "List name has been lowercased"
-msgstr "List nimes muudeti kõik tähed väikeseks."
+msgstr "List on suletud"
 
 #. (notice.notified_user)
 #: ../web_tt2/notice.tt2:85
+#, fuzzy
 msgid "User %1 has been notified"
-msgstr "Kasutajat %1 teavitati"
+msgstr "List on suletud"
 
 # nlsref 16,74
 #: ../web_tt2/picture_upload.tt2:4
+#, fuzzy
 msgid "Setting your picture for this list"
-msgstr "Enda pildi määramine listile"
+msgstr "Listi teemad"
 
 #: ../web_tt2/picture_upload.tt2:9
 msgid ""
@@ -3197,27 +3142,28 @@ msgid ""
 "page. The picture should use a standard format (gif, jpp, jpeg or png) and "
 "its size should not exceed 100 Kb."
 msgstr ""
-"Te võite laadida allpool enda pildi. See saab nähtavaks listi ülevaatelehel. "
-"Pilt peaks olema .gif, .jpg, .jpp või .png vormingus ja tema suurus ei tohi "
-"ületada 100Kb."
 
 #: ../web_tt2/picture_upload.tt2:21 ../web_tt2/picture_upload.tt2:22
+#, fuzzy
 msgid "Your picture"
-msgstr "Teie pilt"
+msgstr "Listid"
 
 #: ../web_tt2/picture_upload.tt2:25
+#, fuzzy
 msgid "Your picture in the subscribers list"
-msgstr "Teie pilt liitunute nimekirjas"
+msgstr "Soovin liituda listiga %1"
 
 #: ../web_tt2/picture_upload.tt2:26
 msgid "In the members page"
 msgstr "Liikmete lehel"
 
 #: ../web_tt2/pref.tt2:4 ../web_tt2/viewlogs.tt2:92
+#, fuzzy
 msgid "User preferences"
 msgstr "Eelistused"
 
 #: ../web_tt2/pref.tt2:16
+#, fuzzy
 msgid "Connection expiration period:"
 msgstr "Sessiooni aegumine periood"
 
@@ -3231,42 +3177,39 @@ msgid ""
 "you are also list owner or list moderator your email address for these roles "
 "will also be updated."
 msgstr ""
-"Te saate muuta oma e-maili aadressi korraga kõigi listide jaoks, millega "
-"olete antud serveris liitunud. Kui te olete mõne listi omanik või "
-"moderaator, kas siis need rollid uuendatakse teie jaoks koheselt."
 
 #: ../web_tt2/pref.tt2:31
+#, fuzzy
 msgid "New email address:"
-msgstr "Uus e-posti aadress :"
+msgstr "Uus aadress :"
 
 #: ../web_tt2/pref.tt2:32
+#, fuzzy
 msgid "Change Email"
-msgstr "E-posti aadressi muutmine"
+msgstr "Saada kiri"
 
 #: ../web_tt2/pref.tt2:37
 msgid "Changing your password"
-msgstr "Salasõna muutmine"
+msgstr "Parooli muutmine"
 
 #: ../web_tt2/pref.tt2:42
+#, fuzzy
 msgid "Re-enter your new password:"
-msgstr "Uue salasõna kordus:"
+msgstr "Uus parool veelkord:"
 
 #: ../web_tt2/remove_arc.tt2:5
 msgid ""
 "Operation successful. The message will be deleted as soon\n"
 "as possible. This task may be performed in a few minutes."
 msgstr ""
-"Tegevus õnnestus. Kiri kustutatakse esimesel võimalusel. See võib aega võtta "
-"mõned minutid."
 
 #: ../web_tt2/remove_arc.tt2:9
+#, fuzzy
 msgid ""
 "Unable to find the message to delete, probably this message\n"
 "was received without Message-Id. Please refer to listmaster with\n"
 "complete URL of the message concerned"
-msgstr ""
-"Kirja kustutamisel tekkis viga, pöörduge administraatori poole täieliku URL "
-"aadressiga."
+msgstr "Kirja kustutamisel tekkis viga, pöördu administraatori poole."
 
 #: ../web_tt2/remove_arc.tt2:11
 msgid "Unable to find the message to delete"
@@ -3281,206 +3224,212 @@ msgstr ""
 "koos täieliku URL'iga mis on seotud selle kirjaga"
 
 #: ../web_tt2/rename_list_request.tt2:3
+#, fuzzy
 msgid "Renaming the list"
-msgstr "Listi ümbernimetamine"
+msgstr "Muuda selle listi nime"
 
 #: ../web_tt2/rename_list_request.tt2:20
 msgid "Rename this list"
-msgstr "Muutke selle listi nime"
+msgstr "Muuda selle listi nime"
 
 #: ../web_tt2/rename_list_request.tt2:20
 msgid "Do you really want to rename this list?"
-msgstr "Olete kindel, et soovite selle listi nime muuta?"
+msgstr "Oled kindel, et soovid selle listi nime muuta?"
 
 #: ../web_tt2/renewpasswd.tt2:5
+#, fuzzy
 msgid "You requested an account creation on this list server."
-msgstr "Soovisite liituda listserveriga"
+msgstr "Soovisite liituda listiga %1."
 
 #: ../web_tt2/renewpasswd.tt2:7
 msgid "The password you submitted is wrong. Maybe you forgot it?"
-msgstr "Sisestatud salasõna on vale. Vahest te unustasite selle?"
+msgstr ""
 
 #: ../web_tt2/renewpasswd.tt2:9
-msgid ""
-"Too many wrong password were sumitted for this account. Your account as been "
-"blocked in order to protect you agains attacks. You must renew renew your "
-"password in order to login."
+msgid "You missed the password, please submit again. Maybe you forgot it?"
 msgstr ""
 
 #: ../web_tt2/renewpasswd.tt2:11
-msgid "You missed the password, please submit again. Maybe you forgot it?"
-msgstr ""
-"Te unustasite sisestada salasõna. Palun sisestage see. Vahest te unustasite "
-"salasõna?"
-
-#: ../web_tt2/renewpasswd.tt2:13
+#, fuzzy
 msgid "You will receive an email that will allow you to choose your password."
-msgstr "Teile saadetakse kiri, mis lubab teil valida uue salasõna. "
+msgstr ""
+"Teile saadetakse kiri, kus on teie parool. Et kinnitada oma<BR>\n"
+"aadressi muutust, sisestage saadud parool siia:"
+
+#: ../web_tt2/renewpasswd.tt2:14
+msgid "In order to use Sympa, you will need to define a password."
+msgstr ""
 
 #: ../web_tt2/renewpasswd.tt2:16
-msgid "In order to use Sympa, you will need to define a password."
-msgstr "Selleks, et kasutada Sympa listiserverit, peate looma salasõna."
-
-#: ../web_tt2/renewpasswd.tt2:18
+#, fuzzy
 msgid "You forgot your password, so you have to renew it."
-msgstr "Te olete unustanud oma salasõna, seega peate selle uuendama"
+msgstr ""
+"Te kas unustasite oma parooli või teil ei ole listiserveris parooli olnudki."
 
-#: ../web_tt2/renewpasswd.tt2:21
+#: ../web_tt2/renewpasswd.tt2:19
 msgid ""
 "Please submit your email address, you will receive a message that gives you "
 "access to the appropriate form in order to choose your password."
 msgstr ""
-"Palun sisestage oma e-posti aadress. Sellele aadressile saadetakse kiri "
-"viitega, mille aabil saate valida endale uue salasõna."
 
-#: ../web_tt2/renewpasswd.tt2:27 ../web_tt2/sigrequest.tt2:29
+#: ../web_tt2/renewpasswd.tt2:25 ../web_tt2/sigrequest.tt2:29
 #: ../web_tt2/sso_login.tt2:17
+#, fuzzy
 msgid "Your e-mail address:"
-msgstr "E-posti aadress :"
+msgstr "Teie e-posti aadress :"
+
+#: ../web_tt2/renewpasswd.tt2:29
+#, fuzzy
+msgid "Request first password"
+msgstr "Olen oma parooli unustanud"
 
 #: ../web_tt2/renewpasswd.tt2:31
-msgid "Request first password"
-msgstr "Esimese salasõna taotlemine"
-
-#: ../web_tt2/renewpasswd.tt2:33
+#, fuzzy
 msgid "Request new password"
-msgstr "Uue salasõna taotlemine"
+msgstr "Uus parool veelkord:"
 
 #: ../web_tt2/requestpasswd.tt2:4
+#, fuzzy
 msgid "Message sent"
-msgstr "Kiri on saadetud."
+msgstr "kiri"
 
 #: ../web_tt2/requestpasswd.tt2:6
 msgid ""
 "We've sent you an email that will allow you choose your password. Please "
 "check your mailbox."
 msgstr ""
-"Saatsime teile emaili, mis lubab valida uue salasõna. Palun kontrollige oma "
-"postkasti."
 
 #: ../web_tt2/requestpasswd.tt2:10
 msgid "We were not able to send you a validation message."
-msgstr "Kirja saatmine ebaõnnestus"
+msgstr ""
 
 #: ../web_tt2/requestpasswd.tt2:14
 msgid ""
 "Internal error: could not build a validation link, please contact the "
 "service administrator"
 msgstr ""
-"Süsteemne viga: ei suuda luua valideerimise viidet. Palun võtke ühendust "
-"admistraatoriga."
 
 #: ../web_tt2/requestpasswd.tt2:18
+#, fuzzy
 msgid "Unkown error."
-msgstr "Tundmatu viga."
+msgstr "Autor teadmata"
 
 #: ../web_tt2/request_topic.tt2:5
 msgid "This list is configured to require topic(s) foreach message."
-msgstr "See list nõuab igale kirjale teemat."
+msgstr ""
 
 #: ../web_tt2/request_topic.tt2:7 ../web_tt2/viewmod.tt2:34
 msgid ""
 "Please select one or more topic(s) that corresponds to your message below:"
-msgstr "Palun valige üks või enam teemat enda kirjale."
+msgstr ""
 
 #: ../web_tt2/request_topic.tt2:15 ../web_tt2/request_topic.tt2:17
+#, fuzzy
 msgid "Tag this mail"
-msgstr "Märgistage see kiri"
+msgstr "Saada kiri"
 
 #. (date)
 #: ../web_tt2/request_topic.tt2:29
+#, fuzzy
 msgid "Date: %1"
-msgstr "Kuupäev: %1"
+msgstr "Kellele: %1"
 
 #. (subject)
 #: ../web_tt2/request_topic.tt2:31
+#, fuzzy
 msgid "Subject: %1"
-msgstr "Teema:"
+msgstr "Teema :"
 
 #: ../web_tt2/reviewbouncing.tt2:3
+#, fuzzy
 msgid "Manage bouncing list members"
-msgstr "Saatmata kirjadega tellijate haldus"
+msgstr "Vigaste liikmete haldus:"
 
-#: ../web_tt2/review.tt2:46 ../web_tt2/review.tt2:48
+#: ../web_tt2/review.tt2:47 ../web_tt2/review.tt2:49
 #: ../web_tt2/reviewbouncing.tt2:6
 msgid "Dump"
-msgstr "Tee tõmmis"
+msgstr ""
 
 #: ../web_tt2/reviewbouncing.tt2:19
 msgid "Remind all subscribers"
-msgstr "Meeldetuletus kõigile listi tellijatele"
+msgstr "Meeldetuletus listi liikmetele"
 
 #. (total)
-#: ../web_tt2/review.tt2:62 ../web_tt2/reviewbouncing.tt2:19
+#: ../web_tt2/review.tt2:61 ../web_tt2/reviewbouncing.tt2:19
 msgid ""
 "Do you really want to send a subscription reminder message to the %1 "
 "subscribers?"
 msgstr "Olete kindel, et soovite saata meeldetuletuse kõigile %1 liikmetele ?"
 
-#: ../web_tt2/review.tt2:126 ../web_tt2/review.tt2:27
+#: ../web_tt2/review.tt2:274 ../web_tt2/review.tt2:28
 #: ../web_tt2/reviewbouncing.tt2:115 ../web_tt2/reviewbouncing.tt2:44
 #: ../web_tt2/viewlogs.tt2:31
 msgid "Previous page"
-msgstr "Eelmine leht"
+msgstr "eelmine leht"
 
 #. (page,total_page)
 #: ../web_tt2/reviewbouncing.tt2:118 ../web_tt2/reviewbouncing.tt2:47
 msgid "page %1 / %2"
 msgstr "lk %1 / %2"
 
-#: ../web_tt2/review.tt2:132 ../web_tt2/review.tt2:33
+#: ../web_tt2/review.tt2:280 ../web_tt2/review.tt2:34
 #: ../web_tt2/reviewbouncing.tt2:121 ../web_tt2/reviewbouncing.tt2:50
 #: ../web_tt2/viewlogs.tt2:37
 msgid "Next page"
-msgstr "Järgmine leht"
+msgstr "järgmine leht"
 
 #: ../web_tt2/reviewbouncing.tt2:58
 msgid "Table which display list bounces"
-msgstr "Kohalejõudmate kirjade tabel"
+msgstr ""
 
-#: ../web_tt2/review.tt2:148 ../web_tt2/reviewbouncing.tt2:61
-#: ../web_tt2/show_exclude.tt2:15 ../web_tt2/subindex.tt2:11
-#: ../web_tt2/subscriber_table.tt2:12 ../web_tt2/subscriber_table.tt2:15
+#: ../web_tt2/review.tt2:117 ../web_tt2/review.tt2:120
+#: ../web_tt2/reviewbouncing.tt2:61 ../web_tt2/subindex.tt2:11
 #: ../web_tt2/viewlogs.tt2:54 ../web_tt2/viewlogs.tt2:63
 msgid "Email"
-msgstr "E-post"
+msgstr "e-post"
 
 #: ../web_tt2/reviewbouncing.tt2:62
+#, fuzzy
 msgid "Bounce score"
-msgstr "Vigu"
+msgstr "vigade arv"
 
 #: ../web_tt2/reviewbouncing.tt2:63
+#, fuzzy
 msgid "Details"
-msgstr "Detailid"
+msgstr "e-post"
 
 #: ../web_tt2/reviewbouncing.tt2:66
+#, fuzzy
 msgid "# of bounces"
-msgstr "Vigade arv"
+msgstr "Vead"
 
 #: ../web_tt2/reviewbouncing.tt2:67
+#, fuzzy
 msgid "First bounce"
-msgstr "Esimene veateade"
+msgstr "Vaata viimast veateadet"
 
 #: ../web_tt2/reviewbouncing.tt2:68
+#, fuzzy
 msgid "Last bounce"
-msgstr "Viimane veateade"
+msgstr "Vaata viimast veateadet"
 
 #: ../web_tt2/reviewbouncing.tt2:95
+#, fuzzy
 msgid "no score"
-msgstr "kohaletoimetamata kirju pole"
+msgstr "vigade arv"
 
-#: ../web_tt2/review.tt2:105 ../web_tt2/review.tt2:139
+#: ../web_tt2/review.tt2:105 ../web_tt2/review.tt2:287
 #: ../web_tt2/reviewbouncing.tt2:126
 msgid "Delete selected email addresses"
-msgstr "Valitud aadresside kustutamine"
+msgstr "Kustuta valitud aadressid"
 
 #: ../web_tt2/reviewbouncing.tt2:128
 msgid "Reset errors for selected users"
-msgstr "Valitud kasutajate vigade nullimine"
+msgstr "Eemalda valitud kasutajatelt vead"
 
 #: ../web_tt2/review_family.tt2:4
 msgid "Table which display family lists"
-msgstr "Listide perede loetelu"
+msgstr ""
 
 #: ../web_tt2/review_family.tt2:6 ../web_tt2/viewlogs.tt2:157
 msgid "Status"
@@ -3490,80 +3439,96 @@ msgstr "Olek"
 msgid "Instantiation date"
 msgstr "Loomisaeg"
 
-#: ../web_tt2/review.tt2:5
+#: ../web_tt2/review.tt2:6
+#, fuzzy
 msgid "Manage list members"
-msgstr "Tellijate haldamine"
+msgstr "Listid"
 
-#: ../web_tt2/review.tt2:12 ../web_tt2/viewlogs.tt2:8
+#: ../web_tt2/review.tt2:13 ../web_tt2/viewlogs.tt2:8
 msgid "Page size"
 msgstr "Lehe suurus"
 
-#: ../web_tt2/review.tt2:129 ../web_tt2/review.tt2:30
+#: ../web_tt2/review.tt2:277 ../web_tt2/review.tt2:31
 #: ../web_tt2/viewlogs.tt2:34
+#, fuzzy
 msgid "page"
-msgstr "leht"
+msgstr "Listi [% list.name %] koduleht:"
 
-#: ../web_tt2/review.tt2:40
+#: ../web_tt2/review.tt2:41
 msgid "Pending subscriptions"
 msgstr "Ootel liitumised"
 
-#: ../web_tt2/review.tt2:50
-#, fuzzy
-msgid "Exclude"
-msgstr "Laiendatud otsing"
-
-#: ../web_tt2/review.tt2:56
+#: ../web_tt2/review.tt2:55
 msgid "Synchronize members with data sources"
-msgstr "Tellijate sünkroniseerimine andmeallikast"
+msgstr ""
 
-#: ../web_tt2/review.tt2:62
+#: ../web_tt2/review.tt2:61
 #, fuzzy
 msgid "Remind all"
-msgstr "Saada meeldetuletus kõigile"
+msgstr "Uuenda arhiivi"
 
-#: ../web_tt2/review.tt2:71
+#: ../web_tt2/review.tt2:70
 msgid "Add an user: "
-msgstr "Lisa kasutaja:"
+msgstr ""
 
-#: ../web_tt2/review.tt2:75
+#: ../web_tt2/review.tt2:74
 msgid "Multiple add"
 msgstr "Hulgi lisamine"
 
-#: ../web_tt2/review.tt2:87
+#: ../web_tt2/review.tt2:86
+#, fuzzy
 msgid "Search user by e-mail: "
-msgstr "E-maili otsimine"
+msgstr "Otsi kasutajat"
 
-#: ../web_tt2/review.tt2:88
+#: ../web_tt2/review.tt2:87
+#, fuzzy
 msgid "Search user by email"
-msgstr "E-maili otsimine"
+msgstr "Otsi kasutajat"
 
 #: ../web_tt2/review.tt2:93
 msgid "Selection too wide, can not show selection"
 msgstr "Liiga palju vastuseid, ei saa näidata"
 
-#. (similar_subscribers_occurence)
-#: ../web_tt2/review.tt2:117
-msgid " Other similar subscriber's email(s) (%1)"
-msgstr ""
+#: ../web_tt2/review.tt2:109
+msgid "List members"
+msgstr "Listi liikmed"
 
-#: ../web_tt2/review.tt2:137
+#: ../web_tt2/review.tt2:125 ../web_tt2/review.tt2:128
+msgid "Domain"
+msgstr "Domeen"
+
+#: ../web_tt2/review.tt2:133
+msgid "Picture"
+msgstr "Pilt"
+
+#: ../web_tt2/review.tt2:146
+msgid "Reception"
+msgstr "Vastuvõtt"
+
+#: ../web_tt2/review.tt2:151 ../web_tt2/review.tt2:154
+#, fuzzy
+msgid "Sources"
+msgstr "size=\"-1\"><b>Teadete kohandamine</b"
+
+#: ../web_tt2/review.tt2:160 ../web_tt2/review.tt2:163
+#: ../web_tt2/viewlogs.tt2:124
+#, fuzzy
+msgid "Sub date"
+msgstr "Sorteeri kuupäeva järgi"
+
+#: ../web_tt2/review.tt2:200
+#, fuzzy
+msgid "bouncing"
+msgstr "kasutades sisendina"
+
+#. (u.email)
+#: ../web_tt2/review.tt2:217
+msgid "%1's picture"
+msgstr "%1 -s pilt"
+
+#: ../web_tt2/review.tt2:285
 msgid "Do you really want to unsubscribe ALL selected subscribers?"
 msgstr "Olete kindel, et soovite kustutada kõik valitud aadressid ?"
-
-#: ../web_tt2/review.tt2:145
-#, fuzzy
-msgid "Excluded users"
-msgstr "Laiendatud otsing"
-
-#: ../web_tt2/review.tt2:146 ../web_tt2/show_exclude.tt2:13
-#, fuzzy
-msgid "List of exclude"
-msgstr "Kataloog SHARED"
-
-#: ../web_tt2/review.tt2:149 ../web_tt2/show_exclude.tt2:16
-#, fuzzy
-msgid "Since"
-msgstr "Suurus"
 
 #: ../web_tt2/rss_request.tt2:5
 msgid "RSS channel"
@@ -3574,38 +3539,43 @@ msgid ""
 "This server provides various news via RSS. Choose parameters and pickup the "
 "RSS url"
 msgstr ""
-"Server jagab erinevaid uudiseid RSS kaudu. Valige sobivad parameetrid ja "
-"saate RSS viite."
 
 #: ../web_tt2/rss_request.tt2:12
+#, fuzzy
 msgid "Limit the number of responses:"
-msgstr "Maksimaalne vastuste arv"
+msgstr "Limiteeri vastuste arvu"
 
 #: ../web_tt2/rss_request.tt2:19
+#, fuzzy
 msgid "Limit the number of days used for the selection:"
-msgstr "Maksimaalne päevade arv:"
+msgstr "Limiteeri vastuste arvu"
 
 #: ../web_tt2/rss_request.tt2:31
+#, fuzzy
 msgid "Update RSS URL"
-msgstr "Uuenda RSS URL"
+msgstr "Uuenda"
 
 # nlsref 16,70
 #: ../web_tt2/rss_request.tt2:43
+#, fuzzy
 msgid "latest arc:"
-msgstr "Viimane kirje"
+msgstr "Jagatud dokumendid"
 
 # nlsref 16,70
 #: ../web_tt2/rss_request.tt2:48
+#, fuzzy
 msgid "latest document:"
-msgstr "Viimane dokument"
+msgstr "Jagatud dokumendid"
 
 #: ../web_tt2/rss_request.tt2:53
+#, fuzzy
 msgid "active lists:"
-msgstr "Aktiivsed listid"
+msgstr "Mitteaktiivsed listid"
 
 #: ../web_tt2/rss_request.tt2:58
+#, fuzzy
 msgid "latest lists:"
-msgstr "Viimased listid"
+msgstr "Uuemad listid"
 
 #: ../web_tt2/rss.tt2:15 ../web_tt2/rss.tt2:5
 msgid "Server error"
@@ -3630,18 +3600,20 @@ msgstr "enim jagatud dokumendid"
 
 #. (count)
 #: ../web_tt2/rss.tt2:18
+#, fuzzy
 msgid "The %1 new lists"
-msgstr "%1 uusimat listi"
+msgstr "%1 uuemat listi"
 
 #. (for)
 #: ../web_tt2/rss.tt2:23 ../web_tt2/rss.tt2:33
+#, fuzzy
 msgid "for %1 days"
 msgstr "%1 päevaks"
 
 #. (count)
 #: ../web_tt2/rss.tt2:28
 msgid "The %1 most active lists"
-msgstr "%1 aktiivsemat listi"
+msgstr "Aktiivsemad listid"
 
 #: ../web_tt2/rss.tt2:30
 msgid "The most active lists"
@@ -3649,31 +3621,37 @@ msgstr "Aktiivsemad listid"
 
 #. (count)
 #: ../web_tt2/rss.tt2:38
+#, fuzzy
 msgid "The %1 most recent messages"
-msgstr "%1 viimast kirja"
+msgstr "Uuemad kirjad eespool"
 
 #: ../web_tt2/rss.tt2:40
+#, fuzzy
 msgid "Most recent messages"
-msgstr "Viimased kirjad"
+msgstr "Uuemad kirjad eespool"
 
 #. (for)
 #: ../web_tt2/rss.tt2:43 ../web_tt2/rss.tt2:52
+#, fuzzy
 msgid "for %1 days "
 msgstr "%1 päevaks"
 
 # nlsref 16,70
 #. (count)
 #: ../web_tt2/rss.tt2:47
+#, fuzzy
 msgid "The %1 most recent shared documents"
-msgstr "% viimast jagatud dokumenti"
+msgstr "Jagatud dokumendid"
 
 # nlsref 16,70
 #: ../web_tt2/rss.tt2:49
+#, fuzzy
 msgid "Most recent shared documents"
-msgstr "Viimased jagatud dokumendid"
+msgstr "Jagatud dokumendid"
 
 #. (l.name,l.host,l.subject,l.msg_count)
 #: ../web_tt2/rss.tt2:72
+#, fuzzy
 msgid "%1@%2 - %3: %4 messages"
 msgstr "%1@%2 : %3 kirja"
 
@@ -3681,7 +3659,7 @@ msgstr "%1@%2 : %3 kirja"
 #. (l.average)
 #: ../web_tt2/rss.tt2:72
 msgid "%1 by day "
-msgstr "%1 päeva"
+msgstr "%1 päev"
 
 #. (d.anchor)
 #: ../web_tt2/rss.tt2:88
@@ -3690,57 +3668,68 @@ msgstr "Järjehoidja %1"
 
 #: ../web_tt2/scenario_test.tt2:3
 msgid "Scenario test module"
-msgstr "Scenario testimis keskkond"
+msgstr "Scenario test module"
 
 #: ../web_tt2/scenario_test.tt2:7
+#, fuzzy
 msgid "Scenario name:"
-msgstr "Scenario nimi"
+msgstr "Scenari name"
 
 #: ../web_tt2/scenario_test.tt2:19
+#, fuzzy
 msgid "sender email:"
-msgstr "Saatja:"
+msgstr "sender email"
 
 #: ../web_tt2/scenario_test.tt2:22
+#, fuzzy
 msgid "Related email:"
-msgstr "Seotud e-mail"
+msgstr "Related email"
 
 #: ../web_tt2/scenario_test.tt2:25
+#, fuzzy
 msgid "Remote IP address:"
-msgstr "IP aadress:"
+msgstr "Remote addr"
 
 #: ../web_tt2/scenario_test.tt2:28
+#, fuzzy
 msgid "Remote host:"
-msgstr "Arvuti:"
+msgstr "Remote host"
 
 #: ../web_tt2/scenario_test.tt2:31
+#, fuzzy
 msgid "Auth method:"
 msgstr "Identifitseerimise meetod"
 
 #: ../web_tt2/scenario_test.tt2:38
 msgid "get matched rule"
-msgstr "Leia vastav reegel"
+msgstr ""
 
 #: ../web_tt2/search_user.tt2:3
+#, fuzzy
 msgid "User search result:"
-msgstr "Otsingu tulemused:"
+msgstr "vaikeseade"
 
 #. (email)
 #: ../web_tt2/search_user.tt2:5
+#, fuzzy
 msgid "<strong>%1</strong> is subscribed to the following mailing lists:"
-msgstr "Kasutaja <strong>%1</strong> on järgnevate listide liige"
+msgstr "Aadress <strong>%1</strong> on järgnevate listide liige"
 
 # nlsref 6,3
 #. (email)
 #: ../web_tt2/search_user.tt2:8
+#, fuzzy
 msgid "Lists which %1 is subscribed "
-msgstr " Kasutaja <strong>%1</strong> on järgnevate listide liige"
+msgstr "Listil %s ei ole lugejaid.\n"
 
 # nlsref 16,62
 #: ../web_tt2/search_user.tt2:11
+#, fuzzy
 msgid "role"
-msgstr "roll"
+msgstr "profiil"
 
 #: ../web_tt2/search_user.tt2:13
+#, fuzzy
 msgid "reception"
 msgstr "Vastuvõtt"
 
@@ -3749,40 +3738,48 @@ msgid "topics"
 msgstr "teemad"
 
 #: ../web_tt2/search_user.tt2:17
+#, fuzzy
 msgid "bounce"
-msgstr "kohalejõudmata kirjad"
+msgstr "Vead"
 
 #: ../web_tt2/search_user.tt2:35
+#, fuzzy
 msgid "member"
-msgstr "liige"
+msgstr "Listi liikmed"
 
 # #-#-#-#-#  et.po (PACKAGE VERSION)  #-#-#-#-#
 # nlsref 16,57
 #: ../web_tt2/search_user.tt2:36
+#, fuzzy
 msgid "owner"
-msgstr "omanik"
+msgstr "Omanik"
 
 #: ../web_tt2/search_user.tt2:37
+#, fuzzy
 msgid "editor"
-msgstr "moderaator"
+msgstr "Moderaator"
 
 #: ../web_tt2/serveradmin.tt2:7
+#, fuzzy
 msgid "Manage lists"
-msgstr "Listide haldamine"
+msgstr "Listid"
 
 #: ../web_tt2/serveradmin.tt2:12
+#, fuzzy
 msgid "Consult lists"
-msgstr "Nõuande listid"
+msgstr "Suletud listid"
 
 #: ../web_tt2/serveradmin.tt2:14
+#, fuzzy
 msgid "Lists sorted by creation date"
-msgstr "Listid sorteeritult tegemise aja järgi"
+msgstr "List ei ole veel aktiveeritud"
 
 #: ../web_tt2/serveradmin.tt2:15
 msgid "Lists sorted by last message date"
-msgstr "Listid sorteeritult viimase kirja aja järgi"
+msgstr ""
 
 #: ../web_tt2/serveradmin.tt2:25
+#, fuzzy
 msgid "The following virtual robots are running on this server:"
 msgstr "Teie serveris käivad virtuaalsed listserverid:"
 
@@ -3792,26 +3789,28 @@ msgstr "Siin serveris ei ole virtuaalseid listservereid."
 
 #: ../web_tt2/serveradmin.tt2:46
 msgid "Review lists from this family"
-msgstr "Vaata selle perekonna liste"
+msgstr ""
 
 #: ../web_tt2/serveradmin.tt2:60
 msgid "Search User"
-msgstr "Kasutajate otsimine"
+msgstr "Otsi kasutajat"
 
 #: ../web_tt2/serveradmin.tt2:69
 msgid "Delay for active sessions (minutes)"
-msgstr "Aktiivsete sessioonide viivituse pikkus (minutites)"
+msgstr ""
 
 #: ../web_tt2/serveradmin.tt2:71
 msgid "Show only connected users"
-msgstr "Näita vaid sisse logitud kasutajaid"
+msgstr ""
 
 # nlsref 17,1
 #: ../web_tt2/serveradmin.tt2:73
+#, fuzzy
 msgid "Show sessions"
-msgstr "Sessioonid"
+msgstr "sessioon"
 
 #: ../web_tt2/serveradmin.tt2:79
+#, fuzzy
 msgid "You can change your users email address here:"
 msgstr "E-posti aadressi muutmine"
 
@@ -3820,24 +3819,24 @@ msgid ""
 "Changing a user's email address will apply the change his memberships but it "
 "will also apply to his ownerships if he is owner of some lists."
 msgstr ""
-"Kasutaja e-posti aadressi muutmine mõjub nii listide tellimise kui ka "
-"listide õiguste kohta."
 
 #: ../web_tt2/serveradmin.tt2:86
+#, fuzzy
 msgid "Current user email address: "
-msgstr "Praegune e-posti aadress:"
+msgstr "Teine e-posti aadress:"
 
 #: ../web_tt2/serveradmin.tt2:88
+#, fuzzy
 msgid "New user email address: "
-msgstr "Uus e-posti aadress:"
+msgstr "Uus aadress :"
 
 #: ../web_tt2/serveradmin.tt2:90
 msgid "Update user memberships"
-msgstr "Kasutaja tellimuste uuendamine"
+msgstr ""
 
 #: ../web_tt2/serveradmin.tt2:95
 msgid "Change identity"
-msgstr "Identiteedi muutmine"
+msgstr ""
 
 #: ../web_tt2/serveradmin.tt2:97
 msgid ""
@@ -3845,33 +3844,33 @@ msgid ""
 "may be usefull when providing assistance or to test users privileges. The "
 "new identity is attached to the current session"
 msgstr ""
-"Listiülemana on teil võimalus muuta oma identiteeti ja käituda teise "
-"kasutajana. See võib olla kasulik kasutaja abistamisel või õiguste "
-"testimisel. Uus identiteet on seotud vaid praeguse sessiooniga."
 
 #: ../web_tt2/serveradmin.tt2:101
 msgid "change identity as: "
-msgstr "uus identiteet:"
+msgstr ""
 
 #: ../web_tt2/serveradmin.tt2:111
 msgid "Rebuild HTML archives using \"arctxt\" directories as input."
-msgstr "Arhiivide veebiversioonide taasloomine kasutades \"arctxt\" kaustu."
+msgstr ""
 
 #: ../web_tt2/serveradmin.tt2:114
+#, fuzzy
 msgid "listname: "
-msgstr "listi nimi:"
+msgstr "Listi nimi :"
 
 #: ../web_tt2/serveradmin.tt2:114
 msgid "Rebuild archive"
-msgstr "Arhiivide taasloomine"
+msgstr "Uuenda arhiivi"
 
 #: ../web_tt2/serveradmin.tt2:115
+#, fuzzy
 msgid "Rebuild all"
-msgstr "Taasloo kõik arhiivid"
+msgstr "Uuenda arhiivi"
 
 #: ../web_tt2/serveradmin.tt2:115
+#, fuzzy
 msgid "  May take a lot of CPU time,  be careful!"
-msgstr "Ettevaatust, võib tekitada suurt koormust serverile!"
+msgstr "Tähelepanu: võib tekitada suurt protsessori koormust!"
 
 #: ../web_tt2/serveradmin.tt2:125
 msgid ""
@@ -3879,17 +3878,14 @@ msgid ""
 "current session. On a production server, this allow to keep logs rather "
 "small and to test some features with the maximum log level. "
 msgstr ""
-"Teil on võimalik muuta logimise seadeid vaid antud konkreetse sessiooni "
-"jaoks. See aitab hoida logid väikesed aga samas testida mõnda võimalust "
-"maksimaalse logi tasemel-"
 
 #: ../web_tt2/serveradmin.tt2:129
 msgid "Log level:"
-msgstr "Logimise tase:"
+msgstr ""
 
 #: ../web_tt2/serveradmin.tt2:135
 msgid "Set log level"
-msgstr "Sea logimise tase"
+msgstr ""
 
 #: ../web_tt2/serveradmin.tt2:145
 msgid "Setting defaults list templates"
@@ -3899,87 +3895,81 @@ msgstr "Listimallidele vaikeväärtuste kohandamine"
 msgid "Setting site templates"
 msgstr "Veebimallide kohandamine"
 
-#: ../web_tt2/serveradmin.tt2:166
+#: ../web_tt2/serveradmin.tt2:168
 msgid "view translations"
-msgstr "Tõlked"
+msgstr "vaata tõlkeid"
 
-#: ../web_tt2/serveradmin.tt2:167
+#: ../web_tt2/serveradmin.tt2:169
 msgid "Customize templates"
 msgstr "Mallide kohandamine"
 
-#: ../web_tt2/serveradmin.tt2:172
+#: ../web_tt2/serveradmin.tt2:174
 msgid ""
 "When customizing Sympa web templates, it is needed to known which variables "
 "can be processed by the tt2 parser.This button is for controlling tt2 vars "
 "dump feature:"
 msgstr ""
-"Kui muuta Sympa veebimalle, siis tueb teada, milliseid muutujaid saab "
-"töödelda tt2 parser. Nupp on kontrollimaks tt2 muutujate tõmmise tegemise "
-"võimalust:"
-
-#: ../web_tt2/serveradmin.tt2:175
-msgid "Unset template vars dump"
-msgstr "Muutujate tõmmise tegemise välja lülitamine"
 
 #: ../web_tt2/serveradmin.tt2:177
-msgid "Set template vars dump"
-msgstr "Muutujate tõmmise tegemise sisse lülitamine"
+msgid "Unset template vars dump"
+msgstr ""
 
-#: ../web_tt2/serveradmin.tt2:188
-msgid "Skins administration page"
-msgstr "Kestade haldamine"
-
-#: ../web_tt2/serveradmin.tt2:192
+#: ../web_tt2/serveradmin.tt2:179
 #, fuzzy
-msgid "View main config"
-msgstr "Listi seadete muutmine"
+msgid "Set template vars dump"
+msgstr "Mallide kohandamine"
 
-#: ../web_tt2/serveradmin.tt2:231
+#: ../web_tt2/serveradmin.tt2:190
+#, fuzzy
+msgid "Skins administration page"
+msgstr "Listi haldamine"
+
+#: ../web_tt2/serveradmin.tt2:197
 msgid ""
 "Sympa is designed to allow easy internationalization of its user interface "
 "(service mail messages and web interface). All translations for one language "
 "are gathered in a single PO file that can be manipulated by standard GNU "
 "gettext tools."
 msgstr ""
-"Sympa on üles ehitatud nii, et kasutajaliidese tõlkimine oleks võimalikult "
-"lihtne. Kõik ühe keele tõlted kogutakse kokku ühte PO faili, mida on "
-"võimalik töödelda vabavaralise gettext programmiga."
 
-#: ../web_tt2/serveradmin.tt2:234
+#: ../web_tt2/serveradmin.tt2:200
+#, fuzzy
 msgid ""
 "Check our translation FAQ if you wish to translate Sympa GUI in your native "
 "language: "
 msgstr ""
-"Vaadake meie tõlke KKK, kui tahate tõlkida Sympa Kasutajaliidest oma "
+"Vaata meie tõlke KKK kui sa tahad tõlkida Sympa Kasutajaliidest oma "
 "emakeelde:"
 
-#: ../web_tt2/serveradmin.tt2:241
+#: ../web_tt2/serveradmin.tt2:207
 msgid "You can submit a problem or request a new feature: "
 msgstr ""
-"Te võite teatada Sympa vigadest või soovitada mõnda uut võimalust Sympa "
-"parandamiseks:"
 
 #. (process_id,loop_count,start_time)
-#: ../web_tt2/serveradmin.tt2:249
+#: ../web_tt2/serveradmin.tt2:215
+#, fuzzy
 msgid "This FastCGI process (%1) has served %2 pages since %3."
 msgstr "See FastCGI protsess (%1) on täitnud %2 päringut alates %3."
 
 #: ../web_tt2/setlang.tt2:9
+#, fuzzy
 msgid "Language selection"
-msgstr "Keele valik"
+msgstr "Pööra valik ringi"
 
 #: ../web_tt2/setlang.tt2:17
+#, fuzzy
 msgid "Validate your language selection"
-msgstr "Kinnitage oma keelevalik"
+msgstr "Pööra valik ringi"
 
 #: ../web_tt2/setlang.tt2:17
+#, fuzzy
 msgid "Set language"
-msgstr "Vali keel"
+msgstr "Keel"
 
 #. (list_request_date)
 #: ../web_tt2/set_pending_list_request.tt2:10
 msgid " on %1"
-msgstr "kuupäev: %1"
+msgstr "Kellele: %1"
 
 #: ../web_tt2/set_pending_list_request.tt2:23
 msgid "Close it"
@@ -3987,7 +3977,7 @@ msgstr "Sulge"
 
 #: ../web_tt2/set_pending_list_request.tt2:24
 msgid "Install it"
-msgstr "Seadista"
+msgstr "Käivita see"
 
 #: ../web_tt2/set_pending_list_request.tt2:26 ../web_tt2/subrequest.tt2:43
 msgid "submit"
@@ -3995,9 +3985,10 @@ msgstr "saada"
 
 #: ../web_tt2/set_pending_list_request.tt2:27
 msgid "notify owner"
-msgstr "teavitage omanikku"
+msgstr "teavita omanikku"
 
 #: ../web_tt2/set_pending_list_request.tt2:36
+#, fuzzy
 msgid "Information file:"
 msgstr "Infofail"
 
@@ -4025,40 +4016,25 @@ msgstr "Sertifikaadi väljaandja:"
 msgid "Cipher key size used"
 msgstr "Võtme suurus:"
 
-#: ../web_tt2/show_exclude.tt2:3
-msgid "Show the exclusion table"
-msgstr ""
-
-#: ../web_tt2/show_exclude.tt2:10
-msgid ""
-"Users listed below are excluded from the list. Beware, that this feature is "
-"different from the blacklist. Exclusion makes sense\n"
-"when a list is based on external data sources ; thanks to exclusion, a user "
-"can unsubscribe (or being removed by list owner) even though \n"
-"he should be included via an external data source. Users get into the "
-"exclusion table, through the standard unsubscribe/delete functions. \n"
-"They get off the exclusion table with the standard subscribe/add functions."
-msgstr ""
-
-#: ../web_tt2/show_exclude.tt2:28
-#, fuzzy
-msgid "No exclude."
-msgstr "Kataloog SHARED"
-
 #: ../web_tt2/show_sessions.tt2:2
+#, fuzzy
 msgid "Sessions list"
-msgstr "Sessioonide loetelu"
+msgstr "Tegemisel listid"
 
 #. (list)
 #: ../web_tt2/sigrequest.tt2:4
+#, fuzzy
 msgid "You asked to be unsubscribed  from list %1"
 msgstr "Te soovisite lahkuda listist %1."
 
 #: ../web_tt2/sigrequest.tt2:5
+#, fuzzy
 msgid ""
 "To confirm\n"
 "      your request, please click the button below:"
-msgstr "Oma soovi kinnitamiseks vajutage palun alpool olevat nuppu."
+msgstr ""
+"Oma soovi kinnitamiseks listiga %1 liitumisel peate \n"
+"\tsisestama oma parooli:"
 
 #. (list)
 #: ../web_tt2/sigrequest.tt2:12
@@ -4071,12 +4047,13 @@ msgid "You are not subscribed to list %1 with e-mail address %2"
 msgstr "Te ei ole listi %1 liige aadressiga %2"
 
 #: ../web_tt2/sigrequest.tt2:21
+#, fuzzy
 msgid ""
 "You might have subscribed with another address.\n"
 "      Please contact the list owner to help you unsubscribe:"
 msgstr ""
-"Võib-olla olete  siin listis liige mõne teise e-posti aadressiga\n"
-"      Võtke ühendust listi omanikuga listist lahkumiseks :"
+"Oled äkki teise aadressiga siin listis liige\n"
+"      Võta ühendust listi omanikuga list lahkumiseks :"
 
 #. (list)
 #: ../web_tt2/sigrequest.tt2:25
@@ -4087,21 +4064,17 @@ msgid ""
 "inside; please provide your email address below to receive this validation "
 "link."
 msgstr ""
-"Enne lahkumisavalduse töötlemist peab süsteem teid tuvastama. Kui  olete "
-"Sympa kasutaja, siis peaksite sisse logima. Vastasel juhul võime saata "
-"valideerimise kirja - palun külastage selles kirjas olevat  veebiviidet."
 
 #: ../web_tt2/sigrequest.tt2:33
+#, fuzzy
 msgid "Send me a validation link"
-msgstr "Saatke mulle valideerimiskiri"
+msgstr "Saada mulle parool"
 
 #: ../web_tt2/sigrequest.tt2:40
 msgid ""
 "We've sent you an email including a validation link. You should check your "
 "mailbox to read this email and use this validation link."
 msgstr ""
-"Valideerimiskiri saadetud. Külastage oma postkasti ja leidke "
-"valideerimisviide."
 
 #: ../web_tt2/skinsedit.tt2:5
 msgid "Cascading Style Sheet"
@@ -4126,20 +4099,20 @@ msgid ""
 "static css installation succeed. Reload the current page and/or check sympa "
 "logs  to be sure that static css a really in use."
 msgstr ""
-"Staatiline css loodud. Taaslaadige praegune leht või jälgige sympa logisid "
-"veenudmaks, et staatiline css on ka reaalselt kasutuses."
 
 #: ../web_tt2/skinsedit.tt2:16
+#, fuzzy
 msgid "The css_path parameter is defined, value is"
-msgstr "Muutuja css_path väärtuseks on"
+msgstr "List on juba olemas"
 
 #: ../web_tt2/skinsedit.tt2:17
 msgid "the current definition for css location (css_url parameter) is"
-msgstr "Muutuja css_url väärtuseks on"
+msgstr ""
 
 #: ../web_tt2/skinsedit.tt2:25
+#, fuzzy
 msgid "install static css"
-msgstr "Seadista staatiline CSS"
+msgstr "nähtav kohaliku võrgu kasutajatele"
 
 #. (cssurl)
 #: ../web_tt2/skinsedit.tt2:31
@@ -4151,11 +4124,6 @@ msgid ""
 "forget to set parameter css_url, it must be the URL for the directory where "
 "css are stored (current value is <a target=\"test\" href=\"%1\">%1</a>)."
 msgstr ""
-"Muutuja css_path on väärtuseta. <strong>Te peaksite muutma faili robot.conf</"
-"strong>. Kui muutujal css_path on väärtus vaid siis on võimalik luua "
-"staatiline css - see teeb sympa kiiremaks. Ärge unustage määrata väärtus ka "
-"muutujale css_url, mille väärtuseks on URL, mis viitab staatilisele cssle "
-"(praegune väärtus on <a target=\"test\" href=\"%1\">%1</a>)."
 
 #: ../web_tt2/skinsedit.tt2:35
 msgid "Colors"
@@ -4488,7 +4456,7 @@ msgid "Disable topics subscription"
 msgstr "Keelatud pealikrjade liitumine"
 
 #: ../web_tt2/suboptions.tt2:51
-msgid "Only possible for direct reception modes."
+msgid "Only possible in \"normal\" receiving mode"
 msgstr ""
 
 #. (list)
@@ -4572,96 +4540,6 @@ msgstr "Minu parool ?"
 #, fuzzy
 msgid "You are already subscribed to list %1"
 msgstr "Te olete juba listi %1 liige"
-
-#: ../web_tt2/subscriber_table.tt2:4
-msgid "List members"
-msgstr "Listi liikmed"
-
-#: ../web_tt2/subscriber_table.tt2:20 ../web_tt2/subscriber_table.tt2:23
-msgid "Domain"
-msgstr "Domeen"
-
-#: ../web_tt2/subscriber_table.tt2:28
-msgid "Picture"
-msgstr "Pilt"
-
-#: ../web_tt2/subscriber_table.tt2:41 ../web_tt2/suspend_request.tt2:12
-msgid "Reception"
-msgstr "Vastuvõtt"
-
-#: ../web_tt2/subscriber_table.tt2:46 ../web_tt2/subscriber_table.tt2:49
-msgid "Sources"
-msgstr "Allikad"
-
-#: ../web_tt2/subscriber_table.tt2:55 ../web_tt2/subscriber_table.tt2:58
-#: ../web_tt2/viewlogs.tt2:124
-msgid "Sub date"
-msgstr "Sorteeri kuupäeva järgi"
-
-#: ../web_tt2/subscriber_table.tt2:91
-msgid "bouncing"
-msgstr "omab kätte toimetamata kirju"
-
-#. (u.email)
-#: ../web_tt2/subscriber_table.tt2:108
-msgid "%1's picture"
-msgstr "kasutaja %1 pilt"
-
-#: ../web_tt2/suspend_request.tt2:13
-#, fuzzy
-msgid "Suspended"
-msgstr "Saatja"
-
-#: ../web_tt2/suspend_request.tt2:23
-#, fuzzy
-msgid "Suspended from "
-msgstr "Saatja"
-
-#: ../web_tt2/suspend_request.tt2:23 ../web_tt2/suspend_request.tt2:44
-msgid " to "
-msgstr ""
-
-#: ../web_tt2/suspend_request.tt2:23
-msgid "indefinite end date"
-msgstr ""
-
-#: ../web_tt2/suspend_request.tt2:33
-#, fuzzy
-msgid "No subscription."
-msgstr "Listist lahkumine:"
-
-#: ../web_tt2/suspend_request.tt2:37
-#, fuzzy
-msgid "Toogle selection"
-msgstr "Pööra valik ringi"
-
-#: ../web_tt2/suspend_request.tt2:41
-msgid "Suspend[% IF sub.display == 1 %]/Resume"
-msgstr ""
-
-#: ../web_tt2/suspend_request.tt2:43
-msgid "From : <noscript>[%|loc%](dd-mm-yyyy) "
-msgstr ""
-
-#: ../web_tt2/suspend_request.tt2:46
-msgid "Select the checkbox for an indefinite end date. "
-msgstr ""
-
-#: ../web_tt2/suspend_request.tt2:49
-#, fuzzy
-msgid "Suspend my subscriptions"
-msgstr "Ootel liitumised"
-
-# nlsref 6,76
-#: ../web_tt2/suspend_request.tt2:51
-#, fuzzy
-msgid "Resume my subscriptions"
-msgstr "Meeldetuletus listi %s liikmestaatusest"
-
-#: ../web_tt2/suspend_request.tt2:55
-#, fuzzy
-msgid "Unsubscribe selected lists"
-msgstr "Eemalda valitud listid"
 
 #: ../web_tt2/ticket.tt2:4
 msgid "The link you used is unvalid"
@@ -4760,7 +4638,7 @@ msgid "to:"
 msgstr ""
 
 #: ../web_tt2/viewlogs.tt2:73
-msgid "ex: 24-05-2006"
+msgid "ex: 24/05/2006"
 msgstr ""
 
 #: ../web_tt2/viewlogs.tt2:75
@@ -4818,7 +4696,7 @@ msgstr "Otsi kasutajat"
 #. (date_to_formated)
 #. This entry is a date/time format
 #. Check the strftime manpage for format details : http://docs.freebsd.org/info/gawk/gawk.info.Time_Functions.html
-#: ../web_tt2/viewlogs.tt2:113 ../wwsympa/wwsympa.fcgi.in:16069
+#: ../web_tt2/viewlogs.tt2:113 ../wwsympa/wwsympa.fcgi.in:15931
 msgid "%d %b %Y %H:%M:%S"
 msgstr "%d %b %Y %H:%M:%S"
 
@@ -4945,243 +4823,225 @@ msgstr "Veebiarhiivide suurus"
 msgid "Web archives are restricted to list subscribers and local domain users."
 msgstr "vaid kohaliku domeeni e-postiaadressiga"
 
-#: ../mail_tt2/authorization_reject.tt2:104
-#: ../mail_tt2/authorization_reject.tt2:114
-#: ../mail_tt2/authorization_reject.tt2:124
-#: ../mail_tt2/authorization_reject.tt2:128
-#: ../mail_tt2/authorization_reject.tt2:19
-#: ../mail_tt2/authorization_reject.tt2:35
-#: ../mail_tt2/authorization_reject.tt2:42
-#: ../mail_tt2/authorization_reject.tt2:55
-#: ../mail_tt2/authorization_reject.tt2:71
-#: ../mail_tt2/authorization_reject.tt2:81
-#: ../mail_tt2/authorization_reject.tt2:9
-#: ../mail_tt2/authorization_reject.tt2:94
-msgid ""
-"If you are subscribed to the list with a different email address, you should "
-"either use that other email address or update your list membership with the "
-"new email address."
-msgstr ""
-
-#: ../mail_tt2/authorization_reject.tt2:12
+#: ../mail_tt2/authorization_reject.tt2:11
 #, fuzzy
 msgid "Web archives are restricted to listmaster."
 msgstr "ükskõik kes listiomaniku nõusolekul"
 
-#: ../mail_tt2/authorization_reject.tt2:15
+#: ../mail_tt2/authorization_reject.tt2:14
 #, fuzzy
 msgid "Web archives are restricted to list owners."
 msgstr "lubatud vaid listiomanikele"
 
-#: ../mail_tt2/authorization_reject.tt2:18
+#: ../mail_tt2/authorization_reject.tt2:17
 #, fuzzy
 msgid "Web archives are restricted to list subscribers."
 msgstr "listi liikmete kirjad modereeritakse, teistele keelatud"
 
-#: ../mail_tt2/authorization_reject.tt2:22
+#: ../mail_tt2/authorization_reject.tt2:20
 msgid "Adding a user to the list is restricted to list owners."
 msgstr "Kasutajaid lisada sellesse listi võib ainult omanik."
 
-#: ../mail_tt2/authorization_reject.tt2:25
+#: ../mail_tt2/authorization_reject.tt2:23
 msgid "Adding a user to the list is not allowed."
 msgstr "Kasutaja lisamine sellese listi ei ole lubatud."
 
-#: ../mail_tt2/authorization_reject.tt2:28
+#: ../mail_tt2/authorization_reject.tt2:26
 msgid "List creation is restricted to local domain users."
 msgstr "vListi tegemine on piiratud ainult kohaliku domeeni kasutajatele."
 
-#: ../mail_tt2/authorization_reject.tt2:31
+#: ../mail_tt2/authorization_reject.tt2:29
 msgid "List creation is restricted to listmaster."
 msgstr "Listi tegemise peab kinnitama listiülem."
 
-#: ../mail_tt2/authorization_reject.tt2:34
+#: ../mail_tt2/authorization_reject.tt2:32
 #, fuzzy
 msgid "Shared document edition is restricted to list subscribers."
 msgstr "listi liikmete kirjad modereeritakse, teistele keelatud"
 
-#: ../mail_tt2/authorization_reject.tt2:38
+#: ../mail_tt2/authorization_reject.tt2:35
 #, fuzzy
 msgid "Shared document edition is restricted to list owners."
 msgstr "lubatud vaid listiomanikele"
 
-#: ../mail_tt2/authorization_reject.tt2:41
+#: ../mail_tt2/authorization_reject.tt2:38
 #, fuzzy
 msgid ""
 "Shared document edition is restricted to list subscribers authenticated with "
 "user certificate."
 msgstr "ainult listi liikmed, kontrollitakse S/MIME signatuuri"
 
-#: ../mail_tt2/authorization_reject.tt2:45
+#: ../mail_tt2/authorization_reject.tt2:41
 msgid "Deleting a user from the list is restricted to list owners."
 msgstr "Kasutajate eemaldamine listist on lubatud ainult listi omanikul."
 
-#: ../mail_tt2/authorization_reject.tt2:48
+#: ../mail_tt2/authorization_reject.tt2:44
 msgid "It is not possible to delete a user from the list."
 msgstr "Ei ole võimalik kustutada kasutajat listist"
 
-#: ../mail_tt2/authorization_reject.tt2:51
+#: ../mail_tt2/authorization_reject.tt2:47
 #, fuzzy
 msgid "Shared document reading is restricted to list owners."
 msgstr "lubatud vaid listiomanikele"
 
-#: ../mail_tt2/authorization_reject.tt2:54
+#: ../mail_tt2/authorization_reject.tt2:50
 #, fuzzy
 msgid "Shared document reading is restricted to list subscribers."
 msgstr "listi liikmete kirjad modereeritakse, teistele keelatud"
 
-#: ../mail_tt2/authorization_reject.tt2:58
+#: ../mail_tt2/authorization_reject.tt2:53
 #, fuzzy
 msgid ""
 "Shared document reading is restricted to list subscribers authenticated with "
 "user certificat."
 msgstr "ainult listi liikmed, kontrollitakse S/MIME signatuuri"
 
-#: ../mail_tt2/authorization_reject.tt2:61
+#: ../mail_tt2/authorization_reject.tt2:56
 msgid "you are not allowed to edit list parameters."
 msgstr "teil ei ole lubatud muuta listi seadeid."
 
-#: ../mail_tt2/authorization_reject.tt2:64
+#: ../mail_tt2/authorization_reject.tt2:59
 msgid "List parameter editing is restricted to list owners."
 msgstr "Listi parameetrite muutmine lubatud ainult listi omanikul"
 
-#: ../mail_tt2/authorization_reject.tt2:67
+#: ../mail_tt2/authorization_reject.tt2:62
 #, fuzzy
 msgid "The 'global remind' feature is restricted to listmaster."
 msgstr "ükskõik kes listiomaniku nõusolekul"
 
-#: ../mail_tt2/authorization_reject.tt2:70
+#: ../mail_tt2/authorization_reject.tt2:65
 msgid "List information is restricted to list subscribers."
 msgstr "Listi info on piiratud listi tellijatega"
 
-#: ../mail_tt2/authorization_reject.tt2:74
+#: ../mail_tt2/authorization_reject.tt2:68
 msgid "The 'invite' feature is unavailable."
 msgstr ""
 
-#: ../mail_tt2/authorization_reject.tt2:77
+#: ../mail_tt2/authorization_reject.tt2:71
 #, fuzzy
 msgid "The 'invite' feature is restricted to list owners."
 msgstr "lubatud vaid listiomanikele"
 
-#: ../mail_tt2/authorization_reject.tt2:80
+#: ../mail_tt2/authorization_reject.tt2:74
 #, fuzzy
 msgid "The 'invite' feature is restricted to list subscribers."
 msgstr "listi liikmete kirjad modereeritakse, teistele keelatud"
 
-#: ../mail_tt2/authorization_reject.tt2:84
+#: ../mail_tt2/authorization_reject.tt2:77
 #, fuzzy
 msgid "The 'remind' feature is restricted to listmaster."
 msgstr "ükskõik kes listiomaniku nõusolekul"
 
-#: ../mail_tt2/authorization_reject.tt2:87
+#: ../mail_tt2/authorization_reject.tt2:80
 #, fuzzy
 msgid "The 'remind' feature is restricted to list owners."
 msgstr "lubatud vaid listiomanikele"
 
-#: ../mail_tt2/authorization_reject.tt2:90
+#: ../mail_tt2/authorization_reject.tt2:83
 msgid "The 'review' feature is unavailable."
 msgstr ""
 
-#: ../mail_tt2/authorization_reject.tt2:93
+#: ../mail_tt2/authorization_reject.tt2:86
 msgid ""
 "The 'review' feature is restricted to list subscribers and local domain "
 "users."
 msgstr ""
 
-#: ../mail_tt2/authorization_reject.tt2:97
+#: ../mail_tt2/authorization_reject.tt2:89
 #, fuzzy
 msgid "The 'review' feature is restricted to listmaster."
 msgstr "ükskõik kes listiomaniku nõusolekul"
 
-#: ../mail_tt2/authorization_reject.tt2:100
+#: ../mail_tt2/authorization_reject.tt2:92
 #, fuzzy
 msgid "The 'review' feature is restricted to list owners."
 msgstr "lubatud vaid listiomanikele"
 
-#: ../mail_tt2/authorization_reject.tt2:103
+#: ../mail_tt2/authorization_reject.tt2:95
 #, fuzzy
 msgid "The 'review' feature is restricted to list subscribers."
 msgstr "listi liikmete kirjad modereeritakse, teistele keelatud"
 
-#: ../mail_tt2/authorization_reject.tt2:107
+#: ../mail_tt2/authorization_reject.tt2:98
 #, fuzzy
 msgid "Message distribution in this list is not allowed."
 msgstr "vaid kohaliku domeeni e-postiaadressiga"
 
-#: ../mail_tt2/authorization_reject.tt2:110
+#: ../mail_tt2/authorization_reject.tt2:101
 #, fuzzy
 msgid "Message distribution in the list is restricted to local domain users."
 msgstr "vaid kohaliku domeeni e-postiaadressiga"
 
-#: ../mail_tt2/authorization_reject.tt2:113
+#: ../mail_tt2/authorization_reject.tt2:104
 #, fuzzy
 msgid ""
 "Message distribution for this list is restricted to list subscribers and "
 "local domain users."
 msgstr "vaid kohaliku domeeni e-postiaadressiga"
 
-#: ../mail_tt2/authorization_reject.tt2:117
+#: ../mail_tt2/authorization_reject.tt2:107
 #, fuzzy
 msgid "Message distribution for this list is restricted to list moderators."
 msgstr "Newsletter, lubatud ainult moderaatoritele"
 
-#: ../mail_tt2/authorization_reject.tt2:120
+#: ../mail_tt2/authorization_reject.tt2:110
 msgid "Multipart messages are not allowed in this list."
 msgstr ""
 
-#: ../mail_tt2/authorization_reject.tt2:123
+#: ../mail_tt2/authorization_reject.tt2:113
 #, fuzzy
 msgid "Message distribution in the list is restricted to list subscribers."
 msgstr "listi liikmete kirjad modereeritakse, teistele keelatud"
 
-#: ../mail_tt2/authorization_reject.tt2:127
+#: ../mail_tt2/authorization_reject.tt2:116
 #, fuzzy
 msgid ""
 "Message distribution for this list is restricted to list subscribers check S/"
 "MIME signature."
 msgstr "ainult listi liikmed, kontrollitakse S/MIME signatuuri"
 
-#: ../mail_tt2/authorization_reject.tt2:131
+#: ../mail_tt2/authorization_reject.tt2:119
 #, fuzzy
 msgid "You are not allowed to subscribe to this list."
 msgstr "Te olete juba listi %1 liige"
 
-#: ../mail_tt2/authorization_reject.tt2:134
+#: ../mail_tt2/authorization_reject.tt2:122
 #, fuzzy
 msgid "Subscription to this list is restricted to local domain users."
 msgstr "vaid kohaliku domeeni e-postiaadressiga"
 
-#: ../mail_tt2/authorization_reject.tt2:137
+#: ../mail_tt2/authorization_reject.tt2:125
 msgid "Subscription to this list requires S/MIME signature."
 msgstr ""
 
-#: ../mail_tt2/authorization_reject.tt2:140
+#: ../mail_tt2/authorization_reject.tt2:128
 #, fuzzy
 msgid "Topics visibility is restricted to listmaster."
 msgstr "ükskõik kes listiomaniku nõusolekul"
 
-#: ../mail_tt2/authorization_reject.tt2:143
+#: ../mail_tt2/authorization_reject.tt2:131
 #, fuzzy
 msgid "Topics visibility is restricted to identified users."
 msgstr ": kasutaja eelistused. Seda saab kasutada ainult sisse logides."
 
-#: ../mail_tt2/authorization_reject.tt2:146
+#: ../mail_tt2/authorization_reject.tt2:134
 msgid "It is not possible to unsubscribe from this list."
 msgstr "Ei ole võimalik lahkuda listist"
 
 # nlsref 6,9
-#: ../mail_tt2/authorization_reject.tt2:149
+#: ../mail_tt2/authorization_reject.tt2:137
 #, fuzzy
 msgid "List is private: You can not read the archives."
 msgstr "List on privaatne : sa ei saa sooritada antud operatsiooni"
 
 # nlsref 6,10
-#: ../mail_tt2/authorization_reject.tt2:152
+#: ../mail_tt2/authorization_reject.tt2:140
 #, fuzzy
 msgid "List is private: You can not browse available files."
 msgstr "List on privaatne : sa ei saa sooritada antud operatsiooni"
 
 # nlsref 6,46
-#: ../mail_tt2/authorization_reject.tt2:155
+#: ../mail_tt2/authorization_reject.tt2:143
 #, fuzzy
 msgid "The MODINDEX command is restricted to moderators."
 msgstr ""
@@ -5189,7 +5049,7 @@ msgstr ""
 "Teie ei ole listi %s moderaator.\n"
 
 # nlsref 6,46
-#: ../mail_tt2/authorization_reject.tt2:158
+#: ../mail_tt2/authorization_reject.tt2:146
 #, fuzzy
 msgid "This action is restricted to list owners or moderators."
 msgstr ""
@@ -5197,72 +5057,72 @@ msgstr ""
 "Teie ei ole listi %s moderaator.\n"
 
 # nlsref 6,46
-#: ../mail_tt2/authorization_reject.tt2:161
+#: ../mail_tt2/authorization_reject.tt2:149
 #, fuzzy
 msgid "This action is restricted to moderators."
 msgstr ""
 "MODINDEX on lubatud ainult listi moderaatoritele.\n"
 "Teie ei ole listi %s moderaator.\n"
 
-#: ../mail_tt2/authorization_reject.tt2:164
+#: ../mail_tt2/authorization_reject.tt2:152
 #, fuzzy
 msgid "This action is restricted to list owners."
 msgstr "lubatud vaid listiomanikele"
 
-#: ../mail_tt2/authorization_reject.tt2:167
+#: ../mail_tt2/authorization_reject.tt2:155
 #, fuzzy
 msgid "This action is restricted to listmasters."
 msgstr "ükskõik kes listiomaniku nõusolekul"
 
-#: ../mail_tt2/authorization_reject.tt2:170
+#: ../mail_tt2/authorization_reject.tt2:158
 #, fuzzy
 msgid "This action is restricted to listmasters or list owners."
 msgstr "lubatud vaid listiomanikele"
 
-#: ../mail_tt2/authorization_reject.tt2:173
+#: ../mail_tt2/authorization_reject.tt2:161
 msgid "This action is restricted to listmasters or privileged list owners."
 msgstr ""
 
-#: ../mail_tt2/authorization_reject.tt2:176
+#: ../mail_tt2/authorization_reject.tt2:164
 msgid ""
 "This action is restricted to document author, listmasters or privileged list "
 "owners."
 msgstr ""
 
-#: ../mail_tt2/authorization_reject.tt2:179
+#: ../mail_tt2/authorization_reject.tt2:167
 #, fuzzy
 msgid "This action is restricted to privileged list owners."
 msgstr "lubatud vaid listiomanikele"
 
 #. (role,right)
-#: ../mail_tt2/authorization_reject.tt2:182
+#: ../mail_tt2/authorization_reject.tt2:170
 msgid "Right on this action is '%2' for a '%1'."
 msgstr ""
 
 #. (role,right)
-#: ../mail_tt2/authorization_reject.tt2:185
+#: ../mail_tt2/authorization_reject.tt2:173
 #, fuzzy
 msgid "You need to login."
 msgstr "Te peate esmalt sisse logima"
 
 #. (role,right)
-#: ../mail_tt2/authorization_reject.tt2:188
+#: ../mail_tt2/authorization_reject.tt2:176
 msgid "This action is impossible because editing is a moderated function."
 msgstr ""
 
 #. (role,right)
-#: ../mail_tt2/authorization_reject.tt2:191
+#: ../mail_tt2/authorization_reject.tt2:179
 msgid ""
 "This action is impossible for directories because editing is a moderated "
 "function."
 msgstr ""
 
-#: ../mail_tt2/authorization_reject.tt2:194
+#: ../mail_tt2/authorization_reject.tt2:182
 #, fuzzy
 msgid "The list is closed."
 msgstr "List ei ole suletud"
 
-#: ../mail_tt2/authorization_reject.tt2:197
+#: ../mail_tt2/authorization_reject.tt2:185
 msgid "you are not allowed to perform this action."
 msgstr "teil ei ole lubatud seda tegevust sooritada."
 
@@ -5328,19 +5188,13 @@ msgid "These commands have been performed:"
 msgstr "Soovitud tegevus teostatakse varsti"
 
 # nlsref 6,262
-#: ../mail_tt2/command_report.tt2:20
+#: ../mail_tt2/command_report.tt2:19
 #, fuzzy
 msgid "Your message signature was successfully verified using S/MIME."
 msgstr "Teie kirja S/MIME signatuur kontrolliti edukalt"
 
-# nlsref 6,262
-#: ../mail_tt2/command_report.tt2:23
-#, fuzzy
-msgid "Your message contain a DKIM signature. It was succesfully verified"
-msgstr "Teie kirja S/MIME signatuur kontrolliti edukalt"
-
 # nlsref 6,25
-#: ../mail_tt2/command_report.tt2:28
+#: ../mail_tt2/command_report.tt2:24
 #, fuzzy
 msgid ""
 "Your request to subscribe/unsubscribe has been forwarded to the list's\n"
@@ -5353,91 +5207,91 @@ msgstr ""
 
 # nlsref 6,36
 #. (notice.email,notice.listname)
-#: ../mail_tt2/command_report.tt2:31
+#: ../mail_tt2/command_report.tt2:27
 msgid "Information regarding user %1 has been updated for list %2."
 msgstr "Info %1 kasutaja kohta uuendati listis %2."
 
 # nlsref 6,37
 #. (notice.email,notice.listname)
-#: ../mail_tt2/command_report.tt2:34
+#: ../mail_tt2/command_report.tt2:30
 #, fuzzy
 msgid "User %1 is now subscriber of list %2."
 msgstr "Kasutaja %s on nüüd listi %s liige.\n"
 
 # nlsref 6,85
 #. (notice.email,notice.listname)
-#: ../mail_tt2/command_report.tt2:37
+#: ../mail_tt2/command_report.tt2:33
 #, fuzzy
 msgid "User %1 has been invited to subscribe in list %2."
 msgstr "Kasutaja %s kutsuti liituma listiga %s.\n"
 
 # nlsref 6,78
 #. (notice.total,notice.listname)
-#: ../mail_tt2/command_report.tt2:40
+#: ../mail_tt2/command_report.tt2:36
 #, fuzzy
 msgid "Subscription reminder sent to each of %1 %2 subscribers."
 msgstr "Meeldetuletus saadeti kõikidele %d-le %s listi lugejale\n"
 
 #. (notice.count)
-#: ../mail_tt2/command_report.tt2:43
+#: ../mail_tt2/command_report.tt2:39
 msgid "The Reminder has been sent to %1 users."
 msgstr ""
 
 # nlsref 6,38
 #. (notice.email,notice.listname)
-#: ../mail_tt2/command_report.tt2:46
+#: ../mail_tt2/command_report.tt2:42
 #, fuzzy
 msgid "The user %1 has been removed from the list %2."
 msgstr "Kasutaja %s eemaldati listist %s/\n"
 
 # nlsref 6,40
 #. (notice.listname)
-#: ../mail_tt2/command_report.tt2:49
+#: ../mail_tt2/command_report.tt2:45
 #, fuzzy
 msgid "Your configuration regarding list %1 has been updated."
 msgstr "Uuendati teie seadeid listis %s.\n"
 
 # nlsref 4,18
 #. (notice.cmd)
-#: ../mail_tt2/command_report.tt2:52
+#: ../mail_tt2/command_report.tt2:48
 #, fuzzy
 msgid "Command '%1' found: ignoring end of message."
 msgstr "Leitud käsk '%1': ignoreerin kirja lõppu."
 
 #. (notice.listname)
-#: ../mail_tt2/command_report.tt2:55
+#: ../mail_tt2/command_report.tt2:51
 #, fuzzy
 msgid "There is no message to moderate for list '%1'."
 msgstr "%1 kirja ootab listis %2@%3 toimetamist"
 
-#: ../mail_tt2/command_report.tt2:67
+#: ../mail_tt2/command_report.tt2:63
 #, fuzzy
 msgid "Command has been rejected:"
 msgstr "Käsk jäi täitmata :"
 
 # nlsref 4,11
-#: ../mail_tt2/command_report.tt2:69
+#: ../mail_tt2/command_report.tt2:65
 #, fuzzy
 msgid "These commands have been rejected:"
 msgstr "Sinu kirja saatmisest aadressile %s keelduti"
 
-#: ../mail_tt2/command_report.tt2:85
+#: ../mail_tt2/command_report.tt2:81
 #, fuzzy
 msgid "Command has failed:"
 msgstr "Käsu täitmine ei õnnestunud: "
 
-#: ../mail_tt2/command_report.tt2:87
+#: ../mail_tt2/command_report.tt2:83
 #, fuzzy
 msgid "These commands have failed:"
 msgstr "Soovitud tegevus teostatakse varsti"
 
 # nlsref 4,19
-#: ../mail_tt2/command_report.tt2:94
+#: ../mail_tt2/command_report.tt2:90
 msgid "Command not understood: ignoring end of message."
 msgstr "Käsku ei mõistetud: ignoreerin kirja lõppu."
 
 # nlsref 6,263
-#: ../mail_tt2/command_report.tt2:98
+#: ../mail_tt2/command_report.tt2:94
 #, fuzzy
 msgid ""
 "Your message was not a multipart/signed message or Sympa could not verify "
@@ -5450,7 +5304,7 @@ msgstr ""
 "saadetud kirja teemareal)."
 
 # nlsref 6,13
-#: ../mail_tt2/command_report.tt2:101
+#: ../mail_tt2/command_report.tt2:97
 msgid "Command syntax error."
 msgstr "Käsu süntaks on vigane."
 
@@ -5458,20 +5312,20 @@ msgstr "Käsu süntaks on vigane."
 #. (u_err.listname)
 #. (glob.listname)
 #. (listname)
-#: ../mail_tt2/command_report.tt2:104 ../mail_tt2/command_report.tt2:178
+#: ../mail_tt2/command_report.tt2:100 ../mail_tt2/command_report.tt2:174
 #: ../mail_tt2/message_report.tt2:55
 msgid "List '%1' does not exist."
 msgstr "Listi '%1' ei ole olemas."
 
 # nlsref 6,91
 #. (u_err.listname)
-#: ../mail_tt2/command_report.tt2:107
+#: ../mail_tt2/command_report.tt2:103
 msgid "%1 mailing list does not provide subscriber preferences."
 msgstr "%1 list ei paku liikmetele seadistusvõimalusi."
 
 # nlsref 6,30
 #. (u_err.email,u_err.listname)
-#: ../mail_tt2/command_report.tt2:111
+#: ../mail_tt2/command_report.tt2:107
 #, fuzzy
 msgid ""
 "Your e-mail address %1 has not been found in the list %2. Maybe\n"
@@ -5482,13 +5336,13 @@ msgstr ""
 
 # nlsref 6,33
 #. (u_err.email,u_err.listname)
-#: ../mail_tt2/command_report.tt2:114
+#: ../mail_tt2/command_report.tt2:110
 msgid "E-mail address %1 has not been found in the list %2."
 msgstr "E-posti aadressi %s ei leitud listist '%2'."
 
 # nlsref 6,45
 #. (u_err.listname)
-#: ../mail_tt2/command_report.tt2:118
+#: ../mail_tt2/command_report.tt2:114
 msgid ""
 "List %1 does not accept the DIGEST mode. \n"
 "Your configuration regarding this command has not been updated."
@@ -5498,38 +5352,38 @@ msgstr ""
 
 # nlsref 6,90
 #. (u_err.listname,u_err.modes)
-#: ../mail_tt2/command_report.tt2:121
+#: ../mail_tt2/command_report.tt2:117
 #, fuzzy
 msgid "List %1 allows only these reception modes: %2"
 msgstr "Listis %1 on lubatud vaid need vastuvõtuviisid: %2"
 
-#: ../mail_tt2/command_report.tt2:124
+#: ../mail_tt2/command_report.tt2:120
 #, fuzzy
 msgid "This list archive is empty."
 msgstr "Arhiiv on tühi"
 
 # nlsref 6,8
-#: ../mail_tt2/command_report.tt2:127
+#: ../mail_tt2/command_report.tt2:123
 #, fuzzy
 msgid "Required file does not exist."
 msgstr "Nõutud faili ei ole olemas.\n"
 
 # nlsref 6,3
 #. (u_err.listname)
-#: ../mail_tt2/command_report.tt2:130
+#: ../mail_tt2/command_report.tt2:126
 msgid "List %1 has no subscriber."
 msgstr "Listil %1 ei ole ühtegi tellijat."
 
 # nlsref 6,84
 #. (u_err.email,u_err.listname)
-#: ../mail_tt2/command_report.tt2:133
+#: ../mail_tt2/command_report.tt2:129
 #, fuzzy
 msgid "The User '%1' is already subscriber of list '%2'."
 msgstr "Kasutaja %s on juba listi %s liige\n"
 
 # nlsref 6,16
 #. (u_err.command)
-#: ../mail_tt2/command_report.tt2:138
+#: ../mail_tt2/command_report.tt2:134
 #, fuzzy
 msgid ""
 "The authentication process failed.\n"
@@ -5539,18 +5393,18 @@ msgstr ""
 "Ilmselt proovisite kinnitada listi liikmeks saamise soovi erinevalt\n"
 "e-posti aadressilt. Proovige kasutada sama aadressi, mis soovis oli."
 
-#: ../mail_tt2/command_report.tt2:150
+#: ../mail_tt2/command_report.tt2:146
 #, fuzzy
 msgid "Command has failed because of an internal server error:"
 msgstr "Esines serveri sisene viga, käsk jäi täitmata :"
 
-#: ../mail_tt2/command_report.tt2:152
+#: ../mail_tt2/command_report.tt2:148
 #, fuzzy
 msgid "These commands have failed because of an internal server error:"
 msgstr "Sisemine viga serveris"
 
 # nlsref 4,37
-#: ../mail_tt2/command_report.tt2:169
+#: ../mail_tt2/command_report.tt2:165
 msgid ""
 "Ignoring message body not in text/plain, please use text/plain only (or put "
 "your command in the subject)."
@@ -5559,33 +5413,33 @@ msgstr ""
 "tekstivormis, pange oma käsk kirja subject reale."
 
 # nlsref 4,39
-#: ../mail_tt2/command_report.tt2:172
+#: ../mail_tt2/command_report.tt2:168
 #, fuzzy
 msgid "No command found in message."
 msgstr "Kirjast ei leitud ühtegi käsku"
 
-#: ../mail_tt2/command_report.tt2:175
+#: ../mail_tt2/command_report.tt2:171
 msgid "Ignoring message because of an internal server error."
-msgstr "Kirja ignoreeritakse süsteemse vea tõttu"
+msgstr ""
 
 #. (conf.wwsympa_url)
-#: ../mail_tt2/command_report.tt2:185
+#: ../mail_tt2/command_report.tt2:181
 msgid "For further information, check the mailing list web site %1"
 msgstr "Edasise informatsiooni saamiseks, palun minge listi webi lehele %1"
 
 #. (list.name,date)
-#: ../mail_tt2/digest_plain.tt2:4 ../mail_tt2/digest_plain.tt2:7
+#: ../mail_tt2/digest_plain.tt2:4 ../mail_tt2/digest_plain.tt2:6
 msgid "%1 Digest %2"
 msgstr "Kokkuvõte"
 
-#: ../mail_tt2/digest.tt2:10 ../mail_tt2/digest_plain.tt2:9
-#: ../mail_tt2/get_archive.tt2:9 ../src/lib/List.pm:2771
+#: ../mail_tt2/digest.tt2:10 ../mail_tt2/digest_plain.tt2:8
+#: ../mail_tt2/get_archive.tt2:9 ../src/lib/List.pm:2705
 #, fuzzy
 msgid "Table of contents:"
 msgstr "Sisukord:"
 
 #. (list.name,date)
-#: ../mail_tt2/digest_plain.tt2:27
+#: ../mail_tt2/digest_plain.tt2:26
 msgid "End of %1 Digest %2"
 msgstr "Listi %1 kokkuvõtte lõpp - %2"
 
@@ -5682,7 +5536,7 @@ msgid "Archive of %1, file %2"
 msgstr "Arhiiv %1, fail %2"
 
 # nlsref 6,83
-#: ../mail_tt2/global_remind.tt2:2 ../src/lib/Commands.pm:1628
+#: ../mail_tt2/global_remind.tt2:2 ../src/lib/Commands.pm:1633
 msgid "Subscription summary"
 msgstr "Liikmestaatuse kokkuvõte"
 
@@ -5707,23 +5561,15 @@ msgstr ""
 msgid "User guide"
 msgstr "Kasutajajuhend"
 
-#: ../mail_tt2/helpfile.tt2:5
-#, fuzzy
-msgid "                       (Automatic Mailing System)"
-msgstr "HELp                        * Seesama abistav fail"
-
 #: ../mail_tt2/helpfile.tt2:7
-#, fuzzy
-msgid "                                User's Guide"
-msgstr "HELp                        * Seesama abistav fail"
+msgid "User's Guide"
+msgstr "Kasutajajuhend"
 
 #: ../mail_tt2/helpfile.tt2:10
 msgid ""
 "SYMPA is an electronic mailing-list manager that automates list management "
 "functions such as subscriptions, moderation, and archive management."
 msgstr ""
-"SYMPA on elektrooline listide tarkvara, mis automatiseerib tegevusi nagu "
-"tellimine, modereerimine ja arhiveerimine"
 
 #. (conf.sympa)
 #: ../mail_tt2/helpfile.tt2:12
@@ -5735,8 +5581,6 @@ msgid ""
 "You can put multiple commands in a message. These commands must appear in "
 "the message body and each line must contain only one command."
 msgstr ""
-"Võite panna mitu käsku ühe kirja sisse. Käsud peavad olema kirja sisus ja "
-"iga rida võib sisaldada vaid ühte käsku."
 
 #: ../mail_tt2/helpfile.tt2:16
 msgid "Available commands are:"
@@ -5770,40 +5614,33 @@ msgid ""
 "SUBscribe <list> <name>     * To subscribe or to confirm a subscription to "
 "<list>."
 msgstr ""
-"SUBscribe <list> <nimi>     * Listiga <list> liitumiseks või liitumise "
-"kinnitamiseks."
 
 #: ../mail_tt2/helpfile.tt2:25
 msgid ""
 "UNSubscribe <list> <EMAIL>  * To quit <list>. <EMAIL> is an optional email "
 "address, useful if different from your \"From:\" address."
 msgstr ""
-"UNSubscribe <list> <EMAIL>  * Listist <list> lahkumiseks. <EMAIL> ei ole "
-"kohustuslik. Seda kasutatakse juhul, kui kirja aadress erineb registreeritud "
-"aadressist."
 
 #: ../mail_tt2/helpfile.tt2:26
 msgid "UNSubscribe * <EMAIL>       * To quit all lists."
-msgstr "UNSubscribe * <EMAIL>       * Kõigist listidest lahkumiseks."
+msgstr ""
 
 #: ../mail_tt2/helpfile.tt2:28
+#, fuzzy
 msgid ""
 "SET <list>|* NOMAIL         * To suspend the message reception for <list>"
-msgstr ""
-"SET <list>|* NOMAIL         * Peatab listi(de)st kirjade tulemise, jääte "
-"liikmeks aga mailile kirju ei saadeta. Hea valik puhkuse ajaks."
+msgstr "Peatab listi(de)st kirjade tulemise, jääte"
 
 #: ../mail_tt2/helpfile.tt2:29
+#, fuzzy
 msgid "SET <list>|* DIGEST         * Message reception in compilation mode"
-msgstr ""
-"SET <list>|* DIGEST         * Kirjad listi(de)st tulevad kokkuvõtetena."
+msgstr "Kirjad listi(de)st tulevad kokkuvõtetena."
 
 #: ../mail_tt2/helpfile.tt2:30
 msgid ""
 "SET <list|*> DIGESTPLAIN    * Message reception in compilation mode, sent as "
 "a plain text email with all attachments"
 msgstr ""
-"SET <list|*> DIGESTPLAIN    * Kirjad saadetakse tekstiliste kokkuvõtetena."
 
 #: ../mail_tt2/helpfile.tt2:31
 #, fuzzy
@@ -6469,7 +6306,7 @@ msgstr ""
 # nlsref 16,7
 #. (list.name)
 #: ../mail_tt2/listmaster_notification.tt2:259
-#: ../mail_tt2/listowner_notification.tt2:43
+#: ../mail_tt2/listowner_notification.tt2:41
 msgid "List %1 automatic bounce management"
 msgstr "Listi %1 automaatne vigade haldus"
 
@@ -6507,7 +6344,7 @@ msgstr ""
 "kustutati listist %2:"
 
 #: ../mail_tt2/listmaster_notification.tt2:276
-#: ../mail_tt2/listowner_notification.tt2:60
+#: ../mail_tt2/listowner_notification.tt2:58
 msgid "Managing bouncing subscribers:"
 msgstr "Vigaste liikmete haldus:"
 
@@ -6945,20 +6782,19 @@ msgstr "INFO: '%1' list '%2' kasutajalt '%3'"
 msgid ""
 "WARNING: %1 %2 failed to unsubscribe from %3 because his address was not "
 "found in the list.\n"
-"You may help this person looking for similar email in subscriber list using "
-"the following link :"
+"(You may help this person)."
 msgstr ""
 "HOIATUS: %s %s ei saanud lahkuda listist %s kuna tema aadressi ei \n"
 "leitud sellest listist\n"
 " ( Te võite seda inimest aidata )\n"
 
 #. (list.name)
-#: ../mail_tt2/listowner_notification.tt2:33
+#: ../mail_tt2/listowner_notification.tt2:31
 msgid "List \"%1\" customizations have been removed"
 msgstr "Listi seaded eemaldati"
 
 #. (list.name,list.host,param0,param1,param2)
-#: ../mail_tt2/listowner_notification.tt2:40
+#: ../mail_tt2/listowner_notification.tt2:38
 msgid ""
 "List %1@%2 has been reinstantiated (family %3). \n"
 "Some of the customizations have been removed because they no longer respect "
@@ -6969,7 +6805,7 @@ msgid ""
 msgstr ""
 
 #. (total,list.name)
-#: ../mail_tt2/listowner_notification.tt2:47
+#: ../mail_tt2/listowner_notification.tt2:45
 #, fuzzy
 msgid ""
 "Because we received many non-delivery reports, the %1 subscribers listed "
@@ -6981,7 +6817,7 @@ msgstr ""
 "et neid võidakse kustutada listist %2:"
 
 #. (total,list.name)
-#: ../mail_tt2/listowner_notification.tt2:50
+#: ../mail_tt2/listowner_notification.tt2:48
 #, fuzzy
 msgid ""
 "Because we received many non-delivery reports, the %1 subscribers listed "
@@ -6993,7 +6829,7 @@ msgstr ""
 "kustutati listist %2:"
 
 #. (total,list.name)
-#: ../mail_tt2/listowner_notification.tt2:53
+#: ../mail_tt2/listowner_notification.tt2:51
 #, fuzzy
 msgid ""
 "Because we received many non-delivery reports, the %1 subscribers listed "
@@ -7006,14 +6842,14 @@ msgstr ""
 
 # nlsref 8,24
 #. (list.name)
-#: ../mail_tt2/listowner_notification.tt2:63
+#: ../mail_tt2/listowner_notification.tt2:61
 #, fuzzy
 msgid "Subscription request to list %1"
 msgstr "Lahkumissoov listist %s"
 
 # nlsref 8,3
 #. (list.name)-)
-#: ../mail_tt2/listowner_notification.tt2:68
+#: ../mail_tt2/listowner_notification.tt2:66
 #, fuzzy
 msgid ""
 "Dear owner of list %1,\n"
@@ -7028,7 +6864,7 @@ msgstr ""
 "järgnevale URLile:"
 
 #. (replyto)
-#: ../mail_tt2/listowner_notification.tt2:72
+#: ../mail_tt2/listowner_notification.tt2:70
 #, fuzzy
 msgid ""
 "If prefered, you can accept this subscription request sending an email to %1 "
@@ -7038,24 +6874,24 @@ msgstr ""
 "või saada kiri aadressile %1@%2 koos pealkirjaga:\n"
 "AUTH %2 ADD %3 %4 %5\n"
 
-#: ../mail_tt2/listowner_notification.tt2:76
+#: ../mail_tt2/listowner_notification.tt2:74
 msgid "That can be done using this mailto link:"
 msgstr ""
 
-#: ../mail_tt2/listowner_notification.tt2:79
+#: ../mail_tt2/listowner_notification.tt2:77
 msgid "The user has provided the following informations:"
 msgstr ""
 
 # nlsref 8,24
 #. (list.name)
-#: ../mail_tt2/listowner_notification.tt2:86
+#: ../mail_tt2/listowner_notification.tt2:84
 #, fuzzy
 msgid "UNsubscription request from list %1"
 msgstr "Lahkumissoov listist %s"
 
 # nlsref 8,25
 #. (list.name)-)
-#: ../mail_tt2/listowner_notification.tt2:91
+#: ../mail_tt2/listowner_notification.tt2:89
 #, fuzzy
 msgid ""
 "Dear owner of list %1,\n"
@@ -7069,7 +6905,7 @@ msgstr ""
 "selle sooviga, klikkige järgneval URLil:"
 
 #. (sympa)-)
-#: ../mail_tt2/listowner_notification.tt2:97
+#: ../mail_tt2/listowner_notification.tt2:95
 #, fuzzy
 msgid ""
 "\n"
@@ -7081,14 +6917,14 @@ msgstr ""
 
 # nlsref 8,28
 #. (list.name)
-#: ../mail_tt2/listowner_notification.tt2:102
+#: ../mail_tt2/listowner_notification.tt2:100
 #, fuzzy
 msgid "WARNING: bounce rate too high in list %1"
 msgstr "HOIATUS: vigade arv on liiga suur listis %s"
 
 # nlsref 8,27
 #. (list.name,rate)
-#: ../mail_tt2/listowner_notification.tt2:107
+#: ../mail_tt2/listowner_notification.tt2:105
 #, fuzzy
 msgid ""
 "Bounce rate in list %1 is %2.\n"
@@ -7102,47 +6938,47 @@ msgstr ""
 
 # nlsref 8,21
 #. (command,list.name,who,gecos)
-#: ../mail_tt2/listowner_notification.tt2:112
+#: ../mail_tt2/listowner_notification.tt2:110
 msgid "FYI: %1 list %2 from %3 %4"
 msgstr "INFO: '%1' list '%2' kasutajalt '%3'"
 
 # nlsref 8,21
 #. (command,list.name,who,gecos)
-#: ../mail_tt2/listowner_notification.tt2:114
+#: ../mail_tt2/listowner_notification.tt2:112
 msgid "FYI command %1 list %2 from %3 %4"
 msgstr "INFO: '%1' list '%2' kasutajalt '%3'"
 
 #. (by)
-#: ../mail_tt2/listowner_notification.tt2:114
+#: ../mail_tt2/listowner_notification.tt2:112
 msgid " validated by %1 "
 msgstr "Kinnitatud %1 poolt"
 
-#: ../mail_tt2/listowner_notification.tt2:115
+#: ../mail_tt2/listowner_notification.tt2:113
 msgid "No action is needed on your side."
 msgstr ""
 
 #. (who)
-#: ../mail_tt2/listowner_notification.tt2:119
-#: ../mail_tt2/listowner_notification.tt2:131
+#: ../mail_tt2/listowner_notification.tt2:117
+#: ../mail_tt2/listowner_notification.tt2:129
 msgid "FYI: automatic removal of user %1"
 msgstr "automaatne kasutaja %1 eemaldus"
 
 # nlsref 6,38
 #. (who,list.name)
-#: ../mail_tt2/listowner_notification.tt2:121
-#: ../mail_tt2/listowner_notification.tt2:133
+#: ../mail_tt2/listowner_notification.tt2:119
+#: ../mail_tt2/listowner_notification.tt2:131
 #, fuzzy
 msgid "User \"%1\" has been automatically removed from list %2. "
 msgstr "Kasutaja %s eemaldati listist %s/\n"
 
 #. (list.name)
-#: ../mail_tt2/listowner_notification.tt2:142
+#: ../mail_tt2/listowner_notification.tt2:140
 #, fuzzy
 msgid "List %1: Failed to change member email address"
 msgstr "Muuda minu e-posti aadress"
 
 #. (current_email,new_email,datasource)
-#: ../mail_tt2/listowner_notification.tt2:146
+#: ../mail_tt2/listowner_notification.tt2:144
 msgid ""
 "User %1 could not change his member email address (new email address is %2) "
 "because he is included via a the following data sources: %3.\n"
@@ -7152,7 +6988,7 @@ msgid ""
 msgstr ""
 
 #. (list.name,type)
-#: ../mail_tt2/listowner_notification.tt2:149
+#: ../mail_tt2/listowner_notification.tt2:147
 msgid "List %1 / %2"
 msgstr "lk %1 / %2"
 
@@ -7743,11 +7579,11 @@ msgid "Summary of list %1"
 msgstr "Listi %s kokkuvõte"
 
 #. (file_name)
-#: ../mail_tt2/urlized_part.tt2:4
+#: ../mail_tt2/urlized_part.tt2:3
 msgid ""
 "The %1 file that was initially attached to this message has been stored on "
 "the mailing lists server:"
-msgstr "Kirjaga kaasas olnud manus %1 salvestati serverisse."
+msgstr ""
 
 #. (list.name)
 #: ../mail_tt2/user_notification.tt2:4
@@ -7998,11 +7834,6 @@ msgstr "kõik"
 msgid "restricted to owner with authentication"
 msgstr "listiomanik ilma autentimata"
 
-#: ../src/etc/scenari/add.authdkim:1
-#, fuzzy
-msgid "restricted to owner without authentication if DKIM signature is OK."
-msgstr "listiomanik ilma autentimata"
-
 #: ../src/etc/scenari/add.closed:1
 msgid "add impossible"
 msgstr "lisamine on võimatu"
@@ -8010,12 +7841,6 @@ msgstr "lisamine on võimatu"
 #: ../src/etc/scenari/add.owner:1
 #, fuzzy
 msgid "add performed by list owner does not need authentication"
-msgstr "listiomanik ilma autentimata"
-
-#: ../src/etc/scenari/add.ownerdkim:1
-#, fuzzy
-msgid ""
-"add performed by list owner does not need authentication if DKIM signature OK"
 msgstr "listiomanik ilma autentimata"
 
 #: ../src/etc/scenari/add.owner_notify:1
@@ -8071,13 +7896,6 @@ msgstr "kõik saavad muuta"
 msgid "deletion performed only by list owners, need authentication"
 msgstr "listiomanikud, vajalik on autentimine"
 
-#: ../src/etc/scenari/del.authdkim:1
-#, fuzzy
-msgid ""
-"deletion performed only by list owners, need authentication unless DKIM "
-"signature is OK"
-msgstr "listiomanikud, vajalik on autentimine"
-
 #: ../src/etc/scenari/del.closed:1
 msgid "remove subscriber impossible"
 msgstr "listi liikmete eemaldamine võimatu"
@@ -8107,19 +7925,6 @@ msgstr "listiomanik autentimata"
 msgid "listmaster only"
 msgstr "ainult listmaster näeb listi liikmeid"
 
-#: ../src/etc/scenari/remind.listmasterdkim:1
-#, fuzzy
-msgid ""
-"listmaster only (do not require authentication if DKIM siganture is OK) "
-msgstr "listiomanik ilma autentimata"
-
-#: ../src/etc/scenari/remind.ownerdkim:1
-#, fuzzy
-msgid ""
-"restricted to list owners (authentication is not required if a DKIM "
-"signature is OK)"
-msgstr "listiomanikud ilma autentimata, teavitusega"
-
 #: ../src/etc/scenari/review.closed:1
 #, fuzzy
 msgid "no one can review"
@@ -8137,11 +7942,6 @@ msgstr "ainult omanik näeb listi liikmeid"
 msgid "anyone can do it !"
 msgstr "kõik näevad lugejaid"
 
-#: ../src/etc/scenari/send.editordkim:1
-#, fuzzy
-msgid "Moderated, no authentication needed if DKIM signature from editor is OK"
-msgstr "lisamine vajab autentimist"
-
 #: ../src/etc/scenari/send.editorkey:1
 msgid "Moderated"
 msgstr "Modereeritud"
@@ -8151,9 +7951,8 @@ msgid "Moderated, even for moderators"
 msgstr "modereeritud kõigile (ka moderaatoritele)"
 
 #: ../src/etc/scenari/send.editorkeyonlyauth:1
-#, fuzzy
-msgid "Moderated, need  authentication  from editor"
-msgstr "lisamine vajab autentimist"
+msgid "Moderated, with editor confirmation"
+msgstr "modereeritud, vajalik moderaatori autentimine"
 
 #: ../src/etc/scenari/send.intranet:1
 msgid "restricted to local domain"
@@ -8185,7 +7984,7 @@ msgstr "listi liikmed eelmeva kontrolliga"
 
 #: ../src/etc/scenari/send.privatekeyandeditorkeyonly:1
 #, fuzzy
-msgid "Moderated, for subscribers and even moderators themself"
+msgid "Moderated, for subscribers and moderators"
 msgstr "modereeritakse nii lugejate kui moderaatorite kirju"
 
 #: ../src/etc/scenari/send.privateoreditorkey:1
@@ -8198,7 +7997,7 @@ msgstr "listi liikmed, mitteliikmetelt küsitakse nõusolekut"
 
 #: ../src/etc/scenari/send.private_smime:1
 #, fuzzy
-msgid "restricted to subscribers and checked smime signature"
+msgid "restricted to subscribers check smime signature"
 msgstr "ainult listi liikmed, kontrollitakse S/MIME signatuuri"
 
 #: ../src/etc/scenari/send.public:1
@@ -8206,9 +8005,8 @@ msgid "public list"
 msgstr "saata võib igaüks"
 
 #: ../src/etc/scenari/send.publickey:1
-#, fuzzy
-msgid "anyone no authentication if DKIM signature is OK"
-msgstr "listiomanik ilma autentimata"
+msgid "anyone with previous md5 authentication"
+msgstr "saata võib igaüks, eelneva kontrolliga"
 
 #: ../src/etc/scenari/send.publicnoattachment:1
 msgid "public list multipart/mixed messages are forwarded to moderator"
@@ -8222,7 +8020,7 @@ msgstr "saata võib igaüks, bcc päisega kirju ignoreeritakse"
 msgid "public list multipart messages are rejected"
 msgstr "saata võivad kõik, manustega kirjad ei ole lubatud"
 
-#: ../src/etc/scenari/subscribe.auth:1 ../src/etc/scenari/subscribe.authdkim:1
+#: ../src/etc/scenari/subscribe.auth:1
 msgid "subscription request confirmed"
 msgstr "vajalik autentimine"
 
@@ -8230,21 +8028,8 @@ msgstr "vajalik autentimine"
 msgid "need authentication (notification is sent to owners)"
 msgstr "vajalik autentimine (listiomanikke teavitatakse)"
 
-#: ../src/etc/scenari/subscribe.auth_notifydkim:1
-#, fuzzy
-msgid ""
-"need authentication unless DKIM signature is OK. (notification is sent to "
-"owners)"
-msgstr "vajalik autentimine (listiomanikke teavitatakse)"
-
 #: ../src/etc/scenari/subscribe.auth_owner:1
 msgid "requires authentication then owner approval"
-msgstr "vajalik autentimine ning omaniku luba"
-
-#: ../src/etc/scenari/subscribe.auth_ownerdkim:1
-#, fuzzy
-msgid ""
-"requires authentication unless DKIM signature is OK, then owner approval"
 msgstr "vajalik autentimine ning omaniku luba"
 
 #: ../src/etc/scenari/subscribe.closed:1
@@ -8296,20 +8081,8 @@ msgstr "nähtav kõigile"
 msgid "need authentication"
 msgstr "autentimisega"
 
-#: ../src/etc/scenari/unsubscribe.authdkim:1
-#, fuzzy
-msgid "need authentication unless DKIM signature is OK"
-msgstr "vajalik autentimine ning omaniku luba"
-
 #: ../src/etc/scenari/unsubscribe.auth_notify:1
 msgid "authentication requested, notification sent to owner"
-msgstr "autentimisega, teavitatakse omanikku"
-
-#: ../src/etc/scenari/unsubscribe.auth_notifydkim:1
-#, fuzzy
-msgid ""
-"authentication requested unless DKIM signature is OK, notification sent to "
-"owner"
 msgstr "autentimisega, teavitatakse omanikku"
 
 #: ../src/etc/scenari/unsubscribe.closed:1
@@ -8479,74 +8252,62 @@ msgid ""
 "daily certificate expiration date checking; users are warned when their "
 "certificate has expired or expires within 3 days"
 msgstr ""
-"Igapäevane sertifikaatide kontroll. Kasutajaid teavitakse kui nende "
-"sertifikaat aegub kolme päeva jooksul."
 
 #: ../src/etc/global_task_models/crl_update.daily.task:1
 msgid "daily update of the certificate revocation list"
-msgstr "Iga päev värskendatakse sertifikaadi tühistusnimekirja"
+msgstr ""
 
 #: ../src/etc/global_task_models/eval_bouncers.daily.task:1
 msgid "Daily evaluation of bouncing users"
-msgstr "Igapäevane kättetoimetamata kirjade määratlemine"
+msgstr "Igapäevane vigadeste kasutajate uurimine"
 
 #: ../src/etc/global_task_models/purge_logs_table.daily.task:1
 msgid "daily delete logs "
-msgstr "Logid kustutatakse iga päev"
+msgstr ""
 
 #: ../src/etc/global_task_models/purge_one_time_ticket_table.daily.task:1
 msgid ""
 "daily delete tickets older than sympa.conf/one_time_ticket_table_ttl "
 "parameter"
 msgstr ""
-"Igapäevaselt kustutatakse piletid, mis on vanemad kui määratud parameetriga "
-"<em>sympa.conf/one_time_ticket_table_ttl</em>."
 
 #: ../src/etc/global_task_models/purge_orphan_bounces.monthly.task:1
 msgid "delete monthly bounces for unsubscribed addresses"
 msgstr ""
-"Kustutada iga kuu kättetoimetamata kirjade info tellimuse lõpetanud "
-"kasutajate kohta."
 
 #: ../src/etc/global_task_models/purge_session_table.daily.task:1
 msgid ""
 "daily delete sessions older than sympa.conf/session_expiration_period "
 "parameter"
 msgstr ""
-"Iga päev kustutadakse sessioonid, mis on vanemad kui konfiguratsioonifailis "
-"sympa.conf defineeritud muutuja session_exporation_period väärtus."
 
 #: ../src/etc/global_task_models/purge_tables.daily.task:1
 msgid "daily delete unusefull item from any table"
 msgstr ""
-"Igapäevaselt kustutatakse kogu ebavajalik info kõikidest andmebaasi "
-"tabelitest"
 
 #: ../src/etc/global_task_models/purge_user_table.monthly.task:1
 msgid "purge of orphan entries in user table every month"
-msgstr "Kustutatakse iga kuu kasutajate tabelis orvuks jäänud kirjed"
+msgstr ""
 
 #: ../src/etc/list_task_models/expire.yearly.task:1
 msgid "expiration routine run yearly"
-msgstr "Aegumisi kontrollitakse aastas kord"
+msgstr ""
 
 #: ../src/etc/list_task_models/remind.2month.task:1
 msgid "remind message sent to subscribers every 2 month"
-msgstr "Meeldetuletuskiri saadetakse tellijatele iga kahe kuu tagant"
+msgstr ""
 
 #: ../src/etc/list_task_models/remind.monthly.task:1
 msgid "remind message sent to subscribers every month"
-msgstr "Meeldetuletuskiri saadetakse tellijatele iga kuu"
+msgstr ""
 
 #: ../src/etc/list_task_models/remind.yearly.task:1
 msgid "remind message sent to subscribers every year"
-msgstr "Meeldetuletuskiri saadetakse tellijatele iga aasta"
+msgstr ""
 
 #: ../src/etc/list_task_models/sync_include.ttl.task:1
 msgid "Update of list members based on the TTL"
 msgstr ""
-"Kasutajate nimekirja uuendatakse TTL (<em>time to live</em> - aeg elada) "
-"alusel"
 
 #: ../src/etc/create_list_templates/discussion_list/comment.tt2:1
 msgid "Public discussion mailing list"
@@ -8554,949 +8315,937 @@ msgstr "Avalik list arutelude jaoks"
 
 # nlsref 16,83
 #: ../src/etc/create_list_templates/discussion_list/comment.tt2:2
+#, fuzzy
 msgid "public archives"
-msgstr "avalik arhiiv"
+msgstr "Veebiarhiivid"
 
 #: ../src/etc/create_list_templates/discussion_list/comment.tt2:3
 #: ../src/etc/create_list_templates/private_working_group/comment.tt2:3
+#, fuzzy
 msgid "only subscribers can post"
-msgstr "vaid tellijad saavad kirju saata"
+msgstr "Liikmeid kokku: %1"
 
 #: ../src/etc/create_list_templates/hotline/comment.tt2:1
 msgid "Hotline mailing list"
-msgstr "Tehnilise toe listid"
+msgstr "Murele aadress"
 
 #: ../src/etc/create_list_templates/hotline/comment.tt2:3
 msgid "everyone can post"
-msgstr "kõik saavad kirju saata"
+msgstr "kõik saavad saata"
 
 # nlsref 16,83
 #: ../src/etc/create_list_templates/hotline/comment.tt2:4
 #: ../src/etc/create_list_templates/private_working_group/comment.tt2:4
+#, fuzzy
 msgid "private archives"
-msgstr "arhiivile juurdepääs vaid tellijatele"
+msgstr "Veebiarhiivid"
 
 #: ../src/etc/create_list_templates/hotline/comment.tt2:5
 #: ../src/etc/create_list_templates/private_working_group/comment.tt2:5
+#, fuzzy
 msgid "controlled subscription"
-msgstr "kontrollitud liitumised"
+msgstr "Sinu listid"
 
 #: ../src/etc/create_list_templates/html-news-letter/comment.tt2:1
 msgid ""
 "Mailing list configuration to be used for a news letter providing both text "
 "plain and HTML formats"
-msgstr "Teadetetahvel nii tavateksti kui HTML kirjade jaoks"
+msgstr ""
 
 #: ../src/etc/create_list_templates/html-news-letter/comment.tt2:3
 #: ../src/etc/create_list_templates/news-letter/comment.tt2:3
+#, fuzzy
 msgid "public and moderated list"
-msgstr ""
-"Avalik modereeritud list (kõik saavad lugeda, postitused vaadatakse "
-"moderaatori poolt üle)"
+msgstr "saata võib igaüks"
 
 #: ../src/etc/create_list_templates/html-news-letter/comment.tt2:4
 #: ../src/etc/create_list_templates/news-letter/comment.tt2:4
 msgid "subscribers emails are protected"
-msgstr "tellijate e-posti aadresside vaatamine kaitstakse parooliga"
+msgstr ""
 
 #: ../src/etc/create_list_templates/html-news-letter/comment.tt2:5
 msgid "default reception format is HTML"
-msgstr "vaikeformaadiks on HTML"
+msgstr ""
 
 #: ../src/etc/create_list_templates/intranet_list/comment.tt2:1
 msgid "Mailing list for intranets"
-msgstr "Listid sisevõrgu jaoks"
+msgstr "Listid intraneti jaoks"
 
 #: ../src/etc/create_list_templates/news-letter/comment.tt2:1
 msgid "Mailing list configuration to be used for a news letter"
-msgstr "Uudiste listid"
+msgstr ""
 
 #: ../src/etc/create_list_templates/private_working_group/comment.tt2:1
 msgid "Private working group setup"
-msgstr "Kinnised listid"
+msgstr ""
 
 #: ../src/etc/create_list_templates/public_web_forum/comment.tt2:1
 msgid "Web forum ML"
-msgstr "Veebifoorumid"
+msgstr ""
 
 #: ../src/etc/create_list_templates/public_web_forum/comment.tt2:3
 msgid ""
 "Messages can either be read via email (subscription) or\n"
 "via the web (web archives)"
 msgstr ""
-"Kirju saab lugeda kas e-posti kaudu (liitumine) või veebilehelt (arhiivid)"
 
 #. This entry is a date/time format
 #. Check the strftime manpage for format details : http://docs.freebsd.org/info/gawk/gawk.info.Time_Functions.html
-#: ../src/lib/Commands.pm:963 ../wwsympa/wwsympa.fcgi.in:9706
+#: ../src/lib/Commands.pm:958 ../wwsympa/wwsympa.fcgi.in:9622
 msgid "%A"
 msgstr "%A"
 
 # nlsref 1,3
-#: ../src/lib/Conf.pm:141
+#: ../src/lib/Conf.pm:136
+#, fuzzy
 msgid "Error at line %d: %s\n"
-msgstr "Viga real %d : %s\n"
+msgstr "Viga real %d : %s"
 
 # nlsref 1,3
-#: ../src/lib/Conf.pm:432
+#: ../src/lib/Conf.pm:418
+#, fuzzy
 msgid "Error at line %d: %s"
-msgstr "Viga real %d: %s"
+msgstr "Viga real %d : %s"
 
 #. This entry is a date/time format
 #. Check the strftime manpage for format details : http://docs.freebsd.org/info/gawk/gawk.info.Time_Functions.html
 #: ../src/lib/Family.pm:2591 ../src/lib/Family.pm:388 ../src/lib/Family.pm:665
-#: ../src/lib/List.pm:1861 ../wwsympa/Auth.pm:459
-#: ../wwsympa/wwsympa.fcgi.in:1057 ../wwsympa/wwsympa.fcgi.in:2851
+#: ../src/lib/List.pm:1802 ../wwsympa/Auth.pm:464
+#: ../wwsympa/wwsympa.fcgi.in:1041 ../wwsympa/wwsympa.fcgi.in:2847
 msgid "%d %b %Y at %H:%M:%S"
 msgstr "%d %b %Y at %H:%M:%S"
 
 # nlsref 16,1
-#: ../src/lib/List.pm:323
+#: ../src/lib/List.pm:322
 msgid "Account"
 msgstr "Konto"
 
 # nlsref 16,2
-#: ../src/lib/List.pm:327
+#: ../src/lib/List.pm:326
 msgid "Who can add subscribers"
 msgstr "Kes saab listi liikmeid lisada"
 
 # nlsref 16,3
-#: ../src/lib/List.pm:331
+#: ../src/lib/List.pm:330
 msgid "Anonymous sender"
 msgstr "Anonüümne saatja"
 
 # nlsref 16,5
-#: ../src/lib/List.pm:336
+#: ../src/lib/List.pm:335
 msgid "frequency"
 msgstr "sagedus"
 
 # nlsref 16,6
-#: ../src/lib/List.pm:1414 ../src/lib/List.pm:341
+#: ../src/lib/List.pm:1351 ../src/lib/List.pm:340
 msgid "access right"
 msgstr "juurdepääsuõigus"
 
 # nlsref 16,4
-#: ../src/lib/List.pm:345
+#: ../src/lib/List.pm:344
 msgid "Text archives"
 msgstr "Tekstipõhised arhiivid"
 
 # nlsref 16,212
-#: ../src/lib/List.pm:350
+#: ../src/lib/List.pm:349
 msgid "Archive encrypted mails as cleartext"
 msgstr "Arhiveeri krüpteeritud kirjad tavatekstina"
 
 # nlsref 16,19
-#: ../src/lib/List.pm:1163 ../src/lib/List.pm:1203 ../src/lib/List.pm:357
-#: ../src/lib/List.pm:533 ../src/lib/List.pm:660 ../src/lib/List.pm:695
+#: ../src/lib/List.pm:1106 ../src/lib/List.pm:1146 ../src/lib/List.pm:356
+#: ../src/lib/List.pm:532 ../src/lib/List.pm:602 ../src/lib/List.pm:637
 msgid "reception mode"
 msgstr "vastuvõtu viis"
 
 # nlsref 16,88
-#: ../src/lib/List.pm:360
+#: ../src/lib/List.pm:359
 msgid "Available subscription options"
 msgstr "Võimalikud listiga liitumise variandid"
 
 # nlsref 16,8
-#: ../src/lib/List.pm:368
+#: ../src/lib/List.pm:367
 msgid "warn rate"
 msgstr "hoiatamise häär"
 
 # nlsref 16,9
-#: ../src/lib/List.pm:375
+#: ../src/lib/List.pm:374
 msgid "halt rate"
 msgstr "peatamise määr"
 
 # #-#-#-#-#  et.po (PACKAGE VERSION)  #-#-#-#-#
 # nlsref 16,7
-#: ../src/lib/List.pm:379
+#: ../src/lib/List.pm:378
 msgid "Bounces management"
 msgstr "Vigade haldus"
 
-#: ../src/lib/List.pm:386 ../src/lib/List.pm:407
+#: ../src/lib/List.pm:385 ../src/lib/List.pm:406
 msgid "threshold"
 msgstr "künnis"
 
-#: ../src/lib/List.pm:391 ../src/lib/List.pm:412
+#: ../src/lib/List.pm:390 ../src/lib/List.pm:411
 msgid "action for this population"
-msgstr "tegevus"
+msgstr ""
 
-#: ../src/lib/List.pm:396 ../src/lib/List.pm:417
+#: ../src/lib/List.pm:395 ../src/lib/List.pm:416
 msgid "notification"
 msgstr "teavitus"
 
-#: ../src/lib/List.pm:400
+#: ../src/lib/List.pm:399
 msgid "Management of bouncers, 1st level"
 msgstr "Vigade haldus, 1. tase"
 
-#: ../src/lib/List.pm:421
+#: ../src/lib/List.pm:420
 msgid "Management of bouncers, 2nd level"
 msgstr "Vigade haldus, 2. tase"
 
 # nlsref 16,10
-#: ../src/lib/List.pm:428
+#: ../src/lib/List.pm:427
 msgid "Expiration of unmoderated messages"
 msgstr "Modereerimata teadete aegumine"
 
 # nlsref 16,11
-#: ../src/lib/List.pm:434
+#: ../src/lib/List.pm:433
 msgid "Secret string for generating unique keys"
 msgstr "Salajane sõne unikaalsete võtmete genereerimiseks"
 
 # nlsref 16,12
-#: ../src/lib/List.pm:452
+#: ../src/lib/List.pm:451
 msgid "Creation of the list"
 msgstr "Listi loomine"
 
-#: ../src/lib/List.pm:463
+#: ../src/lib/List.pm:462
 msgid "internal identifier"
-msgstr "sisemine identifikaator"
+msgstr ""
 
-#: ../src/lib/List.pm:471
+#: ../src/lib/List.pm:470
 msgid "label"
-msgstr "silt"
+msgstr ""
 
-#: ../src/lib/List.pm:477
+#: ../src/lib/List.pm:476
 msgid "additional comment"
-msgstr "lisa kommentaar"
+msgstr ""
 
-#: ../src/lib/List.pm:484
+#: ../src/lib/List.pm:483
 msgid "type"
-msgstr "tüüp"
+msgstr ""
 
-#: ../src/lib/List.pm:490
+#: ../src/lib/List.pm:489
 msgid "possible attribute values (if enum is used)"
-msgstr "võimalikud väärtused (kui kasutatakse hulka)"
+msgstr ""
 
-#: ../src/lib/List.pm:495
+#: ../src/lib/List.pm:494
+#, fuzzy
 msgid "is the attribute optional?"
-msgstr "kas see parameeter on vabalt valitav?"
+msgstr "atribuutid valikulised/kohustuslikud"
 
-#: ../src/lib/List.pm:501
+#: ../src/lib/List.pm:500
 msgid "Custom user attributes"
-msgstr "kasutaja parameetrid"
+msgstr ""
 
 # nlsref 16,16
-#: ../src/lib/List.pm:507
+#: ../src/lib/List.pm:506
 msgid "Custom header field"
 msgstr "Lisanduv päiserida"
 
 # nlsref 16,17
-#: ../src/lib/List.pm:512
+#: ../src/lib/List.pm:511
 msgid "Subject tagging"
 msgstr "Teemarea märgistamine"
 
-#: ../src/lib/List.pm:526
+#: ../src/lib/List.pm:525
+#, fuzzy
 msgid "custom parameters"
-msgstr "parameetrid"
+msgstr "Valed parameetrid"
 
 # nlsref 16,20
-#: ../src/lib/List.pm:1168 ../src/lib/List.pm:1208 ../src/lib/List.pm:538
-#: ../src/lib/List.pm:665 ../src/lib/List.pm:700
+#: ../src/lib/List.pm:1111 ../src/lib/List.pm:1151 ../src/lib/List.pm:537
+#: ../src/lib/List.pm:607 ../src/lib/List.pm:642
 msgid "visibility"
 msgstr "nähtavus"
 
 # nlsref 16,18
-#: ../src/lib/List.pm:542
+#: ../src/lib/List.pm:541
 msgid "Subscription profile"
 msgstr "Listiga liitumise profiil"
 
 # nlsref 16,21
-#: ../src/lib/List.pm:546
+#: ../src/lib/List.pm:545
 msgid "Who can delete subscribers"
 msgstr "Kes võib kustutada listi lugejaiks soovijaid"
 
-#: ../src/lib/List.pm:551
+#: ../src/lib/List.pm:550
 msgid "Delivery time (hh:mm)"
-msgstr "Saatmise aeg (tt:mm)"
+msgstr ""
 
 # nlsref 16,23
-#: ../src/lib/List.pm:426 ../src/lib/List.pm:559
+#: ../src/lib/List.pm:425 ../src/lib/List.pm:558
 msgid "days"
 msgstr "päevi"
 
 # nlsref 16,24
-#: ../src/lib/List.pm:565
+#: ../src/lib/List.pm:564
 msgid "hour"
 msgstr "tund"
 
 # nlsref 16,25
-#: ../src/lib/List.pm:571
+#: ../src/lib/List.pm:570
 msgid "minute"
 msgstr "minut"
 
 # nlsref 16,22
-#: ../src/lib/List.pm:575
+#: ../src/lib/List.pm:574
 msgid "Digest frequency"
 msgstr "Kokkuvõtte sagedus"
 
-#: ../src/lib/List.pm:583
+#: ../src/lib/List.pm:582
 msgid "Digest maximum number of messages"
 msgstr "Kokkuvõte maksimaalne kirjade arv"
 
 # nlsref 15,4
-#: ../src/lib/List.pm:591
+#: ../src/lib/List.pm:590
 #, fuzzy
 msgid "Inclusions timeout for message distribution"
-msgstr "Kirja jaotusele ajapiirangute lisamine"
-
-#: ../src/lib/List.pm:598
-#, fuzzy
-msgid "Insert DKIM signature to messages sent to the list"
-msgstr "Kirjade saatmine   : %1"
-
-#: ../src/lib/List.pm:606
-msgid "Type of list message where a DKIM signature is added"
-msgstr ""
-
-#: ../src/lib/List.pm:613
-msgid "file path for list DKIM private key"
-msgstr ""
-
-#: ../src/lib/List.pm:621
-msgid "Selector for DNS lookup of DKIM public key"
-msgstr ""
-
-#: ../src/lib/List.pm:649
-#, fuzzy
-msgid "DKIM configuration"
-msgstr "Seadetefail"
+msgstr "kirja jalus"
 
 # nlsref 16,27
-#: ../src/lib/List.pm:1158 ../src/lib/List.pm:655
+#: ../src/lib/List.pm:1101 ../src/lib/List.pm:597
 msgid "email address"
 msgstr "e-posti aadress"
 
 # nlsref 16,29
-#: ../src/lib/List.pm:1173 ../src/lib/List.pm:670
+#: ../src/lib/List.pm:1116 ../src/lib/List.pm:612
 msgid "name"
 msgstr "nimi"
 
 # nlsref 16,30
-#: ../src/lib/List.pm:1178 ../src/lib/List.pm:675
+#: ../src/lib/List.pm:1121 ../src/lib/List.pm:617
 msgid "private information"
 msgstr "isiklik informatsioon"
 
 # nlsref 16,88
-#: ../src/lib/List.pm:710
+#: ../src/lib/List.pm:652
 msgid "Periodical subscription expiration task"
-msgstr "Perioodiline tellimuse aegumise jälgimise teenus"
+msgstr ""
 
 # nlsref 16,31
-#: ../src/lib/List.pm:721
+#: ../src/lib/List.pm:663
 msgid "Attachment type"
 msgstr "Manuse tüüp"
 
 # nlsref 16,32
-#: ../src/lib/List.pm:725
+#: ../src/lib/List.pm:667
 msgid "Forced reply address"
 msgstr "Pealesunnitud vastusaadress"
 
 # nlsref 16,33
-#: ../src/lib/List.pm:731
+#: ../src/lib/List.pm:673
 msgid "Internet domain"
 msgstr "Interneti domeeninimi"
 
 # nlsref 16,34
-#: ../src/lib/List.pm:737
+#: ../src/lib/List.pm:679
 msgid "File inclusion"
 msgstr "Failist lisamine"
 
-#: ../src/lib/List.pm:741
+#: ../src/lib/List.pm:683
 msgid "data location URL"
-msgstr "Andmete asukoha URL"
+msgstr ""
 
 # nlsref 16,38
-#: ../src/lib/List.pm:1039 ../src/lib/List.pm:747 ../src/lib/List.pm:780
-#: ../src/lib/List.pm:861
+#: ../src/lib/List.pm:689 ../src/lib/List.pm:722 ../src/lib/List.pm:803
+#: ../src/lib/List.pm:981
 msgid "remote user"
 msgstr "kaugkasutaja"
 
 # nlsref 16,39
-#: ../src/lib/List.pm:1044 ../src/lib/List.pm:754 ../src/lib/List.pm:786
-#: ../src/lib/List.pm:867
+#: ../src/lib/List.pm:696 ../src/lib/List.pm:728 ../src/lib/List.pm:809
+#: ../src/lib/List.pm:986
 msgid "remote password"
 msgstr "kaugparool"
 
 # nlsref 16,209
-#: ../src/lib/List.pm:1000 ../src/lib/List.pm:1058 ../src/lib/List.pm:759
-#: ../src/lib/List.pm:822 ../src/lib/List.pm:946
+#: ../src/lib/List.pm:1000 ../src/lib/List.pm:701 ../src/lib/List.pm:764
+#: ../src/lib/List.pm:888 ../src/lib/List.pm:942
 msgid "short name for this source"
-msgstr "Allika lühinimi"
+msgstr ""
 
 # nlsref 16,34
-#: ../src/lib/List.pm:764
+#: ../src/lib/List.pm:706
+#, fuzzy
 msgid "Remote file inclusion"
-msgstr "Failide lisamine kaughaldusega"
+msgstr "Failist lisamine"
 
 # nlsref 16,36
-#: ../src/lib/List.pm:1017 ../src/lib/List.pm:770 ../src/lib/List.pm:851
-#: ../src/lib/List.pm:978
+#: ../src/lib/List.pm:712 ../src/lib/List.pm:793 ../src/lib/List.pm:920
+#: ../src/lib/List.pm:959
 msgid "remote host"
 msgstr "kaughost"
 
 # nlsref 16,37
-#: ../src/lib/List.pm:775 ../src/lib/List.pm:856 ../src/lib/List.pm:984
+#: ../src/lib/List.pm:717 ../src/lib/List.pm:798 ../src/lib/List.pm:926
 msgid "remote port"
 msgstr "kaugport"
 
 # nlsref 16,40
-#: ../src/lib/List.pm:790
+#: ../src/lib/List.pm:732
 msgid "suffix"
 msgstr "eesliide"
 
 # nlsref 16,41
-#: ../src/lib/List.pm:796
+#: ../src/lib/List.pm:738
 msgid "filter"
 msgstr "filter"
 
 # nlsref 16,42
-#: ../src/lib/List.pm:802
+#: ../src/lib/List.pm:744
 msgid "extracted attribute"
 msgstr "eraldatud atribuut"
 
 # nlsref 16,43
-#: ../src/lib/List.pm:807
+#: ../src/lib/List.pm:749
 msgid "selection (if multiple)"
 msgstr "valik (kui võimalik)"
 
 # nlsref 16,97
-#: ../src/lib/List.pm:812
+#: ../src/lib/List.pm:754
 msgid "search scope"
 msgstr "otsingu skoop"
 
 # nlsref 16,98
-#: ../src/lib/List.pm:818
+#: ../src/lib/List.pm:760
 msgid "connection timeout"
 msgstr "ühenduse aegumine"
 
 # nlsref 16,35
-#: ../src/lib/List.pm:846
+#: ../src/lib/List.pm:788
 msgid "LDAP query inclusion"
 msgstr "LDAP päringuga kasutajate lisamine"
 
 # nlsref 16,140
-#: ../src/lib/List.pm:871
+#: ../src/lib/List.pm:813
 msgid "first-level suffix"
 msgstr "first-level suffix"
 
 # nlsref 16,141
-#: ../src/lib/List.pm:877
+#: ../src/lib/List.pm:819
 msgid "first-level filter"
 msgstr "first-level filter"
 
 # nlsref 16,142
-#: ../src/lib/List.pm:882
+#: ../src/lib/List.pm:824
 msgid "first-level extracted attribute"
 msgstr "first-level extracted attribute"
 
 # nlsref 16,143
-#: ../src/lib/List.pm:887
+#: ../src/lib/List.pm:829
 msgid "first-level selection"
 msgstr "first-level selection"
 
 # nlsref 16,197
-#: ../src/lib/List.pm:892
+#: ../src/lib/List.pm:834
 msgid "first-level search scope"
 msgstr "first-level search scope"
 
 # nlsref 16,198
-#: ../src/lib/List.pm:898
+#: ../src/lib/List.pm:840
 msgid "first-level connection timeout"
 msgstr "first-level connection timeout"
 
 # nlsref 16,201
-#: ../src/lib/List.pm:904
+#: ../src/lib/List.pm:846
 msgid "first-level regular expression"
 msgstr "first-level regular expression"
 
 # nlsref 16,144
-#: ../src/lib/List.pm:908
+#: ../src/lib/List.pm:850
 msgid "second-level suffix template"
 msgstr "second-level suffix template"
 
 # nlsref 16,145
-#: ../src/lib/List.pm:914
+#: ../src/lib/List.pm:856
 msgid "second-level filter template"
 msgstr "second-level filter template"
 
 # nlsref 16,146
-#: ../src/lib/List.pm:920
+#: ../src/lib/List.pm:862
 msgid "second-level extracted attribute"
 msgstr "second-level extracted attribute"
 
 # nlsref 16,147
-#: ../src/lib/List.pm:925
+#: ../src/lib/List.pm:867
 msgid "second-level selection"
 msgstr "second-level selection"
 
 # nlsref 16,199
-#: ../src/lib/List.pm:930
+#: ../src/lib/List.pm:872
 msgid "second-level search scope"
 msgstr "second-level search scope"
 
 # nlsref 16,200
-#: ../src/lib/List.pm:936
+#: ../src/lib/List.pm:878
 msgid "second-level connection timeout"
 msgstr "second-level connection timeout"
 
 # nlsref 16,202
-#: ../src/lib/List.pm:942
+#: ../src/lib/List.pm:884
 msgid "second-level regular expression"
 msgstr "second-level regular expression"
 
 # nlsref 16,135
-#: ../src/lib/List.pm:968
+#: ../src/lib/List.pm:910
 msgid "LDAP 2-level query inclusion"
 msgstr "LDAPi 2-tasemelise päringu lisamine"
 
 # nlsref 16,44
-#: ../src/lib/List.pm:973
+#: ../src/lib/List.pm:915
 msgid "List inclusion"
 msgstr "Listi kasutajate lisamine"
 
 # nlsref 16,207
-#: ../src/lib/List.pm:990
+#: ../src/lib/List.pm:932
 msgid "remote path of sympa list dump"
-msgstr "tõmmise asukoht"
+msgstr ""
 
 # nlsref 16,208
-#: ../src/lib/List.pm:995
+#: ../src/lib/List.pm:937
 msgid "certificate for authentication by remote Sympa"
-msgstr "sertifikaat teise Sympa autoriseerimiseks"
+msgstr ""
 
 # nlsref 16,206
-#: ../src/lib/List.pm:1007
+#: ../src/lib/List.pm:949
 msgid "remote list inclusion"
 msgstr ""
 
 # nlsref 16,46
-#: ../src/lib/List.pm:1012
+#: ../src/lib/List.pm:954
 msgid "database type"
 msgstr "andmebaasi tüüp"
 
 # nlsref 16,46
-#: ../src/lib/List.pm:1021
+#: ../src/lib/List.pm:963
+#, fuzzy
 msgid "database port"
-msgstr "andmebaasi port"
+msgstr "andmebaasi tüüp"
 
 # nlsref 16,48
-#: ../src/lib/List.pm:1026
+#: ../src/lib/List.pm:968
 msgid "database name"
 msgstr "andmebaasi nimi"
 
 # nlsref 16,94
-#: ../src/lib/List.pm:1030
+#: ../src/lib/List.pm:972
 msgid "connection options"
 msgstr "ühenduse seaded"
 
 # nlsref 16,148
-#: ../src/lib/List.pm:1035
+#: ../src/lib/List.pm:977
+#, fuzzy
 msgid "environment variables for database connection"
 msgstr "keskkonnamuutujad andmebaasiühenduseks"
 
 # nlsref 16,51
-#: ../src/lib/List.pm:1050
+#: ../src/lib/List.pm:992
 msgid "SQL query"
 msgstr "SQL päring"
 
-#: ../src/lib/List.pm:1054
+#: ../src/lib/List.pm:996
 msgid "Directory where the database is stored (used for DBD::CSV only)"
-msgstr "Kaust andmebaasi salvestamiseks (kasutatakse vaid DBD::CSV puhul)"
+msgstr ""
 
 # nlsref 16,45
-#: ../src/lib/List.pm:1065
+#: ../src/lib/List.pm:1007
 msgid "SQL query inclusion"
 msgstr "SQL päringuga kasutajate lisamine"
 
-#: ../src/lib/List.pm:1071
+#: ../src/lib/List.pm:1013
+#, fuzzy
 msgid "Notify subscribers when they are included from a data source?"
-msgstr "Teavitada kasutajaid kun nad on juba lisatud andmeallikasse"
+msgstr "Te olete juba listi %1 liige"
 
 # nlsref 16,53
-#: ../src/lib/List.pm:1075
+#: ../src/lib/List.pm:1017
 msgid "Who can view list information"
 msgstr "Kes saab näha infot listi kohta"
 
 # nlsref 16,54
-#: ../src/lib/List.pm:1079
+#: ../src/lib/List.pm:1021
 msgid "Who can invite people"
 msgstr "Kes võib inimesi listi kutsuda"
 
 # nlsref 16,55
-#: ../src/lib/List.pm:1085
+#: ../src/lib/List.pm:1027
 msgid "Language of the list"
 msgstr "Listi keel"
 
-#: ../src/lib/List.pm:1110
+#: ../src/lib/List.pm:1052
 msgid "Regular expression applied to prevent loops with robots"
-msgstr "Regulaaravalised korduste vältimiseks"
+msgstr ""
 
 # nlsref 16,56
-#: ../src/lib/List.pm:1117
+#: ../src/lib/List.pm:1059
 msgid "Maximum message size"
 msgstr "Maksimaalne kirja suurus"
 
-#: ../src/lib/List.pm:1123
+#: ../src/lib/List.pm:1065
+#, fuzzy
 msgid "Message topic name"
-msgstr "Teadete teema nimi"
+msgstr "Modereeritavaid kirju:"
 
-#: ../src/lib/List.pm:1128
+#: ../src/lib/List.pm:1070
+#, fuzzy
 msgid "Message topic keywords"
-msgstr "Teadete teema võtmesõnad"
+msgstr "Tühista vead"
 
-#: ../src/lib/List.pm:1134
+#: ../src/lib/List.pm:1076
+#, fuzzy
 msgid "Message topic title"
-msgstr "Teadete teema pealkiri"
+msgstr "Modereeritavaid kirju:"
 
 # nlsref 16,74
-#: ../src/lib/List.pm:1139
+#: ../src/lib/List.pm:1081
+#, fuzzy
 msgid "Topics for message categorization"
-msgstr "Teemad teadete rühmitamiseks"
+msgstr "Listi teemad"
 
-#: ../src/lib/List.pm:1145
+#: ../src/lib/List.pm:1087
 msgid "Defines to which part of messages topic keywords are applied"
-msgstr "Määrab kindlaks, millisele teate osale  teema võtmesõnad rakenduvad"
+msgstr ""
 
 # nlsref 15,4
-#: ../src/lib/List.pm:1152
+#: ../src/lib/List.pm:1094
+#, fuzzy
 msgid "Message tagging"
-msgstr "kirja sildistamine"
+msgstr "kirja jalus"
 
 # nlsref 16,62
-#: ../src/lib/List.pm:1183 ../src/lib/List.pm:1213
+#: ../src/lib/List.pm:1126 ../src/lib/List.pm:1156
 msgid "profile"
-msgstr "profiiil"
+msgstr "profiil"
 
 # nlsref 16,63
-#: ../src/lib/List.pm:1224
+#: ../src/lib/List.pm:1167
 msgid "Priority"
 msgstr "Prioriteet"
 
 # nlsref 16,64
-#: ../src/lib/List.pm:1228
+#: ../src/lib/List.pm:1171
 msgid "Who can start a remind process"
-msgstr "Kes võib käivitada meeldetuletuste saatmise"
+msgstr "Kes võib käivitada meeldetuletuse"
 
-#: ../src/lib/List.pm:1233
+#: ../src/lib/List.pm:1176
 msgid "Return-path of the REMIND command"
-msgstr "tagasisaatmise aadress REMIND käsule"
+msgstr ""
 
 # nlsref 16,66
-#: ../src/lib/List.pm:1257 ../src/lib/List.pm:1277
+#: ../src/lib/List.pm:1200 ../src/lib/List.pm:1220
 msgid "Reply address"
 msgstr "Vastusaadress"
 
 # nlsref 16,91
-#: ../src/lib/List.pm:1263
+#: ../src/lib/List.pm:1206
 msgid "value"
 msgstr "väärtus"
 
 # nlsref 16,92
-#: ../src/lib/List.pm:1268
+#: ../src/lib/List.pm:1211
 msgid "other email address"
 msgstr "teine e-posti aadress"
 
 # nlsref 16,93
-#: ../src/lib/List.pm:1273
+#: ../src/lib/List.pm:1216
 msgid "respect of existing header field"
 msgstr "usutakse olemasolevat päiserida"
 
 # nlsref 16,67
-#: ../src/lib/List.pm:1282
+#: ../src/lib/List.pm:1225
 msgid "Who can review subscribers"
 msgstr "Kes võib listi liikmeid vaadata"
 
 # nlsref 16,16
-#: ../src/lib/List.pm:1289
+#: ../src/lib/List.pm:1232
 msgid "RFC 2369 Header fields"
 msgstr "RFC 2369 alusel lisatav päiserida"
 
 # nlsref 16,68
-#: ../src/lib/List.pm:1293
+#: ../src/lib/List.pm:1236
 msgid "Who can send messages"
 msgstr "Kes võib kirju saata"
 
 # nlsref 16,69
-#: ../src/lib/List.pm:1300
+#: ../src/lib/List.pm:1243
 msgid "Serial number of the config"
 msgstr "Seadete järjekorranumber"
 
 # nlsref 16,86
-#: ../src/lib/List.pm:1305
+#: ../src/lib/List.pm:1248
 msgid "Who can view"
 msgstr "Kes saab vaadata"
 
 # nlsref 16,87
-#: ../src/lib/List.pm:1309
+#: ../src/lib/List.pm:1252
 msgid "Who can edit"
 msgstr "Kes saab toimetada"
 
 # nlsref 16,203
-#: ../src/lib/List.pm:1316 ../src/lib/List.pm:1421
+#: ../src/lib/List.pm:1259 ../src/lib/List.pm:1358
 msgid "quota"
 msgstr ""
 
-#: ../src/lib/List.pm:1325 ../src/lib/List.pm:1330
+#: ../src/lib/List.pm:1268 ../src/lib/List.pm:1273
 msgid "email address protection method"
 msgstr ""
 
 # nlsref 16,71
-#: ../src/lib/List.pm:1336
+#: ../src/lib/List.pm:1279
 msgid "Status of the list"
 msgstr "Listi staatus"
 
 # nlsref 16,72
-#: ../src/lib/List.pm:1343
+#: ../src/lib/List.pm:1286
 msgid "Subject of the list"
 msgstr "Listi teema"
 
 # nlsref 16,73
-#: ../src/lib/List.pm:1347
+#: ../src/lib/List.pm:1290
 msgid "Who can subscribe to the list"
 msgstr "Kes võib listiga liituda"
 
 # nlsref 16,74
-#: ../src/lib/List.pm:1353
+#: ../src/lib/List.pm:1296
 msgid "Topics for the list"
 msgstr "Listi teemad"
 
 # nlsref 16,75
-#: ../src/lib/List.pm:1360
+#: ../src/lib/List.pm:1303
 msgid "Inclusions timeout"
 msgstr "Lisamiste aegumine"
 
 # nlsref 16,76
-#: ../src/lib/List.pm:1364
+#: ../src/lib/List.pm:1307
 msgid "Who can unsubscribe"
 msgstr "Kes võib listist lahkuda"
 
 # nlsref 16,77
-#: ../src/lib/List.pm:1385
+#: ../src/lib/List.pm:1328
 msgid "Last update of config"
 msgstr "Seadete viimane uuendamine"
 
 # nlsref 16,81
-#: ../src/lib/List.pm:1392
+#: ../src/lib/List.pm:1335
 msgid "User data source"
 msgstr "Kasutajaandmete allikas"
 
-#: ../src/lib/List.pm:1398
+#: ../src/lib/List.pm:1341
+#, fuzzy
 msgid "Allow picture display? (must be enabled for the current robot)"
 msgstr ""
-"Kas lubada pildi kuvamine? (peab olema lubatud praeguse üldises "
-"konfiguratsioonis)"
-
-# nlsref 16,74
-#: ../src/lib/List.pm:1404
-#, fuzzy
-msgid "Allow message personnalization"
-msgstr "Listi teemad"
+"Kas lubada pildi kuvamine ? (peab olema lubatud praeguse roboti juures)"
 
 # nlsref 16,82
-#: ../src/lib/List.pm:1410
+#: ../src/lib/List.pm:1347
 msgid "Visibility of the list"
-msgstr "Listi nähtavus kasutajatele"
+msgstr "Kellele on list nähtav"
 
-#: ../src/lib/List.pm:1426
+#: ../src/lib/List.pm:1363
 msgid "Maximum number of month archived"
-msgstr "Maksimaalne kuude arv arhiveerimiseks"
+msgstr "Maksimaalne kuude arv arhiveeritud"
 
 # nlsref 16,83
-#: ../src/lib/List.pm:1431
+#: ../src/lib/List.pm:1368
 msgid "Web archives"
 msgstr "Veebiarhiivid"
 
 # nlsref 16,85
-#: ../src/lib/List.pm:1437
+#: ../src/lib/List.pm:1374
 msgid "Welcome return-path"
 msgstr "Tervitusteksti vastusaadress"
 
-#: ../src/lib/List.pm:1442
+#: ../src/lib/List.pm:1379
 msgid "percentage of list members in VERP mode"
-msgstr "VERP režiimis olevate liikmete osakaal"
+msgstr ""
 
-#: ../src/lib/List.pm:366 ../src/lib/List.pm:373
+#: ../src/lib/List.pm:365 ../src/lib/List.pm:372
 #, fuzzy
 msgid "%"
 msgstr "%A"
 
-#: ../src/lib/List.pm:384 ../src/lib/List.pm:405
+#: ../src/lib/List.pm:383 ../src/lib/List.pm:404
 msgid "points"
-msgstr "punkte"
+msgstr ""
 
 # nlsref 16,29
-#: ../src/lib/List.pm:517
+#: ../src/lib/List.pm:516
+#, fuzzy
 msgid "var name"
-msgstr "muutuja nimi"
+msgstr "nimi"
 
 # nlsref 16,91
-#: ../src/lib/List.pm:522
+#: ../src/lib/List.pm:521
+#, fuzzy
 msgid "var value"
-msgstr "muutuja väärtus"
+msgstr "väärtus"
 
 # nlsref 15,6
-#: ../src/lib/List.pm:581
+#: ../src/lib/List.pm:580
+#, fuzzy
 msgid "messages"
-msgstr "kirjad"
+msgstr "meeldetuletuskiri"
 
-#: ../src/lib/List.pm:1358 ../src/lib/List.pm:589 ../src/lib/List.pm:817
-#: ../src/lib/List.pm:897 ../src/lib/List.pm:935
+#: ../src/lib/List.pm:1301 ../src/lib/List.pm:588 ../src/lib/List.pm:759
+#: ../src/lib/List.pm:839 ../src/lib/List.pm:877
 msgid "seconds"
-msgstr "sekundit"
-
-#: ../src/lib/List.pm:628
-msgid "list of headers to be included ito the message for signature"
-msgstr ""
-
-#: ../src/lib/List.pm:635
-msgid "DKIM \"d=\" tag, you should probably use the default value"
-msgstr ""
-
-#: ../src/lib/List.pm:642
-msgid "DKIM \"i=\" tag, you should probably leave this parameter empty"
 msgstr ""
 
 # nlsref 16,81
-#: ../src/lib/List.pm:685
+#: ../src/lib/List.pm:627
+#, fuzzy
 msgid "the data source"
-msgstr "Andmeallikas"
+msgstr "Kasutajaandmete allikas"
 
-#: ../src/lib/List.pm:690
+#: ../src/lib/List.pm:632
+#, fuzzy
 msgid "data source parameters"
-msgstr "Andmeallikate seaded"
+msgstr "Andmete allikad"
 
-#: ../src/lib/List.pm:706
+#: ../src/lib/List.pm:648
 msgid "Moderators defined in an external data source"
-msgstr "Välises andmebaasis määratud moderaatorid"
+msgstr ""
 
 # nlsref 8,7
-#: ../src/lib/List.pm:715
+#: ../src/lib/List.pm:657
 msgid "Family name"
 msgstr "Grupi nimi"
 
-#: ../src/lib/List.pm:828 ../src/lib/List.pm:952
+#: ../src/lib/List.pm:770 ../src/lib/List.pm:894
 msgid "use SSL (LDAPS)"
 msgstr "kasuta SSL-i (LDAPS)"
 
 # nlsref 16,45
-#: ../src/lib/List.pm:833 ../src/lib/List.pm:957
+#: ../src/lib/List.pm:775 ../src/lib/List.pm:899
+#, fuzzy
 msgid "SSL version"
-msgstr "SSL versioon"
+msgstr "SQL päringuga kasutajate lisamine"
 
-#: ../src/lib/List.pm:838 ../src/lib/List.pm:962
+#: ../src/lib/List.pm:780 ../src/lib/List.pm:904
+#, fuzzy
 msgid "SSL ciphers used"
-msgstr "Kasutatavad SSL meetodid"
+msgstr "Võtme suurus:"
 
-#: ../src/lib/List.pm:1090 ../src/lib/List.pm:1370
+#: ../src/lib/List.pm:1032 ../src/lib/List.pm:1313
 msgid "epoch date"
 msgstr "epohhiformaadis aeg"
 
-#: ../src/lib/List.pm:1094 ../src/lib/List.pm:1375
+#: ../src/lib/List.pm:1036 ../src/lib/List.pm:1318
 msgid "date"
 msgstr "kuupäev"
 
 # nlsref 16,53
-#: ../src/lib/List.pm:1099
+#: ../src/lib/List.pm:1041
+#, fuzzy
 msgid "who ran the instantiation"
-msgstr "Kes saab installeerida"
+msgstr "Kes saab näha infot listi kohta"
 
 # nlsref 16,53
-#: ../src/lib/List.pm:1103
+#: ../src/lib/List.pm:1045
 msgid "Latest family instantiation"
 msgstr "Viimati loodud grupp"
 
-#: ../src/lib/List.pm:1115
+#: ../src/lib/List.pm:1057
+#, fuzzy
 msgid "bytes"
-msgstr "baiti"
+msgstr "Nägemiseni !"
 
 # nlsref 16,81
-#: ../src/lib/List.pm:1193
+#: ../src/lib/List.pm:1136
+#, fuzzy
 msgid "the datasource"
-msgstr "andmeallikas"
+msgstr "Kasutajaandmete allikas"
 
-#: ../src/lib/List.pm:1198
+#: ../src/lib/List.pm:1141
+#, fuzzy
 msgid "datasource parameters"
-msgstr "andmeallika parameetrid"
+msgstr "Andmete allikad"
 
-#: ../src/lib/List.pm:1218
+#: ../src/lib/List.pm:1161
 msgid "Owners defined in an external data source"
-msgstr "Välises andmeallikas määratud omanikud"
+msgstr ""
 
-#: ../src/lib/List.pm:1237
+#: ../src/lib/List.pm:1180
+#, fuzzy
 msgid "Periodical subscription reminder task"
-msgstr "Perioodiline meeldetuletuste ülesanne"
+msgstr "Listiga liitumise soove ei ole"
 
-#: ../src/lib/List.pm:1242
+#: ../src/lib/List.pm:1185
 msgid "Incoming SMTP header fields to be removed"
-msgstr "Sissetuleva SMTP päise väljad, mis eemaldadakse"
+msgstr ""
 
-#: ../src/lib/List.pm:1249
+#: ../src/lib/List.pm:1192
 msgid "Outgoing SMTP header fields to be removed"
-msgstr "Väljamineva SMTP päise väljad, mis eemaldadakse"
+msgstr ""
 
-#: ../src/lib/List.pm:1315 ../src/lib/List.pm:1420
+#: ../src/lib/List.pm:1258 ../src/lib/List.pm:1357
 msgid "Kbytes"
-msgstr "kB"
+msgstr ""
 
 # nlsref 16,77
-#: ../src/lib/List.pm:1381
+#: ../src/lib/List.pm:1324
 msgid "who updated the config"
 msgstr "viimati muutis"
 
 #. This entry is a date/time format
 #. Check the strftime manpage for format details : http://docs.freebsd.org/info/gawk/gawk.info.Time_Functions.html
-#: ../src/lib/List.pm:2889
+#: ../src/lib/List.pm:2808
 msgid "%a, %d %b %Y %H:%M:%S"
 msgstr "%a, %d %b %Y %H:%M:%S"
 
 #. This entry is a date/time format
 #. Check the strftime manpage for format details : http://docs.freebsd.org/info/gawk/gawk.info.Time_Functions.html
-#: ../src/lib/List.pm:2890
+#: ../src/lib/List.pm:2809
 msgid "%a, %d %b %Y"
 msgstr "%a, %d %b %Y"
 
 #. This entry is a date/time format
 #. Check the strftime manpage for format details : http://docs.freebsd.org/info/gawk/gawk.info.Time_Functions.html
-#: ../src/lib/List.pm:3081 ../src/lib/List.pm:3082 ../src/lib/List.pm:3086
-#: ../wwsympa/wwsympa.fcgi.in:10882 ../wwsympa/wwsympa.fcgi.in:10951
-#: ../wwsympa/wwsympa.fcgi.in:11153 ../wwsympa/wwsympa.fcgi.in:11500
-#: ../wwsympa/wwsympa.fcgi.in:14938 ../wwsympa/wwsympa.fcgi.in:14945
-#: ../wwsympa/wwsympa.fcgi.in:15644 ../wwsympa/wwsympa.fcgi.in:16374
-#: ../wwsympa/wwsympa.fcgi.in:16375 ../wwsympa/wwsympa.fcgi.in:4243
-#: ../wwsympa/wwsympa.fcgi.in:4301 ../wwsympa/wwsympa.fcgi.in:4872
-#: ../wwsympa/wwsympa.fcgi.in:4873 ../wwsympa/wwsympa.fcgi.in:6314
-#: ../wwsympa/wwsympa.fcgi.in:7333 ../wwsympa/wwsympa.fcgi.in:7876
-#: ../wwsympa/wwsympa.fcgi.in:7916 ../wwsympa/wwsympa.fcgi.in:7918
-#: ../wwsympa/wwsympa.fcgi.in:8394 ../wwsympa/wwsympa.fcgi.in:8395
-#: ../wwsympa/wwsympa.fcgi.in:8429 ../wwsympa/wwsympa.fcgi.in:8430
-#: ../wwsympa/wwsympa.fcgi.in:8609 ../wwsympa/wwsympa.fcgi.in:8610
+#: ../src/lib/List.pm:2995 ../src/lib/List.pm:2996 ../src/lib/List.pm:3000
+#: ../wwsympa/wwsympa.fcgi.in:10990 ../wwsympa/wwsympa.fcgi.in:11059
+#: ../wwsympa/wwsympa.fcgi.in:11261 ../wwsympa/wwsympa.fcgi.in:11598
+#: ../wwsympa/wwsympa.fcgi.in:15506 ../wwsympa/wwsympa.fcgi.in:16236
+#: ../wwsympa/wwsympa.fcgi.in:16237 ../wwsympa/wwsympa.fcgi.in:4807
+#: ../wwsympa/wwsympa.fcgi.in:4808 ../wwsympa/wwsympa.fcgi.in:6231
+#: ../wwsympa/wwsympa.fcgi.in:7249 ../wwsympa/wwsympa.fcgi.in:7792
+#: ../wwsympa/wwsympa.fcgi.in:7832 ../wwsympa/wwsympa.fcgi.in:7834
+#: ../wwsympa/wwsympa.fcgi.in:8310 ../wwsympa/wwsympa.fcgi.in:8311
+#: ../wwsympa/wwsympa.fcgi.in:8345 ../wwsympa/wwsympa.fcgi.in:8346
+#: ../wwsympa/wwsympa.fcgi.in:8525 ../wwsympa/wwsympa.fcgi.in:8526
 msgid "%d %b %Y"
 msgstr "%d %b %Y"
 
 # nlsref 11,1
 #: ../src/lib/mail.pm:53
+#, fuzzy
 msgid ""
 "Your system does not conform to the POSIX P1003.1 standard, or\n"
 "your Perl system does not define the _SC_ARG_MAX constant in its POSIX\n"
 "library. You must modify the smtp.pm module in order to set a value\n"
 "for variable %s.\n"
 msgstr ""
-"Teie süsteem ei vasta POIX P1003.1 standardile. Teie Perl ei defineeri "
-"konstanti _SC_ARG_MA oma POSIX teegis. Te peate muutma smtp.pm moodulit, et "
-"saaks määrata väärtuse muutujale %s.\n"
+"Your system does not conform to the POSIX P1003.1 standard, or\n"
+"your Perl system does not define the _SC_ARG_MAX constant in its POSIX\n"
+"library. You must modify the smtp.pm module in order to set a value\n"
+"for variable $max_arg.\n"
 
 # nlsref 11,2
-#: ../src/lib/mail.pm:805
+#: ../src/lib/mail.pm:755
 msgid "Unable to create a channel in smtpto: %m"
-msgstr "Ei ole võimalik luua smtp kanalit  arvutisse %m"
+msgstr "Unable to create a channel in smtpto: %m"
 
 # nlsref 5,4
 #: ../src/lib/PlainDigest.pm:163
+#, fuzzy
 msgid ""
 "----- Malformed message ignored -----\n"
 "\n"
 msgstr ""
-"---- Valesti kodeeritud kiri ignoreeritud----\n"
+"---- Algse kirja lõpp aadressilt %s----\n"
 "\n"
 
 #: ../src/lib/PlainDigest.pm:194
@@ -9505,9 +9254,6 @@ msgid ""
 "[Attached message follows]\n"
 "-----Original message-----\n"
 msgstr ""
-"\n"
-"[Järgneb manus]\n"
-"--- Originaalkiri ---\n"
 
 # nlsref 5,4
 #: ../src/lib/PlainDigest.pm:204
@@ -9532,48 +9278,38 @@ msgid ""
 "\n"
 "[An attachment of type %s was included here]\n"
 msgstr ""
-"\n"
-"[Siin oli %s tüüpi manus]\n"
 
 #: ../src/lib/PlainDigest.pm:261
 msgid ""
 "\n"
 "-----Delivery Status Report-----\n"
 msgstr ""
-"\n"
-"----Kirja kohaletoimetamise aruanne ----\n"
 
 #: ../src/lib/PlainDigest.pm:263
 msgid "-----End of Delivery Status Report-----\n"
-msgstr "------Kirja kohaletoimetamise aruande lõpp-----\n"
+msgstr "------Kirja kohaletoimetamise raporti lõpp-----\n"
 
 #: ../src/lib/PlainDigest.pm:301 ../src/lib/PlainDigest.pm:322
 msgid ""
 "\n"
 "[** Unable to process HTML message part **]\n"
 msgstr ""
-"\n"
-"[[** Võimatu töödelda HTML kirjaosa **]\n"
 
 #: ../src/lib/PlainDigest.pm:328
 msgid ""
 "\n"
 "[ ** Unable to process HTML message part **]\n"
 msgstr ""
-"\n"
-"[[** Võimatu töödelda HTML kirjaosa **]\n"
 
 #: ../src/lib/PlainDigest.pm:332
 msgid "[ Text converted from HTML ]\n"
-msgstr "[ HTML'ist teisendatud tekst ]\n"
+msgstr ""
 
 #: ../src/lib/PlainDigest.pm:339
 msgid ""
 "\n"
 "[ ** Unable to process HTML message part ** ]\n"
 msgstr ""
-"\n"
-"[[** Võimatu töödelda HTML kirjaosa **]\n"
 
 #: ../src/lib/tt2.pm:150
 msgid "(unknown date)"
@@ -9581,24 +9317,23 @@ msgstr "(tundamtu kuupäev)"
 
 #. This entry is a date/time format
 #. Check the strftime manpage for format details : http://docs.freebsd.org/info/gawk/gawk.info.Time_Functions.html
-#: ../wwsympa/wwsympa.fcgi.in:1058
+#: ../wwsympa/wwsympa.fcgi.in:1042
 msgid "%H:%M:%S"
 msgstr "%H:%M:%S"
 
 #. This entry is a date/time format
 #. Check the strftime manpage for format details : http://docs.freebsd.org/info/gawk/gawk.info.Time_Functions.html
 #: ../wwsympa/SympaSession.pm:427 ../wwsympa/SympaSession.pm:428
-#: ../wwsympa/wwsympa.fcgi.in:11734 ../wwsympa/wwsympa.fcgi.in:11867
-#: ../wwsympa/wwsympa.fcgi.in:14180 ../wwsympa/wwsympa.fcgi.in:7830
+#: ../wwsympa/wwsympa.fcgi.in:11822 ../wwsympa/wwsympa.fcgi.in:11955
+#: ../wwsympa/wwsympa.fcgi.in:14268 ../wwsympa/wwsympa.fcgi.in:7746
 msgid "%d %b %y  %H:%M"
 msgstr "%d %b %y  %H:%M"
 
 #. This entry is a date/time format
 #. Check the strftime manpage for format details : http://docs.freebsd.org/info/gawk/gawk.info.Time_Functions.html
-#: ../wwsympa/wwsympa.fcgi.in:16014 ../wwsympa/wwsympa.fcgi.in:16015
-#, fuzzy
-msgid "%Y-%m-%d-%H-%M-%S"
-msgstr "%Y/%m/%d/%H/%M/%S"
+#: ../wwsympa/wwsympa.fcgi.in:15876 ../wwsympa/wwsympa.fcgi.in:15877
+msgid "%Y/%m/%d/%H/%M/%S"
+msgstr ""
 
 # nlsref 17,1
 #: ../wwsympa/wwslib.pm:41
@@ -9637,11 +9372,12 @@ msgstr "1 nädal"
 
 #: ../wwsympa/wwslib.pm:49
 msgid "listed in the list review page"
-msgstr "Näidatakse listi ülevaate lehel."
+msgstr ""
 
 #: ../wwsympa/wwslib.pm:50
+#, fuzzy
 msgid "concealed"
-msgstr "varjatud"
+msgstr "nähtav kõigile"
 
 # nlsref 15,1
 #: ../wwsympa/wwslib.pm:54
@@ -9650,8 +9386,9 @@ msgstr "tervituskiri"
 
 # nlsref 15,2
 #: ../wwsympa/wwslib.pm:55
+#, fuzzy
 msgid "unsubscribe message"
-msgstr "listist lahkumise teade"
+msgstr "listist lahkumise kiri"
 
 # nlsref 15,3
 #: ../wwsympa/wwslib.pm:56
@@ -9731,41 +9468,45 @@ msgstr "viirusteatis"
 # nlsref 15,18
 #: ../wwsympa/wwslib.pm:71
 msgid "list aliases template"
-msgstr "listi aliaste mall"
+msgstr ""
 
 #: ../wwsympa/wwslib.pm:28
 msgid "standard (direct reception)"
-msgstr "tavaline (kohene kirjade vastuvõtt)"
+msgstr ""
 
 #: ../wwsympa/wwslib.pm:29
 msgid "digest MIME format"
-msgstr "MIME formaadis kokkuvõtted"
+msgstr ""
 
 #: ../wwsympa/wwslib.pm:30
 msgid "digest plain text format"
-msgstr "kokkuvõtted tekstina"
+msgstr ""
 
 # nlsref 15,12
 #: ../wwsympa/wwslib.pm:31
+#, fuzzy
 msgid "summary mode"
-msgstr "kokkuvõtte laad"
+msgstr "kokkuvõttev kiri"
 
 #: ../wwsympa/wwslib.pm:32
+#, fuzzy
 msgid "notice mode"
-msgstr "teadete laad"
+msgstr "kogu sõna"
 
 # nlsref 16,19
 #: ../wwsympa/wwslib.pm:33
+#, fuzzy
 msgid "text-only mode"
-msgstr "vaid tekstina"
+msgstr "vastuvõtu viis"
 
 #: ../wwsympa/wwslib.pm:34
+#, fuzzy
 msgid "html-only mode"
-msgstr "ainult htmlina"
+msgstr "ainult html"
 
 #: ../wwsympa/wwslib.pm:35
 msgid "urlize mode"
-msgstr "viidetena"
+msgstr ""
 
 #: ../wwsympa/wwslib.pm:36
 msgid "no mail (useful for vacations)"
@@ -9773,31 +9514,11 @@ msgstr "ei saadeta maile (soovitav puhkuse ajaks)"
 
 #: ../wwsympa/wwslib.pm:37
 msgid "you do not receive your own posts"
-msgstr "teile ei tule enda saadetud kirju"
+msgstr "teile ei tule enda saadetud kirjad"
 
-#~ msgid "Your Lists"
-#~ msgstr "Teie listid"
-
-#~ msgid ""
-#~ "The best way to post an email to the list is to compose an email to the "
-#~ "list email address <b>%1@%2</b> using your favourite email client. We "
-#~ "also provide a form below to compose an email through the web interface."
-#~ msgstr ""
-#~ "Parim moodus listi postitamiseks on saata e-mail aadressile <b>%2@%2</b> "
-#~ "kasutades oma meelis kirjade kirjutamise programmi. Pakume lisaks "
-#~ "võimalust kasutada Sympa veebikeskonda."
-
-#~ msgid "Cannot add subscribers when list status is '%1'"
-#~ msgstr "Tellijaid ei saa lisada, kui listi staatuseks on '%1'"
-
-#~ msgid "User's Guide"
-#~ msgstr "Kasutajajuhend"
-
-#~ msgid "Moderated, with editor confirmation"
-#~ msgstr "modereeritud, vajalik moderaatori autentimine"
-
-#~ msgid "anyone with previous md5 authentication"
-#~ msgstr "saata võib igaüks, eelneva kontrolliga"
+#, fuzzy
+#~ msgid "Prout"
+#~ msgstr "Saada kiri"
 
 #~ msgid "[Listmaster]"
 #~ msgstr "listiülem"
@@ -9813,11 +9534,180 @@ msgstr "teile ei tule enda saadetud kirju"
 #~ msgid "last login from %1 &nbsp;&nbsp; (%2)</span>"
 #~ msgstr "viimane sisselogimine arvutist %1 &nbsp;&nbsp; (%2)</span>"
 
+# nlsref 6,76
+#~ msgid "Manage your subscriptions"
+#~ msgstr "Liitumiste haldamine"
+
+# nlsref 16,72
+#, fuzzy
+#~ msgid "Send to the list"
+#~ msgstr "Listi teema"
+
+# nlsref 15,6
+#, fuzzy
+#~ msgid "Send to me"
+#~ msgstr "meeldetuletuskiri"
+
+#, fuzzy
+#~ msgid "Start date"
+#~ msgstr "Sorteeri kuupäeva järgi"
+
+#, fuzzy
+#~ msgid "End date"
+#~ msgstr "kuupäev"
+
+#, fuzzy
+#~ msgid "March"
+#~ msgstr "Otsi"
+
+# nlsref 16,62
+#, fuzzy
+#~ msgid "April"
+#~ msgstr "profiil"
+
+#, fuzzy
+#~ msgid "September"
+#~ msgstr "Listi liikmed"
+
+#, fuzzy
+#~ msgid "October"
+#~ msgstr "Muu"
+
+#, fuzzy
+#~ msgid "November"
+#~ msgstr "Listi liikmed"
+
+#, fuzzy
+#~ msgid "December"
+#~ msgstr "Listi liikmed"
+
+#, fuzzy
+#~ msgid "Mo"
+#~ msgstr "Modereeri"
+
+#, fuzzy
+#~ msgid "Fr"
+#~ msgstr "saatja aadressil"
+
+#, fuzzy
+#~ msgid "Sa"
+#~ msgstr "Salvesta"
+
+#, fuzzy
+#~ msgid "Sunday"
+#~ msgstr "Kokkuvõte"
+
+#, fuzzy
+#~ msgid "today"
+#~ msgstr "Sisu"
+
+#, fuzzy
+#~ msgid "microcal"
+#~ msgstr "Kohalik"
+
+#, fuzzy
+#~ msgid "Excluded users"
+#~ msgstr "Laiendatud otsing"
+
+#, fuzzy
+#~ msgid "List of exclude"
+#~ msgstr "Kataloog SHARED"
+
+#, fuzzy
+#~ msgid "Since"
+#~ msgstr "Suurus"
+
+#, fuzzy
+#~ msgid "Suspended"
+#~ msgstr "Saatja"
+
+#, fuzzy
+#~ msgid "No subscription."
+#~ msgstr "Listist lahkumine:"
+
+#, fuzzy
+#~ msgid "Toogle selection"
+#~ msgstr "Pööra valik ringi"
+
+#, fuzzy
+#~ msgid "Suspend my subscriptions"
+#~ msgstr "Ootel liitumised"
+
+# nlsref 6,76
+#, fuzzy
+#~ msgid "Resume my subscriptions"
+#~ msgstr "Meeldetuletus listi %s liikmestaatusest"
+
+#, fuzzy
+#~ msgid "Unsubscribe selected lists"
+#~ msgstr "Eemalda valitud listid"
+
+# nlsref 6,262
+#, fuzzy
+#~ msgid "Your message contain a DKIM signature. It was succesfully verified"
+#~ msgstr "Teie kirja S/MIME signatuur kontrolliti edukalt"
+
 #, fuzzy
 #~ msgid ""
 #~ "Or send a message to %1 with the following subject:\n"
 #~ "CONFIRM %2\n"
 #~ msgstr "Või saada kiri aadressile %1@%2 järgmise pealkirjaga:"
+
+#, fuzzy
+#~ msgid "restricted to owner without authentication if DKIM signature is OK."
+#~ msgstr "listiomanik ilma autentimata"
+
+#, fuzzy
+#~ msgid ""
+#~ "add performed by list owner does not need authentication if DKIM "
+#~ "signature OK"
+#~ msgstr "listiomanik ilma autentimata"
+
+#, fuzzy
+#~ msgid ""
+#~ "deletion performed only by list owners, need authentication unless DKIM "
+#~ "signature is OK"
+#~ msgstr "listiomanikud, vajalik on autentimine"
+
+#, fuzzy
+#~ msgid ""
+#~ "restricted to list owners (authentication is not required if a DKIM "
+#~ "signature is OK)"
+#~ msgstr "listiomanikud ilma autentimata, teavitusega"
+
+#, fuzzy
+#~ msgid "Moderated, need  authentication  from editor"
+#~ msgstr "lisamine vajab autentimist"
+
+#, fuzzy
+#~ msgid ""
+#~ "need authentication unless DKIM signature is OK. (notification is sent to "
+#~ "owners)"
+#~ msgstr "vajalik autentimine (listiomanikke teavitatakse)"
+
+#, fuzzy
+#~ msgid ""
+#~ "requires authentication unless DKIM signature is OK, then owner approval"
+#~ msgstr "vajalik autentimine ning omaniku luba"
+
+#, fuzzy
+#~ msgid ""
+#~ "authentication requested unless DKIM signature is OK, notification sent "
+#~ "to owner"
+#~ msgstr "autentimisega, teavitatakse omanikku"
+
+#, fuzzy
+#~ msgid "Insert DKIM signature to messages sent to the list"
+#~ msgstr "Kirjade saatmine   : %1"
+
+#, fuzzy
+#~ msgid "DKIM configuration"
+#~ msgstr "Seadetefail"
+
+# nlsref 16,74
+#, fuzzy
+#~ msgid "Allow message personnalization"
+#~ msgstr "Listi teemad"
 
 #~ msgid "-List definition"
 #~ msgstr "-Listi kirjeldus"
