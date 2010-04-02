@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "POT-Creation-Date: 2002-07-16 17:27+0800\n"
-"PO-Revision-Date: 2010-03-31 11:34+0200\n"
+"PO-Revision-Date: 2010-04-02 12:36+0200\n"
 "Last-Translator: David Verdin <david.verdin@cru.fr>\n"
 "Language-Team: Français\n"
 "MIME-Version: 1.0\n"
@@ -972,12 +972,52 @@ msgstr ""
 "message :"
 
 #: ../web_tt2/compose_mail.tt2:64
-msgid ""
-">Messages personalization: use the TT2 <a href=\"http://www.tt2.org"
-"\">template syntax TT2 </a>:"
-msgstr ""
+msgid "Messages customization: use the template syntax:"
+msgstr "Personnalisation des messages. Utilisez la syntaxe de templates :"
 
-#: ../web_tt2/compose_mail.tt2:79
+#: ../web_tt2/compose_mail.tt2:65
+msgid "Below are some examples of TT2 parameters usable in messages."
+msgstr "Vous trouverez ci-dessous des exemples de paramètres utilisables dans les messages."
+
+#: ../web_tt2/compose_mail.tt2:67
+msgid ": the listname; always available."
+msgstr "&#160;: le nom de la liste&#160;; toujours disponible."
+
+#: ../web_tt2/compose_mail.tt2:68
+msgid ": the name of the host the list is intalled on; always available."
+msgstr "<&#160;: le nom de l'hôte hébergeant la liste&#160;; toujours disponible."
+
+#: ../web_tt2/compose_mail.tt2:69
+msgid ": the user email; always available."
+msgstr "&#160;: l'email de l'utilisateur&#160;; toujours disponible."
+
+#: ../web_tt2/compose_mail.tt2:70
+msgid ": the user name associated to her email; always available."
+msgstr "&#160;: le nom associé à l'email de l'utilisateur&#160;; toujours disponible."
+
+#: ../web_tt2/compose_mail.tt2:71
+msgid ": the - human readable - user's subscription date; always available."
+msgstr "<&#160;: la date d'abonnement de l'utilisateur&#160;; toujours disponible."
+
+#: ../web_tt2/compose_mail.tt2:72
+msgid ""
+": can be anything you like; available if you defined a user custom attribute "
+"named \"title\" (see the list configuration, section \"Miscellaneous\")."
+msgstr "&#160;: peut être ce que vous voulez&#160;; disponible si vous avez défini un attribut utilisateur personnalisé nommé &#170;&#160;title&#160;&#187; (voir la configuration de la lsite, section &#170;&#160;Divers&#160;&#187;)"
+
+#: ../web_tt2/compose_mail.tt2:73
+msgid ""
+": can be anything you like; available if you defined a user custom attribute "
+"named \"name\"."
+msgstr "&#160;: peut être ce que vous voulez&#160;; disponible si vous avez défini un attribut utilisateur personnalisé nommé &#170;&#160;name&#160;&#187;."
+
+#: ../web_tt2/compose_mail.tt2:74
+msgid ""
+": can be anything you like; available if you defined a user custom attribute "
+"named \"organization\"."
+msgstr "<&#160;: peut être ce que vous voulez&#160;; disponible si vous avez défini un attribut utilisateur personnalisé nommé &#170;&#160;organization&#160;&#187;."
+
+#: ../web_tt2/compose_mail.tt2:78
 msgid "URL:"
 msgstr "URL :"
 
@@ -2593,11 +2633,12 @@ msgstr "aujourd'hui"
 #. (+cpt)
 #: ../web_tt2/javascript.tt2:1056
 msgid "microcal"
-msgstr "microcalendrier"
+msgstr "microcal"
 
+# "+src.id+"_cal
 #: ../web_tt2/javascript.tt2:1096
 msgid "\"+src.id+\"_cal"
-msgstr ""
+msgstr "\"+src.id+\"_cal"
 
 #. (count)
 #: ../web_tt2/latest_arc.tt2:6
@@ -3290,9 +3331,9 @@ msgstr ""
 #: ../web_tt2/renewpasswd.tt2:9
 msgid ""
 "Too many wrong password were sumitted for this account. Your account as been "
-"blocked in order to protect you agains attacks. You must renew renew your "
-"password in order to login."
-msgstr ""
+"blocked in order to protect you agains attacks. You must renew your password "
+"in order to login."
+msgstr "Trop de mots de passe invalides ont été soumis pour ce compte. Il a été suspendu pour vous protéger des attaques. Vous devez renouveler votre mot de passe pour vous connecter."
 
 #: ../web_tt2/renewpasswd.tt2:11
 msgid "You missed the password, please submit again. Maybe you forgot it?"
@@ -4034,15 +4075,14 @@ msgid ""
 "exclusion table, through the standard unsubscribe/delete functions. \n"
 "They get off the exclusion table with the standard subscribe/add functions."
 msgstr ""
-"\n"
 "Les utilisateurs dont la liste suit sont exclus de la liste. Prenez bien garde au fait que la liste d'exclusion n'est pas une liste noire. L'exclusion prend tout son sens\n"
 "quand la liste des abonnés est importée depuis une ou plusieurs source(s) de donneées externe(s). Dans ce cas, l'exclusion permet aux utilisateurs de se désabonner ou au propriétaire de les supprimer. En pratique, l'utilisateur désabonné est alors ajouté à la table des exclusions et son adresses sera ignorée la prochaine fois que la liste se synchronisera avec ses sources de données.\n"
 "Les utilisateurs sont ajoutés à la liste des exclusions via les fonctions habituelles de désabonnement ou de suppression d'abonné.\n"
 "Ils en sont supprimés via les fonctions standards d'abonnement ou d'ajout d'abonné."
 
 #: ../web_tt2/show_exclude.tt2:28
-msgid "No exclude."
-msgstr ""
+msgid "No user excluded."
+msgstr "Aucun abonné exclu."
 
 #: ../web_tt2/show_sessions.tt2:2
 msgid "Sessions list"
@@ -4654,11 +4694,11 @@ msgid "Suspended"
 msgstr "Suspendu"
 
 #: ../web_tt2/suspend_request.tt2:23
-msgid "Suspended from "
-msgstr ""
+msgid "Suspended from"
+msgstr "Suspendu du"
 
-#: ../web_tt2/suspend_request.tt2:23 ../web_tt2/suspend_request.tt2:44
-msgid " to "
+#: ../web_tt2/suspend_request.tt2:23 ../web_tt2/viewlogs.tt2:113
+msgid "to"
 msgstr "au"
 
 #: ../web_tt2/suspend_request.tt2:23
@@ -4674,16 +4714,20 @@ msgid "Toogle selection"
 msgstr "Inverser la sélection"
 
 #: ../web_tt2/suspend_request.tt2:41
-msgid "Suspend[% IF sub.display == 1 %]/Resume"
-msgstr ""
+msgid "Suspend / Resume the selected lists"
+msgstr "Suspendre / Reprendre l'abonnement aux listes sélectionnées."
 
 #: ../web_tt2/suspend_request.tt2:43
-msgid "From : <noscript>[%|loc%](dd-mm-yyyy) "
-msgstr ""
+msgid "From:"
+msgstr "De :"
+
+#: ../web_tt2/suspend_request.tt2:44
+msgid "To:"
+msgstr "À :"
 
 #: ../web_tt2/suspend_request.tt2:46
-msgid "Select the checkbox for an indefinite end date. "
-msgstr ""
+msgid "Check this box if you want to suspend your subscription indefinitely."
+msgstr "Cocher cette case pour suspendre votre abonnement sans date de fin."
 
 #: ../web_tt2/suspend_request.tt2:49
 msgid "Suspend my subscriptions"
@@ -4844,10 +4888,6 @@ msgstr "Période explorée :"
 msgid "%d %b %Y %H:%M:%S"
 msgstr "%d %b %Y %H:%M:%S"
 
-#: ../web_tt2/viewlogs.tt2:113
-msgid "to"
-msgstr "à"
-
 #. (list)
 #: ../web_tt2/viewlogs.tt2:114
 msgid "Research was carried out in list <strong>%1</strong>."
@@ -4972,7 +5012,7 @@ msgid ""
 "If you are subscribed to the list with a different email address, you should "
 "either use that other email address or update your list membership with the "
 "new email address."
-msgstr "\nSi vous êtes abonné à cette liste avec une autre adresse email, vous devez utiliser cette adresse ou bien vous abonner à la liste avec votre nouvelle adresse."
+msgstr "Si vous êtes abonné à cette liste avec une autre adresse email, vous devez utiliser cette adresse ou bien vous abonner à la liste avec votre nouvelle adresse."
 
 #: ../mail_tt2/authorization_reject.tt2:12
 msgid "Web archives are restricted to listmaster."
@@ -5335,7 +5375,8 @@ msgstr "Signature S/MIME correctement vérifiée."
 # nlsref 6,262
 #: ../mail_tt2/command_report.tt2:23
 msgid "Your message contain a DKIM signature. It was succesfully verified"
-msgstr "Votre message contient une signature DKIM. Elle a été vérifiée avec succès."
+msgstr ""
+"Votre message contient une signature DKIM. Elle a été vérifiée avec succès."
 
 # nlsref 6,25
 #: ../mail_tt2/command_report.tt2:28
@@ -6915,8 +6956,10 @@ msgid ""
 "You may help this person looking for similar email in subscriber list using "
 "the following link :"
 msgstr ""
-"ATTENTION : %1 %2 n'est pas parvenu à se désabonner de la liste %3 parce que son adresse n'a pas été trouvée dans cette liste.\n"
-"Vous pourriez peut-être aider cette personne en cherchant une adresse similaire. Pour ce faire, suivez le lien suivant :"
+"ATTENTION : %1 %2 n'est pas parvenu à se désabonner de la liste %3 parce que "
+"son adresse n'a pas été trouvée dans cette liste.\n"
+"Vous pourriez peut-être aider cette personne en cherchant une adresse "
+"similaire. Pour ce faire, suivez le lien suivant :"
 
 #. (list.name)
 #: ../mail_tt2/listowner_notification.tt2:33
@@ -7939,7 +7982,9 @@ msgstr "réservé aux propriétaires authentifiés"
 
 #: ../src/etc/scenari/add.authdkim:1
 msgid "restricted to owner without authentication if DKIM signature is OK."
-msgstr "réservé aux propriétaires sans authentification si la signature DKIM est valide."
+msgstr ""
+"réservé aux propriétaires sans authentification si la signature DKIM est "
+"valide."
 
 #: ../src/etc/scenari/add.closed:1
 msgid "add impossible"
@@ -7952,7 +7997,7 @@ msgstr "ajout par le propriétaire sans authentification"
 #: ../src/etc/scenari/add.ownerdkim:1
 msgid ""
 "add performed by list owner does not need authentication if DKIM signature OK"
-msgstr "\najout par le propriétaire sans authentification si la signature DKIM est valide."
+msgstr "ajout par le propriétaire sans authentification si la signature DKIM est valide."
 
 #: ../src/etc/scenari/add.owner_notify:1
 msgid "add performed by owner does not need authentication (notification)"
@@ -8007,7 +8052,9 @@ msgstr "suppression réservée au propriétaire avec authentification"
 msgid ""
 "deletion performed only by list owners, need authentication unless DKIM "
 "signature is OK"
-msgstr "suppression réservée au propriétaire avec authentification sauf si la signature DKIM est valide."
+msgstr ""
+"suppression réservée au propriétaire avec authentification sauf si la "
+"signature DKIM est valide."
 
 #: ../src/etc/scenari/del.closed:1
 msgid "remove subscriber impossible"
@@ -8041,13 +8088,15 @@ msgstr "listmaster seulement"
 #: ../src/etc/scenari/remind.listmasterdkim:1
 msgid ""
 "listmaster only (do not require authentication if DKIM siganture is OK) "
-msgstr ""
+msgstr "listmaster seulement (pas d'authentification si une signature DKIM valide est fournie)"
 
 #: ../src/etc/scenari/remind.ownerdkim:1
 msgid ""
 "restricted to list owners (authentication is not required if a DKIM "
 "signature is OK)"
-msgstr "Réservé aux propriétaire de liste (pas d'authentification la signature DKIM est valide)"
+msgstr ""
+"Réservé aux propriétaire de liste (pas d'authentification la signature DKIM "
+"est valide)"
 
 #: ../src/etc/scenari/review.closed:1
 msgid "no one can review"
@@ -8067,7 +8116,9 @@ msgstr "accessible à tous !"
 
 #: ../src/etc/scenari/send.editordkim:1
 msgid "Moderated, no authentication needed if DKIM signature from editor is OK"
-msgstr "Modérée ; pour les modérateurs : pas de demande d'authentification si la signature DKIM est valide."
+msgstr ""
+"Modérée ; pour les modérateurs : pas de demande d'authentification si la "
+"signature DKIM est valide."
 
 #: ../src/etc/scenari/send.editorkey:1
 msgid "Moderated"
@@ -8131,7 +8182,7 @@ msgstr "liste ouverte"
 
 #: ../src/etc/scenari/send.publickey:1
 msgid "anyone no authentication if DKIM signature is OK"
-msgstr ""
+msgstr "public ; pas d'authentification si une signature DKIM valide est trouvée."
 
 #: ../src/etc/scenari/send.publicnoattachment:1
 msgid "public list multipart/mixed messages are forwarded to moderator"
@@ -8157,7 +8208,9 @@ msgstr "soumis a authentification (notification des propriétaires)"
 msgid ""
 "need authentication unless DKIM signature is OK. (notification is sent to "
 "owners)"
-msgstr "soumis a authentification sauf si la signature DKIM est valide (notification des propriétaires)"
+msgstr ""
+"soumis a authentification sauf si la signature DKIM est valide (notification "
+"des propriétaires)"
 
 #: ../src/etc/scenari/subscribe.auth_owner:1
 msgid "requires authentication then owner approval"
@@ -8166,7 +8219,9 @@ msgstr "sousmis a authentification puis accord du propriétaire"
 #: ../src/etc/scenari/subscribe.auth_ownerdkim:1
 msgid ""
 "requires authentication unless DKIM signature is OK, then owner approval"
-msgstr "sousmis a authentification sauf si la signature DKIM est valide, puis accord du propriétaire"
+msgstr ""
+"sousmis a authentification sauf si la signature DKIM est valide, puis accord "
+"du propriétaire"
 
 #: ../src/etc/scenari/subscribe.closed:1
 msgid "subscribe is impossible"
@@ -8219,7 +8274,7 @@ msgstr "possible après authentification"
 
 #: ../src/etc/scenari/unsubscribe.authdkim:1
 msgid "need authentication unless DKIM signature is OK"
-msgstr ""
+msgstr "tuthentification requise suaf si une signature DKIM valide est trouvée."
 
 #: ../src/etc/scenari/unsubscribe.auth_notify:1
 msgid "authentication requested, notification sent to owner"
@@ -8229,7 +8284,9 @@ msgstr "authentification demandée, notification du propriétaire"
 msgid ""
 "authentication requested unless DKIM signature is OK, notification sent to "
 "owner"
-msgstr "authentification demandée sauf si la signature DKIM est valide, notification du propriétaire"
+msgstr ""
+"authentification demandée sauf si la signature DKIM est valide, notification "
+"du propriétaire"
 
 #: ../src/etc/scenari/unsubscribe.closed:1
 msgid "impossible"
@@ -8534,6 +8591,12 @@ msgstr ""
 
 #. This entry is a date/time format
 #. Check the strftime manpage for format details : http://docs.freebsd.org/info/gawk/gawk.info.Time_Functions.html
+#: ../src/lib/Bulk.pm:374
+msgid "%d %b %Y  %H:%M"
+msgstr "%d %b %Y  %H:%M"
+
+#. This entry is a date/time format
+#. Check the strftime manpage for format details : http://docs.freebsd.org/info/gawk/gawk.info.Time_Functions.html
 #: ../src/lib/Commands.pm:963 ../wwsympa/wwsympa.fcgi.in:9706
 msgid "%A"
 msgstr "%A"
@@ -8750,16 +8813,17 @@ msgid "Insert DKIM signature to messages sent to the list"
 msgstr "Insérer une signature aux messages postés par la liste."
 
 #: ../src/lib/List.pm:606
-msgid "Type of list message where a DKIM signature is added"
-msgstr ""
+msgid ""
+"The categories of messages sent to the list that will be signed using DKIM."
+msgstr "Les catégories de messages de liste qui seront signés avec DKIM."
 
 #: ../src/lib/List.pm:613
-msgid "file path for list DKIM private key"
-msgstr ""
+msgid "File path for list DKIM private key"
+msgstr "Chemin vers le fichier contenant la clé privée DKIM de la liste"
 
 #: ../src/lib/List.pm:621
 msgid "Selector for DNS lookup of DKIM public key"
-msgstr ""
+msgstr "Selecteur pour la recherche DNS de la clé publique DKIM."
 
 #: ../src/lib/List.pm:649
 msgid "DKIM configuration"
@@ -9249,16 +9313,16 @@ msgid "seconds"
 msgstr "secondes"
 
 #: ../src/lib/List.pm:628
-msgid "list of headers to be included ito the message for signature"
-msgstr ""
+msgid "List of headers to be included ito the message for signature"
+msgstr "Liste des entêtes SMTP qui doivent être inclus dans la signature DKIM."
 
 #: ../src/lib/List.pm:635
 msgid "DKIM \"d=\" tag, you should probably use the default value"
-msgstr ""
+msgstr "Balise DKIM \"d=\" ; vous devriez probablement utiliser la valeur par défaut."
 
 #: ../src/lib/List.pm:642
 msgid "DKIM \"i=\" tag, you should probably leave this parameter empty"
-msgstr ""
+msgstr "Balise DKIM \"i=\". Vous devriez sans doute laisser cette valeur vide."
 
 # nlsref 16,81
 #: ../src/lib/List.pm:685
@@ -9679,6 +9743,9 @@ msgstr "interrompre la réception des messages (utile pendant les vacances)"
 #: ../wwsympa/wwslib.pm:37
 msgid "you do not receive your own posts"
 msgstr "pour ne pas recevoir ses propres messages"
+
+#~ msgid " to "
+#~ msgstr "au"
 
 #~ msgid "Your Lists"
 #~ msgstr "Vos listes "

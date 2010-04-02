@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: sympa\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
 "POT-Creation-Date: 2002-07-16 17:27+0800\n"
-"PO-Revision-Date: 2009-12-08 11:23+0100\n"
+"PO-Revision-Date: 2010-04-02 14:45+0200\n"
 "Last-Translator: Serguei S. Dukachev <iam@dukess.ru>\n"
 "Language-Team: Russian <ru@li.org>\n"
 "MIME-Version: 1.0\n"
@@ -142,9 +142,8 @@ msgid "Your preferences"
 msgstr "Ваши предпочтения"
 
 #: ../web_tt2/suspend_request.tt2:5 ../web_tt2/your_lists.tt2:9
-#, fuzzy
 msgid "Manage your subscriptions"
-msgstr "Ожидающие подписчики"
+msgstr "Управление Вашими подписками"
 
 #: ../web_tt2/lists.tt2:27 ../web_tt2/your_lists.tt2:14
 msgid "admin"
@@ -647,7 +646,7 @@ msgstr "одно из этих слов"
 #: ../web_tt2/arcsearch_form.tt2:25
 #, fuzzy
 msgid "Prefer:"
-msgstr "Предпочитать"
+msgstr "Предпочитать:"
 
 #: ../web_tt2/arcsearch_form.tt2:26
 msgid "newest messages"
@@ -672,7 +671,7 @@ msgstr "имеет значение"
 #: ../web_tt2/arcsearch_form.tt2:35
 #, fuzzy
 msgid "Check:"
-msgstr "Проверка"
+msgstr "Проверка:"
 
 #: ../web_tt2/arcsearch_form.tt2:36
 msgid "part of word"
@@ -685,7 +684,7 @@ msgstr "целое слово"
 #: ../web_tt2/arcsearch_form.tt2:40
 #, fuzzy
 msgid "Layout:"
-msgstr "Расположение"
+msgstr "Расположение:"
 
 #: ../web_tt2/arcsearch_form.tt2:41 ../web_tt2/arcsearch_form.tt2:42
 #: ../web_tt2/arcsearch_form.tt2:43
@@ -713,7 +712,7 @@ msgstr "Тело сообщения"
 #: ../web_tt2/arcsearch_form.tt2:54
 #, fuzzy
 msgid "Extend search field:"
-msgstr "Растянуть поле поиска"
+msgstr "Растянуть поле поиска:"
 
 #: ../web_tt2/arcsearch.tt2:4
 msgid "Result of your search in the archive"
@@ -930,7 +929,6 @@ msgid "You should remove list aliases manually"
 msgstr "Вы должны удалить алиасы рассылки вручную"
 
 #: ../web_tt2/compose_mail.tt2:5
-#, fuzzy
 msgid "Sending a message to the list"
 msgstr "Отправка сообщения в рассылку"
 
@@ -956,9 +954,8 @@ msgid "Subject:"
 msgstr "Тема:"
 
 #: ../web_tt2/compose_mail.tt2:26
-#, fuzzy
 msgid "Send to selected receipient"
-msgstr "Отправить в рассылку"
+msgstr "Отправить выбранному получателю"
 
 #: ../web_tt2/compose_mail.tt2:27
 msgid "Send to me"
@@ -980,6 +977,8 @@ msgid ""
 ">Messages personalization: use the TT2 <a href=\"http://www.tt2.org"
 "\">template syntax TT2 </a>:"
 msgstr ""
+">Персонализация сообщений: используйте TT2 (<a "
+"href=\"http://www.tt2.org\">синтаксис шаблонов TT2 </a>):"
 
 #: ../web_tt2/compose_mail.tt2:79
 msgid "URL:"
@@ -1546,20 +1545,20 @@ msgstr "Дополнительная информация"
 
 #: ../web_tt2/edit_attributes.tt2:7
 msgid "[% k.name %]:"
-msgstr ""
+msgstr "[% k.name %]:"
 
 #: ../web_tt2/edit_attributes.tt2:24
 msgid "*: Required element"
 msgstr "*: Требуемый элемент"
 
 #: ../web_tt2/edit_config.tt2:2
-#, fuzzy
 msgid "Edit robot config"
-msgstr "Изменение конфигурации:"
+msgstr "Изменение конфигурации робота"
 
 #: ../web_tt2/edit_config.tt2:35 ../web_tt2/serveradmin.tt2:213
+#, fuzzy
 msgid "Set"
-msgstr ""
+msgstr "Установить"
 
 #: ../web_tt2/editfile.tt2:4
 msgid "Edit list templates"
@@ -1716,7 +1715,7 @@ msgstr "источник сценария"
 #: ../web_tt2/editsubscriber.tt2:55 ../web_tt2/error.tt2:104
 #: ../web_tt2/rss.tt2:4 ../web_tt2/subindex.tt2:39
 msgid ":"
-msgstr ""
+msgstr ":"
 
 #: ../web_tt2/editsubscriber.tt2:5
 msgid "Subscriber information"
@@ -2318,7 +2317,7 @@ msgstr "Ошибка авторизации"
 #. (u_err.status)
 #: ../web_tt2/error.tt2:124
 msgid "Service unavailable because list status is '%1'"
-msgstr ""
+msgstr "Сервис недоступен по причине статуса рассылки: '%1'"
 
 #. (u_err.argument)
 #: ../web_tt2/error.tt2:125
@@ -2763,7 +2762,6 @@ msgid "template name"
 msgstr "название шаблона"
 
 #: ../web_tt2/ls_templates.tt2:40
-#, fuzzy
 msgid "distrib"
 msgstr "разослать"
 
@@ -2920,8 +2918,9 @@ msgid "Reject and blacklist sender"
 msgstr "Отказать и внести отправителя в чёрный список"
 
 #: ../web_tt2/modindex.tt2:128
+#, fuzzy
 msgid "Toggle spams"
-msgstr ""
+msgstr "Пометить спам"
 
 #: ../web_tt2/modindex.tt2:143
 msgid "Listing of shared documents to moderate"
@@ -2973,9 +2972,8 @@ msgid "Virtual Robots"
 msgstr "Виртуальные роботы"
 
 #: ../web_tt2/nav.tt2:30
-#, fuzzy
 msgid "Edit Robot Config"
-msgstr "Редактировать конфигурацию списка рассылки"
+msgstr "Изменить конфигурацию робота"
 
 #: ../web_tt2/nav.tt2:34 ../web_tt2/serveradmin.tt2:38
 msgid "Families"
@@ -3248,6 +3246,9 @@ msgid ""
 "blocked in order to protect you agains attacks. You must renew renew your "
 "password in order to login."
 msgstr ""
+"Было произведено очень много неверных попыток ввести пароль для этого "
+"аккаунта. Ваш аккаунт был заблокирован в целях предотвращения повторных "
+"атак. Вам необходимо обновить пароль для возможности входа."
 
 #: ../web_tt2/renewpasswd.tt2:11
 msgid "You missed the password, please submit again. Maybe you forgot it?"
@@ -3304,7 +3305,6 @@ msgid "We were not able to send you a validation message."
 msgstr "Мы не смогли отправить Вам сообщение для подтверждения. "
 
 #: ../web_tt2/requestpasswd.tt2:14
-#, fuzzy
 msgid ""
 "Internal error: could not build a validation link, please contact the "
 "service administrator"
@@ -3488,8 +3488,9 @@ msgstr "Выборка слишком широка, невозможно ото�
 
 #. (similar_subscribers_occurence)
 #: ../web_tt2/review.tt2:117
+#, fuzzy
 msgid " Other similar subscriber's email(s) (%1)"
-msgstr ""
+msgstr "Почтовые адреса другого похожего подписчика (%1)"
 
 #: ../web_tt2/review.tt2:137
 msgid "Do you really want to unsubscribe ALL selected subscribers?"
@@ -3871,9 +3872,8 @@ msgid "Skins administration page"
 msgstr "Страница управления скинами"
 
 #: ../web_tt2/serveradmin.tt2:192
-#, fuzzy
 msgid "View main config"
-msgstr "Изменение конфигурации:"
+msgstr "Просмотр основной конфигурации"
 
 #: ../web_tt2/serveradmin.tt2:231
 msgid ""
@@ -3971,7 +3971,6 @@ msgid "Show the exclusion table"
 msgstr "Показать таблицу исключений"
 
 #: ../web_tt2/show_exclude.tt2:10
-#, fuzzy
 msgid ""
 "Users listed below are excluded from the list. Beware, that this feature is "
 "different from the blacklist. Exclusion makes sense\n"
@@ -3983,7 +3982,7 @@ msgid ""
 msgstr ""
 "Пользователи, перечисленные ниже, исключены из списка рассылки. Будьте "
 "внимательны, так как эта функция отлична от принципа действия чёрного "
-"сипска. Исключения становятся нужны тогда,\n"
+"списка. Исключения становятся нужны тогда,\n"
 "когда список рассылки базируется на внешнем источнике данных; благодаря "
 "исключению пользователь может отписаться (или быть удалённым владельцем) "
 "даже в том случае,\n"
@@ -4626,20 +4625,17 @@ msgstr "Приостановить[% IF sub.display == 1 %]/Возобновит
 
 #: ../web_tt2/suspend_request.tt2:43
 msgid "From : <noscript>[%|loc%](dd-mm-yyyy) "
-msgstr ""
+msgstr "От: <noscript>[%|loc%](ДД-ММ-ГГГГ) "
 
 #: ../web_tt2/suspend_request.tt2:46
-#, fuzzy
 msgid "Select the checkbox for an indefinite end date. "
 msgstr "Постаьте галочку для выбора неопределённого срока действия."
 
 #: ../web_tt2/suspend_request.tt2:49
-#, fuzzy
 msgid "Suspend my subscriptions"
 msgstr "Приостановить действие моих подписок"
 
 #: ../web_tt2/suspend_request.tt2:51
-#, fuzzy
 msgid "Resume my subscriptions"
 msgstr "Возобновить действие моих подписок"
 
@@ -4741,9 +4737,8 @@ msgid "to:"
 msgstr "до:"
 
 #: ../web_tt2/viewlogs.tt2:73
-#, fuzzy
 msgid "ex: 24-05-2006"
-msgstr "пример: 24/05/2006"
+msgstr "пример: 24-05-2006"
 
 #: ../web_tt2/viewlogs.tt2:75
 msgid "Search by type:"
@@ -4917,11 +4912,15 @@ msgstr ""
 #: ../mail_tt2/authorization_reject.tt2:81
 #: ../mail_tt2/authorization_reject.tt2:9
 #: ../mail_tt2/authorization_reject.tt2:94
+#, fuzzy
 msgid ""
 "If you are subscribed to the list with a different email address, you should "
 "either use that other email address or update your list membership with the "
 "new email address."
 msgstr ""
+"Если Вы подписаны на список рассылки другим адресом электронной почты, Вы "
+"должны или использовать тот, другой, адрес электронной почты или обновить "
+"Ваше членство в списке рассылки с новым адресом электронной почты."
 
 #: ../mail_tt2/authorization_reject.tt2:12
 msgid "Web archives are restricted to listmaster."
@@ -5277,10 +5276,8 @@ msgstr ""
 "Ваша цифровая подпись сообщения была успешно верифицирована с помощью S/MIME."
 
 #: ../mail_tt2/command_report.tt2:23
-#, fuzzy
 msgid "Your message contain a DKIM signature. It was succesfully verified"
-msgstr ""
-"Ваша цифровая подпись сообщения была успешно верифицирована с помощью S/MIME."
+msgstr "Ваше сообщение содержит подпись DKIM. Она была успешно проверена."
 
 #: ../mail_tt2/command_report.tt2:28
 msgid ""
@@ -5603,14 +5600,12 @@ msgid "User guide"
 msgstr "Руководство пользователя"
 
 #: ../mail_tt2/helpfile.tt2:5
-#, fuzzy
 msgid "                       (Automatic Mailing System)"
-msgstr "HELp                                              * Этот файл помощи"
+msgstr "                       (Автоматическая система почтовых рассылок)"
 
 #: ../mail_tt2/helpfile.tt2:7
-#, fuzzy
 msgid "                                User's Guide"
-msgstr "HELp                                              * Этот файл помощи"
+msgstr "                                Руководство пользователя"
 
 #: ../mail_tt2/helpfile.tt2:10
 msgid ""
@@ -6003,9 +5998,8 @@ msgstr "%1 запросил создание листа \"%2\""
 
 #: ../mail_tt2/listmaster_notification.tt2:12
 #: ../mail_tt2/listmaster_notification.tt2:26
-#, fuzzy
 msgid "To activate/delete this mailing list:"
-msgstr "Чтобы активировать удалить этот список рассылки: "
+msgstr "Чтобы активировать или удалить этот список рассылки: "
 
 #. (email,old_listname,new_listname)
 #: ../mail_tt2/listmaster_notification.tt2:19
@@ -6127,9 +6121,8 @@ msgid "The antivirus scan has failed while processing the following file:"
 msgstr "Антивирусное сканирование не удалось при обработке следующего файла: "
 
 #: ../mail_tt2/listmaster_notification.tt2:109
-#, fuzzy
 msgid "The returned error message:"
-msgstr "Вернувшееся сообщение об ошибке :"
+msgstr "Возвращённое сообщение об ошибке: "
 
 #: ../mail_tt2/listmaster_notification.tt2:114
 msgid "Parameter error"
@@ -6803,22 +6796,21 @@ msgstr ""
 
 #. (type,list.name,who,gecos)
 #: ../mail_tt2/listowner_notification.tt2:25
-#, fuzzy
 msgid "FYI: %1 List \"%2\" from %3 %4"
 msgstr "FYI: %1 список \"%2\" от %3 %4"
 
 #. (who,gecos,list.name)
 #: ../mail_tt2/listowner_notification.tt2:28
-#, fuzzy
 msgid ""
 "WARNING: %1 %2 failed to unsubscribe from %3 because his address was not "
 "found in the list.\n"
 "You may help this person looking for similar email in subscriber list using "
 "the following link :"
 msgstr ""
-"ПРЕДУПРЕЖДЕНИЕ: %1 %2 не удалось отписаться от %3, так как адрес не был "
+"ПРЕДУПРЕЖДЕНИЕ: %1 %2 не удалось отписаться от %3, так как его адрес не был "
 "найден в списке. \n"
-"(Вы можете ему помочь)."
+"Вы можете помочь этому человеку, взглянув на похожие адреса электронной "
+"почты, пройдя по этой ссылке:"
 
 #. (list.name)
 #: ../mail_tt2/listowner_notification.tt2:33
@@ -7892,12 +7884,12 @@ msgstr ""
 "удаление, производитемое только владельцам рассылки, требует аутентификации"
 
 #: ../src/etc/scenari/del.authdkim:1
-#, fuzzy
 msgid ""
 "deletion performed only by list owners, need authentication unless DKIM "
 "signature is OK"
 msgstr ""
-"удаление, производитемое только владельцам рассылки, требует аутентификации"
+"удаление, производитемое только владельцам рассылки, требует аутентификации "
+"в случае, если подпись DKIM не является верной"
 
 #: ../src/etc/scenari/del.closed:1
 msgid "remove subscriber impossible"
@@ -8053,13 +8045,15 @@ msgstr "подписка требует подтверждения"
 
 #: ../src/etc/scenari/subscribe.auth_notify:1
 msgid "need authentication (notification is sent to owners)"
-msgstr "требуется аутентификация (владельцу направляется уведомление)"
+msgstr "требуется аутентификация (владельцам направляется уведомление)"
 
 #: ../src/etc/scenari/subscribe.auth_notifydkim:1
 msgid ""
 "need authentication unless DKIM signature is OK. (notification is sent to "
 "owners)"
-msgstr "требуется аутентификация, если подпись DKIM неверна"
+msgstr ""
+"требуется аутентификация, если подпись DKIM неверна (владельцам направляется "
+"уведомление)"
 
 #: ../src/etc/scenari/subscribe.auth_owner:1
 msgid "requires authentication then owner approval"
@@ -8126,17 +8120,15 @@ msgid "need authentication unless DKIM signature is OK"
 msgstr "требуется аутентификация, если подпись DKIM неверна"
 
 #: ../src/etc/scenari/unsubscribe.auth_notify:1
-#, fuzzy
 msgid "authentication requested, notification sent to owner"
-msgstr "аутентификация запрашивается, уведомление отправляется владельцу"
+msgstr "запрашивается аутентификация, уведомление отправляется владельцу"
 
 #: ../src/etc/scenari/unsubscribe.auth_notifydkim:1
-#, fuzzy
 msgid ""
 "authentication requested unless DKIM signature is OK, notification sent to "
 "owner"
 msgstr ""
-"аутентификация запрашивается, если подпись DKIM неверна, уведомление "
+"запрашивается аутентификация, если подпись DKIM неверна; уведомление "
 "отправляется владельцу"
 
 #: ../src/etc/scenari/unsubscribe.closed:1
@@ -8227,7 +8219,6 @@ msgid "%m/%d/%Y"
 msgstr "%d/%m/%Y"
 
 #: ../src/etc/mhonarc-ressources.tt2:341
-#, fuzzy
 msgid ", <em>(continued)</em>"
 msgstr ", <em>(продолжающееся)</em>"
 
@@ -8309,10 +8300,9 @@ msgid "daily update of the certificate revocation list"
 msgstr "ежедневное обновление списка отозванных сертификатов"
 
 #: ../src/etc/global_task_models/eval_bouncers.daily.task:1
-#, fuzzy
 msgid "Daily evaluation of bouncing users"
 msgstr ""
-"ежедневная оценка доступности пользователей (количества возвратов сообщений)"
+"Ежедневная оценка доступности пользователей (количества возвратов сообщений)"
 
 #: ../src/etc/global_task_models/purge_logs_table.daily.task:1
 msgid "daily delete logs "
@@ -8751,8 +8741,9 @@ msgid "connection timeout"
 msgstr "таймаут соединения"
 
 #: ../src/lib/List.pm:846
+#, fuzzy
 msgid "LDAP query inclusion"
-msgstr ""
+msgstr "включение в запросе к LDAP"
 
 #: ../src/lib/List.pm:871
 msgid "first-level suffix"
@@ -8861,8 +8852,9 @@ msgstr ""
 "Директория, где хранится база данных (используется только для DBD::CSV)"
 
 #: ../src/lib/List.pm:1065
+#, fuzzy
 msgid "SQL query inclusion"
-msgstr ""
+msgstr "включение в SQL-запрос"
 
 #: ../src/lib/List.pm:1071
 msgid "Notify subscribers when they are included from a data source?"
@@ -9315,7 +9307,6 @@ msgstr "%d %b %y %H:%M"
 #. This entry is a date/time format
 #. Check the strftime manpage for format details : http://docs.freebsd.org/info/gawk/gawk.info.Time_Functions.html
 #: ../wwsympa/wwsympa.fcgi.in:16014 ../wwsympa/wwsympa.fcgi.in:16015
-#, fuzzy
 msgid "%Y-%m-%d-%H-%M-%S"
 msgstr "%Y-%m-%d-%H-%M-%S"
 
