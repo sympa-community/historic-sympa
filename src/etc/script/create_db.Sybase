@@ -14,6 +14,7 @@ create table user_table
     password_user          varchar(40)            null    , 
     last_login_date_user   numeric,
     last_login_host_user   varchar (60),
+    wrong_login_count_user numeric,
     cookie_delay_user      numeric                null    ,
     lang_user              varchar(10)            null    ,
     attributes_user	   varchar(255)           null    ,
@@ -43,6 +44,9 @@ create table subscriber_table
     subscribed_subscriber  numeric		  null    ,
     included_subscriber    numeric                null    ,
     include_sources_subscriber varchar(50)        null    ,
+    suspend_subscriber     numeric                null    ,
+    suspend_start_date_subscriber   numeric       null    ,
+    suspend_end_date_subscriber     numeric       null    ,
     constraint ind_subscriber primary key (list_subscriber, user_subscriber, robot_subscriber)
 )
 go
@@ -86,6 +90,21 @@ create index robot_admin_fk on admin_table (robot_admin)
 go
 
 create index role_admin_fk on admin_table (role_admin)
+go
+
+create table exclusion_table 
+(
+	list_exclusion 		varchar(50)       null,
+ 	user_exclusion 		varchar(100) 	  null,
+	date_exclusion 		numeric          null,
+    	constraint ind_exclusion primary key (list_exclusion, user_exclusion)
+)
+go
+
+create index list_exclusion_fk on exclusion_table (list_exclusion)
+go
+
+create index user_exclusion_fk on exclusion_table (user_exclusion)
 go
 
 create table netidmap_table 
@@ -162,11 +181,13 @@ go
 CREATE TABLE bulkmailer_table (
   	messagekey_bulkmailer  	varchar(80),
 	packetid_bulkmailer 	varchar(33),
+  	messageid_bulkmailer  	varchar(100),
 	receipients_bulkmailer 	text,
 	returnpath_bulkmailer 	varchar(100),
 	robot_bulkmailer 	varchar(80),
 	listname_bulkmailer 	varchar(50),
 	verp_bulkmailer 	int(1),
+	merge_bulkmailer 	int(1),
 	priority_message_bulkmailer 	int(10),
 	priority_packet_bulkmailer 	int(10),
 	reception_date_bulkmailer 	int(11),
@@ -182,10 +203,24 @@ go
 
 CREATE TABLE bulkspool_table (
   	messagekey_bulkspool  	varchar(33),
+  	messageid_bulkspool  	varchar(100),
 	message_bulkspool 	text,
 	lock_bulkspool 	int(1),
+        dkim_sender_bulkspool varchar2(100),
+        dkim_privatekey_bulkspool  varchar2(100),
+	dkim_signer_selector_bulkspool varchar2(50),
+	dkim_signer_domain_bulkspool varchar2(50),
+	dkim_header_list_bulkspool' varchar2(500),
 	constraint ind_bulkspool primary key (messagekey_bulkspool)
 )
 
 create index messagekey_bulkspool_fk on bulkspool_table (messagekey_bulkspool)
+go
+create table conf_tabl
+
+  robot_conf        varchar(80)        not null      
+  label_conf	    varchar(80)        not null      
+  value_conf        varchar(300)       null     
+  constraint ind_conf primary key (robot_conf, label_conf
+
 go

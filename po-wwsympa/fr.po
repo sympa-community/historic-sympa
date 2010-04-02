@@ -18,7 +18,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fr\n"
 "POT-Creation-Date: 2007-11-13 14:50+0200\n"
-"PO-Revision-Date: 2009-06-19 09:14+0200\n"
+"PO-Revision-Date: 2010-03-31 11:53+0200\n"
 "Last-Translator: Olivier Salaün <os@cru.fr>\n"
 "Language-Team: Français\n"
 "MIME-Version: 1.0\n"
@@ -863,11 +863,11 @@ msgstr ""
 "Nom</strong> (remplacez 'nomdelaliste' par le nom de la liste à laquelle "
 "vous souhaitez vous abonner et indiquez vos propres prénom et nom)."
 
-#: ../web_tt2/help_user.tt2:167 ../web_tt2/help_user.tt2:34
+#: ../web_tt2/help_user.tt2:168 ../web_tt2/help_user.tt2:34
 msgid "<strong>Leave the message body blank</strong>."
 msgstr "<strong>Laissez le corps du message vide</strong>."
 
-#: ../web_tt2/help_user.tt2:168 ../web_tt2/help_user.tt2:35
+#: ../web_tt2/help_user.tt2:169 ../web_tt2/help_user.tt2:35
 msgid ""
 "To save some time, you can also send several commands in a single message. "
 "To do that, follow the instructions available in the <a href=\"#howitworks"
@@ -984,8 +984,8 @@ msgstr ""
 #. (path_cgi)
 #: ../web_tt2/help_arc.tt2:12 ../web_tt2/help_arc.tt2:77
 #: ../web_tt2/help_arc.tt2:93 ../web_tt2/help_shared.tt2:9
-#: ../web_tt2/help_user.tt2:100 ../web_tt2/help_user.tt2:127
-#: ../web_tt2/help_user.tt2:172 ../web_tt2/help_user.tt2:50
+#: ../web_tt2/help_user.tt2:100 ../web_tt2/help_user.tt2:128
+#: ../web_tt2/help_user.tt2:173 ../web_tt2/help_user.tt2:50
 msgid ""
 "Go to the list environment <strong><a href=\"%1/home\">homepage</a></strong> "
 "and <strong>log on</strong>."
@@ -1060,7 +1060,6 @@ msgstr ""
 "si nécessaire."
 
 #: ../web_tt2/help_user.tt2:62
-#, fuzzy
 msgid ""
 "<strong>If the unique authentication process does not apply to you, you can "
 "use your list password.</strong> In this case, log on through the classic "
@@ -1075,7 +1074,6 @@ msgstr ""
 "champ 'Mot de passe'.<br />"
 
 #: ../web_tt2/help_user.tt2:63
-#, fuzzy
 msgid ""
 "If you do not remember your list password, click on 'Lost password?'. After "
 "you've provided your email address, a mail with a validation URL will be "
@@ -1086,7 +1084,6 @@ msgstr ""
 "un mail contenant une URL de validation vous sera envoyé à cette adresse."
 
 #: ../web_tt2/help_user.tt2:65
-#, fuzzy
 msgid ""
 "<strong>If the unique authentication process does not apply to you and you "
 "do no have a list password yet</strong>, click on '<strong>First login?</"
@@ -1097,7 +1094,8 @@ msgstr ""
 "unique et que vous ne possédez pas encore de mot de passe de listes</"
 "strong>, cliquez sur '<strong>Première connexion</strong>' puis indiquez "
 "votre adresse e-mail. Un lien de confirmation vous sera envoyé à cette "
-"adresse. Par la suite vous pourrez définir votre mot de passe."
+"adresse. Cliquer dessus vous redirigera vers un pge où vous pourrez définir "
+"votre mot de passe."
 
 #: ../web_tt2/help_user.tt2:68
 msgid ""
@@ -1422,11 +1420,19 @@ msgstr ""
 "<strong>Normal</strong>&#160;: ce mode est le mode de réception par "
 "défaut&#160;; il permet d'annuler les autres modes d'abonnement."
 
-#: ../web_tt2/help_user.tt2:116
+#: ../web_tt2/help_user.tt2:115
+msgid ""
+"<strong>suspended</strong>: this mode allows you to suspend your "
+"subscription to one or more lists for a specified period or not. Unlike "
+"unsubscription, you can keep track of your subscription and reactivate it at "
+"any time by visiting the \"Manage your subscription\" section."
+msgstr ""
+
+#: ../web_tt2/help_user.tt2:117
 msgid "<strong>Choose a visibility option</strong>:"
 msgstr "<strong>Choisissez une option de visibilité</strong>&#160;:"
 
-#: ../web_tt2/help_user.tt2:118
+#: ../web_tt2/help_user.tt2:119
 msgid ""
 "<strong>listed in the list review page</strong>: your name and email address "
 "will be displayed in the members list (if the list owner allowed subscribers "
@@ -1435,7 +1441,7 @@ msgstr ""
 "<strong>Référencé dans la liste des abonnés</strong>&#160;: vous serez "
 "visible dans la liste des abonnés (si l'accès à celle-ci est autorisé)."
 
-#: ../web_tt2/help_user.tt2:119
+#: ../web_tt2/help_user.tt2:120
 msgid ""
 "<strong>concealed</strong>: your name and email address will not be "
 "displayed in the members list. However you email address will be visible in "
@@ -1445,15 +1451,15 @@ msgstr ""
 "des abonnés. Votre adresse e-mail sera néanmoins visible dans les archives "
 "des messages si vous en avez envoyé."
 
-#: ../web_tt2/help_user.tt2:121
+#: ../web_tt2/help_user.tt2:122
 msgid "<strong>Click on the 'Update' button</strong>."
 msgstr "<strong>Cliquez sur le bouton 'Mise à jour'</strong>."
 
-#: ../web_tt2/help_user.tt2:124
+#: ../web_tt2/help_user.tt2:125
 msgid "Changing your general preferences"
 msgstr "Modifier ses préférences générales"
 
-#: ../web_tt2/help_user.tt2:125
+#: ../web_tt2/help_user.tt2:126
 msgid ""
 "The general preferences apply to all your subscriptions as well as to the "
 "way your Sympa mailing list web interface displays. To change your "
@@ -1463,7 +1469,7 @@ msgstr ""
 "à la manière dont se présente votre interface de listes Sympa. Pour modifier "
 "vos préférences, procédez comme suit&#160;:"
 
-#: ../web_tt2/help_user.tt2:128
+#: ../web_tt2/help_user.tt2:129
 msgid ""
 "In the form displayed on top of the left column, <strong>click on the 'Your "
 "preferences' link</strong>."
@@ -1471,20 +1477,20 @@ msgstr ""
 "Dans la boîte en haut de la colonne de gauche, <strong>cliquez sur le lien "
 "'Vos préférences'</strong>."
 
-#: ../web_tt2/help_user.tt2:129
+#: ../web_tt2/help_user.tt2:130
 msgid "<strong>Change your preferences</strong>."
 msgstr "<strong>Modifiez vos préférences</strong>."
 
-#: ../web_tt2/help_user.tt2:130
+#: ../web_tt2/help_user.tt2:131
 msgid "<strong>Click on 'Submit' for every option</strong> you change."
 msgstr ""
 "<strong>Cliquez sur 'Valider' pour chaque option</strong> que vous modifiez."
 
-#: ../web_tt2/help_user.tt2:132
+#: ../web_tt2/help_user.tt2:133
 msgid "You can change:"
 msgstr "Vous pouvez modifier&#160;:"
 
-#: ../web_tt2/help_user.tt2:134
+#: ../web_tt2/help_user.tt2:135
 msgid ""
 "your <strong>name</strong>; if you subscribe to a list from the mailing list "
 "server web interface, the 'Name' field will automatically be filled in in "
@@ -1494,7 +1500,7 @@ msgstr ""
 "l'interface web du serveur de listes, le champ 'Nom' sera automatiquement "
 "renseigné dans la liste des abonnés&#160;;"
 
-#: ../web_tt2/help_user.tt2:135
+#: ../web_tt2/help_user.tt2:136
 msgid ""
 "the <strong>language in which the Sympa web interface is displayed</strong> "
 "(you can change language on every page of the web interface; your choice "
@@ -1506,7 +1512,7 @@ msgstr ""
 "votre choix sera conservé même si vous modifiez la langue de l'interface "
 "sans passer par la page 'Préférences'&#160;;"
 
-#: ../web_tt2/help_user.tt2:136
+#: ../web_tt2/help_user.tt2:137
 msgid ""
 "the <strong>lifetime of the cookie placed on your computer by Sympa</strong> "
 "('Connection expiration period'). By default, the session expires when you "
@@ -1519,7 +1525,7 @@ msgstr ""
 "manière intensive, nous vous conseillons de choisir une durée plus "
 "longue&#160;;"
 
-#: ../web_tt2/help_user.tt2:137
+#: ../web_tt2/help_user.tt2:138
 msgid ""
 "A cookie is a small file a web server stores on your hard disk, most "
 "generally temporarily, in order to identify you as a user of its service. It "
@@ -1531,7 +1537,7 @@ msgstr ""
 "Il contient quelques informations de référence vous concernant&#160;: nom, "
 "adresse e-mail, date de dernière connexion, etc."
 
-#: ../web_tt2/help_user.tt2:138
+#: ../web_tt2/help_user.tt2:139
 msgid ""
 "the <strong>email address with which you subscribed</strong> to the lists "
 "(if you subscribed with several email addresses, the address to be replaced "
@@ -1541,7 +1547,7 @@ msgstr ""
 "(si vous êtes abonné aux listes avec plusieurs adresses, l'adresse remplacée "
 "sera celle avec laquelle vous êtes connecté);"
 
-#: ../web_tt2/help_user.tt2:139
+#: ../web_tt2/help_user.tt2:140
 msgid ""
 "Be careful: this will change your subscriptions to all your lists. If you "
 "want to change address for a single mailing list, you had better unsubscribe "
@@ -1552,11 +1558,11 @@ msgstr ""
 "mieux vous désabonner de cette liste et vous y réabonner avec l'adresse "
 "idoine."
 
-#: ../web_tt2/help_user.tt2:140
+#: ../web_tt2/help_user.tt2:141
 msgid "your <strong>list password</strong>."
 msgstr "votre <strong>mot de passe de listes</strong>."
 
-#: ../web_tt2/help_user.tt2:142
+#: ../web_tt2/help_user.tt2:143
 msgid ""
 "The '<strong>Your other email addresses</strong>' section acts like an email "
 "address change."
@@ -1564,11 +1570,11 @@ msgstr ""
 "La section '<strong>Vos autres adresses e-mail</strong>' équivaut à un "
 "changement d'adresse e-mail."
 
-#: ../web_tt2/help_user.tt2:144
+#: ../web_tt2/help_user.tt2:145
 msgid "Searching for a mailing list"
 msgstr "Rechercher une liste de diffusion"
 
-#: ../web_tt2/help_user.tt2:145
+#: ../web_tt2/help_user.tt2:146
 msgid ""
 "You may need to search for a mailing list. To do that, you have three "
 "options:"
@@ -1577,7 +1583,7 @@ msgstr ""
 "possibilités&#160;:"
 
 #. (path_cgi)
-#: ../web_tt2/help_user.tt2:147
+#: ../web_tt2/help_user.tt2:148
 msgid ""
 "<strong>browse the different sections</strong> displayed on the <a href=\"%1/"
 "home\">list environment homepage</a>;"
@@ -1585,7 +1591,7 @@ msgstr ""
 "<strong>parcourir les différentes rubriques</strong> listées en <a href=\"%1/"
 "home\">page d'accueil du serveur de listes</a>&#160;;"
 
-#: ../web_tt2/help_user.tt2:148
+#: ../web_tt2/help_user.tt2:149
 msgid ""
 "search for a list via the <strong>search box</strong>: the searched string "
 "will return all the lists whose name or description matches your search "
@@ -1597,7 +1603,7 @@ msgstr ""
 "généralement à une courte phrase)&#160;;"
 
 #. (path_cgi)
-#: ../web_tt2/help_user.tt2:149
+#: ../web_tt2/help_user.tt2:150
 msgid ""
 "click on the '<a href=\"%1/lists\">List of lists</a>' tab on top of page to "
 "<strong>display all available lists</strong>."
@@ -1605,7 +1611,7 @@ msgstr ""
 "cliquer sur l'onglet '<a href=\"%1/lists\">Liste des listes</a>' en haut de "
 "page pour <strong>afficher l'intégralité des listes</strong>."
 
-#: ../web_tt2/help_user.tt2:151
+#: ../web_tt2/help_user.tt2:152
 msgid ""
 "According to the domain to which your email address belongs (example: <em "
 "class=\"example\">cru.fr</em>, <em class=\"example\">fai.com</em>, etc.) and "
@@ -1620,12 +1626,12 @@ msgstr ""
 "cachées si vous connaissez leur nom. Pour cela, <a href=\"#subscribe"
 "\">utilisez votre client de messagerie</a>."
 
-#: ../web_tt2/help_user.tt2:153
+#: ../web_tt2/help_user.tt2:154
 msgid "Reading a list archive online"
 msgstr "Lire les archives d'une liste en ligne"
 
 #. (path_cgi)
-#: ../web_tt2/help_user.tt2:154
+#: ../web_tt2/help_user.tt2:155
 msgid ""
 "Please refer to the <a href=\"%1/help/arc\"><strong>archive documentation</"
 "strong></a>."
@@ -1633,12 +1639,12 @@ msgstr ""
 "Consultez la <a href=\"%1/help/arc\"><strong>documentation des archives</"
 "strong></a>."
 
-#: ../web_tt2/help_sendmsg.tt2:3 ../web_tt2/help_user.tt2:156
+#: ../web_tt2/help_sendmsg.tt2:3 ../web_tt2/help_user.tt2:157
 msgid "Sending a message"
 msgstr "Envoyer un message"
 
 #. (path_cgi)
-#: ../web_tt2/help_user.tt2:157
+#: ../web_tt2/help_user.tt2:158
 msgid ""
 "Please refer to the <a href=\"%1/help/sendmsg\"><strong>documentation about "
 "sending messages</strong></a>."
@@ -1646,12 +1652,12 @@ msgstr ""
 "Consultez la <a href=\"%1/help/sendmsg\"><strong>documentation pour l'envoi "
 "de messages</strong></a>."
 
-#: ../web_tt2/help_shared.tt2:3 ../web_tt2/help_user.tt2:159
+#: ../web_tt2/help_shared.tt2:3 ../web_tt2/help_user.tt2:160
 msgid "Using the shared document web space"
 msgstr "Utiliser l'espace de stockage partagé"
 
 #. (path_cgi)
-#: ../web_tt2/help_user.tt2:160
+#: ../web_tt2/help_user.tt2:161
 msgid ""
 "Please refer to the <a href=\"%1/help/shared\"><strong>shared document web "
 "space documentation</strong></a>."
@@ -1659,16 +1665,16 @@ msgstr ""
 "Consultez la <a href=\"%1/help/shared\"><strong>documentation de l'espace de "
 "stockage</strong></a>."
 
-#: ../web_tt2/help_user.tt2:162
+#: ../web_tt2/help_user.tt2:163
 msgid "Unsubscribing from lists"
 msgstr "Se désabonner des listes"
 
-#: ../web_tt2/help_user.tt2:163
+#: ../web_tt2/help_user.tt2:164
 msgid "To unsubscribe from a list, do as follows:"
 msgstr "Pour vous désabonner d'une liste, procédez comme suit&#160;:"
 
 #. (conf.email,conf.host)
-#: ../web_tt2/help_user.tt2:165
+#: ../web_tt2/help_user.tt2:166
 msgid ""
 "From the address with which you subscribed to the list, send a "
 "<strong>message to %1@%2</strong>."
@@ -1676,7 +1682,7 @@ msgstr ""
 "À partir de l'adresse avec laquelle vous êtes abonné à la liste, envoyez un "
 "<strong>message à %1</strong>."
 
-#: ../web_tt2/help_user.tt2:166
+#: ../web_tt2/help_user.tt2:167
 msgid ""
 "In the subject line of your email, type in: <strong>unsubscribe "
 "nameofthelist</strong> (replace 'nameofthelist' by the name of the list you "
@@ -1686,7 +1692,7 @@ msgstr ""
 "strong> (remplacez 'nomdelaliste' par le nom de la liste dont vous souhaitez "
 "vous désabonner)."
 
-#: ../web_tt2/help_user.tt2:170
+#: ../web_tt2/help_user.tt2:171
 msgid ""
 "You can also unsubscribe through the mailing list web interface (you will "
 "need to repeat the operation for each list you want to unsubscribe from):"
@@ -1695,7 +1701,7 @@ msgstr ""
 "(vous devrez répéter l'opération pour chaque liste dont vous souhaitez vous "
 "désabonner)&#160;:"
 
-#: ../web_tt2/help_user.tt2:173
+#: ../web_tt2/help_user.tt2:174
 msgid ""
 "<strong>Go to the information page of the list</strong> you want to "
 "unsubscribe from."
@@ -1703,7 +1709,7 @@ msgstr ""
 "<strong>Allez sur la page d'information de la liste</strong> dont vous "
 "souhaitez vous désabonner."
 
-#: ../web_tt2/help_user.tt2:174
+#: ../web_tt2/help_user.tt2:175
 msgid "<strong>In the left menu, click on the 'Unsubscribe' link</strong>."
 msgstr ""
 "<strong>Dans le menu de gauche, cliquez sur le lien 'Désabonnement'</strong>."
@@ -3795,7 +3801,6 @@ msgstr ""
 "format MIME)."
 
 #: ../web_tt2/help_editfile.tt2:9
-#, fuzzy
 msgid ""
 "Unsubscribe message: This message is sent when users leave the list\n"
 "using the UNSUBSCRIBE command."
@@ -3804,7 +3809,6 @@ msgstr ""
 "liste."
 
 #: ../web_tt2/help_editfile.tt2:13
-#, fuzzy
 msgid ""
 "Deletion message: This message is sent to users when you\n"
 "remove them from the list using the DEL command (unless you hit the\n"
@@ -3812,10 +3816,10 @@ msgid ""
 msgstr ""
 "Message de suppression : Envoyé aux personnes supprimées de la liste des "
 "abonnés\n"
-"par le propriétaire de la liste ou via le module de gestion des erreurs."
+"par le propriétaire de la liste (sauf s'il active l'option « quiet ») ou via "
+"le module de gestion des erreurs."
 
 #: ../web_tt2/help_editfile.tt2:18
-#, fuzzy
 msgid ""
 "Remind message: This message is sent to each subscriber\n"
 "when using the command  REMIND. It's very useful to help people who are\n"
@@ -3826,12 +3830,11 @@ msgstr ""
 "rappel des abonnements.\n"
 "Ce message peut être envoyé depuis l'interface d'administration de liste "
 "dans la page\n"
-"<i>abonnés</i>. Cette procédure est très utile pour aider chaque personne à "
-"se désabonner\n"
+"<i>abonnés</i> ou via la commande REMIND. Cette procédure est très utile "
+"pour aider chaque personne à se désabonner\n"
 "au cas où celles-ci ne connaissent plus leur adresse d'abonnement."
 
 #: ../web_tt2/help_editfile.tt2:21
-#, fuzzy
 msgid ""
 "Subscribing invitation message: sent to a person if someone  \n"
 "uses the INVITE command to invite someone to subscribe."
@@ -3840,12 +3843,10 @@ msgstr ""
 "<CODE>INVITE [nom de liste]</CODE>."
 
 #: ../web_tt2/help_editfile.tt2:24
-#, fuzzy
 msgid "Other files/pages description:"
 msgstr "Description des autres fichiers/pages :"
 
 #: ../web_tt2/help_editfile.tt2:28
-#, fuzzy
 msgid ""
 "List homepage: HTML text to describe the list. It is printed on the\n"
 "right-hand side of the main list page. (default for this is the list "
@@ -3856,7 +3857,6 @@ msgstr ""
 "droite de la page de la liste. (a pour défaut la description de la liste)"
 
 #: ../web_tt2/help_editfile.tt2:31
-#, fuzzy
 msgid ""
 "List description: This text is sent as an answer to the mail command\n"
 "INFO. It can also be included in the <em>Welcome message</em>."
@@ -3875,7 +3875,6 @@ msgstr ""
 "début de chaque message diffusé dans la liste."
 
 #: ../web_tt2/help_editfile.tt2:37
-#, fuzzy
 msgid ""
 "Message footer: same as <em>Message header,</em> but attached at the\n"
 "end of the message."
@@ -3885,7 +3884,7 @@ msgstr ""
 
 #: ../web_tt2/help_editlist.tt2:5
 msgid ":"
-msgstr ""
+msgstr "&#160;:"
 
 # nlsref 16,73
 #: ../web_tt2/help_editlist.tt2:9
@@ -4145,7 +4144,6 @@ msgstr ""
 "des champs"
 
 #: ../web_tt2/help_editlist.tt2:84
-#, fuzzy
 msgid ""
 "FYI: Defining editors will not make the list moderated; you will have to set "
 "the \"send\" parameter."
@@ -7051,7 +7049,6 @@ msgstr ""
 "sur les fichiers et dossiers qui sont déjà en ligne&#160;:"
 
 #: ../web_tt2/help_shared.tt2:102
-#, fuzzy
 msgid "by changing their access rights (read and write);"
 msgstr "en modifiant les droits d'accès (lecture et écriture)&#160;;"
 

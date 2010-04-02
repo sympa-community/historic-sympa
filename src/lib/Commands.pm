@@ -87,7 +87,7 @@ my $quiet;
 # IN :-$sender (+): the command sender
 #     -$robot (+): robot
 #     -$i (+): command line
-#     -$sign_mod : 'smime'| -
+#     -$sign_mod : 'smime'| 'dkim' -
 #
 # OUT : $status |'unknown_cmd'
 #      
@@ -255,10 +255,11 @@ sub lists {
     my $lists = {};
 
     my $all_lists =  &List::get_lists($robot);
+    
     foreach my $list ( @$all_lists ) {
 	my $l = $list->{'name'};
-
-	my $result = $list->check_list_authz('visibility','smtp',
+	
+	my $result = $list->check_list_authz('visibility','smtp', # 'smtp' isn't it a bug ? 
 					     {'sender' => $sender,
 					      'message' => $message, });
 
@@ -303,7 +304,7 @@ sub lists {
 # 
 # IN : -$listname (+): list name
 #      -$robot (+): robot 
-#      -$sign_mod : 'smime' | -
+#      -$sign_mod : 'smime' | 'dkim'|  -
 #
 # OUT : 'unknown_list'|'not_allowed'|1  | undef
 #      
@@ -559,7 +560,6 @@ sub review {
     my $message = shift ;
 
     &do_log('debug', 'Commands::review(%s,%s,%s)', $listname,$robot,$sign_mod );
-
     my $sympa = &Conf::get_robot_conf($robot, 'sympa');
 
     my $user;
@@ -659,7 +659,7 @@ sub review {
 #
 # IN : -$listname (+): list name
 #      -$robot (+): robot 
-#      -$sign_mod : 'smime'| -
+#      -$sign_mod : 'smime'| 'dkim' | -
 #
 # OUT : 1
 #
@@ -675,10 +675,15 @@ sub verify {
     
     &Language::SetLang($list->{'admin'}{'lang'});
     
-    if ($sign_mod eq 'smime') {
-	$auth_method='smime';
+    if  ($sign_mod) {
 	&do_log('info', 'VERIFY successfull from %s', $sender,time-$time_command);
-	&report::notice_report_cmd('smime',{},$cmd_line); 
+	if ($sign_mod eq 'smime') {
+	    $auth_method='smime';
+	    &report::notice_report_cmd('smime',{},$cmd_line); 
+	}elsif($sign_mod eq 'dkim') {
+	    $auth_method='dkim';
+	    &report::notice_report_cmd('dkim',{},$cmd_line); 
+	}
     }else{
 	&do_log('info', 'VERIFY from %s : could not find correct s/mime signature', $sender,time-$time_command);
 	&report::reject_report_cmd('user','no_verify_sign',{},$cmd_line);
@@ -766,7 +771,7 @@ sub subscribe {
 
     ## Unless rejected by scenario, don't go further if the user is subscribed already.
     my $user_entry = $list->get_subscriber($sender);    
-    if ( defined($user_entry) && ($user_entry->{'subscribed'} == 1)) {
+    if ( defined($user_entry)) {
 	&report::reject_report_cmd('user','already_subscriber',{'email'=>$sender, 'listname'=>$list->{'name'}},$cmd_line);
 	&do_log('err','User %s is subscribed to %s already. Ignoring subscription request.', $sender, $list->{'name'});
 	return undef;
@@ -1121,37 +1126,27 @@ sub signoff {
 	## remove it if found, otherwise just reject the
 	## command.
 	my $user_entry = $list->get_subscriber($email);
-	unless ((defined $user_entry) && ($user_entry->{'subscribed'} == 1)) {
+	unless ((defined $user_entry)) {
 	    &report::reject_report_cmd('user','your_email_not_found',{'email'=> $email, 'listname' => $list->{'name'}},$cmd_line); 
 	    &do_log('info', 'SIG %s from %s refused, not on list', $which, $email);
 	    
 	    ## Tell the owner somebody tried to unsubscribe
 	    if ($action =~ /notify/i) {
-		unless ($list->send_notify_to_owner('warn-signoff',{'who' => $email, 
-								    'gecos' => $comment})) {
+		# try to find email from same domain or email wwith same local part.
+	
+		unless ($list->send_notify_to_owner('warn-signoff',{'who' => $email, 'gecos' => $comment })) {
 		    &do_log('info',"Unable to send notify 'warn-signoff' to $list->{'name'} list owner");
 		}
 	    }
 	    return 'not_allowed';
 	}
 	
-	if ($user_entry->{'included'} == 1) {
-	    unless ($list->update_user($email, 
-				       {'subscribed' => 0,
-					'update_date' => time})) {
-		&do_log('info', 'SIG %s from %s failed, database update failed', $which, $email);
-		my $error = "Unable to update user $user in list $listname";
-		&report::reject_report_cmd('intern',$error,{'listname'=>$which},$cmd_line,$sender,$robot);
-		return undef;
-	    }
-
-	}else {
-	    ## Really delete and rewrite to disk.
-	    unless ($list->delete_user($email)){
-		my $error = "Unable to delete user $user from list $listname";
-		&report::reject_report_cmd('intern',$error,{'listname'=>$which},$cmd_line,$sender,$robot);
-	    }
+	## Really delete and rewrite to disk.
+	unless ($list->delete_user('users' => [$email], 'exclude' =>' 1')){
+	    my $error = "Unable to delete user $user from list $listname";
+	    &report::reject_report_cmd('intern',$error,{'listname'=>$which},$cmd_line,$sender,$robot);
 	}
+	
 	
 	## Notify the owner
 	if ($action =~ /notify/i) {
@@ -1685,7 +1680,9 @@ sub remind {
 		$context{'user'}{'lang'} = $global_info{$email}{'lang'};
 		$context{'user'}{'password'} = $global_info{$email}{'password'};
 		$context{'user'}{'gecos'} = $global_info{$email}{'gecos'};
+		$context{'use_bulk'} = 1;
                 @{$context{'lists'}} = @{$global_subscription{$email}};
+		$context{'use_bulk'} = 1;
 
 		unless (&List::send_global_file('global_remind', $email, $robot, \%context)){
 		    &do_log('notice',"Unable to send template 'global_remind' to $email");
@@ -1795,7 +1792,7 @@ sub del {
 	## just reject the message.
 	my $user_entry = $list->get_subscriber($who);
 
-	unless ((defined $user_entry) && ($user_entry->{'subscribed'} == 1)) {
+	unless ((defined $user_entry)) {
 	    &report::reject_report_cmd('user','your_email_not_found',{'email'=> $who, 'listname' => $which},$cmd_line); 
 	    &do_log('info', 'DEL %s %s from %s refused, not on list', $which, $who, $sender);
 	    return 'not_allowed';
@@ -1804,24 +1801,14 @@ sub del {
 	## Get gecos before deletion
 	my $gecos = $user_entry->{'gecos'};
 	
-	if ($user_entry->{'included'} == 1) {
-	    unless ($list->update_user($who, 
-				       {'subscribed' => 0,
-					'update_date' => time})) {
-		&do_log('info', 'DEL %s %s from %s failed, database update failed', $which, $who, $sender);
-		my $error = "Unable to update user $who in list $which";
-		&report::reject_report_cmd('intern',$error,{'listname'=>$which},$cmd_line,$sender,$robot);
-		return undef;
-	    }
-
-	}else {
-	    ## Really delete and rewrite to disk.
-	    my $u;
-	    unless ($u = $list->delete_user($who)){
-		my $error = "Unable to delete user $who from list $which for command 'del'";
-		&report::reject_report_cmd('intern',$error,{'listname'=>$which},$cmd_line,$sender,$robot);
-	    }
+	
+	## Really delete and rewrite to disk.
+	my $u;
+	unless ($u = $list->delete_user('users' => [$who], 'exclude' =>' 1')){
+	    my $error = "Unable to delete user $who from list $which for command 'del'";
+	    &report::reject_report_cmd('intern',$error,{'listname'=>$which},$cmd_line,$sender,$robot);
 	}
+	
 
 	## Send a notice to the removed user, unless the owner indicated
 	## quiet del.
@@ -2068,8 +2055,13 @@ sub distribute {
 
     ## Distribute the message
     if (($main::daemon_usage == DAEMON_MESSAGE) || ($main::daemon_usage == DAEMON_ALL)) {
+	my $numsmtp;
+	my $apply_dkim_signature = 'off';
+	$apply_dkim_signature = 'on' if &tools::is_in_array($list->{'admin'}{'dkim_signature_apply_on'},'any');
+        $apply_dkim_signature = 'on' if &tools::is_in_array($list->{'admin'}{'dkim_signature_apply_on'},'editor_validated_messages');
 
-	my $numsmtp =$list->distribute_msg($message);
+	$numsmtp =$list->distribute_msg('message'=> $message,
+					'apply_dkim_signature'=>$apply_dkim_signature);
 	unless (defined $numsmtp) {
 	    &do_log('err','Commands::distribute(): Unable to send message to list %s', $name);
 	    &report::reject_report_msg('intern','',$sender,{'msg_id' => $msg_id},$robot,$msg_string,$list);
@@ -2247,7 +2239,13 @@ sub confirm {
 	
 	## Distribute the message
 	if (($main::daemon_usage == DAEMON_MESSAGE) || ($main::daemon_usage == DAEMON_ALL)) {
-	    my $numsmtp = $list->distribute_msg($message);
+	    my $numsmtp;
+	    my $apply_dkim_signature = 'off'; 
+	    $apply_dkim_signature = 'on' if &tools::is_in_array($list->{'admin'}{'dkim_signature_apply_on'},'any');
+	    $apply_dkim_signature = 'on' if &tools::is_in_array($list->{'admin'}{'dkim_signature_apply_on'},'md5_authenticated_messages');
+
+	    $numsmtp =$list->distribute_msg('message'=> $message,
+					    'apply_dkim_signature'=>$apply_dkim_signature);
 
 	    unless (defined $numsmtp) {
 		&do_log('err','Commands::confirm(): Unable to send message to list %s', $list->{'name'});
@@ -2602,10 +2600,10 @@ sub which {
 #        -type : for message_report.tt2 parsing
 #        -data : ref(HASH) for message_report.tt2 parsing
 #        -msg : for do_log
-#     -$sign_mod (+): 'smime'| -
+#     -$sign_mod (+): 'smime'| 'dkim' | -
 #     -$list : ref(List) | -
 #
-# OUT : 'smime'|'md5'|'smtp' if authentification OK, undef else
+# OUT : 'smime'|'md5'|'dkim'|'smtp' if authentification OK, undef else
 #       | undef   
 ##########################################################
 sub get_auth_method {
@@ -2615,7 +2613,7 @@ sub get_auth_method {
     my $auth_method;
 
     if ($sign_mod eq 'smime') {
-	$auth_method='smime';
+	$auth_method ='smime';
 
     }elsif ($auth ne '') {
 	&do_log('debug',"auth received from $sender : $auth");	
@@ -2628,7 +2626,7 @@ sub get_auth_method {
 	    $compute= &List::compute_auth($email,$cmd);	    
 	}
 	if ($auth eq $compute) {
-	    $auth_method='md5' ;
+	    $auth_method = 'md5' ;
 	}else{           
 	    &do_log('debug2', 'auth should be %s',$compute);
 	    if ($error->{'type'} eq 'auth_failed'){
@@ -2639,8 +2637,9 @@ sub get_auth_method {
 	    &do_log('info', '%s refused, auth failed',$error->{'msg'});
 	    return undef;
 	}
-    }else {
-	$auth_method='smtp';
+    }else {	
+	$auth_method = 'smtp';
+	$auth_method = 'dkim' if ($sign_mod eq 'dkim');
     }
  
     return $auth_method;

@@ -191,8 +191,8 @@ our @params = (
     },
     {
         name    => 'http_host',
-        default => 'http://domain.tld',
         query   => 'URL to a virtual host.',
+        default => 'http://domain.tld',
         default => 'http://domain.tld',
 	vhost   => '1',
         edit    => '1',
@@ -626,6 +626,62 @@ our @params = (
         edit    => '1',
         advice  =>'This is required for HTML mail archiving',
     },
+    { title => 'DKIM' },
+    {
+        name    => 'dkim_feature',
+        default => 'off',
+        vhost => '1',
+	file   => 'sympa.conf',
+    },
+    {
+        name    => 'dkim_add_signature_to',
+        default => 'robot,list', 
+	advice  => 'Insert a DKIM signature to message from the robot, from the list or both',
+        vhost => '1',
+	file   => 'sympa.conf',
+    },
+    {
+        name    => 'dkim_signature_apply_on',
+        default => 'md5_authenticated_messages,smime_authenticated_messages,dkim_authenticated_messages,editor_validated_messages', 
+	advice  => 'Type of message that receive a DKIM signature before distribution to subscribers.Possible value are "none", "any" or a list of the following keywords : "md5_authenticated_messages,smime_authenticated_messages,dkim_authenticated_message,editor_validated_message".',
+        vhost => '1',
+	file   => 'sympa.conf',
+    },    
+    {
+        name => 'dkim_private_key_path',
+	vhost => '1',
+        query   => 'location of the file where DKIM private key is stored',
+	optional => '1',
+	file   => 'sympa.conf',
+    },
+    {
+        name => 'dkim_selector',
+	vhost => '1',
+        query   => 'the selector', 
+	optional => '1',
+	file   => 'sympa.conf',
+    },
+    {
+        name => 'dkim_signer_domain',
+	vhost => '1',
+        query   => 'the "d=" tag as defined in rfc 4871, default is virtual host domaine',
+	optional => '1',
+	file   => 'sympa.conf',
+    },
+    {
+        name => 'dkim_signer_identity',
+	vhost => '1',
+        query   => 'the "i=" tag as defined in rfc 4871, default null',
+	optional => '1',
+	file   => 'sympa.conf',
+    },
+    {
+	name => 'dkim_header_list',
+        vhost => '1',
+	file   => 'sympa.conf',
+        query   => 'list of headers to be included ito the message for signature', 
+        default => 'from:sender:reply-to:subject:date:message-id:to:cc:list-id:list-help:list-unsubscribe:list-subscribe:list-post:list-owner:list-archive:in-reply-to:references:resent-date:resent-from:resent-sender:resent-to:resent-cc:resent-message-id:mime-version:content-type:content-transfer-encoding:content-id:content-description', 
+    }, 
     { 'title' => 'S/MIME pluggin' },
     {
         name   => 'openssl',
@@ -827,6 +883,14 @@ our @params = (
 	vhost   => '1',
     },
     {
+        name  => 'spam_status',
+        default => 'x-spam-status',
+        query => 'Messages are supposed to be filtered by an antispam that add one more headers to messages. This parameter is used to select a special scenario in order to decide the message spam status : ham, spam or unsure. This parameter replace antispam_tag_header_name, antispam_tag_header_spam_regexp and antispam_tag_header_ham_regexp.',
+	vhost   => '1',
+        file  => 'sympa.conf',
+        edit  => '1',
+    },
+    {
         name  => 'antispam_tag_header_name',
         default => 'X-Spam-Status',
         query => 'If a spam filter (like spamassassin or j-chkmail) add a smtp headers to tag spams, name of this header (example X-Spam-Status)',
@@ -938,7 +1002,7 @@ our @params = (
     },
     {
         name    => 'anonymous_header_fields',
-        default => 'Sender,X-Sender,Received,Message-id,From,X-Envelope-To,Resent-From,Reply-To,Organization,Disposition-Notification-To,X-Envelope-From,X-X-Sender',
+        default => 'Sender,X-Sender,Received,Message-id,From,DKIM-Signature,X-Envelope-To,Resent-From,Reply-To,Organization,Disposition-Notification-To,X-Envelope-From,X-X-Sender',
     },
     {
         name => 'dark_color',
@@ -1284,6 +1348,10 @@ our @params = (
         default => 'on',
     },
     {
+        name    => 'merge_feature',
+	default => 'off',
+    },
+    {
         name    => 'use_blacklist',
         default => 'send,subscribe',
     },
@@ -1317,6 +1385,14 @@ our @params = (
         name    => 'alias_manager',
         default => Sympa::Constants::SBINDIR . '/alias_manager.pl',
     },
+    {
+        name    => 'max_wrong_password',
+        default => '19',
+        vhost => '1',
+	file   => 'sympa.conf',
+    },
+
+
 
 );
 

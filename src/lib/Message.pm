@@ -173,7 +173,6 @@ sub new {
 	do_log('err', "Invalid From: field '%s'", $message->{'sender'});
 	return undef;
     }
-
     ## Store decoded subject
     my $subject = $hdr->get('Subject');
     my @decoded_subject = MIME::EncWords::decode_mimewords($subject);
@@ -190,6 +189,7 @@ sub new {
 									 $subject, Charset=>'utf8');
 	chomp $message->{'decoded_subject'};
     }
+
 
     ## Extract recepient address (X-Sympa-To)
     $message->{'rcpt'} = $hdr->get('X-Sympa-To');
@@ -209,6 +209,32 @@ sub new {
 	    $listname = lc($listname);
 	    $robot ||= $Conf::Conf{'host'};
 	    
+
+	    ## Antispam feature.
+	    #my $spam_header_name = &Conf::get_robot_conf($robot,'antispam_tag_header_name');
+	    #my $spam_regexp = &Conf::get_robot_conf($robot,'antispam_tag_header_spam_regexp');
+	    ## my $ham_regexp = &Conf::get_robot_conf($robot,'antispam_tag_header_ham_regexp');
+	    
+	    ## if (&Conf::get_robot_conf($robot,'antispam_feature') =~ /on/i){
+	    ## 	if ($hdr->get($spam_header_name) =~ /$spam_regexp/i) {
+	    ## 		    $message->{'spam_status'} = 'spam';
+	    ## 		}elsif($hdr->get($spam_header_name) =~ /$ham_regexp/i) {
+	    ## 		    $message->{'spam_status'} = 'ham';
+	    ## 		}
+	    ##    }else{
+	    ## 	$message->{'spam_status'} = 'not configured';
+	    ##     }
+	    
+	    my $spam_status = &Scenario::request_action('spam_status','smtp',$robot, {'message' => $message});
+	    $message->{'spam_status'} = 'unkown';
+	    if(defined $spam_status) {
+		if (ref($spam_status ) eq 'HASH') {
+		    $message->{'spam_status'} =  $spam_status ->{'action'};
+		}else{
+		    $message->{'spam_status'} = $spam_status ;
+		}
+	    }
+
 	    my $conf_email = &Conf::get_robot_conf($robot, 'email');
 	    my $conf_host = &Conf::get_robot_conf($robot, 'host');
 	    unless ($listname =~ /^(sympa|$Conf::Conf{'listmaster_email'}|$conf_email)(\@$conf_host)?$/i) {
@@ -224,23 +250,13 @@ sub new {
 		}
 		
 	    }
-	    ## Antispam feature.
-	    my $spam_header_name = &Conf::get_robot_conf($robot,'antispam_tag_header_name');
-	    my $spam_regexp = &Conf::get_robot_conf($robot,'antispam_tag_header_spam_regexp');
-	    my $ham_regexp = &Conf::get_robot_conf($robot,'antispam_tag_header_ham_regexp');
-	    
-	    if (&Conf::get_robot_conf($robot,'antispam_feature') =~ /on/i){
-		if ($hdr->get($spam_header_name) =~ /$spam_regexp/i) {
-		    $message->{'spam_status'} = 'spam';
-		}elsif($hdr->get($spam_header_name) =~ /$ham_regexp/i) {
-		    $message->{'spam_status'} = 'ham';
-		}
-	    }else{
-		$message->{'spam_status'} = 'not configured';
+	    # verify DKIM signature
+	    if (&Conf::get_robot_conf($robot, 'dkim_feature') eq 'on'){
+		$message->{'dkim_pass'} = &tools::dkim_verifier($message->{'msg_as_string'});
 	    }
 	}
     }
-
+    
     ## S/MIME
     if ($Conf::Conf{'openssl'}) {
 
@@ -277,7 +293,7 @@ sub new {
 	}
 	
     }
-
+    
     ## TOPICS
     my $topics;
     if ($topics = $hdr->get('X-Sympa-Topic')){

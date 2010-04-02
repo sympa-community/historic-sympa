@@ -20,8 +20,9 @@
 # Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
 
 AC_PREREQ(2.59)
-AC_INIT(sympa, 6.0.1, sympa-authors@cru.fr)
+AC_INIT(sympa, 6.1a.2, sympa-authors@cru.fr)
 AM_INIT_AUTOMAKE([foreign -Wall -Werror])
+m4_ifdef([AM_SILENT_RULES], [AM_SILENT_RULES([yes])])
 AM_PO_SUBDIRS
 
 AC_PREFIX_DEFAULT(/home/sympa)
@@ -319,6 +320,9 @@ AC_SUBST(WWSCONFIG)
 AC_PROG_CC
 # needed for using per-target flags
 AM_PROG_CC_C_O
+AC_PATH_PROGS([SED], [sed gsed])
+#AC_PROG_SED
+AC_PROG_LN_S
 
 AC_ARG_WITH(
     [perl],
@@ -350,6 +354,11 @@ else
     if test -z "$PERL"; then
 	AC_MSG_ERROR([perl required])
     fi
+fi
+
+AC_PATH_PROG(POD2MAN, pod2man)
+if test -z "$POD2MAN"; then
+    AC_MSG_ERROR([pod2man required])
 fi
 
 USER=sympa

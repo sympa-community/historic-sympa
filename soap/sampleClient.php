@@ -24,15 +24,13 @@ if ($_GET['viewSource']) {
 }else {
 
   echo "<html> <body BGCOLOR=\"#000099\" TEXT=\"#cccccc\" LINK=\"#ff9933\" ALINK=\"#ff9933\" VLINK=\"#ff9933\"> \n";
-  if ($_COOKIE['sympaEmail'] && $_COOKIE['sympaMd5']) {
+  if ( $_COOKIE['sympaMd5']) {
     
     // LOGOUT
     if ($_GET['logout'] == 1) {
-      setcookie ("sympaEmail", "", time() - 3600);
       setcookie ("sympaMd5", "", time() - 3600);
       echo "<P ALIGN=\"center\"><FONT COLOR=\"#ff0000\">Logged out</FONT></P>\n";
     }else {  
-      $userEmail = $_COOKIE['sympaEmail'];
       $md5 = $_COOKIE['sympaMd5'];
     }
     
@@ -43,7 +41,6 @@ if ($_GET['viewSource']) {
     if (gettype($md5) == "string") {
       $userEmail = $_POST['email'];
       
-      setcookie("sympaEmail",$userEmail);
       setcookie("sympaMd5",$md5);
       
     }else {
@@ -92,15 +89,27 @@ if ($_GET['viewSource']) {
     $res = $soapclient->authenticateAndRun($userEmail,$md5,'complexWhich');
     
     if (isset($res) && gettype($res) == 'array') {
-      
+
+      echo "<table><tr><th>listAdress</th><th>list home page</th><th>Subject</th><th>Bounce count</th><th>first bounce date</th><th>last bounce date</th><th>bounce type</th></tr>";
       foreach ($res as $list) {
-	echo "<DD>";
+	echo "<tr>";
 	list ($list->listName,$list->listDomain) = explode("@",$list->listAddress);
 	$subscribed[$list->listAddress] = True;
 	
-      echo "<P>".$list->listAddress." [<A HREF=\"".$_SERVER['PHP_SELF']."?signoff=1&list=".$list->listName."\">signoff</A>] [<A HREF=\"".$list->homepage."\">info</A>]<BR>".$list->subject."</P>\n";
+	echo "<td>".$list->listAddress." [<A HREF=\"".$_SERVER['PHP_SELF']."?signoff=1&list=".$list->listName."\">signoff</A>]</td><td>[<A HREF=\"".$list->homepage."\">info</A>]</td><td>".$list->subject."</td>";
+	echo "<td>".$list->bounceCount."</td><td>".$list->firstBounceDate."</td><td>".$list->lastBounceDate."</td><td>".$list->bounceCode."</td></tr>";
       }
-      echo "</DL>\n";
+      echo "</table>";
+
+      #foreach ($res as $list) {
+#	echo "<DD>";
+#	list ($list->listName,$list->listDomain) = explode("@",$list->listAddress);
+	$subscribed[$list->listAddress] = True;
+#	
+#	echo "<P>".$list->listAddress." [<A HREF=\"".$_SERVER['PHP_SELF']."?signoff=1&list=".$list->listName."\">signoff</A>] [<A HREF=\"".$list->homepage."\">info</A>]<BR>".$list->subject."<br>";
+#	echo "$list->   </P>\n";
+#      }
+#      echo "</DL>\n";
     }else {
       echo "<DL><DD>No subscription</DL><BR>\n";
     }

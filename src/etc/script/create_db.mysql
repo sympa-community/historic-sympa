@@ -11,6 +11,7 @@ CREATE TABLE user_table (
   	password_user		varchar (40),
 	last_login_date_user	int(11),
 	last_login_host_user	varchar(60),
+	wrong_login_count_user  int(11),
 	cookie_delay_user	int,
 	lang_user		varchar (10),
 	attributes_user		text,
@@ -35,6 +36,9 @@ CREATE TABLE subscriber_table (
 	subscribed_subscriber 	int(1),
 	included_subscriber 	int(1),
 	include_sources_subscriber varchar(50),
+	suspend_subscriber	int(1),
+	suspend_start_date_subscriber	int(11),
+	suspend_end_date_subscriber	int(11),
 	PRIMARY KEY (robot_subscriber, list_subscriber, user_subscriber),
 	INDEX user_index (user_subscriber)
 );
@@ -58,9 +62,17 @@ CREATE TABLE admin_table (
 	INDEX user_index (user_admin)
 );
  
+CREATE TABLE exclusion_table (
+	list_exclusion 		varchar(50) NOT NULL,
+ 	user_exclusion 		varchar(100) NOT NULL,
+	date_exclusion 		int(11),
+	PRIMARY KEY (list_exclusion, user_exclusion),
+	INDEX user_index (user_exclusion)
+);
+
 CREATE TABLE netidmap_table (
         netid_netidmap              varchar (100) NOT NULL,
-	serviceid_netidmap		    varchar (100) NOT NULL,
+	serviceid_netidmap	    varchar (100) NOT NULL,
 	robot_netidmap	            varchar (80) NOT NULL,
         email_netidmap              varchar (100),
         PRIMARY KEY (netid_netidmap, serviceid_netidmap, robot_netidmap)
@@ -110,25 +122,35 @@ CREATE TABLE one_time_ticket_table (
 CREATE TABLE bulkmailer_table (
 	messagekey_bulkmailer varchar(80) NOT NULL,
 	packetid_bulkmailer varchar(33) NOT NULL,
-	receipients_bulkmailer text NOT NULL,
-	returnpath_bulkmailer varchar(100) NOT NULL,
-	robot_bulkmailer varchar(80) NOT NULL,
+	messageid_bulkmailer varchar(100),
+	receipients_bulkmailer text,
+	returnpath_bulkmailer varchar(100),
+	robot_bulkmailer varchar(80),
 	listname_bulkmailer varchar(50) default NULL,
-	verp_bulkmailer int(1) NOT NULL,
-	priority_message_bulkmailer smallint(10) NOT NULL,
-	priority_packet_bulkmailer smallint(10) NOT NULL,
-	reception_date_bulkmailer int(11) NOT NULL,
-	delivery_date_bulkmailer int(11) NOT NULL,
+	verp_bulkmailer int(1),
+	merge_bulkmailer int(1),
+	priority_message_bulkmailer smallint(10),
+	priority_packet_bulkmailer smallint(10),
+	reception_date_bulkmailer int(11),
+	delivery_date_bulkmailer int(11),
 	lock_bulkmailer varchar(30) default NULL,
 	PRIMARY KEY (messagekey_bulkmailer,packetid_bulkmailer)
 );
 
-CREATE TABLE bulkspool_table (
-	messagekey_bulkspool varchar(33) NOT NULL,
-	message_bulkspool longtext NOT NULL,
-	lock_bulkspool int(1) NOT NULL,
-	PRIMARY KEY (messagekey_bulkspool)
-);
+
+CREATE TABLE `bulkspool_table` (
+  `messagekey_bulkspool` varchar(33) NOT NULL COMMENT 'An internal id of the message in order to join this table with bulkmailer_table'
+  `messageid_bulkspool` varchar(100) NOT NULL COMMENT 'The value of the `Message-ID` SMTP field for this message'
+  `message_bulkspool` longtext COMMENT 'The message itself as a string. The database MUST be tuned in order to accept big data blog for storing messages with attachments',
+  `lock_bulkspool` int(1) default NULL COMMENT 'lock used by parallele bulk demon ni order to prevent a message to be distribited twice',
+  `dkim_header_list_bulkspool` varchar(500) default NULL COMMENT 'The list of header part of the signed datas',
+  `dkim_privatekey_bulkspool` varchar(100) default NULL COMMENT 'The DKIM private key value.',
+  `dkim_sender_identity_bulkspool` varchar(100) default NULL COMMENT 'The dkim signature "i=" tag ',
+  `dkim_signer_domain_bulkspool` varchar(50) default NULL COMMENT 'The DKIM signature "d=" tag',
+  `dkim_signer_selector_bulkspool` varchar(50) default NULL COMMENT 'The DKIM DNS selector',
+  PRIMARY KEY  (`messagekey_bulkspool`)
+)
+
 
 CREATE TABLE conf_table (
   robot_conf varchar(80) default NULL,

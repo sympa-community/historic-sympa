@@ -38,6 +38,7 @@ use Conf;
 use Language;
 use Log;
 use Sympa::Constants;
+use Message;
 
 ## RCS identification.
 #my $id = '@(#)$Id$';
@@ -68,6 +69,22 @@ my %openssl_errors = (1 => 'an error occurred parsing the command options',
 		      3 => 'an error occurred creating the PKCS#7 file or when reading the MIME message',
 		      4 => 'an error occurred decrypting or verifying the message',
 		      5 => 'the message was verified correctly but an error occurred writing out the signers certificates');
+
+## Local variables to determine whether to use Text::LineFold or Text::Wrap.
+my $use_text_linefold;
+my $use_text_wrap;
+eval { require Text::LineFold; Text::LineFold->import(0.008); };
+if ($@) {
+    $use_text_linefold = 0;
+    eval { require Text::Wrap; };
+    if ($@) {
+	$use_text_wrap = 0;
+    } else {
+	$use_text_wrap = 1;
+    }
+} else {
+    $use_text_linefold = 1;
+}
 
 ## Sets owner and/or access rights on a file.
 sub set_file_rights {
@@ -700,6 +717,229 @@ sub get_template_path {
     }
 
     return undef;
+}
+
+sub get_dkim_parameters {
+
+    my $params = shift;
+
+    my $robot = $params->{'robot'};
+    my $listname = $params->{'listname'};
+    do_log('debug2',"get_dkim_parameters (%s,%s)",$robot, $listname);
+
+    my $data ; my $keyfile ;
+    if ($listname) {
+	# fetch dkim parameter in list context
+	my $list = new List ($listname,$robot);
+	unless ($list){
+	    do_log('err',"Could not load list %s@%s",$listname, $robot);
+	    return undef;
+	}
+
+	$data->{'d'} = $list->{'admin'}{'dkim_parameters'}{'signer_domain'};
+	if ($list->{'admin'}{'dkim_parameters'}{'signer_identity'}) {
+	    $data->{'i'} = $list->{'admin'}{'dkim_parameters'}{'signer_identity'};
+	}else{
+	    # RFC 4871 (page 21) 
+	    $data->{'i'} = $list->{'name'}.'-request@'.$robot;
+	}
+	
+	$data->{'header_list'} = $list->{'admin'}{'dkim_parameters'}{'header_list'};
+	$data->{'selector'} = $list->{'admin'}{'dkim_parameters'}{'selector'};
+	$keyfile = $list->{'admin'}{'dkim_parameters'}{'private_key_path'};
+    }else{
+	# in robot context
+	$data->{'d'} = &Conf::get_robot_conf($robot, 'dkim_signer_domain');
+	$data->{'i'} = &Conf::get_robot_conf($robot, 'dkim_signer_identity');
+	$data->{'header_list'} = &Conf::get_robot_conf($robot, 'dkim_header_list');
+	$data->{'selector'} = &Conf::get_robot_conf($robot, 'dkim_selector');
+	$keyfile = &Conf::get_robot_conf($robot, 'dkim_private_key_path');
+    }
+    unless (open (KEY, $keyfile)) {
+	do_log('err',"Could not read dkim private key %s",&Conf::get_robot_conf($robot, 'dkim_signer_selector'));
+	return undef;
+    }
+    while (<KEY>){
+	$data->{'private_key'} .= $_;
+    }
+    close (KEY);
+
+    return $data;
+}
+
+# input a msg as string, output the dkim status
+sub dkim_verifier {
+    my $msg_as_string = shift;
+    my $dkim;
+
+    unless (eval "require Mail::DKIM::Verifier") {
+	&do_log('err', "Failed to load Mail::DKIM::verifier perl module, ignoring DKIM signature");
+	return undef;
+    }
+    
+    unless ( $dkim = Mail::DKIM::Verifier->new() ){
+	&do_log('err', 'Could not create Mail::DKIM::Verifier');
+	return undef;
+    }
+   
+    my $temporary_file = $Conf::Conf{'tmpdir'}."/dkim.".$$ ;  
+    if (!open(MSGDUMP,"> $temporary_file")) {
+	&do_log('err', 'Can\'t store message in file %s', $temporary_file);
+	return undef;
+    }
+    print MSGDUMP $msg_as_string ;
+
+    unless (close(MSGDUMP)){ 
+	do_log('err',"unable to dump message in temporary file $temporary_file"); 
+	return undef; 
+    }
+
+    unless (open (MSGDUMP, "$temporary_file")) {
+	&do_log('err', 'Can\'t read message in file %s', $temporary_file);
+	return undef;
+    }
+
+    # this documented method is pretty but dont validate signatures, why ?
+    # $dkim->load(\*MSGDUMP);
+    while (<MSGDUMP>){
+	chomp;
+	s/\015$//;
+	$dkim->PRINT("$_\015\012");
+    }
+
+    $dkim->CLOSE;
+    close(MSGDUMP);
+    unlink ($temporary_file);
+    
+    foreach my $signature ($dkim->signatures) {
+	return 1 if  ($signature->result_detail eq "pass");
+    }    
+    return undef;
+}
+
+# input a msg as string, output idem without signature if invalid
+sub remove_invalid_dkim_signature {
+
+    do_log('debug',"removing invalide dkim signature");
+
+    my $msg_as_string = shift;
+
+    unless (&tools::dkim_verifier($msg_as_string)){
+	my $parser = new MIME::Parser;
+	$parser->output_to_core(1);
+	my $entity = $parser->parse_data($msg_as_string);
+	unless($entity) {
+	    &do_log('err','could not parse message');
+	    return $msg_as_string ;
+	}
+	$entity->head->delete('DKIM-Signature');
+	return $entity->as_string;
+    }else{
+	return ($msg_as_string); # sgnature is valid.
+    }
+}
+
+# input object msg and listname, output signed message object
+sub dkim_sign {
+    # in case of any error, this proc MUST return $msg_as_string NOT undef ; this would cause Sympa to send empty mail 
+    my $msg_as_string = shift;
+    my $data = shift;
+    my $dkim_d = $data->{'dkim_d'};    
+    my $dkim_i = $data->{'dkim_i'};
+    my $dkim_selector = $data->{'dkim_selector'};
+    my $dkim_privatekey = $data->{'dkim_privatekey'};
+    my $dkim_header_list = $data->{'dkim_header_list'};
+
+    do_log('debug2', 'tools::dkim_sign (msg:%s,dkim_d:%s,dkim_i%s,dkim_selector:%s,dkim_header_list:%s,dkim_privatekey:%s)',substr($msg_as_string,0,30),$dkim_d,$data->{'dkim_i'},$data->{'dkim_selector'},$data->{'dkim_header_list'}, substr($data->{'dkim_privatekey'},0,30));
+
+    unless ($dkim_selector) {
+	do_log('err',"DKIM selector is undefined, could not sign message");
+	return $msg_as_string;
+    }
+    unless ($dkim_privatekey) {
+	do_log('err',"DKIM key file is undefined, could not sign message");
+	return $msg_as_string;
+    }
+    unless ($dkim_d) {
+	do_log('err',"DKIM d= tag is undefined, could not sign message");
+	return $msg_as_string;
+    }
+    
+    my $temporary_keyfile = $Conf::Conf{'tmpdir'}."/dkimkey.".$$ ;  
+    if (!open(MSGDUMP,"> $temporary_keyfile")) {
+	&do_log('err', 'Can\'t store key in file %s', $temporary_keyfile);
+	return $msg_as_string;
+    }
+    print MSGDUMP $dkim_privatekey ;
+    close(MSGDUMP);
+
+    unless (eval "require Mail::DKIM::Signer") {
+	&do_log('err', "Failed to load Mail::DKIM::signer perl module, ignoring DKIM signature");
+	return ($msg_as_string); 
+    }
+    my $dkim ;
+    if ($dkim_i) {
+    # create a signer object
+	$dkim = Mail::DKIM::Signer->new(
+					Algorithm => "rsa-sha1",
+					Method    => "relaxed",
+					Domain    => $dkim_d,
+					Identity  => $dkim_i,
+					Selector  => $dkim_selector,
+					KeyFile   => $temporary_keyfile,
+					);
+    }else{
+	$dkim = Mail::DKIM::Signer->new(
+					Algorithm => "rsa-sha1",
+					Method    => "relaxed",
+					Domain    => $dkim_d,
+					Selector  => $dkim_selector,
+					KeyFile   => $temporary_keyfile,
+					);
+    }
+    unless ($dkim) {
+	&do_log('err', 'Can\'t create Mail::DKIM::Signer');
+	return ($msg_as_string); 
+    }    
+    my $temporary_file = $Conf::Conf{'tmpdir'}."/dkim.".$$ ;  
+    if (!open(MSGDUMP,"> $temporary_file")) {
+	&do_log('err', 'Can\'t store message in file %s', $temporary_file);
+	return ($msg_as_string); 
+    }
+    print MSGDUMP $msg_as_string ;
+    close(MSGDUMP);
+
+    unless (open (MSGDUMP , $temporary_file)){
+	&do_log('err', 'Can\'t read temporary file %s', $temporary_file);
+	return undef;
+    }
+
+    $dkim->load(\*MSGDUMP);
+
+    close (MSGDUMP);
+    unless ($dkim->CLOSE) {
+	&do_log('err', 'Cannot sign (DKIM) message');
+	return ($msg_as_string); 
+    }
+    my $message = new Message($temporary_file,'noxsympato');
+    unless ($message){
+	do_log('err',"unable to load $temporary_file as a message objet");
+	return ($msg_as_string); 
+    }
+
+    if ($main::options{'debug'}) {
+	do_log('debug',"temporary file is $temporary_file");
+    }else{
+	unlink ($temporary_file);
+    }
+    unlink ($temporary_keyfile);
+#    $dkim->signature->headerlist("Message-ID:Date:From:To:Subject:Sender");
+    $dkim->signature->headerlist($dkim_header_list);
+    $dkim->signature->prettify;
+    
+    $message->{'msg'}->head->add('DKIM-signature',$dkim->signature->as_string);
+
+    return $message->{'msg'}->as_string ;
 }
 
 # input object msg and listname, output signed message object
@@ -2927,6 +3167,25 @@ sub diff_on_arrays {
 } 
 
 ####################################################
+# is_on_array                     
+####################################################
+# Test if a value is on an array
+# 
+# IN : -$setA : ref(ARRAY) - set
+#      -$value : a serached value
+#
+# OUT : boolean
+#######################################################    
+sub is_in_array {
+    my ($set,$value) = @_;
+    
+    foreach my $elt (@$set) {
+	return 1 if ($elt eq $value);
+    }
+    return undef;
+}
+
+####################################################
 # clean_msg_id
 ####################################################
 # clean msg_id to use it without  \n, \s or <,>
@@ -3190,8 +3449,67 @@ sub unlock {
     return 1;
 }
 
-## input a string
-## output md5 digest
+############################################################
+#  get_fingerprint                                         #
+############################################################
+#  Used in 2 cases :                                       #
+#  - check the md5 in the url                              #
+#  - create an md5 to put in a url                         #
+#                                                          #
+#  Use : get_db_random()                                   #
+#        init_db_random()                                  #
+#        md5_fingerprint()                                 #
+#                                                          #  
+# IN : $email : email of the subscriber                    #
+#      $fingerprint : the fingerprint in the url (1st case)#
+#                                                          # 
+# OUT : $fingerprint : a md5 for create an url             #
+#     | 1 : if the md5 in the url is true                  #
+#     | undef                                              #
+#                                                          #
+############################################################
+sub get_fingerprint {
+    
+    my $email = shift;
+    my $fingerprint = shift;
+    my $random;
+    my $random_email;
+     
+    unless($random = &get_db_random()){ # si un random existe : get_db_random
+	$random = &init_db_random(); # sinon init_db_random
+    }
+ 
+    $random_email = ($random.$email);
+ 
+    if( $fingerprint ) { #si on veut vérifier le fingerprint dans l'url
+
+	if($fingerprint eq &md5_fingerprint($random_email)){
+	    return 1;
+	}else{
+	    return undef;
+	}
+
+    }else{ #si on veut créer une url de type http://.../sympa/unsub/$list/$email/&get_fingerprint($email)
+
+	$fingerprint = &md5_fingerprint($random_email);
+	return $fingerprint;
+
+    }
+}
+
+############################################################
+#  md5_fingerprint                                         #
+############################################################
+#  The algorithm MD5 (Message Digest 5) is a cryptographic #
+#  hash function which permit to obtain                    #
+#  the fingerprint of a file/data                          #
+#                                                          #
+# IN : a string                                            #
+#                                                          #
+# OUT : md5 digest                                         #
+#     | undef                                              #
+#                                                          #
+############################################################
 sub md5_fingerprint {
     
     my $input_string = shift;
@@ -3202,6 +3520,88 @@ sub md5_fingerprint {
     $digestmd5->reset;
     $digestmd5->add($input_string);
     return (unpack("H*", $digestmd5->digest));
+}
+
+############################################################
+#  get_db_random                                           #
+############################################################
+#  This function returns $random                           #
+#  which is stored in the database                         #
+#                                                          #  
+# IN : -                                                   #
+#                                                          #
+# OUT : $random : the random stored in the database        #
+#     | undef                                              #
+#                                                          #
+############################################################
+sub get_db_random {
+    
+    ## Database and SQL statement handlers
+    my ($dbh, $sth, @sth_stack);
+
+    $dbh = &List::db_get_handler();
+
+    ## Check database connection
+    unless ($dbh and $dbh->ping) {
+	return undef unless &List::db_connect();
+	$dbh = &List::db_get_handler();
+    }
+    my $statement = sprintf "SELECT random FROM fingerprint_table;";
+    
+    push @sth_stack, $sth;
+    unless ($sth = $dbh->prepare($statement)) {
+	&do_log('err','Unable to prepare SQL statement : %s', $dbh->errstr);
+	return undef;
+    }
+    unless ($sth->execute) {
+	&do_log('err','Unable to execute SQL statement "%s" : %s', $statement, $dbh->errstr);
+	return undef;
+    }
+    my $random = $sth->fetchrow_hashref('NAME_lc');
+    
+    $sth->finish();
+    $sth = pop @sth_stack;
+
+    return $random;
+
+}
+
+############################################################
+#  init_db_random                                          #
+############################################################
+#  This function initializes $random used in               #
+#  get_fingerprint if there is no value in the database    #
+#                                                          #  
+# IN : -                                                   #
+#                                                          #
+# OUT : $random : the random initialized in the database   #
+#     | undef                                              #
+#                                                          #
+############################################################
+sub init_db_random {
+
+    my $range = 89999999999999999999;
+    my $minimum = 10000000000000000000;
+
+    my $random = int(rand($range)) + $minimum;
+
+    ## Database and SQL statement handlers
+    my ($dbh, $sth, @sth_stack);
+
+    ## Check database connection
+    unless ($dbh and $dbh->ping) {
+	return undef unless &List::db_connect();
+    }
+    my $statement = sprintf "INSERT INTO fingerprint_table VALUES (%d)", $random;
+    
+    push @sth_stack, $sth;
+    
+    unless ($dbh->do($statement)) {
+	&do_log('err','Unable to execute SQL statement "%s" : %s', $statement, $dbh->errstr);
+	return undef;
+    }
+       
+    return $random;
 }
 
 sub get_separator {
@@ -3450,5 +3850,38 @@ sub count_numbers_in_string {
     $count++ while $str =~ /(\d+\s+)/g;
     return $count;
 }
+
+#*******************************************
+# Function : wrap_text
+# Description : return line-wrapped text.
+## IN : text, init, subs, cols
+#*******************************************
+sub wrap_text {
+    my $text = shift;
+    my $init = shift;
+    my $subs = shift;
+    my $cols = shift;
+    $cols = 78 unless defined $cols;
+    return $text unless $cols;
+
+    if ($use_text_linefold) {
+	my $emailre = &tools::get_regexp('email');
+	$text = Text::LineFold->new(
+	    Language => &Language::GetLang(),
+	    OutputCharset => (&Encode::is_utf8($text)? '_UNICODE_': 'utf8'),
+	    UserBreaking => ['NONBREAKURI',
+			     [qr/\b$emailre\b/ => sub { ($_[1]) }],
+			     ],
+	    ColumnsMax => $cols
+	)->fold($init, $subs, $text);
+    } elsif ($use_text_wrap) {
+	local ($Text::Wrap::unexpand) = 0;
+	local ($Text::Wrap::columns) = $cols + 1;
+	$text = Text::Wrap::wrap($init, $subs, $text);
+    }
+
+    return $text;
+}
+
 
 1;

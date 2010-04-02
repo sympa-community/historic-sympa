@@ -102,6 +102,7 @@ Options:
                                          : close lists of family_name family under robot_name.      
 
    --close_list=listname\@robot          : close a list
+   --rename_list=listname\@robot --new_listname=newlistname --new_listrobot=newrobot : renames a list or move it to another virtual robot
    --purge_list=listname\@robot          : remove a list no backup is possible
    --sync_include=listname\@robot        : trigger the list members update
    --reload_list_config --list=mylist\@mydom  : recreates all config.bin files. You should run this command if you edit 
@@ -111,6 +112,7 @@ Options:
    --log_level=LEVEL                     : sets Sympa log level
    --md5_digest=password                 : output a MD5 digest of a password (usefull for SOAP client trusted application)
    --test_database_message_buffer        : test the database message buffer size
+   --conf_2_db			         : load in database, sympa;conf, wwsympa.conf and each robot.conf
    -h, --help                            : print this help
    -v, --version                         : print version number
 
@@ -124,8 +126,8 @@ encryption.
 my %options;
 unless (&GetOptions(\%main::options, 'dump=s', 'debug|d', ,'log_level=s','foreground', 'service=s','config|f=s', 
 		    'lang|l=s', 'mail|m', 'keepcopy|k=s', 'help', 'version', 'import=s','make_alias_file','lowercase','md5_encode_password',
-		    'close_list=s','purge_list=s','create_list','instantiate_family=s','robot=s','add_list=s','modify_list=s','close_family=s','md5_digest=s',
-		    'input_file=s','sync_include=s','upgrade','upgrade_shared','from=s','to=s','reload_list_config','list=s','quiet','close_unknown','test_database_message_buffer')) {
+		    'close_list=s','rename_list=s','new_listname=s','new_listrobot=s','purge_list=s','create_list','instantiate_family=s','robot=s','add_list=s','modify_list=s','close_family=s','md5_digest=s',
+		    'input_file=s','sync_include=s','upgrade','upgrade_shared','from=s','to=s','reload_list_config','list=s','quiet','close_unknown','test_database_message_buffer','conf_2_db')) {
     &fatal_err("Unknown options.");
 }
 
@@ -143,6 +145,7 @@ $main::options{'batch'} = 1 if ($main::options{'dump'} ||
 				$main::options{'close_list'} ||
 				$main::options{'purge_list'} ||
 				$main::options{'create_list'} ||
+				$main::options{'rename_list'} ||
 				$main::options{'instantiate_family'} ||
 				$main::options{'add_list'} ||
 				$main::options{'modify_list'} ||
@@ -152,6 +155,7 @@ $main::options{'batch'} = 1 if ($main::options{'dump'} ||
 				$main::options{'upgrade'} ||
 				$main::options{'upgrade_shared'} ||
 				$main::options{'test_database_message_buffer'} || 
+				$main::options{'conf_2_db'} || 
 				$main::options{'reload_list_config'}
 				 );
 
@@ -159,7 +163,7 @@ $main::options{'batch'} = 1 if ($main::options{'dump'} ||
 $main::options{'foreground'} = 1 if ($main::options{'debug'} || $main::options{'batch'});
 
 $main::options{'log_to_stderr'} = 1 unless ($main::options{'batch'});
-$main::options{'log_to_stderr'} = 1 if ($main::options{'upgrade'} || $main::options{'reload_list_config'} || $main::options{'test_database_message_buffer'});
+$main::options{'log_to_stderr'} = 1 if ($main::options{'upgrade'} || $main::options{'reload_list_config'} || $main::options{'test_database_message_buffer'} || $main::options{'conf_2_db'});
 
 my %loop_info;
 my %msgid_table;
@@ -175,8 +179,7 @@ my $config_file = $main::options{'config'} || Sympa::Constants::CONFIG;
 
 ## Load configuration file. Ignoring database config for now: it avoids trying to load a database that could not exist yet.
 unless (Conf::load($config_file,1)) {
-   &fatal_err("Configuration file $config_file has errors.");
-   
+   &fatal_err("Configuration file $config_file has errors.");  
 }
 
 ## Open the syslog and say we're read out stuff.
@@ -559,6 +562,46 @@ if ($main::options{'dump'}) {
     printf STDOUT "List %s has been closed, aliases have been removed\n", $list->{'name'};
     
     exit 0;
+}elsif ($main::options{'rename_list'}) {
+
+  ## TODO A completer
+  
+    my ($listname, $robotname) = split /\@/, $main::options{'rename_list'};
+    my $list = new List ($listname, $robotname);
+
+    unless (defined $list) {
+	print STDERR "Incorrect list name $main::options{'rename_list'}\n";
+	exit 1;
+    }
+
+    unless ($main::options{'new_listname'}) {
+      print STDERR "Missing parameter new_listname\n";
+      exit 1;
+    }
+    
+    unless ($main::options{'new_listrobot'}) {
+      print STDERR "Missing parameter new_listrobot\n";
+      exit 1;
+    }
+    
+    my ($new_listname, $new_robotname) = ($main::options{'new_listname'}, $main::options{'new_listrobot'});
+    
+    my $result = &admin::rename_list(list => $list,
+				     new_listname => $new_listname,
+				     new_robot => $new_robotname,
+				     options => {'skip_authz' => 1},
+				     user_email => 'listmaster@'.$robotname,
+				    );
+
+    unless($result == 1) {
+      printf STDERR "Could not rename list %s to %s: %s\@%s\n", $main::options{'rename_list'}, $main::options{'new_listname'}, $main::options{'new_listrobot'}, $result;
+      exit 1;	
+    }
+
+    printf STDOUT "List %s has been renamed to %s\@%s\n", $main::options{'rename_list'}, $main::options{'new_listname'}, $main::options{'new_listrobot'};
+    
+    exit 0;
+
 }elsif ($main::options{'test_database_message_buffer'}) {
     my $size = 0;   
     printf "Sympa is going to store messages bigger and bigger to test the limit with its database. This may be very long \n";
@@ -567,6 +610,16 @@ if ($main::options{'dump'}) {
 	printf "The maximum message size ($size Ko) testing was successful \n";
     }else{
 	printf "maximun message size that can be stored in database : $size Ko\n";
+    }
+    exit 1;
+    
+}elsif ($main::options{'conf_2_db'}) {
+   
+    printf "Sympa is going to store $config_file in database conf_table. This operation do NOT remove original files\n";
+    if ( Conf::conf_2_db($config_file) ) {
+	printf "Done";
+    }else{
+	printf "an error occur";
     }
     exit 1;
     
@@ -1144,11 +1197,11 @@ sub DoFile {
     my ($file) = @_;
     &do_log('debug', 'DoFile(%s)', $file);
 
-    
     my ($listname, $robot);
     my $status;
     
     my $message = new Message($file);
+
     unless (defined $message) {
 	&do_log('err', 'Unable to create Message object %s', $file);
 	&Log::db_log({'robot' => $robot,'list' => $listname,'action' => 'DoFile','parameters' => "$file",'target_email' => "",'msg_id' => '','status' => 'error','error_type' => 'unable_create_message','user_email' => '','client' => $ip,'daemon' => $daemon_name});
@@ -1252,9 +1305,14 @@ sub DoFile {
             }
             
 	    # check authorization
-	    my $result = &Scenario::request_action('automatic_list_creation',
-	        ($message->{'smime_signed'} ? 'smime' : 'smtp'),$robot,
-		{'sender' => $sender, 'message' => $message, 'family'=>$dyn_list_family, 'automatic_listname'=>$listname });
+	    my $auth_level =  'smtp';
+	    $auth_level = 'dkim' if $message->{'dkim_pass'};
+	    $auth_level = 'smime' if $message->{'smime_signed'};
+	    my $result = &Scenario::request_action('automatic_list_creation',$auth_level,$robot,
+						   {'sender' => $sender, 
+						    'message' => $message, 
+						    'family'=>$dyn_list_family, 
+						    'automatic_listname'=>$listname });
 	    my $r_action;
 	    unless (defined $result) {
 		&do_log('err', 'sympa::DoFile(): message (%s) ignored because unable to evaluate scenario "automatic_list_creation" for list %s',  $hdr->get('Message-Id'),$listname);
@@ -1345,11 +1403,11 @@ sub DoFile {
 	$is_crypted = 'not_crypted';
     }
 
-    ## S/MIME signed messages
+    ## S/MIME or DKIM signed messages
     if ($message->{'smime_signed'}) {
-	$is_signed = {'subject' => $message->{'smime_subject'},
+	$is_signed = {'subject' => $message->{'smime_subject'},# subject semantic is relater to X509 (subject is the private key owner, not the message Subject header !)
 		      'body' => 'smime'};
-    }else {
+    }else{
 	undef $is_signed;
     }
 	
@@ -1419,7 +1477,8 @@ sub DoFile {
             }
             &do_log('info', 'Successfully create list %s with %s subscribers', $listname, $list->get_total());
         }
-    }
+    } 
+
     if ($main::daemon_usage == DAEMON_CREATION) {
         #do not process messages in list creation only mode, move them to main spool
         unless ($list->move_message($message->{'filename'}, $Conf{'queue'})) {
@@ -1432,7 +1491,7 @@ sub DoFile {
         $status = 1;
 
     }elsif ($rcpt =~ /^listmaster(\@(\S+))?$/) {
-	$status = &DoForward('sympa', 'listmaster', $robot, $msg);
+	$status = &DoForward('sympa', 'listmaster', $robot, $message);
 
 	## Mail adressed to the robot and mail 
 	## to <list>-subscribe or <list>-unsubscribe are commands
@@ -1448,12 +1507,11 @@ sub DoFile {
 	    
 	    $status = &DoCommand("$listname-$command", $robot, $message);
 	}else {
-	    $status = &DoForward($listname, $type, $robot, $msg);
+	    $status = &DoForward($listname, $type, $robot, $message);
 	}         
     }else {	
 	$status =  &DoMessage($rcpt, $message, $robot);
     }
-    
 
     ## Mail back the result.
     if (&report::is_there_any_report_cmd()) {
@@ -1477,7 +1535,7 @@ sub DoFile {
 	    
 	    ## Too many reports sent => message skipped !!
 	    if ($loop_info{$sender}{'count'} >=  &Conf::get_robot_conf($robot, 'loop_command_max')) {
-		&do_log('notice', 'Ignoring message which would cause a loop, %d messages sent to %s', $loop_info{$sender}{'count'}, $sender);
+		&do_log('notice', 'Ignoring message which would cause a loop, %d messages received from %s', $loop_info{$sender}{'count'}, $sender);
 		
 		return undef;
 	    }
@@ -1567,21 +1625,23 @@ sub DoSendMessage {
 # IN : -$name : list name (+) if ($function <> 'listmaster')
 #      -$function (+): 'listmaster'|'request'|'editor'
 #      -$robot (+): robot
-#      -$msg (+): ref(MIME::Entity)
+#      -$msg (+): ref(message object).
 #
 # OUT : 1 
 #     | undef
 #
 ############################################################
 sub DoForward {
-    my($name, $function, $robot, $msg) = @_;
+    my($name, $function, $robot, $message) = @_;
     &do_log('debug', 'DoForward(%s, %s)', $name, $function);
 
+    my $msg = $message->{'msg'};
     my $hdr = $msg->head;
     my $messageid = $hdr->get('Message-Id');
     my $msg_string = $msg->as_string;
 
-    if ($msg->{'spam_status'} eq 'spam'){
+
+    if ($message->{'spam_status'} eq 'spam'){
 	&do_log('notice', "Message for %s-%s ignored, because tagued as spam (Message-id: %s)",$name, $function,$messageid);
 	return undef;
     }
@@ -1847,16 +1907,17 @@ sub DoMessage{
 	
     ## Call scenarii : auth_method MD5 do not have any sense in send
     ## scenarii because auth is perfom by distribute or reject command.
-    
+	
     my $action;
     my $result;	
-    if ($is_signed->{'body'}) {
-	$result = $list->check_list_authz('send', 'smime',$context);
-	$action = $result->{'action'} if (ref($result) eq 'HASH');
-    }else{
-	$result = $list->check_list_authz('send', 'smtp',$context);
-	$action = $result->{'action'} if (ref($result) eq 'HASH');
-    } 
+
+    # the order of the following 3 lines is important ! SMIME > DKIM > SMTP
+    my $auth_method = 'smtp';   
+    $auth_method = 'dkim' if ($message->{'dkim_pass'});
+    $auth_method = 'smime' if ($is_signed->{'body'}) ;
+    
+    $result = $list->check_list_authz('send',$auth_method,$context);
+    $action = $result->{'action'} if (ref($result) eq 'HASH');
 
     unless (defined $action) {
 	&do_log('err', 'sympa::DoMessage(): message (%s) ignored because unable to evaluate scenario "send" for list %s',$messageid,$listname);
@@ -1867,7 +1928,6 @@ sub DoMessage{
 	return undef ;
     }
 	
-
     ## message topic context	
     if (($action =~ /^do_it/) && ($context->{'topic_needed'})) {
         $action = 'editorkey' if ($list->{'admin'}{'msg_topic_tagging'} eq 'required_moderator');
@@ -1876,11 +1936,16 @@ sub DoMessage{
 
     if (($action =~ /^do_it/) || ($main::daemon_usage == DAEMON_MESSAGE)) {
 
-
 	if (($main::daemon_usage == DAEMON_MESSAGE) || ($main::daemon_usage == DAEMON_ALL)) {
+
+	    my $apply_dkim_signature = 'off';
+	    $apply_dkim_signature = 'on' if &tools::is_in_array($list->{'admin'}{'dkim_signature_apply_on'},'any');
+	    $apply_dkim_signature = 'on' if (&tools::is_in_array($list->{'admin'}{'dkim_signature_apply_on'},'smime_authenticated_messages') && ($is_signed->{'body'}));
+	    $apply_dkim_signature = 'on' if &tools::is_in_array($list->{'admin'}{'dkim_signature_apply_on'},'dkim_authenticated_messages');
+
 	    my $numsmtp;
-	    eval { $numsmtp = $list->distribute_msg($message)};
-	    
+	    eval { $numsmtp =$list->distribute_msg('message'=> $message,
+						   'apply_dkim_signature'=>$apply_dkim_signature)};
 	    ## Keep track of known message IDs...if any
 	    $msgid_table{$list->get_list_id()}{$messageid}++ if ($messageid);
 	    
@@ -2039,7 +2104,9 @@ sub DoCommand {
     ## If X-Sympa-To = <listname>-<subscribe|unsubscribe> parse as a unique command
     if ($rcpt =~ /^(\S+)-(subscribe|unsubscribe)(\@(\S+))?$/o) {
 	&do_log('debug',"processing message for $1-$2");
-	&Commands::parse($sender,$robot,"$2 $1",,$message);
+	my $auth_level ;
+	$auth_level = 'dkim' if $message->{'dkim_pass'}; # at this point $message->{'dkim_pass'} does not verify that Subject: is part of the signature. It SHOULD !
+	&Commands::parse($sender,$robot,"$2 $1",$auth_level ,$message);
 	&Log::db_log({'robot' => $robot,'list' => $rcpt,'action' => 'DoCommand','parameters' => "$rcpt,$robot,$message",'target_email' => '','msg_id' => $messageid,'status' => 'success','error_type' => '','user_email' => $sender,'client' => $ip,'daemon' => $daemon_name});
 	return 1; 
     }
@@ -2050,7 +2117,10 @@ sub DoCommand {
     $subject_field =~ s/\n//mg; ## multiline subjects
     $subject_field =~ s/^\s*(Re:)?\s*(.*)\s*$/$2/i;
 
-    $success ||= &Commands::parse($sender, $robot, $subject_field, $is_signed->{'subject'},$message) ;
+    my $auth_level = 'dkim' if ($message->{'dkim_pass'});
+    $auth_level = $is_signed->{'subject'} if ($is_signed->{'subject'}) ;
+
+    $success ||= &Commands::parse($sender, $robot, $subject_field, $auth_level, $message) ;
 
     unless ($success eq 'unknown_cmd') {
 	$cmd_found = 1;
@@ -2104,15 +2174,17 @@ sub DoCommand {
 	    
 	    &do_log('debug2',"is_signed->body $is_signed->{'body'}");
 	    
-	    $status = &Commands::parse($sender, $robot, $i, $is_signed->{'body'},$message);
+	    $auth_level = 'dkim' if ($message->{'dkim_pass'});
+	    $auth_level = $is_signed->{'body'} if ($is_signed->{'body'}) ;
+	    $status = &Commands::parse($sender, $robot, $i, $auth_level, $message);
+
 	    $cmd_found = 1; # if problem no_cmd_understood is sent here
 	    if ($status eq 'unknown_cmd') {
 		&do_log('notice', "Unknown command found :%s", $i);
 		&report::reject_report_cmd('user','not_understood',{},$i);
 		&Log::db_log({'robot' => $robot,'list' => $rcpt,'action' => 'DoCommand','parameters' => "$rcpt,$robot,$message",'target_email' => '','msg_id' => $messageid,'status' => 'error','error_type' => 'not_understood','user_email' => $sender,'client' => $ip,'daemon' => $daemon_name});
 		last;
-	    }
-	    
+	    }	    
 	    if ($i =~ /^(quit|end|stop|-)\s*$/io) {
 		last;
 	    }
@@ -2161,7 +2233,7 @@ sub SendDigest{
  	my ($listname, $listrobot) = split /\@/, $listaddress;
  	my $list = new List ($listname, $listrobot);
 	unless ($list) {
-	    &do_log('info', 'Unknown list, deleting digest file %s', $filename);
+	    &do_log('info', 'Unknown list %s, (robot %s), deleting digest file %s', $filename,$listname, $listrobot )
 	    &Log::db_log({'robot' => $listrobot,'list' => $list->{'name'},'action' => 'SendDigest','parameters' => "$filename",'target_email' => '','msg_id' => '','status' => 'error','error_type' => 'unknown_list','user_email' => '','client' => $ip,'daemon' => $daemon_name});
 	    unlink $filename;
 	    return undef;

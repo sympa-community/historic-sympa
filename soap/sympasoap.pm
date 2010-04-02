@@ -857,7 +857,7 @@ sub del {
     }
 
     my $user_entry = $list->get_subscriber($email);
-    unless ((defined $user_entry) && ($user_entry->{'subscribed'} == 1)) {
+    unless ((defined $user_entry)) {
 	    &do_log('info', 'DEL %s %s from %s refused, not on list', $listname, $email, $sender);
 	    die SOAP::Fault->faultcode('Client')
 		->faultstring('Not subscribed')
@@ -866,24 +866,17 @@ sub del {
     
     my $gecos = $user_entry->{'gecos'};
     
-    if ($user_entry->{'included'} == 1) {
-	unless ($list->update_user($email, {'subscribed' => 0, 'update_date' => time})) {
-	    &do_log('info', 'DEL %s %s from %s failed, database update failed', $email, $listname, $sender);
-	    die SOAP::Fault->faultcode('Server')
-		->faultstring('Unable to update subscriber informations')
-		->faultdetail('Database update failed');	    
-	}
-    } else {
-	## Really delete and rewrite to disk.
-	my $u;
-	unless ($u = $list->delete_user($email)){
-	    my $error = "Unable to delete user $email from list $listname for command 'del'";
-	    &do_log('info', 'DEL %s %s from %s failed, '.$error);
-	    die SOAP::Fault->faultcode('Server')
-		->faultstring('Unable to remove subscriber informations')
-		->faultdetail('Database access failed');	  
-	}
+    
+    ## Really delete and rewrite to disk.
+    my $u;
+    unless ($u = $list->delete_user('users' => [$email], 'exclude' =>' 1')){
+	my $error = "Unable to delete user $email from list $listname for command 'del'";
+	&do_log('info', 'DEL %s %s from %s failed, '.$error);
+	die SOAP::Fault->faultcode('Server')
+	    ->faultstring('Unable to remove subscriber informations')
+	    ->faultdetail('Database access failed');	  
     }
+    
     
     ## Send a notice to the removed user, unless the owner indicated
     ## quiet del.
@@ -1084,7 +1077,7 @@ sub signoff {
 	}
 	
 	## Really delete and rewrite to disk.
-	$list->delete_user($sender);
+	$list->delete_user('users' => [$sender], 'exclude' =>' 1');
 
 	## Notify the owner
 	if ($action =~ /notify/i) {
@@ -1346,6 +1339,20 @@ sub which {
 	$result_item->{'isSubscriber'} = 0;
 	if ($list->is_user($sender)) {
 	    $result_item->{'isSubscriber'} = 1;
+	}
+	## determine bounce informations of this user for this list
+ 
+	my $subscriber ;
+	if($subscriber = $list->get_subscriber($sender)) { 
+	    $result_item->{'bounceCount'} = 0;
+	    if ($subscriber->{'bounce'} =~ /^(\d+)\s+(\d+)\s+(\d+)(\s+(.*))?$/) {
+		$result_item->{'firstBounceDate'} =  $1;
+		$result_item->{'lastBounceDate'} = $2;
+		$result_item->{'bounceCount'} = $3;
+		if ($4 =~ /^(\d+\.(\d+\.\d+))$/) {
+		    $result_item->{'bounceCode'} = $1;
+		}	
+	    }
 	}
 	
 	my $listInfo;
