@@ -1010,12 +1010,54 @@ msgid "Please select one or more topic(s) that corresponds to your message:"
 msgstr ""
 
 #: ../web_tt2/compose_mail.tt2:64
-msgid ""
-">Messages personalization: use the TT2 <a href=\"http://www.tt2.org"
-"\">template syntax TT2 </a>:"
+msgid "Messages customization: use the template syntax:"
 msgstr ""
 
-#: ../web_tt2/compose_mail.tt2:79
+#: ../web_tt2/compose_mail.tt2:65
+msgid "Below are some examples of TT2 parameters usable in messages."
+msgstr ""
+
+#: ../web_tt2/compose_mail.tt2:67
+#, fuzzy
+msgid ": the listname; always available."
+msgstr "Μη διαθέσιμη λίστα"
+
+#: ../web_tt2/compose_mail.tt2:68
+msgid ": the name of the host the list is intalled on; always available."
+msgstr ""
+
+#: ../web_tt2/compose_mail.tt2:69
+#, fuzzy
+msgid ": the user email; always available."
+msgstr "Μη διαθέσιμη λίστα"
+
+#: ../web_tt2/compose_mail.tt2:70
+msgid ": the user name associated to her email; always available."
+msgstr ""
+
+#: ../web_tt2/compose_mail.tt2:71
+msgid ": the - human readable - user's subscription date; always available."
+msgstr ""
+
+#: ../web_tt2/compose_mail.tt2:72
+msgid ""
+": can be anything you like; available if you defined a user custom attribute "
+"named \"title\" (see the list configuration, section \"Miscellaneous\")."
+msgstr ""
+
+#: ../web_tt2/compose_mail.tt2:73
+msgid ""
+": can be anything you like; available if you defined a user custom attribute "
+"named \"name\"."
+msgstr ""
+
+#: ../web_tt2/compose_mail.tt2:74
+msgid ""
+": can be anything you like; available if you defined a user custom attribute "
+"named \"organization\"."
+msgstr ""
+
+#: ../web_tt2/compose_mail.tt2:78
 msgid "URL:"
 msgstr ""
 
@@ -3387,8 +3429,8 @@ msgstr ""
 #: ../web_tt2/renewpasswd.tt2:9
 msgid ""
 "Too many wrong password were sumitted for this account. Your account as been "
-"blocked in order to protect you agains attacks. You must renew renew your "
-"password in order to login."
+"blocked in order to protect you agains attacks. You must renew your password "
+"in order to login."
 msgstr ""
 
 #: ../web_tt2/renewpasswd.tt2:11
@@ -4149,7 +4191,7 @@ msgstr ""
 
 #: ../web_tt2/show_exclude.tt2:28
 #, fuzzy
-msgid "No exclude."
+msgid "No user excluded."
 msgstr "Κατάλογος του φακέλου"
 
 #: ../web_tt2/show_sessions.tt2:2
@@ -4694,11 +4736,11 @@ msgstr "Αποστολέας"
 
 #: ../web_tt2/suspend_request.tt2:23
 #, fuzzy
-msgid "Suspended from "
+msgid "Suspended from"
 msgstr "Αποστολέας"
 
-#: ../web_tt2/suspend_request.tt2:23 ../web_tt2/suspend_request.tt2:44
-msgid " to "
+#: ../web_tt2/suspend_request.tt2:23 ../web_tt2/viewlogs.tt2:113
+msgid "to"
 msgstr ""
 
 #: ../web_tt2/suspend_request.tt2:23
@@ -4716,15 +4758,21 @@ msgid "Toogle selection"
 msgstr "Γλώσσα :"
 
 #: ../web_tt2/suspend_request.tt2:41
-msgid "Suspend[% IF sub.display == 1 %]/Resume"
-msgstr ""
+#, fuzzy
+msgid "Suspend / Resume the selected lists"
+msgstr "Εκκαθάριση επιλεγμένων λιστών"
 
 #: ../web_tt2/suspend_request.tt2:43
-msgid "From : <noscript>[%|loc%](dd-mm-yyyy) "
+#, fuzzy
+msgid "From:"
+msgstr "Από"
+
+#: ../web_tt2/suspend_request.tt2:44
+msgid "To:"
 msgstr ""
 
 #: ../web_tt2/suspend_request.tt2:46
-msgid "Select the checkbox for an indefinite end date. "
+msgid "Check this box if you want to suspend your subscription indefinitely."
 msgstr ""
 
 #: ../web_tt2/suspend_request.tt2:49
@@ -4895,10 +4943,6 @@ msgstr "Αναζήτηση Χρήστη"
 #. Check the strftime manpage for format details : http://docs.freebsd.org/info/gawk/gawk.info.Time_Functions.html
 #: ../web_tt2/viewlogs.tt2:113 ../wwsympa/wwsympa.fcgi.in:16069
 msgid "%d %b %Y %H:%M:%S"
-msgstr ""
-
-#: ../web_tt2/viewlogs.tt2:113
-msgid "to"
 msgstr ""
 
 #. (list)
@@ -8584,6 +8628,12 @@ msgstr ""
 
 #. This entry is a date/time format
 #. Check the strftime manpage for format details : http://docs.freebsd.org/info/gawk/gawk.info.Time_Functions.html
+#: ../src/lib/Bulk.pm:374
+msgid "%d %b %Y  %H:%M"
+msgstr ""
+
+#. This entry is a date/time format
+#. Check the strftime manpage for format details : http://docs.freebsd.org/info/gawk/gawk.info.Time_Functions.html
 #: ../src/lib/Commands.pm:963 ../wwsympa/wwsympa.fcgi.in:9706
 msgid "%A"
 msgstr ""
@@ -8776,11 +8826,12 @@ msgid "Insert DKIM signature to messages sent to the list"
 msgstr "Αποστολή μηνυμάτων : %1"
 
 #: ../src/lib/List.pm:606
-msgid "Type of list message where a DKIM signature is added"
+msgid ""
+"The categories of messages sent to the list that will be signed using DKIM."
 msgstr ""
 
 #: ../src/lib/List.pm:613
-msgid "file path for list DKIM private key"
+msgid "File path for list DKIM private key"
 msgstr ""
 
 #: ../src/lib/List.pm:621
@@ -9197,7 +9248,7 @@ msgid "seconds"
 msgstr ""
 
 #: ../src/lib/List.pm:628
-msgid "list of headers to be included ito the message for signature"
+msgid "List of headers to be included ito the message for signature"
 msgstr ""
 
 #: ../src/lib/List.pm:635
