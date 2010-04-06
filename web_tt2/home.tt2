@@ -4,6 +4,20 @@
 [%|loc%]This server provides you access to your mailing list environment. Starting from this web page, you can perform subscription options, unsubscription, archive, list moderation, list configuration.[%END%]
 </p>
 
+ [% IF admin_summary %]
+ <h1>[%|loc%]Your administration panel[%END%]</h1>
+ <div id="home_admin_summary">
+ <ul>
+  [% FOREACH list = admin_summary %]
+    <li>[%|loc(list.key)%]List %1: [%END%]
+    [% IF list.value.mod_message %]<a href="[% path_cgi %]/modindex/[% list.key %]">[%|loc(list.value.mod_message)%]%1 messages[%END%][% END %]</a>
+    [% IF list.value.mod_shared_total %]<a href="[% path_cgi %]/modindex/[% list.key %]">[%|loc(list.value.mod_shared_total)%]%1 documents[%END%][% END %]</a>
+    [% IF list.value.mod_subscription %]<a href="[% path_cgi %]/subindex/[% list.key %]">[%|loc(list.value.mod_subscription)%]%1 subscription requests[%END%][% END %]</a>
+  [% END %]
+  </ul>
+ </div>
+ [% END %]
+
 <h2>[%|loc%]Mailing lists categories[%END%]</h2>
 <br />
 
