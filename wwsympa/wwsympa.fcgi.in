@@ -8389,8 +8389,22 @@ sub do_home {
 	$param->{'admin_summary'}{$one_list->{'name'}}{'mod_shared_total'} = $mod_shared_total if ($mod_shared_total > 0);
 	
     }
-    
+
+    ## Build the errors_summary variable, tells for a suscriber
+    ## how many sending messages are in errors
+
+    foreach my $the_list (@{$param->{'get_which'}}){ #review all the lists
+
+	next if $param->{'errors_summary'}{$the_list->{'name'}};
+	
+	my $errors = $the_list->get_total_bouncing(); #get the bounces of the subscriber
+	
+	$param->{'errors_summary'}{$the_list->{'name'}} = $errors if ($errors > 0); #if there is bounces put it in errors_summary
+    }
+
     return 1;
+
+
 }
 
  sub do_editsubscriber {
