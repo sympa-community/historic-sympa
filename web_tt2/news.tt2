@@ -22,13 +22,13 @@
    [% IF list_to_admin.value.mod_subscription %]<a href="[% path_cgi %]/subindex/[% list_to_admin.key %]">[%|loc(list_to_admin.value.mod_subscription)%]%1 subscription requests[%END%][% END %]</a></li>
  [% END %]
  </ul>
+</div>
+</div>
 [% ELSE %]
 <br>
 <!-- do nothing-->
 
 [% END %]
-</div>
-</div>
 <!-- list of new errors-->
 
 
