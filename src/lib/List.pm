@@ -4027,7 +4027,6 @@ sub send_notify_to_owner {
     my $host = $self->{'admin'}{'host'};
     my @to = $self->get_owners_email();
     my $robot = $self->{'domain'};
-    $param->{'auto_submitted'} = 'auto-generated';
 
     unless (@to) {
 	do_log('notice', 'No owner defined or all of them use nomail option in list %s ; using listmasters as default', $self->{'name'} );
@@ -4040,6 +4039,7 @@ sub send_notify_to_owner {
 
     if (ref($param) eq 'HASH') {
 
+	$param->{'auto_submitted'} = 'auto-generated';
 	$param->{'to'} =join(',', @to);
 	$param->{'type'} = $operation;
 
