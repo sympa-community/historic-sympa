@@ -39,6 +39,7 @@ use tt2;
 use Sympa::Constants;
 use tools;
 
+
 our @ISA = qw(Exporter);
 our @EXPORT = qw(%list_of_lists);
 
@@ -4621,6 +4622,8 @@ sub delete_user {
     my %param = @_;
     my @u = @{$param{'users'}};
     my $exclude = $param{'exclude'};
+    my $parameter = $param{'parameter'};#case of deleting : bounce? manual signoff or deleted by admin?
+    my $daemon_name = $param{'daemon'};
     &do_log('debug2', 'List::delete_user');
 
     my $name = $self->{'name'};
@@ -4655,7 +4658,11 @@ sub delete_user {
 	unless ($dbh->do($statement)) {
 	    do_log('err','Unable to execute SQL statement %s : %s', $statement, $dbh->errstr);
 	    next;
-	}   
+	}
+	
+	#log in stat_table to make statistics
+	&Log::db_stat_log({'robot' => $self->{'domain'}, 'list' => $name, 'operation' => 'del subscriber', 'parameter' => $parameter
+			       , 'mail' => $who, 'client' => '', 'daemon' => $daemon_name});
 	
 	$total--;
     }
@@ -4664,6 +4671,7 @@ sub delete_user {
     $self->savestats();
     &delete_user_picture($self,shift(@u));
     return (-1 * $total);
+
 }
 
 
@@ -6946,7 +6954,7 @@ sub add_user_db {
 
 ## Adds a new user, no overwrite.
 sub add_user {
-    my($self, @new_users) = @_;
+    my($self, @new_users, $daemon) = @_;
     &do_log('debug2', 'List::add_user');
     
     my $name = $self->{'name'};
@@ -7006,6 +7014,10 @@ sub add_user {
 	
 	$new_user->{'subscribed'} ||= 0;
 	$new_user->{'included'} ||= 0;
+
+	#Log in stat_table to make staistics
+	&Log::db_stat_log({'robot' => $self->{'domain'}, 'list' => $self->{'name'}, 'operation' =>'add subscriber', 'parameter' => '', 'mail' => $new_user->{'email'},
+		       'client' => '', 'daemon' => $daemon});
 	
 	## Update Subscriber Table
 	$statement = sprintf "INSERT INTO subscriber_table (user_subscriber, comment_subscriber, list_subscriber, robot_subscriber, date_subscriber, update_subscriber, reception_subscriber, topics_subscriber, visibility_subscriber,subscribed_subscriber,included_subscriber,include_sources_subscriber,custom_attribute_subscriber,suspend_subscriber,suspend_start_date_subscriber,suspend_end_date_subscriber) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)", 
@@ -11970,7 +11982,12 @@ sub close {
     $self->save_config($email);
     $self->savestats();
     
-    $self->remove_aliases();    
+    $self->remove_aliases();   
+
+    #log in stat_table to make staistics
+    &Log::db_stat_log({'robot' => $self->{'domain'}, 'list' => $self->{'name'}, 'operation' => 'close_list','parameter' => '', 
+		       'mail' => $email, 'client' => '', 'daemon' => 'damon_name'});
+		       
     
     return 1;
 }
@@ -11998,6 +12015,10 @@ sub purge {
     }
 
     &tools::remove_dir($self->{'dir'});
+
+    #log ind stat table to make statistics
+    &Log::db_stat_log({'robot' => $self->{'domain'}, 'list' => $self->{'name'}, 'operation' => 'purge list', 'parameter' => '',
+		       'mail' => $email, 'client' => '', 'daemon' => 'daemon_name'});
     
     return 1;
 }

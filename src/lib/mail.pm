@@ -280,6 +280,7 @@ sub mail_file {
     $data->{'return_path'} ||= &Conf::get_robot_conf($robot, 'request');
     
     ## SENDING
+
     unless (defined &sending('msg' => $message,
 			     'rcpt' => $rcpt,
 			     'from' => $data->{'return_path'},
@@ -460,6 +461,7 @@ sub mail_forward {
     #	$message->head->add('Auto-Submitted', 'auto-forwarded');
     #}
     
+
     unless (defined &sending('msg' => $messageasstring, 
 			     'rcpt' => $rcpt,
 			     'from' => $from,
@@ -561,6 +563,7 @@ sub sendto {
 	    }
 	    my $encrypted_msg_as_string;
 	    if ($encrypted_msg_as_string = &tools::smime_encrypt ($msg_header, $msg_body, $email)){
+
 		&sending('msg' => $encrypted_msg_as_string,
 			 'rcpt' => $email,
 			 'from' => $from,
@@ -577,6 +580,7 @@ sub sendto {
 	$msg = $msg_header->as_string . "\n" . $msg_body;   
 	if ($msg) {
 	    # my $result = &sending($msg,$rcpt,$from,$robot,'','none');
+
 	    my $result = &sending('msg' => $msg,
 				  'rcpt' => $rcpt,
 				  'from' => $from,
@@ -697,7 +701,7 @@ sub sending {
 				     'verp' => $verpfeature,
 				     'merge' => $mergefeature,
 				     'dkim' => $dkim,
-				     'tag_as_last' => $tag_as_last);
+				     'tag_as_last' => $tag_as_last,);
 
 	unless (defined $bulk_code) {
 	    &do_log('err', 'Failed to store message for list %s', $listname);

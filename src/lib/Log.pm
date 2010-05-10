@@ -29,6 +29,7 @@ use Carp;
 use POSIX qw(mktime);
 use Encode;
 
+
 our @ISA = qw(Exporter);
 our @EXPORT = qw(fatal_err do_log do_openlog $log_level %levels);
 
@@ -283,6 +284,58 @@ sub db_log {
     }
       
 }
+
+#insert data in stats table
+sub db_stat_log{
+    my $arg = shift;
+
+    my $list = $arg->{'list'};
+    my $operation = $arg->{'operation'};
+    my $date = time; #epoch time : time since 1st january 1970
+    my $mail = $arg->{'mail'};
+    my $daemon = $arg->{'daemon'};
+    my $ip = $arg->{'client'};
+    my $robot = $arg->{'robot'};
+    my $parameter = $arg->{'parameter'};
+    my $random = int(rand(1000000));
+    my $id = $date.$random;
+
+    if($list =~ /(.+)\@(.+)/) {#remove the robot name of the list name
+	$list = $1;
+	unless($robot) {
+	    $robot = $2;
+	}
+    }
+
+    my $dbh = &List::db_get_handler();#recupérer le gestionnaire de base de données
+
+
+    unless ($dbh and $dbh->ping) {## Check database connection
+	return undef unless &List::db_connect();
+	$dbh = &List::db_get_handler();
+    }
+
+    ##insert in stat table
+    my $statement = sprintf 'INSERT INTO stat_table (id_stat, date_stat, email_stat, operation_stat, list_stat, daemon_stat, user_ip_stat, robot_stat, parameter_stat) VALUES (%s, %d, %s, %s, %s, %s, %s, %s, %s)', 
+    $id,
+    $date,
+    $dbh->quote($mail),
+    $dbh->quote($operation),
+    $dbh->quote($list),
+    $dbh->quote($daemon),
+    $dbh->quote($ip),
+    $dbh->quote($robot),
+    $dbh->quote($parameter);
+    
+    unless($dbh->do($statement)){
+	do_log('err', 'Unable to execute SQL statement "%s", %s', $statement, $dbh->errstr);
+	return undef;
+    }
+   
+
+
+}#end sub
+
 
 # delete logs in RDBMS
 sub db_log_del {
