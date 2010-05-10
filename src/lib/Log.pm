@@ -299,6 +299,7 @@ sub db_stat_log{
     my $parameter = $arg->{'parameter'};
     my $random = int(rand(1000000));
     my $id = $date.$random;
+    my $read = 0; 
 
     if($list =~ /(.+)\@(.+)/) {#remove the robot name of the list name
 	$list = $1;
@@ -316,7 +317,7 @@ sub db_stat_log{
     }
 
     ##insert in stat table
-    my $statement = sprintf 'INSERT INTO stat_table (id_stat, date_stat, email_stat, operation_stat, list_stat, daemon_stat, user_ip_stat, robot_stat, parameter_stat) VALUES (%s, %d, %s, %s, %s, %s, %s, %s, %s)', 
+    my $statement = sprintf 'INSERT INTO stat_table (id_stat, date_stat, email_stat, operation_stat, list_stat, daemon_stat, user_ip_stat, robot_stat, parameter_stat, read_stat) VALUES (%s, %d, %s, %s, %s, %s, %s, %s, %s, %d)', 
     $id,
     $date,
     $dbh->quote($mail),
@@ -325,7 +326,8 @@ sub db_stat_log{
     $dbh->quote($daemon),
     $dbh->quote($ip),
     $dbh->quote($robot),
-    $dbh->quote($parameter);
+    $dbh->quote($parameter),
+    $dbh->quote($read);
     
     unless($dbh->do($statement)){
 	do_log('err', 'Unable to execute SQL statement "%s", %s', $statement, $dbh->errstr);
