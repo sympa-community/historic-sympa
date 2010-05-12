@@ -215,48 +215,52 @@ while (!$end) {
 	
 	## Go through the bulk_mailer table and process messages
     if ($bulk = Bulk::next()) {
-		if ($bulk->{'messagekey'} ne $messagekey) {
-			# current packet is no related to the same message as the previous packet
-            # so it is needed to fetch the new message from message_table 
-			$messageasstring = &Bulk::messageasstring($bulk->{'messagekey'});
-			unless ( $messageasstring ) {
-				&do_log('err',"internal error : current packet 'messagekey= %s contain a ref to a null message",$bulk->{'messagekey'});
-			}
-		}
-		my @rcpts = split /,/,$bulk->{'receipients'};
-		if ($bulk->{'verp'}){   
-			foreach my $rcpt (@rcpts) {
-				my $return_path = $rcpt;
-				$return_path =~ s/\@/\=\=a\=\=/; 
-				$return_path = "$Conf::Conf{'bounce_email_prefix'}+$return_path\=\=$bulk->{'listname'}\@$bulk->{'robot'}"; # VERP broken if no listname is provided
-				*SMTP = &mail::smtpto($return_path, \$rcpt, $bulk->{'robot'});
-				print SMTP $messageasstring;
-				close SMTP;
-			}
-		}else{
-			*SMTP = &mail::smtpto($bulk->{'returnpath'}, \@rcpts, $bulk->{'robot'});
-			print SMTP $messageasstring;
-			close SMTP;
-		}
-
-		## Remove packet once it has been processed
+	if ($bulk->{'messagekey'} ne $messagekey) {
+	    # current packet is no related to the same message as the previous packet
+	    # so it is needed to fetch the new message from message_table 
+	    $messageasstring = &Bulk::messageasstring($bulk->{'messagekey'});
+	    unless ( $messageasstring_init ) {
+		&do_log('err',"internal error : current packet (messagekey= %s) contain a ref to a null message",$bulk->{'messagekey'});
 		unless (&Bulk::remove($bulk->{'messagekey'},$bulk->{'packetid'})) {
-			&do_log('err',"failed to remove processed packet '%s', messagekey '%s'", $bulk->{'messagekey'},$bulk->{'packetid'});
-			return undef;
+		    &do_log('err',"failed to remove processed packet '%s', messagekey '%s'", $bulk->{'messagekey'},$bulk->{'packetid'});
 		}
-
-		if($bulk->{'priority_packet'} == $Conf::Conf{'sympa_packet_priority'} + 1){
-			&do_log('notice','Done sending message %s to list %s@%s (priority %s) in %s seconds since scheduled expedition date. Now sending VERP.', 
-				$bulk->{'messagekey'}, 
-				$bulk->{'listname'}, 
-				$bulk->{'robot'}, 
-				$bulk->{'priority_message'}, 
-				time() - $bulk->{'delivery_date'});
-		}
-		$date_of_last_activity = time();
+		next;
+	    }
+	}
+	my @rcpts = split /,/,$bulk->{'receipients'};
+	if ($bulk->{'verp'}){   
+	    foreach my $rcpt (@rcpts) {
+		my $return_path = $rcpt;
+		$return_path =~ s/\@/\=\=a\=\=/; 
+		$return_path = "$Conf::Conf{'bounce_email_prefix'}+$return_path\=\=$bulk->{'listname'}\@$bulk->{'robot'}"; # VERP broken if no listname is provided
+		*SMTP = &mail::smtpto($return_path, \$rcpt, $bulk->{'robot'});
+		print SMTP $messageasstring;
+		close SMTP;
+	    }
+	}else{
+	    *SMTP = &mail::smtpto($bulk->{'returnpath'}, \@rcpts, $bulk->{'robot'});
+	    print SMTP $messageasstring;
+	    close SMTP;
+	}
+	
+	## Remove packet once it has been processed
+	unless (&Bulk::remove($bulk->{'messagekey'},$bulk->{'packetid'})) {
+	    &do_log('err',"failed to remove processed packet '%s', messagekey '%s'", $bulk->{'messagekey'},$bulk->{'packetid'});
+	    return undef;
+	}
+	
+	if($bulk->{'priority_packet'} == $Conf::Conf{'sympa_packet_priority'} + 1){
+	    &do_log('notice','Done sending message %s to list %s@%s (priority %s) in %s seconds since scheduled expedition date. Now sending VERP.', 
+		    $bulk->{'messagekey'}, 
+		    $bulk->{'listname'}, 
+		    $bulk->{'robot'}, 
+		    $bulk->{'priority_message'}, 
+		    time() - $bulk->{'delivery_date'});
+	}
+	$date_of_last_activity = time();
     }else{
-		## Sleep for a while if bulk_mailer DB table is empty
-		sleep $Conf::Conf{'bulk_sleep'}; 
+	## Sleep for a while if bulk_mailer DB table is empty
+	sleep $Conf::Conf{'bulk_sleep'}; 
     }
     &mail::reaper;
 }
