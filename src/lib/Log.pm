@@ -598,16 +598,35 @@ sub aggregate_data {
 
     
     $aggregated_data = &deal_data($res);
-    #open TMP2, ">/tmp/digdump"; &tools::dump_var($aggregated_data, 0, \*TMP2); close TMP2;
+    
     #the line is read, so update the read_stat from 0 to 1
     #my $update = sprintf "UPDATE stat_table SET read_stat = 1 WHERE (date_stat = '%d' AND operation_stat = 'add subscriber')", $i;
     #$dbh->do($update);
     
     
     #store reslults in stat_counter_table
-    
-    #&db_stat_counter_log({'begin_date' => $begin_date, 'end_date' => $end_date, 'operation' => 'send_mail', 'list' => '', 'variation' => $count, 'total' => '', 'robot' => $robot});
+    foreach my $key_op (keys (%$aggregated_data)) {
+	
+	&do_log('trace', 'voici la clef : %s', $key_op);
+	open TMP2, ">/tmp/digdump"; &tools::dump_var($aggregated_data->{$key_op}, 0, \*TMP2); close TMP2;
+
+	#store send mail data
+	if($key_op eq 'send_mail'){
+	    &do_log('trace', 'on est dedans !');
+	    foreach my $key_robot (keys (%{$aggregated_data->{$key_op}})){
+		&do_log('trace', 'voici la clef : %s', $key_robot);
+		foreach my $key_list (keys (%{$aggregated_data->{$key_op}->{$key_robot}})){
+		    
+		    &do_log('trace', 'on stock dans stat_couter_table !!!');
+		    &db_stat_counter_log({'begin_date' => $begin_date, 'end_date' => $end_date, 'operation' => $key_op, 'list' => $key_list, 'variation' => $aggregated_data->{$key_op}->{$key_robot}->{$key_list}->{'count'}, 'total' => '', 'robot' => $key_robot});
+		}
+	    }
+	}
+    }
+
+
 }
+
 
 #called by subroutine aggregate_data
 #get in parameter the result of db request and put in an hash data we need.
@@ -624,7 +643,7 @@ sub deal_data {
 	#open TMP2, ">/tmp/digdump"; &tools::dump_var($id, 0, \*TMP2); close TMP2;
 	
 		
-	#test about sned_mail
+	#----------------------------test about send_mail----------------------------------
 	if($result_request->{$id}->{'operation_stat'} eq 'send_mail') {
 	    
 	    
@@ -634,23 +653,65 @@ sub deal_data {
 		
 	    }
 	    
-	    my $l_name = $result_request->{$id}->{'list_stat'};
+	    my $r_name = $result_request->{$id}->{'robot_stat'};#get name of robot
+	    my $l_name = $result_request->{$id}->{'list_stat'};#get name of list
 	    
-	    #if the listname dont exist in $data, create it, with size & count to zero
-	    unless(exists ($data{'send_mail'}{$l_name})) {
-		$data{'send_mail'}{$l_name}{'size'} = 0;
-		$data{'send_mail'}{$l_name}{'count'} = 0;
+	    
+	    #if the listname and robot  dont exist in $data, create it, with size & count to zero
+	    unless(exists ($data{'send_mail'}{$r_name}{$l_name})) {
+		$data{'send_mail'}{$r_name}{$l_name}{'size'} = 0;
+		$data{'send_mail'}{$r_name}{$l_name}{'count'} = 0;
 		
 	    }
 	    
 	    
 	    #on ajoute la taille du message
-	    $data{'send_mail'}{$l_name}{'size'} += $result_request->{$id}->{'parameter_stat'};
+	    $data{'send_mail'}{$r_name}{$l_name}{'size'} += $result_request->{$id}->{'parameter_stat'};
 	    #on ajoute +1 message envoyé
-	    $data{'send_mail'}{$l_name}{'count'}++;
+	    $data{'send_mail'}{$r_name}{$l_name}{'count'}++;
 	}
 	
-	open TMP2, ">/tmp/digdump"; &tools::dump_var(\%data, 0, \*TMP2); close TMP2;
+	#------------------------------test about add_susbcriber-----------------------
+	if($result_request->{$id}->{'operation_stat'} eq 'add subscriber') {
+	    
+	    unless(exists ($data{'add_subscriber'})){
+		$data{'add_subscriber'}=undef;
+	    }
+	    
+	    my $r_name = $result_request->{$id}->{'robot_stat'}; #get name of robot
+	    my $l_name = $result_request->{$id}->{'list_stat'}; #get name of list
+	    
+	    #if the listname and robot  dont exist in $data, create it, with  count to zero
+	    unless(exists ($data{'add_subscriber'}{$r_name}{$l_name})) {
+		$data{'add_subscriber'}{$r_name}{$l_name}{'count'}=0;
+	    }
+	    
+	    #on incrémente le nombre d'inscriptions
+	    $data{'add_subscriber'}{$r_name}{$l_name}{'count'}++;
+	    
+	    
+	}
+	
+	#-------------------------------test about del_subscriber-----------------------
+	if($result_request->{$id}->{'operation_stat'} eq 'del subscriber') {
+	    
+	    unless(exists ($data{'del_subscriber'})){
+		$data{'del_subscriber'} = undef;
+	    }
+	    
+	    my $r_name = $result_request->{$id}->{'robot_stat'}; #get name of robot
+	    my $l_name = $result_request->{$id}->{'list_stat'}; #get name of list
+	    my $param = $result_request->{$id}->{'parameter_stat'}; #if del is usubcription, deleted by admin or bounce...
+	    
+	    unless(exists ($data{'del_subscriber'}{$r_name}{$l_name})){
+		$data{'del_subscriber'}{$r_name}{$l_name}{$param} = 0;
+	    }
+	    
+	    #on incrémente les parametres
+	    $data{'del_subscriber'}{$r_name}{$l_name}{$param}++;
+	}
+	
+	#open TMP2, ">/tmp/digdump"; &tools::dump_var(\%data, 0, \*TMP2); close TMP2;
 	
     }
     return \%data;
