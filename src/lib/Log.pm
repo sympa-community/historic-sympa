@@ -338,6 +338,51 @@ sub db_stat_log{
 
 }#end sub
 
+sub db_stat_counter_log {
+    my $arg = shift;
+    
+    my $date_deb = $arg->{'begin_date'};
+    my $date_fin = $arg->{'end_date'};
+    my $operation = $arg->{'operation'};
+    my $list = $arg->{'list'};
+    my $variation = $arg->{'variation'};
+    my $total = $arg->{'total'};
+    my $robot = $arg->{'robot'};
+    my $random = int(rand(1000000));
+    my $id = $date_deb.$random;
+
+    if($list =~ /(.+)\@(.+)/) {#remove the robot name of the list name
+	$list = $1;
+	unless($robot) {
+	    $robot = $2;
+	}
+    }
+
+    my $dbh = &List::db_get_handler();#recupérer le gestionnaire de base de données
+
+
+    unless ($dbh and $dbh->ping) {## Check database connection
+	return undef unless &List::db_connect();
+	$dbh = &List::db_get_handler();
+    }
+    
+    my $statement = sprintf 'INSERT INTO stat_counter_table (id_counter, beginning_date_counter, end_date_counter, operation_counter, list_counter, variation_counter, total_counter, robot_counter) VALUES (%s, %d, %d, %s, %s, %d, %d, %s)',
+    $id,
+    $date_deb,
+    $date_fin,
+    $dbh->quote($operation),
+    $dbh->quote($list),
+    $variation,
+    $total,
+    $dbh->quote($robot);
+
+    unless($dbh->do($statement)){
+	do_log('err', 'Unable to execute SQL statement "%s", %s', $statement, $dbh->errstr);
+	return undef;
+    }
+
+}#end sub
+
 
 # delete logs in RDBMS
 sub db_log_del {
@@ -450,10 +495,9 @@ sub get_first_db_log {
 	
     }
     
-    #if the listmaster want to make a search by an IP adress.
-    if($select->{'ip'}) {
+    #if the listmaster want to make a search by an IP adress.    if($select->{'ip'}) {
 	$statement .= sprintf "AND client_logs = '%s'",$select->{'ip'};
-    }
+    
     
     ## Currently not used
     #if the search is on the actor of the action
@@ -518,6 +562,98 @@ sub set_log_level {
 
 sub get_log_level {
     return $log_level;
+}
+
+
+#aggregate date from stat_table to stat_counter_table
+#dates must be in epoch format
+sub aggregate_data {
+    my ($begin_date, $end_date) = @_;
+
+    
+    my $statement;
+    
+    my $dbh = &List::db_get_handler();
+    my $aggregated_data; # the hash containing aggregated data that the sub deal_data will return.
+    
+    ## Check database connection
+    unless ($dbh and $dbh->ping) {
+	return undef unless &List::db_connect();
+	$dbh = &List::db_get_handler();
+    }
+    
+    
+    
+    
+    $statement = sprintf "SELECT * FROM stat_table WHERE (date_stat BETWEEN '%s' AND '%s') AND (read_stat = 0)", $begin_date, $end_date; 
+    my $sth = $dbh->prepare($statement);
+    
+    unless($sth->execute){
+	&do_log('err','Unable to execute statement %s',$statement);
+	return undef;
+    }
+
+    
+    my $res = $sth->fetchall_hashref('id_stat');
+
+    
+    $aggregated_data = &deal_data($res);
+    #open TMP2, ">/tmp/digdump"; &tools::dump_var($aggregated_data, 0, \*TMP2); close TMP2;
+    #the line is read, so update the read_stat from 0 to 1
+    #my $update = sprintf "UPDATE stat_table SET read_stat = 1 WHERE (date_stat = '%d' AND operation_stat = 'add subscriber')", $i;
+    #$dbh->do($update);
+    
+    
+    #store reslults in stat_counter_table
+    
+    #&db_stat_counter_log({'begin_date' => $begin_date, 'end_date' => $end_date, 'operation' => 'send_mail', 'list' => '', 'variation' => $count, 'total' => '', 'robot' => $robot});
+}
+
+#called by subroutine aggregate_data
+#get in parameter the result of db request and put in an hash data we need.
+sub deal_data {
+    
+
+    my $result_request = shift;
+    my %data;
+
+
+    #on parcours caque ligne correspondant a un nuplet
+    #each $id correspond to an hash
+    foreach my $id (keys(%$result_request)) {
+	#open TMP2, ">/tmp/digdump"; &tools::dump_var($id, 0, \*TMP2); close TMP2;
+	
+		
+	#test about sned_mail
+	if($result_request->{$id}->{'operation_stat'} eq 'send_mail') {
+	    
+	    
+	    #test if send_mail value exists already or not, if not, create it
+	    unless(exists ($data{'send_mail'})){
+		$data{'send_mail'} = undef;
+		
+	    }
+	    
+	    my $l_name = $result_request->{$id}->{'list_stat'};
+	    
+	    #if the listname dont exist in $data, create it, with size & count to zero
+	    unless(exists ($data{'send_mail'}{$l_name})) {
+		$data{'send_mail'}{$l_name}{'size'} = 0;
+		$data{'send_mail'}{$l_name}{'count'} = 0;
+		
+	    }
+	    
+	    
+	    #on ajoute la taille du message
+	    $data{'send_mail'}{$l_name}{'size'} += $result_request->{$id}->{'parameter_stat'};
+	    #on ajoute +1 message envoyé
+	    $data{'send_mail'}{$l_name}{'count'}++;
+	}
+	
+	open TMP2, ">/tmp/digdump"; &tools::dump_var(\%data, 0, \*TMP2); close TMP2;
+	
+    }
+    return \%data;
 }
 
 1;

@@ -1127,6 +1127,10 @@ sub purge_logs_table {
 	&do_log('err','purge_logs_table(): Failed to delete logs');
 	return undef;
     }
+    my $date_deb = 1273149382;
+
+    &Log::aggregate_data($date_deb , $execution_date);
+
     &do_log('notice','purge_logs_table(): logs purged');
     return 1;
 }

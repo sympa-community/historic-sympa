@@ -956,7 +956,7 @@ sub probe_db {
     ##   the table lists the field on which the index applies
     my %indexes = ('admin_table' => {'user_index' => ['user_admin']},
 		   'subscriber_table' => {'user_index' => ['user_subscriber']},
-		   'stat_table' => {'user_index' => ['email_user']}
+		   'stat_table' => {'user_index' => ['email_stat']}
 		   );
 
     # table indexes that can be removed during upgrade process
