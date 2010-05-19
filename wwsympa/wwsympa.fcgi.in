@@ -66,12 +66,10 @@ use time_utils;
 use Sympa::Constants;
 use wwslib;
 use cookielib;
-use Robot;
 use tt2;
 
-#########################
+#Correlation functions :
 use correlation;
-#########################
 
 #use open ':utf8'; ## Default is to consider files utf8 
 
@@ -97,6 +95,7 @@ my $wwsconf = {};
 ## Change to your wwsympa.conf location
 my $conf_file = Sympa::Constants::WWSCONFIG;
 my $sympa_conf_file = Sympa::Constants::CONFIG;
+
 
 
 
@@ -219,11 +218,8 @@ my %comm = ('home' => 'do_home',
 	 'remove_arc' => 'do_remove_arc',
 	 'send_me' => 'do_send_me',
 	 'view_source' => 'do_view_source',
-############################################################
-# Correlation
-         'correlation' => 'do_correlation',
-         'correlation_percent' => 'do_correlation_percent',
-#############################################################
+	 'correlation' => 'do_correlation',
+	 'correlation_percent' => 'do_correlation_percent',
 	 'arcsearch_form' => 'do_arcsearch_form',
 	 'arcsearch_id' => 'do_arcsearch_id',
 	 'arcsearch' => 'do_arcsearch',
@@ -535,10 +531,8 @@ my %required_args = ('active_lists' => ['for|count'],
 		     'send_newsletter' => ['param.list','param.user.email', 'url'],
 		     'send_me' => ['param.list'],
 		     'view_source' => ['param.list'],
-##############################################################################################
-                     'correlation' => ['param.list'],
-                     'correlation_percent' => ['param.list'],
-##############################################################################################
+		     'correlation' => ['param.list'],
+		     'correlation_percent' => ['param.list'],
 		     'requestpasswd' => ['email'],
 		     'serveradmin' => ['param.user.email'],
 		     'set' => ['param.list','reception|visibility'],
@@ -4552,7 +4546,6 @@ sub check_custom_attribute {
 	 $param->{'user'}{$p} = $in{$p};
      }
 
-     &report::notice_report_web('performed',{},$param->{'action'});
      &web_db_log({'parameters' => "$in{'gecos'},$in{'lang'},$in{'cookie_delay'}",
 		  'status' => 'success',
 	      });
@@ -4903,61 +4896,43 @@ sub do_subrequest {
  sub do_signoff {
      &wwslog('info', 'do_signoff');
 
-     my $authenticated_email_address;
-
-     unless ($authenticated_email_address) {
+     unless ($param->{'user'}{'email'}) {
 	 unless ($in{'email'}) {
 	     return 'sigrequest';
 	 }
 
-	 if ($in{'fingerprint'}) {
-
-	     unless(&tools::get_fingerprint($in{'email'}, $in{'fingerprint'})){
-		 &report::reject_report_web('user','cannot_do_signoff');
-		 &wwslog('err','do_signoff: failed to unsubscribe user %s', $in{'email'});
-		 return undef;
-	     }
-
-	     ## We don't set $param->{'user'}{'email'} because we don't want the user to be authenticated 
-	     ## to prevent the cookie from being set
-	     $authenticated_email_address = $in{'email'};
-
-	 }else {
-	     
-	     ## Perform login first
-	     if ($in{'passwd'}) {
-		 $in{'previous_action'} = 'signoff';
-		 $in{'previous_list'} = $param->{'list'};
-		 return 'login';
-	     }
-	     
-	     if ( &List::is_user_db($in{'email'}) ) {
-		 &report::reject_report_web('user','no_user',{},$param->{'action'});
-		 &wwslog('info','do_signoff: need auth for user %s', $in{'email'});
-		 &web_db_log({'target_email' => $in{'email'},
-			      'status' => 'error',
-			      'error_type' => 'authentication'});
-		 return undef;
-	     }
-	     
-	     ## No passwd
-	     &init_passwd($in{'email'}, {'lang' => $param->{'lang'} });
-	     
-	     $param->{'user'}{'email'} = $in{'email'};
-	     $authenticated_email_address = $in{'email'};
+	 ## Perform login first
+	 if ($in{'passwd'}) {
+	     $in{'previous_action'} = 'signoff';
+	     $in{'previous_list'} = $param->{'list'};
+	     return 'login';
 	 }
+
+	 if ( &List::is_user_db($in{'email'}) ) {
+	     &report::reject_report_web('user','no_user',{},$param->{'action'});
+	     &wwslog('info','do_signoff: need auth for user %s', $in{'email'});
+	     &web_db_log({'target_email' => $in{'email'},
+			  'status' => 'error',
+			  'error_type' => 'authentication'});
+	     return undef;
+	 }
+
+	 ## No passwd
+	 &init_passwd($in{'email'}, {'lang' => $param->{'lang'} });
+
+	 $param->{'user'}{'email'} = $in{'email'};
      }
 
-     unless ($list->is_user($authenticated_email_address)) {
+     unless ($list->is_user($param->{'user'}{'email'})) {
 	 &report::reject_report_web('user','not_subscriber',{'list'=>$list->{'name'}},$param->{'action'},$list);
-	 &wwslog('info','do_signoff: %s not subscribed to %s',$authenticated_email_address, $param->{'list'} );
+	 &wwslog('info','do_signoff: %s not subscribed to %s',$param->{'user'}{'email'}, $param->{'list'} );
 	 &web_db_log({'status' => 'error',
 		      'error_type' => 'not_subscriber'});
 	 return undef;
      }
 
      my $result = $list->check_list_authz('unsubscribe',$param->{'auth_method'},
-					  {'sender' => $authenticated_email_address,
+					  {'sender' => $param->{'user'}{'email'},
 					   'remote_host' => $param->{'remote_host'},
 					   'remote_addr' => $param->{'remote_addr'}});
      my $sig_is;
@@ -4972,13 +4947,13 @@ sub do_subrequest {
      if ($sig_is =~ /reject/) {
 	 &report::reject_report_web('auth',$reason,{},$param->{'action'},$list);
 	 &wwslog('info', 'do_signoff: %s may not signoff from %s'
-		 , $authenticated_email_address, $param->{'list'});
+		 , $param->{'user'}{'email'}, $param->{'list'});
 	 &web_db_log({'status' => 'error',
 		      'error_type' => 'authorization'});
 	 return undef;
      }elsif ($sig_is =~ /owner/) {
-	 unless ($list->send_notify_to_owner('sigrequest',{'who' => $authenticated_email_address,
-							   'keyauth' => $list->compute_auth($authenticated_email_address, 'del')})) {
+	 unless ($list->send_notify_to_owner('sigrequest',{'who' => $param->{'user'}{'email'},
+							   'keyauth' => $list->compute_auth($param->{'user'}{'email'}, 'del')})) {
 	     &wwslog('notice',"Unable to send notify 'sigrequest' to $list->{'name'} list owner");
 	 }
 	 &report::notice_report_web('sent_to_owner',{},$param->{'action'});
@@ -4986,18 +4961,18 @@ sub do_subrequest {
 	 return undef;
      }else {
 	 if ($param->{'subscriber'}{'included'}) {
-	     unless ($list->update_user($authenticated_email_address, 
+	     unless ($list->update_user($param->{'user'}{'email'}, 
 					{'subscribed' => 0,
 					 'update_date' => time})) {
-		 &report::reject_report_web('intern','update_subscriber_db_failed',{'sub'=>$authenticated_email_address},$param->{'action'},$list,$authenticated_email_address,$robot);
+		 &report::reject_report_web('intern','update_subscriber_db_failed',{'sub'=>$param->{'user'}{'email'}},$param->{'action'},$list,$param->{'user'}{'email'},$robot);
 		 &wwslog('info', 'do_signoff: update failed');
 		 &web_db_log({'status' => 'error',
 			      'error_type' => 'internal'});
 		 return undef;
 	     }
 	 }else {
-	     unless ($list->delete_user($authenticated_email_address)) {
-		 &report::reject_report_web('intern','delete_subscriber_db_failed',{'sub'=>$authenticated_email_address},$param->{'action'},$list,$authenticated_email_address,$robot);
+	     unless ($list->delete_user($param->{'user'}{'email'})) {
+		 &report::reject_report_web('intern','delete_subscriber_db_failed',{'sub'=>$param->{'user'}{'email'}},$param->{'action'},$list,$param->{'user'}{'email'},$robot);
 		 &wwslog('info', 'do_signoff: signoff failed');
 		 &web_db_log({'status' => 'error',
 			      'error_type' => 'internal'});
@@ -5007,7 +4982,7 @@ sub do_subrequest {
 	 }
 
 	 if ($sig_is =~ /notify/) {
-	     unless ($list->send_notify_to_owner('notice',{'who' => $authenticated_email_address,
+	     unless ($list->send_notify_to_owner('notice',{'who' => $param->{'user'}{'email'},
 					  'gecos' => '', 
 							   'command' => 'signoff'})) {
 		 &wwslog('notice',"Unable to send notify 'notice' to $list->{'name'} list owner");
@@ -5015,10 +4990,10 @@ sub do_subrequest {
 	 }
 
 	 ## perform which to update your_subscribtions cookie ;
-	 @{$param->{'get_which'}} = &List::get_which($authenticated_email_address,$robot,'member') ; 
+	 @{$param->{'get_which'}} = &List::get_which($param->{'user'}{'email'},$robot,'member') ; 
 
-	 unless ($list->send_file('bye', $authenticated_email_address, $robot, {})) {
-	     &wwslog('notice',"Unable to send template 'bye' to $authenticated_email_address");
+	 unless ($list->send_file('bye', $param->{'user'}{'email'}, $robot, {})) {
+	     &wwslog('notice',"Unable to send template 'bye' to $param->{'user'}{'email'}");
 	 }
      }
      &report::notice_report_web('performed',{},$param->{'action'});
@@ -5959,11 +5934,8 @@ sub do_skinsedit {
      $list->delete_subscription_request(@added_users);
 
      &report::notice_report_web('add_performed', {'total' => $total},$param->{'action'});
-     
-     foreach my $email (@added_users) {
-       &web_db_log({'target_email' => $email,
-		    'status' => 'success'});
-     }
+     &web_db_log({'target_email' => $in{'email'}||$in{'pending_email'},
+		  'status' => 'success'});
      
      $in{'list'} = $in{'previous_list'} if ($in{'previous_list'});
      return $in{'previous_action'} || 'review';
@@ -7497,8 +7469,6 @@ sub do_remove_arc {
 
      return 1;
  }
-
-
 ####################################################
 #  do_correlation_percent                           
 ####################################################
@@ -7512,6 +7482,7 @@ sub do_remove_arc {
  sub do_correlation_percent   {
      &wwslog('info', 'do_view_source(%s, %s, %s, %s', $in{'list'}, $in{'yyyy'}, $in{'month'}, $in{'msgid'});
      
+ #    unless ( ($Conf::Conf{'correlation'}) && ($Conf::Conf{'verp_rate'} eq 100) ){
      unless ( ($list->{admin}{correlation} eq "on") && ($list->{admin}{verp_rate} eq "100%") ){
          &wwslog('info','do_correlation_percent: invalid parameters; verp_rate must be = \"100%\", correlation must be \"on\"');
 	 printf "Content-Type: text/html\n\n";
@@ -7543,11 +7514,14 @@ sub do_remove_arc {
      unless($correlation_info = &correlation::get_delivered_info_percent($in{'msgid'}, $in{'list'})){
          #TODO: Change error names
          &report::reject_report_web('intern','may_not_view_source',{},$param->{'action'},$list,$param->{'user'}{'email'},$robot);
+       #  &wwslog('info','view_source: no message id found');
          $param->{'status'} = 'no_msgid';
          return undef;
      }
  
      $param->{'bypass'} = 'extreme';
+   #  printf "Content-Type: text/plain\n\n";
+    # printf "Content-Type: text/html";
      printf "Content-Type: text/html\n\n";
 
      printf '<HTML><HEAD><TITLE>Suivi du Courrier</TITLE>';
@@ -7572,7 +7546,7 @@ sub do_remove_arc {
 #################################################### 
  sub do_correlation   {
      &wwslog('info', 'do_view_source(%s, %s, %s, %s', $in{'list'}, $in{'yyyy'}, $in{'month'}, $in{'msgid'});
-
+     #unless ( ($Conf::Conf{'correlation'}) && ($Conf::Conf{'verp_rate'} eq 100) ){
      unless ( ($list->{admin}{correlation} eq "on") && ($list->{admin}{verp_rate} eq "100%") ){
          &wwslog('info','do_correlation : invalid parameters; verp_rate must be = \"100%\", correlation must be \"on\"');
      	 $param->{'bypass'} = 'extreme';
@@ -7612,6 +7586,8 @@ sub do_remove_arc {
      }
  
      $param->{'bypass'} = 'extreme';
+   #  printf "Content-Type: text/plain\n\n";
+    # printf "Content-Type: text/html";
      printf "Content-Type: text/html\n\n";
 
      printf '<HTML><HEAD><TITLE>Suivi du Courrier</TITLE>';
@@ -7623,7 +7599,6 @@ printf '</HEAD><BODY>';
      printf '</BODY></HTML>';
      return 1;
  }
-
 
  ## Output an initial form to search in web archives
  sub do_arcsearch_form {
@@ -9041,6 +9016,7 @@ sub do_edit_list {
 		## Remove if empty
 		if ($new_admin->{$pname} =~ /^\s*$/) {
 		    delete $new_admin->{$pname};
+		    next; # Go directly to the next parameter.
 		}
 	    }
 	    
@@ -15183,8 +15159,6 @@ sub do_compose_mail {
      
      &wwslog('info', 'do_send_mail');
 
-     # Get the sender mail
-     my $from = $param->{'user'}{'email'};
      my $to;
      # Send the message to the list or to the sender as clicking the send to the list or to me.
      # First if : send to the list
@@ -15210,6 +15184,9 @@ sub do_compose_mail {
 	     $to = $list->get_list_address();
 	 }
      }
+
+     # Take the sender mail
+     my $from = $param->{'user'}{'email'};
 
      # Send the mail to the sender. To test his message
      # Second if : send to the sender "send to me"
@@ -15263,18 +15240,18 @@ sub do_compose_mail {
 	 # Generate a newsletter from an HTML URL and send it to a list by the Web interface.
 	 # Else you must use parse routine of MIME::Lite::HTML and send of MIME::Lite.
 	 my $mailHTML = new MIME::Lite::HTML(
-					     {
-						 From => $from,
-						 To => $to,
-						 Headers => {'In-Reply-To' => $in{'in_reply_to'}, 'Message-ID' => $in{'message_id'}},
-						 'return_path' => &Conf::get_robot_conf($robot, 'sympa'),
-						 Subject => $in{'subject'},
-						 HTMLCharset => 'utf-8',
-						 TextCharset => 'utf-8',
-						 TextEncoding => '8bit',
-						 HTMLEncoding => '8bit',
-						 remove_jscript => '1', #delete the scripts in the html
-					     }
+					 {
+					     From => $from,
+					     To => $to,
+					     Headers => {'In-Reply-To' => $in{'in_reply_to'}, 'Message-ID' => $in{'message_id'}},
+					     'return_path' => &Conf::get_robot_conf($robot, 'sympa'),
+					     Subject => $in{'subject'},
+					     HTMLCharset => 'utf-8',
+					     TextCharset => 'utf-8',
+					     TextEncoding => '8bit',
+					     HTMLEncoding => '8bit',
+					     remove_jscript => '1', #delete the scripts in the html
+					 }
 					     );
 	 my $pages_url;
 	 $pages_url = $in{'url'};

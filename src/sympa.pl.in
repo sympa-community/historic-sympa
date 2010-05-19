@@ -1,4 +1,4 @@
-#! --PERL--
+#!--PERL--
 # sympa.pl - This script is the main one ; it runs as a daemon and does
 # the messages/commands processing
 # RCS Identication ; $Revision$ ; $Date$ 
@@ -48,7 +48,6 @@ use File::Copy;
 use tools;
 use tt2;
 use Sympa::Constants;
-
 #---------------------------------------------
 use correlation;
 #---------------------------------------------
@@ -1041,7 +1040,8 @@ while (!$signal) {
 
     ## Set NLS default lang for current message
     $Language::default_lang = $main::options{'lang'} || &Conf::get_robot_conf($robot, 'lang');
-
+	
+	# Appel de la fonction de traitement des mails entrants
     my $status = &DoFile("$t_spool/$filename");
     
     if (defined($status)) {
@@ -1194,7 +1194,6 @@ sub DoFile {
     unless ($sender) {
 	&do_log('err', 'No From found in message, skipping.');
 	&Log::db_log({'robot' => $robot,'list' => $listname,'action' => 'DoFile','parameters' => "$file",'target_email' => "",'msg_id' => $hdr->get('Message-ID'),'status' => 'error','error_type' => 'no_sender','user_email' => $sender,'client' => $ip,'daemon' => $daemon_name});
-	return undef;
 	return undef;
     }
 
@@ -1722,48 +1721,55 @@ unless (&mail::mail_forward($msg,&Conf::get_robot_conf($robot, 'request'),\@rcpt
 ####################################################
 sub DoMessage{
     my($which, $message, $robot) = @_;
-    &do_log('debug', 'DoMessage(%s, %s, %s, msg from %s, %s, %s,%s)', $which, $message->{'msg'}, $robot, $message->{'sender'}, $message->{'size'}, $message->{'msg_as_string'}, $message->{'smime_crypted'});
-    
+    #&do_log('debug', 'DoMessage(%s, %s, %s, msg from %s, %s, %s,%s)', $which, $message->{'msg'}, $robot, $message->{'sender'}, $message->{'size'}, $message->{'msg_as_string'}, $message->{'smime_crypted'});
+
+#-------------------------------------------------------------------------------------------------------------------------
+    &do_log('notice', 'DoMessage(%s, %s, %s, msg from %s, %s, %s,%s)', $which, $message->{'msg'}, $robot, $message->{'sender'}, $message->{'size'}, $message->{'msg_as_string'}, $message->{'smime_crypted'});
+#-------------------------------------------------------------------------------------------------------------------------
     
     ## List and host.
-    my($listname, $host) = split(/[@\s]+/, $which);
-    
-    my $hdr = $message->{'msg'}->head;
-    
-    my $messageid = $hdr->get('Message-Id');
-    my $msg_string = $message->{'msg'}->as_string;
-    
-    my $sender = $message->{'sender'};
-    
-    ## Search for the list
-    my $list = new List ($listname, $robot);
-    
-    ## List unknown
-    unless ($list) {
-	&do_log('notice', 'Unknown list %s', $listname);
-	my $sympa_email = &Conf::get_robot_conf($robot, 'sympa');
-	
-	unless (&List::send_global_file('list_unknown', $sender, $robot,
-					{'list' => $which,
-					 'date' => &POSIX::strftime("%d %b %Y  %H:%M", localtime(time)),
-					 'boundary' => $sympa_email.time,
-					 'header' => $hdr->as_string(),
-					 'auto_submitted' => 'auto-replied'
-					 })) {
-	    &do_log('notice',"Unable to send template 'list_unknown' to $sender");
-	}
-	return undef;
-    }
-    
-    ($listname, $host) = ($list->{'name'}, $list->{'admin'}{'host'});
-    
-    my $start_time = time;
-    
-    &Language::SetLang($list->{'admin'}{'lang'});
-    
-    ## Now check if the sender is an authorized address.
-    
-    &do_log('info', "Processing message for %s with priority %s, %s", $listname,$list->{'admin'}{'priority'}, $messageid );
+	    my($listname, $host) = split(/[@\s]+/, $which);
+	    
+	    my $hdr = $message->{'msg'}->head;
+
+
+	    my $messageid = $hdr->get('Message-Id');
+	    my $msg = $message->{'msg'};
+	    my $msg_string = $msg->as_string;
+	    
+	    my $sender = $message->{'sender'};
+	    
+
+
+	    ## Search for the list
+	    my $list = new List ($listname, $robot);
+	    
+	    ## List unknown
+	    unless ($list) {
+		&do_log('notice', 'Unknown list %s', $listname);
+		my $sympa_email = &Conf::get_robot_conf($robot, 'sympa');
+		
+		unless (&List::send_global_file('list_unknown', $sender, $robot,
+						{'list' => $which,
+						 'date' => &POSIX::strftime("%d %b %Y  %H:%M", localtime(time)),
+						 'boundary' => $sympa_email.time,
+						 'header' => $hdr->as_string(),
+						 'auto_submitted' => 'auto-replied'
+						 })) {
+		    &do_log('notice',"Unable to send template 'list_unknown' to $sender");
+		}
+		return undef;
+	    }
+	    
+	    ($listname, $host) = ($list->{'name'}, $list->{'admin'}{'host'});
+	    
+	    my $start_time = time;
+	    
+	    &Language::SetLang($list->{'admin'}{'lang'});
+	    
+	    ## Now check if the sender is an authorized address.
+	    
+	    &do_log('info', "Processing message for %s with priority %s, %s", $listname,$list->{'admin'}{'priority'}, $messageid );
     
     my $conf_email = &Conf::get_robot_conf($robot, 'sympa');
     my $conf_loop_prevention_regex = $list->{'admin'}{'loop_prevention_regex'};
@@ -1802,7 +1808,7 @@ sub DoMessage{
 
     ## Check if the message is a return receipt
     if ($hdr->get('multipart/report')) {
-	&do_log('notice', 'Message for %s from %s ignored because it is a report', $listname, $sender);
+	&do_log('err', 'Message for %s from %s ignored because it is a report', $listname, $sender);
 	&Log::db_log({'robot' => $robot,'list' => $list->{'name'},'action' => 'DoMessage','parameters' => "$which,$messageid,$robot",'target_email' => '','msg_id' => $messageid,'status' => 'error','error_type' => 'ignored_report','user_email' => $sender,'client' => $ip,'daemon' => $daemon_name});
 	return undef;
     }
@@ -1870,21 +1876,53 @@ sub DoMessage{
 	&Log::db_log({'robot' => $robot,'list' => $list->{'name'},'action' => 'DoMessage','parameters' => "$which,$messageid,$robot",'target_email' => '','msg_id' => $messageid,'status' => 'error','error_type' => 'internal','user_email' => $sender,'client' => $ip,'daemon' => $daemon_name});
 	return undef ;
     }
-	
-#########################################################################################################################
-## Ajout Correlation
+#-------------------------------------------------------------------------------------------------------------------------
 
-   # &do_log('notice', "subject : %s date : %s msgid : %s\n from : %s\n robot : %s\n list : %s\n which : %s\n message string : \n\n%s\n\n", $hdr->get('subject'),$hdr->get('date'), $messageid, $sender, $robot, $list->{'name'}, $which, $msg_string);
+    &do_log('notice', "subject : %s date : %s msgid : %s\n from : %s\n robot : %s\n list : %s\n which : %s\n message string : \n\n%s\n\n", $hdr->get('subject'),$hdr->get('date'), $messageid, $sender, $robot, $list->{'name'}, $which, $msg_string);
+
+
+    &do_log('debug2', 'DO MESSAGE correlation list value : %s', $list->{'admin'}{'correlation'}); 	
+    &do_log('debug2', 'DO MESSAGE verp rate list value : %s', $list->{'admin'}{'verp_rate'}); 	
 
     if($list->{'admin'}{'correlation'} eq "on"){
+
 	if($list->{'admin'}{'verp_rate'} != "100%"){
-	    &do_log('err', "The verp_rate parameter in sympa.conf need to have a value to 100% in order to use activate the correlation; current verp_rate value : %s ", $list->{'admin'}{'verp_rate'});
+            &do_log('err', "The verp_rate parameter in sympa.conf need to have a value to 100% in order to use activate the correlation; current verp_rate value : %s ", $list->{'admin'}{'verp_rate'});
 	}
 	else{
- 	    &do_log('notice', "Correlation enable verp rate : %s ", $list->{'admin'}{'verp_rate'});
+      	    &do_log('notice', "Correlation enable verp rate : %s ", $list->{'admin'}{'verp_rate'});
             &correlation::db_insert_message($message, $robot, $list);
+            
+	    my $receiver = $hdr->get('Disposition-Notification-To');
+	    if(defined($receiver)){
+		 &do_log('debug2', "Disposition-Notification ASKED");
+
+		 
+		 #my $key = &correlation::find_msg_key($messageid, $listname);
+		 #&do_log('notice', "listname : %s", $listname);
+		 #&do_log('notice', "robot : %s", $robot);
+		 #&do_log('notice', "key : %s", $key);
+
+                 #my $return_path = $sender;
+                 #$return_path =~ s/\@/\=\=a\=\=/;
+		 #&do_log('notice', "return-path: %s", $return_path);
+
+		 #my $new_receiver = "$Conf::Conf{'bounce_email_prefix'}+$return_path\=\=$listname\=\=$key\@$robot";
+
+	 	 #$hdr->replace('Disposition-Notification-To', $new_receiver);#$obj->replace(TAG, LINE [, INDEX ])
+	         #&do_log('notice', "Disposition-Notification NEW : %s", $hdr->get('Disposition-Notification-To'));
+	 	 #$msg->replace('Disposition-Notification-To', $new_receiver);#$obj->replace(TAG, LINE [, INDEX ])
+	         #&do_log('notice', "Disposition-Notification NEW : %s", $msg->get('Disposition-Notification-To'));
+	 	 #$message->{'msg'}->replace('Disposition-Notification-To', $new_receiver);#$obj->replace(TAG, LINE [, INDEX ])
+	         #&do_log('notice', "Disposition-Notification NEW : %s", $message->{'msg'}->get('Disposition-Notification-To'));
+		#&correlation::change_mdn_receiver($message, $receiver);
+	    }  
+	    else{
+	        &do_log('debug2', "NO disposition-Notification ");
+	    }
+    	}
     }
-#########################################################################################################################
+#-------------------------------------------------------------------------------------------------------------------------
 
     ## message topic context	
     if (($action =~ /^do_it/) && ($context->{'topic_needed'})) {
@@ -1894,9 +1932,9 @@ sub DoMessage{
 
     if (($action =~ /^do_it/) || ($main::daemon_usage == DAEMON_MESSAGE)) {
 
-
 	if (($main::daemon_usage == DAEMON_MESSAGE) || ($main::daemon_usage == DAEMON_ALL)) {
 	    my $numsmtp = $list->distribute_msg($message);
+
 	    
 	    ## Keep track of known message IDs...if any
 	    $msgid_table{$list->get_list_id()}{$messageid}++ if ($messageid);
@@ -1908,8 +1946,8 @@ sub DoMessage{
 		return undef;
 	    }
 	    &do_log('info', 'Message for %s from %s accepted (%d seconds, %d sessions, %d subscribers), message-id=%s, size=%d', $listname, $sender,  time - $start_time, $numsmtp, $list->get_total(),$messageid, $message->{'size'});
-	    &Log::db_log({'robot' => $robot,'list' => $list->{'name'},'action' => 'DoMessage','parameters' => "$which,$messageid,$robot",'target_email' => '','msg_id' => $messageid,'status' => 'success','error_type' => '','user_email' => $sender,'client' => $ip,'daemon' => $daemon_name});
-	    return 1;
+	    
+		return 1;
 
 	}else{   
           # this message is to be distributed but this daemon is dedicated to commands or list creation -> move it to distribution spool
@@ -1937,6 +1975,17 @@ sub DoMessage{
 	&Log::db_log({'robot' => $robot,'list' => $list->{'name'},'action' => 'DoMessage','parameters' => "$which,$messageid,$robot",'target_email' => '','msg_id' => $messageid,'status' => 'success','error_type' => 'kept_for_auth','user_email' => $sender,'client' => $ip,'daemon' => $daemon_name});
 	return 1;
     }elsif($action =~ /^editorkey(\s?,\s?(quiet))?/){
+#-------------------------------------------------------------------------------------------------------------------------
+	    &do_log('notice', 'DO MESSAGE6 : %s', $message); 	
+	    &do_log('notice', 'DO MESSAGE6 : %s', $message); 	
+	    &do_log('notice', 'DO MESSAGE6 : %s', $message); 	
+	    &do_log('notice', 'DO MESSAGE6 : %s', $message); 	
+	    &do_log('notice', 'DO MESSAGE6 : %s', $message); 	
+	    &do_log('notice', 'DO MESSAGE6 : %s', $message); 	
+	    &do_log('notice', 'DO MESSAGE6 : %s', $message); 	
+	    &do_log('notice', 'DO MESSAGE6 : %s', $message); 	
+	    &do_log('notice', 'DO MESSAGE6 : %s', $message); 	
+#-------------------------------------------------------------------------------------------------------------------------
 	my $key = $list->send_to_editor('md5',$message);
 
 	unless (defined $key) {

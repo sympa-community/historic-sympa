@@ -1,5 +1,4 @@
 #!--PERL--
-
 # bounced.pl - This script runs as a daemon ; it does the incoming 
 # non-delivery reports analysis and storage
 # RCS Identication ; $Revision$ ; $Date$ 
@@ -50,9 +49,7 @@ use tt2;
 use tools;
 use Sympa::Constants;
 
-################################
 use correlation;
-################################
 
 ## Equivalents relative to RFC 1893
 my %equiv = ( "user unknown" => '5.1.1',
@@ -208,34 +205,57 @@ while (!$end) {
 	fatal_err("Can't open dir %s: %m", $queue); ## No return.
     }
 
+
     my @files =  (sort grep(!/^(\.|T\.|BAD\-)/, readdir DIR ));
     closedir DIR;
+
     foreach my $file (@files) {
 
 	last if $end;
-	next unless (-f "$queue/$file");
+	next unless (-f "$queue/$file");# Ignorer si fichier special
+
+	#--------------------------------------------------------------------------------------------------
+
+	do_log ('notice',"TEST BOUNCE : file $queue/$file ");
+	do_log ('notice',"TEST BOUNCE : file $queue/$file ");
+	do_log ('notice',"TEST BOUNCE : file $queue/$file ");
+	do_log ('notice',"TEST BOUNCE : file $queue/$file ");
+	do_log ('notice',"TEST BOUNCE : file $queue/$file ");
+	do_log ('notice',"TEST BOUNCE : file $queue/$file ");
 	
-	unless ($file =~ /^(\S+)\.\d+\.\d+$/) {
+
+#	 open (F, $queue/$file) || die "Problème pour ouvrir $file: $!";
+#	my $ligne;
+#	 while ($ligne = <F>) {
+#		do_log ('notice',"TEST BOUNCE MAIL: $ligne ");
+#	}
+#	close F;
+
+
+	#--------------------------------------------------------------------------------------------------
+
+	
+	unless ($file =~ /^(\S+)\.\d+\.\d+$/) {# Si nom du fichier correspond au format de stockage de sympa
 	    my @s = stat("$queue/$file");
-	    if (POSIX::S_ISREG($s[2])) {
+	    if (POSIX::S_ISREG($s[2])) {# Si fichier ordinaire
 		do_log ('notice',"Ignoring file $queue/$file because unknown format");
-		&ignore_bounce({'file' => $file,
+		&ignore_bounce({'file' => $file, # Sauve le fichier dans un rep BAD/
 				'queue' => $queue,
 			    });
-	        unlink("$queue/$file");
+	        unlink("$queue/$file"); # Destruction du fichier
 	    }
 	    next;
 	}
 
-	if ($file =~ /^(\S+)\.\d+\.\d+$/) {
-	    my ($listname, $robot) = split(/\@/,$1);
+	if ($file =~ /^(\S+)\.\d+\.\d+$/) {# Si format de stockage de Sympa
+	    my ($listname, $robot) = split(/\@/,$1);# partie reconnue de la chaine va dans $1
 	    $robot ||= &List::search_list_among_robots($listname);
 	}
 	
 	my ($listname, $robot) = split(/\@/,$1);
 	$robot ||= &List::search_list_among_robots($listname);
 
-	if (-z "$queue/$file") {
+	if (-z "$queue/$file") {# Fichier vide
 	    do_log ('notice',"Ignoring file $queue/$file because empty file");
 	    &ignore_bounce({'file' => $file,
 			    'robot' => $robot,
@@ -253,48 +273,49 @@ while (!$end) {
 	    next;
 	}
 	my $parser = new MIME::Parser;
-	$parser->output_to_core(1);
+	$parser->output_to_core(1); # Permet de creer un objet MIME::Body::InCore au lieu de stocker le corp ds un fichier
 	my $entity = $parser->read(\*BOUNCE);
 	my $head = $entity->head;
 	my $to = $head->get('to', 0);
 	close BOUNCE ; 
 
 	my $who;
-##################################################################################################
-## Correlation
 	my $id;
-##################################################################################################
 	chomp $to;	
 	&do_log('debug', 'bounce for :%s:  Conf{bounce_email_prefix}=%sxx',$to,$Conf{'bounce_email_prefix'});
+	
+	
 	$to =~ s/<//;
 	$to =~ s/>//;
 	if ($to =~ /^$Conf{'bounce_email_prefix'}\+(.*)\@(.*)$/) { #VERP in use
 
-	    my $local_part = $1;
+            my $local_part = $1;
 	    my $robot = $2;
-	    my $unique ;
+	    my $unique;
 	    if ($local_part =~ /^(.*)(\=\=([wr]))$/) {
 		$local_part = $1;
 		$unique = $2;
 	    }
-
-##################################################################################################
-## Correlation
+#------------------------------------------------------------------------------------------------
 # Test if an id part is present in the to address; use for the correlation
 	    elsif ($local_part =~  /^(.*)\=\=a\=\=(.*)\=\=(.*)\=\=(.*)$/ ) {
 		$id = $4;
 		$local_part =~ /^(.*)\=\=(.*)$/ ;
 		$local_part = $1;
 		&do_log('debug2', 'ID PART : %s in the bounce for :%s  ',$id, $to);
-	    }
-##################################################################################################
 
+	    }
+            else{
+		&do_log('debug2', 'NOT ID PART in the bounce for :%s  ', $to);
+
+	    }
+#------------------------------------------------------------------------------------------------
 	    $local_part =~ s/\=\=a\=\=/\@/ ;
 	    $local_part =~ /^(.*)\=\=(.*)$/ ; 	    
 	    $who = $1;
-	    $listname = $2 ;
+	    $listname = $2;
 
-	    &do_log('debug', 'VERP in use : bounce related to %s for list %s@%s',$who,$listname,$robot);
+	    &do_log('notice', 'VERP in use : bounce related to %s for list %s@%s',$who,$listname,$robot);
 
 	    if ($unique =~ /[wr]/) { # in this case the bounce result from a remind or a welcome message ;so try to remove the subscriber
 		&do_log('debug', "VERP for a service message, try to remove the subscriber");
@@ -342,13 +363,11 @@ while (!$end) {
 		next;
 	    }
 	}
-
-##################################################################################################
-## Correlation
-# If the DSN notification is correct and the correlation mode is enable, it will be inserted in the database
+######################################################################
+# Correlation
         my $list = new List ($listname, $robot);
         unless($list) {
-            do_log('err','Skipping bouncefile %s for unknown list %s@%s',$file,$listname,$robot);
+            do_log('notice','Skipping bouncefile %s for unknown list %s@%s',$file,$listname,$robot);
             &ignore_bounce({'file' => $file,
                  'robot' => $robot,
                  'queue' => $queue,
@@ -357,8 +376,10 @@ while (!$end) {
             next;
         }
 
+#----------------------------------------------------------------------------------------------------------------------
+# If the DSN notification is correct and the correlation mode is enable, it will be inserted in the database
 	if(($head->get('Content-type') =~ /multipart\/report/) && ($head->get('Content-type') =~ /report\-type\=delivery-status/i) && ($list->{'admin'}{'verp_rate'} eq "100%") && ($list->{'admin'}{'correlation'} eq "on")) {
-
+	
 	    do_log ('notice',"processing  DSN Report");
 	    
 	    my @parts = $entity->parts();
@@ -373,7 +394,7 @@ while (!$end) {
 
 	    my $msg_id = $head->get('Message-Id');
 	    chomp $msg_id;
-	    do_log ('debug2',"Message-Id Detected, value : %s", $msg_id);
+
 
 
 	    foreach my $p (@parts) {
@@ -425,6 +446,8 @@ while (!$end) {
                                 ($original_rcpt)= $original_rcpt =~ /(\S+\@\S+)/;
 			    }	
 			}
+			# Recupération de l'identifiant du mail initial (pk_mail) passé par envid 
+			# afin de permettre la correlation meme lorsque le verp n'est pas utilisé
 			if ( ($line =~ /original\-envelope\-id\:\s*(.+)/i) && (!$id) ) {
 			    $id = $1;
 			    chomp $id;
@@ -433,11 +456,12 @@ while (!$end) {
                         if ($line =~ /arrival\-date\:\s*(.+)/i) {
                             $arrival_date = $1;
                             chomp $arrival_date;
-                            do_log ('debug2',"1 - Arrival Date, value : %s", $arrival_date);
+
                         }
 
 		    }
 		}
+
 	    }
 
 	    if($original_rcpt =~ /<(\S+\@\S+)>/){
@@ -447,10 +471,14 @@ while (!$end) {
                 ($msg_id)= $msg_id =~ /<(\S+\@\S+)>/;
             }
 
-	    do_log ('debug2',"DSN Action Detected, value : %s", $dsn_status);
-	    do_log ('debug2',"DSN Recipient Detected, value : %s", $original_rcpt);
-	    do_log ('debug2',"DSN Message-Id Detected, value : %s", $msg_id);
-	    do_log ('debug2',"DSN Arrival Date Detected, value : %s", $arrival_date);
+
+	    do_log ('debug2',"FINAL DSN Action Detected, value : %s", $dsn_status);
+	    do_log ('debug2',"FINAL DSN Recipient Detected, value : %s", $original_rcpt);
+	    do_log ('debug2',"FINAL DSN Message-Id Detected, value : %s", $msg_id);
+	    do_log ('debug2',"FINAL DSN Arrival Date Detected, value : %s", $arrival_date);
+
+            
+
 	     
 	    unless ($id) {
                     &do_log('err', "error: Id not found in to address %s, will ignore",$to);
@@ -472,6 +500,8 @@ while (!$end) {
  	            unlink("$queue/$file");
                     next;
 	    }
+
+	#   if ($list->is_user($original_rcpt)) {
              
             &do_log('debug2', "Save in database...");
 	    unless (&correlation::db_insert_notification($id, 'DSN', $original_rcpt, $msg_id, $dsn_status, $arrival_date )) {
@@ -482,13 +512,9 @@ while (!$end) {
             &do_log('debug2', "DSN Correctly removed...");
             next;
 	}
-
-
+#-----------------------------------------------------------------------------------------------------------------------------------
 # If the MDN notification is correct and the correlation mode is enable, it will be inserted in the database
 	if(($head->get('Content-type') =~ /multipart\/report/) && ($head->get('Content-type') =~ /report\-type\=disposition-notification/i) && ($list->{'admin'}{'verp_rate'} eq "100%") && ($list->{'admin'}{'correlation'} eq "on")) {
-
-
-	    do_log ('notice',"processing MDN Report");
 
 	    my @parts = $entity->parts();
 	    my $original_rcpt;
@@ -504,8 +530,6 @@ while (!$end) {
 	    my $date = $head->get('Date');
 
 	    chomp $msg_id;
-	    do_log ('debug2',"Message-Id Detected, value : %s", $msg_id);
-
 
 	    foreach my $p (@parts) {
 		my $h = $p->head();
@@ -568,6 +592,7 @@ while (!$end) {
 
 		    }
 		}
+
 	    }
 
 	    if($original_rcpt =~ /<(\S+\@\S+)>/){
@@ -577,10 +602,12 @@ while (!$end) {
                 ($msg_id)= $msg_id =~ /<(\S+\@\S+)>/;
             }
 
-	    do_log ('debug2',"MDN Disposition Detected, value : %s", $mdn_status);
-	    do_log ('debug2',"MDN Recipient Detected, value : %s", $original_rcpt);
-	    do_log ('debug2',"MDN Message-Id Detected, value : %s", $msg_id);
-	    do_log ('debug2',"MDN Date Detected, value : %s", $date);
+
+	    do_log ('debug2',"FINAL MDN Disposition Detected, value : %s", $mdn_status);
+	    do_log ('debug2',"FINAL MDN Recipient Detected, value : %s", $original_rcpt);
+	    do_log ('debug2',"FINAL MDN Message-Id Detected, value : %s", $msg_id);
+	    do_log ('debug2',"FINAL MDN Date Detected, value : %s", $date);
+            
 	     
 	    unless ($id) {
                     &do_log('err', "error: Id not found in to address %s, will ignore",$to);
@@ -613,7 +640,6 @@ while (!$end) {
             next;
 	}
 
-##################################################################################################
 
 	if(($head->get('Content-type') =~ /multipart\/report/) && ($head->get('Content-type') =~ /report\-type\=feedback-report/)) {
 	    # this case a report Email Feedback Reports http://www.shaftek.org/publications/drafts/abuse-report/draft-shafranovich-feedback-report-01.txt mainly use by AOL
@@ -743,6 +769,7 @@ while (!$end) {
 	    next;		
 	}
 
+	# Fin section feedback report
 	# else (not welcome or remind) 
 	my $list = new List ($listname, $robot);
 	if (! $list) {
@@ -783,6 +810,8 @@ while (!$end) {
 		    }		
 		## Analysis of bounced message
 		&anabounce(\*BOUNCE, \%hash, \$from);
+		# Voir pour appeler une methode de parsing des dsn qui maj la bdd
+		# &updatedatabase(%hash);
 	    }
 	    close BOUNCE;
 	    
@@ -797,7 +826,8 @@ while (!$end) {
  
 	    my $adr_count;
 	    ## Bouncing addresses
-
+		# Voir si pas mettre un test conditionnel sur le status code pour detecter les dsn positifs et ne pas fausser les statistiques de l'abonné.
+		# Peut être possibilité de lancer la maj des tables pour chaque recipient ici a condition d'avoir approfondi le parsing en amont.
 	    while (my ($rcpt, $status) = each %hash) {
 		$adr_count++;
 		my $bouncefor = $who;

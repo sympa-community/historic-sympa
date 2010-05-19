@@ -128,6 +128,29 @@ sub find_list_user_address{
 	}
 	return ($nb_addresses, @users);
 }
+	
+#sub format_cc_address{
+#	my $cc_header = shift;
+#	my @cc;
+#	my $nb_adresses_cc;
+#
+#	if($cc_header =~ /\s.*/){
+#		@cc = split /,\s+/,"$cc_header";
+#		foreach my $cc (@cc){
+#			($cc)= $cc =~ /(\S+@\S+)/;			
+#			if($cc =~ /<(\S+@\S+)>/){
+#				($cc)= $cc =~ /<(\S+@\S+)>/;			
+#			}			
+#		}
+#		$nb_adresses_cc = @cc;
+#	}
+#
+#	else{
+#		@cc = $cc_header;
+#		$nb_adresses_cc = @cc;
+#	}
+#	return @cc;
+#}
 
 ##############################################
 #   connection
@@ -566,12 +589,12 @@ sub db_insert_message{
     unless($content_type =~ /.*delivery-status.*/){
 
 	&do_log('debug2', 'Waiting....');
-	my $message_id = format_msg_id($row_msgid) or &do_log('notice', "Error : Format msgID failed"); 
+	my $message_id = format_msg_id($row_msgid) or &do_log('err', "Error : Format msgID failed"); 
 	return undef unless ($message_id);
 	&do_log('debug2', 'Message-Id Formated : %s', $message_id);
-	my $from_address = format_from_address($row_from) or &do_log('notice', "Error : Format From address failed"); 
+	my $from_address = format_from_address($row_from) or &do_log('err', "Error : Format From address failed"); 
 	&do_log('debug2', 'From Address Formated : %s', $from_address);
-	my ($to_addresses_nb, @to_addresses) = find_list_user_address($list) or &do_log('notice', "Error : Format To header failed"); 
+	my ($to_addresses_nb, @to_addresses) = find_list_user_address($list) or &do_log('err', "Error : Format To header failed"); 
 	return undef unless ($to_addresses_nb);
 	foreach my $to_address (@to_addresses) {
 		&do_log('debug2', 'To Address Formated : %s', $to_address);
@@ -712,7 +735,7 @@ sub find_msg_key{
     my $listname = shift;	
 
     my $pk;
-    my $message_id = format_msg_id($msgid) or &do_log('notice', "Error : Format msgID failed");
+    my $message_id = format_msg_id($msgid) or &do_log('err', "Error : Format msgID failed");
 
     return undef unless ($message_id);
     &do_log('debug2', 'Message-Id Formated : %s', $message_id);
@@ -750,14 +773,15 @@ sub change_mdn_receiver{
   	my $mdn_header;
   	my $email = Email::Simple->new($msg_string);
 	
-	&do_log('notice', 'Will change Disposition-Notification value to : %s', $receiver);
+	&do_log('debug2', 'Will change Disposition-Notification value to : %s', $receiver);
 	if(undef($mdn_header = $email->header("Disposition-Notification-To")) ) {
 	    &do_log('err', 'Disposition-Notification-To header not found');
 	    return undef;
 	}
 	else {
    	    $email->header_set("Disposition-Notification-To", "$receiver");
-	    &do_log('debug2', 'NEW e-mail Ready to be sent : %s', $email->as_string);
+	    &do_log('debug2', 'NEW e-mail Ready to be sent : %s', $receiver);
+
   	    return $email->as_string;
 	}
 }
@@ -797,6 +821,14 @@ sub get_delivered_info{
          return undef;
     }
 
+    #unless(@pk_notifs = get_pk_notifications($dbh, $pkmsg)){
+    #   &do_log('err', "Unable to get the pk identificators of the notifications for message : %s", $msgid);
+    #   return undef;
+    #}
+    #&do_log('debug2', "PK notifications : %s", @pk_notifs);
+    #foreach my $pk_notif (@pk_notifs){
+    #   &do_log('debug2', "PK notifications founded : %s", $pk_notif);
+    #}
     unless($nb_rcpt = get_recipients_number($dbh, $pkmsg)){
        &do_log('err', "Unable to get the number of recipients for message : %s", $msgid);
        return undef;
@@ -936,7 +968,7 @@ sub remove_message{
     }
     my $dbh = connection($Conf::Conf{'db_name'}, $Conf::Conf{'db_host'}, $Conf::Conf{'db_port'}, $Conf::Conf{'db_user'}, $Conf::Conf{'db_passwd'});
     unless ($dbh and $dbh->ping) {
-         &do_log('notice', "Error : Can't join database");
+         &do_log('err', "Error : Can't join database");
          return undef;
     }
     unless(@pk_notifs = get_pk_notifications($dbh, $pkmsg)) {

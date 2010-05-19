@@ -1,4 +1,4 @@
-#!--PERL--
+#! --PERL--
 
 # archived.pl - This script does the web archives building for Sympa
 # RCS Identication ; $Revision: 4985 $ ; $Date: 2008-05-02 12:06:27 +0200 (Fri, 02 May 2008) $ 
@@ -39,8 +39,6 @@ This script must be run along with sympa. It regularly checks the bulkmailer_tab
 
 use lib '--modulesdir--';
 
-use strict;
-
 use Conf;
 use Log;
 use Commands;
@@ -51,7 +49,6 @@ use Bulk;
 use List;
 use tools;
 use Sympa::Constants;
-
 #------------------
 use correlation;
 #------------------
@@ -107,7 +104,7 @@ unless ($main::options{'debug'} || $main::options{'foreground'}) {
    open(STDERR, ">> /dev/null");
    open(STDOUT, ">> /dev/null");
    if (open(TTY, "/dev/tty")) {
-#      ioctl(TTY, &TIOCNOTTY, 0);
+      ioctl(TTY, $TIOCNOTTY, 0);
       close(TTY);
    }
    setpgrp(0, 0);
@@ -154,24 +151,20 @@ do_log('notice', "bulk.pl %s Started", Sympa::Constants::VERSION);
 
 ## Catch SIGTERM, in order to exit cleanly, whenever possible.
 $SIG{'TERM'} = 'sigterm';
-my $end = 0;
+$end = 0;
 
 my $opensmtp = 0 ;
 my $fh = 'fh0000000000';	## File handle for the stream.
 
 my $messagekey;       # the key of the current message in the message_table   
-my $messageasstring_init;  # the current message as a string
-my $messageasstring;  # the transformed message.
-my $last_check_date = 0;
+my $messageasstring;  # the current message as a string
 
 my $timeout = $Conf::Conf{'bulk_wait_to_fork'};
-my $last_check_date = time();
 
 $options->{'multiple_process'} = 1;
 $Conf::Conf{'maxsmtp'} = int($Conf::Conf{'maxsmtp'}/$Conf::Conf{'bulk_max_count'});
 
 while (!$end) {
-    &List::init_list_cache();
     my $bulk;
 	
     unless ($main::options{'foreground'}) {
@@ -192,7 +185,7 @@ while (!$end) {
 		$dbh->disconnect; # when loading conf in database disconnect because of sharing dbh may crash bulk.pl
 		
 		if($Conf::Conf{'bulk_max_count'} > 1) {
-		    &do_log('info','Workload increased: %s packets to process. Creating %s child bulks to increase sending rate.', $r_packets, $Conf::Conf{'bulk_max_count'}-1);
+		    &do_log('info','Too much packets in spool (%s). Creating %s child bulks to increase sending rate.', $r_packets, $Conf::Conf{'bulk_max_count'}-1);
 		    for my $process_count(1..$Conf::Conf{'bulk_max_count'}-1){
 			if ((my $child_pid = fork) != 0) {
 			    do_log('info', "Starting bulk child daemon, pid %s", $child_pid);
@@ -216,123 +209,107 @@ while (!$end) {
     if (($main::daemon_usage eq 'DAEMON_SLAVE') && 
 		(time() - $date_of_last_activity > $Conf::Conf{'bulk_lazytime'}) && 
 		!(my $r_packets = &Bulk::there_is_too_much_remaining_packets())){
-		&do_log('info', "Process %s didn't send any message since %s seconds, exiting.", $$, $Conf::Conf{'bulk_lazytime'});
+		&do_log('info', "Process %s too old, exiting.", $$);
 		last;
     }
 	
 	## Go through the bulk_mailer table and process messages
     if ($bulk = Bulk::next()) {
-	
-	if ($bulk->{'messagekey'} ne $messagekey) {
-	    # current packet is no related to the same message as the previous packet
+		if ($bulk->{'messagekey'} ne $messagekey) {
+			# current packet is no related to the same message as the previous packet
             # so it is needed to fetch the new message from message_table 
-	    $messageasstring_init = &Bulk::messageasstring($bulk->{'messagekey'});
-	    unless ( $messageasstring_init ) {
-		&do_log('err',"internal error : current packet 'messagekey= %s contain a ref to a null message",$bulk->{'messagekey'});
-	    }
-	}
-	#--------------------------------------------------
-	#------------- BEGIN VERP AND MERGE ---------------
-        #--------------------------------------------------
-	my $data; #HASH which will contain the attributes of the subscriber
-	
-	# Initialization of the HASH : $data. It will be used by parse_tt2 to personalized messages.
-	$data->{'listname'} = $bulk->{'listname'};
-	$data->{'robot'} = $bulk->{'robot'};
-	$data->{'to'} = $bulk->{'receipients'};
-	$data->{'wwsympa_url'} = $Conf{'wwsympa_url'};
-	
-	my $rcpt; # It is the email of a subscriber, use it in the foreach
-	my @rcpts = split /,/,$bulk->{'receipients'}; # Contain all the subscribers
-	## Use an intermediate handler to encode to filesystem_encoding
-	my $user;
-	
-	if (($bulk->{'verp'})||($bulk->{'merge'})){ # message needs personalization
-	    
-	    foreach $rcpt (@rcpts) {
-		my $return_path = $bulk->{'returnpath'};
-		if ($bulk->{'verp'}) {
-##########################################################################################
-## Ajout modification correlation
-		    if($list->{'admin'}{'correlation'} eq "on"){
-
-                        my $msgid = &correlation::extract_msgid($messageasstring);
-                        my $key = &correlation::find_msg_key($msgid, $bulk->{'listname'});
-                        &do_log('debug2', "VERP CORRELATION FINDED Key: %s ", $key);
-                        $return_path = $rcpt;
-                        $return_path =~ s/\@/\=\=a\=\=/;
-                        $return_path = "$Conf::Conf{'bounce_email_prefix'}+$return_path\=\=$bulk->{'listname'}\=\=$key\@$bulk->{'robot'}";
-                        &do_log('debug2', "MSG VERP return-path: %s ", $return_path);
-                        #Specify the return_path value for the Disposition-Notification-To header in order that
-                        # mdn report returns to the sympa server for correlation treatment
-                        my $msg_result;
-                        $msg_result = &correlation::change_mdn_receiver($messageasstring, $return_path);
-                        #*SMTP = &mail::smtpto($return_path, \$rcpt, $bulk->{'robot'});
-                        if($msg_result) {
-                               $messageasstring = $msg_result;
-                               *SMTP = &mail::smtpto($return_path, \$rcpt, $bulk->{'robot'}, $key);
-                        }
-                        else{
-                               *SMTP = &mail::smtpto($return_path, \$rcpt, $bulk->{'robot'}, $key);
-                        }
-		    }
-		    else {
-                         &do_log('debug2', "BULK MSG VERP NO CORRELATION: %s ", $rcpt );
-                         my $msgid = &correlation::extract_msgid($messageasstring);
-                         $return_path = $rcpt;
-                         $return_path =~ s/\@/\=\=a\=\=/;
-                         $return_path = "$Conf::Conf{'bounce_email_prefix'}+$return_path\=\=$bulk->{'listname'}\@$bulk->{'robot'}"; # VERP broken if no listname is provided
-                         #*SMTP = &mail::smtpto($return_path, \$rcpt, $bulk->{'robot'});
-                         *SMTP = &mail::smtpto($return_path, \$rcpt, $bulk->{'robot'}, $msgid);
-		    }
+			$messageasstring = &Bulk::messageasstring($bulk->{'messagekey'});
+			unless ( $messageasstring ) {
+				&do_log('err',"internal error : current packet 'messagekey= %s contain a ref to a null message",$bulk->{'messagekey'});
+			}
 		}
-		if ($bulk->{'merge'}) { 
-		    
-		    ### Parse an MIME::Entity message
-		    my $parser = new MIME::Parser;
-		    my $entity = $parser->parse_data($messageasstring_init); ## Retrouver la méthode qui correspond
-		    
-		    unless(&Bulk::merge_msg ($entity, $rcpt, $bulk, $data)){
-			&do_log('err', 'Erreur d appel &Bulk::merge_msg');
-		    }
-
-		    $messageasstring = $entity->as_string;
-		}
+	
 		
-###		*SMTP = &mail::smtpto($return_path, \$rcpt, $bulk->{'robot'});
-		# Message with customized data
-		print SMTP $messageasstring;
-		close SMTP;
-
-	    }
-	}else{ # message dont needs personalization, they can be sent by packet
-	    my $msgid = &correlation::extract_msgid($messageasstring);
-	    my $key = &correlation::find_msg_key($msgid, $bulk->{'listname'});
-##	    *SMTP = &mail::smtpto($bulk->{'returnpath'}, \@rcpts, $bulk->{'robot'});
-            *SMTP = &mail::smtpto($bulk->{'returnpath'}, \@rcpts, $bulk->{'robot'}, $key);
-	    # Initial message
-	    print SMTP $messageasstring_init;
-	    close SMTP;
-	}
-##########################################################################################
-	## Remove packet once it has been processed
-	unless (&Bulk::remove($bulk->{'messagekey'},$bulk->{'packetid'})) {
-	    &do_log('err',"failed to remove processed packet '%s', messagekey '%s'", $bulk->{'messagekey'},$bulk->{'packetid'});
-	    return undef;
-	}
+		my @rcpts = split /,/,$bulk->{'receipients'};
 	
-	if($bulk->{'priority_packet'} == $Conf::Conf{'sympa_packet_priority'} + 1){
-	    &do_log('notice','Done sending message %s to list %s@%s (priority %s) in %s seconds since scheduled expedition date. Now sending VERP.', 
-		    $bulk->{'messagekey'}, 
-		    $bulk->{'listname'}, 
-		    $bulk->{'robot'}, 
-		    $bulk->{'priority_message'}, 
-		    time() - $bulk->{'delivery_date'});
-	}
-	$date_of_last_activity = time();
+###################################################################################################
+## Correlation	
+
+
+		my $list = new List($bulk->{'listname'}, $bulk->{'robot'});
+
+		&do_log('debug2', "TEST BULK CORRELATION verp rate: %s ", $list->{'admin'}{'verp_rate'});
+
+#----------------------------------------------------------------------------------------------
+# Change the VERP usage in order to insert a message identifier TODO: choose to remove the envid mecanism or not
+#----------------------------------------------------------------------------------------------
+		if(($bulk->{'verp'}) && ($list->{'admin'}{'verp_rate'} eq "100%") && ($list->{'admin'}{'correlation'} eq "on")){
+			my $msgid = &correlation::extract_msgid($messageasstring);
+			my $key = &correlation::find_msg_key($msgid, $bulk->{'listname'});
+			&do_log('debug2', "FINDED Key: %s ", $key);
+			foreach my $rcpt (@rcpts) {
+				&do_log('debug2', "TEST BULK MSG VERP CORRELATION: %s ", $rcpt );
+				$return_path = $rcpt;
+				$return_path =~ s/\@/\=\=a\=\=/; 
+				$return_path = "$Conf::Conf{'bounce_email_prefix'}+$return_path\=\=$bulk->{'listname'}\=\=$key\@$bulk->{'robot'}";
+				&do_log('debug2', "TEST BULK MSG VERP return-path: %s ", $return_path);
+
+				#Specify the return_path value for the Disposition-Notification-To header in order that
+				# mdn report returns to the sympa server for correlation treatment
+				my $msg_result; 
+				$msg_result = &correlation::change_mdn_receiver($messageasstring, $return_path);
+				#*SMTP = &mail::smtpto($return_path, \$rcpt, $bulk->{'robot'});
+				if(defined($msg_result)) {
+					$messageasstring = $msg_result;
+					*SMTP = &mail::smtpto($return_path, \$rcpt, $bulk->{'robot'}, $key);
+				}
+				else{
+					*SMTP = &mail::smtpto($return_path, \$rcpt, $bulk->{'robot'}, $key);
+				}
+				print SMTP $messageasstring;
+				close SMTP;
+			}
+		}
+		elsif ( ($bulk->{'verp'}) && ($list->{'admin'}{'correlation'} eq "off") ){   
+			foreach my $rcpt (@rcpts) {
+
+				my $msgid = &correlation::extract_msgid($messageasstring);
+				my $key = &correlation::find_msg_key($msgid, $bulk->{'listname'});
+				&do_log('debug2', "TEST BULK MSG VERP NO CORRELATION: %s ", $rcpt );
+				$return_path = $rcpt;
+				$return_path =~ s/\@/\=\=a\=\=/; 
+				$return_path = "$Conf::Conf{'bounce_email_prefix'}+$return_path\=\=$bulk->{'listname'}\@$bulk->{'robot'}"; # VERP broken if no listname is provided
+				#*SMTP = &mail::smtpto($return_path, \$rcpt, $bulk->{'robot'});
+				*SMTP = &mail::smtpto($return_path, \$rcpt, $bulk->{'robot'}, $key);
+				print SMTP $messageasstring;
+				close SMTP;
+			}
+		}else{
+#----------------------------------------------------------------------------------------------------------------			
+			my $msgid = &correlation::extract_msgid($messageasstring);
+			my $key = &correlation::find_msg_key($msgid, $bulk->{'listname'});
+			&do_log('debug2', "TEST BULK MSG KEY : %s - %s", $msgid, $bulk->{'packetid'});
+			
+			*SMTP = &mail::smtpto($bulk->{'returnpath'}, \@rcpts, $bulk->{'robot'}, $key);
+			#*SMTP = &mail::smtpto($bulk->{'returnpath'}, \@rcpts, $bulk->{'robot'});
+			print SMTP $messageasstring;
+			close SMTP;
+#-----------------------------------------------------------------------------------------------------------------
+		}
+
+		## Remove packet once it has been processed
+		unless (&Bulk::remove($bulk->{'messagekey'},$bulk->{'packetid'})) {
+			&do_log('err',"failed to remove processed packet '%s', messagekey '%s'", $bulk->{'messagekey'},$bulk->{'packetid'});
+			return undef;
+		}
+
+		if($bulk->{'priority_packet'} == $Conf::Conf{'sympa_packet_priority'} + 1){
+			&do_log('notice','Done sending message %s to list %s@%s (priority %s) in %s seconds since scheduled expedition date. Now sending VERP.', 
+				$bulk->{'messagekey'}, 
+				$bulk->{'listname'}, 
+				$bulk->{'robot'}, 
+				$bulk->{'priority_message'}, 
+				time() - $bulk->{'delivery_date'});
+		}
+		$date_of_last_activity = time();
     }else{
-	## Sleep for a while if bulk_mailer DB table is empty
-	sleep $Conf::Conf{'bulk_sleep'}; 
+		## Sleep for a while if bulk_mailer DB table is empty
+		sleep $Conf::Conf{'bulk_sleep'}; 
     }
     &mail::reaper;
 }
