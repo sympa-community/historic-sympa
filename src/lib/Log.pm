@@ -366,15 +366,15 @@ sub db_stat_counter_log {
 	$dbh = &List::db_get_handler();
     }
     
-    my $statement = sprintf 'INSERT INTO stat_counter_table (id_counter, beginning_date_counter, end_date_counter, operation_counter, list_counter, variation_counter, total_counter, robot_counter) VALUES (%s, %d, %d, %s, %s, %d, %d, %s)',
+    my $statement = sprintf 'INSERT INTO stat_counter_table (id_counter, beginning_date_counter, end_date_counter, operation_counter, robot_counter, list_counter, variation_counter, total_counter) VALUES (%s, %d, %d, %s, %s, %s, %d, %d)',
     $id,
     $date_deb,
     $date_fin,
     $dbh->quote($operation),
+    $dbh->quote($robot);
     $dbh->quote($list),
     $variation,
     $total,
-    $dbh->quote($robot);
 
     unless($dbh->do($statement)){
 	do_log('err', 'Unable to execute SQL statement "%s", %s', $statement, $dbh->errstr);
@@ -607,17 +607,16 @@ sub aggregate_data {
     #store reslults in stat_counter_table
     foreach my $key_op (keys (%$aggregated_data)) {
 	
-	&do_log('trace', 'voici la clef : %s', $key_op);
-	open TMP2, ">/tmp/digdump"; &tools::dump_var($aggregated_data->{$key_op}, 0, \*TMP2); close TMP2;
+	#open TMP2, ">/tmp/digdump"; &tools::dump_var($aggregated_data->{$key_op}, 0, \*TMP2); close TMP2;
 
 	#store send mail data
 	if($key_op eq 'send_mail'){
-	    &do_log('trace', 'on est dedans !');
+
 	    foreach my $key_robot (keys (%{$aggregated_data->{$key_op}})){
-		&do_log('trace', 'voici la clef : %s', $key_robot);
+
 		foreach my $key_list (keys (%{$aggregated_data->{$key_op}->{$key_robot}})){
 		    
-		    &do_log('trace', 'on stock dans stat_couter_table !!!');
+
 		    &db_stat_counter_log({'begin_date' => $begin_date, 'end_date' => $end_date, 'operation' => $key_op, 'list' => $key_list, 'variation' => $aggregated_data->{$key_op}->{$key_robot}->{$key_list}->{'count'}, 'total' => '', 'robot' => $key_robot});
 		}
 	    }
