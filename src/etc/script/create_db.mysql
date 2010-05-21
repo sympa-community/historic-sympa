@@ -39,6 +39,7 @@ CREATE TABLE subscriber_table (
 	suspend_subscriber	int(1),
 	suspend_start_date_subscriber	int(11),
 	suspend_end_date_subscriber	int(11),
+	number_messages_subscriber	int(5), NOT NULL
 	PRIMARY KEY (robot_subscriber, list_subscriber, user_subscriber),
 	INDEX user_index (user_subscriber)
 );

@@ -32,7 +32,8 @@ CREATE TABLE subscriber_table (
 	bounce_score_subscriber integer,
 	suspend_subscriber	boolean,
 	suspend_start_date_subscriber	integer,
-	suspend_end_date_subscriber	integer,	
+	suspend_end_date_subscriber	integer,
+	number_messages_subscriber	integer,	
 	PRIMARY KEY (robot_subscriber, list_subscriber, user_subscriber)
 );
 CREATE INDEX subscriber_idx ON subscriber_table (user_subscriber,list_subscriber,robot_subscriber);
