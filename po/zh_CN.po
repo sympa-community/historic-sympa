@@ -8048,6 +8048,10 @@ msgstr "公开邮件列表，Bcc拒绝了（不能发送同样的邮件到多个
 msgid "public list multipart messages are rejected"
 msgstr "公开邮件列表多节邮件被拒绝"
 
+#: ../src/etc/scenari/spam_status.x-spam-status:1
+msgid "test x-spam-status  header"
+msgstr ""
+
 #: ../src/etc/scenari/subscribe.auth:1 ../src/etc/scenari/subscribe.authdkim:1
 msgid "subscription request confirmed"
 msgstr "订阅请求已被确认"

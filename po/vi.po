@@ -8271,6 +8271,10 @@ msgstr "hộp thư chung công cộng, từ chối BCC (chống thư rác)"
 msgid "public list multipart messages are rejected"
 msgstr "hộp thư chung công cộng, các thư đa phần bị từ chối"
 
+#: ../src/etc/scenari/spam_status.x-spam-status:1
+msgid "test x-spam-status  header"
+msgstr ""
+
 #: ../src/etc/scenari/subscribe.auth:1 ../src/etc/scenari/subscribe.authdkim:1
 msgid "subscription request confirmed"
 msgstr "yêu cầu đăng ký đã được xác nhận"

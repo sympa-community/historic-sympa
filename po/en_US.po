@@ -987,13 +987,25 @@ msgstr "This list is configured to require topic(s)."
 msgid "Please select one or more topic(s) that corresponds to your message:"
 msgstr "Please select one or more topic(s) that corresponds to your message:"
 
+#: ../web_tt2/compose_mail.tt2:64
+msgid "Messages customization: use the template syntax:"
+msgstr "Messages customization: use the template syntax:"
+
 #: ../web_tt2/compose_mail.tt2:65
 msgid "Below are some examples of TT2 parameters usable in messages."
 msgstr "Below are some examples of TT2 parameters usable in messages."
 
+#: ../web_tt2/compose_mail.tt2:67
+msgid ": the listname; always available."
+msgstr ": the listname; always available."
+
 #: ../web_tt2/compose_mail.tt2:68
 msgid ": the name of the host the list is intalled on; always available."
 msgstr ": the name of the host the list is intalled on; always available."
+
+#: ../web_tt2/compose_mail.tt2:69
+msgid ": the user email; always available."
+msgstr ": the user email; always available."
 
 #: ../web_tt2/compose_mail.tt2:70
 msgid ": the user name associated to her email; always available."
@@ -3339,6 +3351,16 @@ msgid "The password you submitted is wrong. Maybe you forgot it?"
 msgstr ""
 "The password you submitted is incorrect. Perhaps you have forgotten it?"
 
+#: ../web_tt2/renewpasswd.tt2:9
+msgid ""
+"Too many wrong password were sumitted for this account. Your account as been "
+"blocked in order to protect you agains attacks. You must renew your password "
+"in order to login."
+msgstr ""
+"Too many wrong password were sumitted for this account. Your account as been "
+"blocked in order to protect you agains attacks. You must renew your password "
+"in order to login."
+
 # rtb
 #: ../web_tt2/renewpasswd.tt2:11
 msgid "You missed the password, please submit again. Maybe you forgot it?"
@@ -4084,6 +4106,10 @@ msgstr ""
 "exclusion table, through the standard unsubscribe/delete functions. \n"
 "They get off the exclusion table with the standard subscribe/add functions."
 
+#: ../web_tt2/show_exclude.tt2:28
+msgid "No user excluded."
+msgstr "No user excluded."
+
 #: ../web_tt2/show_sessions.tt2:2
 msgid "Sessions list"
 msgstr "Sessions list"
@@ -4692,6 +4718,10 @@ msgstr "%1's picture"
 msgid "Suspended"
 msgstr "Suspended"
 
+#: ../web_tt2/suspend_request.tt2:23
+msgid "Suspended from"
+msgstr "Suspended from"
+
 #: ../web_tt2/suspend_request.tt2:23 ../web_tt2/viewlogs.tt2:113
 msgid "to"
 msgstr "to"
@@ -4707,6 +4737,18 @@ msgstr "No subscription."
 #: ../web_tt2/suspend_request.tt2:37
 msgid "Toogle selection"
 msgstr "Toogle selection"
+
+#: ../web_tt2/suspend_request.tt2:41
+msgid "Suspend / Resume the selected lists"
+msgstr "Suspend / Resume the selected lists"
+
+#: ../web_tt2/suspend_request.tt2:43
+msgid "From:"
+msgstr "From:"
+
+#: ../web_tt2/suspend_request.tt2:44
+msgid "To:"
+msgstr "To:"
 
 #: ../web_tt2/suspend_request.tt2:46
 msgid "Check this box if you want to suspend your subscription indefinitely."
@@ -8133,6 +8175,10 @@ msgstr "public list, Bcc rejected (anti-spam)"
 msgid "public list multipart messages are rejected"
 msgstr "public list multipart messages are rejected"
 
+#: ../src/etc/scenari/spam_status.x-spam-status:1
+msgid "test x-spam-status  header"
+msgstr ""
+
 #: ../src/etc/scenari/subscribe.auth:1 ../src/etc/scenari/subscribe.authdkim:1
 msgid "subscription request confirmed"
 msgstr "subscription request confirmed"
@@ -8528,6 +8574,12 @@ msgstr ""
 
 #. This entry is a date/time format
 #. Check the strftime manpage for format details : http://docs.freebsd.org/info/gawk/gawk.info.Time_Functions.html
+#: ../src/lib/Bulk.pm:374
+msgid "%d %b %Y  %H:%M"
+msgstr "%d %b %Y  %H:%M"
+
+#. This entry is a date/time format
+#. Check the strftime manpage for format details : http://docs.freebsd.org/info/gawk/gawk.info.Time_Functions.html
 #: ../src/lib/Commands.pm:963 ../wwsympa/wwsympa.fcgi.in:9706
 msgid "%A"
 msgstr "%A"
@@ -8722,6 +8774,10 @@ msgid ""
 "The categories of messages sent to the list that will be signed using DKIM."
 msgstr ""
 "The categories of messages sent to the list that will be signed using DKIM."
+
+#: ../src/lib/List.pm:613
+msgid "File path for list DKIM private key"
+msgstr "File path for list DKIM private key"
 
 #: ../src/lib/List.pm:621
 msgid "Selector for DNS lookup of DKIM public key"
@@ -9128,6 +9184,10 @@ msgstr "messages"
 msgid "seconds"
 msgstr "seconds"
 
+#: ../src/lib/List.pm:628
+msgid "List of headers to be included ito the message for signature"
+msgstr "List of headers to be included into the message for signature"
+
 #: ../src/lib/List.pm:635
 msgid "DKIM \"d=\" tag, you should probably use the default value"
 msgstr "DKIM \"d=\" tag, you should probably use the default value"
@@ -9517,62 +9577,6 @@ msgstr "no mail (useful for vacations)"
 #: ../wwsympa/wwslib.pm:37
 msgid "you do not receive your own posts"
 msgstr "you do not receive your own posts"
-
-#: ../web_tt2/compose_mail.tt2:64
-msgid "Messages customization: use the template syntax:"
-msgstr "Messages customization: use the template syntax:"
-
-#: ../web_tt2/compose_mail.tt2:67
-msgid ": the listname; always available."
-msgstr ": the listname; always available."
-
-#: ../web_tt2/compose_mail.tt2:69
-msgid ": the user email; always available."
-msgstr ": the user email; always available."
-
-#: ../web_tt2/renewpasswd.tt2:9
-msgid ""
-"Too many wrong password were sumitted for this account. Your account as been "
-"blocked in order to protect you agains attacks. You must renew your password "
-"in order to login."
-msgstr ""
-"Too many wrong password were sumitted for this account. Your account as been "
-"blocked in order to protect you agains attacks. You must renew your password "
-"in order to login."
-
-#: ../web_tt2/show_exclude.tt2:28
-msgid "No user excluded."
-msgstr "No user excluded."
-
-#: ../web_tt2/suspend_request.tt2:23
-msgid "Suspended from"
-msgstr "Suspended from"
-
-#: ../web_tt2/suspend_request.tt2:41
-msgid "Suspend / Resume the selected lists"
-msgstr "Suspend / Resume the selected lists"
-
-#: ../web_tt2/suspend_request.tt2:43
-msgid "From:"
-msgstr "From:"
-
-#: ../web_tt2/suspend_request.tt2:44
-msgid "To:"
-msgstr "To:"
-
-#. This entry is a date/time format
-#. Check the strftime manpage for format details : http://docs.freebsd.org/info/gawk/gawk.info.Time_Functions.html
-#: ../src/lib/Bulk.pm:374
-msgid "%d %b %Y  %H:%M"
-msgstr "%d %b %Y  %H:%M"
-
-#: ../src/lib/List.pm:613
-msgid "File path for list DKIM private key"
-msgstr "File path for list DKIM private key"
-
-#: ../src/lib/List.pm:628
-msgid "List of headers to be included ito the message for signature"
-msgstr "List of headers to be included into the message for signature"
 
 #~ msgid " to "
 #~ msgstr " to "

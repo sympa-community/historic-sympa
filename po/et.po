@@ -8267,6 +8267,10 @@ msgstr "saata võib igaüks, bcc päisega kirju ignoreeritakse"
 msgid "public list multipart messages are rejected"
 msgstr "saata võivad kõik, manustega kirjad ei ole lubatud"
 
+#: ../src/etc/scenari/spam_status.x-spam-status:1
+msgid "test x-spam-status  header"
+msgstr ""
+
 #: ../src/etc/scenari/subscribe.auth:1 ../src/etc/scenari/subscribe.authdkim:1
 msgid "subscription request confirmed"
 msgstr "vajalik autentimine"

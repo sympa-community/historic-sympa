@@ -8178,6 +8178,10 @@ msgstr "공용 리스트. Bcc 거부했다 (반대로스팸)"
 msgid "public list multipart messages are rejected"
 msgstr "공용 리스트. 여러 부분 메시지는 거부됩니다"
 
+#: ../src/etc/scenari/spam_status.x-spam-status:1
+msgid "test x-spam-status  header"
+msgstr ""
+
 #: ../src/etc/scenari/subscribe.auth:1 ../src/etc/scenari/subscribe.authdkim:1
 msgid "subscription request confirmed"
 msgstr "구독 요청 확인했습니다"

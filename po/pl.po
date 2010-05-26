@@ -8035,6 +8035,10 @@ msgstr "lista publiczna, ukryta kopia (Bcc) odrzucana (anty-spam)"
 msgid "public list multipart messages are rejected"
 msgstr "wiadomości typu multipart wysyłane na listę publiczną są odrzucane"
 
+#: ../src/etc/scenari/spam_status.x-spam-status:1
+msgid "test x-spam-status  header"
+msgstr ""
+
 #: ../src/etc/scenari/subscribe.auth:1 ../src/etc/scenari/subscribe.authdkim:1
 msgid "subscription request confirmed"
 msgstr "prośba o subskrypcję do listy potwierdzona"

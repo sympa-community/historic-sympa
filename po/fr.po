@@ -8229,6 +8229,10 @@ msgstr "liste ouverte, Bcc interdit (anti-spam)"
 msgid "public list multipart messages are rejected"
 msgstr "liste ouverte mais attachements interdits"
 
+#: ../src/etc/scenari/spam_status.x-spam-status:1
+msgid "test x-spam-status  header"
+msgstr ""
+
 #: ../src/etc/scenari/subscribe.auth:1 ../src/etc/scenari/subscribe.authdkim:1
 msgid "subscription request confirmed"
 msgstr "demande d'abonnement après confirmation"

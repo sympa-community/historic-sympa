@@ -8336,6 +8336,10 @@ msgstr "lista pública Bcc rejected (anti-spam)"
 msgid "public list multipart messages are rejected"
 msgstr "lista pública pero los mensajes con anexos no están permitidos"
 
+#: ../src/etc/scenari/spam_status.x-spam-status:1
+msgid "test x-spam-status  header"
+msgstr ""
+
 #: ../src/etc/scenari/subscribe.auth:1 ../src/etc/scenari/subscribe.authdkim:1
 msgid "subscription request confirmed"
 msgstr "solicitud de subscripción confirmada"
