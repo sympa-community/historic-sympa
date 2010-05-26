@@ -455,6 +455,9 @@ sub request_action {
 	    my $action = $rule->{'action'};
 
             ## reject : get parameters
+	    if ($action =~ /^(ham|spam|unsure)/) {
+		$action = $1 ;		
+	    }
 	    if ($action =~/^reject(\((.+)\))?(\s?,\s?(quiet))?/) {
 
 		if ($4 eq 'quiet') { 
@@ -498,7 +501,7 @@ sub request_action {
 		}
 
 		## Check syntax of returned action
-		unless ($action =~ /^(do_it|reject|request_auth|owner|editor|editorkey|listmaster)/) {
+		unless ($action =~ /^(do_it|reject|request_auth|owner|editor|editorkey|listmaster|ham|spam|unsure)/) {
 		    &do_log('err', "Matched unknown action '%s' in scenario", $rule->{'action'});
 		    return undef;
 		}
@@ -611,10 +614,12 @@ sub verify {
 	    
 	    ## List param
 	}elsif ($value =~ /\[list\-\>([\w\-]+)\]/i) {
-	    if ($1 =~ /^name|total$/) {
-		$value =~ s/\[list\-\>([\w\-]+)\]/$list->{$1}/;
-	    }elsif ($list->{'admin'}{$1} and (!ref($list->{'admin'}{$1})) ) {
-		$value =~ s/\[list\-\>([\w\-]+)\]/$list->{'admin'}{$1}/;
+	    my $param = $1;
+
+	    if ($param =~ /^name|total$/) {
+		$value =~ s/\[list\-\>([\w\-]+)\]/$list->{$param}/;
+	    }elsif ($list->{'admin'}{$param} and (!ref($list->{'admin'}{$param})) ) {
+		$value =~ s/\[list\-\>([\w\-]+)\]/$list->{'admin'}{$param}/;
 	    }else{
 		do_log('err','Unknown list parameter %s in rule %s', $value, $condition);
 		return undef;

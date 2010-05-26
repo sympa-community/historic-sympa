@@ -79,10 +79,10 @@ sub fatal_err {
 }
 
 sub do_log {
-    my $facility = shift;
+    my $level = shift;
 
     # do not log if log level if too high regarding the log requested by user 
-    return if ($levels{$facility} > $log_level);
+    return if ($levels{$level} > $log_level);
 
     my $message = shift;
     my @param = @_;
@@ -103,18 +103,21 @@ sub do_log {
         $message = $call[3] . '() ' . $message if ($call[3]);
     }
 
+    ## Add facility to log entry
+    $message = $level.' '.$message;
+
     # map to standard syslog facility if needed
-    if ($facility eq 'trace' ) {
+    if ($level eq 'trace' ) {
         $message = "###### TRACE MESSAGE ######:  " . $message;
-        $facility = 'notice';
-    } elsif ($facility eq 'debug2' || $facility eq 'debug3') {
-        $facility = 'debug';
+        $level = 'notice';
+    } elsif ($level eq 'debug2' || $level eq 'debug3') {
+        $level = 'debug';
     }
 
     eval {
-        unless (syslog($facility, $message, @param)) {
+        unless (syslog($level, $message, @param)) {
             &do_connect();
-            syslog($facility, $message, @param);
+            syslog($level, $message, @param);
         }
     };
 
@@ -128,7 +131,7 @@ sub do_log {
     if ($main::options{'foreground'}) {
         if (
             $main::options{'log_to_stderr'} ||
-            ($main::options{'batch'} && $facility eq 'err')
+            ($main::options{'batch'} && $level eq 'err')
         ) {
             $message =~ s/%m/$errno/g;
             printf STDERR "$message\n", @param;
@@ -421,6 +424,7 @@ sub get_first_db_log {
 	do_log('err','Unable to execute SQL statement "%s" : %s', $statement, $dbh->errstr);
 	return undef;
     }
+    my $log = $sth->fetchrow_hashref('NAME_lc');
     $rows_nb = $sth->rows;
 
     ## If no rows returned, return an empty hash
@@ -429,7 +433,6 @@ sub get_first_db_log {
 	return {};
     }
 
-    my $log = $sth->fetchrow_hashref('NAME_lc');
     ## We can't use the "AS date" directive in the SELECT statement because "date" is a reserved keywork with Oracle
     $log->{date} = $log->{date_logs} if defined($log->{date_logs});
     return $log;

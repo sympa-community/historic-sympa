@@ -1,7 +1,7 @@
 <!-- $Id$ -->
    <h1>[%|loc%]Mailing lists server[%END%]</h1>
 <p class="text_justify">
-[%|loc(conf.email,conf.host)%]This server provides you access to your mailing list environment. Starting from this web page, you can perform subscription options, unsubscription, archive, list moderation, list configuration.[%END%]
+[%|loc%]This server provides you access to your mailing list environment. Starting from this web page, you can perform subscription options, unsubscription, archive, list moderation, list configuration.[%END%]
 </p>
 
 <h2>[%|loc%]Mailing lists categories[%END%]</h2>
@@ -20,11 +20,11 @@
       [% END %]
 
       [% IF topic.sub.size %]
-            <li class="no_style"><ul class="no_style">
+            <ul class="no_style">
       [% FOREACH subtopic = topic.sub %]
               <li class="smaller"><a href="[% path_cgi %]/lists/[% topic.id %]/[% subtopic.key %]">[% subtopic.value.current_title %]</a></li>
       [% END %]
-      </ul></li>
+      </ul>
       [% END %]
       [% IF topic.next %]
        </ul>

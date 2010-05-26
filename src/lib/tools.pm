@@ -70,6 +70,22 @@ my %openssl_errors = (1 => 'an error occurred parsing the command options',
 		      4 => 'an error occurred decrypting or verifying the message',
 		      5 => 'the message was verified correctly but an error occurred writing out the signers certificates');
 
+## Local variables to determine whether to use Text::LineFold or Text::Wrap.
+my $use_text_linefold;
+my $use_text_wrap;
+eval { require Text::LineFold; Text::LineFold->import(0.008); };
+if ($@) {
+    $use_text_linefold = 0;
+    eval { require Text::Wrap; };
+    if ($@) {
+	$use_text_wrap = 0;
+    } else {
+	$use_text_wrap = 1;
+    }
+} else {
+    $use_text_linefold = 1;
+}
+
 ## Sets owner and/or access rights on a file.
 sub set_file_rights {
     my %param = @_;
@@ -810,6 +826,7 @@ sub remove_invalid_dkim_signature {
 
     unless (&tools::dkim_verifier($msg_as_string)){
 	my $parser = new MIME::Parser;
+	$parser->output_to_core(1);
 	my $entity = $parser->parse_data($msg_as_string);
 	unless($entity) {
 	    &do_log('err','could not parse message');
@@ -1564,9 +1581,8 @@ sub qencode_filename {
 	$leading = $1 if ($part =~ s/^(\.desc\.)//); ## leading .desc
 	$trailing = $1 if ($part =~ s/((\.\w+)+)$//); ## trailing .xx
 
-	## We use low-level subroutine instead of to prevent Encode::encode('MIME-Q')
-	## Otherwise \n are inserted
-	my $encoded_part = &Encode::encode_utf8(&Encode::MIME::Header::_encode_q($part));
+	my $encoded_part = MIME::EncWords::encode_mimewords($part, Charset => 'utf8', Encoding => 'q', MaxLineLen => 1000, Minimal => 'NO');
+	
 
 	$filename = $leading.$encoded_part.$trailing;
     }
@@ -3612,9 +3628,11 @@ sub string_2_hash {
     my $data = shift;
     my %hash ;
     
-    while ($data =~ /^(\;?(\w+)\=\"([^\"]*)\")/) {
-	$hash{$2} = $3; 
-	$data =~ s/$1// ;
+    pos($data) = 0;
+    while ($data =~ /\G;?(\w+)\=\"((\\[\"\\]|[^\"])*)\"(?=(;|\z))/g) {
+	my ($var, $val) = ($1, $2);
+	$val =~ s/\\([\"\\])/$1/g;
+	$hash{$var} = $val; 
     }    
 
     return (%hash);
@@ -3629,7 +3647,9 @@ sub hash_2_string {
     my $data_string ;
     foreach my $var (keys %$refhash ) {
 	next unless ($var);
-	$data_string .= ';'.$var.'="'.$refhash->{$var}.'"';
+	my $val = $refhash->{$var};
+	$val =~ s/([\"\\])/\\$1/g;
+	$data_string .= ';'.$var.'="'.$val.'"';
     }
     return ($data_string);
 }
@@ -3830,5 +3850,38 @@ sub count_numbers_in_string {
     $count++ while $str =~ /(\d+\s+)/g;
     return $count;
 }
+
+#*******************************************
+# Function : wrap_text
+# Description : return line-wrapped text.
+## IN : text, init, subs, cols
+#*******************************************
+sub wrap_text {
+    my $text = shift;
+    my $init = shift;
+    my $subs = shift;
+    my $cols = shift;
+    $cols = 78 unless defined $cols;
+    return $text unless $cols;
+
+    if ($use_text_linefold) {
+	my $emailre = &tools::get_regexp('email');
+	$text = Text::LineFold->new(
+	    Language => &Language::GetLang(),
+	    OutputCharset => (&Encode::is_utf8($text)? '_UNICODE_': 'utf8'),
+	    UserBreaking => ['NONBREAKURI',
+			     [qr/\b$emailre\b/ => sub { ($_[1]) }],
+			     ],
+	    ColumnsMax => $cols
+	)->fold($init, $subs, $text);
+    } elsif ($use_text_wrap) {
+	local ($Text::Wrap::unexpand) = 0;
+	local ($Text::Wrap::columns) = $cols + 1;
+	$text = Text::Wrap::wrap($init, $subs, $text);
+    }
+
+    return $text;
+}
+
 
 1;

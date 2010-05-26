@@ -14,6 +14,7 @@ create table user_table
     password_user          varchar(40)            null    , 
     last_login_date_user   numeric,
     last_login_host_user   varchar (60),
+    wrong_login_count_user numeric,
     cookie_delay_user      numeric                null    ,
     lang_user              varchar(10)            null    ,
     attributes_user	   varchar(255)           null    ,
@@ -180,6 +181,7 @@ go
 CREATE TABLE bulkmailer_table (
   	messagekey_bulkmailer  	varchar(80),
 	packetid_bulkmailer 	varchar(33),
+  	messageid_bulkmailer  	varchar(100),
 	receipients_bulkmailer 	text,
 	returnpath_bulkmailer 	varchar(100),
 	robot_bulkmailer 	varchar(80),
@@ -201,6 +203,7 @@ go
 
 CREATE TABLE bulkspool_table (
   	messagekey_bulkspool  	varchar(33),
+  	messageid_bulkspool  	varchar(100),
 	message_bulkspool 	text,
 	lock_bulkspool 	int(1),
         dkim_sender_bulkspool varchar2(100),
@@ -212,4 +215,12 @@ CREATE TABLE bulkspool_table (
 )
 
 create index messagekey_bulkspool_fk on bulkspool_table (messagekey_bulkspool)
+go
+create table conf_tabl
+
+  robot_conf        varchar(80)        not null      
+  label_conf	    varchar(80)        not null      
+  value_conf        varchar(300)       null     
+  constraint ind_conf primary key (robot_conf, label_conf
+
 go

@@ -675,6 +675,7 @@ sub probe_db {
 						  'password_user' => 'varchar(40)',
 						  'last_login_date_user' => 'int(11)',
 						  'last_login_host_user' => 'varchar(60)',
+						  'wrong_login_count_user' => 'int(11)',
 						  'cookie_delay_user' => 'int(11)',
 						  'lang_user' => 'varchar(10)',
 						  'attributes_user' => 'text',
@@ -748,6 +749,7 @@ sub probe_db {
 							     'remote_addr_one_time_ticket' => 'varchar(60)',
 							     'status_one_time_ticket' => 'varchar(60)'},
 				 'bulkmailer_table' => {'messagekey_bulkmailer' => 'varchar(80)',
+							'messageid_bulkmailer' => 'varchar(100)',
 							'packetid_bulkmailer' => 'varchar(33)',
 							'receipients_bulkmailer' => 'text',
 							'returnpath_bulkmailer' => 'varchar(100)',
@@ -761,6 +763,7 @@ sub probe_db {
 							'delivery_date_bulkmailer' => 'int(11)',
 							'lock_bulkmailer' => 'varchar(30)'},
 				 'bulkspool_table' => {'messagekey_bulkspool' => 'varchar(33)',
+						       'messageid_bulkspool' => 'varchar(100)',
 						       'message_bulkspool' => 'longtext',
 						       'lock_bulkspool' => 'int(1)',
 						       'dkim_privatekey_bulkspool' => 'varchar(1000)',
@@ -778,6 +781,7 @@ sub probe_db {
 						   'password_user' => 'text',
 						   'last_login_date_user' => 'integer',
 						   'last_login_host_user' => 'text',
+						   'wrong_login_count_user' => 'integer',
 						   'cookie_delay_user' => 'integer',
 						   'lang_user' => 'text',
 						   'attributes_user' => 'text',
@@ -852,6 +856,7 @@ sub probe_db {
 						       'status_one_time_ticket' => 'text',				  
 							 },				 
 				  'bulkmailer_table' => {'messagekey_bulkmailer' => 'text',
+							 'messageid_bulkmailer' => 'text',
 							 'packetid_bulkmailer' => 'text',
 							 'receipients_bulkmailer' => 'text',
 							 'returnpath_bulkmailer' => 'text',
@@ -865,6 +870,7 @@ sub probe_db {
 							 'delivery_date_bulkmailer' => 'integer',
 							 'lock_bulkmailer' => 'text'},
 				  'bulkspool_table' => {'messagekey_bulkspool' => 'text',
+							'messageid_bulkspool' => 'text',
 							'message_bulkspool' => 'text',
 							'lock_bulkspool' => 'integer',
 							'dkim_privatekey_bulkspool' => 'varchar(1000)',
@@ -1024,7 +1030,7 @@ sub probe_db {
  	}
 	
  	foreach my $t (@tables) {
- 	    $t =~ s/^\"(.+)\"$/$1/;
+	    $t =~ s/^.*\"([^"]+)\"$/$1/;
  	}
 	
 	foreach my $t (@tables) {
@@ -1313,7 +1319,7 @@ sub probe_db {
 		    }
 		}	 
 	    }   
-	    elsif ($Conf::Conf{'db_type'} eq 'sqlite') {
+	    elsif ($Conf::Conf{'db_type'} eq 'SQLite') {
 		## Create required INDEX and PRIMARY KEY
 		my $should_update;
 		foreach my $field (@{$primary{$t}}) {
@@ -1325,28 +1331,10 @@ sub probe_db {
 		
 		if ($should_update) {
 		    my $fields = join ',',@{$primary{$t}};
-		    
-		    ## drop previous primary key
-		    unless ($dbh->do("ALTER TABLE $t DROP PRIMARY KEY")) {
-			&do_log('err', 'Could not drop PRIMARY KEY, table\'%s\'.', $t);
-		    }
-		    push @report, sprintf('Table %s, PRIMARY KEY dropped', $t);
-		    &do_log('info', 'Table %s, PRIMARY KEY dropped', $t);
-		    
-		    ## Add primary key
-		    &do_log('debug', "ALTER TABLE $t ADD PRIMARY KEY ($fields)");
-		    unless ($dbh->do("ALTER TABLE $t ADD PRIMARY KEY ($fields)")) {
-			&do_log('err', 'Could not set field \'%s\' as PRIMARY KEY, table\'%s\'.', $fields, $t);
-			return undef;
-		    }
-		    push @report, sprintf('Table %s, PRIMARY KEY set on %s', $t, $fields);
-		    &do_log('info', 'Table %s, PRIMARY KEY set on %s', $t, $fields);
-		    
-		    
 		    ## drop previous index
 		    my $success;
 		    foreach my $field (@{$primary{$t}}) {
-			unless ($dbh->do("ALTER TABLE $t DROP INDEX $field")) {
+			unless ($dbh->do("DROP INDEX $field")) {
 			    next;
 			}
 			$success = 1; last;
@@ -1360,7 +1348,7 @@ sub probe_db {
 		    }
 		    
 		    ## Add INDEX
-		    unless ($dbh->do("ALTER TABLE $t ADD INDEX $t\_index ($fields)")) {
+		    unless ($dbh->do("CREATE INDEX IF NOT EXIST $t\_index ON $t ($fields)")) {
 			&do_log('err', 'Could not set INDEX on field \'%s\', table\'%s\'.', $fields, $t);
 			return undef;
 		    }

@@ -59,8 +59,8 @@ installconfig: installdir
 			--target $(DESTDIR)$(confdir)/wwsympa.conf \
 			|| /bin/true; \
 	fi; \
-	if [ ! -f $(DESTDIR)$(sysconfdir)/sympa/data_structure.version ]; then \
-		cd $(DESTDIR)$(sysconfdir)/sympa; \
+	if [ ! -f $(DESTDIR)$(sysconfdir)/data_structure.version ]; then \
+		cd $(DESTDIR)$(sysconfdir); \
 		echo "# automatically created file" >> data_structure.version; \
 		echo "# you should not modify it" >> data_structure.version; \
 		echo $(VERSION) >> data_structure.version; \
@@ -74,6 +74,10 @@ nextstep:
 	@echo "** http://www.sympa.org/documentation/manual/sympa-$(VERSION).pdf"
 	@echo ""
 	@echo "#########################################################"
+	@echo "# CHECK YOU HAVE ALL THE NEEDED MODULES:"
+	@echo "#    * Check the required perl modules are installed:"
+	@echo "#        $(sbindir)/sympa_wizard.pl --check"
+	@echo "#"
 	@echo "# FIRST INSTALLATION:"
 	@echo "#    * Check the INSTALL file."
 	@echo "#    * Run the wizard to define some required parameters that can't be guessed."
@@ -82,10 +86,6 @@ nextstep:
 	@echo "# UPGRADING"
 	@echo "#    * Run this script to upgrade your data structures:"
 	@echo "#        $(sbindir)/sympa.pl --upgrade"
-	@echo "#"
-	@echo "# IN BOTH CASES:"
-	@echo "#    * Check the required perl modules are installed:"
-	@echo "#        $(sbindir)/sympa_wizard.pl --check"
 	@echo "#######################################################"
 
 importantchanges:

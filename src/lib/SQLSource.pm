@@ -42,14 +42,14 @@ our %date_format = (
 		       'Pg' => 'date_part(\'epoch\',%s)',
 		       'mysql' => 'UNIX_TIMESTAMP(%s)',
 		       'Oracle' => '((to_number(to_char(%s,\'J\')) - to_number(to_char(to_date(\'01/01/1970\',\'dd/mm/yyyy\'), \'J\'))) * 86400) +to_number(to_char(%s,\'SSSSS\'))',
-		       'Sybase' => 'datediff(second, "01/01/1970",%s)',
+		       'Sybase' => 'datediff(second, \'01/01/1970\',%s)',
 		       'SQLite' => 'strftime(\'%%s\',%s,\'utc\')'
 		       },
 		   'write' => {
 		       'Pg' => '\'epoch\'::timestamp with time zone + \'%d sec\'',
 		       'mysql' => 'FROM_UNIXTIME(%d)',
 		       'Oracle' => 'to_date(to_char(round(%s/86400) + to_number(to_char(to_date(\'01/01/1970\',\'dd/mm/yyyy\'), \'J\'))) || \':\' ||to_char(mod(%s,86400)), \'J:SSSSS\')',
-		       'Sybase' => 'dateadd(second,%s,"01/01/1970")',
+		       'Sybase' => 'dateadd(second,%s,\'01/01/1970\')',
 		       'SQLite' => 'datetime(%d,\'unixepoch\',\'localtime\')'
 		       }
 	       );
@@ -129,9 +129,6 @@ sub connect {
 	$connect_string = "DBI:Oracle:";
 	if ($param->{'db_host'} && $param->{'db_name'}) {
 	    $connect_string .= "host=$param->{'db_host'};sid=$param->{'db_name'}";
-	}
-	if (defined $param->{'db_port'}) {
-	    $connect_string .= ';port=' . $param->{'db_port'};
 	}
     }elsif ($param->{'db_type'} eq 'Pg') {
 	$connect_string = "DBI:Pg:dbname=$param->{'db_name'};host=$param->{'db_host'}";
@@ -222,7 +219,7 @@ sub connect {
       if ($param->{'db_type'} eq 'mysql' ||
 	  $param->{'db_type'} eq 'Pg') {
 	$dbh->do("SET NAMES 'utf8'");
-      }elsif ($param->{'db_type'} eq 'oracle') { 
+      }elsif ($param->{'db_type'} eq 'Oracle') { 
 	$ENV{'NLS_LANG'} = 'UTF8';
       }elsif ($param->{'db_type'} eq 'Sybase') { 
 	$ENV{'SYBASE_CHARSET'} = 'utf8';
