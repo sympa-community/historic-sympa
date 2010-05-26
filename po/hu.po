@@ -6,8 +6,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: hu\n"
 "POT-Creation-Date: 2002-07-16 17:27+0800\n"
-"PO-Revision-Date: 2009-11-04 10:59+0100\n"
-"Last-Translator: Akos <nakos60@yahoo.com>\n"
+"PO-Revision-Date: 2010-04-07 16:14+0200\n"
+"Last-Translator: Laszlo L. Tornoci <torlasz@net.sote.hu>\n"
 "Language-Team: Magyar\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -116,7 +116,6 @@ msgid "Listmaster"
 msgstr "Listamester"
 
 #: ../web_tt2/login_menu.tt2:14
-#, fuzzy
 msgid "Privileged owner"
 msgstr "Kiemelt tulajdonos"
 
