@@ -30,7 +30,8 @@ msgid ""
 "from this web page, you can perform subscription options, unsubscription, "
 "archive, list moderation, list configuration."
 msgstr ""
-"このサーバでは、メーリングリストサーバの個人用ページにアクセスできます。このページから、個人設定、登録解除、投稿保管庫、モデレーション、リストの設定など"
+"このサーバでは、メーリングリストサーバの個人用ページにアクセスできます。この"
+"ページから、個人設定、登録解除、投稿保管庫、モデレーション、リストの設定など"
 "へ進むことができます。"
 
 #: ../web_tt2/home.tt2:7
@@ -985,19 +986,24 @@ msgstr ": 読者登録の日付。"
 msgid ""
 ": can be anything you like; available if you defined a user custom attribute "
 "named \"title\" (see the list configuration, section \"Miscellaneous\")."
-msgstr ": カスタムユーザ属性として「title」という名前の属性を定義していれば、その値 (リストの設定変更の「その他」を参照)。"
+msgstr ""
+": カスタムユーザ属性として「title」という名前の属性を定義していれば、その値 "
+"(リストの設定変更の「その他」を参照)。"
 
 #: ../web_tt2/compose_mail.tt2:73
 msgid ""
 ": can be anything you like; available if you defined a user custom attribute "
 "named \"name\"."
-msgstr ": カスタムユーザ属性として「name」という名前の属性を定義していれば、その値。"
+msgstr ""
+": カスタムユーザ属性として「name」という名前の属性を定義していれば、その値。"
 
 #: ../web_tt2/compose_mail.tt2:74
 msgid ""
 ": can be anything you like; available if you defined a user custom attribute "
 "named \"organization\"."
-msgstr ": カスタムユーザ属性として「organization」という名前の属性を定義していれば、その値。"
+msgstr ""
+": カスタムユーザ属性として「organization」という名前の属性を定義していれば、"
+"その値。"
 
 #: ../web_tt2/compose_mail.tt2:78
 msgid "URL:"
@@ -1627,8 +1633,9 @@ msgid ""
 "can be sent to the original author. You may prepare various rejection "
 "messages."
 msgstr ""
-"拒否メッセージ: "
-"リストのモデレータは、メッセージを拒否する際に、メッセージを書いた人に知らせることができます。いろいろな拒否メッセージを用意しておけます。"
+"拒否メッセージ: リストのモデレータは、メッセージを拒否する際に、メッセージを"
+"書いた人に知らせることができます。いろいろな拒否メッセージを用意しておけま"
+"す。"
 
 #: ../web_tt2/editfile.tt2:39
 msgid ""
@@ -2118,7 +2125,8 @@ msgstr "リスト名を教えてください"
 #: ../web_tt2/error.tt2:78
 msgid ""
 "Failed to moderate a message; it was probably moderated by another moderator"
-msgstr "メッセージの処理に失敗しました。おそらく、他のモデレータが処理したのでしょう"
+msgstr ""
+"メッセージの処理に失敗しました。おそらく、他のモデレータが処理したのでしょう"
 
 #: ../web_tt2/error.tt2:79
 msgid "Tagging message is required for this list"
@@ -2358,7 +2366,9 @@ msgstr ""
 #: ../web_tt2/error.tt2:129
 msgid ""
 "Failed to update admin email in list '%1', list owner has been notified."
-msgstr "'%1' メーリングリストの運営者電子メールアドレスの更新に失敗しました。リストオーナーに知らせました。"
+msgstr ""
+"'%1' メーリングリストの運営者電子メールアドレスの更新に失敗しました。リスト"
+"オーナーに知らせました。"
 
 #. (auth.action)
 #: ../web_tt2/error.tt2:138
@@ -3081,7 +3091,8 @@ msgstr "パスワードを変更する場合はメニューの「個人設定」
 #. (notice.list)
 #: ../web_tt2/notice.tt2:58
 msgid "No message and no document to moderate for list %1"
-msgstr "%1 メーリングリストにはモデレーションを待っているメッセージや文書はありません"
+msgstr ""
+"%1 メーリングリストにはモデレーションを待っているメッセージや文書はありません"
 
 #: ../web_tt2/notice.tt2:61
 msgid "The list of list members have been built/updated."
@@ -3168,7 +3179,8 @@ msgid ""
 "you are also list owner or list moderator your email address for these roles "
 "will also be updated."
 msgstr ""
-"登録している全リストの電子メールアドレスをまとめて変えることもできます。どこかのリストでオーナーやモデレータになっているのなら、その電子メールアドレスも"
+"登録している全リストの電子メールアドレスをまとめて変えることもできます。どこ"
+"かのリストでオーナーやモデレータになっているのなら、その電子メールアドレスも"
 "いっしょに変わります。"
 
 #: ../web_tt2/pref.tt2:31
@@ -3244,7 +3256,8 @@ msgid ""
 "blocked in order to protect you agains attacks. You must renew your password "
 "in order to login."
 msgstr ""
-"間違ったパスワードを何度も入力しました。なんらかの攻撃の可能性があるため、あなたのアカウントを使用停止にしました。ログインできるようにするには、パスワー"
+"間違ったパスワードを何度も入力しました。なんらかの攻撃の可能性があるため、あ"
+"なたのアカウントを使用停止にしました。ログインできるようにするには、パスワー"
 "ドを作り直さなければなりません。"
 
 #: ../web_tt2/renewpasswd.tt2:11
@@ -3965,9 +3978,12 @@ msgid ""
 "exclusion table, through the standard unsubscribe/delete functions. \n"
 "They get off the exclusion table with the standard subscribe/add functions."
 msgstr ""
-"下の一覧にある人はリスト登録から除外します。ご注意いただきたいのですが、これはブラックリスト機能とは違います。除外は、外部データソースによるリスト登録の"
-"ときだけ意味を持ちます。除外された人は、外部データソースから取り込まれることになっていたとしても登録解除ができ (リストのオーナーが削除することもでき) "
-"ます。この人たちは、通常の登録解除や削除のの際に除外テーブルに入り、読者登録や追加の際に除外テーブルから抜けます。"
+"下の一覧にある人はリスト登録から除外します。ご注意いただきたいのですが、これ"
+"はブラックリスト機能とは違います。除外は、外部データソースによるリスト登録の"
+"ときだけ意味を持ちます。除外された人は、外部データソースから取り込まれること"
+"になっていたとしても登録解除ができ (リストのオーナーが削除することもでき) ま"
+"す。この人たちは、通常の登録解除や削除のの際に除外テーブルに入り、読者登録や"
+"追加の際に除外テーブルから抜けます。"
 
 #: ../web_tt2/show_exclude.tt2:28
 msgid "No user excluded."
@@ -4470,7 +4486,8 @@ msgid ""
 "        this list against your will, a message containing an validation link "
 "was sent to the e-mail address you provided."
 msgstr ""
-"あなたが実在の人物であることを確認します。これによって、誰かがあなたの意思に反してこのメーリングリストへの登録を申し込んでしまうのを防ぎます。これから確"
+"あなたが実在の人物であることを確認します。これによって、誰かがあなたの意思に"
+"反してこのメーリングリストへの登録を申し込んでしまうのを防ぎます。これから確"
 "認用の URL を書いたメッセージをあなたが入力した電子メールアドレスに送ります。"
 
 #. (list)
@@ -4873,7 +4890,8 @@ msgid ""
 "either use that other email address or update your list membership with the "
 "new email address."
 msgstr ""
-"リストにほかの電子メールアドレスで読者登録しているのなら、その電子メールアドレスを使ってログインするか、または読者登録のアドレスを変えてください。"
+"リストにほかの電子メールアドレスで読者登録しているのなら、その電子メールアド"
+"レスを使ってログインするか、または読者登録のアドレスを変えてください。"
 
 #: ../mail_tt2/authorization_reject.tt2:12
 msgid "Web archives are restricted to listmaster."
@@ -5126,7 +5144,8 @@ msgstr "ログインしていません。"
 #. (role,right)
 #: ../mail_tt2/authorization_reject.tt2:188
 msgid "This action is impossible because editing is a moderated function."
-msgstr "この操作はできません。変更はモデレーションを受けることになっているためです。"
+msgstr ""
+"この操作はできません。変更はモデレーションを受けることになっているためです。"
 
 #. (role,right)
 #: ../mail_tt2/authorization_reject.tt2:191
@@ -5134,7 +5153,8 @@ msgid ""
 "This action is impossible for directories because editing is a moderated "
 "function."
 msgstr ""
-"この操作はディレクトリに対してはできません。変更はモデレーションを受けることに \n"
+"この操作はディレクトリに対してはできません。変更はモデレーションを受けること"
+"に \n"
 "なっているためです。"
 
 #: ../mail_tt2/authorization_reject.tt2:194
@@ -5265,7 +5285,8 @@ msgstr "'%1' コマンドがありました。メッセージの残りは無視�
 #. (notice.listname)
 #: ../mail_tt2/command_report.tt2:55
 msgid "There is no message to moderate for list '%1'."
-msgstr "%1 メーリングリストには、モデレーションを待っているメッセージはありません。"
+msgstr ""
+"%1 メーリングリストには、モデレーションを待っているメッセージはありません。"
 
 #: ../mail_tt2/command_report.tt2:67
 msgid "Command has been rejected:"
@@ -5547,7 +5568,9 @@ msgstr "                                 ご利用案内"
 msgid ""
 "SYMPA is an electronic mailing-list manager that automates list management "
 "functions such as subscriptions, moderation, and archive management."
-msgstr "Sympa (サンパ) はメーリングリスト管理システムです。読者登録、モデレーション、投稿保管庫管理などの管理作業を自動化します。"
+msgstr ""
+"Sympa (サンパ) はメーリングリスト管理システムです。読者登録、モデレーション、"
+"投稿保管庫管理などの管理作業を自動化します。"
 
 #. (conf.sympa)
 #: ../mail_tt2/helpfile.tt2:12
@@ -5748,7 +5771,8 @@ msgid ""
 "MODINDEX <list>                 * Moderation: to view the list of messages "
 "to moderate"
 msgstr ""
-"MODINDEX <リスト>               * モデレーション: モデレーションしなければならない\n"
+"MODINDEX <リスト>               * モデレーション: モデレーションしなければな"
+"らない\n"
 "                                  メッセージの一覧を取り寄せ"
 
 # 仮訳です。
@@ -6253,9 +6277,11 @@ msgid ""
 "If you are able to do so, you should probably update these data sources with "
 "this person's new email address."
 msgstr ""
-"運営者 %1 の電子メールアドレスを変更できませんでした (変更先は %2)。次のデータソースから取り込まれているためです: %3\n"
+"運営者 %1 の電子メールアドレスを変更できませんでした (変更先は %2)。次のデー"
+"タソースから取り込まれているためです: %3\n"
 "\n"
-"可能なら、データソースでこの人の電子メールアドレスを新しいものに更新してみてください。"
+"可能なら、データソースでこの人の電子メールアドレスを新しいものに更新してみて"
+"ください。"
 
 #. (param0,param1)
 #: ../mail_tt2/listmaster_notification.tt2:196
@@ -6750,8 +6776,9 @@ msgid ""
 "You may help this person looking for similar email in subscriber list using "
 "the following link :"
 msgstr ""
-"注意: %2 <%1> は %3 の登録解除ができませんでした。アドレスがリストになかったためです。次のリンクを使えば、読者一覧から似た電子メールアドレ"
-"スを探して、この人を助けてあげることができるかもしれません。"
+"注意: %2 <%1> は %3 の登録解除ができませんでした。アドレスがリストになかった"
+"ためです。次のリンクを使えば、読者一覧から似た電子メールアドレスを探して、こ"
+"の人を助けてあげることができるかもしれません。"
 
 #. (list.name)
 #: ../mail_tt2/listowner_notification.tt2:33
@@ -7830,7 +7857,8 @@ msgstr "削除はオーナーだけができる。本人確認が必要"
 msgid ""
 "deletion performed only by list owners, need authentication unless DKIM "
 "signature is OK"
-msgstr "削除はオーナーのみができる。DKIM署名で確認できればオーナーの本人確認は不要。"
+msgstr ""
+"削除はオーナーのみができる。DKIM署名で確認できればオーナーの本人確認は不要。"
 
 #: ../src/etc/scenari/del.closed:1
 msgid "remove subscriber impossible"
@@ -7890,7 +7918,9 @@ msgstr "誰でもできてしまう"
 
 #: ../src/etc/scenari/send.editordkim:1
 msgid "Moderated, no authentication needed if DKIM signature from editor is OK"
-msgstr "投稿はモデレーションを受ける (DKIM署名で確認できればモデレータの本人確認は不要)"
+msgstr ""
+"投稿はモデレーションを受ける (DKIM署名で確認できればモデレータの本人確認は不"
+"要)"
 
 #: ../src/etc/scenari/send.editorkey:1
 msgid "Moderated"
@@ -7898,7 +7928,8 @@ msgstr "投稿はモデレーションを受ける"
 
 #: ../src/etc/scenari/send.editorkeyonly:1
 msgid "Moderated, even for moderators"
-msgstr "投稿はモデレーションを受ける。モデレータ自身の投稿もモデレーションを受ける"
+msgstr ""
+"投稿はモデレーションを受ける。モデレータ自身の投稿もモデレーションを受ける"
 
 #: ../src/etc/scenari/send.editorkeyonlyauth:1
 msgid "Moderated, need  authentication  from editor"
@@ -7926,7 +7957,8 @@ msgstr "投稿はモデレーションを受ける。投稿できるのは読者
 
 #: ../src/etc/scenari/send.privateandnomultipartoreditorkey:1
 msgid "Moderated, for non subscribers sending multipart messages"
-msgstr "読者以外の人がマルチパートメッセージを送った場合はモデレーションを受ける"
+msgstr ""
+"読者以外の人がマルチパートメッセージを送った場合はモデレーションを受ける"
 
 #: ../src/etc/scenari/send.privatekey:1
 msgid "restricted to subscribers with previous md5 authentication"
