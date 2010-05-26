@@ -1,227 +1,289 @@
 ------------------------------------------------------------------------
-r6444 | olivier.salaun | 2010-05-24 09:13:58 +0200 (Mon, 24 May 2010) | 2 lines
+r6449 | sympa-authors | 2010-05-26 17:21:43 +0200 (Wed, 26 May 2010) | 1 line
 Changed paths:
-   M /trunk/web_tt2/edit_attributes.tt2
+   M /branches/sympa-6.1-branch/po/ar.po
+   M /branches/sympa-6.1-branch/po/bg.po
+   M /branches/sympa-6.1-branch/po/br.po
+   M /branches/sympa-6.1-branch/po/ca.po
+   M /branches/sympa-6.1-branch/po/cs.po
+   M /branches/sympa-6.1-branch/po/de.po
+   M /branches/sympa-6.1-branch/po/el.po
+   M /branches/sympa-6.1-branch/po/en_US.po
+   M /branches/sympa-6.1-branch/po/es.po
+   M /branches/sympa-6.1-branch/po/et.po
+   M /branches/sympa-6.1-branch/po/eu.po
+   M /branches/sympa-6.1-branch/po/fi.po
+   M /branches/sympa-6.1-branch/po/fr.po
+   M /branches/sympa-6.1-branch/po/hu.po
+   M /branches/sympa-6.1-branch/po/id.po
+   M /branches/sympa-6.1-branch/po/it.po
+   M /branches/sympa-6.1-branch/po/ja.po
+   M /branches/sympa-6.1-branch/po/ko.po
+   M /branches/sympa-6.1-branch/po/la.po
+   M /branches/sympa-6.1-branch/po/ml.po
+   M /branches/sympa-6.1-branch/po/nb_NO.po
+   M /branches/sympa-6.1-branch/po/nl.po
+   M /branches/sympa-6.1-branch/po/oc.po
+   M /branches/sympa-6.1-branch/po/pl.po
+   M /branches/sympa-6.1-branch/po/pt.po
+   M /branches/sympa-6.1-branch/po/pt_BR.po
+   M /branches/sympa-6.1-branch/po/ro.po
+   M /branches/sympa-6.1-branch/po/ru.po
+   M /branches/sympa-6.1-branch/po/sv.po
+   M /branches/sympa-6.1-branch/po/sympa.pot
+   M /branches/sympa-6.1-branch/po/tr.po
+   M /branches/sympa-6.1-branch/po/vi.po
+   M /branches/sympa-6.1-branch/po/zh_CN.po
+   M /branches/sympa-6.1-branch/po/zh_TW.po
 
-[bug] to prevent error "Argument "" isn't numeric in numeric gt (>)" when no custom attribute is defined for a list
-
+[-feature]Committing updated catalogues from Pootle
 ------------------------------------------------------------------------
-r6438 | david.verdin | 2010-05-19 09:18:03 +0200 (Wed, 19 May 2010) | 2 lines
+r6448 | sympa-authors | 2010-05-26 17:20:21 +0200 (Wed, 26 May 2010) | 1 line
 Changed paths:
-   M /trunk
-   D /trunk/Module_Correlation_Install.tar.gz
-   M /trunk/src/bulk.pl.in
-   M /trunk/src/etc/mhonarc-ressources.tt2
-   D /trunk/src/etc/script/create_db_correlation.mysql
-   M /trunk/src/lib/Conf.pm
-   M /trunk/src/lib/List.pm
-   M /trunk/src/lib/Makefile.am
-   M /trunk/src/lib/confdef.pm
-   D /trunk/src/lib/correlation.pm
-   M /trunk/src/lib/mail.pm
-   M /trunk/src/sympa.pl.in
-   M /trunk/wwsympa/bounced.pl.in
-   M /trunk/wwsympa/wwsympa.fcgi.in
+   M /branches/sympa-6.1-branch/ChangeLog
 
-[bug] Bam! Back to pre-XIMF era to let Serge use whatever the magical tar.gz we found can contain.
-
+[-feature]Committing latest translations from Pootle
 ------------------------------------------------------------------------
-r6437 | serge.aumont | 2010-05-18 10:41:11 +0200 (Tue, 18 May 2010) | 2 lines
+r6447 | sympa-authors | 2010-05-26 17:02:24 +0200 (Wed, 26 May 2010) | 1 line
 Changed paths:
-   M /trunk
-   A /trunk/Module_Correlation_Install.tar.gz (from /branches/sympa-ximf/Module_Correlation_Install.tar.gz:6436)
-   M /trunk/src/bulk.pl.in
-   M /trunk/src/etc/mhonarc-ressources.tt2
-   A /trunk/src/etc/script/create_db_correlation.mysql (from /branches/sympa-ximf/src/etc/script/create_db_correlation.mysql:6436)
-   M /trunk/src/lib/Conf.pm
-   M /trunk/src/lib/List.pm
-   M /trunk/src/lib/Makefile.am
-   M /trunk/src/lib/confdef.pm
-   A /trunk/src/lib/correlation.pm (from /branches/sympa-ximf/src/lib/correlation.pm:6436)
-   M /trunk/src/lib/mail.pm
-   M /trunk/src/sympa.pl.in
-   M /trunk/wwsympa/bounced.pl.in
-   M /trunk/wwsympa/wwsympa.fcgi.in
+   M /branches/sympa-6.1-branch/po/fr.po
+   M /branches/sympa-6.1-branch/po/ja.po
+   M /branches/sympa-6.1-branch/po-wwsympa/ja.po
 
-[feature] Merge of trunk with sympa-ximf branche UNTESTED
-
+[-feature]Committing updated catalogues from Pootle
 ------------------------------------------------------------------------
-r6435 | serge.aumont | 2010-05-18 08:24:22 +0200 (Tue, 18 May 2010) | 2 lines
+r6446 | sympa-authors | 2010-05-26 17:01:37 +0200 (Wed, 26 May 2010) | 1 line
 Changed paths:
-   M /trunk/wwsympa/wwsympa.fcgi.in
+   M /branches/sympa-6.1-branch/configure.ac
+   M /branches/sympa-6.1-branch/po/en_US.po
+   M /branches/sympa-6.1-branch/po/hu.po
+   M /branches/sympa-6.1-branch/po/ja.po
+   M /branches/sympa-6.1-branch/po-wwsympa/ja.po
+
+[-feature]Committing latest translations from Pootle
+------------------------------------------------------------------------
+r6445 | david.verdin | 2010-05-25 14:45:50 +0200 (Tue, 25 May 2010) | 3 lines
+Changed paths:
+   M /branches/sympa-6.1-branch
+   M /branches/sympa-6.1-branch/wwsympa/wwsympa.fcgi.in
 
 [bug] Dan Pritts fix https://sourcesup.cru.fr/tracker/index.php?func=detail&aid=6839&group_id=23&atid=167
 
-------------------------------------------------------------------------
-r6434 | david.verdin | 2010-05-12 17:19:53 +0200 (Wed, 12 May 2010) | 2 lines
-Changed paths:
-   M /trunk
-   M /trunk/po/Makefile.in.in
-   M /trunk/src/bulk.pl.in
-
-[svn] retrieving lmatest modifications from 6.1 branch.
 
 ------------------------------------------------------------------------
-r6430 | olivier.salaun | 2010-05-10 18:01:44 +0200 (Mon, 10 May 2010) | 2 lines
+r6433 | david.verdin | 2010-05-12 17:18:12 +0200 (Wed, 12 May 2010) | 2 lines
 Changed paths:
-   M /trunk/src/lib/List.pm
+   M /branches/sympa-6.1-branch
+   M /branches/sympa-6.1-branch/po/Makefile.in.in
 
-[bug] while running sync_include(), remove members before adding new ones. This will prevent duplicate entries issues will members that were added with an incorrect email address including 8bit chars (having the same primary key).
+[change] Improved English translation handling retrieved from version 6.0.
 
 ------------------------------------------------------------------------
-r6427 | serge.aumont | 2010-05-07 09:03:34 +0200 (Fri, 07 May 2010) | 3 lines
+r6432 | david.verdin | 2010-05-12 17:17:27 +0200 (Wed, 12 May 2010) | 2 lines
 Changed paths:
-   M /trunk/wwsympa/bounced.pl.in
+   M /branches/sympa-6.1-branch/src/bulk.pl.in
 
-[bug] ARC filehandle never closed. patch from Philip Crandall
-
+[svn] retrieving latest bug fixes from 6.0 branch.
 
 ------------------------------------------------------------------------
-r6426 | serge.aumont | 2010-05-05 11:17:29 +0200 (Wed, 05 May 2010) | 2 lines
+r6421 | david.verdin | 2010-04-27 09:25:31 +0200 (Tue, 27 Apr 2010) | 3 lines
 Changed paths:
-   M /trunk/src/lib/confdef.pm
-
-[bug] Remove default db_port because DBI uses the default port for each DBMS correctly. Patch from Stefan Hornburg 
-
-------------------------------------------------------------------------
-r6425 | serge.aumont | 2010-05-05 10:46:50 +0200 (Wed, 05 May 2010) | 2 lines
-Changed paths:
-   M /trunk/src/lib/Conf.pm
-   M /trunk/src/lib/admin.pm
-   M /trunk/src/lib/confdef.pm
-   M /trunk/wwsympa/wwsympa.fcgi.in
-
-[bug] SMTP-checking of list may send HELO host name with port number. Patch from  Soji IKEDA
-
-------------------------------------------------------------------------
-r6422 | david.verdin | 2010-04-27 09:26:08 +0200 (Tue, 27 Apr 2010) | 3 lines
-Changed paths:
-   M /trunk
-   M /trunk/src/lib/List.pm
+   M /branches/sympa-6.1-branch
+   M /branches/sympa-6.1-branch/src/lib/List.pm
 
 [bug] Reverting a part of revision #6227. This lead to datasources loosing all their subscribers when using a single datasource and the synchronizing failed.
 
 
 ------------------------------------------------------------------------
-r6419 | david.verdin | 2010-04-26 18:36:22 +0200 (Mon, 26 Apr 2010) | 2 lines
+r6418 | david.verdin | 2010-04-26 18:24:55 +0200 (Mon, 26 Apr 2010) | 3 lines
 Changed paths:
-   M /trunk
-   M /trunk/configure.ac
-   M /trunk/po/Makefile.in.in
-   M /trunk/po/ar.po
-   M /trunk/po/bg.po
-   M /trunk/po/br.po
-   M /trunk/po/ca.po
-   M /trunk/po/cs.po
-   M /trunk/po/de.po
-   M /trunk/po/el.po
-   M /trunk/po/en_US.po
-   M /trunk/po/es.po
-   M /trunk/po/et.po
-   M /trunk/po/eu.po
-   M /trunk/po/fi.po
-   M /trunk/po/fr.po
-   M /trunk/po/hu.po
-   M /trunk/po/id.po
-   M /trunk/po/it.po
-   M /trunk/po/ja.po
-   M /trunk/po/ko.po
-   M /trunk/po/la.po
-   M /trunk/po/ml.po
-   M /trunk/po/nb_NO.po
-   M /trunk/po/nl.po
-   M /trunk/po/oc.po
-   M /trunk/po/pl.po
-   M /trunk/po/pt.po
-   M /trunk/po/pt_BR.po
-   M /trunk/po/ro.po
-   M /trunk/po/ru.po
-   M /trunk/po/sv.po
-   M /trunk/po/sympa.pot
-   M /trunk/po/tr.po
-   M /trunk/po/vi.po
-   M /trunk/po/zh_CN.po
-   M /trunk/po/zh_TW.po
-   M /trunk/po-wwsympa/ar.po
-   M /trunk/po-wwsympa/bg.po
-   M /trunk/po-wwsympa/br.po
-   M /trunk/po-wwsympa/cs.po
-   M /trunk/po-wwsympa/de.po
-   M /trunk/po-wwsympa/el.po
-   M /trunk/po-wwsympa/en_US.po
-   M /trunk/po-wwsympa/es.po
-   M /trunk/po-wwsympa/et.po
-   M /trunk/po-wwsympa/eu.po
-   M /trunk/po-wwsympa/fi.po
-   M /trunk/po-wwsympa/fr.po
-   M /trunk/po-wwsympa/hu.po
-   M /trunk/po-wwsympa/id.po
-   M /trunk/po-wwsympa/it.po
-   M /trunk/po-wwsympa/ja.po
-   M /trunk/po-wwsympa/nb_NO.po
-   M /trunk/po-wwsympa/nl.po
-   M /trunk/po-wwsympa/oc.po
-   M /trunk/po-wwsympa/pl.po
-   M /trunk/po-wwsympa/pt.po
-   M /trunk/po-wwsympa/pt_BR.po
-   M /trunk/po-wwsympa/ro.po
-   M /trunk/po-wwsympa/ru.po
-   M /trunk/po-wwsympa/sv.po
-   M /trunk/po-wwsympa/tr.po
-   M /trunk/po-wwsympa/vi.po
-   M /trunk/po-wwsympa/web_help.pot
-   M /trunk/po-wwsympa/zh_CN.po
-   M /trunk/src/lib/Bulk.pm
-   M /trunk/src/lib/List.pm
-   M /trunk/web_tt2/compose_mail.tt2
-   M /trunk/web_tt2/help_user.tt2
-   M /trunk/web_tt2/home.tt2
-   M /trunk/web_tt2/javascript.tt2
-   M /trunk/web_tt2/renewpasswd.tt2
-   M /trunk/web_tt2/show_exclude.tt2
-   M /trunk/web_tt2/suspend_request.tt2
+   M /branches/sympa-6.1-branch
+   M /branches/sympa-6.1-branch/src/lib/List.pm
 
-[svn] retrieving latest modifications and bug fixes from the 6.1 stabilization branch.
-
-------------------------------------------------------------------------
-r6415 | olivier.salaun | 2010-04-26 14:55:41 +0200 (Mon, 26 Apr 2010) | 4 lines
-Changed paths:
-   M /trunk/src/etc/mhonarc-ressources.tt2
-
-[bug] Changed template to prevent the regular web_tt2_error mail notices for messages that include a From header with double quotes (");
-
-Now using the mhonarc :J flag to escape any quote. Also replaced "" with '' in the TT2 condition.
-
-------------------------------------------------------------------------
-r6414 | david.verdin | 2010-04-26 13:04:22 +0200 (Mon, 26 Apr 2010) | 3 lines
-Changed paths:
-   M /trunk/web_tt2/css.tt2
-   M /trunk/web_tt2/javascript.tt2
-   M /trunk/web_tt2/lists.tt2
-
-[change] css improvement in list of lists for admin commands list view
+[bug] When calling send_notify_to_owner, the '$param' parameter was used as a hash, wihout checking first that it was actually a hash. in some cases though, such as in set_status_family_closed(), it was a ref to an array. This caused Sympa to crach with a "Can't coerce array into a hash" error. Fixed by moving the bad line in the hash-specific part of the sub.
 
 
 ------------------------------------------------------------------------
-r6413 | serge.aumont | 2010-04-22 10:33:29 +0200 (Thu, 22 Apr 2010) | 2 lines
+r6417 | david.verdin | 2010-04-26 18:24:01 +0200 (Mon, 26 Apr 2010) | 3 lines
 Changed paths:
-   M /trunk/wwsympa/wwsympa.fcgi.in
+   M /branches/sympa-6.1-branch
+   M /branches/sympa-6.1-branch/web_tt2/home.tt2
 
-[bug] reported by Reinhold Nagel solve improper loading of certs by user brower. 
+[-bug] Removed a useless -and ugly- <li> tag.
+
 
 ------------------------------------------------------------------------
-r6412 | serge.aumont | 2010-04-21 16:52:04 +0200 (Wed, 21 Apr 2010) | 2 lines
+r6407 | david.verdin | 2010-04-07 17:52:46 +0200 (Wed, 07 Apr 2010) | 2 lines
 Changed paths:
-   M /trunk/src/etc/scenari/spam_status.x-spam-status
-
-[-bug] Fix incorrect regexp for x-spam-status header check
-
-------------------------------------------------------------------------
-r6406 | serge.aumont | 2010-04-07 17:32:57 +0200 (Wed, 07 Apr 2010) | 1 line
-Changed paths:
-   A /trunk/src/etc/scenari/spam_status.x-spam-status
+   M /branches/sympa-6.1-branch
+   A /branches/sympa-6.1-branch/src/etc/scenari/spam_status.x-spam-status (from /trunk/src/etc/scenari/spam_status.x-spam-status:6406)
 
 [-feature] Committing forgottne scenarion used for antispam protection.
+
+------------------------------------------------------------------------
+r6399 | david.verdin | 2010-04-02 16:03:20 +0200 (Fri, 02 Apr 2010) | 2 lines
+Changed paths:
+   M /branches/sympa-6.1-branch/po/en_US.po
+
+[-change] reorganized english catalogue.
+
+------------------------------------------------------------------------
+r6398 | david.verdin | 2010-04-02 15:19:40 +0200 (Fri, 02 Apr 2010) | 2 lines
+Changed paths:
+   M /branches/sympa-6.1-branch/po/en_US.po
+   M /branches/sympa-6.1-branch/po/fr.po
+
+[-feature] Fixing bad translations.
+
+------------------------------------------------------------------------
+r6397 | david.verdin | 2010-04-02 14:55:50 +0200 (Fri, 02 Apr 2010) | 1 line
+Changed paths:
+   M /branches/sympa-6.1-branch/po/ar.po
+   M /branches/sympa-6.1-branch/po/bg.po
+   M /branches/sympa-6.1-branch/po/br.po
+   M /branches/sympa-6.1-branch/po/ca.po
+   M /branches/sympa-6.1-branch/po/cs.po
+   M /branches/sympa-6.1-branch/po/de.po
+   M /branches/sympa-6.1-branch/po/el.po
+   M /branches/sympa-6.1-branch/po/en_US.po
+   M /branches/sympa-6.1-branch/po/es.po
+   M /branches/sympa-6.1-branch/po/et.po
+   M /branches/sympa-6.1-branch/po/eu.po
+   M /branches/sympa-6.1-branch/po/fi.po
+   M /branches/sympa-6.1-branch/po/hu.po
+   M /branches/sympa-6.1-branch/po/id.po
+   M /branches/sympa-6.1-branch/po/it.po
+   M /branches/sympa-6.1-branch/po/ja.po
+   M /branches/sympa-6.1-branch/po/ko.po
+   M /branches/sympa-6.1-branch/po/la.po
+   M /branches/sympa-6.1-branch/po/ml.po
+   M /branches/sympa-6.1-branch/po/nb_NO.po
+   M /branches/sympa-6.1-branch/po/nl.po
+   M /branches/sympa-6.1-branch/po/oc.po
+   M /branches/sympa-6.1-branch/po/pl.po
+   M /branches/sympa-6.1-branch/po/pt.po
+   M /branches/sympa-6.1-branch/po/pt_BR.po
+   M /branches/sympa-6.1-branch/po/ro.po
+   M /branches/sympa-6.1-branch/po/ru.po
+   M /branches/sympa-6.1-branch/po/sv.po
+   M /branches/sympa-6.1-branch/po/sympa.pot
+   M /branches/sympa-6.1-branch/po/tr.po
+   M /branches/sympa-6.1-branch/po/vi.po
+   M /branches/sympa-6.1-branch/po/zh_CN.po
+   M /branches/sympa-6.1-branch/po/zh_TW.po
+   M /branches/sympa-6.1-branch/po-wwsympa/ar.po
+   M /branches/sympa-6.1-branch/po-wwsympa/bg.po
+   M /branches/sympa-6.1-branch/po-wwsympa/br.po
+   M /branches/sympa-6.1-branch/po-wwsympa/cs.po
+   M /branches/sympa-6.1-branch/po-wwsympa/de.po
+   M /branches/sympa-6.1-branch/po-wwsympa/el.po
+   M /branches/sympa-6.1-branch/po-wwsympa/en_US.po
+   M /branches/sympa-6.1-branch/po-wwsympa/es.po
+   M /branches/sympa-6.1-branch/po-wwsympa/et.po
+   M /branches/sympa-6.1-branch/po-wwsympa/eu.po
+   M /branches/sympa-6.1-branch/po-wwsympa/fi.po
+   M /branches/sympa-6.1-branch/po-wwsympa/fr.po
+   M /branches/sympa-6.1-branch/po-wwsympa/hu.po
+   M /branches/sympa-6.1-branch/po-wwsympa/id.po
+   M /branches/sympa-6.1-branch/po-wwsympa/it.po
+   M /branches/sympa-6.1-branch/po-wwsympa/ja.po
+   M /branches/sympa-6.1-branch/po-wwsympa/nb_NO.po
+   M /branches/sympa-6.1-branch/po-wwsympa/nl.po
+   M /branches/sympa-6.1-branch/po-wwsympa/oc.po
+   M /branches/sympa-6.1-branch/po-wwsympa/pl.po
+   M /branches/sympa-6.1-branch/po-wwsympa/pt.po
+   M /branches/sympa-6.1-branch/po-wwsympa/pt_BR.po
+   M /branches/sympa-6.1-branch/po-wwsympa/ro.po
+   M /branches/sympa-6.1-branch/po-wwsympa/ru.po
+   M /branches/sympa-6.1-branch/po-wwsympa/sv.po
+   M /branches/sympa-6.1-branch/po-wwsympa/tr.po
+   M /branches/sympa-6.1-branch/po-wwsympa/vi.po
+   M /branches/sympa-6.1-branch/po-wwsympa/web_help.pot
+   M /branches/sympa-6.1-branch/po-wwsympa/zh_CN.po
+
+[-feature] Updating catalogues with latest Sympa modifications.
+------------------------------------------------------------------------
+r6396 | david.verdin | 2010-04-02 14:53:56 +0200 (Fri, 02 Apr 2010) | 1 line
+Changed paths:
+   M /branches/sympa-6.1-branch/po/fr.po
+   M /branches/sympa-6.1-branch/po/ru.po
+
+[-feature] Retrieving latest translations from Pootle.
+------------------------------------------------------------------------
+r6395 | david.verdin | 2010-04-02 14:53:23 +0200 (Fri, 02 Apr 2010) | 2 lines
+Changed paths:
+   M /branches/sympa-6.1-branch/src/lib/Bulk.pm
+   M /branches/sympa-6.1-branch/src/lib/List.pm
+   M /branches/sympa-6.1-branch/web_tt2/compose_mail.tt2
+   M /branches/sympa-6.1-branch/web_tt2/help_user.tt2
+   M /branches/sympa-6.1-branch/web_tt2/javascript.tt2
+   M /branches/sympa-6.1-branch/web_tt2/renewpasswd.tt2
+   M /branches/sympa-6.1-branch/web_tt2/show_exclude.tt2
+   M /branches/sympa-6.1-branch/web_tt2/suspend_request.tt2
+
+[-change] fixed weird English formulations before leaving it to be transalted.
+
+------------------------------------------------------------------------
+r6394 | david.verdin | 2010-03-31 17:49:52 +0200 (Wed, 31 Mar 2010) | 2 lines
+Changed paths:
+   M /branches/sympa-6.1-branch/po/Makefile.in.in
+
+[-bug] *.new.po files were not removed after the make.
+
+------------------------------------------------------------------------
+r6393 | david.verdin | 2010-03-31 12:00:10 +0200 (Wed, 31 Mar 2010) | 1 line
+Changed paths:
+   M /branches/sympa-6.1-branch/po/ar.po
+   M /branches/sympa-6.1-branch/po/bg.po
+   M /branches/sympa-6.1-branch/po/br.po
+   M /branches/sympa-6.1-branch/po/ca.po
+   M /branches/sympa-6.1-branch/po/cs.po
+   M /branches/sympa-6.1-branch/po/de.po
+   M /branches/sympa-6.1-branch/po/el.po
+   M /branches/sympa-6.1-branch/po/en_US.po
+   M /branches/sympa-6.1-branch/po/es.po
+   M /branches/sympa-6.1-branch/po/et.po
+   M /branches/sympa-6.1-branch/po/eu.po
+   M /branches/sympa-6.1-branch/po/fi.po
+   M /branches/sympa-6.1-branch/po/fr.po
+   M /branches/sympa-6.1-branch/po/hu.po
+   M /branches/sympa-6.1-branch/po/id.po
+   M /branches/sympa-6.1-branch/po/it.po
+   M /branches/sympa-6.1-branch/po/ja.po
+   M /branches/sympa-6.1-branch/po/ko.po
+   M /branches/sympa-6.1-branch/po/la.po
+   M /branches/sympa-6.1-branch/po/ml.po
+   M /branches/sympa-6.1-branch/po/nb_NO.po
+   M /branches/sympa-6.1-branch/po/nl.po
+   M /branches/sympa-6.1-branch/po/oc.po
+   M /branches/sympa-6.1-branch/po/pl.po
+   M /branches/sympa-6.1-branch/po/pt.po
+   M /branches/sympa-6.1-branch/po/pt_BR.po
+   M /branches/sympa-6.1-branch/po/ro.po
+   M /branches/sympa-6.1-branch/po/ru.po
+   M /branches/sympa-6.1-branch/po/sv.po
+   M /branches/sympa-6.1-branch/po/tr.po
+   M /branches/sympa-6.1-branch/po/vi.po
+   M /branches/sympa-6.1-branch/po/zh_CN.po
+   M /branches/sympa-6.1-branch/po/zh_TW.po
+   M /branches/sympa-6.1-branch/po-wwsympa/es.po
+   M /branches/sympa-6.1-branch/po-wwsympa/fr.po
+
+[-feature] Retrieving latest translations from Pootle.
+------------------------------------------------------------------------
+r6392 | david.verdin | 2010-03-31 09:04:38 +0200 (Wed, 31 Mar 2010) | 2 lines
+Changed paths:
+   M /branches/sympa-6.1-branch/configure.ac
+
+[svn] Updating the Sympa version number.
+
+------------------------------------------------------------------------
+r6391 | david.verdin | 2010-03-31 09:02:39 +0200 (Wed, 31 Mar 2010) | 2 lines
+Changed paths:
+   A /branches/sympa-6.1-branch (from /trunk:6390)
+
+[svn] Creating the branch for Sympa 6.1 stabilization.
+
 ------------------------------------------------------------------------
 r6390 | david.verdin | 2010-03-31 08:57:10 +0200 (Wed, 31 Mar 2010) | 2 lines
 Changed paths:
