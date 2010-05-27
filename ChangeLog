@@ -1,4 +1,33 @@
 ------------------------------------------------------------------------
+r6456 | sympa-authors | 2010-05-27 17:58:17 +0200 (Thu, 27 May 2010) | 1 line
+Changed paths:
+   M /branches/sympa-6.1-branch/ChangeLog
+   M /branches/sympa-6.1-branch/po/it.po
+
+[-feature]Committing latest translations from Pootle
+------------------------------------------------------------------------
+r6455 | sympa-authors | 2010-05-27 17:44:03 +0200 (Thu, 27 May 2010) | 1 line
+Changed paths:
+   M /branches/sympa-6.1-branch/NEWS
+
+[-feature]Committing latest translations from Pootle
+------------------------------------------------------------------------
+r6453 | sympa-authors | 2010-05-27 15:39:05 +0200 (Thu, 27 May 2010) | 3 lines
+Changed paths:
+   M /branches/sympa-6.1-branch
+   M /branches/sympa-6.1-branch/src/lib/Upgrade.pm
+
+[bug][#6835][Submitted by S. Hornburg, linuxia.de] SQLite 3 upgrades failed to work because the table names retrieved from $dbh->tables look like that: "main"."user_table"
+
+
+------------------------------------------------------------------------
+r6450 | sympa-authors | 2010-05-26 17:49:40 +0200 (Wed, 26 May 2010) | 1 line
+Changed paths:
+   M /branches/sympa-6.1-branch/ChangeLog
+   M /branches/sympa-6.1-branch/NEWS
+
+[-release]Preparing version 6.1b.1
+------------------------------------------------------------------------
 r6449 | sympa-authors | 2010-05-26 17:21:43 +0200 (Wed, 26 May 2010) | 1 line
 Changed paths:
    M /branches/sympa-6.1-branch/po/ar.po
