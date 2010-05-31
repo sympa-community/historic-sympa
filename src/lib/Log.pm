@@ -51,6 +51,8 @@ our %levels = (
     debug3 => 3,
 );
 
+our $last_date_aggregation;
+
 sub fatal_err {
     my $m  = shift;
     my $errno  = $!;
@@ -600,8 +602,8 @@ sub aggregate_data {
     $aggregated_data = &deal_data($res);
     
     #the line is read, so update the read_stat from 0 to 1
-    #my $update = sprintf "UPDATE stat_table SET read_stat = 1 WHERE (date_stat = '%d' AND operation_stat = 'add subscriber')", $i;
-    #$dbh->do($update);
+    my $update = sprintf "UPDATE stat_table SET read_stat = 1 WHERE (date_stat BETWEEN '%s' AND '%s')", $begin_date, $end_date;
+    $dbh->do($update);
     
     
     #store reslults in stat_counter_table
@@ -745,9 +747,10 @@ sub aggregate_data {
 	}
 	
     }#end of foreach
-
-    my $localtime = localtime(time);
-    &do_log('info', 'data aggregated at %s', $localtime);
+	
+    my $d_deb = localtime($begin_date);
+    my $d_fin = localtime($end_date);
+    &do_log('info', 'data aggregated from %s to %s', $d_deb, $d_fin);
 }
 
 
@@ -1037,9 +1040,33 @@ sub update_subscriber_msg_send {
     return 1;
 
 }
+
+#get date of the last time we have aggregated data
+sub get_last_date_aggregation {
     
-
-
+    my $dbh = &List::db_get_handler;
+    
+     ## Check database connection
+    unless ($dbh and $dbh->ping) {
+	return undef unless &List::db_connect();
+	$dbh = &List::db_get_handler();
+    }
+    
+    
+    my $statement = " SELECT MAX( end_date_counter ) FROM `stat_counter_table` ";
+    my $sth = $dbh->prepare($statement);
+    
+    unless($sth->execute){
+	&do_log('err','Unable to execute statement %s',$statement);
+	return undef;
+    }
+    
+    my $last_date = $sth->fetchrow_array;
+    
+    #open TMP2, ">/tmp/digdump"; &tools::dump_var($last_date, 0, \*TMP2); close TMP2;
+    return $last_date;
+    
+}
 1;
 
 
