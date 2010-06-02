@@ -12172,6 +12172,39 @@ sub get_list_id {
     return $self->{'name'}.'@'.$self->{'domain'};
 }
 
+##connect to stat_counter_table and extract data.
+sub get_data {
+    my ($data, $robotname, $listname) = @_;
+
+    my $statement;
+    my $dbh = &db_get_handler();
+    #my $data; # the hash containing aggregated data that the sub deal_data will return.
+    
+    ## Check database connection
+    unless ($dbh and $dbh->ping) {
+	return undef unless &List::db_connect();
+	$dbh = &List::db_get_handler();
+    }
+           
+    
+    $statement = sprintf "SELECT * FROM stat_counter_table WHERE data_counter = '%s' AND robot_counter = '%s' AND list_counter = '%s'", $data,$robotname, $listname;
+
+    my $sth = $dbh->prepare($statement);
+    
+    unless($sth->execute){
+	&do_log('err','Unable to execute statement %s',$statement);
+	return undef;
+    }
+    my $res = $sth->fetchall_hashref('id_counter');
+    #&do_log('trace', 'test');
+
+    return $res;
+}
+
+    
+
+    
+
 ###### END of the List package ######
 
 1;

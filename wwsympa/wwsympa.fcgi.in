@@ -407,6 +407,7 @@ my %action_args = ('default' => ['list'],
 		'search_user' => ['email'],
 		'set_lang' => ['lang'],
 		'attach' => ['list','dir','file'],
+		'stats' => ['list'],
 		'edit_list_request' => ['list','group'],
 		'rename_list' => ['list','new_list','new_robot'],
 		'copy_list' => ['list','new_list','new_robot'],
@@ -544,7 +545,7 @@ my %required_args = ('active_lists' => ['for|count'],
 		     'sigrequest' => ['param.list'],
 		     'skinedit' => ['param.user.email'],
 		     'sso_login' => ['auth_service_name'],
-		     'stats' => ['param.user.email','param.list'],
+		     'stats' => ['param.list'],
 		     'subindex' => ['param.list','param.user.email'],
 		     'suboptions' => ['param.list','param.user.email'],
 		     'subrequest' => ['param.list'],
@@ -15816,6 +15817,40 @@ sub do_stats {
      $param->{'shared_size'} = int (($list->get_shared_size + 512)/1024);
      $param->{'arc_size'} = int (($list->get_arc_size($wwsconf->{'arc_path'}) + 512)/1024);
 
+
+
+     #-------------------send_mail treatment-----------------
+     my $data_mail = &List::get_data('send_mail', $robot , $in{'list'});
+
+     foreach my $id_data (keys(%$data_mail)){
+	 my $date_deb = &tools::adate($data_mail->{$id_data}->{'beginning_date_counter'});
+	 my $date_fin = &tools::adate($data_mail->{$id_data}->{'end_date_counter'});
+	 
+	 $data_mail->{$id_data}->{'beginning_date_counter'} = $date_deb;
+	 $data_mail->{$id_data}->{'end_date_counter'} = $date_fin;
+
+	 
+	 $param->{'stats_mail'} = $data_mail->{$id_data};
+	 
+     }
+
+     #------------------subscriptions treatment----------------------
+        my $data_sub = &List::get_data('add_subscriber', $robot , $in{'list'});
+
+     foreach my $id_data (keys(%$data_sub)){
+	 my $date_deb = &tools::adate($data_sub->{$id_data}->{'beginning_date_counter'});
+	 my $date_fin = &tools::adate($data_sub->{$id_data}->{'end_date_counter'});
+	 
+	 $data_sub->{$id_data}->{'beginning_date_counter'} = $date_deb;
+	 $data_sub->{$id_data}->{'end_date_counter'} = $date_fin;
+
+	 
+	 $param->{'stats_subscriber'} = $data_sub->{$id_data};
+	 #open TMP2, ">/tmp/digdump"; &tools::dump_var($param->{'stats_subscriber'}, 0, \*TMP2); close TMP2;
+	 
+     }
+
+	 
      return 1;
 }
 

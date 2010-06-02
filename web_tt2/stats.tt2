@@ -1,4 +1,14 @@
 <!-- $Id$ -->
+
+[% USE date %]
+
 <strong>[%|loc%]Shared document directory size:[%END%] [% shared_size %]K</strong><br />
+
 <strong>[%|loc%]Web archives size:[%END%] [% arc_size %]K</strong><br />
+
+<h1> salut salut !!</h1>
+
+<strong> voici l'historique des messages envoyés</strong>
+<br>
+
 <!-- end stats.tt2 -->
