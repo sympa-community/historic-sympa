@@ -335,6 +335,166 @@
 	src/bulk.pl.in:  bulk.pl now uses the "use strict" pragma. Some
 	variables were not properly defined.
 
+6.0.2		May 28, 2010
+
+  Bug fixes:
+
+	src/lib/Bulk.pm: [Submitted by S. Ikeda] When bulk_max_count was
+	increased, some message packets were processed more than once. Fixed to
+	check that a packet is really not locked before trying to send it and
+	using a prepared statement to quicken lock process.
+
+	wwsympa/wwsympa.fcgi.in:  Dan Pritts fix
+	https://sourcesup.cru.fr/tracker/index.php?func=detail&aid=6839&group_id=23&atid=167
+
+	src/bulk.pl.in:  When a packet was found which corresponded to no
+	message in the spool table, then an empty message was sent anyway.
+	Should such a case arise again, the packet would be deleted.
+
+	src/lib/List.pm:  Reverting a part of revision #6227. This lead to
+	datasources loosing all their subscribers when using a single
+	datasource and the synchronizing failed.
+
+	src/lib/List.pm:  When calling send_notify_to_owner, the '$param'
+	parameter was used as a hash, wihout checking first that it was
+	actually a hash. in some cases though, such as in
+	set_status_family_closed(), it was a ref to an array. This caused Sympa
+	to crach with a "Can't coerce array into a hash" error. Fixed by moving
+	the bad line in the hash-specific part of the sub.
+
+	src/lib/List.pm: [Submitted by M. Brethous, Orange FT Group] When a
+	file was used as datasource for subscribers inclusion, no test was done
+	on the data found in the file. This led to 100% CPU usage when, for
+	example, a very large excel file was used instead of a normal text file
+	- a likely error when sources are handled by list owners. Fixed by
+	cancelling inclusion when no valid email is found in the 50 first non
+	empty lines of the source file.
+
+	src/lib/Bulk.pm:  Fix a bug reported by K Clair (riseup) and Thomas
+	Berry (nasa) : no purge where done in bulk_spool_table.
+
+	src/sympa_wizard.pl.in: [Submitted by R. ANDERSSON] With older version
+	of DBD::Mysql, bulk.pl happened to die with an "Out of memory!" cry.
+	Fixed by increasing the version to the oldest fixing this problem. See
+	http://bugs.mysql.com/bug.php?id=19453 for more details.
+
+	src/lib/SQLSource.pm: [Submitted by T. Berry, NASA] Some SQL statements
+	with Sybase failed when the actual backend was Microsoft SQL Server
+	2005 sp3. This was due to a double quote in the definition of a
+	constant breaking the query. Fixed by replacing double quotes by
+	slash-escaped simple quotes.
+
+	src/lib/Log.pm: [Submitted by P. DiCamillo, univ. Brown] Using Oracle
+	10, the logs for the list were never displayed in the web interface.
+	This was due to Oracle returning 0 to function $sth->rows, before any
+	row are fetched. fixed by first trying to fetch rows before counting
+	the number of rows.
+
+	src/sympa_wizard.pl.in: [Reported by M. anderson, riseup.net] changed
+	the minimal version of Time::hires to the older which doesn't seem to
+	have any problem with the "time()" function.
+
+	po/ar.po, po/bg.po, po/br.po, po/ca.po, po/cs.po, po/de.po, po/el.po,
+	po/en_US.po, po/es.po, po/et.po, po/eu.po, po/fi.po, po/fr.po,
+	po/hu.po, po/id.po, po/it.po, po/ja.po, po/ko.po, po/la.po, po/ml.po,
+	po/nb_NO.po, po/nl.po, po/oc.po, po/pl.po, po/pt.po, po/pt_BR.po,
+	po/ro.po, po/ru.po, po/sv.po, po/sympa.pot, po/tr.po, po/vi.po,
+	po/zh_CN.po, po/zh_TW.po, web_tt2/home.tt2: [Reported by M. deranek,
+	slonko.net] Removed inheritance of a faulty message with the sympa
+	email address in it.
+
+	Makefile.am: [Reported by P. Polkinghorne, Brunel univ.] The message
+	displayed at the end of the "make install" didn't make it clear that
+	the Perl modules checking must be done before any other upgrade or
+	setting operation.
+
+	wwsympa/wwsympa.fcgi.in: [Submitted by K. Maneva-Jakimoska, univ.
+	Montclair] when a user had set her name, she could not delete it. the
+	only was to set it as ' '. fixed by setting it to undef if no value is
+	provided by the form.
+
+	wwsympa/Bounce.pm: [Reported by Q. Brown, univ. Simmons] Sympa
+	misinterpreted a header added by the puremessage antispam engine when
+	no from was present in a bounce file. this lead to huge filenames for
+	bad bounces and overwhlmingly large logs.
+
+	src/lib/List.pm: [Submitted by R. Pinson] When a cutsom_subject was
+	used AND the user added the tag herself AND The subject was a
+	multi-line subject, then only the first line of the subject was kept in
+	the final messgage. Fixed by changing the way Wympa catches the
+	non-funtional (subject message and "Re:") part of the subject.
+
+	wwsympa/wwsympa.fcgi.in: [Submitted by K. clair, when no user was
+	bouncing in a list, trying to access to the bounces review lead to a
+	cryptic error : "No page 1". Fixed by checking if there are more than 0
+	bounces before issuing an error.
+
+	src/lib/Upgrade.pm: [Reproted by M. Deranek, slonko.net] Upgrade.pm had
+	three problems :
+
+	src/lib/Conf.pm: [Reported by J. Bazik, Brown University] When the
+	'sendmail_aliases' parameter was set to 'none', a file named 'none' was
+	still created in the list_data directory. Fixed by testing the value of
+	this parameter before creating the file.
+
+	src/lib/Lock.pm: [Reported by J. Bazik, Brown University] In the
+	subroutine Lock::_lock_nfs, if File::NFSLock failed, the else clause
+	attempted to close a filehandle that was never set. Fixed by removing
+	this closing attempt.
+
+	Makefile.am:  During the make isntall, the Makefile used a line tha
+	ttested the existence of the data_structure.version file in the sympa
+	subdirectory of etc. If the file did not exist, then it was created.
+	Problems:
+
+	configure.ac: [Reported by M. Deranek, slonko.net] While running
+	configure, the option "--with-localedir" could be used, but a warning
+	was issued, stating that this option was obsolete. But the replacement
+	option proposed (--localedir) was invalid. Fixed by deleting this
+	warning message and the overall documentation in configure. Same
+	problem fixed with the pair "--with-docdir"/"--docdir".
+
+	src/lib/Upgrade.pm: [Submitted by M. Deranek, slonko.net] The upgrade
+	process failed with SQLite, because DBD::SQLite >= 1.26_02 returns the
+	table names prefixed with "main".
+
+	web_tt2/compose_mail.tt2: [Submitted by M. Warkus, univ. Marburg]When
+	accessing the "Compose message" page from an archive by selecting
+	"sender", "list" or "both" with the radio buttons, the selected
+	destination address appeared next to two buttons: "Send to the list"
+	and "Send to me".
+
+	wwsympa/wwsympa.fcgi.in:  Avoid to print a sybillin message when no
+	bounces exist. If nothing exist, just go on and display a page with no
+	entries.
+
+	src/lib/SQLSource.pm: [Submitted by F. Lachapelle, Inverse] If the
+	db_type is set to Oracle and db_port is specified in the main
+	configuration file, than the port would appear two times in the
+	connection string. Fixed by removing useless isolated port insertion
+	in the connect string, as it is done for any connection in a central place.
+
+
+	src/lib/tools.pm: [reported by F.Fareneau, univ Valenciennes] shared
+	documents/folders names were badly encoded while using Encode >= 2.19.
+	The issue was related to a low level subroutine
+	(Encode::MIME::Header::_encode_q()) that slightly changed its API
+	(expecting unicode instead of bytes parameter). Now using
+	MIME::EncWords::encode_mimewords() instead.
+
+	src/lib/tools.pm: [#6552] [Soji IKEDA] Wwsympa would stall while
+	loading session data including metacharacters. Existing code
+	(tools::string_2_hash()) would loop on a regular expression match.
+	Patch also escapes ``"'' characters.
+
+
+
+  Changes:
+
+	po/Makefile.in.in:  Updated the make rules for i18N to update the
+	English catalogue withou loosing customization.
+
+
 6.0.1		9th December 2009
 
   Bug fixes:

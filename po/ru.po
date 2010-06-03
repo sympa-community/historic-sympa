@@ -8,8 +8,8 @@ msgstr ""
 "Project-Id-Version: sympa\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
 "POT-Creation-Date: 2002-07-16 17:27+0800\n"
-"PO-Revision-Date: 2010-04-02 14:45+0200\n"
-"Last-Translator: Serguei S. Dukachev <iam@dukess.ru>\n"
+"PO-Revision-Date: 2010-06-03 08:05+0200\n"
+"Last-Translator: chernysh <mail33@gmail.com>\n"
 "Language-Team: Russian <ru@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -4961,15 +4961,14 @@ msgstr ""
 #: ../mail_tt2/authorization_reject.tt2:81
 #: ../mail_tt2/authorization_reject.tt2:9
 #: ../mail_tt2/authorization_reject.tt2:94
-#, fuzzy
 msgid ""
 "If you are subscribed to the list with a different email address, you should "
 "either use that other email address or update your list membership with the "
 "new email address."
 msgstr ""
 "Если Вы подписаны на список рассылки другим адресом электронной почты, Вы "
-"должны или использовать тот, другой, адрес электронной почты или обновить "
-"Ваше членство в списке рассылки с новым адресом электронной почты."
+"должны либо использовать тот, другой, адрес электронной почты, либо изменить "
+"Ваш адрес электронной почты в списке рассылки. "
 
 #: ../mail_tt2/authorization_reject.tt2:12
 msgid "Web archives are restricted to listmaster."
@@ -8962,9 +8961,8 @@ msgid "Topics for message categorization"
 msgstr "Темы для классификации сообщений"
 
 #: ../src/lib/List.pm:1145
-#, fuzzy
 msgid "Defines to which part of messages topic keywords are applied"
-msgstr "Определение части сообщения, к которой применяются ключевые слова"
+msgstr "Указывает, к какой части сообщения применяются ключевые слова тем"
 
 #: ../src/lib/List.pm:1152
 msgid "Message tagging"
@@ -9122,9 +9120,8 @@ msgid "seconds"
 msgstr "секунд"
 
 #: ../src/lib/List.pm:628
-#, fuzzy
 msgid "List of headers to be included ito the message for signature"
-msgstr "список подписываемых заголовков, включённых в письмо"
+msgstr "Список заголовков, включаемых в письмо для сигнатуры"
 
 #: ../src/lib/List.pm:635
 #, fuzzy
@@ -9150,9 +9147,8 @@ msgid "Moderators defined in an external data source"
 msgstr "Модераторы, заданные из внешнего источника данных"
 
 #: ../src/lib/List.pm:715
-#, fuzzy
 msgid "Family name"
-msgstr "Фамилия семейства"
+msgstr "Название семейства"
 
 #: ../src/lib/List.pm:828 ../src/lib/List.pm:952
 msgid "use SSL (LDAPS)"
@@ -9176,11 +9172,11 @@ msgstr "Дата"
 
 #: ../src/lib/List.pm:1099
 msgid "who ran the instantiation"
-msgstr ""
+msgstr "кто запускал экземпляр"
 
 #: ../src/lib/List.pm:1103
 msgid "Latest family instantiation"
-msgstr ""
+msgstr "Последний экземпляр семейства"
 
 #: ../src/lib/List.pm:1115
 msgid "bytes"
@@ -9509,7 +9505,6 @@ msgid "notice mode"
 msgstr "режим уведомления"
 
 #: ../wwsympa/wwslib.pm:33
-#, fuzzy
 msgid "text-only mode"
 msgstr "только обычный текст"
 

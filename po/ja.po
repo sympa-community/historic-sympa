@@ -12,7 +12,7 @@ msgstr ""
 "Project-Id-Version: Sympa-5.4.6, Sympa-6.0, Sympa-6.1a.1\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2002-07-16 17:27+0800\n"
-"PO-Revision-Date: 2010-05-12 16:18+0200\n"
+"PO-Revision-Date: 2010-06-02 02:39+0200\n"
 "Last-Translator: IKEDA Soji <hatuka@nezumi.nu>\n"
 "Language-Team: 日本語\n"
 "MIME-Version: 1.0\n"
@@ -9039,7 +9039,7 @@ msgstr "利用するSSL暗号方式"
 
 #: ../src/lib/List.pm:1090 ../src/lib/List.pm:1370
 msgid "epoch date"
-msgstr "エポック"
+msgstr "Unix時間"
 
 #: ../src/lib/List.pm:1094 ../src/lib/List.pm:1375
 msgid "date"
