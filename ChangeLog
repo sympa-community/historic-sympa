@@ -1,4 +1,81 @@
 ------------------------------------------------------------------------
+r6476 | sympa-authors | 2010-06-03 16:24:50 +0200 (Thu, 03 Jun 2010) | 1 line
+Changed paths:
+   M /branches/sympa-6.1-branch/po/ar.po
+   M /branches/sympa-6.1-branch/po/bg.po
+   M /branches/sympa-6.1-branch/po/br.po
+   M /branches/sympa-6.1-branch/po/ca.po
+   M /branches/sympa-6.1-branch/po/cs.po
+   M /branches/sympa-6.1-branch/po/de.po
+   M /branches/sympa-6.1-branch/po/el.po
+   M /branches/sympa-6.1-branch/po/en_US.po
+   M /branches/sympa-6.1-branch/po/es.po
+   M /branches/sympa-6.1-branch/po/et.po
+   M /branches/sympa-6.1-branch/po/eu.po
+   M /branches/sympa-6.1-branch/po/fi.po
+   M /branches/sympa-6.1-branch/po/fr.po
+   M /branches/sympa-6.1-branch/po/hu.po
+   M /branches/sympa-6.1-branch/po/id.po
+   M /branches/sympa-6.1-branch/po/it.po
+   M /branches/sympa-6.1-branch/po/ja.po
+   M /branches/sympa-6.1-branch/po/ko.po
+   M /branches/sympa-6.1-branch/po/la.po
+   M /branches/sympa-6.1-branch/po/ml.po
+   M /branches/sympa-6.1-branch/po/nb_NO.po
+   M /branches/sympa-6.1-branch/po/nl.po
+   M /branches/sympa-6.1-branch/po/oc.po
+   M /branches/sympa-6.1-branch/po/pl.po
+   M /branches/sympa-6.1-branch/po/pt.po
+   M /branches/sympa-6.1-branch/po/pt_BR.po
+   M /branches/sympa-6.1-branch/po/ro.po
+   M /branches/sympa-6.1-branch/po/ru.po
+   M /branches/sympa-6.1-branch/po/sv.po
+   M /branches/sympa-6.1-branch/po/sympa.pot
+   M /branches/sympa-6.1-branch/po/tr.po
+   M /branches/sympa-6.1-branch/po/vi.po
+   M /branches/sympa-6.1-branch/po/zh_CN.po
+   M /branches/sympa-6.1-branch/po/zh_TW.po
+
+[-feature]Committing updated catalogues from Pootle
+------------------------------------------------------------------------
+r6475 | sympa-authors | 2010-06-03 16:23:22 +0200 (Thu, 03 Jun 2010) | 1 line
+Changed paths:
+   M /branches/sympa-6.1-branch
+   M /branches/sympa-6.1-branch/NEWS
+   M /branches/sympa-6.1-branch/configure.ac
+   M /branches/sympa-6.1-branch/po/ja.po
+   M /branches/sympa-6.1-branch/po/ru.po
+   M /branches/sympa-6.1-branch/src/bulk.pl.in
+   M /branches/sympa-6.1-branch/src/lib/Conf.pm
+   M /branches/sympa-6.1-branch/src/lib/SQLSource.pm
+
+[-feature]Committing latest translations from Pootle
+------------------------------------------------------------------------
+r6471 | sympa-authors | 2010-06-03 16:03:59 +0200 (Thu, 03 Jun 2010) | 2 lines
+Changed paths:
+   A /branches/sympa-6.1-branch/web_tt2/auto_signoff.tt2
+
+[-feature] Forgot to add the auto_signoff.tt2 file.
+
+------------------------------------------------------------------------
+r6468 | sympa-authors | 2010-06-02 18:37:51 +0200 (Wed, 02 Jun 2010) | 2 lines
+Changed paths:
+   M /branches/sympa-6.1-branch/mail_tt2/user_notification.tt2
+   M /branches/sympa-6.1-branch/src/lib/Bulk.pm
+   M /branches/sympa-6.1-branch/src/lib/mail.pm
+   M /branches/sympa-6.1-branch/src/sympa_wizard.pl.in
+   M /branches/sympa-6.1-branch/web_tt2/Makefile.am
+   M /branches/sympa-6.1-branch/wwsympa/wwsympa.fcgi.in
+
+[feature] Retrieved from development server the feature that allows to add auto_signoff links at the bottom of list messages.
+
+------------------------------------------------------------------------
+r6457 | sympa-authors | 2010-05-27 18:00:32 +0200 (Thu, 27 May 2010) | 1 line
+Changed paths:
+   M /branches/sympa-6.1-branch/ChangeLog
+
+[-release]Preparing version 6.1b.1
+------------------------------------------------------------------------
 r6456 | sympa-authors | 2010-05-27 17:58:17 +0200 (Thu, 27 May 2010) | 1 line
 Changed paths:
    M /branches/sympa-6.1-branch/ChangeLog
