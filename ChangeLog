@@ -1,4 +1,166 @@
 ------------------------------------------------------------------------
+r6472 | sympa-authors | 2010-06-03 16:16:49 +0200 (jeu 03 jun 2010) | 1 ligne
+Chemins modifiés :
+   M /branches/sympa-6.0-branch/configure.ac
+   M /branches/sympa-6.0-branch/po/ar.po
+   M /branches/sympa-6.0-branch/po/bg.po
+   M /branches/sympa-6.0-branch/po/br.po
+   M /branches/sympa-6.0-branch/po/ca.po
+   M /branches/sympa-6.0-branch/po/cs.po
+   M /branches/sympa-6.0-branch/po/de.po
+   M /branches/sympa-6.0-branch/po/el.po
+   M /branches/sympa-6.0-branch/po/en_US.po
+   M /branches/sympa-6.0-branch/po/es.po
+   M /branches/sympa-6.0-branch/po/et.po
+   M /branches/sympa-6.0-branch/po/eu.po
+   M /branches/sympa-6.0-branch/po/fi.po
+   M /branches/sympa-6.0-branch/po/fr.po
+   M /branches/sympa-6.0-branch/po/hu.po
+   M /branches/sympa-6.0-branch/po/id.po
+   M /branches/sympa-6.0-branch/po/it.po
+   M /branches/sympa-6.0-branch/po/ja.po
+   M /branches/sympa-6.0-branch/po/ko.po
+   M /branches/sympa-6.0-branch/po/la.po
+   M /branches/sympa-6.0-branch/po/ml.po
+   M /branches/sympa-6.0-branch/po/nb_NO.po
+   M /branches/sympa-6.0-branch/po/nl.po
+   M /branches/sympa-6.0-branch/po/oc.po
+   M /branches/sympa-6.0-branch/po/pl.po
+   M /branches/sympa-6.0-branch/po/pt.po
+   M /branches/sympa-6.0-branch/po/pt_BR.po
+   M /branches/sympa-6.0-branch/po/ro.po
+   M /branches/sympa-6.0-branch/po/ru.po
+   M /branches/sympa-6.0-branch/po/sv.po
+   M /branches/sympa-6.0-branch/po/tr.po
+   M /branches/sympa-6.0-branch/po/vi.po
+   M /branches/sympa-6.0-branch/po/zh_CN.po
+   M /branches/sympa-6.0-branch/po/zh_TW.po
+   M /branches/sympa-6.0-branch/po-wwsympa/ar.po
+   M /branches/sympa-6.0-branch/po-wwsympa/bg.po
+   M /branches/sympa-6.0-branch/po-wwsympa/br.po
+   M /branches/sympa-6.0-branch/po-wwsympa/cs.po
+   M /branches/sympa-6.0-branch/po-wwsympa/de.po
+   M /branches/sympa-6.0-branch/po-wwsympa/el.po
+   M /branches/sympa-6.0-branch/po-wwsympa/en_US.po
+   M /branches/sympa-6.0-branch/po-wwsympa/es.po
+   M /branches/sympa-6.0-branch/po-wwsympa/et.po
+   M /branches/sympa-6.0-branch/po-wwsympa/eu.po
+   M /branches/sympa-6.0-branch/po-wwsympa/fi.po
+   M /branches/sympa-6.0-branch/po-wwsympa/fr.po
+   M /branches/sympa-6.0-branch/po-wwsympa/hu.po
+   M /branches/sympa-6.0-branch/po-wwsympa/id.po
+   M /branches/sympa-6.0-branch/po-wwsympa/it.po
+   M /branches/sympa-6.0-branch/po-wwsympa/ja.po
+   M /branches/sympa-6.0-branch/po-wwsympa/nb_NO.po
+   M /branches/sympa-6.0-branch/po-wwsympa/nl.po
+   M /branches/sympa-6.0-branch/po-wwsympa/oc.po
+   M /branches/sympa-6.0-branch/po-wwsympa/pl.po
+   M /branches/sympa-6.0-branch/po-wwsympa/pt.po
+   M /branches/sympa-6.0-branch/po-wwsympa/pt_BR.po
+   M /branches/sympa-6.0-branch/po-wwsympa/ro.po
+   M /branches/sympa-6.0-branch/po-wwsympa/ru.po
+   M /branches/sympa-6.0-branch/po-wwsympa/sv.po
+   M /branches/sympa-6.0-branch/po-wwsympa/tr.po
+   M /branches/sympa-6.0-branch/po-wwsympa/vi.po
+   M /branches/sympa-6.0-branch/po-wwsympa/zh_CN.po
+
+[-feature]Committing latest translations from Pootle
+------------------------------------------------------------------------
+r6470 | sympa-authors | 2010-06-03 15:57:07 +0200 (jeu 03 jun 2010) | 2 lignes
+Chemins modifiés :
+   M /branches/sympa-6.0-branch/src/lib/SQLSource.pm
+
+[bug][Reported by O. Germes, univ. Rennes1] The upper case "O" in "Oracle" caused the task_manager.pl to be unable to synchronize datasources. This is a quick fix that reverts the patch for bug [#6603].
+
+------------------------------------------------------------------------
+r6465 | sympa-authors | 2010-05-31 17:33:01 +0200 (lun 31 mai 2010) | 2 lignes
+Chemins modifiés :
+   M /branches/sympa-6.0-branch/src/lib/Conf.pm
+
+[bug][submitted by G. rousse, INRIA] Spool directories created in Conf.pm didn't have ownership set, meaning they belonged to root.root, preventing sympa to create new content therein, preventing sympa.pl to start.
+
+------------------------------------------------------------------------
+r6464 | sympa-authors | 2010-05-31 17:29:09 +0200 (lun 31 mai 2010) | 2 lignes
+Chemins modifiés :
+   M /branches/sympa-6.0-branch/po/ar.po
+   M /branches/sympa-6.0-branch/po/bg.po
+   M /branches/sympa-6.0-branch/po/br.po
+   M /branches/sympa-6.0-branch/po/ca.po
+   M /branches/sympa-6.0-branch/po/cs.po
+   M /branches/sympa-6.0-branch/po/de.po
+   M /branches/sympa-6.0-branch/po/el.po
+   M /branches/sympa-6.0-branch/po/en_US.po
+   M /branches/sympa-6.0-branch/po/es.po
+   M /branches/sympa-6.0-branch/po/et.po
+   M /branches/sympa-6.0-branch/po/eu.po
+   M /branches/sympa-6.0-branch/po/fi.po
+   M /branches/sympa-6.0-branch/po/fr.po
+   M /branches/sympa-6.0-branch/po/hu.po
+   M /branches/sympa-6.0-branch/po/id.po
+   M /branches/sympa-6.0-branch/po/it.po
+   M /branches/sympa-6.0-branch/po/ja.po
+   M /branches/sympa-6.0-branch/po/ko.po
+   M /branches/sympa-6.0-branch/po/la.po
+   M /branches/sympa-6.0-branch/po/ml.po
+   M /branches/sympa-6.0-branch/po/nb_NO.po
+   M /branches/sympa-6.0-branch/po/nl.po
+   M /branches/sympa-6.0-branch/po/oc.po
+   M /branches/sympa-6.0-branch/po/pl.po
+   M /branches/sympa-6.0-branch/po/pt.po
+   M /branches/sympa-6.0-branch/po/pt_BR.po
+   M /branches/sympa-6.0-branch/po/ro.po
+   M /branches/sympa-6.0-branch/po/ru.po
+   M /branches/sympa-6.0-branch/po/sv.po
+   M /branches/sympa-6.0-branch/po/tr.po
+   M /branches/sympa-6.0-branch/po/vi.po
+   M /branches/sympa-6.0-branch/po/zh_CN.po
+   M /branches/sympa-6.0-branch/po/zh_TW.po
+   M /branches/sympa-6.0-branch/po-wwsympa/ar.po
+   M /branches/sympa-6.0-branch/po-wwsympa/bg.po
+   M /branches/sympa-6.0-branch/po-wwsympa/br.po
+   M /branches/sympa-6.0-branch/po-wwsympa/cs.po
+   M /branches/sympa-6.0-branch/po-wwsympa/de.po
+   M /branches/sympa-6.0-branch/po-wwsympa/el.po
+   M /branches/sympa-6.0-branch/po-wwsympa/en_US.po
+   M /branches/sympa-6.0-branch/po-wwsympa/es.po
+   M /branches/sympa-6.0-branch/po-wwsympa/et.po
+   M /branches/sympa-6.0-branch/po-wwsympa/eu.po
+   M /branches/sympa-6.0-branch/po-wwsympa/fi.po
+   M /branches/sympa-6.0-branch/po-wwsympa/fr.po
+   M /branches/sympa-6.0-branch/po-wwsympa/hu.po
+   M /branches/sympa-6.0-branch/po-wwsympa/id.po
+   M /branches/sympa-6.0-branch/po-wwsympa/it.po
+   M /branches/sympa-6.0-branch/po-wwsympa/ja.po
+   M /branches/sympa-6.0-branch/po-wwsympa/nb_NO.po
+   M /branches/sympa-6.0-branch/po-wwsympa/nl.po
+   M /branches/sympa-6.0-branch/po-wwsympa/oc.po
+   M /branches/sympa-6.0-branch/po-wwsympa/pl.po
+   M /branches/sympa-6.0-branch/po-wwsympa/pt.po
+   M /branches/sympa-6.0-branch/po-wwsympa/pt_BR.po
+   M /branches/sympa-6.0-branch/po-wwsympa/ro.po
+   M /branches/sympa-6.0-branch/po-wwsympa/ru.po
+   M /branches/sympa-6.0-branch/po-wwsympa/sv.po
+   M /branches/sympa-6.0-branch/po-wwsympa/tr.po
+   M /branches/sympa-6.0-branch/po-wwsympa/vi.po
+   M /branches/sympa-6.0-branch/po-wwsympa/zh_CN.po
+
+[-change] Updating Sympa translations.
+
+------------------------------------------------------------------------
+r6463 | sympa-authors | 2010-05-31 16:08:59 +0200 (lun 31 mai 2010) | 2 lignes
+Chemins modifiés :
+   M /branches/sympa-6.0-branch/src/bulk.pl.in
+
+[bug][Reported by S. Bosquin, Ejinov] A bad variable name seemed to have appeared just before the version tag, making bulk.pl to fail starting. Fixed by giving the right name to this variable.
+
+------------------------------------------------------------------------
+r6460 | sympa-authors | 2010-05-28 11:58:47 +0200 (ven 28 mai 2010) | 1 ligne
+Chemins modifiés :
+   M /branches/sympa-6.0-branch/ChangeLog
+   M /branches/sympa-6.0-branch/NEWS
+
+[-release]Preparing version 6.0.2
+------------------------------------------------------------------------
 r6459 | sympa-authors | 2010-05-28 11:48:42 +0200 (ven 28 mai 2010) | 1 ligne
 Chemins modifiés :
    M /branches/sympa-6.0-branch/ChangeLog

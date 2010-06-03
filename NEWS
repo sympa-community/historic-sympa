@@ -3,6 +3,25 @@
 
 (See Changelog file for the full changes log)
 
+6.0.3		June 03, 2010
+
+  Bug fixes:
+
+	src/lib/SQLSource.pm: [Reported by O. Germes, univ. Rennes1] The upper
+	case "O" in "Oracle" caused the task_manager.pl to be unable to
+	synchronize datasources. This is a quick fix that reverts the patch for
+	bug [#6603].
+
+	src/lib/Conf.pm: [submitted by G. rousse, INRIA] Spool directories
+	created in Conf.pm didn't have ownership set, meaning they belonged to
+	root.root, preventing sympa to create new content therein, preventing
+	sympa.pl to start.
+
+	src/bulk.pl.in: [Reported by S. Bosquin, Ejinov] A bad variable name
+	seemed to have appeared just before the version tag, making bulk.pl to
+	fail starting. Fixed by giving the right name to this variable.
+
+
 6.0.2		May 28, 2010
 
   Bug fixes:
