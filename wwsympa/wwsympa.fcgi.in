@@ -15830,26 +15830,57 @@ sub do_stats {
 	 $data_mail->{$id_data}->{'end_date_counter'} = $date_fin;
 
 	 
-	 $param->{'stats_mail'} = $data_mail->{$id_data};
+	 $param->{'stats_mail'}{$id_data} = $data_mail->{$id_data};
 	 
      }
-
+     
      #------------------subscriptions treatment----------------------
-        my $data_sub = &List::get_data('add_subscriber', $robot , $in{'list'});
-
+     my $data_sub = &List::get_data('add_subscriber', $robot , $in{'list'});
+     
      foreach my $id_data (keys(%$data_sub)){
 	 my $date_deb = &tools::adate($data_sub->{$id_data}->{'beginning_date_counter'});
 	 my $date_fin = &tools::adate($data_sub->{$id_data}->{'end_date_counter'});
 	 
 	 $data_sub->{$id_data}->{'beginning_date_counter'} = $date_deb;
 	 $data_sub->{$id_data}->{'end_date_counter'} = $date_fin;
+	 
+	 
+	 $param->{'stats_subscriber'}{$id_data} = $data_sub->{$id_data};
+	 
+     }
+     
+     #------------------unsubscriptions treatment------------------------
+     my $data_unsub = &List::get_data('unsubscription', $robot, $in{'list'});
+     
+     foreach my $id_data (keys(%$data_unsub)){
+	 my $date_deb = &tools::adate($data_unsub->{$id_data}->{'beginning_date_counter'});
+	 my $date_fin = &tools::adate($data_unsub->{$id_data}->{'end_date_counter'});
+	 
+	 $data_unsub->{$id_data}->{'beginning_date_counter'} = $date_deb;
+	 $data_unsub->{$id_data}->{'end_date_counter'} = $date_fin;
 
 	 
-	 $param->{'stats_subscriber'} = $data_sub->{$id_data};
-	 #open TMP2, ">/tmp/digdump"; &tools::dump_var($param->{'stats_subscriber'}, 0, \*TMP2); close TMP2;
+	 $param->{'stats_unsubscriber'}{$id_data} = $data_unsub->{$id_data};
+	 
+     }
+     #-------------------deleted treatment----------------------------------
+         my $data_deleted = &List::get_data('deleted by admin', $robot, $in{'list'});
+     
+     foreach my $id_data (keys(%$data_deleted)){
+	 my $date_deb = &tools::adate($data_deleted->{$id_data}->{'beginning_date_counter'});
+	 my $date_fin = &tools::adate($data_deleted->{$id_data}->{'end_date_counter'});
+	 
+	 $data_deleted->{$id_data}->{'beginning_date_counter'} = $date_deb;
+	 $data_deleted->{$id_data}->{'end_date_counter'} = $date_fin;
+
+	 
+	 $param->{'stats_deleted'}{$id_data} = $data_deleted->{$id_data};
 	 
      }
 
+
+
+     open TMP2, ">/tmp/digdump"; &tools::dump_var($param->{'stats_subscriber'}, 0, \*TMP2); close TMP2;
 	 
      return 1;
 }

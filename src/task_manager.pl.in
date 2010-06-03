@@ -1135,7 +1135,8 @@ sub purge_logs_table {
     $sec = 0;
     my $date_end = timelocal($sec,$min,$hour,$mday,$mon,$year,$wday,$yday,$isdst);
 
-    my $date_deb = &Log::get_last_date_aggregation();
+
+    my $date_deb = $date_end-86400;#on enleve 24h !!!!!! IN DEVELOPMENT !!!! 
     
     #open TMP2, ">/tmp/digdump"; &tools::dump_var($begin_date, 0, \*TMP2); close TMP2;
 

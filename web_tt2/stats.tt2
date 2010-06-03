@@ -1,14 +1,47 @@
 <!-- $Id$ -->
 
 [% USE date %]
-
+<h1>Statistiques de la liste [% list %]</h1>
 <strong>[%|loc%]Shared document directory size:[%END%] [% shared_size %]K</strong><br />
 
 <strong>[%|loc%]Web archives size:[%END%] [% arc_size %]K</strong><br />
 
-<h1> salut salut !!</h1>
+<br>
 
-<strong> voici l'historique des messages envoyés</strong>
+<strong>abonnements : </strong>
+[% FOREACH id = stats_subscriber %]
+<p>du [% id.value.beginning_date_counter %] au [% id.value.end_date_counter %] : +[% id.value.variation_counter %]</p>
+<br>
+[% END %]
+<br>
+
+<strong>envoi de messages : </strong>
+
+[% FOREACH id = stats_mail %]
+<p>du [% id.value.beginning_date_counter %] au [% id.value.end_date_counter %] : [% id.value.variation_counter %] messages envoyé(s)</p>
+<br>
+[% END %]
+<br>
+
+<strong>désabonnements : </strong>
+[% FOREACH id = stats_unsubscriber %]
+<p>du [% id.value.beginning_date_counter %] au [% id.value.end_date_counter %] : -[% id.value.variation_counter %]</p>
+<br>
+[% END %]
+<br>
+
+<strong>supprimés par un admin : </strong>
+[% FOREACH id = stats_deleted %]
+<p>du [% id.value.beginning_date_counter %] au [% id.value.end_date_counter %] : -[% id.value.variation_counter %]</p>
+<br>
+[% END %]
+<br>
+
+<strong>supprimés par le bounce : </strong>
+[% FOREACH id = stats_bounced %]
+<p>du [% id.value.beginning_date_counter %] au [% id.value.end_date_counter %] : -[% id.value.variation_counter %]</p>
+<br>
+[% END %]
 <br>
 
 <!-- end stats.tt2 -->
