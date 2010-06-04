@@ -165,7 +165,7 @@ CREATE TABLE bulkspool_table (
         dkim_privatekey_bulkspool  varchar(100),
 	dkim_signer_selector_bulkspool varchar(50),
 	dkim_signer_domain_bulkspool varchar(50),
-	dkim_header_list_bulkspool' varchar(500),
+	dkim_header_list_bulkspool varchar(500),
 	constraint ind_bulkspool primary key (messagekey_bulkspool)
 );
 CREATE INDEX messagekey_bulkspool_idx ON bulkspool_table(messagekey_bulkspool);
