@@ -3,6 +3,34 @@
 
 (See Changelog file for the full changes log)
 
+6.1b.3		June 07, 2010
+
+  Bug fixes:
+
+	src/etc/script/create_db.Oracle, src/etc/script/create_db.Pg,
+	src/etc/script/create_db.SQLite, src/etc/script/create_db.Sybase,
+	src/etc/script/create_db.mysql:
+	[Reported by A. Michon, IBCP and A.Gouaux]
+	In the create_db.* scripts, some of the name of the fields
+	related to DKIM were uncorrect, leading bulk.pl to fail starting. These
+	names are now correct.
+
+	src/etc/script/create_db.Pg: [reported by A. Michon, IBCP] A typo in
+	create_db.Pg caused the db creation query to fail.
+
+6.1b.2		June 03, 2010
+
+  Features:
+
+	mail_tt2/user_notification.tt2, src/lib/Bulk.pm,src/lib/mail.pm,
+	src/sympa_wizard.pl.in, web_tt2/Makefile.am, wwsympa/wwsympa.fcgi.in
+	web_tt2/auto_signoff.tt2:
+	Autosignoff footer link. It is nw possible to add a link in list messages
+	which are customized for each user. When clicking this link, the user will
+	trigger the sending of a confirmation email. This confirmation email
+	contain an authenticating link. Clicking this link will unsubscribe
+	the user.
+
 6.1b.1		May 26, 2010
 
   Features:

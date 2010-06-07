@@ -1,4 +1,44 @@
 ------------------------------------------------------------------------
+r6483 | sympa-authors | 2010-06-07 11:16:57 +0200 (Mon, 07 Jun 2010) | 1 line
+Changed paths:
+   M /branches/sympa-6.1-branch/po/ru.po
+   M /branches/sympa-6.1-branch/po-wwsympa/ru.po
+
+[-feature]Committing updated catalogues from Pootle
+------------------------------------------------------------------------
+r6482 | sympa-authors | 2010-06-07 11:15:33 +0200 (Mon, 07 Jun 2010) | 1 line
+Changed paths:
+   M /branches/sympa-6.1-branch/configure.ac
+   M /branches/sympa-6.1-branch/po/ru.po
+   M /branches/sympa-6.1-branch/po/zh_CN.po
+   M /branches/sympa-6.1-branch/po-wwsympa/ru.po
+
+[-feature]Committing latest translations from Pootle
+------------------------------------------------------------------------
+r6481 | sympa-authors | 2010-06-07 11:07:55 +0200 (Mon, 07 Jun 2010) | 2 lines
+Changed paths:
+   M /branches/sympa-6.1-branch/src/etc/script/create_db.Oracle
+   M /branches/sympa-6.1-branch/src/etc/script/create_db.Pg
+   M /branches/sympa-6.1-branch/src/etc/script/create_db.SQLite
+   M /branches/sympa-6.1-branch/src/etc/script/create_db.Sybase
+   M /branches/sympa-6.1-branch/src/etc/script/create_db.mysql
+
+[bug][Reported by A. Michon, IBCP and A. Gouaux] In the create_db.* scripts, some of the name of the fields related to DKIM were uncorrect, leading bulk.pl to fail starting. These names are now correct.
+
+------------------------------------------------------------------------
+r6479 | sympa-authors | 2010-06-04 15:14:10 +0200 (Fri, 04 Jun 2010) | 2 lines
+Changed paths:
+   M /branches/sympa-6.1-branch/src/etc/script/create_db.Pg
+
+[bug][reported by A. Michon, IBCP] A typo in create_db.Pg caused the db creation query to fail.
+
+------------------------------------------------------------------------
+r6477 | sympa-authors | 2010-06-03 16:30:31 +0200 (Thu, 03 Jun 2010) | 1 line
+Changed paths:
+   M /branches/sympa-6.1-branch/ChangeLog
+
+[-release]Preparing version 6.1b.2
+------------------------------------------------------------------------
 r6476 | sympa-authors | 2010-06-03 16:24:50 +0200 (Thu, 03 Jun 2010) | 1 line
 Changed paths:
    M /branches/sympa-6.1-branch/po/ar.po
