@@ -1014,7 +1014,8 @@ msgstr ": почтовый адрес пользователя; всегда д�
 
 #: ../web_tt2/compose_mail.tt2:70
 msgid ": the user name associated to her email; always available."
-msgstr ": имя пользователя, связанного его с почтовым адресом; всегда доступно."
+msgstr ""
+": имя пользователя, связанного его с почтовым адресом; всегда доступно."
 
 #: ../web_tt2/compose_mail.tt2:71
 msgid ": the - human readable - user's subscription date; always available."
