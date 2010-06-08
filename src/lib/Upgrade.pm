@@ -1772,10 +1772,12 @@ foreach $table ( keys %{ $db_struct{'mysql'} } ) {
     $create_db_Pg .= "CREATE TABLE $table ( \n";
     foreach $field  ( keys %{ $db_struct{'mysql'}{$table}  } ) {
 	my $trans = $db_struct{'mysql'}{$table}{$field};
-	$trans =~ s/^int.*/int4/g;
+	$trans =~ s/^int(1)/smallint/g;
+	$trans =~ s/^int(.*/int4/g;
 	$trans =~ s/^bigint.*/bigint/g;
-	$trans =~ s/^smallint.*/smallint/g;
+	$trans =~ s/^smallint.*/int4/g;
 	$trans =~ s/^enum.*/varchar(15)/g;
+	$trans =~ s/^text.*/varchar(500)/g;
 	$trans =~ s/^longtext.*/text/g;
 	$trans =~ s/^datetime.*/timestamp with time zone/g;
 	$create_db_Pg .= "\t $field \t".$trans ;
