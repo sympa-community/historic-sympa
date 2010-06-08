@@ -1773,7 +1773,7 @@ foreach $table ( keys %{ $db_struct{'mysql'} } ) {
     foreach $field  ( keys %{ $db_struct{'mysql'}{$table}  } ) {
 	my $trans = $db_struct{'mysql'}{$table}{$field};
 	$trans =~ s/^int(1)/smallint/g;
-	$trans =~ s/^int(.*/int4/g;
+	$trans =~ s/^int\(.*/int4/g;
 	$trans =~ s/^bigint.*/bigint/g;
 	$trans =~ s/^smallint.*/int4/g;
 	$trans =~ s/^enum.*/varchar(15)/g;
@@ -1875,7 +1875,7 @@ foreach $table ( keys %{ $db_struct{'mysql'} } ) {
     foreach $field  ( keys %{ $db_struct{'mysql'}{$table}  } ) {
 	my $trans = $db_struct{'mysql'}{$table}{$field};
 	$trans =~ s/^varchar.*/text/g;
-	$trans =~ s/^int\(\1\).*/boolean/g;
+	$trans =~ s/^int\(1\).*/boolean/g;
 	$trans =~ s/^int.*/integer/g;
 	$trans =~ s/^bigint.*/integer/g;
 	$trans =~ s/^smallint.*/integer/g;
