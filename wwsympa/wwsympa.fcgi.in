@@ -1924,7 +1924,13 @@ sub get_parameters {
 		 ## Q-encode file path
 		 my @tokens = split /\//, $in{$p};
 		 foreach my $i (0..$#tokens) {
-		     $tokens[$i] = &tools::qencode_filename($tokens[$i]);
+		     if( &tools::qencode_filename($tokens[$i]) ne $tokens[$i]) {
+			 $tokens[$i] =~ s/\s/!!space!!/g;
+			 $tokens[$i] =~ s/-/!!dash!!/g;
+			 $tokens[$i] = &tools::qencode_filename($tokens[$i]);
+			 $tokens[$i] =~ s/!!dash!!/=2D/g;
+			 $tokens[$i] =~ s/!!space!!/=20/g;
+		     }
 		 }
 		 $in{$p} = join '/', @tokens;
 		 ## Sympa's URI escaping subroutine (tools::escape_chars()) replaces '/' with %A5 ('¥' character)
