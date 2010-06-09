@@ -1130,4 +1130,13 @@ function config_ctxhelp(td) {
 
 </script>
 
+<script type="text/javascript" src="[% static_content_url %]/js/jquery.js"></script>
+<script type="text/javascript" src="[% static_content_url %]/js/jquery.jqplot.min.js"></script>
+<script type="text/javascript" src="[% static_content_url %]/js/jqplot.categoryAxisRenderer.min.js"></script>
+<script type="text/javascript" src="[% static_content_url %]/js/jqplot.barRenderer.min.js"></script>
+<script type="text/javascript" src="[% static_content_url %]/js/jqplot.CanvasAxisTickRenderer.js"></script>
+<script type="text/javascript" src="[% static_content_url %]/js/jqplot.CanvasTextRenderer.js"></script>
+<link rel="stylesheet" type="text/css" href="[% static_content_url %]/js/jquery.jqplot.css" />
+
+
 <!-- end javascript.tt2 -->

@@ -15816,11 +15816,13 @@ sub do_stats {
 
      $param->{'shared_size'} = int (($list->get_shared_size + 512)/1024);
      $param->{'arc_size'} = int (($list->get_arc_size($wwsconf->{'arc_path'}) + 512)/1024);
-
+     $param->{'static_content_url'} = &Conf::get_robot_conf($robot, 'static_content_url');
 
 
      #-------------------send_mail treatment-----------------
      my $data_mail = &List::get_data('send_mail', $robot , $in{'list'});
+
+     $param->{'stats_values'} = "[";
 
      foreach my $id_data (keys(%$data_mail)){
 	 my $date_deb = &tools::adate($data_mail->{$id_data}->{'beginning_date_counter'});
@@ -15831,8 +15833,10 @@ sub do_stats {
 
 	 
 	 $param->{'stats_mail'}{$id_data} = $data_mail->{$id_data};
-	 
+	 $param->{'stats_values'} .= "['".$data_mail->{$id_data}->{'end_date_counter'}."',".$data_mail->{$id_data}->{'variation_counter'}."],";
      }
+     $param->{'stats_values'} =~ s/,$//;
+     $param->{'stats_values'} .= "]";
      
      #------------------subscriptions treatment----------------------
      my $data_sub = &List::get_data('add_subscriber', $robot , $in{'list'});
@@ -15877,10 +15881,28 @@ sub do_stats {
 	 $param->{'stats_deleted'}{$id_data} = $data_deleted->{$id_data};
 	 
      }
+     #--------------------shared treatment-------------------------------------
+     ##in this case, we group uploading, directory creations and file creations
+     my $data_shared_up = &List::get_data('d_upload', $robot, $in{'list'});
+     my $data_shared_di = &List::get_data('d_create_directory', $robot, $in{'list'});
+     my $data_shared_fi = &List::get_data('d_create_file', $robot, $in{'list'});
+     
+     #we groupint the tree hashes.
+     my $data_shared = undef;
+     foreach my $key1 (keys(%$data_shared_up)){
+	 $data_shared->{$key1} = $data_shared_up->{$key1};
+     }
+     
+     foreach my $key2 (keys(%$data_shared_di)){
+	 $data_shared->{$key2} = $data_shared_di->{$key2};
+     }
+     
+     foreach my $key3 (keys(%$data_shared_fi)){
+	 $data_shared->{$key3} = $data_shared_fi->{$key3};
+     }
 
-
-
-     open TMP2, ">/tmp/digdump"; &tools::dump_var($param->{'stats_subscriber'}, 0, \*TMP2); close TMP2;
+     $param->{'stats_new_file_shared'} = $data_shared;
+     open TMP2, ">/tmp/digdump"; &tools::dump_var($param->{'stats_new_file_shared'}, 0, \*TMP2); close TMP2;
 	 
      return 1;
 }
