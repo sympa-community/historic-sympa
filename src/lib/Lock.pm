@@ -153,7 +153,7 @@ sub unlock {
 
 	## If the new lock mode is different from the one we just removed, we need to create a new file lock.
 	if ($previous_mode eq 'write' && $current_mode eq 'read') {
-	    &do_log('debug2', "Need to unlock and redo locking on %s", $self->{'lock_filename'});
+	    &do_log('debug3', "Need to unlock and redo locking on %s", $self->{'lock_filename'});
 
 	    ## First release previous lock
 	    return undef unless($self->remove_lock());
@@ -187,7 +187,7 @@ sub add_lock {
     unless($timeout) {
 	$timeout = $list_of_locks{$self->{'lock_filename'}}{'timeout'} || $default_timeout;
     }
-    &do_log('debug2', 'Adding lock to file %s in mode %s with a timeout of: %s',$self->{'lock_filename'}, $mode, $timeout);
+    &do_log('debug3', 'Adding lock to file %s in mode %s with a timeout of: %s',$self->{'lock_filename'}, $mode, $timeout);
     my ($fh, $nfs_lock);
     if ($Conf::Conf{'lock_method'} eq 'nfs') {
 	($fh, $nfs_lock) = _lock_nfs($self->{'lock_filename'}, $mode, $timeout);
@@ -208,7 +208,7 @@ sub add_lock {
 ## Called by lock() or unlock() when these function need to remove a lock (i.e. on the file system or NFS).
 sub remove_lock {
     my $self = shift;
-    &do_log('debug2', 'Removing lock from file %s',$self->{'lock_filename'});
+    &do_log('debug3', 'Removing lock from file %s',$self->{'lock_filename'});
 
     my $fh = $list_of_locks{$self->{'lock_filename'}}{'fh'};
     my $previous_mode;

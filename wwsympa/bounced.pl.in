@@ -593,6 +593,7 @@ sub store_bounce {
 	return undef;
     }
     print ARC <BOUNCE>;
+    close ARC;
     close BOUNCE; 
 }
 

@@ -1061,6 +1061,7 @@ sub probe_db {
  	}
 	
  	foreach my $t (@tables) {
+	    $t =~ s/^"main"\.//; # needed for SQLite 3
 	    $t =~ s/^.*\"([^"]+)\"$/$1/;
  	}
 	

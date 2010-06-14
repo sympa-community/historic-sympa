@@ -356,7 +356,7 @@ sub load {
     ## Set Regexp for accepted list suffixes
     if (defined ($Conf{'list_check_suffixes'})) {
 	$Conf{'list_check_regexp'} = $Conf{'list_check_suffixes'};
-	$Conf{'list_check_regexp'} =~ s/,/\|/g;
+	$Conf{'list_check_regexp'} =~ s/[,\s]+/\|/g;
     }
 	
     $Conf{'sympa'} = "$Conf{'email'}\@$Conf{'host'}";
@@ -837,18 +837,34 @@ sub checkfiles {
 		do_log('err', 'Unable to create spool %s', $Conf{$qdir});
 		$config_err++;
 	    }
+            unless (&tools::set_file_rights(
+                    file  => $Conf{$qdir},
+                    user  => Sympa::Constants::USER,
+                    group => Sympa::Constants::GROUP,
+            )) {
+                &do_log('err','Unable to set rights on %s',$Conf{$qdir});
+		$config_err++;
+            }
 	}
     }
 
     ## Also create associated bad/ spools
-    foreach my $qdir ('queue','queuedistribute','queueautomatic')
-    {
-	unless (-d $Conf{$qdir}.'/bad') {
-	    do_log('info', "creating spool $Conf{$qdir}/bad");
-	    unless ( mkdir ($Conf{$qdir}.'/bad', 0775)) {
-		do_log('err', 'Unable to create spool %s', $Conf{$qdir}.'/bad');
+    foreach my $qdir ('queue','queuedistribute','queueautomatic') {
+        my $subdir = $Conf{$qdir}.'/bad';
+	unless (-d $subdir) {
+	    do_log('info', "creating spool $subdir");
+	    unless ( mkdir ($subdir, 0775)) {
+		do_log('err', 'Unable to create spool %s', $subdir);
 		$config_err++;
 	    }
+            unless (&tools::set_file_rights(
+                    file  => $subdir,
+                    user  => Sympa::Constants::USER,
+                    group => Sympa::Constants::GROUP,
+            )) {
+                &do_log('err','Unable to set rights on %s',$subdir);
+		$config_err++;
+            }
 	}
     }
 
