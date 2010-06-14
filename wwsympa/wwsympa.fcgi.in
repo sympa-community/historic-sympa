@@ -27,7 +27,7 @@
 ##           Olivier Salaün <os AT cru.fr>
 =pod 
 
-=head1 NAME 
+=head1 NAME
 
 I<wwsympa.fcgi> - Sympa web interface 
 
@@ -15831,12 +15831,12 @@ sub do_stats {
 	 $data_mail->{$id_data}->{'beginning_date_counter'} = $date_deb;
 	 $data_mail->{$id_data}->{'end_date_counter'} = $date_fin;
 
-	 
 	 $param->{'stats_mail'}{$id_data} = $data_mail->{$id_data};
 	 $param->{'stats_values'} .= "['".$data_mail->{$id_data}->{'end_date_counter'}."',".$data_mail->{$id_data}->{'variation_counter'}."],";
      }
      $param->{'stats_values'} =~ s/,$//;
      $param->{'stats_values'} .= "]";
+     #&wwslog('trace', "$data_mail->{$id_data}->{'end_date_counter'}");
      
      #------------------subscriptions treatment----------------------
      my $data_sub = &List::get_data('add_subscriber', $robot , $in{'list'});
