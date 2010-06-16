@@ -21,14 +21,15 @@
 
 package mail;
 
-use strict;
-
-use Exporter;
+require Exporter;
 use Carp;
-use POSIX qw(sysconf);
+@ISA = qw(Exporter);
+@EXPORT = qw(mail_file mail_message mail_forward set_send_spool);
+
+#use strict;
+use POSIX;
 use MIME::Charset;
 use MIME::Tools;
-
 use Conf;
 use Log;
 use Language;
@@ -37,9 +38,9 @@ use Bulk;
 use tools;
 use Sympa::Constants;
 
-our @ISA = qw(Exporter);
-our @EXPORT = qw(mail_file mail_message mail_forward set_send_spool);
+use strict;
 
+#use strict;
 
 ## RCS identification.
 #my $id = '@(#)$Id$';
@@ -52,7 +53,7 @@ if ($@) {
     $max_arg = 4096;
     printf STDERR gettext("Your system does not conform to the POSIX P1003.1 standard, or\nyour Perl system does not define the _SC_ARG_MAX constant in its POSIX\nlibrary. You must modify the smtp.pm module in order to set a value\nfor variable %s.\n"), $max_arg;
 } else {
-    $max_arg = sysconf($max_arg);
+    $max_arg = POSIX::sysconf($max_arg);
 }
 
 my %pid = ();
@@ -280,21 +281,18 @@ sub mail_file {
     $data->{'return_path'} ||= &Conf::get_robot_conf($robot, 'request');
     
     ## SENDING
-    unless (defined &sending('msg' => $message,
-			     'rcpt' => $rcpt,
-			     'from' => $data->{'return_path'},
-			     'robot' => $robot,
-			     'listname' => $listname,
-			     'priority' => &Conf::get_robot_conf($robot,'sympa_priority'),
-			     'sign_mode' => $sign_mode,
-			     'use_bulk' => $data->{'use_bulk'},
-			     'dkim' => $data->{'dkim'},
-			     )
-	    )
-    {
-	return undef;
-    }
-   return 1;
+    return undef unless (defined &sending('msg' => $message,
+					  'rcpt' => $rcpt,
+					  'from' => $data->{'return_path'},
+					  'robot' => $robot,
+					  'listname' => $listname,
+					  'priority' => &Conf::get_robot_conf($robot,'sympa_priority'),
+					  'sign_mode' => $sign_mode,
+					  'use_bulk' => $data->{'use_bulk'},
+					  'dkim' => $data->{'dkim'},
+					  )
+			 );
+    return 1;
 }
 
 ####################################################
@@ -420,7 +418,8 @@ sub mail_message {
 				'verp' => $verp,
 				'dkim' => $dkim,
 				'merge' => $list->{'admin'}{'merge_feature'},
-				'tag_as_last' => $tag_as_last));
+				'tag_as_last' => $tag_as_last)
+			);
 }
 
 
@@ -520,7 +519,6 @@ sub reaper {
 #     $robot(+) : robot 
 #     $encrypt : 'smime_crypted' | undef
 #     $verp : 1| undef  
-#     $merge : 1| undef  
 #     $use_bulk : if defined,  send message using bulk
 #     
 # OUT : 1 - call to sending
@@ -537,7 +535,6 @@ sub sendto {
     my $priority =  $params{'priority'}; 
     my $encrypt = $params{'encrypt'};
     my $verp = $params{'verp'};
-    my $merge = $params{'merge'};
     my $dkim = $params{'dkim'};
     my $use_bulk = $params{'use_bulk'};
     my $tag_as_last = $params{'tag_as_last'};
@@ -585,7 +582,6 @@ sub sendto {
 				  'priority' => $priority,
 				  'delivery_date' =>  $delivery_date,
 				  'verp' => $verp,
-				  'merge' => $merge,
 				  'use_bulk' => $use_bulk,
 				  'dkim' => $dkim,
 				  'tag_as_last' => $tag_as_last);
@@ -682,9 +678,9 @@ sub sending {
     }
     my $verpfeature = ($verp eq 'on');
     my $mergefeature = ($merge eq 'on');
-
+    
     if ($use_bulk){ # in that case use bulk tables to prepare message distribution 
-
+	
 	my $bulk_code = &Bulk::store('msg' => $messageasstring,
 				     'msg_id' => $msg_id,
 				     'rcpts' => $rcpt,
@@ -699,13 +695,12 @@ sub sending {
 				     'dkim' => $dkim,
 				     'tag_as_last' => $tag_as_last,
 				     );
-
+	
 	unless (defined $bulk_code) {
 	    &do_log('err', 'Failed to store message for list %s', $listname);
 	    &List::send_notify_to_listmaster('bulk_error',  $robot, {'listname' => $listname});
 	    return undef;
 	}
-	
     }elsif(defined $send_spool) { # in context wwsympa.fcgi do not send message to reciepients but copy it to standard spool 
 	do_log('debug',"NOT USING BULK");
 
@@ -764,7 +759,10 @@ sub sending {
 #
 ##################################################################################
 sub smtpto {
-   my($from, $rcpt, $robot, $sign_mode) = @_;
+   my($from, $rcpt, $robot, $msgkey, $sign_mode) = @_;
+
+
+       &do_log('trace', 'TEST TEST :( from :%s, rcpt:%s, sign_mode:%s, robot:%s, msgid:%s )', $from, $rcpt,$sign_mode, $robot, $msgkey);
 
    unless ($from) {
        &do_log('err', 'Missing Return-Path in mail::smtpto()');
@@ -810,19 +808,31 @@ sub smtpto {
        
    my $sendmail = &Conf::get_robot_conf($robot, 'sendmail');
    my $sendmail_args = &Conf::get_robot_conf($robot, 'sendmail_args');
-       
    if ($pid == 0) {
+       if ($msgkey) {
+	   $sendmail_args .= ' -N success,delay,failure -V '.$msgkey;
+       }
+
+
        close(OUT);
        open(STDIN, "<&IN");
+      
+	#------------------------------------------------------------------------------------------- 
        
        if (! ref($rcpt)) {
-	   exec $sendmail, split(/\s+/,$sendmail_args), '-f', $from, $rcpt;
+	&do_log('trace', 'TEST1 TEST mail::smtpto(sendmail_args:%s, from:%s, rcpt:%s )', $sendmail_args, $from, $rcpt);
+	   exec $sendmail, split(/\s+/,$sendmail_args),'-f', $from, $rcpt;
        }elsif (ref($rcpt) eq 'SCALAR') {
+	&do_log('trace', 'TEST2 TEST mail::smtpto(sendmail_args:%s, from:%s, rcpt:%s )', $sendmail_args, $from, $$rcpt);
 	   exec $sendmail, split(/\s+/,$sendmail_args), '-f', $from, $$rcpt;
        }elsif (ref($rcpt) eq 'ARRAY'){
+	&do_log('trace', 'TEST3 TEST mail::smtpto(sendmail_args:%s, from:%s, rcpt:%s )', $sendmail_args, $from, @$rcpt);
 	   exec $sendmail, split(/\s+/,$sendmail_args), '-f', $from, @$rcpt;
        }
-       exit 1; ## Should never get there.
+       
+	#------------------------------------------------------------------------------------------- 
+
+	exit 1; ## Should never get there.
        }
    if ($main::options{'mail'}) {
        $str = "safefork: $sendmail $sendmail_args -f $from ";

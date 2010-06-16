@@ -1,0 +1,27 @@
+<!-- $Id: tracking.tt2 6369 2010-03-16 08:05:56Z serge.aumont $ -->
+<div class="block">
+
+<table summary="[%|loc%]Message tracking[%END%]" class="listOfItems text_center">
+  <tr><th>[%|loc%]Recipient Email[%END%]</th>
+     <th>[%|loc%]Delivery status[%END%]</th>
+     <th>[%|loc%]Notification Date[%END%]</th>
+     <th>[%|loc%]Notification[%END%]</th>
+  </tr>
+      
+  [% FOREACH u = tracking_info %]
+    [% IF dark == '1' %]
+      [% SET dark = 0 %]
+       <tr>
+    [% ELSE %]
+       <tr class="color0">
+       [% SET dark = 1 %]
+    [% END %]
+    <td>[% u.recipient %]</td><td>[% u.status %]</td><td>[% u.arrival_date %]</td><td>link to the DSN / or MDN</td>
+    </tr>
+  [% END %]
+</table>
+<!-- end tracking.tt2 (distrib) -->
+
+</div>
+
+

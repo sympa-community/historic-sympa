@@ -1,5 +1,4 @@
 #!--PERL--
-
 # bounced.pl - This script runs as a daemon ; it does the incoming 
 # non-delivery reports analysis and storage
 # RCS Identication ; $Revision$ ; $Date$ 
@@ -49,6 +48,7 @@ use POSIX;
 use tt2;
 use tools;
 use Sympa::Constants;
+use tracking;
 
 ## Equivalents relative to RFC 1893
 my %equiv = ( "user unknown" => '5.1.1',
@@ -204,21 +204,28 @@ while (!$end) {
 	fatal_err("Can't open dir %s: %m", $queue); ## No return.
     }
 
+
     my @files =  (sort grep(!/^(\.|T\.|BAD\-)/, readdir DIR ));
     closedir DIR;
+
     foreach my $file (@files) {
 
 	last if $end;
 	next unless (-f "$queue/$file");
+
+	do_log ('trace',"TEST BOUNCE : file $queue/$file ");
+
+	#--------------------------------------------------------------------------------------------------
+
 	
 	unless ($file =~ /^(\S+)\.\d+\.\d+$/) {
 	    my @s = stat("$queue/$file");
 	    if (POSIX::S_ISREG($s[2])) {
 		do_log ('notice',"Ignoring file $queue/$file because unknown format");
-		&ignore_bounce({'file' => $file,
+		&ignore_bounce({'file' => $file, 
 				'queue' => $queue,
 			    });
-	        unlink("$queue/$file");
+	        unlink("$queue/$file"); 
 	    }
 	    next;
 	}
@@ -249,32 +256,44 @@ while (!$end) {
 	    next;
 	}
 	my $parser = new MIME::Parser;
-	$parser->output_to_core(1);
+	$parser->output_to_core(1); 
 	my $entity = $parser->read(\*BOUNCE);
 	my $head = $entity->head;
 	my $to = $head->get('to', 0);
 	close BOUNCE ; 
 
 	my $who;
+	my $id;
 	chomp $to;	
-	&do_log('debug', 'bounce for :%s:  Conf{bounce_email_prefix}=%sxx',$to,$Conf{'bounce_email_prefix'});
+	&do_log('debug', 'bounce for :%s:  Conf{bounce_email_prefix}=%',$to,$Conf{'bounce_email_prefix'});
+	
+	
 	$to =~ s/<//;
 	$to =~ s/>//;
 	if ($to =~ /^$Conf{'bounce_email_prefix'}\+(.*)\@(.*)$/) { #VERP in use
-
-	    my $local_part = $1;
+            my $local_part = $1;
 	    my $robot = $2;
-	    my $unique ;
+	    my $unique;
 	    if ($local_part =~ /^(.*)(\=\=([wr]))$/) {
 		$local_part = $1;
 		$unique = $2;
+	    }elsif ($local_part =~  /^(.*)\=\=a\=\=(.*)\=\=(.*)\=\=(.*)$/ ) {# tracking in use
+#------------------------------------------------------------------------------------------------
+# Test if an id part is present in the to address; use for the tracking
+		$id = $4;
+		$local_part =~ /^(.*)\=\=(.*)$/ ;
+		$local_part = $1;
+		&do_log('trace', 'ID PART : %s in the bounce for :%s',$id, $to);
+	    }else{
+		&do_log('trace', 'NOT ID PART in the bounce for :%s', $to);
 	    }
+#------------------------------------------------------------------------------------------------
 	    $local_part =~ s/\=\=a\=\=/\@/ ;
 	    $local_part =~ /^(.*)\=\=(.*)$/ ; 	    
 	    $who = $1;
-	    $listname = $2 ;
+	    $listname = $2;
 
-	    &do_log('debug', 'VERP in use : bounce related to %s for list %s@%s',$who,$listname,$robot);
+	    &do_log('notice', 'VERP in use : bounce related to %s for list %s@%s',$who,$listname,$robot);
 
 	    if ($unique =~ /[wr]/) { # in this case the bounce result from a remind or a welcome message ;so try to remove the subscriber
 		&do_log('debug', "VERP for a service message, try to remove the subscriber");
@@ -301,7 +320,7 @@ while (!$end) {
 			&Log::db_log({'robot' => $list->{'domain'},'list' => $list->{'name'},'action' => 'del',
 				      'target_email' => $who,'status' => 'error','error_type' => 'welcome_bounced',
 				      'daemon' => 'bounced'});
-
+			
 			if ($action =~ /notify/) {
 			    unless ($list->send_notify_to_owner('automatic_del',
 								{'who' => $who,
@@ -311,7 +330,7 @@ while (!$end) {
 			    } 
 			}
 		    }
-		}else {
+		}else{
 		    do_log ('notice',"Unable to remove $who from $listname (welcome message bounced but del is closed)");
 		    &ignore_bounce({'file' => $file,
 				    'robot' => $robot,
@@ -320,8 +339,287 @@ while (!$end) {
 		}
 		unlink("$queue/$file");
 		next;
+	    }# close VERP + remind or welcome block
+	}# close VERP in use block
+######################################################################
+# Tracking
+        my $list = new List ($listname, $robot);
+        unless($list) {
+            do_log('err','Skipping bouncefile %s for unknown list %s@%s',$file,$listname,$robot);
+            &ignore_bounce({'file' => $file,
+                 'robot' => $robot,
+                 'queue' => $queue,
+                 });
+            unlink("$queue/$file");
+            next;
+        }
+
+#----------------------------------------------------------------------------------------------------------------------
+# If the DSN notification is correct and the tracking mode is enable, it will be inserted in the database
+	if(($head->get('Content-type') =~ /multipart\/report/) && ($head->get('Content-type') =~ /report\-type\=delivery-status/i) && ($list->{'admin'}{'tracking'} eq "on")) {
+	
+	    do_log ('trace',"processing  DSN Report block 1");
+	    
+	    my @parts = $entity->parts();
+	    my $original_rcpt; my $final_rcpt; my $user_agent; my $version; my $dsn_status; my $msg_id; my $orig_msg_id;
+	    my $listname, $robot;
+	    my $arrival_date;
+
+	    my $msg_id = $head->get('Message-Id');
+	    chomp $msg_id;
+
+	    my $date = $head->get('Date');
+
+	    foreach my $p (@parts) {
+		my $h = $p->head();
+		my $content = $h->get('Content-type');
+
+		if ($content =~ /message\/delivery-status/) {
+		    do_log('trace',"processing a message/delivery-status mime part");
+		    my @report = split(/\n/, $p->bodyhandle->as_string());
+		    foreach my $line (@report) {
+			$line = lc($line);
+			# Action Field MUST be present in a DSN report, possible values : failed, delayed, delivered, relayed, expanded(rfc3464)
+			if ($line =~ /action\:\s*(.+)/i) {
+			    $dsn_status = $1;
+			    chomp $dsn_status;
+			}			
+			
+			# The final-recipient field is more appropriated than the original-recipient field because it HAVE TO be present in a dsn report.(rfc3464)
+			#if ($line =~ /original\-recipient\:\s(.+)\s*$/i) {
+			#    $original_rcpt = $1;
+			#    chomp $original_rcpt;
+			#    my @rcpt;
+	       		#    if($original_rcpt =~ /.*;.*/){
+			#	@rcpt = split /;\s*/,$original_rcpt;
+			#	foreach my $rcpt (@rcpt){
+			#	    if($rcpt =~ /(\S+\@\S+)/){
+			#		($rcpt)= $rcpt =~ /(\S+\@\S+)/;	
+			#		$original_rcpt = $rcpt;
+			#	    }
+			#	}
+			#    }
+                        #    else{
+                        #        ($original_rcpt)= $original_rcpt =~ /(\S+\@\S+)/;
+                        #    }
+			#}
+			if ( ($line =~ /final\-recipient\:\s*(.+)\s*$/i) && (not $final_rcpt) ) {
+			    $final_rcpt = $1;
+			    chomp $final_rcpt;
+			    my @rcpt;
+	       		    if($final_rcpt =~ /.*;.*/){
+				@rcpt = split /;\s*/,$final_rcpt;
+				foreach my $rcpt (@rcpt){
+				    if($rcpt =~ /(\S+\@\S+)/){
+					($rcpt)= $rcpt=~ /(\S+\@\S+)/;			
+					$final_rcpt = $rcpt;
+				    }
+				}
+			    }
+			    else{
+                                ($final_rcpt)= $final_rcpt =~ /(\S+\@\S+)/;
+			    }	
+			}
+			# Recupération de l'identifiant du mail initial (pk_mail) passé par envid 
+			# afin de permettre la tracking meme lorsque le verp n'est pas utilisé
+			if ( ($line =~ /original\-envelope\-id\:\s*(.+)/i) && (!$id) ) {
+			    $id = $1;
+			    chomp $id;
+	      	    	    do_log ('debug2',"1 - Original Envelope-id Detected, value : %s", $id);
+			}
+                        if ($line =~ /arrival\-date\:\s*(.+)/i) {
+                            $arrival_date = $1;
+                            chomp $arrival_date;
+
+                        }
+		    }
+		}
 	    }
+
+	    # unused because original_rcpt is extracted from VERP
+	    #if($original_rcpt =~ /<(\S+\@\S+)>/){
+            #   	($original_rcpt)= $original_rcpt =~ /<(\S+\@\S+)>/;
+            #}
+	    $original_rcpt = $who;
+
+	    if($final_rcpt =~ /<(\S+\@\S+)>/){
+               	($final_rcpt)= $final_rcpt =~ /<(\S+\@\S+)>/;
+            }
+            if($msg_id =~ /<(\S+\@\S+)>/){
+                ($msg_id)= $msg_id =~ /<(\S+\@\S+)>/;
+            }
+
+
+	    do_log ('debug2',"FINAL DSN Action Detected, value : %s", $dsn_status);
+	    do_log ('debug2',"FINAL DSN Recipient Detected, value : %s", $original_rcpt);
+	    do_log ('debug2',"FINAL DSN final Recipient Detected, value : %s", $final_rcpt);
+	    do_log ('debug2',"FINAL DSN Message-Id Detected, value : %s", $msg_id);
+	    do_log ('debug2',"FINAL DSN Arrival Date Detected, value : %s", $arrival_date);
+
+	    unless  ($dsn_status =~ /failed/) { # DSN with status "failed" should not be removed because theu must be processed for classical bounce managment (not only for tracking feature)
+		unless ($id) {
+                    &do_log('err', "error: Id not found in to address %s, will ignore",$to);
+ 	            unlink("$queue/$file");
+                    next;
+		}
+		unless ($original_rcpt) {
+                    &do_log('err', "error: original recipient not found in dsn: %s, will ignore",$msg_id);
+ 	            unlink("$queue/$file");
+                    next;
+		}
+		unless ($msg_id) {
+                    &do_log('err', "error: message_id not found in dsn will ignore");
+ 	            unlink("$queue/$file");
+                    next;
+		}
+	    }
+	                 
+            &do_log('debug2', "Save in database...");
+	    if (&tracking::db_insert_notification($id, 'DSN', $original_rcpt, $msg_id, $dsn_status, $arrival_date )) {
+		&do_log('notice', "DSN Correctly treated...");
+	    }else{
+		do_log('err','Not able to fill database with notification data');
+	    }
+	    unless($dsn_status =~ /failed/) { 
+		if (unlink("$queue/$file")){
+		    &do_log('debug2', "DSN Correctly removed...");
+		}else{
+		    &do_log('err', "could not unlink $queue/$file");
+		}
+		next;
+	    }
+	} 
+#-----------------------------------------------------------------------------------------------------------------------------------
+# If the MDN notification is correct and the tracking mode is enable, it will be inserted in the database
+	if(($head->get('Content-type') =~ /multipart\/report/) && ($head->get('Content-type') =~ /report\-type\=disposition-notification/i) && ($list->{'admin'}{'tracking'} eq "on")) {
+
+	    do_log ('trace',"processing  MDN Report block 1");
+	    
+	    my @parts = $entity->parts();
+	    my $original_rcpt; my $final_rcpt; my $user_agent; my $version; my $dsn_status; my $msg_id; my $orig_msg_id;
+	    my $listname, $robot;
+	    my $date;
+
+	    my $msg_id = $head->get('Message-Id');
+	    chomp $msg_id;
+
+	    my $date = $head->get('Date');
+
+	    foreach my $p (@parts) {
+		my $h = $p->head();
+		my $content = $h->get('Content-type');
+
+		if ($content =~ /message\/disposition-notification/) {
+		    do_log('trace',"processing a message/ddisposition-notification mime part");
+		    my @report = split(/\n/, $p->bodyhandle->as_string());
+		    foreach my $line (@report) {
+			$line = lc($line);
+# Disposition Field MUST be present in a MDN report, possible values : displayed, deleted(rfc3798)
+			if ($line =~ /disposition\:\s*(.+)\s*\;\s*(.+)/i) {
+			    $mdn_status = $2;
+			    if($mdn_status  =~ /.*\/.*/){
+			    	my @results = split /\/\s*/,$mdn_status;
+			    	$mdn_status = $results[$0];
+			    	chomp $mdn_status;
+			    }
+			}
+
+			# block removed because original-recipeint is extracted using VERP
+			# The final-recipient field is less appropriated than the original-recipient field for the tracking but because of it HAVE TO be present in a mdn report(rfc3798), we search it if the original-recipient field is not present.
+			#if ($line =~ /original\-recipient\:\s(.+)\s*$/i) {
+			#    $original_rcpt = $1;
+			#    chomp $original_rcpt;
+			#    my @rcpt;
+			#    if($original_rcpt =~ /.*;.*/){
+			#	@rcpt = split /;\s*/,$original_rcpt;
+			#	foreach my $rcpt (@rcpt){
+			#	    if($rcpt =~ /(\S+\@\S+)/){
+			#		($rcpt)= $rcpt =~ /(\S+\@\S+)/;	
+			#		$original_rcpt = $rcpt;
+			#	    }
+			#	}
+			#    }
+                        #    else{
+                        #        ($original_rcpt)= $original_rcpt =~ /(\S+\@\S+)/;
+                        #    }
+			#}
+			if ( ($line =~ /final\-recipient\:\s*(.+)\s*$/i) && (not $final_rcpt) ) {
+			    $final_rcpt = $1;
+			    chomp $final_rcpt;
+			    my @rcpt;
+	       		    if($final_rcpt =~ /.*;.*/){
+				@rcpt = split /;\s*/,$final_rcpt;
+				foreach my $rcpt (@rcpt){
+				    if($rcpt =~ /(\S+\@\S+)/){
+					($rcpt)= $rcpt=~ /(\S+\@\S+)/;			
+					$final_rcpt = $rcpt;
+				    }
+				}
+			    }
+			    else{
+                                ($final_rcpt)= $final_rcpt =~ /(\S+\@\S+)/;
+			    }	
+			}
+			if ( ($line =~ /original\-envelope\-id\:\s*(.+)/i) && (!$id) ) {
+			    $id = $1;
+			    chomp $id;
+	      	    	    do_log ('trace',"1 - Original Envelope-id Detected, value : %s", $id);
+			}
+		    }
+		}
+	    }
+
+	    if($original_rcpt =~ /<(\S+\@\S+)>/){
+               	($original_rcpt)= $original_rcpt =~ /<(\S+\@\S+)>/;
+            }
+	    if($final_rcpt =~ /<(\S+\@\S+)>/){
+               	($final_rcpt)= $final_rcpt =~ /<(\S+\@\S+)>/;
+            }
+            if($msg_id =~ /<(\S+\@\S+)>/){
+                ($msg_id)= $msg_id =~ /<(\S+\@\S+)>/;
+            }
+	    # let's use VERP 
+	    $original_rcpt = $who;
+
+	    do_log ('debug2',"FINAL MDN Disposition Detected, value : %s", $mdn_status);
+	    do_log ('debug2',"FINAL MDN Recipient Detected, value : %s", $original_rcpt);
+	    do_log ('debug2',"FINAL MDN Message-Id Detected, value : %s", $msg_id);
+	    do_log ('debug2',"FINAL MDN Date Detected, value : %s", $date);
+            	     
+	    unless ($id) {
+                    &do_log('err', "error: Id not found in to address %s, will ignore",$to);
+ 	            unlink("$queue/$file");
+                    next;
+	    }
+	    unless ($original_rcpt) {
+                    &do_log('err', "error: original recipient not found in dsn: %s, will ignore",$msg_id);
+ 	            unlink("$queue/$file");
+                    next;
+	    }
+	    unless ($msg_id) {
+                    &do_log('err', "error: message_id not found in dsn will ignore");
+ 	            unlink("$queue/$file");
+                    next;
+	    }
+	    unless ($mdn_status) {
+                    &do_log('err', "error: dsn status not found in dsn: %s, will ignore",$msg_id);
+ 	            unlink("$queue/$file");
+                    next;
+	    }
+             
+            &do_log('debug2', "Save in database...");
+	    unless (&tracking::db_insert_notification($id, 'MDN', $original_rcpt, $msg_id, $mdn_status, $date )) {
+                   do_log('err','Not able to fill database with notification data');
+	    }
+            &do_log('notice', "MDN Correctly treated...");
+	    if( unlink("$queue/$file")){
+		&do_log('debug2', "MDN Correctly removed...");
+	    }else{
+		&do_log('debug2', "could not unlink queue/$file");
+	    }
+	    next;
 	}
+
 	if(($head->get('Content-type') =~ /multipart\/report/) && ($head->get('Content-type') =~ /report\-type\=feedback-report/)) {
 	    # this case a report Email Feedback Reports http://www.shaftek.org/publications/drafts/abuse-report/draft-shafranovich-feedback-report-01.txt mainly use by AOL
 	    do_log ('notice',"processing  Email Feedback Report");
@@ -450,6 +748,7 @@ while (!$end) {
 	    next;		
 	}
 
+	# Fin section feedback report
 	# else (not welcome or remind) 
 	my $list = new List ($listname, $robot);
 	if (! $list) {
@@ -490,6 +789,8 @@ while (!$end) {
 		    }		
 		## Analysis of bounced message
 		&anabounce(\*BOUNCE, \%hash, \$from);
+		# Voir pour appeler une methode de parsing des dsn qui maj la bdd
+		# &updatedatabase(%hash);
 	    }
 	    close BOUNCE;
 	    
@@ -504,7 +805,8 @@ while (!$end) {
  
 	    my $adr_count;
 	    ## Bouncing addresses
-
+		# Voir si pas mettre un test conditionnel sur le status code pour detecter les dsn positifs et ne pas fausser les statistiques de l'abonné.
+		# Peut être possibilité de lancer la maj des tables pour chaque recipient ici a condition d'avoir approfondi le parsing en amont.
 	    while (my ($rcpt, $status) = each %hash) {
 		$adr_count++;
 		my $bouncefor = $who;

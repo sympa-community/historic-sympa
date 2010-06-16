@@ -1396,8 +1396,9 @@ our @params = (
         vhost => '1',
 	file   => 'sympa.conf',
     },
-
-
-
+    {
+        name    => 'tracking',
+        default => 'off',
+    },
 );
 

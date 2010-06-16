@@ -21,11 +21,7 @@
 package List;
 
 use strict;
-
-use POSIX qw(strftime);
-use Fcntl qw(LOCK_SH LOCK_EX LOCK_NB LOCK_UN);
-use Encode;
-
+use POSIX;
 use Datasource;
 use SQLSource qw(create_db %date_format);
 use Upgrade;
@@ -35,13 +31,16 @@ use Scenario;
 use Fetch;
 use WebAgent;
 use Exporter;
+# xxxxxxx faut-il virer encode ? Faut en faire un use ? 
+require Encode;
+
 use tt2;
 use Sympa::Constants;
-use tools;
 
-our @ISA = qw(Exporter);
-our @EXPORT = qw(%list_of_lists);
+my @ISA = qw(Exporter);
+my @EXPORT = qw(%list_of_lists);
 
+use Fcntl qw(LOCK_SH LOCK_EX LOCK_NB LOCK_UN);
 
 =head1 CONSTRUCTOR
 
@@ -271,7 +270,7 @@ my @param_order = qw (subject visibility info subscribe add unsubscribe del owne
 		      send editor editor_include delivery_time account topics 
 		      host lang web_archive archive digest digest_max_size available_user_options 
 		      default_user_options msg_topic msg_topic_keywords_apply_on msg_topic_tagging reply_to_header reply_to forced_reply_to * 
-		      verp_rate welcome_return_path remind_return_path merge_feature user_data_source include_file include_remote_file 
+		      verp_rate tracking welcome_return_path remind_return_path user_data_source include_file include_remote_file 
 		      include_list include_remote_sympa_list include_ldap_query
                       include_ldap_2level_query include_sql_query include_admin ttl distribution_ttl creation update 
 		      status serial custom_attribute);
@@ -434,6 +433,11 @@ my %alias = ('reply-to' => 'reply_to',
 			 'gettext_id' => "Secret string for generating unique keys",
 			 'group' => 'other'
 		     },
+	    'tracking' => {'format' => ['on','off'],
+			     'default' =>  {'conf' => 'tracking'},
+			     'gettext_id' => "Tracking Module; allow to follow outgoing mails",
+			     'group' => 'bounces'
+			     },
 	    'creation' => {'format' => {'date_epoch' => {'format' => '\d+',
 							 'occurrence' => '1',
 							 'gettext_id' => "",
@@ -587,7 +591,6 @@ my %alias = ('reply-to' => 'reply_to',
 	    'distribution_ttl' => {'format' => '\d+',
 		      'length' => 6,
 		      'gettext_unit' => 'seconds',
-		      'default' => {'conf' => 'default_distribution_ttl'},
 		      'gettext_id' => "Inclusions timeout for message distribution",
 		      'group' => 'data_source'
 		      },
@@ -1356,7 +1359,7 @@ my %alias = ('reply-to' => 'reply_to',
 	    'ttl' => {'format' => '\d+',
 		      'length' => 6,
 		      'gettext_unit' => 'seconds',
-		      'default' => {'conf' => 'default_ttl'},
+		      'default' => 3600,
 		      'gettext_id' => "Inclusions timeout",
 		      'group' => 'data_source'
 		      },
@@ -2875,7 +2878,7 @@ sub send_msg_digest {
 	$msg->{'plain_body'} = $mail->PlainDigest::plain_body_as_string();
 	#$msg->{'body'} = $mail->bodyhandle->as_string();
 	chomp $msg->{'from'};
-	$msg->{'month'} = strftime("%Y-%m", localtime(time)); ## Should be extracted from Date:
+	$msg->{'month'} = &POSIX::strftime("%Y-%m", localtime(time)); ## Should be extracted from Date:
 	$msg->{'message_id'} = &tools::clean_msg_id($mail->head->get('Message-Id'));
 	
 	## Clean up Message-ID
@@ -3241,80 +3244,72 @@ sub send_msg {
     my $mixed = ($message->{'msg'}->head->get('Content-Type') =~ /multipart\/mixed/i);
     my $alternative = ($message->{'msg'}->head->get('Content-Type') =~ /multipart\/alternative/i);
  
-    if ( $message->{'msg'}->head->get('X-Sympa-Receipient') ) {
-
-	@tabrcpt = split /,/, $message->{'msg'}->head->get('X-Sympa-Receipient');
-	$message->{'msg'}->head->delete('X-Sympa-Receipient');
-
-    } else {
-	
-	for ( my $user = $self->get_first_user(); $user; $user = $self->get_next_user() ){
-	    unless ($user->{'email'}) {
-		&do_log('err','Skipping user with no email address in list %s', $name);
+    for ( my $user = $self->get_first_user(); $user; $user = $self->get_next_user() ){
+	unless ($user->{'email'}) {
+	    &do_log('err','Skipping user with no email address in list %s', $name);
+	    next;
+	}
+	my $options;
+	$options->{'email'} = $user->{'email'};
+	$options->{'name'} = $name;
+	$options->{'domain'} = $host;
+	my $user_data = &get_subscriber_no_object($options);
+	## test to know if the rcpt suspended her subscription for this list
+	## if yes, don't send the message
+	if ($user_data->{'suspend'} eq '1'){
+	    if(($user_data->{'startdate'} <= time) && ((time <= $user_data->{'enddate'}) || (!$user_data->{'enddate'}))){
 		next;
+	    }elsif(($user_data->{'enddate'} < time) && ($user_data->{'enddate'})){
+		## If end date is < time, update the BDD by deleting the suspending's data
+		&restore_suspended_subscription($user->{'email'},$name,$host);
 	    }
-	    my $options;
-	    $options->{'email'} = $user->{'email'};
-	    $options->{'name'} = $name;
-	    $options->{'domain'} = $host;
-	    my $user_data = &get_subscriber_no_object($options);
-	    ## test to know if the rcpt suspended her subscription for this list
-	    ## if yes, don't send the message
-	    if ($user_data->{'suspend'} eq '1'){
-		if(($user_data->{'startdate'} <= time) && ((time <= $user_data->{'enddate'}) || (!$user_data->{'enddate'}))){
-		    next;
-		}elsif(($user_data->{'enddate'} < time) && ($user_data->{'enddate'})){
-		    ## If end date is < time, update the BDD by deleting the suspending's data
-		    &restore_suspended_subscription($user->{'email'},$name,$host);
-		}
-	    }
-	    if ($user->{'reception'} =~ /^digest|digestplain|summary|nomail$/i) {
-		next;
-	    } elsif ($user->{'reception'} eq 'notice') {
-		if ($user->{'bounce_address'}) {
-		    push @tabrcpt_notice_verp, $user->{'email'}; 
-		}else{
+	}
+	if ($user->{'reception'} =~ /^digest|digestplain|summary|nomail$/i) {
+	    next;
+	} elsif ($user->{'reception'} eq 'notice') {
+	    if ($user->{'bounce_address'}) {
+		push @tabrcpt_notice_verp, $user->{'email'}; 
+	    }else{
 		    push @tabrcpt_notice, $user->{'email'}; 
 		}
-	    } elsif ($alternative and ($user->{'reception'} eq 'txt')) {
-		if ($user->{'bounce_address'}) {
-		    push @tabrcpt_txt_verp, $user->{'email'};
-		}else{
-		    push @tabrcpt_txt, $user->{'email'};
-		}
-	    } elsif ($alternative and ($user->{'reception'} eq 'html')) {
+	} elsif ($alternative and ($user->{'reception'} eq 'txt')) {
+	    if ($user->{'bounce_address'}) {
+		push @tabrcpt_txt_verp, $user->{'email'};
+	    }else{
+		push @tabrcpt_txt, $user->{'email'};
+	    }
+	} elsif ($alternative and ($user->{'reception'} eq 'html')) {
+	    if ($user->{'bounce_address'}) {
+		push @tabrcpt_html_verp, $user->{'email'};
+	    }else{
 		if ($user->{'bounce_address'}) {
 		    push @tabrcpt_html_verp, $user->{'email'};
 		}else{
-		    if ($user->{'bounce_address'}) {
-			push @tabrcpt_html_verp, $user->{'email'};
-		    }else{
-			push @tabrcpt_html, $user->{'email'};
-		    }
-		}
-	    } elsif ($mixed and ($user->{'reception'} eq 'urlize')) {
-		if ($user->{'bounce_address'}) {
-		    push @tabrcpt_url_verp, $user->{'email'};
-		}else{
-		    push @tabrcpt_url, $user->{'email'};
-		}
-	    } elsif ($message->{'smime_crypted'} && 
-		     (! -r $Conf::Conf{'ssl_cert_dir'}.'/'.&tools::escape_chars($user->{'email'}) &&
-		      ! -r $Conf::Conf{'ssl_cert_dir'}.'/'.&tools::escape_chars($user->{'email'}.'@enc' ))) {
-		## Missing User certificate
-		unless ($self->send_file('x509-user-cert-missing', $user->{'email'}, $robot, {'mail' => {'subject' => $message->{'msg'}->head->get('Subject'),
-													 'sender' => $message->{'msg'}->head->get('From')},
-											      'auto_submitted' => 'auto-generated'})) {
-		    &do_log('notice',"Unable to send template 'x509-user-cert-missing' to $user->{'email'}");
-		}
+		    push @tabrcpt_html, $user->{'email'};
+		}    
+	    }
+	}elsif ($mixed and ($user->{'reception'} eq 'urlize')) {
+	    if ($user->{'bounce_address'}) {
+		push @tabrcpt_url_verp, $user->{'email'};
 	    }else{
-		if ($user->{'bounce_address'}) {
-		    push @tabrcpt_verp, $user->{'email'} unless ($sender_hash{$user->{'email'}})&&($user->{'reception'} eq 'not_me');
-		}else{	    
-		    push @tabrcpt, $user->{'email'} unless ($sender_hash{$user->{'email'}})&&($user->{'reception'} eq 'not_me');}
+		push @tabrcpt_url, $user->{'email'};
+	    }
+	} elsif ($message->{'smime_crypted'} && 
+		 (! -r $Conf::Conf{'ssl_cert_dir'}.'/'.&tools::escape_chars($user->{'email'}) &&
+		  ! -r $Conf::Conf{'ssl_cert_dir'}.'/'.&tools::escape_chars($user->{'email'}.'@enc' ))) {
+	    ## Missing User certificate
+	    unless ($self->send_file('x509-user-cert-missing', $user->{'email'}, $robot, {'mail' => {'subject' => $message->{'msg'}->head->get('Subject'),
+												     'sender' => $message->{'msg'}->head->get('From')},
+											  'auto_submitted' => 'auto-generated'})) {
+	    &do_log('notice',"Unable to send template 'x509-user-cert-missing' to $user->{'email'}");
+	    }
+	}else{
+	    if ($user->{'bounce_address'}) {
+		push @tabrcpt_verp, $user->{'email'} unless ($sender_hash{$user->{'email'}})&&($user->{'reception'} eq 'not_me');
+	    }else{	    
+		push @tabrcpt, $user->{'email'} unless ($sender_hash{$user->{'email'}})&&($user->{'reception'} eq 'not_me');}
 	    }	    
-	}
-    }
+       }    
 
     ## sa  return 0  = Pb  ?
     unless (@tabrcpt || @tabrcpt_notice || @tabrcpt_txt || @tabrcpt_html || @tabrcpt_url || @tabrcpt_verp || @tabrcpt_notice_verp || @tabrcpt_txt_verp || @tabrcpt_html_verp || @tabrcpt_url_verp) {
@@ -3598,6 +3593,8 @@ sub send_to_editor {
    @rcpt = $self->get_editors_email();
    
    my $hdr = $message->{'msg'}->head;
+
+&do_log('notice', 'LIST::send_to_editor DO MESSAGE6 HEADER : %s', $hdr->as_string());
 
    ## Did we find a recipient?
    if ($#rcpt < 0) {
@@ -5108,8 +5105,8 @@ sub get_subscriber {
     my $update_field = sprintf $date_format{'read'}{$Conf::Conf{'db_type'}}, 'update_subscriber', 'update_subscriber';	
     
     ## Use session cache
-    if (defined $list_cache{'get_subscriber'}{$self->{'domain'}}{$self->{'name'}}{$email}) {
-	return $list_cache{'get_subscriber'}{$self->{'domain'}}{$self->{'name'}}{$email};
+    if (defined $list_cache{'get_subscriber'}{$self->{'domain'}}{$name}{$email}) {
+	return $list_cache{'get_subscriber'}{$self->{'domain'}}{$name}{$email};
     }
 
     my $options;
@@ -9738,7 +9735,7 @@ sub store_digest {
     if ($newfile) {
 	## create header
 	printf OUT "\nThis digest for list has been created on %s\n\n",
-      strftime("%a %b %e %H:%M:%S %Y", @now);
+      POSIX::strftime("%a %b %e %H:%M:%S %Y", @now);
 	print OUT "------- THIS IS A RFC934 COMPLIANT DIGEST, YOU CAN BURST IT -------\n\n";
 	printf OUT "\n%s\n\n", &tools::get_separator();
 
@@ -12155,4 +12152,56 @@ sub get_list_id {
 
 ###### END of the List package ######
 
+## This package handles Sympa virtual robots
+## It should :
+##   * provide access to global conf parameters,
+##   * deliver the list of lists
+##   * determine the current robot, given a host
+package Robot;
+
+use Conf;
+
+## Constructor of a Robot instance
+sub new {
+    my($pkg, $name) = @_;
+
+    my $robot = {'name' => $name};
+    &Log::do_log('debug2', '');
+    
+    unless (defined $name && $Conf::Conf{'robots'}{$name}) {
+	&Log::do_log('err',"Unknown robot '$name'");
+	return undef;
+    }
+
+    ## The default robot
+    if ($name eq $Conf::Conf{'host'}) {
+	$robot->{'home'} = $Conf::Conf{'home'};
+    }else {
+	$robot->{'home'} = $Conf::Conf{'home'}.'/'.$name;
+	unless (-d $robot->{'home'}) {
+	    &Log::do_log('err', "Missing directory '$robot->{'home'}' for robot '$name'");
+	    return undef;
+	}
+    }
+
+    ## Initialize internal list cache
+    undef %list_cache;
+
+    # create a new Robot object
+    bless $robot, $pkg;
+
+    return $robot;
+}
+
+## load all lists belonging to this robot
+sub get_lists {
+    my $self = shift;
+
+    return &List::get_lists($self->{'name'});
+}
+
+
+###### END of the Robot package ######
+
+## Packages must return true.
 1;
