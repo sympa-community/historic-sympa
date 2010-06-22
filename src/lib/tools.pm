@@ -1389,6 +1389,11 @@ sub smime_decrypt {
 	}
     }
 	
+    unless (defined $decryptedmsg) {
+      &do_log('err', 'Message could not be decrypted');
+      return undef;
+    }
+
     ## Now remove headers from $msg_as_string
     my @msg_tab = split(/\n/, $msg_as_string);
     my $line;
@@ -3887,5 +3892,38 @@ sub wrap_text {
     return $text;
 }
 
+#*******************************************
+# Function : addrencode
+# Description : return formatted (and encoded) name-addr as RFC5322 3.4.
+## IN : addr, [phrase, [charset]]
+#*******************************************
+sub addrencode {
+    my $addr = shift;
+    my $phrase = (shift || '');
+    my $charset = (shift || 'utf8');
+
+    return undef unless $addr =~ /\S/;
+
+    if ($phrase =~ /[^\s\x21-\x7E]/) {
+	# Minimal encoding leaves special characters unencoded.
+	# In this case do maximal encoding for workaround.
+	my $minimal =
+	    ($phrase =~ /(\A|\s)[\x21-\x7E]*[\"(),:;<>\@\\][\x21-\x7E]*(\s|\z)/)?
+	    'NO': 'YES';
+	$phrase = MIME::EncWords::encode_mimewords(
+	    Encode::decode('utf8', $phrase),
+	    'Encoding' => 'A', 'Charset' => $charset,
+	    'Replacement' => 'FALLBACK',
+	    'Field' => 'Resent-Sender', # almost longest
+	    'Minimal' => $minimal
+            );
+	return "$phrase <$addr>";
+    } elsif ($phrase =~ /\S/) {
+	$phrase =~ s/([\\\"])/\\$1/g;
+	return "\"$phrase\" <$addr>";
+    } else {
+	return "<$addr>";
+    }
+}
 
 1;

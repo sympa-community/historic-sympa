@@ -3502,9 +3502,13 @@ sub do_sso_login_succeeded {
      if ($in{'help_topic'}) {
 	 if ($in{'help_topic'} eq 'editlist') {
 	     foreach my $pname (sort List::by_order keys %{$pinfo}) {
-		 next if ($pname =~ /^comment|defaults$/);
+		 next if ($pname =~ /^(comment|defaults)$/);
 
-		 $param->{'param'}{$pname}{'title'} = $pinfo->{$pname}{'title'}{$param->{'lang'}};
+		 if ($pinfo->{$pname}{'gettext_id'}) {
+		     $param->{'param'}{$pname}{'title'} = gettext($pinfo->{$pname}{'gettext_id'});
+		 } else {
+		     $param->{'param'}{$pname}{'title'} = $pinfo->{$pname}{'title'}{$param->{'lang'}};
+		 }
 		 $param->{'param'}{$pname}{'comment'} = $pinfo->{$pname}{'comment'}{$param->{'lang'}};
 	     }
 	 }
@@ -6282,8 +6286,9 @@ sub do_skinsedit {
 	 $param->{'spool'}{$id}{'from'} = &MIME::EncWords::decode_mimewords($mail->{'msg'}->head->get('From'), Charset=>'utf8');
 	 $param->{'spool'}{$id}{'spam_status'} = $mail->{'spam_status'};
 	 foreach my $field ('subject','date','from') {
-	     $param->{'spool'}{$id}{$field} =~ s/</&lt;/;
-	     $param->{'spool'}{$id}{$field} =~ s/>/&gt;/;
+	     $param->{'spool'}{$id}{$field} =~ s/&/&amp;/g;
+	     $param->{'spool'}{$id}{$field} =~ s/</&lt;/g;
+	     $param->{'spool'}{$id}{$field} =~ s/>/&gt;/g;
 	 }
      }
      closedir SPOOL;
@@ -6725,7 +6730,6 @@ sub do_skinsedit {
 	 my $mail_command = sprintf ("QUIET DISTRIBUTE %s %s\n",$list->{'name'},$id);
 	 $data->{'body'} .= $mail_command;
 
-
 	 ## For compatibility concerns
 	 foreach my $list_id ($list->get_list_id(),$list->{'name'}) {
 	     $file = $Conf{'queuemod'}.'/'.$list_id.'_'.$id;
@@ -6772,6 +6776,7 @@ sub do_skinsedit {
 	 }
      }
 
+     $data->{'not_auto_submitted'} = 1;
      unless (&mail::mail_file('',&Conf::get_robot_conf($robot, 'sympa'), $data, $robot)) {
 	 &report::reject_report_web('intern','cannot_send_distribute',{'from' => $param->{'user'}{'email'},'listname'=>$list->{'name'}},
 				    $param->{'action'},$list,$param->{'user'}{'email'},$robot);
@@ -14595,6 +14600,7 @@ sub d_test_existing_and_rights {
 		 'from'=> $param->{'user'}{'email'},
 		 'body' => $mail_command};
 
+     $data->{'not_auto_submitted'} = 1;
      unless (&mail::mail_file('',&Conf::get_robot_conf($robot, 'sympa'),$data,$robot)) {
 	 &report::reject_report_web('intern','cannot_send_remind',{'from' => $param->{'user'}{'email'},'listname'=>$list->{'name'}},
 				    $param->{'action'},$list,$param->{'user'}{'email'},$robot);
@@ -15287,7 +15293,8 @@ sub do_compose_mail {
      }
 
      if (defined $param->{'subscriber'}) {
-	 $from = $param->{'subscriber'}{'gecos'}.' <'.$from.'>';
+	 $from = &tools::addrencode($from, $param->{'subscriber'}{'gecos'},
+				    &Language::GetCharset());
      }
 
      ##--------------- TOPICS --------------------
@@ -15368,13 +15375,13 @@ sub do_compose_mail {
 			       'Message-ID' => $in{'message_id'}}, 
 		'subject' => $in{'subject'},
 		'return_path' => &Conf::get_robot_conf($robot, 'sympa'),
-		'from'=> $from,
 		'to' => $to,
-		'body' => $in{'body'},
+		'body' => "From: $from\n\n" . $in{'body'},
 		'sign_mode' => '',
 		'header_possible' => '1'};
 
-    unless (&mail::mail_file('', $to, $data, $robot)) {
+     $data->{'not_auto_submitted'} = 1;
+     unless (&mail::mail_file('', $to, $data, $robot)) {
 	 &report::reject_report_web('intern','cannot_send_mail',{'from' => $param->{'user'}{'email'},'listname'=>$list->{'name'}},
 				    $param->{'action'},$list,$param->{'user'}{'email'},$robot);
 	 &wwslog('err','do_send_mail: failed to send message for $to list');
@@ -15542,6 +15549,7 @@ sub do_compose_mail {
 	 return undef;
      }
 
+     $data->{'not_auto_submitted'} = 1;
      unless (&mail::mail_file('',&Conf::get_robot_conf($robot, 'sympa'),$data,$robot)) {
 	 &report::reject_report_web('intern','cannot_send_mail',{'from' => $param->{'user'}{'email'},'listname'=>$list->{'name'}},
 				    $param->{'action'},$list,$param->{'user'}{'email'},$robot);
@@ -15995,6 +16003,9 @@ sub mailto {
     @addresses = split (',',$email);
     
     $gecos = $email unless ($gecos);
+    $gecos =~ s/&/&amp;/g;
+    $gecos =~ s/</&lt;/g;
+    $gecos =~ s/>/&gt;/g;
     foreach my $address (@addresses) {
 
 	($recipients{$address}{'local'},$recipients{$address}{'domain'}) = split ('@',$address);	
