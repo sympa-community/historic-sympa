@@ -260,6 +260,7 @@ while (!$end) {
 	my $entity = $parser->read(\*BOUNCE);
 	my $head = $entity->head;
 	my $to = $head->get('to', 0);
+	my $notification_as_string = $entity->as_string;
 	close BOUNCE ; 
 
 	my $who;
@@ -384,25 +385,7 @@ while (!$end) {
 			    $dsn_status = $1;
 			    chomp $dsn_status;
 			}			
-			
-			# The final-recipient field is more appropriated than the original-recipient field because it HAVE TO be present in a dsn report.(rfc3464)
-			#if ($line =~ /original\-recipient\:\s(.+)\s*$/i) {
-			#    $original_rcpt = $1;
-			#    chomp $original_rcpt;
-			#    my @rcpt;
-	       		#    if($original_rcpt =~ /.*;.*/){
-			#	@rcpt = split /;\s*/,$original_rcpt;
-			#	foreach my $rcpt (@rcpt){
-			#	    if($rcpt =~ /(\S+\@\S+)/){
-			#		($rcpt)= $rcpt =~ /(\S+\@\S+)/;	
-			#		$original_rcpt = $rcpt;
-			#	    }
-			#	}
-			#    }
-                        #    else{
-                        #        ($original_rcpt)= $original_rcpt =~ /(\S+\@\S+)/;
-                        #    }
-			#}
+
 			if ( ($line =~ /final\-recipient\:\s*(.+)\s*$/i) && (not $final_rcpt) ) {
 			    $final_rcpt = $1;
 			    chomp $final_rcpt;
@@ -420,8 +403,7 @@ while (!$end) {
                                 ($final_rcpt)= $final_rcpt =~ /(\S+\@\S+)/;
 			    }	
 			}
-			# Recupération de l'identifiant du mail initial (pk_mail) passé par envid 
-			# afin de permettre la tracking meme lorsque le verp n'est pas utilisé
+			do_log('trace',"supprimer le cas non verp");
 			if ( ($line =~ /original\-envelope\-id\:\s*(.+)/i) && (!$id) ) {
 			    $id = $1;
 			    chomp $id;
@@ -436,10 +418,6 @@ while (!$end) {
 		}
 	    }
 
-	    # unused because original_rcpt is extracted from VERP
-	    #if($original_rcpt =~ /<(\S+\@\S+)>/){
-            #   	($original_rcpt)= $original_rcpt =~ /<(\S+\@\S+)>/;
-            #}
 	    $original_rcpt = $who;
 
 	    if($final_rcpt =~ /<(\S+\@\S+)>/){
@@ -448,7 +426,6 @@ while (!$end) {
             if($msg_id =~ /<(\S+\@\S+)>/){
                 ($msg_id)= $msg_id =~ /<(\S+\@\S+)>/;
             }
-
 
 	    do_log ('debug2',"FINAL DSN Action Detected, value : %s", $dsn_status);
 	    do_log ('debug2',"FINAL DSN Recipient Detected, value : %s", $original_rcpt);
@@ -475,7 +452,7 @@ while (!$end) {
 	    }
 	                 
             &do_log('debug2', "Save in database...");
-	    if (&tracking::db_insert_notification($id, 'DSN', $original_rcpt, $msg_id, $dsn_status, $arrival_date )) {
+	    if (&tracking::db_insert_notification($id, 'DSN', $original_rcpt, $msg_id, $dsn_status, $arrival_date,$notification_as_string )) {
 		&do_log('notice', "DSN Correctly treated...");
 	    }else{
 		do_log('err','Not able to fill database with notification data');
@@ -499,6 +476,7 @@ while (!$end) {
 	    my $original_rcpt; my $final_rcpt; my $user_agent; my $version; my $dsn_status; my $msg_id; my $orig_msg_id;
 	    my $listname, $robot;
 	    my $date;
+            my $mdn_status;
 
 	    my $msg_id = $head->get('Message-Id');
 	    chomp $msg_id;
@@ -523,26 +501,6 @@ while (!$end) {
 			    	chomp $mdn_status;
 			    }
 			}
-
-			# block removed because original-recipeint is extracted using VERP
-			# The final-recipient field is less appropriated than the original-recipient field for the tracking but because of it HAVE TO be present in a mdn report(rfc3798), we search it if the original-recipient field is not present.
-			#if ($line =~ /original\-recipient\:\s(.+)\s*$/i) {
-			#    $original_rcpt = $1;
-			#    chomp $original_rcpt;
-			#    my @rcpt;
-			#    if($original_rcpt =~ /.*;.*/){
-			#	@rcpt = split /;\s*/,$original_rcpt;
-			#	foreach my $rcpt (@rcpt){
-			#	    if($rcpt =~ /(\S+\@\S+)/){
-			#		($rcpt)= $rcpt =~ /(\S+\@\S+)/;	
-			#		$original_rcpt = $rcpt;
-			#	    }
-			#	}
-			#    }
-                        #    else{
-                        #        ($original_rcpt)= $original_rcpt =~ /(\S+\@\S+)/;
-                        #    }
-			#}
 			if ( ($line =~ /final\-recipient\:\s*(.+)\s*$/i) && (not $final_rcpt) ) {
 			    $final_rcpt = $1;
 			    chomp $final_rcpt;
@@ -608,7 +566,7 @@ while (!$end) {
 	    }
              
             &do_log('debug2', "Save in database...");
-	    unless (&tracking::db_insert_notification($id, 'MDN', $original_rcpt, $msg_id, $mdn_status, $date )) {
+	    unless (&tracking::db_insert_notification($id, 'MDN', $original_rcpt, $msg_id, $mdn_status, $date,$notification_as_string )) {
                    do_log('err','Not able to fill database with notification data');
 	    }
             &do_log('notice', "MDN Correctly treated...");

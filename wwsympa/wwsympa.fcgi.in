@@ -735,6 +735,7 @@ my %in_regexp = (
 		 ## Free data
 		 'subject' => '.*',
 		 'gecos' => '[^<>\\\*\$\n]+',
+		 'fromname' =>  '[^<>\\\*\$\n]+',
 		 'additional_field' => '[^<>\\\*\$\n]+',
 		 'dump' => '[^<>\\\*\$]+', # contents email + gecos
 
@@ -804,6 +805,7 @@ my %in_regexp = (
 		 'new_email' => &tools::get_regexp('email'),
 		 'pending_email' => &tools::get_regexp('email').',.*', # Email address is followed by ',' + gecos data
 		 'sender' => &tools::get_regexp('email'),
+		 'fromaddr' =>  &tools::get_regexp('email'),
 		 'to' => '(([\w\-\_\.\/\+\=\']+|\".*\")\s[\w\-]+(\.[\w\-]+)+(,?))*',
 
 		 ## Host
@@ -7710,7 +7712,6 @@ sub do_remove_arc {
  sub do_tracking   {
      &wwslog('info', 'do_tracking(%s, %s, %s, %s', $in{'list'}, $in{'yyyy'}, $in{'month'}, $in{'msgid'});
 
-
      ## Access control
      do_log('trace',"TODO le controle d'acces est-il mauvais ?");
      unless ($param->{'is_owner'}){
@@ -7718,7 +7719,7 @@ sub do_remove_arc {
 	 $param->{'previous_list'} = $list->{'name'};
 	 return undef;
      }
-     unless ( ($list->{admin}{tracking} eq "on") ){
+     unless (($list->{admin}{tracking} eq "on")||($list->{admin}{tracking} eq "on_demand")){
          &wwslog('err','do_tracking : list not configured for tracking');
 	 &report::reject_report_web('intern','list_not_configured_for_tracking');
 	 $param->{'previous_action'} = 'arc';
@@ -7733,27 +7734,20 @@ sub do_remove_arc {
 	 return undef;
      } 
      ##
+
+     $param->{'subject'} = $in{'subject'};
+     $param->{'fromname'} = $in{'fromname'};
+     $param->{'fromaddr'} = $in{'fromaddr'};
+     $param->{'msgid'} = $in{'msgid'} ;
+     $param->{'listname'} = $in{'list'};
+
      do_log('trace',"call get_recipient_status");
-     unless($param->{'tracking_info'} = &tracking::get_recipients_status($in{'msgid'}, $in{'list'})){
+     unless($param->{'tracking_info'} = &tracking::get_recipients_status($in{'msgid'}, $in{'list'},$robot)){
          &report::reject_report_web('err','could_not_get_tracking_info',{},$param->{'action'},$list,$param->{'user'}{'email'},$robot);
          &wwslog('err',"could not get tracking info for message_id $in{'msgid'} and list $in{'list'}");
          $param->{'status'} = 'could_not_get_tracking_info';
          return undef;
      }
-
- 
-   #     #    $param->{'bypass'} = 'extreme';
-   #    #   #  printf "Content-Type: text/plain\n\n";
-   #    # printf "Content-Type: text/html";
-   #     printf "Content-Type: text/html\n\n";
-   #
-   #     printf '<HTML><HEAD><TITLE>Suivi du Courrier</TITLE>';
-   ##<META HTTP-EQUIV="refresh" CONTENT="2">
-   #printf '</HEAD><BODY>';
-   #     printf "<br /><p>";
-   #     printf $tracking_info;
-   #     printf "<br /></p>";
-   #     printf '</BODY></HTML>';
      return 1;
  }
 

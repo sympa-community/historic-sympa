@@ -1936,50 +1936,26 @@ sub DoMessage{
 	return undef ;
     }
 #-------------------------------------------------------------------------------------------------------------------------
-    &do_log('notice', "subject : %s date : %s msgid : %s\n from : %s\n robot : %s\n list : %s\n which : %s\n message string : \n\n%s\n\n", $hdr->get('subject'),$hdr->get('date'), $messageid, $sender, $robot, $list->{'name'}, $which, $msg_string);
-
-
-    &do_log('debug2', 'DO MESSAGE tracking list value : %s', $list->{'admin'}{'tracking'}); 	
-    &do_log('debug2', 'DO MESSAGE verp rate list value : %s', $list->{'admin'}{'verp_rate'}); 	
-
-    if($list->{'admin'}{'tracking'} eq "on"){
-
-	if($list->{'admin'}{'verp_rate'} != "100%"){
-            &do_log('err', "The verp_rate parameter in sympa.conf need to have a value to 100% in order to use activate the tracking; current verp_rate value : %s ", $list->{'admin'}{'verp_rate'});
-	}
-	else{
-      	    &do_log('notice', "Tracking enable verp rate : %s ", $list->{'admin'}{'verp_rate'});
-            &tracking::db_insert_message($message, $robot, $list);
-            
-	    my $receiver = $hdr->get('Disposition-Notification-To');
-	    if(defined($receiver)){
-		 &do_log('debug2', "Disposition-Notification ASKED");
-
-		 
-		 #my $key = &tracking::find_msg_key($messageid, $listname);
-		 #&do_log('notice', "listname : %s", $listname);
-		 #&do_log('notice', "robot : %s", $robot);
-		 #&do_log('notice', "key : %s", $key);
-
-                 #my $return_path = $sender;
-                 #$return_path =~ s/\@/\=\=a\=\=/;
-		 #&do_log('notice', "return-path: %s", $return_path);
-
-		 #my $new_receiver = "$Conf::Conf{'bounce_email_prefix'}+$return_path\=\=$listname\=\=$key\@$robot";
-
-	 	 #$hdr->replace('Disposition-Notification-To', $new_receiver);#$obj->replace(TAG, LINE [, INDEX ])
-	         #&do_log('notice', "Disposition-Notification NEW : %s", $hdr->get('Disposition-Notification-To'));
-	 	 #$msg->replace('Disposition-Notification-To', $new_receiver);#$obj->replace(TAG, LINE [, INDEX ])
-	         #&do_log('notice', "Disposition-Notification NEW : %s", $msg->get('Disposition-Notification-To'));
-	 	 #$message->{'msg'}->replace('Disposition-Notification-To', $new_receiver);#$obj->replace(TAG, LINE [, INDEX ])
-	         #&do_log('notice', "Disposition-Notification NEW : %s", $message->{'msg'}->get('Disposition-Notification-To'));
-		#&tracking::change_mdn_receiver($message, $receiver);
-	    }  
-	    else{
-	        &do_log('debug2', "NO disposition-Notification ");
-	    }
-    	}
-    }
+#    &do_log('notice', "subject : %s date : %s msgid : %s\n from : %s\n robot : %s\n list : %s\n which : %s\n message string : \n\n%s\n\n", $hdr->get('subject'),$hdr->get('date'), $messageid, $sender, $robot, $list->{'name'}, $which, $msg_string)
+#
+#    if($list->{'admin'}{'tracking'} eq "on"){
+#
+#	if($list->{'admin'}{'verp_rate'} != "100%"){
+#            &do_log('err', "The verp_rate parameter in sympa.conf need to have a value to 100% in order to use activate the tracking; force value");
+#	    $list->{'admin'}{'verp_rate'} = '100%';
+#	}
+#	
+#	&do_log('trace', "Tracking enable verp rate : %s ", $list->{'admin'}{'verp_rate'});
+#	&tracking::db_insert_message($message, $robot, $list);
+#	
+#	my $receiver = $hdr->get('Disposition-Notification-To');
+#	if(defined($receiver)){
+#	    &do_log('debug2', "Disposition-Notification ASKED");
+#	}  
+#	else{
+#	    &do_log('debug2', "NO disposition-Notification ");
+#	}    	
+#    }
 #-------------------------------------------------------------------------------------------------------------------------
 
     ## message topic context	

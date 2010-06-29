@@ -325,6 +325,7 @@ sub mail_message {
     my $from = $list->{'name'}.&Conf::get_robot_conf($robot, 'return_path_suffix').'@'.$host;
 
     do_log('debug', 'mail::mail_message(from: %s, , file:%s, %s, verp->%s, %d rcpt, last: %s)', $from, $message->{'filename'}, $message->{'smime_crypted'}, $verp, $#rcpt+1, $tag_as_last);
+    do_log('trace', 'mail::mail_message(from: %s, , file:%s, %s, verp->%s, %d rcpt, last: %s)', $from, $message->{'filename'}, $message->{'smime_crypted'}, $verp, $#rcpt+1, $tag_as_last);
     
     my($i, $j, $nrcpt, $size); 
     my $numsmtp = 0;
@@ -539,7 +540,8 @@ sub sendto {
     my $use_bulk = $params{'use_bulk'};
     my $tag_as_last = $params{'tag_as_last'};
 
-    do_log('debug', 'mail::sendto(from : %s,listname: %s, encrypt : %s, verp : %s, priority = %s, last: %s', $from, $listname, $encrypt, $verp, $priority, $tag_as_last);
+    do_log('debug', 'mail::sendto(from : %s,listname: %s, encrypt : %s, verp : %s, priority = %s, last: %s, use_bulk: %s', $from, $listname, $encrypt, $verp, $priority, $tag_as_last, $use_bulk);
+    do_log('trace', 'mail::sendto(from : %s,listname: %s, encrypt : %s, verp : %s, priority = %s, last: %s, use_bulk: %s', $from, $listname, $encrypt, $verp, $priority, $tag_as_last, $use_bulk);
     
     my $delivery_date =  $params{'delivery_date'};
     $delivery_date = time() unless $delivery_date; # if not specified, delivery tile is right now (used for sympa messages etc)
@@ -637,6 +639,8 @@ sub sending {
     my $sympa_file;
     my $fh;
     my $signed_msg; # if signing
+    
+    do_log('trace'," use_bulk  $use_bulk");
 
     if ($sign_mode eq 'smime') {
 	my $parser = new MIME::Parser;
@@ -675,12 +679,14 @@ sub sending {
 	if ($messageasstring =~ /Message-ID:\s*(\<.*\>)\s*\n/) {
 	    $msg_id = $1;
 	}
-    }
-    my $verpfeature = ($verp eq 'on');
+    }# 
+    my $verpfeature = (($verp eq 'on')||($verp eq 'tracking'));
+    my $trackingfeature = ($verp eq 'tracking');
     my $mergefeature = ($merge eq 'on');
     
     if ($use_bulk){ # in that case use bulk tables to prepare message distribution 
-	
+	do_log('trace',"Bulk::store('msg' => $messageasstring,'msg_id' => $msg_id, 'rcpts' => $rcpt, 'from' => $from, 'robot' => $robot, 'listname' => $listname, 'priority_message' => $priority_message, 'priority_packet' => $priority_packet, 'delivery_date' => $delivery_date, 'verp' => $verpfeature,'tracking' => $trackingfeature,'merge' => $mergefeature,'dkim' => $dkim,    'tag_as_last' => $tag_as_last,");
+
 	my $bulk_code = &Bulk::store('msg' => $messageasstring,
 				     'msg_id' => $msg_id,
 				     'rcpts' => $rcpt,
@@ -691,6 +697,7 @@ sub sending {
 				     'priority_packet' => $priority_packet,
 				     'delivery_date' => $delivery_date,
 				     'verp' => $verpfeature,
+				     'tracking' => $trackingfeature,
 				     'merge' => $mergefeature,
 				     'dkim' => $dkim,
 				     'tag_as_last' => $tag_as_last,
@@ -703,6 +710,7 @@ sub sending {
 	}
     }elsif(defined $send_spool) { # in context wwsympa.fcgi do not send message to reciepients but copy it to standard spool 
 	do_log('debug',"NOT USING BULK");
+	do_log('trace',"NOT USING BULK");
 
 	$sympa_email = &Conf::get_robot_conf($robot, 'sympa');	
 	$sympa_file = "$send_spool/T.$sympa_email.".time.'.'.int(rand(10000));
@@ -734,6 +742,7 @@ sub sending {
 	}
     }else{ # send it now
 	do_log('debug',"NOT USING BULK");
+	do_log('trace',"NOT USING BULK              2222222222222222222");
 	*SMTP = &smtpto($from, $rcpt, $robot);	
 	print SMTP $messageasstring;	
 	unless (close SMTP) {
@@ -811,6 +820,7 @@ sub smtpto {
    if ($pid == 0) {
        if ($msgkey) {
 	   $sendmail_args .= ' -N success,delay,failure -V '.$msgkey;
+	   do_log('trace'," sending with  $sendmail_args ")
        }
 
 

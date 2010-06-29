@@ -454,6 +454,9 @@ $POWERED_BY$
   <input type="hidden" name="in_reply_to" value="$MSGID$" />
   <input type="hidden" name="subject" value="Re: $SUBJECTNA$" />
   <input type="hidden" name="list" value="($tag$% list %$tag$)" />
+  <input type="hidden" name="fromname" value="$FROMNAME$" />
+  <input type="hidden" name="fromaddr" value="$FROMADDRNAME:J$@$FROMADDRDOMAIN$" />
+
   ($tag$% IF list_conf.reply_to_header.apply == 'forced' %$tag$)
       ($tag$% IF list_conf.reply_to_header.value == 'all' %$tag$)
           <input type="hidden" name="to" value="$FROMADDRNAME:J$ $FROMADDRDOMAIN$,($tag$% list %$tag$) ($tag$% list_conf.host %$tag$)" />
@@ -486,7 +489,7 @@ $POWERED_BY$
     <br /><input class="MainMenuLinks" type="submit" name="action_view_source" value="($tag$%|loc%$tag$)view source($tag$%END%$tag$)" />
     ($tag$% END %$tag$)
 
-    ($tag$% IF listconf.tracking == 'on' %$tag$) 
+    ($tag$% IF listconf.tracking == 'on' ||listconf.tracking == 'on_demand' %$tag$) 
       ($tag$% IF is_owner %$tag$) 
         <input class="MainMenuLinks" type="submit" name="action_tracking" value="mail tracking" /> 
       ($tag$% ELSE %$tag$)

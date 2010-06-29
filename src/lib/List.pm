@@ -433,7 +433,7 @@ my %alias = ('reply-to' => 'reply_to',
 			 'gettext_id' => "Secret string for generating unique keys",
 			 'group' => 'other'
 		     },
-	    'tracking' => {'format' => ['on','off'],
+	    'tracking' => {'format' => ['on','on_demand','off'],
 			     'default' =>  {'conf' => 'tracking'},
 			     'gettext_id' => "Tracking Module; allow to follow outgoing mails",
 			     'group' => 'bounces'
@@ -1784,24 +1784,22 @@ sub extract_verp_rcpt() {
 
     &do_log('debug','&extract_verp(%s,%s,%s,%s)',$percent,$xseq,$refrcpt,$refrcptverp)  ;
 
-    if ($percent == '0%') {
-	return ();
-    }
-    
-    my $nbpart ; 
-    if ( $percent =~ /^(\d+)\%/ ) {
-	$nbpart = 100/$1;  
-    }
-    else {
-	&do_log ('err', 'Wrong format for parameter extract_verp: %s. Can\'t process VERP.',$percent);
-	return undef;
-    }
-    
-    my $modulo = $xseq % $nbpart ;
-    my $lenght = int (($#{$refrcpt} + 1) / $nbpart) + 1;
+    my @result;
 
-    my @result = splice @$refrcpt, $lenght*$modulo, $lenght ;
-    
+    if ($percent != '0%') {
+	my $nbpart ; 
+	if ( $percent =~ /^(\d+)\%/ ) {
+	    $nbpart = 100/$1;
+	}else {
+	    &do_log ('err', 'Wrong format for parameter extract_verp: %s. Can\'t process VERP.',$percent);
+	    return undef;
+	}
+	
+	my $modulo = $xseq % $nbpart ;
+	my $lenght = int (($#{$refrcpt} + 1) / $nbpart) + 1;
+	
+	@result = splice @$refrcpt, $lenght*$modulo, $lenght ;
+    }
     foreach my $verprcpt (@$refrcptverp) {
 	push @result, $verprcpt;
     }
@@ -2539,6 +2537,7 @@ sub distribute_msg {
     my $apply_dkim_signature = $param{'apply_dkim_signature'};
 
     do_log('debug2', 'List::distribute_msg(%s, %s, %s, %s, %s, %s, apply_dkim_signature=%s)', $self->{'name'}, $message->{'msg'}, $message->{'size'}, $message->{'filename'}, $message->{'smime_crypted'}, $apply_dkim_signature );
+    do_log('trace', 'List::distribute_msg(%s, %s, %s, %s, %s, %s, apply_dkim_signature=%s)', $self->{'name'}, $message->{'msg'}, $message->{'size'}, $message->{'filename'}, $message->{'smime_crypted'}, $apply_dkim_signature );
 
     my $hdr = $message->{'msg'}->head;
     my ($name, $host) = ($self->{'name'}, $self->{'admin'}{'host'});
@@ -2637,6 +2636,13 @@ sub distribute_msg {
 
 	$message->{'msg'}->head->add('Subject', $subject_field);
     }
+
+    ## Prepare tracking if list config allow it
+    my $apply_tracking = 'off';
+    if (($self->{'admin'}{'tracking'} eq 'on')||(($self->{'admin'}{'tracking'} eq 'on_demand') && ($hdr->get('Disposition-Notification-To')))){
+	$apply_tracking = 'on';
+	$hdr->delete('Disposition-Notification-To'); # remove notification request becuse a new one will be inserted
+    }
     
     ## Remove unwanted headers if present.
     if ($self->{'admin'}{'remove_headers'}) {
@@ -2732,7 +2738,8 @@ sub distribute_msg {
     }
 
     ## Blindly send the message to all users.
-    my $numsmtp = $self->send_msg('message'=> $message, 'apply_dkim_signature'=>$apply_dkim_signature);
+    do_log('trace',"self->send_msg('message'=> $message, 'apply_dkim_signature'=>$apply_dkim_signature, 'apply_tracking'=>$apply_tracking);");
+    my $numsmtp = $self->send_msg('message'=> $message, 'apply_dkim_signature'=>$apply_dkim_signature, 'apply_tracking'=>$apply_tracking);
     unless (defined ($numsmtp)) {
 	return $numsmtp;
     }
@@ -3207,8 +3214,10 @@ sub send_msg {
 
     my $message = $param{'message'};
     my $apply_dkim_signature = $param{'apply_dkim_signature'};
+    my $apply_tracking = $param{'apply_tracking'};
 
     do_log('debug2', 'List::send_msg(filname = %s, smime_crypted = %s,apply_dkim_signature = %s )', $message->{'filename'}, $message->{'smime_crypted'},$apply_dkim_signature);
+    do_log('trace', 'List::send_msg(filname = %s, smime_crypted = %s,apply_dkim_signature = %s )', $message->{'filename'}, $message->{'smime_crypted'},$apply_dkim_signature);
     
     my $hdr = $message->{'msg'}->head;
     my $name = $self->{'name'};
@@ -3265,20 +3274,21 @@ sub send_msg {
 	    }
 	}
 	if ($user->{'reception'} =~ /^digest|digestplain|summary|nomail$/i) {
+	    do_log('trace',"reception $user->{'reception'}");
 	    next;
-	} elsif ($user->{'reception'} eq 'notice') {
+	}elsif ($user->{'reception'} eq 'notice') {
 	    if ($user->{'bounce_address'}) {
 		push @tabrcpt_notice_verp, $user->{'email'}; 
 	    }else{
-		    push @tabrcpt_notice, $user->{'email'}; 
-		}
-	} elsif ($alternative and ($user->{'reception'} eq 'txt')) {
+		push @tabrcpt_notice, $user->{'email'}; 
+	    }
+	}elsif ($alternative and ($user->{'reception'} eq 'txt')) {
 	    if ($user->{'bounce_address'}) {
 		push @tabrcpt_txt_verp, $user->{'email'};
 	    }else{
 		push @tabrcpt_txt, $user->{'email'};
 	    }
-	} elsif ($alternative and ($user->{'reception'} eq 'html')) {
+	}elsif ($alternative and ($user->{'reception'} eq 'html')) {
 	    if ($user->{'bounce_address'}) {
 		push @tabrcpt_html_verp, $user->{'email'};
 	    }else{
@@ -3304,18 +3314,22 @@ sub send_msg {
 	    &do_log('notice',"Unable to send template 'x509-user-cert-missing' to $user->{'email'}");
 	    }
 	}else{
-	    if ($user->{'bounce_address'}) {
+	    if ($user->{'bounce_score'}) {
 		push @tabrcpt_verp, $user->{'email'} unless ($sender_hash{$user->{'email'}})&&($user->{'reception'} eq 'not_me');
+		do_log('trace',"verp by bounce reception $user->{'email'}");
+
 	    }else{	    
+		do_log('trace',"tabrcpt reception $user->{'email'}");
 		push @tabrcpt, $user->{'email'} unless ($sender_hash{$user->{'email'}})&&($user->{'reception'} eq 'not_me');}
 	    }	    
        }    
 
-    ## sa  return 0  = Pb  ?
     unless (@tabrcpt || @tabrcpt_notice || @tabrcpt_txt || @tabrcpt_html || @tabrcpt_url || @tabrcpt_verp || @tabrcpt_notice_verp || @tabrcpt_txt_verp || @tabrcpt_html_verp || @tabrcpt_url_verp) {
 	&do_log('info', 'No subscriber for sending msg in list %s', $name);
 	return 0;
     }
+    do_log('trace',"($#tabrcpt || $#tabrcpt_notice || $#tabrcpt_txt || $#tabrcpt_html || $#tabrcpt_url || $#tabrcpt_verp || $#tabrcpt_notice_verp || $#tabrcpt_txt_verp || $#tabrcpt_html_verp || $#tabrcpt_url_verp) ");
+
     #save the message before modifying it
     my $saved_msg = $message->{'msg'}->dup;
     my $nbr_smtp = 0;
@@ -3323,6 +3337,9 @@ sub send_msg {
 
     # prepare verp parameter
     my $verp_rate =  $self->{'admin'}{'verp_rate'};
+    $verp_rate = '100%' if ($apply_tracking eq 'on'); # force verp if tracking is requested.  
+    &do_log('trace', "verp_rate $verp_rate");
+
     my $xsequence =  $self->{'stats'}->[0] ;
 
     my $tags_to_use;
@@ -3343,7 +3360,7 @@ sub send_msg {
     if ($apply_dkim_signature eq 'on') {
 	$dkim_parameters = &tools::get_dkim_parameters({'robot'=>$self->{'domain'}, 'listname'=>$self->{'name'}});
     }
-
+    &do_log('trace',"prepare DKIM");
     ## Storing the not empty subscribers' arrays into a hash.
     my $available_rcpt;
     my $available_verp_rcpt;
@@ -3368,8 +3385,9 @@ sub send_msg {
 	$available_rcpt->{'tabrcpt_url'} = \@tabrcpt_url;
 	$available_verp_rcpt->{'tabrcpt_url'} = \@tabrcpt_url_verp;
     }
-
+    &do_log('trace',"parcours de available_rcpt");
     foreach my $array_name (keys %$available_rcpt) {
+	&do_log('trace',"array_name $array_name");
 	my $new_message;
 	##Prepare message for normal reception mode
 	if ($array_name eq 'tabrcpt') {
@@ -3459,7 +3477,7 @@ sub send_msg {
 	    } 
 	    $new_message = new Message($url_msg);
 	}
-
+	&do_log('trace',"avant topics");
 	## TOPICS
 	my @selected_tabrcpt;
 	my @possible_verptabrcpt;
@@ -3471,14 +3489,17 @@ sub send_msg {
 	    @possible_verptabrcpt = @{$available_verp_rcpt->{$array_name}};
 	}
 
+	&do_log('trace',"apply_tracking $apply_tracking");
+
 	## Preparing VERP receipients.
 	my @verp_selected_tabrcpt = &extract_verp_rcpt($verp_rate, $xsequence,\@selected_tabrcpt, \@possible_verptabrcpt);
-	
-	## Sending non VERP.
+	&do_log('trace',"verp_selected_tabrcpt $#verp_selected_tabrcpt");
+
+	my $verp= 'off';	
 	my $result = &mail::mail_message('message'=>$new_message, 
 					 'rcpt'=> \@selected_tabrcpt, 
 					 'list'=>$self, 
-					 'verp' => 'off', 
+					 'verp' => $verp,					 
 					 'dkim_parameters'=>$dkim_parameters,
 					 'tag_as_last' => $tags_to_use->{'tag_noverp'});
 	unless (defined $result) {
@@ -3488,11 +3509,13 @@ sub send_msg {
 	$tags_to_use->{'tag_noverp'} = 0 if ($result > 0);
 	$nbr_smtp += $result;
 	
+	$verp= 'on';
+	$verp = 'tracking' if ($apply_tracking eq 'on');
 	## Sending VERP.
 	$result = &mail::mail_message('message'=> $new_message, 
 				      'rcpt'=> \@verp_selected_tabrcpt, 
 				      'list'=> $self,
-				      'verp' => 'on',
+				      'verp' => $verp,
 				      'dkim_parameters'=>$dkim_parameters,
 				      'tag_as_last' => $tags_to_use->{'tag_verp'});
 	unless (defined $result) {
@@ -3502,6 +3525,7 @@ sub send_msg {
 	$tags_to_use->{'tag_verp'} = 0 if ($result > 0);
 	$nbr_smtp += $result;
 	$nbr_verp += $result;	
+	do_log('trace',"nbr_smtp $nbr_smtp nbr_verp  $nbr_verp ");
     }
 
     return $nbr_smtp;

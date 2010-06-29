@@ -258,27 +258,39 @@ while (!$end) {
         # 
  
 
-	my $list = new List($bulk->{'listname'}, $bulk->{'robot'});
+	#my $list = new List($bulk->{'listname'}, $bulk->{'robot'});
 	my $listname= $bulk->{'listname'}; my $robot =  $bulk->{'robot'};
 
-	&do_log('trace', "TEST BULK TRACKING verp rate: %s ", $list->{'admin'}{'verp_rate'});
-	
-
-	if (($bulk->{'verp'})||($bulk->{'merge'})||($list->{'admin'}{'tracking'} eq "on")){ # message needs personalization
+	if (($bulk->{'verp'})||($bulk->{'merge'})||($bulk->{'tracking'})){ # message needs personalization
 	    my $key ;
-	    do_log ('trace',"tracking : $list->{'admin'}{'tracking'}, verp  $list->{'admin'}{'verp_rate'}");
 	    ### Parse an MIME::Entity message
 	    my $parser = new MIME::Parser;
 	    $parser->output_to_core(1);
 	    my $entity = $parser->parse_data($messageasstring_init); 
 	    
-	    if(($list->{'admin'}{'tracking'} eq "on")){
-#		my $msgid = &tracking::extract_msgid($messageasstring);
-		$key = &tracking::find_msg_key($entity->head->get('Message-Id'), $listname);
-		&do_log('trace', "FINDED Key: %s FAUT-IL  mettre le verp à 100% pour que cela marche ?", $key);
+	    if($bulk->{'tracking'}){
+		$key = &tracking::find_msg_key($entity->head->get('Message-Id'), $listname,$robot);
+		&do_log('trace', "tracking is requested found Key: %s ", $key);
 	    }
 	    
 	    foreach $rcpt (@rcpts) {
+		do_log('trace',"envoi a l'unité pour $rcpt");
+
+		my $return_path;
+		my $escaped_rcpt = $rcpt;
+		$escaped_rcpt  =~ s/\@/\=\=a\=\=/; 
+
+		if($bulk->{'tracking'}){ # VERP + tracking
+		    do_log ('trace',"We should use a header editing method that do not alter S/MIME signed messages (using Mime::entity  b64-encode(b64-decode(text)) may be defferent from original text)"); 
+		    $return_path = $Conf::Conf{'bounce_email_prefix'}.'+'.$escaped_rcpt.'=='.$listname.'=='.$key.'@'.$robot;
+		    $entity->head->replace('Disposition-Notification-To',$return_path);
+		    $messageasstring_init = $entity->as_string;
+		}else{  # VERP
+		    &do_log('trace', " pas de TRACKING returnpath : $return_path ");
+		    $return_path = $Conf::Conf{'bounce_email_prefix'}.'+'.$escaped_rcpt.'=='.$listname.'@'.$robot; 
+		}
+		&do_log('trace', "VERP or VERP + TRACKING returnpath : $return_path ");
+
 		if ($bulk->{'merge'}) { 		    		    
 		    unless(&Bulk::merge_msg ($entity, $rcpt, $bulk, $data)){
 			&do_log('err', 'Erreur d appel &Bulk::merge_msg');
@@ -286,23 +298,6 @@ while (!$end) {
 		    $messageasstring = $entity->as_string;		    
 		}else{
 		    $messageasstring = $messageasstring_init;
-		}
-
-		&do_log('trace', "TEST BULK MSG VERP TRACKING: %s ", $rcpt );
-		my $return_path;
-		my $escaped_rcpt = $rcpt;
-		$escaped_rcpt  =~ s/\@/\=\=a\=\=/; 
-		
-		if(($list->{'admin'}{'tracking'} eq 'on')){
-		    $return_path = "$Conf::Conf{'bounce_email_prefix'}+$escaped_rcpt\=\=$listname\=\=$key\@$robot"; 
-		    do_log('trace',"tracking active  returnpath 3: %s ", $return_path );
-		    my $msg_result = &tracking::change_mdn_receiver($messageasstring, $return_path);
-		    if(defined($msg_result)) {
-			$messageasstring = $msg_result;
-		    }
-		}else{
-		    $return_path = "$Conf::Conf{'bounce_email_prefix'}+$escaped_rcpt\=\=$listname\@robot"; 
-		    &do_log('trace', "returnpath 1.1: %s ", $return_path );
 		}
 
 		if (&Conf::get_robot_conf($bulk->{'robot'}, 'dkim_feature') eq 'on'){
@@ -316,7 +311,7 @@ while (!$end) {
 									   'dkim_header_list' =>$message_from_spool->{'dkim_header_list'} } );
 		}
 
-		do_log('trace',"xxxxxxx mail::smtpto($return_path, $rcpt, $bulk->{'robot'},$key);");
+		do_log('trace',"mail::smtpto($return_path, $rcpt, $bulk->{'robot'},key : $key, message : $messageasstring);");
 
 
 		*SMTP = &mail::smtpto($return_path, \$rcpt, $bulk->{'robot'},$key);
@@ -325,6 +320,7 @@ while (!$end) {
 		close SMTP;
 	    }
 	}else{ # message dont needs personalization, they can be sent by packet
+	    do_log('trace',"envoi par packet");
             if (&Conf::get_robot_conf($bulk->{'robot'}, 'dkim_feature') eq 'on'){
 		$messageasstring_init = &tools::remove_invalid_dkim_signature($messageasstring_init );
 	    }
@@ -336,6 +332,7 @@ while (!$end) {
 										 'dkim_privatekey' => $message_from_spool->{'dkim_privatekey'},
 										 'dkim_header_list' =>$message_from_spool->{'dkim_header_list'} } );
 	    }
+	    
 	    *SMTP = &mail::smtpto($bulk->{'returnpath'}, \@rcpts, $bulk->{'robot'});		
 	    print SMTP $messageasstring_init;
 	    close SMTP;
