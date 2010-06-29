@@ -1716,30 +1716,25 @@ sub extract_verp_rcpt() {
     my $refrcpt = shift;
     my $refrcptverp = shift;
 
-
     &do_log('debug','&extract_verp(%s,%s,%s,%s)',$percent,$xseq,$refrcpt,$refrcptverp)  ;
 
-    if ($percent == '0%') {
-	return ();
-    }
-    
-    my $nbpart ; 
-    if ( $percent =~ /^(\d+)\%/ ) {
-	$nbpart = 100/$1;  
-    }
-    else {
-	&do_log ('err', 'Wrong format for parameter extract_verp: %s. Can\'t process VERP.',$percent);
-	return undef;
-    }
-    
-    my $modulo = $xseq % $nbpart ;
-    my $lenght = int (($#{$refrcpt} + 1) / $nbpart) + 1;
+    my @result;
 
-    &do_log('debug','&extract_verp(%s,%s,%s,%s)',$percent,$xseq,$refrcpt,$refrcptverp)  ;
-
-    
-    my @result = splice @$refrcpt, $lenght*$modulo, $lenght ;
-    
+    if ($percent != '0%') {
+	my $nbpart ; 
+	if ( $percent =~ /^(\d+)\%/ ) {
+	    $nbpart = 100/$1;  
+	}
+	else {
+	    &do_log ('err', 'Wrong format for parameter extract_verp: %s. Can\'t process VERP.',$percent);
+	    return undef;
+	}
+	
+	my $modulo = $xseq % $nbpart ;
+	my $lenght = int (($#{$refrcpt} + 1) / $nbpart) + 1;
+	
+	@result = splice @$refrcpt, $lenght*$modulo, $lenght ;
+    }
     foreach my $verprcpt (@$refrcptverp) {
 	push @result, $verprcpt;
     }
