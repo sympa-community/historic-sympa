@@ -15184,7 +15184,7 @@ sub do_compose_mail {
 		'subject' => $in{'subject'},
 		'return_path' => &Conf::get_robot_conf($robot, 'sympa'),
 		'to' => $to,
-		'body' => "From: $from\n\n" . $in{'body'},
+		'body' => "From: $from\n" . $in{'body'},
 		'sign_mode' => '',
 		'header_possible' => '1'};
 
