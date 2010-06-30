@@ -10,7 +10,6 @@
     <li>[%|loc%]Distribution ended at[%END%] : [% distribution_date %]</li>
 </ul>
 
-
 <table summary="[%|loc%]Message tracking[%END%]" class="listOfItems text_center">
   <tr><th>[%|loc%]Recipient Email[%END%]</th>
      <th>[%|loc%]Delivery status[%END%]</th>
@@ -33,6 +32,6 @@
     </tr>
   [% END %]
 </table>
-<!-- end tracking.tt2 (distrib) -->
 
 </div>
+<!-- end tracking.tt2 (distrib) -->

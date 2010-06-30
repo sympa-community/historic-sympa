@@ -587,17 +587,17 @@ sub db_insert_message{
 	    #	foreach my $to (@to_addresses) {
 	    
 	    &do_log('trace', 'Recipient Address :%s', $to );
-	    unless ($sth = &store_notif_DB($dbh, $pk_message, $status, $to, $list->{'name'},$robot,'DSN')) {
+	    unless ($sth = &store_notif_DB($dbh, $pk_message, $status, $to, $list->{'name'},$robot,'')) {
 		&do_log('err', 'Unable to execute message storage in notification table"%s"', $message_id);
 		return undef;
 	    }
             # what is usage for the following block ??? 
-	    if(defined $disposition_notif) {
-		unless ($sth = &store_notif_DB($dbh, $pk_message, $status, $to, $list->{'name'},$robot,'MDN')) {
-		    &do_log('err', 'Unable to execute message storage in notification table"%s"', $message_id);
-		    return undef;
-		}
-	    }
+	    #if(defined $disposition_notif) {
+            #		unless ($sth = &store_notif_DB($dbh, $pk_message, $status, $to, $list->{'name'},$robot,'MDN')) {
+	    #	    &do_log('err', 'Unable to execute message storage in notification table"%s"', $message_id);
+            #		    return undef;
+	    #	}
+	    #}
 	} 
 	$sth -> finish;
 	$dbh -> disconnect;

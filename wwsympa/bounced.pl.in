@@ -357,7 +357,7 @@ while (!$end) {
 
 #----------------------------------------------------------------------------------------------------------------------
 # If the DSN notification is correct and the tracking mode is enable, it will be inserted in the database
-	if(($head->get('Content-type') =~ /multipart\/report/) && ($head->get('Content-type') =~ /report\-type\=delivery-status/i) && ($list->{'admin'}{'tracking'} eq "on")) {
+	if(($head->get('Content-type') =~ /multipart\/report/) && ($head->get('Content-type') =~ /report\-type\=delivery-status/i) && (($list->{'admin'}{'tracking'} eq "on")||($list->{'admin'}{'tracking'} eq "on_demand"))) {
 	
 	    do_log ('trace',"processing  DSN Report block 1");
 	    
@@ -433,7 +433,8 @@ while (!$end) {
 	    do_log ('debug2',"FINAL DSN Message-Id Detected, value : %s", $msg_id);
 	    do_log ('debug2',"FINAL DSN Arrival Date Detected, value : %s", $arrival_date);
 
-	    unless  ($dsn_status =~ /failed/) { # DSN with status "failed" should not be removed because theu must be processed for classical bounce managment (not only for tracking feature)
+	    unless  ($dsn_status =~ /failed/) { # DSN with status "failed" should not be removed because they must be processed for classical bounce managment (not only for tracking feature)
+		&do_log('err', "Non failed dsn status $dsn_status");
 		unless ($id) {
                     &do_log('err', "error: Id not found in to address %s, will ignore",$to);
  	            unlink("$queue/$file");
@@ -451,7 +452,7 @@ while (!$end) {
 		}
 	    }
 	                 
-            &do_log('debug2', "Save in database...");
+            &do_log('trace', "Save in database...");
 	    if (&tracking::db_insert_notification($id, 'DSN', $original_rcpt, $msg_id, $dsn_status, $arrival_date,$notification_as_string )) {
 		&do_log('notice', "DSN Correctly treated...");
 	    }else{
@@ -468,8 +469,7 @@ while (!$end) {
 	} 
 #-----------------------------------------------------------------------------------------------------------------------------------
 # If the MDN notification is correct and the tracking mode is enable, it will be inserted in the database
-	if(($head->get('Content-type') =~ /multipart\/report/) && ($head->get('Content-type') =~ /report\-type\=disposition-notification/i) && ($list->{'admin'}{'tracking'} eq "on")) {
-
+	if(($head->get('Content-type') =~ /multipart\/report/) && ($head->get('Content-type') =~ /report\-type\=disposition-notification/i) && (($list->{'admin'}{'tracking'} eq "on")||($list->{'admin'}{'tracking'} eq "on_demand"))) {
 	    do_log ('trace',"processing  MDN Report block 1");
 	    
 	    my @parts = $entity->parts();
