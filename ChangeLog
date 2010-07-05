@@ -1,4 +1,260 @@
 ------------------------------------------------------------------------
+r6577 | sympa-authors | 2010-07-05 12:08:19 +0200 (lun 05 jui 2010) | 1 ligne
+Chemins modifiés :
+   M /branches/sympa-6.0-branch/configure.ac
+   M /branches/sympa-6.0-branch/po/ar.po
+   M /branches/sympa-6.0-branch/po/bg.po
+   M /branches/sympa-6.0-branch/po/br.po
+   M /branches/sympa-6.0-branch/po/ca.po
+   M /branches/sympa-6.0-branch/po/cs.po
+   M /branches/sympa-6.0-branch/po/de.po
+   M /branches/sympa-6.0-branch/po/el.po
+   M /branches/sympa-6.0-branch/po/en_US.po
+   M /branches/sympa-6.0-branch/po/es.po
+   M /branches/sympa-6.0-branch/po/et.po
+   M /branches/sympa-6.0-branch/po/eu.po
+   M /branches/sympa-6.0-branch/po/fi.po
+   M /branches/sympa-6.0-branch/po/fr.po
+   M /branches/sympa-6.0-branch/po/hu.po
+   M /branches/sympa-6.0-branch/po/id.po
+   M /branches/sympa-6.0-branch/po/it.po
+   M /branches/sympa-6.0-branch/po/ja.po
+   M /branches/sympa-6.0-branch/po/ko.po
+   M /branches/sympa-6.0-branch/po/la.po
+   M /branches/sympa-6.0-branch/po/ml.po
+   M /branches/sympa-6.0-branch/po/nb_NO.po
+   M /branches/sympa-6.0-branch/po/nl.po
+   M /branches/sympa-6.0-branch/po/oc.po
+   M /branches/sympa-6.0-branch/po/pl.po
+   M /branches/sympa-6.0-branch/po/pt.po
+   M /branches/sympa-6.0-branch/po/pt_BR.po
+   M /branches/sympa-6.0-branch/po/ro.po
+   M /branches/sympa-6.0-branch/po/ru.po
+   M /branches/sympa-6.0-branch/po/sv.po
+   M /branches/sympa-6.0-branch/po/tr.po
+   M /branches/sympa-6.0-branch/po/vi.po
+   M /branches/sympa-6.0-branch/po/zh_CN.po
+   M /branches/sympa-6.0-branch/po/zh_TW.po
+   M /branches/sympa-6.0-branch/po-wwsympa/ru.po
+
+[-feature]Committing latest translations from Pootle
+------------------------------------------------------------------------
+r6572 | david.verdin | 2010-06-29 13:02:28 +0200 (mar 29 jun 2010) | 2 lignes
+Chemins modifiés :
+   M /branches/sympa-6.0-branch/wwsympa/wwsympa.fcgi.in
+
+[bug] An extra "\n" appended to the "From:" field caused HTML message to be trimmed from their headers and consequently treated as plain text. This caused HTML messages to arrive as a plain text messages starting by SMTP headers.
+
+------------------------------------------------------------------------
+r6570 | serge.aumont | 2010-06-29 10:27:31 +0200 (mar 29 jun 2010) | 2 lignes
+Chemins modifiés :
+   M /branches/sympa-6.0-branch/src/lib/List.pm
+
+[bug] fix verp rate 0% case where Sympa do not send messages to subscriber with bounces 
+
+------------------------------------------------------------------------
+r6568 | olivier.salaun | 2010-06-25 09:16:31 +0200 (ven 25 jun 2010) | 2 lignes
+Chemins modifiés :
+   M /branches/sympa-6.0-branch/README.charset
+
+[-bug][#7000] [S.Ikeda] Path in README.charset
+
+------------------------------------------------------------------------
+r6558 | olivier.salaun | 2010-06-22 09:40:48 +0200 (mar 22 jun 2010) | 2 lignes
+Chemins modifiés :
+   M /branches/sympa-6.0-branch
+   M /branches/sympa-6.0-branch/src/lib/LDAPSource.pm
+
+[bug][#6802] [T.Berry, NASA] Remove duplicate code + variable declared twice
+
+------------------------------------------------------------------------
+r6540 | olivier.salaun | 2010-06-18 18:17:39 +0200 (ven 18 jun 2010) | 2 lignes
+Chemins modifiés :
+   M /trunk/src/lib/LDAPSource.pm
+Fision via : r6558
+
+[bug][#6802] [T.Berry, NASA] Remove duplicate code + variable declared twice
+
+------------------------------------------------------------------------
+r6555 | olivier.salaun | 2010-06-21 17:58:56 +0200 (lun 21 jun 2010) | 2 lignes
+Chemins modifiés :
+   M /branches/sympa-6.0-branch
+   M /branches/sympa-6.0-branch/wwsympa/wwsympa.fcgi.in
+
+[bug][#6842] [S.Ikeda] /help/editlist does not show title of parameters
+
+------------------------------------------------------------------------
+r6537 | olivier.salaun | 2010-06-18 17:33:41 +0200 (ven 18 jun 2010) | 2 lignes
+Chemins modifiés :
+   M /trunk/wwsympa/wwsympa.fcgi.in
+Fision via : r6555
+
+[bug][#6842] [S.Ikeda] /help/editlist does not show title of parameters
+
+------------------------------------------------------------------------
+r6551 | olivier.salaun | 2010-06-21 17:56:15 +0200 (lun 21 jun 2010) | 2 lignes
+Chemins modifiés :
+   M /branches/sympa-6.0-branch
+   M /branches/sympa-6.0-branch/src/lib/tools.pm
+
+[bug][#6901][reported by D.Black] tools::smime_decrypt() could make sympa.pl process crash. 
+
+------------------------------------------------------------------------
+r6532 | olivier.salaun | 2010-06-16 16:45:55 +0200 (mer 16 jun 2010) | 2 lignes
+Chemins modifiés :
+   M /trunk/src/lib/tools.pm
+Fision via : r6551
+
+[bug][#6901][reported by D.Black] tools::smime_decrypt() could make sympa.pl process crash. 
+
+------------------------------------------------------------------------
+r6548 | olivier.salaun | 2010-06-21 17:54:18 +0200 (lun 21 jun 2010) | 2 lignes
+Chemins modifiés :
+   M /branches/sympa-6.0-branch
+   M /branches/sympa-6.0-branch/src/lib/tools.pm
+   M /branches/sympa-6.0-branch/wwsympa/wwsympa.fcgi.in
+
+[bug][S.Ikeda][#3779] Comma in gecos caused invalid From: in Web posting. New tools::addrencode() for proper encoding of From: SMTP header field according to RFC5322.
+
+------------------------------------------------------------------------
+r6529 | olivier.salaun | 2010-06-16 15:48:01 +0200 (mer 16 jun 2010) | 2 lignes
+Chemins modifiés :
+   M /trunk/src/lib/tools.pm
+   M /trunk/wwsympa/wwsympa.fcgi.in
+Fision via : r6548
+
+[bug][S.Ikeda][#3779] Comma in gecos caused invalid From: in Web posting. New tools::addrencode() for proper encoding of From: SMTP header field according to RFC5322.
+
+------------------------------------------------------------------------
+r6545 | olivier.salaun | 2010-06-21 17:43:57 +0200 (lun 21 jun 2010) | 2 lignes
+Chemins modifiés :
+   M /branches/sympa-6.0-branch
+   M /branches/sympa-6.0-branch/src/lib/Upgrade.pm
+   M /branches/sympa-6.0-branch/wwsympa/wwsympa.fcgi.in
+
+[bug][#4106][reported by M.Larchet] Shared documents could not get manipulated. This was due to changes in the algorithm of MIME::EncWords::encode_mimewords() function (chars -_+! no more Q-encoded). The problem started with version 1.010 of MIME::EncWords. The fix consists in a massive renaming of shared files (according to new algorithm) during sympa.pl --upgrade.
+
+------------------------------------------------------------------------
+r6528 | olivier.salaun | 2010-06-16 15:04:53 +0200 (mer 16 jun 2010) | 2 lignes
+Chemins modifiés :
+   M /trunk/src/lib/Upgrade.pm
+   M /trunk/wwsympa/wwsympa.fcgi.in
+Fision via : r6545
+
+[bug][#4106][reported by M.Larchet] Shared documents could not get manipulated. This was due to changes in the algorithm of MIME::EncWords::encode_mimewords() function (chars -_+! no more Q-encoded). The problem started with version 1.010 of MIME::EncWords. The fix consists in a massive renaming of shared files (according to new algorithm) during sympa.pl --upgrade.
+
+------------------------------------------------------------------------
+r6518 | olivier.salaun | 2010-06-15 13:31:11 +0200 (mar 15 jun 2010) | 4 lignes
+Chemins modifiés :
+   M /trunk/src/etc/create_list_templates/hotline/config.tt2
+   M /trunk/src/etc/create_list_templates/private_working_group/config.tt2
+   M /trunk/src/lib/List.pm
+   M /trunk/src/lib/confdef.pm
+   M /trunk/src/sympa.pl.in
+Fision via : r6545
+
+[feature][#6693] [requested by R.Sharshenov] New "reject_mail_from_automates_feature" list parameter allows to disable the
+ detection (and rejection) of mails from automates. This detection is based on the From header field as well as the Auto-S
+ubmitted header field. A default behavior can be defined in sympa.conf.
+
+------------------------------------------------------------------------
+r6543 | olivier.salaun | 2010-06-21 17:25:06 +0200 (lun 21 jun 2010) | 2 lignes
+Chemins modifiés :
+   M /branches/sympa-6.0-branch
+   M /branches/sympa-6.0-branch/src/lib/mail.pm
+   M /branches/sympa-6.0-branch/wwsympa/wwsympa.fcgi.in
+
+[bug][#3984] [submitted by S.Kristoffersen] Restored code to add Auto-Submitted SMTP header field. mail::mail_file() does not set this header when 'not_auto_submitted' is set, ie when wwsympa sends commands to sympa.pl through the msg/ spool.
+
+------------------------------------------------------------------------
+r6516 | olivier.salaun | 2010-06-15 10:57:32 +0200 (mar 15 jun 2010) | 3 lignes
+Chemins modifiés :
+   M /trunk/src/lib/mail.pm
+   M /trunk/wwsympa/wwsympa.fcgi.in
+Fision via : r6543
+
+[bug][#3984] [submitted by S.Kristoffersen] Restored code to add Auto-Submitted SMTP header field. mail::mail_file() does 
+not set this header when 'not_auto_submitted' is set, ie when wwsympa sends commands to sympa.pl through the msg/ spool.
+
+------------------------------------------------------------------------
+r6542 | olivier.salaun | 2010-06-21 17:23:44 +0200 (lun 21 jun 2010) | 2 lignes
+Chemins modifiés :
+   M /branches/sympa-6.0-branch
+   M /branches/sympa-6.0-branch/src/lib/Lock.pm
+
+[bug][#6513] [Landry Breuil] Fix errors in apache error log (Use of uninitialized value in sprintf) when debug is enabled
+
+------------------------------------------------------------------------
+r6507 | olivier.salaun | 2010-06-14 15:57:20 +0200 (lun 14 jun 2010) | 2 lignes
+Chemins modifiés :
+   M /trunk/src/lib/Lock.pm
+Fision via : r6542
+
+[bug][#6513] [Landry Breuil] Fix errors in apache error log (Use of uninitialized value in sprintf) when debug is enabled
+
+------------------------------------------------------------------------
+r6541 | olivier.salaun | 2010-06-21 17:15:58 +0200 (lun 21 jun 2010) | 2 lignes
+Chemins modifiés :
+   M /branches/sympa-6.0-branch
+   M /branches/sympa-6.0-branch/wwsympa/Bounce.pm
+
+[bug][#3881] [Michael Quintero] code to handle Groupwise 7 bounces
+
+------------------------------------------------------------------------
+r6506 | olivier.salaun | 2010-06-14 14:24:36 +0200 (lun 14 jun 2010) | 2 lignes
+Chemins modifiés :
+   M /trunk/wwsympa/Bounce.pm
+Fision via : r6541
+
+[bug][#3881] [Michael Quintero] code to handle Groupwise 7 bounces
+
+------------------------------------------------------------------------
+r6269 | olivier.salaun | 2009-10-05 14:01:22 +0200 (lun 05 oct 2009) | 2 lignes
+Chemins modifiés :
+   M /trunk/wwsympa/wwsympa.fcgi.in
+Fision via : r6541
+
+[bug] Fixed bug introduced in revision 5998. web signoff did not recognize authenticated users.
+
+------------------------------------------------------------------------
+r6508 | sympa-authors | 2010-06-14 17:25:16 +0200 (lun 14 jun 2010) | 2 lignes
+Chemins modifiés :
+   M /branches/sympa-6.0-branch/src/lib/List.pm
+
+[bug][#6904][Submitted by T. Berry, NASA] The _load_admin_file sub did not ut a lock on the config file before opening it. If another process was writing it at the same time, the function found the file to be empty, and put the list in error config. Fixed by adding a lock an removing it once the config is loaded.
+
+------------------------------------------------------------------------
+r6490 | sympa-authors | 2010-06-09 11:46:00 +0200 (mer 09 jun 2010) | 2 lignes
+Chemins modifiés :
+   M /branches/sympa-6.0-branch/src/Makefile.am
+   M /branches/sympa-6.0-branch/src/bouncequeue.c
+   M /branches/sympa-6.0-branch/src/familyqueue.c
+   M /branches/sympa-6.0-branch/src/queue.c
+
+[bug][#6912][Submitted by S. Ikeda]When queue, queuebounce or queueautomatic parameter was not defined in sympa.conf, queue, bouncequeue or familyqueue referred unallocated memory instead of using value given by configure.
+
+------------------------------------------------------------------------
+r6489 | sympa-authors | 2010-06-09 08:51:54 +0200 (mer 09 jun 2010) | 2 lignes
+Chemins modifiés :
+   M /branches/sympa-6.0-branch/wwsympa/wwsympa.fcgi.in
+
+[bug] Previous versions of the Q-encoder were not completely faithfull to the Q-encoding spec. It changed , but some files in the shared still have the former encoding. Added escaping to avoid to say that a file does not exist just because the encoding canons changed.
+
+------------------------------------------------------------------------
+r6480 | sympa-authors | 2010-06-04 15:39:35 +0200 (ven 04 jun 2010) | 2 lignes
+Chemins modifiés :
+   M /branches/sympa-6.0-branch/src/lib/Lock.pm
+
+[change] Increasing the log level in Lock subfunctions. These were polluting the logs when a process was set in debug mode.
+
+------------------------------------------------------------------------
+r6473 | sympa-authors | 2010-06-03 16:19:01 +0200 (jeu 03 jun 2010) | 1 ligne
+Chemins modifiés :
+   M /branches/sympa-6.0-branch/ChangeLog
+   M /branches/sympa-6.0-branch/NEWS
+
+[-release]Preparing version 6.0.3
+------------------------------------------------------------------------
 r6472 | sympa-authors | 2010-06-03 16:16:49 +0200 (jeu 03 jun 2010) | 1 ligne
 Chemins modifiés :
    M /branches/sympa-6.0-branch/configure.ac
@@ -606,6 +862,16 @@ Chemins modifiés :
 [bug] Avoid to print a sybillin message when no bounces exist. If nothing exist, just go on and display a page with no entries.
 
 ------------------------------------------------------------------------
+r6326 | david.verdin | 2010-01-07 17:28:54 +0100 (jeu 07 jan 2010) | 4 lignes
+Chemins modifiés :
+   M /trunk/src/lib/SQLSource.pm
+Fision via : r6330
+
+[bug][Submùitted by F. Lachapelle, Inverse] If the db_type is set to Oracle and db_port is specified in the main configuration file, than the port would appear two times in the connection string.
+Fixed by removing useless isolated port insertion in the connect string, as it is done for any connection in a central place.
+
+
+------------------------------------------------------------------------
 r6328 | david.verdin | 2010-01-07 17:34:36 +0100 (jeu 07 jan 2010) | 5 lignes
 Chemins modifiés :
    M /branches/sympa-6.0-branch/src/lib/SQLSource.pm
@@ -1106,6 +1372,14 @@ Chemins modifiés :
 [-bug] fixed wrong log facility
 
 ------------------------------------------------------------------------
+r6270 | olivier.salaun | 2009-10-06 09:35:36 +0200 (mar 06 oct 2009) | 2 lignes
+Chemins modifiés :
+   M /trunk/src/task_manager.pl.in
+Fision via : r6272
+
+[-bug] fixed wrong log facility
+
+------------------------------------------------------------------------
 r6255 | david.verdin | 2009-10-01 00:59:24 +0200 (jeu 01 oct 2009) | 2 lignes
 Chemins modifiés :
    M /branches/sympa-6.0-branch/ChangeLog
@@ -1507,6 +1781,15 @@ Chemins modifiés :
 [-bug] Retrieving revision 6193 from the trunk. Also fixing a typo.
 
 ------------------------------------------------------------------------
+r6193 | david.verdin | 2009-09-07 18:31:43 +0200 (lun 07 sep 2009) | 3 lignes
+Chemins modifiés :
+   M /trunk/src/lib/confdef.pm
+Fision via : r6200
+
+[bug] http_host was not set by default in syma.conf, making the sympa wizard to fail starting.
+
+
+------------------------------------------------------------------------
 r6199 | david.verdin | 2009-09-14 11:52:46 +0200 (lun 14 sep 2009) | 3 lignes
 Chemins modifiés :
    M /branches/sympa-6.0-branch
@@ -1514,6 +1797,14 @@ Chemins modifiés :
 
 [bug] http_host was not set by default in syma.conf, making the sympa wizard to fail starting.
 
+
+------------------------------------------------------------------------
+r6192 | david.verdin | 2009-09-07 18:16:41 +0200 (lun 07 sep 2009) | 2 lignes
+Chemins modifiés :
+   M /trunk/configure.ac
+Fision via : r6199
+
+[-bug] Restoring the localedir definition in non FHS context to avoid i18n directories to be scattered in the root directory.
 
 ------------------------------------------------------------------------
 r6198 | david.verdin | 2009-09-14 11:52:08 +0200 (lun 14 sep 2009) | 5 lignes
@@ -1535,6 +1826,22 @@ Chemins modifiés :
    M /branches/sympa-6.0-branch/src/sympa_wizard.pl.in
 
 [-change] explain why Time-HiRes is required
+
+------------------------------------------------------------------------
+r6194 | olivier.salaun | 2009-09-08 13:58:59 +0200 (mar 08 sep 2009) | 2 lignes
+Chemins modifiés :
+   M /trunk/src/lib/List.pm
+Fision via : r6195
+
+[bug][#3047][reported by N.Chipaux, Mandriva] Some service messages sent by Sympa would use an unappropriate language (did not match the user language). This issue happened whenever a message was sent to more than one reciepient; the first user's language was used for the following ones. Fixed List::send_file() and List::send_global_file(): now duplicating the 'context' parameter to prevent changes of the original data structure.
+
+------------------------------------------------------------------------
+r6161 | olivier.salaun | 2009-08-31 17:41:00 +0200 (lun 31 aoû 2009) | 2 lignes
+Chemins modifiés :
+   M /trunk/src/sympa_wizard.pl.in
+Fision via : r6195
+
+[-change] document usage for Time::HiRes
 
 ------------------------------------------------------------------------
 r6189 | david.verdin | 2009-09-07 15:31:35 +0200 (lun 07 sep 2009) | 6 lignes
@@ -1568,11 +1875,633 @@ Chemins modifiés :
 [-svn]Deleting svn:merginfo property.
 
 ------------------------------------------------------------------------
+r6003 | david.verdin | 2009-07-23 17:04:16 +0200 (jeu 23 jui 2009) | 2 lignes
+Chemins modifiés :
+   M /trunk
+   M /trunk/Makefile.am
+   M /trunk/configure.ac
+   M /trunk/doc/sample/test/web_tt2/welcome.tt2
+   M /trunk/sympa.spec.in
+Fision via : r6176
+
+[svn] Some references to the 't' directory remained.
+
+------------------------------------------------------------------------
+r6001 | david.verdin | 2009-07-23 16:54:54 +0200 (jeu 23 jui 2009) | 2 lignes
+Chemins modifiés :
+   A /branches/branche-julien (de /trunk:6000)
+Fision via : r6176, r6003
+
+[svn] creating new branch for Julien's summer of code!
+
+------------------------------------------------------------------------
+r6001 | david.verdin | 2009-07-23 16:54:54 +0200 (jeu 23 jui 2009) | 2 lignes
+Chemins modifiés :
+   A /branches/branche-julien (de /trunk:6000)
+Fision via : r6176
+
+[svn] creating new branch for Julien's summer of code!
+
+------------------------------------------------------------------------
+r5980 | david.verdin | 2009-07-22 15:28:29 +0200 (mer 22 jui 2009) | 2 lignes
+Chemins modifiés :
+   M /branches/sympa-autotools-cleanup
+   M /branches/sympa-autotools-cleanup/doc/man8
+   M /branches/sympa-autotools-cleanup/doc/sample/test/web_tt2/welcome.tt2
+   M /branches/sympa-autotools-cleanup/src/etc
+   M /branches/sympa-autotools-cleanup/src/etc/script
+   M /branches/sympa-autotools-cleanup/src/sympa_wizard.pl.in
+   M /branches/sympa-autotools-cleanup/sympa.spec.in
+   M /branches/sympa-autotools-cleanup/wwsympa/wwsympa.fcgi.in
+Fision via : r6176
+
+[svn] Retrieving latest modifications from the trunk.
+
+------------------------------------------------------------------------
+r5958 | david.verdin | 2009-07-10 16:44:46 +0200 (ven 10 jui 2009) | 3 lignes
+Chemins modifiés :
+   M /trunk
+   M /trunk/Makefile.am
+   M /trunk/configure.ac
+   M /trunk/doc/man8/Makefile.am
+   D /trunk/doc/man8/alias_manager.pod
+   A /trunk/doc/man8/alias_manager.pod.in (de /branches/sympa-autotools-cleanup/doc/man8/alias_manager.pod.in:5957)
+   D /trunk/doc/man8/archived.pod
+   A /trunk/doc/man8/archived.pod.in (de /branches/sympa-autotools-cleanup/doc/man8/archived.pod.in:5957)
+   D /trunk/doc/man8/bounced.pod
+   A /trunk/doc/man8/bounced.pod.in (de /branches/sympa-autotools-cleanup/doc/man8/bounced.pod.in:5957)
+   M /trunk/doc/sample/test/web_tt2/welcome.tt2
+   M /trunk/src/etc/Makefile.am
+   D /trunk/src/etc/list_aliases.tt2
+   A /trunk/src/etc/list_aliases.tt2.in (de /branches/sympa-autotools-cleanup/src/etc/list_aliases.tt2.in:5957)
+   M /trunk/src/etc/script/Makefile.am
+   D /trunk/src/etc/script/arc2webarc.pl
+   A /trunk/src/etc/script/arc2webarc.pl.in (de /branches/sympa-autotools-cleanup/src/etc/script/arc2webarc.pl.in:5957)
+   D /trunk/src/etc/script/crypt_passwd.pl
+   A /trunk/src/etc/script/crypt_passwd.pl.in (de /branches/sympa-autotools-cleanup/src/etc/script/crypt_passwd.pl.in:5957)
+   D /trunk/src/etc/script/init_comment.pl
+   A /trunk/src/etc/script/init_comment.pl.in (de /branches/sympa-autotools-cleanup/src/etc/script/init_comment.pl.in:5957)
+   D /trunk/src/etc/script/ldap_alias_manager.pl
+   A /trunk/src/etc/script/ldap_alias_manager.pl.in (de /branches/sympa-autotools-cleanup/src/etc/script/ldap_alias_manager.pl.in:5957)
+   D /trunk/src/etc/script/mod2html.pl
+   A /trunk/src/etc/script/mod2html.pl.in (de /branches/sympa-autotools-cleanup/src/etc/script/mod2html.pl.in:5957)
+   D /trunk/src/etc/script/mysql_alias_manager.pl
+   A /trunk/src/etc/script/mysql_alias_manager.pl.in (de /branches/sympa-autotools-cleanup/src/etc/script/mysql_alias_manager.pl.in:5957)
+   D /trunk/src/etc/script/p12topem.pl
+   A /trunk/src/etc/script/p12topem.pl.in (de /branches/sympa-autotools-cleanup/src/etc/script/p12topem.pl.in:5957)
+   D /trunk/src/etc/script/sympa
+   A /trunk/src/etc/script/sympa.in (de /branches/sympa-autotools-cleanup/src/etc/script/sympa.in:5957)
+   D /trunk/src/etc/script/testldap.pl
+   A /trunk/src/etc/script/testldap.pl.in (de /branches/sympa-autotools-cleanup/src/etc/script/testldap.pl.in:5957)
+   D /trunk/src/etc/script/testlogs.pl
+   A /trunk/src/etc/script/testlogs.pl.in (de /branches/sympa-autotools-cleanup/src/etc/script/testlogs.pl.in:5957)
+   D /trunk/src/etc/script/tpl2tt2.pl
+   A /trunk/src/etc/script/tpl2tt2.pl.in (de /branches/sympa-autotools-cleanup/src/etc/script/tpl2tt2.pl.in:5957)
+   M /trunk/src/lib/Archive.pm
+   M /trunk/src/lib/Bulk.pm
+   M /trunk/src/lib/CAS.pm
+   M /trunk/src/lib/Commands.pm
+   M /trunk/src/lib/Conf.pm
+   M /trunk/src/lib/Config_XML.pm
+   M /trunk/src/lib/Datasource.pm
+   M /trunk/src/lib/Family.pm
+   M /trunk/src/lib/Fetch.pm
+   A /trunk/src/lib/HTML (de /branches/sympa-autotools-cleanup/src/lib/HTML:5957)
+   R /trunk/src/lib/HTML/myFormatText.pm (de /branches/sympa-autotools-cleanup/src/lib/HTML/myFormatText.pm:5957)
+   M /trunk/src/lib/LDAPSource.pm
+   M /trunk/src/lib/Language.pm
+   M /trunk/src/lib/Ldap.pm
+   M /trunk/src/lib/List.pm
+   M /trunk/src/lib/Lock.pm
+   M /trunk/src/lib/Log.pm
+   M /trunk/src/lib/Makefile.am
+   M /trunk/src/lib/Message.pm
+   M /trunk/src/lib/PlainDigest.pm
+   A /trunk/src/lib/Robot.pm (de /branches/sympa-autotools-cleanup/src/lib/Robot.pm:5957)
+   M /trunk/src/lib/SQLSource.pm
+   M /trunk/src/lib/Scenario.pm
+   M /trunk/src/lib/Task.pm
+   M /trunk/src/lib/Upgrade.pm
+   A /trunk/src/lib/WebAgent.pm (de /branches/sympa-autotools-cleanup/src/lib/WebAgent.pm:5957)
+   M /trunk/src/lib/admin.pm
+   M /trunk/src/lib/confdef.pm
+   M /trunk/src/lib/mail.pm
+   M /trunk/src/lib/report.pm
+   M /trunk/src/lib/time_utils.pm
+   M /trunk/src/lib/tools.pm
+   M /trunk/src/lib/tt2.pm
+   M /trunk/sympa.spec.in
+   A /trunk/t (de /branches/sympa-autotools-cleanup/t:5957)
+   R /trunk/t/Makefile.am (de /branches/sympa-autotools-cleanup/t/Makefile.am:5957)
+   R /trunk/t/modules.t (de /branches/sympa-autotools-cleanup/t/modules.t:5957)
+   M /trunk/wwsympa/Auth.pm
+   M /trunk/wwsympa/Bounce.pm
+   M /trunk/wwsympa/Challenge.pm
+   M /trunk/wwsympa/Marc/Search.pm
+   M /trunk/wwsympa/Marc.pm
+   M /trunk/wwsympa/SharedDocument.pm
+   M /trunk/wwsympa/SympaSession.pm
+   M /trunk/wwsympa/cookielib.pm
+   M /trunk/wwsympa/wwslib.pm
+Fision via : r6176, r5980
+
+[-feature] Reintegrating the latest changes in sympa-autotools-cleanup branch.
+
+
+------------------------------------------------------------------------
+r5957 | david.verdin | 2009-07-10 16:36:00 +0200 (ven 10 jui 2009) | 2 lignes
+Chemins modifiés :
+   M /branches/sympa-autotools-cleanup
+   M /branches/sympa-autotools-cleanup/ChangeLog
+   M /branches/sympa-autotools-cleanup/INSTALL
+   M /branches/sympa-autotools-cleanup/Makefile.am
+   M /branches/sympa-autotools-cleanup/NEWS
+   R /branches/sympa-autotools-cleanup/check_perl_modules.pl (de /trunk/check_perl_modules.pl:5956)
+   M /branches/sympa-autotools-cleanup/configure.ac
+   M /branches/sympa-autotools-cleanup/doc/sample/test/web_tt2/welcome.tt2
+   M /branches/sympa-autotools-cleanup/important_changes.pl
+   M /branches/sympa-autotools-cleanup/mail_tt2/d_install_shared.tt2
+   M /branches/sympa-autotools-cleanup/mail_tt2/moderate.tt2
+   M /branches/sympa-autotools-cleanup/mail_tt2/modindex.tt2
+   M /branches/sympa-autotools-cleanup/mail_tt2/user_notification.tt2
+   M /branches/sympa-autotools-cleanup/mail_tt2/welcome.tt2
+   M /branches/sympa-autotools-cleanup/po
+   M /branches/sympa-autotools-cleanup/po/de.po
+   M /branches/sympa-autotools-cleanup/po/es.po
+   M /branches/sympa-autotools-cleanup/po/fr.po
+   M /branches/sympa-autotools-cleanup/po/vi.po
+   M /branches/sympa-autotools-cleanup/po-wwsympa
+   M /branches/sympa-autotools-cleanup/po-wwsympa/fr.po
+   M /branches/sympa-autotools-cleanup/soap
+   M /branches/sympa-autotools-cleanup/src
+   M /branches/sympa-autotools-cleanup/src/bulk.pl.in
+   M /branches/sympa-autotools-cleanup/src/etc/mhonarc-ressources.tt2
+   M /branches/sympa-autotools-cleanup/src/etc/script/create_db.mysql
+   M /branches/sympa-autotools-cleanup/src/lib
+   M /branches/sympa-autotools-cleanup/src/lib/Bulk.pm
+   M /branches/sympa-autotools-cleanup/src/lib/Conf.pm
+   M /branches/sympa-autotools-cleanup/src/lib/List.pm
+   M /branches/sympa-autotools-cleanup/src/lib/Sympa
+   M /branches/sympa-autotools-cleanup/src/lib/Upgrade.pm
+   M /branches/sympa-autotools-cleanup/src/lib/confdef.pm
+   M /branches/sympa-autotools-cleanup/src/lib/mail.pm
+   M /branches/sympa-autotools-cleanup/src/lib/tools.pm
+   M /branches/sympa-autotools-cleanup/src/sympa_wizard.pl.in
+   A /branches/sympa-autotools-cleanup/sympa-6.0b.tar.gz (de /trunk/sympa-6.0b.tar.gz:5956)
+   D /branches/sympa-autotools-cleanup/sympa.spec
+   M /branches/sympa-autotools-cleanup/sympa.spec.in
+   M /branches/sympa-autotools-cleanup/web_tt2/Makefile.am
+   M /branches/sympa-autotools-cleanup/web_tt2/compose_mail.tt2
+   M /branches/sympa-autotools-cleanup/web_tt2/css.tt2
+   A /branches/sympa-autotools-cleanup/web_tt2/css_ie.tt2 (de /trunk/web_tt2/css_ie.tt2:5956)
+   M /branches/sympa-autotools-cleanup/web_tt2/footer.tt2
+   M /branches/sympa-autotools-cleanup/web_tt2/javascript.tt2
+   M /branches/sympa-autotools-cleanup/web_tt2/lists.tt2
+   M /branches/sympa-autotools-cleanup/web_tt2/loginbanner.tt2
+   M /branches/sympa-autotools-cleanup/web_tt2/main.tt2
+   M /branches/sympa-autotools-cleanup/web_tt2/title.tt2
+   M /branches/sympa-autotools-cleanup/wwsympa
+   M /branches/sympa-autotools-cleanup/wwsympa/icons
+   M /branches/sympa-autotools-cleanup/wwsympa/wwsympa.fcgi.in
+Fision via : r6176, r5980, r5958
+
+[-change] Reporting latest changes from trunk to autotools-cleanup.
+
+------------------------------------------------------------------------
+r5874 | olivier.salaun | 2009-06-09 19:33:08 +0200 (mar 09 jun 2009) | 2 lignes
+Chemins modifiés :
+   M /trunk/Makefile.am
+   M /trunk/doc/man8/archived.pod
+   M /trunk/doc/man8/bounced.pod
+   M /trunk/sympa.spec
+   M /trunk/sympa.spec.in
+Fision via : r6176, r5980, r5958, r5957
+
+[-bug] fix references to sympa.conf and wwsympa.conf : located in confdir, not in sysconfdir
+
+------------------------------------------------------------------------
+r5873 | olivier.salaun | 2009-06-09 18:07:51 +0200 (mar 09 jun 2009) | 2 lignes
+Chemins modifiés :
+   A /branches/sympa-autotools-cleanup (de /trunk:5872)
+Fision via : r6176, r5980, r5958
+
+[change] Sync Of Guillaume's branch with trunk
+
+------------------------------------------------------------------------
+r5968 | rousse | 2009-07-16 22:57:38 +0200 (jeu 16 jui 2009) | 1 ligne
+Chemins modifiés :
+   M /branches/sympa-autotools-cleanup/sympa.spec.in
+Fision via : r6176
+
+[bug] fix configure invocation, and some file paths
+------------------------------------------------------------------------
+r5965 | david.verdin | 2009-07-13 11:01:07 +0200 (lun 13 jui 2009) | 2 lignes
+Chemins modifiés :
+   A /branches/sympa-autotools-cleanup (de /branches/sympa-autotools-cleanup:5957)
+Fision via : r6176
+
+[-svn] Recreating Guillaume's branch to the state it was just after a resynchronization with the trunk.
+
+------------------------------------------------------------------------
+r5957 | david.verdin | 2009-07-10 16:36:00 +0200 (ven 10 jui 2009) | 2 lignes
+Chemins modifiés :
+   M /branches/sympa-autotools-cleanup
+   M /branches/sympa-autotools-cleanup/ChangeLog
+   M /branches/sympa-autotools-cleanup/INSTALL
+   M /branches/sympa-autotools-cleanup/Makefile.am
+   M /branches/sympa-autotools-cleanup/NEWS
+   R /branches/sympa-autotools-cleanup/check_perl_modules.pl (de /trunk/check_perl_modules.pl:5956)
+   M /branches/sympa-autotools-cleanup/configure.ac
+   M /branches/sympa-autotools-cleanup/doc/sample/test/web_tt2/welcome.tt2
+   M /branches/sympa-autotools-cleanup/important_changes.pl
+   M /branches/sympa-autotools-cleanup/mail_tt2/d_install_shared.tt2
+   M /branches/sympa-autotools-cleanup/mail_tt2/moderate.tt2
+   M /branches/sympa-autotools-cleanup/mail_tt2/modindex.tt2
+   M /branches/sympa-autotools-cleanup/mail_tt2/user_notification.tt2
+   M /branches/sympa-autotools-cleanup/mail_tt2/welcome.tt2
+   M /branches/sympa-autotools-cleanup/po
+   M /branches/sympa-autotools-cleanup/po/de.po
+   M /branches/sympa-autotools-cleanup/po/es.po
+   M /branches/sympa-autotools-cleanup/po/fr.po
+   M /branches/sympa-autotools-cleanup/po/vi.po
+   M /branches/sympa-autotools-cleanup/po-wwsympa
+   M /branches/sympa-autotools-cleanup/po-wwsympa/fr.po
+   M /branches/sympa-autotools-cleanup/soap
+   M /branches/sympa-autotools-cleanup/src
+   M /branches/sympa-autotools-cleanup/src/bulk.pl.in
+   M /branches/sympa-autotools-cleanup/src/etc/mhonarc-ressources.tt2
+   M /branches/sympa-autotools-cleanup/src/etc/script/create_db.mysql
+   M /branches/sympa-autotools-cleanup/src/lib
+   M /branches/sympa-autotools-cleanup/src/lib/Bulk.pm
+   M /branches/sympa-autotools-cleanup/src/lib/Conf.pm
+   M /branches/sympa-autotools-cleanup/src/lib/List.pm
+   M /branches/sympa-autotools-cleanup/src/lib/Sympa
+   M /branches/sympa-autotools-cleanup/src/lib/Upgrade.pm
+   M /branches/sympa-autotools-cleanup/src/lib/confdef.pm
+   M /branches/sympa-autotools-cleanup/src/lib/mail.pm
+   M /branches/sympa-autotools-cleanup/src/lib/tools.pm
+   M /branches/sympa-autotools-cleanup/src/sympa_wizard.pl.in
+   A /branches/sympa-autotools-cleanup/sympa-6.0b.tar.gz (de /trunk/sympa-6.0b.tar.gz:5956)
+   D /branches/sympa-autotools-cleanup/sympa.spec
+   M /branches/sympa-autotools-cleanup/sympa.spec.in
+   M /branches/sympa-autotools-cleanup/web_tt2/Makefile.am
+   M /branches/sympa-autotools-cleanup/web_tt2/compose_mail.tt2
+   M /branches/sympa-autotools-cleanup/web_tt2/css.tt2
+   A /branches/sympa-autotools-cleanup/web_tt2/css_ie.tt2 (de /trunk/web_tt2/css_ie.tt2:5956)
+   M /branches/sympa-autotools-cleanup/web_tt2/footer.tt2
+   M /branches/sympa-autotools-cleanup/web_tt2/javascript.tt2
+   M /branches/sympa-autotools-cleanup/web_tt2/lists.tt2
+   M /branches/sympa-autotools-cleanup/web_tt2/loginbanner.tt2
+   M /branches/sympa-autotools-cleanup/web_tt2/main.tt2
+   M /branches/sympa-autotools-cleanup/web_tt2/title.tt2
+   M /branches/sympa-autotools-cleanup/wwsympa
+   M /branches/sympa-autotools-cleanup/wwsympa/icons
+   M /branches/sympa-autotools-cleanup/wwsympa/wwsympa.fcgi.in
+Fision via : r6176
+
+[-change] Reporting latest changes from trunk to autotools-cleanup.
+
+------------------------------------------------------------------------
+r5874 | olivier.salaun | 2009-06-09 19:33:08 +0200 (mar 09 jun 2009) | 2 lignes
+Chemins modifiés :
+   M /trunk/Makefile.am
+   M /trunk/doc/man8/archived.pod
+   M /trunk/doc/man8/bounced.pod
+   M /trunk/sympa.spec
+   M /trunk/sympa.spec.in
+Fision via : r6176, r5957
+
+[-bug] fix references to sympa.conf and wwsympa.conf : located in confdir, not in sysconfdir
+
+------------------------------------------------------------------------
+r5873 | olivier.salaun | 2009-06-09 18:07:51 +0200 (mar 09 jun 2009) | 2 lignes
+Chemins modifiés :
+   A /branches/sympa-autotools-cleanup (de /trunk:5872)
+Fision via : r6176
+
+[change] Sync Of Guillaume's branch with trunk
+
+------------------------------------------------------------------------
+r5811 | rousse | 2009-05-26 22:30:03 +0200 (mar 26 mai 2009) | 1 ligne
+Chemins modifiés :
+   D /branches/sympa-autotools-cleanup/sympa.spec
+   A /branches/sympa-autotools-cleanup/sympa.spec.in (de /branches/sympa-autotools-cleanup/sympa.spec:5808)
+Fision via : r6176
+
+[change] make spec file a template file, to have version automatically substituted, drop most post-install stuff excepted user/group creation, and use FHS setup
+------------------------------------------------------------------------
 r6175 | david.verdin | 2009-09-04 14:11:11 +0200 (ven 04 sep 2009) | 2 lignes
 Chemins modifiés :
    M /branches/sympa-6.0-branch/sympa.spec.in
 
 [-svn] Experiments regarding svn merginfo property.
+
+------------------------------------------------------------------------
+r6003 | david.verdin | 2009-07-23 17:04:16 +0200 (jeu 23 jui 2009) | 2 lignes
+Chemins modifiés :
+   M /trunk
+   M /trunk/Makefile.am
+   M /trunk/configure.ac
+   M /trunk/doc/sample/test/web_tt2/welcome.tt2
+   M /trunk/sympa.spec.in
+Fision via : r6175
+
+[svn] Some references to the 't' directory remained.
+
+------------------------------------------------------------------------
+r6001 | david.verdin | 2009-07-23 16:54:54 +0200 (jeu 23 jui 2009) | 2 lignes
+Chemins modifiés :
+   A /branches/branche-julien (de /trunk:6000)
+Fision via : r6175, r6003
+
+[svn] creating new branch for Julien's summer of code!
+
+------------------------------------------------------------------------
+r6001 | david.verdin | 2009-07-23 16:54:54 +0200 (jeu 23 jui 2009) | 2 lignes
+Chemins modifiés :
+   A /branches/branche-julien (de /trunk:6000)
+Fision via : r6175
+
+[svn] creating new branch for Julien's summer of code!
+
+------------------------------------------------------------------------
+r5980 | david.verdin | 2009-07-22 15:28:29 +0200 (mer 22 jui 2009) | 2 lignes
+Chemins modifiés :
+   M /branches/sympa-autotools-cleanup
+   M /branches/sympa-autotools-cleanup/doc/man8
+   M /branches/sympa-autotools-cleanup/doc/sample/test/web_tt2/welcome.tt2
+   M /branches/sympa-autotools-cleanup/src/etc
+   M /branches/sympa-autotools-cleanup/src/etc/script
+   M /branches/sympa-autotools-cleanup/src/sympa_wizard.pl.in
+   M /branches/sympa-autotools-cleanup/sympa.spec.in
+   M /branches/sympa-autotools-cleanup/wwsympa/wwsympa.fcgi.in
+Fision via : r6175
+
+[svn] Retrieving latest modifications from the trunk.
+
+------------------------------------------------------------------------
+r5958 | david.verdin | 2009-07-10 16:44:46 +0200 (ven 10 jui 2009) | 3 lignes
+Chemins modifiés :
+   M /trunk
+   M /trunk/Makefile.am
+   M /trunk/configure.ac
+   M /trunk/doc/man8/Makefile.am
+   D /trunk/doc/man8/alias_manager.pod
+   A /trunk/doc/man8/alias_manager.pod.in (de /branches/sympa-autotools-cleanup/doc/man8/alias_manager.pod.in:5957)
+   D /trunk/doc/man8/archived.pod
+   A /trunk/doc/man8/archived.pod.in (de /branches/sympa-autotools-cleanup/doc/man8/archived.pod.in:5957)
+   D /trunk/doc/man8/bounced.pod
+   A /trunk/doc/man8/bounced.pod.in (de /branches/sympa-autotools-cleanup/doc/man8/bounced.pod.in:5957)
+   M /trunk/doc/sample/test/web_tt2/welcome.tt2
+   M /trunk/src/etc/Makefile.am
+   D /trunk/src/etc/list_aliases.tt2
+   A /trunk/src/etc/list_aliases.tt2.in (de /branches/sympa-autotools-cleanup/src/etc/list_aliases.tt2.in:5957)
+   M /trunk/src/etc/script/Makefile.am
+   D /trunk/src/etc/script/arc2webarc.pl
+   A /trunk/src/etc/script/arc2webarc.pl.in (de /branches/sympa-autotools-cleanup/src/etc/script/arc2webarc.pl.in:5957)
+   D /trunk/src/etc/script/crypt_passwd.pl
+   A /trunk/src/etc/script/crypt_passwd.pl.in (de /branches/sympa-autotools-cleanup/src/etc/script/crypt_passwd.pl.in:5957)
+   D /trunk/src/etc/script/init_comment.pl
+   A /trunk/src/etc/script/init_comment.pl.in (de /branches/sympa-autotools-cleanup/src/etc/script/init_comment.pl.in:5957)
+   D /trunk/src/etc/script/ldap_alias_manager.pl
+   A /trunk/src/etc/script/ldap_alias_manager.pl.in (de /branches/sympa-autotools-cleanup/src/etc/script/ldap_alias_manager.pl.in:5957)
+   D /trunk/src/etc/script/mod2html.pl
+   A /trunk/src/etc/script/mod2html.pl.in (de /branches/sympa-autotools-cleanup/src/etc/script/mod2html.pl.in:5957)
+   D /trunk/src/etc/script/mysql_alias_manager.pl
+   A /trunk/src/etc/script/mysql_alias_manager.pl.in (de /branches/sympa-autotools-cleanup/src/etc/script/mysql_alias_manager.pl.in:5957)
+   D /trunk/src/etc/script/p12topem.pl
+   A /trunk/src/etc/script/p12topem.pl.in (de /branches/sympa-autotools-cleanup/src/etc/script/p12topem.pl.in:5957)
+   D /trunk/src/etc/script/sympa
+   A /trunk/src/etc/script/sympa.in (de /branches/sympa-autotools-cleanup/src/etc/script/sympa.in:5957)
+   D /trunk/src/etc/script/testldap.pl
+   A /trunk/src/etc/script/testldap.pl.in (de /branches/sympa-autotools-cleanup/src/etc/script/testldap.pl.in:5957)
+   D /trunk/src/etc/script/testlogs.pl
+   A /trunk/src/etc/script/testlogs.pl.in (de /branches/sympa-autotools-cleanup/src/etc/script/testlogs.pl.in:5957)
+   D /trunk/src/etc/script/tpl2tt2.pl
+   A /trunk/src/etc/script/tpl2tt2.pl.in (de /branches/sympa-autotools-cleanup/src/etc/script/tpl2tt2.pl.in:5957)
+   M /trunk/src/lib/Archive.pm
+   M /trunk/src/lib/Bulk.pm
+   M /trunk/src/lib/CAS.pm
+   M /trunk/src/lib/Commands.pm
+   M /trunk/src/lib/Conf.pm
+   M /trunk/src/lib/Config_XML.pm
+   M /trunk/src/lib/Datasource.pm
+   M /trunk/src/lib/Family.pm
+   M /trunk/src/lib/Fetch.pm
+   A /trunk/src/lib/HTML (de /branches/sympa-autotools-cleanup/src/lib/HTML:5957)
+   R /trunk/src/lib/HTML/myFormatText.pm (de /branches/sympa-autotools-cleanup/src/lib/HTML/myFormatText.pm:5957)
+   M /trunk/src/lib/LDAPSource.pm
+   M /trunk/src/lib/Language.pm
+   M /trunk/src/lib/Ldap.pm
+   M /trunk/src/lib/List.pm
+   M /trunk/src/lib/Lock.pm
+   M /trunk/src/lib/Log.pm
+   M /trunk/src/lib/Makefile.am
+   M /trunk/src/lib/Message.pm
+   M /trunk/src/lib/PlainDigest.pm
+   A /trunk/src/lib/Robot.pm (de /branches/sympa-autotools-cleanup/src/lib/Robot.pm:5957)
+   M /trunk/src/lib/SQLSource.pm
+   M /trunk/src/lib/Scenario.pm
+   M /trunk/src/lib/Task.pm
+   M /trunk/src/lib/Upgrade.pm
+   A /trunk/src/lib/WebAgent.pm (de /branches/sympa-autotools-cleanup/src/lib/WebAgent.pm:5957)
+   M /trunk/src/lib/admin.pm
+   M /trunk/src/lib/confdef.pm
+   M /trunk/src/lib/mail.pm
+   M /trunk/src/lib/report.pm
+   M /trunk/src/lib/time_utils.pm
+   M /trunk/src/lib/tools.pm
+   M /trunk/src/lib/tt2.pm
+   M /trunk/sympa.spec.in
+   A /trunk/t (de /branches/sympa-autotools-cleanup/t:5957)
+   R /trunk/t/Makefile.am (de /branches/sympa-autotools-cleanup/t/Makefile.am:5957)
+   R /trunk/t/modules.t (de /branches/sympa-autotools-cleanup/t/modules.t:5957)
+   M /trunk/wwsympa/Auth.pm
+   M /trunk/wwsympa/Bounce.pm
+   M /trunk/wwsympa/Challenge.pm
+   M /trunk/wwsympa/Marc/Search.pm
+   M /trunk/wwsympa/Marc.pm
+   M /trunk/wwsympa/SharedDocument.pm
+   M /trunk/wwsympa/SympaSession.pm
+   M /trunk/wwsympa/cookielib.pm
+   M /trunk/wwsympa/wwslib.pm
+Fision via : r6175, r5980
+
+[-feature] Reintegrating the latest changes in sympa-autotools-cleanup branch.
+
+
+------------------------------------------------------------------------
+r5957 | david.verdin | 2009-07-10 16:36:00 +0200 (ven 10 jui 2009) | 2 lignes
+Chemins modifiés :
+   M /branches/sympa-autotools-cleanup
+   M /branches/sympa-autotools-cleanup/ChangeLog
+   M /branches/sympa-autotools-cleanup/INSTALL
+   M /branches/sympa-autotools-cleanup/Makefile.am
+   M /branches/sympa-autotools-cleanup/NEWS
+   R /branches/sympa-autotools-cleanup/check_perl_modules.pl (de /trunk/check_perl_modules.pl:5956)
+   M /branches/sympa-autotools-cleanup/configure.ac
+   M /branches/sympa-autotools-cleanup/doc/sample/test/web_tt2/welcome.tt2
+   M /branches/sympa-autotools-cleanup/important_changes.pl
+   M /branches/sympa-autotools-cleanup/mail_tt2/d_install_shared.tt2
+   M /branches/sympa-autotools-cleanup/mail_tt2/moderate.tt2
+   M /branches/sympa-autotools-cleanup/mail_tt2/modindex.tt2
+   M /branches/sympa-autotools-cleanup/mail_tt2/user_notification.tt2
+   M /branches/sympa-autotools-cleanup/mail_tt2/welcome.tt2
+   M /branches/sympa-autotools-cleanup/po
+   M /branches/sympa-autotools-cleanup/po/de.po
+   M /branches/sympa-autotools-cleanup/po/es.po
+   M /branches/sympa-autotools-cleanup/po/fr.po
+   M /branches/sympa-autotools-cleanup/po/vi.po
+   M /branches/sympa-autotools-cleanup/po-wwsympa
+   M /branches/sympa-autotools-cleanup/po-wwsympa/fr.po
+   M /branches/sympa-autotools-cleanup/soap
+   M /branches/sympa-autotools-cleanup/src
+   M /branches/sympa-autotools-cleanup/src/bulk.pl.in
+   M /branches/sympa-autotools-cleanup/src/etc/mhonarc-ressources.tt2
+   M /branches/sympa-autotools-cleanup/src/etc/script/create_db.mysql
+   M /branches/sympa-autotools-cleanup/src/lib
+   M /branches/sympa-autotools-cleanup/src/lib/Bulk.pm
+   M /branches/sympa-autotools-cleanup/src/lib/Conf.pm
+   M /branches/sympa-autotools-cleanup/src/lib/List.pm
+   M /branches/sympa-autotools-cleanup/src/lib/Sympa
+   M /branches/sympa-autotools-cleanup/src/lib/Upgrade.pm
+   M /branches/sympa-autotools-cleanup/src/lib/confdef.pm
+   M /branches/sympa-autotools-cleanup/src/lib/mail.pm
+   M /branches/sympa-autotools-cleanup/src/lib/tools.pm
+   M /branches/sympa-autotools-cleanup/src/sympa_wizard.pl.in
+   A /branches/sympa-autotools-cleanup/sympa-6.0b.tar.gz (de /trunk/sympa-6.0b.tar.gz:5956)
+   D /branches/sympa-autotools-cleanup/sympa.spec
+   M /branches/sympa-autotools-cleanup/sympa.spec.in
+   M /branches/sympa-autotools-cleanup/web_tt2/Makefile.am
+   M /branches/sympa-autotools-cleanup/web_tt2/compose_mail.tt2
+   M /branches/sympa-autotools-cleanup/web_tt2/css.tt2
+   A /branches/sympa-autotools-cleanup/web_tt2/css_ie.tt2 (de /trunk/web_tt2/css_ie.tt2:5956)
+   M /branches/sympa-autotools-cleanup/web_tt2/footer.tt2
+   M /branches/sympa-autotools-cleanup/web_tt2/javascript.tt2
+   M /branches/sympa-autotools-cleanup/web_tt2/lists.tt2
+   M /branches/sympa-autotools-cleanup/web_tt2/loginbanner.tt2
+   M /branches/sympa-autotools-cleanup/web_tt2/main.tt2
+   M /branches/sympa-autotools-cleanup/web_tt2/title.tt2
+   M /branches/sympa-autotools-cleanup/wwsympa
+   M /branches/sympa-autotools-cleanup/wwsympa/icons
+   M /branches/sympa-autotools-cleanup/wwsympa/wwsympa.fcgi.in
+Fision via : r6175, r5980, r5958
+
+[-change] Reporting latest changes from trunk to autotools-cleanup.
+
+------------------------------------------------------------------------
+r5874 | olivier.salaun | 2009-06-09 19:33:08 +0200 (mar 09 jun 2009) | 2 lignes
+Chemins modifiés :
+   M /trunk/Makefile.am
+   M /trunk/doc/man8/archived.pod
+   M /trunk/doc/man8/bounced.pod
+   M /trunk/sympa.spec
+   M /trunk/sympa.spec.in
+Fision via : r6175, r5980, r5958, r5957
+
+[-bug] fix references to sympa.conf and wwsympa.conf : located in confdir, not in sysconfdir
+
+------------------------------------------------------------------------
+r5873 | olivier.salaun | 2009-06-09 18:07:51 +0200 (mar 09 jun 2009) | 2 lignes
+Chemins modifiés :
+   A /branches/sympa-autotools-cleanup (de /trunk:5872)
+Fision via : r6175, r5980, r5958
+
+[change] Sync Of Guillaume's branch with trunk
+
+------------------------------------------------------------------------
+r5968 | rousse | 2009-07-16 22:57:38 +0200 (jeu 16 jui 2009) | 1 ligne
+Chemins modifiés :
+   M /branches/sympa-autotools-cleanup/sympa.spec.in
+Fision via : r6175
+
+[bug] fix configure invocation, and some file paths
+------------------------------------------------------------------------
+r5965 | david.verdin | 2009-07-13 11:01:07 +0200 (lun 13 jui 2009) | 2 lignes
+Chemins modifiés :
+   A /branches/sympa-autotools-cleanup (de /branches/sympa-autotools-cleanup:5957)
+Fision via : r6175
+
+[-svn] Recreating Guillaume's branch to the state it was just after a resynchronization with the trunk.
+
+------------------------------------------------------------------------
+r5957 | david.verdin | 2009-07-10 16:36:00 +0200 (ven 10 jui 2009) | 2 lignes
+Chemins modifiés :
+   M /branches/sympa-autotools-cleanup
+   M /branches/sympa-autotools-cleanup/ChangeLog
+   M /branches/sympa-autotools-cleanup/INSTALL
+   M /branches/sympa-autotools-cleanup/Makefile.am
+   M /branches/sympa-autotools-cleanup/NEWS
+   R /branches/sympa-autotools-cleanup/check_perl_modules.pl (de /trunk/check_perl_modules.pl:5956)
+   M /branches/sympa-autotools-cleanup/configure.ac
+   M /branches/sympa-autotools-cleanup/doc/sample/test/web_tt2/welcome.tt2
+   M /branches/sympa-autotools-cleanup/important_changes.pl
+   M /branches/sympa-autotools-cleanup/mail_tt2/d_install_shared.tt2
+   M /branches/sympa-autotools-cleanup/mail_tt2/moderate.tt2
+   M /branches/sympa-autotools-cleanup/mail_tt2/modindex.tt2
+   M /branches/sympa-autotools-cleanup/mail_tt2/user_notification.tt2
+   M /branches/sympa-autotools-cleanup/mail_tt2/welcome.tt2
+   M /branches/sympa-autotools-cleanup/po
+   M /branches/sympa-autotools-cleanup/po/de.po
+   M /branches/sympa-autotools-cleanup/po/es.po
+   M /branches/sympa-autotools-cleanup/po/fr.po
+   M /branches/sympa-autotools-cleanup/po/vi.po
+   M /branches/sympa-autotools-cleanup/po-wwsympa
+   M /branches/sympa-autotools-cleanup/po-wwsympa/fr.po
+   M /branches/sympa-autotools-cleanup/soap
+   M /branches/sympa-autotools-cleanup/src
+   M /branches/sympa-autotools-cleanup/src/bulk.pl.in
+   M /branches/sympa-autotools-cleanup/src/etc/mhonarc-ressources.tt2
+   M /branches/sympa-autotools-cleanup/src/etc/script/create_db.mysql
+   M /branches/sympa-autotools-cleanup/src/lib
+   M /branches/sympa-autotools-cleanup/src/lib/Bulk.pm
+   M /branches/sympa-autotools-cleanup/src/lib/Conf.pm
+   M /branches/sympa-autotools-cleanup/src/lib/List.pm
+   M /branches/sympa-autotools-cleanup/src/lib/Sympa
+   M /branches/sympa-autotools-cleanup/src/lib/Upgrade.pm
+   M /branches/sympa-autotools-cleanup/src/lib/confdef.pm
+   M /branches/sympa-autotools-cleanup/src/lib/mail.pm
+   M /branches/sympa-autotools-cleanup/src/lib/tools.pm
+   M /branches/sympa-autotools-cleanup/src/sympa_wizard.pl.in
+   A /branches/sympa-autotools-cleanup/sympa-6.0b.tar.gz (de /trunk/sympa-6.0b.tar.gz:5956)
+   D /branches/sympa-autotools-cleanup/sympa.spec
+   M /branches/sympa-autotools-cleanup/sympa.spec.in
+   M /branches/sympa-autotools-cleanup/web_tt2/Makefile.am
+   M /branches/sympa-autotools-cleanup/web_tt2/compose_mail.tt2
+   M /branches/sympa-autotools-cleanup/web_tt2/css.tt2
+   A /branches/sympa-autotools-cleanup/web_tt2/css_ie.tt2 (de /trunk/web_tt2/css_ie.tt2:5956)
+   M /branches/sympa-autotools-cleanup/web_tt2/footer.tt2
+   M /branches/sympa-autotools-cleanup/web_tt2/javascript.tt2
+   M /branches/sympa-autotools-cleanup/web_tt2/lists.tt2
+   M /branches/sympa-autotools-cleanup/web_tt2/loginbanner.tt2
+   M /branches/sympa-autotools-cleanup/web_tt2/main.tt2
+   M /branches/sympa-autotools-cleanup/web_tt2/title.tt2
+   M /branches/sympa-autotools-cleanup/wwsympa
+   M /branches/sympa-autotools-cleanup/wwsympa/icons
+   M /branches/sympa-autotools-cleanup/wwsympa/wwsympa.fcgi.in
+Fision via : r6175
+
+[-change] Reporting latest changes from trunk to autotools-cleanup.
+
+------------------------------------------------------------------------
+r5874 | olivier.salaun | 2009-06-09 19:33:08 +0200 (mar 09 jun 2009) | 2 lignes
+Chemins modifiés :
+   M /trunk/Makefile.am
+   M /trunk/doc/man8/archived.pod
+   M /trunk/doc/man8/bounced.pod
+   M /trunk/sympa.spec
+   M /trunk/sympa.spec.in
+Fision via : r6175, r5957
+
+[-bug] fix references to sympa.conf and wwsympa.conf : located in confdir, not in sysconfdir
+
+------------------------------------------------------------------------
+r5873 | olivier.salaun | 2009-06-09 18:07:51 +0200 (mar 09 jun 2009) | 2 lignes
+Chemins modifiés :
+   A /branches/sympa-autotools-cleanup (de /trunk:5872)
+Fision via : r6175
+
+[change] Sync Of Guillaume's branch with trunk
 
 ------------------------------------------------------------------------
 r6170 | david.verdin | 2009-09-03 17:35:06 +0200 (jeu 03 sep 2009) | 2 lignes
@@ -1607,6 +2536,14 @@ Chemins modifiés :
 
 [change][Submitted by M. Warkus] Lists for which no message was ever sent will display a user friendly message instead "January 1 1970".
 
+
+------------------------------------------------------------------------
+r6164 | david.verdin | 2009-09-03 11:49:29 +0200 (jeu 03 sep 2009) | 2 lignes
+Chemins modifiés :
+   M /trunk/web_tt2/get_inactive_lists.tt2
+Fision via : r6165
+
+[change][Submitted by M. Warkus] Lists for which no message was ever sent will display a user friendly message instead "January 1 1970".
 
 ------------------------------------------------------------------------
 r6148 | david.verdin | 2009-08-28 14:05:32 +0200 (ven 28 aoû 2009) | 2 lignes
@@ -2027,6 +2964,14 @@ Chemins modifiés :
 [-bug] [reported by Niklas Matthies] bindir instead of sampledir
 
 ------------------------------------------------------------------------
+r6053 | olivier.salaun | 2009-08-04 15:19:59 +0200 (mar 04 aoû 2009) | 2 lignes
+Chemins modifiés :
+   M /trunk/configure.ac
+Fision via : r6054
+
+[-bug] [reported by Niklas Matthies] bindir instead of sampledir
+
+------------------------------------------------------------------------
 r6052 | serge.aumont | 2009-08-04 08:38:41 +0200 (mar 04 aoû 2009) | 2 lignes
 Chemins modifiés :
    M /branches/sympa-6.0-branch/src/etc/script/sympa.in
@@ -2040,6 +2985,14 @@ Chemins modifiés :
    M /branches/sympa-6.0-branch/doc/sample/test/web_tt2/welcome.tt2
    M /branches/sympa-6.0-branch/src/etc/script/sympa.in
    M /branches/sympa-6.0-branch/sympa.spec.in
+
+[change] [proposed by Jpse-Marcio Martins] no more check the OSYTE, check if functions file exists instead
+
+------------------------------------------------------------------------
+r6050 | olivier.salaun | 2009-08-03 17:48:16 +0200 (lun 03 aoû 2009) | 2 lignes
+Chemins modifiés :
+   M /trunk/src/etc/script/sympa.in
+Fision via : r6051
 
 [change] [proposed by Jpse-Marcio Martins] no more check the OSYTE, check if functions file exists instead
 
@@ -2118,6 +3071,14 @@ Chemins modifiés :
 [svn] Updated SVN properties (merge and ignore).
 
 ------------------------------------------------------------------------
+r6026 | david.verdin | 2009-07-28 16:42:21 +0200 (mar 28 jui 2009) | 2 lignes
+Chemins modifiés :
+   M /trunk/src/lib/Conf.pm
+Fision via : r6035
+
+[bug][Submitted by M. Warkus, univ.Marburg] Inverted test caused the config not to be loaded.
+
+------------------------------------------------------------------------
 r6034 | david.verdin | 2009-07-30 10:37:32 +0200 (jeu 30 jui 2009) | 2 lignes
 Chemins modifiés :
    M /branches/sympa-6.0-branch/configure.ac
@@ -2185,6 +3146,16 @@ Chemins modifiés :
 [bug] Sympa doesn't complain anymore chen an optional paramater is missing in robot.conf.
 
 ------------------------------------------------------------------------
+r6022 | david.verdin | 2009-07-28 14:32:39 +0200 (mar 28 jui 2009) | 3 lignes
+Chemins modifiés :
+   M /trunk/src/lib/Conf.pm
+   M /trunk/src/lib/confdef.pm
+Fision via : r6023
+
+[bug] Now Sympa don't complain about optional robot parameters without definition in sympa;conf and wwsympa.conf. Sympa now stop because of required robot parameters without value (minimum a default).  
+
+
+------------------------------------------------------------------------
 r6021 | david.verdin | 2009-07-28 13:50:28 +0200 (mar 28 jui 2009) | 3 lignes
 Chemins modifiés :
    M /branches/sympa-6.0-branch
@@ -2204,6 +3175,14 @@ Chemins modifiés :
 
 [bug][submitted bu M. Deranek, slonko.net] A missing semi-colon made wizard.pl to fail installing correctly Cosntants.pm 
 on some systems.
+
+------------------------------------------------------------------------
+r6019 | olivier.salaun | 2009-07-28 11:30:31 +0200 (mar 28 jui 2009) | 2 lignes
+Chemins modifiés :
+   M /trunk/wwsympa/wwsympa.fcgi.in
+Fision via : r6020
+
+[bug] [reported by N.Matthies] Added notice when user preferences have been updated
 
 ------------------------------------------------------------------------
 r6017 | david.verdin | 2009-07-28 09:29:45 +0200 (mar 28 jui 2009) | 2 lignes
@@ -2254,6 +3233,14 @@ Chemins modifiés :
 [svn] Reporting the correction from revision 6005.
 
 ------------------------------------------------------------------------
+r6005 | david.verdin | 2009-07-23 17:40:10 +0200 (jeu 23 jui 2009) | 2 lignes
+Chemins modifiés :
+   M /trunk/src/bulk.pl.in
+Fision via : r6006
+
+[bug] bulk.pl now uses the "use strict" pragma. Some variables were not properly defined.
+
+------------------------------------------------------------------------
 r6004 | david.verdin | 2009-07-23 17:05:17 +0200 (jeu 23 jui 2009) | 2 lignes
 Chemins modifiés :
    M /branches/sympa-6.0-branch
@@ -2263,6 +3250,52 @@ Chemins modifiés :
    M /branches/sympa-6.0-branch/sympa.spec.in
 
 [svn] Some references to the 't' directory remained.
+
+------------------------------------------------------------------------
+r6003 | david.verdin | 2009-07-23 17:04:16 +0200 (jeu 23 jui 2009) | 2 lignes
+Chemins modifiés :
+   M /trunk
+   M /trunk/Makefile.am
+   M /trunk/configure.ac
+   M /trunk/doc/sample/test/web_tt2/welcome.tt2
+   M /trunk/sympa.spec.in
+Fision via : r6004
+
+[svn] Some references to the 't' directory remained.
+
+------------------------------------------------------------------------
+r6002 | david.verdin | 2009-07-23 17:03:19 +0200 (jeu 23 jui 2009) | 2 lignes
+Chemins modifiés :
+   M /branches/branche-julien/Makefile.am
+   M /branches/branche-julien/configure.ac
+Fision via : r6004, r6003
+
+[svn] Some references to the 't' directory remained.
+
+------------------------------------------------------------------------
+r6001 | david.verdin | 2009-07-23 16:54:54 +0200 (jeu 23 jui 2009) | 2 lignes
+Chemins modifiés :
+   A /branches/branche-julien (de /trunk:6000)
+Fision via : r6004, r6003
+
+[svn] creating new branch for Julien's summer of code!
+
+------------------------------------------------------------------------
+r6002 | david.verdin | 2009-07-23 17:03:19 +0200 (jeu 23 jui 2009) | 2 lignes
+Chemins modifiés :
+   M /branches/branche-julien/Makefile.am
+   M /branches/branche-julien/configure.ac
+Fision via : r6004
+
+[svn] Some references to the 't' directory remained.
+
+------------------------------------------------------------------------
+r6001 | david.verdin | 2009-07-23 16:54:54 +0200 (jeu 23 jui 2009) | 2 lignes
+Chemins modifiés :
+   A /branches/branche-julien (de /trunk:6000)
+Fision via : r6004
+
+[svn] creating new branch for Julien's summer of code!
 
 ------------------------------------------------------------------------
 r5993 | david.verdin | 2009-07-23 14:23:23 +0200 (jeu 23 jui 2009) | 2 lignes
@@ -2296,6 +3329,1049 @@ Chemins modifiés :
    M /trunk/sympa.spec.in
 
 [svn] Retrieving latest developments from Guillaume's branch.
+
+------------------------------------------------------------------------
+r5980 | david.verdin | 2009-07-22 15:28:29 +0200 (mer 22 jui 2009) | 2 lignes
+Chemins modifiés :
+   M /branches/sympa-autotools-cleanup
+   M /branches/sympa-autotools-cleanup/doc/man8
+   M /branches/sympa-autotools-cleanup/doc/sample/test/web_tt2/welcome.tt2
+   M /branches/sympa-autotools-cleanup/src/etc
+   M /branches/sympa-autotools-cleanup/src/etc/script
+   M /branches/sympa-autotools-cleanup/src/sympa_wizard.pl.in
+   M /branches/sympa-autotools-cleanup/sympa.spec.in
+   M /branches/sympa-autotools-cleanup/wwsympa/wwsympa.fcgi.in
+Fision via : r5981
+
+[svn] Retrieving latest modifications from the trunk.
+
+------------------------------------------------------------------------
+r5975 | david.verdin | 2009-07-21 15:30:49 +0200 (mar 21 jui 2009) | 2 lignes
+Chemins modifiés :
+   M /trunk/doc/man8
+   M /trunk/src/etc
+   M /trunk/src/etc/script
+Fision via : r5981, r5980
+
+[svn] Ignoring generated files.
+
+------------------------------------------------------------------------
+r5974 | david.verdin | 2009-07-21 15:15:50 +0200 (mar 21 jui 2009) | 2 lignes
+Chemins modifiés :
+   M /trunk/wwsympa/wwsympa.fcgi.in
+Fision via : r5981, r5980
+
+[-bug] Need to import Robot.pm now that it is in a dedicated directory.
+
+------------------------------------------------------------------------
+r5967 | david.verdin | 2009-07-16 18:21:05 +0200 (jeu 16 jui 2009) | 2 lignes
+Chemins modifiés :
+   M /trunk/src/lib/Sympa/Constants.pm.in
+Fision via : r5981, r5980
+
+[bug][Reported by N. Matthies] Typo in ARCDIR constant declaration.
+
+------------------------------------------------------------------------
+r5966 | david.verdin | 2009-07-13 11:30:07 +0200 (lun 13 jui 2009) | 2 lignes
+Chemins modifiés :
+   M /trunk/src/sympa_wizard.pl.in
+Fision via : r5981, r5980
+
+[bug][Reported by N. Matthies] Net::NetMask was not listed as a required module, though it is used by Scenario.pm.
+
+------------------------------------------------------------------------
+r5958 | david.verdin | 2009-07-10 16:44:46 +0200 (ven 10 jui 2009) | 3 lignes
+Chemins modifiés :
+   M /trunk
+   M /trunk/Makefile.am
+   M /trunk/configure.ac
+   M /trunk/doc/man8/Makefile.am
+   D /trunk/doc/man8/alias_manager.pod
+   A /trunk/doc/man8/alias_manager.pod.in (de /branches/sympa-autotools-cleanup/doc/man8/alias_manager.pod.in:5957)
+   D /trunk/doc/man8/archived.pod
+   A /trunk/doc/man8/archived.pod.in (de /branches/sympa-autotools-cleanup/doc/man8/archived.pod.in:5957)
+   D /trunk/doc/man8/bounced.pod
+   A /trunk/doc/man8/bounced.pod.in (de /branches/sympa-autotools-cleanup/doc/man8/bounced.pod.in:5957)
+   M /trunk/doc/sample/test/web_tt2/welcome.tt2
+   M /trunk/src/etc/Makefile.am
+   D /trunk/src/etc/list_aliases.tt2
+   A /trunk/src/etc/list_aliases.tt2.in (de /branches/sympa-autotools-cleanup/src/etc/list_aliases.tt2.in:5957)
+   M /trunk/src/etc/script/Makefile.am
+   D /trunk/src/etc/script/arc2webarc.pl
+   A /trunk/src/etc/script/arc2webarc.pl.in (de /branches/sympa-autotools-cleanup/src/etc/script/arc2webarc.pl.in:5957)
+   D /trunk/src/etc/script/crypt_passwd.pl
+   A /trunk/src/etc/script/crypt_passwd.pl.in (de /branches/sympa-autotools-cleanup/src/etc/script/crypt_passwd.pl.in:5957)
+   D /trunk/src/etc/script/init_comment.pl
+   A /trunk/src/etc/script/init_comment.pl.in (de /branches/sympa-autotools-cleanup/src/etc/script/init_comment.pl.in:5957)
+   D /trunk/src/etc/script/ldap_alias_manager.pl
+   A /trunk/src/etc/script/ldap_alias_manager.pl.in (de /branches/sympa-autotools-cleanup/src/etc/script/ldap_alias_manager.pl.in:5957)
+   D /trunk/src/etc/script/mod2html.pl
+   A /trunk/src/etc/script/mod2html.pl.in (de /branches/sympa-autotools-cleanup/src/etc/script/mod2html.pl.in:5957)
+   D /trunk/src/etc/script/mysql_alias_manager.pl
+   A /trunk/src/etc/script/mysql_alias_manager.pl.in (de /branches/sympa-autotools-cleanup/src/etc/script/mysql_alias_manager.pl.in:5957)
+   D /trunk/src/etc/script/p12topem.pl
+   A /trunk/src/etc/script/p12topem.pl.in (de /branches/sympa-autotools-cleanup/src/etc/script/p12topem.pl.in:5957)
+   D /trunk/src/etc/script/sympa
+   A /trunk/src/etc/script/sympa.in (de /branches/sympa-autotools-cleanup/src/etc/script/sympa.in:5957)
+   D /trunk/src/etc/script/testldap.pl
+   A /trunk/src/etc/script/testldap.pl.in (de /branches/sympa-autotools-cleanup/src/etc/script/testldap.pl.in:5957)
+   D /trunk/src/etc/script/testlogs.pl
+   A /trunk/src/etc/script/testlogs.pl.in (de /branches/sympa-autotools-cleanup/src/etc/script/testlogs.pl.in:5957)
+   D /trunk/src/etc/script/tpl2tt2.pl
+   A /trunk/src/etc/script/tpl2tt2.pl.in (de /branches/sympa-autotools-cleanup/src/etc/script/tpl2tt2.pl.in:5957)
+   M /trunk/src/lib/Archive.pm
+   M /trunk/src/lib/Bulk.pm
+   M /trunk/src/lib/CAS.pm
+   M /trunk/src/lib/Commands.pm
+   M /trunk/src/lib/Conf.pm
+   M /trunk/src/lib/Config_XML.pm
+   M /trunk/src/lib/Datasource.pm
+   M /trunk/src/lib/Family.pm
+   M /trunk/src/lib/Fetch.pm
+   A /trunk/src/lib/HTML (de /branches/sympa-autotools-cleanup/src/lib/HTML:5957)
+   R /trunk/src/lib/HTML/myFormatText.pm (de /branches/sympa-autotools-cleanup/src/lib/HTML/myFormatText.pm:5957)
+   M /trunk/src/lib/LDAPSource.pm
+   M /trunk/src/lib/Language.pm
+   M /trunk/src/lib/Ldap.pm
+   M /trunk/src/lib/List.pm
+   M /trunk/src/lib/Lock.pm
+   M /trunk/src/lib/Log.pm
+   M /trunk/src/lib/Makefile.am
+   M /trunk/src/lib/Message.pm
+   M /trunk/src/lib/PlainDigest.pm
+   A /trunk/src/lib/Robot.pm (de /branches/sympa-autotools-cleanup/src/lib/Robot.pm:5957)
+   M /trunk/src/lib/SQLSource.pm
+   M /trunk/src/lib/Scenario.pm
+   M /trunk/src/lib/Task.pm
+   M /trunk/src/lib/Upgrade.pm
+   A /trunk/src/lib/WebAgent.pm (de /branches/sympa-autotools-cleanup/src/lib/WebAgent.pm:5957)
+   M /trunk/src/lib/admin.pm
+   M /trunk/src/lib/confdef.pm
+   M /trunk/src/lib/mail.pm
+   M /trunk/src/lib/report.pm
+   M /trunk/src/lib/time_utils.pm
+   M /trunk/src/lib/tools.pm
+   M /trunk/src/lib/tt2.pm
+   M /trunk/sympa.spec.in
+   A /trunk/t (de /branches/sympa-autotools-cleanup/t:5957)
+   R /trunk/t/Makefile.am (de /branches/sympa-autotools-cleanup/t/Makefile.am:5957)
+   R /trunk/t/modules.t (de /branches/sympa-autotools-cleanup/t/modules.t:5957)
+   M /trunk/wwsympa/Auth.pm
+   M /trunk/wwsympa/Bounce.pm
+   M /trunk/wwsympa/Challenge.pm
+   M /trunk/wwsympa/Marc/Search.pm
+   M /trunk/wwsympa/Marc.pm
+   M /trunk/wwsympa/SharedDocument.pm
+   M /trunk/wwsympa/SympaSession.pm
+   M /trunk/wwsympa/cookielib.pm
+   M /trunk/wwsympa/wwslib.pm
+Fision via : r5981, r5980
+
+[-feature] Reintegrating the latest changes in sympa-autotools-cleanup branch.
+
+
+------------------------------------------------------------------------
+r5957 | david.verdin | 2009-07-10 16:36:00 +0200 (ven 10 jui 2009) | 2 lignes
+Chemins modifiés :
+   M /branches/sympa-autotools-cleanup
+   M /branches/sympa-autotools-cleanup/ChangeLog
+   M /branches/sympa-autotools-cleanup/INSTALL
+   M /branches/sympa-autotools-cleanup/Makefile.am
+   M /branches/sympa-autotools-cleanup/NEWS
+   R /branches/sympa-autotools-cleanup/check_perl_modules.pl (de /trunk/check_perl_modules.pl:5956)
+   M /branches/sympa-autotools-cleanup/configure.ac
+   M /branches/sympa-autotools-cleanup/doc/sample/test/web_tt2/welcome.tt2
+   M /branches/sympa-autotools-cleanup/important_changes.pl
+   M /branches/sympa-autotools-cleanup/mail_tt2/d_install_shared.tt2
+   M /branches/sympa-autotools-cleanup/mail_tt2/moderate.tt2
+   M /branches/sympa-autotools-cleanup/mail_tt2/modindex.tt2
+   M /branches/sympa-autotools-cleanup/mail_tt2/user_notification.tt2
+   M /branches/sympa-autotools-cleanup/mail_tt2/welcome.tt2
+   M /branches/sympa-autotools-cleanup/po
+   M /branches/sympa-autotools-cleanup/po/de.po
+   M /branches/sympa-autotools-cleanup/po/es.po
+   M /branches/sympa-autotools-cleanup/po/fr.po
+   M /branches/sympa-autotools-cleanup/po/vi.po
+   M /branches/sympa-autotools-cleanup/po-wwsympa
+   M /branches/sympa-autotools-cleanup/po-wwsympa/fr.po
+   M /branches/sympa-autotools-cleanup/soap
+   M /branches/sympa-autotools-cleanup/src
+   M /branches/sympa-autotools-cleanup/src/bulk.pl.in
+   M /branches/sympa-autotools-cleanup/src/etc/mhonarc-ressources.tt2
+   M /branches/sympa-autotools-cleanup/src/etc/script/create_db.mysql
+   M /branches/sympa-autotools-cleanup/src/lib
+   M /branches/sympa-autotools-cleanup/src/lib/Bulk.pm
+   M /branches/sympa-autotools-cleanup/src/lib/Conf.pm
+   M /branches/sympa-autotools-cleanup/src/lib/List.pm
+   M /branches/sympa-autotools-cleanup/src/lib/Sympa
+   M /branches/sympa-autotools-cleanup/src/lib/Upgrade.pm
+   M /branches/sympa-autotools-cleanup/src/lib/confdef.pm
+   M /branches/sympa-autotools-cleanup/src/lib/mail.pm
+   M /branches/sympa-autotools-cleanup/src/lib/tools.pm
+   M /branches/sympa-autotools-cleanup/src/sympa_wizard.pl.in
+   A /branches/sympa-autotools-cleanup/sympa-6.0b.tar.gz (de /trunk/sympa-6.0b.tar.gz:5956)
+   D /branches/sympa-autotools-cleanup/sympa.spec
+   M /branches/sympa-autotools-cleanup/sympa.spec.in
+   M /branches/sympa-autotools-cleanup/web_tt2/Makefile.am
+   M /branches/sympa-autotools-cleanup/web_tt2/compose_mail.tt2
+   M /branches/sympa-autotools-cleanup/web_tt2/css.tt2
+   A /branches/sympa-autotools-cleanup/web_tt2/css_ie.tt2 (de /trunk/web_tt2/css_ie.tt2:5956)
+   M /branches/sympa-autotools-cleanup/web_tt2/footer.tt2
+   M /branches/sympa-autotools-cleanup/web_tt2/javascript.tt2
+   M /branches/sympa-autotools-cleanup/web_tt2/lists.tt2
+   M /branches/sympa-autotools-cleanup/web_tt2/loginbanner.tt2
+   M /branches/sympa-autotools-cleanup/web_tt2/main.tt2
+   M /branches/sympa-autotools-cleanup/web_tt2/title.tt2
+   M /branches/sympa-autotools-cleanup/wwsympa
+   M /branches/sympa-autotools-cleanup/wwsympa/icons
+   M /branches/sympa-autotools-cleanup/wwsympa/wwsympa.fcgi.in
+Fision via : r5981, r5980, r5958
+
+[-change] Reporting latest changes from trunk to autotools-cleanup.
+
+------------------------------------------------------------------------
+r5956 | lumineau | 2009-07-10 10:10:56 +0200 (ven 10 jui 2009) | 3 lignes
+Chemins modifiés :
+   M /trunk/src/etc/mhonarc-ressources.tt2
+   M /trunk/web_tt2/css.tt2
+   M /trunk/web_tt2/lists.tt2
+   M /trunk/web_tt2/main.tt2
+Fision via : r5981, r5980, r5958, r5957
+
+[-change] css changes for archives and list of lists, top.png path fixed
+
+
+------------------------------------------------------------------------
+r5929 | david.verdin | 2009-07-01 11:15:26 +0200 (mer 01 jui 2009) | 2 lignes
+Chemins modifiés :
+   M /trunk/Makefile.am
+Fision via : r5981, r5980, r5958, r5957
+
+[bug][Reported by P. Maes, univ. Louvain] chown user.group doesn't work under Solaris. Making two separate calls to chown user then chgrp group instead.
+
+------------------------------------------------------------------------
+r5928 | david.verdin | 2009-07-01 09:30:57 +0200 (mer 01 jui 2009) | 2 lignes
+Chemins modifiés :
+   M /trunk/src/lib/Upgrade.pm
+Fision via : r5981, r5980, r5958, r5957
+
+[bug][Reported by A. Suter, crox.net] "0" character was not allowed in md5 encoded passwords. Changed regular expression to allow it.
+
+------------------------------------------------------------------------
+r5927 | david.verdin | 2009-07-01 09:28:41 +0200 (mer 01 jui 2009) | 2 lignes
+Chemins modifiés :
+   M /trunk
+Fision via : r5981, r5980, r5958, r5957
+
+[-change] Ignoring sympa.spec (generated file).
+
+------------------------------------------------------------------------
+r5926 | david.verdin | 2009-07-01 09:17:53 +0200 (mer 01 jui 2009) | 2 lignes
+Chemins modifiés :
+   D /trunk/sympa.spec
+Fision via : r5981, r5980, r5958, r5957
+
+[-bug][Reported by G. Rousse, INRIA] sympa.spec is a generated file. Removing it from the subversion repository.
+
+------------------------------------------------------------------------
+r5925 | david.verdin | 2009-07-01 09:01:06 +0200 (mer 01 jui 2009) | 2 lignes
+Chemins modifiés :
+   M /trunk/doc/man8/Makefile.am
+   M /trunk/src/etc/Makefile.am
+   M /trunk/src/etc/script/Makefile.am
+Fision via : r5981, r5980, r5958, r5957
+
+[bug][Reported by P. Maes, univ. Louvain] The Sun command sed doesn't support the option "-i". Removing this option.
+
+------------------------------------------------------------------------
+r5924 | olivier.salaun | 2009-06-30 17:59:49 +0200 (mar 30 jun 2009) | 2 lignes
+Chemins modifiés :
+   M /trunk/wwsympa/wwsympa.fcgi.in
+Fision via : r5981, r5980, r5958, r5957
+
+[-bug] while performing multiple add, the target email was not logged in db_logs
+
+------------------------------------------------------------------------
+r5923 | david.verdin | 2009-06-30 12:39:24 +0200 (mar 30 jun 2009) | 2 lignes
+Chemins modifiés :
+   M /trunk/wwsympa/wwsympa.fcgi.in
+Fision via : r5981, r5980, r5958, r5957
+
+[bug][Reported by Wen Si] Single value and single instance list parameters value could not be removed using the web interface. fixed by *not* going directly to the next parameter in do_edit_list when such a parameter is found empty.
+
+------------------------------------------------------------------------
+r5922 | david.verdin | 2009-06-30 11:16:06 +0200 (mar 30 jun 2009) | 3 lignes
+Chemins modifiés :
+   M /trunk/src/lib/Conf.pm
+Fision via : r5981, r5980, r5958, r5957
+
+[bug][Reported by M. Warkus, univ. Marburg] When using the default robot, wwsympa.conf parameters were not taken into account, only the default values set in confdef.pm. The value could only be set in sympa.conf. This was due to the load_robots function which initialized the config with default values and sympa.conf values and then lokked for customized values for virtual hosts only. Fixed by replacing default values by their equivalent in wwsympa.conf when found.
+
+
+------------------------------------------------------------------------
+r5921 | david.verdin | 2009-06-29 09:31:27 +0200 (lun 29 jun 2009) | 2 lignes
+Chemins modifiés :
+   M /trunk/src/lib/Bulk.pm
+Fision via : r5981, r5980, r5958, r5957
+
+[bug][Reported by W. Si] An update statement ended with an "order by" clause, which is forbidden in Oracle. Actually, there is no valid reason to have an "order by" clause in such a query, so it was removed.
+
+------------------------------------------------------------------------
+r5920 | david.verdin | 2009-06-29 08:42:28 +0200 (lun 29 jun 2009) | 2 lignes
+Chemins modifiés :
+   M /trunk/src/etc/script/create_db.mysql
+Fision via : r5981, r5980, r5958, r5957
+
+[bug][Submitted by D. Ayre, univ. E. Carr, Vancouver] A missing comma in create_db.mysql made the creation script fail with an SQL error.
+
+------------------------------------------------------------------------
+r5919 | david.verdin | 2009-06-26 15:03:33 +0200 (ven 26 jun 2009) | 2 lignes
+Chemins modifiés :
+   M /trunk
+Fision via : r5981, r5980, r5958, r5957
+
+[-change] Changing svn:ignore property.
+
+------------------------------------------------------------------------
+r5918 | david.verdin | 2009-06-25 13:53:24 +0200 (jeu 25 jun 2009) | 2 lignes
+Chemins modifiés :
+   M /trunk/po/de.po
+Fision via : r5981, r5980, r5958, r5957
+
+[change][Submitted by M. Warkus, univ. Marburg] Updated German translation.
+
+------------------------------------------------------------------------
+r5917 | david.verdin | 2009-06-23 15:24:45 +0200 (mar 23 jun 2009) | 2 lignes
+Chemins modifiés :
+   M /trunk/mail_tt2/d_install_shared.tt2
+   M /trunk/mail_tt2/moderate.tt2
+   M /trunk/mail_tt2/modindex.tt2
+   M /trunk/mail_tt2/user_notification.tt2
+   M /trunk/mail_tt2/welcome.tt2
+   M /trunk/po/fr.po
+Fision via : r5981, r5980, r5958, r5957
+
+[change][Submitted by P. Maes, univ. Louvain] Removing URL from internationalization messages. Leavinf them had no sense, as an URL won't be translated, and any change in the layout (such as putting the URL in another line) would break the translation key. Fixed by putting the URL out of the i18n string.
+
+------------------------------------------------------------------------
+r5915 | david.verdin | 2009-06-22 15:48:47 +0200 (lun 22 jun 2009) | 2 lignes
+Chemins modifiés :
+   M /trunk/mail_tt2/moderate.tt2
+Fision via : r5981, r5980, r5958, r5957
+
+[change][Submitted by P. Maes, univ. Louvain] The one time ticket URL was incluided in the internationalization message. It had no sense, as an URL won't be translated, and any change in the layout (such as putting the URL in another line) would break the translation key. Fixed by putting the URL out of the i18n string.
+
+------------------------------------------------------------------------
+r5914 | david.verdin | 2009-06-19 16:21:25 +0200 (ven 19 jun 2009) | 2 lignes
+Chemins modifiés :
+   M /trunk/src/sympa_wizard.pl.in
+Fision via : r5981, r5980, r5958, r5957
+
+[bug][Reported by P. Maes, univ. Louvain] Net::Netmask CPAN module was not chacked by the Sympa wizard, though it is required.
+
+------------------------------------------------------------------------
+r5913 | david.verdin | 2009-06-19 16:13:36 +0200 (ven 19 jun 2009) | 2 lignes
+Chemins modifiés :
+   M /trunk/src/lib/List.pm
+   M /trunk/src/lib/confdef.pm
+Fision via : r5981, r5980, r5958, r5957
+
+[change] Now ttl and distribution_ttl list parameters take their defaults in default_ttl and default_distribution_ttl sympa.conf parameters.
+
+------------------------------------------------------------------------
+r5912 | olivier.salaun | 2009-06-18 17:55:55 +0200 (jeu 18 jun 2009) | 2 lignes
+Chemins modifiés :
+   M /trunk/src/lib/confdef.pm
+Fision via : r5981, r5980, r5958, r5957
+
+[change] define longer period for default values of cleandelay_xx parameters
+
+------------------------------------------------------------------------
+r5911 | olivier.salaun | 2009-06-18 17:15:36 +0200 (jeu 18 jun 2009) | 2 lignes
+Chemins modifiés :
+   M /trunk/web_tt2/compose_mail.tt2
+Fision via : r5981, r5980, r5958, r5957
+
+[feature] add instruction on the compose_mail page to suggest that users can also use their favourite mail client
+
+------------------------------------------------------------------------
+r5910 | david.verdin | 2009-06-18 17:01:09 +0200 (jeu 18 jun 2009) | 2 lignes
+Chemins modifiés :
+   M /trunk
+   M /trunk/po
+   M /trunk/po-wwsympa
+   M /trunk/soap
+   M /trunk/src
+   M /trunk/src/lib
+   M /trunk/src/lib/Sympa
+   M /trunk/wwsympa
+   M /trunk/wwsympa/icons
+Fision via : r5981, r5980, r5958, r5957
+
+[-change] Ignoring new files generated during the build process.
+
+------------------------------------------------------------------------
+r5909 | david.verdin | 2009-06-18 16:55:55 +0200 (jeu 18 jun 2009) | 2 lignes
+Chemins modifiés :
+   M /trunk/src/bulk.pl.in
+Fision via : r5981, r5980, r5958, r5957
+
+[-change] Improving bulk's log messages.
+
+------------------------------------------------------------------------
+r5908 | olivier.salaun | 2009-06-17 09:30:21 +0200 (mer 17 jun 2009) | 2 lignes
+Chemins modifiés :
+   M /trunk/src/lib/tools.pm
+Fision via : r5981, r5980, r5958, r5957
+
+[-change] adding comments about remove_pid()
+
+------------------------------------------------------------------------
+r5906 | david.verdin | 2009-06-16 16:54:34 +0200 (mar 16 jun 2009) | 2 lignes
+Chemins modifiés :
+   M /trunk/sympa-6.0b.tar.gz
+Fision via : r5981, r5980, r5958, r5957
+
+[-change] Updating the tar.gz for Sympa 6.0b.
+
+------------------------------------------------------------------------
+r5903 | david.verdin | 2009-06-16 16:26:15 +0200 (mar 16 jun 2009) | 2 lignes
+Chemins modifiés :
+   M /trunk/sympa-6.0b.tar.gz
+Fision via : r5981, r5980, r5958, r5957
+
+[-feature] Committing the tar.gz for version 6.0b.
+
+------------------------------------------------------------------------
+r5902 | david.verdin | 2009-06-16 16:24:50 +0200 (mar 16 jun 2009) | 2 lignes
+Chemins modifiés :
+   M /trunk/web_tt2/title.tt2
+Fision via : r5981, r5980, r5958, r5957
+
+[-bug] Non variable-based definition of the path to the static content directory. REplaced hard-coded path by [% icons_url %] variable.
+
+------------------------------------------------------------------------
+r5901 | david.verdin | 2009-06-16 15:26:50 +0200 (mar 16 jun 2009) | 2 lignes
+Chemins modifiés :
+   M /trunk/web_tt2/Makefile.am
+Fision via : r5981, r5980, r5958, r5957
+
+[-bug] css_ie.tt2 file was not installed, making wwsympa.fcgi to fail starting.
+
+------------------------------------------------------------------------
+r5900 | david.verdin | 2009-06-16 14:39:21 +0200 (mar 16 jun 2009) | 2 lignes
+Chemins modifiés :
+   M /trunk/Makefile.am
+   M /trunk/important_changes.pl
+Fision via : r5981, r5980, r5958, r5957
+
+[bug] The "important_changes.pl" script was not launched. also took into account the fact that the version was previously stored in Version.pm
+
+------------------------------------------------------------------------
+r5899 | david.verdin | 2009-06-16 14:36:21 +0200 (mar 16 jun 2009) | 2 lignes
+Chemins modifiés :
+   M /trunk/wwsympa/wwsympa.fcgi.in
+Fision via : r5981, r5980, r5958, r5957
+
+[bug] The VERSION constant was not used in wwsympa.fcgi.
+
+------------------------------------------------------------------------
+r5898 | david.verdin | 2009-06-16 14:30:15 +0200 (mar 16 jun 2009) | 2 lignes
+Chemins modifiés :
+   M /trunk/po-wwsympa/fr.po
+Fision via : r5981, r5980, r5958, r5957
+
+[-change] Updated translations.
+
+------------------------------------------------------------------------
+r5897 | david.verdin | 2009-06-16 14:29:22 +0200 (mar 16 jun 2009) | 2 lignes
+Chemins modifiés :
+   M /trunk/po/es.po
+   M /trunk/po/fr.po
+   M /trunk/po/vi.po
+Fision via : r5981, r5980, r5958, r5957
+
+[-change] Updated translations.
+
+------------------------------------------------------------------------
+r5896 | david.verdin | 2009-06-16 13:27:32 +0200 (mar 16 jun 2009) | 2 lignes
+Chemins modifiés :
+   M /trunk/NEWS
+Fision via : r5981, r5980, r5958, r5957
+
+[-change] Updating the NEWS file.
+
+------------------------------------------------------------------------
+r5895 | olivier.salaun | 2009-06-12 16:59:31 +0200 (ven 12 jun 2009) | 2 lignes
+Chemins modifiés :
+   M /trunk/src/lib/confdef.pm
+   M /trunk/sympa-6.0b.tar.gz
+Fision via : r5981, r5980, r5958, r5957
+
+[-bug] using staticdir instead of expldir/static_content as default
+
+------------------------------------------------------------------------
+r5894 | olivier.salaun | 2009-06-11 17:17:24 +0200 (jeu 11 jun 2009) | 2 lignes
+Chemins modifiés :
+   D /trunk/sympa-6.0a.14.tar.gz
+   A /trunk/sympa-6.0b.tar.gz
+   M /trunk/sympa.spec
+Fision via : r5981, r5980, r5958, r5957
+
+[change] preparinf 6.0b
+
+------------------------------------------------------------------------
+r5893 | lumineau | 2009-06-11 17:14:05 +0200 (jeu 11 jun 2009) | 3 lignes
+Chemins modifiés :
+   M /trunk/web_tt2/javascript.tt2
+Fision via : r5981, r5980, r5958, r5957
+
+[-change] function choosecolornumber in javascript.tt2
+
+
+------------------------------------------------------------------------
+r5892 | olivier.salaun | 2009-06-11 17:10:43 +0200 (jeu 11 jun 2009) | 2 lignes
+Chemins modifiés :
+   M /trunk/NEWS
+Fision via : r5981, r5980, r5958, r5957
+
+[-change] NEWS file presentation
+
+------------------------------------------------------------------------
+r5891 | olivier.salaun | 2009-06-11 16:57:58 +0200 (jeu 11 jun 2009) | 2 lignes
+Chemins modifiés :
+   M /trunk/NEWS
+Fision via : r5981, r5980, r5958, r5957
+
+[-change] sorted bug fixes
+
+------------------------------------------------------------------------
+r5890 | olivier.salaun | 2009-06-11 16:10:29 +0200 (jeu 11 jun 2009) | 2 lignes
+Chemins modifiés :
+   M /trunk/NEWS
+Fision via : r5981, r5980, r5958, r5957
+
+[-change] updated NEWS
+
+------------------------------------------------------------------------
+r5889 | serge.aumont | 2009-06-11 12:01:02 +0200 (jeu 11 jun 2009) | 3 lignes
+Chemins modifiés :
+   M /trunk/NEWS
+Fision via : r5981, r5980, r5958, r5957
+
+[-change] preparing 6.0a
+
+
+------------------------------------------------------------------------
+r5888 | olivier.salaun | 2009-06-11 08:57:09 +0200 (jeu 11 jun 2009) | 2 lignes
+Chemins modifiés :
+   M /trunk/NEWS
+   M /trunk/configure.ac
+Fision via : r5981, r5980, r5958, r5957
+
+[feature] preparing Sympa 6.0b
+
+------------------------------------------------------------------------
+r5887 | serge.aumont | 2009-06-10 18:04:28 +0200 (mer 10 jun 2009) | 2 lignes
+Chemins modifiés :
+   M /trunk/check_perl_modules.pl
+   M /trunk/src/sympa_wizard.pl.in
+Fision via : r5981, r5980, r5958, r5957
+
+[-bug] ciphersaber is not required anymore but optionnal
+
+------------------------------------------------------------------------
+r5886 | lumineau | 2009-06-10 17:23:13 +0200 (mer 10 jun 2009) | 3 lignes
+Chemins modifiés :
+   M /trunk/web_tt2/main.tt2
+Fision via : r5981, r5980, r5958, r5957
+
+[-change] little correction in main.tt2
+
+
+------------------------------------------------------------------------
+r5885 | olivier.salaun | 2009-06-10 16:29:29 +0200 (mer 10 jun 2009) | 2 lignes
+Chemins modifiés :
+   M /trunk/ChangeLog
+   M /trunk/NEWS
+   A /trunk/check_perl_modules.pl
+Fision via : r5981, r5980, r5958, r5957
+
+[-change] restore check-perl-modules.pl because sympa-wizard.pl --check is still buggy
+
+------------------------------------------------------------------------
+r5884 | lumineau | 2009-06-10 16:10:58 +0200 (mer 10 jun 2009) | 2 lignes
+Chemins modifiés :
+   M /trunk/web_tt2/css.tt2
+   M /trunk/web_tt2/css_ie.tt2
+   M /trunk/web_tt2/loginbanner.tt2
+Fision via : r5981, r5980, r5958, r5957
+
+[-change] css and loginbanner.tt2 modifications 
+
+------------------------------------------------------------------------
+r5883 | olivier.salaun | 2009-06-10 15:35:19 +0200 (mer 10 jun 2009) | 2 lignes
+Chemins modifiés :
+   M /trunk/INSTALL
+Fision via : r5981, r5980, r5958, r5957
+
+[change] new dependency regarding gettext-devel
+
+------------------------------------------------------------------------
+r5882 | olivier.salaun | 2009-06-10 15:15:32 +0200 (mer 10 jun 2009) | 2 lignes
+Chemins modifiés :
+   M /trunk/sympa-6.0a.14.tar.gz
+Fision via : r5981, r5980, r5958, r5957
+
+[change] updating the tar.gz
+
+------------------------------------------------------------------------
+r5881 | olivier.salaun | 2009-06-10 14:45:04 +0200 (mer 10 jun 2009) | 3 lignes
+Chemins modifiés :
+   D /trunk/check_perl_modules.pl
+   M /trunk/src/sympa_wizard.pl.in
+Fision via : r5981, r5980, r5958, r5957
+
+[change] [Submitted by G.Rousse, INRIA] check_perl_modules.pl now replaced with sympa_wizard.pl --check
+All recent changes in check_perl_modules.pl have been reported in sympa_wizard.pl
+
+------------------------------------------------------------------------
+r5880 | lumineau | 2009-06-10 13:44:47 +0200 (mer 10 jun 2009) | 2 lignes
+Chemins modifiés :
+   M /trunk/web_tt2/css.tt2
+   A /trunk/web_tt2/css_ie.tt2
+   M /trunk/web_tt2/footer.tt2
+   M /trunk/web_tt2/main.tt2
+Fision via : r5981, r5980, r5958, r5957
+
+[-change] css modifications for different internet explorer versions compatibilities
+
+------------------------------------------------------------------------
+r5879 | olivier.salaun | 2009-06-10 13:41:20 +0200 (mer 10 jun 2009) | 2 lignes
+Chemins modifiés :
+   M /trunk/src/lib/confdef.pm
+Fision via : r5981, r5980, r5958, r5957
+
+[-bug] bounce_path value was incorrect with and additional '/bounce' token
+
+------------------------------------------------------------------------
+r5878 | serge.aumont | 2009-06-10 13:31:32 +0200 (mer 10 jun 2009) | 2 lignes
+Chemins modifiés :
+   M /trunk/doc/Makefile.am
+Fision via : r5981, r5980, r5958, r5957
+
+[bug] - bad commit repair
+
+------------------------------------------------------------------------
+r5877 | serge.aumont | 2009-06-10 12:12:01 +0200 (mer 10 jun 2009) | 2 lignes
+Chemins modifiés :
+   M /trunk/check_perl_modules.pl
+Fision via : r5981, r5980, r5958, r5957
+
+[bug] remove Net::LDAP::Server as a required module, this will come soon but not now ! 
+
+------------------------------------------------------------------------
+r5876 | serge.aumont | 2009-06-10 12:03:23 +0200 (mer 10 jun 2009) | 3 lignes
+Chemins modifiés :
+   M /trunk/check_perl_modules.pl
+   M /trunk/doc/Makefile.am
+   M /trunk/src/lib/confdef.pm
+   M /trunk/src/sympa_wizard.pl.in
+Fision via : r5981, r5980, r5958, r5957
+
+[bug] various undefine constant and problems with the wizard
+
+
+------------------------------------------------------------------------
+r5875 | olivier.salaun | 2009-06-09 21:27:08 +0200 (mar 09 jun 2009) | 5 lignes
+Chemins modifiés :
+   M /trunk/src/lib/mail.pm
+Fision via : r5981, r5980, r5958, r5957
+
+[bug][Submitted by M. Adams, Cypress Interactive] Message stored in msg/ spool by sympa_soap_s
+erver or wwsympa.fcgi might have escaped characters (%xx) altered. The printf call has been re
+placed with print.
+Bug was introduced in revision 5488
+
+------------------------------------------------------------------------
+r5874 | olivier.salaun | 2009-06-09 19:33:08 +0200 (mar 09 jun 2009) | 2 lignes
+Chemins modifiés :
+   M /trunk/Makefile.am
+   M /trunk/doc/man8/archived.pod
+   M /trunk/doc/man8/bounced.pod
+   M /trunk/sympa.spec
+   M /trunk/sympa.spec.in
+Fision via : r5981, r5980, r5958, r5957
+
+[-bug] fix references to sympa.conf and wwsympa.conf : located in confdir, not in sysconfdir
+
+------------------------------------------------------------------------
+r5955 | rousse | 2009-07-02 21:59:07 +0200 (jeu 02 jui 2009) | 1 ligne
+Chemins modifiés :
+   M /branches/sympa-autotools-cleanup/src/lib/Archive.pm
+   M /branches/sympa-autotools-cleanup/src/lib/Language.pm
+   M /branches/sympa-autotools-cleanup/src/lib/List.pm
+   M /branches/sympa-autotools-cleanup/src/lib/Log.pm
+   M /branches/sympa-autotools-cleanup/src/lib/Upgrade.pm
+   M /branches/sympa-autotools-cleanup/src/lib/mail.pm
+   M /branches/sympa-autotools-cleanup/src/lib/tools.pm
+Fision via : r5981, r5980, r5958
+
+[change] never import POSIX symbols globally, only import needed functions
+------------------------------------------------------------------------
+r5954 | rousse | 2009-07-02 21:45:37 +0200 (jeu 02 jui 2009) | 1 ligne
+Chemins modifiés :
+   D /branches/sympa-autotools-cleanup/sympa-6.0a.14.tar.gz
+Fision via : r5981, r5980, r5958
+
+[bug] ooops, why did this get added ?
+------------------------------------------------------------------------
+r5953 | rousse | 2009-07-02 21:45:01 +0200 (jeu 02 jui 2009) | 1 ligne
+Chemins modifiés :
+   M /branches/sympa-autotools-cleanup/Makefile.am
+   M /branches/sympa-autotools-cleanup/configure.ac
+   A /branches/sympa-autotools-cleanup/src/etc/list_aliases.tt2.in (de /branches/sympa-autotools-cleanup/src/etc/list_aliases.tt2:5921)
+   M /branches/sympa-autotools-cleanup/sympa-6.0a.14.tar.gz
+   A /branches/sympa-autotools-cleanup/t
+   A /branches/sympa-autotools-cleanup/t/Makefile.am
+   A /branches/sympa-autotools-cleanup/t/modules.t
+Fision via : r5981, r5980, r5958
+
+[change] first tests introduction: check all perl modules load correctly
+------------------------------------------------------------------------
+r5952 | rousse | 2009-07-02 21:43:08 +0200 (jeu 02 jui 2009) | 1 ligne
+Chemins modifiés :
+   D /branches/sympa-autotools-cleanup/src/etc/list_aliases.tt2
+Fision via : r5981, r5980, r5958
+
+[change] now a generated file
+------------------------------------------------------------------------
+r5951 | rousse | 2009-07-02 21:41:55 +0200 (jeu 02 jui 2009) | 1 ligne
+Chemins modifiés :
+   M /branches/sympa-autotools-cleanup/src/etc/Makefile.am
+Fision via : r5981, r5980, r5958
+
+[change] switch to local substitution model, before installation
+------------------------------------------------------------------------
+r5950 | rousse | 2009-07-02 21:40:45 +0200 (jeu 02 jui 2009) | 1 ligne
+Chemins modifiés :
+   M /branches/sympa-autotools-cleanup/src/lib/List.pm
+Fision via : r5981, r5980, r5958
+
+[bug] load tools module at runtime
+------------------------------------------------------------------------
+r5949 | rousse | 2009-07-02 21:40:05 +0200 (jeu 02 jui 2009) | 1 ligne
+Chemins modifiés :
+   M /branches/sympa-autotools-cleanup/wwsympa/Challenge.pm
+Fision via : r5981, r5980, r5958
+
+[bug] fix typo
+------------------------------------------------------------------------
+r5948 | rousse | 2009-07-02 21:39:43 +0200 (jeu 02 jui 2009) | 1 ligne
+Chemins modifiés :
+   M /branches/sympa-autotools-cleanup/wwsympa/Challenge.pm
+Fision via : r5981, r5980, r5958
+
+[change] drop var strictures, way too many undefined variables (FIXME!)
+------------------------------------------------------------------------
+r5947 | rousse | 2009-07-02 21:35:01 +0200 (jeu 02 jui 2009) | 1 ligne
+Chemins modifiés :
+   M /branches/sympa-autotools-cleanup/wwsympa/Challenge.pm
+Fision via : r5981, r5980, r5958
+
+[bug] fix typo
+------------------------------------------------------------------------
+r5946 | rousse | 2009-07-02 21:33:07 +0200 (jeu 02 jui 2009) | 1 ligne
+Chemins modifiés :
+   M /branches/sympa-autotools-cleanup/wwsympa/Auth.pm
+   M /branches/sympa-autotools-cleanup/wwsympa/Bounce.pm
+   M /branches/sympa-autotools-cleanup/wwsympa/Challenge.pm
+   M /branches/sympa-autotools-cleanup/wwsympa/Marc/Search.pm
+   M /branches/sympa-autotools-cleanup/wwsympa/Marc.pm
+   M /branches/sympa-autotools-cleanup/wwsympa/SharedDocument.pm
+   M /branches/sympa-autotools-cleanup/wwsympa/SympaSession.pm
+   M /branches/sympa-autotools-cleanup/wwsympa/cookielib.pm
+   M /branches/sympa-autotools-cleanup/wwsympa/wwslib.pm
+Fision via : r5981, r5980, r5958
+
+[change] same cleanup as src/lib directory
+------------------------------------------------------------------------
+r5945 | rousse | 2009-07-02 21:23:57 +0200 (jeu 02 jui 2009) | 1 ligne
+Chemins modifiés :
+   M /branches/sympa-autotools-cleanup/src/lib/Config_XML.pm
+   M /branches/sympa-autotools-cleanup/src/lib/Family.pm
+   M /branches/sympa-autotools-cleanup/src/lib/Scenario.pm
+   M /branches/sympa-autotools-cleanup/src/lib/admin.pm
+Fision via : r5981, r5980, r5958
+
+[change] consistant syntax for ensuring a true value is returned when loading module
+------------------------------------------------------------------------
+r5944 | rousse | 2009-07-02 21:20:35 +0200 (jeu 02 jui 2009) | 1 ligne
+Chemins modifiés :
+   M /branches/sympa-autotools-cleanup/src/lib/Bulk.pm
+   M /branches/sympa-autotools-cleanup/src/lib/List.pm
+Fision via : r5981, r5980, r5958
+
+[change] always load Encode at compile time, it's a core module
+------------------------------------------------------------------------
+r5943 | rousse | 2009-07-02 21:19:35 +0200 (jeu 02 jui 2009) | 1 ligne
+Chemins modifiés :
+   M /branches/sympa-autotools-cleanup/src/lib/Bulk.pm
+   M /branches/sympa-autotools-cleanup/src/lib/List.pm
+Fision via : r5981, r5980, r5958
+
+[change] Fetch is a sympa module, no need to delay loading at runtime
+------------------------------------------------------------------------
+r5942 | rousse | 2009-07-02 21:17:48 +0200 (jeu 02 jui 2009) | 6 lignes
+Chemins modifiés :
+   M /branches/sympa-autotools-cleanup/src/lib/Archive.pm
+   M /branches/sympa-autotools-cleanup/src/lib/Bulk.pm
+   M /branches/sympa-autotools-cleanup/src/lib/CAS.pm
+   M /branches/sympa-autotools-cleanup/src/lib/Commands.pm
+   M /branches/sympa-autotools-cleanup/src/lib/Conf.pm
+   M /branches/sympa-autotools-cleanup/src/lib/Config_XML.pm
+   M /branches/sympa-autotools-cleanup/src/lib/Family.pm
+   M /branches/sympa-autotools-cleanup/src/lib/LDAPSource.pm
+   M /branches/sympa-autotools-cleanup/src/lib/Language.pm
+   M /branches/sympa-autotools-cleanup/src/lib/Ldap.pm
+   M /branches/sympa-autotools-cleanup/src/lib/List.pm
+   M /branches/sympa-autotools-cleanup/src/lib/Lock.pm
+   M /branches/sympa-autotools-cleanup/src/lib/Message.pm
+   M /branches/sympa-autotools-cleanup/src/lib/PlainDigest.pm
+   M /branches/sympa-autotools-cleanup/src/lib/SQLSource.pm
+   M /branches/sympa-autotools-cleanup/src/lib/Scenario.pm
+   M /branches/sympa-autotools-cleanup/src/lib/Task.pm
+   M /branches/sympa-autotools-cleanup/src/lib/admin.pm
+   M /branches/sympa-autotools-cleanup/src/lib/confdef.pm
+   M /branches/sympa-autotools-cleanup/src/lib/mail.pm
+   M /branches/sympa-autotools-cleanup/src/lib/report.pm
+   M /branches/sympa-autotools-cleanup/src/lib/tools.pm
+   M /branches/sympa-autotools-cleanup/src/lib/tt2.pm
+Fision via : r5981, r5980, r5958
+
+[change] consistant package header:
+- pragma
+- generic perl modules
+- sympa perl modules
+- package variables
+
+------------------------------------------------------------------------
+r5941 | rousse | 2009-07-02 21:10:31 +0200 (jeu 02 jui 2009) | 1 ligne
+Chemins modifiés :
+   M /branches/sympa-autotools-cleanup/src/lib/confdef.pm
+Fision via : r5981, r5980, r5958
+
+[change] no need for Exporter when export list is empty
+------------------------------------------------------------------------
+r5940 | rousse | 2009-07-02 21:01:17 +0200 (jeu 02 jui 2009) | 1 ligne
+Chemins modifiés :
+   M /branches/sympa-autotools-cleanup/src/lib/Makefile.am
+Fision via : r5981, r5980, r5958
+
+[change] add new modules
+------------------------------------------------------------------------
+r5939 | rousse | 2009-07-02 20:59:53 +0200 (jeu 02 jui 2009) | 1 ligne
+Chemins modifiés :
+   M /branches/sympa-autotools-cleanup/src/lib/Fetch.pm
+   A /branches/sympa-autotools-cleanup/src/lib/HTML
+   A /branches/sympa-autotools-cleanup/src/lib/HTML/myFormatText.pm
+   M /branches/sympa-autotools-cleanup/src/lib/List.pm
+   M /branches/sympa-autotools-cleanup/src/lib/PlainDigest.pm
+   A /branches/sympa-autotools-cleanup/src/lib/Robot.pm
+   A /branches/sympa-autotools-cleanup/src/lib/WebAgent.pm
+Fision via : r5981, r5980, r5958
+
+[change] one unique package per module
+------------------------------------------------------------------------
+r5938 | rousse | 2009-07-02 20:54:35 +0200 (jeu 02 jui 2009) | 1 ligne
+Chemins modifiés :
+   M /branches/sympa-autotools-cleanup/src/lib/Commands.pm
+Fision via : r5981, r5980, r5958
+
+[change] use consistant syntax for ISA and EXPORT
+------------------------------------------------------------------------
+r5937 | rousse | 2009-07-02 20:52:58 +0200 (jeu 02 jui 2009) | 1 ligne
+Chemins modifiés :
+   M /branches/sympa-autotools-cleanup/src/lib/Conf.pm
+   M /branches/sympa-autotools-cleanup/src/lib/LDAPSource.pm
+   M /branches/sympa-autotools-cleanup/src/lib/Language.pm
+   M /branches/sympa-autotools-cleanup/src/lib/Ldap.pm
+   M /branches/sympa-autotools-cleanup/src/lib/List.pm
+   M /branches/sympa-autotools-cleanup/src/lib/Log.pm
+   M /branches/sympa-autotools-cleanup/src/lib/SQLSource.pm
+   M /branches/sympa-autotools-cleanup/src/lib/mail.pm
+Fision via : r5981, r5980, r5958
+
+[change] import Exporter at compile time
+------------------------------------------------------------------------
+r5936 | rousse | 2009-07-02 20:49:45 +0200 (jeu 02 jui 2009) | 1 ligne
+Chemins modifiés :
+   M /branches/sympa-autotools-cleanup/src/lib/CAS.pm
+   M /branches/sympa-autotools-cleanup/src/lib/Commands.pm
+   M /branches/sympa-autotools-cleanup/src/lib/Language.pm
+   M /branches/sympa-autotools-cleanup/src/lib/List.pm
+   M /branches/sympa-autotools-cleanup/src/lib/PlainDigest.pm
+   M /branches/sympa-autotools-cleanup/src/lib/mail.pm
+Fision via : r5981, r5980, r5958
+
+[change] ISA, EXPORT & co are package variables, not lexical ones
+------------------------------------------------------------------------
+r5935 | rousse | 2009-07-02 20:47:01 +0200 (jeu 02 jui 2009) | 1 ligne
+Chemins modifiés :
+   M /branches/sympa-autotools-cleanup/src/lib/Bulk.pm
+Fision via : r5981, r5980, r5958
+
+[change] no need for Exporter when export list is empty
+------------------------------------------------------------------------
+r5934 | rousse | 2009-07-02 20:43:53 +0200 (jeu 02 jui 2009) | 1 ligne
+Chemins modifiés :
+   M /branches/sympa-autotools-cleanup/src/lib/Datasource.pm
+   M /branches/sympa-autotools-cleanup/src/lib/Fetch.pm
+   M /branches/sympa-autotools-cleanup/src/lib/Lock.pm
+   M /branches/sympa-autotools-cleanup/src/lib/Message.pm
+   M /branches/sympa-autotools-cleanup/src/lib/Scenario.pm
+   M /branches/sympa-autotools-cleanup/src/lib/Task.pm
+   M /branches/sympa-autotools-cleanup/src/lib/Upgrade.pm
+   M /branches/sympa-autotools-cleanup/src/lib/time_utils.pm
+   M /branches/sympa-autotools-cleanup/src/lib/tools.pm
+   M /branches/sympa-autotools-cleanup/src/lib/tt2.pm
+Fision via : r5981, r5980, r5958
+
+[change] no need for Exporter when export list is empty
+------------------------------------------------------------------------
+r5933 | rousse | 2009-07-01 23:05:19 +0200 (mer 01 jui 2009) | 1 ligne
+Chemins modifiés :
+   M /branches/sympa-autotools-cleanup/src/etc/script/Makefile.am
+   D /branches/sympa-autotools-cleanup/src/etc/script/arc2webarc.pl
+   A /branches/sympa-autotools-cleanup/src/etc/script/arc2webarc.pl.in (de /branches/sympa-autotools-cleanup/src/etc/script/arc2webarc.pl:5921)
+   D /branches/sympa-autotools-cleanup/src/etc/script/crypt_passwd.pl
+   A /branches/sympa-autotools-cleanup/src/etc/script/crypt_passwd.pl.in (de /branches/sympa-autotools-cleanup/src/etc/script/crypt_passwd.pl:5921)
+   D /branches/sympa-autotools-cleanup/src/etc/script/init_comment.pl
+   A /branches/sympa-autotools-cleanup/src/etc/script/init_comment.pl.in (de /branches/sympa-autotools-cleanup/src/etc/script/init_comment.pl:5921)
+   D /branches/sympa-autotools-cleanup/src/etc/script/ldap_alias_manager.pl
+   A /branches/sympa-autotools-cleanup/src/etc/script/ldap_alias_manager.pl.in (de /branches/sympa-autotools-cleanup/src/etc/script/ldap_alias_manager.pl:5921)
+   D /branches/sympa-autotools-cleanup/src/etc/script/mod2html.pl
+   A /branches/sympa-autotools-cleanup/src/etc/script/mod2html.pl.in (de /branches/sympa-autotools-cleanup/src/etc/script/mod2html.pl:5921)
+   D /branches/sympa-autotools-cleanup/src/etc/script/mysql_alias_manager.pl
+   A /branches/sympa-autotools-cleanup/src/etc/script/mysql_alias_manager.pl.in (de /branches/sympa-autotools-cleanup/src/etc/script/mysql_alias_manager.pl:5921)
+   D /branches/sympa-autotools-cleanup/src/etc/script/p12topem.pl
+   A /branches/sympa-autotools-cleanup/src/etc/script/p12topem.pl.in (de /branches/sympa-autotools-cleanup/src/etc/script/p12topem.pl:5921)
+   D /branches/sympa-autotools-cleanup/src/etc/script/sympa
+   A /branches/sympa-autotools-cleanup/src/etc/script/sympa.in (de /branches/sympa-autotools-cleanup/src/etc/script/sympa:5921)
+   D /branches/sympa-autotools-cleanup/src/etc/script/testldap.pl
+   A /branches/sympa-autotools-cleanup/src/etc/script/testldap.pl.in (de /branches/sympa-autotools-cleanup/src/etc/script/testldap.pl:5921)
+   D /branches/sympa-autotools-cleanup/src/etc/script/testlogs.pl
+   A /branches/sympa-autotools-cleanup/src/etc/script/testlogs.pl.in (de /branches/sympa-autotools-cleanup/src/etc/script/testlogs.pl:5921)
+   D /branches/sympa-autotools-cleanup/src/etc/script/tpl2tt2.pl
+   A /branches/sympa-autotools-cleanup/src/etc/script/tpl2tt2.pl.in (de /branches/sympa-autotools-cleanup/src/etc/script/tpl2tt2.pl:5921)
+Fision via : r5981, r5980, r5958
+
+[change] switch to a local substitution model, before installation
+------------------------------------------------------------------------
+r5932 | rousse | 2009-07-01 22:34:07 +0200 (mer 01 jui 2009) | 1 ligne
+Chemins modifiés :
+   M /branches/sympa-autotools-cleanup/doc/man8/alias_manager.pod.in
+Fision via : r5981, r5980, r5958
+
+[bug] use wwsympa configuration file substitution target directly
+------------------------------------------------------------------------
+r5931 | rousse | 2009-07-01 22:33:43 +0200 (mer 01 jui 2009) | 1 ligne
+Chemins modifiés :
+   M /branches/sympa-autotools-cleanup/doc/man8/Makefile.am
+Fision via : r5981, r5980, r5958
+
+[bug] drop useless substitutions rules, add missing ones
+------------------------------------------------------------------------
+r5930 | rousse | 2009-07-01 22:29:00 +0200 (mer 01 jui 2009) | 1 ligne
+Chemins modifiés :
+   M /branches/sympa-autotools-cleanup/doc/man8/Makefile.am
+   D /branches/sympa-autotools-cleanup/doc/man8/alias_manager.pod
+   A /branches/sympa-autotools-cleanup/doc/man8/alias_manager.pod.in (de /branches/sympa-autotools-cleanup/doc/man8/alias_manager.pod:5929)
+   D /branches/sympa-autotools-cleanup/doc/man8/archived.pod
+   A /branches/sympa-autotools-cleanup/doc/man8/archived.pod.in (de /branches/sympa-autotools-cleanup/doc/man8/archived.pod:5929)
+   D /branches/sympa-autotools-cleanup/doc/man8/bounced.pod
+   A /branches/sympa-autotools-cleanup/doc/man8/bounced.pod.in (de /branches/sympa-autotools-cleanup/doc/man8/bounced.pod:5929)
+Fision via : r5981, r5980, r5958
+
+[change] switch to local substitution model, prior installation
+------------------------------------------------------------------------
+r5873 | olivier.salaun | 2009-06-09 18:07:51 +0200 (mar 09 jun 2009) | 2 lignes
+Chemins modifiés :
+   A /branches/sympa-autotools-cleanup (de /trunk:5872)
+Fision via : r5981, r5980, r5958
+
+[change] Sync Of Guillaume's branch with trunk
+
+------------------------------------------------------------------------
+r5979 | david.verdin | 2009-07-22 15:09:06 +0200 (mer 22 jui 2009) | 2 lignes
+Chemins modifiés :
+   M /branches/sympa-autotools-cleanup/Makefile.am
+Fision via : r5981
+
+[bug][Reported by N. Matthies] The static content directory didn't have the good ownership (sympa.sympa). this was due to this directory being created and the ownership never changed after.
+
+------------------------------------------------------------------------
+r5978 | david.verdin | 2009-07-22 15:07:47 +0200 (mer 22 jui 2009) | 2 lignes
+Chemins modifiés :
+   M /branches/sympa-autotools-cleanup/configure.ac
+Fision via : r5981
+
+[bug] localedir configure variable was not initialized when performing a fresh install of Sympa.
+
+------------------------------------------------------------------------
+r5977 | david.verdin | 2009-07-22 15:05:56 +0200 (mer 22 jui 2009) | 2 lignes
+Chemins modifiés :
+   M /branches/sympa-autotools-cleanup/src/lib/Sympa/Constants.pm.in
+Fision via : r5981
+
+[bug][Reported by N. Matthies] A typo in the ARCDIR constant name led to badly defined archives directory name.
+
+------------------------------------------------------------------------
+r5976 | david.verdin | 2009-07-22 15:04:46 +0200 (mer 22 jui 2009) | 2 lignes
+Chemins modifiés :
+   M /branches/sympa-autotools-cleanup/src/lib/confdef.pm
+Fision via : r5981
+
+[bug][Reported by N. Matthies] The default value of most of the 'queue*' parameters being set to 'undef', these parameters were initialized with an empty default value in sympa.conf, making sympa crash at startup.
+
+------------------------------------------------------------------------
+r5971 | rousse | 2009-07-16 23:14:46 +0200 (jeu 16 jui 2009) | 1 ligne
+Chemins modifiés :
+   M /branches/sympa-autotools-cleanup/Makefile.am
+Fision via : r5981
+
+[bug] in case of FHS installation, sysconfdir is a shared path, don't install stuff directly there
+------------------------------------------------------------------------
+r5970 | rousse | 2009-07-16 23:10:34 +0200 (jeu 16 jui 2009) | 1 ligne
+Chemins modifiés :
+   M /branches/sympa-autotools-cleanup/Makefile.am
+Fision via : r5981
+
+[change] don't run the wizard automatically at installation time, it break non-interactive installation (package building, testing, etc...), but display informations for the use
+------------------------------------------------------------------------
+r5969 | rousse | 2009-07-16 22:59:15 +0200 (jeu 16 jui 2009) | 4 lignes
+Chemins modifiés :
+   M /branches/sympa-autotools-cleanup/configure.ac
+Fision via : r5981
+
+[bug] fix some paths for FHS-compliant installation:
+- no need to redeclare standard localedir variable
+- localstatedir is a shared path, nothing can be installed directly there
+
+------------------------------------------------------------------------
+r5968 | rousse | 2009-07-16 22:57:38 +0200 (jeu 16 jui 2009) | 1 ligne
+Chemins modifiés :
+   M /branches/sympa-autotools-cleanup/sympa.spec.in
+Fision via : r5981
+
+[bug] fix configure invocation, and some file paths
+------------------------------------------------------------------------
+r5965 | david.verdin | 2009-07-13 11:01:07 +0200 (lun 13 jui 2009) | 2 lignes
+Chemins modifiés :
+   A /branches/sympa-autotools-cleanup (de /branches/sympa-autotools-cleanup:5957)
+Fision via : r5981
+
+[-svn] Recreating Guillaume's branch to the state it was just after a resynchronization with the trunk.
 
 ------------------------------------------------------------------------
 r5975 | david.verdin | 2009-07-21 15:30:49 +0200 (mar 21 jui 2009) | 2 lignes
@@ -2416,6 +4492,838 @@ Chemins modifiés :
 
 [-feature] Reintegrating the latest changes in sympa-autotools-cleanup branch.
 
+
+------------------------------------------------------------------------
+r5957 | david.verdin | 2009-07-10 16:36:00 +0200 (ven 10 jui 2009) | 2 lignes
+Chemins modifiés :
+   M /branches/sympa-autotools-cleanup
+   M /branches/sympa-autotools-cleanup/ChangeLog
+   M /branches/sympa-autotools-cleanup/INSTALL
+   M /branches/sympa-autotools-cleanup/Makefile.am
+   M /branches/sympa-autotools-cleanup/NEWS
+   R /branches/sympa-autotools-cleanup/check_perl_modules.pl (de /trunk/check_perl_modules.pl:5956)
+   M /branches/sympa-autotools-cleanup/configure.ac
+   M /branches/sympa-autotools-cleanup/doc/sample/test/web_tt2/welcome.tt2
+   M /branches/sympa-autotools-cleanup/important_changes.pl
+   M /branches/sympa-autotools-cleanup/mail_tt2/d_install_shared.tt2
+   M /branches/sympa-autotools-cleanup/mail_tt2/moderate.tt2
+   M /branches/sympa-autotools-cleanup/mail_tt2/modindex.tt2
+   M /branches/sympa-autotools-cleanup/mail_tt2/user_notification.tt2
+   M /branches/sympa-autotools-cleanup/mail_tt2/welcome.tt2
+   M /branches/sympa-autotools-cleanup/po
+   M /branches/sympa-autotools-cleanup/po/de.po
+   M /branches/sympa-autotools-cleanup/po/es.po
+   M /branches/sympa-autotools-cleanup/po/fr.po
+   M /branches/sympa-autotools-cleanup/po/vi.po
+   M /branches/sympa-autotools-cleanup/po-wwsympa
+   M /branches/sympa-autotools-cleanup/po-wwsympa/fr.po
+   M /branches/sympa-autotools-cleanup/soap
+   M /branches/sympa-autotools-cleanup/src
+   M /branches/sympa-autotools-cleanup/src/bulk.pl.in
+   M /branches/sympa-autotools-cleanup/src/etc/mhonarc-ressources.tt2
+   M /branches/sympa-autotools-cleanup/src/etc/script/create_db.mysql
+   M /branches/sympa-autotools-cleanup/src/lib
+   M /branches/sympa-autotools-cleanup/src/lib/Bulk.pm
+   M /branches/sympa-autotools-cleanup/src/lib/Conf.pm
+   M /branches/sympa-autotools-cleanup/src/lib/List.pm
+   M /branches/sympa-autotools-cleanup/src/lib/Sympa
+   M /branches/sympa-autotools-cleanup/src/lib/Upgrade.pm
+   M /branches/sympa-autotools-cleanup/src/lib/confdef.pm
+   M /branches/sympa-autotools-cleanup/src/lib/mail.pm
+   M /branches/sympa-autotools-cleanup/src/lib/tools.pm
+   M /branches/sympa-autotools-cleanup/src/sympa_wizard.pl.in
+   A /branches/sympa-autotools-cleanup/sympa-6.0b.tar.gz (de /trunk/sympa-6.0b.tar.gz:5956)
+   D /branches/sympa-autotools-cleanup/sympa.spec
+   M /branches/sympa-autotools-cleanup/sympa.spec.in
+   M /branches/sympa-autotools-cleanup/web_tt2/Makefile.am
+   M /branches/sympa-autotools-cleanup/web_tt2/compose_mail.tt2
+   M /branches/sympa-autotools-cleanup/web_tt2/css.tt2
+   A /branches/sympa-autotools-cleanup/web_tt2/css_ie.tt2 (de /trunk/web_tt2/css_ie.tt2:5956)
+   M /branches/sympa-autotools-cleanup/web_tt2/footer.tt2
+   M /branches/sympa-autotools-cleanup/web_tt2/javascript.tt2
+   M /branches/sympa-autotools-cleanup/web_tt2/lists.tt2
+   M /branches/sympa-autotools-cleanup/web_tt2/loginbanner.tt2
+   M /branches/sympa-autotools-cleanup/web_tt2/main.tt2
+   M /branches/sympa-autotools-cleanup/web_tt2/title.tt2
+   M /branches/sympa-autotools-cleanup/wwsympa
+   M /branches/sympa-autotools-cleanup/wwsympa/icons
+   M /branches/sympa-autotools-cleanup/wwsympa/wwsympa.fcgi.in
+Fision via : r5958
+
+[-change] Reporting latest changes from trunk to autotools-cleanup.
+
+------------------------------------------------------------------------
+r5956 | lumineau | 2009-07-10 10:10:56 +0200 (ven 10 jui 2009) | 3 lignes
+Chemins modifiés :
+   M /trunk/src/etc/mhonarc-ressources.tt2
+   M /trunk/web_tt2/css.tt2
+   M /trunk/web_tt2/lists.tt2
+   M /trunk/web_tt2/main.tt2
+Fision via : r5958, r5957
+
+[-change] css changes for archives and list of lists, top.png path fixed
+
+
+------------------------------------------------------------------------
+r5929 | david.verdin | 2009-07-01 11:15:26 +0200 (mer 01 jui 2009) | 2 lignes
+Chemins modifiés :
+   M /trunk/Makefile.am
+Fision via : r5958, r5957
+
+[bug][Reported by P. Maes, univ. Louvain] chown user.group doesn't work under Solaris. Making two separate calls to chown user then chgrp group instead.
+
+------------------------------------------------------------------------
+r5928 | david.verdin | 2009-07-01 09:30:57 +0200 (mer 01 jui 2009) | 2 lignes
+Chemins modifiés :
+   M /trunk/src/lib/Upgrade.pm
+Fision via : r5958, r5957
+
+[bug][Reported by A. Suter, crox.net] "0" character was not allowed in md5 encoded passwords. Changed regular expression to allow it.
+
+------------------------------------------------------------------------
+r5927 | david.verdin | 2009-07-01 09:28:41 +0200 (mer 01 jui 2009) | 2 lignes
+Chemins modifiés :
+   M /trunk
+Fision via : r5958, r5957
+
+[-change] Ignoring sympa.spec (generated file).
+
+------------------------------------------------------------------------
+r5926 | david.verdin | 2009-07-01 09:17:53 +0200 (mer 01 jui 2009) | 2 lignes
+Chemins modifiés :
+   D /trunk/sympa.spec
+Fision via : r5958, r5957
+
+[-bug][Reported by G. Rousse, INRIA] sympa.spec is a generated file. Removing it from the subversion repository.
+
+------------------------------------------------------------------------
+r5925 | david.verdin | 2009-07-01 09:01:06 +0200 (mer 01 jui 2009) | 2 lignes
+Chemins modifiés :
+   M /trunk/doc/man8/Makefile.am
+   M /trunk/src/etc/Makefile.am
+   M /trunk/src/etc/script/Makefile.am
+Fision via : r5958, r5957
+
+[bug][Reported by P. Maes, univ. Louvain] The Sun command sed doesn't support the option "-i". Removing this option.
+
+------------------------------------------------------------------------
+r5924 | olivier.salaun | 2009-06-30 17:59:49 +0200 (mar 30 jun 2009) | 2 lignes
+Chemins modifiés :
+   M /trunk/wwsympa/wwsympa.fcgi.in
+Fision via : r5958, r5957
+
+[-bug] while performing multiple add, the target email was not logged in db_logs
+
+------------------------------------------------------------------------
+r5923 | david.verdin | 2009-06-30 12:39:24 +0200 (mar 30 jun 2009) | 2 lignes
+Chemins modifiés :
+   M /trunk/wwsympa/wwsympa.fcgi.in
+Fision via : r5958, r5957
+
+[bug][Reported by Wen Si] Single value and single instance list parameters value could not be removed using the web interface. fixed by *not* going directly to the next parameter in do_edit_list when such a parameter is found empty.
+
+------------------------------------------------------------------------
+r5922 | david.verdin | 2009-06-30 11:16:06 +0200 (mar 30 jun 2009) | 3 lignes
+Chemins modifiés :
+   M /trunk/src/lib/Conf.pm
+Fision via : r5958, r5957
+
+[bug][Reported by M. Warkus, univ. Marburg] When using the default robot, wwsympa.conf parameters were not taken into account, only the default values set in confdef.pm. The value could only be set in sympa.conf. This was due to the load_robots function which initialized the config with default values and sympa.conf values and then lokked for customized values for virtual hosts only. Fixed by replacing default values by their equivalent in wwsympa.conf when found.
+
+
+------------------------------------------------------------------------
+r5921 | david.verdin | 2009-06-29 09:31:27 +0200 (lun 29 jun 2009) | 2 lignes
+Chemins modifiés :
+   M /trunk/src/lib/Bulk.pm
+Fision via : r5958, r5957
+
+[bug][Reported by W. Si] An update statement ended with an "order by" clause, which is forbidden in Oracle. Actually, there is no valid reason to have an "order by" clause in such a query, so it was removed.
+
+------------------------------------------------------------------------
+r5920 | david.verdin | 2009-06-29 08:42:28 +0200 (lun 29 jun 2009) | 2 lignes
+Chemins modifiés :
+   M /trunk/src/etc/script/create_db.mysql
+Fision via : r5958, r5957
+
+[bug][Submitted by D. Ayre, univ. E. Carr, Vancouver] A missing comma in create_db.mysql made the creation script fail with an SQL error.
+
+------------------------------------------------------------------------
+r5919 | david.verdin | 2009-06-26 15:03:33 +0200 (ven 26 jun 2009) | 2 lignes
+Chemins modifiés :
+   M /trunk
+Fision via : r5958, r5957
+
+[-change] Changing svn:ignore property.
+
+------------------------------------------------------------------------
+r5918 | david.verdin | 2009-06-25 13:53:24 +0200 (jeu 25 jun 2009) | 2 lignes
+Chemins modifiés :
+   M /trunk/po/de.po
+Fision via : r5958, r5957
+
+[change][Submitted by M. Warkus, univ. Marburg] Updated German translation.
+
+------------------------------------------------------------------------
+r5917 | david.verdin | 2009-06-23 15:24:45 +0200 (mar 23 jun 2009) | 2 lignes
+Chemins modifiés :
+   M /trunk/mail_tt2/d_install_shared.tt2
+   M /trunk/mail_tt2/moderate.tt2
+   M /trunk/mail_tt2/modindex.tt2
+   M /trunk/mail_tt2/user_notification.tt2
+   M /trunk/mail_tt2/welcome.tt2
+   M /trunk/po/fr.po
+Fision via : r5958, r5957
+
+[change][Submitted by P. Maes, univ. Louvain] Removing URL from internationalization messages. Leavinf them had no sense, as an URL won't be translated, and any change in the layout (such as putting the URL in another line) would break the translation key. Fixed by putting the URL out of the i18n string.
+
+------------------------------------------------------------------------
+r5915 | david.verdin | 2009-06-22 15:48:47 +0200 (lun 22 jun 2009) | 2 lignes
+Chemins modifiés :
+   M /trunk/mail_tt2/moderate.tt2
+Fision via : r5958, r5957
+
+[change][Submitted by P. Maes, univ. Louvain] The one time ticket URL was incluided in the internationalization message. It had no sense, as an URL won't be translated, and any change in the layout (such as putting the URL in another line) would break the translation key. Fixed by putting the URL out of the i18n string.
+
+------------------------------------------------------------------------
+r5914 | david.verdin | 2009-06-19 16:21:25 +0200 (ven 19 jun 2009) | 2 lignes
+Chemins modifiés :
+   M /trunk/src/sympa_wizard.pl.in
+Fision via : r5958, r5957
+
+[bug][Reported by P. Maes, univ. Louvain] Net::Netmask CPAN module was not chacked by the Sympa wizard, though it is required.
+
+------------------------------------------------------------------------
+r5913 | david.verdin | 2009-06-19 16:13:36 +0200 (ven 19 jun 2009) | 2 lignes
+Chemins modifiés :
+   M /trunk/src/lib/List.pm
+   M /trunk/src/lib/confdef.pm
+Fision via : r5958, r5957
+
+[change] Now ttl and distribution_ttl list parameters take their defaults in default_ttl and default_distribution_ttl sympa.conf parameters.
+
+------------------------------------------------------------------------
+r5912 | olivier.salaun | 2009-06-18 17:55:55 +0200 (jeu 18 jun 2009) | 2 lignes
+Chemins modifiés :
+   M /trunk/src/lib/confdef.pm
+Fision via : r5958, r5957
+
+[change] define longer period for default values of cleandelay_xx parameters
+
+------------------------------------------------------------------------
+r5911 | olivier.salaun | 2009-06-18 17:15:36 +0200 (jeu 18 jun 2009) | 2 lignes
+Chemins modifiés :
+   M /trunk/web_tt2/compose_mail.tt2
+Fision via : r5958, r5957
+
+[feature] add instruction on the compose_mail page to suggest that users can also use their favourite mail client
+
+------------------------------------------------------------------------
+r5910 | david.verdin | 2009-06-18 17:01:09 +0200 (jeu 18 jun 2009) | 2 lignes
+Chemins modifiés :
+   M /trunk
+   M /trunk/po
+   M /trunk/po-wwsympa
+   M /trunk/soap
+   M /trunk/src
+   M /trunk/src/lib
+   M /trunk/src/lib/Sympa
+   M /trunk/wwsympa
+   M /trunk/wwsympa/icons
+Fision via : r5958, r5957
+
+[-change] Ignoring new files generated during the build process.
+
+------------------------------------------------------------------------
+r5909 | david.verdin | 2009-06-18 16:55:55 +0200 (jeu 18 jun 2009) | 2 lignes
+Chemins modifiés :
+   M /trunk/src/bulk.pl.in
+Fision via : r5958, r5957
+
+[-change] Improving bulk's log messages.
+
+------------------------------------------------------------------------
+r5908 | olivier.salaun | 2009-06-17 09:30:21 +0200 (mer 17 jun 2009) | 2 lignes
+Chemins modifiés :
+   M /trunk/src/lib/tools.pm
+Fision via : r5958, r5957
+
+[-change] adding comments about remove_pid()
+
+------------------------------------------------------------------------
+r5906 | david.verdin | 2009-06-16 16:54:34 +0200 (mar 16 jun 2009) | 2 lignes
+Chemins modifiés :
+   M /trunk/sympa-6.0b.tar.gz
+Fision via : r5958, r5957
+
+[-change] Updating the tar.gz for Sympa 6.0b.
+
+------------------------------------------------------------------------
+r5903 | david.verdin | 2009-06-16 16:26:15 +0200 (mar 16 jun 2009) | 2 lignes
+Chemins modifiés :
+   M /trunk/sympa-6.0b.tar.gz
+Fision via : r5958, r5957
+
+[-feature] Committing the tar.gz for version 6.0b.
+
+------------------------------------------------------------------------
+r5902 | david.verdin | 2009-06-16 16:24:50 +0200 (mar 16 jun 2009) | 2 lignes
+Chemins modifiés :
+   M /trunk/web_tt2/title.tt2
+Fision via : r5958, r5957
+
+[-bug] Non variable-based definition of the path to the static content directory. REplaced hard-coded path by [% icons_url %] variable.
+
+------------------------------------------------------------------------
+r5901 | david.verdin | 2009-06-16 15:26:50 +0200 (mar 16 jun 2009) | 2 lignes
+Chemins modifiés :
+   M /trunk/web_tt2/Makefile.am
+Fision via : r5958, r5957
+
+[-bug] css_ie.tt2 file was not installed, making wwsympa.fcgi to fail starting.
+
+------------------------------------------------------------------------
+r5900 | david.verdin | 2009-06-16 14:39:21 +0200 (mar 16 jun 2009) | 2 lignes
+Chemins modifiés :
+   M /trunk/Makefile.am
+   M /trunk/important_changes.pl
+Fision via : r5958, r5957
+
+[bug] The "important_changes.pl" script was not launched. also took into account the fact that the version was previously stored in Version.pm
+
+------------------------------------------------------------------------
+r5899 | david.verdin | 2009-06-16 14:36:21 +0200 (mar 16 jun 2009) | 2 lignes
+Chemins modifiés :
+   M /trunk/wwsympa/wwsympa.fcgi.in
+Fision via : r5958, r5957
+
+[bug] The VERSION constant was not used in wwsympa.fcgi.
+
+------------------------------------------------------------------------
+r5898 | david.verdin | 2009-06-16 14:30:15 +0200 (mar 16 jun 2009) | 2 lignes
+Chemins modifiés :
+   M /trunk/po-wwsympa/fr.po
+Fision via : r5958, r5957
+
+[-change] Updated translations.
+
+------------------------------------------------------------------------
+r5897 | david.verdin | 2009-06-16 14:29:22 +0200 (mar 16 jun 2009) | 2 lignes
+Chemins modifiés :
+   M /trunk/po/es.po
+   M /trunk/po/fr.po
+   M /trunk/po/vi.po
+Fision via : r5958, r5957
+
+[-change] Updated translations.
+
+------------------------------------------------------------------------
+r5896 | david.verdin | 2009-06-16 13:27:32 +0200 (mar 16 jun 2009) | 2 lignes
+Chemins modifiés :
+   M /trunk/NEWS
+Fision via : r5958, r5957
+
+[-change] Updating the NEWS file.
+
+------------------------------------------------------------------------
+r5895 | olivier.salaun | 2009-06-12 16:59:31 +0200 (ven 12 jun 2009) | 2 lignes
+Chemins modifiés :
+   M /trunk/src/lib/confdef.pm
+   M /trunk/sympa-6.0b.tar.gz
+Fision via : r5958, r5957
+
+[-bug] using staticdir instead of expldir/static_content as default
+
+------------------------------------------------------------------------
+r5894 | olivier.salaun | 2009-06-11 17:17:24 +0200 (jeu 11 jun 2009) | 2 lignes
+Chemins modifiés :
+   D /trunk/sympa-6.0a.14.tar.gz
+   A /trunk/sympa-6.0b.tar.gz
+   M /trunk/sympa.spec
+Fision via : r5958, r5957
+
+[change] preparinf 6.0b
+
+------------------------------------------------------------------------
+r5893 | lumineau | 2009-06-11 17:14:05 +0200 (jeu 11 jun 2009) | 3 lignes
+Chemins modifiés :
+   M /trunk/web_tt2/javascript.tt2
+Fision via : r5958, r5957
+
+[-change] function choosecolornumber in javascript.tt2
+
+
+------------------------------------------------------------------------
+r5892 | olivier.salaun | 2009-06-11 17:10:43 +0200 (jeu 11 jun 2009) | 2 lignes
+Chemins modifiés :
+   M /trunk/NEWS
+Fision via : r5958, r5957
+
+[-change] NEWS file presentation
+
+------------------------------------------------------------------------
+r5891 | olivier.salaun | 2009-06-11 16:57:58 +0200 (jeu 11 jun 2009) | 2 lignes
+Chemins modifiés :
+   M /trunk/NEWS
+Fision via : r5958, r5957
+
+[-change] sorted bug fixes
+
+------------------------------------------------------------------------
+r5890 | olivier.salaun | 2009-06-11 16:10:29 +0200 (jeu 11 jun 2009) | 2 lignes
+Chemins modifiés :
+   M /trunk/NEWS
+Fision via : r5958, r5957
+
+[-change] updated NEWS
+
+------------------------------------------------------------------------
+r5889 | serge.aumont | 2009-06-11 12:01:02 +0200 (jeu 11 jun 2009) | 3 lignes
+Chemins modifiés :
+   M /trunk/NEWS
+Fision via : r5958, r5957
+
+[-change] preparing 6.0a
+
+
+------------------------------------------------------------------------
+r5888 | olivier.salaun | 2009-06-11 08:57:09 +0200 (jeu 11 jun 2009) | 2 lignes
+Chemins modifiés :
+   M /trunk/NEWS
+   M /trunk/configure.ac
+Fision via : r5958, r5957
+
+[feature] preparing Sympa 6.0b
+
+------------------------------------------------------------------------
+r5887 | serge.aumont | 2009-06-10 18:04:28 +0200 (mer 10 jun 2009) | 2 lignes
+Chemins modifiés :
+   M /trunk/check_perl_modules.pl
+   M /trunk/src/sympa_wizard.pl.in
+Fision via : r5958, r5957
+
+[-bug] ciphersaber is not required anymore but optionnal
+
+------------------------------------------------------------------------
+r5886 | lumineau | 2009-06-10 17:23:13 +0200 (mer 10 jun 2009) | 3 lignes
+Chemins modifiés :
+   M /trunk/web_tt2/main.tt2
+Fision via : r5958, r5957
+
+[-change] little correction in main.tt2
+
+
+------------------------------------------------------------------------
+r5885 | olivier.salaun | 2009-06-10 16:29:29 +0200 (mer 10 jun 2009) | 2 lignes
+Chemins modifiés :
+   M /trunk/ChangeLog
+   M /trunk/NEWS
+   A /trunk/check_perl_modules.pl
+Fision via : r5958, r5957
+
+[-change] restore check-perl-modules.pl because sympa-wizard.pl --check is still buggy
+
+------------------------------------------------------------------------
+r5884 | lumineau | 2009-06-10 16:10:58 +0200 (mer 10 jun 2009) | 2 lignes
+Chemins modifiés :
+   M /trunk/web_tt2/css.tt2
+   M /trunk/web_tt2/css_ie.tt2
+   M /trunk/web_tt2/loginbanner.tt2
+Fision via : r5958, r5957
+
+[-change] css and loginbanner.tt2 modifications 
+
+------------------------------------------------------------------------
+r5883 | olivier.salaun | 2009-06-10 15:35:19 +0200 (mer 10 jun 2009) | 2 lignes
+Chemins modifiés :
+   M /trunk/INSTALL
+Fision via : r5958, r5957
+
+[change] new dependency regarding gettext-devel
+
+------------------------------------------------------------------------
+r5882 | olivier.salaun | 2009-06-10 15:15:32 +0200 (mer 10 jun 2009) | 2 lignes
+Chemins modifiés :
+   M /trunk/sympa-6.0a.14.tar.gz
+Fision via : r5958, r5957
+
+[change] updating the tar.gz
+
+------------------------------------------------------------------------
+r5881 | olivier.salaun | 2009-06-10 14:45:04 +0200 (mer 10 jun 2009) | 3 lignes
+Chemins modifiés :
+   D /trunk/check_perl_modules.pl
+   M /trunk/src/sympa_wizard.pl.in
+Fision via : r5958, r5957
+
+[change] [Submitted by G.Rousse, INRIA] check_perl_modules.pl now replaced with sympa_wizard.pl --check
+All recent changes in check_perl_modules.pl have been reported in sympa_wizard.pl
+
+------------------------------------------------------------------------
+r5880 | lumineau | 2009-06-10 13:44:47 +0200 (mer 10 jun 2009) | 2 lignes
+Chemins modifiés :
+   M /trunk/web_tt2/css.tt2
+   A /trunk/web_tt2/css_ie.tt2
+   M /trunk/web_tt2/footer.tt2
+   M /trunk/web_tt2/main.tt2
+Fision via : r5958, r5957
+
+[-change] css modifications for different internet explorer versions compatibilities
+
+------------------------------------------------------------------------
+r5879 | olivier.salaun | 2009-06-10 13:41:20 +0200 (mer 10 jun 2009) | 2 lignes
+Chemins modifiés :
+   M /trunk/src/lib/confdef.pm
+Fision via : r5958, r5957
+
+[-bug] bounce_path value was incorrect with and additional '/bounce' token
+
+------------------------------------------------------------------------
+r5878 | serge.aumont | 2009-06-10 13:31:32 +0200 (mer 10 jun 2009) | 2 lignes
+Chemins modifiés :
+   M /trunk/doc/Makefile.am
+Fision via : r5958, r5957
+
+[bug] - bad commit repair
+
+------------------------------------------------------------------------
+r5877 | serge.aumont | 2009-06-10 12:12:01 +0200 (mer 10 jun 2009) | 2 lignes
+Chemins modifiés :
+   M /trunk/check_perl_modules.pl
+Fision via : r5958, r5957
+
+[bug] remove Net::LDAP::Server as a required module, this will come soon but not now ! 
+
+------------------------------------------------------------------------
+r5876 | serge.aumont | 2009-06-10 12:03:23 +0200 (mer 10 jun 2009) | 3 lignes
+Chemins modifiés :
+   M /trunk/check_perl_modules.pl
+   M /trunk/doc/Makefile.am
+   M /trunk/src/lib/confdef.pm
+   M /trunk/src/sympa_wizard.pl.in
+Fision via : r5958, r5957
+
+[bug] various undefine constant and problems with the wizard
+
+
+------------------------------------------------------------------------
+r5875 | olivier.salaun | 2009-06-09 21:27:08 +0200 (mar 09 jun 2009) | 5 lignes
+Chemins modifiés :
+   M /trunk/src/lib/mail.pm
+Fision via : r5958, r5957
+
+[bug][Submitted by M. Adams, Cypress Interactive] Message stored in msg/ spool by sympa_soap_s
+erver or wwsympa.fcgi might have escaped characters (%xx) altered. The printf call has been re
+placed with print.
+Bug was introduced in revision 5488
+
+------------------------------------------------------------------------
+r5874 | olivier.salaun | 2009-06-09 19:33:08 +0200 (mar 09 jun 2009) | 2 lignes
+Chemins modifiés :
+   M /trunk/Makefile.am
+   M /trunk/doc/man8/archived.pod
+   M /trunk/doc/man8/bounced.pod
+   M /trunk/sympa.spec
+   M /trunk/sympa.spec.in
+Fision via : r5958, r5957
+
+[-bug] fix references to sympa.conf and wwsympa.conf : located in confdir, not in sysconfdir
+
+------------------------------------------------------------------------
+r5955 | rousse | 2009-07-02 21:59:07 +0200 (jeu 02 jui 2009) | 1 ligne
+Chemins modifiés :
+   M /branches/sympa-autotools-cleanup/src/lib/Archive.pm
+   M /branches/sympa-autotools-cleanup/src/lib/Language.pm
+   M /branches/sympa-autotools-cleanup/src/lib/List.pm
+   M /branches/sympa-autotools-cleanup/src/lib/Log.pm
+   M /branches/sympa-autotools-cleanup/src/lib/Upgrade.pm
+   M /branches/sympa-autotools-cleanup/src/lib/mail.pm
+   M /branches/sympa-autotools-cleanup/src/lib/tools.pm
+Fision via : r5958
+
+[change] never import POSIX symbols globally, only import needed functions
+------------------------------------------------------------------------
+r5954 | rousse | 2009-07-02 21:45:37 +0200 (jeu 02 jui 2009) | 1 ligne
+Chemins modifiés :
+   D /branches/sympa-autotools-cleanup/sympa-6.0a.14.tar.gz
+Fision via : r5958
+
+[bug] ooops, why did this get added ?
+------------------------------------------------------------------------
+r5953 | rousse | 2009-07-02 21:45:01 +0200 (jeu 02 jui 2009) | 1 ligne
+Chemins modifiés :
+   M /branches/sympa-autotools-cleanup/Makefile.am
+   M /branches/sympa-autotools-cleanup/configure.ac
+   A /branches/sympa-autotools-cleanup/src/etc/list_aliases.tt2.in (de /branches/sympa-autotools-cleanup/src/etc/list_aliases.tt2:5921)
+   M /branches/sympa-autotools-cleanup/sympa-6.0a.14.tar.gz
+   A /branches/sympa-autotools-cleanup/t
+   A /branches/sympa-autotools-cleanup/t/Makefile.am
+   A /branches/sympa-autotools-cleanup/t/modules.t
+Fision via : r5958
+
+[change] first tests introduction: check all perl modules load correctly
+------------------------------------------------------------------------
+r5952 | rousse | 2009-07-02 21:43:08 +0200 (jeu 02 jui 2009) | 1 ligne
+Chemins modifiés :
+   D /branches/sympa-autotools-cleanup/src/etc/list_aliases.tt2
+Fision via : r5958
+
+[change] now a generated file
+------------------------------------------------------------------------
+r5951 | rousse | 2009-07-02 21:41:55 +0200 (jeu 02 jui 2009) | 1 ligne
+Chemins modifiés :
+   M /branches/sympa-autotools-cleanup/src/etc/Makefile.am
+Fision via : r5958
+
+[change] switch to local substitution model, before installation
+------------------------------------------------------------------------
+r5950 | rousse | 2009-07-02 21:40:45 +0200 (jeu 02 jui 2009) | 1 ligne
+Chemins modifiés :
+   M /branches/sympa-autotools-cleanup/src/lib/List.pm
+Fision via : r5958
+
+[bug] load tools module at runtime
+------------------------------------------------------------------------
+r5949 | rousse | 2009-07-02 21:40:05 +0200 (jeu 02 jui 2009) | 1 ligne
+Chemins modifiés :
+   M /branches/sympa-autotools-cleanup/wwsympa/Challenge.pm
+Fision via : r5958
+
+[bug] fix typo
+------------------------------------------------------------------------
+r5948 | rousse | 2009-07-02 21:39:43 +0200 (jeu 02 jui 2009) | 1 ligne
+Chemins modifiés :
+   M /branches/sympa-autotools-cleanup/wwsympa/Challenge.pm
+Fision via : r5958
+
+[change] drop var strictures, way too many undefined variables (FIXME!)
+------------------------------------------------------------------------
+r5947 | rousse | 2009-07-02 21:35:01 +0200 (jeu 02 jui 2009) | 1 ligne
+Chemins modifiés :
+   M /branches/sympa-autotools-cleanup/wwsympa/Challenge.pm
+Fision via : r5958
+
+[bug] fix typo
+------------------------------------------------------------------------
+r5946 | rousse | 2009-07-02 21:33:07 +0200 (jeu 02 jui 2009) | 1 ligne
+Chemins modifiés :
+   M /branches/sympa-autotools-cleanup/wwsympa/Auth.pm
+   M /branches/sympa-autotools-cleanup/wwsympa/Bounce.pm
+   M /branches/sympa-autotools-cleanup/wwsympa/Challenge.pm
+   M /branches/sympa-autotools-cleanup/wwsympa/Marc/Search.pm
+   M /branches/sympa-autotools-cleanup/wwsympa/Marc.pm
+   M /branches/sympa-autotools-cleanup/wwsympa/SharedDocument.pm
+   M /branches/sympa-autotools-cleanup/wwsympa/SympaSession.pm
+   M /branches/sympa-autotools-cleanup/wwsympa/cookielib.pm
+   M /branches/sympa-autotools-cleanup/wwsympa/wwslib.pm
+Fision via : r5958
+
+[change] same cleanup as src/lib directory
+------------------------------------------------------------------------
+r5945 | rousse | 2009-07-02 21:23:57 +0200 (jeu 02 jui 2009) | 1 ligne
+Chemins modifiés :
+   M /branches/sympa-autotools-cleanup/src/lib/Config_XML.pm
+   M /branches/sympa-autotools-cleanup/src/lib/Family.pm
+   M /branches/sympa-autotools-cleanup/src/lib/Scenario.pm
+   M /branches/sympa-autotools-cleanup/src/lib/admin.pm
+Fision via : r5958
+
+[change] consistant syntax for ensuring a true value is returned when loading module
+------------------------------------------------------------------------
+r5944 | rousse | 2009-07-02 21:20:35 +0200 (jeu 02 jui 2009) | 1 ligne
+Chemins modifiés :
+   M /branches/sympa-autotools-cleanup/src/lib/Bulk.pm
+   M /branches/sympa-autotools-cleanup/src/lib/List.pm
+Fision via : r5958
+
+[change] always load Encode at compile time, it's a core module
+------------------------------------------------------------------------
+r5943 | rousse | 2009-07-02 21:19:35 +0200 (jeu 02 jui 2009) | 1 ligne
+Chemins modifiés :
+   M /branches/sympa-autotools-cleanup/src/lib/Bulk.pm
+   M /branches/sympa-autotools-cleanup/src/lib/List.pm
+Fision via : r5958
+
+[change] Fetch is a sympa module, no need to delay loading at runtime
+------------------------------------------------------------------------
+r5942 | rousse | 2009-07-02 21:17:48 +0200 (jeu 02 jui 2009) | 6 lignes
+Chemins modifiés :
+   M /branches/sympa-autotools-cleanup/src/lib/Archive.pm
+   M /branches/sympa-autotools-cleanup/src/lib/Bulk.pm
+   M /branches/sympa-autotools-cleanup/src/lib/CAS.pm
+   M /branches/sympa-autotools-cleanup/src/lib/Commands.pm
+   M /branches/sympa-autotools-cleanup/src/lib/Conf.pm
+   M /branches/sympa-autotools-cleanup/src/lib/Config_XML.pm
+   M /branches/sympa-autotools-cleanup/src/lib/Family.pm
+   M /branches/sympa-autotools-cleanup/src/lib/LDAPSource.pm
+   M /branches/sympa-autotools-cleanup/src/lib/Language.pm
+   M /branches/sympa-autotools-cleanup/src/lib/Ldap.pm
+   M /branches/sympa-autotools-cleanup/src/lib/List.pm
+   M /branches/sympa-autotools-cleanup/src/lib/Lock.pm
+   M /branches/sympa-autotools-cleanup/src/lib/Message.pm
+   M /branches/sympa-autotools-cleanup/src/lib/PlainDigest.pm
+   M /branches/sympa-autotools-cleanup/src/lib/SQLSource.pm
+   M /branches/sympa-autotools-cleanup/src/lib/Scenario.pm
+   M /branches/sympa-autotools-cleanup/src/lib/Task.pm
+   M /branches/sympa-autotools-cleanup/src/lib/admin.pm
+   M /branches/sympa-autotools-cleanup/src/lib/confdef.pm
+   M /branches/sympa-autotools-cleanup/src/lib/mail.pm
+   M /branches/sympa-autotools-cleanup/src/lib/report.pm
+   M /branches/sympa-autotools-cleanup/src/lib/tools.pm
+   M /branches/sympa-autotools-cleanup/src/lib/tt2.pm
+Fision via : r5958
+
+[change] consistant package header:
+- pragma
+- generic perl modules
+- sympa perl modules
+- package variables
+
+------------------------------------------------------------------------
+r5941 | rousse | 2009-07-02 21:10:31 +0200 (jeu 02 jui 2009) | 1 ligne
+Chemins modifiés :
+   M /branches/sympa-autotools-cleanup/src/lib/confdef.pm
+Fision via : r5958
+
+[change] no need for Exporter when export list is empty
+------------------------------------------------------------------------
+r5940 | rousse | 2009-07-02 21:01:17 +0200 (jeu 02 jui 2009) | 1 ligne
+Chemins modifiés :
+   M /branches/sympa-autotools-cleanup/src/lib/Makefile.am
+Fision via : r5958
+
+[change] add new modules
+------------------------------------------------------------------------
+r5939 | rousse | 2009-07-02 20:59:53 +0200 (jeu 02 jui 2009) | 1 ligne
+Chemins modifiés :
+   M /branches/sympa-autotools-cleanup/src/lib/Fetch.pm
+   A /branches/sympa-autotools-cleanup/src/lib/HTML
+   A /branches/sympa-autotools-cleanup/src/lib/HTML/myFormatText.pm
+   M /branches/sympa-autotools-cleanup/src/lib/List.pm
+   M /branches/sympa-autotools-cleanup/src/lib/PlainDigest.pm
+   A /branches/sympa-autotools-cleanup/src/lib/Robot.pm
+   A /branches/sympa-autotools-cleanup/src/lib/WebAgent.pm
+Fision via : r5958
+
+[change] one unique package per module
+------------------------------------------------------------------------
+r5938 | rousse | 2009-07-02 20:54:35 +0200 (jeu 02 jui 2009) | 1 ligne
+Chemins modifiés :
+   M /branches/sympa-autotools-cleanup/src/lib/Commands.pm
+Fision via : r5958
+
+[change] use consistant syntax for ISA and EXPORT
+------------------------------------------------------------------------
+r5937 | rousse | 2009-07-02 20:52:58 +0200 (jeu 02 jui 2009) | 1 ligne
+Chemins modifiés :
+   M /branches/sympa-autotools-cleanup/src/lib/Conf.pm
+   M /branches/sympa-autotools-cleanup/src/lib/LDAPSource.pm
+   M /branches/sympa-autotools-cleanup/src/lib/Language.pm
+   M /branches/sympa-autotools-cleanup/src/lib/Ldap.pm
+   M /branches/sympa-autotools-cleanup/src/lib/List.pm
+   M /branches/sympa-autotools-cleanup/src/lib/Log.pm
+   M /branches/sympa-autotools-cleanup/src/lib/SQLSource.pm
+   M /branches/sympa-autotools-cleanup/src/lib/mail.pm
+Fision via : r5958
+
+[change] import Exporter at compile time
+------------------------------------------------------------------------
+r5936 | rousse | 2009-07-02 20:49:45 +0200 (jeu 02 jui 2009) | 1 ligne
+Chemins modifiés :
+   M /branches/sympa-autotools-cleanup/src/lib/CAS.pm
+   M /branches/sympa-autotools-cleanup/src/lib/Commands.pm
+   M /branches/sympa-autotools-cleanup/src/lib/Language.pm
+   M /branches/sympa-autotools-cleanup/src/lib/List.pm
+   M /branches/sympa-autotools-cleanup/src/lib/PlainDigest.pm
+   M /branches/sympa-autotools-cleanup/src/lib/mail.pm
+Fision via : r5958
+
+[change] ISA, EXPORT & co are package variables, not lexical ones
+------------------------------------------------------------------------
+r5935 | rousse | 2009-07-02 20:47:01 +0200 (jeu 02 jui 2009) | 1 ligne
+Chemins modifiés :
+   M /branches/sympa-autotools-cleanup/src/lib/Bulk.pm
+Fision via : r5958
+
+[change] no need for Exporter when export list is empty
+------------------------------------------------------------------------
+r5934 | rousse | 2009-07-02 20:43:53 +0200 (jeu 02 jui 2009) | 1 ligne
+Chemins modifiés :
+   M /branches/sympa-autotools-cleanup/src/lib/Datasource.pm
+   M /branches/sympa-autotools-cleanup/src/lib/Fetch.pm
+   M /branches/sympa-autotools-cleanup/src/lib/Lock.pm
+   M /branches/sympa-autotools-cleanup/src/lib/Message.pm
+   M /branches/sympa-autotools-cleanup/src/lib/Scenario.pm
+   M /branches/sympa-autotools-cleanup/src/lib/Task.pm
+   M /branches/sympa-autotools-cleanup/src/lib/Upgrade.pm
+   M /branches/sympa-autotools-cleanup/src/lib/time_utils.pm
+   M /branches/sympa-autotools-cleanup/src/lib/tools.pm
+   M /branches/sympa-autotools-cleanup/src/lib/tt2.pm
+Fision via : r5958
+
+[change] no need for Exporter when export list is empty
+------------------------------------------------------------------------
+r5933 | rousse | 2009-07-01 23:05:19 +0200 (mer 01 jui 2009) | 1 ligne
+Chemins modifiés :
+   M /branches/sympa-autotools-cleanup/src/etc/script/Makefile.am
+   D /branches/sympa-autotools-cleanup/src/etc/script/arc2webarc.pl
+   A /branches/sympa-autotools-cleanup/src/etc/script/arc2webarc.pl.in (de /branches/sympa-autotools-cleanup/src/etc/script/arc2webarc.pl:5921)
+   D /branches/sympa-autotools-cleanup/src/etc/script/crypt_passwd.pl
+   A /branches/sympa-autotools-cleanup/src/etc/script/crypt_passwd.pl.in (de /branches/sympa-autotools-cleanup/src/etc/script/crypt_passwd.pl:5921)
+   D /branches/sympa-autotools-cleanup/src/etc/script/init_comment.pl
+   A /branches/sympa-autotools-cleanup/src/etc/script/init_comment.pl.in (de /branches/sympa-autotools-cleanup/src/etc/script/init_comment.pl:5921)
+   D /branches/sympa-autotools-cleanup/src/etc/script/ldap_alias_manager.pl
+   A /branches/sympa-autotools-cleanup/src/etc/script/ldap_alias_manager.pl.in (de /branches/sympa-autotools-cleanup/src/etc/script/ldap_alias_manager.pl:5921)
+   D /branches/sympa-autotools-cleanup/src/etc/script/mod2html.pl
+   A /branches/sympa-autotools-cleanup/src/etc/script/mod2html.pl.in (de /branches/sympa-autotools-cleanup/src/etc/script/mod2html.pl:5921)
+   D /branches/sympa-autotools-cleanup/src/etc/script/mysql_alias_manager.pl
+   A /branches/sympa-autotools-cleanup/src/etc/script/mysql_alias_manager.pl.in (de /branches/sympa-autotools-cleanup/src/etc/script/mysql_alias_manager.pl:5921)
+   D /branches/sympa-autotools-cleanup/src/etc/script/p12topem.pl
+   A /branches/sympa-autotools-cleanup/src/etc/script/p12topem.pl.in (de /branches/sympa-autotools-cleanup/src/etc/script/p12topem.pl:5921)
+   D /branches/sympa-autotools-cleanup/src/etc/script/sympa
+   A /branches/sympa-autotools-cleanup/src/etc/script/sympa.in (de /branches/sympa-autotools-cleanup/src/etc/script/sympa:5921)
+   D /branches/sympa-autotools-cleanup/src/etc/script/testldap.pl
+   A /branches/sympa-autotools-cleanup/src/etc/script/testldap.pl.in (de /branches/sympa-autotools-cleanup/src/etc/script/testldap.pl:5921)
+   D /branches/sympa-autotools-cleanup/src/etc/script/testlogs.pl
+   A /branches/sympa-autotools-cleanup/src/etc/script/testlogs.pl.in (de /branches/sympa-autotools-cleanup/src/etc/script/testlogs.pl:5921)
+   D /branches/sympa-autotools-cleanup/src/etc/script/tpl2tt2.pl
+   A /branches/sympa-autotools-cleanup/src/etc/script/tpl2tt2.pl.in (de /branches/sympa-autotools-cleanup/src/etc/script/tpl2tt2.pl:5921)
+Fision via : r5958
+
+[change] switch to a local substitution model, before installation
+------------------------------------------------------------------------
+r5932 | rousse | 2009-07-01 22:34:07 +0200 (mer 01 jui 2009) | 1 ligne
+Chemins modifiés :
+   M /branches/sympa-autotools-cleanup/doc/man8/alias_manager.pod.in
+Fision via : r5958
+
+[bug] use wwsympa configuration file substitution target directly
+------------------------------------------------------------------------
+r5931 | rousse | 2009-07-01 22:33:43 +0200 (mer 01 jui 2009) | 1 ligne
+Chemins modifiés :
+   M /branches/sympa-autotools-cleanup/doc/man8/Makefile.am
+Fision via : r5958
+
+[bug] drop useless substitutions rules, add missing ones
+------------------------------------------------------------------------
+r5930 | rousse | 2009-07-01 22:29:00 +0200 (mer 01 jui 2009) | 1 ligne
+Chemins modifiés :
+   M /branches/sympa-autotools-cleanup/doc/man8/Makefile.am
+   D /branches/sympa-autotools-cleanup/doc/man8/alias_manager.pod
+   A /branches/sympa-autotools-cleanup/doc/man8/alias_manager.pod.in (de /branches/sympa-autotools-cleanup/doc/man8/alias_manager.pod:5929)
+   D /branches/sympa-autotools-cleanup/doc/man8/archived.pod
+   A /branches/sympa-autotools-cleanup/doc/man8/archived.pod.in (de /branches/sympa-autotools-cleanup/doc/man8/archived.pod:5929)
+   D /branches/sympa-autotools-cleanup/doc/man8/bounced.pod
+   A /branches/sympa-autotools-cleanup/doc/man8/bounced.pod.in (de /branches/sympa-autotools-cleanup/doc/man8/bounced.pod:5929)
+Fision via : r5958
+
+[change] switch to local substitution model, prior installation
+------------------------------------------------------------------------
+r5873 | olivier.salaun | 2009-06-09 18:07:51 +0200 (mar 09 jun 2009) | 2 lignes
+Chemins modifiés :
+   A /branches/sympa-autotools-cleanup (de /trunk:5872)
+Fision via : r5958
+
+[change] Sync Of Guillaume's branch with trunk
 
 ------------------------------------------------------------------------
 r5956 | lumineau | 2009-07-10 10:10:56 +0200 (ven 10 jui 2009) | 3 lignes
@@ -3372,6 +6280,509 @@ Chemins modifiés :
  - remove Version.pm module (now using Constans.pm)
  - turn SPEC file into a template, to have version automatically substituted, drop most post-install stuff excepted user/group creation, and use FHS setup
 
+------------------------------------------------------------------------
+r5815 | rousse | 2009-05-26 22:51:07 +0200 (mar 26 mai 2009) | 1 ligne
+Chemins modifiés :
+   M /branches/sympa-autotools-cleanup/Makefile.am
+Fision via : r5816
+
+[change] distribute README.charset also
+------------------------------------------------------------------------
+r5814 | rousse | 2009-05-26 22:46:06 +0200 (mar 26 mai 2009) | 1 ligne
+Chemins modifiés :
+   M /branches/sympa-autotools-cleanup/src/lib/confdef.pm
+   M /branches/sympa-autotools-cleanup/src/sympa_wizard.pl.in
+Fision via : r5816
+
+[bug] fix typos
+------------------------------------------------------------------------
+r5813 | rousse | 2009-05-26 22:30:45 +0200 (mar 26 mai 2009) | 1 ligne
+Chemins modifiés :
+   M /branches/sympa-autotools-cleanup/Makefile.am
+Fision via : r5816
+
+[change] distribute sympa.spec and sympa.spec.in
+------------------------------------------------------------------------
+r5812 | rousse | 2009-05-26 22:30:29 +0200 (mar 26 mai 2009) | 1 ligne
+Chemins modifiés :
+   M /branches/sympa-autotools-cleanup/configure.ac
+Fision via : r5816
+
+[change] create sympa.spec at configure time
+------------------------------------------------------------------------
+r5811 | rousse | 2009-05-26 22:30:03 +0200 (mar 26 mai 2009) | 1 ligne
+Chemins modifiés :
+   D /branches/sympa-autotools-cleanup/sympa.spec
+   A /branches/sympa-autotools-cleanup/sympa.spec.in (de /branches/sympa-autotools-cleanup/sympa.spec:5808)
+Fision via : r5816
+
+[change] make spec file a template file, to have version automatically substituted, drop most post-install stuff excepted user/group creation, and use FHS setup
+------------------------------------------------------------------------
+r5810 | rousse | 2009-05-26 22:28:48 +0200 (mar 26 mai 2009) | 1 ligne
+Chemins modifiés :
+   M /branches/sympa-autotools-cleanup/po/Makefile.in.in
+Fision via : r5816
+
+[bug] update xgettext args, as executables have been renamed
+------------------------------------------------------------------------
+r5809 | rousse | 2009-05-26 22:28:14 +0200 (mar 26 mai 2009) | 1 ligne
+Chemins modifiés :
+   M /branches/sympa-autotools-cleanup/po/POTFILES.in
+Fision via : r5816
+
+[bug] update files list, as executables have been renamed
+------------------------------------------------------------------------
+r5803 | rousse | 2009-05-22 14:54:26 +0200 (ven 22 mai 2009) | 1 ligne
+Chemins modifiés :
+   M /branches/sympa-autotools-cleanup/src/lib/Makefile.am
+   A /branches/sympa-autotools-cleanup/src/lib/Sympa/Template
+   A /branches/sympa-autotools-cleanup/src/lib/Sympa/Template/Compat.pm
+   M /branches/sympa-autotools-cleanup/src/lib/tt2.pm
+Fision via : r5816
+
+[change] ship Sympa::Template::Compat in its own file
+------------------------------------------------------------------------
+r5802 | rousse | 2009-05-22 14:48:43 +0200 (ven 22 mai 2009) | 1 ligne
+Chemins modifiés :
+   M /branches/sympa-autotools-cleanup/soap/Makefile.am
+   M /branches/sympa-autotools-cleanup/src/Makefile.am
+   M /branches/sympa-autotools-cleanup/src/lib/Makefile.am
+   M /branches/sympa-autotools-cleanup/wwsympa/Makefile.am
+   M /branches/sympa-autotools-cleanup/wwsympa/icons/Makefile.am
+Fision via : r5816
+
+[bug] fix various distribution bugs
+------------------------------------------------------------------------
+r5801 | rousse | 2009-05-22 14:34:43 +0200 (ven 22 mai 2009) | 1 ligne
+Chemins modifiés :
+   M /branches/sympa-autotools-cleanup/po-wwsympa/Makefile.in.in
+Fision via : r5816
+
+[bug] fix trailing space
+------------------------------------------------------------------------
+r5800 | rousse | 2009-05-22 14:31:16 +0200 (ven 22 mai 2009) | 1 ligne
+Chemins modifiés :
+   M /branches/sympa-autotools-cleanup/po/POTFILES.in
+Fision via : r5816
+
+[bug] Version.pm doesn't exists anymore
+------------------------------------------------------------------------
+r5799 | rousse | 2009-05-22 14:30:10 +0200 (ven 22 mai 2009) | 1 ligne
+Chemins modifiés :
+   M /branches/sympa-autotools-cleanup/soap/Makefile.am
+   M /branches/sympa-autotools-cleanup/soap/sympa_soap_client.pl.in
+   M /branches/sympa-autotools-cleanup/soap/sympa_soap_server.fcgi.in
+   M /branches/sympa-autotools-cleanup/src/Makefile.am
+   M /branches/sympa-autotools-cleanup/src/alias_manager.pl.in
+   M /branches/sympa-autotools-cleanup/src/bulk.pl.in
+   M /branches/sympa-autotools-cleanup/src/sympa.pl.in
+   M /branches/sympa-autotools-cleanup/src/sympa_wizard.pl.in
+   M /branches/sympa-autotools-cleanup/src/task_manager.pl.in
+   M /branches/sympa-autotools-cleanup/wwsympa/Makefile.am
+   M /branches/sympa-autotools-cleanup/wwsympa/archived.pl.in
+   M /branches/sympa-autotools-cleanup/wwsympa/bounced.pl.in
+   M /branches/sympa-autotools-cleanup/wwsympa/wwsympa.fcgi.in
+Fision via : r5816
+
+[bug] as modulesdir is configurable, modules are not mandatorily installed in default location
+------------------------------------------------------------------------
+r5798 | rousse | 2009-05-22 14:23:12 +0200 (ven 22 mai 2009) | 1 ligne
+Chemins modifiés :
+   M /branches/sympa-autotools-cleanup/soap/sympa_soap_server.fcgi.in
+   M /branches/sympa-autotools-cleanup/wwsympa/archived.pl.in
+   M /branches/sympa-autotools-cleanup/wwsympa/bounced.pl.in
+   M /branches/sympa-autotools-cleanup/wwsympa/wwslib.pm
+Fision via : r5816
+
+[change] use Sympa::Constants
+------------------------------------------------------------------------
+r5797 | rousse | 2009-05-22 14:17:05 +0200 (ven 22 mai 2009) | 1 ligne
+Chemins modifiés :
+   M /branches/sympa-autotools-cleanup/wwsympa/wwslib.pm
+Fision via : r5816
+
+[change] modules don't need to know other modules locations, only executable does
+------------------------------------------------------------------------
+r5796 | rousse | 2009-05-22 14:12:59 +0200 (ven 22 mai 2009) | 1 ligne
+Chemins modifiés :
+   M /branches/sympa-autotools-cleanup/src/bulk.pl.in
+   M /branches/sympa-autotools-cleanup/src/sympa.pl.in
+   M /branches/sympa-autotools-cleanup/wwsympa/archived.pl.in
+Fision via : r5816
+
+[change] use Sympa::Constants instead of Version.pm
+------------------------------------------------------------------------
+r5795 | rousse | 2009-05-22 14:05:40 +0200 (ven 22 mai 2009) | 1 ligne
+Chemins modifiés :
+   M /branches/sympa-autotools-cleanup/configure.ac
+Fision via : r5816
+
+[change] rename defaultdir to default
+------------------------------------------------------------------------
+r5794 | rousse | 2009-05-22 14:04:30 +0200 (ven 22 mai 2009) | 1 ligne
+Chemins modifiés :
+   M /branches/sympa-autotools-cleanup/src/lib/Commands.pm
+   M /branches/sympa-autotools-cleanup/src/lib/Conf.pm
+   M /branches/sympa-autotools-cleanup/src/lib/Family.pm
+   M /branches/sympa-autotools-cleanup/src/lib/Language.pm
+   M /branches/sympa-autotools-cleanup/src/lib/List.pm
+   M /branches/sympa-autotools-cleanup/src/lib/Makefile.am
+   M /branches/sympa-autotools-cleanup/src/lib/Upgrade.pm
+   D /branches/sympa-autotools-cleanup/src/lib/Version.pm
+   M /branches/sympa-autotools-cleanup/src/lib/admin.pm
+   M /branches/sympa-autotools-cleanup/src/lib/confdef.pm
+   M /branches/sympa-autotools-cleanup/src/lib/mail.pm
+   M /branches/sympa-autotools-cleanup/src/lib/tools.pm
+   M /branches/sympa-autotools-cleanup/src/lib/tt2.pm
+Fision via : r5816
+
+[change] use Sympa::Constants everywhere, and drop useless Version.pm
+------------------------------------------------------------------------
+r5793 | rousse | 2009-05-22 14:02:48 +0200 (ven 22 mai 2009) | 1 ligne
+Chemins modifiés :
+   M /branches/sympa-autotools-cleanup/src/lib/Makefile.am
+   M /branches/sympa-autotools-cleanup/src/lib/Sympa/Constants.pm.in
+Fision via : r5816
+
+[change] more constants
+------------------------------------------------------------------------
+r5792 | rousse | 2009-05-22 14:01:26 +0200 (ven 22 mai 2009) | 1 ligne
+Chemins modifiés :
+   M /branches/sympa-autotools-cleanup/Makefile.am
+   M /branches/sympa-autotools-cleanup/configure.ac
+   M /branches/sympa-autotools-cleanup/wwsympa/icons/Makefile.am
+Fision via : r5816
+
+[change] set static content, bounce and archive directories in FHS-compliant locations only for new install, and keep original locations for upgrade
+------------------------------------------------------------------------
+r5791 | rousse | 2009-05-21 22:16:54 +0200 (jeu 21 mai 2009) | 1 ligne
+Chemins modifiés :
+   M /branches/sympa-autotools-cleanup/src/alias_manager.pl.in
+   M /branches/sympa-autotools-cleanup/src/bulk.pl.in
+   M /branches/sympa-autotools-cleanup/src/sympa.pl.in
+   M /branches/sympa-autotools-cleanup/src/sympa_wizard.pl.in
+   M /branches/sympa-autotools-cleanup/src/task_manager.pl.in
+Fision via : r5816
+
+[change] use Sympa::Constants
+------------------------------------------------------------------------
+r5790 | rousse | 2009-05-21 22:16:15 +0200 (jeu 21 mai 2009) | 1 ligne
+Chemins modifiés :
+   M /branches/sympa-autotools-cleanup/src/lib/Sympa/Constants.pm.in
+Fision via : r5816
+
+[change] add two missing constants
+------------------------------------------------------------------------
+r5789 | rousse | 2009-05-21 19:04:13 +0200 (jeu 21 mai 2009) | 1 ligne
+Chemins modifiés :
+   M /branches/sympa-autotools-cleanup/soap/Makefile.am
+   D /branches/sympa-autotools-cleanup/soap/sympa_soap_client.pl
+   A /branches/sympa-autotools-cleanup/soap/sympa_soap_client.pl.in (de /branches/sympa-autotools-cleanup/soap/sympa_soap_client.pl:5777)
+   D /branches/sympa-autotools-cleanup/soap/sympa_soap_server.fcgi
+   A /branches/sympa-autotools-cleanup/soap/sympa_soap_server.fcgi.in (de /branches/sympa-autotools-cleanup/soap/sympa_soap_server.fcgi:5776)
+Fision via : r5816
+
+[change] performs substitutions at build time, not after installation
+------------------------------------------------------------------------
+r5788 | rousse | 2009-05-21 19:00:16 +0200 (jeu 21 mai 2009) | 1 ligne
+Chemins modifiés :
+   M /branches/sympa-autotools-cleanup/wwsympa/Makefile.am
+   D /branches/sympa-autotools-cleanup/wwsympa/archived.pl
+   A /branches/sympa-autotools-cleanup/wwsympa/archived.pl.in (de /branches/sympa-autotools-cleanup/wwsympa/archived.pl:5774)
+   D /branches/sympa-autotools-cleanup/wwsympa/bounced.pl
+   A /branches/sympa-autotools-cleanup/wwsympa/bounced.pl.in (de /branches/sympa-autotools-cleanup/wwsympa/bounced.pl:5775)
+   D /branches/sympa-autotools-cleanup/wwsympa/wwsympa.fcgi
+   A /branches/sympa-autotools-cleanup/wwsympa/wwsympa.fcgi.in (de /branches/sympa-autotools-cleanup/wwsympa/wwsympa.fcgi:5761)
+Fision via : r5816
+
+[change] performs substitutions at build time, not after installation
+------------------------------------------------------------------------
+r5787 | rousse | 2009-05-21 18:21:01 +0200 (jeu 21 mai 2009) | 1 ligne
+Chemins modifiés :
+   M /branches/sympa-autotools-cleanup/src/alias_manager.pl.in
+   M /branches/sympa-autotools-cleanup/src/bulk.pl.in
+   M /branches/sympa-autotools-cleanup/src/sympa.pl.in
+   M /branches/sympa-autotools-cleanup/src/task_manager.pl.in
+Fision via : r5816
+
+[bug] old perl libraries have been converted to modules
+------------------------------------------------------------------------
+r5786 | rousse | 2009-05-21 18:10:03 +0200 (jeu 21 mai 2009) | 1 ligne
+Chemins modifiés :
+   M /branches/sympa-autotools-cleanup/src/Makefile.am
+Fision via : r5816
+
+[change] add individual dependencies between each script and its source file
+------------------------------------------------------------------------
+r5785 | rousse | 2009-05-21 18:04:59 +0200 (jeu 21 mai 2009) | 1 ligne
+Chemins modifiés :
+   M /branches/sympa-autotools-cleanup/src/Makefile.am
+   D /branches/sympa-autotools-cleanup/src/alias_manager.pl
+   A /branches/sympa-autotools-cleanup/src/alias_manager.pl.in (de /branches/sympa-autotools-cleanup/src/alias_manager.pl:5761)
+   D /branches/sympa-autotools-cleanup/src/bulk.pl
+   A /branches/sympa-autotools-cleanup/src/bulk.pl.in (de /branches/sympa-autotools-cleanup/src/bulk.pl:5761)
+   D /branches/sympa-autotools-cleanup/src/sympa.pl
+   A /branches/sympa-autotools-cleanup/src/sympa.pl.in (de /branches/sympa-autotools-cleanup/src/sympa.pl:5761)
+   D /branches/sympa-autotools-cleanup/src/sympa_wizard.pl
+   A /branches/sympa-autotools-cleanup/src/sympa_wizard.pl.in (de /branches/sympa-autotools-cleanup/src/sympa_wizard.pl:5761)
+   D /branches/sympa-autotools-cleanup/src/task_manager.pl
+   A /branches/sympa-autotools-cleanup/src/task_manager.pl.in (de /branches/sympa-autotools-cleanup/src/task_manager.pl:5761)
+Fision via : r5816
+
+[change] performs substitutions at build time, not after installation
+------------------------------------------------------------------------
+r5784 | rousse | 2009-05-21 17:56:18 +0200 (jeu 21 mai 2009) | 1 ligne
+Chemins modifiés :
+   M /branches/sympa-autotools-cleanup/src/lib/Makefile.am
+   A /branches/sympa-autotools-cleanup/src/lib/Sympa
+   A /branches/sympa-autotools-cleanup/src/lib/Sympa/Constants.pm.in
+Fision via : r5816
+
+[change] perform all substitution in a single perl module
+------------------------------------------------------------------------
+r5783 | rousse | 2009-05-21 17:55:32 +0200 (jeu 21 mai 2009) | 1 ligne
+Chemins modifiés :
+   M /branches/sympa-autotools-cleanup/po-wwsympa/Makefile.in.in
+Fision via : r5816
+
+[change] no need for PERL5LIB var, we're not using any perl module
+------------------------------------------------------------------------
+r5782 | rousse | 2009-05-21 17:54:59 +0200 (jeu 21 mai 2009) | 1 ligne
+Chemins modifiés :
+   M /branches/sympa-autotools-cleanup/po/Makefile.in.in
+Fision via : r5816
+
+[change] no need for PERL5LIB var, we're not using any perl module
+------------------------------------------------------------------------
+r5781 | rousse | 2009-05-21 17:54:04 +0200 (jeu 21 mai 2009) | 1 ligne
+Chemins modifiés :
+   M /branches/sympa-autotools-cleanup/po/POTFILES.in
+Fision via : r5816
+
+[bug] update POTFILES list
+------------------------------------------------------------------------
+r5780 | rousse | 2009-05-21 17:16:22 +0200 (jeu 21 mai 2009) | 1 ligne
+Chemins modifiés :
+   M /branches/sympa-autotools-cleanup/po/Makefile.in.in
+Fision via : r5816
+
+[bug] perl modules have changed location in repository
+------------------------------------------------------------------------
+r5779 | rousse | 2009-05-21 17:14:44 +0200 (jeu 21 mai 2009) | 1 ligne
+Chemins modifiés :
+   M /branches/sympa-autotools-cleanup/po/Makefile.in.in
+   M /branches/sympa-autotools-cleanup/po-wwsympa/Makefile.in.in
+Fision via : r5816
+
+[change] no need to generate a file list, they are given directly to xgettext through shell expansion
+------------------------------------------------------------------------
+r5778 | rousse | 2009-05-21 17:11:07 +0200 (jeu 21 mai 2009) | 1 ligne
+Chemins modifiés :
+   A /branches/sympa-autotools-cleanup/po/xgettext.pl
+Fision via : r5816
+
+[bug] ooops, it's still used...
+------------------------------------------------------------------------
+r5777 | rousse | 2009-05-21 17:01:31 +0200 (jeu 21 mai 2009) | 1 ligne
+Chemins modifiés :
+   M /branches/sympa-autotools-cleanup/soap/sympa_soap_client.pl
+Fision via : r5816
+
+[change] use herein document for usage
+------------------------------------------------------------------------
+r5776 | rousse | 2009-05-21 16:58:28 +0200 (jeu 21 mai 2009) | 1 ligne
+Chemins modifiés :
+   M /branches/sympa-autotools-cleanup/soap/sympa_soap_client.pl
+   M /branches/sympa-autotools-cleanup/soap/sympa_soap_server.fcgi
+Fision via : r5816
+
+[bug] old perl libraries have been converted to modules
+------------------------------------------------------------------------
+r5775 | rousse | 2009-05-21 16:46:14 +0200 (jeu 21 mai 2009) | 1 ligne
+Chemins modifiés :
+   A /branches/sympa-autotools-cleanup/wwsympa/Bounce.pm (de /branches/sympa-autotools-cleanup/wwsympa/bounce-lib.pl:5761)
+   M /branches/sympa-autotools-cleanup/wwsympa/Makefile.am
+   D /branches/sympa-autotools-cleanup/wwsympa/bounce-lib.pl
+   M /branches/sympa-autotools-cleanup/wwsympa/bounced.pl
+Fision via : r5816
+
+[change] convert bounce-lib.pl to Bounce.pm
+------------------------------------------------------------------------
+r5774 | rousse | 2009-05-21 16:41:08 +0200 (jeu 21 mai 2009) | 1 ligne
+Chemins modifiés :
+   M /branches/sympa-autotools-cleanup/wwsympa/SharedDocument.pm
+   M /branches/sympa-autotools-cleanup/wwsympa/archived.pl
+   M /branches/sympa-autotools-cleanup/wwsympa/bounced.pl
+Fision via : r5816
+
+[bug] old perl libraries have been converted to modules
+------------------------------------------------------------------------
+r5773 | rousse | 2009-05-21 16:38:36 +0200 (jeu 21 mai 2009) | 1 ligne
+Chemins modifiés :
+   A /branches/sympa-autotools-cleanup/src/lib/Makefile.am
+Fision via : r5816
+
+[bug] add forgotten Makefile.am
+------------------------------------------------------------------------
+r5772 | rousse | 2009-05-21 16:38:15 +0200 (jeu 21 mai 2009) | 1 ligne
+Chemins modifiés :
+   D /branches/sympa-autotools-cleanup/src/lib/time_utils.pl
+   A /branches/sympa-autotools-cleanup/src/lib/time_utils.pm (de /branches/sympa-autotools-cleanup/src/lib/time_utils.pl:5768)
+Fision via : r5816
+
+[change] convert time_utils.pl in time_utils.pm
+------------------------------------------------------------------------
+r5771 | rousse | 2009-05-21 16:36:12 +0200 (jeu 21 mai 2009) | 1 ligne
+Chemins modifiés :
+   M /branches/sympa-autotools-cleanup/src/lib/Bulk.pm
+   M /branches/sympa-autotools-cleanup/src/lib/LDAPSource.pm
+   M /branches/sympa-autotools-cleanup/src/lib/List.pm
+   M /branches/sympa-autotools-cleanup/src/lib/Message.pm
+   M /branches/sympa-autotools-cleanup/src/lib/SQLSource.pm
+   D /branches/sympa-autotools-cleanup/src/lib/tt2.pl
+   A /branches/sympa-autotools-cleanup/src/lib/tt2.pm (de /branches/sympa-autotools-cleanup/src/lib/tt2.pl:5768)
+Fision via : r5816
+
+[change] convert tt2.pl in tt2.pm
+------------------------------------------------------------------------
+r5770 | rousse | 2009-05-21 16:33:41 +0200 (jeu 21 mai 2009) | 1 ligne
+Chemins modifiés :
+   M /branches/sympa-autotools-cleanup/src/lib/Bulk.pm
+   M /branches/sympa-autotools-cleanup/src/lib/Commands.pm
+   M /branches/sympa-autotools-cleanup/src/lib/Conf.pm
+   M /branches/sympa-autotools-cleanup/src/lib/LDAPSource.pm
+   M /branches/sympa-autotools-cleanup/src/lib/List.pm
+   M /branches/sympa-autotools-cleanup/src/lib/Lock.pm
+   M /branches/sympa-autotools-cleanup/src/lib/Message.pm
+   M /branches/sympa-autotools-cleanup/src/lib/SQLSource.pm
+   M /branches/sympa-autotools-cleanup/src/lib/Scenario.pm
+   M /branches/sympa-autotools-cleanup/src/lib/Task.pm
+   M /branches/sympa-autotools-cleanup/src/lib/admin.pm
+   M /branches/sympa-autotools-cleanup/src/lib/mail.pm
+   D /branches/sympa-autotools-cleanup/src/lib/tools.pl
+   A /branches/sympa-autotools-cleanup/src/lib/tools.pm (de /branches/sympa-autotools-cleanup/src/lib/tools.pl:5769)
+Fision via : r5816
+
+[change] convert tools.pl in tools.pm
+------------------------------------------------------------------------
+r5769 | rousse | 2009-05-21 16:27:02 +0200 (jeu 21 mai 2009) | 1 ligne
+Chemins modifiés :
+   M /branches/sympa-autotools-cleanup/src/lib/tools.pl
+Fision via : r5816
+
+[change] no need for shellbang, this is a perl module
+------------------------------------------------------------------------
+r5768 | rousse | 2009-05-21 16:23:23 +0200 (jeu 21 mai 2009) | 1 ligne
+Chemins modifiés :
+   M /branches/sympa-autotools-cleanup/configure.ac
+   D /branches/sympa-autotools-cleanup/src/Archive.pm
+   D /branches/sympa-autotools-cleanup/src/Bulk.pm
+   D /branches/sympa-autotools-cleanup/src/CAS.pm
+   D /branches/sympa-autotools-cleanup/src/Commands.pm
+   D /branches/sympa-autotools-cleanup/src/Conf.pm
+   D /branches/sympa-autotools-cleanup/src/Config_XML.pm
+   D /branches/sympa-autotools-cleanup/src/Datasource.pm
+   D /branches/sympa-autotools-cleanup/src/Family.pm
+   D /branches/sympa-autotools-cleanup/src/Fetch.pm
+   D /branches/sympa-autotools-cleanup/src/LDAPSource.pm
+   D /branches/sympa-autotools-cleanup/src/Language.pm
+   D /branches/sympa-autotools-cleanup/src/Ldap.pm
+   D /branches/sympa-autotools-cleanup/src/List.pm
+   D /branches/sympa-autotools-cleanup/src/Lock.pm
+   D /branches/sympa-autotools-cleanup/src/Log.pm
+   M /branches/sympa-autotools-cleanup/src/Makefile.am
+   D /branches/sympa-autotools-cleanup/src/Message.pm
+   D /branches/sympa-autotools-cleanup/src/PlainDigest.pm
+   D /branches/sympa-autotools-cleanup/src/SQLSource.pm
+   D /branches/sympa-autotools-cleanup/src/Scenario.pm
+   D /branches/sympa-autotools-cleanup/src/Task.pm
+   D /branches/sympa-autotools-cleanup/src/Upgrade.pm
+   D /branches/sympa-autotools-cleanup/src/Version.pm
+   D /branches/sympa-autotools-cleanup/src/admin.pm
+   D /branches/sympa-autotools-cleanup/src/confdef.pm
+   A /branches/sympa-autotools-cleanup/src/lib
+   A /branches/sympa-autotools-cleanup/src/lib/Archive.pm (de /branches/sympa-autotools-cleanup/src/Archive.pm:5761)
+   A /branches/sympa-autotools-cleanup/src/lib/Bulk.pm (de /branches/sympa-autotools-cleanup/src/Bulk.pm:5761)
+   A /branches/sympa-autotools-cleanup/src/lib/CAS.pm (de /branches/sympa-autotools-cleanup/src/CAS.pm:5761)
+   A /branches/sympa-autotools-cleanup/src/lib/Commands.pm (de /branches/sympa-autotools-cleanup/src/Commands.pm:5761)
+   A /branches/sympa-autotools-cleanup/src/lib/Conf.pm (de /branches/sympa-autotools-cleanup/src/Conf.pm:5761)
+   A /branches/sympa-autotools-cleanup/src/lib/Config_XML.pm (de /branches/sympa-autotools-cleanup/src/Config_XML.pm:5761)
+   A /branches/sympa-autotools-cleanup/src/lib/Datasource.pm (de /branches/sympa-autotools-cleanup/src/Datasource.pm:5761)
+   A /branches/sympa-autotools-cleanup/src/lib/Family.pm (de /branches/sympa-autotools-cleanup/src/Family.pm:5761)
+   A /branches/sympa-autotools-cleanup/src/lib/Fetch.pm (de /branches/sympa-autotools-cleanup/src/Fetch.pm:5761)
+   A /branches/sympa-autotools-cleanup/src/lib/LDAPSource.pm (de /branches/sympa-autotools-cleanup/src/LDAPSource.pm:5761)
+   A /branches/sympa-autotools-cleanup/src/lib/Language.pm (de /branches/sympa-autotools-cleanup/src/Language.pm:5761)
+   A /branches/sympa-autotools-cleanup/src/lib/Ldap.pm (de /branches/sympa-autotools-cleanup/src/Ldap.pm:5761)
+   A /branches/sympa-autotools-cleanup/src/lib/List.pm (de /branches/sympa-autotools-cleanup/src/List.pm:5761)
+   A /branches/sympa-autotools-cleanup/src/lib/Lock.pm (de /branches/sympa-autotools-cleanup/src/Lock.pm:5761)
+   A /branches/sympa-autotools-cleanup/src/lib/Log.pm (de /branches/sympa-autotools-cleanup/src/Log.pm:5761)
+   A /branches/sympa-autotools-cleanup/src/lib/Message.pm (de /branches/sympa-autotools-cleanup/src/Message.pm:5761)
+   A /branches/sympa-autotools-cleanup/src/lib/PlainDigest.pm (de /branches/sympa-autotools-cleanup/src/PlainDigest.pm:5761)
+   A /branches/sympa-autotools-cleanup/src/lib/SQLSource.pm (de /branches/sympa-autotools-cleanup/src/SQLSource.pm:5761)
+   A /branches/sympa-autotools-cleanup/src/lib/Scenario.pm (de /branches/sympa-autotools-cleanup/src/Scenario.pm:5761)
+   A /branches/sympa-autotools-cleanup/src/lib/Task.pm (de /branches/sympa-autotools-cleanup/src/Task.pm:5761)
+   A /branches/sympa-autotools-cleanup/src/lib/Upgrade.pm (de /branches/sympa-autotools-cleanup/src/Upgrade.pm:5761)
+   A /branches/sympa-autotools-cleanup/src/lib/Version.pm (de /branches/sympa-autotools-cleanup/src/Version.pm:5761)
+   A /branches/sympa-autotools-cleanup/src/lib/admin.pm (de /branches/sympa-autotools-cleanup/src/admin.pm:5761)
+   A /branches/sympa-autotools-cleanup/src/lib/confdef.pm (de /branches/sympa-autotools-cleanup/src/confdef.pm:5761)
+   A /branches/sympa-autotools-cleanup/src/lib/mail.pm (de /branches/sympa-autotools-cleanup/src/mail.pm:5761)
+   A /branches/sympa-autotools-cleanup/src/lib/report.pm (de /branches/sympa-autotools-cleanup/src/report.pm:5761)
+   A /branches/sympa-autotools-cleanup/src/lib/time_utils.pl (de /branches/sympa-autotools-cleanup/src/time_utils.pl:5761)
+   A /branches/sympa-autotools-cleanup/src/lib/tools.pl (de /branches/sympa-autotools-cleanup/src/tools.pl:5761)
+   A /branches/sympa-autotools-cleanup/src/lib/tt2.pl (de /branches/sympa-autotools-cleanup/src/tt2.pl:5761)
+   D /branches/sympa-autotools-cleanup/src/mail.pm
+   D /branches/sympa-autotools-cleanup/src/report.pm
+   D /branches/sympa-autotools-cleanup/src/time_utils.pl
+   D /branches/sympa-autotools-cleanup/src/tools.pl
+   D /branches/sympa-autotools-cleanup/src/tt2.pl
+Fision via : r5816
+
+[change] change location of perl modules in archive
+------------------------------------------------------------------------
+r5767 | rousse | 2009-05-21 16:14:47 +0200 (jeu 21 mai 2009) | 1 ligne
+Chemins modifiés :
+   M /branches/sympa-autotools-cleanup/configure.ac
+   M /branches/sympa-autotools-cleanup/wwsympa/Makefile.am
+   A /branches/sympa-autotools-cleanup/wwsympa/icons/Makefile.am
+Fision via : r5816
+
+[change] don't forget to install icons
+------------------------------------------------------------------------
+r5766 | rousse | 2009-05-21 16:07:46 +0200 (jeu 21 mai 2009) | 1 ligne
+Chemins modifiés :
+   M /branches/sympa-autotools-cleanup/Makefile.am
+Fision via : r5816
+
+[change] create bounce and archive directories under spooldir, not under prefix
+------------------------------------------------------------------------
+r5765 | rousse | 2009-05-21 16:02:29 +0200 (jeu 21 mai 2009) | 1 ligne
+Chemins modifiés :
+   D /branches/sympa-autotools-cleanup/po/xgettext.pl
+Fision via : r5816
+
+[change] drop obsoletes custom xgettext.pl script
+------------------------------------------------------------------------
+r5764 | rousse | 2009-05-21 16:02:06 +0200 (jeu 21 mai 2009) | 1 ligne
+Chemins modifiés :
+   M /branches/sympa-autotools-cleanup/wwsympa/Makefile.am
+   D /branches/sympa-autotools-cleanup/wwsympa/wwsympa_sudo_wrapper.pl
+Fision via : r5816
+
+[change] drop obsoletes sudo wrapper
+------------------------------------------------------------------------
+r5763 | rousse | 2009-05-21 15:59:37 +0200 (jeu 21 mai 2009) | 1 ligne
+Chemins modifiés :
+   M /branches/sympa-autotools-cleanup/configure.ac
+Fision via : r5816
+
+[change] use FHS compliant setup on new install, and keep old setup for upgrade, according to the presence of /etc/sympa.conf file
+------------------------------------------------------------------------
+r5762 | rousse | 2009-05-21 14:56:18 +0200 (jeu 21 mai 2009) | 1 ligne
+Chemins modifiés :
+   M /branches/sympa-autotools-cleanup/configure.ac
+Fision via : r5816
+
+[change] useless, all builtin variables are automatically substituted already
 ------------------------------------------------------------------------
 r5761 | lumineau | 2009-05-20 16:54:47 +0200 (mer 20 mai 2009) | 3 lignes
 Chemins modifiés :

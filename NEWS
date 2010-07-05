@@ -3,6 +3,57 @@
 
 (See Changelog file for the full changes log)
 
+6.0.4		July 05, 2010
+
+  Bug fixes:
+
+	src/lib/Lock.pm: [#6513] [Landry Breuil] Fix errors in apache error log
+	(Use of uninitialized value in sprintf) when debug is enabled
+
+	wwsympa/Bounce.pm: [#3881] [Michael Quintero] code to handle Groupwise
+	7 bounces
+
+	wwsympa/wwsympa.fcgi.in:  An extra "\n" appended to the "From:" field
+	caused HTML message to be trimmed from their headers and consequently
+	treated as plain text. This caused HTML messages to arrive as a plain
+	text messages starting by SMTP headers.
+
+	src/lib/LDAPSource.pm: [#6802] [T.Berry, NASA] Remove duplicate code +
+	variable declared twice
+
+	wwsympa/wwsympa.fcgi.in: [#6842] [S.Ikeda] /help/editlist does not show
+	title of parameters
+
+	src/lib/tools.pm: [#6901][reported by D.Black] tools::smime_decrypt()
+	could make sympa.pl process crash. 
+
+	src/lib/tools.pm, wwsympa/wwsympa.fcgi.in: [S.Ikeda][#3779] Comma in
+	gecos caused invalid From: in Web posting. New tools::addrencode() for
+	proper encoding of From: SMTP header field according to RFC5322.
+
+	src/lib/Upgrade.pm, wwsympa/wwsympa.fcgi.in: [#4106][reported by
+	M.Larchet] Shared documents could not get manipulated. This was due to
+	changes in the algorithm of MIME::EncWords::encode_mimewords() function
+	(chars -_+! no more Q-encoded). The problem started with version 1.010
+	of MIME::EncWords. The fix consists in a massive renaming of shared
+	files (according to new algorithm) during sympa.pl --upgrade.
+
+	src/lib/mail.pm, wwsympa/wwsympa.fcgi.in: [#3984] [submitted by
+	S.Kristoffersen] Restored code to add Auto-Submitted SMTP header field.
+	mail::mail_file() does not set this header when 'not_auto_submitted' is
+	set, ie when wwsympa sends commands to sympa.pl through the msg/ spool.
+
+  Features:
+
+	src/etc/create_list_templates/hotline/config.tt2,
+	src/etc/create_list_templates/private_working_group/config.tt2,
+	src/lib/List.pm, src/lib/confdef.pm, src/sympa.pl.in: [#6693]
+	[requested by R.Sharshenov] New "reject_mail_from_automates_feature"
+	list parameter allows to disable the
+	detection (and rejection) of mails from automates. This detection is
+	based on the From header field as well as the Auto-S
+	ubmitted header field. A default behavior can be defined in sympa.conf.
+
 6.0.3		June 03, 2010
 
   Bug fixes:
