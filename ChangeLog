@@ -1,4 +1,37 @@
 ------------------------------------------------------------------------
+r6584 | sympa-authors | 2010-07-05 16:38:22 +0200 (lun 05 jui 2010) | 1 ligne
+Chemins modifiés :
+   M /branches/sympa-6.0-branch/configure.ac
+
+[-feature]Committing latest translations from Pootle
+------------------------------------------------------------------------
+r6583 | david.verdin | 2010-07-05 16:36:27 +0200 (lun 05 jui 2010) | 2 lignes
+Chemins modifiés :
+   M /branches/sympa-6.0-branch/configure.ac
+
+[-svn] Back to 6.0.3 for retagging.
+
+------------------------------------------------------------------------
+r6581 | sympa-authors | 2010-07-05 15:38:37 +0200 (lun 05 jui 2010) | 1 ligne
+Chemins modifiés :
+   M /branches/sympa-6.0-branch/configure.ac
+
+[-feature]Committing latest translations from Pootle
+------------------------------------------------------------------------
+r6580 | david.verdin | 2010-07-05 15:31:25 +0200 (lun 05 jui 2010) | 2 lignes
+Chemins modifiés :
+   M /branches/sympa-6.0-branch/src/lib/Lock.pm
+
+[bug] The debug4 log facility does not exist. Replacing its occurences with debug3.
+
+------------------------------------------------------------------------
+r6578 | sympa-authors | 2010-07-05 12:12:13 +0200 (lun 05 jui 2010) | 1 ligne
+Chemins modifiés :
+   M /branches/sympa-6.0-branch/ChangeLog
+   M /branches/sympa-6.0-branch/NEWS
+
+[-release]Preparing version 6.0.4
+------------------------------------------------------------------------
 r6577 | sympa-authors | 2010-07-05 12:08:19 +0200 (lun 05 jui 2010) | 1 ligne
 Chemins modifiés :
    M /branches/sympa-6.0-branch/configure.ac
