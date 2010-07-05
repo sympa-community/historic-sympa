@@ -218,7 +218,7 @@ msgstr "Post"
 msgid "RSS"
 msgstr "RSS"
 
-#: ../src/lib/List.pm:1320 ../web_tt2/list_menu.tt2:80
+#: ../src/lib/List.pm:1326 ../web_tt2/list_menu.tt2:80
 #: ../web_tt2/list_menu.tt2:82
 msgid "Shared documents"
 msgstr "Delade dokument"
@@ -834,6 +834,24 @@ msgstr ""
 #: ../web_tt2/arcsearch.tt2:122
 msgid "Return to archive %1"
 msgstr "Återgå till arkivet %1"
+
+#: ../web_tt2/auto_signoff.tt2:1
+#, fuzzy
+msgid "Unsubscription request"
+msgstr "Prenumerationer"
+
+#. (signing_off_email,list)
+#: ../web_tt2/auto_signoff.tt2:2
+#, fuzzy
+msgid "You clicked a link to unsubscribe the address %1 from list %2."
+msgstr "Här är prenumeranterna för e-postlistan %1@%2:"
+
+#. (list)
+#: ../web_tt2/auto_signoff.tt2:3
+msgid ""
+"A confirmation was just sent to this address. By clicking the link it "
+"contains, you will be definitively unsubscribed from list %1"
+msgstr ""
 
 #: ../web_tt2/blacklist.tt2:4
 #, fuzzy
@@ -2463,6 +2481,16 @@ msgstr ""
 msgid "Closed lists"
 msgstr "Stäng listor"
 
+#: ../src/etc/mhonarc-ressources.tt2:212 ../src/etc/mhonarc-ressources.tt2:328
+#: ../web_tt2/get_closed_lists.tt2:29 ../web_tt2/get_closed_lists.tt2:9
+#: ../web_tt2/modindex.tt2:125 ../web_tt2/modindex.tt2:182
+#: ../web_tt2/modindex.tt2:64 ../web_tt2/review.tt2:138
+#: ../web_tt2/reviewbouncing.tt2:131 ../web_tt2/reviewbouncing.tt2:60
+#: ../web_tt2/subindex.tt2:10 ../web_tt2/subindex.tt2:57
+#: ../web_tt2/subscriber_table.tt2:7
+msgid "Toggle Selection"
+msgstr ""
+
 #: ../web_tt2/get_closed_lists.tt2:10 ../web_tt2/get_pending_lists.tt2:9
 msgid "list name"
 msgstr "listnamn"
@@ -2474,13 +2502,6 @@ msgstr "listämne"
 #: ../web_tt2/get_closed_lists.tt2:12 ../web_tt2/get_pending_lists.tt2:11
 msgid "Requested by"
 msgstr "Önskad av"
-
-#: ../src/etc/mhonarc-ressources.tt2:212 ../src/etc/mhonarc-ressources.tt2:328
-#: ../web_tt2/get_closed_lists.tt2:29 ../web_tt2/modindex.tt2:125
-#: ../web_tt2/modindex.tt2:182 ../web_tt2/review.tt2:138
-#: ../web_tt2/reviewbouncing.tt2:131
-msgid "Toggle Selection"
-msgstr ""
 
 #: ../web_tt2/get_closed_lists.tt2:30
 msgid "Purge selected lists"
@@ -3889,6 +3910,19 @@ msgstr ""
 msgid "The following virtual robots are running on this server:"
 msgstr "Följande virtuella robotar körs på denna server :"
 
+#: ../web_tt2/serveradmin.tt2:27
+msgid "Sympa URL:"
+msgstr ""
+
+#: ../web_tt2/serveradmin.tt2:27
+msgid "Mail domain:"
+msgstr ""
+
+#: ../web_tt2/serveradmin.tt2:27
+#, fuzzy
+msgid "Listmaster(s):"
+msgstr "Listmästare"
+
 #: ../web_tt2/serveradmin.tt2:30
 msgid "No Virtual Robot defined on this server"
 msgstr "Det finns ingen Virtuell Robot definerad för denna server"
@@ -4526,11 +4560,11 @@ msgstr "meddelande för uppsägning av prenumeration"
 msgid "No subscription requests"
 msgstr ""
 
-#: ../web_tt2/subindex.tt2:57
+#: ../web_tt2/subindex.tt2:58
 msgid "Add selected addresses"
 msgstr "Lägg till vald(a) address(er)"
 
-#: ../web_tt2/subindex.tt2:58
+#: ../web_tt2/subindex.tt2:59
 msgid "Reject selected addresses"
 msgstr "Neka valda adresser"
 
@@ -4888,7 +4922,7 @@ msgstr "Sök användare"
 #. (date_to_formated)
 #. This entry is a date/time format
 #. Check the strftime manpage for format details : http://docs.freebsd.org/info/gawk/gawk.info.Time_Functions.html
-#: ../web_tt2/viewlogs.tt2:113 ../wwsympa/wwsympa.fcgi.in:16069
+#: ../web_tt2/viewlogs.tt2:113 ../wwsympa/wwsympa.fcgi.in:16135
 msgid "%d %b %Y %H:%M:%S"
 msgstr ""
 
@@ -5599,7 +5633,7 @@ msgid "%1 Digest %2"
 msgstr "%1 Samlingsbrev %2"
 
 #: ../mail_tt2/digest.tt2:10 ../mail_tt2/digest_plain.tt2:9
-#: ../mail_tt2/get_archive.tt2:9 ../src/lib/List.pm:2771
+#: ../mail_tt2/get_archive.tt2:9 ../src/lib/List.pm:2784
 msgid "Table of contents:"
 msgstr "Innehållsförteckning:"
 
@@ -7719,8 +7753,16 @@ msgstr ""
 msgid "Unsubscribing from list %1"
 msgstr "Jag avregisterar mig från listan %1"
 
+#. (list.name,ip)
+#: ../mail_tt2/user_notification.tt2:51
+msgid ""
+"Somebody (probably you) requested to unsubscribe you from list %1.\n"
+"This query was issued from the IP number '%2'.\n"
+"To confirm and get removed from the list, please click the link below: "
+msgstr ""
+
 #. (list.name)
-#: ../mail_tt2/user_notification.tt2:49
+#: ../mail_tt2/user_notification.tt2:53
 msgid ""
 "You have requested to removed from list %1. To confirm and get removed from "
 "the list, please click the link below: "
@@ -8474,13 +8516,13 @@ msgstr ""
 
 #. This entry is a date/time format
 #. Check the strftime manpage for format details : http://docs.freebsd.org/info/gawk/gawk.info.Time_Functions.html
-#: ../src/lib/Bulk.pm:374
+#: ../src/lib/Bulk.pm:376
 msgid "%d %b %Y  %H:%M"
 msgstr ""
 
 #. This entry is a date/time format
 #. Check the strftime manpage for format details : http://docs.freebsd.org/info/gawk/gawk.info.Time_Functions.html
-#: ../src/lib/Commands.pm:963 ../wwsympa/wwsympa.fcgi.in:9706
+#: ../src/lib/Commands.pm:963 ../wwsympa/wwsympa.fcgi.in:9766
 msgid "%A"
 msgstr ""
 
@@ -8497,8 +8539,8 @@ msgstr "Fel på rad %d : %s"
 #. This entry is a date/time format
 #. Check the strftime manpage for format details : http://docs.freebsd.org/info/gawk/gawk.info.Time_Functions.html
 #: ../src/lib/Family.pm:2591 ../src/lib/Family.pm:388 ../src/lib/Family.pm:665
-#: ../src/lib/List.pm:1861 ../wwsympa/Auth.pm:459
-#: ../wwsympa/wwsympa.fcgi.in:1057 ../wwsympa/wwsympa.fcgi.in:2851
+#: ../src/lib/List.pm:1874 ../wwsympa/Auth.pm:459
+#: ../wwsympa/wwsympa.fcgi.in:1059 ../wwsympa/wwsympa.fcgi.in:2853
 msgid "%d %b %Y at %H:%M:%S"
 msgstr ""
 
@@ -8518,7 +8560,7 @@ msgstr "Anonym avsändare"
 msgid "frequency"
 msgstr ""
 
-#: ../src/lib/List.pm:1414 ../src/lib/List.pm:341
+#: ../src/lib/List.pm:1427 ../src/lib/List.pm:341
 msgid "access right"
 msgstr ""
 
@@ -8578,6 +8620,19 @@ msgstr ""
 #: ../src/lib/List.pm:434
 msgid "Secret string for generating unique keys"
 msgstr ""
+
+#: ../src/lib/List.pm:1090 ../src/lib/List.pm:1383 ../src/lib/List.pm:439
+msgid "epoch date"
+msgstr ""
+
+#: ../src/lib/List.pm:443
+msgid "human readable"
+msgstr ""
+
+#: ../src/lib/List.pm:448
+#, fuzzy
+msgid "who created the list"
+msgstr "vem uppdaterade konfigurationen"
 
 #: ../src/lib/List.pm:452
 msgid "Creation of the list"
@@ -8948,120 +9003,128 @@ msgstr "profil"
 msgid "Priority"
 msgstr "Prioritet"
 
-#: ../src/lib/List.pm:1228
+#: ../src/lib/List.pm:1230
+msgid "Reject mail from automates (crontab, etc)?"
+msgstr ""
+
+#: ../src/lib/List.pm:1234
 msgid "Who can start a remind process"
 msgstr ""
 
-#: ../src/lib/List.pm:1233
+#: ../src/lib/List.pm:1239
 msgid "Return-path of the REMIND command"
 msgstr ""
 
-#: ../src/lib/List.pm:1257 ../src/lib/List.pm:1277
+#: ../src/lib/List.pm:1263 ../src/lib/List.pm:1283
 msgid "Reply address"
 msgstr "Svarsaddress"
 
-#: ../src/lib/List.pm:1263
+#: ../src/lib/List.pm:1269
 msgid "value"
 msgstr "värde"
 
-#: ../src/lib/List.pm:1268
+#: ../src/lib/List.pm:1274
 msgid "other email address"
 msgstr "annan e-postaddress"
 
-#: ../src/lib/List.pm:1273
+#: ../src/lib/List.pm:1279
 msgid "respect of existing header field"
 msgstr ""
 
-#: ../src/lib/List.pm:1282
+#: ../src/lib/List.pm:1288
 msgid "Who can review subscribers"
 msgstr ""
 
-#: ../src/lib/List.pm:1289
+#: ../src/lib/List.pm:1295
 msgid "RFC 2369 Header fields"
 msgstr "RFC 2369 fälthuvud"
 
-#: ../src/lib/List.pm:1293
+#: ../src/lib/List.pm:1299
 msgid "Who can send messages"
 msgstr ""
 
-#: ../src/lib/List.pm:1300
+#: ../src/lib/List.pm:1306
 msgid "Serial number of the config"
 msgstr "Konfigurationens serienummer"
 
-#: ../src/lib/List.pm:1305
+#: ../src/lib/List.pm:1311
 msgid "Who can view"
 msgstr ""
 
-#: ../src/lib/List.pm:1309
+#: ../src/lib/List.pm:1315
 msgid "Who can edit"
 msgstr ""
 
-#: ../src/lib/List.pm:1316 ../src/lib/List.pm:1421
+#: ../src/lib/List.pm:1322 ../src/lib/List.pm:1434
 msgid "quota"
 msgstr "kvot"
 
-#: ../src/lib/List.pm:1325 ../src/lib/List.pm:1330
+#: ../src/lib/List.pm:1331 ../src/lib/List.pm:1336
 msgid "email address protection method"
 msgstr ""
 
-#: ../src/lib/List.pm:1336
+#: ../src/lib/List.pm:1342
 msgid "Status of the list"
 msgstr "Liststatus"
 
-#: ../src/lib/List.pm:1343
+#: ../src/lib/List.pm:1350
+msgid "Timeout for fetch of include_sql_query"
+msgstr ""
+
+#: ../src/lib/List.pm:1356
 msgid "Subject of the list"
 msgstr "Ämnet för listan"
 
-#: ../src/lib/List.pm:1347
+#: ../src/lib/List.pm:1360
 msgid "Who can subscribe to the list"
 msgstr ""
 
-#: ../src/lib/List.pm:1353
+#: ../src/lib/List.pm:1366
 msgid "Topics for the list"
 msgstr ""
 
-#: ../src/lib/List.pm:1360
+#: ../src/lib/List.pm:1373
 msgid "Inclusions timeout"
 msgstr ""
 
-#: ../src/lib/List.pm:1364
+#: ../src/lib/List.pm:1377
 msgid "Who can unsubscribe"
 msgstr ""
 
-#: ../src/lib/List.pm:1385
+#: ../src/lib/List.pm:1398
 msgid "Last update of config"
 msgstr "Senaste uppdateringen av konfigurationen"
 
-#: ../src/lib/List.pm:1392
+#: ../src/lib/List.pm:1405
 msgid "User data source"
 msgstr ""
 
-#: ../src/lib/List.pm:1398
+#: ../src/lib/List.pm:1411
 msgid "Allow picture display? (must be enabled for the current robot)"
 msgstr ""
 
-#: ../src/lib/List.pm:1404
+#: ../src/lib/List.pm:1417
 msgid "Allow message personnalization"
 msgstr ""
 
-#: ../src/lib/List.pm:1410
+#: ../src/lib/List.pm:1423
 msgid "Visibility of the list"
 msgstr ""
 
-#: ../src/lib/List.pm:1426
+#: ../src/lib/List.pm:1439
 #, fuzzy
 msgid "Maximum number of month archived"
 msgstr "Max antal meddelande för samlingsbrev"
 
-#: ../src/lib/List.pm:1431
+#: ../src/lib/List.pm:1444
 msgid "Web archives"
 msgstr ""
 
-#: ../src/lib/List.pm:1437
+#: ../src/lib/List.pm:1450
 msgid "Welcome return-path"
 msgstr ""
 
-#: ../src/lib/List.pm:1442
+#: ../src/lib/List.pm:1455
 msgid "percentage of list members in VERP mode"
 msgstr ""
 
@@ -9088,8 +9151,8 @@ msgstr "värde"
 msgid "messages"
 msgstr "# meddelande"
 
-#: ../src/lib/List.pm:1358 ../src/lib/List.pm:589 ../src/lib/List.pm:817
-#: ../src/lib/List.pm:897 ../src/lib/List.pm:935
+#: ../src/lib/List.pm:1348 ../src/lib/List.pm:1371 ../src/lib/List.pm:589
+#: ../src/lib/List.pm:817 ../src/lib/List.pm:897 ../src/lib/List.pm:935
 msgid "seconds"
 msgstr ""
 
@@ -9136,11 +9199,7 @@ msgstr ""
 msgid "SSL ciphers used"
 msgstr "Krypteringsalgoritmens nyckelstorlek"
 
-#: ../src/lib/List.pm:1090 ../src/lib/List.pm:1370
-msgid "epoch date"
-msgstr ""
-
-#: ../src/lib/List.pm:1094 ../src/lib/List.pm:1375
+#: ../src/lib/List.pm:1094 ../src/lib/List.pm:1388
 msgid "date"
 msgstr ""
 
@@ -9168,53 +9227,53 @@ msgstr ""
 msgid "Owners defined in an external data source"
 msgstr ""
 
-#: ../src/lib/List.pm:1237
+#: ../src/lib/List.pm:1243
 msgid "Periodical subscription reminder task"
 msgstr ""
 
-#: ../src/lib/List.pm:1242
+#: ../src/lib/List.pm:1248
 msgid "Incoming SMTP header fields to be removed"
 msgstr ""
 
-#: ../src/lib/List.pm:1249
+#: ../src/lib/List.pm:1255
 msgid "Outgoing SMTP header fields to be removed"
 msgstr ""
 
-#: ../src/lib/List.pm:1315 ../src/lib/List.pm:1420
+#: ../src/lib/List.pm:1321 ../src/lib/List.pm:1433
 msgid "Kbytes"
 msgstr ""
 
-#: ../src/lib/List.pm:1381
+#: ../src/lib/List.pm:1394
 msgid "who updated the config"
 msgstr "vem uppdaterade konfigurationen"
 
 #. This entry is a date/time format
 #. Check the strftime manpage for format details : http://docs.freebsd.org/info/gawk/gawk.info.Time_Functions.html
-#: ../src/lib/List.pm:2889
+#: ../src/lib/List.pm:2902
 msgid "%a, %d %b %Y %H:%M:%S"
 msgstr ""
 
 #. This entry is a date/time format
 #. Check the strftime manpage for format details : http://docs.freebsd.org/info/gawk/gawk.info.Time_Functions.html
-#: ../src/lib/List.pm:2890
+#: ../src/lib/List.pm:2903
 msgid "%a, %d %b %Y"
 msgstr ""
 
 #. This entry is a date/time format
 #. Check the strftime manpage for format details : http://docs.freebsd.org/info/gawk/gawk.info.Time_Functions.html
-#: ../src/lib/List.pm:3081 ../src/lib/List.pm:3082 ../src/lib/List.pm:3086
-#: ../wwsympa/wwsympa.fcgi.in:10882 ../wwsympa/wwsympa.fcgi.in:10951
-#: ../wwsympa/wwsympa.fcgi.in:11153 ../wwsympa/wwsympa.fcgi.in:11500
-#: ../wwsympa/wwsympa.fcgi.in:14938 ../wwsympa/wwsympa.fcgi.in:14945
-#: ../wwsympa/wwsympa.fcgi.in:15644 ../wwsympa/wwsympa.fcgi.in:16374
-#: ../wwsympa/wwsympa.fcgi.in:16375 ../wwsympa/wwsympa.fcgi.in:4243
-#: ../wwsympa/wwsympa.fcgi.in:4301 ../wwsympa/wwsympa.fcgi.in:4872
-#: ../wwsympa/wwsympa.fcgi.in:4873 ../wwsympa/wwsympa.fcgi.in:6314
-#: ../wwsympa/wwsympa.fcgi.in:7333 ../wwsympa/wwsympa.fcgi.in:7876
-#: ../wwsympa/wwsympa.fcgi.in:7916 ../wwsympa/wwsympa.fcgi.in:7918
-#: ../wwsympa/wwsympa.fcgi.in:8394 ../wwsympa/wwsympa.fcgi.in:8395
-#: ../wwsympa/wwsympa.fcgi.in:8429 ../wwsympa/wwsympa.fcgi.in:8430
-#: ../wwsympa/wwsympa.fcgi.in:8609 ../wwsympa/wwsympa.fcgi.in:8610
+#: ../src/lib/List.pm:3094 ../src/lib/List.pm:3095 ../src/lib/List.pm:3099
+#: ../wwsympa/wwsympa.fcgi.in:10942 ../wwsympa/wwsympa.fcgi.in:11011
+#: ../wwsympa/wwsympa.fcgi.in:11213 ../wwsympa/wwsympa.fcgi.in:11560
+#: ../wwsympa/wwsympa.fcgi.in:14999 ../wwsympa/wwsympa.fcgi.in:15006
+#: ../wwsympa/wwsympa.fcgi.in:15707 ../wwsympa/wwsympa.fcgi.in:16440
+#: ../wwsympa/wwsympa.fcgi.in:16441 ../wwsympa/wwsympa.fcgi.in:4249
+#: ../wwsympa/wwsympa.fcgi.in:4307 ../wwsympa/wwsympa.fcgi.in:4878
+#: ../wwsympa/wwsympa.fcgi.in:4879 ../wwsympa/wwsympa.fcgi.in:6374
+#: ../wwsympa/wwsympa.fcgi.in:7393 ../wwsympa/wwsympa.fcgi.in:7936
+#: ../wwsympa/wwsympa.fcgi.in:7976 ../wwsympa/wwsympa.fcgi.in:7978
+#: ../wwsympa/wwsympa.fcgi.in:8454 ../wwsympa/wwsympa.fcgi.in:8455
+#: ../wwsympa/wwsympa.fcgi.in:8489 ../wwsympa/wwsympa.fcgi.in:8490
+#: ../wwsympa/wwsympa.fcgi.in:8669 ../wwsympa/wwsympa.fcgi.in:8670
 msgid "%d %b %Y"
 msgstr ""
 
@@ -9226,7 +9285,7 @@ msgid ""
 "for variable %s.\n"
 msgstr ""
 
-#: ../src/lib/mail.pm:805
+#: ../src/lib/mail.pm:810
 msgid "Unable to create a channel in smtpto: %m"
 msgstr ""
 
@@ -9309,21 +9368,21 @@ msgstr "%1 : okänd åtgärd"
 
 #. This entry is a date/time format
 #. Check the strftime manpage for format details : http://docs.freebsd.org/info/gawk/gawk.info.Time_Functions.html
-#: ../wwsympa/wwsympa.fcgi.in:1058
+#: ../wwsympa/wwsympa.fcgi.in:1060
 msgid "%H:%M:%S"
 msgstr ""
 
 #. This entry is a date/time format
 #. Check the strftime manpage for format details : http://docs.freebsd.org/info/gawk/gawk.info.Time_Functions.html
 #: ../wwsympa/SympaSession.pm:427 ../wwsympa/SympaSession.pm:428
-#: ../wwsympa/wwsympa.fcgi.in:11734 ../wwsympa/wwsympa.fcgi.in:11867
-#: ../wwsympa/wwsympa.fcgi.in:14180 ../wwsympa/wwsympa.fcgi.in:7830
+#: ../wwsympa/wwsympa.fcgi.in:11794 ../wwsympa/wwsympa.fcgi.in:11927
+#: ../wwsympa/wwsympa.fcgi.in:14240 ../wwsympa/wwsympa.fcgi.in:7890
 msgid "%d %b %y  %H:%M"
 msgstr ""
 
 #. This entry is a date/time format
 #. Check the strftime manpage for format details : http://docs.freebsd.org/info/gawk/gawk.info.Time_Functions.html
-#: ../wwsympa/wwsympa.fcgi.in:16014 ../wwsympa/wwsympa.fcgi.in:16015
+#: ../wwsympa/wwsympa.fcgi.in:16080 ../wwsympa/wwsympa.fcgi.in:16081
 msgid "%Y-%m-%d-%H-%M-%S"
 msgstr ""
 
