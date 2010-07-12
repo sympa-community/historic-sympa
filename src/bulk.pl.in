@@ -221,14 +221,15 @@ while (!$end) {
 	## Go through the bulk_mailer table and process messages
     if ($bulk = Bulk::next()) {
 	if ($bulk->{'messagekey'} ne $messagekey) {
-	    # current packet is no related to the same message as the previous packet
+	    # current packet is not related to the same message as the previous packet
             # so it is needed to fetch the new message from message_table 
+
+	    $messagekey = $bulk->{'messagekey'};
 	    $message_from_spool = &Bulk::message_from_spool($bulk->{'messagekey'});
 
 	    $messageasstring_init = $message_from_spool->{'messageasstring'};
-	    
-	    unless ( $messageasstring ) {
-		&do_log('err',"internal error : current packet (messagekey= %s) contain a ref to a null message",$bulk->{'messagekey'});
+	    unless ( $messageasstring_init ) {
+		&do_log('err',"internal error : current packet (messagekey= %s) contain a ref to a null message",$bulk->{'messagekey'});		
 		unless (&Bulk::remove($bulk->{'messagekey'},$bulk->{'packetid'})) {
 		    &do_log('err',"failed to remove processed packet '%s', messagekey '%s'", $bulk->{'messagekey'},$bulk->{'packetid'});
 		}
@@ -268,21 +269,26 @@ while (!$end) {
 	    $parser->output_to_core(1);
 	    my $entity = $parser->parse_data($messageasstring_init); 
 	    
-	    if($bulk->{'tracking'}){
-		$key = &tracking::find_msg_key($entity->head->get('Message-Id'), $listname,$robot);
-		&do_log('trace', "tracking is requested found Key: %s ", $key);
-	    }
+	    #if($bulk->{'tracking'}){
+	    #   $key = &tracking::find_msg_key($entity->head->get('Message-Id'), $listname,$robot);
+	    #   &do_log('trace', "tracking is requested found Key: %s ", $key);
+	    #}
 	    
 	    foreach $rcpt (@rcpts) {
 		do_log('trace',"envoi a l'unité pour $rcpt");
+		my $notification_id;
 
 		my $return_path;
 		my $escaped_rcpt = $rcpt;
 		$escaped_rcpt  =~ s/\@/\=\=a\=\=/; 
-
+		
 		if($bulk->{'tracking'}){ # VERP + tracking
+		    my $msgid = $entity->head->get('Message-Id'); chomp $msgid;		    
+		    do_log('trace', "Appel de tracking::find_notification_id_by_message($rcpt,$msgid,$listname,$robot)");
+		    $notification_id = &tracking::find_notification_id_by_message($rcpt, $msgid, $listname,$robot);
+
 		    do_log ('trace',"We should use a header editing method that do not alter S/MIME signed messages (using Mime::entity  b64-encode(b64-decode(text)) may be defferent from original text)"); 
-		    $return_path = $Conf::Conf{'bounce_email_prefix'}.'+'.$escaped_rcpt.'=='.$listname.'=='.$key.'@'.$robot;
+		    $return_path = $Conf::Conf{'bounce_email_prefix'}.'+'.$escaped_rcpt.'=='.$listname.'=='.$notification_id.'@'.$robot;
 		    $entity->head->replace('Disposition-Notification-To',$return_path);
 		    $messageasstring_init = $entity->as_string;
 		}else{  # VERP
@@ -311,10 +317,10 @@ while (!$end) {
 									   'dkim_header_list' =>$message_from_spool->{'dkim_header_list'} } );
 		}
 
-		do_log('trace',"mail::smtpto($return_path, $rcpt, $bulk->{'robot'},key : $key, message : $messageasstring);");
+		do_log('trace',"mail::smtpto($return_path, $rcpt, $bulk->{'robot'},key : $notification_id, message : $messageasstring);");
 
 
-		*SMTP = &mail::smtpto($return_path, \$rcpt, $bulk->{'robot'},$key);
+		*SMTP = &mail::smtpto($return_path, \$rcpt, $bulk->{'robot'},$notification_id);
 		# Message with customized data
 		print SMTP $messageasstring;
 		close SMTP;
@@ -359,7 +365,7 @@ while (!$end) {
     }
     &mail::reaper;
 }
-do_log('notice', 'bulk.pl exited normally due to signal');
+&do_log('notice', 'bulk.pl exited normally due to signal');
 &tools::remove_pid($Conf::Conf{'pidfile_bulk'}, $$, $options);
 
 exit(0);

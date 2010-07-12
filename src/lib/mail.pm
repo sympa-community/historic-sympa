@@ -325,17 +325,17 @@ sub mail_message {
     my $from = $list->{'name'}.&Conf::get_robot_conf($robot, 'return_path_suffix').'@'.$host;
 
     do_log('debug', 'mail::mail_message(from: %s, , file:%s, %s, verp->%s, %d rcpt, last: %s)', $from, $message->{'filename'}, $message->{'smime_crypted'}, $verp, $#rcpt+1, $tag_as_last);
-    do_log('trace', 'mail::mail_message(from: %s, , file:%s, %s, verp->%s, %d rcpt, last: %s)', $from, $message->{'filename'}, $message->{'smime_crypted'}, $verp, $#rcpt+1, $tag_as_last);
-    
+
+    do_log('trace', "return 0 car  $#rcpt + 1 = 0") if ($#rcpt == -1);
+    return 0 if ($#rcpt == -1);
+
     my($i, $j, $nrcpt, $size); 
     my $numsmtp = 0;
-    
+
     ## If message contain a footer or header added by Sympa  use the object message else
     ## Extract body from original file to preserve signature
     my ($msg_body, $msg_header);
-    
     $msg_header = $message->{'msg'}->head;
-    
     if ($message->{'altered'}) {
 	$msg_body = $message->{'msg'}->body_as_string;
 	
@@ -363,6 +363,7 @@ sub mail_message {
     my @sendto;
     my @sendtobypacket;
 
+    do_log('trace', 'mail::mail_message   aaaa');
     while (defined ($i = shift(@rcpt))) {
 	my @k = reverse(split(/[\.@]/, $i));
 	my @l = reverse(split(/[\.@]/, $j));
@@ -372,6 +373,7 @@ sub mail_message {
 	    $dom = $1;
 	    chomp $dom;
 	}
+	do_log('trace', 'mail::mail_message   bbbb');
 	$rcpt_by_dom{$dom} += 1 ;
 	&do_log('debug2', "domain: $dom ; rcpt by dom: $rcpt_by_dom{$dom} ; limit for this domain: $Conf::Conf{'nrcpt_by_domain'}{$dom}");
 
@@ -401,11 +403,13 @@ sub mail_message {
 	push(@sendto, $i);
 	$j = $i;
     }
+    do_log('trace', 'mail::mail_message   ccccc');
     if ($#sendto >= 0) {
 	$numsmtp++ ;# if (&sendto($msg_header, $msg_body, $from, \@sendto, $robot));
 	my @tab =  @sendto ; push @sendtobypacket, \@tab ;# do not replace this line by push @sendtobypacket, \@sendto !!!
     }
 
+    do_log('trace', 'mail::mail_message  dddd');
     return $numsmtp if (&sendto('msg_header' => $msg_header, 
 				'msg_body' => $msg_body,
 				'from' => $from,
@@ -763,6 +767,7 @@ sub sending {
 # IN : $from :(+) for SMTP "MAIL From:" field
 #      $rcpt :(+) ref(SCALAR)|ref(ARRAY)- for SMTP "RCPT To:" field
 #      $robot :(+) robot
+#      $msgkey : a id of this message submission in notification table
 # OUT : mail::$fh - file handle on opened file for ouput, for SMTP "DATA" field
 #       | undef
 #
@@ -771,7 +776,7 @@ sub smtpto {
    my($from, $rcpt, $robot, $msgkey, $sign_mode) = @_;
 
 
-       &do_log('trace', 'TEST TEST :( from :%s, rcpt:%s, sign_mode:%s, robot:%s, msgid:%s )', $from, $rcpt,$sign_mode, $robot, $msgkey);
+       &do_log('trace', 'TEST TEST :( from :%s, rcpt:%s, robot:%s,  msgkey:%s, sign_mode: %s  )', $from, $rcpt, $msgkey, $robot, $sign_mode);
 
    unless ($from) {
        &do_log('err', 'Missing Return-Path in mail::smtpto()');

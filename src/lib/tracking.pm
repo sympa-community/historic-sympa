@@ -30,8 +30,7 @@ use Log;
 use MIME::Base64;
 
 
-our $message_table = "mail_table";
-our $notif_table = "notification_table";
+
 our $status = "Waiting";   
 
 
@@ -130,7 +129,6 @@ sub connection{
 # A connection must already exist 
 # 
 # IN :-$dbh (+): the database connection
-#     -$table (+): the database table to use
 #     -$id (+): the message-id of the mail
 #     -$listname (+): the name of the list to which the 
 #		      mail has been sent
@@ -139,15 +137,14 @@ sub connection{
 # OUT : $pk |undef
 #      
 ##############################################
-sub get_pk_message {
-	my ($dbh, $table, $id, $listname,$robot) = @_;
+sub get_pk_message_to_be_removed {
+	my ($dbh, $id, $listname,$robot) = @_;
 
-        # xxx $table = "mail_table";
 	my $sth;
 	my $pk;
-	my $request = "SELECT pk_mail FROM $table WHERE `message_id_mail` = '$id' AND `list_mail` = '$listname' AND `robot_mail` = '$robot'";
+	my $request = "SELECT pk_mail FROM mail_table WHERE `message_id_mail` = '$id' AND `list_mail` = '$listname' AND `robot_mail` = '$robot'";
 
-        &do_log('trace', 'Request For Message Table : : %s', $request);
+        &do_log('trace', ' proceduer à virer Request For Message Table : : %s', $request);
 
 	unless ($sth = $dbh->prepare($request)) {
                 &do_log('err','Unable to prepare SQL statement : %s', $dbh->errstr);
@@ -182,8 +179,8 @@ sub get_recipients_number {
 
         my $sth;
         my $pk;
-        # my $request = "SELECT COUNT(*) FROM $notif_table WHERE `pk_mail_notification` = '$pk_mail' AND `type_notification` = 'DSN'";
-	my $request = "SELECT COUNT(*) FROM $notif_table WHERE `pk_mail_notification` = '$pk_mail'";
+        # my $request = "SELECT COUNT(*) FROM notification_table WHERE `pk_mail_notification` = '$pk_mail' AND `type_notification` = 'DSN'";
+	my $request = "SELECT COUNT(*) FROM notification_table WHERE `pk_mail_notification` = '$pk_mail'";
 
         &do_log('trace', 'Request For Message Table : : %s', $request);
         unless ($sth = $dbh->prepare($request)) {
@@ -218,14 +215,7 @@ sub get_recipients_status {
 	my $listname = shift;
         my $robot =shift;
 
-        my $pk_mail; 
-
-	unless($pk_mail = find_msg_key($msgid, $listname,$robot)) {
-	    &do_log('err', "Unable to get the pk identificator for message %s list %s robot %s", $msgid,$listname,$robot);
-	    return undef;
-	}
-
-        &do_log('debug2', 'get_recipients_status  %s', $pk_mail);
+        &do_log('debug2', 'get_recipients_status(%s,%s,%s)', $msgid,$listname,$robot);
 
 	my $dbh = &List::db_get_handler();
 
@@ -237,8 +227,9 @@ sub get_recipients_status {
         my $sth;
         my $pk;
 
-        my $request = "SELECT recipient_notification AS recipient, status_notification AS status, arrival_date_notification AS arrival_date, type_notification as type, message_notification as notification_message FROM $notif_table WHERE `pk_mail_notification` = '$pk_mail'";
-
+	# the message->head method return message-id including <blabla@dom> where mhonarc return blabla@dom that's why we test both of them
+        my $request = sprintf "SELECT recipient_notification AS recipient,  reception_option_notification AS reception_option, status_notification AS status, arrival_date_notification AS arrival_date, type_notification as type, message_notification as notification_message FROM notification_table WHERE (list_notification = %s AND robot_notification = %s AND (message_id_notification = %s OR CONCAT('<',message_id_notification,'>') = %s OR message_id_notification = %s ))",$dbh->quote($listname),$dbh->quote($robot),$dbh->quote($msgid),$dbh->quote($msgid),$dbh->quote('<'.$msgid.'>');
+	
         &do_log('trace', 'Request For Message Table : : %s', $request);
         unless ($sth = $dbh->prepare($request)) {
                 &do_log('err','Unable to prepare SQL statement : %s', $dbh->errstr);
@@ -282,7 +273,7 @@ sub get_not_displayed_recipients {
 
         my $sth;
         my $pk;
-        my $request = "SELECT recipient_notification FROM $notif_table WHERE `pk_mail_notification` = '$pk_mail' AND `type_notification` = 'MDN' AND `status_notification` != 'displayed'";
+        my $request = "SELECT recipient_notification FROM notification_table WHERE `pk_mail_notification` = '$pk_mail' AND `type_notification` = 'MDN' AND `status_notification` != 'displayed'";
 
         &do_log('debug2', 'Request For Message Table : : %s', $request);
         unless ($sth = $dbh->prepare($request)) {
@@ -318,11 +309,11 @@ sub get_not_displayed_recipients {
 ##############################################
 sub get_pk_notifications {
         my $dbh = shift;
-        my $pk_mail = shift;
+        my $pk_mail = shift;	
 
         my $sth;
         my $pk;
-        my $request = "SELECT pk_notification FROM $notif_table WHERE `pk_mail_notification` = '$pk_mail'";
+        my $request = "SELECT pk_notification FROM notification_table WHERE `pk_mail_notification` = '$pk_mail'";
 
         &do_log('debug2', 'Request For Message Table : : %s', $request);
         unless ($sth = $dbh->prepare($request)) {
@@ -351,7 +342,6 @@ sub get_pk_notifications {
 # and the notification type.
 # 
 # IN :-$dbh (+): the database connection
-#     -$table (+): the given table to ask
 #     -$id (+): the storage identifiant of the corresponding mail
 #     -$recipient (+): the address of one of the list subscribers
 #     -$type (+): the notification type (DSN | MDN)
@@ -360,13 +350,13 @@ sub get_pk_notifications {
 #      
 ##############################################
 sub get_pk_notification {
-        my ($dbh, $table, $id, $recipient, $type) = @_;
+        my ($dbh, $id, $recipient, $type) = @_;
 
         my $sth;
         my $pk;
-#        my $request = "SELECT pk_notification FROM $table WHERE `pk_mail_notification` = '$id' AND `recipient_notification` = '$recipient' AND `type_notification`= '$type'";
+#        my $request = "SELECT pk_notification FROM notification_table WHERE `pk_mail_notification` = '$id' AND `recipient_notification` = '$recipient' AND `type_notification`= '$type'";
 	do_log('trace',"eclaicir pourquoi le WHERE portait aussi sur le type ??? ");
-        my $request = "SELECT pk_notification FROM $table WHERE `pk_mail_notification` = '$id' AND `recipient_notification` = '$recipient'";
+        my $request = "SELECT pk_notification FROM notification_table WHERE `pk_mail_notification` = '$id' AND `recipient_notification` = '$recipient'";
         &do_log('debug2', 'Request For Message Table : : %s', $request);
         unless ($sth = $dbh->prepare($request)) {
                 &do_log('err','Unable to prepare SQL statement : %s', $dbh->errstr);
@@ -384,46 +374,7 @@ sub get_pk_notification {
 }
 
 ##############################################
-#   store_message
-##############################################
-# Function use to store mail informations in
-# the given table using the given database connection. 
-# 
-# IN :-$dbh (+): the database connection
-#     -$table (+): the given table to store
-#     -$id (+): the message-id of the mail
-#     -$from (+): the sender address of the mail
-#     -$date (+): the sending date
-#     -$subject (+): the subject of the mail
-#     -$list (+): the diffusion list to which the mail has been initially sent
-#     -$robot (+): the robot of diffusion list to which the mail has been initially sent
-#
-# OUT : 1 |undef
-#      
-##############################################
-
-sub store_message{
-	my ($dbh, $id, $from, $date, $subject, $list,$robot) = @_;
-	
-	&do_log('debug', "store_message_DB ($id, $from, $date,$subject,$list, $robot)");
-	my $sth;
-	my $request = sprintf "INSERT INTO mail_table (message_id_mail,from_mail,date_mail,subject_mail,list_mail,robot_mail)VALUES (%s, %s, %s, %s, %s, %s)", $dbh->quote($id),$dbh->quote($from),$dbh->quote($date),$dbh->quote($subject),$dbh->quote($list),$dbh->quote($robot);
-	
-	&do_log('debug', 'Request For Message Table : : %s', $request);
-	unless ($sth = $dbh->prepare($request)) {
-		&do_log('err','Unable to prepare SQL statement : %s', $dbh->errstr);
-        	return undef;
-	}
-	unless ($sth->execute()) {
-        	&do_log('err','Unable to execute SQL statement "%s" : %s', $request, $dbh->errstr);
-        	return undef;
-	}
-        $sth->finish();
-	return 1; 
-}
-
-##############################################
-#   store_notif_DB
+#   store_notification
 ##############################################
 # Function used to add a notification entry 
 # corresponding to a subscriber of a mail.
@@ -437,18 +388,18 @@ sub store_message{
 #     -$id (+): the mail identifiant of the initial mail
 #     -$status (+): the current state of the recipient entry. 
 #		    Will change after a notification reception for this recipient.
-#     -$address (+): the mail address of the subscriber
+#     -$recipient (+): the mail address of the recipient
 #     -$list (+): the list to which the mail has been initially sent
 #     -$notif_type (+): the kind of notification representing this entry (DSN|MDN).
 #
 # OUT : $sth | undef
 #      
 ##############################################
-sub store_notif_DB{
-	my ($dbh, $id, $status, $address, $list, $robot, $notif_type) = @_;
+sub store_notification_to_be_removed{
+	my ($dbh, $key_track,$id, $status, $recipient, $list, $robot, $notif_type) = @_;
 	
 	my $sth;
-	my $request = sprintf "INSERT INTO notification_table (pk_mail_notification,recipient_notification,status_notification,type_notification,list_notification,robot_notification) VALUES (%s,%s,%s,%s,%s,%s)",$dbh->quote($id),$dbh->quote($address), $dbh->quote($status),$dbh->quote($notif_type),$dbh->quote($list),$dbh->quote($robot);
+	my $request = sprintf "INSERT INTO notification_table (pk_mail_notification,recipient_notification,status_notification,type_notification,list_notification,robot_notification) VALUES (%s,%s,%s,%s,%s,%s)",$dbh->quote($id),$dbh->quote($recipient), $dbh->quote($status),$dbh->quote($notif_type),$dbh->quote($list),$dbh->quote($robot);
 	
 	&do_log('trace', 'Request For Notification Table : : %s', $request);
 	unless ($sth = $dbh->prepare($request)) {
@@ -463,7 +414,7 @@ sub store_notif_DB{
 }
 
 ##############################################
-#   update_notif_table
+#   update_notification
 ##############################################
 # Function used to update a notification entry 
 # corresponding to a subscriber of a mail. This function
@@ -485,15 +436,15 @@ sub store_notif_DB{
 # OUT : $sth | undef
 #      
 ##############################################
-sub update_notif_table{
-	my ($dbh, $pk, $msg_id, $status, $date,$notification_as_string) = @_;
+sub update_notification_to_be_removed{
+	my ($dbh, $msgid, $status, $date,$notification_as_string) = @_;
 
 	my $sth;
-
 	chomp $date;
 
 	$notification_as_string = MIME::Base64::encode($notification_as_string);
-        my $request = "UPDATE notification_table SET `message_id_notification` = '$msg_id', `status_notification` = '$status', `arrival_date_notification` = '$date', `message_notification` = '$notification_as_string' WHERE pk_notification = '$pk'";
+    #    my $request = sprintf "UPDATE notification_table SET  `status_notification` = %s, `arrival_date_notification` = %s, `message_notification` = %s WHERE `message_id_notification` = %s AND list_notification = %s AND robot_notification = %s", $dbh->quote($status),$dbh->quote($date),$dbh->quote($notification_as_string);$dbh->quote($msgid),$dbh->quote($listname),$dbh->quote($robot);
+    my $request = sprintf "UPDATE notification_table SET  `status_notification` = %s, `arrival_date_notification` = %s, `message_notification` = %s WHERE `message_id_notification` = %s AND list_notification = %s AND robot_notification = %s"; #$dbh->quote($status),$dbh->quote($date),$dbh->quote($notification_as_string);$dbh->quote($msgid),$dbh->quote($listname),$dbh->quote($robot);
 
         &do_log('debug2', 'Request For Notification Table : : %s', $request);
         unless ($sth = $dbh->prepare($request)) {
@@ -524,7 +475,7 @@ sub update_notif_table{
 # OUT : 1 | undef
 #      
 ##############################################
-sub db_insert_message{
+sub db_insert_message_to_be_removed{
     my ($message, $robot, $list) = @_;
 
     my $rcpt;
@@ -534,75 +485,102 @@ sub db_insert_message{
     &do_log('debug2', "Message extracted  list name : %s  addresses number : %s", $list->{'name'}, $cpt);
     my $subject = $hdr->get('subject');    chomp($subject);
     my $send_date = $hdr->get('date');    chomp($send_date);
-    my $row_msgid = $hdr->get('Message-Id')or &do_log('notice', "Error : Extract msgID failed");    chomp($row_msgid);
+    my $msgid = $hdr->get('Message-Id')or &do_log('notice', "Error : Extract msgID failed");    chomp($msgid);
     my $content_type = $hdr->get('Content-Type');    chomp($content_type);
     &do_log('trace', "Message extracted : %s", $content_type);
  
-    my $disposition_notif = $hdr->get('Disposition-Notification-To');
-    if ($disposition_notif) {
-	&do_log('debug', "Disposition-Notification = $disposition_notif");
-    }else{ 
-	&do_log('debug', "Disposition-Notification Not Asked");
-    }
-    chomp($disposition_notif);
- 
-    my $row_from = $hdr->get('from');    chomp($row_from);
-    &do_log('trace', "Message extracted : %s", $row_from);
-
-    my $msg_string = $message->{'msg'}->as_string;
-    &do_log('trace', 'string message : %s', $msg_string);
-
+    my $key_track = &tracking::next_tracking_key();
+    
     unless($content_type =~ /.*delivery\-status.*/){
 
-	my $message_id = format_msg_id($row_msgid) or &do_log('err', "Error : Format msgID failed"); 
-	unless ($message_id) {
-	    &do_log('err', 'Notification message without message-id');
-	    return undef;
-	}
-	
-	my $from_address = format_from_address($row_from) or &do_log('err', "Error : Format From address failed"); 
-	&do_log('trace', 'From Address Format : %s', $from_address);
+	#my $message_id = format_msg_id($msgid) or &do_log('err', "Error : Format msgID failed"); 
+	#unless ($message_id) {
+	#    &do_log('err', 'Notification message without message-id');
+	#    return undef;
+	#}
 	
         my $dbh = connection($Conf::Conf{'db_name'}, $Conf::Conf{'db_host'}, $Conf::Conf{'db_port'}, $Conf::Conf{'db_user'}, $Conf::Conf{'db_passwd'});
 	unless ($dbh and $dbh->ping) {
 		&do_log('err', "Error : Can't join database");
 		return undef;
 	}
-	do_log('trace',"call store_message");
-	unless (&tracking::store_message($dbh, $message_id, $from_address, $send_date, $subject, $list->{'name'},$robot)) {
-                &do_log('err', 'Unable to execute message storage in mail table "%s"', $message_id);
-                return undef;
-	}
 
-	my $pk_message;
-	unless ($pk_message = &get_pk_message($dbh, 'mail_table', $message_id, $list->{'name'},$robot )){
-                &do_log('err', 'Unable to execute message key request on message : "%s"', $message_id);
-                return undef;
-	}
-	do_log('trace',"pk_message :$pk_message");
 	my $sth;
 
 	for (my $user=$list->get_first_user(); $user; $user=$list->get_next_user()) {
 	    my $to= lc($user->{'email'});
-	    #	foreach my $to (@to_addresses) {
 	    
 	    &do_log('trace', 'Recipient Address :%s', $to );
-	    unless ($sth = &store_notif_DB($dbh, $pk_message, $status, $to, $list->{'name'},$robot,'')) {
-		&do_log('err', 'Unable to execute message storage in notification table"%s"', $message_id);
+	    unless ($sth = &store_notification($dbh, $key_track,$msgid, $status, $to, $list->{'name'},$robot,'')) {
+		&do_log('err', 'Unable to execute message storage in notification table"%s"', $msgid);
 		return undef;
 	    }
-            # what is usage for the following block ??? 
-	    #if(defined $disposition_notif) {
-            #		unless ($sth = &store_notif_DB($dbh, $pk_message, $status, $to, $list->{'name'},$robot,'MDN')) {
-	    #	    &do_log('err', 'Unable to execute message storage in notification table"%s"', $message_id);
-            #		    return undef;
-	    #	}
-	    #}
 	} 
 	$sth -> finish;
 	$dbh -> disconnect;
 	&do_log('notice', 'Successful Mail Treatment :%s', $subject );
     }
+    return 1;
+}
+
+##############################################
+#   db_init_notification_table
+##############################################
+# Function used to initialyse notification table for each subscriber
+# IN : 
+#   listname
+#   robot,
+#   msgid  : the messageid of the original message
+#   rcpt : a tab ref of recipients
+#   reception_option : teh reception option of thoses subscribers
+# OUT : 1 | undef
+#      
+##############################################
+sub db_init_notification_table{
+
+    my %params = @_;
+    my $msgid =  $params{'msgid'}; chomp $msgid;
+    my $listname =  $params{'listname'};
+    my $robot =  $params{'robot'};
+    my $reception_option =  $params{'reception_option'};
+    my @rcpt =  @{$params{'rcpt'}};
+    
+    &do_log('debug2', "db_init_notification_table (msgid = %s, listname = %s, reception_option = %s",$msgid,$listname,$reception_option);
+    &do_log('trace', "db_init_notification_table (msgid = %s, listname = %s, reception_option = %s",$msgid,$listname,$reception_option);
+
+    my $dbh = connection($Conf::Conf{'db_name'}, $Conf::Conf{'db_host'}, $Conf::Conf{'db_port'}, $Conf::Conf{'db_user'}, $Conf::Conf{'db_passwd'});
+    unless ($dbh and $dbh->ping) {
+	&do_log('err', "Error : Can't join database");
+	return undef;
+    }
+    
+    my $sth;
+    
+    foreach my $email (@rcpt){
+	my $email= lc($email);
+	
+	&do_log('trace', 'Recipient Address :%s', $email );
+#	unless ($sth = &store_notification($dbh, $msgid,$listname,$robot,$email,$reception_option)) {
+#	    &do_log('err', 'Unable to execute message storage in notification table for message "%s"', $msgid);
+#	    return undef;
+#	}
+
+	my $request = sprintf "INSERT INTO notification_table (message_id_notification,recipient_notification,reception_option_notification,list_notification,robot_notification) VALUES (%s,%s,%s,%s,%s)",$dbh->quote($msgid),$dbh->quote($email),$dbh->quote($reception_option),$dbh->quote($listname),$dbh->quote($robot);
+	
+	&do_log('trace', 'Request %s', $request);
+	unless ($sth = $dbh->prepare($request)) {
+                &do_log('err','Unable to prepare SQL statement "%s": %s', $request, $dbh->errstr);
+                return undef;
+	}
+	unless ($sth->execute()) {
+                &do_log('err','Unable to execute SQL statement "%s" : %s', $request, $dbh->errstr);
+                return undef;
+	}
+
+
+    } 
+    $sth -> finish;
+    $dbh -> disconnect;
     return 1;
 }
 
@@ -630,26 +608,42 @@ sub db_insert_message{
 #      
 ##############################################
 sub db_insert_notification {
-	my ($id, $type, $recipient, $msg_id, $status, $arrival_date ,$notification_as_string  ) = @_;
+    my ($notification_id, $type, $status, $arrival_date ,$notification_as_string  ) = @_;
+    
+    &do_log('debug2', "db_insert_notification  :notification_id : %s, type : %s, recipient : %s, msgid : %s, status :%s",$notification_id, $type, $status); 
+    
+    chomp $arrival_date;
+    
+    my $dbh = connection($Conf::Conf{'db_name'}, $Conf::Conf{'db_host'}, $Conf::Conf{'db_port'}, $Conf::Conf{'db_user'}, $Conf::Conf{'db_passwd'});
+    
+    unless ($dbh and $dbh->ping) { 
+	&do_log('err', "Error : Can't join database"); 
+	return undef; 
+    } 
+    
+    $notification_as_string = MIME::Base64::encode($notification_as_string);
+    
+    my $request = sprintf "UPDATE notification_table SET  `status_notification` = %s, `arrival_date_notification` = %s, `message_notification` = %s WHERE (pk_notification = %s)",$dbh->quote($status),$dbh->quote($arrival_date),$dbh->quote($notification_as_string),$dbh->quote($notification_id);
 
-        my $dbh = connection($Conf::Conf{'db_name'}, $Conf::Conf{'db_host'}, $Conf::Conf{'db_port'}, $Conf::Conf{'db_user'}, $Conf::Conf{'db_passwd'});
+        my $request_trace = sprintf "UPDATE notification_table SET  `status_notification` = %s, `arrival_date_notification` = %s, WHERE (pk_notification = %s)",$dbh->quote($status),$dbh->quote($arrival_date),$dbh->quote($notification_id);
 
-        unless ($dbh and $dbh->ping) { &do_log('err', "Error : Can't join database"); return undef; } my $pk_notif; unless
-                ($pk_notif = get_pk_notification($dbh,
-                "notification_table", $id, $recipient, $type)) {
-                &do_log('err', 'Unable to get notification
-                identificator : "%s"', $msg_id); return undef; }
-                &do_log('debug2', "pk_notif value founded : %s",
-                $pk_notif); my $sth;
+    &do_log('trace','db_insert_notification request_trace  %s', $request_trace);
+    
+    my $sth;
+    
+    unless ($sth = $dbh->prepare($request)) {
+	&do_log('err','Unable to prepare SQL statement "%s": %s', $request, $dbh->errstr);
+	return undef;
+    }
+    unless ($sth->execute()) {
+	&do_log('err','Unable to execute SQL statement "%s" : %s', $request, $dbh->errstr);
+	return undef;
+    }
+    
+    $sth -> finish;
+    $dbh -> disconnect;
 
-        unless ($sth = update_notif_table($dbh, $pk_notif, $msg_id, $status, $arrival_date, $notification_as_string ) ) {
-                &do_log('err', 'Unable to update the notification table : "%s"', $msg_id);
-                return undef;
-        }
-        $sth -> finish;
-        $dbh -> disconnect;
-        &do_log('notice', 'Successful Notification Treatment :%s', $msg_id);
-	return 1;
+    return 1;
 }
 
 ##############################################
@@ -665,7 +659,7 @@ sub db_insert_notification {
 # OUT : $pk | undef
 #      
 ##############################################
-sub find_msg_key{
+sub find_msg_key_to_be_removed{
 
     my $msgid = shift;	
     my $listname = shift;	
@@ -675,174 +669,141 @@ sub find_msg_key{
     my $message_id = format_msg_id($msgid) or &do_log('err', "Error : Format msgID failed");
 
     return undef unless ($message_id);
-    &do_log('debug2', 'Message-Id Formated : %s', $message_id);
+    &do_log('trace', ' procedure à virer Message-Id Formated : %s', $message_id);
 
     my $dbh = connection($Conf::Conf{'db_name'}, $Conf::Conf{'db_host'}, $Conf::Conf{'db_port'}, $Conf::Conf{'db_user'}, $Conf::Conf{'db_passwd'});
     unless ($dbh and $dbh->ping) {
           &do_log('err', "Error : Can't join database");
           return undef;
     }
-    unless($pk = &get_pk_message($dbh, "mail_table", $message_id, $listname,$robot)) {
-          &do_log('err', "Unable to get the pk identificator of the message %s", $message_id);
-          return undef;
+    
+    my $request = "SELECT pk_mail_notification FROM notification_table ORDER BY pk_mail_notification DESC LIMIT 1";
+    
+    my $sth;
+
+    unless ($sth = $dbh->prepare($request)) {
+	&do_log('err','Unable to prepare SQL statement %s : %s', $request, $dbh->errstr);
+	return undef;
     }
+    unless ($sth->execute) {
+	&do_log('err','Unable to execute SQL statement "%s" : %s', $request, $dbh->errstr);
+	return undef;
+    }
+    
+    my @pk_mail = $sth->fetchrow_array;
+    $pk = $pk_mail[0];
+    $sth->finish();
     $dbh -> disconnect;
-    return $pk;
+    return ($pk+1); # should return 1 if table if empty
 }
 
-
 ##############################################
-#   get_delivered_info
+#   find_notification_id_by_message
 ##############################################
-# Function use to get all the tracking informations of an msg-id.
-# Informations are return as a string.
+# return the tracking_id find by recipeint,message-id,listname and robot
+# tracking_id areinitialized by sympa.pl by List::distribute_msg
 # 
-# IN :-$msgid (+): the given message-id
-#     -$listname (+): the name of the list to which the mail has initially been sent.
-#
-# OUT : $infos | undef
+# used by bulk.pl in order to set return_path when tracking is required.
 #      
 ##############################################
-sub get_delivered_info_to_be_removed{
-	
-    my $msgid = shift;
-    my $listname = shift;
-    my $robot=shift;
 
-    my $pkmsg;
-    my @pk_notifs;
-    my @recipients;
-    my @recipients2;
-    my $infos = "Unusual Recipients Deliveries : ";
-    my $tmp_infos = "";
-    my $nb_rcpt;
-
-    &do_log('debug', "get_delivered_info_to_be_removed (%s,%s)", $msgid,$listname);
-    
-
-    unless($pkmsg = find_msg_key($msgid, $listname,$robot)) {
-	&do_log('err', "Unable to get the pk identificator of the message %s", $msgid);
-       return undef;
-    }
-    my $dbh = connection($Conf::Conf{'db_name'}, $Conf::Conf{'db_host'}, $Conf::Conf{'db_port'}, $Conf::Conf{'db_user'}, $Conf::Conf{'db_passwd'});
-    unless ($dbh and $dbh->ping) {
-         &do_log('err', "Error : Can't join database");
-         return undef;
-    }
-
-    #unless(@pk_notifs = get_pk_notifications($dbh, $pkmsg)){
-    #   &do_log('err', "Unable to get the pk identificators of the notifications for message : %s", $msgid);
-    #   return undef;
-    #}
-    #&do_log('debug2', "PK notifications : %s", @pk_notifs);
-    #foreach my $pk_notif (@pk_notifs){
-    #   &do_log('debug2', "PK notifications founded : %s", $pk_notif);
-    #}
-    unless($nb_rcpt = get_recipients_number($dbh, $pkmsg)){
-       &do_log('err', "Unable to get number of recipients for message : %s", $msgid);
-       return undef;
-    }
-
-    unless(@recipients = get_undelivered_recipients($dbh, $pkmsg)){
-       &do_log('err', "Unable to get the pk identificators of the notifications for message : %s", $msgid);
-       return undef;
-    }
-    my $i = 0;
-    foreach my $recipient (@recipients){
-	if( ($i%2) == 0){
-		&do_log('trace', "recipient : %s", $recipient);
-		$tmp_infos .= "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<li>ADDRESS : <em>".$recipient."</em>";
-	}
-	else{
-		&do_log('trace', "status : %s", $recipient);
-		$tmp_infos .= "&nbsp;&nbsp;&nbsp;&nbsp;STATUS : <em>".$recipient."</em></li>";
-	} 
-	$i++;
-    }
-    $i = $i/2;
-    $infos .= "<strong>".$i."/".$nb_rcpt."</strong><br />".$tmp_infos;
-    
-    my $j = 0;
-    if(@recipients2 = get_not_displayed_recipients($dbh, $pkmsg)){
-        $infos .= "<br /><br />Recipients who did not read the message yet (or which has refused to send back a notification) :    ";
-	$tmp_infos = "";
-    	foreach my $recipient (@recipients2){
-            &do_log('trace', "recipient : %s", $recipient);
-            $tmp_infos .= "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<li>ADDRESS : <em>".$recipient."</em></li>";
-	    $j++;
-	}
-    $infos .= "<strong>".$j."/".$nb_rcpt."</strong><br />".$tmp_infos;
-    }
-    $dbh -> disconnect;
-    return $infos;
- }
-
-##############################################
-#   remove_message
-##############################################
-# Function use to remove the message and the corresponding notifications.
-# 
-# IN :-$msgid (+): the given message-id
-#     -$listname (+): the name of the list to which the mail has initially been sent.
-#
-# OUT : 1 | undef
-#      
-##############################################
-sub remove_message{
-    my $msgid = shift;
-    my $listname = shift;
+sub find_notification_id_by_message{
+    my $recipient = shift;	
+    my $msgid = shift;	chomp $msgid;
+    my $listname = shift;	
     my $robot = shift;
 
-    my $pkmsg;
-    my @pk_notifs;
+    do_log('debug2','find_notification_id_by_message(%s,%s,%s,%s)',$recipient,$msgid ,$listname,$robot );
+    my $pk;
 
-   
-    unless($pkmsg = find_msg_key($msgid, $listname,$robot)) {
-       &do_log('err', "Unable to get the pk identificator of the message %s", $msgid);
-       return undef;
-    }
     my $dbh = connection($Conf::Conf{'db_name'}, $Conf::Conf{'db_host'}, $Conf::Conf{'db_port'}, $Conf::Conf{'db_user'}, $Conf::Conf{'db_passwd'});
     unless ($dbh and $dbh->ping) {
-         &do_log('err', "Error : Can't join database");
-         return undef;
+          &do_log('err', "Error : Can't join database");
+          return undef;
     }
-    unless(@pk_notifs = get_pk_notifications($dbh, $pkmsg)) {
-        &do_log('err', "Unable to get the pk identificators of notifications corresponding to the message %s", $msgid);
+    
+    # the message->head method return message-id including <blabla@dom> where mhonarc return blabla@dom that's why we test both of them
+    my $request = sprintf "SELECT pk_notification FROM notification_table WHERE ( recipient_notification = %s AND list_notification = %s AND robot_notification = %s AND (message_id_notification = %s OR CONCAT('<',message_id_notification,'>') = %s OR message_id_notification = %s ))", $dbh->quote($recipient),$dbh->quote($listname),$dbh->quote($robot),$dbh->quote($msgid),$dbh->quote($msgid),$dbh->quote('<'.$msgid.'>');
+    
+    my $sth;
+
+    unless ($sth = $dbh->prepare($request)) {
+	&do_log('err','Unable to prepare SQL statement %s : %s', $request, $dbh->errstr);
 	return undef;
     }
-    unless(remove_entry($dbh, "mail", $pkmsg)) {
-        &do_log('err', "Unable to remove %s", $pkmsg);
+    unless ($sth->execute) {
+	&do_log('err','Unable to execute SQL statement "%s" : %s', $request, $dbh->errstr);
 	return undef;
     }
-    unless(remove_entries($dbh, "notification", @pk_notifs)) {
-        &do_log('err', "Unable to remove %s", @pk_notifs);
-	return undef;
+    
+    my @pk_notifications = $sth->fetchrow_array;
+    if ($#pk_notifications > 0){
+	&do_log('err','Found more then one pk_notification maching  (recipient=%s,msgis=%s,listname=%s,robot%s)',$recipient,$msgid ,$listname,$robot );	
+	# we should return undef...
     }
+    $sth->finish();
     $dbh -> disconnect;
-    return 1;
+    return @pk_notifications[0];
 }
 
 ##############################################
-#   remove_entry
+#   next_tracking_key 
 ##############################################
-# Function use to remove the entry in argument to the given datatable
+# OUT : return next unused tracking message key
+#      
+##############################################
+sub next_tracking_key{
+
+
+    my $dbh = connection($Conf::Conf{'db_name'}, $Conf::Conf{'db_host'}, $Conf::Conf{'db_port'}, $Conf::Conf{'db_user'}, $Conf::Conf{'db_passwd'});
+    unless ($dbh and $dbh->ping) {
+          &do_log('err', "Error : Can't join database");
+          return undef;
+    }
+    
+    my $request = "SELECT pk_mail_notification FROM notification_table ORDER BY pk_mail_notification DESC LIMIT 1";
+    
+    my $sth;
+
+    unless ($sth = $dbh->prepare($request)) {
+	&do_log('err','Unable to prepare SQL statement %s : %s', $request, $dbh->errstr);
+	return undef;
+    }
+    unless ($sth->execute) {
+	&do_log('err','Unable to execute SQL statement "%s" : %s', $request, $dbh->errstr);
+	return undef;
+    }
+    
+    my @pk_mail = $sth->fetchrow_array;
+    $sth->finish();
+    $dbh -> disconnect;
+    return ($pk_mail[0]+1); # should return 1 if table if empty
+}
+
+##############################################
+#   remove_notifications
+##############################################
+# Function use to remove notifications in argument to the given datatable
 # 
 # IN :-$dbh (+): the database connection
-#     -$table (+): the given table to update
-#     -$pk (+): the entry identifiant
+#    : $msgid : id of related message
+#    : $listname
+#    : $robot
 #
 # OUT : $sth | undef
 #      
 ##############################################
-sub remove_entry{
+sub remove_notifications{
     my $dbh = shift;
-    my $table = shift;
-    my $pk = shift;
+    my $msgid =shift;
+    my $listname =shift;
+    my $robot =shift;
 
+    &do_log('debug2', 'Remove notification id =  %s, listname = %s, robot = %s', $msgid,$listname,$robot );
     my $sth;
-    my $table_name = $table."_table";
-    my $pk_header = "pk_".$table;
-    my $request = "DELETE FROM $table_name WHERE `$pk_header` = '$pk'";
+
+    my $request = sprintf "DELETE FROM notification_table WHERE `message_id_notification` = %s AND list_notification = %s AND robot_notification = %s", $dbh->quote($msgid),$dbh->quote($listname),$dbh->quote($robot);
+
 
     &do_log('debug2', 'Request For Table : : %s', $request);
     unless ($sth = $dbh->prepare($request)) {
@@ -854,30 +815,6 @@ sub remove_entry{
             return undef;
     }
     $sth -> finish;
-    return 1;
-}
-
-##############################################
-#   remove_entries
-##############################################
-# Function use to remove several entries in argument to the given datatable
-# 
-# IN :-$dbh (+): the database connection
-#     -$table (+): the given table to update
-#     -@pk (+): entry identifiants
-#
-# OUT : $sth | undef
-#      
-##############################################
-sub remove_entries{
-    my ($dbh, $table, @pks) = @_;
-
-    foreach my $pk (@pks) {
-    	unless(remove_entry($dbh, $table, $pk)){
-            &do_log('err','Unable to remove entries; error on "%s"', $pk);
-            return undef;
-	}
-    }
     return 1;
 }
 

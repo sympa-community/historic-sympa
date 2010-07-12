@@ -11,7 +11,7 @@
 </ul>
 
 <table summary="[%|loc%]Message tracking[%END%]" class="listOfItems text_center">
-  <tr><th>[%|loc%]Recipient Email[%END%]</th>
+  <tr><th>[%|loc%]Recipient Email[%END%]</th><th>[%|loc%]Reception Option[%END%]</th>
      <th>[%|loc%]Delivery status[%END%]</th>
      <th>[%|loc%]Notification Date[%END%]</th>
      <th>[%|loc%]Notification[%END%]</th>
@@ -25,7 +25,7 @@
        <tr class="color0">
        [% SET dark = 1 %]
     [% END %]
-    <td>[% u.recipient %]</td><td>[% u.status %]</td><td>[% u.arrival_date %]</td>
+    <td>[% u.recipient %]</td><td>[% u.reception_option %]</td><td>[% u.status %]</td><td>[% u.arrival_date %]</td>
      <td>
        [% IF u.notification_message %] <a href="javascript:void(0);" onclick="showMDN(this)">X</a><pre style="display:none">[% u.notification_message %]</pre>[% END %]
      </td>

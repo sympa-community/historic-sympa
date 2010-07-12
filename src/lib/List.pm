@@ -2640,6 +2640,7 @@ sub distribute_msg {
     ## Prepare tracking if list config allow it
     my $apply_tracking = 'off';
     if (($self->{'admin'}{'tracking'} eq 'on')||(($self->{'admin'}{'tracking'} eq 'on_demand') && ($hdr->get('Disposition-Notification-To')))){
+	do_log('trace',"tracking activé");
 	$apply_tracking = 'on';
 	$hdr->delete('Disposition-Notification-To'); # remove notification request becuse a new one will be inserted
     }
@@ -3217,9 +3218,10 @@ sub send_msg {
     my $apply_tracking = $param{'apply_tracking'};
 
     do_log('debug2', 'List::send_msg(filname = %s, smime_crypted = %s,apply_dkim_signature = %s )', $message->{'filename'}, $message->{'smime_crypted'},$apply_dkim_signature);
-    do_log('trace', 'List::send_msg(filname = %s, smime_crypted = %s,apply_dkim_signature = %s )', $message->{'filename'}, $message->{'smime_crypted'},$apply_dkim_signature);
+    do_log('trace', 'List::send_msg(filname = %s, smime_crypted = %s,apply_dkim_signature = %s  apply_tracking =%s)', $message->{'filename'}, $message->{'smime_crypted'},$apply_dkim_signature,$apply_tracking );
     
     my $hdr = $message->{'msg'}->head;
+    my $original_message_id = $hdr->get('Message-Id');
     my $name = $self->{'name'};
     my $robot = $self->{'domain'};
     my $admin = $self->{'admin'};
@@ -3249,7 +3251,7 @@ sub send_msg {
     my $from = $name.&Conf::get_robot_conf($robot, 'return_path_suffix').'@'.$host;
 
     # separate subscribers depending on user reception option and also if verp a dicovered some bounce for them.
-    my (@tabrcpt, @tabrcpt_notice, @tabrcpt_txt, @tabrcpt_html, @tabrcpt_url, @tabrcpt_verp, @tabrcpt_notice_verp, @tabrcpt_txt_verp, @tabrcpt_html_verp, @tabrcpt_url_verp);
+    my (@tabrcpt, @tabrcpt_notice, @tabrcpt_txt, @tabrcpt_html, @tabrcpt_url, @tabrcpt_verp, @tabrcpt_notice_verp, @tabrcpt_txt_verp, @tabrcpt_html_verp, @tabrcpt_url_verp, @tabrcpt_digestplain, @tabrcpt_digest, @tabrcpt_summary, @tabrcpt_nomail, @tabrcpt_digestplain_verp, @tabrcpt_digest_verp, @tabrcpt_summary_verp, @tabrcpt_nomail_verp );
     my $mixed = ($message->{'msg'}->head->get('Content-Type') =~ /multipart\/mixed/i);
     my $alternative = ($message->{'msg'}->head->get('Content-Type') =~ /multipart\/alternative/i);
  
@@ -3258,6 +3260,7 @@ sub send_msg {
 	    &do_log('err','Skipping user with no email address in list %s', $name);
 	    next;
 	}
+	&do_log('trace','parcours de la liste abonné  %s option %s', $user->{'email'},$user->{'reception'});
 	my $options;
 	$options->{'email'} = $user->{'email'};
 	$options->{'name'} = $name;
@@ -3267,15 +3270,20 @@ sub send_msg {
 	## if yes, don't send the message
 	if ($user_data->{'suspend'} eq '1'){
 	    if(($user_data->{'startdate'} <= time) && ((time <= $user_data->{'enddate'}) || (!$user_data->{'enddate'}))){
-		next;
+		push @tabrcpt_nomail_verp, $user->{'email'}; next;
 	    }elsif(($user_data->{'enddate'} < time) && ($user_data->{'enddate'})){
 		## If end date is < time, update the BDD by deleting the suspending's data
 		&restore_suspended_subscription($user->{'email'},$name,$host);
 	    }
 	}
-	if ($user->{'reception'} =~ /^digest|digestplain|summary|nomail$/i) {
-	    do_log('trace',"reception $user->{'reception'}");
-	    next;
+	if ($user->{'reception'} eq 'digestplain') { # digest digestplain, nomail and summary reception option are initialized for tracking feature only
+	    push @tabrcpt_digestplain_verp, $user->{'email'}; next;
+	}elsif($user->{'reception'} eq 'digest') {
+	    push @tabrcpt_digest_verp, $user->{'email'}; next;
+	}elsif($user->{'reception'} eq 'summary'){
+	    push @tabrcpt_summary_verp, $user->{'email'}; next;
+	}elsif($user->{'reception'} eq 'nomail'){
+	    push @tabrcpt_nomail_verp, $user->{'email'}; next;
 	}elsif ($user->{'reception'} eq 'notice') {
 	    if ($user->{'bounce_address'}) {
 		push @tabrcpt_notice_verp, $user->{'email'}; 
@@ -3304,7 +3312,7 @@ sub send_msg {
 	    }else{
 		push @tabrcpt_url, $user->{'email'};
 	    }
-	} elsif ($message->{'smime_crypted'} && 
+	}elsif ($message->{'smime_crypted'} && 
 		 (! -r $Conf::Conf{'ssl_cert_dir'}.'/'.&tools::escape_chars($user->{'email'}) &&
 		  ! -r $Conf::Conf{'ssl_cert_dir'}.'/'.&tools::escape_chars($user->{'email'}.'@enc' ))) {
 	    ## Missing User certificate
@@ -3314,6 +3322,7 @@ sub send_msg {
 	    &do_log('notice',"Unable to send template 'x509-user-cert-missing' to $user->{'email'}");
 	    }
 	}else{
+	    do_log('trace'," option par default (mail)");
 	    if ($user->{'bounce_score'}) {
 		push @tabrcpt_verp, $user->{'email'} unless ($sender_hash{$user->{'email'}})&&($user->{'reception'} eq 'not_me');
 		do_log('trace',"verp by bounce reception $user->{'email'}");
@@ -3322,13 +3331,14 @@ sub send_msg {
 		do_log('trace',"tabrcpt reception $user->{'email'}");
 		push @tabrcpt, $user->{'email'} unless ($sender_hash{$user->{'email'}})&&($user->{'reception'} eq 'not_me');}
 	    }	    
-       }    
+    }
+    do_log('trace',"fin du parcours des abonnés");
 
     unless (@tabrcpt || @tabrcpt_notice || @tabrcpt_txt || @tabrcpt_html || @tabrcpt_url || @tabrcpt_verp || @tabrcpt_notice_verp || @tabrcpt_txt_verp || @tabrcpt_html_verp || @tabrcpt_url_verp) {
 	&do_log('info', 'No subscriber for sending msg in list %s', $name);
 	return 0;
     }
-    do_log('trace',"($#tabrcpt || $#tabrcpt_notice || $#tabrcpt_txt || $#tabrcpt_html || $#tabrcpt_url || $#tabrcpt_verp || $#tabrcpt_notice_verp || $#tabrcpt_txt_verp || $#tabrcpt_html_verp || $#tabrcpt_url_verp) ");
+    do_log('trace',"effectif (tabrcpt =$#tabrcpt || tabrcpt_notice=$#tabrcpt_notice || tabrcpt_txt=$#tabrcpt_txt || tabrcpt_html =$#tabrcpt_html || $#tabrcpt_url || tabrcpt_verp=$#tabrcpt_verp || tabrcpt_notice_verp=$#tabrcpt_notice_verp || tabrcpt_txt_verp=$#tabrcpt_txt_verp || tabrcpt_html_verp=$#tabrcpt_html_verp || tabrcpt_url_verp=$#tabrcpt_url_verp, tabrcpt_nomail_verp =$#tabrcpt_nomail_verp");
 
     #save the message before modifying it
     my $saved_msg = $message->{'msg'}->dup;
@@ -3360,37 +3370,73 @@ sub send_msg {
     if ($apply_dkim_signature eq 'on') {
 	$dkim_parameters = &tools::get_dkim_parameters({'robot'=>$self->{'domain'}, 'listname'=>$self->{'name'}});
     }
-    &do_log('trace',"prepare DKIM");
+    &do_log('trace',"initialisation des tables ");
     ## Storing the not empty subscribers' arrays into a hash.
     my $available_rcpt;
     my $available_verp_rcpt;
 
+
     if (@tabrcpt) {
+	&do_log('trace',"initialisation des tables 1 ");
 	$available_rcpt->{'tabrcpt'} = \@tabrcpt;
-	$available_verp_rcpt->{'tabrcpt'} = \@tabrcpt_verp;
+	$available_verp_rcpt->{'tabrcpt'} = \@tabrcpt_verp;	
     }
     if (@tabrcpt_notice) {
+	&do_log('trace',"initialisation des tables 2 ");
 	$available_rcpt->{'tabrcpt_notice'} = \@tabrcpt_notice;
 	$available_verp_rcpt->{'tabrcpt_notice'} = \@tabrcpt_notice_verp;
     }
     if (@tabrcpt_txt) {
+	&do_log('trace',"initialisation des tables 3 ");
 	$available_rcpt->{'tabrcpt_txt'} = \@tabrcpt_txt;
 	$available_verp_rcpt->{'tabrcpt_txt'} = \@tabrcpt_txt_verp;
     }
     if (@tabrcpt_html) {
+	&do_log('trace',"initialisation des tables 4 ");
 	$available_rcpt->{'tabrcpt_html'} = \@tabrcpt_html;
 	$available_verp_rcpt->{'tabrcpt_html'} = \@tabrcpt_html_verp;
     }
     if (@tabrcpt_url) {
+	&do_log('trace',"initialisation des tables 4 ");
 	$available_rcpt->{'tabrcpt_url'} = \@tabrcpt_url;
 	$available_verp_rcpt->{'tabrcpt_url'} = \@tabrcpt_url_verp;
     }
-    &do_log('trace',"parcours de available_rcpt");
+    if (@tabrcpt_digestplain_verp)  {
+	&do_log('trace',"initialisation des tables 5 ");
+	$available_rcpt->{'tabrcpt_digestplain'} = \@tabrcpt_digestplain;
+	$available_verp_rcpt->{'tabrcpt_digestplain'} = \@tabrcpt_digestplain_verp;
+    }
+    if (@tabrcpt_digest_verp) {
+	&do_log('trace',"initialisation des tables 6 ");
+	$available_rcpt->{'tabrcpt_digest'} = \@tabrcpt_digest;
+	$available_verp_rcpt->{'tabrcpt_digest'} = \@tabrcpt_digest_verp;
+    }
+    if (@tabrcpt_summary_verp) {
+	&do_log('trace',"initialisation des tables 7 ");
+	$available_rcpt->{'tabrcpt_summary'} = \@tabrcpt_summary;
+	$available_verp_rcpt->{'tabrcpt_summary'} = \@tabrcpt_summary_verp;
+    }
+    if (@tabrcpt_nomail_verp) {
+	&do_log('trace',"initialisation des tables  8");
+	$available_rcpt->{'tabrcpt_nomail'} = \@tabrcpt_nomail;
+	$available_verp_rcpt->{'tabrcpt_nomail'} = \@tabrcpt_nomail_verp;
+    }
+    &do_log('trace',"initialisation des tables  terminee");
     foreach my $array_name (keys %$available_rcpt) {
-	&do_log('trace',"array_name $array_name");
+
+	&do_log('trace',"-----------------array_name $array_name ");
+	my $reception_option ;	 
+	if ($array_name =~ /^tabrcpt_((nomail)|(summary)|(digest)|(digestplain)|(url)|(htlm)|(txt)|(notice))?(_verp)?/) {
+	    $reception_option =  $1;	    
+	    $reception_option = 'mail' unless $reception_option ;
+	}
+	&do_log('trace',"-----------------reception_option $reception_option");
+
+
+
 	my $new_message;
 	##Prepare message for normal reception mode
-	if ($array_name eq 'tabrcpt') {
+	if (($array_name eq 'tabrcpt')||($array_name eq 'tabrcpt_nomail')||($array_name eq 'summary')||($array_name eq 'digest')||($array_name eq 'digestplain')){
 	    ## Add a footer
 	    unless ($message->{'protected'}) {
 		my $new_msg = $self->add_parts($message->{'msg'});
@@ -3477,7 +3523,7 @@ sub send_msg {
 	    } 
 	    $new_message = new Message($url_msg);
 	}
-	&do_log('trace',"avant topics");
+
 	## TOPICS
 	my @selected_tabrcpt;
 	my @possible_verptabrcpt;
@@ -3488,14 +3534,21 @@ sub send_msg {
 	    @selected_tabrcpt = @{$available_rcpt->{$array_name}};
 	    @possible_verptabrcpt = @{$available_verp_rcpt->{$array_name}};
 	}
-
-	&do_log('trace',"apply_tracking $apply_tracking");
-
+	
+	&do_log('trace',"-----------------preparing verp recipient selected_tabrcpt:$#selected_tabrcpt possible_verptabrcpt $#possible_verptabrcpt ");
+	if ($array_name =~ /^tabrcpt_((nomail)|(summary)|(digest)|(digestplain)|(url)|(htlm)|(txt)|(notice)|())(_verp)+/) {
+	    my $reception_option =  $1;
+	    
+	    $reception_option = 'mail' unless $reception_option ;
+	    do_log('trace',"array name  $array_name option $reception_option ");
+	}
+	
 	## Preparing VERP receipients.
 	my @verp_selected_tabrcpt = &extract_verp_rcpt($verp_rate, $xsequence,\@selected_tabrcpt, \@possible_verptabrcpt);
-	&do_log('trace',"verp_selected_tabrcpt $#verp_selected_tabrcpt");
-
+	&do_log('trace',"-----------------verp_selected_tabrcpt $#verp_selected_tabrcpt");
+	
 	my $verp= 'off';	
+	
 	my $result = &mail::mail_message('message'=>$new_message, 
 					 'rcpt'=> \@selected_tabrcpt, 
 					 'list'=>$self, 
@@ -3510,8 +3563,27 @@ sub send_msg {
 	$nbr_smtp += $result;
 	
 	$verp= 'on';
-	$verp = 'tracking' if ($apply_tracking eq 'on');
-	## Sending VERP.
+
+	if ($apply_tracking eq 'on') {
+	    $verp = 'tracking' ;
+	    do_log('trace',"----------------- track repere avec option $reception_option ");
+	    
+	    &tracking::db_init_notification_table('listname'=> $self->{'name'},
+						  'robot'=> $robot,
+						  'msgid' => $original_message_id, # what ever the message is transformed because of the reception option, tracking use the original message id
+						  'rcpt'=> \@verp_selected_tabrcpt, 
+						  'reception_option' => $reception_option,
+						  );
+	    do_log('trace',"----------------- tracking initialisé pour l'option $reception_option ");
+	    
+	}	
+
+	#  ignore those reception option where mail must not ne sent
+        #  next if  (($array_name eq 'tabrcpt_digest') or ($array_name eq 'tabrcpt_digestlplain') or ($array_name eq 'tabrcpt_summary') or ($array_name eq 'tabrcpt_nomail')) ;
+	next if  ($array_name =~ /^tabrcpt_((nomail)|(summary)|(digest)|(digestplain))(_verp)?/);
+	do_log('trace',"prepare verp sending for $reception_option");
+	
+	## prepare VERP sending.
 	$result = &mail::mail_message('message'=> $new_message, 
 				      'rcpt'=> \@verp_selected_tabrcpt, 
 				      'list'=> $self,
@@ -3525,9 +3597,9 @@ sub send_msg {
 	$tags_to_use->{'tag_verp'} = 0 if ($result > 0);
 	$nbr_smtp += $result;
 	$nbr_verp += $result;	
-	do_log('trace',"nbr_smtp $nbr_smtp nbr_verp  $nbr_verp ");
+	do_log('trace',"-----------------nbr_smtp $nbr_smtp nbr_verp  $nbr_verp ");
     }
-
+    do_log('trace',"-----------------------------$nbr_smtp");
     return $nbr_smtp;
 }
 
@@ -3656,7 +3728,7 @@ sub send_to_editor {
 	   my $cryptedmsg = &tools::smime_encrypt($msg->head, $msg->body_as_string, $recipient); 
 	   unless ($cryptedmsg) {
 	       &do_log('notice', 'Failed encrypted message for moderator');
-	       # xxxx send a generic error message : X509 cert missing
+	       #  send a generic error message : X509 cert missing
 	       return undef;
 	   }
 

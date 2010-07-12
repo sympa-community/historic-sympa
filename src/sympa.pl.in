@@ -1938,24 +1938,10 @@ sub DoMessage{
 #-------------------------------------------------------------------------------------------------------------------------
 #    &do_log('notice', "subject : %s date : %s msgid : %s\n from : %s\n robot : %s\n list : %s\n which : %s\n message string : \n\n%s\n\n", $hdr->get('subject'),$hdr->get('date'), $messageid, $sender, $robot, $list->{'name'}, $which, $msg_string)
 #
-    if(($list->{'admin'}{'tracking'} eq "on")||(($list->{'admin'}{'tracking'} eq "on_demand")&&($hdr->get('Disposition-Notification-To')))){
-#
-#	if($list->{'admin'}{'verp_rate'} != "100%"){
-#            &do_log('err', "The verp_rate parameter in sympa.conf need to have a value to 100% in order to use activate the tracking; force value");
-#	    $list->{'admin'}{'verp_rate'} = '100%';
-#	}
-#	
-#	&do_log('trace', "Tracking enable verp rate : %s ", $list->{'admin'}{'verp_rate'});
-	&tracking::db_insert_message($message, $robot, $list);
-#	
-	my $receiver = $hdr->get('Disposition-Notification-To');
-	if(defined($receiver)){
-	    &do_log('debug2', "Disposition-Notification ASKED");
-	}  
-	else{
-	    &do_log('debug2', "NO disposition-Notification ");
-	}    	
-    }
+#    if(($list->{'admin'}{'tracking'} eq "on")||(($list->{'admin'}{'tracking'} eq "on_demand")&&($hdr->get('Disposition-Notification-To')))){
+#	&tracking::db_insert_message($message, $robot, $list);
+#    }
+
 #-------------------------------------------------------------------------------------------------------------------------
 
     ## message topic context	
@@ -2017,7 +2003,7 @@ sub DoMessage{
 	return 1;
     }elsif($action =~ /^editorkey(\s?,\s?(quiet))?/){
 #-------------------------------------------------------------------------------------------------------------------------
-	    &do_log('notice', 'DO MESSAGE6 : %s', $message); 	
+	    &do_log('trace', 'DO MESSAGE6 : %s', $message); 	
 	    &do_log('notice', 'DO MESSAGE6 : %s', $message); 	
 	    &do_log('notice', 'DO MESSAGE6 : %s', $message); 	
 	    &do_log('notice', 'DO MESSAGE6 : %s', $message); 	
