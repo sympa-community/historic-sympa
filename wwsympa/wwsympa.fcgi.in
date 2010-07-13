@@ -7713,13 +7713,12 @@ sub do_remove_arc {
      &wwslog('info', 'do_tracking(%s, %s, %s, %s', $in{'list'}, $in{'yyyy'}, $in{'month'}, $in{'msgid'});
 
      ## Access control
-     do_log('trace',"TODO le controle d'acces est-il mauvais ?");
      unless ($param->{'is_owner'}){
 	 $param->{'previous_action'} = 'arc';
 	 $param->{'previous_list'} = $list->{'name'};
 	 return undef;
      }
-     unless (($list->{admin}{tracking} eq "on")||($list->{admin}{tracking} eq "on_demand")){
+     unless (($list->{admin}{tracking}{delivery_status_notification} eq 'on')||($list->{admin}{tracking}{message_delivery_notification} eq 'on')||($list->{admin}{tracking}{message_delivery_notification} eq 'on_demand')){
          &wwslog('err','do_tracking : list not configured for tracking');
 	 &report::reject_report_web('intern','list_not_configured_for_tracking');
 	 $param->{'previous_action'} = 'arc';
@@ -7741,7 +7740,6 @@ sub do_remove_arc {
      $param->{'msgid'} = $in{'msgid'} ;
      $param->{'listname'} = $in{'list'};
 
-     do_log('trace',"call get_recipient_status");
      unless($param->{'tracking_info'} = &tracking::get_recipients_status($in{'msgid'}, $in{'list'},$robot)){
          &report::reject_report_web('err','could_not_get_tracking_info',{},$param->{'action'},$list,$param->{'user'}{'email'},$robot);
          &wwslog('err',"could not get tracking info for message_id $in{'msgid'} and list $in{'list'}");

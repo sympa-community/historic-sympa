@@ -94,18 +94,15 @@ sub get_recipients_status {
 	# the message->head method return message-id including <blabla@dom> where mhonarc return blabla@dom that's why we test both of them
         my $request = sprintf "SELECT recipient_notification AS recipient,  reception_option_notification AS reception_option, status_notification AS status, arrival_date_notification AS arrival_date, type_notification as type, message_notification as notification_message FROM notification_table WHERE (list_notification = %s AND robot_notification = %s AND (message_id_notification = %s OR CONCAT('<',message_id_notification,'>') = %s OR message_id_notification = %s ))",$dbh->quote($listname),$dbh->quote($robot),$dbh->quote($msgid),$dbh->quote($msgid),$dbh->quote('<'.$msgid.'>');
 	
-        &do_log('trace', 'Request For Message Table : : %s', $request);
         unless ($sth = $dbh->prepare($request)) {
                 &do_log('err','Unable to prepare SQL statement : %s', $dbh->errstr);
                 return undef;
         }
-        &do_log('trace', 'post prepare');
         unless ($sth->execute) {
                 &do_log('err','Unable to execute SQL statement "%s" : %s', $request, $dbh->errstr);
                 return undef;
         }
         my @pk_notifs;
-       &do_log('trace', 'post execute');
         while (my $pk_notif = $sth->fetchrow_hashref){
 	    if ($pk_notif->{'notification_message'}) { 
 		$pk_notif->{'notification_message'} = MIME::Base64::decode($pk_notif->{'notification_message'});
@@ -141,7 +138,6 @@ sub db_init_notification_table{
     my @rcpt =  @{$params{'rcpt'}};
     
     &do_log('debug2', "db_init_notification_table (msgid = %s, listname = %s, reception_option = %s",$msgid,$listname,$reception_option);
-    &do_log('trace', "db_init_notification_table (msgid = %s, listname = %s, reception_option = %s",$msgid,$listname,$reception_option);
 
     my $dbh = connection($Conf::Conf{'db_name'}, $Conf::Conf{'db_host'}, $Conf::Conf{'db_port'}, $Conf::Conf{'db_user'}, $Conf::Conf{'db_passwd'});
     unless ($dbh and $dbh->ping) {
@@ -154,15 +150,8 @@ sub db_init_notification_table{
     foreach my $email (@rcpt){
 	my $email= lc($email);
 	
-	&do_log('trace', 'Recipient Address :%s', $email );
-#	unless ($sth = &store_notification($dbh, $msgid,$listname,$robot,$email,$reception_option)) {
-#	    &do_log('err', 'Unable to execute message storage in notification table for message "%s"', $msgid);
-#	    return undef;
-#	}
-
 	my $request = sprintf "INSERT INTO notification_table (message_id_notification,recipient_notification,reception_option_notification,list_notification,robot_notification) VALUES (%s,%s,%s,%s,%s)",$dbh->quote($msgid),$dbh->quote($email),$dbh->quote($reception_option),$dbh->quote($listname),$dbh->quote($robot);
 	
-	&do_log('trace', 'Request %s', $request);
 	unless ($sth = $dbh->prepare($request)) {
                 &do_log('err','Unable to prepare SQL statement "%s": %s', $request, $dbh->errstr);
                 return undef;
@@ -220,8 +209,7 @@ sub db_insert_notification {
     
     my $request = sprintf "UPDATE notification_table SET  `status_notification` = %s, `arrival_date_notification` = %s, `message_notification` = %s WHERE (pk_notification = %s)",$dbh->quote($status),$dbh->quote($arrival_date),$dbh->quote($notification_as_string),$dbh->quote($notification_id);
 
-    my $request_trace = sprintf "UPDATE notification_table SET  `status_notification` = %s, `arrival_date_notification` = %s, WHERE (pk_notification = %s)",$dbh->quote($status),$dbh->quote($arrival_date),$dbh->quote($notification_id);
-    &do_log('trace','db_insert_notification request_trace  %s', $request_trace);
+    # my $request_trace = sprintf "UPDATE notification_table SET  `status_notification` = %s, `arrival_date_notification` = %s, WHERE (pk_notification = %s)",$dbh->quote($status),$dbh->quote($arrival_date),$dbh->quote($notification_id);
     
     my $sth;
     

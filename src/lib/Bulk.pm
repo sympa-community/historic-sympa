@@ -141,9 +141,6 @@ sub next {
     # select the packet that has been locked previously
     $statement = sprintf "SELECT messagekey_bulkmailer AS messagekey, messageid_bulkmailer AS messageid, packetid_bulkmailer AS packetid, receipients_bulkmailer AS receipients, returnpath_bulkmailer AS returnpath, listname_bulkmailer AS listname, robot_bulkmailer AS robot, priority_message_bulkmailer AS priority_message, priority_packet_bulkmailer AS priority_packet, verp_bulkmailer AS verp, tracking_bulkmailer AS tracking, merge_bulkmailer as merge, reception_date_bulkmailer AS reception_date, delivery_date_bulkmailer AS delivery_date FROM bulkmailer_table WHERE lock_bulkmailer=%s %s",$dbh->quote($lock), $order;
 
-
-    do_log('trace',"bulk::next statement :$statement"); 
-
     unless ($sth = $dbh->prepare($statement)) {
 	do_log('err','Unable to prepare SQL statement : %s', $dbh->errstr);
 	return undef;
@@ -158,8 +155,6 @@ sub next {
    
     $sth->finish();
     
-    do_log('trace',"bulk::next  messagekey $result->{'messagekey'}");
-
     return $result;
 
 }
@@ -233,8 +228,6 @@ sub message_from_spool {
     }
     my $message_from_spool = $sth->fetchrow_hashref('NAME_lc') ;
     $sth->finish;
-
-    &do_log('trace', '(messagekey : %s b64 (messageasstring) : %s messageastring : %s )',$messagekey,  $message_from_spool->{'message'}, MIME::Base64::decode($message_from_spool->{'message'}));
 
     return({'messageasstring'=> MIME::Base64::decode($message_from_spool->{'message'}),
 	    'messageid' => $message_from_spool->{'messageid'},
@@ -415,16 +408,13 @@ sub store {
     my $delivery_date = $data{'delivery_date'};
     my $verp  = $data{'verp'};
     my $tracking  = $data{'tracking'};
-    &do_log('trace', "Bulk::store tracking : xxxx".$tracking."xxx");
     $tracking  = '' unless (($tracking  eq 'dsn')||($tracking  eq 'mdn'));
-    &do_log('trace', "Bulk::store et manitenant tracking : xxxx".$tracking."xxx");
     $verp=0 unless($verp);
     my $merge  = $data{'merge'};
     my $dkim = $data{'dkim'};
     my $tag_as_last = $data{'tag_as_last'};
 
     &do_log('debug', 'Bulk::store(<msg>,<rcpts>,from = %s,robot = %s,listname= %s,priority_message = %s, delivery_date= %s,verp = %s, tracking = %s, merge = %s, dkim: d= %s i=%s, last: %s)',$from,$robot,$listname,$priority_message,$delivery_date,$verp,$tracking, $merge,$dkim->{'d'},$dkim->{'i'},$tag_as_last);
-    &do_log('trace', 'Bulk::store(<msg>,<rcpts>,from = %s,robot = %s,listname= %s,priority_message = %s, delivery_date= %s,verp = %s, tracking = %s, merge = %s, dkim: d= %s i=%s, last: %s)',$from,$robot,$listname,$priority_message,$delivery_date,$verp,$tracking, $merge,$dkim->{'d'},$dkim->{'i'},$tag_as_last);
 
     $dbh = &List::db_get_handler();
 

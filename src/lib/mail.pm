@@ -315,8 +315,6 @@ sub mail_message {
     my $list =  $params{'list'};
     my $verp = $params{'verp'};
 
-    do_log('trace', "mail_message VERP $verp");
-
     my @rcpt =  @{$params{'rcpt'}};
     my $dkim  =  $params{'dkim_parameters'};
     my $tag_as_last = $params{'tag_as_last'};
@@ -328,8 +326,6 @@ sub mail_message {
     my $from = $list->{'name'}.&Conf::get_robot_conf($robot, 'return_path_suffix').'@'.$host;
 
     do_log('debug', 'mail::mail_message(from: %s, , file:%s, %s, verp->%s, %d rcpt, last: %s)', $from, $message->{'filename'}, $message->{'smime_crypted'}, $verp, $#rcpt+1, $tag_as_last);
-
-    do_log('trace', "return 0 car  $#rcpt + 1 = 0") if ($#rcpt == -1);
     return 0 if ($#rcpt == -1);
 
     my($i, $j, $nrcpt, $size); 
@@ -366,7 +362,6 @@ sub mail_message {
     my @sendto;
     my @sendtobypacket;
 
-    do_log('trace', 'mail::mail_message   aaaa');
     while (defined ($i = shift(@rcpt))) {
 	my @k = reverse(split(/[\.@]/, $i));
 	my @l = reverse(split(/[\.@]/, $j));
@@ -376,7 +371,6 @@ sub mail_message {
 	    $dom = $1;
 	    chomp $dom;
 	}
-	do_log('trace', 'mail::mail_message   bbbb');
 	$rcpt_by_dom{$dom} += 1 ;
 	&do_log('debug2', "domain: $dom ; rcpt by dom: $rcpt_by_dom{$dom} ; limit for this domain: $Conf::Conf{'nrcpt_by_domain'}{$dom}");
 
@@ -406,13 +400,12 @@ sub mail_message {
 	push(@sendto, $i);
 	$j = $i;
     }
-    do_log('trace', 'mail::mail_message   ccccc');
+
     if ($#sendto >= 0) {
 	$numsmtp++ ;# if (&sendto($msg_header, $msg_body, $from, \@sendto, $robot));
 	my @tab =  @sendto ; push @sendtobypacket, \@tab ;# do not replace this line by push @sendtobypacket, \@sendto !!!
     }
 
-    do_log('trace', 'mail::mail_message  dddd');
     return $numsmtp if (&sendto('msg_header' => $msg_header, 
 				'msg_body' => $msg_body,
 				'from' => $from,
@@ -548,7 +541,6 @@ sub sendto {
     my $tag_as_last = $params{'tag_as_last'};
 
     do_log('debug', 'mail::sendto(from : %s,listname: %s, encrypt : %s, verp : %s, priority = %s, last: %s, use_bulk: %s', $from, $listname, $encrypt, $verp, $priority, $tag_as_last, $use_bulk);
-    do_log('trace', 'mail::sendto(from : %s,listname: %s, encrypt : %s, verp : %s, priority = %s, last: %s, use_bulk: %s', $from, $listname, $encrypt, $verp, $priority, $tag_as_last, $use_bulk);
     
     my $delivery_date =  $params{'delivery_date'};
     $delivery_date = time() unless $delivery_date; # if not specified, delivery tile is right now (used for sympa messages etc)
@@ -647,8 +639,6 @@ sub sending {
     my $fh;
     my $signed_msg; # if signing
     
-    do_log('trace'," sending use_bulk  $use_bulk  VERP : $verp ;");
-
     if ($sign_mode eq 'smime') {
 	my $parser = new MIME::Parser;
 	$parser->output_to_core(1);
@@ -693,12 +683,10 @@ sub sending {
 	$trackingfeature = $verp;
     }else{
 	$trackingfeature ='';
-	do_log('trace',"pas de tracking ????  verp = $verp");
     }
     my $mergefeature = ($merge eq 'on');
     
     if ($use_bulk){ # in that case use bulk tables to prepare message distribution 
-	do_log('trace',"CAll Bulk::store('msg_id' => $msg_id, 'rcpts' => $rcpt, 'from' => $from, 'robot' => $robot, 'listname' => $listname, 'priority_message' => $priority_message, 'priority_packet' => $priority_packet, 'delivery_date' => $delivery_date, 'verp' => $verpfeature,'tracking' => $trackingfeature,'merge' => $mergefeature,'dkim' => $dkim,    'tag_as_last' => $tag_as_last,");
 
 	my $bulk_code = &Bulk::store('msg' => $messageasstring,
 				     'msg_id' => $msg_id,
@@ -723,7 +711,6 @@ sub sending {
 	}
     }elsif(defined $send_spool) { # in context wwsympa.fcgi do not send message to reciepients but copy it to standard spool 
 	do_log('debug',"NOT USING BULK");
-	do_log('trace',"NOT USING BULK");
 
 	$sympa_email = &Conf::get_robot_conf($robot, 'sympa');	
 	$sympa_file = "$send_spool/T.$sympa_email.".time.'.'.int(rand(10000));
@@ -755,7 +742,6 @@ sub sending {
 	}
     }else{ # send it now
 	do_log('debug',"NOT USING BULK");
-	do_log('trace',"NOT USING BULK              2222222222222222222");
 	*SMTP = &smtpto($from, $rcpt, $robot);	
 	print SMTP $messageasstring;	
 	unless (close SMTP) {
@@ -784,8 +770,7 @@ sub sending {
 sub smtpto {
    my($from, $rcpt, $robot, $msgkey, $sign_mode) = @_;
 
-
-       &do_log('trace', 'TEST TEST :( from :%s, rcpt:%s, robot:%s,  msgkey:%s, sign_mode: %s  )', $from, $rcpt, $robot, $msgkey, $sign_mode);
+   &do_log('debug2', 'smtpto( from :%s, rcpt:%s, robot:%s,  msgkey:%s, sign_mode: %s  )', $from, $rcpt, $robot, $msgkey, $sign_mode);
 
    unless ($from) {
        &do_log('err', 'Missing Return-Path in mail::smtpto()');
@@ -834,27 +819,19 @@ sub smtpto {
    if ($pid == 0) {
        if ($msgkey) {
 	   $sendmail_args .= ' -N success,delay,failure -V '.$msgkey;
-	   do_log('trace'," sending with  $sendmail_args ")
        }
 
 
        close(OUT);
        open(STDIN, "<&IN");
       
-	#------------------------------------------------------------------------------------------- 
-       
        if (! ref($rcpt)) {
-	&do_log('trace', 'TEST1 TEST mail::smtpto(sendmail_args:%s, from:%s, rcpt:%s )', $sendmail_args, $from, $rcpt);
 	   exec $sendmail, split(/\s+/,$sendmail_args),'-f', $from, $rcpt;
        }elsif (ref($rcpt) eq 'SCALAR') {
-	&do_log('trace', 'TEST2 TEST mail::smtpto(sendmail_args:%s, from:%s, rcpt:%s )', $sendmail_args, $from, $$rcpt);
 	   exec $sendmail, split(/\s+/,$sendmail_args), '-f', $from, $$rcpt;
        }elsif (ref($rcpt) eq 'ARRAY'){
-	&do_log('trace', 'TEST3 TEST mail::smtpto(sendmail_args:%s, from:%s, rcpt:%s )', $sendmail_args, $from, @$rcpt);
 	   exec $sendmail, split(/\s+/,$sendmail_args), '-f', $from, @$rcpt;
        }
-       
-	#------------------------------------------------------------------------------------------- 
 
 	exit 1; ## Should never get there.
        }

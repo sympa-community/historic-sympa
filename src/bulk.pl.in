@@ -268,38 +268,22 @@ while (!$end) {
 	    my $parser = new MIME::Parser;
 	    $parser->output_to_core(1);
 	    my $entity = $parser->parse_data($messageasstring_init); 
-	    
-	    #if($bulk->{'tracking'}){
-	    #   $key = &tracking::find_msg_key($entity->head->get('Message-Id'), $listname,$robot);
-	    #   &do_log('trace', "tracking is requested found Key: %s ", $key);
-	    #}
-	    
+	    	    
 	    foreach $rcpt (@rcpts) {
-		do_log('trace',"envoi a l'unité pour $rcpt");
 		my $notification_id;
-
 		my $return_path;
 		my $escaped_rcpt = $rcpt;
 		$escaped_rcpt  =~ s/\@/\=\=a\=\=/; 
 		
-		do_log('trace', "tracking is requested : %s ", $bulk->{'tracking'});
-
 		if(($bulk->{'tracking'} eq 'dsn')||($bulk->{'tracking'} eq 'mdn')){ # tracking by MDN required tracking by DSN to
 		    my $msgid = $entity->head->get('Message-Id'); chomp $msgid;		    
-		    do_log('trace', "Appel de tracking::find_notification_id_by_message($rcpt,$msgid,$listname,$robot)");
 		    $notification_id = &tracking::find_notification_id_by_message($rcpt, $msgid, $listname,$robot);
-
-		    do_log ('trace',"We should use a header editing method that do not alter S/MIME signed messages (using Mime::entity  b64-encode(b64-decode(text)) may be defferent from original text)"); 
 		    $return_path = $Conf::Conf{'bounce_email_prefix'}.'+'.$escaped_rcpt.'=='.$listname.'=='.$notification_id.'@'.$robot;
 		    $entity->head->replace('Disposition-Notification-To',$return_path) if ($bulk->{'tracking'} eq 'mdn') ;
-
 		    $messageasstring_init = $entity->as_string;
 		}else{  # VERP
-		    &do_log('trace', " pas de TRACKING returnpath : $return_path ");
 		    $return_path = $Conf::Conf{'bounce_email_prefix'}.'+'.$escaped_rcpt.'=='.$listname.'@'.$robot; 
 		}
-		&do_log('trace', "VERP or VERP + TRACKING returnpath : $return_path ");
-
 		if ($bulk->{'merge'}) { 		    		    
 		    unless(&Bulk::merge_msg ($entity, $rcpt, $bulk, $data)){
 			&do_log('err', 'Erreur d appel &Bulk::merge_msg');
@@ -320,16 +304,12 @@ while (!$end) {
 									   'dkim_header_list' =>$message_from_spool->{'dkim_header_list'} } );
 		}
 
-		do_log('trace',"mail::smtpto($return_path, $rcpt, $bulk->{'robot'},key : $notification_id, message : $messageasstring);");
-
-
 		*SMTP = &mail::smtpto($return_path, \$rcpt, $bulk->{'robot'},$notification_id);
 		# Message with customized data
 		print SMTP $messageasstring;
 		close SMTP;
 	    }
 	}else{ # message dont needs personalization, they can be sent by packet
-	    do_log('trace',"envoi par packet");
             if (&Conf::get_robot_conf($bulk->{'robot'}, 'dkim_feature') eq 'on'){
 		$messageasstring_init = &tools::remove_invalid_dkim_signature($messageasstring_init );
 	    }

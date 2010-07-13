@@ -1397,11 +1397,11 @@ our @params = (
 	file   => 'sympa.conf',
     },
     {
-        name    => 'delivery_status_notification',
+        name    => 'tracking_delivery_status_notification',
         default => 'off',
     },
     {
-        name    => 'message_delivery_notification',
+        name    => 'tracking_message_delivery_notification',
         default => 'off',
     },
 );

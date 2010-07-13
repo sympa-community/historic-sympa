@@ -213,11 +213,6 @@ while (!$end) {
 	last if $end;
 	next unless (-f "$queue/$file");
 
-	do_log ('trace',"TEST BOUNCE : file $queue/$file ");
-
-	#--------------------------------------------------------------------------------------------------
-
-	
 	unless ($file =~ /^(\S+)\.\d+\.\d+$/) {
 	    my @s = stat("$queue/$file");
 	    if (POSIX::S_ISREG($s[2])) {
@@ -279,17 +274,15 @@ while (!$end) {
 		$local_part = $1;
 		$unique = $2;
 	    }elsif ($local_part =~  /^(.*)\=\=a\=\=(.*)\=\=(.*)\=\=(.*)$/ ) {# tracking in use
-#------------------------------------------------------------------------------------------------
-# Test if an id part is present in the to address; use for the tracking
+ 
 		$distribution_id = $4;
 		$local_part =~ /^(.*)\=\=(.*)$/ ;
 		$local_part = $1;
-		&do_log('trace', 'ID PART : %s in the bounce for :%s',$distribution_id, $to);
 	    }else{
 		undef $distribution_id ;
-		&do_log('trace', 'NOT ID PART in the bounce for :%s', $to);
+		&do_log('err', 'NOT ID PART in the bounce for :%s', $to);
 	    }
-#------------------------------------------------------------------------------------------------
+
 	    $local_part =~ s/\=\=a\=\=/\@/ ;
 	    $local_part =~ /^(.*)\=\=(.*)$/ ; 	    
 	    $who = $1;
@@ -343,8 +336,7 @@ while (!$end) {
 		next;
 	    }# close VERP + remind or welcome block
 	}# close VERP in use block
-######################################################################
-# Tracking
+
         my $list = new List ($listname, $robot);
         unless($list) {
             do_log('err','Skipping bouncefile %s for unknown list %s@%s',$file,$listname,$robot);
@@ -356,16 +348,14 @@ while (!$end) {
             next;
         }
 
-#----------------------------------------------------------------------------------------------------------------------
-# If the DSN notification is correct and the tracking mode is enable, it will be inserted in the database
+	#----------------------------------------------------------------------------------------------------------------------
+	# If the DSN notification is correct and the tracking mode is enable, it will be inserted in the database
 	my $tracking_in_use;
 	$tracking_in_use = 1 if ($list->{'admin'}{'tracking'}{'delivery_status_notification'} eq "on");
 	$tracking_in_use = 1 if ($list->{'admin'}{'tracking'}{'message_delivery_notification'} eq "on");
 	$tracking_in_use = 1 if ($list->{'admin'}{'tracking'}{'message_delivery_notification'} eq "on_demand");
 	if(($head->get('Content-type') =~ /multipart\/report/) && ($head->get('Content-type') =~ /report\-type\=delivery-status/i) && ($tracking_in_use)) {
 	
-	    do_log ('trace',"processing  DSN Report block 1");
-	    
 	    my @parts = $entity->parts();
 	    my $original_rcpt; my $final_rcpt; my $user_agent; my $version; my $dsn_status; my $msg_id; my $orig_msg_id;
 	    my $listname, $robot;
@@ -381,7 +371,6 @@ while (!$end) {
 		my $content = $h->get('Content-type');
 
 		if ($content =~ /message\/delivery-status/) {
-		    do_log('trace',"processing a message/delivery-status mime part");
 		    my @report = split(/\n/, $p->bodyhandle->as_string());
 		    foreach my $line (@report) {
 			$line = lc($line);
@@ -456,7 +445,6 @@ while (!$end) {
 		}
 	    }
 	                 
-            &do_log('trace', "Save in database...");
 	    if (&tracking::db_insert_notification($distribution_id, 'DSN', $dsn_status, $arrival_date,$notification_as_string )) {
 		&do_log('notice', "DSN Correctly treated...");
 	    }else{
@@ -471,11 +459,10 @@ while (!$end) {
 		next;
 	    }
 	} 
-#-----------------------------------------------------------------------------------------------------------------------------------
-# If the MDN notification is correct and the tracking mode is enable, it will be inserted in the database
+	#-----------------------------------------------------------------------------------------------------------------------------------
+	# If the MDN notification is correct and the tracking mode is enable, it will be inserted in the database
 	if(($head->get('Content-type') =~ /multipart\/report/) && ($head->get('Content-type') =~ /report\-type\=disposition-notification/i) && (($list->{'admin'}{'tracking'}{'message_delivery_notification'} eq "on")||($list->{'admin'}{'tracking'}{'message_delivery_notification'} eq "on_demand"))) {
-	    do_log ('trace',"processing  MDN Report block 1");
-	    
+
 	    my @parts = $entity->parts();
 	    my $original_rcpt; my $final_rcpt; my $user_agent; my $version; my $dsn_status; my $msg_id; my $orig_msg_id;
 	    my $listname, $robot;
@@ -492,7 +479,6 @@ while (!$end) {
 		my $content = $h->get('Content-type');
 
 		if ($content =~ /message\/disposition-notification/) {
-		    do_log('trace',"processing a message/ddisposition-notification mime part");
 		    my @report = split(/\n/, $p->bodyhandle->as_string());
 		    foreach my $line (@report) {
 			$line = lc($line);
@@ -522,12 +508,6 @@ while (!$end) {
                                 ($final_rcpt)= $final_rcpt =~ /(\S+\@\S+)/;
 			    }	
 			}
-			# $distribution_id is fetch by VERP method and nothing else
-			#if ( ($line =~ /original\-envelope\-id\:\s*(.+)/i) && (!$distribution_id) ) {
-			#    $distribution_id = $1;
-			#    chomp $distribution_id;
-	      	    	#    do_log ('trace',"1 - Original Envelope-id Detected, value : %s", $distribution_id);
-			#}
 		    }
 		}
 	    }
