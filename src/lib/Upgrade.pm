@@ -756,7 +756,7 @@ sub probe_db {
 							'robot_bulkmailer' => 'varchar(80)',
 							'listname_bulkmailer' => 'varchar(50)',
 							'verp_bulkmailer' => 'int(1)',
-							'tracking_bulkmailer' => 'int(1)',
+							'tracking_bulkmailer' => "enum('mdn','dsn')",
 							'merge_bulkmailer' => 'int(1)',
 							'priority_message_bulkmailer' => 'smallint(10)',
 							'priority_packet_bulkmailer' => 'smallint(10)',

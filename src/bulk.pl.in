@@ -262,7 +262,7 @@ while (!$end) {
 	#my $list = new List($bulk->{'listname'}, $bulk->{'robot'});
 	my $listname= $bulk->{'listname'}; my $robot =  $bulk->{'robot'};
 
-	if (($bulk->{'verp'})||($bulk->{'merge'})||($bulk->{'tracking'})){ # message needs personalization
+	if (($bulk->{'verp'})||($bulk->{'merge'})||($bulk->{'tracking'}eq 'dsn')||($bulk->{'tracking'}eq 'mdn')){ # message needs personalization
 	    my $key ;
 	    ### Parse an MIME::Entity message
 	    my $parser = new MIME::Parser;
@@ -282,14 +282,17 @@ while (!$end) {
 		my $escaped_rcpt = $rcpt;
 		$escaped_rcpt  =~ s/\@/\=\=a\=\=/; 
 		
-		if($bulk->{'tracking'}){ # VERP + tracking
+		do_log('trace', "tracking is requested : %s ", $bulk->{'tracking'});
+
+		if(($bulk->{'tracking'} eq 'dsn')||($bulk->{'tracking'} eq 'mdn')){ # tracking by MDN required tracking by DSN to
 		    my $msgid = $entity->head->get('Message-Id'); chomp $msgid;		    
 		    do_log('trace', "Appel de tracking::find_notification_id_by_message($rcpt,$msgid,$listname,$robot)");
 		    $notification_id = &tracking::find_notification_id_by_message($rcpt, $msgid, $listname,$robot);
 
 		    do_log ('trace',"We should use a header editing method that do not alter S/MIME signed messages (using Mime::entity  b64-encode(b64-decode(text)) may be defferent from original text)"); 
 		    $return_path = $Conf::Conf{'bounce_email_prefix'}.'+'.$escaped_rcpt.'=='.$listname.'=='.$notification_id.'@'.$robot;
-		    $entity->head->replace('Disposition-Notification-To',$return_path);
+		    $entity->head->replace('Disposition-Notification-To',$return_path) if ($bulk->{'tracking'} eq 'mdn') ;
+
 		    $messageasstring_init = $entity->as_string;
 		}else{  # VERP
 		    &do_log('trace', " pas de TRACKING returnpath : $return_path ");

@@ -433,11 +433,21 @@ my %alias = ('reply-to' => 'reply_to',
 			 'gettext_id' => "Secret string for generating unique keys",
 			 'group' => 'other'
 		     },
-	    'tracking' => {'format' => ['on','on_demand','off'],
-			     'default' =>  {'conf' => 'tracking'},
-			     'gettext_id' => "Tracking Module; allow to follow outgoing mails",
-			     'group' => 'bounces'
-			     },
+	    'tracking' => {'format' => {'delivery_status_notification' => {'format' => ['on','off'],
+										'default' =>  {'conf' => 'tracking_delivery_status_notification'},
+										'gettext_id' => "tracking message by delivery status notification",
+										'order' => 1
+									   },
+									   								   									   
+									'message_delivery_notification' => {'format' => ['on','on_demand','off'],
+										'default' =>  {'conf' => 'tracking_message_delivery_notification'},
+										'gettext_id' => "tracking message by message delivery notification",
+										'order' => 2
+									   }
+				         },
+					'group' => 'bounces',
+					'gettext_id' => "Message tracking feature"
+					},		
 	    'creation' => {'format' => {'date_epoch' => {'format' => '\d+',
 							 'occurrence' => '1',
 							 'gettext_id' => "",
@@ -2639,10 +2649,14 @@ sub distribute_msg {
 
     ## Prepare tracking if list config allow it
     my $apply_tracking = 'off';
-    if (($self->{'admin'}{'tracking'} eq 'on')||(($self->{'admin'}{'tracking'} eq 'on_demand') && ($hdr->get('Disposition-Notification-To')))){
-	do_log('trace',"tracking activé");
-	$apply_tracking = 'on';
-	$hdr->delete('Disposition-Notification-To'); # remove notification request becuse a new one will be inserted
+    
+    $apply_tracking = 'dsn' if ($self->{'admin'}{'tracking'}{'delivery_status_notification'} eq 'on');
+    $apply_tracking = 'mdn' if ($self->{'admin'}{'tracking'}{'message_delivery_notification'} eq 'on');
+    $apply_tracking = 'mdn' if (($self->{'admin'}{'tracking'}{'message_delivery_notification'}  eq 'on_demand') && ($hdr->get('Disposition-Notification-To')));
+
+    if ($apply_tracking ne 'off'){
+	do_log('trace',"tracking activé mode $apply_tracking");
+	$hdr->delete('Disposition-Notification-To'); # remove notification request becuse a new one will be inserted if needed
     }
     
     ## Remove unwanted headers if present.
@@ -3347,7 +3361,7 @@ sub send_msg {
 
     # prepare verp parameter
     my $verp_rate =  $self->{'admin'}{'verp_rate'};
-    $verp_rate = '100%' if ($apply_tracking eq 'on'); # force verp if tracking is requested.  
+    $verp_rate = '100%' if (($apply_tracking eq 'dsn')||($apply_tracking eq 'mdn')); # force verp if tracking is requested.  
     &do_log('trace', "verp_rate $verp_rate");
 
     my $xsequence =  $self->{'stats'}->[0] ;
@@ -3564,8 +3578,8 @@ sub send_msg {
 	
 	$verp= 'on';
 
-	if ($apply_tracking eq 'on') {
-	    $verp = 'tracking' ;
+	if (($apply_tracking eq 'dsn')||($apply_tracking eq 'mdn')){
+	    $verp = $apply_tracking ;
 	    do_log('trace',"----------------- track repere avec option $reception_option ");
 	    
 	    &tracking::db_init_notification_table('listname'=> $self->{'name'},

@@ -314,6 +314,9 @@ sub mail_message {
     my $message =  $params{'message'};
     my $list =  $params{'list'};
     my $verp = $params{'verp'};
+
+    do_log('trace', "mail_message VERP $verp");
+
     my @rcpt =  @{$params{'rcpt'}};
     my $dkim  =  $params{'dkim_parameters'};
     my $tag_as_last = $params{'tag_as_last'};
@@ -644,7 +647,7 @@ sub sending {
     my $fh;
     my $signed_msg; # if signing
     
-    do_log('trace'," use_bulk  $use_bulk");
+    do_log('trace'," sending use_bulk  $use_bulk  VERP : $verp ;");
 
     if ($sign_mode eq 'smime') {
 	my $parser = new MIME::Parser;
@@ -677,19 +680,25 @@ sub sending {
     if (ref($msg) eq "MIME::Entity") {
 	$messageasstring = $msg->as_string;
 	my $head = $msg->head;
-	$msg_id = $head->get('Message-ID');
+	$msg_id = $head->get('Message-ID'); chomp $msg_id;
     }else {
 	$messageasstring = $msg;
 	if ($messageasstring =~ /Message-ID:\s*(\<.*\>)\s*\n/) {
-	    $msg_id = $1;
+	    $msg_id = $1; chomp $msg_id;
 	}
     }# 
-    my $verpfeature = (($verp eq 'on')||($verp eq 'tracking'));
-    my $trackingfeature = ($verp eq 'tracking');
+    my $verpfeature = (($verp eq 'on')||($verp eq 'mdn')||($verp eq 'dsn'));
+    my $trackingfeature ;
+    if (($verp eq 'mdn')||($verp eq 'dsn')) {
+	$trackingfeature = $verp;
+    }else{
+	$trackingfeature ='';
+	do_log('trace',"pas de tracking ????  verp = $verp");
+    }
     my $mergefeature = ($merge eq 'on');
     
     if ($use_bulk){ # in that case use bulk tables to prepare message distribution 
-	do_log('trace',"Bulk::store('msg' => $messageasstring,'msg_id' => $msg_id, 'rcpts' => $rcpt, 'from' => $from, 'robot' => $robot, 'listname' => $listname, 'priority_message' => $priority_message, 'priority_packet' => $priority_packet, 'delivery_date' => $delivery_date, 'verp' => $verpfeature,'tracking' => $trackingfeature,'merge' => $mergefeature,'dkim' => $dkim,    'tag_as_last' => $tag_as_last,");
+	do_log('trace',"CAll Bulk::store('msg_id' => $msg_id, 'rcpts' => $rcpt, 'from' => $from, 'robot' => $robot, 'listname' => $listname, 'priority_message' => $priority_message, 'priority_packet' => $priority_packet, 'delivery_date' => $delivery_date, 'verp' => $verpfeature,'tracking' => $trackingfeature,'merge' => $mergefeature,'dkim' => $dkim,    'tag_as_last' => $tag_as_last,");
 
 	my $bulk_code = &Bulk::store('msg' => $messageasstring,
 				     'msg_id' => $msg_id,
@@ -776,7 +785,7 @@ sub smtpto {
    my($from, $rcpt, $robot, $msgkey, $sign_mode) = @_;
 
 
-       &do_log('trace', 'TEST TEST :( from :%s, rcpt:%s, robot:%s,  msgkey:%s, sign_mode: %s  )', $from, $rcpt, $msgkey, $robot, $sign_mode);
+       &do_log('trace', 'TEST TEST :( from :%s, rcpt:%s, robot:%s,  msgkey:%s, sign_mode: %s  )', $from, $rcpt, $robot, $msgkey, $sign_mode);
 
    unless ($from) {
        &do_log('err', 'Missing Return-Path in mail::smtpto()');

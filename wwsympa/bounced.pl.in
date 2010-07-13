@@ -358,7 +358,11 @@ while (!$end) {
 
 #----------------------------------------------------------------------------------------------------------------------
 # If the DSN notification is correct and the tracking mode is enable, it will be inserted in the database
-	if(($head->get('Content-type') =~ /multipart\/report/) && ($head->get('Content-type') =~ /report\-type\=delivery-status/i) && (($list->{'admin'}{'tracking'} eq "on")||($list->{'admin'}{'tracking'} eq "on_demand"))) {
+	my $tracking_in_use;
+	$tracking_in_use = 1 if ($list->{'admin'}{'tracking'}{'delivery_status_notification'} eq "on");
+	$tracking_in_use = 1 if ($list->{'admin'}{'tracking'}{'message_delivery_notification'} eq "on");
+	$tracking_in_use = 1 if ($list->{'admin'}{'tracking'}{'message_delivery_notification'} eq "on_demand");
+	if(($head->get('Content-type') =~ /multipart\/report/) && ($head->get('Content-type') =~ /report\-type\=delivery-status/i) && ($tracking_in_use)) {
 	
 	    do_log ('trace',"processing  DSN Report block 1");
 	    
@@ -469,7 +473,7 @@ while (!$end) {
 	} 
 #-----------------------------------------------------------------------------------------------------------------------------------
 # If the MDN notification is correct and the tracking mode is enable, it will be inserted in the database
-	if(($head->get('Content-type') =~ /multipart\/report/) && ($head->get('Content-type') =~ /report\-type\=disposition-notification/i) && (($list->{'admin'}{'tracking'} eq "on")||($list->{'admin'}{'tracking'} eq "on_demand"))) {
+	if(($head->get('Content-type') =~ /multipart\/report/) && ($head->get('Content-type') =~ /report\-type\=disposition-notification/i) && (($list->{'admin'}{'tracking'}{'message_delivery_notification'} eq "on")||($list->{'admin'}{'tracking'}{'message_delivery_notification'} eq "on_demand"))) {
 	    do_log ('trace',"processing  MDN Report block 1");
 	    
 	    my @parts = $entity->parts();

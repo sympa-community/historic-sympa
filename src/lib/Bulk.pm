@@ -415,6 +415,9 @@ sub store {
     my $delivery_date = $data{'delivery_date'};
     my $verp  = $data{'verp'};
     my $tracking  = $data{'tracking'};
+    &do_log('trace', "Bulk::store tracking : xxxx".$tracking."xxx");
+    $tracking  = '' unless (($tracking  eq 'dsn')||($tracking  eq 'mdn'));
+    &do_log('trace', "Bulk::store et manitenant tracking : xxxx".$tracking."xxx");
     $verp=0 unless($verp);
     my $merge  = $data{'merge'};
     my $dkim = $data{'dkim'};
