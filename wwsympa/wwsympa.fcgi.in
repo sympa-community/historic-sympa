@@ -7102,7 +7102,7 @@ sub do_arc {
     if ($session->{'is_a_crawler'}) {       
 	$param->{'header_date'} = $stat[9];
     }
-    $param->{'base'} = sprintf "%s%s/arc/%s/%s/", $param->{'base_url'}, $param->{'path_cgi'}, $param->{'list'}, $in{'month'};
+    $param->{'base'} = sprintf "%s%s/arc/%s/%s/%s", $param->{'base_url'}, $param->{'path_cgi'}, $param->{'list'}, $in{'month'}, $in{'arc_file'};
     $param->{'archive_name'} = $in{'month'};
     
     return 1;
