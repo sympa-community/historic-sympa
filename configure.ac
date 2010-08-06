@@ -19,7 +19,7 @@
 # along with this program; if not, write to the Free Software
 # Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
 
-AC_PREREQ(2.59)
+AC_PREREQ(2.60)
 AC_INIT(sympa, 6.0.5, sympa-authors@cru.fr)
 AM_INIT_AUTOMAKE([foreign -Wall -Werror])
 AM_PO_SUBDIRS
@@ -58,6 +58,7 @@ arcdir=$prefix/arc
 bouncedir=$prefix/bounce
 confdir=/etc
 localedir=$prefix/locale
+docdir=$prefix/doc
 
 ## If installer wants to use the FHS standard, change 
 AC_ARG_ENABLE(
@@ -83,6 +84,7 @@ AC_ARG_ENABLE(
 		arcdir=$localstatedir/lib/sympa/arc
 		bouncedir=$localstatedir/lib/sympa/bounce
 		confdir=$sysconfdir
+		docdir=$datadir/doc/sympa
 	fi
 	],
 )
@@ -104,6 +106,7 @@ AC_SUBST(arcdir)
 AC_SUBST(bouncedir)
 AC_SUBST(localedir)
 AC_SUBST(confdir)
+AC_SUBST(docdir)
 
 # allow user to redefine some of them
 AC_ARG_WITH(
@@ -221,7 +224,7 @@ AC_ARG_WITH(
     docdir,
     AS_HELP_STRING(
 	[--with-docdir=DIR],
-	[man files]
+	[documentations]
     ),
     [
 	docdir="$withval"
