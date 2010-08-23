@@ -217,7 +217,7 @@ msgstr "Zamieść"
 msgid "RSS"
 msgstr "RSS"
 
-#: ../src/lib/List.pm:1326 ../web_tt2/list_menu.tt2:80
+#: ../src/lib/List.pm:1320 ../web_tt2/list_menu.tt2:80
 #: ../web_tt2/list_menu.tt2:82
 msgid "Shared documents"
 msgstr "Dokumenty współdzielone"
@@ -1020,8 +1020,8 @@ msgid ""
 ": can be anything you like; available if you defined a user custom attribute "
 "named \"title\" (see the list configuration, section \"Miscellaneous\")."
 msgstr ""
-": wartość atrybutu użytkownika \"title\" (sprawdź w konfiguracji listy, sekcja "
-"\"Różne\"), dostępna jeśli atrybut jest zdefiniowany."
+": wartość atrybutu użytkownika \"title\" (sprawdź w konfiguracji listy, "
+"sekcja \"Różne\"), dostępna jeśli atrybut jest zdefiniowany."
 
 #: ../web_tt2/compose_mail.tt2:73
 msgid ""
@@ -2421,16 +2421,6 @@ msgstr ""
 msgid "Closed lists"
 msgstr "Zamknięte listy"
 
-#: ../src/etc/mhonarc-ressources.tt2:212 ../src/etc/mhonarc-ressources.tt2:328
-#: ../web_tt2/get_closed_lists.tt2:29 ../web_tt2/get_closed_lists.tt2:9
-#: ../web_tt2/modindex.tt2:125 ../web_tt2/modindex.tt2:182
-#: ../web_tt2/modindex.tt2:64 ../web_tt2/review.tt2:138
-#: ../web_tt2/reviewbouncing.tt2:131 ../web_tt2/reviewbouncing.tt2:60
-#: ../web_tt2/subindex.tt2:10 ../web_tt2/subindex.tt2:57
-#: ../web_tt2/subscriber_table.tt2:7
-msgid "Toggle Selection"
-msgstr "Wybierz"
-
 #: ../web_tt2/get_closed_lists.tt2:10 ../web_tt2/get_pending_lists.tt2:9
 msgid "list name"
 msgstr "nazwa listy"
@@ -2442,6 +2432,13 @@ msgstr "temat listy"
 #: ../web_tt2/get_closed_lists.tt2:12 ../web_tt2/get_pending_lists.tt2:11
 msgid "Requested by"
 msgstr "Wnioskowana przez"
+
+#: ../src/etc/mhonarc-ressources.tt2:212 ../src/etc/mhonarc-ressources.tt2:328
+#: ../web_tt2/get_closed_lists.tt2:29 ../web_tt2/modindex.tt2:125
+#: ../web_tt2/modindex.tt2:182 ../web_tt2/review.tt2:138
+#: ../web_tt2/reviewbouncing.tt2:131
+msgid "Toggle Selection"
+msgstr "Wybierz"
 
 #: ../web_tt2/get_closed_lists.tt2:30
 msgid "Purge selected lists"
@@ -3766,18 +3763,6 @@ msgstr "Listy posortowane według daty wpłynięcia najnowszej wiadomości"
 msgid "The following virtual robots are running on this server:"
 msgstr "Następujące wirtualne roboty są uruchomione na tym serwerze:"
 
-#: ../web_tt2/serveradmin.tt2:27
-msgid "Sympa URL:"
-msgstr "URL Sympy:"
-
-#: ../web_tt2/serveradmin.tt2:27
-msgid "Mail domain:"
-msgstr "Domena:"
-
-#: ../web_tt2/serveradmin.tt2:27
-msgid "Listmaster(s):"
-msgstr "Administrator:"
-
 #: ../web_tt2/serveradmin.tt2:30
 msgid "No Virtual Robot defined on this server"
 msgstr "Brak zdefiniowanego Wirtualnego Robota na tym serwerze"
@@ -4037,8 +4022,8 @@ msgstr ""
 "użytkownik może się wypisać z listy (lub zostać wypisany przez właściciela), "
 "nawet jeśli\n"
 "powinien być zapisany przez zewnętrzne źródło danych. Użytkownicy trafiają "
-"do tabeli wyłączonych za pomocą standardowych funkcji wypisania "
-"się/usunięcia.\n"
+"do tabeli wyłączonych za pomocą standardowych funkcji wypisania się/"
+"usunięcia.\n"
 "Zapisanie się na listę/dodanie powoduje natomiast usunięcia użytkownika z "
 "tabeli wyłączonych."
 
@@ -4210,7 +4195,8 @@ msgid ""
 "button. The new color is not really installed but it is used only for your "
 "own session. When happy with the different colors you choosen, you may save "
 "them in a new static CSS.\n"
-msgstr "Możesz użyć edytora kolorów w celu zmiany zdefiniowanych kolorów. Najpierw "
+msgstr ""
+"Możesz użyć edytora kolorów w celu zmiany zdefiniowanych kolorów. Najpierw "
 "wybierz identyfikator koloru który chcesz zmienić, następnie na palecie "
 "zaznacz kolor i naciśnij przycisk Test. Nowy kolor nie zostanie faktycznie "
 "zainstalowany - będzie używany wyłącznie w obrębie Twojej sesji. Kiedy "
@@ -4485,11 +4471,11 @@ msgstr "Wykaz subskrypcji do moderacji"
 msgid "No subscription requests"
 msgstr "Brak żądań subskrypcji"
 
-#: ../web_tt2/subindex.tt2:58
+#: ../web_tt2/subindex.tt2:57
 msgid "Add selected addresses"
 msgstr "Dodaj wybrane adresy"
 
-#: ../web_tt2/subindex.tt2:59
+#: ../web_tt2/subindex.tt2:58
 msgid "Reject selected addresses"
 msgstr "Odrzuć zaznaczone adresy"
 
@@ -4823,7 +4809,7 @@ msgstr "Okres wyszukiwania: "
 #. (date_to_formated)
 #. This entry is a date/time format
 #. Check the strftime manpage for format details : http://docs.freebsd.org/info/gawk/gawk.info.Time_Functions.html
-#: ../web_tt2/viewlogs.tt2:113 ../wwsympa/wwsympa.fcgi.in:16135
+#: ../web_tt2/viewlogs.tt2:113 ../wwsympa/wwsympa.fcgi.in:16130
 msgid "%d %b %Y %H:%M:%S"
 msgstr "%d %b %Y %H:%M:%S"
 
@@ -5502,7 +5488,7 @@ msgid "%1 Digest %2"
 msgstr "%1 Paczka wiadomości %2"
 
 #: ../mail_tt2/digest.tt2:10 ../mail_tt2/digest_plain.tt2:9
-#: ../mail_tt2/get_archive.tt2:9 ../src/lib/List.pm:2784
+#: ../mail_tt2/get_archive.tt2:9 ../src/lib/List.pm:2771
 msgid "Table of contents:"
 msgstr "Spis treści:"
 
@@ -6902,7 +6888,8 @@ msgstr ""
 msgid ""
 "If prefered, you can accept this subscription request sending an email to %1 "
 "with the following subject:"
-msgstr "Jeśli wolisz, możesz zaakceptować to żądanie wysyłając email na %1 z "
+msgstr ""
+"Jeśli wolisz, możesz zaakceptować to żądanie wysyłając email na %1 z "
 "następującym tematem:\n"
 
 #: ../mail_tt2/listowner_notification.tt2:76
@@ -8456,7 +8443,7 @@ msgstr "%d %b %y  %H:%M"
 
 #. This entry is a date/time format
 #. Check the strftime manpage for format details : http://docs.freebsd.org/info/gawk/gawk.info.Time_Functions.html
-#: ../src/lib/Commands.pm:963 ../wwsympa/wwsympa.fcgi.in:9766
+#: ../src/lib/Commands.pm:963 ../wwsympa/wwsympa.fcgi.in:9767
 msgid "%A"
 msgstr "%A"
 
@@ -8471,8 +8458,8 @@ msgstr "Błąd w linii %d: %s"
 #. This entry is a date/time format
 #. Check the strftime manpage for format details : http://docs.freebsd.org/info/gawk/gawk.info.Time_Functions.html
 #: ../src/lib/Family.pm:2591 ../src/lib/Family.pm:388 ../src/lib/Family.pm:665
-#: ../src/lib/List.pm:1874 ../wwsympa/Auth.pm:459
-#: ../wwsympa/wwsympa.fcgi.in:1059 ../wwsympa/wwsympa.fcgi.in:2853
+#: ../src/lib/List.pm:1861 ../wwsympa/Auth.pm:459
+#: ../wwsympa/wwsympa.fcgi.in:1059 ../wwsympa/wwsympa.fcgi.in:2859
 msgid "%d %b %Y at %H:%M:%S"
 msgstr "%d %b %Y at %H:%M:%S"
 
@@ -8492,7 +8479,7 @@ msgstr "Anonimowy nadawca"
 msgid "frequency"
 msgstr "częstotliwość"
 
-#: ../src/lib/List.pm:1427 ../src/lib/List.pm:341
+#: ../src/lib/List.pm:1414 ../src/lib/List.pm:341
 msgid "access right"
 msgstr "prawo dostępu"
 
@@ -8552,18 +8539,6 @@ msgstr "Wygaśnięcie niezmoderowanych wiadomości"
 #: ../src/lib/List.pm:434
 msgid "Secret string for generating unique keys"
 msgstr "Sekretny ciąg do generowania unikatowych kluczy"
-
-#: ../src/lib/List.pm:1090 ../src/lib/List.pm:1383 ../src/lib/List.pm:439
-msgid "epoch date"
-msgstr "data epoch"
-
-#: ../src/lib/List.pm:443
-msgid "human readable"
-msgstr "czytelne dla ludzi"
-
-#: ../src/lib/List.pm:448
-msgid "who created the list"
-msgstr "kto utworzył listę"
 
 #: ../src/lib/List.pm:452
 msgid "Creation of the list"
@@ -8934,129 +8909,121 @@ msgstr "profil"
 msgid "Priority"
 msgstr "Priorytet"
 
-#: ../src/lib/List.pm:1230
-msgid "Reject mail from automates (crontab, etc)?"
-msgstr ""
-
-#: ../src/lib/List.pm:1234
+#: ../src/lib/List.pm:1228
 msgid "Who can start a remind process"
 msgstr "Kto może rozpocząć proces przypominania"
 
-#: ../src/lib/List.pm:1239
+#: ../src/lib/List.pm:1233
 msgid "Return-path of the REMIND command"
 msgstr "Ścieżka powrotna komendy REMIND"
 
-#: ../src/lib/List.pm:1263 ../src/lib/List.pm:1283
+#: ../src/lib/List.pm:1257 ../src/lib/List.pm:1277
 msgid "Reply address"
 msgstr "Adres zwrotny"
 
-#: ../src/lib/List.pm:1269
+#: ../src/lib/List.pm:1263
 msgid "value"
 msgstr "wartość"
 
-#: ../src/lib/List.pm:1274
+#: ../src/lib/List.pm:1268
 msgid "other email address"
 msgstr "inny adres email"
 
-#: ../src/lib/List.pm:1279
+#: ../src/lib/List.pm:1273
 msgid "respect of existing header field"
 msgstr "pozostawienie obecnych pól nagłówka"
 
-#: ../src/lib/List.pm:1288
+#: ../src/lib/List.pm:1282
 msgid "Who can review subscribers"
 msgstr "Kto może przeglądać zapisanych"
 
-#: ../src/lib/List.pm:1295
+#: ../src/lib/List.pm:1289
 msgid "RFC 2369 Header fields"
 msgstr "Pola nagłówka RFC 2369"
 
-#: ../src/lib/List.pm:1299
+#: ../src/lib/List.pm:1293
 msgid "Who can send messages"
 msgstr "Kto może wysyłać wiadomości"
 
-#: ../src/lib/List.pm:1306
+#: ../src/lib/List.pm:1300
 msgid "Serial number of the config"
 msgstr "Numer seryjny pliku konfiguracyjnego"
 
-#: ../src/lib/List.pm:1311
+#: ../src/lib/List.pm:1305
 msgid "Who can view"
 msgstr "Kto może odczytywać"
 
-#: ../src/lib/List.pm:1315
+#: ../src/lib/List.pm:1309
 msgid "Who can edit"
 msgstr "Kto może edytować"
 
-#: ../src/lib/List.pm:1322 ../src/lib/List.pm:1434
+#: ../src/lib/List.pm:1316 ../src/lib/List.pm:1421
 msgid "quota"
 msgstr "quota"
 
-#: ../src/lib/List.pm:1331 ../src/lib/List.pm:1336
+#: ../src/lib/List.pm:1325 ../src/lib/List.pm:1330
 msgid "email address protection method"
 msgstr "metoda zabezpieczenia adresu email"
 
-#: ../src/lib/List.pm:1342
+#: ../src/lib/List.pm:1336
 msgid "Status of the list"
 msgstr "Status listy"
 
-#: ../src/lib/List.pm:1350
-msgid "Timeout for fetch of include_sql_query"
-msgstr "Timeout dla pobrania include_sql_query"
-
-#: ../src/lib/List.pm:1356
+#: ../src/lib/List.pm:1343
 msgid "Subject of the list"
 msgstr "Temat listy"
 
-#: ../src/lib/List.pm:1360
+#: ../src/lib/List.pm:1347
 msgid "Who can subscribe to the list"
 msgstr "Kto może zapisać się na listę"
 
-#: ../src/lib/List.pm:1366
+#: ../src/lib/List.pm:1353
 msgid "Topics for the list"
 msgstr "Tematy dla listy"
 
-#: ../src/lib/List.pm:1373
+#: ../src/lib/List.pm:1360
 msgid "Inclusions timeout"
 msgstr "Upłynął czas dołączenia (include)"
 
-#: ../src/lib/List.pm:1377
+#: ../src/lib/List.pm:1364
 msgid "Who can unsubscribe"
 msgstr "Kto może się wypisać"
 
-#: ../src/lib/List.pm:1398
+#: ../src/lib/List.pm:1385
 msgid "Last update of config"
 msgstr "Ostatnia modyfikacja pliku konfiguracyjnego"
 
-#: ../src/lib/List.pm:1405
+#: ../src/lib/List.pm:1392
 msgid "User data source"
 msgstr "Źródło danych użytkownika"
 
-#: ../src/lib/List.pm:1411
+#: ../src/lib/List.pm:1398
 msgid "Allow picture display? (must be enabled for the current robot)"
 msgstr ""
 "Zezwolić na wyświetlanie obrazków ? (musi być ustawione dla aktualnego "
 "robota)"
 
-#: ../src/lib/List.pm:1417
+#: ../src/lib/List.pm:1404
 msgid "Allow message personnalization"
 msgstr "Pozwól na dostosowanie wiadomości"
 
-#: ../src/lib/List.pm:1423
+#: ../src/lib/List.pm:1410
 msgid "Visibility of the list"
 msgstr "Widoczność listy"
 
-#: ../src/lib/List.pm:1439
+#: ../src/lib/List.pm:1426
 msgid "Maximum number of month archived"
 msgstr "Maksymalna liczba zarchiwizowanych miesięcy"
 
-#: ../src/lib/List.pm:1444
+#: ../src/lib/List.pm:1431
 msgid "Web archives"
 msgstr "Archiwa WWW"
 
-#: ../src/lib/List.pm:1450
+#: ../src/lib/List.pm:1437
 msgid "Welcome return-path"
 msgstr "Powitalna ścieżka-zwrotna"
 
-#: ../src/lib/List.pm:1455
+#: ../src/lib/List.pm:1442
 msgid "percentage of list members in VERP mode"
 msgstr "procent subskrybentów listy w trybie VERP"
 
@@ -9080,8 +9047,8 @@ msgstr "wartość zmiennej"
 msgid "messages"
 msgstr "# wiadomości"
 
-#: ../src/lib/List.pm:1348 ../src/lib/List.pm:1371 ../src/lib/List.pm:589
-#: ../src/lib/List.pm:817 ../src/lib/List.pm:897 ../src/lib/List.pm:935
+#: ../src/lib/List.pm:1358 ../src/lib/List.pm:589 ../src/lib/List.pm:817
+#: ../src/lib/List.pm:897 ../src/lib/List.pm:935
 msgid "seconds"
 msgstr "sekund"
 
@@ -9125,7 +9092,11 @@ msgstr "wersja SSL"
 msgid "SSL ciphers used"
 msgstr "użyte szyfrowanie SSL"
 
-#: ../src/lib/List.pm:1094 ../src/lib/List.pm:1388
+#: ../src/lib/List.pm:1090 ../src/lib/List.pm:1370
+msgid "epoch date"
+msgstr "data epoch"
+
+#: ../src/lib/List.pm:1094 ../src/lib/List.pm:1375
 msgid "date"
 msgstr "data"
 
@@ -9153,53 +9124,53 @@ msgstr "parametry źródła danych"
 msgid "Owners defined in an external data source"
 msgstr "Właściciele zdefiniowani w zewnętrznym źródle danych"
 
-#: ../src/lib/List.pm:1243
+#: ../src/lib/List.pm:1237
 msgid "Periodical subscription reminder task"
 msgstr "Okresowe zadanie przypominające o subskrypcji"
 
-#: ../src/lib/List.pm:1248
+#: ../src/lib/List.pm:1242
 msgid "Incoming SMTP header fields to be removed"
 msgstr "Przychodzący nagłówek SMTP dla pól które mają zostać usunięte"
 
-#: ../src/lib/List.pm:1255
+#: ../src/lib/List.pm:1249
 msgid "Outgoing SMTP header fields to be removed"
 msgstr "Wychodzący nagłówek SMTP dla pól które mają zostać usuniete"
 
-#: ../src/lib/List.pm:1321 ../src/lib/List.pm:1433
+#: ../src/lib/List.pm:1315 ../src/lib/List.pm:1420
 msgid "Kbytes"
 msgstr "Kilobajtów"
 
-#: ../src/lib/List.pm:1394
+#: ../src/lib/List.pm:1381
 msgid "who updated the config"
 msgstr "kto zaktualizował konfigurację"
 
 #. This entry is a date/time format
 #. Check the strftime manpage for format details : http://docs.freebsd.org/info/gawk/gawk.info.Time_Functions.html
-#: ../src/lib/List.pm:2902
+#: ../src/lib/List.pm:2889
 msgid "%a, %d %b %Y %H:%M:%S"
 msgstr "%a, %d %b %Y %H:%M:%S"
 
 #. This entry is a date/time format
 #. Check the strftime manpage for format details : http://docs.freebsd.org/info/gawk/gawk.info.Time_Functions.html
-#: ../src/lib/List.pm:2903
+#: ../src/lib/List.pm:2890
 msgid "%a, %d %b %Y"
 msgstr "%a, %d %b %Y"
 
 #. This entry is a date/time format
 #. Check the strftime manpage for format details : http://docs.freebsd.org/info/gawk/gawk.info.Time_Functions.html
-#: ../src/lib/List.pm:3094 ../src/lib/List.pm:3095 ../src/lib/List.pm:3099
-#: ../wwsympa/wwsympa.fcgi.in:10942 ../wwsympa/wwsympa.fcgi.in:11011
-#: ../wwsympa/wwsympa.fcgi.in:11213 ../wwsympa/wwsympa.fcgi.in:11560
+#: ../src/lib/List.pm:3081 ../src/lib/List.pm:3082 ../src/lib/List.pm:3086
+#: ../wwsympa/wwsympa.fcgi.in:10943 ../wwsympa/wwsympa.fcgi.in:11012
+#: ../wwsympa/wwsympa.fcgi.in:11214 ../wwsympa/wwsympa.fcgi.in:11561
 #: ../wwsympa/wwsympa.fcgi.in:14999 ../wwsympa/wwsympa.fcgi.in:15006
-#: ../wwsympa/wwsympa.fcgi.in:15707 ../wwsympa/wwsympa.fcgi.in:16440
-#: ../wwsympa/wwsympa.fcgi.in:16441 ../wwsympa/wwsympa.fcgi.in:4249
-#: ../wwsympa/wwsympa.fcgi.in:4307 ../wwsympa/wwsympa.fcgi.in:4878
-#: ../wwsympa/wwsympa.fcgi.in:4879 ../wwsympa/wwsympa.fcgi.in:6374
-#: ../wwsympa/wwsympa.fcgi.in:7393 ../wwsympa/wwsympa.fcgi.in:7936
-#: ../wwsympa/wwsympa.fcgi.in:7976 ../wwsympa/wwsympa.fcgi.in:7978
-#: ../wwsympa/wwsympa.fcgi.in:8454 ../wwsympa/wwsympa.fcgi.in:8455
-#: ../wwsympa/wwsympa.fcgi.in:8489 ../wwsympa/wwsympa.fcgi.in:8490
-#: ../wwsympa/wwsympa.fcgi.in:8669 ../wwsympa/wwsympa.fcgi.in:8670
+#: ../wwsympa/wwsympa.fcgi.in:15705 ../wwsympa/wwsympa.fcgi.in:16435
+#: ../wwsympa/wwsympa.fcgi.in:16436 ../wwsympa/wwsympa.fcgi.in:4251
+#: ../wwsympa/wwsympa.fcgi.in:4309 ../wwsympa/wwsympa.fcgi.in:4880
+#: ../wwsympa/wwsympa.fcgi.in:4881 ../wwsympa/wwsympa.fcgi.in:6375
+#: ../wwsympa/wwsympa.fcgi.in:7394 ../wwsympa/wwsympa.fcgi.in:7937
+#: ../wwsympa/wwsympa.fcgi.in:7977 ../wwsympa/wwsympa.fcgi.in:7979
+#: ../wwsympa/wwsympa.fcgi.in:8455 ../wwsympa/wwsympa.fcgi.in:8456
+#: ../wwsympa/wwsympa.fcgi.in:8490 ../wwsympa/wwsympa.fcgi.in:8491
+#: ../wwsympa/wwsympa.fcgi.in:8670 ../wwsympa/wwsympa.fcgi.in:8671
 msgid "%d %b %Y"
 msgstr "%d %b %Y"
 
@@ -9215,7 +9186,7 @@ msgstr ""
 "Musisz poprawić moduł smtp.pm aby ustawić tą wartość\n"
 "dla zmiennej $max_arg.\n"
 
-#: ../src/lib/mail.pm:810
+#: ../src/lib/mail.pm:806
 msgid "Unable to create a channel in smtpto: %m"
 msgstr "Nie mogę stworzyć kanału w smtptp: %m"
 
@@ -9316,14 +9287,14 @@ msgstr "%H:%M:%S"
 #. This entry is a date/time format
 #. Check the strftime manpage for format details : http://docs.freebsd.org/info/gawk/gawk.info.Time_Functions.html
 #: ../wwsympa/SympaSession.pm:427 ../wwsympa/SympaSession.pm:428
-#: ../wwsympa/wwsympa.fcgi.in:11794 ../wwsympa/wwsympa.fcgi.in:11927
-#: ../wwsympa/wwsympa.fcgi.in:14240 ../wwsympa/wwsympa.fcgi.in:7890
+#: ../wwsympa/wwsympa.fcgi.in:11795 ../wwsympa/wwsympa.fcgi.in:11928
+#: ../wwsympa/wwsympa.fcgi.in:14241 ../wwsympa/wwsympa.fcgi.in:7891
 msgid "%d %b %y  %H:%M"
 msgstr "%d %b %y  %H:%M"
 
 #. This entry is a date/time format
 #. Check the strftime manpage for format details : http://docs.freebsd.org/info/gawk/gawk.info.Time_Functions.html
-#: ../wwsympa/wwsympa.fcgi.in:16080 ../wwsympa/wwsympa.fcgi.in:16081
+#: ../wwsympa/wwsympa.fcgi.in:16075 ../wwsympa/wwsympa.fcgi.in:16076
 msgid "%Y-%m-%d-%H-%M-%S"
 msgstr "%Y/%m/%d/%H/%M/%S"
 
@@ -9474,6 +9445,28 @@ msgstr "żadnej poczty (przydatne na urlop)"
 #: ../wwsympa/wwslib.pm:37
 msgid "you do not receive your own posts"
 msgstr "nie otrzymuj swoich własnych postów"
+
+#: ../src/lib/List.pm:1230
+msgid "Reject mail from automates (crontab, etc)?"
+msgstr ""
+
+#~ msgid "Sympa URL:"
+#~ msgstr "URL Sympy:"
+
+#~ msgid "Mail domain:"
+#~ msgstr "Domena:"
+
+#~ msgid "Listmaster(s):"
+#~ msgstr "Administrator:"
+
+#~ msgid "human readable"
+#~ msgstr "czytelne dla ludzi"
+
+#~ msgid "who created the list"
+#~ msgstr "kto utworzył listę"
+
+#~ msgid "Timeout for fetch of include_sql_query"
+#~ msgstr "Timeout dla pobrania include_sql_query"
 
 #, fuzzy
 #~ msgid " to "

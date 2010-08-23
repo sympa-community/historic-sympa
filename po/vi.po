@@ -215,7 +215,7 @@ msgstr "Bài viết"
 msgid "RSS"
 msgstr "RSS"
 
-#: ../src/lib/List.pm:1326 ../web_tt2/list_menu.tt2:80
+#: ../src/lib/List.pm:1320 ../web_tt2/list_menu.tt2:80
 #: ../web_tt2/list_menu.tt2:82
 msgid "Shared documents"
 msgstr "Tài liệu dùng chung"
@@ -2461,16 +2461,6 @@ msgstr ""
 msgid "Closed lists"
 msgstr "Hộp thư chung bị đóng"
 
-#: ../src/etc/mhonarc-ressources.tt2:212 ../src/etc/mhonarc-ressources.tt2:328
-#: ../web_tt2/get_closed_lists.tt2:29 ../web_tt2/get_closed_lists.tt2:9
-#: ../web_tt2/modindex.tt2:125 ../web_tt2/modindex.tt2:182
-#: ../web_tt2/modindex.tt2:64 ../web_tt2/review.tt2:138
-#: ../web_tt2/reviewbouncing.tt2:131 ../web_tt2/reviewbouncing.tt2:60
-#: ../web_tt2/subindex.tt2:10 ../web_tt2/subindex.tt2:57
-#: ../web_tt2/subscriber_table.tt2:7
-msgid "Toggle Selection"
-msgstr "Bật/tắt chọn"
-
 #: ../web_tt2/get_closed_lists.tt2:10 ../web_tt2/get_pending_lists.tt2:9
 msgid "list name"
 msgstr "tên hộp thư chung"
@@ -2482,6 +2472,13 @@ msgstr "chủ đề hộp thư chung"
 #: ../web_tt2/get_closed_lists.tt2:12 ../web_tt2/get_pending_lists.tt2:11
 msgid "Requested by"
 msgstr "Yêu cầu bởi"
+
+#: ../src/etc/mhonarc-ressources.tt2:212 ../src/etc/mhonarc-ressources.tt2:328
+#: ../web_tt2/get_closed_lists.tt2:29 ../web_tt2/modindex.tt2:125
+#: ../web_tt2/modindex.tt2:182 ../web_tt2/review.tt2:138
+#: ../web_tt2/reviewbouncing.tt2:131
+msgid "Toggle Selection"
+msgstr "Bật/tắt chọn"
 
 #: ../web_tt2/get_closed_lists.tt2:30
 msgid "Purge selected lists"
@@ -3852,19 +3849,6 @@ msgstr "Hộp thư chung được sắp xếp theo ngày nhận thư cuối cùn
 msgid "The following virtual robots are running on this server:"
 msgstr "Theo đây có những rô-bốt ảo đang chạy trên máy phục vụ này:"
 
-#: ../web_tt2/serveradmin.tt2:27
-msgid "Sympa URL:"
-msgstr ""
-
-#: ../web_tt2/serveradmin.tt2:27
-msgid "Mail domain:"
-msgstr ""
-
-#: ../web_tt2/serveradmin.tt2:27
-#, fuzzy
-msgid "Listmaster(s):"
-msgstr "Chủ hộp thư chung"
-
 #: ../web_tt2/serveradmin.tt2:30
 msgid "No Virtual Robot defined on this server"
 msgstr "Chưa xác định rô-bốt ảo trên máy phục vụ này"
@@ -4592,11 +4576,11 @@ msgstr "Yêu cầu đăng ký cần điều tiết"
 msgid "No subscription requests"
 msgstr "Không có yêu cầu đăng ký"
 
-#: ../web_tt2/subindex.tt2:58
+#: ../web_tt2/subindex.tt2:57
 msgid "Add selected addresses"
 msgstr "Thêm những địa chỉ được chọn"
 
-#: ../web_tt2/subindex.tt2:59
+#: ../web_tt2/subindex.tt2:58
 msgid "Reject selected addresses"
 msgstr "Từ chối những địa chỉ được chọn"
 
@@ -4950,7 +4934,7 @@ msgstr "Kỳ tìm: "
 #. (date_to_formated)
 #. This entry is a date/time format
 #. Check the strftime manpage for format details : http://docs.freebsd.org/info/gawk/gawk.info.Time_Functions.html
-#: ../web_tt2/viewlogs.tt2:113 ../wwsympa/wwsympa.fcgi.in:16135
+#: ../web_tt2/viewlogs.tt2:113 ../wwsympa/wwsympa.fcgi.in:16130
 msgid "%d %b %Y %H:%M:%S"
 msgstr "%d %b %Y %H:%M:%S"
 
@@ -5664,7 +5648,7 @@ msgid "%1 Digest %2"
 msgstr "%1 Bó thư %2"
 
 #: ../mail_tt2/digest.tt2:10 ../mail_tt2/digest_plain.tt2:9
-#: ../mail_tt2/get_archive.tt2:9 ../src/lib/List.pm:2784
+#: ../mail_tt2/get_archive.tt2:9 ../src/lib/List.pm:2771
 msgid "Table of contents:"
 msgstr "Mục Lục: "
 
@@ -8718,7 +8702,7 @@ msgstr "%d %b %y  %H:%M"
 
 #. This entry is a date/time format
 #. Check the strftime manpage for format details : http://docs.freebsd.org/info/gawk/gawk.info.Time_Functions.html
-#: ../src/lib/Commands.pm:963 ../wwsympa/wwsympa.fcgi.in:9766
+#: ../src/lib/Commands.pm:963 ../wwsympa/wwsympa.fcgi.in:9767
 msgid "%A"
 msgstr "%A"
 
@@ -8735,8 +8719,8 @@ msgstr "Lỗi trên dòng %d : %s"
 #. This entry is a date/time format
 #. Check the strftime manpage for format details : http://docs.freebsd.org/info/gawk/gawk.info.Time_Functions.html
 #: ../src/lib/Family.pm:2591 ../src/lib/Family.pm:388 ../src/lib/Family.pm:665
-#: ../src/lib/List.pm:1874 ../wwsympa/Auth.pm:459
-#: ../wwsympa/wwsympa.fcgi.in:1059 ../wwsympa/wwsympa.fcgi.in:2853
+#: ../src/lib/List.pm:1861 ../wwsympa/Auth.pm:459
+#: ../wwsympa/wwsympa.fcgi.in:1059 ../wwsympa/wwsympa.fcgi.in:2859
 msgid "%d %b %Y at %H:%M:%S"
 msgstr "%d %b %Y lúc %H:%M:%S"
 
@@ -8756,7 +8740,7 @@ msgstr "Người gửi nặc danh"
 msgid "frequency"
 msgstr "tần số"
 
-#: ../src/lib/List.pm:1427 ../src/lib/List.pm:341
+#: ../src/lib/List.pm:1414 ../src/lib/List.pm:341
 msgid "access right"
 msgstr "quyền truy cập"
 
@@ -8816,19 +8800,6 @@ msgstr "Làm hết hạn các thư chưa điều tiết"
 #: ../src/lib/List.pm:434
 msgid "Secret string for generating unique keys"
 msgstr "Chuỗi bí mật để tạo khoá duy nhất"
-
-#: ../src/lib/List.pm:1090 ../src/lib/List.pm:1383 ../src/lib/List.pm:439
-msgid "epoch date"
-msgstr "ngày thời điểm"
-
-#: ../src/lib/List.pm:443
-msgid "human readable"
-msgstr ""
-
-#: ../src/lib/List.pm:448
-#, fuzzy
-msgid "who created the list"
-msgstr "ai đã cập nhật cấu hình"
 
 #: ../src/lib/List.pm:452
 msgid "Creation of the list"
@@ -9196,130 +9167,122 @@ msgstr "hồ sơ"
 msgid "Priority"
 msgstr "Ưu tiên"
 
-#: ../src/lib/List.pm:1230
-msgid "Reject mail from automates (crontab, etc)?"
-msgstr ""
-
-#: ../src/lib/List.pm:1234
+#: ../src/lib/List.pm:1228
 msgid "Who can start a remind process"
 msgstr "Ai có quyền khởi chạy một tiến trình nhắc nhở"
 
-#: ../src/lib/List.pm:1239
+#: ../src/lib/List.pm:1233
 msgid "Return-path of the REMIND command"
 msgstr "Đường dẫn trở về của lệnh REMIND (nhắc nhở)"
 
-#: ../src/lib/List.pm:1263 ../src/lib/List.pm:1283
+#: ../src/lib/List.pm:1257 ../src/lib/List.pm:1277
 msgid "Reply address"
 msgstr "Địa chỉ hồi âm"
 
-#: ../src/lib/List.pm:1269
+#: ../src/lib/List.pm:1263
 msgid "value"
 msgstr "giá trị"
 
-#: ../src/lib/List.pm:1274
+#: ../src/lib/List.pm:1268
 msgid "other email address"
 msgstr "địa chỉ thư khác"
 
-#: ../src/lib/List.pm:1279
+#: ../src/lib/List.pm:1273
 msgid "respect of existing header field"
 msgstr "tương ứng với trường dòng đầu tồn tại"
 
-#: ../src/lib/List.pm:1288
+#: ../src/lib/List.pm:1282
 msgid "Who can review subscribers"
 msgstr "Ai có quyền xem lại người đăng ký"
 
-#: ../src/lib/List.pm:1295
+#: ../src/lib/List.pm:1289
 msgid "RFC 2369 Header fields"
 msgstr "Dòng đầu RFC 2369"
 
-#: ../src/lib/List.pm:1299
+#: ../src/lib/List.pm:1293
 msgid "Who can send messages"
 msgstr "Ai có quyền gửi thư"
 
-#: ../src/lib/List.pm:1306
+#: ../src/lib/List.pm:1300
 msgid "Serial number of the config"
 msgstr "Số thứ tự của cấu hình"
 
-#: ../src/lib/List.pm:1311
+#: ../src/lib/List.pm:1305
 msgid "Who can view"
 msgstr "Ai có quyền xem"
 
-#: ../src/lib/List.pm:1315
+#: ../src/lib/List.pm:1309
 msgid "Who can edit"
 msgstr "Ai có quyền sửa"
 
-#: ../src/lib/List.pm:1322 ../src/lib/List.pm:1434
+#: ../src/lib/List.pm:1316 ../src/lib/List.pm:1421
 msgid "quota"
 msgstr "hạn ngạch"
 
-#: ../src/lib/List.pm:1331 ../src/lib/List.pm:1336
+#: ../src/lib/List.pm:1325 ../src/lib/List.pm:1330
 msgid "email address protection method"
 msgstr "phương pháp bảo vế địa chỉ thư"
 
-#: ../src/lib/List.pm:1342
+#: ../src/lib/List.pm:1336
 msgid "Status of the list"
 msgstr "Trạng thái về hộp thư chung"
 
-#: ../src/lib/List.pm:1350
-msgid "Timeout for fetch of include_sql_query"
-msgstr ""
-
-#: ../src/lib/List.pm:1356
+#: ../src/lib/List.pm:1343
 msgid "Subject of the list"
 msgstr "Đề tài của hộp thư chung"
 
-#: ../src/lib/List.pm:1360
+#: ../src/lib/List.pm:1347
 msgid "Who can subscribe to the list"
 msgstr "Ai có quyền đăng ký với hộp thư chung"
 
-#: ../src/lib/List.pm:1366
+#: ../src/lib/List.pm:1353
 msgid "Topics for the list"
 msgstr "Các chủ đề cho hộp thư chung"
 
-#: ../src/lib/List.pm:1373
+#: ../src/lib/List.pm:1360
 msgid "Inclusions timeout"
 msgstr "Thời hạn bao gồm"
 
-#: ../src/lib/List.pm:1377
+#: ../src/lib/List.pm:1364
 msgid "Who can unsubscribe"
 msgstr "Ai có quyền hủy đăng ký"
 
-#: ../src/lib/List.pm:1398
+#: ../src/lib/List.pm:1385
 msgid "Last update of config"
 msgstr "Lần cuối cập nhật cấu hình"
 
-#: ../src/lib/List.pm:1405
+#: ../src/lib/List.pm:1392
 msgid "User data source"
 msgstr "Nguồn dữ liệu người dùng"
 
-#: ../src/lib/List.pm:1411
+#: ../src/lib/List.pm:1398
 #, fuzzy
 msgid "Allow picture display? (must be enabled for the current robot)"
 msgstr ""
 "Cho phép hiển thị hình ảnh không? (Phải được bật cho rô-bốt hiện thời.)"
 
-#: ../src/lib/List.pm:1417
+#: ../src/lib/List.pm:1404
 #, fuzzy
 msgid "Allow message personnalization"
 msgstr "Chủ đề để phân loại thư"
 
-#: ../src/lib/List.pm:1423
+#: ../src/lib/List.pm:1410
 msgid "Visibility of the list"
 msgstr "Hiện/ẩn hộp thư chung"
 
-#: ../src/lib/List.pm:1439
+#: ../src/lib/List.pm:1426
 msgid "Maximum number of month archived"
 msgstr "Số tối đa các tháng đã lưu trữ"
 
-#: ../src/lib/List.pm:1444
+#: ../src/lib/List.pm:1431
 msgid "Web archives"
 msgstr "Kho thư Web"
 
-#: ../src/lib/List.pm:1450
+#: ../src/lib/List.pm:1437
 msgid "Welcome return-path"
 msgstr "Đường dẫn trở về Chào mừng"
 
-#: ../src/lib/List.pm:1455
+#: ../src/lib/List.pm:1442
 msgid "percentage of list members in VERP mode"
 msgstr "phần trăm các thành viên hộp thư chung trong chế độ VERP"
 
@@ -9343,8 +9306,8 @@ msgstr "giá trị biến"
 msgid "messages"
 msgstr "thư"
 
-#: ../src/lib/List.pm:1348 ../src/lib/List.pm:1371 ../src/lib/List.pm:589
-#: ../src/lib/List.pm:817 ../src/lib/List.pm:897 ../src/lib/List.pm:935
+#: ../src/lib/List.pm:1358 ../src/lib/List.pm:589 ../src/lib/List.pm:817
+#: ../src/lib/List.pm:897 ../src/lib/List.pm:935
 msgid "seconds"
 msgstr "giây"
 
@@ -9391,7 +9354,11 @@ msgstr "Phiên bản SSL"
 msgid "SSL ciphers used"
 msgstr "Mật mã SSL dùng"
 
-#: ../src/lib/List.pm:1094 ../src/lib/List.pm:1388
+#: ../src/lib/List.pm:1090 ../src/lib/List.pm:1370
+msgid "epoch date"
+msgstr "ngày thời điểm"
+
+#: ../src/lib/List.pm:1094 ../src/lib/List.pm:1375
 msgid "date"
 msgstr "ngày"
 
@@ -9420,55 +9387,55 @@ msgstr "tham số nguồn dữ liệu"
 msgid "Owners defined in an external data source"
 msgstr "Chủ hộp được xác định trong một nguồn dữ liệu bên ngoài"
 
-#: ../src/lib/List.pm:1243
+#: ../src/lib/List.pm:1237
 msgid "Periodical subscription reminder task"
 msgstr "Công việc định kỳ nhắc nhở về sự đăng ký"
 
-#: ../src/lib/List.pm:1248
+#: ../src/lib/List.pm:1242
 #, fuzzy
 msgid "Incoming SMTP header fields to be removed"
 msgstr "Các dòng đầu SMTP gửi đến mà cần gỡ bỏ"
 
-#: ../src/lib/List.pm:1255
+#: ../src/lib/List.pm:1249
 #, fuzzy
 msgid "Outgoing SMTP header fields to be removed"
 msgstr "Các dòng đầu SMTP gửi đi mà cần gỡ bỏ"
 
-#: ../src/lib/List.pm:1321 ../src/lib/List.pm:1433
+#: ../src/lib/List.pm:1315 ../src/lib/List.pm:1420
 msgid "Kbytes"
 msgstr "Kbyte"
 
-#: ../src/lib/List.pm:1394
+#: ../src/lib/List.pm:1381
 msgid "who updated the config"
 msgstr "ai đã cập nhật cấu hình"
 
 #. This entry is a date/time format
 #. Check the strftime manpage for format details : http://docs.freebsd.org/info/gawk/gawk.info.Time_Functions.html
-#: ../src/lib/List.pm:2902
+#: ../src/lib/List.pm:2889
 msgid "%a, %d %b %Y %H:%M:%S"
 msgstr "%a, %d %b %Y %H:%M:%S"
 
 #. This entry is a date/time format
 #. Check the strftime manpage for format details : http://docs.freebsd.org/info/gawk/gawk.info.Time_Functions.html
-#: ../src/lib/List.pm:2903
+#: ../src/lib/List.pm:2890
 msgid "%a, %d %b %Y"
 msgstr "%a, %d %b %Y"
 
 #. This entry is a date/time format
 #. Check the strftime manpage for format details : http://docs.freebsd.org/info/gawk/gawk.info.Time_Functions.html
-#: ../src/lib/List.pm:3094 ../src/lib/List.pm:3095 ../src/lib/List.pm:3099
-#: ../wwsympa/wwsympa.fcgi.in:10942 ../wwsympa/wwsympa.fcgi.in:11011
-#: ../wwsympa/wwsympa.fcgi.in:11213 ../wwsympa/wwsympa.fcgi.in:11560
+#: ../src/lib/List.pm:3081 ../src/lib/List.pm:3082 ../src/lib/List.pm:3086
+#: ../wwsympa/wwsympa.fcgi.in:10943 ../wwsympa/wwsympa.fcgi.in:11012
+#: ../wwsympa/wwsympa.fcgi.in:11214 ../wwsympa/wwsympa.fcgi.in:11561
 #: ../wwsympa/wwsympa.fcgi.in:14999 ../wwsympa/wwsympa.fcgi.in:15006
-#: ../wwsympa/wwsympa.fcgi.in:15707 ../wwsympa/wwsympa.fcgi.in:16440
-#: ../wwsympa/wwsympa.fcgi.in:16441 ../wwsympa/wwsympa.fcgi.in:4249
-#: ../wwsympa/wwsympa.fcgi.in:4307 ../wwsympa/wwsympa.fcgi.in:4878
-#: ../wwsympa/wwsympa.fcgi.in:4879 ../wwsympa/wwsympa.fcgi.in:6374
-#: ../wwsympa/wwsympa.fcgi.in:7393 ../wwsympa/wwsympa.fcgi.in:7936
-#: ../wwsympa/wwsympa.fcgi.in:7976 ../wwsympa/wwsympa.fcgi.in:7978
-#: ../wwsympa/wwsympa.fcgi.in:8454 ../wwsympa/wwsympa.fcgi.in:8455
-#: ../wwsympa/wwsympa.fcgi.in:8489 ../wwsympa/wwsympa.fcgi.in:8490
-#: ../wwsympa/wwsympa.fcgi.in:8669 ../wwsympa/wwsympa.fcgi.in:8670
+#: ../wwsympa/wwsympa.fcgi.in:15705 ../wwsympa/wwsympa.fcgi.in:16435
+#: ../wwsympa/wwsympa.fcgi.in:16436 ../wwsympa/wwsympa.fcgi.in:4251
+#: ../wwsympa/wwsympa.fcgi.in:4309 ../wwsympa/wwsympa.fcgi.in:4880
+#: ../wwsympa/wwsympa.fcgi.in:4881 ../wwsympa/wwsympa.fcgi.in:6375
+#: ../wwsympa/wwsympa.fcgi.in:7394 ../wwsympa/wwsympa.fcgi.in:7937
+#: ../wwsympa/wwsympa.fcgi.in:7977 ../wwsympa/wwsympa.fcgi.in:7979
+#: ../wwsympa/wwsympa.fcgi.in:8455 ../wwsympa/wwsympa.fcgi.in:8456
+#: ../wwsympa/wwsympa.fcgi.in:8490 ../wwsympa/wwsympa.fcgi.in:8491
+#: ../wwsympa/wwsympa.fcgi.in:8670 ../wwsympa/wwsympa.fcgi.in:8671
 msgid "%d %b %Y"
 msgstr "%d %b %Y"
 
@@ -9486,7 +9453,7 @@ msgstr ""
 "Người dùng cần phải sửa đổi mô-đun smtp.pm để đặt giá trị của biến « "
 "$max_arg ».\n"
 
-#: ../src/lib/mail.pm:810
+#: ../src/lib/mail.pm:806
 msgid "Unable to create a channel in smtpto: %m"
 msgstr "Không thể tạo một kênh trong smtpto: %m"
 
@@ -9587,14 +9554,14 @@ msgstr "%H:%M:%S"
 #. This entry is a date/time format
 #. Check the strftime manpage for format details : http://docs.freebsd.org/info/gawk/gawk.info.Time_Functions.html
 #: ../wwsympa/SympaSession.pm:427 ../wwsympa/SympaSession.pm:428
-#: ../wwsympa/wwsympa.fcgi.in:11794 ../wwsympa/wwsympa.fcgi.in:11927
-#: ../wwsympa/wwsympa.fcgi.in:14240 ../wwsympa/wwsympa.fcgi.in:7890
+#: ../wwsympa/wwsympa.fcgi.in:11795 ../wwsympa/wwsympa.fcgi.in:11928
+#: ../wwsympa/wwsympa.fcgi.in:14241 ../wwsympa/wwsympa.fcgi.in:7891
 msgid "%d %b %y  %H:%M"
 msgstr "%d %b %y  %H:%M"
 
 #. This entry is a date/time format
 #. Check the strftime manpage for format details : http://docs.freebsd.org/info/gawk/gawk.info.Time_Functions.html
-#: ../wwsympa/wwsympa.fcgi.in:16080 ../wwsympa/wwsympa.fcgi.in:16081
+#: ../wwsympa/wwsympa.fcgi.in:16075 ../wwsympa/wwsympa.fcgi.in:16076
 #, fuzzy
 msgid "%Y-%m-%d-%H-%M-%S"
 msgstr "%Y/%m/%d/%H/%M/%S"
@@ -9748,6 +9715,34 @@ msgstr "không thư (có ích khi đi nghỉ)"
 #: ../wwsympa/wwslib.pm:37
 msgid "you do not receive your own posts"
 msgstr "bạn không nhận bài thư được mình gửi"
+
+#: ../web_tt2/serveradmin.tt2:27
+msgid "Sympa URL:"
+msgstr ""
+
+#: ../web_tt2/serveradmin.tt2:27
+msgid "Mail domain:"
+msgstr ""
+
+#: ../src/lib/List.pm:443
+msgid "human readable"
+msgstr ""
+
+#: ../src/lib/List.pm:1230
+msgid "Reject mail from automates (crontab, etc)?"
+msgstr ""
+
+#: ../src/lib/List.pm:1350
+msgid "Timeout for fetch of include_sql_query"
+msgstr ""
+
+#, fuzzy
+#~ msgid "Listmaster(s):"
+#~ msgstr "Chủ hộp thư chung"
+
+#, fuzzy
+#~ msgid "who created the list"
+#~ msgstr "ai đã cập nhật cấu hình"
 
 #, fuzzy
 #~ msgid " to "
