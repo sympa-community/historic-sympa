@@ -15374,6 +15374,8 @@ sub do_compose_mail {
 	       &web_db_log({'robot' => $robot,'list' => $list->{'name'},'action' => $param->{'action'},'parameters' => "",'target_email' => "",'msg_id' => '','status' => 'error','error_type' => 'no_body','user_email' => $param->{'user'}{'email'},'client' => $ip,'daemon' => $daemon_name});
 	       return undef;
 	   }
+
+	   $in{'body'} = "\n".$in{'body'};
    }
 
 
