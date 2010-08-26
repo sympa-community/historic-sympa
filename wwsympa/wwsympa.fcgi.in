@@ -15176,6 +15176,7 @@ sub do_compose_mail {
 	   $Text::Wrap::columns = 80;
 	   $Text::Wrap::huge = 'overflow';
 	   $in{'body'} = &Text::Wrap::wrap ('','',$in{'body'});
+	   $in{'body'} = "\n".$in{'body'};
 
 	   my @body = split /\0/, $in{'body'};
    }
