@@ -69,6 +69,7 @@ use cookielib;
 use tt2;
 #use DateTime;
 use tracking;
+use Spool;
 
 #use open ':utf8'; ## Default is to consider files utf8 
 
@@ -240,6 +241,8 @@ my %comm = ('home' => 'do_home',
 	 'set_session_email' => 'do_set_session_email',
 	 'restore_email' => 'do_restore_email',
 	 'skinsedit' => 'do_skinsedit',
+	 'view_spools' => 'do_view_spools',
+	 'spool_message' => 'do_spool_message',
 	 'css' => 'do_css',
 	 'help' => 'do_help',
 	 'edit_list_request' => 'do_edit_list_request',
@@ -393,6 +396,8 @@ my %action_args = ('default' => ['list'],
 		'serveradmin' => ['subaction'],
 		'set_session_email' => ['email'],
 		'skinsedit' => [],
+		'view_spools' => ['spool_name'],
+		'spool_message' => ['operation','spool_name','robot','listname','messagekey'],
 		'get_pending_lists' => [],
 		'get_closed_lists' => [],
 		'get_latest_lists' => [],
@@ -629,6 +634,7 @@ my %required_privileges = ('admin' => ['owner','editor'],
 			   'subindex' => ['owner'],
 			   'sync_include' => ['owner'],
 			   'skinedit' => ['listmaster'],
+			   'view_spools' => ['listmaster'],
 			   'view_template' => ['listmaster'],
 			   'viewbounce' => ['owner'],
 			   'viewlogs' => ['owner','editor'],
@@ -691,6 +697,9 @@ my %action_type = ('editfile' => 'admin',
 		'get_latest_lists' => 'serveradmin',
 		'ls_templates' => 'serveradmin',
 		'skinedit' => 'serveradmin',
+		'spools' => 'serveradmin',
+		'view_spools' => 'serveradmin',
+		'spool_message' => 'serveradmin',
 		'review_family' => 'serveradmin',
 		'search_user' => 'serveradmin',
 		'show_sessions' => 'serveradmin',
@@ -700,7 +709,7 @@ my %action_type = ('editfile' => 'admin',
 		'set_loglevel' => 'serveradmin',
 		'editfile' => 'serveradmin',
 		'unset_dumpvars' => 'serveradmin',
-		'set_dumpvars' => 'serveradmin'
+		'set_dumpvars' => 'serveradmin'		
 );
 
 ## actions tthat are not used in return of login,
@@ -741,6 +750,8 @@ my %in_regexp = (
 
 		 ## Free data
 		 'subject' => '.*',
+		 'updated_message_asstring' => '.*',
+		 'message_asstring' => '.*',
 		 'gecos' => '[^<>\\\*\$\n]+',
 		 'fromname' =>  '[^<>\\\*\$\n]+',
 		 'additional_field' => '[^<>\\\*\$\n]+',
@@ -5313,6 +5324,10 @@ sub do_auto_signoff {
 	 $param->{'lists_default_files'}{$f}{'selected'} = '';
      }
      
+     foreach my $spool ('auth', 'bad', 'bounce', 'digest', 'bulk', 'expire', 'moderation', 'msg', 'outgoing', 'subscribe', 'topic') {
+	 push (@{$param->{'list_of_spool'}},$spool);
+     }
+
      ## Checking families and other virtual hosts.
      &get_server_details();
 
@@ -5404,6 +5419,114 @@ sub do_show_sessions {
     $in{'session_delay'} = 10 unless ($in{'session_delay'});
     my $delay = 60 * $in{'session_delay'};
     $param->{'sessions'} = &SympaSession::list_sessions($delay,$robot,$in{'connected_only'});        
+    return '1';
+}
+
+
+## activate dump var feature
+sub do_view_spools {
+    &wwslog('info', 'do_view_spools');
+    
+    $in{'spool_name'} = 'msg' unless $in{'spool_name'};
+    $param->{'spool_name'} = $in{'spool_name'} ;
+    
+    my $spool = new Spool($in{'spool_name'});
+    $param->{'spool_content'} = $spool->get_content;
+
+    return '1';
+}
+
+## activate dump var feature
+sub do_spool_message {
+    &wwslog('info', "do_spool_message operation: spool : $in{'spool_name'}, $in{'operation'}, robot: $in{'robot'}, listname: $in{'listname'}, messagekey: $in{'messagekey'}");
+    &wwslog('trace', "do_spool_message operation: spool : $in{'spool_name'}, $in{'operation'}, robot: $in{'robot'}, listname: $in{'listname'}, messagekey: $in{'messagekey'}");
+    
+    $in{'operation'} = 'view'  unless $in{'operation'};
+    $param->{'operation'} = $in{'operation'};
+    
+    my $robotname;
+    my $listname;
+    if ($in{'robot'} ne '__'){ $robotname = $in{'robot'}} else {$robotname = ''}
+    if ($in{'listname'} ne '__'){ $listname = $in{'listname'}} else {$listname = ''}
+    $param->{'listname'} = $listname ;
+    $param->{'robot'} = $robotname;
+
+    unless ($in{'messagekey'}) {
+	do_log('err',"messagekey missing could not find message");
+	return undef;
+    }
+    $param->{'messagekey'}= $in{'messagekey'};
+
+    unless ($in{'spool_name'}) {
+	do_log('err',"spool_name missing could not find message");
+	return undef;
+    }
+    $param->{'spool_name'} = $in{'spool_name'};
+    
+    
+    my $spool = new Spool($in{'spool_name'});
+    $param->{'spool_message'} = $spool->get_message({'robot'=>$robotname,'listname'=>$listname,'messagekey' => $in{'messagekey'}});
+    
+	unless ($param->{'spool_message'}) {
+	    do_log('err',"could not find message");
+	    return undef;
+	}
+    
+    if ($in{'operation'} eq 'view'){
+	do_log('notice',"spool_message view robot=> $robotname list=> listname messagekey => $in{'messagekey'}");
+	return 1;
+    }elsif ($in{'operation'} eq 'remove'){
+	do_log('trace',"spool_message remove robot=> $robotname list=> $listname messagekey => $in{'messagekey'}");
+	if ($spool->remove_message({'robot'=>$robotname, 'listname'=>$listname, 'messagekey' => $in{'messagekey'}})) {    
+	    do_log('notice',"spool_message remove robot=> $robotname list=> listname messagekey => $in{'messagekey'}");
+	    return 'view_spools';
+	}else{
+	    do_log('notice',"Could not remove spool_message remove robot=> $robotname list=> listname messagekey => $in{'messagekey'}");
+	    return undef ;
+	}	
+    }elsif ($in{'operation'} eq 'edit'){
+	do_log('info',"request edit message");
+	return 1;
+    }elsif ( $in{'operation'} eq 'submit_message' ) {
+	do_log('trace',"edit message submit detected");
+	# a new message is submitted 
+	
+	unless ($spool->store($in{'updated_message_asstring'},{'list'=>$listname,
+							       'robot'=>$robotname,
+							       'dkim_d'=>$param->{'spool_message'}{'dkim_d'},
+							       'dkim_'=>$param->{'spool_message'}{'dkim_i'},
+							       'dkim_selector'=>$param->{'spool_message'}{'dkim_selector'},
+							       'dkim_private_key'=>$param->{'spool_message'}{'dkim-private_key'},
+							       'dkim_header_list'=>$param->{'spool_message'}{'dkim_header_list'}
+							   }) ) {
+	    
+	    &report::reject_report_web('user','Could not store message in spool.');
+	    return undef;
+	}
+	else{do_log('trace',"message stored");}
+	
+	unless ($spool->remove_message ({'robot'=>$robotname, 'listname'=>$listname, 'messagekey'=>$in{'messagekey'}})) { 
+	    &report::reject_report_web('user','Could not remove previous message from spool');
+	    return;
+	}
+	my $new_messagekey = &tools::md5_fingerprint($in{'updated_message_asstring'});
+	do_log('info',"Spool : message for list : $listname, robot : $robotname, messagekey $in{'messagekey'} as been changed in spool (new messagekey : $new_messagekey");
+	$in{'operation'} = 'view'; 
+	$in{'messagekey'} = $new_messagekey; 
+	return 'spool_message';
+    }elsif ( $in{'operation'} eq 'dump_message' ) {
+	my $dump_file =  &Conf::get_robot_conf($robot, 'tmpdir').'/message_'.$robotname.'_'.$listname.'_'.time ;
+	unless (open DUMP, ">$dump_file") {
+	    &wwslog('err','failed to create %s : %s', $dump_file, $!);
+	    return undef;
+	}
+	printf DUMP $param->{'spool_message'}{'messageasstring'};
+	unless (close DUMP) {
+	    &wwslog('err','failed to write %s : %s', $dump_file, $!);
+	    return undef;
+	}
+	$param->{'dumped'} = $dump_file;	
+    }
     return '1';
 }
 

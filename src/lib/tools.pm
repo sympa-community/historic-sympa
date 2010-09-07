@@ -2092,6 +2092,15 @@ sub adate {
     return $date;
 }
 
+## convert an epoch date into a readable date scalar
+sub epoch2yyyymmjj_hhmmss {
+
+    my $epoch = $_[0];
+    my @date = localtime ($epoch);
+    my $date = strftime ("%Y-%m-%d  %H:%M:%S", @date);
+    
+    return $date;
+}
 ## human format (used in task models and scenarii)
 
 # -> absolute date :

@@ -1,0 +1,31 @@
+
+<h2>[%|loc%]Edit spool message :[% END %] [% spool_name %] [% robot %] [% listname %] [% messagekey %]
+
+
+[% IF operation == 'view' %]
+<div class="block">
+<pre>
+[% spool_message.messageasstring %]
+</pre>
+</div>
+[% ELSIF operation == 'edit' %]
+<form action="[% path_cgi %]" method="post" name="spool_mail">
+<fieldset>
+  <input type="hidden" name="operation" value="submit_message" />
+  <input type="hidden" name="listname" value="[% listname %]" />
+  <input type="hidden" name="spool_name" value="[% spool_name %]" />
+  <input type="hidden" name="robot" value="[% robot %]" />
+  <input type="hidden" name="messagekey" value="[% messagekey %]" />
+  <textarea NAME="updated_message_asstring" COLS="80" ROWS="30" WRAP="SOFT">
+[% spool_message.messageasstring %]
+  </textarea>
+  <input class="MainMenuLinks" type="submit"  name="action_spool_message"  value="[%|loc%]save in db spool[%END%]" />
+</fieldset>
+</form>
+[% ELSIF operation == 'remove' %]
+removed.
+[% ELSIF operation == 'dump_message' %]
+<h2>Message dumped in file  [% dumped %]</h2>
+[% END %]
+
+

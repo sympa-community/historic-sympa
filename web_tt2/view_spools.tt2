@@ -1,0 +1,50 @@
+<!-- $Id: view_spools.tt2  -->
+
+<div class="block">
+<h2>[%|loc%]View spool content :[% END %] [% spool_name %]</h2>
+
+<table id="spool_view_table" summary="[%|loc%]Spool content[%END%]" class="listOfItems text_center tablesorter">
+<thead>
+<tr>
+<th>[%|loc%]sender[%END%]</th>
+<th>[%|loc%]listname[%END%]</th>
+<th>[%|loc%]robot[%END%]</th>
+<th>[%|loc%]priority[%END%]</th>
+<th>[%|loc%]date[%END%]</th>
+<th>[%|loc%]size[%END%]</th>
+<th>[%|loc%]message-id[%END%]</th>
+<th>[%|loc%]subject[%END%]</th>
+<th>[%|loc%]message[%END%]</th>
+</tr>
+</thead>
+<tbody>
+  [% SET count = 0 %]
+  [% FOREACH message IN spool_content %]
+   [% SET count = count + 1 %]
+   [% IF dark == '1' %]<tr>[% SET dark = '0' %][% ELSE %]<tr class="color0">[% SET dark = '1' %][% END %]
+
+   [% IF message.robot %] [% SET robot_arg = message.robot %][% ELSE %] [% SET robot_arg = '__' %] [% END %]
+   [% IF message.list %] [% SET list_arg = message.list %][% ELSE %] [% SET list_arg = '__' %] [% END %]
+    <td>[% message.sender %]</td>
+    <td>[% message.list %]</td>
+    <td>[% message.robot %]</td>
+    <td>[% message.priority %]</td>
+    <td>[% message.receptiondate_asstring %]</td>
+    <td>[% message.size %]</td>
+    <td>[% message.messageid %]</td>
+    <td>[% message.subject %]</td>
+    <td>   
+    <a class="MainMenuLinks" href="[% path_cgi %]/spool_message/view/[% spool_name %]/[% robot_arg %]/[% list_arg %]/[% message.messagekey %]">view</a>
+    <a class="MainMenuLinks" href="[% path_cgi %]/spool_message/edit/[% spool_name %]/[% robot_arg %]/[% list_arg %]/[% message.messagekey %]">edit</a>
+    <a class="MainMenuLinks" href="[% path_cgi %]/spool_message/remove/[% spool_name %]/[% robot_arg %]/[% list_arg %]/[% message.messagekey %]">remove</a>
+    <a class="MainMenuLinks" href="[% path_cgi %]/spool_message/dump_message/[% spool_name %]/[% robot_arg %]/[% list_arg %]/[% message.messagekey %]">dump</a>
+    </td>
+   </tr>
+
+  [% END %]  
+</tbody>
+</table>
+
+[%|loc%]Number of messages :[% END %][% count %]
+</div>
+<!-- end view_spools.tt2 -->

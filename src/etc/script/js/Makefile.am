@@ -27,6 +27,8 @@ js_DATA = jqplot.barRenderer.min.js \
 	jqplot.categoryAxisRenderer.min.js \
 	jquery.jqplot.css \
 	jquery.jqplot.min.js \
+	jquery.tablesorter.js \
+	jquery.tablesorter.css \
 	jquery.js \
 	sympa.js 
 

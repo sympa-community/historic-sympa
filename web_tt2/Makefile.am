@@ -54,6 +54,7 @@ webtemplate_DATA = active_lists.tt2 \
 		   edit_config.tt2 \
 		   editfile.tt2 \
 		   edit_list_request.tt2 \
+		   spool_message.tt2 \
 		   editsubscriber.tt2 \
 		   edit_template.tt2 \
 		   error.tt2 \
@@ -138,6 +139,7 @@ webtemplate_DATA = active_lists.tt2 \
 		   viewbounce.tt2 \
 		   viewlogs.tt2 \
 		   viewmod.tt2 \
+		   view_spools.tt2 \
 		   view_template.tt2 \
 		   your_lists.tt2
 

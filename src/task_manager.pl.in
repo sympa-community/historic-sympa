@@ -1166,16 +1166,16 @@ sub purge_session_table {
     return 1;
 }
 
-## remove messages from bulkspool table when no more packet have any pointer to this message
+## remove messages from spool table when no more packet have any pointer to this message
 sub purge_tables {    
 
     do_log('info','task_manager::purge_tables()');
-    my $removed = &Bulk::purge_bulkspool();
+    my $removed = &Bulk::purge_spool();
     unless(defined $removed) {
-	&do_log('err','Failed to purge bulkspool');
+	&do_log('err','Failed to purge spool');
 	return undef;
     }
-    &do_log('notice','%s rows removed in bulkspool_table',$removed);
+    &do_log('notice','%s rows removed in spool_table',$removed);
     return 1;
 }
 

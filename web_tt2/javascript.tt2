@@ -53,6 +53,27 @@ var nomove={"TR":0,"CENTER":0,"B":0,"P":0,"U":0,"I":0,"DIV":0,"A":0,"FONT":0,"LI
 <script type="text/javascript" src="[% static_content_url %]/js/jqplot.CanvasAxisTickRenderer.js"></script>
 <script type="text/javascript" src="[% static_content_url %]/js/jqplot.CanvasTextRenderer.js"></script>
 <link rel="stylesheet" type="text/css" href="[% static_content_url %]/js/jquery.jqplot.css" />
+
+<link rel="stylesheet" type="text/css" href="[% static_content_url %]/js/jquery.tablesorter.css" />
+<script type="text/javascript" src="[% static_content_url %]/js/jquery.tablesorter.js"></script>
+<script type="text/javascript">
+	$(document).ready(function(){
+		$('#spool_view_table').tablesorter({headers: {8: {sorter: false}}, sortList: [[4, 1]]});
+		$('#spool_view_table').bind('sortEnd', function() {
+			$('#spool_view_table tbody tr').each(function() {
+				if(!window.spool_view_table_alt_idx) window.spool_view_table_alt_idx = 0;
+				window.spool_view_table_alt_idx++;
+				$(this).removeClass();
+				if(window.spool_view_table_alt_idx % 2) $(this).addClass('color0');
+			});
+		});
+		
+		/*$('.tablesorter thead th.header').each(function() {
+			$(this).prepend($('<div>').addClass('tablesortertag').append('&darr;'));
+		});*/
+	});
+</script>
+
 [% IF use_html_editor %]
 <script type="text/javascript" src="[% static_content_url %]/js/[% html_editor_file %]"></script>
 <script type="text/javascript">

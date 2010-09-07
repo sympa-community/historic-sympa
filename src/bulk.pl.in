@@ -48,6 +48,7 @@ use Getopt::Long;
 
 use mail;
 use Bulk;
+use Spool;
 use List;
 use tools;
 use tracking;
@@ -166,6 +167,8 @@ my $last_check_date = time();
 $options->{'multiple_process'} = 1;
 $Conf::Conf{'maxsmtp'} = int($Conf::Conf{'maxsmtp'}/$Conf::Conf{'bulk_max_count'});
 
+my $spool = new Spool('bulk');
+
 while (!$end) {
     &List::init_list_cache();
     my $bulk;
@@ -224,7 +227,7 @@ while (!$end) {
             # so it is needed to fetch the new message from message_table 
 
 	    $messagekey = $bulk->{'messagekey'};
-	    $message_from_spool = &Bulk::message_from_spool($bulk->{'messagekey'});
+	    $message_from_spool = $spool->get_message({'messagekey'=>$bulk->{'messagekey'},'listname'=>$bulk->{'listname'},'robot'=>$bulk->{'robot'}});
 
 	    $messageasstring_init = $message_from_spool->{'messageasstring'};
 

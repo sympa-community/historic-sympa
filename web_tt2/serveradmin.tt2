@@ -34,8 +34,7 @@
 [% END %]
 
 [% IF families -%]
-  [% IF subaction == 'families' %]
-<h2>[%|loc%]Families[%END%]</h2><br />
+  [% IF subaction == 'families' %]<h2>[%|loc%]Families[%END%]</h2><br />
 <div>
   <form action="[% path_cgi %]" method="post">
   <fieldset>
@@ -120,6 +119,7 @@
 [% END %] 
 
 [% IF subaction == 'logs' %]
+
 <h2>[%|loc%]Logs[%END%]</h2><br />
 <div>
 [%|loc%]You can increase the log level specified by configuration only for your current session. On a production server, this allow to keep logs rather small and to test some features with the maximum log level. [%END%]<br/>
@@ -135,6 +135,28 @@
 <input class="MainMenuLinks" type="submit" name="action_set_loglevel" value="[%|loc%]Set log level[%END%]" /></fieldset>
 </form>
 </div>
+<h2>[%|loc%]Spools[%END%]</h2><br />
+<div>
+[% END %] 
+
+[% IF  subaction == 'spools' %]
+[%|loc%]View spools[%END%]<br/>
+
+<form class="bold_label" action="[% path_cgi %]" method="post">
+<fieldset>
+
+[%|loc%]Select spool to scan :[%END%] 
+<select id="spool_name" name="spool_name">
+[% FOREACH spool IN list_of_spool %]
+  <option value="[% spool %]" [% IF spool == spool_name %] selected="selected"[% END %]>[% spool %]</option>
+[% END %]
+</select>
+
+<input class="MainMenuLinks" type="submit" name="action_view_spools" value="[%|loc%]view a spool[%END%]" /></fieldset>
+</form>
+</div>
+
+
 [% END %] 
 
 [% IF subaction == 'templates' %]
