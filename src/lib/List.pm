@@ -1720,7 +1720,7 @@ sub extract_verp_rcpt() {
 
     my @result;
 
-    if ($percent != '0%') {
+    if ($percent ne '0%') {
 	my $nbpart ; 
 	if ( $percent =~ /^(\d+)\%/ ) {
 	    $nbpart = 100/$1;  
@@ -3508,10 +3508,11 @@ sub send_to_editor {
        }
    }
    
+   my $subject = MIME::EncWords::decode_mimewords($hdr->get('Subject'), Charset=>'utf8');
    my $param = {'modkey' => $modkey,
 		'boundary' => $boundary,
 		'msg_from' => $message->{'sender'},
-		'subject' => $hdr->{'subject'},
+		'subject' => $subject,
 		'spam_status' => $message->{'spam_status'},
 		'mod_spool_size' => $self->get_mod_spool_size(),
 		'method' => $method};
