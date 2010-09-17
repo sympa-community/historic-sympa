@@ -1,4 +1,306 @@
 ------------------------------------------------------------------------
+r6685 | sympa-authors | 2010-09-17 15:56:14 +0200 (ven 17 sep 2010) | 1 ligne
+Chemins modifiés :
+   M /branches/sympa-6.0-branch/configure.ac
+   M /branches/sympa-6.0-branch/po/ar.po
+   M /branches/sympa-6.0-branch/po/bg.po
+   M /branches/sympa-6.0-branch/po/br.po
+   M /branches/sympa-6.0-branch/po/ca.po
+   M /branches/sympa-6.0-branch/po/cs.po
+   M /branches/sympa-6.0-branch/po/de.po
+   M /branches/sympa-6.0-branch/po/el.po
+   M /branches/sympa-6.0-branch/po/es.po
+   M /branches/sympa-6.0-branch/po/et.po
+   M /branches/sympa-6.0-branch/po/eu.po
+   M /branches/sympa-6.0-branch/po/fi.po
+   M /branches/sympa-6.0-branch/po/fr.po
+   M /branches/sympa-6.0-branch/po/hu.po
+   M /branches/sympa-6.0-branch/po/id.po
+   M /branches/sympa-6.0-branch/po/it.po
+   M /branches/sympa-6.0-branch/po/ja.po
+   M /branches/sympa-6.0-branch/po/ko.po
+   M /branches/sympa-6.0-branch/po/la.po
+   M /branches/sympa-6.0-branch/po/ml.po
+   M /branches/sympa-6.0-branch/po/nb_NO.po
+   M /branches/sympa-6.0-branch/po/nl.po
+   M /branches/sympa-6.0-branch/po/oc.po
+   M /branches/sympa-6.0-branch/po/pl.po
+   M /branches/sympa-6.0-branch/po/pt.po
+   M /branches/sympa-6.0-branch/po/pt_BR.po
+   M /branches/sympa-6.0-branch/po/ro.po
+   M /branches/sympa-6.0-branch/po/ru.po
+   M /branches/sympa-6.0-branch/po/sv.po
+   M /branches/sympa-6.0-branch/po/tr.po
+   M /branches/sympa-6.0-branch/po/vi.po
+   M /branches/sympa-6.0-branch/po/zh_CN.po
+   M /branches/sympa-6.0-branch/po/zh_TW.po
+   M /branches/sympa-6.0-branch/po-wwsympa/ar.po
+   M /branches/sympa-6.0-branch/po-wwsympa/bg.po
+   M /branches/sympa-6.0-branch/po-wwsympa/br.po
+   M /branches/sympa-6.0-branch/po-wwsympa/cs.po
+   M /branches/sympa-6.0-branch/po-wwsympa/de.po
+   M /branches/sympa-6.0-branch/po-wwsympa/el.po
+   M /branches/sympa-6.0-branch/po-wwsympa/en_US.po
+   M /branches/sympa-6.0-branch/po-wwsympa/es.po
+   M /branches/sympa-6.0-branch/po-wwsympa/et.po
+   M /branches/sympa-6.0-branch/po-wwsympa/eu.po
+   M /branches/sympa-6.0-branch/po-wwsympa/fi.po
+   M /branches/sympa-6.0-branch/po-wwsympa/fr.po
+   M /branches/sympa-6.0-branch/po-wwsympa/hu.po
+   M /branches/sympa-6.0-branch/po-wwsympa/id.po
+   M /branches/sympa-6.0-branch/po-wwsympa/it.po
+   M /branches/sympa-6.0-branch/po-wwsympa/ja.po
+   M /branches/sympa-6.0-branch/po-wwsympa/nb_NO.po
+   M /branches/sympa-6.0-branch/po-wwsympa/nl.po
+   M /branches/sympa-6.0-branch/po-wwsympa/oc.po
+   M /branches/sympa-6.0-branch/po-wwsympa/pl.po
+   M /branches/sympa-6.0-branch/po-wwsympa/pt.po
+   M /branches/sympa-6.0-branch/po-wwsympa/pt_BR.po
+   M /branches/sympa-6.0-branch/po-wwsympa/ro.po
+   M /branches/sympa-6.0-branch/po-wwsympa/ru.po
+   M /branches/sympa-6.0-branch/po-wwsympa/sv.po
+   M /branches/sympa-6.0-branch/po-wwsympa/tr.po
+   M /branches/sympa-6.0-branch/po-wwsympa/vi.po
+   M /branches/sympa-6.0-branch/po-wwsympa/zh_CN.po
+
+[-feature]Committing latest translations from Pootle
+------------------------------------------------------------------------
+r6680 | david.verdin | 2010-09-10 12:17:57 +0200 (ven 10 sep 2010) | 2 lignes
+Chemins modifiés :
+   M /branches/sympa-6.0-branch/wwsympa/wwsympa.fcgi.in
+
+[bug] In some - difficult to precisely describe - configurations, sessions could be messed due to an inner cache of cookie environement variable, either in Apache of perl. Fixed by force-blanking this variable as soon as we affect it to a session.
+
+------------------------------------------------------------------------
+r6679 | david.verdin | 2010-09-10 12:13:11 +0200 (ven 10 sep 2010) | 2 lignes
+Chemins modifiés :
+   M /branches/sympa-6.0-branch
+
+[svn] Comitting mergeinfo.
+
+------------------------------------------------------------------------
+r6676 | sympa-authors | 2010-09-10 11:59:45 +0200 (ven 10 sep 2010) | 2 lignes
+Chemins modifiés :
+   M /trunk/src/lib/List.pm
+   M /trunk/src/lib/admin.pm
+   M /trunk/src/lib/tools.pm
+Fision via : r6679
+
+[-bug] Incorrect use of == instead of eq operator
+
+------------------------------------------------------------------------
+r6677 | sympa-authors | 2010-09-10 12:03:33 +0200 (ven 10 sep 2010) | 2 lignes
+Chemins modifiés :
+   M /branches/sympa-6.0-branch/src/lib/List.pm
+   M /branches/sympa-6.0-branch/src/lib/admin.pm
+   M /branches/sympa-6.0-branch/src/lib/tools.pm
+
+[-bug] Incorrect use of == instead of eq operator 
+
+------------------------------------------------------------------------
+r6664 | sympa-authors | 2010-08-26 11:31:57 +0200 (jeu 26 aoû 2010) | 2 lignes
+Chemins modifiés :
+   M /branches/sympa-6.0-branch/wwsympa/wwsympa.fcgi.in
+
+[bug][Submitted by T. Koczka] The post form in the web interface sent messages with empty bodies due to the modification introduced in http://sourcesup.cru.fr/scm/viewvc.php/branches/sympa-6.0-branch/wwsympa/wwsympa.fcgi.in?root=sympa&r1=6572&r2=6571&pathrev=6572. In the case of the plain text messages created by the post interface, there was no line drop between the headers and the body. The latter was then ignored. Fixed by adding a new line in the text plain message specific code.
+
+------------------------------------------------------------------------
+r6659 | david.verdin | 2010-08-25 11:39:28 +0200 (mer 25 aoû 2010) | 5 lignes
+Chemins modifiés :
+   M /branches/sympa-6.0-branch/src/etc/script/sympa.in
+
+[bug][Submitted by O. Wild, UC Davis] "/etc/init.d/sympa status" was
+reporting that the bulk process had died and left the pidfile behind. The
+real issue was that multiple bulk processes were running, and the pid
+file had multiple pids listed in it.
+
+------------------------------------------------------------------------
+r6649 | david.verdin | 2010-08-19 17:47:33 +0200 (jeu 19 aoû 2010) | 4 lignes
+Chemins modifiés :
+   M /branches/sympa-6.0-branch/configure.ac
+
+[change][Submitted by G. Rousse, INRIA] Several improvments in configure.ac:
+- changed the minimal version of autoconf to 2.60
+- factorization of the section regarding the FSH/non FSH alternative.
+
+------------------------------------------------------------------------
+r6639 | olivier.salaun | 2010-08-11 14:28:58 +0200 (mer 11 aoû 2010) | 2 lignes
+Chemins modifiés :
+   M /branches/sympa-6.0-branch
+   M /branches/sympa-6.0-branch/doc/Makefile.am
+
+[-change]Cancel change at revision 6627. pdf_DATA target requires autoconf 2.60
+
+------------------------------------------------------------------------
+r6637 | olivier.salaun | 2010-08-11 14:28:16 +0200 (mer 11 aoû 2010) | 2 lignes
+Chemins modifiés :
+   M /trunk/doc/Makefile.am
+Fision via : r6639
+
+[-change]Cancel change at revision 6627. pdf_DATA target requires autoconf 2.60
+
+------------------------------------------------------------------------
+r6629 | olivier.salaun | 2010-08-06 17:03:54 +0200 (ven 06 aoû 2010) | 2 lignes
+Chemins modifiés :
+   M /branches/sympa-6.0-branch
+   M /branches/sympa-6.0-branch/configure.ac
+   M /branches/sympa-6.0-branch/doc/Makefile.am
+
+[bug][#6855][S.Ikeda] Samples were installed under / and sympa.pdf was not installed. Added missing docdir def in configure.ac + AC_PREREQ(2.60)
+
+------------------------------------------------------------------------
+r6627 | olivier.salaun | 2010-08-06 17:02:57 +0200 (ven 06 aoû 2010) | 2 lignes
+Chemins modifiés :
+   M /trunk/configure.ac
+   M /trunk/doc/Makefile.am
+Fision via : r6629
+
+[bug][#6855][S.Ikeda] Samples were installed under / and sympa.pdf was not installed. Added missing docdir def in configure.ac + AC_PREREQ(2.60)
+
+------------------------------------------------------------------------
+r6625 | olivier.salaun | 2010-08-06 16:03:52 +0200 (ven 06 aoû 2010) | 3 lignes
+Chemins modifiés :
+   M /branches/sympa-6.0-branch
+   M /branches/sympa-6.0-branch/configure.ac
+
+[bug][O.Lacroix, CIRIL] ./configure --help was not consistant with the directory defaults. Changed the help message for the following options : --with-expldir, --with-spooldir, --with-scriptdir, --with-modulesdir
+***** piddir default changed from PREFIX/var to /var
+
+------------------------------------------------------------------------
+r6623 | olivier.salaun | 2010-08-06 16:02:40 +0200 (ven 06 aoû 2010) | 3 lignes
+Chemins modifiés :
+   M /trunk/configure.ac
+Fision via : r6625
+
+[bug][O.Lacroix, CIRIL] ./configure --help was not consistant with the directory defaults. Changed the help message for the following options : --with-expldir, --with-spooldir, --with-scriptdir, --with-modulesdir
+***** piddir default changed from PREFIX/var to /var
+
+------------------------------------------------------------------------
+r6613 | olivier.salaun | 2010-07-29 17:52:01 +0200 (jeu 29 jui 2010) | 3 lignes
+Chemins modifiés :
+   M /branches/sympa-6.0-branch
+   M /branches/sympa-6.0-branch/wwsympa/wwsympa.fcgi.in
+
+[bug][#6879][reported by A.Koshokin, Intel] Fixed the BASE HTML tag. The base previously was the archive directory, now setting it to the archive message. 
+Bug description: NAME anchors within HTML archived messages were broken.
+
+------------------------------------------------------------------------
+r6611 | olivier.salaun | 2010-07-29 17:50:54 +0200 (jeu 29 jui 2010) | 3 lignes
+Chemins modifiés :
+   M /trunk/wwsympa/wwsympa.fcgi.in
+Fision via : r6613
+
+[bug][#6879][reported by A.Koshokin, Intel] Fixed the BASE HTML tag. The base previously was the archive directory, now setting it to the archive message. 
+Bug description: NAME anchors within HTML archived messages were broken.
+
+------------------------------------------------------------------------
+r6607 | olivier.salaun | 2010-07-29 13:55:46 +0200 (jeu 29 jui 2010) | 2 lignes
+Chemins modifiés :
+   M /branches/sympa-6.0-branch
+   M /branches/sympa-6.0-branch/src/lib/Bulk.pm
+
+[bug][#7038][reported by D.Pritts, Internet2] Prevent duplicate entry error in Bulk::store(). This error occured while sending duplicate service messages (same content to the same user). The listmaster is no more notified, but the second instance of the message is still not sent; this should be fixed.
+
+------------------------------------------------------------------------
+r6605 | olivier.salaun | 2010-07-29 13:47:53 +0200 (jeu 29 jui 2010) | 2 lignes
+Chemins modifiés :
+   M /trunk/src/lib/Bulk.pm
+Fision via : r6607
+
+[bug][#7038][reported by D.Pritts, Internet2] Prevent duplicate entry error in Bulk::store(). This error occured while sending duplicate service messages (same content to the same user). The listmaster is no more notified, but the second instance of the message is still not sent; this should be fixed.
+
+------------------------------------------------------------------------
+r6601 | olivier.salaun | 2010-07-28 11:59:26 +0200 (mer 28 jui 2010) | 3 lignes
+Chemins modifiés :
+   M /branches/sympa-6.0-branch
+   M /branches/sympa-6.0-branch/wwsympa/wwsympa.fcgi.in
+
+[bug] To field was not set while sending the sendpasswd service message.
+This bug was introduced in revision 5150.
+
+------------------------------------------------------------------------
+r6599 | olivier.salaun | 2010-07-28 11:56:45 +0200 (mer 28 jui 2010) | 3 lignes
+Chemins modifiés :
+   M /trunk/wwsympa/wwsympa.fcgi.in
+Fision via : r6601
+
+[bug] To field was not set while sending the sendpasswd service message.
+This bug was introduced in revision 5150.
+
+------------------------------------------------------------------------
+r6594 | david.verdin | 2010-07-07 17:03:15 +0200 (mer 07 jui 2010) | 2 lignes
+Chemins modifiés :
+   M /branches/sympa-6.0-branch/po/ar.po
+   M /branches/sympa-6.0-branch/po/bg.po
+   M /branches/sympa-6.0-branch/po/br.po
+   M /branches/sympa-6.0-branch/po/ca.po
+   M /branches/sympa-6.0-branch/po/cs.po
+   M /branches/sympa-6.0-branch/po/de.po
+   M /branches/sympa-6.0-branch/po/el.po
+   M /branches/sympa-6.0-branch/po/es.po
+   M /branches/sympa-6.0-branch/po/et.po
+   M /branches/sympa-6.0-branch/po/eu.po
+   M /branches/sympa-6.0-branch/po/fi.po
+   M /branches/sympa-6.0-branch/po/fr.po
+   M /branches/sympa-6.0-branch/po/hu.po
+   M /branches/sympa-6.0-branch/po/id.po
+   M /branches/sympa-6.0-branch/po/it.po
+   M /branches/sympa-6.0-branch/po/ja.po
+   M /branches/sympa-6.0-branch/po/ko.po
+   M /branches/sympa-6.0-branch/po/la.po
+   M /branches/sympa-6.0-branch/po/ml.po
+   M /branches/sympa-6.0-branch/po/nb_NO.po
+   M /branches/sympa-6.0-branch/po/nl.po
+   M /branches/sympa-6.0-branch/po/oc.po
+   M /branches/sympa-6.0-branch/po/pl.po
+   M /branches/sympa-6.0-branch/po/pt.po
+   M /branches/sympa-6.0-branch/po/pt_BR.po
+   M /branches/sympa-6.0-branch/po/ro.po
+   M /branches/sympa-6.0-branch/po/ru.po
+   M /branches/sympa-6.0-branch/po/sv.po
+   M /branches/sympa-6.0-branch/po/tr.po
+   M /branches/sympa-6.0-branch/po/vi.po
+   M /branches/sympa-6.0-branch/po/zh_CN.po
+   M /branches/sympa-6.0-branch/po/zh_TW.po
+   M /branches/sympa-6.0-branch/po-wwsympa/ar.po
+   M /branches/sympa-6.0-branch/po-wwsympa/bg.po
+   M /branches/sympa-6.0-branch/po-wwsympa/br.po
+   M /branches/sympa-6.0-branch/po-wwsympa/cs.po
+   M /branches/sympa-6.0-branch/po-wwsympa/de.po
+   M /branches/sympa-6.0-branch/po-wwsympa/el.po
+   M /branches/sympa-6.0-branch/po-wwsympa/en_US.po
+   M /branches/sympa-6.0-branch/po-wwsympa/es.po
+   M /branches/sympa-6.0-branch/po-wwsympa/et.po
+   M /branches/sympa-6.0-branch/po-wwsympa/eu.po
+   M /branches/sympa-6.0-branch/po-wwsympa/fi.po
+   M /branches/sympa-6.0-branch/po-wwsympa/fr.po
+   M /branches/sympa-6.0-branch/po-wwsympa/hu.po
+   M /branches/sympa-6.0-branch/po-wwsympa/id.po
+   M /branches/sympa-6.0-branch/po-wwsympa/it.po
+   M /branches/sympa-6.0-branch/po-wwsympa/ja.po
+   M /branches/sympa-6.0-branch/po-wwsympa/nb_NO.po
+   M /branches/sympa-6.0-branch/po-wwsympa/nl.po
+   M /branches/sympa-6.0-branch/po-wwsympa/oc.po
+   M /branches/sympa-6.0-branch/po-wwsympa/pl.po
+   M /branches/sympa-6.0-branch/po-wwsympa/pt.po
+   M /branches/sympa-6.0-branch/po-wwsympa/pt_BR.po
+   M /branches/sympa-6.0-branch/po-wwsympa/ro.po
+   M /branches/sympa-6.0-branch/po-wwsympa/ru.po
+   M /branches/sympa-6.0-branch/po-wwsympa/sv.po
+   M /branches/sympa-6.0-branch/po-wwsympa/tr.po
+   M /branches/sympa-6.0-branch/po-wwsympa/vi.po
+   M /branches/sympa-6.0-branch/po-wwsympa/zh_CN.po
+
+[svn]Committing updated translations.
+
+------------------------------------------------------------------------
+r6589 | sympa-authors | 2010-07-06 16:12:24 +0200 (mar 06 jui 2010) | 1 ligne
+Chemins modifiés :
+   M /branches/sympa-6.0-branch/ChangeLog
+   M /branches/sympa-6.0-branch/NEWS
+
+[-release]Preparing version 6.0.5
+------------------------------------------------------------------------
 r6588 | sympa-authors | 2010-07-06 16:10:41 +0200 (mar 06 jui 2010) | 1 ligne
 Chemins modifiés :
    M /branches/sympa-6.0-branch/configure.ac

@@ -3,6 +3,54 @@
 
 (See Changelog file for the full changes log)
 
+6.0.6		September 17, 2010
+
+  Bug fixes:
+
+	src/lib/Bulk.pm: [#7038][reported by D.Pritts, Internet2] Prevent
+	duplicate entry error in Bulk::store(). This error occured while
+	sending duplicate service messages (same content to the same user). The
+	listmaster is no more notified, but the second instance of the message
+	is still not sent; this should be fixed.
+
+	wwsympa/wwsympa.fcgi.in:  To field was not set while sending the
+	sendpasswd service message.
+	This bug was introduced in revision 5150.
+
+	wwsympa/wwsympa.fcgi.in:  In some - difficult to precisely describe -
+	configurations, sessions could be messed due to an inner cache of
+	cookie environement variable, either in Apache of perl. Fixed by
+	force-blanking this variable as soon as we affect it to a session.
+
+	configure.ac, doc/Makefile.am: [#6855][S.Ikeda] Samples were installed
+	under / and sympa.pdf was not installed. Added missing docdir def in
+	configure.ac + AC_PREREQ(2.60)
+
+	configure.ac: [O.Lacroix, CIRIL] ./configure --help was not consistant
+	with the directory defaults. Changed the help message for the following
+	options : --with-expldir, --with-spooldir, --with-scriptdir,
+	--with-modulesdir
+	***** piddir default changed from PREFIX/var to /var
+
+	wwsympa/wwsympa.fcgi.in: [#6879][reported by A.Koshokin, Intel] Fixed
+	the BASE HTML tag. The base previously was the archive directory, now
+	setting it to the archive message. 
+	Bug description: NAME anchors within HTML archived messages were
+	broken.
+
+	src/lib/Bulk.pm: [#7038][reported by D.Pritts, Internet2] Prevent
+	duplicate entry error in Bulk::store(). This error occured while
+	sending duplicate service messages (same content to the same user). The
+	listmaster is no more notified, but the second instance of the message
+	is still not sent; this should be fixed.
+
+  Changes:
+
+	configure.ac: [Submitted by G. Rousse, INRIA] Several improvments in
+	configure.ac:
+	- changed the minimal version of autoconf to 2.60
+	- factorization of the section regarding the FSH/non FSH alternative.
+
 6.0.5		July 06, 2010
 
   Bug fixes:
