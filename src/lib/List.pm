@@ -5601,7 +5601,7 @@ sub get_first_user {
 	
 	## SORT BY
 	if ($sortby eq 'domain') {
-	    $statement = sprintf "SELECT user_subscriber \"email\", comment_subscriber \"gecos\", reception_subscriber \"reception\", topics_subscriber \"topics\", visibility_subscriber \"visibility\", bounce_subscriber \"bounce\", bounce_score_subscriber \"bounce_score\",bounce_address_subscriber \"bounce_address\", %s \"date\", %s \"update_date\", subscribed_subscriber \"subscribed\", included_subscriber \"included\", include_sources_subscriber \"id\", custom_attribute_subscriber \"custom_attribute\", substr(user_subscriber,instr(user_subscriber,'\@')+1) \"dom\",suspend_subscriber \"suspend\", suspend_start_date_subscriber \"startdate\", suspend_end_date_subscriber \"enddate\" %s FROM subscriber_table WHERE (list_subscriber = %s AND robot_subscriber = %s) ORDER BY \"dom\"", 
+	    $statement = sprintf "SELECT user_subscriber \"email\", comment_subscriber \"gecos\", reception_subscriber \"reception\", topics_subscriber \"topics\", visibility_subscriber \"visibility\", bounce_subscriber \"bounce\", bounce_score_subscriber \"bounce_score\",bounce_address_subscriber \"bounce_address\", %s \"date\", %s \"update_date\", subscribed_subscriber \"subscribed\", included_subscriber \"included\", include_sources_subscriber \"id\", custom_attribute_subscriber \"custom_attribute\", substr(user_subscriber,instr(user_subscriber,'\@')+1) \"dom\",suspend_subscriber \"suspend\", suspend_start_date_subscriber \"startdate\", suspend_end_date_subscriber \"enddate\" %s FROM subscriber_table WHERE (list_subscriber = %s AND robot_subscriber = %s) ORDER BY dom", 
 	    $date_field, 
 	    $update_field, 
 	    $additional, 
@@ -5609,16 +5609,16 @@ sub get_first_user {
 	    $dbh->quote($self->{'domain'});
 	    
 	}elsif ($sortby eq 'email') {
-	    $statement .= " ORDER BY \"email\"";
+	    $statement .= " ORDER BY email";
 	    
 	}elsif ($sortby eq 'date') {
-	    $statement .= " ORDER BY \"date\" DESC";
+	    $statement .= " ORDER BY date DESC";
 	    
 	}elsif ($sortby eq 'sources') {
-	    $statement .= " ORDER BY \"subscribed\" DESC,\"id\"";
+	    $statement .= " ORDER BY subscribed DESC,id";
 	    
 	}elsif ($sortby eq 'name') {
-	    $statement .= " ORDER BY \"gecos\"";
+	    $statement .= " ORDER BY gecos";
 	} 
 	
 	## Sybase
@@ -5634,7 +5634,7 @@ sub get_first_user {
 	
 	## SORT BY
 	if ($sortby eq 'domain') {
-	    $statement = sprintf "SELECT user_subscriber \"email\", comment_subscriber \"gecos\", reception_subscriber \"reception\", topics_subscriber \"topics\", visibility_subscriber \"visibility\", bounce_subscriber \"bounce\", bounce_score_subscriber \"bounce_score\",  bounce_address_subscriber \"bounce_address\",%s \"date\", %s \"update_date\", subscribed_subscriber \"subscribed\", included_subscriber \"included\", include_sources_subscriber \"id\", custom_attribute_subscriber \"custom_attribute\", substring(user_subscriber,charindex('\@',user_subscriber)+1,100) \"dom\",suspend_subscriber \"suspend\", suspend_start_date_subscriber \"startdate\", suspend_end_date_subscriber \"enddate\" %s FROM subscriber_table WHERE (list_subscriber = %s AND robot_subscriber = %s) ORDER BY \"dom\"", 
+	    $statement = sprintf "SELECT user_subscriber \"email\", comment_subscriber \"gecos\", reception_subscriber \"reception\", topics_subscriber \"topics\", visibility_subscriber \"visibility\", bounce_subscriber \"bounce\", bounce_score_subscriber \"bounce_score\",  bounce_address_subscriber \"bounce_address\",%s \"date\", %s \"update_date\", subscribed_subscriber \"subscribed\", included_subscriber \"included\", include_sources_subscriber \"id\", custom_attribute_subscriber \"custom_attribute\", substring(user_subscriber,charindex('\@',user_subscriber)+1,100) \"dom\",suspend_subscriber \"suspend\", suspend_start_date_subscriber \"startdate\", suspend_end_date_subscriber \"enddate\" %s FROM subscriber_table WHERE (list_subscriber = %s AND robot_subscriber = %s) ORDER BY dom", 
 	    $date_field, 
 	    $update_field, 
 	    $additional, 
@@ -5642,16 +5642,16 @@ sub get_first_user {
 	    $dbh->quote($self->{'domain'});
 	    
 	}elsif ($sortby eq 'email') {
-	    $statement .= " ORDER BY \"email\"";
+	    $statement .= " ORDER BY email";
 	    
 	}elsif ($sortby eq 'date') {
-	    $statement .= " ORDER BY \"date\" DESC";
+	    $statement .= " ORDER BY date DESC";
 	    
 	}elsif ($sortby eq 'sources') {
-	    $statement .= " ORDER BY \"subscribed\" DESC,\"id\"";
+	    $statement .= " ORDER BY subscribed DESC,id";
 	    
 	}elsif ($sortby eq 'name') {
-	    $statement .= " ORDER BY \"gecos\"";
+	    $statement .= " ORDER BY gecos";
 	}
 	
 	
@@ -5685,7 +5685,7 @@ sub get_first_user {
 	    $statement .= ' ORDER BY date DESC';
 	    
 	}elsif ($sortby eq 'sources') {
-	    $statement .= " ORDER BY \"subscribed\" DESC,\"id\"";
+	    $statement .= " ORDER BY subscribed DESC,id";
 	    
 	}elsif ($sortby eq 'name') {
 	    $statement .= ' ORDER BY gecos';
@@ -5726,7 +5726,7 @@ sub get_first_user {
 	    $statement .= ' ORDER BY date DESC';
 	    
 	}elsif ($sortby eq 'sources') {
-	    $statement .= " ORDER BY \"subscribed\" DESC,\"id\"";
+	    $statement .= " ORDER BY subscribed DESC,id";
 	    
 	}elsif ($sortby eq 'name') {
 	    $statement .= ' ORDER BY gecos';
@@ -5766,7 +5766,7 @@ sub get_first_user {
 	    $statement .= ' ORDER BY date DESC';
 	    
 	}elsif ($sortby eq 'sources') {
-	    $statement .= " ORDER BY \"subscribed\" DESC,\"id\"";
+	    $statement .= " ORDER BY subscribed DESC,id";
 	    
 	}elsif ($sortby eq 'name') {
 	    $statement .= ' ORDER BY gecos';
@@ -5943,7 +5943,7 @@ sub get_first_admin_user {
 	
 	## SORT BY
 	if ($sortby eq 'domain') {
-	    $statement = sprintf "SELECT user_admin \"email\", comment_admin \"gecos\", reception_admin \"reception\", visibility_admin \"visibility\", %s \"date\", %s \"update_date\", info_admin \"info\", profile_admin \"profile\", subscribed_admin \"subscribed\", included_admin \"included\", include_sources_admin \"id\", substr(user_admin,instr(user_admin,'\@')+1) \"dom\"  FROM admin_table WHERE (list_admin = %s AND robot_admin = %s AND role_admin = %s ) ORDER BY \"dom\"", 
+	    $statement = sprintf "SELECT user_admin \"email\", comment_admin \"gecos\", reception_admin \"reception\", visibility_admin \"visibility\", %s \"date\", %s \"update_date\", info_admin \"info\", profile_admin \"profile\", subscribed_admin \"subscribed\", included_admin \"included\", include_sources_admin \"id\", substr(user_admin,instr(user_admin,'\@')+1) \"dom\"  FROM admin_table WHERE (list_admin = %s AND robot_admin = %s AND role_admin = %s ) ORDER BY dom", 
 	    $date_field, 
 	    $update_field, 
 	    $dbh->quote($name), 
@@ -5951,16 +5951,16 @@ sub get_first_admin_user {
 	    $dbh->quote($role);
 	    
 	}elsif ($sortby eq 'email') {
-	    $statement .= " ORDER BY \"email\"";
+	    $statement .= " ORDER BY email";
 	    
 	}elsif ($sortby eq 'date') {
-	    $statement .= " ORDER BY \"date\" DESC";
+	    $statement .= " ORDER BY date DESC";
 	    
 	}elsif ($sortby eq 'sources') {
-	    $statement .= " ORDER BY \"subscribed\" DESC,\"id\"";
+	    $statement .= " ORDER BY subscribed DESC,id";
 	    
 	}elsif ($sortby eq 'name') {
-	    $statement .= " ORDER BY \"gecos\"";
+	    $statement .= " ORDER BY gecos";
 	} 
 	
 	## Sybase
@@ -5975,7 +5975,7 @@ sub get_first_admin_user {
 	$dbh->quote($role);
 	## SORT BY
 	if ($sortby eq 'domain') {
-	    $statement = sprintf "SELECT user_admin \"email\", comment_admin \"gecos\", reception_admin \"reception\", visibility_admin \"visibility\", %s \"date\", %s \"update_date\", info_admin \"info\", profile_admin \"profile\", subscribed_admin \"subscribed\", included_admin \"included\", include_sources_admin \"id\", substring(user_admin,charindex('\@',user_admin)+1,100) \"dom\" FROM admin_table WHERE (list_admin = %s  AND robot_admin = %s AND role_admin = %s) ORDER BY \"dom\"", 
+	    $statement = sprintf "SELECT user_admin \"email\", comment_admin \"gecos\", reception_admin \"reception\", visibility_admin \"visibility\", %s \"date\", %s \"update_date\", info_admin \"info\", profile_admin \"profile\", subscribed_admin \"subscribed\", included_admin \"included\", include_sources_admin \"id\", substring(user_admin,charindex('\@',user_admin)+1,100) \"dom\" FROM admin_table WHERE (list_admin = %s  AND robot_admin = %s AND role_admin = %s) ORDER BY dom", 
 	    $date_field, 
 	    $update_field, 
 	    $dbh->quote($name), 
@@ -5983,16 +5983,16 @@ sub get_first_admin_user {
 	    $dbh->quote($role);
 	    
 	}elsif ($sortby eq 'email') {
-	    $statement .= " ORDER BY \"email\"";
+	    $statement .= " ORDER BY email";
 	    
 	}elsif ($sortby eq 'date') {
-	    $statement .= " ORDER BY \"date\" DESC";
+	    $statement .= " ORDER BY date DESC";
 	    
 	}elsif ($sortby eq 'sources') {
-	    $statement .= " ORDER BY \"subscribed\" DESC,\"id\"";
+	    $statement .= " ORDER BY subscribed DESC,id";
 	    
 	}elsif ($sortby eq 'name') {
-	    $statement .= " ORDER BY \"gecos\"";
+	    $statement .= " ORDER BY gecos";
 	}
 	
 	
@@ -6026,7 +6026,7 @@ sub get_first_admin_user {
 	    $statement .= ' ORDER BY date DESC';
 	    
 	}elsif ($sortby eq 'sources') {
-	    $statement .= " ORDER BY \"subscribed\" DESC,\"id\"";
+	    $statement .= " ORDER BY subscribed DESC,id";
 	    
 	}elsif ($sortby eq 'name') {
 	    $statement .= ' ORDER BY gecos';
@@ -6067,7 +6067,7 @@ sub get_first_admin_user {
 	    $statement .= ' ORDER BY date DESC';
 	    
 	}elsif ($sortby eq 'sources') {
-	    $statement .= " ORDER BY \"subscribed\" DESC,\"id\"";
+	    $statement .= " ORDER BY subscribed DESC,id";
 	    
 	}elsif ($sortby eq 'name') {
 	    $statement .= ' ORDER BY gecos';
@@ -6107,7 +6107,7 @@ sub get_first_admin_user {
 	    $statement .= ' ORDER BY date DESC';
 	    
 	}elsif ($sortby eq 'sources') {
-	    $statement .= " ORDER BY \"subscribed\" DESC,\"id\"";
+	    $statement .= " ORDER BY subscribed DESC,id";
 	    
 	}elsif ($sortby eq 'email') {
 	    $statement .= ' ORDER BY gecos';
