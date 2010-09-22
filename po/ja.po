@@ -12,7 +12,7 @@ msgstr ""
 "Project-Id-Version: Sympa-5.4.6, Sympa-6.0.3, Sympa-6.1b.4\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2002-07-16 17:27+0800\n"
-"PO-Revision-Date: 2010-08-17 07:03+0200\n"
+"PO-Revision-Date: 2010-09-21 03:20+0200\n"
 "Last-Translator: IKEDA Soji <hatuka@nezumi.nu>\n"
 "Language-Team: 日本語\n"
 "MIME-Version: 1.0\n"
@@ -910,7 +910,6 @@ msgid "You should remove list aliases manually"
 msgstr "リストのエイリアスは手作業で削除しなければなりません"
 
 #: ../web_tt2/compose_mail.tt2:5
-#, fuzzy
 msgid "Sendind a message to the list"
 msgstr "リストへメッセージを送る"
 
@@ -4233,9 +4232,8 @@ msgid "Disable topics subscription"
 msgstr "トピックへの読者登録をやめる"
 
 #: ../web_tt2/suboptions.tt2:51
-#, fuzzy
 msgid "Only possible in \"normal\" receiving mode"
-msgstr "「直接受け取る」(normal) 受け取りモードのときだけできます。"
+msgstr "「直接受け取る」(normal) 受け取りモードのときだけできます"
 
 #. (list)
 #: ../web_tt2/subrequest.tt2:28 ../web_tt2/subrequest.tt2:7
@@ -4410,9 +4408,8 @@ msgid "to:"
 msgstr "から"
 
 #: ../web_tt2/viewlogs.tt2:73
-#, fuzzy
 msgid "ex: 24/05/2006"
-msgstr "例: 24-05-2006"
+msgstr "例: 24/05/2006"
 
 #: ../web_tt2/viewlogs.tt2:75
 msgid "Search by type:"
@@ -6441,15 +6438,11 @@ msgstr "参考: %4 <%3> から \"%2\" メーリングリスト宛ての %1"
 
 #. (who,gecos,list.name)
 #: ../mail_tt2/listowner_notification.tt2:28
-#, fuzzy
 msgid ""
 "WARNING: %1 %2 failed to unsubscribe from %3 because his address was not "
 "found in the list.\n"
 "(You may help this person)."
-msgstr ""
-"注意: %2 <%1> は %3 の登録解除ができませんでした。アドレスがリストになかった"
-"ためです。次のリンクを使えば、読者一覧から似た電子メールアドレスを探して、こ"
-"の人を助けてあげることができるかもしれません。"
+msgstr "注意: %2 <%1> は %3 の登録解除ができませんでした。アドレスがリストになかったためです (助けてあげましょう)。"
 
 #. (list.name)
 #: ../mail_tt2/listowner_notification.tt2:31
@@ -7603,7 +7596,6 @@ msgid "restricted to subscribers with previous md5 authentication"
 msgstr "パスワードで本人確認できた読者のみ"
 
 #: ../src/etc/scenari/send.privatekeyandeditorkeyonly:1
-#, fuzzy
 msgid "Moderated, for subscribers and moderators"
 msgstr "投稿はモデレーションを受ける (読者もモデレータ自身も)"
 
@@ -7616,7 +7608,6 @@ msgid "Private, confirmation for non subscribers"
 msgstr "読者限定。読者以外は投稿を確認"
 
 #: ../src/etc/scenari/send.private_smime:1
-#, fuzzy
 msgid "restricted to subscribers check smime signature"
 msgstr "S/MIME署名で確認された読者のみ"
 
