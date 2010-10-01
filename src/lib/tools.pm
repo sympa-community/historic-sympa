@@ -128,7 +128,7 @@ sub _create_xss_parser {
 						AllowSrc        => 1,
 						AllowHref       => 1,
 						AllowRelURL     => 1,
-						EscapeFiltered  => 1,
+						EscapeFiltered  => 0,
 						Rules => {
 						    '*' => {
 							src => '^http://'.&Conf::get_robot_conf($parameters{'robot'},'http_host'),
@@ -510,15 +510,36 @@ sub get_list_list_tpl {
 }
 
 
-#copy a directory and it's content
+#copy a directory and its content
 sub copy_dir {
     my $dir1 = shift;
     my $dir2 = shift;
-    &do_log('info','copy_dir %1 %2',$dir1,$dir2);
+    &do_log('debug','Copy directory %s to %s',$dir1,$dir2);
 
-    return undef unless (-d $dir1) ;
-    #return undef unless (-d $dir2) ;
+    unless (-d $dir1){
+	&do_log('err',"Directory source '%s' doesn't exist. Copy impossible",$dir1);
+	return undef;
+    }
     return (&File::Copy::Recursive::dircopy($dir1,$dir2)) ;
+}
+
+#delete a directory and its content
+sub del_dir {
+    my $dir = shift;
+    &do_log('debug','del_dir %s',$dir);
+    
+    if(opendir DIR, $dir){
+	for (readdir DIR) {
+	    next if /^\.{1,2}$/;
+	    my $path = "$dir/$_";
+	    unlink $path if -f $path;
+	    del_dir($path) if -d $path;
+	}
+	closedir DIR;
+	unless(rmdir $dir) {&do_log('err','Unable to delete directory %s: $!',$dir);}
+    }else{
+	&do_log('err','Unable to open directory %s to delete the files it contains: $!',$dir);
+    }
 }
 
 #to be used before creating a file in a directory that may not exist already. 
