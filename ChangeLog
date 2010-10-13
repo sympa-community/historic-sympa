@@ -1,4 +1,158 @@
 ------------------------------------------------------------------------
+r6713 | sympa-authors | 2010-10-13 15:57:09 +0200 (Wed, 13 Oct 2010) | 1 line
+Changed paths:
+   M /branches/sympa-6.1-branch/po/ar.po
+   M /branches/sympa-6.1-branch/po/bg.po
+   M /branches/sympa-6.1-branch/po/br.po
+   M /branches/sympa-6.1-branch/po/ca.po
+   M /branches/sympa-6.1-branch/po/cs.po
+   M /branches/sympa-6.1-branch/po/de.po
+   M /branches/sympa-6.1-branch/po/el.po
+   M /branches/sympa-6.1-branch/po/es.po
+   M /branches/sympa-6.1-branch/po/et.po
+   M /branches/sympa-6.1-branch/po/eu.po
+   M /branches/sympa-6.1-branch/po/fi.po
+   M /branches/sympa-6.1-branch/po/fr.po
+   M /branches/sympa-6.1-branch/po/hu.po
+   M /branches/sympa-6.1-branch/po/id.po
+   M /branches/sympa-6.1-branch/po/it.po
+   M /branches/sympa-6.1-branch/po/ja.po
+   M /branches/sympa-6.1-branch/po/ko.po
+   M /branches/sympa-6.1-branch/po/la.po
+   M /branches/sympa-6.1-branch/po/ml.po
+   M /branches/sympa-6.1-branch/po/nb_NO.po
+   M /branches/sympa-6.1-branch/po/nl.po
+   M /branches/sympa-6.1-branch/po/oc.po
+   M /branches/sympa-6.1-branch/po/pl.po
+   M /branches/sympa-6.1-branch/po/pt.po
+   M /branches/sympa-6.1-branch/po/pt_BR.po
+   M /branches/sympa-6.1-branch/po/ro.po
+   M /branches/sympa-6.1-branch/po/ru.po
+   M /branches/sympa-6.1-branch/po/sv.po
+   M /branches/sympa-6.1-branch/po/tr.po
+   M /branches/sympa-6.1-branch/po/vi.po
+   M /branches/sympa-6.1-branch/po/zh_CN.po
+   M /branches/sympa-6.1-branch/po/zh_TW.po
+
+[-feature]Committing updated catalogues from Pootle
+------------------------------------------------------------------------
+r6712 | sympa-authors | 2010-10-13 15:56:21 +0200 (Wed, 13 Oct 2010) | 1 line
+Changed paths:
+   M /branches/sympa-6.1-branch/configure.ac
+   M /branches/sympa-6.1-branch/po/sympa.pot
+
+[-feature]Committing latest translations from Pootle
+------------------------------------------------------------------------
+r6711 | sympa-authors | 2010-10-13 15:23:39 +0200 (Wed, 13 Oct 2010) | 1 line
+Changed paths:
+   M /branches/sympa-6.1-branch/po/ar.po
+   M /branches/sympa-6.1-branch/po/bg.po
+   M /branches/sympa-6.1-branch/po/br.po
+   M /branches/sympa-6.1-branch/po/ca.po
+   M /branches/sympa-6.1-branch/po/cs.po
+   M /branches/sympa-6.1-branch/po/de.po
+   M /branches/sympa-6.1-branch/po/el.po
+   M /branches/sympa-6.1-branch/po/en_US.po
+   M /branches/sympa-6.1-branch/po/es.po
+   M /branches/sympa-6.1-branch/po/et.po
+   M /branches/sympa-6.1-branch/po/eu.po
+   M /branches/sympa-6.1-branch/po/fi.po
+   M /branches/sympa-6.1-branch/po/fr.po
+   M /branches/sympa-6.1-branch/po/hu.po
+   M /branches/sympa-6.1-branch/po/id.po
+   M /branches/sympa-6.1-branch/po/it.po
+   M /branches/sympa-6.1-branch/po/ja.po
+   M /branches/sympa-6.1-branch/po/ko.po
+   M /branches/sympa-6.1-branch/po/la.po
+   M /branches/sympa-6.1-branch/po/ml.po
+   M /branches/sympa-6.1-branch/po/nb_NO.po
+   M /branches/sympa-6.1-branch/po/nl.po
+   M /branches/sympa-6.1-branch/po/oc.po
+   M /branches/sympa-6.1-branch/po/pl.po
+   M /branches/sympa-6.1-branch/po/pt.po
+   M /branches/sympa-6.1-branch/po/pt_BR.po
+   M /branches/sympa-6.1-branch/po/ro.po
+   M /branches/sympa-6.1-branch/po/ru.po
+   M /branches/sympa-6.1-branch/po/sv.po
+   M /branches/sympa-6.1-branch/po/tr.po
+   M /branches/sympa-6.1-branch/po/vi.po
+   M /branches/sympa-6.1-branch/po/zh_CN.po
+   M /branches/sympa-6.1-branch/po/zh_TW.po
+   M /branches/sympa-6.1-branch/po-wwsympa/ar.po
+   M /branches/sympa-6.1-branch/po-wwsympa/bg.po
+   M /branches/sympa-6.1-branch/po-wwsympa/br.po
+   M /branches/sympa-6.1-branch/po-wwsympa/cs.po
+   M /branches/sympa-6.1-branch/po-wwsympa/de.po
+   M /branches/sympa-6.1-branch/po-wwsympa/el.po
+   M /branches/sympa-6.1-branch/po-wwsympa/en_US.po
+   M /branches/sympa-6.1-branch/po-wwsympa/es.po
+   M /branches/sympa-6.1-branch/po-wwsympa/et.po
+   M /branches/sympa-6.1-branch/po-wwsympa/eu.po
+   M /branches/sympa-6.1-branch/po-wwsympa/fi.po
+   M /branches/sympa-6.1-branch/po-wwsympa/fr.po
+   M /branches/sympa-6.1-branch/po-wwsympa/hu.po
+   M /branches/sympa-6.1-branch/po-wwsympa/id.po
+   M /branches/sympa-6.1-branch/po-wwsympa/it.po
+   M /branches/sympa-6.1-branch/po-wwsympa/ja.po
+   M /branches/sympa-6.1-branch/po-wwsympa/nb_NO.po
+   M /branches/sympa-6.1-branch/po-wwsympa/nl.po
+   M /branches/sympa-6.1-branch/po-wwsympa/oc.po
+   M /branches/sympa-6.1-branch/po-wwsympa/pl.po
+   M /branches/sympa-6.1-branch/po-wwsympa/pt.po
+   M /branches/sympa-6.1-branch/po-wwsympa/pt_BR.po
+   M /branches/sympa-6.1-branch/po-wwsympa/ro.po
+   M /branches/sympa-6.1-branch/po-wwsympa/ru.po
+   M /branches/sympa-6.1-branch/po-wwsympa/sv.po
+   M /branches/sympa-6.1-branch/po-wwsympa/tr.po
+   M /branches/sympa-6.1-branch/po-wwsympa/vi.po
+   M /branches/sympa-6.1-branch/po-wwsympa/zh_CN.po
+
+[-feature] Retrieving latest translations from Pootle.
+------------------------------------------------------------------------
+r6710 | serge.aumont | 2010-10-13 14:59:26 +0200 (Wed, 13 Oct 2010) | 2 lines
+Changed paths:
+   M /branches/sympa-6.1-branch/wwsympa/wwsympa.fcgi.in
+
+[bug] more about CAS bug reported by Vincent Bonamy
+
+------------------------------------------------------------------------
+r6707 | serge.aumont | 2010-10-13 10:48:49 +0200 (Wed, 13 Oct 2010) | 2 lines
+Changed paths:
+   M /branches/sympa-6.1-branch/wwsympa/wwsympa.fcgi.in
+
+[bug] CAS auth bug, reported by Vincent Bonamy
+
+------------------------------------------------------------------------
+r6703 | david.verdin | 2010-10-08 15:25:15 +0200 (Fri, 08 Oct 2010) | 2 lines
+Changed paths:
+   M /branches/sympa-6.1-branch/po/POTFILES.in
+
+[bug][Submitted by G. Rousse, INRIA]This patch fix the list of source files with extractable strings, avoiding an error when running 'autoreconf' from svn checkout because generated files don't exist at this stage.
+
+------------------------------------------------------------------------
+r6702 | david.verdin | 2010-10-01 16:02:48 +0200 (Fri, 01 Oct 2010) | 2 lines
+Changed paths:
+   M /branches/sympa-6.1-branch/src/lib/Message.pm
+   M /branches/sympa-6.1-branch/src/lib/tools.pm
+   M /branches/sympa-6.1-branch/wwsympa/archived.pl.in
+
+[feature] When a message is archived or when the archives are rebuilt, the files produced by archived have any HTML they contain escaped by HTML::StripScript. the original message files are left unchanged.
+
+------------------------------------------------------------------------
+r6701 | david.verdin | 2010-09-24 11:08:28 +0200 (Fri, 24 Sep 2010) | 2 lines
+Changed paths:
+   M /branches/sympa-6.1-branch/src/lib/confdef.pm
+
+[bug] The 'custom_robot_parameter' was considered mandatory, making Sympa to fail starting when it was not set. Fixed by specifying that it is optional.
+
+------------------------------------------------------------------------
+r6699 | sympa-authors | 2010-09-22 10:39:30 +0200 (Wed, 22 Sep 2010) | 1 line
+Changed paths:
+   M /branches/sympa-6.1-branch/ChangeLog
+   M /branches/sympa-6.1-branch/NEWS
+
+[-release]Preparing version 6.1b.7
+------------------------------------------------------------------------
 r6698 | sympa-authors | 2010-09-22 09:10:29 +0200 (Wed, 22 Sep 2010) | 1 line
 Changed paths:
    M /branches/sympa-6.1-branch/po/ar.po
