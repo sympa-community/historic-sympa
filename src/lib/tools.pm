@@ -2504,7 +2504,9 @@ sub remove_pid {
     ## Then the pidfile contains a list of space-separated PIDs on a single line
     if($options->{'multiple_process'}){
 	unless (open(PFILE, $pidfile)) {
-	    fatal_err('Could not open %s, exiting', $pidfile);
+	   # fatal_err('Could not open %s, exiting', $pidfile);
+	    do_log('err','Could not open %s to remove pid %s, ', $pidfile,$pid);
+	    return undef;
 	}
 	my $previous_pid = <PFILE>; chomp $previous_pid;
 	close PFILE;
@@ -2520,7 +2522,8 @@ sub remove_pid {
 	}else{
 	    if(-f $pidfile){
 		unless (open(PFILE, ">$pidfile")) {
-		    fatal_err('Could not open %s, exiting', $pidfile);
+		    &do_log('err', "Failed to open $pidfile: %s", $!);
+		    return undef;
 		}
 		print PFILE "$previous_pid\n";
 		close(PFILE);
@@ -3340,6 +3343,58 @@ sub lower_version {
     return 0;
 }
 
+sub add_in_blacklist {
+    my $entry = shift;
+    my $robot = shift;
+    my $list =shift;
+
+    &do_log('info',"tools::add_in_blacklist(%s,%s,%s)",$entry,$robot,$list->{'name'});
+    $entry = lc($entry);
+    chomp $entry;
+
+    # robot blacklist not yet availible 
+    unless ($list) {
+	 &do_log('info',"tools::add_in_blacklist: robot blacklist not yet availible, missing list parameter");
+	 return undef;
+    }
+    unless (($entry)&&($robot)) {
+	 &do_log('info',"tools::add_in_blacklist:  missing parameters");
+	 return undef;
+    }
+    if ($entry =~ /\*.*\*/) {
+	&do_log('info',"tools::add_in_blacklist: incorrect parameter $entry");
+	return undef;
+    }
+    my $dir = $list->{'dir'}.'/search_filters';
+    unless ((-d $dir) || mkdir ($dir, 0755)) {
+	&do_log('info','do_blacklist : unable to create dir %s',$dir);
+	return undef;
+    }
+    my $file = $dir.'/blacklist.txt';
+    
+    if (open BLACKLIST, "$file"){
+	while(<BLACKLIST>) {
+	    next if (/^\s*$/o || /^[\#\;]/o);
+	    my $regexp= $_ ;
+	    chomp $regexp;
+	    $regexp =~ s/\*/.*/ ; 
+	    $regexp = '^'.$regexp.'$';
+	    if ($entry =~ /$regexp/i) { 
+		&do_log('notice','do_blacklist : %s already in blacklist(%s)',$entry,$_);
+		return 0;
+	    }	
+	}
+	close BLACKLIST;
+    }   
+    unless (open BLACKLIST, ">> $file"){
+	&do_log('info','do_blacklist : append to file %s',$file);
+	return undef;
+    }
+    printf BLACKLIST "$entry\n";
+    close BLACKLIST;
+
+}
+
 sub LOCK_SH {1};
 sub LOCK_EX {2};
 sub LOCK_NB {4};
@@ -3350,7 +3405,7 @@ sub lock {
     my $lock_file = shift;
     my $mode = shift; ## read or write
     
-    my $operation;
+    my $operation; # 
     my $open_mode;
 
     if ($mode eq 'read') {
@@ -3410,58 +3465,6 @@ sub lock {
     }
 
     return \*FH;
-}
-
-sub add_in_blacklist {
-    my $entry = shift;
-    my $robot = shift;
-    my $list =shift;
-
-    &do_log('info',"tools::add_in_blacklist(%s,%s,%s)",$entry,$robot,$list->{'name'});
-    $entry = lc($entry);
-    chomp $entry;
-
-    # robot blacklist not yet availible 
-    unless ($list) {
-	 &do_log('info',"tools::add_in_blacklist: robot blacklist not yet availible, missing list parameter");
-	 return undef;
-    }
-    unless (($entry)&&($robot)) {
-	 &do_log('info',"tools::add_in_blacklist:  missing parameters");
-	 return undef;
-    }
-    if ($entry =~ /\*.*\*/) {
-	&do_log('info',"tools::add_in_blacklist: incorrect parameter $entry");
-	return undef;
-    }
-    my $dir = $list->{'dir'}.'/search_filters';
-    unless ((-d $dir) || mkdir ($dir, 0755)) {
-	&do_log('info','do_blacklist : unable to create dir %s',$dir);
-	return undef;
-    }
-    my $file = $dir.'/blacklist.txt';
-    
-    if (open BLACKLIST, "$file"){
-	while(<BLACKLIST>) {
-	    next if (/^\s*$/o || /^[\#\;]/o);
-	    my $regexp= $_ ;
-	    chomp $regexp;
-	    $regexp =~ s/\*/.*/ ; 
-	    $regexp = '^'.$regexp.'$';
-	    if ($entry =~ /$regexp/i) { 
-		&do_log('notice','do_blacklist : %s already in blacklist(%s)',$entry,$_);
-		return 0;
-	    }	
-	}
-	close BLACKLIST;
-    }   
-    unless (open BLACKLIST, ">> $file"){
-	&do_log('info','do_blacklist : append to file %s',$file);
-	return undef;
-    }
-    printf BLACKLIST "$entry\n";
-    close BLACKLIST;
-
 }
 
 ## unlock a file 
@@ -3864,7 +3867,8 @@ sub get_number_of_pids {
     my $pidfile = shift;
     my $p_count = 0;
     unless (open(PFILE, $pidfile)){
-	fatal_err('Could not open %s, exiting', $pidfile);
+	&do_log('err', "unable to open pidfile %s:%s",$pidfile,$!);
+	return undef;
     }
     while (<PFILE>){
 	$p_count += &count_numbers_in_string($_);

@@ -180,8 +180,12 @@ while (!$end) {
 	    
 	    ## Start new processes if at least 'bulk_fork_threshold' (sympa.conf parameter) in the bulkmailer_table table
 	    ## Only if no bulk child process is still running
-	    if((my $r_packets = &Bulk::there_is_too_much_remaining_packets()) && 
-	       !(&tools::get_number_of_pids($Conf::Conf{'pidfile_bulk'}) > 1)){
+	    my $number_of_pids = &tools::get_number_of_pids($Conf::Conf{'pidfile_bulk'});
+	    unless (defined($number_of_pids)){
+		&tools::write_pid($Conf::Conf{'pidfile_bulk'}, $$, $options);
+		$number_of_pids = &tools::get_number_of_pids($Conf::Conf{'pidfile_bulk'});
+	    }
+	    if((my $r_packets = &Bulk::there_is_too_much_remaining_packets()) && defined($number_of_pids) && ($number_of_pids <= 1) ){
 		
 		## disconnect from database before fork
 		## to prevent DB handlers to be shared by different processes
