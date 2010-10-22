@@ -199,6 +199,7 @@ while (!$end) {
 			    do_log('info', "Starting bulk child daemon, pid %s", $child_pid);
 			    # Saves the pid number
 			    &tools::write_pid($Conf::Conf{'pidfile_bulk'}, $child_pid, $options);
+			    sleep 1; 
 			}else{
 			    ## We're in a child bulk process
 			    $date_of_last_activity = time();
