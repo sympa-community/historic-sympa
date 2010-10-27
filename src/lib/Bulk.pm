@@ -269,8 +269,8 @@ sub merge_msg {
     }
     ## Get the Content-Type / Charset / Content-Transfer-encoding of a message
     my $type      = $entity->mime_type;
-    my $charset   = unmime $entity->head->mime_attr('content-type.charset');
-    my $encoding  = unmime $entity->head->mime_encoding;
+    my $charset   = &MIME::WordDecoder::unmime($entity->head->mime_attr('content-type.charset'));
+    my $encoding  = &MIME::WordDecoder::unmime($entity->head->mime_encoding);
 
     my $message_output;
     my $IO;
