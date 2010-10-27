@@ -280,10 +280,16 @@ sub merge_msg {
 	
 	if(defined $body){
 	    ## --------- Initial Charset to UTF-8 --------- ##
-	    unless($charset =~ /UTF-8/){
-		# Put the charset to UTF-8
-		Encode::from_to($body, $charset, 'UTF-8');
-	      }
+	    ## We use find_encoding() to ensure that's a valid charset
+	    if ($charset && ref Encode::find_encoding($charset)) { 
+		unless($charset =~ /UTF-8/){
+		    # Put the charset to UTF-8
+		    Encode::from_to($body, $charset, 'UTF-8');
+		  }       
+	    }else {
+		&do_log('err', "Incorrect charset '%s' ; cannot encode in this charset", $charset);
+	    }
+
 	    ## PARSAGE ##
 	    
 	    &merge_data('rcpt' => $rcpt,
@@ -296,11 +302,16 @@ sub merge_msg {
 			); 
 	    $body = $message_output;
 
-	    unless($charset =~ /UTF-8/){
-		# Put the charset to the initial
-		Encode::from_to($body, 'UTF-8',$charset);
-	      }
-	    
+	    ## We use find_encoding() to ensure that's a valid charset
+	    if ($charset && ref Encode::find_encoding($charset)) { 
+		unless($charset =~ /UTF-8/){
+		    # Put the charset to UTF-8
+			Encode::from_to($body, 'UTF-8',$charset);
+		  }       
+	    }else {
+		&do_log('err', "Incorrect charset '%s' ; cannot encode in this charset", $charset);
+	    }
+
 	    # Write the new body in the entity
 	    unless($IO = $entity->bodyhandle->open("w") || die "open body: $!"){
 		&do_log('err', "Can't open Entity");
