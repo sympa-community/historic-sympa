@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: hu\n"
 "POT-Creation-Date: 2002-07-16 17:27+0800\n"
-"PO-Revision-Date: 2010-09-20 17:58+0200\n"
+"PO-Revision-Date: 2010-11-04 21:18+0100\n"
 "Last-Translator: Andras Bendzsak <sibike@sch.bme.hu>\n"
 "Language-Team: Magyar\n"
 "MIME-Version: 1.0\n"
@@ -7016,7 +7016,7 @@ msgstr ""
 #. (list.name)
 #: ../mail_tt2/listowner_notification.tt2:63
 msgid "Subscription request to list %1"
-msgstr "Leiratkozási kérelem a(z) %1 listán"
+msgstr "Feliratkozási kérelem a(z) %1 listán"
 
 # nlsref 8,3
 #. (list.name)-)
