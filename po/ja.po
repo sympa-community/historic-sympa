@@ -12,7 +12,7 @@ msgstr ""
 "Project-Id-Version: Sympa-5.4.6, Sympa-6.0.3, Sympa-6.1b.4\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2002-07-16 17:27+0800\n"
-"PO-Revision-Date: 2010-09-29 05:40+0200\n"
+"PO-Revision-Date: 2010-11-10 08:40+0100\n"
 "Last-Translator: IKEDA Soji <hatuka@nezumi.nu>\n"
 "Language-Team: 日本語\n"
 "MIME-Version: 1.0\n"
@@ -4799,7 +4799,7 @@ msgstr "探す期間"
 #. (date_to_formated)
 #. This entry is a date/time format
 #. Check the strftime manpage for format details : http://docs.freebsd.org/info/gawk/gawk.info.Time_Functions.html
-#: ../web_tt2/viewlogs.tt2:113 ../wwsympa/wwsympa.fcgi.in:16154
+#: ../web_tt2/viewlogs.tt2:113 ../wwsympa/wwsympa.fcgi.in:16155
 msgid "%d %b %Y %H:%M:%S"
 msgstr "%Y年%m月%d日 %H:%M:%S"
 
@@ -6434,7 +6434,7 @@ msgstr "リストシステム管理者: サーバ内部のエラー"
 #: ../mail_tt2/listmaster_notification.tt2:282
 #: ../mail_tt2/listmaster_notification.tt2:294
 msgid " User %1 has encountered an internal server error"
-msgstr "%1 がサーバ内部のエラーに遭いました"
+msgstr "%1 がサーバ内部のエラーに遭いました。"
 
 #: ../mail_tt2/listmaster_notification.tt2:295
 #: ../mail_tt2/listmaster_notification.tt2:366
@@ -7183,9 +7183,7 @@ msgstr "メッセージのゆくえ"
 #. (list.name)
 #: ../mail_tt2/message_report.tt2:99
 msgid "Your message for list %1 has been forwarded to editor(s)"
-msgstr ""
-"あなたが %1 メーリングリスト宛てに送ったメッセージを、 \n"
-"モデレータ (たち) に回送しました"
+msgstr "あなたが %1 メーリングリスト宛てに送ったメッセージを、モデレータ (たち) に回送しました。"
 
 #. (key,list.name)
 #: ../mail_tt2/message_report.tt2:103
@@ -7255,9 +7253,7 @@ msgstr "保留メッセージを見るには、次のリンクをクリックし
 msgid ""
 "To tag the message in list %1 for the appropriate topic, please use the "
 "following link:"
-msgstr ""
-"添付の %1 リスト宛てメッセージにトピックの印をつけるには、 \n"
-"次のページへ行ってください:"
+msgstr "%1 メーリングリストリスト宛てのメッセージを添付しました。これにトピックの印をつけるには、次のページへ行ってください:"
 
 #. (list.name)
 #: ../mail_tt2/moderate.tt2:29
@@ -7323,9 +7319,7 @@ msgstr "%1 メーリングリスト読者登録確認"
 #. (list.name,list.host,user.email,user.password)
 #: ../mail_tt2/remind.tt2:4
 msgid "Your are subscriber of list %1@%2 with  email %3"
-msgstr ""
-"あなたは、メーリングリスト %1@%2 に、電子メールアドレス \n"
-"%3 で読者登録しています"
+msgstr "あなたは、メーリングリスト %1@%2 に、電子メールアドレス %3 で読者登録しています。"
 
 #. (user.email,list.name,list.host)
 #: ../mail_tt2/removed.tt2:6
@@ -8434,7 +8428,7 @@ msgstr ""
 
 #. This entry is a date/time format
 #. Check the strftime manpage for format details : http://docs.freebsd.org/info/gawk/gawk.info.Time_Functions.html
-#: ../src/lib/Bulk.pm:387
+#: ../src/lib/Bulk.pm:376
 msgid "%d %b %Y  %H:%M"
 msgstr "%Y/%m/%d %H:%M"
 
@@ -9169,8 +9163,8 @@ msgstr "%Y年%m月%d日(%a)"
 #: ../wwsympa/wwsympa.fcgi.in:10960 ../wwsympa/wwsympa.fcgi.in:11029
 #: ../wwsympa/wwsympa.fcgi.in:11231 ../wwsympa/wwsympa.fcgi.in:11578
 #: ../wwsympa/wwsympa.fcgi.in:15017 ../wwsympa/wwsympa.fcgi.in:15024
-#: ../wwsympa/wwsympa.fcgi.in:15726 ../wwsympa/wwsympa.fcgi.in:16504
-#: ../wwsympa/wwsympa.fcgi.in:16505 ../wwsympa/wwsympa.fcgi.in:4266
+#: ../wwsympa/wwsympa.fcgi.in:15727 ../wwsympa/wwsympa.fcgi.in:16505
+#: ../wwsympa/wwsympa.fcgi.in:16506 ../wwsympa/wwsympa.fcgi.in:4266
 #: ../wwsympa/wwsympa.fcgi.in:4324 ../wwsympa/wwsympa.fcgi.in:4895
 #: ../wwsympa/wwsympa.fcgi.in:4896 ../wwsympa/wwsympa.fcgi.in:6392
 #: ../wwsympa/wwsympa.fcgi.in:7411 ../wwsympa/wwsympa.fcgi.in:7954
@@ -9302,7 +9296,7 @@ msgstr "%y/%m/%d %H:%M"
 
 #. This entry is a date/time format
 #. Check the strftime manpage for format details : http://docs.freebsd.org/info/gawk/gawk.info.Time_Functions.html
-#: ../wwsympa/wwsympa.fcgi.in:16099 ../wwsympa/wwsympa.fcgi.in:16100
+#: ../wwsympa/wwsympa.fcgi.in:16100 ../wwsympa/wwsympa.fcgi.in:16101
 msgid "%Y-%m-%d-%H-%M-%S"
 msgstr ""
 
