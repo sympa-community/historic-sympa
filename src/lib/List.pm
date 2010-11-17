@@ -2626,8 +2626,8 @@ sub distribute_msg {
 	
  	## Encode subject using initial charset
 
-	## Don't try to encode the subject if it was not originaly encoded non-ASCII.
-	if ($message->{'subject_charset'} or $subject_field !~ /[^\x00-\x7E]/) {
+	## Don't try to encode the subject if it was not originaly encoded.
+	if ($message->{'subject_charset'}) {
 	    $subject_field = MIME::EncWords::encode_mimewords([
 							       [Encode::decode('utf8', $before_tag), $message->{'subject_charset'}],
 							       [Encode::decode('utf8', '['.$parsed_tag.'] '), &Language::GetCharset()],
