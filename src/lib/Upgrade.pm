@@ -843,7 +843,7 @@ sub upgrade {
 
 		&do_log('notice','List %s ; changing user_data_source from file to include2...', $list->{'name'});
 		
-		my @users = &List::_load_users_file("$list->{'dir'}/subscribers");
+		my @users = &List::_load_list_members_file("$list->{'dir'}/subscribers");
 		
 		$list->{'admin'}{'user_data_source'} = 'include2';
 		$list->{'total'} = 0;
@@ -864,7 +864,7 @@ sub upgrade {
 
 		&do_log('notice','List %s ; changing user_data_source from database to include2...', $list->{'name'});
 
-		unless ($list->update_user('*', {'subscribed' => 1})) {
+		unless ($list->update_list_member('*', {'subscribed' => 1})) {
 		    &do_log('err', 'Failed to update subscribed DB field');
 		}
 

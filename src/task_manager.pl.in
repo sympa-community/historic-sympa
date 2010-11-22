@@ -998,7 +998,7 @@ sub select_subs {
     my $list = $task->{'list_object'};
     
     if ( $list->{'admin'}{'user_data_source'} =~ /database|file|include2/) {
-        for ( my $user = $list->get_first_list_member(); $user; $user = $list->get_next_user() ) { 
+        for ( my $user = $list->get_first_list_member(); $user; $user = $list->get_next_list_member() ) { 
             push (@users, $user);
 	}
     }
@@ -1051,7 +1051,7 @@ sub delete_subs_cmd {
 	if ($action =~ /reject/i) {
 	    error ($task->{'filepath'}, "error in delete_subs command : deletion of $email not allowed");
 	} else {
-	    my $u = $list->delete_user ($email) if (!$log);
+	    my $u = $list->delete_list_member ($email) if (!$log);
 	    &do_log ('notice', "--> $email deleted");
 	    $selection{$email} = {};
 	}
@@ -1229,7 +1229,7 @@ sub purge_user_table {
 	    }
 	    
 	    ## Subscribers
-	    for (my $user = $list->get_first_list_member(); $user; $user = $list->get_next_user()) {
+	    for (my $user = $list->get_first_list_member(); $user; $user = $list->get_next_list_member()) {
 		$known_people{$user->{'email'}} = 1;
 	    }
 	}
@@ -1344,12 +1344,12 @@ sub purge_orphan_bounces {
 	     if ($u->{'last_bounce'} < $refdate) {
 		 my $email = $u->{'email'};
 
-		 unless ( $list->is_user($email) ) {
+		 unless ( $list->is_list_member($email) ) {
 		     do_log('info','expire_bounce: %s not subscribed', $email);
 		     next;
 		 }
 
-		 unless( $list->update_user($email, {'bounce' => 'NULL'},{'bounce_address' => 'NULL'})) {
+		 unless( $list->update_list_member($email, {'bounce' => 'NULL'},{'bounce_address' => 'NULL'})) {
 		     do_log('info','expire_bounce: failed update database for %s', $email);
 		     next;
 		 }
@@ -1586,7 +1586,7 @@ sub eval_bouncers {
 	    my $score = &get_score($user_ref,$list_traffic) || 0;
 	    
 	    ## copying score into DataBase
-	    unless ($list->update_user($user_ref->{'email'},{'score' => $score }) ) {
+	    unless ($list->update_list_member($user_ref->{'email'},{'score' => $score }) ) {
 		&do_log('err','Task eval_bouncers :Error while updating DB for user %s',$user_ref->{'email'});
 		next;
 	    }

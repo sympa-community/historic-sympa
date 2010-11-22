@@ -280,15 +280,15 @@ sub init_passwd {
     
     my ($passwd, $user);
     
-    if (&List::is_user_db($email)) {
-	$user = &List::get_user_db($email);
+    if (&List::is_global_user($email)) {
+	$user = &List::get_global_user($email);
 	
 	$passwd = $user->{'password'};
 	
 	unless ($passwd) {
 	    $passwd = &new_passwd();
 	    
-	    unless ( &List::update_user_db($email,
+	    unless ( &List::update_global_user($email,
 					   {'password' => $passwd,
 					    'lang' => $user->{'lang'} || $data->{'lang'}} )) {
 		&report::reject_report_web('intern','update_user_db_failed',{'user'=>$email},'','',$email,$robot);

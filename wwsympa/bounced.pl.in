@@ -309,7 +309,7 @@ while (!$end) {
 		$action = $result->{'action'} if (ref($result) eq 'HASH');
 		
 		if ($action =~ /do_it/i) {
-		    if ($list->is_user($who)) {
+		    if ($list->is_list_member($who)) {
 			my $u = $list->delete_list_member('users' => [$who], 'exclude' =>' 1');
 			do_log ('notice',"$who has been removed from $listname because welcome message bounced");
 			&Log::db_log({'robot' => $list->{'domain'},'list' => $list->{'name'},'action' => 'del',
@@ -652,7 +652,7 @@ while (!$end) {
 			my $action;
 			$action = $result->{'action'} if (ref($result) eq 'HASH');		    
 			if ($action =~ /do_it/i) {
-			    if ($list->is_user($original_rcpt)) {
+			    if ($list->is_list_member($original_rcpt)) {
 				my $u = $list->delete_list_member('users' => [$original_rcpt], 'exclude' =>' 1');
 				
 				do_log ('notice',"$original_rcpt has been removed from %s because abuse feedback report",$list->name);	
@@ -744,7 +744,7 @@ while (!$end) {
 	    if (! -d $bounce_dir) {
 		unless (mkdir $bounce_dir, 0777) {
 		    &List::send_notify_to_listmaster('intern_error',$Conf{'domain'},{'error' => "Failed to list create bounce directory $bounce_dir"});
-		    &do_log('err', 'Could not create %s: %s bounced die, check bounce-path in wwsympa.conf', $bounce_dir, $!);
+		    &do_log('err', 'Could not create %s: %s bounced die, check bounce_path in wwsympa.conf', $bounce_dir, $!);
 		    exit;
 		} 
 	    }
@@ -875,7 +875,7 @@ sub update_subscriber_bounce_history {
     my $first = my $last = time;
     my $count = 0;
     
-    my $user = $list->get_subscriber($bouncefor);
+    my $user = $list->get_list_member($bouncefor);
     
     unless ($user) {
 	&do_log ('notice', 'Subscriber not found in list %s : %s', $list->{'name'}, $bouncefor); 		    
@@ -889,13 +889,13 @@ sub update_subscriber_bounce_history {
     if ($rcpt ne $bouncefor) {
 	&do_log('notice','Bouncing address identified with VERP : %s / %s', $rcpt, $bouncefor);
 	&do_log ('debug','&update_subscribe (%s, bounce-> %s %s %s %s,bounce_address->%s)',$bouncefor,$first,$last,$count,$status,$rcpt); 
-	$list->update_user($bouncefor,{'bounce' => "$first $last $count $status",
+	$list->update_list_member($bouncefor,{'bounce' => "$first $last $count $status",
 				       'bounce_address' => $rcpt});
 	&Log::db_log({'robot' => $list->{'domain'},'list' => $list->{'name'},'action' => 'get_bounce','parameters' => "address=$rcpt",
 		      'target_email' => $bouncefor,'msg_id' => '','status' => 'error','error_type' => $status,
 		      'daemon' => 'bounced'});
     }else{
-	$list->update_user($bouncefor,{'bounce' => "$first $last $count $status"});
+	$list->update_list_member($bouncefor,{'bounce' => "$first $last $count $status"});
 	&do_log('notice','Received bounce for email address %s, list %s', $bouncefor, $list->{'name'});
 	&Log::db_log({'robot' => $list->{'domain'},'list' => $list->{'name'},'action' => 'get_bounce',
 		      'target_email' => $bouncefor,'msg_id' => '','status' => 'error','error_type' => $status,

@@ -119,12 +119,12 @@ Returns a default option of the list for subscription.
 
 Returns the number of subscribers to the list.
 
-=item get_user_db ( USER )
+=item get_global_user ( USER )
 
 Returns a hash with the information regarding the indicated
 user.
 
-=item get_subscriber ( USER )
+=item get_list_member ( USER )
 
 Returns a subscriber of the list.
 
@@ -136,11 +136,11 @@ Return an admin user of the list with predefined role
 
 Returns a hash to the first user on the list.
 
-=item get_first_admin_user ( ROLE )
+=item get_first_list_admin ( ROLE )
 
 Returns a hash to the first admin user with predefined role on the list.
 
-=item get_next_user ()
+=item get_next_list_member ()
 
 Returns a hash to the next users, until we reach the end of
 the list.
@@ -150,11 +150,11 @@ the list.
 Returns a hash to the next admin users, until we reach the end of
 the list.
 
-=item update_user ( USER, HASHPTR )
+=item update_list_member ( USER, HASHPTR )
 
 Sets the new values given in the hash for the user.
 
-=item update_admin_user ( USER, ROLE, HASHPTR )
+=item update_list_admin ( USER, ROLE, HASHPTR )
 
 Sets the new values given in the hash for the admin user.
 
@@ -168,7 +168,7 @@ entries.
 Adds a new admin user to the list. May overwrite existing
 entries.
 
-=item is_user ( USER )
+=item is_list_member ( USER )
 
 Returns true if the indicated user is member of the list.
  
@@ -1841,7 +1841,7 @@ sub dump {
 
     my $user_file_name = "$self->{'dir'}/subscribers.db.dump";
 
-    unless ($self->_save_users_file($user_file_name)) {
+    unless ($self->_save_list_members_file($user_file_name)) {
 	&do_log('err', 'Failed to save file %s', $user_file_name);
 	return undef;
     }
@@ -1883,7 +1883,7 @@ sub save_config {
 				  'date' => (gettext_strftime "%d %b %Y at %H:%M:%S", localtime(time)),
 				  };
 
-    unless (&_save_admin_file($config_file_name, $old_config_file_name, $self->{'admin'})) {
+    unless (&_save_list_config_file($config_file_name, $old_config_file_name, $self->{'admin'})) {
 	&do_log('info', 'unable to save config file %s', $config_file_name);
 	$lock->unlock();
 	return undef;
@@ -1996,7 +1996,7 @@ sub load {
 
     }elsif ($self->{'name'} ne $name || $time_config > $self->{'mtime'}->[0] ||
 	    $options->{'reload_config'}) {	
-	$admin = _load_admin_file($self->{'dir'}, $self->{'domain'}, 'config');
+	$admin = _load_list_config_file($self->{'dir'}, $self->{'domain'}, 'config');
 
 	## Get a shared lock on config file first 
 	my $lock = new Lock ($self->{'dir'}.'/config');
@@ -2054,79 +2054,7 @@ sub load {
      } 
 
     $self->{'as_x509_cert'} = 1  if ((-r "$self->{'dir'}/cert.pem") || (-r "$self->{'dir'}/cert.pem.enc"));
-    
-    if ($self->{'admin'}{'user_data_source'} eq 'database') {
-	
-    }elsif($self->{'admin'}->{'user_data_source'} eq 'file') { 
-	
-	$time_subscribers = (stat("$self->{'dir'}/subscribers"))[9] if (-f "$self->{'dir'}/subscribers");
-
-	## Touch subscribers file if not exists
-	unless ( -r "$self->{'dir'}/subscribers") {
-	    open L, ">$self->{'dir'}/subscribers" or return undef;
-	    close L;
-	    do_log('info','No subscribers file, creating %s',"$self->{'dir'}/subscribers");
-	}
-	
-	if ($self->{'name'} ne $name || $time_subscribers > $self->{'mtime'}[1]) {
-	    $users = _load_users("$self->{'dir'}/subscribers");
-	    unless (defined $users) {
-		do_log('err', 'Could not load subscribers for list %s', $self->{'name'});
-		#return undef;
-	    }
-	    $m2 = $time_subscribers;
-	}
-
-    }elsif ($self->{'admin'}{'user_data_source'} eq 'include2') {
-	## currently no check
-
-    }elsif($self->{'admin'}{'user_data_source'} eq 'include') {
-
-    ## include other subscribers as defined in include directives (list|ldap|sql|file|owners|editors)
-	unless ( $self->has_include_data_sources()) {
-	    &do_log('err', 'Include paragraph missing in configuration file %s', "$self->{'dir'}/config");
-#	    return undef;
-	}
-
-	$time_subscribers = (stat("$self->{'dir'}/subscribers.db"))[9] if (-f "$self->{'dir'}/subscribers.db");
-
-
-	## Update 'subscriber.db'
-	if ( ## 'config' is more recent than 'subscribers.db'
-	     ($time_config > $time_subscribers) || 
-	     ## 'ttl'*2 is NOT over
-	     (time > ($time_subscribers + $self->{'admin'}{'ttl'} * 2)) ||
-	     ## 'ttl' is over AND not Web context
-	     ((time > ($time_subscribers + $self->{'admin'}{'ttl'})) &&
-	      !($ENV{'HTTP_HOST'} && (-f "$self->{'dir'}/subscribers.db")))) {
-	    
-	    $users = $self->_load_users_include("$self->{'dir'}/subscribers.db", 0);
-	    unless (defined $users) {
-		do_log('err', 'Could not load subscribers for list %s', $self->{'name'});
-		#return undef;
-	    }
-
-	    $m2 = time;
-	}elsif (## First new()
-		! $self->{'users'} ||
-		## 'subscribers.db' is more recent than $self->{'users'}
-		($time_subscribers > $self->{'mtime'}->[1])) {
-
-	    ## Use cache
-	    $users = $self->_load_users_include("$self->{'dir'}/subscribers.db", 1);
-
-	    unless (defined $users) {
-		return undef;
-	    }
-
-	    $m2 = $time_subscribers;
-	}
-	
-    }else { 
-	do_log('notice','Wrong value for user_data_source');
-	return undef;
-    }
-    
+       
     ## Load stats file if first new() or stats file changed
     my ($stats, $total);
     if (! $self->{'mtime'}[2] || ($time_stats > $self->{'mtime'}[2])) {
@@ -2163,7 +2091,7 @@ sub get_owners {
     my $owners = ();
 
     # owners are in the admin_table ; they might come from an include data source
-    for (my $owner = $self->get_first_admin_user('owner'); $owner; $owner = $self->get_next_list_admin()) {
+    for (my $owner = $self->get_first_list_admin('owner'); $owner; $owner = $self->get_next_list_admin()) {
 	push(@{$owners},$owner);
     } 
 
@@ -2191,7 +2119,7 @@ sub get_editors {
     my $editors = ();
 
     # editors are in the admin_table ; they might come from an include data source
-    for (my $editor = $self->get_first_admin_user('editor'); $editor; $editor = $self->get_next_list_admin()) {
+    for (my $editor = $self->get_first_list_admin('editor'); $editor; $editor = $self->get_next_list_admin()) {
 	push(@{$editors},$editor);
     } 
 
@@ -2638,8 +2566,8 @@ sub distribute_msg {
 	
  	## Encode subject using initial charset
 
-	## Don't try to encode the subject if it was not originaly encoded non-ASCII.
-	if ($message->{'subject_charset'} or $subject_field !~ /[^\x00-\x7E]/) {
+	## Don't try to encode the subject if it was not originaly encoded.
+	if ($message->{'subject_charset'}) {
 	    $subject_field = MIME::EncWords::encode_mimewords([
 							       [Encode::decode('utf8', $before_tag), $message->{'subject_charset'}],
 							       [Encode::decode('utf8', '['.$parsed_tag.'] '), &Language::GetCharset()],
@@ -2810,12 +2738,12 @@ sub send_msg_digest {
     my (@list_of_mail);
 
     ## Create the list of subscribers in various digest modes
-    for (my $user = $self->get_first_list_member(); $user; $user = $self->get_next_user()) {
+    for (my $user = $self->get_first_list_member(); $user; $user = $self->get_next_list_member()) {
 	my $options;
 	$options->{'email'} = $user->{'email'};
 	$options->{'name'} = $self->{'name'};
 	$options->{'domain'} = $self->{'domain'};
-	my $user_data = &get_subscriber_no_object($options);
+	my $user_data = &get_list_member_no_object($options);
 	## test to know if the rcpt suspended her subscription for this list
 	## if yes, don't send the message
 	if ($user_data->{'suspend'} eq '1'){
@@ -2997,7 +2925,7 @@ sub send_global_file {
     my $data = &tools::dup_var($context);
 
     unless ($data->{'user'}) {
-	$data->{'user'} = &get_user_db($who) unless ($options->{'skip_db'});
+	$data->{'user'} = &get_global_user($who) unless ($options->{'skip_db'});
 	$data->{'user'}{'email'} = $who unless (defined $data->{'user'});;
     }
     unless ($data->{'user'}{'lang'}) {
@@ -3095,13 +3023,13 @@ sub send_file {
     ## Unless multiple recipients
     unless (ref ($who)) {
 	unless ($data->{'user'}) {
-	    unless ($data->{'user'} = &get_user_db($who)) {
+	    unless ($data->{'user'} = &get_global_user($who)) {
 		$data->{'user'}{'email'} = $who;
 		$data->{'user'}{'lang'} = $self->{'admin'}{'lang'};
 	    }
 	}
 	
-	$data->{'subscriber'} = $self->get_subscriber($who);
+	$data->{'subscriber'} = $self->get_list_member($who);
 	
 	if ($data->{'subscriber'}) {
 	    $data->{'subscriber'}{'date'} = gettext_strftime "%d %b %Y", localtime($data->{'subscriber'}{'date'});
@@ -3268,7 +3196,7 @@ sub send_msg {
     my $mixed = ($message->{'msg'}->head->get('Content-Type') =~ /multipart\/mixed/i);
     my $alternative = ($message->{'msg'}->head->get('Content-Type') =~ /multipart\/alternative/i);
  
-    for ( my $user = $self->get_first_list_member(); $user; $user = $self->get_next_user() ){
+    for ( my $user = $self->get_first_list_member(); $user; $user = $self->get_next_list_member() ){
 	unless ($user->{'email'}) {
 	    &do_log('err','Skipping user with no email address in list %s', $name);
 	    next;
@@ -3277,7 +3205,7 @@ sub send_msg {
 	$options->{'email'} = $user->{'email'};
 	$options->{'name'} = $name;
 	$options->{'domain'} = $host;
-	my $user_data = &get_subscriber_no_object($options);
+	my $user_data = &get_list_member_no_object($options);
 	## test to know if the rcpt suspended her subscription for this list
 	## if yes, don't send the message
 	if ($user_data->{'suspend'} eq '1'){
@@ -3515,8 +3443,8 @@ sub send_msg {
 	my @selected_tabrcpt;
 	my @possible_verptabrcpt;
 	if ($self->is_there_msg_topic()){
-	    @selected_tabrcpt = $self->select_subscribers_for_topic($new_message->get_topic(),$available_rcpt->{$array_name});
-	    @possible_verptabrcpt = $self->select_subscribers_for_topic($new_message->get_topic(),$available_verp_rcpt->{$array_name});
+	    @selected_tabrcpt = $self->select_list_members_for_topic($new_message->get_topic(),$available_rcpt->{$array_name});
+	    @possible_verptabrcpt = $self->select_list_members_for_topic($new_message->get_topic(),$available_verp_rcpt->{$array_name});
 	} else {
 	    @selected_tabrcpt = @{$available_rcpt->{$array_name}};
 	    @possible_verptabrcpt = @{$available_verp_rcpt->{$array_name}};
@@ -4714,8 +4642,8 @@ sub delete_list_member {
 	    
 	}
 
-	$list_cache{'is_user'}{$self->{'domain'}}{$name}{$who} = undef;    
-	$list_cache{'get_subscriber'}{$self->{'domain'}}{$name}{$who} = undef;    
+	$list_cache{'is_list_member'}{$self->{'domain'}}{$name}{$who} = undef;    
+	$list_cache{'get_list_member'}{$self->{'domain'}}{$name}{$who} = undef;    
 	
 	## Delete record in SUBSCRIBER
 	$statement = sprintf "DELETE FROM subscriber_table WHERE (user_subscriber=%s AND list_subscriber=%s AND robot_subscriber=%s)",
@@ -4854,9 +4782,9 @@ sub get_total {
 }
 
 ## Returns a hash for a given user
-sub get_user_db {
+sub get_global_user {
     my $who = &tools::clean_email(shift);
-    do_log('debug2', 'List::get_user_db(%s)', $who);
+    do_log('debug2', '(%s)', $who);
 
     my $statement;
  
@@ -5072,7 +5000,7 @@ sub insert_delete_exclusion {
 	$options->{'email'} = $email;
 	$options->{'name'} = $list;
 	$options->{'domain'} = $robot;
-	my $user = &get_subscriber_no_object($options);
+	my $user = &get_list_member_no_object($options);
 	my $date = time;
 
 	if ($user->{'included'} eq '1') {
@@ -5170,14 +5098,14 @@ sub get_exclusion {
 }
 
 ######################################################################
-###  get_subscriber                                                  #
+###  get_list_member                                                  #
 ## Returns a subscriber of the list.                                 #
 ######################################################################
-sub get_subscriber {
+sub get_list_member {
     my  $self= shift;
     my  $email = &tools::clean_email(shift);
     
-    do_log('debug2', 'List::get_subscriber(%s)', $email);
+    do_log('debug2', '(%s)', $email);
 
     my $name = $self->{'name'};
     my $statement;
@@ -5185,8 +5113,8 @@ sub get_subscriber {
     my $update_field = sprintf $date_format{'read'}{$Conf::Conf{'db_type'}}, 'update_subscriber', 'update_subscriber';	
     
     ## Use session cache
-    if (defined $list_cache{'get_subscriber'}{$self->{'domain'}}{$name}{$email}) {
-	return $list_cache{'get_subscriber'}{$self->{'domain'}}{$name}{$email};
+    if (defined $list_cache{'get_list_member'}{$self->{'domain'}}{$name}{$email}) {
+	return $list_cache{'get_list_member'}{$self->{'domain'}}{$name}{$email};
     }
 
     my $options;
@@ -5194,7 +5122,7 @@ sub get_subscriber {
     $options->{'name'} = $self->{'name'};
     $options->{'domain'} = $self->{'domain'};
 
-    my $user = &get_subscriber_no_object($options);
+    my $user = &get_list_member_no_object($options);
 
     unless($user){
 	do_log('err','Unable to retrieve information from database for user %s', $email);
@@ -5206,7 +5134,7 @@ sub get_subscriber {
     $user->{'subscribed'} = 1 if ($self->{'admin'}{'user_data_source'} eq 'database');	
 
     ## Set session cache
-    $list_cache{'get_subscriber'}{$self->{'domain'}}{$self->{'name'}}{$email} = $user;
+    $list_cache{'get_list_member'}{$self->{'domain'}}{$self->{'name'}}{$email} = $user;
 
     return $user;
 }
@@ -5414,7 +5342,7 @@ sub find_list_member_by_pattern_no_object {
 }
 
 ######################################################################
-###  get_subscriber_no_object                                        #
+###  get_list_member_no_object                                        #
 ## Get details regarding a subscriber.                               #
 # IN:                                                                #
 #   - a single reference to a hash with the following keys:          #
@@ -5426,9 +5354,9 @@ sub find_list_member_by_pattern_no_object {
 #   - a hash containing the user details otherwise                   #
 ######################################################################
 
-sub get_subscriber_no_object {
+sub get_list_member_no_object {
     my $options = shift;
-    &do_log('debug2', 'List::get_subscriber_no_object(%s, %s, %s)', $options->{'name'}, $options->{'email'}, $options->{'domain'});
+    &do_log('debug2', '(%s, %s, %s)', $options->{'name'}, $options->{'email'}, $options->{'domain'});
 
     my $name = $options->{'name'};
     
@@ -5438,8 +5366,8 @@ sub get_subscriber_no_object {
     my $update_field = sprintf $date_format{'read'}{$Conf::Conf{'db_type'}}, 'update_subscriber', 'update_subscriber';	
     
     ## Use session cache
-    if (defined $list_cache{'get_subscriber'}{$options->{'domain'}}{$name}{$email}) {
-	return $list_cache{'get_subscriber'}{$options->{'domain'}}{$name}{$email};
+    if (defined $list_cache{'get_list_member'}{$options->{'domain'}}{$name}{$email}) {
+	return $list_cache{'get_list_member'}{$options->{'domain'}}{$name}{$email};
     }
 
     ## Check database connection
@@ -5490,57 +5418,9 @@ sub get_subscriber_no_object {
 
     $sth = pop @sth_stack;
     ## Set session cache
-    $list_cache{'get_subscriber'}{$options->{'domain'}}{$name}{$email} = $user;
+    $list_cache{'get_list_member'}{$options->{'domain'}}{$name}{$email} = $user;
     return $user;
 }
-
-## Returns an array of all users in User table hash for a given user
-sub get_subscriber_by_bounce_address {
-
-    my  $self= shift;
-    my  $bounce_address = &tools::clean_email(shift);
-    
-    do_log('debug2', 'List::get_subscriber_by_bounce_address (%s)', $bounce_address);
-
-    return undef unless $bounce_address;
-
-    my $statement;
-    my @users;
-    my @subscribers;
- 
-    unless ($List::use_db) {
-	&do_log('info', 'Sympa not setup to use DBI');
-	return undef;
-    }
-
-    my $listname = $self->{'name'};
-    my $robot = $self->{'domain'};
-
-    ## Check database connection
-    unless ($dbh and $dbh->ping) {
-	return undef unless &db_connect();
-    }
-
-    $statement = sprintf "SELECT user_subscriber AS email, bounce_address_subscriber AS bounce_address FROM subscriber_table WHERE (list_subscriber=%s AND robot_subscriber=%s AND bounce_address_subscriber LIKE %s",$dbh->quote($listname),$dbh->quote($robot),$dbh->quote($bounce_address);
-    
-    push @sth_stack, $sth;
-
-    unless ($sth = $dbh->prepare($statement)) {
-	do_log('err','Unable to prepare SQL statement : %s', $dbh->errstr);
-	return undef;
-    }
-    unless ($sth->execute) {
-	do_log('err','Unable to execute SQL statement "%s" : %s', $statement, $dbh->errstr);
-	return undef;
-    }
-    while (my $subscriber = $sth->fetchrow_hashref('NAME_lc')) {
-	push @subscribers, $subscriber;
-    }
-    $sth->finish();
-    $sth = pop @sth_stack;
-    return @subscribers;
-}
-
 
 ## Returns an admin user of the list.
 sub get_list_admin {
@@ -6230,9 +6110,9 @@ sub get_first_list_admin {
 }
     
 ## Loop for all subsequent users.
-sub get_next_user {
+sub get_next_list_member {
     my $self = shift;
-    do_log('debug2', 'List::get_next_user');
+    do_log('debug2', '');
 
     unless (defined $sth) {
 	&do_log('err', 'No handle defined, get_first_list_member(%s) was not run', $self->{'name'});
@@ -6499,9 +6379,9 @@ sub get_total_bouncing {
 }
 
 ## Is the person in user table (db only)
-sub is_user_db {
+sub is_global_user {
    my $who = &tools::clean_email(pop);
-   do_log('debug3', 'List::is_user_db(%s)', $who);
+   do_log('debug3', '(%s)', $who);
 
    return undef unless ($who);
 
@@ -6541,10 +6421,10 @@ sub is_user_db {
 }
 
 ## Is the indicated person a subscriber to the list?
-sub is_user {
+sub is_list_member {
     my ($self, $who) = @_;
     $who = &tools::clean_email($who);
-    do_log('debug3', 'List::is_user(%s)', $who);
+    do_log('debug3', '(%s)', $who);
     
     return undef unless ($self && $who);
     
@@ -6552,9 +6432,9 @@ sub is_user {
     my $name = $self->{'name'};
     
     ## Use cache
-    if (defined $list_cache{'is_user'}{$self->{'domain'}}{$name}{$who}) {
-	# &do_log('debug3', 'Use cache(%s,%s): %s', $name, $who, $list_cache{'is_user'}{$self->{'domain'}}{$name}{$who});
-	return $list_cache{'is_user'}{$self->{'domain'}}{$name}{$who};
+    if (defined $list_cache{'is_list_member'}{$self->{'domain'}}{$name}{$who}) {
+	# &do_log('debug3', 'Use cache(%s,%s): %s', $name, $who, $list_cache{'is_list_member'}{$self->{'domain'}}{$name}{$who});
+	return $list_cache{'is_list_member'}{$self->{'domain'}}{$name}{$who};
     }
     
     ## Check database connection
@@ -6584,15 +6464,15 @@ sub is_user {
     $sth = pop @sth_stack;
     
     ## Set cache
-    $list_cache{'is_user'}{$self->{'domain'}}{$name}{$who} = $is_user;
+    $list_cache{'is_list_member'}{$self->{'domain'}}{$name}{$who} = $is_user;
     
     return $is_user;
 }
 
 ## Sets new values for the given user (except gecos)
-sub update_user {
+sub update_list_member {
     my($self, $who, $values) = @_;
-    do_log('debug2', 'List::update_user(%s)', $who);
+    do_log('debug2', '(%s)', $who);
     $who = &tools::clean_email($who);    
 
     my ($field, $value);
@@ -6661,7 +6541,7 @@ sub update_user {
     ## custom attributes
     if (defined $Conf::Conf{'custom_attribute'}){
 	foreach my $f (sort keys %{$Conf::Conf{'custom_attribute'}}){
-	    do_log('debug2', "List::update_user custom_attribute id: $Conf::Conf{'custom_attribute'}{id} name: $Conf::Conf{'custom_attribute'}{name} type: $Conf::Conf{'custom_attribute'}{type} ");
+	    do_log('debug2', "custom_attribute id: $Conf::Conf{'custom_attribute'}{id} name: $Conf::Conf{'custom_attribute'}{name} type: $Conf::Conf{'custom_attribute'}{type} ");
 	    	
 	}
     }
@@ -6747,16 +6627,16 @@ sub update_user {
     }
     
     ## Reset session cache
-    $list_cache{'get_subscriber'}{$self->{'domain'}}{$name}{$who} = undef;
+    $list_cache{'get_list_member'}{$self->{'domain'}}{$name}{$who} = undef;
     
     return 1;
 }
 
 
 ## Sets new values for the given admin user (except gecos)
-sub update_admin_user {
+sub update_list_admin {
     my($self, $who,$role, $values) = @_;
-    do_log('debug2', 'List::update_admin_user(%s,%s)', $role, $who); 
+    do_log('debug2', '(%s,%s)', $role, $who); 
     $who = &tools::clean_email($who);    
 
     my ($field, $value);
@@ -6881,9 +6761,9 @@ sub update_admin_user {
 
 
 ## Sets new values for the given user in the Database
-sub update_user_db {
+sub update_global_user {
     my($who, $values) = @_;
-    do_log('debug', 'List::update_user_db(%s)', $who);
+    do_log('debug', '(%s)', $who);
 
     $who = &tools::clean_email($who);
 
@@ -6945,7 +6825,7 @@ sub update_user_db {
     $statement = sprintf "UPDATE user_table SET %s WHERE (email_user=%s)"
 	    , join(',', @set_list), $dbh->quote($who); 
     
-    do_log('debug3', 'List::update_user_db()   statement : %s', $statement);
+    do_log('debug3', 'statement : %s', $statement);
     unless ($dbh->do($statement)) {
 	do_log('err','Unable to execute SQL statement "%s" : %s', $statement, $dbh->errstr);
 	return undef;
@@ -6972,7 +6852,7 @@ sub add_global_user {
     
     return undef unless (my $who = &tools::clean_email($values->{'email'}));
     
-    return undef if (is_user_db($who));
+    return undef if (is_global_user($who));
     
     ## mapping between var and field names
     my %map_field = ( email => 'email_user',
@@ -7058,7 +6938,7 @@ sub add_list_member {
 	    $new_user->{'password'} = &tools::crypt_password($new_user->{'password'});
 	}
 	
-	$list_cache{'is_user'}{$self->{'domain'}}{$name}{$who} = undef;
+	$list_cache{'is_list_member'}{$self->{'domain'}}{$name}{$who} = undef;
 	
 	my $statement;
 	
@@ -7070,7 +6950,7 @@ sub add_list_member {
 	
 	unless ($new_user->{'included'}) {
 	    ## Is the email in user table?
-	    if (! is_user_db($who)) {
+	    if (! is_global_user($who)) {
 		## Insert in User Table
 		$statement = sprintf "INSERT INTO user_table (email_user, gecos_user, lang_user, password_user) VALUES (%s,%s,%s,%s)",$dbh->quote($who), $dbh->quote($new_user->{'gecos'}), $dbh->quote($new_user->{'lang'}), $dbh->quote($new_user->{'password'});
 		
@@ -7157,7 +7037,7 @@ sub add_list_admin {
 	    
 	unless ($new_admin_user->{'included'}) {
 	    ## Is the email in user table?
-	    if (! is_user_db($who)) {
+	    if (! is_global_user($who)) {
 		## Insert in User Table
 		$statement = sprintf "INSERT INTO user_table (email_user, gecos_user, lang_user, password_user) VALUES (%s,%s,%s,%s)",$dbh->quote($who), $dbh->quote($new_admin_user->{'gecos'}), $dbh->quote($new_admin_user->{'lang'}), $dbh->quote($new_admin_user->{'password'});
 		
@@ -7292,7 +7172,7 @@ sub am_i {
     ## Use cache
     if (defined $list_cache{'am_i'}{$function}{$self->{'domain'}}{$self->{'name'}}{$who} &&
 	$function ne 'editor') { ## Defaults for editor may be owners) {
-	# &do_log('debug3', 'Use cache(%s,%s): %s', $name, $who, $list_cache{'is_user'}{$self->{'domain'}}{$name}{$who});
+	# &do_log('debug3', 'Use cache(%s,%s): %s', $name, $who, $list_cache{'is_list_member'}{$self->{'domain'}}{$name}{$who});
 	return $list_cache{'am_i'}{$function}{$self->{'domain'}}{$self->{'name'}}{$who};
     }
 
@@ -7500,7 +7380,7 @@ sub may_do {
        if ($arc_access =~ /^public$/io)  {
 	   return 1;
        }elsif ($arc_access =~ /^private$/io) {
-	   return 1 if ($self->is_user($who));
+	   return 1 if ($self->is_list_member($who));
 	   return $self->am_i('owner', $who);
        }elsif ($arc_access =~ /^owner$/io) {
 	   return $self->am_i('owner', $who);
@@ -7513,7 +7393,7 @@ sub may_do {
 	   if ($i =~ /^public$/io) {
 	       return 1;
 	   }elsif ($i =~ /^private$/io) {
-	       return 1 if ($self->is_user($who));
+	       return 1 if ($self->is_list_member($who));
 	       return $self->am_i('owner', $who);
 	   }elsif ($i =~ /^owner$/io) {
 	       return $self->am_i('owner', $who);
@@ -7525,7 +7405,7 @@ sub may_do {
    if ($action =~ /^send$/io) {
       if ($admin->{'send'} =~/^(private|privateorpublickey|privateoreditorkey)$/i) {
 
-         return undef unless ($self->is_user($who) || $self->am_i('owner', $who));
+         return undef unless ($self->is_list_member($who) || $self->am_i('owner', $who));
       }elsif ($admin->{'send'} =~ /^(editor|editorkey|privateoreditorkey)$/i) {
          return undef unless ($self->am_i('editor', $who));
       }elsif ($admin->{'send'} =~ /^(editorkeyonly|publickey|privatekey)$/io) {
@@ -7545,9 +7425,9 @@ sub may_do {
 
    if ($action =~ /^auth$/io) {
        if ($admin->{'send'} =~ /^(privatekey)$/io) {
-	   return 1 if ($self->is_user($who) || $self->am_i('owner', $who));
+	   return 1 if ($self->is_list_member($who) || $self->am_i('owner', $who));
        } elsif ($admin->{'send'} =~ /^(privateorpublickey)$/io) {
-	   return 1 unless ($self->is_user($who) || $self->am_i('owner', $who));
+	   return 1 unless ($self->is_list_member($who) || $self->am_i('owner', $who));
        }elsif ($admin->{'send'} =~ /^(publickey)$/io) {
 	   return 1;
        }
@@ -7864,50 +7744,10 @@ sub _load_stats_file {
    return ($stats, $total, $last_sync, $last_sync_admin_user);
 }
 
-## Loads the list of subscribers as a tied hash
-sub _load_users {
-    my $file = shift;
-    do_log('debug2', 'List::_load_users(%s)', $file);
-
-    ## Create the in memory btree using DB_File.
-    my %users;
-    my @users_list = (&_load_users_file($file)) ;     
-    my $btree = new DB_File::BTREEINFO;
-    return undef unless ($btree);
-    $btree->{'compare'} = \&_compare_addresses;
-    $btree->{'cachesize'} = 200 * ( $#users_list + 1 ) ;
-    my $ref = tie %users, 'DB_File', undef, O_CREAT|O_RDWR, 0600, $btree;
-    return undef unless ($ref);
-
-    ## Counters.
-    my $total = 0;
-
-    foreach my $user ( @users_list ) {
-	my $email = $user->{'email'};
-	unless ($users{$email}) {
-	    $total++;
-	    $users{$email} = join("\n", %{$user});
-	    unless ( defined ( $users{$email} )) { 
-		# $btree->{'cachesize'} under-sized
-		&do_log('err', '_load_users : cachesise too small : (%d users)', $total);
-		return undef;  
-	    }
-	}
-    }
-
-    my $l = {
-	'ref'	=>	$ref,
-	'users'	=>	\%users,
-	'total'	=>	$total
-	};
-    
-    $l;
-}
-
 ## Loads the list of subscribers.
-sub _load_users_file {
+sub _load_list_members_file {
     my $file = shift;
-    do_log('debug2', 'List::_load_users_file(%s)', $file);
+    do_log('debug2', '(%s)', $file);
     
     ## Open the file and switch to paragraph mode.
     open(L, $file) || return undef;
@@ -8055,7 +7895,7 @@ sub _include_users_list {
     
     my $id = Datasource::_get_datasource_id($includelistname);
 
-    for (my $user = $includelist->get_first_list_member(); $user; $user = $includelist->get_next_user()) {
+    for (my $user = $includelist->get_first_list_member(); $user; $user = $includelist->get_next_list_member()) {
 	my %u;
 
 	## Check if user has already been included
@@ -8107,7 +7947,7 @@ sub _include_users_admin {
 	}
 	
 	foreach my $list (@$lists) {
-	    #my $admin = _load_admin_file($dir, $domain, 'config');
+	    #my $admin = _load_list_config_file($dir, $domain, 'config');
 	}
     }
 }
@@ -8624,162 +8464,7 @@ sub _include_users_sql {
 }
 
 ## Loads the list of subscribers from an external include source
-sub _load_users_include {
-    my $self = shift;
-    my $db_file = shift;
-    my $use_cache = shift;
-    my $name = $self->{'name'}; 
-    my $admin = $self->{'admin'};
-    my $dir = $self->{'dir'};
-    do_log('debug2', 'List::_load_users_include for list %s ; use_cache: %d',$name, $use_cache);
-
-    my (%users, $depend_on, $ref);
-    my $total = 0;
-
-    ## Create in memory btree using DB_File.
-    my $btree = new DB_File::BTREEINFO;
-    return undef unless ($btree);
-    $btree->{'compare'} = \&_compare_addresses;
-
-    if (!$use_cache && (-f $db_file)) {
-        rename $db_file, $db_file.'old';
-    }
-
-    unless ($use_cache) {
-	unless ($ref = tie %users, 'DB_File', $db_file, O_CREAT|O_RDWR, 0600, $btree) {
-	    &do_log('err', '(no cache) Could not tie to DB_File %s',$db_file);
-	    return undef;
-	}
-
-	## Lock DB_File
-	my $fd = $ref->fd;
-
-	unless (open DB_FH, "+<&$fd") {
-	    &do_log('err', 'Cannot open %s: %s', $db_file, $!);
-	    return undef;
-	}
-	unless (flock (DB_FH, LOCK_EX | LOCK_NB)) {
-	    &do_log('notice','Waiting for writing lock on %s', $db_file);
-	    unless (flock (DB_FH, LOCK_EX)) {
-		&do_log('err', 'Failed locking %s: %s', $db_file, $!);
-		return undef;
-	    }
-	}
-	&do_log('debug3', 'Got lock for writing on %s', $db_file);
-
-	foreach my $type ('include_list','include_remote_sympa_list','include_file','include_ldap_query','include_ldap_2level_query','include_sql_query','include_remote_file') {
-	    last unless (defined $total);
-	    
-	    foreach my $tmp_incl (@{$admin->{$type}}) {
-		my $included;
-		
-		## Work with a copy of admin hash branch to avoid including temporary variables into the actual admin hash.[bug #3182]
-		my $incl = &tools::dup_var($tmp_incl);
-
-		## get the list of users
-		if ($type eq 'include_sql_query') {
-		    $included = _include_users_sql(\%users, $incl, $admin->{'default_user_options'}, 'tied', $admin->{'sql_fetch_timeout'});
-		}elsif ($type eq 'include_ldap_query') {
-		    $included = _include_users_ldap(\%users, $incl, $admin->{'default_user_options'}, 'tied');
-		}elsif ($type eq 'include_ldap_2level_query') {
-		    my $result = _include_users_ldap_2level(\%users, $incl, $admin->{'default_user_options'}, 'tied');
-		    if (defined $result) {
-			$included = $result->{'total'};
-			if (defined $result->{'errors'}){
-			    &do_log('error', 'Errors occurred during the second LDAP passe for list %s, source "%s"', $self->{'name'}, );
-			}
-		    }else{
-			$included = undef;
-		    }
-		}elsif ($type eq 'include_list') {
-		    $depend_on->{$name} = 1 ;
-		    if (&_inclusion_loop ($name,$incl,$depend_on)) {
-			do_log('err','loop detection in list inclusion : could not include again %s in %s',$incl,$name);
-		    }else{
-			$depend_on->{$incl} = 1;
-			$included = _include_users_list (\%users, $incl, $self->{'domain'}, $admin->{'default_user_options'}, 'tied');
-
-		    }
-		}elsif ($type eq 'include_remote_sympa_list') {
-		    $included = $self->_include_users_remote_sympa_list(\%users, $incl, $dir,$admin->{'domain'},$admin->{'default_user_options'}, 'tied');
-		}elsif ($type eq 'include_file') {
-		    $included = _include_users_file (\%users, $incl, $admin->{'default_user_options'}, 'tied');
-		}elsif ($type eq 'include_remote_file') {
-		    $included = _include_users_remote_file (\%users, $incl, $admin->{'default_user_options'}, 'tied');
-		}
-		unless (defined $included) {
-		    &do_log('err', 'Inclusion %s failed in list %s', $type, $name);
-		    next;
-		}
-		
-		$total += $included;
-	    }
-	}
-  
-	## Unlock
-	$ref->sync;
-	flock(DB_FH,LOCK_UN);
-	&do_log('debug3', 'Release lock on %s', $db_file);
-	undef $ref;
-	untie %users;
-	close DB_FH;
-	
-	unless (defined $total) {
-	    if (-f $db_file.'old') {
-	        unlink $db_file;
-		rename $db_file.'old', $db_file;
-		$total = 0;
-	    }
-	}
-    }
-
-    unless ($ref = tie %users, 'DB_File', $db_file, O_CREAT|O_RDWR, 0600, $btree) {
-	&do_log('err', '(use cache) Could not tie to DB_File %s',$db_file);
-	return undef;
-    }
-
-    ## Lock DB_File
-    my $fd = $ref->fd;
-    unless (open DB_FH, "+<&$fd") {
-	&do_log('err', 'Cannot open %s: %s', $db_file, $!);
-	return undef;
-    }
-    unless (flock (DB_FH, LOCK_SH | LOCK_NB)) {
-	&do_log('notice','Waiting for reading lock on %s', $db_file);
-	unless (flock (DB_FH, LOCK_SH)) {
-	    &do_log('err', 'Failed locking %s: %s', $db_file, $!);
-	    return undef;
-	}
-    }
-    &do_log('debug3', 'Got lock for reading on %s', $db_file);
-
-    ## Unlock DB_file
-    flock(DB_FH,LOCK_UN);
-    &do_log('debug3', 'Release lock on %s', $db_file);
-    
-    ## Inclusion failed, clear cache
-    unless (defined $total) {
-	undef $ref;
-	#untie %users;
-	close DB_FH;
-	unlink $db_file;
-	return undef;
-    }
-
-    my $l = {	 'ref'    => $ref,
-		 'users'  => \%users
-	     };
-    $l->{'total'} = $total
-	if $total;
-
-    undef $ref;
-    #untie %users;
-    close DB_FH;
-    $l;
-}
-
-## Loads the list of subscribers from an external include source
-sub _load_users_include2 {
+sub _load_list_members_from_include {
     my $self = shift;
     my $name = $self->{'name'}; 
     my $admin = $self->{'admin'};
@@ -8863,12 +8548,12 @@ sub _load_users_include2 {
 }
 
 ## Loads the list of admin users from an external include source
-sub _load_admin_users_include {
+sub _load_list_admin_from_include {
     my $self = shift;
     my $role = shift;
     my $name = $self->{'name'};
    
-    &do_log('debug2', 'List::_load_admin_users_include(%s) for list %s',$role, $name); 
+    &do_log('debug2', '(%s) for list %s',$role, $name); 
 
     my (%admin_users, $depend_on, $ref);
     my $total = 0;
@@ -8888,7 +8573,7 @@ sub _load_admin_users_include {
       	my $include_file = &tools::get_filename('etc',{},"data_sources/$entry->{'source'}\.incl",$self->{'domain'},$self);
 
         unless (defined $include_file){
-	    &do_log('err', '_load_admin_users_include : the file %s.incl doesn\'t exist',$entry->{'source'});
+	    &do_log('err', 'the file %s.incl doesn\'t exist',$entry->{'source'});
 	    return undef;
 	}
 
@@ -8907,7 +8592,7 @@ sub _load_admin_users_include {
 		$parsing{'include_path'} = $include_path;
 		$include_admin_user = &_load_include_admin_user_file($self->{'domain'},$include_path,\%parsing);	
 	    } else {
-		&do_log('err', '_load_admin_users_include : errors to get path of the the file %s.incl',$entry->{'source'});
+		&do_log('err', 'errors to get path of the the file %s.incl',$entry->{'source'});
 		return undef;
 	    }
 	    
@@ -9169,13 +8854,13 @@ sub sync_include {
     my $errors_occurred=0;
 
     ## Load a hash with the old subscribers
-    for (my $user=$self->get_first_list_member(); $user; $user=$self->get_next_user()) {
+    for (my $user=$self->get_first_list_member(); $user; $user=$self->get_next_list_member()) {
 	$old_subscribers{lc($user->{'email'})} = $user;
 	
 	## User neither included nor subscribed = > set subscribed to 1 
 	unless ($old_subscribers{lc($user->{'email'})}{'included'} || $old_subscribers{lc($user->{'email'})}{'subscribed'}) {
 	    &do_log('notice','Update user %s neither included nor subscribed', $user->{'email'});
-	    unless( $self->update_user(lc($user->{'email'}),  {'update_date' => time,
+	    unless( $self->update_list_member(lc($user->{'email'}),  {'update_date' => time,
 							       'subscribed' => 1 }) ) {
 		&do_log('err', 'List:sync_include(%s): Failed to update %s', $name, lc($user->{'email'}));
 		next;
@@ -9189,7 +8874,7 @@ sub sync_include {
     ## Load a hash with the new subscriber list
     my $new_subscribers;
     unless ($option eq 'purge') {
-	my $result = $self->_load_users_include2();
+	my $result = $self->_load_list_members_from_include();
 	$new_subscribers = $result->{'users'};
 	my $tmp_errors = $result->{'errors'};
 	my @errors = @$tmp_errors;
@@ -9241,7 +8926,7 @@ sub sync_include {
 	    ## User is also subscribed, update DB entry
 	    if ($old_subscribers{$email}{'subscribed'}) {
 		&do_log('debug', 'List:sync_include: updating %s to list %s', $email, $name);
-		unless( $self->update_user($email,  {'update_date' => time,
+		unless( $self->update_list_member($email,  {'update_date' => time,
 						     'included' => 0,
 						     'id' => ''}) ) {
 		    &do_log('err', 'List:sync_include(%s): Failed to update %s',  $name, $email);
@@ -9286,7 +8971,7 @@ sub sync_include {
 	      foreach my $attribute ('id','gecos') {
 		if ($old_subscribers{$email}{$attribute} ne $new_subscribers->{$email}{$attribute}) {
 		  &do_log('debug', 'List:sync_include: updating %s to list %s', $email, $name);
-		  unless( $self->update_user($email,  {'update_date' => time,
+		  unless( $self->update_list_member($email,  {'update_date' => time,
 						       $attribute => $new_subscribers->{$email}{$attribute} }) ) {
 		    &do_log('err', 'List:sync_include(%s): Failed to update %s', $name, $email);
 		    next;
@@ -9297,7 +8982,7 @@ sub sync_include {
 		## User was already subscribed, update include_sources_subscriber in DB
 	    }else {
 		&do_log('debug', 'List:sync_include: updating %s to list %s', $email, $name);
-		unless( $self->update_user($email,  {'update_date' => time,
+		unless( $self->update_list_member($email,  {'update_date' => time,
 						     'included' => 1,
 						     'id' => $new_subscribers->{$email}{'id'} }) ) {
 		    &do_log('err', 'List:sync_include(%s): Failed to update %s',
@@ -9408,7 +9093,7 @@ sub sync_include_admin {
 	my $new_admin_users_config;
 	unless ($option eq 'purge') {
 	    
-	    $new_admin_users_include = $self->_load_admin_users_include($role);
+	    $new_admin_users_include = $self->_load_list_admin_from_include($role);
 	    
 	    ## If include sources were not available, do not update admin users
 	    ## Use DB cache instead
@@ -9420,7 +9105,7 @@ sub sync_include_admin {
 		return undef;
 	    }
 
-	    $new_admin_users_config = $self->_load_admin_users_config($role);
+	    $new_admin_users_config = $self->_load_list_admin_from_config($role);
 	    
 	    unless (defined $new_admin_users_config) {
 		&do_log('err', 'Could not get %ss from config for list %s', $role, $name);
@@ -9470,7 +9155,7 @@ sub sync_include_admin {
 			    &do_log('debug', 'List:sync_include_admin : updating %s %s to list %s',$role, $email, $name);
 			    $param_update->{'update_date'} = time;
 			    
-			    unless ($self->update_admin_user($email, $role,$param_update)) {
+			    unless ($self->update_list_admin($email, $role,$param_update)) {
 				&do_log('err', 'List:sync_include_admin(%s): Failed to update %s %s', $name,$role,$email);
 				next;
 			    }
@@ -9514,7 +9199,7 @@ sub sync_include_admin {
 			    &do_log('debug', 'List:sync_include_admin : updating %s %s to list %s', $role, $email, $name);
 			    $param_update->{'update_date'} = time;
 			    
-			    unless ($self->update_admin_user($email, $role,$param_update)) {
+			    unless ($self->update_list_admin($email, $role,$param_update)) {
 				&do_log('err', 'List:sync_include_admin(%s): Failed to update %s %s', $name, $role,$email);
 				next;
 			    }
@@ -9553,7 +9238,7 @@ sub sync_include_admin {
 			&do_log('debug', 'List:sync_include_admin : updating %s %s to list %s', $role, $email, $name);
 			$param_update->{'update_date'} = time;
 			
-			unless ($self->update_admin_user($email, $role,$param_update)) {
+			unless ($self->update_list_admin($email, $role,$param_update)) {
 			    &do_log('err', 'List:sync_include_admin(%s): Failed to update %s %s', $name, $role, $email);
 			    next;
 			}
@@ -9620,13 +9305,13 @@ sub sync_include_admin {
 }
 
 ## Load param admin users from the config of the list
-sub _load_admin_users_config {
+sub _load_list_admin_from_config {
     my $self = shift;
     my $role = shift; 
     my $name = $self->{'name'};
     my %admin_users;
 
-    &do_log('debug2', 'List::_load_admin_users_config(%s) for list %s',$role, $name);  
+    &do_log('debug2', '(%s) for list %s',$role, $name);  
 
     foreach my $entry (@{$self->{'admin'}{$role}}) {
 	my $email = lc($entry->{'email'});
@@ -9758,9 +9443,9 @@ sub _save_stats_file {
 }
 
 ## Writes the user list to disk
-sub _save_users_file {
+sub _save_list_members_file {
     my($self, $file) = @_;
-    do_log('debug3', 'List::_save_users_file(%s)', $file);
+    do_log('debug3', '(%s)', $file);
     
     my($k, $s);
     
@@ -9769,7 +9454,7 @@ sub _save_users_file {
     rename("$file", "$file.old");
     open SUB, "> $file" or return undef;
     
-    for ($s = $self->get_first_list_member(); $s; $s = $self->get_next_user()) {
+    for ($s = $self->get_first_list_member(); $s; $s = $self->get_next_list_member()) {
 	foreach $k ('date','update_date','email','gecos','reception','visibility') {
 	    printf SUB "%s %s\n", $k, $s->{$k} unless ($s->{$k} eq '');
 	    
@@ -10126,10 +9811,10 @@ sub get_which {
 		push @which, $list ;
 		
 		## Update cache
-		$list_cache{'is_user'}{$list->{'domain'}}{$l}{$email} = 1;
+		$list_cache{'is_list_member'}{$list->{'domain'}}{$l}{$email} = 1;
 	    }else {
 		## Update cache
-		$list_cache{'is_user'}{$list->{'domain'}}{$l}{$email} = 0;		    
+		$list_cache{'is_list_member'}{$list->{'domain'}}{$l}{$email} = 0;		    
 	    }
 	    
 	}elsif ($function eq 'owner') {
@@ -10807,9 +10492,9 @@ sub get_cert {
 }
 
 ## Load a config file of a list
-sub _load_admin_file {
+sub _load_list_config_file {
     my ($directory,$robot, $file) = @_;
-    do_log('debug3', 'List::_load_admin_file(%s, %s, %s)', $directory, $robot, $file);
+    do_log('debug3', '(%s, %s, %s)', $directory, $robot, $file);
 
     my $config_file = $directory.'/'.$file;
 
@@ -11133,9 +10818,9 @@ sub _load_admin_file {
 }
 
 ## Save a config file
-sub _save_admin_file {
+sub _save_list_config_file {
     my ($config_file, $old_config_file, $admin) = @_;
-    do_log('debug3', 'List::_save_admin_file(%s, %s, %s)', $config_file,$old_config_file, $admin);
+    do_log('debug3', '(%s, %s, %s)', $config_file,$old_config_file, $admin);
 
     unless (rename $config_file, $old_config_file) {
 	&do_log('notice', 'Cannot rename %s to %s', $config_file, $old_config_file);
@@ -11383,30 +11068,43 @@ sub compute_topic {
     }
 
     # getting string to parse
-    my $mail_string;
-
+    # We convert it to Unicode for case-ignore match with non-ASCII keywords.
+    my $mail_string = '';
     if ($self->{'admin'}{'msg_topic_keywords_apply_on'} eq 'subject'){
-	$mail_string = $msg->head->get('subject');
-
-    }elsif ($self->{'admin'}{'msg_topic_keywords_apply_on'} eq 'body'){
-	if (defined $msg->bodyhandle) {
-	    $mail_string = $msg->bodyhandle->as_string();
+	$mail_string = &MIME::EncWords::decode_mimewords($msg->head->get('subject'), Charset=>'_UNICODE_')."\n";
+    }
+    unless ($self->{'admin'}{'msg_topic_keywords_apply_on'} eq 'subject') {
+	# get bodies of any text/* parts, not digging nested subparts.
+	my @parts;
+	if ($msg->effective_type =~ /^(multipart|message)\//i) {
+	    @parts = $msg->parts();
+	} else {
+	    @parts = ($msg);
 	}
-
-	## Default : search in both subject and message body
-    }else {
-	$mail_string = $msg->head->get('subject');
-
-	if (defined $msg->bodyhandle) {
-	    $mail_string .= $msg->bodyhandle->as_string();
+	foreach my $part (@parts) {
+	    next unless $part->effective_type =~ /^text\//i;
+	    my $charset = $part->head->mime_attr("Content-Type.Charset");
+	    $charset = MIME::Charset->new($charset);
+	    if (defined $part->bodyhandle) {
+		my $body = $msg->bodyhandle->as_string();
+		my $converted;
+		eval {
+		    $converted = $charset->decode($body);
+		};
+		if ($@) {
+		    $converted = Encode::decode('US-ASCII', $body);
+		}
+		$mail_string .= $converted."\n";
+	    }
 	}
     }
 
     # parsing
     foreach my $keyw (keys %keywords) {
+	my $k = $keywords{$keyw};
+	$keyw = Encode::decode_utf8($keyw);
 	$keyw = &tools::escape_regexp($keyw);
 	if ($mail_string =~ /$keyw/i){
-	    my $k = $keywords{$keyw};
 	    $topic_hash{$k} = 1;
 	}
     }
@@ -11533,7 +11231,7 @@ sub load_msg_topic_file {
 
 
 ####################################################
-# modifying_msg_topic_for_subscribers()
+# modifying_msg_topic_for_list_members()
 ####################################################
 #  Deletes topics subscriber that does not exist anymore
 #  and send a notify to concerned subscribers.
@@ -11545,9 +11243,9 @@ sub load_msg_topic_file {
 # OUT : -0 if no subscriber topics have been deleted
 #       -1 if some subscribers topics have been deleted 
 ##################################################### 
-sub modifying_msg_topic_for_subscribers(){
+sub modifying_msg_topic_for_list_members(){
     my ($self,$new_msg_topic) = @_;
-    &do_log('debug3',"List::modifying_msg_topic_for_subscribers($self->{'name'}");
+    &do_log('debug3',"($self->{'name'}");
     my $deleted = 0;
 
     my @old_msg_topic_name;
@@ -11564,7 +11262,7 @@ sub modifying_msg_topic_for_subscribers(){
 
     if ($#{$msg_topic_changes->{'deleted'}} >= 0) {
 	
-	for (my $subscriber=$self->get_first_list_member(); $subscriber; $subscriber=$self->get_next_user()) {
+	for (my $subscriber=$self->get_first_list_member(); $subscriber; $subscriber=$self->get_next_list_member()) {
 	    
 	    if ($subscriber->{'reception'} eq 'mail') {
 		my $topics = &tools::diff_on_arrays($msg_topic_changes->{'deleted'},&tools::get_array_from_splitted_string($subscriber->{'topics'}));
@@ -11574,12 +11272,12 @@ sub modifying_msg_topic_for_subscribers(){
 		    unless ($self->send_notify_to_user('deleted_msg_topics',$subscriber->{'email'},
 						       {'del_topics' => $topics->{'intersection'},
 							'url' => $wwsympa_url.'/suboptions/'.$self->{'name'}})) {
-			&do_log('err',"List::modifying_msg_topic_for_subscribers($self->{'name'}) : impossible to send notify to user about 'deleted_msg_topics'");
+			&do_log('err',"($self->{'name'}) : impossible to send notify to user about 'deleted_msg_topics'");
 		    }
-		    unless ($self->update_user(lc($subscriber->{'email'}), 
+		    unless ($self->update_list_member(lc($subscriber->{'email'}), 
 					       {'update_date' => time,
 						'topics' => join(',',@{$topics->{'added'}})})) {
-			&do_log('err',"List::modifying_msg_topic_for_subscribers($self->{'name'} : impossible to update user '$subscriber->{'email'}'");
+			&do_log('err',"($self->{'name'} : impossible to update user '$subscriber->{'email'}'");
 		    }
 		    $deleted = 1;
 		}
@@ -11591,7 +11289,7 @@ sub modifying_msg_topic_for_subscribers(){
 }
 
 ####################################################
-# select_subscribers_for_topic
+# select_list_members_for_topic
 ####################################################
 # Select users subscribed to a topic that is in
 # the topic list incoming when reception mode is 'mail', 'notice', 'not_me', 'txt', 'html' or 'urlize', and the other
@@ -11606,9 +11304,9 @@ sub modifying_msg_topic_for_subscribers(){
 #     
 #
 ####################################################
-sub select_subscribers_for_topic {
+sub select_list_members_for_topic {
     my ($self,$string_topic,$subscribers) = @_;
-    &do_log('debug3', 'List::select_subscribers_for_topic(%s, %s)', $self->{'name'},$string_topic); 
+    &do_log('debug3', '(%s, %s)', $self->{'name'},$string_topic); 
     
     my @selected_users;
     my $msg_topics;
@@ -11620,7 +11318,7 @@ sub select_subscribers_for_topic {
     foreach my $user (@$subscribers) {
 
 	# user topic
-	my $info_user = $self->get_subscriber($user);
+	my $info_user = $self->get_list_member($user);
 
 	if ($info_user->{'reception'} !~ /^(mail|notice|not_me|txt|html|urlize)$/i) {
 	    push @selected_users,$user;
@@ -11819,7 +11517,7 @@ sub get_subscription_requests {
 	    next;
 	}
 
-	my $user_entry = $self->get_subscriber($email);
+	my $user_entry = $self->get_list_member($email);
 	 
 	if ( defined($user_entry) && ($user_entry->{'subscribed'} == 1)) {
 	    &do_log('err','User %s is subscribed to %s already. Deleting subscription request.', $email, $self->{'name'});
@@ -11835,7 +11533,7 @@ sub get_subscription_requests {
 	$subscriptions{$email} = {'gecos' => $gecos,
 				  'custom_attribute' => \%xml};
 	unless($subscriptions{$email}{'gecos'}) {
-		my $user = get_user_db($email);
+		my $user = get_global_user($email);
 		if ($user->{'gecos'}) {
 			$subscriptions{$email}{'gecos'} = $user->{'gecos'};
 		}
@@ -12042,12 +11740,12 @@ sub close_list {
     
     ## Dump subscribers, unless list is already closed
     unless ($self->{'admin'}{'status'} eq 'closed') {
-	$self->_save_users_file("$self->{'dir'}/subscribers.closed.dump");
+	$self->_save_list_members_file("$self->{'dir'}/subscribers.closed.dump");
     }
 
     ## Delete users
     my @users;
-    for ( my $user = $self->get_first_list_member(); $user; $user = $self->get_next_user() ){
+    for ( my $user = $self->get_first_list_member(); $user; $user = $self->get_next_list_member() ){
 	push @users, $user->{'email'};
     }
     $self->delete_list_member('users' => \@users);
