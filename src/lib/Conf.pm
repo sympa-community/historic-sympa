@@ -110,9 +110,9 @@ sub load {
 
     ## Loading the config file.
     my $config_err = 0;
-    my($i, %o, %config);
+    my($i, %line_numbered_config, %config);
     if(my $config_loading_result = &_load_config_file_to_hash({'path_to_config_file' => $config_file})) {
-		%o = %{$config_loading_result->{'numbered_config'}};
+		%line_numbered_config = %{$config_loading_result->{'numbered_config'}};
 		%config = %{$config_loading_result->{'config'}};
 		$config_err = $config_loading_result->{'errors'};
     }else{
@@ -121,7 +121,7 @@ sub load {
     }
 
     # Returning the config file content if this is what has been asked.
-    return (\%o) if ($return_result);
+    return (\%line_numbered_config) if ($return_result);
 
     ## Some parameter values are hardcoded. In that case, ignore what was set in the config file and simply use the hardcoded value.
     foreach my $p (keys %hardcoded_params) {
@@ -146,20 +146,9 @@ sub load {
     }   
 
     ## Check if we have unknown values.
-    foreach $i (sort keys %config) {
-		next if (exists $params{$i});
-		if (defined $old_params{$i}) {
-			if ($old_params{$i}) {
-				printf STDERR  "Line %d of sympa.conf, parameter %s is no more available, read documentation for new parameter(s) %s\n", $o{$i}[1], $i, $old_params{$i};
-			}else {
-				printf STDERR  "Line %d of sympa.conf, parameter %s is now obsolete\n", $o{$i}[1], $i;
-				next;
-			}
-		}else {
-			printf STDERR  "Line %d, unknown field: %s in sympa.conf\n", $o{$i}[1], $i;
-		}
-		$config_err++;
-    }
+    $config_err += _detect_unknown_parameters_in_config({	'config_hash' => \%config,
+															'config_file_line_numbering_reference' => \%line_numbered_config,
+															});
     ## Do we have all required values ?
     foreach $i (keys %params) {
 		unless (defined $config{$i} or defined $params{$i}->{'default'} or defined $params{$i}->{'optional'}) {
@@ -1619,6 +1608,24 @@ sub _remove_unvalid_robot_entry {
 	return 1;
 }
 
-
+sub _detect_unknown_parameters_in_config {
+	my $param = shift;
+	my $number_of_unknown_parameters_found = 0;
+    foreach my $parameter (sort keys %{$param->{'config_hash'}}) {
+		next if (exists $params{$parameter});
+		if (defined $old_params{$parameter}) {
+			if ($old_params{$parameter}) {
+				printf STDERR  "Line %d of sympa.conf, parameter %s is no more available, read documentation for new parameter(s) %s\n", $param->{'config_file_line_numbering_reference'}{$parameter}[1], $parameter, $old_params{$parameter};
+			}else {
+				printf STDERR  "Line %d of sympa.conf, parameter %s is now obsolete\n", $param->{'config_file_line_numbering_reference'}{$parameter}[1], $parameter;
+				next;
+			}
+		}else {
+			printf STDERR  "Line %d, unknown field: %s in sympa.conf\n", $param->{'config_file_line_numbering_reference'}{$parameter}[1], $parameter;
+		}
+		$number_of_unknown_parameters_found++;
+    }
+	return $number_of_unknown_parameters_found;
+}
 ## Packages must return true.
 1;
