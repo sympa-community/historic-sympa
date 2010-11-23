@@ -155,7 +155,7 @@ our @params = (
     },
     {
         name    => 'queuedistribute',
-	file    => 'sympa.conf'
+		file    => 'sympa.conf'
     },
     {
         name    => 'queueautomatic',

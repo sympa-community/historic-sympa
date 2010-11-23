@@ -110,10 +110,11 @@ sub load {
 
     ## Loading the config file.
     my $config_err = 0;
-    my($i, %o);
+    my($i, %o, %config);
     if(my $config_loading_result = &_load_config_file_to_hash({'path_to_config_file' => $config_file})) {
-	%o = %{$config_loading_result->{'numbered_config'}};
-	$config_err = $config_loading_result->{'errors'};
+		%o = %{$config_loading_result->{'numbered_config'}};
+		%config = %{$config_loading_result->{'config'}};
+		$config_err = $config_loading_result->{'errors'};
     }else{
         printf STDERR  "load: Unable to load %s. Aborting\n", $config_file;
         return undef;
@@ -124,57 +125,57 @@ sub load {
 
     ## Some parameter values are hardcoded. In that case, ignore what was set in the config file and simply use the hardcoded value.
     foreach my $p (keys %hardcoded_params) {
-	$Ignored_Conf{$p} = $o{$p}[0] if (defined $o{$p});
-	$o{$p}[0] = $hardcoded_params{$p};
+	$Ignored_Conf{$p} = $config{$p} if (defined $config{$p});
+	$config{$p} = $hardcoded_params{$p};
     }
 
     ## Defaults
-    unless (defined $o{'wwsympa_url'}) {
-	$o{'wwsympa_url'}[0] = "http://$o{'host'}[0]/sympa";
+    unless (defined $config{'wwsympa_url'}) {
+	$config{'wwsympa_url'} = "http://$config{'host'}/sympa";
     }
 
     # 'host' and 'domain' are mandatory and synonime.$Conf{'host'} is
     # still wydly use even if the doc require domain.
  
-    $o{'host'} = $o{'domain'} if (defined $o{'domain'}) ;
-    $o{'domain'} = $o{'host'} if (defined $o{'host'}) ;
+    $config{'host'} = $config{'domain'} if (defined $config{'domain'}) ;
+    $config{'domain'} = $config{'host'} if (defined $config{'host'}) ;
     
-    unless ( (defined $o{'cafile'}) || (defined $o{'capath'} )) {
-	$o{'cafile'}[0] = Sympa::Constants::DEFAULTDIR . '/ca-bundle.crt';
+    unless ( (defined $config{'cafile'}) || (defined $config{'capath'} )) {
+	$config{'cafile'} = Sympa::Constants::DEFAULTDIR . '/ca-bundle.crt';
     }   
 
-    my $spool = $o{'spool'}[0] || $params{'spool'}->{'default'};
+    my $spool = $config{'spool'} || $params{'spool'}->{'default'};
 
-    unless (defined $o{'queueautomatic'}) {
-      $o{'queueautomatic'}[0] = "$spool/automatic";
+    unless (defined $config{'queueautomatic'}) {
+      $config{'queueautomatic'} = "$spool/automatic";
     }
 
-    unless (defined $o{'queuedigest'}) {
-	$o{'queuedigest'}[0] = "$spool/digest";
+    unless (defined $config{'queuedigest'}) {
+	$config{'queuedigest'} = "$spool/digest";
     }
-    unless (defined $o{'queuedistribute'}) {
-	$o{'queuedistribute'}[0] = "$spool/distribute";
+    unless (defined $config{'queuedistribute'}) {
+	$config{'queuedistribute'} = "$spool/distribute";
     }
-    unless (defined $o{'queuemod'}) {
-	$o{'queuemod'}[0] = "$spool/moderation";
+    unless (defined $config{'queuemod'}) {
+	$config{'queuemod'} = "$spool/moderation";
     }
-    unless (defined $o{'queuetopic'}) {
-	$o{'queuetopic'}[0] = "$spool/topic";
+    unless (defined $config{'queuetopic'}) {
+	$config{'queuetopic'} = "$spool/topic";
     }
-    unless (defined $o{'queueauth'}) {
-	$o{'queueauth'}[0] = "$spool/auth";
+    unless (defined $config{'queueauth'}) {
+	$config{'queueauth'} = "$spool/auth";
     }
-    unless (defined $o{'queueoutgoing'}) {
-	$o{'queueoutgoing'}[0] = "$spool/outgoing";
+    unless (defined $config{'queueoutgoing'}) {
+	$config{'queueoutgoing'} = "$spool/outgoing";
     }
-    unless (defined $o{'queuesubscribe'}) {
-	$o{'queuesubscribe'}[0] = "$spool/subscribe";
+    unless (defined $config{'queuesubscribe'}) {
+	$config{'queuesubscribe'} = "$spool/subscribe";
     }
-    unless (defined $o{'queuetask'}) {
-	$o{'queuetask'}[0] = "$spool/task";
+    unless (defined $config{'queuetask'}) {
+	$config{'queuetask'} = "$spool/task";
     }
-    unless (defined $o{'tmpdir'}) {
-	$o{'tmpdir'}[0] = "$spool/tmp";
+    unless (defined $config{'tmpdir'}) {
+	$config{'tmpdir'} = "$spool/tmp";
     }    
 
     ## Check if we have unknown values.
@@ -194,20 +195,13 @@ sub load {
     }
     ## Do we have all required values ?
     foreach $i (keys %params) {
-	unless (defined $o{$i} or defined $params{$i}->{'default'} or defined $params{$i}->{'optional'}) {
-	    printf "Required field not found in sympa.conf: %s\n", $i;
-	    $config_err++;
-	    next;
+		unless (defined $config{$i} or defined $params{$i}->{'default'} or defined $params{$i}->{'optional'}) {
+			printf "Required field not found in sympa.conf: %s\n", $i;
+			$config_err++;
+			next;
+		}
+		$Conf{$i} = $config{$i} || $params{$i}->{'default'};
 	}
-	if($params{$i}{'multiple'} == 1){
-	    foreach my $instance (@{$o{$i}}){
-		my $instance_value = $instance->[0] || $params{$i}->{'default'};
-		push @{$Conf{$i}}, $instance_value;
-	    }
-	}else{
-	    $Conf{$i} = $o{$i}[0] || $params{$i}->{'default'};
-	}
-    }
 
     ## Some parameters depend on others
     unless ($Conf{'css_url'}) {
