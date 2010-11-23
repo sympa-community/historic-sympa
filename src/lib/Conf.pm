@@ -129,69 +129,36 @@ sub load {
 	$config{$p} = $hardcoded_params{$p};
     }
 
-    ## Defaults
-    unless (defined $config{'wwsympa_url'}) {
-	$config{'wwsympa_url'} = "http://$config{'host'}/sympa";
-    }
-
     # 'host' and 'domain' are mandatory and synonime.$Conf{'host'} is
-    # still wydly use even if the doc require domain.
+    # still widely used even if the doc requires domain.
  
     $config{'host'} = $config{'domain'} if (defined $config{'domain'}) ;
     $config{'domain'} = $config{'host'} if (defined $config{'host'}) ;
     
+    ## Defaults
+    unless (defined $config{'wwsympa_url'}) {
+		$config{'wwsympa_url'} = "http://$config{'host'}/sympa";
+    }
+
+	## Why do we need to intitialize this variable with a fake value? o_°
     unless ( (defined $config{'cafile'}) || (defined $config{'capath'} )) {
-	$config{'cafile'} = Sympa::Constants::DEFAULTDIR . '/ca-bundle.crt';
+		$config{'cafile'} = Sympa::Constants::DEFAULTDIR . '/ca-bundle.crt';
     }   
 
-    my $spool = $config{'spool'} || $params{'spool'}->{'default'};
-
-    unless (defined $config{'queueautomatic'}) {
-      $config{'queueautomatic'} = "$spool/automatic";
-    }
-
-    unless (defined $config{'queuedigest'}) {
-	$config{'queuedigest'} = "$spool/digest";
-    }
-    unless (defined $config{'queuedistribute'}) {
-	$config{'queuedistribute'} = "$spool/distribute";
-    }
-    unless (defined $config{'queuemod'}) {
-	$config{'queuemod'} = "$spool/moderation";
-    }
-    unless (defined $config{'queuetopic'}) {
-	$config{'queuetopic'} = "$spool/topic";
-    }
-    unless (defined $config{'queueauth'}) {
-	$config{'queueauth'} = "$spool/auth";
-    }
-    unless (defined $config{'queueoutgoing'}) {
-	$config{'queueoutgoing'} = "$spool/outgoing";
-    }
-    unless (defined $config{'queuesubscribe'}) {
-	$config{'queuesubscribe'} = "$spool/subscribe";
-    }
-    unless (defined $config{'queuetask'}) {
-	$config{'queuetask'} = "$spool/task";
-    }
-    unless (defined $config{'tmpdir'}) {
-	$config{'tmpdir'} = "$spool/tmp";
-    }    
-
     ## Check if we have unknown values.
-    foreach $i (sort keys %o) {
-	next if (exists $params{$i});
-	if (defined $old_params{$i}) {
-	    if ($old_params{$i}) {
-		printf STDERR  "Line %d of sympa.conf, parameter %s is no more available, read documentation for new parameter(s) %s\n", $o{$i}[1], $i, $old_params{$i};
-	    }else {
-		printf STDERR  "Line %d of sympa.conf, parameter %s is now obsolete\n", $o{$i}[1], $i;
-		next;
-	    }
-	}else {
-	    printf STDERR  "Line %d, unknown field: %s in sympa.conf\n", $o{$i}[1], $i;
-	}
-	$config_err++;
+    foreach $i (sort keys %config) {
+		next if (exists $params{$i});
+		if (defined $old_params{$i}) {
+			if ($old_params{$i}) {
+				printf STDERR  "Line %d of sympa.conf, parameter %s is no more available, read documentation for new parameter(s) %s\n", $o{$i}[1], $i, $old_params{$i};
+			}else {
+				printf STDERR  "Line %d of sympa.conf, parameter %s is now obsolete\n", $o{$i}[1], $i;
+				next;
+			}
+		}else {
+			printf STDERR  "Line %d, unknown field: %s in sympa.conf\n", $o{$i}[1], $i;
+		}
+		$config_err++;
     }
     ## Do we have all required values ?
     foreach $i (keys %params) {

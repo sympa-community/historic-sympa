@@ -894,9 +894,9 @@ our @params = (
     },
     {
         name    => 'wwsympa_url',
-        default => 'http://host.domain.tld/sympa',
+        sample => 'http://host.domain.tld/sympa',
         query   => 'URL of main web page',
-	vhost   => '1',
+		vhost   => '1',
         file    => 'sympa.conf',
         edit    => '1',
     },
@@ -1012,7 +1012,8 @@ our @params = (
     },
     {
         name    => 'tmpdir',
-    },
+        default => Sympa::Constants::SPOOLDIR . '/tmp',
+     },
     {
         name    => 'sleep',
         default => '5',
