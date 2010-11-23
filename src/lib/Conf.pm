@@ -1516,7 +1516,7 @@ sub conf_2_db {
     my @conf_parameters = @confdef::params ;
 
     # store in database robots parameters.
-    my $robots_conf = &load_robots ; #load only parameters that are in a robot.txt file (do not apply defaults). 
+    my $robots_conf = &load_robots ; #load only parameters that are in a robot.conf file (do not apply defaults). 
 
     unless (opendir DIR,$Conf{'etc'} ) {
 		printf STDERR "Unable to open directory $Conf{'etc'} for virtual robots config\n" ;
@@ -1528,7 +1528,7 @@ sub conf_2_db {
 		next unless (-f "$Conf{'etc'}/$robot/robot.conf");
 		
 		my $config;
-		if(my $result_of_config_loading = _load_config_file_to_hash({'path_to_config_file' => $Conf{'etc'}.'/'.$robot.'/robot.txt'})){
+		if(my $result_of_config_loading = _load_config_file_to_hash({'path_to_config_file' => $Conf{'etc'}.'/'.$robot.'/robot.conf'})){
 			$config = $result_of_config_loading->{'config'};
 		}
 		&_remove_unvalid_robot_entry($config);
