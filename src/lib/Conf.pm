@@ -1562,7 +1562,8 @@ sub conf_2_db {
 ## Simply load a config file and returns a hash.
 ## the returned hash contains two keys:
 ## 1- the key 'config' points to a hash containing the data found in the config file.
-## 2- the key 'errors' contains the number of config entries that could not be loaded, due to an error.
+## 2- the key 'numbered_config' points to a hash containing the data found in the config file. Each entry contains both the value of a parameter and the line where it was found in the config file.
+## 3- the key 'errors' contains the number of config entries that could not be loaded, due to an error.
 ## Returns undef if something went wrong while attempting to read the file.
 sub _load_config_file_to_hash {
     my $param = shift;
