@@ -104,18 +104,18 @@ our %Conf = ();
 # do not change gloval hash %Conf if $return_result  is set ;
 # we known that's dirty, this proc should be rewritten without this global var %Conf
 sub load {
-    my $config = shift;
+    my $config_file = shift;
     my $no_db = shift;
     my $return_result = shift;
 
     ## Loading the config file.
     my $config_err = 0;
     my($i, %o);
-    if(my $config_loading_result = &_load_config_file_to_hash({'path_to_config_file' => $config})) {
+    if(my $config_loading_result = &_load_config_file_to_hash({'path_to_config_file' => $config_file})) {
 	%o = %{$config_loading_result->{'numbered_config'}};
 	$config_err = $config_loading_result->{'errors'};
     }else{
-        printf STDERR  "load: Unable to load %s. Aborting\n", $config;
+        printf STDERR  "load: Unable to load %s. Aborting\n", $config_file;
         return undef;
     }
 
@@ -286,13 +286,13 @@ sub load {
     $Conf{'nrcpt_by_domain'} = $nrcpt_by_domain ;
     
     foreach my $robot (keys %{$Conf{'robots'}}) {
-	my $config;   
-	unless ($config = &tools::get_filename('etc',{},'auth.conf', $robot)) {
+	my $robot_config_file;   
+	unless ($robot_config_file = &tools::get_filename('etc',{},'auth.conf', $robot)) {
 	    &do_log('err',"_load_auth: Unable to find auth.conf");
 	    next;
 	}
 	
-	$Conf{'auth_services'}{$robot} = &_load_auth($robot, $config);	
+	$Conf{'auth_services'}{$robot} = &_load_auth($robot, $robot_config_file);	
     }
     
     if ($Conf{'ldap_export_name'}) {    
@@ -365,11 +365,11 @@ sub load {
 sub load_charset {
     my $charset = {};
 
-    my $config = $Conf{'etc'}.'/charset.conf' ;
-    $config = Sympa::Constants::DEFAULTDIR . '/charset.conf' unless -f $config;
-    if (-f $config) {
-	unless (open CONFIG, $config) {
-	    printf STDERR 'unable to read configuration file %s: %s\n',$config, $!;
+    my $config_file = $Conf{'etc'}.'/charset.conf' ;
+    $config_file = Sympa::Constants::DEFAULTDIR . '/charset.conf' unless -f $config_file;
+    if (-f $config_file) {
+	unless (open CONFIG, $config_file) {
+	    printf STDERR 'unable to read configuration file %s: %s\n',$config_file, $!;
 	    return {};
 	}
 	while (<CONFIG>) {
@@ -379,11 +379,11 @@ sub load_charset {
 	    next unless /\S/;
 	    my ($locale, $cset) = split(/\s+/, $_);
 	    unless ($cset) {
-		printf STDERR 'charset name is missing in configuration file %s line %d\n',$config, $.;
+		printf STDERR 'charset name is missing in configuration file %s line %d\n',$config_file, $.;
 		next;
 	    }
 	    unless ($locale =~ s/^([a-z]+)_([a-z]+)/lc($1).'_'.uc($2).$'/ei) { #'
-		printf STDERR 'illegal locale name in configuration file %s line %d\n',$config, $.;
+		printf STDERR 'illegal locale name in configuration file %s line %d\n',$config_file, $.;
 		next;
 	    }
 	    $charset->{$locale} = $cset;
@@ -398,18 +398,18 @@ sub load_charset {
 
 ## load nrcpt file (limite receipient par domain
 sub load_nrcpt_by_domain {
-  my $config = $Conf{'etc'}.'/nrcpt_by_domain.conf';
+  my $config_file = $Conf{'etc'}.'/nrcpt_by_domain.conf';
   my $line_num = 0;
   my $config_err = 0;
   my $nrcpt_by_domain ; 
   my $valid_dom = 0;
 
-  return undef unless (-f $config) ;
-  &do_log('notice',"load_nrcpt: loading $config");
+  return undef unless (-f $config_file) ;
+  &do_log('notice',"load_nrcpt: loading $config_file");
 
   ## Open the configuration file or return and read the lines.
-  unless (open(IN, $config)) {
-      printf STDERR  "load: Unable to open %s: %s\n", $config, $!;
+  unless (open(IN, $config_file)) {
+      printf STDERR  "load: Unable to open %s: %s\n", $config_file, $!;
       return undef;
   }
   while (<IN>) {
@@ -421,12 +421,12 @@ sub load_nrcpt_by_domain {
 	  $nrcpt_by_domain->{$domain} = $value;
 	  $valid_dom +=1;
       }else {
-	  printf STDERR gettext("Error at line %d: %s"), $line_num, $config, $_;
+	  printf STDERR gettext("Error at line %d: %s"), $line_num, $config_file, $_;
 	  $config_err++;
       }
   } 
   close(IN);
-  &do_log('debug',"load_nrcpt: loaded $valid_dom config lines from $config");
+  &do_log('debug',"load_nrcpt: loaded $valid_dom config lines from $config_file");
   return ($nrcpt_by_domain);
 }
 
@@ -1002,8 +1002,8 @@ sub get_sso_by_id {
 sub _load_auth {
     
     my $robot = shift;
-    my $config = shift;
-    &do_log('debug', 'Conf::_load_auth(%s)', $config);
+    my $config_file = shift;
+    &do_log('debug', 'Conf::_load_auth(%s)', $config_file);
 
     my $line_num = 0;
     my $config_err = 0;
@@ -1080,8 +1080,8 @@ sub _load_auth {
 
 
     ## Open the configuration file or return and read the lines.
-    unless (open(IN, $config)) {
-	do_log('notice',"_load_auth: Unable to open %s: %s", $config, $!);
+    unless (open(IN, $config_file)) {
+	do_log('notice',"_load_auth: Unable to open %s: %s", $config_file, $!);
 	return undef;
     }
     
@@ -1104,11 +1104,11 @@ sub _load_auth {
 	}elsif (/^\s*(\S+)\s+(.*\S)\s*$/o){
 	    my ($keyword,$value) = ($1,$2);
 	    unless (defined $valid_keywords{$current_paragraph->{'auth_type'}}{$keyword}) {
-		do_log('err',"_load_auth: unknown keyword '%s' in %s line %d", $keyword, $config, $line_num);
+		do_log('err',"_load_auth: unknown keyword '%s' in %s line %d", $keyword, $config_file, $line_num);
 		next;
 	    }
 	    unless ($value =~ /^$valid_keywords{$current_paragraph->{'auth_type'}}{$keyword}$/) {
-		do_log('err',"_load_auth: unknown format '%s' for keyword '%s' in %s line %d", $value, $keyword, $config,$line_num);
+		do_log('err',"_load_auth: unknown format '%s' for keyword '%s' in %s line %d", $value, $keyword, $config_file,$line_num);
 		next;
 	    }
 
@@ -1235,17 +1235,17 @@ sub load_trusted_application {
     my $robot = shift;
     
     # find appropriate trusted-application.conf file
-    my $config ;
+    my $config_file ;
     if (defined $robot) {
-	$config = $Conf{'etc'}.'/'.$robot.'/trusted_applications.conf';
+	$config_file = $Conf{'etc'}.'/'.$robot.'/trusted_applications.conf';
     }else{
-	$config = $Conf{'etc'}.'/trusted_applications.conf' ;
+	$config_file = $Conf{'etc'}.'/trusted_applications.conf' ;
     }
-    # print STDERR "load_trusted_applications $config ($robot)\n";
+    # print STDERR "load_trusted_applications $config_file ($robot)\n";
 
-    return undef unless  (-r $config);
-    # open TMP, ">/tmp/dump1";&tools::dump_var(&load_generic_conf_file($config,\%trusted_applications);, 0,\*TMP);close TMP;
-    return (&load_generic_conf_file($config,\%trusted_applications));
+    return undef unless  (-r $config_file);
+    # open TMP, ">/tmp/dump1";&tools::dump_var(&load_generic_conf_file($config_file,\%trusted_applications);, 0,\*TMP);close TMP;
+    return (&load_generic_conf_file($config_file,\%trusted_applications));
 
 }
 
@@ -1258,16 +1258,16 @@ sub load_crawlers_detection {
 						  'format' => '.+'
 						  } );
         
-    my $config ;
+    my $config_file ;
     if (defined $robot) {
-	$config = $Conf{'etc'}.'/'.$robot.'/crawlers_detection.conf';
+	$config_file = $Conf{'etc'}.'/'.$robot.'/crawlers_detection.conf';
     }else{
-	$config = $Conf{'etc'}.'/crawlers_detection.conf' ;
-	$config = Sympa::Constants::DEFAULTDIR .'/crawlers_detection.conf' unless (-f $config);
+	$config_file = $Conf{'etc'}.'/crawlers_detection.conf' ;
+	$config_file = Sympa::Constants::DEFAULTDIR .'/crawlers_detection.conf' unless (-f $config_file);
     }
 
-    return undef unless  (-r $config);
-    my $hashtab = &load_generic_conf_file($config,\%crawlers_detection_conf);
+    return undef unless  (-r $config_file);
+    my $hashtab = &load_generic_conf_file($config_file,\%crawlers_detection_conf);
     my $hashhash ;
 
 
