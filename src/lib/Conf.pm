@@ -112,7 +112,7 @@ sub load {
     my $config_err = 0;
     my($i, %o);
     if(my $config_loading_result = &_load_config_file_to_hash({'path_to_config_file' => $config})) {
-	%o = %{$config_loading_result->{'config'}};
+	%o = %{$config_loading_result->{'numbered_config'}};
 	$config_err = $config_loading_result->{'errors'};
     }else{
         printf STDERR  "load: Unable to load %s. Aborting\n", $config;
@@ -1595,16 +1595,19 @@ sub _load_config_file_to_hash {
 		}
 		if($params{$keyword}{'multiple'} == 1){
 		    if($result->{'config'}{$keyword}) {
-			push @{$result->{'config'}{$keyword}}, [$value, $line_num];
+				push @{$result->{'config'}{$keyword}}, $value;
+				push @{$result->{'numbered_config'}{$keyword}}, [$value, $line_num];
 		    }else{
-			$result->{'config'}{$keyword} = [[$value, $line_num]];
+				$result->{'config'}{$keyword} = $value;
+				$result->{'numbered_config'}{$keyword} = [[$value, $line_num]];
 		    }
 		}else{
-		    $result->{'config'}{$keyword} = [ $value, $line_num ];
+		    $result->{'config'}{$keyword} = $value;
+		    $result->{'numbered_config'}{$keyword} = [ $value, $line_num ];
 		}
 	    } else {
-		printf STDERR  gettext("Error at line %d: %s\n"), $line_num, $param->{'path_to_config_file'}, $_;
-		$result->{'errors'}++;
+			printf STDERR  gettext("Error at line %d: %s\n"), $line_num, $param->{'path_to_config_file'}, $_;
+			$result->{'errors'}++;
 	    }
     }
     close(IN);
@@ -1647,7 +1650,7 @@ sub _remove_unvalid_robot_entry {
 	my $config_hash = $param->{'config_hash'};
 	foreach my $keyword(keys %$config_hash) {
 		unless($valid_robot_key_words{$keyword}) {
-			printf STDERR "\_remove\_unvalid\_robot\_entry: removing unknown robot keyword $keyword\n";
+			printf STDERR "_remove_unvalid_robot_entry: removing unknown robot keyword $keyword\n";
 			delete $config_hash->{$keyword};
 		}
 	}
