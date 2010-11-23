@@ -444,24 +444,19 @@ sub load_conf_file {
     return undef unless (-r $path) ;
     return undef unless (open (CONF,$path));
     while (<CONF>) {
-	next if (/^\s*$/o || /^[\#\;]/o);
-	if (/^\s*(\S+)\s+(.+)\s*$/io) {
-	    my($keyword, $value) = ($1, $2);
-	    $value =~ s/\s*$//;
-	    $keyword = lc($keyword);
-	    
-	    ## Not all parameters should be lowercased
-	    ## We should define which parameter needs to be lowercased
-	    #$value = lc($value) unless ($keyword eq 'title' || $keyword eq 'logo_html_definition' || $keyword eq 'lang');
-
-	    if ($config_type eq 'robot') {
-		unless($valid_robot_key_words{$keyword}) {
-		    printf STDERR "load_config_file robot config: unknown keyword $keyword\n";
-		    next;
+		next if (/^\s*$/o || /^[\#\;]/o);
+		if (/^\s*(\S+)\s+(.+)\s*$/io) {
+		    my($keyword, $value) = ($1, $2);
+		    $value =~ s/\s*$//;
+		    $keyword = lc($keyword);
+		    ## Not all parameters should be lowercased
+		    ## We should define which parameter needs to be lowercased
+		    #$value = lc($value) unless ($keyword eq 'title' || $keyword eq 'logo_html_definition' || $keyword eq 'lang');
+		    $thisconf{$keyword} = $value;
 		}
-	    }# elseif(some other config type) { some other check of valid keywords
-	    $thisconf{$keyword} = $value;
-	}
+    }
+    if ($config_type eq 'robot') {
+		return _remove_unvalid_robot_entry({'config_hash' => \%thisconf});
     }
     return (\%thisconf);
 }
@@ -1671,6 +1666,21 @@ sub _load_binary_cache {
     }
     return $result;
 }
+
+## Checks a hash containing a sympa config and removes any entry that
+## is not supposed to be defined at the robot level.
+sub _remove_unvalid_robot_entry {
+	my $param = shift;
+	my $config_hash = $param->{'config_hash'};
+	foreach my $keyword(keys %$config_hash) {
+		unless($valid_robot_key_words{$keyword}) {
+			printf STDERR "_remove_unvalid_robot_entry: removing unknown robot keyword $keyword\n";
+			delete $config_hash->{$keyword};
+		}
+	}
+	return $config_hash;
+}
+
 
 ## Packages must return true.
 1;
