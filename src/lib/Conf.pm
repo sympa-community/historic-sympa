@@ -430,37 +430,6 @@ sub load_nrcpt_by_domain {
   return ($nrcpt_by_domain);
 }
 
-#load a confif file without any default and inherited property 
-sub load_conf_file {
-
-    my $config_type = shift; #  'robot' or other
-    my $path=shift;
-
-    do_log('info',"load_config_file($config_type,$path)");
-
-    my %thisconf;
-
-    return undef unless (-f $path) ;
-    return undef unless (-r $path) ;
-    return undef unless (open (CONF,$path));
-    while (<CONF>) {
-		next if (/^\s*$/o || /^[\#\;]/o);
-		if (/^\s*(\S+)\s+(.+)\s*$/io) {
-		    my($keyword, $value) = ($1, $2);
-		    $value =~ s/\s*$//;
-		    $keyword = lc($keyword);
-		    ## Not all parameters should be lowercased
-		    ## We should define which parameter needs to be lowercased
-		    #$value = lc($value) unless ($keyword eq 'title' || $keyword eq 'logo_html_definition' || $keyword eq 'lang');
-		    $thisconf{$keyword} = $value;
-		}
-    }
-    if ($config_type eq 'robot') {
-		return _remove_unvalid_robot_entry({'config_hash' => \%thisconf});
-    }
-    return (\%thisconf);
-}
-
 ## load each virtual robots configuration files
 sub load_robots {
     
@@ -1550,24 +1519,28 @@ sub conf_2_db {
     my $robots_conf = &load_robots ; #load only parameters that are in a robot.txt file (do not apply defaults). 
 
     unless (opendir DIR,$Conf{'etc'} ) {
-	printf STDERR "Unable to open directory $Conf{'etc'} for virtual robots config\n" ;
-	return undef;
+		printf STDERR "Unable to open directory $Conf{'etc'} for virtual robots config\n" ;
+		return undef;
     }
 
     foreach my $robot (readdir(DIR)) {
-	next unless (-d "$Conf{'etc'}/$robot");
-	next unless (-f "$Conf{'etc'}/$robot/robot.conf");
-	
-	my $config = &load_conf_file('robot',$Conf{'etc'}.'/'.$robot.'/robot.txt');
-	
-	for my $i ( 0 .. $#conf_parameters ) {
-	    if ($conf_parameters[$i]->{'name'}) { #skip separators in conf_parameters structure
-		if (($conf_parameters[$i]->{'vhost'} eq '1') && #skip parameters that can't be define by robot so not to be loaded in db at that stage 
-		    ($config->{$conf_parameters[$i]->{'name'}})){
-		    &Conf::set_robot_conf($robot, $conf_parameters[$i]->{'name'}, $config->{$conf_parameters[$i]->{'name'}});
+		next unless (-d "$Conf{'etc'}/$robot");
+		next unless (-f "$Conf{'etc'}/$robot/robot.conf");
+		
+		my $config;
+		if(my $result_of_config_loading = _load_config_file_to_hash({'path_to_config_file' => $Conf{'etc'}.'/'.$robot.'/robot.txt'})){
+			$config = $result_of_config_loading->{'config'};
 		}
-	    }
-	}
+		&_remove_unvalid_robot_entry($config);
+		
+		for my $i ( 0 .. $#conf_parameters ) {
+		    if ($conf_parameters[$i]->{'name'}) { #skip separators in conf_parameters structure
+			if (($conf_parameters[$i]->{'vhost'} eq '1') && #skip parameters that can't be define by robot so not to be loaded in db at that stage 
+			    ($config->{$conf_parameters[$i]->{'name'}})){
+			    &Conf::set_robot_conf($robot, $conf_parameters[$i]->{'name'}, $config->{$conf_parameters[$i]->{'name'}});
+			}
+		    }
+		}
     }
     closedir (DIR);
 
@@ -1674,11 +1647,11 @@ sub _remove_unvalid_robot_entry {
 	my $config_hash = $param->{'config_hash'};
 	foreach my $keyword(keys %$config_hash) {
 		unless($valid_robot_key_words{$keyword}) {
-			printf STDERR "_remove_unvalid_robot_entry: removing unknown robot keyword $keyword\n";
+			printf STDERR "\_remove\_unvalid\_robot\_entry: removing unknown robot keyword $keyword\n";
 			delete $config_hash->{$keyword};
 		}
 	}
-	return $config_hash;
+	return 1;
 }
 
 
