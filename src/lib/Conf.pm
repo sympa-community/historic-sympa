@@ -144,6 +144,10 @@ sub load {
 		printf STDERR "Warning: %n required modules are missing.\n",$missing_modules_count;
 	}
 
+	## Load robot.conf files
+	my $robots_conf = &load_robots ;    
+	$Conf{'robots'} = $robots_conf ;
+
     unless ($no_db){
 		#load parameter from database if database value as prioprity over conf file
 		foreach my $label (keys %valid_robot_key_words) {
@@ -153,9 +157,6 @@ sub load {
 				$Conf{$label} = $value ;
 			}
 		}
-		## Load robot.conf files
-		my $robots_conf = &load_robots ;    
-		$Conf{'robots'} = $robots_conf ;
 		foreach my $robot (keys %{$Conf{'robots'}}) {
 			foreach my $label (keys %valid_robot_key_words) {
 				next unless ($db_storable_parameters{$label} == 1);
