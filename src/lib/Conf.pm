@@ -145,9 +145,7 @@ sub load {
 	}
 
 	## Load robot.conf files
-	my $robots_conf = &load_robots ;    
-	$Conf{'robots'} = $robots_conf ;
-
+	$Conf{'robots'} = &load_robots() ;
     unless ($no_db){
 		#load parameter from database if database value as prioprity over conf file
 		foreach my $label (keys %valid_robot_key_words) {
@@ -259,6 +257,7 @@ sub load {
     $Conf{'request'} = "$Conf{'email'}-request\@$Conf{'domain'}";
     $Conf{'pictures_url'}  = $Conf{'static_content_url'}.'/pictures/';
     $Conf{'pictures_path'}  = $Conf{'static_content_path'}.'/pictures/';
+	open TMP,">/tmp/dumpconf";&tools::dump_var(\%Conf,0,\*TMP);close TMP;
 	
     return 1;
 }
@@ -344,69 +343,44 @@ sub load_robots {
     }
 
     unless (opendir DIR,$Conf{'etc'} ) {
-	printf STDERR "Unable to open directory $Conf{'etc'} for virtual robots config\n" ;
-	return undef;
+		printf STDERR "Unable to open directory $Conf{'etc'} for virtual robots config\n" ;
+		return undef;
     }
     my $exiting = 0;
     ## Set the defaults based on sympa.conf and wwsympa.conf first
     foreach my $key (keys %valid_robot_key_words) {
-	if(defined $wwsconf->{$key}){
-	    $robot_conf->{$Conf{'domain'}}{$key} = $wwsconf->{$key};
-	}elsif(defined $Conf{$key}){
-	    $robot_conf->{$Conf{'domain'}}{$key} = $Conf{$key};
-	}else{
-	    unless ($optional_key_words{$key}){
-		printf STDERR "Parameter $key seems to be neither a wwsympa.conf nor a sympa.conf parameter.\n" ;
-		$exiting = 1;
-	    }
-	}
+		if(defined $wwsconf->{$key}){
+			$robot_conf->{$Conf{'domain'}}{$key} = $wwsconf->{$key};
+		}elsif(defined $Conf{$key}){
+			$robot_conf->{$Conf{'domain'}}{$key} = $Conf{$key};
+		}else{
+			unless ($optional_key_words{$key}){
+				printf STDERR "Parameter $key seems to be neither a wwsympa.conf nor a sympa.conf parameter.\n" ;
+				$exiting = 1;
+			}
+		}
     }
     return undef if ($exiting);
 
     foreach my $robot (readdir(DIR)) {
-	next unless (-d "$Conf{'etc'}/$robot");
-	next unless (-f "$Conf{'etc'}/$robot/robot.conf");
-	
-
-	unless (-r "$Conf{'etc'}/$robot/robot.conf") {
-	    printf STDERR "No read access on %s\n", "$Conf{'etc'}/$robot/robot.conf";
-	    &List::send_notify_to_listmaster('cannot_access_robot_conf',$Conf{'domain'}, ["No read access on $Conf{'etc'}/$robot/robot.conf. you should change privileges on this file to activate this virtual host. "]);
-	    next;
-	}
-
-	unless (open (ROBOT_CONF,"$Conf{'etc'}/$robot/robot.conf")) {
-	    printf STDERR "load robots config: Unable to open $Conf{'etc'}/$robot/robot.conf\n"; 
-	    next ;
-	}
-
-	while (<ROBOT_CONF>) {
-	    next if (/^\s*$/o || /^[\#\;]/o);
-	    if (/^\s*(\S+)\s+(.+)\s*$/io) {
-		my($keyword, $value) = ($1, $2);
-		$value =~ s/\s*$//;
-		$keyword = lc($keyword);
-
-		## Not all parameters should be lowercased
-		## We should define which parameter needs to be lowercased
-		#$value = lc($value) unless ($keyword eq 'title' || $keyword eq 'logo_html_definition' || $keyword eq 'lang');
-
-		if ($valid_robot_key_words{$keyword}) {
-		    if($params{$keyword}{'multiple'} == 1){
-			if($robot_conf->{$robot}{$keyword}) {
-			    push @{$robot_conf->{$robot}{$keyword}}, $value;
-			}else{
-			    $robot_conf->{$robot}{$keyword} = [$value];
-			}
-		    }else{
-			$robot_conf->{$robot}{$keyword} = $value;
-		    }
-		    # printf STDERR "load robots config: $keyword = $value\n";
-		}else{
-		    printf STDERR "load robots config: unknown keyword $keyword\n";
-		    # printf STDERR "load robots config: unknown keyword $keyword\n";
+		next unless (-d "$Conf{'etc'}/$robot");
+		next unless (-f "$Conf{'etc'}/$robot/robot.conf");
+		
+		unless (-r "$Conf{'etc'}/$robot/robot.conf") {
+			printf STDERR "No read access on %s\n", "$Conf{'etc'}/$robot/robot.conf";
+			&List::send_notify_to_listmaster('cannot_access_robot_conf',$Conf{'domain'}, ["No read access on $Conf{'etc'}/$robot/robot.conf. you should change privileges on this file to activate this virtual host. "]);
+			next;
 		}
-	    }
-	}
+		my $config_err;
+		my $config_file = "$Conf{'etc'}/$robot/robot.conf";
+		if(my $config_loading_result = &_load_config_file_to_hash({'path_to_config_file' => $config_file})) {
+			$robot_conf->{$robot} = $config_loading_result->{'config'};
+			$config_err = $config_loading_result->{'errors'};
+		}else{
+			printf STDERR  "load: Unable to load %s. Aborting\n", $config_file;
+			return undef;
+		}
+		&_dump_non_robot_parameters({'config_hash' => $robot_conf->{$robot}});
 	# listmaster is a list of email separated by commas
 	$robot_conf->{$robot}{'listmaster'} =~ s/\s//g;
 
@@ -482,9 +456,6 @@ sub load_robots {
 	# printf STDERR "load trusted de $robot";
 	$robot_conf->{$robot}{'trusted_applications'} = &load_trusted_application($robot);
 	$robot_conf->{$robot}{'crawlers_detection'} = &load_crawlers_detection($robot);
-
-	close (ROBOT_CONF);
-
 
 	#load parameter from database if database value as prioprity over conf file
 	#foreach my $label (keys %valid_robot_key_words) {
@@ -1671,6 +1642,16 @@ sub _check_cpan_modules_required_by_config {
         }
     }
 	return $number_of_missing_modules;
+}
+
+sub _dump_non_robot_parameters {
+	my $param = shift;
+	foreach my $key (keys %{$param->{'config_hash'}}){
+		unless($valid_robot_key_words{$key}){
+			delete $param->{'config_hash'}{$key};
+			printf STDERR "load robots config: unknown robot parameter: $key\n";
+		}
+	}
 }
 ## Packages must return true.
 1;
