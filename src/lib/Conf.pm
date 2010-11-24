@@ -123,11 +123,8 @@ sub load {
     # Returning the config file content if this is what has been asked.
     return (\%line_numbered_config) if ($return_result);
 
-    ## Some parameter values are hardcoded. In that case, ignore what was set in the config file and simply use the hardcoded value.
-    foreach my $p (keys %hardcoded_params) {
-	$Ignored_Conf{$p} = $config{$p} if (defined $config{$p});
-	$config{$p} = $hardcoded_params{$p};
-    }
+	## Some parameter values are hardcoded. In that case, ignore what was set in the config file and simply use the hardcoded value.
+	%Ignored_Conf = %{&_set_hardcoded_parameter_values({'config_hash' => \%config,})};
     
     &_fix_particular_parameters_value({'config_hash' => \%config,});
 
@@ -1633,6 +1630,20 @@ sub _fix_particular_parameters_value {
     }
 
 	return 1;
+}
+
+## For parameters whose value is hard_coded, as per %hardcoded_params, set the
+## parameter value to the hardcoded value, whatever is defined in the config.
+## Returns a ref to a hash containing the ignored values.
+sub _set_hardcoded_parameter_values{
+	my $param = shift;
+	my %ignored_values;
+    ## Some parameter values are hardcoded. In that case, ignore what was set in the config file and simply use the hardcoded value.
+    foreach my $p (keys %hardcoded_params) {
+		$ignored_values{$p} = $param->{'config_hash'}{$p} if (defined $param->{'config_hash'}{$p});
+		$param->{'config_hash'}{$p} = $hardcoded_params{$p};
+    }
+    return \%ignored_values;
 }
 ## Packages must return true.
 1;
