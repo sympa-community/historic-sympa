@@ -128,25 +128,11 @@ sub load {
 	$Ignored_Conf{$p} = $config{$p} if (defined $config{$p});
 	$config{$p} = $hardcoded_params{$p};
     }
-
-    # 'host' and 'domain' are mandatory and synonime.$Conf{'host'} is
-    # still widely used even if the doc requires domain.
- 
-    $config{'host'} = $config{'domain'} if (defined $config{'domain'}) ;
-    $config{'domain'} = $config{'host'} if (defined $config{'host'}) ;
     
-    ## Defaults
-    unless (defined $config{'wwsympa_url'}) {
-		$config{'wwsympa_url'} = "http://$config{'host'}/sympa";
-    }
-
-	## Why do we need to intitialize this variable with a fake value? o_°
-    unless ( (defined $config{'cafile'}) || (defined $config{'capath'} )) {
-		$config{'cafile'} = Sympa::Constants::DEFAULTDIR . '/ca-bundle.crt';
-    }   
+    &_fix_particular_parameters_value({'config_hash' => \%config,});
 
     ## Check if we have unknown values.
-    $config_err += _detect_unknown_parameters_in_config({	'config_hash' => \%config,
+    $config_err += &_detect_unknown_parameters_in_config({	'config_hash' => \%config,
 															'config_file_line_numbering_reference' => \%line_numbered_config,
 															});
     ## Do we have all required values ?
@@ -1626,6 +1612,26 @@ sub _detect_unknown_parameters_in_config {
 		$number_of_unknown_parameters_found++;
     }
 	return $number_of_unknown_parameters_found;
+}
+
+sub _fix_particular_parameters_value {
+	my $param = shift;
+
+    # 'host' and 'domain' are mandatory and synonym.$Conf{'host'} is
+    # still widely used even if the doc requires domain.
+    $param->{'config_hash'}{'host'} = $param->{'config_hash'}{'domain'} if (defined $param->{'config_hash'}{'domain'}) ;
+    $param->{'config_hash'}{'domain'} = $param->{'config_hash'}{'host'} if (defined $param->{'config_hash'}{'host'}) ;
+    
+    ## Defaults
+    unless (defined $param->{'config_hash'}{'wwsympa_url'}) {
+		$param->{'config_hash'}{'wwsympa_url'} = "http://$param->{'config_hash'}{'host'}/sympa";
+    }
+
+	## Why do we need to intitialize this variable with a fake value? o_°
+    unless ( (defined $param->{'config_hash'}{'cafile'}) || (defined $param->{'config_hash'}{'capath'} )) {
+		$param->{'config_hash'}{'cafile'} = Sympa::Constants::DEFAULTDIR . '/ca-bundle.crt';
+    }   
+	return 1;
 }
 ## Packages must return true.
 1;
