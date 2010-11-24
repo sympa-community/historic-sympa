@@ -143,70 +143,58 @@ sub load {
 		printf STDERR "Warning: %n required modules are missing.\n",$missing_modules_count;
 	}
 
-    ## Load charset.conf file if necessary.
-    if($Conf{'legacy_character_support_feature'} eq 'on'){
-	my $charset_conf = &load_charset;
-	$Conf{'locale2charset'} = $charset_conf;
-    }else{
-	$Conf{'locale2charset'} = {};
-    }
-
     unless ($no_db){
-	#load parameter from database if database value as prioprity over conf file
-	foreach my $label (keys %valid_robot_key_words) {
-	    next unless ($valid_robot_key_words{$label} eq 'db');
-	    my $value = &get_db_conf('*', $label);
-	    if ($value) {
-		$Conf{$label} = $value ;
-	    }
-	}
-	## Load robot.conf files
-	my $robots_conf = &load_robots ;    
-	$Conf{'robots'} = $robots_conf ;
-	foreach my $robot (keys %{$Conf{'robots'}}) {
-	    foreach my $label (keys %valid_robot_key_words) {
-		next unless ($valid_robot_key_words{$label} eq 'db');
-		my $value = &get_db_conf($robot, $label);
-		if ($value) {
-		    $Conf{'robots'}{$robot}{$label} = $value ;
+		#load parameter from database if database value as prioprity over conf file
+		foreach my $label (keys %valid_robot_key_words) {
+			next unless ($valid_robot_key_words{$label} eq 'db');
+			my $value = &get_db_conf('*', $label);
+			if ($value) {
+				$Conf{$label} = $value ;
+			}
 		}
-	    }
-	}
+		## Load robot.conf files
+		my $robots_conf = &load_robots ;    
+		$Conf{'robots'} = $robots_conf ;
+		foreach my $robot (keys %{$Conf{'robots'}}) {
+			foreach my $label (keys %valid_robot_key_words) {
+				next unless ($valid_robot_key_words{$label} eq 'db');
+				my $value = &get_db_conf($robot, $label);
+				if ($value) {
+					$Conf{'robots'}{$robot}{$label} = $value ;
+				}
+			}
+		}
     }
 
     ## Parsing custom robot parameters.
     foreach my $robot (keys %{$Conf{'robots'}}) {
-	my $csp_tmp_storage = undef;
-	foreach my $custom_p (@{$Conf{'robots'}{$robot}{'custom_robot_parameter'}}){
-	    if($custom_p =~ /(\S+)\s*\;\s*(.+)/) {
-		$csp_tmp_storage->{$1} = $2;
-	    }
-	}
-	$Conf{'robots'}{$robot}{'custom_robot_parameter'} = $csp_tmp_storage;
+		my $csp_tmp_storage = undef;
+		foreach my $custom_p (@{$Conf{'robots'}{$robot}{'custom_robot_parameter'}}){
+			if($custom_p =~ /(\S+)\s*\;\s*(.+)/) {
+				$csp_tmp_storage->{$1} = $2;
+			}
+		}
+		$Conf{'robots'}{$robot}{'custom_robot_parameter'} = $csp_tmp_storage;
     }
 
-    my $nrcpt_by_domain =  &load_nrcpt_by_domain ;
-    $Conf{'nrcpt_by_domain'} = $nrcpt_by_domain ;
-    
     foreach my $robot (keys %{$Conf{'robots'}}) {
-	my $robot_config_file;   
-	unless ($robot_config_file = &tools::get_filename('etc',{},'auth.conf', $robot)) {
-	    &do_log('err',"_load_auth: Unable to find auth.conf");
-	    next;
-	}
-	
-	$Conf{'auth_services'}{$robot} = &_load_auth($robot, $robot_config_file);	
+		my $robot_config_file;   
+		unless ($robot_config_file = &tools::get_filename('etc',{},'auth.conf', $robot)) {
+			&do_log('err',"_load_auth: Unable to find auth.conf");
+			next;
+		}
+		$Conf{'auth_services'}{$robot} = &_load_auth($robot, $robot_config_file);	
     }
     
     if ($Conf{'ldap_export_name'}) {    
-	##Export
-	$Conf{'ldap_export'} = {$Conf{'ldap_export_name'} => { 'host' => $Conf{'ldap_export_host'},
+		##Export
+		$Conf{'ldap_export'} = 	{$Conf{'ldap_export_name'} => { 'host' => $Conf{'ldap_export_host'},
 							       'suffix' => $Conf{'ldap_export_suffix'},
 							       'password' => $Conf{'ldap_export_password'},
 							       'DnManager' => $Conf{'ldap_export_dnmanager'},
 							       'connection_timeout' => $Conf{'ldap_export_connection_timeout'}
-							   }
-			    };
+								}
+								};
     }
         
     my $p = 1;
@@ -254,10 +242,19 @@ sub load {
 	$Conf{'list_check_regexp'} =~ s/[,\s]+/\|/g;
     }
 	
-    $Conf{'sympa'} = "$Conf{'email'}\@$Conf{'domain'}";
-    $Conf{'request'} = "$Conf{'email'}-request\@$Conf{'domain'}";
+
+    ## Load charset.conf file if necessary.
+    if($Conf{'legacy_character_support_feature'} eq 'on'){
+		$Conf{'locale2charset'} = &load_charset ();
+    }else{
+		$Conf{'locale2charset'} = {};
+    }
+    $Conf{'nrcpt_by_domain'} = &load_nrcpt_by_domain () ;
     $Conf{'trusted_applications'} = &load_trusted_application (); 
     $Conf{'crawlers_detection'} = &load_crawlers_detection (); 
+
+    $Conf{'sympa'} = "$Conf{'email'}\@$Conf{'domain'}";
+    $Conf{'request'} = "$Conf{'email'}-request\@$Conf{'domain'}";
     $Conf{'pictures_url'}  = $Conf{'static_content_url'}.'/pictures/';
     $Conf{'pictures_path'}  = $Conf{'static_content_path'}.'/pictures/';
 	
