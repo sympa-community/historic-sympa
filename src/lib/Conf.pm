@@ -123,42 +123,28 @@ sub load {
     # Returning the config file content if this is what has been asked.
     return (\%line_numbered_config) if ($return_result);
 
-	## Some parameter values are hardcoded. In that case, ignore what was set in the config file and simply use the hardcoded value.
+	# Some parameter values are hardcoded. In that case, ignore what was
+	#  set in the config file and simply use the hardcoded value.
 	%Ignored_Conf = %{&_set_hardcoded_parameter_values({'config_hash' => \%config,})};
     
+    # Some parameters need special treatments to get their final values.
     &_fix_particular_parameters_value({'config_hash' => \%config,});
 
-    ## Check if we have unknown values.
+    # Users may define parameters with a typo or other errors. Check that the parameters
+    # we found in the config file are all well defined Sympa parameters.
     $config_err += &_detect_unknown_parameters_in_config({	'config_hash' => \%config,
 															'config_file_line_numbering_reference' => \%line_numbered_config,
 															});
-    ## Do we have all required values ?
-    foreach $i (keys %params) {
-		unless (defined $config{$i} or defined $params{$i}->{'default'} or defined $params{$i}->{'optional'}) {
-			printf "Required field not found in sympa.conf: %s\n", $i;
-			$config_err++;
-			next;
-		}
-		$Conf{$i} = $config{$i} || $params{$i}->{'default'};
+
+    ## Some parameters must have a value specifically defined in the config. If not, it is an error.
+    $config_err += &_detect_missing_mandatory_parameters({'config_hash' => \%config,});
+
+	%Conf = %config;
+	
+	if (my $missing_modules_count = &_check_cpan_modules_required_by_config({'config_hash' => \%Conf,})){
+		printf STDERR "Warning: %n required modules are missing.\n",$missing_modules_count;
 	}
 
-    ## Some parameters require CPAN modules
-    if ($Conf{'lock_method'} eq 'nfs') {
-        eval "require File::NFSLock";
-        if ($@) {
-            &do_log('err',"Failed to load File::NFSLock perl module ; setting 'lock_method' to 'flock'" );
-            $Conf{'lock_method'} = 'flock';
-        }
-    }
-		 
-    ## Some parameters require CPAN modules
-    if ($Conf{'DKIM_feature'} eq 'on') {
-        eval "require Mail::DKIM";
-        if ($@) {
-            &do_log('err', "Failed to load Mail::DKIM perl module ; setting 'DKIM_feature' to 'off'");
-            $Conf{'DKIM_feature'} = 'off';
-        }
-    }
     ## Load charset.conf file if necessary.
     if($Conf{'legacy_character_support_feature'} eq 'on'){
 	my $charset_conf = &load_charset;
@@ -278,7 +264,7 @@ sub load {
     $Conf{'pictures_path'}  = $Conf{'static_content_path'}.'/pictures/';
 	
     return 1;
-}    
+}
 
 ## load charset.conf file (charset mapping for service messages)
 sub load_charset {
@@ -1644,6 +1630,50 @@ sub _set_hardcoded_parameter_values{
 		$param->{'config_hash'}{$p} = $hardcoded_params{$p};
     }
     return \%ignored_values;
+}
+
+sub _detect_missing_mandatory_parameters {
+	my $param = shift;
+	my $number_of_errors = 0;
+    foreach my $parameter (keys %params) {
+		unless (defined $param->{'config_hash'}{$parameter} or defined $params{$parameter}->{'default'} or defined $params{$parameter}->{'optional'}) {
+			printf "Required field not found in sympa.conf: %s\n", $parameter;
+			$number_of_errors++;
+			next;
+		}
+		$param->{'config_hash'}{$parameter} ||= $params{$parameter}->{'default'};
+	}
+	return $number_of_errors;
+}
+
+## Some functionalities activated by some parameter values require that
+## some optional CPAN modules are installed. This function checks whether
+## these modules are installed and if they are missing, changes the config
+## to fall back to a functioning that doesn't require a module and issues
+## a warning.
+## Returns the number of missing modules.
+sub _check_cpan_modules_required_by_config {
+	my $param = shift;
+	my $number_of_missing_modules = 0;
+    if ($param->{'config_hash'}{'lock_method'} eq 'nfs') {
+        eval "require File::NFSLock";
+        if ($@) {
+            printf STDERR "Failed to load File::NFSLock perl module ; setting 'lock_method' to 'flock'\n";
+            $param->{'config_hash'}{'lock_method'} = 'flock';
+            $number_of_missing_modules++;
+        }
+    }
+		 
+    ## Some parameters require CPAN modules
+    if ($param->{'config_hash'}{'dkim_feature'} eq 'on') {
+        eval "require Mail::DKIM";
+        if ($@) {
+            printf STDERR "Failed to load Mail::DKIM perl module ; setting 'DKIM_feature' to 'off'\n";
+            $param->{'config_hash'}{'dkim_feature'} = 'off';
+            $number_of_missing_modules++;
+        }
+    }
+	return $number_of_missing_modules;
 }
 ## Packages must return true.
 1;
