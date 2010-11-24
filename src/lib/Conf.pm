@@ -365,104 +365,7 @@ sub load_robots {
     foreach my $robot (readdir(DIR)) {
 		next unless (-d "$Conf{'etc'}/$robot");
 		next unless (-f "$Conf{'etc'}/$robot/robot.conf");
-		
-		unless (-r "$Conf{'etc'}/$robot/robot.conf") {
-			printf STDERR "No read access on %s\n", "$Conf{'etc'}/$robot/robot.conf";
-			&List::send_notify_to_listmaster('cannot_access_robot_conf',$Conf{'domain'}, ["No read access on $Conf{'etc'}/$robot/robot.conf. you should change privileges on this file to activate this virtual host. "]);
-			next;
-		}
-		my $config_err;
-		my $config_file = "$Conf{'etc'}/$robot/robot.conf";
-		if(my $config_loading_result = &_load_config_file_to_hash({'path_to_config_file' => $config_file})) {
-			$robot_conf->{$robot} = $config_loading_result->{'config'};
-			$config_err = $config_loading_result->{'errors'};
-		}else{
-			printf STDERR  "load: Unable to load %s. Aborting\n", $config_file;
-			return undef;
-		}
-		&_dump_non_robot_parameters({'config_hash' => $robot_conf->{$robot}});
-	# listmaster is a list of email separated by commas
-	$robot_conf->{$robot}{'listmaster'} =~ s/\s//g;
-
-	@{$robot_conf->{$robot}{'listmasters'}} = split(/,/, $robot_conf->{$robot}{'listmaster'})
-	    if $robot_conf->{$robot}{'listmaster'};
-
-	## Default for 'host' is the domain
-	$robot_conf->{$robot}{'host'} ||= $robot;
-
-	$robot_conf->{$robot}{'title'} ||= $wwsconf->{'title'};
-	$robot_conf->{$robot}{'default_home'} ||= $wwsconf->{'default_home'};
-	$robot_conf->{$robot}{'use_html_editor'} ||= $wwsconf->{'use_html_editor'};
-	$robot_conf->{$robot}{'html_editor_file'} ||= $wwsconf->{'html_editor_file'};
-	$robot_conf->{$robot}{'html_editor_init'} ||= $wwsconf->{'html_editor_init'};
-
-	$robot_conf->{$robot}{'lang'} ||= $Conf{'lang'};
-	$robot_conf->{$robot}{'email'} ||= $Conf{'email'};
-	$robot_conf->{$robot}{'log_smtp'} ||= $Conf{'log_smtp'};
-	$robot_conf->{$robot}{'log_module'} ||= $Conf{'log_module'};
-	$robot_conf->{$robot}{'log_condition'} ||= $Conf{'log_module'};
-	$robot_conf->{$robot}{'log_level'} ||= $Conf{'log_level'};
-	$robot_conf->{$robot}{'antispam_feature'} ||= $Conf{'antispam_feature'};
-	$robot_conf->{$robot}{'antispam_tag_header_name'} ||= $Conf{'antispam_tag_header_name'};
-	$robot_conf->{$robot}{'antispam_tag_header_spam_regexp'} ||= $Conf{'antispam_tag_header_spam_regexp'};
-	$robot_conf->{$robot}{'antispam_tag_header_ham_regexp'} ||= $Conf{'antispam_tag_header_ham_regexp'};
-	$robot_conf->{$robot}{'wwsympa_url'} ||= 'http://'.$robot_conf->{$robot}{'http_host'}.'/sympa';
-
-	$robot_conf->{$robot}{'static_content_url'} ||= $Conf{'static_content_url'};
-	$robot_conf->{$robot}{'static_content_path'} ||= $Conf{'static_content_path'};
-	$robot_conf->{$robot}{'tracking_delivery_status_notification'} ||= $Conf{'tracking_delivery_status_notification'};
-	$robot_conf->{$robot}{'tracking_message_delivery_notification'} ||= $Conf{'tracking_message_delivery_notification'};
-
-	## CSS
-	$robot_conf->{$robot}{'css_url'} ||= $robot_conf->{$robot}{'static_content_url'}.'/css/'.$robot;
-	$robot_conf->{$robot}{'css_path'} ||= $Conf{'static_content_path'}.'/css/'.$robot;
-
-	$robot_conf->{$robot}{'sympa'} = $robot_conf->{$robot}{'email'}.'@'.$robot_conf->{$robot}{'host'};
-	$robot_conf->{$robot}{'request'} = $robot_conf->{$robot}{'email'}.'-request@'.$robot_conf->{$robot}{'host'};
-	$robot_conf->{$robot}{'cookie_domain'} ||= 'localhost';
-	#$robot_conf->{$robot}{'soap_url'} ||= $Conf{'soap_url'};
-	$robot_conf->{$robot}{'verp_rate'} ||= $Conf{'verp_rate'};
-	$robot_conf->{$robot}{'use_blacklist'} ||= $Conf{'use_blacklist'};
-
-	$robot_conf->{$robot}{'pictures_url'} ||= $robot_conf->{$robot}{'static_content_url'}.'/pictures/';
-	$robot_conf->{$robot}{'pictures_path'} ||= $robot_conf->{$robot}{'static_content_path'}.'/pictures/';
-	$robot_conf->{$robot}{'pictures_feature'} ||= $Conf{'pictures_feature'};
-
-	# split action list for blacklist usage
-	foreach my $action (split(/,/, $Conf{'use_blacklist'})) {
-	    $robot_conf->{$robot}{'blacklist'}{$action} = 1;
-	}
-
-	my ($host, $path);
-	if ($robot_conf->{$robot}{'http_host'} =~ /^([^\/]+)(\/.*)$/) {
-	    ($host, $path) = ($1,$2);
-	}else {
-	    ($host, $path) = ($robot_conf->{$robot}{'http_host'}, '/');
-	}
-
-	## Warn listmaster if another virtual host is defined with the same host+path
-	if (defined $Conf{'robot_by_http_host'}{$host}{$path}) {
-	  printf STDERR "Error: two virtual hosts (%s and %s) are mapped via a single URL '%s%s'", $Conf{'robot_by_http_host'}{$host}{$path}, $robot, $host, $path;
-	}
-
-	$Conf{'robot_by_http_host'}{$host}{$path} = $robot ;
-	
-	## Create a hash to deduce robot from SOAP url
-	if ($robot_conf->{$robot}{'soap_url'}) {
-	    my $url = $robot_conf->{$robot}{'soap_url'};
-	    $url =~ s/^http(s)?:\/\/(.+)$/$2/;
-	    $Conf{'robot_by_soap_url'}{$url} = $robot;
-	}
-	# printf STDERR "load trusted de $robot";
-	$robot_conf->{$robot}{'trusted_applications'} = &load_trusted_application($robot);
-	$robot_conf->{$robot}{'crawlers_detection'} = &load_crawlers_detection($robot);
-
-	#load parameter from database if database value as prioprity over conf file
-	#foreach my $label (keys %valid_robot_key_words) {
-	#    next unless ($valid_robot_key_words{$label} eq 'db');
-	#    my $value = &get_db_conf($robot, $label);
-	#    $robot_conf->{$robot}{$label} = $value if ($value);	    
-	#}		
+		$robot_conf->{$robot} = &_load_single_robot_config({'robot' => $robot});
     }
     closedir(DIR);
     
@@ -1649,9 +1552,114 @@ sub _dump_non_robot_parameters {
 	foreach my $key (keys %{$param->{'config_hash'}}){
 		unless($valid_robot_key_words{$key}){
 			delete $param->{'config_hash'}{$key};
-			printf STDERR "load robots config: unknown robot parameter: $key\n";
+			printf STDERR "Robot %s config: unknown robot parameter: %s\n",$param->{'robot'},$key;
 		}
 	}
+}
+
+sub _load_single_robot_config{
+	my $param = shift;
+	my $robot = $param->{'robot'};
+	my $robot_conf;
+	
+	unless (-r "$Conf{'etc'}/$robot/robot.conf") {
+		printf STDERR "No read access on %s\n", "$Conf{'etc'}/$robot/robot.conf";
+		&List::send_notify_to_listmaster('cannot_access_robot_conf',$Conf{'domain'}, ["No read access on $Conf{'etc'}/$robot/robot.conf. you should change privileges on this file to activate this virtual host. "]);
+		next;
+	}
+	my $config_err;
+	my $config_file = "$Conf{'etc'}/$robot/robot.conf";
+	if(my $config_loading_result = &_load_config_file_to_hash({'path_to_config_file' => $config_file})) {
+		$robot_conf = $config_loading_result->{'config'};
+		$config_err = $config_loading_result->{'errors'};
+	}else{
+		printf STDERR  "load: Unable to load %s. Aborting\n", $config_file;
+		return undef;
+	}
+	&_dump_non_robot_parameters({'config_hash' => $robot_conf, 'robot' => $robot});
+	# listmaster is a list of email separated by commas
+	$robot_conf->{'listmaster'} =~ s/\s//g;
+
+	@{$robot_conf->{'listmasters'}} = split(/,/, $robot_conf->{'listmaster'})
+	    if $robot_conf->{'listmaster'};
+
+	## Default for 'host' is the domain
+	$robot_conf->{'host'} ||= $robot;
+
+	$robot_conf->{'title'} ||= $wwsconf->{'title'};
+	$robot_conf->{'default_home'} ||= $wwsconf->{'default_home'};
+	$robot_conf->{'use_html_editor'} ||= $wwsconf->{'use_html_editor'};
+	$robot_conf->{'html_editor_file'} ||= $wwsconf->{'html_editor_file'};
+	$robot_conf->{'html_editor_init'} ||= $wwsconf->{'html_editor_init'};
+
+	$robot_conf->{'lang'} ||= $Conf{'lang'};
+	$robot_conf->{'email'} ||= $Conf{'email'};
+	$robot_conf->{'log_smtp'} ||= $Conf{'log_smtp'};
+	$robot_conf->{'log_module'} ||= $Conf{'log_module'};
+	$robot_conf->{'log_condition'} ||= $Conf{'log_module'};
+	$robot_conf->{'log_level'} ||= $Conf{'log_level'};
+	$robot_conf->{'antispam_feature'} ||= $Conf{'antispam_feature'};
+	$robot_conf->{'antispam_tag_header_name'} ||= $Conf{'antispam_tag_header_name'};
+	$robot_conf->{'antispam_tag_header_spam_regexp'} ||= $Conf{'antispam_tag_header_spam_regexp'};
+	$robot_conf->{'antispam_tag_header_ham_regexp'} ||= $Conf{'antispam_tag_header_ham_regexp'};
+	$robot_conf->{'wwsympa_url'} ||= 'http://'.$robot_conf->{'http_host'}.'/sympa';
+
+	$robot_conf->{'static_content_url'} ||= $Conf{'static_content_url'};
+	$robot_conf->{'static_content_path'} ||= $Conf{'static_content_path'};
+	$robot_conf->{'tracking_delivery_status_notification'} ||= $Conf{'tracking_delivery_status_notification'};
+	$robot_conf->{'tracking_message_delivery_notification'} ||= $Conf{'tracking_message_delivery_notification'};
+
+	## CSS
+	$robot_conf->{'css_url'} ||= $robot_conf->{'static_content_url'}.'/css/'.$robot;
+	$robot_conf->{'css_path'} ||= $Conf{'static_content_path'}.'/css/'.$robot;
+
+	$robot_conf->{'sympa'} = $robot_conf->{'email'}.'@'.$robot_conf->{'host'};
+	$robot_conf->{'request'} = $robot_conf->{'email'}.'-request@'.$robot_conf->{'host'};
+	$robot_conf->{'cookie_domain'} ||= 'localhost';
+	#$robot_conf->{'soap_url'} ||= $Conf{'soap_url'};
+	$robot_conf->{'verp_rate'} ||= $Conf{'verp_rate'};
+	$robot_conf->{'use_blacklist'} ||= $Conf{'use_blacklist'};
+
+	$robot_conf->{'pictures_url'} ||= $robot_conf->{'static_content_url'}.'/pictures/';
+	$robot_conf->{'pictures_path'} ||= $robot_conf->{'static_content_path'}.'/pictures/';
+	$robot_conf->{'pictures_feature'} ||= $Conf{'pictures_feature'};
+
+	# split action list for blacklist usage
+	foreach my $action (split(/,/, $Conf{'use_blacklist'})) {
+	    $robot_conf->{'blacklist'}{$action} = 1;
+	}
+
+	my ($host, $path);
+	if ($robot_conf->{'http_host'} =~ /^([^\/]+)(\/.*)$/) {
+	    ($host, $path) = ($1,$2);
+	}else {
+	    ($host, $path) = ($robot_conf->{'http_host'}, '/');
+	}
+
+	## Warn listmaster if another virtual host is defined with the same host+path
+	if (defined $Conf{'robot_by_http_host'}{$host}{$path}) {
+	  printf STDERR "Error: two virtual hosts (%s and %s) are mapped via a single URL '%s%s'", $Conf{'robot_by_http_host'}{$host}{$path}, $robot, $host, $path;
+	}
+
+	$Conf{'robot_by_http_host'}{$host}{$path} = $robot ;
+	
+	## Create a hash to deduce robot from SOAP url
+	if ($robot_conf->{'soap_url'}) {
+	    my $url = $robot_conf->{'soap_url'};
+	    $url =~ s/^http(s)?:\/\/(.+)$/$2/;
+	    $Conf{'robot_by_soap_url'}{$url} = $robot;
+	}
+	# printf STDERR "load trusted de $robot";
+	$robot_conf->{'trusted_applications'} = &load_trusted_application($robot);
+	$robot_conf->{'crawlers_detection'} = &load_crawlers_detection($robot);
+
+	#load parameter from database if database value as prioprity over conf file
+	#foreach my $label (keys %valid_robot_key_words) {
+	#    next unless ($valid_robot_key_words{$label} eq 'db');
+	#    my $value = &get_db_conf($robot, $label);
+	#    $robot_conf->{$label} = $value if ($value);	    
+	#}
+	return $robot_conf;
 }
 ## Packages must return true.
 1;
