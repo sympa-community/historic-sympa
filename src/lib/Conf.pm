@@ -110,10 +110,10 @@ sub load {
 
     ## Loading the config file.
     my $config_err = 0;
-    my($i, %line_numbered_config, %config);
+    my %line_numbered_config;
     if(my $config_loading_result = &_load_config_file_to_hash({'path_to_config_file' => $config_file})) {
 		%line_numbered_config = %{$config_loading_result->{'numbered_config'}};
-		%config = %{$config_loading_result->{'config'}};
+		%Conf = %{$config_loading_result->{'config'}};
 		$config_err = $config_loading_result->{'errors'};
     }else{
         printf STDERR  "load: Unable to load %s. Aborting\n", $config_file;
@@ -125,22 +125,20 @@ sub load {
 
 	# Some parameter values are hardcoded. In that case, ignore what was
 	#  set in the config file and simply use the hardcoded value.
-	%Ignored_Conf = %{&_set_hardcoded_parameter_values({'config_hash' => \%config,})};
+	%Ignored_Conf = %{&_set_hardcoded_parameter_values({'config_hash' => \%Conf,})};
     
     # Some parameters need special treatments to get their final values.
-    &_fix_particular_parameters_value({'config_hash' => \%config,});
+    &_fix_particular_parameters_value({'config_hash' => \%Conf,});
 
     # Users may define parameters with a typo or other errors. Check that the parameters
     # we found in the config file are all well defined Sympa parameters.
-    $config_err += &_detect_unknown_parameters_in_config({	'config_hash' => \%config,
+    $config_err += &_detect_unknown_parameters_in_config({	'config_hash' => \%Conf,
 															'config_file_line_numbering_reference' => \%line_numbered_config,
 															});
 
     ## Some parameters must have a value specifically defined in the config. If not, it is an error.
-    $config_err += &_detect_missing_mandatory_parameters({'config_hash' => \%config,});
+    $config_err += &_detect_missing_mandatory_parameters({'config_hash' => \%Conf,});
 
-	%Conf = %config;
-	
 	if (my $missing_modules_count = &_check_cpan_modules_required_by_config({'config_hash' => \%Conf,})){
 		printf STDERR "Warning: %n required modules are missing.\n",$missing_modules_count;
 	}
