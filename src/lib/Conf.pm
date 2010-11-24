@@ -56,10 +56,11 @@ our %params =
 
 # valid virtual host parameters, keyed by parameter name
 my %valid_robot_key_words;
+my %db_storable_parameters;
 my %optional_key_words;
 foreach my $hash(@confdef::params){
     $valid_robot_key_words{$hash->{'name'}} = 1 if ($hash->{'vhost'});    
-    $valid_robot_key_words{$hash->{'name'}} = 'db' if (defined($hash->{'db'}) and $hash->{'db'} ne 'none');
+    $db_storable_parameters{$hash->{'name'}} = 1 if (defined($hash->{'db'}) and $hash->{'db'} ne 'none');
     $optional_key_words{$hash->{'name'}} = 1 if ($hash->{'optional'}); 
 }
 
@@ -146,7 +147,7 @@ sub load {
     unless ($no_db){
 		#load parameter from database if database value as prioprity over conf file
 		foreach my $label (keys %valid_robot_key_words) {
-			next unless ($valid_robot_key_words{$label} eq 'db');
+			next unless ($db_storable_parameters{$label} == 1);
 			my $value = &get_db_conf('*', $label);
 			if ($value) {
 				$Conf{$label} = $value ;
@@ -157,7 +158,7 @@ sub load {
 		$Conf{'robots'} = $robots_conf ;
 		foreach my $robot (keys %{$Conf{'robots'}}) {
 			foreach my $label (keys %valid_robot_key_words) {
-				next unless ($valid_robot_key_words{$label} eq 'db');
+				next unless ($db_storable_parameters{$label} == 1);
 				my $value = &get_db_conf($robot, $label);
 				if ($value) {
 					$Conf{'robots'}{$robot}{$label} = $value ;
