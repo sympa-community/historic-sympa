@@ -145,15 +145,6 @@ sub load {
 		$Conf{$i} = $config{$i} || $params{$i}->{'default'};
 	}
 
-    ## Some parameters depend on others
-    unless ($Conf{'css_url'}) {
-	$Conf{'css_url'} = $Conf{'static_content_url'}.'/css';
-    }
-    
-    unless ($Conf{'css_path'}) {
-	$Conf{'css_path'} = $Conf{'static_content_path'}.'/css';
-    }
-
     ## Some parameters require CPAN modules
     if ($Conf{'lock_method'} eq 'nfs') {
         eval "require File::NFSLock";
@@ -171,11 +162,6 @@ sub load {
             $Conf{'DKIM_feature'} = 'off';
         }
     }
-    unless ($Conf{'DKIM_feature'} eq 'on'){
-	# dkim_signature_apply_ on nothing if DKIM_feature is off
-	$Conf{'dkim_signature_apply_on'} = ['']; # empty array
-    }
-
     ## Load charset.conf file if necessary.
     if($Conf{'legacy_character_support_feature'} eq 'on'){
 	my $charset_conf = &load_charset;
@@ -1630,7 +1616,22 @@ sub _fix_particular_parameters_value {
 	## Why do we need to intitialize this variable with a fake value? o_°
     unless ( (defined $param->{'config_hash'}{'cafile'}) || (defined $param->{'config_hash'}{'capath'} )) {
 		$param->{'config_hash'}{'cafile'} = Sympa::Constants::DEFAULTDIR . '/ca-bundle.crt';
-    }   
+    } 
+      
+    ## Some parameters depend on others
+    unless ($param->{'config_hash'}{'css_url'}) {
+	$param->{'config_hash'}{'css_url'} = $param->{'config_hash'}{'static_content_url'}.'/css';
+    }
+    
+    unless ($param->{'config_hash'}{'css_path'}) {
+	$param->{'config_hash'}{'css_path'} = $param->{'config_hash'}{'static_content_path'}.'/css';
+    }
+
+    unless ($param->{'config_hash'}{'DKIM_feature'} eq 'on'){
+	# dkim_signature_apply_ on nothing if DKIM_feature is off
+	$param->{'config_hash'}{'dkim_signature_apply_on'} = ['']; # empty array
+    }
+
 	return 1;
 }
 ## Packages must return true.
