@@ -969,12 +969,11 @@ sub _load_auth {
 sub get_robot_conf {
     my ($robot, $param) = @_;
 
-    if ($robot ne '*') {
-	if (defined $Conf{'robots'}{$robot} && defined $Conf{'robots'}{$robot}{$param}) {
-	    return $Conf{'robots'}{$robot}{$param};
-	}
+    if (defined $robot && $robot ne '*') {
+		if (defined $Conf{'robots'}{$robot} && defined $Conf{'robots'}{$robot}{$param}) {
+			return $Conf{'robots'}{$robot}{$param};
+		}
     }
-    
     ## default
     return $Conf{$param} || $wwsconf->{$param};
 }
@@ -1576,7 +1575,10 @@ sub _load_single_robot_config{
 		printf STDERR  "load: Unable to load %s. Aborting\n", $config_file;
 		return undef;
 	}
+	
+	# Remove entries which are not supposed to be defined at the robot level.
 	&_dump_non_robot_parameters({'config_hash' => $robot_conf, 'robot' => $robot});
+	
 	# listmaster is a list of email separated by commas
 	$robot_conf->{'listmaster'} =~ s/\s//g;
 
@@ -1586,28 +1588,10 @@ sub _load_single_robot_config{
 	## Default for 'host' is the domain
 	$robot_conf->{'host'} ||= $robot;
 
-	$robot_conf->{'title'} ||= $wwsconf->{'title'};
-	$robot_conf->{'default_home'} ||= $wwsconf->{'default_home'};
-	$robot_conf->{'use_html_editor'} ||= $wwsconf->{'use_html_editor'};
-	$robot_conf->{'html_editor_file'} ||= $wwsconf->{'html_editor_file'};
-	$robot_conf->{'html_editor_init'} ||= $wwsconf->{'html_editor_init'};
-
-	$robot_conf->{'lang'} ||= $Conf{'lang'};
-	$robot_conf->{'email'} ||= $Conf{'email'};
-	$robot_conf->{'log_smtp'} ||= $Conf{'log_smtp'};
-	$robot_conf->{'log_module'} ||= $Conf{'log_module'};
-	$robot_conf->{'log_condition'} ||= $Conf{'log_module'};
-	$robot_conf->{'log_level'} ||= $Conf{'log_level'};
-	$robot_conf->{'antispam_feature'} ||= $Conf{'antispam_feature'};
-	$robot_conf->{'antispam_tag_header_name'} ||= $Conf{'antispam_tag_header_name'};
-	$robot_conf->{'antispam_tag_header_spam_regexp'} ||= $Conf{'antispam_tag_header_spam_regexp'};
-	$robot_conf->{'antispam_tag_header_ham_regexp'} ||= $Conf{'antispam_tag_header_ham_regexp'};
 	$robot_conf->{'wwsympa_url'} ||= 'http://'.$robot_conf->{'http_host'}.'/sympa';
 
 	$robot_conf->{'static_content_url'} ||= $Conf{'static_content_url'};
 	$robot_conf->{'static_content_path'} ||= $Conf{'static_content_path'};
-	$robot_conf->{'tracking_delivery_status_notification'} ||= $Conf{'tracking_delivery_status_notification'};
-	$robot_conf->{'tracking_message_delivery_notification'} ||= $Conf{'tracking_message_delivery_notification'};
 
 	## CSS
 	$robot_conf->{'css_url'} ||= $robot_conf->{'static_content_url'}.'/css/'.$robot;
@@ -1617,12 +1601,9 @@ sub _load_single_robot_config{
 	$robot_conf->{'request'} = $robot_conf->{'email'}.'-request@'.$robot_conf->{'host'};
 	$robot_conf->{'cookie_domain'} ||= 'localhost';
 	#$robot_conf->{'soap_url'} ||= $Conf{'soap_url'};
-	$robot_conf->{'verp_rate'} ||= $Conf{'verp_rate'};
-	$robot_conf->{'use_blacklist'} ||= $Conf{'use_blacklist'};
 
 	$robot_conf->{'pictures_url'} ||= $robot_conf->{'static_content_url'}.'/pictures/';
 	$robot_conf->{'pictures_path'} ||= $robot_conf->{'static_content_path'}.'/pictures/';
-	$robot_conf->{'pictures_feature'} ||= $Conf{'pictures_feature'};
 
 	# split action list for blacklist usage
 	foreach my $action (split(/,/, $Conf{'use_blacklist'})) {
