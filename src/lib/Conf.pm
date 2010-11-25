@@ -144,6 +144,64 @@ sub load {
 		printf STDERR "Warning: %n required modules are missing.\n",$missing_modules_count;
 	}
 
+    my $p = 1;
+    foreach (split(/,/, $Conf{'sort'})) {
+	$Conf{'poids'}{$_} = $p++;
+    }
+    $Conf{'poids'}{'*'} = $p if ! $Conf{'poids'}{'*'};
+    
+    if ($config_err) {
+	return undef;
+    }
+
+    ## Parameters made of comma-separated list
+    foreach my $parameter ('rfc2369_header_fields','anonymous_header_fields','remove_headers','remove_outgoing_headers') {
+	if ($Conf{$parameter} eq 'none') {
+	    delete $Conf{$parameter};
+	}else {
+	    $Conf{$parameter} = [split(/,/, $Conf{$parameter})];
+	}
+    }
+
+    foreach my $action (split(/,/, $Conf{'use_blacklist'})) {
+	$Conf{'blacklist'}{$action} = 1;
+    }
+
+    foreach my $log_module (split(/,/, $Conf{'log_module'})) {
+	$Conf{'loging_for_module'}{$log_module} = 1;
+    }
+    foreach my $log_condition (split(/,/, $Conf{'log_condition'})) {
+	chomp $log_condition;
+	if ($log_condition =~ /^\s*(ip|email)\s*\=\s*(.*)\s*$/i) { 	    
+	    $Conf{'loging_condition'}{$1} = $2;
+	}else{
+	    &do_log('err',"unrecognized log_condition token %s ; ignored",$log_condition);
+	}
+    }    
+
+	&_set_listmasters_entry({'config_hash' => \%Conf});
+    
+    ## Set Regexp for accepted list suffixes
+    if (defined ($Conf{'list_check_suffixes'})) {
+	$Conf{'list_check_regexp'} = $Conf{'list_check_suffixes'};
+	$Conf{'list_check_regexp'} =~ s/[,\s]+/\|/g;
+    }
+	
+
+    ## Load charset.conf file if necessary.
+    if($Conf{'legacy_character_support_feature'} eq 'on'){
+		$Conf{'locale2charset'} = &load_charset ();
+    }else{
+		$Conf{'locale2charset'} = {};
+    }
+    $Conf{'nrcpt_by_domain'} = &load_nrcpt_by_domain () ;
+    $Conf{'trusted_applications'} = &load_trusted_application (); 
+    $Conf{'crawlers_detection'} = &load_crawlers_detection (); 
+
+    $Conf{'sympa'} = "$Conf{'email'}\@$Conf{'domain'}";
+    $Conf{'request'} = "$Conf{'email'}-request\@$Conf{'domain'}";
+    $Conf{'pictures_url'}  = $Conf{'static_content_url'}.'/pictures/';
+    $Conf{'pictures_path'}  = $Conf{'static_content_path'}.'/pictures/';
 	## Load robot.conf files
 	$Conf{'robots'} = &load_robots() ;
     unless ($no_db){
@@ -197,66 +255,6 @@ sub load {
 								};
     }
         
-    my $p = 1;
-    foreach (split(/,/, $Conf{'sort'})) {
-	$Conf{'poids'}{$_} = $p++;
-    }
-    $Conf{'poids'}{'*'} = $p if ! $Conf{'poids'}{'*'};
-    
-    if ($config_err) {
-	return undef;
-    }
-
-    ## Parameters made of comma-separated list
-    foreach my $parameter ('rfc2369_header_fields','anonymous_header_fields','remove_headers','remove_outgoing_headers') {
-	if ($Conf{$parameter} eq 'none') {
-	    delete $Conf{$parameter};
-	}else {
-	    $Conf{$parameter} = [split(/,/, $Conf{$parameter})];
-	}
-    }
-
-    foreach my $action (split(/,/, $Conf{'use_blacklist'})) {
-	$Conf{'blacklist'}{$action} = 1;
-    }
-
-    foreach my $log_module (split(/,/, $Conf{'log_module'})) {
-	$Conf{'loging_for_module'}{$log_module} = 1;
-    }
-    foreach my $log_condition (split(/,/, $Conf{'log_condition'})) {
-	chomp $log_condition;
-	if ($log_condition =~ /^\s*(ip|email)\s*\=\s*(.*)\s*$/i) { 	    
-	    $Conf{'loging_condition'}{$1} = $2;
-	}else{
-	    &do_log('err',"unrecognized log_condition token %s ; ignored",$log_condition);
-	}
-    }    
-
-    $Conf{'listmaster'} =~ s/\s//g ;
-    @{$Conf{'listmasters'}} = split(/,/, $Conf{'listmaster'});
-
-    
-    ## Set Regexp for accepted list suffixes
-    if (defined ($Conf{'list_check_suffixes'})) {
-	$Conf{'list_check_regexp'} = $Conf{'list_check_suffixes'};
-	$Conf{'list_check_regexp'} =~ s/[,\s]+/\|/g;
-    }
-	
-
-    ## Load charset.conf file if necessary.
-    if($Conf{'legacy_character_support_feature'} eq 'on'){
-		$Conf{'locale2charset'} = &load_charset ();
-    }else{
-		$Conf{'locale2charset'} = {};
-    }
-    $Conf{'nrcpt_by_domain'} = &load_nrcpt_by_domain () ;
-    $Conf{'trusted_applications'} = &load_trusted_application (); 
-    $Conf{'crawlers_detection'} = &load_crawlers_detection (); 
-
-    $Conf{'sympa'} = "$Conf{'email'}\@$Conf{'domain'}";
-    $Conf{'request'} = "$Conf{'email'}-request\@$Conf{'domain'}";
-    $Conf{'pictures_url'}  = $Conf{'static_content_url'}.'/pictures/';
-    $Conf{'pictures_path'}  = $Conf{'static_content_path'}.'/pictures/';
 	open TMP,">/tmp/dumpconf";&tools::dump_var(\%Conf,0,\*TMP);close TMP;
 	
     return 1;
@@ -1579,10 +1577,10 @@ sub _load_single_robot_config{
 	# Remove entries which are not supposed to be defined at the robot level.
 	&_dump_non_robot_parameters({'config_hash' => $robot_conf, 'robot' => $robot});
 	
-	&_set_listmasters_entry({'config_hash' => $robot_conf});
-
 	## Default for 'host' is the domain
 	$robot_conf->{'host'} ||= $robot;
+
+	&_set_listmasters_entry({'config_hash' => $robot_conf});
 
 	$robot_conf->{'wwsympa_url'} ||= 'http://'.$robot_conf->{'http_host'}.'/sympa';
 
@@ -1647,15 +1645,15 @@ sub _set_listmasters_entry{
 				push @{$param->{'config_hash'}{'listmasters'}}, $lismaster_address;
 				$number_of_valid_email++;
 			}else{
-				printf STDERR "Listmaster address '%s' is not a valid email\n", $lismaster_address;
+				printf STDERR "Robot %s config: Listmaster address '%s' is not a valid email\n",$param->{'config_hash'}{'host'},$lismaster_address;
 			}
 		}
 	}else{
-		printf STDERR "No listmaster found in hash\n";
+		printf STDERR "Robot %s config: No listmaster found in hash\n",$param->{'config_hash'}{'host'};
 		return undef;
 	}
 	if ($number_of_email_provided > $number_of_valid_email){
-		printf STDERR "All the listmasters addresses found were not valid. Out of %s addresses provided, %s only are valid email addresses.\n",$number_of_email_provided,$number_of_valid_email;
+		printf STDERR "Robot %s config: All the listmasters addresses found were not valid. Out of %s addresses provided, %s only are valid email addresses.\n",$param->{'config_hash'}{'host'},$number_of_email_provided,$number_of_valid_email;
 		return undef;
 	}
 	return $number_of_valid_email;
