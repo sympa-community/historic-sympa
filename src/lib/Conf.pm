@@ -1579,11 +1579,7 @@ sub _load_single_robot_config{
 	# Remove entries which are not supposed to be defined at the robot level.
 	&_dump_non_robot_parameters({'config_hash' => $robot_conf, 'robot' => $robot});
 	
-	# listmaster is a list of email separated by commas
-	$robot_conf->{'listmaster'} =~ s/\s//g;
-
-	@{$robot_conf->{'listmasters'}} = split(/,/, $robot_conf->{'listmaster'})
-	    if $robot_conf->{'listmaster'};
+	&_set_listmasters_entry({'config_hash' => $robot_conf});
 
 	## Default for 'host' is the domain
 	$robot_conf->{'host'} ||= $robot;
@@ -1634,13 +1630,36 @@ sub _load_single_robot_config{
 	$robot_conf->{'trusted_applications'} = &load_trusted_application($robot);
 	$robot_conf->{'crawlers_detection'} = &load_crawlers_detection($robot);
 
-	#load parameter from database if database value as prioprity over conf file
-	#foreach my $label (keys %valid_robot_key_words) {
-	#    next unless ($valid_robot_key_words{$label} eq 'db');
-	#    my $value = &get_db_conf($robot, $label);
-	#    $robot_conf->{$label} = $value if ($value);	    
-	#}
 	return $robot_conf;
 }
+
+sub _set_listmasters_entry{
+	my $param = shift;
+	my $number_of_valid_email = 0;
+	my $number_of_email_provided = 0;
+	# listmaster is a list of email separated by commas
+	if (defined $param->{'config_hash'}{'listmaster'} && $param->{'config_hash'}{'listmaster'} !~ /^\s*$/) {
+		$param->{'config_hash'}{'listmaster'} =~ s/\s//g;
+		my @emails_provided = split(/,/, $param->{'config_hash'}{'listmaster'});
+		$number_of_email_provided = $#emails_provided+1;
+		foreach my $lismaster_address (@emails_provided){
+			if (&tools::valid_email($lismaster_address)) {
+				push @{$param->{'config_hash'}{'listmasters'}}, $lismaster_address;
+				$number_of_valid_email++;
+			}else{
+				printf STDERR "Listmaster address '%s' is not a valid email\n", $lismaster_address;
+			}
+		}
+	}else{
+		printf STDERR "No listmaster found in hash\n";
+		return undef;
+	}
+	if ($number_of_email_provided > $number_of_valid_email){
+		printf STDERR "All the listmasters addresses found were not valid. Out of %s addresses provided, %s only are valid email addresses.\n",$number_of_email_provided,$number_of_valid_email;
+		return undef;
+	}
+	return $number_of_valid_email;
+}
+
 ## Packages must return true.
 1;
