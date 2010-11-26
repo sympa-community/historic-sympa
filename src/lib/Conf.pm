@@ -157,14 +157,7 @@ sub load {
 		$Conf{'locale2charset'} = {};
     }
     $Conf{'nrcpt_by_domain'} = &load_nrcpt_by_domain () ;
-    $Conf{'trusted_applications'} = &load_trusted_application (); 
-    $Conf{'crawlers_detection'} = &load_crawlers_detection (); 
 
-    $Conf{'sympa'} = "$Conf{'email'}\@$Conf{'domain'}";
-    $Conf{'request'} = "$Conf{'email'}-request\@$Conf{'domain'}";
-    $Conf{'pictures_url'}  = $Conf{'static_content_url'}.'/pictures/';
-    $Conf{'pictures_path'}  = $Conf{'static_content_path'}.'/pictures/';
-    
 	## Load robot.conf files
 	$Conf{'robots'} = &load_robots() ;
     unless ($no_db){
@@ -1504,7 +1497,6 @@ sub _infer_robot_parameter_values {
 	    $url =~ s/^http(s)?:\/\/(.+)$/$2/;
 	    $Conf{'robot_by_soap_url'}{$url} = $param->{'config_hash'}{'robot_name'};
 	}
-	# printf STDERR "load trusted de $robot";
 	$param->{'config_hash'}{'trusted_applications'} = &load_trusted_application($param->{'config_hash'}{'robot_name'});
 	$param->{'config_hash'}{'crawlers_detection'} = &load_crawlers_detection($param->{'config_hash'}{'robot_name'});
 
