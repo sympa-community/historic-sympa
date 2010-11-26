@@ -174,15 +174,6 @@ sub load {
 		}
     }
 
-    foreach my $robot (keys %{$Conf{'robots'}}) {
-		my $robot_config_file;   
-		unless ($robot_config_file = &tools::get_filename('etc',{},'auth.conf', $robot)) {
-			&do_log('err',"_load_auth: Unable to find auth.conf");
-			next;
-		}
-		$Conf{'auth_services'}{$robot} = &_load_auth($robot, $robot_config_file);	
-    }
-    
 	open TMP,">/tmp/dumpconf";&tools::dump_var(\%Conf,0,\*TMP);close TMP;
 	
 	return 1;
@@ -291,6 +282,13 @@ sub load_robots {
 		next unless (-f "$Conf{'etc'}/$robot/robot.conf");
 		$robot_conf->{$robot} = &_load_single_robot_config({'robot' => $robot});
 		&_check_double_url_usage({'config_hash' => $robot_conf->{$robot}});
+		my $robot_config_file;   
+		unless ($robot_config_file = &tools::get_filename('etc',{},'auth.conf', $robot)) {
+			print STDERR "Conf::load_robots(): Unable to find auth.conf for robot %s", $robot;
+			next;
+		}
+		$Conf{'auth_services'}{$robot} = &_load_auth($robot, $robot_config_file);	
+
     }
     closedir(DIR);
     
