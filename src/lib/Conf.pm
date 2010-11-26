@@ -156,21 +156,9 @@ sub load {
 	
     unless ($no_db){
 		#load parameter from database if database value as prioprity over conf file
-		foreach my $label (keys %valid_robot_key_words) {
-			next unless ($db_storable_parameters{$label} == 1);
-			my $value = &get_db_conf('*', $label);
-			if ($value) {
-				$Conf{$label} = $value ;
-			}
-		}
+		&_substitute_file_value_by_db_value('config_file' => \%Conf);
 		foreach my $robot (keys %{$Conf{'robots'}}) {
-			foreach my $label (keys %valid_robot_key_words) {
-				next unless ($db_storable_parameters{$label} == 1);
-				my $value = &get_db_conf($robot, $label);
-				if ($value) {
-					$Conf{'robots'}{$robot}{$label} = $value ;
-				}
-			}
+			&_substitute_file_value_by_db_value('config_file' => $Conf{'robots'}{$robot});
 		}
     }
 
@@ -1650,5 +1638,18 @@ sub _parse_custom_robot_parameters {
 	}
 }
 
+sub _substitute_file_value_by_db_value {
+	my $param = shift;
+	my $robot = $param->{'config_file'}{'robot_name'};
+	# The name of the default robot is "*" in the database.
+	$robot = '*' if ($param->{'config_file'}{'robot_name'} eq '');
+	foreach my $label (keys %db_storable_parameters) {
+		next unless ($robot ne '*' && $valid_robot_key_words{$label} == 1);
+		my $value = &get_db_conf($robot, $label);
+		if (defined $value) {
+			$param->{'config_file'}{$label} = $value ;
+		}
+	}
+}
 ## Packages must return true.
 1;
