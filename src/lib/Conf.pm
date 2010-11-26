@@ -1309,31 +1309,31 @@ sub _load_config_file_to_hash {
         next if (/^\s*$/ || /^[\#;]/);
 	    # match "keyword value" pattern
 	    if (/^(\S+)\s+(.+)$/) {
-		my ($keyword, $value) = ($1, $2);
-		$value =~ s/\s*$//;
-		##  'tri' is a synonym for 'sort'
-		## (for compatibilyty with older versions)
-		$keyword = 'sort' if ($keyword eq 'tri');
-		##  'key_password' is a synonym for 'key_passwd'
-		## (for compatibilyty with older versions)
-		$keyword = 'key_passwd' if ($keyword eq 'key_password');
-		## Special case: `command`
-		if ($value =~ /^\`(.*)\`$/) {
-		    $value = qx/$1/;
-		    chomp($value);
-		}
-		if($params{$keyword}{'multiple'} == 1){
-		    if($result->{'config'}{$keyword}) {
-				push @{$result->{'config'}{$keyword}}, $value;
-				push @{$result->{'numbered_config'}{$keyword}}, [$value, $line_num];
-		    }else{
+			my ($keyword, $value) = ($1, $2);
+			$value =~ s/\s*$//;
+			##  'tri' is a synonym for 'sort'
+			## (for compatibilyty with older versions)
+			$keyword = 'sort' if ($keyword eq 'tri');
+			##  'key_password' is a synonym for 'key_passwd'
+			## (for compatibilyty with older versions)
+			$keyword = 'key_passwd' if ($keyword eq 'key_password');
+			## Special case: `command`
+			if ($value =~ /^\`(.*)\`$/) {
+				$value = qx/$1/;
+				chomp($value);
+			}
+			if($params{$keyword}{'multiple'} == 1){
+				if(defined $result->{'config'}{$keyword}) {
+					push @{$result->{'config'}{$keyword}}, $value;
+					push @{$result->{'numbered_config'}{$keyword}}, [$value, $line_num];
+				}else{
+					$result->{'config'}{$keyword} = [$value];
+					$result->{'numbered_config'}{$keyword} = [[$value, $line_num]];
+				}
+			}else{
 				$result->{'config'}{$keyword} = $value;
-				$result->{'numbered_config'}{$keyword} = [[$value, $line_num]];
-		    }
-		}else{
-		    $result->{'config'}{$keyword} = $value;
-		    $result->{'numbered_config'}{$keyword} = [ $value, $line_num ];
-		}
+				$result->{'numbered_config'}{$keyword} = [ $value, $line_num ];
+			}
 	    } else {
 			printf STDERR  "Conf::_load_config_file_to_hash(): ".gettext("Error at line %d: %s\n"), $line_num, $param->{'path_to_config_file'}, $_;
 			$result->{'errors'}++;
@@ -1595,6 +1595,7 @@ sub _load_single_robot_config{
 	
 	## Default for 'host' is the domain
 	$robot_conf->{'host'} ||= $robot;
+	$robot_conf->{'robot_name'} ||= $robot;
 
 	&_set_listmasters_entry({'config_hash' => $robot_conf});
 
