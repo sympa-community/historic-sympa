@@ -156,13 +156,6 @@ sub load {
 	## Load robot.conf files
 	$Conf{'robots'} = &load_robots({'no_db' => $no_db}) ;
 	
-    unless ($no_db){
-		#load parameter from database if database value as prioprity over conf file
-		foreach my $robot (keys %{$Conf{'robots'}}) {
-			
-		}
-    }
-
 	open TMP,">/tmp/dumpconf";&tools::dump_var(\%Conf,0,\*TMP);close TMP;
 	
 	return 1;
