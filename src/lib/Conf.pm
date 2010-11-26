@@ -179,73 +179,6 @@ sub load {
 	return 1;
 }
 
-## load charset.conf file (charset mapping for service messages)
-sub load_charset {
-    my $charset = {};
-
-    my $config_file = $Conf{'etc'}.'/charset.conf' ;
-    $config_file = Sympa::Constants::DEFAULTDIR . '/charset.conf' unless -f $config_file;
-    if (-f $config_file) {
-	unless (open CONFIG, $config_file) {
-	    printf STDERR 'Conf::load_charset(): Unable to read configuration file %s: %s\n',$config_file, $!;
-	    return {};
-	}
-	while (<CONFIG>) {
-	    chomp $_;
-	    s/\s*#.*//;
-	    s/^\s+//;
-	    next unless /\S/;
-	    my ($locale, $cset) = split(/\s+/, $_);
-	    unless ($cset) {
-		printf STDERR 'Conf::load_charset(): Charset name is missing in configuration file %s line %d\n',$config_file, $.;
-		next;
-	    }
-	    unless ($locale =~ s/^([a-z]+)_([a-z]+)/lc($1).'_'.uc($2).$'/ei) { #'
-		printf STDERR 'Conf::load_charset():  Illegal locale name in configuration file %s line %d\n',$config_file, $.;
-		next;
-	    }
-	    $charset->{$locale} = $cset;
-	
-	}
-	close CONFIG;
-    }
-
-    return $charset;
-}
-
-
-## load nrcpt file (limite receipient par domain
-sub load_nrcpt_by_domain {
-  my $config_file = $Conf{'etc'}.'/nrcpt_by_domain.conf';
-  my $line_num = 0;
-  my $config_err = 0;
-  my $nrcpt_by_domain ; 
-  my $valid_dom = 0;
-
-  return undef unless (-f $config_file) ;
-  ## Open the configuration file or return and read the lines.
-  unless (open(IN, $config_file)) {
-      printf STDERR  "Conf::load_nrcpt_by_domain(): : Unable to open %s: %s\n", $config_file, $!;
-      return undef;
-  }
-  while (<IN>) {
-      $line_num++;
-      next if (/^\s*$/o || /^[\#\;]/o);
-      if (/^(\S+)\s+(\d+)$/io) {
-	  my($domain, $value) = ($1, $2);
-	  chomp $domain; chomp $value;
-	  $nrcpt_by_domain->{$domain} = $value;
-	  $valid_dom +=1;
-      }else {
-	  printf STDERR gettext("Conf::load_nrcpt_by_domain(): Error at line %d: %s"), $line_num, $config_file, $_;
-	  $config_err++;
-      }
-  } 
-  close(IN);
-  printf STDERR "Conf::load_nrcpt_by_domain(): Loaded $valid_dom config lines from $config_file";
-  return ($nrcpt_by_domain);
-}
-
 ## load each virtual robots configuration files
 sub load_robots {
     
@@ -293,6 +226,19 @@ sub load_robots {
     closedir(DIR);
     
     return ($robot_conf);
+}
+
+## returns a robot conf parameter
+sub get_robot_conf {
+    my ($robot, $param) = @_;
+
+    if (defined $robot && $robot ne '*') {
+		if (defined $Conf{'robots'}{$robot} && defined $Conf{'robots'}{$robot}{$param}) {
+			return $Conf{'robots'}{$robot}{$param};
+		}
+    }
+    ## default
+    return $Conf{$param} || $wwsconf->{$param};
 }
 
 
@@ -397,6 +343,57 @@ sub set_robot_conf  {
 }
 
 
+# Store configs to database
+sub conf_2_db {
+    my $config_file = shift;
+    do_log('info',"conf_2_db");
+
+    my @conf_parameters = @confdef::params ;
+
+    # store in database robots parameters.
+    my $robots_conf = &load_robots ; #load only parameters that are in a robot.conf file (do not apply defaults). 
+
+    unless (opendir DIR,$Conf{'etc'} ) {
+		printf STDERR "Conf::conf2db(): Unable to open directory $Conf{'etc'} for virtual robots config\n" ;
+		return undef;
+    }
+
+    foreach my $robot (readdir(DIR)) {
+		next unless (-d "$Conf{'etc'}/$robot");
+		next unless (-f "$Conf{'etc'}/$robot/robot.conf");
+		
+		my $config;
+		if(my $result_of_config_loading = _load_config_file_to_hash({'path_to_config_file' => $Conf{'etc'}.'/'.$robot.'/robot.conf'})){
+			$config = $result_of_config_loading->{'config'};
+		}
+		&_remove_unvalid_robot_entry($config);
+		
+		for my $i ( 0 .. $#conf_parameters ) {
+		    if ($conf_parameters[$i]->{'name'}) { #skip separators in conf_parameters structure
+			if (($conf_parameters[$i]->{'vhost'} eq '1') && #skip parameters that can't be define by robot so not to be loaded in db at that stage 
+			    ($config->{$conf_parameters[$i]->{'name'}})){
+			    &Conf::set_robot_conf($robot, $conf_parameters[$i]->{'name'}, $config->{$conf_parameters[$i]->{'name'}});
+			}
+		    }
+		}
+    }
+    closedir (DIR);
+
+    # store in database sympa;conf and wwsympa.conf
+    
+    ## Load configuration file. Ignoring database config and get result
+    my $global_conf;
+    unless ($global_conf= Conf::load($config_file,1,'return_result')) {
+	&fatal_err("Configuration file $config_file has errors.");  
+    }
+    
+    for my $i ( 0 .. $#conf_parameters ) {
+	if (($conf_parameters[$i]->{'edit'} eq '1') && $global_conf->{$conf_parameters[$i]->{'name'}}) {
+	    &Conf::set_robot_conf("*",$conf_parameters[$i]->{'name'},$global_conf->{$conf_parameters[$i]->{'name'}}[0]);
+	}       
+    }
+}
+
 ## Check required files and create them if required
 sub checkfiles_as_root {
 
@@ -448,34 +445,6 @@ sub checkfiles_as_root {
     }
 
     return 1 ;
-}
-
-## return 1 if the parameter is a known robot
-sub valid_robot {
-    my $robot = shift;
-
-    ## Main host
-    return 1 if ($robot eq $Conf{'domain'});
-
-    ## Missing etc directory
-    unless (-d $Conf{'etc'}.'/'.$robot) {
-	&do_log('err', 'Robot %s undefined ; no %s directory', $robot, $Conf{'etc'}.'/'.$robot);
-	return undef;
-    }
-
-    ## Missing expl directory
-    unless (-d $Conf{'home'}.'/'.$robot) {
-	&do_log('err', 'Robot %s undefined ; no %s directory', $robot, $Conf{'home'}.'/'.$robot);
-	return undef;
-    }
-    
-    ## Robot not loaded
-    unless (defined $Conf{'robots'}{$robot}) {
-	&do_log('err', 'Robot %s was not loaded by this Sympa process', $robot);
-	return undef;
-    }
-
-    return 1;
 }
 
 ## Check a few files
@@ -670,6 +639,34 @@ sub checkfiles {
     return 1;
 }
 
+## return 1 if the parameter is a known robot
+sub valid_robot {
+    my $robot = shift;
+
+    ## Main host
+    return 1 if ($robot eq $Conf{'domain'});
+
+    ## Missing etc directory
+    unless (-d $Conf{'etc'}.'/'.$robot) {
+	&do_log('err', 'Robot %s undefined ; no %s directory', $robot, $Conf{'etc'}.'/'.$robot);
+	return undef;
+    }
+
+    ## Missing expl directory
+    unless (-d $Conf{'home'}.'/'.$robot) {
+	&do_log('err', 'Robot %s undefined ; no %s directory', $robot, $Conf{'home'}.'/'.$robot);
+	return undef;
+    }
+    
+    ## Robot not loaded
+    unless (defined $Conf{'robots'}{$robot}) {
+	&do_log('err', 'Robot %s was not loaded by this Sympa process', $robot);
+	return undef;
+    }
+
+    return 1;
+}
+
 ## Returns the SSO record correponding to the provided sso_id
 ## return undef if none was found
 sub get_sso_by_id {
@@ -689,7 +686,8 @@ sub get_sso_by_id {
     return undef;
 }
 
-## Loads and parses the authentication configuration file.
+##########################################
+## Low level subs. Not supposed to be called from other modules.
 ##########################################
 
 sub _load_auth {
@@ -882,20 +880,72 @@ sub _load_auth {
     
 }
 
-## returns a robot conf parameter
-sub get_robot_conf {
-    my ($robot, $param) = @_;
+## load charset.conf file (charset mapping for service messages)
+sub load_charset {
+    my $charset = {};
 
-    if (defined $robot && $robot ne '*') {
-		if (defined $Conf{'robots'}{$robot} && defined $Conf{'robots'}{$robot}{$param}) {
-			return $Conf{'robots'}{$robot}{$param};
-		}
+    my $config_file = $Conf{'etc'}.'/charset.conf' ;
+    $config_file = Sympa::Constants::DEFAULTDIR . '/charset.conf' unless -f $config_file;
+    if (-f $config_file) {
+	unless (open CONFIG, $config_file) {
+	    printf STDERR 'Conf::load_charset(): Unable to read configuration file %s: %s\n',$config_file, $!;
+	    return {};
+	}
+	while (<CONFIG>) {
+	    chomp $_;
+	    s/\s*#.*//;
+	    s/^\s+//;
+	    next unless /\S/;
+	    my ($locale, $cset) = split(/\s+/, $_);
+	    unless ($cset) {
+		printf STDERR 'Conf::load_charset(): Charset name is missing in configuration file %s line %d\n',$config_file, $.;
+		next;
+	    }
+	    unless ($locale =~ s/^([a-z]+)_([a-z]+)/lc($1).'_'.uc($2).$'/ei) { #'
+		printf STDERR 'Conf::load_charset():  Illegal locale name in configuration file %s line %d\n',$config_file, $.;
+		next;
+	    }
+	    $charset->{$locale} = $cset;
+	
+	}
+	close CONFIG;
     }
-    ## default
-    return $Conf{$param} || $wwsconf->{$param};
+
+    return $charset;
 }
 
 
+## load nrcpt file (limite receipient par domain
+sub load_nrcpt_by_domain {
+  my $config_file = $Conf{'etc'}.'/nrcpt_by_domain.conf';
+  my $line_num = 0;
+  my $config_err = 0;
+  my $nrcpt_by_domain ; 
+  my $valid_dom = 0;
+
+  return undef unless (-f $config_file) ;
+  ## Open the configuration file or return and read the lines.
+  unless (open(IN, $config_file)) {
+      printf STDERR  "Conf::load_nrcpt_by_domain(): : Unable to open %s: %s\n", $config_file, $!;
+      return undef;
+  }
+  while (<IN>) {
+      $line_num++;
+      next if (/^\s*$/o || /^[\#\;]/o);
+      if (/^(\S+)\s+(\d+)$/io) {
+	  my($domain, $value) = ($1, $2);
+	  chomp $domain; chomp $value;
+	  $nrcpt_by_domain->{$domain} = $value;
+	  $valid_dom +=1;
+      }else {
+	  printf STDERR gettext("Conf::load_nrcpt_by_domain(): Error at line %d: %s"), $line_num, $config_file, $_;
+	  $config_err++;
+      }
+  } 
+  close(IN);
+  printf STDERR "Conf::load_nrcpt_by_domain(): Loaded $valid_dom config lines from $config_file";
+  return ($nrcpt_by_domain);
+}
 
 ## load .sql named filter conf file
 sub load_sql_filter {
@@ -1197,57 +1247,6 @@ sub _load_a_param {
 	return \@array;
     }else {
 	return $value;
-    }
-}
-
-# Store configs to database
-sub conf_2_db {
-    my $config_file = shift;
-    do_log('info',"conf_2_db");
-
-    my @conf_parameters = @confdef::params ;
-
-    # store in database robots parameters.
-    my $robots_conf = &load_robots ; #load only parameters that are in a robot.conf file (do not apply defaults). 
-
-    unless (opendir DIR,$Conf{'etc'} ) {
-		printf STDERR "Conf::conf2db(): Unable to open directory $Conf{'etc'} for virtual robots config\n" ;
-		return undef;
-    }
-
-    foreach my $robot (readdir(DIR)) {
-		next unless (-d "$Conf{'etc'}/$robot");
-		next unless (-f "$Conf{'etc'}/$robot/robot.conf");
-		
-		my $config;
-		if(my $result_of_config_loading = _load_config_file_to_hash({'path_to_config_file' => $Conf{'etc'}.'/'.$robot.'/robot.conf'})){
-			$config = $result_of_config_loading->{'config'};
-		}
-		&_remove_unvalid_robot_entry($config);
-		
-		for my $i ( 0 .. $#conf_parameters ) {
-		    if ($conf_parameters[$i]->{'name'}) { #skip separators in conf_parameters structure
-			if (($conf_parameters[$i]->{'vhost'} eq '1') && #skip parameters that can't be define by robot so not to be loaded in db at that stage 
-			    ($config->{$conf_parameters[$i]->{'name'}})){
-			    &Conf::set_robot_conf($robot, $conf_parameters[$i]->{'name'}, $config->{$conf_parameters[$i]->{'name'}});
-			}
-		    }
-		}
-    }
-    closedir (DIR);
-
-    # store in database sympa;conf and wwsympa.conf
-    
-    ## Load configuration file. Ignoring database config and get result
-    my $global_conf;
-    unless ($global_conf= Conf::load($config_file,1,'return_result')) {
-	&fatal_err("Configuration file $config_file has errors.");  
-    }
-    
-    for my $i ( 0 .. $#conf_parameters ) {
-	if (($conf_parameters[$i]->{'edit'} eq '1') && $global_conf->{$conf_parameters[$i]->{'name'}}) {
-	    &Conf::set_robot_conf("*",$conf_parameters[$i]->{'name'},$global_conf->{$conf_parameters[$i]->{'name'}}[0]);
-	}       
     }
 }
 
