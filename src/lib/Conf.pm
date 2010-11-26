@@ -109,7 +109,7 @@ sub load {
     my $no_db = shift;
     my $return_result = shift;
 
-    ## Loading the config file.
+    ## Loading the Sympa main config file.
     my $config_err = 0;
     my %line_numbered_config;
     if(my $config_loading_result = &_load_config_file_to_hash({'path_to_config_file' => $config_file})) {
@@ -117,19 +117,12 @@ sub load {
 		%Conf = %{$config_loading_result->{'config'}};
 		$config_err = $config_loading_result->{'errors'};
     }else{
-        printf STDERR  "load: Unable to load %s. Aborting\n", $config_file;
+        printf STDERR  "Conf::load(): Unable to load %s. Aborting\n", $config_file;
         return undef;
     }
 
     # Returning the config file content if this is what has been asked.
     return (\%line_numbered_config) if ($return_result);
-
-	# Some parameter values are hardcoded. In that case, ignore what was
-	#  set in the config file and simply use the hardcoded value.
-	%Ignored_Conf = %{&_set_hardcoded_parameter_values({'config_hash' => \%Conf,})};
-    
-    # Some parameters need special treatments to get their final values.
-    &_fix_particular_parameters_value({'config_hash' => \%Conf,});
 
     # Users may define parameters with a typo or other errors. Check that the parameters
     # we found in the config file are all well defined Sympa parameters.
@@ -137,56 +130,25 @@ sub load {
 															'config_file_line_numbering_reference' => \%line_numbered_config,
 															});
 
+	# Some parameter values are hardcoded. In that case, ignore what was
+	#  set in the config file and simply use the hardcoded value.
+	%Ignored_Conf = %{&_set_hardcoded_parameter_values({'config_hash' => \%Conf,})};
+    
+	&_set_listmasters_entry({'config_hash' => \%Conf});
+	
+    # Some parameters need special treatments to get their final values.
+    &_infer_server_specific_parameter_values({'config_hash' => \%Conf,});
+    
+	&_infer_robot_parameter_values({'config_hash' => \%Conf});
+
     ## Some parameters must have a value specifically defined in the config. If not, it is an error.
     $config_err += &_detect_missing_mandatory_parameters({'config_hash' => \%Conf,});
 
+    return undef if ($config_err);
+
 	if (my $missing_modules_count = &_check_cpan_modules_required_by_config({'config_hash' => \%Conf,})){
-		printf STDERR "Warning: %n required modules are missing.\n",$missing_modules_count;
+		printf STDERR "Conf::load(): Warning: %n required modules are missing.\n",$missing_modules_count;
 	}
-
-    my $p = 1;
-    foreach (split(/,/, $Conf{'sort'})) {
-	$Conf{'poids'}{$_} = $p++;
-    }
-    $Conf{'poids'}{'*'} = $p if ! $Conf{'poids'}{'*'};
-    
-    if ($config_err) {
-	return undef;
-    }
-
-    ## Parameters made of comma-separated list
-    foreach my $parameter ('rfc2369_header_fields','anonymous_header_fields','remove_headers','remove_outgoing_headers') {
-	if ($Conf{$parameter} eq 'none') {
-	    delete $Conf{$parameter};
-	}else {
-	    $Conf{$parameter} = [split(/,/, $Conf{$parameter})];
-	}
-    }
-
-    foreach my $action (split(/,/, $Conf{'use_blacklist'})) {
-	$Conf{'blacklist'}{$action} = 1;
-    }
-
-    foreach my $log_module (split(/,/, $Conf{'log_module'})) {
-	$Conf{'loging_for_module'}{$log_module} = 1;
-    }
-    foreach my $log_condition (split(/,/, $Conf{'log_condition'})) {
-	chomp $log_condition;
-	if ($log_condition =~ /^\s*(ip|email)\s*\=\s*(.*)\s*$/i) { 	    
-	    $Conf{'loging_condition'}{$1} = $2;
-	}else{
-	    &do_log('err',"unrecognized log_condition token %s ; ignored",$log_condition);
-	}
-    }    
-
-	&_set_listmasters_entry({'config_hash' => \%Conf});
-    
-    ## Set Regexp for accepted list suffixes
-    if (defined ($Conf{'list_check_suffixes'})) {
-	$Conf{'list_check_regexp'} = $Conf{'list_check_suffixes'};
-	$Conf{'list_check_regexp'} =~ s/[,\s]+/\|/g;
-    }
-	
 
     ## Load charset.conf file if necessary.
     if($Conf{'legacy_character_support_feature'} eq 'on'){
@@ -202,6 +164,7 @@ sub load {
     $Conf{'request'} = "$Conf{'email'}-request\@$Conf{'domain'}";
     $Conf{'pictures_url'}  = $Conf{'static_content_url'}.'/pictures/';
     $Conf{'pictures_path'}  = $Conf{'static_content_path'}.'/pictures/';
+    
 	## Load robot.conf files
 	$Conf{'robots'} = &load_robots() ;
     unless ($no_db){
@@ -257,7 +220,7 @@ sub load {
         
 	open TMP,">/tmp/dumpconf";&tools::dump_var(\%Conf,0,\*TMP);close TMP;
 	
-    return 1;
+	return 1;
 }
 
 ## load charset.conf file (charset mapping for service messages)
@@ -268,7 +231,7 @@ sub load_charset {
     $config_file = Sympa::Constants::DEFAULTDIR . '/charset.conf' unless -f $config_file;
     if (-f $config_file) {
 	unless (open CONFIG, $config_file) {
-	    printf STDERR 'unable to read configuration file %s: %s\n',$config_file, $!;
+	    printf STDERR 'Conf::load_charset(): Unable to read configuration file %s: %s\n',$config_file, $!;
 	    return {};
 	}
 	while (<CONFIG>) {
@@ -278,11 +241,11 @@ sub load_charset {
 	    next unless /\S/;
 	    my ($locale, $cset) = split(/\s+/, $_);
 	    unless ($cset) {
-		printf STDERR 'charset name is missing in configuration file %s line %d\n',$config_file, $.;
+		printf STDERR 'Conf::load_charset(): Charset name is missing in configuration file %s line %d\n',$config_file, $.;
 		next;
 	    }
 	    unless ($locale =~ s/^([a-z]+)_([a-z]+)/lc($1).'_'.uc($2).$'/ei) { #'
-		printf STDERR 'illegal locale name in configuration file %s line %d\n',$config_file, $.;
+		printf STDERR 'Conf::load_charset():  Illegal locale name in configuration file %s line %d\n',$config_file, $.;
 		next;
 	    }
 	    $charset->{$locale} = $cset;
@@ -304,11 +267,9 @@ sub load_nrcpt_by_domain {
   my $valid_dom = 0;
 
   return undef unless (-f $config_file) ;
-  &do_log('notice',"load_nrcpt: loading $config_file");
-
   ## Open the configuration file or return and read the lines.
   unless (open(IN, $config_file)) {
-      printf STDERR  "load: Unable to open %s: %s\n", $config_file, $!;
+      printf STDERR  "Conf::load_nrcpt_by_domain(): : Unable to open %s: %s\n", $config_file, $!;
       return undef;
   }
   while (<IN>) {
@@ -320,12 +281,12 @@ sub load_nrcpt_by_domain {
 	  $nrcpt_by_domain->{$domain} = $value;
 	  $valid_dom +=1;
       }else {
-	  printf STDERR gettext("Error at line %d: %s"), $line_num, $config_file, $_;
+	  printf STDERR gettext("Conf::load_nrcpt_by_domain(): Error at line %d: %s"), $line_num, $config_file, $_;
 	  $config_err++;
       }
   } 
   close(IN);
-  &do_log('debug',"load_nrcpt: loaded $valid_dom config lines from $config_file");
+  printf STDERR "Conf::load_nrcpt_by_domain(): Loaded $valid_dom config lines from $config_file";
   return ($nrcpt_by_domain);
 }
 
@@ -337,11 +298,11 @@ sub load_robots {
     ## Load wwsympa.conf
     unless ($wwsconf = &wwslib::load_config(Sympa::Constants::WWSCONFIG)) {
         printf STDERR 
-            "Unable to load config file %s\n", Sympa::Constants::WWSCONFIG;
+            "Conf::load_robots(): Unable to load config file %s\n", Sympa::Constants::WWSCONFIG;
     }
 
     unless (opendir DIR,$Conf{'etc'} ) {
-		printf STDERR "Unable to open directory $Conf{'etc'} for virtual robots config\n" ;
+		printf STDERR "Conf::load_robots(): Unable to open directory $Conf{'etc'} for virtual robots config\n" ;
 		return undef;
     }
     my $exiting = 0;
@@ -353,7 +314,7 @@ sub load_robots {
 			$robot_conf->{$Conf{'domain'}}{$key} = $Conf{$key};
 		}else{
 			unless ($optional_key_words{$key}){
-				printf STDERR "Parameter $key seems to be neither a wwsympa.conf nor a sympa.conf parameter.\n" ;
+				printf STDERR "Conf::load_robots(): Parameter $key seems to be neither a wwsympa.conf nor a sympa.conf parameter.\n" ;
 				$exiting = 1;
 			}
 		}
@@ -364,6 +325,7 @@ sub load_robots {
 		next unless (-d "$Conf{'etc'}/$robot");
 		next unless (-f "$Conf{'etc'}/$robot/robot.conf");
 		$robot_conf->{$robot} = &_load_single_robot_config({'robot' => $robot});
+		&_check_double_url_usage({'config_hash' => $robot_conf->{$robot}});
     }
     closedir(DIR);
     
@@ -1292,7 +1254,7 @@ sub conf_2_db {
     my $robots_conf = &load_robots ; #load only parameters that are in a robot.conf file (do not apply defaults). 
 
     unless (opendir DIR,$Conf{'etc'} ) {
-		printf STDERR "Unable to open directory $Conf{'etc'} for virtual robots config\n" ;
+		printf STDERR "Conf::conf2db(): Unable to open directory $Conf{'etc'} for virtual robots config\n" ;
 		return undef;
     }
 
@@ -1345,7 +1307,7 @@ sub _load_config_file_to_hash {
     my $line_num = 0;
     ## Open the configuration file or return and read the lines.
     unless (open(IN, $param->{'path_to_config_file'})) {
-        printf STDERR  "load: Unable to open %s: %s\n", $param->{'path_to_config_file'}, $!;
+        printf STDERR  "Conf::_load_config_file_to_hash(): Unable to open %s: %s\n", $param->{'path_to_config_file'}, $!;
         return undef;
     }
     while (<IN>) {
@@ -1380,7 +1342,7 @@ sub _load_config_file_to_hash {
 		    $result->{'numbered_config'}{$keyword} = [ $value, $line_num ];
 		}
 	    } else {
-			printf STDERR  gettext("Error at line %d: %s\n"), $line_num, $param->{'path_to_config_file'}, $_;
+			printf STDERR  "Conf::_load_config_file_to_hash(): ".gettext("Error at line %d: %s\n"), $line_num, $param->{'path_to_config_file'}, $_;
 			$result->{'errors'}++;
 	    }
     }
@@ -1396,7 +1358,7 @@ sub _save_binary_cache {
 	&Storable::store($param->{'conf_to_save'},$param->{'target_file'});
     };
     if ($@) {
-	printf STDERR  'Failed to save the binary config %s. error: %s', $param->{'target_file'},$@;
+	printf STDERR  'Conf::_save_binary_cache(): Failed to save the binary config %s. error: %s', $param->{'target_file'},$@;
 	return undef;
     }
     return 1;
@@ -1411,7 +1373,7 @@ sub _load_binary_cache {
 	$result = &Storable::retrieve($param->{'source_file'});
     };
     if ($@) {
-	printf STDERR  'Failed to load the binary config %s. error: %s', $param->{'source_file'},$@;
+	printf STDERR  'Conf::_load_binary_cache(): Failed to load the binary config %s. error: %s', $param->{'source_file'},$@;
 	return undef;
     }
     return $result;
@@ -1424,7 +1386,7 @@ sub _remove_unvalid_robot_entry {
 	my $config_hash = $param->{'config_hash'};
 	foreach my $keyword(keys %$config_hash) {
 		unless($valid_robot_key_words{$keyword}) {
-			printf STDERR "_remove_unvalid_robot_entry: removing unknown robot keyword $keyword\n";
+			printf STDERR "Conf::_remove_unvalid_robot_entry(): removing unknown robot keyword $keyword\n";
 			delete $config_hash->{$keyword};
 		}
 	}
@@ -1438,52 +1400,114 @@ sub _detect_unknown_parameters_in_config {
 		next if (exists $params{$parameter});
 		if (defined $old_params{$parameter}) {
 			if ($old_params{$parameter}) {
-				printf STDERR  "Line %d of sympa.conf, parameter %s is no more available, read documentation for new parameter(s) %s\n", $param->{'config_file_line_numbering_reference'}{$parameter}[1], $parameter, $old_params{$parameter};
+				printf STDERR  "Conf::_detect_unknown_parameters_in_config(): Line %d of sympa.conf, parameter %s is no more available, read documentation for new parameter(s) %s\n", $param->{'config_file_line_numbering_reference'}{$parameter}[1], $parameter, $old_params{$parameter};
 			}else {
-				printf STDERR  "Line %d of sympa.conf, parameter %s is now obsolete\n", $param->{'config_file_line_numbering_reference'}{$parameter}[1], $parameter;
+				printf STDERR  "Conf::_detect_unknown_parameters_in_config(): Line %d of sympa.conf, parameter %s is now obsolete\n", $param->{'config_file_line_numbering_reference'}{$parameter}[1], $parameter;
 				next;
 			}
 		}else {
-			printf STDERR  "Line %d, unknown field: %s in sympa.conf\n", $param->{'config_file_line_numbering_reference'}{$parameter}[1], $parameter;
+			printf STDERR  "Conf::_detect_unknown_parameters_in_config(): Line %d, unknown field: %s in sympa.conf\n", $param->{'config_file_line_numbering_reference'}{$parameter}[1], $parameter;
 		}
 		$number_of_unknown_parameters_found++;
     }
 	return $number_of_unknown_parameters_found;
 }
 
-sub _fix_particular_parameters_value {
+sub _infer_server_specific_parameter_values {
 	my $param = shift;
+	
+	$param->{'config_hash'}{'robot_name'} = '';
 
-    # 'host' and 'domain' are mandatory and synonym.$Conf{'host'} is
-    # still widely used even if the doc requires domain.
-    $param->{'config_hash'}{'host'} = $param->{'config_hash'}{'domain'} if (defined $param->{'config_hash'}{'domain'}) ;
-    $param->{'config_hash'}{'domain'} = $param->{'config_hash'}{'host'} if (defined $param->{'config_hash'}{'host'}) ;
-    
-    ## Defaults
-    unless (defined $param->{'config_hash'}{'wwsympa_url'}) {
-		$param->{'config_hash'}{'wwsympa_url'} = "http://$param->{'config_hash'}{'host'}/sympa";
-    }
+	$param->{'config_hash'}{'pictures_url'} ||= $param->{'config_hash'}{'static_content_url'}.'/pictures/';
+	$param->{'config_hash'}{'pictures_path'} ||= $param->{'config_hash'}{'static_content_path'}.'/pictures/';
 
 	## Why do we need to intitialize this variable with a fake value? o_°
     unless ( (defined $param->{'config_hash'}{'cafile'}) || (defined $param->{'config_hash'}{'capath'} )) {
 		$param->{'config_hash'}{'cafile'} = Sympa::Constants::DEFAULTDIR . '/ca-bundle.crt';
     } 
       
-    ## Some parameters depend on others
-    unless ($param->{'config_hash'}{'css_url'}) {
-	$param->{'config_hash'}{'css_url'} = $param->{'config_hash'}{'static_content_url'}.'/css';
+	unless ($param->{'config_hash'}{'DKIM_feature'} eq 'on'){
+		# dkim_signature_apply_ on nothing if DKIM_feature is off
+		$param->{'config_hash'}{'dkim_signature_apply_on'} = ['']; # empty array
+    }
+
+    ## Set Regexp for accepted list suffixes
+    if (defined ($param->{'config_hash'}{'list_check_suffixes'})) {
+		$param->{'config_hash'}{'list_check_regexp'} = $param->{'config_hash'}{'list_check_suffixes'};
+		$param->{'config_hash'}{'list_check_regexp'} =~ s/[,\s]+/\|/g;
+    }
+	
+    my $p = 1;
+    foreach (split(/,/, $param->{'config_hash'}{'sort'})) {
+		$param->{'config_hash'}{'poids'}{$_} = $p++;
+    }
+    $param->{'config_hash'}{'poids'}{'*'} = $p if ! $param->{'config_hash'}{'poids'}{'*'};
+    
+    ## Parameters made of comma-separated list
+    foreach my $parameter ('rfc2369_header_fields','anonymous_header_fields','remove_headers','remove_outgoing_headers') {
+		if ($param->{'config_hash'}{$parameter} eq 'none') {
+			delete $param->{'config_hash'}{$parameter};
+		}else {
+			$param->{'config_hash'}{$parameter} = [split(/,/, $param->{'config_hash'}{$parameter})];
+		}
+    }
+
+    foreach my $action (split(/,/, $param->{'config_hash'}{'use_blacklist'})) {
+		$param->{'config_hash'}{'blacklist'}{$action} = 1;
+    }
+
+    foreach my $log_module (split(/,/, $param->{'config_hash'}{'log_module'})) {
+		$param->{'config_hash'}{'loging_for_module'}{$log_module} = 1;
     }
     
-    unless ($param->{'config_hash'}{'css_path'}) {
-	$param->{'config_hash'}{'css_path'} = $param->{'config_hash'}{'static_content_path'}.'/css';
-    }
+    foreach my $log_condition (split(/,/, $param->{'config_hash'}{'log_condition'})) {
+		chomp $log_condition;
+		if ($log_condition =~ /^\s*(ip|email)\s*\=\s*(.*)\s*$/i) { 	    
+			$param->{'config_hash'}{'loging_condition'}{$1} = $2;
+		}else{
+			&do_log('err',"unrecognized log_condition token %s ; ignored",$log_condition);
+		}
+    }    
 
-    unless ($param->{'config_hash'}{'DKIM_feature'} eq 'on'){
-	# dkim_signature_apply_ on nothing if DKIM_feature is off
-	$param->{'config_hash'}{'dkim_signature_apply_on'} = ['']; # empty array
-    }
-
+	
 	return 1;
+}
+
+sub _infer_robot_parameter_values {
+	my $param = shift;
+
+    # 'host' and 'domain' are mandatory and synonym.$Conf{'host'} is
+    # still widely used even if the doc requires domain.
+    $param->{'config_hash'}{'host'} = $param->{'config_hash'}{'domain'} if (defined $param->{'config_hash'}{'domain'}) ;
+    $param->{'config_hash'}{'domain'} = $param->{'config_hash'}{'host'} if (defined $param->{'config_hash'}{'host'}) ;
+
+	$param->{'config_hash'}{'wwsympa_url'} ||= "http://$param->{'config_hash'}{'host'}/sympa";
+
+	$param->{'config_hash'}{'static_content_url'} ||= $Conf{'static_content_url'};
+	$param->{'config_hash'}{'static_content_path'} ||= $Conf{'static_content_path'};
+
+	## CSS
+ 	$param->{'config_hash'}{'css_url'} ||= $param->{'config_hash'}{'static_content_url'}.'/css/'.$param->{'config_hash'}{'robot_name'};
+	$param->{'config_hash'}{'css_path'} ||= $param->{'config_hash'}{'static_content_path'}.'/css/'.$param->{'config_hash'}{'robot_name'};
+
+	$param->{'config_hash'}{'sympa'} = $param->{'config_hash'}{'email'}.'@'.$param->{'config_hash'}{'host'};
+	$param->{'config_hash'}{'request'} = $param->{'config_hash'}{'email'}.'-request@'.$param->{'config_hash'}{'host'};
+
+	# split action list for blacklist usage
+	foreach my $action (split(/,/, $Conf{'use_blacklist'})) {
+	    $param->{'config_hash'}{'blacklist'}{$action} = 1;
+	}
+
+	## Create a hash to deduce robot from SOAP url
+	if ($param->{'config_hash'}{'soap_url'}) {
+	    my $url = $param->{'config_hash'}{'soap_url'};
+	    $url =~ s/^http(s)?:\/\/(.+)$/$2/;
+	    $Conf{'robot_by_soap_url'}{$url} = $param->{'config_hash'}{'robot_name'};
+	}
+	# printf STDERR "load trusted de $robot";
+	$param->{'config_hash'}{'trusted_applications'} = &load_trusted_application($param->{'config_hash'}{'robot_name'});
+	$param->{'config_hash'}{'crawlers_detection'} = &load_crawlers_detection($param->{'config_hash'}{'robot_name'});
+
 }
 
 ## For parameters whose value is hard_coded, as per %hardcoded_params, set the
@@ -1505,7 +1529,7 @@ sub _detect_missing_mandatory_parameters {
 	my $number_of_errors = 0;
     foreach my $parameter (keys %params) {
 		unless (defined $param->{'config_hash'}{$parameter} or defined $params{$parameter}->{'default'} or defined $params{$parameter}->{'optional'}) {
-			printf "Required field not found in sympa.conf: %s\n", $parameter;
+			printf STDERR "Conf::_detect_missing_mandatory_parameters(): Required field not found in sympa.conf: %s\n", $parameter;
 			$number_of_errors++;
 			next;
 		}
@@ -1526,7 +1550,7 @@ sub _check_cpan_modules_required_by_config {
     if ($param->{'config_hash'}{'lock_method'} eq 'nfs') {
         eval "require File::NFSLock";
         if ($@) {
-            printf STDERR "Failed to load File::NFSLock perl module ; setting 'lock_method' to 'flock'\n";
+            printf STDERR "Conf::_check_cpan_modules_required_by_config(): Failed to load File::NFSLock perl module ; setting 'lock_method' to 'flock'\n";
             $param->{'config_hash'}{'lock_method'} = 'flock';
             $number_of_missing_modules++;
         }
@@ -1536,7 +1560,7 @@ sub _check_cpan_modules_required_by_config {
     if ($param->{'config_hash'}{'dkim_feature'} eq 'on') {
         eval "require Mail::DKIM";
         if ($@) {
-            printf STDERR "Failed to load Mail::DKIM perl module ; setting 'DKIM_feature' to 'off'\n";
+            printf STDERR "Conf::_check_cpan_modules_required_by_config(): Failed to load Mail::DKIM perl module ; setting 'DKIM_feature' to 'off'\n";
             $param->{'config_hash'}{'dkim_feature'} = 'off';
             $number_of_missing_modules++;
         }
@@ -1549,7 +1573,7 @@ sub _dump_non_robot_parameters {
 	foreach my $key (keys %{$param->{'config_hash'}}){
 		unless($valid_robot_key_words{$key}){
 			delete $param->{'config_hash'}{$key};
-			printf STDERR "Robot %s config: unknown robot parameter: %s\n",$param->{'robot'},$key;
+			printf STDERR "Conf::_dump_non_robot_parameters(): Robot %s config: unknown robot parameter: %s\n",$param->{'robot'},$key;
 		}
 	}
 }
@@ -1560,7 +1584,7 @@ sub _load_single_robot_config{
 	my $robot_conf;
 	
 	unless (-r "$Conf{'etc'}/$robot/robot.conf") {
-		printf STDERR "No read access on %s\n", "$Conf{'etc'}/$robot/robot.conf";
+		printf STDERR "Conf::_load_single_robot_config(): No read access on %s\n", "$Conf{'etc'}/$robot/robot.conf";
 		&List::send_notify_to_listmaster('cannot_access_robot_conf',$Conf{'domain'}, ["No read access on $Conf{'etc'}/$robot/robot.conf. you should change privileges on this file to activate this virtual host. "]);
 		next;
 	}
@@ -1570,7 +1594,7 @@ sub _load_single_robot_config{
 		$robot_conf = $config_loading_result->{'config'};
 		$config_err = $config_loading_result->{'errors'};
 	}else{
-		printf STDERR  "load: Unable to load %s. Aborting\n", $config_file;
+		printf STDERR  "Conf::_load_single_robot_config(): Unable to load %s. Aborting\n", $config_file;
 		return undef;
 	}
 	
@@ -1582,52 +1606,8 @@ sub _load_single_robot_config{
 
 	&_set_listmasters_entry({'config_hash' => $robot_conf});
 
-	$robot_conf->{'wwsympa_url'} ||= 'http://'.$robot_conf->{'http_host'}.'/sympa';
-
-	$robot_conf->{'static_content_url'} ||= $Conf{'static_content_url'};
-	$robot_conf->{'static_content_path'} ||= $Conf{'static_content_path'};
-
-	## CSS
-	$robot_conf->{'css_url'} ||= $robot_conf->{'static_content_url'}.'/css/'.$robot;
-	$robot_conf->{'css_path'} ||= $Conf{'static_content_path'}.'/css/'.$robot;
-
-	$robot_conf->{'sympa'} = $robot_conf->{'email'}.'@'.$robot_conf->{'host'};
-	$robot_conf->{'request'} = $robot_conf->{'email'}.'-request@'.$robot_conf->{'host'};
-	$robot_conf->{'cookie_domain'} ||= 'localhost';
-	#$robot_conf->{'soap_url'} ||= $Conf{'soap_url'};
-
-	$robot_conf->{'pictures_url'} ||= $robot_conf->{'static_content_url'}.'/pictures/';
-	$robot_conf->{'pictures_path'} ||= $robot_conf->{'static_content_path'}.'/pictures/';
-
-	# split action list for blacklist usage
-	foreach my $action (split(/,/, $Conf{'use_blacklist'})) {
-	    $robot_conf->{'blacklist'}{$action} = 1;
-	}
-
-	my ($host, $path);
-	if ($robot_conf->{'http_host'} =~ /^([^\/]+)(\/.*)$/) {
-	    ($host, $path) = ($1,$2);
-	}else {
-	    ($host, $path) = ($robot_conf->{'http_host'}, '/');
-	}
-
-	## Warn listmaster if another virtual host is defined with the same host+path
-	if (defined $Conf{'robot_by_http_host'}{$host}{$path}) {
-	  printf STDERR "Error: two virtual hosts (%s and %s) are mapped via a single URL '%s%s'", $Conf{'robot_by_http_host'}{$host}{$path}, $robot, $host, $path;
-	}
-
-	$Conf{'robot_by_http_host'}{$host}{$path} = $robot ;
+	&_infer_robot_parameter_values({'config_hash' => $robot_conf});
 	
-	## Create a hash to deduce robot from SOAP url
-	if ($robot_conf->{'soap_url'}) {
-	    my $url = $robot_conf->{'soap_url'};
-	    $url =~ s/^http(s)?:\/\/(.+)$/$2/;
-	    $Conf{'robot_by_soap_url'}{$url} = $robot;
-	}
-	# printf STDERR "load trusted de $robot";
-	$robot_conf->{'trusted_applications'} = &load_trusted_application($robot);
-	$robot_conf->{'crawlers_detection'} = &load_crawlers_detection($robot);
-
 	return $robot_conf;
 }
 
@@ -1645,18 +1625,35 @@ sub _set_listmasters_entry{
 				push @{$param->{'config_hash'}{'listmasters'}}, $lismaster_address;
 				$number_of_valid_email++;
 			}else{
-				printf STDERR "Robot %s config: Listmaster address '%s' is not a valid email\n",$param->{'config_hash'}{'host'},$lismaster_address;
+				printf STDERR "Conf::_set_listmasters_entry(): Robot %s config: Listmaster address '%s' is not a valid email\n",$param->{'config_hash'}{'host'},$lismaster_address;
 			}
 		}
 	}else{
-		printf STDERR "Robot %s config: No listmaster found in hash\n",$param->{'config_hash'}{'host'};
+		printf STDERR "Conf::_set_listmasters_entry(): Robot %s config: No listmaster found in hash\n",$param->{'config_hash'}{'host'};
 		return undef;
 	}
 	if ($number_of_email_provided > $number_of_valid_email){
-		printf STDERR "Robot %s config: All the listmasters addresses found were not valid. Out of %s addresses provided, %s only are valid email addresses.\n",$param->{'config_hash'}{'host'},$number_of_email_provided,$number_of_valid_email;
+		printf STDERR "Conf::_set_listmasters_entry(): Robot %s config: All the listmasters addresses found were not valid. Out of %s addresses provided, %s only are valid email addresses.\n",$param->{'config_hash'}{'host'},$number_of_email_provided,$number_of_valid_email;
 		return undef;
 	}
 	return $number_of_valid_email;
+}
+
+sub _check_double_url_usage{
+	my $param = shift;
+	my ($host, $path);
+	if ($param->{'config_hash'}{'http_host'} =~ /^([^\/]+)(\/.*)$/) {
+	    ($host, $path) = ($1,$2);
+	}else {
+	    ($host, $path) = ($param->{'config_hash'}{'http_host'}, '/');
+	}
+
+	## Warn listmaster if another virtual host is defined with the same host+path
+	if (defined $Conf{'robot_by_http_host'}{$host}{$path}) {
+	  printf STDERR "Conf::_infer_robot_parameter_values(): Error: two virtual hosts (%s and %s) are mapped via a single URL '%s%s'", $Conf{'robot_by_http_host'}{$host}{$path}, $param->{'config_hash'}{'robot_name'}, $host, $path;
+	}
+
+	$Conf{'robot_by_http_host'}{$host}{$path} = $param->{'config_hash'}{'robot_name'} ;	
 }
 
 ## Packages must return true.
