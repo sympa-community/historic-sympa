@@ -125,6 +125,8 @@ sub load {
     # Returning the config file content if this is what has been asked.
     return (\%line_numbered_config) if ($return_result);
 
+	&_replace_file_value_by_db_value('config_hash' => \%Conf) unless($no_db);
+	
     # Users may define parameters with a typo or other errors. Check that the parameters
     # we found in the config file are all well defined Sympa parameters.
     $config_err += &_detect_unknown_parameters_in_config({	'config_hash' => \%Conf,
@@ -152,13 +154,12 @@ sub load {
 	}
 
 	## Load robot.conf files
-	$Conf{'robots'} = &load_robots() ;
+	$Conf{'robots'} = &load_robots({'no_db' => $no_db}) ;
 	
     unless ($no_db){
 		#load parameter from database if database value as prioprity over conf file
-		&_substitute_file_value_by_db_value('config_file' => \%Conf);
 		foreach my $robot (keys %{$Conf{'robots'}}) {
-			&_substitute_file_value_by_db_value('config_file' => $Conf{'robots'}{$robot});
+			
 		}
     }
 
@@ -169,7 +170,7 @@ sub load {
 
 ## load each virtual robots configuration files
 sub load_robots {
-    
+    my $param = shift;
     my $robot_conf ;
 
     ## Load wwsympa.conf
@@ -201,7 +202,7 @@ sub load_robots {
     foreach my $robot (readdir(DIR)) {
 		next unless (-d "$Conf{'etc'}/$robot");
 		next unless (-f "$Conf{'etc'}/$robot/robot.conf");
-		$robot_conf->{$robot} = &_load_single_robot_config({'robot' => $robot});
+		$robot_conf->{$robot} = &_load_single_robot_config({'robot' => $robot, 'no_db' => $param->{'no_db'}});
 		&_check_double_url_usage({'config_hash' => $robot_conf->{$robot}});
 		my $robot_config_file;   
 		unless ($robot_config_file = &tools::get_filename('etc',{},'auth.conf', $robot)) {
@@ -1566,6 +1567,7 @@ sub _load_single_robot_config{
 		return undef;
 	}
 	
+	&_replace_file_value_by_db_value('config_hash' => $robot_conf) unless $param->{'no_db'};
 	# Remove entries which are not supposed to be defined at the robot level.
 	&_dump_non_robot_parameters({'config_hash' => $robot_conf, 'robot' => $robot});
 	
@@ -1638,16 +1640,16 @@ sub _parse_custom_robot_parameters {
 	}
 }
 
-sub _substitute_file_value_by_db_value {
+sub _replace_file_value_by_db_value {
 	my $param = shift;
-	my $robot = $param->{'config_file'}{'robot_name'};
+	my $robot = $param->{'config_hash'}{'robot_name'};
 	# The name of the default robot is "*" in the database.
-	$robot = '*' if ($param->{'config_file'}{'robot_name'} eq '');
+	$robot = '*' if ($param->{'config_hash'}{'robot_name'} eq '');
 	foreach my $label (keys %db_storable_parameters) {
 		next unless ($robot ne '*' && $valid_robot_key_words{$label} == 1);
 		my $value = &get_db_conf($robot, $label);
 		if (defined $value) {
-			$param->{'config_file'}{$label} = $value ;
+			$param->{'config_hash'}{$label} = $value ;
 		}
 	}
 }
