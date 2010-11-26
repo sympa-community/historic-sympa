@@ -153,6 +153,7 @@ sub load {
 
 	## Load robot.conf files
 	$Conf{'robots'} = &load_robots() ;
+	
     unless ($no_db){
 		#load parameter from database if database value as prioprity over conf file
 		foreach my $label (keys %valid_robot_key_words) {
@@ -173,17 +174,6 @@ sub load {
 		}
     }
 
-    ## Parsing custom robot parameters.
-    foreach my $robot (keys %{$Conf{'robots'}}) {
-		my $csp_tmp_storage = undef;
-		foreach my $custom_p (@{$Conf{'robots'}{$robot}{'custom_robot_parameter'}}){
-			if($custom_p =~ /(\S+)\s*\;\s*(.+)/) {
-				$csp_tmp_storage->{$1} = $2;
-			}
-		}
-		$Conf{'robots'}{$robot}{'custom_robot_parameter'} = $csp_tmp_storage;
-    }
-
     foreach my $robot (keys %{$Conf{'robots'}}) {
 		my $robot_config_file;   
 		unless ($robot_config_file = &tools::get_filename('etc',{},'auth.conf', $robot)) {
@@ -193,17 +183,6 @@ sub load {
 		$Conf{'auth_services'}{$robot} = &_load_auth($robot, $robot_config_file);	
     }
     
-    if ($Conf{'ldap_export_name'}) {    
-		##Export
-		$Conf{'ldap_export'} = 	{$Conf{'ldap_export_name'} => { 'host' => $Conf{'ldap_export_host'},
-							       'suffix' => $Conf{'ldap_export_suffix'},
-							       'password' => $Conf{'ldap_export_password'},
-							       'DnManager' => $Conf{'ldap_export_dnmanager'},
-							       'connection_timeout' => $Conf{'ldap_export_connection_timeout'}
-								}
-								};
-    }
-        
 	open TMP,">/tmp/dumpconf";&tools::dump_var(\%Conf,0,\*TMP);close TMP;
 	
 	return 1;
@@ -1407,7 +1386,6 @@ sub _infer_server_specific_parameter_values {
 	$param->{'config_hash'}{'pictures_url'} ||= $param->{'config_hash'}{'static_content_url'}.'/pictures/';
 	$param->{'config_hash'}{'pictures_path'} ||= $param->{'config_hash'}{'static_content_path'}.'/pictures/';
 
-	## Why do we need to intitialize this variable with a fake value? o_°
     unless ( (defined $param->{'config_hash'}{'cafile'}) || (defined $param->{'config_hash'}{'capath'} )) {
 		$param->{'config_hash'}{'cafile'} = Sympa::Constants::DEFAULTDIR . '/ca-bundle.crt';
     } 
@@ -1465,6 +1443,16 @@ sub _infer_server_specific_parameter_values {
     ## Load nrcpt_by_domain.conf
     $param->{'config_hash'}{'nrcpt_by_domain'} = &load_nrcpt_by_domain () ;
 	
+    if ($param->{'config_hash'}{'ldap_export_name'}) {    
+		$param->{'config_hash'}{'ldap_export'} = 	{$param->{'config_hash'}{'ldap_export_name'} => { 'host' => $param->{'config_hash'}{'ldap_export_host'},
+							       'suffix' => $param->{'config_hash'}{'ldap_export_suffix'},
+							       'password' => $param->{'config_hash'}{'ldap_export_password'},
+							       'DnManager' => $param->{'config_hash'}{'ldap_export_dnmanager'},
+							       'connection_timeout' => $param->{'config_hash'}{'ldap_export_connection_timeout'}
+								}
+								};
+    }
+        
 	return 1;
 }
 
@@ -1501,7 +1489,7 @@ sub _infer_robot_parameter_values {
 	}
 	$param->{'config_hash'}{'trusted_applications'} = &load_trusted_application($param->{'config_hash'}{'robot_name'});
 	$param->{'config_hash'}{'crawlers_detection'} = &load_crawlers_detection($param->{'config_hash'}{'robot_name'});
-
+	&_parse_custom_robot_parameters({'config_hash' => $param->{'config_hash'}});
 }
 
 ## For parameters whose value is hard_coded, as per %hardcoded_params, set the
@@ -1649,6 +1637,19 @@ sub _check_double_url_usage{
 	}
 
 	$Conf{'robot_by_http_host'}{$host}{$path} = $param->{'config_hash'}{'robot_name'} ;	
+}
+
+sub _parse_custom_robot_parameters {
+	my $param = shift;
+	my $csp_tmp_storage = undef;
+	if (defined $param->{'config_hash'}{'custom_robot_parameter'} && ref() ne 'HASH'){
+		foreach my $custom_p (@{$param->{'config_hash'}{'custom_robot_parameter'}}){
+			if($custom_p =~ /(\S+)\s*\;\s*(.+)/) {
+				$csp_tmp_storage->{$1} = $2;
+			}
+		}
+		$param->{'config_hash'}{'custom_robot_parameter'} = $csp_tmp_storage;
+	}
 }
 
 ## Packages must return true.
