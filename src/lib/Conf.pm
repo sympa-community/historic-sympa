@@ -292,12 +292,6 @@ sub load_robots {
     }
     closedir(DIR);
     
-    ## Default SOAP URL corresponds to default robot
-    if ($Conf{'soap_url'}) {
-	my $url = $Conf{'soap_url'};
-	$url =~ s/^http(s)?:\/\/(.+)$/$2/;
-	$Conf{'robot_by_soap_url'}{$url} = $Conf{'domain'};
-    }
     return ($robot_conf);
 }
 
@@ -1449,6 +1443,13 @@ sub _infer_server_specific_parameter_values {
 							       'connection_timeout' => $param->{'config_hash'}{'ldap_export_connection_timeout'}
 								}
 								};
+    }
+        
+    ## Default SOAP URL corresponds to default robot
+    if ($param->{'config_hash'}{'soap_url'}) {
+		my $url = $param->{'config_hash'}{'soap_url'};
+		$url =~ s/^http(s)?:\/\/(.+)$/$2/;
+		$param->{'config_hash'}{'robot_by_soap_url'}{$url} = $param->{'config_hash'}{'domain'};
     }
         
 	return 1;
