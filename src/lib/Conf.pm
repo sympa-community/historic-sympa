@@ -109,9 +109,10 @@ sub load {
     my $no_db = shift;
     my $return_result = shift;
 
-    ## Loading the Sympa main config file.
     my $config_err = 0;
     my %line_numbered_config;
+    
+    ## Loading the Sympa main config file.
     if(my $config_loading_result = &_load_config_file_to_hash({'path_to_config_file' => $config_file})) {
 		%line_numbered_config = %{$config_loading_result->{'numbered_config'}};
 		%Conf = %{$config_loading_result->{'config'}};
@@ -149,14 +150,6 @@ sub load {
 	if (my $missing_modules_count = &_check_cpan_modules_required_by_config({'config_hash' => \%Conf,})){
 		printf STDERR "Conf::load(): Warning: %n required modules are missing.\n",$missing_modules_count;
 	}
-
-    ## Load charset.conf file if necessary.
-    if($Conf{'legacy_character_support_feature'} eq 'on'){
-		$Conf{'locale2charset'} = &load_charset ();
-    }else{
-		$Conf{'locale2charset'} = {};
-    }
-    $Conf{'nrcpt_by_domain'} = &load_nrcpt_by_domain () ;
 
 	## Load robot.conf files
 	$Conf{'robots'} = &load_robots() ;
@@ -1462,6 +1455,15 @@ sub _infer_server_specific_parameter_values {
 		}
     }    
 
+    ## Load charset.conf file if necessary.
+    if($param->{'config_hash'}{'legacy_character_support_feature'} eq 'on'){
+		$param->{'config_hash'}{'locale2charset'} = &load_charset ();
+    }else{
+		$param->{'config_hash'}{'locale2charset'} = {};
+    }
+    
+    ## Load nrcpt_by_domain.conf
+    $param->{'config_hash'}{'nrcpt_by_domain'} = &load_nrcpt_by_domain () ;
 	
 	return 1;
 }
