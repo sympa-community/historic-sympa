@@ -1,4 +1,11 @@
 ------------------------------------------------------------------------
+r6820 | sympa-authors | 2010-11-30 16:24:37 +0100 (Tue, 30 Nov 2010) | 1 line
+Changed paths:
+   M /branches/sympa-test-updater/ChangeLog
+   M /branches/sympa-test-updater/configure.ac
+
+[-feature]Committing latest translations from Pootle
+------------------------------------------------------------------------
 r6819 | sympa-authors | 2010-11-30 16:10:16 +0100 (Tue, 30 Nov 2010) | 1 line
 Changed paths:
    M /branches/sympa-test-updater/po/nl.po
