@@ -1,4 +1,11 @@
 ------------------------------------------------------------------------
+r6828 | sympa-authors | 2010-11-30 16:37:50 +0100 (Tue, 30 Nov 2010) | 1 line
+Changed paths:
+   M /branches/sympa-test-updater/ChangeLog
+   M /branches/sympa-test-updater/configure.ac
+
+[-release]Preparing version 6.2a.1
+------------------------------------------------------------------------
 r6826 | sympa-authors | 2010-11-30 16:35:48 +0100 (Tue, 30 Nov 2010) | 1 line
 Changed paths:
    M /branches/sympa-test-updater/ChangeLog
