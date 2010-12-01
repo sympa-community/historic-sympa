@@ -1,4 +1,88 @@
 ------------------------------------------------------------------------
+r6864 | sympa-authors | 2010-12-01 16:51:02 +0100 (Wed, 01 Dec 2010) | 1 line
+Changed paths:
+   M /branches/sympa-test-updater/po/sympa.pot
+
+[-feature]Committing updated catalogues from Pootle
+------------------------------------------------------------------------
+r6863 | sympa-authors | 2010-12-01 16:50:32 +0100 (Wed, 01 Dec 2010) | 1 line
+Changed paths:
+   M /branches/sympa-test-updater/po/ar.po
+   M /branches/sympa-test-updater/po/bg.po
+   M /branches/sympa-test-updater/po/br.po
+   M /branches/sympa-test-updater/po/ca.po
+   M /branches/sympa-test-updater/po/cs.po
+   M /branches/sympa-test-updater/po/de.po
+   M /branches/sympa-test-updater/po/el.po
+   M /branches/sympa-test-updater/po/es.po
+   M /branches/sympa-test-updater/po/et.po
+   M /branches/sympa-test-updater/po/eu.po
+   M /branches/sympa-test-updater/po/fi.po
+   M /branches/sympa-test-updater/po/fr.po
+   M /branches/sympa-test-updater/po/hu.po
+   M /branches/sympa-test-updater/po/id.po
+   M /branches/sympa-test-updater/po/it.po
+   M /branches/sympa-test-updater/po/ja.po
+   M /branches/sympa-test-updater/po/ko.po
+   M /branches/sympa-test-updater/po/la.po
+   M /branches/sympa-test-updater/po/ml.po
+   M /branches/sympa-test-updater/po/nb_NO.po
+   M /branches/sympa-test-updater/po/nl.po
+   M /branches/sympa-test-updater/po/oc.po
+   M /branches/sympa-test-updater/po/pl.po
+   M /branches/sympa-test-updater/po/pt.po
+   M /branches/sympa-test-updater/po/pt_BR.po
+   M /branches/sympa-test-updater/po/ro.po
+   M /branches/sympa-test-updater/po/ru.po
+   M /branches/sympa-test-updater/po/sv.po
+   M /branches/sympa-test-updater/po/tr.po
+   M /branches/sympa-test-updater/po/vi.po
+   M /branches/sympa-test-updater/po/zh_CN.po
+   M /branches/sympa-test-updater/po/zh_TW.po
+
+[-feature]Committing latest translations from Pootle
+------------------------------------------------------------------------
+r6862 | sympa-authors | 2010-12-01 16:49:47 +0100 (Wed, 01 Dec 2010) | 1 line
+Changed paths:
+   A /branches/sympa-test-updater (from /trunk:6861)
+
+[svn] Creating test branch
+------------------------------------------------------------------------
+r6833 | serge.aumont | 2010-11-30 16:59:26 +0100 (Tue, 30 Nov 2010) | 3 lines
+Changed paths:
+   M /trunk/wwsympa/wwsympa.fcgi.in
+
+[bug] 'closed' and 'expired' tickets can be used is a preexisting session include the same email as email defined in the ticket definition. Now users can reuse a ticket by using back browser button without being punished by an "allready used ticket" error message.
+
+
+------------------------------------------------------------------------
+r6809 | david.verdin | 2010-11-29 09:11:14 +0100 (Mon, 29 Nov 2010) | 2 lines
+Changed paths:
+   M /trunk/configure.ac
+
+[svn] Going back to 6.1.3 to let Serge test the versionning tools.
+
+------------------------------------------------------------------------
+r6808 | david.verdin | 2010-11-29 09:09:47 +0100 (Mon, 29 Nov 2010) | 2 lines
+Changed paths:
+   M /trunk/ChangeLog
+   M /trunk/configure.ac
+   M /trunk/po/bg.po
+   M /trunk/po/cs.po
+   M /trunk/po/el.po
+   M /trunk/po/en_US.po
+   M /trunk/po/et.po
+   M /trunk/po/fi.po
+   M /trunk/po/ja.po
+   M /trunk/po/la.po
+   M /trunk/po/nl.po
+   M /trunk/po/pt.po
+   M /trunk/po/sv.po
+   M /trunk/po/tr.po
+
+[svn] Committing latest translations.
+
+------------------------------------------------------------------------
 r6796 | serge.aumont | 2010-11-25 16:40:21 +0100 (Thu, 25 Nov 2010) | 8 lines
 Changed paths:
    M /trunk/src/etc/script/js/sympa.js
