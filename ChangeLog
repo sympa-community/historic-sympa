@@ -1,49 +1,11 @@
 ------------------------------------------------------------------------
-r6857 | sympa-authors | 2010-12-01 16:43:13 +0100 (Wed, 01 Dec 2010) | 1 line
+r6864 | sympa-authors | 2010-12-01 16:51:02 +0100 (Wed, 01 Dec 2010) | 1 line
 Changed paths:
-   M /branches/sympa-test-updater/ChangeLog
-
-[-feature]Committing latest translations from Pootle
-------------------------------------------------------------------------
-r6856 | sympa-authors | 2010-12-01 16:40:37 +0100 (Wed, 01 Dec 2010) | 1 line
-Changed paths:
-   M /branches/sympa-test-updater/po/ar.po
-   M /branches/sympa-test-updater/po/bg.po
-   M /branches/sympa-test-updater/po/br.po
-   M /branches/sympa-test-updater/po/ca.po
-   M /branches/sympa-test-updater/po/cs.po
-   M /branches/sympa-test-updater/po/de.po
-   M /branches/sympa-test-updater/po/el.po
-   M /branches/sympa-test-updater/po/es.po
-   M /branches/sympa-test-updater/po/et.po
-   M /branches/sympa-test-updater/po/eu.po
-   M /branches/sympa-test-updater/po/fi.po
-   M /branches/sympa-test-updater/po/fr.po
-   M /branches/sympa-test-updater/po/hu.po
-   M /branches/sympa-test-updater/po/id.po
-   M /branches/sympa-test-updater/po/it.po
-   M /branches/sympa-test-updater/po/ja.po
-   M /branches/sympa-test-updater/po/ko.po
-   M /branches/sympa-test-updater/po/la.po
-   M /branches/sympa-test-updater/po/ml.po
-   M /branches/sympa-test-updater/po/nb_NO.po
-   M /branches/sympa-test-updater/po/nl.po
-   M /branches/sympa-test-updater/po/oc.po
-   M /branches/sympa-test-updater/po/pl.po
-   M /branches/sympa-test-updater/po/pt.po
-   M /branches/sympa-test-updater/po/pt_BR.po
-   M /branches/sympa-test-updater/po/ro.po
-   M /branches/sympa-test-updater/po/ru.po
-   M /branches/sympa-test-updater/po/sv.po
    M /branches/sympa-test-updater/po/sympa.pot
-   M /branches/sympa-test-updater/po/tr.po
-   M /branches/sympa-test-updater/po/vi.po
-   M /branches/sympa-test-updater/po/zh_CN.po
-   M /branches/sympa-test-updater/po/zh_TW.po
 
 [-feature]Committing updated catalogues from Pootle
 ------------------------------------------------------------------------
-r6855 | sympa-authors | 2010-12-01 16:40:01 +0100 (Wed, 01 Dec 2010) | 1 line
+r6863 | sympa-authors | 2010-12-01 16:50:32 +0100 (Wed, 01 Dec 2010) | 1 line
 Changed paths:
    M /branches/sympa-test-updater/po/ar.po
    M /branches/sympa-test-updater/po/bg.po
@@ -80,9 +42,9 @@ Changed paths:
 
 [-feature]Committing latest translations from Pootle
 ------------------------------------------------------------------------
-r6854 | sympa-authors | 2010-12-01 16:38:24 +0100 (Wed, 01 Dec 2010) | 1 line
+r6862 | sympa-authors | 2010-12-01 16:49:47 +0100 (Wed, 01 Dec 2010) | 1 line
 Changed paths:
-   A /branches/sympa-test-updater (from /trunk:6853)
+   A /branches/sympa-test-updater (from /trunk:6861)
 
 [svn] Creating test branch
 ------------------------------------------------------------------------
