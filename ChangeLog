@@ -1,11 +1,23 @@
 ------------------------------------------------------------------------
-r6864 | sympa-authors | 2010-12-01 16:51:02 +0100 (Wed, 01 Dec 2010) | 1 line
+r6876 | sympa-authors | 2010-12-01 17:07:44 +0100 (Wed, 01 Dec 2010) | 1 line
+Changed paths:
+   M /branches/sympa-test-updater/po/en_US.po
+
+[-feature]Committing updated catalogues from Pootle
+------------------------------------------------------------------------
+r6875 | sympa-authors | 2010-12-01 17:07:02 +0100 (Wed, 01 Dec 2010) | 1 line
+Changed paths:
+   M /branches/sympa-test-updater/ChangeLog
+
+[-feature]Committing latest translations from Pootle
+------------------------------------------------------------------------
+r6874 | sympa-authors | 2010-12-01 17:03:20 +0100 (Wed, 01 Dec 2010) | 1 line
 Changed paths:
    M /branches/sympa-test-updater/po/sympa.pot
 
 [-feature]Committing updated catalogues from Pootle
 ------------------------------------------------------------------------
-r6863 | sympa-authors | 2010-12-01 16:50:32 +0100 (Wed, 01 Dec 2010) | 1 line
+r6873 | sympa-authors | 2010-12-01 17:02:49 +0100 (Wed, 01 Dec 2010) | 1 line
 Changed paths:
    M /branches/sympa-test-updater/po/ar.po
    M /branches/sympa-test-updater/po/bg.po
@@ -42,9 +54,9 @@ Changed paths:
 
 [-feature]Committing latest translations from Pootle
 ------------------------------------------------------------------------
-r6862 | sympa-authors | 2010-12-01 16:49:47 +0100 (Wed, 01 Dec 2010) | 1 line
+r6872 | sympa-authors | 2010-12-01 16:55:32 +0100 (Wed, 01 Dec 2010) | 1 line
 Changed paths:
-   A /branches/sympa-test-updater (from /trunk:6861)
+   A /branches/sympa-test-updater (from /trunk:6871)
 
 [svn] Creating test branch
 ------------------------------------------------------------------------
