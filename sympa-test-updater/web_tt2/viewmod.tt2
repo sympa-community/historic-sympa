@@ -1,0 +1,4 @@
+<!-- $Id$ -->
+[% PROCESS 'msg00000.html' %]
+
+<!-- end viewmod.tt2 -->
