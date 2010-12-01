@@ -9897,6 +9897,137 @@ msgstr "sense correu (útil per vacances)"
 msgid "you do not receive your own posts"
 msgstr "No pot rebre els seus propis missatges"
 
+#: ../web_tt2/modform.tt2:46
+#, fuzzy
+msgid "Add sender to blacklist"
+msgstr "Editar la llista negra"
+
+#: ../web_tt2/modform.tt2:49
+msgid ""
+"You should rejet spams quietly because the sender of a spam is often "
+"spoofed, if you really want to send this notification, please confirm "
+msgstr ""
+
+#: ../web_tt2/news.tt2:10
+msgid "The following items are waiting for your validation"
+msgstr ""
+
+#: ../web_tt2/news.tt2:30
+msgid ""
+"We received error reports while trying to send you messages. Some of them "
+"may have been lost."
+msgstr ""
+
+#. (user_with_errors.value)
+#: ../web_tt2/news.tt2:35
+msgid " %1 error(s)"
+msgstr ""
+
+#: ../web_tt2/skinsedit.tt2:107
+msgid "Background color for the news area of the home page."
+msgstr ""
+
+#. (fromname,fromaddr,listname)
+#: ../web_tt2/tracking.tt2:6
+msgid "Message from %1 %2 for list %3 "
+msgstr ""
+
+#: ../web_tt2/tracking.tt2:14
+msgid "Recipient Email"
+msgstr ""
+
+#: ../web_tt2/tracking.tt2:15
+msgid "Delivery status"
+msgstr ""
+
+#: ../src/lib/List.pm:437
+msgid "tracking message by delivery status notification"
+msgstr ""
+
+#: ../src/lib/List.pm:443
+msgid "tracking message by message delivery notification"
+msgstr ""
+
+#, fuzzy
+#~ msgid "Statistics"
+#~ msgstr "Estat"
+
+#, fuzzy
+#~ msgid "You must select a topic"
+#~ msgstr "--Selecciona un tema--"
+
+#, fuzzy
+#~ msgid "Rejecting message"
+#~ msgstr "Últims missatge"
+
+#, fuzzy
+#~ msgid "Choose notification "
+#~ msgstr "norificació"
+
+#, fuzzy
+#~ msgid "No notification"
+#~ msgstr "norificació"
+
+#, fuzzy
+#~ msgid "Report message as undetected spam "
+#~ msgstr "El teu missatge ha estat rebutjat."
+
+#, fuzzy
+#~ msgid "loading message..."
+#~ msgstr "Missatge de recordatori global"
+
+#, fuzzy
+#~ msgid "Administration Tasks"
+#~ msgstr "Panell d'administració"
+
+#, fuzzy
+#~ msgid "List %1:"
+#~ msgstr "llista %1"
+
+#, fuzzy
+#~ msgid "%1 document(s)"
+#~ msgstr "Documents compartits"
+
+#, fuzzy
+#~ msgid "%1 subscription request(s)"
+#~ msgstr "No hi ha peticions per donar-se d'alta (subscripció)"
+
+#, fuzzy
+#~ msgid "User Errors"
+#~ msgstr "Inicialitza els errors"
+
+#, fuzzy
+#~ msgid " List %1: "
+#~ msgstr "Llista %1 / %2"
+
+#, fuzzy
+#~ msgid "Add quietly"
+#~ msgstr "silenciós"
+
+#, fuzzy
+#~ msgid "Message tracking"
+#~ msgstr "Marcatge de missatges"
+
+#, fuzzy
+#~ msgid "Distribution ended at"
+#~ msgstr "Distribuir"
+
+#, fuzzy
+#~ msgid "Reception Option"
+#~ msgstr "Recepció"
+
+#, fuzzy
+#~ msgid "Notification Date"
+#~ msgstr "norificació"
+
+#, fuzzy
+#~ msgid "Notification"
+#~ msgstr "norificació"
+
+#, fuzzy
+#~ msgid "Message tracking feature"
+#~ msgstr "Marcatge de missatges"
+
 #~ msgid ""
 #~ "** Warning: Message part originally used character set %s\n"
 #~ "    Some characters may be lost or incorrect **\n"
@@ -10808,10 +10939,6 @@ msgstr "No pot rebre els seus propis missatges"
 #~ "contrasenya.\n"
 #~ "Introdueixi la contrasenya a continuació per tal de confirmar la seva "
 #~ "petició de baixa de la llista %1."
-
-#, fuzzy
-#~ msgid "Rejection message"
-#~ msgstr "Últims missatge"
 
 #, fuzzy
 #~ msgid "Do you really want to delete this reject message?"

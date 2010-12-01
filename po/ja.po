@@ -2926,6 +2926,7 @@ msgid "Reject without notification "
 msgstr "知らせずに拒否"
 
 #: ../web_tt2/modindex.tt2:41
+#, fuzzy
 msgid "Add to blacklist"
 msgstr "ブラックリストに追加"
 
@@ -9473,6 +9474,137 @@ msgstr "受け取らない (休暇のときなどに便利)"
 msgid "you do not receive your own posts"
 msgstr "自分が投稿したものは受け取らない"
 
+#: ../web_tt2/modform.tt2:46
+#, fuzzy
+msgid "Add sender to blacklist"
+msgstr "ブラックリストに追加"
+
+#: ../web_tt2/modform.tt2:49
+msgid ""
+"You should rejet spams quietly because the sender of a spam is often "
+"spoofed, if you really want to send this notification, please confirm "
+msgstr ""
+
+#: ../web_tt2/news.tt2:10
+msgid "The following items are waiting for your validation"
+msgstr ""
+
+#: ../web_tt2/news.tt2:30
+msgid ""
+"We received error reports while trying to send you messages. Some of them "
+"may have been lost."
+msgstr ""
+
+#. (user_with_errors.value)
+#: ../web_tt2/news.tt2:35
+msgid " %1 error(s)"
+msgstr ""
+
+#: ../web_tt2/skinsedit.tt2:107
+msgid "Background color for the news area of the home page."
+msgstr ""
+
+#. (fromname,fromaddr,listname)
+#: ../web_tt2/tracking.tt2:6
+msgid "Message from %1 %2 for list %3 "
+msgstr ""
+
+#: ../web_tt2/tracking.tt2:14
+msgid "Recipient Email"
+msgstr ""
+
+#: ../web_tt2/tracking.tt2:15
+msgid "Delivery status"
+msgstr ""
+
+#: ../src/lib/List.pm:437
+msgid "tracking message by delivery status notification"
+msgstr ""
+
+#: ../src/lib/List.pm:443
+msgid "tracking message by message delivery notification"
+msgstr ""
+
+#, fuzzy
+#~ msgid "Statistics"
+#~ msgstr "状況"
+
+#, fuzzy
+#~ msgid "You must select a topic"
+#~ msgstr "--分野を選択してください--"
+
+#, fuzzy
+#~ msgid "Rejecting message"
+#~ msgstr "削除メッセージ"
+
+#, fuzzy
+#~ msgid "Choose notification "
+#~ msgstr "通知"
+
+#, fuzzy
+#~ msgid "No notification"
+#~ msgstr "通知"
+
+#, fuzzy
+#~ msgid "Report message as undetected spam "
+#~ msgstr "メッセージは拒否されました。"
+
+#, fuzzy
+#~ msgid "loading message..."
+#~ msgstr "全員宛て登録確認メッセージ"
+
+#, fuzzy
+#~ msgid "Administration Tasks"
+#~ msgstr "リスト運営パネル"
+
+#, fuzzy
+#~ msgid "List %1:"
+#~ msgstr "%1 メーリングリスト"
+
+#, fuzzy
+#~ msgid "%1 document(s)"
+#~ msgstr "共有文書置き場"
+
+#, fuzzy
+#~ msgid "%1 subscription request(s)"
+#~ msgstr "読者登録申込はありません"
+
+#, fuzzy
+#~ msgid "User Errors"
+#~ msgstr "エラーをリセットする"
+
+#, fuzzy
+#~ msgid " List %1: "
+#~ msgstr "%1 メーリングリスト / %2"
+
+#, fuzzy
+#~ msgid "Add quietly"
+#~ msgstr "知らせない"
+
+#, fuzzy
+#~ msgid "Message tracking"
+#~ msgstr "メッセージへのトピックの印づけ"
+
+#, fuzzy
+#~ msgid "Distribution ended at"
+#~ msgstr "配送"
+
+#, fuzzy
+#~ msgid "Reception Option"
+#~ msgstr "受け取りかた"
+
+#, fuzzy
+#~ msgid "Notification Date"
+#~ msgstr "通知"
+
+#, fuzzy
+#~ msgid "Notification"
+#~ msgstr "通知"
+
+#, fuzzy
+#~ msgid "Message tracking feature"
+#~ msgstr "メッセージへのトピックの印づけ"
+
 #~ msgid ""
 #~ "** Warning: Message part originally used character set %s\n"
 #~ "    Some characters may be lost or incorrect **\n"
@@ -10329,10 +10461,6 @@ msgstr "自分が投稿したものは受け取らない"
 #, fuzzy
 #~ msgid "This message as been tagged as spam"
 #~ msgstr "その他 (トピックの印のないメッセージ) "
-
-#, fuzzy
-#~ msgid "Rejection message"
-#~ msgstr "削除メッセージ"
 
 #~ msgid "Modify or Delete existing messages"
 #~ msgstr "存在するメッセージの変更、削除"

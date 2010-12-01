@@ -9686,6 +9686,137 @@ msgstr "메일 없음 (휴가 동안 유용한)"
 msgid "you do not receive your own posts"
 msgstr "사용자의 포스트를 받지 않습니다"
 
+#: ../web_tt2/modform.tt2:46
+#, fuzzy
+msgid "Add sender to blacklist"
+msgstr "블랙리스트 편집"
+
+#: ../web_tt2/modform.tt2:49
+msgid ""
+"You should rejet spams quietly because the sender of a spam is often "
+"spoofed, if you really want to send this notification, please confirm "
+msgstr ""
+
+#: ../web_tt2/news.tt2:10
+msgid "The following items are waiting for your validation"
+msgstr ""
+
+#: ../web_tt2/news.tt2:30
+msgid ""
+"We received error reports while trying to send you messages. Some of them "
+"may have been lost."
+msgstr ""
+
+#. (user_with_errors.value)
+#: ../web_tt2/news.tt2:35
+msgid " %1 error(s)"
+msgstr ""
+
+#: ../web_tt2/skinsedit.tt2:107
+msgid "Background color for the news area of the home page."
+msgstr ""
+
+#. (fromname,fromaddr,listname)
+#: ../web_tt2/tracking.tt2:6
+msgid "Message from %1 %2 for list %3 "
+msgstr ""
+
+#: ../web_tt2/tracking.tt2:14
+msgid "Recipient Email"
+msgstr ""
+
+#: ../web_tt2/tracking.tt2:15
+msgid "Delivery status"
+msgstr ""
+
+#: ../src/lib/List.pm:437
+msgid "tracking message by delivery status notification"
+msgstr ""
+
+#: ../src/lib/List.pm:443
+msgid "tracking message by message delivery notification"
+msgstr ""
+
+#, fuzzy
+#~ msgid "Statistics"
+#~ msgstr "상태"
+
+#, fuzzy
+#~ msgid "You must select a topic"
+#~ msgstr "--선택하기--"
+
+#, fuzzy
+#~ msgid "Rejecting message"
+#~ msgstr "삭제 메시지"
+
+#, fuzzy
+#~ msgid "Choose notification "
+#~ msgstr "알림"
+
+#, fuzzy
+#~ msgid "No notification"
+#~ msgstr "알림"
+
+#, fuzzy
+#~ msgid "Report message as undetected spam "
+#~ msgstr "메시지가 거부했습니다."
+
+#, fuzzy
+#~ msgid "loading message..."
+#~ msgstr "전체 미리 알림"
+
+#, fuzzy
+#~ msgid "Administration Tasks"
+#~ msgstr "리스트 관리 제어판"
+
+#, fuzzy
+#~ msgid "List %1:"
+#~ msgstr "%1 메일링 리스트"
+
+#, fuzzy
+#~ msgid "%1 document(s)"
+#~ msgstr "공용 문서"
+
+#, fuzzy
+#~ msgid "%1 subscription request(s)"
+#~ msgstr "구독 요청 없음"
+
+#, fuzzy
+#~ msgid "User Errors"
+#~ msgstr "에러들를 다시 리셋"
+
+#, fuzzy
+#~ msgid " List %1: "
+#~ msgstr "%1 메일링 리스트 / %2"
+
+#, fuzzy
+#~ msgid "Add quietly"
+#~ msgstr "자동 모드"
+
+#, fuzzy
+#~ msgid "Message tracking"
+#~ msgstr "메시지 태그를 붙이기"
+
+#, fuzzy
+#~ msgid "Distribution ended at"
+#~ msgstr "배포하기"
+
+#, fuzzy
+#~ msgid "Reception Option"
+#~ msgstr "받기"
+
+#, fuzzy
+#~ msgid "Notification Date"
+#~ msgstr "알림"
+
+#, fuzzy
+#~ msgid "Notification"
+#~ msgstr "알림"
+
+#, fuzzy
+#~ msgid "Message tracking feature"
+#~ msgstr "메시지 태그를 붙이기"
+
 #~ msgid ""
 #~ "** Warning: Message part originally used character set %s\n"
 #~ "    Some characters may be lost or incorrect **\n"
@@ -10247,10 +10378,6 @@ msgstr "사용자의 포스트를 받지 않습니다"
 #, fuzzy
 #~ msgid "This message as been tagged as spam"
 #~ msgstr "기타 (표를 붙이지 않는 메시지) "
-
-#, fuzzy
-#~ msgid "Rejection message"
-#~ msgstr "삭제 메시지"
 
 #, fuzzy
 #~ msgid "Modify or Delete existing messages"

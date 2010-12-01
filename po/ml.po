@@ -4598,8 +4598,9 @@ msgid "Other events"
 msgstr ""
 
 #: ../web_tt2/viewmod.tt2:17
+#, fuzzy
 msgid "Default rejection message"
-msgstr ""
+msgstr "RSS പുതിയ കത്തുകള്‍ "
 
 #: ../web_tt2/viewmod.tt2:18
 msgid "Do Not Notify"
@@ -8824,6 +8825,141 @@ msgstr ""
 
 #: ../wwsympa/wwslib.pm:37
 msgid "you do not receive your own posts"
+msgstr ""
+
+#: ../web_tt2/list_menu.tt2:56
+msgid "Statistics"
+msgstr ""
+
+#: ../web_tt2/modform.tt2:19
+msgid "You must select a topic"
+msgstr ""
+
+#: ../web_tt2/modform.tt2:30
+#, fuzzy
+msgid "Rejecting message"
+msgstr "RSS പുതിയ കത്തുകള്‍ "
+
+#: ../web_tt2/modform.tt2:32
+msgid "Choose notification "
+msgstr ""
+
+#: ../web_tt2/modform.tt2:34
+msgid "No notification"
+msgstr ""
+
+#: ../web_tt2/modform.tt2:43
+msgid "Report message as undetected spam "
+msgstr ""
+
+#: ../web_tt2/modform.tt2:46
+msgid "Add sender to blacklist"
+msgstr ""
+
+#: ../web_tt2/modform.tt2:49
+msgid ""
+"You should rejet spams quietly because the sender of a spam is often "
+"spoofed, if you really want to send this notification, please confirm "
+msgstr ""
+
+#: ../web_tt2/modindex.tt2:21
+msgid "loading message..."
+msgstr ""
+
+#: ../web_tt2/news.tt2:9
+msgid "Administration Tasks"
+msgstr ""
+
+#: ../web_tt2/news.tt2:10
+msgid "The following items are waiting for your validation"
+msgstr ""
+
+#. (list_to_admin.key)
+#: ../web_tt2/news.tt2:15
+msgid "List %1:"
+msgstr ""
+
+#. (list_to_admin.value.mod_shared_total)
+#: ../web_tt2/news.tt2:17
+msgid "%1 document(s)"
+msgstr ""
+
+#. (list_to_admin.value.mod_subscription)
+#: ../web_tt2/news.tt2:18
+msgid "%1 subscription request(s)"
+msgstr ""
+
+#: ../web_tt2/news.tt2:29
+msgid "User Errors"
+msgstr ""
+
+#: ../web_tt2/news.tt2:30
+msgid ""
+"We received error reports while trying to send you messages. Some of them "
+"may have been lost."
+msgstr ""
+
+#. (user_with_errors.key)
+#: ../web_tt2/news.tt2:34
+msgid " List %1: "
+msgstr ""
+
+#. (user_with_errors.value)
+#: ../web_tt2/news.tt2:35
+msgid " %1 error(s)"
+msgstr ""
+
+#: ../web_tt2/review.tt2:75
+msgid "Add quietly"
+msgstr ""
+
+#: ../web_tt2/skinsedit.tt2:107
+msgid "Background color for the news area of the home page."
+msgstr ""
+
+#: ../web_tt2/tracking.tt2:13 ../web_tt2/tracking.tt2:4
+msgid "Message tracking"
+msgstr ""
+
+#. (fromname,fromaddr,listname)
+#: ../web_tt2/tracking.tt2:6
+msgid "Message from %1 %2 for list %3 "
+msgstr ""
+
+#: ../web_tt2/tracking.tt2:10
+msgid "Distribution ended at"
+msgstr ""
+
+#: ../web_tt2/tracking.tt2:14
+msgid "Recipient Email"
+msgstr ""
+
+#: ../web_tt2/tracking.tt2:14
+msgid "Reception Option"
+msgstr ""
+
+#: ../web_tt2/tracking.tt2:15
+msgid "Delivery status"
+msgstr ""
+
+#: ../web_tt2/tracking.tt2:16
+msgid "Notification Date"
+msgstr ""
+
+#: ../web_tt2/tracking.tt2:17
+msgid "Notification"
+msgstr ""
+
+#: ../src/lib/List.pm:437
+msgid "tracking message by delivery status notification"
+msgstr ""
+
+#: ../src/lib/List.pm:443
+msgid "tracking message by message delivery notification"
+msgstr ""
+
+#: ../src/lib/List.pm:448
+msgid "Message tracking feature"
 msgstr ""
 
 #, fuzzy

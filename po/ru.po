@@ -2952,6 +2952,7 @@ msgid "Reject without notification "
 msgstr "Отказ без уведомления"
 
 #: ../web_tt2/modindex.tt2:41
+#, fuzzy
 msgid "Add to blacklist"
 msgstr "Добавить в чёрный список"
 
@@ -9604,6 +9605,138 @@ msgstr "без писем (полезно для отпускников)"
 msgid "you do not receive your own posts"
 msgstr "Вы не получаете свои же письма"
 
+#: ../web_tt2/modform.tt2:46
+#, fuzzy
+msgid "Add sender to blacklist"
+msgstr "Добавить в чёрный список"
+
+#: ../web_tt2/modform.tt2:49
+msgid ""
+"You should rejet spams quietly because the sender of a spam is often "
+"spoofed, if you really want to send this notification, please confirm "
+msgstr ""
+
+#: ../web_tt2/news.tt2:10
+msgid "The following items are waiting for your validation"
+msgstr ""
+
+#: ../web_tt2/news.tt2:30
+msgid ""
+"We received error reports while trying to send you messages. Some of them "
+"may have been lost."
+msgstr ""
+
+#. (user_with_errors.value)
+#: ../web_tt2/news.tt2:35
+msgid " %1 error(s)"
+msgstr ""
+
+#: ../web_tt2/skinsedit.tt2:107
+msgid "Background color for the news area of the home page."
+msgstr ""
+
+#. (fromname,fromaddr,listname)
+#: ../web_tt2/tracking.tt2:6
+msgid "Message from %1 %2 for list %3 "
+msgstr ""
+
+#: ../web_tt2/tracking.tt2:14
+msgid "Recipient Email"
+msgstr ""
+
+#: ../web_tt2/tracking.tt2:15
+msgid "Delivery status"
+msgstr ""
+
+#: ../src/lib/List.pm:437
+msgid "tracking message by delivery status notification"
+msgstr ""
+
+#: ../src/lib/List.pm:443
+msgid "tracking message by message delivery notification"
+msgstr ""
+
+#, fuzzy
+#~ msgid "Statistics"
+#~ msgstr "Статус"
+
+#, fuzzy
+#~ msgid "You must select a topic"
+#~ msgstr "--Выберите тему--"
+
+#, fuzzy
+#~ msgid "Rejecting message"
+#~ msgstr ""
+#~ "Сообщение, по умолчанию используемое при запрете распространения сообщения"
+
+#, fuzzy
+#~ msgid "Choose notification "
+#~ msgstr "уведомление"
+
+#, fuzzy
+#~ msgid "No notification"
+#~ msgstr "уведомление"
+
+#, fuzzy
+#~ msgid "Report message as undetected spam "
+#~ msgstr "Ваше сообщение было отвергнуто."
+
+#, fuzzy
+#~ msgid "loading message..."
+#~ msgstr "Сообщение общего напоминания"
+
+#, fuzzy
+#~ msgid "Administration Tasks"
+#~ msgstr "Панель администрирования рассылки"
+
+#, fuzzy
+#~ msgid "List %1:"
+#~ msgstr "рассылка %1"
+
+#, fuzzy
+#~ msgid "%1 document(s)"
+#~ msgstr "Общие документы"
+
+#, fuzzy
+#~ msgid "%1 subscription request(s)"
+#~ msgstr "Нет запросов на подписку"
+
+#, fuzzy
+#~ msgid "User Errors"
+#~ msgstr "Обнулить счётчик ошибок"
+
+#, fuzzy
+#~ msgid " List %1: "
+#~ msgstr "Рассылка %1 / %2"
+
+#, fuzzy
+#~ msgid "Add quietly"
+#~ msgstr "без подтверждений и сообщений"
+
+#, fuzzy
+#~ msgid "Message tracking"
+#~ msgstr "Простановка меток в сообщении"
+
+#, fuzzy
+#~ msgid "Distribution ended at"
+#~ msgstr "Разослать"
+
+#, fuzzy
+#~ msgid "Reception Option"
+#~ msgstr "Получение"
+
+#, fuzzy
+#~ msgid "Notification Date"
+#~ msgstr "уведомление"
+
+#, fuzzy
+#~ msgid "Notification"
+#~ msgstr "уведомление"
+
+#, fuzzy
+#~ msgid "Message tracking feature"
+#~ msgstr "Простановка меток в сообщении"
+
 #~ msgid ""
 #~ "** Warning: Message part originally used character set %s\n"
 #~ "    Some characters may be lost or incorrect **\n"
@@ -10278,11 +10411,6 @@ msgstr "Вы не получаете свои же письма"
 #, fuzzy
 #~ msgid "This message as been tagged as spam"
 #~ msgstr "Это сообщение получило метку \"Спам\""
-
-#, fuzzy
-#~ msgid "Rejection message"
-#~ msgstr ""
-#~ "Сообщение, по умолчанию используемое при запрете распространения сообщения"
 
 #~ msgid "Modify or Delete existing messages"
 #~ msgstr "Изменить или удалить существующие сообщения"

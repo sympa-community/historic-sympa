@@ -3071,6 +3071,7 @@ msgid "Reject without notification "
 msgstr "Rechazar sin notificación"
 
 #: ../web_tt2/modindex.tt2:41
+#, fuzzy
 msgid "Add to blacklist"
 msgstr "Agregar a la lista negra"
 
@@ -9849,6 +9850,137 @@ msgstr "no mail (útil para las vacaciones)"
 #: ../wwsympa/wwslib.pm:37
 msgid "you do not receive your own posts"
 msgstr "no recibes tus propios mensajes"
+
+#: ../web_tt2/modform.tt2:46
+#, fuzzy
+msgid "Add sender to blacklist"
+msgstr "Agregar a la lista negra"
+
+#: ../web_tt2/modform.tt2:49
+msgid ""
+"You should rejet spams quietly because the sender of a spam is often "
+"spoofed, if you really want to send this notification, please confirm "
+msgstr ""
+
+#: ../web_tt2/news.tt2:10
+msgid "The following items are waiting for your validation"
+msgstr ""
+
+#: ../web_tt2/news.tt2:30
+msgid ""
+"We received error reports while trying to send you messages. Some of them "
+"may have been lost."
+msgstr ""
+
+#. (user_with_errors.value)
+#: ../web_tt2/news.tt2:35
+msgid " %1 error(s)"
+msgstr ""
+
+#: ../web_tt2/skinsedit.tt2:107
+msgid "Background color for the news area of the home page."
+msgstr ""
+
+#. (fromname,fromaddr,listname)
+#: ../web_tt2/tracking.tt2:6
+msgid "Message from %1 %2 for list %3 "
+msgstr ""
+
+#: ../web_tt2/tracking.tt2:14
+msgid "Recipient Email"
+msgstr ""
+
+#: ../web_tt2/tracking.tt2:15
+msgid "Delivery status"
+msgstr ""
+
+#: ../src/lib/List.pm:437
+msgid "tracking message by delivery status notification"
+msgstr ""
+
+#: ../src/lib/List.pm:443
+msgid "tracking message by message delivery notification"
+msgstr ""
+
+#, fuzzy
+#~ msgid "Statistics"
+#~ msgstr "Status"
+
+#, fuzzy
+#~ msgid "You must select a topic"
+#~ msgstr "--Seleccione una categoría--"
+
+#, fuzzy
+#~ msgid "Rejecting message"
+#~ msgstr "Mensaje de supresión"
+
+#, fuzzy
+#~ msgid "Choose notification "
+#~ msgstr "notificación"
+
+#, fuzzy
+#~ msgid "No notification"
+#~ msgstr "notificación"
+
+#, fuzzy
+#~ msgid "Report message as undetected spam "
+#~ msgstr "Tu mensaje fue rechazado."
+
+#, fuzzy
+#~ msgid "loading message..."
+#~ msgstr "Mensaje de recordatorio global"
+
+#, fuzzy
+#~ msgid "Administration Tasks"
+#~ msgstr "Panel de administración de listas"
+
+#, fuzzy
+#~ msgid "List %1:"
+#~ msgstr "lista %1"
+
+#, fuzzy
+#~ msgid "%1 document(s)"
+#~ msgstr "Documentos compartidos"
+
+#, fuzzy
+#~ msgid "%1 subscription request(s)"
+#~ msgstr "Ninguna solicitud de suscripción"
+
+#, fuzzy
+#~ msgid "User Errors"
+#~ msgstr "Borrar los errores"
+
+#, fuzzy
+#~ msgid " List %1: "
+#~ msgstr "lista %1 / %2"
+
+#, fuzzy
+#~ msgid "Add quietly"
+#~ msgstr "sin avisar"
+
+#, fuzzy
+#~ msgid "Message tracking"
+#~ msgstr "marcando mensajes"
+
+#, fuzzy
+#~ msgid "Distribution ended at"
+#~ msgstr "Distribuir"
+
+#, fuzzy
+#~ msgid "Reception Option"
+#~ msgstr "Recepción"
+
+#, fuzzy
+#~ msgid "Notification Date"
+#~ msgstr "notificación"
+
+#, fuzzy
+#~ msgid "Notification"
+#~ msgstr "notificación"
+
+#, fuzzy
+#~ msgid "Message tracking feature"
+#~ msgstr "marcando mensajes"
 
 #~ msgid ""
 #~ "** Warning: Message part originally used character set %s\n"
