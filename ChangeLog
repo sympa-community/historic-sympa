@@ -1,4 +1,46 @@
 ------------------------------------------------------------------------
+r6894 | sympa-authors | 2010-12-01 23:40:20 +0100 (Wed, 01 Dec 2010) | 1 line
+Changed paths:
+   M /branches/sympa-test-updater/po/ar.po
+   M /branches/sympa-test-updater/po/bg.po
+   M /branches/sympa-test-updater/po/br.po
+   M /branches/sympa-test-updater/po/ca.po
+   M /branches/sympa-test-updater/po/cs.po
+   M /branches/sympa-test-updater/po/de.po
+   M /branches/sympa-test-updater/po/el.po
+   M /branches/sympa-test-updater/po/es.po
+   M /branches/sympa-test-updater/po/eu.po
+   M /branches/sympa-test-updater/po/fi.po
+   M /branches/sympa-test-updater/po/hu.po
+   M /branches/sympa-test-updater/po/id.po
+   M /branches/sympa-test-updater/po/it.po
+   M /branches/sympa-test-updater/po/ja.po
+   M /branches/sympa-test-updater/po/ko.po
+   M /branches/sympa-test-updater/po/la.po
+   M /branches/sympa-test-updater/po/ml.po
+   M /branches/sympa-test-updater/po/nb_NO.po
+   M /branches/sympa-test-updater/po/nl.po
+   M /branches/sympa-test-updater/po/oc.po
+   M /branches/sympa-test-updater/po/pl.po
+   M /branches/sympa-test-updater/po/pt.po
+   M /branches/sympa-test-updater/po/pt_BR.po
+   M /branches/sympa-test-updater/po/ro.po
+   M /branches/sympa-test-updater/po/ru.po
+   M /branches/sympa-test-updater/po/sv.po
+   M /branches/sympa-test-updater/po/tr.po
+   M /branches/sympa-test-updater/po/vi.po
+   M /branches/sympa-test-updater/po/zh_CN.po
+   M /branches/sympa-test-updater/po/zh_TW.po
+
+[-feature]Committing updated catalogues from Pootle
+------------------------------------------------------------------------
+r6892 | sympa-authors | 2010-12-01 23:38:10 +0100 (Wed, 01 Dec 2010) | 1 line
+Changed paths:
+   M /branches/sympa-test-updater/ChangeLog
+   M /branches/sympa-test-updater/configure.ac
+
+[-release]Preparing version 6.4a.0
+------------------------------------------------------------------------
 r6890 | sympa-authors | 2010-12-01 23:16:22 +0100 (Wed, 01 Dec 2010) | 1 line
 Changed paths:
    M /branches/sympa-test-updater/ChangeLog
