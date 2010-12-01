@@ -9883,15 +9883,6 @@ msgstr "không thư (có ích khi đi nghỉ)"
 msgid "you do not receive your own posts"
 msgstr "bạn không nhận bài thư được mình gửi"
 
-#. (+cpt)
-#: ../web_tt2/javascript.tt2:1056
-msgid "microcal"
-msgstr ""
-
-#: ../web_tt2/javascript.tt2:1096
-msgid "\"+src.id+\"_cal"
-msgstr ""
-
 #, fuzzy
 #~ msgid ""
 #~ "You should probably not reject message detected as spam with notification "

@@ -10243,10 +10243,6 @@ msgstr "ei posteja (hyödyllinen lomien aikana)"
 msgid "you do not receive your own posts"
 msgstr "et vastaanota lähettämiäsi viestejä"
 
-#: ../web_tt2/javascript.tt2:1096
-msgid "\"+src.id+\"_cal"
-msgstr ""
-
 #, fuzzy
 #~ msgid "microcal"
 #~ msgstr "Paikallinen"

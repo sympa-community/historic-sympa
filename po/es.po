@@ -9959,15 +9959,6 @@ msgstr "no mail (útil para las vacaciones)"
 msgid "you do not receive your own posts"
 msgstr "no recibes tus propios mensajes"
 
-#. (+cpt)
-#: ../web_tt2/javascript.tt2:1056
-msgid "microcal"
-msgstr ""
-
-#: ../web_tt2/javascript.tt2:1096
-msgid "\"+src.id+\"_cal"
-msgstr ""
-
 #, fuzzy
 #~ msgid ""
 #~ "You should probably not reject message detected as spam with notification "

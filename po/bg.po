@@ -9002,42 +9002,6 @@ msgstr ""
 msgid "you do not receive your own posts"
 msgstr ""
 
-#. (+cpt)
-#: ../web_tt2/javascript.tt2:1056
-msgid "microcal"
-msgstr ""
-
-#: ../web_tt2/javascript.tt2:1096
-msgid "\"+src.id+\"_cal"
-msgstr ""
-
-#: ../web_tt2/modindex.tt2:25
-msgid ""
-"You should probably not reject message detected as spam with notification "
-"because the message sender is probably spoofed. Do you really want to reject "
-"those messages with notification?"
-msgstr ""
-
-#: ../web_tt2/modindex.tt2:39
-msgid "Reject without notification "
-msgstr ""
-
-#: ../web_tt2/modindex.tt2:41
-msgid "Add to blacklist"
-msgstr ""
-
-#: ../web_tt2/modindex.tt2:120
-msgid "Reject and blacklist sender"
-msgstr ""
-
-#: ../web_tt2/modindex.tt2:128
-msgid "Toggle spams"
-msgstr ""
-
-#: ../web_tt2/viewmod.tt2:18
-msgid "Do Not Notify"
-msgstr ""
-
 #, fuzzy
 #~ msgid "Default rejection message"
 #~ msgstr " Последните съобщения "

@@ -9597,23 +9597,6 @@ msgstr "ingen e-post (praktisk ved ferie)"
 msgid "you do not receive your own posts"
 msgstr "du mottar ikke selv dine egne meldinger"
 
-#. (+cpt)
-#: ../web_tt2/javascript.tt2:1056
-msgid "microcal"
-msgstr ""
-
-#: ../web_tt2/javascript.tt2:1096
-msgid "\"+src.id+\"_cal"
-msgstr ""
-
-#: ../web_tt2/modindex.tt2:128
-msgid "Toggle spams"
-msgstr ""
-
-#: ../web_tt2/viewmod.tt2:18
-msgid "Do Not Notify"
-msgstr ""
-
 #, fuzzy
 #~ msgid ""
 #~ "You should probably not reject message detected as spam with notification "
