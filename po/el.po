@@ -5085,7 +5085,7 @@ msgstr "Αναζήτηση Χρήστη"
 #. (date_to_formated)
 #. This entry is a date/time format
 #. Check the strftime manpage for format details : http://docs.freebsd.org/info/gawk/gawk.info.Time_Functions.html
-#: ../web_tt2/viewlogs.tt2:113 ../wwsympa/wwsympa.fcgi.in:16636
+#: ../web_tt2/viewlogs.tt2:113 ../wwsympa/wwsympa.fcgi.in:16638
 msgid "%d %b %Y %H:%M:%S"
 msgstr ""
 
@@ -8775,7 +8775,7 @@ msgstr ""
 
 #. This entry is a date/time format
 #. Check the strftime manpage for format details : http://docs.freebsd.org/info/gawk/gawk.info.Time_Functions.html
-#: ../src/lib/Commands.pm:963 ../wwsympa/wwsympa.fcgi.in:10109
+#: ../src/lib/Commands.pm:963 ../wwsympa/wwsympa.fcgi.in:10111
 msgid "%A"
 msgstr ""
 
@@ -9530,18 +9530,18 @@ msgstr ""
 #. This entry is a date/time format
 #. Check the strftime manpage for format details : http://docs.freebsd.org/info/gawk/gawk.info.Time_Functions.html
 #: ../src/lib/List.pm:3035 ../src/lib/List.pm:3036 ../src/lib/List.pm:3040
-#: ../wwsympa/wwsympa.fcgi.in:11302 ../wwsympa/wwsympa.fcgi.in:11371
-#: ../wwsympa/wwsympa.fcgi.in:11573 ../wwsympa/wwsympa.fcgi.in:11920
-#: ../wwsympa/wwsympa.fcgi.in:15408 ../wwsympa/wwsympa.fcgi.in:15415
-#: ../wwsympa/wwsympa.fcgi.in:16124 ../wwsympa/wwsympa.fcgi.in:16986
-#: ../wwsympa/wwsympa.fcgi.in:16987 ../wwsympa/wwsympa.fcgi.in:4336
-#: ../wwsympa/wwsympa.fcgi.in:4394 ../wwsympa/wwsympa.fcgi.in:4967
-#: ../wwsympa/wwsympa.fcgi.in:4968 ../wwsympa/wwsympa.fcgi.in:6455
-#: ../wwsympa/wwsympa.fcgi.in:7571 ../wwsympa/wwsympa.fcgi.in:8236
-#: ../wwsympa/wwsympa.fcgi.in:8276 ../wwsympa/wwsympa.fcgi.in:8278
-#: ../wwsympa/wwsympa.fcgi.in:8796 ../wwsympa/wwsympa.fcgi.in:8797
-#: ../wwsympa/wwsympa.fcgi.in:8831 ../wwsympa/wwsympa.fcgi.in:8832
-#: ../wwsympa/wwsympa.fcgi.in:9011 ../wwsympa/wwsympa.fcgi.in:9012
+#: ../wwsympa/wwsympa.fcgi.in:11304 ../wwsympa/wwsympa.fcgi.in:11373
+#: ../wwsympa/wwsympa.fcgi.in:11575 ../wwsympa/wwsympa.fcgi.in:11922
+#: ../wwsympa/wwsympa.fcgi.in:15410 ../wwsympa/wwsympa.fcgi.in:15417
+#: ../wwsympa/wwsympa.fcgi.in:16126 ../wwsympa/wwsympa.fcgi.in:16988
+#: ../wwsympa/wwsympa.fcgi.in:16989 ../wwsympa/wwsympa.fcgi.in:4338
+#: ../wwsympa/wwsympa.fcgi.in:4396 ../wwsympa/wwsympa.fcgi.in:4969
+#: ../wwsympa/wwsympa.fcgi.in:4970 ../wwsympa/wwsympa.fcgi.in:6457
+#: ../wwsympa/wwsympa.fcgi.in:7573 ../wwsympa/wwsympa.fcgi.in:8238
+#: ../wwsympa/wwsympa.fcgi.in:8278 ../wwsympa/wwsympa.fcgi.in:8280
+#: ../wwsympa/wwsympa.fcgi.in:8798 ../wwsympa/wwsympa.fcgi.in:8799
+#: ../wwsympa/wwsympa.fcgi.in:8833 ../wwsympa/wwsympa.fcgi.in:8834
+#: ../wwsympa/wwsympa.fcgi.in:9013 ../wwsympa/wwsympa.fcgi.in:9014
 msgid "%d %b %Y"
 msgstr ""
 
@@ -9675,14 +9675,14 @@ msgstr ""
 #. This entry is a date/time format
 #. Check the strftime manpage for format details : http://docs.freebsd.org/info/gawk/gawk.info.Time_Functions.html
 #: ../wwsympa/SympaSession.pm:433 ../wwsympa/SympaSession.pm:434
-#: ../wwsympa/wwsympa.fcgi.in:12154 ../wwsympa/wwsympa.fcgi.in:12287
-#: ../wwsympa/wwsympa.fcgi.in:14633 ../wwsympa/wwsympa.fcgi.in:8190
+#: ../wwsympa/wwsympa.fcgi.in:12156 ../wwsympa/wwsympa.fcgi.in:12289
+#: ../wwsympa/wwsympa.fcgi.in:14635 ../wwsympa/wwsympa.fcgi.in:8192
 msgid "%d %b %y  %H:%M"
 msgstr ""
 
 #. This entry is a date/time format
 #. Check the strftime manpage for format details : http://docs.freebsd.org/info/gawk/gawk.info.Time_Functions.html
-#: ../wwsympa/wwsympa.fcgi.in:16581 ../wwsympa/wwsympa.fcgi.in:16582
+#: ../wwsympa/wwsympa.fcgi.in:16583 ../wwsympa/wwsympa.fcgi.in:16584
 msgid "%Y-%m-%d-%H-%M-%S"
 msgstr ""
 
@@ -9834,6 +9834,14 @@ msgstr ""
 #: ../wwsympa/wwslib.pm:37
 msgid "you do not receive your own posts"
 msgstr ""
+
+#, fuzzy
+#~ msgid "Reject without notification "
+#~ msgstr "Μαγική ταυτοποίηση"
+
+#, fuzzy
+#~ msgid "Add to blacklist"
+#~ msgstr "Πρώτο"
 
 #, fuzzy
 #~ msgid "Default rejection message"
