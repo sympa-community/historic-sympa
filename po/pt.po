@@ -8930,6 +8930,138 @@ msgstr ""
 msgid "you do not receive your own posts"
 msgstr ""
 
+#: ../web_tt2/list_menu.tt2:56
+msgid "Statistics"
+msgstr ""
+
+#: ../web_tt2/modform.tt2:19
+msgid "You must select a topic"
+msgstr ""
+
+#: ../web_tt2/modform.tt2:32
+msgid "Choose notification "
+msgstr ""
+
+#: ../web_tt2/modform.tt2:34
+msgid "No notification"
+msgstr ""
+
+#: ../web_tt2/modform.tt2:43
+msgid "Report message as undetected spam "
+msgstr ""
+
+#: ../web_tt2/modform.tt2:46
+msgid "Add sender to blacklist"
+msgstr ""
+
+#: ../web_tt2/modform.tt2:49
+msgid ""
+"You should rejet spams quietly because the sender of a spam is often "
+"spoofed, if you really want to send this notification, please confirm "
+msgstr ""
+
+#: ../web_tt2/news.tt2:9
+msgid "Administration Tasks"
+msgstr ""
+
+#: ../web_tt2/news.tt2:10
+msgid "The following items are waiting for your validation"
+msgstr ""
+
+#. (list_to_admin.key)
+#: ../web_tt2/news.tt2:15
+msgid "List %1:"
+msgstr ""
+
+#: ../web_tt2/news.tt2:29
+msgid "User Errors"
+msgstr ""
+
+#: ../web_tt2/news.tt2:30
+msgid ""
+"We received error reports while trying to send you messages. Some of them "
+"may have been lost."
+msgstr ""
+
+#. (user_with_errors.key)
+#: ../web_tt2/news.tt2:34
+msgid " List %1: "
+msgstr ""
+
+#. (user_with_errors.value)
+#: ../web_tt2/news.tt2:35
+msgid " %1 error(s)"
+msgstr ""
+
+#: ../web_tt2/review.tt2:75
+msgid "Add quietly"
+msgstr ""
+
+#: ../web_tt2/skinsedit.tt2:107
+msgid "Background color for the news area of the home page."
+msgstr ""
+
+#. (fromname,fromaddr,listname)
+#: ../web_tt2/tracking.tt2:6
+msgid "Message from %1 %2 for list %3 "
+msgstr ""
+
+#: ../web_tt2/tracking.tt2:10
+msgid "Distribution ended at"
+msgstr ""
+
+#: ../web_tt2/tracking.tt2:14
+msgid "Recipient Email"
+msgstr ""
+
+#: ../web_tt2/tracking.tt2:14
+msgid "Reception Option"
+msgstr ""
+
+#: ../web_tt2/tracking.tt2:15
+msgid "Delivery status"
+msgstr ""
+
+#: ../web_tt2/tracking.tt2:16
+msgid "Notification Date"
+msgstr ""
+
+#: ../web_tt2/tracking.tt2:17
+msgid "Notification"
+msgstr ""
+
+#: ../src/lib/List.pm:437
+msgid "tracking message by delivery status notification"
+msgstr ""
+
+#: ../src/lib/List.pm:443
+msgid "tracking message by message delivery notification"
+msgstr ""
+
+#, fuzzy
+#~ msgid "Rejecting message"
+#~ msgstr " As ultimas menssagens "
+
+#, fuzzy
+#~ msgid "loading message..."
+#~ msgstr " As ultimas menssagens "
+
+#, fuzzy
+#~ msgid "%1 document(s)"
+#~ msgstr "%1 ocurrencias encontradas"
+
+#, fuzzy
+#~ msgid "%1 subscription request(s)"
+#~ msgstr "%1 / removendo subscrição de %2"
+
+#, fuzzy
+#~ msgid "Message tracking"
+#~ msgstr " As ultimas menssagens "
+
+#, fuzzy
+#~ msgid "Message tracking feature"
+#~ msgstr " As ultimas menssagens "
+
 #, fuzzy
 #~ msgid "Your Lists"
 #~ msgstr " As ultimas listas "
@@ -8944,10 +9076,6 @@ msgstr ""
 
 #, fuzzy
 #~ msgid "Listing rejection message"
-#~ msgstr " As ultimas menssagens "
-
-#, fuzzy
-#~ msgid "Rejection message"
 #~ msgstr " As ultimas menssagens "
 
 #, fuzzy

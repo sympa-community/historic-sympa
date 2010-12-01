@@ -10000,6 +10000,138 @@ msgstr "geen mail (handig voor vakanties)"
 msgid "you do not receive your own posts"
 msgstr "U ontvangt niet uw eigen e-mails"
 
+#: ../web_tt2/modform.tt2:49
+msgid ""
+"You should rejet spams quietly because the sender of a spam is often "
+"spoofed, if you really want to send this notification, please confirm "
+msgstr ""
+
+#: ../web_tt2/news.tt2:10
+msgid "The following items are waiting for your validation"
+msgstr ""
+
+#: ../web_tt2/news.tt2:30
+msgid ""
+"We received error reports while trying to send you messages. Some of them "
+"may have been lost."
+msgstr ""
+
+#. (user_with_errors.value)
+#: ../web_tt2/news.tt2:35
+msgid " %1 error(s)"
+msgstr ""
+
+#: ../web_tt2/skinsedit.tt2:107
+msgid "Background color for the news area of the home page."
+msgstr ""
+
+#. (fromname,fromaddr,listname)
+#: ../web_tt2/tracking.tt2:6
+msgid "Message from %1 %2 for list %3 "
+msgstr ""
+
+#: ../web_tt2/tracking.tt2:14
+msgid "Recipient Email"
+msgstr ""
+
+#: ../web_tt2/tracking.tt2:15
+msgid "Delivery status"
+msgstr ""
+
+#: ../src/lib/List.pm:437
+msgid "tracking message by delivery status notification"
+msgstr ""
+
+#: ../src/lib/List.pm:443
+msgid "tracking message by message delivery notification"
+msgstr ""
+
+#, fuzzy
+#~ msgid "Statistics"
+#~ msgstr "Status : %1"
+
+#, fuzzy
+#~ msgid "You must select a topic"
+#~ msgstr "--Kies een onderwerp--"
+
+#, fuzzy
+#~ msgid "Rejecting message"
+#~ msgstr "verwijderbericht"
+
+#, fuzzy
+#~ msgid "Choose notification "
+#~ msgstr "iedereen zonder authenticatie"
+
+#, fuzzy
+#~ msgid "No notification"
+#~ msgstr "iedereen zonder authenticatie"
+
+#, fuzzy
+#~ msgid "Report message as undetected spam "
+#~ msgstr "Uw bericht is afgwezen"
+
+#, fuzzy
+#~ msgid "Add sender to blacklist"
+#~ msgstr "Restoren"
+
+#, fuzzy
+#~ msgid "loading message..."
+#~ msgstr "globaal herinneringsbericht"
+
+#, fuzzy
+#~ msgid "Administration Tasks"
+#~ msgstr "Lijst Administratie Paneel"
+
+#, fuzzy
+#~ msgid "List %1:"
+#~ msgstr "Lijst %1 / %2"
+
+#, fuzzy
+#~ msgid "%1 document(s)"
+#~ msgstr "Gedeelde documenten"
+
+#, fuzzy
+#~ msgid "%1 subscription request(s)"
+#~ msgstr "Geen abonneer aanvraag"
+
+#, fuzzy
+#~ msgid "User Errors"
+#~ msgstr "Reset foutmeldingen"
+
+#, fuzzy
+#~ msgid " List %1: "
+#~ msgstr "Lijst %1 / %2"
+
+#, fuzzy
+#~ msgid "Add quietly"
+#~ msgstr "quiet"
+
+#, fuzzy
+#~ msgid "Message tracking"
+#~ msgstr "voetregel van bericht"
+
+#, fuzzy
+#~ msgid "Distribution ended at"
+#~ msgstr "Distribueer"
+
+#, fuzzy
+#~ msgid "Reception Option"
+#~ msgstr "Ontvangst"
+
+#, fuzzy
+#~ msgid "Notification Date"
+#~ msgstr "Certificaat verloop datum"
+
+#, fuzzy
+#~ msgid "Notification"
+#~ msgstr ""
+#~ "De authenticatie is niet gelukt.\n"
+#~ "\n"
+
+#, fuzzy
+#~ msgid "Message tracking feature"
+#~ msgstr "voetregel van bericht"
+
 #~ msgid ""
 #~ "** Warning: Message part originally used character set %s\n"
 #~ "    Some characters may be lost or incorrect **\n"
@@ -10489,10 +10621,6 @@ msgstr "U ontvangt niet uw eigen e-mails"
 #, fuzzy
 #~ msgid "This message as been tagged as spam"
 #~ msgstr "Uw bericht is afgwezen"
-
-#, fuzzy
-#~ msgid "Rejection message"
-#~ msgstr "verwijderbericht"
 
 #, fuzzy
 #~ msgid "Modify or Delete existing messages"

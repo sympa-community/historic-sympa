@@ -9727,6 +9727,136 @@ msgstr ""
 msgid "you do not receive your own posts"
 msgstr ""
 
+#: ../web_tt2/modform.tt2:43
+msgid "Report message as undetected spam "
+msgstr ""
+
+#: ../web_tt2/modform.tt2:49
+msgid ""
+"You should rejet spams quietly because the sender of a spam is often "
+"spoofed, if you really want to send this notification, please confirm "
+msgstr ""
+
+#: ../web_tt2/news.tt2:10
+msgid "The following items are waiting for your validation"
+msgstr ""
+
+#: ../web_tt2/news.tt2:30
+msgid ""
+"We received error reports while trying to send you messages. Some of them "
+"may have been lost."
+msgstr ""
+
+#. (user_with_errors.value)
+#: ../web_tt2/news.tt2:35
+msgid " %1 error(s)"
+msgstr ""
+
+#: ../web_tt2/review.tt2:75
+msgid "Add quietly"
+msgstr ""
+
+#: ../web_tt2/skinsedit.tt2:107
+msgid "Background color for the news area of the home page."
+msgstr ""
+
+#. (fromname,fromaddr,listname)
+#: ../web_tt2/tracking.tt2:6
+msgid "Message from %1 %2 for list %3 "
+msgstr ""
+
+#: ../web_tt2/tracking.tt2:14
+msgid "Recipient Email"
+msgstr ""
+
+#: ../web_tt2/tracking.tt2:15
+msgid "Delivery status"
+msgstr ""
+
+#: ../src/lib/List.pm:437
+msgid "tracking message by delivery status notification"
+msgstr ""
+
+#: ../src/lib/List.pm:443
+msgid "tracking message by message delivery notification"
+msgstr ""
+
+#, fuzzy
+#~ msgid "Statistics"
+#~ msgstr "Κατάσταση"
+
+#, fuzzy
+#~ msgid "You must select a topic"
+#~ msgstr "--Επιλογή θέματος--"
+
+#, fuzzy
+#~ msgid "Rejecting message"
+#~ msgstr "Τελευταίο μήνυμα"
+
+#, fuzzy
+#~ msgid "Choose notification "
+#~ msgstr "Μαγική ταυτοποίηση"
+
+#, fuzzy
+#~ msgid "No notification"
+#~ msgstr "Μαγική ταυτοποίηση"
+
+#, fuzzy
+#~ msgid "Add sender to blacklist"
+#~ msgstr "Πρώτο"
+
+#, fuzzy
+#~ msgid "loading message..."
+#~ msgstr "Συντονισμός μηνήματος"
+
+#, fuzzy
+#~ msgid "Administration Tasks"
+#~ msgstr "Πλαίσιο Διαχείρισης Λίστας"
+
+#, fuzzy
+#~ msgid "List %1:"
+#~ msgstr "Λίστα %1 / %2"
+
+#, fuzzy
+#~ msgid "%1 document(s)"
+#~ msgstr "Διαμοιραζόμενα έγγραφα"
+
+#, fuzzy
+#~ msgid "%1 subscription request(s)"
+#~ msgstr "Ανύπαρκτες αιτήσεις συνδρομής"
+
+#, fuzzy
+#~ msgid "User Errors"
+#~ msgstr "Επαναφορά λαθών"
+
+#, fuzzy
+#~ msgid " List %1: "
+#~ msgstr "Λίστα %1 / %2"
+
+#, fuzzy
+#~ msgid "Message tracking"
+#~ msgstr "Αριθμός μηνύματος"
+
+#, fuzzy
+#~ msgid "Distribution ended at"
+#~ msgstr "Διανομή"
+
+#, fuzzy
+#~ msgid "Reception Option"
+#~ msgstr "Παραλαβή"
+
+#, fuzzy
+#~ msgid "Notification Date"
+#~ msgstr "Ημερομηνία λήξης πιστοποιητικού"
+
+#, fuzzy
+#~ msgid "Notification"
+#~ msgstr "Αίτηση ταυτοποίησης"
+
+#, fuzzy
+#~ msgid "Message tracking feature"
+#~ msgstr "Αριθμός μηνύματος"
+
 #~ msgid ""
 #~ "** Warning: Message part originally used character set %s\n"
 #~ "    Some characters may be lost or incorrect **\n"
@@ -10040,10 +10170,6 @@ msgstr ""
 #~ "Ελέγξε τη γραμματοθυρίδα σας για νέα μηνύματα και εισάγετε ακολούθως το\n"
 #~ "\tσυνθηματικό που σας έχει αποσταλεί. Αυτό\n"
 #~ "θα επιβεβαιώσει την εγγραφή σας ως συνδρομητής της λίστας %1"
-
-#, fuzzy
-#~ msgid "Rejection message"
-#~ msgstr "Τελευταίο μήνυμα"
 
 #, fuzzy
 #~ msgid "Do you really want to delete this reject message?"
@@ -10864,9 +10990,6 @@ msgstr ""
 
 #~ msgid "List %s is not currently running an expiration process.\n"
 #~ msgstr "Η λίστα %s δεν βρίσκεται σε διαδικασία λήξης.\n"
-
-#~ msgid "Moderating your message"
-#~ msgstr "Συντονισμός μηνήματος"
 
 #~ msgid "No password for user"
 #~ msgstr "Δεν ορίστηκε συνθηματικό χρήστη"

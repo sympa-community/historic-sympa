@@ -9617,6 +9617,138 @@ msgstr ""
 msgid "you do not receive your own posts"
 msgstr ""
 
+#: ../web_tt2/modform.tt2:43
+msgid "Report message as undetected spam "
+msgstr ""
+
+#: ../web_tt2/modform.tt2:49
+msgid ""
+"You should rejet spams quietly because the sender of a spam is often "
+"spoofed, if you really want to send this notification, please confirm "
+msgstr ""
+
+#: ../web_tt2/news.tt2:10
+msgid "The following items are waiting for your validation"
+msgstr ""
+
+#: ../web_tt2/news.tt2:30
+msgid ""
+"We received error reports while trying to send you messages. Some of them "
+"may have been lost."
+msgstr ""
+
+#. (user_with_errors.value)
+#: ../web_tt2/news.tt2:35
+msgid " %1 error(s)"
+msgstr ""
+
+#: ../web_tt2/review.tt2:75
+msgid "Add quietly"
+msgstr ""
+
+#: ../web_tt2/skinsedit.tt2:107
+msgid "Background color for the news area of the home page."
+msgstr ""
+
+#. (fromname,fromaddr,listname)
+#: ../web_tt2/tracking.tt2:6
+msgid "Message from %1 %2 for list %3 "
+msgstr ""
+
+#: ../web_tt2/tracking.tt2:14
+msgid "Recipient Email"
+msgstr ""
+
+#: ../web_tt2/tracking.tt2:15
+msgid "Delivery status"
+msgstr ""
+
+#: ../src/lib/List.pm:437
+msgid "tracking message by delivery status notification"
+msgstr ""
+
+#: ../src/lib/List.pm:443
+msgid "tracking message by message delivery notification"
+msgstr ""
+
+#, fuzzy
+#~ msgid "Statistics"
+#~ msgstr "Durum"
+
+#, fuzzy
+#~ msgid "You must select a topic"
+#~ msgstr "--Bir konu başlığı seçin--"
+
+#, fuzzy
+#~ msgid "Rejecting message"
+#~ msgstr "virüs bulaşma mesajı"
+
+#, fuzzy
+#~ msgid "Choose notification "
+#~ msgstr "Sihirli belgeleme"
+
+#, fuzzy
+#~ msgid "No notification"
+#~ msgstr "Sihirli belgeleme"
+
+#, fuzzy
+#~ msgid "Add sender to blacklist"
+#~ msgstr "listesine"
+
+#, fuzzy
+#~ msgid "loading message..."
+#~ msgstr "Mesajınız modere ediliyor"
+
+#, fuzzy
+#~ msgid "Administration Tasks"
+#~ msgstr "Liste Yönetim Paneli"
+
+#, fuzzy
+#~ msgid "List %1:"
+#~ msgstr "%1 / %2 Liste"
+
+#, fuzzy
+#~ msgid "%1 document(s)"
+#~ msgstr "Paylaşılan belgeler"
+
+#, fuzzy
+#~ msgid "%1 subscription request(s)"
+#~ msgstr "Kayıt olma talebi yok"
+
+#, fuzzy
+#~ msgid "User Errors"
+#~ msgstr "Hataları Sıfırla"
+
+#, fuzzy
+#~ msgid " List %1: "
+#~ msgstr "%1 / %2 Liste"
+
+#, fuzzy
+#~ msgid "Message tracking"
+#~ msgstr "Mesaj Sayımı"
+
+#, fuzzy
+#~ msgid "Distribution ended at"
+#~ msgstr "Dağıt"
+
+#, fuzzy
+#~ msgid "Reception Option"
+#~ msgstr "Kabul"
+
+#, fuzzy
+#~ msgid "Notification Date"
+#~ msgstr "Sertifika bitiş süresi"
+
+#, fuzzy
+#~ msgid "Notification"
+#~ msgstr ""
+#~ "Kimlik denetimi süreci başarısız oldu\n"
+#~ "\n"
+
+#, fuzzy
+#~ msgid "Message tracking feature"
+#~ msgstr "Mesaj Sayımı"
+
 #~ msgid ""
 #~ "** Warning: Message part originally used character set %s\n"
 #~ "    Some characters may be lost or incorrect **\n"
@@ -9868,10 +10000,6 @@ msgstr ""
 #~ msgstr ""
 #~ "Epostalarınızı kontrol edin ve size gönderilen şifreyi giriniz. bu sizin %"
 #~ "1 listesine üye olma isteğinizi onaylayacaktır."
-
-#, fuzzy
-#~ msgid "Rejection message"
-#~ msgstr "virüs bulaşma mesajı"
 
 #, fuzzy
 #~ msgid "Do you really want to delete this reject message?"
@@ -10467,9 +10595,6 @@ msgstr ""
 #~ msgstr ""
 #~ "Eğer bu kayıtlı kullanıcıları listeden çıkarmak istiyorsanız, aşağıdaki "
 #~ "komutları kullanın:\n"
-
-#~ msgid "Moderating your message"
-#~ msgstr "Mesajınız modere ediliyor"
 
 #~ msgid "No password for user"
 #~ msgstr "Kullanıcı için şifre yok"
