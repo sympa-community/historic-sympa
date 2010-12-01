@@ -1,4 +1,11 @@
 ------------------------------------------------------------------------
+r6895 | sympa-authors | 2010-12-01 23:59:59 +0100 (Wed, 01 Dec 2010) | 1 line
+Changed paths:
+   M /branches/sympa-test-updater/ChangeLog
+   M /branches/sympa-test-updater/configure.ac
+
+[-release]Preparing version 6.4
+------------------------------------------------------------------------
 r6894 | sympa-authors | 2010-12-01 23:40:20 +0100 (Wed, 01 Dec 2010) | 1 line
 Changed paths:
    M /branches/sympa-test-updater/po/ar.po
