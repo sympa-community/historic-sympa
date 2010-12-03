@@ -95,6 +95,7 @@ my %trusted_applications = ('trusted_application' => {'occurrence' => '0-n',
                               }
                         }
                 );
+my $binary_file_extension = ".bin";
 
 
 my $wwsconf;
@@ -111,45 +112,56 @@ sub load {
 
     my $config_err = 0;
     my %line_numbered_config;
-    
-    ## Loading the Sympa main config file.
-    if(my $config_loading_result = &_load_config_file_to_hash({'path_to_config_file' => $config_file})) {
-        %line_numbered_config = %{$config_loading_result->{'numbered_config'}};
-        %Conf = %{$config_loading_result->{'config'}};
-        $config_err = $config_loading_result->{'errors'};
+
+    if(!_source_is_newer_than_binary({'config_file' => $config_file}) && !$return_result) {
+        printf "Conf::load(): File %s has not changed since the last cache. Using cache.\n",$config_file;
+        if (my $tmp_conf = _load_binary_cache({'config_file' => $config_file.$binary_file_extension})){
+            %Conf = %{$tmp_conf};
+        }else{
+            printf STDERR "Binary config file loading failed. Loading source file '%s'\n",$config_file;
+        }
     }else{
-        printf STDERR  "Conf::load(): Unable to load %s. Aborting\n", $config_file;
-        return undef;
-    }
+         printf "Conf::load(): File %s has changed since the last cache. Loading file.\n",$config_file;
+        
+        ## Loading the Sympa main config file.
+        if(my $config_loading_result = &_load_config_file_to_hash({'path_to_config_file' => $config_file})) {
+            %line_numbered_config = %{$config_loading_result->{'numbered_config'}};
+            %Conf = %{$config_loading_result->{'config'}};
+            $config_err = $config_loading_result->{'errors'};
+        }else{
+            printf STDERR  "Conf::load(): Unable to load %s. Aborting\n", $config_file;
+            return undef;
+        }
+        
+        # Returning the config file content if this is what has been asked.
+        return (\%line_numbered_config) if ($return_result);
 
-    # Returning the config file content if this is what has been asked.
-    return (\%line_numbered_config) if ($return_result);
-
-    &_replace_file_value_by_db_value('config_hash' => \%Conf) unless($no_db);
+        &_replace_file_value_by_db_value('config_hash' => \%Conf) unless($no_db);
+        
+        # Users may define parameters with a typo or other errors. Check that the parameters
+        # we found in the config file are all well defined Sympa parameters.
+        $config_err += &_detect_unknown_parameters_in_config(
+                                {
+                                    'config_hash' => \%Conf,
+                                    'config_file_line_numbering_reference' => \%line_numbered_config,
+                                });
     
-    # Users may define parameters with a typo or other errors. Check that the parameters
-    # we found in the config file are all well defined Sympa parameters.
-    $config_err += &_detect_unknown_parameters_in_config(
-                             {
-                                 'config_hash' => \%Conf,
-                                 'config_file_line_numbering_reference' => \%line_numbered_config,
-                             });
+        # Some parameter values are hardcoded. In that case, ignore what was
+        #  set in the config file and simply use the hardcoded value.
+        %Ignored_Conf = %{&_set_hardcoded_parameter_values({'config_hash' => \%Conf,})};
 
-    # Some parameter values are hardcoded. In that case, ignore what was
-    #  set in the config file and simply use the hardcoded value.
-    %Ignored_Conf = %{&_set_hardcoded_parameter_values({'config_hash' => \%Conf,})};
+        &_set_listmasters_entry({'config_hash' => \%Conf});
     
-    &_set_listmasters_entry({'config_hash' => \%Conf});
-    
-    # Some parameters need special treatments to get their final values.
-    &_infer_server_specific_parameter_values({'config_hash' => \%Conf,});
-    
-    &_infer_robot_parameter_values({'config_hash' => \%Conf});
+        # Some parameters need special treatments to get their final values.
+        &_infer_server_specific_parameter_values({'config_hash' => \%Conf,});
+        
+        &_infer_robot_parameter_values({'config_hash' => \%Conf});
 
-    ## Some parameters must have a value specifically defined in the config. If not, it is an error.
-    $config_err += &_detect_missing_mandatory_parameters({'config_hash' => \%Conf,});
+        ## Some parameters must have a value specifically defined in the config. If not, it is an error.
+        $config_err += &_detect_missing_mandatory_parameters({'config_hash' => \%Conf,});
 
-    return undef if ($config_err);
+        return undef if ($config_err);
+        }
 
     if (my $missing_modules_count = &_check_cpan_modules_required_by_config({'config_hash' => \%Conf,})){
         printf STDERR "Conf::load(): Warning: %n required modules are missing.\n",$missing_modules_count;
@@ -158,7 +170,11 @@ sub load {
     ## Load robot.conf files
     $Conf{'robots'} = &load_robots({'no_db' => $no_db}) ;
     
+    &_store_source_file_name({'config_hash' => \%Conf,'config_file' => $config_file});
+
     open TMP,">/tmp/dumpconf";&tools::dump_var(\%Conf,0,\*TMP);close TMP;
+
+    &_save_config_hash_to_binary({'config_hash' => \%Conf,});
     
     return 1;
 }
@@ -195,19 +211,30 @@ sub load_robots {
     return undef if ($exiting);
 
     foreach my $robot (readdir(DIR)) {
+        my $robot_config_file = "$Conf{'etc'}/$robot/robot.conf";
         next unless (-d "$Conf{'etc'}/$robot");
-        next unless (-f "$Conf{'etc'}/$robot/robot.conf");
-        $robot_conf->{$robot} = &_load_single_robot_config({'robot' => $robot, 'no_db' => $param->{'no_db'}});
-        &_check_double_url_usage({'config_hash' => $robot_conf->{$robot}});
-        my $robot_config_file;   
-        unless ($robot_config_file = &tools::get_filename('etc',{},'auth.conf', $robot)) {
+        next unless (-f $robot_config_file);
+        if(!_source_is_newer_than_binary({'config_file' => $robot_config_file})) {
+            printf "Conf::load(): File %s has not changed since the last cache. Using cache.\n",$robot_config_file;
+            if (my $tmp_conf = _load_binary_cache({'config_file' => $robot_config_file.$binary_file_extension})){
+                $robot_conf->{$robot} = $tmp_conf;
+            }else{
+                printf STDERR "Binary config file loading failed. Loading source file '%s'\n",$robot_config_file;
+            }
+        }else{
+            $robot_conf->{$robot} = &_load_single_robot_config({'robot' => $robot, 'no_db' => $param->{'no_db'}});
+            &_check_double_url_usage({'config_hash' => $robot_conf->{$robot}});
+        }
+        &_store_source_file_name({'config_hash' => $robot_conf->{$robot},'config_file' => $robot_config_file});
+        my $robot_auth_file;   
+        unless ($robot_auth_file = &tools::get_filename('etc',{},'auth.conf', $robot)) {
             print STDERR "Conf::load_robots(): Unable to find auth.conf for robot %s", $robot;
             next;
         }
-        $Conf{'auth_services'}{$robot} = &_load_auth($robot, $robot_config_file);    
-
+        $Conf{'auth_services'}{$robot} = &_load_auth($robot, $robot_auth_file);    
+        &_save_config_hash_to_binary({'config_hash' => $robot_conf->{$robot},'source_file' => $robot_config_file});
     }
-    closedir(DIR);
+    closedir(DIR);        
     
     return ($robot_conf);
 }
@@ -1290,35 +1317,6 @@ sub _load_config_file_to_hash {
     return $result;
 }
 
-# Stores the config hash binary representation to a file.
-# Returns 1 or undef if something went wrong.
-sub _save_binary_cache {
-    my $param = shift;
-    eval {
-    &Storable::store($param->{'conf_to_save'},$param->{'target_file'});
-    };
-    if ($@) {
-    printf STDERR  'Conf::_save_binary_cache(): Failed to save the binary config %s. error: %s', $param->{'target_file'},$@;
-    return undef;
-    }
-    return 1;
-}
-
-# Loads the config hash binary representation from a file an returns it
-# Returns the hash or undef if something went wrong.
-sub _load_binary_cache {
-    my $param = shift;
-    my $result = undef;
-    eval {
-    $result = &Storable::retrieve($param->{'source_file'});
-    };
-    if ($@) {
-    printf STDERR  'Conf::_load_binary_cache(): Failed to load the binary config %s. error: %s', $param->{'source_file'},$@;
-    return undef;
-    }
-    return $result;
-}
-
 ## Checks a hash containing a sympa config and removes any entry that
 ## is not supposed to be defined at the robot level.
 sub _remove_unvalid_robot_entry {
@@ -1616,7 +1614,7 @@ sub _check_double_url_usage{
 
     ## Warn listmaster if another virtual host is defined with the same host+path
     if (defined $Conf{'robot_by_http_host'}{$host}{$path}) {
-      printf STDERR "Conf::_infer_robot_parameter_values(): Error: two virtual hosts (%s and %s) are mapped via a single URL '%s%s'", $Conf{'robot_by_http_host'}{$host}{$path}, $param->{'config_hash'}{'robot_name'}, $host, $path;
+      printf STDERR "Conf::_infer_robot_parameter_values(): Error: two virtual hosts (%s and %s) are mapped via a single URL '%s%s'\n", $Conf{'robot_by_http_host'}{$host}{$path}, $param->{'config_hash'}{'robot_name'}, $host, $path;
     }
 
     $Conf{'robot_by_http_host'}{$host}{$path} = $param->{'config_hash'}{'robot_name'} ;    
@@ -1647,6 +1645,60 @@ sub _replace_file_value_by_db_value {
             $param->{'config_hash'}{$label} = $value ;
         }
     }
+}
+
+# Stores the config hash binary representation to a file.
+# Returns 1 or undef if something went wrong.
+sub _save_binary_cache {
+    my $param = shift;
+    printf "Saving %s\n",$param->{'target_file'};
+    eval {
+        &Storable::store($param->{'conf_to_save'},$param->{'target_file'});
+    };
+    if ($@) {
+        printf STDERR  'Conf::_save_binary_cache(): Failed to save the binary config %s. error: %s\n', $param->{'target_file'},$@;
+        return undef;
+    }
+    return 1;
+}
+
+# Loads the config hash binary representation from a file an returns it
+# Returns the hash or undef if something went wrong.
+sub _load_binary_cache {
+    my $param = shift;
+    my $result = undef;
+    eval {
+        $result = &Storable::retrieve($param->{'config_file'});
+    };
+    if ($@) {
+        printf STDERR  "Conf::_load_binary_cache(): Failed to load the binary config %s. error: %s\n", $param->{'config_file'},$@;
+        return undef;
+    }
+    return $result;
+}
+
+sub _save_config_hash_to_binary {
+    my $param = shift;
+    unless(_save_binary_cache({'conf_to_save' => $param->{'config_hash'},'target_file' => $param->{'config_hash'}{'source_file'}.$binary_file_extension})){
+        printf STDERR "Conf::_save_config_hash_to_binary(): Could not save main config %s\n",$param->{'config_hash'}{'source_file'};
+    }
+}
+
+sub _source_is_newer_than_binary {
+    my $param = shift;
+    if(my $answer = &tools::a_is_older_than_b({'a_file' => $param->{'config_file'}.$binary_file_extension,'b_file' => $param->{'config_file'},})) {
+        if($answer eq 'yes'){
+            return 1;
+        }elsif($answer eq 'no'){
+            return 0;
+        }
+    }
+    return undef;
+}
+
+sub _store_source_file_name {
+    my $param = shift;
+    $param->{'config_hash'}{'source_file'} = $param->{'config_file'};
 }
 ## Packages must return true.
 1;
