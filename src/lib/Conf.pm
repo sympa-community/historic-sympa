@@ -222,8 +222,6 @@ sub load_robots {
             next;
         }
         $Conf{'auth_services'}{$robot} = &_load_auth($robot, $robot_auth_file);    
-        &_store_source_file_name({'config_hash' => $robot_conf->{$robot},'config_file' => $robot_config_file});
-        &_save_config_hash_to_binary({'config_hash' => $robot_conf->{$robot},'source_file' => $robot_config_file});
     }
     closedir(DIR);        
     
@@ -1568,6 +1566,9 @@ sub _load_single_robot_config{
         &_set_listmasters_entry({'config_hash' => $robot_conf});
     
         &_infer_robot_parameter_values({'config_hash' => $robot_conf});
+        
+        &_store_source_file_name({'config_hash' => $robot_conf,'config_file' => $config_file});
+        &_save_config_hash_to_binary({'config_hash' => $robot_conf,'source_file' => $config_file});
    }
    
     return $robot_conf;
