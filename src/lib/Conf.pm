@@ -113,7 +113,7 @@ sub load {
     my $config_err = 0;
     my %line_numbered_config;
 
-    if(!_source_is_newer_than_binary({'config_file' => $config_file}) && !$return_result) {
+    if(_source_has_not_changed({'config_file' => $config_file}) && !$return_result) {
         printf "Conf::load(): File %s has not changed since the last cache. Using cache.\n",$config_file;
         if (my $tmp_conf = _load_binary_cache({'config_file' => $config_file.$binary_file_extension})){
             %Conf = %{$tmp_conf};
@@ -214,24 +214,15 @@ sub load_robots {
         my $robot_config_file = "$Conf{'etc'}/$robot/robot.conf";
         next unless (-d "$Conf{'etc'}/$robot");
         next unless (-f $robot_config_file);
-        if(!_source_is_newer_than_binary({'config_file' => $robot_config_file})) {
-            printf "Conf::load(): File %s has not changed since the last cache. Using cache.\n",$robot_config_file;
-            if (my $tmp_conf = _load_binary_cache({'config_file' => $robot_config_file.$binary_file_extension})){
-                $robot_conf->{$robot} = $tmp_conf;
-            }else{
-                printf STDERR "Binary config file loading failed. Loading source file '%s'\n",$robot_config_file;
-            }
-        }else{
-            $robot_conf->{$robot} = &_load_single_robot_config({'robot' => $robot, 'no_db' => $param->{'no_db'}});
-            &_check_double_url_usage({'config_hash' => $robot_conf->{$robot}});
-        }
-        &_store_source_file_name({'config_hash' => $robot_conf->{$robot},'config_file' => $robot_config_file});
+        $robot_conf->{$robot} = &_load_single_robot_config({'robot' => $robot, 'no_db' => $param->{'no_db'}});
+        &_check_double_url_usage({'config_hash' => $robot_conf->{$robot}});
         my $robot_auth_file;   
         unless ($robot_auth_file = &tools::get_filename('etc',{},'auth.conf', $robot)) {
             print STDERR "Conf::load_robots(): Unable to find auth.conf for robot %s", $robot;
             next;
         }
         $Conf{'auth_services'}{$robot} = &_load_auth($robot, $robot_auth_file);    
+        &_store_source_file_name({'config_hash' => $robot_conf->{$robot},'config_file' => $robot_config_file});
         &_save_config_hash_to_binary({'config_hash' => $robot_conf->{$robot},'source_file' => $robot_config_file});
     }
     closedir(DIR);        
@@ -1552,26 +1543,33 @@ sub _load_single_robot_config{
     }
     my $config_err;
     my $config_file = "$Conf{'etc'}/$robot/robot.conf";
-    if(my $config_loading_result = &_load_config_file_to_hash({'path_to_config_file' => $config_file})) {
-        $robot_conf = $config_loading_result->{'config'};
-        $config_err = $config_loading_result->{'errors'};
+    if(&_source_has_not_changed({'config_file' => $config_file})) {
+        printf "Conf::load(): File %s has not changed since the last cache. Using cache.\n",$config_file;
+        unless ($robot_conf = _load_binary_cache({'config_file' => $config_file.$binary_file_extension})){
+            printf STDERR "Binary config file loading failed. Loading source file '%s'\n",$config_file;
+        }
     }else{
-        printf STDERR  "Conf::_load_single_robot_config(): Unable to load %s. Aborting\n", $config_file;
-        return undef;
-    }
+        if(my $config_loading_result = &_load_config_file_to_hash({'path_to_config_file' => $config_file})) {
+            $robot_conf = $config_loading_result->{'config'};
+            $config_err = $config_loading_result->{'errors'};
+        }else{
+            printf STDERR  "Conf::_load_single_robot_config(): Unable to load %s. Aborting\n", $config_file;
+            return undef;
+        }
+        
+        &_replace_file_value_by_db_value('config_hash' => $robot_conf) unless $param->{'no_db'};
+        # Remove entries which are not supposed to be defined at the robot level.
+        &_dump_non_robot_parameters({'config_hash' => $robot_conf, 'robot' => $robot});
+        
+        ## Default for 'host' is the domain
+        $robot_conf->{'host'} ||= $robot;
+        $robot_conf->{'robot_name'} ||= $robot;
     
-    &_replace_file_value_by_db_value('config_hash' => $robot_conf) unless $param->{'no_db'};
-    # Remove entries which are not supposed to be defined at the robot level.
-    &_dump_non_robot_parameters({'config_hash' => $robot_conf, 'robot' => $robot});
+        &_set_listmasters_entry({'config_hash' => $robot_conf});
     
-    ## Default for 'host' is the domain
-    $robot_conf->{'host'} ||= $robot;
-    $robot_conf->{'robot_name'} ||= $robot;
-
-    &_set_listmasters_entry({'config_hash' => $robot_conf});
-
-    &_infer_robot_parameter_values({'config_hash' => $robot_conf});
-    
+        &_infer_robot_parameter_values({'config_hash' => $robot_conf});
+   }
+   
     return $robot_conf;
 }
 
@@ -1684,16 +1682,11 @@ sub _save_config_hash_to_binary {
     }
 }
 
-sub _source_is_newer_than_binary {
+sub _source_has_not_changed {
     my $param = shift;
-    if(my $answer = &tools::a_is_older_than_b({'a_file' => $param->{'config_file'}.$binary_file_extension,'b_file' => $param->{'config_file'},})) {
-        if($answer eq 'yes'){
-            return 1;
-        }elsif($answer eq 'no'){
-            return 0;
-        }
-    }
-    return undef;
+    my $is_older = &tools::a_is_older_than_b({'a_file' => $param->{'config_file'},'b_file' => $param->{'config_file'}.$binary_file_extension,});
+    return 1 if(defined $is_older && $is_older == 1);
+    return 0;
 }
 
 sub _store_source_file_name {

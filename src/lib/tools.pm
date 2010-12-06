@@ -3220,7 +3220,7 @@ sub is_in_array {
 sub a_is_older_than_b {
     my $param = shift;
     my ($a_file_readable, $b_file_readable) = (0,0);
-    my $answer;
+    my $answer = undef;
     if (-r $param->{'a_file'}) {
 	$a_file_readable = 1;
     }else{
@@ -3235,9 +3235,9 @@ sub a_is_older_than_b {
 	my @a_stats = stat ($param->{'a_file'});
 	my @b_stats = stat ($param->{'b_file'});
 	if($a_stats[9] < $b_stats[9]){
-	    $answer = 'yes';
+	    $answer = 1;
 	}else{
-	    $answer = 'no';
+	    $answer = 0;
 	}
     }
     return $answer;
