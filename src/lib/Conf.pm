@@ -162,7 +162,10 @@ sub load {
         $config_err += &_detect_missing_mandatory_parameters({'config_hash' => \%Conf,});
 
         return undef if ($config_err);
-        }
+
+        &_store_source_file_name({'config_hash' => \%Conf,'config_file' => $config_file});
+        &_save_config_hash_to_binary({'config_hash' => \%Conf,});
+    }
 
     if (my $missing_modules_count = &_check_cpan_modules_required_by_config({'config_hash' => \%Conf,})){
         printf STDERR "Conf::load(): Warning: %n required modules are missing.\n",$missing_modules_count;
@@ -171,11 +174,7 @@ sub load {
     ## Load robot.conf files
     $Conf{'robots'} = &load_robots({'no_db' => $no_db, 'force_reload' => $force_reload}) ;
     
-    &_store_source_file_name({'config_hash' => \%Conf,'config_file' => $config_file});
-
     open TMP,">/tmp/dumpconf";&tools::dump_var(\%Conf,0,\*TMP);close TMP;
-
-    &_save_config_hash_to_binary({'config_hash' => \%Conf,});
     
     return 1;
 }
