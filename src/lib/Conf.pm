@@ -115,7 +115,7 @@ sub load {
     my %line_numbered_config;
 
     if(_source_has_not_changed({'config_file' => $config_file}) && !$return_result) {
-        printf "Conf::load(): File %s has not changed since the last cache. Using cache.\n",$config_file;
+        ##printf "Conf::load(): File %s has not changed since the last cache. Using cache.\n",$config_file;
         if (my $tmp_conf = _load_binary_cache({'config_file' => $config_file.$binary_file_extension})){
             %Conf = %{$tmp_conf};
         }else{
@@ -170,6 +170,8 @@ sub load {
     if (my $missing_modules_count = &_check_cpan_modules_required_by_config({'config_hash' => \%Conf,})){
         printf STDERR "Conf::load(): Warning: %n required modules are missing.\n",$missing_modules_count;
     }
+
+    &_load_server_specific_secondary_config_files({'config_hash' => \%Conf,});
 
     ## Load robot.conf files
     $Conf{'robots'} = &load_robots({'no_db' => $no_db, 'force_reload' => $force_reload}) ;
@@ -1395,16 +1397,6 @@ sub _infer_server_specific_parameter_values {
         }
     }    
 
-    ## Load charset.conf file if necessary.
-    if($param->{'config_hash'}{'legacy_character_support_feature'} eq 'on'){
-        $param->{'config_hash'}{'locale2charset'} = &load_charset ();
-    }else{
-        $param->{'config_hash'}{'locale2charset'} = {};
-    }
-    
-    ## Load nrcpt_by_domain.conf
-    $param->{'config_hash'}{'nrcpt_by_domain'} = &load_nrcpt_by_domain () ;
-    
     if ($param->{'config_hash'}{'ldap_export_name'}) {    
         $param->{'config_hash'}{'ldap_export'} =     {$param->{'config_hash'}{'ldap_export_name'} => { 'host' => $param->{'config_hash'}{'ldap_export_host'},
                                    'suffix' => $param->{'config_hash'}{'ldap_export_suffix'},
@@ -1423,6 +1415,20 @@ sub _infer_server_specific_parameter_values {
     }
         
     return 1;
+}
+
+sub _load_server_specific_secondary_config_files {
+    my $param = shift;
+    ## Load charset.conf file if necessary.
+    if($param->{'config_hash'}{'legacy_character_support_feature'} eq 'on'){
+        $param->{'config_hash'}{'locale2charset'} = &load_charset ();
+    }else{
+        $param->{'config_hash'}{'locale2charset'} = {};
+    }
+    
+    ## Load nrcpt_by_domain.conf
+    $param->{'config_hash'}{'nrcpt_by_domain'} = &load_nrcpt_by_domain () ;
+    
 }
 
 sub _infer_robot_parameter_values {
@@ -1456,11 +1462,14 @@ sub _infer_robot_parameter_values {
         $url =~ s/^http(s)?:\/\/(.+)$/$2/;
         $Conf{'robot_by_soap_url'}{$url} = $param->{'config_hash'}{'robot_name'};
     }
-    $param->{'config_hash'}{'trusted_applications'} = &load_trusted_application($param->{'config_hash'}{'robot_name'});
-    $param->{'config_hash'}{'crawlers_detection'} = &load_crawlers_detection($param->{'config_hash'}{'robot_name'});
     &_parse_custom_robot_parameters({'config_hash' => $param->{'config_hash'}});
 }
 
+sub _load_robot_secondary_config_files {
+    my $param = shift;
+    $param->{'config_hash'}{'trusted_applications'} = &load_trusted_application($param->{'config_hash'}{'robot_name'});
+    $param->{'config_hash'}{'crawlers_detection'} = &load_crawlers_detection($param->{'config_hash'}{'robot_name'});
+}
 ## For parameters whose value is hard_coded, as per %hardcoded_params, set the
 ## parameter value to the hardcoded value, whatever is defined in the config.
 ## Returns a ref to a hash containing the ignored values.
@@ -1569,8 +1578,8 @@ sub _load_single_robot_config{
         
         &_store_source_file_name({'config_hash' => $robot_conf,'config_file' => $config_file});
         &_save_config_hash_to_binary({'config_hash' => $robot_conf,'source_file' => $config_file});
-   }
-   
+    }
+    &_load_robot_secondary_config_files('config_hash' => $robot_conf);
     return $robot_conf;
 }
 
