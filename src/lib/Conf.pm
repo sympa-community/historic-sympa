@@ -111,6 +111,7 @@ sub load {
     my $return_result = shift;
 
     my $config_err = 0;
+    my $force_reload = 0;
     my %line_numbered_config;
 
     if(_source_has_not_changed({'config_file' => $config_file}) && !$return_result) {
@@ -121,8 +122,8 @@ sub load {
             printf STDERR "Binary config file loading failed. Loading source file '%s'\n",$config_file;
         }
     }else{
-         printf "Conf::load(): File %s has changed since the last cache. Loading file.\n",$config_file;
-        
+        printf "Conf::load(): File %s has changed since the last cache. Loading file.\n",$config_file;
+        $force_reload = 1; # Will force the robot.conf reloading, as sympa.conf is the default.
         ## Loading the Sympa main config file.
         if(my $config_loading_result = &_load_config_file_to_hash({'path_to_config_file' => $config_file})) {
             %line_numbered_config = %{$config_loading_result->{'numbered_config'}};
@@ -168,7 +169,7 @@ sub load {
     }
 
     ## Load robot.conf files
-    $Conf{'robots'} = &load_robots({'no_db' => $no_db}) ;
+    $Conf{'robots'} = &load_robots({'no_db' => $no_db, 'force_reload' => $force_reload}) ;
     
     &_store_source_file_name({'config_hash' => \%Conf,'config_file' => $config_file});
 
@@ -214,7 +215,7 @@ sub load_robots {
         my $robot_config_file = "$Conf{'etc'}/$robot/robot.conf";
         next unless (-d "$Conf{'etc'}/$robot");
         next unless (-f $robot_config_file);
-        $robot_conf->{$robot} = &_load_single_robot_config({'robot' => $robot, 'no_db' => $param->{'no_db'}});
+        $robot_conf->{$robot} = &_load_single_robot_config({'robot' => $robot, 'no_db' => $param->{'no_db'}, 'force_reload' => $param->{'force_reload'}});
         &_check_double_url_usage({'config_hash' => $robot_conf->{$robot}});
         my $robot_auth_file;   
         unless ($robot_auth_file = &tools::get_filename('etc',{},'auth.conf', $robot)) {
@@ -1541,8 +1542,8 @@ sub _load_single_robot_config{
     }
     my $config_err;
     my $config_file = "$Conf{'etc'}/$robot/robot.conf";
-    if(&_source_has_not_changed({'config_file' => $config_file})) {
-        printf "Conf::load(): File %s has not changed since the last cache. Using cache.\n",$config_file;
+    if(!$param->{'force_reload'} && &_source_has_not_changed({'config_file' => $config_file})) {
+        printf "Conf::_load_single_robot_config(): File %s has not changed since the last cache. Using cache.\n",$config_file;
         unless ($robot_conf = _load_binary_cache({'config_file' => $config_file.$binary_file_extension})){
             printf STDERR "Binary config file loading failed. Loading source file '%s'\n",$config_file;
         }
