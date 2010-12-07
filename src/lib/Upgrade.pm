@@ -135,6 +135,18 @@ my %db_struct = ('mysql' => {'user_table' => {'email_user' => 'varchar(100)',
 						   'dkim_i_bulkspool' => 'varchar(100)',
 						   'dkim_header_list_bulkspool' => 'varchar(500)',
 					       },
+			     'notification_table' => {'pk_notification' => 'int(11)',
+						      'message_id_notification' => 'varchar(100)',
+						      'recipient_notification' => 'varchar(100)',
+						      'reception_option_notification' => 'varchar(20)',
+						      'status_notification' => 'varchar(100)',
+						      'arrival_date_notification' => 'varchar(80)',
+						      'type_notification' => "enum('DSN', 'MDN')",
+						      'message_notification' => 'longtext',
+						      'list_notification' => 'varchar(50)',
+						      'robot_notification' => 'varchar(80)',
+
+			     },
 			     'stat_table' => {'id_stat' => 'bigint(20)',
 					      'date_stat' => 'int(11)',
 					      'email_stat' => 'varchar(100)',
@@ -238,7 +250,7 @@ my %not_null = ('email_user' => 1,
 		'operation_stat' => 1,
 		'robot_stat' => 1,
 		'read_stat' => 1,
-		);
+	);
 
 my %primary = ('user_table' => ['email_user'],
 	       'subscriber_table' => ['robot_subscriber','list_subscriber','user_subscriber'],
@@ -251,8 +263,11 @@ my %primary = ('user_table' => ['email_user'],
 	       'bulkmailer_table' => ['messagekey_bulkmailer','packetid_bulkmailer'],
 	       'bulkspool_table' => ['messagekey_bulkspool'],
 	       'conf_table' => ['robot_conf','label_conf'],
-	       'stat_table' => ['id_stat']
+	       'stat_table' => ['id_stat'],
+	       'notification_table' => ['pk_notification']
 	       );
+	       
+my %autoincrement = ('notification_table' => 'pk_notification');
 
 ## List the required INDEXES
 ##   1st key is the concerned table
@@ -1155,15 +1170,17 @@ sub probe_db {
 		    if ($not_null{$f}) {
 			$options .= 'NOT NULL';
 		    }
-		    
+		    if ( $autoincrement{$t} eq $f) {
+					$options .= ' AUTO_INCREMENT PRIMARY KEY ';
+			}
 		    unless ($dbh->do("ALTER TABLE $t ADD $f $db_struct{$Conf::Conf{'db_type'}}{$t}{$f} $options")) {
-			&do_log('err', 'Could not add field \'%s\' to table\'%s\'.', $f, $t);
-			&do_log('err', 'Sympa\'s database structure may have change since last update ; please check RELEASE_NOTES');
-			return undef;
+			    &do_log('err', 'Could not add field \'%s\' to table\'%s\'.', $f, $t);
+			    &do_log('err', 'Sympa\'s database structure may have change since last update ; please check RELEASE_NOTES');
+			    return undef;
 		    }
 		    
-		    push @report, sprintf('Field %s added to table %s', $f, $t);
-		    &do_log('info', 'Field %s added to table %s', $f, $t);
+		    push @report, sprintf('Field %s added to table %s (options : %s)', $f, $t, $options);
+		    &do_log('info', 'Field %s added to table %s  (options : %s)', $f, $t, $options);
 		    $added_fields{$f} = 1;
 		    
 		    ## Remove temporary DB field
