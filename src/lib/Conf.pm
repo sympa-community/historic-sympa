@@ -176,7 +176,7 @@ sub load {
     ## Load robot.conf files
     &load_robots({'config_hash' => \%Conf, 'no_db' => $no_db, 'force_reload' => $force_reload}) ;
     &_create_robot_like_config_for_main_robot();
-    open TMP,">/home/verdin/tttconf";&tools::dump_var(\%Conf,0,\*TMP);close TMP;
+    open TMP,">/home/verdin/newconf";&tools::dump_var(\%Conf,0,\*TMP);close TMP;
     
     return 1;
 }
@@ -773,9 +773,9 @@ sub _load_auth {
     return undef;
     }
     
-    $Conf{'cas_number'}{$robot} = &_get_authentification_system_number({'number_to_check'=>'cas_number'});
-    $Conf{'generic_sso_number'}{$robot} = &_get_authentification_system_number({'number_to_check'=>'generic_sso_number'});
-    $Conf{'ldap_number'}{$robot} = &_get_authentification_system_number({'number_to_check'=>'ldap_number'});
+    $Conf{'cas_number'}{$robot} = 0;
+    $Conf{'generic_sso_number'}{$robot} = 0;
+    $Conf{'ldap_number'}{$robot} = 0;
     $Conf{'use_passwd'}{$robot} = 0;
     
     ## Parsing  auth.conf
@@ -1411,7 +1411,8 @@ sub _load_server_specific_secondary_config_files {
     
     ## Load nrcpt_by_domain.conf
     $param->{'config_hash'}{'nrcpt_by_domain'} = &load_nrcpt_by_domain () ;
-    
+    $param->{'config_hash'}{'crawlers_detection'} = &load_crawlers_detection($param->{'config_hash'}{'robot_name'});
+        
 }
 
 sub _infer_robot_parameter_values {
@@ -1453,7 +1454,6 @@ sub _infer_robot_parameter_values {
 sub _load_robot_secondary_config_files {
     my $param = shift;
     $param->{'config_hash'}{'trusted_applications'} = &load_trusted_application($param->{'config_hash'}{'robot_name'});
-    $param->{'config_hash'}{'crawlers_detection'} = &load_crawlers_detection($param->{'config_hash'}{'robot_name'});
     my $robot_name_for_auth_storing  = $param->{'config_hash'}{'robot_name'} || $Conf{'domain'};
     my $is_main_robot = 0;
     $is_main_robot = 1 unless ($param->{'config_hash'}{'robot_name'});
@@ -1712,13 +1712,5 @@ sub _create_robot_like_config_for_main_robot {
     $Conf{'robots'}{$Conf{'domain'}} = $main_conf_no_robots;
 }
 
-sub _get_authentification_system_number {
-    my $param = shift;
-    my $current_number = 0;
-    foreach my $entry (keys %{$Conf{$param->{'number_to_check'}}}){
-        $current_number++;
-    }
-    return $current_number;
-}
 ## Packages must return true.
 1;
