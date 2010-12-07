@@ -288,10 +288,10 @@ our @params = (
     { title => 'General definition' },
     {
         name    => 'domain',
-        default => 'domain.tld',
         query   => 'Main robot hostname',
         edit    => '1',
         file    => 'sympa.conf',
+        vhost   => '1',
     },
     {
         name    => 'listmaster',
@@ -1003,7 +1003,7 @@ our @params = (
     },
     {
         name    => 'host',
-        default => undef,
+        optional => 1,
 	vhost   => '1',
     },
     {

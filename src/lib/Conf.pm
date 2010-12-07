@@ -151,13 +151,13 @@ sub load {
 
         &_set_listmasters_entry({'config_hash' => \%Conf});
     
+        ## Some parameters must have a value specifically defined in the config. If not, it is an error.
+        $config_err += &_detect_missing_mandatory_parameters({'config_hash' => \%Conf,});
+
         # Some parameters need special treatments to get their final values.
         &_infer_server_specific_parameter_values({'config_hash' => \%Conf,});
         
         &_infer_robot_parameter_values({'config_hash' => \%Conf});
-
-        ## Some parameters must have a value specifically defined in the config. If not, it is an error.
-        $config_err += &_detect_missing_mandatory_parameters({'config_hash' => \%Conf,});
 
         return undef if ($config_err);
 
@@ -1349,6 +1349,7 @@ sub _infer_server_specific_parameter_values {
     }
     
     my $p = 1;
+    printf "sort: '%s'",$param->{'config_hash'}{'sort'};
     foreach (split(/,/, $param->{'config_hash'}{'sort'})) {
         $param->{'config_hash'}{'poids'}{$_} = $p++;
     }
