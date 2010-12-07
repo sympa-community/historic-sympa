@@ -137,8 +137,6 @@ sub load {
         # Returning the config file content if this is what has been asked.
         return (\%line_numbered_config) if ($return_result);
 
-        &_replace_file_value_by_db_value('config_hash' => \%Conf) unless($no_db);
-        
         # Users may define parameters with a typo or other errors. Check that the parameters
         # we found in the config file are all well defined Sympa parameters.
         $config_err += &_detect_unknown_parameters_in_config(
@@ -171,12 +169,16 @@ sub load {
         printf STDERR "Conf::load(): Warning: %n required modules are missing.\n",$missing_modules_count;
     }
 
+    &_replace_file_value_by_db_value({'config_hash' => \%Conf}) unless($no_db);
     &_load_server_specific_secondary_config_files({'config_hash' => \%Conf,});
+    &_load_robot_secondary_config_files({'config_hash' => \%Conf});
 
     ## Load robot.conf files
-    $Conf{'robots'} = &load_robots({'no_db' => $no_db, 'force_reload' => $force_reload}) ;
-    
-    ##open TMP,">/tmp/dumpconf";&tools::dump_var(\%Conf,0,\*TMP);close TMP;
+    &load_robots({'config_hash' => \%Conf, 'no_db' => $no_db, 'force_reload' => $force_reload}) ;
+    my $main_conf_no_robots = &tools::dup_var(\%Conf);
+    delete $main_conf_no_robots->{'robots'};
+    $Conf{'robots'}{$Conf{'domain'}} = $main_conf_no_robots;
+    open TMP,">/tmp/dumpconf";&tools::dump_var(\%Conf,0,\*TMP);close TMP;
     
     return 1;
 }
@@ -216,18 +218,10 @@ sub load_robots {
         my $robot_config_file = "$Conf{'etc'}/$robot/robot.conf";
         next unless (-d "$Conf{'etc'}/$robot");
         next unless (-f $robot_config_file);
-        $robot_conf->{$robot} = &_load_single_robot_config({'robot' => $robot, 'no_db' => $param->{'no_db'}, 'force_reload' => $param->{'force_reload'}});
-        &_check_double_url_usage({'config_hash' => $robot_conf->{$robot}});
-        my $robot_auth_file;   
-        unless ($robot_auth_file = &tools::get_filename('etc',{},'auth.conf', $robot)) {
-            print STDERR "Conf::load_robots(): Unable to find auth.conf for robot %s", $robot;
-            next;
-        }
-        $Conf{'auth_services'}{$robot} = &_load_auth($robot, $robot_auth_file);    
+        $param->{'config_hash'}{'robots'}{$robot} = &_load_single_robot_config({'robot' => $robot, 'no_db' => $param->{'no_db'}, 'force_reload' => $param->{'force_reload'}});
+        &_check_double_url_usage({'config_hash' => $param->{'config_hash'}{'robots'}{$robot}});
     }
     closedir(DIR);        
-    
-    return ($robot_conf);
 }
 
 ## returns a robot conf parameter
@@ -695,9 +689,12 @@ sub get_sso_by_id {
 sub _load_auth {
     
     my $robot = shift;
-    my $config_file = shift;
+    my $is_main_robot = shift;
+    # find appropriate auth.conf file
+    my $config_file = &_get_config_file_name({'robot' => $robot, 'file' => "auth.conf"});
     &do_log('debug', 'Conf::_load_auth(%s)', $config_file);
 
+    my $robot ||= $Conf{'domain'};
     my $line_num = 0;
     my $config_err = 0;
     my @paragraphs;
@@ -876,8 +873,8 @@ sub _load_auth {
         next ;
     }
     }
-    close(IN); 
-
+    close(IN);
+    
     return \@paragraphs;
     
 }
@@ -886,8 +883,7 @@ sub _load_auth {
 sub load_charset {
     my $charset = {};
 
-    my $config_file = $Conf{'etc'}.'/charset.conf' ;
-    $config_file = Sympa::Constants::DEFAULTDIR . '/charset.conf' unless -f $config_file;
+    my $config_file = &_get_config_file_name({'robot' => '', 'file' => "charset.conf"});
     if (-f $config_file) {
     unless (open CONFIG, $config_file) {
         printf STDERR 'Conf::load_charset(): Unable to read configuration file %s: %s\n',$config_file, $!;
@@ -919,7 +915,8 @@ sub load_charset {
 
 ## load nrcpt file (limite receipient par domain
 sub load_nrcpt_by_domain {
-  my $config_file = $Conf{'etc'}.'/nrcpt_by_domain.conf';
+  my $config_file = &_get_config_file_name({'robot' => '', 'file' => "nrcpt_by_domain.conf"});
+  return undef unless  (-r $config_file);
   my $line_num = 0;
   my $config_err = 0;
   my $nrcpt_by_domain ; 
@@ -945,7 +942,6 @@ sub load_nrcpt_by_domain {
       }
   } 
   close(IN);
-  printf STDERR "Conf::load_nrcpt_by_domain(): Loaded $valid_dom config lines from $config_file";
   return ($nrcpt_by_domain);
 }
 
@@ -979,12 +975,8 @@ sub load_trusted_application {
     my $robot = shift;
     
     # find appropriate trusted-application.conf file
-    my $config_file ;
-    if (defined $robot) {
-    $config_file = $Conf{'etc'}.'/'.$robot.'/trusted_applications.conf';
-    }else{
-    $config_file = $Conf{'etc'}.'/trusted_applications.conf' ;
-    }
+    my $config_file = &_get_config_file_name({'robot' => $robot, 'file' => "trusted_applications.conf"});
+    return undef unless  (-r $config_file);
     # print STDERR "load_trusted_applications $config_file ($robot)\n";
 
     return undef unless  (-r $config_file);
@@ -1002,14 +994,7 @@ sub load_crawlers_detection {
                           'format' => '.+'
                           } );
         
-    my $config_file ;
-    if (defined $robot) {
-    $config_file = $Conf{'etc'}.'/'.$robot.'/crawlers_detection.conf';
-    }else{
-    $config_file = $Conf{'etc'}.'/crawlers_detection.conf' ;
-    $config_file = Sympa::Constants::DEFAULTDIR .'/crawlers_detection.conf' unless (-f $config_file);
-    }
-
+    my $config_file = &_get_config_file_name({'robot' => $robot, 'file' => "crawlers_detection.conf"});
     return undef unless  (-r $config_file);
     my $hashtab = &load_generic_conf_file($config_file,\%crawlers_detection_conf);
     my $hashhash ;
@@ -1469,6 +1454,10 @@ sub _load_robot_secondary_config_files {
     my $param = shift;
     $param->{'config_hash'}{'trusted_applications'} = &load_trusted_application($param->{'config_hash'}{'robot_name'});
     $param->{'config_hash'}{'crawlers_detection'} = &load_crawlers_detection($param->{'config_hash'}{'robot_name'});
+    my $robot_name_for_auth_storing  = $param->{'config_hash'}{'robot_name'} || $Conf{'domain'};
+    my $is_main_robot = 0;
+    $is_main_robot = 1 unless ($param->{'config_hash'}{'robot_name'});
+    $Conf{'auth_services'}{$robot_name_for_auth_storing} = &_load_auth($param->{'config_hash'}{'robot_name'}, $is_main_robot);    
 }
 ## For parameters whose value is hard_coded, as per %hardcoded_params, set the
 ## parameter value to the hardcoded value, whatever is defined in the config.
@@ -1564,14 +1553,13 @@ sub _load_single_robot_config{
             return undef;
         }
         
-        &_replace_file_value_by_db_value('config_hash' => $robot_conf) unless $param->{'no_db'};
         # Remove entries which are not supposed to be defined at the robot level.
         &_dump_non_robot_parameters({'config_hash' => $robot_conf, 'robot' => $robot});
         
         ## Default for 'host' is the domain
         $robot_conf->{'host'} ||= $robot;
         $robot_conf->{'robot_name'} ||= $robot;
-    
+
         &_set_listmasters_entry({'config_hash' => $robot_conf});
     
         &_infer_robot_parameter_values({'config_hash' => $robot_conf});
@@ -1579,7 +1567,8 @@ sub _load_single_robot_config{
         &_store_source_file_name({'config_hash' => $robot_conf,'config_file' => $config_file});
         &_save_config_hash_to_binary({'config_hash' => $robot_conf,'source_file' => $config_file});
     }
-    &_load_robot_secondary_config_files('config_hash' => $robot_conf);
+    &_replace_file_value_by_db_value({'config_hash' => $robot_conf}) unless $param->{'no_db'};
+    &_load_robot_secondary_config_files({'config_hash' => $robot_conf});
     return $robot_conf;
 }
 
@@ -1703,5 +1692,18 @@ sub _store_source_file_name {
     my $param = shift;
     $param->{'config_hash'}{'source_file'} = $param->{'config_file'};
 }
+
+sub _get_config_file_name {
+    my $param = shift;
+    my $config_file;
+    if ($param->{'robot'}) {
+        $config_file = $Conf{'etc'}.'/'.$param->{'robot'}.'/'.$param->{'file'};
+    }else{
+        $config_file = $Conf{'etc'}.'/'.$param->{'file'} ;
+    }
+    $config_file = Sympa::Constants::DEFAULTDIR .'/'.$param->{'file'} unless (-f $config_file);
+    return $config_file;
+}
+
 ## Packages must return true.
 1;
