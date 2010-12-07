@@ -176,7 +176,7 @@ sub load {
     ## Load robot.conf files
     &load_robots({'config_hash' => \%Conf, 'no_db' => $no_db, 'force_reload' => $force_reload}) ;
     &_create_robot_like_config_for_main_robot();
-    open TMP,">/tmp/dumpconf";&tools::dump_var(\%Conf,0,\*TMP);close TMP;
+    open TMP,">/home/verdin/tttconf";&tools::dump_var(\%Conf,0,\*TMP);close TMP;
     
     return 1;
 }
@@ -692,7 +692,7 @@ sub _load_auth {
     my $config_file = &_get_config_file_name({'robot' => $robot, 'file' => "auth.conf"});
     &do_log('debug', 'Conf::_load_auth(%s)', $config_file);
 
-    my $robot ||= $Conf{'domain'};
+    $robot ||= $Conf{'domain'};
     my $line_num = 0;
     my $config_err = 0;
     my @paragraphs;
@@ -773,9 +773,9 @@ sub _load_auth {
     return undef;
     }
     
-    $Conf{'cas_number'}{$robot} = 0;
-    $Conf{'generic_sso_number'}{$robot} = 0;
-    $Conf{'ldap_number'}{$robot} = 0;
+    $Conf{'cas_number'}{$robot} = &_get_authentification_system_number({'number_to_check'=>'cas_number'});
+    $Conf{'generic_sso_number'}{$robot} = &_get_authentification_system_number({'number_to_check'=>'generic_sso_number'});
+    $Conf{'ldap_number'}{$robot} = &_get_authentification_system_number({'number_to_check'=>'ldap_number'});
     $Conf{'use_passwd'}{$robot} = 0;
     
     ## Parsing  auth.conf
@@ -1349,7 +1349,6 @@ sub _infer_server_specific_parameter_values {
     }
     
     my $p = 1;
-    printf "sort: '%s'",$param->{'config_hash'}{'sort'};
     foreach (split(/,/, $param->{'config_hash'}{'sort'})) {
         $param->{'config_hash'}{'poids'}{$_} = $p++;
     }
@@ -1429,8 +1428,10 @@ sub _infer_robot_parameter_values {
     $param->{'config_hash'}{'static_content_path'} ||= $Conf{'static_content_path'};
 
     ## CSS
-     $param->{'config_hash'}{'css_url'} ||= $param->{'config_hash'}{'static_content_url'}.'/css/'.$param->{'config_hash'}{'robot_name'};
-    $param->{'config_hash'}{'css_path'} ||= $param->{'config_hash'}{'static_content_path'}.'/css/'.$param->{'config_hash'}{'robot_name'};
+    my $final_separator = '';
+    $final_separator = '/' if ($param->{'config_hash'}{'robot_name'});
+    $param->{'config_hash'}{'css_url'} ||= $param->{'config_hash'}{'static_content_url'}.'/css'.$final_separator.$param->{'config_hash'}{'robot_name'};
+    $param->{'config_hash'}{'css_path'} ||= $param->{'config_hash'}{'static_content_path'}.'/css'.$final_separator.$param->{'config_hash'}{'robot_name'};
 
     $param->{'config_hash'}{'sympa'} = $param->{'config_hash'}{'email'}.'@'.$param->{'config_hash'}{'host'};
     $param->{'config_hash'}{'request'} = $param->{'config_hash'}{'email'}.'-request@'.$param->{'config_hash'}{'host'};
@@ -1709,6 +1710,15 @@ sub _create_robot_like_config_for_main_robot {
     delete $main_conf_no_robots->{'robots'};
     &_remove_unvalid_robot_entry({'config_hash' => $main_conf_no_robots, 'quiet' => 1 });
     $Conf{'robots'}{$Conf{'domain'}} = $main_conf_no_robots;
+}
+
+sub _get_authentification_system_number {
+    my $param = shift;
+    my $current_number = 0;
+    foreach my $entry (keys %{$Conf{$param->{'number_to_check'}}}){
+        $current_number++;
+    }
+    return $current_number;
 }
 ## Packages must return true.
 1;
