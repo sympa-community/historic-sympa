@@ -176,7 +176,8 @@ sub load {
     ## Load robot.conf files
     &load_robots({'config_hash' => \%Conf, 'no_db' => $no_db, 'force_reload' => $force_reload}) ;
     &_create_robot_like_config_for_main_robot();
-    open TMP,">/home/verdin/newconf";&tools::dump_var(\%Conf,0,\*TMP);close TMP;
+# Décommenter la ligne ci-dessous pour dumper la configuration à la fin du chargement.
+#    open TMP,">/tmp/dumpconf";&tools::dump_var(\%Conf,0,\*TMP);close TMP;
     
     return 1;
 }
@@ -1648,12 +1649,29 @@ sub _replace_file_value_by_db_value {
 # Returns 1 or undef if something went wrong.
 sub _save_binary_cache {
     my $param = shift;
-    printf "Saving %s\n",$param->{'target_file'};
+    my $lock = new Lock ($param->{'target_file'});
+    unless (defined $lock) {
+        &do_log('err','Could not create new lock');
+        return undef;
+    }
+    $lock->set_timeout(2); 
+    unless ($lock->lock('write')) {
+        return undef;
+    }   
+    
     eval {
         &Storable::store($param->{'conf_to_save'},$param->{'target_file'});
     };
     if ($@) {
         printf STDERR  'Conf::_save_binary_cache(): Failed to save the binary config %s. error: %s\n', $param->{'target_file'},$@;
+        ## Release the lock
+        unless ($lock->unlock()) {
+            return undef;
+        }
+        return undef;
+    }
+    ## Release the lock
+    unless ($lock->unlock()) {
         return undef;
     }
     return 1;
@@ -1664,11 +1682,29 @@ sub _save_binary_cache {
 sub _load_binary_cache {
     my $param = shift;
     my $result = undef;
+
+    my $lock = new Lock ($param->{'config_file'});
+    unless (defined $lock) {
+        &do_log('err','Could not create new lock');
+        return undef;
+    }
+    $lock->set_timeout(2); 
+    unless ($lock->lock('read')) {
+        return undef;
+    }   
+    
     eval {
         $result = &Storable::retrieve($param->{'config_file'});
     };
     if ($@) {
         printf STDERR  "Conf::_load_binary_cache(): Failed to load the binary config %s. error: %s\n", $param->{'config_file'},$@;
+        unless ($lock->unlock()) {
+            return undef;
+        }
+        return undef;
+    }
+    ## Release the lock
+    unless ($lock->unlock()) {
         return undef;
     }
     return $result;
