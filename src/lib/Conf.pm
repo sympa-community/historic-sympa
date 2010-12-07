@@ -175,9 +175,7 @@ sub load {
 
     ## Load robot.conf files
     &load_robots({'config_hash' => \%Conf, 'no_db' => $no_db, 'force_reload' => $force_reload}) ;
-    my $main_conf_no_robots = &tools::dup_var(\%Conf);
-    delete $main_conf_no_robots->{'robots'};
-    $Conf{'robots'}{$Conf{'domain'}} = $main_conf_no_robots;
+    &_create_robot_like_config_for_main_robot();
     open TMP,">/tmp/dumpconf";&tools::dump_var(\%Conf,0,\*TMP);close TMP;
     
     return 1;
@@ -1300,7 +1298,7 @@ sub _remove_unvalid_robot_entry {
     my $config_hash = $param->{'config_hash'};
     foreach my $keyword(keys %$config_hash) {
         unless($valid_robot_key_words{$keyword}) {
-            printf STDERR "Conf::_remove_unvalid_robot_entry(): removing unknown robot keyword $keyword\n";
+            printf STDERR "Conf::_remove_unvalid_robot_entry(): removing unknown robot keyword $keyword\n" unless ($param->{'quiet'});
             delete $config_hash->{$keyword};
         }
     }
@@ -1705,5 +1703,11 @@ sub _get_config_file_name {
     return $config_file;
 }
 
+sub _create_robot_like_config_for_main_robot {
+    my $main_conf_no_robots = &tools::dup_var(\%Conf);
+    delete $main_conf_no_robots->{'robots'};
+    &_remove_unvalid_robot_entry({'config_hash' => $main_conf_no_robots, 'quiet' => 1 });
+    $Conf{'robots'}{$Conf{'domain'}} = $main_conf_no_robots;
+}
 ## Packages must return true.
 1;
