@@ -79,22 +79,30 @@ my %hardcoded_params = (
     filesystem_encoding => 'utf8'
 );
 
-my %trusted_applications = ('trusted_application' => {'occurrence' => '0-n',
-                        'format' => { 'name' => {'format' => '\S*',
-                                     'occurrence' => '1',
-                                     'case' => 'insensitive',
+my %trusted_applications = ('trusted_application' => {
+                                'occurrence' => '0-n',
+                                'format' => {
+                                    'name' => {
+                                        'format' => '\S*',
+                                        'occurrence' => '1',
+                                        'case' => 'insensitive',
                                         },
-                                  'ip'   => {'format' => '\d+\.\d+\.\d+\.\d+',
-                                     'occurrence' => '0-1'},
-                                  'md5password' => {'format' => '.*',
-                                        'occurrence' => '0-1'},
-                                  'proxy_for_variables'=> {'format' => '.*',        
-                                              'occurrence' => '0-n',
-                                              'split_char' => ','
-                                          }
-                              }
-                        }
-                );
+                                    'ip'   => {
+                                        'format' => '\d+\.\d+\.\d+\.\d+',
+                                        'occurrence' => '0-1'
+                                        },
+                                    'md5password' => {
+                                        'format' => '.*',
+                                        'occurrence' => '0-1'
+                                        },
+                                    'proxy_for_variables'=> {
+                                        'format' => '.*',        
+                                        'occurrence' => '0-n',
+                                        'split_char' => ','
+                                        }
+                                    }
+                                }
+                            );
 my $binary_file_extension = ".bin";
 
 
@@ -177,7 +185,7 @@ sub load {
     &load_robots({'config_hash' => \%Conf, 'no_db' => $no_db, 'force_reload' => $force_reload}) ;
     &_create_robot_like_config_for_main_robot();
 # Décommenter la ligne ci-dessous pour dumper la configuration à la fin du chargement.
-#    open TMP,">/tmp/dumpconf";&tools::dump_var(\%Conf,0,\*TMP);close TMP;
+    open TMP,">/tmp/dumpconf";&tools::dump_var(\%Conf,0,\*TMP);close TMP;
     
     return 1;
 }
@@ -1038,167 +1046,163 @@ sub load_generic_conf_file {
     
     ## Set defaults to 1
     foreach my $pname (keys %structure) {       
-    $admin{'defaults'}{$pname} = 1 unless ($structure{$pname}{'internal'});
+        $admin{'defaults'}{$pname} = 1 unless ($structure{$pname}{'internal'});
     }
-        ## Split in paragraphs
+
+    ## Split in paragraphs
     my $i = 0;
     unless (open (CONFIG, $config_file)) {
-    printf STDERR 'unable to read configuration file %s\n',$config_file;
-    return undef;
+        printf STDERR 'unable to read configuration file %s\n',$config_file;
+        return undef;
     }
     while (<CONFIG>) {
-    if (/^\s*$/) {
-        $i++ if $paragraphs[$i];
-    }else {
-        push @{$paragraphs[$i]}, $_;
-    }
+        if (/^\s*$/) {
+            $i++ if $paragraphs[$i];
+        }else {
+            push @{$paragraphs[$i]}, $_;
+        }
     }
 
+    ## Parse each paragraph
     for my $index (0..$#paragraphs) {
-    my @paragraph = @{$paragraphs[$index]};
+        my @paragraph = @{$paragraphs[$index]};
 
-    my $pname;
-
-    ## Clean paragraph, keep comments
-    for my $i (0..$#paragraph) {
-        my $changed = undef;
-        for my $j (0..$#paragraph) {
-        if ($paragraph[$j] =~ /^\s*\#/) {
-            chomp($paragraph[$j]);
-            push @{$admin{'comment'}}, $paragraph[$j];
-            splice @paragraph, $j, 1;
-            $changed = 1;
-        }elsif ($paragraph[$j] =~ /^\s*$/) {
-            splice @paragraph, $j, 1;
-            $changed = 1;
-        }
-
-        last if $changed;
-        }
-
-        last unless $changed;
-    }
-
-    ## Empty paragraph
-    next unless ($#paragraph > -1);
+        my $pname;
     
-    ## Look for first valid line
-    unless ($paragraph[0] =~ /^\s*([\w-]+)(\s+.*)?$/) {
-        printf STDERR 'Bad paragraph "%s" in %s, ignored', @paragraph, $config_file;
-        return undef if $on_error eq 'abort';
-        next;
-    }
-        
-    $pname = $1;    
-    unless (defined $structure{$pname}) {
-        printf STDERR 'Unknown parameter "%s" in %s, ignored', $pname, $config_file;
-        return undef if $on_error eq 'abort';
-        next;
-    }
-    ## Uniqueness
-    if (defined $admin{$pname}) {
-        unless (($structure{$pname}{'occurrence'} eq '0-n') or
-            ($structure{$pname}{'occurrence'} eq '1-n')) {
-        printf STDERR 'Multiple parameter "%s" in %s', $pname, $config_file;
-        return undef if $on_error eq 'abort';
+        ## Clean paragraph, keep comments
+        for my $i (0..$#paragraph) {
+            my $changed = undef;
+            for my $j (0..$#paragraph) {
+                if ($paragraph[$j] =~ /^\s*\#/) {
+                    chomp($paragraph[$j]);
+                    push @{$admin{'comment'}}, $paragraph[$j];
+                    splice @paragraph, $j, 1;
+                    $changed = 1;
+                }elsif ($paragraph[$j] =~ /^\s*$/) {
+                    splice @paragraph, $j, 1;
+                    $changed = 1;
+                }
+                last if $changed;
+            }
+            last unless $changed;
         }
-    }
     
-    ## Line or Paragraph
-    if (ref $structure{$pname}{'format'} eq 'HASH') {
-        ## This should be a paragraph
-        unless ($#paragraph > 0) {
-        printf STDERR 'Expecting a paragraph for "%s" parameter in %s, ignore it\n', $pname, $config_file;
-        return undef if $on_error eq 'abort';
-        next;
-        }
+        ## Empty paragraph
+        next unless ($#paragraph > -1);
         
-        ## Skipping first line
-        shift @paragraph;
-
-        my %hash;
-        for my $i (0..$#paragraph) {        
-        next if ($paragraph[$i] =~ /^\s*\#/);        
-        unless ($paragraph[$i] =~ /^\s*(\w+)\s*/) {
-            printf STDERR 'Bad line "%s" in %s\n',$paragraph[$i], $config_file;
+        ## Look for first valid line
+        unless ($paragraph[0] =~ /^\s*([\w-]+)(\s+.*)?$/) {
+            printf STDERR 'Bad paragraph "%s" in %s, ignored', @paragraph, $config_file;
             return undef if $on_error eq 'abort';
-        }        
-        my $key = $1;
+            next;
+        }
             
-        unless (defined $structure{$pname}{'format'}{$key}) {
-            printf STDERR 'Unknown key "%s" in paragraph "%s" in %s\n', $key, $pname, $config_file;
+        $pname = $1;    
+        unless (defined $structure{$pname}) {
+            printf STDERR 'Unknown parameter "%s" in %s, ignored', $pname, $config_file;
             return undef if $on_error eq 'abort';
             next;
+        }
+        ## Uniqueness
+        if (defined $admin{$pname}) {
+            unless (($structure{$pname}{'occurrence'} eq '0-n') or
+                ($structure{$pname}{'occurrence'} eq '1-n')) {
+                printf STDERR 'Multiple parameter "%s" in %s', $pname, $config_file;
+                return undef if $on_error eq 'abort';
+            }
         }
         
-        unless ($paragraph[$i] =~ /^\s*$key\s+($structure{$pname}{'format'}{$key}{'format'})\s*$/i) {
-            printf STDERR 'Bad entry "%s" in paragraph "%s" in %s\n', $paragraph[$i], $key, $pname, $config_file;
-            return undef if $on_error eq 'abort';
-            next;
-        }
-
-        $hash{$key} = &_load_a_param($key, $1, $structure{$pname}{'format'}{$key});
-        }
-
-
-        ## Apply defaults & Check required keys
-        my $missing_required_field;
-        foreach my $k (keys %{$structure{$pname}{'format'}}) {
-
-        ## Default value
-        unless (defined $hash{$k}) {
-            if (defined $structure{$pname}{'format'}{$k}{'default'}) {
-            $hash{$k} = &_load_a_param($k, 'default', $structure{$pname}{'format'}{$k});
+        ## Line or Paragraph
+        if (ref $structure{$pname}{'format'} eq 'HASH') {
+            ## This should be a paragraph
+            unless ($#paragraph > 0) {
+                printf STDERR 'Expecting a paragraph for "%s" parameter in %s, ignore it\n', $pname, $config_file;
+                return undef if $on_error eq 'abort';
+                next;
             }
-        }
-
-        ## Required fields
-        if ($structure{$pname}{'format'}{$k}{'occurrence'} eq '1') {
-            unless (defined $hash{$k}) {
-            printf STDERR 'Missing key %s in param %s in %s\n', $k, $pname, $config_file;
-            return undef if $on_error eq 'abort';
-            $missing_required_field++;
-            }
-        }
-        }
-
-        next if $missing_required_field;
-
-        delete $admin{'defaults'}{$pname};
-
-        ## Should we store it in an array
-        if (($structure{$pname}{'occurrence'} =~ /n$/)) {
-        push @{$admin{$pname}}, \%hash;
-        }else {
-        $admin{$pname} = \%hash;
-        }
-    }else{
-        ## This should be a single line
-        my $xxxmachin =  $structure{$pname}{'format'};
-        unless ($#paragraph == 0) {
-        printf STDERR 'Expecting a single line for %s parameter in %s %s\n', $pname, $config_file, $xxxmachin ;
-        return undef if $on_error eq 'abort';
-        }
-
-        unless ($paragraph[0] =~ /^\s*$pname\s+($structure{$pname}{'format'})\s*$/i) {
-        printf STDERR 'Bad entry "%s" in %s\n', $paragraph[0], $config_file ;
-        return undef if $on_error eq 'abort';
-        next;
-        }
-
-        my $value = &_load_a_param($pname, $1, $structure{$pname});
-
-        delete $admin{'defaults'}{$pname};
-
-        if (($structure{$pname}{'occurrence'} =~ /n$/)
-        && ! (ref ($value) =~ /^ARRAY/)) {
-        push @{$admin{$pname}}, $value;
-        }else {
-        $admin{$pname} = $value;
-        }
-    }
-    }
+            
+            ## Skipping first line
+            shift @paragraph;
     
+            my %hash;
+            for my $i (0..$#paragraph) {        
+                next if ($paragraph[$i] =~ /^\s*\#/);        
+                unless ($paragraph[$i] =~ /^\s*(\w+)\s*/) {
+                    printf STDERR 'Bad line "%s" in %s\n',$paragraph[$i], $config_file;
+                    return undef if $on_error eq 'abort';
+                }        
+                my $key = $1;
+                unless (defined $structure{$pname}{'format'}{$key}) {
+                    printf STDERR 'Unknown key "%s" in paragraph "%s" in %s\n', $key, $pname, $config_file;
+                    return undef if $on_error eq 'abort';
+                    next;
+                }
+            
+                unless ($paragraph[$i] =~ /^\s*$key\s+($structure{$pname}{'format'}{$key}{'format'})\s*$/i) {
+                    printf STDERR 'Bad entry "%s" in paragraph "%s" in %s\n', $paragraph[$i], $key, $pname, $config_file;
+                    return undef if $on_error eq 'abort';
+                    next;
+                }
+    
+                $hash{$key} = &_load_a_param($key, $1, $structure{$pname}{'format'}{$key});
+            }
+    
+    
+            ## Apply defaults & Check required keys
+            my $missing_required_field;
+            foreach my $k (keys %{$structure{$pname}{'format'}}) {
+                ## Default value
+                unless (defined $hash{$k}) {
+                    if (defined $structure{$pname}{'format'}{$k}{'default'}) {
+                        $hash{$k} = &_load_a_param($k, 'default', $structure{$pname}{'format'}{$k});
+                    }
+                }
+                ## Required fields
+                if ($structure{$pname}{'format'}{$k}{'occurrence'} eq '1') {
+                    unless (defined $hash{$k}) {
+                        printf STDERR 'Missing key %s in param %s in %s\n', $k, $pname, $config_file;
+                        return undef if $on_error eq 'abort';
+                        $missing_required_field++;
+                    }
+                }
+            }
+    
+            next if $missing_required_field;
+    
+            delete $admin{'defaults'}{$pname};
+    
+            ## Should we store it in an array
+            if (($structure{$pname}{'occurrence'} =~ /n$/)) {
+                push @{$admin{$pname}}, \%hash;
+            }else {
+                $admin{$pname} = \%hash;
+            }
+        }else{
+            ## This should be a single line
+            my $xxxmachin =  $structure{$pname}{'format'};
+            unless ($#paragraph == 0) {
+                printf STDERR 'Expecting a single line for %s parameter in %s %s\n', $pname, $config_file, $xxxmachin ;
+                return undef if $on_error eq 'abort';
+            }
+    
+            unless ($paragraph[0] =~ /^\s*$pname\s+($structure{$pname}{'format'})\s*$/i) {
+                printf STDERR 'Bad entry "%s" in %s\n', $paragraph[0], $config_file ;
+                return undef if $on_error eq 'abort';
+                next;
+            }
+    
+            my $value = &_load_a_param($pname, $1, $structure{$pname});
+    
+            delete $admin{'defaults'}{$pname};
+    
+            if (($structure{$pname}{'occurrence'} =~ /n$/)
+            && ! (ref ($value) =~ /^ARRAY/)) {
+                push @{$admin{$pname}}, $value;
+            }else {
+                $admin{$pname} = $value;
+            }
+        }
+    }
     close CONFIG;
     return \%admin;
 }
@@ -1454,7 +1458,11 @@ sub _infer_robot_parameter_values {
 
 sub _load_robot_secondary_config_files {
     my $param = shift;
-    $param->{'config_hash'}{'trusted_applications'} = &load_trusted_application($param->{'config_hash'}{'robot_name'});
+    my $trusted_applications = &load_trusted_application($param->{'config_hash'}{'robot_name'});
+    $param->{'config_hash'}{'trusted_applications'} = undef;
+    if (defined $trusted_applications) {
+        $param->{'config_hash'}{'trusted_applications'} = $trusted_applications->{'trusted_application'};
+    }
     my $robot_name_for_auth_storing  = $param->{'config_hash'}{'robot_name'} || $Conf{'domain'};
     my $is_main_robot = 0;
     $is_main_robot = 1 unless ($param->{'config_hash'}{'robot_name'});
