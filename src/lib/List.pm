@@ -3146,7 +3146,7 @@ sub send_file {
 	return undef;
     }
 
-    $data->{'sender'} = $who;
+    $data->{'sender'} ||= $who;
     $data->{'list'}{'lang'} = $self->{'admin'}{'lang'};
     $data->{'list'}{'name'} = $name;
     $data->{'list'}{'domain'} = $data->{'robot_domain'} = $robot;
