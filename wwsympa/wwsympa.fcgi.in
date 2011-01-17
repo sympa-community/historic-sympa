@@ -8697,7 +8697,7 @@ Sends back the list creation edition form.
 	 $param->{'prev_page'} = $param->{'page'} - 1;
      }
 
-     $param->{'size'} = $in{'size'};
+     $param->{'size'} = $size;
 
      return 1;
  }
