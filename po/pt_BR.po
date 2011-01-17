@@ -1838,8 +1838,8 @@ msgid "scenario source"
 msgstr "fonte do cenário"
 
 #: ../mail_tt2/helpfile.tt2:62 ../mail_tt2/listmaster_notification.tt2:283
-#: ../mail_tt2/listmaster_notification.tt2:295
-#: ../mail_tt2/listmaster_notification.tt2:366
+#: ../mail_tt2/listmaster_notification.tt2:302
+#: ../mail_tt2/listmaster_notification.tt2:373
 #: ../mail_tt2/listowner_notification.tt2:81 ../mail_tt2/lists.tt2:7
 #: ../mail_tt2/summary.tt2:4 ../web_tt2/edit_list_request.tt2:102
 #: ../web_tt2/edit_list_request.tt2:104 ../web_tt2/edit_list_request.tt2:260
@@ -2012,11 +2012,11 @@ msgstr "Não foi possível encontrar o mês '%1'"
 msgid "Archives from %1 are not accessible"
 msgstr "Arquivo de mensagens da lista '%1' não está acessível"
 
-#: ../mail_tt2/listmaster_notification.tt2:331 ../web_tt2/error.tt2:12
+#: ../mail_tt2/listmaster_notification.tt2:338 ../web_tt2/error.tt2:12
 msgid "Unable to load list topics."
 msgstr "Não foi possível carregar os tópicos da lista."
 
-#: ../mail_tt2/listmaster_notification.tt2:332 ../web_tt2/error.tt2:13
+#: ../mail_tt2/listmaster_notification.tt2:339 ../web_tt2/error.tt2:13
 msgid "Unable to load create_list templates."
 msgstr "Não foi possíve carregar os modelos create_list."
 
@@ -2038,7 +2038,7 @@ msgid "The exportation failed for list '%1'"
 msgstr "atualização de membros falhou para lista '%1'"
 
 #. (name)
-#: ../mail_tt2/listmaster_notification.tt2:345 ../web_tt2/error.tt2:18
+#: ../mail_tt2/listmaster_notification.tt2:352 ../web_tt2/error.tt2:18
 msgid "Cannot unzip file '%1'."
 msgstr "Não foi possível descompactar o arquivo '%1'"
 
@@ -2053,7 +2053,7 @@ msgstr ""
 
 #. (i_err.key)
 #. (zipfile)
-#: ../mail_tt2/listmaster_notification.tt2:353 ../web_tt2/error.tt2:21
+#: ../mail_tt2/listmaster_notification.tt2:360 ../web_tt2/error.tt2:21
 msgid "File not found."
 msgstr "Arquivo não encontrado."
 
@@ -6384,8 +6384,9 @@ msgstr "%1 impossível."
 #: ../mail_tt2/listmaster_notification.tt2:130
 #: ../mail_tt2/listmaster_notification.tt2:138
 #: ../mail_tt2/listmaster_notification.tt2:288
-#: ../mail_tt2/listmaster_notification.tt2:359
-#: ../mail_tt2/listmaster_notification.tt2:371
+#: ../mail_tt2/listmaster_notification.tt2:295
+#: ../mail_tt2/listmaster_notification.tt2:366
+#: ../mail_tt2/listmaster_notification.tt2:378
 msgid "See logs for more details."
 msgstr "Veja os registros da lista para mais detalhes."
 
@@ -6666,31 +6667,37 @@ msgstr "Gerenciar membros com problema de recebimento :"
 
 #. (list.name)
 #: ../mail_tt2/listmaster_notification.tt2:280
-#: ../mail_tt2/listmaster_notification.tt2:292
+#: ../mail_tt2/listmaster_notification.tt2:291
+#: ../mail_tt2/listmaster_notification.tt2:299
 #, fuzzy
 msgid "Listmaster: internal server error "
 msgstr "Gerente Geral de Listas: erro interno no servidor"
 
 #. (who)
 #: ../mail_tt2/listmaster_notification.tt2:282
-#: ../mail_tt2/listmaster_notification.tt2:294
+#: ../mail_tt2/listmaster_notification.tt2:301
 msgid " User %1 has encountered an internal server error"
 msgstr " Usuário %1 encontrou um erro interno do servidor"
 
-#: ../mail_tt2/listmaster_notification.tt2:295
-#: ../mail_tt2/listmaster_notification.tt2:366
+#. (error)
+#: ../mail_tt2/listmaster_notification.tt2:293
+msgid "The following error occurred whila managing bounces: %&"
+msgstr ""
+
+#: ../mail_tt2/listmaster_notification.tt2:302
+#: ../mail_tt2/listmaster_notification.tt2:373
 msgid "Web interface"
 msgstr "Interface web"
 
-#: ../mail_tt2/listmaster_notification.tt2:297
+#: ../mail_tt2/listmaster_notification.tt2:304
 msgid "Unable to change directory."
 msgstr "Impossível mudar de pasta."
 
-#: ../mail_tt2/listmaster_notification.tt2:298
+#: ../mail_tt2/listmaster_notification.tt2:305
 msgid "The authentication server name is not defined."
 msgstr "O nome do servidor de autenticação não está definido."
 
-#: ../mail_tt2/listmaster_notification.tt2:299
+#: ../mail_tt2/listmaster_notification.tt2:306
 #, fuzzy
 msgid ""
 "auth.conf error: either email_http_header or ldap_host/"
@@ -6700,303 +6707,303 @@ msgstr ""
 "ldap_get_email_by_uid_filter devem estár definidas."
 
 #. (name)
-#: ../mail_tt2/listmaster_notification.tt2:300
+#: ../mail_tt2/listmaster_notification.tt2:307
 msgid "Unkown authentication service %1."
 msgstr "Serviço de autenticação %1 desconhecido."
 
 #. (user)
-#: ../mail_tt2/listmaster_notification.tt2:301
+#: ../mail_tt2/listmaster_notification.tt2:308
 msgid "Add user '%1' in DB failed."
 msgstr "Não foi possível adicionar o usuário '%1' ao Banco de Dados"
 
 #. (user)
-#: ../mail_tt2/listmaster_notification.tt2:302
+#: ../mail_tt2/listmaster_notification.tt2:309
 msgid "Update user '%1' in DB failed"
 msgstr "Atualização do/a usuário/a '%1' no Banco de dados falhou"
 
 #. (old_email)
-#: ../mail_tt2/listmaster_notification.tt2:302
-#: ../mail_tt2/listmaster_notification.tt2:304
+#: ../mail_tt2/listmaster_notification.tt2:309
+#: ../mail_tt2/listmaster_notification.tt2:311
 #, fuzzy
 msgid " (old email: %1)"
 msgstr " (e-mail antigo: '%1')"
 
 #. (sub)
-#: ../mail_tt2/listmaster_notification.tt2:303
+#: ../mail_tt2/listmaster_notification.tt2:310
 msgid "Add subscriber '%1' in DB failed."
 msgstr "Não foi possível adicionar o membro '%1' ao Banco de Dados"
 
 #. (sub,old_email)
-#: ../mail_tt2/listmaster_notification.tt2:304
+#: ../mail_tt2/listmaster_notification.tt2:311
 msgid "Update subscriber '%1' in DB failed"
 msgstr "Falha na atualização do membro '%1' no banco de dados"
 
 #. (sub)
-#: ../mail_tt2/listmaster_notification.tt2:305
+#: ../mail_tt2/listmaster_notification.tt2:312
 msgid "Delete subscriber '%1' in DB failed."
 msgstr "Falha ao remover o membro '%1' do banco de dados."
 
 #. (old_email)
-#: ../mail_tt2/listmaster_notification.tt2:306
+#: ../mail_tt2/listmaster_notification.tt2:313
 #, fuzzy
 msgid "Delete user in DB for old email '%1' failed."
 msgstr "Exclusão de usuário com email antigo '%1' do DB falhou."
 
 #. (email,list.name)
-#: ../mail_tt2/listmaster_notification.tt2:307
+#: ../mail_tt2/listmaster_notification.tt2:314
 msgid "Subscriber '%1' is not found in list %2."
 msgstr "Membro '%1' não foi encontrado na lista '%2'."
 
 #. (filepath)
-#: ../mail_tt2/listmaster_notification.tt2:308
+#: ../mail_tt2/listmaster_notification.tt2:315
 #, fuzzy
 msgid "Unable to read file: '%1'."
 msgstr "Não foi possível ler o arquivo : '%1'."
 
 #. (filepath)
-#: ../mail_tt2/listmaster_notification.tt2:309
+#: ../mail_tt2/listmaster_notification.tt2:316
 #, fuzzy
 msgid "Unable to write file: '%1'."
 msgstr "Não foi possível gravar o arquivo : '%1'."
 
 #. (file)
-#: ../mail_tt2/listmaster_notification.tt2:310
+#: ../mail_tt2/listmaster_notification.tt2:317
 msgid "Unable to open file '%1'."
 msgstr "Não foi possível abrir '%1'."
 
 #. (directory)
-#: ../mail_tt2/listmaster_notification.tt2:311
+#: ../mail_tt2/listmaster_notification.tt2:318
 msgid "Unable to open directory '%1'."
 msgstr "Não foi possível abrir o diretório '%1'."
 
 #. (dir)
-#: ../mail_tt2/listmaster_notification.tt2:312
+#: ../mail_tt2/listmaster_notification.tt2:319
 msgid "Unable to create directory '%1'."
 msgstr "Impossível criar pasta '%1'."
 
 #. (spool)
-#: ../mail_tt2/listmaster_notification.tt2:313
+#: ../mail_tt2/listmaster_notification.tt2:320
 msgid "Unable to open spool '%1'."
 msgstr "Não foi possível abrir o spool '%1'."
 
 #. (msg)
-#: ../mail_tt2/listmaster_notification.tt2:314
+#: ../mail_tt2/listmaster_notification.tt2:321
 msgid "Unable to get message '%1'."
 msgstr "Não foi possível pegar a mensagem '%1'."
 
 #. (old,new)
-#: ../mail_tt2/listmaster_notification.tt2:315
+#: ../mail_tt2/listmaster_notification.tt2:322
 msgid "Unable to rename file '%1' into '%2'."
 msgstr "Não foi possível renomear o arquivo '%1' para '%2'."
 
 #. (old,new)
-#: ../mail_tt2/listmaster_notification.tt2:316
+#: ../mail_tt2/listmaster_notification.tt2:323
 msgid "Unable to rename directory '%1' into '%2'."
 msgstr "Não foi possível renomear o diretório '%1' para '%2'."
 
 #. (file)
-#: ../mail_tt2/listmaster_notification.tt2:317
+#: ../mail_tt2/listmaster_notification.tt2:324
 msgid "Unable to erase file '%1'."
 msgstr "Não foi possível apagar o arquivo '%1'."
 
 #. (from,list.name)
-#: ../mail_tt2/listmaster_notification.tt2:318
+#: ../mail_tt2/listmaster_notification.tt2:325
 msgid "Unable to send command DISTRIBUTE from '%1' to list '%2'."
 msgstr ""
 "Não foi possível enviar o comando DISTRIBUTE de '%1' para a lista '%2'."
 
 #. (dir)
-#: ../mail_tt2/listmaster_notification.tt2:319
+#: ../mail_tt2/listmaster_notification.tt2:326
 msgid "No HTML version of the message available in '%1'."
 msgstr "Nenhuma versão HTML da mensagem disponível em '%1'."
 
 #. (list.name)
-#: ../mail_tt2/listmaster_notification.tt2:320
+#: ../mail_tt2/listmaster_notification.tt2:327
 msgid "Unable to update file config_changes for list '%1'."
 msgstr "Não foi possível atualizar o arquivo config_changes para a lista '%1'."
 
 #. (month,list.name)
-#: ../mail_tt2/listmaster_notification.tt2:321
+#: ../mail_tt2/listmaster_notification.tt2:328
 msgid "Unable to find month '%1' for list '%2'"
 msgstr "Não foi possível encontrar o mês '%1' para a lista '%2'"
 
 #. (dir)
 #. (path)
-#: ../mail_tt2/listmaster_notification.tt2:321
-#: ../mail_tt2/listmaster_notification.tt2:322
-#: ../mail_tt2/listmaster_notification.tt2:323
+#: ../mail_tt2/listmaster_notification.tt2:328
+#: ../mail_tt2/listmaster_notification.tt2:329
+#: ../mail_tt2/listmaster_notification.tt2:330
 #, fuzzy
 msgid ": unable to read '%1'."
 msgstr " : não é possível ler '%1'."
 
 #. (arc_file,list.name,path)
-#: ../mail_tt2/listmaster_notification.tt2:322
+#: ../mail_tt2/listmaster_notification.tt2:329
 msgid "Unable to find archive '%1' for list '%2'"
 msgstr "Não foi possível encontrar o arquivo '%1' para a lista '%2'"
 
 #. (list.name)
-#: ../mail_tt2/listmaster_notification.tt2:323
+#: ../mail_tt2/listmaster_notification.tt2:330
 msgid "Unable to find archive for list '%1'"
 msgstr "Não foi possível encontrar o arquivo da lista '%1'"
 
-#: ../mail_tt2/listmaster_notification.tt2:324
+#: ../mail_tt2/listmaster_notification.tt2:331
 #, fuzzy
 msgid "Unable to send archive: no message id found."
 msgstr ""
 "Não foi possível enviar o arquivo : não foi encontrado o id da mensagem."
 
 #. (msgid)
-#: ../mail_tt2/listmaster_notification.tt2:325
+#: ../mail_tt2/listmaster_notification.tt2:332
 msgid "No message found in archives matching Message-ID '%1'."
 msgstr "Não há mensagem nos arquivos que tenham a identificação '%1'."
 
 #. (list.name)
-#: ../mail_tt2/listmaster_notification.tt2:326
+#: ../mail_tt2/listmaster_notification.tt2:333
 msgid "Cannot save config file for list '%1'."
 msgstr "Não foi possível salvar o arquivo de configuração para a lista '%1'."
 
-#: ../mail_tt2/listmaster_notification.tt2:327
+#: ../mail_tt2/listmaster_notification.tt2:334
 msgid "Failed to install aliases."
 msgstr "Falha na instalação de atalhos."
 
-#: ../mail_tt2/listmaster_notification.tt2:328
+#: ../mail_tt2/listmaster_notification.tt2:335
 msgid "Failed to remove aliases."
 msgstr "Falha ao remover apelidos."
 
-#: ../mail_tt2/listmaster_notification.tt2:329
+#: ../mail_tt2/listmaster_notification.tt2:336
 msgid "Internal scenario error for 'create_list'."
 msgstr "Erro interno para 'create_list'"
 
-#: ../mail_tt2/listmaster_notification.tt2:330
+#: ../mail_tt2/listmaster_notification.tt2:337
 msgid "Unable to create list."
 msgstr "Impossível criar lista."
 
 #. (list.name)
-#: ../mail_tt2/listmaster_notification.tt2:333
+#: ../mail_tt2/listmaster_notification.tt2:340
 msgid "Unable to get family for list '%1'."
 msgstr "Não foi possível obter a família para a lista '%1'."
 
 #. (new_listname)
-#: ../mail_tt2/listmaster_notification.tt2:334
+#: ../mail_tt2/listmaster_notification.tt2:341
 msgid "Unable to reload list with new listname '%1'."
 msgstr "Não foi possível recarregar a lista com o novo nome '%1'."
 
-#: ../mail_tt2/listmaster_notification.tt2:334
+#: ../mail_tt2/listmaster_notification.tt2:341
 msgid "Unable to reload list"
 msgstr "Não foi possível recarregar a lista"
 
 #. (list.name)
-#: ../mail_tt2/listmaster_notification.tt2:335
+#: ../mail_tt2/listmaster_notification.tt2:342
 msgid "Failed to inlude members for list '%1'"
 msgstr "Falha ao incluir membros para a lista '%1'"
 
 #. (list.name)
-#: ../mail_tt2/listmaster_notification.tt2:336
+#: ../mail_tt2/listmaster_notification.tt2:343
 msgid "Failed to include list admins for list '%1'"
 msgstr "Falha ao incluir administradores de lista para a lista '%1'"
 
-#: ../mail_tt2/listmaster_notification.tt2:337
+#: ../mail_tt2/listmaster_notification.tt2:344
 msgid "No owner is defined for the list '%1'"
 msgstr "Não há responsáveis definidos para a lista '%1'"
 
 #. (list.name)
-#: ../mail_tt2/listmaster_notification.tt2:338
+#: ../mail_tt2/listmaster_notification.tt2:345
 msgid "The exportation to an Ldap directory failed for list '%1'"
 msgstr "A exportação para um diretório Ldap falhou para a lista '%1'"
 
 #. (new_listname)
-#: ../mail_tt2/listmaster_notification.tt2:339
+#: ../mail_tt2/listmaster_notification.tt2:346
 msgid "Unable to check listname '%1' on SMTP server"
 msgstr "Impossível encontrar a lista '%1' no servidor SMTP"
 
 #. (list.name)
-#: ../mail_tt2/listmaster_notification.tt2:340
+#: ../mail_tt2/listmaster_notification.tt2:347
 msgid "Cannot create shared for list '%1'."
 msgstr "Não é possível criar o compartilhamento da lista '%1'."
 
 #. (list.name)
-#: ../mail_tt2/listmaster_notification.tt2:341
+#: ../mail_tt2/listmaster_notification.tt2:348
 msgid "Cannot restore shared for list '%1'."
 msgstr "Não é possível restaurar a área compartilhada para a lista '%1'"
 
 #. (list.name)
-#: ../mail_tt2/listmaster_notification.tt2:342
+#: ../mail_tt2/listmaster_notification.tt2:349
 msgid "Cannot delete shared for list '%1'."
 msgstr "Não é possível excluir o compartilhamento da lista '%1'."
 
-#: ../mail_tt2/listmaster_notification.tt2:343
+#: ../mail_tt2/listmaster_notification.tt2:350
 #, fuzzy
 msgid "Impossible to browse shared documents for list '%1'."
 msgstr "Impossível navegar na pasta compartilhada da lista '%1'."
 
 #. (path)
-#: ../mail_tt2/listmaster_notification.tt2:344
+#: ../mail_tt2/listmaster_notification.tt2:351
 msgid "Cannot upload file '%1'."
 msgstr "Não foi possível subir o arquivo '%1'."
 
 #. (name)
-#: ../mail_tt2/listmaster_notification.tt2:346
+#: ../mail_tt2/listmaster_notification.tt2:353
 msgid "Errors while unzipping file '%1'."
 msgstr "Erros ao descompactar o arquivo '%1'."
 
 #. (from,list.name)
-#: ../mail_tt2/listmaster_notification.tt2:347
+#: ../mail_tt2/listmaster_notification.tt2:354
 msgid "Unable to send command REMIND from '%1' to list '%2'."
 msgstr "Não foi possível enviar o comando REMIND de '%1' para a lista '%2'."
 
 #. (from,list.name)
-#: ../mail_tt2/listmaster_notification.tt2:348
+#: ../mail_tt2/listmaster_notification.tt2:355
 msgid "Unable to send mail from '%1' to list '%2'."
 msgstr "Não foi possível enviar o email de '%1' para a lista '%2'."
 
 #. (key,list.name)
-#: ../mail_tt2/listmaster_notification.tt2:349
+#: ../mail_tt2/listmaster_notification.tt2:356
 msgid "Unable to access the message authenticated with key '%1' for list '%2'."
 msgstr ""
 "Não foi possível enviar a mensagem autenticada com a chave '%1' para a lista "
 "'%2'."
 
 #. (sub)
-#: ../mail_tt2/listmaster_notification.tt2:350
+#: ../mail_tt2/listmaster_notification.tt2:357
 msgid "Unable to delete subscription request for user '%1'."
 msgstr ""
 "Não foi possível apagar a requisição de assinatura para o/a usuário '%1'."
 
 #. (file)
-#: ../mail_tt2/listmaster_notification.tt2:351
+#: ../mail_tt2/listmaster_notification.tt2:358
 msgid "Unable to add file '%1' to archives."
 msgstr "Impossível adicionar documento '%1' ao arquivo."
 
 #. (zipfile)
-#: ../mail_tt2/listmaster_notification.tt2:352
+#: ../mail_tt2/listmaster_notification.tt2:359
 msgid "Unable to write file zip '%1'."
 msgstr "Não foi possível escrever o arquivo zip '%1'."
 
 #. (path,list.name)
-#: ../mail_tt2/listmaster_notification.tt2:354
+#: ../mail_tt2/listmaster_notification.tt2:361
 msgid "Unable to create a SharedDocument with path '%1' for list '%2'."
 msgstr ""
 "Não foi possível criar um SharedDocument com o caminho '%1' para a lista '%"
 "2'."
 
-#: ../mail_tt2/listmaster_notification.tt2:355
+#: ../mail_tt2/listmaster_notification.tt2:362
 msgid "Parameter cookie undefined, authentication failure."
 msgstr "Cookie indefinido de parâmetro, falha na autenticação"
 
 #. (env)
-#: ../mail_tt2/listmaster_notification.tt2:356
+#: ../mail_tt2/listmaster_notification.tt2:363
 #, fuzzy
 msgid "Cookie error: '%1' undefined, authentication failure."
 msgstr "Erro de cookie: '%1' não definido, falha de autenticação."
 
 #. (list.name)
-#: ../mail_tt2/listmaster_notification.tt2:363
+#: ../mail_tt2/listmaster_notification.tt2:370
 #, fuzzy
 msgid "Listmaster: system error "
 msgstr "Gerente Geral de Listas: erro de sistema "
 
 #. (who)
-#: ../mail_tt2/listmaster_notification.tt2:365
+#: ../mail_tt2/listmaster_notification.tt2:372
 msgid " User %1 has encountered a system error"
 msgstr " Usuário %1 encontrou um erro do sistema"
 
@@ -8304,6 +8311,7 @@ msgid "public list multipart messages are rejected"
 msgstr "mensagens de listas públicas multiparte são rejeitadas"
 
 #: ../src/etc/scenari/spam_status.x-spam-status:1
+#: ../src/etc/scenari/spam_status.x-spam-status~:1
 msgid "test x-spam-status  header"
 msgstr ""
 
@@ -9482,7 +9490,7 @@ msgstr ""
 "Você deve alterar o módulo smtp.pm para definir um valor\n"
 "para a variável $max_arg.\n"
 
-#: ../src/lib/mail.pm:810
+#: ../src/lib/mail.pm:812
 msgid "Unable to create a channel in smtpto: %m"
 msgstr "Não foi possível criar um canal em smtoto: %m"
 

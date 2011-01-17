@@ -1764,8 +1764,8 @@ msgid "scenario source"
 msgstr "nguồn kịch bản"
 
 #: ../mail_tt2/helpfile.tt2:62 ../mail_tt2/listmaster_notification.tt2:283
-#: ../mail_tt2/listmaster_notification.tt2:295
-#: ../mail_tt2/listmaster_notification.tt2:366
+#: ../mail_tt2/listmaster_notification.tt2:302
+#: ../mail_tt2/listmaster_notification.tt2:373
 #: ../mail_tt2/listowner_notification.tt2:81 ../mail_tt2/lists.tt2:7
 #: ../mail_tt2/summary.tt2:4 ../web_tt2/edit_list_request.tt2:102
 #: ../web_tt2/edit_list_request.tt2:104 ../web_tt2/edit_list_request.tt2:260
@@ -1938,11 +1938,11 @@ msgstr "Không tìm thấy tháng « %1 »"
 msgid "Archives from %1 are not accessible"
 msgstr "Không thể truy cập đến kho lưu từ %1"
 
-#: ../mail_tt2/listmaster_notification.tt2:331 ../web_tt2/error.tt2:12
+#: ../mail_tt2/listmaster_notification.tt2:338 ../web_tt2/error.tt2:12
 msgid "Unable to load list topics."
 msgstr "Không thể nạp các vấn đề hộp thư chung."
 
-#: ../mail_tt2/listmaster_notification.tt2:332 ../web_tt2/error.tt2:13
+#: ../mail_tt2/listmaster_notification.tt2:339 ../web_tt2/error.tt2:13
 msgid "Unable to load create_list templates."
 msgstr "Không thể nạp các mẫu tạo hộp thư chung (create_list)."
 
@@ -1964,7 +1964,7 @@ msgid "The exportation failed for list '%1'"
 msgstr "Lỗi xuất ra hộp thư chung « %1 »"
 
 #. (name)
-#: ../mail_tt2/listmaster_notification.tt2:345 ../web_tt2/error.tt2:18
+#: ../mail_tt2/listmaster_notification.tt2:352 ../web_tt2/error.tt2:18
 msgid "Cannot unzip file '%1'."
 msgstr "Không thể giải nén tập tin « %1 »."
 
@@ -1979,7 +1979,7 @@ msgstr "Không lấy được địa chỉ thư điện tử của bạn từ d�
 
 #. (i_err.key)
 #. (zipfile)
-#: ../mail_tt2/listmaster_notification.tt2:353 ../web_tt2/error.tt2:21
+#: ../mail_tt2/listmaster_notification.tt2:360 ../web_tt2/error.tt2:21
 msgid "File not found."
 msgstr "Không tìm thấy tập tin."
 
@@ -6345,8 +6345,9 @@ msgstr "%1 không thể làm được."
 #: ../mail_tt2/listmaster_notification.tt2:130
 #: ../mail_tt2/listmaster_notification.tt2:138
 #: ../mail_tt2/listmaster_notification.tt2:288
-#: ../mail_tt2/listmaster_notification.tt2:359
-#: ../mail_tt2/listmaster_notification.tt2:371
+#: ../mail_tt2/listmaster_notification.tt2:295
+#: ../mail_tt2/listmaster_notification.tt2:366
+#: ../mail_tt2/listmaster_notification.tt2:378
 msgid "See logs for more details."
 msgstr "Xem bản ghi để tìm chi tiết."
 
@@ -6633,31 +6634,37 @@ msgstr "Đang quản lý các người đăng ký mà gây ra thư nảy về:"
 
 #. (list.name)
 #: ../mail_tt2/listmaster_notification.tt2:280
-#: ../mail_tt2/listmaster_notification.tt2:292
+#: ../mail_tt2/listmaster_notification.tt2:291
+#: ../mail_tt2/listmaster_notification.tt2:299
 #, fuzzy
 msgid "Listmaster: internal server error "
 msgstr "Chủ hộp thư chung: lỗi trình phục vụ nội bộ"
 
 #. (who)
 #: ../mail_tt2/listmaster_notification.tt2:282
-#: ../mail_tt2/listmaster_notification.tt2:294
+#: ../mail_tt2/listmaster_notification.tt2:301
 msgid " User %1 has encountered an internal server error"
 msgstr "Người dùng %1 đã gặp một lỗi phần mềm nội bộ."
 
-#: ../mail_tt2/listmaster_notification.tt2:295
-#: ../mail_tt2/listmaster_notification.tt2:366
+#. (error)
+#: ../mail_tt2/listmaster_notification.tt2:293
+msgid "The following error occurred whila managing bounces: %&"
+msgstr ""
+
+#: ../mail_tt2/listmaster_notification.tt2:302
+#: ../mail_tt2/listmaster_notification.tt2:373
 msgid "Web interface"
 msgstr "Giao diện Web"
 
-#: ../mail_tt2/listmaster_notification.tt2:297
+#: ../mail_tt2/listmaster_notification.tt2:304
 msgid "Unable to change directory."
 msgstr "Không thể chuyển đổi thư mục."
 
-#: ../mail_tt2/listmaster_notification.tt2:298
+#: ../mail_tt2/listmaster_notification.tt2:305
 msgid "The authentication server name is not defined."
 msgstr "Chưa xác định tên máy phục vụ xác thực."
 
-#: ../mail_tt2/listmaster_notification.tt2:299
+#: ../mail_tt2/listmaster_notification.tt2:306
 #, fuzzy
 msgid ""
 "auth.conf error: either email_http_header or ldap_host/"
@@ -6667,304 +6674,304 @@ msgstr ""
 "« ldap_host/ldap_get_email_by_uid_filter »."
 
 #. (name)
-#: ../mail_tt2/listmaster_notification.tt2:300
+#: ../mail_tt2/listmaster_notification.tt2:307
 msgid "Unkown authentication service %1."
 msgstr "Không nhận ra dịch vụ xác thực %1."
 
 #. (user)
-#: ../mail_tt2/listmaster_notification.tt2:301
+#: ../mail_tt2/listmaster_notification.tt2:308
 msgid "Add user '%1' in DB failed."
 msgstr "Lỗi thêm người dùng « %1 » vào cơ sở dữ liệu."
 
 #. (user)
-#: ../mail_tt2/listmaster_notification.tt2:302
+#: ../mail_tt2/listmaster_notification.tt2:309
 msgid "Update user '%1' in DB failed"
 msgstr "Lỗi cập nhật người dùng « %1 » trong cơ sở dữ liệu"
 
 #. (old_email)
-#: ../mail_tt2/listmaster_notification.tt2:302
-#: ../mail_tt2/listmaster_notification.tt2:304
+#: ../mail_tt2/listmaster_notification.tt2:309
+#: ../mail_tt2/listmaster_notification.tt2:311
 #, fuzzy
 msgid " (old email: %1)"
 msgstr " (thư cũ : %1)"
 
 #. (sub)
-#: ../mail_tt2/listmaster_notification.tt2:303
+#: ../mail_tt2/listmaster_notification.tt2:310
 msgid "Add subscriber '%1' in DB failed."
 msgstr "Lỗi thêm người đăng ký « %1 » vào cơ sở dữ liệu."
 
 #. (sub,old_email)
-#: ../mail_tt2/listmaster_notification.tt2:304
+#: ../mail_tt2/listmaster_notification.tt2:311
 msgid "Update subscriber '%1' in DB failed"
 msgstr "Lỗi cập nhật người đăng ký « %1 » trong cơ sở dữ liệu"
 
 #. (sub)
-#: ../mail_tt2/listmaster_notification.tt2:305
+#: ../mail_tt2/listmaster_notification.tt2:312
 msgid "Delete subscriber '%1' in DB failed."
 msgstr "Lỗi xoá người đăng ký « %1 » khỏi cơ sở dữ liệu."
 
 #. (old_email)
-#: ../mail_tt2/listmaster_notification.tt2:306
+#: ../mail_tt2/listmaster_notification.tt2:313
 msgid "Delete user in DB for old email '%1' failed."
 msgstr "Lỗi xoá người dùng khỏi cơ sở dữ liệu đối với thư cũ « %1 »."
 
 #. (email,list.name)
-#: ../mail_tt2/listmaster_notification.tt2:307
+#: ../mail_tt2/listmaster_notification.tt2:314
 msgid "Subscriber '%1' is not found in list %2."
 msgstr "Người đăng ký « %1 » không tìm thấy trong hộp thư chung %2."
 
 #. (filepath)
-#: ../mail_tt2/listmaster_notification.tt2:308
+#: ../mail_tt2/listmaster_notification.tt2:315
 #, fuzzy
 msgid "Unable to read file: '%1'."
 msgstr "Không thể đọc tập tin: « %1 »."
 
 #. (filepath)
-#: ../mail_tt2/listmaster_notification.tt2:309
+#: ../mail_tt2/listmaster_notification.tt2:316
 #, fuzzy
 msgid "Unable to write file: '%1'."
 msgstr "Không thể ghi tập tin: « %1 »."
 
 #. (file)
-#: ../mail_tt2/listmaster_notification.tt2:310
+#: ../mail_tt2/listmaster_notification.tt2:317
 msgid "Unable to open file '%1'."
 msgstr "Không thể mở tập tin « %1 »."
 
 #. (directory)
-#: ../mail_tt2/listmaster_notification.tt2:311
+#: ../mail_tt2/listmaster_notification.tt2:318
 msgid "Unable to open directory '%1'."
 msgstr "Không thể mở thư mục « %1 »."
 
 #. (dir)
-#: ../mail_tt2/listmaster_notification.tt2:312
+#: ../mail_tt2/listmaster_notification.tt2:319
 msgid "Unable to create directory '%1'."
 msgstr "Không thể tạo thư mục « %1 »."
 
 #. (spool)
-#: ../mail_tt2/listmaster_notification.tt2:313
+#: ../mail_tt2/listmaster_notification.tt2:320
 msgid "Unable to open spool '%1'."
 msgstr "Không thể mở hàng đợi ghi « %1 »."
 
 #. (msg)
-#: ../mail_tt2/listmaster_notification.tt2:314
+#: ../mail_tt2/listmaster_notification.tt2:321
 msgid "Unable to get message '%1'."
 msgstr "Không thể lấy thư « %1 »."
 
 #. (old,new)
-#: ../mail_tt2/listmaster_notification.tt2:315
+#: ../mail_tt2/listmaster_notification.tt2:322
 msgid "Unable to rename file '%1' into '%2'."
 msgstr "Không thể thay đổi tên của tập tin « %1 » thành « %2 »."
 
 #. (old,new)
-#: ../mail_tt2/listmaster_notification.tt2:316
+#: ../mail_tt2/listmaster_notification.tt2:323
 msgid "Unable to rename directory '%1' into '%2'."
 msgstr "Không thể thay đổi tên của thư mục « %1 » thành « %2 »."
 
 #. (file)
-#: ../mail_tt2/listmaster_notification.tt2:317
+#: ../mail_tt2/listmaster_notification.tt2:324
 msgid "Unable to erase file '%1'."
 msgstr "Không thể xoá tập tin « %1 »."
 
 #. (from,list.name)
-#: ../mail_tt2/listmaster_notification.tt2:318
+#: ../mail_tt2/listmaster_notification.tt2:325
 msgid "Unable to send command DISTRIBUTE from '%1' to list '%2'."
 msgstr ""
 "Không thể gửi lệnh DISTRIBUTE (phát hành) từ « %1 » tới hộp thư chung « %2 »."
 
 #. (dir)
-#: ../mail_tt2/listmaster_notification.tt2:319
+#: ../mail_tt2/listmaster_notification.tt2:326
 msgid "No HTML version of the message available in '%1'."
 msgstr "Không có sẵn phiên bản HTML của thư này trong « %1 »."
 
 #. (list.name)
-#: ../mail_tt2/listmaster_notification.tt2:320
+#: ../mail_tt2/listmaster_notification.tt2:327
 msgid "Unable to update file config_changes for list '%1'."
 msgstr ""
 "Không thể cập nhật tập tin « config_changes » (các thay đổi cấu hình) cho "
 "hộp thư chung « %1 »."
 
 #. (month,list.name)
-#: ../mail_tt2/listmaster_notification.tt2:321
+#: ../mail_tt2/listmaster_notification.tt2:328
 msgid "Unable to find month '%1' for list '%2'"
 msgstr "Không tìm thấy tháng « %1 » cho hộp thư chung « %2 »."
 
 #. (dir)
 #. (path)
-#: ../mail_tt2/listmaster_notification.tt2:321
-#: ../mail_tt2/listmaster_notification.tt2:322
-#: ../mail_tt2/listmaster_notification.tt2:323
+#: ../mail_tt2/listmaster_notification.tt2:328
+#: ../mail_tt2/listmaster_notification.tt2:329
+#: ../mail_tt2/listmaster_notification.tt2:330
 #, fuzzy
 msgid ": unable to read '%1'."
 msgstr " : không thể đọc « %1 »."
 
 #. (arc_file,list.name,path)
-#: ../mail_tt2/listmaster_notification.tt2:322
+#: ../mail_tt2/listmaster_notification.tt2:329
 msgid "Unable to find archive '%1' for list '%2'"
 msgstr "Không tìm thấy kho lưu « %1 » cho hộp thư chung « %2 »."
 
 #. (list.name)
-#: ../mail_tt2/listmaster_notification.tt2:323
+#: ../mail_tt2/listmaster_notification.tt2:330
 msgid "Unable to find archive for list '%1'"
 msgstr "Không tìm thấy kho lưu cho hộp thư chung « %1 »"
 
-#: ../mail_tt2/listmaster_notification.tt2:324
+#: ../mail_tt2/listmaster_notification.tt2:331
 #, fuzzy
 msgid "Unable to send archive: no message id found."
 msgstr "Không thể gửi kho lưu vì không tìm thấy mã số thư."
 
 #. (msgid)
-#: ../mail_tt2/listmaster_notification.tt2:325
+#: ../mail_tt2/listmaster_notification.tt2:332
 msgid "No message found in archives matching Message-ID '%1'."
 msgstr ""
 "Không tìm thấy thư trong kho lưu mà tương ứng với mã số thư (Message-ID) « %"
 "1 »."
 
 #. (list.name)
-#: ../mail_tt2/listmaster_notification.tt2:326
+#: ../mail_tt2/listmaster_notification.tt2:333
 msgid "Cannot save config file for list '%1'."
 msgstr "Không thể lưu tập tin cấu hình cho hộp thư chung « %1 »."
 
-#: ../mail_tt2/listmaster_notification.tt2:327
+#: ../mail_tt2/listmaster_notification.tt2:334
 msgid "Failed to install aliases."
 msgstr "Lỗi cài đặt các bí danh."
 
-#: ../mail_tt2/listmaster_notification.tt2:328
+#: ../mail_tt2/listmaster_notification.tt2:335
 msgid "Failed to remove aliases."
 msgstr "Lỗi gỡ bỏ các bí danh."
 
-#: ../mail_tt2/listmaster_notification.tt2:329
+#: ../mail_tt2/listmaster_notification.tt2:336
 msgid "Internal scenario error for 'create_list'."
 msgstr "Lỗi kịch bản nội bộ đối với « create_list » (tạo hộp thư chung)."
 
-#: ../mail_tt2/listmaster_notification.tt2:330
+#: ../mail_tt2/listmaster_notification.tt2:337
 msgid "Unable to create list."
 msgstr "Không thể tạo hộp thư chung."
 
 #. (list.name)
-#: ../mail_tt2/listmaster_notification.tt2:333
+#: ../mail_tt2/listmaster_notification.tt2:340
 msgid "Unable to get family for list '%1'."
 msgstr "Không thể lấy nhóm đối với hộp thư chung « %1 »."
 
 #. (new_listname)
-#: ../mail_tt2/listmaster_notification.tt2:334
+#: ../mail_tt2/listmaster_notification.tt2:341
 msgid "Unable to reload list with new listname '%1'."
 msgstr "Không thể nạp lại hộp thư chung với tên mới « %1 »."
 
-#: ../mail_tt2/listmaster_notification.tt2:334
+#: ../mail_tt2/listmaster_notification.tt2:341
 msgid "Unable to reload list"
 msgstr "Không thể nạp lại hộp thư chung"
 
 #. (list.name)
-#: ../mail_tt2/listmaster_notification.tt2:335
+#: ../mail_tt2/listmaster_notification.tt2:342
 msgid "Failed to inlude members for list '%1'"
 msgstr "Lỗi bao gồm các thành viên cho hộp thư chung « %1 »"
 
 #. (list.name)
-#: ../mail_tt2/listmaster_notification.tt2:336
+#: ../mail_tt2/listmaster_notification.tt2:343
 msgid "Failed to include list admins for list '%1'"
 msgstr "Lỗi bao gồm các quản trị cho hộp thư chung « %1 »"
 
-#: ../mail_tt2/listmaster_notification.tt2:337
+#: ../mail_tt2/listmaster_notification.tt2:344
 msgid "No owner is defined for the list '%1'"
 msgstr "Chưa xác định chủ cho hộp thư chung « %1 »"
 
 #. (list.name)
-#: ../mail_tt2/listmaster_notification.tt2:338
+#: ../mail_tt2/listmaster_notification.tt2:345
 msgid "The exportation to an Ldap directory failed for list '%1'"
 msgstr "Lỗi xuất tới thư mục LDAP đối với hộp thư chung « %1 »"
 
 #. (new_listname)
-#: ../mail_tt2/listmaster_notification.tt2:339
+#: ../mail_tt2/listmaster_notification.tt2:346
 msgid "Unable to check listname '%1' on SMTP server"
 msgstr "Không thể kiểm tra tên hộp thư chung « %1 » trên máy phục vụ SMTP"
 
 #. (list.name)
-#: ../mail_tt2/listmaster_notification.tt2:340
+#: ../mail_tt2/listmaster_notification.tt2:347
 msgid "Cannot create shared for list '%1'."
 msgstr "Không thể tạo vùng chia sẻ đối với hộp thư chung « %1 »."
 
 #. (list.name)
-#: ../mail_tt2/listmaster_notification.tt2:341
+#: ../mail_tt2/listmaster_notification.tt2:348
 msgid "Cannot restore shared for list '%1'."
 msgstr "Không thể phục hồi vùng chia sẻ đối với hộp thư chung « %1 »."
 
 #. (list.name)
-#: ../mail_tt2/listmaster_notification.tt2:342
+#: ../mail_tt2/listmaster_notification.tt2:349
 msgid "Cannot delete shared for list '%1'."
 msgstr "Không thể xoá vùng chia sẻ đối với hộp thư chung « %1 »."
 
-#: ../mail_tt2/listmaster_notification.tt2:343
+#: ../mail_tt2/listmaster_notification.tt2:350
 msgid "Impossible to browse shared documents for list '%1'."
 msgstr "Không thể duyệt các tài liệu chia sẻ đối với hộp thư chung « %1 »."
 
 #. (path)
-#: ../mail_tt2/listmaster_notification.tt2:344
+#: ../mail_tt2/listmaster_notification.tt2:351
 msgid "Cannot upload file '%1'."
 msgstr "Không thể tải lên tập tin « %1 »."
 
 #. (name)
-#: ../mail_tt2/listmaster_notification.tt2:346
+#: ../mail_tt2/listmaster_notification.tt2:353
 msgid "Errors while unzipping file '%1'."
 msgstr "Gặp lỗi trong khi giải nén tập tin « %1 »."
 
 #. (from,list.name)
-#: ../mail_tt2/listmaster_notification.tt2:347
+#: ../mail_tt2/listmaster_notification.tt2:354
 msgid "Unable to send command REMIND from '%1' to list '%2'."
 msgstr ""
 "Không thể gửi lệnh REMIND (nhắc nhở) từ « %1 » tới hộp thư chung « %2 »."
 
 #. (from,list.name)
-#: ../mail_tt2/listmaster_notification.tt2:348
+#: ../mail_tt2/listmaster_notification.tt2:355
 msgid "Unable to send mail from '%1' to list '%2'."
 msgstr "Không thể gửi thư từ « %1 » tới hộp thư chung « %2 »."
 
 #. (key,list.name)
-#: ../mail_tt2/listmaster_notification.tt2:349
+#: ../mail_tt2/listmaster_notification.tt2:356
 msgid "Unable to access the message authenticated with key '%1' for list '%2'."
 msgstr ""
 "Không thể truy cập đến thư được xác thực bằng khoá « %1 » đối với hộp thư "
 "chung « %2 »."
 
 #. (sub)
-#: ../mail_tt2/listmaster_notification.tt2:350
+#: ../mail_tt2/listmaster_notification.tt2:357
 msgid "Unable to delete subscription request for user '%1'."
 msgstr "Không thể xoá yêu cầu đăng ký của người dùng « %1 »."
 
 #. (file)
-#: ../mail_tt2/listmaster_notification.tt2:351
+#: ../mail_tt2/listmaster_notification.tt2:358
 msgid "Unable to add file '%1' to archives."
 msgstr "Không thể thêm tập tin « %1 » vào kho lưu."
 
 #. (zipfile)
-#: ../mail_tt2/listmaster_notification.tt2:352
+#: ../mail_tt2/listmaster_notification.tt2:359
 msgid "Unable to write file zip '%1'."
 msgstr "Không thể ghi tập tin zip « %1 »."
 
 #. (path,list.name)
-#: ../mail_tt2/listmaster_notification.tt2:354
+#: ../mail_tt2/listmaster_notification.tt2:361
 msgid "Unable to create a SharedDocument with path '%1' for list '%2'."
 msgstr ""
 "Không thể tạo một tài liệu chia sẻ SharedDocument với đường dẫn « %1 » cho "
 "hộp thư chung « %2 »."
 
-#: ../mail_tt2/listmaster_notification.tt2:355
+#: ../mail_tt2/listmaster_notification.tt2:362
 msgid "Parameter cookie undefined, authentication failure."
 msgstr "Chưa xác định tham số cookie nên không xác thực được."
 
 #. (env)
-#: ../mail_tt2/listmaster_notification.tt2:356
+#: ../mail_tt2/listmaster_notification.tt2:363
 #, fuzzy
 msgid "Cookie error: '%1' undefined, authentication failure."
 msgstr "Lỗi cookie: chưa xác định « %1 », lỗi xác thực."
 
 #. (list.name)
-#: ../mail_tt2/listmaster_notification.tt2:363
+#: ../mail_tt2/listmaster_notification.tt2:370
 #, fuzzy
 msgid "Listmaster: system error "
 msgstr "Chủ hộp thư chung: lỗi hệ thống"
 
 #. (who)
-#: ../mail_tt2/listmaster_notification.tt2:365
+#: ../mail_tt2/listmaster_notification.tt2:372
 msgid " User %1 has encountered a system error"
 msgstr "Người dùng %1 đã gặp một lỗi hệ thống"
 
@@ -8317,6 +8324,7 @@ msgid "public list multipart messages are rejected"
 msgstr "hộp thư chung công cộng, các thư đa phần bị từ chối"
 
 #: ../src/etc/scenari/spam_status.x-spam-status:1
+#: ../src/etc/scenari/spam_status.x-spam-status~:1
 msgid "test x-spam-status  header"
 msgstr ""
 
@@ -9486,7 +9494,7 @@ msgstr ""
 "Người dùng cần phải sửa đổi mô-đun smtp.pm để đặt giá trị của biến « "
 "$max_arg ».\n"
 
-#: ../src/lib/mail.pm:810
+#: ../src/lib/mail.pm:812
 msgid "Unable to create a channel in smtpto: %m"
 msgstr "Không thể tạo một kênh trong smtpto: %m"
 
