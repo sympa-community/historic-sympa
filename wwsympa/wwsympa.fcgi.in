@@ -4569,7 +4569,7 @@ sub do_pref {
 		  'status' => 'success',
 	      });
 
-     return $in{'previous_action'} || 'suboptions';
+     return $in{'previous_action'} || 'info';
  }
  
 
