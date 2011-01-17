@@ -10160,6 +10160,11 @@ sub do_copy_list {
 sub do_rename_list {
      my $mode = shift;
 
+     if ($in{'new_listname'} =~ /[A-Z]/) {
+	 $in{'new_listname'} = lc($in{'new_listname'});
+	 &report::notice_report_web('listname_lowercased',{},$param->{'action'});
+     }
+
      &wwslog('info', 'do_rename_list(%s,%s, mode = %s)', $in{'new_listname'}, $in{'new_robot'},$mode);
 
      my $result = &admin::rename_list(list => $list,
