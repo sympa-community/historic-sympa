@@ -5190,7 +5190,8 @@ sub do_auto_signoff {
 
        my $ticket = &Auth::create_one_time_ticket($in{'email'},$robot,'signoff/'.$list->{'name'},$ip);
        
-       my $tt2_param = {'type' => 'ticket_to_signoff', 
+       my $tt2_param = {'type' => 'ticket_to_signoff',
+			'list' => $list,
 			'one_time_ticket' => $ticket,
 			'email' => $in{'email'}};
        unless (&List::send_global_file('user_notification', $in{'email'}, $robot, $tt2_param)) {
