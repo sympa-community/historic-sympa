@@ -4531,9 +4531,9 @@ sub add_parts {
 	}
 
     }else {
-	if ($content_type =~ /^multipart\/alternative/i) {
+	if ($content_type =~ /^multipart\/alternative/i || $content_type =~ /^multipart\/related/i) {
 
-	    &do_log('notice', 'Making multipart/alternative into multipart/mixed'); 
+	    &do_log('notice', 'Making $1 into multipart/mixed'); 
 	    $msg->make_multipart("mixed",Force=>1); 
 	}
 	
