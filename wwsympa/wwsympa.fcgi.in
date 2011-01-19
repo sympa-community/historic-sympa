@@ -9786,12 +9786,17 @@ sub _prepare_edit_form {
 	     }
 	 }elsif ($pname eq 'digest') {
 	     foreach my $v (@{$p->{'value'}}) {
-		 next unless ($v->{'name'} eq 'days');
-
-		 foreach my $day (keys %{$v->{'value'}}) {
-		     $v->{'value'}{$day}{'title'} = gettext_strftime "%A", gmtime(0 + ($day +3) * (3600 * 24));
-		 }
-	     }
+		next unless ($v->{'name'} eq 'days');
+		if (ref($v->{'value'}) eq 'ARRAY'){
+		    &tools::do_log('debug2','Empty digest parameter. Putting a dummy value.');
+		    $v->{'value'} = undef;
+		    $v->{'type'} = 'enum';
+		}else{
+		    foreach my $day (keys %{$v->{'value'}}) {
+			$v->{'value'}{$day}{'title'} = gettext_strftime "%A", gmtime(0 + ($day +3) * (3600 * 24));
+		    }
+		}
+	    }
 	 }elsif ($pname eq 'lang') {
 	     my $saved_lang = &Language::GetLang();
 	     
