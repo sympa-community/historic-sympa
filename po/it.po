@@ -260,7 +260,7 @@ msgstr "Iscritti:"
 msgid "Error rate:"
 msgstr "% errori:"
 
-#: ../web_tt2/list_panel.tt2:13
+#: ../web_tt2/get_inactive_lists.tt2:14 ../web_tt2/list_panel.tt2:13
 msgid "Owners"
 msgstr "Proprietari"
 
@@ -479,7 +479,7 @@ msgstr "per %1 giorni"
 msgid "List name"
 msgstr "Nome della lista"
 
-#: ../web_tt2/active_lists.tt2:20
+#: ../web_tt2/active_lists.tt2:20 ../web_tt2/get_inactive_lists.tt2:11
 #, fuzzy
 msgid "Number of messages"
 msgstr "Raccogli il numero massimo di messaggi"
@@ -2637,7 +2637,27 @@ msgstr "Chi può mandare messaggi"
 msgid "Listname"
 msgstr "Nome della lista"
 
-#: ../web_tt2/get_inactive_lists.tt2:23
+#: ../web_tt2/get_inactive_lists.tt2:10
+#, fuzzy
+msgid "Number of subscribers"
+msgstr "moderato per gli iscritti"
+
+#: ../web_tt2/get_inactive_lists.tt2:12
+#, fuzzy
+msgid "Send scenario"
+msgstr "Mittente"
+
+#: ../web_tt2/get_inactive_lists.tt2:13
+#, fuzzy
+msgid "Creator"
+msgstr "Crea"
+
+#: ../web_tt2/get_inactive_lists.tt2:15
+#, fuzzy
+msgid "Editors"
+msgstr "Moderatore"
+
+#: ../web_tt2/get_inactive_lists.tt2:29
 #, fuzzy
 msgid "none so far"
 msgstr "Tasso d'errore"
@@ -5157,7 +5177,7 @@ msgstr "Periodo di ricerca:"
 #. (date_to_formated)
 #. This entry is a date/time format
 #. Check the strftime manpage for format details : http://docs.freebsd.org/info/gawk/gawk.info.Time_Functions.html
-#: ../web_tt2/viewlogs.tt2:113 ../wwsympa/wwsympa.fcgi.in:16154
+#: ../web_tt2/viewlogs.tt2:113 ../wwsympa/wwsympa.fcgi.in:16167
 msgid "%d %b %Y %H:%M:%S"
 msgstr "%d %b %Y %H:%M:%S"
 
@@ -5780,7 +5800,7 @@ msgstr "Errore di sintassi nel comando."
 #. (glob.listname)
 #. (listname)
 #: ../mail_tt2/command_report.tt2:104 ../mail_tt2/command_report.tt2:178
-#: ../mail_tt2/message_report.tt2:55
+#: ../mail_tt2/message_report.tt2:56
 msgid "List '%1' does not exist."
 msgstr "La lista '%1' non esiste."
 
@@ -5897,7 +5917,7 @@ msgid "%1 Digest %2"
 msgstr "%1 Raccolta: %2"
 
 #: ../mail_tt2/digest.tt2:10 ../mail_tt2/digest_plain.tt2:9
-#: ../mail_tt2/get_archive.tt2:9 ../src/lib/List.pm:2778
+#: ../mail_tt2/get_archive.tt2:9 ../src/lib/List.pm:2800
 msgid "Table of contents:"
 msgstr "Sommario:"
 
@@ -7590,8 +7610,8 @@ msgid ""
 msgstr ""
 
 #. (list.name,list.host)
-#: ../mail_tt2/message_report.tt2:16 ../mail_tt2/message_report.tt2:71
-#: ../mail_tt2/message_report.tt2:90
+#: ../mail_tt2/message_report.tt2:16 ../mail_tt2/message_report.tt2:72
+#: ../mail_tt2/message_report.tt2:91
 #, fuzzy
 msgid "For further information, please contact %1-request@%2"
 msgstr "Per un'assistenza maggiore contatta listmaster@%1"
@@ -7644,26 +7664,26 @@ msgstr ""
 "\n"
 "------ Inizio del messaggio sospetto------\n"
 
-# nlsref 4,12
-#. (list.name)
-#: ../mail_tt2/message_report.tt2:52
-#, fuzzy
+#. (msg_size,max_size)
+#: ../mail_tt2/message_report.tt2:53
 msgid ""
-"Your message could not be sent because its size \n"
-"was over the maximum size allowed on this list."
+"Your message could not be sent because its size (%1 kB) was over the maximum "
+"size (%2 kB) allowed on this list.\n"
+"\n"
+"Note: Because binary files have to be encoded in less-efficient ASCII format "
+"before being sent over email, the final size of an attachment is often "
+"significantly larger that the original file."
 msgstr ""
-"Il tuo messaggio non può essere inoltrato perché le dimensioni eccedono "
-"quelle ammesse in questa lista.\n"
 
 #. (listname)
-#: ../mail_tt2/message_report.tt2:58
+#: ../mail_tt2/message_report.tt2:59
 #, fuzzy
 msgid "The %1 list could not be created."
 msgstr "Elimina le liste selezionate."
 
 # nlsref 6,41
 #. (list.name,key)
-#: ../mail_tt2/message_report.tt2:62
+#: ../mail_tt2/message_report.tt2:63
 #, fuzzy
 msgid ""
 "Unable to access the message on list %1 with  key %2.\n"
@@ -7676,7 +7696,7 @@ msgstr ""
 
 # nlsref 6,68
 #. (key)
-#: ../mail_tt2/message_report.tt2:65
+#: ../mail_tt2/message_report.tt2:66
 #, fuzzy
 msgid ""
 "Unable to access the message authenticated with key %1. The message may "
@@ -7685,7 +7705,7 @@ msgstr "Accesso impossibile al messaggio identificato dalla chiave %s.\n"
 
 # nlsref 6,68
 #. (key)
-#: ../mail_tt2/message_report.tt2:68
+#: ../mail_tt2/message_report.tt2:69
 #, fuzzy
 msgid ""
 "Unable to access the message authenticated with key %1 because of a wrong "
@@ -7693,32 +7713,32 @@ msgid ""
 msgstr "Accesso impossibile al messaggio identificato dalla chiave %s.\n"
 
 #. (conf.host)
-#: ../mail_tt2/message_report.tt2:73
+#: ../mail_tt2/message_report.tt2:74
 #, fuzzy
 msgid "For further information, please contact listmaster@%1"
 msgstr "Per un'assistenza maggiore contatta listmaster@%1"
 
-#: ../mail_tt2/message_report.tt2:79
+#: ../mail_tt2/message_report.tt2:80
 #, fuzzy
 msgid "Message distribution: Authorization denied"
 msgstr "Azzera gli errori"
 
 #. (list.name)
-#: ../mail_tt2/message_report.tt2:87
+#: ../mail_tt2/message_report.tt2:88
 msgid ""
 "Your message for list '%1' (attached below) was rejected. \n"
 "You are not allowed to send this message for the following reason:"
 msgstr ""
 
 # nlsref 15,4
-#: ../mail_tt2/message_report.tt2:95
+#: ../mail_tt2/message_report.tt2:96
 #, fuzzy
 msgid "Message distribution"
 msgstr "pié di pagina"
 
 # nlsref 4,38
 #. (list.name)
-#: ../mail_tt2/message_report.tt2:99
+#: ../mail_tt2/message_report.tt2:100
 #, fuzzy
 msgid "Your message for list %1 has been forwarded to editor(s)"
 msgstr ""
@@ -7726,14 +7746,14 @@ msgstr ""
 
 # nlsref 6,44
 #. (key,list.name)
-#: ../mail_tt2/message_report.tt2:103
+#: ../mail_tt2/message_report.tt2:104
 #, fuzzy
 msgid "Message %1 for list '%2' has been distributed."
 msgstr "Il messaggio %s per la lista '%s' e' stato distribuito.\n"
 
 # nlsref 6,44
 #. (key,list.name)
-#: ../mail_tt2/message_report.tt2:107
+#: ../mail_tt2/message_report.tt2:108
 #, fuzzy
 msgid ""
 "Message %1 for list '%2' has been validated; it will be distributed soon."
@@ -7741,14 +7761,14 @@ msgstr "Il messaggio %s per la lista '%s' e' stato distribuito.\n"
 
 # nlsref 6,43
 #. (key,list.name)
-#: ../mail_tt2/message_report.tt2:111
+#: ../mail_tt2/message_report.tt2:112
 #, fuzzy
 msgid "Message %1 for list '%2' has been rejected."
 msgstr "Il messaggio %s per la lista '%s' è stato respinto.\n"
 
 # nlsref 6,44
 #. (key,list.name)
-#: ../mail_tt2/message_report.tt2:115
+#: ../mail_tt2/message_report.tt2:116
 #, fuzzy
 msgid ""
 "Your message for list '%2' with the %1 ID has been confirmed and distributed."
@@ -7756,7 +7776,7 @@ msgstr "Il messaggio %s per la lista '%s' e' stato distribuito.\n"
 
 # nlsref 6,44
 #. (key,list.name)
-#: ../mail_tt2/message_report.tt2:119
+#: ../mail_tt2/message_report.tt2:120
 #, fuzzy
 msgid ""
 "Your message for list '%2' with the %1 ID has been confirmed; it will be "
@@ -9047,7 +9067,7 @@ msgstr "%d %b %y  %H:%M"
 
 #. This entry is a date/time format
 #. Check the strftime manpage for format details : http://docs.freebsd.org/info/gawk/gawk.info.Time_Functions.html
-#: ../src/lib/Commands.pm:963 ../wwsympa/wwsympa.fcgi.in:9784
+#: ../src/lib/Commands.pm:963 ../wwsympa/wwsympa.fcgi.in:9792
 msgid "%A"
 msgstr "%A"
 
@@ -9066,7 +9086,7 @@ msgstr "Errore alla linea %d : %s"
 #. This entry is a date/time format
 #. Check the strftime manpage for format details : http://docs.freebsd.org/info/gawk/gawk.info.Time_Functions.html
 #: ../src/lib/Family.pm:2591 ../src/lib/Family.pm:388 ../src/lib/Family.pm:665
-#: ../src/lib/List.pm:1871 ../wwsympa/Auth.pm:459
+#: ../src/lib/List.pm:1893 ../wwsympa/Auth.pm:459
 #: ../wwsympa/wwsympa.fcgi.in:1067 ../wwsympa/wwsympa.fcgi.in:2869
 msgid "%d %b %Y at %H:%M:%S"
 msgstr "%d %b %Y ore %H:%M:%S"
@@ -9916,31 +9936,31 @@ msgstr "Ultimo aggiornamento della configurazione"
 
 #. This entry is a date/time format
 #. Check the strftime manpage for format details : http://docs.freebsd.org/info/gawk/gawk.info.Time_Functions.html
-#: ../src/lib/List.pm:2896
+#: ../src/lib/List.pm:2918
 msgid "%a, %d %b %Y %H:%M:%S"
 msgstr "%a, %d %b %Y %H:%M:%S"
 
 #. This entry is a date/time format
 #. Check the strftime manpage for format details : http://docs.freebsd.org/info/gawk/gawk.info.Time_Functions.html
-#: ../src/lib/List.pm:2897
+#: ../src/lib/List.pm:2919
 msgid "%a, %d %b %Y"
 msgstr "%a, %d %b %Y"
 
 #. This entry is a date/time format
 #. Check the strftime manpage for format details : http://docs.freebsd.org/info/gawk/gawk.info.Time_Functions.html
-#: ../src/lib/List.pm:3088 ../src/lib/List.pm:3089 ../src/lib/List.pm:3093
-#: ../wwsympa/wwsympa.fcgi.in:10960 ../wwsympa/wwsympa.fcgi.in:11029
-#: ../wwsympa/wwsympa.fcgi.in:11231 ../wwsympa/wwsympa.fcgi.in:11578
-#: ../wwsympa/wwsympa.fcgi.in:15017 ../wwsympa/wwsympa.fcgi.in:15024
-#: ../wwsympa/wwsympa.fcgi.in:15726 ../wwsympa/wwsympa.fcgi.in:16504
-#: ../wwsympa/wwsympa.fcgi.in:16505 ../wwsympa/wwsympa.fcgi.in:4266
+#: ../src/lib/List.pm:3110 ../src/lib/List.pm:3111 ../src/lib/List.pm:3115
+#: ../wwsympa/wwsympa.fcgi.in:10973 ../wwsympa/wwsympa.fcgi.in:11042
+#: ../wwsympa/wwsympa.fcgi.in:11244 ../wwsympa/wwsympa.fcgi.in:11591
+#: ../wwsympa/wwsympa.fcgi.in:15030 ../wwsympa/wwsympa.fcgi.in:15037
+#: ../wwsympa/wwsympa.fcgi.in:15739 ../wwsympa/wwsympa.fcgi.in:16517
+#: ../wwsympa/wwsympa.fcgi.in:16518 ../wwsympa/wwsympa.fcgi.in:4266
 #: ../wwsympa/wwsympa.fcgi.in:4324 ../wwsympa/wwsympa.fcgi.in:4895
-#: ../wwsympa/wwsympa.fcgi.in:4896 ../wwsympa/wwsympa.fcgi.in:6392
-#: ../wwsympa/wwsympa.fcgi.in:7411 ../wwsympa/wwsympa.fcgi.in:7954
-#: ../wwsympa/wwsympa.fcgi.in:7994 ../wwsympa/wwsympa.fcgi.in:7996
-#: ../wwsympa/wwsympa.fcgi.in:8472 ../wwsympa/wwsympa.fcgi.in:8473
-#: ../wwsympa/wwsympa.fcgi.in:8507 ../wwsympa/wwsympa.fcgi.in:8508
-#: ../wwsympa/wwsympa.fcgi.in:8687 ../wwsympa/wwsympa.fcgi.in:8688
+#: ../wwsympa/wwsympa.fcgi.in:4896 ../wwsympa/wwsympa.fcgi.in:6393
+#: ../wwsympa/wwsympa.fcgi.in:7412 ../wwsympa/wwsympa.fcgi.in:7955
+#: ../wwsympa/wwsympa.fcgi.in:8002 ../wwsympa/wwsympa.fcgi.in:8004
+#: ../wwsympa/wwsympa.fcgi.in:8480 ../wwsympa/wwsympa.fcgi.in:8481
+#: ../wwsympa/wwsympa.fcgi.in:8515 ../wwsympa/wwsympa.fcgi.in:8516
+#: ../wwsympa/wwsympa.fcgi.in:8695 ../wwsympa/wwsympa.fcgi.in:8696
 msgid "%d %b %Y"
 msgstr "%d %b %Y"
 
@@ -10092,14 +10112,14 @@ msgstr "%H:%M:%S"
 #. This entry is a date/time format
 #. Check the strftime manpage for format details : http://docs.freebsd.org/info/gawk/gawk.info.Time_Functions.html
 #: ../wwsympa/SympaSession.pm:431 ../wwsympa/SympaSession.pm:432
-#: ../wwsympa/wwsympa.fcgi.in:11812 ../wwsympa/wwsympa.fcgi.in:11945
-#: ../wwsympa/wwsympa.fcgi.in:14258 ../wwsympa/wwsympa.fcgi.in:7908
+#: ../wwsympa/wwsympa.fcgi.in:11825 ../wwsympa/wwsympa.fcgi.in:11958
+#: ../wwsympa/wwsympa.fcgi.in:14271 ../wwsympa/wwsympa.fcgi.in:7909
 msgid "%d %b %y  %H:%M"
 msgstr "%d %b %y  %H:%M"
 
 #. This entry is a date/time format
 #. Check the strftime manpage for format details : http://docs.freebsd.org/info/gawk/gawk.info.Time_Functions.html
-#: ../wwsympa/wwsympa.fcgi.in:16099 ../wwsympa/wwsympa.fcgi.in:16100
+#: ../wwsympa/wwsympa.fcgi.in:16112 ../wwsympa/wwsympa.fcgi.in:16113
 msgid "%Y-%m-%d-%H-%M-%S"
 msgstr ""
 
@@ -10284,6 +10304,15 @@ msgstr "no mail (assenza prolungata)"
 #: ../wwsympa/wwslib.pm:37
 msgid "you do not receive your own posts"
 msgstr "non ricevere i tuoi stessi messaggi"
+
+# nlsref 4,12
+#, fuzzy
+#~ msgid ""
+#~ "Your message could not be sent because its size \n"
+#~ "was over the maximum size allowed on this list."
+#~ msgstr ""
+#~ "Il tuo messaggio non può essere inoltrato perché le dimensioni eccedono "
+#~ "quelle ammesse in questa lista.\n"
 
 #~ msgid ""
 #~ "** Warning: Message part originally used character set %s\n"

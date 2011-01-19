@@ -239,7 +239,7 @@ msgstr "訂閱者："
 msgid "Error rate:"
 msgstr "誤差率："
 
-#: ../web_tt2/list_panel.tt2:13
+#: ../web_tt2/get_inactive_lists.tt2:14 ../web_tt2/list_panel.tt2:13
 msgid "Owners"
 msgstr "所有者"
 
@@ -444,7 +444,7 @@ msgstr "為%1天"
 msgid "List name"
 msgstr "郵件列表名稱"
 
-#: ../web_tt2/active_lists.tt2:20
+#: ../web_tt2/active_lists.tt2:20 ../web_tt2/get_inactive_lists.tt2:11
 #, fuzzy
 msgid "Number of messages"
 msgstr "郵件最大數字摘要"
@@ -2521,7 +2521,27 @@ msgstr "最新郵件"
 msgid "Listname"
 msgstr "郵件列表名"
 
-#: ../web_tt2/get_inactive_lists.tt2:23
+#: ../web_tt2/get_inactive_lists.tt2:10
+#, fuzzy
+msgid "Number of subscribers"
+msgstr "為訂閱者監管的"
+
+#: ../web_tt2/get_inactive_lists.tt2:12
+#, fuzzy
+msgid "Send scenario"
+msgstr "發送者"
+
+#: ../web_tt2/get_inactive_lists.tt2:13
+#, fuzzy
+msgid "Creator"
+msgstr "創建"
+
+#: ../web_tt2/get_inactive_lists.tt2:15
+#, fuzzy
+msgid "Editors"
+msgstr "編輯者"
+
+#: ../web_tt2/get_inactive_lists.tt2:29
 #, fuzzy
 msgid "none so far"
 msgstr "退信的比分"
@@ -4921,7 +4941,7 @@ msgstr "查找間隔："
 #. (date_to_formated)
 #. This entry is a date/time format
 #. Check the strftime manpage for format details : http://docs.freebsd.org/info/gawk/gawk.info.Time_Functions.html
-#: ../web_tt2/viewlogs.tt2:113 ../wwsympa/wwsympa.fcgi.in:16154
+#: ../web_tt2/viewlogs.tt2:113 ../wwsympa/wwsympa.fcgi.in:16167
 msgid "%d %b %Y %H:%M:%S"
 msgstr "%Y年%m月%d日 %H:%M:%S"
 
@@ -5474,7 +5494,7 @@ msgstr "命令語法錯誤。"
 #. (glob.listname)
 #. (listname)
 #: ../mail_tt2/command_report.tt2:104 ../mail_tt2/command_report.tt2:178
-#: ../mail_tt2/message_report.tt2:55
+#: ../mail_tt2/message_report.tt2:56
 msgid "List '%1' does not exist."
 msgstr "郵件列表“%1“不存在。"
 
@@ -5578,7 +5598,7 @@ msgid "%1 Digest %2"
 msgstr "%1郵件摘要%2"
 
 #: ../mail_tt2/digest.tt2:10 ../mail_tt2/digest_plain.tt2:9
-#: ../mail_tt2/get_archive.tt2:9 ../src/lib/List.pm:2778
+#: ../mail_tt2/get_archive.tt2:9 ../src/lib/List.pm:2800
 msgid "Table of contents:"
 msgstr "目錄表："
 
@@ -7144,8 +7164,8 @@ msgid ""
 msgstr "由于內部服務器錯誤，無法發送您的郵件到郵件列表〞%1〞。"
 
 #. (list.name,list.host)
-#: ../mail_tt2/message_report.tt2:16 ../mail_tt2/message_report.tt2:71
-#: ../mail_tt2/message_report.tt2:90
+#: ../mail_tt2/message_report.tt2:16 ../mail_tt2/message_report.tt2:72
+#: ../mail_tt2/message_report.tt2:91
 msgid "For further information, please contact %1-request@%2"
 msgstr "欲知詳情，請與聯系%1-request@%2"
 
@@ -7196,22 +7216,24 @@ msgstr ""
 "\n"
 "感謝您對此的注意。\n"
 
-#. (list.name)
-#: ../mail_tt2/message_report.tt2:52
+#. (msg_size,max_size)
+#: ../mail_tt2/message_report.tt2:53
 msgid ""
-"Your message could not be sent because its size \n"
-"was over the maximum size allowed on this list."
+"Your message could not be sent because its size (%1 kB) was over the maximum "
+"size (%2 kB) allowed on this list.\n"
+"\n"
+"Note: Because binary files have to be encoded in less-efficient ASCII format "
+"before being sent over email, the final size of an attachment is often "
+"significantly larger that the original file."
 msgstr ""
-"無法發送信息因為它的大小超出了\n"
-"這張郵件列表允許的最大值。"
 
 #. (listname)
-#: ../mail_tt2/message_report.tt2:58
+#: ../mail_tt2/message_report.tt2:59
 msgid "The %1 list could not be created."
 msgstr "%1郵件列表不能被創建。"
 
 #. (list.name,key)
-#: ../mail_tt2/message_report.tt2:62
+#: ../mail_tt2/message_report.tt2:63
 #, fuzzy
 msgid ""
 "Unable to access the message on list %1 with  key %2.\n"
@@ -7221,7 +7243,7 @@ msgstr ""
 "警告：這條信息也許已經由郵件列表的一個編輯發送了。"
 
 #. (key)
-#: ../mail_tt2/message_report.tt2:65
+#: ../mail_tt2/message_report.tt2:66
 #, fuzzy
 msgid ""
 "Unable to access the message authenticated with key %1. The message may "
@@ -7229,7 +7251,7 @@ msgid ""
 msgstr "因為錯誤的格式無法用密鑰%1訪問證實的郵件。"
 
 #. (key)
-#: ../mail_tt2/message_report.tt2:68
+#: ../mail_tt2/message_report.tt2:69
 #, fuzzy
 msgid ""
 "Unable to access the message authenticated with key %1 because of a wrong "
@@ -7237,17 +7259,17 @@ msgid ""
 msgstr "因為錯誤的格式無法用密鑰%1訪問證實的郵件。"
 
 #. (conf.host)
-#: ../mail_tt2/message_report.tt2:73
+#: ../mail_tt2/message_report.tt2:74
 msgid "For further information, please contact listmaster@%1"
 msgstr "欲知詳情，請聯系郵件列表管理員@%1"
 
-#: ../mail_tt2/message_report.tt2:79
+#: ../mail_tt2/message_report.tt2:80
 #, fuzzy
 msgid "Message distribution: Authorization denied"
 msgstr "郵件發行：被否認的授權"
 
 #. (list.name)
-#: ../mail_tt2/message_report.tt2:87
+#: ../mail_tt2/message_report.tt2:88
 #, fuzzy
 msgid ""
 "Your message for list '%1' (attached below) was rejected. \n"
@@ -7256,40 +7278,40 @@ msgstr ""
 "郵件列表〞%1〞（附在下面）被拒絕了。\n"
 "您不允許發送這則郵件因為以下原因："
 
-#: ../mail_tt2/message_report.tt2:95
+#: ../mail_tt2/message_report.tt2:96
 msgid "Message distribution"
 msgstr "郵件發行"
 
 #. (list.name)
-#: ../mail_tt2/message_report.tt2:99
+#: ../mail_tt2/message_report.tt2:100
 msgid "Your message for list %1 has been forwarded to editor(s)"
 msgstr "郵件列表%1的郵件被轉發到了編輯。"
 
 #. (key,list.name)
-#: ../mail_tt2/message_report.tt2:103
+#: ../mail_tt2/message_report.tt2:104
 msgid "Message %1 for list '%2' has been distributed."
 msgstr "郵件%1（發往郵件列表〞%2〞）被分發。"
 
 #. (key,list.name)
-#: ../mail_tt2/message_report.tt2:107
+#: ../mail_tt2/message_report.tt2:108
 #, fuzzy
 msgid ""
 "Message %1 for list '%2' has been validated; it will be distributed soon."
 msgstr "郵件%1（發往郵件列表〞%2〞）已經確認，很快將被分發。"
 
 #. (key,list.name)
-#: ../mail_tt2/message_report.tt2:111
+#: ../mail_tt2/message_report.tt2:112
 msgid "Message %1 for list '%2' has been rejected."
 msgstr "郵件%1（發往郵件列表〞%2〞）被拒絕。"
 
 #. (key,list.name)
-#: ../mail_tt2/message_report.tt2:115
+#: ../mail_tt2/message_report.tt2:116
 msgid ""
 "Your message for list '%2' with the %1 ID has been confirmed and distributed."
 msgstr "郵件列表〞%2〞以%1為ID的郵件被證實並且分發了。"
 
 #. (key,list.name)
-#: ../mail_tt2/message_report.tt2:119
+#: ../mail_tt2/message_report.tt2:120
 #, fuzzy
 msgid ""
 "Your message for list '%2' with the %1 ID has been confirmed; it will be "
@@ -8504,7 +8526,7 @@ msgstr "%Y年%m月%d日　%H:%M"
 
 #. This entry is a date/time format
 #. Check the strftime manpage for format details : http://docs.freebsd.org/info/gawk/gawk.info.Time_Functions.html
-#: ../src/lib/Commands.pm:963 ../wwsympa/wwsympa.fcgi.in:9784
+#: ../src/lib/Commands.pm:963 ../wwsympa/wwsympa.fcgi.in:9792
 msgid "%A"
 msgstr "%A"
 
@@ -8521,7 +8543,7 @@ msgstr "%d：%s行有錯誤"
 #. This entry is a date/time format
 #. Check the strftime manpage for format details : http://docs.freebsd.org/info/gawk/gawk.info.Time_Functions.html
 #: ../src/lib/Family.pm:2591 ../src/lib/Family.pm:388 ../src/lib/Family.pm:665
-#: ../src/lib/List.pm:1871 ../wwsympa/Auth.pm:459
+#: ../src/lib/List.pm:1893 ../wwsympa/Auth.pm:459
 #: ../wwsympa/wwsympa.fcgi.in:1067 ../wwsympa/wwsympa.fcgi.in:2869
 msgid "%d %b %Y at %H:%M:%S"
 msgstr "%Y年%m月%d日 %H時%M分%S秒"
@@ -9235,31 +9257,31 @@ msgstr "配置的最近更新人"
 
 #. This entry is a date/time format
 #. Check the strftime manpage for format details : http://docs.freebsd.org/info/gawk/gawk.info.Time_Functions.html
-#: ../src/lib/List.pm:2896
+#: ../src/lib/List.pm:2918
 msgid "%a, %d %b %Y %H:%M:%S"
 msgstr "%Y年%m月%d日（%a）%H:%M:%S"
 
 #. This entry is a date/time format
 #. Check the strftime manpage for format details : http://docs.freebsd.org/info/gawk/gawk.info.Time_Functions.html
-#: ../src/lib/List.pm:2897
+#: ../src/lib/List.pm:2919
 msgid "%a, %d %b %Y"
 msgstr "%Y年%m月%d日（%a）"
 
 #. This entry is a date/time format
 #. Check the strftime manpage for format details : http://docs.freebsd.org/info/gawk/gawk.info.Time_Functions.html
-#: ../src/lib/List.pm:3088 ../src/lib/List.pm:3089 ../src/lib/List.pm:3093
-#: ../wwsympa/wwsympa.fcgi.in:10960 ../wwsympa/wwsympa.fcgi.in:11029
-#: ../wwsympa/wwsympa.fcgi.in:11231 ../wwsympa/wwsympa.fcgi.in:11578
-#: ../wwsympa/wwsympa.fcgi.in:15017 ../wwsympa/wwsympa.fcgi.in:15024
-#: ../wwsympa/wwsympa.fcgi.in:15726 ../wwsympa/wwsympa.fcgi.in:16504
-#: ../wwsympa/wwsympa.fcgi.in:16505 ../wwsympa/wwsympa.fcgi.in:4266
+#: ../src/lib/List.pm:3110 ../src/lib/List.pm:3111 ../src/lib/List.pm:3115
+#: ../wwsympa/wwsympa.fcgi.in:10973 ../wwsympa/wwsympa.fcgi.in:11042
+#: ../wwsympa/wwsympa.fcgi.in:11244 ../wwsympa/wwsympa.fcgi.in:11591
+#: ../wwsympa/wwsympa.fcgi.in:15030 ../wwsympa/wwsympa.fcgi.in:15037
+#: ../wwsympa/wwsympa.fcgi.in:15739 ../wwsympa/wwsympa.fcgi.in:16517
+#: ../wwsympa/wwsympa.fcgi.in:16518 ../wwsympa/wwsympa.fcgi.in:4266
 #: ../wwsympa/wwsympa.fcgi.in:4324 ../wwsympa/wwsympa.fcgi.in:4895
-#: ../wwsympa/wwsympa.fcgi.in:4896 ../wwsympa/wwsympa.fcgi.in:6392
-#: ../wwsympa/wwsympa.fcgi.in:7411 ../wwsympa/wwsympa.fcgi.in:7954
-#: ../wwsympa/wwsympa.fcgi.in:7994 ../wwsympa/wwsympa.fcgi.in:7996
-#: ../wwsympa/wwsympa.fcgi.in:8472 ../wwsympa/wwsympa.fcgi.in:8473
-#: ../wwsympa/wwsympa.fcgi.in:8507 ../wwsympa/wwsympa.fcgi.in:8508
-#: ../wwsympa/wwsympa.fcgi.in:8687 ../wwsympa/wwsympa.fcgi.in:8688
+#: ../wwsympa/wwsympa.fcgi.in:4896 ../wwsympa/wwsympa.fcgi.in:6393
+#: ../wwsympa/wwsympa.fcgi.in:7412 ../wwsympa/wwsympa.fcgi.in:7955
+#: ../wwsympa/wwsympa.fcgi.in:8002 ../wwsympa/wwsympa.fcgi.in:8004
+#: ../wwsympa/wwsympa.fcgi.in:8480 ../wwsympa/wwsympa.fcgi.in:8481
+#: ../wwsympa/wwsympa.fcgi.in:8515 ../wwsympa/wwsympa.fcgi.in:8516
+#: ../wwsympa/wwsympa.fcgi.in:8695 ../wwsympa/wwsympa.fcgi.in:8696
 msgid "%d %b %Y"
 msgstr "%Y年%m月%d日"
 
@@ -9406,14 +9428,14 @@ msgstr ""
 #. This entry is a date/time format
 #. Check the strftime manpage for format details : http://docs.freebsd.org/info/gawk/gawk.info.Time_Functions.html
 #: ../wwsympa/SympaSession.pm:431 ../wwsympa/SympaSession.pm:432
-#: ../wwsympa/wwsympa.fcgi.in:11812 ../wwsympa/wwsympa.fcgi.in:11945
-#: ../wwsympa/wwsympa.fcgi.in:14258 ../wwsympa/wwsympa.fcgi.in:7908
+#: ../wwsympa/wwsympa.fcgi.in:11825 ../wwsympa/wwsympa.fcgi.in:11958
+#: ../wwsympa/wwsympa.fcgi.in:14271 ../wwsympa/wwsympa.fcgi.in:7909
 msgid "%d %b %y  %H:%M"
 msgstr "%Y年%m月%d日　%H:%M"
 
 #. This entry is a date/time format
 #. Check the strftime manpage for format details : http://docs.freebsd.org/info/gawk/gawk.info.Time_Functions.html
-#: ../wwsympa/wwsympa.fcgi.in:16099 ../wwsympa/wwsympa.fcgi.in:16100
+#: ../wwsympa/wwsympa.fcgi.in:16112 ../wwsympa/wwsympa.fcgi.in:16113
 msgid "%Y-%m-%d-%H-%M-%S"
 msgstr ""
 
@@ -9566,6 +9588,13 @@ msgstr "不接收郵件（用于假期）"
 #: ../wwsympa/wwslib.pm:37
 msgid "you do not receive your own posts"
 msgstr "不接收自己發的郵件"
+
+#~ msgid ""
+#~ "Your message could not be sent because its size \n"
+#~ "was over the maximum size allowed on this list."
+#~ msgstr ""
+#~ "無法發送信息因為它的大小超出了\n"
+#~ "這張郵件列表允許的最大值。"
 
 #~ msgid ""
 #~ "** Warning: Message part originally used character set %s\n"
