@@ -1,4 +1,431 @@
 ------------------------------------------------------------------------
+r6990 | sympa-authors | 2011-01-21 08:24:08 +0100 (ven 21 jan 2011) | 1 ligne
+Chemins modifiés :
+   M /branches/sympa-6.1-branch/po/ar.po
+   M /branches/sympa-6.1-branch/po/bg.po
+   M /branches/sympa-6.1-branch/po/br.po
+   M /branches/sympa-6.1-branch/po/ca.po
+   M /branches/sympa-6.1-branch/po/cs.po
+   M /branches/sympa-6.1-branch/po/de.po
+   M /branches/sympa-6.1-branch/po/el.po
+   M /branches/sympa-6.1-branch/po/en_US.po
+   M /branches/sympa-6.1-branch/po/es.po
+   M /branches/sympa-6.1-branch/po/et.po
+   M /branches/sympa-6.1-branch/po/eu.po
+   M /branches/sympa-6.1-branch/po/fi.po
+   M /branches/sympa-6.1-branch/po/fr.po
+   M /branches/sympa-6.1-branch/po/hu.po
+   M /branches/sympa-6.1-branch/po/id.po
+   M /branches/sympa-6.1-branch/po/it.po
+   M /branches/sympa-6.1-branch/po/ja.po
+   M /branches/sympa-6.1-branch/po/ko.po
+   M /branches/sympa-6.1-branch/po/la.po
+   M /branches/sympa-6.1-branch/po/ml.po
+   M /branches/sympa-6.1-branch/po/nb_NO.po
+   M /branches/sympa-6.1-branch/po/nl.po
+   M /branches/sympa-6.1-branch/po/oc.po
+   M /branches/sympa-6.1-branch/po/pl.po
+   M /branches/sympa-6.1-branch/po/pt.po
+   M /branches/sympa-6.1-branch/po/pt_BR.po
+   M /branches/sympa-6.1-branch/po/ro.po
+   M /branches/sympa-6.1-branch/po/ru.po
+   M /branches/sympa-6.1-branch/po/sv.po
+   M /branches/sympa-6.1-branch/po/sympa.pot
+   M /branches/sympa-6.1-branch/po/tr.po
+   M /branches/sympa-6.1-branch/po/vi.po
+   M /branches/sympa-6.1-branch/po/zh_CN.po
+   M /branches/sympa-6.1-branch/po/zh_TW.po
+   M /branches/sympa-6.1-branch/po-wwsympa/et.po
+   M /branches/sympa-6.1-branch/po-wwsympa/fr.po
+
+[-feature]Committing updated catalogues from Pootle
+------------------------------------------------------------------------
+r6989 | sympa-authors | 2011-01-21 08:19:10 +0100 (ven 21 jan 2011) | 1 ligne
+Chemins modifiés :
+   M /branches/sympa-6.1-branch/po/ar.po
+   M /branches/sympa-6.1-branch/po/bg.po
+   M /branches/sympa-6.1-branch/po/br.po
+   M /branches/sympa-6.1-branch/po/ca.po
+   M /branches/sympa-6.1-branch/po/cs.po
+   M /branches/sympa-6.1-branch/po/de.po
+   M /branches/sympa-6.1-branch/po/el.po
+   M /branches/sympa-6.1-branch/po/en_US.po
+   M /branches/sympa-6.1-branch/po/es.po
+   M /branches/sympa-6.1-branch/po/et.po
+   M /branches/sympa-6.1-branch/po/eu.po
+   M /branches/sympa-6.1-branch/po/fi.po
+   M /branches/sympa-6.1-branch/po/fr.po
+   M /branches/sympa-6.1-branch/po/hu.po
+   M /branches/sympa-6.1-branch/po/id.po
+   M /branches/sympa-6.1-branch/po/it.po
+   M /branches/sympa-6.1-branch/po/ja.po
+   M /branches/sympa-6.1-branch/po/ko.po
+   M /branches/sympa-6.1-branch/po/la.po
+   M /branches/sympa-6.1-branch/po/ml.po
+   M /branches/sympa-6.1-branch/po/nb_NO.po
+   M /branches/sympa-6.1-branch/po/nl.po
+   M /branches/sympa-6.1-branch/po/oc.po
+   M /branches/sympa-6.1-branch/po/pl.po
+   M /branches/sympa-6.1-branch/po/pt.po
+   M /branches/sympa-6.1-branch/po/pt_BR.po
+   M /branches/sympa-6.1-branch/po/ro.po
+   M /branches/sympa-6.1-branch/po/ru.po
+   M /branches/sympa-6.1-branch/po/sv.po
+   M /branches/sympa-6.1-branch/po/tr.po
+   M /branches/sympa-6.1-branch/po/vi.po
+   M /branches/sympa-6.1-branch/po/zh_CN.po
+   M /branches/sympa-6.1-branch/po/zh_TW.po
+   M /branches/sympa-6.1-branch/po-wwsympa/et.po
+   M /branches/sympa-6.1-branch/po-wwsympa/fr.po
+   M /branches/sympa-6.1-branch/po-wwsympa/ja.po
+
+[-feature]Committing latest translations from Pootle
+------------------------------------------------------------------------
+r6988 | david.verdin | 2011-01-20 15:13:06 +0100 (jeu 20 jan 2011) | 2 lignes
+Chemins modifiés :
+   M /branches/sympa-6.1-branch/wwsympa/SympaSession.pm
+   M /branches/sympa-6.1-branch/wwsympa/cookielib.pm
+
+[bug][#7423][Reported by M. Larchet, univ. Nancy 2] The CGI::Cookie.pm module issues a warning when trying to parse an empty cookie. This led to overwhelming warning logs in Apache error_log. Fixed by not trying to parse an empty cookie and directly return undef, which would have happenned anyway because the needed cookie is obviously not here in such a situation.
+
+------------------------------------------------------------------------
+r6987 | david.verdin | 2011-01-19 16:49:57 +0100 (mer 19 jan 2011) | 5 lignes
+Chemins modifiés :
+   M /branches/sympa-6.1-branch/wwsympa/wwsympa.fcgi.in
+
+[bug][Reported by M. Larchet, univ. Nancy 2, M.Lièvre, Orange and L. Grégoire, ENSEEIHT] Owners trying to access the list config edition form, section "Sending/receiving setup" when:
+1- No digest parameter was defined in the config file and
+2- they had only read access to the digest parameter
+were being displayed an empty page. this was due to a faulty population of this parameter. Fixed by affecting a "type = enum" value to the parameter hash.
+
+------------------------------------------------------------------------
+r6986 | david.verdin | 2011-01-19 10:40:48 +0100 (mer 19 jan 2011) | 1 ligne
+Chemins modifiés :
+   M /branches/sympa-6.1-branch/src/lib/List.pm
+   M /branches/sympa-6.1-branch/web_tt2/get_inactive_lists.tt2
+   M /branches/sympa-6.1-branch/wwsympa/wwsympa.fcgi.in
+
+[change][Submitted by M. Lievre, Orange] Adding detailed informations to the get_inactive_lists page of the web interface.
+------------------------------------------------------------------------
+r6985 | david.verdin | 2011-01-19 10:40:10 +0100 (mer 19 jan 2011) | 1 ligne
+Chemins modifiés :
+   M /branches/sympa-6.1-branch/po/ar.po
+   M /branches/sympa-6.1-branch/po/bg.po
+   M /branches/sympa-6.1-branch/po/br.po
+   M /branches/sympa-6.1-branch/po/ca.po
+   M /branches/sympa-6.1-branch/po/cs.po
+   M /branches/sympa-6.1-branch/po/de.po
+   M /branches/sympa-6.1-branch/po/el.po
+   M /branches/sympa-6.1-branch/po/en_US.po
+   M /branches/sympa-6.1-branch/po/es.po
+   M /branches/sympa-6.1-branch/po/et.po
+   M /branches/sympa-6.1-branch/po/eu.po
+   M /branches/sympa-6.1-branch/po/fi.po
+   M /branches/sympa-6.1-branch/po/fr.po
+   M /branches/sympa-6.1-branch/po/hu.po
+   M /branches/sympa-6.1-branch/po/id.po
+   M /branches/sympa-6.1-branch/po/it.po
+   M /branches/sympa-6.1-branch/po/ja.po
+   M /branches/sympa-6.1-branch/po/ko.po
+   M /branches/sympa-6.1-branch/po/la.po
+   M /branches/sympa-6.1-branch/po/ml.po
+   M /branches/sympa-6.1-branch/po/nb_NO.po
+   M /branches/sympa-6.1-branch/po/nl.po
+   M /branches/sympa-6.1-branch/po/oc.po
+   M /branches/sympa-6.1-branch/po/pl.po
+   M /branches/sympa-6.1-branch/po/pt.po
+   M /branches/sympa-6.1-branch/po/pt_BR.po
+   M /branches/sympa-6.1-branch/po/ro.po
+   M /branches/sympa-6.1-branch/po/ru.po
+   M /branches/sympa-6.1-branch/po/sv.po
+   M /branches/sympa-6.1-branch/po/sympa.pot
+   M /branches/sympa-6.1-branch/po/tr.po
+   M /branches/sympa-6.1-branch/po/vi.po
+   M /branches/sympa-6.1-branch/po/zh_CN.po
+   M /branches/sympa-6.1-branch/po/zh_TW.po
+
+[-feature] Committing updated i18n catalogues
+------------------------------------------------------------------------
+r6984 | david.verdin | 2011-01-18 16:37:16 +0100 (mar 18 jan 2011) | 2 lignes
+Chemins modifiés :
+   M /branches/sympa-6.1-branch/src/lib/Upgrade.pm
+
+[bug][#7372][Reported by L. Breuil] Upgrading to 6.1.3 broke Sympa startup when using SQLite, because Sympa tried to use the CHANGE query, which is unavailable in SQLite. Short term fixed by not trying to change database fields with SQLite. The automatic upgrade of database will be completely rewritten with version 6.2.
+
+------------------------------------------------------------------------
+r6982 | david.verdin | 2011-01-18 16:05:02 +0100 (mar 18 jan 2011) | 2 lignes
+Chemins modifiés :
+   M /branches/sympa-6.1-branch/web_tt2/editsubscriber.tt2
+
+[bug][#7376][Submitted by A. Bernstein, electricembers.net] If you narrowed your browser window or zoomed the text size enough that the row of admin tabs had to wrap to a new line, the entire contents of the editsubscriber.tt2 page would shift off to the right side of the browser. What was left behind under the admin tabs was just a blank box. Fixed by enclosing the whole editsubscriber.tt2 file content with <div class="block"></div>.
+
+------------------------------------------------------------------------
+r6981 | david.verdin | 2011-01-18 15:56:37 +0100 (mar 18 jan 2011) | 2 lignes
+Chemins modifiés :
+   M /branches/sympa-6.1-branch/src/lib/admin.pm
+
+[bug][#7391][Reported by A. Bernstein, electricemebers.net] The homepage file was not copied when renaming a list.
+
+------------------------------------------------------------------------
+r6980 | david.verdin | 2011-01-18 15:38:45 +0100 (mar 18 jan 2011) | 2 lignes
+Chemins modifiés :
+   M /branches/sympa-6.1-branch/src/lib/List.pm
+
+[change][#7392][Submitteb by A. Bernstein, electricembers.net] Some MUA and the web page sending option in Sympa use Multipart/related content-type. In this case, the footer was not appended to messages.
+
+------------------------------------------------------------------------
+r6978 | david.verdin | 2011-01-17 16:56:28 +0100 (lun 17 jan 2011) | 2 lignes
+Chemins modifiés :
+   M /branches/sympa-6.1-branch/wwsympa/wwsympa.fcgi.in
+
+[bug][#7409]The template in user_notification.tt2 for the sigrequest action was missing the $list parameter, so the $list.name variable came out blank in the resulting message to user. Fixed by adding the parameter to the $tt2_param list.
+
+------------------------------------------------------------------------
+r6977 | david.verdin | 2011-01-17 16:45:04 +0100 (lun 17 jan 2011) | 2 lignes
+Chemins modifiés :
+   M /branches/sympa-6.1-branch/src/lib/List.pm
+
+[bug][#7410][Submitted by A. Bernstein, electricembers.net] In List::send_file(), there were certain times when the sender value was getting set to the recipient when it shouldn't be. Fixed by checking that the sender field has not been previously set before affecting the $who var to ist value.
+
+------------------------------------------------------------------------
+r6976 | david.verdin | 2011-01-17 16:06:11 +0100 (lun 17 jan 2011) | 2 lignes
+Chemins modifiés :
+   M /branches/sympa-6.1-branch/wwsympa/wwsympa.fcgi.in
+
+[bug][#7411][Submitted by A. Bernstein, electricembers.net] After editing a subscriber's options (do_set()), a list owner was returned to the suboptions page by default (if previous_action wasn't populated), which porduced an error message if the owner happenned to not be subscribed to the list. Fixed by redirecting to the list's info page instead.
+
+------------------------------------------------------------------------
+r6974 | david.verdin | 2011-01-17 14:42:27 +0100 (lun 17 jan 2011) | 2 lignes
+Chemins modifiés :
+   M /branches/sympa-6.1-branch/wwsympa/wwsympa.fcgi.in
+
+[bug][#7412][Submitted by A. Bernstein, electricembers] At the end of do_reviewbouncing(), the $param->{'size'} setting was taken from $in{'size'}. ItI should actually be set to $size, which is equal to $in{'size'} if it's provided or else defaults to the wwsconf setting if not. This created an error under some conditions.
+
+------------------------------------------------------------------------
+r6973 | david.verdin | 2011-01-17 13:52:29 +0100 (lun 17 jan 2011) | 2 lignes
+Chemins modifiés :
+   M /branches/sympa-6.1-branch/src/lib/PlainDigest.pm
+
+[bug][#7417][Submitted by A. Bernstein, electricembers.net] Some outdated MUA, like Eudora, use an uncommon MIME type called text/enriched, which provides formatting without HTML. Such a proprietary formatting is not worth a special develmopment - ragarding what is possible with HTML, so we treat it now as text/plain.
+
+------------------------------------------------------------------------
+r6972 | david.verdin | 2011-01-17 12:14:13 +0100 (lun 17 jan 2011) | 2 lignes
+Chemins modifiés :
+   M /branches/sympa-6.1-branch/mail_tt2/message_report.tt2
+   M /branches/sympa-6.1-branch/src/sympa.pl.in
+
+[change][#7420][Submitted by A. Bernstein, electricembers.net] When a message is rejected because it exceeds the maximum allowed size for a list, the report now provides informations regarding the size of the mesage, the maximum allowed size for this list and a technical notice regarding attachments.
+
+------------------------------------------------------------------------
+r6971 | david.verdin | 2011-01-17 11:13:46 +0100 (lun 17 jan 2011) | 2 lignes
+Chemins modifiés :
+   M /branches/sympa-6.1-branch/wwsympa/wwsympa.fcgi.in
+
+[bug][#7421][Submitted by A. Bernstein, electricembers.net] The message displayed on the web when attempting to create a list which already exists was incorrect, due to a call to a call to reject_report_web() using the wrong error condition.
+
+------------------------------------------------------------------------
+r6970 | david.verdin | 2011-01-17 09:08:43 +0100 (lun 17 jan 2011) | 2 lignes
+Chemins modifiés :
+   M /branches/sympa-6.1-branch
+   M /branches/sympa-6.1-branch/src/etc/script/create_db.SQLite
+
+[bug][Reported by L. Breuil] Fixing two typos in the create_db.SQLite script.
+
+------------------------------------------------------------------------
+r6942 | david.verdin | 2010-12-10 16:09:38 +0100 (ven 10 déc 2010) | 2 lignes
+Chemins modifiés :
+   M /trunk/src/lib/Scenario.pm
+Fision via : r6970
+
+[bug][#7356][Submitted by A. Bernstein, electricembers.net] a space between two auth methods in scenario (e.g. smtp, md5 instead of smtp,md5) caused the second authentication method to be ignored. Fixed by changing the regexp responsible of scenraio rules extraction.
+
+------------------------------------------------------------------------
+r6969 | david.verdin | 2011-01-17 09:02:54 +0100 (lun 17 jan 2011) | 2 lignes
+Chemins modifiés :
+   M /branches/sympa-6.1-branch/po/ar.po
+   M /branches/sympa-6.1-branch/po/bg.po
+   M /branches/sympa-6.1-branch/po/br.po
+   M /branches/sympa-6.1-branch/po/ca.po
+   M /branches/sympa-6.1-branch/po/cs.po
+   M /branches/sympa-6.1-branch/po/de.po
+   M /branches/sympa-6.1-branch/po/el.po
+   M /branches/sympa-6.1-branch/po/en_US.po
+   M /branches/sympa-6.1-branch/po/es.po
+   M /branches/sympa-6.1-branch/po/et.po
+   M /branches/sympa-6.1-branch/po/eu.po
+   M /branches/sympa-6.1-branch/po/fi.po
+   M /branches/sympa-6.1-branch/po/fr.po
+   M /branches/sympa-6.1-branch/po/hu.po
+   M /branches/sympa-6.1-branch/po/id.po
+   M /branches/sympa-6.1-branch/po/it.po
+   M /branches/sympa-6.1-branch/po/ja.po
+   M /branches/sympa-6.1-branch/po/ko.po
+   M /branches/sympa-6.1-branch/po/la.po
+   M /branches/sympa-6.1-branch/po/ml.po
+   M /branches/sympa-6.1-branch/po/nb_NO.po
+   M /branches/sympa-6.1-branch/po/nl.po
+   M /branches/sympa-6.1-branch/po/oc.po
+   M /branches/sympa-6.1-branch/po/pl.po
+   M /branches/sympa-6.1-branch/po/pt.po
+   M /branches/sympa-6.1-branch/po/pt_BR.po
+   M /branches/sympa-6.1-branch/po/ro.po
+   M /branches/sympa-6.1-branch/po/ru.po
+   M /branches/sympa-6.1-branch/po/sv.po
+   M /branches/sympa-6.1-branch/po/sympa.pot
+   M /branches/sympa-6.1-branch/po/tr.po
+   M /branches/sympa-6.1-branch/po/vi.po
+   M /branches/sympa-6.1-branch/po/zh_CN.po
+   M /branches/sympa-6.1-branch/po/zh_TW.po
+
+[-feature] Updating i18n catalogues.
+
+------------------------------------------------------------------------
+r6968 | david.verdin | 2011-01-17 09:02:10 +0100 (lun 17 jan 2011) | 1 ligne
+Chemins modifiés :
+   M /branches/sympa-6.1-branch/wwsympa/wwsympa.fcgi.in
+
+[change] On list created through the web interface, if the list name contains higher case letters, they are lower cased to prevent any later inconsistencies in data describing the list. The user is warned about it.
+------------------------------------------------------------------------
+r6943 | david.verdin | 2010-12-10 16:21:56 +0100 (ven 10 déc 2010) | 3 lignes
+Chemins modifiés :
+   M /branches/sympa-6.1-branch/src/lib/Scenario.pm
+
+[bug][#7356][Submitted by A. Bernstein, electricembers.net] a space between two auth methods in scenario (e.g. smtp, md5 instead of smtp,md5) caused the second authentication method to be ignored. Fixed by changing the regexp responsible of scenraio rules extraction.
+
+
+------------------------------------------------------------------------
+r6811 | sympa-authors | 2010-11-30 13:26:07 +0100 (mar 30 nov 2010) | 2 lignes
+Chemins modifiés :
+   M /branches/sympa-6.1-branch/configure.ac
+
+[dev] Test 2.
+
+------------------------------------------------------------------------
+r6810 | sympa-authors | 2010-11-30 13:25:34 +0100 (mar 30 nov 2010) | 2 lignes
+Chemins modifiés :
+   M /branches/sympa-6.1-branch/configure.ac
+
+[dev] Test.
+
+------------------------------------------------------------------------
+r6765 | david.verdin | 2010-11-18 16:19:45 +0100 (jeu 18 nov 2010) | 2 lignes
+Chemins modifiés :
+   M /branches/sympa-6.1-branch/src/sympa.pl.in
+
+[bug][Reported by J. Arnoux, infomaniak.ch] When a message was rejected because its size exceeded the allowed quotas, it was forwarded with the rejection report message. It made no sense because rejection based on the size is there to prevent the circulation of too large files. In addiotion, very large messages caused Sympa to hang on the reprot generation, doing nothing without crashing.
+
+------------------------------------------------------------------------
+r6763 | david.verdin | 2010-11-17 15:49:31 +0100 (mer 17 nov 2010) | 2 lignes
+Chemins modifiés :
+   M /branches/sympa-6.1-branch/mail_tt2/listmaster_notification.tt2
+   M /branches/sympa-6.1-branch/wwsympa/bounced.pl.in
+
+[bug][#6747][Reported by D. Pritts, Internet2] A call to send_notify_to_listmaster was done using a non existing error_code. Fixed by creating a dedicated error code to be sued when bounce related errors occur.
+
+------------------------------------------------------------------------
+r6757 | david.verdin | 2010-11-17 11:11:53 +0100 (mer 17 nov 2010) | 2 lignes
+Chemins modifiés :
+   M /branches/sympa-6.1-branch/src/etc/scenari/spam_status.x-spam-status
+
+[bug][#7076][Reported by D. Pritts, Internet2] The default antispam scenario included the following regexp test on the X-Spam-Status header: /yes/. this was true for any antispam engine using the expression "bayes". fixed by changing the regexp to /^\s*yes/.
+
+------------------------------------------------------------------------
+r6756 | david.verdin | 2010-11-17 09:05:44 +0100 (mer 17 nov 2010) | 2 lignes
+Chemins modifiés :
+   M /branches/sympa-6.1-branch/wwsympa/bounced.pl.in
+
+[bug][#6744][Submitted by D. Pritts, Internet2] bounced log message misspelled bounce_path as bounce-path.
+
+------------------------------------------------------------------------
+r6755 | david.verdin | 2010-11-17 08:58:29 +0100 (mer 17 nov 2010) | 4 lignes
+Chemins modifiés :
+   M /branches/sympa-6.1-branch/src/lib/List.pm
+
+[bug][#6883][Submitted by S. Ikeda]* Topics tagging did not work properly on encoded subject and on message body using charset other than US-ASCII or UTF-8.
+* case-ignore match was available only on Latin letters without accents.
+
+
+------------------------------------------------------------------------
+r6754 | david.verdin | 2010-11-17 08:50:52 +0100 (mer 17 nov 2010) | 2 lignes
+Chemins modifiés :
+   M /branches/sympa-6.1-branch/src/lib/Lock.pm
+
+[bug][#7015][Submitted by S. Ikeda] In some distributions (RHEL 5 for example) File::temp package conflicts with OS-bundled perl. Users need then to install the package manually. Errors are then triggers when using NFS. Fixed by calliong explcitely the "new" sub when creating a File::NFS object.
+
+------------------------------------------------------------------------
+r6753 | david.verdin | 2010-11-17 08:32:52 +0100 (mer 17 nov 2010) | 2 lignes
+Chemins modifiés :
+   M /branches/sympa-6.1-branch/src/etc/script/sympa.in
+
+[change][#6847][Submitted by S. Ikeda] The sympa init script now actually waits for the dameon to be stopped (up to 20 seconds) prior to issuing a status message (failed or success).
+
+------------------------------------------------------------------------
+r6752 | david.verdin | 2010-11-17 08:23:05 +0100 (mer 17 nov 2010) | 2 lignes
+Chemins modifiés :
+   M /branches/sympa-6.1-branch/src/lib/mail.pm
+
+[bug][#7003][Submitted by S. Ikeda] Bodies of service messages were encoded by list character set, diregarding the actual receipient lanquage preferences. Fixed by testing user preferences prior to set the message charset.
+
+------------------------------------------------------------------------
+r6751 | david.verdin | 2010-11-17 08:09:14 +0100 (mer 17 nov 2010) | 2 lignes
+Chemins modifiés :
+   M /branches/sympa-6.1-branch/src/lib/List.pm
+   M /branches/sympa-6.1-branch/src/lib/Message.pm
+
+[bug][#6385][#6396][#7029][Submitted by S. Ikeda] Messages containing a subject with illegal charset crashed sympa.pl. Fixed by verifying that decoding is possible before doing it and leaving otherwise the subject unchanged.
+
+------------------------------------------------------------------------
+r6749 | david.verdin | 2010-11-16 17:23:46 +0100 (mar 16 nov 2010) | 2 lignes
+Chemins modifiés :
+   M /branches/sympa-6.1-branch/wwsympa/wwsympa.fcgi.in
+
+[bug][#6530][Submitted by S. Ikeda]If you chose in WWSympa to have the digest for a list go out only on, say, Saturday, it would instead go out on Sunday. There was a mismatch somewhere between the days of the week referenced by WWSympa and by sympa.pl. Fixed by replacing the call to "localtime" by a call to "gmtime". See explanations by A. Berstein in the follwing URL for details: https://sourcesup.cru.fr/tracker/?group_id=23&atid=167&func=detail&aid=6530
+
+------------------------------------------------------------------------
+r6745 | david.verdin | 2010-11-16 16:48:52 +0100 (mar 16 nov 2010) | 2 lignes
+Chemins modifiés :
+   M /branches/sympa-6.1-branch/src/lib/tools.pm
+   M /branches/sympa-6.1-branch/src/sympa_wizard.pl.in
+
+[bug][#7301][Submitted by S. Ikeda] sympa.conf and cookies.history contain confidential information. Access to them should be restricted. Fixed by making Sympa set their access permissions to 740.
+
+------------------------------------------------------------------------
+r6742 | david.verdin | 2010-11-16 15:09:46 +0100 (mar 16 nov 2010) | 2 lignes
+Chemins modifiés :
+   M /branches/sympa-6.1-branch/po/ca.po
+   M /branches/sympa-6.1-branch/po/cs.po
+   M /branches/sympa-6.1-branch/po/de.po
+   M /branches/sympa-6.1-branch/po/el.po
+   M /branches/sympa-6.1-branch/po/es.po
+   M /branches/sympa-6.1-branch/po/et.po
+   M /branches/sympa-6.1-branch/po/fi.po
+   M /branches/sympa-6.1-branch/po/fr.po
+   M /branches/sympa-6.1-branch/po/hu.po
+   M /branches/sympa-6.1-branch/po/it.po
+   M /branches/sympa-6.1-branch/po/ja.po
+   M /branches/sympa-6.1-branch/po/ko.po
+   M /branches/sympa-6.1-branch/po/nb_NO.po
+   M /branches/sympa-6.1-branch/po/nl.po
+   M /branches/sympa-6.1-branch/po/oc.po
+   M /branches/sympa-6.1-branch/po/pl.po
+   M /branches/sympa-6.1-branch/po/pt_BR.po
+   M /branches/sympa-6.1-branch/po/ru.po
+   M /branches/sympa-6.1-branch/po/sv.po
+   M /branches/sympa-6.1-branch/po/tr.po
+   M /branches/sympa-6.1-branch/po/vi.po
+   M /branches/sympa-6.1-branch/po/zh_CN.po
+   M /branches/sympa-6.1-branch/po/zh_TW.po
+
+[svn] Comitting updated translations.
+
+------------------------------------------------------------------------
+r6739 | sympa-authors | 2010-11-15 11:22:06 +0100 (lun 15 nov 2010) | 1 ligne
+Chemins modifiés :
+   M /branches/sympa-6.1-branch/ChangeLog
+   M /branches/sympa-6.1-branch/NEWS
+
+[-release]Preparing version 6.1.3
+------------------------------------------------------------------------
 r6738 | sympa-authors | 2010-11-15 11:15:08 +0100 (lun 15 nov 2010) | 1 ligne
 Chemins modifiés :
    M /branches/sympa-6.1-branch/configure.ac
