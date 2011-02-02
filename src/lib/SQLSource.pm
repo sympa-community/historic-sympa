@@ -169,44 +169,45 @@ sub connect {
 	}
       }
       
-      my $dbh;
-      unless ($dbh = DBI->connect($connect_string, $param->{'db_user'}, $param->{'db_passwd'})) {
-    	
-	## Notify listmaster if warn option was set
-	## Unless the 'failed' status was set earlier
-	if ($options->{'warn'}) {
-	  unless (defined $db_connections{$connect_string} &&
-		  $db_connections{$connect_string}{'status'} eq 'failed') { 
-
-	    unless (&List::send_notify_to_listmaster('no_db', $Conf::Conf{'domain'},{})) {
-	      &do_log('err',"Unable to send notify 'no_db' to listmaster");
+    my $dbh;
+    {
+	local $@; # # protect existing $@
+	eval {$dbh = DBI->connect($connect_string, $param->{'db_user'}, $param->{'db_passwd'})};
+	unless ($dbh) {
+	    ## Notify listmaster if warn option was set
+	    ## Unless the 'failed' status was set earlier
+	    if ($options->{'warn'}) {
+		unless (defined $db_connections{$connect_string} &&
+		    $db_connections{$connect_string}{'status'} eq 'failed') { 
+    
+		    unless (&List::send_notify_to_listmaster('no_db', $Conf::Conf{'domain'},{})) {
+			&do_log('err',"Unable to send notify 'no_db' to listmaster");
+		    }
+		}
 	    }
-	  }
-	}
-	
-	if ($options->{'keep_trying'}) {
-	  &do_log('err','Can\'t connect to Database %s as %s, still trying...', $connect_string, $param->{'db_user'});
-	} else{
-	  do_log('err','Can\'t connect to Database %s as %s', $connect_string, $param->{'db_user'});
-	  $db_connections{$connect_string}{'status'} = 'failed';
-	  $db_connections{$connect_string}{'first_try'} ||= time;
-	  return undef;
-	}
-	
-	## Loop until connect works
-	my $sleep_delay = 60;
-	while (1) {
-	  sleep $sleep_delay;
-	  $dbh = DBI->connect($connect_string, $param->{'db_user'}, $param->{'db_passwd'});
-	  last if ($dbh && $dbh->ping());
-	  $sleep_delay += 10;
-	}
-	
-	if ($options->{'warn'}) {
-	  do_log('notice','Connection to Database %s restored.', $connect_string);
-	  unless (&send_notify_to_listmaster('db_restored', $Conf::Conf{'domain'},{})) {
-	    &do_log('notice',"Unable to send notify 'db_restored' to listmaster");
-	  }
+	    if ($options->{'keep_trying'}) {
+		&do_log('err','Can\'t connect to Database %s as %s, still trying...', $connect_string, $param->{'db_user'});
+	    } else{
+		do_log('err','Can\'t connect to Database %s as %s', $connect_string, $param->{'db_user'});
+		$db_connections{$connect_string}{'status'} = 'failed';
+		$db_connections{$connect_string}{'first_try'} ||= time;
+		return undef;
+	    }
+	    ## Loop until connect works
+	    my $sleep_delay = 60;
+	    while (1) {
+		sleep $sleep_delay;
+		eval {$dbh = DBI->connect($connect_string, $param->{'db_user'}, $param->{'db_passwd'})};
+		last if ($dbh && $dbh->ping());
+		$sleep_delay += 10;
+	    }
+	    
+	    if ($options->{'warn'}) {
+	    do_log('notice','Connection to Database %s restored.', $connect_string);
+		unless (&List::send_notify_to_listmaster('db_restored', $Conf::Conf{'domain'},{})) {
+		    &do_log('notice',"Unable to send notify 'db_restored' to listmaster");
+		}
+	    }
 	}
 	
       }
