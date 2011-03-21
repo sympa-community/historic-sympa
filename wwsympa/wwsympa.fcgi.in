@@ -68,6 +68,7 @@ use cookielib;
 use tt2;
 #use DateTime;
 use tracking;
+use Sympaspool;
 
 #use open ':utf8'; ## Default is to consider files utf8 
 
@@ -7385,6 +7386,8 @@ sub do_arc {
     
     ## File exist ?
     my $arc_file_path = $arc_month_path.'/'.$in{'arc_file'};
+    do_log('trace',"xxxxxxxxxxxxxxx arc_month_path %s arc_file %s",$arc_month_path,$in{'arc_file'});
+
     unless (-r $arc_file_path) {
 	&wwslog('err',"unable to read $arc_file_path");
 	&report::reject_report_web('user','arc_not_found',{'arc_file' => $in{'arc_file'},
@@ -7674,27 +7677,17 @@ sub do_remove_arc {
 	 return undef;
      } 
 
-    my $file = $Conf{'queueoutgoing'}.'/.remove.'.$list->get_list_id().'.'.$in{'yyyy'}.'-'.$in{'month'}.'.'.time;
-    unless (open REBUILD, ">$file") {
-	&report::reject_report_web('intern','cannot_open_file',{'file' => $file},$param->{'action'},$list,$param->{'user'}{'email'},$robot);
-	&wwslog('info','do_remove: cannot create %s', $file);
-	&web_db_log({'parameters' => $in{'msgid'},
-		     'msg_id' => $in{'msgid'},
-		     'status' => 'error',
-		     'error_type' => 'internal'});
-	closedir ARC;
-	return undef;
-    }
+    my $removeorder = sprintf "remove.%s-%s.%s\n",$in{'yyyy'},$in{'month'},time;
 
     foreach my $msgid (@msgids) {	
 	chomp $msgid ;	
-	printf REBUILD ('%s||%s',$msgid,$param->{'user'}{'email'}) ; printf  REBUILD "\n";
-	#########################################################################
-	# Tracking
+	$removeorder .= sprintf "%s||%s\n",$msgid,$param->{'user'}{'email'} ;
+	# Removing tracking should be done by archived.
 	&tracking::remove_message_by_id($msgid, $in{'list'},$robot);
-	########################################################################
     }
-    close REBUILD;	
+    my $spoolarchive = new Sympaspool('archive');
+    $spoolarchive->store($removeorder,{'list'=>$in{'list'},'robot'=>$robot});
+
     &wwslog('info', 'do_remove_arc %d messages marked to be removed by archived', $#msgids+1);
     &web_db_log({'parameters' => $in{'msgid'},
 		 'msg_id' => $in{'msgid'},
@@ -7704,7 +7697,6 @@ sub do_remove_arc {
 	#'client' => $ip, 'daemon' => $daemon_name});
 
     $param->{'status'} = 'done';
-
     return 1;
 }
  
@@ -9058,56 +9050,69 @@ sub do_home {
  ## Rebuild an archive using arctxt/
  sub do_rebuildarc {
      &wwslog('info', 'do_rebuildarc(%s, %s)', $param->{'list'}, $in{'month'});
+     
+     my $spoolarchive = new Sympaspool('archive');
 
-     my $file = $Conf{'queueoutgoing'}.'/.rebuild.'.$list->get_list_id();
-
-     unless (open REBUILD, ">$file") {
-	 &report::reject_report_web('intern','cannot_open_file',{'file' => $file},$param->{'action'},$list,$param->{'user'}{'email'},$robot);
-	 &wwslog('info','do_rebuildarc: cannot create %s', $file);
+     unless (     $spoolarchive->store('rebuild',{'list'=>$list->{'name'},'robot'=>$list->{'robot'}} )){
+	 &report::reject_report_web('intern','cannot_store_rebuild_order',{},$param->{'action'},$list,$param->{'user'}{'email'},$robot);
+	 &wwslog('info','do_rebuildarc: cannot store rebuild order for list %s',$list->{'name'});
 	 &web_db_log({'parameters' => $in{'month'},
 		      'status' => 'error',
 		      'error_type' => 'internal'});
 	 return undef;
      }
-
-     &wwslog('info', 'File: %s', $file);
-
-     print REBUILD ' ';
-     close REBUILD;
-
+     
+     &wwslog('info', 'rebuild requested for list %s', $list->{'name'});
      &report::notice_report_web('performed',{},$param->{'action'});
      &web_db_log({'parameters' => $in{'month'},
 		  'status' => 'success'});
      return 'admin';
- }
+}
 
- ## Rebuild all archives using arctxt/
- sub do_rebuildallarc {
-     &wwslog('info', 'do_rebuildallarc');
+## Rebuild all archives using arctxt/
+sub do_rebuildallarc {
+    &wwslog('info', 'do_rebuildallarc');
 
-     my $all_lists = &List::get_lists($robot);
-     foreach my $list ( @$all_lists ) {
-	 next unless (defined $list->{'admin'}{'web_archive'});
-	 my $file = $Conf{'queueoutgoing'}.'/.rebuild.'.$list->get_list_id();
+    my $errors = 0;
+    my $spoolarchive;
+    unless ($spoolarchive = new Sympaspool('archive')){
+	&report::reject_report_web('intern','cannot fetch archive spool',{},$param->{'action'},$list,$param->{'user'}{'email'},$robot);
+	&wwslog('err','error in  new Sympaspool(archive) ');
+    }
+    do_log('trace',"new Sympaspool(archive) OK");
+    my $all_lists = &List::get_lists($robot);
+    foreach my $list ( @$all_lists ) {
+	next unless (defined $list->{'admin'}{'web_archive'});
 
-	 unless (open REBUILD, ">$file") {
-	     &report::reject_report_web('intern','cannot_open_file',{'file' => $file},$param->{'action'},'',$param->{'user'}{'email'},$robot);
-	     &wwslog('info','do_rebuildarc: cannot create %s', $file);
-	     &web_db_log({'status' => 'error',
-			  'error_type' => 'internal'});
-	     return undef;
-	 }
+	do_log('trace','list %s@%s', $list->{'name'},$list->{'name'});
+	unless ($spoolarchive->store('rebuild',{'list'=>$list->{'name'},'robot'=>$list->{'robot'} } )){
+	    &report::reject_report_web('intern','cannot_store_rebuild_order',{},$param->{'action'},$list,$param->{'user'}{'email'},$robot);
+	    &wwslog('info','do_rebuildarc: cannot store rebuild order for list %s',$list->{'name'});
+	    &web_db_log({'parameters' => $in{'month'},
+			 'status' => 'error',
+			 'error_type' => 'internal'});
+	    $errors =1;
+	    next;
+	}
+	do_log('trace','OK pour list %s@%s', $list->{'name'},$list->{'name'});
+    }
+    do_log('trace','OK pour toute les listes ? ');
+    if ($errors == 1){
+	&report::reject_report_web('intern','cannot_store_rebuild_order',{},$param->{'action'},$param->{'user'}{'email'},$robot);
+	&wwslog('info','do_rebuildallarc: cannot store rebuild archive order for all lists, see logs' );
+	&web_db_log({'parameters' => $in{'month'},
+		     'status' => 'error',
+		     'error_type' => 'internal'});
+	
+	return undef;
+    }
+    
+    &report::notice_report_web('performed',{},$param->{'action'});
+    &web_db_log({'status' => 'success'});
 
-	 &wwslog('info', 'File: %s', $file);
-
-	 print REBUILD ' ';
-	 close REBUILD;
-
-     }
-     &report::notice_report_web('performed',{},$param->{'action'});
-     &web_db_log({'status' => 'success'});
-     return 'serveradmin';
- }
+    do_log('trace','OK pour toutes les listes  ');
+    return 'serveradmin';
+}
 
  ## Search among lists
  sub do_edit_attributes {

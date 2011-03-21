@@ -75,6 +75,11 @@ our @params = (
         default => Sympa::Constants::PIDDIR . '/bulk.pid',
 	file    => 'sympa.conf',
     },
+    { 
+        name    => 'pidfile_spooler',
+        default => Sympa::Constants::PIDDIR . '/spooler.pid',
+	file    => 'sympa.conf',
+    },
     {
         name   => 'archived_pidfile',
         default => Sympa::Constants::PIDDIR . '/archived.pid',

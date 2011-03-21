@@ -1860,7 +1860,8 @@ sub split_mail {
 
 sub virus_infected {
     my $mail = shift ;
-    my $file = shift ;
+
+    my $file = int(rand(time)) ; # in, version previous from db spools, $file was the filename of the message 
 
     &do_log('debug2', 'Scan virus in %s', $file);
     
@@ -2105,6 +2106,16 @@ sub virus_infected {
 
 ## subroutines for epoch and human format date processings
 
+
+## convert an epoch date into a readable date scalar
+sub epoch2yyyymmjj_hhmmss {
+
+    my $epoch = $_[0];
+    my @date = localtime ($epoch);
+    my $date = strftime ("%Y-%m-%d  %H:%M:%S", @date);
+    
+    return $date;
+}
 
 ## convert an epoch date into a readable date scalar
 sub adate {
@@ -3824,22 +3835,22 @@ Clean all messages in spool $spool_dir older than $clean_delay.
 =cut 
 
 ############################################################
-#  CleanSpool
+#  CleanDir
 ############################################################
 #  Cleans files older than $clean_delay from spool $spool_dir
 #  
-# IN : -$spool_dir (+): the spool directory
+# IN : -$dir (+): the spool directory
 #      -$clean_delay (+): delay in days 
 #
 # OUT : 1
 #
 ############################################################## 
-sub CleanSpool {
-    my ($spool_dir, $clean_delay) = @_;
-    &do_log('debug', 'CleanSpool(%s,%s)', $spool_dir, $clean_delay);
+sub CleanDir {
+    my ($dir, $clean_delay) = @_;
+    &do_log('debug', 'CleanSpool(%s,%s)', $dir, $clean_delay);
 
-    unless (opendir(DIR, $spool_dir)) {
-	&do_log('err', "Unable to open '%s' spool : %s", $spool_dir, $!);
+    unless (opendir(DIR, $dir)) {
+	&do_log('err', "Unable to open '%s' spool : %s", $dir, $!);
 	return undef;
     }
 
@@ -3849,20 +3860,19 @@ sub CleanSpool {
     my ($curlist,$moddelay);
     foreach my $f (sort @qfile) {
 
-	if ((stat "$spool_dir/$f")[9] < (time - $clean_delay * 60 * 60 * 24)) {
-	    if (-f "$spool_dir/$f") {
-		unlink ("$spool_dir/$f") ;
-		&do_log('notice', 'Deleting old file %s', "$spool_dir/$f");
-	    }elsif (-d "$spool_dir/$f") {
-		unless (&tools::remove_dir("$spool_dir/$f")) {
-		    &do_log('err', 'Cannot remove old directory %s : %s', "$spool_dir/$f", $!);
+	if ((stat "$dir/$f")[9] < (time - $clean_delay * 60 * 60 * 24)) {
+	    if (-f "$dir/$f") {
+		unlink ("$dir/$f") ;
+		&do_log('notice', 'Deleting old file %s', "$dir/$f");
+	    }elsif (-d "$dir/$f") {
+		unless (&tools::remove_dir("$dir/$f")) {
+		    &do_log('err', 'Cannot remove old directory %s : %s', "$dir/$f", $!);
 		    next;
 		}
-		&do_log('notice', 'Deleting old directory %s', "$spool_dir/$f");
+		&do_log('notice', 'Deleting old directory %s', "$dir/$f");
 	    }
 	}
     }
-
     return 1;
 }
 

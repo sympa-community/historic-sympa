@@ -152,32 +152,40 @@ sub new {
 	$messageasstring = $message_in_spool->{'messageasstring'};
 	$message->{'messagekey'}= $message_in_spool->{'messagekey'};
 	$message->{'spoolname'}= $message_in_spool->{'spoolname'};
+	do_log('trace'," message as string 3 $messageasstring ");
     }
     if ($file) {
 	## Parse message as a MIME::Entity
 	$message->{'filename'} = $file;
-	unless (open FILE, $file) {
+
+	do_log('trace',"FICHIER $file");
+
+	unless (open FILE, "$file") {
 	    &do_log('err', 'Cannot open message file %s : %s',  $file, $!);
 	    return undef;
 	}
-    
-	# unless ($msg = $parser->read(\*FILE)) {
-	#    do_log('err', 'Unable to parse message %s', $file);
-	#    close(FILE);
-	#    return undef;
-	#}
+	else{do_log('trace',"on peut le lire");}
+
 	while (<FILE>){
 	    $messageasstring = $messageasstring.$_;
 	}
 	close(FILE);
     }
     if($messageasstring){
+	do_log('trace',"on a norte string %s",$messageasstring);
 	if (ref ($messageasstring)){
+	    do_log('trace',"message 1: $messageasstring"); 
 	    $msg = $parser->parse_data($messageasstring);
 	}else{
+	    do_log('trace',"message 2: \$messageasstring"); 
 	    $msg = $parser->parse_data(\$messageasstring);
 	}
     }   
+    unless ($msg){
+	do_log('err',"could not parse message"); 
+	do_log('trace',"hhhhhhhhhhhhh could not parse message"); exit;
+	return undef;
+    }
     $message->{'msg'} = $msg;
     $message->{'msg_as_string'} = $msg->as_string; 
     $message->{'size'} = length($msg->as_string);

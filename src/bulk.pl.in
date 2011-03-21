@@ -52,6 +52,7 @@ use List;
 use tools;
 use tracking;
 use Sympa::Constants;
+use Sympaspool;
 
 my $daemon_name = &Log::set_daemon($0);
 my $date_of_last_activity = time();
@@ -166,6 +167,9 @@ my $last_check_date = time();
 $options->{'multiple_process'} = 1;
 $Conf::Conf{'maxsmtp'} = int($Conf::Conf{'maxsmtp'}/$Conf::Conf{'bulk_max_count'});
 
+
+my $spool = new Sympaspool('bulk');
+
 while (!$end) {
     &List::init_list_cache();
     my $bulk;
@@ -223,13 +227,16 @@ while (!$end) {
     }
 	
 	## Go through the bulk_mailer table and process messages
+
+    do_log('trace',"next ? ");
     if ($bulk = Bulk::next()) {
+	do_log('trace',"processing mesasgekey  $bulk->{'messagekey'}");
 	if ($bulk->{'messagekey'} ne $messagekey) {
 	    # current packet is not related to the same message as the previous packet
             # so it is needed to fetch the new message from message_table 
 
 	    $messagekey = $bulk->{'messagekey'};
-	    $message_from_spool = &Bulk::message_from_spool($bulk->{'messagekey'});
+	    $message_from_spool = $spool->get_message({'messagekey' => $bulk->{'messagekey'}});
 
 	    $messageasstring_init = $message_from_spool->{'messageasstring'};
 
@@ -243,7 +250,6 @@ while (!$end) {
 	    }
 	    $messagekey = $bulk->{'messagekey'};
 	}
-
 	my $data; #HASH which will contain the attributes of the subscriber
 	
 	# Initialization of the HASH : $data. It will be used by parse_tt2 to personalized messages.
@@ -253,7 +259,7 @@ while (!$end) {
 	$data->{'wwsympa_url'} = $Conf{'wwsympa_url'};
 	
 	my $rcpt; # It is the email of a subscriber, use it in the foreach
-	my @rcpts = split /,/,$bulk->{'receipients'}; # Contain all the subscribers
+	my @rcpts = split /,/,$bulk->{'receipients'}; # / Contain all the subscribers 
 	## Use an intermediate handler to encode to filesystem_encoding
 	my $user;
 	

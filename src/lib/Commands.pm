@@ -2030,7 +2030,6 @@ sub distribute {
 	}    
     }
 
-    ## Open and parse the file
     my $message = new Message({'file'=>$file});
     unless (defined $message) {
 	&do_log('err', 'Commands::distribute(): Unable to create Message object %s', $file);
@@ -2111,34 +2110,23 @@ sub confirm {
     do_log('debug', 'Commands::confirm(%s,%s)', $what, $robot);
 
     $what =~ /^\s*(\S+)\s*$/;
-    my $key = $1;
+    my $key = $1; chomp $key;
     my $start_time = time; # get the time at the beginning
 
     my $file;
     my $queueauth = &Conf::get_robot_conf($robot, 'queueauth');
 
-    unless (opendir DIR, $queueauth ) {
-        &do_log('info', 'Commands::confirm(): WARNING unable to read %s directory', $queueauth);
-	my $string = sprintf 'Unable to open directory %s to confirm message with key %s',$queueauth,$key;
-	&report::reject_report_msg('intern',$string,$sender,{},$robot,'',$list);
-	return undef;
-    }
+    my $spool = new Sympaspool ('auth');
 
-    # delete old file from the auth directory
-    foreach (grep (!/^\./,readdir(DIR))) {
-        if (/\_$key$/i){
-	    $file= "$queueauth\/$_";
-        }
-    }
-    closedir DIR ;
+    my $messageinspool = $spool->get_message({'authkey'=>$key});
 
-    unless ($file && (-r $file)) {
+    unless ($messageinspool) {
 	&do_log('info', 'CONFIRM %s from %s refused, auth failed', $key,$sender);
 	&report::reject_report_msg('user','unfound_file_message',$sender,{'key'=> $key},$robot,'','');
 	return 'wrong_auth';
     }
+    my $message = new Message ({'message_in_spool'=>$messageinspool});    
 
-    my $message = new Message ({'file'=>$file});
     unless (defined $message) {
 	&do_log('err', 'Commands::confirm(): Unable to create Message object %s', $file);
 	&report::reject_report_msg('user','wrong_format_message',$sender,{'key'=> $key},$robot,'','');

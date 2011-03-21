@@ -34,11 +34,13 @@ use Scenario;
 use Fetch;
 use WebAgent;
 use Exporter;
+use Sympaspool;
 # xxxxxxx faut-il virer encode ? Faut en faire un use ? 
 require Encode;
 
 use tt2;
 use Sympa::Constants;
+use Data::Dumper;
 
 our @ISA = qw(Exporter);
 our @EXPORT = qw(%list_of_lists);
@@ -1546,6 +1548,8 @@ sub new {
 	return undef;
     }
 
+    $list->{'robot'} = $robot;
+
     $options = {} unless (defined $options);
 
     ## Only process the list if the name is valid.
@@ -2619,12 +2623,9 @@ sub distribute_msg {
     }
 
     ## Archives
-    my $msgtostore = $message->{'msg'};
-    if (($message->{'smime_crypted'} eq 'smime_crypted') &&
-	($self->{admin}{archive_crypted_msg} eq 'original')) {
-	$msgtostore = $message->{'orig_msg'};
-    }
-    $self->archive_msg($msgtostore);
+
+    $self->archive_msg($message);
+    
     
     ## Change the reply-to header if necessary. 
     if ($self->{'admin'}{'reply_to_header'}) {
@@ -2695,7 +2696,8 @@ sub distribute_msg {
     
     ## store msg in digest if list accept digest mode (encrypted message can't be included in digest)
     if (($self->is_digest()) and ($message->{'smime_crypted'} ne 'smime_crypted')) {
-	$self->archive_msg_digest($msgtostore);
+	do_log('trace','ici on a la liste %s @ %s', $self->{'name'},$self->{'robot'}) ;
+	$self->store_digest($message);
     }
 
     ## Synchronize list members, required if list uses include sources
@@ -2718,25 +2720,25 @@ sub distribute_msg {
 # reception digest, digestplain or summary
 # 
 # IN : -$self(+) : ref(List)
-#
+#      $message_in_spool : an digest spool entry in database
 # OUT : 1 : ok
 #       | 0 if no subscriber for sending digest
 #       | undef
 ####################################################
 sub send_msg_digest {
-    my ($self) = @_;
+    my $self = shift;
+    my $messagekey = shift;
+    do_log('debug',"send_msg_disgest(%s)",$messagekey);
+#    do_log('trace',"send_msg_disgest(%s)",$messagekey);
+
+    # fetch and lock message. 
+    my $digestspool = new Sympaspool ('digest');
+
+    my $message_in_spool = $digestspool->next({'messagekey'=>$messagekey});
 
     my $listname = $self->{'name'};
     my $robot = $self->{'domain'};
     do_log('debug2', 'List:send_msg_digest(%s)', $listname);
-    
-    my $filename;
-    ## Backward compatibility concern
-    if (-f "$Conf::Conf{'queuedigest'}/$listname") {
- 	$filename = "$Conf::Conf{'queuedigest'}/$listname";
-    }else {
- 	$filename = $Conf::Conf{'queuedigest'}.'/'.$self->get_list_id();
-    }
     
     my $param = {'replyto' => "$self->{'name'}-request\@$self->{'admin'}{'host'}",
 		 'to' => $self->get_list_address(),
@@ -2773,6 +2775,7 @@ sub send_msg_digest {
 	    }
 	}
 	if ($user->{'reception'} eq "digest") {
+#	    do_log('trace'," un abonne en digest : %s",$user->{'email'});
 	    push @tabrcpt, $user->{'email'};
 
 	}elsif ($user->{'reception'} eq "summary") {
@@ -2780,6 +2783,7 @@ sub send_msg_digest {
 	    push @tabrcptsummary, $user->{'email'};
         
 	}elsif ($user->{'reception'} eq "digestplain") {
+#	    do_log('trace'," un abonne en digestplain : %s",$user->{'email'});
 	    push @tabrcptplain, $user->{'email'};              
 	}
     }
@@ -2788,34 +2792,20 @@ sub send_msg_digest {
 	return 0;
     }
 
-    my $old = $/;
-    local $/ = "\n\n" . &tools::get_separator() . "\n\n";
-    
-    ## Digest split in individual messages
-    open DIGEST, $filename or return undef;
-    foreach (<DIGEST>){
-	
-	my @text = split /\n/;
-	pop @text; pop @text;
-	
-	## Restore carriage returns
-	foreach $i (0 .. $#text) {
-	    $text[$i] .= "\n";
-	}
-	
+    my $separator = "\n\n" . &tools::get_separator() . "\n\n";
+    my @messages_as_string = split (/$separator/,$message_in_spool->{'messageasstring'}); 
+
+    foreach my $message_as_string (@messages_as_string){  
+	do_log('trace',"dump de chaque mail %s",$message_as_string);
 	my $parser = new MIME::Parser;
 	$parser->output_to_core(1);
 	$parser->extract_uuencode(1);  
 	$parser->extract_nested_messages(1);
-#   $parser->output_dir($Conf::Conf{'spool'} ."/tmp");    
-	my $mail = $parser->parse_data(\@text);
-	
+	#   $parser->output_dir($Conf::Conf{'spool'} ."/tmp");    
+	my $mail = $parser->parse_data($message_as_string);
 	next unless (defined $mail);
-
 	push @list_of_mail, $mail;
     }
-    close DIGEST;
-    local $/ = $old;
 
     ## Deletes the introduction part
     splice @list_of_mail, 0, 1;
@@ -2893,8 +2883,7 @@ sub send_msg_digest {
 	    unless ($self->send_file('digest_plain', \@tabrcptplain, $robot, $param)) {
 		&do_log('notice',"Unable to send template 'digest_plain' to $self->{'name'} list subscribers");
 	    }
-	}    
-	
+	}    	
 	
 	## send summary
 	if (@tabrcptsummary) {
@@ -2903,7 +2892,7 @@ sub send_msg_digest {
 	    }
 	}
     }    
-    
+    $digestspool->remove_message({'messagekey'=>$messagekey});    
     return 1;
 }
 
@@ -3581,21 +3570,20 @@ sub send_to_editor {
    
    ## Keeps a copy of the message
    if ($method eq 'md5'){  
+       my $spool = new Sympaspool('mod');
+       $spool->update({'messagekey' => $message->{'messagekey'}},{"authkey" => $modkey,'messagelock'=> 'NULL'});
+
+
+       # this file manipulation must be move in database using a temporary file (not in $modqueue). Fil must be remove after being copied in database
        my $mod_file = $modqueue.'/'.$self->get_list_id().'_'.$modkey;
        unless (open(OUT, ">$mod_file")) {
 	   do_log('notice', 'Could Not open %s', $mod_file);
 	   return undef;
        }
-
-       unless (open (MSG, $file)) {
-	   do_log('notice', 'Could not open %s', $file);
-	   return undef;   
-       }
-
-       print OUT <MSG>;
-       close MSG ;
+       printf OUT $message->{'message_as_string'};
        close(OUT);
 
+       do_log('trace',"ATTENTION ATTENTION ATTENTION : le traitement de conversion html est pas  fait en bdd");
        my $tmp_dir = $modqueue.'/.'.$self->get_list_id().'_'.$modkey;
        unless (-d $tmp_dir) {
 	   unless (mkdir ($tmp_dir, 0777)) {
@@ -3643,14 +3631,14 @@ sub send_to_editor {
 	   return undef;
        }
    }
-   
+
    my $subject = MIME::EncWords::decode_mimewords($hdr->get('Subject'), Charset=>'utf8');
    my $param = {'modkey' => $modkey,
 		'boundary' => $boundary,
 		'msg_from' => $message->{'sender'},
 		'subject' => $subject,
 		'spam_status' => $message->{'spam_status'},
-		'mod_spool_size' => $self->get_mod_spool_size(),
+		'mod_spool_size' => $self->get_mod_spool_size,
 		'method' => $method};
 
    if ($self->is_there_msg_topic()) {
@@ -3694,49 +3682,6 @@ sub send_to_editor {
 	   return undef;
        }
    }
-#  Old code 5.4 and before to be removed in 5.5
-#   if ($encrypt eq 'smime_crypted') {
-#
-#       ## Send a different crypted message to each moderator
-#       foreach my $recipient (@rcpt) {
-#
-#	   # create a one time ticket that will be used as un md5 URL credential
-#	   $param->{'one_time_ticket'} = &Auth::create_one_time_ticket($in{'email'},$robot,'modindex/'.$name,$ip)
-#
-#	   ## $msg->body_as_string respecte-t-il le Base64 ??
-#	   my $cryptedmsg = &tools::smime_encrypt($msg->head, $msg->body_as_string, $recipient); #
-#	   unless ($cryptedmsg) {
-#	       &do_log('notice', 'Failed encrypted message for moderator');
-#	       # xxxx send a generic error message : X509 cert missing
-#	       return undef;
-#	   }
-#
-#	   my $crypted_file = $Conf::Conf{'tmpdir'}.'/'.$self->get_list_id().'.moderate.'.$$;
-#	   unless (open CRYPTED, ">$crypted_file") {
-#	       &do_log('notice', 'Could not create file %s', $crypted_file);
-#	       return undef;
-#	   }
-#	   print CRYPTED $cryptedmsg;
-#	   close CRYPTED;
-#	   
-#
-#	   $param->{'msg_path'} = $crypted_file;
-#
-#	   &tt2::allow_absolute_path();
-#	   unless ($self->send_file('moderate', $recipient, $self->{'domain'}, $param)) {
-#	       &do_log('notice',"Unable to send template 'moderate' to $recipient");
-#	       return undef;
-#	   }
-#       }
-#   }else{
-#       $param->{'msg_path'} = $file;
-#
-#       &tt2::allow_absolute_path();
-#       unless ($self->send_file('moderate', \@rcpt, $self->{'domain'}, $param)) {
-#	   &do_log('notice',"Unable to send template 'moderate' to $self->{'name'} editors");
-#	   return undef;
-#       }
-#  }
    return $modkey;
 }
 
@@ -3779,21 +3724,10 @@ sub send_auth {
                    .int(rand(6)).int(rand(6)).int(rand(6)).int(rand(6))
 		   .int(rand(6)).int(rand(6))."\@".$host;
    my $authkey = Digest::MD5::md5_hex(join('/', $self->get_cookie(),$messageid));
-     
-   my $auth_file = $authqueue.'/'.$self->get_list_id().'_'.$authkey;   
-   unless (open OUT, ">$auth_file") {
-       &do_log('notice', 'Cannot create file %s', $auth_file);
-       return undef;
-   }
-
-   unless (open IN, $file) {
-       &do_log('notice', 'Cannot open file %s', $file);
-       return undef;
-   }
-   
-   print OUT <IN>;
-
-   close IN; close OUT;
+   chomp $authkey;
+  
+   my $spool = new Sympaspool('auth');
+   $spool->update({'messagekey' => $message->{'messagekey'}},{"spoolname" => 'auth','authkey'=> $authkey});
 
    my $param = {'authkey' => $authkey,
 		'boundary' => "----------------- Message-Id: \<$messageid\>",
@@ -7493,23 +7427,36 @@ sub archive_ls {
 
 ## Archive 
 sub archive_msg {
-    my($self, $msg ) = @_;
-    do_log('debug2', 'List::archive_msg for %s',$self->{'name'});
+    my($self, $message ) = @_;
+    do_log('debug', 'List::archive_msg for %s',$self->{'name'});
+    do_log('trace', 'List::archive_msg for %s',$self->{'name'});
 
-    my $is_archived = $self->is_archived();
-    Archive::store_last($self, $msg) if ($is_archived);
-
-    Archive::outgoing("$Conf::Conf{'queueoutgoing'}",$self->get_list_id(),$msg) 
-      if ($self->is_web_archived());
+    if ($self->is_archived()){
+	
+	my $msgtostore = $message->{'msg_as_string'};
+	if (($message->{'smime_crypted'} eq 'smime_crypted') && ($self->{admin}{archive_crypted_msg} eq 'original')) {
+	    $msgtostore = $message->{'orig_msg'}->as_string;
+	}
+#	Archive::store_last($self, $msgtostore) ;
+	
+	if (($Conf::Conf{'ignore_x_no_archive_header_feature'} ne 'on') && (($message->{'msg'}->head->get('X-no-archive') =~ /yes/i) || ($message->{'msg'}->head->get('Restrict') =~ /no\-external\-archive/i))) {
+	    ## ignoring message with a no-archive flag	    
+	    do_log('info',"Do not archive message with no-archive flag for list %s",$self->get_list_id());
+	}else{
+	    do_log('trace', 'on va spooler pour archive');
+	    my $spoolarchive = new Sympaspool ('archive');
+	    unless ($message->{'messagekey'}) {
+		do_log('err', "could not store message in archive spool, messagekey missing");
+		return undef;
+	    }
+	    unless ($spoolarchive->store($msgtostore,{'robot'=>$self->{'robot'},'list'=>$self->{'name'}})){
+		do_log('err', "could not store message in archive spool, unkown reason");
+		return undef;
+	    }
+	    do_log('trace', 'Cest fait pour archive');
+	}
+    }
 }
-
-sub archive_msg_digest {
-   my($self, $msg) = @_;
-   do_log('debug2', 'List::archive_msg_digest');
-
-   $self->store_digest( $msg) if ($self->{'name'});
-}
-
 ## Is the list moderated?                                                          
 sub is_moderated {
     
@@ -7536,21 +7483,15 @@ sub is_web_archived {
 ## Returns 1 if the  digest  must be send 
 sub get_nextdigest {
     my $self = shift;
+    my $date = shift;   # the date epoch as stored in the spool database
+
+    do_log('trace',"%s -> get_nextdigest (%s)",$self->{'name'},$date);
     do_log('debug3', 'List::get_nextdigest (%s)');
 
     my $digest = $self->{'admin'}{'digest'};
-    my $listname = $self->{'name'};
-
-    ## Reverse compatibility concerns
-    my $filename;
-    foreach my $f ("$Conf::Conf{'queuedigest'}/$listname",
- 		   $Conf::Conf{'queuedigest'}.'/'.$self->get_list_id()) {
- 	$filename = $f if (-f $f);
-    }
-    
-    return undef unless (defined $filename);
 
     unless ($digest) {
+	do_log('trace',"pas de digest pour ce cette liste");
 	return undef;
     }
     
@@ -7559,19 +7500,19 @@ sub get_nextdigest {
      
     my @now  = localtime(time);
     my $today = $now[6]; # current day
-    my @timedigest = localtime( (stat $filename)[9]);
+    my @timedigest = localtime($date);
 
     ## Should we send a digest today
     my $send_digest = 0;
     foreach my $d (@days){
 	if ($d == $today) {
+	    do_log('trace',"un digest aujourd'hui");
 	    $send_digest = 1;
 	    last;
 	}
     }
 
-    return undef
-	unless ($send_digest == 1);
+    return undef unless ($send_digest == 1);
 
     if (($now[2] * 60 + $now[1]) >= ($hh * 60 + $mm) and 
 	(timelocal(0, $mm, $hh, $now[3], $now[4], $now[5]) > timelocal(0, $timedigest[1], $timedigest[2], $timedigest[3], $timedigest[4], $timedigest[5]))
@@ -9507,48 +9448,50 @@ sub _compare_addresses {
    return ($ra cmp $rb);
 }
 
-## Does the real job : stores the message given as an argument into
-## the digest of the list.
+## Store the message in spool digest  by creating a new enrty for it or updating an existing one for this list
+## 
 sub store_digest {
-    my($self,$msg) = @_;
-    do_log('debug3', 'List::store_digest');
+    my($self,$message) = @_;
+    do_log('debug', 'List::store_digest');
 
-    my($filename, $newfile);
     my $separator = &tools::get_separator();  
 
-    unless ( -d "$Conf::Conf{'queuedigest'}") {
-	return;
-    }
-    
     my @now  = localtime(time);
 
-    ## Reverse compatibility concern
-    if (-f "$Conf::Conf{'queuedigest'}/$self->{'name'}") {
-  	$filename = "$Conf::Conf{'queuedigest'}/$self->{'name'}";
-    }else {
- 	$filename = $Conf::Conf{'queuedigest'}.'/'.$self->get_list_id();
-    }
+    my $digestspool = new Sympaspool('digest');
+    my $current_digest = $digestspool->next({'list'=>$self->{'name'},'robot'=>$self->{'robot'}}); # remember that spool->next lock the selected message if any
+    my $message_as_string;
 
-    $newfile = !(-e $filename);
-    my $oldtime=(stat $filename)[9] unless($newfile);
-  
-    open(OUT, ">> $filename") || return;
-    if ($newfile) {
-	## create header
-	printf OUT "\nThis digest for list has been created on %s\n\n",
-      POSIX::strftime("%a %b %e %H:%M:%S %Y", @now);
-	print OUT "------- THIS IS A RFC934 COMPLIANT DIGEST, YOU CAN BURST IT -------\n\n";
-	printf OUT "\n%s\n\n", &tools::get_separator();
-
-       # send the date of the next digest to the users
+    if($current_digest) {
+	do_log('trace',"c'est un ajout");
+	$message_as_string = $current_digest->{'messageasstring'};
+    }else{
+	do_log('trace',"c'est une premiere");
+	$message_as_string =  sprintf "\nThis digest for list has been created on %s\n\n", POSIX::strftime("%a %b %e %H:%M:%S %Y", @now);
+	$message_as_string .= sprintf "------- THIS IS A RFC934 COMPLIANT DIGEST, YOU CAN BURST IT -------\n\n";
+	$message_as_string .= sprintf "\n%s\n\n", &tools::get_separator();
     }
-    #$msg->head->delete('Received') if ($msg->head->get('received'));
-    $msg->print(\*OUT);
-    printf OUT "\n%s\n\n", &tools::get_separator();
-    close(OUT);
-    
-    #replace the old time
-    utime $oldtime,$oldtime,$filename   unless($newfile);
+    do_log('trace',"message a mettre dans le digest 0 : %s",$message_as_string );
+    $message_as_string .= $message->{'msg_as_string'} ;
+    $message_as_string .= sprintf "\n%s\n\n", &tools::get_separator();
+
+    do_log('trace',"message a mettre dans le digest 1: %s",$message_as_string );
+
+    # update and unlock current digest message or create it
+    if ($current_digest) {
+	# update does not modify the date field, this is needed in order to send digest when needed.
+	do_log('trace',"updating digest in spool");
+	unless ($digestspool->update({'messagekey'=>$current_digest->{'messagekey'}},{'message'=>$message_as_string,'messagelock'=>'NULL'})){
+	    do_log('err',"could not update digest adding this message (digest spool entry key %s)",$current_digest->{'messagekey'});
+	    return undef;
+	}
+    }else{
+	do_log('trace',"init digest in spool");
+	unless ($digestspool->store($message_as_string,{'list'=>$self->{'name'},'robot'=>$self->{'robot'}})){
+	    do_log('err',"could not store message in digest spool messafge digestkey %s",$current_digest->{'messagekey'})	;
+	    return undef;
+	}
+    }
 }
 
 ## List of lists hosted a robot
@@ -9900,25 +9843,21 @@ sub get_which {
     return @which;
 }
 
-
-
 ## return total of messages awaiting moderation
 sub get_mod_spool_size {
     my $self = shift;
     do_log('debug3', 'List::get_mod_spool_size()');    
-    my @msg;
     
-    unless (opendir SPOOL, $Conf::Conf{'queuemod'}) {
-	&do_log('err', 'Unable to read spool %s', $Conf::Conf{'queuemod'});
-	return undef;
+    my $spool = new Sympaspool('mod');
+    my $count =  $spool->get_content({'selector' =>{'list'=> $self->{'name'},'robot'=> $self=>{'robot'} },
+				      'selection'=>'count'});
+    
+    if ($count) {
+	return $count;
+    }else{
+	do_log('trace',"could not count mod spool content");
+	return 0;
     }
-
-    my $list_name = $self->{'name'};
-    my $list_id = $self->get_list_id();
-    @msg = sort grep(/^($list_id|$list_name)\_\w+$/, readdir SPOOL);
-
-    closedir SPOOL;
-    return ($#msg + 1);
 }
 
 ### moderation for shared
@@ -10485,7 +10424,6 @@ sub _load_list_param {
 	return $value;
     }
 }
-
 
 
 ## Load the certificat file

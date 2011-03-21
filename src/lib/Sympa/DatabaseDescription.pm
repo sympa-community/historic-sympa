@@ -122,15 +122,28 @@ sub db_struct {
 						      'reception_date_bulkmailer' => 'int(11)',
 						      'delivery_date_bulkmailer' => 'int(11)',
 						      'lock_bulkmailer' => 'varchar(30)'},
-			       'bulkspool_table' => {'messagekey_bulkspool' => 'varchar(33)',
-						     'messageid_bulkspool' => 'varchar(100)',
-						     'message_bulkspool' => 'longtext',
-						     'lock_bulkspool' => 'int(1)',
-						     'dkim_privatekey_bulkspool' => 'varchar(1000)',
-						     'dkim_selector_bulkspool' => 'varchar(50)',
-						     'dkim_d_bulkspool' => 'varchar(50)',
-						     'dkim_i_bulkspool' => 'varchar(100)',
-						     'dkim_header_list_bulkspool' => 'varchar(500)',
+			       'spool_table' => {'messagekey_spool' => 'bigint(20)',            # autoincrement
+						 'message_spool' => 'longtext',                 # the message as b64 encoded string
+						 'spoolname_spool'=>  "enum('msg','auth','mod','digest','archive','bounce','automatic','subscribe','topic','bulk')",
+						 'list_spool'=> 'varchar(50)',
+						 'robot_spool' =>'varchar(80)',
+						 'messagelock_spool' => 'varchar(90)',          # a unique string for each process : $$@hostname
+						 'lockdate_spool' => 'int(11)',                # the date a lock is set. Used in order detect old locks
+						 'priority_spool'=> 'varchar(2)',               # priority (list priority, owner pririty etc)
+						 'authkey_spool' => 'varchar(33)',              # authentication key for email chalenge
+						 'message_status_spool' => "enum('ok','bad')",  #
+						 'message_diag_spool' =>'text',                 # the reason why a message is moved to bad
+						 'date_spool'=>'int(11)',                       # the date a message is copied in spool table
+						 'type_spool'=> 'varchar(15)',                  # list | list-request | sympa robot | other rcp
+						 'subject_spool'=>'varchar(110)',               # subject of the message stored to list spool content faster
+						 'sender_spool'=>'varchar(110)',                #                        stored to list spool content faster
+						 'messageid_spool' => 'varchar(100)',           #                        stored to list spool content faster
+						 'size_spool' => 'int(11)',                     #                        stored to list spool content faster
+						 'dkim_privatekey_spool' => 'varchar(1000)',
+						 'dkim_selector_spool' => 'varchar(50)',
+						 'dkim_d_spool' => 'varchar(50)',
+						 'dkim_i_spool' => 'varchar(100)',
+						 'dkim_header_list_spool' => 'varchar(500)',
 						 },
 			       'notification_table' => {'pk_notification' => 'int(11)',
 							'message_id_notification' => 'varchar(100)',
@@ -240,7 +253,7 @@ our %not_null = ('email_user' => 1,
 		'date_session' => 1,
 		'messagekey_bulkmailer' => 1,
 		'packetid_bulkmailer' => 1,
-		'messagekey_bulkspool' => 1,
+		'messagekey_spool' => 1,
 		'id_stat' => 1,
 		'date_stat' => 1,
 		'operation_stat' => 1,
@@ -259,13 +272,14 @@ our %primary = ('user_table' => ['email_user'],
 	       'session_table' => ['id_session'],
 	       'one_time_ticket_table' => ['ticket_one_time_ticket'],
 	       'bulkmailer_table' => ['messagekey_bulkmailer','packetid_bulkmailer'],
-	       'bulkspool_table' => ['messagekey_bulkspool'],
+	       'spool_table' => ['messagekey_spool'],
 	       'conf_table' => ['robot_conf','label_conf'],
 	       'stat_table' => ['id_stat'],
 	       'notification_table' => ['pk_notification']
 	       );
 	       
-our %autoincrement = ('notification_table' => 'pk_notification');
+our %autoincrement = ('notification_table' => 'pk_notification',
+		      'spool_table' => 'messagekey_spool' );
 
 ## List the required INDEXES
 ##   1st key is the concerned table

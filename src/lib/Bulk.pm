@@ -38,6 +38,8 @@ use MIME::Base64;
 use Term::ProgressBar;
 use URI::Escape;
 use constant MAX => 100_000;
+use Sys::Hostname;
+
 
 use Lock;
 use Task;
@@ -57,8 +59,8 @@ use List;
 my ($dbh, $sth, $db_connected, @sth_stack, $use_db);
 
 
-# fingerprint of last message stored in bulkspool
-my $message_fingerprint;
+# last message stored in spool, this global var is used to prevent multiple stored of the same message in spool table 
+my $last_stored_message_key;
 
 # create an empty Bulk
 #sub new {
@@ -103,6 +105,9 @@ sub next {
     # Select the most prioritary packet to lock.
     $statement = sprintf "SELECT %s messagekey_bulkmailer AS messagekey, packetid_bulkmailer AS packetid FROM bulkmailer_table WHERE lock_bulkmailer IS NULL AND delivery_date_bulkmailer <= %d %s %s", $limit_sybase, time(), $limit_oracle, $order;
     
+
+    do_log('trace',"staetment $statement");
+
     unless ($sth = $dbh->prepare($statement)) {
 	do_log('err','Unable to prepare SQL statement : %s', $dbh->errstr);
 	return undef;
@@ -113,7 +118,7 @@ sub next {
 	return undef;
     }
     my $packet;
-    unless($packet = $sth->fetchrow_hashref('NAME_lc')){
+    unless($packet = $sth->fetchrow_hashref('NAME_lc')){	
 	return undef;
     }
     $sth->finish();
@@ -140,6 +145,8 @@ sub next {
     # select the packet that has been locked previously
     $statement = sprintf "SELECT messagekey_bulkmailer AS messagekey, messageid_bulkmailer AS messageid, packetid_bulkmailer AS packetid, receipients_bulkmailer AS receipients, returnpath_bulkmailer AS returnpath, listname_bulkmailer AS listname, robot_bulkmailer AS robot, priority_message_bulkmailer AS priority_message, priority_packet_bulkmailer AS priority_packet, verp_bulkmailer AS verp, tracking_bulkmailer AS tracking, merge_bulkmailer as merge, reception_date_bulkmailer AS reception_date, delivery_date_bulkmailer AS delivery_date FROM bulkmailer_table WHERE lock_bulkmailer=%s %s",$dbh->quote($lock), $order;
 
+
+    do_log('trace',"xxxxxxxxxxxxx $statement");
     unless ($sth = $dbh->prepare($statement)) {
 	do_log('err','Unable to prepare SQL statement : %s', $dbh->errstr);
 	return undef;
@@ -427,6 +434,9 @@ sub store {
 
     &do_log('debug', 'Bulk::store(<msg>,<rcpts>,from = %s,robot = %s,listname= %s,priority_message = %s, delivery_date= %s,verp = %s, tracking = %s, merge = %s, dkim: d= %s i=%s, last: %s)',$from,$robot,$listname,$priority_message,$delivery_date,$verp,$tracking, $merge,$dkim->{'d'},$dkim->{'i'},$tag_as_last);
 
+
+    do_log('trace',"last_stored_message_key  valeur en tre de store $last_stored_message_key ");
+
     $dbh = &List::db_get_handler();
 
     $priority_message = &Conf::get_robot_conf($robot,'sympa_priority') unless ($priority_message);
@@ -436,76 +446,54 @@ sub store {
 	return undef unless &List::db_connect();
     }
 
-
-    #creation of a MIME entity to extract the real sender of a message
-    my $parser = MIME::Parser->new();
-    $parser->output_to_core(1);
-
     my $msg = $message->{'msg'}->as_string;
     if ($message->{'protected'}) {
 	$msg = $message->{'msg_as_string'};
     }
+
     my @sender_hdr = Mail::Address->parse($message->{'msg'}->head->get('From'));
     my $message_sender = $sender_hdr[0]->address;
 
-    
-    $msg = MIME::Base64::encode($msg);
 
-    ##-----------------------------##
-    
-    my $messagekey = &tools::md5_fingerprint($msg);
+    # first store the message in spool_table 
+    # because as soon as packet are created bulk.pl may distribute the
+    # $last_stored_message_key is a global var used in order to detcect if a message as been allready stored    
+    my $message_already_on_spool ;
+    my $bulkspool = new Sympaspool ('bulk');
 
-    # first store the message in bulk_spool_table 
-    # because as soon as packet are created bulk.pl may distribute them
-    # Compare the current message finger print to the fingerprint
-    # of the last call to store() ($message_fingerprint is a global var)
-    # If fingerprint is the same, then the message should not be stored
-    # again in bulkspool_table
-    
-    my $message_already_on_spool;
-
-    if ($messagekey eq $message_fingerprint) {
+    if (($last_stored_message_key) && ($message->{'messagekey'} eq $last_stored_message_key)) {
+	do_log('trace'," message deja dans le spool bulk");
 	$message_already_on_spool = 1;
-	
-    }else {
-
-	## search if this message is already in spool database : mailfile may perform multiple submission of exactly the same message 
-	my $statement = sprintf "SELECT count(*) FROM bulkspool_table WHERE ( messagekey_bulkspool = %s )", $dbh->quote($messagekey);
-    
-	unless ($sth = $dbh->prepare($statement)) {
-	    do_log('err','Unable to prepare SQL statement : %s', $dbh->errstr);
-	    return undef;
-	}	
-	unless ($sth->execute) {
-	    do_log('err','Unable to execute SQL statement "%s" : %s', $statement, $dbh->errstr);
-	    return undef;
-	}
-	
-	$message_already_on_spool = $sth->fetchrow;
-	$sth->finish();
-	
-	# if message is not found in bulkspool_table store it
-	if ($message_already_on_spool == 0) {
-	    my $statement      = sprintf "INSERT INTO bulkspool_table (messagekey_bulkspool, messageid_bulkspool, message_bulkspool, lock_bulkspool, dkim_d_bulkspool,dkim_i_bulkspool,dkim_selector_bulkspool, dkim_privatekey_bulkspool,dkim_header_list_bulkspool) VALUES (%s, %s, %s, 1, %s, %s, %s ,%s ,%s)",$dbh->quote($messagekey),$dbh->quote($msg_id),$dbh->quote($msg),$dbh->quote($dkim->{d}), $dbh->quote($dkim->{i}),$dbh->quote($dkim->{selector}),$dbh->quote($dkim->{private_key}), $dbh->quote($dkim->{header_list}); 
-	    
-	    my $statementtrace = sprintf "INSERT INTO bulkspool_table (messagekey_bulkspool, messageid_bulkspool, message_bulkspool, lock_bulkspool, dkim_d_bulkspool, dkim_i_bulkspool, dkim_selector_bulkspool, dkim_privatekey_bulkspool, dkim_header_list_bulkspool) VALUES (%s, %s, %s, 1, %s ,%s ,%s, %s, %s)",$dbh->quote($messagekey),$dbh->quote($msg_id),$dbh->quote(substr($msg, 0, 100)), $dbh->quote($dkim->{d}), $dbh->quote($dkim->{i}),$dbh->quote($dkim->{selector}),$dbh->quote(substr($dkim->{private_key},0,30)), $dbh->quote($dkim->{header_list});  
-	    # do_log('debug',"insert : $statement_trace");
-	    
-	    unless ($dbh->do($statement)) {
-		do_log('err','Unable to add message in bulkspool_table "%s"; error : %s', $statementtrace, $dbh->errstr);
+    }else{
+	do_log('trace'," message pas deja dans le spool bulk");
+	my $lock = $$.'@'.hostname() ;
+	if ($message->{'messagekey'}) {
+	    # move message to spool bulk and keep it locked
+	    $bulkspool->update({'messagekey'=>$message->{'messagekey'}},{'messagelock'=>$lock,'spoolname'=>'bulk'});
+	    do_log('debug',"moved message to spool bulk");
+	}else{
+	    $message->{'messagekey'} = $bulkspool->store($message->{'msg_as_string'},
+							 {'dkim_d'=>$dkim->{d},
+							  'dkim_i'=>$dkim->{i},
+							  'dkim_selector'=>$dkim->{selector},
+							  'dkim_privatekey'=>$dkim->{private_key},
+							  'dkim_header_list'=>$dkim->{header_list}},
+							 $lock);
+	    unless($message->{'messagekey'}) {
+		do_log('err',"could not store message in spool distribute, message lost ?");
 		return undef;
 	    }
-
-
-	    #log in stat_table to make statistics...
-	    unless($message_sender =~ /($robot)\@/) { #ignore messages sent by robot
-		unless ($message_sender =~ /($listname)-request/) { #ignore messages of requests
-
-		    &Log::db_stat_log({'robot' => $robot, 'list' => $listname, 'operation' => 'send_mail', 'parameter' => length($msg),
-				       'mail' => $message_sender, 'client' => '', 'daemon' => 'sympa.pl'});
-		}
+	    do_log('trace',"maintenant le message est dans le spool bulk avec la cle $message->{'messagekey'} ");
+	}
+	$last_stored_message_key = $message->{'messagekey'};
+	do_log('trace',"last_stored_message_key  affecte a $last_stored_message_key ");
+	
+	#log in stat_table to make statistics...
+	unless($message_sender =~ /($robot)\@/) { #ignore messages sent by robot
+	    unless ($message_sender =~ /($listname)-request/) { #ignore messages of requests			
+		&Log::db_stat_log({'robot' => $robot, 'list' => $listname, 'operation' => 'send_mail', 'parameter' => length($msg),
+				   'mail' => $message_sender, 'client' => '', 'daemon' => 'sympa.pl'});
 	    }
-	    $message_fingerprint = $messagekey;
 	}
     }
 
@@ -541,7 +529,7 @@ sub store {
 	my $packet_already_exist;
 	if ($message_already_on_spool) {
 	    ## search if this packet is already in spool database : mailfile may perform multiple submission of exactly the same message 
-	    my $statement = sprintf "SELECT count(*) FROM bulkmailer_table WHERE ( messagekey_bulkmailer = %s AND  packetid_bulkmailer = %s)", $dbh->quote($messagekey),$dbh->quote($packetid);
+	    my $statement = sprintf "SELECT count(*) FROM bulkmailer_table WHERE ( messagekey_bulkmailer = %s AND  packetid_bulkmailer = %s)", $dbh->quote($message->{'messagekey'}),$dbh->quote($packetid);
 	    unless ($sth = $dbh->prepare($statement)) {
 		do_log('err','Unable to prepare SQL statement : %s', $dbh->errstr);
 		return undef;
@@ -552,13 +540,16 @@ sub store {
 	    }	    
 	    $packet_already_exist = $sth->fetchrow;
 	    $sth->finish();
+	    do_log('trace',"test de duplication : %s",$statement);
 	}
+
+
 	 
 	 if ($packet_already_exist) {
 	     do_log('err','Duplicate message not stored in bulmailer_table');
 	     
 	 }else {
-	     my $statement = sprintf "INSERT INTO bulkmailer_table (messagekey_bulkmailer,messageid_bulkmailer,packetid_bulkmailer,receipients_bulkmailer,returnpath_bulkmailer,robot_bulkmailer,listname_bulkmailer, verp_bulkmailer, tracking_bulkmailer, merge_bulkmailer, priority_message_bulkmailer, priority_packet_bulkmailer, reception_date_bulkmailer, delivery_date_bulkmailer) VALUES (%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)", $dbh->quote($messagekey),$dbh->quote($msg_id),$dbh->quote($packetid),$dbh->quote($rcptasstring),$dbh->quote($from),$dbh->quote($robot),$dbh->quote($listname),$verp,$dbh->quote($tracking),$merge,$priority_message, $priority_for_packet, $current_date,$delivery_date;
+	     my $statement = sprintf "INSERT INTO bulkmailer_table (messagekey_bulkmailer,messageid_bulkmailer,packetid_bulkmailer,receipients_bulkmailer,returnpath_bulkmailer,robot_bulkmailer,listname_bulkmailer, verp_bulkmailer, tracking_bulkmailer, merge_bulkmailer, priority_message_bulkmailer, priority_packet_bulkmailer, reception_date_bulkmailer, delivery_date_bulkmailer) VALUES (%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)", $dbh->quote($message->{'messagekey'}),$dbh->quote($msg_id),$dbh->quote($packetid),$dbh->quote($rcptasstring),$dbh->quote($from),$dbh->quote($robot),$dbh->quote($listname),$verp,$dbh->quote($tracking),$merge,$priority_message, $priority_for_packet, $current_date,$delivery_date;
 	     unless ($sth = $dbh->do($statement)) {
 		 do_log('err','Unable to add packet in bulkmailer_table "%s"; error : %s', $statement, $dbh->errstr);
 		 return undef;
@@ -566,12 +557,7 @@ sub store {
 	 }
 	$packet_rank++;
     }
-    # last : unlock message in bulkspool_table so it is now possible to remove this message if no packet have a ref on it			
-    my $statement = sprintf "UPDATE bulkspool_table SET lock_bulkspool='0' WHERE messagekey_bulkspool = %s",$dbh->quote($messagekey) ;                                        ;
-    unless ($dbh->do($statement)) {
-	do_log('err','Unable to unlock packet in bulkmailer_table "%s"; error : %s', $statement, $dbh->errstr);
-	return undef;
-    }
+    $bulkspool->unlock_message($message->{'messagekey'});
 }
 
 ## remove file that are not referenced by any packet

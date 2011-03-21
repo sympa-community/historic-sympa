@@ -1,4 +1,4 @@
-# DefaultDBManipulator.pm - This module contains default manipulation functions.
+# DBManipulatorDefault.pm - This module contains default manipulation functions.
 # they are used if not defined in the DBManipulator<*> subclasses.
 #<!-- RCS Identication ; $Revision: 7016 $ --> 
 #
@@ -20,7 +20,7 @@
 # along with this program; if not, write to the Free Software
 # Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
 
-package DefaultDBManipulator;
+package DBManipulatorDefault;
 
 use strict;
 
@@ -31,7 +31,7 @@ use Datasource;
 
 our @ISA = qw(Datasource);
 
-sub build_connect_string{
+sub build_connect_string {
     my $self = shift;
     $self->{'connect_string'} = "DBI:$self->{'db_type'}:$self->{'db_name'}:$self->{'db_host'}";
 }
