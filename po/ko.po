@@ -2842,12 +2842,12 @@ msgstr "인증 서버를 선택하십시오"
 msgid "Go"
 msgstr "시작"
 
-#: ../web_tt2/loginbanner.tt2:39 ../web_tt2/sso_login.tt2:46
+#: ../web_tt2/loginbanner.tt2:39
 #, fuzzy
 msgid "email address:"
 msgstr "이메일 주소"
 
-#: ../web_tt2/loginbanner.tt2:41 ../web_tt2/sso_login.tt2:48
+#: ../web_tt2/loginbanner.tt2:41
 #, fuzzy
 msgid "password:"
 msgstr "패스워드"
@@ -4590,17 +4590,13 @@ msgstr "확인 패스워드 전송하기"
 
 #. (init_email)
 #: ../web_tt2/sso_login.tt2:32
+#, fuzzy
 msgid ""
 "A confirmation password has been sent to your email address %1.<br />Please "
-"check your e-mail box for the message containing the confirmation password "
-"needed below."
+"check your e-mail box for the message containing the confirmation link."
 msgstr ""
 "확인 패스워드는 사용자의 이메일 주소 %1 에 전송되었습니다.<br/>아래의 요청된 "
 "확인 패스워드를 포함 하고 있는 당신의 이메일을 확인 하십시요."
-
-#: ../web_tt2/sso_login.tt2:51
-msgid "Validate Address"
-msgstr "주소 유효하기"
 
 #: ../web_tt2/stats.tt2:2
 #, fuzzy
@@ -4989,7 +4985,7 @@ msgstr "검색 기간: "
 #. (date_to_formated)
 #. This entry is a date/time format
 #. Check the strftime manpage for format details : http://docs.freebsd.org/info/gawk/gawk.info.Time_Functions.html
-#: ../web_tt2/viewlogs.tt2:113 ../wwsympa/wwsympa.fcgi.in:16172
+#: ../web_tt2/viewlogs.tt2:113 ../wwsympa/wwsympa.fcgi.in:16198
 msgid "%d %b %Y %H:%M:%S"
 msgstr "%Y년%m월%d일 %H:%M:%S"
 
@@ -7717,33 +7713,21 @@ msgid ""
 msgstr "받을 것 자신을 알림 하는 이메일을 패스워드."
 
 #. (base_url,path_cgi)
-#: ../mail_tt2/sendpasswd.tt2:30 ../mail_tt2/sendssopasswd.tt2:14
+#: ../mail_tt2/sendpasswd.tt2:30 ../mail_tt2/sendssopasswd.tt2:13
 msgid "Help on Sympa: %1%2"
 msgstr "도움말: %1%2"
 
-#: ../mail_tt2/sendssopasswd.tt2:7
+#: ../mail_tt2/sendssopasswd.tt2:6
+#, fuzzy
 msgid ""
 "To complete your account setup actions you need to confirm that you have \n"
-"supplied a working email address.  Please enter the following email and "
-"password\n"
-"in the setup wizard to complete your account configuration."
+"supplied a working email address.  Please follow the link below to complete "
+"your account configuration."
 msgstr ""
 "계정을 완료하기 위해 있다는 것을\n"
 " 확인할 필요가 작업을 설치하기작동 이메일 주소를 공급했습니다.  들어가거든 뒤"
 "에 오는 이메일패스워드\n"
 "계정 구성을 완료하는 셋업 위자드에서."
-
-#. (newuser.email)
-#: ../mail_tt2/sendssopasswd.tt2:9
-#, fuzzy
-msgid "your email address   : %1"
-msgstr "이메일 주소    : %1"
-
-#. (newuser.password)
-#: ../mail_tt2/sendssopasswd.tt2:10
-#, fuzzy
-msgid "your password: %1"
-msgstr "패스워드 : %1"
 
 #. (list.name)
 #: ../mail_tt2/stats_report.tt2:4
@@ -8650,7 +8634,7 @@ msgstr "%y/%m/%d %H:%M"
 
 #. This entry is a date/time format
 #. Check the strftime manpage for format details : http://docs.freebsd.org/info/gawk/gawk.info.Time_Functions.html
-#: ../src/lib/Commands.pm:963 ../wwsympa/wwsympa.fcgi.in:9796
+#: ../src/lib/Commands.pm:963 ../wwsympa/wwsympa.fcgi.in:9810
 msgid "%A"
 msgstr "%a"
 
@@ -8668,7 +8652,7 @@ msgstr "에러 (%d 행) : %s"
 #. Check the strftime manpage for format details : http://docs.freebsd.org/info/gawk/gawk.info.Time_Functions.html
 #: ../src/lib/Family.pm:2591 ../src/lib/Family.pm:388 ../src/lib/Family.pm:665
 #: ../src/lib/List.pm:1893 ../wwsympa/Auth.pm:459
-#: ../wwsympa/wwsympa.fcgi.in:1067 ../wwsympa/wwsympa.fcgi.in:2869
+#: ../wwsympa/wwsympa.fcgi.in:1067 ../wwsympa/wwsympa.fcgi.in:2870
 msgid "%d %b %Y at %H:%M:%S"
 msgstr "%Y년%m월%d일 %H시%M분%S초"
 
@@ -9396,18 +9380,18 @@ msgstr "%Y년%m월%d일 (%a)"
 #. This entry is a date/time format
 #. Check the strftime manpage for format details : http://docs.freebsd.org/info/gawk/gawk.info.Time_Functions.html
 #: ../src/lib/List.pm:3110 ../src/lib/List.pm:3111 ../src/lib/List.pm:3115
-#: ../wwsympa/wwsympa.fcgi.in:10978 ../wwsympa/wwsympa.fcgi.in:11047
-#: ../wwsympa/wwsympa.fcgi.in:11249 ../wwsympa/wwsympa.fcgi.in:11596
-#: ../wwsympa/wwsympa.fcgi.in:15035 ../wwsympa/wwsympa.fcgi.in:15042
-#: ../wwsympa/wwsympa.fcgi.in:15744 ../wwsympa/wwsympa.fcgi.in:16522
-#: ../wwsympa/wwsympa.fcgi.in:16523 ../wwsympa/wwsympa.fcgi.in:4266
-#: ../wwsympa/wwsympa.fcgi.in:4324 ../wwsympa/wwsympa.fcgi.in:4895
-#: ../wwsympa/wwsympa.fcgi.in:4896 ../wwsympa/wwsympa.fcgi.in:6393
-#: ../wwsympa/wwsympa.fcgi.in:7412 ../wwsympa/wwsympa.fcgi.in:7955
-#: ../wwsympa/wwsympa.fcgi.in:8002 ../wwsympa/wwsympa.fcgi.in:8004
-#: ../wwsympa/wwsympa.fcgi.in:8480 ../wwsympa/wwsympa.fcgi.in:8481
-#: ../wwsympa/wwsympa.fcgi.in:8515 ../wwsympa/wwsympa.fcgi.in:8516
-#: ../wwsympa/wwsympa.fcgi.in:8695 ../wwsympa/wwsympa.fcgi.in:8696
+#: ../wwsympa/wwsympa.fcgi.in:10992 ../wwsympa/wwsympa.fcgi.in:11061
+#: ../wwsympa/wwsympa.fcgi.in:11263 ../wwsympa/wwsympa.fcgi.in:11610
+#: ../wwsympa/wwsympa.fcgi.in:15061 ../wwsympa/wwsympa.fcgi.in:15068
+#: ../wwsympa/wwsympa.fcgi.in:15770 ../wwsympa/wwsympa.fcgi.in:16548
+#: ../wwsympa/wwsympa.fcgi.in:16549 ../wwsympa/wwsympa.fcgi.in:4280
+#: ../wwsympa/wwsympa.fcgi.in:4338 ../wwsympa/wwsympa.fcgi.in:4909
+#: ../wwsympa/wwsympa.fcgi.in:4910 ../wwsympa/wwsympa.fcgi.in:6407
+#: ../wwsympa/wwsympa.fcgi.in:7426 ../wwsympa/wwsympa.fcgi.in:7969
+#: ../wwsympa/wwsympa.fcgi.in:8016 ../wwsympa/wwsympa.fcgi.in:8018
+#: ../wwsympa/wwsympa.fcgi.in:8494 ../wwsympa/wwsympa.fcgi.in:8495
+#: ../wwsympa/wwsympa.fcgi.in:8529 ../wwsympa/wwsympa.fcgi.in:8530
+#: ../wwsympa/wwsympa.fcgi.in:8709 ../wwsympa/wwsympa.fcgi.in:8710
 msgid "%d %b %Y"
 msgstr "%Y년%m월%d일"
 
@@ -9555,14 +9539,14 @@ msgstr ""
 #. This entry is a date/time format
 #. Check the strftime manpage for format details : http://docs.freebsd.org/info/gawk/gawk.info.Time_Functions.html
 #: ../wwsympa/SympaSession.pm:431 ../wwsympa/SympaSession.pm:432
-#: ../wwsympa/wwsympa.fcgi.in:11830 ../wwsympa/wwsympa.fcgi.in:11963
-#: ../wwsympa/wwsympa.fcgi.in:14276 ../wwsympa/wwsympa.fcgi.in:7909
+#: ../wwsympa/wwsympa.fcgi.in:11844 ../wwsympa/wwsympa.fcgi.in:11977
+#: ../wwsympa/wwsympa.fcgi.in:14290 ../wwsympa/wwsympa.fcgi.in:7923
 msgid "%d %b %y  %H:%M"
 msgstr "%y/%m/%d %H:%M"
 
 #. This entry is a date/time format
 #. Check the strftime manpage for format details : http://docs.freebsd.org/info/gawk/gawk.info.Time_Functions.html
-#: ../wwsympa/wwsympa.fcgi.in:16117 ../wwsympa/wwsympa.fcgi.in:16118
+#: ../wwsympa/wwsympa.fcgi.in:16143 ../wwsympa/wwsympa.fcgi.in:16144
 msgid "%Y-%m-%d-%H-%M-%S"
 msgstr ""
 
@@ -9770,6 +9754,16 @@ msgstr ""
 msgid "Background color for the news area of the home page."
 msgstr ""
 
+#. (init_email)
+#: ../web_tt2/sso_login.tt2:32
+msgid ""
+"A confirmation password has been sent to your email address %1.<br />Please "
+"check your e-mail box for the message containing the confirmation password "
+"needed below."
+msgstr ""
+"확인 패스워드는 사용자의 이메일 주소 %1 에 전송되었습니다.<br/>아래의 요청된 "
+"확인 패스워드를 포함 하고 있는 당신의 이메일을 확인 하십시요."
+
 #. (fromname,fromaddr,listname)
 #: ../web_tt2/tracking.tt2:6
 msgid "Message from %1 %2 for list %3 "
@@ -9782,6 +9776,18 @@ msgstr ""
 #: ../web_tt2/tracking.tt2:15
 msgid "Delivery status"
 msgstr ""
+
+#: ../mail_tt2/sendssopasswd.tt2:7
+msgid ""
+"To complete your account setup actions you need to confirm that you have \n"
+"supplied a working email address.  Please enter the following email and "
+"password\n"
+"in the setup wizard to complete your account configuration."
+msgstr ""
+"계정을 완료하기 위해 있다는 것을\n"
+" 확인할 필요가 작업을 설치하기작동 이메일 주소를 공급했습니다.  들어가거든 뒤"
+"에 오는 이메일패스워드\n"
+"계정 구성을 완료하는 셋업 위자드에서."
 
 #: ../src/lib/List.pm:437
 msgid "tracking message by delivery status notification"
@@ -9855,6 +9861,9 @@ msgstr ""
 #~ msgid "Add quietly"
 #~ msgstr "자동 모드"
 
+#~ msgid "Validate Address"
+#~ msgstr "주소 유효하기"
+
 #, fuzzy
 #~ msgid "Message tracking"
 #~ msgstr "메시지 태그를 붙이기"
@@ -9875,12 +9884,13 @@ msgstr ""
 #~ msgid "Notification"
 #~ msgstr "알림"
 
-#~ msgid ""
-#~ "Your message could not be sent because its size \n"
-#~ "was over the maximum size allowed on this list."
-#~ msgstr ""
-#~ "그것의 크기\n"
-#~ " 때문에 메세지 보내질 수 없었습니다.있었 이 리스트에 허용된 최대 크기에."
+#, fuzzy
+#~ msgid "your email address   : %1"
+#~ msgstr "이메일 주소    : %1"
+
+#, fuzzy
+#~ msgid "your password: %1"
+#~ msgstr "패스워드 : %1"
 
 #, fuzzy
 #~ msgid "who can view message tracking"
@@ -9889,6 +9899,13 @@ msgstr ""
 #, fuzzy
 #~ msgid "Message tracking feature"
 #~ msgstr "메시지 태그를 붙이기"
+
+#~ msgid ""
+#~ "Your message could not be sent because its size \n"
+#~ "was over the maximum size allowed on this list."
+#~ msgstr ""
+#~ "그것의 크기\n"
+#~ " 때문에 메세지 보내질 수 없었습니다.있었 이 리스트에 허용된 최대 크기에."
 
 #~ msgid ""
 #~ "** Warning: Message part originally used character set %s\n"

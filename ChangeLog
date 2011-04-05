@@ -1,4 +1,98 @@
 ------------------------------------------------------------------------
+r7019 | david.verdin | 2011-02-10 11:07:02 +0100 (jeu 10 fév 2011) | 2 lignes
+Chemins modifiés :
+   M /branches/sympa-6.1-branch/src/lib/Scenario.pm
+
+[bug][#7521][Submitted by E. del Rio] Explicit incldes in scenarios did not longer work because the rules using them did not have an authentification method. Fixed by adding them to the scenario list as soon as they are found in the main scenario body.
+
+------------------------------------------------------------------------
+r7014 | olivier.salaun | 2011-02-02 16:36:47 +0100 (mer 02 fév 2011) | 3 lignes
+Chemins modifiés :
+   M /branches/sympa-6.1-branch/src/lib/Conf.pm
+
+[change][#7071]CGI.pm changes environment variable names ('-' => '_')
+While using generic_sso, declared environment variable names needs to be transformed accordingly
+
+------------------------------------------------------------------------
+r7012 | david.verdin | 2011-02-02 16:30:21 +0100 (mer 02 fév 2011) | 2 lignes
+Chemins modifiés :
+   M /branches/sympa-6.1-branch/src/lib/SQLSource.pm
+
+[bug][Reported by J.C. Vergerolles, univ. Bordeaux 2] Some DBD, such as DBD-Oracle, issue croak statements when the connexion can't be established. This lead to sympa crashing just beacuse the database is unreachable. Fixed putting each database connection attempt in an eval block. If the connection fails, Sympa retries to connect if asked or simply returns undef after logging.
+
+------------------------------------------------------------------------
+r7011 | olivier.salaun | 2011-02-02 15:31:39 +0100 (mer 02 fév 2011) | 2 lignes
+Chemins modifiés :
+   M /branches/sympa-6.1-branch/src/lib/Conf.pm
+
+[bug][#7071][reported by I.Krzysztof]While using generic_sso, allow other characters for the 'netid_http_header'parameter (including hyphen).
+
+------------------------------------------------------------------------
+r7010 | olivier.salaun | 2011-02-02 15:29:24 +0100 (mer 02 fév 2011) | 3 lignes
+Chemins modifiés :
+   M /branches/sympa-6.1-branch
+   M /branches/sympa-6.1-branch/mail_tt2/sendssopasswd.tt2
+   M /branches/sympa-6.1-branch/web_tt2/sso_login.tt2
+   M /branches/sympa-6.1-branch/wwsympa/wwsympa.fcgi.in
+
+[bug][#7070]Login with generic_sso failed when 'force_email_verify' was enabled
+The problem was due to the user password no more stored in the user DB. Usage of password to validate the user email address has been replaced with one-time tickets.
+
+------------------------------------------------------------------------
+r7004 | olivier.salaun | 2011-02-02 15:08:57 +0100 (mer 02 fév 2011) | 3 lignes
+Chemins modifiés :
+   M /trunk/mail_tt2/sendssopasswd.tt2
+   M /trunk/web_tt2/sso_login.tt2
+   M /trunk/wwsympa/wwsympa.fcgi.in
+Fision via : r7010
+
+[bug][#7070]Login with generic_sso failed when 'force_email_verify' was enabled
+The problem was due to the user password no more stored in the user DB. Usage of password to validate the user email address has been replaced with one-time tickets.
+
+------------------------------------------------------------------------
+r7009 | olivier.salaun | 2011-02-02 15:28:39 +0100 (mer 02 fév 2011) | 2 lignes
+Chemins modifiés :
+   M /branches/sympa-6.1-branch
+   M /branches/sympa-6.1-branch/src/lib/List.pm
+   M /branches/sympa-6.1-branch/wwsympa/wwsympa.fcgi.in
+
+[bug][#5989][submited by A.Bendzsak] change_email web feature did not updae the netidmap_table. Now it does.
+
+------------------------------------------------------------------------
+r7003 | olivier.salaun | 2011-02-01 16:10:07 +0100 (mar 01 fév 2011) | 2 lignes
+Chemins modifiés :
+   M /trunk/src/lib/List.pm
+   M /trunk/wwsympa/wwsympa.fcgi.in
+Fision via : r7009
+
+[bug][#5989][submited by A.Bendzsak] change_email web feature did not updae the netidmap_table. Now it does.
+
+------------------------------------------------------------------------
+r7008 | olivier.salaun | 2011-02-02 15:28:05 +0100 (mer 02 fév 2011) | 3 lignes
+Chemins modifiés :
+   M /branches/sympa-6.1-branch
+   M /branches/sympa-6.1-branch/wwsympa/wwslib.pm
+
+[bug][#3049][reported by L. Foucher, IUT P. Sabatier] CAS authentication failed when Sympa web server was behind an HTTP reverse proxy. The URL of the service passed to the CAS server was incorrect. Now using get_header_field() that can use 'HTTP_X_FORWARDED_HOST' env variable if set.
+
+
+------------------------------------------------------------------------
+r7002 | olivier.salaun | 2011-02-01 12:16:31 +0100 (mar 01 fév 2011) | 2 lignes
+Chemins modifiés :
+   M /trunk/wwsympa/wwslib.pm
+Fision via : r7008
+
+[bug][#3049][reported by L. Foucher, IUT P. Sabatier] CAS authentication failed when Sympa web server was behind an HTTP reverse proxy. The URL of the service passed to the CAS server was incorrect. Now using get_header_field() that can use 'HTTP_X_FORWARDED_HOST' env variable if set.
+
+------------------------------------------------------------------------
+r6991 | sympa-authors | 2011-01-21 09:04:56 +0100 (ven 21 jan 2011) | 1 ligne
+Chemins modifiés :
+   M /branches/sympa-6.1-branch/ChangeLog
+   M /branches/sympa-6.1-branch/NEWS
+   M /branches/sympa-6.1-branch/configure.ac
+
+[-release]Preparing version 6.1.4
+------------------------------------------------------------------------
 r6990 | sympa-authors | 2011-01-21 08:24:08 +0100 (ven 21 jan 2011) | 1 ligne
 Chemins modifiés :
    M /branches/sympa-6.1-branch/po/ar.po

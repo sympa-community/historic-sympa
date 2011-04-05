@@ -6,8 +6,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: hu\n"
 "POT-Creation-Date: 2002-07-16 17:27+0800\n"
-"PO-Revision-Date: 2011-01-08 15:52+0200\n"
-"Last-Translator: Andras Bendzsak <sibike@sch.bme.hu>\n"
+"PO-Revision-Date: 2011-01-27 15:18+0200\n"
+"Last-Translator: Anonymous Pootle User\n"
 "Language-Team: Magyar\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -161,7 +161,7 @@ msgstr "Nincs elérhető levelezési lista."
 
 #: ../web_tt2/list_menu.tt2:11
 msgid "Subscriber Options"
-msgstr "Tag beállításai"
+msgstr "Listatagsági beállítások"
 
 #. (list)
 #: ../web_tt2/list_menu.tt2:15
@@ -214,7 +214,7 @@ msgstr "Archívum"
 
 #: ../web_tt2/list_menu.tt2:69 ../web_tt2/list_menu.tt2:71
 msgid "Post"
-msgstr "Levél beküldése"
+msgstr "Levél küldése"
 
 #: ../web_tt2/list_menu.tt2:75
 msgid "RSS"
@@ -288,7 +288,7 @@ msgstr "Testreszabás:"
 
 #: ../web_tt2/admin.tt2:9
 msgid "Editing of various files and messages attached to your list."
-msgstr "A listához kapcsolódó állományok és üzenetek testreszabása."
+msgstr "A listához kapcsolódó állományok és üzenetek módosítása."
 
 #: ../web_tt2/admin.tt2:10
 msgid "Manage subscribers:"
@@ -478,7 +478,7 @@ msgstr "Tagok hozzáadása"
 #: ../web_tt2/review.tt2:106 ../web_tt2/review.tt2:140
 #: ../web_tt2/review.tt2:74 ../web_tt2/reviewbouncing.tt2:127
 msgid "quiet"
-msgstr "nincs értesítés"
+msgstr "értesítés nélkül"
 
 #: ../web_tt2/admin_menu.tt2:4
 msgid "List Administration Panel"
@@ -2773,11 +2773,11 @@ msgid "Go"
 msgstr "Mehet"
 
 # nlsref 16,27
-#: ../web_tt2/loginbanner.tt2:39 ../web_tt2/sso_login.tt2:46
+#: ../web_tt2/loginbanner.tt2:39
 msgid "email address:"
 msgstr "email cím:"
 
-#: ../web_tt2/loginbanner.tt2:41 ../web_tt2/sso_login.tt2:48
+#: ../web_tt2/loginbanner.tt2:41
 msgid "password:"
 msgstr "jelszó:"
 
@@ -4534,17 +4534,13 @@ msgstr "Megerősítő jelszó küldése"
 
 #. (init_email)
 #: ../web_tt2/sso_login.tt2:32
+#, fuzzy
 msgid ""
 "A confirmation password has been sent to your email address %1.<br />Please "
-"check your e-mail box for the message containing the confirmation password "
-"needed below."
+"check your e-mail box for the message containing the confirmation link."
 msgstr ""
 "Elküldtük az Ön jelszavát a(z) %1 e-mail címre.<br />Kérem a levél "
 "megérkezése után adja meg lent a kapott jelszót."
-
-#: ../web_tt2/sso_login.tt2:51
-msgid "Validate Address"
-msgstr "Érvényesít"
 
 #: ../web_tt2/stats.tt2:2
 msgid "Shared document directory size:"
@@ -4908,7 +4904,7 @@ msgstr "Keresési tartomány:"
 #. (date_to_formated)
 #. This entry is a date/time format
 #. Check the strftime manpage for format details : http://docs.freebsd.org/info/gawk/gawk.info.Time_Functions.html
-#: ../web_tt2/viewlogs.tt2:113 ../wwsympa/wwsympa.fcgi.in:16172
+#: ../web_tt2/viewlogs.tt2:113 ../wwsympa/wwsympa.fcgi.in:16198
 msgid "%d %b %Y %H:%M:%S"
 msgstr "%Y. %b. %-d., %H.%M.%S"
 
@@ -7679,30 +7675,20 @@ msgstr ""
 "kéréséhez használja a következő linket."
 
 #. (base_url,path_cgi)
-#: ../mail_tt2/sendpasswd.tt2:30 ../mail_tt2/sendssopasswd.tt2:14
+#: ../mail_tt2/sendpasswd.tt2:30 ../mail_tt2/sendssopasswd.tt2:13
 msgid "Help on Sympa: %1%2"
 msgstr "Súgó a Sympa használatához: %1%2"
 
-#: ../mail_tt2/sendssopasswd.tt2:7
+#: ../mail_tt2/sendssopasswd.tt2:6
+#, fuzzy
 msgid ""
 "To complete your account setup actions you need to confirm that you have \n"
-"supplied a working email address.  Please enter the following email and "
-"password\n"
-"in the setup wizard to complete your account configuration."
+"supplied a working email address.  Please follow the link below to complete "
+"your account configuration."
 msgstr ""
 "A felhasználói fiók véglegesítéséhez meg kell erősítenie, hogy az email címe "
 "működőképes. Kérem adja meg az email címet és a hozzá tartozó jelszót a "
 "folyamat véglegesítéséhez."
-
-#. (newuser.email)
-#: ../mail_tt2/sendssopasswd.tt2:9
-msgid "your email address   : %1"
-msgstr "e-mail címe           : %1"
-
-#. (newuser.password)
-#: ../mail_tt2/sendssopasswd.tt2:10
-msgid "your password: %1"
-msgstr "jelszava      : %1"
 
 #. (list.name)
 #: ../mail_tt2/stats_report.tt2:4
@@ -8625,7 +8611,7 @@ msgstr "%Y. %b. %d   %H.%M"
 
 #. This entry is a date/time format
 #. Check the strftime manpage for format details : http://docs.freebsd.org/info/gawk/gawk.info.Time_Functions.html
-#: ../src/lib/Commands.pm:963 ../wwsympa/wwsympa.fcgi.in:9796
+#: ../src/lib/Commands.pm:963 ../wwsympa/wwsympa.fcgi.in:9810
 msgid "%A"
 msgstr "%A"
 
@@ -8643,7 +8629,7 @@ msgstr "Hiba a(z) %d sorban: %s"
 #. Check the strftime manpage for format details : http://docs.freebsd.org/info/gawk/gawk.info.Time_Functions.html
 #: ../src/lib/Family.pm:2591 ../src/lib/Family.pm:388 ../src/lib/Family.pm:665
 #: ../src/lib/List.pm:1893 ../wwsympa/Auth.pm:459
-#: ../wwsympa/wwsympa.fcgi.in:1067 ../wwsympa/wwsympa.fcgi.in:2869
+#: ../wwsympa/wwsympa.fcgi.in:1067 ../wwsympa/wwsympa.fcgi.in:2870
 msgid "%d %b %Y at %H:%M:%S"
 msgstr "%Y. %b. %-d., %H.%M.%S"
 
@@ -9467,18 +9453,18 @@ msgstr "%Y. %b. %-d., %A"
 #. This entry is a date/time format
 #. Check the strftime manpage for format details : http://docs.freebsd.org/info/gawk/gawk.info.Time_Functions.html
 #: ../src/lib/List.pm:3110 ../src/lib/List.pm:3111 ../src/lib/List.pm:3115
-#: ../wwsympa/wwsympa.fcgi.in:10978 ../wwsympa/wwsympa.fcgi.in:11047
-#: ../wwsympa/wwsympa.fcgi.in:11249 ../wwsympa/wwsympa.fcgi.in:11596
-#: ../wwsympa/wwsympa.fcgi.in:15035 ../wwsympa/wwsympa.fcgi.in:15042
-#: ../wwsympa/wwsympa.fcgi.in:15744 ../wwsympa/wwsympa.fcgi.in:16522
-#: ../wwsympa/wwsympa.fcgi.in:16523 ../wwsympa/wwsympa.fcgi.in:4266
-#: ../wwsympa/wwsympa.fcgi.in:4324 ../wwsympa/wwsympa.fcgi.in:4895
-#: ../wwsympa/wwsympa.fcgi.in:4896 ../wwsympa/wwsympa.fcgi.in:6393
-#: ../wwsympa/wwsympa.fcgi.in:7412 ../wwsympa/wwsympa.fcgi.in:7955
-#: ../wwsympa/wwsympa.fcgi.in:8002 ../wwsympa/wwsympa.fcgi.in:8004
-#: ../wwsympa/wwsympa.fcgi.in:8480 ../wwsympa/wwsympa.fcgi.in:8481
-#: ../wwsympa/wwsympa.fcgi.in:8515 ../wwsympa/wwsympa.fcgi.in:8516
-#: ../wwsympa/wwsympa.fcgi.in:8695 ../wwsympa/wwsympa.fcgi.in:8696
+#: ../wwsympa/wwsympa.fcgi.in:10992 ../wwsympa/wwsympa.fcgi.in:11061
+#: ../wwsympa/wwsympa.fcgi.in:11263 ../wwsympa/wwsympa.fcgi.in:11610
+#: ../wwsympa/wwsympa.fcgi.in:15061 ../wwsympa/wwsympa.fcgi.in:15068
+#: ../wwsympa/wwsympa.fcgi.in:15770 ../wwsympa/wwsympa.fcgi.in:16548
+#: ../wwsympa/wwsympa.fcgi.in:16549 ../wwsympa/wwsympa.fcgi.in:4280
+#: ../wwsympa/wwsympa.fcgi.in:4338 ../wwsympa/wwsympa.fcgi.in:4909
+#: ../wwsympa/wwsympa.fcgi.in:4910 ../wwsympa/wwsympa.fcgi.in:6407
+#: ../wwsympa/wwsympa.fcgi.in:7426 ../wwsympa/wwsympa.fcgi.in:7969
+#: ../wwsympa/wwsympa.fcgi.in:8016 ../wwsympa/wwsympa.fcgi.in:8018
+#: ../wwsympa/wwsympa.fcgi.in:8494 ../wwsympa/wwsympa.fcgi.in:8495
+#: ../wwsympa/wwsympa.fcgi.in:8529 ../wwsympa/wwsympa.fcgi.in:8530
+#: ../wwsympa/wwsympa.fcgi.in:8709 ../wwsympa/wwsympa.fcgi.in:8710
 msgid "%d %b %Y"
 msgstr "%Y. %b. %-d."
 
@@ -9624,14 +9610,14 @@ msgstr "%H:%M:%S"
 #. This entry is a date/time format
 #. Check the strftime manpage for format details : http://docs.freebsd.org/info/gawk/gawk.info.Time_Functions.html
 #: ../wwsympa/SympaSession.pm:431 ../wwsympa/SympaSession.pm:432
-#: ../wwsympa/wwsympa.fcgi.in:11830 ../wwsympa/wwsympa.fcgi.in:11963
-#: ../wwsympa/wwsympa.fcgi.in:14276 ../wwsympa/wwsympa.fcgi.in:7909
+#: ../wwsympa/wwsympa.fcgi.in:11844 ../wwsympa/wwsympa.fcgi.in:11977
+#: ../wwsympa/wwsympa.fcgi.in:14290 ../wwsympa/wwsympa.fcgi.in:7923
 msgid "%d %b %y  %H:%M"
 msgstr "%Y. %b. %-d., %H.%M"
 
 #. This entry is a date/time format
 #. Check the strftime manpage for format details : http://docs.freebsd.org/info/gawk/gawk.info.Time_Functions.html
-#: ../wwsympa/wwsympa.fcgi.in:16117 ../wwsympa/wwsympa.fcgi.in:16118
+#: ../wwsympa/wwsympa.fcgi.in:16143 ../wwsympa/wwsympa.fcgi.in:16144
 msgid "%Y-%m-%d-%H-%M-%S"
 msgstr "%Y-%m-%d-%H-%M-%S"
 
@@ -9865,6 +9851,16 @@ msgstr ""
 msgid "Background color for the news area of the home page."
 msgstr ""
 
+#. (init_email)
+#: ../web_tt2/sso_login.tt2:32
+msgid ""
+"A confirmation password has been sent to your email address %1.<br />Please "
+"check your e-mail box for the message containing the confirmation password "
+"needed below."
+msgstr ""
+"Elküldtük az Ön jelszavát a(z) %1 e-mail címre.<br />Kérem a levél "
+"megérkezése után adja meg lent a kapott jelszót."
+
 #. (fromname,fromaddr,listname)
 #: ../web_tt2/tracking.tt2:6
 msgid "Message from %1 %2 for list %3 "
@@ -9877,6 +9873,17 @@ msgstr ""
 #: ../web_tt2/tracking.tt2:15
 msgid "Delivery status"
 msgstr ""
+
+#: ../mail_tt2/sendssopasswd.tt2:7
+msgid ""
+"To complete your account setup actions you need to confirm that you have \n"
+"supplied a working email address.  Please enter the following email and "
+"password\n"
+"in the setup wizard to complete your account configuration."
+msgstr ""
+"A felhasználói fiók véglegesítéséhez meg kell erősítenie, hogy az email címe "
+"működőképes. Kérem adja meg az email címet és a hozzá tartozó jelszót a "
+"folyamat véglegesítéséhez."
 
 #: ../src/lib/List.pm:437
 msgid "tracking message by delivery status notification"
@@ -9953,6 +9960,9 @@ msgstr ""
 #~ msgid "Add quietly"
 #~ msgstr "nincs értesítés"
 
+#~ msgid "Validate Address"
+#~ msgstr "Érvényesít"
+
 #, fuzzy
 #~ msgid "Message tracking"
 #~ msgstr "Üzenet címkézés"
@@ -9973,13 +9983,11 @@ msgstr ""
 #~ msgid "Notification"
 #~ msgstr "Értesítés"
 
-# nlsref 4,12
-#~ msgid ""
-#~ "Your message could not be sent because its size \n"
-#~ "was over the maximum size allowed on this list."
-#~ msgstr ""
-#~ "Levelét nem lehet kézbesíteni, mert mérete\n"
-#~ "meghaladta a listán engedélyezett maximális méretet."
+#~ msgid "your email address   : %1"
+#~ msgstr "e-mail címe           : %1"
+
+#~ msgid "your password: %1"
+#~ msgstr "jelszava      : %1"
 
 #, fuzzy
 #~ msgid "who can view message tracking"
@@ -9988,6 +9996,14 @@ msgstr ""
 #, fuzzy
 #~ msgid "Message tracking feature"
 #~ msgstr "Üzenet címkézés"
+
+# nlsref 4,12
+#~ msgid ""
+#~ "Your message could not be sent because its size \n"
+#~ "was over the maximum size allowed on this list."
+#~ msgstr ""
+#~ "Levelét nem lehet kézbesíteni, mert mérete\n"
+#~ "meghaladta a listán engedélyezett maximális méretet."
 
 #~ msgid ""
 #~ "** Warning: Message part originally used character set %s\n"

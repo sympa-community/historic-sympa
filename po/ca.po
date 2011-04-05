@@ -2809,12 +2809,12 @@ msgstr "Seleccioneu el servidor d'autenticació "
 msgid "Go"
 msgstr "Anar"
 
-#: ../web_tt2/loginbanner.tt2:39 ../web_tt2/sso_login.tt2:46
+#: ../web_tt2/loginbanner.tt2:39
 #, fuzzy
 msgid "email address:"
 msgstr "adreça electrònica"
 
-#: ../web_tt2/loginbanner.tt2:41 ../web_tt2/sso_login.tt2:48
+#: ../web_tt2/loginbanner.tt2:41
 #, fuzzy
 msgid "password:"
 msgstr "contrasenya"
@@ -4642,18 +4642,14 @@ msgstr "Envia'm una contrasenya de confirmació"
 
 #. (init_email)
 #: ../web_tt2/sso_login.tt2:32
+#, fuzzy
 msgid ""
 "A confirmation password has been sent to your email address %1.<br />Please "
-"check your e-mail box for the message containing the confirmation password "
-"needed below."
+"check your e-mail box for the message containing the confirmation link."
 msgstr ""
 "Un missatge de confirmació s'ha enviat a la teva adreça de correu %1.<br /"
 ">Si us plau comprova la teva bústia de correu pel missatge que contè la "
 "contrasenya de confirmació que necessitaràs més avall."
-
-#: ../web_tt2/sso_login.tt2:51
-msgid "Validate Address"
-msgstr "Adreça de correu electrònic validada"
 
 #: ../web_tt2/stats.tt2:2
 #, fuzzy
@@ -5044,7 +5040,7 @@ msgstr "Cerca per període: "
 #. (date_to_formated)
 #. This entry is a date/time format
 #. Check the strftime manpage for format details : http://docs.freebsd.org/info/gawk/gawk.info.Time_Functions.html
-#: ../web_tt2/viewlogs.tt2:113 ../wwsympa/wwsympa.fcgi.in:16172
+#: ../web_tt2/viewlogs.tt2:113 ../wwsympa/wwsympa.fcgi.in:16198
 msgid "%d %b %Y %H:%M:%S"
 msgstr "%d %b %Y %H:%M:%S"
 
@@ -7886,33 +7882,21 @@ msgid ""
 msgstr "Rebrà un correu electrònic amb la seva contrasenya."
 
 #. (base_url,path_cgi)
-#: ../mail_tt2/sendpasswd.tt2:30 ../mail_tt2/sendssopasswd.tt2:14
+#: ../mail_tt2/sendpasswd.tt2:30 ../mail_tt2/sendssopasswd.tt2:13
 msgid "Help on Sympa: %1%2"
 msgstr "Ajuda a Sympa: %1%2"
 
-#: ../mail_tt2/sendssopasswd.tt2:7
+#: ../mail_tt2/sendssopasswd.tt2:6
+#, fuzzy
 msgid ""
 "To complete your account setup actions you need to confirm that you have \n"
-"supplied a working email address.  Please enter the following email and "
-"password\n"
-"in the setup wizard to complete your account configuration."
+"supplied a working email address.  Please follow the link below to complete "
+"your account configuration."
 msgstr ""
 "Per a completar la configuració del teu compte has de confirmar \n"
 " que vas ingressar una adreça de correu vàlida. Per favor, per a activar \n"
 " el teu compte ingressa l'adreça de correu i la contrasenya següents \n"
 " en l'assistent de configuració. "
-
-#. (newuser.email)
-#: ../mail_tt2/sendssopasswd.tt2:9
-#, fuzzy
-msgid "your email address   : %1"
-msgstr "La teva adreça de correu   :%1"
-
-#. (newuser.password)
-#: ../mail_tt2/sendssopasswd.tt2:10
-#, fuzzy
-msgid "your password: %1"
-msgstr "La teva constrasenya : %1"
 
 #. (list.name)
 #: ../mail_tt2/stats_report.tt2:4
@@ -8861,7 +8845,7 @@ msgstr "%d %b %y  %H:%M"
 
 #. This entry is a date/time format
 #. Check the strftime manpage for format details : http://docs.freebsd.org/info/gawk/gawk.info.Time_Functions.html
-#: ../src/lib/Commands.pm:963 ../wwsympa/wwsympa.fcgi.in:9796
+#: ../src/lib/Commands.pm:963 ../wwsympa/wwsympa.fcgi.in:9810
 msgid "%A"
 msgstr "%A"
 
@@ -8879,7 +8863,7 @@ msgstr "Error en la línia %d : %s"
 #. Check the strftime manpage for format details : http://docs.freebsd.org/info/gawk/gawk.info.Time_Functions.html
 #: ../src/lib/Family.pm:2591 ../src/lib/Family.pm:388 ../src/lib/Family.pm:665
 #: ../src/lib/List.pm:1893 ../wwsympa/Auth.pm:459
-#: ../wwsympa/wwsympa.fcgi.in:1067 ../wwsympa/wwsympa.fcgi.in:2869
+#: ../wwsympa/wwsympa.fcgi.in:1067 ../wwsympa/wwsympa.fcgi.in:2870
 msgid "%d %b %Y at %H:%M:%S"
 msgstr "%d %b %Y at %H:%M:%S"
 
@@ -9606,18 +9590,18 @@ msgstr "%a, %d %b %Y"
 #. This entry is a date/time format
 #. Check the strftime manpage for format details : http://docs.freebsd.org/info/gawk/gawk.info.Time_Functions.html
 #: ../src/lib/List.pm:3110 ../src/lib/List.pm:3111 ../src/lib/List.pm:3115
-#: ../wwsympa/wwsympa.fcgi.in:10978 ../wwsympa/wwsympa.fcgi.in:11047
-#: ../wwsympa/wwsympa.fcgi.in:11249 ../wwsympa/wwsympa.fcgi.in:11596
-#: ../wwsympa/wwsympa.fcgi.in:15035 ../wwsympa/wwsympa.fcgi.in:15042
-#: ../wwsympa/wwsympa.fcgi.in:15744 ../wwsympa/wwsympa.fcgi.in:16522
-#: ../wwsympa/wwsympa.fcgi.in:16523 ../wwsympa/wwsympa.fcgi.in:4266
-#: ../wwsympa/wwsympa.fcgi.in:4324 ../wwsympa/wwsympa.fcgi.in:4895
-#: ../wwsympa/wwsympa.fcgi.in:4896 ../wwsympa/wwsympa.fcgi.in:6393
-#: ../wwsympa/wwsympa.fcgi.in:7412 ../wwsympa/wwsympa.fcgi.in:7955
-#: ../wwsympa/wwsympa.fcgi.in:8002 ../wwsympa/wwsympa.fcgi.in:8004
-#: ../wwsympa/wwsympa.fcgi.in:8480 ../wwsympa/wwsympa.fcgi.in:8481
-#: ../wwsympa/wwsympa.fcgi.in:8515 ../wwsympa/wwsympa.fcgi.in:8516
-#: ../wwsympa/wwsympa.fcgi.in:8695 ../wwsympa/wwsympa.fcgi.in:8696
+#: ../wwsympa/wwsympa.fcgi.in:10992 ../wwsympa/wwsympa.fcgi.in:11061
+#: ../wwsympa/wwsympa.fcgi.in:11263 ../wwsympa/wwsympa.fcgi.in:11610
+#: ../wwsympa/wwsympa.fcgi.in:15061 ../wwsympa/wwsympa.fcgi.in:15068
+#: ../wwsympa/wwsympa.fcgi.in:15770 ../wwsympa/wwsympa.fcgi.in:16548
+#: ../wwsympa/wwsympa.fcgi.in:16549 ../wwsympa/wwsympa.fcgi.in:4280
+#: ../wwsympa/wwsympa.fcgi.in:4338 ../wwsympa/wwsympa.fcgi.in:4909
+#: ../wwsympa/wwsympa.fcgi.in:4910 ../wwsympa/wwsympa.fcgi.in:6407
+#: ../wwsympa/wwsympa.fcgi.in:7426 ../wwsympa/wwsympa.fcgi.in:7969
+#: ../wwsympa/wwsympa.fcgi.in:8016 ../wwsympa/wwsympa.fcgi.in:8018
+#: ../wwsympa/wwsympa.fcgi.in:8494 ../wwsympa/wwsympa.fcgi.in:8495
+#: ../wwsympa/wwsympa.fcgi.in:8529 ../wwsympa/wwsympa.fcgi.in:8530
+#: ../wwsympa/wwsympa.fcgi.in:8709 ../wwsympa/wwsympa.fcgi.in:8710
 msgid "%d %b %Y"
 msgstr "%d %b %Y"
 
@@ -9761,14 +9745,14 @@ msgstr "%H:%M:%S"
 #. This entry is a date/time format
 #. Check the strftime manpage for format details : http://docs.freebsd.org/info/gawk/gawk.info.Time_Functions.html
 #: ../wwsympa/SympaSession.pm:431 ../wwsympa/SympaSession.pm:432
-#: ../wwsympa/wwsympa.fcgi.in:11830 ../wwsympa/wwsympa.fcgi.in:11963
-#: ../wwsympa/wwsympa.fcgi.in:14276 ../wwsympa/wwsympa.fcgi.in:7909
+#: ../wwsympa/wwsympa.fcgi.in:11844 ../wwsympa/wwsympa.fcgi.in:11977
+#: ../wwsympa/wwsympa.fcgi.in:14290 ../wwsympa/wwsympa.fcgi.in:7923
 msgid "%d %b %y  %H:%M"
 msgstr "%d %b %y  %H:%M"
 
 #. This entry is a date/time format
 #. Check the strftime manpage for format details : http://docs.freebsd.org/info/gawk/gawk.info.Time_Functions.html
-#: ../wwsympa/wwsympa.fcgi.in:16117 ../wwsympa/wwsympa.fcgi.in:16118
+#: ../wwsympa/wwsympa.fcgi.in:16143 ../wwsympa/wwsympa.fcgi.in:16144
 #, fuzzy
 msgid "%Y-%m-%d-%H-%M-%S"
 msgstr "%Y/%m/%d/%H/%M/%S"
@@ -9977,6 +9961,17 @@ msgstr ""
 msgid "Background color for the news area of the home page."
 msgstr ""
 
+#. (init_email)
+#: ../web_tt2/sso_login.tt2:32
+msgid ""
+"A confirmation password has been sent to your email address %1.<br />Please "
+"check your e-mail box for the message containing the confirmation password "
+"needed below."
+msgstr ""
+"Un missatge de confirmació s'ha enviat a la teva adreça de correu %1.<br /"
+">Si us plau comprova la teva bústia de correu pel missatge que contè la "
+"contrasenya de confirmació que necessitaràs més avall."
+
 #. (fromname,fromaddr,listname)
 #: ../web_tt2/tracking.tt2:6
 msgid "Message from %1 %2 for list %3 "
@@ -9989,6 +9984,18 @@ msgstr ""
 #: ../web_tt2/tracking.tt2:15
 msgid "Delivery status"
 msgstr ""
+
+#: ../mail_tt2/sendssopasswd.tt2:7
+msgid ""
+"To complete your account setup actions you need to confirm that you have \n"
+"supplied a working email address.  Please enter the following email and "
+"password\n"
+"in the setup wizard to complete your account configuration."
+msgstr ""
+"Per a completar la configuració del teu compte has de confirmar \n"
+" que vas ingressar una adreça de correu vàlida. Per favor, per a activar \n"
+" el teu compte ingressa l'adreça de correu i la contrasenya següents \n"
+" en l'assistent de configuració. "
 
 #: ../src/lib/List.pm:437
 msgid "tracking message by delivery status notification"
@@ -10062,6 +10069,9 @@ msgstr ""
 #~ msgid "Add quietly"
 #~ msgstr "silenciós"
 
+#~ msgid "Validate Address"
+#~ msgstr "Adreça de correu electrònic validada"
+
 #, fuzzy
 #~ msgid "Message tracking"
 #~ msgstr "Marcatge de missatges"
@@ -10082,12 +10092,13 @@ msgstr ""
 #~ msgid "Notification"
 #~ msgstr "norificació"
 
-#~ msgid ""
-#~ "Your message could not be sent because its size \n"
-#~ "was over the maximum size allowed on this list."
-#~ msgstr ""
-#~ "El teu missatge no ha estat enviat perquè la mida \n"
-#~ "supera la mida màxima permesa en aquesta llista."
+#, fuzzy
+#~ msgid "your email address   : %1"
+#~ msgstr "La teva adreça de correu   :%1"
+
+#, fuzzy
+#~ msgid "your password: %1"
+#~ msgstr "La teva constrasenya : %1"
 
 #, fuzzy
 #~ msgid "who can view message tracking"
@@ -10096,6 +10107,13 @@ msgstr ""
 #, fuzzy
 #~ msgid "Message tracking feature"
 #~ msgstr "Marcatge de missatges"
+
+#~ msgid ""
+#~ "Your message could not be sent because its size \n"
+#~ "was over the maximum size allowed on this list."
+#~ msgstr ""
+#~ "El teu missatge no ha estat enviat perquè la mida \n"
+#~ "supera la mida màxima permesa en aquesta llista."
 
 #~ msgid ""
 #~ "** Warning: Message part originally used character set %s\n"

@@ -12,7 +12,7 @@ msgstr ""
 "Project-Id-Version: Sympa-5.4.6, Sympa-6.0.3, Sympa-6.1b.4\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2002-07-16 17:27+0800\n"
-"PO-Revision-Date: 2011-01-20 19:29+0200\n"
+"PO-Revision-Date: 2011-02-12 02:18+0200\n"
 "Last-Translator: IKEDA Soji <hatuka@nezumi.nu>\n"
 "Language-Team: 日本語\n"
 "MIME-Version: 1.0\n"
@@ -1399,7 +1399,7 @@ msgstr "作者"
 
 #: ../web_tt2/d_read.tt2:64 ../web_tt2/d_read.tt2:66
 msgid "Size (Kb)"
-msgstr "サイズ (キロバイト)"
+msgstr "大きさ (キロバイト)"
 
 #: ../web_tt2/d_read.tt2:69 ../web_tt2/d_read.tt2:71
 #: ../web_tt2/latest_d_read.tt2:18 ../web_tt2/subscriber_table.tt2:61
@@ -2453,22 +2453,18 @@ msgid "Listname"
 msgstr "リスト名"
 
 #: ../web_tt2/get_inactive_lists.tt2:10
-#, fuzzy
 msgid "Number of subscribers"
-msgstr "読者。投稿はモデレーションを受ける"
+msgstr "読者数"
 
 #: ../web_tt2/get_inactive_lists.tt2:12
-#, fuzzy
 msgid "Send scenario"
-msgstr "送信者"
+msgstr "送信"
 
 #: ../web_tt2/get_inactive_lists.tt2:13
-#, fuzzy
 msgid "Creator"
-msgstr "作成"
+msgstr "作成者"
 
 #: ../web_tt2/get_inactive_lists.tt2:15
-#, fuzzy
 msgid "Editors"
 msgstr "モデレータ"
 
@@ -2727,11 +2723,11 @@ msgstr "ログインするには、以下から自分の組織の認証サーバ
 msgid "Go"
 msgstr "実行"
 
-#: ../web_tt2/loginbanner.tt2:39 ../web_tt2/sso_login.tt2:46
+#: ../web_tt2/loginbanner.tt2:39
 msgid "email address:"
 msgstr "電子メールアドレス:"
 
-#: ../web_tt2/loginbanner.tt2:41 ../web_tt2/sso_login.tt2:48
+#: ../web_tt2/loginbanner.tt2:41
 msgid "password:"
 msgstr "パスワード:"
 
@@ -2961,7 +2957,7 @@ msgstr ""
 
 #: ../web_tt2/modindex.tt2:155 ../web_tt2/modindex.tt2:71
 msgid "Size"
-msgstr "サイズ"
+msgstr "大きさ"
 
 #: ../web_tt2/modindex.tt2:102
 msgid "No subject"
@@ -4021,7 +4017,7 @@ msgstr "証明書の発行者"
 
 #: ../web_tt2/show_cert.tt2:10
 msgid "Cipher key size used"
-msgstr "暗号鍵のサイズ"
+msgstr "暗号鍵の長さ"
 
 #: ../web_tt2/show_exclude.tt2:3
 msgid "Show the exclusion table"
@@ -4452,17 +4448,13 @@ msgstr "確認パスワードを送る"
 
 #. (init_email)
 #: ../web_tt2/sso_login.tt2:32
+#, fuzzy
 msgid ""
 "A confirmation password has been sent to your email address %1.<br />Please "
-"check your e-mail box for the message containing the confirmation password "
-"needed below."
+"check your e-mail box for the message containing the confirmation link."
 msgstr ""
 "確認パスワードをあなたの電子メールアドレス %1 に送りました。<br />電子メール"
 "が届いたら、下の欄に、メールに書いてある確認パスワードを入れてください。"
-
-#: ../web_tt2/sso_login.tt2:51
-msgid "Validate Address"
-msgstr "アドレスの確認"
 
 #: ../web_tt2/stats.tt2:2
 msgid "Shared document directory size:"
@@ -4822,7 +4814,7 @@ msgstr "探す期間"
 #. (date_to_formated)
 #. This entry is a date/time format
 #. Check the strftime manpage for format details : http://docs.freebsd.org/info/gawk/gawk.info.Time_Functions.html
-#: ../web_tt2/viewlogs.tt2:113 ../wwsympa/wwsympa.fcgi.in:16172
+#: ../web_tt2/viewlogs.tt2:113 ../wwsympa/wwsympa.fcgi.in:16198
 msgid "%d %b %Y %H:%M:%S"
 msgstr "%Y年%m月%d日 %H:%M:%S"
 
@@ -6463,7 +6455,7 @@ msgstr "%1 がサーバ内部のエラーに遭いました。"
 #. (error)
 #: ../mail_tt2/listmaster_notification.tt2:293
 msgid "The following error occurred whila managing bounces: %&"
-msgstr ""
+msgstr "配送エラーの処理中につぎの失敗がありました。%1"
 
 #: ../mail_tt2/listmaster_notification.tt2:302
 #: ../mail_tt2/listmaster_notification.tt2:373
@@ -6805,7 +6797,7 @@ msgstr "%2@%3 の投稿保管庫では、使える容量のうち %4 パーセ�
 #. (list.name,size)
 #: ../mail_tt2/listowner_notification.tt2:14
 msgid "Total size used for %1@%2 Bytes."
-msgstr "%1@ が使っているサイズは %2バイトです。"
+msgstr "%1@ で使っている容量は %2 バイトです。"
 
 #. (conf.host,conf.listmaster_email)
 #: ../mail_tt2/listowner_notification.tt2:16
@@ -7154,6 +7146,12 @@ msgid ""
 "before being sent over email, the final size of an attachment is often "
 "significantly larger that the original file."
 msgstr ""
+"メッセージを送れません。大きさ (%1 キロバイト) がリストで受け付けられる大き"
+"さ (%2 キロバイト) を超えていたためです。\n"
+"\n"
+"なお、バイナリデータを電子メールで送るときはまずASCII形式に符号化しなければな"
+"らないことになっているので、添付ファイルがあると元のファイルよりかなり大きく"
+"なります。"
 
 #. (listname)
 #: ../mail_tt2/message_report.tt2:59
@@ -7546,30 +7544,20 @@ msgstr ""
 "ンクをクリックしてパスワードを決めてください。"
 
 #. (base_url,path_cgi)
-#: ../mail_tt2/sendpasswd.tt2:30 ../mail_tt2/sendssopasswd.tt2:14
+#: ../mail_tt2/sendpasswd.tt2:30 ../mail_tt2/sendssopasswd.tt2:13
 msgid "Help on Sympa: %1%2"
 msgstr "使いかた: %1%2"
 
-#: ../mail_tt2/sendssopasswd.tt2:7
+#: ../mail_tt2/sendssopasswd.tt2:6
+#, fuzzy
 msgid ""
 "To complete your account setup actions you need to confirm that you have \n"
-"supplied a working email address.  Please enter the following email and "
-"password\n"
-"in the setup wizard to complete your account configuration."
+"supplied a working email address.  Please follow the link below to complete "
+"your account configuration."
 msgstr ""
 "あなたが入れたアドレスが実際に使える電子メールアドレスかどうか確認する \n"
 "と、アカウント設定の操作は完了です。以下の電子メールとパスワードをセッ \n"
 "トアップウィザードに入力して、アカウント設定を完了してください。"
-
-#. (newuser.email)
-#: ../mail_tt2/sendssopasswd.tt2:9
-msgid "your email address   : %1"
-msgstr "電子メールアドレス: %1"
-
-#. (newuser.password)
-#: ../mail_tt2/sendssopasswd.tt2:10
-msgid "your password: %1"
-msgstr "パスワード: %1"
 
 #. (list.name)
 #: ../mail_tt2/stats_report.tt2:4
@@ -7589,12 +7577,12 @@ msgstr "送信メッセージ数:      %1"
 #. (stats.byte_rcv)
 #: ../mail_tt2/stats_report.tt2:9
 msgid "Received mega-bytes         :      %1"
-msgstr "受信サイズ (メガバイト)        :      %1"
+msgstr "受信総量 (メガバイト)          :      %1"
 
 #. (stats.byte_sent)
 #: ../mail_tt2/stats_report.tt2:10
 msgid "Forwarded mega-bytes        :      %1"
-msgstr "送信サイズ (メガバイト):      %1"
+msgstr "送信総量 (メガバイト)  :      %1"
 
 #. (list.name)
 #: ../mail_tt2/summary.tt2:2
@@ -8470,7 +8458,7 @@ msgstr "%Y/%m/%d %H:%M"
 
 #. This entry is a date/time format
 #. Check the strftime manpage for format details : http://docs.freebsd.org/info/gawk/gawk.info.Time_Functions.html
-#: ../src/lib/Commands.pm:963 ../wwsympa/wwsympa.fcgi.in:9796
+#: ../src/lib/Commands.pm:963 ../wwsympa/wwsympa.fcgi.in:9810
 msgid "%A"
 msgstr "%a"
 
@@ -8486,7 +8474,7 @@ msgstr "間違いがあります (%d 行目): %s"
 #. Check the strftime manpage for format details : http://docs.freebsd.org/info/gawk/gawk.info.Time_Functions.html
 #: ../src/lib/Family.pm:2591 ../src/lib/Family.pm:388 ../src/lib/Family.pm:665
 #: ../src/lib/List.pm:1893 ../wwsympa/Auth.pm:459
-#: ../wwsympa/wwsympa.fcgi.in:1067 ../wwsympa/wwsympa.fcgi.in:2869
+#: ../wwsympa/wwsympa.fcgi.in:1067 ../wwsympa/wwsympa.fcgi.in:2870
 msgid "%d %b %Y at %H:%M:%S"
 msgstr "%Y年%m月%d日%H時%M分%S秒"
 
@@ -9196,18 +9184,18 @@ msgstr "%Y年%m月%d日(%a)"
 #. This entry is a date/time format
 #. Check the strftime manpage for format details : http://docs.freebsd.org/info/gawk/gawk.info.Time_Functions.html
 #: ../src/lib/List.pm:3110 ../src/lib/List.pm:3111 ../src/lib/List.pm:3115
-#: ../wwsympa/wwsympa.fcgi.in:10978 ../wwsympa/wwsympa.fcgi.in:11047
-#: ../wwsympa/wwsympa.fcgi.in:11249 ../wwsympa/wwsympa.fcgi.in:11596
-#: ../wwsympa/wwsympa.fcgi.in:15035 ../wwsympa/wwsympa.fcgi.in:15042
-#: ../wwsympa/wwsympa.fcgi.in:15744 ../wwsympa/wwsympa.fcgi.in:16522
-#: ../wwsympa/wwsympa.fcgi.in:16523 ../wwsympa/wwsympa.fcgi.in:4266
-#: ../wwsympa/wwsympa.fcgi.in:4324 ../wwsympa/wwsympa.fcgi.in:4895
-#: ../wwsympa/wwsympa.fcgi.in:4896 ../wwsympa/wwsympa.fcgi.in:6393
-#: ../wwsympa/wwsympa.fcgi.in:7412 ../wwsympa/wwsympa.fcgi.in:7955
-#: ../wwsympa/wwsympa.fcgi.in:8002 ../wwsympa/wwsympa.fcgi.in:8004
-#: ../wwsympa/wwsympa.fcgi.in:8480 ../wwsympa/wwsympa.fcgi.in:8481
-#: ../wwsympa/wwsympa.fcgi.in:8515 ../wwsympa/wwsympa.fcgi.in:8516
-#: ../wwsympa/wwsympa.fcgi.in:8695 ../wwsympa/wwsympa.fcgi.in:8696
+#: ../wwsympa/wwsympa.fcgi.in:10992 ../wwsympa/wwsympa.fcgi.in:11061
+#: ../wwsympa/wwsympa.fcgi.in:11263 ../wwsympa/wwsympa.fcgi.in:11610
+#: ../wwsympa/wwsympa.fcgi.in:15061 ../wwsympa/wwsympa.fcgi.in:15068
+#: ../wwsympa/wwsympa.fcgi.in:15770 ../wwsympa/wwsympa.fcgi.in:16548
+#: ../wwsympa/wwsympa.fcgi.in:16549 ../wwsympa/wwsympa.fcgi.in:4280
+#: ../wwsympa/wwsympa.fcgi.in:4338 ../wwsympa/wwsympa.fcgi.in:4909
+#: ../wwsympa/wwsympa.fcgi.in:4910 ../wwsympa/wwsympa.fcgi.in:6407
+#: ../wwsympa/wwsympa.fcgi.in:7426 ../wwsympa/wwsympa.fcgi.in:7969
+#: ../wwsympa/wwsympa.fcgi.in:8016 ../wwsympa/wwsympa.fcgi.in:8018
+#: ../wwsympa/wwsympa.fcgi.in:8494 ../wwsympa/wwsympa.fcgi.in:8495
+#: ../wwsympa/wwsympa.fcgi.in:8529 ../wwsympa/wwsympa.fcgi.in:8530
+#: ../wwsympa/wwsympa.fcgi.in:8709 ../wwsympa/wwsympa.fcgi.in:8710
 msgid "%d %b %Y"
 msgstr "%Y年%m月%d日"
 
@@ -9344,14 +9332,14 @@ msgstr ""
 #. This entry is a date/time format
 #. Check the strftime manpage for format details : http://docs.freebsd.org/info/gawk/gawk.info.Time_Functions.html
 #: ../wwsympa/SympaSession.pm:431 ../wwsympa/SympaSession.pm:432
-#: ../wwsympa/wwsympa.fcgi.in:11830 ../wwsympa/wwsympa.fcgi.in:11963
-#: ../wwsympa/wwsympa.fcgi.in:14276 ../wwsympa/wwsympa.fcgi.in:7909
+#: ../wwsympa/wwsympa.fcgi.in:11844 ../wwsympa/wwsympa.fcgi.in:11977
+#: ../wwsympa/wwsympa.fcgi.in:14290 ../wwsympa/wwsympa.fcgi.in:7923
 msgid "%d %b %y  %H:%M"
 msgstr "%y/%m/%d %H:%M"
 
 #. This entry is a date/time format
 #. Check the strftime manpage for format details : http://docs.freebsd.org/info/gawk/gawk.info.Time_Functions.html
-#: ../wwsympa/wwsympa.fcgi.in:16117 ../wwsympa/wwsympa.fcgi.in:16118
+#: ../wwsympa/wwsympa.fcgi.in:16143 ../wwsympa/wwsympa.fcgi.in:16144
 msgid "%Y-%m-%d-%H-%M-%S"
 msgstr ""
 
@@ -9503,6 +9491,27 @@ msgstr "受け取らない (休暇のときなどに便利)"
 msgid "you do not receive your own posts"
 msgstr "自分が投稿したものは受け取らない"
 
+#. (init_email)
+#: ../web_tt2/sso_login.tt2:32
+msgid ""
+"A confirmation password has been sent to your email address %1.<br />Please "
+"check your e-mail box for the message containing the confirmation password "
+"needed below."
+msgstr ""
+"確認パスワードをあなたの電子メールアドレス %1 に送りました。<br />電子メール"
+"が届いたら、下の欄に、メールに書いてある確認パスワードを入れてください。"
+
+#: ../mail_tt2/sendssopasswd.tt2:7
+msgid ""
+"To complete your account setup actions you need to confirm that you have \n"
+"supplied a working email address.  Please enter the following email and "
+"password\n"
+"in the setup wizard to complete your account configuration."
+msgstr ""
+"あなたが入れたアドレスが実際に使える電子メールアドレスかどうか確認する \n"
+"と、アカウント設定の操作は完了です。以下の電子メールとパスワードをセッ \n"
+"トアップウィザードに入力して、アカウント設定を完了してください。"
+
 #~ msgid "Statistics"
 #~ msgstr "統計"
 
@@ -9599,6 +9608,9 @@ msgstr "自分が投稿したものは受け取らない"
 #~ msgid "Background color for the news area of the home page."
 #~ msgstr "ホームページでのお知らせエリアの背景色。"
 
+#~ msgid "Validate Address"
+#~ msgstr "アドレスの確認"
+
 #~ msgid "Message tracking"
 #~ msgstr "メッセージの追跡"
 
@@ -9623,12 +9635,11 @@ msgstr "自分が投稿したものは受け取らない"
 #~ msgid "Notification"
 #~ msgstr "通知内容"
 
-#~ msgid ""
-#~ "Your message could not be sent because its size \n"
-#~ "was over the maximum size allowed on this list."
-#~ msgstr ""
-#~ "メッセージを送れません。リストで受け付けられる大きさを超えていたためで \n"
-#~ "す。"
+#~ msgid "your email address   : %1"
+#~ msgstr "電子メールアドレス: %1"
+
+#~ msgid "your password: %1"
+#~ msgstr "パスワード: %1"
 
 #~ msgid "tracking message by delivery status notification"
 #~ msgstr "配送状況通知によってメッセージを追跡する"
@@ -9644,6 +9655,13 @@ msgstr "自分が投稿したものは受け取らない"
 
 #~ msgid "Message tracking feature"
 #~ msgstr "メッセージ追跡機能"
+
+#~ msgid ""
+#~ "Your message could not be sent because its size \n"
+#~ "was over the maximum size allowed on this list."
+#~ msgstr ""
+#~ "メッセージを送れません。リストで受け付けられる大きさを超えていたためで \n"
+#~ "す。"
 
 #~ msgid ""
 #~ "** Warning: Message part originally used character set %s\n"

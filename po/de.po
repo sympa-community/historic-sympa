@@ -7,7 +7,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: Jens Krehbiel-Graether <jens.krehbiel-graether@okg-"
 "computer.de>\n"
 "POT-Creation-Date: 2002-07-16 17:27+0800\n"
-"PO-Revision-Date: 2011-01-21 07:52+0200\n"
+"PO-Revision-Date: 2011-02-20 03:04+0200\n"
 "Last-Translator: Anonymous Pootle User\n"
 "Language-Team: Deutsch\n"
 "MIME-Version: 1.0\n"
@@ -142,9 +142,8 @@ msgid "Your preferences"
 msgstr "Ihre Einstellungen"
 
 #: ../web_tt2/suspend_request.tt2:5 ../web_tt2/your_lists.tt2:9
-#, fuzzy
 msgid "Manage your subscriptions"
-msgstr "Unbestätigte Abonnements"
+msgstr "Ihre Abonnements verwalten"
 
 #: ../web_tt2/lists.tt2:27 ../web_tt2/your_lists.tt2:14
 msgid "admin"
@@ -799,14 +798,15 @@ msgid "Return to archive %1"
 msgstr "Zurück zum Archiv %1"
 
 #: ../web_tt2/auto_signoff.tt2:1
-#, fuzzy
 msgid "Unsubscription request"
-msgstr "Keine Abonnement-Anfragen"
+msgstr "Kündigungsantrag"
 
 #. (signing_off_email,list)
 #: ../web_tt2/auto_signoff.tt2:2
 msgid "You clicked a link to unsubscribe the address %1 from list %2."
-msgstr "Sie wollen die Abmeldung der address %1 von list %1 durchführen."
+msgstr ""
+"Sie haben einen Link angeklickt um die Adresse %1 von der Liste %2 "
+"abzumelden."
 
 #. (list)
 #: ../web_tt2/auto_signoff.tt2:3
@@ -814,6 +814,8 @@ msgid ""
 "A confirmation was just sent to this address. By clicking the link it "
 "contains, you will be definitively unsubscribed from list %1"
 msgstr ""
+"Eine Bestätigung wurde an die Adresse gesendet. Beim Klick auf den "
+"beinhaltenden Link werden Sie definitiv von der Liste %1 abgemeldet"
 
 # #-#-#-#-#  de.po (PACKAGE VERSION)  #-#-#-#-#
 #: ../web_tt2/blacklist.tt2:4
@@ -972,12 +974,11 @@ msgstr "Titel:"
 
 #: ../web_tt2/compose_mail.tt2:26
 msgid "Send to selected receipient"
-msgstr ""
+msgstr "An ausgewählten Empfänger senden"
 
 #: ../web_tt2/compose_mail.tt2:27
-#, fuzzy
 msgid "Send to me"
-msgstr "Eine Nachricht senden"
+msgstr "An mich senden"
 
 #: ../web_tt2/compose_mail.tt2:47 ../web_tt2/modindex.tt2:50
 #: ../web_tt2/viewmod.tt2:32
@@ -998,6 +999,7 @@ msgstr ""
 #: ../web_tt2/compose_mail.tt2:65
 msgid "Below are some examples of TT2 parameters usable in messages."
 msgstr ""
+"Unterhalb sind einge Beispiele für in Nachrichten nutzbare TT2 Parameter"
 
 #: ../web_tt2/compose_mail.tt2:67
 #, fuzzy
@@ -1006,16 +1008,15 @@ msgstr "Keine Mailingliste verfügbar."
 
 #: ../web_tt2/compose_mail.tt2:68
 msgid ": the name of the host the list is intalled on; always available."
-msgstr ""
+msgstr ": Der Name des Host wo die Liste installiert ist; Immer verfügbar"
 
 #: ../web_tt2/compose_mail.tt2:69
-#, fuzzy
 msgid ": the user email; always available."
-msgstr "Keine Mailingliste verfügbar."
+msgstr ": Benutzeremail; Immer verfügbar"
 
 #: ../web_tt2/compose_mail.tt2:70
 msgid ": the user name associated to her email; always available."
-msgstr ""
+msgstr ": Name des Benutzer in Bezug zur Email; Immer verfügbar"
 
 #: ../web_tt2/compose_mail.tt2:71
 msgid ": the - human readable - user's subscription date; always available."
@@ -2761,11 +2762,11 @@ msgstr ""
 msgid "Go"
 msgstr "Los"
 
-#: ../web_tt2/loginbanner.tt2:39 ../web_tt2/sso_login.tt2:46
+#: ../web_tt2/loginbanner.tt2:39
 msgid "email address:"
 msgstr "E-Mail-Adresse:"
 
-#: ../web_tt2/loginbanner.tt2:41 ../web_tt2/sso_login.tt2:48
+#: ../web_tt2/loginbanner.tt2:41
 msgid "password:"
 msgstr "Passwort:"
 
@@ -4503,18 +4504,14 @@ msgstr "Bestätigungspasswort zuschicken"
 
 #. (init_email)
 #: ../web_tt2/sso_login.tt2:32
+#, fuzzy
 msgid ""
 "A confirmation password has been sent to your email address %1.<br />Please "
-"check your e-mail box for the message containing the confirmation password "
-"needed below."
+"check your e-mail box for the message containing the confirmation link."
 msgstr ""
 "Ein Bestätigungspasswort wurde an Ihre E-Mail-Adresse %1 gesendet.<br/> "
 "Bitte überprüfen Sie Ihr Postfach um das unten geforderte Passwort "
 "einzugeben."
-
-#: ../web_tt2/sso_login.tt2:51
-msgid "Validate Address"
-msgstr "Überprüfe Adresse"
 
 #: ../web_tt2/stats.tt2:2
 msgid "Shared document directory size:"
@@ -4891,7 +4888,7 @@ msgstr "Suchzeitraum: "
 #. (date_to_formated)
 #. This entry is a date/time format
 #. Check the strftime manpage for format details : http://docs.freebsd.org/info/gawk/gawk.info.Time_Functions.html
-#: ../web_tt2/viewlogs.tt2:113 ../wwsympa/wwsympa.fcgi.in:16172
+#: ../web_tt2/viewlogs.tt2:113 ../wwsympa/wwsympa.fcgi.in:16198
 msgid "%d %b %Y %H:%M:%S"
 msgstr "%d. %B %Y %H:%M:%S"
 
@@ -7607,32 +7604,22 @@ msgstr ""
 "Ihr Passwort zu wählen. "
 
 #. (base_url,path_cgi)
-#: ../mail_tt2/sendpasswd.tt2:30 ../mail_tt2/sendssopasswd.tt2:14
+#: ../mail_tt2/sendpasswd.tt2:30 ../mail_tt2/sendssopasswd.tt2:13
 msgid "Help on Sympa: %1%2"
 msgstr "Hilfe zu Sympa: %1%2"
 
-#: ../mail_tt2/sendssopasswd.tt2:7
+#: ../mail_tt2/sendssopasswd.tt2:6
+#, fuzzy
 msgid ""
 "To complete your account setup actions you need to confirm that you have \n"
-"supplied a working email address.  Please enter the following email and "
-"password\n"
-"in the setup wizard to complete your account configuration."
+"supplied a working email address.  Please follow the link below to complete "
+"your account configuration."
 msgstr ""
 "Um Ihre Kontoeinrichtung abzuschließen, müssen Sie bestätigen, dass Sie "
 "eine \n"
 "gültige E-Mail-Adresse angegeben haben. Bitte geben Sie die folgende E-Mail-"
 "Adresse und Passwort im Einrichtungs-Assistenten ein, um Ihre "
 "Kontoeinstellungen abzuschließen."
-
-#. (newuser.email)
-#: ../mail_tt2/sendssopasswd.tt2:9
-msgid "your email address   : %1"
-msgstr "Ihre E-Mail-Adresse   : %1"
-
-#. (newuser.password)
-#: ../mail_tt2/sendssopasswd.tt2:10
-msgid "your password: %1"
-msgstr "Ihr Passwort: %1"
 
 #. (list.name)
 #: ../mail_tt2/stats_report.tt2:4
@@ -8551,7 +8538,7 @@ msgstr "%d. %B %y %H:%M"
 
 #. This entry is a date/time format
 #. Check the strftime manpage for format details : http://docs.freebsd.org/info/gawk/gawk.info.Time_Functions.html
-#: ../src/lib/Commands.pm:963 ../wwsympa/wwsympa.fcgi.in:9796
+#: ../src/lib/Commands.pm:963 ../wwsympa/wwsympa.fcgi.in:9810
 msgid "%A"
 msgstr "%A"
 
@@ -8567,7 +8554,7 @@ msgstr "Fehler in Zeile %d: %s"
 #. Check the strftime manpage for format details : http://docs.freebsd.org/info/gawk/gawk.info.Time_Functions.html
 #: ../src/lib/Family.pm:2591 ../src/lib/Family.pm:388 ../src/lib/Family.pm:665
 #: ../src/lib/List.pm:1893 ../wwsympa/Auth.pm:459
-#: ../wwsympa/wwsympa.fcgi.in:1067 ../wwsympa/wwsympa.fcgi.in:2869
+#: ../wwsympa/wwsympa.fcgi.in:1067 ../wwsympa/wwsympa.fcgi.in:2870
 msgid "%d %b %Y at %H:%M:%S"
 msgstr "%d. %B %Y um %H:%M:%S"
 
@@ -9285,18 +9272,18 @@ msgstr "%a, %d. %B %Y"
 #. This entry is a date/time format
 #. Check the strftime manpage for format details : http://docs.freebsd.org/info/gawk/gawk.info.Time_Functions.html
 #: ../src/lib/List.pm:3110 ../src/lib/List.pm:3111 ../src/lib/List.pm:3115
-#: ../wwsympa/wwsympa.fcgi.in:10978 ../wwsympa/wwsympa.fcgi.in:11047
-#: ../wwsympa/wwsympa.fcgi.in:11249 ../wwsympa/wwsympa.fcgi.in:11596
-#: ../wwsympa/wwsympa.fcgi.in:15035 ../wwsympa/wwsympa.fcgi.in:15042
-#: ../wwsympa/wwsympa.fcgi.in:15744 ../wwsympa/wwsympa.fcgi.in:16522
-#: ../wwsympa/wwsympa.fcgi.in:16523 ../wwsympa/wwsympa.fcgi.in:4266
-#: ../wwsympa/wwsympa.fcgi.in:4324 ../wwsympa/wwsympa.fcgi.in:4895
-#: ../wwsympa/wwsympa.fcgi.in:4896 ../wwsympa/wwsympa.fcgi.in:6393
-#: ../wwsympa/wwsympa.fcgi.in:7412 ../wwsympa/wwsympa.fcgi.in:7955
-#: ../wwsympa/wwsympa.fcgi.in:8002 ../wwsympa/wwsympa.fcgi.in:8004
-#: ../wwsympa/wwsympa.fcgi.in:8480 ../wwsympa/wwsympa.fcgi.in:8481
-#: ../wwsympa/wwsympa.fcgi.in:8515 ../wwsympa/wwsympa.fcgi.in:8516
-#: ../wwsympa/wwsympa.fcgi.in:8695 ../wwsympa/wwsympa.fcgi.in:8696
+#: ../wwsympa/wwsympa.fcgi.in:10992 ../wwsympa/wwsympa.fcgi.in:11061
+#: ../wwsympa/wwsympa.fcgi.in:11263 ../wwsympa/wwsympa.fcgi.in:11610
+#: ../wwsympa/wwsympa.fcgi.in:15061 ../wwsympa/wwsympa.fcgi.in:15068
+#: ../wwsympa/wwsympa.fcgi.in:15770 ../wwsympa/wwsympa.fcgi.in:16548
+#: ../wwsympa/wwsympa.fcgi.in:16549 ../wwsympa/wwsympa.fcgi.in:4280
+#: ../wwsympa/wwsympa.fcgi.in:4338 ../wwsympa/wwsympa.fcgi.in:4909
+#: ../wwsympa/wwsympa.fcgi.in:4910 ../wwsympa/wwsympa.fcgi.in:6407
+#: ../wwsympa/wwsympa.fcgi.in:7426 ../wwsympa/wwsympa.fcgi.in:7969
+#: ../wwsympa/wwsympa.fcgi.in:8016 ../wwsympa/wwsympa.fcgi.in:8018
+#: ../wwsympa/wwsympa.fcgi.in:8494 ../wwsympa/wwsympa.fcgi.in:8495
+#: ../wwsympa/wwsympa.fcgi.in:8529 ../wwsympa/wwsympa.fcgi.in:8530
+#: ../wwsympa/wwsympa.fcgi.in:8709 ../wwsympa/wwsympa.fcgi.in:8710
 msgid "%d %b %Y"
 msgstr "%d. %B %Y"
 
@@ -9438,14 +9425,14 @@ msgstr "%H:%M:%S"
 #. This entry is a date/time format
 #. Check the strftime manpage for format details : http://docs.freebsd.org/info/gawk/gawk.info.Time_Functions.html
 #: ../wwsympa/SympaSession.pm:431 ../wwsympa/SympaSession.pm:432
-#: ../wwsympa/wwsympa.fcgi.in:11830 ../wwsympa/wwsympa.fcgi.in:11963
-#: ../wwsympa/wwsympa.fcgi.in:14276 ../wwsympa/wwsympa.fcgi.in:7909
+#: ../wwsympa/wwsympa.fcgi.in:11844 ../wwsympa/wwsympa.fcgi.in:11977
+#: ../wwsympa/wwsympa.fcgi.in:14290 ../wwsympa/wwsympa.fcgi.in:7923
 msgid "%d %b %y  %H:%M"
 msgstr "%d. %B %y %H:%M"
 
 #. This entry is a date/time format
 #. Check the strftime manpage for format details : http://docs.freebsd.org/info/gawk/gawk.info.Time_Functions.html
-#: ../wwsympa/wwsympa.fcgi.in:16117 ../wwsympa/wwsympa.fcgi.in:16118
+#: ../wwsympa/wwsympa.fcgi.in:16143 ../wwsympa/wwsympa.fcgi.in:16144
 #, fuzzy
 msgid "%Y-%m-%d-%H-%M-%S"
 msgstr "%Y/%m/%d/%H/%M/%S"
@@ -9652,6 +9639,17 @@ msgstr ""
 msgid "Background color for the news area of the home page."
 msgstr ""
 
+#. (init_email)
+#: ../web_tt2/sso_login.tt2:32
+msgid ""
+"A confirmation password has been sent to your email address %1.<br />Please "
+"check your e-mail box for the message containing the confirmation password "
+"needed below."
+msgstr ""
+"Ein Bestätigungspasswort wurde an Ihre E-Mail-Adresse %1 gesendet.<br/> "
+"Bitte überprüfen Sie Ihr Postfach um das unten geforderte Passwort "
+"einzugeben."
+
 #. (fromname,fromaddr,listname)
 #: ../web_tt2/tracking.tt2:6
 msgid "Message from %1 %2 for list %3 "
@@ -9664,6 +9662,19 @@ msgstr ""
 #: ../web_tt2/tracking.tt2:15
 msgid "Delivery status"
 msgstr ""
+
+#: ../mail_tt2/sendssopasswd.tt2:7
+msgid ""
+"To complete your account setup actions you need to confirm that you have \n"
+"supplied a working email address.  Please enter the following email and "
+"password\n"
+"in the setup wizard to complete your account configuration."
+msgstr ""
+"Um Ihre Kontoeinrichtung abzuschließen, müssen Sie bestätigen, dass Sie "
+"eine \n"
+"gültige E-Mail-Adresse angegeben haben. Bitte geben Sie die folgende E-Mail-"
+"Adresse und Passwort im Einrichtungs-Assistenten ein, um Ihre "
+"Kontoeinstellungen abzuschließen."
 
 #: ../src/lib/List.pm:437
 msgid "tracking message by delivery status notification"
@@ -9736,6 +9747,9 @@ msgstr ""
 #~ msgid "Add quietly"
 #~ msgstr "leise"
 
+#~ msgid "Validate Address"
+#~ msgstr "Überprüfe Adresse"
+
 #, fuzzy
 #~ msgid "Message tracking"
 #~ msgstr "Nachrichtenmarkierung"
@@ -9756,12 +9770,11 @@ msgstr ""
 #~ msgid "Notification"
 #~ msgstr "Benachrichtigung"
 
-#~ msgid ""
-#~ "Your message could not be sent because its size \n"
-#~ "was over the maximum size allowed on this list."
-#~ msgstr ""
-#~ "Ihre Nachricht konnte nicht gesendet werden, da ihre\n"
-#~ "Größe über der erlaubten Größe für diese Liste war."
+#~ msgid "your email address   : %1"
+#~ msgstr "Ihre E-Mail-Adresse   : %1"
+
+#~ msgid "your password: %1"
+#~ msgstr "Ihr Passwort: %1"
 
 #, fuzzy
 #~ msgid "who can view message tracking"
@@ -9770,6 +9783,13 @@ msgstr ""
 #, fuzzy
 #~ msgid "Message tracking feature"
 #~ msgstr "Nachrichtenmarkierung"
+
+#~ msgid ""
+#~ "Your message could not be sent because its size \n"
+#~ "was over the maximum size allowed on this list."
+#~ msgstr ""
+#~ "Ihre Nachricht konnte nicht gesendet werden, da ihre\n"
+#~ "Größe über der erlaubten Größe für diese Liste war."
 
 #~ msgid ""
 #~ "** Warning: Message part originally used character set %s\n"

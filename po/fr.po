@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "POT-Creation-Date: 2002-07-16 17:27+0800\n"
-"PO-Revision-Date: 2011-01-13 17:14+0200\n"
+"PO-Revision-Date: 2011-02-15 11:25+0200\n"
 "Last-Translator: David Verdin <david.verdin@cru.fr>\n"
 "Language-Team: Français\n"
 "MIME-Version: 1.0\n"
@@ -2020,8 +2020,8 @@ msgid ""
 "Failed creating list '%1'. The list might already exist or listname might "
 "include forbidden characters."
 msgstr ""
-"Échec de la création de la liste « %1 ». Cette liste existe peut-être déjà "
-"ou bien son nom contient des caractères interdits."
+"Échec de la création de la liste « %1 ». Cette liste existe peut-être déjà ou "
+"bien son nom contient des caractères interdits."
 
 #. (s_err.action)
 #: ../web_tt2/error.tt2:34
@@ -2507,24 +2507,20 @@ msgid "Listname"
 msgstr "Nom de la liste"
 
 #: ../web_tt2/get_inactive_lists.tt2:10
-#, fuzzy
 msgid "Number of subscribers"
-msgstr "modérée pour les abonnés"
+msgstr "Nombre d'abonnés"
 
 #: ../web_tt2/get_inactive_lists.tt2:12
-#, fuzzy
 msgid "Send scenario"
-msgstr "From"
+msgstr "Scénario send"
 
 #: ../web_tt2/get_inactive_lists.tt2:13
-#, fuzzy
 msgid "Creator"
-msgstr "Créer"
+msgstr "Créateur"
 
 #: ../web_tt2/get_inactive_lists.tt2:15
-#, fuzzy
 msgid "Editors"
-msgstr "Modérateur"
+msgstr "Modérateurs"
 
 #: ../web_tt2/get_inactive_lists.tt2:29
 msgid "none so far"
@@ -2788,11 +2784,11 @@ msgid "Go"
 msgstr "Valider"
 
 # nlsref 16,27
-#: ../web_tt2/loginbanner.tt2:39 ../web_tt2/sso_login.tt2:46
+#: ../web_tt2/loginbanner.tt2:39
 msgid "email address:"
 msgstr "adresse email :"
 
-#: ../web_tt2/loginbanner.tt2:41 ../web_tt2/sso_login.tt2:48
+#: ../web_tt2/loginbanner.tt2:41
 msgid "password:"
 msgstr "mot de passe :"
 
@@ -3021,7 +3017,6 @@ msgid "Reject without notification "
 msgstr "Rejeter sans notification"
 
 #: ../web_tt2/modindex.tt2:41
-#, fuzzy
 msgid "Add to blacklist"
 msgstr "Ajouter à  la liste noire"
 
@@ -4254,9 +4249,8 @@ msgstr ""
 "différentes feuilles de styles sont installées dans le répertoire spécifié "
 "par le paramètre « css_path ». Par conséquent, si vous voulez préserver vos "
 "personnalisations, vous devez, dans la configuration de votre serveur "
-"Apache, déclarer que l'URL correspondant au paramètre « css_url » pointe "
-"vers un répertoire différent de celui correspondant au paramètre « css_path "
-"»."
+"Apache, déclarer que l'URL correspondant au paramètre « css_url » pointe vers "
+"un répertoire différent de celui correspondant au paramètre « css_path »."
 
 #: ../web_tt2/skinsedit.tt2:12
 msgid ""
@@ -4591,18 +4585,14 @@ msgstr "Envoyez-moi un mot de passe de confirmation"
 
 #. (init_email)
 #: ../web_tt2/sso_login.tt2:32
+#, fuzzy
 msgid ""
 "A confirmation password has been sent to your email address %1.<br />Please "
-"check your e-mail box for the message containing the confirmation password "
-"needed below."
+"check your e-mail box for the message containing the confirmation link."
 msgstr ""
 "Un mot de passe de confirmation vous a été transmis à l'adresse email %"
 "1<br>Relevez votre boîte aux lettres pour renseigner votre mot de passe ci-"
 "dessous."
-
-#: ../web_tt2/sso_login.tt2:51
-msgid "Validate Address"
-msgstr "Valider l'adresse email"
 
 #: ../web_tt2/stats.tt2:2
 msgid "Shared document directory size:"
@@ -4963,7 +4953,7 @@ msgstr "Période explorée :"
 #. (date_to_formated)
 #. This entry is a date/time format
 #. Check the strftime manpage for format details : http://docs.freebsd.org/info/gawk/gawk.info.Time_Functions.html
-#: ../web_tt2/viewlogs.tt2:113 ../wwsympa/wwsympa.fcgi.in:16172
+#: ../web_tt2/viewlogs.tt2:113 ../wwsympa/wwsympa.fcgi.in:16198
 msgid "%d %b %Y %H:%M:%S"
 msgstr "%d %b %Y %H:%M:%S"
 
@@ -6643,7 +6633,7 @@ msgstr "L'utilisateur %1 a été confronté à une erreur interne"
 #. (error)
 #: ../mail_tt2/listmaster_notification.tt2:293
 msgid "The following error occurred whila managing bounces: %&"
-msgstr ""
+msgstr "L'erreur suivante s'est produite lors du traitement des erreurs : %1"
 
 #: ../mail_tt2/listmaster_notification.tt2:302
 #: ../mail_tt2/listmaster_notification.tt2:373
@@ -7374,6 +7364,13 @@ msgid ""
 "before being sent over email, the final size of an attachment is often "
 "significantly larger that the original file."
 msgstr ""
+"Votre message n'a pas pu être envoyé parce que sa taille (%1 ko) était "
+"supérieure à la taille maximum de message autorisée pour cette liste (%2 "
+"ko).\n"
+"\n"
+"Note : Comme les fichiers binaires doivent être encodés dans le format "
+"ASCII, moins efficace, la taille finale d'une pièce jointe est souvent "
+"nettement supérieure à celle du fichier original."
 
 #. (listname)
 #: ../mail_tt2/message_report.tt2:59
@@ -7616,7 +7613,8 @@ msgstr "Vous avez demandé un désabonnement de la liste %1."
 msgid ""
 "You requested a subscription reminder to be sent to each subscriber of list %"
 "1"
-msgstr "Vous avez l'envoi d'un rappel d'abonnement aux membres de la liste %1"
+msgstr ""
+"Vous avez demandé l'envoi d'un rappel d'abonnement aux membres de la liste %1"
 
 # nlsref 6,78
 #. (-)
@@ -7625,7 +7623,8 @@ msgid ""
 "You requested a subscription reminder to be sent to each subscriber of list "
 "'*'"
 msgstr ""
-"Vous avez l'envoi d'un rappel d'abonnement aux membres de TOUTES les listes."
+"Vous avez demandé l'envoi d'un rappel d'abonnement aux membres de TOUTES les "
+"listes."
 
 # nlsref 6,260
 #. (conf.sympa,command)-)
@@ -7640,13 +7639,14 @@ msgid ""
 "OR\n"
 "- hit the following mailto"
 msgstr ""
-"Pour confirmer cette action veuillez :\n"
+"Pour confirmer cette action, veuillez :\n"
 "- répondre à ce message\n"
 "OU\n"
 "- envoyer un courrier à '%1' avec pour objet\n"
 "%2\n"
+"\n"
 "OU\n"
-"- cliquez sur l'URL suivante"
+"- cliquer sur l'URL suivante"
 
 #. (-)
 #: ../mail_tt2/request_auth.tt2:37
@@ -7759,30 +7759,20 @@ msgstr ""
 "choisir votre mot de passe."
 
 #. (base_url,path_cgi)
-#: ../mail_tt2/sendpasswd.tt2:30 ../mail_tt2/sendssopasswd.tt2:14
+#: ../mail_tt2/sendpasswd.tt2:30 ../mail_tt2/sendssopasswd.tt2:13
 msgid "Help on Sympa: %1%2"
 msgstr "Aide sur Sympa : %1%2"
 
-#: ../mail_tt2/sendssopasswd.tt2:7
+#: ../mail_tt2/sendssopasswd.tt2:6
+#, fuzzy
 msgid ""
 "To complete your account setup actions you need to confirm that you have \n"
-"supplied a working email address.  Please enter the following email and "
-"password\n"
-"in the setup wizard to complete your account configuration."
+"supplied a working email address.  Please follow the link below to complete "
+"your account configuration."
 msgstr ""
 "Pour terminer la validation de votre compte, vous devez confirmer que votre\n"
 "adresse email est valide. Veuillez saisir les éléments email et mot de\n"
 "passe fournis ci-dessous dans l'assistant pour valider votre compte."
-
-#. (newuser.email)
-#: ../mail_tt2/sendssopasswd.tt2:9
-msgid "your email address   : %1"
-msgstr "votre adresse électronique : %1"
-
-#. (newuser.password)
-#: ../mail_tt2/sendssopasswd.tt2:10
-msgid "your password: %1"
-msgstr "votre mot de passe         : %1"
 
 #. (list.name)
 #: ../mail_tt2/stats_report.tt2:4
@@ -8710,7 +8700,7 @@ msgstr "%d %b %Y  %H:%M"
 
 #. This entry is a date/time format
 #. Check the strftime manpage for format details : http://docs.freebsd.org/info/gawk/gawk.info.Time_Functions.html
-#: ../src/lib/Commands.pm:963 ../wwsympa/wwsympa.fcgi.in:9796
+#: ../src/lib/Commands.pm:963 ../wwsympa/wwsympa.fcgi.in:9810
 msgid "%A"
 msgstr "%A"
 
@@ -8728,7 +8718,7 @@ msgstr "Erreur ligne %d : %s"
 #. Check the strftime manpage for format details : http://docs.freebsd.org/info/gawk/gawk.info.Time_Functions.html
 #: ../src/lib/Family.pm:2591 ../src/lib/Family.pm:388 ../src/lib/Family.pm:665
 #: ../src/lib/List.pm:1893 ../wwsympa/Auth.pm:459
-#: ../wwsympa/wwsympa.fcgi.in:1067 ../wwsympa/wwsympa.fcgi.in:2869
+#: ../wwsympa/wwsympa.fcgi.in:1067 ../wwsympa/wwsympa.fcgi.in:2870
 msgid "%d %b %Y at %H:%M:%S"
 msgstr "%d %b %Y at %H:%M:%S"
 
@@ -9556,18 +9546,18 @@ msgstr "%a, %d %b %Y"
 #. This entry is a date/time format
 #. Check the strftime manpage for format details : http://docs.freebsd.org/info/gawk/gawk.info.Time_Functions.html
 #: ../src/lib/List.pm:3110 ../src/lib/List.pm:3111 ../src/lib/List.pm:3115
-#: ../wwsympa/wwsympa.fcgi.in:10978 ../wwsympa/wwsympa.fcgi.in:11047
-#: ../wwsympa/wwsympa.fcgi.in:11249 ../wwsympa/wwsympa.fcgi.in:11596
-#: ../wwsympa/wwsympa.fcgi.in:15035 ../wwsympa/wwsympa.fcgi.in:15042
-#: ../wwsympa/wwsympa.fcgi.in:15744 ../wwsympa/wwsympa.fcgi.in:16522
-#: ../wwsympa/wwsympa.fcgi.in:16523 ../wwsympa/wwsympa.fcgi.in:4266
-#: ../wwsympa/wwsympa.fcgi.in:4324 ../wwsympa/wwsympa.fcgi.in:4895
-#: ../wwsympa/wwsympa.fcgi.in:4896 ../wwsympa/wwsympa.fcgi.in:6393
-#: ../wwsympa/wwsympa.fcgi.in:7412 ../wwsympa/wwsympa.fcgi.in:7955
-#: ../wwsympa/wwsympa.fcgi.in:8002 ../wwsympa/wwsympa.fcgi.in:8004
-#: ../wwsympa/wwsympa.fcgi.in:8480 ../wwsympa/wwsympa.fcgi.in:8481
-#: ../wwsympa/wwsympa.fcgi.in:8515 ../wwsympa/wwsympa.fcgi.in:8516
-#: ../wwsympa/wwsympa.fcgi.in:8695 ../wwsympa/wwsympa.fcgi.in:8696
+#: ../wwsympa/wwsympa.fcgi.in:10992 ../wwsympa/wwsympa.fcgi.in:11061
+#: ../wwsympa/wwsympa.fcgi.in:11263 ../wwsympa/wwsympa.fcgi.in:11610
+#: ../wwsympa/wwsympa.fcgi.in:15061 ../wwsympa/wwsympa.fcgi.in:15068
+#: ../wwsympa/wwsympa.fcgi.in:15770 ../wwsympa/wwsympa.fcgi.in:16548
+#: ../wwsympa/wwsympa.fcgi.in:16549 ../wwsympa/wwsympa.fcgi.in:4280
+#: ../wwsympa/wwsympa.fcgi.in:4338 ../wwsympa/wwsympa.fcgi.in:4909
+#: ../wwsympa/wwsympa.fcgi.in:4910 ../wwsympa/wwsympa.fcgi.in:6407
+#: ../wwsympa/wwsympa.fcgi.in:7426 ../wwsympa/wwsympa.fcgi.in:7969
+#: ../wwsympa/wwsympa.fcgi.in:8016 ../wwsympa/wwsympa.fcgi.in:8018
+#: ../wwsympa/wwsympa.fcgi.in:8494 ../wwsympa/wwsympa.fcgi.in:8495
+#: ../wwsympa/wwsympa.fcgi.in:8529 ../wwsympa/wwsympa.fcgi.in:8530
+#: ../wwsympa/wwsympa.fcgi.in:8709 ../wwsympa/wwsympa.fcgi.in:8710
 msgid "%d %b %Y"
 msgstr "%d %b %Y"
 
@@ -9708,14 +9698,14 @@ msgstr "%H:%M:%S"
 #. This entry is a date/time format
 #. Check the strftime manpage for format details : http://docs.freebsd.org/info/gawk/gawk.info.Time_Functions.html
 #: ../wwsympa/SympaSession.pm:431 ../wwsympa/SympaSession.pm:432
-#: ../wwsympa/wwsympa.fcgi.in:11830 ../wwsympa/wwsympa.fcgi.in:11963
-#: ../wwsympa/wwsympa.fcgi.in:14276 ../wwsympa/wwsympa.fcgi.in:7909
+#: ../wwsympa/wwsympa.fcgi.in:11844 ../wwsympa/wwsympa.fcgi.in:11977
+#: ../wwsympa/wwsympa.fcgi.in:14290 ../wwsympa/wwsympa.fcgi.in:7923
 msgid "%d %b %y  %H:%M"
 msgstr "%d %b %y  %H:%M"
 
 #. This entry is a date/time format
 #. Check the strftime manpage for format details : http://docs.freebsd.org/info/gawk/gawk.info.Time_Functions.html
-#: ../wwsympa/wwsympa.fcgi.in:16117 ../wwsympa/wwsympa.fcgi.in:16118
+#: ../wwsympa/wwsympa.fcgi.in:16143 ../wwsympa/wwsympa.fcgi.in:16144
 msgid "%Y-%m-%d-%H-%M-%S"
 msgstr "%d/%m/%Y/%H/%M/%S"
 
@@ -9895,6 +9885,28 @@ msgstr "interrompre la réception des messages (utile pendant les vacances)"
 msgid "you do not receive your own posts"
 msgstr "pour ne pas recevoir ses propres messages"
 
+#. (init_email)
+#: ../web_tt2/sso_login.tt2:32
+msgid ""
+"A confirmation password has been sent to your email address %1.<br />Please "
+"check your e-mail box for the message containing the confirmation password "
+"needed below."
+msgstr ""
+"Un mot de passe de confirmation vous a été transmis à l'adresse email %"
+"1<br>Relevez votre boîte aux lettres pour renseigner votre mot de passe ci-"
+"dessous."
+
+#: ../mail_tt2/sendssopasswd.tt2:7
+msgid ""
+"To complete your account setup actions you need to confirm that you have \n"
+"supplied a working email address.  Please enter the following email and "
+"password\n"
+"in the setup wizard to complete your account configuration."
+msgstr ""
+"Pour terminer la validation de votre compte, vous devez confirmer que votre\n"
+"adresse email est valide. Veuillez saisir les éléments email et mot de\n"
+"passe fournis ci-dessous dans l'assistant pour valider votre compte."
+
 #~ msgid "Statistics"
 #~ msgstr "Statistiques"
 
@@ -9996,6 +10008,9 @@ msgstr "pour ne pas recevoir ses propres messages"
 #~ msgid "Background color for the news area of the home page."
 #~ msgstr "Couleur de fond pour la zone d'actualités de la page d'accueil."
 
+#~ msgid "Validate Address"
+#~ msgstr "Valider l'adresse email"
+
 # nlsref 15,4
 #~ msgid "Message tracking"
 #~ msgstr "Suivi de la diffusion (corrélation des avis)"
@@ -10021,13 +10036,11 @@ msgstr "pour ne pas recevoir ses propres messages"
 #~ msgid "Notification"
 #~ msgstr "Notification"
 
-# nlsref 4,12
-#~ msgid ""
-#~ "Your message could not be sent because its size \n"
-#~ "was over the maximum size allowed on this list."
-#~ msgstr ""
-#~ "Votre message ne peut pas être envoyé car il dépasse la taille maximale\n"
-#~ "autorisée pour cette liste."
+#~ msgid "your email address   : %1"
+#~ msgstr "votre adresse électronique : %1"
+
+#~ msgid "your password: %1"
+#~ msgstr "votre mot de passe         : %1"
 
 #~ msgid "tracking message by delivery status notification"
 #~ msgstr "Suivre les messages par delivery status notification (DSN)"
@@ -10046,6 +10059,14 @@ msgstr "pour ne pas recevoir ses propres messages"
 # nlsref 15,4
 #~ msgid "Message tracking feature"
 #~ msgstr "Fonctionnalité de suivi des messages"
+
+# nlsref 4,12
+#~ msgid ""
+#~ "Your message could not be sent because its size \n"
+#~ "was over the maximum size allowed on this list."
+#~ msgstr ""
+#~ "Votre message ne peut pas être envoyé car il dépasse la taille maximale\n"
+#~ "autorisée pour cette liste."
 
 #~ msgid ""
 #~ "** Warning: Message part originally used character set %s\n"
