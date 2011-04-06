@@ -132,13 +132,18 @@ sub load {
 	do_log('err','Unable to execute SQL statement "%s" : %s', $statement, $dbh->errstr);
 	return undef;
     }    
-    my $session = $sth->fetchrow_hashref('NAME_lc');
-
-    if ( $sth->fetchrow_hashref('NAME_lc')){
-	do_log('err',"the SQL statement %s did return more then one session. Is this a bug comming from dbi or mysql ? ");
-	$session->{'email'} = '';
+    my $session = undef;
+    my $new_session = undef;
+    my $counter = 0;
+    while ($new_session = $sth->fetchrow_hashref('NAME_lc')) {
+	if ( $counter > 0){
+	    &Log::do_log('err',"The SQL statement did return more than one session. Is this a bug coming from dbi or mysql ? ");
+	    $session->{'email'} = '';
+	    last;
+	}
+	$session = $new_session;
+	$counter ++;
     }
-    $sth->finish();
     
     unless ($session) {
 	return 'not_found';
