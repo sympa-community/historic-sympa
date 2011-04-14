@@ -35,7 +35,7 @@ While processing a message in Sympa, we need to link informations to rhe message
 package Message;
 
 use strict;
-
+use Data::Dumper;
 use Carp;
 use Mail::Header;
 use Mail::Address;
@@ -131,7 +131,11 @@ sub new {
     my $message_in_spool= $datas->{'message_in_spool'};
 
     my $message;
-    &do_log('debug2', 'Message::new(%s,%s)',$file,$noxsympato);
+    my $input = 'file' if $file;
+    $input = 'messageasstring' if $messageasstring; 
+    $input = 'message_in_spool' if $message_in_spool; 
+    $input = 'mimeentity' if $mimeentity; 
+    &do_log('debug2', 'Message::new(input= %s)',$input);
     
     if ($mimeentity) {
 	$message->{'msg'} = $file;
@@ -152,42 +156,34 @@ sub new {
 	$messageasstring = $message_in_spool->{'messageasstring'};
 	$message->{'messagekey'}= $message_in_spool->{'messagekey'};
 	$message->{'spoolname'}= $message_in_spool->{'spoolname'};
-	do_log('trace'," message as string 3 $messageasstring ");
     }
     if ($file) {
 	## Parse message as a MIME::Entity
 	$message->{'filename'} = $file;
-
-	do_log('trace',"FICHIER $file");
-
 	unless (open FILE, "$file") {
 	    &do_log('err', 'Cannot open message file %s : %s',  $file, $!);
 	    return undef;
 	}
-	else{do_log('trace',"on peut le lire");}
-
 	while (<FILE>){
 	    $messageasstring = $messageasstring.$_;
 	}
 	close(FILE);
+	# my $dump = &Dumper($messageasstring); open (DUMP,">>/tmp/dumper"); printf DUMP 'lecture du fichier \n%s',$dump ; close DUMP; do_log('trace',"dumper");
     }
     if($messageasstring){
-	do_log('trace',"on a norte string %s",$messageasstring);
 	if (ref ($messageasstring)){
-	    do_log('trace',"message 1: $messageasstring"); 
 	    $msg = $parser->parse_data($messageasstring);
 	}else{
-	    do_log('trace',"message 2: \$messageasstring"); 
 	    $msg = $parser->parse_data(\$messageasstring);
 	}
     }   
     unless ($msg){
 	do_log('err',"could not parse message"); 
-	do_log('trace',"hhhhhhhhhhhhh could not parse message"); exit;
 	return undef;
     }
     $message->{'msg'} = $msg;
-    $message->{'msg_as_string'} = $msg->as_string; 
+#    $message->{'msg_as_string'} = $msg->as_string; 
+    $message->{'msg_as_string'} = $messageasstring; 
     $message->{'size'} = length($msg->as_string);
 
     my $hdr = $message->{'msg'}->head;
@@ -534,6 +530,16 @@ sub fix_html_part {
 	$io->close;
     }
     return $part;
+}
+
+# extract body as string from msg_as_string
+# do NOT use Mime::Entity in order to preserveB64 encoding form and so preserve S/MIME signature
+sub get_body_from_msg_as_string {
+    my $msg =shift;
+
+    my @bodysection =split("\n\n",$msg );    # convert it as a tab with headers as first element
+    shift @bodysection;                      # remove headers
+    return (join ("\n\n",@bodysection));  # convert it back as string
 }
 
 

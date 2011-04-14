@@ -22,7 +22,7 @@
 # Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
 
 use strict;
-
+use Data::Dumper;
 use lib '--modulesdir--';
 #use Getopt::Std;
 use Getopt::Long;
@@ -57,8 +57,7 @@ my $is_signed = {};
 
 ## Internal tuning
 # delay between each read of the digestqueue
-do_log('trace',"pour les test je passe ce sleep à 2, remettre 5 pour le commit");
-my $digestsleep = 2; 
+my $digestsleep = 5;
 
 ## Init random engine
 srand (time());
@@ -607,7 +606,7 @@ if ($main::options{'dump'}) {
 }elsif ($main::options{'test_database_message_buffer'}) {
     my $size = 0;   
     printf "Sympa is going to store messages bigger and bigger to test the limit with its database. This may be very long \n";
-    $size = &Bulk::store_test(21000); ## will test message until a 21 Mo message.
+    $size = &Sympaspool::store_test(21000); ## will test message until a 21 Mo message.
     if ($size == 21000) {
 	printf "The maximum message size ($size Ko) testing was successful \n";
     }else{
@@ -983,17 +982,17 @@ while (!$signal) {
 	    $msg_bad->clean({'delay'=>$Conf{'clean_delay_queue'}});
 	    my $archive_bad = new Sympaspool('archive','bad'); 
 	    $archive_bad->clean({'delay'=>$Conf{'clean_delay_queueoutgoing'}});
-	    my $queuebounce_bad = new Sympaspool('queuebounce','bad'); 
+	    my $queuebounce_bad = new Sympaspool('bounce','bad'); 
 	    $queuebounce_bad->clean({'delay'=>$Conf{'clean_delay_queuebounce'}});
-	    my $queuemod = new Sympaspool('queuemod');
+	    my $queuemod = new Sympaspool('mod');
 	    $queuemod->clean({'delay'=> $Conf{'clean_delay_queuemod'}});
-	    my $queueauth = new Sympaspool('queueauth');
+	    my $queueauth = new Sympaspool('auth');
 	    $queueauth->clean({'delay'=> $Conf{'clean_delay_queueauth'}});
-	    my $queuetopic = new Sympsspool('queuetopic');
+	    my $queuetopic = new Sympaspool('topic');
 	    $queuetopic->clean({'delay'=> $Conf{'clean_delay_queuetopic'}});
-	    my $queuesubscribe = new Sympaspool('queuesubscribe');
+	    my $queuesubscribe = new Sympaspool('subscribe');
 	    $queuesubscribe->clean({'delay'=> $Conf{'clean_delay_queuesubscribe'}});
-	    my $queueautomatic = new Sympaspool('queueautomatic');
+	    my $queueautomatic = new Sympaspool('automatic');
 	    $queueautomatic->clean({'delay'=> $Conf{'clean_delay_queueautomatic'}});
 
 	    &tools::CleanDir($Conf{'tmpdir'}, $Conf{'clean_delay_tmpdir'}); # this is not a message spool
@@ -1022,7 +1021,6 @@ while (!$signal) {
     ## Set NLS default lang for current message
     $Language::default_lang = $main::options{'lang'} || &Conf::get_robot_conf($robot, 'lang');
 	
-	# Appel de la fonction de traitement des mails entrants
     my $status = &process_message($message_in_spool);
         
     if (defined($status)) {
@@ -1118,6 +1116,8 @@ sub process_message {
     my $status;
     
     my $message = new Message({'message_in_spool' => $message_in_spool});
+    
+    do_log('trace',"sympa réccupère dans le spool numero %s",$message->{'messagekey'});
 
     unless (defined $message) {
 	&do_log('err', 'Unable to create Message object message : %s', $message_in_spool->{'messagekey'});
@@ -1745,13 +1745,12 @@ sub DoMessage{
 	
     my $admin = $list->{'admin'};
     unless ($admin) {
-		&do_log('err', 'sympa::DoMessage(): list config is undefined');
-		&report::reject_report_msg('intern','',$sender,{'message' => $message},$robot,$msg_string,$list);
-		&Log::db_log({'robot' => $robot,'list' => $list->{'name'},'action' => 'DoMessage','parameters' => "$which,$messageid,$robot",'target_email' => '','msg_id' => $messageid,'status' => 'error','error_type' => 'internal','user_email' => $sender,'client' => $ip,'daemon' => $daemon_name});
-		return undef;
-  }
+	&do_log('err', 'sympa::DoMessage(): list config is undefined');
+	&report::reject_report_msg('intern','',$sender,{'message' => $message},$robot,$msg_string,$list);
+	&Log::db_log({'robot' => $robot,'list' => $list->{'name'},'action' => 'DoMessage','parameters' => "$which,$messageid,$robot",'target_email' => '','msg_id' => $messageid,'status' => 'error','error_type' => 'internal','user_email' => $sender,'client' => $ip,'daemon' => $daemon_name});
+	return undef;
+    }
     
-    my $customheader = $admin->{'custom_header'};
 #    $host = $admin->{'host'} if ($admin->{'host'});
 
     ## Check if the message is a return receipt
@@ -1780,7 +1779,7 @@ sub DoMessage{
     ## list msg topic	
     if ($list->is_there_msg_topic()) {
 
-	my $info_msg_topic = $list->load_msg_topic_file($messageid,$robot);
+	my $info_msg_topic = $list->load_msg_topic($messageid,$robot);
 
 	# is msg already tagged ?	
 	if (ref($info_msg_topic) eq "HASH") { 
@@ -2119,12 +2118,11 @@ sub DoCommand {
 ############################################################## 
 sub SendDigest{
     &do_log('debug', 'SendDigest()');
+    &do_log('trace', 'SendDigest()');
 
     my $digestspool = new Sympaspool('digest');
 
     foreach my $digest ($digestspool->get_content({'selection'=>'messagekey,list,robot,date'})){
-	do_log('trace','SENDDIGEST SCAN DU SPOOL list : %s, robot : %s', $digest->{'list'},$digest->{'robot'});
-
  	my $list = new List ($digest->{'list'}, $digest->{'robot'});
 	unless ($list) {
 	    &Log::do_log('info', 'Unknown list %s, (robot %s), deleting digest (messagekey %s)',$digest->{'list'}, $digest->{'messagekey'} );
@@ -2144,7 +2142,6 @@ sub SendDigest{
 	    do_log('info', 'Digest of the list %s sent (%d seconds)', $list->{'name'},time - $start_time);
 	    &Log::db_log({'robot' => $list->{'robot'},'list' => $list->{'name'},'action' => 'SendDigest','parameters' => "",'target_email' => '','msg_id' => '','status' => 'success','error_type' => '','user_email' => '','client' => $ip,'daemon' => $daemon_name});
 	}
-	else{do_log('trace',"pas de digest mur");}
     }
 }
 

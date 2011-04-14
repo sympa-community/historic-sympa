@@ -22,7 +22,7 @@
 package Archive;
 
 use strict;
-
+use Cwd;
 use Log;
 
 my $serial_number = 0; # incremented on each archived mail
@@ -307,8 +307,59 @@ sub clean_archived_message{
     }
 }
 
+#############################
+# convert a messsage to html. 
+#    result is stored in $destination_dir
+#    attachement_url is sused to link attachement
+#    
+sub convert_single_msg_2_html {
+    
+    my $message =shift;
+    my $destination_dir = shift;
+    my $attachement_url = shift;
+    my $list = shift;
+    my $host = $list->{'admin'}{'host'};
 
+    my $pwd = getcwd;  #  mhonarc require du change workdir so this proc must retore it
+    
+    my $robot = $list->{'robot'};
+    my $listname = $list->{'name'};
+    my $msg_file = &Conf::get_robot_conf($robot, 'tmpdir').'/'.$list->get_list_id().'_'.$$;
+
+    unless (open(OUT, ">$msg_file")) {
+	do_log('notice', 'Could Not open %s', $msg_file);
+	return undef;
+    }
+    printf OUT $message->{'message_as_string'};
+    close(OUT);
+    
+    unless (-d $destination_dir) {
+	unless (mkdir ($destination_dir, 0777)) {
+	    &do_log('err','Unable to create %s', $destination_dir);
+	    return undef;
+	}
+	my $mhonarc_ressources = &tools::get_filename('etc',{},'mhonarc-ressources.tt2', $robot,$list);
+	
+	unless ($mhonarc_ressources) {
+	    do_log('notice',"Cannot find any MhOnArc ressource file");
+	    return undef;
+	}
+	## generate HTML
+	chdir $destination_dir;
+	my $mhonarc = &Conf::get_robot_conf($robot, 'mhonarc');
+	my $base_url = &Conf::get_robot_conf($robot, 'wwsympa_url');
+	open ARCMOD, "$mhonarc  -single --outdir .. -rcfile $mhonarc_ressources -definevars listname=$listname -definevars hostname=$host -attachmenturl=$attachement_url $msg_file|";
+	open MSG, ">msg00000.html";
+	&do_log('debug', "$mhonarc  -single -rcfile $mhonarc_ressources -definevars listname=$listname -definevars hostname=$host $msg_file");
+	print MSG <ARCMOD>;
+	close MSG;
+	close ARCMOD;
+	# restore current wd 
+	chdir $pwd;		
+    }
+    unlink $msg_file ;
+    do_log('trace',"conversionde message en html  faite");
+    return 1;
+}
 
 1;
-
-

@@ -35,7 +35,8 @@ use Fetch;
 use WebAgent;
 use Exporter;
 use Sympaspool;
-# xxxxxxx faut-il virer encode ? Faut en faire un use ? 
+use Archive;
+
 require Encode;
 
 use tt2;
@@ -653,7 +654,7 @@ my %alias = ('reply-to' => 'reply_to',
 		                         			  'occurence' => '0-1',
 			                                          'default' => {'conf' => 'dkim_header_list'},
 			                                          'gettext_id' => 'List of headers to be included ito the message for signature',
-								  'comment' => 'You should probably use teh default value which is the value recommended by RFC4871',
+								  'comment' => 'You should probably use the default value which is the value recommended by RFC4871',
 								  'order' => 4
                                                                   },
 					     'signer_domain' =>   {'format' => '\S+',
@@ -2518,7 +2519,7 @@ sub distribute_msg {
     if ($self->is_there_msg_topic()) {
 	my $msg_id = $hdr->get('Message-ID');
 	chomp($msg_id);
-	$info_msg_topic = $self->load_msg_topic_file($msg_id,$robot);
+	$info_msg_topic = $self->load_msg_topic($msg_id,$robot);
 
 	# add X-Sympa-Topic header
 	if (ref($info_msg_topic) eq "HASH") {
@@ -2528,24 +2529,19 @@ sub distribute_msg {
 
     ## Hide the sender if the list is anonymoused
     if ( $self->{'admin'}{'anonymous_sender'} ) {
-
 	foreach my $field (@{$Conf::Conf{'anonymous_header_fields'}}) {
 	    $hdr->delete($field);
 	}
-	
 	$hdr->add('From',"$self->{'admin'}{'anonymous_sender'}");
-	my $new_id = "$self->{'name'}.$sequence\@anonymous";
-	$hdr->add('Message-id',"<$new_id>");
+	my $new_id = '<'."$self->{'name'}.$sequence\@anonymous".'>';
+	$hdr->add('Message-id',$new_id);
 	
-	# rename msg_topic filename
+	# rename update topic content id of the message
 	if ($info_msg_topic) {
-	    my $queuetopic = &Conf::get_robot_conf($robot, 'queuetopic');
-	    my $listname = "$self->{'name'}\@$robot";
-	    rename("$queuetopic/$info_msg_topic->{'filename'}","$queuetopic/$listname.$new_id");
-	    $info_msg_topic->{'filename'} = "$listname.$new_id";
+	    my $topicspool = new Sympaspool ('topic');	    
+	    $topicspool->update({'list' => $self->{'name'},'robot' => $robot},'messagekey' => $info_msg_topic->{'messagekey'},{'messageid'=>$new_id});	
 	}
-	
-	## Virer eventuelle signature S/MIME
+	## TODO remove S/MIME and PGP signature if any
     }
     
     ## Add Custom Subject
@@ -2600,7 +2596,6 @@ sub distribute_msg {
 										    [Encode::decode('utf8', '['.$parsed_tag.']'), &Language::GetCharset()]
 										    ], Encoding=>'A', Field=>'Subject') . ' ' . $after_tag;
 	}
-
 	$message->{'msg'}->head->add('Subject', $subject_field);
     }
 
@@ -2650,6 +2645,7 @@ sub distribute_msg {
     
     ## Add useful headers
     $hdr->add('X-Loop', "$name\@$host");
+    $message->{'msg'}->head->add('X-Loop', "$name\@$host");
     $hdr->add('X-Sequence', $sequence);
     $hdr->add('Errors-to', $name.&Conf::get_robot_conf($robot, 'return_path_suffix').'@'.$host);
     $hdr->add('Precedence', 'list');
@@ -2696,7 +2692,6 @@ sub distribute_msg {
     
     ## store msg in digest if list accept digest mode (encrypted message can't be included in digest)
     if (($self->is_digest()) and ($message->{'smime_crypted'} ne 'smime_crypted')) {
-	do_log('trace','ici on a la liste %s @ %s', $self->{'name'},$self->{'robot'}) ;
 	$self->store_digest($message);
     }
 
@@ -2708,7 +2703,6 @@ sub distribute_msg {
 
     ## Blindly send the message to all users.
     my $numsmtp = $self->send_msg('message'=> $message, 'apply_dkim_signature'=>$apply_dkim_signature, 'apply_tracking'=>$apply_tracking);
-
     $self->savestats() if (defined ($numsmtp));
     return $numsmtp;
 }
@@ -2729,7 +2723,6 @@ sub send_msg_digest {
     my $self = shift;
     my $messagekey = shift;
     do_log('debug',"send_msg_disgest(%s)",$messagekey);
-#    do_log('trace',"send_msg_disgest(%s)",$messagekey);
 
     # fetch and lock message. 
     my $digestspool = new Sympaspool ('digest');
@@ -2775,7 +2768,6 @@ sub send_msg_digest {
 	    }
 	}
 	if ($user->{'reception'} eq "digest") {
-#	    do_log('trace'," un abonne en digest : %s",$user->{'email'});
 	    push @tabrcpt, $user->{'email'};
 
 	}elsif ($user->{'reception'} eq "summary") {
@@ -2783,7 +2775,6 @@ sub send_msg_digest {
 	    push @tabrcptsummary, $user->{'email'};
         
 	}elsif ($user->{'reception'} eq "digestplain") {
-#	    do_log('trace'," un abonne en digestplain : %s",$user->{'email'});
 	    push @tabrcptplain, $user->{'email'};              
 	}
     }
@@ -2796,7 +2787,6 @@ sub send_msg_digest {
     my @messages_as_string = split (/$separator/,$message_in_spool->{'messageasstring'}); 
 
     foreach my $message_as_string (@messages_as_string){  
-	do_log('trace',"dump de chaque mail %s",$message_as_string);
 	my $parser = new MIME::Parser;
 	$parser->output_to_core(1);
 	$parser->extract_uuencode(1);  
@@ -3568,47 +3558,17 @@ sub send_to_editor {
    my $modkey=Digest::MD5::md5_hex(join('/', $self->get_cookie(),$messageid));
    my $boundary ="__ \<$messageid\>";
    
-   ## Keeps a copy of the message
    if ($method eq 'md5'){  
-       my $spool = new Sympaspool('mod');
-       $spool->update({'messagekey' => $message->{'messagekey'}},{"authkey" => $modkey,'messagelock'=> 'NULL'});
+       # move message to spool  mod
+       my $spoolmod = new Sympaspool('mod');       
+       $spoolmod->update({'messagekey' => $message->{'messagekey'}},{"authkey" => $modkey,'messagelock'=> 'NULL'});
 
-
-       # this file manipulation must be move in database using a temporary file (not in $modqueue). Fil must be remove after being copied in database
-       my $mod_file = $modqueue.'/'.$self->get_list_id().'_'.$modkey;
-       unless (open(OUT, ">$mod_file")) {
-	   do_log('notice', 'Could Not open %s', $mod_file);
-	   return undef;
-       }
-       printf OUT $message->{'message_as_string'};
-       close(OUT);
-
-       do_log('trace',"ATTENTION ATTENTION ATTENTION : le traitement de conversion html est pas  fait en bdd");
-       my $tmp_dir = $modqueue.'/.'.$self->get_list_id().'_'.$modkey;
-       unless (-d $tmp_dir) {
-	   unless (mkdir ($tmp_dir, 0777)) {
-	       &do_log('err','Unable to create %s', $tmp_dir);
-	       return undef;
-	   }
-	   my $mhonarc_ressources = &tools::get_filename('etc',{},'mhonarc-ressources.tt2', $robot, $self);
-
-	   unless ($mhonarc_ressources) {
-	       do_log('notice',"Cannot find any MhOnArc ressource file");
-	       return undef;
-	   }
-	   ## generate HTML
-	   chdir $tmp_dir;
-	   my $mhonarc = &Conf::get_robot_conf($robot, 'mhonarc');
-	   my $base_url = &Conf::get_robot_conf($robot, 'wwsympa_url');
-	   open ARCMOD, "$mhonarc  -single --outdir .. -rcfile $mhonarc_ressources -definevars listname=$name -definevars hostname=$host -attachmenturl=viewmod/$name/$modkey $mod_file|";
-	   open MSG, ">msg00000.html";
-	   &do_log('debug', "$mhonarc  -single -rcfile $mhonarc_ressources -definevars listname=$name -definevars hostname=$host $mod_file");
-	   print MSG <ARCMOD>;
-	   close MSG;
-	   close ARCMOD;
-	   chdir $Conf::Conf{'home'};
-       }
+       # prepare html view of this message
+       my $destination_dir  = $Conf::Conf{'viewmail_dir'}.'/mod/.'.$self->get_list_id().'_'.$modkey;
+       do_log('trace',"viewmail_dir :%s",$Conf::Conf{'viewmail_dir'});
+       &Archive::convert_single_msg_2_html ($message,$destination_dir,"viewmod/$name/$modkey",$self );
    }
+   else{do_log('trace',"methode auth = %s",$method);}
 
    @rcpt = $self->get_editors_email();
    
@@ -3645,7 +3605,7 @@ sub send_to_editor {
        $param->{'request_topic'} = 1;
    }
 
-       foreach my $recipient (@rcpt) {
+   foreach my $recipient (@rcpt) {
        if ($encrypt eq 'smime_crypted') {	       
 	   ## is $msg->body_as_string respect base64 number of char per line ??
 	   my $cryptedmsg = &tools::smime_encrypt($msg->head, $msg->body_as_string, $recipient); 
@@ -3727,7 +3687,7 @@ sub send_auth {
    chomp $authkey;
   
    my $spool = new Sympaspool('auth');
-   $spool->update({'messagekey' => $message->{'messagekey'}},{"spoolname" => 'auth','authkey'=> $authkey});
+   $spool->update({'messagekey' => $message->{'messagekey'}},{"spoolname" => 'auth','authkey'=> $authkey, 'messagelock'=> 'NULL'});
 
    my $param = {'authkey' => $authkey,
 		'boundary' => "----------------- Message-Id: \<$messageid\>",
@@ -7429,7 +7389,6 @@ sub archive_ls {
 sub archive_msg {
     my($self, $message ) = @_;
     do_log('debug', 'List::archive_msg for %s',$self->{'name'});
-    do_log('trace', 'List::archive_msg for %s',$self->{'name'});
 
     if ($self->is_archived()){
 	
@@ -7485,13 +7444,11 @@ sub get_nextdigest {
     my $self = shift;
     my $date = shift;   # the date epoch as stored in the spool database
 
-    do_log('trace',"%s -> get_nextdigest (%s)",$self->{'name'},$date);
     do_log('debug3', 'List::get_nextdigest (%s)');
 
     my $digest = $self->{'admin'}{'digest'};
 
     unless ($digest) {
-	do_log('trace',"pas de digest pour ce cette liste");
 	return undef;
     }
     
@@ -7506,7 +7463,6 @@ sub get_nextdigest {
     my $send_digest = 0;
     foreach my $d (@days){
 	if ($d == $today) {
-	    do_log('trace',"un digest aujourd'hui");
 	    $send_digest = 1;
 	    last;
 	}
@@ -9463,30 +9419,23 @@ sub store_digest {
     my $message_as_string;
 
     if($current_digest) {
-	do_log('trace',"c'est un ajout");
 	$message_as_string = $current_digest->{'messageasstring'};
     }else{
-	do_log('trace',"c'est une premiere");
 	$message_as_string =  sprintf "\nThis digest for list has been created on %s\n\n", POSIX::strftime("%a %b %e %H:%M:%S %Y", @now);
 	$message_as_string .= sprintf "------- THIS IS A RFC934 COMPLIANT DIGEST, YOU CAN BURST IT -------\n\n";
 	$message_as_string .= sprintf "\n%s\n\n", &tools::get_separator();
     }
-    do_log('trace',"message a mettre dans le digest 0 : %s",$message_as_string );
     $message_as_string .= $message->{'msg_as_string'} ;
     $message_as_string .= sprintf "\n%s\n\n", &tools::get_separator();
-
-    do_log('trace',"message a mettre dans le digest 1: %s",$message_as_string );
 
     # update and unlock current digest message or create it
     if ($current_digest) {
 	# update does not modify the date field, this is needed in order to send digest when needed.
-	do_log('trace',"updating digest in spool");
 	unless ($digestspool->update({'messagekey'=>$current_digest->{'messagekey'}},{'message'=>$message_as_string,'messagelock'=>'NULL'})){
 	    do_log('err',"could not update digest adding this message (digest spool entry key %s)",$current_digest->{'messagekey'});
 	    return undef;
 	}
     }else{
-	do_log('trace',"init digest in spool");
 	unless ($digestspool->store($message_as_string,{'list'=>$self->{'name'},'robot'=>$self->{'robot'}})){
 	    do_log('err',"could not store message in digest spool messafge digestkey %s",$current_digest->{'messagekey'})	;
 	    return undef;
@@ -9846,16 +9795,16 @@ sub get_which {
 ## return total of messages awaiting moderation
 sub get_mod_spool_size {
     my $self = shift;
-    do_log('debug3', 'List::get_mod_spool_size()');    
+    do_log('debug', 'List::get_mod_spool_size()');    
+    do_log('trace', 'List::get_mod_spool_size()');    
     
     my $spool = new Sympaspool('mod');
-    my $count =  $spool->get_content({'selector' =>{'list'=> $self->{'name'},'robot'=> $self=>{'robot'} },
+    my $count =  $spool->get_content({'selector' =>{'list'=> $self->{'name'},'robot'=> $self->{'robot'} },
 				      'selection'=>'count'});
     
     if ($count) {
 	return $count;
     }else{
-	do_log('trace',"could not count mod spool content");
 	return 0;
     }
 }
@@ -10997,9 +10946,7 @@ sub automatic_tag {
     my $topic_list = $self->compute_topic($msg,$robot);
 
     if ($topic_list) {
-	my $filename = $self->tag_topic($msg_id,$topic_list,'auto');
-
-	unless ($filename) {
+	unless ($self->tag_topic($msg_id,$topic_list,'auto')) {
 	    &do_log('err','Unable to tag message %s with topic "%s"',$msg_id,$topic_list);
 	    return undef;
 	}
@@ -11038,16 +10985,13 @@ sub compute_topic {
     ## TAGGING INHERITED BY THREAD
     # getting reply-to
     my $reply_to = $msg->head->get('In-Reply-To');
-    $reply_to =  &tools::clean_msg_id($reply_to);
-    my $info_msg_reply_to = $self->load_msg_topic_file($reply_to,$robot);
+    my $info_msg_reply_to = $self->load_msg_topic($reply_to,$robot);
 
     # is msg reply to already tagged?	
     if (ref($info_msg_reply_to) eq "HASH") { 
 	return $info_msg_reply_to->{'topic'};
     }
      
-
-
     ## TAGGING BY KEYWORDS
     # getting keywords
     foreach my $topic (@{$self->{'admin'}{'msg_topic'}}) {
@@ -11127,39 +11071,27 @@ sub compute_topic {
 #      -$method (+) : 'auto'|'editor'|'sender'
 #         the method used for tagging
 #
-# OUT : string - msg topic filename
+# OUT : string - msg topic messagekey
 #       | undef
 ####################################################
 sub tag_topic {
     my ($self,$msg_id,$topic_list,$method) = @_;
     &do_log('debug3','tag_topic(%s,%s,"%s",%s)',$self->{'name'},$msg_id,$topic_list,$method);
 
-    my $robot = $self->{'domain'};
-    my $queuetopic = &Conf::get_robot_conf($robot, 'queuetopic');
-    my $list_id = $self->get_list_id();
-    $msg_id = &tools::clean_msg_id($msg_id);
-    $msg_id =~ s/>$//;
-    my $file = $list_id.'.'.$msg_id;
+    my $topic_item =  sprintf  "TOPIC   $topic_list\n";
+    $topic_item .= sprintf  "METHOD  $method\n";
+    my $topicspool = new Sympaspool ('topic');
+    
+    return ($topicspool->store($topic_item,{'list'=>$self->{'name'},'robot'=> $self->{'domain'},'messageid'=>$msg_id}));
 
-    unless (open (FILE, ">$queuetopic/$file")) {
-	&do_log('info','Unable to create msg topic file %s/%s : %s', $queuetopic,$file, $!);
-	return undef;
-    }
-
-    print FILE "TOPIC   $topic_list\n";
-    print FILE "METHOD  $method\n";
-
-    close FILE;
-
-    return "$queuetopic/$file";
 }
 
 
 
 ####################################################
-# load_msg_topic_file
+# load_msg_topic
 ####################################################
-#  Looks for a msg topic file from the msg_id of 
+#  Looks for a msg topic using the msg_id of 
 # the message, loads it and return contained information 
 # in a HASH
 #
@@ -11174,26 +11106,25 @@ sub tag_topic {
 #         - filename : name of the file containing this information 
 #     | undef 
 ####################################################
-sub load_msg_topic_file {
+sub load_msg_topic {
     my ($self,$msg_id,$robot) = @_;
-    $msg_id = &tools::clean_msg_id($msg_id);
-    &do_log('debug3','List::load_msg_topic_file(%s,%s)',$self->{'name'},$msg_id);
-    
-    my $queuetopic = &Conf::get_robot_conf($robot, 'queuetopic');
-    my $list_id = $self->get_list_id();
-    my $file = "$list_id.$msg_id";
-    
-    unless (open (FILE, "$queuetopic/$file")) {
-	&do_log('debug','No topic define ; unable to open %s/%s : %s', $queuetopic,$file, $!);
+
+    &do_log('debug','List::load_msg_topic(%s,%s)',$self->{'name'},$msg_id);    
+    my  $topicspool = new Sympaspool('topic');
+
+    my $topics_from_spool = $topicspool->get_message({'listname' =>$self->{'name'},'robot' => $robot, 'messageid' => $msg_id});
+    unless ($topics_from_spool) {
+	&do_log('debug','No topic define ; unable to find topic for message %s / list  %s', $msg_id,$self->{'name'});
 	return undef;
     }
     
     my %info = ();
     
-    while (<FILE>) {
-	next if /^\s*(\#.*|\s*)$/;
+    my @topics = split(/\n/,$topics_from_spool->{'messageasstring'});
+    foreach my $topic (@topics) {
+	next if ($topic =~ /^\s*(\#.*|\s*)$/);
 	
-	if (/^(\S+)\s+(.+)$/io) {
+	if ($topic =~/^(\S+)\s+(.+)$/io) {
 	    my($keyword, $value) = ($1, $2);
 	    $value =~ s/\s*$//;
 	    
@@ -11204,18 +11135,16 @@ sub load_msg_topic_file {
 		if ($value =~ /^(editor|sender|auto)$/) {
 		    $info{'method'} = $value;
 		}else {
-		    &do_log('err','List::load_msg_topic_file(%s,%s): syntax error in file %s/%s : %s', $queuetopic,$file, $!);
+		    &do_log('err','List::load_msg_topic(%s,%s): syntax error in record %s@%s : %s', $$self->{'name'},$robot,$msg_id);
 		    return undef;
 		}
 	    }
 	}
     }
-    close FILE;
     
     if ((exists $info{'topic'}) && (exists $info{'method'})) {
 	$info{'msg_id'} = $msg_id;
-	$info{'filename'} = $file;
-	
+	$info{'messagekey'} = $topics_from_spool->{'messagekey'};	
 	return \%info;
     }
     return undef;

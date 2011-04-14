@@ -825,11 +825,11 @@ sub dkim_verifier {
 # input a msg as string, output idem without signature if invalid
 sub remove_invalid_dkim_signature {
 
-    do_log('debug',"removing invalide dkim signature");
-
     my $msg_as_string = shift;
 
     unless (&tools::dkim_verifier($msg_as_string)){
+	my $body_as_string = &Message::get_body_from_msg_as_string ($msg_as_string);
+
 	my $parser = new MIME::Parser;
 	$parser->output_to_core(1);
 	my $entity = $parser->parse_data($msg_as_string);
@@ -838,7 +838,8 @@ sub remove_invalid_dkim_signature {
 	    return $msg_as_string ;
 	}
 	$entity->head->delete('DKIM-Signature');
-	return $entity->as_string;
+	do_log('debug',"removing invalide dkim signature header");
+	return $entity->head->as_string."\n".$body_as_string;
     }else{
 	return ($msg_as_string); # sgnature is valid.
     }
@@ -944,7 +945,7 @@ sub dkim_sign {
     
     $message->{'msg'}->head->add('DKIM-signature',$dkim->signature->as_string);
 
-    return $message->{'msg'}->as_string ;
+    return $message->head->as_string."\n".&Message::get_body_from_msg_as_string($msg_as_string);
 }
 
 # input object msg and listname, output signed message object

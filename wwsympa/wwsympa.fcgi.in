@@ -6940,25 +6940,25 @@ sub do_viewmod {
 
      ## For compatibility concerns
      foreach my $list_id ($list->get_list_id(),$list->{'name'}) {
-	 $tmp_dir = $Conf{'queuemod'}.'/.'.$list_id.'_'.$in{'id'};
-	 if (-d $tmp_dir) {
+	 $html_dir = $Conf::get_robot_conf{'viewmail_dir'}.'/mod/.'.$list_id.'_'.$in{'id'};
+	 if (-d $html_dir) {
 	     last;
 	 }
      }
      
-     unless (-d $tmp_dir) {
-	 &report::reject_report_web('intern','no_html_message_available',{'dir' => $tmp_dir},$param->{'action'});
-	 &wwslog('err','do_viewmod: no HTML version of the message available in %s', $tmp_dir);
+     unless (-d $html_dir) {
+	 &report::reject_report_web('intern','no_html_message_available',{'dir' => $html_dir},$param->{'action'});
+	 &wwslog('err','do_viewmod: no HTML version of the message available in %s', $html_dir);
 	 return undef;
      }     
 
      if ($in{'file'}) {
 	 $in{'file'} =~ /\.(\w+)$/;
 	 $param->{'file_extension'} = $1;
-	 $param->{'file'} = $tmp_dir.'/'.$in{'file'};
+	 $param->{'file'} = $html_dir.'/'.$in{'file'};
 	 $param->{'bypass'} = 1; 
      }else {
-	 &tt2::add_include_path($tmp_dir) ;
+	 &tt2::add_include_path($html_dir) ;
      }
 
      $param->{'base'} = sprintf "%s/viewmod/%s/%s/", &Conf::get_robot_conf($robot, 'wwsympa_url'), $param->{'list'}, $in{'id'};     
@@ -6978,74 +6978,6 @@ sub do_viewmod {
 
      return 1;
  }
-
-
-####################################################
-#  do_viewmod
-####################################################
-#  Web page for an editor to moderate a mail and/or 
-#  to tag it in message topic context
-# 
-# IN : -
-#
-# OUT : 'login,request' | '1' | undef
-#
-####################################################
-sub do_viewmod_old {
-     &wwslog('info', 'do_viewmod(%s,%s)', $in{'id'},$in{'file'});
-
-     my $msg;
-     my $tmp_dir;
-
-     my $available_files = &tools::get_templates_list('mail','',$list, {'ignore_global' => 1});
-     foreach my $file (keys %$available_files) {
-	 next unless($file =~ /^reject_/);
-	 $file =~ s/^reject_//;
-         $file =~ s/.tt2$//;
-	 push (@{$param->{'available_files'}},$file); 
-     }
-
-     ## For compatibility concerns
-     foreach my $list_id ($list->get_list_id(),$list->{'name'}) {
-	 $tmp_dir = $Conf{'queuemod'}.'/.'.$list_id.'_'.$in{'id'};
-	 if (-d $tmp_dir) {
-	     last;
-	 }
-     }
-     
-     unless (-d $tmp_dir) {
-	 &report::reject_report_web('intern','no_html_message_available',{'dir' => $tmp_dir},$param->{'action'});
-	 &wwslog('err','do_viewmod: no HTML version of the message available in %s', $tmp_dir);
-	 return undef;
-     }     
-
-     if ($in{'file'}) {
-	 $in{'file'} =~ /\.(\w+)$/;
-	 $param->{'file_extension'} = $1;
-	 $param->{'file'} = $tmp_dir.'/'.$in{'file'};
-	 $param->{'bypass'} = 1;
-     }else {
-	 &tt2::add_include_path($tmp_dir) ;
-     }
-
-     $param->{'base'} = sprintf "%s/viewmod/%s/%s/", &Conf::get_robot_conf($robot, 'wwsympa_url'), $param->{'list'}, $in{'id'};     
-     $param->{'id'} = $in{'id'};
-
-     if ($list->is_there_msg_topic()) {
-
-	 $param->{'request_topic'} = 1;
-     
-	 foreach my $top (@{$list->{'admin'}{'msg_topic'}}) {
-	     if ($top->{'name'}) {
-		 push (@{$param->{'available_topics'}},$top);
-	     }
-	 }
-	 $param->{'topic_required'} = $list->is_msg_topic_tagging_required();
-     }
-
-     return 1;
- }
-
 
 ## Edition of list/sympa files
 ## No list -> sympa files (helpfile,...)
@@ -15863,29 +15795,18 @@ sub do_send_mail {
      $param->{'authkey'} = $in{'authkey'};
 
      my $listname = $list->{'name'};
-     my $authqueue = &Conf::get_robot_conf($robot,'queueauth');
-     my $filename = "$authqueue\/$listname\_$in{'authkey'}";
 
-     ## For compatibility concerns
-     foreach my $list_id ($list->get_list_id(),$list->{'name'}) {
-	 $filename = $authqueue.'/'.$list_id.'_'.$in{'authkey'};
-	 last if (-f $filename);
-     }
+     my $spoolauth = new Sympaspool('auth');
 
-     my $parser;
-     unless ($parser = new MIME::Parser) {
-	  &report::reject_report_web('intern','cannot_parse_message',{'file' => $filename},$param->{'action'},$list,$param->{'user'}{'email'},$robot);
-	 &wwslog('notice', 'Cannot parse message %s', $filename);
+     my $authmessage = $spoolauth->get_message({'list'=> $list->{'name'},'robot'=>$robot,'authkey'=>$in{'authkey'}});
+     unless ($authmessage) {
+	 &report::reject_report_web('user','unkown_auth_key',{},$param->{'action'},$list);
+	 &wwslog('info','do_request_topic: unknown authentication key');
 	 return undef;
      }
-     $parser->output_to_core(1);
+     my $message = new Message({'message_in_spool'=> $authmessage});
 
-     unless (open FILE, "$filename") {
-	 &report::reject_report_web('intern','cannot_open_file',{'file' => $filename},$param->{'action'},$list,$param->{'user'}{'email'},$robot);
-	 &wwslog('notice', 'Cannot open file %s', $filename);
-	 return undef;
-     }
-     my $msg = $parser->parse(\*FILE);
+     my $msg = $message->{'msg'};
      my $head = $msg->head();
      # headers will be encoded later.
      #XXX$param->{'subject'}= &MIME::Words::encode_mimewords($head->get('subject'));
@@ -15927,13 +15848,22 @@ sub do_send_mail {
 
      my $parser;
      my $listname = $list->{'name'};
-     my $authqueue = &Conf::get_robot_conf($robot,'queueauth');
-     my $filename = "$authqueue\/$listname".'@'."$robot\_$in{'authkey'}";
 
      my $mail ;
-     unless($mail  = new Message({'file'=>$filename,'noxsympato'=>'noxsympato'})) {
-	 &report::reject_report_web('intern','cannot_parse_message',{'file' => $filename},$param->{'action'});
-	 &wwslog('info','do_tag_topic_by_sender: cannot parse message %s',$filename);
+     
+     my $authspool = new Sympaspool('auth');
+     my $messagespool = $authspool->get_message({'list'=>$listname, 'robot' => $robot , 'authkey'=> $in{'authkey'}});
+
+     unless($messagespool){
+	 &report::reject_report_web('user','unkown authentication key %s for list %s@%s',$in{'authkey'},$listname,$robot );
+	 &wwslog('info','unkown authentication key %s for list %s@%s',$in{'authkey'},$listname,$robot );
+	 return undef;
+     }
+     
+
+     unless($mail  = new Message({'message_in_spool'=>$messagespool,'noxsympato'=>'noxsympato'})) {
+	 &report::reject_report_web('intern','cannot_parse_message retrived by key %s for list %s@%s',$in{'authkey'},$listname,$robot );
+	 &wwslog('info','do_tag_topic_by_sender: cannot parse message retrived by key %s for list %s@%s',$in{'authkey'},$listname,$robot );
 	 return undef;
      }
      my $sender = $mail->{'sender'};
@@ -15967,29 +15897,14 @@ sub do_send_mail {
      my $data = {'headers' => {'Message-ID' => '<'.$time.'@wwsympa>',
 			       'X-Sympa-NoWrap' => 'yes'},
 		 'from'=> $sender};
-
      $data->{'body'} = sprintf ("QUIET CONFIRM %s\n",$in{'authkey'});
-
-     my $queueauth = &Conf::get_robot_conf($robot, 'queueauth');
-     my $filemsg = "$queueauth/$list->{'name'}_$in{'authkey'}";
-
-     ## For compatibility concerns
-     foreach my $list_id ($list->get_list_id(),$list->{'name'}) {
-	 $filemsg = $queueauth.'/'.$list_id.'_'.$in{'authkey'};
-	 last if (-f $filemsg);
-     }
-
-     unless ($filemsg && (-r $filemsg)) {
-	 &report::reject_report_web('intern','tag_topic_by_sender_failed',{'key' => $in{'authkey'}},$param->{'action'},$robot);
-	 &wwslog('err', 'do_tag_topic_by_sender: Unable to find message %s from %s, auth failed', $in{'authkey'},$param->{'user'}{'email'});
-	 return undef;
-     }
-
      $data->{'not_auto_submitted'} = 1;
+
+
      unless (&mail::mail_file('',&Conf::get_robot_conf($robot, 'sympa'),$data,$robot)) {
 	 &report::reject_report_web('intern','cannot_send_mail',{'from' => $param->{'user'}{'email'},'listname'=>$list->{'name'}},
 				    $param->{'action'},$list,$param->{'user'}{'email'},$robot);
-	 &wwslog('err','do_tag_topic_by_sender: failed to send message for file %s', $filemsg);
+	 &wwslog('err','do_tag_topic_by_sender: failed to send message for list %s@%s authenticated by key %s',$listname,$robot,$in{'authkey'} );
 	 return undef;
      }
 

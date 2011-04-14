@@ -415,137 +415,137 @@ sub conf_2_db {
 sub checkfiles_as_root {
 
   my $config_err = 0;
-
-    ## Check aliases file
-    unless (-f $Conf{'sendmail_aliases'} || ($Conf{'sendmail_aliases'} =~ /^none$/i)) {
-    unless (open ALIASES, ">$Conf{'sendmail_aliases'}") {
-        &do_log('err',"Failed to create aliases file %s", $Conf{'sendmail_aliases'});
-        # printf STDERR "Failed to create aliases file %s", $Conf{'sendmail_aliases'};
-        return undef;
-    }
-
-    print ALIASES "## This aliases file is dedicated to Sympa Mailing List Manager\n";
-    print ALIASES "## You should edit your sendmail.mc or sendmail.cf file to declare it\n";
-    close ALIASES;
-    &do_log('notice', "Created missing file %s", $Conf{'sendmail_aliases'});
-    unless (&tools::set_file_rights(file => $Conf{'sendmail_aliases'},
-                    user  => Sympa::Constants::USER,
-                    group => Sympa::Constants::GROUP,
-                    mode  => 0644,
-                    ))
-    {
-        &do_log('err','Unable to set rights on %s',$Conf{'db_name'});
-        return undef;
-    }
-    }
-
-    foreach my $robot (keys %{$Conf{'robots'}}) {
-
-    # create static content directory
-    my $dir = &get_robot_conf($robot, 'static_content_path');
-    if ($dir ne '' && ! -d $dir){
-        unless ( mkdir ($dir, 0775)) {
-        &do_log('err', 'Unable to create directory %s: %s', $dir, $!);
-        printf STDERR 'Unable to create directory %s: %s',$dir, $!;
-        $config_err++;
-        }
-
-        unless (&tools::set_file_rights(file => $dir,
-                        user  => Sympa::Constants::USER,
-                        group => Sympa::Constants::GROUP,
-                        ))
-        {
-        &do_log('err','Unable to set rights on %s',$Conf{'db_name'});
-        return undef;
-        }
-    }
-    }
-
-    return 1 ;
+  
+  ## Check aliases file
+  unless (-f $Conf{'sendmail_aliases'} || ($Conf{'sendmail_aliases'} =~ /^none$/i)) {
+      unless (open ALIASES, ">$Conf{'sendmail_aliases'}") {
+	  &do_log('err',"Failed to create aliases file %s", $Conf{'sendmail_aliases'});
+	  # printf STDERR "Failed to create aliases file %s", $Conf{'sendmail_aliases'};
+	  return undef;
+      }
+      
+      print ALIASES "## This aliases file is dedicated to Sympa Mailing List Manager\n";
+      print ALIASES "## You should edit your sendmail.mc or sendmail.cf file to declare it\n";
+      close ALIASES;
+      &do_log('notice', "Created missing file %s", $Conf{'sendmail_aliases'});
+      unless (&tools::set_file_rights(file => $Conf{'sendmail_aliases'},
+				      user  => Sympa::Constants::USER,
+				      group => Sympa::Constants::GROUP,
+				      mode  => 0644,
+	      ))
+      {
+	  &do_log('err','Unable to set rights on %s',$Conf{'db_name'});
+	  return undef;
+      }
+  }
+  
+  foreach my $robot (keys %{$Conf{'robots'}}) {
+      
+      # create static content directory
+      my $dir = &get_robot_conf($robot, 'static_content_path');
+      if ($dir ne '' && ! -d $dir){
+	  unless ( mkdir ($dir, 0775)) {
+	      &do_log('err', 'Unable to create directory %s: %s', $dir, $!);
+	      printf STDERR 'Unable to create directory %s: %s',$dir, $!;
+	      $config_err++;
+	  }
+	  
+	  unless (&tools::set_file_rights(file => $dir,
+					  user  => Sympa::Constants::USER,
+					  group => Sympa::Constants::GROUP,
+		  ))
+	  {
+	      &do_log('err','Unable to set rights on %s',$Conf{'db_name'});
+	      return undef;
+	  }
+      }
+  }
+  
+  return 1 ;
 }
 
 ## Check a few files
 sub checkfiles {
     my $config_err = 0;
+    do_log('trace',"xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx");
     
     foreach my $p ('sendmail','openssl','antivirus_path') {
-    next unless $Conf{$p};
-    
-    unless (-x $Conf{$p}) {
-        do_log('err', "File %s does not exist or is not executable", $Conf{$p});
-        $config_err++;
+	next unless $Conf{$p};
+	
+	unless (-x $Conf{$p}) {
+	    do_log('err', "File %s does not exist or is not executable", $Conf{$p});
+	    $config_err++;
+	}
     }
-    }
     
-    foreach my $qdir ('spool','queue','queueautomatic','queuedigest','queuemod','queuetopic','queueauth','queueoutgoing','queuebounce','queuesubscribe','queuetask','queuedistribute','tmpdir')
+    foreach my $qdir ('spool','queue','queueautomatic','queuebounce','queuesubscribe','queuetask','tmpdir','viewmail_dir')
     {
-    unless (-d $Conf{$qdir}) {
-        do_log('info', "creating spool $Conf{$qdir}");
-        unless ( mkdir ($Conf{$qdir}, 0775)) {
-        do_log('err', 'Unable to create spool %s', $Conf{$qdir});
-        $config_err++;
-        }
+	unless (-d $Conf{$qdir}) {
+	    do_log('info', "creating required directories $Conf{$qdir}");
+	    unless ( mkdir ($Conf{$qdir}, 0775)) {
+		do_log('err', 'Unable to create spool conf(%s) = %s', $qdir, $Conf{$qdir});
+		$config_err++;
+	    }
             unless (&tools::set_file_rights(
-                    file  => $Conf{$qdir},
-                    user  => Sympa::Constants::USER,
-                    group => Sympa::Constants::GROUP,
-            )) {
+			 file  => $Conf{$qdir},
+			 user  => Sympa::Constants::USER,
+			 group => Sympa::Constants::GROUP,
+		    )) {
                 &do_log('err','Unable to set rights on %s',$Conf{$qdir});
-        $config_err++;
+		$config_err++;
             }
+	}
     }
-    }
-
-    ## Also create associated bad/ spools
-    foreach my $qdir ('queue','queuedistribute','queueautomatic') {
-        my $subdir = $Conf{$qdir}.'/bad';
-    unless (-d $subdir) {
-        do_log('info', "creating spool $subdir");
-        unless ( mkdir ($subdir, 0775)) {
-        do_log('err', 'Unable to create spool %s', $subdir);
-        $config_err++;
-        }
+    
+    ## Also create associated subdirs
+    foreach my $subdir ( $Conf{'queue'}.'/bad', $Conf{'queueautomatic'}.'/bad', $Conf{'viewmail_dir'}.'/mod', $Conf{'viewmail_dir'}.'/bounce', $Conf{'viewmail_dir'}.'/spool') {
+	unless (-d $subdir) {
+	    do_log('info', "creating spool $subdir");
+	    unless ( mkdir ($subdir, 0775)) {
+		do_log('err', 'Unable to create spool %s', $subdir);
+		$config_err++;
+	    }
             unless (&tools::set_file_rights(
-                    file  => $subdir,
-                    user  => Sympa::Constants::USER,
-                    group => Sympa::Constants::GROUP,
-            )) {
+			 file  => $subdir,
+			 user  => Sympa::Constants::USER,
+			 group => Sympa::Constants::GROUP,
+		    )) {
                 &do_log('err','Unable to set rights on %s',$subdir);
-        $config_err++;
+		$config_err++;
             }
+	}
     }
-    }
-
+    
     ## Check cafile and capath access
     if (defined $Conf{'cafile'} && $Conf{'cafile'}) {
-    unless (-f $Conf{'cafile'} && -r $Conf{'cafile'}) {
-        &do_log('err', 'Cannot access cafile %s', $Conf{'cafile'});
-        unless (&List::send_notify_to_listmaster('cannot_access_cafile', $Conf{'domain'}, [$Conf{'cafile'}])) {
-        &do_log('err', 'Unable to send notify "cannot access cafile" to listmaster');    
-        }
-        $config_err++;
+	unless (-f $Conf{'cafile'} && -r $Conf{'cafile'}) {
+	    &do_log('err', 'Cannot access cafile %s', $Conf{'cafile'});
+	    unless (&List::send_notify_to_listmaster('cannot_access_cafile', $Conf{'domain'}, [$Conf{'cafile'}])) {
+		&do_log('err', 'Unable to send notify "cannot access cafile" to listmaster');    
+	    }
+	    $config_err++;
+	}
     }
-    }
-
+    
     if (defined $Conf{'capath'} && $Conf{'capath'}) {
-    unless (-d $Conf{'capath'} && -x $Conf{'capath'}) {
-        &do_log('err', 'Cannot access capath %s', $Conf{'capath'});
-        unless (&List::send_notify_to_listmaster('cannot_access_capath', $Conf{'domain'}, [$Conf{'capath'}])) {
-        &do_log('err', 'Unable to send notify "cannot access capath" to listmaster');    
-        }
-        $config_err++;
+	unless (-d $Conf{'capath'} && -x $Conf{'capath'}) {
+	    &do_log('err', 'Cannot access capath %s', $Conf{'capath'});
+	    unless (&List::send_notify_to_listmaster('cannot_access_capath', $Conf{'domain'}, [$Conf{'capath'}])) {
+		&do_log('err', 'Unable to send notify "cannot access capath" to listmaster');    
+	    }
+	    $config_err++;
+	}
     }
-    }
-
+    
     ## queuebounce and bounce_path pointing to the same directory
     if ($Conf{'queuebounce'} eq $wwsconf->{'bounce_path'}) {
-    &do_log('err', 'Error in config: queuebounce and bounce_path parameters pointing to the same directory (%s)', $Conf{'queuebounce'});
-    unless (&List::send_notify_to_listmaster('queuebounce_and_bounce_path_are_the_same', $Conf{'domain'}, [$Conf{'queuebounce'}])) {
-        &do_log('err', 'Unable to send notify "queuebounce_and_bounce_path_are_the_same" to listmaster');    
+	&do_log('err', 'Error in config: queuebounce and bounce_path parameters pointing to the same directory (%s)', $Conf{'queuebounce'});
+	unless (&List::send_notify_to_listmaster('queuebounce_and_bounce_path_are_the_same', $Conf{'domain'}, [$Conf{'queuebounce'}])) {
+	    &do_log('err', 'Unable to send notify "queuebounce_and_bounce_path_are_the_same" to listmaster');    
+	}
+	$config_err++;
     }
-    $config_err++;
-    }
-
+    
     ## automatic_list_creation enabled but queueautomatic pointing to queue
     if (($Conf{automatic_list_feature} eq 'on') && $Conf{'queue'} eq $Conf{'queueautomatic'}) {
         &do_log('err', 'Error in config: queue and queueautomatic parameters pointing to the same directory (%s)', $Conf{'queue'});
@@ -554,104 +554,104 @@ sub checkfiles {
         }
         $config_err++;
     }
-
+    
     #  create pictures dir if usefull for each robot
     foreach my $robot (keys %{$Conf{'robots'}}) {
-    my $dir = &get_robot_conf($robot, 'static_content_path');
-    if ($dir ne '' && -d $dir) {
-        unless (-f $dir.'/index.html'){
-        unless(open (FF, ">$dir".'/index.html')) {
-            &do_log('err', 'Unable to create %s/index.html as an empty file to protect directory: %s', $dir, $!);
-        }
-        close FF;        
-        }
-        
-        # create picture dir
-        if ( &get_robot_conf($robot, 'pictures_feature') eq 'on') {
-        my $pictures_dir = &get_robot_conf($robot, 'pictures_path');
-        unless (-d $pictures_dir){
-            unless (mkdir ($pictures_dir, 0775)) {
-            do_log('err', 'Unable to create directory %s',$pictures_dir);
-            $config_err++;
-            }
-            chmod 0775, $pictures_dir;
-
-            my $index_path = $pictures_dir.'/index.html';
-            unless (-f $index_path){
-            unless (open (FF, ">$index_path")) {
-                &do_log('err', 'Unable to create %s as an empty file to protect directory', $index_path);
-            }
-            close FF;
-            }
-        }        
-        }
-    }
+	my $dir = &get_robot_conf($robot, 'static_content_path');
+	if ($dir ne '' && -d $dir) {
+	    unless (-f $dir.'/index.html'){
+		unless(open (FF, ">$dir".'/index.html')) {
+		    &do_log('err', 'Unable to create %s/index.html as an empty file to protect directory: %s', $dir, $!);
+		}
+		close FF;        
+	    }
+	    
+	    # create picture dir
+	    if ( &get_robot_conf($robot, 'pictures_feature') eq 'on') {
+		my $pictures_dir = &get_robot_conf($robot, 'pictures_path');
+		unless (-d $pictures_dir){
+		    unless (mkdir ($pictures_dir, 0775)) {
+			do_log('err', 'Unable to create directory %s',$pictures_dir);
+			$config_err++;
+		    }
+		    chmod 0775, $pictures_dir;
+		    
+		    my $index_path = $pictures_dir.'/index.html';
+		    unless (-f $index_path){
+			unless (open (FF, ">$index_path")) {
+			    &do_log('err', 'Unable to create %s as an empty file to protect directory', $index_path);
+			}
+			close FF;
+		    }
+		}        
+	    }
+	}
     }            
-
+    
     # create or update static CSS files
     my $css_updated = undef;
     foreach my $robot (keys %{$Conf{'robots'}}) {
-    my $dir = &get_robot_conf($robot, 'css_path');
-    
-    ## Get colors for parsing
-    my $param = {};
-    foreach my $p (%params) {
-        $param->{$p} = &Conf::get_robot_conf($robot, $p) if (($p =~ /_color$/)|| ($p =~ /color_/));
-    }
+	my $dir = &get_robot_conf($robot, 'css_path');
+	
+	## Get colors for parsing
+	my $param = {};
+	foreach my $p (%params) {
+	    $param->{$p} = &Conf::get_robot_conf($robot, $p) if (($p =~ /_color$/)|| ($p =~ /color_/));
+	}
+	
+	## Set TT2 path
+	my $tt2_include_path = &tools::make_tt2_include_path($robot,'web_tt2','','');
+	
+	## Create directory if required
+	unless (-d $dir) {
+	    unless ( &tools::mkdir_all($dir, 0755)) {
+		&List::send_notify_to_listmaster('cannot_mkdir',  $robot, ["Could not create directory $dir: $!"]);
+		&do_log('err','Failed to create directory %s',$dir);
+		return undef;
+	    }
+	}
+	
+	foreach my $css ('style.css','print.css','fullPage.css','print-preview.css') {
 
-    ## Set TT2 path
-    my $tt2_include_path = &tools::make_tt2_include_path($robot,'web_tt2','','');
-
-    ## Create directory if required
-    unless (-d $dir) {
-        unless ( &tools::mkdir_all($dir, 0755)) {
-        &List::send_notify_to_listmaster('cannot_mkdir',  $robot, ["Could not create directory $dir: $!"]);
-        &do_log('err','Failed to create directory %s',$dir);
-        return undef;
-        }
-    }
-
-    foreach my $css ('style.css','print.css','fullPage.css','print-preview.css') {
-
-        $param->{'css'} = $css;
-        my $css_tt2_path = &tools::get_filename('etc',{}, 'web_tt2/css.tt2', $robot, undef);
-        
-        ## Update the CSS if it is missing or if a new css.tt2 was installed
-        if (! -f $dir.'/'.$css ||
-        (stat($css_tt2_path))[9] > (stat($dir.'/'.$css))[9]) {
-        &do_log('notice',"TT2 file $css_tt2_path has changed; updating static CSS file $dir/$css ; previous file renamed");
-        
-        ## Keep copy of previous file
-        rename $dir.'/'.$css, $dir.'/'.$css.'.'.time;
-
-        unless (open (CSS,">$dir/$css")) {
-            &List::send_notify_to_listmaster('cannot_open_file',  $robot, ["Could not open file $dir/$css: $!"]);
-            &do_log('err','Failed to open (write) file %s',$dir.'/'.$css);
-            return undef;
-        }
-        
-        unless (&tt2::parse_tt2($param,'css.tt2' ,\*CSS, $tt2_include_path)) {
-            my $error = &tt2::get_error();
-            $param->{'tt2_error'} = $error;
-            &List::send_notify_to_listmaster('web_tt2_error', $robot, [$error]);
-            &do_log('err', "Error while installing $dir/$css");
-        }
-
-        $css_updated ++;
-
-        close (CSS) ;
-        
-        ## Make the CSS world-readable
-        chmod 0644, $dir.'/'.$css;
-        }        
-    }
+	    $param->{'css'} = $css;
+	    my $css_tt2_path = &tools::get_filename('etc',{}, 'web_tt2/css.tt2', $robot, undef);
+	    
+	    ## Update the CSS if it is missing or if a new css.tt2 was installed
+	    if (! -f $dir.'/'.$css ||
+		(stat($css_tt2_path))[9] > (stat($dir.'/'.$css))[9]) {
+		&do_log('notice',"TT2 file $css_tt2_path has changed; updating static CSS file $dir/$css ; previous file renamed");
+		
+		## Keep copy of previous file
+		rename $dir.'/'.$css, $dir.'/'.$css.'.'.time;
+		
+		unless (open (CSS,">$dir/$css")) {
+		    &List::send_notify_to_listmaster('cannot_open_file',  $robot, ["Could not open file $dir/$css: $!"]);
+		    &do_log('err','Failed to open (write) file %s',$dir.'/'.$css);
+		    return undef;
+		}
+		
+		unless (&tt2::parse_tt2($param,'css.tt2' ,\*CSS, $tt2_include_path)) {
+		    my $error = &tt2::get_error();
+		    $param->{'tt2_error'} = $error;
+		    &List::send_notify_to_listmaster('web_tt2_error', $robot, [$error]);
+		    &do_log('err', "Error while installing $dir/$css");
+		}
+		
+		$css_updated ++;
+		
+		close (CSS) ;
+		
+		## Make the CSS world-readable
+		chmod 0644, $dir.'/'.$css;
+	    }        
+	}
     }
     if ($css_updated) {
-    ## Notify main listmaster
-    &List::send_notify_to_listmaster('css_updated',  $Conf{'domain'}, ["Static CSS files have been updated ; check log file for details"]);
+	## Notify main listmaster
+	&List::send_notify_to_listmaster('css_updated',  $Conf{'domain'}, ["Static CSS files have been updated ; check log file for details"]);
     }
-
-
+    
+    
     return undef if ($config_err);
     return 1;
 }

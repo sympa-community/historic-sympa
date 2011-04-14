@@ -26,6 +26,7 @@ use Fcntl qw(LOCK_SH LOCK_EX LOCK_NB LOCK_UN);
 use Carp;
 use IO::Scalar;
 use Storable;
+use Data::Dumper;
 use Mail::Header;
 use Mail::Address;
 use Time::HiRes qw(time);
@@ -435,7 +436,7 @@ sub store {
     &do_log('debug', 'Bulk::store(<msg>,<rcpts>,from = %s,robot = %s,listname= %s,priority_message = %s, delivery_date= %s,verp = %s, tracking = %s, merge = %s, dkim: d= %s i=%s, last: %s)',$from,$robot,$listname,$priority_message,$delivery_date,$verp,$tracking, $merge,$dkim->{'d'},$dkim->{'i'},$tag_as_last);
 
 
-    do_log('trace',"last_stored_message_key  valeur en tre de store $last_stored_message_key ");
+    do_log('trace',"last_stored_message_key  valeur en entre de store $last_stored_message_key ");
 
     $dbh = &List::db_get_handler();
 
@@ -448,8 +449,12 @@ sub store {
 
     my $msg = $message->{'msg'}->as_string;
     if ($message->{'protected'}) {
+	do_log('trace',"message protected on utilise message->{msg_as_string}");
 	$msg = $message->{'msg_as_string'};
     }
+    else{ do_log('trace',"message normal on utilise message->msg->as_string") }
+
+    
 
     my @sender_hdr = Mail::Address->parse($message->{'msg'}->head->get('From'));
     my $message_sender = $sender_hdr[0]->address;
@@ -465,14 +470,14 @@ sub store {
 	do_log('trace'," message deja dans le spool bulk");
 	$message_already_on_spool = 1;
     }else{
-	do_log('trace'," message pas deja dans le spool bulk");
+	do_log('trace',"le message n'est pas déjà dans le spool");
 	my $lock = $$.'@'.hostname() ;
 	if ($message->{'messagekey'}) {
 	    # move message to spool bulk and keep it locked
-	    $bulkspool->update({'messagekey'=>$message->{'messagekey'}},{'messagelock'=>$lock,'spoolname'=>'bulk'});
+	    $bulkspool->update({'messagekey'=>$message->{'messagekey'}},{'messagelock'=>$lock,'spoolname'=>'bulk','message' => $msg});
 	    do_log('debug',"moved message to spool bulk");
 	}else{
-	    $message->{'messagekey'} = $bulkspool->store($message->{'msg_as_string'},
+	    $message->{'messagekey'} = $bulkspool->store($msg,
 							 {'dkim_d'=>$dkim->{d},
 							  'dkim_i'=>$dkim->{i},
 							  'dkim_selector'=>$dkim->{selector},
@@ -619,76 +624,6 @@ sub remove_bulkspool_message {
     }
     return 1;
 }
-
-# test the maximal message size the database will accept
-sub store_test { 
-    my $value_test = shift;
-    my $divider = 100;
-    my $steps = 50;
-    my $maxtest = $value_test/$divider;
-    my $size_increment = $divider*$maxtest/$steps;
-    my $barmax = $size_increment*$steps*($steps+1)/2;
-    my $even_part = $barmax/$steps;
-    my $rcpts = 'nobody@cru.fr';
-    my $from = 'sympa-test@notadomain' ;
-    my $robot = 'notarobot' ;
-    my $listname = 'notalist';
-    my $priority_message = 9;
-    my $delivery_date = time;
-    my $verp  = 'on';
-    my $merge  = 1;
-    
-    &do_log('debug', 'Bulk::store_test(<msg>,<rcpts>,from = %s,robot = %s,listname= %s,priority_message = %s,delivery_date= %s,verp = %s, merge = %s)',$from,$robot,$listname,$priority_message,$delivery_date,$verp,$merge);
-
-    print "maxtest: $maxtest\n";
-    print "barmax: $barmax\n";
-    my $progress = Term::ProgressBar->new({name  => 'Total size transfered',
-                                         count => $barmax,
-                                         ETA   => 'linear', });
-    $dbh = &List::db_get_handler();
-
-    unless ($dbh and $dbh->ping) {
-	return undef unless &List::db_connect();
-    }
-    
-    $priority_message = 9;
-
-    my $messagekey = &tools::md5_fingerprint(time());
-    my $msg;
-    $progress->max_update_rate(1);
-    my $next_update = 0;
-    my $total = 0;
-
-    my $result = 0;
-    
-    for (my $z=1;$z<=$steps;$z++){	
-	$msg = MIME::Base64::decode($msg);
-	for(my $i=1;$i<=1024*$size_increment;$i++){
-	    $msg .=  'a';
-	}
-	$msg = MIME::Base64::encode($msg);
-	my $time = time();
-        $progress->message(sprintf "Test storing and removing of a %5d kB message (step %s out of %s)", $z*$size_increment, $z, $steps);
-	# 
-	my $statement = sprintf "INSERT INTO bulkspool_table (messagekey_bulkspool, message_bulkspool, lock_bulkspool) VALUES (%s, %s, '1')",$dbh->quote($messagekey),$dbh->quote($msg);
-	my $statementtrace = sprintf "INSERT INTO bulkspool_table (messagekey_bulkspool, message_bulkspool, lock_bulkspool) VALUES (%s, %s, '1')",$dbh->quote($messagekey),$dbh->quote(substr($msg, 0, 100));	    
-	unless ($dbh->do($statement)) {
-	    return (($z-1)*$size_increment);
-	}
-	unless ( &Bulk::remove_bulkspool_message('bulkspool',$messagekey) ) {
-	    &do_log('err','Unable to remove test message (key = %s) from bulkspool_table',$messagekey);	    
-	}
-	$total += $z*$size_increment;
-        $progress->message(sprintf ".........[OK. Done in %.2f sec]", time() - $time);
-	$next_update = $progress->update($total+$even_part)
-	    if $total > $next_update && $total < $barmax;
-	$result = $z*$size_increment;
-    }
-    $progress->update($barmax)
-	if $barmax >= $next_update;
-    return $result;
-}
-
 ## Return the number of remaining packets in the bulkmailer table.
 sub get_remaining_packets_count {
     &do_log('debug3', 'get_remaining_packets_count');

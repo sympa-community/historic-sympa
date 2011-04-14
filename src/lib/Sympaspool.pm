@@ -110,7 +110,11 @@ sub get_content {
 	return undef unless &List::db_connect();
     }
 
+    my $dump = &Dumper($selector); open (DUMP,">/tmp/dumper"); printf DUMP 'Selector \n%s',$dump ; close DUMP; do_log('trace',"dumper");
+
+
     my $sql_where = _sqlselector($selector);
+
 
     if ($self->{'selection_status'} eq 'bad') {
 	$sql_where = $sql_where."AND message_status_spool = 'bad' " ;
@@ -129,6 +133,7 @@ sub get_content {
     }
 
     $statement = $statement . sprintf " FROM spool_table WHERE %s AND spoolname_spool = %s ",$sql_where,$dbh->quote($self->{'spoolname'});
+    do_log('trace',"staement %s",$statement);
 
     push @sth_stack, $sth;
     unless ($sth = $dbh->prepare($statement)) {
@@ -251,6 +256,10 @@ sub get_message {
 #	} 
 
 	$sqlselector = $sqlselector.' AND ' unless ($sqlselector eq '');
+
+	if ($field eq 'messageid') {
+	    $selector->{'messageid'} = substr $selector->{'messageid'}, 0, 95;
+	}
 	$sqlselector = $sqlselector.' '.$field.'_spool = '.$dbh->quote($selector->{$field}); 
     }
     my $all = &_selectfields();
@@ -304,12 +313,14 @@ sub update {
     my $where = _sqlselector($selector);
 
     my $set = '';
-    
+
     # hidde B64 encoding inside spool database.    
     if ($values->{'message'}) {
 	$values->{'size'} =  length($values->{'message'});
 	$values->{'message'} =  MIME::Base64::encode($values->{'message'})  ;
     }
+    # update can used in order to move a message from a spool to another one
+    $values->{'spoolname'} = $self->{'spoolname'} unless($values->{'spoolname'});
 
     foreach my $meta (keys %$values) {
 	next if ($meta =~ /^(messagekey)$/); 
@@ -624,6 +635,7 @@ sub _sqlselector {
 	    $sqlselector = ' '.$field.'_spool = '.$dbh->quote($selector->{$field});
 	}
     }
+    do_log('trace',"sqlselector %s",$sqlselector);
     return $sqlselector;
 }
 
