@@ -751,6 +751,8 @@ my %alias = ('reply-to' => 'reply_to',
 				  'gettext_id' => "Forced reply address",
 				  'obsolete' => 1
 			 },
+			 
+			 
 	    'host' => {'format' => &tools::get_regexp('host'),
 		       'length' => 20,
 		       'default' => {'conf' => 'host'},
@@ -864,10 +866,37 @@ my %alias = ('reply-to' => 'reply_to',
 										'gettext_id' => 'SSL ciphers used',
 										'order' => 2.5,
 									   },
-							      
+							       'starthour' => {'format' => '\d+',
+						 'length' => 2,
+						 'occurrence' => '0-1',
+						 'gettext_id' => "start hour",
+						 'order' => 10
+						 },
+				      'startminute' => {'format' => '\d+',
+						   'length' => 2,
+						   'occurrence' => '0-1',
+						   'gettext_id' => "start minute",
+						   'order' => 11
+						   },
+					  'endhour' => {'format' => '\d+',
+						  'length' => 2,
+						  'occurrence' => '0-1',
+						  'gettext_id' => "end hour",
+						  'order' => 12
+						 },
+						 
+					  'endminute' => {'format' => '\d+',
+						   'length' => 2,
+						   'occurrence' => '0-1',
+						   'gettext_id' => "end minute",
+						   'order' => 13
+						   },
 							      
 									    
 					      },
+					     
+						 
+					     
 				     'occurrence' => '0-n',
 				     'gettext_id' => "LDAP query inclusion",
 				     'group' => 'data_source'
@@ -988,8 +1017,35 @@ my %alias = ('reply-to' => 'reply_to',
 										'gettext_id' => 'SSL ciphers used',
 										'order' => 2.5,
 									    },
+						'starthour' => {'format' => '\d+',
+							'length' => 2,
+							'occurrence' => '0-1',
+							'gettext_id' => "start hour",
+							'order' => 18
+						 },
+				      'startminute' => {'format' => '\d+',
+						   'length' => 2,
+						   'occurrence' => '0-1',
+						   'gettext_id' => "start minute",
+						   'order' => 19
+						   },
+					  'endhour' => {'format' => '\d+',
+						  'length' => 2,
+						  'occurrence' => '0-1',
+						  'gettext_id' => "end hour",
+						  'order' => 20
+						 },
+						 
+					  'endminute' => {'format' => '\d+',
+						   'length' => 2,
+						   'occurrence' => '0-1',
+						   'gettext_id' => "end minute",
+						   'order' => 21
+						   },
+						 
+					     },
 
-					      },
+					      
 				     'occurrence' => '0-n',
 				     'gettext_id' => "LDAP 2-level query inclusion",
 				     'group' => 'data_source'
@@ -1084,7 +1140,32 @@ my %alias = ('reply-to' => 'reply_to',
 							     'gettext_id' => "short name for this source",
 							     'length' => 15,
 							     'order' => 1
-							     }
+							     },
+						 'starthour' => {'format' => '\d+',
+						 'length' => 2,
+						 'occurrence' => '0-1',
+						 'gettext_id' => "start hour",
+						 'order' => 10
+						 },
+				      'startminute' => {'format' => '\d+',
+						   'length' => 2,
+						   'occurrence' => '0-1',
+						   'gettext_id' => "start minute",
+						   'order' => 11
+						   },
+					  'endhour' => {'format' => '\d+',
+						  'length' => 2,
+						  'occurrence' => '0-1',
+						  'gettext_id' => "end hour",
+						  'order' => 12
+						 },
+						 
+					  'endminute' => {'format' => '\d+',
+						   'length' => 2,
+						   'occurrence' => '0-1',
+						   'gettext_id' => "end minute",
+						   'order' => 13
+						   },
 						 
 					     },
 				    'occurrence' => '0-n',
@@ -7499,17 +7580,15 @@ sub _include_users_remote_file {
 
 ## Returns a list of subscribers extracted from a remote LDAP Directory
 sub _include_users_ldap {
-    my ($users, $param, $default_user_options, $tied) = @_;
+    my ($users, $id, $source, $default_user_options, $tied) = @_;
     &Log::do_log('debug2', 'List::_include_users_ldap');
     
-    my $id = Datasource::_get_datasource_id($param);
-
-    my $user = $param->{'user'};
-    my $passwd = $param->{'passwd'};
-    my $ldap_suffix = $param->{'suffix'};
-    my $ldap_filter = $param->{'filter'};
-    my $ldap_attrs = $param->{'attrs'};
-    my $ldap_select = $param->{'select'};
+    my $user = $source->{'user'};
+    my $passwd = $source->{'passwd'};
+    my $ldap_suffix = $source->{'suffix'};
+    my $ldap_filter = $source->{'filter'};
+    my $ldap_attrs = $source->{'attrs'};
+    my $ldap_select = $source->{'select'};
     
     ## LDAP and query handler
     my ($ldaph, $fetch);
@@ -7517,21 +7596,18 @@ sub _include_users_ldap {
     ## Connection timeout (default is 120)
     #my $timeout = 30; 
     
-    my $param2 = &tools::dup_var($param);
-    my $ds = new LDAPSource($param2);
-
-    unless (defined $ds && $ds->connect()) {
-	&Log::do_log('err',"Unable to connect to the LDAP server '%s'", $param2->{'host'});
+    unless (defined $source && $source->connect()) {
+	&Log::do_log('err',"Unable to connect to the LDAP server '%s'", $source->{'host'});
 	    return undef;
 	}
-    &Log::do_log('debug2', 'Searching on server %s ; suffix %s ; filter %s ; attrs: %s', $param->{'host'}, $ldap_suffix, $ldap_filter, $ldap_attrs);
-    $fetch = $ds->{'ldap_handler'}->search ( base => "$ldap_suffix",
+    &Log::do_log('debug2', 'Searching on server %s ; suffix %s ; filter %s ; attrs: %s', $source->{'host'}, $ldap_suffix, $ldap_filter, $ldap_attrs);
+    $fetch = $source->{'ldap_handler'}->search ( base => "$ldap_suffix",
 			      filter => "$ldap_filter",
 			      attrs => [ "$ldap_attrs" ],
-			      scope => "$param->{'scope'}");
+			      scope => "$source->{'scope'}");
     if ($fetch->code()) {
 	do_log('err','Ldap search (single level) failed : %s (searching on server %s ; suffix %s ; filter %s ; attrs: %s)', 
-	       $fetch->error(), $param->{'host'}, $ldap_suffix, $ldap_filter, $ldap_attrs);
+	       $fetch->error(), $source->{'host'}, $ldap_suffix, $ldap_filter, $ldap_attrs);
         return undef;
     }
     
@@ -7574,8 +7650,8 @@ sub _include_users_ldap {
 	}
     }
     
-    unless ($ds->disconnect()) {
-	do_log('notice','Can\'t unbind from  LDAP server %s', $param->{'host'});
+    unless ($source->disconnect()) {
+	do_log('notice','Can\'t unbind from  LDAP server %s', $source->{'host'});
 	return undef;
     }
     
@@ -7613,7 +7689,7 @@ sub _include_users_ldap {
 	}
     }
 
-    &Log::do_log('debug2',"unbinded from LDAP server %s ", $param->{'host'});
+    &Log::do_log('debug2',"unbinded from LDAP server %s ", $source->{'host'});
     &Log::do_log('info','%d new users included from LDAP query',$total);
 
     return $total;
@@ -7622,52 +7698,41 @@ sub _include_users_ldap {
 ## Returns a list of subscribers extracted indirectly from a remote LDAP
 ## Directory using a two-level query
 sub _include_users_ldap_2level {
-    my ($users, $param, $default_user_options,$tied) = @_;
+    my ($users, $id, $source, $default_user_options,$tied) = @_;
     &Log::do_log('debug2', 'List::_include_users_ldap_2level');
     
-    unless (eval "require Net::LDAP") {
-	do_log('err',"Unable to use LDAP library, install perl-ldap (CPAN) first");
-	return undef;
-    }
-    require Net::LDAP;
-
-    my $id = Datasource::_get_datasource_id($param);
-
-    my $user = $param->{'user'};
-    my $passwd = $param->{'passwd'};
-    my $ldap_suffix1 = $param->{'suffix1'};
-    my $ldap_filter1 = $param->{'filter1'};
-    my $ldap_attrs1 = $param->{'attrs1'};
-    my $ldap_select1 = $param->{'select1'};
-    my $ldap_scope1 = $param->{'scope1'};
-    my $ldap_regex1 = $param->{'regex1'};
-    my $ldap_suffix2 = $param->{'suffix2'};
-    my $ldap_filter2 = $param->{'filter2'};
-    my $ldap_attrs2 = $param->{'attrs2'};
-    my $ldap_select2 = $param->{'select2'};
-    my $ldap_scope2 = $param->{'scope2'};
-    my $ldap_regex2 = $param->{'regex2'};
+    my $user = $source->{'user'};
+    my $passwd = $source->{'passwd'};
+    my $ldap_suffix1 = $source->{'suffix1'};
+    my $ldap_filter1 = $source->{'filter1'};
+    my $ldap_attrs1 = $source->{'attrs1'};
+    my $ldap_select1 = $source->{'select1'};
+    my $ldap_scope1 = $source->{'scope1'};
+    my $ldap_regex1 = $source->{'regex1'};
+    my $ldap_suffix2 = $source->{'suffix2'};
+    my $ldap_filter2 = $source->{'filter2'};
+    my $ldap_attrs2 = $source->{'attrs2'};
+    my $ldap_select2 = $source->{'select2'};
+    my $ldap_scope2 = $source->{'scope2'};
+    my $ldap_regex2 = $source->{'regex2'};
     my @sync_errors = ();
     
     ## LDAP and query handler
     my ($ldaph, $fetch);
 
-    my $param2 = &tools::dup_var($param);
-    my $ds = new LDAPSource($param2);
-    
-    unless (defined $ds && ($ldaph = $ds->connect())) {
-	&Log::do_log('err',"Unable to connect to the LDAP server '%s'", $param2->{'host'});
+    unless (defined $source && ($ldaph = $source->connect())) {
+	&Log::do_log('err',"Unable to connect to the LDAP server '%s'", $source->{'host'});
 	    return undef;
 	}
     
-    &Log::do_log('debug2', 'Searching on server %s ; suffix %s ; filter %s ; attrs: %s', $param->{'host'}, $ldap_suffix1, $ldap_filter1, $ldap_attrs1) ;
+    &Log::do_log('debug2', 'Searching on server %s ; suffix %s ; filter %s ; attrs: %s', $source->{'host'}, $ldap_suffix1, $ldap_filter1, $ldap_attrs1) ;
     $fetch = $ldaph->search ( base => "$ldap_suffix1",
 			      filter => "$ldap_filter1",
 			      attrs => [ "$ldap_attrs1" ],
 			      scope => "$ldap_scope1");
     if ($fetch->code()) {
 	do_log('err','LDAP search (1st level) failed : %s (searching on server %s ; suffix %s ; filter %s ; attrs: %s)', 
-	       $fetch->error(), $param2->{'host'}, $ldap_suffix1, $ldap_filter1, $ldap_attrs1);
+	       $fetch->error(), $source->{'host'}, $ldap_suffix1, $ldap_filter1, $ldap_attrs1);
         return undef;
     }
     
@@ -7702,15 +7767,15 @@ sub _include_users_ldap_2level {
 	($suffix2 = $ldap_suffix2) =~ s/\[attrs1\]/$attr/g;
 	($filter2 = $ldap_filter2) =~ s/\[attrs1\]/$attr/g;
 
-	do_log('debug2', 'Searching on server %s ; suffix %s ; filter %s ; attrs: %s', $param->{'host'}, $suffix2, $filter2, $ldap_attrs2);
+	do_log('debug2', 'Searching on server %s ; suffix %s ; filter %s ; attrs: %s', $source->{'host'}, $suffix2, $filter2, $ldap_attrs2);
 	$fetch = $ldaph->search ( base => "$suffix2",
 				  filter => "$filter2",
 				  attrs => [ "$ldap_attrs2" ],
 				  scope => "$ldap_scope2");
 	if ($fetch->code()) {
 	    &Log::do_log('err','LDAP search (2nd level) failed : %s. Node: %s (searching on server %s ; suffix %s ; filter %s ; attrs: %s)', 
-		   $fetch->error(), $attr, $param->{'host'}, $suffix2, $filter2, $ldap_attrs2);
-	    push @sync_errors, {'error',$fetch->error(), 'host', $param->{'host'}, 'suffix2', $suffix2, 'fliter2', $filter2,'ldap_attrs2', $ldap_attrs2};
+		   $fetch->error(), $attr, $source->{'host'}, $suffix2, $filter2, $ldap_attrs2);
+	    push @sync_errors, {'error',$fetch->error(), 'host', $source->{'host'}, 'suffix2', $suffix2, 'fliter2', $filter2,'ldap_attrs2', $ldap_attrs2};
 	}
 
 	## returns a reference to a HASH where the keys are the DNs
@@ -7751,8 +7816,8 @@ sub _include_users_ldap_2level {
 	}
     }
     
-    unless ($ds->disconnect()) {
-	do_log('err','Can\'t unbind from  LDAP server %s', $param->{'host'});
+    unless ($source->disconnect()) {
+	do_log('err','Can\'t unbind from  LDAP server %s', $source->{'host'});
 	return undef;
     }
     
@@ -7790,7 +7855,7 @@ sub _include_users_ldap_2level {
 	}
     }
 
-    &Log::do_log('debug2',"unbinded from LDAP server %s ", $param->{'host'}) ;
+    &Log::do_log('debug2',"unbinded from LDAP server %s ", $source->{'host'}) ;
     &Log::do_log('info','%d new users included from LDAP query',$total);
 
     my $result;
@@ -7801,24 +7866,22 @@ sub _include_users_ldap_2level {
 
 ## Returns a list of subscribers extracted from an remote Database
 sub _include_users_sql {
-    my ($users, $param, $default_user_options, $tied, $fetch_timeout) = @_;
+    my ($users, $id, $source, $default_user_options, $tied, $fetch_timeout) = @_;
 
     &Log::do_log('debug','List::_include_users_sql()');
-    my $id = Datasource::_get_datasource_id($param);
-    my $ds = new SQLSource($param);
-    unless ($ds->connect && ($ds->do_query($param->{'sql_query'}))) {
-	&Log::do_log('err','Unable to connect to SQL datasource with parameters host: %s, database: %s',$param->{'host'},$param->{'db_name'});
+    unless ($source->connect && ($source->do_query($source->{'sql_query'}))) {
+	&Log::do_log('err','Unable to connect to SQL datasource with parameters host: %s, database: %s',$source->{'host'},$source->{'db_name'});
         return undef;
     }
     ## Counters.
     my $total = 0;
     
     ## Process the SQL results
-    $ds->set_fetch_timeout($fetch_timeout);
-    my $array_of_users = $ds->fetch;
+    $source->set_fetch_timeout($fetch_timeout);
+    my $array_of_users = $source->fetch;
 	
     unless (defined $array_of_users && ref($array_of_users) eq 'ARRAY') {
-	&Log::do_log('err', 'Failed to include users from %s',$param->{'name'});
+	&Log::do_log('err', 'Failed to include users from %s',$source->{'name'});
 	return undef;
     }
 
@@ -7863,8 +7926,7 @@ sub _include_users_sql {
 	    $users->{$email} = \%u;
 	}
     }
-    $ds->disconnect();
-    
+    $source->disconnect();
     &Log::do_log('info','%d included users from SQL query', $total);
     return $total;
 }
@@ -7872,6 +7934,7 @@ sub _include_users_sql {
 ## Loads the list of subscribers from an external include source
 sub _load_list_members_from_include {
     my $self = shift;
+    my $old_subs = shift;
     my $name = $self->{'name'}; 
     my $admin = $self->{'admin'};
     my $dir = $self->{'dir'};
@@ -7880,38 +7943,82 @@ sub _load_list_members_from_include {
     my $total = 0;
     my @errors;
     my $result;
-
+    my @ex_sources;
+    
+    
     foreach my $type ('include_list','include_remote_sympa_list','include_file','include_ldap_query','include_ldap_2level_query','include_sql_query','include_remote_file') {
 	last unless (defined $total);
 	    
 	foreach my $tmp_incl (@{$admin->{$type}}) {
 	    my $included;
-	    ## Work with a copy of admin hash branch to avoid including temporary variables into the actual admin hash.[bug #3182]
+	    my $source_is_new = 1;
+        ## Work with a copy of admin hash branch to avoid including temporary variables into the actual admin hash.[bug #3182]
 	    my $incl = &tools::dup_var($tmp_incl);
-
-	    ## get the list of users
+		my $source_id = Datasource::_get_datasource_id($tmp_incl);
+		if (defined $old_subs->{$source_id}) {
+			$source_is_new = 0;
+		}
+	    ## Get the list of users.
+	    ## Verify if we can syncronize sources. If it's allowed OR there are new sources, we update the list, and can add subscribers.
+		## Else if we can't syncronize sources. We make an array with excluded sources.
 	    if ($type eq 'include_sql_query') {
-		$included = _include_users_sql(\%users, $incl, $admin->{'default_user_options'}, 'untied', $admin->{'sql_fetch_timeout'});
-		unless (defined $included){
-		    push @errors, {'type' => $type, 'name' => $incl->{'name'}};
-		}
+			my $source = new SQLSource($incl);
+			if ($source->is_allowed_to_sync() || $source_is_new) {
+				$included = _include_users_sql(\%users, $source_id, $source, $admin->{'default_user_options'}, 'untied', $admin->{'sql_fetch_timeout'});
+				unless (defined $included){
+					push @errors, {'type' => $type, 'name' => $incl->{'name'}};
+				}
+			}else{
+				my $exclusion_data = {	'id' => $source_id,
+										'name' => $incl->{'name'},
+										'starthour' => $source->{'starthour'},
+										'startminute' => $source->{'startminute'} ,
+										'endhour' => $source->{'endhour'},
+										'endminute' => $source->{'endminute'}};
+				push @ex_sources, $exclusion_data;
+				$included = 0;
+			}
 	    }elsif ($type eq 'include_ldap_query') {
-		$included = _include_users_ldap(\%users, $incl, $admin->{'default_user_options'});
-		unless (defined $included){
-		    push @errors, {'type' => $type, 'name' => $incl->{'name'}};
-		}
-	    }elsif ($type eq 'include_ldap_2level_query') {
-		my $result = _include_users_ldap_2level(\%users, $incl, $admin->{'default_user_options'});
-		if (defined $result) {
-		    $included = $result->{'total'};
-		    if (defined $result->{'errors'}){
-			&Log::do_log('err', 'Errors occurred during the second LDAP passe');
-			push @errors, {'type' => $type, 'name' => $incl->{'name'}};
-		    }
-		}else{
-		    $included = undef;
-		    push @errors, {'type' => $type, 'name' => $incl->{'name'}};
-		}
+			my $source = new LDAPSource($incl);
+			if ($source->is_allowed_to_sync() || $source_is_new) {
+				$included = _include_users_ldap(\%users, $source_id, $source, $admin->{'default_user_options'});
+				unless (defined $included){
+					push @errors, {'type' => $type, 'name' => $incl->{'name'}};
+				}
+			}else{
+				my $exclusion_data = {	'id' => $source_id,
+										'name' => $incl->{'name'},
+										'starthour' => $source->{'starthour'},
+										'startminute' => $source->{'startminute'} ,
+										'endhour' => $source->{'endhour'},
+										'endminute' => $source->{'endminute'}};
+				push @ex_sources, $exclusion_data;
+				$included = 0;
+			}
+		}elsif ($type eq 'include_ldap_2level_query') {
+			my $source = new LDAPSource($incl);
+			if ($source->is_allowed_to_sync() || $source_is_new) {
+				my $result = _include_users_ldap_2level(\%users,$source_id, $source, $admin->{'default_user_options'});
+				if (defined $result) {
+					$included = $result->{'total'};
+					if (defined $result->{'errors'}){
+						&Log::do_log('err', 'Errors occurred during the second LDAP passe');
+						push @errors, {'type' => $type, 'name' => $incl->{'name'}};
+					}
+				}else{
+					$included = undef;
+					push @errors, {'type' => $type, 'name' => $incl->{'name'}};
+				}
+			}else{	
+				my $exclusion_data = {	'id' => $source_id,
+										'name' => $incl->{'name'},
+										'starthour' => $source->{'starthour'},
+										'startminute' => $source->{'startminute'} ,
+										'endhour' => $source->{'endhour'},
+										'endminute' => $source->{'endminute'}};
+				push @ex_sources, $exclusion_data;
+				$included = 0;
+			}
 	    }elsif ($type eq 'include_remote_sympa_list') {
 		$included = $self->_include_users_remote_sympa_list(\%users, $incl, $dir,$admin->{'domain'},$admin->{'default_user_options'});
 		unless (defined $included){
@@ -7939,6 +8046,7 @@ sub _load_list_members_from_include {
 		    push @errors, {'type' => $type, 'name' => $incl->{'name'}};
 		}
 	    }
+
 	    unless (defined $included) {
 		&Log::do_log('err', 'Inclusion %s failed in list %s', $type, $name);
 		next;
@@ -7950,6 +8058,7 @@ sub _load_list_members_from_include {
     ## If an error occured, return an undef value
     $result->{'users'} = \%users;
     $result->{'errors'} = \@errors;
+    $result->{'exclusions'} = \@ex_sources;
     return $result;
 }
 
@@ -8249,12 +8358,27 @@ sub _load_include_admin_user_file {
     return \%include;
 }
 
+## Returns a ref to an array containing the ids (as computed by Datasource::_get_datasource_id) of the list of memebers given as argument.
+sub get_list_of_sources_id {
+	my $self = shift;
+	my $list_of_subscribers = shift;
+	
+	my %old_subs_id;
+	foreach my $old_sub (keys %{$list_of_subscribers}) {
+		my @tmp_old_tab = split(/,/,$list_of_subscribers->{$old_sub}{'id'});
+		foreach my $raw (@tmp_old_tab) {
+			$old_subs_id{$raw} = 1;
+		}
+	}
+	my $ids = join(',',keys %old_subs_id);
+	return \%old_subs_id;
+}
+
 sub sync_include {
     my ($self) = shift;
     my $option = shift;
     my $name=$self->{'name'};
     &Log::do_log('debug', 'List:sync_include(%s)', $name);
-    
     my %old_subscribers;
     my $total=0;
     my $errors_occurred=0;
@@ -8268,8 +8392,8 @@ sub sync_include {
 	    &Log::do_log('notice','Update user %s neither included nor subscribed', $user->{'email'});
 	    unless( $self->update_list_member(lc($user->{'email'}),  {'update_date' => time,
 							       'subscribed' => 1 }) ) {
-		&Log::do_log('err', 'List:sync_include(%s): Failed to update %s', $name, lc($user->{'email'}));
-		next;
+			&Log::do_log('err', 'List:sync_include(%s): Failed to update %s', $name, lc($user->{'email'}));
+			next;
 	    }			    
 	    $old_subscribers{lc($user->{'email'})}{'subscribed'} = 1;
 	}
@@ -8280,34 +8404,59 @@ sub sync_include {
     ## Load a hash with the new subscriber list
     my $new_subscribers;
     unless ($option eq 'purge') {
-	my $result = $self->_load_list_members_from_include();
-	$new_subscribers = $result->{'users'};
-	my $tmp_errors = $result->{'errors'};
-	my @errors = @$tmp_errors;
-	## If include sources were not available, do not update subscribers
-	## Use DB cache instead and warn the listmaster.
-	if($#errors > -1) {
-	    &Log::do_log('err', 'Errors occurred while synchronizing datasources for list %s', $name);
-	    $errors_occurred = 1;
-	    unless (&List::send_notify_to_listmaster('sync_include_failed', $self->{'domain'}, {'errors' => \@errors, 'listname' => $self->{'name'}})) {
-		&Log::do_log('notice',"Unable to send notify 'sync_include_failed' to listmaster");
-	    }
-	    return undef;
+		my $result = $self->_load_list_members_from_include($self->get_list_of_sources_id(\%old_subscribers));
+		$new_subscribers = $result->{'users'};
+		my @errors = @{$result->{'errors'}};
+		my @exclusions = @{$result->{'exclusions'}};
+		
+		## If include sources were not available, do not update subscribers
+		## Use DB cache instead and warn the listmaster.
+		if($#errors > -1) {
+			&Log::do_log('err', 'Errors occurred while synchronizing datasources for list %s', $name);
+			$errors_occurred = 1;
+			unless (&List::send_notify_to_listmaster('sync_include_failed', $self->{'domain'}, {'errors' => \@errors, 'listname' => $self->{'name'}})) {
+			&Log::do_log('notice',"Unable to send notify 'sync_include_failed' to listmaster");
+			}
+			return undef;
+		}
+		
+		# Feed the new_subscribers hash with users previously subscribed
+		# with data sources not used because we were not in the period of
+		# time during which synchronization is allowed. This will prevent
+		# these users from being unsubscribed.
+		if($#exclusions > -1) {
+			foreach my $ex_sources (@exclusions) {
+				my $id = $ex_sources->{'id'};
+				foreach my $email (keys %old_subscribers) {
+					if($old_subscribers{$email}{'id'} =~ /$id/g) {
+						$new_subscribers->{$email}{'date'} = $old_subscribers{$email}{'date'};
+						$new_subscribers->{$email}{'update_date'} = $old_subscribers{$email}{'update_date'};
+						$new_subscribers->{$email}{'visibility'} = $self->{'default_user_options'}{'visibility'} if (defined $self->{'default_user_options'}{'visibility'});
+						$new_subscribers->{$email}{'reception'} = $self->{'default_user_options'}{'reception'} if (defined $self->{'default_user_options'}{'reception'});
+						$new_subscribers->{$email}{'profile'} = $self->{'default_user_options'}{'profile'} if (defined $self->{'default_user_options'}{'profile'});
+						$new_subscribers->{$email}{'info'} = $self->{'default_user_options'}{'info'} if (defined $self->{'default_user_options'}{'info'});
+						if(defined $new_subscribers->{$email}{'id'} && $new_subscribers->{$email}{'id'} ne '') {
+							$new_subscribers->{$email}{'id'} = join (',', split(',', $new_subscribers->{$email}{'id'}), $id);
+						}else{
+							$new_subscribers->{$email}{'id'} = $old_subscribers{$email}{'id'};
+						}
+					}
+				}
+			}
+		}
 	}
-    }
 
-    my $data_exclu;
-    my @subscriber_exclusion;
+	my $data_exclu;
+	my @subscriber_exclusion;
 
-    ## Récupérer un array d'emails pour une liste donnée in 'exclusion_table'
-    $data_exclu = &get_exclusion($name);
+	## Récupérer un array d'emails pour une liste donnée in 'exclusion_table'
+	$data_exclu = &get_exclusion($name);
 
-    my $key =0;
-    while ($data_exclu->{'emails'}->[$key]){
-	push @subscriber_exclusion, $data_exclu->{'emails'}->[$key];
-	$key = $key + 1;
-    }
-    
+	my $key =0;
+	while ($data_exclu->{'emails'}->[$key]){
+		push @subscriber_exclusion, $data_exclu->{'emails'}->[$key];
+		$key = $key + 1;
+	}
 
     my $users_added = 0;
     my $users_updated = 0;
@@ -8323,116 +8472,122 @@ sub sync_include {
 	return undef;
     }
 
-    ## Go though previous list of users
+    ## Go through previous list of users
     my $users_removed = 0;
     my $user_removed;
     my @deltab;
     foreach my $email (keys %old_subscribers) {
-	unless( defined($new_subscribers->{$email}) ) {
-	    ## User is also subscribed, update DB entry
-	    if ($old_subscribers{$email}{'subscribed'}) {
-		&Log::do_log('debug', 'List:sync_include: updating %s to list %s', $email, $name);
-		unless( $self->update_list_member($email,  {'update_date' => time,
-						     'included' => 0,
-						     'id' => ''}) ) {
-		    &Log::do_log('err', 'List:sync_include(%s): Failed to update %s',  $name, $email);
-		    next;
-		}
-		
-		$users_updated++;
-
-		## Tag user for deletion
-	    }else {
-		&Log::do_log('debug3', 'List:sync_include: removing %s from list %s', $email, $name);
-		@deltab = ($email);
-		unless($user_removed = $self->delete_list_member('users' => \@deltab)) {
-		    &Log::do_log('err', 'List:sync_include(%s): Failed to delete %s', $name, $user_removed);
-		    return undef;
-		}
-		if ($user_removed) {
-		    $users_removed++;
-		    ## Send notification if the list config authorizes it only.
-		    if ($self->{'admin'}{'inclusion_notification_feature'} eq 'on') {
-			unless ($self->send_file('removed', $email, $self->{'domain'},{})) {
-			    &Log::do_log('err',"Unable to send template 'removed' to $email");
+		unless( defined($new_subscribers->{$email}) ) {
+			## User is also subscribed, update DB entry
+			if ($old_subscribers{$email}{'subscribed'}) {
+				&Log::do_log('debug', 'List:sync_include: updating %s to list %s', $email, $name);
+				unless( $self->update_list_member($email,  {'update_date' => time,
+								'included' => 0,
+								'id' => ''}) ) {
+					&Log::do_log('err', 'List:sync_include(%s): Failed to update %s',  $name, $email);
+					next;
+				}
+			
+				$users_updated++;
+	
+				## Tag user for deletion
+			}else {
+				&Log::do_log('debug3', 'List:sync_include: removing %s from list %s', $email, $name);
+				@deltab = ($email);
+				unless($user_removed = $self->delete_list_member('users' => \@deltab)) {
+					&Log::do_log('err', 'List:sync_include(%s): Failed to delete %s', $name, $user_removed);
+					return undef;
+				}
+				if ($user_removed) {
+					$users_removed++;
+					## Send notification if the list config authorizes it only.
+					if ($self->{'admin'}{'inclusion_notification_feature'} eq 'on') {
+						unless ($self->send_file('removed', $email, $self->{'domain'},{})) {
+							&Log::do_log('err',"Unable to send template 'removed' to $email");
+						}
+					}
+				}
 			}
-		    }
 		}
-	    }
-	}
     }
     if ($users_removed > 0) {
-	&Log::do_log('notice', 'List:sync_include(%s): %d users removed', $name, $users_removed);
+		&Log::do_log('notice', 'List:sync_include(%s): %d users removed', $name, $users_removed);
     }
 
     ## Go through new users
     my @add_tab;
     $users_added = 0;
     foreach my $email (keys %{$new_subscribers}) {
-	if (defined($old_subscribers{$email}) ) {
-
-	    if ($old_subscribers{$email}{'included'}) {
-
-	      ## If one user attribute has changed, then we should update the user entry
-	      foreach my $attribute ('id','gecos') {
-		if ($old_subscribers{$email}{$attribute} ne $new_subscribers->{$email}{$attribute}) {
-		  &Log::do_log('debug', 'List:sync_include: updating %s to list %s', $email, $name);
-		  unless( $self->update_list_member($email,  {'update_date' => time,
-						       $attribute => $new_subscribers->{$email}{$attribute} }) ) {
-		    &Log::do_log('err', 'List:sync_include(%s): Failed to update %s', $name, $email);
-		    next;
-		  }
-		  $users_updated++;
-		}
-	      }
-		## User was already subscribed, update include_sources_subscriber in DB
-	    }else {
-		&Log::do_log('debug', 'List:sync_include: updating %s to list %s', $email, $name);
-		unless( $self->update_list_member($email,  {'update_date' => time,
+		if (defined($old_subscribers{$email}) ) {
+			if ($old_subscribers{$email}{'included'}) {
+				## If one user attribute has changed, then we should update the user entry
+				my $succesful_update = 0;
+				foreach my $attribute ('id','gecos') {
+					if ($old_subscribers{$email}{$attribute} ne $new_subscribers->{$email}{$attribute}) {
+						&Log::do_log('debug', 'List:sync_include: updating %s to list %s', $email, $name);
+						my $update_time = $new_subscribers->{$email}{'update_date'} || time;
+						unless( $self->update_list_member(
+															$email,
+															{'update_date' => $update_time,
+															$attribute => $new_subscribers->{$email}{$attribute}}
+														)){
+															
+							&Log::do_log('err', 'List:sync_include(%s): Failed to update %s', $name, $email);
+							next;
+						}else {
+							$succesful_update = 1;
+						}
+					}
+				}
+				$users_updated++ if($succesful_update);
+				## User was already subscribed, update include_sources_subscriber in DB
+			}else {
+				&Log::do_log('debug', 'List:sync_include: updating %s to list %s', $email, $name);
+				unless( $self->update_list_member($email,  {'update_date' => time,
 						     'included' => 1,
 						     'id' => $new_subscribers->{$email}{'id'} }) ) {
-		    &Log::do_log('err', 'List:sync_include(%s): Failed to update %s',
-			    $name, $email);
-		    next;
-		}
-		$users_updated++;
-	    }
+					&Log::do_log('err', 'List:sync_include(%s): Failed to update %s',
+					$name, $email);
+					next;
+				}
+				$users_updated++;
+			}
 
 	    ## Add new included user
-	}else {
-	    my $compare = 0;
-	    foreach my $sub_exclu (@subscriber_exclusion){
-		unless ($compare eq '1'){
-		    if ($email eq $sub_exclu){
-			$compare = 1;
-		    }else{
-			next;
-		    }
+		}else {
+			my $compare = 0;
+			foreach my $sub_exclu (@subscriber_exclusion){
+				unless ($compare eq '1'){
+					if ($email eq $sub_exclu){
+						$compare = 1;
+					}else{
+						next;
+					}
+				}
+			}
+			if($compare eq '1'){
+				next;
+			}
+			&Log::do_log('debug3', 'List:sync_include: adding %s to list %s', $email, $name);
+			my $u = $new_subscribers->{$email};
+			$u->{'included'} = 1;
+			$u->{'date'} = time;
+			@add_tab = ($u);
+			my $user_added = 0;
+			unless( $user_added = $self->add_list_member( @add_tab ) ) {
+				&Log::do_log('err', 'List:sync_include(%s): Failed to add new users', $name);
+				return undef;
+			}
+			if ($user_added) {
+				$users_added++;
+				## Send notification if the list config authorizes it only.
+				if ($self->{'admin'}{'inclusion_notification_feature'} eq 'on') {
+					unless ($self->send_file('welcome', $u->{'email'}, $self->{'domain'},{})) {
+						&Log::do_log('err',"Unable to send template 'welcome' to $u->{'email'}");
+					}
+				}
+			}
 		}
-	    }
-	    if($compare eq '1'){
-		next;
-	    }
-	    &Log::do_log('debug3', 'List:sync_include: adding %s to list %s', $email, $name);
-	    my $u = $new_subscribers->{$email};
-	    $u->{'included'} = 1;
-	    $u->{'date'} = time;
-	    @add_tab = ($u);
-	    my $user_added = 0;
-	    unless( $user_added = $self->add_list_member( @add_tab ) ) {
-		&Log::do_log('err', 'List:sync_include(%s): Failed to add new users', $name);
-		return undef;
-	    }
-	    if ($user_added) {
-		$users_added++;
-		## Send notification if the list config authorizes it only.
-		if ($self->{'admin'}{'inclusion_notification_feature'} eq 'on') {
-		    unless ($self->send_file('welcome', $u->{'email'}, $self->{'domain'},{})) {
-			&Log::do_log('err',"Unable to send template 'welcome' to $u->{'email'}");
-		    }
-		}
-	    }
-	}
     }
 
     if ($users_added) {
@@ -8450,6 +8605,8 @@ sub sync_include {
     $self->{'total'} = $self->_load_total_db('nocache');
     $self->{'last_sync'} = time;
     $self->savestats();
+    
+    
 
     return 1;
 }
@@ -8467,12 +8624,13 @@ sub on_the_fly_sync_include {
     &Log::do_log('debug2','List::on_the_fly_sync_include(%s)',$pertinent_ttl);
     if ( $options{'use_ttl'} != 1 || $self->{'last_sync'} < time - $pertinent_ttl) { 
 	&Log::do_log('notice', "Synchronizing list members...");
-	if ($self->sync_include()) {
+	my $return_value = $self->sync_include();
+	if ($return_value == 1) {
 	    $self->remove_task('sync_include');
 	    return 1;
 	}
 	else {
-	    return undef;
+	    return $return_value;
 	}
     }
     return 1;
