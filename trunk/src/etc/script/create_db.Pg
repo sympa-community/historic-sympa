@@ -1,0 +1,136 @@
+-- POSTGRESQL Database creation script
+
+CREATE DATABASE sympa;
+
+-- Connect to DB 
+\connect sympa 
+
+
+-- --------------------------------------------------------
+--
+-- Table structure for table `conf_table`
+-- 
+
+CREATE TABLE conf_table ( 
+	 CONSTRAINT ind_conf PRIMARY KEY (robot_conf, label_conf) 
+ );
+
+
+-- --------------------------------------------------------
+--
+-- Table structure for table `notification_table`
+-- 
+
+CREATE TABLE notification_table ( 
+	 CONSTRAINT ind_notification PRIMARY KEY (pk_notification) 
+ );
+
+
+-- --------------------------------------------------------
+--
+-- Table structure for table `logs_table`
+-- 
+
+CREATE TABLE logs_table ( 
+	 CONSTRAINT ind_logs PRIMARY KEY (id_logs) 
+ );
+
+
+-- --------------------------------------------------------
+--
+-- Table structure for table `user_table`
+-- 
+
+CREATE TABLE user_table ( 
+	 CONSTRAINT ind_user PRIMARY KEY (email_user) 
+ );
+
+
+-- --------------------------------------------------------
+--
+-- Table structure for table `exclusion_table`
+-- 
+
+CREATE TABLE exclusion_table ( 
+	 CONSTRAINT ind_exclusion PRIMARY KEY (list_exclusion, user_exclusion) 
+ );
+
+
+-- --------------------------------------------------------
+--
+-- Table structure for table `session_table`
+-- 
+
+CREATE TABLE session_table ( 
+	 CONSTRAINT ind_session PRIMARY KEY (id_session) 
+ );
+
+
+-- --------------------------------------------------------
+--
+-- Table structure for table `netidmap_table`
+-- 
+
+CREATE TABLE netidmap_table ( 
+	 CONSTRAINT ind_netidmap PRIMARY KEY (netid_netidmap, serviceid_netidmap, robot_netidmap) 
+ );
+
+
+-- --------------------------------------------------------
+--
+-- Table structure for table `bulkspool_table`
+-- 
+
+CREATE TABLE bulkspool_table ( 
+	 CONSTRAINT ind_bulkspool PRIMARY KEY (messagekey_bulkspool) 
+ );
+
+
+-- --------------------------------------------------------
+--
+-- Table structure for table `admin_table`
+-- 
+
+CREATE TABLE admin_table ( 
+	 CONSTRAINT ind_admin PRIMARY KEY (robot_admin, list_admin, role_admin, user_admin) 
+ );
+
+
+-- --------------------------------------------------------
+--
+-- Table structure for table `one_time_ticket_table`
+-- 
+
+CREATE TABLE one_time_ticket_table ( 
+	 CONSTRAINT ind_one_time_ticket PRIMARY KEY (ticket_one_time_ticket) 
+ );
+
+
+-- --------------------------------------------------------
+--
+-- Table structure for table `bulkmailer_table`
+-- 
+
+CREATE TABLE bulkmailer_table ( 
+	 CONSTRAINT ind_bulkmailer PRIMARY KEY (messagekey_bulkmailer, packetid_bulkmailer) 
+ );
+
+
+-- --------------------------------------------------------
+--
+-- Table structure for table `subscriber_table`
+-- 
+
+CREATE TABLE subscriber_table ( 
+	 CONSTRAINT ind_subscriber PRIMARY KEY (robot_subscriber, list_subscriber, user_subscriber) 
+ );
+
+
+-- --------------------------------------------------------
+--
+-- Table structure for table `stat_table`
+-- 
+
+CREATE TABLE stat_table ( 
+	 CONSTRAINT ind_stat PRIMARY KEY (id_stat) 
+ );

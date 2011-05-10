@@ -1,0 +1,5 @@
+<!-- $Id$ -->
+
+[%|loc%]You will receive a n email, with a confirmation link.[%END%]<br />
+[%|loc%]To confirm your email address change, go to your email account and click on the provided link[%END%]
+<!-- end change_email.tt2 -->

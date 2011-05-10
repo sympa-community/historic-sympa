@@ -1,0 +1,15 @@
+<!-- $Id$ -->
+[% IF homepage_content %]
+     [% homepage_content %]
+[% ELSE %]
+
+<div class="block">
+
+   <p>
+     [% info_content %]
+   </p>
+
+</div>
+[% END %]
+
+<!-- end info.tt2 -->
