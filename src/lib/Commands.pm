@@ -2010,29 +2010,25 @@ sub distribute {
     &Language::SetLang($list->{'admin'}{'lang'});
 
     #read the moderation queue and purge it
-    my $modqueue =  &Conf::get_robot_conf($robot,'queuemod') ;
-    
+
+    my $modspool = new Sympaspool ('mod');
     my $name = $list->{'name'};
-    my $file;
 
-    ## For compatibility concerns
-    foreach my $list_id ($list->get_list_id(),$list->{'name'}) {
-	$file = $modqueue.'/'.$list_id.'_'.$key;
-	last if (-f $file);
-    }    
-    
-    ## if the file has been accepted by WWSympa, it's name is different.
-    unless (-r $file) {
-	## For compatibility concerns
-	foreach my $list_id ($list->get_list_id(),$list->{'name'}) {
-	    $file = $modqueue.'/'.$list_id.'_'.$key.'.distribute';
-	    last if (-f $file);
-	}    
+    my $message_in_spool = $modspool->get_message({'list'=>$list->{'name'},'robot'=>$robot,'authkey'=>$key});
+    unless ($message_in_spool) {
+	## if the message has been accepted via WWSympa, it's in spool 'validated' 
+	$validatedspool = new Sympaspool ('validated');
+	$message_in_spool = $validatedspool->get_message({'list'=>$list->{'name'},'robot'=>$robot,'authkey'=>$key});
     }
-
-    my $message = new Message({'file'=>$file});
+    unless ($message_in_spool) {
+	&do_log('err', 'Commands::distribute(): Unable to find message for %s with key %s', $name, $key);
+	&report::reject_report_msg('user','unfound_message',$sender,{'listname' => $name,'key'=> $key},$robot,'',$list);
+	return 'msg_not_found';
+	
+    }
+    my $message = new Message({'message_in_spool'=>$message_in_spool});
     unless (defined $message) {
-	&do_log('err', 'Commands::distribute(): Unable to create Message object %s', $file);
+	&do_log('err', 'Commands::distribute(): Unable to create message object for %s@%s validation key %s',$name,$robot,$key);
 	&report::reject_report_msg('user','unfound_message',$sender,{'listname' => $name,'key'=> $key},$robot,'',$list);
 	return 'msg_not_found';
     }
@@ -2046,45 +2042,30 @@ sub distribute {
     $hdr->add('X-Validation-by', $sender);
 
     ## Distribute the message
-    if (($main::daemon_usage == DAEMON_MESSAGE) || ($main::daemon_usage == DAEMON_ALL)) {
-	my $numsmtp;
-	my $apply_dkim_signature = 'off';
-	$apply_dkim_signature = 'on' if &tools::is_in_array($list->{'admin'}{'dkim_signature_apply_on'},'any');
-        $apply_dkim_signature = 'on' if &tools::is_in_array($list->{'admin'}{'dkim_signature_apply_on'},'editor_validated_messages');
+    my $numsmtp;
+    my $apply_dkim_signature = 'off';
+    $apply_dkim_signature = 'on' if &tools::is_in_array($list->{'admin'}{'dkim_signature_apply_on'},'any');
+    $apply_dkim_signature = 'on' if &tools::is_in_array($list->{'admin'}{'dkim_signature_apply_on'},'editor_validated_messages');
 
-	$numsmtp =$list->distribute_msg('message'=> $message,
-					'apply_dkim_signature'=>$apply_dkim_signature);
-	unless (defined $numsmtp) {
-	    &do_log('err','Commands::distribute(): Unable to send message to list %s', $name);
-	    &report::reject_report_msg('intern','',$sender,{'msg_id' => $msg_id},$robot,$msg_string,$list);
-	    return undef;
-	}
-	unless ($numsmtp) {
-	    &do_log('info', 'Message for %s from %s accepted but all subscribers use digest,nomail or summary',$which, $sender);
-	} 
-	&do_log('info', 'Message for %s from %s accepted (%d seconds, %d sessions, %d subscribers), message-id=%s, size=%d', $which, $sender, time - $start_time, $numsmtp, $list->get_total(), $hdr->get('Message-Id'), $bytes);
-
-	unless ($quiet) {
-	    unless (&report::notice_report_msg('message_distributed',$sender,{'key' => $key,'message' => $message},$robot,$list)) {
-		&do_log('notice',"Commands::distribute(): Unable to send template 'message_report', entry 'message_distributed' to $sender");
-	    }
-	}
-	
-	&do_log('info', 'DISTRIBUTE %s %s from %s accepted (%d seconds)', $name, $key, $sender, time-$time_command);
-	
-    }else{   
-	# this message is to be distributed but this daemon is dedicated to commands -> move it to distribution spool
-	unless ($list->move_message($file, $Conf{'queuedistribute'})) {
-	    &do_log('err','COmmands::distribute(): Unable to move in spool for distribution message to list %s (daemon_usage = command)', $listname);
-	    &report::reject_report_msg('intern','',$sender,{'msg_id' => $msg_id},$robot,$msg_string,$list);
-	    return undef;
-	}
-	unless ($quiet) {
-	    &report::notice_report_msg('message_in_distribution_spool',$sender,{'key' => $key,'message' => $message},$robot,$list);
-	}
-	&do_log('info', 'Message for %s from %s moved in spool %s for distribution message-id=%s', $name, $sender, $Conf{'queuedistribute'},$hdr->get('Message-Id'));
+    $numsmtp =$list->distribute_msg('message'=> $message,
+				    'apply_dkim_signature'=>$apply_dkim_signature);
+    unless (defined $numsmtp) {
+	&do_log('err','Commands::distribute(): Unable to send message to list %s', $name);
+	&report::reject_report_msg('intern','',$sender,{'msg_id' => $msg_id},$robot,$msg_string,$list);
+	return undef;
     }
-    unlink($file);
+    unless ($numsmtp) {
+	&do_log('info', 'Message for %s from %s accepted but all subscribers use digest,nomail or summary',$which, $sender);
+    } 
+    &do_log('info', 'Message for %s from %s accepted (%d seconds, %d sessions, %d subscribers), message-id=%s, size=%d', $which, $sender, time - $start_time, $numsmtp, $list->get_total(), $hdr->get('Message-Id'), $bytes);
+    
+    unless ($quiet) {
+	unless (&report::notice_report_msg('message_distributed',$sender,{'key' => $key,'message' => $message},$robot,$list)) {
+	    &do_log('notice',"Commands::distribute(): Unable to send template 'message_report', entry 'message_distributed' to $sender");
+	}
+    }
+    
+    &do_log('info', 'DISTRIBUTE %s %s from %s accepted (%d seconds)', $name, $key, $sender, time-$time_command);
     
     return 1;
 }
@@ -2128,7 +2109,7 @@ sub confirm {
     my $message = new Message ({'message_in_spool'=>$messageinspool});    
 
     unless (defined $message) {
-	&do_log('err', 'Commands::confirm(): Unable to create Message object %s', $file);
+	&do_log('err', 'Commands::confirm(): Unable to create message object for key %s',$key);
 	&report::reject_report_msg('user','wrong_format_message',$sender,{'key'=> $key},$robot,'','');
 	return 'msg_not_found';
     }
@@ -2295,46 +2276,26 @@ sub reject {
     &Language::SetLang($list->{'admin'}{'lang'});
 
     my $name = "$list->{'name'}";
-    my $file;
 
-    ## For compatibility concerns
-    foreach my $list_id ($list->get_list_id(),$list->{'name'}) {
-	$file = $modqueue.'/'.$list_id.'_'.$key;
-	last if (-f $file);
-    }       
+    my $modspool = new Sympaspool('mod');
+    my $message_in_spool = $modspool->get_message({'list'=>$list->{'name'},'robot'=>$robot,'authkey'=>$key});
 
-    my $msg;
-    my $parser = new MIME::Parser;
-    $parser->output_to_core(1);
-
-    unless ($msg = $parser->read(\*IN)) {
-	&do_log('notice', 'Commands::reject(): Unable to parse message');
-	&report::reject_report_msg('intern','',$sender,{},$robot,'',$list);
-	return undef;
-    }
-
-    close(IN);
-    
-    my $bytes = -s $file;
-    my $hdr= $msg->head;
-    my $customheader = $list->{'admin'}{'custom_header'};
-    my $to_field = $hdr->get('To');
-    
-    ## Open the file
-    if (!open(IN, $file)) {
+    unless ($message_in_spool) {
 	&do_log('info', 'REJECT %s %s from %s refused, auth failed', $which, $key, $sender);
 	&report::reject_report_msg('user','unfound_message',$sender,{'key'=> $key},$robot,'',$list);
 	return 'wrong_auth';
     }
-    
-    my $message;
-    $parser = new MIME::Parser;
-    $parser->output_to_core(1);
-    unless ($message = $parser->read(\*IN)) {
-	&do_log('notice', 'Commands::reject(): Unable to parse message');
-	&report::reject_report_msg('intern','',$sender,{},$robot,'',$list);
-	return undef;
+    my $message = new Message({'message_in_spool'=> $message_in_spool});
+    unless ($message_) {
+	&do_log('err', 'Could not parse spool message %s %s from %s refused, auth failed', $which, $key, $sender);
+	&report::reject_report_msg('user','unfound_message',$sender,{'key'=> $key},$robot,'',$list);
+	return 'wrong_auth';
     }
+    my $msg = $message->{'msg'};    
+    my $bytes = $message->{'size'};    
+    my $hdr= $msg->head;
+    my $customheader = $list->{'admin'}{'custom_header'};
+    my $to_field = $hdr->get('To');
     
     my @sender_hdr = Mail::Address->parse($message->head->get('From'));
     unless  ($#sender_hdr == -1) {
@@ -2345,7 +2306,7 @@ sub reject {
 	$context{'rejected_by'} = $sender;
 	$context{'editor_msg_body'} = $editor_msg->{'msg'}->body_as_string if ($editor_msg) ;
 	
-	&do_log('debug2', 'message %s by %s rejected sender %s',$context{'subject'},$context{'rejected_by'},$rejected_sender);
+	&do_log('debug', 'message %s by %s rejected sender %s',$context{'subject'},$context{'rejected_by'},$rejected_sender);
 
 	## Notify author of message
 	unless ($quiet) {
@@ -2362,9 +2323,10 @@ sub reject {
 
     }
     
-    close(IN);
     &do_log('info', 'REJECT %s %s from %s accepted (%d seconds)', $name, $sender, $key, time-$time_command);
-    unlink($file);
+    &tools::remove_dir ( $Conf::Conf{'viewmail_dir'}.'/mod/'.$list->get_list_id().'/'.$key);
+    
+    $modspool->remove({'list'=>$list->{'name'},'robot'=>$robot,'authkey'=>$key});
 
     return 1;
 }

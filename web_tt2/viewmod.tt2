@@ -1,4 +1,14 @@
 <!-- $Id$ -->
-[% PROCESS 'msg00000.html' %]
+<h1> tttt</h1>
+[% TRY %]
+
+ [% PROCESS 'msg00000.html' %]
+
+[% CATCH %]
+   ERROR! Type: [% error.type %]
+          Info: [% error.info %]
+[% END %]
+
+
 
 <!-- end viewmod.tt2 -->

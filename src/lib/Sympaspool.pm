@@ -75,8 +75,8 @@ sub new {
     my $spool={};
     do_log('debug2', 'Spool::new(%s)', $spoolname);
     
-    unless ($spoolname =~ /^(auth)|(bounce)|(digest)|(bulk)|(expire)|(mod)|(msg)|(archive)|(automatic)|(subscribe)|(topic)$/){
-	do_log('err','unknown spool');
+    unless ($spoolname =~ /^(auth)|(bounce)|(digest)|(bulk)|(expire)|(mod)|(msg)|(archive)|(automatic)|(subscribe)|(topic)|(validated)$/){
+	do_log('err','internal error unknown spool %s',$spoolname);
 	return undef;
     }
     $spool->{'spoolname'} = $spoolname;
@@ -91,6 +91,12 @@ sub new {
     return $spool;
 }
 
+
+sub count {
+    my $self = shift;
+    return ($self->get_content({'selection'=>'count'}));
+}
+
 #######################
 #
 #  get_content return the content an array of hash describing the spool content
@@ -99,23 +105,27 @@ sub get_content {
 
     my $self = shift;
     my $data= shift;
-    my $selector=$data->{'selector'};   # hash field->value used as filter  WHERE sql query 
-    my $selection=$data->{'selection'}; # a comma separated list of field to select. value '*' allowed and is the default . 'count' mean the selection is just a count.
-                                        # should be used mainly to select all but 'message' that may be huge and may be unusefull
+    my $selector=$data->{'selector'};     # hash field->value used as filter  WHERE sql query 
+    my $selection=$data->{'selection'};   # the list of field to select. possible values are :
+                                          #    -  a comma separated list of field to select. 
+                                          #    -  '*'  is the default .
+                                          #    -  '*_but_message' mean any field except message which may be hugue and unusefull while listing spools
+                                          #    - 'count' mean the selection is just a count.
+                                          # should be used mainly to select all but 'message' that may be huge and may be unusefull
+    my $ofset = $data->{'ofset'};         # for pagination, start fetch at element number = $ofset;
+    my $page_size = $data->{'page_size'}; # for pagination, limit answers to $page_size
+    my $orderby = $data->{'sortby'};      # sort
+    my $way = $data->{'way'};             # asc or desc 
 
     &do_log('debug', 'Spool::get_content(%s)',$self->{'spoolname'});
+    &do_log('trace', 'Spool::get_content(%s,selector : %s)',$self->{'spoolname'},$selector);
     
     $dbh = &List::db_get_handler();
     unless ($dbh and $dbh->ping) {
 	return undef unless &List::db_connect();
     }
 
-    my $dump = &Dumper($selector); open (DUMP,">/tmp/dumper"); printf DUMP 'Selector \n%s',$dump ; close DUMP; do_log('trace',"dumper");
-
-
     my $sql_where = _sqlselector($selector);
-
-
     if ($self->{'selection_status'} eq 'bad') {
 	$sql_where = $sql_where."AND message_status_spool = 'bad' " ;
     }else{
@@ -124,7 +134,6 @@ sub get_content {
     $sql_where =~s/^AND//;
 
     my $statement ;
-    
     if ($selection eq 'count'){
 	# just return the selected count, not all the values
 	$statement = 'SELECT COUNT(*) ';
@@ -133,7 +142,15 @@ sub get_content {
     }
 
     $statement = $statement . sprintf " FROM spool_table WHERE %s AND spoolname_spool = %s ",$sql_where,$dbh->quote($self->{'spoolname'});
-    do_log('trace',"staement %s",$statement);
+
+    if ($orderby) {
+	$statement = $statement. ' ORDER BY '.$orderby.'_spool ';
+	$statement = $statement. ' DESC' if ($way eq 'desc') ;
+    }
+    if ($page_size) {
+	$statement = $statement . ' LIMIT '.$ofset.' , '.$page_size;
+    }
+    do_log('trace',"statement $statement");
 
     push @sth_stack, $sth;
     unless ($sth = $dbh->prepare($statement)) {
@@ -146,21 +163,24 @@ sub get_content {
     }
     if($selection eq 'count') {
 	my @result = $sth->fetchrow_array();
-	do_log('trace',"return count");
+	do_log('trace',"comptage %s",$result[0]);
 	return $result[0];
     }else{
 	my @messages;
 	while (my $message = $sth->fetchrow_hashref('NAME_lc')) {
 	    $message->{'date_asstring'} = &tools::epoch2yyyymmjj_hhmmss($message->{'date'});
+	    $message->{'lockdate_asstring'} = &tools::epoch2yyyymmjj_hhmmss($message->{'lockdate'});
 	    $message->{'messageasstring'} = MIME::Base64::decode($message->{'message'}) if ($message->{'message'}) ;
+	    $message->{'listname'} = $message->{'list'}; # duplicated because "list" is a tt2 method that convert a string to an array of chars so you can't test  [% IF  message.list %] because it is always defined!!!
+	    $message->{'status'} = $self->{'selection_status'}; 
 	    push @messages, $message;
+	    do_log('trace',"contenu message de %s subject: %s",$message->{'sender'},$message->{'subject'});
 	}
 	$sth->finish();
 	$sth = pop @sth_stack;
 	return @messages;
     }
 }
-
 
 #######################
 #
@@ -371,9 +391,6 @@ sub store {
     my $metadata = shift; # a set of attributes related to the spool
     my $locked = shift;   # if define message must stay locked after store
 
-    #my $message_asstring = $message->{'msg_as_string'};
-    
-    do_log('trace',"Spool::store ($self->{'spoolname'},$self->{'selection_status'}, <message_asstring> ,list : $metadata->{'list'},robot : $metadata->{'robot'} , date: $metadata->{'date'}), lock : $locked");
     do_log('debug',"Spool::store ($self->{'spoolname'},$self->{'selection_status'}, <message_asstring> ,list : $metadata->{'list'},robot : $metadata->{'robot'} , date: $metadata->{'date'}), lock : $locked");
 
     $dbh = &List::db_get_handler();
@@ -383,19 +400,18 @@ sub store {
     };
 
     my $b64msg = MIME::Base64::encode($message_asstring);
+
+    my $message = new Message({'messageasstring'=>$message_asstring});
     
-    ### Prepare message meta data.
-    my $parser = new MIME::Parser;
-    $parser->output_to_core(1);
-
-    my $entity = $parser->parse_data($message_asstring); 
-
-    if($entity) {
-	$metadata->{'subject'} = $entity->head->get('Subject'); chomp $metadata->{'subject'} ;
+    if($message) {
+	$metadata->{'spam_status'} = $message->{'spam_status'};
+	$metadata->{'subject'} = $message->{'msg'}->head->get('Subject'); chomp $metadata->{'subject'} ;
 	$metadata->{'subject'} = substr $metadata->{'subject'}, 0, 109;
-	$metadata->{'messageid'} = $entity->head->get('Message-Id'); chomp $metadata->{'messageid'} ;
-	$metadata->{'messageid'} = substr $metadata->{'messageid'}, 0, 95;
-	my @sender_hdr = Mail::Address->parse($entity->get('From'));
+	$metadata->{'messageid'} = $message->{'msg'}->head->get('Message-Id'); chomp $metadata->{'messageid'} ;
+	$metadata->{'messageid'} = substr $metadata->{'messageid'}, 0, 295;
+	$metadata->{'headerdate'} = substr $message->{'msg'}->head->get('Date'), 0, 78;
+
+	my @sender_hdr = Mail::Address->parse($message->{'msg'}->get('From'));
 	if ($#sender_hdr >= 0){
 	    $metadata->{'sender'} = lc($sender_hdr[0]->address);
 	    $metadata->{'sender'} = substr $metadata->{'sender'}, 0, 109;
@@ -410,7 +426,7 @@ sub store {
     $metadata->{'message_status'} = 'ok';
 
     my $insertpart1; my $insertpart2;
-    foreach my $meta ('list','robot','message_status','priority','date','type','subject','sender','messageid','size','dkim_header_list','dkim_privatekey','dkim_d','dkim_i','dkim_selector') {
+    foreach my $meta ('list','robot','message_status','priority','date','type','subject','sender','messageid','size','headerdate','spam_status','dkim_header_list','dkim_privatekey','dkim_d','dkim_i','dkim_selector') {
 	$insertpart1 = $insertpart1. ', '.$meta.'_spool';
 	$insertpart2 = $insertpart2. ', '.$dbh->quote($metadata->{$meta});   
     }
@@ -593,17 +609,19 @@ sub store_test {
 
 #######################
 # Internal to ease SQL
-# return a SQL SELECT substring in ordder to select choosen fields from spool table 
+# return a SQL SELECT substring in ordder to select choosen fields from spool table
+# selction is comma separated list of field, '*' or '*_but_message'. in this case skip message_spool field 
 sub _selectfields{
     my $selection = shift;  # default all valid fields from spool table
 
     $selection = '*' unless $selection;
     my $select ='';
 
-    if ($selection eq '*') {
+    if (($selection eq '*_but_message')||($selection eq '*')) {
 	my %db_struct = &Sympa::DatabaseDescription::db_struct();
 
 	foreach my $field ( keys %{ $db_struct{'mysql'}{'spool_table'}} ) {
+	    next if (($selection eq '*_but_message') && ($field eq 'message_spool')) ;
 	    my $var = $field;
 	    $var =~ s/\_spool//;
 	    $select = $select . $field .' AS '.$var.',';
@@ -625,7 +643,7 @@ sub _selectfields{
 sub _sqlselector {
 	
     my $selector = shift; 
- 
+    do_log('trace',"_selector %s",$selector);
     my $sqlselector = '';
     
     foreach my $field (keys %$selector) {
@@ -635,7 +653,6 @@ sub _sqlselector {
 	    $sqlselector = ' '.$field.'_spool = '.$dbh->quote($selector->{$field});
 	}
     }
-    do_log('trace',"sqlselector %s",$sqlselector);
     return $sqlselector;
 }
 

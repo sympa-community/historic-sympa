@@ -310,55 +310,76 @@ sub clean_archived_message{
 #############################
 # convert a messsage to html. 
 #    result is stored in $destination_dir
-#    attachement_url is sused to link attachement
+#    attachement_url is used to link attachement
 #    
 sub convert_single_msg_2_html {
     
-    my $message =shift;
-    my $destination_dir = shift;
-    my $attachement_url = shift;
-    my $list = shift;
-    my $host = $list->{'admin'}{'host'};
+    my $data =shift;
+    my $msg_as_string = $data->{'msg_as_string'};
+    my $destination_dir = $data->{'destination_dir'};
+    my $attachement_url = $data->{'attachement_url'};
+    my $list = $data->{'list'};
+    my $robot = $data->{'robot'};
+    my $messagekey = $data->{'messagekey'};
 
-    my $pwd = getcwd;  #  mhonarc require du change workdir so this proc must retore it
-    
-    my $robot = $list->{'robot'};
-    my $listname = $list->{'name'};
-    my $msg_file = &Conf::get_robot_conf($robot, 'tmpdir').'/'.$list->get_list_id().'_'.$$;
+    do_log('trace',"Destination %s taille du message %s  ",$destination_dir,length($destination_dir));
 
+    my $listname =''; my $msg_file;
+    my $host = $robot;
+    if ($list) {
+	$host = $list->{'admin'}{'host'};
+	$robot = $list->{'robot'};
+	$listname = $list->{'name'};
+	$msg_file = &Conf::get_robot_conf($robot, 'tmpdir').'/'.$list->get_list_id().'_'.$$;
+    }else{
+	$msg_file = &Conf::get_robot_conf($robot, 'tmpdir').'/'.$messagekey.'_'.$$;
+    }
+
+    my $pwd = getcwd;  #  mhonarc require du change workdir so this proc must retore it    
     unless (open(OUT, ">$msg_file")) {
 	do_log('notice', 'Could Not open %s', $msg_file);
 	return undef;
     }
-    printf OUT $message->{'message_as_string'};
+    printf OUT $msg_as_string ;
     close(OUT);
+
+    do_log('trace',"dump temporaire %s",$msg_file);
     
     unless (-d $destination_dir) {
-	unless (mkdir ($destination_dir, 0777)) {
+	unless (&tools::mkdir_all($destination_dir, 0777)) {
 	    &do_log('err','Unable to create %s', $destination_dir);
 	    return undef;
 	}
-	my $mhonarc_ressources = &tools::get_filename('etc',{},'mhonarc-ressources.tt2', $robot,$list);
-	
-	unless ($mhonarc_ressources) {
-	    do_log('notice',"Cannot find any MhOnArc ressource file");
-	    return undef;
-	}
-	## generate HTML
-	chdir $destination_dir;
-	my $mhonarc = &Conf::get_robot_conf($robot, 'mhonarc');
-	my $base_url = &Conf::get_robot_conf($robot, 'wwsympa_url');
-	open ARCMOD, "$mhonarc  -single --outdir .. -rcfile $mhonarc_ressources -definevars listname=$listname -definevars hostname=$host -attachmenturl=$attachement_url $msg_file|";
-	open MSG, ">msg00000.html";
-	&do_log('debug', "$mhonarc  -single -rcfile $mhonarc_ressources -definevars listname=$listname -definevars hostname=$host $msg_file");
-	print MSG <ARCMOD>;
-	close MSG;
-	close ARCMOD;
-	# restore current wd 
-	chdir $pwd;		
     }
-    unlink $msg_file ;
-    do_log('trace',"conversionde message en html  faite");
+    my $mhonarc_ressources = &tools::get_filename('etc',{},'mhonarc-ressources.tt2', $robot,$list);
+    
+    unless ($mhonarc_ressources) {
+	do_log('notice',"Cannot find any MhOnArc ressource file");
+	return undef;
+    }
+    ## generate HTML
+    unless (chdir $destination_dir) {
+	do_log('trace',"pas pu changer de reperetoire");
+    }
+    my $tracepwd = getcwd ; do_log('trace',"maintenant pwd : %s, attachement url : %s",$tracepwd,$attachement_url);
+
+
+    my $mhonarc = &Conf::get_robot_conf($robot, 'mhonarc');
+    my $base_url = &Conf::get_robot_conf($robot, 'wwsympa_url');
+    #open ARCMOD, "$mhonarc  -single --outdir .. -rcfile $mhonarc_ressources -definevars listname=$listname -definevars hostname=$host -attachmenturl=$attachement_url $msg_file |";
+    #open MSG, ">msg00000.html";
+    #&do_log('debug', "$mhonarc  --outdir .. -single -rcfile $mhonarc_ressources -definevars listname=$listname -definevars hostname=$host $msg_file");
+    #print MSG <ARCMOD>;
+    #close MSG;
+    #close ARCMOD;
+    `$mhonarc  -single --outdir .. -rcfile $mhonarc_ressources -definevars listname=$listname -definevars hostname=$host -attachmenturl=$attachement_url $msg_file > msg00000.html`;
+
+    #unlink $msg_file ;
+    do_log('trace'," $mhonarc  -single --outdir .. -rcfile $mhonarc_ressources -definevars listname=$listname -definevars hostname=$host -attachmenturl=$attachement_url $msg_file > msg00000.html");
+    # restore current wd 
+    chdir $pwd;		
+
+    &do_log('trace', " generation dans $destination_dir");
     return 1;
 }
 

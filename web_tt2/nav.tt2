@@ -17,6 +17,8 @@
     <li class="[% class %]"><a href="[% path_cgi %]/serveradmin/users">[%|loc%]Users[%END%]</a></li>
 [% IF subaction == 'archives' %][% SET class = 'MainMenuLinksCurrentPage' %][% ELSE %][% SET class = 'MainMenuLinks' %][% END %]
     <li class="[% class %]"><a href="[% path_cgi %]/serveradmin/archives">[%|loc%]Archives[%END%]</a></li>
+[% IF subaction == 'viewspools' %][% SET class = 'MainMenuLinksCurrentPage' %][% ELSE %][% SET class = 'MainMenuLinks' %][% END %]
+    <li class="[% class %]"><a href="[% path_cgi %]/viewspools">[%|loc%]Spools[%END%]</a></li>
 [% IF subaction == 'logs' %][% SET class = 'MainMenuLinksCurrentPage' %][% ELSE %][% SET class = 'MainMenuLinks' %][% END %]
     <li class="[% class %]"><a href="[% path_cgi %]/serveradmin/logs">[%|loc%]Logs[%END%]</a></li>
 [% IF subaction == 'templates' %][% SET class = 'MainMenuLinksCurrentPage' %][% ELSE %][% SET class = 'MainMenuLinks' %][% END %]

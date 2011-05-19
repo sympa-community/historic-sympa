@@ -37,14 +37,14 @@ This fcgi script completely handles all aspects of the Sympa web interface
 
 =cut 
 
-use lib '--modulesdir--';
+use lib '/usr/local/sympa-sa/bin';
 
 use Getopt::Long;
 use Archive::Zip;
   
 use strict 'vars';
 use Time::Local;
-
+use Data::Dumper;
 
 ## Sympa API
 use List;
@@ -302,6 +302,10 @@ my %comm = ('home' => 'do_home',
 	 'attach' => 'do_attach',
 	 'stats' => 'do_stats',
 	 'viewlogs'=> 'do_viewlogs',
+	 'viewspools'=> 'do_viewspools',
+	 'viewspool_message'=> 'do_viewspool_message',
+	 'viewspool_message_dump'=> 'do_viewspool_message_dump',
+	 'viewspool_message_remove'=> 'do_viewspool_message_remove',
 	 'wsdl'=> 'do_wsdl',
 	 'sync_include' => 'do_sync_include',
 	 'review_family' => 'do_review_family',
@@ -426,6 +430,10 @@ my %action_args = ('default' => ['list'],
 		'copy_list' => ['list','new_list','new_robot'],
 		'redirect' => [],
 		'viewlogs' => ['list','first'],
+		'viewspools' => ['spoolname','status'],
+		'viewspool_message' => ['spoolname','messagekey','status'],
+		'viewspool_message_dump' => ['spoolname','messagekey','status'],
+		'viewspool_message_remove' => ['spoolname','messagekey','status'],
 		'wsdl' => [],
 		'sync_include' => ['list'],
 		'review_family' => ['family_name'],
@@ -577,6 +585,10 @@ my %required_args = ('active_lists' => ['for|count'],
 		     'viewbounce' => ['param.list','email'],
 		     'viewfile' => ['file','param.list'],
 		     'viewlogs' => ['param.list'],
+		     'viewspools' => [],
+		     'viewspool_message' => ['spoolname','messagekey'],
+		     'viewspool_message_dump' => ['spoolname','messagekey','status'],
+		     'viewspool_message_remove' => ['spoolname','messagekey','status'],
 		     'viewmod' => ['param.list','param.user.email','id|idspam'],
 		     'wsdl' => [],
 		     'which' => ['param.user.email'],
@@ -635,6 +647,7 @@ my %required_privileges = ('admin' => ['owner','editor'],
 			   'view_template' => ['listmaster'],
 			   'viewbounce' => ['owner'],
 			   'viewlogs' => ['owner','editor'],
+			   'viewlogs' => ['owner'],
 			   'viewmod' => ['editor'],
 			  );
 
@@ -687,6 +700,10 @@ my %action_type = ('editfile' => 'admin',
 		'edit_template' => 'admin',
 		'blacklist' => 'admin',
 		'viewlogs' => 'admin',
+		'viewspools' => 'admin',
+		'viewspool_message' => 'admin',
+		'viewspool_message_remove' => 'admin',
+		'viewspool_message_dump' => 'admin',
 		'serveradmin' => 'serveradmin',
 		'get_pending_lists' => 'serveradmin',
 		'get_closed_lists' => 'serveradmin',
@@ -1032,7 +1049,7 @@ my $birthday = time ;
      $ip = $ENV{'REMOTE_ADDR'} unless ($ip);
      $ip = 'undef' unless ($ip);
       ## In case HTTP_HOST does not match cookie_domain
-    my $http_host = &get_header_field('HTTP_HOST');
+    my $http_host = get_header_field('HTTP_HOST');
      $http_host =~ s/:\d+$//; ## suppress port
      unless (($http_host =~ /$param->{'cookie_domain'}$/) || 
              ($param->{'cookie_domain'} eq 'localhost')) {
@@ -1536,16 +1553,16 @@ my $birthday = time ;
      if ($param->{'bypass'}) {
 
 	## if bypass = 'extreme' leave the action send the content-type and the content itself
-	unless ($param->{'bypass'} eq 'extreme') {
-
+	 unless ($param->{'bypass'} eq 'extreme') {
+	     
 	     ## if bypass = 'asis', file content-type is in the file itself as is define by the action in $param->{'content_type'};
 	     unless ($param->{'bypass'} eq 'asis') {
 		 my $type = $param->{'content_type'} || $mime_types->{$param->{'file_extension'}} || 'application/octet-stream';
 		 printf "Content-Type: %s\n\n", $type;
 	     }
-
+	     
 	     #  $param->{'file'} or $param->{'error'} must be define in this case.
-
+	     
 	     if (open (FILE, $param->{'file'})){
 		 print <FILE>;
 		 close FILE;
@@ -6346,46 +6363,23 @@ sub do_skinsedit {
      my $msg;
      my $doc;
 
-     ## Loads message list
-     unless (opendir SPOOL, $Conf{'queuemod'}) {
-	 &report::reject_report_web('intern','cannot_open_spool',{'spool'=>$Conf{'queuemod'}},$param->{'action'},$list,$param->{'user'}{'email'},$robot);
-	 &wwslog('err','do_modindex: unable to read spool');
-	 return 'admin';
-     }
-
      my $list_name = $list->{'name'};
-     my $list_id = $list->get_list_id();
-     foreach $msg ( sort grep(!/^\./, readdir SPOOL )) {
-	 next
-	     unless ($msg =~ /^$list_id\_(\w+)$/ ||
-		     $msg =~ /^$list_name\_(\w+)$/);
+     my $modspool = new Sympaspool('mod');
+     my @messages  = $modspool->get_content({'selector'=>{'list'=>$list_name,'robot'=>$robot}});
+     foreach $msg ( @messages ) {
 
-	 my $id = $1;
-
-	 ## Load msg
-	 my $mail = new Message({'file'=>"$Conf{'queuemod'}/$msg"});
-	 
-	 unless (defined $mail) {
-	     &report::reject_report_web('intern','cannot_get_msg',{'msg'=>"$Conf{'queuemod'}/$msg"},$param->{'action'},$list,$param->{'user'}{'email'},$robot);
-	     &wwslog('err','do_modindex: unable to parse msg %s', $msg);
-	     closedir SPOOL;
-	     next;
-	 }
-
-
-	 $param->{'spool'}{$id}{'size'} = int( (-s "$Conf{'queuemod'}/$msg") / 1024 + 0.5);
-	 $param->{'spool'}{$id}{'subject'} =  &MIME::EncWords::decode_mimewords($mail->{'msg'}->head->get('Subject'), Charset=>'utf8');
-	 $param->{'spool'}{$id}{'subject'} ||= 'no_subject';
-	 $param->{'spool'}{$id}{'date'} = &MIME::EncWords::decode_mimewords($mail->{'msg'}->head->get('Date'), Charset=>'utf8');
-	 $param->{'spool'}{$id}{'from'} = &MIME::EncWords::decode_mimewords($mail->{'msg'}->head->get('From'), Charset=>'utf8');
-	 $param->{'spool'}{$id}{'spam_status'} = $mail->{'spam_status'};
+	 $param->{'spool'}{$msg->{'authkey'}}{'size'} = int( $msg->{'size'} / 1024 + 0.5);
+	 $param->{'spool'}{$msg->{'authkey'}}{'subject'} =  &MIME::EncWords::decode_mimewords($msg->{'subject'}, Charset=>'utf8');
+	 $param->{'spool'}{$msg->{'authkey'}}{'subject'} ||= 'no_subject';
+	 $param->{'spool'}{$msg->{'authkey'}}{'date'} = &MIME::EncWords::decode_mimewords($msg->{'headerdate'}, Charset=>'utf8');
+	 $param->{'spool'}{$msg->{'authkey'}}{'from'} = &MIME::EncWords::decode_mimewords($msg->{'sender'}, Charset=>'utf8');
+	 $param->{'spool'}{$msg->{'authkey'}}{'spam_status'} = $msg->{'spam_status'};
 	 foreach my $field ('subject','date','from') {
-	     $param->{'spool'}{$id}{$field} =~ s/&/&amp;/g;
-	     $param->{'spool'}{$id}{$field} =~ s/</&lt;/g;
-	     $param->{'spool'}{$id}{$field} =~ s/>/&gt;/g;
+	     $param->{'spool'}{$msg->{'authkey'}}{$field} =~ s/&/&amp;/g;
+	     $param->{'spool'}{$msg->{'authkey'}}{$field} =~ s/</&lt;/g;
+	     $param->{'spool'}{$msg->{'authkey'}}{$field} =~ s/>/&gt;/g;
 	 }
      }
-     closedir SPOOL;
 
      if ($list->is_there_msg_topic()) {
 
@@ -6816,6 +6810,9 @@ sub do_skinsedit {
      $in{'id'} =~ s/\0/,/g;
 
      &wwslog('info', 'do_distribute(%s)', $in{'id'});
+     &do_log('trace',"CES LA QUE CELA SE PASSE wwsympa.fcgi");
+
+     my $modspool = new Sympaspool('mod');
      my ($msg, $file);
 
      my $time = time;
@@ -6842,76 +6839,65 @@ sub do_skinsedit {
 	 return undef;
      } 
 
-
      ## messages
      foreach my $id (split (/,/, $in{'id'})) {
-	 my $mail_command = sprintf ("QUIET DISTRIBUTE %s %s\n",$list->{'name'},$id);
-	 $data->{'body'} .= $mail_command;
 
-	 ## For compatibility concerns
-	 foreach my $list_id ($list->get_list_id(),$list->{'name'}) {
-	     $file = $Conf{'queuemod'}.'/'.$list_id.'_'.$id;
-	     last if (-f $file);
-	 }
+	 
+	 my $message_in_spool = $modspool->get_message({'list'=>$list->{'name'},'robot'=>$robot,'authkey'=>$id});
 
-	 unless (-f $file) {
+	 unless ($message_in_spool) {
 	     &report::reject_report_web('user','already_moderated',{},$param->{'action'});
-	     &wwslog('err','do_distribute: Unable to open %s', $file);
+	     &wwslog('err','do_distribute: Unable to find message in spool mod with authkey  %s', $id);
 	     &web_db_log({'parameters' => $in{'id'},
 			  'status' => 'error',
 			  'error_type' => 'internal'});
 	     next;
 	 }
+	 $data->{'body'} .= sprintf ("QUIET DISTRIBUTE %s %s\n",$list->{'name'},$id);
 
 	 ## TAG 
 	 if ($list_topics) {
 
-	     my $parser = new MIME::Parser;
-	     $parser->output_to_core(1);
-	     
-	     unless (open FILE, "$file") {
-		 &wwslog('notice', 'do_distribute: Cannot open file %s', $file);
-		 &report::reject_report_web('intern','cannot_open_file',{'file' => $file},$param->{'action'},$list,$param->{'user'}{'email'},$robot);
-		 &web_db_log({'parameters' => $in{'id'},
-			      'status' => 'error',
-			      'error_type' => 'internal'});
-		 return undef;
-	     }
-
-	     my $msg = $parser->parse(\*FILE);
+	     my $message = new Message({'message_in_spool'=> $message_in_spool});
+	     my $msg = $message->{'msg'};
 	     my $head = $msg->head();
 	     my $filetopic = $list->tag_topic(&tools::clean_msg_id($head->get('Message-Id')),$list_topics,'editor');
 	 }
-	 
-	 unless (rename($file,"$file.distribute")) {
-	     &report::reject_report_web('intern','rename_file',{'old'=>$file,
-								'new'=>"$file.distribute"},
+
+         # move message in spool of validated messages
+         unless ($modspool->update({'list'=>$list->{'name'},'robot'=>$robot,'authkey'=>$id},{'spoolname'=>'validated'}) ) {
+
+	     &report::reject_report_web('intern','change_spool',{'old'=>'mod',
+								 'new'=>"validated"},
 					$param->{'action'},$list,$param->{'user'}{'email'},$robot);
-	     &wwslog('err','do_distribute: failed to rename %s', $file);
+	     &wwslog('err','do_distribute: failed to move message in validated spool, key %s', $id);
 	     &web_db_log({'parameters' => $in{'id'},
 			  'status' => 'error',
 			  'error_type' => 'internal'});
+
 	 }
+	 # clean html view of the message
+	 &tools::remove_dir ( $Conf::Conf{'viewmail_dir'}.'/mod/'.$list->get_list_id().'/'.$id);	
      }
 
      $data->{'not_auto_submitted'} = 1;
      unless (&mail::mail_file('',&Conf::get_robot_conf($robot, 'sympa'), $data, $robot)) {
 	 &report::reject_report_web('intern','cannot_send_distribute',{'from' => $param->{'user'}{'email'},'listname'=>$list->{'name'}},
 				    $param->{'action'},$list,$param->{'user'}{'email'},$robot);
-	 &wwslog('err','do_distribute: failed to send message for file %s', $file);
+	 &wwslog('err','do_distribute: failed to send message for list %s, id %s', $list->{'name'},$in{'id'});
 	 &web_db_log({'parameters' => $in{'id'},
 		      'status' => 'error',
 		      'error_type' => 'internal'});
 	 return undef;
      }
-
+     
      &web_db_log({'parameters' => $in{'id'},
 		  'status' => 'success'});
 
      &report::notice_report_web('performed_soon',{},$param->{'action'});
 
      return 'modindex';
- }
+}
 
 ####################################################
 #  do_viewmod
@@ -6928,7 +6914,7 @@ sub do_viewmod {
      &wwslog('info', 'do_viewmod(%s,%s)', $in{'id'},$in{'file'});
 
      my $msg;
-     my $tmp_dir;
+
 
      my $available_files = &tools::get_templates_list('mail','',$list, {'ignore_global' => 1});
      foreach my $file (keys %$available_files) {
@@ -6937,27 +6923,25 @@ sub do_viewmod {
          $file =~ s/.tt2$//;
 	 push (@{$param->{'available_files'}},$file); 
      }
-
-     ## For compatibility concerns
-     foreach my $list_id ($list->get_list_id(),$list->{'name'}) {
-	 $html_dir = $Conf::get_robot_conf{'viewmail_dir'}.'/mod/.'.$list_id.'_'.$in{'id'};
-	 if (-d $html_dir) {
-	     last;
-	 }
-     }
      
+     my $html_dir = $Conf::Conf{'viewmail_dir'}.'/mod/'.$list->get_list_id().'/'.$in{'id'};
+
+     do_log('trace', 'htlm_dir : %s',$html_dir);      
      unless (-d $html_dir) {
 	 &report::reject_report_web('intern','no_html_message_available',{'dir' => $html_dir},$param->{'action'});
 	 &wwslog('err','do_viewmod: no HTML version of the message available in %s', $html_dir);
 	 return undef;
      }     
 
+
      if ($in{'file'}) {
 	 $in{'file'} =~ /\.(\w+)$/;
 	 $param->{'file_extension'} = $1;
 	 $param->{'file'} = $html_dir.'/'.$in{'file'};
+	 do_log('trace', 'param file :%s',$param->{'file'});      
 	 $param->{'bypass'} = 1; 
      }else {
+	 do_log('trace',"html_dir   add_include  %s",$html_dir);
 	 &tt2::add_include_path($html_dir) ;
      }
 
@@ -7818,7 +7802,7 @@ sub do_remove_arc {
      }
      if (! $in{'msgid'} || 
 	 $in{'msgid'} =~ /NO-ID-FOUND\.mhonarc\.org/) {
-	 &report::reject_report_web('err','no_msgid',{},$param->{'action'},$list,$param->{'user'}{'email'},$robot);
+	 &report::reject_report_web('intern','no_msgid',{},$param->{'action'},$list,$param->{'user'}{'email'},$robot);
 	 &wwslog('err','view_source: no message id found');
 	 $param->{'status'} = 'no_msgid';
 	 return undef;
@@ -7832,7 +7816,7 @@ sub do_remove_arc {
      $param->{'listname'} = $in{'list'};
 
      unless($param->{'tracking_info'} = &tracking::get_recipients_status($in{'msgid'}, $in{'list'},$robot)){
-         &report::reject_report_web('err','could_not_get_tracking_info',{},$param->{'action'},$list,$param->{'user'}{'email'},$robot);
+         &report::reject_report_web('intern','could_not_get_tracking_info',{},$param->{'action'},$list,$param->{'user'}{'email'},$robot);
          &wwslog('err',"could not get tracking info for message_id $in{'msgid'} and list $in{'list'}");
          $param->{'status'} = 'could_not_get_tracking_info';
          return undef;
@@ -16592,6 +16576,259 @@ sub do_viewlogs {
     }	
 
 
+    return 1;
+}
+
+
+ ## view logs stored in RDBMS
+ ## this function as been writen in order to allow list owner and listmater to views logs
+ ## of there robot or there is real problems with privacy policy and law in such services.
+ ## 
+sub do_viewspools {
+    
+    my $spoolname = 'msg';
+    $spoolname = $in{'spoolname'} if ($in{'spoolname'});
+    my $status = 'ok';
+    $status = $in{'status'} if ($in{'status'});
+    $param->{'spoolname'} = $spoolname;
+    $param->{'status'} = $status;
+
+    &wwslog('info', 'do_viewspools(%s,%s)',$spoolname,$status);
+
+    unless (&List::is_listmaster($param->{'user'}{'email'},$robot)) {
+	unless ($param->{'is_owner'} && $in{'list'}) {
+	    &report::reject_report_web('auth','action_owner',{},$param->{'action'},$list);
+	    &wwslog('info','do_viewspools: not owner');
+	    return undef;
+	}
+    }
+
+    my $spool_page_size;
+    if($in{'spool_page_size'}){
+	$spool_page_size =   $in{'spool_page_size'}; 
+	$session->{'spool_page_size'} = $in{'spool_page_size'} ; 
+    }else{
+	$spool_page_size = $session->{'review_page_spool_page_size'} || 25 ;
+    }
+    $param->{'spool_page_size'} = $spool_page_size;
+    
+
+    my $spool = new Sympaspool($spoolname,$status);
+    unless ($spool) {
+	&report::reject_report_web('intern','unkown spool');
+	&wwslog('info','do_viewspools: unkown spool');
+	return undef;
+    }
+
+    $param->{'total'} = $spool->count;
+
+    unless ($param->{'total'}) {
+	$param->{'total'} = 0;
+	return 1;
+    }
+
+    $param->{'current_page'} = $in{'current_page'} || 1;
+    $param->{'total_page'} = int ($param->{'total'} / $spool_page_size);
+    $param->{'total_page'} ++
+	if ($param->{'total'} % $spool_page_size);
+    
+    if ($param->{'total_page'} > 0 and ($param->{'page'} > $param->{'total_page'})) {
+	&report::reject_report_web('user','no_page',{'page' => $param->{'page'}},$param->{'action'},$list);
+	&web_db_log({'status' => 'error', 'error_type' => 'out of pages'});
+	&wwslog('info','do_viewspools: no page %d', $param->{'page'});
+	return undef;
+    }
+
+    if ($in{'nav'} eq 'next') {
+	$param->{'current_page'} += 1;
+    }elsif($in{'nav'} eq 'last') {
+	$param->{'current_page'} = $param->{'total_page'} ;
+    }elsif($in{'nav'} eq 'previous') {
+	$param->{'current_page'} -= 1;
+    }elsif($in{'nav'} eq 'first') {
+	$param->{'current_page'} = 1;
+    }
+    $param->{'current_page'} = 1 unless (($param->{'current_page'} >= 1) && ($param->{'current_page'} <= $param->{'total_page'} ));
+
+    my $ofset = ($param->{'current_page'} -  1) * $spool_page_size;
+
+    # force sortby to a correct value
+    $in{'sortby'} = 'index' unless ($in{'sortby'} =~ /(index)|(list)|(lock)|(date)|(subject)|(sender)|(messageid)|(priority)|(authkey)|(spam)|(size)/);
+    $param->{'sortby'} = $in{'sortby'};
+
+    $in{'way'} = 'asc' unless ($in{'way'} eq 'desc');
+    $param->{'way'} = $in{'way'};
+
+    # 'index' in user interface is mapped to 'messagekey' table field
+    $in{'sortby'} = 'messagekey' if ($in{'sortby'} eq 'index') ;
+    do_log('trace',"sortby %s",$in{'sortby'});
+
+    my %selector = ();
+    if ($in{'list'}) {
+	$selector{'list'}=$in{'list'};
+    }
+    my @messages = $spool->get_content({'selector'=> \%selector ,'selection'=>'*_but_message','ofset'=>$ofset,'page_size' => $spool_page_size,'sortby' => $in{'sortby'},'way' => $in{'way'}});
+    $param->{'spool_content'} = \@messages;
+    return 1;
+}
+
+ ## deliver a view of an message identified by the spoolname and the messagekey
+sub do_viewspool_message {
+    
+    my $messagekey = $in{'messagekey'};
+    my $spoolname = $in{'spoolname'};
+    $param->{'spoolname'} = $spoolname;
+    my $status = 'ok';
+    $status = $in{'status'} if ($in{'status'});
+    my $status = $in{'status'};
+			       
+    &wwslog('info', 'do_viewspool_message(spoolname = %s,messagekey = %s, status =%s)',$spoolname,$messagekey,$status);
+
+    my $spool = new Sympaspool($spoolname,$status);
+    unless ($spool) {
+	&report::reject_report_web('intern','unkown spool');
+	&wwslog('info','do_viewspools: unkown spool');
+	return undef;
+    }
+    my @messages = $spool->get_content({'selector'=> {'messagekey'=>$messagekey},'selection'=>'*'});
+    
+    unless ($#messages == 0){
+	&report::reject_report_web('intern','could not find message');
+	&wwslog('info','do_viewspool_mesasge : could not find message %s',$#messages);
+	    return;
+    }
+
+    # take care that wwsympa must fetch the message first, then check which list it is for in order to perform authz
+    my $list;
+    # if user is not lismaster then the message must be related to a list owned by the user.
+    unless  ( $param->{'is_listmaster'}){
+	my $message_listname = $messages[0]->{'list'};
+	if ($message_listname){
+	    $list = new List($message_listname,$robot);
+	}   
+	unless ($list && ($list->am_i('privileged_owner', $param->{'user'}{'email'})|| $list->am_i('owner', $param->{'user'}{'email'})||$list->am_i('editor', $param->{'user'}{'email'}))) {	    
+	    &report::reject_report_web('auth','action_owner',{},$param->{'action'},$list);
+	    &wwslog('info','do_viewspools: not owner');
+	    return undef;
+	}
+    }
+
+    $param->{'spool_message_asstring'} = @messages[0]->{'messageasstring'};
+    return 1;
+
+    # the following code is not executed because of a bug. It should be able to disply message as html....
+
+
+    my $destination_dir = $Conf::Conf{'viewmail_dir'}.'/spool/viewmail/'.$messagekey;
+
+    do_log('trace',"conversion dans %s",$destination_dir.'/msg00000.html');
+    unless (-d $destination_dir) {
+	&Archive::convert_single_msg_2_html ({'msg_as_string'=>$param->{'spool_message_asstring'},
+					      'destination_dir'=>$destination_dir,
+					      'attachement_url'=>"viewspool_message/$messagekey",
+					      'list'=>$list,
+					      'robot'=>$robot,
+					      'messagekey'=>$messagekey,} );
+	
+	
+    }
+
+    do_log('trace','openning %s/msg00000.html',$destination_dir);    
+    unless (open (HTMLMAIL ,$destination_dir.'/msg00000.html')){
+	&report::reject_report_web('intern','could not show message as html');
+	&wwslog('info','do_viewspool_message : could not show message as html');
+	return;
+    }
+    
+    while (<HTMLMAIL>){
+	$param->{'spool_message_ashtml'} .= $_;
+
+    }
+    close HTMLMAIL;
+    # my $dump = &Dumper($param); open (DUMP,">/tmp/dumper"); printf DUMP '----------------param  \n%s',$dump ; close DUMP; do_log('trace',"dumper");
+
+    return 1;
+}
+
+ ## deliver a view of an message identified by the spoolname and the messagekey
+sub do_viewspool_message_dump {
+    
+    my $messagekey = $in{'messagekey'};
+    my $spoolname = $in{'spoolname'};
+    $param->{'spoolname'} = $spoolname;
+    my $status = 'ok';
+    $status = $in{'status'} if ($in{'status'});
+    my $status = $in{'status'};
+			       
+    &wwslog('info', 'do_viewspool_message_dump(spoolname = %s,messagekey = %s, status =%s)',$spoolname,$messagekey,$status);
+
+
+    unless  ( $param->{'is_listmaster'}){
+	&report::reject_report_web('auth','action_listmaster',{},$param->{'action'});
+	&wwslog('info','authorization failed, insufficient privileges');
+    }
+
+    my $spool = new Sympaspool($spoolname,$status);
+    unless ($spool) {
+	&report::reject_report_web('intern','unkown spool');
+	&wwslog('info','do_viewspools: unkown spool');
+	return undef;
+    }
+    my @messages = $spool->get_content({'selector'=> {'messagekey'=>$messagekey},'selection'=>'*'});
+    
+    unless ($#messages == 0){
+	&report::reject_report_web('intern','could not find message');
+	&wwslog('info','do_viewspool_mesasge : could not find message %s',$#messages);
+	    return;
+    }
+
+
+    $param->{'msg_file'} = &Conf::get_robot_conf($robot, 'tmpdir').'/'.$messagekey.'_'.$$;
+    
+
+    unless (open(OUT, ">$param->{'msg_file'}")) {
+	do_log('notice', 'Could Not open %s', $param->{'msg_file'});
+	return undef;
+    }
+    printf OUT  @messages[0]->{'messageasstring'};
+    close(OUT);
+
+    return 1;
+}
+
+
+ ## remove a message identified by the spoolname and the messagekey
+sub do_viewspool_message_remove {
+    
+    my $messagekey = $in{'messagekey'};
+    $param->{'messagekey'} = $messagekey;
+    my $spoolname = $in{'spoolname'};
+    $param->{'spoolname'} = $spoolname;
+    my $status = 'ok';
+    $status = $in{'status'} if ($in{'status'});
+    my $status = $in{'status'};
+			       
+    &wwslog('info', 'do_viewspool_message_dump(spoolname = %s,messagekey = %s, status =%s)',$spoolname,$messagekey,$status);
+
+    unless  ( $param->{'is_listmaster'}){
+	&report::reject_report_web('auth','action_listmaster',{},$param->{'action'});
+	&wwslog('info','authorization failed, insufficient privileges');
+    }
+
+    my $spool = new Sympaspool($spoolname,$status);
+    unless ($spool) {
+	&report::reject_report_web('intern','unkown spool');
+	&wwslog('info','do_viewspools: unkown spool');
+	return undef;
+    }
+    unless ($spool->remove_message({'messagekey'=>$messagekey})){
+	&report::reject_report_web('intern','could not remove message');
+	&wwslog('info','do_viewspool_mesasge : could not remove message');
+	return;	
+	
+    }
+    
+    $param->{'removed'} = 1;
     return 1;
 }
 

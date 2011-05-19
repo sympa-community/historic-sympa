@@ -3124,6 +3124,7 @@ sub send_file {
 	$data->{'dkim'} = &tools::get_dkim_parameters({'robot' => $self->{'domain'}});
     } 
     $data->{'use_bulk'} = 1  unless ($data->{'alarm'}) ; # use verp excepted for alarms. We should make this configurable in order to support Sympa server on a machine without any MTA service
+	   my $dump = &Dumper($data); open (DUMP,">>/tmp/dumper2"); printf DUMP '----------------data \n%s',$dump ; close DUMP; do_log('trace',"dumper");
     unless (&mail::mail_file($filename, $who, $data, $self->{'domain'})) {
 	&do_log('err',"List::send_file, could not send template $filename to $who");
 	return undef;
@@ -3539,10 +3540,9 @@ sub send_msg {
 #################################################################
 sub send_to_editor {
    my($self, $method, $message) = @_;
-   my ($msg, $file, $encrypt) = ($message->{'msg'}, $message->{'filename'});
-
-   $encrypt = 'smime_crypted' if ($message->{'smime_crypted'}); 
-   do_log('debug3', "List::send_to_editor, msg: $msg, file: $file method : $method, encrypt : $encrypt");
+   my $msg = $message->{'msg'};
+   my $encrypt = 'smime_crypted' if ($message->{'smime_crypted'}); 
+   do_log('debug', "List::send_to_editor, messagekey: $message->{'messagekey'}, method : $method, encrypt : $encrypt");
 
    my($i, @rcpt);
    my $admin = $self->{'admin'};
@@ -3560,13 +3560,16 @@ sub send_to_editor {
    
    if ($method eq 'md5'){  
        # move message to spool  mod
-       my $spoolmod = new Sympaspool('mod');       
+       my $spoolmod = new Sympaspool('mod');
        $spoolmod->update({'messagekey' => $message->{'messagekey'}},{"authkey" => $modkey,'messagelock'=> 'NULL'});
 
        # prepare html view of this message
-       my $destination_dir  = $Conf::Conf{'viewmail_dir'}.'/mod/.'.$self->get_list_id().'_'.$modkey;
+       my $destination_dir  = $Conf::Conf{'viewmail_dir'}.'/mod/'.$self->get_list_id().'/'.$modkey;
        do_log('trace',"viewmail_dir :%s",$Conf::Conf{'viewmail_dir'});
-       &Archive::convert_single_msg_2_html ($message,$destination_dir,"viewmod/$name/$modkey",$self );
+       &Archive::convert_single_msg_2_html ({'msg_as_string'=>$message->{'msg_as_string'},
+					     'destination_dir'=>$destination_dir,
+					     'attachement_url' => "viewmod/$name/$modkey",
+					     'list'=>$self} );
    }
    else{do_log('trace',"methode auth = %s",$method);}
 
@@ -3614,21 +3617,14 @@ sub send_to_editor {
 	       #  send a generic error message : X509 cert missing
 	       return undef;
 	   }
+	   $param->{'msg_as_string'} = $cryptedmsg;
 
-	   my $crypted_file = $Conf::Conf{'tmpdir'}.'/'.$self->get_list_id().'.moderate.'.$$;
-	   unless (open CRYPTED, ">$crypted_file") {
-	       &do_log('notice', 'Could not create file %s', $crypted_file);
-	       return undef;
-	   }
-	   print CRYPTED $cryptedmsg;
-	   close CRYPTED;
-	   $param->{'msg_path'} = $crypted_file;
-
-   }else{
-       $param->{'msg_path'} = $file;
+       }else{
+	   $param->{'msg_as_string'} = $message->{'msg_as_string'};
+	   my $dump = &Dumper($param->{'msg_as_string'}); open (DUMP,">>/tmp/dumper2"); printf DUMP 'msg_as_string \n%s',$dump ; close DUMP; do_log('trace',"dumper");
        }
        # create a one time ticket that will be used as un md5 URL credential
-
+       
        unless ($param->{'one_time_ticket'} = &Auth::create_one_time_ticket($recipient,$robot,'modindex/'.$name,'mail')){
 	   &do_log('notice',"Unable to create one_time_ticket for $recipient, service modindex/$name");
        }else{

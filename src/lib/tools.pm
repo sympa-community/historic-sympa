@@ -945,7 +945,7 @@ sub dkim_sign {
     
     $message->{'msg'}->head->add('DKIM-signature',$dkim->signature->as_string);
 
-    return $message->head->as_string."\n".&Message::get_body_from_msg_as_string($msg_as_string);
+    return $message->{'msg'}->head->as_string."\n".&Message::get_body_from_msg_as_string($msg_as_string);
 }
 
 # input object msg and listname, output signed message object
@@ -1917,7 +1917,7 @@ sub virus_infected {
 	}
 	close ANTIVIR;
     
-	my $status = $?/256 ;
+	my $status = $? / 256 ; # /
 
         ## uvscan status =12 or 13 (*256) => virus
         if (( $status == 13) || ($status == 12)) { 
@@ -2399,6 +2399,7 @@ sub make_tt2_include_path {
 	}
     }
 
+    unshift @include_path,$Conf::Conf{'viewmaildir'};
     return \@include_path;
 
 }

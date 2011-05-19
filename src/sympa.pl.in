@@ -1117,8 +1117,6 @@ sub process_message {
     
     my $message = new Message({'message_in_spool' => $message_in_spool});
     
-    do_log('trace',"sympa réccupère dans le spool numero %s",$message->{'messagekey'});
-
     unless (defined $message) {
 	&do_log('err', 'Unable to create Message object message : %s', $message_in_spool->{'messagekey'});
 	&Log::db_log({'robot' => $robot,'list' => $listname,'action' => 'process_message','target_email' => "",'msg_id' => '','status' => 'error','error_type' => 'unable_create_message','user_email' => '','client' => $ip,'daemon' => $daemon_name});
@@ -2118,7 +2116,6 @@ sub DoCommand {
 ############################################################## 
 sub SendDigest{
     &do_log('debug', 'SendDigest()');
-    &do_log('trace', 'SendDigest()');
 
     my $digestspool = new Sympaspool('digest');
 

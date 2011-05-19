@@ -124,20 +124,22 @@ sub db_struct {
 						      'lock_bulkmailer' => 'varchar(30)'},
 			       'spool_table' => {'messagekey_spool' => 'bigint(20)',            # autoincrement
 						 'message_spool' => 'longtext',                 # the message as b64 encoded string
-						 'spoolname_spool'=>  "enum('msg','auth','mod','digest','archive','bounce','automatic','subscribe','topic','bulk')",
+						 'spoolname_spool'=>  "enum('msg','auth','mod','digest','archive','bounce','automatic','subscribe','topic','bulk','validated')",
 						 'list_spool'=> 'varchar(50)',
 						 'robot_spool' =>'varchar(80)',
 						 'messagelock_spool' => 'varchar(90)',          # a unique string for each process : $$@hostname
-						 'lockdate_spool' => 'int(11)',                # the date a lock is set. Used in order detect old locks
 						 'priority_spool'=> 'varchar(2)',               # priority (list priority, owner pririty etc)
 						 'authkey_spool' => 'varchar(33)',              # authentication key for email chalenge
 						 'message_status_spool' => "enum('ok','bad')",  #
 						 'message_diag_spool' =>'text',                 # the reason why a message is moved to bad
 						 'date_spool'=>'int(11)',                       # the date a message is copied in spool table
+						 'lockdate_spool' => 'int(11)',                 # the date a lock is set. Used in order detect old locks
+						 'headerdate_spool' => 'varchar(80)',           # the message header date
 						 'type_spool'=> 'varchar(15)',                  # list | list-request | sympa robot | other rcp
 						 'subject_spool'=>'varchar(110)',               # subject of the message stored to list spool content faster
 						 'sender_spool'=>'varchar(110)',                #                        stored to list spool content faster
-						 'messageid_spool' => 'varchar(100)',           #                        stored to list spool content faster
+						 'messageid_spool' => 'varchar(300)',           #                        stored to list spool content faster
+						 'spam_status_spool' => 'varchar(12)',          # spamstatus scenario result
 						 'size_spool' => 'int(11)',                     #                        stored to list spool content faster
 						 'dkim_privatekey_spool' => 'varchar(1000)',
 						 'dkim_selector_spool' => 'varchar(50)',

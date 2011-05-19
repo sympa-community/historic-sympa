@@ -106,9 +106,6 @@ sub next {
     # Select the most prioritary packet to lock.
     $statement = sprintf "SELECT %s messagekey_bulkmailer AS messagekey, packetid_bulkmailer AS packetid FROM bulkmailer_table WHERE lock_bulkmailer IS NULL AND delivery_date_bulkmailer <= %d %s %s", $limit_sybase, time(), $limit_oracle, $order;
     
-
-    do_log('trace',"staetment $statement");
-
     unless ($sth = $dbh->prepare($statement)) {
 	do_log('err','Unable to prepare SQL statement : %s', $dbh->errstr);
 	return undef;
@@ -146,8 +143,6 @@ sub next {
     # select the packet that has been locked previously
     $statement = sprintf "SELECT messagekey_bulkmailer AS messagekey, messageid_bulkmailer AS messageid, packetid_bulkmailer AS packetid, receipients_bulkmailer AS receipients, returnpath_bulkmailer AS returnpath, listname_bulkmailer AS listname, robot_bulkmailer AS robot, priority_message_bulkmailer AS priority_message, priority_packet_bulkmailer AS priority_packet, verp_bulkmailer AS verp, tracking_bulkmailer AS tracking, merge_bulkmailer as merge, reception_date_bulkmailer AS reception_date, delivery_date_bulkmailer AS delivery_date FROM bulkmailer_table WHERE lock_bulkmailer=%s %s",$dbh->quote($lock), $order;
 
-
-    do_log('trace',"xxxxxxxxxxxxx $statement");
     unless ($sth = $dbh->prepare($statement)) {
 	do_log('err','Unable to prepare SQL statement : %s', $dbh->errstr);
 	return undef;
@@ -436,8 +431,6 @@ sub store {
     &do_log('debug', 'Bulk::store(<msg>,<rcpts>,from = %s,robot = %s,listname= %s,priority_message = %s, delivery_date= %s,verp = %s, tracking = %s, merge = %s, dkim: d= %s i=%s, last: %s)',$from,$robot,$listname,$priority_message,$delivery_date,$verp,$tracking, $merge,$dkim->{'d'},$dkim->{'i'},$tag_as_last);
 
 
-    do_log('trace',"last_stored_message_key  valeur en entre de store $last_stored_message_key ");
-
     $dbh = &List::db_get_handler();
 
     $priority_message = &Conf::get_robot_conf($robot,'sympa_priority') unless ($priority_message);
@@ -449,12 +442,8 @@ sub store {
 
     my $msg = $message->{'msg'}->as_string;
     if ($message->{'protected'}) {
-	do_log('trace',"message protected on utilise message->{msg_as_string}");
 	$msg = $message->{'msg_as_string'};
     }
-    else{ do_log('trace',"message normal on utilise message->msg->as_string") }
-
-    
 
     my @sender_hdr = Mail::Address->parse($message->{'msg'}->head->get('From'));
     my $message_sender = $sender_hdr[0]->address;
@@ -467,10 +456,8 @@ sub store {
     my $bulkspool = new Sympaspool ('bulk');
 
     if (($last_stored_message_key) && ($message->{'messagekey'} eq $last_stored_message_key)) {
-	do_log('trace'," message deja dans le spool bulk");
 	$message_already_on_spool = 1;
     }else{
-	do_log('trace',"le message n'est pas déjà dans le spool");
 	my $lock = $$.'@'.hostname() ;
 	if ($message->{'messagekey'}) {
 	    # move message to spool bulk and keep it locked
@@ -488,10 +475,8 @@ sub store {
 		do_log('err',"could not store message in spool distribute, message lost ?");
 		return undef;
 	    }
-	    do_log('trace',"maintenant le message est dans le spool bulk avec la cle $message->{'messagekey'} ");
 	}
 	$last_stored_message_key = $message->{'messagekey'};
-	do_log('trace',"last_stored_message_key  affecte a $last_stored_message_key ");
 	
 	#log in stat_table to make statistics...
 	unless($message_sender =~ /($robot)\@/) { #ignore messages sent by robot
@@ -545,7 +530,6 @@ sub store {
 	    }	    
 	    $packet_already_exist = $sth->fetchrow;
 	    $sth->finish();
-	    do_log('trace',"test de duplication : %s",$statement);
 	}
 
 
