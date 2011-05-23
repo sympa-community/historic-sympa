@@ -16588,12 +16588,14 @@ sub do_viewspools {
     
     my $spoolname = 'msg';
     $spoolname = $in{'spoolname'} if ($in{'spoolname'});
-    my $status = 'ok';
-    $status = $in{'status'} if ($in{'status'});
     $param->{'spoolname'} = $spoolname;
-    $param->{'status'} = $status;
 
-    &wwslog('info', 'do_viewspools(%s,%s)',$spoolname,$status);
+    my $spool_status = 'ok';
+    do_log('trace',"STATUS : $in{'spool_status'}");
+    $spool_status = $in{'spool_status'} if ($in{'spool_status'});
+    $param->{'spool_status'} = $spool_status;
+
+    &wwslog('info', 'do_viewspools(%s,%s)',$spoolname,$spool_status);
 
     unless (&List::is_listmaster($param->{'user'}{'email'},$robot)) {
 	unless ($param->{'is_owner'} && $in{'list'}) {
@@ -16613,7 +16615,7 @@ sub do_viewspools {
     $param->{'spool_page_size'} = $spool_page_size;
     
 
-    my $spool = new Sympaspool($spoolname,$status);
+    my $spool = new Sympaspool($spoolname,$spool_status);
     unless ($spool) {
 	&report::reject_report_web('intern','unkown spool');
 	&wwslog('info','do_viewspools: unkown spool');
