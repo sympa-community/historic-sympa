@@ -75,6 +75,7 @@ Options:
    --foreground                          : the process remains attached to the TTY
    -k, --keepcopy=dir                    : keep a copy of incoming message
    --log_level=LEVEL                     : sets Sympa log level
+   --queue=PATH_TO_SPOOL                 : overright queue sympa parameter in order to choose spool location.
    -h, --help                            : print this help
    -v, --version                         : print version number
 
@@ -83,7 +84,7 @@ This demon is the Sympa spooler that load into database (table spool_table) mess
 
 ## Check --dump option
 my %options;
-unless (&GetOptions(\%main::options, 'debug|d', ,'log_level=s','foreground','keepcopy|k=s', 'help', 'version')) {
+unless (&GetOptions(\%main::options, 'debug|d', ,'log_level=s','foreground','keepcopy|k=s', 'queue=s', 'help', 'version')) {
     &fatal_err("Unknown options.");
 }
 
@@ -113,6 +114,7 @@ my $config_file = $main::options{'config'} || Sympa::Constants::CONFIG;
 unless (Conf::load($config_file,1)) {
    &fatal_err("Configuration file $config_file has errors.");  
 }
+
 
 ## Open the syslog and say we're read out stuff.
 do_openlog($Conf{'syslog'}, $Conf{'log_socket_type'}, 'spooler');
@@ -262,7 +264,12 @@ $SIG{'PIPE'} = 'IGNORE'; ## Ignore SIGPIPE ; prevents sympa.pl from dying
 my @qfile;
 
 my $spooldir = $Conf{'queue'};
-my $spool = new Sympaspool('msg');
+if ($main::options{'queue'}){
+    $spooldir = $main::options{'queue'} ;
+}
+
+my $msgspool = new Sympaspool('msg');
+my $bouncespool = new Sympaspool('bounce');
 
 ## This is the main loop : look for files in the directory, handles
 ## them, sleeps a while and continues the good job.
@@ -285,6 +292,7 @@ while (!$signal) {
 	my $list;
 	my ($listname, $robot);	
 	my %meta ;
+	my $spool;
 
 	## z and Z are a null priority, so file stay in queue and are processed
 	## only if renamed by administrator
@@ -295,6 +303,14 @@ while (!$signal) {
 
 	($listname, $robot) = split(/\@/,$1);
 	$meta{'date'} = $2;
+
+	# spooler is able to recognize message to be processed by bounced if file name start with 'Sympa_Bounce.'
+	if ($listname =~ /Sympa_Bounce\./) {
+	    $listname =~ s/Sympa_Bounce\.// ;
+	    $spool = $bouncespool;
+	}else{
+	    $spool = $msgspool;
+	}
 	
 	$listname = lc($listname);
 	if ($robot) {
