@@ -8039,7 +8039,7 @@ msgstr ""
 msgid "%H:%M:%S"
 msgstr ""
 
-#: ../wwsympa/SympaSession.pm:431 ../wwsympa/SympaSession.pm:432 ../wwsympa/wwsympa.fcgi.in:11844 ../wwsympa/wwsympa.fcgi.in:11977 ../wwsympa/wwsympa.fcgi.in:14290 ../wwsympa/wwsympa.fcgi.in:7923
+#: ../wwsympa/SympaSession.pm:436 ../wwsympa/SympaSession.pm:437 ../wwsympa/wwsympa.fcgi.in:11844 ../wwsympa/wwsympa.fcgi.in:11977 ../wwsympa/wwsympa.fcgi.in:14290 ../wwsympa/wwsympa.fcgi.in:7923
 #. This entry is a date/time format
 #. Check the strftime manpage for format details : http://docs.freebsd.org/info/gawk/gawk.info.Time_Functions.html
 msgid "%d %b %y  %H:%M"
