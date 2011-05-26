@@ -16,7 +16,7 @@ msgstr ""
 "Project-Id-Version: Sympa-5.4.6, 6.0, 6.1a.1\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2007-11-13 14:50+0200\n"
-"PO-Revision-Date: 2010-12-27 17:36+0200\n"
+"PO-Revision-Date: 2011-05-17 02:26+0200\n"
 "Last-Translator: IKEDA Soji <hatuka@nezumi.nu>\n"
 "Language-Team: 日本語\n"
 "MIME-Version: 1.0\n"
@@ -32,7 +32,7 @@ msgstr "読者、モデレータ、オーナーむけの説明"
 
 #: ../web_tt2/help.tt2:13
 msgid "In this documentation, you will find:"
-msgstr "この説明では、次のことがらをとりあげます:"
+msgstr "この説明では、次のことがらをとりあげます——"
 
 #. (path_cgi)
 #: ../web_tt2/help.tt2:15
@@ -103,7 +103,7 @@ msgstr ""
 
 #: ../web_tt2/help_introduction.tt2:7
 msgid "Special cases:</strong>"
-msgstr "特殊な場合:</strong>"
+msgstr "しかし、例外もあります:</strong>"
 
 #: ../web_tt2/help_introduction.tt2:9
 msgid ""
@@ -111,8 +111,9 @@ msgid ""
 "subscribed to it. However, you need to be subscribed to a list to receive "
 "its messages."
 msgstr ""
-"読者登録しなくてもメッセージを送れるメーリングリストというのも、たまにありま"
-"す。ですが、リストに読者登録していないと、自分にメッセージが届きません。"
+"ときには、読者登録しなくてもメッセージを送れるメーリングリストというのもあり"
+"ます。このようなリストでは、読者登録していないかぎり、送った人にはメッセージ"
+"が届きません。"
 
 #: ../web_tt2/help_introduction.tt2:10
 msgid ""
@@ -121,9 +122,9 @@ msgid ""
 "used to transmit information from a unique sender to a large number of "
 "recipients."
 msgstr ""
-"読者登録しているのにメッセージを送れないメーリングリストというのも、たまにあ"
-"ります。「お知らせ」型のリストがそうで、決まった送り手がおおぜいの受け手に情"
-"報を伝えるのに使うのです。"
+"ときには、読者登録しているのにメッセージを送れないメーリングリストというのも"
+"あります。「お知らせ」型のリストがそうで、決まった送り手がおおぜいの受け手に"
+"情報を伝えるのに使うのです。"
 
 #: ../web_tt2/help_introduction.tt2:13
 msgid "Interest of mailing lists"
@@ -138,8 +139,8 @@ msgid ""
 msgstr ""
 "なにかのメーリングリスト (略して<acronym  title=\"メーリングリスト\">リスト</"
 "acronym>とも言います) に読者登録すると、<strong>特定の話題について読めたり</"
-"strong>、<strong>それについての話しあいに加われたり</strong>します。たとえば "
-"---"
+"strong>、<strong>それについての話しあいに加われたり</strong>します。たとえば"
+"<span lang=\"ja\" xml:lang=\"ja\">——</span>"
 
 #: ../web_tt2/help_introduction.tt2:16
 msgid "mailing list for all the employees of a company;"
@@ -195,7 +196,7 @@ msgid ""
 "of lists</strong>:"
 msgstr ""
 "ですがメーリングリストは、そのはたらきによって大きく<strong>2 種類</strong>に"
-"分けることができます:"
+"分けることができます——"
 
 #: ../web_tt2/help_introduction.tt2:29
 msgid ""
@@ -218,7 +219,7 @@ msgid ""
 "exchanges. Those lists can be moderated or not:"
 msgstr ""
 "<strong>「話しあい」型のリスト</strong>では、だれでもやりとりに加われます。こ"
-"ういうリストには、モデレーションを受けるものとそうでないものがあります:"
+"ういうリストには、モデレーションを受けるものとそうでないものがあります——"
 
 #: ../web_tt2/help_introduction.tt2:32
 msgid ""
@@ -250,7 +251,7 @@ msgstr "メーリングリストでできること"
 #: ../web_tt2/help_introduction.tt2:38
 msgid "Once subscribed to a mailing list service, you can:"
 msgstr ""
-"いったんリストのサービスに登録すれば、次のようなことができるようになります:"
+"いったんリストのサービスに登録すれば、次のようなことができるようになります——"
 
 #: ../web_tt2/help_introduction.tt2:40
 msgid ""
@@ -261,7 +262,7 @@ msgstr ""
 
 #: ../web_tt2/help_introduction.tt2:41
 msgid "manage your subscriptions</strong>:"
-msgstr "自分の読者登録を管理する</strong>:"
+msgstr "自分の読者登録を管理する</strong>——"
 
 #. (path_cgi)
 #: ../web_tt2/help_introduction.tt2:43
@@ -404,7 +405,7 @@ msgstr "メーリングリストのしくみ: 誰が何をするのか"
 
 #: ../web_tt2/help_introduction.tt2:69
 msgid "A mailing list service involves four types of roles:"
-msgstr "メーリングリストには、4 種の役柄の人がかかわっています:"
+msgstr "メーリングリストには、4 種の役柄の人がかかわっています——"
 
 #: ../web_tt2/help_introduction.tt2:71
 msgid "<strong>listmaster;</strong>"
@@ -441,7 +442,7 @@ msgid ""
 "service</strong>. Their duties:"
 msgstr ""
 "リストシステム管理者は、<strong>メーリングリストサービスの運用</strong>を担う"
-"人(たち)です。このひとたちの仕事はつぎのようなものです:"
+"人(たち)です。このひとたちの仕事は次のようなものです——"
 
 #: ../web_tt2/help_introduction.tt2:81
 msgid ""
@@ -452,7 +453,7 @@ msgstr "<strong>メーリングリストサーバの管理</strong> (設置、�
 #: ../web_tt2/help_introduction.tt2:82
 msgid ""
 "<strong>define the general orientations of the mailing list service</strong>:"
-msgstr "<strong>メーリングリストサービスの全般的な方針の決定</strong>:"
+msgstr "<strong>メーリングリストサービスの全般的な方針の決定</strong>——"
 
 #: ../web_tt2/help_introduction.tt2:84
 msgid "who will be allowed to ask for the creation of a new list,"
@@ -517,7 +518,7 @@ msgid ""
 msgstr ""
 "リストを作った人がリストのオーナーもやることが多い</strong>ですが、リストの作"
 "成を申し込んだ人や作成に責任をもつ人のこともあります。<strong>オーナーの仕事"
-"は</strong>:"
+"は</strong>——"
 
 #. (path_cgi)
 #: ../web_tt2/help_introduction.tt2:98
@@ -635,27 +636,22 @@ msgstr ""
 
 #: ../web_tt2/help_introduction.tt2:117
 msgid ""
-"In most mailing list services, subscribers receive a '<a target=\"_blank\" "
-"title=\"Example of subscribers charter (French)\" href=\"http://listes.cru."
-"fr/cnil/charte.abonne.html\">List subscribers charter</a>' on subscription. "
-"Then they are obliged to respect all the rules contained in that charter."
+"In most mailing list services, subscribers receive a List subscribers "
+"charter on subscription. Then they are obliged to respect all the rules "
+"contained in that charter."
 msgstr ""
-"多くのリストサービスでは、読者は読者登録の際に「<a target=\"_blank\" title="
-"\"読者の約款の例 (フランス語)\" href=\"http://listes.cru.fr/cnil/charte."
-"abonne.html\">リストの読者の約款</a>」を受け取ります。読者は、この約款に書い"
-"てあるすべてのとりきめを尊重する義務があります。"
+"多くのリストサービスでは、読者は読者登録の際に「リストの読者の約款」を受け取"
+"ります。読者は、この約款に書いてあるすべてのとりきめを尊重する義務がありま"
+"す。"
 
+# 仮訳です。
 #: ../web_tt2/help_introduction.tt2:118
 msgid ""
-"If available, list owners and moderators have to conform to the <a target="
-"\"_blank\" title=\"Example of charter aimed at owners and moderators (French)"
-"\" href=\"http://listes.cru.fr/cnil/charte.proprio.html\">Owner and "
-"moderator charter</a>."
+"If available, list owners and moderators have to conform to the Owner and "
+"moderator charter."
 msgstr ""
-"リストのオーナーとモデレータも、<a target=\"_blank\" title=\"オーナーとモデ"
-"レータのための約款の例 (フランス語)\" href=\"http://listes.cru.fr/cnil/"
-"charte.proprio.html\">オーナー、ファシリテーター、モデレータの約款</a>を (も"
-"しあれば) 守らなければなりません。"
+"オーナーやモデレータは、「オーナーやモデレータの約款」があるのならその内容を"
+"知っていなければなりません。"
 
 # See the comment for "Good Practices".
 #: ../web_tt2/help_introduction.tt2:119
@@ -704,7 +700,7 @@ msgid ""
 "options, etc.), you have two options:"
 msgstr ""
 "リストでなにかやりたいこと</strong> (読者登録、個人設定を変える、など) がある"
-"のなら、2 つのやりかたがあります:"
+"のなら、2 つのやりかたがあります——"
 
 #: ../web_tt2/help_user.tt2:9
 msgid "<strong>log on to the web environment</strong>;"
@@ -721,7 +717,7 @@ msgstr ""
 
 #: ../web_tt2/help_user.tt2:12
 msgid "<strong>To send a command to Sympa</strong>, do as follows:"
-msgstr "<strong>Sympa にコマンドを送るには</strong>、つぎのやりかたがあります:"
+msgstr "<strong>Sympa にコマンドを送るには</strong>、次のやりかたがあります——"
 
 #: ../web_tt2/help_user.tt2:14
 msgid ""
@@ -741,7 +737,7 @@ msgstr ""
 "<strong>いくつかのコマンドを送るのなら</strong>、メッセージの表題 (Subject) "
 "は空にしておき、メッセージの本文にコマンドを打ち込みます。<strong>注意</"
 "strong>: Sympa は、送ったメッセージの内容が厳密に規則通りになっていないと受け"
-"付けてくれません。たとえば:"
+"付けてくれません。たとえば——"
 
 #: ../web_tt2/help_user.tt2:17
 msgid "Write every command on a new line."
@@ -779,7 +775,7 @@ msgstr "リストに読者登録する"
 
 #: ../web_tt2/help_user.tt2:26
 msgid "Subscribing to a mailing list is very simple:"
-msgstr "リストへの読者登録のしかたは、とてもかんたんです:"
+msgstr "リストへの読者登録のしかたは、とてもかんたんです——"
 
 #: ../web_tt2/help_user.tt2:28
 msgid ""
@@ -872,9 +868,9 @@ msgid ""
 "before it can be processed. If so, please conform to the instructions "
 "contained in the message you receive."
 msgstr ""
-"なお、だれか他の人が、あなたが読者登録したいかどうか確かめずに申込をしてしま"
-"うこともあります。急いでいるときは、送られてくるメッセージの説明にしたがって"
-"自分で確認の手続きをしてください。"
+"なお、あなたの確認がないと読者登録を実施しないリストもあります。そういうとき"
+"は、届いたメッセージに手順が書いてありますから、それに従って確認をしてくださ"
+"い。"
 
 #: ../web_tt2/help_user.tt2:40
 msgid ""
@@ -895,7 +891,7 @@ msgid ""
 msgstr ""
 "<strong>申込が受け付けられると、リストへの登録を確認するメッセージが届きま"
 "す。このメッセージ</strong> (リストの読者の約款) <strong>には、とても重要な情"
-"報が書いてあります。つぎのようなことです。</strong>"
+"報が書いてあります。次のようなことです。</strong>"
 
 #: ../web_tt2/help_user.tt2:43
 msgid ""
@@ -914,16 +910,16 @@ msgid ""
 "<strong>detailed information about the list</strong>: its purpose, the "
 "Internet address at which the message archive is available, etc."
 msgstr ""
-"<strong>リストについての詳しい案内</strong> --- 内容、投稿保管庫のウェブアド"
-"レスなど。"
+"<strong>リストについての詳しい案内</strong><span lang=\"ja\" xml:lang=\"ja\">"
+"——</span>内容、投稿保管庫のウェブアドレスなど。"
 
 #: ../web_tt2/help_user.tt2:45
 msgid ""
 "the <strong>rules applying to the list and its members</strong>: allowed and "
 "forbidden topics, netiquette, legal information, privacy policy, etc."
 msgstr ""
-"<strong>リスト利用の条件</strong> --- 扱える話題や扱わない話題、ネチケット、"
-"法的な情報、情報保護指針など。"
+"<strong>リスト利用の条件</strong><span lang=\"ja\" xml:lang=\"ja\">——</span>"
+"扱える話題や扱わない話題、ネチケット、法的な情報、情報保護指針など。"
 
 #: ../web_tt2/help_user.tt2:47
 msgid ""
@@ -943,7 +939,7 @@ msgid ""
 "interface</strong>. To do that, do as follows:"
 msgstr ""
 "リストのサーバの<strong>ウェブインタフェースから読者登録することもできます</"
-"strong>。これをするには、以下のようにしてください:"
+"strong>。これをするには、次のようにしてください——"
 
 #. (path_cgi)
 #: ../web_tt2/help_arc.tt2:12 ../web_tt2/help_arc.tt2:77
@@ -986,7 +982,7 @@ msgstr ""
 
 #: ../web_tt2/help_user.tt2:58
 msgid "The authentication process varies according to your personal situation:"
-msgstr "ひとりひとりの状況に応じて、ログインのしかたは変わってきます:"
+msgstr "ひとりひとりの状況に応じて、ログインのしかたは変わってきます——"
 
 #: ../web_tt2/help_user.tt2:60
 msgid ""
@@ -1098,7 +1094,7 @@ msgstr ""
 # # "À partir de cette page d'information, vous pourrez :"
 #: ../web_tt2/help_user.tt2:74
 msgid "Form this information page, you can:"
-msgstr "この案内ページでは、次のようなことができます:"
+msgstr "この案内ページでは、次のようなことができます——"
 
 # # "modifier vos <a href=\"#options\">options d'abonné</a> ;"
 #: ../web_tt2/help_user.tt2:76
@@ -1256,7 +1252,7 @@ msgid ""
 "your <strong>general preferences</strong>, which apply to the entire Sympa "
 "mailing list environment."
 msgstr ""
-"<strong>一般設定</strong> (Sympa のメーリングリストウェブサイト全体で共通)。"
+"<strong>個人設定</strong> (Sympa のメーリングリストウェブサイト全体で共通)。"
 
 #: ../web_tt2/help_user.tt2:97
 msgid "Changing your subscriber options"
@@ -1271,7 +1267,7 @@ msgid ""
 "change them, do as follows:"
 msgstr ""
 "<strong>読者登録の設定は、リストごとに違っていてもかまいません</strong>。変え"
-"るには、以下のようにします。"
+"るには、次のようにします。"
 
 # # "Allez sur la <strong><a href=\"%1/home\">page d'accueil</a></strong> de "
 # # "l'environnement de listes et <strong>authentifiez-vous</strong>."
@@ -1300,7 +1296,7 @@ msgid ""
 "exclusive, thus you can not select several of them):"
 msgstr ""
 "strong>受け取りモードを決める</strong> (モードは一度にひとつしか選べません。"
-"複数のモードは選べません)。以下のようなモードがあります。"
+"複数のモードは選べません)。次のようなモードがあります。"
 
 # # "<strong>Choisissez un mode de réception des messages</strong> (ces "
 # # "options sont exclusives, vous ne pouvez donc pas en sélectionner deux "
@@ -1497,7 +1493,7 @@ msgstr "<strong>「更新」ボタンをクリックします</strong>。"
 
 #: ../web_tt2/help_user.tt2:125
 msgid "Changing your general preferences"
-msgstr "一般設定を変える"
+msgstr "個人設定を変える"
 
 # # "Les préférences générales sont relatives à l'ensemble de vos abonnements "
 # # "et à la manière dont se présente votre interface de listes Sympa. Pour "
@@ -1508,9 +1504,11 @@ msgid ""
 "way your Sympa mailing list web interface displays. To change your "
 "preferences, do as follows:"
 msgstr ""
-"一般設定は、読者登録しているすべてのリストと、Sympa のウェブインタフェースで"
-"の表示にたいしてはたらきます。設定を変えるには以下のようにします。"
+"個人設定は、読者登録しているすべてのリストと、Sympa のウェブインタフェースで"
+"の表示にたいしてはたらきます。設定を変えるには次のようにします。"
 
+# * 6.1(?): "Your preferences" link has been moved to top bar.
+# 
 # # "Dans la boîte en haut de la colonne de gauche, <strong>cliquez sur le "
 # # "lien 'Vos préférences'</strong>."
 #: ../web_tt2/help_user.tt2:129
@@ -1518,8 +1516,7 @@ msgid ""
 "In the form displayed on top of the left column, <strong>click on the 'Your "
 "preferences' link</strong>."
 msgstr ""
-"左側 (上のほう) に表示されるフォームで<strong>「個人設定」のリンクをクリック"
-"します</strong>。"
+"画面の上のほうの<strong>「個人設定」のリンクをクリックします</strong>。"
 
 # # "<strong>Modifiez vos préférences</strong>."
 #: ../web_tt2/help_user.tt2:130
@@ -1754,7 +1751,7 @@ msgstr "リストの登録解除をする"
 
 #: ../web_tt2/help_user.tt2:164
 msgid "To unsubscribe from a list, do as follows:"
-msgstr "リストの登録解除をするには、つぎのようにしてください:"
+msgstr "リストの登録解除をするには、次のようにしてください——"
 
 #. (conf.email,conf.host)
 #: ../web_tt2/help_user.tt2:166
@@ -1780,7 +1777,7 @@ msgid ""
 "need to repeat the operation for each list you want to unsubscribe from):"
 msgstr ""
 "リストのウェブインタフェースで登録解除することもできます (登録解除したいリス"
-"トごとに同じ手順を繰り返されければいけません):"
+"トごとに同じ手順を繰り返されければいけません) ——"
 
 #: ../web_tt2/help_user.tt2:174
 msgid ""
@@ -1803,7 +1800,7 @@ msgstr "はじめに: リストを運営しているのは誰か"
 
 #: ../web_tt2/help_admin.tt2:6
 msgid "Reminder: a mailing list service involves four types of roles:"
-msgstr "復習: メーリングリストには、4 種の役柄の人がかかわっています:"
+msgstr "復習: メーリングリストには、4 種の役柄の人がかかわっています——"
 
 #: ../web_tt2/help_admin.tt2:8
 msgid "listmaster;"
@@ -1848,7 +1845,7 @@ msgstr ""
 
 #: ../web_tt2/help_admin.tt2:17
 msgid "To request the creation of a mailing list, do as follows:"
-msgstr "メーリングリストの作成を申し込むには、以下のようにします:"
+msgstr "メーリングリストの作成を申し込むには、次のようにします——"
 
 #. (path_cgi,conf.host)
 #: ../web_tt2/help_admin.tt2:19
@@ -2041,7 +2038,7 @@ msgstr "リストを運営する"
 
 #: ../web_tt2/help_admin.tt2:49
 msgid "To manage a list you own, do as follows:"
-msgstr "自分がオーナーになっているリストを運営するには、次のようにします:"
+msgstr "自分がオーナーになっているリストを運営するには、次のようにします——"
 
 #. (path_cgi)
 #: ../web_tt2/help_admin.tt2:51
@@ -2078,7 +2075,7 @@ msgstr ""
 
 #: ../web_tt2/help_admin.tt2:58
 msgid "Those different sections allow you to:"
-msgstr "リストの運営モジュールでは、ほかに次のような項目へ行けます:"
+msgstr "リストの運営モジュールでは、ほかに次のような項目へ行けます——"
 
 #. (path_cgi)
 #: ../web_tt2/help_admin.tt2:60
@@ -2118,7 +2115,7 @@ msgstr "<a href=\"#supprlist\">リストの閉鎖</a>。"
 
 #: ../web_tt2/help_admin.tt2:70
 msgid "The options available in the 'Moderate' submenu allow you to:"
-msgstr "「モデレーション」サブメニューでは、次のような項目へ行けます:"
+msgstr "「モデレーション」サブメニューでは、次のような項目へ行けます——"
 
 #: ../web_tt2/help_admin.tt2:72
 msgid "<a href=\"#moderate\">moderate messages</a> sent to the list;"
@@ -2161,11 +2158,11 @@ msgid ""
 "list</strong>, among which:"
 msgstr ""
 "このページからは、<strong>リストに関するファイルの一部を変更できます</"
-"strong>。つぎのようなものです:"
+"strong>。次のようなものです——"
 
 #: ../web_tt2/help_admin.tt2:83
 msgid "typical messages sent to subscribers in particular occasions:"
-msgstr "特定の場合に読者に送るメッセージ:"
+msgstr "特定の場合に読者に送るメッセージ——"
 
 #: ../web_tt2/help_admin.tt2:85
 msgid ""
@@ -2241,7 +2238,7 @@ msgstr ""
 
 #: ../web_tt2/help_admin.tt2:94
 msgid "miscellaneous files:"
-msgstr "その他のファイル:"
+msgstr "その他のファイル——"
 
 #: ../web_tt2/help_admin.tt2:96
 msgid ""
@@ -2406,7 +2403,7 @@ msgid ""
 "strong>. For each subscriber, the following information is available:"
 msgstr ""
 "「読者一覧」の項目では、<strong>リストに読者登録している人すべての一覧</"
-"strong>を見ることができます。読者ごとに次のような情報があります:"
+"strong>を見ることができます。読者ごとに次のような情報があります——"
 
 #: ../web_tt2/help_admin.tt2:121
 msgid "<strong>email address</strong>;"
@@ -2479,7 +2476,7 @@ msgid ""
 "You can <strong>subscribe other people to the list</strong> from this page:"
 msgstr ""
 "このページからは、<strong>リストに新たに人を読者登録する</strong>こともできま"
-"す:"
+"す——"
 
 #: ../web_tt2/help_admin.tt2:135
 msgid ""
@@ -2552,7 +2549,7 @@ msgid ""
 msgstr ""
 "<strong>読者全員に読者登録確認を送る</strong>には、「<strong>全てに読者登録確"
 "認を送る</strong>」をクリックします。読者登録確認のお知らせには次のことが書い"
-"てあります:"
+"てあります——"
 
 #: ../web_tt2/help_admin.tt2:145
 msgid ""
@@ -2645,7 +2642,7 @@ msgstr ""
 
 #: ../web_tt2/help_admin.tt2:163
 msgid "The information displayed involves:"
-msgstr "この表には次のものが入っています:"
+msgstr "この表には次のものが入っています——"
 
 #: ../web_tt2/help_admin.tt2:165
 msgid "the type of error (in English);"
@@ -2954,14 +2951,14 @@ msgid ""
 "operation is irreversible!!! If you delete a message, you will not be able "
 "to retrieve it.</strong>"
 msgstr ""
-"<strong>メッセージがリストに送られてしまったあとでも、処理する</strong>ことが"
-"可能です。投稿がモデレーションを受けないリストで役立つでしょう。<strong>メッ"
-"セージを削除する</strong>には、<a href=\"%1/help/arc#arcsearch\">投稿保管庫で"
-"そのメッセージを探し</a>、メッセージの右上にある「<strong>このメールに削除の"
-"印をつける</strong>」ボタンをクリックします。確認のメッセージが表示されますの"
-"で、「OK」をクリックします。メッセージは数秒たつと削除されます。<strong>注"
-"意: この操作はもとに戻せませんからね! メッセージを削除すると、二度と見ること"
-"はできません。</strong>"
+"<strong>メッセージがリストに送られてしまったあとでも処理はできます</strong> "
+"(投稿がモデレーションを受けないリストではこの方法がいいでしょう)。<strong>"
+"メッセージを削除する</strong>には、<a href=\"%1/help/arc#arcsearch\">投稿保管"
+"庫でそのメッセージを探し</a>、メッセージの右上にある「<strong>このメールに削"
+"除の印をつける</strong>」ボタンをクリックします。確認のメッセージが表示されま"
+"すので、「OK」をクリックします。メッセージは数秒たつと削除されます。<strong>"
+"注意: この操作はもとに戻せませんからね! メッセージを削除すると、二度と取り戻"
+"すことはできません。</strong>"
 
 #: ../web_tt2/help_admin.tt2:205
 msgid "Managing the message archive"
@@ -3106,7 +3103,7 @@ msgstr ""
 # # "Quelques conseils pour le choix des noms de vos listes :"
 #: ../web_tt2/help_admin.tt2:217
 msgid "A few tips to name your lists:"
-msgstr "リストの命名についてのヒント:"
+msgstr "リストの命名についてのヒント——"
 
 # # "N'utilisez <strong>pas d'espaces, d'accents ni de caractères "
 # # "spéciaux</strong> dans les noms des listes : ces caractères peuvent créer "
@@ -3284,12 +3281,13 @@ msgid ""
 "wiki/Netiquette\">page of the Wikipedia dedicated to the Netiquette</a>."
 msgstr ""
 "<strong>メーリングリストのサービスを利用することも含め、電子メールを利用する"
-"際には、気持ちよくやりとりするためにいくつかの厳格なとりきめ --- ネチケットを"
-"まもらなければなりません</strong>。読者にこれをまもらせることは、リストのオー"
-"ナーやモデレータの務めです。<a target=\"_blank\" href=\"http://ja.wikipedia."
-"org/wiki/%%E3%%83%%8D%%E3%%83%%81%%E3%%82%%B1%%E3%%83%%83%%E3%%83%%88\">ウィ"
-"キペディアの「ネチケット」の項目</a>では、ネチケットの一般原則を知ることがで"
-"きますし、参考になるページへのリンクもあります。"
+"際には、気持ちよくやりとりするためにいくつかの厳格なとりきめ<span lang=\"ja"
+"\" xml:lang=\"ja\">——</span>ネチケットをまもらなければなりません</strong>。読"
+"者にこれをまもらせることは、リストのオーナーやモデレータの務めです。<a "
+"target=\"_blank\" href=\"http://ja.wikipedia.org/wiki/%%E3%%83%%8D%%E3%%83%%"
+"81%%E3%%82%%B1%%E3%%83%%83%%E3%%83%%88\">ウィキペディアの「ネチケット」の項目"
+"</a>では、ネチケットの一般原則を知ることができますし、参考になるページへのリ"
+"ンクもあります。"
 
 #: ../web_tt2/help_admin.tt2:243
 msgid ""
@@ -3297,7 +3295,7 @@ msgid ""
 "rules that apply to its use:"
 msgstr ""
 "<strong>リストの利用約款を制定する</strong>ことをお勧めします。これは、運営に"
-"関わる以下のようなとりきめを集約したものです:"
+"関わる次のようなとりきめを集約したものです——"
 
 #: ../web_tt2/help_admin.tt2:245
 msgid "allowed, tolerated and forbidden topics;"
@@ -3370,7 +3368,7 @@ msgstr "リストの投稿保管庫をウェブで読む"
 
 #: ../web_tt2/help_arc.tt2:4
 msgid "To read the messages sent to a list</strong>, you have two options:"
-msgstr "リストのメッセージを読む方法は</strong> 3 つあります:"
+msgstr "リストのメッセージを読む方法は</strong> 3 つあります——"
 
 #: ../web_tt2/help_arc.tt2:6
 msgid "read the messages you receive <strong>in your email inbox</strong>;"
@@ -3387,7 +3385,7 @@ msgstr ""
 #: ../web_tt2/help_arc.tt2:10
 msgid "<strong>To read the list archive online</strong>, do as follows:"
 msgstr ""
-"<strong>ウェブでリストの投稿保管庫を読むには</strong>、次のようにします:"
+"<strong>ウェブでリストの投稿保管庫を読むには</strong>、次のようにします——"
 
 # # "<strong>Allez sur la page d'information de la liste</strong> dont vous "
 # # "souhaitez lire les archives."
@@ -3631,7 +3629,8 @@ msgstr "メッセージを読むページでは、暦は表示されません。
 # # "Contenu des messages : liens et pièces jointes"
 #: ../web_tt2/help_arc.tt2:51
 msgid "Content of the messages: links and attachments"
-msgstr "メッセージの中身 --- リンクと添付"
+msgstr ""
+"メッセージの中身<span lang=\"ja\" xml:lang=\"ja\">——</span>リンクと添付"
 
 # # "Généralement, <strong>les liens contenus dans les messages sont "
 # # "cliquables</strong> : il vous suffit de cliquer dessus pour aller visiter "
@@ -3778,7 +3777,7 @@ msgstr ""
 # # "Pour effectuer une recherche simple, procédez comme suit :"
 #: ../web_tt2/help_arc.tt2:75
 msgid "To perform a simple search, do as follows:"
-msgstr "簡易検索をするには、以下のようにします。"
+msgstr "簡易検索をするには、次のようにします。"
 
 # # "Allez sur la <strong>page d'information de la liste</strong> qui vous "
 # # "intéresse."
@@ -3891,7 +3890,7 @@ msgid ""
 "do as follows:"
 msgstr ""
 "高度な検索モードは、簡易検索よりもずっと強力で柔軟ですし、ずっと使いやすいで"
-"す。高度な検索をするには、以下のようにします。"
+"す。高度な検索をするには、次のようにします。"
 
 # # "<strong>Cliquez sur le lien 'Recherche avancée'</strong> situé sous le "
 # # "champ de recherche."
@@ -3961,9 +3960,9 @@ msgid ""
 "giving up..."
 msgstr ""
 "<strong>結果が多いと、複数ページに分かれて表示されることがあります</strong>。"
-"早とちりしないように<!-- ??? Ne vous y laissez pas prendre : ??? --> --- 見え"
-"ているもののなかに自分が探しているメッセージがないからといって諦めず、他の"
-"ページがないか確かめてください。"
+"早とちりしないように<!-- ??? Ne vous y laissez pas prendre : ??? --><span "
+"lang=\"ja\" xml:lang=\"ja\">——</span>見えているもののなかに自分が探している"
+"メッセージがないからといって諦めず、他のページがないか確かめてください。"
 
 # # "Lorsque vous avez spécifié une plage de recherche très étendue, "
 # # "<strong>une première recherche est parfois effectuée sur une partie des "
@@ -3992,8 +3991,8 @@ msgid ""
 "For each message, the <strong>information displayed on the results page</"
 "strong> is the following:"
 msgstr ""
-"メッセージごとに<strong>結果のページに表示される情報</strong>には以下のものが"
-"あります。"
+"メッセージごとに<strong>結果のページに表示される情報</strong>には次のものがあ"
+"ります。"
 
 # # "objet du message ;"
 #: ../web_tt2/help_arc.tt2:112
@@ -4049,14 +4048,14 @@ msgstr ""
 
 #: ../web_tt2/help_editfile.tt2:3
 msgid "Service messages description :"
-msgstr "サービスメッセージの説明:"
+msgstr "サービスメッセージの説明——"
 
 #: ../web_tt2/help_editfile.tt2:6
 msgid ""
 "Welcome message: This message is sent to new subscribers. It can be\n"
 "a full MIME structured message (only for MIME gurus)."
 msgstr ""
-"歓迎メッセージ: 登録された読者に送るメッセージ。\n"
+"歓迎メッセージ&mdash;&mdash;登録された読者に送るメッセージ。\n"
 "MIME の複雑なメッセージを書くこともできます (MIME の知識に精通している人な"
 "ら)。"
 
@@ -4065,8 +4064,8 @@ msgid ""
 "Unsubscribe message: This message is sent when users leave the list\n"
 "using the UNSUBSCRIBE command."
 msgstr ""
-"登録解除メッセージ: 誰かが UNSUBSCRIBE コマンドで登録解除したときに、その人に"
-"このメッセージを送ります。"
+"登録解除メッセージ&mdash;&mdash;誰かが UNSUBSCRIBE コマンドで登録解除したとき"
+"に、その人にこのメッセージを送ります。"
 
 #: ../web_tt2/help_editfile.tt2:13
 msgid ""
@@ -4074,7 +4073,7 @@ msgid ""
 "remove them from the list using the DEL command (unless you hit the\n"
 "Quiet button."
 msgstr ""
-"削除メッセージ:(「知らせない」にチェックを入れずに)\n"
+"削除メッセージ&mdash;&mdash;(「知らせない」にチェックを入れずに)\n"
 "読者を削除 (DEL コマンド) したときに、削除された人にこのメッセージを送りま"
 "す。"
 
@@ -4085,8 +4084,8 @@ msgid ""
 "confused about their own subscription emails or people who are not able to\n"
 "unsubscribe themselves."
 msgstr ""
-"登録確認メッセージ: REMIND コマンドを使うと、このメッセージを全読者に送れま"
-"す。\n"
+"登録確認メッセージ&mdash;&mdash;REMIND コマンドを使うと、このメッセージを全読"
+"者に送れます。\n"
 "読者登録している電子メールアドレスがわからなくなった人や、自分で登録解除がで"
 "きない\n"
 "人に便利です。"
@@ -4096,12 +4095,12 @@ msgid ""
 "Subscribing invitation message: sent to a person if someone  \n"
 "uses the INVITE command to invite someone to subscribe."
 msgstr ""
-"読者登録に招待するメッセージ: 誰かが INVITE コマンドを使って読者登録に招待す"
-"ると、招待された人にこのメッセージを送ります。"
+"読者登録に招待するメッセージ&mdash;&mdash;誰かが INVITE コマンドを使って読者"
+"登録に招待すると、招待された人にこのメッセージを送ります。"
 
 #: ../web_tt2/help_editfile.tt2:24
 msgid "Other files/pages description:"
-msgstr "その他のファイルやページの説明:"
+msgstr "その他のファイルやページの説明——"
 
 #: ../web_tt2/help_editfile.tt2:28
 msgid ""
@@ -4109,8 +4108,9 @@ msgid ""
 "right-hand side of the main list page. (default for this is the list "
 "description)"
 msgstr ""
-"リストのホームページ: リストを説明するHTMLテキスト。 これはリストのメインペー"
-"ジの右側に表示されます (なければ、かわりに下の「リストの説明」が入ります)。"
+"リストのホームページ&mdash;&mdash;リストを説明するHTMLテキスト。 これはリスト"
+"のメインページの右側に表示されます (なければ、かわりに下の「リストの説明」が"
+"入ります)。"
 
 # # "List description : This text is sent as an answer to the mail command\n"
 # # "INFO. It can also be included in the <em>Welcome message</em>."
@@ -4119,28 +4119,28 @@ msgid ""
 "List description: This text is sent as an answer to the mail command\n"
 "INFO. It can also be included in the <em>Welcome message</em>."
 msgstr ""
-"リストの説明: このテキストを INFO コマンドに対する返信として送ります。また、"
-"<em>歓迎メッセージ</em>にもこのテキストが入ります。"
+"リストの説明&mdash;&mdash;このテキストを INFO コマンドに対する返信として送り"
+"ます。また、<em>歓迎メッセージ</em>にもこのテキストが入ります。"
 
 #: ../web_tt2/help_editfile.tt2:34
 msgid ""
 "Message header: If this file is not empty, it is added as a MIME\n"
 "attachment at the beginning of each message distributed to the list."
 msgstr ""
-"メッセージの前付け: このテキストが空でなければ、リストで配信するすべてのメッ"
-"セージの先頭にMIME のパートとして追加します。"
+"メッセージの前付け&mdash;&mdash;このテキストが空でなければ、リストで配信する"
+"すべてのメッセージの先頭にMIME のパートとして追加します。"
 
 #: ../web_tt2/help_editfile.tt2:37
 msgid ""
 "Message footer: same as <em>Message header,</em> but attached at the\n"
 "end of the message."
 msgstr ""
-"メッセージの後付け: <em>メッセージの前付け</em> と同様ですがメッセージの最後"
-"に付けます。"
+"メッセージの後付け&mdash;&mdash;<em>メッセージの前付け</em> と同様ですがメッ"
+"セージの最後に付けます。"
 
 #: ../web_tt2/help_editlist.tt2:5
 msgid ":"
-msgstr ""
+msgstr "&mdash;&mdash;"
 
 #: ../web_tt2/help_editlist.tt2:9
 msgid "Privilege for adding (ADD command) a subscriber to the list"
@@ -4187,7 +4187,7 @@ msgstr ""
 
 #: ../web_tt2/help_editlist.tt2:22
 msgid "This paragraph defines bounce management parameters:"
-msgstr "ここでは、配送エラー管理のパラメータを決めます:"
+msgstr "ここでは、配送エラー管理のパラメータを決めます——"
 
 #: ../web_tt2/help_editlist.tt2:24
 msgid "Default value: bounce_warn_rate robot parameter"
@@ -4682,7 +4682,7 @@ msgstr ""
 "メーリングリストのウェブサイトを、一般公開のウェブサイトから電子メールアドレ"
 "スを収集するソフトウェア (「spambot」などと呼びます) から保護する必要がありま"
 "す。そのためにさまざまな方法をとることができます。spam_protection パラメータ"
-"や web_archive_spam_protection パラメータで方法を選べます。次の値があります:"
+"や web_archive_spam_protection パラメータで方法を選べます。次の値があります——"
 
 #: ../web_tt2/help_editlist.tt2:150
 msgid ""
@@ -4778,9 +4778,10 @@ msgid ""
 "google and co."
 msgstr ""
 "spam_protection と同様ですが、投稿保管庫のみに適用されます。上記の他に次の値"
-"があります --- cookie にすると、利用者は投稿保管庫の中を見る前に簡単なフォー"
-"ムでクッキーを受け取らなければならなくなります。これで、Google をはじめあらゆ"
-"る検索エンジン情報収集ソフトウェアから守れます。"
+"があります<span lang=\"ja\" xml:lang=\"ja\">——</span>cookie にすると、利用者"
+"は投稿保管庫の中を見る前に簡単なフォームでクッキーを受け取らなければならなく"
+"なります。これで、Google をはじめあらゆる検索エンジン情報収集ソフトウェアから"
+"守れます。"
 
 #: ../web_tt2/help_editlist.tt2:173
 msgid ""
@@ -4832,7 +4833,7 @@ msgstr "リストのメッセージを受け取れない読者がいる"
 
 #: ../web_tt2/help_faqadmin.tt2:6
 msgid "To find the cause of the problem, do as follows:"
-msgstr "原因をつきとめるために、以下のことをしてください:"
+msgstr "原因をつきとめるために、次のことをしてください——"
 
 #: ../web_tt2/help_faqadmin.tt2:8
 msgid ""
@@ -4900,7 +4901,7 @@ msgstr "読者登録できないリストがある"
 
 #: ../web_tt2/help_faquser.tt2:13 ../web_tt2/help_faquser.tt2:6
 msgid "This problem may be due to the following reasons:"
-msgstr "これは、つぎのような理由で起きると思われます:"
+msgstr "これは、次のような理由で起きると思われます——"
 
 #: ../web_tt2/help_faquser.tt2:8
 msgid ""
@@ -4975,7 +4976,7 @@ msgstr "送ってくるはずのメッセージが (まったく) 届かない�
 #: ../web_tt2/help_faquser.tt2:23 ../web_tt2/help_faquser.tt2:46
 #: ../web_tt2/help_faquser.tt2:64
 msgid "This problem can have multiple reasons:"
-msgstr "理由はいくつか考えられます:"
+msgstr "理由はいくつか考えられます——"
 
 #: ../web_tt2/help_faquser.tt2:25
 msgid "You have never been subscribed to the list"
@@ -5040,9 +5041,9 @@ msgid ""
 "href=\"%1/help/user#subscribe\">subscribe</a> again."
 msgstr ""
 "誰かが悪意から勝手にあなたの登録解除を申し込んだが、リストの設定では読者登録"
-"や登録解除の申込に確認が要るようになっていなかった、ということもありえます。"
-"こういう場合は、<a href=\"%1/help/user#subscribe\">読者登録のやり直し</a>をし"
-"ます。"
+"や登録解除の申込に確認が要るようになっていなかった、ということもありえます"
+"ね。こういう場合は、<a href=\"%1/help/user#subscribe\">読者登録をやり直します"
+"</a>。"
 
 #. (path_cgi)
 #: ../web_tt2/help_faquser.tt2:38
@@ -5150,7 +5151,7 @@ msgstr ""
 msgid "<strong>The problem may also come from your email account</strong>:"
 msgstr ""
 "<strong>あるいは、あなたの電子メールアカウントに問題があるのかもしれません</"
-"strong>:"
+"strong>——"
 
 #: ../web_tt2/help_faquser.tt2:56
 msgid "The mail server is temporarily unavailable."
@@ -5334,8 +5335,8 @@ msgid ""
 "You can also change the '<strong>Visibility of the list</strong>'. The "
 "options available are the following:"
 msgstr ""
-"「<strong>リストの見えかた</strong>」を変えることもできます。以下の選択肢があ"
-"ります。"
+"「<strong>リストの見えかた</strong>」を変えることもできます。次の選択肢があり"
+"ます。"
 
 # # "liste cachée sauf aux abonnés (conceal) - <em>option par défaut</em> ;"
 #: ../web_tt2/help_listconfig.tt2:20
@@ -5362,10 +5363,11 @@ msgstr "読者 (private)。"
 msgid "conceal even for subscribers (secret);"
 msgstr "読者にも見えない (secret)。"
 
+# 存在しないシナリオ名。
 # # "abonné à nos grosses listes techniques (semipublic)."
 #: ../web_tt2/help_listconfig.tt2:25
 msgid "semipublic (semipublic)."
-msgstr ""
+msgstr "<!-- semipublic -->"
 
 # # "Si vous souhaitez restreindre la visibilité de la liste suivant d'autres "
 # # "critères, faites-en la demande aux listmasters : il est probable qu'ils "
@@ -5679,7 +5681,7 @@ msgstr "権限"
 # # "À partir de cette page, vous pouvez décider :"
 #: ../web_tt2/help_listconfig.tt2:58
 msgid "From this page, you can decide:"
-msgstr "このページでは、以下のことを決められます。"
+msgstr "このページでは、次のことを決められます。"
 
 # # "<strong>qui a accès aux informations sur la liste</strong>. Les options "
 # # "disponibles sont les suivantes :"
@@ -5688,7 +5690,7 @@ msgid ""
 "<strong>who can view list information</strong>. The following options are "
 "available:"
 msgstr ""
-"<strong>リストの案内を見ることができるのは</strong>。以下の選択肢があります。"
+"<strong>リストの案内を見ることができるのは</strong>。次の選択肢があります。"
 
 # # "pour tous (open) - <em>option par défaut</em> ;"
 #: ../web_tt2/help_listconfig.tt2:62
@@ -5705,7 +5707,7 @@ msgstr "読者のみ (private)。"
 #: ../web_tt2/help_listconfig.tt2:65
 msgid ""
 "who can subscribe to the list</strong>. The following options are available:"
-msgstr "リストへ読者登録をできるのは</strong>。以下の選択肢があります。"
+msgstr "リストへ読者登録をできるのは</strong>。次の選択肢があります。"
 
 # # "demande d'abonnement après confirmation (auth) ;"
 #: ../web_tt2/help_listconfig.tt2:67
@@ -5791,7 +5793,7 @@ msgid ""
 "<strong>who can unsubscribe from the list</strong>. The following options "
 "are available:"
 msgstr ""
-"リストから<strong>登録解除をできるのは</strong>。以下の選択肢があります。"
+"リストから<strong>登録解除をできるのは</strong>。次の選択肢があります。"
 
 # # "possible après authentification (auth) ;"
 #: ../web_tt2/help_listconfig.tt2:82
@@ -5847,7 +5849,7 @@ msgid ""
 "who can invite people to subscribe to the list</strong>. The following "
 "options are available:"
 msgstr ""
-"リストに読者登録するよう招待できるのは</strong>。以下の選択肢があります。"
+"リストに読者登録するよう招待できるのは</strong>。次の選択肢があります。"
 
 # # "fermé (closed) ;"
 #: ../web_tt2/help_listconfig.tt2:132 ../web_tt2/help_listconfig.tt2:92
@@ -5876,7 +5878,7 @@ msgid ""
 "<strong>who can review subscribers</strong>. The following options are "
 "available:"
 msgstr ""
-"<strong>読者一覧を見ることができるのは</strong>。以下の選択肢があります。"
+"<strong>読者一覧を見ることができるのは</strong>。次の選択肢があります。"
 
 # # "pour personne (closed) ;"
 #: ../web_tt2/help_listconfig.tt2:99
@@ -5952,8 +5954,8 @@ msgid ""
 "The following options are available in the '<strong>Who can view</strong>' "
 "drop-down list:"
 msgstr ""
-"「<strong>見ることができるのは</strong>」のドロップダウンリストでは、以下の選"
-"択肢があります。"
+"「<strong>見ることができるのは</strong>」のドロップダウンリストでは、次の選択"
+"肢があります。"
 
 # # "limité aux propriétaires de la liste (owner) ;"
 #: ../web_tt2/help_listconfig.tt2:113
@@ -5972,8 +5974,8 @@ msgid ""
 "The following options are available in the '<strong>Who can edit</strong>' "
 "drop-down list:"
 msgstr ""
-"「<strong>変更できるのは</strong>」のドロップダウンリストでは、以下の選択肢が"
-"あります。"
+"「<strong>変更できるのは</strong>」のドロップダウンリストでは、次の選択肢があ"
+"ります。"
 
 # # "limité aux propriétaires de la liste (owner) - <em>option par défaut</em> "
 # # ";"
@@ -6042,7 +6044,7 @@ msgid ""
 msgstr ""
 "このページで、<strong>ウェブ上のリスト投稿保管庫を見ることのできる</strong> "
 "(メーリングリストのウェブインタフェースでメッセージを読める) <strong>人を決め"
-"る</strong>ことができます。以下の選択肢があります。"
+"る</strong>ことができます。次の選択肢があります。"
 
 # # "listmaster (listmaster) ;"
 #: ../web_tt2/help_listconfig.tt2:134
@@ -6118,7 +6120,7 @@ msgstr ""
 "まとめ読みはプレインテキストで届き、<acronym lang=\"en\" xml:lang=\"en\" "
 "title=\"HyperText Markup Language\">HTML</acronym> のタグもそのまま見えます"
 "し、メッセージのヘッダがすべて入っています。「<strong>テキスト投稿保管庫</"
-"strong>」パラメータで以下のことを決めることができます。"
+"strong>」パラメータで次のことを決めることができます。"
 
 # # "<strong>qui a le droit</strong> de se faire envoyer par e-mail les "
 # # "archives récapitulatives des messages de la liste ;"
@@ -6287,7 +6289,7 @@ msgid ""
 msgstr ""
 "「<strong>配送エラーの管理、第一段階</strong>」と「<strong>配送エラーの管理、"
 "第二段階</strong>」で、配送エラーを起こしている読者に対する自動処理を実施でき"
-"ます。以下のことを決められます。"
+"ます。次のことを決められます。"
 
 #: ../web_tt2/help_listconfig.tt2:165
 msgid ""
@@ -6745,9 +6747,9 @@ msgid ""
 "you to gather useful information in order not to make a blunder:"
 msgstr ""
 "メーリングリストに読者登録してもすぐにはメッセージを送らず、数日は<strong>観"
-"察期間とする</strong>というのは、たいへん良い考えです。これによって、以下のよ"
-"うな重要な情報を収集することができ、妙なことをしでかさなくてすむようになりま"
-"す:"
+"察期間とする</strong>というのは、たいへん良い考えです。これによって、次のよう"
+"な重要な情報を収集することができ、妙なことをしでかさなくてすむようになります"
+"——"
 
 #: ../web_tt2/help_sendmsg.tt2:24
 msgid "Who can send messages to the list?"
@@ -6906,8 +6908,8 @@ msgid ""
 msgstr ""
 "<strong>リストから届いたメッセージに返信するとき</strong>は、リストに返信した"
 "ほうがいいのか個人宛てがいいのかを、よく考えて決めましょう。決める基準はこう"
-"です --- ほかの読者にとって、あなたの返信する内容は興味を持てるようなもので"
-"しょうか。"
+"です<span lang=\"ja\" xml:lang=\"ja\">——</span>ほかの読者にとって、あなたの返"
+"信する内容は興味を持てるようなものでしょうか。"
 
 #: ../web_tt2/help_sendmsg.tt2:43
 msgid ""
@@ -6935,12 +6937,14 @@ msgid ""
 "or more generally illegal."
 msgstr ""
 "メーリングリストでは、<strong>ある種のメッセージは歓迎されないことがあります"
-"</strong>。つぎのようなものです --- 宣伝。商業的な性格のメッセージ。政治的あ"
-"るいは宗教的なテーマを含むもの。事実無根の情報 (デマ) をひろめるもの。プライ"
-"バシーを侵害するもの。中傷的な質の情報。脅迫。下品なもの。卑猥なもの。民族差"
-"別的または人種差別的なもの。そのほか差別を助長するもの。理由の如何にかかわら"
-"ず、他者への憎悪や暴力を称揚するもの。道徳的な価値を毀損しようと目論むもの。"
-"その他、非合法な内容を含むもの。"
+"</strong>。次のようなものです<span lang=\"ja\" xml:lang=\"ja\">——</span>広告"
+"宣伝。同じような内容を繰り返し送ること。商業的な性格のメッセージ。ウィルス警"
+"告。テスト投稿。政治的あるいは宗教的なテーマを含むもの。事実無根の情報 (デ"
+"マ) をひろめるもの。言い争い (フレーミング)。プライバシーを侵害するもの。中傷"
+"や誣告。脅迫。攻撃的なもの。<!-- abusive, infringing, -->民族差別的、人種差別"
+"的なもの。下品、卑猥なもの。差別を助長するもの。理由の如何にかかわらず、他者"
+"への憎悪や暴力を称揚するもの。道徳的な価値を毀損しようと目論むもの。その他、"
+"非合法な内容を含むもの。"
 
 #: ../web_tt2/help_sendmsg.tt2:45
 msgid ""
@@ -6986,7 +6990,7 @@ msgid ""
 "attachments</strong>. However, be careful to respect a few elementary rules:"
 msgstr ""
 "メッセージを送るときに、<strong>添付ファイルを付けることもできます</strong>。"
-"ですが、つぎのようなきまりを守るようにしましょう:"
+"ですが、次のようなきまりを守るようにしましょう——"
 
 #: ../web_tt2/help_sendmsg.tt2:49
 msgid ""
@@ -7032,11 +7036,12 @@ msgid ""
 "Netiquette\">page of the Wikipedia dedicated to the Netiquette</a>."
 msgstr ""
 "<strong>メーリングリストのサービスを利用することも含め、電子メールを利用する"
-"際には、気持ちよくやりとりするためにいくつかの厳格なとりきめ --- ネチケットを"
-"守らなければなりません</strong>。<a target=\"_blank\" href=\"http://ja."
-"wikipedia.org/wiki/%%E3%%83%%8D%%E3%%83%%81%%E3%%82%%B1%%E3%%83%%83%%E3%%83%%"
-"88\">ウィキペディアの「ネチケット」の項目</a>では、ネチケットの一般原則を知る"
-"ことができますし、参考になるページへのリンクもあります。"
+"際には、気持ちよくやりとりするためにいくつかの厳格なとりきめ<span lang=\"ja"
+"\" xml:lang=\"ja\">——</span>ネチケットを守らなければなりません</strong>。<a "
+"target=\"_blank\" href=\"http://ja.wikipedia.org/wiki/%%E3%%83%%8D%%E3%%83%%"
+"81%%E3%%82%%B1%%E3%%83%%83%%E3%%83%%88\">ウィキペディアの「ネチケット」の項目"
+"</a>では、ネチケットの一般原則を知ることができますし、参考になるページへのリ"
+"ンクもあります。"
 
 # # "Certaines listes disposent d'un <strong>espace de stockage partagé où les "
 # # "abonnés peuvent télécharger des documents ou en publier</strong> : cet "
@@ -7061,7 +7066,7 @@ msgstr "共有文書置き場の文書を見る"
 # # "comme suit :"
 #: ../web_tt2/help_shared.tt2:7
 msgid "To access the 'Shared documents' section of a list, do as follows:"
-msgstr "「共有文書置き場」のセクションへ行くには、以下のようにします。"
+msgstr "「共有文書置き場」のセクションへ行くには、次のようにします。"
 
 # # "Allez sur la <strong >page d'information de la liste</strong> qui vous "
 # # "intéresse."
@@ -7225,8 +7230,8 @@ msgid ""
 "is the same for folders."
 msgstr ""
 "注意: 名前順のとき、アルファベットの大文字と小文字は別のものとして扱いますの"
-"で、まず大文字で始まる名前の文書がアルファベット順に表示され、つぎに小文字で"
-"始まる名前の文書がアルファベット順に表示されます。フォルダの名前も同じです。"
+"で、まず大文字で始まる名前の文書がアルファベット順に表示され、次に小文字で始"
+"まる名前の文書がアルファベット順に表示されます。フォルダの名前も同じです。"
 
 # # "<strong>Vous pouvez trier les documents et les dossiers suivant d'autres "
 # # "critères</strong> que le nom du document/dossier : un tri en fonction de "
@@ -7255,7 +7260,7 @@ msgstr "共有文書置き場から文書をダウンロードする"
 # # "Pour télécharger un document à partir d'une liste, procédez comme suit :"
 #: ../web_tt2/help_shared.tt2:38
 msgid "To download a document from a list, do as follows:"
-msgstr "文書をダウンロードするには、以下のようにします。"
+msgstr "文書をダウンロードするには、次のようにします。"
 
 # # "<strong>Allez à la section 'Documents partagés'</strong> de la liste qui "
 # # "vous intéresse."
@@ -7328,7 +7333,7 @@ msgstr "フォルダを作成する"
 # # ":"
 #: ../web_tt2/help_shared.tt2:50
 msgid "To create a folder on a list</strong>, do as follows:"
-msgstr "フォルダを作成するには</strong>、以下のようにします。"
+msgstr "フォルダを作成するには</strong>、次のようにします。"
 
 # # "<strong>Placez-vous dans le dossier où vous souhaitez créer votre "
 # # "dossier</strong>."
@@ -7378,7 +7383,7 @@ msgstr "ファイルをアップロードする"
 # # "de texte associé au bouton 'Browse'."
 #: ../web_tt2/help_shared.tt2:60
 msgid "<strong>To upload a file on a list</strong>, do as follows:"
-msgstr "<strong>ファイルをアップロードするには</strong>、以下のようにします。"
+msgstr "<strong>ファイルをアップロードするには</strong>、次のようにします。"
 
 # # "<strong>Cliquez sur le bouton 'Publier'</strong>."
 #: ../web_tt2/help_shared.tt2:63
@@ -7465,7 +7470,7 @@ msgstr "ブックマークを作成する"
 # # "xml:lang=\"en\">URL</acronym> du site</strong>."
 #: ../web_tt2/help_shared.tt2:73
 msgid "<strong>To publish a bookmark on a list</strong>, do as follows:"
-msgstr "<strong>ブックマークを作成するには</strong>、以下のようにします。"
+msgstr "<strong>ブックマークを作成するには</strong>、次のようにします。"
 
 # # "Cliquez sur le bouton <strong>'Ajouter'</strong>."
 #: ../web_tt2/help_shared.tt2:76
@@ -7515,7 +7520,7 @@ msgstr "ファイルを作成する"
 # # "puis <strong>cliquez sur le bouton 'Publier'</strong>."
 #: ../web_tt2/help_shared.tt2:85
 msgid "To create a file on a list</strong>, do as follows:"
-msgstr "ファイルを作成するには</strong>、以下のようにします。"
+msgstr "ファイルを作成するには</strong>、次のようにします。"
 
 # # "<strong>Important : les seuls fichiers qui peuvent être créés en ligne "
 # # "sur les listes sont des fichiers en texte brut. Vous ne pourrez en aucun "
@@ -7984,9 +7989,9 @@ msgid ""
 "strong>."
 msgstr ""
 "あなたが共有文書置き場の構成に携わる方で、ファイルやフォルダを作成しようとし"
-"ているのなら、<strong>熟慮の上で行ってください。考えてもみてください --- 今後"
-"このリストは非常に重要な情報伝達手段になり、何年にもわたって利用されつづける"
-"かもしれないのです</strong>。"
+"ているのなら、<strong>熟慮の上で行ってください。こう考えてみてください<span "
+"lang=\"ja\" xml:lang=\"ja\">——</span>このリストは今後、非常に重要な情報伝達手"
+"段になり、何年にもわたって利用されつづけるかもしれません</strong>。"
 
 # # "Vous pouvez également également choisir de mettre en place une "
 # # "<strong>organisation par personne, par équipe, etc.</strong>, voire "
@@ -8211,6 +8216,17 @@ msgstr ""
 "(まとめ読み) のいずれかのモードを取りやめるのに使います。\n"
 "読者が nomail (なにも受け取らない) モードにしていた場合、リストからのメッセー"
 "ジをまた一通ずつ受け取れるようになります。"
+
+#~ msgid ""
+#~ "If available, list owners and moderators have to conform to the <a target="
+#~ "\"_blank\" title=\"Example of charter aimed at owners and moderators "
+#~ "(French)\" href=\"http://listes.cru.fr/cnil/charte.proprio.html\">Owner "
+#~ "and moderator charter</a>."
+#~ msgstr ""
+#~ "リストのオーナーとモデレータも、<a target=\"_blank\" title=\"オーナーとモ"
+#~ "デレータのための約款の例 (フランス語)\" href=\"http://listes.cru.fr/cnil/"
+#~ "charte.proprio.html\">オーナー、ファシリテーター、モデレータの約款</a>を "
+#~ "(もしあれば) 守らなければなりません。"
 
 # # "L'option '<strong>Cleartext</strong>' archive le message sous sa forme "
 # # "cryptée originale."
@@ -8469,7 +8485,7 @@ msgstr ""
 #~ "INFO. It can also be included in the"
 #~ msgstr ""
 #~ "リストの説明: この文章は INFO コマンドへの応答に使います。\n"
-#~ "また、以下のメッセージにも入ります:"
+#~ "また、次のメッセージにも入ります——"
 
 #~ msgid "Welcome message"
 #~ msgstr "歓迎メッセージ"
