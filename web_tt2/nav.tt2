@@ -8,7 +8,7 @@
 </div>
 [% END %]
 
-[% IF action == 'serveradmin' or action == 'skinsedit'  or action == 'edit_config' or action == 'get_pending_lists'  or action == 'get_closed_lists'  or action == 'get_latest_lists'   or action == 'get_inactive_lists' %]
+[% IF action == 'serveradmin' or action == 'skinsedit'  or action == 'edit_config' or action == 'get_pending_lists'  or action == 'get_closed_lists' or action == 'get_latest_lists' or action == 'get_inactive_lists'  or action ==  'viewspools' %]
 <div id="nav">
   <ul>
 [% IF (subaction == '' or subaction == 'm_lists') and action != 'skinsedit' %][% SET class = 'MainMenuLinksCurrentPage' %][% ELSE %][% SET class = 'MainMenuLinks' %][% END %]

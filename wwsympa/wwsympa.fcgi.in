@@ -37,7 +37,7 @@ This fcgi script completely handles all aspects of the Sympa web interface
 
 =cut 
 
-use lib '/usr/local/sympa-sa/bin';
+use lib '--modulesdir--';
 
 use Getopt::Long;
 use Archive::Zip;
@@ -16604,6 +16604,9 @@ sub do_viewspools {
 	    return undef;
 	}
     }
+
+    $param->{'global_count_ok'} = &Sympaspool::global_count('ok');
+    $param->{'global_count_bad'} = &Sympaspool::global_count('bad');
 
     my $spool_page_size;
     if($in{'spool_page_size'}){

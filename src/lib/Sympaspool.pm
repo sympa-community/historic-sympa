@@ -91,6 +91,30 @@ sub new {
     return $spool;
 }
 
+# total spool_table count : not object oriented, just a subroutine 
+sub global_count {
+
+    my $message_status = shift;
+
+    my 	$statement = "SELECT COUNT(*) FROM spool_table where message_status_spool = '".$message_status."'";
+
+    $dbh = &List::db_get_handler();
+    unless ($dbh and $dbh->ping) {
+	return undef unless &List::db_connect();
+    }
+
+    push @sth_stack, $sth;
+    unless ($sth = $dbh->prepare($statement)) {
+	&do_log('err','Unable to prepare SQL statement : %s', $dbh->errstr);
+	return undef;
+    }
+    unless ($sth->execute) {
+	&do_log('err','Unable to execute SQL statement "%s" : %s', $statement, $dbh->errstr);
+	return undef;
+    }
+    my @result = $sth->fetchrow_array();
+    return $result[0];
+}
 
 sub count {
     my $self = shift;
@@ -116,9 +140,6 @@ sub get_content {
     my $page_size = $data->{'page_size'}; # for pagination, limit answers to $page_size
     my $orderby = $data->{'sortby'};      # sort
     my $way = $data->{'way'};             # asc or desc 
-
-    &do_log('debug', 'Spool::get_content(%s)',$self->{'spoolname'});
-    &do_log('trace', 'Spool::get_content(%s,selector : %s)',$self->{'spoolname'},$selector);
     
     $dbh = &List::db_get_handler();
     unless ($dbh and $dbh->ping) {

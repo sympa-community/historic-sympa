@@ -1,6 +1,8 @@
 <!-- $Id: viewspools.tt2 6913 2010-12-03 10:21:58Z serge.aumont $ -->
 <div class="block">
 
+<h2>Spool browser</h2>
+<p>
 
 [% FOREACH existingspool IN [ 'msg' 'auth' 'mod' 'digest' 'archive' 'bounce' 'automatic' 'subscribe' 'topic' 'bulk' 'validated' ] %]
    [% IF existingspool == spoolname %]
@@ -11,16 +13,14 @@
    &nbsp;
 [% END %]
 
-
-[% line_count = 0 %]
-
-<h2>Current spool [% spoolname %] </h2>
+</p>
+<p>
 
 <form class="noborder" action="[% path_cgi %]/viewspools/[% spoolname %]">
  <fieldset>
 
 <ul>
-status [% status %]
+Select messages by status :  
 <!-- <li>Select status ok <input id="statusok" type="radio" name="status" value="ok" [%IF status == 'ok' %]checked="checked"[%END%] onchange="this.form.submit();" /> 
     status bad <input id="statusbad" type="radio" name="status" value="bad" [%IF status == 'bad' %]checked="checked"[%END%] onchange="this.form.submit();" />
 </li> -->
@@ -34,7 +34,11 @@ status [% status %]
 <li>Spool empty.</li></ul>
 [% ELSE %]
 
-<li>Spool content :  #[% total %] entries. </li>
+<li>Total spools :[% global_count = global_count_ok  + global_count_bad %] [% global_count %]  ([% global_count_ok %] entries with status ok, [% global_count_bad %] entries with status bad) </li>
+<li>This spool content :  #[% total %] entries with status [% spool_status %] </li>
+
+
+
 </ul>
 
 <div class="search_form">
@@ -69,6 +73,10 @@ status [% status %]
 </div>
 
 </div>
+</p>
+
+[% line_count = 0 %]
+
 
  <table summary="[%|loc%]Spool content[%END%] :" class="listOfItems">
    <tr>
