@@ -1,13 +1,13 @@
 msgid ""
 msgstr ""
 "POT-Creation-Date: 2002-07-16 17:27+0800\n"
-"PO-Revision-Date: 2011-05-25 17:28+0200\n"
+"PO-Revision-Date: 2011-05-26 15:45+0200\n"
 "Last-Translator: David Verdin <david.verdin@cru.fr>\n"
 "Language-Team: Français\n"
+"Language: fr\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Language: fr\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
 "X-Generator: Pootle 2.1.2\n"
 "Projct-Id-Version: fr\n"
@@ -1048,9 +1048,8 @@ msgstr ""
 "un attribut utilisateur personnalisé nommé &#170;&#160;organization&#160;"
 "&#187;."
 
-#: ../web_tt2/compose_mail.tt2:78
-msgid "URL:"
-msgstr "URL :"
+#~ msgid "URL:"
+#~ msgstr "URL :"
 
 #: ../web_tt2/copy_template.tt2:3
 msgid "Copying template"
@@ -1618,9 +1617,8 @@ msgstr "Voulez-vous annuler le chargement ?"
 msgid "Additional information"
 msgstr "informations supplémentaires"
 
-#: ../web_tt2/edit_attributes.tt2:7
-msgid "[% k.name %]:"
-msgstr "[% k.name %] :"
+#~ msgid "[% k.name %]:"
+#~ msgstr "[% k.name %] :"
 
 #: ../web_tt2/edit_attributes.tt2:24
 msgid "*: Required element"
@@ -3044,9 +3042,8 @@ msgstr "Rejeter avec notification"
 msgid "Reject and blacklist sender"
 msgstr "Rejeter et ajouter l'auteur à la liste noire"
 
-#: ../web_tt2/modindex.tt2:128
-msgid "Toggle spams"
-msgstr "Basculer la sélection des spams"
+#~ msgid "Toggle spams"
+#~ msgstr "Basculer la sélection des spams"
 
 #: ../web_tt2/modindex.tt2:143
 msgid "Listing of shared documents to moderate"
@@ -8708,9 +8705,8 @@ msgid "Error at line %d: %s\n"
 msgstr "Erreur ligne %d : %s\n"
 
 # nlsref 1,3
-#: ../src/lib/Conf.pm:438
-msgid "Error at line %d: %s"
-msgstr "Erreur ligne %d : %s"
+#~ msgid "Error at line %d: %s"
+#~ msgstr "Erreur ligne %d : %s"
 
 #. This entry is a date/time format
 #. Check the strftime manpage for format details : http://docs.freebsd.org/info/gawk/gawk.info.Time_Functions.html
@@ -10249,14 +10245,17 @@ msgstr ""
 #: ../src/lib/List.pm:6438
 msgid "Attempt to exceed the max number of members (%s) for this list."
 msgstr ""
+"Tentative d'ajout d'un abonné au-delà du nombre d'abonnés autorisés pour "
+"cette liste."
 
 #: ../src/lib/List.pm:6441
 msgid "Attempts to add some users in database failed."
 msgstr ""
+"Des tentatives d'ajout d'utilisateurs dans la base de données ont échoué"
 
 #: ../src/lib/List.pm:6443
 msgid "Added %s users out of %s required."
-msgstr ""
+msgstr "% abonnés ont été ajoutés sur %s demandés."
 
 #: ../wwsympa/wwsympa.fcgi.in:4877
 msgid "Unable to add user %s in list %s : %s"
