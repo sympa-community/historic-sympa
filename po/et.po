@@ -10,10 +10,10 @@ msgstr ""
 "PO-Revision-Date: 2011-05-27 13:20+0200\n"
 "Last-Translator: Urmas <urmas@tamme.tartu.ee>\n"
 "Language-Team: Estonian <et@li.org>\n"
-"Language: et\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+"Language: et\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "X-Generator: Pootle 2.1.2\n"
 "X-Poedit-SourceCharset: utf-8\n"
@@ -9642,109 +9642,9 @@ msgstr "ei saadeta maile (soovitav puhkuse ajaks)"
 msgid "you do not receive your own posts"
 msgstr "teile ei tule enda saadetud kirju"
 
-#: ../web_tt2/list_menu.tt2:10
-msgid ""
-"You <span style=\"font-weight: bold; font-size: 10px\">are</span> subscribed"
-msgstr ""
-"Te <span style=\"font-weight: bold; font-size: 10px\">olete</span> liitunud"
-
-#: ../web_tt2/list_menu.tt2:21
-msgid ""
-"You <span style=\"font-weight: bold; font-size: 10px\">are not</span> "
-"subscribed"
-msgstr ""
-"Te <span style=\"font-weight: bold; font-size: 10px\">ei ole</span> tellija"
-
-#. (k.name)
-#: ../web_tt2/edit_attributes.tt2:7
-msgid "%1:"
-msgstr "%1:"
-
-#: ../web_tt2/stats.tt2:6
-msgid "This page displays overall informations regarding the list activity"
-msgstr "Sellel lehel kuvatakse üldist infot listi aktiivsusest"
-
-#: ../web_tt2/stats.tt2:47
-msgid "No operation recorded in this field yet."
-msgstr "Sellel väljal ei ole veel ühtegi salvestist."
-
-#. (listname,max_number_of_subscribers)
-#: ../mail_tt2/listmaster_notification.tt2:153
-msgid ""
-"Sympa could not include subscribers to list %1 because the maximum number of "
-"users was reached for this list. This limit is defined to %2."
-msgstr ""
-"Sympa ei saanud lisada liitujat listi %1 tellijate piirarvu ületamise tõttu. "
-"Limiit on %2."
-
-#: ../src/sympa_wizard.pl.in:249
-msgid "%s [%s] : "
-msgstr "%s [%s] : "
-
-#: ../src/sympa_wizard.pl.in:271
-msgid "Incorrect parameter definition: %s\n"
-msgstr "Vigane parameetri väärtus: %s\n"
-
-#: ../src/sympa_wizard.pl.in:337
-msgid ""
-"%s and %s have been updated.\n"
-"Previous versions have been saved as %s and %s.\n"
-msgstr ""
-"%s ja %s on uuendatud.\n"
-"Eelmised versioonid salvestati kui %s ja %s.\n"
-
-#: ../src/lib/confdef.pm:48
-msgid "Main robot hostname"
-msgstr "Põhiserveri nimi"
-
-#: ../src/lib/confdef.pm:61
-msgid "Effective address will be [EMAIL]@[HOST]"
-msgstr "Aadressiks saab olema [EMAIL]@[HOST]"
-
 #: ../src/lib/confdef.pm:66
 msgid "Gecos for service mail sent by Sympa itself"
 msgstr ""
-
-#: ../src/lib/confdef.pm:76
-msgid "Listmasters email list comma separated"
-msgstr "Listiülemate komaga eraldatud loetelu"
-
-#: ../src/lib/confdef.pm:80
-msgid ""
-"Sympa will associate listmaster privileges to these email addresses (mail "
-"and web interfaces). Some error reports may also be sent to these addresses."
-msgstr ""
-"Sympa seostab antud e-posti aadressidega listiülema õigused (maili- ja "
-"veebiliides). Mõned veateated saadetakse ka nendel aadressidel."
-
-#: ../src/lib/confdef.pm:324
-msgid ""
-"Directory for storing static contents (CSS, members pictures, documentation) "
-"directly delivered by Apache"
-msgstr ""
-"Staatilise sisu (CSS, pildid, abitekstid) kaust avaldatakse Apache poolt "
-"otse."
-
-#: ../src/lib/confdef.pm:332
-msgid "URL mapped with the static_content_path directory defined above"
-msgstr "Üleval kirjeldatud kaustale static_content_path vastav URL"
-
-#: ../src/lib/confdef.pm:349
-msgid "Secret used by Sympa to make MD5 fingerprint in web cookies secure"
-msgstr ""
-"Sympa küpsiste turvalisuse tõstmiseks kasutatava MD5 sõrmejälgede slasõna"
-
-#: ../src/lib/confdef.pm:1338 ../src/lib/confdef.pm:351
-msgid "Should not be changed ! May invalid all user password"
-msgstr "Ei tohiks muuta! Võib vigaseks muuta kõigi kasutajate paroolid"
-
-#: ../src/lib/confdef.pm:361
-msgid ""
-"This parameter is a scenario, check sympa documentation about scenarios if "
-"you want to define one"
-msgstr ""
-"See on scenario, lugege abimaterjale scenariote kasutamise kohta kui tahate "
-"seda kasutada"
 
 #: ../src/lib/confdef.pm:389
 msgid ""
@@ -10347,6 +10247,90 @@ msgstr ""
 #: ../src/lib/confdef.pm:260
 msgid "Log intensity"
 msgstr ""
+
+#~ msgid ""
+#~ "You <span style=\"font-weight: bold; font-size: 10px\">are</span> "
+#~ "subscribed"
+#~ msgstr ""
+#~ "Te <span style=\"font-weight: bold; font-size: 10px\">olete</span> "
+#~ "liitunud"
+
+#~ msgid ""
+#~ "You <span style=\"font-weight: bold; font-size: 10px\">are not</span> "
+#~ "subscribed"
+#~ msgstr ""
+#~ "Te <span style=\"font-weight: bold; font-size: 10px\">ei ole</span> "
+#~ "tellija"
+
+#~ msgid "%1:"
+#~ msgstr "%1:"
+
+#~ msgid "This page displays overall informations regarding the list activity"
+#~ msgstr "Sellel lehel kuvatakse üldist infot listi aktiivsusest"
+
+#~ msgid "No operation recorded in this field yet."
+#~ msgstr "Sellel väljal ei ole veel ühtegi salvestist."
+
+#~ msgid ""
+#~ "Sympa could not include subscribers to list %1 because the maximum number "
+#~ "of users was reached for this list. This limit is defined to %2."
+#~ msgstr ""
+#~ "Sympa ei saanud lisada liitujat listi %1 tellijate piirarvu ületamise "
+#~ "tõttu. Limiit on %2."
+
+#~ msgid "%s [%s] : "
+#~ msgstr "%s [%s] : "
+
+#~ msgid "Incorrect parameter definition: %s\n"
+#~ msgstr "Vigane parameetri väärtus: %s\n"
+
+#~ msgid ""
+#~ "%s and %s have been updated.\n"
+#~ "Previous versions have been saved as %s and %s.\n"
+#~ msgstr ""
+#~ "%s ja %s on uuendatud.\n"
+#~ "Eelmised versioonid salvestati kui %s ja %s.\n"
+
+#~ msgid "Main robot hostname"
+#~ msgstr "Põhiserveri nimi"
+
+#~ msgid "Effective address will be [EMAIL]@[HOST]"
+#~ msgstr "Aadressiks saab olema [EMAIL]@[HOST]"
+
+#~ msgid "Listmasters email list comma separated"
+#~ msgstr "Listiülemate komaga eraldatud loetelu"
+
+#~ msgid ""
+#~ "Sympa will associate listmaster privileges to these email addresses (mail "
+#~ "and web interfaces). Some error reports may also be sent to these "
+#~ "addresses."
+#~ msgstr ""
+#~ "Sympa seostab antud e-posti aadressidega listiülema õigused (maili- ja "
+#~ "veebiliides). Mõned veateated saadetakse ka nendel aadressidel."
+
+#~ msgid ""
+#~ "Directory for storing static contents (CSS, members pictures, "
+#~ "documentation) directly delivered by Apache"
+#~ msgstr ""
+#~ "Staatilise sisu (CSS, pildid, abitekstid) kaust avaldatakse Apache poolt "
+#~ "otse."
+
+#~ msgid "URL mapped with the static_content_path directory defined above"
+#~ msgstr "Üleval kirjeldatud kaustale static_content_path vastav URL"
+
+#~ msgid "Secret used by Sympa to make MD5 fingerprint in web cookies secure"
+#~ msgstr ""
+#~ "Sympa küpsiste turvalisuse tõstmiseks kasutatava MD5 sõrmejälgede slasõna"
+
+#~ msgid "Should not be changed ! May invalid all user password"
+#~ msgstr "Ei tohiks muuta! Võib vigaseks muuta kõigi kasutajate paroolid"
+
+#~ msgid ""
+#~ "This parameter is a scenario, check sympa documentation about scenarios "
+#~ "if you want to define one"
+#~ msgstr ""
+#~ "See on scenario, lugege abimaterjale scenariote kasutamise kohta kui "
+#~ "tahate seda kasutada"
 
 #~ msgid "Statistics"
 #~ msgstr "Statistika"
