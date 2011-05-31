@@ -1,13 +1,13 @@
 msgid ""
 msgstr ""
 "POT-Creation-Date: 2002-07-16 17:27+0800\n"
-"PO-Revision-Date: 2011-05-26 15:45+0200\n"
-"Last-Translator: David Verdin <david.verdin@cru.fr>\n"
+"PO-Revision-Date: 2011-05-29 12:22+0200\n"
+"Last-Translator: dgeo <dgeo@centrale-marseille.fr>\n"
 "Language-Team: Français\n"
+"Language: fr\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Language: fr\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
 "X-Generator: Pootle 2.1.2\n"
 "Projct-Id-Version: fr\n"
@@ -9889,60 +9889,71 @@ msgid ""
 "Sympa GUI. Don't select a language if you don't have the proper locale "
 "packages installed."
 msgstr ""
+"Ceci est la liste des langages qui sera proposée à vos utilisateurs pour la "
+"GUI de Sympa. Ne sélectionnez pas un langage si vous n'avez pas la locale "
+"d'installée"
 
 #: ../src/lib/confdef.pm:791
 msgid "Default language (one of supported languages)"
-msgstr ""
+msgstr "Langue par défault (une des langues supportées)"
 
 #: ../src/lib/confdef.pm:795
 msgid "This is the default language used by Sympa"
-msgstr ""
+msgstr "Ceci est la langue par défaut utilisée par Sympa"
 
 #: ../src/lib/confdef.pm:812
 msgid "Welcome message return-path ( unique | owner )"
-msgstr ""
+msgstr "Adresse de retour du message de bienvenue ( unique | propriétaire )"
 
 #: ../src/lib/confdef.pm:814
 msgid "If set to unique, new subcriber is removed if welcome message bounce"
 msgstr ""
+"Si réglé sur unique, le nouvel inscrit est supprimé si le message de "
+"bienvenue revient"
 
 #: ../src/lib/confdef.pm:819
 msgid "Remind message return-path ( unique | owner )"
-msgstr ""
+msgstr "Adresse de retour des rappels (unique | propriétaire )"
 
 #: ../src/lib/confdef.pm:821
 msgid ""
 "If set to unique, subcriber is removed if remind message bounce, use with "
 "care"
 msgstr ""
+"Si réglé sur unique, l'abonné est supprimé si le message de rappel revient "
+"en erreur"
 
 #: ../src/lib/confdef.pm:830
 msgid "Task name for expiration of old bounces"
-msgstr ""
+msgstr "Nom de la tâche pour l'expiration des anciens rebonds"
 
 #: ../src/lib/confdef.pm:874
 msgid "Bouncing email rate for warn list owner"
-msgstr ""
+msgstr "Taux d'erreurs avant de prévenir le propriétaire"
 
 #: ../src/lib/confdef.pm:881
 msgid "Bouncing email rate for halt the list (not implemented)"
-msgstr ""
+msgstr "Taux d'erreurs avant d'arrêter la liste (pas implémenté)"
 
 #: ../src/lib/confdef.pm:883
 msgid "Not yet used in current version, Default is 50"
-msgstr ""
+msgstr "Pas encore utilisé dans cette version, par défaut à 50."
 
 #: ../src/lib/confdef.pm:903
 msgid ""
 "Use of binary version of the list config structure on disk (none | "
 "binary_file)"
 msgstr ""
+"Utilisation de la version binaire de la liste de configuration de la "
+"structure sur le disque (non | fichier_binaire)"
 
 #: ../src/lib/confdef.pm:906
 msgid ""
 "Set this parameter to \"binary_file\" if you manage a big amount of lists "
 "(1000+); it should make the web interface startup faster"
 msgstr ""
+"Mettre ce paramètre à \"binary_file\" si vous gérez une grande quantité de "
+"listes (1 000+); ça devrait accélérer le démarrage de l'interface web"
 
 #: ../src/lib/confdef.pm:911
 msgid "flock | nfs"
@@ -9950,37 +9961,39 @@ msgstr ""
 
 #: ../src/lib/confdef.pm:915
 msgid "Sympa commands priority"
-msgstr ""
+msgstr "Priorité des commandes Sympa"
 
 #: ../src/lib/confdef.pm:945
 msgid "Type of the database (mysql|Pg|Oracle|Sybase|SQLite)"
-msgstr ""
+msgstr "Type de la base de données (mysql|Pg|Oracle|Sybase|SQLite)"
 
 #: ../src/lib/confdef.pm:948
 msgid "Be careful to the case"
-msgstr ""
+msgstr "Attention à la case"
 
 #: ../src/lib/confdef.pm:956
 msgid "With SQLite, the name of the DB corresponds to the DB file"
-msgstr ""
+msgstr "Avec SQLite, le nom de la BDD correspond au fichier de la BDD"
 
 #: ../src/lib/confdef.pm:962
 msgid "Hostname of the database server"
-msgstr ""
+msgstr "Nom du serveur de la base de données"
 
 #: ../src/lib/confdef.pm:969
 msgid "Port of the database server"
-msgstr ""
+msgstr "Port du serveur de la base de données"
 
 #: ../src/lib/confdef.pm:988
 msgid ""
 "What ever you use a password or not, you must protect the SQL server (is it "
 "not a public internet service ?)"
 msgstr ""
+"Que vous utilisiez un mot de passe ou non, vous devez protéger le serveur "
+"SQL (qui n'est pas un service internet ?)"
 
 #: ../src/lib/confdef.pm:1002
 msgid "This is useful for defining ORACLE_HOME "
-msgstr ""
+msgstr "C'est utile pour définir ORACLE_HOME"
 
 #: ../src/lib/confdef.pm:1008
 msgid "Database private extention to subscriber table"
@@ -9988,7 +10001,7 @@ msgstr ""
 
 #: ../src/lib/confdef.pm:1010 ../src/lib/confdef.pm:1018
 msgid "You need to extend the database format with these fields"
-msgstr ""
+msgstr "Vous devez ajouter ces champs à la base de données"
 
 #: ../src/lib/confdef.pm:1016
 msgid "Database private extention to user table"
@@ -9996,7 +10009,7 @@ msgstr ""
 
 #: ../src/lib/confdef.pm:1035
 msgid "Number of months that elapse before a log is expired"
-msgstr ""
+msgstr "Nombre de mois avant expiration de la journalisation"
 
 #: ../src/lib/confdef.pm:1057
 msgid ""
@@ -10012,27 +10025,27 @@ msgstr ""
 
 #: ../src/lib/confdef.pm:1074
 msgid "Loop prevention"
-msgstr ""
+msgstr "Protection contre les boucles"
 
 #: ../src/lib/confdef.pm:1107
 msgid "Path to OpenSSL"
-msgstr ""
+msgstr "Chemin vers OpenSSL"
 
 #: ../src/lib/confdef.pm:1110
 msgid "Sympa recognizes S/MIME if OpenSSL is installed"
-msgstr ""
+msgstr "Sympa reconnaît le S/MIME si OpenSSL est installé"
 
 #: ../src/lib/confdef.pm:1117
 msgid "Directory containing trusted CA certificates"
-msgstr ""
+msgstr "Repertoire contenant les AC de confiance"
 
 #: ../src/lib/confdef.pm:1125
 msgid "File containing bundled trusted CA certificates"
-msgstr ""
+msgstr "Fichier contenant les AC de confiance"
 
 #: ../src/lib/confdef.pm:1133
 msgid "Password used to crypt lists private keys"
-msgstr ""
+msgstr "Mot de passe utilisé pour chiffrer les clés privées des listes"
 
 #: ../src/lib/confdef.pm:1157
 msgid ""
@@ -10042,10 +10055,16 @@ msgid ""
 "\"smime_authenticated_messages\", \"dkim_authenticated_messages\", "
 "\"editor_validated_messages\"."
 msgstr ""
+"Type de mesage pour lesquels une signature DKIM est apposée avant "
+"distribution aux abonnés. Valeurs possibles: \"none\"(aucun), \"any\"(tous), ou "
+"une liste des mots-clés suivants: \"md5_authenticated_messages\"(messages "
+"authentifiés par MD5), \"smime_authenticated_messages\", "
+"\"dkim_authenticated_messages\",\"editor_validated_messages\"(authentifiés par "
+"un modérateur)."
 
 #: ../src/lib/confdef.pm:1164
 msgid "Location of the file where DKIM private key is stored"
-msgstr ""
+msgstr "Chemin de stockage des clés privées DKIM"
 
 #: ../src/lib/confdef.pm:1171
 msgid ""
@@ -10061,14 +10080,17 @@ msgid "Antivirus plug-in"
 msgstr ""
 
 #: ../src/lib/confdef.pm:1203
+#, fuzzy
 msgid "Path to the antivirus scanner engine"
-msgstr ""
+msgstr "Chemin vers le moteur antivirus."
 
 #: ../src/lib/confdef.pm:1206
 msgid ""
 "supported antivirus: McAfee/uvscan, Fsecure/fsav, Sophos, AVP and Trend "
 "Micro/VirusWall"
 msgstr ""
+"Antivirus supportés: McAfee/uvscan, Fsecure/fsav, Sophos, AVP and Trend "
+"Micro/VirusWall"
 
 #: ../src/lib/confdef.pm:1212
 msgid "Antivirus plugin command argument"
@@ -10083,19 +10105,25 @@ msgid ""
 "If a spam filter (like spamassassin or j-chkmail) add a smtp headers to tag "
 "spams, name of this header (example X-Spam-Status)"
 msgstr ""
+"Si l'anti-spam (comme spamassassin ou j-chkmail) place une entête smtp pour "
+"identifier les indésirables, nom de cet entête (exemple: X-Spam-Status)"
 
 #: ../src/lib/confdef.pm:1239
 msgid "Regexp applied on this header to verify message is a spam (example Yes)"
 msgstr ""
+"Expression rationelle appliquée sur cet entête pour identifier le message "
+"comme indésirable (exemple: Yes)"
 
 #: ../src/lib/confdef.pm:1247
 msgid ""
 "Regexp applied on this header to verify message is NOT a spam (example No)"
 msgstr ""
+"Expression rationelle appliquée sur cet entête pour identifier le message "
+"comme ACCEPTABLE (exemple: No)"
 
 #: ../src/lib/confdef.pm:1258
 msgid "Directory for storing HTML archives"
-msgstr ""
+msgstr "Répertoire de stockage des archives HTML"
 
 #: ../src/lib/confdef.pm:1261 ../src/lib/confdef.pm:1281
 msgid "Better if not in a critical partition"
@@ -10106,26 +10134,28 @@ msgid ""
 "Default index organization when entering the web archive: either threaded or "
 "in chronological order"
 msgstr ""
+"Ordre d'affichage par défaut des archives web: par discussion (threaded) ou "
+"ordre chronologique (chronological)"
 
 #: ../src/lib/confdef.pm:1273
 msgid "File containing archived PID while running"
-msgstr ""
+msgstr "Fichier contenant le PID du démon archived quand il est lancé"
 
 #: ../src/lib/confdef.pm:1279
 msgid "Directory for storing bounces"
-msgstr ""
+msgstr "Répertoire de stockage des retours en erreur"
 
 #: ../src/lib/confdef.pm:1286
 msgid "File containing bounced PID while running"
-msgstr ""
+msgstr "Fichier contenant le PID du démon bounced quand il est lancé"
 
 #: ../src/lib/confdef.pm:1292
 msgid "HTTP cookies lifetime"
-msgstr ""
+msgstr "Durée de vie des cookies HTTP"
 
 #: ../src/lib/confdef.pm:1298
 msgid "HTTP cookies validity domain"
-msgstr ""
+msgstr "Domaine pour lequel les cookies HTTP sont valides"
 
 #: ../src/lib/confdef.pm:1305
 msgid ""
@@ -10133,10 +10163,12 @@ msgid ""
 "parameter is the absolute path on the file system to the script of the "
 "custom archiver."
 msgstr ""
+"Active un archiveur différent de MHonArc. La valeur de ce paramètre est le "
+"chemin absolu du script à utiliser."
 
 #: ../src/lib/confdef.pm:1312
 msgid "Type of main Web page ( lists | home )"
-msgstr ""
+msgstr "Type de page d'accueil ( \"lists\"(listes) | \"home\"(page d'accueil) )"
 
 #: ../src/lib/confdef.pm:1320
 msgid "Syslog facility for wwsympa, archived and bounced"
@@ -10152,45 +10184,51 @@ msgstr ""
 
 #: ../src/lib/confdef.pm:1331
 msgid "This is required for HTML mail archiving"
-msgstr ""
+msgstr "Requis pour l'archivage HTML des messages"
 
 #: ../src/lib/confdef.pm:1336
 msgid "Password case (insensitive | sensitive)"
 msgstr ""
+"Sensibilité à la casse des mots de passe ( \"insensitive\"(non) | "
+"\"sensitive\"(oui) )"
 
 #: ../src/lib/confdef.pm:1343
 msgid "Title of main Web page"
-msgstr ""
+msgstr "Titre de la page d'accueil"
 
 #: ../src/lib/confdef.pm:1351
 msgid "Is fast_cgi module for Apache (or Roxen) installed (0 | 1)"
 msgstr ""
+"Est-ce-que le module fast_cgi d'Apache (ou Roxen) est installé ( 0 | 1 )"
 
 #: ../src/lib/confdef.pm:1354
 msgid "This module provide much faster web interface"
-msgstr ""
+msgstr "Ce module fournit une interface beaucoup plus rapide"
 
 #: ../src/lib/confdef.pm:1357
 msgid "Virtual host specific parameters"
-msgstr ""
+msgstr "Paramètres spécifiques à l'Hôte Virtuel (VirtualHost)"
 
 #: ../src/lib/confdef.pm:1361
 msgid "URL of a virtual host"
-msgstr ""
+msgstr "URL d'un hôte virtuel"
 
 #: ../src/lib/confdef.pm:1392
 msgid "Default limit for the number of subscribers per list (0 means no limit)"
 msgstr ""
+"Limite par défaut du nombre d'abonnés par liste (0 signifie aucune limite)"
 
 #: ../src/lib/confdef.pm:1412
 msgid ""
 "If set to \"on\", users will be able to post messages in HTML using a "
 "javascript WYSIWYG editor."
 msgstr ""
+"Si ce paramètre est à \"on\", les utilisateurs auront accès à un éditeur riche "
+"en javascript (WYSIWYG) pour poster des messages HTML"
 
 #: ../src/lib/confdef.pm:1420
 msgid "Path to the javascript file making the WYSIWYG HTML editor available"
-msgstr ""
+msgstr "Chemin du fichier javascript donnant accès à l'éditeur riche"
 
 #: ../src/lib/confdef.pm:1427
 msgid "Javascript excerpt that enables and configures the WYSIWYG HTML editor."
@@ -10203,21 +10241,30 @@ msgid ""
 "be used to authenticate the user. Otherwise, use of the first email returned "
 "by the LDAP server will be used."
 msgstr ""
+"Avec une authentification LDAP, si l'identifiant fourni par l'utilisateur "
+"est un email valide et que ce paramètre est à \"false\", l'adresse fournie "
+"sera utilisée pour l'authentiification. Sinon (\"true\"), la première adresse "
+"retourné par le serveur LDAP sera utilisé."
 
 #: ../src/lib/confdef.pm:1466
 msgid "If set to \"on\", enables support of legacy character set"
-msgstr ""
+msgstr "Si \"on\", active le support des anciennes tables de caractères"
 
 #: ../src/lib/confdef.pm:1468
 msgid ""
 "In some language environments, legacy encoding (character set) is preferred "
 "for e-mail messages: for example iso-2022-jp in Japanese language."
 msgstr ""
+"Pour certaines langues, les anciennes tables de caractères sont préférables "
+"pour encoder les messages: par exemple iso-2022-jp pour le japonais"
 
 #: ../src/lib/confdef.pm:1507
+#, fuzzy
 msgid ""
 "Default number of lines of the array displaying users in the review page"
 msgstr ""
+"Nombre de lignes à afficher par défaut pour le tableau des utilisateurs dans "
+"la page \"review\""
 
 #: ../src/lib/confdef.pm:1519
 msgid ""

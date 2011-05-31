@@ -7,13 +7,13 @@ msgid ""
 msgstr ""
 "Project-Id-Version: 2.0\n"
 "POT-Creation-Date: 2002-07-16 17:27+0800\n"
-"PO-Revision-Date: 2011-01-21 19:27+0200\n"
+"PO-Revision-Date: 2011-05-27 13:20+0200\n"
 "Last-Translator: Urmas <urmas@tamme.tartu.ee>\n"
 "Language-Team: Estonian <et@li.org>\n"
+"Language: et\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Language: et\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "X-Generator: Pootle 2.1.2\n"
 "X-Poedit-SourceCharset: utf-8\n"
@@ -1984,7 +1984,7 @@ msgstr ""
 #. (s_err.action)
 #: ../web_tt2/error.tt2:34
 msgid "SYSTEM ERROR (%1)"
-msgstr "SÜSTEEMI VIGA (%1)"
+msgstr "SÜSTEEMNE VIGA (%1)"
 
 #. (u_err.action)
 #: ../web_tt2/error.tt2:43
@@ -2740,7 +2740,7 @@ msgstr "salasõnal:"
 
 #: ../web_tt2/loginbanner.tt2:43
 msgid "Login"
-msgstr "Sisse logimine"
+msgstr "Login sisse"
 
 # nlsref 6,15
 #: ../web_tt2/loginbanner.tt2:51
@@ -3877,7 +3877,7 @@ msgstr "Taasloo kõik arhiivid"
 
 #: ../web_tt2/serveradmin.tt2:115
 msgid "  May take a lot of CPU time,  be careful!"
-msgstr "  Ettevaatust, võib tekitada suurt koormust serveri protsessorile!"
+msgstr " Ettevaatust, võib tekitada suurt koormust serveri protsessorile!"
 
 #: ../web_tt2/serveradmin.tt2:125
 msgid ""
@@ -4455,13 +4455,12 @@ msgstr "Saada mulle parooli kinnitus"
 
 #. (init_email)
 #: ../web_tt2/sso_login.tt2:32
-#, fuzzy
 msgid ""
 "A confirmation password has been sent to your email address %1.<br />Please "
 "check your e-mail box for the message containing the confirmation link."
 msgstr ""
 "Teie kinnitusparool saadeti aadressile %1.<br />Palun kontrollige oma "
-"kirjakasti kuna sa vajad kinnitusparooli allpool."
+"kirjakasti, et leida kinnituskiri."
 
 # nlsref 16,70
 #: ../web_tt2/stats.tt2:2
@@ -4879,9 +4878,8 @@ msgstr "Muud sündmused"
 
 # nlsref 15,7
 #: ../web_tt2/viewmod.tt2:17
-#, fuzzy
 msgid "Default rejection message"
-msgstr "kiri toimetaja keeldumisest"
+msgstr "Vaikimisi keeldumisteade"
 
 #: ../web_tt2/viewmod.tt2:18
 msgid "Do Not Notify"
@@ -7538,7 +7536,6 @@ msgid "Help on Sympa: %1%2"
 msgstr "Abi Sympa kohta: %1%2"
 
 #: ../mail_tt2/sendssopasswd.tt2:6
-#, fuzzy
 msgid ""
 "To complete your account setup actions you need to confirm that you have \n"
 "supplied a working email address.  Please follow the link below to complete "
@@ -7546,7 +7543,7 @@ msgid ""
 msgstr ""
 "Kasutajakonto tegemise lõpetamiseks peate kinnitama, et sisestasite töötava "
 "e-posti aadressi.\n"
-"Palun sisestage e-posti aadress ja salasõna seadistuse visardisse."
+"Palun kliksige allolevale lingile."
 
 #. (list.name)
 #: ../mail_tt2/stats_report.tt2:4
@@ -8084,7 +8081,7 @@ msgstr "vajalik autentimine ning omaniku luba"
 #: ../src/etc/scenari/subscribe.auth_ownerdkim:1
 msgid ""
 "requires authentication unless DKIM signature is OK, then owner approval"
-msgstr "nõuab audentimist, kui  DKIM allkiri ei sobi, ja omaniku heakskiitu"
+msgstr "nõuab audentimist, kui DKIM allkiri ei sobi, ja omaniku heakskiitu"
 
 #: ../src/etc/scenari/subscribe.closed:1
 msgid "subscribe is impossible"
@@ -9649,25 +9646,27 @@ msgstr "teile ei tule enda saadetud kirju"
 msgid ""
 "You <span style=\"font-weight: bold; font-size: 10px\">are</span> subscribed"
 msgstr ""
+"Te <span style=\"font-weight: bold; font-size: 10px\">olete</span> liitunud"
 
 #: ../web_tt2/list_menu.tt2:21
 msgid ""
 "You <span style=\"font-weight: bold; font-size: 10px\">are not</span> "
 "subscribed"
 msgstr ""
+"Te <span style=\"font-weight: bold; font-size: 10px\">ei ole</span> tellija"
 
 #. (k.name)
 #: ../web_tt2/edit_attributes.tt2:7
 msgid "%1:"
-msgstr ""
+msgstr "%1:"
 
 #: ../web_tt2/stats.tt2:6
 msgid "This page displays overall informations regarding the list activity"
-msgstr ""
+msgstr "Sellel lehel kuvatakse üldist infot listi aktiivsusest"
 
 #: ../web_tt2/stats.tt2:47
 msgid "No operation recorded in this field yet."
-msgstr ""
+msgstr "Sellel väljal ei ole veel ühtegi salvestist."
 
 #. (listname,max_number_of_subscribers)
 #: ../mail_tt2/listmaster_notification.tt2:153
@@ -9675,28 +9674,32 @@ msgid ""
 "Sympa could not include subscribers to list %1 because the maximum number of "
 "users was reached for this list. This limit is defined to %2."
 msgstr ""
+"Sympa ei saanud lisada liitujat listi %1 tellijate piirarvu ületamise tõttu. "
+"Limiit on %2."
 
 #: ../src/sympa_wizard.pl.in:249
 msgid "%s [%s] : "
-msgstr ""
+msgstr "%s [%s] : "
 
 #: ../src/sympa_wizard.pl.in:271
 msgid "Incorrect parameter definition: %s\n"
-msgstr ""
+msgstr "Vigane parameetri väärtus: %s\n"
 
 #: ../src/sympa_wizard.pl.in:337
 msgid ""
 "%s and %s have been updated.\n"
 "Previous versions have been saved as %s and %s.\n"
 msgstr ""
+"%s ja %s on uuendatud.\n"
+"Eelmised versioonid salvestati kui %s ja %s.\n"
 
 #: ../src/lib/confdef.pm:48
 msgid "Main robot hostname"
-msgstr ""
+msgstr "Põhiserveri nimi"
 
 #: ../src/lib/confdef.pm:61
 msgid "Effective address will be [EMAIL]@[HOST]"
-msgstr ""
+msgstr "Aadressiks saab olema [EMAIL]@[HOST]"
 
 #: ../src/lib/confdef.pm:66
 msgid "Gecos for service mail sent by Sympa itself"
@@ -9704,37 +9707,44 @@ msgstr ""
 
 #: ../src/lib/confdef.pm:76
 msgid "Listmasters email list comma separated"
-msgstr ""
+msgstr "Listiülemate komaga eraldatud loetelu"
 
 #: ../src/lib/confdef.pm:80
 msgid ""
 "Sympa will associate listmaster privileges to these email addresses (mail "
 "and web interfaces). Some error reports may also be sent to these addresses."
 msgstr ""
+"Sympa seostab antud e-posti aadressidega listiülema õigused (maili- ja "
+"veebiliides). Mõned veateated saadetakse ka nendel aadressidel."
 
 #: ../src/lib/confdef.pm:324
 msgid ""
 "Directory for storing static contents (CSS, members pictures, documentation) "
 "directly delivered by Apache"
 msgstr ""
+"Staatilise sisu (CSS, pildid, abitekstid) kaust avaldatakse Apache poolt "
+"otse."
 
 #: ../src/lib/confdef.pm:332
 msgid "URL mapped with the static_content_path directory defined above"
-msgstr ""
+msgstr "Üleval kirjeldatud kaustale static_content_path vastav URL"
 
 #: ../src/lib/confdef.pm:349
 msgid "Secret used by Sympa to make MD5 fingerprint in web cookies secure"
 msgstr ""
+"Sympa küpsiste turvalisuse tõstmiseks kasutatava MD5 sõrmejälgede slasõna"
 
 #: ../src/lib/confdef.pm:1338 ../src/lib/confdef.pm:351
 msgid "Should not be changed ! May invalid all user password"
-msgstr ""
+msgstr "Ei tohiks muuta! Võib vigaseks muuta kõigi kasutajate paroolid"
 
 #: ../src/lib/confdef.pm:361
 msgid ""
 "This parameter is a scenario, check sympa documentation about scenarios if "
 "you want to define one"
 msgstr ""
+"See on scenario, lugege abimaterjale scenariote kasutamise kohta kui tahate "
+"seda kasutada"
 
 #: ../src/lib/confdef.pm:389
 msgid ""
