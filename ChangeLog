@@ -1,4 +1,366 @@
 ------------------------------------------------------------------------
+r7114 | sympa-authors | 2011-06-06 09:28:17 +0200 (lun 06 jun 2011) | 1 ligne
+Chemins modifiés :
+   M /branches/sympa-6.1-branch/po/fr.po
+   M /branches/sympa-6.1-branch/po-wwsympa/fr.po
+
+[-feature]Committing updated catalogues from Pootle
+------------------------------------------------------------------------
+r7113 | sympa-authors | 2011-06-06 09:18:33 +0200 (lun 06 jun 2011) | 1 ligne
+Chemins modifiés :
+   M /branches/sympa-6.1-branch/po/fr.po
+   M /branches/sympa-6.1-branch/po-wwsympa/fr.po
+
+[-feature]Committing latest translations from Pootle
+------------------------------------------------------------------------
+r7112 | sympa-authors | 2011-06-06 09:02:43 +0200 (lun 06 jun 2011) | 1 ligne
+Chemins modifiés :
+   M /branches/sympa-6.1-branch/po/ar.po
+   M /branches/sympa-6.1-branch/po/bg.po
+   M /branches/sympa-6.1-branch/po/br.po
+   M /branches/sympa-6.1-branch/po/ca.po
+   M /branches/sympa-6.1-branch/po/cs.po
+   M /branches/sympa-6.1-branch/po/de.po
+   M /branches/sympa-6.1-branch/po/el.po
+   M /branches/sympa-6.1-branch/po/en_US.po
+   M /branches/sympa-6.1-branch/po/es.po
+   M /branches/sympa-6.1-branch/po/et.po
+   M /branches/sympa-6.1-branch/po/eu.po
+   M /branches/sympa-6.1-branch/po/fi.po
+   M /branches/sympa-6.1-branch/po/fr.po
+   M /branches/sympa-6.1-branch/po/hu.po
+   M /branches/sympa-6.1-branch/po/id.po
+   M /branches/sympa-6.1-branch/po/it.po
+   M /branches/sympa-6.1-branch/po/ja.po
+   M /branches/sympa-6.1-branch/po/ko.po
+   M /branches/sympa-6.1-branch/po/la.po
+   M /branches/sympa-6.1-branch/po/ml.po
+   M /branches/sympa-6.1-branch/po/nb_NO.po
+   M /branches/sympa-6.1-branch/po/nl.po
+   M /branches/sympa-6.1-branch/po/oc.po
+   M /branches/sympa-6.1-branch/po/pl.po
+   M /branches/sympa-6.1-branch/po/pt.po
+   M /branches/sympa-6.1-branch/po/pt_BR.po
+   M /branches/sympa-6.1-branch/po/ro.po
+   M /branches/sympa-6.1-branch/po/ru.po
+   M /branches/sympa-6.1-branch/po/sv.po
+   M /branches/sympa-6.1-branch/po/tr.po
+   M /branches/sympa-6.1-branch/po/vi.po
+   M /branches/sympa-6.1-branch/po/zh_CN.po
+   M /branches/sympa-6.1-branch/po/zh_TW.po
+   M /branches/sympa-6.1-branch/po-wwsympa/ar.po
+   M /branches/sympa-6.1-branch/po-wwsympa/bg.po
+   M /branches/sympa-6.1-branch/po-wwsympa/br.po
+   M /branches/sympa-6.1-branch/po-wwsympa/cs.po
+   M /branches/sympa-6.1-branch/po-wwsympa/de.po
+   M /branches/sympa-6.1-branch/po-wwsympa/el.po
+   M /branches/sympa-6.1-branch/po-wwsympa/en_US.po
+   M /branches/sympa-6.1-branch/po-wwsympa/es.po
+   M /branches/sympa-6.1-branch/po-wwsympa/et.po
+   M /branches/sympa-6.1-branch/po-wwsympa/eu.po
+   M /branches/sympa-6.1-branch/po-wwsympa/fi.po
+   M /branches/sympa-6.1-branch/po-wwsympa/fr.po
+   M /branches/sympa-6.1-branch/po-wwsympa/hu.po
+   M /branches/sympa-6.1-branch/po-wwsympa/id.po
+   M /branches/sympa-6.1-branch/po-wwsympa/it.po
+   M /branches/sympa-6.1-branch/po-wwsympa/ja.po
+   M /branches/sympa-6.1-branch/po-wwsympa/nb_NO.po
+   M /branches/sympa-6.1-branch/po-wwsympa/nl.po
+   M /branches/sympa-6.1-branch/po-wwsympa/oc.po
+   M /branches/sympa-6.1-branch/po-wwsympa/pl.po
+   M /branches/sympa-6.1-branch/po-wwsympa/pt.po
+   M /branches/sympa-6.1-branch/po-wwsympa/pt_BR.po
+   M /branches/sympa-6.1-branch/po-wwsympa/ro.po
+   M /branches/sympa-6.1-branch/po-wwsympa/ru.po
+   M /branches/sympa-6.1-branch/po-wwsympa/sv.po
+   M /branches/sympa-6.1-branch/po-wwsympa/tr.po
+   M /branches/sympa-6.1-branch/po-wwsympa/vi.po
+   M /branches/sympa-6.1-branch/po-wwsympa/zh_CN.po
+
+[-feature]Committing updated catalogues from Pootle
+------------------------------------------------------------------------
+r7111 | sympa-authors | 2011-06-06 08:52:37 +0200 (lun 06 jun 2011) | 1 ligne
+Chemins modifiés :
+   M /branches/sympa-6.1-branch/po/ar.po
+   M /branches/sympa-6.1-branch/po/bg.po
+   M /branches/sympa-6.1-branch/po/br.po
+   M /branches/sympa-6.1-branch/po/ca.po
+   M /branches/sympa-6.1-branch/po/cs.po
+   M /branches/sympa-6.1-branch/po/de.po
+   M /branches/sympa-6.1-branch/po/el.po
+   M /branches/sympa-6.1-branch/po/en_US.po
+   M /branches/sympa-6.1-branch/po/es.po
+   M /branches/sympa-6.1-branch/po/et.po
+   M /branches/sympa-6.1-branch/po/eu.po
+   M /branches/sympa-6.1-branch/po/fi.po
+   M /branches/sympa-6.1-branch/po/fr.po
+   M /branches/sympa-6.1-branch/po/hu.po
+   M /branches/sympa-6.1-branch/po/id.po
+   M /branches/sympa-6.1-branch/po/it.po
+   M /branches/sympa-6.1-branch/po/ja.po
+   M /branches/sympa-6.1-branch/po/ko.po
+   M /branches/sympa-6.1-branch/po/la.po
+   M /branches/sympa-6.1-branch/po/ml.po
+   M /branches/sympa-6.1-branch/po/nb_NO.po
+   M /branches/sympa-6.1-branch/po/nl.po
+   M /branches/sympa-6.1-branch/po/oc.po
+   M /branches/sympa-6.1-branch/po/pl.po
+   M /branches/sympa-6.1-branch/po/pt.po
+   M /branches/sympa-6.1-branch/po/pt_BR.po
+   M /branches/sympa-6.1-branch/po/ro.po
+   M /branches/sympa-6.1-branch/po/ru.po
+   M /branches/sympa-6.1-branch/po/sv.po
+   M /branches/sympa-6.1-branch/po/tr.po
+   M /branches/sympa-6.1-branch/po/vi.po
+   M /branches/sympa-6.1-branch/po/zh_CN.po
+   M /branches/sympa-6.1-branch/po/zh_TW.po
+   M /branches/sympa-6.1-branch/po-wwsympa/ar.po
+   M /branches/sympa-6.1-branch/po-wwsympa/bg.po
+   M /branches/sympa-6.1-branch/po-wwsympa/br.po
+   M /branches/sympa-6.1-branch/po-wwsympa/cs.po
+   M /branches/sympa-6.1-branch/po-wwsympa/de.po
+   M /branches/sympa-6.1-branch/po-wwsympa/el.po
+   M /branches/sympa-6.1-branch/po-wwsympa/en_US.po
+   M /branches/sympa-6.1-branch/po-wwsympa/es.po
+   M /branches/sympa-6.1-branch/po-wwsympa/et.po
+   M /branches/sympa-6.1-branch/po-wwsympa/eu.po
+   M /branches/sympa-6.1-branch/po-wwsympa/fi.po
+   M /branches/sympa-6.1-branch/po-wwsympa/fr.po
+   M /branches/sympa-6.1-branch/po-wwsympa/hu.po
+   M /branches/sympa-6.1-branch/po-wwsympa/id.po
+   M /branches/sympa-6.1-branch/po-wwsympa/it.po
+   M /branches/sympa-6.1-branch/po-wwsympa/ja.po
+   M /branches/sympa-6.1-branch/po-wwsympa/nb_NO.po
+   M /branches/sympa-6.1-branch/po-wwsympa/nl.po
+   M /branches/sympa-6.1-branch/po-wwsympa/oc.po
+   M /branches/sympa-6.1-branch/po-wwsympa/pl.po
+   M /branches/sympa-6.1-branch/po-wwsympa/pt.po
+   M /branches/sympa-6.1-branch/po-wwsympa/pt_BR.po
+   M /branches/sympa-6.1-branch/po-wwsympa/ro.po
+   M /branches/sympa-6.1-branch/po-wwsympa/ru.po
+   M /branches/sympa-6.1-branch/po-wwsympa/sv.po
+   M /branches/sympa-6.1-branch/po-wwsympa/tr.po
+   M /branches/sympa-6.1-branch/po-wwsympa/vi.po
+   M /branches/sympa-6.1-branch/po-wwsympa/zh_CN.po
+
+[-feature]Committing latest translations from Pootle
+------------------------------------------------------------------------
+r7108 | sympa-authors | 2011-05-31 13:28:39 +0200 (mar 31 mai 2011) | 1 ligne
+Chemins modifiés :
+   M /branches/sympa-6.1-branch/po/et.po
+   M /branches/sympa-6.1-branch/po/fr.po
+   M /branches/sympa-6.1-branch/po/ja.po
+
+[-feature]Committing updated catalogues from Pootle
+------------------------------------------------------------------------
+r7107 | sympa-authors | 2011-05-31 13:23:37 +0200 (mar 31 mai 2011) | 1 ligne
+Chemins modifiés :
+   M /branches/sympa-6.1-branch/po/et.po
+   M /branches/sympa-6.1-branch/po/fr.po
+   M /branches/sympa-6.1-branch/po/ja.po
+
+[-feature]Committing latest translations from Pootle
+------------------------------------------------------------------------
+r7106 | sympa-authors | 2011-05-26 16:22:26 +0200 (jeu 26 mai 2011) | 1 ligne
+Chemins modifiés :
+   M /branches/sympa-6.1-branch/po/fr.po
+
+[-feature]Committing updated catalogues from Pootle
+------------------------------------------------------------------------
+r7105 | sympa-authors | 2011-05-26 16:17:19 +0200 (jeu 26 mai 2011) | 1 ligne
+Chemins modifiés :
+   M /branches/sympa-6.1-branch/po/fr.po
+
+[-feature]Committing latest translations from Pootle
+------------------------------------------------------------------------
+r7104 | sympa-authors | 2011-05-26 15:27:49 +0200 (jeu 26 mai 2011) | 1 ligne
+Chemins modifiés :
+   M /branches/sympa-6.1-branch/po/ar.po
+   M /branches/sympa-6.1-branch/po/bg.po
+   M /branches/sympa-6.1-branch/po/br.po
+   M /branches/sympa-6.1-branch/po/ca.po
+   M /branches/sympa-6.1-branch/po/cs.po
+   M /branches/sympa-6.1-branch/po/de.po
+   M /branches/sympa-6.1-branch/po/el.po
+   M /branches/sympa-6.1-branch/po/en_US.po
+   M /branches/sympa-6.1-branch/po/es.po
+   M /branches/sympa-6.1-branch/po/et.po
+   M /branches/sympa-6.1-branch/po/eu.po
+   M /branches/sympa-6.1-branch/po/fi.po
+   M /branches/sympa-6.1-branch/po/fr.po
+   M /branches/sympa-6.1-branch/po/hu.po
+   M /branches/sympa-6.1-branch/po/id.po
+   M /branches/sympa-6.1-branch/po/it.po
+   M /branches/sympa-6.1-branch/po/ja.po
+   M /branches/sympa-6.1-branch/po/ko.po
+   M /branches/sympa-6.1-branch/po/la.po
+   M /branches/sympa-6.1-branch/po/ml.po
+   M /branches/sympa-6.1-branch/po/nb_NO.po
+   M /branches/sympa-6.1-branch/po/nl.po
+   M /branches/sympa-6.1-branch/po/oc.po
+   M /branches/sympa-6.1-branch/po/pl.po
+   M /branches/sympa-6.1-branch/po/pt.po
+   M /branches/sympa-6.1-branch/po/pt_BR.po
+   M /branches/sympa-6.1-branch/po/ro.po
+   M /branches/sympa-6.1-branch/po/ru.po
+   M /branches/sympa-6.1-branch/po/sv.po
+   M /branches/sympa-6.1-branch/po/sympa.pot
+   M /branches/sympa-6.1-branch/po/tr.po
+   M /branches/sympa-6.1-branch/po/vi.po
+   M /branches/sympa-6.1-branch/po/zh_CN.po
+   M /branches/sympa-6.1-branch/po/zh_TW.po
+   M /branches/sympa-6.1-branch/po-wwsympa/ar.po
+   M /branches/sympa-6.1-branch/po-wwsympa/bg.po
+   M /branches/sympa-6.1-branch/po-wwsympa/br.po
+   M /branches/sympa-6.1-branch/po-wwsympa/cs.po
+   M /branches/sympa-6.1-branch/po-wwsympa/de.po
+   M /branches/sympa-6.1-branch/po-wwsympa/el.po
+   M /branches/sympa-6.1-branch/po-wwsympa/en_US.po
+   M /branches/sympa-6.1-branch/po-wwsympa/es.po
+   M /branches/sympa-6.1-branch/po-wwsympa/et.po
+   M /branches/sympa-6.1-branch/po-wwsympa/eu.po
+   M /branches/sympa-6.1-branch/po-wwsympa/fi.po
+   M /branches/sympa-6.1-branch/po-wwsympa/fr.po
+   M /branches/sympa-6.1-branch/po-wwsympa/hu.po
+   M /branches/sympa-6.1-branch/po-wwsympa/id.po
+   M /branches/sympa-6.1-branch/po-wwsympa/it.po
+   M /branches/sympa-6.1-branch/po-wwsympa/ja.po
+   M /branches/sympa-6.1-branch/po-wwsympa/nb_NO.po
+   M /branches/sympa-6.1-branch/po-wwsympa/nl.po
+   M /branches/sympa-6.1-branch/po-wwsympa/oc.po
+   M /branches/sympa-6.1-branch/po-wwsympa/pl.po
+   M /branches/sympa-6.1-branch/po-wwsympa/pt.po
+   M /branches/sympa-6.1-branch/po-wwsympa/pt_BR.po
+   M /branches/sympa-6.1-branch/po-wwsympa/ro.po
+   M /branches/sympa-6.1-branch/po-wwsympa/ru.po
+   M /branches/sympa-6.1-branch/po-wwsympa/sv.po
+   M /branches/sympa-6.1-branch/po-wwsympa/tr.po
+   M /branches/sympa-6.1-branch/po-wwsympa/vi.po
+   M /branches/sympa-6.1-branch/po-wwsympa/zh_CN.po
+
+[-feature]Committing updated catalogues from Pootle
+------------------------------------------------------------------------
+r7103 | sympa-authors | 2011-05-26 15:19:50 +0200 (jeu 26 mai 2011) | 1 ligne
+Chemins modifiés :
+   M /branches/sympa-6.1-branch/po/ar.po
+   M /branches/sympa-6.1-branch/po/bg.po
+   M /branches/sympa-6.1-branch/po/br.po
+   M /branches/sympa-6.1-branch/po/ca.po
+   M /branches/sympa-6.1-branch/po/cs.po
+   M /branches/sympa-6.1-branch/po/de.po
+   M /branches/sympa-6.1-branch/po/el.po
+   M /branches/sympa-6.1-branch/po/en_US.po
+   M /branches/sympa-6.1-branch/po/es.po
+   M /branches/sympa-6.1-branch/po/et.po
+   M /branches/sympa-6.1-branch/po/eu.po
+   M /branches/sympa-6.1-branch/po/fi.po
+   M /branches/sympa-6.1-branch/po/fr.po
+   M /branches/sympa-6.1-branch/po/hu.po
+   M /branches/sympa-6.1-branch/po/id.po
+   M /branches/sympa-6.1-branch/po/it.po
+   M /branches/sympa-6.1-branch/po/ja.po
+   M /branches/sympa-6.1-branch/po/ko.po
+   M /branches/sympa-6.1-branch/po/la.po
+   M /branches/sympa-6.1-branch/po/ml.po
+   M /branches/sympa-6.1-branch/po/nb_NO.po
+   M /branches/sympa-6.1-branch/po/nl.po
+   M /branches/sympa-6.1-branch/po/oc.po
+   M /branches/sympa-6.1-branch/po/pl.po
+   M /branches/sympa-6.1-branch/po/pt.po
+   M /branches/sympa-6.1-branch/po/pt_BR.po
+   M /branches/sympa-6.1-branch/po/ro.po
+   M /branches/sympa-6.1-branch/po/ru.po
+   M /branches/sympa-6.1-branch/po/sv.po
+   M /branches/sympa-6.1-branch/po/tr.po
+   M /branches/sympa-6.1-branch/po/vi.po
+   M /branches/sympa-6.1-branch/po/zh_CN.po
+   M /branches/sympa-6.1-branch/po/zh_TW.po
+   M /branches/sympa-6.1-branch/po-wwsympa/ar.po
+   M /branches/sympa-6.1-branch/po-wwsympa/bg.po
+   M /branches/sympa-6.1-branch/po-wwsympa/br.po
+   M /branches/sympa-6.1-branch/po-wwsympa/cs.po
+   M /branches/sympa-6.1-branch/po-wwsympa/de.po
+   M /branches/sympa-6.1-branch/po-wwsympa/el.po
+   M /branches/sympa-6.1-branch/po-wwsympa/en_US.po
+   M /branches/sympa-6.1-branch/po-wwsympa/es.po
+   M /branches/sympa-6.1-branch/po-wwsympa/et.po
+   M /branches/sympa-6.1-branch/po-wwsympa/eu.po
+   M /branches/sympa-6.1-branch/po-wwsympa/fi.po
+   M /branches/sympa-6.1-branch/po-wwsympa/fr.po
+   M /branches/sympa-6.1-branch/po-wwsympa/hu.po
+   M /branches/sympa-6.1-branch/po-wwsympa/id.po
+   M /branches/sympa-6.1-branch/po-wwsympa/it.po
+   M /branches/sympa-6.1-branch/po-wwsympa/ja.po
+   M /branches/sympa-6.1-branch/po-wwsympa/nb_NO.po
+   M /branches/sympa-6.1-branch/po-wwsympa/nl.po
+   M /branches/sympa-6.1-branch/po-wwsympa/oc.po
+   M /branches/sympa-6.1-branch/po-wwsympa/pl.po
+   M /branches/sympa-6.1-branch/po-wwsympa/pt.po
+   M /branches/sympa-6.1-branch/po-wwsympa/pt_BR.po
+   M /branches/sympa-6.1-branch/po-wwsympa/ro.po
+   M /branches/sympa-6.1-branch/po-wwsympa/ru.po
+   M /branches/sympa-6.1-branch/po-wwsympa/sv.po
+   M /branches/sympa-6.1-branch/po-wwsympa/tr.po
+   M /branches/sympa-6.1-branch/po-wwsympa/vi.po
+   M /branches/sympa-6.1-branch/po-wwsympa/zh_CN.po
+
+[-feature]Committing latest translations from Pootle
+------------------------------------------------------------------------
+r7059 | david.verdin | 2011-04-06 09:31:37 +0200 (mer 06 avr 2011) | 2 lignes
+Chemins modifiés :
+   M /branches/sympa-6.1-branch/wwsympa/SympaSession.pm
+
+[bug][Reported by V. Carpier, AC Réunion (but seriously, he was in the CRU before!)] SympaSession.pm caused "fetch without execute" errors to be issued into the Apache error logs. This was due to a second call to "fetchrow_hashref" after all the lines had already been fetched, and the statement handler subsequently finished. Fixed by including result fetching into a loop.
+
+------------------------------------------------------------------------
+r7058 | david.verdin | 2011-04-05 15:13:00 +0200 (mar 05 avr 2011) | 1 ligne
+Chemins modifiés :
+   M /branches/sympa-6.1-branch/ChangeLog
+   M /branches/sympa-6.1-branch/po/ar.po
+   M /branches/sympa-6.1-branch/po/bg.po
+   M /branches/sympa-6.1-branch/po/br.po
+   M /branches/sympa-6.1-branch/po/ca.po
+   M /branches/sympa-6.1-branch/po/cs.po
+   M /branches/sympa-6.1-branch/po/de.po
+   M /branches/sympa-6.1-branch/po/el.po
+   M /branches/sympa-6.1-branch/po/en_US.po
+   M /branches/sympa-6.1-branch/po/es.po
+   M /branches/sympa-6.1-branch/po/et.po
+   M /branches/sympa-6.1-branch/po/eu.po
+   M /branches/sympa-6.1-branch/po/fr.po
+   M /branches/sympa-6.1-branch/po/hu.po
+   M /branches/sympa-6.1-branch/po/id.po
+   M /branches/sympa-6.1-branch/po/it.po
+   M /branches/sympa-6.1-branch/po/ja.po
+   M /branches/sympa-6.1-branch/po/ko.po
+   M /branches/sympa-6.1-branch/po/la.po
+   M /branches/sympa-6.1-branch/po/ml.po
+   M /branches/sympa-6.1-branch/po/nb_NO.po
+   M /branches/sympa-6.1-branch/po/nl.po
+   M /branches/sympa-6.1-branch/po/oc.po
+   M /branches/sympa-6.1-branch/po/pl.po
+   M /branches/sympa-6.1-branch/po/pt.po
+   M /branches/sympa-6.1-branch/po/pt_BR.po
+   M /branches/sympa-6.1-branch/po/ro.po
+   M /branches/sympa-6.1-branch/po/ru.po
+   M /branches/sympa-6.1-branch/po/sv.po
+   M /branches/sympa-6.1-branch/po/sympa.pot
+   M /branches/sympa-6.1-branch/po/tr.po
+   M /branches/sympa-6.1-branch/po/vi.po
+   M /branches/sympa-6.1-branch/po/zh_CN.po
+   M /branches/sympa-6.1-branch/po/zh_TW.po
+   M /branches/sympa-6.1-branch/po-wwsympa/fr.po
+   M /branches/sympa-6.1-branch/po-wwsympa/it.po
+
+[svn] Updating i18n catalogues
+------------------------------------------------------------------------
+r7055 | sympa-authors | 2011-04-01 14:07:20 +0200 (ven 01 avr 2011) | 2 lignes
+Chemins modifiés :
+   M /branches/sympa-6.1-branch/src/lib/Upgrade.pm
+
+[bug] reported by gauthier Catteau Message-ID may be longer than 100 chars and so they may result in a SQL error.
+
+------------------------------------------------------------------------
 r7019 | david.verdin | 2011-02-10 11:07:02 +0100 (jeu 10 fév 2011) | 2 lignes
 Chemins modifiés :
    M /branches/sympa-6.1-branch/src/lib/Scenario.pm
