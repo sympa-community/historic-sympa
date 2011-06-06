@@ -1,13 +1,13 @@
 msgid ""
 msgstr ""
 "POT-Creation-Date: 2002-07-16 17:27+0800\n"
-"PO-Revision-Date: 2011-06-06 08:38+0200\n"
+"PO-Revision-Date: 2011-06-06 09:15+0200\n"
 "Last-Translator: Anonymous Pootle User\n"
 "Language-Team: Français\n"
+"Language: fr\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Language: fr\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
 "X-Generator: Pootle 2.1.2\n"
 "Projct-Id-Version: fr\n"
@@ -9885,70 +9885,85 @@ msgstr "pour ne pas recevoir ses propres messages"
 
 #: ../src/lib/confdef.pm:912
 msgid "flock | nfs"
-msgstr ""
+msgstr "flock | nfs"
 
 #: ../src/lib/confdef.pm:1009
+#, fuzzy
 msgid "Database private extention to subscriber table"
 msgstr ""
 
 #: ../src/lib/confdef.pm:1017
+#, fuzzy
 msgid "Database private extention to user table"
 msgstr ""
 
 #: ../src/lib/confdef.pm:1058
+#, fuzzy
 msgid ""
 "Default timeout between two scheduled synchronizations of list members with "
 "data sources."
 msgstr ""
 
 #: ../src/lib/confdef.pm:1064
+#, fuzzy
 msgid ""
 "Default timeout between two action-triggered synchronizations of list "
 "members with data sources."
 msgstr ""
 
 #: ../src/lib/confdef.pm:1172
+#, fuzzy
 msgid ""
 "The \"d=\" tag as defined in rfc 4871, default is virtual host domain name"
 msgstr ""
 
 #: ../src/lib/confdef.pm:1186
+#, fuzzy
 msgid "The \"i=\" tag as defined in rfc 4871, default is null"
 msgstr ""
 
 #: ../src/lib/confdef.pm:1198
+#, fuzzy
 msgid "Antivirus plug-in"
 msgstr ""
 
 #: ../src/lib/confdef.pm:1213
+#, fuzzy
 msgid "Antivirus plugin command argument"
 msgstr ""
 
 #: ../src/lib/confdef.pm:1222
+#, fuzzy
 msgid "Tag based spam filtering"
 msgstr ""
 
 #: ../src/lib/confdef.pm:1262 ../src/lib/confdef.pm:1282
+#, fuzzy
 msgid "Better if not in a critical partition"
 msgstr ""
 
 #: ../src/lib/confdef.pm:1321
+#, fuzzy
 msgid "Syslog facility for wwsympa, archived and bounced"
 msgstr ""
 
 #: ../src/lib/confdef.pm:1324
+#, fuzzy
 msgid "Default is to use previously defined sympa log facility."
 msgstr ""
 
 #: ../src/lib/confdef.pm:1329
+#, fuzzy
 msgid "Path to MHonArc mail2html plugin"
 msgstr ""
 
 #: ../src/lib/confdef.pm:1428
+#, fuzzy
 msgid "Javascript excerpt that enables and configures the WYSIWYG HTML editor."
 msgstr ""
 
 #: ../src/lib/confdef.pm:1520
+#, fuzzy
 msgid ""
 "Messages are supposed to be filtered by an antispam that add one more "
 "headers to messages. This parameter is used to select a special scenario in "
@@ -9958,14 +9973,17 @@ msgid ""
 msgstr ""
 
 #: ../src/lib/confdef.pm:1528
+#, fuzzy
 msgid "Directory containing user certificates"
 msgstr ""
 
 #: ../src/lib/confdef.pm:1534
+#, fuzzy
 msgid "File containing task_manager PID while running"
 msgstr ""
 
 #: ../src/lib/confdef.pm:1539
+#, fuzzy
 msgid ""
 "Default number of lines of the array displaying the log entries in the logs "
 "page"
@@ -9973,15 +9991,15 @@ msgstr ""
 
 #: ../src/lib/Conf.pm:964
 msgid "Conf::load_nrcpt_by_domain(): Error at line %d: %s"
-msgstr ""
+msgstr "Conf::load_nrcpt_by_domain(): Erreur à la ligne %d: %s"
 
 #: ../wwsympa/wwsympa.fcgi.in:4877
 msgid "Unable to add user %s in list %s : %s"
-msgstr ""
+msgstr "Impossible d'ajouter l'utilisateur %s à la liste %s : %s"
 
 #: ../wwsympa/wwsympa.fcgi.in:16213
 msgid "Users deleted by admin"
-msgstr ""
+msgstr "Utilisateur supprimé par l'administrateur"
 
 #: ../web_tt2/edit_config.tt2:7
 msgid "[%confparam.title%]"
@@ -9996,18 +10014,22 @@ msgid "[% confparam.query %]"
 msgstr ""
 
 #: ../src/lib/confdef.pm:43
+#, fuzzy
 msgid "Directories and file location"
 msgstr ""
 
 #: ../src/lib/confdef.pm:234
+#, fuzzy
 msgid "Syslog"
 msgstr ""
 
 #: ../src/lib/confdef.pm:260
+#, fuzzy
 msgid "Log intensity"
 msgstr ""
 
 #: ../src/lib/confdef.pm:662
+#, fuzzy
 msgid "Plugin"
 msgstr ""
 
