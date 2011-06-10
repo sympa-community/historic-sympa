@@ -1172,6 +1172,278 @@ my %alias = ('reply-to' => 'reply_to',
 				    'gettext_id' => "SQL query inclusion",
 				    'group' => 'data_source'
 				    },
+		######## SQL ###########
+		'include_sql_ca' => {'format' => {'db_type' => {'format' => '\S+',
+							       'occurrence' => '1',
+							       'gettext_id' => "database type",
+							       'order' => 1
+							       },
+						 'host' => {'format' => &tools::get_regexp('host'),
+							    'occurrence' => '1',
+							    'gettext_id' => "remote host",
+							    'order' => 2
+							    },
+						 'db_port' => {'format' => '\d+',
+							       'gettext_id' => "database port",
+							       'order' => 3 
+							       },
+					         'db_name' => {'format' => '\S+',
+							       'occurrence' => '1',
+							       'gettext_id' => "database name",
+							       'order' => 4 
+							       },
+						 'connect_options' => {'format' => '.+',
+								       'gettext_id' => "connection options",
+								       'order' => 4
+								       },
+						 'db_env' => {'format' => '\w+\=\S+(;\w+\=\S+)*',
+							      'order' => 5,
+							      'gettext_id' => "environment variables for database connection"
+							      },
+						 'user' => {'format' => '\S+',
+							    'occurrence' => '1',
+							    'gettext_id' => "remote user",
+							    'order' => 6
+							    },
+						 'passwd' => {'format' => '.+',
+							      'field_type' => 'password',
+							      'gettext_id' => "remote password",
+							      'order' => 7
+							      },
+						 'sql_query' => {'format' => &tools::get_regexp('sql_query'),
+								 'length' => 50,
+								 'occurrence' => '1',
+								 'gettext_id' => "SQL query",
+								 'order' => 8
+								 },
+						  'f_dir' => {'format' => '.+',
+							     'gettext_id' => "Directory where the database is stored (used for DBD::CSV only)",
+							     'order' => 9
+							     },
+						  'name' => {'format' => '.+',
+							     'gettext_id' => "short name for this source",
+							     'length' => 15,
+							     'order' => 1
+							     },
+						  'mapping' => {'format' => '.+',
+								'gettext_id' => "Mapping :",
+								'length' => 100,
+								'order' => 16,
+								},
+						  'email_entry' => {'format' => '\S+',
+								'occurence' => '1',
+								'gettext_id' => "Name of email entry",
+								'order' => 17,
+							},
+						 },
+				    'occurrence' => '0-n',
+				    'gettext_id' => "SQL query custom attribute",
+				    'group' => 'data_source'
+				    },
+		####### LDAP ###########
+		'include_ldap_ca' => {'format' => {'host' => {'format' => &tools::get_regexp('multiple_host_with_port'),
+							     'occurrence' => '1',
+							     'gettext_id' => "remote host",
+							     'order' => 2
+							     },
+						  'port' => {'format' => '\d+',
+							     'length' => 4,
+							     'gettext_id' => "remote port",
+							     'obsolete' => 1,
+							     'order' => 2
+							     },
+						  'user' => {'format' => '.+',
+							     'gettext_id' => "remote user",
+							     'order' => 3
+							     },
+						  'passwd' => {'format' => '.+',
+							       'length' => 10,
+							       'field_type' => 'password',
+							       'gettext_id' => "remote password",
+							       'order' => 3
+							       },
+						  'suffix' => {'format' => '.+',
+							       'gettext_id' => "suffix",
+							       'order' => 4
+							       },
+						  'filter' => {'format' => '.+',
+							       'length' => 50,
+							       'occurrence' => '1',
+							       'gettext_id' => "filter",
+							       'order' => 7
+							       },
+						  'attrs' => {'format' => '\w+',
+							      'length' => 15,
+							      'default' => 'mail',
+							      'gettext_id' => "extracted attribute",
+							      'order' => 8
+							      },
+						  'select' => {'format' => ['all','first'],
+							       'default' => 'first',
+							       'gettext_id' => "selection (if multiple)",
+							       'order' => 9
+							       },
+					          'scope' => {'format' => ['base','one','sub'],
+							      'default' => 'sub',
+							      'gettext_id' => "search scope",
+							      'order' => 5
+							      },
+						  'timeout' => {'format' => '\w+',
+								'default' => 30,
+								'gettext_unit' => 'seconds',
+								'gettext_id' => "connection timeout",
+								'order' => 6
+								},
+						   'name' => {'format' => '.+',
+							      'gettext_id' => "short name for this source",
+							      'length' => 15,
+							      'order' => 1
+							      },
+							      'use_ssl' => {'format' => ['yes','no'],
+									    'default' => 'no',
+									    'gettext_id' => 'use SSL (LDAPS)',
+									    'order' => 2.5,
+									},
+							      'ssl_version' => {'format' => ['sslv2','sslv3','tls'],
+										'default' => 'sslv3',
+										'gettext_id' => 'SSL version',
+										'order' => 2.5,
+									    },
+							      'ssl_ciphers' => {'format' => '.+',
+										'default' => 'ALL',
+										'gettext_id' => 'SSL ciphers used',
+										'order' => 2.5,
+									   },
+		    
+					      },
+				     'occurrence' => '0-n',
+				     'gettext_id' => "LDAP query custom attribute",
+				     'group' => 'data_source'
+				     },
+		
+		###### LDAP2 ###########
+		'include_ldap_2level_ca' => {'format' => {'host' => {'format' => &tools::get_regexp('multiple_host_with_port'),
+							     'occurrence' => '1',
+							     'gettext_id' => "remote host",
+							     'order' => 1
+							     },
+						  'port' => {'format' => '\d+',
+							     'length' => 4,
+							     'gettext_id' => "remote port",
+							     'obsolete' => 1,
+							     'order' => 2
+							     },
+						  'user' => {'format' => '.+',
+							     'gettext_id' => "remote user",
+							     'order' => 3
+							     },
+						  'passwd' => {'format' => '.+',
+							       'length' => 10,
+							       'field_type' => 'password',
+							       'gettext_id' => "remote password",
+							       'order' => 3
+							       },
+						  'suffix1' => {'format' => '.+',
+							       'gettext_id' => "first-level suffix",
+							       'order' => 4
+							       },
+						  'filter1' => {'format' => '.+',
+							       'length' => 50,
+							       'occurrence' => '1',
+							       'gettext_id' => "first-level filter",
+							       'order' => 7
+							       },
+						  'attrs1' => {'format' => '\w+',
+							      'length' => 15,
+							      'gettext_id' => "first-level extracted attribute",
+							      'order' => 8
+							      },
+						  'select1' => {'format' => ['all','first','regex'],
+							       'default' => 'first',
+							       'gettext_id' => "first-level selection",
+							       'order' => 9
+							       },
+					          'scope1' => {'format' => ['base','one','sub'],
+							      'default' => 'sub',
+							      'gettext_id' => "first-level search scope",
+							      'order' => 5
+							      },
+						  'timeout1' => {'format' => '\w+',
+								'default' => 30,
+								'gettext_unit' => 'seconds',
+								'gettext_id' => "first-level connection timeout",
+								'order' => 6
+								},
+						  'regex1' => {'format' => '.+',
+								'length' => 50,
+								'default' => '',
+								'gettext_id' => "first-level regular expression",
+								'order' => 10
+								},
+						  'suffix2' => {'format' => '.+',
+							       'gettext_id' => "second-level suffix template",
+							       'order' => 11
+							       },
+						  'filter2' => {'format' => '.+',
+							       'length' => 50,
+							       'occurrence' => '1',
+							       'gettext_id' => "second-level filter template",
+							       'order' => 14
+							       },
+						  'attrs2' => {'format' => '\w+',
+							      'length' => 15,
+							      'default' => 'mail',
+							      'gettext_id' => "second-level extracted attribute",
+							      'order' => 15
+							      },
+						  'select2' => {'format' => ['all','first','regex'],
+							       'default' => 'first',
+							       'gettext_id' => "second-level selection",
+							       'order' => 16
+							       },
+					          'scope2' => {'format' => ['base','one','sub'],
+							      'default' => 'sub',
+							      'gettext_id' => "second-level search scope",
+							      'order' => 12
+							      },
+						  'timeout2' => {'format' => '\w+',
+								'default' => 30,
+								'gettext_unit' => 'seconds',
+								'gettext_id' => "second-level connection timeout",
+								'order' => 13
+								},
+						  'regex2' => {'format' => '.+',
+								'length' => 50,
+								'default' => '',
+								'gettext_id' => "second-level regular expression",
+								'order' => 17
+								},
+						   'name' => {'format' => '.+',
+							      'gettext_id' => "short name for this source",
+							      'length' => 15,
+							      'order' => 1
+							      },
+							      'use_ssl' => {'format' => ['yes','no'],
+									    'default' => 'no',
+									    'gettext_id' => 'use SSL (LDAPS)',
+									    'order' => 2.5,
+									},
+							      'ssl_version' => {'format' => ['sslv2','sslv3','tls'],
+										'default' => '',
+										'gettext_id' => 'SSL version',
+										'order' => 2.5,
+									    },
+							      'ssl_ciphers' => {'format' => '.+',
+										'default' => 'ALL',
+										'gettext_id' => 'SSL ciphers used',
+										'order' => 2.5,
+									    },
+					     },
+				     'occurrence' => '0-n',
+				     'gettext_id' => "LDAP 2-level query custom attribute",
+				     'group' => 'data_source'
+				     },
+		########################
 	    'inclusion_notification_feature' => {'format' => ['on','off'],
 						 'occurence' => '0-1',
 						 'default' => 'off',
@@ -6133,7 +6405,6 @@ sub update_list_member {
 		    &Log::do_log('err','Could not update informations for user %s in table %s for list %s@%s',$who,$table,$name,$self->{'domain'});
 		    return undef;
 		}	
-	    }else {
 		unless ($sth = &SDM::do_query("UPDATE %s SET %s WHERE (user_subscriber=%s AND list_subscriber=%s AND robot_subscriber = %s)", 
 		$table, 
 		join(',', @set_list), 
@@ -6428,9 +6699,10 @@ sub add_list_member {
 
 	$new_user->{'date'} ||= time;
 	$new_user->{'update_date'} ||= $new_user->{'date'};
-	
+
 	my %custom_attr = %{ $subscriptions->{$who}{'custom_attribute'} } if (defined $subscriptions->{$who}{'custom_attribute'} );
 	$new_user->{'custom_attribute'} ||= &createXMLCustomAttribute(\%custom_attr) ;
+	
 	do_log('debug2', 'custom_attribute = %s', $new_user->{'custom_attribute'});
 
 	## Crypt password if it was not crypted
@@ -7864,6 +8136,27 @@ sub _include_users_ldap_2level {
     return $result;
 }
 
+sub _include_ca_sql {
+	my $source = shift;
+	my $ca;
+	my $ca_res
+	
+	&Log::do_log('debug','List::_include_ca_sql()');
+    
+	my $sth = $source->do_query($source->{'sql_query'});
+	my $mail = $source->{'email_entry'};
+	$ca = $sth->fetchall_hashref($mail);
+	my $result;
+	foreach my $email (keys %{$ca}) {
+		foreach my $custom_attribute (keys %{$ca->{$email}}) {
+				$result->{$email}{$custom_attribute}{'value'} = $ca->{$email}{$custom_attribute};
+				
+		}
+	}
+	return $result;
+}
+
+
 ## Returns a list of subscribers extracted from an remote Database
 sub _include_users_sql {
     my ($users, $id, $source, $default_user_options, $tied, $fetch_timeout) = @_;
@@ -7946,7 +8239,7 @@ sub _load_list_members_from_include {
     my @ex_sources;
     
     
-    foreach my $type ('include_list','include_remote_sympa_list','include_file','include_ldap_query','include_ldap_2level_query','include_sql_query','include_remote_file') {
+    foreach my $type ('include_sql_ca','include_list','include_remote_sympa_list','include_file','include_ldap_query','include_ldap_2level_query','include_sql_query','include_remote_file') {
 	last unless (defined $total);
 	    
 	foreach my $tmp_incl (@{$admin->{$type}}) {
@@ -7978,6 +8271,11 @@ sub _load_list_members_from_include {
 				push @ex_sources, $exclusion_data;
 				$included = 0;
 			}
+		}elsif ($type eq 'include_sql_ca') {
+			my $source = new SQLSource($incl);
+			my $ca = _include_ca_sql($source);
+			
+			
 	    }elsif ($type eq 'include_ldap_query') {
 			my $source = new LDAPSource($incl);
 			if ($source->is_allowed_to_sync() || $source_is_new) {
@@ -8374,6 +8672,46 @@ sub get_list_of_sources_id {
 	return \%old_subs_id;
 }
 
+
+sub sync_include_ca {
+	my $self = shift;
+	my $name = $self->{'name'}; 
+	my $admin = $self->{'admin'};
+    my %old_subscribers;
+    my $email;
+    
+    foreach my $type ('include_sql_ca') {
+		foreach my $tmp_incl (@{$admin->{$type}}) {
+			## Work with a copy of admin hash branch to avoid including temporary variables into the actual admin hash.[bug #3182]
+			my $incl = &tools::dup_var($tmp_incl);
+			if ($type eq 'include_sql_ca') {
+				my $source = new SQLSource($incl);
+				my $ca = _include_ca_sql($source);
+				## Load a hash with the old subscribers
+				my $users_to_update;
+				for (my $user=$self->get_first_list_member(); $user; $user=$self->get_next_list_member()) {
+					if(defined $ca->{$user->{'email'}}) {
+						$users_to_update->{$user->{'email'}} = $ca->{$user->{'email'}};
+					}
+				}
+				open TMP , ">/tmp/user_ca";
+				print TMP &Dumper($users_to_update);
+				close TMP;
+				foreach my $user_email (keys %{$users_to_update}) {
+					if($self->update_list_member($user_email, {'custom_attribute'=>&createXMLCustomAttribute($users_to_update->{$user_email})})) {
+						&Log::do_log('debug2', 'Updated user %s',$user_email);
+					}else{
+						&Log::do_log('error', 'could not update user %s',$user_email);
+					}
+				}
+			}
+		}
+	}
+	
+	
+	return 1;
+}
+
 sub sync_include {
     my ($self) = shift;
     my $option = shift;
@@ -8605,8 +8943,8 @@ sub sync_include {
     $self->{'total'} = $self->_load_total_db('nocache');
     $self->{'last_sync'} = time;
     $self->savestats();
-    
-    
+    $self->sync_include_ca();
+		
 
     return 1;
 }
