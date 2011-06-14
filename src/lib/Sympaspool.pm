@@ -411,6 +411,8 @@ sub store {
     my $message_asstring = shift;  
     my $metadata = shift; # a set of attributes related to the spool
     my $locked = shift;   # if define message must stay locked after store
+    my $sender = $metadata->{'sender'};
+    $sender |= '';
 
     do_log('debug',"Spool::store ($self->{'spoolname'},$self->{'selection_status'}, <message_asstring> ,list : $metadata->{'list'},robot : $metadata->{'robot'} , date: $metadata->{'date'}), lock : $locked");
 
@@ -434,13 +436,13 @@ sub store {
 
 	my @sender_hdr = Mail::Address->parse($message->{'msg'}->get('From'));
 	if ($#sender_hdr >= 0){
-	    $metadata->{'sender'} = lc($sender_hdr[0]->address);
+	    $metadata->{'sender'} = lc($sender_hdr[0]->address) unless ($sender);
 	    $metadata->{'sender'} = substr $metadata->{'sender'}, 0, 109;
 	}
     }else{
 	$metadata->{'subject'} = '';
 	$metadata->{'messageid'} = '';
-	$metadata->{'sender'} = '';
+	$metadata->{'sender'} = $sender;
     }
     $metadata->{'date'}= int(time) unless ($metadata->{'date'}) ;
     $metadata->{'size'}= length($message_asstring) unless ($metadata->{'size'}) ;

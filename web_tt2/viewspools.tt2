@@ -16,18 +16,14 @@
 </p>
 <p>
 
-<form class="noborder" action="[% path_cgi %]/viewspools/[% spoolname %]">
+<form class="noborder" action="[% path_cgi %]/viewspools/[% spoolname %]" method="POST">
  <fieldset>
 
 <ul>
-Select messages by status :  
-<!-- <li>Select status ok <input id="statusok" type="radio" name="status" value="ok" [%IF status == 'ok' %]checked="checked"[%END%] onchange="this.form.submit();" /> 
-    status bad <input id="statusbad" type="radio" name="status" value="bad" [%IF status == 'bad' %]checked="checked"[%END%] onchange="this.form.submit();" />
-</li> -->
+Select messages by status : 
   <select id="spool_status" name="spool_status" onchange="this.form.submit();">
-          <option value="[% spool_status %]" selected="selected">[% spool_status %]</option>
-          <option value="ok">ok</option>
-	  <option value="bad">bad</option>
+          <option value="ok" [% IF spool_status == 'ok' %] selected="selected" [%END%]>ok</option>
+          <option value="bad" [% IF spool_status == 'bad' %] selected="selected" [%END%]>bad</option>
   </select>
 
 [% IF total == 0 %] 
@@ -146,13 +142,18 @@ Select messages by status :
 		<input type="button" class="MainMenuLinks" name="action_viewspool_message" value="view" onclick="spoolPopup('[% msg.messagekey %]', '[% path_cgi %]/ajax/viewspool_message/[% spoolname %]/[% msg.messagekey %]/[% msg.status %]', this)" />
 		<input type="button" class="MainMenuLinks" name="action_viewspool_message_dump" value="dump" onclick="spoolPopup('[% msg.messagekey %]', '[% path_cgi %]/ajax/viewspool_message_dump/[% spoolname %]/[% msg.messagekey %]/[% msg.status %]', this)" />
 		<input type="button" class="MainMenuLinks" name="action_viewspool_message_remove" value="remove" onclick="spoolPopup('[% msg.messagekey %]', '[% path_cgi %]/ajax/viewspool_message_remove/[% spoolname %]/[% msg.messagekey %]/[% msg.status %]', this, 'removed_ok')" />
-		
+		<input type="button" class="MainMenuLinks" name="action_viewspool_message_mv" [% IF spool_status == 'bad' -%]value="set status OK"[% ELSE -%]value="set status bad"[% END -%] onclick="spoolPopup('[% msg.messagekey %]', '[% path_cgi %]/ajax/viewspool_message_mv/[% spoolname %]/[% msg.messagekey %]/[% msg.status %]/[% spoolname %]/[% IF spool_status == 'bad' -%]ok[% ELSE -%]bad[% END -%] ', this, 'removed_ok')" />
+
 		<div id="mainviewspool[% msg.messagekey %]" class="block viewspool" style="display:none ; background-color:[% color_5 %]; position:absolute; width:80%">
 			<input style="float:right" type="button" name="action_viewspool_message" value="X"  onclick="jQuery(this).parent().hide()"/>	
 			<p>
 				<div id="viewspool[% msg.messagekey %]"> [%|loc%]loading message...[%END%]<!-- empty div that will display a content by AJAX -->	 </div>
 			</p>
 		</div>
+	
+
+		
+
 	</td>
 	<td>
 	[% msg.date_asstring %]

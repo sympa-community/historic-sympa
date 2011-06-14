@@ -11361,47 +11361,17 @@ sub _urlize_part {
 sub store_subscription_request {
     my ($self, $email, $gecos, $custom_attr) = @_;
     &do_log('debug2', '(%s, %s, %s)', $self->{'name'}, $email, $gecos, $custom_attr);
-
-    my $filename = $Conf::Conf{'queuesubscribe'}.'/'.$self->get_list_id().'.'.time.'.'.int(rand(1000));
-
-    unless (opendir SUBSPOOL, "$Conf::Conf{'queuesubscribe'}") {
-	&do_log('err', 'Could not open %s', $Conf::Conf{'queuesubscribe'});
-	return undef;
-    }
+    &do_log('trace', '(%s, %s, %s)', $self->{'name'}, $email, $gecos, $custom_attr);
     
-    my @req_files = sort grep (!/^\.+$/,readdir(SUBSPOOL));
-    closedir SUBSPOOL;
-
-    my $listaddr = $self->{'name'}.'@'.$self->{'domain'};
-
-    foreach my $file (@req_files) {
-	next unless ($file =~ /$listaddr\..*/) ;
-	unless (open OLDREQUEST, "$Conf::Conf{'queuesubscribe'}/$file") {
-	    &do_log('err', 'Could not open %s for verification', $file);
-	    return undef;
-	}
-	foreach my $line (<OLDREQUEST>) {
-	    if ($line =~ /^$email/i) {
-		&do_log('notice', 'Subscription already requested by %s', $email);
-		return undef;
-	    }
-	}
-	close OLDREQUEST;
-    }
-
-    unless (open REQUEST, ">$filename") {
-	&do_log('notice', 'Could not open %s', $filename);
+    my $subscription_request_spool = new Sympaspool ('subscribe');
+    
+    if ($subscription_request_spool->get_content({'selector' =>{'list'=> $self->{'name'},'robot'=> $self->{'robot'},'sender'=>$email},'selection'=>'count'}) != 0) {
+	&do_log('notice', 'Subscription already requested by %s', $email);
 	return undef;
+    }else{
+	my $subrequest = sprintf "$gecos||$custom_attr\n";
+	$subscription_request_spool->store($subrequest,{'list'=>$self->{'name'},'robot'=> $self->{'robot'},'sender'=>$email });
     }
-
-    ## First line of the file contains the user email address + his/her name
-    printf REQUEST "$email\t$gecos\n";
-
-    ## Following lines may contain custom attributes in an XML format
-    printf REQUEST "$custom_attr\n";
-
-    close REQUEST;
-
     return 1;
 } 
 
@@ -11411,41 +11381,31 @@ sub get_subscription_requests {
 
     my %subscriptions;
 
-    unless (opendir SPOOL, $Conf::Conf{'queuesubscribe'}) {
-	&do_log('info', 'Unable to read spool %s', $Conf::Conf{'queuesubscribe'});
-	return undef;
-    }
+    my $subscription_request_spool = new Sympaspool ('subscribe');
 
-    foreach my $filename (sort grep(/^$self->{'name'}(\@$self->{'domain'})?\.\d+\.\d+$/, readdir SPOOL)) {
-	unless (open REQUEST, "<:bytes", "$Conf::Conf{'queuesubscribe'}/$filename") {
-	    do_log('err', 'Could not open %s', $filename);
-	    closedir SPOOL;
+    my @subrequests = $subscription_request_spool->get_content({'selector' =>{'list'=> $self->{'name'},'robot'=> $self->{'robot'}},'selection'=>'*'});
+
+    foreach my $subrequest ( $subscription_request_spool->get_content({'selector' =>{'list'=> $self->{'name'},'robot'=> $self->{'robot'}},'selection'=>'*'})) {
+
+	my $email = $subrequest->{'sender'};
+	my $gecos; my $customattributes;
+	if ($subrequest->{'messageasstring'} =~ /(.*)\|\|.*$/) {
+	    $gecos = $1; $customattributes = $subrequest->{'messageasstring'} ; $customattributes =~ s/^.*\|\|// ; 
+	}else{
+	    &do_log('err', "Failed to parse subscription request %s",$subrequest->{'messagekey'});
 	    next;
 	}
-
-	## First line of the file contains the user email address + his/her name
-	my $line = <REQUEST>;
-	my ($email, $gecos);
-	if ($line =~ /^((\S+|\".*\")\@\S+)\s*([^\t]*)\t(.*)$/) {
-	    ($email, $gecos) = ($1, $3); 
-	    
-	}else {
-	    &do_log('err', "Failed to parse subscription request %s",$filename);
-	    next;
-	}
-
 	my $user_entry = $self->get_list_member($email);
 	 
 	if ( defined($user_entry) && ($user_entry->{'subscribed'} == 1)) {
 	    &do_log('err','User %s is subscribed to %s already. Deleting subscription request.', $email, $self->{'name'});
-	    unless (unlink "$Conf::Conf{'queuesubscribe'}/$filename") {
-		&do_log('err', 'Could not delete file %s', $filename);
+	    unless ($subscription_request_spool->remove_message({'list'=> $self->{'name'},'robot'=> $self->{'robot'},'sender'=>$email})) {
+		&do_log('err', 'Could not delete subrequest %s for list %s@%s from %s', $subrequest->{'messagekey'},$self->{'name'},$self->{'robot'},$subrequest->{'sender'});
 	    }
 	    next;
 	}
 	## Following lines may contain custom attributes in an XML format
-	my %xml = &parseCustomAttribute(\*REQUEST) ;
-	close REQUEST;
+	my %xml = &parseCustomAttribute($customattributes) ;
 	
 	$subscriptions{$email} = {'gecos' => $gecos,
 				  'custom_attribute' => \%xml};
@@ -11455,9 +11415,7 @@ sub get_subscription_requests {
 			$subscriptions{$email}{'gecos'} = $user->{'gecos'};
 		}
 	}
-
-	$filename =~ /^$self->{'name'}(\@$self->{'domain'})?\.(\d+)\.\d+$/;
-	$subscriptions{$email}{'date'} = $2;
+	$subscriptions{$email}{'date'} = $subrequest->{'date'};
     }
     closedir SPOOL;
 
@@ -11468,64 +11426,27 @@ sub get_subscription_request_count {
     my ($self) = shift;
     do_log('debug2', 'List::get_subscription_requests_count(%s)', $self->{'name'});
 
-    my %subscriptions;
-    my $i = 0 ;
-
-    unless (opendir SPOOL, $Conf::Conf{'queuesubscribe'}) {
-	&do_log('info', 'Unable to read spool %s', $Conf::Conf{'queuesubscribe'});
-	return undef;
-    }
-
-    foreach my $filename (sort grep(/^$self->{'name'}(\@$self->{'domain'})?\.\d+\.\d+$/, readdir SPOOL)) {
-	$i++;
-    }
-    closedir SPOOL;
-
-    return $i;
+    my $subscription_request_spool = new Sympaspool ('subscribe');
+    
+    return $subscription_request_spool->get_content({'selector' =>{'list'=> $self->{'name'},'robot'=> $self->{'robot'}},'selection'=>'count'});
 } 
+
 
 sub delete_subscription_request {
     my ($self, @list_of_email) = @_;
     &do_log('debug2', 'List::delete_subscription_request(%s, %s)', $self->{'name'}, join(',',@list_of_email));
 
-    my $removed_file = 0;
-    my $email_regexp = &tools::get_regexp('email');
-    
-    unless (opendir SPOOL, $Conf::Conf{'queuesubscribe'}) {
-	&do_log('info', 'Unable to read spool %s', $Conf::Conf{'queuesubscribe'});
-	return undef;
+    my $subscription_request_spool = new Sympaspool ('subscribe');
+
+    my $removed = 0;
+    foreach my $email (@list_of_email) {
+	$removed++ if  $subscription_request_spool->remove_message({'list'=> $self->{'name'},'robot'=> $self->{'robot'},'sender'=>$email}) ;	
     }
 
-    foreach my $filename (sort grep(/^$self->{'name'}(\@$self->{'domain'})?\.\d+\.\d+$/, readdir SPOOL)) {
-	
-	unless (open REQUEST, "$Conf::Conf{'queuesubscribe'}/$filename") {
-	    &do_log('notice', 'Could not open %s', $filename);
-	    next;
-	}
-	my $line = <REQUEST>;
-	close REQUEST;
-
-	foreach my $email (@list_of_email) {
-
-	    unless ($line =~ /^($email_regexp)\s*/ && ($1 eq $email)) {
-		next;
-	    }
-	    
-	    unless (unlink "$Conf::Conf{'queuesubscribe'}/$filename") {
-		&do_log('err', 'Could not delete file %s', $filename);
-		last;
-	    }
-	    $removed_file++;
-	}
-    }
-
-    closedir SPOOL;
-    
-    unless ($removed_file > 0) {
+    unless ($removed > 0) {
 	&do_log('err', 'No pending subscription was found for users %s', join(',',@list_of_email));
 	return undef;
     }
-
     return 1;
 } 
 

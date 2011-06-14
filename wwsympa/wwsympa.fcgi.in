@@ -306,6 +306,7 @@ my %comm = ('home' => 'do_home',
 	 'viewspool_message'=> 'do_viewspool_message',
 	 'viewspool_message_dump'=> 'do_viewspool_message_dump',
 	 'viewspool_message_remove'=> 'do_viewspool_message_remove',
+	 'viewspool_message_mv'=> 'do_viewspool_message_mv',
 	 'wsdl'=> 'do_wsdl',
 	 'sync_include' => 'do_sync_include',
 	 'review_family' => 'do_review_family',
@@ -430,10 +431,11 @@ my %action_args = ('default' => ['list'],
 		'copy_list' => ['list','new_list','new_robot'],
 		'redirect' => [],
 		'viewlogs' => ['list','first'],
-		'viewspools' => ['spoolname','status'],
-		'viewspool_message' => ['spoolname','messagekey','status'],
-		'viewspool_message_dump' => ['spoolname','messagekey','status'],
-		'viewspool_message_remove' => ['spoolname','messagekey','status'],
+		'viewspools' => ['spoolname','spool_status'],
+		'viewspool_message' => ['spoolname','messagekey','spool_status'],
+		'viewspool_message_dump' => ['spoolname','messagekey','spool_status'],
+		'viewspool_message_remove' => ['spoolname','messagekey','spool_status'],
+		'viewspool_message_mv' => ['spoolname','messagekey','spool_status','new_spoolname','new_status'],
 		'wsdl' => [],
 		'sync_include' => ['list'],
 		'review_family' => ['family_name'],
@@ -587,8 +589,9 @@ my %required_args = ('active_lists' => ['for|count'],
 		     'viewlogs' => ['param.list'],
 		     'viewspools' => [],
 		     'viewspool_message' => ['spoolname','messagekey'],
-		     'viewspool_message_dump' => ['spoolname','messagekey','status'],
-		     'viewspool_message_remove' => ['spoolname','messagekey','status'],
+		     'viewspool_message_dump' => ['spoolname','messagekey','spool_status'],
+		     'viewspool_message_remove' => ['spoolname','messagekey','spool_status'],
+		     'viewspool_message_mv' => ['spoolname','messagekey','spool_status','new_spoolname','new_status'],
 		     'viewmod' => ['param.list','param.user.email','id|idspam'],
 		     'wsdl' => [],
 		     'which' => ['param.user.email'],
@@ -703,6 +706,7 @@ my %action_type = ('editfile' => 'admin',
 		'viewspools' => 'admin',
 		'viewspool_message' => 'admin',
 		'viewspool_message_remove' => 'admin',
+		'viewspool_message_mv' => 'admin',
 		'viewspool_message_dump' => 'admin',
 		'serveradmin' => 'serveradmin',
 		'get_pending_lists' => 'serveradmin',
@@ -1881,9 +1885,8 @@ sub get_parameters {
     
     $param->{'path_info'} = $ENV{'PATH_INFO'};
     $param->{'http_method'} = $ENV{'REQUEST_METHOD'}; ## Usefull to skip previous_action when using POST
-    
     if ($ENV{'REQUEST_METHOD'} eq 'GET') {
-	&_split_params ($ENV{'PATH_INFO'});
+	&_split_params ($ENV{'PATH_INFO'});	
     }elsif ($ENV{'REQUEST_METHOD'} eq 'POST') {
 	    ## POST
 
@@ -16585,13 +16588,13 @@ sub do_viewlogs {
  ## of there robot or there is real problems with privacy policy and law in such services.
  ## 
 sub do_viewspools {
-    
+
+    do_log('trace',"STATUS : %s",$in{'spool_status'});    
     my $spoolname = 'msg';
     $spoolname = $in{'spoolname'} if ($in{'spoolname'});
     $param->{'spoolname'} = $spoolname;
 
     my $spool_status = 'ok';
-    do_log('trace',"STATUS : $in{'spool_status'}");
     $spool_status = $in{'spool_status'} if ($in{'spool_status'});
     $param->{'spool_status'} = $spool_status;
 
@@ -16684,8 +16687,8 @@ sub do_viewspool_message {
     my $spoolname = $in{'spoolname'};
     $param->{'spoolname'} = $spoolname;
     my $status = 'ok';
-    $status = $in{'status'} if ($in{'status'});
-    my $status = $in{'status'};
+    $status = $in{'spool_status'} if ($in{'spool_status'});
+    $param->{'spool_status'} = $status;
 			       
     &wwslog('info', 'do_viewspool_message(spoolname = %s,messagekey = %s, status =%s)',$spoolname,$messagekey,$status);
 
@@ -16762,8 +16765,8 @@ sub do_viewspool_message_dump {
     my $spoolname = $in{'spoolname'};
     $param->{'spoolname'} = $spoolname;
     my $status = 'ok';
-    $status = $in{'status'} if ($in{'status'});
-    my $status = $in{'status'};
+    $status = $in{'spool_status'} if ($in{'spool_status'});
+    $param->{'spool_status'} = $status;
 			       
     &wwslog('info', 'do_viewspool_message_dump(spoolname = %s,messagekey = %s, status =%s)',$spoolname,$messagekey,$status);
 
@@ -16783,7 +16786,7 @@ sub do_viewspool_message_dump {
     
     unless ($#messages == 0){
 	&report::reject_report_web('intern','could not find message');
-	&wwslog('info','do_viewspool_mesasge : could not find message %s',$#messages);
+	&wwslog('info','do_viewspool_message_dump : could not find message %s',$#messages);
 	    return;
     }
 
@@ -16796,8 +16799,9 @@ sub do_viewspool_message_dump {
 	return undef;
     }
     printf OUT  @messages[0]->{'messageasstring'};
-    close(OUT);
-
+    if (close(OUT)) {
+	do_log('info',"message (messagekey = %s) flushed in file %s",$messagekey,$param->{'msg_file'});
+    }
     return 1;
 }
 
@@ -16810,10 +16814,10 @@ sub do_viewspool_message_remove {
     my $spoolname = $in{'spoolname'};
     $param->{'spoolname'} = $spoolname;
     my $status = 'ok';
-    $status = $in{'status'} if ($in{'status'});
-    my $status = $in{'status'};
+    $status = $in{'spool_status'} if ($in{'spool_status'});
+    $param->{'spool_status'} = $status;
 			       
-    &wwslog('info', 'do_viewspool_message_dump(spoolname = %s,messagekey = %s, status =%s)',$spoolname,$messagekey,$status);
+    &wwslog('info', 'do_viewspool_message_remove(spoolname = %s,messagekey = %s, status =%s)',$spoolname,$messagekey,$status);
 
     unless  ( $param->{'is_listmaster'}){
 	&report::reject_report_web('auth','action_listmaster',{},$param->{'action'});
@@ -16828,12 +16832,68 @@ sub do_viewspool_message_remove {
     }
     unless ($spool->remove_message({'messagekey'=>$messagekey})){
 	&report::reject_report_web('intern','could not remove message');
-	&wwslog('info','do_viewspool_mesasge : could not remove message');
+	&wwslog('info','do_viewspool_message_remove : could not remove message');
 	return;	
 	
     }
     
     $param->{'removed'} = 1;
+    return 1;
+}
+
+
+## Move a message from a spool to another one
+sub do_viewspool_message_mv {
+    
+    my $messagekey = $in{'messagekey'};
+    my $spoolname = $in{'spoolname'};
+    my $status = $in{'status'};
+    my $newspool = $in{'new_spoolname'};
+    my $newstatus = $in{'new_status'};
+
+
+    do_log('info',"move message %s from spool %s status %s to spool %s with status %s",$messagekey,$spoolname,$status,$newspool,$newstatus);
+
+
+    $param->{'messagekey'} = $messagekey;
+    $param->{'spoolname'} = $spoolname;
+
+    $status = 'ok' unless ($status);
+    $newspool = $spoolname unless ($spoolname);
+    $newstatus = 'ok' unless ($newstatus);
+
+    unless (($newspool) && ($newstatus)){
+	&report::reject_report_web('intern','unkown spool %s or status %s',$newspool,$newstatus);
+	&wwslog('info','do_viewspool_message_mv: unkown spool %s,%s',$spoolname,$status);
+	return undef;
+    }
+			       
+    unless  ( $param->{'is_listmaster'}){
+	&report::reject_report_web('auth','action_listmaster',{},$param->{'action'});
+	&wwslog('info','authorization failed, insufficient privileges');
+    }
+
+    my $spool = new Sympaspool($spoolname,$status);
+    unless ($spool) {
+	&report::reject_report_web('intern','unkown spool');
+	&wwslog('info','do_viewspool_message_mv: unkown spool %s,%s',$spoolname,$status);
+	return undef;
+    }
+
+    unless ( new Sympaspool($newspool,$newstatus)) {
+	&report::reject_report_web('user','unkopwn spool');
+	&wwslog('info','do_viewspool_message_mv : could not move message to unkown spool %s,%s',$newspool,$newstatus);
+	return;	
+    }
+
+
+    unless ($spool->update({'messagekey'=>$messagekey},{'message_status'=>$newstatus,'spoolname'=>$newspool})){
+	&report::reject_report_web('intern','could not move message to spool');
+	&wwslog('info','do_viewspool_message : could not move message to spool %s, status %s',$newspool,$newstatus);
+	return;		
+    }
+    do_log('trace',"message %s moved to spool %s with status %s",$messagekey,$newspool,$newstatus);
+    $param->{'moved'} = 1;
     return 1;
 }
 

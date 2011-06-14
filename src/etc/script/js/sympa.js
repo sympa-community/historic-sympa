@@ -1080,7 +1080,7 @@ jQuery(document).ready(function() {
 function spoolPopup(msgkey, url, trigger, remove_if_divclass_present) {
 	if(!remove_if_divclass_present) remove_if_divclass_present = '';
 	jQuery('.viewspool').hide();
-	var p = jQuery('#viewspool' + msgkey).attr({msgkey: msgkey, ridcp: remove_if_divclass_present}).load(url, function(t) {
+	var p = jQuery('#viewspool' + msgkey).attr({msgkey: msgkey, ridcp: remove_if_divclass_present}).load(url, function(t, s, r) {
 		var p = jQuery(this), msgkey = p.attr('msgkey'), ridcp = p.attr('ridcp');
 		if(ridcp && p.has('.' + ridcp).length) {
 			p.parent().delay(2000).queue(function() {
