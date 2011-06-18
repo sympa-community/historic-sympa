@@ -8787,7 +8787,7 @@ Sends back the list creation edition form.
      print REBUILD ' ';
      close REBUILD;
 
-     &report::notice_report_web('performed',{},$param->{'action'});
+     &report::notice_report_web('performed_soon',{},$param->{'action'});
      &web_db_log({'parameters' => $in{'month'},
 		  'status' => 'success'});
      return 'admin';
@@ -8816,7 +8816,7 @@ Sends back the list creation edition form.
 	 close REBUILD;
 
      }
-     &report::notice_report_web('performed',{},$param->{'action'});
+     &report::notice_report_web('performed_soon',{},$param->{'action'});
      &web_db_log({'status' => 'success'});
      return 'serveradmin';
  }
