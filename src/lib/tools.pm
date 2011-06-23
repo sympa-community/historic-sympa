@@ -41,6 +41,7 @@ use Language;
 use Log;
 use Sympa::Constants;
 use Message;
+use SDM;
 
 ## RCS identification.
 #my $id = '@(#)$Id$';
@@ -2128,20 +2129,14 @@ sub adate {
     return $date;
 }
 
-## human format (used in task models and scenarii)
+## Return the epoch date corresponding to the last midnight before date given as argument.
+sub get_midnight_time {
 
-# -> absolute date :
-#  xxxxYxxMxxDxxHxxMin
-# Y year ; M : month (1-12) ; D : day (1-28|29|30|31) ; H : hour (0-23) ; Min : minutes (0-59)
-# H and Min parameters are optionnal
-# ex 2001y9m13d14h10min
-
-# -> duration :
-# +|- xxYxxMxxWxxDxxHxxMin
-# W week, others are the same
-# all parameters are optionnals
-# before the duration you may write an absolute date, an epoch date or the keyword 'execution_date' which refers to the epoch date when the subroutine is executed. If you put nothing, the execution_date is used
-
+    my $epoch = $_[0];
+    &Log::do_log('debug3','Getting midnight time for: %s',$epoch);
+    my @date = localtime ($epoch);
+    return $epoch - $date[0] - $date[1]*60 - $date[2]*3600;
+}
 
 ## convert a human format date into an epoch date
 sub epoch_conv {
@@ -3609,31 +3604,12 @@ sub md5_fingerprint {
 ############################################################
 sub get_db_random {
     
-    ## Database and SQL statement handlers
-    my ($dbh, $sth, @sth_stack);
-
-    $dbh = &List::db_get_handler();
-
-    ## Check database connection
-    unless ($dbh and $dbh->ping) {
-	return undef unless &List::db_connect();
-	$dbh = &List::db_get_handler();
-    }
-    my $statement = sprintf "SELECT random FROM fingerprint_table;";
-    
-    push @sth_stack, $sth;
-    unless ($sth = $dbh->prepare($statement)) {
-	&do_log('err','Unable to prepare SQL statement : %s', $dbh->errstr);
-	return undef;
-    }
-    unless ($sth->execute) {
-	&do_log('err','Unable to execute SQL statement "%s" : %s', $statement, $dbh->errstr);
+    my $sth;
+    unless ($sth = &SDM::do_query("SELECT random FROM fingerprint_table")) {
+	&do_log('err','Unable to retrieve random value from fingerprint_table');
 	return undef;
     }
     my $random = $sth->fetchrow_hashref('NAME_lc');
-    
-    $sth->finish();
-    $sth = pop @sth_stack;
 
     return $random;
 
@@ -3658,22 +3634,10 @@ sub init_db_random {
 
     my $random = int(rand($range)) + $minimum;
 
-    ## Database and SQL statement handlers
-    my ($dbh, $sth, @sth_stack);
-
-    ## Check database connection
-    unless ($dbh and $dbh->ping) {
-	return undef unless &List::db_connect();
-    }
-    my $statement = sprintf "INSERT INTO fingerprint_table VALUES (%d)", $random;
-    
-    push @sth_stack, $sth;
-    
-    unless ($dbh->do($statement)) {
-	&do_log('err','Unable to execute SQL statement "%s" : %s', $statement, $dbh->errstr);
+    unless (&SDM::do_query('INSERT INTO fingerprint_table VALUES (%d)', $random)) {
+	&do_log('err','Unable to set random value in fingerprint_table');
 	return undef;
     }
-       
     return $random;
 }
 

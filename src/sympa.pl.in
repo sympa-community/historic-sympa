@@ -50,6 +50,7 @@ use tt2;
 use Sympa::Constants;
 use tracking;
 use Sympaspool;
+use SDM;
 
 # durty global variables
 my $is_signed = {}; 
@@ -168,6 +169,7 @@ $main::options{'log_to_stderr'} = 1 if ($main::options{'upgrade'} || $main::opti
 
 my %loop_info;
 my %msgid_table;
+my $latest_msgid_table_cleanup = time;
 
 # this loop is run foreach HUP signal received
 my $signal = 0;
@@ -471,8 +473,9 @@ if ($main::options{'dump'}) {
 	$u->{'email'} = $email;
 	$u->{'gecos'} = $gecos;
 
-	unless ($list->add_list_member($u)) {
-	    printf STDERR "\nCould not add %s\n", $email;
+	$list->add_list_member($u);
+	if (defined $list->{'add_outcome'}{'errors'}) {
+	    printf STDERR "\nCould not add %s. %s\n", $email,$list->{'add_outcome'}{'errors'}{'error_message'};
 	    next;
 	}
 	print STDERR '+';
@@ -978,6 +981,7 @@ while (!$signal) {
 	## Clean queue (bad)
 	if ($index_cleanqueue++ >= 1000){
 	    $index_cleanqueue=0;
+
 	    my $msg_bad = new Sympaspool('msg','bad'); 
 	    $msg_bad->clean({'delay'=>$Conf{'clean_delay_queue'}});
 	    my $archive_bad = new Sympaspool('archive','bad'); 
@@ -994,12 +998,14 @@ while (!$signal) {
 	    $queuesubscribe->clean({'delay'=> $Conf{'clean_delay_queuesubscribe'}});
 	    my $queueautomatic = new Sympaspool('automatic');
 	    $queueautomatic->clean({'delay'=> $Conf{'clean_delay_queueautomatic'}});
-
 	    &tools::CleanDir($Conf{'tmpdir'}, $Conf{'clean_delay_tmpdir'}); # this is not a message spool
-
+	}	    				          
+	## Cleanup in-memory msgid table, only in a while
+	if (time > $latest_msgid_table_cleanup + $Conf{'msgid_table_cleanup_frequency'}) {
+	    &clean_msgid_table();
+	    $latest_msgid_table_cleanup = time;
 	}
     }
-
     
     &mail::reaper; # finish terminated process
     
@@ -1039,7 +1045,7 @@ while (!$signal) {
 #List::dump();
 
 ## Disconnect from Database
-List::db_disconnect if ($List::dbh);
+SDM::db_disconnect if ($SDM::dbh);
 
 } #end of block while ($signal ne 'term'){
 
@@ -1846,7 +1852,7 @@ sub DoMessage{
 	    eval { $numsmtp =$list->distribute_msg('message'=> $message,
 						   'apply_dkim_signature'=>$apply_dkim_signature)};
 	    ## Keep track of known message IDs...if any
-	    $msgid_table{$list->get_list_id()}{$messageid}++ if ($messageid);
+	    $msgid_table{$list->get_list_id()}{$messageid} = time if ($messageid);
 	    
 	    unless (defined($numsmtp)) {
 		&do_log('err','sympa::DoMessage(): Unable to send message to list %s', $listname);
@@ -1998,7 +2004,7 @@ sub DoCommand {
     }## Clean old files from spool
     
     ## Keep track of known message IDs...if any
-    $msgid_table{'sympa@'.$robot}{$messageid}++
+    $msgid_table{'sympa@'.$robot}{$messageid} = time
 	if ($messageid);
 
     ## If X-Sympa-To = <listname>-<subscribe|unsubscribe> parse as a unique command
@@ -2143,6 +2149,21 @@ sub SendDigest{
 	    &Log::db_log({'robot' => $list->{'robot'},'list' => $list->{'name'},'action' => 'SendDigest','parameters' => "",'target_email' => '','msg_id' => '','status' => 'success','error_type' => '','user_email' => '','client' => $ip,'daemon' => $daemon_name});
 	}
     }
+}
+
+## Cleanup the msgid_table every 'msgid_table_cleanup_frequency' sec
+## Removes all entries older than 'msgid_table_cleanup_ttl' sec
+sub clean_msgid_table {
+	
+	foreach my $rcpt (keys %msgid_table) {
+		foreach my $msgid (keys %{$msgid_table{$rcpt}}) {
+			if (time > $msgid_table{$rcpt}{$msgid} + $Conf{'msgid_table_cleanup_ttl'}) {
+				delete $msgid_table{$rcpt}{$msgid};
+			}	
+		}	
+	}
+	
+	return 1;
 }
 
 1;

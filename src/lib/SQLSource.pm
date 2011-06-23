@@ -31,28 +31,16 @@ use List;
 use tools;
 use tt2;
 use Exporter;
+use Data::Dumper;
+use DBManipulatorMySQL;
+use DBManipulatorOracle;
+use DBManipulatorPostgres;
+use DBManipulatorSQLite;
+use DBManipulatorSybase;
 
 our @ISA = qw(Exporter);
 our @EXPORT = qw(%date_format);
 our @EXPORT_OK = qw(connect query disconnect fetch create_db ping quote set_fetch_timeout);
-our $AUTOLOAD;
-
-our %date_format = (
-		   'read' => {
-		       'Pg' => 'date_part(\'epoch\',%s)',
-		       'mysql' => 'UNIX_TIMESTAMP(%s)',
-		       'Oracle' => '((to_number(to_char(%s,\'J\')) - to_number(to_char(to_date(\'01/01/1970\',\'dd/mm/yyyy\'), \'J\'))) * 86400) +to_number(to_char(%s,\'SSSSS\'))',
-		       'Sybase' => 'datediff(second, \'01/01/1970\',%s)',
-		       'SQLite' => 'strftime(\'%%s\',%s,\'utc\')'
-		       },
-		   'write' => {
-		       'Pg' => '\'epoch\'::timestamp with time zone + \'%d sec\'',
-		       'mysql' => 'FROM_UNIXTIME(%d)',
-		       'Oracle' => 'to_date(to_char(round(%s/86400) + to_number(to_char(to_date(\'01/01/1970\',\'dd/mm/yyyy\'), \'J\'))) || \':\' ||to_char(mod(%s,86400)), \'J:SSSSS\')',
-		       'Sybase' => 'dateadd(second,%s,\'01/01/1970\')',
-		       'SQLite' => 'datetime(%d,\'unixepoch\',\'localtime\')'
-		       }
-	       );
 
 ## Structure to keep track of active connections/connection status
 ## Key : connect_string (includes server+port+dbname+DB type)
@@ -65,13 +53,13 @@ sub new {
     my $pkg = shift;
     my $param = shift;
     my $self = $param;
-    &Log::do_log('debug','Creating new SQLSource object for RDBMS "%s"',$param->{'db_type'});
+    &Log::do_log('debug',"Creating new SQLSource object for RDBMS '%s'",$param->{'db_type'});
     ## Casting the object with the right DBManipulator<RDBMS> class according to
     ## the parameters. It's repetitive code because it is hard to use variables
     ## with "require" pragma and @ISA decalarations. Later, maybe...
     if ($param->{'db_type'} =~ /^mysql$/i) {
 	unless ( eval "require DBManipulatorMySQL" ){
-	    &Log::do_log('err',"Unable to use DBManipulatorMySQL module");
+	    &Log::do_log('err',"Unable to use DBManipulatorMySQL module: $@");
 	    return undef;
 	}
 	require DBManipulatorMySQL;
@@ -125,8 +113,21 @@ sub new {
     return $self;
 }
 
+sub connect {
+    my $self = shift;
+    &Log::do_log('debug',"Checking connection to database %s",$self->{'db_name'});
+    if ($self->{'dbh'} && $self->{'dbh'}->ping) {
+	&Log::do_log('debug','Connection to database %s already available',$self->{'db_name'});
+	return 1;
+    }
+    unless($self->establish_connection()) {
+	&Log::do_log('err','Unable to establish new connection to database %s on host %s',$self->{'db_name'},$self->{'db_host'});
+	return undef;
+    }
+}
+
 ############################################################
-#  connect
+#  establish_connection
 ############################################################
 #  Connect to an SQL database.
 #  
@@ -134,14 +135,14 @@ sub new {
 #         currently accepts 'keep_trying' : wait and retry until
 #         db connection is ok (boolean) ; 'warn' : warn
 #         listmaster if connection fails (boolean)
-# OUT : $dbh
+# OUT : $self->{'dbh'}
 #     | undef
 #
 ##############################################################
-sub connect {
+sub establish_connection {
     my $self = shift;
-    my $options = shift;
 
+    &Log::do_log('debug','Creating connection to database %s',$self->{'db_name'});
     ## Do we have db_xxx required parameters
     foreach my $db_param ('db_type','db_name') {
 	unless ($self->{$db_param}) {
@@ -185,7 +186,7 @@ sub connect {
 	$db_connections{$self->{'connect_string'}}{'dbh'}->ping()) {
       
       &do_log('debug', "Use previous connection");
-      $self->{'dbh'} = $db_connections{$self->{'connect_string'}}{'dbh'} if $self;
+      $self->{'dbh'} = $db_connections{$self->{'connect_string'}}{'dbh'};
       return $db_connections{$self->{'connect_string'}}{'dbh'};
 
     }else {
@@ -199,12 +200,11 @@ sub connect {
 	}
       }
       
-      my $dbh;
-      unless ($dbh = DBI->connect($self->{'connect_string'}, $self->{'db_user'}, $self->{'db_passwd'})) {
+      unless ($self->{'dbh'} = DBI->connect($self->{'connect_string'}, $self->{'db_user'}, $self->{'db_passwd'})) {
     	
 	## Notify listmaster if warn option was set
 	## Unless the 'failed' status was set earlier
-	if ($options->{'warn'}) {
+	if ($self->{'reconnect_options'}{'warn'}) {
 	  unless (defined $db_connections{$self->{'connect_string'}} &&
 		  $db_connections{$self->{'connect_string'}}{'status'} eq 'failed') { 
 
@@ -214,7 +214,7 @@ sub connect {
 	  }
 	}
 	
-	if ($options->{'keep_trying'}) {
+	if ($self->{'reconnect_options'}{'keep_trying'}) {
 	  &do_log('err','Can\'t connect to Database %s as %s, still trying...', $self->{'connect_string'}, $self->{'db_user'});
 	} else{
 	  do_log('err','Can\'t connect to Database %s as %s', $self->{'connect_string'}, $self->{'db_user'});
@@ -227,12 +227,12 @@ sub connect {
 	my $sleep_delay = 60;
 	while (1) {
 	  sleep $sleep_delay;
-	  $dbh = DBI->connect($self->{'connect_string'}, $self->{'db_user'}, $self->{'db_passwd'});
-	  last if ($dbh && $dbh->ping());
+	  $self->{'dbh'} = DBI->connect($self->{'connect_string'}, $self->{'db_user'}, $self->{'db_passwd'});
+	  last if ($self->{'dbh'} && $self->{'dbh'}->ping());
 	  $sleep_delay += 10;
 	}
 	
-	if ($options->{'warn'}) {
+	if ($self->{'reconnect_options'}{'warn'}) {
 	  do_log('notice','Connection to Database %s restored.', $self->{'connect_string'});
 	  unless (&send_notify_to_listmaster('db_restored', $Conf::Conf{'domain'},{})) {
 	    &do_log('notice',"Unable to send notify 'db_restored' to listmaster");
@@ -242,13 +242,14 @@ sub connect {
       }
       
       if ($self->{'db_type'} eq 'Pg') { # Configure Postgres to use ISO format dates
-	$dbh->do ("SET DATESTYLE TO 'ISO';");
+	$self->{'dbh'}->do ("SET DATESTYLE TO 'ISO';");
       }
       
       ## Set client encoding to UTF8
       if ($self->{'db_type'} eq 'mysql' ||
 	  $self->{'db_type'} eq 'Pg') {
-	$dbh->do("SET NAMES 'utf8'");
+	&Log::do_log('debug','Setting client encoding to UTF-8');
+	$self->{'dbh'}->do("SET NAMES 'utf8'");
       }elsif ($self->{'db_type'} eq 'oracle') { 
 	$ENV{'NLS_LANG'} = 'UTF8';
       }elsif ($self->{'db_type'} eq 'Sybase') { 
@@ -259,38 +260,86 @@ sub connect {
       if ($self->{'db_type'} eq 'Sybase') { 
 	my $dbname;
 	$dbname="use $self->{'db_name'}";
-        $dbh->do ($dbname);
+        $self->{'dbh'}->do ($dbname);
       }
       
       ## Force field names to be lowercased
       ## This has has been added after some problems of field names upercased with Oracle
-      $dbh->{'FetchHashKeyName'}='NAME_lc';
+      $self->{'dbh'}{'FetchHashKeyName'}='NAME_lc';
 
       if ($self->{'db_type'} eq 'SQLite') { # Configure to use sympa database
-        $dbh->func( 'func_index', -1, sub { return index($_[0],$_[1]) }, 'create_function' );
-	if(defined $self->{'db_timeout'}) { $dbh->func( $self->{'db_timeout'}, 'busy_timeout' ); } else { $dbh->func( 5000, 'busy_timeout' ); };
+        $self->{'dbh'}->func( 'func_index', -1, sub { return index($_[0],$_[1]) }, 'create_function' );
+	if(defined $self->{'db_timeout'}) { $self->{'dbh'}->func( $self->{'db_timeout'}, 'busy_timeout' ); } else { $self->{'dbh'}->func( 5000, 'busy_timeout' ); };
       }
       
-      $self->{'dbh'} = $dbh if $self;
       $self->{'connect_string'} = $self->{'connect_string'} if $self;     
-      $db_connections{$self->{'connect_string'}}{'dbh'} = $dbh;
-      
-      do_log('debug2','Connected to Database %s',$self->{'db_name'});
-      return $dbh;
+      $db_connections{$self->{'connect_string'}}{'dbh'} = $self->{'dbh'};
+      &Log::do_log('debug','Connected to Database %s',$self->{'db_name'});
+      return $self->{'dbh'};
     }
 }
 
-sub query {
-    my ($self, $sql_query) = @_;
-    unless ($self->{'sth'} = $self->{'dbh'}->prepare($sql_query)) {
-        do_log('err','Unable to prepare SQL query : %s', $self->{'dbh'}->errstr);
-        return undef;
+sub do_query {
+    my $self = shift;
+    my $query = shift;
+    my @params = @_;
+
+    unless($self->connect()) {
+	&Log::do_log('err', 'Unable to get a handle to %s database',$self->{'db_name'});
+	return undef;
     }
+    my $statement = sprintf $query, @params;
+
+    &Log::do_log('debug', "Will perform query '%s'",$statement);
+    unless ($self->{'sth'} = $self->{'dbh'}->prepare($statement)) {
+	my $trace_statement = sprintf $query, @{$self->prepare_query_log_values(@params)};
+	&Log::do_log('err','Unable to prepare SQL statement %s : %s', $trace_statement, $self->{'dbh'}->errstr);
+	return undef;
+    }
+    
     unless ($self->{'sth'}->execute) {
-        do_log('err','Unable to perform SQL query %s : %s ',$sql_query, $self->{'dbh'}->errstr);
-        return undef;
+	my $trace_statement = sprintf $query, @{$self->prepare_query_log_values(@params)};
+	&Log::do_log('err','Unable to execute SQL statement "%s" : %s', $trace_statement, $self->{'dbh'}->errstr);
+	return undef;
     }
 
+    return $self->{'sth'};
+}
+
+sub do_prepared_query {
+    my $self = shift;
+    my $query = shift;
+    my @params = @_;
+
+    unless($self->connect()) {
+	&Log::do_log('err', 'Unable to get a handle to %s database',$self->{'db_name'});
+	return undef;
+    }
+
+    unless ($self->{'sth'} = $self->{'dbh'}->prepare($query)) {
+	do_log('err','Unable to prepare SQL statement : %s', $self->{'dbh'}->errstr);
+	return undef;
+    }
+    
+    unless ($self->{'sth'}->execute(@params)) {
+	do_log('err','Unable to execute SQL statement "%s" : %s', $query, $self->{'dbh'}->errstr);
+	return undef;
+    }
+
+    return $self->{'sth'};
+}
+
+sub prepare_query_log_values {
+    my $self = shift;
+    my @result;
+    foreach my $value (@_) {
+	my $cropped = substr($value,0,100);
+	if ($cropped ne $value) {
+	    $cropped .= "...[shortened]";
+	}
+	push @result, $cropped;
+    }
+    return \@result;
 }
 
 sub fetch {
@@ -328,53 +377,8 @@ sub disconnect {
     delete $db_connections{$self->{'connect_string'}};
 }
 
-## Try to create the database
 sub create_db {
     &do_log('debug3', 'List::create_db()');    
-
-    &do_log('notice','Trying to create %s database...', $Conf::Conf{'db_name'});
-
-    unless ($Conf::Conf{'db_type'} eq 'mysql') {
-	&do_log('err', 'Cannot create %s DB', $Conf::Conf{'db_type'});
-	return undef;
-    }
-
-    my $drh;
-    unless ($drh = DBI->connect("DBI:mysql:dbname=mysql;host=localhost", 'root', '')) {
-	&do_log('err', 'Cannot connect as root to database');
-	return undef;
-    }
-
-    ## Create DB
-    my $rc = $drh->func("createdb", $Conf::Conf{'db_name'}, 'localhost', $Conf::Conf{'db_user'}, $Conf::Conf{'db_passwd'}, 'admin');
-    unless (defined $rc) {
-	&do_log('err', 'Cannot create database %s : %s', $Conf::Conf{'db_name'}, $drh->errstr);
-	return undef;
-    }
-
-    ## Re-connect to DB (to prevent "MySQL server has gone away" error)
-    unless ($drh = DBI->connect("DBI:mysql:dbname=mysql;host=localhost", 'root', '')) {
-	&do_log('err', 'Cannot connect as root to database');
-	return undef;
-    }
-
-    ## Grant privileges
-    unless ($drh->do("GRANT ALL ON $Conf::Conf{'db_name'}.* TO '$Conf::Conf{'db_user'}'\@localhost IDENTIFIED BY '$Conf::Conf{'db_passwd'}'")) {
-	&do_log('err', 'Cannot grant privileges to %s on database %s : %s', $Conf::Conf{'db_user'}, $Conf::Conf{'db_name'}, $drh->errstr);
-	return undef;
-    }
-
-    &do_log('notice', 'Database %s created', $Conf::Conf{'db_name'});
-
-    ## Reload MysqlD to take changes into account
-    $rc = $drh->func("reload", $Conf::Conf{'db_name'}, 'localhost', $Conf::Conf{'db_user'}, $Conf::Conf{'db_passwd'}, 'admin');
-    unless (defined $rc) {
-	&do_log('err', 'Cannot reload mysqld : %s', $drh->errstr);
-	return undef;
-    }
-
-    $drh->disconnect();
-
     return 1;
 }
 
@@ -385,25 +389,35 @@ sub ping {
 
 sub quote {
     my ($self, $string, $datatype) = @_;
-    
     return $self->{'dbh'}->quote($string, $datatype); 
 }
 
 sub set_fetch_timeout {
     my ($self, $timeout) = @_;
-
     return $self->{'fetch_timeout'} = $timeout;
 }
 
-sub AUTOLOAD {
+## Returns a character string corresponding to the expression to use in
+## a read query (e.g. SELECT) for the field given as argument.
+## This sub takes a single argument: the name of the field to be used in
+## the query.
+##
+sub get_canonical_write_date {
     my $self = shift;
-    my $name = $AUTOLOAD;
-    $name =~ /(.*):(.*)/;
-    &do_log('err',"Function %s was not found in module %s",$2,$1);
-    return undef;
+    my $field = shift;
+    return $self->get_formatted_date({'mode'=>'write','target'=>$field});
 }
 
-sub DESTROY {} ## Here to prevent AUTOLOAD calling when destroying the object.
+## Returns a character string corresponding to the expression to use in 
+## a write query (e.g. UPDATE or INSERT) for the value given as argument.
+## This sub takes a single argument: the value of the date to be used in
+## the query.
+##
+sub get_canonical_read_date {
+    my $self = shift;
+    my $value = shift;
+    return $self->get_formatted_date({'mode'=>'read','target'=>$value});
+}
 
 ## Packages must return true.
 1;

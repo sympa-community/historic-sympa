@@ -108,7 +108,7 @@ sub db_struct {
 							   'remote_addr_one_time_ticket' => 'varchar(60)',
 							   'status_one_time_ticket' => 'varchar(60)'},
 			       'bulkmailer_table' => {'messagekey_bulkmailer' => 'varchar(80)',
-						      'messageid_bulkmailer' => 'varchar(100)',
+						      'messageid_bulkmailer' => 'varchar(200)',
 						      'packetid_bulkmailer' => 'varchar(33)',
 						      'receipients_bulkmailer' => 'text',
 						      'returnpath_bulkmailer' => 'varchar(100)',
@@ -122,6 +122,7 @@ sub db_struct {
 						      'reception_date_bulkmailer' => 'int(11)',
 						      'delivery_date_bulkmailer' => 'int(11)',
 						      'lock_bulkmailer' => 'varchar(30)'},
+
 			       'spool_table' => {'messagekey_spool' => 'bigint(20)',            # autoincrement
 						 'message_spool' => 'longtext',                 # the message as b64 encoded string
 						 'spoolname_spool'=>  "enum('msg','auth','mod','digest','archive','bounce','automatic','subscribe','topic','bulk','validated')",
@@ -147,7 +148,7 @@ sub db_struct {
 						 'dkim_i_spool' => 'varchar(100)',
 						 'dkim_header_list_spool' => 'varchar(500)',
 						 },
-			       'notification_table' => {'pk_notification' => 'int(11)',
+			       'notification_table' => {'pk_notification' => 'bigint(20)',
 							'message_id_notification' => 'varchar(100)',
 							'recipient_notification' => 'varchar(100)',
 							'reception_option_notification' => 'varchar(20)',
@@ -171,6 +172,15 @@ sub db_struct {
 						  'parameter_stat' => 'varchar(50)',
 						  'read_stat' => 'tinyint(1)',
 					      },
+				 'stat_counter_table' => {'id_counter' => 'bigint(20)',
+							  'beginning_date_counter' => 'int(11)',
+							  'end_date_counter' => 'int(11)',
+							  'data_counter' => 'varchar(50)',
+							  'robot_counter' => 'varchar(80)',
+							  'list_counter' => 'varchar(150)',
+							  'variation_counter' => 'int',
+							  'total_counter' => 'int',
+				 },
 			       'conf_table' => {'robot_conf' => 'varchar(80)',
 						'label_conf' => 'varchar(80)',
 						'value_conf' => 'varchar(300)'}
@@ -261,6 +271,10 @@ our %not_null = ('email_user' => 1,
 		'operation_stat' => 1,
 		'robot_stat' => 1,
 		'read_stat' => 1,
+		'id_counter' => 1,
+		'beginning_date_counter' => 1,
+		'data_counter' => 1,
+		'robot_counter' => 1,
 		'date_notification' => 1,
 		'pk_notification' => 1
 	);
@@ -277,6 +291,7 @@ our %primary = ('user_table' => ['email_user'],
 	       'spool_table' => ['messagekey_spool'],
 	       'conf_table' => ['robot_conf','label_conf'],
 	       'stat_table' => ['id_stat'],
+	       'stat_counter_table' => ['id_counter'],
 	       'notification_table' => ['pk_notification']
 	       );
 	       
@@ -287,7 +302,7 @@ our %autoincrement = ('notification_table' => 'pk_notification',
 ##   1st key is the concerned table
 ##   2nd key is the index name
 ##   the table lists the field on which the index applies
-my %indexes = ('admin_table' => {'user_index' => ['user_admin']},
+our %indexes = ('admin_table' => {'user_index' => ['user_admin']},
 	       'subscriber_table' => {'user_index' => ['user_subscriber']},
 	       'stat_table' => {'user_index' => ['email_stat']}
 	       );

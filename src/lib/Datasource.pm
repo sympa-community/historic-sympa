@@ -26,6 +26,7 @@ use strict;
 
 use Carp;
 use Log;
+use Data::Dumper;
 
 ############################################################
 #  constructor
@@ -42,8 +43,9 @@ use Log;
 #
 ##############################################################
 sub new {
+
     my($pkg, $param) = @_;
-    &Log::do_log('debug2', '');
+    &Log::do_log('debug', '');
     my $self = $param;
     ## Bless Message object
     bless $self, $pkg;
