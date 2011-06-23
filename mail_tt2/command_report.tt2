@@ -1,4 +1,4 @@
-From: SYMPA <[% conf.email %]@[% conf.host %]>
+From: [% conf.email_gecos %] <[% conf.email %]@[% conf.host %]>
 To: [% to %]
 Subject: [% FILTER qencode %][%|loc%]Results of your commands[%END%][%END%]
 X-Loop: [% conf.sympa %]
@@ -137,6 +137,8 @@ Your configuration regarding this command has not been updated.[%END-%]
 You probably confirmed your %1 using a different
 email address. Please try using your canonical address.[%END-%]
 
+[% ELSE %]
+[% u_err.entry %]
 [% END -%]
 [% END -%]
 [% END -%]

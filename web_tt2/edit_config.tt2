@@ -14,7 +14,7 @@
      [% close_table %]
      <a name="[%confparam.title%]">
      <h4>[% confparam.title %]</h4>
-<table class="listOfItems"><tr><th>parameter name</th><th>value</th><th>apply to</th><th>default</th>[%# <th>semantic</th> %]</tr> 
+<table class="listOfItems"><tr><th>[%|loc%]parameter name[%END%]</th><th>[%|loc%]value[%END%]</th><th>[%|loc%]apply to[%END%]</th><th>[%|loc%]default[%END%]</th>[%# <th>semantic</th> %]</tr> 
   [% ELSE %]
      [% IF dark == '1' %]
        <tr> [% SET dark='0'%]
@@ -48,7 +48,7 @@
 	[% robot %]
   [% END %]
 [% ELSE %]
-	main conf
+	[%|loc%]main conf[%END%]
 [% END %]
 </td>
 <td>[% confparam.default %]</td>[%# <td>confparam.query</td> %]
