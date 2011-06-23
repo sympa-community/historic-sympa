@@ -1170,7 +1170,7 @@ sub process_message {
     ## Initialize command report
     &report::init_report_cmd();
 	
-    ## Maybe we are an automatic list
+    ## Maybe demon is handling an automatic list
     #_amr ici on ne doit prendre que la première ligne !
     my ($dyn_list_family, $dyn_just_created);
     # we care of fake headers. If we put it, it's the 1st one.
@@ -1388,13 +1388,16 @@ sub process_message {
 
     if ($main::daemon_usage == DAEMON_CREATION) {
         #do not process messages in list creation only mode, move them to main spool
-        unless ($list->move_message($message->{'filename'}, $Conf{'queue'})) {
-            &do_log('err','sympa::Process_message(): Unable to move in spool for processing message to list %s (daemon_usage = creation)', $listname);
+	my $spool = new Sympaspool('automatic');
+	unless ($spool->update({'messagekey' => $message_in_spool->{'messagekey'}},{"spoolname" => 'msg','messagelock'=> 'NULL'})) {
+
+#        unless ($list->move_message($message->{'filename'}, $Conf{'queue'})) {
+            &do_log('err','sympa::Process_message(): Unable to move message in spool for processing message to list %s (daemon_usage = creation)', $listname);
             &report::reject_report_msg('intern','',$sender,{'msg_id' => $hdr->get('Message-ID'),'message' => $message},$robot,$message->{'msg'}->as_string,$list);
             return undef;
         }
         &do_log('info', ($dyn_just_created ? 'After automatic list creation, ' : '') 
-           . 'Message for %s from %s moved in spool %s for processing message-id=%s', $listname, $sender, $Conf{'queue'},$hdr->get('Message-ID'));
+           . 'Message for %s from %s moved in spool msg for processing message-id=%s', $listname, $sender, $hdr->get('Message-ID'));
         $status = 1;
 
     }elsif ($rcpt =~ /^listmaster(\@(\S+))?$/) {

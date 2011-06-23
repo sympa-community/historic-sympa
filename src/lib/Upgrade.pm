@@ -752,7 +752,6 @@ sub upgrade {
 		    do_log('trace',"%s/%s est un répertoire",$spooldir,$filename);
 		    next;
 		}				
-		do_log('trace',"xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx   chargement de %s/%s",$spooldir,$filename);
 
 		if (($spoolparameter eq 'queuedigest')){
 		    unless ($filename =~ /^([^@]*)\@([^@]*)$/){$ignored .= ','.$filename; next;}
@@ -826,8 +825,6 @@ sub upgrade {
 		    $robot = lc(&Conf::get_robot_conf($robot, 'host'));
 		}
 
-		do_log('trace',"xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx robot %s listname %s",$robot,$listname);
-			
 		$meta{'robot'} = $robot if $robot;
 		$meta{'list'} = $listname if $listname;
 		$meta{'priority'} = 1 unless $meta{'priority'};
