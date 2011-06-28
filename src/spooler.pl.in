@@ -384,8 +384,10 @@ while (!$signal) {
 	next;
     }
 }
+
 ## Disconnect from Database
-List::db_disconnect if ($List::dbh);
+SDM::db_disconnect if ($SDM::dbh);
+
 }
 do_log('notice', 'spooler exited normally due to signal');
 my $file = $Conf{'pidfile_spooler'};

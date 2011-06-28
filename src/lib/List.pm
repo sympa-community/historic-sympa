@@ -36,7 +36,6 @@ use WebAgent;
 use Exporter;
 use Sympaspool;
 use Archive;
-use Data::Dumper;
 # xxxxxxx faut-il virer encode ? Faut en faire un use ? 
 require Encode;
 

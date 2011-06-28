@@ -51,6 +51,7 @@ use Storable;
 use Mail::Header;
 use Archive;
 use Language;
+use SDM;
 use Log;
 use Conf;
 use mail;
@@ -96,23 +97,13 @@ sub global_count {
 
     my $message_status = shift;
 
-    my 	$statement = "SELECT COUNT(*) FROM spool_table where message_status_spool = '".$message_status."'";
-
-    $dbh = &List::db_get_handler();
-    unless ($dbh and $dbh->ping) {
-	return undef unless &List::db_connect();
-    }
-
     push @sth_stack, $sth;
-    unless ($sth = $dbh->prepare($statement)) {
-	&do_log('err','Unable to prepare SQL statement : %s', $dbh->errstr);
-	return undef;
-    }
-    unless ($sth->execute) {
-	&do_log('err','Unable to execute SQL statement "%s" : %s', $statement, $dbh->errstr);
-	return undef;
-    }
+    $sth = &SDM::do_query ("SELECT COUNT(*) FROM spool_table where message_status_spool = '".$message_status."'");
+
     my @result = $sth->fetchrow_array();
+    $sth->finish();
+    $sth = pop @sth_stack;
+
     return $result[0];
 }
 
@@ -141,10 +132,6 @@ sub get_content {
     my $orderby = $data->{'sortby'};      # sort
     my $way = $data->{'way'};             # asc or desc 
     
-    $dbh = &List::db_get_handler();
-    unless ($dbh and $dbh->ping) {
-	return undef unless &List::db_connect();
-    }
 
     my $sql_where = _sqlselector($selector);
     if ($self->{'selection_status'} eq 'bad') {
@@ -162,7 +149,7 @@ sub get_content {
 	$statement = 'SELECT '.&_selectfields($selection);
     }
 
-    $statement = $statement . sprintf " FROM spool_table WHERE %s AND spoolname_spool = %s ",$sql_where,$dbh->quote($self->{'spoolname'});
+    $statement = $statement . sprintf " FROM spool_table WHERE %s AND spoolname_spool = %s ",$sql_where,&SDM::quote($self->{'spoolname'});
 
     if ($orderby) {
 	$statement = $statement. ' ORDER BY '.$orderby.'_spool ';
@@ -174,14 +161,7 @@ sub get_content {
     do_log('trace',"statement $statement");
 
     push @sth_stack, $sth;
-    unless ($sth = $dbh->prepare($statement)) {
-	&do_log('err','Unable to prepare SQL statement : %s', $dbh->errstr);
-	return undef;
-    }
-    unless ($sth->execute) {
-	&do_log('err','Unable to execute SQL statement "%s" : %s', $statement, $dbh->errstr);
-	return undef;
-    }
+    $sth = &SDM::do_query($statement);
     if($selection eq 'count') {
 	my @result = $sth->fetchrow_array();
 	do_log('trace',"comptage %s",$result[0]);
@@ -214,11 +194,6 @@ sub next {
 
     &do_log('debug', 'Spool::next(%s,%s)',$self->{'spoolname'},$self->{'selection_status'});
     
-    $dbh = &List::db_get_handler();
-
-    unless ($dbh and $dbh->ping) {
-	return undef unless &List::db_connect();
-    }
     my $sql_where = _sqlselector($selector);
 
     if ($self->{'selection_status'} eq 'bad') {
@@ -231,30 +206,16 @@ sub next {
     my $lock = $$.'@'.hostname(); 
     my $epoch=time; # should we use milli or nano seconds ? 
 
-    my $statement = sprintf "UPDATE spool_table SET messagelock_spool=%s, lockdate_spool =%s WHERE messagelock_spool IS NULL AND spoolname_spool =%s AND %s ORDER BY priority_spool, date_spool LIMIT 1", $dbh->quote($lock),$dbh->quote($epoch),$dbh->quote($self->{'spoolname'}),$sql_where;
+    my $statement = sprintf "UPDATE spool_table SET messagelock_spool=%s, lockdate_spool =%s WHERE messagelock_spool IS NULL AND spoolname_spool =%s AND %s ORDER BY priority_spool, date_spool LIMIT 1", &SDM::quote($lock),&SDM::quote($epoch),&SDM::quote($self->{'spoolname'}),$sql_where;
     push @sth_stack, $sth;
 
-    unless ($sth = $dbh->prepare($statement)) {
-	&do_log('err','Unable to prepare SQL statement : %s', $dbh->errstr);
-	return undef;
-    }
-    unless ($sth->execute) {
-	&do_log('err','Unable to execute SQL statement "%s" : %s', $statement, $dbh->errstr);
-	return undef;
-    }
+    $sth = &SDM::do_query($statement);
     return undef unless ($sth->rows); # spool is empty
 
     my $star_select = &_selectfields();
-    my $statement = sprintf "SELECT %s FROM spool_table WHERE spoolname_spool = %s AND message_status_spool= %s AND messagelock_spool = %s AND lockdate_spool = %s AND (priority_spool != 'z' OR priority_spool IS NULL) ORDER by priority_spool LIMIT 1", $star_select ,$dbh->quote($self->{'spoolname'}),$dbh->quote($self->{'selection_status'}),$dbh->quote($lock),$dbh->quote($epoch);
+    my $statement = sprintf "SELECT %s FROM spool_table WHERE spoolname_spool = %s AND message_status_spool= %s AND messagelock_spool = %s AND lockdate_spool = %s AND (priority_spool != 'z' OR priority_spool IS NULL) ORDER by priority_spool LIMIT 1", $star_select ,&SDM::quote($self->{'spoolname'}),&SDM::quote($self->{'selection_status'}),&SDM::quote($lock),&SDM::quote($epoch);
 
-    unless ($sth = $dbh->prepare($statement)) {
-	&do_log('err','Unable to prepare SQL statement : %s', $dbh->errstr);
-	return undef;
-    }
-    unless ($sth->execute) {
-	&do_log('err','Unable to execute SQL statement "%s" : %s', $statement, $dbh->errstr);
-	return undef;
-    }
+    $sth = &SDM::do_query($statement);
     my $message = $sth->fetchrow_hashref('NAME_lc');
     $sth->finish();
     $sth = pop @sth_stack;
@@ -282,11 +243,7 @@ sub get_message {
 
     &do_log('debug', "Spool::get_message($self->{'spoolname'},messagekey = $selector->{'messagekey'}, listname = $selector->{'listname'},robot = $selector->{'robot'})");
     
-    $dbh = &List::db_get_handler();
 
-    unless ($dbh and $dbh->ping) {
-	return undef unless &List::db_connect();
-    }
     my $sqlselector = '';
     my %db_struct  = &Sympa::DatabaseDescription::db_struct();
 
@@ -301,20 +258,14 @@ sub get_message {
 	if ($field eq 'messageid') {
 	    $selector->{'messageid'} = substr $selector->{'messageid'}, 0, 95;
 	}
-	$sqlselector = $sqlselector.' '.$field.'_spool = '.$dbh->quote($selector->{$field}); 
+	$sqlselector = $sqlselector.' '.$field.'_spool = '.&SDM::quote($selector->{$field}); 
     }
     my $all = &_selectfields();
-    my $statement = sprintf "SELECT %s FROM spool_table WHERE spoolname_spool = %s AND ".$sqlselector.' LIMIT 1',$all,$dbh->quote($self->{'spoolname'});
+    my $statement = sprintf "SELECT %s FROM spool_table WHERE spoolname_spool = %s AND ".$sqlselector.' LIMIT 1',$all,&SDM::quote($self->{'spoolname'});
 
     push @sth_stack, $sth;
-    unless ($sth = $dbh->prepare($statement)) {
-	&do_log('err','Unable to prepare SQL statement : %s', $dbh->errstr);
-	return undef;
-    }
-    unless ($sth->execute) {
-	&do_log('err','Unable to execute SQL statement "%s" : %s', $statement, $dbh->errstr);
-	return undef;
-    }   
+    $sth = &SDM::do_query($statement);
+
     my $message = $sth->fetchrow_hashref('NAME_lc');
     if ($message) {
 	$message->{'lock'} =  $message->{'messagelock'}; 
@@ -325,7 +276,6 @@ sub get_message {
     $sth = pop @sth_stack;
     return $message;
 }
-
 
 #################"
 # lock one message from related spool using a specified selector
@@ -372,7 +322,7 @@ sub update {
 	    # SQL set  xx = NULL and set xx = 'NULL' is not the same !
 	    $set = $set .$meta.'_spool = NULL';
 	}else{	
-	    $set = $set .$meta.'_spool = '.$dbh->quote($values->{$meta});
+	    $set = $set .$meta.'_spool = '.&SDM::quote($values->{$meta});
 	}
 	if ($meta eq 'messagelock') {
 	    if ($values->{'messagelock'} eq 'NULL'){
@@ -380,7 +330,7 @@ sub update {
 		$set =  $set .', lockdate_spool = NULL ';
 	    }else{		
 		# when setting a lock always set the lockdate
-		$set =  $set .', lockdate_spool = '.$dbh->quote(time);
+		$set =  $set .', lockdate_spool = '.&SDM::quote(time);
 	    }    
 	}
     }
@@ -395,7 +345,7 @@ sub update {
     ## Updating Db
     my $statement = sprintf "UPDATE spool_table SET %s WHERE (%s)", $set,$where ;
 
-    unless ($dbh->do($statement)) {
+    unless (&SDM::do_query($statement)) {
 	do_log('err','Unable to execute SQL statement "%s" : %s', $statement, $dbh->errstr);
 	return undef;
     }    
@@ -415,12 +365,6 @@ sub store {
     $sender |= '';
 
     do_log('debug',"Spool::store ($self->{'spoolname'},$self->{'selection_status'}, <message_asstring> ,list : $metadata->{'list'},robot : $metadata->{'robot'} , date: $metadata->{'date'}), lock : $locked");
-
-    $dbh = &List::db_get_handler();
-
-    unless ($dbh and $dbh->ping) {
-		return undef unless &List::db_connect();
-    };
 
     my $b64msg = MIME::Base64::encode($message_asstring);
 
@@ -451,33 +395,18 @@ sub store {
     my $insertpart1; my $insertpart2;
     foreach my $meta ('list','robot','message_status','priority','date','type','subject','sender','messageid','size','headerdate','spam_status','dkim_header_list','dkim_privatekey','dkim_d','dkim_i','dkim_selector') {
 	$insertpart1 = $insertpart1. ', '.$meta.'_spool';
-	$insertpart2 = $insertpart2. ', '.$dbh->quote($metadata->{$meta});   
+	$insertpart2 = $insertpart2. ', '.&SDM::quote($metadata->{$meta});   
     }
     my $lock = $$.'@'.hostname() ;
 
     push @sth_stack, $sth;
+    my $statement        = sprintf "INSERT INTO spool_table (spoolname_spool, messagelock_spool, message_spool %s ) VALUES (%s,%s,%s %s )",$insertpart1,&SDM::quote($self->{'spoolname'}),&SDM::quote($lock),&SDM::quote($b64msg), $insertpart2;
+    $sth = &SDM::do_query ($statement);
 
-    my $statement        = sprintf "INSERT INTO spool_table (spoolname_spool, messagelock_spool, message_spool %s ) VALUES (%s,%s,%s %s )",$insertpart1,$dbh->quote($self->{'spoolname'}),$dbh->quote($lock),$dbh->quote($b64msg), $insertpart2;
-    unless ($sth = $dbh->prepare($statement)) {
-	&do_log('err','Unable to prepare SQL statement : %s', $dbh->errstr);
-	return undef;
-    }
-    unless ($sth->execute) {
-	&do_log('err','Unable to execute SQL statement "%s" : %s', $statement, $dbh->errstr);
-	return undef;
-    }
-    $statement = sprintf "SELECT messagekey_spool as messagekey FROM spool_table WHERE messagelock_spool = %s AND date_spool = %s",$dbh->quote($lock),$dbh->quote($metadata->{'date'});
-
+    $statement = sprintf "SELECT messagekey_spool as messagekey FROM spool_table WHERE messagelock_spool = %s AND date_spool = %s",&SDM::quote($lock),&SDM::quote($metadata->{'date'});
+    $sth = &SDM::do_query ($statement);
     # this query return the autoinc primary key as result of this insert
 
-    unless ($sth = $dbh->prepare($statement)) {
-	&do_log('err','Unable to prepare SQL statement : %s', $dbh->errstr);
-	return undef;
-    }
-    unless ($sth->execute) {
-	&do_log('err','Unable to execute SQL statement "%s" : %s', $statement, $dbh->errstr);
-	return undef;
-    }
     my $inserted_message = $sth->fetchrow_hashref('NAME_lc');
     my $messagekey = $inserted_message->{'messagekey'};
     
@@ -501,11 +430,6 @@ sub remove_message {
     my $messagekey = $selector->{'messagekey'};
     my $listname = $selector->{'listname'};
     do_log('debug',"remove_message ($self->{'spoolname'},$listname,$robot,$messagekey)");
-    $dbh = &List::db_get_handler();
-
-    unless ($dbh and $dbh->ping) {
-	return undef unless &List::db_connect();
-    };
     
     ## search if this message is already in spool database : mailfile may perform multiple submission of exactly the same message 
     unless ($self->get_message($selector)){
@@ -514,18 +438,11 @@ sub remove_message {
     }
     
     my $sqlselector = &_sqlselector($selector);
-    #my $statement  = sprintf "DELETE FROM spool_table WHERE spoolname_spool = %s AND messagekey_spool = %s AND list_spool = %s AND robot_spool = %s AND bad_spool IS NULL",$dbh->quote($self->{'spoolname'}),$dbh->quote($messagekey),$dbh->quote($listname),$dbh->quote($robot);
-    my $statement  = sprintf "DELETE FROM spool_table WHERE spoolname_spool = %s AND %s",$dbh->quote($self->{'spoolname'}),$sqlselector;
+    #my $statement  = sprintf "DELETE FROM spool_table WHERE spoolname_spool = %s AND messagekey_spool = %s AND list_spool = %s AND robot_spool = %s AND bad_spool IS NULL",&SDM::quote($self->{'spoolname'}),&SDM::quote($messagekey),&SDM::quote($listname),&SDM::quote($robot);
+    my $statement  = sprintf "DELETE FROM spool_table WHERE spoolname_spool = %s AND %s",&SDM::quote($self->{'spoolname'}),$sqlselector;
     
     push @sth_stack, $sth;
-    unless ($sth = $dbh->prepare($statement)) {
-	&do_log('err','Unable to prepare SQL statement : %s', $dbh->errstr);
-	return undef;
-    }
-    unless ($sth->execute) {
-	&do_log('err','Unable to execute SQL statement "%s" : %s', $statement, $dbh->errstr);
-	return undef;
-    }   
+    $sth = &SDM::do_query ($statement);
     
     $sth-> finish;
     $sth = pop @sth_stack;
@@ -560,14 +477,7 @@ sub clean {
     }
     
     push @sth_stack, $sth;
-    unless ($sth = $dbh->prepare($sqlquery)) {
-	&do_log('err','Unable to prepare SQL statement : %s', $dbh->errstr);
-	return undef;
-    }
-    unless ($sth->execute) {
-	&do_log('err','Unable to execute SQL statement "%s" : %s', $sqlquery, $dbh->errstr);
-	return undef;
-    }   
+    &SDM::do_query($sqlquery);
     $sth-> finish;
     do_log('debug',"%s entries older than %s days removed from spool %s" ,$sth->rows,$delay,$self->{'spoolname'});
     $sth = pop @sth_stack;
@@ -671,9 +581,9 @@ sub _sqlselector {
     
     foreach my $field (keys %$selector) {
 	if ($sqlselector) {
-	    $sqlselector .= ' AND '.$field.'_spool = '.$dbh->quote($selector->{$field});
+	    $sqlselector .= ' AND '.$field.'_spool = '.&SDM::quote($selector->{$field});
 	}else{
-	    $sqlselector = ' '.$field.'_spool = '.$dbh->quote($selector->{$field});
+	    $sqlselector = ' '.$field.'_spool = '.&SDM::quote($selector->{$field});
 	}
     }
     return $sqlselector;
