@@ -158,13 +158,11 @@ sub get_content {
     if ($page_size) {
 	$statement = $statement . ' LIMIT '.$ofset.' , '.$page_size;
     }
-    do_log('trace',"statement $statement");
 
     push @sth_stack, $sth;
     $sth = &SDM::do_query($statement);
     if($selection eq 'count') {
 	my @result = $sth->fetchrow_array();
-	do_log('trace',"comptage %s",$result[0]);
 	return $result[0];
     }else{
 	my @messages;
@@ -175,7 +173,6 @@ sub get_content {
 	    $message->{'listname'} = $message->{'list'}; # duplicated because "list" is a tt2 method that convert a string to an array of chars so you can't test  [% IF  message.list %] because it is always defined!!!
 	    $message->{'status'} = $self->{'selection_status'}; 
 	    push @messages, $message;
-	    do_log('trace',"contenu message de %s subject: %s",$message->{'sender'},$message->{'subject'});
 	}
 	$sth->finish();
 	$sth = pop @sth_stack;
@@ -393,7 +390,7 @@ sub store {
     $metadata->{'message_status'} = 'ok';
 
     my $insertpart1; my $insertpart2;
-    foreach my $meta ('list','robot','message_status','priority','date','type','subject','sender','messageid','size','headerdate','spam_status','dkim_header_list','dkim_privatekey','dkim_d','dkim_i','dkim_selector') {
+    foreach my $meta ('list','robot','message_status','priority','date','type','subject','sender','messageid','size','headerdate','spam_status','dkim_header_list','dkim_privatekey','dkim_d','dkim_i','dkim_selector','create_list_if_needed') {
 	$insertpart1 = $insertpart1. ', '.$meta.'_spool';
 	$insertpart2 = $insertpart2. ', '.&SDM::quote($metadata->{$meta});   
     }
@@ -576,7 +573,6 @@ sub _selectfields{
 sub _sqlselector {
 	
     my $selector = shift; 
-    do_log('trace',"_selector %s",$selector);
     my $sqlselector = '';
     
     foreach my $field (keys %$selector) {

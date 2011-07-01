@@ -82,7 +82,6 @@ Options:
    -k, --keepcopy=dir                    : keep a copy of incoming message
    -l, --lang=LANG                       : use a language catalog for Sympa
    -m, --mail                            : log calls to sendmail
-   --service=process_command|process_message|process_creation  : process dedicated to messages distribution, commands or to automatic lists creation (default three of them)
    --dump=list\@dom|ALL                  : dumps subscribers 
    --make_alias_file                     : create file in /tmp with all aliases (usefull when aliases.tpl is changed)
    --lowercase                           : lowercase email addresses in database
@@ -126,7 +125,7 @@ encryption.
 
 ## Check --dump option
 my %options;
-unless (&GetOptions(\%main::options, 'dump=s', 'debug|d', ,'log_level=s','foreground', 'service=s','config|f=s', 
+unless (&GetOptions(\%main::options, 'dump=s', 'debug|d', ,'log_level=s','foreground','config|f=s', 
 		    'lang|l=s', 'mail|m', 'keepcopy|k=s', 'help', 'version', 'import=s','make_alias_file','lowercase','md5_encode_password',
 		    'close_list=s','rename_list=s','new_listname=s','new_listrobot=s','purge_list=s','create_list','instantiate_family=s','robot=s','add_list=s','modify_list=s','close_family=s','md5_digest=s',
 		    'input_file=s','sync_include=s','upgrade','upgrade_shared','from=s','to=s','reload_list_config','list=s','quiet','close_unknown','test_database_message_buffer','conf_2_db')) {
@@ -229,16 +228,6 @@ if (!chdir($Conf{'home'})) {
    ## Function never returns.
 }
 
-if ($main::options{'service'} eq 'process_message') {
-    $main::daemon_usage = DAEMON_MESSAGE;
-}elsif ($main::options{'service'} eq 'process_command') {
-    $main::daemon_usage = DAEMON_COMMAND;
-}elsif ($main::options{'service'} eq 'process_creation') {
-    $main::daemon_usage = DAEMON_CREATION;
-}else{
-    $main::daemon_usage = DAEMON_ALL; # default is to run one sympa.pl server for commands, messages and automatic lists creation. 
-}
-
 ## Check for several files.
 unless (&Conf::checkfiles_as_root()) {
    fatal_err("output checkfiles_as_root : Missing files. Aborting.");
@@ -271,78 +260,35 @@ if ($signal ne 'hup') {
 	# start the main sympa.pl daemon
 
 	## Fork a new process dedicated to automatic list creation, if required
-	if (($Conf{'automatic_list_feature'} eq 'on') || $main::daemon_usage == DAEMON_CREATION) {
-	    do_log('debug', "Starting server for automatic lists creation");
-	    if ((my $child_pid = fork) != 0) {
-		do_log('notice', "Server for automatic lists creation started, pid $child_pid");
-		do_log('debug', "Server for automatic lists creation started, pid $child_pid, exiting from initial process");
-	    }else {
-		## We're in the specialized child process
-		$main::daemon_usage = DAEMON_CREATION; # automatic lists creation	    
-	    }
-	}
+#	if (($Conf{'automatic_list_feature'} eq 'on') || $main::daemon_usage == DAEMON_CREATION) {
+#	    do_log('debug', "Starting server for automatic lists creation");
+#	    if ((my $child_pid = fork) != 0) {
+#		do_log('notice', "Server for automatic lists creation started, pid $child_pid");
+#		do_log('debug', "Server for automatic lists creation started, pid $child_pid, exiting from initial process");
+#	    }else {
+#		## We're in the specialized child process
+#		$main::daemon_usage = DAEMON_CREATION; # automatic lists creation	    
+#	    }
+#	}
 
-	unless ($main::daemon_usage == DAEMON_CREATION) {
-
-	    ## A single process that handles both messages and commands
-	    ## The distribute/ spool is not used
-	    if ($Conf{'distribution_mode'} eq 'single' && 
-		
-		$main::daemon_usage == DAEMON_ALL ) {
-		my $purpose = 'all';
-		&do_log('debug', "Starting server for $purpose purpose");
-		if ((my $child_pid = fork) != 0) {
-		    do_log('info', "Server started for $purpose, pid $child_pid");
-		    do_log('debug', "$purpose server started, pid $child_pid, exiting from initial process");
-		    exit(0);
-		}
-		
-		## Starting a dedicated process if sympa.pl is started with a --service argument
-	    }elsif ($main::daemon_usage == DAEMON_COMMAND ||
-		    $main::daemon_usage == DAEMON_COMMAND){
-		
-		my $purpose;
-		if ($main::daemon_usage == DAEMON_COMMAND) {$purpose = 'command';}
-		elsif ($main::daemon_usage == DAEMON_MESSAGE) {$purpose = 'message';}
-		do_log('debug', "Starting server for $purpose purpose");
-		if ((my $child_pid = fork) != 0) {
-		    do_log('info', "Server started for $purpose, pid $child_pid");
-		    do_log('debug', "$purpose server started, pid $child_pid, exiting from initial process");
-		    exit(0);
-		}
-		
-		## Sympa forks to have 2 dedicated processes for processing commands and messages
-	    }else{
-		$main::daemon_usage = DAEMON_COMMAND; # fork sympa.pl dedicated to commands
-		do_log('debug', "Starting server for commands");
-		if ((my $child_pid = fork) != 0) {
-		    do_log('info', "Server for commands started, pid $child_pid");
-		    $main::daemon_usage = DAEMON_MESSAGE; # main process continue in order to fork
-		    do_log('debug', "Starting server for messages");	    
-		    if ((my $child_pid = fork) != 0) {
-			do_log('notice', "Server for messages started, pid $child_pid");
-			do_log('debug', "Server for messages started, pid $child_pid, exiting from initial process");
-			exit(0);  # exit from main process
-		    }
-		}
-	    }
+	&do_log('debug', "Starting server $0");
+	if ((my $child_pid = fork) != 0) {
+	    do_log('info', "Server started $0 pid $child_pid");
+	    do_log('debug', "$0 server started, pid $child_pid, exiting from initial process");
+	    exit(0);
 	}
+	
+	## Starting a dedicated process if sympa.pl is started with a --service argument
+	
     }
 
-    my $service = 'sympa';
-    $service .= '(distribute)' if ($main::daemon_usage == DAEMON_MESSAGE);
-    $service .= '(command)' if ($main::daemon_usage == DAEMON_COMMAND);
-    $service .= '(creation)' if ($main::daemon_usage == DAEMON_CREATION);
-    do_openlog($Conf{'syslog'}, $Conf{'log_socket_type'}, $service);
+    do_openlog($Conf{'syslog'}, $Conf{'log_socket_type'}, 'sympa');
 
-    do_log('debug', "Running server $$ for $service purpose ");
+    do_log('debug', "Running server $$");
     unless ($main::options{'batch'} ) {
 
 	## Create and write the pidfile
 	my $file = $Conf{'pidfile'};
-	$file = $Conf{'pidfile_distribute'} if ($main::daemon_usage == DAEMON_MESSAGE) ;
-	$file = $Conf{'pidfile_creation'} if ($main::daemon_usage == DAEMON_CREATION) ;
-
 	## If process is running in foreground, don't write STDERR to a dedicated file
 	my $options;
 	$options->{'stderr_to_tty'} = 1 if ($main::options{'foreground'});
@@ -373,17 +319,11 @@ if ($signal ne 'hup') {
     $signal = '0';
 }
 
-## Check for several files.
-## Prevent that 2 processes perform checks at the same time...
-if ($main::daemon_usage == DAEMON_COMMAND ||
-    $main::daemon_usage == DAEMON_ALL) {
-    unless (&Conf::checkfiles()) {
-	fatal_err("Missing files. Aborting.");
-	## No return.
-    }
-}else {
-    sleep 1; ## wait until main process has created required directories
+unless (&Conf::checkfiles()) {
+    fatal_err("Missing files. Aborting.");
+    ## No return.
 }
+
 
 ## Daemon called for dumping subscribers list
 if ($main::options{'dump'}) {
@@ -952,13 +892,6 @@ my $index_cleanqueue = 0;
 my @qfile;
 
 my $spoolname = 'msg';
-# if daemon is dedicated to message or automatic lists creation, change the current spool
-if ($main::daemon_usage == DAEMON_MESSAGE) {
-    $spoolname = 'distribute';
-}elsif ($main::daemon_usage == DAEMON_CREATION) {
-    $spoolname = 'automatic';
-}
-
 my $spool = new Sympaspool ($spoolname);
 ## This is the main loop : look for files in the directory, handles
 ## them, sleeps a while and continues the good job.
@@ -968,43 +901,39 @@ while (!$signal) {
 
     &List::init_list_cache();
 
-
-    unless ($main::daemon_usage == DAEMON_COMMAND)  { # process digest only in distribution mode
-	## Scan queuedigest
-	if ($index_queuedigest++ >=$digestsleep){
-	    $index_queuedigest=0;
-	    &SendDigest();
-	}
+    ## Scan queuedigest it should be performed by task manager !
+    if ($index_queuedigest++ >=$digestsleep){
+	$index_queuedigest=0;
+	&SendDigest();
     }
-    unless ($main::daemon_usage == DAEMON_MESSAGE) { # process expire and bads only in command mode 
-    
-	## Clean queue (bad)
-	if ($index_cleanqueue++ >= 1000){
-	    $index_cleanqueue=0;
 
-	    my $msg_bad = new Sympaspool('msg','bad'); 
-	    $msg_bad->clean({'delay'=>$Conf{'clean_delay_queue'}});
-	    my $archive_bad = new Sympaspool('archive','bad'); 
-	    $archive_bad->clean({'delay'=>$Conf{'clean_delay_queueoutgoing'}});
-	    my $queuebounce_bad = new Sympaspool('bounce','bad'); 
-	    $queuebounce_bad->clean({'delay'=>$Conf{'clean_delay_queuebounce'}});
-	    my $queuemod = new Sympaspool('mod');
-	    $queuemod->clean({'delay'=> $Conf{'clean_delay_queuemod'}});
-	    my $queueauth = new Sympaspool('auth');
-	    $queueauth->clean({'delay'=> $Conf{'clean_delay_queueauth'}});
-	    my $queuetopic = new Sympaspool('topic');
-	    $queuetopic->clean({'delay'=> $Conf{'clean_delay_queuetopic'}});
-	    my $queuesubscribe = new Sympaspool('subscribe');
-	    $queuesubscribe->clean({'delay'=> $Conf{'clean_delay_queuesubscribe'}});
-	    my $queueautomatic = new Sympaspool('automatic');
-	    $queueautomatic->clean({'delay'=> $Conf{'clean_delay_queueautomatic'}});
-	    &tools::CleanDir($Conf{'tmpdir'}, $Conf{'clean_delay_tmpdir'}); # this is not a message spool
-	}	    				          
-	## Cleanup in-memory msgid table, only in a while
-	if (time > $latest_msgid_table_cleanup + $Conf{'msgid_table_cleanup_frequency'}) {
-	    &clean_msgid_table();
-	    $latest_msgid_table_cleanup = time;
-	}
+    # it should be performed by task manager !
+    ## Clean queue (bad)
+    if ($index_cleanqueue++ >= 1000){
+	$index_cleanqueue=0;
+	
+	my $msg_bad = new Sympaspool('msg','bad'); 
+	$msg_bad->clean({'delay'=>$Conf{'clean_delay_queue'}});
+	my $archive_bad = new Sympaspool('archive','bad'); 
+	$archive_bad->clean({'delay'=>$Conf{'clean_delay_queueoutgoing'}});
+	my $queuebounce_bad = new Sympaspool('bounce','bad'); 
+	$queuebounce_bad->clean({'delay'=>$Conf{'clean_delay_queuebounce'}});
+	my $queuemod = new Sympaspool('mod');
+	$queuemod->clean({'delay'=> $Conf{'clean_delay_queuemod'}});
+	my $queueauth = new Sympaspool('auth');
+	$queueauth->clean({'delay'=> $Conf{'clean_delay_queueauth'}});
+	my $queuetopic = new Sympaspool('topic');
+	$queuetopic->clean({'delay'=> $Conf{'clean_delay_queuetopic'}});
+	my $queuesubscribe = new Sympaspool('subscribe');
+	$queuesubscribe->clean({'delay'=> $Conf{'clean_delay_queuesubscribe'}});
+	my $queueautomatic = new Sympaspool('automatic');
+	$queueautomatic->clean({'delay'=> $Conf{'clean_delay_queueautomatic'}});
+	&tools::CleanDir($Conf{'tmpdir'}, $Conf{'clean_delay_tmpdir'}); # this is not a message spool
+    }	    				          
+    ## Cleanup in-memory msgid table, only in a while
+    if (time > $latest_msgid_table_cleanup + $Conf{'msgid_table_cleanup_frequency'}) {
+	&clean_msgid_table();
+	$latest_msgid_table_cleanup = time;
     }
     
     &mail::reaper; # finish terminated process
@@ -1051,8 +980,6 @@ SDM::db_disconnect if ($SDM::dbh);
 
 do_log('notice', 'Sympa exited normally due to signal');
 my $file = $Conf{'pidfile'};
-$file = $Conf{'pidfile_distribute'} if ($main::daemon_usage == DAEMON_MESSAGE) ;
-$file = $Conf{'pidfile_creation'} if ($main::daemon_usage == DAEMON_CREATION) ;
 &tools::remove_pid($file, $$);
 
 exit(0);
@@ -1118,8 +1045,7 @@ sub process_message {
     my $message_in_spool = shift;
     &do_log('debug', 'process_message()');
 
-    my ($listname, $robot);
-    my $status;
+    my ($listname, $robot);    my $status;
     
     my $message = new Message({'message_in_spool' => $message_in_spool});
     
@@ -1175,20 +1101,17 @@ sub process_message {
     
     ## Initialize command report
     &report::init_report_cmd();
-	
+
+    my ($dyn_list_family, $dyn_just_created);	
     ## Maybe demon is handling an automatic list
-    #_amr ici on ne doit prendre que la première ligne !
-    my ($dyn_list_family, $dyn_just_created);
-    # we care of fake headers. If we put it, it's the 1st one.
-    if ($hdr->as_string() =~ /^X-Sympa-Family/mo) {
-      $dyn_list_family = $hdr->get('X-Sympa-Family');
-      chomp $dyn_list_family;
+    if($message->{'create_list_if_needed'}){
+	# we care of fake headers. If we put it, it's the 1st one.
+	if ($hdr->as_string() =~ /^X-Sympa-Family/mo) {
+	    $dyn_list_family = $hdr->get('X-Sympa-Family');
+	    chomp $dyn_list_family;
+	}
     }
-    if ($main::daemon_usage == DAEMON_CREATION && !$dyn_list_family) {
-        &do_log('err','internal server error : automatic lists creation daemon should never proceed messages without X-Sympa-Family header');
-        &report::global_report_cmd('intern','Automatic lists creation daemon with message without header',{},$sender,$robot,1);
-        return undef;
-    }
+
     $hdr->delete('X-Sympa-Family');
 
     my $list_address;
@@ -1208,7 +1131,7 @@ sub process_message {
 	$host = $conf_host;
 	$name = $listname;
 	$list_address = $name.'@'.$host;
-    }else {
+    }else{
 	$list = new List ($listname, $robot);
 	unless (defined $list) {
 	    unless ($dyn_list_family) {
@@ -1346,17 +1269,8 @@ sub process_message {
 
 	return undef;
     }
-  
-    if ($main::daemon_usage == DAEMON_MESSAGE) {
-	if (($rcpt =~ /^$Conf{'listmaster_email'}(\@(\S+))?$/) || ($rcpt =~ /^(sympa|$conf_email)(\@\S+)?$/i) || ($type =~ /^(subscribe|unsubscribe)$/o) || ($type =~ /^(request|owner|editor)$/o)) {
-	    &do_log('err','internal serveur error : distribution daemon should never proceed with command');
-	    &report::global_report_cmd('intern','Distribution daemon proceed with command',{},$sender,$robot,1);
-	    &Log::db_log({'robot' => $robot,'list' => $listname,'action' => 'Process_message','target_email' => "",'msg_id' => $hdr->get('Message-ID'),'status' => 'error','error_type' => 'internal','user_email' => $sender,'client' => $ip,'daemon' => $daemon_name});
-	    return undef;
-	} 
-    }
 
-    if ($main::daemon_usage == DAEMON_CREATION || (($Conf{'automatic_list_feature'} eq 'on') && $main::daemon_usage == DAEMON_ALL )) {
+    if ($Conf{'automatic_list_feature'} eq 'on')  {
         if ($dyn_list_family && $dyn_just_created) {
             unless (defined $list->sync_include()) {
 		&do_log('err', 'sympa::Process_message() : Failed to synchronize list members of dynamic list %s from %s family',$listname, $dyn_list_family);
@@ -1392,21 +1306,7 @@ sub process_message {
         }
     } 
 
-    if ($main::daemon_usage == DAEMON_CREATION) {
-        #do not process messages in list creation only mode, move them to main spool
-	my $spool = new Sympaspool('automatic');
-	unless ($spool->update({'messagekey' => $message_in_spool->{'messagekey'}},{"spoolname" => 'msg','messagelock'=> 'NULL'})) {
-
-#        unless ($list->move_message($message->{'filename'}, $Conf{'queue'})) {
-            &do_log('err','sympa::Process_message(): Unable to move message in spool for processing message to list %s (daemon_usage = creation)', $listname);
-            &report::reject_report_msg('intern','',$sender,{'msg_id' => $hdr->get('Message-ID'),'message' => $message},$robot,$message->{'msg'}->as_string,$list);
-            return undef;
-        }
-        &do_log('info', ($dyn_just_created ? 'After automatic list creation, ' : '') 
-           . 'Message for %s from %s moved in spool msg for processing message-id=%s', $listname, $sender, $hdr->get('Message-ID'));
-        $status = 1;
-
-    }elsif ($rcpt =~ /^listmaster(\@(\S+))?$/) {
+    if ($rcpt =~ /^listmaster(\@(\S+))?$/) {
 	$status = &DoForward('sympa', 'listmaster', $robot, $message);
 
 	## Mail adressed to the robot and mail 
@@ -1839,47 +1739,32 @@ sub DoMessage{
 	$action = 'request_auth' if ($list->{'admin'}{'msg_topic_tagging'} eq 'required_sender');
     }
 
-    if (($action =~ /^do_it/) || ($main::daemon_usage == DAEMON_MESSAGE)) {
+    if ($action =~ /^do_it/) {
 
-	if (($main::daemon_usage == DAEMON_MESSAGE) || ($main::daemon_usage == DAEMON_ALL)) {
-
-	    my $apply_dkim_signature = 'off';
-	    $apply_dkim_signature = 'on' if &tools::is_in_array($list->{'admin'}{'dkim_signature_apply_on'},'any');
-	    $apply_dkim_signature = 'on' if (&tools::is_in_array($list->{'admin'}{'dkim_signature_apply_on'},'smime_authenticated_messages') && ($is_signed->{'body'}));
-	    $apply_dkim_signature = 'on' if &tools::is_in_array($list->{'admin'}{'dkim_signature_apply_on'},'dkim_authenticated_messages');
-
-	    my $numsmtp;
-	    eval { $numsmtp =$list->distribute_msg('message'=> $message,
-						   'apply_dkim_signature'=>$apply_dkim_signature)};
-	    ## Keep track of known message IDs...if any
-	    $msgid_table{$list->get_list_id()}{$messageid} = time if ($messageid);
-	    
-	    unless (defined($numsmtp)) {
-		&do_log('err','sympa::DoMessage(): Unable to send message to list %s', $listname);
-		&report::reject_report_msg('intern','',$sender,{'msg_id' => $messageid,'message' => $message},$robot,$msg_string,$list);
-		&Log::db_log({'robot' => $robot,'list' => $list->{'name'},'action' => 'DoMessage','parameters' => "$which,$messageid,$robot",'target_email' => '','msg_id' => $messageid,'status' => 'error','error_type' => 'internal','user_email' => $sender,'client' => $ip,'daemon' => $daemon_name});
-		return undef;
-	    }
-	    &do_log('info', 'Message for %s from %s accepted (%d seconds, %d sessions, %d subscribers), message-id=%s, size=%d', $listname, $sender,  time - $start_time, $numsmtp, $list->get_total(),$messageid, $message->{'size'});
-	    
-		return 1;
-
-	}else{   
-          # this message is to be distributed but this daemon is dedicated to commands or list creation -> move it to distribution spool
-          unless ($list->move_message($message->{'filename'}, $Conf{'queuedistribute'})) {
-		&do_log('err','sympa::DoMessage(): Unable to move in spool for distribution message to list %s (daemon_usage = command)', $listname);
-		&report::reject_report_msg('intern','',$sender,{'msg_id' => $messageid,'message' => $message},$robot,$msg_string,$list);
-		&Log::db_log({'robot' => $robot,'list' => $list->{'name'},'action' => 'DoMessage','parameters' => "$which,$messageid,$robot",'target_email' => '','msg_id' => $messageid,'status' => 'error','error_type' => 'internal','user_email' => $sender,'client' => $ip,'daemon' => $daemon_name});
-		return undef;
-	    }
-	    &do_log('info', 'Message for %s from %s moved in spool %s for distribution message-id=%s', $listname, $sender, $Conf{'queuedistribute'},$messageid);
-	    &Log::db_log({'robot' => $robot,'list' => $list->{'name'},'action' => 'DoMessage','parameters' => "$which,$messageid,$robot",'target_email' => '','msg_id' => $messageid,'status' => 'success','error_type' => 'moved_in_spool','user_email' => $sender,'client' => $ip,'daemon' => $daemon_name});
-	    return 1;
+	my $apply_dkim_signature = 'off';
+	$apply_dkim_signature = 'on' if &tools::is_in_array($list->{'admin'}{'dkim_signature_apply_on'},'any');
+	$apply_dkim_signature = 'on' if (&tools::is_in_array($list->{'admin'}{'dkim_signature_apply_on'},'smime_authenticated_messages') && ($is_signed->{'body'}));
+	$apply_dkim_signature = 'on' if &tools::is_in_array($list->{'admin'}{'dkim_signature_apply_on'},'dkim_authenticated_messages');
+	
+	my $numsmtp;
+	eval { $numsmtp =$list->distribute_msg('message'=> $message,
+					       'apply_dkim_signature'=>$apply_dkim_signature)};
+	## Keep track of known message IDs...if any
+	$msgid_table{$list->get_list_id()}{$messageid} = time if ($messageid);
+	
+	unless (defined($numsmtp)) {
+	    &do_log('err','sympa::DoMessage(): Unable to send message to list %s', $listname);
+	    &report::reject_report_msg('intern','',$sender,{'msg_id' => $messageid,'message' => $message},$robot,$msg_string,$list);
+	    &Log::db_log({'robot' => $robot,'list' => $list->{'name'},'action' => 'DoMessage','parameters' => "$which,$messageid,$robot",'target_email' => '','msg_id' => $messageid,'status' => 'error','error_type' => 'internal','user_email' => $sender,'client' => $ip,'daemon' => $daemon_name});
+	    return undef;
 	}
+	&do_log('info', 'Message for %s from %s accepted (%d seconds, %d sessions, %d subscribers), message-id=%s, size=%d', $listname, $sender,  time - $start_time, $numsmtp, $list->get_total(),$messageid, $message->{'size'});
+	
+	return 1;
 	
     }elsif($action =~ /^request_auth/){
     	my $key = $list->send_auth($message);
-
+	
 	unless (defined $key) {
 	    &do_log('err','sympa::DoMessage(): Calling to send_auth function failed for user %s in list %s', $sender, $list->{'name'});
 	    &report::reject_report_msg('intern','The request authentication sending failed',$sender,{'msg_id' => $messageid,'message' => $message},$robot,$msg_string,$list);
@@ -1890,7 +1775,7 @@ sub DoMessage{
 	&Log::db_log({'robot' => $robot,'list' => $list->{'name'},'action' => 'DoMessage','parameters' => "$which,$messageid,$robot",'target_email' => '','msg_id' => $messageid,'status' => 'success','error_type' => 'kept_for_auth','user_email' => $sender,'client' => $ip,'daemon' => $daemon_name});
 	return 1;
     }elsif($action =~ /^editorkey(\s?,\s?(quiet))?/){
-
+	
 	my $key = $list->send_to_editor('md5',$message);
 
 	unless (defined $key) {

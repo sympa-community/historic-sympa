@@ -125,18 +125,19 @@ sub db_struct {
 
 			       'spool_table' => {'messagekey_spool' => 'bigint(20)',            # autoincrement
 						 'message_spool' => 'longtext',                 # the message as b64 encoded string
-						 'spoolname_spool'=>  "enum('msg','auth','mod','digest','archive','bounce','automatic','subscribe','topic','bulk','validated')",
+						 'spoolname_spool'=>  "enum('msg','auth','mod','digest','archive','bounce','subscribe','topic','bulk','validated')",
 						 'list_spool'=> 'varchar(50)',
 						 'robot_spool' =>'varchar(80)',
 						 'messagelock_spool' => 'varchar(90)',          # a unique string for each process : $$@hostname
 						 'priority_spool'=> 'varchar(2)',               # priority (list priority, owner pririty etc)
 						 'authkey_spool' => 'varchar(33)',              # authentication key for email chalenge
-						 'message_status_spool' => "enum('ok','bad')",  #
+						 'message_status_spool' => "enum('ok','bad')",  # if problem when processed entries have 'bad' status
 						 'message_diag_spool' =>'text',                 # the reason why a message is moved to bad
 						 'date_spool'=>'int(11)',                       # the date a message is copied in spool table
 						 'lockdate_spool' => 'int(11)',                 # the date a lock is set. Used in order detect old locks
 						 'headerdate_spool' => 'varchar(80)',           # the message header date
-						 'type_spool'=> 'varchar(15)',                  # list | list-request | sympa robot | other rcp
+						 'type_spool'=> 'varchar(15)',                  # list | list-request | sympa robot | other rcp 
+						 'create_list_if_needed_spool'=> 'int(1)',      # set to 1 if message is related to a dynamic list, set to 0 if list as been created or if list is static
 						 'subject_spool'=>'varchar(110)',               # subject of the message stored to list spool content faster
 						 'sender_spool'=>'varchar(110)',                #                        stored to list spool content faster
 						 'messageid_spool' => 'varchar(300)',           #                        stored to list spool content faster

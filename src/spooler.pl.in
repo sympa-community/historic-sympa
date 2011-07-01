@@ -270,7 +270,7 @@ if ($main::options{'queue'}){
 
 my $msgspool = new Sympaspool('msg');
 my $bouncespool = new Sympaspool('bounce');
-my $automaticspool = new Sympaspool('automatic');
+# my $automaticspool = new Sympaspool('automatic');
 
 ## This is the main loop : look for files in the directory, handles
 ## them, sleeps a while and continues the good job.
@@ -311,10 +311,11 @@ while (!$signal) {
 	    $spool = $bouncespool;
 	}elsif ($listname =~ /Sympa_Automatic\./) {
 	    $listname =~ s/Sympa_Automatic\.// ;
-	    do_log('trace',"c'est pour une liste auto");
-	    $spool = $automaticspool;
+	    $meta{'create_list_if_needed'} = 1;
+	    $spool = $msgspool;
 	}else{
 	    $spool = $msgspool;
+	    $meta{'dynamic_list'} = 0;
 	}
 	
 	$listname = lc($listname);

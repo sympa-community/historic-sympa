@@ -2101,9 +2101,6 @@ sub confirm {
     my $key = $1; chomp $key;
     my $start_time = time; # get the time at the beginning
 
-    my $file;
-    my $queueauth = &Conf::get_robot_conf($robot, 'queueauth');
-
     my $spool = new Sympaspool ('auth');
 
     my $messageinspool = $spool->get_message({'authkey'=>$key});
@@ -2126,7 +2123,7 @@ sub confirm {
     &Language::SetLang($list->{'admin'}{'lang'});
 
     my $name = $list->{'name'};
-    my $bytes = -s $file;
+    my $bytes = $message->{'size'};
     my $hdr= $msg->head;
 
     my $msgid = $hdr->get('Message-Id');
@@ -2204,42 +2201,28 @@ sub confirm {
 	$hdr->add('X-Validation-by', $sender);
 	
 	## Distribute the message
-	if (($main::daemon_usage == DAEMON_MESSAGE) || ($main::daemon_usage == DAEMON_ALL)) {
-	    my $numsmtp;
-	    my $apply_dkim_signature = 'off'; 
-	    $apply_dkim_signature = 'on' if &tools::is_in_array($list->{'admin'}{'dkim_signature_apply_on'},'any');
-	    $apply_dkim_signature = 'on' if &tools::is_in_array($list->{'admin'}{'dkim_signature_apply_on'},'md5_authenticated_messages');
-
-	    $numsmtp =$list->distribute_msg('message'=> $message,
-					    'apply_dkim_signature'=>$apply_dkim_signature);
-
-	    unless (defined $numsmtp) {
-		&do_log('err','Commands::confirm(): Unable to send message to list %s', $list->{'name'});
-		&report::reject_report_msg('intern','',$sender,{'msg_id' => $msgid,'message' => $message},$robot,$msg_string,$list);
-		return undef;
-	    }
- 
-	    unless ($quiet || ($action =~ /quiet/i )) {
-		unless (&report::notice_report_msg('message_confirmed',$sender,{'key' => $key,'message' => $message},$robot,$list)) {
-		    &do_log('notice',"Commands::confirm(): Unable to send template 'message_report', entry 'message_distributed' to $sender");
-		}
-	    }
-	    &do_log('info', 'CONFIRM %s from %s for list %s accepted (%d seconds)', $key, $sender, $list->{'name'}, time-$time_command);
-
-	}else{
-	    # this message is to be distributed but this daemon is dedicated to commands -> move it to distribution spool
-	    unless ($list->move_message($file, $Conf{'queuedistribute'})){
-		&do_log('err','Commands::confirm(): Unable to move in spool for distribution message to list %s (daemon_usage = command)', $listname);
-		&report::reject_report_msg('intern','',$sender,{'msg_id' => $msgid,'message' => $message},$robot,$msg_string,$list);
-		return undef;
-	    }
-	    unless ($quiet || ($action =~ /quiet/i )) {
-		&report::notice_report_msg('message_confirmed_and_in_distribution_spool',$sender,{'key' => $key,'message' => $message},$robot,$list);
-	    }
-
-	    &do_log('info', 'Message for list %s from %s confirmed ; file %s moved to spool %s for distribution message-id=%s', $name, $sender, $file, $Conf{'queuedistribute'},$hdr->get('Message-Id'));
+	my $numsmtp;
+	my $apply_dkim_signature = 'off'; 
+	$apply_dkim_signature = 'on' if &tools::is_in_array($list->{'admin'}{'dkim_signature_apply_on'},'any');
+	$apply_dkim_signature = 'on' if &tools::is_in_array($list->{'admin'}{'dkim_signature_apply_on'},'md5_authenticated_messages');
+	
+	$numsmtp =$list->distribute_msg('message'=> $message,
+					'apply_dkim_signature'=>$apply_dkim_signature);
+	
+	unless (defined $numsmtp) {
+	    &do_log('err','Commands::confirm(): Unable to send message to list %s', $list->{'name'});
+	    &report::reject_report_msg('intern','',$sender,{'msg_id' => $msgid,'message' => $message},$robot,$msg_string,$list);
+	    return undef;
 	}
-	unlink($file);
+	
+	unless ($quiet || ($action =~ /quiet/i )) {
+	    unless (&report::notice_report_msg('message_confirmed',$sender,{'key' => $key,'message' => $message},$robot,$list)) {
+		&do_log('notice',"Commands::confirm(): Unable to send template 'message_report', entry 'message_distributed' to $sender");
+	    }
+	}
+	&do_log('info', 'CONFIRM %s from %s for list %s accepted (%d seconds)', $key, $sender, $list->{'name'}, time-$time_command);
+
+	$spool->remove({'authkey'=>$key});
 	
 	return 1;
     }

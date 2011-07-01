@@ -156,6 +156,7 @@ sub new {
 	$messageasstring = $message_in_spool->{'messageasstring'};
 	$message->{'messagekey'}= $message_in_spool->{'messagekey'};
 	$message->{'spoolname'}= $message_in_spool->{'spoolname'};
+	$message->{'create_list_if_needed'}= $message_in_spool->{'create_list_if_needed'};
     }
     if ($file) {
 	## Parse message as a MIME::Entity

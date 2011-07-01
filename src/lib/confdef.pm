@@ -446,11 +446,6 @@ our @params = (
         'advice'   => gettext('Sympa also locks this file to ensure that it is not running more than once. Caution: user sympa need to write access without special privilege.'),
     },
     {
-        'name'     => 'pidfile_creation',
-        'default'  => Sympa::Constants::PIDDIR . '/sympa-creation.pid',
-        'file'     => 'sympa.conf',
-    },
-    {
         'name'     => 'umask',
         'default'  => '027',
         'query'    => gettext('Umask used for file creation by Sympa'),
@@ -678,36 +673,48 @@ our @params = (
         'name'     => 'queuedistribute',
         'default'  => Sympa::Constants::SPOOLDIR . '/distribute',
         'file'     => 'sympa.conf',
+	'version_validity' => '6.3', # valid before version 6.3
+	'upgrade'          => 1,     # used by upgrade process after validy
     },
     {
         'name'     => 'queuemod',
         'default'  => Sympa::Constants::SPOOLDIR . '/moderation',
         'query'    => gettext('Directory for moderation spool'),
         'file'     => 'sympa.conf',
+	'version_validity' => '6.3', # valid before version 6.3
+	'upgrade'          => 1,      # used by upgrade process after validy
     },
     {
         'name'     => 'queuedigest',
         'default'  => Sympa::Constants::SPOOLDIR . '/digest',
         'query'    => gettext('Directory for digest spool'),
         'file'     => 'sympa.conf',
+	'version_validity' => '6.3', # valid before version 6.3
+	'upgrade'          => 1,      # used by upgrade process after validy
     },
     {
         'name'     => 'queueauth',
         'default'  => Sympa::Constants::SPOOLDIR . '/auth',
         'query'    => gettext('Directory for authentication spool'),
         'file'     => 'sympa.conf',
+	'version_validity' => '6.3', # valid before version 6.3
+	'upgrade'          => 1,      # used by upgrade process after validy
     },
     {
         'name'     => 'queueoutgoing',
         'default'  => Sympa::Constants::SPOOLDIR . '/outgoing',
         'query'    => gettext('Directory for outgoing spool'),
         'file'     => 'sympa.conf',
+	'version_validity' => '6.3', # valid before version 6.3
+	'upgrade'          => 1,      # used by upgrade process after validy
     },
     {
         'name'     => 'queuetopic',
         'default'  => Sympa::Constants::SPOOLDIR . '/topic',
         'query'    => gettext('Directory for topic spool'),
         'file'     => 'sympa.conf',
+	'version_validity' => '6.3', # valid before version 6.3
+	'upgrade'          => 1,      # used by upgrade process after validy
     },
     {
         'name'     => 'queuebounce',
@@ -740,6 +747,8 @@ our @params = (
         'default'  => Sympa::Constants::SPOOLDIR . '/automatic',
         'query'    => gettext('Directory for automatic list creation spool'),
         'file'     => 'sympa.conf',
+	'version_validity' => '6.3', # valid before version 6.3
+	'upgrade'          => 1,      # used by upgrade process after validy
     },
     {
         'name'     => 'tmpdir',
@@ -1506,11 +1515,6 @@ our @params = (
     {
         'name'     => 'one_time_ticket_table_ttl',
         'default'  => '10d',
-    },
-    {
-        'name'     => 'pidfile_distribute',
-        'default'  => Sympa::Constants::PIDDIR . '/sympa-distribute.pid',
-        'file'     => 'sympa.conf',
     },
     {
         'name'     => 'purge_one_time_ticket_table_task',
