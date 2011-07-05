@@ -163,6 +163,8 @@ unless ($main::options{'upgrade'} || $main::options{'help'}) {
 	&fatal_err("error : data structure was not updated ; you should run sympa.pl --upgrade to run the upgrade process.");
     }
 }
+my $spooldir;
+my %distinct_spools;
 if ($signal ne 'hup') {
     ## Put ourselves in background if we're not in debug mode. That method
     ## works on many systems, although, it seems that Unix conceptors have
@@ -179,14 +181,33 @@ if ($signal ne 'hup') {
 	open(STDERR, ">> /dev/null");
 
 	setpgrp(0, 0);
-	# start the main spooler.pl daemon
+	# start a spooler.pl daemon for the spool location specified by option --queue= or for each distinct spool find in sympa.conf
 
-	if ((my $child_pid = fork) != 0) {
-	    do_log('debug', "Fork, exiting from initial process");
-	    exit(0);
+	if ($main::options{'queue'}){
+	    $distinct_spools{$main::options{'queue'}}= 1;
 	}else{
-	    do_log('debug', "Child process $$");
+	    foreach my $possible_spool ('queue', 'bouncequeue', 'queueautomatic'){
+		$distinct_spools{$Conf{$possible_spool}} = 1 if ($Conf{$possible_spool});
+	    }
 	}
+	my $master = 1;
+	foreach my $distinct_spool (keys %distinct_spools) {
+	    $spooldir = $distinct_spool;
+	    if ($master) { # only master process fork child process
+		if ((my $child_pid = fork) != 0) {
+		    do_log('debug', "Master damon fork child %s",$child_pid);		
+		}else{
+		    do_log('info', "Child process PID %s spooler for spool %s",$$,$spooldir);
+		    $master = 0;
+		    last;
+		}
+	    }
+	}
+	if ($master) {
+	    do_log('debug', "Fork, exiting from initial process");
+	    exit (0);
+	}
+	
 
 	do_openlog($Conf{'syslog'}, $Conf{'log_socket_type'}, 'spooler');
 
@@ -196,11 +217,11 @@ if ($signal ne 'hup') {
 	    
 	    ## Create and write the pidfile
 	    my $file = $Conf{'pidfile_spooler'};
-	    do_log('trace', "pidfile $file");
 	    
 	    ## If process is running in foreground, don't write STDERR to a dedicated file
 	    my $options;
 	    $options->{'stderr_to_tty'} = 1 if ($main::options{'foreground'});
+	    $options->{'multiple_process'} = 1 ;
 	    &tools::write_pid($file, $$, $options);
 	}	
 	
@@ -263,14 +284,8 @@ $SIG{'PIPE'} = 'IGNORE'; ## Ignore SIGPIPE ; prevents sympa.pl from dying
 
 my @qfile;
 
-my $spooldir = $Conf{'queue'};
-if ($main::options{'queue'}){
-    $spooldir = $main::options{'queue'} ;
-}
-
 my $msgspool = new Sympaspool('msg');
 my $bouncespool = new Sympaspool('bounce');
-# my $automaticspool = new Sympaspool('automatic');
 
 ## This is the main loop : look for files in the directory, handles
 ## them, sleeps a while and continues the good job.
@@ -309,13 +324,14 @@ while (!$signal) {
 	if ($listname =~ /Sympa_Bounce\./) {
 	    $listname =~ s/Sympa_Bounce\.// ;
 	    $spool = $bouncespool;
-	}elsif ($listname =~ /Sympa_Automatic\./) {
-	    $listname =~ s/Sympa_Automatic\.// ;
-	    $meta{'create_list_if_needed'} = 1;
-	    $spool = $msgspool;
 	}else{
 	    $spool = $msgspool;
-	    $meta{'dynamic_list'} = 0;
+	    if ($listname =~ /Sympa_Automatic\./) {
+		$listname =~ s/Sympa_Automatic\.// ;
+		$meta{'create_list_if_needed'} = 1;		
+	    }else{
+		$meta{'create_list_if_needed'} = 0;		
+	    }
 	}
 	
 	$listname = lc($listname);
@@ -362,7 +378,7 @@ while (!$signal) {
 	
 	my $message = new Message({'file'=>$spooldir.'/'.$filename});
 
-#	my $dump = &Dumper($message->{'msg_as_string'}); open (DUMP,">>/tmp/dumper"); printf DUMP 'Storing in db spool message \n%s',$dump ; close DUMP; do_log('trace',"dumper");
+#	my $dump = &Dumper($message->{'msg_as_string'}); open (DUMP,">>/tmp/dumper"); printf DUMP 'Storing in db spool message \n%s',$dump ; close DUMP; 
 	my $messagekey = $spool->store($message->{'msg_as_string'},\%meta);
 	unless($messagekey) {
 	    do_log('err',"Could not load message %s/%s in db spool",$spooldir, $filename);

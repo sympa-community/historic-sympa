@@ -169,7 +169,7 @@ sub new {
 	    $messageasstring = $messageasstring.$_;
 	}
 	close(FILE);
-	# my $dump = &Dumper($messageasstring); open (DUMP,">>/tmp/dumper"); printf DUMP 'lecture du fichier \n%s',$dump ; close DUMP; do_log('trace',"dumper");
+	# my $dump = &Dumper($messageasstring); open (DUMP,">>/tmp/dumper"); printf DUMP 'lecture du fichier \n%s',$dump ; close DUMP; 
     }
     if($messageasstring){
 	if (ref ($messageasstring)){

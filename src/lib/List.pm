@@ -3112,7 +3112,7 @@ sub send_file {
 	$data->{'dkim'} = &tools::get_dkim_parameters({'robot' => $self->{'domain'}});
     } 
     $data->{'use_bulk'} = 1  unless ($data->{'alarm'}) ; # use verp excepted for alarms. We should make this configurable in order to support Sympa server on a machine without any MTA service
-	   my $dump = &Dumper($data); open (DUMP,">>/tmp/dumper2"); printf DUMP '----------------data \n%s',$dump ; close DUMP; do_log('trace',"dumper");
+	  # my $dump = &Dumper($data); open (DUMP,">>/tmp/dumper2"); printf DUMP '----------------data \n%s',$dump ; close DUMP; 
     unless (&mail::mail_file($filename, $who, $data, $self->{'domain'})) {
 	&Log::do_log('err',"List::send_file, could not send template $filename to $who");
 	return undef;
@@ -3553,7 +3553,6 @@ sub send_to_editor {
 
        # prepare html view of this message
        my $destination_dir  = $Conf::Conf{'viewmail_dir'}.'/mod/'.$self->get_list_id().'/'.$modkey;
-       do_log('trace',"viewmail_dir :%s",$Conf::Conf{'viewmail_dir'});
        &Archive::convert_single_msg_2_html ({'msg_as_string'=>$message->{'msg_as_string'},
 					     'destination_dir'=>$destination_dir,
 					     'attachement_url' => "viewmod/$name/$modkey",
@@ -6774,7 +6773,6 @@ sub archive_msg {
 	    ## ignoring message with a no-archive flag	    
 	    do_log('info',"Do not archive message with no-archive flag for list %s",$self->get_list_id());
 	}else{
-	    do_log('trace', 'on va spooler pour archive');
 	    my $spoolarchive = new Sympaspool ('archive');
 	    unless ($message->{'messagekey'}) {
 		do_log('err', "could not store message in archive spool, messagekey missing");
