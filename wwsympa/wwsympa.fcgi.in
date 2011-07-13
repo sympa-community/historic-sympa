@@ -15815,7 +15815,7 @@ sub export_topics {
      wwslog ('debug2',"export_topics($robot)");
      my %topics = &List::load_topics($robot);
 
-     unless (defined %topics) {
+     unless (%topics) {
 	 &wwslog('err','No topics defined');
 	 return undef;
      }
