@@ -15253,6 +15253,7 @@ sub do_suspend_request_action {
 
 	# lists selected
 	@lists = split /\0/, $in{'listname'};
+	my $report = "";
 	foreach my $line (@lists) {
 
 	    my $unsub_list = new List ($line, $robot);
@@ -15261,7 +15262,22 @@ sub do_suspend_request_action {
 		return undef;
 	    }
 
-	    &unsubscribe($param->{'user'}{'email'}, $unsub_list);
+	    my %result = &unsubscribe($param->{'user'}{'email'}, $unsub_list);
+	    if ($result{'success'} == 1) {
+		if ($result{'details'} eq 'sent_to_owner') {
+		    $report .= sprintf(gettext("Your unsubscription request to list %s was sent to the list owner."),$unsub_list->{'name'});
+		}else{
+		    $report .= sprintf(gettext("You were successfully unsubscribed from list %s."),$unsub_list->{'name'});
+		}
+	    }else{
+		if ($result{'category_error'} eq 'auth') {
+		    $report .= sprintf(gettext("Unsubscription from list %s denied: Unsubscription from this list is closed."),$unsub_list->{'name'});
+		}else{
+		    $report .= sprintf(gettext("Unsubscription from list %s failed."),$unsub_list->{'name'});
+		}
+	    }
+	    $report .= "\n";
+
 	}
 	if($lists[0] eq ''){
 	    &report::reject_report_web('user','missing_arg',{'argument' => 'must picked one or more list(s)'}, $param->{'action'});
@@ -15269,7 +15285,7 @@ sub do_suspend_request_action {
 	    return 'suspend_request';
 	}
 	
-	&report::notice_report_web('performed',{},"You are unsubscribe from the list(s)");
+	&report::notice_report_web($report,{},'');
     }else{
 	&report::reject_report_web('user','unknown_action',{},$in{'sub_action'},$list);
 	&wwslog('info','unknown action %s', $in{'sub_action'});
