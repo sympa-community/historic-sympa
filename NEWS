@@ -3,6 +3,31 @@
 
 (See Changelog file for the full changes log)
 
+6.1.6		July 20, 2011
+
+  Bug fixes:
+
+	[7135] web_tt2/notice.tt2, wwsympa/wwsympa.fcgi.in: [Reported by J.C.
+	granger, INRA] In the "Manage your subscriptions" page, list members
+	could unsubscribe from list where unsubscription was closed. Fixed by
+	checking authorization scenarios.
+
+	[7132] wwsympa/wwsympa.fcgi.in: [Reported by F. Gadin, univ. La
+	Rochelle] The code in wwsympa used the - deprecated - way of testing
+	hash emptiness. Fixed by removing the "defined" pragma when testing
+	whether the has contains a defined value.
+
+	[7131] src/lib/tools.pm:  In some cases, sympa.pl would reach 100% CPU
+	while processing a message. Fixed by updating the way the text is
+	wrapped when a message is constituted.
+
+	[7124] src/etc/mhonarc-ressources.tt2: [#7055][Submitted by Andras
+	Bendzsak] email with RFC5322-incompliant mailbox quoted by MTA such as
+	Postfix messes archive browsing.  Backported from trunk.
+
+	[7119] wwsympa/bounced.pl.in:  filehandle was not closed.  Backport
+	from trunk.
+
 6.1.5		June 06, 2011
 
   Changes:
