@@ -9,10 +9,10 @@ msgstr ""
 "PO-Revision-Date: 2011-07-03 17:49+0200\n"
 "Last-Translator: Laszlo <torlasz@net.sote.hu>\n"
 "Language-Team: Magyar\n"
-"Language: hu\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+"Language: hu\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "X-Generator: Pootle 2.1.2\n"
 
@@ -4895,7 +4895,7 @@ msgstr "Keresési tartomány:"
 #. (date_to_formated)
 #. This entry is a date/time format
 #. Check the strftime manpage for format details : http://docs.freebsd.org/info/gawk/gawk.info.Time_Functions.html
-#: ../web_tt2/viewlogs.tt2:113 ../wwsympa/wwsympa.fcgi.in:16198
+#: ../web_tt2/viewlogs.tt2:113 ../wwsympa/wwsympa.fcgi.in:16239
 msgid "%d %b %Y %H:%M:%S"
 msgstr "%Y. %b. %-d., %H.%M.%S"
 
@@ -8602,7 +8602,7 @@ msgstr "%Y. %b. %d   %H.%M"
 
 #. This entry is a date/time format
 #. Check the strftime manpage for format details : http://docs.freebsd.org/info/gawk/gawk.info.Time_Functions.html
-#: ../src/lib/Commands.pm:963 ../wwsympa/wwsympa.fcgi.in:9810
+#: ../src/lib/Commands.pm:963 ../wwsympa/wwsympa.fcgi.in:9835
 msgid "%A"
 msgstr "%A"
 
@@ -9444,18 +9444,18 @@ msgstr "%Y. %b. %-d., %A"
 #. This entry is a date/time format
 #. Check the strftime manpage for format details : http://docs.freebsd.org/info/gawk/gawk.info.Time_Functions.html
 #: ../src/lib/List.pm:3110 ../src/lib/List.pm:3111 ../src/lib/List.pm:3115
-#: ../wwsympa/wwsympa.fcgi.in:10992 ../wwsympa/wwsympa.fcgi.in:11061
-#: ../wwsympa/wwsympa.fcgi.in:11263 ../wwsympa/wwsympa.fcgi.in:11610
-#: ../wwsympa/wwsympa.fcgi.in:15061 ../wwsympa/wwsympa.fcgi.in:15068
-#: ../wwsympa/wwsympa.fcgi.in:15770 ../wwsympa/wwsympa.fcgi.in:16548
-#: ../wwsympa/wwsympa.fcgi.in:16549 ../wwsympa/wwsympa.fcgi.in:4280
+#: ../wwsympa/wwsympa.fcgi.in:11017 ../wwsympa/wwsympa.fcgi.in:11086
+#: ../wwsympa/wwsympa.fcgi.in:11288 ../wwsympa/wwsympa.fcgi.in:11635
+#: ../wwsympa/wwsympa.fcgi.in:15086 ../wwsympa/wwsympa.fcgi.in:15093
+#: ../wwsympa/wwsympa.fcgi.in:15811 ../wwsympa/wwsympa.fcgi.in:16589
+#: ../wwsympa/wwsympa.fcgi.in:16590 ../wwsympa/wwsympa.fcgi.in:4280
 #: ../wwsympa/wwsympa.fcgi.in:4338 ../wwsympa/wwsympa.fcgi.in:4909
-#: ../wwsympa/wwsympa.fcgi.in:4910 ../wwsympa/wwsympa.fcgi.in:6407
-#: ../wwsympa/wwsympa.fcgi.in:7426 ../wwsympa/wwsympa.fcgi.in:7969
-#: ../wwsympa/wwsympa.fcgi.in:8016 ../wwsympa/wwsympa.fcgi.in:8018
-#: ../wwsympa/wwsympa.fcgi.in:8494 ../wwsympa/wwsympa.fcgi.in:8495
-#: ../wwsympa/wwsympa.fcgi.in:8529 ../wwsympa/wwsympa.fcgi.in:8530
-#: ../wwsympa/wwsympa.fcgi.in:8709 ../wwsympa/wwsympa.fcgi.in:8710
+#: ../wwsympa/wwsympa.fcgi.in:4910 ../wwsympa/wwsympa.fcgi.in:6432
+#: ../wwsympa/wwsympa.fcgi.in:7451 ../wwsympa/wwsympa.fcgi.in:7994
+#: ../wwsympa/wwsympa.fcgi.in:8041 ../wwsympa/wwsympa.fcgi.in:8043
+#: ../wwsympa/wwsympa.fcgi.in:8519 ../wwsympa/wwsympa.fcgi.in:8520
+#: ../wwsympa/wwsympa.fcgi.in:8554 ../wwsympa/wwsympa.fcgi.in:8555
+#: ../wwsympa/wwsympa.fcgi.in:8734 ../wwsympa/wwsympa.fcgi.in:8735
 msgid "%d %b %Y"
 msgstr "%Y. %b. %-d."
 
@@ -9601,14 +9601,38 @@ msgstr "%H:%M:%S"
 #. This entry is a date/time format
 #. Check the strftime manpage for format details : http://docs.freebsd.org/info/gawk/gawk.info.Time_Functions.html
 #: ../wwsympa/SympaSession.pm:436 ../wwsympa/SympaSession.pm:437
-#: ../wwsympa/wwsympa.fcgi.in:11844 ../wwsympa/wwsympa.fcgi.in:11977
-#: ../wwsympa/wwsympa.fcgi.in:14290 ../wwsympa/wwsympa.fcgi.in:7923
+#: ../wwsympa/wwsympa.fcgi.in:11869 ../wwsympa/wwsympa.fcgi.in:12002
+#: ../wwsympa/wwsympa.fcgi.in:14315 ../wwsympa/wwsympa.fcgi.in:7948
 msgid "%d %b %y  %H:%M"
 msgstr "%Y. %b. %-d., %H.%M"
 
+# nlsref 6,18
+#: ../wwsympa/wwsympa.fcgi.in:15268
+#, fuzzy
+msgid "Your unsubscription request to list %s was sent to the list owner."
+msgstr "A(z) %s listáról törölték."
+
+#: ../wwsympa/wwsympa.fcgi.in:15270
+#, fuzzy
+msgid "You were successfully unsubscribed from list %s."
+msgstr "Leiratkozását kérte a(z) %1 levelezési listáról."
+
+# nlsref 8,24
+#: ../wwsympa/wwsympa.fcgi.in:15274
+#, fuzzy
+msgid ""
+"Unsubscription from list %s denied: Unsubscription from this list is closed."
+msgstr "Leiratkozási kérelem a(z) %s listán"
+
+# nlsref 8,24
+#: ../wwsympa/wwsympa.fcgi.in:15276
+#, fuzzy
+msgid "Unsubscription from list %s failed."
+msgstr "Leiratkozási kérelem a(z) %s listán"
+
 #. This entry is a date/time format
 #. Check the strftime manpage for format details : http://docs.freebsd.org/info/gawk/gawk.info.Time_Functions.html
-#: ../wwsympa/wwsympa.fcgi.in:16143 ../wwsympa/wwsympa.fcgi.in:16144
+#: ../wwsympa/wwsympa.fcgi.in:16184 ../wwsympa/wwsympa.fcgi.in:16185
 msgid "%Y-%m-%d-%H-%M-%S"
 msgstr "%Y-%m-%d-%H-%M-%S"
 
@@ -12659,11 +12683,6 @@ msgstr ""
 #~ msgid "Unsubscription from %1"
 #~ msgstr "Leiratkozás a(z) %1 levelezési listáról"
 
-# nlsref 8,24
-#, fuzzy
-#~ msgid "Unsubscription from this list is impossible."
-#~ msgstr "Leiratkozási kérelem a(z) %s listán"
-
 #~ msgid "%1 messages selected out of %2"
 #~ msgstr "%2 levélből %1 mutatva"
 
@@ -13105,10 +13124,6 @@ msgstr ""
 #~ "jóváhagyásra.\n"
 #~ "Értesítést fog kapni, amint a listára fel lett véve (vagy törölve lett).\n"
 
-# nlsref 6,18
-#~ msgid "Your subscription to list %s has been removed."
-#~ msgstr "A(z) %s listáról törölték."
-
 # nlsref 6,49
 #~ msgid ""
 #~ "\n"
@@ -13217,3 +13232,12 @@ msgstr ""
 #, fuzzy
 #~ msgid "Unable to rename bounces"
 #~ msgstr "Nem sikerült csatornát létrehozni az smtpto-ban: %m"
+
+# nlsref 8,24
+#, fuzzy
+#~ msgid "Unsubscription from this list is impossible."
+#~ msgstr "Leiratkozási kérelem a(z) %s listán"
+
+# nlsref 6,18
+#~ msgid "Your subscription to list %s has been removed."
+#~ msgstr "A(z) %s listáról törölték."

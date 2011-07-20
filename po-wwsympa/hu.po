@@ -16,10 +16,10 @@ msgstr ""
 "PO-Revision-Date: 2011-07-05 08:56+0200\n"
 "Last-Translator: Laszlo <torlasz@net.sote.hu>\n"
 "Language-Team: Magyar\n"
-"Language: hu\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+"Language: hu\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "X-Generator: Pootle 2.1.2\n"
 
@@ -76,9 +76,9 @@ msgid ""
 msgstr ""
 "Ha valami problémája van a rendszer használatával, érdemes megnéznie a <a "
 "href=\"%1/help/faquser\">felhasználói <acronym title=\"Gyakran Ismételt "
-"Kérdések\">GYIK</acronym></a>-ot vagy a  <a href=\"%"
-"1/help/faqadmin\">listatulajdonosok <acronym title=\"Gyakran Ismételt "
-"Kérdések\">GYIK</acronym></a>-ját."
+"Kérdések\">GYIK</acronym></a>-ot vagy a  <a href=\"%1/help/faqadmin"
+"\">listatulajdonosok <acronym title=\"Gyakran Ismételt Kérdések\">GYIK</"
+"acronym></a>-ját."
 
 #: ../web_tt2/help_introduction.tt2:3
 msgid "Mailing lists - General introduction"
@@ -293,8 +293,8 @@ msgid ""
 "change your <a href=\"%1/help/user#options\">subscriber options</a> list by "
 "list,"
 msgstr ""
-"megváltoztathatja a <a href=\"%1/help/user#options\">tagsági beállításait</a> "
-"az egyes listákon külön-külön"
+"megváltoztathatja a <a href=\"%1/help/user#options\">tagsági beállításait</"
+"a> az egyes listákon külön-külön"
 
 #. (path_cgi)
 #: ../web_tt2/help_introduction.tt2:46
@@ -303,8 +303,8 @@ msgid ""
 "apply to the whole mailing list environment (name, password, language of the "
 "mailing list web interface, etc.);"
 msgstr ""
-"megváltoztathatja az <a href=\"%1/help/user#pref\">általános beállításait</a>, "
-"melyek az egész levelezőlista-szolgáltatásra vonatkoznak (név, jelszó, "
+"megváltoztathatja az <a href=\"%1/help/user#pref\">általános beállításait</"
+"a>, melyek az egész levelezőlista-szolgáltatásra vonatkoznak (név, jelszó, "
 "milyen nyelven működjön a szolgáltatás, stb.)"
 
 #: ../web_tt2/help_introduction.tt2:48
@@ -354,8 +354,8 @@ msgid ""
 "<a href=\"%1/help/shared#shared_read\">download documents</a> from the "
 "shared document web space,"
 msgstr ""
-"<a href=\"%1/help/shared#shared_read\">állományokat tölthet le</a> azon listák "
-"közös dokumentumtárából, melyeknek tagja"
+"<a href=\"%1/help/shared#shared_read\">állományokat tölthet le</a> azon "
+"listák közös dokumentumtárából, melyeknek tagja"
 
 #. (path_cgi)
 #: ../web_tt2/help_introduction.tt2:55 ../web_tt2/help_user.tt2:81
@@ -564,8 +564,8 @@ msgid ""
 "<strong>appoint one or several <a href=\"%1/help/listconfig#description"
 "\">moderators</a></strong>;"
 msgstr ""
-"<strong>kijelölni egy vagy több <a href=\"%"
-"1/help/listconfig#description\">szerkesztőt</a></strong> (ha ez szükséges)"
+"<strong>kijelölni egy vagy több <a href=\"%1/help/listconfig#description"
+"\">szerkesztőt</a></strong> (ha ez szükséges)"
 
 #. (path_cgi)
 #: ../web_tt2/help_introduction.tt2:101
@@ -573,8 +573,8 @@ msgid ""
 "<strong>manage <a href=\"%1/help/admin#manage_members\">subscriptions and "
 "unsubscriptions</a></strong>;"
 msgstr ""
-"<strong>felügyelni <a href=\"%1/help/admin#manage_members\">a lista tagjainak "
-"fel- és leiratkozását</a></strong>"
+"<strong>felügyelni <a href=\"%1/help/admin#manage_members\">a lista "
+"tagjainak fel- és leiratkozását</a></strong>"
 
 #. (path_cgi)
 #: ../web_tt2/help_introduction.tt2:102
@@ -583,8 +583,8 @@ msgid ""
 "admin#manage_shared\">shared document web space</a></strong> at the "
 "subscribers' disposal;"
 msgstr ""
-"<strong>eldönteni, hogy a listának szüksége van-e <a href=\"%"
-"1/help/admin#manage_shared\">közös dokumentumtárra</a></strong>"
+"<strong>eldönteni, hogy a listának szüksége van-e <a href=\"%1/help/"
+"admin#manage_shared\">közös dokumentumtárra</a></strong>"
 
 #: ../web_tt2/help_introduction.tt2:103
 msgid ""
@@ -691,10 +691,10 @@ msgid ""
 "about <a href=\"%1/help/admin#rulesadmin\">good practices for owners and "
 "moderators</a>."
 msgstr ""
-"További tudnivalók olvashatók a  dokumentáció <a href=\"%"
-"1/help/sendmsg#rulesuser\">\"Tanácsok listatagoknak\"</a> és a <a href=\"%"
-"1/help/admin#rulesadmin\">\"Tanácsok listatulajdonosoknak és "
-"szerkesztőknek\"</a> című részein."
+"További tudnivalók olvashatók a  dokumentáció <a href=\"%1/help/"
+"sendmsg#rulesuser\">\"Tanácsok listatagoknak\"</a> és a <a href=\"%1/help/"
+"admin#rulesadmin\">\"Tanácsok listatulajdonosoknak és szerkesztőknek\"</a> "
+"című részein."
 
 #: ../web_tt2/help_user.tt2:3
 msgid "Mailing lists - User Guide"
