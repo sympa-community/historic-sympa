@@ -1,13 +1,13 @@
 msgid ""
 msgstr ""
 "POT-Creation-Date: 2002-07-16 17:27+0800\n"
-"PO-Revision-Date: 2011-06-06 09:15+0200\n"
+"PO-Revision-Date: 2011-07-04 20:48+0200\n"
 "Last-Translator: Anonymous Pootle User\n"
 "Language-Team: Français\n"
+"Language: fr\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Language: fr\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
 "X-Generator: Pootle 2.1.2\n"
 "Projct-Id-Version: fr\n"
@@ -9881,7 +9881,7 @@ msgstr "interrompre la réception des messages (utile pendant les vacances)"
 
 #: ../wwsympa/wwslib.pm:37
 msgid "you do not receive your own posts"
-msgstr "pour ne pas recevoir ses propres messages"
+msgstr "Ne pas recevoir mes propres messages"
 
 #: ../src/lib/confdef.pm:1009
 msgid "Database private extention to subscriber table"
@@ -9889,7 +9889,7 @@ msgstr ""
 
 #: ../src/lib/confdef.pm:1017
 msgid "Database private extention to user table"
-msgstr ""
+msgstr "Extension privée de la table des utilisateurs dans la base de donnée"
 
 #: ../src/lib/confdef.pm:1058
 msgid ""

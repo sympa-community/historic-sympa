@@ -8,13 +8,13 @@ msgstr ""
 "Project-Id-Version: sympa\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
 "POT-Creation-Date: 2002-07-16 17:27+0800\n"
-"PO-Revision-Date: 2011-06-01 15:23+0200\n"
+"PO-Revision-Date: 2011-06-15 09:50+0200\n"
 "Last-Translator: Serguei S. Dukachev <iam@dukess.ru>\n"
 "Language-Team: Russian <ru@li.org>\n"
+"Language: ru\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Language: ru\n"
 "Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n%"
 "10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
 "X-Generator: Pootle 2.1.2\n"
@@ -241,7 +241,7 @@ msgstr "Подписчики:"
 
 #: ../web_tt2/list_panel.tt2:12
 msgid "Error rate:"
-msgstr "Доля ошибок: "
+msgstr "Доля ошибок:"
 
 #: ../web_tt2/get_inactive_lists.tt2:14 ../web_tt2/list_panel.tt2:13
 msgid "Owners"
@@ -272,12 +272,13 @@ msgid ""
 "Use it with care: it allows you to modify some of the list parameters. The "
 "list of the parameters you can modify depends on your privileges."
 msgstr ""
-"Используйте с осторожностью : Вы изменить некоторые параметры рассылки. "
-"Список параметров, которые можно изменить, зависит от Ваших полномочий. "
+"Используйте с осторожностью : Вы можете изменить некоторые параметры "
+"рассылки. Список параметров, которые можно изменить, зависит от Ваших "
+"полномочий."
 
 #: ../web_tt2/admin.tt2:9
 msgid "Customizing: "
-msgstr "Настройка:"
+msgstr "Настройка: "
 
 #: ../web_tt2/admin.tt2:9
 msgid "Editing of various files and messages attached to your list."
@@ -293,7 +294,7 @@ msgid ""
 "on."
 msgstr ""
 "Позволяет вам добавлять или удалять подписчиков рассылки, модерировать "
-"подписки и т. п. "
+"подписки и т. п."
 
 #: ../web_tt2/admin.tt2:12
 msgid "Blacklist:"
@@ -302,7 +303,7 @@ msgstr "Чёрный список:"
 #: ../web_tt2/admin.tt2:12
 msgid "Handles the set of black-listed mail addresses for this list."
 msgstr ""
-"Обрабатывает набор адресов, внесённых в чёрный список для этой рассылки. "
+"Обрабатывает набор адресов, внесённых в чёрный список для этой рассылки."
 
 #: ../web_tt2/admin.tt2:15
 msgid "Manage archives:"
@@ -310,11 +311,11 @@ msgstr "Управление архивами:"
 
 #: ../web_tt2/admin.tt2:15
 msgid "Allows you to download and delete list archives."
-msgstr "Позволяет вам загружать и удалять архивы рассылки. "
+msgstr "Позволяет вам загружать и удалять архивы рассылки."
 
 #: ../web_tt2/admin.tt2:18
 msgid "Bounces:"
-msgstr "Возвращено сообщений: "
+msgstr "Возвращено сообщений:"
 
 #: ../web_tt2/admin.tt2:18
 msgid "Manages non-delivery reports (also called bounces)."
@@ -327,7 +328,7 @@ msgstr "Журналы:"
 
 #: ../web_tt2/admin.tt2:21
 msgid "A tool for exploring the list logs."
-msgstr "Инструмент для работы с журналами рассылки. "
+msgstr "Инструмент для работы с журналами рассылки."
 
 #: ../web_tt2/admin.tt2:26
 msgid "Drastic operations"
@@ -349,7 +350,7 @@ msgid ""
 "again."
 msgstr ""
 "Эта рассылка сейчас закрыта. Щелчок по этой кнопке снова сделает её "
-"активной. "
+"активной."
 
 #: ../web_tt2/admin.tt2:36 ../web_tt2/admin_menu.tt2:122
 #: ../web_tt2/admin_menu.tt2:124
@@ -382,7 +383,7 @@ msgid ""
 msgstr ""
 "Позволяет Вам изменить имя рассылки. Всё, связанное с рассылкой, будет "
 "перемаркировано в соответствии с новым названием, включая почтовые алиасы и "
-"web-архивы. "
+"web-архивы."
 
 #: ../web_tt2/admin.tt2:59 ../web_tt2/admin_menu.tt2:96
 #: ../web_tt2/admin_menu.tt2:98
@@ -391,7 +392,7 @@ msgstr "Создать общее пространство"
 
 #: ../web_tt2/admin.tt2:59
 msgid "Initializes the shared document web space."
-msgstr "Инициализирует WEB-пространство для общих документов. "
+msgstr "Инициализирует WEB-пространство для общих документов."
 
 #: ../web_tt2/admin.tt2:63 ../web_tt2/admin_menu.tt2:105
 msgid "Delete Shared"
@@ -400,8 +401,7 @@ msgstr "Удалить общее пространство"
 #. (listname)
 #: ../web_tt2/admin.tt2:63
 msgid "Are you sure you wish to delete the shared documents for list %1?"
-msgstr ""
-"Вы уверены, что хотите удалить общие документы для списка рассылки %1? "
+msgstr "Вы уверены, что хотите удалить общие документы для списка рассылки %1?"
 
 #: ../web_tt2/admin.tt2:63
 msgid ""
@@ -409,7 +409,7 @@ msgid ""
 "shared\" button."
 msgstr ""
 "Закрывает WEB-пространство для общих документов. Оно может быть "
-"восстановлено кнопкой \"Восстановить общее пространство\". "
+"восстановлено кнопкой \"Восстановить общее пространство\"."
 
 #: ../web_tt2/admin.tt2:67
 msgid "Restore Shared"
@@ -417,16 +417,16 @@ msgstr "Восстановить общее пространство"
 
 #: ../web_tt2/admin.tt2:67
 msgid "Restores the previously closed shared document web space."
-msgstr "Восстанавливает ранее закрытое WEB-пространство для общих документов. "
+msgstr "Восстанавливает ранее закрытое WEB-пространство для общих документов."
 
 #. (count)
 #: ../web_tt2/active_lists.tt2:17 ../web_tt2/active_lists.tt2:5
 msgid " The %1 most active lists "
-msgstr " %1 самых активных рассылок"
+msgstr " %1 самых активных рассылок "
 
 #: ../web_tt2/active_lists.tt2:7
 msgid " Active lists "
-msgstr " Активные рассылки"
+msgstr " Активные рассылки "
 
 #. (for)
 #: ../web_tt2/active_lists.tt2:11 ../web_tt2/active_lists.tt2:17
@@ -594,11 +594,11 @@ msgstr "Удалить архив за выбранные месяцы"
 
 #: ../web_tt2/arc_manage.tt2:24
 msgid "Do you really want to delete Selected Archives?"
-msgstr "Вы действительно хотите удалить указанные архивы? "
+msgstr "Вы действительно хотите удалить указанные архивы?"
 
 #: ../web_tt2/arc_manage.tt2:24
 msgid "Do you want to DownLoad a Zip of the selected Archives?"
-msgstr "Вы хотите загрузить ZIP-файл с выбранными архивами? "
+msgstr "Вы хотите загрузить ZIP-файл с выбранными архивами?"
 
 #: ../web_tt2/arc_protect.tt2:7
 msgid "I am not a spammer"
@@ -609,7 +609,7 @@ msgid ""
 "This button aims at protecting mailing lists archives against Spam Harvester."
 msgstr ""
 "Эта кнопка служит для защиты архивов рассылок от роботов-сборщиков почтовых "
-"адресов для спаммерских баз. "
+"адресов для спаммерских баз."
 
 #: ../web_tt2/arc.tt2:4 ../web_tt2/arcsearch_form.tt2:3
 msgid "List archive"
@@ -621,7 +621,7 @@ msgstr "Расширенный поиск в архиве"
 
 #: ../web_tt2/arcsearch.tt2:7 ../web_tt2/arcsearch_form.tt2:12
 msgid "Search field:"
-msgstr "Поле поиска: "
+msgstr "Поле поиска:"
 
 #: ../src/etc/mhonarc-ressources.tt2:52 ../web_tt2/arcsearch_form.tt2:16
 #: ../web_tt2/review.tt2:89 ../web_tt2/reviewbouncing.tt2:13
@@ -630,7 +630,7 @@ msgstr "Поиск"
 
 #: ../web_tt2/arcsearch_form.tt2:19
 msgid "Search:"
-msgstr "Поиск: "
+msgstr "Поиск:"
 
 #: ../web_tt2/arcsearch_form.tt2:20
 msgid "this sentence"
@@ -1225,8 +1225,8 @@ msgid ""
 msgstr ""
 "Ваш запрос на создание рассылки был зарегистрирован. Теперь Вы можете "
 "изменить\n"
-" её конфигурацию с помощью кнопки \"Администрирование\", но рассылка не "
-"будет работать, пока глобальный администратор не одобрит её. "
+"её конфигурацию с помощью кнопки \"Администрирование\", но рассылка не будет "
+"работать, пока глобальный администратор не одобрит её."
 
 #: ../web_tt2/d_control.tt2:3 ../web_tt2/d_editfile.tt2:6
 #: ../web_tt2/d_properties.tt2:3 ../web_tt2/d_read.tt2:7
@@ -1598,7 +1598,7 @@ msgstr "Вы хотите переименовать Ваш файл %1? "
 
 #: ../web_tt2/d_upload.tt2:15
 msgid "Do you want to cancel the upload?"
-msgstr "Вы хотите отменить загрузку?  "
+msgstr "Вы хотите отменить загрузку?"
 
 #: ../web_tt2/edit_attributes.tt2:4 ../web_tt2/subindex.tt2:14
 msgid "Additional information"
@@ -2639,11 +2639,11 @@ msgstr "сегодня"
 #. (+cpt)
 #: ../web_tt2/javascript.tt2:1056
 msgid "microcal"
-msgstr ""
+msgstr "microcal"
 
 #: ../web_tt2/javascript.tt2:1096
 msgid "\"+src.id+\"_cal"
-msgstr ""
+msgstr "\"+src.id+\"_cal"
 
 #. (count)
 #: ../web_tt2/latest_arc.tt2:6
@@ -4487,14 +4487,13 @@ msgstr "Выслать мне пароль подтверждения"
 
 #. (init_email)
 #: ../web_tt2/sso_login.tt2:32
-#, fuzzy
 msgid ""
 "A confirmation password has been sent to your email address %1.<br />Please "
 "check your e-mail box for the message containing the confirmation link."
 msgstr ""
-"Пароль подтверждения был отправлен на Ваш электронный адрес %1.<br /"
-">Пожалуйста, найдите в своём почтовом ящике письмо с паролем подтверждения, "
-"необходимым ниже. "
+"Пароль подтверждения был отправлен на Ваш электронный адрес %1.<br "
+"/>Пожалуйста, проверьте свой почтовый ящик на наличие сообщения с "
+"подтверждающей ссылкой. "
 
 #: ../web_tt2/stats.tt2:2
 msgid "Shared document directory size:"
@@ -7582,16 +7581,14 @@ msgid "Help on Sympa: %1%2"
 msgstr "Помощь, касающаяся Sympa: %1%2"
 
 #: ../mail_tt2/sendssopasswd.tt2:6
-#, fuzzy
 msgid ""
 "To complete your account setup actions you need to confirm that you have \n"
 "supplied a working email address.  Please follow the link below to complete "
 "your account configuration."
 msgstr ""
 "Чтобы закончить настройку своего аккаунта, необходимо подтвердить, что Вы \n"
-" указали работающий электронный адрес.  Пожалуйста, введите следующий адрес "
-"электронной почты и пароль,\n"
-" чтобы настройщик закончил конфигурирование Вашего аккаунта. "
+" указали работающий электронный адрес.  Пожалуйста, пройдите по ссылке ниже "
+"для завершения настройки."
 
 #. (list.name)
 #: ../mail_tt2/stats_report.tt2:4
@@ -8272,9 +8269,8 @@ msgstr "Хронологически"
 
 #: ../src/etc/mhonarc-ressources.tt2:183 ../src/etc/mhonarc-ressources.tt2:295
 #: ../src/etc/mhonarc-ressources.tt2:408 ../src/etc/mhonarc-ressources.tt2:411
-#, fuzzy
 msgid "Thread"
-msgstr "Ветви обсуждений"
+msgstr "Тред"
 
 #. ($PAGENUM$,$NUMOFPAGES$)
 #: ../src/etc/mhonarc-ressources.tt2:185 ../src/etc/mhonarc-ressources.tt2:297
@@ -8413,7 +8409,6 @@ msgid "daily delete unusefull item from any table"
 msgstr "ежедневное удаление ненужных записей из всех таблиц базы данных"
 
 #: ../src/etc/global_task_models/purge_user_table.monthly.task:1
-#, fuzzy
 msgid "purge of orphan entries in user table every month"
 msgstr ""
 "ежемесячная очистка таблицы пользователей от записей, не участвующих в "
@@ -8757,7 +8752,6 @@ msgid "name"
 msgstr "имя"
 
 #: ../src/lib/List.pm:1177 ../src/lib/List.pm:674
-#, fuzzy
 msgid "private information"
 msgstr "личные сведения"
 
@@ -8900,15 +8894,15 @@ msgid "second-level regular expression"
 msgstr "регулярное выражение 2-го уровня"
 
 #: ../src/lib/List.pm:967
+#, fuzzy
 msgid "LDAP 2-level query inclusion"
-msgstr ""
+msgstr "включение в запросе второго уровня к LDAP"
 
 #: ../src/lib/List.pm:972
 msgid "List inclusion"
 msgstr "Подключение списка рассылки"
 
 #: ../src/lib/List.pm:989
-#, fuzzy
 msgid "remote path of sympa list dump"
 msgstr "сетевой путь к дампу списка рассылки SYMPA"
 
@@ -9039,7 +9033,7 @@ msgstr "другой адрес электронной почты"
 
 #: ../src/lib/List.pm:1278
 msgid "respect of existing header field"
-msgstr ""
+msgstr "сохранение существующих полей в заголовке"
 
 #: ../src/lib/List.pm:1287
 msgid "Who can review subscribers"
@@ -9582,22 +9576,22 @@ msgstr "Вы не получаете свои же письма"
 #: ../web_tt2/list_menu.tt2:10
 msgid ""
 "You <span style=\"font-weight: bold; font-size: 10px\">are</span> subscribed"
-msgstr ""
+msgstr "Вы <span style=\"font-weight: bold; font-size: 10px\">подписаны</span>"
 
 #: ../web_tt2/list_menu.tt2:21
 msgid ""
 "You <span style=\"font-weight: bold; font-size: 10px\">are not</span> "
 "subscribed"
-msgstr ""
+msgstr "Вы <span style=\"font-weight: bold; font-size: 10px\">не подписаны</span>"
 
 #: ../web_tt2/compose_mail.tt2:82
 msgid "Send the page from the following URL:"
-msgstr ""
+msgstr "Загрузить веб-страницу с указанного URL:"
 
 #. (k.name)
 #: ../web_tt2/edit_attributes.tt2:7
 msgid "%1:"
-msgstr ""
+msgstr "%1:"
 
 #: ../web_tt2/error.tt2:55 ../web_tt2/error.tt2:56
 msgid ""
@@ -9605,14 +9599,20 @@ msgid ""
 "to send. Please fill the form with one of them only. A web page OR a file to "
 "upload."
 msgstr ""
+"Вы указали загрузку как файла, так и URL. Sympa не может выбрать, что именно "
+"отправлять. Пожалуйста, укажите что нибудь одно: или имя файла или адрес "
+"веб-страницы (URL)."
 
 #: ../web_tt2/stats.tt2:6
 msgid "This page displays overall informations regarding the list activity"
 msgstr ""
+"На этой странице отображается полная информация относительно деятельности в "
+"списке рассылки"
 
 #: ../web_tt2/stats.tt2:47
+#, fuzzy
 msgid "No operation recorded in this field yet."
-msgstr ""
+msgstr "Ещё нет операции, записанной в этом поле."
 
 #. (listname,max_number_of_subscribers)
 #: ../mail_tt2/listmaster_notification.tt2:153
@@ -9620,28 +9620,38 @@ msgid ""
 "Sympa could not include subscribers to list %1 because the maximum number of "
 "users was reached for this list. This limit is defined to %2."
 msgstr ""
+"Sympa не может добавить подписчиков в список %1, так как было достигнут "
+"предел количества пользователей в этом списке рассылки. Максимальное "
+"количество сейчас ограничено %2."
 
 #: ../src/sympa_wizard.pl.in:249
 msgid "%s [%s] : "
-msgstr ""
+msgstr "%s [%s] : "
 
 #: ../src/sympa_wizard.pl.in:271
 msgid "Incorrect parameter definition: %s\n"
 msgstr ""
+"Неправильное задание параметра: %s\n"
+"\n"
 
 #: ../src/sympa_wizard.pl.in:337
 msgid ""
 "%s and %s have been updated.\n"
 "Previous versions have been saved as %s and %s.\n"
 msgstr ""
+"%s и %s были обновлены.\n"
+"\n"
+"Предыдущие версии были сохранены как %s и %s.\n"
+"\n"
 
 #: ../src/lib/confdef.pm:48
 msgid "Main robot hostname"
-msgstr ""
+msgstr "Имя хоста главного робота"
 
 #: ../src/lib/confdef.pm:61
+#, fuzzy
 msgid "Effective address will be [EMAIL]@[HOST]"
-msgstr ""
+msgstr "Эффективный адрес будет [EMAIL]@[HOST]"
 
 #: ../src/lib/confdef.pm:66
 msgid "Gecos for service mail sent by Sympa itself"
@@ -9649,27 +9659,33 @@ msgstr ""
 
 #: ../src/lib/confdef.pm:76
 msgid "Listmasters email list comma separated"
-msgstr ""
+msgstr "Список адресов глобальных администраторов, разделённый запятыми"
 
 #: ../src/lib/confdef.pm:80
 msgid ""
 "Sympa will associate listmaster privileges to these email addresses (mail "
 "and web interfaces). Some error reports may also be sent to these addresses."
 msgstr ""
+"Sympa назначит права глобального администратора этим адресам электронной "
+"почты (почтовый и веб-интерфейс). Некоторые сообщения об ошибках могут быть "
+"отправлены на эти адреса."
 
 #: ../src/lib/confdef.pm:324
 msgid ""
 "Directory for storing static contents (CSS, members pictures, documentation) "
 "directly delivered by Apache"
 msgstr ""
+"Каталог для хранения статического контента (CSS, аватары подписчиков, "
+"документация), напрямую отдаваемого веб-сервером Apache"
 
 #: ../src/lib/confdef.pm:332
 msgid "URL mapped with the static_content_path directory defined above"
-msgstr ""
+msgstr "URL, соответствующий заданному выше каталогу static_content_path"
 
 #: ../src/lib/confdef.pm:349
 msgid "Secret used by Sympa to make MD5 fingerprint in web cookies secure"
 msgstr ""
+"Секретная строка, используемая Sympa для создания MD5-отпечатка в кукисах."
 
 #: ../src/lib/confdef.pm:1339 ../src/lib/confdef.pm:351
 msgid "Should not be changed ! May invalid all user password"
@@ -9680,63 +9696,80 @@ msgid ""
 "This parameter is a scenario, check sympa documentation about scenarios if "
 "you want to define one"
 msgstr ""
+"Этот параметр является сценарием, ознакомьтесь с документацией Sympa о "
+"сценариях, если вы хотите его определить"
 
 #: ../src/lib/confdef.pm:389
 msgid ""
 "Used to define a custom parameter for your server. Do not forget the "
 "semicolon between the param name and the param value."
 msgstr ""
+"Используется для определения пользовательских параметров для сервера. Не "
+"забывайте ставить точку с запятой между именем параметра и его значением."
 
 #: ../src/lib/confdef.pm:401
 msgid "Directory containing mailing lists subdirectories"
-msgstr ""
+msgstr "Каталог, содержащий подкаталоги списков рассылки"
 
 #: ../src/lib/confdef.pm:408
 msgid ""
 "Directory for configuration files; it also contains scenari/ and templates/ "
 "directories"
 msgstr ""
+"Каталог для конфигурационных файлов, в нём также находятся подкаталоги "
+"scenari/ и templates/ "
 
 #: ../src/lib/confdef.pm:417
 msgid "Syslog facility for sympa"
 msgstr ""
+"Под каким именем (facility) сообщения от sympa будут записываться в "
+"системный журнал (syslog)"
 
 #: ../src/lib/confdef.pm:425
 msgid "Log verbosity"
-msgstr ""
+msgstr "Подробность журналирования"
 
 #: ../src/lib/confdef.pm:428
 msgid "0: normal, 2,3,4: for debug"
-msgstr ""
+msgstr "0: нормальная, 2,3,4: для отладки"
 
 #: ../src/lib/confdef.pm:433
 msgid "Communication mode with syslogd (unix | inet)"
-msgstr ""
+msgstr "Режим связи с Syslogd (Unix | inet)"
 
 #: ../src/lib/confdef.pm:439
 msgid "File containing Sympa PID while running"
-msgstr ""
+msgstr "Файл, содержащий PID Sympa в процессе работы"
 
 #: ../src/lib/confdef.pm:441
 msgid ""
 "Sympa also locks this file to ensure that it is not running more than once. "
 "Caution: user sympa need to write access without special privilege."
 msgstr ""
+"Sympa также блокирует этот файл чтобы убедиться в том, что запущено не более "
+"одной копии программы. Внимание: пользователь Sympa должен иметь доступ на "
+"запись без особых привилегий."
 
 #: ../src/lib/confdef.pm:451
 msgid "Umask used for file creation by Sympa"
 msgstr ""
+"маска режима создания пользовательских файлов (umask), используемая Sympa "
+"для создания файлов"
 
 #: ../src/lib/confdef.pm:464
 msgid ""
 "Max. number of Sendmail processes (launched by Sympa) running simultaneously"
 msgstr ""
+"Максимальное количество процессов Sendmail (запущенных Sympa), выполняющихся "
+"одновременно"
 
 #: ../src/lib/confdef.pm:466
 msgid ""
 "Proposed value is quite low, you can rise it up to 100, 200 or even 300 with "
 "powerfull systems."
 msgstr ""
+"Предложенное значение является весьма низким, вы можете увеличить его до "
+"100, 200 или даже 300 на мощных системах."
 
 #: ../src/lib/confdef.pm:476
 msgid ""
@@ -9771,13 +9804,15 @@ msgstr ""
 
 #: ../src/lib/confdef.pm:526
 msgid "Path to the MTA (sendmail, postfix, exim or qmail)"
-msgstr ""
+msgstr "Путь к MTA (sendmail, postfix, exim или qmail)"
 
 #: ../src/lib/confdef.pm:529
 msgid ""
 "should point to a sendmail-compatible binary (eg: a binary named \"sendmail"
 "\" is distributed with Postfix)"
 msgstr ""
+"должен указывать на Sendmail-совместимый исполняемый файл (например: файл с "
+"именем \"sendmail\" распространяется с Postfix)"
 
 #: ../src/lib/confdef.pm:541
 msgid "Specify which rfc2369 mailing list headers to add"
@@ -9794,18 +9829,21 @@ msgid ""
 "Default value is real FQDN of host. Set [HOST]:[PORT] to specify non-"
 "standard port."
 msgstr ""
+"Значением по умолчанию является полное имя домена (FQDN ) хоста. Задайте "
+"значение вида [HOST]:[PORT] для назначения нестандартного порта."
 
 #: ../src/lib/confdef.pm:584
 msgid "SMTP HELO (EHLO) parameter used for alias verification"
-msgstr ""
+msgstr "параметр SMTP HELO (EHLO), используемый для проверки псевдонимов"
 
 #: ../src/lib/confdef.pm:586
 msgid "Default value is the host part of list_check_smtp parameter."
-msgstr ""
+msgstr "Значением по умолчанию является имя хоста из параметра list_check_smtp."
 
 #: ../src/lib/confdef.pm:602
+#, fuzzy
 msgid "Default priority for a packet to be sent by bulk."
-msgstr ""
+msgstr "Приоритет по умолчанию для пакетов, которые будут массово разосланы."
 
 #: ../src/lib/confdef.pm:609
 msgid ""
@@ -9877,12 +9915,15 @@ msgstr ""
 
 #: ../src/lib/confdef.pm:733
 msgid "Must not be 0."
-msgstr ""
+msgstr "Не должно быть 0."
 
 #: ../src/lib/confdef.pm:777
+#, fuzzy
 msgid ""
 "Directory containing available NLS catalogues (Message internationalization)"
 msgstr ""
+"Каталог, содержащий доступные каталоги NLS (переводы сообщений на различные "
+"языки)"
 
 #: ../src/lib/confdef.pm:787
 msgid ""
@@ -10261,7 +10302,7 @@ msgstr ""
 
 #: ../src/lib/List.pm:6443
 msgid "Added %s users out of %s required."
-msgstr ""
+msgstr "Добавлено %s пользователей из %s необходимых."
 
 #: ../wwsympa/wwsympa.fcgi.in:4877
 msgid "Unable to add user %s in list %s : %s"
@@ -10269,7 +10310,7 @@ msgstr ""
 
 #: ../wwsympa/wwsympa.fcgi.in:16213
 msgid "Users deleted by admin"
-msgstr ""
+msgstr "Пользователь удален администратором"
 
 #: ../web_tt2/edit_config.tt2:7
 msgid "[%confparam.title%]"

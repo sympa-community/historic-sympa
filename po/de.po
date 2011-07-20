@@ -7,13 +7,13 @@ msgstr ""
 "Report-Msgid-Bugs-To: Jens Krehbiel-Graether <jens.krehbiel-graether@okg-"
 "computer.de>\n"
 "POT-Creation-Date: 2002-07-16 17:27+0800\n"
-"PO-Revision-Date: 2011-05-02 11:18+0200\n"
-"Last-Translator: Jens <sympa-translate@jkg-it-services.de>\n"
+"PO-Revision-Date: 2011-07-20 14:31+0200\n"
+"Last-Translator: liloz <liloz@riseup.net>\n"
 "Language-Team: Deutsch\n"
+"Language: de\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Language: de\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "X-Generator: Pootle 2.1.2\n"
 
@@ -74,7 +74,7 @@ msgstr "Liste anlegen"
 
 #: ../web_tt2/menu.tt2:12
 msgid "Sympa admin"
-msgstr "Sympa-Admin"
+msgstr "Sympa-Administrator"
 
 #: ../web_tt2/menu.tt2:16
 msgid "List of lists"
@@ -109,7 +109,7 @@ msgstr "Identität wiederherstellen"
 
 #: ../mail_tt2/listmaster_notification.tt2:2 ../web_tt2/login_menu.tt2:13
 msgid "Listmaster"
-msgstr "Mailinglisten Administrator"
+msgstr "Listenadministrator"
 
 #: ../web_tt2/login_menu.tt2:14
 msgid "Privileged owner"
@@ -126,7 +126,7 @@ msgstr "Moderator"
 
 #: ../web_tt2/login_menu.tt2:17
 msgid "Subscriber"
-msgstr "Abonnenten"
+msgstr "Abonnent"
 
 #. (last_login_host)
 #: ../web_tt2/login_menu.tt2:21
@@ -183,7 +183,7 @@ msgstr "Info"
 
 #: ../web_tt2/list_menu.tt2:34
 msgid "Admin"
-msgstr "Admin"
+msgstr "Administrator"
 
 #: ../web_tt2/admin_menu.tt2:35 ../web_tt2/admin_menu.tt2:41
 #: ../web_tt2/admin_menu.tt2:45 ../web_tt2/list_menu.tt2:37
@@ -238,7 +238,7 @@ msgstr "Abonnenten:"
 
 #: ../web_tt2/list_panel.tt2:12
 msgid "Error rate:"
-msgstr "Fehlerrate:&nbsp;"
+msgstr "Fehlerrate:"
 
 #: ../web_tt2/get_inactive_lists.tt2:14 ../web_tt2/list_panel.tt2:13
 msgid "Owners"
@@ -255,11 +255,11 @@ msgstr "Zertifikat laden"
 
 #: ../web_tt2/list_panel.tt2:29 ../web_tt2/list_panel.tt2:31
 msgid "Contact owners"
-msgstr "Kontakt zu Eigentümern"
+msgstr "Eigentümern kontaktieren"
 
 #: ../web_tt2/admin.tt2:4
 msgid "Casual administration"
-msgstr "Übliche Administration"
+msgstr "grundlegende Administration"
 
 #: ../web_tt2/admin.tt2:7
 msgid "Edit list config:"
@@ -322,11 +322,11 @@ msgstr "Berichte über Zustellfehler (Bounces) verwalten."
 
 #: ../web_tt2/admin.tt2:21
 msgid "Logs:"
-msgstr "Logs:"
+msgstr "Protokolle:"
 
 #: ../web_tt2/admin.tt2:21
 msgid "A tool for exploring the list logs."
-msgstr "Ein Werkzeug, um die Listenlogs zu betrachten."
+msgstr "Ein Werkzeug, um die Listenprotokolle zu betrachten."
 
 #: ../web_tt2/admin.tt2:26
 msgid "Drastic operations"
@@ -365,7 +365,7 @@ msgid ""
 "Completely removes the current list. Listmaster privileges are required to "
 "restore a list."
 msgstr ""
-"Entfernt die aktuelle Liste vollständig. Es sind Listmaster-Rechte "
+"Entfernt die aktuelle Liste vollständig. Es sind Listenadministrator-Rechte "
 "erforderlich, um eine Liste wiederherzustellen."
 
 #: ../web_tt2/admin.tt2:46 ../web_tt2/admin_menu.tt2:129
@@ -480,7 +480,7 @@ msgstr "leise"
 
 #: ../web_tt2/admin_menu.tt2:4
 msgid "List Administration Panel"
-msgstr "Listen-Administrationsmenü"
+msgstr "Listenverwaltung"
 
 #: ../web_tt2/admin_menu.tt2:10 ../web_tt2/admin_menu.tt2:16
 msgid "Subscribers"
@@ -913,7 +913,7 @@ msgid ""
 "You need to choose a password for your WWSympa environment.\n"
 "You will need this password to perform privileged operations."
 msgstr ""
-"Sie benötigen ein Passwort für die WWSympa Umgebung.\n"
+"Sie benötigen ein Passwort für die WWSympa-Umgebung.\n"
 "Dieses Passwort wird für privilegierte Operationen verwendet."
 
 #: ../web_tt2/choosepasswd.tt2:11 ../web_tt2/pref.tt2:41
@@ -1019,29 +1019,40 @@ msgstr ": Name des Benutzer in Bezug zur Email; Immer verfügbar"
 #: ../web_tt2/compose_mail.tt2:71
 msgid ": the - human readable - user's subscription date; always available."
 msgstr ""
+": das lesbare Datum der Eintragung in die Liste des Nutzers; immer verfügbar "
+""
 
 #: ../web_tt2/compose_mail.tt2:72
 msgid ""
 ": can be anything you like; available if you defined a user custom attribute "
 "named \"title\" (see the list configuration, section \"Miscellaneous\")."
 msgstr ""
+": können Sie frei wählen; verfügbar, falls Sie die Benutzereigenschaft "
+"\"Titel\" definiert haben (siehe Konfiguration der Liste, Abschnitt "
+"\"Verschiedenes\")."
 
 #: ../web_tt2/compose_mail.tt2:73
 msgid ""
 ": can be anything you like; available if you defined a user custom attribute "
 "named \"name\"."
 msgstr ""
+": können Sie frei wählen; verfügbar, falls Sie die Benutzereigenschaft "
+"\"Name\" definiert haben."
 
 #: ../web_tt2/compose_mail.tt2:74
 msgid ""
 ": can be anything you like; available if you defined a user custom attribute "
 "named \"organization\"."
 msgstr ""
+": können Sie frei wählen; verfügbar, falls Sie die Benutzereigenschaft "
+"\"Organisation\" definiert haben."
 
 #: ../web_tt2/compose_mail.tt2:78
 msgid "URL:"
 msgstr "URL:"
 
+# copying template = Vorlage wird kopiert (in action)
+# Vorlage kopieren = copy template (click here...)
 #: ../web_tt2/copy_template.tt2:3
 msgid "Copying template"
 msgstr "Vorlage kopieren"
@@ -1219,8 +1230,8 @@ msgid ""
 "listmaster validates it."
 msgstr ""
 "Ihre Anfrage auf Erstellung einer Liste wurde registriert. Sie können\n"
-"jetzt die Konfiguration über den Administrations-Knopf ändern, aber die "
-"Liste ist erst verwendbar, wenn sie von Listmaster bestätigt wird."
+"jetzt die Konfiguration über den Administrations-Knopf ändern, die Liste ist "
+"jedoch erst nach Bestätigung durch den Listenadministrator verwendbar."
 
 #: ../web_tt2/d_control.tt2:3 ../web_tt2/d_editfile.tt2:6
 #: ../web_tt2/d_properties.tt2:3 ../web_tt2/d_read.tt2:7
@@ -1609,13 +1620,12 @@ msgid "*: Required element"
 msgstr "*: Obligatorisches Element"
 
 #: ../web_tt2/edit_config.tt2:2
-#, fuzzy
 msgid "Edit robot config"
-msgstr "Listenkonfiguration bearbeiten:"
+msgstr "Listenkonfiguration bearbeiten"
 
 #: ../web_tt2/edit_config.tt2:35 ../web_tt2/serveradmin.tt2:213
 msgid "Set"
-msgstr ""
+msgstr "Übernehmen"
 
 #: ../web_tt2/editfile.tt2:4
 msgid "Edit list templates"
@@ -1849,7 +1859,7 @@ msgstr "von %1 bis %2"
 
 #: ../web_tt2/editsubscriber.tt2:76
 msgid "View last bounce"
-msgstr "Letzte abgewiesene Nachricht ansehen"
+msgstr "Letzten Zustellfehler ansehen"
 
 #: ../web_tt2/editsubscriber.tt2:77
 msgid "Reset errors"
@@ -1939,7 +1949,7 @@ msgstr "Fehler beim Einbinden der Mitglieder"
 
 #: ../web_tt2/error.tt2:15
 msgid "Failed to include list admins"
-msgstr "Fehler beim Einbinden der Listen-Admins"
+msgstr "Fehler beim Einbinden der Listenadministratoren"
 
 #: ../web_tt2/error.tt2:16
 msgid "No owner is defined for the list"
@@ -1964,7 +1974,8 @@ msgstr ""
 #: ../web_tt2/error.tt2:20
 msgid "Failed to get your email address from the authentication service."
 msgstr ""
-"Ihre E-Mail-Adresse konnte nicht beim Legitimierungsdienst ermittelt werden."
+"Ihre E-Mail-Adresse konnte vom Legitimierungsdienst nicht übermittelt "
+"werden."
 
 #. (i_err.key)
 #. (zipfile)
@@ -2378,12 +2389,12 @@ msgstr "Keine SOAP-Dienste"
 
 #: ../web_tt2/error.tt2:123
 msgid "Authentication failed"
-msgstr "Legitimierung fehlgeschlagen"
+msgstr "Anmeldung fehlgeschlagen"
 
 #. (u_err.status)
 #: ../web_tt2/error.tt2:124
 msgid "Service unavailable because list status is '%1'"
-msgstr ""
+msgstr "Dienst nicht verfügbar, da Listenstatus '%1'"
 
 #. (u_err.argument)
 #: ../web_tt2/error.tt2:125
@@ -2413,8 +2424,8 @@ msgstr ""
 msgid ""
 "Failed to update admin email in list '%1', list owner has been notified."
 msgstr ""
-"Admin-Adresse in Liste '%1' konnte nicht aktualisiert werden, Eigentümer "
-"wurde benachrichtigt."
+"Die Administrator-Adresse in Liste '%1' konnte nicht aktualisiert werden, "
+"der Listeneigentümer wurde benachrichtigt."
 
 #. (auth.action)
 #: ../web_tt2/error.tt2:138
@@ -2475,24 +2486,21 @@ msgid "Listname"
 msgstr "Listenname"
 
 #: ../web_tt2/get_inactive_lists.tt2:10
-#, fuzzy
 msgid "Number of subscribers"
-msgstr "für Abonnenten moderiert"
+msgstr "Anzahl der Abonnenten"
 
 #: ../web_tt2/get_inactive_lists.tt2:12
 #, fuzzy
 msgid "Send scenario"
-msgstr "Absender"
+msgstr "Sende-Szenario"
 
 #: ../web_tt2/get_inactive_lists.tt2:13
-#, fuzzy
 msgid "Creator"
-msgstr "Erstellen"
+msgstr "erstellt von"
 
 #: ../web_tt2/get_inactive_lists.tt2:15
-#, fuzzy
 msgid "Editors"
-msgstr "Moderator"
+msgstr "Moderatoren"
 
 #: ../web_tt2/get_inactive_lists.tt2:29
 msgid "none so far"
@@ -2531,150 +2539,139 @@ msgid "on %1"
 msgstr "auf %1"
 
 #: ../web_tt2/javascript.tt2:833
-#, fuzzy
 msgid "Start date"
-msgstr "Letzte Aktualisierung"
+msgstr "Datum Beginn"
 
 #: ../web_tt2/javascript.tt2:834
-#, fuzzy
 msgid "End date"
-msgstr "Datum"
+msgstr "Datum Ende"
 
 #: ../web_tt2/javascript.tt2:838
 msgid "January"
-msgstr ""
+msgstr "Januar"
 
 #: ../web_tt2/javascript.tt2:838
 msgid "February"
-msgstr ""
+msgstr "Februar"
 
 #: ../web_tt2/javascript.tt2:838
-#, fuzzy
 msgid "March"
-msgstr "Suchen"
+msgstr "März"
 
 #: ../web_tt2/javascript.tt2:838
-#, fuzzy
 msgid "April"
-msgstr "Profil"
+msgstr "April"
 
 #: ../web_tt2/javascript.tt2:838
 msgid "May"
-msgstr ""
+msgstr "Mai"
 
 #: ../web_tt2/javascript.tt2:838
 msgid "June"
-msgstr ""
+msgstr "Juni"
 
 #: ../web_tt2/javascript.tt2:838
 msgid "July"
-msgstr ""
+msgstr "Juli"
 
 #: ../web_tt2/javascript.tt2:838
 msgid "August"
-msgstr ""
+msgstr "August"
 
 #: ../web_tt2/javascript.tt2:838
-#, fuzzy
 msgid "September"
-msgstr "Abonnent"
+msgstr "September"
 
 #: ../web_tt2/javascript.tt2:838
-#, fuzzy
 msgid "October"
-msgstr "Andere"
+msgstr "Oktober"
 
 #: ../web_tt2/javascript.tt2:838
-#, fuzzy
 msgid "November"
-msgstr "Abonnent"
+msgstr "November"
 
 #: ../web_tt2/javascript.tt2:838
-#, fuzzy
 msgid "December"
-msgstr "Abonnent"
+msgstr "Dezember"
 
 #: ../web_tt2/javascript.tt2:839
 msgid "Su"
-msgstr ""
+msgstr "So"
 
 #: ../web_tt2/javascript.tt2:839
-#, fuzzy
 msgid "Mo"
-msgstr "Mehr"
+msgstr "Mo"
 
 #: ../web_tt2/javascript.tt2:839
 msgid "Tu"
-msgstr ""
+msgstr "Di"
 
 #: ../web_tt2/javascript.tt2:839
 msgid "We"
-msgstr ""
+msgstr "Mi"
 
 #: ../web_tt2/javascript.tt2:839
 msgid "Th"
-msgstr ""
+msgstr "Do"
 
 #: ../web_tt2/javascript.tt2:839
-#, fuzzy
 msgid "Fr"
-msgstr "Absender"
+msgstr "Fr"
 
 #: ../web_tt2/javascript.tt2:839
-#, fuzzy
 msgid "Sa"
-msgstr "Speichern"
+msgstr "Sa"
 
 #: ../web_tt2/javascript.tt2:840
 msgid "Sunday"
-msgstr ""
+msgstr "Sonntag"
 
 #: ../web_tt2/javascript.tt2:840
 msgid "Monday"
-msgstr ""
+msgstr "Montag"
 
 #: ../web_tt2/javascript.tt2:840
 msgid "Tuesday"
-msgstr ""
+msgstr "Dienstag"
 
 #: ../web_tt2/javascript.tt2:840
 msgid "Wednesday"
-msgstr ""
+msgstr "Mittwoch"
 
 #: ../web_tt2/javascript.tt2:840
 msgid "Thursday"
-msgstr ""
+msgstr "Donnerstag"
 
 #: ../web_tt2/javascript.tt2:840
 msgid "Friday"
-msgstr ""
+msgstr "Freitag"
 
 #: ../web_tt2/javascript.tt2:840
 msgid "Saturday"
-msgstr ""
+msgstr "Samstag"
 
 #: ../web_tt2/javascript.tt2:841
 msgid "Calendar"
-msgstr ""
+msgstr "Kalender"
 
 #: ../web_tt2/javascript.tt2:842
-#, fuzzy
 msgid "today"
-msgstr "Nachrichtentext"
+msgstr "Heute"
 
 #. (+cpt)
 #: ../web_tt2/javascript.tt2:1056
 msgid "microcal"
-msgstr ""
+msgstr "microcal"
 
 #: ../web_tt2/javascript.tt2:1096
+#, fuzzy
 msgid "\"+src.id+\"_cal"
-msgstr ""
+msgstr "\"+src.id+\"_cal"
 
 #. (count)
 #: ../web_tt2/latest_arc.tt2:6
 msgid " The %1 most recent messages "
-msgstr " Die %1 aktuellsten Nachrichten"
+msgstr " Die %1 neuesten Nachrichten"
 
 #: ../web_tt2/latest_arc.tt2:8
 msgid " Recent messages "
@@ -2691,7 +2688,7 @@ msgstr "Absender"
 #. (count)
 #: ../web_tt2/latest_d_read.tt2:5
 msgid " The %1 most recent shared documents "
-msgstr " Die %1 neuesten, gemeinsamen Dokumente"
+msgstr " Die %1 neuesten gemeinsamen Dokumente"
 
 #: ../web_tt2/latest_d_read.tt2:7
 msgid " Most recent shared documents "
@@ -2699,7 +2696,7 @@ msgstr " Die neuesten gemeinsamen Dokumente "
 
 #: ../web_tt2/latest_d_read.tt2:16
 msgid "Most recent documents for this list "
-msgstr "Neueste Dokumente für diese Liste"
+msgstr "Neueste Dokumente dieser Liste"
 
 #: ../web_tt2/latest_d_read.tt2:19 ../web_tt2/subindex.tt2:12
 #: ../web_tt2/subscriber_table.tt2:33 ../web_tt2/subscriber_table.tt2:36
@@ -2721,7 +2718,7 @@ msgstr "Neue Listen"
 
 #: ../web_tt2/latest_lists.tt2:18
 msgid " The latest lists of this robot"
-msgstr " Die neuesten Listen dieses Robots"
+msgstr " Zuletzt erstellte Listen"
 
 #. (occurrence)
 #: ../web_tt2/lists.tt2:7 ../web_tt2/review.tt2:109
@@ -2731,7 +2728,7 @@ msgstr "%1 Treffer"
 #. (email)
 #: ../web_tt2/lists.tt2:9
 msgid "<strong>%1</strong> is subscribed to the following mailing lists"
-msgstr "<strong>%1</strong> hat folgende Mailinglisten abonniert:"
+msgstr "<strong>%1</strong> hat folgende Mailinglisten abonniert"
 
 #: ../web_tt2/lists.tt2:38 ../web_tt2/nav.tt2:69
 msgid "Manage Subscribers"
@@ -2744,17 +2741,18 @@ msgstr "schwarze Liste"
 #: ../web_tt2/lists.tt2:44 ../web_tt2/nav.tt2:21 ../web_tt2/nav.tt2:85
 #: ../web_tt2/serveradmin.tt2:123
 msgid "Logs"
-msgstr "Logs"
+msgstr "Protokolle"
 
 #. (user.email)
 #: ../web_tt2/lists.tt2:62
 msgid "No subscriptions with address <strong>%1</strong>!"
-msgstr "Keine Abonnenten mit der Adresse <strong>%1</strong>!"
+msgstr "Keine Abonnements mit der Adresse <strong>%1</strong>!"
 
 #: ../web_tt2/loginbanner.tt2:18
 msgid "To login, select your organization authentication server below:"
 msgstr ""
-"Wählen Sie, um sich anzumelden, den Legitimierungsserver Ihrer Organisation:"
+"Um sich anzumelden, wählen Sie unten den Legitimierungsserver Ihrer "
+"Organisation:"
 
 #: ../web_tt2/loginbanner.tt2:24
 msgid "Go"
@@ -2762,7 +2760,7 @@ msgstr "Los"
 
 #: ../web_tt2/loginbanner.tt2:39
 msgid "email address:"
-msgstr "E-Mail-Adresse:"
+msgstr "E-Mail Adresse:"
 
 #: ../web_tt2/loginbanner.tt2:41
 msgid "password:"
@@ -2774,7 +2772,7 @@ msgstr "Anmelden"
 
 #: ../web_tt2/loginbanner.tt2:51
 msgid "Authentication help"
-msgstr "Legitimierungshilfe"
+msgstr "Hilfe zur Anmeldung"
 
 #: ../web_tt2/loginbanner.tt2:55
 msgid "First login?"
@@ -2796,8 +2794,8 @@ msgstr ""
 msgid ""
 "This page is suggested in order to edit or create mail or web tt2 templates."
 msgstr ""
-"Diese Seite ist dazu gedacht, um Mail- oder Web-tt2-Vorlagen zu erstellen "
-"oder zu bearbeiten."
+"Diese Seite ist dazu gedacht, Mail- oder Web-tt2-Vorlagen zu erstellen oder "
+"zu bearbeiten."
 
 #: ../web_tt2/ls_templates.tt2:15
 msgid ""
@@ -2813,12 +2811,11 @@ msgstr ""
 "Prioritätenregeln für die Auswahl von Vorlagen:\n"
 "<ul>\n"
 "<li>WENN ein Listenkontext definiert ist, benutze die listeneigene Vorlage, "
-"wenn eine existiert</li>\n"
-"<li>SONST benutze die für diesen Robot definierte Vorlage, wenn eine "
-"existiert</li>\n"
-"<li>SONST benutze die lokal definierte Vorlage, wenn eine existiert</li>\n"
-"<li>SONST benutze die Vorlage, die in der Distribution enthalten ist (diese "
-"dürfen nicht bearbeitet werden, da Sympa diese Dateien bei einem Update "
+"falls eine existiert</li>\n"
+"<li>SONST benutze die Standardvorlage des Servers, falls eine existiert</li>\n"
+"<li>SONST benutze die lokal definierte Vorlage, falls eine existiert</li>\n"
+"<li>SONST benutze die Vorlage der Distribution (diese dürfen nicht "
+"bearbeitet werden, da Sympa diese Dateien bei einem Update "
 "überschreibt)</li>\n"
 "</ul>"
 
@@ -2849,7 +2846,7 @@ msgstr "Neu laden"
 #: ../web_tt2/ls_templates.tt2:37
 msgid "This table contain all templates you can copy or see"
 msgstr ""
-"Die folgende Tabelle führt alle Vorlagen auf, die Sie sehen und kopieren "
+"Die folgende Tabelle enthält alle Vorlagen, die Sie kopieren oder bearbeiten "
 "können."
 
 #: ../web_tt2/ls_templates.tt2:39
@@ -2858,27 +2855,27 @@ msgstr "Vorlagenname"
 
 #: ../web_tt2/ls_templates.tt2:40
 msgid "distrib"
-msgstr "Verteilen"
+msgstr "verteilen"
 
 #: ../web_tt2/ls_templates.tt2:84
 msgid "view"
-msgstr "Ansehen"
+msgstr "ansehen"
 
 #: ../web_tt2/ls_templates.tt2:104 ../web_tt2/ls_templates.tt2:126
 #: ../web_tt2/ls_templates.tt2:148 ../web_tt2/ls_templates.tt2:85
 msgid "cp"
-msgstr "cp"
+msgstr "kopieren"
 
 #: ../web_tt2/ls_templates.tt2:105 ../web_tt2/ls_templates.tt2:127
 #: ../web_tt2/ls_templates.tt2:149
 msgid "rm"
-msgstr "rm"
+msgstr "löschen"
 
 #. (lang.value)
 #: ../web_tt2/ls_templates.tt2:105 ../web_tt2/ls_templates.tt2:127
 #: ../web_tt2/ls_templates.tt2:149
 msgid "Do you really want to remove %1?"
-msgstr "Wollen Sie %1 wirklich entfernen?"
+msgstr "Wollen Sie %1 wirklich löschen?"
 
 #: ../web_tt2/maintenance.tt2:2
 msgid ""
@@ -3069,9 +3066,8 @@ msgid "Virtual Robots"
 msgstr "Virtuelle Roboter"
 
 #: ../web_tt2/nav.tt2:30
-#, fuzzy
 msgid "Edit Robot Config"
-msgstr "Listenkonfiguration bearbeiten"
+msgstr "Serverkonfiguration bearbeiten"
 
 #: ../web_tt2/nav.tt2:34 ../web_tt2/serveradmin.tt2:38
 msgid "Families"
@@ -3087,7 +3083,7 @@ msgstr "Fehler/Wunsch"
 
 #: ../web_tt2/nav.tt2:105
 msgid "DKIM"
-msgstr ""
+msgstr "DKIM"
 
 #: ../web_tt2/nav.tt2:117
 msgid "Send a message"
@@ -3203,7 +3199,7 @@ msgstr "%1 Adressen wurden abonniert"
 
 #: ../web_tt2/notice.tt2:73
 msgid "You have been authenticated"
-msgstr "Sie wurden legitimiert"
+msgstr "Sie wurden angemeldet"
 
 #. (notice.orig_file,notice.new_file)
 #: ../web_tt2/notice.tt2:76
@@ -3213,7 +3209,8 @@ msgstr "Datei %1 wurde in %2 umbenannt"
 #: ../web_tt2/notice.tt2:79
 msgid "List has been set to the pending status; listmaster need to validate it"
 msgstr ""
-"Liste wurde in den Wartemodus versetzt; der Listmaster muss sie bestätigen"
+"Liste wurde in den Wartemodus versetzt; der Listenadministrator muss sie "
+"bestätigen"
 
 #: ../web_tt2/notice.tt2:82
 msgid "List name has been lowercased"
@@ -3304,7 +3301,7 @@ msgid ""
 msgstr ""
 "Die zu löschende Nachricht konnte nicht gefunden werden,\n"
 "wahrscheinlich, da sie ohne Nachrichten-ID empfangen wurde.\n"
-"Bitte wenden Sie sich an den Listmaster und teilen Sie ihm\n"
+"Bitte wenden Sie sich an den Listenadministrator und teilen Sie ihm\n"
 "die gesamte URL der betroffenen Nachricht mit."
 
 #: ../web_tt2/remove_arc.tt2:11
@@ -3317,7 +3314,7 @@ msgid ""
 "complete URL of the message concerned."
 msgstr ""
 "Fehler beim Löschen der Nachricht. Bitte wenden Sie sich mit der\n"
-"vollständigen URL der betreffenden Nachricht an den listmaster."
+"vollständigen URL der betreffenden Nachricht an den Listenadministrator."
 
 #: ../web_tt2/rename_list_request.tt2:3
 msgid "Renaming the list"
@@ -3339,12 +3336,16 @@ msgstr "Sie haben einen neuen Account auf diesem Listenserver beantragt."
 msgid "The password you submitted is wrong. Maybe you forgot it?"
 msgstr "Das angegebene Passwort ist falsch. Vielleicht haben Sie es vergessen?"
 
+# mistake in english version: Your account _has_ been blocked...
 #: ../web_tt2/renewpasswd.tt2:9
 msgid ""
 "Too many wrong password were sumitted for this account. Your account as been "
 "blocked in order to protect you agains attacks. You must renew your password "
 "in order to login."
 msgstr ""
+"Das Passwort für dieses Konto wurde zu oft falsch eingegeben. Um Sie vor "
+"Angriffen zu schützen, wurde Ihr Konto gesperrt. Um sich anzumelden, müssen "
+"Sie Ihr Passwort erneuern."
 
 #: ../web_tt2/renewpasswd.tt2:11
 msgid "You missed the password, please submit again. Maybe you forgot it?"
@@ -3481,7 +3482,7 @@ msgstr "Nächste Seite"
 
 #: ../web_tt2/reviewbouncing.tt2:58
 msgid "Table which display list bounces"
-msgstr "Tabelle, die die Zustellungsfehler einer Liste anzeigt"
+msgstr "Tabelle der Zustellfehler einer Liste"
 
 #: ../web_tt2/review.tt2:148 ../web_tt2/reviewbouncing.tt2:61
 #: ../web_tt2/show_exclude.tt2:15 ../web_tt2/subindex.tt2:11
@@ -3492,11 +3493,11 @@ msgstr "E-Mail"
 
 #: ../web_tt2/reviewbouncing.tt2:62
 msgid "Bounce score"
-msgstr "Zustellfehler-Punktzahl"
+msgstr "Zustellfehlercode"
 
 #: ../web_tt2/reviewbouncing.tt2:63
 msgid "Details"
-msgstr "Details"
+msgstr "Einzelheiten"
 
 #: ../web_tt2/reviewbouncing.tt2:66
 msgid "# of bounces"
@@ -3554,7 +3555,7 @@ msgstr "Unbestätigte Abonnements"
 
 #: ../web_tt2/review.tt2:50
 msgid "Exclude"
-msgstr ""
+msgstr "Ausschliessen"
 
 #: ../web_tt2/review.tt2:56
 msgid "Synchronize members with data sources"
@@ -3587,7 +3588,7 @@ msgstr "Auswahl zu groß, kann nicht angezeigt werden"
 #. (similar_subscribers_occurence)
 #: ../web_tt2/review.tt2:117
 msgid " Other similar subscriber's email(s) (%1)"
-msgstr ""
+msgstr "Adressen ähnlicher Abonnenten (%1)"
 
 #: ../web_tt2/review.tt2:137
 msgid "Do you really want to unsubscribe ALL selected subscribers?"
@@ -3595,17 +3596,15 @@ msgstr "Wollen Sie wirklich ALLE ausgewählten Abonnenten kündigen?"
 
 #: ../web_tt2/review.tt2:145
 msgid "Excluded users"
-msgstr ""
+msgstr "Ausgeschlossene Benutzer"
 
 #: ../web_tt2/review.tt2:146 ../web_tt2/show_exclude.tt2:13
-#, fuzzy
 msgid "List of exclude"
-msgstr "Inhaltsverzeichnis des Ordners"
+msgstr "Liste ausgeschlossener Adressen"
 
 #: ../web_tt2/review.tt2:149 ../web_tt2/show_exclude.tt2:16
-#, fuzzy
 msgid "Since"
-msgstr "Größe"
+msgstr "Seit"
 
 #: ../web_tt2/rss_request.tt2:5
 msgid "RSS channel"
@@ -3820,16 +3819,15 @@ msgstr "Die folgenden virtuellen Roboter laufen auf diesem Server:"
 
 #: ../web_tt2/serveradmin.tt2:27
 msgid "Sympa URL:"
-msgstr ""
+msgstr "URL von Sympa:"
 
 #: ../web_tt2/serveradmin.tt2:27
 msgid "Mail domain:"
-msgstr ""
+msgstr "Mail domain:"
 
 #: ../web_tt2/serveradmin.tt2:27
-#, fuzzy
 msgid "Listmaster(s):"
-msgstr "listmaster"
+msgstr "Listenadministrator(en):"
 
 #: ../web_tt2/serveradmin.tt2:30
 msgid "No Virtual Robot defined on this server"
@@ -3889,10 +3887,10 @@ msgid ""
 "may be usefull when providing assistance or to test users privileges. The "
 "new identity is attached to the current session"
 msgstr ""
-"Als Listmaster können Sie Ihre Identität ändern und als jemand anderer "
-"auftreten. Dies kann für den Support oder zum Testen von Benutzerrechten "
-"nützlich sein. Die neue Identität ist an die aktuell angemeldete Sitzung "
-"gebunden."
+"Als Listenadministrator können Sie Ihre Identität ändern und als jemand "
+"anderer auftreten. Dies kann für den Support oder zum Testen von "
+"Benutzerrechten nützlich sein. Die neue Identität ist an die aktuell "
+"angemeldete Sitzung gebunden."
 
 #: ../web_tt2/serveradmin.tt2:101
 msgid "change identity as: "
@@ -3925,18 +3923,18 @@ msgid ""
 "current session. On a production server, this allow to keep logs rather "
 "small and to test some features with the maximum log level. "
 msgstr ""
-"Sie können den durch die Konfiguration angegebenen Loglevel für die aktuelle "
-"Sitzung erhöhen. Auf einem Server in der Produktion erlaubt dies, die Logs "
-"klein zu halten, aber bestimmte Funktionen mit dem maximalen Loglevel zu "
-"testen."
+"Sie können die in der Konfiguration angegebenen Protokolldichte für die "
+"aktuelle Sitzung erhöhen. Auf einem Server in der Produktion erlaubt dies, "
+"die Protokolle klein zu halten, aber bestimmte Funktionen mit der maximalen "
+"Protokolldichte zu testen."
 
 #: ../web_tt2/serveradmin.tt2:129
 msgid "Log level:"
-msgstr "Loglevel:"
+msgstr "Protokolldichte:"
 
 #: ../web_tt2/serveradmin.tt2:135
 msgid "Set log level"
-msgstr "Loglevel einstellen"
+msgstr "Protokolldichte einstellen"
 
 #: ../web_tt2/serveradmin.tt2:145
 msgid "Setting defaults list templates"
@@ -3974,12 +3972,11 @@ msgstr "Template-Variablen-Dump einschalten"
 
 #: ../web_tt2/serveradmin.tt2:188
 msgid "Skins administration page"
-msgstr "Erscheinungsbilder verwalten"
+msgstr "Erscheinungsbild verwalten"
 
 #: ../web_tt2/serveradmin.tt2:192
-#, fuzzy
 msgid "View main config"
-msgstr "Listenkonfiguration bearbeiten:"
+msgstr "Grundlegende Einstellungen"
 
 #: ../web_tt2/serveradmin.tt2:231
 msgid ""
@@ -4054,7 +4051,7 @@ msgstr "Konfigurationsdatei"
 
 #: ../web_tt2/show_cert.tt2:6
 msgid "HTTPS authentication information"
-msgstr "HTTPS-Legitimierungsinformationen"
+msgstr "Informationen zur Anmeldung per HTTPS"
 
 #: ../web_tt2/show_cert.tt2:7
 msgid "User certificate belong to"
@@ -4074,7 +4071,7 @@ msgstr "Verwendete Schlüsselgröße"
 
 #: ../web_tt2/show_exclude.tt2:3
 msgid "Show the exclusion table"
-msgstr ""
+msgstr "Ausschlusstabelle anzeigen"
 
 #: ../web_tt2/show_exclude.tt2:10
 msgid ""
@@ -4086,10 +4083,18 @@ msgid ""
 "exclusion table, through the standard unsubscribe/delete functions. \n"
 "They get off the exclusion table with the standard subscribe/add functions."
 msgstr ""
+"Unten aufgelistete Benutzer wurden von der Liste ausgeschlossen. Beachten "
+"Sie, daß sich diese Funktion von der schwarzen Liste unterscheidet. "
+"Ausschließen ist von Bedeutung, wenn eine Liste auf externen Datenquellen "
+"basiert; mittels Ausschließen kann sich ein Benutzer abmelden (oder vom "
+"Listeneigentümer entfernt werden), obwohl er laut der externen Datenquelle "
+"aufgenommen werden sollte. Benutzer gelangen über die gewöhnlichen "
+"Abmelden/Löschen-Funktionen in die Ausschlußtabelle. Genauso werden sie über "
+"die gewöhnlichen Abonnieren/Hinzufügen-Funktionen wieder daraus entfernt."
 
 #: ../web_tt2/show_exclude.tt2:28
 msgid "No user excluded."
-msgstr ""
+msgstr "Keine ausgeschlossenen Benutzer."
 
 #: ../web_tt2/show_sessions.tt2:2
 msgid "Sessions list"
@@ -4124,8 +4129,8 @@ msgid ""
 "      Please contact the list owner to help you unsubscribe:"
 msgstr ""
 "Sie sind möglicherweise mit einer anderen Adresse eingetragen.\n"
-"       Bitte kontaktieren Sie den Eigentümer der Liste, damit er ihnen bei "
-"der Abmeldung hilft:"
+" Bitte kontaktieren Sie den Eigentümer der Liste, damit er ihnen bei der "
+"Abmeldung hilft:"
 
 #. (list)
 #: ../web_tt2/sigrequest.tt2:25
@@ -4191,7 +4196,7 @@ msgid ""
 "logs  to be sure that static css a really in use."
 msgstr ""
 "Installation von statischen CSS erfolgreich! Um sicherzugehen, dass das CSS "
-"auch benutzt wird, bitte die Seite neu laden oder die Log-Dateien überprüfen."
+"auch benutzt wird, bitte die Seite neu laden oder die Protokolle überprüfen."
 
 #: ../web_tt2/skinsedit.tt2:16
 msgid "The css_path parameter is defined, value is"
@@ -4301,6 +4306,11 @@ msgid ""
 "used for. For more details on rendering, feel free to try changing the "
 "colors in your session to see how well all that works."
 msgstr ""
+"Bitte beachten Sie, daß diese Beschreibung nicht die genaue Bedeutung jedes "
+"Farbwertes wiedergeben kann, dies würde viel zu weit führen. Die Tabelle "
+"soll vielmehr einen Überblick der Nutzungsmöglichkeiten der Farbwerte geben. "
+"Für weitere Einzelheiten zur Darstellung können Sie in Ihrer Sitzung die "
+"Farben ändern und so ausprobieren, was passiert. "
 
 #: ../web_tt2/skinsedit.tt2:78
 msgid ""
@@ -4483,8 +4493,8 @@ msgstr ""
 "verbindet. Egal, ob Sie eine E-Mail-Adresse eingeben, oder die "
 "vorgeschlagene akzeptieren, Sie müssen bestätigen, dass dies eine "
 "funktionierende E-Mail-Adresse ist, indem Sie ein Bestätigungspasswort "
-"eingeben, das Ihnen zugeschickt wird. Bitte drücken Sie auf den Knopf "
-"\"Sende mir ein Bestätigungspasswort\", um die Bestätigung fortzusetzen."
+"eingeben, das Ihnen zugeschickt wird. Bitte drücken Sie auf den Knopf \"Sende "
+"mir ein Bestätigungspasswort\", um fortzufahren."
 
 #: ../web_tt2/sso_login.tt2:5
 msgid ""
@@ -4502,14 +4512,13 @@ msgstr "Bestätigungspasswort zuschicken"
 
 #. (init_email)
 #: ../web_tt2/sso_login.tt2:32
-#, fuzzy
 msgid ""
 "A confirmation password has been sent to your email address %1.<br />Please "
 "check your e-mail box for the message containing the confirmation link."
 msgstr ""
 "Ein Bestätigungspasswort wurde an Ihre E-Mail-Adresse %1 gesendet.<br/> "
-"Bitte überprüfen Sie Ihr Postfach um das unten geforderte Passwort "
-"einzugeben."
+"Bitte überprüfen Sie Ihr Postfach auf die Nachricht mit dem Bestätigungs-"
+"Link."
 
 #: ../web_tt2/stats.tt2:2
 msgid "Shared document directory size:"
@@ -4560,9 +4569,8 @@ msgid "Disable topics subscription"
 msgstr "Themen-Abonnement deaktivieren"
 
 #: ../web_tt2/suboptions.tt2:51
-#, fuzzy
 msgid "Only possible for direct reception modes."
-msgstr "Nur im \"normalen\" Empfangsmodus möglich"
+msgstr "Nur im Direktempfangs-Modus möglich."
 
 #. (list)
 #: ../web_tt2/subrequest.tt2:28 ../web_tt2/subrequest.tt2:7
@@ -4669,7 +4677,7 @@ msgstr "Datum"
 
 #: ../web_tt2/subscriber_table.tt2:91
 msgid "bouncing"
-msgstr "mit Zustellfehlern"
+msgstr "Zustellfehler"
 
 #. (u.email)
 #: ../web_tt2/subscriber_table.tt2:108
@@ -4677,14 +4685,12 @@ msgid "%1's picture"
 msgstr "%1's Bild"
 
 #: ../web_tt2/suspend_request.tt2:13
-#, fuzzy
 msgid "Suspended"
-msgstr "Absender"
+msgstr "zu Deaktivierender"
 
 #: ../web_tt2/suspend_request.tt2:23
-#, fuzzy
 msgid "Suspended from"
-msgstr "Absender"
+msgstr "deaktiviert von"
 
 #: ../web_tt2/suspend_request.tt2:23 ../web_tt2/viewlogs.tt2:113
 msgid "to"
@@ -4692,51 +4698,45 @@ msgstr "an"
 
 #: ../web_tt2/suspend_request.tt2:23
 msgid "indefinite end date"
-msgstr ""
+msgstr "Kein End-Datum definiert"
 
 #: ../web_tt2/suspend_request.tt2:33
-#, fuzzy
 msgid "No subscription."
-msgstr "Themen-Abonnement:"
+msgstr "Kein Abonnement."
 
 #: ../web_tt2/suspend_request.tt2:37
-#, fuzzy
 msgid "Toogle selection"
-msgstr "Auswahl invertieren"
+msgstr "Auswahl umkehren"
 
 #: ../web_tt2/suspend_request.tt2:41
-#, fuzzy
 msgid "Suspend / Resume the selected lists"
-msgstr "Gewählte Listen endgültig löschen"
+msgstr "Gewählte Listen deaktivieren / aktivieren"
 
 #: ../web_tt2/suspend_request.tt2:43
-#, fuzzy
 msgid "From:"
-msgstr "Absender"
+msgstr "Absender:"
 
 #: ../web_tt2/suspend_request.tt2:44
-#, fuzzy
 msgid "To:"
-msgstr "An: %1"
+msgstr "An:"
 
 #: ../web_tt2/suspend_request.tt2:46
 msgid "Check this box if you want to suspend your subscription indefinitely."
 msgstr ""
+"Markieren Sie dieses Feld, um Ihr Abonnement auf unbestimmte Zeit zu "
+"deaktivieren."
 
 #: ../web_tt2/suspend_request.tt2:49
-#, fuzzy
 msgid "Suspend my subscriptions"
-msgstr "Unbestätigte Abonnements"
+msgstr "Abonnements deaktivieren"
 
 #: ../web_tt2/suspend_request.tt2:51
-#, fuzzy
 msgid "Resume my subscriptions"
-msgstr "Unbestätigte Abonnements"
+msgstr "Abonnements aktivieren"
 
 #: ../web_tt2/suspend_request.tt2:55
-#, fuzzy
 msgid "Unsubscribe selected lists"
-msgstr "Gewählte Listen endgültig löschen"
+msgstr "Gewählte Listen abbestellen"
 
 #: ../web_tt2/ticket.tt2:4
 msgid "The link you used is unvalid"
@@ -4767,9 +4767,9 @@ msgid ""
 "perform this validation, please report this confidentiality issue to your "
 "mail services administrator."
 msgstr ""
-"Der Bestätigungslink wurde bereits von Rechner %1 aus bestätigt. Falls Sie "
-"diese Bestätigung nicht selbst vollzogen haben, teilen Sie diesen "
-"Vertraulichkeitsbruch bitte Ihrem Mailadministrator mit."
+"Der Bestätigungslink wurde bereits von Rechner %1 aus betätigt. Falls Sie "
+"dies nicht selbst vollzogen haben, teilen Sie diesen Vertraulichkeitsbruch "
+"bitte dem Administrator Ihres E-Mail-Service mit."
 
 #: ../web_tt2/ticket.tt2:20 ../web_tt2/ticket.tt2:27 ../web_tt2/ticket.tt2:36
 msgid ""
@@ -4808,7 +4808,7 @@ msgstr ""
 
 #: ../web_tt2/tt2_error.tt2:19
 msgid "Please contact the listmaster."
-msgstr "Bitte kontaktieren Sie den Listmaster."
+msgstr "Bitte kontaktieren Sie den Listenadministrator."
 
 #: ../web_tt2/tt2_error.tt2:22
 msgid "Powered by"
@@ -4816,7 +4816,7 @@ msgstr "Powered by"
 
 #: ../web_tt2/viewlogs.tt2:4
 msgid "Logs view"
-msgstr "Logbetrachter"
+msgstr "Ansicht der Protokolle"
 
 #: ../web_tt2/viewlogs.tt2:50
 msgid "Search by:"
@@ -4835,9 +4835,8 @@ msgid "to:"
 msgstr "bis:"
 
 #: ../web_tt2/viewlogs.tt2:73
-#, fuzzy
 msgid "ex: 24-05-2006"
-msgstr "z.B.: 24/05/2006"
+msgstr "z.B.: 24.05.2006"
 
 #: ../web_tt2/viewlogs.tt2:75
 msgid "Search by type:"
@@ -4849,7 +4848,7 @@ msgstr "Alle"
 
 #: ../web_tt2/viewlogs.tt2:88
 msgid "Authentication"
-msgstr "Legitimierung"
+msgstr "Anmeldung"
 
 # #-#-#-#-#  de.po (PACKAGE VERSION)  #-#-#-#-#
 #: ../web_tt2/viewlogs.tt2:90
@@ -5014,14 +5013,17 @@ msgid ""
 "either use that other email address or update your list membership with the "
 "new email address."
 msgstr ""
+"Falls Sie diese Liste unter einer anderen E-Mail-Adresse abonniert haben, "
+"sollten Sie entweder diese andere Adresse benutzen, oder Ihre "
+"Listenmitgliedschaft auf die neue Adresse aktualisieren."
 
 #: ../mail_tt2/authorization_reject.tt2:12
 msgid "Web archives are restricted to listmaster."
-msgstr "Webarchive sind auf Listmaster beschränkt."
+msgstr "Der Zugriff auf Webarchive ist auf Listenadministratoren beschränkt."
 
 #: ../mail_tt2/authorization_reject.tt2:15
 msgid "Web archives are restricted to list owners."
-msgstr "Webarchive sind auf Listeneigner beschränkt."
+msgstr "Der Zugriff auf Webarchive ist auf Listeneigentümer beschränkt."
 
 #: ../mail_tt2/authorization_reject.tt2:18
 msgid "Web archives are restricted to list subscribers."
@@ -5042,7 +5044,7 @@ msgstr "Nur Benutzer aus der lokalen Domäne können Listen erstellen."
 
 #: ../mail_tt2/authorization_reject.tt2:31
 msgid "List creation is restricted to listmaster."
-msgstr "Nur der Listmaster kann Listen erstellen."
+msgstr "Nur der Listenadministrator kann Listen erstellen."
 
 #: ../mail_tt2/authorization_reject.tt2:34
 msgid "Shared document edition is restricted to list subscribers."
@@ -5050,7 +5052,9 @@ msgstr "Bearbeiten gemeinsamer Dokumente ist auf Listenabonnenten beschränkt."
 
 #: ../mail_tt2/authorization_reject.tt2:38
 msgid "Shared document edition is restricted to list owners."
-msgstr "Bearbeiten gemeinsamer Dokumente ist auf den Listeneigner beschränkt."
+msgstr ""
+"Das Bearbeiten gemeinsamer Dokumente ist auf den Listeneigentümer "
+"beschränkt."
 
 #: ../mail_tt2/authorization_reject.tt2:41
 msgid ""
@@ -5062,7 +5066,7 @@ msgstr ""
 
 #: ../mail_tt2/authorization_reject.tt2:45
 msgid "Deleting a user from the list is restricted to list owners."
-msgstr "Nur der Listeneigner kann Benutzer löschen."
+msgstr "Das Löschen von Benutzern ist auf den Listeneigentümer beschränkt."
 
 #: ../mail_tt2/authorization_reject.tt2:48
 msgid "It is not possible to delete a user from the list."
@@ -5070,7 +5074,8 @@ msgstr "Es ist nicht möglich, Benutzer von der Liste zu löschen."
 
 #: ../mail_tt2/authorization_reject.tt2:51
 msgid "Shared document reading is restricted to list owners."
-msgstr "Lesen gemeinsamer Dokumente ist auf den Listeneigner beschränkt."
+msgstr ""
+"Das Lesen gemeinsamer Dokumente ist auf den Listeneigentümer beschränkt."
 
 #: ../mail_tt2/authorization_reject.tt2:54
 msgid "Shared document reading is restricted to list subscribers."
@@ -5090,11 +5095,12 @@ msgstr "Sie haben keine Berechtigung, Listenparameter zu ändern."
 
 #: ../mail_tt2/authorization_reject.tt2:64
 msgid "List parameter editing is restricted to list owners."
-msgstr "Das Ändern von Listenparametern ist beschränkt auf Listen-Eigentümer."
+msgstr "Das Ändern von Listenparametern auf den Listeneigentümer beschränkt."
 
 #: ../mail_tt2/authorization_reject.tt2:67
 msgid "The 'global remind' feature is restricted to listmaster."
-msgstr "Die Funktion 'global remind' ist auf den Listmaster beschränkt."
+msgstr ""
+"Die Funktion 'global remind' ist auf den Listenadministrator beschränkt."
 
 #: ../mail_tt2/authorization_reject.tt2:70
 msgid "List information is restricted to list subscribers."
@@ -5107,7 +5113,7 @@ msgstr "Die 'Einladungs'-Funktion (invite) ist nicht verfügbar."
 #: ../mail_tt2/authorization_reject.tt2:77
 msgid "The 'invite' feature is restricted to list owners."
 msgstr ""
-"Die 'Einladungs'-Funktion (invite) ist auf den Listeneigner beschränkt."
+"Die 'Einladungs'-Funktion (invite) ist auf den Listeneigentümer beschränkt."
 
 #: ../mail_tt2/authorization_reject.tt2:80
 msgid "The 'invite' feature is restricted to list subscribers."
@@ -5116,11 +5122,14 @@ msgstr ""
 
 #: ../mail_tt2/authorization_reject.tt2:84
 msgid "The 'remind' feature is restricted to listmaster."
-msgstr "Die 'Erinnerungs'-Funktion (remind) ist auf den Listmaster beschränkt."
+msgstr ""
+"Die 'Erinnerungs'-Funktion (remind) ist auf den Listenadministrator "
+"beschränkt."
 
 #: ../mail_tt2/authorization_reject.tt2:87
 msgid "The 'remind' feature is restricted to list owners."
-msgstr "Die 'Erinnerungs'-Funktion (remind) ist auf Listeneigner beschränkt."
+msgstr ""
+"Die 'Erinnerungs'-Funktion (remind) ist auf den Listeneigentümer beschränkt."
 
 #: ../mail_tt2/authorization_reject.tt2:90
 msgid "The 'review' feature is unavailable."
@@ -5136,12 +5145,14 @@ msgstr ""
 
 #: ../mail_tt2/authorization_reject.tt2:97
 msgid "The 'review' feature is restricted to listmaster."
-msgstr "Die 'Auflistungs'-Funktion (review) ist auf den Listmaster beschränkt."
+msgstr ""
+"Die 'Auflistungs'-Funktion (review) ist auf den Listenadministrator "
+"beschränkt."
 
 #: ../mail_tt2/authorization_reject.tt2:100
 msgid "The 'review' feature is restricted to list owners."
 msgstr ""
-"Die 'Auflistungs'-Funktion (review) ist auf den Listeneigner beschränkt."
+"Die 'Auflistungs'-Funktion (review) ist auf den Listeneigentümer beschränkt."
 
 #: ../mail_tt2/authorization_reject.tt2:103
 msgid "The 'review' feature is restricted to list subscribers."
@@ -5197,11 +5208,11 @@ msgstr "Abonnement dieser Liste ist auf lokale Domänenbenutzer beschränkt."
 
 #: ../mail_tt2/authorization_reject.tt2:137
 msgid "Subscription to this list requires S/MIME signature."
-msgstr "Abonnement dieser Liste benötigt eine S/MIME-Signatur."
+msgstr "Das Abonnieren dieser Liste erfordert eine S/MIME-Signatur."
 
 #: ../mail_tt2/authorization_reject.tt2:140
 msgid "Topics visibility is restricted to listmaster."
-msgstr "Die Themen-Anzeige ist auf Listmaster beschränkt."
+msgstr "Die Themen-Anzeige ist auf den Listenadministrator beschränkt."
 
 #: ../mail_tt2/authorization_reject.tt2:143
 msgid "Topics visibility is restricted to identified users."
@@ -5225,7 +5236,7 @@ msgstr "Das Kommando MODINDEX ist auf Moderatoren beschränkt."
 
 #: ../mail_tt2/authorization_reject.tt2:158
 msgid "This action is restricted to list owners or moderators."
-msgstr "Dieser Vorgang ist auf Listeneigner oder Moderatoren beschränkt."
+msgstr "Dieser Vorgang ist auf Listeneigentümer oder Moderatoren beschränkt."
 
 #: ../mail_tt2/authorization_reject.tt2:161
 msgid "This action is restricted to moderators."
@@ -5233,32 +5244,35 @@ msgstr "Diese Funktion ist auf Moderatoren beschränkt."
 
 #: ../mail_tt2/authorization_reject.tt2:164
 msgid "This action is restricted to list owners."
-msgstr "Diese Funktion ist auf Listeneigner beschränkt."
+msgstr "Diese Funktion ist auf den Listeneigentümer beschränkt."
 
 #: ../mail_tt2/authorization_reject.tt2:167
 msgid "This action is restricted to listmasters."
-msgstr "Diese Funktion ist auf Administratoren beschränkt."
+msgstr "Diese Funktion ist auf den Listenadministrator beschränkt."
 
 #: ../mail_tt2/authorization_reject.tt2:170
 msgid "This action is restricted to listmasters or list owners."
-msgstr "Diese Funktion ist auf Listmaster oder Listeneigner beschränkt."
+msgstr ""
+"Diese Funktion ist auf Listenadministratoren oder Listeneigentümer "
+"beschränkt."
 
 #: ../mail_tt2/authorization_reject.tt2:173
 msgid "This action is restricted to listmasters or privileged list owners."
 msgstr ""
-"Diese Funktion ist auf Listmaster oder privilagierte Listeneigner beschränkt."
+"Diese Funktion ist auf Listenadministratoren oder privilegierte "
+"Listeneigentümer beschränkt."
 
 #: ../mail_tt2/authorization_reject.tt2:176
 msgid ""
 "This action is restricted to document author, listmasters or privileged list "
 "owners."
 msgstr ""
-"Diese Funktion ist auf Dokumentenurheber, Listmaster oder privilegierte "
-"Listeneigner beschränkt."
+"Diese Funktion ist auf Dokumentenurheber, Listenadministratoren oder "
+"privilegierte Listeneigentümer beschränkt."
 
 #: ../mail_tt2/authorization_reject.tt2:179
 msgid "This action is restricted to privileged list owners."
-msgstr "Diese Funktion ist auf privilegierte Listeneigner beschränkt."
+msgstr "Diese Funktion ist auf privilegierte Listeneigentümer beschränkt."
 
 #. (role,right)
 #: ../mail_tt2/authorization_reject.tt2:182
@@ -5358,10 +5372,9 @@ msgstr ""
 "Ihre Nachrichtensignatur wurde erfolgreich mit Hilfe von S/MIME verifiziert."
 
 #: ../mail_tt2/command_report.tt2:23
-#, fuzzy
 msgid "Your message contain a DKIM signature. It was succesfully verified"
 msgstr ""
-"Ihre Nachrichtensignatur wurde erfolgreich mit Hilfe von S/MIME verifiziert."
+"Ihre Nachrichtensignatur wurde erfolgreich mit Hilfe von DKIM verifiziert."
 
 #: ../mail_tt2/command_report.tt2:28
 msgid ""
@@ -5369,7 +5382,7 @@ msgid ""
 "owners for approval. You will receive a notification when you have\n"
 "been subscribed (or unsubscribed) to the list."
 msgstr ""
-"Ihr Antrag auf Abonnement bzw. Abbestellung wurde an die Listeneigner\n"
+"Ihr Antrag auf Abonnement bzw. Abbestellung wurde an die Listeneigentümer\n"
 "zur Prüfung weitergeleitet. Sie werden eine Benachrichtigung erhalten,\n"
 "wenn Sie in die Liste ein- bzw. aus ihr ausgetragen wurden."
 
@@ -5521,9 +5534,9 @@ msgid ""
 "You probably confirmed your %1 using a different\n"
 "email address. Please try using your canonical address."
 msgstr ""
-"Die Legitimierung schlug fehl.\n"
-"Sie haben wahrscheinlich Ihr %1 mit einer anderen E-Mail-Adresse bestätigt."
-"Bitte versuchen Sie Ihre registrierte Adrese zu benutzen."
+"Die Anmeldung schlug fehl.\n"
+"Sie haben wahrscheinlich Ihr %1 mit einer anderen E-Mail-Adresse bestätigt. "
+"Bitte versuchen Sie, Ihre registrierte Adrese zu benutzen."
 
 #: ../mail_tt2/command_report.tt2:150
 msgid "Command has failed because of an internal server error:"
@@ -5591,7 +5604,7 @@ msgid ""
 "Your document %1 for list %2@%3\n"
 "has been installed by %4 list editor."
 msgstr ""
-"Ihr Dokument %1 an die Liste %2@%3\n"
+"Ihr Dokument %1 für Liste %2@%3\n"
 "wurde vom Listenmoderator %4 eingepflegt."
 
 #: ../mail_tt2/d_install_shared.tt2:7
@@ -5686,14 +5699,12 @@ msgid "User guide"
 msgstr "Benutzerhandbuch"
 
 #: ../mail_tt2/helpfile.tt2:5
-#, fuzzy
 msgid "                       (Automatic Mailing System)"
-msgstr "HELp                        * Diese Hilfedatei"
+msgstr "(Automatisches Versandsystem)"
 
 #: ../mail_tt2/helpfile.tt2:7
-#, fuzzy
 msgid "                                User's Guide"
-msgstr "HELp                        * Diese Hilfedatei"
+msgstr "Benutzerhandbuch"
 
 #: ../mail_tt2/helpfile.tt2:10
 msgid ""
@@ -5851,7 +5862,7 @@ msgstr ""
 msgid ""
 "The following commands are available only for lists owners or moderators:"
 msgstr ""
-"Die folgenden Kommandos sind nur für Eigentümer oder Moderatoren von Listen "
+"Die folgenden Befehle sind nur für Listeneigentümer oder Moderatoren "
 "verfügbar:"
 
 #: ../mail_tt2/helpfile.tt2:49
@@ -5922,7 +5933,7 @@ msgstr "Betreff              : %1"
 #. (o.gecos)
 #: ../mail_tt2/info_report.tt2:9
 msgid "Owner             : %1"
-msgstr "Eigentümer           : %1"
+msgstr "Eigentümer : %1"
 
 #. (e.gecos)
 #: ../mail_tt2/info_report.tt2:14
@@ -6008,7 +6019,7 @@ msgstr "Erstellung der Mailingliste %1"
 #. (list.name,list.host)
 #: ../mail_tt2/list_created.tt2:4
 msgid "%1@%2 mailing list has been activated by listmaster."
-msgstr "Mailingliste %1@%2 wurde vom Listmaster aktiviert."
+msgstr "Mailingliste %1@%2 wurde vom Listenadministrator aktiviert."
 
 #: ../mail_tt2/list_created.tt2:6
 msgid "homepage"
@@ -6138,7 +6149,7 @@ msgstr "Fehler:"
 #: ../mail_tt2/listmaster_notification.tt2:52
 #: ../mail_tt2/listmaster_notification.tt2:60
 msgid "Check log file for further details."
-msgstr "Für weitere Informationen prüfen Sie bitte die Sympa-Logdateien"
+msgstr "Für weitere Einzelheiten prüfen Sie bitte die Protokolldatei"
 
 #: ../mail_tt2/listmaster_notification.tt2:55
 msgid "Upgrade procedures failed"
@@ -6159,8 +6170,8 @@ msgstr "Datenbankstruktur aktualisiert"
 msgid ""
 "The database structure has been updated; check log file for further details: "
 msgstr ""
-"Die Datenbankstruktur wurde aktualisiert; prüfen sie das Protokoll (Log) für "
-"weitere Details: "
+"Die Datenbankstruktur wurde aktualisiert; prüfen sie das Protokolldatei für "
+"weitere Einzelheiten: "
 
 #: ../mail_tt2/listmaster_notification.tt2:71
 msgid "DataBase connection restored"
@@ -6182,7 +6193,7 @@ msgid ""
 "check log files !!"
 msgstr ""
 "Sympa konnte eine Nachricht für die Liste %1 nicht im Bulkmailer ablegen. "
-"Sie sollten die Logdateien überprüfen!"
+"Sie sollten die Protokolldateien überprüfen!"
 
 #: ../mail_tt2/listmaster_notification.tt2:83
 msgid "Loop detected"
@@ -6227,7 +6238,7 @@ msgstr "%1 unmöglich."
 #: ../mail_tt2/listmaster_notification.tt2:366
 #: ../mail_tt2/listmaster_notification.tt2:378
 msgid "See logs for more details."
-msgstr "Schauen Sie in das Protokoll (Log) für mehr Details."
+msgstr "Beachten Sie die Protokolldateien für weitere Einzelheiten."
 
 #: ../mail_tt2/listmaster_notification.tt2:121
 msgid "Unable to create directory"
@@ -6252,7 +6263,7 @@ msgstr ""
 # #-#-#-#-#  de.po (PACKAGE VERSION)  #-#-#-#-#
 #: ../mail_tt2/listmaster_notification.tt2:133
 msgid "A bounce management failed"
-msgstr "Ein Zustellfehler konnte nicht verarbeitet werden"
+msgstr "Ein Zustellfehler konnte nicht bearbeitet werden"
 
 #. (file,bad)
 #: ../mail_tt2/listmaster_notification.tt2:135
@@ -6312,7 +6323,7 @@ msgstr "Einbinden der Datenquelle %1 (Typ %2) fehlgeschlagen."
 #: ../mail_tt2/listmaster_notification.tt2:159
 #: ../mail_tt2/listmaster_notification.tt2:166
 msgid "Check Sympa log files for more precise information"
-msgstr "Für genauere Informationen prüfen Sie bitte die Sympa-Logdateien"
+msgstr "Für genauere Informationen prüfen Sie bitte die Sympa-Protokolldateien"
 
 #. (param0)
 #: ../mail_tt2/listmaster_notification.tt2:163
@@ -6364,12 +6375,12 @@ msgstr "Der Status der Liste wurde auf error_config gesetzt"
 #: ../mail_tt2/listmaster_notification.tt2:248
 #: ../mail_tt2/listmaster_notification.tt2:255
 msgid "Check Sympa log files for more precise information."
-msgstr "Für genauere Informationen prüfen Sie bitte die Sympa-Logdateien."
+msgstr "Für genauere Informationen prüfen Sie bitte die Sympa-Protokolldateien."
 
 #. (param0)
 #: ../mail_tt2/listmaster_notification.tt2:177
 msgid "List owner/editor email changes"
-msgstr "Adressänderung von Listeneigner/-moderator"
+msgstr "Änderung von E-Mail-Adressen der Listeneigentümer/-moderatoren"
 
 #. (previous_email,new_email)
 #: ../mail_tt2/listmaster_notification.tt2:179
@@ -6395,8 +6406,8 @@ msgid ""
 "If you are able to do so, you should probably update these data sources with "
 "this person's new email address."
 msgstr ""
-"Admin %1 konnte seine Admin-E-Mail-Adresse nicht ändern (neue Adresse ist %"
-"2), weil er über die folgende Datenquellen eingebunden ist: %3.\n"
+"Administrator %1 konnte seine Admin-E-Mail-Adresse nicht ändern (neue "
+"Adresse ist %2), weil er über die folgende Datenquellen eingebunden ist: %3.\n"
 "\n"
 "Sie sollten, falls Ihnen dies möglich ist, wahrscheinlich die neue Adresse "
 "dieser Person in diese Datenquellen einpflegen."
@@ -6512,7 +6523,7 @@ msgstr "Abonnenten mit Zustellfehlern verwalten:"
 #: ../mail_tt2/listmaster_notification.tt2:291
 #: ../mail_tt2/listmaster_notification.tt2:299
 msgid "Listmaster: internal server error "
-msgstr "Listmaster: interner Serverfehler "
+msgstr "Listenadministrator: interner Serverfehler "
 
 #. (who)
 #: ../mail_tt2/listmaster_notification.tt2:282
@@ -6520,10 +6531,11 @@ msgstr "Listmaster: interner Serverfehler "
 msgid " User %1 has encountered an internal server error"
 msgstr " Bei Benutzer %1 trat ein interner Server-Fehler auf"
 
+# mistake in engl. version: whila -> while
 #. (error)
 #: ../mail_tt2/listmaster_notification.tt2:293
 msgid "The following error occurred whila managing bounces: %&"
-msgstr ""
+msgstr "Der folgende Fehler trat bei der Bearbeitung von Zustellfehlern auf: %&"
 
 #: ../mail_tt2/listmaster_notification.tt2:302
 #: ../mail_tt2/listmaster_notification.tt2:373
@@ -6733,7 +6745,7 @@ msgstr "Fehler beim Einbinden der Mitglieder für Liste '%1'"
 #. (list.name)
 #: ../mail_tt2/listmaster_notification.tt2:343
 msgid "Failed to include list admins for list '%1'"
-msgstr "Fehler beim Einbinden der Listenadmins für Liste '%1'"
+msgstr "Fehler beim Einbinden der Listenadministratoren für Liste '%1'"
 
 #: ../mail_tt2/listmaster_notification.tt2:344
 msgid "No owner is defined for the list '%1'"
@@ -6818,17 +6830,17 @@ msgstr ""
 
 #: ../mail_tt2/listmaster_notification.tt2:362
 msgid "Parameter cookie undefined, authentication failure."
-msgstr "Parameter cookie nicht definiert, Legitimierung fehlgeschlagen."
+msgstr "Parameter cookie nicht definiert, Anmeldung fehlgeschlagen."
 
 #. (env)
 #: ../mail_tt2/listmaster_notification.tt2:363
 msgid "Cookie error: '%1' undefined, authentication failure."
-msgstr "Cookie-Fehler: '%1' undefiniert, Legitimierung fehlgeschlagen."
+msgstr "Cookie-Fehler: '%1' undefiniert, Anmeldung fehlgeschlagen."
 
 #. (list.name)
 #: ../mail_tt2/listmaster_notification.tt2:370
 msgid "Listmaster: system error "
-msgstr "Listmaster: Systemfehler "
+msgstr "Listenadministrator: Systemfehler "
 
 #. (who)
 #: ../mail_tt2/listmaster_notification.tt2:372
@@ -6894,7 +6906,6 @@ msgstr "Zu Ihrer Information: %1 Liste \"%2\" von %3 %4"
 
 #. (who,gecos,list.name)
 #: ../mail_tt2/listowner_notification.tt2:28
-#, fuzzy
 msgid ""
 "WARNING: %1 %2 failed to unsubscribe from %3 because his address was not "
 "found in the list.\n"
@@ -6903,7 +6914,8 @@ msgid ""
 msgstr ""
 "WARNUNG: %1 %2 konnte nicht von %3 abgemeldet werden, da seine E-Mail-"
 "Adresse nicht in der Liste gefunden wurde.\n"
-"(Sie könnten dieser Person helfen)."
+"Über folgenden Link können Sie dieser Person helfen, in der Abonnentenliste "
+"nach ähnlichen E-Mail-Adressen zu suchen:"
 
 #. (list.name)
 #: ../mail_tt2/listowner_notification.tt2:33
@@ -7040,7 +7052,7 @@ msgid ""
 msgstr ""
 "Zustellfehlerrate der Liste %1 beträgt %2.\n"
 "\n"
-"Sie sollten nicht existierende Abonnenten löschen: \n"
+"Sie sollten nicht belieferbare Abonnenten löschen: \n"
 
 #. (command,list.name,who,gecos)
 #: ../mail_tt2/listowner_notification.tt2:112
@@ -7102,7 +7114,7 @@ msgstr "Liste %1 / %2"
 #. (list.name,list.host)
 #: ../mail_tt2/list_rejected.tt2:4
 msgid "%1@%2 mailing list has been rejected by listmaster."
-msgstr "Die Mailingliste %1@%2 wurde vom Listmaster abgelehnt."
+msgstr "Die Mailingliste %1@%2 wurde vom Listenadministrator abgelehnt."
 
 # #-#-#-#-#  de.po (PACKAGE VERSION)  #-#-#-#-#
 #: ../mail_tt2/lists.tt2:2
@@ -7202,11 +7214,11 @@ msgstr ""
 "\n"
 "Falls Ihre Nachricht tatsächlich einen Befehl enthielt, denken Sie\n"
 "bitte daran, dass Befehle niemals an eine Liste gesendet werden\n"
-"dürfen. Befehle müssen an %2 gesendet werden.\n"
+"sollen. Befehle müssen an %2 gesendet werden.\n"
 "\n"
-"Falls Ihre Nachricht an die Liste gehen sollte, wurde Sie von der\n"
-"Software als Befehl angesehen. Bitte kontaktieren Sie den Eigentümer\n"
-"der Liste unter %1-request@%3, damit er sich um Ihre Nachricht\n"
+"Falls Ihre Nachricht wirklich für die Liste bestimmt war, wurde Sie von der\n"
+"Software als Befehl angesehen. Bitte kontaktieren Sie den Listeneigentümer\n"
+" unter %1-request@%3, damit er sich um Ihre Nachricht\n"
 "kümmern kann.\n"
 "\n"
 "Danke für Ihre Aufmerksamkeit.\n"
@@ -7221,6 +7233,12 @@ msgid ""
 "before being sent over email, the final size of an attachment is often "
 "significantly larger that the original file."
 msgstr ""
+"Die Nachricht konnte nicht versendet werden, da ihre Größe (%1 kB) die auf "
+"dieser Liste maximal erlaubte Größe (%2 kB) überschreitet.\n"
+"\n"
+"Anmerkung: Weil Binärdaten vor dem Versand in das weniger effizienten ASCII-"
+"Format umgewandelt werden müssen, ist die endgültige Größe eines "
+"Dateianhangs oftmals wesentlich größer als die Originaldatei."
 
 #. (listname)
 #: ../mail_tt2/message_report.tt2:59
@@ -7236,7 +7254,7 @@ msgstr ""
 "Mit dem Schlüssel %2 kann nicht auf die Nachricht der Liste %1 zugegriffen "
 "werden.\n"
 "Warnung: diese Nachricht könnte bereits durch einen der Listenmoderatoren "
-"versendet sein."
+"versendet worden sein."
 
 #. (key)
 #: ../mail_tt2/message_report.tt2:66
@@ -7283,7 +7301,7 @@ msgstr "Nachrichtenverteilung"
 #: ../mail_tt2/message_report.tt2:100
 msgid "Your message for list %1 has been forwarded to editor(s)"
 msgstr ""
-"Ihre Nachricht an Liste %1 wurde an den/die Moderator(en) weitergeleitet"
+"Ihre Nachricht für Liste %1 wurde an den/die Moderator(en) weitergeleitet"
 
 #. (key,list.name)
 #: ../mail_tt2/message_report.tt2:104
@@ -7607,17 +7625,14 @@ msgid "Help on Sympa: %1%2"
 msgstr "Hilfe zu Sympa: %1%2"
 
 #: ../mail_tt2/sendssopasswd.tt2:6
-#, fuzzy
 msgid ""
 "To complete your account setup actions you need to confirm that you have \n"
 "supplied a working email address.  Please follow the link below to complete "
 "your account configuration."
 msgstr ""
-"Um Ihre Kontoeinrichtung abzuschließen, müssen Sie bestätigen, dass Sie "
-"eine \n"
-"gültige E-Mail-Adresse angegeben haben. Bitte geben Sie die folgende E-Mail-"
-"Adresse und Passwort im Einrichtungs-Assistenten ein, um Ihre "
-"Kontoeinstellungen abzuschließen."
+"Um Ihre Kontoeinrichtung abzuschließen, müssen Sie bestätigen, dass Sie eine "
+"gültige E-Mail-Adresse angegeben haben. Bitte folgen Sie untenstehendem "
+"Link, um Ihre Kontoerstellung abzuschließen."
 
 #. (list.name)
 #: ../mail_tt2/stats_report.tt2:4
@@ -7678,7 +7693,7 @@ msgstr ""
 
 #: ../mail_tt2/user_notification.tt2:10
 msgid "You can contact list owner:"
-msgstr "Sie können den Eigentümer der Liste kontaktieren:"
+msgstr "Sie können den Listeneigentümer kontaktieren:"
 
 #. (list.name)
 #: ../mail_tt2/user_notification.tt2:14
@@ -7733,7 +7748,7 @@ msgstr "Listen-Homepage"
 
 #: ../mail_tt2/user_notification.tt2:36
 msgid "Owner and moderator guide:"
-msgstr "Handbuch für Eigentümer und Moderatoren:"
+msgstr "Handbuch für Listeneigentümer und Moderatoren:"
 
 #: ../mail_tt2/user_notification.tt2:40
 msgid "Changing your subscriber email address"
@@ -7755,15 +7770,15 @@ msgstr "Abbestellen der Liste %1"
 
 #. (list.name,ip)
 #: ../mail_tt2/user_notification.tt2:51
-#, fuzzy
 msgid ""
 "Somebody (probably you) requested to unsubscribe you from list %1.\n"
 "This query was issued from the IP number '%2'.\n"
 "To confirm and get removed from the list, please click the link below: "
 msgstr ""
-"Sie haben beantragt, aus der Liste %1 ausgetragen zu werden. Um dies zu "
-"bestätigen und damit Ihr Abonnement zu kündigen, klicken Sie auf den "
-"folgenden Link:"
+"Jemand (vermutlich Sie) hat beantragt, Sie von der Liste %1 zu entfernen.\n"
+"Dieser Auftrag wurde von der IP-Adresse '%2' gegeben.\n"
+" Um dies zu bestätigen und damit Ihr Abonnement zu kündigen, klicken Sie auf "
+"den folgenden Link:"
 
 #. (list.name)
 #: ../mail_tt2/user_notification.tt2:53
@@ -7896,7 +7911,7 @@ msgstr "lokale Abonnenten oder lokale Domäne"
 
 #: ../src/etc/scenari/access_web_archive.listmaster:1
 msgid "listmaster"
-msgstr "Listmaster"
+msgstr "Listenadministrator"
 
 #: ../src/etc/scenari/access_web_archive.owner:1
 msgid "by owner"
@@ -7913,12 +7928,13 @@ msgstr "öffentlich"
 
 #: ../src/etc/scenari/add.auth:1
 msgid "restricted to owner with authentication"
-msgstr "beschränkt auf Eigentümer mit Legitimierung"
+msgstr "beschränkt auf angemeldete Eigentümer"
 
 #: ../src/etc/scenari/add.authdkim:1
-#, fuzzy
 msgid "restricted to owner without authentication if DKIM signature is OK."
-msgstr "beschränkt auf Eigentümer mit Legitimierung"
+msgstr ""
+"beschränkt auf nicht angemeldete Eigentümer, falls die DKIM-Signatur gültig "
+"ist."
 
 #: ../src/etc/scenari/add.closed:1
 msgid "add impossible"
@@ -7926,23 +7942,25 @@ msgstr "Hinzufügen nicht möglich"
 
 #: ../src/etc/scenari/add.owner:1
 msgid "add performed by list owner does not need authentication"
-msgstr "Hinzufügen durch Listeneigner benötigt keine Legitimierung"
+msgstr "Das Hinzufügen durch Listeneigentümer erfordert keine Anmeldung"
 
 #: ../src/etc/scenari/add.ownerdkim:1
-#, fuzzy
 msgid ""
 "add performed by list owner does not need authentication if DKIM signature OK"
-msgstr "Hinzufügen durch Listeneigner benötigt keine Legitimierung"
+msgstr ""
+"Das Hinzufügen durch den Listeneigentümer erfordert keine Anmeldung, falls "
+"die DKIM-Signatur gültig ist"
 
 #: ../src/etc/scenari/add.owner_notify:1
 msgid "add performed by owner does not need authentication (notification)"
 msgstr ""
-"Hinzufügen durch Listeneigner benötigt keine Legitimierung (Benachrichtigung)"
+"Hinzufügen durch den Listeneigentümer erfordert keine Anmeldung "
+"(Benachrichtigung)"
 
 #: ../src/etc/scenari/automatic_list_creation.listmaster:1
 #: ../src/etc/scenari/create_list.listmaster:1
 msgid "restricted to listmaster"
-msgstr "beschränkt auf Listmaster"
+msgstr "beschränkt auf Listenadministrator"
 
 #: ../src/etc/scenari/automatic_list_creation.public:1
 msgid "anybody. Be sure you know what you are doing"
@@ -7954,7 +7972,7 @@ msgstr "jeder aus der lokalen Domäne "
 
 #: ../src/etc/scenari/create_list.public_listmaster:1
 msgid "anybody by validation by listmaster required"
-msgstr "jeder, Überprüfung durch den Listmaster erforderlich"
+msgstr "jeder, Überprüfung durch den Listenadministrator erforderlich"
 
 #: ../src/etc/scenari/d_edit.editor:1
 msgid "moderated for subscribers"
@@ -7963,7 +7981,7 @@ msgstr "für Abonnenten moderiert"
 #: ../src/etc/scenari/d_edit.owner:1 ../src/etc/scenari/d_read.owner:1
 #: ../src/etc/scenari/remind.owner:1
 msgid "restricted to list owners"
-msgstr "beschränkt auf Listen-Eigentümer"
+msgstr "beschränkt auf Listeneigentümer"
 
 #: ../src/etc/scenari/d_edit.private:1 ../src/etc/scenari/d_read.private:1
 #: ../src/etc/scenari/info.private:1 ../src/etc/scenari/invite.private:1
@@ -7982,14 +8000,15 @@ msgstr "öffentliche Dokumente"
 
 #: ../src/etc/scenari/del.auth:1
 msgid "deletion performed only by list owners, need authentication"
-msgstr "Löschen erfolgt durch Listen-Eigentümer mit Legitimierung"
+msgstr "Löschen nur durch den angemeldeten Listeneigentümer"
 
 #: ../src/etc/scenari/del.authdkim:1
-#, fuzzy
 msgid ""
 "deletion performed only by list owners, need authentication unless DKIM "
 "signature is OK"
-msgstr "Löschen erfolgt durch Listen-Eigentümer mit Legitimierung"
+msgstr ""
+"Löschen nur durch den angemeldeten Listeneigentümer, außer DKIM-Signatur ist "
+"gültig"
 
 #: ../src/etc/scenari/del.closed:1
 msgid "remove subscriber impossible"
@@ -7997,15 +8016,15 @@ msgstr "Abmelden von Abonnenten nicht möglich"
 
 #: ../src/etc/scenari/del.owner:1
 msgid "by owner without authentication"
-msgstr "durch Eigentümer ohne Legitimierung"
+msgstr "durch Eigentümer ohne Anmeldung"
 
 #: ../src/etc/scenari/del.owner_notify:1
 msgid "list owners, authentication not needed (notification)"
-msgstr "Listen-Eigentümer, Legitimierung nicht erforderlich (Benachrichtigung)"
+msgstr "Listeneigentümer, Anmeldung nicht erforderlich (Benachrichtigung)"
 
 #: ../src/etc/scenari/global_remind.listmaster:1
 msgid "just for listmaster"
-msgstr "nur für Listmaster"
+msgstr "nur für Listenadministrator"
 
 #: ../src/etc/scenari/info.open:1
 msgid "for anyone"
@@ -8013,24 +8032,27 @@ msgstr "jeder"
 
 #: ../src/etc/scenari/invite.owner:1
 msgid "invite perform by list owner do not need authentication"
-msgstr "Einladung durch Listen-Eigentümer braucht keine Legitimierung"
+msgstr "Einladung durch Listeneigentümer erfordert keine Anmeldung"
 
 #: ../src/etc/scenari/remind.listmaster:1
 #: ../src/etc/scenari/review.listmaster:1
 msgid "listmaster only"
-msgstr "nur Listmaster"
+msgstr "nur Listenadministrator"
 
 #: ../src/etc/scenari/remind.listmasterdkim:1
 msgid ""
 "listmaster only (do not require authentication if DKIM siganture is OK) "
 msgstr ""
+"nur Listenadministrator (erfordert keine Anmeldung wenn die DKIM-Signatur "
+"gültig ist)"
 
 #: ../src/etc/scenari/remind.ownerdkim:1
-#, fuzzy
 msgid ""
 "restricted to list owners (authentication is not required if a DKIM "
 "signature is OK)"
-msgstr "Listen-Eigentümer, Legitimierung nicht erforderlich (Benachrichtigung)"
+msgstr ""
+"dem Listeneigentümer vorbehalten (erfordert keine Anmeldung wenn die DKIM-"
+"Signatur gültig ist)"
 
 #: ../src/etc/scenari/review.closed:1
 msgid "no one can review"
@@ -8042,7 +8064,7 @@ msgstr "beschränkt auf Abonnenten oder Benutzer der lokalen Domäne"
 
 #: ../src/etc/scenari/review.owner:1
 msgid "only owner (and listmaster)"
-msgstr "nur Listen-Eigentümer (und Listmaster)"
+msgstr "nur Listeneigentümer (und Listenadministrator)"
 
 #: ../src/etc/scenari/review.public:1
 msgid "anyone can do it !"
@@ -8050,7 +8072,7 @@ msgstr "jeder"
 
 #: ../src/etc/scenari/send.editordkim:1
 msgid "Moderated, no authentication needed if DKIM signature from editor is OK"
-msgstr ""
+msgstr "Moderiert; erfordert keine Anmeldung wenn die DKIM-Signatur gültig ist."
 
 #: ../src/etc/scenari/send.editorkey:1
 msgid "Moderated"
@@ -8061,9 +8083,8 @@ msgid "Moderated, even for moderators"
 msgstr "Moderiert, auch für Moderatoren"
 
 #: ../src/etc/scenari/send.editorkeyonlyauth:1
-#, fuzzy
 msgid "Moderated, need  authentication  from editor"
-msgstr "braucht Legitimierung"
+msgstr "Moderiert, für Moderatoren ist eine Anmeldung erforderlich."
 
 #: ../src/etc/scenari/send.intranet:1
 msgid "restricted to local domain"
@@ -8091,12 +8112,11 @@ msgstr "Moderiert für Nicht-Abonnenten, die mehrteilige Nachrichten senden"
 
 #: ../src/etc/scenari/send.privatekey:1
 msgid "restricted to subscribers with previous md5 authentication"
-msgstr "beschränkt auf Abonnenten mit vorheriger md5-Legitimierung"
+msgstr "beschränkt auf Abonnenten mit vorheriger MD5-Legitimierung"
 
 #: ../src/etc/scenari/send.privatekeyandeditorkeyonly:1
-#, fuzzy
 msgid "Moderated, for subscribers and even moderators themself"
-msgstr "Moderiert, für Abonnenten und Moderatoren"
+msgstr "Moderiert, für Abonnenten sowie Moderatoren"
 
 #: ../src/etc/scenari/send.privateoreditorkey:1
 msgid "Private, moderated for non subscribers"
@@ -8107,9 +8127,8 @@ msgid "Private, confirmation for non subscribers"
 msgstr "Privat, Bestätigung für Nicht-Abonnenten"
 
 #: ../src/etc/scenari/send.private_smime:1
-#, fuzzy
 msgid "restricted to subscribers and checked smime signature"
-msgstr "beschränkt auf Abonnenten mit S/MIME-Signatur"
+msgstr "beschränkt auf Abonnenten mit gültiger S/MIME-Signatur"
 
 #: ../src/etc/scenari/send.public:1
 msgid "public list"
@@ -8117,7 +8136,7 @@ msgstr "Öffentliche Liste"
 
 #: ../src/etc/scenari/send.publickey:1
 msgid "anyone no authentication if DKIM signature is OK"
-msgstr ""
+msgstr "öffentlich; erfordert keine Anmeldung wenn die DKIM-Signatur gültig ist"
 
 #: ../src/etc/scenari/send.publicnoattachment:1
 msgid "public list multipart/mixed messages are forwarded to moderator"
@@ -8135,7 +8154,7 @@ msgstr "öffentliche Liste, mehrteilige Nachrichten werden verworfen"
 #: ../src/etc/scenari/spam_status.x-spam-status:1
 #: ../src/etc/scenari/spam_status.x-spam-status~:1
 msgid "test x-spam-status  header"
-msgstr ""
+msgstr "überprüfen der x-spam-status Kopfzeile"
 
 #: ../src/etc/scenari/subscribe.auth:1 ../src/etc/scenari/subscribe.authdkim:1
 msgid "subscription request confirmed"
@@ -8143,26 +8162,26 @@ msgstr "Abonnement-Anfrage bestätigt"
 
 #: ../src/etc/scenari/subscribe.auth_notify:1
 msgid "need authentication (notification is sent to owners)"
-msgstr ""
-"benötigt Legitimierung (dem Eigentümer wird eine Benachrichtigung gesendet)"
+msgstr "Anmeldung erforderlich (Eigentümer wird benachrichtigt)"
 
 #: ../src/etc/scenari/subscribe.auth_notifydkim:1
-#, fuzzy
 msgid ""
 "need authentication unless DKIM signature is OK. (notification is sent to "
 "owners)"
 msgstr ""
-"benötigt Legitimierung (dem Eigentümer wird eine Benachrichtigung gesendet)"
+"Anmeldung erforderlich, außer mit gültiger DKIM-Signatur (Eigentümer wird "
+"benachrichtigt)"
 
 #: ../src/etc/scenari/subscribe.auth_owner:1
 msgid "requires authentication then owner approval"
-msgstr "benötigt Legitimierung, dann Bestätigung durch den Eigentümer"
+msgstr "Anmeldung erforderlich, dann Bestätigung durch den Eigentümer"
 
 #: ../src/etc/scenari/subscribe.auth_ownerdkim:1
-#, fuzzy
 msgid ""
 "requires authentication unless DKIM signature is OK, then owner approval"
-msgstr "benötigt Legitimierung, dann Bestätigung durch den Eigentümer"
+msgstr ""
+"Anmeldung erforderlich, außer mit gültiger DKIM-Signatur, dann Bestätigung "
+"durch den Eigentümer"
 
 #: ../src/etc/scenari/subscribe.closed:1
 msgid "subscribe is impossible"
@@ -8170,15 +8189,17 @@ msgstr "Abonnieren nicht möglich"
 
 #: ../src/etc/scenari/subscribe.intranetorowner:1
 msgid "local domain users or owner approval"
-msgstr "Benutzer der lokalen Domäne oder nach Bestätigung durch den Eigentümer"
+msgstr ""
+"nur für Benutzer der lokalen Domäne oder nach Bestätigung durch den "
+"Eigentümer"
 
 #: ../src/etc/scenari/subscribe.open:1
 msgid "for anyone without authentication"
-msgstr "jeder ohne Legitimierung"
+msgstr "jeder ohne Anmeldung"
 
 #: ../src/etc/scenari/subscribe.open_notify:1
 msgid "anyone, notification is sent to list owner"
-msgstr "jeder, mit Benachrichtigung an den Listen-Eigentümer"
+msgstr "jeder, Listeneigentümer wird benachrichtigt"
 
 #: ../src/etc/scenari/subscribe.open_quiet:1
 msgid "anyone, no welcome message"
@@ -8194,12 +8215,11 @@ msgstr "muss mit S/MIME signiert sein"
 
 #: ../src/etc/scenari/subscribe.smimeorowner:1
 msgid "requires S/MIME signed or owner approval"
-msgstr ""
-"muss mit S/MIME signiert sein oder mit Bestätigung durch den Eigentümer"
+msgstr "erfordert S/MIME-Signatur oder Bestätigung durch den Eigentümer"
 
 #: ../src/etc/scenari/topics_visibility.conceal:1
 msgid "conceal unless for listmaster"
-msgstr "verbergen (außer für listmaster)"
+msgstr "verbergen (außer für Listenadministrator)"
 
 #: ../src/etc/scenari/topics_visibility.identified:1
 msgid "conceal unless user is logged in"
@@ -8212,22 +8232,23 @@ msgstr "sichtbar"
 
 #: ../src/etc/scenari/unsubscribe.auth:1
 msgid "need authentication"
-msgstr "braucht Legitimierung"
+msgstr "Anmeldung erforderlich"
 
 #: ../src/etc/scenari/unsubscribe.authdkim:1
 msgid "need authentication unless DKIM signature is OK"
-msgstr ""
+msgstr "Anmeldung erforderlich, außer mit gültiger DKIM-Signatur"
 
 #: ../src/etc/scenari/unsubscribe.auth_notify:1
 msgid "authentication requested, notification sent to owner"
-msgstr "Legitimierung notwendig, Benachrichtigung an den Eigentümer"
+msgstr "Anmeldung erforderlich, Eigentümer wird benachrichtigt"
 
 #: ../src/etc/scenari/unsubscribe.auth_notifydkim:1
-#, fuzzy
 msgid ""
 "authentication requested unless DKIM signature is OK, notification sent to "
 "owner"
-msgstr "Legitimierung notwendig, Benachrichtigung an den Eigentümer"
+msgstr ""
+"Anmeldung erforderlich, außer mit gültiger DKIM-Signatur, Eigentümer wird "
+"benachrichtigt"
 
 #: ../src/etc/scenari/unsubscribe.closed:1
 msgid "impossible"
@@ -8239,7 +8260,7 @@ msgstr "offen"
 
 #: ../src/etc/scenari/unsubscribe.open_notify:1
 msgid "open with mail confirmation, owner is notified"
-msgstr "offen mit E-Mail-Benachrichtigung, der Eigentümer wird benachrichtigt"
+msgstr "offen nach Bestätigungs-E-Mail, Eigentümer wird benachrichtigt"
 
 #: ../src/etc/scenari/visibility.conceal:1
 msgid "conceal except for subscribers"
@@ -8401,7 +8422,7 @@ msgstr "Tägliche Überprüfung der Abonnenten mit Zustellfehlern"
 
 #: ../src/etc/global_task_models/purge_logs_table.daily.task:1
 msgid "daily delete logs "
-msgstr "Logs täglich löschen"
+msgstr "Protokolle täglich löschen"
 
 #: ../src/etc/global_task_models/purge_one_time_ticket_table.daily.task:1
 msgid ""
@@ -8413,7 +8434,7 @@ msgstr ""
 
 #: ../src/etc/global_task_models/purge_orphan_bounces.monthly.task:1
 msgid "delete monthly bounces for unsubscribed addresses"
-msgstr "Die monatlichen Zustellfehler für abgemeldete Adressen löschen"
+msgstr "Die monatlichen Zustellfehler für nicht angemeldete Adressen löschen"
 
 #: ../src/etc/global_task_models/purge_session_table.daily.task:1
 msgid ""
@@ -8530,9 +8551,8 @@ msgstr ""
 #. This entry is a date/time format
 #. Check the strftime manpage for format details : http://docs.freebsd.org/info/gawk/gawk.info.Time_Functions.html
 #: ../src/lib/Bulk.pm:387
-#, fuzzy
 msgid "%d %b %Y  %H:%M"
-msgstr "%d. %B %y %H:%M"
+msgstr "%d.%e.%Y %H:%M"
 
 #. This entry is a date/time format
 #. Check the strftime manpage for format details : http://docs.freebsd.org/info/gawk/gawk.info.Time_Functions.html
@@ -8640,12 +8660,11 @@ msgstr "Epoche-Datum"
 
 #: ../src/lib/List.pm:442
 msgid "human readable"
-msgstr ""
+msgstr "menschenlesbar"
 
 #: ../src/lib/List.pm:447
-#, fuzzy
 msgid "who created the list"
-msgstr "Konfigurationsaktualisierung durchgeführt von"
+msgstr "der die Liste erstellt hat"
 
 #: ../src/lib/List.pm:451
 msgid "Creation of the list"
@@ -8733,27 +8752,27 @@ msgid "Inclusions timeout for message distribution"
 msgstr "Zeitlimit für Einbindevorgänge bei Nachrichtenverteilung"
 
 #: ../src/lib/List.pm:597
-#, fuzzy
 msgid "Insert DKIM signature to messages sent to the list"
-msgstr "Nachricht an die Liste senden"
+msgstr "DKIM-Signatur an Nachrichten anfügen, die an die Liste gesendet werden"
 
 #: ../src/lib/List.pm:605
 msgid ""
 "The categories of messages sent to the list that will be signed using DKIM."
 msgstr ""
+"Kategorien an die Liste zu sendender Nachrichten, die per DKIM signiert "
+"werden sollen."
 
 #: ../src/lib/List.pm:612
 msgid "File path for list DKIM private key"
-msgstr ""
+msgstr "Dateisystem-Pfad des privaten DKIM-Schlüssels der Liste"
 
 #: ../src/lib/List.pm:620
 msgid "Selector for DNS lookup of DKIM public key"
-msgstr ""
+msgstr "Auswahl der DNS-Anfrage für öffentliche DKIM-Schlüssel"
 
 #: ../src/lib/List.pm:648
-#, fuzzy
 msgid "DKIM configuration"
-msgstr "Listenkonfiguration kopieren"
+msgstr "DKIM Konfiguration"
 
 #: ../src/lib/List.pm:1157 ../src/lib/List.pm:654
 msgid "email address"
@@ -9018,7 +9037,7 @@ msgstr "Priorität"
 
 #: ../src/lib/List.pm:1229
 msgid "Reject mail from automates (crontab, etc)?"
-msgstr ""
+msgstr "Automatisch erstellte Mails (crontab, etc) abweisen?"
 
 #: ../src/lib/List.pm:1233
 msgid "Who can start a remind process"
@@ -9082,7 +9101,7 @@ msgstr "Status der Liste"
 
 #: ../src/lib/List.pm:1349
 msgid "Timeout for fetch of include_sql_query"
-msgstr ""
+msgstr "Wartezeit, nach der die Abfrage von include_sql_query abgebrochen wird"
 
 #: ../src/lib/List.pm:1355
 msgid "Subject of the list"
@@ -9118,9 +9137,8 @@ msgstr ""
 "Anzeigen von Bildern erlauben? (muss für den aktuellen Robot aktiviert sein)"
 
 #: ../src/lib/List.pm:1416
-#, fuzzy
 msgid "Allow message personnalization"
-msgstr "Themen, um Nachrichten zu gruppieren"
+msgstr "Nachrichten-Personalisierung zulassen"
 
 #: ../src/lib/List.pm:1422
 msgid "Visibility of the list"
@@ -9167,17 +9185,19 @@ msgstr "Nachrichten"
 msgid "seconds"
 msgstr "Sekunden"
 
+# english mistake: ito -> into
 #: ../src/lib/List.pm:627
 msgid "List of headers to be included ito the message for signature"
-msgstr ""
+msgstr "Liste der Kopfzeilen, die mit der Nachricht DKIM-signiert werden sollen"
 
 #: ../src/lib/List.pm:634
 msgid "DKIM \"d=\" tag, you should probably use the default value"
 msgstr ""
+"DKIM \"d=\" Markierung; vermutlich sollten Sie den Standardwert verwenden."
 
 #: ../src/lib/List.pm:641
 msgid "DKIM \"i=\" tag, you should probably leave this parameter empty"
-msgstr ""
+msgstr "DKIM \"i=\" Markierung; vermutlich sollten Sie diesen Wert leer lassen."
 
 #: ../src/lib/List.pm:684
 msgid "the data source"
@@ -9233,7 +9253,7 @@ msgstr "Parameter der Datenquelle"
 
 #: ../src/lib/List.pm:1217
 msgid "Owners defined in an external data source"
-msgstr "In einer externen Datenquelle definierte Eigentümer"
+msgstr "Eigentümer in einer externen Datenquelle definiert"
 
 #: ../src/lib/List.pm:1242
 msgid "Periodical subscription reminder task"
@@ -9310,9 +9330,8 @@ msgstr ""
 "\n"
 
 #: ../src/lib/PlainDigest.pm:184
-#, fuzzy
 msgid "[Unknown]"
-msgstr "Unbekannt"
+msgstr "[Unbekannt]"
 
 #: ../src/lib/PlainDigest.pm:206
 msgid ""
@@ -9325,28 +9344,24 @@ msgstr ""
 "-----Original-Nachricht-----\n"
 
 #: ../src/lib/PlainDigest.pm:208
-#, fuzzy
 msgid "Date: %s\n"
-msgstr "Datum: %1"
+msgstr "Datum: %s\n"
 
 #: ../src/lib/PlainDigest.pm:209
-#, fuzzy
 msgid "From: %s\n"
-msgstr "Absender: %1"
+msgstr "Absender: %s\n"
 
 #: ../src/lib/PlainDigest.pm:210
-#, fuzzy
 msgid "To: %s\n"
-msgstr "An: %1"
+msgstr "An: %s\n"
 
 #: ../src/lib/PlainDigest.pm:211
 msgid "Cc: %s\n"
-msgstr ""
+msgstr "Kopie an: %s\n"
 
 #: ../src/lib/PlainDigest.pm:212
-#, fuzzy
 msgid "Subject: %s\n"
-msgstr "Betreff: %1"
+msgstr "Betreff: %s\n"
 
 #: ../src/lib/PlainDigest.pm:218
 msgid ""
@@ -9357,13 +9372,12 @@ msgstr ""
 "\n"
 
 #: ../src/lib/PlainDigest.pm:240 ../src/lib/PlainDigest.pm:293
-#, fuzzy
 msgid ""
 "** Warning: Message part using unrecognised character set %s\n"
 "    Some characters may be lost or incorrect **\n"
 "\n"
 msgstr ""
-"** Warnung: Der Nachrichtenteil verwendete ursprünglich den Zeichensatz %s\n"
+"** Warnung: Der Nachrichtenteil verwendet einen unbekannten Zeichensatz %s\n"
 "    Einige Zeichen können nicht oder falsch angezeigt werden **\n"
 "\n"
 
@@ -9384,11 +9398,10 @@ msgstr ""
 "-----Zustell-Statusbericht -----\n"
 
 #: ../src/lib/PlainDigest.pm:265
-#, fuzzy
 msgid ""
 "\n"
 "-----End of Delivery Status Report-----\n"
-msgstr "----- Ende des Zustellstatus-Berichtes -----\n"
+msgstr "\n-----Ende des Zustellstatus-Berichtes-----\n"
 
 #: ../src/lib/PlainDigest.pm:275 ../src/lib/PlainDigest.pm:304
 msgid ""
@@ -9404,11 +9417,11 @@ msgstr "[ Text konvertiert von HTML ]\n"
 
 #: ../src/lib/PlainDigest.pm:357
 msgid "[ Image%s ]"
-msgstr ""
+msgstr "[ Bild%s ]"
 
 #: ../src/lib/PlainDigest.pm:357
 msgid "[Image%s]"
-msgstr ""
+msgstr "[ Bild%s ]"
 
 #: ../src/lib/tt2.pm:150
 msgid "(unknown date)"
@@ -9426,14 +9439,13 @@ msgstr "%H:%M:%S"
 #: ../wwsympa/wwsympa.fcgi.in:11844 ../wwsympa/wwsympa.fcgi.in:11977
 #: ../wwsympa/wwsympa.fcgi.in:14290 ../wwsympa/wwsympa.fcgi.in:7923
 msgid "%d %b %y  %H:%M"
-msgstr "%d. %B %y %H:%M"
+msgstr "%d. %b %y %H:%M"
 
 #. This entry is a date/time format
 #. Check the strftime manpage for format details : http://docs.freebsd.org/info/gawk/gawk.info.Time_Functions.html
 #: ../wwsympa/wwsympa.fcgi.in:16143 ../wwsympa/wwsympa.fcgi.in:16144
-#, fuzzy
 msgid "%Y-%m-%d-%H-%M-%S"
-msgstr "%Y/%m/%d/%H/%M/%S"
+msgstr "%d. %m %Y %H:%M:%S"
 
 #: ../wwsympa/wwslib.pm:41
 msgid "session"
@@ -9465,7 +9477,7 @@ msgstr "1 Woche"
 
 #: ../wwsympa/wwslib.pm:49
 msgid "listed in the list review page"
-msgstr "gelistet in der Listenübersicht"
+msgstr "Übersicht auf der Seite für Listen-Berichte"
 
 #: ../wwsympa/wwslib.pm:50
 msgid "concealed"
@@ -9477,7 +9489,7 @@ msgstr "Begrüßungsnachricht"
 
 #: ../wwsympa/wwslib.pm:55
 msgid "unsubscribe message"
-msgstr "Nachricht beim Austragen"
+msgstr "Abschiedsnachricht"
 
 #: ../wwsympa/wwslib.pm:56
 msgid "deletion message"
@@ -9485,11 +9497,11 @@ msgstr "Löschnachricht"
 
 #: ../wwsympa/wwslib.pm:57
 msgid "message footer"
-msgstr "Nachrichtenfuß"
+msgstr "Nachrichtenfußzeile"
 
 #: ../wwsympa/wwslib.pm:58
 msgid "message header"
-msgstr "Nachrichtenkopf"
+msgstr "Nachrichtenkopfzeile"
 
 #: ../wwsympa/wwslib.pm:59
 msgid "remind message"
@@ -9497,15 +9509,15 @@ msgstr "Erinnerungsnachricht"
 
 #: ../wwsympa/wwslib.pm:60
 msgid "editor rejection message"
-msgstr "Moderator-Ablehnungsnachricht"
+msgstr "\"Abgelehnt durch den Moderator\" - Nachricht"
 
 #: ../wwsympa/wwslib.pm:61
 msgid "subscribing invitation message"
-msgstr "Einladungsnachricht"
+msgstr "Listeneinladungs-Nachricht"
 
 #: ../wwsympa/wwslib.pm:62
 msgid "help file"
-msgstr "Hilfetext"
+msgstr "Hilfedatei"
 
 #: ../wwsympa/wwslib.pm:63
 msgid "directory of lists"
@@ -9513,7 +9525,7 @@ msgstr "Listenübersicht"
 
 #: ../wwsympa/wwslib.pm:64
 msgid "global remind message"
-msgstr "Globale Erinnerungsnachricht"
+msgstr "globale Erinnerungsnachricht"
 
 #: ../wwsympa/wwslib.pm:65
 msgid "summary message"
@@ -9525,15 +9537,15 @@ msgstr "Listenbeschreibung"
 
 #: ../wwsympa/wwslib.pm:67
 msgid "list homepage"
-msgstr "Listen-Homepage"
+msgstr "Homepage der Liste"
 
 #: ../wwsympa/wwslib.pm:68
 msgid "list creation request message"
-msgstr "Listenerstellungsanfrage"
+msgstr "Anfrage zur Erstellung einer Liste"
 
 #: ../wwsympa/wwslib.pm:69
 msgid "list creation notification message"
-msgstr "Benachrichtigung bei Listenerstellung"
+msgstr "Benachrichtigung über Listenerstellung"
 
 #: ../wwsympa/wwslib.pm:70
 msgid "virus infection message"
@@ -9549,11 +9561,11 @@ msgstr "standard (direkter Empfang)"
 
 #: ../wwsympa/wwslib.pm:29
 msgid "digest MIME format"
-msgstr "Kompilat im MIME-Format"
+msgstr "Auswahl im MIME-Format"
 
 #: ../wwsympa/wwslib.pm:30
 msgid "digest plain text format"
-msgstr "Kompilat im Reintext-Format"
+msgstr "Auswahl im Reintext-Format"
 
 #: ../wwsympa/wwslib.pm:31
 msgid "summary mode"
@@ -9587,39 +9599,46 @@ msgstr "Sie empfangen Ihre eigenen Nachrichten nicht"
 msgid ""
 "You <span style=\"font-weight: bold; font-size: 10px\">are</span> subscribed"
 msgstr ""
+"Sie <span style=\"font-weight: bold; font-size: 10px\">sind</span> auf der "
+"Liste"
 
 #: ../web_tt2/list_menu.tt2:21
 msgid ""
 "You <span style=\"font-weight: bold; font-size: 10px\">are not</span> "
 "subscribed"
 msgstr ""
+"Sie <span style=\"font-weight: bold; font-size: 10px\">sind nicht</span> auf "
+"der Liste"
 
 #: ../web_tt2/compose_mail.tt2:79
 msgid "Select the source of your HTML newsletter"
-msgstr ""
+msgstr "Wählen Sie die Quelle Ihres HTML Rundbriefes"
 
 #: ../web_tt2/compose_mail.tt2:82
 msgid "Send the page from the following URL:"
-msgstr ""
+msgstr "Die Seite von folgender URL senden:"
 
 #: ../web_tt2/compose_mail.tt2:85
 msgid "OR"
-msgstr ""
+msgstr "ODER"
 
 #: ../web_tt2/compose_mail.tt2:87
 msgid "<strong>Send an HTML file from your computer:"
-msgstr ""
+msgstr "<strong>Eine HTML-Datei von Ihrem Computer senden:"
 
 #. (k.name)
 #: ../web_tt2/edit_attributes.tt2:7
 msgid "%1:"
-msgstr ""
+msgstr "%1:"
 
 #: ../web_tt2/error.tt2:54
 msgid ""
 "You didn't define the web page you want to use to create your newsletter. "
 "Please specify either an URL or a file to upload."
 msgstr ""
+"Sie haben die Webseite, die Sie zur Erstellung Ihres Rundbriefes benutzen "
+"wollen, nicht ausgewählt. Bitte geben sie entweder eine URL oder eine "
+"hochzuladende Datei an."
 
 #: ../web_tt2/error.tt2:55 ../web_tt2/error.tt2:56
 msgid ""
@@ -9627,52 +9646,61 @@ msgid ""
 "to send. Please fill the form with one of them only. A web page OR a file to "
 "upload."
 msgstr ""
+"Sie haben sowohl eine URL als auch eine hochzuladende Datei angegeben. Sympa "
+"kann nicht entscheiden, welche es senden soll. Bitte geben sie entweder "
+"eine Webseite ODER eine hochzuladende Datei an."
 
+# english mistake: rejet -> reject
 #: ../web_tt2/modform.tt2:49
 msgid ""
 "You should rejet spams quietly because the sender of a spam is often "
 "spoofed, if you really want to send this notification, please confirm "
 msgstr ""
+"Sie sollten Spam still verwerfen, da die Absenderadresse von Spam häufig "
+"gefälscht ist. Falls Sie diese Bestätigung wirklich senden möchten, "
+"bestätigen sie bitte "
 
 #: ../web_tt2/news.tt2:10
 msgid "The following items are waiting for your validation"
-msgstr ""
+msgstr "Die folgenden Positionen warten auf Ihre Bestätigung"
 
 #: ../web_tt2/news.tt2:30
 msgid ""
 "We received error reports while trying to send you messages. Some of them "
 "may have been lost."
 msgstr ""
+"Beim Versuch, Nachrichten an Sie zu senden, haben wir Fehlermeldungen "
+"erhalten. Einige der Nachrichten könnten verloren gegangen sein."
 
 #. (user_with_errors.value)
 #: ../web_tt2/news.tt2:35
 msgid " %1 error(s)"
-msgstr ""
+msgstr "%1 Fehler"
 
 #: ../web_tt2/skinsedit.tt2:107
 msgid "Background color for the news area of the home page."
-msgstr ""
+msgstr "Hintergrundfarbe des Neuigkeiten-Bereiches der Homepage."
 
 #: ../web_tt2/stats.tt2:6
 msgid "This page displays overall informations regarding the list activity"
-msgstr ""
+msgstr "Diese Seite zeigt allgemeine Informationen zur Listen-Aktivität an"
 
 #: ../web_tt2/stats.tt2:47
 msgid "No operation recorded in this field yet."
-msgstr ""
+msgstr "In diesem Feld sind noch keine Aufgaben eingetragen."
 
 #. (fromname,fromaddr,listname)
 #: ../web_tt2/tracking.tt2:6
 msgid "Message from %1 %2 for list %3 "
-msgstr ""
+msgstr "Nachricht von %1 %2 an Liste %3"
 
 #: ../web_tt2/tracking.tt2:14
 msgid "Recipient Email"
-msgstr ""
+msgstr "Empfängeradresse"
 
 #: ../web_tt2/tracking.tt2:15
 msgid "Delivery status"
-msgstr ""
+msgstr "Übertragungsstatus"
 
 #. (listname,max_number_of_subscribers)
 #: ../mail_tt2/listmaster_notification.tt2:153
@@ -9680,273 +9708,332 @@ msgid ""
 "Sympa could not include subscribers to list %1 because the maximum number of "
 "users was reached for this list. This limit is defined to %2."
 msgstr ""
+"Sympa konnte keine Abonnenten zur Liste %1 hinzufügen, da die maximale "
+"Benutzerzahl erreicht ist. Das Maximum liegt bei %2."
 
 #: ../src/sympa_wizard.pl.in:249
 msgid "%s [%s] : "
-msgstr ""
+msgstr "%s [%s] :"
 
 #: ../src/sympa_wizard.pl.in:271
 msgid "Incorrect parameter definition: %s\n"
-msgstr ""
+msgstr "Falsche Definition des Parameters: %s\n"
 
 #: ../src/sympa_wizard.pl.in:337
 msgid ""
 "%s and %s have been updated.\n"
 "Previous versions have been saved as %s and %s.\n"
 msgstr ""
+"%s und %s wurden aktualisiert.\n"
+"Vorherige Versionen wurden als %s und %s gesichert.\n"
 
 #: ../src/lib/confdef.pm:48
 msgid "Main robot hostname"
-msgstr ""
+msgstr "Rechnername des Hauptservers"
 
 #: ../src/lib/confdef.pm:61
 msgid "Effective address will be [EMAIL]@[HOST]"
-msgstr ""
+msgstr "Die effektive Adresse wird lauten: [EMAIL]@[HOST]"
 
 #: ../src/lib/confdef.pm:66
 msgid "Gecos for service mail sent by Sympa itself"
-msgstr ""
+msgstr "Gecos für Wartungsmail von Sympa selbst gesendet"
 
 #: ../src/lib/confdef.pm:76
 msgid "Listmasters email list comma separated"
-msgstr ""
+msgstr "E-Mail-Adressen der Listenadministratoren, durch Komma getrennt"
 
 #: ../src/lib/confdef.pm:80
 msgid ""
 "Sympa will associate listmaster privileges to these email addresses (mail "
 "and web interfaces). Some error reports may also be sent to these addresses."
 msgstr ""
+"Sympa wird diesen E-Mail-Adressen Listenadministratorenrechte zuweisen "
+"(E-Mail und Webinterfaces). Auch verschiedene Fehlerberichte könnten an "
+"diese Adressen gesendet werden."
 
 #: ../src/lib/confdef.pm:324
 msgid ""
 "Directory for storing static contents (CSS, members pictures, documentation) "
 "directly delivered by Apache"
 msgstr ""
+"Verzeichnis zum Speichern dauerhafter Inhalte (CSS, Mitlgiederfotos, "
+"Dokumentation), auf die direkt vom Apache-Webserver zugegriffen wird."
 
 #: ../src/lib/confdef.pm:332
 msgid "URL mapped with the static_content_path directory defined above"
 msgstr ""
+"Die dem Verzeichnis static_content_path zugewiesene URL ist oben definiert"
 
 #: ../src/lib/confdef.pm:349
 msgid "Secret used by Sympa to make MD5 fingerprint in web cookies secure"
 msgstr ""
+"Von Sympa verwendeter Schlüssel zum Schutz der MD5-Prüfsummen in den Web-"
+"Cookies."
 
 #: ../src/lib/confdef.pm:1339 ../src/lib/confdef.pm:351
 msgid "Should not be changed ! May invalid all user password"
 msgstr ""
+"Sollte nicht geändert werden! Kann alle Benutzerpasswörter ungültig machen"
 
 #: ../src/lib/confdef.pm:361
 msgid ""
 "This parameter is a scenario, check sympa documentation about scenarios if "
 "you want to define one"
 msgstr ""
+"Dieser Wert ist ein Szenario. Siehe \"Szenarios\" in der Sympa-Dokumentation, "
+"falls Sie eines definieren möchten"
 
 #: ../src/lib/confdef.pm:389
 msgid ""
 "Used to define a custom parameter for your server. Do not forget the "
 "semicolon between the param name and the param value."
 msgstr ""
+"Wird benutzt, um benutzerdefinierte Parameter für Ihren Server zu "
+"definieren. Vergessen Sie nicht das Semikolon zwischen Parametername und "
+"Wert."
 
 #: ../src/lib/confdef.pm:401
 msgid "Directory containing mailing lists subdirectories"
-msgstr ""
+msgstr "Verzeichnis mit Unterverzeichnissen der Mailinglisten"
 
 #: ../src/lib/confdef.pm:408
 msgid ""
 "Directory for configuration files; it also contains scenari/ and templates/ "
 "directories"
 msgstr ""
+"Verzeichnis für Konfigurationsdateien; enthält auch die Szenario- und "
+"Vorlagen-Verzeichnisse"
 
 #: ../src/lib/confdef.pm:417
 msgid "Syslog facility for sympa"
-msgstr ""
+msgstr "Systemprotokoll-Werkzeug für Sympa"
 
 #: ../src/lib/confdef.pm:425
 msgid "Log verbosity"
-msgstr ""
+msgstr "Protokolldichte"
 
 #: ../src/lib/confdef.pm:428
 msgid "0: normal, 2,3,4: for debug"
-msgstr ""
+msgstr "0: Standard, 2,3,4: zur Fehleranalyse"
 
 #: ../src/lib/confdef.pm:433
 msgid "Communication mode with syslogd (unix | inet)"
-msgstr ""
+msgstr "Kommunikationsmodus mit syslogd (unix | inet)"
 
 #: ../src/lib/confdef.pm:439
 msgid "File containing Sympa PID while running"
-msgstr ""
+msgstr "Datei mit Sympa PID im laufenden Betrieb"
 
 #: ../src/lib/confdef.pm:441
 msgid ""
 "Sympa also locks this file to ensure that it is not running more than once. "
 "Caution: user sympa need to write access without special privilege."
 msgstr ""
+"Sympa sperrt diese Datei im laufenden Betrieb, um sicherzustellen, daß es "
+"nicht mehrfach gestartet wird. Achtung: Benutzer \"sympa\" benötigt "
+"Schreibzugriff ohne besondere Rechte."
 
 #: ../src/lib/confdef.pm:451
 msgid "Umask used for file creation by Sympa"
-msgstr ""
+msgstr "Umask für von Sympa erstellte Dateien"
 
 #: ../src/lib/confdef.pm:464
 msgid ""
 "Max. number of Sendmail processes (launched by Sympa) running simultaneously"
 msgstr ""
+"Maximale Anzahl (von Sympa gestarteter) gleichzeitiger Sendmail-Prozesse"
 
 #: ../src/lib/confdef.pm:466
 msgid ""
 "Proposed value is quite low, you can rise it up to 100, 200 or even 300 with "
 "powerfull systems."
 msgstr ""
+"Der vorgeschlagene Wert liegt relativ niedrig. Auf leistungsfähigen Systemen "
+"können Sie ihn auf 100, 200 oder sogar 300 erhöhen."
 
 #: ../src/lib/confdef.pm:476
 msgid ""
 "comma separated list of operations for which blacklist filter is applied"
 msgstr ""
+"durch Komma getrennte Liste der Aufgaben, auf die die schwarze Liste "
+"angewendet werden soll"
 
 #: ../src/lib/confdef.pm:481
 msgid "Setting this parameter to \"none\" will hide the blacklist feature"
 msgstr ""
+"Das setzen dieses Wertes auf \"none\" versteckt die \"schwarze Liste\"-Funktion"
 
 #: ../src/lib/confdef.pm:486
 msgid ""
 "If set, when a list editor report a spam, this external script is run by "
 "wwsympa or sympa, the spam is sent into script stdin"
 msgstr ""
+"Falls gesetzt, werden von Listenmoderatoren gemeldete Spam-Mails auf den "
+"stdin dieses von wwsympa oder sympa ausgeführten Skripts gesendet"
 
 #: ../src/lib/confdef.pm:493
 msgid ""
 "Default maximum size (in bytes) for messages (can be re-defined for each "
 "list)"
 msgstr ""
+"Standard Maximalgröße (in Bytes) für Nachrichten (kann für jede Liste neu "
+"definiert werden)"
 
 #: ../src/lib/confdef.pm:510
 msgid ""
 "Maximum number of recipients per call to Sendmail. The nrcpt_by_domain.conf "
 "file allows a different tuning per destination domain."
 msgstr ""
+"Maximale Empfängeranzahl je Aufruf von Sendmail. Die Datei "
+"nrcpt_by_domain.conf erlaubt abweichende per-Domain-Einstellungen."
 
 #: ../src/lib/confdef.pm:516
 msgid "Max. number of different domains per call to Sendmail"
-msgstr ""
+msgstr "Maximale Anzahl unterschiedlicher Domains je Aufruf von Sendmail"
 
 #: ../src/lib/confdef.pm:526
 msgid "Path to the MTA (sendmail, postfix, exim or qmail)"
-msgstr ""
+msgstr "Pfad zum MTA (sendmail, postfix, exim oder qmail)"
 
 #: ../src/lib/confdef.pm:529
 msgid ""
 "should point to a sendmail-compatible binary (eg: a binary named \"sendmail"
 "\" is distributed with Postfix)"
 msgstr ""
+"sollte auf eine Sendmail-kompatible Binärdatei verweisen (eine Binärdatei "
+"namens \"sendmail\" ist z.B. Teil der Postfix-Distribution)"
 
 #: ../src/lib/confdef.pm:541
 msgid "Specify which rfc2369 mailing list headers to add"
 msgstr ""
+"Geben Sie an, welche rfc2369 Mailinglisten-Kopfzeilen hinzugefügt werden "
+"sollen"
 
 #: ../src/lib/confdef.pm:557
 msgid "Reject mail from automates (crontab, etc) sent to a list?"
-msgstr ""
+msgstr "Automatisiert (crontab, etc.) an die Liste gesendete E-Mails abweisen?"
 
 #: ../src/lib/confdef.pm:572
 msgid ""
 "SMTP server to which Sympa verify if alias with the same name as the list to "
 "be created"
 msgstr ""
+"Dieser Wert ist ein Szenario. Siehe \"Szenarios\" in der Sympa-Dokumentation, "
+"falls Sie eines definieren möchten"
 
 #: ../src/lib/confdef.pm:574
 msgid ""
 "Default value is real FQDN of host. Set [HOST]:[PORT] to specify non-"
 "standard port."
 msgstr ""
+"Der Standardwert ist der reale FQDN des Host. Setzen Sie [HOST]:[PORT] um "
+"einen vom Standard abweichenden Port zu definieren."
 
 #: ../src/lib/confdef.pm:584
 msgid "SMTP HELO (EHLO) parameter used for alias verification"
-msgstr ""
+msgstr "SMTP HELO (EHLO)-Parameter zur Alias-Prüfung"
 
 #: ../src/lib/confdef.pm:586
 msgid "Default value is the host part of list_check_smtp parameter."
-msgstr ""
+msgstr "Standardwert ist der Host-Teil des list_check_smtp Parameters."
 
 #: ../src/lib/confdef.pm:602
 msgid "Default priority for a packet to be sent by bulk."
-msgstr ""
+msgstr "Standardpriorität eines Paketes im Massenversand."
 
 #: ../src/lib/confdef.pm:609
 msgid ""
 "Minimum number of packets in database before the bulk forks to increase "
 "sending rate"
 msgstr ""
+"Minimale Paketanzahl in der Datenbank vor dem Splitten des Massenversandes "
+"zur Erhöhung der Senderate."
 
 #: ../src/lib/confdef.pm:616
 msgid "Max number of bulks that will run on the same server"
-msgstr ""
+msgstr "Maximale Anzahl an Massenversänden, die über den gleichen Server laufen"
 
 #: ../src/lib/confdef.pm:623
 msgid ""
 "The number of seconds a slave bulk will remain running without processing a "
 "message before it spontaneously dies."
 msgstr ""
+"Anzahl an Sekunden, die ein abgesplitteter Massenversandprozess leer "
+"weiterläuft, bevor er sich selbst beendet."
 
 #: ../src/lib/confdef.pm:630
 msgid ""
 "The number of seconds a bulk sleeps between starting a new loop if it didn't "
 "find a message to send."
 msgstr ""
+"Anzahl an Sekunden, die ein Massenversandprozess im Leerlauf wartet, bevor "
+"er in die nächste Runde geht."
 
 #: ../src/lib/confdef.pm:632
 msgid "Keep it small if you want your server to be reactive."
 msgstr ""
+"Halten Sie den Wert klein, falls Sie einen schnell ansprechenden Server "
+"wollen. "
 
 #: ../src/lib/confdef.pm:637
 msgid ""
 "Number of seconds a master bulk waits between two packets number checks."
 msgstr ""
+"Anzahl an Sekunden, die ein Massenversand-Hauptprozess zwischen zwei "
+"Paketanzahl-Prüfungen wartet."
 
 #: ../src/lib/confdef.pm:639
 msgid ""
 "Keep it small if you expect brutal increases in the message sending load."
 msgstr ""
+"Halten Sie den Wert klein, falls Sie schlagartigen Zuwachs an zu sendenden "
+"Nachrichten erwarten."
 
 #: ../src/lib/confdef.pm:647
 msgid "Default disk quota for shared repository"
-msgstr ""
+msgstr "Standard Festplatten-Quota des gemeinsamen Speichers"
 
 #: ../src/lib/confdef.pm:662
 msgid "Directory containing various specialized spools"
-msgstr ""
+msgstr "Verzeichnis mit verschiedenen spezialisierten Warteschlangen"
 
 #: ../src/lib/confdef.pm:664
 msgid "All spool are created at runtime by sympa.pl"
-msgstr ""
+msgstr "Alle Warteschlangen werden im laufenden Betrieb von sympa.pl erstellt"
 
 #: ../src/lib/confdef.pm:669
 msgid "Directory for incoming spool"
-msgstr ""
+msgstr "Verzeichnis für eingehende Warteschlangen"
 
 #: ../src/lib/confdef.pm:698
 msgid "Directory for outgoing spool"
-msgstr ""
+msgstr "Verzeichnis für ausgehende Warteschlangen"
 
 #: ../src/lib/confdef.pm:710
 msgid "Directory for bounce incoming spool"
-msgstr ""
+msgstr "Verzeichnis für Warteschlange eingehender Zustellfehler"
 
 #: ../src/lib/confdef.pm:722
 msgid "Directory for automatic list creation spool"
-msgstr ""
+msgstr "Verzeichnis für Warteschlangen automatisch erstellter Listen"
 
 #: ../src/lib/confdef.pm:728
 msgid "Temporary directory used by OpenSSL and antivirus plugins"
 msgstr ""
+"Temporäres Verzeichnis zur Benutzung durch OpenSSL und AntiVirus-"
+"Erweiterungen"
 
 #: ../src/lib/confdef.pm:733
 msgid "Must not be 0."
-msgstr ""
+msgstr "Darf nicht 0 sein."
 
 #: ../src/lib/confdef.pm:777
 msgid ""
 "Directory containing available NLS catalogues (Message internationalization)"
 msgstr ""
+"Verzeichnis mit verfügbaren NLS-Katalogen (Nachrichten-"
+"Internationalisierung)"
 
 #: ../src/lib/confdef.pm:787
 msgid ""
@@ -9954,154 +10041,175 @@ msgid ""
 "Sympa GUI. Don't select a language if you don't have the proper locale "
 "packages installed."
 msgstr ""
+"Dies ist der Satz an Sprachen, die Ihren Benutzern für die grafische Sympa-"
+"Oberfläche zur Verfügung stehen. Aktivieren Sie keine Sprache, für die Sie "
+"nicht die korrekten \"locale\"-Pakete installiert haben."
 
 #: ../src/lib/confdef.pm:792
 msgid "Default language (one of supported languages)"
-msgstr ""
+msgstr "Standardsprache (eine der unterstützen Sprachen)"
 
 #: ../src/lib/confdef.pm:796
 msgid "This is the default language used by Sympa"
-msgstr ""
+msgstr "Dies ist die Standardsprache, die von Sympa verwendet wird"
 
 #: ../src/lib/confdef.pm:813
 msgid "Welcome message return-path ( unique | owner )"
-msgstr ""
+msgstr "Rückkehrpfad für Begrüßungs-Nachrichten ( unique | owner )"
 
 #: ../src/lib/confdef.pm:815
 msgid "If set to unique, new subcriber is removed if welcome message bounce"
 msgstr ""
+"Wenn auf \"unique\" gesetzt, werden neue Abonnenten entfernt, falls die Begr"
+"üßungs-Nachricht nicht zustellbar war."
 
 #: ../src/lib/confdef.pm:820
 msgid "Remind message return-path ( unique | owner )"
-msgstr ""
+msgstr "Rückkehrpfad für Erinnerungs-Nachrichten ( unique | owner )"
 
 #: ../src/lib/confdef.pm:822
 msgid ""
 "If set to unique, subcriber is removed if remind message bounce, use with "
 "care"
 msgstr ""
+"Wenn auf \"unique\" gesetzt, wird der Abonnent entfernt, falls die "
+"Erinnerungs-Nachricht nicht zustellbar war. Mit Vorsicht zu benutzen!"
 
 #: ../src/lib/confdef.pm:831
 msgid "Task name for expiration of old bounces"
-msgstr ""
+msgstr "Name der Aufgabe zum Entfernen alter nicht zustellbarer E-Mails"
 
 #: ../src/lib/confdef.pm:875
 msgid "Bouncing email rate for warn list owner"
-msgstr ""
+msgstr "Zustellfehlerrate für Warnung an den Listeneigentümer"
 
 #: ../src/lib/confdef.pm:882
 msgid "Bouncing email rate for halt the list (not implemented)"
-msgstr ""
+msgstr "Zustellfehlerrate für Stopp des Versands (noch nicht implementiert)"
 
 #: ../src/lib/confdef.pm:884
 msgid "Not yet used in current version, Default is 50"
 msgstr ""
+"Steht in der aktuellen Version noch nicht zur Verfügung. Standard ist 50"
 
 #: ../src/lib/confdef.pm:904
 msgid ""
 "Use of binary version of the list config structure on disk (none | "
 "binary_file)"
 msgstr ""
+"Benutzung einer Binär-Version der Listenkonfigurations-Struktur von "
+"Festplatte (keine | Binär-Datei)"
 
 #: ../src/lib/confdef.pm:907
 msgid ""
 "Set this parameter to \"binary_file\" if you manage a big amount of lists "
 "(1000+); it should make the web interface startup faster"
 msgstr ""
+"Setzen Sie diesen Parameter auf \"binary_file\" falls Sie viele Listen (1000+) "
+"zu verwalten haben; dies sollte den Start der Web-Schnittstelle "
+"beschleunigen"
 
 #: ../src/lib/confdef.pm:912
 msgid "flock | nfs"
-msgstr ""
+msgstr "flock | nfs"
 
 #: ../src/lib/confdef.pm:916
 msgid "Sympa commands priority"
-msgstr ""
+msgstr "Priotität der Sympa-Befehle"
 
 #: ../src/lib/confdef.pm:946
 msgid "Type of the database (mysql|Pg|Oracle|Sybase|SQLite)"
-msgstr ""
+msgstr "Art der Datenbank (mysql|Pg|Oracle|Sybase|SQLite)"
 
 #: ../src/lib/confdef.pm:949
 msgid "Be careful to the case"
-msgstr ""
+msgstr "Achten Sie auf die Groß-/Kleinschreibung"
 
 #: ../src/lib/confdef.pm:957
 msgid "With SQLite, the name of the DB corresponds to the DB file"
-msgstr ""
+msgstr "Bei SQLite entspricht der Name der Datenbank der DB-Datei"
 
 #: ../src/lib/confdef.pm:963
 msgid "Hostname of the database server"
-msgstr ""
+msgstr "Hostname des Datenbankservers"
 
 #: ../src/lib/confdef.pm:970
 msgid "Port of the database server"
-msgstr ""
+msgstr "Port des Datenbankservers"
 
 #: ../src/lib/confdef.pm:989
 msgid ""
 "What ever you use a password or not, you must protect the SQL server (is it "
 "not a public internet service ?)"
 msgstr ""
+"Ob Sie ein Passwort benutzen oder nicht: Sichern Sie den SQL-Server! (Ist "
+"das etwa kein öffentlicher Webservice?)"
 
 #: ../src/lib/confdef.pm:1003
 msgid "This is useful for defining ORACLE_HOME "
-msgstr ""
+msgstr "Nützlich um ORACLE_HOME zu definieren"
 
 #: ../src/lib/confdef.pm:1009
 msgid "Database private extention to subscriber table"
-msgstr ""
+msgstr "Private Datenbankerweiterung zur Abonnentenliste"
 
 #: ../src/lib/confdef.pm:1011 ../src/lib/confdef.pm:1019
 msgid "You need to extend the database format with these fields"
-msgstr ""
+msgstr "Sie müssen das Datenbankformat um diese Felder erweitern"
 
 #: ../src/lib/confdef.pm:1017
 msgid "Database private extention to user table"
-msgstr ""
+msgstr "Private Datenbankerweiterung zur Benutzerliste"
 
 #: ../src/lib/confdef.pm:1036
 msgid "Number of months that elapse before a log is expired"
-msgstr ""
+msgstr "Anzahl Monate, die Protokolle aufbewahrt werden"
 
 #: ../src/lib/confdef.pm:1058
 msgid ""
 "Default timeout between two scheduled synchronizations of list members with "
 "data sources."
 msgstr ""
+"Standard-Wartezeit zwischen zwei geplanten Synchronisierungen der "
+"Listenmitgliedern mit Datenquellen"
 
 #: ../src/lib/confdef.pm:1064
 msgid ""
 "Default timeout between two action-triggered synchronizations of list "
 "members with data sources."
 msgstr ""
+"Standard-Wartezeit zwischen zwei interaktiv ausgelösten Synchronisierungen "
+"der Listenmitgliedern mit Datenquellen"
 
 #: ../src/lib/confdef.pm:1070
 msgid "Default timeout while performing a fetch for an include_sql_query sync"
 msgstr ""
+"Standard-Wartezeit während des Holens einer include_sql_query "
+"Synchronisierung"
 
 #: ../src/lib/confdef.pm:1075
 msgid "Loop prevention"
-msgstr ""
+msgstr "Loop-Vermeidung"
 
 #: ../src/lib/confdef.pm:1108
 msgid "Path to OpenSSL"
-msgstr ""
+msgstr "Pfad zu OpenSSL"
 
 #: ../src/lib/confdef.pm:1111
 msgid "Sympa recognizes S/MIME if OpenSSL is installed"
-msgstr ""
+msgstr "Sympa erkennt S/MIME falls OpenSSL installiert ist"
 
 #: ../src/lib/confdef.pm:1118
 msgid "Directory containing trusted CA certificates"
-msgstr ""
+msgstr "Verzeichnis mit Zertifikaten der vertrauenswürdigen CAs"
 
 #: ../src/lib/confdef.pm:1126
 msgid "File containing bundled trusted CA certificates"
-msgstr ""
+msgstr "Datei mit Zertifikaten der vertrauenswürdigen CAs"
 
 #: ../src/lib/confdef.pm:1134
 msgid "Password used to crypt lists private keys"
-msgstr ""
+msgstr "Passwort zum verschlüsseln der privaten Schlüssel der Mailingliste"
 
 #: ../src/lib/confdef.pm:1158
 msgid ""
@@ -10111,94 +10219,111 @@ msgid ""
 "\"smime_authenticated_messages\", \"dkim_authenticated_messages\", "
 "\"editor_validated_messages\"."
 msgstr ""
+"Art der Nachricht, der vor dem Versand an die Abonnenten eine DKIM-Signatur "
+"hinzugefügt wird. Mögliche Werte sind: \"none\" (keine), \"any\" (jegliche) oder "
+"eine Liste der folgenden Schlüssel: \"md5_authenticated_messages\", "
+"\"smime_authenticated_messages\", \"dkim_authenticated_messages\", "
+"\"editor_validated_messages\"."
 
 #: ../src/lib/confdef.pm:1165
 msgid "Location of the file where DKIM private key is stored"
-msgstr ""
+msgstr "Speicherort der Datei mit dem privaten DKIM-Schlüssel"
 
 #: ../src/lib/confdef.pm:1172
 msgid ""
 "The \"d=\" tag as defined in rfc 4871, default is virtual host domain name"
 msgstr ""
+"Der \"d=\"-Tag, wie in RFC4871 definiert, Standard ist der Domainname des "
+"virtuellen Hosts"
 
 #: ../src/lib/confdef.pm:1186
 msgid "The \"i=\" tag as defined in rfc 4871, default is null"
-msgstr ""
+msgstr "Der \"i=\"-Tag, wie in RFC4871 definiert, Standard ist Null"
 
 #: ../src/lib/confdef.pm:1194
 msgid "List of headers to be included into the message for signature"
-msgstr ""
+msgstr "Liste der zum Signieren in die Nachricht zu integrierenden Kopfzeilen"
 
 #: ../src/lib/confdef.pm:1198
 msgid "Antivirus plug-in"
-msgstr ""
+msgstr "AntiVirus-Erweiterung"
 
 #: ../src/lib/confdef.pm:1204
 msgid "Path to the antivirus scanner engine"
-msgstr ""
+msgstr "Pfad zum AntiVirus-Scanner"
 
 #: ../src/lib/confdef.pm:1207
 msgid ""
 "supported antivirus: McAfee/uvscan, Fsecure/fsav, Sophos, AVP and Trend "
 "Micro/VirusWall"
 msgstr ""
+"unterstützte AntiVirus-Scanner: McAfee/uvscan, Fsecure/fsav, Sophos, AVP und "
+"Trend Micro/VirusWall"
 
 #: ../src/lib/confdef.pm:1213
 msgid "Antivirus plugin command argument"
-msgstr ""
+msgstr "Befehlsoptionen für die AntiVirus-Erweiterung"
 
 #: ../src/lib/confdef.pm:1222
 msgid "Tag based spam filtering"
-msgstr ""
+msgstr "Tag-basierter Spamfilter"
 
 #: ../src/lib/confdef.pm:1232
 msgid ""
 "If a spam filter (like spamassassin or j-chkmail) add a smtp headers to tag "
 "spams, name of this header (example X-Spam-Status)"
 msgstr ""
+"Name der Kopfzeile, die ein Spamfilter (wie spamassassin oder j-chkmail) zum "
+"Markieren von Spam hinzufügt (z.B. X-Spam-Status)"
 
 #: ../src/lib/confdef.pm:1240
 msgid "Regexp applied on this header to verify message is a spam (example Yes)"
 msgstr ""
+"Regexp, die auf diese Kopfzeile angewendet wird, um sie als Spam zu "
+"identifizieren (z.B. Yes)"
 
 #: ../src/lib/confdef.pm:1248
 msgid ""
 "Regexp applied on this header to verify message is NOT a spam (example No)"
 msgstr ""
+"Regexp, die auf diese Kopfzeile angewendet wird, um sie als \"KEIN Spam\" zu "
+"identifizieren (z.B. No)"
 
 #: ../src/lib/confdef.pm:1259
 msgid "Directory for storing HTML archives"
-msgstr ""
+msgstr "Verzeichnis zum Speichern von HTML-Archiven"
 
 #: ../src/lib/confdef.pm:1262 ../src/lib/confdef.pm:1282
 msgid "Better if not in a critical partition"
-msgstr ""
+msgstr "Besser nicht auf einer kritischen Partition"
 
 #: ../src/lib/confdef.pm:1267
 msgid ""
 "Default index organization when entering the web archive: either threaded or "
 "in chronological order"
 msgstr ""
+"Standard-Sortierung des Index bei Aufruf des Web-Archives: nach Thema oder "
+"chronologisch"
 
 #: ../src/lib/confdef.pm:1274
 msgid "File containing archived PID while running"
-msgstr ""
+msgstr "Datei mit archivierter PID im laufenden Betrieb"
 
 #: ../src/lib/confdef.pm:1280
 msgid "Directory for storing bounces"
-msgstr ""
+msgstr "Verzeichnis zum Speichern nicht zustellbarer E-Mails"
 
 #: ../src/lib/confdef.pm:1287
 msgid "File containing bounced PID while running"
-msgstr ""
+msgstr "Datei mit zurückgewiesenen PID im laufenden Betrieb"
 
 #: ../src/lib/confdef.pm:1293
 msgid "HTTP cookies lifetime"
-msgstr ""
+msgstr "Lebensdauer der HTTP-Cookies"
 
 #: ../src/lib/confdef.pm:1299
 msgid "HTTP cookies validity domain"
-msgstr ""
+msgstr "Gültigkeitsbereich der HTTP-Cookies"
 
 #: ../src/lib/confdef.pm:1306
 msgid ""
@@ -10206,68 +10331,78 @@ msgid ""
 "parameter is the absolute path on the file system to the script of the "
 "custom archiver."
 msgstr ""
+"Aktiviert ein benutzerdefiniertes Packprogramm statt MHonArc. Der Wert "
+"dieses Parameters ist der absolute Pfad zum Skript  des gewünschten "
+"Packprogrammes im Dateisystem."
 
 #: ../src/lib/confdef.pm:1313
 msgid "Type of main Web page ( lists | home )"
-msgstr ""
+msgstr "Art der Haupt-Webseite ( lists | home )"
 
 #: ../src/lib/confdef.pm:1321
 msgid "Syslog facility for wwsympa, archived and bounced"
 msgstr ""
+"Systemprotokoll-Einrichtung für wwsympa, archivierte und nicht zustellbare "
+"Nachrichten"
 
 #: ../src/lib/confdef.pm:1324
 msgid "Default is to use previously defined sympa log facility."
-msgstr ""
+msgstr "Standard ist die zuvor definierte sympa-Protokolleinrichtung."
 
 #: ../src/lib/confdef.pm:1329
 msgid "Path to MHonArc mail2html plugin"
-msgstr ""
+msgstr "Pfad zur MHonArc mail2html-Erweiterung"
 
 #: ../src/lib/confdef.pm:1332
 msgid "This is required for HTML mail archiving"
-msgstr ""
+msgstr "Notwendig zum Archivieren von HTML-Mails"
 
 #: ../src/lib/confdef.pm:1337
 msgid "Password case (insensitive | sensitive)"
-msgstr ""
+msgstr "Groß-/Kleinschreibung von Passwörtern (insensitive | sensitive)"
 
 #: ../src/lib/confdef.pm:1344
 msgid "Title of main Web page"
-msgstr ""
+msgstr "Titel der Haupt-Webseite"
 
 #: ../src/lib/confdef.pm:1352
 msgid "Is fast_cgi module for Apache (or Roxen) installed (0 | 1)"
-msgstr ""
+msgstr "Ist das fast_cgi - Modul für Apache (oder Roxen) installiert? (0 | 1)"
 
 #: ../src/lib/confdef.pm:1355
 msgid "This module provide much faster web interface"
-msgstr ""
+msgstr "Dieses Modul bietet eine wesentlich schnellere Web-Schnittstelle"
 
 #: ../src/lib/confdef.pm:1358
 msgid "Virtual host specific parameters"
-msgstr ""
+msgstr "Parameter des virtuellen Host"
 
 #: ../src/lib/confdef.pm:1362
 msgid "URL of a virtual host"
-msgstr ""
+msgstr "URL des virtuellen Host"
 
 #: ../src/lib/confdef.pm:1393
 msgid "Default limit for the number of subscribers per list (0 means no limit)"
 msgstr ""
+"Standard-Höchstwert der Abonnenten-Anzahl pro Liste (0 = keine Begrenzung)"
 
 #: ../src/lib/confdef.pm:1413
 msgid ""
 "If set to \"on\", users will be able to post messages in HTML using a "
 "javascript WYSIWYG editor."
 msgstr ""
+"Falls auf \"on\" gesetzt, können die Benutzer mittels JavaScript-WYSIWYG-"
+"Editor HTML-Nachrichten verfassen."
 
 #: ../src/lib/confdef.pm:1421
 msgid "Path to the javascript file making the WYSIWYG HTML editor available"
-msgstr ""
+msgstr "Pfad zur Datei, die den JavaScript-WYSIWYG-Editor zur Verfügung stellt"
 
 #: ../src/lib/confdef.pm:1428
 msgid "Javascript excerpt that enables and configures the WYSIWYG HTML editor."
 msgstr ""
+"JavaScript-Code zum aktivieren und konfigurieren des JavaScript-WYSIWYG-"
+"Editors."
 
 #: ../src/lib/confdef.pm:1460
 msgid ""
@@ -10276,21 +10411,27 @@ msgid ""
 "be used to authenticate the user. Otherwise, use of the first email returned "
 "by the LDAP server will be used."
 msgstr ""
+"Betrifft LDAP-Authentifizierung: Falls der Nutzer eine E-Mail-Adresse als "
+"Loginname sendet und der Parameter auf \"false\" gesetzt ist, wird diese "
+"Adresse zur Benutzeranmeldung verwendet. Andernfalls wird die erste vom "
+"LDAP-Server zurückgegebene E-Mail-Adresse benutzt."
 
 #: ../src/lib/confdef.pm:1467
 msgid "If set to \"on\", enables support of legacy character set"
-msgstr ""
+msgstr "\"on\" aktiviert die Unterstützung für \"traditionelle\" Zeichensätze"
 
 #: ../src/lib/confdef.pm:1469
 msgid ""
 "In some language environments, legacy encoding (character set) is preferred "
 "for e-mail messages: for example iso-2022-jp in Japanese language."
 msgstr ""
+"In manchen Sprachumgebungen wird für E-Mails die \"traditionelle\" "
+"Zeichenkodierungen vorgezogen: z.B. iso-2022-jp für Japanisch."
 
 #: ../src/lib/confdef.pm:1508
 msgid ""
 "Default number of lines of the array displaying users in the review page"
-msgstr ""
+msgstr "Standard-Linienanzahl der Benutzerliste auf der Bericht-Seite"
 
 #: ../src/lib/confdef.pm:1520
 msgid ""
@@ -10300,88 +10441,99 @@ msgid ""
 "replace antispam_tag_header_name, antispam_tag_header_spam_regexp and "
 "antispam_tag_header_ham_regexp."
 msgstr ""
+"Nachrichten sollten einen Spamfilter durchlaufen, der eine oder mehrere "
+"Kopfzeilen anfügt. Dieser Parameter definiert ein besonderes Szenario, um "
+"den Spam-Status festzulegen: ham, spam oder unklar. Dieser Parameter ersetzt "
+"antispam_tag_header_name, antispam_tag_header_spam_regexp und "
+"antispam_tag_header_ham_regexp."
 
 #: ../src/lib/confdef.pm:1528
 msgid "Directory containing user certificates"
-msgstr ""
+msgstr "Verzeichnis mit Benutzerzertifikaten"
 
 #: ../src/lib/confdef.pm:1534
 msgid "File containing task_manager PID while running"
-msgstr ""
+msgstr "Datei mit der task_manager PID im laufenden Betrieb"
 
 #: ../src/lib/confdef.pm:1539
 msgid ""
 "Default number of lines of the array displaying the log entries in the logs "
 "page"
-msgstr ""
+msgstr "Standard-Linienanzahl der Protokolleinträge auf der Protokoll-Seite"
 
 #: ../src/lib/Conf.pm:964
+#, fuzzy
 msgid "Conf::load_nrcpt_by_domain(): Error at line %d: %s"
-msgstr ""
+msgstr "Conf::load_nrcpt_by_domain(): Fehler in Zeile %d: %s"
 
 #: ../src/lib/List.pm:441
 msgid "tracking message by delivery status notification"
-msgstr ""
+msgstr "verfolge Nachricht anhand der Lieferstatus-Benachrichtigung"
 
 #: ../src/lib/List.pm:446
 msgid "tracking message by message delivery notification"
-msgstr ""
+msgstr "verfolge Nachricht anhand des Zustellungsberichtes"
 
 #: ../src/lib/List.pm:457
 msgid "Tracking datas are removed after this number of days"
-msgstr ""
+msgstr "Anzahl Tage bevor Verfolgungsdaten entfernt werden "
 
 #: ../src/lib/List.pm:6438
 msgid "Attempt to exceed the max number of members (%s) for this list."
 msgstr ""
+"Versuch, die maximal zulässige Mitgliederzahl der Liste (%s) zu "
+"überschreiten."
 
 #: ../src/lib/List.pm:6441
 msgid "Attempts to add some users in database failed."
-msgstr ""
+msgstr "Der Versuch, Benutzer zur Datenbank hinzuzufügen, ist gescheitert."
 
 #: ../src/lib/List.pm:6443
 msgid "Added %s users out of %s required."
-msgstr ""
+msgstr "%s Benutzer von %s erforderlichen wurden hinzugefügt."
 
 #: ../wwsympa/wwsympa.fcgi.in:4877
 msgid "Unable to add user %s in list %s : %s"
-msgstr ""
+msgstr "Konnte Benutzer %s zur Liste %s nicht hinzufügen: %s"
 
 #: ../wwsympa/wwsympa.fcgi.in:16210
 msgid "Mail sending"
-msgstr ""
+msgstr "E-Mail wird gesendet"
 
 #: ../wwsympa/wwsympa.fcgi.in:16213
 msgid "Users deleted by admin"
-msgstr ""
+msgstr "Benutzer vom Administrator gelöscht"
 
 #: ../web_tt2/edit_config.tt2:7
+#, fuzzy
 msgid "[%confparam.title%]"
-msgstr ""
+msgstr "[%confparam.title%]"
 
 #: ../web_tt2/edit_config.tt2:16
+#, fuzzy
 msgid "[% confparam.title %]"
-msgstr ""
+msgstr "[% confparam.title %]"
 
 #: ../web_tt2/edit_config.tt2:28
+#, fuzzy
 msgid "[% confparam.query %]"
-msgstr ""
+msgstr "[% confparam.query %]"
 
 #: ../src/lib/confdef.pm:43
 msgid "Directories and file location"
-msgstr ""
+msgstr "Ort für Verzeichnisse und Dateien"
 
 #: ../src/lib/confdef.pm:234
 msgid "Syslog"
-msgstr ""
+msgstr "Systemprotokoll"
 
 #: ../src/lib/confdef.pm:260
 msgid "Log intensity"
-msgstr ""
+msgstr "Protokolldichte"
 
 #: ../src/lib/confdef.pm:662
 msgid "Plugin"
-msgstr ""
+msgstr "Erweiterungs-Modul"
 
 #~ msgid "Statistics"
 #~ msgstr "Statistik"

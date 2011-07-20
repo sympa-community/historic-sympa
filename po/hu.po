@@ -6,13 +6,13 @@ msgid ""
 msgstr ""
 "Project-Id-Version: hu\n"
 "POT-Creation-Date: 2002-07-16 17:27+0800\n"
-"PO-Revision-Date: 2011-01-27 15:18+0200\n"
-"Last-Translator: Anonymous Pootle User\n"
+"PO-Revision-Date: 2011-07-03 17:49+0200\n"
+"Last-Translator: Laszlo <torlasz@net.sote.hu>\n"
 "Language-Team: Magyar\n"
+"Language: hu\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Language: hu\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "X-Generator: Pootle 2.1.2\n"
 
@@ -108,7 +108,7 @@ msgstr "Súgó"
 
 #: ../web_tt2/login_menu.tt2:9
 msgid "Restore identity"
-msgstr "Identitás helyreállítása"
+msgstr "Felhasználóváltás vége"
 
 #: ../mail_tt2/listmaster_notification.tt2:2 ../web_tt2/login_menu.tt2:13
 msgid "Listmaster"
@@ -2285,9 +2285,8 @@ msgstr "Nincsenek megosztott dokumentumok."
 
 # nlsref 16,70
 #: ../web_tt2/error.tt2:99
-#, fuzzy
 msgid "The shared document space is empty"
-msgstr "Megosztott dokumentumok terület üres"
+msgstr "A megosztott dokumentumok területe üres"
 
 #: ../web_tt2/error.tt2:100
 msgid "The shared directory cannot have any description"
@@ -2376,9 +2375,8 @@ msgid "This list has no message topic"
 msgstr "A listához nem tartoznak témák"
 
 #: ../web_tt2/error.tt2:119
-#, fuzzy
 msgid "Tag message with topic is required for this list"
-msgstr "Az üzenetekhez kötelezõ témát választani"
+msgstr "Ennél a listánál kötelező címkézni az üzeneteket"
 
 #. (u_err.email)
 #: ../web_tt2/error.tt2:120
@@ -2438,7 +2436,7 @@ msgstr ""
 #. (auth.action)
 #: ../web_tt2/error.tt2:138
 msgid "AUTHORIZATION REJECT (%1)"
-msgstr ""
+msgstr "JOGOSULTSÁGI HIBA (%1)"
 
 #. (auth.listname)
 #: ../web_tt2/error.tt2:140
@@ -2495,24 +2493,20 @@ msgid "Listname"
 msgstr "Lista neve"
 
 #: ../web_tt2/get_inactive_lists.tt2:10
-#, fuzzy
 msgid "Number of subscribers"
-msgstr "zártkörű, csak listatagok írhatnak a szerkesztőn keresztül"
+msgstr "A tagok száma"
 
 #: ../web_tt2/get_inactive_lists.tt2:12
-#, fuzzy
 msgid "Send scenario"
-msgstr "Feladó"
+msgstr "Küldési szabályrendszer"
 
 #: ../web_tt2/get_inactive_lists.tt2:13
-#, fuzzy
 msgid "Creator"
-msgstr "Létrehozás"
+msgstr "Létrehozta"
 
 #: ../web_tt2/get_inactive_lists.tt2:15
-#, fuzzy
 msgid "Editors"
-msgstr "Szerkesztő"
+msgstr "Szerkesztők"
 
 #: ../web_tt2/get_inactive_lists.tt2:29
 msgid "none so far"
@@ -2807,15 +2801,13 @@ msgstr ""
 "email címével kapcsolatos mûveleteket tudjon végezni."
 
 #: ../web_tt2/ls_templates.tt2:7
-#, fuzzy
 msgid ""
 "This page is suggested in order to edit or create mail or web tt2 templates."
 msgstr ""
-"Az az oldal ajánlott a mail vagy web tt2 sablonok szerkesztéséhez vagy "
+"Ez az oldal ajánlott a mail vagy web tt2 sablonok szerkesztéséhez ill. "
 "létrehozásához."
 
 #: ../web_tt2/ls_templates.tt2:15
-#, fuzzy
 msgid ""
 "Priority rules for template selection:\n"
 "<ul>\n"
@@ -2826,13 +2818,14 @@ msgid ""
 "edited because Sympa's update will over write these files)</li>\n"
 "</ul>"
 msgstr ""
-"A sablon kiválasztásának sorrendje:\n"
+"A sablon kiválasztása a következő sorrendben történik:\n"
 "<ul>\n"
-"<li>HA lista szinten definiálva van, akkor alklamazza azt a</li>\n"
-"<li>EGYÉBKÉNT a robot szint sablont alkalmazza</li>\n"
-"<li>EGYÉBKÉNT a helyileg definált sablont alkalmazza </li>\n"
-"<li>EGYÉBKÉNT a gyári sablont alkalmazza (ezeket nem szabad módosítani, mert "
-"frissítéskor felülíródnak</li>\n"
+"<li>HA létezik a listának saját sablonja, akkor a lista megjelenítésekor azt "
+"használjuk</li>\n"
+"<li>EGYÉBKÉNT a robot szintű (virtuális gépnév) sablont alkalmazzuk</li>\n"
+"<li>EGYÉBKÉNT a helyileg definált sablont alkalmazzuk </li>\n"
+"<li>EGYÉBKÉNT a Sympa alapértelmezett sablonját alkalmazzuk (ezeket nem "
+"szabad módosítani, mert frissítéskor felülíródnak</li>\n"
 "</ul>"
 
 #: ../web_tt2/ls_templates.tt2:17
@@ -2871,9 +2864,8 @@ msgid "template name"
 msgstr "sablon neve"
 
 #: ../web_tt2/ls_templates.tt2:40
-#, fuzzy
 msgid "distrib"
-msgstr "Engedélyez"
+msgstr "alapértelmezett"
 
 #: ../web_tt2/ls_templates.tt2:84
 msgid "view"
@@ -3005,7 +2997,6 @@ msgid "Reject without notification "
 msgstr "Visszautasítás értesítés nélkül"
 
 #: ../web_tt2/modindex.tt2:41
-#, fuzzy
 msgid "Add to blacklist"
 msgstr "Hozzáadás a tiltólistához"
 
@@ -3109,7 +3100,7 @@ msgstr "Hibák bejelentése, új funkciók kérése"
 
 #: ../web_tt2/nav.tt2:105
 msgid "DKIM"
-msgstr ""
+msgstr "DKIM"
 
 # nlsref 15,6
 #: ../web_tt2/nav.tt2:117
@@ -3146,9 +3137,8 @@ msgstr "%1: művelet végrehajtva"
 
 #. (notice.action)
 #: ../web_tt2/notice.tt2:22
-#, fuzzy
 msgid "%1: action will complete soon"
-msgstr "%1 : változtatások sikeresen elmentve"
+msgstr "%1 : a művelet hamarosan végrehajtásra kerül"
 
 #: ../web_tt2/notice.tt2:25
 msgid "Configuration file has been updated"
@@ -3255,7 +3245,7 @@ msgid ""
 "page. The picture should use a standard format (gif, jpp, jpeg or png) and "
 "its size should not exceed 100 Kb."
 msgstr ""
-"Itt feltöltheti a fénylépét ami látható lesz a listatagok felsorolásánál. A "
+"Itt feltöltheti a fényképét ami látható lesz a listatagok felsorolásánál. A "
 "képnek szabványos formátumúnak kell lennie (gif, jpp, jpeg vagy png) és csak "
 "100kb-nál kisebb lehet."
 
@@ -3435,7 +3425,6 @@ msgid "Unkown error."
 msgstr "Ismeretlen hiba."
 
 #: ../web_tt2/request_topic.tt2:5
-#, fuzzy
 msgid "This list is configured to require topic(s) foreach message."
 msgstr ""
 "Ez a lista úgy lett beállítva, hogy minden levélhez kötelező legyen témát "
@@ -3830,9 +3819,8 @@ msgid "Manage lists"
 msgstr "Listák kezelése"
 
 #: ../web_tt2/serveradmin.tt2:12
-#, fuzzy
 msgid "Consult lists"
-msgstr "Megszüntetett listák"
+msgstr "Listák ellenőrzése"
 
 #: ../web_tt2/serveradmin.tt2:14
 msgid "Lists sorted by creation date"
@@ -3872,44 +3860,44 @@ msgstr "Felhasználó keresése"
 
 #: ../web_tt2/serveradmin.tt2:69
 msgid "Delay for active sessions (minutes)"
-msgstr ""
+msgstr "Hány perccel ezelőttig tekintsünk egy munkamenetet aktívnak"
 
 #: ../web_tt2/serveradmin.tt2:71
 msgid "Show only connected users"
-msgstr "Csak a csatlakozott felhasználók mutatása"
+msgstr "Csak a bejelentkezett felhasználókat mutassuk"
 
 # nlsref 17,1
 #: ../web_tt2/serveradmin.tt2:73
 msgid "Show sessions"
-msgstr "Munkamenetek mutatása"
+msgstr "A munkamenetek listája"
 
 #: ../web_tt2/serveradmin.tt2:79
 msgid "You can change your users email address here:"
-msgstr "Felhsználók email címének megváltoztatása:"
+msgstr "A felhasználók email címének megváltoztatása:"
 
 #: ../web_tt2/serveradmin.tt2:81
 msgid ""
 "Changing a user's email address will apply the change his memberships but it "
 "will also apply to his ownerships if he is owner of some lists."
 msgstr ""
-"Az email cím megváltoztatása egyben a feliratkozásokat is frissítése, és a "
-"tulajdonosi jogkörök is frissülnek."
+"Az email cím megváltoztatása frissíti a feliratkozásokat és a tulajdonosi "
+"jogköröket is (ha vannak)."
 
 #: ../web_tt2/serveradmin.tt2:86
 msgid "Current user email address: "
-msgstr "Felhasználó jelenlegi email címe:"
+msgstr "A felhasználó jelenlegi email címe:"
 
 #: ../web_tt2/serveradmin.tt2:88
 msgid "New user email address: "
-msgstr "Felhasználó új email címe:"
+msgstr "A felhasználó új email címe:"
 
 #: ../web_tt2/serveradmin.tt2:90
 msgid "Update user memberships"
-msgstr "Email cím megváltoztatása"
+msgstr "Az email cím megváltoztatása"
 
 #: ../web_tt2/serveradmin.tt2:95
 msgid "Change identity"
-msgstr "Identitás megváltoztatása"
+msgstr "Felhasználóváltás"
 
 #: ../web_tt2/serveradmin.tt2:97
 msgid ""
@@ -3917,10 +3905,13 @@ msgid ""
 "may be usefull when providing assistance or to test users privileges. The "
 "new identity is attached to the current session"
 msgstr ""
+"A szolgáltatás adminisztrátoraként más felhasználó képében is dolgozhat. Ez "
+"hasznos lehet, ha egy felhasználó segítségre szorul, vagy ellenőrizni kell a "
+"jogosultságát. A felhasználóváltás erre a munkamenetre lesz érvényes."
 
 #: ../web_tt2/serveradmin.tt2:101
 msgid "change identity as: "
-msgstr "identitás megváltoztatása"
+msgstr "Felhasználóváltás erre az email címre:"
 
 #: ../web_tt2/serveradmin.tt2:111
 msgid "Rebuild HTML archives using \"arctxt\" directories as input."
