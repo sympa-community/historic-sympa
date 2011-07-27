@@ -1,13 +1,13 @@
 msgid ""
 msgstr ""
 "POT-Creation-Date: 2002-07-16 17:27+0800\n"
-"PO-Revision-Date: 2011-07-04 20:48+0200\n"
-"Last-Translator: Anonymous Pootle User\n"
+"PO-Revision-Date: 2011-07-21 17:05+0200\n"
+"Last-Translator: David Verdin <david.verdin@cru.fr>\n"
 "Language-Team: Français\n"
+"Language: fr\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Language: fr\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
 "X-Generator: Pootle 2.1.2\n"
 "Projct-Id-Version: fr\n"
@@ -9702,24 +9702,25 @@ msgid "%d %b %y  %H:%M"
 msgstr "%d %b %y  %H:%M"
 
 #: ../wwsympa/wwsympa.fcgi.in:15268
-#, fuzzy
 msgid "Your unsubscription request to list %s was sent to the list owner."
-msgstr "La demande a été soumise au gestionnaire de la liste"
+msgstr ""
+"Votre demande de désabonnement de la liste %s a été soumise à son "
+"gestionnaire."
 
 #: ../wwsympa/wwsympa.fcgi.in:15270
-#, fuzzy
 msgid "You were successfully unsubscribed from list %s."
-msgstr "Vous avez demandé à vous désabonner de la liste %1."
+msgstr "Vous avez été désabonné(e) de la liste %s."
 
 #: ../wwsympa/wwsympa.fcgi.in:15274
 msgid ""
 "Unsubscription from list %s denied: Unsubscription from this list is closed."
 msgstr ""
+"Votre demande de désabonnement de la liste %s a échoué : le désabonnement de "
+"cette liste est interdit."
 
 #: ../wwsympa/wwsympa.fcgi.in:15276
-#, fuzzy
 msgid "Unsubscription from list %s failed."
-msgstr "Se désabonner de la liste %1"
+msgstr "Un désabonnement de la liste %s a échoué."
 
 #. This entry is a date/time format
 #. Check the strftime manpage for format details : http://docs.freebsd.org/info/gawk/gawk.info.Time_Functions.html
