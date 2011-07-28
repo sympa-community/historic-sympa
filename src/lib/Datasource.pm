@@ -25,9 +25,8 @@ package Datasource;
 use strict;
 
 use Carp;
-
-use Conf;
 use Log;
+use Data::Dumper;
 
 ############################################################
 #  constructor
@@ -44,19 +43,12 @@ use Log;
 #
 ##############################################################
 sub new {
-    my($pkg, $type, $param_ref) = @_;
-    my $datasrc;
-    &do_log('debug2', 'Datasource::new(%s)',$type);
-    
-    # import the desirable subs
-    eval "use ${type}Source qw(connect query disconnect fetch ping quote set_fetch_timeout)";
-    return undef if ($@);
-
-    $datasrc->{'param'} = $param_ref;
-
+    my($pkg, $param) = @_;
+    &Log::do_log('debug', '');
+    my $self = $param;
     ## Bless Message object
-    bless $datasrc, $pkg;
-    return $datasrc;
+    bless $self, $pkg;
+    return $self;
 }
 
 # Returns a unique ID for an include datasource

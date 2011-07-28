@@ -99,7 +99,7 @@ sub parse {
    my $sign_mod = shift;
    my $message = shift;
 
-   &do_log('debug2', 'Commands::parse(%s, %s, %s, %s, %s)', $sender, $robot, $i, $sign_mod, $message );
+   &do_log('debug2', 'Commands::parse(%s, %s, %s, %s, %s)', $sender, $robot, $i, $sign_mod, $message->{'msg'}->as_string );
 
    my $j;
    $cmd_line = '';
@@ -831,9 +831,12 @@ sub subscribe {
 	    $u->{'gecos'} = $comment;
 	    $u->{'date'} = $u->{'update_date'} = time;
 
-	    unless ($list->add_list_member($u)){
-		my $error = "Unable to add user $user in list $listname";
-		&report::reject_report_cmd('intern',$error,{'listname'=>$which},$cmd_line,$sender,$robot);
+	    $list->add_list_member($u);
+	    if (defined $list->{'add_outcome'}{'errors'}) {
+		my $error = sprintf "Unable to add user %s in list %s : %s",$user,$listname,$list->{'add_outcome'}{'errors'}{'error_message'};
+		my $error_type = 'intern';
+		$error_type = 'user' if (defined $list->{'add_outcome'}{'errors'}{'max_list_members_exceeded'});
+		&report::reject_report_cmd($error_type,$error,{'listname'=>$which},$cmd_line,$sender,$robot);
 		return undef; 
 	    }
 	}
@@ -1271,11 +1274,15 @@ sub add {
 	    $u->{'gecos'} = $comment;
 	    $u->{'date'} = $u->{'update_date'} = time;
 	    
-	    unless ($list->add_list_member($u)) {
-		my $error = "Unable to add user $user in list $listname";
-		&report::reject_report_cmd('intern',$error,{'listname'=>$which},$cmd_line,$sender,$robot);
+	    $list->add_list_member($u);
+	    if (defined $list->{'add_outcome'}{'errors'}) {
+		my $error = sprintf "Unable to add user %s in list %s : %s",$user,$listname,$list->{'add_outcome'}{'errors'}{'error_message'};
+		my $error_type = 'intern';
+		$error_type = 'user' if (defined $list->{'add_outcome'}{'errors'}{'max_list_members_exceeded'});
+		&report::reject_report_cmd($error_type,$error,{'listname'=>$which},$cmd_line,$sender,$robot);
 		return undef; 
 	    }
+	
 	    $list->delete_subscription_request($email);
 	    &report::notice_report_cmd('now_subscriber',{'email'=> $email, 'listname' => $which},$cmd_line);  
 	}
@@ -2031,7 +2038,7 @@ sub distribute {
     }
 
     ## Open and parse the file
-    my $message = new Message($file);
+    my $message = new Message({'file'=>$file});
     unless (defined $message) {
 	&do_log('err', 'Commands::distribute(): Unable to create Message object %s', $file);
 	&report::reject_report_msg('user','unfound_message',$sender,{'listname' => $name,'key'=> $key},$robot,'',$list);
@@ -2138,8 +2145,7 @@ sub confirm {
 	return 'wrong_auth';
     }
 
-    my $message = new Message ($file);
-
+    my $message = new Message ({'file'=>$file});
     unless (defined $message) {
 	&do_log('err', 'Commands::confirm(): Unable to create Message object %s', $file);
 	&report::reject_report_msg('user','wrong_format_message',$sender,{'key'=> $key},$robot,'','');
@@ -2148,11 +2154,9 @@ sub confirm {
 
     my $msg = $message->{'msg'};
     my $list = $message->{'list'};
-
     &Language::SetLang($list->{'admin'}{'lang'});
 
     my $name = $list->{'name'};
-   
     my $bytes = -s $file;
     my $hdr= $msg->head;
 

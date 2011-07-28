@@ -29,6 +29,7 @@ use Log;
 use Conf;
 use List;
 use report;
+use SDM;
 
 ## return the password finger print (this proc allow futur replacement of md5 by sha1 or ....)
 sub password_fingerprint{
@@ -198,7 +199,7 @@ sub ldap_authentication {
      
      ## bind in order to have the user's DN
      my $param = &tools::dup_var($ldap);
-     my $ds = new Datasource('LDAP', $param);
+     my $ds = new LDAPSource($param);
      
      unless (defined $ds && ($ldap_anonymous = $ds->connect())) {
        &do_log('err',"Unable to connect to the LDAP server '%s'", $ldap->{'host'});
@@ -229,7 +230,7 @@ sub ldap_authentication {
      $param->{'ldap_bind_dn'} = $DN[0];
      $param->{'ldap_bind_password'} = $pwd;
      
-     $ds = new Datasource('LDAP', $param);
+     $ds = new LDAPSource($param);
      
      unless (defined $ds && ($ldap_passwd = $ds->connect())) {
        do_log('err',"Unable to connect to the LDAP server '%s'", $param->{'host'});
@@ -282,7 +283,7 @@ sub ldap_authentication {
      &do_log('debug3',"canonic: $canonic_email[0]");
      ## If the identifier provided was a valid email, return the provided email.
      ## Otherwise, return the canonical email guessed after the login.
-     if( &tools::valid_email($auth) && !$Conf::Conf{'robots'}{$robot}{'ldap_force_canonical_email'}) {
+     if( &tools::valid_email($auth) && !&Conf::get_robot_conf($robot,'ldap_force_canonical_email')) {
 	 return ($auth);
      }else{
 	 return lc($canonic_email[0]);
@@ -313,7 +314,7 @@ sub get_email_by_net_id {
     my $ldap = @{$Conf{'auth_services'}{$robot}}[$auth_id];
 
     my $param = &tools::dup_var($ldap);
-    my $ds = new Datasource('LDAP', $param);
+    my $ds = new LDAPSource($param);
     my $ldap_anonymous;
     
     unless (defined $ds && ($ldap_anonymous = $ds->connect())) {
@@ -362,12 +363,8 @@ sub remote_app_check_password {
     # seach entry for trusted_application in Conf
     my @trusted_apps ;
     
-    # select trusted_apps from robot context or symap context
-    if ((defined $robot) &&  (defined $Conf::Conf{'robots'}{$robot}{'trusted_applications'})) {
- 	@trusted_apps = @{$Conf::Conf{'robots'}{$robot}{'trusted_applications'}{'trusted_application'}};
-    }else{
- 	@trusted_apps = @{$Conf::Conf{'trusted_applications'}{'trusted_application'}};
-    }
+    # select trusted_apps from robot context or sympa context
+    @trusted_apps = @{&Conf::get_robot_conf($robot,'trusted_applications')};
     
     foreach my $application (@trusted_apps){
 	
@@ -403,18 +400,10 @@ sub create_one_time_ticket {
     do_log('info', 'Auth::create_one_time_ticket(%s,%s,%s,%s) value = %s',$email,$robot,$data_string,$remote_addr,$ticket);
 
     my $date = time;
-    my $dbh = &List::db_get_handler();
     my $sth;
-
-    ## Check database connection
-    unless ($dbh and $dbh->ping) {
-	return undef unless &List::db_connect();
-    }
     
-    my $statement = sprintf "INSERT INTO one_time_ticket_table (ticket_one_time_ticket, robot_one_time_ticket, email_one_time_ticket, date_one_time_ticket, data_one_time_ticket, remote_addr_one_time_ticket, status_one_time_ticket) VALUES ('%s','%s','%s','%s','%s','%s','%s')",$ticket,$robot,$email,time,$data_string,$remote_addr,'open';
-
-    unless ($dbh->do($statement)) {
-	do_log('err','Unable to insert in table one_time_ticket_table while executing SQL statement "%s" : %s', $statement, $dbh->errstr);
+    unless (&SDM::do_query("INSERT INTO one_time_ticket_table (ticket_one_time_ticket, robot_one_time_ticket, email_one_time_ticket, date_one_time_ticket, data_one_time_ticket, remote_addr_one_time_ticket, status_one_time_ticket) VALUES ('%s','%s','%s','%s','%s','%s','%s')",$ticket,$robot,$email,time,$data_string,$remote_addr,'open')) {
+	do_log('err','Unable to insert new one time ticket for user %s, robot %s in the database',$email,$robot);
 	return undef;
     }   
     return $ticket;
@@ -428,30 +417,17 @@ sub get_one_time_ticket {
     
     do_log('debug2', '(%s)',$ticket_number);
     
-    my $dbh = &List::db_get_handler();
     my $sth;
     
-    ## Check database connection
-    unless ($dbh and $dbh->ping) {
-	return return {'result'=>'error'} unless &List::db_connect();
-    }
-    my $statement;
-    $statement = sprintf "SELECT ticket_one_time_ticket AS ticket, robot_one_time_ticket AS robot, email_one_time_ticket AS email, date_one_time_ticket AS \"date\", data_one_time_ticket AS data, remote_addr_one_time_ticket AS remote_addr, status_one_time_ticket as status FROM one_time_ticket_table WHERE ticket_one_time_ticket = '%s' ", $ticket_number;
-    
-    unless ($sth = $dbh->prepare($statement)) {
-	do_log('err','Auth::get_one_time_ticket: Unable to prepare SQL statement : %s', $dbh->errstr);
+    unless ($sth = &SDM::do_query("SELECT ticket_one_time_ticket AS ticket, robot_one_time_ticket AS robot, email_one_time_ticket AS email, date_one_time_ticket AS \"date\", data_one_time_ticket AS data, remote_addr_one_time_ticket AS remote_addr, status_one_time_ticket as status FROM one_time_ticket_table WHERE ticket_one_time_ticket = '%s' ", $ticket_number)) {
+	do_log('err','Unable to retrieve one time ticket %s from database',$ticket_number);
 	return {'result'=>'error'};
     }
-    unless ($sth->execute) {
-	do_log('err','Auth::get_one_time_ticket: Unable to execute SQL statement "%s" : %s', $statement, $dbh->errstr);
-	return {'result'=>'error'};
-    }    
  
     my $ticket = $sth->fetchrow_hashref('NAME_lc');
-    $sth->finish();
     
     unless ($ticket) {	
-	do_log('info','Auth::get_one_time_ticket: Unable to find one time ticket %s (SQL query %s)%s', $ticket,$statement, $dbh->errstr);
+	do_log('info','Auth::get_one_time_ticket: Unable to find one time ticket %s', $ticket);
 	return {'result'=>'not_found'};
     }
     
@@ -468,13 +444,11 @@ sub get_one_time_ticket {
     }else{
 	$result = 'success';
     }
-    $statement = sprintf "UPDATE one_time_ticket_table SET status_one_time_ticket = '%s' WHERE (ticket_one_time_ticket='%s')", $addr, $ticket_number;
-    
-    unless ($dbh->do($statement)) {
-    	do_log('err','Auth::get_one_time_ticket  Unable to execute SQL statement "%s" : %s', $statement, $dbh->errstr);
+    unless (&SDM::do_query("UPDATE one_time_ticket_table SET status_one_time_ticket = '%s' WHERE (ticket_one_time_ticket='%s')", $addr, $ticket_number)) {
+    	do_log('err','Unable to set one time tivket %s status to %s',$ticket_number, $addr);
     }
 
-    do_log('info', 'xxxx Auth::get_one_time_ticket(%s) : result : %s',$ticket_number,$result);
+    do_log('info', 'Auth::get_one_time_ticket(%s) : result : %s',$ticket_number,$result);
     return {'result'=>$result,
 	    'date'=>$ticket->{'date'},
 	    'email'=>$ticket->{'email'},

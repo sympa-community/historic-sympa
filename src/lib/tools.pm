@@ -34,12 +34,14 @@ use Mail::Header;
 use Encode::Guess; ## Usefull when encoding should be guessed
 use Encode::MIME::Header;
 use Text::LineFold;
+use MIME::Lite::HTML;
 
 use Conf;
 use Language;
 use Log;
 use Sympa::Constants;
 use Message;
+use SDM;
 
 ## RCS identification.
 #my $id = '@(#)$Id$';
@@ -775,6 +777,7 @@ sub dkim_verifier {
     my $msg_as_string = shift;
     my $dkim;
 
+    do_log('debug',"dkim verifier");
     unless (eval "require Mail::DKIM::Verifier") {
 	&do_log('err', "Failed to load Mail::DKIM::verifier perl module, ignoring DKIM signature");
 	return undef;
@@ -816,7 +819,7 @@ sub dkim_verifier {
     
     foreach my $signature ($dkim->signatures) {
 	return 1 if  ($signature->result_detail eq "pass");
-    }    
+    }
     return undef;
 }
 
@@ -924,7 +927,7 @@ sub dkim_sign {
 	&do_log('err', 'Cannot sign (DKIM) message');
 	return ($msg_as_string); 
     }
-    my $message = new Message($temporary_file,'noxsympato');
+    my $message = new Message({'file'=>$temporary_file,'noxsympato'=>'noxsympato'});
     unless ($message){
 	do_log('err',"unable to load $temporary_file as a message objet");
 	return ($msg_as_string); 
@@ -1039,9 +1042,8 @@ sub smime_sign_check {
     my $message = shift;
 
     my $sender = $message->{'sender'};
-    my $file = $message->{'filename'};
 
-    do_log('debug2', 'tools::smime_sign_check (message, %s, %s)', $sender, $file);
+    do_log('debug', 'tools::smime_sign_check (message, %s, %s)', $sender, $message->{'filename'});
 
     my $is_signed = {};
     $is_signed->{'body'} = undef;   
@@ -1056,27 +1058,29 @@ sub smime_sign_check {
     my $trusted_ca_options = '';
     $trusted_ca_options = "-CAfile $Conf::Conf{'cafile'} " if ($Conf::Conf{'cafile'});
     $trusted_ca_options .= "-CApath $Conf::Conf{'capath'} " if ($Conf::Conf{'capath'});
-    do_log('debug3', "$Conf::Conf{'openssl'} smime -verify  $trusted_ca_options -signer  $temporary_file");
+    do_log('debug', "$Conf::Conf{'openssl'} smime -verify  $trusted_ca_options -signer  $temporary_file");
 
     unless (open (MSGDUMP, "| $Conf::Conf{'openssl'} smime -verify  $trusted_ca_options -signer $temporary_file > /dev/null")) {
 
 	do_log('err', "unable to verify smime signature from $sender $verify");
 	return undef ;
     }
-
-    if ($message->{'smime_crypted'}) {
+    
+    if ($message->{'smime_crypted'}){
 	$message->{'msg'}->head->print(\*MSGDUMP);
 	print MSGDUMP "\n";
-	print MSGDUMP ${$message->{'msg_as_string'}};
-    }else {
-	unless (open MSG, $file) {
-	    do_log('err', 'Unable to open file %s: %s', $file, $!);
+	print MSGDUMP $message->{'msg_as_string'};
+    }elsif (! $message->{'filename'}) {
+	print MSGDUMP $message->{'msg_as_string'};
+    }else{
+	unless (open MSG, $message->{'filename'}) {
+	    do_log('err', 'Unable to open file %s: %s', $message->{'filename'}, $!);
 	    return undef;
+
 	}
 	print MSGDUMP <MSG>;
+	close MSG;
     }
-
-    close MSG;
     close MSGDUMP;
 
     my $status = $?/256 ;
@@ -1084,7 +1088,6 @@ sub smime_sign_check {
 	do_log('err', 'Unable to check S/MIME signature : %s', $openssl_errors{$status});
 	return undef ;
     }
-    
     ## second step is the message signer match the sender
     ## a better analyse should be performed to extract the signer email. 
     my $signer = smime_parse_cert({file => $temporary_file});
@@ -2114,20 +2117,14 @@ sub adate {
     return $date;
 }
 
-## human format (used in task models and scenarii)
+## Return the epoch date corresponding to the last midnight before date given as argument.
+sub get_midnight_time {
 
-# -> absolute date :
-#  xxxxYxxMxxDxxHxxMin
-# Y year ; M : month (1-12) ; D : day (1-28|29|30|31) ; H : hour (0-23) ; Min : minutes (0-59)
-# H and Min parameters are optionnal
-# ex 2001y9m13d14h10min
-
-# -> duration :
-# +|- xxYxxMxxWxxDxxHxxMin
-# W week, others are the same
-# all parameters are optionnals
-# before the duration you may write an absolute date, an epoch date or the keyword 'execution_date' which refers to the epoch date when the subroutine is executed. If you put nothing, the execution_date is used
-
+    my $epoch = $_[0];
+    &Log::do_log('debug3','Getting midnight time for: %s',$epoch);
+    my @date = localtime ($epoch);
+    return $epoch - $date[0] - $date[1]*60 - $date[2]*3600;
+}
 
 ## convert a human format date into an epoch date
 sub epoch_conv {
@@ -2943,7 +2940,7 @@ sub dump_var {
 		print $fd "\t"x$level.$index."\n";
 		&dump_var($var->[$index], $level+1, $fd);
 	    }
-	}elsif (ref($var) eq 'HASH' || ref($var) eq 'Scenario' || ref($var) eq 'List') {
+	}elsif (ref($var) eq 'HASH' || ref($var) eq 'Scenario' || ref($var) eq 'List' || ref($var) eq 'CGI::Fast') {
 	    foreach my $key (sort keys %{$var}) {
 		print $fd "\t"x$level.'_'.$key.'_'."\n";
 		&dump_var($var->{$key}, $level+1, $fd);
@@ -3202,6 +3199,45 @@ sub is_in_array {
 	return 1 if ($elt eq $value);
     }
     return undef;
+}
+
+####################################################
+# a_is_older_than_b
+####################################################
+# Compares the last modifications date of two files
+# 
+# IN : - a hash with two entries:
+#
+#        * a_file : the full path to a file
+#        * b_file : the full path to a file
+#
+# OUT : string: 'true' it the last modification date of "a_file" is older than "b_file"'s, 'false' otherwise.
+#       return undef if the comparison could not be caried on.
+#######################################################    
+sub a_is_older_than_b {
+    my $param = shift;
+    my ($a_file_readable, $b_file_readable) = (0,0);
+    my $answer = undef;
+    if (-r $param->{'a_file'}) {
+	$a_file_readable = 1;
+    }else{
+	&do_log('err', 'Could not read file %s. Comparison impossible', $param->{'a_file'});
+    }
+    if (-r $param->{'b_file'}) {
+	$b_file_readable = 1;
+    }else{
+	&do_log('err', 'Could not read file %s. Comparison impossible', $param->{'b_file'});
+    }
+    if ($a_file_readable && $b_file_readable) {
+	my @a_stats = stat ($param->{'a_file'});
+	my @b_stats = stat ($param->{'b_file'});
+	if($a_stats[9] < $b_stats[9]){
+	    $answer = 1;
+	}else{
+	    $answer = 0;
+	}
+    }
+    return $answer;
 }
 
 ####################################################
@@ -3555,31 +3591,12 @@ sub md5_fingerprint {
 ############################################################
 sub get_db_random {
     
-    ## Database and SQL statement handlers
-    my ($dbh, $sth, @sth_stack);
-
-    $dbh = &List::db_get_handler();
-
-    ## Check database connection
-    unless ($dbh and $dbh->ping) {
-	return undef unless &List::db_connect();
-	$dbh = &List::db_get_handler();
-    }
-    my $statement = sprintf "SELECT random FROM fingerprint_table;";
-    
-    push @sth_stack, $sth;
-    unless ($sth = $dbh->prepare($statement)) {
-	&do_log('err','Unable to prepare SQL statement : %s', $dbh->errstr);
-	return undef;
-    }
-    unless ($sth->execute) {
-	&do_log('err','Unable to execute SQL statement "%s" : %s', $statement, $dbh->errstr);
+    my $sth;
+    unless ($sth = &SDM::do_query("SELECT random FROM fingerprint_table")) {
+	&do_log('err','Unable to retrieve random value from fingerprint_table');
 	return undef;
     }
     my $random = $sth->fetchrow_hashref('NAME_lc');
-    
-    $sth->finish();
-    $sth = pop @sth_stack;
 
     return $random;
 
@@ -3604,22 +3621,10 @@ sub init_db_random {
 
     my $random = int(rand($range)) + $minimum;
 
-    ## Database and SQL statement handlers
-    my ($dbh, $sth, @sth_stack);
-
-    ## Check database connection
-    unless ($dbh and $dbh->ping) {
-	return undef unless &List::db_connect();
-    }
-    my $statement = sprintf "INSERT INTO fingerprint_table VALUES (%d)", $random;
-    
-    push @sth_stack, $sth;
-    
-    unless ($dbh->do($statement)) {
-	&do_log('err','Unable to execute SQL statement "%s" : %s', $statement, $dbh->errstr);
+    unless (&SDM::do_query('INSERT INTO fingerprint_table VALUES (%d)', $random)) {
+	&do_log('err','Unable to set random value in fingerprint_table');
 	return undef;
     }
-       
     return $random;
 }
 
@@ -3884,13 +3889,10 @@ sub wrap_text {
     $cols = 78 unless defined $cols;
     return $text unless $cols;
 
-    my $emailre = &tools::get_regexp('email');
     $text = Text::LineFold->new(
 	    Language => &Language::GetLang(),
 	    OutputCharset => (&Encode::is_utf8($text)? '_UNICODE_': 'utf8'),
-	    UserBreaking => ['NONBREAKURI',
-			     [qr/\b$emailre\b/ => sub { ($_[1]) }],
-			     ],
+	    Prep => 'NONBREAKURI',
 	    ColumnsMax => $cols
 	)->fold($init, $subs, $text);
 
@@ -3930,5 +3932,32 @@ sub addrencode {
 	return "<$addr>";
     }
 }
+
+# Generate a newsletter from an HTML URL or a file path.
+sub create_html_part_from_web_page {
+    my $param = shift;
+    &do_log('debug',"Creating HTML MIME part. Source: %s",$param->{'source'});
+    my $mailHTML = new MIME::Lite::HTML(
+					{
+					    From => $param->{'From'},
+					    To => $param->{'To'},
+					    Headers => $param->{'Headers'},
+					    Subject => $param->{'Subject'},
+					    HTMLCharset => 'utf-8',
+					    TextCharset => 'utf-8',
+					    TextEncoding => '8bit',
+					    HTMLEncoding => '8bit',
+					    remove_jscript => '1', #delete the scripts in the html
+					}
+					);
+    # parse return the MIME::Lite part to send
+    my $part = $mailHTML->parse($param->{'source'});
+    unless (defined($part)) {
+	&do_log('err', 'Unable to convert file %s to a MIME part',$param->{'source'});
+	return undef;
+    }
+    return $part->as_string;
+}
+
 
 1;

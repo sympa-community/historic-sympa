@@ -142,7 +142,7 @@ sub new {
 
     ## Keep the scenario in memory
     $all_scenarios{$scenario->{'file_path'}} = $scenario;
-    
+
     return $scenario;
 }
 
@@ -156,7 +156,8 @@ sub _parse_scenario {
     my @scenario;
     my @rules = split /\n/, $paragraph;
 
-    foreach my $current_rule (@rules) {
+    foreach my $current_rule (@rules) {	
+	my @auth_methods_list;
 	next if ($current_rule =~ /^\s*\w+\s*$/o); # skip paragraph name
 	my $rule = {};
 	$current_rule =~ s/\#.*$//;         # remove comments
@@ -171,41 +172,29 @@ sub _parse_scenario {
         
 	if ($current_rule =~ /\s*(include\s*\(?\'?(.*)\'?\)?)\s*$/i) {
 	    $rule->{'condition'} = $1;
-	}elsif ($current_rule =~ /^\s*(.*)\s+(md5|pgp|smtp|smime|dkim)((\s*,\s*(md5|pgp|smtp|smime|dkim))*)\s*->\s*(.*)\s*$/i) {
-	    $rule->{'condition'}=$1;
-	    $rule->{'auth_method'}=$2 || 'smtp';
-	    $rule->{'action'} = $6;
+	    push(@scenario, $rule);
+	}elsif ($current_rule =~ /^\s*(.*?)\s+((\s*(md5|pgp|smtp|smime|dkim)\s*,?)*)\s*->\s*(.*)\s*$/gi) {
+	    $rule->{'condition'} = $1;
+	    $rule->{'action'} = $5;
+	    my $auth_methods = $2 || 'smtp';
+	    $auth_methods=~ s/\s//g;
+	    @auth_methods_list = split ',', $auth_methods;
 	}else {
 	    do_log('err', "error rule syntaxe in scenario $function rule line $. expected : <condition> <auth_mod> -> <action>");
 	    do_log('err',"error parsing $current_rule");
 	    return undef;
 	}
 
-	
-#	## Make action an ARRAY
-#	my $action = $6;
-#	my @actions;
-#	while ($action =~ s/^\s*((\w+)(\s?\([^\)]*\))?)(\s|\,|$)//) {
-#	    push @actions, $1;
-#	}
-#	$rule->{action} = \@actions;
-	       
-	push(@scenario,$rule);
-
 	## Duplicate the rule for each mentionned authentication method
-        my $auth_list = $3 ; 
-        while ($auth_list =~ /\s*,\s*(md5|pgp|smtp|smime|dkim)((\s*,\s*(md5|pgp|smtp|smime|dkim))*)\s*/i) {
+	foreach my $auth_method (@auth_methods_list) {
 	    push(@scenario,{'condition' => $rule->{condition}, 
-                            'auth_method' => $1,
+                            'auth_method' => $auth_method,
                             'action' => $rule->{action}});
-	    $auth_list = $2;
-#	    do_log('debug3', "load rule ite: $rule->{'condition'} $1 -> $rule->{'action'}");
 	}
-	
     }
-    
+
     $structure->{'rules'} = \@scenario;
-   
+
     return $structure; 
 }
 
@@ -400,7 +389,6 @@ sub request_action {
 	## Add rules at the beginning of the array
 	unshift @rules, @{$include_scenario->{'rules'}};
     }
-
     ## Look for 'include' directives amongst rules first
     foreach my $index (0..$#rules) {
 	if ($rules[$index]{'condition'} =~ /^\s*include\s*\(?\'?([\w\.]+)\'?\)?\s*$/i) {
@@ -1011,7 +999,7 @@ sub search{
             return $persistent_cache{'named_filter'}{$filter_file}{$filter}{'value'};
         }
 	
-	my $ds = new Datasource('SQL', $sql_conf->{'sql_named_filter_query'});
+	my $ds = new SQLSource($sql_conf->{'sql_named_filter_query'});
 	unless ($ds->connect() && $ds->ping) {
             do_log('notice','Unable to connect to the SQL server %s:%d',$sql_conf->{'db_host'}, $sql_conf->{'db_port'});
             return undef;
@@ -1091,7 +1079,7 @@ sub search{
 	
 	my $ldap;
 	my $param = &tools::dup_var(\%ldap_conf);
-	my $ds = new Datasource('LDAP', $param);
+	my $ds = new LDAPSource($param);
 	    
 	unless (defined $ds && ($ldap = $ds->connect())) {
 	    &do_log('err',"Unable to connect to the LDAP server '%s'", $param->{'ldap_host'});
