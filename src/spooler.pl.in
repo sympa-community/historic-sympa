@@ -37,6 +37,7 @@ use Auth;
 use SympaSession;
 use Language;
 use Log;
+use Lock;
 use mail;
 use MIME::QuotedPrint;
 use List;
@@ -317,6 +318,18 @@ while (!$signal) {
 	## Don't process temporary files created by queue (T.xxx)
 	next if ($filename =~ /^T\./);
 
+
+	## Lock file
+	my $lock = new Lock ($spooldir.'/'.$filename);
+	unless (defined $lock) {
+	    &Log::do_log('err','Could not create new lock');
+	    next;
+	}
+	$lock->set_timeout(2); 
+	unless ($lock->lock('write')) {
+	    next;
+	}   
+
 	($listname, $robot) = split(/\@/,$1);
 	$meta{'date'} = $2;
 
@@ -390,6 +403,9 @@ while (!$signal) {
  		&do_log('notice', 'Could not rename %s to %s: %s', "$t_spool/$filename", $main::options{'keepcopy'}."/$filename", $!);
 	    }
 	}
+	
+	## Release the lock
+	$lock->unlock();
 	unless (unlink ($spooldir.'/'.$filename)) {
 	    do_log('err',"Could not unlink message %s/%s . Exiting",$spooldir, $filename);
 	    exit;

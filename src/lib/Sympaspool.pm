@@ -76,7 +76,7 @@ sub new {
     my $spool={};
     do_log('debug2', 'Spool::new(%s)', $spoolname);
     
-    unless ($spoolname =~ /^(auth)|(bounce)|(digest)|(bulk)|(expire)|(mod)|(msg)|(archive)|(automatic)|(subscribe)|(topic)|(validated)$/){
+    unless ($spoolname =~ /^(auth)|(bounce)|(digest)|(bulk)|(expire)|(mod)|(msg)|(archive)|(automatic)|(subscribe)|(topic)|(validated)|(task)$/){
 	do_log('err','internal error unknown spool %s',$spoolname);
 	return undef;
     }
@@ -161,6 +161,7 @@ sub get_content {
 
     push @sth_stack, $sth;
     $sth = &SDM::do_query($statement);
+    do_log('trace',"statement $statement");
     if($selection eq 'count') {
 	my @result = $sth->fetchrow_array();
 	return $result[0];
@@ -176,6 +177,7 @@ sub get_content {
 	}
 	$sth->finish();
 	$sth = pop @sth_stack;
+	do_log('trace',"trouve $#messages element");
 	return @messages;
     }
 }
@@ -362,6 +364,7 @@ sub store {
     $sender |= '';
 
     do_log('debug',"Spool::store ($self->{'spoolname'},$self->{'selection_status'}, <message_asstring> ,list : $metadata->{'list'},robot : $metadata->{'robot'} , date: $metadata->{'date'}), lock : $locked");
+    do_log('trace',"Spool::store ($self->{'spoolname'},$self->{'selection_status'}, <message_asstring> ,list : $metadata->{'list'},robot : $metadata->{'robot'} , date: $metadata->{'date'}), lock : $locked");
 
     my $b64msg = MIME::Base64::encode($message_asstring);
 
@@ -390,7 +393,7 @@ sub store {
     $metadata->{'message_status'} = 'ok';
 
     my $insertpart1; my $insertpart2;
-    foreach my $meta ('list','robot','message_status','priority','date','type','subject','sender','messageid','size','headerdate','spam_status','dkim_header_list','dkim_privatekey','dkim_d','dkim_i','dkim_selector','create_list_if_needed') {
+    foreach my $meta ('list','robot','message_status','priority','date','type','subject','sender','messageid','size','headerdate','spam_status','dkim_header_list','dkim_privatekey','dkim_d','dkim_i','dkim_selector','create_list_if_needed','task_label','task_date','task_model','task_object') {
 	$insertpart1 = $insertpart1. ', '.$meta.'_spool';
 	$insertpart2 = $insertpart2. ', '.&SDM::quote($metadata->{$meta});   
     }
@@ -398,6 +401,8 @@ sub store {
 
     push @sth_stack, $sth;
     my $statement        = sprintf "INSERT INTO spool_table (spoolname_spool, messagelock_spool, message_spool %s ) VALUES (%s,%s,%s %s )",$insertpart1,&SDM::quote($self->{'spoolname'}),&SDM::quote($lock),&SDM::quote($b64msg), $insertpart2;
+
+    do_log('trace',"wwwwwwwwwwwwwwwwwww $statement");
     $sth = &SDM::do_query ($statement);
 
     $statement = sprintf "SELECT messagekey_spool as messagekey FROM spool_table WHERE messagelock_spool = %s AND date_spool = %s",&SDM::quote($lock),&SDM::quote($metadata->{'date'});
@@ -548,6 +553,7 @@ sub _selectfields{
     my $select ='';
 
     if (($selection eq '*_but_message')||($selection eq '*')) {
+
 	my %db_struct = &Sympa::DatabaseDescription::db_struct();
 
 	foreach my $field ( keys %{ $db_struct{'mysql'}{'spool_table'}} ) {
@@ -570,16 +576,25 @@ sub _selectfields{
 #######################
 # Internal to ease SQL
 # return a SQL WHERE substring in ordder to select choosen fields from spool table 
+# selector is a hash where key is a column name and value is column value espected.**** 
+#   **** value can be prefixed with <,>,>=,<=, in that case the default comparator operator (=) is changed, I known this is dirty but I'am lazy :-(
 sub _sqlselector {
 	
     my $selector = shift; 
     my $sqlselector = '';
     
     foreach my $field (keys %$selector) {
+	my $compare_operator = '=';
+	my $select_value = $selector->{$field};
+	if ($select_value =~ /^([\<\>]\=?)\.(.*)$/){ 
+	    $compare_operator = $1;
+	    $select_value = $2;
+	}
+
 	if ($sqlselector) {
-	    $sqlselector .= ' AND '.$field.'_spool = '.&SDM::quote($selector->{$field});
+	    $sqlselector .= ' AND '.$field.'_spool '.$compare_operator.' '.&SDM::quote($selector->{$field});
 	}else{
-	    $sqlselector = ' '.$field.'_spool = '.&SDM::quote($selector->{$field});
+	    $sqlselector = ' '.$field.'_spool '.$compare_operator.' '.&SDM::quote($selector->{$field});
 	}
     }
     return $sqlselector;

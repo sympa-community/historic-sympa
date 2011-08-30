@@ -753,7 +753,7 @@ our @params = (
     {
         'name'     => 'tmpdir',
         'default'  => Sympa::Constants::SPOOLDIR . '/tmp',
-        'query'    => gettext('Temporary directory used by OpenSSL and antivirus plugins'),
+        'query'    => gettext('Temporary directory used by OpenSSL, antivirus plugins, mhonarc etc'),
     },
     {
         'name'     => 'sleep',

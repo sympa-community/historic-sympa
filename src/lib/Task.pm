@@ -30,52 +30,37 @@ use List;
 use Conf;
 use Log;
 use tools;
+use Sympaspool;
 
 my @task_list;
 my %task_by_list;
 my %task_by_model;
 
+my $taskspool ;
+
+sub set_spool {
+    $taskspool = new Sympaspool('task');
+}
+
 ## Creates a new Task object
 sub new {
-    my($pkg, $file) = @_;
+    my($pkg,$task_in_spool) = @_;
     my $task;
-    &do_log('debug2', 'Task::new(%s)',$file);
+    &do_log('debug2', 'Task::new  messagekey = %s',$task_in_spool->{'messagekey'});
     
-    $task->{'filepath'} = $file;
-
-    ## We might get a filepath
-    ## Extract filename from path
-    my @path = split /\//, $file;
-    $task->{'filename'} = $path[$#path];
     my $listname_regexp = &tools::get_regexp('listname');
     my $host_regexp = &tools::get_regexp('host');
-
-    ## File including the list domain
-    if ($task->{'filename'} =~ /^(\d+)\.(\w*)\.(\w+)\.($listname_regexp|_global)\@($host_regexp)$/) {
-	$task->{'date'} = $1;
-	$task->{'label'} = $2;
-	$task->{'model'} = $3;
-	$task->{'object'} = $4;
-	$task->{'domain'} = $5;
+    
+    $task->{'messagekey'} = $task_in_spool->{'messagekey'};    
+    $task->{'taskasstring'} = $task_in_spool->{'messageasstring'};    
+    $task->{'date'} = $task_in_spool->{'task_date'};    
+    $task->{'label'} = $task_in_spool->{'task_label'};    
+    $task->{'model'} = $task_in_spool->{'task_model'};    
+    $task->{'domain'} = $task_in_spool->{'robot'};    
 	
-	if ($task->{'object'} ne '_global') { # list task
-	    $task->{'list_object'} = new List ($task->{'object'},$task->{'domain'});
-	    $task->{'domain'} = $task->{'list_object'}{'domain'};
-	}
-
-    }elsif ($task->{'filename'} =~ /^(\d+)\.(\w*)\.(\w+)\.($listname_regexp|_global)$/) {
-	$task->{'date'} = $1;
-	$task->{'label'} = $2;
-	$task->{'model'} = $3;
-	$task->{'object'} = $4;
-
-	if ($task->{'object'} ne '_global') { # list task
-	    $task->{'list_object'} = new List ($task->{'object'});
-	    $task->{'domain'} = $task->{'list_object'}{'domain'};
-	}
-    }else {
-	&do_log('err', "Unknown format for task '%s'", $task->{'filename'});
-	return undef;
+    if ($task_in_spool->{'list'}) { # list task
+	$task->{'list_object'} = new List ($task_in_spool->{'list'},$task_in_spool->{'robot'});
+	$task->{'domain'} = $task->{'list_object'}{'domain'};
     }
 
     $task->{'id'} = $task->{'object'};
@@ -87,27 +72,33 @@ sub new {
     return $task;
 }
 
+
+##remove a task using message key
+sub remove {
+    my $self = shift;
+
+    unless ($taskspool->remove_message({'messagekey'=>$self->{'messagekey'}})){
+	&do_log('err', 'Unable to remove task (mesasgekey = %s)', $self->{'meqssagekey'});
+	return undef;
+    }
+}
+
+
 ## Build all Task objects
 sub list_tasks {
-    my $spool_task = shift;
-
-    ## Create required tasks
-    unless (opendir(DIR, $spool_task)) {
-	&do_log ('err', "error : can't open dir %s: %m", $spool_task);
-    }
-    my @task_files = sort epoch_sort (grep !/^\.\.?$/, readdir DIR); # @tasks updating
-    closedir DIR;
 
     ## Reset the list of tasks
     undef @task_list;
     undef %task_by_list;
     undef %task_by_model;
 
+    # fetch all task
+    my $taskspool = new Sympaspool ('task');
+    my @tasks = $taskspool->get_content({'selector'=>{}});
+
     ## Create Task objects
-    foreach my $t (@task_files) {
-	next if ($t =~ /^\./);
-	my $task = new Task ($spool_task.'/'.$t);
-	
+    foreach my $t (@tasks) {
+	my $task = new Task ($t);	
 	## Maintain list of tasks
 	push @task_list, $task;
 	

@@ -42,11 +42,11 @@ use Sympa::DatabaseDescription;
 # db structure description has moved in Sympa/Constant.pm 
 my %db_struct = &Sympa::DatabaseDescription::db_struct();
 
-my %not_null = %Sympa::DatabaseDescription::not_null;
+my %not_null = &Sympa::DatabaseDescription::not_null();
 
-my %primary =  %Sympa::DatabaseDescription::primary ;
+my %primary =  &Sympa::DatabaseDescription::primary() ;
 	       
-my %autoincrement = %Sympa::DatabaseDescription::autoincrement ;
+my %autoincrement = &Sympa::DatabaseDescription::autoincrement() ;
 
 ## List the required INDEXES
 ##   1st key is the concerned table
@@ -109,7 +109,7 @@ sub db_get_handler {
 ## Just check if DB connection is ok
 sub check_db_connect {
     
-    &Log::do_log('debug2', 'Checking connection to the Sympa database');
+    #&Log::do_log('debug2', 'Checking connection to the Sympa database');
     ## Is the Database defined
     unless (&Conf::get_robot_conf('*','db_name')) {
 	&Log::do_log('err', 'No db_name defined in configuration file');
@@ -372,7 +372,10 @@ sub check_primary_key {
     my $param = shift;
     my $t = $param->{'table'};
     my $report_ref = $param->{'report'};
-    &Log::do_log('debug','Checking primary keys for table %s',$t);
+
+    my $list_of_keys = join ',',@{$primary{$t}};
+    my $key_as_string = "$t [$list_of_keys]";
+    &Log::do_log('debug','Checking primary keys for table %s expected_keys %s',$t,$key_as_string );
 
     my $should_update = $db_source->check_key({'table'=>$t,'key_name'=>'primary','expected_keys'=>$primary{$t}});
     if ($should_update){
