@@ -535,7 +535,7 @@ sub aggregate_data {
 	#store send mail data-------------------------------
 	if($key_op eq 'send_mail'){
 
-	    foreach my $key_robot (keys (%{$aggregat update_subscriber_msg_sended_data->{$key_op}})){
+	    foreach my $key_robot (keys (%{$aggregated_data->{$key_op}})){ 
 
 		foreach my $key_list (keys (%{$aggregated_data->{$key_op}->{$key_robot}})){
 		    
