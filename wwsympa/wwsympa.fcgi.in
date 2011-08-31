@@ -8612,6 +8612,8 @@ Sends back the list creation edition form.
 	 &wwslog('info','do_create_list: not allowed');
 	 return undef;
      }
+     $param->{'all_lists'} = &List::get_lists($robot);
+
 
      my %topics;
      unless (%topics = &List::load_topics($robot)) {
