@@ -171,14 +171,11 @@ sub search_msgid {
     chomp $msgid ;
 
     foreach my $file (grep (!/\./,readdir ARC)) {
-	do_log('trace',"scan de %s/%s",$dir,$file);
 	next unless (open MAIL,"$dir/$file") ;
-	do_log('trace',"scan OPEN de %s/%s",$dir,$file);
 	while (<MAIL>) {
 	    last if /^$/ ; #stop parse after end of headers
 	    if (/^Message-id:\s?<?([^>\s]+)>?\s?/i ) {
 		my $id = $1;
-		do_log('trace',"scan de %s/%s  message_id = %s",$dir,$file,$id);
 		if ($id eq $msgid) {
 		    close MAIL; closedir ARC;
 		    return $file;
@@ -322,8 +319,6 @@ sub convert_single_msg_2_html {
     my $robot = $data->{'robot'};
     my $messagekey = $data->{'messagekey'};
 
-    do_log('trace',"Destination %s taille du message %s  ",$destination_dir,length($destination_dir));
-
     my $listname =''; my $msg_file;
     my $host = $robot;
     if ($list) {
@@ -343,8 +338,6 @@ sub convert_single_msg_2_html {
     printf OUT $msg_as_string ;
     close(OUT);
 
-    do_log('trace',"dump temporaire %s",$msg_file);
-    
     unless (-d $destination_dir) {
 	unless (&tools::mkdir_all($destination_dir, 0777)) {
 	    &do_log('err','Unable to create %s', $destination_dir);
@@ -359,9 +352,9 @@ sub convert_single_msg_2_html {
     }
     ## generate HTML
     unless (chdir $destination_dir) {
-	do_log('trace',"pas pu changer de reperetoire");
+	do_log('err',"Could not change working directory to %s",$destination_dir);
     }
-    my $tracepwd = getcwd ; do_log('trace',"maintenant pwd : %s, attachement url : %s",$tracepwd,$attachement_url);
+    my $tracepwd = getcwd ;
 
 
     my $mhonarc = &Conf::get_robot_conf($robot, 'mhonarc');
@@ -374,12 +367,9 @@ sub convert_single_msg_2_html {
     #close ARCMOD;
     `$mhonarc  -single --outdir .. -rcfile $mhonarc_ressources -definevars listname=$listname -definevars hostname=$host -attachmenturl=$attachement_url $msg_file > msg00000.html`;
 
-    #unlink $msg_file ;
-    do_log('trace'," $mhonarc  -single --outdir .. -rcfile $mhonarc_ressources -definevars listname=$listname -definevars hostname=$host -attachmenturl=$attachement_url $msg_file > msg00000.html");
     # restore current wd 
     chdir $pwd;		
 
-    &do_log('trace', " generation dans $destination_dir");
     return 1;
 }
 

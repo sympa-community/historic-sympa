@@ -6820,7 +6820,6 @@ sub do_skinsedit {
      $in{'id'} =~ s/\0/,/g;
 
      &wwslog('info', 'do_distribute(%s)', $in{'id'});
-     &do_log('trace',"CES LA QUE CELA SE PASSE wwsympa.fcgi");
 
      my $modspool = new Sympaspool('mod');
      my ($msg, $file);
@@ -6936,7 +6935,6 @@ sub do_viewmod {
      
      my $html_dir = $Conf::Conf{'viewmail_dir'}.'/mod/'.$list->get_list_id().'/'.$in{'id'};
 
-     do_log('trace', 'htlm_dir : %s',$html_dir);      
      unless (-d $html_dir) {
 	 &report::reject_report_web('intern','no_html_message_available',{'dir' => $html_dir},$param->{'action'});
 	 &wwslog('err','do_viewmod: no HTML version of the message available in %s', $html_dir);
@@ -6948,10 +6946,8 @@ sub do_viewmod {
 	 $in{'file'} =~ /\.(\w+)$/;
 	 $param->{'file_extension'} = $1;
 	 $param->{'file'} = $html_dir.'/'.$in{'file'};
-	 do_log('trace', 'param file :%s',$param->{'file'});      
 	 $param->{'bypass'} = 1; 
      }else {
-	 do_log('trace',"html_dir   add_include  %s",$html_dir);
 	 &tt2::add_include_path($html_dir) ;
      }
 
@@ -7312,7 +7308,6 @@ sub do_arc {
     
     ## File exist ?
     my $arc_file_path = $arc_month_path.'/'.$in{'arc_file'};
-    do_log('trace',"xxxxxxxxxxxxxxx arc_month_path %s arc_file %s",$arc_month_path,$in{'arc_file'});
 
     unless (-r $arc_file_path) {
 	&wwslog('err',"unable to read $arc_file_path");
@@ -9007,12 +9002,10 @@ sub do_rebuildallarc {
 	&report::reject_report_web('intern','cannot fetch archive spool',{},$param->{'action'},$list,$param->{'user'}{'email'},$robot);
 	&wwslog('err','error in  new Sympaspool(archive) ');
     }
-    do_log('trace',"new Sympaspool(archive) OK");
     my $all_lists = &List::get_lists($robot);
     foreach my $list ( @$all_lists ) {
 	next unless (defined $list->{'admin'}{'web_archive'});
 
-	do_log('trace','list %s@%s', $list->{'name'},$list->{'name'});
 	unless ($spoolarchive->store('rebuild',{'list'=>$list->{'name'},'robot'=>$list->{'robot'} } )){
 	    &report::reject_report_web('intern','cannot_store_rebuild_order',{},$param->{'action'},$list,$param->{'user'}{'email'},$robot);
 	    &wwslog('info','do_rebuildarc: cannot store rebuild order for list %s',$list->{'name'});
@@ -9022,9 +9015,7 @@ sub do_rebuildallarc {
 	    $errors =1;
 	    next;
 	}
-	do_log('trace','OK pour list %s@%s', $list->{'name'},$list->{'name'});
     }
-    do_log('trace','OK pour toute les listes ? ');
     if ($errors == 1){
 	&report::reject_report_web('intern','cannot_store_rebuild_order',{},$param->{'action'},$param->{'user'}{'email'},$robot);
 	&wwslog('info','do_rebuildallarc: cannot store rebuild archive order for all lists, see logs' );
@@ -9038,7 +9029,6 @@ sub do_rebuildallarc {
     &report::notice_report_web('performed',{},$param->{'action'});
     &web_db_log({'status' => 'success'});
 
-    do_log('trace','OK pour toutes les listes  ');
     return 'serveradmin';
 }
 
@@ -16585,7 +16575,6 @@ sub do_viewlogs {
  ## 
 sub do_viewspools {
 
-    do_log('trace',"STATUS : %s",$in{'spool_status'});    
     my $spoolname = 'msg';
     $spoolname = $in{'spoolname'} if ($in{'spoolname'});
     $param->{'spoolname'} = $spoolname;
@@ -16665,7 +16654,6 @@ sub do_viewspools {
 
     # 'index' in user interface is mapped to 'messagekey' table field
     $in{'sortby'} = 'messagekey' if ($in{'sortby'} eq 'index') ;
-    do_log('trace',"sortby %s",$in{'sortby'});
 
     my %selector = ();
     if ($in{'list'}) {
@@ -16725,7 +16713,6 @@ sub do_viewspool_message {
 
     my $destination_dir = $Conf::Conf{'viewmail_dir'}.'/spool/viewmail/'.$messagekey;
 
-    do_log('trace',"conversion dans %s",$destination_dir.'/msg00000.html');
     unless (-d $destination_dir) {
 	&Archive::convert_single_msg_2_html ({'msg_as_string'=>$param->{'spool_message_asstring'},
 					      'destination_dir'=>$destination_dir,
@@ -16737,7 +16724,6 @@ sub do_viewspool_message {
 	
     }
 
-    do_log('trace','openning %s/msg00000.html',$destination_dir);    
     unless (open (HTMLMAIL ,$destination_dir.'/msg00000.html')){
 	&report::reject_report_web('intern','could not show message as html');
 	&wwslog('info','do_viewspool_message : could not show message as html');
@@ -16749,7 +16735,6 @@ sub do_viewspool_message {
 
     }
     close HTMLMAIL;
-    # my $dump = &Dumper($param); open (DUMP,">/tmp/dumper"); printf DUMP '----------------param  \n%s',$dump ; close DUMP; do_log('trace',"dumper");
 
     return 1;
 }
@@ -16888,7 +16873,7 @@ sub do_viewspool_message_mv {
 	&wwslog('info','do_viewspool_message : could not move message to spool %s, status %s',$newspool,$newstatus);
 	return;		
     }
-    do_log('trace',"message %s moved to spool %s with status %s",$messagekey,$newspool,$newstatus);
+    do_log('debug2',"message %s moved to spool %s with status %s",$messagekey,$newspool,$newstatus);
     $param->{'moved'} = 1;
     return 1;
 }

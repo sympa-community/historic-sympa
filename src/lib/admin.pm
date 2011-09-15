@@ -440,19 +440,11 @@ sub create_list{
     }
 
     my $conf;
-    if (-r $template_file) {
-	do_log('trace',"bon fichierr");
-    }else{
-	do_log('trace',"mauvais fichierr");
-    }
-    do_log('trace',"avant de parser config.tt2");
     my $tt_result = &tt2::parse_tt2($param, 'config.tt2', \$conf, [$family->{'dir'}]);
-    do_log('trace',"après  parse_tt2 config.tt2");
     unless (defined $tt_result || !$abort_on_error) {
 	&do_log('err', 'admin::create_list : abort on tt2 error. List %s from family %s@%s',  $param->{'listname'}, $family->{'name'},$robot);
 	return undef;
     }
-    do_log('trace',"create directory %s",$tt_result);
 
      ## Create the list directory
      my $list_dir;

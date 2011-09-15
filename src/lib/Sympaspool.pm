@@ -161,7 +161,6 @@ sub get_content {
 
     push @sth_stack, $sth;
     $sth = &SDM::do_query($statement);
-    do_log('trace',"statement $statement");
     if($selection eq 'count') {
 	my @result = $sth->fetchrow_array();
 	return $result[0];
@@ -177,7 +176,6 @@ sub get_content {
 	}
 	$sth->finish();
 	$sth = pop @sth_stack;
-	do_log('trace',"trouve $#messages element");
 	return @messages;
     }
 }
@@ -364,7 +362,6 @@ sub store {
     $sender |= '';
 
     do_log('debug',"Spool::store ($self->{'spoolname'},$self->{'selection_status'}, <message_asstring> ,list : $metadata->{'list'},robot : $metadata->{'robot'} , date: $metadata->{'date'}), lock : $locked");
-    do_log('trace',"Spool::store ($self->{'spoolname'},$self->{'selection_status'}, <message_asstring> ,list : $metadata->{'list'},robot : $metadata->{'robot'} , date: $metadata->{'date'}), lock : $locked");
 
     my $b64msg = MIME::Base64::encode($message_asstring);
 
@@ -402,7 +399,6 @@ sub store {
     push @sth_stack, $sth;
     my $statement        = sprintf "INSERT INTO spool_table (spoolname_spool, messagelock_spool, message_spool %s ) VALUES (%s,%s,%s %s )",$insertpart1,&SDM::quote($self->{'spoolname'}),&SDM::quote($lock),&SDM::quote($b64msg), $insertpart2;
 
-    do_log('trace',"wwwwwwwwwwwwwwwwwww $statement");
     $sth = &SDM::do_query ($statement);
 
     $statement = sprintf "SELECT messagekey_spool as messagekey FROM spool_table WHERE messagelock_spool = %s AND date_spool = %s",&SDM::quote($lock),&SDM::quote($metadata->{'date'});

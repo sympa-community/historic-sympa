@@ -5157,7 +5157,6 @@ sub get_list_member_no_object {
 	$user->{'reception'} ||= 'mail';
 	$user->{'update_date'} ||= $user->{'date'};
 	do_log('debug2', 'custom_attribute  = (%s)', $user->{custom_attribute});
-	do_log('trace', 'bizut : nombre de messages   = (%s)', $user->{'number_messages'});
 	if (defined $user->{custom_attribute}) {
 	    &Log::do_log('debug2', '1. custom_attribute  = (%s)', $user->{custom_attribute});
 	    my %custom_attr = &parseCustomAttribute($user->{'custom_attribute'});

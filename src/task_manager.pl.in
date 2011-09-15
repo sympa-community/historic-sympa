@@ -272,7 +272,7 @@ while (!$end) {
 
     my %used_models; # models for which a task exists
     foreach my $model (&Task::get_used_models) {
-	do_log('trace',"model used $model");
+	do_log('debug2',"model used $model");
 	$used_models{$model} = 1;
     }
 
@@ -281,7 +281,7 @@ while (!$end) {
 			'execution_date' => 'execution_date');
     ## global tasks
     foreach my $key (keys %global_models) {	
-	do_log('trace',"global_model : $key");
+	do_log('debug2',"global_model : $key");
 	unless ($used_models{$global_models{$key}}) {
 	    if ($Conf{$key}) { 
 		my %data = %default_data; # hash of datas necessary to the creation of tasks
@@ -292,12 +292,11 @@ while (!$end) {
     }    	
     
     ## list tasks
-    &do_log ('trace', 'list task by list and by robot');
     foreach my $robot (keys %{$Conf{'robots'}}) {
-	do_log('trace',"creating list task : current bot  is $robot");
+	do_log('debug3',"creating list task : current bot  is $robot");
 	my $all_lists = &List::get_lists($robot);
 	foreach my $list ( @$all_lists ) {
-	    do_log('trace',"creating list task : current list  is $list->{'name'}");
+	    do_log('debug3',"creating list task : current list  is $list->{'name'}");
 	    my %data = %default_data;
 	
 	    $data{'list'} = {'name' => $list->{'name'},
@@ -310,7 +309,7 @@ while (!$end) {
 	    foreach my $model (&Task::get_used_models($list->get_list_id())) {		
 		$used_list_models{$model} = 1; 
 	    }	    
-	    do_log('trace',"creating list task using models");my $tt= 0;
+	    do_log('debug3',"creating list task using models");my $tt= 0;
 
 	    foreach my $model (@list_models) {
 		unless ($used_list_models{$model}) {
@@ -322,21 +321,19 @@ while (!$end) {
 				     ($list->{'admin'}{'status'} eq 'open'));
 
 			create ($current_date, 'INIT', $model, 'ttl', \%data);
-			do_log('trace',"sync_include task ceration done");$tt++;
+			do_log('debug3',"sync_include task ceration done");$tt++;
 			
 		    }elsif (defined $list->{'admin'}{$model_task_parameter} && 
 			    defined $list->{'admin'}{$model_task_parameter}{'name'} &&
 			    ($list->{'admin'}{'status'} eq 'open')) {
 			
 			create ($current_date, '', $model, $list->{'admin'}{$model_task_parameter}{'name'}, \%data);
-			do_log('trace',"not sync_include task created");$tt++;
+			$tt++;
 		    }
 		}
 	    }
-	    do_log('trace',"creating list task using models finished %d",$tt);
 	}
     }
-    do_log('trace',"apres le traitement par liste");
     ## Execute existing tasks
     ## List all tasks
     unless (&Task::list_tasks($spool_task)) {
@@ -347,12 +344,9 @@ while (!$end) {
 
     ## processing of tasks anterior to the current date
     &do_log ('debug3', 'processing of tasks anterior to the current date');
-    &do_log ('trace', 'processing of tasks anterior to the current date');
     foreach my $task ( &Task::get_task_list() ) {
 	
 	last if $end;
-	do_log('trace',"task date $task->{'date'} / $current_date") ;
-	do_log('trace',"trouve une tache pour plus tard")  if ($task->{'date'} > $current_date) ;
 	
 	last unless ($task->{'date'} < $current_date);
 	if ($task->{'object'} ne '_global') { # list task
@@ -408,7 +402,6 @@ sub create {
     my $Rdata         = shift;
 
     &do_log ('debug', "create task date: $date label: $label model: $model model_choice: $model_choice Rdata :$Rdata");
-    &do_log ('trace', "create task date: $date label: $label model: $model model_choice: $model_choice Rdata :$Rdata");
 
     my $list_name;
     my $robot;
@@ -463,7 +456,6 @@ sub create {
 	&do_log ('notice', "Ignoring creation task request") ;
 	return undef;
     }
-    do_log('trace',"task is accetable, store it in spool");
     # task is accetable, store it in spool
     my $taskspool = new Sympaspool('task');
     my %meta;
@@ -481,7 +473,7 @@ sub create {
     #my $dump = &Dumper($task_as_string); open (DUMP,">>/tmp/dumper"); printf DUMP 'DUMP\n%s',$dump ; close DUMP; 
     #my $dump = &Dumper(\%meta); open (DUMP,">>/tmp/dumper"); printf DUMP '%s\n',$dump ; close DUMP; 
 
-    &do_log ('trace', "task creation done  date: $date label: $label model: $model  model_choice: $model_choice, Rdata :$Rdata");
+    &do_log ('debug3', "task creation done  date: $date label: $label model: $model  model_choice: $model_choice, Rdata :$Rdata");
     $taskspool->store($task_as_string,\%meta);
     return 1;
 }
@@ -508,8 +500,6 @@ sub check {
 
 
 	chomp $line;
-	do_log('trace',"line %D : %s",$lnb,$line);
-
 	$lnb++;
 
 	next if ( $line =~ /^\s*\#/ ); 
@@ -729,7 +719,6 @@ sub execute {
     foreach my $line (@tasklines){
 	chomp $line;
 	$lnb++;
-	do_log('trace',"process line $line ($lnb)");
 	unless ($labelfound ) {
 	    chk_line ($line, \%result);
 	    if ($result{'label'} eq $label) { 
@@ -745,14 +734,12 @@ sub execute {
 	
 	# processing of the assignments
 	if ($result{'nature'} eq 'assignment') {
-	    do_log('trace',"process cas assignement");
 	    $status = $vars{$result{'var'}} = &cmd_process ($result{'command'}, $result{'Rarguments'}, $task, \%vars, $lnb);
 	    last unless defined($status);
 	}
 	
 	# processing of the commands
 	if ($result{'nature'} eq 'command') {
-	    do_log('trace',"process cas command");
 	    $status = &cmd_process ($result{'command'}, $result{'Rarguments'}, $task, \%vars, $lnb);
 	    last unless (defined($status) && $status >= 0);
 	}
@@ -783,7 +770,6 @@ sub cmd_process {
     my $taskasstring = $task->{'taskasstring'};
 
     &do_log('debug2', 'cmd_process(%s, %d)', $command, $lnb);
-    &do_log('trace', 'cmd_process(%s, %d)', $command, $lnb);
 
      # building of %context
     my %context = ('line_number' => $lnb);

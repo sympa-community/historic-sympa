@@ -221,7 +221,6 @@ while (!$end) {
 	    next;
 	}
 	my $listadress = $item->{'list'}.'@'.$item->{'robot'}	;
-	do_log('trace',"listasress $listadress");
 
 	my $arclistdir = $listadress.'.'.$yyyymm;
 	my $arcpath = "$wwsconf->{'arc_path'}/$listadress/$yyyymm";
@@ -411,7 +410,6 @@ sub remove {
     my $msgid = shift;
 
     do_log ('debug',"remove ($adrlist, $msgid)");
-    do_log ('trace',"yep remove ($adrlist, $msgid)");
     my $arc ;
 
     if ($adrlist =~ /^(.*)\.(\d{4}-\d{2})$/) {
@@ -721,7 +719,7 @@ sub mail2arc {
     my $listname = $message_in_spool->{'list'};
     my $robot = $message_in_spool->{'robot'};
     my ($yyyy, $mm, $dd, $hh, $min, $ss) = @_;
-    my $txtdate = &tools::epoch2yyyymmjj_hhmmss ($message_in_spool->{'date'}); do_log('trace',"epoch2yyyymmjj_hhmmss (%s) = %s", $message_in_spool->{'date'},$tracedate); 
+    my $txtdate = &tools::epoch2yyyymmjj_hhmmss ($message_in_spool->{'date'});
     if ($txtdate =~ /(\d\d\d\d)\-(\d\d)\-(\d\d)\s*(\d\d)\:(\d\d)/){
 	$yyyy = $1; $mm = $2; $dd = $3; $hh = $4; $min = $5; $ss = $6;
     }else{

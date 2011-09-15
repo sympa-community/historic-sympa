@@ -147,7 +147,7 @@ sub mail_file {
 	my $output;
 	my @path = split /\//, $filename;	   
 	&Language::PushLang($data->{'lang'}) if (defined $data->{'lang'});
-	my $dump = &Dumper($data); open (DUMP,">>/tmp/dumper2"); printf DUMP 'avant tt2 \n%s',$dump ; close DUMP; do_log('trace',"dumper");
+	my $dump = &Dumper($data); open (DUMP,">>/tmp/dumper2"); printf DUMP 'avant tt2 \n%s',$dump ; close DUMP;
 	&tt2::parse_tt2($data, $path[$#path], \$output);
 	&Language::PopLang() if (defined $data->{'lang'});
 	$message_as_string .= join('',$output);
@@ -255,24 +255,18 @@ sub mail_file {
     ## All these data provide mail attachements in service messages
     my @msgs = ();
     if (ref($data->{'msg_list'}) eq 'ARRAY') {
-	do_log('trace'," map");
 	@msgs = map {$_->{'msg'} || $_->{'full_msg'}} @{$data->{'msg_list'}};
     } elsif ($data->{'spool'}) {
-	do_log('trace'," spool");
 	@msgs = @{$data->{'spool'}};
     } elsif ($data->{'msg'}) {
-	do_log('trace'," msg");
 	push @msgs, $data->{'msg'};
     } elsif ($data->{'msg_path'} and open IN, '<'.$data->{'msg_path'}) {
-	do_log('trace'," msg_path");
 	push @msgs, join('', <IN>);
 	close IN;
     } elsif ($data->{'file'} and open IN, '<'.$data->{'file'}) {
-	do_log('trace',"file");
 	push @msgs, join('', <IN>);
 	close IN;
     }
-    else{do_log('trace',"pas d'attachement");}
 
     my $listname = ''; 
     if (ref($data->{'list'}) eq "HASH") {
@@ -280,12 +274,11 @@ sub mail_file {
     } elsif ($data->{'list'}) {
 	$listname = $data->{'list'};
     }
-    my $dump = &Dumper($message_as_string); open (DUMP,">>/tmp/dumper2"); printf DUMP 'avant \n%s',$dump ; close DUMP; do_log('trace',"dumper");
 
     unless ($message_as_string = &reformat_message("$headers"."$message_as_string", \@msgs, $data->{'charset'})) {
     	&do_log('err', "mail::mail_file: Failed to reformat message");
     }
-    my $dump = &Dumper($message_as_string); open (DUMP,">>/tmp/dumper2"); printf DUMP 'avant \n%s',$dump ; close DUMP; do_log('trace',"dumper");
+    my $dump = &Dumper($message_as_string); open (DUMP,">>/tmp/dumper2"); printf DUMP 'avant \n%s',$dump ; close DUMP;
 
     ## Set it in case it was not set
     $data->{'return_path'} ||= &Conf::get_robot_conf($robot, 'request');
@@ -354,7 +347,6 @@ sub mail_message {
 	$msg_body = ${$message->{'msg_as_string'}}; # why is object message msg_as_string contain a body _as_string ? wrong name for this mesage property	
     }else{
 	## Get body from original message body
-	# my $dump = &Dumper($message->{'msg_as_string'}); open (DUMP,">>/tmp/dumper"); printf DUMP 'dump avant speration des entetes \n%s',$dump ; close DUMP; do_log('trace',"dumper");
 
 	my @bodysection =split("\n\n",$message->{'msg_as_string'});  # convert it as a tab with headers as first element
 	shift @bodysection;                                          # remove headers
@@ -951,8 +943,6 @@ sub reformat_message($;$$) {
 	    return undef;
 	}
     }
-    my $dump = &Dumper($message); open (DUMP,">>/tmp/dumper2"); printf DUMP 'reformat message \n%s',$dump ; close DUMP; do_log('trace',"dumper");
-    my $dump = &Dumper($attachments); open (DUMP,">>/tmp/dumper2"); printf DUMP 'reformat attachements \n%s',$dump ; close DUMP; do_log('trace',"dumper");
     $msg->head->delete("X-Mailer");
     $msg = &fix_part($msg, $parser, $attachments, $defcharset);
     $msg->head->add("X-Mailer", sprintf "Sympa %s", Sympa::Constants::VERSION);
@@ -966,30 +956,24 @@ sub fix_part($$$$) {
     my $defcharset = shift;
     return $part unless $part;
 
-    my $dump = &Dumper($part); open (DUMP,">>/tmp/dumper2"); printf DUMP 'fix part  part \n%s',$dump ; close DUMP; do_log('trace',"dumper");
     my $enc = $part->head->mime_attr("Content-Transfer-Encoding");
     # Parts with nonstandard encodings aren't modified.
 
     if ($enc and $enc !~ /^(?:base64|quoted-printable|[78]bit|binary)$/i) {
-	do_log('trace'," return unkown part encoding");	open (DUMP,">>/tmp/dumper2"); printf DUMP 'unknown part encoding\n'; close DUMP;  
 	return $part;
     }
-    else{open (DUMP,">>/tmp/dumper2"); printf DUMP 'fix part bon encodage \n'; close DUMP; do_log('trace',"dumper");   }
     my $eff_type = $part->effective_type;
     
     if ($eff_type =~ m{^multipart/(signed|encrypted)$}){
-	do_log('trace',"signed/encrypted");
 	return $part;
     }
     
     if ($part->head->get('X-Sympa-Attach')) { # Need re-attaching data.
 	
 	my $data = shift @{$attachments};
-	my $dump = &Dumper($data); open (DUMP,">>/tmp/dumper2"); printf DUMP 'data = shift attachement \n%s',$dump ; close DUMP; do_log('trace',"dumper");
 	if (ref($data) ne 'MIME::Entity') {
 	    eval {
 		$data = $parser->parse_data($data);
-		my $dump = &Dumper($data); open (DUMP,">>/tmp/dumper2"); printf DUMP 'data = parser parse_date(data) \n%s',$dump ; close DUMP; do_log('trace',"dumper");
 	    };
 	    if ($@) {
 		&do_log('notice',"mail::reformat_message: Failed to parse MIME data");
@@ -998,17 +982,13 @@ sub fix_part($$$$) {
 	}
 	$part->head->delete('X-Sympa-Attach');
 	$part->parts([$data]);
-	my $dump = &Dumper($part); open (DUMP,">>/tmp/dumper2"); printf DUMP 'part apres delelete de x-sympa-attach\n%s',$dump ; close DUMP; do_log('trace',"dumper");
     } elsif ($part->parts) {
-	do_log('trace'," data a pas de attach mais a des part");
-	
 	my @newparts = ();
 	foreach ($part->parts) {
 	    push @newparts, &fix_part($_, $parser, $attachments, $defcharset);
 	}
 	$part->parts(\@newparts);
     } elsif ($eff_type =~ m{^(?:multipart|message)(?:/|\Z)}i) {
-	do_log('trace',"eff_type ni  multipart ni  message");
 	# multipart or message types without subparts.
 	
 	return $part;
@@ -1059,7 +1039,6 @@ sub fix_part($$$$) {
 			       $part->suggest_encoding);
 	$part->sync_headers(Length => 'COMPUTE');
     }
-    do_log('trace',"sortie en fin");
     return $part;
 }
 

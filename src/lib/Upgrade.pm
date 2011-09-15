@@ -711,7 +711,7 @@ sub upgrade {
 	foreach my $spoolparameter (keys %spools_def ){
 	    next if ($spoolparameter eq 'queuetask'); # task is to be done later
 	    
-	    my $spooldir = $Conf::Conf{$spoolparameter};do_log('trace',"perfom task later");
+	    my $spooldir = $Conf::Conf{$spoolparameter};
 	    
 	    unless (-d $spooldir){
 		do_log('info',"Could not perform migration of spool %s because it is not a directory", $spoolparameter);
