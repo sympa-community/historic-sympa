@@ -5013,11 +5013,13 @@ sub insert_delete_exclusion {
     my $robot = shift;
     my $action = shift;
     &do_log('info', 'List::insert_delete_exclusion("%s", "%s", "%s", "%s")', $email, $list, $robot, $action);
-
+    
+	my $r = 1;
     ## Check database connection
     unless ($dbh and $dbh->ping) {
 	return undef unless &db_connect();
     }
+    
     my $statement;
     if($action eq 'insert'){
 	## INSERT only if $user->{'included'} eq '1'
@@ -5049,13 +5051,14 @@ sub insert_delete_exclusion {
 	    push @users_excluded, $data_excluded->{'emails'}->[$key];
 	    $key = $key + 1;
 	}
-
+	
+	$r = 0;
 	foreach my $users (@users_excluded) {
 	    if($email eq $users){
 		## Delete : list, user and date
 		$statement = sprintf "DELETE FROM exclusion_table WHERE (list_exclusion = %s AND user_exclusion = %s)",	$dbh->quote($list), $dbh->quote($email);
 
-		unless ($dbh->do($statement)) {
+		unless ($r = $dbh->do($statement)) {
 		    &do_log('err','Unable to execute SQL statement "%s" : %s', $statement, $dbh->errstr);
 		    return undef;
 		}
@@ -5066,8 +5069,7 @@ sub insert_delete_exclusion {
 	&do_log('err','You must choose an action');
 	return undef;
     }
-   
-    return 1;
+    return $r;
 }
 
 ######################################################################
@@ -6994,22 +6996,25 @@ sub add_user {
 	my $who = &tools::clean_email($new_user->{'email'});
 	next unless $who;
 	
-	# Delete from exclusion_table if new_user is in.
-	&insert_delete_exclusion($who, $name, $self->{'domain'}, 'delete');
-
+	# Delete from exclusion_table and force a sync_include if new_user was excluded
+	if(&insert_delete_exclusion($who, $name, $self->{'domain'}, 'delete')) {
+		$self->sync_include();
+		next if($self->is_user($who));
+	}
+	
 	$new_user->{'date'} ||= time;
 	$new_user->{'update_date'} ||= $new_user->{'date'};
 	
 	my %custom_attr = %{ $subscriptions->{$who}{'custom_attribute'} } if (defined $subscriptions->{$who}{'custom_attribute'} );
 	$new_user->{'custom_attribute'} ||= &createXMLCustomAttribute(\%custom_attr) ;
 	do_log('debug2', 'List::add_user custom_attribute = %s', $new_user->{'custom_attribute'});
-
+	
 	my $date_field = sprintf $date_format{'write'}{$Conf::Conf{'db_type'}}, $new_user->{'date'}, $new_user->{'date'};
 	my $update_field = sprintf $date_format{'write'}{$Conf::Conf{'db_type'}}, $new_user->{'update_date'}, $new_user->{'update_date'};
 	
 	## Crypt password if it was not crypted
 	unless ($new_user->{'password'} =~ /^crypt/) {
-	    $new_user->{'password'} = &tools::crypt_password($new_user->{'password'});
+		$new_user->{'password'} = &tools::crypt_password($new_user->{'password'});
 	}
 	
 	$list_cache{'is_user'}{$self->{'domain'}}{$name}{$who} = undef;
@@ -7019,20 +7024,20 @@ sub add_user {
 	## Either is_included or is_subscribed must be set
 	## default is is_subscriber for backward compatibility reason
 	unless ($new_user->{'included'}) {
-	    $new_user->{'subscribed'} = 1;
+		$new_user->{'subscribed'} = 1;
 	}
 	
 	unless ($new_user->{'included'}) {
-	    ## Is the email in user table?
-	    if (! is_user_db($who)) {
+		## Is the email in user table?
+		if (! is_user_db($who)) {
 		## Insert in User Table
 		$statement = sprintf "INSERT INTO user_table (email_user, gecos_user, lang_user, password_user) VALUES (%s,%s,%s,%s)",$dbh->quote($who), $dbh->quote($new_user->{'gecos'}), $dbh->quote($new_user->{'lang'}), $dbh->quote($new_user->{'password'});
 		
 		unless ($dbh->do($statement)) {
-		    do_log('err','Unable to execute SQL statement "%s" : %s', $statement, $dbh->errstr);
-		    next;
+			do_log('err','Unable to execute SQL statement "%s" : %s', $statement, $dbh->errstr);
+			next;
 		}
-	    }
+		}
 	}	    
 	
 	$new_user->{'subscribed'} ||= 0;
@@ -7058,8 +7063,8 @@ sub add_user {
 	$dbh->quote($new_user->{'enddate'});
 	
 	unless ($dbh->do($statement)) {
-	    do_log('err','Unable to execute SQL statement "%s" : %s', $statement, $dbh->errstr);
-	    next;
+		do_log('err','Unable to execute SQL statement "%s" : %s', $statement, $dbh->errstr);
+		next;
 	}
 	$total++;
     }
