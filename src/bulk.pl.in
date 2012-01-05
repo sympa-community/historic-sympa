@@ -267,7 +267,7 @@ while (!$end) {
 	    foreach $rcpt (@rcpts) {
 		my $return_path = $bulk->{'returnpath'};
 		if ($bulk->{'verp'}) {
-		    my $return_path = $rcpt;
+		    $return_path = $rcpt;
 		    $return_path =~ s/\@/\=\=a\=\=/; 
 		    $return_path = "$Conf::Conf{'bounce_email_prefix'}+$return_path\=\=$bulk->{'listname'}\@$bulk->{'robot'}"; 
 		}
