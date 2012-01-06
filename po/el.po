@@ -11,10 +11,10 @@ msgstr ""
 "PO-Revision-Date: 2011-10-04 15:21+0200\n"
 "Last-Translator: tdrakop <tdrakop@sch.gr>\n"
 "Language-Team: Greek, Modern (1453-) <el@li.org>\n"
-"Language: el\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+"Language: el\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "X-Generator: Pootle 2.1.2\n"
 "X-Rosetta-Version: 0.1\n"
@@ -5179,7 +5179,8 @@ msgstr ""
 
 #: ../mail_tt2/authorization_reject.tt2:28
 msgid "List creation is restricted to local domain users."
-msgstr "Η δημιουργία λίστας επιτρέπεται μόνο σε τοπικούς(local domain) χρήστες."
+msgstr ""
+"Η δημιουργία λίστας επιτρέπεται μόνο σε τοπικούς(local domain) χρήστες."
 
 #: ../mail_tt2/authorization_reject.tt2:31
 #, fuzzy
@@ -5734,7 +5735,7 @@ msgid "%1 Digest %2"
 msgstr "%1 Επισκόπηση %2"
 
 #: ../mail_tt2/digest.tt2:10 ../mail_tt2/digest_plain.tt2:9
-#: ../mail_tt2/get_archive.tt2:9 ../src/lib/List.pm:2800
+#: ../mail_tt2/get_archive.tt2:9 ../src/lib/List.pm:2801
 msgid "Table of contents:"
 msgstr "Πίνακας περιεχομένων:"
 
@@ -8744,7 +8745,7 @@ msgstr "Σφάλμα στη γραμμή %d : %s"
 #. This entry is a date/time format
 #. Check the strftime manpage for format details : http://docs.freebsd.org/info/gawk/gawk.info.Time_Functions.html
 #: ../src/lib/Family.pm:2591 ../src/lib/Family.pm:388 ../src/lib/Family.pm:665
-#: ../src/lib/List.pm:1893 ../wwsympa/Auth.pm:459
+#: ../src/lib/List.pm:1894 ../wwsympa/Auth.pm:459
 #: ../wwsympa/wwsympa.fcgi.in:1067 ../wwsympa/wwsympa.fcgi.in:2870
 msgid "%d %b %Y at %H:%M:%S"
 msgstr ""
@@ -9456,19 +9457,19 @@ msgstr ""
 
 #. This entry is a date/time format
 #. Check the strftime manpage for format details : http://docs.freebsd.org/info/gawk/gawk.info.Time_Functions.html
-#: ../src/lib/List.pm:2918
+#: ../src/lib/List.pm:2919
 msgid "%a, %d %b %Y %H:%M:%S"
 msgstr ""
 
 #. This entry is a date/time format
 #. Check the strftime manpage for format details : http://docs.freebsd.org/info/gawk/gawk.info.Time_Functions.html
-#: ../src/lib/List.pm:2919
+#: ../src/lib/List.pm:2920
 msgid "%a, %d %b %Y"
 msgstr ""
 
 #. This entry is a date/time format
 #. Check the strftime manpage for format details : http://docs.freebsd.org/info/gawk/gawk.info.Time_Functions.html
-#: ../src/lib/List.pm:3110 ../src/lib/List.pm:3111 ../src/lib/List.pm:3115
+#: ../src/lib/List.pm:3111 ../src/lib/List.pm:3112 ../src/lib/List.pm:3116
 #: ../wwsympa/wwsympa.fcgi.in:11017 ../wwsympa/wwsympa.fcgi.in:11086
 #: ../wwsympa/wwsympa.fcgi.in:11288 ../wwsympa/wwsympa.fcgi.in:11635
 #: ../wwsympa/wwsympa.fcgi.in:15086 ../wwsympa/wwsympa.fcgi.in:15093

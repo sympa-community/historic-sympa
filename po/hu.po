@@ -3279,8 +3279,8 @@ msgid ""
 "will also be updated."
 msgstr ""
 "Itt megváltoztathatja az email címét, mégpedig egyszerre, az összes listára "
-"vonatkozóan. Címváltoztatás esetén a tulajdonosi és a szerkesztői jogkörök is "
-"az új email címhez kerülnek át."
+"vonatkozóan. Címváltoztatás esetén a tulajdonosi és a szerkesztői jogkörök "
+"is az új email címhez kerülnek át."
 
 #: ../web_tt2/pref.tt2:31
 msgid "New email address:"
@@ -5609,7 +5609,7 @@ msgid "%1 Digest %2"
 msgstr "%1 Kivonat %2"
 
 #: ../mail_tt2/digest.tt2:10 ../mail_tt2/digest_plain.tt2:9
-#: ../mail_tt2/get_archive.tt2:9 ../src/lib/List.pm:2800
+#: ../mail_tt2/get_archive.tt2:9 ../src/lib/List.pm:2801
 msgid "Table of contents:"
 msgstr "Tartalomjegyzék:"
 
@@ -7893,8 +7893,8 @@ msgid ""
 "manager\n"
 "was unable to access your personal certificate (email %1)."
 msgstr ""
-"A levelezőlista-kezelő nem tudta továbbítani Önnek a levelet, mert nem "
-"tudta elérni a személyes tanúsítványát (email: %1)."
+"A levelezőlista-kezelő nem tudta továbbítani Önnek a levelet, mert nem tudta "
+"elérni a személyes tanúsítványát (email: %1)."
 
 #. (conf.email,conf.host)
 #: ../mail_tt2/x509-user-cert-missing.tt2:10
@@ -8620,7 +8620,7 @@ msgstr "Hiba a(z) %d sorban: %s"
 #. This entry is a date/time format
 #. Check the strftime manpage for format details : http://docs.freebsd.org/info/gawk/gawk.info.Time_Functions.html
 #: ../src/lib/Family.pm:2591 ../src/lib/Family.pm:388 ../src/lib/Family.pm:665
-#: ../src/lib/List.pm:1893 ../wwsympa/Auth.pm:459
+#: ../src/lib/List.pm:1894 ../wwsympa/Auth.pm:459
 #: ../wwsympa/wwsympa.fcgi.in:1067 ../wwsympa/wwsympa.fcgi.in:2870
 msgid "%d %b %Y at %H:%M:%S"
 msgstr "%Y. %b. %-d., %H.%M.%S"
@@ -9432,19 +9432,19 @@ msgstr "ki frissítette a beállításokat"
 
 #. This entry is a date/time format
 #. Check the strftime manpage for format details : http://docs.freebsd.org/info/gawk/gawk.info.Time_Functions.html
-#: ../src/lib/List.pm:2918
+#: ../src/lib/List.pm:2919
 msgid "%a, %d %b %Y %H:%M:%S"
 msgstr "%Y. %b. %-d., %A, %H.%M.%S"
 
 #. This entry is a date/time format
 #. Check the strftime manpage for format details : http://docs.freebsd.org/info/gawk/gawk.info.Time_Functions.html
-#: ../src/lib/List.pm:2919
+#: ../src/lib/List.pm:2920
 msgid "%a, %d %b %Y"
 msgstr "%Y. %b. %-d., %A"
 
 #. This entry is a date/time format
 #. Check the strftime manpage for format details : http://docs.freebsd.org/info/gawk/gawk.info.Time_Functions.html
-#: ../src/lib/List.pm:3110 ../src/lib/List.pm:3111 ../src/lib/List.pm:3115
+#: ../src/lib/List.pm:3111 ../src/lib/List.pm:3112 ../src/lib/List.pm:3116
 #: ../wwsympa/wwsympa.fcgi.in:11017 ../wwsympa/wwsympa.fcgi.in:11086
 #: ../wwsympa/wwsympa.fcgi.in:11288 ../wwsympa/wwsympa.fcgi.in:11635
 #: ../wwsympa/wwsympa.fcgi.in:15086 ../wwsympa/wwsympa.fcgi.in:15093

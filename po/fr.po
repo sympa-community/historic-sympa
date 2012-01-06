@@ -4,10 +4,10 @@ msgstr ""
 "PO-Revision-Date: 2011-09-05 16:00+0200\n"
 "Last-Translator: Anonymous Pootle User\n"
 "Language-Team: Français\n"
-"Language: fr\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+"Language: fr\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
 "X-Generator: Pootle 2.1.2\n"
 "Projct-Id-Version: fr\n"
@@ -5670,7 +5670,7 @@ msgid "%1 Digest %2"
 msgstr "Compilation du %2, liste %1"
 
 #: ../mail_tt2/digest.tt2:10 ../mail_tt2/digest_plain.tt2:9
-#: ../mail_tt2/get_archive.tt2:9 ../src/lib/List.pm:2800
+#: ../mail_tt2/get_archive.tt2:9 ../src/lib/List.pm:2801
 msgid "Table of contents:"
 msgstr "Sommaire :"
 
@@ -8715,7 +8715,7 @@ msgstr "Erreur ligne %d : %s"
 #. This entry is a date/time format
 #. Check the strftime manpage for format details : http://docs.freebsd.org/info/gawk/gawk.info.Time_Functions.html
 #: ../src/lib/Family.pm:2591 ../src/lib/Family.pm:388 ../src/lib/Family.pm:665
-#: ../src/lib/List.pm:1893 ../wwsympa/Auth.pm:459
+#: ../src/lib/List.pm:1894 ../wwsympa/Auth.pm:459
 #: ../wwsympa/wwsympa.fcgi.in:1067 ../wwsympa/wwsympa.fcgi.in:2870
 msgid "%d %b %Y at %H:%M:%S"
 msgstr "%d %b %Y at %H:%M:%S"
@@ -9531,19 +9531,19 @@ msgstr "qui a mis à jour le fichier de configuration"
 
 #. This entry is a date/time format
 #. Check the strftime manpage for format details : http://docs.freebsd.org/info/gawk/gawk.info.Time_Functions.html
-#: ../src/lib/List.pm:2918
+#: ../src/lib/List.pm:2919
 msgid "%a, %d %b %Y %H:%M:%S"
 msgstr "%a, %d %b %Y %H:%M:%S"
 
 #. This entry is a date/time format
 #. Check the strftime manpage for format details : http://docs.freebsd.org/info/gawk/gawk.info.Time_Functions.html
-#: ../src/lib/List.pm:2919
+#: ../src/lib/List.pm:2920
 msgid "%a, %d %b %Y"
 msgstr "%a, %d %b %Y"
 
 #. This entry is a date/time format
 #. Check the strftime manpage for format details : http://docs.freebsd.org/info/gawk/gawk.info.Time_Functions.html
-#: ../src/lib/List.pm:3110 ../src/lib/List.pm:3111 ../src/lib/List.pm:3115
+#: ../src/lib/List.pm:3111 ../src/lib/List.pm:3112 ../src/lib/List.pm:3116
 #: ../wwsympa/wwsympa.fcgi.in:11017 ../wwsympa/wwsympa.fcgi.in:11086
 #: ../wwsympa/wwsympa.fcgi.in:11288 ../wwsympa/wwsympa.fcgi.in:11635
 #: ../wwsympa/wwsympa.fcgi.in:15086 ../wwsympa/wwsympa.fcgi.in:15093
@@ -9967,28 +9967,6 @@ msgstr ""
 msgid "Javascript excerpt that enables and configures the WYSIWYG HTML editor."
 msgstr ""
 
-#: ../src/lib/confdef.pm:1517
-msgid ""
-"Messages are supposed to be filtered by an antispam that add one more "
-"headers to messages. This parameter is used to select a special scenario in "
-"order to decide the message spam status: ham, spam or unsure. This parameter "
-"replace antispam_tag_header_name, antispam_tag_header_spam_regexp and "
-"antispam_tag_header_ham_regexp."
-msgstr ""
-"Les messages sont supposés être filtrés par un moteur antispam qui ajoute un "
-"ou plusieurs entêtes aux messages. Ce paramètre est utilisé pour "
-"sélectionner un scenario particulier dans le but de décider du status du "
-"spam : ham, spam ou unsure. Ce paramètre remplace antispam_tag_header_name, "
-"antispam_tag_header_spam_regexp et antispam_tag_header_ham_regexp."
-
-#: ../src/lib/confdef.pm:1525
-msgid "Directory containing user certificates"
-msgstr "Répertoire contenant les certificats utilisateurs"
-
-#: ../src/lib/confdef.pm:1531
-msgid "File containing task_manager PID while running"
-msgstr "Fichier contenant le PID du task_manager en cours d’exécution"
-
 #: ../src/lib/confdef.pm:1536
 msgid ""
 "Default number of lines of the array displaying the log entries in the logs "
@@ -10007,21 +9985,38 @@ msgstr ""
 msgid "[% confparam.query %]"
 msgstr ""
 
-#: ../src/lib/confdef.pm:43
-msgid "Directories and file location"
-msgstr "Répertoires et emplacement du fichier"
-
-#: ../src/lib/confdef.pm:234
-msgid "Syslog"
-msgstr "Syslog"
-
 #: ../src/lib/confdef.pm:260
 msgid "Log intensity"
 msgstr ""
 
-#: ../src/lib/confdef.pm:662
-msgid "Plugin"
-msgstr "Greffon "
+#~ msgid ""
+#~ "Messages are supposed to be filtered by an antispam that add one more "
+#~ "headers to messages. This parameter is used to select a special scenario "
+#~ "in order to decide the message spam status: ham, spam or unsure. This "
+#~ "parameter replace antispam_tag_header_name, "
+#~ "antispam_tag_header_spam_regexp and antispam_tag_header_ham_regexp."
+#~ msgstr ""
+#~ "Les messages sont supposés être filtrés par un moteur antispam qui ajoute "
+#~ "un ou plusieurs entêtes aux messages. Ce paramètre est utilisé pour "
+#~ "sélectionner un scenario particulier dans le but de décider du status du "
+#~ "spam : ham, spam ou unsure. Ce paramètre remplace "
+#~ "antispam_tag_header_name, antispam_tag_header_spam_regexp et "
+#~ "antispam_tag_header_ham_regexp."
+
+#~ msgid "Directory containing user certificates"
+#~ msgstr "Répertoire contenant les certificats utilisateurs"
+
+#~ msgid "File containing task_manager PID while running"
+#~ msgstr "Fichier contenant le PID du task_manager en cours d’exécution"
+
+#~ msgid "Directories and file location"
+#~ msgstr "Répertoires et emplacement du fichier"
+
+#~ msgid "Syslog"
+#~ msgstr "Syslog"
+
+#~ msgid "Plugin"
+#~ msgstr "Greffon "
 
 #~ msgid ""
 #~ "You <span style=\"font-weight: bold; font-size: 10px\">are</span> "

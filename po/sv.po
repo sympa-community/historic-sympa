@@ -12,10 +12,10 @@ msgstr ""
 "PO-Revision-Date: 2011-10-24 11:10+0200\n"
 "Last-Translator: Pontus Freyhult <pontus_sympa_pootle@soua.net>\n"
 "Language-Team: Svenska <sv@li.org>\n"
-"Language: sv\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+"Language: sv\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "X-Generator: Pootle 2.1.2\n"
 "X-Rosetta-Version: 0.1\n"
@@ -5469,7 +5469,7 @@ msgid "%1 Digest %2"
 msgstr "%1 Samlingsbrev %2"
 
 #: ../mail_tt2/digest.tt2:10 ../mail_tt2/digest_plain.tt2:9
-#: ../mail_tt2/get_archive.tt2:9 ../src/lib/List.pm:2800
+#: ../mail_tt2/get_archive.tt2:9 ../src/lib/List.pm:2801
 msgid "Table of contents:"
 msgstr "Innehållsförteckning:"
 
@@ -7494,8 +7494,7 @@ msgid ""
 msgstr ""
 "För att slutföra din kontokonfigurering måste du bekräfta att du har en "
 "fungerande\n"
-"e-postadress. Klicka på länken nedan för att slutföra din "
-"kontokonfigurering."
+"e-postadress. Klicka på länken nedan för att slutföra din kontokonfigurering."
 
 #. (list.name)
 #: ../mail_tt2/stats_report.tt2:4
@@ -8421,7 +8420,7 @@ msgstr "Fel på rad %d: %s"
 #. This entry is a date/time format
 #. Check the strftime manpage for format details : http://docs.freebsd.org/info/gawk/gawk.info.Time_Functions.html
 #: ../src/lib/Family.pm:2591 ../src/lib/Family.pm:388 ../src/lib/Family.pm:665
-#: ../src/lib/List.pm:1893 ../wwsympa/Auth.pm:459
+#: ../src/lib/List.pm:1894 ../wwsympa/Auth.pm:459
 #: ../wwsympa/wwsympa.fcgi.in:1067 ../wwsympa/wwsympa.fcgi.in:2870
 msgid "%d %b %Y at %H:%M:%S"
 msgstr "%d %b %Y klockan %H:%M:%S"
@@ -9117,19 +9116,19 @@ msgstr "vem uppdaterade konfigurationen"
 # Should we use swedish typography?
 #. This entry is a date/time format
 #. Check the strftime manpage for format details : http://docs.freebsd.org/info/gawk/gawk.info.Time_Functions.html
-#: ../src/lib/List.pm:2918
+#: ../src/lib/List.pm:2919
 msgid "%a, %d %b %Y %H:%M:%S"
 msgstr "%a, %d %b %Y %H:%M:%S"
 
 #. This entry is a date/time format
 #. Check the strftime manpage for format details : http://docs.freebsd.org/info/gawk/gawk.info.Time_Functions.html
-#: ../src/lib/List.pm:2919
+#: ../src/lib/List.pm:2920
 msgid "%a, %d %b %Y"
 msgstr "%a, %d %b %Y"
 
 #. This entry is a date/time format
 #. Check the strftime manpage for format details : http://docs.freebsd.org/info/gawk/gawk.info.Time_Functions.html
-#: ../src/lib/List.pm:3110 ../src/lib/List.pm:3111 ../src/lib/List.pm:3115
+#: ../src/lib/List.pm:3111 ../src/lib/List.pm:3112 ../src/lib/List.pm:3116
 #: ../wwsympa/wwsympa.fcgi.in:11017 ../wwsympa/wwsympa.fcgi.in:11086
 #: ../wwsympa/wwsympa.fcgi.in:11288 ../wwsympa/wwsympa.fcgi.in:11635
 #: ../wwsympa/wwsympa.fcgi.in:15086 ../wwsympa/wwsympa.fcgi.in:15093
@@ -9458,30 +9457,6 @@ msgstr "ingen e-post (användbar för semestrar)"
 #: ../wwsympa/wwslib.pm:37
 msgid "you do not receive your own posts"
 msgstr "dina egna postningar skickas inte till dig"
-
-#: ../web_tt2/list_menu.tt2:10
-msgid ""
-"You <span style=\"font-weight: bold; font-size: 10px\">are</span> subscribed"
-msgstr ""
-"Du <span style=\"font-weight: bold; font-size: 10px\">är</span> prenumerant"
-
-#: ../web_tt2/list_menu.tt2:21
-msgid ""
-"You <span style=\"font-weight: bold; font-size: 10px\">are not</span> "
-"subscribed"
-msgstr ""
-"Du <span style=\"font-weight: bold; font-size: 10px\">är inte</span> "
-"prenumerant"
-
-#: ../web_tt2/compose_mail.tt2:79
-#, fuzzy
-msgid "Select the source of your HTML newsletter"
-msgstr "Välj källan till ditt HTML-nyhetsbrev"
-
-#: ../web_tt2/compose_mail.tt2:85
-#, fuzzy
-msgid "OR"
-msgstr "ELLER"
 
 #: ../web_tt2/compose_mail.tt2:87
 msgid "<strong>Send an HTML file from your computer:"
@@ -10199,6 +10174,28 @@ msgstr ""
 #: ../src/lib/confdef.pm:260
 msgid "Log intensity"
 msgstr ""
+
+#~ msgid ""
+#~ "You <span style=\"font-weight: bold; font-size: 10px\">are</span> "
+#~ "subscribed"
+#~ msgstr ""
+#~ "Du <span style=\"font-weight: bold; font-size: 10px\">är</span> "
+#~ "prenumerant"
+
+#~ msgid ""
+#~ "You <span style=\"font-weight: bold; font-size: 10px\">are not</span> "
+#~ "subscribed"
+#~ msgstr ""
+#~ "Du <span style=\"font-weight: bold; font-size: 10px\">är inte</span> "
+#~ "prenumerant"
+
+#, fuzzy
+#~ msgid "Select the source of your HTML newsletter"
+#~ msgstr "Välj källan till ditt HTML-nyhetsbrev"
+
+#, fuzzy
+#~ msgid "OR"
+#~ msgstr "ELLER"
 
 #, fuzzy
 #~ msgid "Statistics"
