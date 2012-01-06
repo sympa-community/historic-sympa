@@ -1,20 +1,19 @@
-# SOME DESCRIPTIVE TITLE.
-# Copyright (C) YEAR Free Software Foundation, Inc.
-# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+# Copyright (C) 2011 Free Software Foundation, Inc.
 #
+# Laszlo Tornoci <torlasz@net.sote.hu>, 2011.
 msgid ""
 msgstr ""
 "Project-Id-Version: hu\n"
 "POT-Creation-Date: 2002-07-16 17:27+0800\n"
-"PO-Revision-Date: 2011-07-03 17:49+0200\n"
-"Last-Translator: Laszlo <torlasz@net.sote.hu>\n"
-"Language-Team: Magyar\n"
+"PO-Revision-Date: 2011-09-04 21:31+0200\n"
+"Last-Translator: Laszlo Tornoci <torlasz@net.sote.hu>\n"
+"Language-Team: Hungarian <kde-i18n-doc@kde.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Language: hu\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Pootle 2.1.2\n"
+"X-Generator: Lokalize 1.2\n"
 
 #: ../web_tt2/home.tt2:2
 msgid "Mailing lists server"
@@ -34,7 +33,7 @@ msgstr ""
 
 #: ../web_tt2/home.tt2:7
 msgid "Mailing lists categories"
-msgstr "Levelezési lista kategóriák"
+msgstr "Levelezőlista-kategóriák"
 
 #: ../web_tt2/home.tt2:17
 msgid "Others"
@@ -47,7 +46,7 @@ msgstr "RSS hírek"
 #. (user.email)
 #: ../web_tt2/login.tt2:3
 msgid "You have logged in with email address %1"
-msgstr "%1 e-mail címmel jelentkezett be"
+msgstr "%1 email címmel jelentkezett be"
 
 #: ../web_tt2/main.tt2:27
 msgid "RSS Latest messages"
@@ -224,11 +223,11 @@ msgstr "RSS"
 #: ../src/lib/List.pm:1325 ../web_tt2/list_menu.tt2:80
 #: ../web_tt2/list_menu.tt2:82
 msgid "Shared documents"
-msgstr "Megosztott dokumentumok"
+msgstr "Dokumentumtár"
 
 #: ../web_tt2/list_menu.tt2:88
 msgid "Review members"
-msgstr "Listatagok adatai"
+msgstr "A listatagok adatai"
 
 #: ../web_tt2/list_panel.tt2:7
 msgid "Closed list"
@@ -464,11 +463,11 @@ msgstr "Tárgy"
 
 #: ../web_tt2/add_request.tt2:7
 msgid "email1@dom1 Name1"
-msgstr "e-mail1@tartomány1 név1"
+msgstr "email1@tartomány1 név1"
 
 #: ../web_tt2/add_request.tt2:8
 msgid "email2@dom2 Name2"
-msgstr "e-mail2@tartomány2 név2"
+msgstr "email2@tartomány2 név2"
 
 #: ../web_tt2/add_request.tt2:12
 msgid "Add subscribers"
@@ -903,14 +902,14 @@ msgstr "Ellenőrizze a postaládáját!"
 
 #: ../web_tt2/change_email.tt2:3
 msgid "You will receive a n email, with a confirmation link."
-msgstr "Hamarosan kap egy e-mailt, benne a megerősítő linkkel."
+msgstr "Hamarosan kap egy emailt, benne a megerősítő linkkel."
 
 #: ../web_tt2/change_email.tt2:4
 msgid ""
 "To confirm your email address change, go to your email account and click on "
 "the provided link"
 msgstr ""
-"E-mail címe sikeres megváltoztatásához, kérem kattintson a kapott emailben "
+"Email címe sikeres megváltoztatásához, kérem kattintson a kapott emailben "
 "szereplő linkre."
 
 #: ../web_tt2/choosepasswd.tt2:4
@@ -978,12 +977,12 @@ msgstr "Tárgy:"
 # nlsref 16,72
 #: ../web_tt2/compose_mail.tt2:26
 msgid "Send to selected receipient"
-msgstr "Küldés a kiválasztott címekre"
+msgstr "Küldés a listára"
 
 # nlsref 15,6
 #: ../web_tt2/compose_mail.tt2:27
 msgid "Send to me"
-msgstr "Küldés saját címre"
+msgstr "Küldés saját magamnak"
 
 #: ../web_tt2/compose_mail.tt2:47 ../web_tt2/modindex.tt2:50
 #: ../web_tt2/viewmod.tt2:32
@@ -1150,7 +1149,7 @@ msgstr ""
 
 #: ../web_tt2/create_list_request.tt2:33
 msgid "the list name; be careful, not its address!"
-msgstr "A lista neve; figyelem, nem az e-mail címe!"
+msgstr "A lista neve; figyelem, nem az email címe!"
 
 #: ../web_tt2/create_list_request.tt2:34
 msgid "List name:"
@@ -1413,7 +1412,7 @@ msgstr "megnyit"
 
 #: ../web_tt2/d_read.tt2:47
 msgid "Listing of root folder"
-msgstr "Megosztott gyökérmappa tartalma"
+msgstr "A dokumentumtár kezdőmappájának tartalma"
 
 #: ../web_tt2/d_read.tt2:59 ../web_tt2/d_read.tt2:61
 #: ../web_tt2/latest_d_read.tt2:20 ../web_tt2/modindex.tt2:153
@@ -1500,7 +1499,7 @@ msgstr "Új könyvtár létrehozása a(z) %1 könyvtáron belül"
 
 #: ../web_tt2/d_read.tt2:316
 msgid "Create a new folder inside root folder"
-msgstr "Új könyvtár létrehozása a gyökérkönyvtáron belül"
+msgstr "Új mappa létrehozása a kezdőmappán belül"
 
 #: ../web_tt2/d_read.tt2:319
 msgid "Folder name"
@@ -1537,21 +1536,21 @@ msgstr "Hozzáad"
 #. (visible_path)
 #: ../web_tt2/d_read.tt2:366
 msgid "Upload a file inside folder %1"
-msgstr "Állomány feltöltése a(z) %1 könyvtárba"
+msgstr "Állomány feltöltése a(z) %1 mappába"
 
 # vajon tényleg MEGOSZTOTT lesz a könyvtár neve?
 #: ../web_tt2/d_read.tt2:368
 msgid "Upload a file inside folder SHARED"
-msgstr "Állomány feltöltése a MEGOSZTOTT könyvtárba"
+msgstr "Állomány feltöltése a dokumentumtárba"
 
 #. (visible_path)
 #: ../web_tt2/d_read.tt2:385
 msgid "Unzip a file inside the folder %1"
-msgstr "Állomány kitömörítése a(z) %1 könyvtárba"
+msgstr "Állomány kitömörítése a(z) %1 mappába"
 
 #: ../web_tt2/d_read.tt2:387
 msgid "Unzip a file inside the folder SHARED"
-msgstr "Állomány kitömörítése a MEGOSZTOTT KÖNYVTÁRba"
+msgstr "Állomány kitömörítése a dokumentumtárba"
 
 #: ../web_tt2/dump_scenario.tt2:6
 msgid "scenario is created but not loaded in the list config"
@@ -1799,7 +1798,7 @@ msgstr "Információk a listatagról"
 
 #: ../web_tt2/editsubscriber.tt2:10 ../web_tt2/pref.tt2:9
 msgid "Email:"
-msgstr "E-mail:"
+msgstr "Email:"
 
 #: ../web_tt2/editsubscriber.tt2:12 ../web_tt2/pref.tt2:10
 #: ../web_tt2/suboptions.tt2:8
@@ -2065,7 +2064,7 @@ msgstr ""
 
 #: ../web_tt2/error.tt2:52
 msgid "Please provide email address"
-msgstr "Kérem adja meg az e-mail címét"
+msgstr "Kérem adja meg az email címét"
 
 #. (u_err.argument)
 #: ../web_tt2/error.tt2:53
@@ -2084,7 +2083,7 @@ msgstr "Be kell jelentkeznie"
 #. (u_err.email)
 #: ../web_tt2/error.tt2:56
 msgid "Address \"%1\" is incorrect"
-msgstr "Nem megfelelő e-mail cím: \"%1\""
+msgstr "Nem megfelelő email cím: \"%1\""
 
 #: ../web_tt2/error.tt2:57
 msgid "Provided password is incorrect"
@@ -2444,7 +2443,7 @@ msgid ""
 "Could not change your subscription address for the list '%1' \n"
 "     because your new address is not allowed to subscribe/unsubscribe:"
 msgstr ""
-"A(z) '%1' listán nem sikerült megváltoztatni az e-mail címét,\n"
+"A(z) '%1' listán nem sikerült megváltoztatni az email címét,\n"
 "mert az új címének nincs jogosultsága a listára való feliratkozáshoz."
 
 #: ../web_tt2/get_closed_lists.tt2:6 ../web_tt2/get_closed_lists.tt2:7
@@ -2528,7 +2527,7 @@ msgstr "Kérelmezés dátuma"
 # nlsref 16,61
 #: ../web_tt2/info.tt2:8
 msgid "List informations"
-msgstr "Lista információk"
+msgstr "Információk a listáról"
 
 #: ../web_tt2/install_pending_list.tt2:11 ../web_tt2/scenario_test.tt2:13
 #: ../web_tt2/set_pending_list_request.tt2:7
@@ -2786,11 +2785,11 @@ msgstr "Segítség a belépéshez"
 
 #: ../web_tt2/loginbanner.tt2:55
 msgid "First login?"
-msgstr "Első bejelentkezés?"
+msgstr "Ez az első bejelentkezése?"
 
 #: ../web_tt2/loginbanner.tt2:56
 msgid "Lost password?"
-msgstr "Elveszett jelszó?"
+msgstr "Elveszett a jelszava?"
 
 #: ../web_tt2/loginrequest.tt2:4
 msgid ""
@@ -2959,7 +2958,7 @@ msgstr "Adjon meg egy listanevet"
 
 #: ../web_tt2/menu_search.tt2:7
 msgid "Search lists"
-msgstr "Lista keresés"
+msgstr "Listakeresés"
 
 #: ../web_tt2/modindex.tt2:61 ../web_tt2/modindex.tt2:9
 msgid "Listing messages to moderate"
@@ -3183,7 +3182,7 @@ msgstr "%1 állomány elmentve"
 
 #: ../web_tt2/notice.tt2:52
 msgid "Your password has been emailed to you"
-msgstr "Jelszavát e-mailben elküldtük"
+msgstr "Jelszavát emailben elküldtük"
 
 #: ../web_tt2/notice.tt2:55
 msgid "To choose your password go to 'preferences', from the upper menu."
@@ -3251,7 +3250,7 @@ msgstr ""
 
 #: ../web_tt2/picture_upload.tt2:21 ../web_tt2/picture_upload.tt2:22
 msgid "Your picture"
-msgstr "Az ön fényképe"
+msgstr "Az Ön fényképe"
 
 #: ../web_tt2/picture_upload.tt2:25
 msgid "Your picture in the subscribers list"
@@ -3271,7 +3270,7 @@ msgstr "Munkamenet lejárati ideje:"
 
 #: ../web_tt2/pref.tt2:26
 msgid "Changing your email address"
-msgstr "E-mail cím megváltoztatása"
+msgstr "Email cím megváltoztatása"
 
 #: ../web_tt2/pref.tt2:28
 msgid ""
@@ -3279,8 +3278,9 @@ msgid ""
 "you are also list owner or list moderator your email address for these roles "
 "will also be updated."
 msgstr ""
-"Mágváltoztathatja az email címét egyszerre az összes lista esetén. A "
-"tulajdonosi és a szerkesztői jogkörök megmaradnak az új email  cím esetén is."
+"Itt megváltoztathatja az email címét, mégpedig egyszerre, az összes listára "
+"vonatkozóan. Címváltoztatás esetén a tulajdonosi és a szerkesztői jogkörök is "
+"az új email címhez kerülnek át."
 
 #: ../web_tt2/pref.tt2:31
 msgid "New email address:"
@@ -3365,7 +3365,8 @@ msgstr "A megadott jelszó hibás. Talán elfelejtette?"
 
 #: ../web_tt2/renewpasswd.tt2:13
 msgid "You will receive an email that will allow you to choose your password."
-msgstr "Hamarosan kap egy e-mailt, benne a jelszóemlékeztetőjével."
+msgstr ""
+"Hamarosan kap egy emailt, melynek segítségével beállíthatja a jelszavát."
 
 #: ../web_tt2/renewpasswd.tt2:16
 msgid "In order to use Sympa, you will need to define a password."
@@ -3386,7 +3387,7 @@ msgstr ""
 #: ../web_tt2/renewpasswd.tt2:27 ../web_tt2/sigrequest.tt2:29
 #: ../web_tt2/sso_login.tt2:17
 msgid "Your e-mail address:"
-msgstr "E-mail címe:"
+msgstr "Az Ön email címe:"
 
 #: ../web_tt2/renewpasswd.tt2:31
 msgid "Request first password"
@@ -3496,7 +3497,7 @@ msgstr "A visszapattanó listatagokat tartalmazó táblázat"
 #: ../web_tt2/subscriber_table.tt2:12 ../web_tt2/subscriber_table.tt2:15
 #: ../web_tt2/viewlogs.tt2:54 ../web_tt2/viewlogs.tt2:63
 msgid "Email"
-msgstr "E-mail"
+msgstr "Email"
 
 #: ../web_tt2/reviewbouncing.tt2:62
 msgid "Bounce score"
@@ -3525,7 +3526,7 @@ msgstr "nincs pontszám"
 #: ../web_tt2/review.tt2:105 ../web_tt2/review.tt2:139
 #: ../web_tt2/reviewbouncing.tt2:126
 msgid "Delete selected email addresses"
-msgstr "Kijelölt e-mail címek törlése"
+msgstr "A kijelölt email címek törlése"
 
 #: ../web_tt2/reviewbouncing.tt2:128
 msgid "Reset errors for selected users"
@@ -4022,7 +4023,7 @@ msgstr "Ez a FastCGI folyamat (%1) %3 óta %2 kérést szolgált ki."
 
 #: ../web_tt2/setlang.tt2:9
 msgid "Language selection"
-msgstr "Nyelv kiválasztása"
+msgstr "Nyelvválasztás"
 
 #: ../web_tt2/setlang.tt2:17
 msgid "Validate your language selection"
@@ -4030,7 +4031,7 @@ msgstr "Erősítse meg a kiválasztott nyelvet"
 
 #: ../web_tt2/setlang.tt2:17
 msgid "Set language"
-msgstr "Nyelv kiválasztása"
+msgstr "Nyelvválasztás"
 
 #. (list_request_date)
 #: ../web_tt2/set_pending_list_request.tt2:10
@@ -4133,7 +4134,7 @@ msgstr "Leiratkozom a(z) %1 listáról"
 #. (list,email)
 #: ../web_tt2/sigrequest.tt2:18
 msgid "You are not subscribed to list %1 with e-mail address %2"
-msgstr "A(z) %1 listának nem tagja %2 e-mail címmel"
+msgstr "Ön nem tagja a(z) %1 listának %2 email címmel"
 
 #: ../web_tt2/sigrequest.tt2:21
 msgid ""
@@ -4525,13 +4526,12 @@ msgstr "Megerősítő jelszó küldése"
 
 #. (init_email)
 #: ../web_tt2/sso_login.tt2:32
-#, fuzzy
 msgid ""
 "A confirmation password has been sent to your email address %1.<br />Please "
 "check your e-mail box for the message containing the confirmation link."
 msgstr ""
-"Elküldtük az Ön jelszavát a(z) %1 e-mail címre.<br />Kérem a levél "
-"megérkezése után adja meg lent a kapott jelszót."
+"Elküldtük a megerősítő kódot a(z) %1 email címre.<br />Kérem a levél "
+"megérkezése után kattintson a benne levő megerősítő linkre!"
 
 #: ../web_tt2/stats.tt2:2
 msgid "Shared document directory size:"
@@ -4617,7 +4617,7 @@ msgid ""
 "was sent to the e-mail address you provided."
 msgstr ""
 "Azonosításához és hogy mások ne tudják akarata ellenére\n"
-"        felvenni erre a listára, e-mailben kap egy megerősítő linket."
+"        felvenni erre a listára, emailben kap egy megerősítő linket."
 
 #. (list)
 #: ../web_tt2/subrequest.tt2:32
@@ -4630,7 +4630,7 @@ msgstr ""
 
 #: ../web_tt2/subrequest.tt2:38
 msgid "Your e-mail address"
-msgstr "E-mail cím"
+msgstr "Az Ön email címe"
 
 #. (list)
 #: ../web_tt2/subrequest.tt2:51
@@ -4647,7 +4647,7 @@ msgstr ", ezen kívül még további szükséges személyes adatokat."
 
 #: ../web_tt2/subrequest.tt2:58
 msgid "e-mail address"
-msgstr "E-mail cím"
+msgstr "email cím"
 
 #: ../web_tt2/subrequest.tt2:59
 msgid "password"
@@ -5321,7 +5321,7 @@ msgstr "Leiratkozás a(z) %1 listáról"
 #. (user.email,list.name,list.host)
 #: ../mail_tt2/bye.tt2:4
 msgid "Your email address (%1) has been removed from list %2@%3"
-msgstr "E-mail címe (%1) törölve lett a(z) %2@%3 listáról"
+msgstr "Az Ön email címe (%1) törölve lett a(z) %2@%3 listáról"
 
 #: ../mail_tt2/bye.tt2:5
 msgid "bye !"
@@ -5510,14 +5510,14 @@ msgid ""
 "Your e-mail address %1 has not been found in the list %2. Maybe\n"
 "you subscribed from a different e-mail address ?"
 msgstr ""
-"%1 e-mail címe nem található meg a(z) %2 listán.\n"
-"Lehet, hogy egy másik e-mail címmel iratkozott fel?"
+"%1 email címe nem található meg a(z) %2 listán.\n"
+"Lehet, hogy egy másik email címmel iratkozott fel?"
 
 # nlsref 6,33
 #. (u_err.email,u_err.listname)
 #: ../mail_tt2/command_report.tt2:114
 msgid "E-mail address %1 has not been found in the list %2."
-msgstr "A(z) %1 e-mail cím nem található a %2 listán."
+msgstr "A(z) %1 email cím nem található a %2 listán."
 
 # nlsref 6,45
 #. (u_err.listname)
@@ -5565,8 +5565,8 @@ msgid ""
 "email address. Please try using your canonical address."
 msgstr ""
 "Az autentikációs folyamat sikertelen.\n"
-"Feliratkozását valószínűleg egy másik e-mail címről erősítette meg.\n"
-"Kérem, próbáljon meg feliratkozni az általában használt e-mailcíméről."
+"Feliratkozását valószínűleg egy másik email címről erősítette meg.\n"
+"Kérem, próbáljon meg feliratkozni az általában használt email címéről."
 
 #: ../mail_tt2/command_report.tt2:150
 msgid "Command has failed because of an internal server error:"
@@ -5672,7 +5672,7 @@ msgid ""
 "%2@%3\n"
 "because you didn't confirm your subscription."
 msgstr ""
-"E-mail címe (%1) törölve lett a(z)\n"
+"Email címe (%1) törölve lett a(z)\n"
 "%2@%3 listáról,\n"
 "mert nem erősítette meg a listatagságát."
 
@@ -5689,7 +5689,7 @@ msgstr "újrafeliratkozás a(z) %1 listára"
 #: ../mail_tt2/expire_warning1.tt2:4 ../mail_tt2/expire_warning2.tt2:4
 msgid ""
 "You have been subscriber of list %1@%2 with email %3 for 1 year or more;"
-msgstr "A(z) %1@%2 lista tagja már több mint 1 éve a(z) %3 e-mail címmel;"
+msgstr "A(z) %1@%2 lista tagja már több mint 1 éve a(z) %3 email címmel;"
 
 #: ../mail_tt2/expire_warning1.tt2:7 ../mail_tt2/expire_warning2.tt2:7
 #: ../mail_tt2/remind.tt2:6
@@ -5751,7 +5751,7 @@ msgstr ""
 #. (conf.sympa)
 #: ../mail_tt2/helpfile.tt2:12
 msgid "All commands must be sent to the electronic address %1"
-msgstr "Minden parancsot a következő e-mail címre kell küldeni: %1"
+msgstr "Minden parancsot a következő email címre kell küldeni: %1"
 
 #: ../mail_tt2/helpfile.tt2:14
 msgid ""
@@ -5799,7 +5799,7 @@ msgid ""
 "address, useful if different from your \"From:\" address."
 msgstr ""
 "UNSubscribe <lista> <EMAIL>  * Leiratkozás a <listá>-ról. Az <EMAIL> egy "
-"opcionális e-mail cím, ami akkor kell, ha különbözik a \"Feladó:\" címtől."
+"opcionális email cím, ami akkor kell, ha különbözik a \"Feladó:\" címtől."
 
 #: ../mail_tt2/helpfile.tt2:26
 msgid "UNSubscribe * <EMAIL>       * To quit all lists."
@@ -5816,12 +5816,13 @@ msgstr ""
 "SET <lista>|* DIGEST        * Levelek fogadása összefűzve (kivonatként)"
 
 #: ../mail_tt2/helpfile.tt2:30
+#, fuzzy
 msgid ""
 "SET <list|*> DIGESTPLAIN    * Message reception in compilation mode, sent as "
 "a plain text email with all attachments"
 msgstr ""
 "SET <lista>|* DIGESTPLAIN   * Üzenetfogadás sima kivonat, azaz egyszerű "
-"szöveges e-mail minden csatolmánnyal formájában."
+"szöveges email minden csatolmánnyal formájában."
 
 #: ../mail_tt2/helpfile.tt2:31
 msgid "SET <list>|* SUMMARY        * Receiving the message index only"
@@ -5840,7 +5841,7 @@ msgstr ""
 msgid ""
 "SET <list>|* CONCEAL        * To become unlisted (hidden subscriber address)"
 msgstr ""
-"SET <lista>|* CONCEAL       * Elrejti a címét (titkos lesz az e-mail címe)"
+"SET <lista>|* CONCEAL       * Elrejti a címét (titkos lesz az email címe)"
 
 #: ../mail_tt2/helpfile.tt2:35
 msgid "SET <list>|* NOCONCEAL      * Subscriber address visible via REView"
@@ -7486,7 +7487,7 @@ msgstr "Emlékeztető a(z) %1 levelezési listás tagságáról"
 #. (list.name,list.host,user.email,user.password)
 #: ../mail_tt2/remind.tt2:4
 msgid "Your are subscriber of list %1@%2 with  email %3"
-msgstr "A(z) %1@%2 listán %3 e-mail címmel van nyilvántartva"
+msgstr "A(z) %1@%2 listán %3 email címmel van nyilvántartva"
 
 #. (user.email,list.name,list.host)
 #: ../mail_tt2/removed.tt2:6
@@ -7495,7 +7496,7 @@ msgid ""
 "%2@%3, probably because we received\n"
 "non-delivery reports for your address."
 msgstr ""
-"Az e-mail címe (%1) törölve lett a(z) %2@%3\n"
+"Az email címe (%1) törölve lett a(z) %2@%3\n"
 "levelezési listáról, valószínűleg azért,\n"
 "mert néhány levelet nem sikerült kézbesíteni a címére."
 
@@ -7797,7 +7798,7 @@ msgstr "Tulajdonosi és moderátori kézikönyv:"
 
 #: ../mail_tt2/user_notification.tt2:40
 msgid "Changing your subscriber email address"
-msgstr "E-mail cím megváltoztatása"
+msgstr "Email cím megváltoztatása"
 
 #: ../mail_tt2/user_notification.tt2:42
 msgid ""
@@ -7845,7 +7846,7 @@ msgstr "Üdvözöljük a(z) %1@%2 levelezési listán"
 #. (user.email)
 #: ../mail_tt2/welcome.tt2:5
 msgid "Your subscription email is %1"
-msgstr "Ezzel az e-mailcímmel iratkozott fel: %1"
+msgstr "Ezzel az email címmel iratkozott fel: %1"
 
 #: ../mail_tt2/welcome.tt2:13
 msgid "General informations about mailing lists:"
@@ -7892,8 +7893,8 @@ msgid ""
 "manager\n"
 "was unable to access your personal certificate (email %1)."
 msgstr ""
-"A levelezési lista kezelő nem tudta továbbítani Önnek a levelet, mert nem "
-"tudta elérni a személyes tanúsítványát (e-mail: %1)."
+"A levelezőlista-kezelő nem tudta továbbítani Önnek a levelet, mert nem "
+"tudta elérni a személyes tanúsítványát (email: %1)."
 
 #. (conf.email,conf.host)
 #: ../mail_tt2/x509-user-cert-missing.tt2:10
@@ -7941,7 +7942,7 @@ msgid ""
 msgstr ""
 "Hasznos lenne víruskeresést végrehajtani a rendszerén.\n"
 "\n"
-"Ugyanakkor vegye figyelembe, hogy sok vírus meghamisítja a küldő e-mail "
+"Ugyanakkor vegye figyelembe, hogy sok vírus meghamisítja a küldő email "
 "címét, így lehetséges, hogy a vírus nem az Ön számítógépéről jött. Ebben az "
 "esetben, kérem hagyja figyelmen kívül ezt az üzenetet."
 
@@ -8564,7 +8565,7 @@ msgstr "nyilvános, moderált lista"
 #: ../src/etc/create_list_templates/html-news-letter/comment.tt2:4
 #: ../src/etc/create_list_templates/news-letter/comment.tt2:4
 msgid "subscribers emails are protected"
-msgstr "a tagok e-mailcímei védettek"
+msgstr "a tagok email címei védettek"
 
 #: ../src/etc/create_list_templates/html-news-letter/comment.tt2:5
 msgid "default reception format is HTML"
@@ -8591,7 +8592,7 @@ msgid ""
 "Messages can either be read via email (subscription) or\n"
 "via the web (web archives)"
 msgstr ""
-"Az üzenetek egyaránt olvashatóak e-mailben (feliratkozás) vagy a webes "
+"Az üzenetek egyaránt olvashatóak emailben (feliratkozás) vagy a webes "
 "archívumban"
 
 #. This entry is a date/time format
@@ -8850,7 +8851,7 @@ msgstr "DKIM konfiguráció"
 # nlsref 16,27
 #: ../src/lib/List.pm:1157 ../src/lib/List.pm:654
 msgid "email address"
-msgstr "E-mail cím"
+msgstr "email cím"
 
 # nlsref 16,29
 #: ../src/lib/List.pm:1172 ../src/lib/List.pm:669
@@ -9184,7 +9185,7 @@ msgstr "Érték"
 # nlsref 16,92
 #: ../src/lib/List.pm:1273
 msgid "other email address"
-msgstr "Másik e-mail cím"
+msgstr "másik email cím"
 
 # nlsref 16,93
 #: ../src/lib/List.pm:1278
@@ -9229,7 +9230,7 @@ msgstr "Kvóta"
 # nlsref 16,205
 #: ../src/lib/List.pm:1330 ../src/lib/List.pm:1335
 msgid "email address protection method"
-msgstr "E-mail címek védelmének módja"
+msgstr "email címek védelmének módja"
 
 # nlsref 16,71
 #: ../src/lib/List.pm:1341
@@ -9534,14 +9535,13 @@ msgstr ""
 "\n"
 
 #: ../src/lib/PlainDigest.pm:240 ../src/lib/PlainDigest.pm:293
-#, fuzzy
 msgid ""
 "** Warning: Message part using unrecognised character set %s\n"
 "    Some characters may be lost or incorrect **\n"
 "\n"
 msgstr ""
 "** Vigyázat: Az üzenetrész eredetileg a %s karakterkészletet használta!\n"
-"    Lehet, hogy néhány karakter elveszett vagy hibás **\n"
+"    Lehet, hogy néhány karakter elveszett vagy hibás. **\n"
 "\n"
 
 #: ../src/lib/PlainDigest.pm:257

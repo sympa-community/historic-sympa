@@ -3,18 +3,20 @@
 # This file is distributed under the same license as the sympa package.
 # FIRST AUTHOR <EMAIL@ADDRESS>, 2006.
 #
-#, fuzzy
 msgid ""
 msgstr ""
 "Project-Id-Version: sympa\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
 "POT-Creation-Date: 2002-07-16 17:27+0800\n"
-"PO-Revision-Date: 2006-11-28 12:37+0000\n"
-"Last-Translator: Piarres Beobide <pi@beobide.net>\n"
+"PO-Revision-Date: 2011-12-09 15:42+0200\n"
+"Last-Translator: Anonymous Pootle User\n"
 "Language-Team: Basque <eu@li.org>\n"
+"Language: eu\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Pootle 2.1.2\n"
 "X-Rosetta-Export-Date: 2006-12-11 09:58+0000\n"
 
 #: ../web_tt2/home.tt2:2
@@ -7120,7 +7122,7 @@ msgstr ""
 msgid ""
 "The %1 file that was initially attached to this message has been stored on "
 "the mailing lists server:"
-msgstr ""
+msgstr "Fitxategi %1 erantsia ikusteko, klik egin esteka honetan:"
 
 #. (list.name)
 #: ../mail_tt2/user_notification.tt2:4

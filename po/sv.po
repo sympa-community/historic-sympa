@@ -9,13 +9,13 @@ msgstr ""
 "Project-Id-Version: sympa\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
 "POT-Creation-Date: 2002-07-16 17:27+0800\n"
-"PO-Revision-Date: 2011-04-13 08:33+0200\n"
-"Last-Translator: Anonymous Pootle User\n"
+"PO-Revision-Date: 2011-10-24 11:10+0200\n"
+"Last-Translator: Pontus Freyhult <pontus_sympa_pootle@soua.net>\n"
 "Language-Team: Svenska <sv@li.org>\n"
+"Language: sv\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Language: sv\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "X-Generator: Pootle 2.1.2\n"
 "X-Rosetta-Version: 0.1\n"
@@ -31,9 +31,8 @@ msgid ""
 "archive, list moderation, list configuration."
 msgstr ""
 "Den här servern ger dig åtkomst till din e-postlista. På den här webbsidan "
-"kan du ställa in\n"
-"prenumerationsinställningar, avsluta prenumerationer, arkiv, listmoderering "
-"och listkonfiguration."
+"kan du ställa inprenumerationsinställningar, avsluta prenumerationer, arkiv, "
+"listmoderering och listkonfiguration."
 
 #: ../web_tt2/home.tt2:7
 msgid "Mailing lists categories"
@@ -164,7 +163,7 @@ msgstr "Prenumerantinställningar"
 #. (list)
 #: ../web_tt2/list_menu.tt2:15
 msgid "Do you really want to unsubscribe from list %1?"
-msgstr "Vill du verkligen avsluta prenumerationen av listan %1?"
+msgstr "Vill du verkligen avsluta prenumerationen på listan %1?"
 
 #: ../web_tt2/list_menu.tt2:15 ../web_tt2/list_menu.tt2:25
 #: ../web_tt2/suspend_request.tt2:57
@@ -2449,24 +2448,20 @@ msgid "Listname"
 msgstr "Listnamn"
 
 #: ../web_tt2/get_inactive_lists.tt2:10
-#, fuzzy
 msgid "Number of subscribers"
-msgstr "modererad för prenumeranter"
+msgstr "Antal prenumeranter"
 
 #: ../web_tt2/get_inactive_lists.tt2:12
-#, fuzzy
 msgid "Send scenario"
-msgstr "Avsändare"
+msgstr "Sändningscenario"
 
 #: ../web_tt2/get_inactive_lists.tt2:13
-#, fuzzy
 msgid "Creator"
-msgstr "Skapa"
+msgstr "Skapare"
 
 #: ../web_tt2/get_inactive_lists.tt2:15
-#, fuzzy
 msgid "Editors"
-msgstr "Redigerare"
+msgstr "Redaktörer"
 
 #: ../web_tt2/get_inactive_lists.tt2:29
 msgid "none so far"
@@ -3315,8 +3310,8 @@ msgid ""
 "Please submit your email address, you will receive a message that gives you "
 "access to the appropriate form in order to choose your password."
 msgstr ""
-"Ange din e-postadress, du får ett meddelande som ger dig möjlighet att välja "
-"ett lösenord."
+"Vänligen ange din e-postadress, så kommer du få ett meddelande som ger dig "
+"möjlighet att välja ett lösenord."
 
 #: ../web_tt2/renewpasswd.tt2:27 ../web_tt2/sigrequest.tt2:29
 #: ../web_tt2/sso_login.tt2:17
@@ -4439,14 +4434,12 @@ msgstr "Skicka mig ett bekräftelselösenord"
 
 #. (init_email)
 #: ../web_tt2/sso_login.tt2:32
-#, fuzzy
 msgid ""
 "A confirmation password has been sent to your email address %1.<br />Please "
 "check your e-mail box for the message containing the confirmation link."
 msgstr ""
-"Ett bekräftelselösenord har skickats till din e-postadress %1.<br/> "
-"Kontrollera din e-post för att se meddelandet med bekräftelselösenordet som "
-"behövs nedan."
+"Ett bekräftelselösenord har skickats till din e-postadress %1.<br /> "
+"Kontrollera din e-post för att se meddelandet med bekräftelselänken."
 
 #: ../web_tt2/stats.tt2:2
 msgid "Shared document directory size:"
@@ -6418,7 +6411,7 @@ msgstr " Användaren %1 har råkat ut för ett internt serverfel"
 #. (error)
 #: ../mail_tt2/listmaster_notification.tt2:293
 msgid "The following error occurred whila managing bounces: %&"
-msgstr ""
+msgstr "Följande fel uppstod när studsar hanterades: %&"
 
 #: ../mail_tt2/listmaster_notification.tt2:302
 #: ../mail_tt2/listmaster_notification.tt2:373
@@ -6965,7 +6958,7 @@ msgstr "Användaren \"%1\" har automatiskt tagits bort från listan %2. "
 #. (list.name)
 #: ../mail_tt2/listowner_notification.tt2:142
 msgid "List %1: Failed to change member email address"
-msgstr "Listan %1: Kunde inte ändra medlemse-postadress"
+msgstr "Listan %1: Kunde inte ändra medlems e-postadress"
 
 #. (current_email,new_email,datasource)
 #: ../mail_tt2/listowner_notification.tt2:146
@@ -7003,12 +6996,12 @@ msgstr "Här är en lista på listor från %1@%2"
 
 #: ../mail_tt2/list_unknown.tt2:3
 msgid "List unknown"
-msgstr "Okänd listan"
+msgstr "Okänd lista"
 
 #: ../mail_tt2/list_unknown.tt2:10
 msgid "This is an automatic response sent by Sympa Mailing Lists Manager."
 msgstr ""
-"Detta är ett automatiskt svarsmeddelande skicka av e-postlisthanteraren "
+"Detta är ett automatiskt svarsmeddelande skickat av e-postlisthanteraren "
 "Sympa."
 
 #: ../mail_tt2/list_unknown.tt2:12
@@ -7019,7 +7012,7 @@ msgstr "Följande e-postadress är inte en känd e-postlista:"
 msgid ""
 "To find out the correct listname, ask for this server's lists directory:"
 msgstr ""
-"För att hitta det riktiga listnamnen, titta i den här serverns listkatalog:"
+"För att hitta det riktiga listnamnet, titta i den här serverns listkatalog:"
 
 #. (conf.listmaster_email,conf.host)
 #: ../mail_tt2/list_unknown.tt2:20
@@ -7138,7 +7131,7 @@ msgid ""
 "already been confirmed."
 msgstr ""
 "Kunde inte få åtkomst till meddelande autentiserat med nyckeln %1. "
-"Meddelandet kan redan ha bekrfätats."
+"Meddelandet kan redan ha bekräftats."
 
 #. (key)
 #: ../mail_tt2/message_report.tt2:69
@@ -7494,17 +7487,15 @@ msgid "Help on Sympa: %1%2"
 msgstr "Hjälp för Sympa: %1%2"
 
 #: ../mail_tt2/sendssopasswd.tt2:6
-#, fuzzy
 msgid ""
 "To complete your account setup actions you need to confirm that you have \n"
 "supplied a working email address.  Please follow the link below to complete "
 "your account configuration."
 msgstr ""
-"För att slutföra din kontokonfigurering måste du bekräfta att du har angett "
-"en fungerande\n"
-"e-postadress. Ange följande e-postadress och lösenord i konfigurationsguiden "
-"för att \n"
-"slutföra ditt kontoskapande."
+"För att slutföra din kontokonfigurering måste du bekräfta att du har en "
+"fungerande\n"
+"e-postadress. Klicka på länken nedan för att slutföra din "
+"kontokonfigurering."
 
 #. (list.name)
 #: ../mail_tt2/stats_report.tt2:4
@@ -7670,7 +7661,7 @@ msgstr "Din prenumerationsadress är %1"
 
 #: ../mail_tt2/welcome.tt2:13
 msgid "General informations about mailing lists:"
-msgstr "Allmänn information om e-postlistor:"
+msgstr "Allmän information om e-postlistor:"
 
 #: ../mail_tt2/which.tt2:2
 msgid "Result of your command"
@@ -8916,7 +8907,7 @@ msgstr "respektra befintliga huvudrader"
 
 #: ../src/lib/List.pm:1287
 msgid "Who can review subscribers"
-msgstr "Vem kan godkänna prenumeranter"
+msgstr "Vem kan se prenumeranter"
 
 #: ../src/lib/List.pm:1294
 msgid "RFC 2369 Header fields"
@@ -9294,25 +9285,25 @@ msgid "%d %b %y  %H:%M"
 msgstr "%d %b %y  %H:%M"
 
 #: ../wwsympa/wwsympa.fcgi.in:15268
-#, fuzzy
 msgid "Your unsubscription request to list %s was sent to the list owner."
-msgstr "Din begäran har skickats vidare till listägaren"
+msgstr ""
+"Din begäran att avsluta prenumerationen på listan %s har skickats vidare "
+"till listägaren."
 
 #: ../wwsympa/wwsympa.fcgi.in:15270
-#, fuzzy
 msgid "You were successfully unsubscribed from list %s."
-msgstr "Du begärde att din prenumeration på listan %1 skulle avslutas"
+msgstr "Din prenumeration på listan %s har sagts upp."
 
 #: ../wwsympa/wwsympa.fcgi.in:15274
-#, fuzzy
 msgid ""
 "Unsubscription from list %s denied: Unsubscription from this list is closed."
-msgstr "det är inte möjligt att prenumerera"
+msgstr ""
+"Uppsägning av prenumeration på listan %s nekades: Uppsägning av "
+"prenumeration på denna lista är stängd."
 
 #: ../wwsympa/wwsympa.fcgi.in:15276
-#, fuzzy
 msgid "Unsubscription from list %s failed."
-msgstr "det är inte möjligt att prenumerera"
+msgstr "Uppsägning av prenumeration på listan %s misslyckades."
 
 #. This entry is a date/time format
 #. Check the strftime manpage for format details : http://docs.freebsd.org/info/gawk/gawk.info.Time_Functions.html
@@ -9472,20 +9463,25 @@ msgstr "dina egna postningar skickas inte till dig"
 msgid ""
 "You <span style=\"font-weight: bold; font-size: 10px\">are</span> subscribed"
 msgstr ""
+"Du <span style=\"font-weight: bold; font-size: 10px\">är</span> prenumerant"
 
 #: ../web_tt2/list_menu.tt2:21
 msgid ""
 "You <span style=\"font-weight: bold; font-size: 10px\">are not</span> "
 "subscribed"
 msgstr ""
+"Du <span style=\"font-weight: bold; font-size: 10px\">är inte</span> "
+"prenumerant"
 
 #: ../web_tt2/compose_mail.tt2:79
+#, fuzzy
 msgid "Select the source of your HTML newsletter"
-msgstr ""
+msgstr "Välj källan till ditt HTML-nyhetsbrev"
 
 #: ../web_tt2/compose_mail.tt2:85
+#, fuzzy
 msgid "OR"
-msgstr ""
+msgstr "ELLER"
 
 #: ../web_tt2/compose_mail.tt2:87
 msgid "<strong>Send an HTML file from your computer:"
