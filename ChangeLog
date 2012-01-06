@@ -1,4 +1,10 @@
 ------------------------------------------------------------------------
+r7258 | sympa-authors | 2012-01-06 15:57:54 +0100 (ven 06 jan 2012) | 1 ligne
+Chemins modifiés :
+   M /branches/sympa-6.1-branch/ChangeLog
+
+[-feature]Committing latest translations from Pootle
+------------------------------------------------------------------------
 r7257 | sympa-authors | 2012-01-06 14:55:18 +0100 (ven 06 jan 2012) | 1 ligne
 Chemins modifiés :
    M /branches/sympa-6.1-branch/po/ar.po
