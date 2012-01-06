@@ -1,4 +1,114 @@
 ------------------------------------------------------------------------
+r7255 | sympa-authors | 2012-01-06 10:53:38 +0100 (ven 06 jan 2012) | 1 ligne
+Chemins modifiés :
+   M /branches/sympa-6.1-branch/po/el.po
+   M /branches/sympa-6.1-branch/po/es.po
+   M /branches/sympa-6.1-branch/po/eu.po
+   M /branches/sympa-6.1-branch/po/fr.po
+   M /branches/sympa-6.1-branch/po/hu.po
+   M /branches/sympa-6.1-branch/po/it.po
+   M /branches/sympa-6.1-branch/po/ja.po
+   M /branches/sympa-6.1-branch/po/pt_BR.po
+   M /branches/sympa-6.1-branch/po/sv.po
+   M /branches/sympa-6.1-branch/po-wwsympa/hu.po
+   M /branches/sympa-6.1-branch/po-wwsympa/ja.po
+   M /branches/sympa-6.1-branch/po-wwsympa/nl.po
+
+[-feature]Committing latest translations from Pootle
+------------------------------------------------------------------------
+r7254 | sympa-authors | 2012-01-05 17:53:29 +0100 (jeu 05 jan 2012) | 1 ligne
+Chemins modifiés :
+   M /branches/sympa-6.1-branch/src/bulk.pl.in
+
+[bug][Submitted by P. Vandry, TZoNE.ORG] The VERP return path was never correctly set due to a bad variable initialization.
+------------------------------------------------------------------------
+r7252 | david.verdin | 2012-01-05 16:26:03 +0100 (jeu 05 jan 2012) | 1 ligne
+Chemins modifiés :
+   M /branches/sympa-6.1-branch
+
+[svn] Committing updated metadata
+------------------------------------------------------------------------
+r7209 | david.verdin | 2011-09-05 17:06:16 +0200 (lun 05 sep 2011) | 1 ligne
+Chemins modifiés :
+   M /branches/sympa-6.0-branch/configure.ac
+Fision via : r7252
+
+[bug][Submitted by R. di Cosmo] When installing Sympa, if configure was used with the --enable-fsh option, then the lists directory was incorrectly set.
+------------------------------------------------------------------------
+r6706 | serge.aumont | 2010-10-13 10:46:06 +0200 (mer 13 oct 2010) | 2 lignes
+Chemins modifiés :
+   M /branches/sympa-6.0-branch/wwsympa/wwsympa.fcgi.in
+Fision via : r7252
+
+[bug] CAS auth problem, reported by Vincent Bonamy
+
+------------------------------------------------------------------------
+r7251 | david.verdin | 2011-12-14 13:27:44 +0100 (mer 14 déc 2011) | 1 ligne
+Chemins modifiés :
+   M /branches/sympa-6.1-branch/src/bulk.pl.in
+
+[bug][#8094][Submitted by A. Piper, univ. Marburg] In some contexts, using the unsubscription UL
+------------------------------------------------------------------------
+r7248 | etiennemeleard | 2011-11-14 10:40:56 +0100 (lun 14 nov 2011) | 1 ligne
+Chemins modifiés :
+   M /branches/sympa-6.1-branch/src/lib/List.pm
+
+[bug][#7424] Excluding then restoring (eg manually subscribing) an included member resulted in member being included and subscribed at the same time.
+------------------------------------------------------------------------
+r7223 | sikeda | 2011-10-07 04:16:24 +0200 (ven 07 oct 2011) | 2 lignes
+Chemins modifiés :
+   M /branches/sympa-6.1-branch/src/sympa_wizard.pl.in
+
+[-bug] SOAP::Lite 0.712.5 seems not really to exist. 0.712 may be a fixed version.
+
+------------------------------------------------------------------------
+r7222 | sikeda | 2011-10-07 03:06:29 +0200 (ven 07 oct 2011) | 2 lignes
+Chemins modifiés :
+   M /branches/sympa-6.1-branch/src/lib/Lock.pm
+
+[-bug] a typo in previous commit.
+
+------------------------------------------------------------------------
+r7215 | david.verdin | 2011-10-05 08:42:02 +0200 (mer 05 oct 2011) | 2 lignes
+Chemins modifiés :
+   M /branches/sympa-6.1-branch/src/lib/List.pm
+   M /branches/sympa-6.1-branch/src/lib/Lock.pm
+
+[bug][Reported and boldly tested by O. Menkens] In perl, when the real and effective uids of a sccript are different, the tainted mode is activated. This caused mod_fcgid to issue a lot of "Insecure dependency" errors in the Apache logs. Fixed by untainting the variables causing these errors.
+
+------------------------------------------------------------------------
+r7211 | david.verdin | 2011-09-29 09:22:19 +0200 (jeu 29 sep 2011) | 1 ligne
+Chemins modifiés :
+   M /branches/sympa-6.1-branch/mail_tt2/summary.tt2
+
+[bug][Submitted by A. Bernstein, electricembers.net] The summary.tt2 template contained a wrap TT2 command that caused the URL to be broken. Fixed by moving this command around parts of the message that don't contain URLs.
+------------------------------------------------------------------------
+r7208 | david.verdin | 2011-09-05 16:15:52 +0200 (lun 05 sep 2011) | 1 ligne
+Chemins modifiés :
+   M /branches/sympa-6.1-branch/configure.ac
+
+[bug][Submitted by R. di Cosmo] When installing Sympa, if configure was used with the --enable-fsh option, then the lists directory was incorrectly set.
+------------------------------------------------------------------------
+r7205 | david.verdin | 2011-09-05 14:03:51 +0200 (lun 05 sep 2011) | 7 lignes
+Chemins modifiés :
+   M /branches/sympa-6.1-branch/src/sympa_wizard.pl.in
+
+[bug] When using the SOAP server, if the lists subjects or gecos
+fields included UTF-8 characters. The response content-length header was
+smaller than the real character count in the response document, thus,
+clients created too small buffers to process the XML document and validation
+of said document failed. This issue was due to the fact that libwww is counting characters instead of bytes.
+Fixed by upgrading to the latest version of SOAP::Lite.
+
+------------------------------------------------------------------------
+r7197 | sympa-authors | 2011-08-25 16:47:57 +0200 (jeu 25 aoû 2011) | 1 ligne
+Chemins modifiés :
+   M /branches/sympa-6.1-branch/ChangeLog
+   M /branches/sympa-6.1-branch/NEWS
+   M /branches/sympa-6.1-branch/configure.ac
+
+[-release]Preparing version 6.1.7
+------------------------------------------------------------------------
 r7196 | sympa-authors | 2011-08-25 16:22:12 +0200 (jeu 25 aoû 2011) | 1 ligne
 Chemins modifiés :
    M /branches/sympa-6.1-branch/ChangeLog
