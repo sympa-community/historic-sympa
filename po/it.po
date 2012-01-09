@@ -12,7 +12,7 @@ msgstr ""
 "Project-Id-Version: it\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2002-07-16 17:27+0800\n"
-"PO-Revision-Date: 2011-04-05 11:37+0200\n"
+"PO-Revision-Date: 2011-12-15 17:27+0200\n"
 "Last-Translator: Anonymous Pootle User\n"
 "Language-Team: Italiano\n"
 "MIME-Version: 1.0\n"
@@ -146,7 +146,7 @@ msgstr "Utenti iscritti"
 #. (last_login_host)
 #: ../web_tt2/login_menu.tt2:21
 msgid "last login from %1"
-msgstr ""
+msgstr "Ultimo accesso da %1"
 
 #: ../web_tt2/login_menu.tt2:36
 msgid "Logout"
@@ -5914,7 +5914,7 @@ msgid "%1 Digest %2"
 msgstr "%1 Raccolta: %2"
 
 #: ../mail_tt2/digest.tt2:10 ../mail_tt2/digest_plain.tt2:9
-#: ../mail_tt2/get_archive.tt2:9 ../src/lib/List.pm:2800
+#: ../mail_tt2/get_archive.tt2:9 ../src/lib/List.pm:2801
 msgid "Table of contents:"
 msgstr "Sommario:"
 
@@ -9070,7 +9070,7 @@ msgstr "Errore alla linea %d : %s"
 #. This entry is a date/time format
 #. Check the strftime manpage for format details : http://docs.freebsd.org/info/gawk/gawk.info.Time_Functions.html
 #: ../src/lib/Family.pm:2591 ../src/lib/Family.pm:388 ../src/lib/Family.pm:665
-#: ../src/lib/List.pm:1893 ../wwsympa/Auth.pm:459
+#: ../src/lib/List.pm:1894 ../wwsympa/Auth.pm:459
 #: ../wwsympa/wwsympa.fcgi.in:1067 ../wwsympa/wwsympa.fcgi.in:2870
 msgid "%d %b %Y at %H:%M:%S"
 msgstr "%d %b %Y ore %H:%M:%S"
@@ -9920,19 +9920,19 @@ msgstr "Ultimo aggiornamento della configurazione"
 
 #. This entry is a date/time format
 #. Check the strftime manpage for format details : http://docs.freebsd.org/info/gawk/gawk.info.Time_Functions.html
-#: ../src/lib/List.pm:2918
+#: ../src/lib/List.pm:2919
 msgid "%a, %d %b %Y %H:%M:%S"
 msgstr "%a, %d %b %Y %H:%M:%S"
 
 #. This entry is a date/time format
 #. Check the strftime manpage for format details : http://docs.freebsd.org/info/gawk/gawk.info.Time_Functions.html
-#: ../src/lib/List.pm:2919
+#: ../src/lib/List.pm:2920
 msgid "%a, %d %b %Y"
 msgstr "%a, %d %b %Y"
 
 #. This entry is a date/time format
 #. Check the strftime manpage for format details : http://docs.freebsd.org/info/gawk/gawk.info.Time_Functions.html
-#: ../src/lib/List.pm:3110 ../src/lib/List.pm:3111 ../src/lib/List.pm:3115
+#: ../src/lib/List.pm:3111 ../src/lib/List.pm:3112 ../src/lib/List.pm:3116
 #: ../wwsympa/wwsympa.fcgi.in:11017 ../wwsympa/wwsympa.fcgi.in:11086
 #: ../wwsympa/wwsympa.fcgi.in:11288 ../wwsympa/wwsympa.fcgi.in:11635
 #: ../wwsympa/wwsympa.fcgi.in:15086 ../wwsympa/wwsympa.fcgi.in:15093

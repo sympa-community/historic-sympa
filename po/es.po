@@ -17,8 +17,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: sympa-es\n"
 "POT-Creation-Date: 2002-07-16 17:27+0800\n"
-"PO-Revision-Date: 2011-07-24 15:29+0200\n"
-"Last-Translator: Daniel Viñar Ulriksen <dani@belvil.net>\n"
+"PO-Revision-Date: 2012-01-02 11:35+0200\n"
+"Last-Translator: Alfonso Marin <amm44@alu.um.es>\n"
 "Language-Team: Español <sympa-users@sympa.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -4601,14 +4601,13 @@ msgstr ""
 msgid "I subscribe to list %1"
 msgstr "Me suscribo a %1"
 
+# tenía francés y español en la misma línea. dejo solo español.
 #: ../web_tt2/subrequest.tt2:31
 msgid ""
 "To confirm your identity and prevent anyone from subscribing you to\n"
 "        this list against your will, a message containing an validation link "
 "was sent to the e-mail address you provided."
 msgstr ""
-"Pour valider votre identité et empêcher un tiers de vous abonner à\n"
-"votre insu, un message contenant un lien de validation vous a été envoyé. "
 "Para confirmar tu identidad y evitar que alguien te inscriba contra tu\n"
 "voluntad, se te ha enviado un mensaje que contiene un enlace de validación."
 
@@ -5560,7 +5559,7 @@ msgid "%1 Digest %2"
 msgstr "Compilación del %2, lista %1 "
 
 #: ../mail_tt2/digest.tt2:10 ../mail_tt2/digest_plain.tt2:9
-#: ../mail_tt2/get_archive.tt2:9 ../src/lib/List.pm:2800
+#: ../mail_tt2/get_archive.tt2:9 ../src/lib/List.pm:2801
 msgid "Table of contents:"
 msgstr "Tabla de contenido:"
 
@@ -8439,9 +8438,10 @@ msgstr "mensaje recordatorio enviado a los suscriptores cada año"
 msgid "Update of list members based on the TTL"
 msgstr "Actualizar la lista de miembros basada en la TTL"
 
+# había un pequeño error
 #: ../src/etc/create_list_templates/discussion_list/comment.tt2:1
 msgid "Public discussion mailing list"
-msgstr "Lista de discución publica"
+msgstr "Lista de discusión publica"
 
 #: ../src/etc/create_list_templates/discussion_list/comment.tt2:2
 msgid "public archives"
@@ -8539,7 +8539,7 @@ msgstr "Error línea %d: %s"
 #. This entry is a date/time format
 #. Check the strftime manpage for format details : http://docs.freebsd.org/info/gawk/gawk.info.Time_Functions.html
 #: ../src/lib/Family.pm:2591 ../src/lib/Family.pm:388 ../src/lib/Family.pm:665
-#: ../src/lib/List.pm:1893 ../wwsympa/Auth.pm:459
+#: ../src/lib/List.pm:1894 ../wwsympa/Auth.pm:459
 #: ../wwsympa/wwsympa.fcgi.in:1067 ../wwsympa/wwsympa.fcgi.in:2870
 msgid "%d %b %Y at %H:%M:%S"
 msgstr "%d %b %Y en %H:%M:%S"
@@ -9243,19 +9243,19 @@ msgstr "quién actualizó la configuración"
 
 #. This entry is a date/time format
 #. Check the strftime manpage for format details : http://docs.freebsd.org/info/gawk/gawk.info.Time_Functions.html
-#: ../src/lib/List.pm:2918
+#: ../src/lib/List.pm:2919
 msgid "%a, %d %b %Y %H:%M:%S"
 msgstr "%a, %d/%b/%Y %H:%M:%S"
 
 #. This entry is a date/time format
 #. Check the strftime manpage for format details : http://docs.freebsd.org/info/gawk/gawk.info.Time_Functions.html
-#: ../src/lib/List.pm:2919
+#: ../src/lib/List.pm:2920
 msgid "%a, %d %b %Y"
 msgstr "%a, %d/%b/%Y"
 
 #. This entry is a date/time format
 #. Check the strftime manpage for format details : http://docs.freebsd.org/info/gawk/gawk.info.Time_Functions.html
-#: ../src/lib/List.pm:3110 ../src/lib/List.pm:3111 ../src/lib/List.pm:3115
+#: ../src/lib/List.pm:3111 ../src/lib/List.pm:3112 ../src/lib/List.pm:3116
 #: ../wwsympa/wwsympa.fcgi.in:11017 ../wwsympa/wwsympa.fcgi.in:11086
 #: ../wwsympa/wwsympa.fcgi.in:11288 ../wwsympa/wwsympa.fcgi.in:11635
 #: ../wwsympa/wwsympa.fcgi.in:15086 ../wwsympa/wwsympa.fcgi.in:15093
@@ -9585,200 +9585,6 @@ msgstr "interrumpir la recepción de mensajes (útil para las vacaciones)"
 #: ../wwsympa/wwslib.pm:37
 msgid "you do not receive your own posts"
 msgstr "No recibir mis propios mensajes"
-
-#: ../mail_tt2/moderate.tt2:23
-msgid ""
-"Because the new message is suspected to be a spam it is not attached to this "
-"one. You must use the web interface to reject or validate it."
-msgstr ""
-
-#: ../src/lib/confdef.pm:348
-msgid "Secret used by Sympa to make MD5 fingerprint in web cookies secure"
-msgstr ""
-
-#: ../src/lib/confdef.pm:1336 ../src/lib/confdef.pm:350
-msgid "Should not be changed ! May invalid all user password"
-msgstr ""
-
-#: ../src/lib/confdef.pm:360
-msgid ""
-"This parameter is a scenario, check sympa documentation about scenarios if "
-"you want to define one"
-msgstr ""
-
-#: ../src/lib/confdef.pm:388
-msgid ""
-"Used to define a custom parameter for your server. Do not forget the "
-"semicolon between the param name and the param value."
-msgstr ""
-
-#: ../src/lib/confdef.pm:400
-msgid "Directory containing mailing lists subdirectories"
-msgstr ""
-
-#: ../src/lib/confdef.pm:407
-msgid ""
-"Directory for configuration files; it also contains scenari/ and templates/ "
-"directories"
-msgstr ""
-
-#: ../src/lib/confdef.pm:416
-msgid "Syslog facility for sympa"
-msgstr ""
-
-#: ../src/lib/confdef.pm:424
-msgid "Log verbosity"
-msgstr ""
-
-#: ../src/lib/confdef.pm:427
-msgid "0: normal, 2,3,4: for debug"
-msgstr ""
-
-#: ../src/lib/confdef.pm:432
-msgid "Communication mode with syslogd (unix | inet)"
-msgstr ""
-
-#: ../src/lib/confdef.pm:438
-msgid "File containing Sympa PID while running"
-msgstr ""
-
-#: ../src/lib/confdef.pm:440
-msgid ""
-"Sympa also locks this file to ensure that it is not running more than once. "
-"Caution: user sympa need to write access without special privilege."
-msgstr ""
-
-#: ../src/lib/confdef.pm:450
-msgid "Umask used for file creation by Sympa"
-msgstr ""
-
-#: ../src/lib/confdef.pm:463
-msgid ""
-"Max. number of Sendmail processes (launched by Sympa) running simultaneously"
-msgstr ""
-
-#: ../src/lib/confdef.pm:465
-msgid ""
-"Proposed value is quite low, you can rise it up to 100, 200 or even 300 with "
-"powerfull systems."
-msgstr ""
-
-#: ../src/lib/confdef.pm:475
-msgid ""
-"comma separated list of operations for which blacklist filter is applied"
-msgstr ""
-
-#: ../src/lib/confdef.pm:480
-msgid "Setting this parameter to \"none\" will hide the blacklist feature"
-msgstr ""
-
-#: ../src/lib/confdef.pm:485
-msgid ""
-"If set, when a list editor report a spam, this external script is run by "
-"wwsympa or sympa, the spam is sent into script stdin"
-msgstr ""
-
-#: ../src/lib/confdef.pm:491
-msgid ""
-"Default maximum size (in bytes) for messages (can be re-defined for each "
-"list)"
-msgstr ""
-
-#: ../src/lib/confdef.pm:508
-msgid ""
-"Maximum number of recipients per call to Sendmail. The nrcpt_by_domain.conf "
-"file allows a different tuning per destination domain."
-msgstr ""
-
-#: ../src/lib/confdef.pm:514
-msgid "Max. number of different domains per call to Sendmail"
-msgstr ""
-
-#: ../src/lib/confdef.pm:524
-msgid "Path to the MTA (sendmail, postfix, exim or qmail)"
-msgstr ""
-
-#: ../src/lib/confdef.pm:527
-msgid ""
-"should point to a sendmail-compatible binary (eg: a binary named \"sendmail"
-"\" is distributed with Postfix)"
-msgstr ""
-
-#: ../src/lib/confdef.pm:539
-msgid "Specify which rfc2369 mailing list headers to add"
-msgstr ""
-
-#: ../src/lib/confdef.pm:555
-msgid "Reject mail from automates (crontab, etc) sent to a list?"
-msgstr ""
-
-#: ../src/lib/confdef.pm:570
-msgid ""
-"SMTP server to which Sympa verify if alias with the same name as the list to "
-"be created"
-msgstr ""
-
-#: ../src/lib/confdef.pm:572
-msgid ""
-"Default value is real FQDN of host. Set [HOST]:[PORT] to specify non-"
-"standard port."
-msgstr ""
-
-#: ../src/lib/confdef.pm:582
-msgid "SMTP HELO (EHLO) parameter used for alias verification"
-msgstr ""
-
-#: ../src/lib/confdef.pm:584
-msgid "Default value is the host part of list_check_smtp parameter."
-msgstr ""
-
-#: ../src/lib/confdef.pm:600
-msgid "Default priority for a packet to be sent by bulk."
-msgstr ""
-
-#: ../src/lib/confdef.pm:607
-msgid ""
-"Minimum number of packets in database before the bulk forks to increase "
-"sending rate"
-msgstr ""
-
-#: ../src/lib/confdef.pm:614
-msgid "Max number of bulks that will run on the same server"
-msgstr ""
-
-#: ../src/lib/confdef.pm:621
-msgid ""
-"The number of seconds a slave bulk will remain running without processing a "
-"message before it spontaneously dies."
-msgstr ""
-
-#: ../src/lib/confdef.pm:628
-msgid ""
-"The number of seconds a bulk sleeps between starting a new loop if it didn't "
-"find a message to send."
-msgstr ""
-
-#: ../src/lib/confdef.pm:630
-msgid "Keep it small if you want your server to be reactive."
-msgstr ""
-
-#: ../src/lib/confdef.pm:635
-msgid ""
-"Number of seconds a master bulk waits between two packets number checks."
-msgstr ""
-
-#: ../src/lib/confdef.pm:637
-msgid ""
-"Keep it small if you expect brutal increases in the message sending load."
-msgstr ""
-
-#: ../src/lib/confdef.pm:645
-msgid "Default disk quota for shared repository"
-msgstr ""
-
-#: ../src/lib/confdef.pm:659
-msgid "Directory containing various specialized spools"
-msgstr ""
 
 #: ../src/lib/confdef.pm:661
 msgid "All spool are created at runtime by sympa.pl"
@@ -10186,6 +9992,217 @@ msgstr ""
 #: ../src/lib/confdef.pm:662
 msgid "Plugin"
 msgstr ""
+
+#~ msgid ""
+#~ "Because the new message is suspected to be a spam it is not attached to "
+#~ "this one. You must use the web interface to reject or validate it."
+#~ msgstr ""
+#~ "Debido a que el nuevo mensaje es sospechoso de spam, no será adjuntado a "
+#~ "este. Debe utilizar la interfaz web para rechazarlo o validarlo."
+
+#~ msgid "Secret used by Sympa to make MD5 fingerprint in web cookies secure"
+#~ msgstr ""
+#~ "Secreto utilizado por Sympa para generar la huella MD5 en las cookies "
+#~ "seguras de web"
+
+#~ msgid "Should not be changed ! May invalid all user password"
+#~ msgstr ""
+#~ "No debe ser modificada! Puede invalidar todas las contraseñas de usuario"
+
+#~ msgid ""
+#~ "This parameter is a scenario, check sympa documentation about scenarios "
+#~ "if you want to define one"
+#~ msgstr ""
+#~ "Este parámetro es un escenario, chequea la documentación sympa sobre "
+#~ "escenarios si quieres definir uno"
+
+#~ msgid ""
+#~ "Used to define a custom parameter for your server. Do not forget the "
+#~ "semicolon between the param name and the param value."
+#~ msgstr ""
+#~ "Utilizado para definir parámetros por defecto en tu servidor. No te "
+#~ "olvides del punto y coma entre el nombre y el valor del parámetro."
+
+#~ msgid "Directory containing mailing lists subdirectories"
+#~ msgstr "Carpeta que contiene las subcarpetas de las listas de correo"
+
+#~ msgid ""
+#~ "Directory for configuration files; it also contains scenari/ and "
+#~ "templates/ directories"
+#~ msgstr ""
+#~ "Carpeta para los archivos de configuración; también contiene las carpetas "
+#~ "scenari/ y templates/"
+
+#~ msgid "Syslog facility for sympa"
+#~ msgstr "Funcionalidad Syslog para sympa"
+
+#~ msgid "Log verbosity"
+#~ msgstr "Verbosidad del registro"
+
+#~ msgid "0: normal, 2,3,4: for debug"
+#~ msgstr "0: normal, 2, 3,4: para debbugeo"
+
+#~ msgid "Communication mode with syslogd (unix | inet)"
+#~ msgstr "Modo de comunicación con syslogd (unix | inet)"
+
+#~ msgid "File containing Sympa PID while running"
+#~ msgstr "Archivo conteniendo el PID de Sympa mientras está ejecutándose"
+
+#~ msgid ""
+#~ "Sympa also locks this file to ensure that it is not running more than "
+#~ "once. Caution: user sympa need to write access without special privilege."
+#~ msgstr ""
+#~ "Sympa también bloquea esto para asegurarse que no corre más de una vez. "
+#~ "Precaución: el usuario sympa necesita acceso de escritura sin privilegio "
+#~ "especial. "
+
+#~ msgid "Umask used for file creation by Sympa"
+#~ msgstr "Umask para la creación de archivos por Sympa"
+
+#~ msgid ""
+#~ "Max. number of Sendmail processes (launched by Sympa) running "
+#~ "simultaneously"
+#~ msgstr ""
+#~ "Número máx. de procesos Sendmail (lanzados por Sympa) corriendo "
+#~ "simultáneamente"
+
+#~ msgid ""
+#~ "Proposed value is quite low, you can rise it up to 100, 200 or even 300 "
+#~ "with powerfull systems."
+#~ msgstr ""
+#~ "El valor propuesto es un poco bajo, puedes aumentarlo hasta 100, 200 e "
+#~ "incluso 300 para sistemas poderosos."
+
+#~ msgid ""
+#~ "comma separated list of operations for which blacklist filter is applied"
+#~ msgstr ""
+#~ "lista separada por coma, de las operaciones para las cuales el filtro de "
+#~ "lista negra se aplica"
+
+#~ msgid "Setting this parameter to \"none\" will hide the blacklist feature"
+#~ msgstr ""
+#~ "Colocando este parámetro en \"nada\" hará esconder la funcionalidad de "
+#~ "lista negra"
+
+#~ msgid ""
+#~ "If set, when a list editor report a spam, this external script is run by "
+#~ "wwsympa or sympa, the spam is sent into script stdin"
+#~ msgstr ""
+#~ "Si se establece, cuando un editor de la lista notifica un spam, este "
+#~ "script externo lo ejecuta wwsympa o sympa, el spam se envía a la entrada "
+#~ "estandar del script"
+
+#~ msgid ""
+#~ "Default maximum size (in bytes) for messages (can be re-defined for each "
+#~ "list)"
+#~ msgstr ""
+#~ "Tamaño máximo predefinido (en bytes) de los mensajes (puede redefinirse "
+#~ "en cada lista)"
+
+#~ msgid ""
+#~ "Maximum number of recipients per call to Sendmail. The nrcpt_by_domain."
+#~ "conf file allows a different tuning per destination domain."
+#~ msgstr ""
+#~ "Máximo de destinatarios por cada invocación hecha a Sendmail. El fichero "
+#~ "nrcpt_by_domain.conf permite establecer un número diferente por dominio "
+#~ "de destino."
+
+#~ msgid "Max. number of different domains per call to Sendmail"
+#~ msgstr "Máximo número de dominios diferentes por invocación de Sendmail."
+
+#~ msgid "Path to the MTA (sendmail, postfix, exim or qmail)"
+#~ msgstr ""
+#~ "Ruta de acceso al servidor de envío (o MTA; sendmail, postfix, exim o "
+#~ "qmail)."
+
+#~ msgid ""
+#~ "should point to a sendmail-compatible binary (eg: a binary named "
+#~ "\"sendmail\" is distributed with Postfix)"
+#~ msgstr ""
+#~ "Debería apuntar a un ejecutable complatible con sendmail. Por ejemplo, un "
+#~ "ejecutable llamado \"sendmail\" se distribuye con Postfix."
+
+#~ msgid "Specify which rfc2369 mailing list headers to add"
+#~ msgstr ""
+#~ "Especificar qué cabeceras rfc2369 (cabeceras para listas de correo) hay "
+#~ "que añadir."
+
+#~ msgid "Reject mail from automates (crontab, etc) sent to a list?"
+#~ msgstr "¿Se rechaza correo automatizado (crontab, etc) enviado a la lista?"
+
+#, fuzzy
+#~ msgid ""
+#~ "SMTP server to which Sympa verify if alias with the same name as the list "
+#~ "to be created"
+#~ msgstr ""
+#~ "Servidor SMTP en el que Sympa verifica si un alias con el mismo nombre "
+#~ "que la lista se creará."
+
+#~ msgid ""
+#~ "Default value is real FQDN of host. Set [HOST]:[PORT] to specify non-"
+#~ "standard port."
+#~ msgstr ""
+#~ "El valor predeterminado es el FQDN real del equipo (del host). Ponga "
+#~ "[HOST]:[PORT] para especificar un puerto diferente del estándar."
+
+#~ msgid "SMTP HELO (EHLO) parameter used for alias verification"
+#~ msgstr ""
+#~ "Parámetro HELO (EHLO), de SMTP, que se usará para la verificación de un "
+#~ "alias"
+
+#~ msgid "Default value is the host part of list_check_smtp parameter."
+#~ msgstr ""
+#~ "El valor predeterminado es la parte correspondiente a el host (al equipo) "
+#~ "del parámetro list_check_smtp."
+
+#~ msgid "Default priority for a packet to be sent by bulk."
+#~ msgstr "Prioridad predeterminada de un paquete enviado mediante bulk."
+
+#~ msgid ""
+#~ "Minimum number of packets in database before the bulk forks to increase "
+#~ "sending rate"
+#~ msgstr ""
+#~ "Número mínimo de paquetes en base de datos antes de que el proceso bulk "
+#~ "cree nuevos procesos para incremental el ratio de envío"
+
+#~ msgid "Max number of bulks that will run on the same server"
+#~ msgstr ""
+#~ "Número máximo de procesos bulk que se ejecutarán en el mismo servidor"
+
+#~ msgid ""
+#~ "The number of seconds a slave bulk will remain running without processing "
+#~ "a message before it spontaneously dies."
+#~ msgstr ""
+#~ "El número de segundos que un proceso hijo bulk permanecerá ejectuándose "
+#~ "sin procesar ningún mensaje antes de morir espontáneamente."
+
+#~ msgid ""
+#~ "The number of seconds a bulk sleeps between starting a new loop if it "
+#~ "didn't find a message to send."
+#~ msgstr ""
+#~ "El número de segundos que un proceso bulk duerme entre ejecuciones si no "
+#~ "encontró ningun mensaje a enviar."
+
+#~ msgid "Keep it small if you want your server to be reactive."
+#~ msgstr "Permanece pequeño si quieres que el servidor se reactive."
+
+#~ msgid ""
+#~ "Number of seconds a master bulk waits between two packets number checks."
+#~ msgstr ""
+#~ "Número de segundos que un proceso bulk master espera entre dos chequeos "
+#~ "de números de paquete."
+
+#~ msgid ""
+#~ "Keep it small if you expect brutal increases in the message sending load."
+#~ msgstr ""
+#~ "Mantener bajo si esperas un incremento brutal en la carga de envío de "
+#~ "mensajes."
+
+#~ msgid "Default disk quota for shared repository"
+#~ msgstr "Cuota de disco por defecto para el repositorio compartido"
+
+#~ msgid "Directory containing various specialized spools"
+#~ msgstr "Directorio contenedor de varias colas especializadas"
 
 #~ msgid ""
 #~ "You <span style=\"font-weight: bold; font-size: 10px\">are</span> "

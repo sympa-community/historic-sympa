@@ -4769,7 +4769,7 @@ msgstr ""
 msgid "%1 Digest %2"
 msgstr ""
 
-#: ../mail_tt2/digest.tt2:10 ../mail_tt2/digest_plain.tt2:9 ../mail_tt2/get_archive.tt2:9 ../src/lib/List.pm:2800
+#: ../mail_tt2/digest.tt2:10 ../mail_tt2/digest_plain.tt2:9 ../mail_tt2/get_archive.tt2:9 ../src/lib/List.pm:2801
 msgid "Table of contents:"
 msgstr ""
 
@@ -7229,7 +7229,7 @@ msgstr ""
 msgid "Error at line %d: %s"
 msgstr ""
 
-#: ../src/lib/Family.pm:2591 ../src/lib/Family.pm:388 ../src/lib/Family.pm:665 ../src/lib/List.pm:1893 ../wwsympa/Auth.pm:459 ../wwsympa/wwsympa.fcgi.in:1067 ../wwsympa/wwsympa.fcgi.in:2870
+#: ../src/lib/Family.pm:2591 ../src/lib/Family.pm:388 ../src/lib/Family.pm:665 ../src/lib/List.pm:1894 ../wwsympa/Auth.pm:459 ../wwsympa/wwsympa.fcgi.in:1067 ../wwsympa/wwsympa.fcgi.in:2870
 #. This entry is a date/time format
 #. Check the strftime manpage for format details : http://docs.freebsd.org/info/gawk/gawk.info.Time_Functions.html
 msgid "%d %b %Y at %H:%M:%S"
@@ -7915,19 +7915,19 @@ msgstr ""
 msgid "who updated the config"
 msgstr ""
 
-#: ../src/lib/List.pm:2918
+#: ../src/lib/List.pm:2919
 #. This entry is a date/time format
 #. Check the strftime manpage for format details : http://docs.freebsd.org/info/gawk/gawk.info.Time_Functions.html
 msgid "%a, %d %b %Y %H:%M:%S"
 msgstr ""
 
-#: ../src/lib/List.pm:2919
+#: ../src/lib/List.pm:2920
 #. This entry is a date/time format
 #. Check the strftime manpage for format details : http://docs.freebsd.org/info/gawk/gawk.info.Time_Functions.html
 msgid "%a, %d %b %Y"
 msgstr ""
 
-#: ../src/lib/List.pm:3110 ../src/lib/List.pm:3111 ../src/lib/List.pm:3115 ../wwsympa/wwsympa.fcgi.in:11017 ../wwsympa/wwsympa.fcgi.in:11086 ../wwsympa/wwsympa.fcgi.in:11288 ../wwsympa/wwsympa.fcgi.in:11635 ../wwsympa/wwsympa.fcgi.in:15086 ../wwsympa/wwsympa.fcgi.in:15093 ../wwsympa/wwsympa.fcgi.in:15811 ../wwsympa/wwsympa.fcgi.in:16589 ../wwsympa/wwsympa.fcgi.in:16590 ../wwsympa/wwsympa.fcgi.in:4280 ../wwsympa/wwsympa.fcgi.in:4338 ../wwsympa/wwsympa.fcgi.in:4909 ../wwsympa/wwsympa.fcgi.in:4910 ../wwsympa/wwsympa.fcgi.in:6432 ../wwsympa/wwsympa.fcgi.in:7451 ../wwsympa/wwsympa.fcgi.in:7994 ../wwsympa/wwsympa.fcgi.in:8041 ../wwsympa/wwsympa.fcgi.in:8043 ../wwsympa/wwsympa.fcgi.in:8519 ../wwsympa/wwsympa.fcgi.in:8520 ../wwsympa/wwsympa.fcgi.in:8554 ../wwsympa/wwsympa.fcgi.in:8555 ../wwsympa/wwsympa.fcgi.in:8734 ../wwsympa/wwsympa.fcgi.in:8735
+#: ../src/lib/List.pm:3111 ../src/lib/List.pm:3112 ../src/lib/List.pm:3116 ../wwsympa/wwsympa.fcgi.in:11017 ../wwsympa/wwsympa.fcgi.in:11086 ../wwsympa/wwsympa.fcgi.in:11288 ../wwsympa/wwsympa.fcgi.in:11635 ../wwsympa/wwsympa.fcgi.in:15086 ../wwsympa/wwsympa.fcgi.in:15093 ../wwsympa/wwsympa.fcgi.in:15811 ../wwsympa/wwsympa.fcgi.in:16589 ../wwsympa/wwsympa.fcgi.in:16590 ../wwsympa/wwsympa.fcgi.in:4280 ../wwsympa/wwsympa.fcgi.in:4338 ../wwsympa/wwsympa.fcgi.in:4909 ../wwsympa/wwsympa.fcgi.in:4910 ../wwsympa/wwsympa.fcgi.in:6432 ../wwsympa/wwsympa.fcgi.in:7451 ../wwsympa/wwsympa.fcgi.in:7994 ../wwsympa/wwsympa.fcgi.in:8041 ../wwsympa/wwsympa.fcgi.in:8043 ../wwsympa/wwsympa.fcgi.in:8519 ../wwsympa/wwsympa.fcgi.in:8520 ../wwsympa/wwsympa.fcgi.in:8554 ../wwsympa/wwsympa.fcgi.in:8555 ../wwsympa/wwsympa.fcgi.in:8734 ../wwsympa/wwsympa.fcgi.in:8735
 #. This entry is a date/time format
 #. Check the strftime manpage for format details : http://docs.freebsd.org/info/gawk/gawk.info.Time_Functions.html
 msgid "%d %b %Y"

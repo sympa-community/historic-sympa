@@ -5658,7 +5658,7 @@ msgid "%1 Digest %2"
 msgstr "%1 - 다이제스트 %2"
 
 #: ../mail_tt2/digest.tt2:10 ../mail_tt2/digest_plain.tt2:9
-#: ../mail_tt2/get_archive.tt2:9 ../src/lib/List.pm:2800
+#: ../mail_tt2/get_archive.tt2:9 ../src/lib/List.pm:2801
 msgid "Table of contents:"
 msgstr "목차:"
 
@@ -8651,7 +8651,7 @@ msgstr "에러 (%d 행) : %s"
 #. This entry is a date/time format
 #. Check the strftime manpage for format details : http://docs.freebsd.org/info/gawk/gawk.info.Time_Functions.html
 #: ../src/lib/Family.pm:2591 ../src/lib/Family.pm:388 ../src/lib/Family.pm:665
-#: ../src/lib/List.pm:1893 ../wwsympa/Auth.pm:459
+#: ../src/lib/List.pm:1894 ../wwsympa/Auth.pm:459
 #: ../wwsympa/wwsympa.fcgi.in:1067 ../wwsympa/wwsympa.fcgi.in:2870
 msgid "%d %b %Y at %H:%M:%S"
 msgstr "%Y년%m월%d일 %H시%M분%S초"
@@ -9367,19 +9367,19 @@ msgstr "설치 을 업데이트했는 분"
 
 #. This entry is a date/time format
 #. Check the strftime manpage for format details : http://docs.freebsd.org/info/gawk/gawk.info.Time_Functions.html
-#: ../src/lib/List.pm:2918
+#: ../src/lib/List.pm:2919
 msgid "%a, %d %b %Y %H:%M:%S"
 msgstr "%Y년%m월%d일 (%a) %H:%M:%S"
 
 #. This entry is a date/time format
 #. Check the strftime manpage for format details : http://docs.freebsd.org/info/gawk/gawk.info.Time_Functions.html
-#: ../src/lib/List.pm:2919
+#: ../src/lib/List.pm:2920
 msgid "%a, %d %b %Y"
 msgstr "%Y년%m월%d일 (%a)"
 
 #. This entry is a date/time format
 #. Check the strftime manpage for format details : http://docs.freebsd.org/info/gawk/gawk.info.Time_Functions.html
-#: ../src/lib/List.pm:3110 ../src/lib/List.pm:3111 ../src/lib/List.pm:3115
+#: ../src/lib/List.pm:3111 ../src/lib/List.pm:3112 ../src/lib/List.pm:3116
 #: ../wwsympa/wwsympa.fcgi.in:11017 ../wwsympa/wwsympa.fcgi.in:11086
 #: ../wwsympa/wwsympa.fcgi.in:11288 ../wwsympa/wwsympa.fcgi.in:11635
 #: ../wwsympa/wwsympa.fcgi.in:15086 ../wwsympa/wwsympa.fcgi.in:15093

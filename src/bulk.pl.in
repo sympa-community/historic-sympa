@@ -246,7 +246,7 @@ while (!$end) {
 	$data->{'listname'} = $bulk->{'listname'};
 	$data->{'robot'} = $bulk->{'robot'};
 	$data->{'to'} = $bulk->{'receipients'};
-	$data->{'wwsympa_url'} = $Conf{'wwsympa_url'};
+	$data->{'wwsympa_url'} = &Conf::get_robot_conf($bulk->{'robot'},'wwsympa_url');
 	
 	my $rcpt; # It is the email of a subscriber, use it in the foreach
 	my @rcpts = split /,/,$bulk->{'receipients'}; # Contain all the subscribers
@@ -267,7 +267,7 @@ while (!$end) {
 	    foreach $rcpt (@rcpts) {
 		my $return_path = $bulk->{'returnpath'};
 		if ($bulk->{'verp'}) {
-		    my $return_path = $rcpt;
+		    $return_path = $rcpt;
 		    $return_path =~ s/\@/\=\=a\=\=/; 
 		    $return_path = "$Conf::Conf{'bounce_email_prefix'}+$return_path\=\=$bulk->{'listname'}\@$bulk->{'robot'}"; 
 		}

@@ -3,18 +3,20 @@
 # This file is distributed under the same license as the sympa package.
 # FIRST AUTHOR <EMAIL@ADDRESS>, 2006.
 #
-#, fuzzy
 msgid ""
 msgstr ""
 "Project-Id-Version: sympa\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
 "POT-Creation-Date: 2002-07-16 17:27+0800\n"
-"PO-Revision-Date: 2006-11-28 12:37+0000\n"
-"Last-Translator: Piarres Beobide <pi@beobide.net>\n"
+"PO-Revision-Date: 2011-12-09 15:42+0200\n"
+"Last-Translator: Anonymous Pootle User\n"
 "Language-Team: Basque <eu@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+"Language: eu\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Pootle 2.1.2\n"
 "X-Rosetta-Export-Date: 2006-12-11 09:58+0000\n"
 
 #: ../web_tt2/home.tt2:2
@@ -5240,7 +5242,7 @@ msgid "%1 Digest %2"
 msgstr "%1 Laburpena %2"
 
 #: ../mail_tt2/digest.tt2:10 ../mail_tt2/digest_plain.tt2:9
-#: ../mail_tt2/get_archive.tt2:9 ../src/lib/List.pm:2800
+#: ../mail_tt2/get_archive.tt2:9 ../src/lib/List.pm:2801
 msgid "Table of contents:"
 msgstr ""
 
@@ -7120,7 +7122,7 @@ msgstr ""
 msgid ""
 "The %1 file that was initially attached to this message has been stored on "
 "the mailing lists server:"
-msgstr ""
+msgstr "Fitxategi %1 erantsia ikusteko, klik egin esteka honetan:"
 
 #. (list.name)
 #: ../mail_tt2/user_notification.tt2:4
@@ -7954,7 +7956,7 @@ msgstr ""
 #. This entry is a date/time format
 #. Check the strftime manpage for format details : http://docs.freebsd.org/info/gawk/gawk.info.Time_Functions.html
 #: ../src/lib/Family.pm:2591 ../src/lib/Family.pm:388 ../src/lib/Family.pm:665
-#: ../src/lib/List.pm:1893 ../wwsympa/Auth.pm:459
+#: ../src/lib/List.pm:1894 ../wwsympa/Auth.pm:459
 #: ../wwsympa/wwsympa.fcgi.in:1067 ../wwsympa/wwsympa.fcgi.in:2870
 msgid "%d %b %Y at %H:%M:%S"
 msgstr ""
@@ -8654,19 +8656,19 @@ msgstr ""
 
 #. This entry is a date/time format
 #. Check the strftime manpage for format details : http://docs.freebsd.org/info/gawk/gawk.info.Time_Functions.html
-#: ../src/lib/List.pm:2918
+#: ../src/lib/List.pm:2919
 msgid "%a, %d %b %Y %H:%M:%S"
 msgstr ""
 
 #. This entry is a date/time format
 #. Check the strftime manpage for format details : http://docs.freebsd.org/info/gawk/gawk.info.Time_Functions.html
-#: ../src/lib/List.pm:2919
+#: ../src/lib/List.pm:2920
 msgid "%a, %d %b %Y"
 msgstr ""
 
 #. This entry is a date/time format
 #. Check the strftime manpage for format details : http://docs.freebsd.org/info/gawk/gawk.info.Time_Functions.html
-#: ../src/lib/List.pm:3110 ../src/lib/List.pm:3111 ../src/lib/List.pm:3115
+#: ../src/lib/List.pm:3111 ../src/lib/List.pm:3112 ../src/lib/List.pm:3116
 #: ../wwsympa/wwsympa.fcgi.in:11017 ../wwsympa/wwsympa.fcgi.in:11086
 #: ../wwsympa/wwsympa.fcgi.in:11288 ../wwsympa/wwsympa.fcgi.in:11635
 #: ../wwsympa/wwsympa.fcgi.in:15086 ../wwsympa/wwsympa.fcgi.in:15093
