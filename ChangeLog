@@ -1,4 +1,16 @@
 ------------------------------------------------------------------------
+r7261 | david.verdin | 2012-01-09 10:29:37 +0100 (lun 09 jan 2012) | 1 ligne
+Chemins modifiés :
+   M /branches/sympa-6.1-branch/src/lib/List.pm
+
+[bug][Reported by J.H. Belpois, univ. Brest] When a lot of lists used inclusions for their members, displaying the list of lists could lead an error 500. This was due to attempts to include list ADMINS even though they were not included from external sources. These attempts led to the creation of write locks (include_admins.lock) that, beyond a certain number of lists, led to automatic collisions with read locks used when gathering the admins mail addresses. After a certain number of collisions, the web request timed out. Fixed by quitting the skipping the admin sync when no admin source is defined.
+------------------------------------------------------------------------
+r7260 | david.verdin | 2012-01-09 10:18:08 +0100 (lun 09 jan 2012) | 1 ligne
+Chemins modifiés :
+   M /branches/sympa-6.1-branch/ChangeLog
+
+[svn] Updating the ChangLog
+------------------------------------------------------------------------
 r7259 | sympa-authors | 2012-01-06 16:32:39 +0100 (ven 06 jan 2012) | 1 ligne
 Chemins modifiés :
    M /branches/sympa-6.1-branch/ChangeLog
