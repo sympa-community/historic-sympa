@@ -9350,118 +9350,158 @@ sub sync_include_admin {
 
     ## don't care about listmaster role
     foreach my $role ('owner','editor'){
-	my $old_admin_users = {};
-        ## Load a hash with the old admin users
-	for (my $admin_user=$self->get_first_admin_user($role); $admin_user; $admin_user=$self->get_next_admin_user()) {
-	    $old_admin_users->{lc($admin_user->{'email'})} = $admin_user;
-	}
-	
-	## Load a hash with the new admin user list from an include source(s)
-	my $new_admin_users_include;
-	## Load a hash with the new admin user users from the list config
-	my $new_admin_users_config;
-	unless ($option eq 'purge') {
-	    
-	    $new_admin_users_include = $self->_load_admin_users_include($role);
-	    
-	    ## If include sources were not available, do not update admin users
-	    ## Use DB cache instead
-	    unless (defined $new_admin_users_include) {
-		&do_log('err', 'Could not get %ss from an include source for list %s', $role, $name);
-		unless (&List::send_notify_to_listmaster('sync_include_admin_failed', $self->{'domain'}, [$name])) {
-		    &do_log('notice',"Unable to send notify 'sync_include_admmin_failed' to listmaster");
-		}
-		return undef;
+	if(defined $self->{'admin'}{$role.'_include'} && $#{$self->{'admin'}{$role.'_include'}}>-1) {
+	    my $old_admin_users = {};
+	    ## Load a hash with the old admin users
+	    for (my $admin_user=$self->get_first_admin_user($role); $admin_user; $admin_user=$self->get_next_admin_user()) {
+		$old_admin_users->{lc($admin_user->{'email'})} = $admin_user;
 	    }
-
-	    $new_admin_users_config = $self->_load_admin_users_config($role);
 	    
-	    unless (defined $new_admin_users_config) {
-		&do_log('err', 'Could not get %ss from config for list %s', $role, $name);
-		return undef;
-	    }
-	}
-	
-	my @add_tab;
-	my $admin_users_added = 0;
-	my $admin_users_updated = 0;
-	
-	## Get an Exclusive lock
-	my $lock = new Lock ($self->{'dir'}.'/include_admin_user');
-	unless (defined $lock) {
-	    &do_log('err','Could not create new lock');
-	    return undef;
-	}
-	$lock->set_timeout(20); 
-	unless ($lock->lock('write')) {
-	    return undef;
-	}
-	
-	## Go through new admin_users_include
-	foreach my $email (keys %{$new_admin_users_include}) {
-	    
-	    # included and subscribed
-	    if (defined $new_admin_users_config->{$email}) {
-		my $param;
-		foreach my $p ('reception','visibility','gecos','info','profile') {
-		    #  config parameters have priority on include parameters in case of conflict
-		    $param->{$p} = $new_admin_users_config->{$email}{$p} if (defined $new_admin_users_config->{$email}{$p});
-		    $param->{$p} ||= $new_admin_users_include->{$email}{$p};
-		}
-
-                #Admin User was already in the DB
-		if (defined $old_admin_users->{$email}) {
-
-		    $param->{'included'} = 1;
-		    $param->{'id'} = $new_admin_users_include->{$email}{'id'};
-		    $param->{'subscribed'} = 1;
-		   
-		    my $param_update = &is_update_param($param,$old_admin_users->{$email});
-		    
-		    # updating
-		    if (defined $param_update) {
-			if (%{$param_update}) {
-			    &do_log('debug', 'List:sync_include_admin : updating %s %s to list %s',$role, $email, $name);
-			    $param_update->{'update_date'} = time;
-			    
-			    unless ($self->update_admin_user($email, $role,$param_update)) {
-				&do_log('err', 'List:sync_include_admin(%s): Failed to update %s %s', $name,$role,$email);
-				next;
-			    }
-			    $admin_users_updated++;
-			}
-		    }
-		    #for the next foreach (sort of new_admin_users_config that are not included)
-		    delete ($new_admin_users_config->{$email});
-		    
-		# add a new included and subscribed admin user 
-		}else {
-		    &do_log('debug2', 'List:sync_include_admin: adding %s %s to list %s',$email,$role, $name);
-		    
-		    foreach my $key (keys %{$param}) {  
-			$new_admin_users_config->{$email}{$key} = $param->{$key};
-		    }
-		    $new_admin_users_config->{$email}{'included'} = 1;
-		    $new_admin_users_config->{$email}{'subscribed'} = 1;
-		    push (@add_tab,$new_admin_users_config->{$email});
-		    
-                    #for the next foreach (sort of new_admin_users_config that are not included)
-		    delete ($new_admin_users_config->{$email});
-		}
+	    ## Load a hash with the new admin user list from an include source(s)
+	    my $new_admin_users_include;
+	    ## Load a hash with the new admin user users from the list config
+	    my $new_admin_users_config;
+	    unless ($option eq 'purge') {
 		
-	    # only included
-	    }else {
-		my $param = $new_admin_users_include->{$email};
+		$new_admin_users_include = $self->_load_admin_users_include($role);
+		
+		## If include sources were not available, do not update admin users
+		## Use DB cache instead
+		unless (defined $new_admin_users_include) {
+		    &do_log('err', 'Could not get %ss from an include source for list %s', $role, $name);
+		    unless (&List::send_notify_to_listmaster('sync_include_admin_failed', $self->{'domain'}, [$name])) {
+			&do_log('notice',"Unable to send notify 'sync_include_admmin_failed' to listmaster");
+		    }
+		    return undef;
+		}
 
-                #Admin User was already in the DB
+		$new_admin_users_config = $self->_load_admin_users_config($role);
+		
+		unless (defined $new_admin_users_config) {
+		    &do_log('err', 'Could not get %ss from config for list %s', $role, $name);
+		    return undef;
+		}
+	    }
+	    
+	    my @add_tab;
+	    my $admin_users_added = 0;
+	    my $admin_users_updated = 0;
+	    
+	    ## Get an Exclusive lock
+	    my $lock = new Lock ($self->{'dir'}.'/include_admin_user');
+	    unless (defined $lock) {
+		&do_log('err','Could not create new lock');
+		return undef;
+	    }
+	    $lock->set_timeout(20); 
+	    unless ($lock->lock('write')) {
+		return undef;
+	    }
+	    
+	    ## Go through new admin_users_include
+	    foreach my $email (keys %{$new_admin_users_include}) {
+		
+		# included and subscribed
+		if (defined $new_admin_users_config->{$email}) {
+		    my $param;
+		    foreach my $p ('reception','visibility','gecos','info','profile') {
+			#  config parameters have priority on include parameters in case of conflict
+			$param->{$p} = $new_admin_users_config->{$email}{$p} if (defined $new_admin_users_config->{$email}{$p});
+			$param->{$p} ||= $new_admin_users_include->{$email}{$p};
+		    }
+
+		    #Admin User was already in the DB
+		    if (defined $old_admin_users->{$email}) {
+
+			$param->{'included'} = 1;
+			$param->{'id'} = $new_admin_users_include->{$email}{'id'};
+			$param->{'subscribed'} = 1;
+		       
+			my $param_update = &is_update_param($param,$old_admin_users->{$email});
+			
+			# updating
+			if (defined $param_update) {
+			    if (%{$param_update}) {
+				&do_log('debug', 'List:sync_include_admin : updating %s %s to list %s',$role, $email, $name);
+				$param_update->{'update_date'} = time;
+				
+				unless ($self->update_admin_user($email, $role,$param_update)) {
+				    &do_log('err', 'List:sync_include_admin(%s): Failed to update %s %s', $name,$role,$email);
+				    next;
+				}
+				$admin_users_updated++;
+			    }
+			}
+			#for the next foreach (sort of new_admin_users_config that are not included)
+			delete ($new_admin_users_config->{$email});
+			
+		    # add a new included and subscribed admin user 
+		    }else {
+			&do_log('debug2', 'List:sync_include_admin: adding %s %s to list %s',$email,$role, $name);
+			
+			foreach my $key (keys %{$param}) {  
+			    $new_admin_users_config->{$email}{$key} = $param->{$key};
+			}
+			$new_admin_users_config->{$email}{'included'} = 1;
+			$new_admin_users_config->{$email}{'subscribed'} = 1;
+			push (@add_tab,$new_admin_users_config->{$email});
+			
+			#for the next foreach (sort of new_admin_users_config that are not included)
+			delete ($new_admin_users_config->{$email});
+		    }
+		    
+		# only included
+		}else {
+		    my $param = $new_admin_users_include->{$email};
+
+		    #Admin User was already in the DB
+		    if (defined($old_admin_users->{$email}) ) {
+
+			$param->{'included'} = 1;
+			$param->{'id'} = $new_admin_users_include->{$email}{'id'};
+			$param->{'subscribed'} = 0;
+
+			my $param_update = &is_update_param($param,$old_admin_users->{$email});
+		       
+			# updating
+			if (defined $param_update) {
+			    if (%{$param_update}) {
+				&do_log('debug', 'List:sync_include_admin : updating %s %s to list %s', $role, $email, $name);
+				$param_update->{'update_date'} = time;
+				
+				unless ($self->update_admin_user($email, $role,$param_update)) {
+				    &do_log('err', 'List:sync_include_admin(%s): Failed to update %s %s', $name, $role,$email);
+				    next;
+				}
+				$admin_users_updated++;
+			    }
+			}
+		    # add a new included admin user 
+		    }else {
+			&do_log('debug2', 'List:sync_include_admin: adding %s %s to list %s', $role, $email, $name);
+			
+			foreach my $key (keys %{$param}) {  
+			    $new_admin_users_include->{$email}{$key} = $param->{$key};
+			}
+			$new_admin_users_include->{$email}{'included'} = 1;
+			push (@add_tab,$new_admin_users_include->{$email});
+		    }
+		}
+	    }   
+
+	    ## Go through new admin_users_config (that are not included : only subscribed)
+	    foreach my $email (keys %{$new_admin_users_config}) {
+
+		my $param = $new_admin_users_config->{$email};
+		
+		#Admin User was already in the DB
 		if (defined($old_admin_users->{$email}) ) {
 
-		    $param->{'included'} = 1;
-		    $param->{'id'} = $new_admin_users_include->{$email}{'id'};
-		    $param->{'subscribed'} = 0;
-
+		    $param->{'included'} = 0;
+		    $param->{'id'} = '';
+		    $param->{'subscribed'} = 1;
 		    my $param_update = &is_update_param($param,$old_admin_users->{$email});
-		   
+
 		    # updating
 		    if (defined $param_update) {
 			if (%{$param_update}) {
@@ -9469,107 +9509,67 @@ sub sync_include_admin {
 			    $param_update->{'update_date'} = time;
 			    
 			    unless ($self->update_admin_user($email, $role,$param_update)) {
-				&do_log('err', 'List:sync_include_admin(%s): Failed to update %s %s', $name, $role,$email);
+				&do_log('err', 'List:sync_include_admin(%s): Failed to update %s %s', $name, $role, $email);
 				next;
 			    }
 			    $admin_users_updated++;
 			}
 		    }
-		# add a new included admin user 
+		# add a new subscribed admin user 
 		}else {
 		    &do_log('debug2', 'List:sync_include_admin: adding %s %s to list %s', $role, $email, $name);
 		    
 		    foreach my $key (keys %{$param}) {  
-			$new_admin_users_include->{$email}{$key} = $param->{$key};
+			$new_admin_users_config->{$email}{$key} = $param->{$key};
 		    }
-		    $new_admin_users_include->{$email}{'included'} = 1;
-		    push (@add_tab,$new_admin_users_include->{$email});
+		    $new_admin_users_config->{$email}{'subscribed'} = 1;
+		    push (@add_tab,$new_admin_users_config->{$email});
 		}
 	    }
-	}   
-
-	## Go through new admin_users_config (that are not included : only subscribed)
-	foreach my $email (keys %{$new_admin_users_config}) {
-
-	    my $param = $new_admin_users_config->{$email};
 	    
-	    #Admin User was already in the DB
-	    if (defined($old_admin_users->{$email}) ) {
-
-		$param->{'included'} = 0;
-		$param->{'id'} = '';
-		$param->{'subscribed'} = 1;
-		my $param_update = &is_update_param($param,$old_admin_users->{$email});
-
-		# updating
-		if (defined $param_update) {
-		    if (%{$param_update}) {
-			&do_log('debug', 'List:sync_include_admin : updating %s %s to list %s', $role, $email, $name);
-			$param_update->{'update_date'} = time;
-			
-			unless ($self->update_admin_user($email, $role,$param_update)) {
-			    &do_log('err', 'List:sync_include_admin(%s): Failed to update %s %s', $name, $role, $email);
-			    next;
-			}
-			$admin_users_updated++;
-		    }
+	    if ($#add_tab >= 0) {
+		unless( $admin_users_added = $self->add_admin_user($role,@add_tab ) ) {
+		    &do_log('err', 'List:sync_include_admin(%s): Failed to add new %ss',  $role, $name);
+		    return undef;
 		}
-	    # add a new subscribed admin user 
-	    }else {
-		&do_log('debug2', 'List:sync_include_admin: adding %s %s to list %s', $role, $email, $name);
-		
-		foreach my $key (keys %{$param}) {  
-		    $new_admin_users_config->{$email}{$key} = $param->{$key};
-		}
-		$new_admin_users_config->{$email}{'subscribed'} = 1;
-		push (@add_tab,$new_admin_users_config->{$email});
 	    }
-	}
-	
-	if ($#add_tab >= 0) {
-	    unless( $admin_users_added = $self->add_admin_user($role,@add_tab ) ) {
-		&do_log('err', 'List:sync_include_admin(%s): Failed to add new %ss',  $role, $name);
+	    
+	    if ($admin_users_added) {
+		&do_log('debug', 'List:sync_include_admin(%s): %d %s(s) added',
+			$name, $admin_users_added, $role);
+	    }
+	    
+	    &do_log('debug', 'List:sync_include_admin(%s): %d %s(s) updated', $name, $admin_users_updated, $role);
+
+	    ## Go though old list of admin users
+	    my $admin_users_removed = 0;
+	    my @deltab;
+	    
+	    foreach my $email (keys %$old_admin_users) {
+		unless (defined($new_admin_users_include->{$email}) || defined($new_admin_users_config->{$email})) {
+		    &do_log('debug2', 'List:sync_include_admin: removing %s %s to list %s', $role, $email, $name);
+		    push(@deltab, $email);
+		}
+	    }
+	    
+	    if ($#deltab >= 0) {
+		unless($admin_users_removed = $self->delete_admin_user($role,@deltab)) {
+		    &do_log('err', 'List:sync_include_admin(%s): Failed to delete %s %s',
+			    $name, $role, $admin_users_removed);
+		    return undef;
+		}
+		&do_log('debug', 'List:sync_include_admin(%s): %d %s(s) removed',
+			$name, $admin_users_removed, $role);
+	    }
+
+	    ## Release lock
+	    unless ($lock->unlock()) {
 		return undef;
 	    }
-	}
-	
-	if ($admin_users_added) {
-	    &do_log('debug', 'List:sync_include_admin(%s): %d %s(s) added',
-		    $name, $admin_users_added, $role);
-	}
-	
-	&do_log('debug', 'List:sync_include_admin(%s): %d %s(s) updated', $name, $admin_users_updated, $role);
-
-	## Go though old list of admin users
-	my $admin_users_removed = 0;
-	my @deltab;
-	
-	foreach my $email (keys %$old_admin_users) {
-	    unless (defined($new_admin_users_include->{$email}) || defined($new_admin_users_config->{$email})) {
-		&do_log('debug2', 'List:sync_include_admin: removing %s %s to list %s', $role, $email, $name);
-		push(@deltab, $email);
-	    }
-	}
-	
-	if ($#deltab >= 0) {
-	    unless($admin_users_removed = $self->delete_admin_user($role,@deltab)) {
-		&do_log('err', 'List:sync_include_admin(%s): Failed to delete %s %s',
-			$name, $role, $admin_users_removed);
-		return undef;
-	    }
-	    &do_log('debug', 'List:sync_include_admin(%s): %d %s(s) removed',
-		    $name, $admin_users_removed, $role);
-	}
-
-	## Release lock
-	unless ($lock->unlock()) {
-	    return undef;
-	}
-    }	
-   
-    $self->{'last_sync_admin_user'} = time;
-    $self->savestats();
- 
+	    $self->{'last_sync_admin_user'} = time;
+	    $self->savestats();
+	}	
+    }
     return $self->get_nb_owners;
 }
 
