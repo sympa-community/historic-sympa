@@ -442,6 +442,13 @@ our @params = (
 	optional => '1',
     },
     {
+        name    => 'automatic_lists_family',
+        query   => 'Defines the name of the family the automatic lists are based on.', 
+        vhost   => '1',
+        file    => 'sympa.conf',
+        optional => '1',
+    },
+    {
         name  => 'max_size',
         query => 'The default maximum size (in bytes) for messages (can be re-defined for each list)',
         default => '5242880',

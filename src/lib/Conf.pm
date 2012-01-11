@@ -1275,6 +1275,78 @@ sub load_sql_filter {
 }
 
 ## load trusted_application.conf configuration file
+sub load_automatic_lists_description {
+    my $robot = shift;
+    
+    my %automatic_lists_params = (
+	'class' => {
+	    'occurrence' => '1-n',
+	    'format' => { 
+		'name' => {'format' => '.*', 'occurrence' => '1', },
+		'stamp' => {'format' => '.*', 'occurrence' => '1', },
+		'description' => {'format' => '.*', 'occurrence' => '1', },
+		'order' => {'format' => '\d+', 'occurrence' => '1',  },
+		'instances' => {'occurrence' => '1','format' => '.*',},
+		    #'format' => {
+			#'instance' => {
+			    #'occurrence' => '1-n',
+			    #'format' => {
+				#'value' => {'format' => '.*', 'occurrence' => '1', },
+				#'tag' => {'format' => '.*', 'occurrence' => '1', },
+				#'order' => {'format' => '\d+', 'occurrence' => '1',  },
+				#},
+			    #},
+			#},
+		},
+	    },
+	);
+    # find appropriate automatic_lists_description.tt2 file
+    my $config ;
+    if (defined $robot) {
+	$config = $Conf{'etc'}.'/'.$robot.'/families/'.$Conf{$robot}{'automatic_lists_family'}.'/automatic_lists_description.conf';
+    }else{
+	$config = $Conf{'etc'}.'/families/'.$Conf{'automatic_lists_family'}.'/automatic_lists_description.conf';
+    }
+    # print STDERR "load_trusted_applications $config ($robot)\n";
+    return undef unless  (-r $config);
+    # open TMP, ">/tmp/dump1";&tools::dump_var(&load_generic_conf_file($config,\%trusted_applications);, 0,\*TMP);close TMP;
+    my $description = &load_generic_conf_file($config,\%automatic_lists_params);
+
+    ## Now doing some structuration work because Conf::load_automatic_lists_description() can't handle
+    ## data structured beyond one level of hash. This needs to change.
+    my @structured_data;
+    foreach my $class (@{$description->{'class'}}){
+	my @structured_instances;
+	my @instances = split '%%%',$class->{'instances'};
+	my $default_found = 0;
+	foreach my $instance (@instances) {
+	    my $structured_instance;
+	    my @instance_params = split '---',$instance;
+	    foreach my $instance_param (@instance_params) {
+		$instance_param =~ /^\s*(\S+)\s+(.*)\s*$/;
+		my $key = $1;
+		my $value = $2;
+		$key =~ s/^\s*//;
+		$key =~ s/\s*$//;
+		$value =~ s/^\s*//;
+		$value =~ s/\s*$//;
+		$structured_instance->{$key} = $value;
+	    }
+	    $structured_instances[$structured_instance->{'order'}] = $structured_instance;
+	    if (defined $structured_instance->{'default'}) {
+		$default_found = 1;
+	    }
+	}
+	unless($default_found) {$structured_instances[0]->{'default'} = 1;}
+	$class->{'instances'} = \@structured_instances;
+	$structured_data[$class->{'order'}] = $class;
+    }
+    $description->{'class'} = \@structured_data;
+    return $description;
+}
+
+
+## load trusted_application.conf configuration file
 sub load_trusted_application {
     my $robot = shift;
     
@@ -1359,7 +1431,7 @@ sub load_generic_conf_file {
         ## Split in paragraphs
     my $i = 0;
     unless (open (CONFIG, $config_file)) {
-	printf STDERR 'unable to read configuration file %s\n',$config_file;
+	printf STDERR "unable to read configuration file %s\n",$config_file;
 	return undef;
     }
     while (<CONFIG>) {
@@ -1400,14 +1472,14 @@ sub load_generic_conf_file {
 	
 	## Look for first valid line
 	unless ($paragraph[0] =~ /^\s*([\w-]+)(\s+.*)?$/) {
-	    printf STDERR 'Bad paragraph "%s" in %s, ignored', @paragraph, $config_file;
+	    printf STDERR "Bad paragraph '%s' in %s, ignored", @paragraph, $config_file;
 	    return undef if $on_error eq 'abort';
 	    next;
 	}
 	    
 	$pname = $1;	
 	unless (defined $structure{$pname}) {
-	    printf STDERR 'Unknown parameter "%s" in %s, ignored', $pname, $config_file;
+	    printf STDERR "Unknown parameter '%s' in %s, ignored", $pname, $config_file;
 	    return undef if $on_error eq 'abort';
 	    next;
 	}
@@ -1415,7 +1487,7 @@ sub load_generic_conf_file {
 	if (defined $admin{$pname}) {
 	    unless (($structure{$pname}{'occurrence'} eq '0-n') or
 		    ($structure{$pname}{'occurrence'} eq '1-n')) {
-		printf STDERR 'Multiple parameter "%s" in %s', $pname, $config_file;
+		printf STDERR "Multiple parameter '%s' in %s", $pname, $config_file;
 		return undef if $on_error eq 'abort';
 	    }
 	}
@@ -1424,7 +1496,7 @@ sub load_generic_conf_file {
 	if (ref $structure{$pname}{'format'} eq 'HASH') {
 	    ## This should be a paragraph
 	    unless ($#paragraph > 0) {
-		printf STDERR 'Expecting a paragraph for "%s" parameter in %s, ignore it\n', $pname, $config_file;
+		printf STDERR "Expecting a paragraph for '%s' parameter in %s, ignore it\n", $pname, $config_file;
 		return undef if $on_error eq 'abort';
 		next;
 	    }
@@ -1436,19 +1508,19 @@ sub load_generic_conf_file {
 	    for my $i (0..$#paragraph) {	    
 		next if ($paragraph[$i] =~ /^\s*\#/);		
 		unless ($paragraph[$i] =~ /^\s*(\w+)\s*/) {
-		    printf STDERR 'Bad line "%s" in %s\n',$paragraph[$i], $config_file;
+		    printf STDERR "Bad line '%s' in %s\n",$paragraph[$i], $config_file;
 		    return undef if $on_error eq 'abort';
 		}		
 		my $key = $1;
 			
 		unless (defined $structure{$pname}{'format'}{$key}) {
-		    printf STDERR 'Unknown key "%s" in paragraph "%s" in %s\n', $key, $pname, $config_file;
+		    printf STDERR "Unknown key '%s' in paragraph '%s' in %s\n", $key, $pname, $config_file;
 		    return undef if $on_error eq 'abort';
 		    next;
 		}
 		
 		unless ($paragraph[$i] =~ /^\s*$key\s+($structure{$pname}{'format'}{$key}{'format'})\s*$/i) {
-		    printf STDERR 'Bad entry "%s" in paragraph "%s" in %s\n', $paragraph[$i], $key, $pname, $config_file;
+		    printf STDERR "Bad entry '%s' in paragraph '%s' in %s\n", $paragraph[$i], $key, $pname, $config_file;
 		    return undef if $on_error eq 'abort';
 		    next;
 		}
@@ -1471,7 +1543,7 @@ sub load_generic_conf_file {
 		## Required fields
 		if ($structure{$pname}{'format'}{$k}{'occurrence'} eq '1') {
 		    unless (defined $hash{$k}) {
-			printf STDERR 'Missing key %s in param %s in %s\n', $k, $pname, $config_file;
+			printf STDERR "Missing key %s in param %s in %s\n", $k, $pname, $config_file;
 			return undef if $on_error eq 'abort';
 			$missing_required_field++;
 		    }
@@ -1492,12 +1564,12 @@ sub load_generic_conf_file {
 	    ## This should be a single line
 	    my $xxxmachin =  $structure{$pname}{'format'};
 	    unless ($#paragraph == 0) {
-		printf STDERR 'Expecting a single line for %s parameter in %s %s\n', $pname, $config_file, $xxxmachin ;
+		printf STDERR "Expecting a single line for %s parameter in %s %s\n", $pname, $config_file, $xxxmachin ;
 		return undef if $on_error eq 'abort';
 	    }
 
 	    unless ($paragraph[0] =~ /^\s*$pname\s+($structure{$pname}{'format'})\s*$/i) {
-		printf STDERR 'Bad entry "%s" in %s\n', $paragraph[0], $config_file ;
+		printf STDERR "Bad entry '%s' in %s\n", $paragraph[0], $config_file ;
 		return undef if $on_error eq 'abort';
 		next;
 	    }

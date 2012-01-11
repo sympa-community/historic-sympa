@@ -41,6 +41,7 @@ use lib '--modulesdir--';
 
 use Getopt::Long;
 use Archive::Zip;
+use Data::Dumper;
   
 use strict 'vars';
 use Time::Local;
@@ -312,6 +313,10 @@ my %comm = ('home' => 'do_home',
 	 'show_exclude' => 'do_show_exclude',
 	 'ca' => 'do_ca', # 'ca' stands for 'custom_action'. I used a short name to make it discrete in a URL.
 	 'lca' => 'do_lca', # 'lca' stands for 'list_custom_action'. I used a short name to make it discrete in a URL.
+	 'automatic_lists_management_request' => 'do_automatic_lists_management_request',
+	 'automatic_lists_management' => 'do_automatic_lists_management',
+	 'automatic_lists_request' => 'do_automatic_lists_request',
+	 'automatic_lists' => 'do_automatic_lists',
 	 );
 
 my %auth_action = ('logout' => 1,
@@ -437,6 +442,10 @@ my %action_args = ('default' => ['list'],
 		'show_exclude' => ['list'],
 		'ca' => ['custom_action','@cap'],
 		'lca' => ['custom_action','list','@cap'],
+		'automatic_lists_management_request' => [],
+		'automatic_lists_management' => [],
+		'automatic_lists_request' => [],
+		'automatic_lists' => [],
 		);
 
 ## Define the required parameters for each action
@@ -624,6 +633,8 @@ my %required_privileges = ('admin' => ['owner','editor'],
 			   'viewbounce' => ['owner'],
 			   'viewlogs' => ['owner','editor'],
 			   'viewmod' => ['editor'],
+			    'automatic_lists_management_request' => ['listmaster'],
+			    'automatic_lists_management' => ['listmaster'],
 			  );
 
 # this definition is used to choose the left side menu type (admin -> listowner admin menu | serveradmin -> server_admin menu | none list or your_list menu)
@@ -691,7 +702,9 @@ my %action_type = ('editfile' => 'admin',
 		'set_loglevel' => 'serveradmin',
 		'editfile' => 'serveradmin',
 		'unset_dumpvars' => 'serveradmin',
-		'set_dumpvars' => 'serveradmin'
+		'set_dumpvars' => 'serveradmin',
+		'automatic_lists_management_request' => 'serveradmin',
+		'automatic_lists_management' => 'serveradmin',
 );
 
 ## actions tthat are not used in return of login,
@@ -803,6 +816,7 @@ my %in_regexp = (
 		 'pending_email' => &tools::get_regexp('email').',.*', # Email address is followed by ',' + gecos data
 		 'sender' => &tools::get_regexp('email'),
 		 'to' => '(([\w\-\_\.\/\+\=\']+|\".*\")\s[\w\-]+(\.[\w\-]+)+(,?))*',
+		 'automatic_list_part_*' => '[\w\-\.\+]*',
 
 		 ## Host
 		 'new_robot' => &tools::get_regexp('host'),
@@ -16910,6 +16924,38 @@ sub do_maintenance {
     return 1;
 }
 
+sub do_automatic_lists_management_request {
+    &wwslog('notice', 'Starting');
+    $param->{'automatic_lists_description'} = &Conf::load_automatic_lists_description();
+    return 1;
+}
+
+sub do_automatic_lists_management {
+    &wwslog('notice', 'Starting');
+    
+    return 1;
+}
+
+sub do_automatic_lists_request {
+    &wwslog('notice', 'Starting');
+    $param->{'automatic_lists_description'} = &Conf::load_automatic_lists_description();
+    return 1;
+}
+
+sub do_automatic_lists {
+    &wwslog('notice', 'Starting');
+    $param->{'automatic_lists_description'} = &Conf::load_automatic_lists_description();
+    my @list_name_parts;
+    foreach my $input (keys %in) {
+	next unless ($input =~ /automatic_list_part_(\d+)/);
+	$list_name_parts[$1] = $in{$input};
+    }
+    foreach my $list_name_part (@list_name_parts) {
+	$param->{'list_name'} .= "$list_name_part-";
+    }
+    $param->{'list_name'} =~ s/-$//;
+    return 1;
+}
 =pod 
 
 =head1 AUTHORS 
