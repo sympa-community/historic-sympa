@@ -2807,7 +2807,52 @@ sub _load_param_constraint_conf {
     return $constraint;
 }
 
+sub create_automatic_list {
+    my $self = shift;
+    my %param = @_;
+    my $auth_level = $param{'auth_level'};
+    my $sender = $param{'sender'};
+    my $message = $param{'message'};
+    my $listname = $param{'listname'};
+    
+    # check authorization
+    my $result = &Scenario::request_action('automatic_list_creation',$auth_level,$self->{'robot'},
+					   {'sender' => $sender, 
+					    'message' => $message, 
+					    'family'=>$self, 
+					    'automatic_listname'=>$listname });
+    my $r_action;
+    unless (defined $result) {
+	&Log::do_log('err', 'Unable to evaluate scenario "automatic_list_creation" for list %s', $listname);
+	return undef;
+    }
+    
+    if (ref($result) eq 'HASH') {
+	$r_action = $result->{'action'};
+    }else {
+	&Log::do_log('err', 'Unconsistent scenario evaluation result for automatic cration of list %s@%s by user %s.', $listname,$self->{'robot'},$sender);
+	return undef;
+    }
 
+    unless ($r_action =~ /do_it/) {
+	&Log::do_log('info', 'automatic_list_creation %s@%s from %s refused', $listname,$self->{'robot'},$sender);
+	return undef;
+    }
+    
+    my $result = $self->add_list({listname=>$listname}, 1);
+    
+    unless (defined $result->{'ok'}) {
+	my $details = $result->{'string_error'} || $result->{'string_info'} || [];
+	&Log::do_log('err', "Failed to add a dynamic list to the family %s : %s", $self->{'name'}, join(';', @{$details}));
+	return undef;
+    }
+    my $list = new List ($listname, $self->{'robot'});
+    unless (defined $list) {
+	&Log::do_log('err', 'sympa::DoFile() : dynamic list %s could not be created',$listname);
+	return undef;
+    }
+    return $list;
+}
 
 =pod 
 
