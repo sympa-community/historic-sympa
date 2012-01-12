@@ -442,13 +442,6 @@ our @params = (
 	optional => '1',
     },
     {
-        name    => 'automatic_lists_family',
-        query   => 'Defines the name of the family the automatic lists are based on.', 
-        vhost   => '1',
-        file    => 'sympa.conf',
-        optional => '1',
-    },
-    {
         name  => 'max_size',
         query => 'The default maximum size (in bytes) for messages (can be re-defined for each list)',
         default => '5242880',
@@ -486,17 +479,29 @@ our @params = (
     {
         name    => 'automatic_list_feature',
         default => 'off',
-	vhost   => '1',
+        vhost   => '1',
     },
     {
         name    => 'automatic_list_creation',
         default => 'public',
-	vhost   => '1',
+        vhost   => '1',
     },
     {
         name    => 'automatic_list_removal',
         default => '', ## Can be 'if_empty'
-	vhost   => '1',
+        vhost   => '1',
+    },
+    {
+        name    => 'automatic_list_family',
+        query   => 'Defines the name of the family the automatic lists are based on.', 
+        file    => 'sympa.conf',
+        optional => '1',
+    },
+    {
+        name    => 'automatic_list_prefix',
+        query   => 'Defines the prefix allowing to recognize that a list is an automatic list.', 
+        file    => 'sympa.conf',
+        optional => '1',
     },
     {
         name    => 'global_remind',

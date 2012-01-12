@@ -1277,6 +1277,7 @@ sub load_sql_filter {
 ## load trusted_application.conf configuration file
 sub load_automatic_lists_description {
     my $robot = shift;
+    &Log::do_log('debug2','Starting');
     
     my %automatic_lists_params = (
 	'class' => {
@@ -1303,17 +1304,15 @@ sub load_automatic_lists_description {
     # find appropriate automatic_lists_description.tt2 file
     my $config ;
     if (defined $robot) {
-	$config = $Conf{'etc'}.'/'.$robot.'/families/'.$Conf{$robot}{'automatic_lists_family'}.'/automatic_lists_description.conf';
+	$config = $Conf{'etc'}.'/'.$robot.'/families/'.$Conf{$robot}{'automatic_list_family'}.'/automatic_lists_description.conf';
     }else{
-	$config = $Conf{'etc'}.'/families/'.$Conf{'automatic_lists_family'}.'/automatic_lists_description.conf';
+	$config = $Conf{'etc'}.'/families/'.$Conf{'automatic_list_family'}.'/automatic_lists_description.conf';
     }
-    # print STDERR "load_trusted_applications $config ($robot)\n";
     return undef unless  (-r $config);
-    # open TMP, ">/tmp/dump1";&tools::dump_var(&load_generic_conf_file($config,\%trusted_applications);, 0,\*TMP);close TMP;
     my $description = &load_generic_conf_file($config,\%automatic_lists_params);
 
     ## Now doing some structuration work because Conf::load_automatic_lists_description() can't handle
-    ## data structured beyond one level of hash. This needs to change.
+    ## data structured beyond one level of hash. This needs to be changed.
     my @structured_data;
     foreach my $class (@{$description->{'class'}}){
 	my @structured_instances;

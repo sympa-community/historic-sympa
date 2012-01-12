@@ -16945,16 +16945,40 @@ sub do_automatic_lists_request {
 sub do_automatic_lists {
     &wwslog('notice', 'Starting');
     $param->{'automatic_lists_description'} = &Conf::load_automatic_lists_description();
+    &wwslog('trace',"'$robot'");
+    my $family_name = $Conf{'automatic_list_family'};
+    my $family;
+    
     my @list_name_parts;
+    my $listname = $Conf{'automatic_list_prefix'};
+    &wwslog('trace',"'$family_name'");
     foreach my $input (keys %in) {
 	next unless ($input =~ /automatic_list_part_(\d+)/);
 	$list_name_parts[$1] = $in{$input};
     }
     foreach my $list_name_part (@list_name_parts) {
-	$param->{'list_name'} .= "$list_name_part-";
+	$listname .= "$list_name_part-";
     }
-    $param->{'list_name'} =~ s/-$//;
-    return 1;
+    $listname =~ s/-$//;
+
+    $list = new List ($listname, $robot);
+    unless (defined $list) {
+	## Automatic creation of a mailing list, based on a family
+	unless ($family = new Family($family_name,$robot)) {
+	    &Log::do_log('err', "Failed to create the dynamic list $listname: family $family_name does not exist.");
+	    &List::send_notify_to_listmaster('automatic_list_creation_failed',$robot,["Failed to create the dynamic list $listname: family $family_name does not exist."]);
+	    return undef;
+	}
+	
+	unless ($list = $family->create_automatic_list(('listname' => $listname,'auth_level' => 'md5','sender'=>$session->{'email'}))) {
+	    &Log::do_log('err', "Failed to create the dynamic list $listname.");
+	    &List::send_notify_to_listmaster('automatic_list_creation_failed',$robot,["Failed to create the dynamic list $listname."]);
+	    return undef;
+	}
+    }
+    
+    $param->{'list_name'} = $listname;
+    return 'compose_mail';
 }
 =pod 
 
