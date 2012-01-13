@@ -31,6 +31,10 @@
   <li> <a class="MainMenuLinks"  [% IF  conf.main_menu_custom_button_3_target %] target ="[% conf.main_menu_custom_button_3_target %]"[% END %] href="[% conf.main_menu_custom_button_3_url %]">[% conf.main_menu_custom_button_3_title %]</a></li>
 [%END%]
 
+ [% IF 1 %]
+   [% IF action == 'automatic_lists_request' %][% SET class = 'MainMenuLinksCurrentPage' %][% ELSE %][% SET class = 'MainMenuLinks' %][% END %]                                              <li><a class="[% class %]" href="[% path_cgi %]/automatic_lists_request" >[%|loc%]Automatic lists[%END%]</a></li>
+[% END %]
+
 </ul>
 
 
