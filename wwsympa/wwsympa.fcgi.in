@@ -16977,7 +16977,7 @@ sub do_automatic_lists {
 	}
     }
     
-    $param->{'list_name'} = $listname;
+    $in{'list'} = $listname;
     return 'compose_mail';
 }
 =pod 
