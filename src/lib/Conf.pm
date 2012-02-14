@@ -35,6 +35,7 @@ use wwslib;
 use confdef;
 use tools;
 use Sympa::Constants;
+use Data::Dumper;
 
 our @ISA = qw(Exporter);
 our @EXPORT = qw(%Conf DAEMON_MESSAGE DAEMON_COMMAND DAEMON_CREATION DAEMON_ALL);
@@ -226,6 +227,22 @@ sub load {
 	$Conf{$i} = $o{$i}[0] || $params{$i}->{'default'};
     }
 
+    # Hack because multi valued parameters are not available for Sympa 6.1.
+    if (defined $Conf{'automatic_list_families'}) {
+	my @families = split ';',$Conf{'automatic_list_families'};
+	my %families_description;
+	foreach my $family_description (@families) {
+	    my %family;
+	    my @family_parameters = split ':',$family_description;
+	    foreach my $family_parameter (@family_parameters) {
+		my @parameter = split '=', $family_parameter;
+		$family{$parameter[0]} = $parameter[1];
+	    }
+	    $families_description{$family{'name'}} = \%family;
+	    $families_description{$family{'name'}}{'description'} = &load_automatic_lists_description(undef,$family{'name'});
+	}
+	$Conf{'automatic_list_families'} = \%families_description;
+    }
     ## Some parameters depend on others
     unless ($Conf{'css_url'}) {
 	$Conf{'css_url'} = $Conf{'static_content_url'}.'/css';
@@ -588,6 +605,24 @@ sub load_robots {
 	$robot_conf->{$robot}{'pictures_url'} ||= $robot_conf->{$robot}{'static_content_url'}.'/pictures/';
 	$robot_conf->{$robot}{'pictures_path'} ||= $robot_conf->{$robot}{'static_content_path'}.'/pictures/';
 	$robot_conf->{$robot}{'pictures_feature'} ||= $Conf{'pictures_feature'};
+	
+	# Hack because multi valued parameters are not available for Sympa 6.1.
+	if (defined $robot_conf->{$robot}{'automatic_list_families'}) {
+	    my @families = split ';',$robot_conf->{$robot}{'automatic_list_families'};
+	    my %families_description;
+	    foreach my $family_description (@families) {
+		my %family;
+		my @family_parameters = split ':',$family_description;
+		foreach my $family_parameter (@family_parameters) {
+		    my @parameter = split '=', $family_parameter;
+		    $family{$parameter[0]} = $parameter[1];
+		}
+		$families_description{$family{'name'}} = \%family;
+		$families_description{$family{'name'}}{'description'} = &load_automatic_lists_description($robot,$family{'name'});
+	    }
+	    $robot_conf->{$robot}{'automatic_list_families'} = \%families_description;
+	}
+	$robot_conf->{$robot}{'automatic_list_families'} ||= $Conf{'automatic_list_families'};
 
 	# split action list for blacklist usage
 	foreach my $action (split(/,/, $Conf{'use_blacklist'})) {
@@ -1274,10 +1309,11 @@ sub load_sql_filter {
     return (&load_generic_conf_file($file,\%sql_named_filter_params, 'abort'));
 }
 
-## load trusted_application.conf configuration file
+## load automatic_list_description.conf configuration file
 sub load_automatic_lists_description {
     my $robot = shift;
-    &Log::do_log('debug2','Starting');
+    my $family = shift;
+    &Log::do_log('debug2','Starting: robot %s family %s',$robot,$family);
     
     my %automatic_lists_params = (
 	'class' => {
@@ -1304,9 +1340,9 @@ sub load_automatic_lists_description {
     # find appropriate automatic_lists_description.tt2 file
     my $config ;
     if (defined $robot) {
-	$config = $Conf{'etc'}.'/'.$robot.'/families/'.$Conf{$robot}{'automatic_list_family'}.'/automatic_lists_description.conf';
+	$config = $Conf{'etc'}.'/'.$robot.'/families/'.$family.'/automatic_lists_description.conf';
     }else{
-	$config = $Conf{'etc'}.'/families/'.$Conf{'automatic_list_family'}.'/automatic_lists_description.conf';
+	$config = $Conf{'etc'}.'/families/'.$family.'/automatic_lists_description.conf';
     }
     return undef unless  (-r $config);
     my $description = &load_generic_conf_file($config,\%automatic_lists_params);
