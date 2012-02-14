@@ -468,6 +468,8 @@ my %required_args = ('active_lists' => ['for|count'],
 		     'arcsearch' => ['param.list'],
 		     'arcsearch_form' => ['param.list'],
 		     'arcsearch_id' => ['param.list'],
+		     'automatic_lists_request' => ['family'],
+		     'automatic_lists' => ['family'],
 		     'attach' => ['param.list'],
 		     'blacklist' => ['param.list'],
 		     'change_email' => ['param.user.email'],
@@ -807,6 +809,7 @@ my %in_regexp = (
 
 		 ## Family names
 		 'family_name' => &tools::get_regexp('family_name'),
+		 'family' => &tools::get_regexp('family_name'),
 
 		 ## Email addresses
 		 'email' => &tools::get_regexp('email').'|'.&tools::get_regexp('uid'),
@@ -16938,20 +16941,22 @@ sub do_automatic_lists_management {
 
 sub do_automatic_lists_request {
     &wwslog('notice', 'Starting');
-    $param->{'family'} = $Conf{'automatic_list_families'}{$in{'family'}};
+    my $family_config = &Conf::get_robot_conf($robot,'automatic_list_families');
+    $param->{'family'} = $family_config->{$in{'family'}};
     return 1;
 }
 
 sub do_automatic_lists {
     &wwslog('notice', 'Starting');
-    $param->{'automatic_lists_description'} = &Conf::load_automatic_lists_description();
-    &wwslog('trace',"'$robot'");
-    my $family_name = $Conf{'automatic_list_family'};
+    my $family_name = $in{'family'};
     my $family;
     
     my @list_name_parts;
-    my $listname = $Conf{'automatic_list_prefix'};
-    &wwslog('trace',"'$family_name'");
+    my $families_config = &Conf::get_robot_conf($robot,'automatic_list_families');
+    my $family_config = $families_config->{$family_name};
+    my $listname = $family_config->{'prefix'};
+    open TMP,">/tmp/family_config";print TMP &Dumper($family_config);close TMP;
+    &wwslog('trace',"'$family_name',");
     foreach my $input (keys %in) {
 	next unless ($input =~ /automatic_list_part_(\d+)/);
 	$list_name_parts[$1] = $in{$input};

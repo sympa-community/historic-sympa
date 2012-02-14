@@ -11,7 +11,7 @@
 [%END%]
 [%END%]
 <input class="MainMenuLinks" type="submit" name="action_automatic_lists" value="[%|loc%]Go to list[%END%]" />
-<input type="hidden" name="family" value="[% family %]" />
+<input type="hidden" name="family" value="[% family.name %]" />
 </form>
 </div>
 <!-- End automatic_lists_request.tt2 -->
