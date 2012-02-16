@@ -41,6 +41,7 @@ use Language;
 use Log;
 use tools;
 use Sympa::Constants;
+use Data::Dumper;
 
 =pod 
 
@@ -434,6 +435,9 @@ sub create_list{
 	return undef;
     }
 
+    my $family_config = &Conf::get_robot_conf($robot,'automatic_list_families');
+    $param->{'family_config'} = $family_config->{$family->{'name'}};
+    open TMP, ">/tmp/family_config_dump";print TMP &Dumper($param);close TMP;
     my $conf;
     my $tt_result = &tt2::parse_tt2($param, 'config.tt2', \$conf, [$family->{'dir'}]);
     unless (defined $tt_result || !$abort_on_error) {
