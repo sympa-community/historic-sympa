@@ -5033,7 +5033,7 @@ sub insert_delete_exclusion {
 
 	if ($user->{'included'} eq '1') {
 	    ## Insert : list, user and date
-	    $statement = sprintf "INSERT INTO exclusion_table (list_exclusion, user_exclusion, date_exclusion) VALUES (%s, %s, %s)", $dbh->quote($list), $dbh->quote($email), $dbh->quote($date);
+	    $statement = sprintf "INSERT INTO exclusion_table (list_exclusion, robot_exclusion, user_exclusion, date_exclusion) VALUES (%s, %s, %s, %s)", $dbh->quote($list), $dbh->quote($robot), $dbh->quote($email), $dbh->quote($date);
 	    
 	    unless ($dbh->do($statement)) {
 		&do_log('err','Unable to execute SQL statement "%s" : %s', $statement, $dbh->errstr);
@@ -5043,7 +5043,7 @@ sub insert_delete_exclusion {
 	
     }elsif($action eq 'delete') {
 	## If $email is in exclusion_table, delete it.
-	my $data_excluded = &get_exclusion($list);
+	my $data_excluded = &get_exclusion($list,$robot);
 	my @users_excluded;
 
 	my $key =0;
@@ -5056,7 +5056,7 @@ sub insert_delete_exclusion {
 	foreach my $users (@users_excluded) {
 	    if($email eq $users){
 		## Delete : list, user and date
-		$statement = sprintf "DELETE FROM exclusion_table WHERE (list_exclusion = %s AND user_exclusion = %s)",	$dbh->quote($list), $dbh->quote($email);
+		$statement = sprintf "DELETE FROM exclusion_table WHERE (list_exclusion = %s AND robot_exclusion = %s AND user_exclusion = %s)",	$dbh->quote($list), $dbh->quote($robot), $dbh->quote($email);
 
 		unless ($r = $dbh->do($statement)) {
 		    &do_log('err','Unable to execute SQL statement "%s" : %s', $statement, $dbh->errstr);
@@ -5066,7 +5066,7 @@ sub insert_delete_exclusion {
 	}
 
     }else{
-	&do_log('err','You must choose an action');
+	&do_log('err','Unknown action %s',$action);
 	return undef;
     }
     return $r;
@@ -5083,15 +5083,16 @@ sub insert_delete_exclusion {
 sub get_exclusion {
     
     my  $name= shift;
-    &do_log('debug2', 'List::get_exclusion(%s)', $name);
+    my  $robot= shift;
+    &do_log('debug2', 'List::get_exclusion(%s@%s)', $name,$robot);
    
     ## Check database connection
     unless ($dbh and $dbh->ping) {
 	return undef unless &db_connect();
     }
     ## the query return the email and the date in a hash
-    my $statement = sprintf "SELECT user_exclusion AS email, date_exclusion AS date FROM exclusion_table WHERE list_exclusion = %s", 
-    $dbh->quote($name); 
+    my $statement = sprintf "SELECT user_exclusion AS email, date_exclusion AS date FROM exclusion_table WHERE list_exclusion = %s AND robot_exclusion=%s", 
+    $dbh->quote($name),$dbh->quote($robot); 
   
     push @sth_stack, $sth;
     unless ($sth = $dbh->prepare($statement)) {
@@ -5119,7 +5120,7 @@ sub get_exclusion {
     $sth = pop @sth_stack;
    
     unless($data_exclu){
-	&do_log('err','Unable to retrieve information from database for list %s', $name);
+	&do_log('err','Unable to retrieve information from database for list %s@%s', $name,$robot);
 	return undef;
     }
     return $data_exclu;
@@ -9164,7 +9165,7 @@ sub sync_include {
     my @subscriber_exclusion;
 
     ## Récupérer un array d'emails pour une liste donnée in 'exclusion_table'
-    $data_exclu = &get_exclusion($name);
+    $data_exclu = &get_exclusion($name,$self->{'domain'});
 
     my $key =0;
     while ($data_exclu->{'emails'}->[$key]){
