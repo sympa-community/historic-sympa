@@ -5085,15 +5085,27 @@ sub get_exclusion {
     my  $name= shift;
     my  $robot= shift;
     &do_log('debug2', 'List::get_exclusion(%s@%s)', $name,$robot);
-   
+    
     ## Check database connection
     unless ($dbh and $dbh->ping) {
 	return undef unless &db_connect();
     }
+
+    my $list = new List($name, $robot);
+    unless (defined $list) {
+	&Log::do_log('err','List %s@%s does not exist', $name,$robot);
+	return undef;
+    }
     ## the query return the email and the date in a hash
-    my $statement = sprintf "SELECT user_exclusion AS email, date_exclusion AS date FROM exclusion_table WHERE list_exclusion = %s AND robot_exclusion=%s", 
-    $dbh->quote($name),$dbh->quote($robot); 
-  
+    my $statement;
+    if (defined $list->{'admin'}{'family_name'} && $list->{'admin'}{'family_name'} ne '') {
+	$statement = sprintf "SELECT user_exclusion AS email, date_exclusion AS date FROM exclusion_table WHERE (list_exclusion = %s OR family_exclusion = %s) AND robot_exclusion=%s", 
+	$dbh->quote($name),$dbh->quote($list->{'admin'}{'family_name'}),$dbh->quote($robot);
+    }else{
+	$statement = sprintf "SELECT user_exclusion AS email, date_exclusion AS date FROM exclusion_table WHERE list_exclusion = %s AND robot_exclusion=%s", 
+	$dbh->quote($name),$dbh->quote($robot);
+    }
+ 
     push @sth_stack, $sth;
     unless ($sth = $dbh->prepare($statement)) {
 	&do_log('err','Unable to prepare SQL statement : %s', $dbh->errstr);
@@ -9192,6 +9204,17 @@ sub sync_include {
     my @add_tab;
     $users_added = 0;
     foreach my $email (keys %{$new_subscribers}) {
+	my $compare = 0;
+	foreach my $sub_exclu (@subscriber_exclusion){
+	    if ($email eq $sub_exclu){
+		$compare = 1;
+		last;
+	    }
+	}
+	if($compare == 1){
+	    delete $new_subscribers->{$email};
+	    next;
+	}
 	if (defined($old_subscribers{$email}) ) {
 
 	    if ($old_subscribers{$email}{'included'}) {
@@ -9223,19 +9246,6 @@ sub sync_include {
 
 	    ## Add new included user
 	}else {
-	    my $compare = 0;
-	    foreach my $sub_exclu (@subscriber_exclusion){
-		unless ($compare eq '1'){
-		    if ($email eq $sub_exclu){
-			$compare = 1;
-		    }else{
-			next;
-		    }
-		}
-	    }
-	    if($compare eq '1'){
-		next;
-	    }
 	    &do_log('debug3', 'List:sync_include: adding %s to list %s', $email, $name);
 	    my $u = $new_subscribers->{$email};
 	    $u->{'included'} = 1;
