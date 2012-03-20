@@ -977,7 +977,6 @@ sub probe_db {
 		    'user_admin' => 1,
 		    'role_admin' => 1,
 		    'date_admin' => 1,
-		    'list_exclusion' => 1,
 		    'user_exclusion' => 1,
 		    'robot_exclusion' => 1,
 		    'netid_netidmap' => 1,

@@ -5012,7 +5012,8 @@ sub insert_delete_exclusion {
     my $list = shift;
     my $robot = shift;
     my $action = shift;
-    &do_log('info', 'List::insert_delete_exclusion("%s", "%s", "%s", "%s")', $email, $list, $robot, $action);
+    my $family = shift;
+    &do_log('info', 'List::insert_delete_exclusion("%s", "%s", "%s", "%s", "%s")', $email, $list, $robot, $action, $family);
     
 	my $r = 1;
     ## Check database connection
@@ -5031,9 +5032,14 @@ sub insert_delete_exclusion {
 	my $user = &get_subscriber_no_object($options);
 	my $date = time;
 
-	if ($user->{'included'} eq '1') {
-	    ## Insert : list, user and date
-	    $statement = sprintf "INSERT INTO exclusion_table (list_exclusion, robot_exclusion, user_exclusion, date_exclusion) VALUES (%s, %s, %s, %s)", $dbh->quote($list), $dbh->quote($robot), $dbh->quote($email), $dbh->quote($date);
+	if ($user->{'included'} eq '1' or defined $family) {
+	    ## Insert : family or list, user and date
+	    if (defined $family) {
+		&Log::do_log('trace',"Excluding from family %s",$family);
+		$statement = sprintf "INSERT INTO exclusion_table (list_exclusion, family_exclusion, robot_exclusion, user_exclusion, date_exclusion) VALUES (%s, %s, %s, %s, %s)", $dbh->quote($list), $dbh->quote($family), $dbh->quote($robot), $dbh->quote($email), $dbh->quote($date);
+	    }else{
+		$statement = sprintf "INSERT INTO exclusion_table (list_exclusion, robot_exclusion, user_exclusion, date_exclusion) VALUES (%s, %s, %s, %s)", $dbh->quote($list), $dbh->quote($robot), $dbh->quote($email), $dbh->quote($date);
+	    }
 	    
 	    unless ($dbh->do($statement)) {
 		&do_log('err','Unable to execute SQL statement "%s" : %s', $statement, $dbh->errstr);
@@ -5056,7 +5062,11 @@ sub insert_delete_exclusion {
 	foreach my $users (@users_excluded) {
 	    if($email eq $users){
 		## Delete : list, user and date
-		$statement = sprintf "DELETE FROM exclusion_table WHERE (list_exclusion = %s AND robot_exclusion = %s AND user_exclusion = %s)",	$dbh->quote($list), $dbh->quote($robot), $dbh->quote($email);
+		if (defined $family) {
+		    $statement = sprintf "DELETE FROM exclusion_table WHERE (family_exclusion = %s AND robot_exclusion = %s AND user_exclusion = %s)",	$dbh->quote($family), $dbh->quote($robot), $dbh->quote($email);
+		}else{
+		    $statement = sprintf "DELETE FROM exclusion_table WHERE (list_exclusion = %s AND robot_exclusion = %s AND user_exclusion = %s)",	$dbh->quote($list), $dbh->quote($robot), $dbh->quote($email);
+		}
 
 		unless ($r = $dbh->do($statement)) {
 		    &do_log('err','Unable to execute SQL statement "%s" : %s', $statement, $dbh->errstr);

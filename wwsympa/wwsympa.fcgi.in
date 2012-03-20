@@ -174,6 +174,8 @@ my %comm = ('home' => 'do_home',
 	 'suboptions' => 'do_suboptions',
 	 'signoff' => 'do_signoff',
 	 'auto_signoff' => 'do_auto_signoff',
+	 'family_signoff' => 'do_family_signoff',
+	 'family_signoff_request' => 'do_family_signoff_request',
 	 'multiple_signoff' => 'do_multiple_sigoff',
 	 'sigrequest' => 'do_sigrequest',
 	 'ignoresub' => 'do_ignoresub',
@@ -385,6 +387,8 @@ my %action_args = ('default' => ['list'],
                 'ignoresub' => ['list','@email','@gecos'],
 		'signoff' => ['list','email','passwd'],
 		'auto_signoff' => ['list','email'],
+		'family_signoff' => ['family','email'],
+		'family_signoff_request' => ['family','email'],
 		'sigrequest' => ['list','email'],
 		'set' => ['list','email','reception','gecos'],
 		'serveradmin' => ['subaction'],
@@ -5036,7 +5040,7 @@ sub do_subrequest {
     return 1;
 }
 sub do_auto_signoff {
-     &wwslog('info', 'do_signoff');
+     &wwslog('info', 'do_auto_signoff');
      ## If the URL isn't valid, then go to home page. No need to guide the user: this function is supposed to be used by clicking on autocreated URL only.
      return 'home' unless $in{'email'};
 
@@ -5087,6 +5091,49 @@ sub do_auto_signoff {
      ## If OK, return the page displaying the informations to the user.
      return 1;
      
+}
+sub do_family_signoff_request {
+    &wwslog('info', 'do_family_signoff_request');
+    ## If the URL isn't valid, then go to home page. No need to guide the user: this function is supposed to be used by clicking on autocreated URL only.
+    return 'home' unless $in{'email'};
+
+    my $ticket = &Auth::create_one_time_ticket($in{'email'},$robot,'family_signoff/'.$in{'family'}.'/'.$in{'email'},$ip);
+
+    my $tt2_param = {
+	'family' => $in{'family'},
+	'type' => 'ticket_to_family_signoff', 
+	'one_time_ticket' => $ticket,
+	'email' => $in{'email'},
+	'context' => 'family_signoff',
+	'ip' => $ip,
+    };
+    unless (&List::send_global_file('user_notification', $in{'email'}, $robot, $tt2_param)) {
+	&do_log('notice',"Unable to send template 'user_notification' to $in{'email'}");
+	return undef;
+    }
+    $param->{'signing_off_email'} = $in {'email'};
+    $param->{'family'} = $in {'family'};
+    ## If OK, return the page displaying the informations to the user.
+    return 1;
+
+}
+
+sub do_family_signoff {
+    &wwslog('info', 'do_family_signoff');
+    $param->{'signing_off_email'} = $in {'email'};
+    $param->{'family'} = $in {'family'};
+
+    unless ($in{'email'} eq $session->{'email'}) {
+	&report::reject_report_web('user','cannot_do_signoff');
+	&wwslog('err','do_signoff: user %s tried to unsubscribe address %s from family %s',$session->{'email'}, $in{'email'},$in {'family'});
+	return undef;
+    }
+    unless (List::insert_delete_exclusion($in{'email'},&SympaSession::get_random(),$robot,'insert',$in{'family'})) {
+	&report::reject_report_web('user','cannot_do_signoff');
+	&wwslog('err','do_signoff: Unsubscription of address %s from family %s failed.',$in{'email'},$in {'family'});
+	return undef;
+    }
+    return 1;
 }
 ####################################################
 # do_signoff

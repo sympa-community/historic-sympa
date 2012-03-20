@@ -2871,7 +2871,7 @@ sub is_allowed_to_create_automatic_lists {
     }
 
     unless ($r_action =~ /do_it/) {
-	&Log::do_log('info', 'Automatic list creation refused to user %s for family %s', $sender, $self->{'name'});
+	&Log::do_log('debug2', 'Automatic list creation refused to user %s for family %s', $sender, $self->{'name'});
 	return undef;
     }
     
