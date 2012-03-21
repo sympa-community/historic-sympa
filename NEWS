@@ -3,9 +3,16 @@
 
 (See Changelog file for the full changes log)
 
-6.1.8		January 09, 2012
+6.1.9		March 21, 2012
 
   Bug fixes:
+
+	[7294] src/lib/List.pm, src/lib/Upgrade.pm, wwsympa/wwsympa.fcgi.in: 
+	the exclusion table was not robot-aware, thus potentially leading to
+	mutliple unsubscriptions if several lists having the same local part
+	were present in several robots. Fixed by adding a "robot_exclusion"
+	column to the exclusion table. this column will be automatically filled
+	when upgrading Sympa.
 
 	[7261] src/lib/List.pm: [Reported by J.H. Belpois, univ. Brest] When a
 	lot of lists used inclusions for their members, displaying the list of
@@ -20,9 +27,6 @@
 	[7254] src/bulk.pl.in: [Submitted by P. Vandry, TZoNE.ORG] The VERP
 	return path was never correctly set due to a bad variable
 	initialization.
-
-	[7251] src/bulk.pl.in: [#8094][Submitted by A. Piper, univ. Marburg] In
-	some contexts, using the unsubscription URL would not work.
 
 	[7248] src/lib/List.pm: [#7424] Excluding then restoring (eg manually
 	subscribing) an included member resulted in member being included and
@@ -53,6 +57,10 @@
 	of said document failed. This issue was due to the fact that libwww is
 	counting characters instead of bytes.
 	Fixed by upgrading to the latest version of SOAP::Lite.
+
+6.1.8		January 09, 2012
+
+	Cancelled du to errors in the version.
 
 6.1.7		August 25, 2011
 
