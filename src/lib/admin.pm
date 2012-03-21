@@ -441,7 +441,7 @@ sub create_list{
                 $param->{'listname'}, $family->{'name'},$robot);
       return undef;
     }
-
+    
      ## Create the list directory
      my $list_dir;
 
@@ -500,7 +500,27 @@ sub create_list{
 	print INFO $param->{'description'};
     }
     close INFO;
-    
+
+    ## Create associated files if a template was given.
+    for my $file ('footer.tt2','header.tt2') {
+	my $template_file = &tools::get_filename('etc',{},$file, $robot,$family);
+	if (defined $template_file) {
+	    my $final_name = $file;
+	    $final_name =~ s/\.tt2$//;
+	    my $file_content;
+	    my $tt_result = &tt2::parse_tt2($param, $file, \$file_content, [$family->{'dir'}]);
+	    unless (defined $tt_result) {
+		&do_log('err', 'admin::create_list : abort on tt2 error. List %s from family %s@%s',
+			$param->{'listname'}, $family->{'name'},$robot);
+	    }
+	    unless (open FILE, '>:utf8', "$list_dir/$final_name") {
+		&do_log('err','Impossible to create %s/%s : %s',$list_dir,$final_name,$!);
+	    }
+	    print FILE $file_content;
+	    close FILE;
+	}
+    }
+
     ## Create list object
     my $list;
     unless ($list = new List ($param->{'listname'}, $robot)) {
