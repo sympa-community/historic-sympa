@@ -56,12 +56,12 @@ To confirm and get removed from the list, please click the link below: [%END%]
 
 [% ELSIF type == 'ticket_to_family_signoff' -%]
 Subject: [% FILTER qencode %][%|loc(family)%]Unsubscribing from family %1[%END%][%END%]
-[% IF context == 'auto_family_signoff'%]
+[% IF context == 'family_signoff'%]
 [%|loc(family,ip)%]Somebody (probably you) requested to unsubscribe you from family %1.
 This query was issued from the IP number '%2'.
-To confirm and get removed from the list, please click the link below: [%END%] 
+To confirm and get removed from all the lists of this family, please click the link below: [%END%] 
 [% ELSE %]
-[%|loc(family)%]You have requested to removed from family %1. To confirm and get removed from the list, please click the link below: [%END%] 
+[%|loc(family)%]You have requested to be removed from family %1. To confirm and get removed from all the lists of this family, please click the link below: [%END%] 
 [% END %]
   [% conf.wwsympa_url %]/ticket/[% one_time_ticket %]
 
