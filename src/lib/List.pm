@@ -1,4 +1,4 @@
-Change the reply-to header if necessary. # list.pm - This module includes all list processing functions
+# list.pm - This module includes all list processing functions
 # RCS Identication ; $Revision$ ; $Date$ 
 #
 # Sympa - SYsteme de Multi-Postage Automatique
