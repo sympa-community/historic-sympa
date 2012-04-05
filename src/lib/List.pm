@@ -1,4 +1,4 @@
-# list.pm - This module includes all list processing functions
+Change the reply-to header if necessary. # list.pm - This module includes all list processing functions
 # RCS Identication ; $Revision$ ; $Date$ 
 #
 # Sympa - SYsteme de Multi-Postage Automatique
@@ -2690,7 +2690,7 @@ sub distribute_msg {
 	    if ($self->{'admin'}{'reply_to_header'}{'value'} eq 'list') {
 		$reply = "$name\@$host";
 	    }elsif ($self->{'admin'}{'reply_to_header'}{'value'} eq 'sender') {
-		$reply = undef;
+		$reply = $hdr->get('From');
 	    }elsif ($self->{'admin'}{'reply_to_header'}{'value'} eq 'all') {
 		$reply = "$name\@$host,".$hdr->get('From');
 	    }elsif ($self->{'admin'}{'reply_to_header'}{'value'} eq 'other_email') {
