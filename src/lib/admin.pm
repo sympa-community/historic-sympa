@@ -340,7 +340,9 @@ sub create_list_old{
     if ($list->has_include_data_sources()) {
 	&do_log('notice', "Synchronizing list members...");
 	$list->sync_include();
-    }   
+    }
+    
+    $list->save_config;
 
     return $return;
 }
