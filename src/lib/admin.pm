@@ -837,10 +837,11 @@ sub rename_list{
 		 &do_log('err', "Unable to open '%s' spool : %s", $Conf::Conf{$spool}, $!);
 	     }
 	     
-	     foreach my $file (sort grep (!/^\.+$/,readdir(DIR))) {
+	     foreach my $file (sort readdir(DIR)) {
 		 next unless ($file =~ /^$old_listname\_/ ||
 			      $file =~ /^$old_listname\./ ||
 			      $file =~ /^$old_listname\@$robot\./ ||
+			      $file =~ /^\.$old_listname\@$robot\_/ ||
 			      $file =~ /^$old_listname\@$robot\_/ ||
 			      $file =~ /\.$old_listname$/);
 		 
@@ -853,6 +854,8 @@ sub rename_list{
 		     $newfile =~ s/^$old_listname\@$robot\./$param{'new_listname'}\@$param{'new_robot'}\./;
 		 }elsif ($file =~ /^$old_listname\@$robot\_/) {
 		     $newfile =~ s/^$old_listname\@$robot\_/$param{'new_listname'}\@$param{'new_robot'}\_/;
+		 }elsif ($file =~ /^\.$old_listname\@$robot\_/) {
+		     $newfile =~ s/^\.$old_listname\@$robot\_/\.$param{'new_listname'}\@$param{'new_robot'}\_/;
 		 }elsif ($file =~ /\.$old_listname$/) {
 		     $newfile =~ s/\.$old_listname$/\.$param{'new_listname'}/;
 		 }
