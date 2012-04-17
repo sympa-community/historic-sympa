@@ -1398,11 +1398,11 @@ my %alias = ('reply-to' => 'reply_to',
 			 'internal' => 1,
 			 'group' => 'other'
 		     },
-	    'user_data_source' => {'format' => ['database','file','include','include2'],
+	    'user_data_source' => {'format' => '\S+',
 				   'default' => 'include2',
-				   'obsolete_values'=> ['database','file','include'],
 				   'gettext_id' => "User data source",
-				   'group' => 'data_source'
+				   'group' => 'data_source',
+				   'obsolete' => 1,
 				   },
 	    'pictures_feature' => {'format' => ['on','off'],
 			       'occurence' => '0-1',
@@ -2071,79 +2071,7 @@ sub load {
      } 
 
     $self->{'as_x509_cert'} = 1  if ((-r "$self->{'dir'}/cert.pem") || (-r "$self->{'dir'}/cert.pem.enc"));
-    
-    if ($self->{'admin'}{'user_data_source'} eq 'database') {
-	
-    }elsif($self->{'admin'}->{'user_data_source'} eq 'file') { 
-	
-	$time_subscribers = (stat("$self->{'dir'}/subscribers"))[9] if (-f "$self->{'dir'}/subscribers");
 
-	## Touch subscribers file if not exists
-	unless ( -r "$self->{'dir'}/subscribers") {
-	    open L, ">$self->{'dir'}/subscribers" or return undef;
-	    close L;
-	    do_log('info','No subscribers file, creating %s',"$self->{'dir'}/subscribers");
-	}
-	
-	if ($self->{'name'} ne $name || $time_subscribers > $self->{'mtime'}[1]) {
-	    $users = _load_users("$self->{'dir'}/subscribers");
-	    unless (defined $users) {
-		do_log('err', 'Could not load subscribers for list %s', $self->{'name'});
-		#return undef;
-	    }
-	    $m2 = $time_subscribers;
-	}
-
-    }elsif ($self->{'admin'}{'user_data_source'} eq 'include2') {
-	## currently no check
-
-    }elsif($self->{'admin'}{'user_data_source'} eq 'include') {
-
-    ## include other subscribers as defined in include directives (list|ldap|sql|file|owners|editors)
-	unless ( $self->has_include_data_sources()) {
-	    &do_log('err', 'Include paragraph missing in configuration file %s', "$self->{'dir'}/config");
-#	    return undef;
-	}
-
-	$time_subscribers = (stat("$self->{'dir'}/subscribers.db"))[9] if (-f "$self->{'dir'}/subscribers.db");
-
-
-	## Update 'subscriber.db'
-	if ( ## 'config' is more recent than 'subscribers.db'
-	     ($time_config > $time_subscribers) || 
-	     ## 'ttl'*2 is NOT over
-	     (time > ($time_subscribers + $self->{'admin'}{'ttl'} * 2)) ||
-	     ## 'ttl' is over AND not Web context
-	     ((time > ($time_subscribers + $self->{'admin'}{'ttl'})) &&
-	      !($ENV{'HTTP_HOST'} && (-f "$self->{'dir'}/subscribers.db")))) {
-	    
-	    $users = $self->_load_users_include("$self->{'dir'}/subscribers.db", 0);
-	    unless (defined $users) {
-		do_log('err', 'Could not load subscribers for list %s', $self->{'name'});
-		#return undef;
-	    }
-
-	    $m2 = time;
-	}elsif (## First new()
-		! $self->{'users'} ||
-		## 'subscribers.db' is more recent than $self->{'users'}
-		($time_subscribers > $self->{'mtime'}->[1])) {
-
-	    ## Use cache
-	    $users = $self->_load_users_include("$self->{'dir'}/subscribers.db", 1);
-
-	    unless (defined $users) {
-		return undef;
-	    }
-
-	    $m2 = $time_subscribers;
-	}
-	
-    }else { 
-	do_log('notice','Wrong value for user_data_source');
-	return undef;
-    }
-    
     ## Load stats file if first new() or stats file changed
     my ($stats, $total);
     if (! $self->{'mtime'}[2] || ($time_stats > $self->{'mtime'}[2])) {
@@ -5165,8 +5093,6 @@ sub get_subscriber {
     }
     $user->{'reception'} = $self->{'admin'}{'default_user_options'}{'reception'}
     unless ($self->is_available_reception_mode($user->{'reception'}));
-    ## In case it was not set in the database
-    $user->{'subscribed'} = 1 if ($self->{'admin'}{'user_data_source'} eq 'database');	
 
     ## Set session cache
     $list_cache{'get_subscriber'}{$self->{'domain'}}{$self->{'name'}}{$email} = $user;
@@ -5553,9 +5479,6 @@ sub get_admin_user {
     if (defined $admin_user) {
 	$admin_user->{'reception'} ||= 'mail';
 	$admin_user->{'update_date'} ||= $admin_user->{'date'};
-	
-	## In case it was not set in the database
-	$admin_user->{'subscribed'} = 1 if ($self->{'admin'}{'user_data_source'} eq 'database');
     }
     
     $sth->finish();
@@ -5828,9 +5751,6 @@ sub get_first_user {
 	$user->{'reception'} = $self->{'admin'}{'default_user_options'}{'reception'}
 	unless ($self->is_available_reception_mode($user->{'reception'}));
 	$user->{'update_date'} ||= $user->{'date'};
-	
-	## In case it was not set in the database
-	$user->{'subscribed'} = 1 if (defined($user) && ($self->{'admin'}{'user_data_source'} eq 'database'));
 
 	############################################################################	    
 	if (defined $user->{custom_attribute}) {
@@ -5845,12 +5765,9 @@ sub get_first_user {
 	$sth->finish;
 	$sth = pop @sth_stack;
 	
-	if ($self->{'admin'}{'user_data_source'} eq 'include2') {
-	    
-	    ## Release the Shared lock
-	    unless ($lock->unlock()) {
-		return undef;
-	    }
+	## Release the Shared lock
+	unless ($lock->unlock()) {
+	    return undef;
 	}
     }
     
@@ -6169,10 +6086,6 @@ sub get_first_admin_user {
 	    if (! $admin_user->{'email'});
 	$admin_user->{'reception'} ||= 'mail';
 	$admin_user->{'update_date'} ||= $admin_user->{'date'};
-
-	## In case it was not set in the database
-	$admin_user->{'subscribed'} = 1 if (defined($admin_user) && ($self->{'admin'}{'user_data_source'} eq 'database'));
-
     }else {
 	$sth->finish;
         $sth = pop @sth_stack;
@@ -6212,9 +6125,6 @@ sub get_next_user {
 	    $user->{'reception'} = $self->{'admin'}{'default_user_options'}{'reception'}
 	}
 	$user->{'update_date'} ||= $user->{'date'};
-	
-	## In case it was not set in the database
-	$user->{'subscribed'} = 1 if (defined($user) && ($self->{'admin'}{'user_data_source'} eq 'database'));
 
 	do_log('debug2', '(email = %s)', $user->{'email'});
 	if (defined $user->{custom_attribute}) {
@@ -6231,17 +6141,14 @@ sub get_next_user {
 	$sth->finish;
 	$sth = pop @sth_stack;
 	
-	if ($self->{'admin'}{'user_data_source'} eq 'include2') {
-	    
-	    ## Release lock
-	    my $lock = new Lock ($self->{'dir'}.'/include');
-	    unless (defined $lock) {
-		&do_log('err','Could not create new lock');
-		return undef;
-	    }
-	    unless ($lock->unlock()) {
-		return undef;
-	    }
+	## Release lock
+	my $lock = new Lock ($self->{'dir'}.'/include');
+	unless (defined $lock) {
+	    &do_log('err','Could not create new lock');
+	    return undef;
+	}
+	unless ($lock->unlock()) {
+	    return undef;
 	}
     }
     
@@ -6267,9 +6174,6 @@ sub get_next_admin_user {
 	    if (! $admin_user->{'email'});
 	$admin_user->{'reception'} ||= 'mail';
 	$admin_user->{'update_date'} ||= $admin_user->{'date'};
-	
-	## In case it was not set in the database
-	$admin_user->{'subscribed'} = 1 if (defined($admin_user) && ($self->{'admin'}{'user_data_source'} eq 'database'));
     }
     else {
 	$sth->finish;
@@ -6349,10 +6253,6 @@ sub get_first_bouncing_user {
     if (defined $user) {
 	&do_log('err','Warning: entry with empty email address in list %s', $self->{'name'}) 
 	    if (! $user->{'email'});
-	
-	## In case it was not set in the database
-	$user->{'subscribed'} = 1 if (defined ($user) && ($self->{'admin'}{'user_data_source'} eq 'database'));    
-
     }else {
 	$sth->finish;
 	$sth = pop @sth_stack;
@@ -6381,8 +6281,6 @@ sub get_next_bouncing_user {
 	&do_log('err','Warning: entry with empty email address in list %s', $self->{'name'}) 
 	    if (! $user->{'email'});
 	
-	## In case it was not set in the database
-	$user->{'subscribed'} = 1 if (defined ($user) && ($self->{'admin'}{'user_data_source'} eq 'database'));    
 	if (defined $user->{custom_attribute}) {
 	    	my %custom_attr = &parseCustomAttribute($user->{'custom_attribute'});
 	    	$user->{'custom_attribute'} = \%custom_attr ;
@@ -10620,14 +10518,6 @@ sub _apply_defaults {
 	}
     }
 
-    ## Default for user_data_source is 'file'
-    ## if not using a RDBMS
-    if ($List::use_db) {
-	$::pinfo{'user_data_source'}{'default'} = 'include2';
-    }else {
-	$::pinfo{'user_data_source'}{'default'} = 'file';
-    }
-    
     return \%::pinfo;
 }
 
@@ -10685,8 +10575,6 @@ sub _save_list_param {
 	    my $value = sprintf '%s %d:%d', join(',', @{$p->{'days'}})
 		,$p->{'hour'}, $p->{'minute'};
 	    $fd->print(sprintf "%s %s\n\n", $key, $value);
-##	}elsif (($key eq 'user_data_source') && $defaults && $List::use_db) {
-##	    printf $fd "%s %s\n\n", $key,  'database';
 	}else {
 	    $fd->print(sprintf "%s %s\n\n", $key, $p);
 	}
@@ -10718,12 +10606,6 @@ sub _load_list_param {
     ## Synonyms
     if (defined $p->{'synonym'}{$value}) {
 	$value = $p->{'synonym'}{$value};
-    }
-
-    ## Include mode should not be used anymore
-    ## Change value to include2 to shift to new behavior
-    if ($key eq 'user_data_source' && $value eq 'include') {
-	$value = 'include2';
     }
 
     ## Scenario
@@ -11099,27 +10981,14 @@ sub _load_admin_file {
     }
 
     ############################################
-    ## Bellow are constraints between parameters
+    ## Below are constraints between parameters
     ############################################
 
-    ## Subscription and unsubscribe add and del are closed 
-    ## if subscribers are extracted via external include method
-    ## (current version external method are SQL or LDAP query
-    if ($admin{'user_data_source'} eq 'include') {
-	foreach my $p ('subscribe','add','invite','unsubscribe','del') {
-	    $admin{$p} = &_load_list_param($robot,$p, 'closed', $::pinfo{$p}, 'closed', $directory);
-	}
-
-    }
-
     ## Do we have a database config/access
-    if (($admin{'user_data_source'} eq 'database') ||
-	($admin{'user_data_source'} eq 'include2')){
-	unless ($List::use_db) {
-	    &do_log('info', 'Sympa not setup to use DBI or no database access');
-	    ## We should notify the listmaster here...
-	    #return undef;
-	}
+    unless ($List::use_db) {
+	&do_log('info', 'Sympa not setup to use DBI or no database access');
+	## We should notify the listmaster here...
+	#return undef;
     }
 
     ## This default setting MUST BE THE LAST ONE PERFORMED

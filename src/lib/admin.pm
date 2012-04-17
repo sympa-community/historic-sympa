@@ -821,9 +821,8 @@ sub rename_list{
 	 }
 	 
 	 # if subscribtion are stored in database rewrite the database
-	 if ($list->{'admin'}{'user_data_source'} =~ /^(database|include2)$/) {
-	     &List::rename_list_db ($list,$param{'new_listname'},$param{'new_robot'});
-	 }
+	 &List::rename_list_db($list, $param{'new_listname'},
+			       $param{'new_robot'});
      }
      ## Install new aliases
      $param{'listname'} = $param{'new_listname'};

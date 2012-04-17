@@ -2490,23 +2490,23 @@ sub _set_status_changes {
 	$result->{'aliases'} = &admin::remove_aliases($list,$self->{'robot'});
     }
     
-    ## subscribers
-    if (($old_status ne 'pending') && ($old_status ne 'open')) {
-	
-	if ($list->{'admin'}{'user_data_source'} eq 'file') {
-	    $list->{'users'} = &List::_load_users_file("$list->{'dir'}/subscribers.closed.dump");
-	}elsif ($list->{'admin'}{'user_data_source'} eq 'database') {
-	    unless (-f "$list->{'dir'}/subscribers.closed.dump") {
-		&do_log('notice', 'No subscribers to restore');
-	    }
-	    my @users = &List::_load_users_file("$list->{'dir'}/subscribers.closed.dump");
-	    
-	    ## Insert users in database
-	    foreach my $user (@users) {
-		$list->add_user($user);
-	    }
-	}
-    }
+##    ## subscribers
+##    if (($old_status ne 'pending') && ($old_status ne 'open')) {
+##	
+##	if ($list->{'admin'}{'user_data_source'} eq 'file') {
+##	    $list->{'users'} = &List::_load_users_file("$list->{'dir'}/subscribers.closed.dump");
+##	}elsif ($list->{'admin'}{'user_data_source'} eq 'database') {
+##	    unless (-f "$list->{'dir'}/subscribers.closed.dump") {
+##		&do_log('notice', 'No subscribers to restore');
+##	    }
+##	    my @users = &List::_load_users_file("$list->{'dir'}/subscribers.closed.dump");
+##	    
+##	    ## Insert users in database
+##	    foreach my $user (@users) {
+##		$list->add_user($user);
+##	    }
+##	}
+##    }
 	
     return $result;
 }
