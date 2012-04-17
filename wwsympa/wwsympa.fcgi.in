@@ -4299,26 +4299,21 @@ sub do_search {
     return undef unless (defined &check_authz('do_search', 'review'));
     ## Regexp
     $param->{'filter'} = $in{'filter'};
-    my $regexp = &tools::escape_regexp($param->{'filter'});
-    
-    my $sql_regexp;
-    if ($list->{'admin'}{'user_data_source'} eq 'database') {
-	$sql_regexp = $param->{'filter'};
-	$sql_regexp =~ s/\%/\\\%/g;
-	$sql_regexp =~ s/\*/\%/g;
-	#$sql_regexp = '%'.$sql_regexp.'%';
-    }
-    
+    ## Decode regexp to Unicode for case-insensitive match.
+    my $regexp = &tools::escape_regexp(Encode::decode_utf8($param->{'filter'} || ''));
+
     my $record = 0;
     ## Maximum size of selection
     my $max_select = 50;
     
     ## Members list
-    for (my $i = $list->get_first_user({'sql_regexp' => $sql_regexp, 'sortby' => 'email'}); $i; $i = $list->get_next_user()) {
-	
+    for (my $i = $list->get_first_user({'sortby' => 'email'}); $i; $i = $list->get_next_user()) {
+
+	## Decode gecos to Unicode for case-insensitive match.
+	my $gecos = Encode::decode_utf8($i->{'gecos'} || '');
 	## Search filter
 	next if ($i->{'email'} !~ /$regexp/i
-		 && $i->{'gecos'} !~ /$regexp/i);
+		 && $gecos !~ /$regexp/i);
 	
 	next if (($i->{'visibility'} eq 'conceal')
 		 and (! $param->{'is_owner'}) );
