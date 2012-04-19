@@ -9757,11 +9757,12 @@ sub get_lists {
 	    if ( defined($requested_lists)){
 	      @files = sort @{$requested_lists};
 	    }else {
-              if ($use_files) {
+              if ($use_files or not defined($Conf::Conf{'db_list_cache'}) or not $Conf::Conf{'db_list_cache'}) {
 	        @files = sort readdir(DIR);
               }else {
                 # get list names from list config table
-                my $files = &get_lists_db('SELECT name_list FROM list_table');
+				my $statement = sprintf("SELECT name_list FROM list_table WHERE robot_list = %s" , $dbh->quote($robot));  
+                my $files = &get_lists_db($statement);
                 @files = @{$files};
               }
 	    }
