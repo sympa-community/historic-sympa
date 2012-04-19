@@ -169,6 +169,7 @@ sub remove {
     my $statement = sprintf "DELETE FROM bulkmailer_table WHERE packetid_bulkmailer = %s AND messagekey_bulkmailer = %s",$dbh->quote($packetid),$dbh->quote($messagekey),;
     unless ($dbh and $dbh->ping) {
 	return undef unless &List::db_connect();
+	$dbh = &List::db_get_handler();
     }	   
     return ($dbh->do($statement));
 }
@@ -181,6 +182,7 @@ sub messageasstring {
     
     unless ($dbh and $dbh->ping) {
 	return undef unless &List::db_connect();
+	$dbh = &List::db_get_handler();
     }
     unless ($sth = $dbh->prepare($statement)) {
 	do_log('err','Unable to prepare SQL statement : %s', $dbh->errstr);
@@ -214,6 +216,7 @@ sub message_from_spool {
 
     unless ($dbh and $dbh->ping) {
 	return undef unless &List::db_connect();
+	$dbh = &List::db_get_handler();
     }
     unless ($sth = $dbh->prepare($statement)) {
 	do_log('err','Unable to prepare SQL statement : %s', $dbh->errstr);
@@ -432,6 +435,7 @@ sub store {
     
     unless ($dbh and $dbh->ping) {
 	return undef unless &List::db_connect();
+	$dbh = &List::db_get_handler();
     }
     
     $msg = MIME::Base64::encode($msg);
@@ -557,6 +561,7 @@ sub purge_bulkspool {
 
     unless ($dbh and $dbh->ping) {
 	return undef unless &List::db_connect();
+	$dbh = &List::db_get_handler();
     }
     my $statement = "SELECT messagekey_bulkspool AS messagekey FROM bulkspool_table LEFT JOIN bulkmailer_table ON messagekey_bulkspool = messagekey_bulkmailer WHERE messagekey_bulkmailer IS NULL AND lock_bulkspool = 0";
     unless ($sth = $dbh->prepare($statement)) {
@@ -592,6 +597,7 @@ sub remove_bulkspool_message {
 
     unless ($dbh and $dbh->ping) {
 	return undef unless &List::db_connect();
+	$dbh = &List::db_get_handler();
     }
 
     my $statement = sprintf "DELETE FROM %s WHERE %s = '%s'",$table,$key,$messagekey;
@@ -637,6 +643,7 @@ sub store_test {
 
     unless ($dbh and $dbh->ping) {
 	return undef unless &List::db_connect();
+	$dbh = &List::db_get_handler();
     }
     
     $priority_message = 9;
@@ -688,6 +695,7 @@ sub get_remaining_packets_count {
 
     unless ($dbh and $dbh->ping) {
 	return undef unless &List::db_connect();
+	$dbh = &List::db_get_handler();
     }
 
     my $statement = "SELECT COUNT(*) FROM bulkmailer_table";
