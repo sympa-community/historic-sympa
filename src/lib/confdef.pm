@@ -528,7 +528,7 @@ our @params = (
     },
     {
         name    => 'db_list_cache',
-        default => '0',
+        default => 'off',
         advice  => 'Whether or not to cache lists in the database',
     },
     { title => 'Internationalization' },

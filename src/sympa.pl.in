@@ -929,7 +929,7 @@ elsif ($main::options{'close_family'}) {
 }
 ##########################################
 elsif ($main::options{'sync_list_db'}) {       
-    unless ($Conf{'db_list_cache'}) {
+    unless ($Conf{'db_list_cache'} eq 'on') {
        print STDOUT "\nSympa not configured to use database list caching \n";
        exit 1;
     }
@@ -946,7 +946,7 @@ elsif ($main::options{'sync_list_db'}) {
        }
     } else {
         &List::_flush_list_db();
-        my $all_lists = &List::get_lists('*', undef, undef, 1);
+        my $all_lists = &List::get_lists('*', { 'use_files' => 1 });
         foreach my $list (@$all_lists) {
            $list->_update_list_db;
         }

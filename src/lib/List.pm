@@ -9717,9 +9717,11 @@ sub store_digest {
 ## Returns a ref to an array of List objects
 sub get_lists {
     my $robot_context = shift || '*';
-    my $options = shift;
+    my $options = shift || {};
     my $requested_lists = shift; ## Optional parameter to load only a subset of all lists
-    my $use_files = shift;
+    my $use_files = $options->{'use_files'};
+    $use_files = 1
+	unless $Conf::Conf{'db_list_cache'} eq 'on';
 
     my(@lists, $l,@robots);
     do_log('debug2', 'List::get_lists(%s)',$robot_context);
@@ -12266,7 +12268,12 @@ sub _flush_list_db
     my ($listname) = shift;
     my $statement;
     unless ($listname) {
-        $statement =  "TRUNCATE list_table";
+	if ($Conf::Conf{'db_type'} eq 'SQLite') {
+	    # SQLite does not have TRUNCATE TABLE.
+	    $statement = "DELETE FROM list_table";
+	} else {
+	    $statement =  "TRUNCATE TABLE list_table";
+	}
     } else {
         $statement = sprintf "DELETE FROM list_table WHERE name_list = %s", $dbh->quote($listname);
     } 
