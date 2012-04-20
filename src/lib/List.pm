@@ -9719,9 +9719,13 @@ sub get_lists {
     my $robot_context = shift || '*';
     my $options = shift || {};
     my $requested_lists = shift; ## Optional parameter to load only a subset of all lists
-    my $use_files = $options->{'use_files'};
-    $use_files = 1
-	unless $Conf::Conf{'db_list_cache'} eq 'on';
+
+    my $use_files;
+    if ($Conf::Conf{'db_list_cache'} ne 'on') {
+	$use_files = 1;
+    } else {
+	$use_files = $options->{'use_files'};
+    }
 
     my(@lists, $l,@robots);
     do_log('debug2', 'List::get_lists(%s)',$robot_context);
@@ -9755,16 +9759,16 @@ sub get_lists {
 	    ## otherwise load all lists
 	    my @files;
 	    if ( defined($requested_lists)){
-	      @files = sort @{$requested_lists};
-	    }else {
-              if ($use_files or not defined($Conf::Conf{'db_list_cache'}) or not $Conf::Conf{'db_list_cache'}) {
-	        @files = sort readdir(DIR);
-              }else {
-                # get list names from list config table
-				my $statement = sprintf("SELECT name_list FROM list_table WHERE robot_list = %s" , $dbh->quote($robot));  
-                my $files = &get_lists_db($statement);
-                @files = @{$files};
-              }
+		@files = sort @{$requested_lists};
+	    } else {
+		if ($use_files) {
+		    @files = sort readdir(DIR);
+		} else {
+		    # get list names from list cache table
+		    my $statement = sprintf("SELECT name_list FROM list_table WHERE robot_list = %s" , $dbh->quote($robot));  
+		    my $files = &get_lists_db($statement);
+		    @files = @{$files};
+		}
 	    }
 
 	    foreach my $l (@files) {
