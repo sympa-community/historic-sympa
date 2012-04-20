@@ -7933,23 +7933,13 @@ sub do_remove_arc {
      ## Checking families and other virtual hosts.
      &get_server_details();
 
-     #my $all_lists = &List::get_lists($robot);
-     # use list config db table to get lists
-     my $all_lists;
-    if ($Conf{'db_list_cache'} eq 'on') {
-	my $statement = "SELECT name_list from list_table WHERE status_list = 'pending'";
-	my @lists = &List::get_lists_db($statement);
-	$all_lists = &List::get_lists($robot, undef, \@lists);
-    } else {
-	$all_lists = &List::get_lists($robot);
+    my $all_lists = &List::get_lists($robot,
+				     { 'filter_query' => [ 'status' => 'pending' ] });
+    foreach my $list ( @$all_lists ) {
+	$param->{'pending'}{$list->{'name'}}{'subject'} = $list->{'admin'}{'subject'};
+	$param->{'pending'}{$list->{'name'}}{'by'} = $list->{'admin'}{'creation'}{'email'};
+	$param->{'pending'}{$list->{'name'}}{'date'} = gettext_strftime "%d %b %y  %H:%M", localtime($list->{'admin'}{'creation'}{'date_epoch'});
     }
-     foreach my $list ( @$all_lists ) {
-	 if ($list->{'admin'}{'status'} eq 'pending') {
-	     $param->{'pending'}{$list->{'name'}}{'subject'} = $list->{'admin'}{'subject'};
-	     $param->{'pending'}{$list->{'name'}}{'by'} = $list->{'admin'}{'creation'}{'email'};
-	     $param->{'pending'}{$list->{'name'}}{'date'} = gettext_strftime "%d %b %y  %H:%M", localtime($list->{'admin'}{'creation'}{'date_epoch'});
-	 }
-     }
 
      return 1;
  }
@@ -7962,23 +7952,12 @@ sub do_remove_arc {
      ## Checking families and other virtual hosts.
      &get_server_details();
 
-     #my $all_lists = &List::get_lists($robot);
-     # use list config db table to get lists
-    my $all_lists;
-    if ($Conf{'db_list_cache'} eq 'on') {
-	my $statement = "SELECT name_list from list_table WHERE status_list = 'closed'";
-	my @lists = &List::get_lists_db($statement);
-	$all_lists = &List::get_lists($robot, undef, \@lists);
-    } else {
-	$all_lists = &List::get_lists($robot);
+    my $all_lists = &List::get_lists($robot,
+				     { 'filter_query' => [ 'status' => 'closed|family_closed' ] });
+    foreach my $list ( @$all_lists ) {
+	$param->{'closed'}{$list->{'name'}}{'subject'} = $list->{'admin'}{'subject'};
+	$param->{'closed'}{$list->{'name'}}{'by'} = $list->{'admin'}{'creation'}{'email'};
     }
-     foreach my $list ( @$all_lists ) {
-	 if ($list->{'admin'}{'status'} eq 'closed' ||
-	     $list->{'admin'}{'status'} eq 'family_closed') {
-	     $param->{'closed'}{$list->{'name'}}{'subject'} = $list->{'admin'}{'subject'};
-	     $param->{'closed'}{$list->{'name'}}{'by'} = $list->{'admin'}{'creation'}{'email'};
-	 }
-     }
 
      return 1;
  }
@@ -8884,18 +8863,7 @@ Sends back the list creation edition form.
 
      ## Members list
      my $record = 0;
-     #my $all_lists = &List::get_lists($robot);
-     # use list config db table to get lists
-    my $all_lists;
-    if ($Conf{'db_list_cache'} eq 'on') {
-	#XXXmy $regexp = $param->{'regexp'};
-	#XXXmy $statement = sprintf "SELECT name_list from list_table WHERE name_list RLIKE '%s' OR subject_list RLIKE '%s'", $regexp, $regexp;
-	my $statement = sprintf "SELECT name_list from list_table";
-	my @lists = &List::get_lists_db($statement) || undef;
-	$all_lists = &List::get_lists($robot, undef, \@lists);
-    } else {
-	$all_lists = &List::get_lists($robot);
-    }
+     my $all_lists = &List::get_lists($robot);
      foreach my $list ( @$all_lists ) {
 	 my $is_admin;
 	 ## Search filter

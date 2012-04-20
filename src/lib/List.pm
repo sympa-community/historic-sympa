@@ -9719,16 +9719,71 @@ sub get_lists {
     my $robot_context = shift || '*';
     my $options = shift || {};
     my $requested_lists = shift; ## Optional parameter to load only a subset of all lists
-
     my $use_files;
-    if ($Conf::Conf{'db_list_cache'} ne 'on') {
+    my $cond_perl;
+    my $cond_sql;
+
+    my(@lists, $l,@robots);
+    do_log('debug2', 'List::get_lists(%s)',$robot_context);
+
+    # Determin if files are used instead of list_table DB cache.
+    if ($Conf::Conf{'db_list_cache'} ne 'on' or defined $requested_lists) {
 	$use_files = 1;
     } else {
 	$use_files = $options->{'use_files'};
     }
 
-    my(@lists, $l,@robots);
-    do_log('debug2', 'List::get_lists(%s)',$robot_context);
+    # Build query: Perl expression for files and SQL expression for list_table.
+    my @query = (@{$options->{'filter_query'} || []});
+    my @clause_perl = ();
+    my @clause_sql = ();
+    while (1 < scalar @query) {
+        my @expr_perl = ();
+        my @expr_sql = ();
+        my @keys = split /[|]/, shift @query;
+        my @vals = split /[|]/, shift @query;
+
+        foreach my $k (@keys) {
+            next unless $k =~ /\S/;
+            $k =~ s/^\s+//;
+            $k =~ s/\s+$//;
+
+            foreach my $v (@vals) {
+                if ($k eq 'web_archive') {
+                    push @expr_perl, sprintf '&is_web_archived($list) == %d',
+                                             ($v+0 ? 1 : 0);
+                } elsif ($k =~ /^(name|robot)$/) {
+                    push @expr_perl, sprintf '$list->{"%s"} eq "%s"',
+                                             quotemeta $k, quotemeta $v;
+                } elsif ($k =~ /^(status|subject)$/) {
+                    push @expr_perl, sprintf '$list->{"admin"}{"%s"} eq "%s"',
+                                             quotemeta $k, quotemeta $v;
+                } else {
+                    do_log('err', "bug in logic. Ask developer");
+                    return undef;
+                }
+                if ($k eq 'web_archive') {
+                    push @expr_sql, sprintf 'web_archive_list = %d',
+                                            ($v+0 ? 1 : 0);
+                } else {
+                    push @expr_sql, sprintf '%s_list = %s',
+                                            $k, $dbh->quote($v);
+                }
+            }
+        }
+        if (scalar @expr_perl) {
+            push @clause_perl, join ' || ', @expr_perl;
+            push @clause_sql, join ' OR ', @expr_sql;
+        }
+    }
+    if (scalar @clause_perl) {
+        $cond_perl = join ' && ', map { "($_)" } @clause_perl;
+        $cond_sql = join ' AND ', map { "($_)" } @clause_sql;
+        do_log('debug2', 'query %s; %s', $cond_perl, $cond_sql);
+    } else {
+        $cond_perl = undef;
+        $cond_sql = undef;
+    }
 
     if ($robot_context eq '*') {
 	@robots = &get_robots ;
@@ -9737,11 +9792,17 @@ sub get_lists {
     }
     
     foreach my $robot (@robots) {
-    
 	## Check cache first
 	if (defined $list_cache{'get_lists'}{$robot}) {
-	    push @lists, @{$list_cache{'get_lists'}{$robot}};
-	}else {
+	    if (defined $cond_perl) {
+		foreach my $list (@{$list_cache{'get_lists'}{$robot}}) {
+		    next unless eval $cond_perl;
+		    push @lists, $list;
+		}
+	    } else {
+		push @lists, @{$list_cache{'get_lists'}{$robot}};
+	    }
+	} else {
 	    my $robot_dir =  $Conf::Conf{'home'}.'/'.$robot ;
 	    $robot_dir = $Conf::Conf{'home'}  unless ((-d $robot_dir) || ($robot ne $Conf::Conf{'host'}));
 	    
@@ -9750,25 +9811,26 @@ sub get_lists {
 		return undef ;
 	    }
 	    
-	    unless (opendir(DIR, $robot_dir)) {
-		do_log('err',"Unable to open $robot_dir");
-		return undef;
-	    }
-
 	    ## Load only requested lists if $requested_list is set
 	    ## otherwise load all lists
 	    my @files;
-	    if ( defined($requested_lists)){
+	    if (defined($requested_lists)){
 		@files = sort @{$requested_lists};
-	    } else {
-		if ($use_files) {
-		    @files = sort readdir(DIR);
-		} else {
-		    # get list names from list cache table
-		    my $statement = sprintf("SELECT name_list FROM list_table WHERE robot_list = %s" , $dbh->quote($robot));  
-		    my $files = &get_lists_db($statement);
-		    @files = @{$files};
+	    } elsif ($use_files) {
+		unless (opendir(DIR, $robot_dir)) {
+		    do_log('err',"Unable to open $robot_dir");
+		    return undef;
 		}
+		@files = sort readdir(DIR);
+		closedir DIR;
+	    } else {
+		# get list names from list cache table
+		my $where = sprintf 'robot_list = %s', $dbh->quote($robot);  
+		if (defined $cond_sql) {
+		    $where .= " AND $cond_sql";
+		}
+		my $files = &get_lists_db($where);
+		@files = @{$files};
 	    }
 
 	    foreach my $l (@files) {
@@ -9777,17 +9839,20 @@ sub get_lists {
 		my $list = new List ($l, $robot, $options);
 		
 		next unless (defined $list);
+
+		if ($use_files and defined $cond_perl) {
+		    next unless eval $cond_perl;
+		}
 		
 		push @lists, $list;
 		
 		## Also feed the cache
 		## Unless we only loaded a subset of all lists ($requested_lists parameter used)
-		unless (defined $requested_lists) {
-		  push @{$list_cache{'get_lists'}{$robot}}, $list;
+		unless (defined $requested_lists or defined $cond_perl) {
+		    push @{$list_cache{'get_lists'}{$robot}}, $list;
 		}
 		
 	    }
-	    closedir DIR;
 	}
     }
     return \@lists;
@@ -12158,14 +12223,16 @@ sub get_list_id {
 ## Support for list config caching in database
 
 sub get_lists_db {
-    my $statement = shift;
-    return undef unless defined($statement);
-    do_log('info', 'List::get_search_list_db(%s)', $statement);
+    my $where = shift || '';
+    do_log('debug2', 'List::get_lists_db(%s)', $where);
 
     unless ($List::use_db) {
        &do_log('info', 'Sympa not setup to use DBI');
        return undef;
     }
+
+    my $statement = 'SELECT name_list FROM list_table';
+    $statement .= " WHERE $where" if $where;
 
     my ($l, @lists);
 
