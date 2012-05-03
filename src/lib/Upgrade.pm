@@ -741,6 +741,13 @@ sub upgrade {
 		&Log::do_log('err',"Exclusion robot could not be guessed for user '%s' in list '%s'. Either this user is no longer subscribed to the list or the list appear in more than one robot (or the query to the database failed). Here is the list of robots in which this list name appears: '%s'",$data->{'list_exclusion'},$data->{'user_exclusion'},@valid_robot_candidates);
 	    }
 	}
+	## Caching all lists config subset to database
+	&Log::do_log('notice','Caching all lists config subset to database');
+	&List::_flush_list_db();
+	my $all_lists = &List::get_lists('*', { 'use_files' => 1 });
+	foreach my $list (@$all_lists) {
+	    $list->_update_list_db;
+	}
    }
 
     return 1;
