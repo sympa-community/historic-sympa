@@ -7,7 +7,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2007-11-13 14:50+0200\n"
-"PO-Revision-Date: 2012-03-20 12:46+0200\n"
+"PO-Revision-Date: 2012-05-02 13:04+0200\n"
 "Last-Translator: Lorena <maygoras@gmail.com>\n"
 "Language-Team: Catala <LL@li.org>\n"
 "Language: ca\n"
@@ -1887,10 +1887,10 @@ msgid ""
 "approval by a listmaster."
 msgstr ""
 "Apareixerà un missatge per a informar que s'ha enviat la sol·licitut de "
-"creació als administradors i que a partir d'aquest moment, es pot modificar "
+"creació als administradors i que, a partir d'aquest moment, es pot modificar "
 "la llista fent clic en el botó «Administrar». Tot i això, el missatge "
 "adverteix que la llista no s'instalarà i serà visible fins què "
-"l'administrador l'haja aprovat. "
+"l'administrador l'haja aprovat."
 
 #: web_tt2/help_admin.tt2:44
 msgid ""
@@ -1899,6 +1899,10 @@ msgid ""
 "notice message entitled '<strong>Creation of the nameofthelist list</"
 "strong>', informing you that your list was actually created."
 msgstr ""
+"Després d'això, haureu d'<strong>esperar que un dels administradors aprove "
+"la creació de la llista</strong>. Aleshores, rebreu un missatge de "
+"notificació amb el títol «<strong>Creació de la llista "
+"nomdelallista</strong>», per informar que la llista s'ha creat."
 
 #: web_tt2/help_admin.tt2:45
 msgid ""
@@ -1906,14 +1910,19 @@ msgid ""
 "its owner or moderator does not mean that you are automatically subscribed "
 "to it!"
 msgstr ""
+"<strong>Per últim, sucribiu-vous a la llista</strong>: crear una llista o "
+"ser-ne el propietari o moderador no implica que us subscriviu "
+"automàticament."
 
 #: web_tt2/help_admin.tt2:47
 msgid "Managing a list"
-msgstr ""
+msgstr "Com gestionar una llista"
 
 #: web_tt2/help_admin.tt2:49
 msgid "To manage a list you own, do as follows:"
 msgstr ""
+"Per a gestionar una llista en què sou el propietari, seguiu els passos "
+"següents:"
 
 #. (path_cgi)
 #: web_tt2/help_admin.tt2:51
@@ -1921,74 +1930,87 @@ msgid ""
 "Go to the <strong>list environment homepage</strong> and <strong><a href=\"%"
 "1/help/user#sympa_auth\">log on</a></strong>."
 msgstr ""
+"Aneu a la <strong>pàgina d'inici de l'entorn de la llista</strong> y "
+"<strong><a href=\"%1/help/user#sympa_auth\">iniciu sessió</a></strong>."
 
 #: web_tt2/help_admin.tt2:52
 msgid ""
 "If you are subscribed to the list with several addresses, use the address "
 "with which you requested the list creation."
 msgstr ""
+"Si esteu subscrit a la llista amb més d'una adreça, empreu l'adreça amb què "
+"heu demanat la creació de la llista."
 
 #: web_tt2/help_admin.tt2:53
 msgid "Go to the information page of the list</strong> you want to manage."
 msgstr ""
+"Aneu a la pàgina d'informació de la llista</strong> que voleu gestionar."
 
 #: web_tt2/help_admin.tt2:54
 msgid "In the left menu, <strong>click on the 'Admin' link</strong>."
 msgstr ""
+"En el menú de l'esquerra, <strong>feu clic en l'enllaç «Admin»</strong>."
 
 #: web_tt2/help_admin.tt2:57
 msgid ""
 "To browse the sections of the administration module, click on the links "
 "below the 'Admin' link, in the left menu."
 msgstr ""
+"Aneu al menú de l'esquerra i feu clic en «Admin», per a navegar per les "
+"seccions del mòdul d'administració."
 
 #: web_tt2/help_admin.tt2:58
 msgid "Those different sections allow you to:"
-msgstr ""
+msgstr "Les diferents seccion permeten:"
 
 #. (path_cgi)
 #: web_tt2/help_admin.tt2:60
 msgid "<a href=\"%1/help/listconfig\">configure the list</a>;"
-msgstr ""
+msgstr "<a href=\"%1/help/listconfig\">configurar la llista</a>;"
 
 #: web_tt2/help_admin.tt2:61
 msgid "<a href=\"#customize\">customize files related to the list</a>;"
 msgstr ""
+"<a href=\"#customize\">personalitzar fitxers relacionats amb la llista</a>;"
 
 #: web_tt2/help_admin.tt2:62
 msgid "<a href=\"#manage_members\">manage subscribers</a>;"
-msgstr ""
+msgstr "<a href=\"#manage_members\">gestionar subscriptors</a>;"
 
 #: web_tt2/help_admin.tt2:63
 msgid ""
 "<a href=\"#manage_archives\">manage the message archive of the list</a>;"
 msgstr ""
+"<a href=\"#manage_archives\">gestionar l'arxiu dels missatges de la "
+"llista</a>;"
 
 #: web_tt2/help_admin.tt2:64
 msgid "<a href=\"#manage_bounces\">manage bounces</a>;"
-msgstr ""
+msgstr "<a href=\"#manage_bounces\">gestionar rebots</a>;"
 
 #: web_tt2/help_admin.tt2:65
 msgid ""
 "<a href=\"#manage_shared\">create, delete or restore the shared document web "
 "space</a>;"
 msgstr ""
+"<a href=\"#manage_shared\">crear, eliminar o restaurar l'espai web per a "
+"compartir documents</a>;"
 
 #: web_tt2/help_admin.tt2:66
 msgid "<a href=\"#renamelist\">rename the list</a>;"
-msgstr ""
+msgstr "<a href=\"#renamelist\">canviar el nom de la llista</a>;"
 
 #: web_tt2/help_admin.tt2:67
 msgid "<a href=\"#supprlist\">delete the list</a>."
-msgstr ""
+msgstr "<a href=\"#supprlist\">eliminar la llista</a>."
 
 #: web_tt2/help_admin.tt2:70
 msgid "The options available in the 'Moderate' submenu allow you to:"
-msgstr ""
+msgstr "Les opcions que hi ha en «Moderar» dins del submenú us permeten:"
 
 #: web_tt2/help_admin.tt2:72
 msgid "<a href=\"#moderate\">moderate messages</a> sent to the list;"
-msgstr ""
+msgstr "<a href=\"#moderate\">moderar missatges</a> enviar a la llista;"
 
 #. (path_cgi)
 #: web_tt2/help_admin.tt2:73
@@ -1996,14 +2018,16 @@ msgid ""
 "<a href=\"%1/help/shared\">moderate documents</a> available in the shared "
 "document web space;"
 msgstr ""
+"<a href=\"%1/help/shared\">moderar documents</a> que està en l'espai web per a "
+"compartir documents;"
 
 #: web_tt2/help_admin.tt2:74
 msgid "<a href=\"#manage_members\">moderate pending subscriptions</a>."
-msgstr ""
+msgstr "<a href=\"#manage_members\">moderar subscripcions pendents</a>."
 
 #: web_tt2/help_admin.tt2:77 web_tt2/help_listconfig.tt2:3
 msgid "Configuring the list"
-msgstr ""
+msgstr "Com configurar la llista"
 
 #. (path_cgi)
 #: web_tt2/help_admin.tt2:78
@@ -2011,20 +2035,25 @@ msgid ""
 "To learn how to configure the list, please refer to the <a href=\"%1/help/"
 "listconfig\"><strong>documentation about list configuration</strong></a>."
 msgstr ""
+"Per a aprendre a configurar la llista, aneu a <a href=\"%"
+"1/help/listconfig\"><strong>documents sobre la configuració de "
+"llistes</strong></a>."
 
 #: web_tt2/help_admin.tt2:80
 msgid "Customizing the list"
-msgstr ""
+msgstr "Com personalitzar la llista"
 
 #: web_tt2/help_admin.tt2:81
 msgid ""
 "From this page, you can <strong>edit a number of files relating to your "
 "list</strong>, among which:"
 msgstr ""
+"Des d'aquesta pàgina, podeu <strong>editar el nombre de fitxers relatius a "
+"la llista</strong>, d'entre aquests:"
 
 #: web_tt2/help_admin.tt2:83
 msgid "typical messages sent to subscribers in particular occasions:"
-msgstr ""
+msgstr "missatges típics que s'envien als subscriptors en ocasions concretes:"
 
 #: web_tt2/help_admin.tt2:85
 msgid ""
@@ -2035,12 +2064,21 @@ msgid ""
 "message (reserved to the <acronym lang=\"en\" xml:lang=\"en\" title="
 "\"Multipurpose Internet Mail Extensions\">MIME</acronym> format experts);"
 msgstr ""
+"<strong>missatge de benvinguda</strong>: aquest missatge és la notificació "
+"que s'envia a la gent que s'acaba de subscriure. Heu d'escriure unes normes "
+"de funcionament per a la llistam i afegir-la en el missatge de benvinguda. "
+"Podeu crear un missatge estructurat amb <acronym lang=\"en\" xml:lang=\"en\" "
+"title=\"Extensió de correu d'Internet multifunció\">MIME</acronym> (reservat "
+"per a experts de format en <acronym lang=\"en\" xml:lang=\"en\" title=\"Extensió "
+"de correu d'Internet multifunció\">MIME</acronym>);"
 
 #: web_tt2/help_admin.tt2:86
 msgid ""
 "<strong>unsubscribe message</strong>: this message is sent to people "
 "unsubscribing from the list;"
 msgstr ""
+"<strong>missatge de donada de baixa</strong>: aquest missatge s'envia a la "
+"gent que es dóna de baixa de la llista;"
 
 #: web_tt2/help_admin.tt2:87
 msgid ""
@@ -2048,6 +2086,9 @@ msgid ""
 "unsubscribe from the list (DEL command), especially because their address "
 "caused bounces;"
 msgstr ""
+"<strong>missatge d'eliminació</strong>: aquest missatge s'envia a la gent "
+"que doneu de baixa de la llista (ordre DEL), sobretot perquè l'adreça causa "
+"rebots;"
 
 #: web_tt2/help_admin.tt2:88
 msgid ""
@@ -2057,28 +2098,41 @@ msgid ""
 "people whose current address is not their subscription address anymore, or "
 "even who forgot that they were subscribed to the list;"
 msgstr ""
+"<strong>missatge de recordatori</strong>: aquest missatge s'envia als "
+"subscriptors com a recordatori personalitzat quan s'utilitza l'ordre "
+"RECORDATORI. Aquesta ordre és bàsica per a la bona gestió de la llista ja "
+"que molts dels rebots es deuen al fet que alguns subscriptors tenen una "
+"adreça que no és l'adreça amb què es van subscriure o que, fins i tot, s'han "
+"oblidat que estan subscrits a la llista;"
 
 #: web_tt2/help_admin.tt2:89
 msgid ""
 "<strong>subscribing invitation message</strong>: this message is sent to "
 "people you invite to subscribe to the list using the INVITE command;"
 msgstr ""
+"<strong>missatge d'invitacióp a subscriure's</strong>: aquest missatge "
+"s'envia a la gent que inviteu a subscriure's a la llista emprant l'ordre "
+"CONVIDAR;"
 
 #: web_tt2/help_admin.tt2:90
 msgid ""
 "<strong>notice of message rejected by the moderator</strong>: this message "
 "is sent to the sender of a message rejected by the moderator;"
 msgstr ""
+"<strong>notificació de missatge rebutjat pel moderador</strong>: aquest "
+"missatge s'envia al remitent del missatge que ha rebutjat el moderador;"
 
 #: web_tt2/help_admin.tt2:91
 msgid ""
 "<strong>notice of message rejected because of a virus</strong>: this message "
 "is sent to the sender of a message in which a virus was found."
 msgstr ""
+"<strong>notificació de missatge rebutjat per un virus</strong>: aquest "
+"missatge s'envia al remitent del missatge en què s'ha trobat el virus."
 
 #: web_tt2/help_admin.tt2:94
 msgid "miscellaneous files:"
-msgstr ""
+msgstr "fitxers diversos:"
 
 #: web_tt2/help_admin.tt2:96
 msgid ""
@@ -2087,6 +2141,10 @@ msgid ""
 "message (subscription notice). It is not the same as the list presentation "
 "page displayed on the mailing list web interface;"
 msgstr ""
+"<strong>descripció de la llista</strong>: la descripció de la llista s'envia "
+"per correu com a resposta a l'ordre INFO. Per defecte, també s'inclou en el "
+"misstage de benvinguda (notificació de subscripció). Aquesta descripció no "
+"és la mateixa que es veu en l'interfície web de la llista de correu;"
 
 #: web_tt2/help_admin.tt2:97
 msgid ""
@@ -2096,6 +2154,11 @@ msgid ""
 "you do not use this format, use <code>&lt;br /&gt;</code> tags to indicate "
 "line breaks;"
 msgstr ""
+"<strong>pàgina d'inici de la llista</strong>: aquesta descipció està "
+"disponible en la pàgina d'informació de la llista. Pot estar en format "
+"<acronym lang=\"en\" xml:lang=\"en\" title=\"Hipertext llenguatge de "
+"marques\">HTML</acronym>. Tot i que empreu aquest format, empreu <code>&lt;br "
+"/&gt;</code> etiquetes per indicar els salts de línia;"
 
 #: web_tt2/help_admin.tt2:98
 msgid ""
@@ -2104,6 +2167,10 @@ msgid ""
 "\">MIME</acronym> attachment at the beginning of each message distributed to "
 "the list;"
 msgstr ""
+"<strong>capçalera dels missatges</strong>: quan està disponible, s'afegeix "
+"com a <acronym lang=\"en\" xml:lang=\"en\" title=\"Extensió de correu d'Internet "
+"multifunció\">MIME</acronym> al començament de cada missatge distribuit a la "
+"llista;"
 
 #: web_tt2/help_admin.tt2:99
 msgid ""
@@ -2112,6 +2179,9 @@ msgid ""
 "\">MIME</acronym> attachment at the end of each message distributed to the "
 "list."
 msgstr ""
+"<strong>peu de pàgina del missatge</strong>: quan està disponible, s'afegeix "
+"com a <acronym lang=\"en\" xml:lang=\"en\" title=\"Extensió de correu d'Internet "
+"multifunció\">MIME</acronym> al final del missatge distribuit a la llista."
 
 #: web_tt2/help_admin.tt2:103
 msgid ""
@@ -2122,16 +2192,24 @@ msgid ""
 "<strong>'Subject' field</strong> (subject line) and the <strong>message "
 "body</strong>."
 msgstr ""
+"Per defecte, Sympa empra fitxers predeterminats; en aquest cas, els fitxers "
+"específics que es corresponen amb la llista estan buits. <strong>Per a "
+"editar una arixu, elegiu de la llista deplegable l'opció «Edita»</strong>. "
+"Tindreu la opció de canviar el <strong>camp «De» </strong> (remitent, el "
+"<strong>camp «Assumpte»</strong> (línia d'assumpte) i el <strong>cos del "
+"missatge</strong>."
 
 #: web_tt2/help_admin.tt2:104
 msgid ""
 "Be careful: the values between square brackets are variables. Do not change "
 "them, unless you really know what you are doing..."
 msgstr ""
+"Aneu amb compte: els valors entre claudàtors poden variar. No els canvieu, "
+"si no sabeu que esteu fent..."
 
 #: web_tt2/help_admin.tt2:107
 msgid "Managing the shared document web space"
-msgstr ""
+msgstr "Gestionar l'espai web per a compartir documents"
 
 #: web_tt2/help_admin.tt2:108
 msgid ""
@@ -2139,6 +2217,10 @@ msgid ""
 "create it. To do that, go to the <strong>list administration module</strong> "
 "and click on the '<strong>Create shared</strong>' link."
 msgstr ""
+"Per defecte, les llistes no tenen un espai web per a compartir documents. "
+"Així, doncs, heu de crear un. Per a fer-ho, aneu al <strong>mòdul "
+"d'administració de la llista</strong> i feu clic en l'enllaç de "
+"«<strong>Creació compartida</strong>»."
 
 #. (path_cgi)
 #: web_tt2/help_admin.tt2:110
@@ -2151,6 +2233,14 @@ msgid ""
 "can edit</strong></a>'; choose the '<strong>Restricted to subscribers "
 "(private)</strong>' option."
 msgstr ""
+"Per a permetre que els subscriptors publiquen documents en l'espai web per a "
+"compartir documents, necessiteu <strong>canviar els permisos "
+"predeterminats</strong>: en el mòdul d'administració de la llista feu clic "
+"en «<strong>Editar configuració de la llista</strong>» i després en "
+"«<strong>Privilegis</strong>». En el botó de la pàgina, hi ha una llista "
+"desplegable amb el nom «<a href=\"%1/help/listconfig#docsrights\"><strong>Qui "
+"pot editar</strong></a>»; elegiu l'opció «<strong>Restringit per als "
+"subscriptors (privat)</strong>»."
 
 #. (path_cgi)
 #: web_tt2/help_admin.tt2:111
@@ -2159,6 +2249,10 @@ msgid ""
 "will still be unwritable. If you want to make them writable, you will have "
 "to <a href=\"%1/help/shared#acces\">change access rights</a> for each folder."
 msgstr ""
+"Aneu amb compte: si creeu carpetes abans de cambiar els permisos, ja que "
+"aquestes carpetes continuaran sense poder-se modificar. Si voleu que es "
+"puguen modificar, haureu de <a href=\"%1/help/shared#acces\">canviar els "
+"permisos d'accés</a> per a cada carpeta."
 
 #. (path_cgi)
 #: web_tt2/help_admin.tt2:112
@@ -2167,6 +2261,10 @@ msgid ""
 "<strong>quotas</strong></a> for the shared document web space on the "
 "'Privileges' page of the 'Edit list config' section."
 msgstr ""
+"També podeu voler <a href=\"%1/help/listconfig#docsrights\">establir unes "
+"<strong>cuotes</strong></a> per a l'espai web per a compartir documents en "
+"la pàgina de «Privilegis», la secció d'«Editar la configuració de la "
+"llista»."
 
 #. (path_cgi)
 #: web_tt2/help_admin.tt2:114
@@ -2176,6 +2274,10 @@ msgid ""
 "etc.), refer to the '<a href=\"%1/help/shared\">Using the shared document "
 "web space</a>' section of the User guide."
 msgstr ""
+"Per a <strong>saber tot sobre la gestiò de l'espai web per a compartir "
+"documents</strong> (com organitzar-ho, canviar els permisos d'accés, nom de "
+"documents, etc.), aneu a la Guia de l'Usuari, secció «<a href=\"%"
+"1/help/shared\">Com emprar l'espai web per a compartir documents</a>»."
 
 #: web_tt2/help_admin.tt2:115
 msgid ""
@@ -2186,20 +2288,30 @@ msgid ""
 "document web space has <strong>no impact on the documents it contains</"
 "strong>."
 msgstr ""
+"Per a <strong>denegar l'acess a l'espai web per a compartir "
+"documents</strong>, en el menú d'«Adminisrtar»feu clic en «<strong>Elimina "
+"espai compartit</strong>». Aleshores, encara tindreu la possibilitat de "
+"<strong>reobrir-lo</strong> fent clic en «<strong>Restaurar espai "
+"compartit</strong>». Tot i que elimineu o restaureul'espai web per a "
+"compartir documents, això <strong>no afectarà els documents que "
+"conté</strong>."
 
 #: web_tt2/help_admin.tt2:117
 msgid "Managing subscribers"
-msgstr ""
+msgstr "Com gestionar els subscriptors"
 
 #: web_tt2/help_admin.tt2:119
 msgid ""
 "This section lets you browse the <strong>list of all the list subscribers</"
 "strong>. For each subscriber, the following information is available:"
 msgstr ""
+"Aquesta secció us permet navegar per la <strong>la llista de tots els "
+"suscriptors de las llista</strong>. La informació següent està disponible "
+"per a cada subscriptor:"
 
 #: web_tt2/help_admin.tt2:121
 msgid "<strong>email address</strong>;"
-msgstr ""
+msgstr "<strong>adreça electrònica</strong>;"
 
 #: web_tt2/help_admin.tt2:122
 msgid ""
@@ -2207,34 +2319,44 @@ msgid ""
 "em>, <em class=\"example\">@sympa.org</em>, <em class=\"example\">@fai.com</"
 "em>, etc.);"
 msgstr ""
+"<strong>domini</strong> de la adreça electrònica (<em "
+"class=\"example\">@cru.fr</em>, <em class=\"example\">@sympa.org</em>, <em "
+"class=\"example\">@fai.com</em>, etc.);"
 
 #: web_tt2/help_admin.tt2:123
 msgid "<strong>picture</strong> (if that feature was activated for the list);"
 msgstr ""
+"<strong>imatge</strong> (si es va activar aquesta funció per a la llista);"
 
 #: web_tt2/help_admin.tt2:124
 msgid ""
 "<strong>name</strong> (according to the subscription method, it is not "
 "always displayed);"
 msgstr ""
+"<strong>nom</strong> (segons el mètode d'inscripció, no sempre es pot "
+"veure);"
 
 #: web_tt2/help_admin.tt2:125
 msgid "<a href=\"#deliverymode\"><strong>message delivery mode</strong></a>;"
 msgstr ""
+"<a href=\"#deliverymode\"><strong>modalitat d'entrega del "
+"missatge</strong></a>;"
 
 #: web_tt2/help_admin.tt2:126
 msgid ""
 "<strong>data source</strong> indicating the origin in case the subscriber is "
 "included in the list and not directly subscribed;"
 msgstr ""
+"<strong>font de dades</strong> s'indica l'origen en cas que el subscriptor "
+"estiga inclos en la llista, però no subscrit directament;"
 
 #: web_tt2/help_admin.tt2:127
 msgid "<strong>date of subscription</strong> to the list;"
-msgstr ""
+msgstr "<strong>data d'inscripció</strong> en la llista;"
 
 #: web_tt2/help_admin.tt2:128
 msgid "<strong>latest update</strong> of the subscriber options."
-msgstr ""
+msgstr "<strong>darrera actualització</strong> de les opcions del subscriptor."
 
 #: web_tt2/help_admin.tt2:131
 msgid ""
@@ -2243,6 +2365,11 @@ msgid ""
 "page. You may also wish to sort subscribers according to different criteria "
 "by clicking on the corresponding column header."
 msgstr ""
+"Per defecte, cada pàgina mostra 25&#160; subscriptors. Podeu navegar per les "
+"pàgines emprant ñes fletxes de navegació o mitjançant l'opció de mostrar "
+"més subscriptors per pàgina. També podeu reodenar la llista de subscriptors "
+"segons diferents criteris fent clic en la capçalera de la columna "
+"corresponent."
 
 #: web_tt2/help_admin.tt2:132
 msgid ""
@@ -2250,17 +2377,25 @@ msgid ""
 "address or name in the input field and click on the '<strong>Search</"
 "strong>' button."
 msgstr ""
+"Per a <strong>cecar un subscriptor</strong>, introduiu tot o part de "
+"l'adreça electrònica o el nom del subscriptor en el camp d'entrada i feu "
+"clic en el botó de «<strong>Cerca</strong>»."
 
 #: web_tt2/help_admin.tt2:133
 msgid ""
 "You can <strong>subscribe other people to the list</strong> from this page:"
 msgstr ""
+"Podeu <strong>subscriure altres persones a la llista</strong> des d'aqueste "
+"pàgina:"
 
 #: web_tt2/help_admin.tt2:135
 msgid ""
 "To add <strong>a single person</strong>, enter his/her email address in the "
 "input field and click on the '<strong>Add</strong>' button."
 msgstr ""
+"Per a afegir <strong>només a una persona</strong>, introduiu l'adreça "
+"d'aquesta en el camp d'entrada i feu clic en el botó de "
+"«<strong>Afegeix</strong>»."
 
 #: web_tt2/help_admin.tt2:136
 msgid ""
@@ -2269,6 +2404,11 @@ msgid ""
 "and names of the people you want to subscribe to the list and click on "
 "'<strong>Add subscribers</strong>'."
 msgstr ""
+"Per a afegir <strong>més d'una persona</strong>, fue clic en el botó "
+"«<strong>Afegeix més d'un</strong>». En el camp d'entrada que es veu, "
+"introduiu les adreces electròniques i els noms de les persones que voleu "
+"subscriure a la llista i feu clic en «<strong>Afegeix "
+"subscriptors</strong>»."
 
 #: web_tt2/help_admin.tt2:140
 msgid ""
@@ -2276,6 +2416,9 @@ msgid ""
 "tick the 'Quiet' box. However, it is far better to warn people that you "
 "subscribe them!"
 msgstr ""
+"Si voleu subscriure algú sense fer-s'ho saber amb una notificació, elegiu la "
+"casella de «Silenciós». Tot i així, és millor avisar la gent què els has "
+"subcrit."
 
 #. (conf.email,conf.host)
 #: web_tt2/help_admin.tt2:141
@@ -2288,6 +2431,13 @@ msgid ""
 "<strong>invite nameofthelist emailaddress</strong> (example: <em class="
 "\"example\">invite list_example john.doe(@)fai.com</em>)."
 msgstr ""
+"Encara que podeu subscriure gent a les vostres llistes de correu, sempre és "
+" <strong>molt millor que la gent faça els passos necessaris per a "
+"subscriure-s'hi per ells mateixs</strong>. També podeu <strong>invitar gent "
+"perquè es subcriguen a la llista</strong> a través de l'ordre CONVIDAR: "
+"envieu un correu a %1@%2 i escribiu l'ordre següent en el cos del missatge: "
+"<strong>convidar nomedelallista adreçalectrònica</strong> (exemple: <em "
+"class=\"example\">convida llista_exemple john.doe(@)fai.com</em>)."
 
 #: web_tt2/help_admin.tt2:142
 msgid ""
@@ -2297,6 +2447,11 @@ msgid ""
 "request, tick the box in front of a person's name and click on the button of "
 "your choice."
 msgstr ""
+"Per a <strong>aceptar o rebutjar les sol·licituds de subscripció a la "
+"llista</strong>, feu clic en «<strong>Subcripcions pendents</strong>». Es "
+"mostrarà la llista de tota la gent que a sol·licitat subcriure-s'hi. Per a "
+"acptar o rebutjar una sol·licitud, marqueu la casella que hi és davant el "
+"nom d'una persona o feu clic en el botó que volgueu."
 
 #: web_tt2/help_admin.tt2:143
 msgid ""
@@ -2304,30 +2459,36 @@ msgid ""
 "on the '<strong>Remind all</strong>' button. The subscription reminder "
 "message contains:"
 msgstr ""
+"Per a <strong>enviar un recordatori de subscripció a tots els "
+"subscriptors</strong>, feu clic en el botó «<strong>Recorda a "
+"tots</strong>». El missatge recordatori de subcripció conté:"
 
 #: web_tt2/help_admin.tt2:145
 msgid ""
 "the <strong>name of the list</strong> to which the subscriber is subscribed;"
 msgstr ""
+"el <strong>nom de la llista</strong> en què el subscriptor està subscrit;"
 
 #: web_tt2/help_admin.tt2:146
 msgid ""
 "the <strong>email address</strong> with which the subscriber is subscribed;"
-msgstr ""
+msgstr "l'<strong>adreça electrònica</strong> amb què es va subscriure;"
 
 #: web_tt2/help_admin.tt2:147
 msgid "the subscriber's <strong>list password</strong>;"
-msgstr ""
+msgstr "la <strong>contrssenya de la llista</strong> del subscriptor;"
 
 #: web_tt2/help_admin.tt2:148
 msgid "a <strong>link to the information page</strong> of the list;"
-msgstr ""
+msgstr "un <strong>enllaç a la pàgina d'informació</strong> de la llista;"
 
 #: web_tt2/help_admin.tt2:149
 msgid ""
 "a <strong>clickable address in order to allow subscribers to unsubscribe</"
 "strong> from the list."
 msgstr ""
+"una <strong>adreça per a donar-se de baixa de la llista fent clic al "
+"damunt</strong>."
 
 #. (path_cgi)
 #: web_tt2/help_admin.tt2:151
@@ -2336,6 +2497,9 @@ msgid ""
 "href=\"%1/help/listconfig#other\">Miscellaneous</a>' page of the 'Edit list "
 "config' section."
 msgstr ""
+"També podeu configurar un recordatori de subscripció automàtica, per fer "
+"això, aneu a la secció «Edita la configuració de la llista» i elegiu la "
+"pàgina «<a href=\"%1/help/listconfig#other\">Miscel·lània</a>»."
 
 #: web_tt2/help_admin.tt2:154
 msgid ""
@@ -2343,12 +2507,19 @@ msgid ""
 "ticking the boxes in front of their names and click on the '<strong>Delete "
 "selected email addresses</strong>' button."
 msgstr ""
+"Per a <strong>donar de baixa un subscriptor</strong> des d'aquesta pàgina, "
+"seleccioneu-los marcant les caselles que hi ha davant dels noms i feu clic "
+"en el botó «<strong>Elimina les adreces electròniques "
+"selesccionades</strong>»."
 
 #: web_tt2/help_admin.tt2:155
 msgid ""
 "If you do not want to notify the subscribers, tick the 'Quiet' box. However, "
 "this is not advisable, except in the case of bouncing subscribers."
 msgstr ""
+"Si no voleu que els subscriptors reben una notificació, feu marqueu la "
+"casella «Silenciós». Tot i així, no es reconomana aquesta opció excepte en "
+"casos de subscriptors inaccesibles."
 
 #: web_tt2/help_admin.tt2:157 web_tt2/help_admin.tt2:179
 msgid ""
@@ -2356,12 +2527,17 @@ msgid ""
 "displayed on the page, and then click on the 'Toggle selection' button: all "
 "subscribers will be selected in a single click!"
 msgstr ""
+"Consell: per a seleccionar tots els subscriptors d'una vegada, primer "
+"assegureu-vos que es veuen tots en una pàgina i feu clic en el botó «Commuta "
+"la selecció»: tots els subscriptors es seleccionaran amb un clic."
 
 #: web_tt2/help_admin.tt2:159
 msgid ""
 "To <strong>change a subscriber's subscriber options</strong>, click on his/"
 "her email address."
 msgstr ""
+"Per a <strong>canviar les opcions de subscripció d'un subscriptor</strong>, "
+"feu clic en l'adreça electrònica d'aquest."
 
 #: web_tt2/help_admin.tt2:160
 msgid ""
@@ -2369,28 +2545,33 @@ msgid ""
 "delivery mode of the subscriber</strong>. You can also <strong>unsubscribe "
 "him/her</strong>."
 msgstr ""
+"Des d'aquesta pàgina, podeu <strong>canviar el nom, l'adreça electrònica i "
+"la modalitat d'entrega del subscriptor</strong>. També podeu <strong>donar-"
+"lo de baixa</strong>."
 
 #: web_tt2/help_admin.tt2:162
 msgid ""
 "If the subscriber is <a href=\"#manage_bounces\">bouncing</a>, another form "
 "displays under the 'Subscriber information' form:"
 msgstr ""
+"Si el subscriptor està <a href=\"#manage_bounces\">retornant missatges</a>, es "
+"veura un altre formulari en el formulari de «Informació del subscriptor»:"
 
 #: web_tt2/help_admin.tt2:163
 msgid "The information displayed involves:"
-msgstr ""
+msgstr "La informació que es mostra inclou:"
 
 #: web_tt2/help_admin.tt2:165
 msgid "the type of error (in English);"
-msgstr ""
+msgstr "el tipus d'error (en anglés);"
 
 #: web_tt2/help_admin.tt2:166
 msgid "the number or errors;"
-msgstr ""
+msgstr "el nombre d'errors;"
 
 #: web_tt2/help_admin.tt2:167
 msgid "the period during which errors occurred."
-msgstr ""
+msgstr "el període de temps en què van haver errors."
 
 #. (path_cgi)
 #: web_tt2/help_admin.tt2:169
@@ -2399,16 +2580,22 @@ msgid ""
 "strong>. If you reset errors, the subscriber's <a href=\"%1/help/"
 "listconfig#bouncers\">score</a> will be reset to zero."
 msgstr ""
+"Podeu <strong>verificar l'últim error</strong> o <strong>reiniciar els "
+"errors</strong>. Si reiniceu els errors, la <a href=\"%"
+"1/help/listconfig#bouncers\">puntuació</a> del subscriptor es posarà a cero."
 
 #: web_tt2/help_admin.tt2:171
 msgid ""
 "To manage bouncing addresses more easily, go to the '<a href="
 "\"#manage_bounces\">Bounces</a>' page of the list administration module."
 msgstr ""
+"Per a gestionar amb més facilitat les adreces que generen missatges "
+"retornats, aneu al mòdul d'administració i elegiu la pàgina de «<a "
+"href=\"#manage_bounces\">Retornats</a>»."
 
 #: web_tt2/help_admin.tt2:174
 msgid "Managing bounces"
-msgstr ""
+msgstr "Com gestionar retornats"
 
 #: web_tt2/help_admin.tt2:175
 msgid ""
@@ -2419,6 +2606,14 @@ msgid ""
 "check the bouncing addresses, go to the '<strong>Bounces</strong>' page of "
 "the list administration module."
 msgstr ""
+"Quan hi ha un <strong>problema amb les adreces electròniques dels "
+"subscriptors</strong> (adreces electròniques obsoletes, adreces que estaben "
+"temporalment no disponibles quan es van enviar els missatges, que s'ha "
+"excedit la quota de la bústia d'entrada, etc.), el percentatge d'adreces que "
+"generen missatges retornats es pot veure en el menú de l'esquerra amb el "
+"nom de «<strong>Freqüència d'error</strong>». Per a verificar les adreces "
+"amb retornats, aneu al mòdul d'administració, la pàgina de "
+"«<strong>Retornats</strong>»."
 
 #: web_tt2/help_admin.tt2:176
 msgid ""
@@ -2427,6 +2622,10 @@ msgid ""
 "are either notified, unsubscribed, or their score is reset to zero when "
 "their address stops bouncing."
 msgstr ""
+"El programari de Sympa gestiona automàticament els subscriptors amb "
+"retornats: segons el nombre d'errors i el trànsit de la llista, també es "
+"notifica, dona de baixa o se'ls posa la puntuació a cero quan l'adreça deixa "
+"de fer retornats als subcriptors inaccesibles."
 
 #: web_tt2/help_admin.tt2:177
 msgid ""
@@ -2435,6 +2634,11 @@ msgid ""
 "strong>' button. If the error remains, the addresses will be reported as "
 "bouncing again as soon as a message is posted on the list."
 msgstr ""
+"Per <strong>fer que les adreces deixen de fer retornats</strong>, "
+"seleccioneu-los marcant les caselles i fent clic en el botó "
+"«<strong>Reiniciar errors per als usuaris seleccionats</strong>». Si l'error "
+"continua, les adreces es llistaran com a retornats una altra vegada, tan "
+"prompte com s'envie un missatge a la llista."
 
 #: web_tt2/help_admin.tt2:178
 msgid ""
@@ -2444,10 +2648,16 @@ msgid ""
 "the boxes in front of their names and click on the '<strong>Delete selected "
 "email addresses</strong>' button."
 msgstr ""
+"També podeu <strong>donar de baixa subscriptors les adreces dels quals "
+"continuen fent retornats</strong>: si hi ha moltes adreces que fan retornats "
+"el servidor de la llista de correu es carrega bastant. Per a donar de baixa "
+"subscriptors, seleccioneu-los marcant les caselles de davant els noms i feu "
+"clic en el botó «<strong>Elimina les adreces electròniques "
+"seleccionades</strong>»."
 
 #: web_tt2/help_admin.tt2:181
 msgid "Moderating messages sent to the list"
-msgstr ""
+msgstr "Com moderar els missatges que s'envien a la llista"
 
 #: web_tt2/help_admin.tt2:182
 msgid ""
@@ -2457,6 +2667,11 @@ msgid ""
 "that their message will be moderated. As for moderators, they also receive a "
 "notice message from Sympa, which includes the message to moderate."
 msgstr ""
+"Quan es modera una llista, <strong>tots els missatges han de ser aprovats "
+"per un dels moderadors abans que no es distribueixen a la llista</strong>. "
+"Després d'enviar un missatge a la llista, es notifica automàticament als "
+"subscriptors que es revisarà el seu missatge. Qant als moderadors, també "
+"reben una notificació de Sympa, que inclou el missatge que s'ha de revisar."
 
 #: web_tt2/help_admin.tt2:184
 msgid ""
@@ -2468,20 +2683,29 @@ msgid ""
 "messages are on top of page). <strong>To read a message, click on its "
 "subject</strong>."
 msgstr ""
+"Podeu <strong>realitzar tasques de moderació</strong> ja siga <strong>pel "
+"correu electrònic</strong>, responent els missatges del Sympa, o <strong>a "
+"través de la interfície web de la llista de correu</strong>. Per a fer-ho, "
+"aneu al submenú «Modera» i feu clic en l'enllaç «<strong>Missatge</strong>»: "
+"que us envia a una pàgina que mostra tots els missatges que s'han de "
+"moderar (els missatges més recents estan al començament de la pàigna). "
+"<strong>Per a llegir un missatge feu clic en l'assumpte</strong>."
 
 #: web_tt2/help_admin.tt2:186
 msgid "You have <strong>two options</strong>:"
-msgstr ""
+msgstr "Teniu <strong>dos opcions</strong>:"
 
 #: web_tt2/help_admin.tt2:188
 msgid "<strong>authorize the message distribution</strong> on the list;"
-msgstr ""
+msgstr "<strong>autoritzar la distribució del missatge</strong> a la llista;"
 
 #: web_tt2/help_admin.tt2:189
 msgid ""
 "<strong>reject the message and notify sender</strong>: when you reject a "
 "message, it is better to notify its sender..."
 msgstr ""
+"<strong>rebutjar el missatge i notificar-s'ho al remitent</strong>: quan "
+"rebutjeu un missatge, és millor notificar-s'ho al remitent..."
 
 #: web_tt2/help_admin.tt2:191
 msgid ""
@@ -2493,6 +2717,12 @@ msgid ""
 "strong>: thus, you will be able to view all messages remaining to be "
 "moderated."
 msgstr ""
+"Tots els moderadors poden decidir si distribuir un missatge o no. No obstant "
+"això, <strong>el primer moderador que processe el missatge serà qui "
+"decidisca</strong>. Sympa us enviarà una notificació si intenteu processar "
+"un missatge que ja ha estat revisat. Quan hi ha diversos moderadors, és "
+"<strong>més fàcil moderar els missatges des de l'interfície web de la llista "
+"de correu</strong>: ja que mostra els missatges que falta revisar."
 
 #: web_tt2/help_admin.tt2:192
 msgid ""
@@ -2501,6 +2731,10 @@ msgid ""
 "the message is allowed with a lot of delay, it is possible to receive a "
 "message dated January 1st on December 31st!"
 msgstr ""
+"<strong>Sense importar la data i el moment de la revisió, la data i el "
+"moment d'enviament del missatge no canvia</strong>. De manera que si la "
+"distribució del missatge s'aprova amb molt d'enraderiment, és pot rebre un "
+"missatge del dia 1 de gener el dia  31 de decembre."
 
 #: web_tt2/help_admin.tt2:193
 msgid ""
@@ -2508,12 +2742,18 @@ msgid ""
 "it is notified by email. You can <a href=\"#customize\">customize the "
 "message he/she gets</a>."
 msgstr ""
+"En el cas que el missatge s'haja rebutjat amb una notificació, el "
+"subscriptor que ha enviat el missatge rebre una notificació per correu "
+"electrònic. Podeu <a href=\"#customize\">personalitzar el missatge que "
+"reba</a>."
 
 #: web_tt2/help_admin.tt2:195
 msgid ""
 "Checking the '<strong>Reject without notification</strong>' checkbox allows "
 "you to prevent the message author from receiving a notification."
 msgstr ""
+"Si s'activa la casella de «<strong>Rebutja sense notificació</strong>» "
+"l'autor del missatge no rebrà una notificació."
 
 #: web_tt2/help_admin.tt2:197
 msgid ""
@@ -2522,6 +2762,10 @@ msgid ""
 "blacklist. You can manage the blacklist via the '<strong>edit blacklist</"
 "strong>' button at the bottom of the page."
 msgstr ""
+"Si activeu la casella de «<strong>Afegir a la llista negra</strong>» omet la "
+"notificació i afegeix l'autor a la llista negra de la llista. Podeu "
+"gestionar la llista negra si anau a la part inferior de la pàgina i feu clic "
+"en el botó «<strong>editar llista  negra</strong>»."
 
 #: web_tt2/help_admin.tt2:199
 msgid ""
@@ -2530,6 +2774,10 @@ msgid ""
 "button. The message management page will let define a set of rejection "
 "messages and define the default one."
 msgstr ""
+"Si voleu personalitzar el missatge de rebutjament que s'envia a l'autor, "
+"podeu fer-ho a través del botó «<strong>Gestiona els missatges de "
+"rebutjament</strong>». La pàgina de gestió dels missatges permet definir un "
+"conjunt de missatges de rebutjament i definir-ne un per defecte."
 
 #. (path_cgi)
 #: web_tt2/help_admin.tt2:201
@@ -2540,6 +2788,12 @@ msgid ""
 "on '<strong>Edit list config</strong>', and then on '<strong>List "
 "definition</strong>'."
 msgstr ""
+"<strong>Recordatori</strong>: podeu <a href=\"%"
+"1/help/listconfig#description\">afegir o eliminar moderadors</a> a través del "
+"mòdul d'administració de la llista. Per a fer-ho, heu d'anar a la pàgina "
+"d'informació i entrar en «<strong>Edita configuració de llista</strong>», "
+"després en «<strong>Definició de la llista</strong>» i per últim en "
+"«<strong>Administra</strong>»."
 
 #. (path_cgi)
 #: web_tt2/help_admin.tt2:202
@@ -2554,10 +2808,19 @@ msgid ""
 "operation is irreversible!!! If you delete a message, you will not be able "
 "to retrieve it.</strong>"
 msgstr ""
+"També es possible <strong>processar missatges després que s'hagen distribuit "
+"en la llista</strong>; fet que podria ser útil quan una llista no està "
+"moderada. Si voleu <strong>eliminar un missatge</strong>, <a href=\"%"
+"1/help/arc#arcsearch\">cerqueu-ho en l'arxiu de missatges en linia</a> aneu a "
+"la part superior dreta del missatge i feu clic en el botó «<strong>Etiqueta "
+"aquest correu per a eliminar</strong>». Es mostrarà un missatge de "
+"confirmació; feu clic en «OK». Després de uns pocs segons s'eliminarà el "
+"missatge . <strong>Aneu en compte: aquesta acció és irreversible! Si "
+"elimineu un missatge, no podreu recuperar-lo.</strong>"
 
 #: web_tt2/help_admin.tt2:205
 msgid "Managing the message archive"
-msgstr ""
+msgstr "Gestionar l'arxiu de missatges"
 
 #: web_tt2/help_admin.tt2:206
 msgid ""
@@ -2566,6 +2829,11 @@ msgid ""
 "To download those archives, <strong>select the months</strong> that interest "
 "you in the list and click on the '<strong>Download Zip file</strong>' button."
 msgstr ""
+"El robot de gestió de llistes de correu de Sympa pot generar <strong>arxius "
+"válids per a baixar-se(en format .ZIP) dels missatges que s'envien a la "
+"llista</strong>. Per a baixar-se aquests arxius, <strong>seleccioneu els "
+"mesos</strong> que us interesen de la llista i feu clic en el botó "
+"«<strong>Baixar fitxer Zip </strong>»."
 
 #: web_tt2/help_admin.tt2:207
 msgid ""
@@ -2573,6 +2841,9 @@ msgid ""
 "messages have been sent, click on the first month, hold down the SHIFT key "
 "and click on the last month of the list."
 msgstr ""
+"Nota: per a seleccionar tots els mesos en què s'han enviat missatges, aneu a "
+"la llista «Sel·lecció d'arxiu» i feu clic en el primer mes, mantingueu "
+"premut el botó de SHIFT i feu clic en l'últim botó de la llista."
 
 #: web_tt2/help_admin.tt2:208
 msgid ""
@@ -2586,6 +2857,16 @@ msgid ""
 "your choice (Notepad, WordPad, Vim, etc.) to open them. <strong>Each file "
 "represents an entire message (full header)</strong>."
 msgstr ""
+"Rebreu un fitxer del tipus «<strong>nomdelallista_arxiu.zip</strong>» que "
+"contindrà  <strong>carpetes amb els noms de «nomdelallista_any-mes»</strong> "
+"(exemple: <em class=\"example\">llista_exemple_2005-06</em>) per cada mes. "
+"Dins de cada carperta, <strong>els noms dels fitxers són números</strong> "
+"que representen la posició cronològica del missatge enviat (exemple: el "
+"fitxer amb el nom «1» inclou el primer missatge que s'ha enviat del mes). "
+"Els fitxers dels missatges <strong>no tenen una extensió</strong>; però "
+"podeu obrir-los amb l'editor de text que elegiu (Notepad, WordPad, Vim, "
+"etc.). <strong>Cada fitxer representa un missatge sencer (amb totes les "
+"capçaleres)</strong>."
 
 #: web_tt2/help_admin.tt2:209
 msgid ""
@@ -2594,6 +2875,11 @@ msgid ""
 "<strong>select the months</strong> that interest you in the list and click "
 "on the '<strong>Delete selected months</strong>' button."
 msgstr ""
+"Des de la pàgina «Gestionar arxius», també es pot <strong>eliminar "
+"missatges</strong> (s'eliminen mes per mes i no missatge a missatge). Per a "
+"fer això, s'ha de <strong>seleccionar els mesos</strong> que interesen de la "
+"llista i fer clic en el botó «<strong>Elimina els mesos "
+"seleccionats</strong>»."
 
 #: web_tt2/help_admin.tt2:210
 msgid ""
@@ -2602,10 +2888,13 @@ msgid ""
 "archive file, but also the entire message archive of the selected month!!!</"
 "strong>"
 msgstr ""
+"<strong>Atenció: aquesta acció és irreversible! Quan feu clic en «Elimina "
+"els mesos seleccionats», recordeu que no sols esteu eliminant un fitxer d'un "
+"arxiu, sinó tot l'arxiu complet del missatge del mes seleccionar!</strong>"
 
 #: web_tt2/help_admin.tt2:213
 msgid "Renaming the list"
-msgstr ""
+msgstr "Com renombrar una llista"
 
 #: web_tt2/help_admin.tt2:214
 msgid ""
@@ -2613,28 +2902,38 @@ msgid ""
 "list</strong>'. Enter the name of your choice and click on the 'Rename this "
 "list' button. A confirmation message displays; click on 'OK'."
 msgstr ""
+"En el <strong>mòdul d'aministració de la llista</strong>, feu clic en "
+"«<strong>Renombra la llista</strong>». Escriviu el nom que elegiu i feu clic "
+"en el botó de «Renombra aquesta llista». Apareoxerà un missatge de "
+"confirmació; feu clic en «D'acord»."
 
 #: web_tt2/help_admin.tt2:215
 msgid ""
 "If you change your mind, you will only have to redo the inverse operation in "
 "order to retrieve the former list name."
 msgstr ""
+"Si canvieu de parer, sols haureu de refer l'acció inversa per a recuperar el "
+"nom anterior de la llista."
 
 #: web_tt2/help_admin.tt2:216
 msgid ""
 "Be careful: when you rename a list, you have to let the listmasters know; "
 "otherwise, the change will not be effective</strong>."
 msgstr ""
+"Atenció: quan renombreu la llista, s'ho has de dir als adminisrtador, sinó, "
+"el canvi no serà efectiu</strong>."
 
 #: web_tt2/help_admin.tt2:217
 msgid "A few tips to name your lists:"
-msgstr ""
+msgstr "Alguns consell per posar nom a una llista:"
 
 #: web_tt2/help_admin.tt2:219
 msgid ""
 "<strong>Do not use any spaces, accents or specials characters</strong> in "
 "list names: those characters might cause problems."
 msgstr ""
+"<strong>No empreu espais, accents o caràcters especials</strong> en el nom "
+"de la llista: aquests caràcters poden causar problemes."
 
 #: web_tt2/help_admin.tt2:220
 msgid ""
@@ -2642,6 +2941,9 @@ msgid ""
 "who will have to type this name every time they will send a message to the "
 "list!"
 msgstr ""
+"Elegiu <strong>un nom explicit però curt</strong>: penseu en els "
+"subscriptors que han d'escriure el nom cada vegada que envien un missatge a "
+"la llista."
 
 #. (conf.host)
 #: web_tt2/help_admin.tt2:221
@@ -2651,16 +2953,23 @@ msgid ""
 "easily recognizable (example: <em class=\"example\">xx-users@%1, xx-hotline@%"
 "1.fr</em>, etc.)."
 msgstr ""
+"Si gestioneu un conjunt de llistes, podeu <strong>emprar un prefix comú per "
+"als noms de totes les llistes</strong>; així, es mostraran juntes en els "
+"llistats i es podran reconèixer fàcilment (exemple: <em class=\"exemple\">xx-"
+"users@%1, xx-hotline@%1.fr</em>, etc.)."
 
 #: web_tt2/help_admin.tt2:225
 msgid "Deleting the list"
-msgstr ""
+msgstr "Com eliminar una llista"
 
 #: web_tt2/help_admin.tt2:226
 msgid ""
 "In the <strong>list administration module</strong>, click on '<strong>Remove "
 "list</strong>'. A confirmation message displays; click on 'OK'."
 msgstr ""
+"En el <strong>mòdul d'adminstració de la llista</strong>, feu clic en "
+"«<strong>Elimina la llista</strong>». Apareixerà un missatge de confirmació; "
+"feu clic en «D'acord»."
 
 #: web_tt2/help_admin.tt2:227
 msgid ""
@@ -2668,23 +2977,33 @@ msgid ""
 "it yourself!!! If you want to reopen the list, you will have to ask the "
 "listmasters.</strong>"
 msgstr ""
+"<strong>Atenció: si elimineu la llista, no podreu tornar a obrir-la "
+"vosaltres mateixos! Si es voleu reobrir la llista, s'ho haureu de demanar "
+"als administradors.</strong>"
 
 #: web_tt2/help_admin.tt2:229
 msgid ""
 "In real terms, what are the <strong>consequences</strong> of a list deletion?"
 msgstr ""
+"En realitat, quines són les <strong>conseqüències</strong> d'eliminar una "
+"llista?"
 
 #: web_tt2/help_admin.tt2:231
 msgid ""
 "<strong>All subscribers are immediately unsubscribed</strong> automatically "
 "(including owners and moderators)."
 msgstr ""
+"<strong>Tots els subscriptors es donen de baixa de la llista "
+"immediatament</strong> de manera automàtica (fins i tot els propietaris i "
+"els moderadors)."
 
 #: web_tt2/help_admin.tt2:232
 msgid ""
 "<strong>The message archive is preserved</strong> but no one can access it "
 "anymore."
 msgstr ""
+"<strong>Es guarda l'arxiu dels missatges</strong> però ningú no pot tornar a "
+"accedir."
 
 #: web_tt2/help_admin.tt2:233
 msgid ""
