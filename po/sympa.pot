@@ -76,7 +76,7 @@ msgstr ""
 msgid "Home"
 msgstr ""
 
-#: ../web_tt2/arc.tt2:4 ../web_tt2/arc_manage.tt2:4 ../web_tt2/arcsearch_form.tt2:4 ../web_tt2/compose_mail.tt2:12 ../web_tt2/compose_mail.tt2:5 ../web_tt2/create_list_request.tt2:26 ../web_tt2/create_list_request.tt2:33 ../web_tt2/create_list_request.tt2:38 ../web_tt2/create_list_request.tt2:42 ../web_tt2/create_list_request.tt2:68 ../web_tt2/create_list_request.tt2:73 ../web_tt2/create_list_request.tt2:93 ../web_tt2/d_control.tt2:5 ../web_tt2/d_editfile.tt2:12 ../web_tt2/d_editfile.tt2:14 ../web_tt2/d_properties.tt2:10 ../web_tt2/d_properties.tt2:6 ../web_tt2/d_properties.tt2:8 ../web_tt2/d_read.tt2:22 ../web_tt2/d_read.tt2:47 ../web_tt2/edit_list_request.tt2:39 ../web_tt2/edit_list_request.tt2:4 ../web_tt2/editfile.tt2:4 ../web_tt2/menu.tt2:22 ../web_tt2/modindex.tt2:192 ../web_tt2/modindex.tt2:9 ../web_tt2/pref.tt2:4 ../web_tt2/rename_list_request.tt2:3 ../web_tt2/review.tt2:5 ../web_tt2/reviewbouncing.tt2:3 ../web_tt2/suboptions.tt2:21 ../web_tt2/suspend_request.tt2:64
+#: ../web_tt2/arc.tt2:4 ../web_tt2/arc_manage.tt2:4 ../web_tt2/arcsearch_form.tt2:4 ../web_tt2/compose_mail.tt2:12 ../web_tt2/compose_mail.tt2:5 ../web_tt2/create_list_request.tt2:26 ../web_tt2/create_list_request.tt2:33 ../web_tt2/create_list_request.tt2:38 ../web_tt2/create_list_request.tt2:42 ../web_tt2/create_list_request.tt2:68 ../web_tt2/create_list_request.tt2:73 ../web_tt2/create_list_request.tt2:93 ../web_tt2/d_control.tt2:5 ../web_tt2/d_editfile.tt2:12 ../web_tt2/d_editfile.tt2:14 ../web_tt2/d_properties.tt2:10 ../web_tt2/d_properties.tt2:6 ../web_tt2/d_properties.tt2:8 ../web_tt2/d_read.tt2:22 ../web_tt2/d_read.tt2:47 ../web_tt2/edit_list_request.tt2:39 ../web_tt2/edit_list_request.tt2:4 ../web_tt2/editfile.tt2:4 ../web_tt2/menu.tt2:22 ../web_tt2/modindex.tt2:192 ../web_tt2/modindex.tt2:9 ../web_tt2/pref.tt2:4 ../web_tt2/rename_list_request.tt2:3 ../web_tt2/review.tt2:5 ../web_tt2/reviewbouncing.tt2:3 ../web_tt2/suboptions.tt2:21 ../web_tt2/suspend_request.tt2:5
 msgid "Help"
 msgstr ""
 
@@ -473,7 +473,7 @@ msgstr ""
 msgid "Archive Management"
 msgstr ""
 
-#: ../web_tt2/arc.tt2:4 ../web_tt2/arc_manage.tt2:4 ../web_tt2/arcsearch_form.tt2:4 ../web_tt2/compose_mail.tt2:12 ../web_tt2/compose_mail.tt2:5 ../web_tt2/create_list_request.tt2:26 ../web_tt2/d_control.tt2:5 ../web_tt2/d_editfile.tt2:12 ../web_tt2/d_editfile.tt2:14 ../web_tt2/d_properties.tt2:10 ../web_tt2/d_properties.tt2:6 ../web_tt2/d_properties.tt2:8 ../web_tt2/d_read.tt2:171 ../web_tt2/d_read.tt2:173 ../web_tt2/d_read.tt2:179 ../web_tt2/d_read.tt2:22 ../web_tt2/d_read.tt2:47 ../web_tt2/edit_list_request.tt2:39 ../web_tt2/edit_list_request.tt2:4 ../web_tt2/editfile.tt2:4 ../web_tt2/editsubscriber.tt2:37 ../web_tt2/latest_d_read.tt2:29 ../web_tt2/latest_d_read.tt2:32 ../web_tt2/modindex.tt2:192 ../web_tt2/modindex.tt2:9 ../web_tt2/picture_upload.tt2:21 ../web_tt2/pref.tt2:4 ../web_tt2/rename_list_request.tt2:3 ../web_tt2/review.tt2:5 ../web_tt2/reviewbouncing.tt2:3 ../web_tt2/suboptions.tt2:20 ../web_tt2/subscriber_table.tt2:108
+#: ../web_tt2/arc.tt2:4 ../web_tt2/arc_manage.tt2:4 ../web_tt2/arcsearch_form.tt2:4 ../web_tt2/compose_mail.tt2:12 ../web_tt2/compose_mail.tt2:5 ../web_tt2/create_list_request.tt2:26 ../web_tt2/d_control.tt2:5 ../web_tt2/d_editfile.tt2:12 ../web_tt2/d_editfile.tt2:14 ../web_tt2/d_properties.tt2:10 ../web_tt2/d_properties.tt2:6 ../web_tt2/d_properties.tt2:8 ../web_tt2/d_read.tt2:171 ../web_tt2/d_read.tt2:173 ../web_tt2/d_read.tt2:179 ../web_tt2/d_read.tt2:22 ../web_tt2/d_read.tt2:47 ../web_tt2/edit_list_request.tt2:39 ../web_tt2/edit_list_request.tt2:4 ../web_tt2/editfile.tt2:4 ../web_tt2/editsubscriber.tt2:37 ../web_tt2/latest_d_read.tt2:29 ../web_tt2/latest_d_read.tt2:32 ../web_tt2/modindex.tt2:192 ../web_tt2/modindex.tt2:9 ../web_tt2/picture_upload.tt2:21 ../web_tt2/pref.tt2:4 ../web_tt2/rename_list_request.tt2:3 ../web_tt2/review.tt2:5 ../web_tt2/reviewbouncing.tt2:3 ../web_tt2/suboptions.tt2:20 ../web_tt2/subscriber_table.tt2:106
 msgid "Open in a new window"
 msgstr ""
 
@@ -1209,7 +1209,7 @@ msgstr ""
 msgid "Size (Kb)"
 msgstr ""
 
-#: ../web_tt2/d_read.tt2:69 ../web_tt2/d_read.tt2:71 ../web_tt2/latest_d_read.tt2:18 ../web_tt2/subscriber_table.tt2:61
+#: ../web_tt2/d_read.tt2:69 ../web_tt2/d_read.tt2:71 ../web_tt2/latest_d_read.tt2:18 ../web_tt2/subscriber_table.tt2:59
 msgid "Last update"
 msgstr ""
 
@@ -3993,19 +3993,19 @@ msgstr ""
 msgid "Reception"
 msgstr ""
 
-#: ../web_tt2/subscriber_table.tt2:46 ../web_tt2/subscriber_table.tt2:49
+#: ../web_tt2/subscriber_table.tt2:45 ../web_tt2/subscriber_table.tt2:48
 msgid "Sources"
 msgstr ""
 
-#: ../web_tt2/subscriber_table.tt2:55 ../web_tt2/subscriber_table.tt2:58 ../web_tt2/viewlogs.tt2:124
+#: ../web_tt2/subscriber_table.tt2:53 ../web_tt2/subscriber_table.tt2:56 ../web_tt2/viewlogs.tt2:124
 msgid "Sub date"
 msgstr ""
 
-#: ../web_tt2/subscriber_table.tt2:91
+#: ../web_tt2/subscriber_table.tt2:89
 msgid "bouncing"
 msgstr ""
 
-#: ../web_tt2/subscriber_table.tt2:108
+#: ../web_tt2/subscriber_table.tt2:106
 #. (u.email)
 msgid "%1's picture"
 msgstr ""
@@ -4187,7 +4187,7 @@ msgstr ""
 msgid "Search period: "
 msgstr ""
 
-#: ../web_tt2/viewlogs.tt2:113 ../wwsympa/wwsympa.fcgi.in:16239
+#: ../web_tt2/viewlogs.tt2:113 ../wwsympa/wwsympa.fcgi.in:16171
 #. (date_from_formated)
 #. (date_to_formated)
 #. This entry is a date/time format
@@ -4769,7 +4769,7 @@ msgstr ""
 msgid "%1 Digest %2"
 msgstr ""
 
-#: ../mail_tt2/digest.tt2:10 ../mail_tt2/digest_plain.tt2:9 ../mail_tt2/get_archive.tt2:9 ../src/lib/List.pm:2801
+#: ../mail_tt2/digest.tt2:10 ../mail_tt2/digest_plain.tt2:9 ../mail_tt2/get_archive.tt2:9 ../src/lib/List.pm:2735
 msgid "Table of contents:"
 msgstr ""
 
@@ -7208,13 +7208,13 @@ msgid ""
 "via the web (web archives)"
 msgstr ""
 
-#: ../src/lib/Bulk.pm:387
+#: ../src/lib/Bulk.pm:390
 #. This entry is a date/time format
 #. Check the strftime manpage for format details : http://docs.freebsd.org/info/gawk/gawk.info.Time_Functions.html
 msgid "%d %b %Y  %H:%M"
 msgstr ""
 
-#: ../src/lib/Commands.pm:963 ../wwsympa/wwsympa.fcgi.in:9835
+#: ../src/lib/Commands.pm:963 ../wwsympa/wwsympa.fcgi.in:9772
 #. This entry is a date/time format
 #. Check the strftime manpage for format details : http://docs.freebsd.org/info/gawk/gawk.info.Time_Functions.html
 msgid "%A"
@@ -7229,7 +7229,7 @@ msgstr ""
 msgid "Error at line %d: %s"
 msgstr ""
 
-#: ../src/lib/Family.pm:2591 ../src/lib/Family.pm:388 ../src/lib/Family.pm:665 ../src/lib/List.pm:1894 ../wwsympa/Auth.pm:459 ../wwsympa/wwsympa.fcgi.in:1067 ../wwsympa/wwsympa.fcgi.in:2870
+#: ../src/lib/Family.pm:2591 ../src/lib/Family.pm:388 ../src/lib/Family.pm:665 ../src/lib/List.pm:1894 ../wwsympa/Auth.pm:459 ../wwsympa/wwsympa.fcgi.in:1067 ../wwsympa/wwsympa.fcgi.in:2869
 #. This entry is a date/time format
 #. Check the strftime manpage for format details : http://docs.freebsd.org/info/gawk/gawk.info.Time_Functions.html
 msgid "%d %b %Y at %H:%M:%S"
@@ -7771,7 +7771,7 @@ msgstr ""
 msgid "Last update of config"
 msgstr ""
 
-#: ../src/lib/List.pm:1404
+#: ../src/lib/List.pm:1403
 msgid "User data source"
 msgstr ""
 
@@ -7915,19 +7915,19 @@ msgstr ""
 msgid "who updated the config"
 msgstr ""
 
-#: ../src/lib/List.pm:2919
+#: ../src/lib/List.pm:2853
 #. This entry is a date/time format
 #. Check the strftime manpage for format details : http://docs.freebsd.org/info/gawk/gawk.info.Time_Functions.html
 msgid "%a, %d %b %Y %H:%M:%S"
 msgstr ""
 
-#: ../src/lib/List.pm:2920
+#: ../src/lib/List.pm:2854
 #. This entry is a date/time format
 #. Check the strftime manpage for format details : http://docs.freebsd.org/info/gawk/gawk.info.Time_Functions.html
 msgid "%a, %d %b %Y"
 msgstr ""
 
-#: ../src/lib/List.pm:3111 ../src/lib/List.pm:3112 ../src/lib/List.pm:3116 ../wwsympa/wwsympa.fcgi.in:11017 ../wwsympa/wwsympa.fcgi.in:11086 ../wwsympa/wwsympa.fcgi.in:11288 ../wwsympa/wwsympa.fcgi.in:11635 ../wwsympa/wwsympa.fcgi.in:15086 ../wwsympa/wwsympa.fcgi.in:15093 ../wwsympa/wwsympa.fcgi.in:15811 ../wwsympa/wwsympa.fcgi.in:16589 ../wwsympa/wwsympa.fcgi.in:16590 ../wwsympa/wwsympa.fcgi.in:4280 ../wwsympa/wwsympa.fcgi.in:4338 ../wwsympa/wwsympa.fcgi.in:4909 ../wwsympa/wwsympa.fcgi.in:4910 ../wwsympa/wwsympa.fcgi.in:6432 ../wwsympa/wwsympa.fcgi.in:7451 ../wwsympa/wwsympa.fcgi.in:7994 ../wwsympa/wwsympa.fcgi.in:8041 ../wwsympa/wwsympa.fcgi.in:8043 ../wwsympa/wwsympa.fcgi.in:8519 ../wwsympa/wwsympa.fcgi.in:8520 ../wwsympa/wwsympa.fcgi.in:8554 ../wwsympa/wwsympa.fcgi.in:8555 ../wwsympa/wwsympa.fcgi.in:8734 ../wwsympa/wwsympa.fcgi.in:8735
+#: ../src/lib/List.pm:3045 ../src/lib/List.pm:3046 ../src/lib/List.pm:3050 ../wwsympa/wwsympa.fcgi.in:10949 ../wwsympa/wwsympa.fcgi.in:11018 ../wwsympa/wwsympa.fcgi.in:11220 ../wwsympa/wwsympa.fcgi.in:11567 ../wwsympa/wwsympa.fcgi.in:15018 ../wwsympa/wwsympa.fcgi.in:15025 ../wwsympa/wwsympa.fcgi.in:15743 ../wwsympa/wwsympa.fcgi.in:16521 ../wwsympa/wwsympa.fcgi.in:16522 ../wwsympa/wwsympa.fcgi.in:4278 ../wwsympa/wwsympa.fcgi.in:4331 ../wwsympa/wwsympa.fcgi.in:4902 ../wwsympa/wwsympa.fcgi.in:4903 ../wwsympa/wwsympa.fcgi.in:6425 ../wwsympa/wwsympa.fcgi.in:7444 ../wwsympa/wwsympa.fcgi.in:7984 ../wwsympa/wwsympa.fcgi.in:8031 ../wwsympa/wwsympa.fcgi.in:8033 ../wwsympa/wwsympa.fcgi.in:8509 ../wwsympa/wwsympa.fcgi.in:8510 ../wwsympa/wwsympa.fcgi.in:8544 ../wwsympa/wwsympa.fcgi.in:8545 ../wwsympa/wwsympa.fcgi.in:8724 ../wwsympa/wwsympa.fcgi.in:8725
 #. This entry is a date/time format
 #. Check the strftime manpage for format details : http://docs.freebsd.org/info/gawk/gawk.info.Time_Functions.html
 msgid "%d %b %Y"
@@ -8039,29 +8039,29 @@ msgstr ""
 msgid "%H:%M:%S"
 msgstr ""
 
-#: ../wwsympa/SympaSession.pm:436 ../wwsympa/SympaSession.pm:437 ../wwsympa/wwsympa.fcgi.in:11869 ../wwsympa/wwsympa.fcgi.in:12002 ../wwsympa/wwsympa.fcgi.in:14315 ../wwsympa/wwsympa.fcgi.in:7948
+#: ../wwsympa/SympaSession.pm:436 ../wwsympa/SympaSession.pm:437 ../wwsympa/wwsympa.fcgi.in:11801 ../wwsympa/wwsympa.fcgi.in:11934 ../wwsympa/wwsympa.fcgi.in:14247 ../wwsympa/wwsympa.fcgi.in:7941
 #. This entry is a date/time format
 #. Check the strftime manpage for format details : http://docs.freebsd.org/info/gawk/gawk.info.Time_Functions.html
 msgid "%d %b %y  %H:%M"
 msgstr ""
 
-#: ../wwsympa/wwsympa.fcgi.in:15268
+#: ../wwsympa/wwsympa.fcgi.in:15200
 msgid "Your unsubscription request to list %s was sent to the list owner."
 msgstr ""
 
-#: ../wwsympa/wwsympa.fcgi.in:15270
+#: ../wwsympa/wwsympa.fcgi.in:15202
 msgid "You were successfully unsubscribed from list %s."
 msgstr ""
 
-#: ../wwsympa/wwsympa.fcgi.in:15274
+#: ../wwsympa/wwsympa.fcgi.in:15206
 msgid "Unsubscription from list %s denied: Unsubscription from this list is closed."
 msgstr ""
 
-#: ../wwsympa/wwsympa.fcgi.in:15276
+#: ../wwsympa/wwsympa.fcgi.in:15208
 msgid "Unsubscription from list %s failed."
 msgstr ""
 
-#: ../wwsympa/wwsympa.fcgi.in:16184 ../wwsympa/wwsympa.fcgi.in:16185
+#: ../wwsympa/wwsympa.fcgi.in:16116 ../wwsympa/wwsympa.fcgi.in:16117
 #. This entry is a date/time format
 #. Check the strftime manpage for format details : http://docs.freebsd.org/info/gawk/gawk.info.Time_Functions.html
 msgid "%Y-%m-%d-%H-%M-%S"
