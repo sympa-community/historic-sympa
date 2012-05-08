@@ -84,7 +84,7 @@ Options:
    --dump=list\@dom|ALL                  : dumps subscribers 
    --make_alias_file                     : create file in /tmp with all aliases (usefull when aliases.tpl is changed)
    --lowercase                           : lowercase email addresses in database
-   --sync_list_db[=listname]             : syncs filesystem list configs to the database cache of list configs, optionally sync an individual list if specified.
+   --sync_list_db [--list=listname]      : syncs filesystem list configs to the database cache of list configs, optionally sync an individual list if specified.
    --md5_encode_password                 : rewrite password in database using md5 fingerprint. YOU CAN'T UNDO unless you save this table first
    --create_list --robot=robot_name --input_file=/path/to/file.xml 
                                          : create a list with the xml file under robot_name
@@ -158,7 +158,7 @@ $main::options{'batch'} = 1 if ($main::options{'dump'} ||
 				$main::options{'test_database_message_buffer'} || 
 				$main::options{'conf_2_db'} || 
 				$main::options{'reload_list_config'} ||
-                $main::options{'sync_list_db'}
+				$main::options{'sync_list_db'}
 				 );
 
 # Some option force foreground mode
@@ -933,17 +933,14 @@ elsif ($main::options{'sync_list_db'}) {
        print STDOUT "\nSympa not configured to use database list caching \n";
        exit 1;
     }
-    my $listname = $main::options{'sync_list_db'};
+    my $listname = $main::options{'list'} || '';
     if (length($listname) > 1) {
-       my ($listname, $robot) = split /\@/, $listname;
-        my $list = new List ($listname, $robot); 
-       unless (defined $list) {
-           print STDOUT "\nList '$list' does not exist. \n";
-           exit 1;
-       }
-        if (&List::_flush_list_db($listname)) {        
-           $list->_update_list_db;
-       }
+	my $list = new List ($listname); 
+	unless (defined $list) {
+	    print STDOUT "\nList '$listname' does not exist. \n";
+	    exit 1;
+	}
+	$list->_update_list_db;
     } else {
         &List::_flush_list_db();
         my $all_lists = &List::get_lists('*', { 'use_files' => 1 });

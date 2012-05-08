@@ -12271,26 +12271,7 @@ sub _update_list_db
     my $i;
     my $adm_txt;
     my $ed_txt;
-    my $statement = sprintf "SELECT COUNT(*) FROM list_table WHERE name_list = %s AND robot_list = %s" , $dbh->quote($self->{'name'}), $dbh->quote($self->{'admin'}{'host'});  
-    unless ($sth = $dbh->prepare($statement)) {
-       do_log('err','Unable to prepare SQL statement : %s', $dbh->errstr);
-       return undef;
-    }
-    my $ret;
-    unless ($sth->execute) {
-       do_log('err',"Unable to execute SQL statement '%s' : %s", $statement, $dbh->errstr);
-       return undef;
-    }
-    
-    my $op = "UPDATE";
-    my $set = "";
-    my $ret = $sth->fetchrow_arrayref;
-    $sth->finish;
-    my $count = $ret->[0];
-    unless ($count > 0) {
-       $op = "INSERT INTO";
-       $set = "";
-    }
+
     my $name = $self->{'name'};
     my $subject = $self->{'admin'}{'subject'} || '';
     my $status = $self->{'admin'}{'status'};
@@ -12319,22 +12300,24 @@ sub _update_list_db
        }
     }
     $ed_txt = join(',',@admins) || '';
-	my $statement = sprintf "%s `list_table` %s SET status_list= %s, name_list=%s, robot_list=%s, subject_list=%s, web_archive_list=%s, topics_list=%s, owners_list=%s, editors_list=%s ",
-	   $op, $set, $dbh->quote($status), $dbh->quote($name), 
-       $dbh->quote($robot), $dbh->quote($subject), 
-       $dbh->quote($web_archive), $dbh->quote($topics),
-       $dbh->quote($adm_txt),$dbh->quote($ed_txt);
 
-    if ($op eq "UPDATE") {
-       $statement .= sprintf " WHERE robot_list = %s AND name_list = %s ", $dbh->quote($robot), $dbh->quote($name); 
-    }
-
-    unless ($sth = $dbh->prepare($statement)) {
-       do_log('err','Unable to prepare SQL statement : %s', $dbh->errstr);
-       return undef;
-    }
-    unless ($sth->execute) {
-       do_log('err','Unable to execute SQL statement "%s" : %s', $statement, $dbh->errstr);
+    my $statement;
+    $statement = sprintf 'INSERT INTO list_table (status_list, name_list, robot_list, subject_list, web_archive_list, topics_list, owners_list, editors_list) VALUES (%s, %s, %s, %s, %d, %s, %s, %s)',
+			 $dbh->quote($status), $dbh->quote($name),
+			 $dbh->quote($robot), $dbh->quote($subject),
+			 ($web_archive ? 1 : 0), $dbh->quote($topics),
+			 $dbh->quote($adm_txt), $dbh->quote($ed_txt);
+    unless ($dbh->do($statement)) {
+	$statement = sprintf 'UPDATE list_table SET status_list = %s, name_list = %s, robot_list = %s, subject_list = %s, web_archive_list = %d, topics_list = %s, owners_list = %s, editors_list = %s WHERE robot_list = %s AND name_list = %s',
+			     $dbh->quote($status), $dbh->quote($name),
+			     $dbh->quote($robot), $dbh->quote($subject),
+			     ($web_archive ? 1 : 0), $dbh->quote($topics),
+			     $dbh->quote($adm_txt),$dbh->quote($ed_txt),
+			     $dbh->quote($robot), $dbh->quote($name);
+	unless ($dbh->do($statement)) {
+	    do_log('err','Unable to execute SQL statement "%s" : %s', $statement, $dbh->errstr);
+	    return undef;
+	}
     }
     return 1;
 }
