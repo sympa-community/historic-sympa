@@ -16,13 +16,13 @@ msgstr ""
 "Project-Id-Version: Sympa-5.4.6, 6.0, 6.1a.1\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2007-11-13 14:50+0200\n"
-"PO-Revision-Date: 2012-04-16 06:02+0200\n"
+"PO-Revision-Date: 2012-05-08 05:14+0200\n"
 "Last-Translator: IKEDA Soji <hatuka@nezumi.nu>\n"
 "Language-Team: 日本語\n"
+"Language: ja\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Language: ja\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
 "X-Generator: Pootle 2.1.2\n"
 
@@ -634,7 +634,6 @@ msgstr ""
 
 # 原文のURLはリンク切れのためリンクを張りません。
 #: ../web_tt2/help_introduction.tt2:117
-#, fuzzy
 msgid ""
 "In most mailing list services, subscribers receive a '<a target=\"_blank\" "
 "title=\"Example of subscribers charter (French)\" href=\"http://listes.cru."
@@ -1146,11 +1145,10 @@ msgstr ""
 
 #. (path_cgi)
 #: ../web_tt2/help_user.tt2:83
-#, fuzzy
 msgid ""
 "<a href=\"%1/help/suspend\">suspend or resume</a> your subscription of each "
 "list;"
-msgstr "Sympa の使用についての<a href=\"%1/help/user\">ユーザ ガイド</a>。"
+msgstr "リストごとに受け取りを<a href=\"%1/help/suspend\">休止したり再開したりする</a>。"
 
 # # "<a href=\"#unsubscribe\">vous désabonner</a> de la liste."
 #: ../web_tt2/help_user.tt2:84
@@ -1760,17 +1758,14 @@ msgstr ""
 
 #: ../web_tt2/help_user.tt2:164
 msgid "Suspending or resuming your subscription of each list"
-msgstr ""
+msgstr "リストごとに受け取りを休止したり再開したりする"
 
 #. (path_cgi)
 #: ../web_tt2/help_user.tt2:165
-#, fuzzy
 msgid ""
 "Please refer to the <a href=\"%1/help/suspend\"><strong>subscription "
 "management documentation</strong></a>."
-msgstr ""
-"<a href=\"%1/help/arc\"><strong>アーカイブ ドキュメント</strong></a>を見てく"
-"ださい。"
+msgstr "<a href=\"%1/help/suspend\"><strong>受け取り休止/再開の説明</strong></a>を見てください。"
 
 #: ../web_tt2/help_user.tt2:167
 msgid "Unsubscribing from lists"
@@ -4482,41 +4477,30 @@ msgstr ""
 "conf) に設定してあるロボットのドメイン名です。"
 
 #: ../web_tt2/help_editlist.tt2:101
-#, fuzzy
 msgid ""
 "Include subscribers from this file.  The file should contain one e-mail "
 "address per line (lines beginning with a \"#\" are ignored)."
-msgstr ""
-"このパラメータは、user_data_source の値が取り込み (include) に設定してある場"
-"合にのみ使います。ファイル形式は1行につきひとつの電子メールアドレスです (行頭"
-"が「#」のものは無視されます)。"
+msgstr "ここで設定したファイルから読者を取り込みます。ファイル形式は1行につきひとつの電子メールアドレスです (行頭が「#」のものは無視されます)。"
 
 #: ../web_tt2/help_editlist.tt2:103
-#, fuzzy
 msgid ""
 "This paragraph defines parameters for a two-level query returning a list of "
 "subscribers. Usually the first-level query returns a list of DNs and the "
 "second-level queries convert the DNs into e-mail addresses. This feature "
 "requires the Net::LDAP (perlldap) PERL module."
 msgstr ""
-"ここでは、読者一覧を返す 二段階クエリのパラメータを設定します。通常、第一段階"
-"のクエリでは識別名 (DN) の一覧を取得し、第二段階では識別名を電子メールアドレ"
-"スに変換します。ここでの設定は、パラメータ user_data_source が include に設定"
-"してあるときにだけ使います。この機能には Net::LDAP (perlldap) PERL モジュール"
-"が必要です。"
+"ここでは、読者一覧を返す 二段階クエリのパラメータを設定します。通常、第一段階のクエリでは識別名 (DN) "
+"の一覧を取得し、第二段階では識別名を電子メールアドレスに変換します。この機能には Net::LDAP (perlldap) PERL "
+"モジュールが必要です。"
 
 #: ../web_tt2/help_editlist.tt2:105
-#, fuzzy
 msgid ""
 "This paragraph defines parameters for a query returning a list of "
 "subscribers. This feature requires the Net::LDAP (perlldap) PERL module."
 msgstr ""
-"ここでは、読者一覧を返すクエリのパラメータを設定します。ここでの設定は、パラ"
-"メータ user_data_source が include に設定してあるときにだけ使います。この機能"
-"には Net::LDAP (perlldap) PERL モジュールが必要です。"
+"ここでは、読者一覧を返すクエリのパラメータを設定します。この機能には Net::LDAP (perlldap) PERL モジュールが必要です。"
 
 #: ../web_tt2/help_editlist.tt2:107
-#, fuzzy
 msgid ""
 "Include subscribers from other list. All subscribers of list listname become "
 "subscribers of the current list. You may include as many lists as required, "
@@ -4526,14 +4510,10 @@ msgid ""
 "list B and then list B in list A, since this will give rise to an infinite "
 "loop."
 msgstr ""
-"このパラメータは user_data_source に include が設定してあるときにだけ使いま"
-"す。include_list に設定してある名前のリストの読者はすべて、このリストの読者に"
-"なります。取り込みたいリストについて一行ずつ include_list 行を書くことで、い"
-"くつでも必要なだけリストを取り込むことができます。たとえ取り込み先のリストの "
-"user_data_source 設定が不適切でも、さらにはほかのリストを取り込んでいるリスト"
-"であっても、取り込むことができます。なお、A メーリングリストを B メーリングリ"
-"ストに取り込み、さらに A メーリングリストに B メーリングリストを取り込むと、"
-"無限ループを引き起こします。ご注意ください。"
+"他のリストから読者を取り込みます。設定したリストの読者はすべて、このリストの読者になります。取り込みたいリストについて一行ずつ include_list "
+"行を書くことで、いくつでも必要なだけリストを取り込むことができます。たとえ取り込み先のリストの user_data_source "
+"設定が不適切でも、さらにはほかのリストを取り込んでいるリストであっても、取り込むことができます。なお、A メーリングリストを B "
+"メーリングリストに取り込み、さらに A メーリングリストに B メーリングリストを取り込むと、無限ループを引き起こします。ご注意ください。"
 
 #: ../web_tt2/help_editlist.tt2:109
 msgid ""
@@ -4561,13 +4541,10 @@ msgstr ""
 "する権限を与えることだけです。読者一覧シナリオでこの動作を制御します。 "
 
 #: ../web_tt2/help_editlist.tt2:112
-#, fuzzy
 msgid ""
 "This parameter is used to begin a paragraph defining the SQL query "
 "parameters. "
-msgstr ""
-"このパラメータは user_data_source の値が取り込み (include) に設定してあるとき"
-"にのみ使います。ここから SQL クエリを決める設定が始まります。 "
+msgstr "ここから SQL クエリを決める設定が始まります。 "
 
 #: ../web_tt2/help_editlist.tt2:114
 msgid ""
@@ -8100,25 +8077,24 @@ msgstr ""
 "白、特殊記号、全角の英数字や半角の片仮名は使わない</strong>ようにしましょう。"
 
 #: ../web_tt2/help_suspend.tt2:3
-#, fuzzy
 msgid "Manage your subscriptions"
-msgstr "読者登録状況を見る"
+msgstr "受け取り休止/再開"
 
 #: ../web_tt2/help_suspend.tt2:5
 msgid "How does the suspension work?"
-msgstr ""
+msgstr "受け取りを休止するには"
 
 #: ../web_tt2/help_suspend.tt2:6
 msgid ""
 "In order to <strong>suspend your subscription</strong> to one or more lists, "
 "follow these steps:"
-msgstr ""
+msgstr "あるリストだけ<strong>受け取りを休止</strong>するには、次の手順を踏みます"
 
 #: ../web_tt2/help_suspend.tt2:8
 msgid ""
 "Select a start date through the calendar that appears when you click on the "
 "\"start date\" field;"
-msgstr ""
+msgstr "「開始日」の欄をクリックするとカレンダーがでますので、そこから開始日を選びます。"
 
 #: ../web_tt2/help_suspend.tt2:9
 msgid ""
@@ -8127,33 +8103,34 @@ msgid ""
 "In this case, you will have to return to this page to resume your "
 "subscription;"
 msgstr ""
+"受け取りを再開する日をあらかじめ決めてあるときは、「終了日」の欄で同じように選びます。「無期限」をクリックでき、その場合受け取りを再開したくなったらまた"
+"このページに来る必要があります。"
 
 #: ../web_tt2/help_suspend.tt2:10
 msgid ""
 "Select the lists which you want to suspend your subscription for. The "
 "\"Toogle selection\" button allows you to invert the selection;"
-msgstr ""
+msgstr "受け取りを休止したいリストを選びます。「選択を逆転」ボタンで選択を逆転できます。"
 
 #: ../web_tt2/help_suspend.tt2:11
 msgid "Click on \"Suspend my subscriptions\" to confirm the suspension."
-msgstr ""
+msgstr "「受け取りを休止」をクリックすると、休止します"
 
 #: ../web_tt2/help_suspend.tt2:13
-#, fuzzy
 msgid ""
 "<strong>To resume your subscription</strong> to one or more lists, follow "
 "these steps:"
-msgstr "リストに<strong>読者登録した日</strong>。"
+msgstr "<strong>受け取りを再開するには</strong>、次の手順を踏みます。"
 
 #: ../web_tt2/help_suspend.tt2:15
 msgid ""
 "Select the list(s) you want to reactivate. The \"Toogle selection\" button "
 "allows you to invert the selection;"
-msgstr ""
+msgstr "受け取りを再開したいリストを選びます (複数可)。「選択を逆転」ボタンで選択を逆転できます。"
 
 #: ../web_tt2/help_suspend.tt2:16
 msgid "Click \"Resume\"."
-msgstr ""
+msgstr "「再開」をクリックします。"
 
 #: ../web_tt2/help_user_options.tt2:3
 msgid ""
