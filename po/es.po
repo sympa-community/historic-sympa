@@ -1440,11 +1440,11 @@ msgid "Last update"
 msgstr "Última actualización"
 
 #: ../web_tt2/d_read.tt2:75 ../web_tt2/editfile.tt2:30
-#: ../web_tt2/editfile.tt2:31 ../web_tt2/editfile.tt2:36
-#: ../web_tt2/editfile.tt2:37 ../web_tt2/editfile.tt2:38
-#: ../web_tt2/editfile.tt2:40 ../web_tt2/editfile.tt2:45
-#: ../web_tt2/editfile.tt2:46 ../web_tt2/editfile.tt2:50
-#: ../web_tt2/editfile.tt2:51 ../web_tt2/manage_template.tt2:35
+#: ../web_tt2/editfile.tt2:31 ../web_tt2/editfile.tt2:35
+#: ../web_tt2/editfile.tt2:36 ../web_tt2/editfile.tt2:37
+#: ../web_tt2/editfile.tt2:39 ../web_tt2/editfile.tt2:44
+#: ../web_tt2/editfile.tt2:45 ../web_tt2/editfile.tt2:49
+#: ../web_tt2/editfile.tt2:50 ../web_tt2/manage_template.tt2:35
 #: ../web_tt2/manage_template.tt2:56 ../web_tt2/serveradmin.tt2:149
 #: ../web_tt2/serveradmin.tt2:162
 msgid "Edit"
@@ -1665,19 +1665,20 @@ msgstr ""
 "impreso en el lado derecho de la página principal de la lista. )por defecto, "
 "es la descripción de la lista)"
 
-#: ../web_tt2/editfile.tt2:32
+#: ../web_tt2/editfile.tt2:31
+#, fuzzy
 msgid ""
-"List description: This text is sent as an answer to the mail command\n"
-"INFO. It can also be included in the <em>Welcome message</em>."
+"List description: This text is sent as an answer to the mail command INFO. "
+"It can also be included in the <em>Welcome message</em>."
 msgstr ""
 "Descripción de la lista: Este texto se envía como respuesta a un comando\n"
 "INFO. También puede ser incluído en el <em>Mensaje de Bienvenida</em>."
 
-#: ../web_tt2/editfile.tt2:34
+#: ../web_tt2/editfile.tt2:33
 msgid "Automatic messages"
 msgstr "Mensajes automáticos"
 
-#: ../web_tt2/editfile.tt2:36
+#: ../web_tt2/editfile.tt2:35
 msgid ""
 "Welcome message: This message is sent to new subscribers. It can be a full "
 "MIME structured message (only for MIME gurus)."
@@ -1685,7 +1686,7 @@ msgstr ""
 "Mensaje de Bienvenida: Este mensaje se envía a los nuevos suscriptores. "
 "Puede ser un mensaje estructurado en MIME (sólo para gurúes de MIME)"
 
-#: ../web_tt2/editfile.tt2:37
+#: ../web_tt2/editfile.tt2:36
 msgid ""
 "Rejection message: when a message is rejected by list editor, a notification "
 "can be sent to the original author. You may prepare various rejection "
@@ -1695,7 +1696,7 @@ msgstr ""
 "lista, puede ser enviado una notificación al autor. Puedes preparar varios "
 "mensajes de rechazo."
 
-#: ../web_tt2/editfile.tt2:39
+#: ../web_tt2/editfile.tt2:38
 msgid ""
 "Remind message: This message is sent to each subscriber\n"
 "when using the command  REMIND. It's very useful to help people who are "
@@ -1710,7 +1711,7 @@ msgstr ""
 "a darse de baja\n"
 "de la lista cuando ya no recuerda su dirección de suscripción."
 
-#: ../web_tt2/editfile.tt2:41
+#: ../web_tt2/editfile.tt2:40
 msgid ""
 "Subscribing invitation message: sent to a person if someone  \n"
 "uses the INVITE command to invite someone to subscribe."
@@ -1719,11 +1720,11 @@ msgstr ""
 "comando \n"
 "<CODE>INVITE [nombre de lista]</CODE>."
 
-#: ../web_tt2/editfile.tt2:43
+#: ../web_tt2/editfile.tt2:42
 msgid "Added in distributed messages"
 msgstr "Agregado a los mensajes enviados"
 
-#: ../web_tt2/editfile.tt2:45
+#: ../web_tt2/editfile.tt2:44
 msgid ""
 "Message footer: If this file is not empty, it is added as a MIME attachment "
 "at the end of each message distributed to the list."
@@ -1731,7 +1732,7 @@ msgstr ""
 "Pié de fin de mensaje: Si no está vacío, este archivo se adjunta al fin de "
 "cada mensaje enviado por la lista."
 
-#: ../web_tt2/editfile.tt2:46
+#: ../web_tt2/editfile.tt2:45
 msgid ""
 "Message header: If this file is not empty, it is added as a MIME attachment "
 "at the beginning of each message distributed to the list."
@@ -1739,17 +1740,17 @@ msgstr ""
 "Encabezado de mensaje: Si este archivo no está vacío, es agregado como un "
 "adjunto MIME al inicio de cada mensaje enviado a través de la lista."
 
-#: ../web_tt2/editfile.tt2:48
+#: ../web_tt2/editfile.tt2:47
 msgid "More"
 msgstr "Otros"
 
-#: ../web_tt2/editfile.tt2:50
+#: ../web_tt2/editfile.tt2:49
 msgid "Unsubscribe message: This message is sent when users leave the list."
 msgstr ""
 "Mensaje de de-suscripción: Enviado a las personas que se dan de baja de la "
 "lista."
 
-#: ../web_tt2/editfile.tt2:52
+#: ../web_tt2/editfile.tt2:51
 msgid ""
 "Deletion message: This message is sent to users when you\n"
 "remove them from the list using the DEL command (unless you hit the Quiet "
@@ -4882,7 +4883,7 @@ msgstr "Período explorado:"
 #. (date_to_formated)
 #. This entry is a date/time format
 #. Check the strftime manpage for format details : http://docs.freebsd.org/info/gawk/gawk.info.Time_Functions.html
-#: ../web_tt2/viewlogs.tt2:113 ../wwsympa/wwsympa.fcgi.in:16171
+#: ../web_tt2/viewlogs.tt2:113 ../wwsympa/wwsympa.fcgi.in:16175
 msgid "%d %b %Y %H:%M:%S"
 msgstr "%d %b %Y %H:%M:%S"
 
@@ -8524,7 +8525,7 @@ msgstr "%d %b %Y  %H:%M"
 
 #. This entry is a date/time format
 #. Check the strftime manpage for format details : http://docs.freebsd.org/info/gawk/gawk.info.Time_Functions.html
-#: ../src/lib/Commands.pm:963 ../wwsympa/wwsympa.fcgi.in:9772
+#: ../src/lib/Commands.pm:963 ../wwsympa/wwsympa.fcgi.in:9776
 msgid "%A"
 msgstr "%A"
 
@@ -9256,18 +9257,18 @@ msgstr "%a, %d/%b/%Y"
 #. This entry is a date/time format
 #. Check the strftime manpage for format details : http://docs.freebsd.org/info/gawk/gawk.info.Time_Functions.html
 #: ../src/lib/List.pm:3045 ../src/lib/List.pm:3046 ../src/lib/List.pm:3050
-#: ../wwsympa/wwsympa.fcgi.in:10949 ../wwsympa/wwsympa.fcgi.in:11018
-#: ../wwsympa/wwsympa.fcgi.in:11220 ../wwsympa/wwsympa.fcgi.in:11567
-#: ../wwsympa/wwsympa.fcgi.in:15018 ../wwsympa/wwsympa.fcgi.in:15025
-#: ../wwsympa/wwsympa.fcgi.in:15743 ../wwsympa/wwsympa.fcgi.in:16521
-#: ../wwsympa/wwsympa.fcgi.in:16522 ../wwsympa/wwsympa.fcgi.in:4278
+#: ../wwsympa/wwsympa.fcgi.in:10953 ../wwsympa/wwsympa.fcgi.in:11022
+#: ../wwsympa/wwsympa.fcgi.in:11224 ../wwsympa/wwsympa.fcgi.in:11571
+#: ../wwsympa/wwsympa.fcgi.in:15022 ../wwsympa/wwsympa.fcgi.in:15029
+#: ../wwsympa/wwsympa.fcgi.in:15747 ../wwsympa/wwsympa.fcgi.in:16525
+#: ../wwsympa/wwsympa.fcgi.in:16526 ../wwsympa/wwsympa.fcgi.in:4278
 #: ../wwsympa/wwsympa.fcgi.in:4331 ../wwsympa/wwsympa.fcgi.in:4902
 #: ../wwsympa/wwsympa.fcgi.in:4903 ../wwsympa/wwsympa.fcgi.in:6425
-#: ../wwsympa/wwsympa.fcgi.in:7444 ../wwsympa/wwsympa.fcgi.in:7984
-#: ../wwsympa/wwsympa.fcgi.in:8031 ../wwsympa/wwsympa.fcgi.in:8033
-#: ../wwsympa/wwsympa.fcgi.in:8509 ../wwsympa/wwsympa.fcgi.in:8510
-#: ../wwsympa/wwsympa.fcgi.in:8544 ../wwsympa/wwsympa.fcgi.in:8545
-#: ../wwsympa/wwsympa.fcgi.in:8724 ../wwsympa/wwsympa.fcgi.in:8725
+#: ../wwsympa/wwsympa.fcgi.in:7448 ../wwsympa/wwsympa.fcgi.in:7988
+#: ../wwsympa/wwsympa.fcgi.in:8035 ../wwsympa/wwsympa.fcgi.in:8037
+#: ../wwsympa/wwsympa.fcgi.in:8513 ../wwsympa/wwsympa.fcgi.in:8514
+#: ../wwsympa/wwsympa.fcgi.in:8548 ../wwsympa/wwsympa.fcgi.in:8549
+#: ../wwsympa/wwsympa.fcgi.in:8728 ../wwsympa/wwsympa.fcgi.in:8729
 msgid "%d %b %Y"
 msgstr "%d/%b/%Y"
 
@@ -9406,35 +9407,35 @@ msgstr "%H:%M:%S"
 #. This entry is a date/time format
 #. Check the strftime manpage for format details : http://docs.freebsd.org/info/gawk/gawk.info.Time_Functions.html
 #: ../wwsympa/SympaSession.pm:436 ../wwsympa/SympaSession.pm:437
-#: ../wwsympa/wwsympa.fcgi.in:11801 ../wwsympa/wwsympa.fcgi.in:11934
-#: ../wwsympa/wwsympa.fcgi.in:14247 ../wwsympa/wwsympa.fcgi.in:7941
+#: ../wwsympa/wwsympa.fcgi.in:11805 ../wwsympa/wwsympa.fcgi.in:11938
+#: ../wwsympa/wwsympa.fcgi.in:14251 ../wwsympa/wwsympa.fcgi.in:7945
 msgid "%d %b %y  %H:%M"
 msgstr "%d %b %y    %H:%M"
 
-#: ../wwsympa/wwsympa.fcgi.in:15200
+#: ../wwsympa/wwsympa.fcgi.in:15204
 msgid "Your unsubscription request to list %s was sent to the list owner."
 msgstr ""
 "Tu solicitud de darte de baja de la lista %s fue enviada al propietario de "
 "ésta. "
 
-#: ../wwsympa/wwsympa.fcgi.in:15202
+#: ../wwsympa/wwsympa.fcgi.in:15206
 msgid "You were successfully unsubscribed from list %s."
 msgstr "Fuiste dado de baja correctamente de la lista de correo %s."
 
-#: ../wwsympa/wwsympa.fcgi.in:15206
+#: ../wwsympa/wwsympa.fcgi.in:15210
 msgid ""
 "Unsubscription from list %s denied: Unsubscription from this list is closed."
 msgstr ""
 "Tu solicitud de darte de baja de la lista %s fracasó: no está permitido "
 "darse de baja de esa lista. "
 
-#: ../wwsympa/wwsympa.fcgi.in:15208
+#: ../wwsympa/wwsympa.fcgi.in:15212
 msgid "Unsubscription from list %s failed."
 msgstr "No se ha podido darte de baja de la lista %s."
 
 #. This entry is a date/time format
 #. Check the strftime manpage for format details : http://docs.freebsd.org/info/gawk/gawk.info.Time_Functions.html
-#: ../wwsympa/wwsympa.fcgi.in:16116 ../wwsympa/wwsympa.fcgi.in:16117
+#: ../wwsympa/wwsympa.fcgi.in:16120 ../wwsympa/wwsympa.fcgi.in:16121
 msgid "%Y-%m-%d-%H-%M-%S"
 msgstr "%d/%m/%Y/%H/%M/%S"
 
@@ -9585,6 +9586,14 @@ msgstr "interrumpir la recepción de mensajes (útil para las vacaciones)"
 #: ../wwsympa/wwslib.pm:37
 msgid "you do not receive your own posts"
 msgstr "No recibir mis propios mensajes"
+
+#: ../web_tt2/editfile.tt2:32
+msgid ""
+"List description: This text is sent as an answer to the mail command\n"
+"INFO. It can also be included in the <em>Welcome message</em>."
+msgstr ""
+"Descripción de la lista: Este texto se envía como respuesta a un comando\n"
+"INFO. También puede ser incluído en el <em>Mensaje de Bienvenida</em>."
 
 #: ../web_tt2/list_menu.tt2:69
 msgid "OpenSocial"

@@ -1493,11 +1493,11 @@ msgid "Last update"
 msgstr "Darrièra actualizacion"
 
 #: ../web_tt2/d_read.tt2:75 ../web_tt2/editfile.tt2:30
-#: ../web_tt2/editfile.tt2:31 ../web_tt2/editfile.tt2:36
-#: ../web_tt2/editfile.tt2:37 ../web_tt2/editfile.tt2:38
-#: ../web_tt2/editfile.tt2:40 ../web_tt2/editfile.tt2:45
-#: ../web_tt2/editfile.tt2:46 ../web_tt2/editfile.tt2:50
-#: ../web_tt2/editfile.tt2:51 ../web_tt2/manage_template.tt2:35
+#: ../web_tt2/editfile.tt2:31 ../web_tt2/editfile.tt2:35
+#: ../web_tt2/editfile.tt2:36 ../web_tt2/editfile.tt2:37
+#: ../web_tt2/editfile.tt2:39 ../web_tt2/editfile.tt2:44
+#: ../web_tt2/editfile.tt2:45 ../web_tt2/editfile.tt2:49
+#: ../web_tt2/editfile.tt2:50 ../web_tt2/manage_template.tt2:35
 #: ../web_tt2/manage_template.tt2:56 ../web_tt2/serveradmin.tt2:149
 #: ../web_tt2/serveradmin.tt2:162
 msgid "Edit"
@@ -1731,21 +1731,21 @@ msgstr ""
 "tièra. Aquò a man drecha de la pagina de la tièra\n"
 "(lo tèxt predefinit es lo del camp descripcion de la tièra)"
 
-#: ../web_tt2/editfile.tt2:32
+#: ../web_tt2/editfile.tt2:31
 #, fuzzy
 msgid ""
-"List description: This text is sent as an answer to the mail command\n"
-"INFO. It can also be included in the <em>Welcome message</em>."
+"List description: This text is sent as an answer to the mail command INFO. "
+"It can also be included in the <em>Welcome message</em>."
 msgstr ""
 "Descripcion de la tièra : Aquel tèxt se manda en responsa a  la comandaINFO "
 "en mòde messatjariá.Lo messatge de benvenuguda pòt tanben caber aquel tèxt."
 
-#: ../web_tt2/editfile.tt2:34
+#: ../web_tt2/editfile.tt2:33
 #, fuzzy
 msgid "Automatic messages"
 msgstr "messatges mai ancians "
 
-#: ../web_tt2/editfile.tt2:36
+#: ../web_tt2/editfile.tt2:35
 #, fuzzy
 msgid ""
 "Welcome message: This message is sent to new subscribers. It can be a full "
@@ -1755,14 +1755,14 @@ msgstr ""
 "Podètz emplegar un messatge MIME estructurat (reservats als conessèires del "
 "format MIME)."
 
-#: ../web_tt2/editfile.tt2:37
+#: ../web_tt2/editfile.tt2:36
 msgid ""
 "Rejection message: when a message is rejected by list editor, a notification "
 "can be sent to the original author. You may prepare various rejection "
 "messages."
 msgstr ""
 
-#: ../web_tt2/editfile.tt2:39
+#: ../web_tt2/editfile.tt2:38
 #, fuzzy
 msgid ""
 "Remind message: This message is sent to each subscriber\n"
@@ -1775,7 +1775,7 @@ msgstr ""
 "las personas que se rementan pas mai ont ne son de lors abonaments, o que se "
 "sabon pas desabonar d'esperelas."
 
-#: ../web_tt2/editfile.tt2:41
+#: ../web_tt2/editfile.tt2:40
 #, fuzzy
 msgid ""
 "Subscribing invitation message: sent to a person if someone  \n"
@@ -1785,12 +1785,12 @@ msgstr ""
 "emplega la comanda INVITE per invitar qualqu'un a s'abonar."
 
 # nlsref 16,68
-#: ../web_tt2/editfile.tt2:43
+#: ../web_tt2/editfile.tt2:42
 #, fuzzy
 msgid "Added in distributed messages"
 msgstr "Qual pòt difusir de messatges"
 
-#: ../web_tt2/editfile.tt2:45
+#: ../web_tt2/editfile.tt2:44
 #, fuzzy
 msgid ""
 "Message footer: If this file is not empty, it is added as a MIME attachment "
@@ -1799,7 +1799,7 @@ msgstr ""
 "Encap de messatge : S'aqueste camp es pas vuèg, aqueste fichièr s'estaca en "
 "cap de cada messatge difusit a la tièra."
 
-#: ../web_tt2/editfile.tt2:46
+#: ../web_tt2/editfile.tt2:45
 #, fuzzy
 msgid ""
 "Message header: If this file is not empty, it is added as a MIME attachment "
@@ -1808,19 +1808,19 @@ msgstr ""
 "Encap de messatge : S'aqueste camp es pas vuèg, aqueste fichièr s'estaca en "
 "cap de cada messatge difusit a la tièra."
 
-#: ../web_tt2/editfile.tt2:48
+#: ../web_tt2/editfile.tt2:47
 #, fuzzy
 msgid "More"
 msgstr "Moderar"
 
-#: ../web_tt2/editfile.tt2:50
+#: ../web_tt2/editfile.tt2:49
 #, fuzzy
 msgid "Unsubscribe message: This message is sent when users leave the list."
 msgstr ""
 "Messatge de desabonament : Se manda a cada persona que se desabona de la "
 "tièra."
 
-#: ../web_tt2/editfile.tt2:52
+#: ../web_tt2/editfile.tt2:51
 #, fuzzy
 msgid ""
 "Deletion message: This message is sent to users when you\n"
@@ -5119,7 +5119,7 @@ msgstr "Recercar dins un periòde"
 #. (date_to_formated)
 #. This entry is a date/time format
 #. Check the strftime manpage for format details : http://docs.freebsd.org/info/gawk/gawk.info.Time_Functions.html
-#: ../web_tt2/viewlogs.tt2:113 ../wwsympa/wwsympa.fcgi.in:16171
+#: ../web_tt2/viewlogs.tt2:113 ../wwsympa/wwsympa.fcgi.in:16175
 msgid "%d %b %Y %H:%M:%S"
 msgstr "%d %b %Y %H:%M:%S"
 
@@ -8958,7 +8958,7 @@ msgstr "%d %b %y  %H:%M"
 
 #. This entry is a date/time format
 #. Check the strftime manpage for format details : http://docs.freebsd.org/info/gawk/gawk.info.Time_Functions.html
-#: ../src/lib/Commands.pm:963 ../wwsympa/wwsympa.fcgi.in:9772
+#: ../src/lib/Commands.pm:963 ../wwsympa/wwsympa.fcgi.in:9776
 msgid "%A"
 msgstr "%A"
 
@@ -9822,18 +9822,18 @@ msgstr "%a, %d %b %Y"
 #. This entry is a date/time format
 #. Check the strftime manpage for format details : http://docs.freebsd.org/info/gawk/gawk.info.Time_Functions.html
 #: ../src/lib/List.pm:3045 ../src/lib/List.pm:3046 ../src/lib/List.pm:3050
-#: ../wwsympa/wwsympa.fcgi.in:10949 ../wwsympa/wwsympa.fcgi.in:11018
-#: ../wwsympa/wwsympa.fcgi.in:11220 ../wwsympa/wwsympa.fcgi.in:11567
-#: ../wwsympa/wwsympa.fcgi.in:15018 ../wwsympa/wwsympa.fcgi.in:15025
-#: ../wwsympa/wwsympa.fcgi.in:15743 ../wwsympa/wwsympa.fcgi.in:16521
-#: ../wwsympa/wwsympa.fcgi.in:16522 ../wwsympa/wwsympa.fcgi.in:4278
+#: ../wwsympa/wwsympa.fcgi.in:10953 ../wwsympa/wwsympa.fcgi.in:11022
+#: ../wwsympa/wwsympa.fcgi.in:11224 ../wwsympa/wwsympa.fcgi.in:11571
+#: ../wwsympa/wwsympa.fcgi.in:15022 ../wwsympa/wwsympa.fcgi.in:15029
+#: ../wwsympa/wwsympa.fcgi.in:15747 ../wwsympa/wwsympa.fcgi.in:16525
+#: ../wwsympa/wwsympa.fcgi.in:16526 ../wwsympa/wwsympa.fcgi.in:4278
 #: ../wwsympa/wwsympa.fcgi.in:4331 ../wwsympa/wwsympa.fcgi.in:4902
 #: ../wwsympa/wwsympa.fcgi.in:4903 ../wwsympa/wwsympa.fcgi.in:6425
-#: ../wwsympa/wwsympa.fcgi.in:7444 ../wwsympa/wwsympa.fcgi.in:7984
-#: ../wwsympa/wwsympa.fcgi.in:8031 ../wwsympa/wwsympa.fcgi.in:8033
-#: ../wwsympa/wwsympa.fcgi.in:8509 ../wwsympa/wwsympa.fcgi.in:8510
-#: ../wwsympa/wwsympa.fcgi.in:8544 ../wwsympa/wwsympa.fcgi.in:8545
-#: ../wwsympa/wwsympa.fcgi.in:8724 ../wwsympa/wwsympa.fcgi.in:8725
+#: ../wwsympa/wwsympa.fcgi.in:7448 ../wwsympa/wwsympa.fcgi.in:7988
+#: ../wwsympa/wwsympa.fcgi.in:8035 ../wwsympa/wwsympa.fcgi.in:8037
+#: ../wwsympa/wwsympa.fcgi.in:8513 ../wwsympa/wwsympa.fcgi.in:8514
+#: ../wwsympa/wwsympa.fcgi.in:8548 ../wwsympa/wwsympa.fcgi.in:8549
+#: ../wwsympa/wwsympa.fcgi.in:8728 ../wwsympa/wwsympa.fcgi.in:8729
 msgid "%d %b %Y"
 msgstr "%d %b %Y"
 
@@ -9982,38 +9982,38 @@ msgstr "%H:%M:%S"
 #. This entry is a date/time format
 #. Check the strftime manpage for format details : http://docs.freebsd.org/info/gawk/gawk.info.Time_Functions.html
 #: ../wwsympa/SympaSession.pm:436 ../wwsympa/SympaSession.pm:437
-#: ../wwsympa/wwsympa.fcgi.in:11801 ../wwsympa/wwsympa.fcgi.in:11934
-#: ../wwsympa/wwsympa.fcgi.in:14247 ../wwsympa/wwsympa.fcgi.in:7941
+#: ../wwsympa/wwsympa.fcgi.in:11805 ../wwsympa/wwsympa.fcgi.in:11938
+#: ../wwsympa/wwsympa.fcgi.in:14251 ../wwsympa/wwsympa.fcgi.in:7945
 msgid "%d %b %y  %H:%M"
 msgstr "%d %b %y  %H:%M"
 
 # nlsref 6,18
-#: ../wwsympa/wwsympa.fcgi.in:15200
+#: ../wwsympa/wwsympa.fcgi.in:15204
 #, fuzzy
 msgid "Your unsubscription request to list %s was sent to the list owner."
 msgstr "Sètz desabonat(/ada) de la tièra %s"
 
-#: ../wwsympa/wwsympa.fcgi.in:15202
+#: ../wwsympa/wwsympa.fcgi.in:15206
 #, fuzzy
 msgid "You were successfully unsubscribed from list %s."
 msgstr "Avètz demandat de vos desabonar de la tièra %1."
 
 # nlsref 8,24
-#: ../wwsympa/wwsympa.fcgi.in:15206
+#: ../wwsympa/wwsympa.fcgi.in:15210
 #, fuzzy
 msgid ""
 "Unsubscription from list %s denied: Unsubscription from this list is closed."
 msgstr "Demanda de desabonament de la tièra %s"
 
 # nlsref 8,24
-#: ../wwsympa/wwsympa.fcgi.in:15208
+#: ../wwsympa/wwsympa.fcgi.in:15212
 #, fuzzy
 msgid "Unsubscription from list %s failed."
 msgstr "Demanda de desabonament de la tièra %s"
 
 #. This entry is a date/time format
 #. Check the strftime manpage for format details : http://docs.freebsd.org/info/gawk/gawk.info.Time_Functions.html
-#: ../wwsympa/wwsympa.fcgi.in:16116 ../wwsympa/wwsympa.fcgi.in:16117
+#: ../wwsympa/wwsympa.fcgi.in:16120 ../wwsympa/wwsympa.fcgi.in:16121
 #, fuzzy
 msgid "%Y-%m-%d-%H-%M-%S"
 msgstr "%d/%m/%Y/%H/%M/%S"
@@ -10194,6 +10194,15 @@ msgstr "Copar la recepcion dels messatges (es util pendent las vacanças)"
 #: ../wwsympa/wwslib.pm:37
 msgid "you do not receive your own posts"
 msgstr "per recebre pas los vòstres messatges"
+
+#: ../web_tt2/editfile.tt2:32
+#, fuzzy
+msgid ""
+"List description: This text is sent as an answer to the mail command\n"
+"INFO. It can also be included in the <em>Welcome message</em>."
+msgstr ""
+"Descripcion de la tièra : Aquel tèxt se manda en responsa a  la comandaINFO "
+"en mòde messatjariá.Lo messatge de benvenuguda pòt tanben caber aquel tèxt."
 
 #: ../web_tt2/list_menu.tt2:10
 msgid ""

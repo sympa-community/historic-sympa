@@ -1436,11 +1436,11 @@ msgid "Last update"
 msgstr "最近更新"
 
 #: ../web_tt2/d_read.tt2:75 ../web_tt2/editfile.tt2:30
-#: ../web_tt2/editfile.tt2:31 ../web_tt2/editfile.tt2:36
-#: ../web_tt2/editfile.tt2:37 ../web_tt2/editfile.tt2:38
-#: ../web_tt2/editfile.tt2:40 ../web_tt2/editfile.tt2:45
-#: ../web_tt2/editfile.tt2:46 ../web_tt2/editfile.tt2:50
-#: ../web_tt2/editfile.tt2:51 ../web_tt2/manage_template.tt2:35
+#: ../web_tt2/editfile.tt2:31 ../web_tt2/editfile.tt2:35
+#: ../web_tt2/editfile.tt2:36 ../web_tt2/editfile.tt2:37
+#: ../web_tt2/editfile.tt2:39 ../web_tt2/editfile.tt2:44
+#: ../web_tt2/editfile.tt2:45 ../web_tt2/editfile.tt2:49
+#: ../web_tt2/editfile.tt2:50 ../web_tt2/manage_template.tt2:35
 #: ../web_tt2/manage_template.tt2:56 ../web_tt2/serveradmin.tt2:149
 #: ../web_tt2/serveradmin.tt2:162
 msgid "Edit"
@@ -1669,19 +1669,19 @@ msgstr ""
 "邮件列表主页：描述邮件列表的HTML文本。\n"
 "它打印在主要邮件列表页的右边。（缺省是邮件列表描述）"
 
-#: ../web_tt2/editfile.tt2:32
+#: ../web_tt2/editfile.tt2:31
 #, fuzzy
 msgid ""
-"List description: This text is sent as an answer to the mail command\n"
-"INFO. It can also be included in the <em>Welcome message</em>."
+"List description: This text is sent as an answer to the mail command INFO. "
+"It can also be included in the <em>Welcome message</em>."
 msgstr "邮件列表描述：该文本作为邮件命令INFO的答复发送。它也可能包含于"
 
-#: ../web_tt2/editfile.tt2:34
+#: ../web_tt2/editfile.tt2:33
 #, fuzzy
 msgid "Automatic messages"
 msgstr "最老的邮件"
 
-#: ../web_tt2/editfile.tt2:36
+#: ../web_tt2/editfile.tt2:35
 #, fuzzy
 msgid ""
 "Welcome message: This message is sent to new subscribers. It can be a full "
@@ -1690,14 +1690,14 @@ msgstr ""
 "欢迎邮件：这则邮件是发送给新的订阅者。它可以是\n"
 "一则充分的MIME结构的邮件（仅对MIME专家）。"
 
-#: ../web_tt2/editfile.tt2:37
+#: ../web_tt2/editfile.tt2:36
 msgid ""
 "Rejection message: when a message is rejected by list editor, a notification "
 "can be sent to the original author. You may prepare various rejection "
 "messages."
 msgstr ""
 
-#: ../web_tt2/editfile.tt2:39
+#: ../web_tt2/editfile.tt2:38
 #, fuzzy
 msgid ""
 "Remind message: This message is sent to each subscriber\n"
@@ -1710,7 +1710,7 @@ msgstr ""
 "不是很清楚和不能自行退订的人们是非常\n"
 "有用的。"
 
-#: ../web_tt2/editfile.tt2:41
+#: ../web_tt2/editfile.tt2:40
 #, fuzzy
 msgid ""
 "Subscribing invitation message: sent to a person if someone  \n"
@@ -1719,12 +1719,12 @@ msgstr ""
 "订阅邀请邮件：如果某人使用INVITE命令\n"
 "邀请某人订阅，则发送到此人。"
 
-#: ../web_tt2/editfile.tt2:43
+#: ../web_tt2/editfile.tt2:42
 #, fuzzy
 msgid "Added in distributed messages"
 msgstr "发送信息"
 
-#: ../web_tt2/editfile.tt2:45
+#: ../web_tt2/editfile.tt2:44
 #, fuzzy
 msgid ""
 "Message footer: If this file is not empty, it is added as a MIME attachment "
@@ -1733,7 +1733,7 @@ msgstr ""
 "邮件头信息：如果这个文件不是空的，它作为MIME\n"
 "附加在每则邮件的开头被分发到邮件列表。"
 
-#: ../web_tt2/editfile.tt2:46
+#: ../web_tt2/editfile.tt2:45
 #, fuzzy
 msgid ""
 "Message header: If this file is not empty, it is added as a MIME attachment "
@@ -1742,19 +1742,19 @@ msgstr ""
 "邮件头信息：如果这个文件不是空的，它作为MIME\n"
 "附加在每则邮件的开头被分发到邮件列表。"
 
-#: ../web_tt2/editfile.tt2:48
+#: ../web_tt2/editfile.tt2:47
 #, fuzzy
 msgid "More"
 msgstr "监管"
 
-#: ../web_tt2/editfile.tt2:50
+#: ../web_tt2/editfile.tt2:49
 #, fuzzy
 msgid "Unsubscribe message: This message is sent when users leave the list."
 msgstr ""
 "退订邮件：当用户离开邮件列表时，用退订命令\n"
 "发送这则邮件。"
 
-#: ../web_tt2/editfile.tt2:52
+#: ../web_tt2/editfile.tt2:51
 #, fuzzy
 msgid ""
 "Deletion message: This message is sent to users when you\n"
@@ -4938,7 +4938,7 @@ msgstr "查找间隔："
 #. (date_to_formated)
 #. This entry is a date/time format
 #. Check the strftime manpage for format details : http://docs.freebsd.org/info/gawk/gawk.info.Time_Functions.html
-#: ../web_tt2/viewlogs.tt2:113 ../wwsympa/wwsympa.fcgi.in:16171
+#: ../web_tt2/viewlogs.tt2:113 ../wwsympa/wwsympa.fcgi.in:16175
 msgid "%d %b %Y %H:%M:%S"
 msgstr "%Y年%m月%d日 %H:%M:%S"
 
@@ -8501,7 +8501,7 @@ msgstr "%Y年%m月%d日　%H:%M"
 
 #. This entry is a date/time format
 #. Check the strftime manpage for format details : http://docs.freebsd.org/info/gawk/gawk.info.Time_Functions.html
-#: ../src/lib/Commands.pm:963 ../wwsympa/wwsympa.fcgi.in:9772
+#: ../src/lib/Commands.pm:963 ../wwsympa/wwsympa.fcgi.in:9776
 msgid "%A"
 msgstr "%A"
 
@@ -9242,18 +9242,18 @@ msgstr "%Y年%m月%d日（%a）"
 #. This entry is a date/time format
 #. Check the strftime manpage for format details : http://docs.freebsd.org/info/gawk/gawk.info.Time_Functions.html
 #: ../src/lib/List.pm:3045 ../src/lib/List.pm:3046 ../src/lib/List.pm:3050
-#: ../wwsympa/wwsympa.fcgi.in:10949 ../wwsympa/wwsympa.fcgi.in:11018
-#: ../wwsympa/wwsympa.fcgi.in:11220 ../wwsympa/wwsympa.fcgi.in:11567
-#: ../wwsympa/wwsympa.fcgi.in:15018 ../wwsympa/wwsympa.fcgi.in:15025
-#: ../wwsympa/wwsympa.fcgi.in:15743 ../wwsympa/wwsympa.fcgi.in:16521
-#: ../wwsympa/wwsympa.fcgi.in:16522 ../wwsympa/wwsympa.fcgi.in:4278
+#: ../wwsympa/wwsympa.fcgi.in:10953 ../wwsympa/wwsympa.fcgi.in:11022
+#: ../wwsympa/wwsympa.fcgi.in:11224 ../wwsympa/wwsympa.fcgi.in:11571
+#: ../wwsympa/wwsympa.fcgi.in:15022 ../wwsympa/wwsympa.fcgi.in:15029
+#: ../wwsympa/wwsympa.fcgi.in:15747 ../wwsympa/wwsympa.fcgi.in:16525
+#: ../wwsympa/wwsympa.fcgi.in:16526 ../wwsympa/wwsympa.fcgi.in:4278
 #: ../wwsympa/wwsympa.fcgi.in:4331 ../wwsympa/wwsympa.fcgi.in:4902
 #: ../wwsympa/wwsympa.fcgi.in:4903 ../wwsympa/wwsympa.fcgi.in:6425
-#: ../wwsympa/wwsympa.fcgi.in:7444 ../wwsympa/wwsympa.fcgi.in:7984
-#: ../wwsympa/wwsympa.fcgi.in:8031 ../wwsympa/wwsympa.fcgi.in:8033
-#: ../wwsympa/wwsympa.fcgi.in:8509 ../wwsympa/wwsympa.fcgi.in:8510
-#: ../wwsympa/wwsympa.fcgi.in:8544 ../wwsympa/wwsympa.fcgi.in:8545
-#: ../wwsympa/wwsympa.fcgi.in:8724 ../wwsympa/wwsympa.fcgi.in:8725
+#: ../wwsympa/wwsympa.fcgi.in:7448 ../wwsympa/wwsympa.fcgi.in:7988
+#: ../wwsympa/wwsympa.fcgi.in:8035 ../wwsympa/wwsympa.fcgi.in:8037
+#: ../wwsympa/wwsympa.fcgi.in:8513 ../wwsympa/wwsympa.fcgi.in:8514
+#: ../wwsympa/wwsympa.fcgi.in:8548 ../wwsympa/wwsympa.fcgi.in:8549
+#: ../wwsympa/wwsympa.fcgi.in:8728 ../wwsympa/wwsympa.fcgi.in:8729
 msgid "%d %b %Y"
 msgstr "%Y年%m月%d日"
 
@@ -9393,34 +9393,34 @@ msgstr "%H:%M:%S"
 #. This entry is a date/time format
 #. Check the strftime manpage for format details : http://docs.freebsd.org/info/gawk/gawk.info.Time_Functions.html
 #: ../wwsympa/SympaSession.pm:436 ../wwsympa/SympaSession.pm:437
-#: ../wwsympa/wwsympa.fcgi.in:11801 ../wwsympa/wwsympa.fcgi.in:11934
-#: ../wwsympa/wwsympa.fcgi.in:14247 ../wwsympa/wwsympa.fcgi.in:7941
+#: ../wwsympa/wwsympa.fcgi.in:11805 ../wwsympa/wwsympa.fcgi.in:11938
+#: ../wwsympa/wwsympa.fcgi.in:14251 ../wwsympa/wwsympa.fcgi.in:7945
 msgid "%d %b %y  %H:%M"
 msgstr "%Y年%m月%d日　%H:%M"
 
-#: ../wwsympa/wwsympa.fcgi.in:15200
+#: ../wwsympa/wwsympa.fcgi.in:15204
 #, fuzzy
 msgid "Your unsubscription request to list %s was sent to the list owner."
 msgstr "请求转发到了邮件列表所有者"
 
-#: ../wwsympa/wwsympa.fcgi.in:15202
+#: ../wwsympa/wwsympa.fcgi.in:15206
 #, fuzzy
 msgid "You were successfully unsubscribed from list %s."
 msgstr "您要求从邮件列表%1退订"
 
-#: ../wwsympa/wwsympa.fcgi.in:15206
+#: ../wwsympa/wwsympa.fcgi.in:15210
 msgid ""
 "Unsubscription from list %s denied: Unsubscription from this list is closed."
 msgstr ""
 
-#: ../wwsympa/wwsympa.fcgi.in:15208
+#: ../wwsympa/wwsympa.fcgi.in:15212
 #, fuzzy
 msgid "Unsubscription from list %s failed."
 msgstr "我退订邮件列表%1"
 
 #. This entry is a date/time format
 #. Check the strftime manpage for format details : http://docs.freebsd.org/info/gawk/gawk.info.Time_Functions.html
-#: ../wwsympa/wwsympa.fcgi.in:16116 ../wwsympa/wwsympa.fcgi.in:16117
+#: ../wwsympa/wwsympa.fcgi.in:16120 ../wwsympa/wwsympa.fcgi.in:16121
 msgid "%Y-%m-%d-%H-%M-%S"
 msgstr "%Y年%m月%d日　%H:%M:%S"
 
@@ -9571,6 +9571,13 @@ msgstr "不接收邮件（用于假期）"
 #: ../wwsympa/wwslib.pm:37
 msgid "you do not receive your own posts"
 msgstr "不接收自己发的邮件"
+
+#: ../web_tt2/editfile.tt2:32
+#, fuzzy
+msgid ""
+"List description: This text is sent as an answer to the mail command\n"
+"INFO. It can also be included in the <em>Welcome message</em>."
+msgstr "邮件列表描述：该文本作为邮件命令INFO的答复发送。它也可能包含于"
 
 #: ../web_tt2/list_menu.tt2:10
 msgid ""
