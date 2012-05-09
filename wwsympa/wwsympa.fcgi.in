@@ -6925,7 +6925,9 @@ sub do_viewmod {
      unless ($in{'file'}) {
 	 ## Messages edition
 	 foreach my $f ('info','homepage','welcome.tt2','bye.tt2','removed.tt2','message.footer','message.header','remind.tt2','invite.tt2','reject.tt2','your_infected_msg.tt2') {
-	     next unless ($list->may_edit($f, $param->{'user'}{'email'}) eq 'write');
+	     my $filename_for_auth = $f;
+	     $filename_for_auth = 'info.file' if ($filename_for_auth eq 'info');
+	     next unless ($list->may_edit($filename_for_auth, $param->{'user'}{'email'}) eq 'write');
 	     if ($wwslib::filenames{$f}{'gettext_id'}) {
 		 $param->{'files'}{$f}{'complete'} = gettext($wwslib::filenames{$f}{'gettext_id'});
 	     }else {
@@ -6953,7 +6955,9 @@ sub do_viewmod {
      }
 
      if ($param->{'list'}) {
-	 my ($role,$right) = $list->may_edit($in{'file'}, $param->{'user'}{'email'});
+	 my $filename_for_auth = $in{'file'};
+	 $filename_for_auth = 'info.file' if ($filename_for_auth eq 'info');
+	 my ($role,$right) = $list->may_edit($filename_for_auth, $param->{'user'}{'email'});
 
 	 unless ($right eq 'write') {
 	     &report::reject_report_web('auth','edit_right',{'role'=>$role, 'right' => $right},$param->{'action'},$list);
