@@ -3,6 +3,106 @@
 
 (See Changelog file for the full changes log)
 
+6.1.10		May 10, 2012
+
+  Features:
+
+	[7341] configure.ac: [Submitted by X. Bachelot] New configure option
+	available: --with-staticdir. this option allows admins to specify the
+	location of the static data directory. this directory is used for data
+	that don't need to be parsed by Sympa at each web request, e.g. CSS,
+	icons, etc.
+
+	[7326] wwsympa/wwsympa.fcgi.in:  Search on list review page allows
+	case-insensitive match for non-ASCII letters.
+
+	[7323] src/lib/admin.pm:  If the following files are defined in the
+	family directory, they are parsed and installed for each list in the
+	family:
+	- message.footer.tt2 (parsed as message.footer)
+	- message.header.tt2 (parsed as message.header)
+	- message.footer.mime.tt2 (parsed as message.footer.mime)
+	- message.header.mime.tt2 (parsed as message.header.mime)
+	- info.tt2 (parsed as info)
+	For now, these files are parsed at list creation only. Later
+	improvments will allow these files to be recreated when a list is
+	reinstantiated.
+
+*****	[7321] src/lib/Conf.pm, src/lib/List.pm, src/lib/Upgrade.pm,
+*****	src/lib/admin.pm, src/lib/confdef.pm, src/sympa.pl.in,
+*****	wwsympa/wwsympa.fcgi.in: [Patch from Riseup] Adding a database cache of
+*****	several list config values. This cache allows to speed up list
+*****	searches, pending lists page and such. The upgrade automatically
+*****   initiates the db cache.
+
+
+  Changes:
+
+	[7342] web_tt2/editfile.tt2, wwsympa/wwsympa.fcgi.in: [Reported by E.
+	Duval, CGT] In edit_list.conf, the "info" key controlled both the info
+	list parameter and the info file. Now, when one needs to control the
+	edition of the info parameter, one will use the key "info" in
+	edit_list.conf. If one needs to control the edition of the info file,
+	one will use the key "info.file" in the edit_list.conf.
+
+	[7328] web_tt2/suspend_request.tt2:7326), web_tt2/help_user.tt2,
+	web_tt2/suspend_request.tt2: [Submitted by S. Ikeda]Move subscription
+	management documentation to the help.
+
+*****	[7327] doc/sample/config.include, src/etc/edit_list.conf,
+*****	src/lib/Commands.pm, src/lib/Family.pm, src/lib/List.pm,
+*****	src/lib/admin.pm, src/task_manager.pl.in, web_tt2/help_editlist.tt2,
+*****	web_tt2/subscriber_table.tt2, wwsympa/wwsympa.fcgi.in:	[Submitted by
+*****	S. Ikeda] 'user_data_source' list parameter is obsoleted; only
+*****	'include2' was its available value.
+
+	[7312] src/etc/edit_list.conf:	Removing default config hiding
+	default_user_options config options to list owners.
+
+  Bug fixes:
+
+	[7347] src/lib/Scenario.pm:  In some cases, scenario evaluation would
+	fail due to a question mark having been insterted in the scenario rule
+	evaluation regexp. Fixed by removing this question mark.
+
+	[7340] soap/sympa_soap_server-wrapper.fcgi.c,
+	soap/sympa_soap_server.fcgi.in, wwsympa/wwsympa-wrapper.fcgi.c,
+	wwsympa/wwsympa.fcgi.in: [Submitted by E. Bouthenot] In version 5.14.2
+	of Perl, wwsympa.fcgi execution would trigger a segfault, for exemple
+	when creating a one time ticket. this was due to the perl '-U' option
+	being used in the wwsympa shebang. fixed by removing it from the
+	shebang and using C functions in the C wrapper to change the real user
+	and group ids.
+
+	[7339] src/lib/Message.pm: [#8331] StripScripts breaks HTML parts with
+	7-bit charset in messages.
+
+	[7331] src/lib/Bulk.pm, src/lib/tools.pm:  Bulk daemon was sometimes
+	dying unexpectedly when local database went away then was available
+	again. This was caused by 2 things. The first one was a wrong way to
+	managed the pid file, ending in multiple whitespaces beeing inserted
+	randomly between pids. The second one was an error in the database
+	connexion managment ending in loosing the reference to the right
+	SQLSource object.
+
+	[7322] src/lib/admin.pm:  When renaming a list, the directories
+	containing the HTML version of messages to be moderated where not
+	renamed. The editors sould therefore not see the message content in the
+	moderation page. fixed by parsing files starting with a dot and by
+	adding a the regexps to test these directories name.
+
+*****	[7319] src/lib/List.pm: [Submitted by M. Woloszyn, univ. Silesia] When
+*****	the "reply_to' parameter had the values "sender" for field "value" and
+*****	"forced" for field "apply", some MUA (Outlook and Thunderbird) did not
+*****	reply to the message sender but to the list. this was due to the
+*****	reply-to header being left undef in that case. fixed by forcing the
+*****	field value to the email original sender.
+
+	[7309] src/lib/List.pm: [Submitted by O. Lacroix, CIRIL] When using a
+	MySQL backend, sorting addresse by domain wouls not work due to double
+	quotes in the SQL query around the keyword "dom". This lead to a bad
+	usage of the nrcpt parameter. Fixed by removing the double quotes.
+
 6.1.9		March 21, 2012
 
   Bug fixes:
