@@ -1,13 +1,13 @@
 msgid ""
 msgstr ""
 "POT-Creation-Date: 2002-07-16 17:27+0800\n"
-"PO-Revision-Date: 2011-09-05 16:00+0200\n"
-"Last-Translator: Anonymous Pootle User\n"
+"PO-Revision-Date: 2012-05-09 16:47+0200\n"
+"Last-Translator: David Verdin <david.verdin@cru.fr>\n"
 "Language-Team: Français\n"
+"Language: fr\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Language: fr\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
 "X-Generator: Pootle 2.1.2\n"
 "Projct-Id-Version: fr\n"
@@ -1663,14 +1663,13 @@ msgstr ""
 "description de la liste)."
 
 #: ../web_tt2/editfile.tt2:31
-#, fuzzy
 msgid ""
 "List description: This text is sent as an answer to the mail command INFO. "
 "It can also be included in the <em>Welcome message</em>."
 msgstr ""
-"Description de la liste : Ce texte est envoyé en retour à la commande "
-"<code>INFO [nom de liste]</code> en mode messagerie.\n"
-"Il est aussi inclus dans le <I>message de bienvenue</I>."
+"Description de la liste : Ce texte est envoyé en réponse à la commande mail "
+"<code>INFO [nom de liste]</code>.\n"
+"Il est aussi inclus dans le <em>message de bienvenue</em>."
 
 #: ../web_tt2/editfile.tt2:33
 msgid "Automatic messages"
@@ -9916,7 +9915,7 @@ msgstr ""
 
 #: ../web_tt2/list_menu.tt2:69
 msgid "OpenSocial"
-msgstr ""
+msgstr "Opensocial"
 
 #. (base_url,path_cgi,u_err.oauth_provider)
 #: ../web_tt2/error.tt2:134
