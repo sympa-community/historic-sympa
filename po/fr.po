@@ -4,10 +4,10 @@ msgstr ""
 "PO-Revision-Date: 2012-05-10 12:08+0200\n"
 "Last-Translator: David Verdin <david.verdin@cru.fr>\n"
 "Language-Team: Français\n"
-"Language: fr\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+"Language: fr\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
 "X-Generator: Pootle 2.1.2\n"
 "Projct-Id-Version: fr\n"
@@ -9904,20 +9904,6 @@ msgstr "interrompre la réception des messages (utile pendant les vacances)"
 msgid "you do not receive your own posts"
 msgstr "Ne pas recevoir mes propres messages"
 
-#. (base_url,path_cgi,u_err.oauth_provider)
-#: ../web_tt2/error.tt2:134
-msgid ""
-"Failed to include members from VOOT group, use the following link to check "
-"the OAuth status : <a href=\"%1%2/oauth_check/%3\">%1%2/oauth_check/%3</a>"
-msgstr ""
-"Échec de l'inclusion du groupe VOOT. Cliquez sur le lien suivant pour "
-"vérifier le statut OAuth&160;: <a href=\"%1%2/oauth_check/%3\">%1%"
-"2/oauth_check/%3</a>"
-
-#: ../web_tt2/oauth_authorize.tt2:4
-msgid "OAuth authorize"
-msgstr "Autorisation Oauth"
-
 #: ../web_tt2/oauth_authorize.tt2:13
 msgid "Don't authorize"
 msgstr ""
@@ -10058,6 +10044,18 @@ msgstr ""
 #: ../src/lib/confdef.pm:260
 msgid "Log intensity"
 msgstr ""
+
+#~ msgid ""
+#~ "Failed to include members from VOOT group, use the following link to "
+#~ "check the OAuth status : <a href=\"%1%2/oauth_check/%3\">%1%2/oauth_check/"
+#~ "%3</a>"
+#~ msgstr ""
+#~ "Échec de l'inclusion du groupe VOOT. Cliquez sur le lien suivant pour "
+#~ "vérifier le statut OAuth&160;: <a href=\"%1%2/oauth_check/%3\">%1%2/"
+#~ "oauth_check/%3</a>"
+
+#~ msgid "OAuth authorize"
+#~ msgstr "Autorisation Oauth"
 
 #~ msgid ""
 #~ "List description: This text is sent as an answer to the mail command\n"
