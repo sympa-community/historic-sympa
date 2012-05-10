@@ -9795,15 +9795,6 @@ msgstr ""
 msgid "you do not receive your own posts"
 msgstr ""
 
-#: ../web_tt2/editfile.tt2:32
-#, fuzzy
-msgid ""
-"List description: This text is sent as an answer to the mail command\n"
-"INFO. It can also be included in the <em>Welcome message</em>."
-msgstr ""
-"Περιγραφή λίστας : Το κείμενο αυτό αποστέλλεται ως απάντηση σε μήνυμα \n"
-"με την εντολή INFO. Μπορεί επίσης να συμπεριληφθεί σε"
-
 #: ../web_tt2/list_menu.tt2:10
 msgid ""
 "You <span style=\"font-weight: bold; font-size: 10px\">are</span> subscribed"
@@ -10797,6 +10788,14 @@ msgid ""
 "Your message could not be sent because its size \n"
 "was over the maximum size allowed on this list."
 msgstr ""
+
+#, fuzzy
+#~ msgid ""
+#~ "List description: This text is sent as an answer to the mail command\n"
+#~ "INFO. It can also be included in the <em>Welcome message</em>."
+#~ msgstr ""
+#~ "Περιγραφή λίστας : Το κείμενο αυτό αποστέλλεται ως απάντηση σε μήνυμα \n"
+#~ "με την εντολή INFO. Μπορεί επίσης να συμπεριληφθεί σε"
 
 #, fuzzy
 #~ msgid "Statistics"

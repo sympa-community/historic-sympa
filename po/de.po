@@ -9624,15 +9624,6 @@ msgstr "keine Nachricht (nützlich für Urlaube)"
 msgid "you do not receive your own posts"
 msgstr "Sie empfangen Ihre eigenen Nachrichten nicht"
 
-#: ../web_tt2/editfile.tt2:32
-msgid ""
-"List description: This text is sent as an answer to the mail command\n"
-"INFO. It can also be included in the <em>Welcome message</em>."
-msgstr ""
-"Listenbeschreibung: Dieser Text wird als Antwort auf den E-Mail-Befehl\n"
-"INFO ausgegeben. Er kann auch in die <em>Willkommensnachricht</em> "
-"aufgenommen werden."
-
 #: ../web_tt2/list_menu.tt2:69
 msgid "OpenSocial"
 msgstr ""
@@ -9709,6 +9700,14 @@ msgstr ""
 #: ../src/lib/List.pm:1119
 msgid "group"
 msgstr ""
+
+#~ msgid ""
+#~ "List description: This text is sent as an answer to the mail command\n"
+#~ "INFO. It can also be included in the <em>Welcome message</em>."
+#~ msgstr ""
+#~ "Listenbeschreibung: Dieser Text wird als Antwort auf den E-Mail-Befehl\n"
+#~ "INFO ausgegeben. Er kann auch in die <em>Willkommensnachricht</em> "
+#~ "aufgenommen werden."
 
 #~ msgid ""
 #~ "You <span style=\"font-weight: bold; font-size: 10px\">are</span> "

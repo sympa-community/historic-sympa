@@ -10195,15 +10195,6 @@ msgstr "Copar la recepcion dels messatges (es util pendent las vacanças)"
 msgid "you do not receive your own posts"
 msgstr "per recebre pas los vòstres messatges"
 
-#: ../web_tt2/editfile.tt2:32
-#, fuzzy
-msgid ""
-"List description: This text is sent as an answer to the mail command\n"
-"INFO. It can also be included in the <em>Welcome message</em>."
-msgstr ""
-"Descripcion de la tièra : Aquel tèxt se manda en responsa a  la comandaINFO "
-"en mòde messatjariá.Lo messatge de benvenuguda pòt tanben caber aquel tèxt."
-
 #: ../web_tt2/list_menu.tt2:10
 msgid ""
 "You <span style=\"font-weight: bold; font-size: 10px\">are</span> subscribed"
@@ -11072,6 +11063,15 @@ msgstr ""
 #: ../src/lib/confdef.pm:260
 msgid "Log intensity"
 msgstr ""
+
+#, fuzzy
+#~ msgid ""
+#~ "List description: This text is sent as an answer to the mail command\n"
+#~ "INFO. It can also be included in the <em>Welcome message</em>."
+#~ msgstr ""
+#~ "Descripcion de la tièra : Aquel tèxt se manda en responsa a  la "
+#~ "comandaINFO en mòde messatjariá.Lo messatge de benvenuguda pòt tanben "
+#~ "caber aquel tèxt."
 
 #, fuzzy
 #~ msgid "Statistics"

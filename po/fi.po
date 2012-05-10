@@ -9845,14 +9845,6 @@ msgstr "ei posteja (hyödyllinen lomien aikana)"
 msgid "you do not receive your own posts"
 msgstr "et vastaanota lähettämiäsi viestejä"
 
-#: ../web_tt2/editfile.tt2:32
-msgid ""
-"List description: This text is sent as an answer to the mail command\n"
-"INFO. It can also be included in the <em>Welcome message</em>."
-msgstr ""
-"Listan kuvaus : Tämä teksti lähetetään vastaukseksi sähköpostikomentoon\n"
-"INFO. Se voidaan liittää myös <em>Tervetuloviestiin</em>"
-
 #: ../web_tt2/list_menu.tt2:10
 msgid ""
 "You <span style=\"font-weight: bold; font-size: 10px\">are</span> subscribed"
@@ -10659,6 +10651,13 @@ msgstr ""
 #: ../src/lib/confdef.pm:260
 msgid "Log intensity"
 msgstr ""
+
+#~ msgid ""
+#~ "List description: This text is sent as an answer to the mail command\n"
+#~ "INFO. It can also be included in the <em>Welcome message</em>."
+#~ msgstr ""
+#~ "Listan kuvaus : Tämä teksti lähetetään vastaukseksi sähköpostikomentoon\n"
+#~ "INFO. Se voidaan liittää myös <em>Tervetuloviestiin</em>"
 
 #, fuzzy
 #~ msgid "Statistics"

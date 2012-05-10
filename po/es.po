@@ -9587,14 +9587,6 @@ msgstr "interrumpir la recepción de mensajes (útil para las vacaciones)"
 msgid "you do not receive your own posts"
 msgstr "No recibir mis propios mensajes"
 
-#: ../web_tt2/editfile.tt2:32
-msgid ""
-"List description: This text is sent as an answer to the mail command\n"
-"INFO. It can also be included in the <em>Welcome message</em>."
-msgstr ""
-"Descripción de la lista: Este texto se envía como respuesta a un comando\n"
-"INFO. También puede ser incluído en el <em>Mensaje de Bienvenida</em>."
-
 #: ../web_tt2/list_menu.tt2:69
 msgid "OpenSocial"
 msgstr ""
@@ -10072,6 +10064,13 @@ msgstr ""
 #: ../src/lib/confdef.pm:662
 msgid "Plugin"
 msgstr ""
+
+#~ msgid ""
+#~ "List description: This text is sent as an answer to the mail command\n"
+#~ "INFO. It can also be included in the <em>Welcome message</em>."
+#~ msgstr ""
+#~ "Descripción de la lista: Este texto se envía como respuesta a un comando\n"
+#~ "INFO. También puede ser incluído en el <em>Mensaje de Bienvenida</em>."
 
 #~ msgid ""
 #~ "You <span style=\"font-weight: bold; font-size: 10px\">are</span> "

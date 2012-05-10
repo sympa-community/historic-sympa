@@ -9591,15 +9591,6 @@ msgstr "без писем (полезно для отпускников)"
 msgid "you do not receive your own posts"
 msgstr "Вы не получаете свои же письма"
 
-#: ../web_tt2/editfile.tt2:32
-msgid ""
-"List description: This text is sent as an answer to the mail command\n"
-"INFO. It can also be included in the <em>Welcome message</em>."
-msgstr ""
-"Описание списка рассылки: Этот текст отправляется в качестве ответа на "
-"команду INFO, переданную по почте. Он также включается в <em>Приветственное "
-"сообщение</em>."
-
 #: ../web_tt2/list_menu.tt2:69
 msgid "OpenSocial"
 msgstr ""
@@ -10056,6 +10047,14 @@ msgstr ""
 #: ../src/lib/confdef.pm:234
 msgid "Syslog"
 msgstr ""
+
+#~ msgid ""
+#~ "List description: This text is sent as an answer to the mail command\n"
+#~ "INFO. It can also be included in the <em>Welcome message</em>."
+#~ msgstr ""
+#~ "Описание списка рассылки: Этот текст отправляется в качестве ответа на "
+#~ "команду INFO, переданную по почте. Он также включается в "
+#~ "<em>Приветственное сообщение</em>."
 
 #~ msgid ""
 #~ "You <span style=\"font-weight: bold; font-size: 10px\">are</span> "

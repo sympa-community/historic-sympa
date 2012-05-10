@@ -9593,13 +9593,6 @@ msgstr "不接收郵件（用于假期）"
 msgid "you do not receive your own posts"
 msgstr "不接收自己發的郵件"
 
-#: ../web_tt2/editfile.tt2:32
-#, fuzzy
-msgid ""
-"List description: This text is sent as an answer to the mail command\n"
-"INFO. It can also be included in the <em>Welcome message</em>."
-msgstr "郵件列表描述：該文本作為郵件命令INFO的答復發送。它也可能包含于"
-
 #: ../web_tt2/list_menu.tt2:10
 msgid ""
 "You <span style=\"font-weight: bold; font-size: 10px\">are</span> subscribed"
@@ -10476,6 +10469,12 @@ msgstr ""
 #: ../src/lib/confdef.pm:260
 msgid "Log intensity"
 msgstr ""
+
+#, fuzzy
+#~ msgid ""
+#~ "List description: This text is sent as an answer to the mail command\n"
+#~ "INFO. It can also be included in the <em>Welcome message</em>."
+#~ msgstr "郵件列表描述：該文本作為郵件命令INFO的答復發送。它也可能包含于"
 
 #, fuzzy
 #~ msgid "Statistics"

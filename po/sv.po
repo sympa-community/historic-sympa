@@ -9459,14 +9459,6 @@ msgstr "ingen e-post (användbar för semestrar)"
 msgid "you do not receive your own posts"
 msgstr "dina egna postningar skickas inte till dig"
 
-#: ../web_tt2/editfile.tt2:32
-msgid ""
-"List description: This text is sent as an answer to the mail command\n"
-"INFO. It can also be included in the <em>Welcome message</em>."
-msgstr ""
-"Listbeskrivning : Denna text skickas som svar till kommandot\n"
-"INFO. Den kan också inkluderas i <em>Välomstmeddelandet</em>."
-
 #: ../web_tt2/list_menu.tt2:69
 msgid "OpenSocial"
 msgstr ""
@@ -10254,6 +10246,13 @@ msgstr ""
 #: ../src/lib/confdef.pm:260
 msgid "Log intensity"
 msgstr ""
+
+#~ msgid ""
+#~ "List description: This text is sent as an answer to the mail command\n"
+#~ "INFO. It can also be included in the <em>Welcome message</em>."
+#~ msgstr ""
+#~ "Listbeskrivning : Denna text skickas som svar till kommandot\n"
+#~ "INFO. Den kan också inkluderas i <em>Välomstmeddelandet</em>."
 
 #~ msgid ""
 #~ "You <span style=\"font-weight: bold; font-size: 10px\">are</span> "

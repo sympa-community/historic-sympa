@@ -9664,14 +9664,6 @@ msgstr "ei saadeta maile (soovitav puhkuse ajaks)"
 msgid "you do not receive your own posts"
 msgstr "teile ei tule enda saadetud kirju"
 
-#: ../web_tt2/editfile.tt2:32
-msgid ""
-"List description: This text is sent as an answer to the mail command\n"
-"INFO. It can also be included in the <em>Welcome message</em>."
-msgstr ""
-"Listi kirjeldus: Tekst mis saadetakse vastuseks e-mailiga saadetud käsule \n"
-"INFO. Seda teksti võib lisada ka <em>tervituskirjale</em>."
-
 #: ../web_tt2/list_menu.tt2:69
 msgid "OpenSocial"
 msgstr ""
@@ -10188,6 +10180,14 @@ msgstr ""
 #: ../src/lib/List.pm:6489
 msgid "Added %s users out of %s required."
 msgstr ""
+
+#~ msgid ""
+#~ "List description: This text is sent as an answer to the mail command\n"
+#~ "INFO. It can also be included in the <em>Welcome message</em>."
+#~ msgstr ""
+#~ "Listi kirjeldus: Tekst mis saadetakse vastuseks e-mailiga saadetud "
+#~ "käsule \n"
+#~ "INFO. Seda teksti võib lisada ka <em>tervituskirjale</em>."
 
 #~ msgid ""
 #~ "You <span style=\"font-weight: bold; font-size: 10px\">are</span> "

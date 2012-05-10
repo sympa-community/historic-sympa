@@ -10565,15 +10565,14 @@ msgstr "no mail (assenza prolungata)"
 msgid "you do not receive your own posts"
 msgstr "non ricevere i tuoi stessi messaggi"
 
-#: ../web_tt2/editfile.tt2:32
 #, fuzzy
-msgid ""
-"List description: This text is sent as an answer to the mail command\n"
-"INFO. It can also be included in the <em>Welcome message</em>."
-msgstr ""
-"Descrizione della lista: Questo testo viene inviato come risposta al "
-"comando\n"
-"INFO. Può essere anche incluso nel messaggio di benvenuto.\n"
+#~ msgid ""
+#~ "List description: This text is sent as an answer to the mail command\n"
+#~ "INFO. It can also be included in the <em>Welcome message</em>."
+#~ msgstr ""
+#~ "Descrizione della lista: Questo testo viene inviato come risposta al "
+#~ "comando\n"
+#~ "INFO. Può essere anche incluso nel messaggio di benvenuto.\n"
 
 #~ msgid ""
 #~ "You <span style=\"font-weight: bold; font-size: 10px\">are</span> "

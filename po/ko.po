@@ -9720,15 +9720,6 @@ msgstr "메일 없음 (휴가 동안 유용한)"
 msgid "you do not receive your own posts"
 msgstr "사용자의 포스트를 받지 않습니다"
 
-#: ../web_tt2/editfile.tt2:32
-#, fuzzy
-msgid ""
-"List description: This text is sent as an answer to the mail command\n"
-"INFO. It can also be included in the <em>Welcome message</em>."
-msgstr ""
-"리스트 묘사 : 이 원본은 메일 명령\n"
-"에 회신으로 보내집니다.정보. 그것은 또한에서 포함될 수 있습니다."
-
 #: ../web_tt2/list_menu.tt2:10
 msgid ""
 "You <span style=\"font-weight: bold; font-size: 10px\">are</span> subscribed"
@@ -10605,6 +10596,14 @@ msgstr ""
 #: ../src/lib/confdef.pm:260
 msgid "Log intensity"
 msgstr ""
+
+#, fuzzy
+#~ msgid ""
+#~ "List description: This text is sent as an answer to the mail command\n"
+#~ "INFO. It can also be included in the <em>Welcome message</em>."
+#~ msgstr ""
+#~ "리스트 묘사 : 이 원본은 메일 명령\n"
+#~ "에 회신으로 보내집니다.정보. 그것은 또한에서 포함될 수 있습니다."
 
 #, fuzzy
 #~ msgid "Statistics"

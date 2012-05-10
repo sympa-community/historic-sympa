@@ -9532,14 +9532,6 @@ msgstr "żadnej poczty (przydatne na urlop)"
 msgid "you do not receive your own posts"
 msgstr "nie otrzymuj swoich własnych postów"
 
-#: ../web_tt2/editfile.tt2:32
-msgid ""
-"List description: This text is sent as an answer to the mail command\n"
-"INFO. It can also be included in the <em>Welcome message</em>."
-msgstr ""
-"Opis listy: Ten tekst jest wysyłany jako odpowiedź na komendę pocztową\n"
-"INFO. Może być też zawarty w "
-
 #: ../web_tt2/list_menu.tt2:10
 msgid ""
 "You <span style=\"font-weight: bold; font-size: 10px\">are</span> subscribed"
@@ -10392,6 +10384,13 @@ msgstr ""
 #: ../src/lib/confdef.pm:260
 msgid "Log intensity"
 msgstr ""
+
+#~ msgid ""
+#~ "List description: This text is sent as an answer to the mail command\n"
+#~ "INFO. It can also be included in the <em>Welcome message</em>."
+#~ msgstr ""
+#~ "Opis listy: Ten tekst jest wysyłany jako odpowiedź na komendę pocztową\n"
+#~ "INFO. Może być też zawarty w "
 
 #~ msgid "Statistics"
 #~ msgstr "Statystyki"
