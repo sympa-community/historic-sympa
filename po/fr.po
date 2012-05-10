@@ -1,13 +1,13 @@
 msgid ""
 msgstr ""
 "POT-Creation-Date: 2002-07-16 17:27+0800\n"
-"PO-Revision-Date: 2012-05-10 12:08+0200\n"
+"PO-Revision-Date: 2012-05-10 15:26+0200\n"
 "Last-Translator: David Verdin <david.verdin@cru.fr>\n"
 "Language-Team: Français\n"
+"Language: fr\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Language: fr\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
 "X-Generator: Pootle 2.1.2\n"
 "Projct-Id-Version: fr\n"
@@ -9906,46 +9906,54 @@ msgstr "Ne pas recevoir mes propres messages"
 
 #: ../web_tt2/oauth_authorize.tt2:13
 msgid "Don't authorize"
-msgstr ""
+msgstr "Ne pas autoriser"
 
 #: ../web_tt2/oauth_check.tt2:4
 msgid "OAuth check"
-msgstr ""
+msgstr "Vérification OAuth"
 
 #: ../web_tt2/oauth_check.tt2:10
 msgid "Got new access token, everything is alright."
-msgstr ""
+msgstr "Nouveau jeton d'accès obtenu."
 
 #: ../web_tt2/oauth_check.tt2:15
 msgid ""
 "Unable to check, provider may not be available or access token may be "
 "outdated and failed to be get new one."
 msgstr ""
+"Vérification impossible. Le serveur n'est peut-être pas accessible ou bien "
+"le jeton d'accès est périmé et n'a pas pu être renouvelé."
 
 #: ../web_tt2/oauth_check.tt2:18
 msgid "Unable to load consumer, configuration may be erroneous."
 msgstr ""
+"Chargement du client impossible. La configuration est sans doute erronée."
 
 #: ../web_tt2/select_voot_groups_request.tt2:6
 msgid ""
 "Hereafter is the list of the groups you accepted to share with Sympa. Select "
 "which group you want members to be included in your list."
 msgstr ""
+"Voici une liste de groupes que vous acceptez de partager avec le serveur de "
+"listes. Sélectionnez le groupe dont vous désirez inclure les membres dans "
+"votre listes."
 
 #: ../web_tt2/select_voot_provider_request.tt2:4
 msgid "Select VOOT provider"
-msgstr ""
+msgstr "Sélectionnez un serveur VOOT."
 
 #: ../web_tt2/select_voot_provider_request.tt2:6
 msgid ""
 "Hereafter is the list of VOOT providers that share group information with "
 "Sympa. Select which provider you want to use your groups from."
 msgstr ""
+"Voici une liste de serveurs VOOT qui partagent des groupes avec le serveur "
+"de listes. Sélectionnez le serveur dont vous voulez utiliser les groupes."
 
 #. (consumer_name,oauth_provider)
 #: ../mail_tt2/message_report.tt2:96
 msgid "Your OAuth token used by consumer %1 may have expired."
-msgstr ""
+msgstr "Votre jeton OAuth utilisé par le client %1 a expiré."
 
 #. (consumer_name,oauth_provider,conf.wwsympa_url)
 #: ../mail_tt2/message_report.tt2:105
@@ -9955,79 +9963,97 @@ msgid ""
 "\n"
 "Visit  %3/oauth_check/%2 to check the token state and renew it if necessary."
 msgstr ""
+"Le serveur de listes n'a pas pu récupérer de données auprès du client %1. "
+"Votre jeton d'accès auprès du serveur %2 est sans doute périmé.\n"
+"^nCliquez sur %3/oauth_check/%2 pour vérifier l'état du jeton et le "
+"renouveler si nécessaire."
 
 #: ../mail_tt2/moderate.tt2:23
 msgid ""
 "Because the new message is suspected to be a spam it is not attached to this "
 "one. You must use the web interface to reject or validate it."
 msgstr ""
+"Le message à modérer étant soupçonné d'être un spam, il n'est pas mise en "
+"pièce jointe de celui-ci. Vous devez utiliser l'interface web si vous "
+"désirez le lire avant de le rejeter ou de l'accepter."
 
 #: ../src/lib/confdef.pm:1006
 msgid "Database private extention to subscriber table"
-msgstr ""
+msgstr "Extension de la table d'abonnés de la base de données."
 
 #: ../src/lib/confdef.pm:1055
 msgid ""
 "Default timeout between two scheduled synchronizations of list members with "
 "data sources."
 msgstr ""
+"Délai par défaut entre deux synchronisations automatiques de la liste des "
+"membres avec les sources de données."
 
 #: ../src/lib/confdef.pm:1061
 msgid ""
 "Default timeout between two action-triggered synchronizations of list "
 "members with data sources."
 msgstr ""
+"Délai par défaut entre deux synchronisations à la volée (déclenchées par des "
+"actions de l'utilisateur) de la liste des membres avec les sources de "
+"données."
 
 #: ../src/lib/confdef.pm:1169
 msgid ""
 "The \"d=\" tag as defined in rfc 4871, default is virtual host domain name"
 msgstr ""
+"La balise \"d=\" telles que définie par la RFC 4871. La valeur  par défaut est "
+"le nom de domaine."
 
 #: ../src/lib/confdef.pm:1183
 msgid "The \"i=\" tag as defined in rfc 4871, default is null"
-msgstr ""
+msgstr "La balise \"i=\" telles que définie par la RFC 4871. vide par défaut."
 
 #: ../src/lib/confdef.pm:1195
 msgid "Antivirus plug-in"
-msgstr ""
+msgstr "Plugin antivirus"
 
 #: ../src/lib/confdef.pm:1210
 msgid "Antivirus plugin command argument"
-msgstr ""
+msgstr "Arguments de la ligne de commande de l'antivirus."
 
 #: ../src/lib/confdef.pm:1219
 msgid "Tag based spam filtering"
-msgstr ""
+msgstr "Filtrage du spam fondé sur des tags."
 
 #: ../src/lib/confdef.pm:1259 ../src/lib/confdef.pm:1279
 msgid "Better if not in a critical partition"
-msgstr ""
+msgstr "Il est conseillé de ne pas employer une partition critique."
 
 #: ../src/lib/confdef.pm:1318
 msgid "Syslog facility for wwsympa, archived and bounced"
-msgstr ""
+msgstr "Facilité syslog pour wwsympa, archived et bounced."
 
 #: ../src/lib/confdef.pm:1321
 msgid "Default is to use previously defined sympa log facility."
 msgstr ""
+"La valeur par défaut est celle préalablement définie pour la facilité des "
+"logs de sympa.pl"
 
 #: ../src/lib/confdef.pm:1326
 msgid "Path to MHonArc mail2html plugin"
-msgstr ""
+msgstr "Chemin absolu vers le plugin mail2html de MHonArc."
 
 #: ../src/lib/confdef.pm:1425
 msgid "Javascript excerpt that enables and configures the WYSIWYG HTML editor."
-msgstr ""
+msgstr "Fragment javascript qui active et configure un éditeur HTML WYSIWYG."
 
 #: ../src/lib/confdef.pm:1536
 msgid ""
 "Default number of lines of the array displaying the log entries in the logs "
 "page"
 msgstr ""
+"Valeur par défaut du nombre de ligne de logs affichées dans la page des "
+"logs."
 
 #: ../src/lib/List.pm:1119
 msgid "group"
-msgstr ""
+msgstr "groupe"
 
 #: ../web_tt2/edit_config.tt2:7
 msgid "[%confparam.title%]"
@@ -10043,7 +10069,7 @@ msgstr ""
 
 #: ../src/lib/confdef.pm:260
 msgid "Log intensity"
-msgstr ""
+msgstr "Intensité des logs"
 
 #~ msgid ""
 #~ "Failed to include members from VOOT group, use the following link to "
