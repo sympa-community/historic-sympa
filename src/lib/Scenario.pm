@@ -173,7 +173,7 @@ sub _parse_scenario {
 	if ($current_rule =~ /\s*(include\s*\(?\'?(.*)\'?\)?)\s*$/i) {
 	    $rule->{'condition'} = $1;
 	    push(@scenario, $rule);
-	}elsif ($current_rule =~ /^\s*(.*)\s+((\s*(md5|pgp|smtp|smime|dkim)\s*,?)*)\s*->\s*(.*)\s*$/gi) {
+	}elsif ($current_rule =~ /^\s*(.*?)\s+((\s*(md5|pgp|smtp|smime|dkim)\s*,?)*)\s*->\s*(.*)\s*$/gi) {
 	    $rule->{'condition'} = $1;
 	    $rule->{'action'} = $5;
 	    my $auth_methods = $2 || 'smtp';
