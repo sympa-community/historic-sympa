@@ -3,6 +3,20 @@
 
 (See Changelog file for the full changes log)
 
+6.0.7		May 11, 2012
+
+  Bug fixes:
+
+	[7358] wwsympa/wwsympa.fcgi.in:  Fixing a potential security issue
+	related to archives
+
+	[7208] configure.ac: [Submitted by R. di Cosmo] When installing Sympa,
+	if configure was used with the --enable-fsh option, then the lists
+	directory was incorrectly set.
+
+	[6706] wwsympa/wwsympa.fcgi.in:  CAS auth problem, reported by Vincent
+	Bonamy
+
 6.0.6		September 20, 2010
 
   Bug fixes:

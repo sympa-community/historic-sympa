@@ -1,4 +1,44 @@
 ------------------------------------------------------------------------
+r7359 | sympa-authors | 2012-05-11 11:12:19 +0200 (ven 11 mai 2012) | 2 lignes
+Chemins modifiés :
+   M /branches/sympa-6.0-branch
+
+[dev] Updating repository metadata.
+
+------------------------------------------------------------------------
+r7208 | david.verdin | 2011-09-05 16:15:52 +0200 (lun 05 sep 2011) | 1 ligne
+Chemins modifiés :
+   M /branches/sympa-6.1-branch/configure.ac
+Fision via : r7359
+
+[bug][Submitted by R. di Cosmo] When installing Sympa, if configure was used with the --enable-fsh option, then the lists directory was incorrectly set.
+------------------------------------------------------------------------
+r7358 | david.verdin | 2012-05-11 11:00:52 +0200 (ven 11 mai 2012) | 1 ligne
+Chemins modifiés :
+   M /branches/sympa-6.0-branch/wwsympa/wwsympa.fcgi.in
+
+[bug] Fixing a potential security issue related to archives
+------------------------------------------------------------------------
+r7209 | david.verdin | 2011-09-05 17:06:16 +0200 (lun 05 sep 2011) | 1 ligne
+Chemins modifiés :
+   M /branches/sympa-6.0-branch/configure.ac
+
+[bug][Submitted by R. di Cosmo] When installing Sympa, if configure was used with the --enable-fsh option, then the lists directory was incorrectly set.
+------------------------------------------------------------------------
+r6706 | serge.aumont | 2010-10-13 10:46:06 +0200 (mer 13 oct 2010) | 2 lignes
+Chemins modifiés :
+   M /branches/sympa-6.0-branch/wwsympa/wwsympa.fcgi.in
+
+[bug] CAS auth problem, reported by Vincent Bonamy
+
+------------------------------------------------------------------------
+r6693 | sympa-authors | 2010-09-20 18:08:52 +0200 (lun 20 sep 2010) | 1 ligne
+Chemins modifiés :
+   M /branches/sympa-6.0-branch/ChangeLog
+   M /branches/sympa-6.0-branch/NEWS
+
+[-release]Preparing version 6.0.6
+------------------------------------------------------------------------
 r6692 | sympa-authors | 2010-09-20 18:07:15 +0200 (lun 20 sep 2010) | 1 ligne
 Chemins modifiés :
    M /branches/sympa-6.0-branch/configure.ac
