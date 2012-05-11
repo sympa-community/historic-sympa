@@ -3,6 +3,20 @@
 
 (See Changelog file for the full changes log)
 
+6.1.11		May 11, 2012
+
+  Bug fixes:
+
+	[7358] wwsympa/wwsympa.fcgi.in:  Fixing a potential security issue
+	related to archives
+
+	[7357] src/lib/Scenario.pm:  When upgrading from 6.1.9 to 6.1.10 the db
+	list cache was not initialized, due to a badly defined upgrade test.
+	fixed by raising the version number tested.
+
+	[7356] src/lib/Upgrade.pm:  A removed question mark in the regexp
+	evaluating scenario rules would break some scenario evaluations.
+
 6.1.10		May 10, 2012
 
   Features:
