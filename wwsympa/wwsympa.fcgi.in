@@ -16204,6 +16204,11 @@ sub do_viewlogs {
 sub do_arc_manage {
     &wwslog('info', "do_arc_manage ($in{'list'})");
 
+    ## Access control
+    unless (defined &check_authz('do_arc', 'web_archive.access')) {
+	return undef;
+    }
+    
     my $search_base = $wwsconf->{'arc_path'}.'/'.$list->get_list_id();
     opendir ARC, "$search_base";
     foreach my $dir (sort {$b cmp $a} grep(!/^\./,readdir ARC)) {
@@ -16220,6 +16225,11 @@ sub do_arc_manage {
 sub do_arc_download {
     
     &wwslog('info', "do_arc_download ($in{'list'})");
+    
+    ## Access control
+    unless (defined &check_authz('do_arc', 'web_archive.access')) {
+	return undef;
+    }
     
     ##zip file name:listname_archives.zip  
     my $zip_file_name = $in{'list'}.'_archives.zip';
@@ -16320,6 +16330,11 @@ sub do_arc_delete {
     my @abs_dirs;
     
     &wwslog('info', "do_arc_delete ($in{'list'})");
+    
+    ## Access control
+    unless (defined &check_authz('do_arc', 'web_archive.access')) {
+	return undef;
+    }
     
     unless (defined  $in{'directories'}){
       	&report::reject_report_web('user','select_month',{},$param->{'action'});
