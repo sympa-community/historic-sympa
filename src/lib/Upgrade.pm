@@ -1022,16 +1022,8 @@ sub probe_db {
 		    'messagekey_bulkmailer' => 1,
 		    'packetid_bulkmailer' => 1,
 		    'messagekey_bulkspool' => 1,
-             'name_list'=>1,
-             'path_list'=>1,
-             'robot_list'=>1,
-             'status_list'=>1,
-             'creation_email_list'=>1,
-             'subject_list'=>1,
-             'web_archive_list'=>1,
-             'topics_list'=>1,
-             'owners_list'=>1,
-             'editors_list'=>1
+		    'name_list'=>1,
+		    'robot_list'=>1,
 		    );
     
     my %primary = ('user_table' => ['email_user'],
