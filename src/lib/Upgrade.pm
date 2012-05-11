@@ -703,7 +703,7 @@ sub upgrade {
 		}
 		
    }	
-   if (&tools::lower_version($previous_version, '6.1.9')) {
+   if (&tools::lower_version($previous_version, '6.1.11')) {
        ## Exclusion table was not robot-enabled.
        &Log::do_log('notice','fixing robot column of exclusion table.');
 	my $statement = "SELECT * FROM exclusion_table"; 
