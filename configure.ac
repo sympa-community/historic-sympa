@@ -323,9 +323,9 @@ AC_ARG_WITH(
     staticdir,
     AS_HELP_STRING(
 	[--with-staticdir=DIR],
-	[application scripts @<:@PREFIX/static_content@:>@]
+	[static data @<:@PREFIX/static_content@:>@]
     ),
-    [scriptdir="$withval"]
+    [staticdir="$withval"]
 )
 
 CONFIG=$confdir/sympa.conf
