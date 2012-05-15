@@ -857,9 +857,6 @@ sub verify {
             $regexp =~ s/\[host\]/$reghost/g ;
 	}
 
-	# Reject potentially harmful regexp, "(?{ code })" or "(??{ code })".
-	return -1 * $negation if $regexp =~ /\(\?\??\{.*\}/s;
-
 	# wrap matches with eval{} to avoid crash by malformed regexp.
 	my $r = 0;
 	if (ref($args[0])) {
