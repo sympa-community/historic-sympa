@@ -2171,8 +2171,23 @@ sub DoCommand {
 
 	## check Content-type
 	my $mime = $hdr->get('Mime-Version') ;
-	my $content_type = $hdr->get('Content-type');
-	my $transfert_encoding = $hdr->get('Content-transfer-encoding');
+	my $content_type = $msg->effective_type;
+	## Get charset
+	my $cset =
+	    MIME::Charset->new($hdr->mime_attr('Content-Type.Charset'));
+	unless ($cset->decoder) {
+	    # Charset is unknown.  Detect 7-bit charset.
+	    my ($dummy, $charset) =
+		MIME::Charset::body_encode($msg->bodyhandle->as_string,
+					   '', Detect7Bit => 'YES');
+	    $cset = MIME::Charset->new($charset);
+	}
+	if ($cset->decoder) {
+	    $cset->encoder('UTF-8');
+	} else {
+	    $cset = MIME::Charset->new('US-ASCII');
+	}
+
 	unless (($content_type =~ /text/i and !$mime)
 		or !($content_type) 
 		or ($content_type =~ /text\/plain/i)) {
@@ -2184,10 +2199,9 @@ sub DoCommand {
 	
 	my @body = $msg->bodyhandle->as_lines();
 	foreach $i (@body) {
-	    if ($transfert_encoding =~ /quoted-printable/i) {
-		$i = MIME::QuotedPrint::decode($i);
-	    }
-	    
+	    $i = $cset->encode($i);
+
+	    last if ($i =~ /^-- $/); ## ignore signature
 	    $i =~ s/^\s*>?\s*(.*)\s*$/$1/g;
 	    next if ($i =~ /^$/); ## skip empty lines
 	    next if ($i =~ /^\s*\#/) ;
