@@ -2816,11 +2816,11 @@ sub send_msg_digest {
     my @all_msg;
     foreach $i (0 .. $#list_of_mail){
 	my $mail = $list_of_mail[$i];
-	my $subject = &MIME::EncWords::decode_mimewords($mail->head->get('Subject'), Charset=>'utf8');
+	my $subject = &MIME::EncWords::decode_mimewords($mail->head->get('Subject', 0), Charset=>'utf8');
 	chomp $subject;
-	my $from = &MIME::EncWords::decode_mimewords($mail->head->get('From'), Charset=>'utf8');
+	my $from = &MIME::EncWords::decode_mimewords($mail->head->get('From', 0), Charset=>'utf8');
 	chomp $from;    
-	my $date = &MIME::EncWords::decode_mimewords($mail->head->get('Date'), Charset=>'utf8');
+	my $date = &MIME::EncWords::decode_mimewords($mail->head->get('Date', 0), Charset=>'utf8');
 	chomp $date;    
 	
         my $msg = {};
@@ -3266,8 +3266,8 @@ sub send_msg {
 		     (! -r $Conf::Conf{'ssl_cert_dir'}.'/'.&tools::escape_chars($user->{'email'}) &&
 		      ! -r $Conf::Conf{'ssl_cert_dir'}.'/'.&tools::escape_chars($user->{'email'}.'@enc' ))) {
 		## Missing User certificate
-		unless ($self->send_file('x509-user-cert-missing', $user->{'email'}, $robot, {'mail' => {'subject' => $message->{'msg'}->head->get('Subject'),
-													 'sender' => $message->{'msg'}->head->get('From')},
+		unless ($self->send_file('x509-user-cert-missing', $user->{'email'}, $robot, {'mail' => {'subject' => $message->{'msg'}->head->get('Subject', 0),
+													 'sender' => $message->{'msg'}->head->get('From', 0)},
 											      'auto_submitted' => 'auto-generated'})) {
 		    &do_log('notice',"Unable to send template 'x509-user-cert-missing' to $user->{'email'}");
 		}
@@ -3584,7 +3584,7 @@ sub send_to_editor {
        }
    }
    
-   my $subject = MIME::EncWords::decode_mimewords($hdr->get('Subject'), Charset=>'utf8');
+   my $subject = MIME::EncWords::decode_mimewords($hdr->get('Subject', 0), Charset=>'utf8');
    my $param = {'modkey' => $modkey,
 		'boundary' => $boundary,
 		'msg_from' => $message->{'sender'},
@@ -3921,11 +3921,11 @@ sub archive_send_last {
    my $msg = {};
    $msg->{'id'} = 1;
    
-   $msg->{'subject'} = &MIME::EncWords::decode_mimewords($mail->{'msg'}->head->get('Subject'), Charset=>'utf8');
+   $msg->{'subject'} = &MIME::EncWords::decode_mimewords($mail->{'msg'}->head->get('Subject', 0), Charset=>'utf8');
    chomp $msg->{'subject'};   
-   $msg->{'from'} = &MIME::EncWords::decode_mimewords($mail->{'msg'}->head->get('From'), Charset=>'utf8');
+   $msg->{'from'} = &MIME::EncWords::decode_mimewords($mail->{'msg'}->head->get('From', 0), Charset=>'utf8');
    chomp $msg->{'from'};    	        	
-   $msg->{'date'} = &MIME::EncWords::decode_mimewords($mail->{'msg'}->head->get('Date'), Charset=>'utf8');
+   $msg->{'date'} = &MIME::EncWords::decode_mimewords($mail->{'msg'}->head->get('Date', 0), Charset=>'utf8');
    chomp $msg->{'date'};
    
    $msg->{'full_msg'} = $mail->{'msg'}->as_string;
@@ -4478,7 +4478,7 @@ sub add_parts {
 	    ## Append to first text/plain part
 
 	    foreach my $part ($msg->parts) {
-		&do_log('debug3', 'TYPE: %s', $part->head->get('Content-Type'));
+		&do_log('debug3', 'TYPE: %s', $part->head->get('Content-Type', 0));
 		if ($part->head->get('Content-Type') =~ /^text\/plain/i) {
 
 		    my @body;
@@ -11345,7 +11345,7 @@ sub compute_topic {
     # We convert it to Unicode for case-ignore match with non-ASCII keywords.
     my $mail_string = '';
     if ($self->{'admin'}{'msg_topic_keywords_apply_on'} eq 'subject'){
-	$mail_string = &MIME::EncWords::decode_mimewords($msg->head->get('subject'), Charset=>'_UNICODE_')."\n";
+	$mail_string = &MIME::EncWords::decode_mimewords($msg->head->get('Subject', 0), Charset=>'_UNICODE_')."\n";
     }
     unless ($self->{'admin'}{'msg_topic_keywords_apply_on'} eq 'subject') {
 	# get bodies of any text/* parts, not digging nested subparts.

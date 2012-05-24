@@ -323,7 +323,7 @@ sub safefork {
 ###################################################### 
 sub checkcommand {
    my($msg, $sender, $robot) = @_;
-   do_log('debug3', 'tools::checkcommand(msg->head->get(subject): %s,%s)',$msg->head->get('Subject'), $sender);
+   do_log('debug3', 'tools::checkcommand(msg->head->get(subject): %s,%s)',$msg->head->get('Subject', 0), $sender);
 
    my($avoid, $i);
 
@@ -1318,7 +1318,7 @@ sub smime_decrypt {
     my $msg = shift;
     my $list = shift ; ## the recipient of the msg
     
-    &do_log('debug2', 'tools::smime_decrypt message msg from %s,%s',$msg->head->get('from'),$list->{'name'});
+    &do_log('debug2', 'tools::smime_decrypt message msg from %s,%s',$msg->head->get('from', 0),$list->{'name'});
 
     ## an empty "list" parameter means mail to sympa@, listmaster@...
     my $dir = $list->{'dir'};

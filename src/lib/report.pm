@@ -157,9 +157,9 @@ sub _get_msg_as_hash {
 
     $msg_hash = {'full' => $msg_entity->as_string, 
 		 'body' => $body_as_string,
-		 'from' => $head->get('From'),
-		 'subject' => $head->get('Subject'),
-		 'message_id' => $head->get('Message-Id')
+		 'from' => $head->get('From', 0),
+		 'subject' => $head->get('Subject', 0),
+		 'message_id' => $head->get('Message-Id', 0)
 		 };
 
     return $msg_hash;

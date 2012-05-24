@@ -2063,7 +2063,7 @@ sub distribute {
 	unless ($numsmtp) {
 	    &do_log('info', 'Message for %s from %s accepted but all subscribers use digest,nomail or summary',$which, $sender);
 	} 
-	&do_log('info', 'Message for %s from %s accepted (%d seconds, %d sessions, %d subscribers), message-id=%s, size=%d', $which, $sender, time - $start_time, $numsmtp, $list->get_total(), $hdr->get('Message-Id'), $bytes);
+	&do_log('info', 'Message for %s from %s accepted (%d seconds, %d sessions, %d subscribers), message-id=%s, size=%d', $which, $sender, time - $start_time, $numsmtp, $list->get_total(), $hdr->get('Message-Id', 0), $bytes);
 
 	unless ($quiet) {
 	    unless (&report::notice_report_msg('message_distributed',$sender,{'key' => $key,'message' => $message},$robot,$list)) {
@@ -2355,7 +2355,7 @@ sub reject {
     unless  ($#sender_hdr == -1) {
 	my $rejected_sender = $sender_hdr[0]->address;
 	my %context;
-	$context{'subject'} = &MIME::EncWords::decode_mimewords($message->head->get('subject'), Charset=>'utf8');
+	$context{'subject'} = &MIME::EncWords::decode_mimewords($message->head->get('Subject', 0), Charset=>'utf8');
 	chomp($context{'subject'});
 	$context{'rejected_by'} = $sender;
 	$context{'editor_msg_body'} = $editor_msg->{'msg'}->body_as_string if ($editor_msg) ;
