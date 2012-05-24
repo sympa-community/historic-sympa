@@ -1444,14 +1444,14 @@ sub as_singlepart {
     if ($msg->effective_type() =~ /^$preferred_type$/) {
 	$done = 1;
     }elsif ($msg->effective_type() =~ /^multipart\/alternative/) {
-	my @parts = $msg->parts();
-	foreach my $index (0..$#parts) {
-	    if (($parts[$index]->effective_type() =~ /^$preferred_type$/) ||
+	foreach my $part ($msg->parts) {
+	    if (($part->effective_type() =~ /^$preferred_type$/) ||
 		(
-		 ($parts[$index]->effective_type() =~ /^multipart\/related$/) &&
-		 ($parts[$index]->parts(0)->effective_type() =~ /^$preferred_type$/))) {
+		 ($part->effective_type() =~ /^multipart\/related$/) &&
+		 $part->parts &&
+		 ($part->parts(0)->effective_type() =~ /^$preferred_type$/))) {
 		## Only keep the first matching part
-		$msg->parts([$parts[$index]]);
+		$msg->parts([$part]);
 		$msg->make_singlepart();
 		$done = 1;
 		last;
@@ -1466,14 +1466,13 @@ sub as_singlepart {
 	$done ||= &as_singlepart($msg, $preferred_type, $loops);
 
     }elsif ($msg->effective_type() =~ /^multipart/) {
-	my @parts = $msg->parts();
-	foreach my $index (0..$#parts) {
+	foreach my $part ($msg->parts) {
             
-            next unless (defined $parts[$index]); ## Skip empty parts
+            next unless (defined $part); ## Skip empty parts
  
-	    if ($parts[$index]->effective_type() =~ /^multipart\/alternative/) {
-		if (&as_singlepart($parts[$index], $preferred_type, $loops)) {
-		    $msg->parts([$parts[$index]]);
+	    if ($part->effective_type() =~ /^multipart\/alternative/) {
+		if (&as_singlepart($part, $preferred_type, $loops)) {
+		    $msg->parts([$part]);
 		    $msg->make_singlepart();
 		    $done = 1;
 		}

@@ -3409,13 +3409,16 @@ sub send_msg {
 		return 0;
 	    }
 	    my $mime_types = &tools::load_mime_types();
-	    my @parts = $url_msg->parts();
-	    
-	    foreach my $i (0..$#parts) {
-		my $entity = &_urlize_part ($url_msg->parts ($i), $self, $dir1, $i, $mime_types,  &Conf::get_robot_conf($robot, 'wwsympa_url')) ;
+	    my @parts = ();
+	    my $i = 0;
+	    foreach my $part ($url_msg->parts()) {
+		my $entity = &_urlize_part($part, $self, $dir1, $i, $mime_types,  &Conf::get_robot_conf($robot, 'wwsympa_url'));
 		if (defined $entity) {
-		    $parts[$i] = $entity;
+		    push @parts, $entity;
+		} else {
+		    push @parts, $part;
 		}
+		$i++;
 	    }
 	    
 	    ## Replace message parts
@@ -4457,7 +4460,8 @@ sub add_parts {
 	}elsif ($content_type =~ /^multipart\/mixed/i) {
 	    ## Append to first part if text/plain
 	    
-	    if ($msg->parts(0)->head->get('Content-Type') =~ /^text\/plain/i) {
+	    if ($msg->parts and
+		$msg->parts(0)->effective_type =~ /^text\/plain/i) {
 		
 		my $part = $msg->parts(0);
 		my @body;
