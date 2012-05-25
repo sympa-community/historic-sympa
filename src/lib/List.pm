@@ -3207,7 +3207,7 @@ sub send_msg {
  
     if ( $message->{'msg'}->head->get('X-Sympa-Receipient') ) {
 
-	@tabrcpt = split /,/, $message->{'msg'}->head->get('X-Sympa-Receipient');
+	@tabrcpt = split /,/, $message->{'msg'}->head->get('X-Sympa-Receipient', 0);
 	$message->{'msg'}->head->delete('X-Sympa-Receipient');
 
     } else {
@@ -11657,7 +11657,7 @@ sub _urlize_part {
     ##create the linked file 	
     ## Store body in file 
     if (open OFILE, ">$expl/$dir/$filename") {
-	my @ct = split(/;/,$head->get('Content-type'));
+	my @ct = split(/;/,$head->get('Content-type', 0));
 	chomp ($ct[0]); 
    	printf OFILE "Content-type: %s\n\n", $ct[0];
     } else {

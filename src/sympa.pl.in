@@ -1509,7 +1509,7 @@ sub DoFile {
         #do not process messages in list creation only mode, move them to main spool
         unless ($list->move_message($message->{'filename'}, $Conf{'queue'})) {
             &do_log('err','sympa::DoFile(): Unable to move in spool for processing message to list %s (daemon_usage = creation)', $listname);
-            &report::reject_report_msg('intern','',$sender,{'msg_id' => $hdr->get('Message-ID'),'message' => $message},$robot,$message->{'msg_as_string'},$list);
+            &report::reject_report_msg('intern','',$sender,{'msg_id' => $hdr->get('Message-ID', 0),'message' => $message},$robot,$message->{'msg_as_string'},$list);
             return undef;
         }
         &do_log('info', ($dyn_just_created ? 'After automatic list creation, ' : '') 
