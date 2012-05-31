@@ -11657,9 +11657,11 @@ sub _urlize_part {
     ##create the linked file 	
     ## Store body in file 
     if (open OFILE, ">$expl/$dir/$filename") {
-	my @ct = split(/;/,$head->get('Content-type', 0));
-	chomp ($ct[0]); 
-   	printf OFILE "Content-type: %s\n\n", $ct[0];
+	my $ct = $message->effective_type || 'text/plain';
+	printf OFILE "Content-type: %s", $ct;
+	printf OFILE "; Charset=%s", $head->mime_attr('Content-Type.Charset')
+	    if $head->mime_attr('Content-Type.Charset') =~ /\S/;
+	print OFILE "\n\n";
     } else {
 	&do_log('notice', "Unable to open $expl/$dir/$filename") ;
 	return undef ; 
