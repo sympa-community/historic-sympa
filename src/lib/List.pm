@@ -4422,83 +4422,45 @@ sub add_parts {
     }
     
     ## No footer/header
-    unless (-f $footer or -f $header) {
+    unless (($footer and -s $footer) or ($header and -s $header)) {
  	return undef;
     }
     
-    my $parser = new MIME::Parser;
-    $parser->output_to_core(1);
-
-    ## Msg Content-Type
-    my $content_type = $msg->head->get('Content-Type');
-    
-    ## MIME footer/header
     if ($type eq 'append'){
-
-	my (@footer_msg, @header_msg);
-	if ($header) {
+	## append footer/header
+	my ($footer_msg, $header_msg);
+	if ($header and -s $header) {
 	    open HEADER, $header;
-	    @header_msg = <HEADER>;
+	    $header_msg = join '', <HEADER>;
 	    close HEADER;
+	    $header_msg = '' unless $header_msg =~ /\S/;
 	}
-	
-	if ($footer) {
+	if ($footer and -s $footer) {
 	    open FOOTER, $footer;
-	    @footer_msg = <FOOTER>;
+	    $footer_msg = join '', <FOOTER>;
 	    close FOOTER;
+	    $footer_msg = '' unless $footer_msg =~ /\S/;
 	}
-	
-	if (!$content_type or $content_type =~ /^text\/plain/i) {
-		    
-	    my @body;
-	    if (defined $msg->bodyhandle) {
-		@body = $msg->bodyhandle->as_lines;
-	    }
-
-	    $msg->bodyhandle (new MIME::Body::Scalar [@header_msg,@body,@footer_msg] );
-
-	}elsif ($content_type =~ /^multipart\/mixed/i) {
-	    ## Append to first part if text/plain
-	    
-	    if ($msg->parts and
-		$msg->parts(0)->effective_type =~ /^text\/plain/i) {
-		
-		my $part = $msg->parts(0);
-		my @body;
-		
-		if (defined $part->bodyhandle) {
-		    @body = $part->bodyhandle->as_lines;
-		}
-		$part->bodyhandle (new MIME::Body::Scalar [@header_msg,@body,@footer_msg] );
-	    }else {
-		&do_log('notice', 'First part of message not in text/plain ; ignoring footers and headers');
-	    }
-
-	}elsif ($content_type =~ /^multipart\/alternative/i) {
-	    ## Append to first text/plain part
-
-	    foreach my $part ($msg->parts) {
-		&do_log('debug3', 'TYPE: %s', $part->head->get('Content-Type', 0));
-		if ($part->head->get('Content-Type') =~ /^text\/plain/i) {
-
-		    my @body;
-		    if (defined $part->bodyhandle) {
-			@body = $part->bodyhandle->as_lines;
-		    }
-		    $part->bodyhandle (new MIME::Body::Scalar [@header_msg,@body,@footer_msg] );
-		    next;
-		}
+	if (length $header_msg or length $footer_msg) {
+	    if (&_append_parts($msg, $header_msg, $footer_msg)) {
+		$msg->sync_headers(Length => 'COMPUTE')
+		    if $msg->head->get('Content-Length');
 	    }
 	}
+    } else {
+	## MIME footer/header
+	my $parser = new MIME::Parser;
+	$parser->output_to_core(1);
 
-    }else {
+	my $content_type = $msg->effective_type || 'text/plain';
+
 	if ($content_type =~ /^multipart\/alternative/i || $content_type =~ /^multipart\/related/i) {
 
 	    &do_log('notice', 'Making $1 into multipart/mixed'); 
 	    $msg->make_multipart("mixed",Force=>1); 
 	}
 	
-	if ($header) {
+	if ($header and -s $header) {
 	    if ($header =~ /\.mime$/) {
 		
 		my $header_part = $parser->parse_in($header);    
@@ -4517,7 +4479,7 @@ sub add_parts {
 		$msg->add_part($header_part, 0);
 	    }
 	}
-	if ($footer) {
+	if ($footer and -s $footer) {
 	    if ($footer =~ /\.mime$/) {
 		
 		my $footer_part = $parser->parse_in($footer);    
@@ -4541,7 +4503,75 @@ sub add_parts {
     return $msg;
 }
 
+sub _append_parts {
+    my $part = shift;
+    my $header_msg = shift || '';
+    my $footer_msg = shift || '';
 
+    my $eff_type = $part->effective_type || 'text/plain';
+
+    if ($eff_type eq 'text/plain') {
+	my $cset = MIME::Charset->new('UTF-8');
+	$cset->encoder($part->head->mime_attr('Content-Type.Charset')||'NONE');
+
+	my $body;
+	if (defined $part->bodyhandle) {
+	    $body = $part->bodyhandle->as_string;
+	} else {
+	    $body = '';
+	}
+
+	## Only encodable footer/header are allowed.
+	if ($cset->encoder) {
+	    eval {
+		$header_msg = $cset->encode($header_msg, 1);
+	    };
+	    $header_msg = '' if $@;
+	    eval {
+		$footer_msg = $cset->encode($footer_msg, 1);
+	    };
+	    $footer_msg = '' if $@;
+	} else {
+	    $header_msg = '' if $header_msg =~ /[^\x01-\x7F]/;
+	    $footer_msg = '' if $footer_msg =~ /[^\x01-\x7F]/;
+	}
+
+	if (length $header_msg or length $footer_msg) {
+	    $header_msg .= "\n"
+		if length $header_msg and $header_msg !~ /\n$/;
+	    $body .= "\n"
+		if length $footer_msg and length $body and $body !~ /\n$/;
+
+	    my $io = $part->bodyhandle->open('w');
+	    unless (defined $io) {
+		&do_log('err', "List::add_parts: Failed to save message : $!");
+		return undef;
+	    }
+	    $io->print($header_msg);
+	    $io->print($body);
+	    $io->print($footer_msg);
+	    $io->close;
+	    $part->sync_headers(Length => 'COMPUTE')
+		if $part->head->get('Content-Length');
+	}
+	return 1;
+    } elsif ($eff_type eq 'multipart/mixed') {
+	## Append to first part if text/plain
+	if ($part->parts and
+	    &_append_parts($part->parts(0), $header_msg, $footer_msg)) {
+	    return 1;
+	}
+    } elsif ($eff_type eq 'multipart/alternative') {
+	## Append to first text/plain part
+	foreach my $p ($part->parts) {
+	    if (&_append_parts($p, $header_msg, $footer_msg)) {
+		return 1;
+	    }
+	}
+    }
+
+    return undef;
+}
 
 
 ## Delete a new user to Database (in User table)
