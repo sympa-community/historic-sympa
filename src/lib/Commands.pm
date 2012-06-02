@@ -2063,7 +2063,7 @@ sub distribute {
 	unless ($numsmtp) {
 	    &do_log('info', 'Message for %s from %s accepted but all subscribers use digest,nomail or summary',$which, $sender);
 	} 
-	&do_log('info', 'Message for %s from %s accepted (%d seconds, %d sessions, %d subscribers), message-id=%s, size=%d', $which, $sender, time - $start_time, $numsmtp, $list->get_total(), $hdr->get('Message-Id', 0), $bytes);
+	&do_log('info', 'Message for %s from %s accepted (%d seconds, %d sessions, %d subscribers), message-id=%s, size=%d', $which, $sender, time - $start_time, $numsmtp, $list->get_total(), $msg_id, $bytes);
 
 	unless ($quiet) {
 	    unless (&report::notice_report_msg('message_distributed',$sender,{'key' => $key,'message' => $message},$robot,$list)) {
@@ -2083,7 +2083,7 @@ sub distribute {
 	unless ($quiet) {
 	    &report::notice_report_msg('message_in_distribution_spool',$sender,{'key' => $key,'message' => $message},$robot,$list);
 	}
-	&do_log('info', 'Message for %s from %s moved in spool %s for distribution message-id=%s', $name, $sender, $Conf{'queuedistribute'},$hdr->get('Message-Id'));
+	&do_log('info', 'Message for %s from %s moved in spool %s for distribution message-id=%s', $name, $sender, $Conf{'queuedistribute'}, $msg_id);
     }
     unlink($file);
     
@@ -2264,7 +2264,7 @@ sub confirm {
 		&report::notice_report_msg('message_confirmed_and_in_distribution_spool',$sender,{'key' => $key,'message' => $message},$robot,$list);
 	    }
 
-	    &do_log('info', 'Message for list %s from %s confirmed ; file %s moved to spool %s for distribution message-id=%s', $name, $sender, $file, $Conf{'queuedistribute'},$hdr->get('Message-Id'));
+	    &do_log('info', 'Message for list %s from %s confirmed ; file %s moved to spool %s for distribution message-id=%s', $name, $sender, $file, $Conf{'queuedistribute'}, $msgid);
 	}
 	unlink($file);
 	
@@ -2355,8 +2355,7 @@ sub reject {
     unless  ($#sender_hdr == -1) {
 	my $rejected_sender = $sender_hdr[0]->address;
 	my %context;
-	$context{'subject'} = &MIME::EncWords::decode_mimewords($message->head->get('Subject', 0), Charset=>'utf8');
-	chomp($context{'subject'});
+	$context{'subject'} = &tools::decode_header($message, 'Subject');
 	$context{'rejected_by'} = $sender;
 	$context{'editor_msg_body'} = $editor_msg->{'msg'}->body_as_string if ($editor_msg) ;
 	

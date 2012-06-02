@@ -323,7 +323,6 @@ sub safefork {
 ###################################################### 
 sub checkcommand {
    my($msg, $sender, $robot) = @_;
-   do_log('debug3', 'tools::checkcommand(msg->head->get(subject): %s,%s)',$msg->head->get('Subject', 0), $sender);
 
    my($avoid, $i);
 
@@ -331,6 +330,8 @@ sub checkcommand {
 
    ## Check for commands in the subject.
    my $subject = $msg->head->get('Subject');
+
+    do_log('debug3', 'tools::checkcommand(msg->head->get(subject): %s,%s)', $subject, $sender);
 
    if ($subject) {
        if ($Conf::Conf{'misaddressed_commands_regexp'} && ($subject =~ /^$Conf::Conf{'misaddressed_commands_regexp'}\b/im)) {
@@ -1023,10 +1024,14 @@ sub smime_sign {
     ## crypted message, add this header in the crypted form.
     my $predefined_headers ;
     foreach my $header ($signed_msg->head->tags) {
-	$predefined_headers->{$header} = 1 if ($signed_msg->head->get($header)) ;
+	$predefined_headers->{$header} = 1
+	    if ($signed_msg->head->get($header));
     }
     foreach my $header ($in_msg->head->tags) {
-	$signed_msg->head->add($header,$in_msg->head->get($header)) unless $predefined_headers->{$header} ;
+	my $val = $in_msg->head->get($header);
+	next unless defined $val;
+	$signed_msg->head->add($header, $val)
+	    unless $predefined_headers->{$header};
     }
     
     my $messageasstring = $signed_msg->as_string ;
@@ -1301,7 +1306,9 @@ unlink ($temporary_file) unless ($main::options{'debug'}) ;
 	        if ($cryptedmsg->head->get($header)) ;
 	}
 	foreach my $header ($msg_header->tags) {
-	    $cryptedmsg->head->add($header,$msg_header->get($header)) 
+	    my $val = $msg_header->get($header);
+	    next unless defined $val;
+	    $cryptedmsg->head->add($header, $val) 
 	        unless $predefined_headers->{$header} ;
 	}
 
@@ -1317,8 +1324,9 @@ unlink ($temporary_file) unless ($main::options{'debug'}) ;
 sub smime_decrypt {
     my $msg = shift;
     my $list = shift ; ## the recipient of the msg
-    
-    &do_log('debug2', 'tools::smime_decrypt message msg from %s,%s',$msg->head->get('from', 0),$list->{'name'});
+    my $from = $msg->head->get('from');
+
+    &do_log('debug2', 'tools::smime_decrypt message msg from %s,%s', $from, $list->{'name'});
 
     ## an empty "list" parameter means mail to sympa@, listmaster@...
     my $dir = $list->{'dir'};
@@ -1411,7 +1419,10 @@ sub smime_decrypt {
     }
     
     foreach my $header ($msg->head->tags) {
-	$decryptedmsg->head->add($header,$msg->head->get($header)) unless $predefined_headers->{$header} ;
+	my $val = $msg->head->get($header);
+	next unless defined $val;
+	$decryptedmsg->head->add($header, $val)
+	    unless $predefined_headers->{$header} ;
     }
     ## Some headers from the initial message should not be restored
     ## Content-Disposition and Content-Transfer-Encoding if the result is multipart
@@ -3925,6 +3936,43 @@ sub addrencode {
 	return "\"$phrase\" <$addr>";
     } else {
 	return "<$addr>";
+    }
+}
+
+#*******************************************
+# Function : decode_header
+# Description : return header value decoded to UTF-8 or undef.
+#               trailing newline will be removed.
+#               If sep is given, return all occurrances joined by it.
+## IN : msg, tag, [sep]
+#*******************************************
+sub decode_header {
+    my $msg = shift;
+    my $tag = shift;
+    my $sep = shift || undef;
+
+    my $head;
+    if (ref $msg eq 'Message') {
+	$head = $msg->{'msg'}->head;
+    } elsif (ref $msg eq 'MIME::Entity') {
+	$head = $msg->head;
+    } elsif (ref $msg eq 'MIME::Head' or ref $msg eq 'Mail::Header') {
+	$head = $msg;
+    }
+    if (defined $sep) {
+	my @values = $head->get($tag);
+	return undef unless scalar @values;
+	foreach my $val (@values) {
+	    $val = MIME::EncWords::decode_mimewords($val, Charset => 'UTF-8');
+	    chomp $val;
+	}
+	return join $sep, @values;
+    } else {
+	my $val = $head->get($tag);
+	return undef unless defined $val;
+	$val = MIME::EncWords::decode_mimewords($val, Charset => 'UTF-8');
+	chomp $val;
+	return $val;
     }
 }
 

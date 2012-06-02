@@ -2816,13 +2816,10 @@ sub send_msg_digest {
     my @all_msg;
     foreach $i (0 .. $#list_of_mail){
 	my $mail = $list_of_mail[$i];
-	my $subject = &MIME::EncWords::decode_mimewords($mail->head->get('Subject', 0), Charset=>'utf8');
-	chomp $subject;
-	my $from = &MIME::EncWords::decode_mimewords($mail->head->get('From', 0), Charset=>'utf8');
-	chomp $from;    
-	my $date = &MIME::EncWords::decode_mimewords($mail->head->get('Date', 0), Charset=>'utf8');
-	chomp $date;    
-	
+	my $subject = &tools::decode_header($mail, 'Subject');
+	my $from = &tools::decode_header($mail, 'From');
+	my $date = &tools::decode_header($mail, 'Date');
+
         my $msg = {};
 	$msg->{'id'} = $i+1;
         $msg->{'subject'} = $subject;	
@@ -3204,10 +3201,10 @@ sub send_msg {
     my (@tabrcpt, @tabrcpt_notice, @tabrcpt_txt, @tabrcpt_html, @tabrcpt_url, @tabrcpt_verp, @tabrcpt_notice_verp, @tabrcpt_txt_verp, @tabrcpt_html_verp, @tabrcpt_url_verp);
     my $mixed = ($message->{'msg'}->head->get('Content-Type') =~ /multipart\/mixed/i);
     my $alternative = ($message->{'msg'}->head->get('Content-Type') =~ /multipart\/alternative/i);
+    my $recip = $message->{'msg'}->head->get('X-Sympa-Receipient');
  
-    if ( $message->{'msg'}->head->get('X-Sympa-Receipient') ) {
-
-	@tabrcpt = split /,/, $message->{'msg'}->head->get('X-Sympa-Receipient', 0);
+    if ($recip) {
+	@tabrcpt = split /,/, $recip;
 	$message->{'msg'}->head->delete('X-Sympa-Receipient');
 
     } else {
@@ -3266,9 +3263,9 @@ sub send_msg {
 		     (! -r $Conf::Conf{'ssl_cert_dir'}.'/'.&tools::escape_chars($user->{'email'}) &&
 		      ! -r $Conf::Conf{'ssl_cert_dir'}.'/'.&tools::escape_chars($user->{'email'}.'@enc' ))) {
 		## Missing User certificate
-		unless ($self->send_file('x509-user-cert-missing', $user->{'email'}, $robot, {'mail' => {'subject' => $message->{'msg'}->head->get('Subject', 0),
-													 'sender' => $message->{'msg'}->head->get('From', 0)},
-											      'auto_submitted' => 'auto-generated'})) {
+		my $subject = $message->{'msg'}->head->get('Subject');
+		my $sender = $message->{'msg'}->head->get('From');
+		unless ($self->send_file('x509-user-cert-missing', $user->{'email'}, $robot, {'mail' => {'subject' => $subject, 'sender' => $sender}, 'auto_submitted' => 'auto-generated'})) {
 		    &do_log('notice',"Unable to send template 'x509-user-cert-missing' to $user->{'email'}");
 		}
 	    }else{
@@ -3584,7 +3581,7 @@ sub send_to_editor {
        }
    }
    
-   my $subject = MIME::EncWords::decode_mimewords($hdr->get('Subject', 0), Charset=>'utf8');
+   my $subject = tools::decode_header($hdr, 'Subject');
    my $param = {'modkey' => $modkey,
 		'boundary' => $boundary,
 		'msg_from' => $message->{'sender'},
@@ -3920,14 +3917,11 @@ sub archive_send_last {
    my @msglist;
    my $msg = {};
    $msg->{'id'} = 1;
-   
-   $msg->{'subject'} = &MIME::EncWords::decode_mimewords($mail->{'msg'}->head->get('Subject', 0), Charset=>'utf8');
-   chomp $msg->{'subject'};   
-   $msg->{'from'} = &MIME::EncWords::decode_mimewords($mail->{'msg'}->head->get('From', 0), Charset=>'utf8');
-   chomp $msg->{'from'};    	        	
-   $msg->{'date'} = &MIME::EncWords::decode_mimewords($mail->{'msg'}->head->get('Date', 0), Charset=>'utf8');
-   chomp $msg->{'date'};
-   
+
+   $msg->{'subject'} = &tools::decode_header($mail, 'Subject');
+   $msg->{'from'} = &tools::decode_header($mail, 'From');
+   $msg->{'date'} = &tools::decode_header($mail, 'Date');
+
    $msg->{'full_msg'} = $mail->{'msg'}->as_string;
    
    push @msglist,$msg;
@@ -11375,7 +11369,7 @@ sub compute_topic {
     # We convert it to Unicode for case-ignore match with non-ASCII keywords.
     my $mail_string = '';
     if ($self->{'admin'}{'msg_topic_keywords_apply_on'} eq 'subject'){
-	$mail_string = &MIME::EncWords::decode_mimewords($msg->head->get('Subject', 0), Charset=>'_UNICODE_')."\n";
+	$mail_string = Encode::decode_utf8(&tools::decode_header($msg, 'Subject'))."\n";
     }
     unless ($self->{'admin'}{'msg_topic_keywords_apply_on'} eq 'subject') {
 	# get bodies of any text/* parts, not digging nested subparts.

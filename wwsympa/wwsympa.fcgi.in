@@ -6331,10 +6331,10 @@ sub do_skinsedit {
 
 
 	 $param->{'spool'}{$id}{'size'} = int( (-s "$Conf{'queuemod'}/$msg") / 1024 + 0.5);
-	 $param->{'spool'}{$id}{'subject'} =  &MIME::EncWords::decode_mimewords($mail->{'msg'}->head->get('Subject', 0), Charset=>'utf8');
+	 $param->{'spool'}{$id}{'subject'} =  &tools::decode_header($mail, 'Subject');
 	 $param->{'spool'}{$id}{'subject'} ||= 'no_subject';
-	 $param->{'spool'}{$id}{'date'} = &MIME::EncWords::decode_mimewords($mail->{'msg'}->head->get('Date', 0), Charset=>'utf8');
-	 $param->{'spool'}{$id}{'from'} = &MIME::EncWords::decode_mimewords($mail->{'msg'}->head->get('From', 0), Charset=>'utf8');
+	 $param->{'spool'}{$id}{'date'} = &tools::decode_header($mail, 'Date');
+	 $param->{'spool'}{$id}{'from'} = &tools::decode_header($mail, 'From');
 	 $param->{'spool'}{$id}{'spam_status'} = $mail->{'spam_status'};
 	 foreach my $field ('subject','date','from') {
 	     $param->{'spool'}{$id}{$field} =~ s/&/&amp;/g;
@@ -6693,8 +6693,7 @@ sub do_skinsedit {
 		 my $rejected_sender = $sender_hdr[0]->address;
 		 unless ($in{'quiet'}) {
 		     my %context;
-		     $context{'subject'} = &MIME::EncWords::decode_mimewords($msg->head->get('Subject', 0), Charset=>'utf8');
-		     chomp $context{'subject'};
+		     $context{'subject'} = &tools::decode_header($msg, 'Subject');
 		     $context{'rejected_by'} = $param->{'user'}{'email'};
 		     $context{'template_used'} = $in{'message_template'};
 		     unless ($list->send_file($in{'message_template'}, $rejected_sender, $robot, \%context)) {
@@ -15492,14 +15491,11 @@ sub do_compose_mail {
      my $msg = $parser->parse(\*FILE);
      my $head = $msg->head();
      # headers will be encoded later.
-     $param->{'subject'} = MIME::EncWords::decode_mimewords($head->get('Subject', 0), Charset=>'utf8');
-     chomp $param->{'subject'};
+     $param->{'subject'} = tools::decode_header($head, 'Subject');
      $param->{'subject'} = &tools::escape_html($param->{'subject'});
-     $param->{'from'} = MIME::EncWords::decode_mimewords($head->get('From', 0), Charset=>'utf8');
-     chomp  $param->{'from'};
+     $param->{'from'} = tools::decode_header($head, 'From');
      $param->{'from'} = &tools::escape_html($param->{'from'});
-     $param->{'date'} = MIME::EncWords::decode_mimewords($head->get('Date', 0), Charset=>'utf8');
-     chomp  $param->{'date'};
+     $param->{'date'} = tools::decode_header($head, 'Date');
      $param->{'date'} =  &tools::escape_html($param->{'date'});
      $param->{'message_id'} = &tools::clean_msg_id($head->get('Message-Id'));
 

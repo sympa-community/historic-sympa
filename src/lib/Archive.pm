@@ -161,15 +161,10 @@ sub scan_dir_archive {
 	my $msg = {};
 	$msg->{'id'} = $i;
 
-	$msg->{'subject'} = &MIME::EncWords::decode_mimewords($mail->{'msg'}->head->get('Subject', 0), Charset=>'utf8');
-	chomp $msg->{'subject'};
+	$msg->{'subject'} = &tools::decode_header($mail, 'Subject');
+	$msg->{'from'} = &tools::decode_header($mail, 'From');
+	$msg->{'date'} = &tools::decode_header($mail, 'Date');
 
-	$msg->{'from'} = &MIME::EncWords::decode_mimewords($mail->{'msg'}->head->get('From', 0), Charset=>'utf8');
-	chomp $msg->{'from'};    	        	
-        
-	$msg->{'date'} = &MIME::EncWords::decode_mimewords($mail->{'msg'}->head->get('Date', 0), Charset=>'utf8');
-	chomp $msg->{'date'};
-	
 	$msg->{'full_msg'} = $mail->{'msg'}->as_string;
 
 	&do_log('debug','Archive::scan_dir_archive adding message %s in archive to send', $msg->{'subject'});
