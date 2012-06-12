@@ -14672,7 +14672,7 @@ sub do_upload_pictures {
     # type of the file
     my $filetype;
     if ($fn =~ /\.(jpg|jpeg|png|gif)$/i) {
-	$filetype = $1; 
+	$filetype = lc $1; 
     }
     else {$filetype = undef};
     
