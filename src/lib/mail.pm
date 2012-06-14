@@ -26,6 +26,7 @@ use strict;
 use Exporter;
 use Carp;
 use POSIX qw(sysconf);
+use Time::Local;
 use MIME::Charset;
 use MIME::Tools;
 
@@ -169,7 +170,7 @@ sub mail_file {
 		last;
 	    }
 		
-	    foreach my $header ('to','from','subject','reply-to','mime-version', 'content-type','content-transfer-encoding') {
+	    foreach my $header ('date', 'to','from','subject','reply-to','mime-version', 'content-type','content-transfer-encoding') {
 		if ($line=~/^$header:/i) {
 		    $header_ok{$header} = 1;
 		    last;
@@ -180,6 +181,25 @@ sub mail_file {
    
     ## ADD MISSING HEADERS
     my $headers="";
+
+    unless ($header_ok{'date'}) {
+	my $now = time;
+	my $tzoff = timegm(localtime $now) - $now;
+	my $sign;
+	if ($tzoff < 0) {
+	   ($sign, $tzoff) = ('-', -$tzoff);
+	} else {
+	   $sign = '+';
+	}
+	$tzoff = sprintf '%s%02d%02d',
+			 $sign, int($tzoff / 3600), int($tzoff / 60) % 60;
+	Language::PushLang('en_US');
+	$headers .= 'Date: ' .
+		    POSIX::strftime("%a, %d %b %Y %H:%M:%S $tzoff",
+				    localtime $now) .
+		    "\n";
+	Language::PopLang();
+    }
 
     unless ($header_ok{'to'}) {
 
