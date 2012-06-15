@@ -1024,14 +1024,14 @@ sub smime_sign {
     ## crypted message, add this header in the crypted form.
     my $predefined_headers ;
     foreach my $header ($signed_msg->head->tags) {
-	$predefined_headers->{$header} = 1
+	$predefined_headers->{lc $header} = 1
 	    if ($signed_msg->head->get($header));
     }
-    foreach my $header ($in_msg->head->tags) {
-	my $val = $in_msg->head->get($header);
-	next unless defined $val;
-	$signed_msg->head->add($header, $val)
-	    unless $predefined_headers->{$header};
+    foreach my $header (split /\n(?![ \t])/, $in_msg->head->as_string) {
+	next unless $header =~ /^([^\s:]+)\s*:\s*(.*)$/s;
+	my ($tag, $val) = ($1, $2);
+	$signed_msg->head->add($tag, $val)
+	    unless $predefined_headers->{lc $tag};
     }
     
     my $messageasstring = $signed_msg->as_string ;
@@ -1302,14 +1302,14 @@ unlink ($temporary_file) unless ($main::options{'debug'}) ;
         ## crypted message, add this header in the crypted form.
 	my $predefined_headers ;
 	foreach my $header ($cryptedmsg->head->tags) {
-	    $predefined_headers->{$header} = 1 
+	    $predefined_headers->{lc $header} = 1 
 	        if ($cryptedmsg->head->get($header)) ;
 	}
-	foreach my $header ($msg_header->tags) {
-	    my $val = $msg_header->get($header);
-	    next unless defined $val;
-	    $cryptedmsg->head->add($header, $val) 
-	        unless $predefined_headers->{$header} ;
+	foreach my $header (split /\n(?![ \t])/, $msg_header->as_string) {
+	    next unless $header =~ /^([^\s:]+)\s*:\s*(.*)$/s;
+	    my ($tag, $val) = ($1, $2);
+	    $cryptedmsg->head->add($tag, $val) 
+	        unless $predefined_headers->{lc $tag};
 	}
 
     }else{
@@ -1415,14 +1415,14 @@ sub smime_decrypt {
     ## decrypted message, add this header in the decrypted form.
     my $predefined_headers ;
     foreach my $header ($decryptedmsg->head->tags) {
-	$predefined_headers->{$header} = 1 if ($decryptedmsg->head->get($header)) ;
+	$predefined_headers->{lc $header} = 1
+	    if ($decryptedmsg->head->get($header));
     }
-    
-    foreach my $header ($msg->head->tags) {
-	my $val = $msg->head->get($header);
-	next unless defined $val;
-	$decryptedmsg->head->add($header, $val)
-	    unless $predefined_headers->{$header} ;
+    foreach my $header (split /\n(?![ \t])/, $msg->head->as_string) {
+	next unless $header =~ /^([^\s:]+)\s*:\s*(.*)$/s;
+	my ($tag, $val) = ($1, $2);
+	$decryptedmsg->head->add($tag, $val)
+	    unless $predefined_headers->{lc $tag};
     }
     ## Some headers from the initial message should not be restored
     ## Content-Disposition and Content-Transfer-Encoding if the result is multipart
