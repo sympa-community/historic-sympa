@@ -1570,7 +1570,7 @@ my $birthday = time ;
  	 print "Content-Type: application/rss+xml; charset=utf-8\n\n";
  
  	 ## Icons
- 	 $param->{'icons_url'} = $Conf{'static_content_url'}.'/icons';
+ 	 $param->{'icons_url'} = &Conf::get_robot_conf($robot, 'static_content_url').'/icons';
  
  	 ## Retro compatibility concerns
  	 $param->{'active'} = 1;
@@ -2289,7 +2289,7 @@ sub send_html {
     print "Content-Type: text/html\n\n";
     
     ## Icons
-    $param->{'icons_url'} =  $Conf{'static_content_url'}.'/icons';
+    $param->{'icons_url'} = &Conf::get_robot_conf($robot, 'static_content_url').'/icons';
     
     
     ## Retro compatibility concerns
