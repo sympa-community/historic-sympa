@@ -18,10 +18,9 @@
   <option  value="quiet">[%|loc %]Do Not Notify[%END%]</option>	 
    [% FOREACH file = available_files %]
   <option  value="reject_[%  file  %]"> [%  file  %]</option> 
-
- [%- END- %]
+   [%- END- %]
+  </select>
 </fieldset>
-</select>
 
 </form>
 
