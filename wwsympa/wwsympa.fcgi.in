@@ -573,7 +573,9 @@ my %required_args = ('active_lists' => ['for|count'],
 ## Defines the required privileges to access privileged actions
 ## You can define a set ofequiivalent privileges in the ARRAYREF
 my %required_privileges = ('admin' => ['owner','editor'],
+			   'arc_delete' => ['owner'],
 			   'arc_download' => ['owner'],
+			   'arc_manage' => ['owner'],
 			   'blacklist' => ['owner','editor'],
 			   'close_list' => ['privileged_owner'],
 			   'close_list_request' => ['privileged_owner'],
@@ -2240,6 +2242,7 @@ sub check_action_parameters {
 	  &wwslog('info',"missing parameter '$arg_name'");
 	  &web_db_log({'status' => 'error',
 		       'error_type' => 'missing_parameter'});
+	  delete $param->{'list'};
 	  return undef;
 	}
       }
@@ -2261,6 +2264,7 @@ sub check_action_parameters {
       &wwslog('info','authorization failed, insufficient privileges');
       &web_db_log({'status' => 'error',
 		   'error_type' => 'authorization'});		      
+      delete $param->{'list'};
       return undef;
     }
   }
