@@ -1097,7 +1097,7 @@ sub probe_db {
 		$found = 1 if ($t1 eq $t2);
 	    }
 	    unless ($found) {
-		unless ($dbh->do("CREATE TABLE $t1 (temporary INT)")) {
+		unless ($dbh->do("CREATE TABLE $t1 (temporary INT) DEFAULT CHARACTER SET utf8")) {
 		    &do_log('err', 'Could not create table %s in database %s : %s', $t1, $Conf::Conf{'db_name'}, $dbh->errstr);
 		    next;
 		}
