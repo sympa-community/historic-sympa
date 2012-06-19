@@ -940,7 +940,6 @@ my $birthday = time ;
 
  ## Main loop
  my $loop_count;
- my $start_time = &POSIX::strftime("%d %b %Y at %H:%M:%S", localtime(time));
  while ($query = &new_loop()) {
 
      undef %::changed_params;
@@ -2280,15 +2279,15 @@ sub send_html {
     ## Send HTML
     if ($param->{'date'}) {
 	Language::PushLang("en_US");
-	  printf "Date: %s\n", &POSIX::strftime('%a, %d %b %Y %R %z',localtime(time));
-	  Language::PopLang();
-      }
+	printf "Date: %s\n", &POSIX::strftime("%a, %d %b %Y %H:%M:%S GMT", gmtime(time));
+	Language::PopLang();
+    }
     ## If we set the header indicating the last time the file to send was modified, add an HTTP header (limitate web harvesting).
     if ($param->{'header_date'}) {
 	Language::PushLang("en_US");
-	  printf "Last-Modified: %s\n", &POSIX::strftime('%a, %d %b %Y %R %z',localtime($param->{'header_date'}));
-	  Language::PopLang();
-      }
+	printf "Last-Modified: %s\n", &POSIX::strftime('%a, %d %b %Y %H:%M:%S GMT', gmtime($param->{'header_date'}));
+	Language::PopLang();
+    }
     print "Cache-control: no-cache\n"  unless ( $param->{'action'} eq 'arc')  ;
     print "Content-Type: text/html\n\n";
     
@@ -2595,7 +2594,7 @@ Use it to create a List object and initialize output parameters.
      &wwslog('debug2', 'check_param_out');
 
      $param->{'loop_count'} = $loop_count;
-     $param->{'start_time'} = $start_time;
+     $param->{'start_time'} = gettext_strftime "%d %b %Y at %H:%M:%S", localtime(time);
      $param->{'process_id'} = $$;
 
      ## listmaster has owner and editor privileges for the list
@@ -2881,7 +2880,7 @@ sub do_ticket {
 	    $param->{'user'} =  &List::get_user_db($session->{'email'});
 	    $param->{'user'}{'email'} =  $session->{'email'} ;
 	    $param->{'last_login _host'} = $param->{'user'}{'last_login_host'};   
-	    $param->{'last_login_date'} = &POSIX::strftime("%d %b %Y at %H:%M:%S", localtime($param->{'user'}{'last_login_date'})) if ($param->{'user'}{'last_login_date'}); 
+	    $param->{'last_login_date'} = gettext_strftime "%d %b %Y at %H:%M:%S", localtime($param->{'user'}{'last_login_date'}) if ($param->{'user'}{'last_login_date'}); 
 	    &List::update_user_db($param->{'user'}{'email'},{last_login_date =>time(),last_login_host=>$ip }) ;
 	}elsif($param->{'ticket_context'}{'result'} eq 'closed'){
 	    &wwslog('info', 'do_ticket(%s) : Refusing to perform login because the ticket has been used before', $in{'ticket'});
@@ -3002,7 +3001,7 @@ sub do_ticket {
      } 
      $param->{'user'} = $data->{'user'};
      $param->{'last_login_host'} = $data->{'user'}{'last_login_host'};
-     $param->{'last_login_date'} = &POSIX::strftime("%d %b %Y at %H:%M:%S", localtime($data->{'user'}{'last_login_date'})) if ($data->{'user'}{'last_login_date'});
+     $param->{'last_login_date'} = gettext_strftime "%d %b %Y at %H:%M:%S", localtime($data->{'user'}{'last_login_date'}) if ($data->{'user'}{'last_login_date'});
      $session->{'auth'} = $data->{'auth'};
      my $email = lc($param->{'user'}{'email'});
      $session->{'email'} = $email;
