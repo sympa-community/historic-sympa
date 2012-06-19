@@ -940,6 +940,7 @@ my $birthday = time ;
 
  ## Main loop
  my $loop_count;
+ my $start_time = time;
  while ($query = &new_loop()) {
 
      undef %::changed_params;
@@ -2594,7 +2595,7 @@ Use it to create a List object and initialize output parameters.
      &wwslog('debug2', 'check_param_out');
 
      $param->{'loop_count'} = $loop_count;
-     $param->{'start_time'} = gettext_strftime "%d %b %Y at %H:%M:%S", localtime(time);
+     $param->{'start_time'} = gettext_strftime "%d %b %Y at %H:%M:%S", localtime($start_time);
      $param->{'process_id'} = $$;
 
      ## listmaster has owner and editor privileges for the list
