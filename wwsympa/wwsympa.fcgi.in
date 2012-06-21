@@ -8124,12 +8124,14 @@ sub do_set_pending_list_request {
      }
 
      ## Notify listmasters
+     my @listmasters = split /\s*,\s*/,
+			     &Conf::get_robot_conf($robot, 'listmaster');
      if ($in{'status'} eq 'open') {
-	 unless ($list->send_file('list_created', &Conf::get_robot_conf($robot, 'listmaster'), $robot,{})) {
+	 unless ($list->send_file('list_created', \@listmasters, $robot, {})) {
 	     &wwslog('notice',"Unable to send template 'list_created' to listmaster");
 	 }
      }elsif ($in{'status'} eq 'closed') {
-	 unless ($list->send_file('list_rejected', &Conf::get_robot_conf($robot, 'listmaster'), $robot,{})) {
+	 unless ($list->send_file('list_rejected', \@listmasters, $robot, {})) {
 	     &wwslog('notice',"Unable to send template 'list_rejected' to listmaster");
 	 }
      }

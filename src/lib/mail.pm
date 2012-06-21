@@ -202,7 +202,8 @@ sub mail_file {
     }
 
     unless ($header_ok{'to'}) {
-
+	# Currently, bare e-mail address is assumed.  Complex ones such as
+	# "phrase" <email> won't be allowed.
 	if (ref ($rcpt)) {
 	    if ($data->{'to'}) {
 		$to = $data->{'to'};
@@ -212,10 +213,7 @@ sub mail_file {
 	}else{
 	    $to = $rcpt;
 	}   
-	$headers .= "To: ".MIME::EncWords::encode_mimewords(
-	    Encode::decode('utf8', $to),
-	    'Encoding' => 'A', 'Charset' => $data->{'charset'}, 'Field' => 'To'
-	    )."\n"; 
+	$headers .= "To: $to\n";
     }     
     unless ($header_ok{'from'}) {
 	if ($data->{'from'} eq 'sympa') {
