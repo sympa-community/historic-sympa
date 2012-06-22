@@ -7764,13 +7764,9 @@ sub do_remove_arc {
 	 &report::reject_report_web('user','missing_arg',{'argument' => 'key_word'},$param->{'action'});
 	 &wwslog('info','do_arcsearch: no search term');
 	 return undef;
-     }elsif ($in{'key_word'} =~ /[<>\\\*\$]/) {
-	 &report::reject_report_web('user','syntax_errors',{'params' => 'key_word'},$param->{'action'});
-	 &wwslog('info','do_arcsearch: syntax error');
-	 return undef;
      }
 
-     $param->{'key_word'} = &tools::escape_regexp($in{'key_word'});
+     $param->{'key_word'} = $in{'key_word'};
 
      $search->limit ($in{'limit'});
 
@@ -7780,15 +7776,17 @@ sub do_remove_arc {
      $search->match (1) 
 	 if (($in{'match'} eq 'partial') or ($in{'match'} eq '1'));
 
-     my @words = split(/\s+/,&tools::escape_regexp($in{'key_word'}));
-     $search->words (\@words);
      $search->clean_words ($in{'key_word'});
-     my @clean_words = @words;
-
-     for my $i (0 .. $#words) {
-	 $words[$i] =~ s,/,\\/,g;
-	 $words[$i] = '\b' . $words[$i] . '\b' if ($in{'match'} eq 'exact');
+     my @clean_words = split(/\s+/, $in{'key_word'});
+     my @words = @clean_words;
+     foreach my $w (@words) {
+	 $w = &tools::escape_regexp($w);
+	 $w =~ s,/,\\/,g;
+	 $w = '\b' . $w . '\b'
+	     if $in{'match'} eq 'exact';
      }
+     $search->words(\@words);
+
      $search->key_word (join('|',@words));
 
      if ($in{'case'} eq 'off') {
@@ -7845,11 +7843,6 @@ sub do_remove_arc {
 
      $param->{'res'} = $search->res;
 
-     ## Decode subject header fields
-     foreach my $m (@{$param->{'res'}}) {
-	 $m->{'subj'} = &MIME::EncWords::decode_mimewords($m->{'subj'}, Charset=>'utf8');
-     }
-
      return 1;
  }
 
@@ -7891,19 +7884,21 @@ sub do_remove_arc {
 	 return undef;
      }
 
-     $param->{'msgid'} = &tools::unescape_chars($in{'msgid'});
-     $in{'msgid'} = &tools::escape_regexp($in{'msgid'});
-
-     ## Mhonarc escapes some characters : '-' (&#45;) and '&' (&#38;)
-     $in{'msgid'} =~ s/\&/\&\#38\;/g;
-     $in{'msgid'} =~ s/\-/\&\#45\;/g;
+     $in{'msgid'} = &tools::unescape_chars($in{'msgid'});
+     $param->{'msgid'} = $in{'msgid'};
 
      $search->limit (1);
 
-     my @words = split(/\s+/,$in{'msgid'});
-     $search->words (\@words);
      $search->clean_words ($in{'msgid'});
-     my @clean_words = @words;
+     my @words = split(/\s+/, $in{'msgid'});
+     foreach my $w (@words) {
+	$w = &tools::escape_regexp($w);
+	$w =~ s,/,\\/,g;
+	# Mhonarc escapes some characters : '-' (&#45;) and '&' (&#38;)
+	$w =~ s/\&/\&\#38\;/g;
+	$w =~ s/\-/\&\#45\;/g;
+     }
+     $search->words (\@words);
 
      $search->key_word (join('|',@words));
 
