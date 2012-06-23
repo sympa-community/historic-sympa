@@ -7584,7 +7584,12 @@ sub do_remove_arc {
 	 next unless (open MAIL,"$arcpath/arctxt/$file") ;
 	 while (<MAIL>) {
 	     last if /^$/ ;
-	     if (/^Message-id:\s?<?([^>\s]+)>?\s?/i ) {
+	     my $idline = $_;
+	     if (/^Message-id\s*:\s*$/i) {
+		chomp $idline;
+		$idline .= <MAIL>;
+	     }
+	     if ($idline =~ /^Message-id\s*:\s*<?([^>\s]+)>?\s?/i ) {
 		 my $id = $1;
 		 if ($id eq $in{'msgid'}) {
 		     $msgfile = $file ;
@@ -7662,7 +7667,12 @@ sub do_remove_arc {
 	 next unless (open MAIL,"$arcpath/arctxt/$file") ;
 	 while (<MAIL>) {
 	     last if /^$/ ;
-	     if (/^Message-id:\s?<?([^>\s]+)>?\s?/i ) {
+	     my $idline = $_;
+	     if (/^Message-id\s*:\s*$/i) {
+		chomp $idline;
+		$idline .= <MAIL>;
+	     }
+	     if ($idline =~ /^Message-id\s*:\s*<?([^>\s]+)>?\s?/i ) {
 		 my $id = $1;
 		 if ($id eq $in{'msgid'}) {
 		     $msgfile = $file ;
