@@ -5116,7 +5116,7 @@ sub get_subscriber {
     my $user = &get_subscriber_no_object($options);
 
     unless($user){
-	do_log('err','Unable to retrieve information from database for user %s', $email);
+	##do_log('err','Unable to retrieve information from database for user %s', $email);
 	return undef;
     }
     $user->{'reception'} = $self->{'admin'}{'default_user_options'}{'reception'}
