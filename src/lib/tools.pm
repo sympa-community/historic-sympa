@@ -2327,7 +2327,14 @@ sub get_filename {
 ######################################################
 sub make_tt2_include_path {
     my ($robot,$dir,$lang,$list) = @_;
-    &Log::do_log('debug3','tools::make_tt2_include_path(%s,%s,%s,%s)',$robot,$dir,$lang,$list);
+
+    my $listname;
+    if (ref $list eq 'List') {
+	$listname = $list->{'name'};
+    } else {
+	$listname = $list;
+    }
+    &Log::do_log('debug3', 'tools::make_tt2_include_path(%s,%s,%s,%s)', $robot, $dir, $lang, $listname);
 
     my @include_path;
 
