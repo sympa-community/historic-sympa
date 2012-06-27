@@ -23,6 +23,9 @@ package Archive;
 
 use strict;
 
+use Encode qw(decode_utf8 encode_utf8);
+use HTML::Entities qw(decode_entities);
+
 use Log;
 
 my $serial_number = 0; # incremented on each archived mail
@@ -269,6 +272,7 @@ sub load_html_message {
 
 	if (/^<!--(\S+): (.*) -->$/) {
 	    my ($key, $value) = ($1, $2);
+	    $value = encode_utf8(decode_entities(decode_utf8($value)));
 	    if ($key eq 'X-From-R13') {
 		$metadata{'X-From'} = $value;
 		$metadata{'X-From'} =~ tr/N-Z[@A-Mn-za-m/@A-Z[a-z/; ## Mhonarc protection of email addresses
