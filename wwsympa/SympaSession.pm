@@ -79,8 +79,7 @@ sub new {
 	}
 	if ($status eq 'not_found') {
 	    do_log('info',"SympaSession::new ignoring unknown session cookie '$cookie'" ); # start a new session (may ne a fake cookie)
-	    $session->set_cookie('localhost', 'now'); # destroy cookie if any
-	    return (new SympaSession($robot, {}));
+	    return (new SympaSession ($robot));
 	}
 	# checking if the client host is unchanged during the session brake sessions when using multiple proxy with
         # load balancing (round robin, etc). This check is removed until we introduce some other method
