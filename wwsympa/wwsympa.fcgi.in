@@ -1019,6 +1019,7 @@ my $birthday = time ;
  
      $param->{'cookie_domain'} = $Conf{'robots'}{$robot}{'cookie_domain'} if $Conf{'robots'}{$robot};
      $param->{'cookie_domain'} ||= $wwsconf->{'cookie_domain'};
+
      $ip = $ENV{'REMOTE_HOST'};
      $ip = $ENV{'REMOTE_ADDR'} unless ($ip);
      $ip = 'undef' unless ($ip);
@@ -1030,7 +1031,6 @@ my $birthday = time ;
          &wwslog('notice', 'Cookie_domain(%s) does NOT match HTTP_HOST; setting cookie_domain to %s', $param->{'cookie_domain'}, $http_host);
          $param->{'cookie_domain'} = $http_host;
      }
-
      &Log::set_log_level($Conf{'robots'}{$robot}{'log_level'});
 
      ## Sympa parameters in $param->{'conf'}
@@ -3115,7 +3115,8 @@ sub do_sso_login {
 	    $in{'action'} = 'redirect';
 	    $param->{'redirect_to'} = $redirect_url;
 	    $param->{'bypass'} = 'extreme';
-	    $session->set_cookie('localhost','session');
+	    $session->set_cookie($param->{'cookie_domain'},'session');
+	    #$session->set_cookie('localhost','session');
 	    print "Location: $param->{'redirect_to'}\n\n";
 	}
 	
@@ -3562,7 +3563,8 @@ sub do_redirect {
     # because of some bug Sympa did redirection to un empty URL. Next line should prevent it.
     $redirect_to ||= $param->{'base_url'}.$param->{'path_cgi'};
 
-    $session->set_cookie('localhost','session');
+    #$session->set_cookie('localhost','session');
+    $session->set_cookie($param->{'cookie_domain'},'session');
     print "Location: $redirect_to\n\n";
     $param->{'bypass'} = 'extreme';
     return 1;
