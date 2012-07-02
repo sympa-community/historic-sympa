@@ -827,7 +827,7 @@ sub smtpto {
    
 
    if (!pipe(IN, OUT)) {
-       fatal_err(sprintf gettext("Unable to create a channel in smtpto: %m"), $!); ## No return
+       fatal_err(sprintf gettext("Unable to create a channel in smtpto: %s"), "$!"); ## No return
        }
    $pid = &tools::safefork();
    $pid{$pid} = 0;

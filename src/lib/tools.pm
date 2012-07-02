@@ -1723,7 +1723,7 @@ sub cookie_changed {
 	}
 	umask $umask;
 	chown [getpwnam(Sympa::Constants::USER)]->[2], [getgrnam(Sympa::Constants::GROUP)]->[2], "$Conf::Conf{'etc'}/cookies.history";
-	printf COOK "$current ";
+	print COOK "$current ";
 	close COOK;
 	return(0);
     }
@@ -1769,7 +1769,7 @@ sub load_mime_types {
         next unless (-r $loc);
 
         unless(open (CONF, $loc)) {
-            printf STDERR "load_mime_types: unable to open $loc\n";
+            print STDERR "load_mime_types: unable to open $loc\n";
             return undef;
         }
     }
@@ -2564,7 +2564,7 @@ sub is_a_crawler {
 #	return ($Conf::Conf{$robot}{'crawlers_detection'}{'user_agent_string'}{$context->{'user_agent_string'}});
 #    }
 
-    # open (TMP, ">> /tmp/dump1"); printf TMP "dump de la conf dans is_a_crawler : \n"; &tools::dump_var($Conf::Conf{'crawlers_detection'}, 0,\*TMP);     close TMP;
+    # open (TMP, ">> /tmp/dump1"); print TMP "dump de la conf dans is_a_crawler : \n"; &tools::dump_var($Conf::Conf{'crawlers_detection'}, 0,\*TMP);     close TMP;
     return $Conf::Conf{'crawlers_detection'}{'user_agent_string'}{$context->{'user_agent_string'}};
 }
 
@@ -3395,7 +3395,7 @@ sub add_in_blacklist {
 	&do_log('info','do_blacklist : append to file %s',$file);
 	return undef;
     }
-    printf BLACKLIST "$entry\n";
+    print BLACKLIST "$entry\n";
     close BLACKLIST;
 
 }

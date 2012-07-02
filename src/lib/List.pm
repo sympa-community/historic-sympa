@@ -11778,10 +11778,10 @@ sub store_subscription_request {
     }
 
     ## First line of the file contains the user email address + his/her name
-    printf REQUEST "$email\t$gecos\n";
+    print REQUEST "$email\t$gecos\n";
 
     ## Following lines may contain custom attributes in an XML format
-    printf REQUEST "$custom_attr\n";
+    print REQUEST "$custom_attr\n";
 
     close REQUEST;
 

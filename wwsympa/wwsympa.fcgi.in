@@ -7691,9 +7691,9 @@ sub do_remove_arc {
 	 }
 
 	 $param->{'bypass'} = 'extreme';
-	 printf "Content-Type: text/plain\n\n";
+	 print "Content-Type: text/plain\n\n";
 	 while (<MSG>){
-	     printf $_ ;
+	     print $_;
 	 }
 	 close MSG;
 
@@ -14657,9 +14657,9 @@ sub d_test_existing_and_rights {
 	 $ct = 'application/pkix-cert';
      }
      $param->{'bypass'} = 'extreme';
-     printf "Content-type: $ct\n\n";
+     print "Content-type: $ct\n\n";
      foreach my $l (@cert) {
-	 printf "$l";
+	 print "$l";
      }
      return 1;
  }
@@ -15882,7 +15882,7 @@ sub do_blacklist {
 		$param->{'ignored_linest'} .=  $line."\n";
 		$param->{'ignored'} += 1;
 	    }else{
-		printf BLACKLIST "$line\n";
+		print BLACKLIST "$line\n";
 		$param->{'blacklist'} .=  $line."\n";
 		$param->{'rows'} += 1;
         	$count += 1  unless ($line =~ /^\s*$/o || /^[\#\;]/o);
@@ -16312,7 +16312,7 @@ sub do_arc_download {
 
     ##Sending Zip to browser
     $param->{'bypass'} ='extreme';
-    printf("Content-Type: application/zip;\nContent-disposition: filename=\"%s\";\n\n",$zip_file_name);
+    printf("Content-Type: application/zip;\nContent-disposition: attachment; filename=\"%s\";\n\n",$zip_file_name);
     ##MIME Header
     unless (open (ZIP,$zip_abs_file)) {
 	&report::reject_report_web('intern','cannot_open_file',{'file' => $zip_abs_file},$param->{'action'},$list,$param->{'user'}{'email'},$robot);
