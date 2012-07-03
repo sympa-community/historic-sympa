@@ -62,7 +62,6 @@ CREATE TABLE bulkspool_table (
 	 dkim_privatekey_bulkspool 	text, 
 	 messageid_bulkspool 	text, 
 	 dkim_i_bulkspool 	text, 
-	 dkim_header_list_bulkspool 	text, 
 	 messagekey_bulkspool 	text NOT NULL, 
 	 message_bulkspool 	longtext, 
 	 lock_bulkspool 	boolean, 

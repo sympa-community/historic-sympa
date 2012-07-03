@@ -106,7 +106,6 @@ sub set_send_spool {
 #            -d : d=tag
 #            -i : i=tag (optionnal)
 #            -selector : dkim dns selector
-#            -header_list : headers part of the signed infos
 #            -key : the RSA private key
 #      -$robot(+)
 #      -$sign_mode :'smime' | '' | undef

@@ -68,7 +68,6 @@ CREATE TABLE bulkspool_table (
 	 dkim_privatekey_bulkspool 	 varchar(1000), 
 	 messageid_bulkspool 	 varchar(200), 
 	 dkim_i_bulkspool 	 varchar(100), 
-	 dkim_header_list_bulkspool 	 varchar(500), 
 	 messagekey_bulkspool 	 varchar(33) NOT NULL, 
 	 message_bulkspool 	 longtext, 
 	 lock_bulkspool 	 int(1), 
