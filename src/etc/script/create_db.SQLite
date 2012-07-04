@@ -6,16 +6,16 @@
 -- 
 
 CREATE TABLE admin_table ( 
-	 date_admin 	timestamp NOT NULL, 
-	 update_admin 	timestamp, 
+	 date_admin 	numeric NOT NULL, 
+	 update_admin 	numeric, 
 	 info_admin 	text, 
 	 list_admin 	text NOT NULL, 
 	 reception_admin 	text, 
 	 comment_admin 	text, 
-	 subscribed_admin 	boolean, 
+	 subscribed_admin 	numeric, 
 	 profile_admin 	text, 
 	 role_admin 	text NOT NULL, 
-	 included_admin 	boolean, 
+	 included_admin 	numeric, 
 	 user_admin 	text NOT NULL, 
 	 include_sources_admin 	text, 
 	 robot_admin 	text NOT NULL, 
@@ -37,8 +37,8 @@ CREATE TABLE bulkmailer_table (
 	 reception_date_bulkmailer 	integer, 
 	 packetid_bulkmailer 	text NOT NULL, 
 	 priority_message_bulkmailer 	integer, 
-	 verp_bulkmailer 	boolean, 
-	 merge_bulkmailer 	boolean, 
+	 verp_bulkmailer 	numeric, 
+	 merge_bulkmailer 	numeric, 
 	 tracking_bulkmailer 	text, 
 	 returnpath_bulkmailer 	text, 
 	 messageid_bulkmailer 	text, 
@@ -63,8 +63,8 @@ CREATE TABLE bulkspool_table (
 	 messageid_bulkspool 	text, 
 	 dkim_i_bulkspool 	text, 
 	 messagekey_bulkspool 	text NOT NULL, 
-	 message_bulkspool 	longtext, 
-	 lock_bulkspool 	boolean, 
+	 message_bulkspool 	text, 
+	 lock_bulkspool 	numeric, 
 	 PRIMARY KEY (messagekey_bulkspool) 
  );
 
@@ -102,13 +102,13 @@ CREATE TABLE exclusion_table (
 -- 
 
 CREATE TABLE list_table ( 
-	 creation_epoch_list 	timestamp, 
+	 creation_epoch_list 	numeric, 
 	 name_list 	text NOT NULL, 
 	 topics_list 	text, 
 	 robot_list 	text NOT NULL, 
 	 status_list 	text, 
 	 path_list 	text, 
-	 web_archive_list 	tinyint(1), 
+	 web_archive_list 	numeric, 
 	 owners_list 	text, 
 	 subject_list 	text, 
 	 creation_email_list 	text, 
@@ -214,7 +214,7 @@ CREATE TABLE subscriber_table (
 	 date_subscriber 	timestamp NOT NULL, 
 	 bounce_score_subscriber 	integer, 
 	 number_messages_subscriber 	integer, 
-	 suspend_subscriber 	boolean, 
+	 suspend_subscriber 	numeric, 
 	 PRIMARY KEY (robot_subscriber, list_subscriber, user_subscriber) 
  );
 
