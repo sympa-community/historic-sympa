@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: 2.0\n"
 "POT-Creation-Date: 2002-07-16 17:27+0800\n"
-"PO-Revision-Date: 2011-08-17 15:47+0200\n"
-"Last-Translator: Urmas Buhvestov <urmas@tamme.tartu.ee>\n"
+"PO-Revision-Date: 2012-02-16 11:48+0200\n"
+"Last-Translator: Urmas <urmas@tamme.tartu.ee>\n"
 "Language-Team: Estonian <et@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -102,7 +102,7 @@ msgstr "Esilehele"
 #: ../web_tt2/modindex.tt2:192 ../web_tt2/modindex.tt2:9 ../web_tt2/pref.tt2:4
 #: ../web_tt2/rename_list_request.tt2:3 ../web_tt2/review.tt2:5
 #: ../web_tt2/reviewbouncing.tt2:3 ../web_tt2/suboptions.tt2:21
-#: ../web_tt2/suspend_request.tt2:64
+#: ../web_tt2/suspend_request.tt2:5
 msgid "Help"
 msgstr "Abi"
 
@@ -564,7 +564,7 @@ msgstr "Arhiivi haldamine"
 #: ../web_tt2/picture_upload.tt2:21 ../web_tt2/pref.tt2:4
 #: ../web_tt2/rename_list_request.tt2:3 ../web_tt2/review.tt2:5
 #: ../web_tt2/reviewbouncing.tt2:3 ../web_tt2/suboptions.tt2:20
-#: ../web_tt2/subscriber_table.tt2:108
+#: ../web_tt2/subscriber_table.tt2:106
 msgid "Open in a new window"
 msgstr "Ava uues aknas"
 
@@ -1402,16 +1402,16 @@ msgid "Size (Kb)"
 msgstr "Suurus (Kb)"
 
 #: ../web_tt2/d_read.tt2:69 ../web_tt2/d_read.tt2:71
-#: ../web_tt2/latest_d_read.tt2:18 ../web_tt2/subscriber_table.tt2:61
+#: ../web_tt2/latest_d_read.tt2:18 ../web_tt2/subscriber_table.tt2:59
 msgid "Last update"
 msgstr "Viimati uuendatud"
 
 #: ../web_tt2/d_read.tt2:75 ../web_tt2/editfile.tt2:30
-#: ../web_tt2/editfile.tt2:31 ../web_tt2/editfile.tt2:36
-#: ../web_tt2/editfile.tt2:37 ../web_tt2/editfile.tt2:38
-#: ../web_tt2/editfile.tt2:40 ../web_tt2/editfile.tt2:45
-#: ../web_tt2/editfile.tt2:46 ../web_tt2/editfile.tt2:50
-#: ../web_tt2/editfile.tt2:51 ../web_tt2/manage_template.tt2:35
+#: ../web_tt2/editfile.tt2:31 ../web_tt2/editfile.tt2:35
+#: ../web_tt2/editfile.tt2:36 ../web_tt2/editfile.tt2:37
+#: ../web_tt2/editfile.tt2:39 ../web_tt2/editfile.tt2:44
+#: ../web_tt2/editfile.tt2:45 ../web_tt2/editfile.tt2:49
+#: ../web_tt2/editfile.tt2:50 ../web_tt2/manage_template.tt2:35
 #: ../web_tt2/manage_template.tt2:56 ../web_tt2/serveradmin.tt2:149
 #: ../web_tt2/serveradmin.tt2:162
 msgid "Edit"
@@ -1630,19 +1630,20 @@ msgstr ""
 "Listi koduleht: HTML tekst listi kirjeldamiseks. See kuvatakse listi pealehe "
 "paremale paneelile. (vaikeväärtuseks listi kirjeldus)"
 
-#: ../web_tt2/editfile.tt2:32
+#: ../web_tt2/editfile.tt2:31
+#, fuzzy
 msgid ""
-"List description: This text is sent as an answer to the mail command\n"
-"INFO. It can also be included in the <em>Welcome message</em>."
+"List description: This text is sent as an answer to the mail command INFO. "
+"It can also be included in the <em>Welcome message</em>."
 msgstr ""
 "Listi kirjeldus: Tekst mis saadetakse vastuseks e-mailiga saadetud käsule \n"
 "INFO. Seda teksti võib lisada ka <em>tervituskirjale</em>."
 
-#: ../web_tt2/editfile.tt2:34
+#: ../web_tt2/editfile.tt2:33
 msgid "Automatic messages"
 msgstr "Vanemad kirjad eespool"
 
-#: ../web_tt2/editfile.tt2:36
+#: ../web_tt2/editfile.tt2:35
 msgid ""
 "Welcome message: This message is sent to new subscribers. It can be a full "
 "MIME structured message (only for MIME gurus)."
@@ -1650,7 +1651,7 @@ msgstr ""
 "Tervitustekst: See tekst saadetakse uutele tellijatele. See võib olla MIME "
 "struktuuriga tekst (vaid MIME ekspertidele)."
 
-#: ../web_tt2/editfile.tt2:37
+#: ../web_tt2/editfile.tt2:36
 msgid ""
 "Rejection message: when a message is rejected by list editor, a notification "
 "can be sent to the original author. You may prepare various rejection "
@@ -1660,7 +1661,7 @@ msgstr ""
 "lükateakse listi moderaatori poolt tagasi. Võite ette valmistada mitu "
 "erinevat tagasilükkamise kirja."
 
-#: ../web_tt2/editfile.tt2:39
+#: ../web_tt2/editfile.tt2:38
 msgid ""
 "Remind message: This message is sent to each subscriber\n"
 "when using the command  REMIND. It's very useful to help people who are "
@@ -1671,7 +1672,7 @@ msgstr ""
 "peale. On väga kasulik aidatamaks inimestele, kes on segaduses oma "
 "tellimustest või kes ei oska listist iseseisvalt lahkuda."
 
-#: ../web_tt2/editfile.tt2:41
+#: ../web_tt2/editfile.tt2:40
 msgid ""
 "Subscribing invitation message: sent to a person if someone  \n"
 "uses the INVITE command to invite someone to subscribe."
@@ -1680,11 +1681,11 @@ msgstr ""
 "INVITE käsus, kutsumaks teda listi tellijaks."
 
 # nlsref 16,68
-#: ../web_tt2/editfile.tt2:43
+#: ../web_tt2/editfile.tt2:42
 msgid "Added in distributed messages"
 msgstr "Lisati edasisaadetud kirjade hulka"
 
-#: ../web_tt2/editfile.tt2:45
+#: ../web_tt2/editfile.tt2:44
 msgid ""
 "Message footer: If this file is not empty, it is added as a MIME attachment "
 "at the end of each message distributed to the list."
@@ -1692,7 +1693,7 @@ msgstr ""
 "Kirja jalus: Kui see fail ei ole tühi, lisatakse ta MIME manusena iga listi "
 "kirja lõppu."
 
-#: ../web_tt2/editfile.tt2:46
+#: ../web_tt2/editfile.tt2:45
 msgid ""
 "Message header: If this file is not empty, it is added as a MIME attachment "
 "at the beginning of each message distributed to the list."
@@ -1700,16 +1701,16 @@ msgstr ""
 "Kirja päis: Kui see fail ei ole tühi, lisatakse ta MIME manusena iga listi "
 "kirja algusesse."
 
-#: ../web_tt2/editfile.tt2:48
+#: ../web_tt2/editfile.tt2:47
 msgid "More"
 msgstr "Veel"
 
-#: ../web_tt2/editfile.tt2:50
+#: ../web_tt2/editfile.tt2:49
 msgid "Unsubscribe message: This message is sent when users leave the list."
 msgstr ""
 "Lahkumise kiri: See teade saadetakse kui kasutaja lõpetab listi tellimuse."
 
-#: ../web_tt2/editfile.tt2:52
+#: ../web_tt2/editfile.tt2:51
 msgid ""
 "Deletion message: This message is sent to users when you\n"
 "remove them from the list using the DEL command (unless you hit the Quiet "
@@ -4608,21 +4609,21 @@ msgstr "Pilt"
 msgid "Reception"
 msgstr "Vastuvõtt"
 
-#: ../web_tt2/subscriber_table.tt2:46 ../web_tt2/subscriber_table.tt2:49
+#: ../web_tt2/subscriber_table.tt2:45 ../web_tt2/subscriber_table.tt2:48
 msgid "Sources"
 msgstr "Allikad"
 
-#: ../web_tt2/subscriber_table.tt2:55 ../web_tt2/subscriber_table.tt2:58
+#: ../web_tt2/subscriber_table.tt2:53 ../web_tt2/subscriber_table.tt2:56
 #: ../web_tt2/viewlogs.tt2:124
 msgid "Sub date"
 msgstr "Sorteeri kuupäeva järgi"
 
-#: ../web_tt2/subscriber_table.tt2:91
+#: ../web_tt2/subscriber_table.tt2:89
 msgid "bouncing"
 msgstr "omab kätte toimetamata kirju"
 
 #. (u.email)
-#: ../web_tt2/subscriber_table.tt2:108
+#: ../web_tt2/subscriber_table.tt2:106
 msgid "%1's picture"
 msgstr "%1 pilt"
 
@@ -4817,7 +4818,7 @@ msgstr "Perioodi otsing: "
 #. (date_to_formated)
 #. This entry is a date/time format
 #. Check the strftime manpage for format details : http://docs.freebsd.org/info/gawk/gawk.info.Time_Functions.html
-#: ../web_tt2/viewlogs.tt2:113 ../wwsympa/wwsympa.fcgi.in:16239
+#: ../web_tt2/viewlogs.tt2:113 ../wwsympa/wwsympa.fcgi.in:16175
 msgid "%d %b %Y %H:%M:%S"
 msgstr "%d %b %Y %H:%M:%S"
 
@@ -5507,7 +5508,7 @@ msgid "%1 Digest %2"
 msgstr "%1 Kokkuvõte %2"
 
 #: ../mail_tt2/digest.tt2:10 ../mail_tt2/digest_plain.tt2:9
-#: ../mail_tt2/get_archive.tt2:9 ../src/lib/List.pm:2801
+#: ../mail_tt2/get_archive.tt2:9 ../src/lib/List.pm:2735
 msgid "Table of contents:"
 msgstr "Sisukord:"
 
@@ -7267,7 +7268,7 @@ msgstr "Kiri listi %1 kasutajalt %2 kinnitamiseks"
 #. (list.name,msg_from)
 #: ../mail_tt2/moderate.tt2:14
 msgid "One new message from list %1 from %2 arrived. "
-msgstr "Saabus uus krüpteeritud kiri listi %1@%2. "
+msgstr "Saabus uus krüpteeritud kiri listi %1 aadressilt %2. "
 
 #: ../mail_tt2/moderate.tt2:15
 msgid "This message has been tagged as spam"
@@ -8455,13 +8456,13 @@ msgstr ""
 
 #. This entry is a date/time format
 #. Check the strftime manpage for format details : http://docs.freebsd.org/info/gawk/gawk.info.Time_Functions.html
-#: ../src/lib/Bulk.pm:387
+#: ../src/lib/Bulk.pm:390
 msgid "%d %b %Y  %H:%M"
 msgstr "%d. %b %Y  %H:%M"
 
 #. This entry is a date/time format
 #. Check the strftime manpage for format details : http://docs.freebsd.org/info/gawk/gawk.info.Time_Functions.html
-#: ../src/lib/Commands.pm:963 ../wwsympa/wwsympa.fcgi.in:9835
+#: ../src/lib/Commands.pm:963 ../wwsympa/wwsympa.fcgi.in:9776
 msgid "%A"
 msgstr "%A"
 
@@ -8479,7 +8480,7 @@ msgstr "Viga real %d: %s"
 #. Check the strftime manpage for format details : http://docs.freebsd.org/info/gawk/gawk.info.Time_Functions.html
 #: ../src/lib/Family.pm:2591 ../src/lib/Family.pm:388 ../src/lib/Family.pm:665
 #: ../src/lib/List.pm:1894 ../wwsympa/Auth.pm:459
-#: ../wwsympa/wwsympa.fcgi.in:1067 ../wwsympa/wwsympa.fcgi.in:2870
+#: ../wwsympa/wwsympa.fcgi.in:1067 ../wwsympa/wwsympa.fcgi.in:2869
 msgid "%d %b %Y at %H:%M:%S"
 msgstr "%d. %b %Y at %H:%M:%S"
 
@@ -9126,7 +9127,7 @@ msgid "Last update of config"
 msgstr "Seadete viimane uuendamine"
 
 # nlsref 16,81
-#: ../src/lib/List.pm:1404
+#: ../src/lib/List.pm:1403
 msgid "User data source"
 msgstr "Kasutajaandmete allikas"
 
@@ -9291,31 +9292,31 @@ msgstr "viimati muutis"
 
 #. This entry is a date/time format
 #. Check the strftime manpage for format details : http://docs.freebsd.org/info/gawk/gawk.info.Time_Functions.html
-#: ../src/lib/List.pm:2919
+#: ../src/lib/List.pm:2853
 msgid "%a, %d %b %Y %H:%M:%S"
 msgstr "%a, %d. %b %Y %H:%M:%S"
 
 #. This entry is a date/time format
 #. Check the strftime manpage for format details : http://docs.freebsd.org/info/gawk/gawk.info.Time_Functions.html
-#: ../src/lib/List.pm:2920
+#: ../src/lib/List.pm:2854
 msgid "%a, %d %b %Y"
 msgstr "%a, %d. %b %Y"
 
 #. This entry is a date/time format
 #. Check the strftime manpage for format details : http://docs.freebsd.org/info/gawk/gawk.info.Time_Functions.html
-#: ../src/lib/List.pm:3111 ../src/lib/List.pm:3112 ../src/lib/List.pm:3116
-#: ../wwsympa/wwsympa.fcgi.in:11017 ../wwsympa/wwsympa.fcgi.in:11086
-#: ../wwsympa/wwsympa.fcgi.in:11288 ../wwsympa/wwsympa.fcgi.in:11635
-#: ../wwsympa/wwsympa.fcgi.in:15086 ../wwsympa/wwsympa.fcgi.in:15093
-#: ../wwsympa/wwsympa.fcgi.in:15811 ../wwsympa/wwsympa.fcgi.in:16589
-#: ../wwsympa/wwsympa.fcgi.in:16590 ../wwsympa/wwsympa.fcgi.in:4280
-#: ../wwsympa/wwsympa.fcgi.in:4338 ../wwsympa/wwsympa.fcgi.in:4909
-#: ../wwsympa/wwsympa.fcgi.in:4910 ../wwsympa/wwsympa.fcgi.in:6432
-#: ../wwsympa/wwsympa.fcgi.in:7451 ../wwsympa/wwsympa.fcgi.in:7994
-#: ../wwsympa/wwsympa.fcgi.in:8041 ../wwsympa/wwsympa.fcgi.in:8043
-#: ../wwsympa/wwsympa.fcgi.in:8519 ../wwsympa/wwsympa.fcgi.in:8520
-#: ../wwsympa/wwsympa.fcgi.in:8554 ../wwsympa/wwsympa.fcgi.in:8555
-#: ../wwsympa/wwsympa.fcgi.in:8734 ../wwsympa/wwsympa.fcgi.in:8735
+#: ../src/lib/List.pm:3045 ../src/lib/List.pm:3046 ../src/lib/List.pm:3050
+#: ../wwsympa/wwsympa.fcgi.in:10953 ../wwsympa/wwsympa.fcgi.in:11022
+#: ../wwsympa/wwsympa.fcgi.in:11224 ../wwsympa/wwsympa.fcgi.in:11571
+#: ../wwsympa/wwsympa.fcgi.in:15022 ../wwsympa/wwsympa.fcgi.in:15029
+#: ../wwsympa/wwsympa.fcgi.in:15747 ../wwsympa/wwsympa.fcgi.in:16540
+#: ../wwsympa/wwsympa.fcgi.in:16541 ../wwsympa/wwsympa.fcgi.in:4278
+#: ../wwsympa/wwsympa.fcgi.in:4331 ../wwsympa/wwsympa.fcgi.in:4902
+#: ../wwsympa/wwsympa.fcgi.in:4903 ../wwsympa/wwsympa.fcgi.in:6425
+#: ../wwsympa/wwsympa.fcgi.in:7448 ../wwsympa/wwsympa.fcgi.in:7988
+#: ../wwsympa/wwsympa.fcgi.in:8035 ../wwsympa/wwsympa.fcgi.in:8037
+#: ../wwsympa/wwsympa.fcgi.in:8513 ../wwsympa/wwsympa.fcgi.in:8514
+#: ../wwsympa/wwsympa.fcgi.in:8548 ../wwsympa/wwsympa.fcgi.in:8549
+#: ../wwsympa/wwsympa.fcgi.in:8728 ../wwsympa/wwsympa.fcgi.in:8729
 msgid "%d %b %Y"
 msgstr "%d. %b %Y"
 
@@ -9456,35 +9457,35 @@ msgstr "%H:%M:%S"
 #. This entry is a date/time format
 #. Check the strftime manpage for format details : http://docs.freebsd.org/info/gawk/gawk.info.Time_Functions.html
 #: ../wwsympa/SympaSession.pm:436 ../wwsympa/SympaSession.pm:437
-#: ../wwsympa/wwsympa.fcgi.in:11869 ../wwsympa/wwsympa.fcgi.in:12002
-#: ../wwsympa/wwsympa.fcgi.in:14315 ../wwsympa/wwsympa.fcgi.in:7948
+#: ../wwsympa/wwsympa.fcgi.in:11805 ../wwsympa/wwsympa.fcgi.in:11938
+#: ../wwsympa/wwsympa.fcgi.in:14251 ../wwsympa/wwsympa.fcgi.in:7945
 msgid "%d %b %y  %H:%M"
 msgstr "%d %b %y  %H:%M"
 
 # nlsref 6,18
-#: ../wwsympa/wwsympa.fcgi.in:15268
+#: ../wwsympa/wwsympa.fcgi.in:15204
 msgid "Your unsubscription request to list %s was sent to the list owner."
 msgstr "Teie taotlus listist %s lahkumiseks saadeti listiomanikule."
 
-#: ../wwsympa/wwsympa.fcgi.in:15270
+#: ../wwsympa/wwsympa.fcgi.in:15206
 msgid "You were successfully unsubscribed from list %s."
 msgstr "Olete edukalt eemaldatud listist %s."
 
 # nlsref 8,24
-#: ../wwsympa/wwsympa.fcgi.in:15274
+#: ../wwsympa/wwsympa.fcgi.in:15210
 msgid ""
 "Unsubscription from list %s denied: Unsubscription from this list is closed."
 msgstr ""
 "Lahkumissoov listist %s keelatud: Lahkumisavalduste vastuvõtt lõpetatud."
 
 # nlsref 8,24
-#: ../wwsympa/wwsympa.fcgi.in:15276
+#: ../wwsympa/wwsympa.fcgi.in:15212
 msgid "Unsubscription from list %s failed."
 msgstr "Eemaldamine listist %s ebaõnnestus."
 
 #. This entry is a date/time format
 #. Check the strftime manpage for format details : http://docs.freebsd.org/info/gawk/gawk.info.Time_Functions.html
-#: ../wwsympa/wwsympa.fcgi.in:16184 ../wwsympa/wwsympa.fcgi.in:16185
+#: ../wwsympa/wwsympa.fcgi.in:16120 ../wwsympa/wwsympa.fcgi.in:16121
 msgid "%Y-%m-%d-%H-%M-%S"
 msgstr "%d/%m/%Y-%H%:M:%S"
 
@@ -9663,74 +9664,67 @@ msgstr "ei saadeta maile (soovitav puhkuse ajaks)"
 msgid "you do not receive your own posts"
 msgstr "teile ei tule enda saadetud kirju"
 
-#: ../src/lib/confdef.pm:388
+#: ../web_tt2/list_menu.tt2:69
+msgid "OpenSocial"
+msgstr ""
+
+#. (base_url,path_cgi,u_err.oauth_provider)
+#: ../web_tt2/error.tt2:134
 msgid ""
-"Used to define a custom parameter for your server. Do not forget the "
-"semicolon between the param name and the param value."
+"Failed to include members from VOOT group, use the following link to check "
+"the OAuth status : <a href=\"%1%2/oauth_check/%3\">%1%2/oauth_check/%3</a>"
 msgstr ""
 
-#: ../src/lib/confdef.pm:400
-msgid "Directory containing mailing lists subdirectories"
+#: ../web_tt2/oauth_authorize.tt2:4
+msgid "OAuth authorize"
 msgstr ""
 
-#: ../src/lib/confdef.pm:407
+#: ../web_tt2/oauth_check.tt2:4
+msgid "OAuth check"
+msgstr ""
+
+#: ../web_tt2/oauth_check.tt2:10
+msgid "Got new access token, everything is alright."
+msgstr ""
+
+#: ../web_tt2/oauth_check.tt2:15
 msgid ""
-"Directory for configuration files; it also contains scenari/ and templates/ "
-"directories"
+"Unable to check, provider may not be available or access token may be "
+"outdated and failed to be get new one."
 msgstr ""
 
-#: ../src/lib/confdef.pm:416
-msgid "Syslog facility for sympa"
+#: ../web_tt2/oauth_check.tt2:18
+msgid "Unable to load consumer, configuration may be erroneous."
 msgstr ""
 
-#: ../src/lib/confdef.pm:432
-msgid "Communication mode with syslogd (unix | inet)"
-msgstr ""
-
-#: ../src/lib/confdef.pm:438
-msgid "File containing Sympa PID while running"
-msgstr ""
-
-#: ../src/lib/confdef.pm:440
+#: ../web_tt2/select_voot_groups_request.tt2:6
 msgid ""
-"Sympa also locks this file to ensure that it is not running more than once. "
-"Caution: user sympa need to write access without special privilege."
+"Hereafter is the list of the groups you accepted to share with Sympa. Select "
+"which group you want members to be included in your list."
 msgstr ""
 
-#: ../src/lib/confdef.pm:450
-msgid "Umask used for file creation by Sympa"
+#: ../web_tt2/select_voot_provider_request.tt2:4
+msgid "Select VOOT provider"
 msgstr ""
 
-#: ../src/lib/confdef.pm:463
+#: ../web_tt2/select_voot_provider_request.tt2:6
 msgid ""
-"Max. number of Sendmail processes (launched by Sympa) running simultaneously"
+"Hereafter is the list of VOOT providers that share group information with "
+"Sympa. Select which provider you want to use your groups from."
 msgstr ""
 
-#: ../src/lib/confdef.pm:465
+#. (consumer_name,oauth_provider)
+#: ../mail_tt2/message_report.tt2:96
+msgid "Your OAuth token used by consumer %1 may have expired."
+msgstr ""
+
+#. (consumer_name,oauth_provider,conf.wwsympa_url)
+#: ../mail_tt2/message_report.tt2:105
 msgid ""
-"Proposed value is quite low, you can rise it up to 100, 200 or even 300 with "
-"powerfull systems."
-msgstr ""
-
-#: ../src/lib/confdef.pm:475
-msgid ""
-"comma separated list of operations for which blacklist filter is applied"
-msgstr ""
-
-#: ../src/lib/confdef.pm:480
-msgid "Setting this parameter to \"none\" will hide the blacklist feature"
-msgstr ""
-
-#: ../src/lib/confdef.pm:485
-msgid ""
-"If set, when a list editor report a spam, this external script is run by "
-"wwsympa or sympa, the spam is sent into script stdin"
-msgstr ""
-
-#: ../src/lib/confdef.pm:491
-msgid ""
-"Default maximum size (in bytes) for messages (can be re-defined for each "
-"list)"
+"Sympa failed to retreive data using %1 consumer, this may be because your "
+"access token for OAuth provider %2 is out of date.\n"
+"\n"
+"Visit  %3/oauth_check/%2 to check the token state and renew it if necessary."
 msgstr ""
 
 #: ../src/lib/confdef.pm:508
@@ -9743,34 +9737,10 @@ msgstr ""
 msgid "Max. number of different domains per call to Sendmail"
 msgstr ""
 
-#: ../src/lib/confdef.pm:524
-msgid "Path to the MTA (sendmail, postfix, exim or qmail)"
-msgstr ""
-
 #: ../src/lib/confdef.pm:527
 msgid ""
 "should point to a sendmail-compatible binary (eg: a binary named \"sendmail"
 "\" is distributed with Postfix)"
-msgstr ""
-
-#: ../src/lib/confdef.pm:539
-msgid "Specify which rfc2369 mailing list headers to add"
-msgstr ""
-
-#: ../src/lib/confdef.pm:570
-msgid ""
-"SMTP server to which Sympa verify if alias with the same name as the list to "
-"be created"
-msgstr ""
-
-#: ../src/lib/confdef.pm:572
-msgid ""
-"Default value is real FQDN of host. Set [HOST]:[PORT] to specify non-"
-"standard port."
-msgstr ""
-
-#: ../src/lib/confdef.pm:582
-msgid "SMTP HELO (EHLO) parameter used for alias verification"
 msgstr ""
 
 #: ../src/lib/confdef.pm:584
@@ -10191,21 +10161,33 @@ msgid ""
 "page"
 msgstr ""
 
-#: ../src/lib/Conf.pm:967
+#: ../src/lib/Conf.pm:966
 msgid "Conf::load_nrcpt_by_domain(): Error at line %d: %s"
 msgstr ""
 
-#: ../src/lib/List.pm:6443
+#: ../src/lib/List.pm:1119
+msgid "group"
+msgstr ""
+
+#: ../src/lib/List.pm:6484
 msgid "Attempt to exceed the max number of members (%s) for this list."
 msgstr ""
 
-#: ../src/lib/List.pm:6446
+#: ../src/lib/List.pm:6487
 msgid "Attempts to add some users in database failed."
 msgstr ""
 
-#: ../src/lib/List.pm:6448
+#: ../src/lib/List.pm:6489
 msgid "Added %s users out of %s required."
 msgstr ""
+
+#~ msgid ""
+#~ "List description: This text is sent as an answer to the mail command\n"
+#~ "INFO. It can also be included in the <em>Welcome message</em>."
+#~ msgstr ""
+#~ "Listi kirjeldus: Tekst mis saadetakse vastuseks e-mailiga saadetud "
+#~ "käsule \n"
+#~ "INFO. Seda teksti võib lisada ka <em>tervituskirjale</em>."
 
 #~ msgid ""
 #~ "You <span style=\"font-weight: bold; font-size: 10px\">are</span> "
@@ -10330,8 +10312,37 @@ msgstr ""
 #~ msgid " %1 error(s)"
 #~ msgstr " %1 viga"
 
+#, fuzzy
+#~ msgid "Authorize %1 ?"
+#~ msgstr "Autor"
+
+#, fuzzy
+#~ msgid "Authorize"
+#~ msgstr "Autor"
+
+#, fuzzy
+#~ msgid "Don't authorize"
+#~ msgstr "Sorteeri autori järgi"
+
+#, fuzzy
+#~ msgid "Everything is alright."
+#~ msgstr "Pikem info listi kohta:"
+
+#, fuzzy
+#~ msgid "Unknown provider."
+#~ msgstr "Tundmatu viga."
+
 #~ msgid "Add quietly"
 #~ msgstr "Teavituseta"
+
+#, fuzzy
+#~ msgid "Select group"
+#~ msgstr "--Vali jaotis--"
+
+# nlsref 16,81
+#, fuzzy
+#~ msgid "Set as source"
+#~ msgstr "andmeallikas"
 
 #~ msgid "Background color for the news area of the home page."
 #~ msgstr "Uudiste taustavärv pealehel."
@@ -10490,11 +10501,31 @@ msgstr ""
 #~ "See on scenario, lugege abimaterjale scenariote kasutamise kohta kui "
 #~ "tahate seda kasutada"
 
+#, fuzzy
+#~ msgid ""
+#~ "Used to define a custom parameter for your server. Do not forget the "
+#~ "semicolon between the param name and the param value."
+#~ msgstr ""
+#~ "Kasutatakse isikupärase serveri sätete defineerimiseks. Ärge unustage "
+#~ "semikoolonit sätte nime ja väärtuse vahel."
+
 #~ msgid "Directories"
 #~ msgstr "Kaustad"
 
+#~ msgid "Directory containing mailing lists subdirectories"
+#~ msgstr "Meililisti alamkaustu sisaldav kaust"
+
+#~ msgid ""
+#~ "Directory for configuration files; it also contains scenari/ and "
+#~ "templates/ directories"
+#~ msgstr ""
+#~ "Konfiguratsioonifailide kaust; selles on ka kaustad scenari/ ja templates/"
+
 #~ msgid "System related"
 #~ msgstr "Süsteemiga seotud"
+
+#~ msgid "Syslog facility for sympa"
+#~ msgstr "Sympa syslog vahendid"
 
 #~ msgid "Do not forget to edit syslog.conf"
 #~ msgstr "Ärge unustage muuta faili syslog.conf"
@@ -10505,8 +10536,70 @@ msgstr ""
 #~ msgid "0: normal, 2,3,4: for debug"
 #~ msgstr "0: tavaline, 2,3,4: silumiseks"
 
+#~ msgid "Communication mode with syslogd (unix | inet)"
+#~ msgstr "Syslogiga suhtlemise moodus (unix | inet)"
+
+#~ msgid "File containing Sympa PID while running"
+#~ msgstr "Fail Sympa käimise ajal tema PID hoidmiseks"
+
+#~ msgid ""
+#~ "Sympa also locks this file to ensure that it is not running more than "
+#~ "once. Caution: user sympa need to write access without special privilege."
+#~ msgstr ""
+#~ "Sympa lukustab selle faili et programm ei käivituks rohkem kui üks kord "
+#~ "korraga. NB! Kasutajal sympa peab olema kirjutamisõõigus ilma "
+#~ "eriprivileegideta."
+
+#~ msgid "Umask used for file creation by Sympa"
+#~ msgstr "Sympa õiguste mask failide loomisel"
+
 #~ msgid "Sending related"
 #~ msgstr "Saatmisega seotud"
+
+#~ msgid ""
+#~ "Max. number of Sendmail processes (launched by Sympa) running "
+#~ "simultaneously"
+#~ msgstr ""
+#~ "Maksimaalne (sympa poolt käivitatud) samaaegselt töötavate Sendmaili "
+#~ "protsesside arv"
+
+#~ msgid ""
+#~ "Proposed value is quite low, you can rise it up to 100, 200 or even 300 "
+#~ "with powerfull systems."
+#~ msgstr ""
+#~ "Sisestatud väärtus on üsna väike, võite seda suurendada 100, 200 või "
+#~ "isegi 300ni võimsamates süsteemides."
+
+#~ msgid ""
+#~ "comma separated list of operations for which blacklist filter is applied"
+#~ msgstr ""
+#~ "komaga eraldatud operatsioonide loetelu millele rakendatakse musta "
+#~ "nimekirja."
+
+#~ msgid "Setting this parameter to \"none\" will hide the blacklist feature"
+#~ msgstr ""
+#~ "Määrates väärtuseks \"none\" keelab musta nimekirja kasutamise võimaluse"
+
+#~ msgid ""
+#~ "If set, when a list editor report a spam, this external script is run by "
+#~ "wwsympa or sympa, the spam is sent into script stdin"
+#~ msgstr ""
+#~ "Kui on seatud ja listi moderaator teavitab rämpspostist, käivitatakse see "
+#~ "väline skript wwsympa või sympa poolt saates  rämpskirja skripti stdin "
+#~ "sisendisse."
+
+#~ msgid ""
+#~ "Default maximum size (in bytes) for messages (can be re-defined for each "
+#~ "list)"
+#~ msgstr ""
+#~ "Vaikimisi maksimumsuurus (baitides) kirjadele (on võimalik igale listile "
+#~ "eraldi ümber seadistada)"
+
+#~ msgid "Path to the MTA (sendmail, postfix, exim or qmail)"
+#~ msgstr "MTA (sendmail, postfix, exim või gmail) asukoht"
+
+#~ msgid "Specify which rfc2369 mailing list headers to add"
+#~ msgstr "Millised rfc2369 listi päised kirjale lisada"
 
 # nlsref 15,4
 #~ msgid "Specify header fields to be removed before message distribution"
@@ -10514,6 +10607,23 @@ msgstr ""
 
 #~ msgid "Reject mail from automates (crontab, etc) sent to a list?"
 #~ msgstr "Kas lükata automaatide  (crontab jne) kirjad tagasi?"
+
+#~ msgid ""
+#~ "SMTP server to which Sympa verify if alias with the same name as the list "
+#~ "to be created"
+#~ msgstr ""
+#~ "SMTP server mille abil Sympa kontrollib kas sama nimega listi ei ole juba "
+#~ "olemas"
+
+#~ msgid ""
+#~ "Default value is real FQDN of host. Set [HOST]:[PORT] to specify non-"
+#~ "standard port."
+#~ msgstr ""
+#~ "Vaikeväärtus FQDN hostinimele. Määrake [HOST]:[PORT] kui kasutate "
+#~ "mittestandartsed porti."
+
+#~ msgid "SMTP HELO (EHLO) parameter used for alias verification"
+#~ msgstr "SMTP HELO (EHLO) sätted aliase kontrollimiseks"
 
 #~ msgid "Bulk mailer"
 #~ msgstr "Bulk mailer"
@@ -10640,6 +10750,20 @@ msgstr ""
 # nlsref 15,4
 #~ msgid "Message tracking feature"
 #~ msgstr "Kirjade jälgimise funktsioon"
+
+#, fuzzy
+#~ msgid "user"
+#~ msgstr "Kasutajad"
+
+# nlsref 16,62
+#, fuzzy
+#~ msgid "provider"
+#~ msgstr "profiiil"
+
+# nlsref 16,45
+#, fuzzy
+#~ msgid "VOOT group inclusion"
+#~ msgstr "SQL päringuga kasutajate lisamine"
 
 #~ msgid "Maximum number of list members"
 #~ msgstr "Maksimaalne tellijate arv"
@@ -11090,9 +11214,6 @@ msgstr ""
 #~ msgid "To access your personal environment, you need to login first"
 #~ msgstr ""
 #~ "Sympa veebilehe kõikide võimaluste kasutamiseks peate esmalt sisse logima:"
-
-#~ msgid "Everything about this list:"
-#~ msgstr "Pikem info listi kohta:"
 
 #~ msgid ""
 #~ "<strong>Edit list config</strong>:  must be used with care : it allows "
@@ -11981,9 +12102,6 @@ msgstr ""
 #~ "\n"
 #~ "AUTH %s EXPIRE %s %d %d\n"
 
-#~ msgid "Sort by author"
-#~ msgstr "Sorteeri autori järgi"
-
 #~ msgid "Sort by name"
 #~ msgstr "Sordi nime järgi"
 
@@ -12279,3 +12397,9 @@ msgstr ""
 #, fuzzy
 #~ msgid "Unsubscription from this list is impossible."
 #~ msgstr "Lahkumissoov listist %s"
+
+#~ msgid "Everything about this list:"
+#~ msgstr "Pikem info listi kohta:"
+
+#~ msgid "Sort by author"
+#~ msgstr "Sorteeri autori järgi"

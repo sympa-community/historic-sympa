@@ -7,8 +7,8 @@ msgstr ""
 "Project-Id-Version: Sympa\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2002-07-16 17:27+0800\n"
-"PO-Revision-Date: 2011-01-04 20:31+0200\n"
-"Last-Translator: Anonymous Pootle User\n"
+"PO-Revision-Date: 2012-04-16 04:07+0200\n"
+"Last-Translator: robescolano <robescolano@gmail.com>\n"
 "Language-Team: Català <projectek2@upcnet.es>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -22,14 +22,15 @@ msgid "Mailing lists server"
 msgstr "Servidor de llistes de correu"
 
 #: ../web_tt2/home.tt2:4
+#, fuzzy
 msgid ""
 "This server provides you access to your mailing list environment. Starting "
 "from this web page, you can perform subscription options, unsubscription, "
 "archive, list moderation, list configuration."
 msgstr ""
-"Aquest servidor li dóna accés a la llista de correu del servidor %1@%2. Des "
-"d'aquí pot modificar totes les opcions de subscripció i preferències de la "
-"llista."
+"Aquest servidor us dóna accés a la llista de correu del servidor. Des d'aquí "
+"podeu modificar totes les opcions de subscripció, baixa, arxiu, llista de "
+"moderació, configuració de la llista."
 
 #: ../web_tt2/home.tt2:7
 msgid "Mailing lists categories"
@@ -99,20 +100,19 @@ msgstr "Inici"
 #: ../web_tt2/modindex.tt2:192 ../web_tt2/modindex.tt2:9 ../web_tt2/pref.tt2:4
 #: ../web_tt2/rename_list_request.tt2:3 ../web_tt2/review.tt2:5
 #: ../web_tt2/reviewbouncing.tt2:3 ../web_tt2/suboptions.tt2:21
-#: ../web_tt2/suspend_request.tt2:64
+#: ../web_tt2/suspend_request.tt2:5
 msgid "Help"
 msgstr "Ajuda"
 
 #: ../web_tt2/login_menu.tt2:9
 msgid "Restore identity"
-msgstr "Restaura identitat"
+msgstr "Restaura la identitat"
 
 #: ../mail_tt2/listmaster_notification.tt2:2 ../web_tt2/login_menu.tt2:13
 msgid "Listmaster"
-msgstr "administrador"
+msgstr "Administrador"
 
 #: ../web_tt2/login_menu.tt2:14
-#, fuzzy
 msgid "Privileged owner"
 msgstr "Propietari amb privilegis"
 
@@ -121,7 +121,6 @@ msgid "Owner"
 msgstr "Propietari"
 
 #: ../web_tt2/login_menu.tt2:16
-#, fuzzy
 msgid "Editor"
 msgstr "Editor"
 
@@ -131,9 +130,8 @@ msgstr "Subscriptor"
 
 #. (last_login_host)
 #: ../web_tt2/login_menu.tt2:21
-#, fuzzy
 msgid "last login from %1"
-msgstr "Darrer inici de sessió des de %1 (%2)"
+msgstr "Darrer inici de sessió des de %1"
 
 #: ../web_tt2/login_menu.tt2:36
 msgid "Logout"
@@ -145,7 +143,7 @@ msgstr "Preferències"
 
 #: ../web_tt2/suspend_request.tt2:5 ../web_tt2/your_lists.tt2:9
 msgid "Manage your subscriptions"
-msgstr "Gestiona les teves subscripcions"
+msgstr "Gestioneu les vostres subscripcions"
 
 #: ../web_tt2/lists.tt2:27 ../web_tt2/your_lists.tt2:14
 msgid "admin"
@@ -173,9 +171,10 @@ msgstr "Donar-se de baixa"
 #. (list)
 #: ../web_tt2/list_menu.tt2:20
 msgid "Do you really want to subscribe to list %1?"
-msgstr "Voleu donar-vos d'alta de la llista %1?"
+msgstr "Voleu subscriure-us a la llista %1?"
 
 #: ../web_tt2/list_menu.tt2:20 ../web_tt2/subrequest.tt2:68
+#, fuzzy
 msgid "Subscribe"
 msgstr "Subscriure's"
 
@@ -252,7 +251,7 @@ msgstr "Moderadors"
 
 #: ../web_tt2/list_panel.tt2:26
 msgid "Load certificate"
-msgstr "Carregueu el certificat "
+msgstr "Carrega el certificat "
 
 #: ../web_tt2/list_panel.tt2:29 ../web_tt2/list_panel.tt2:31
 msgid "Contact owners"
@@ -266,43 +265,40 @@ msgstr "Administrador esporàdic"
 #: ../web_tt2/admin.tt2:7
 #, fuzzy
 msgid "Edit list config:"
-msgstr "Edita llista de configuració"
+msgstr "Edita la configuració de la llista "
 
 #: ../web_tt2/admin.tt2:7
-#, fuzzy
 msgid ""
 "Use it with care: it allows you to modify some of the list parameters. The "
 "list of the parameters you can modify depends on your privileges."
 msgstr ""
-"Cal fer-lo servir amb moderació : li permet modificar alguns dels paràmetres "
-"de la llista, segons els seus privilegis. "
+"Feu-lo servir amb moderació, perquè us permet modificar alguns paràmetres de "
+"la llista. La llista de paràmetres que podeu modificar depèn dels vostres "
+"privilegis. "
 
 #: ../web_tt2/admin.tt2:9
-#, fuzzy
 msgid "Customizing: "
-msgstr "Personalitza"
+msgstr "Personalitza:"
 
 #: ../web_tt2/admin.tt2:9
 msgid "Editing of various files and messages attached to your list."
 msgstr "Editeu diversos fitxers i missatges relacionats a la vostra llista."
 
 #: ../web_tt2/admin.tt2:10
-#, fuzzy
 msgid "Manage subscribers:"
-msgstr "Gestió de subscriptors"
+msgstr "Gestió de subscriptors:"
 
 #: ../web_tt2/admin.tt2:10
 msgid ""
 "Allows you to add or delete list subscribers, moderate subscriptions and so "
 "on."
 msgstr ""
-"Permet afegir o eliminar subscriptors de la llista, subscripcions moderades, "
-"etc.."
+"Permet afegir o eliminar subscriptors de la llista, moderar subscripcions, "
+"etc."
 
 #: ../web_tt2/admin.tt2:12
-#, fuzzy
 msgid "Blacklist:"
-msgstr "Llista negra"
+msgstr "Llista negra:"
 
 #: ../web_tt2/admin.tt2:12
 msgid "Handles the set of black-listed mail addresses for this list."
@@ -315,7 +311,7 @@ msgstr "Gestió d'arxius"
 
 #: ../web_tt2/admin.tt2:15
 msgid "Allows you to download and delete list archives."
-msgstr "Permet descarregar i eliminar llistes d'arxius."
+msgstr "Permet baixar i eliminar llistes d'arxius."
 
 #: ../web_tt2/admin.tt2:18
 #, fuzzy
@@ -325,7 +321,7 @@ msgstr "Retornats"
 #: ../web_tt2/admin.tt2:18
 msgid "Manages non-delivery reports (also called bounces)."
 msgstr ""
-"Gestioneu informes de missatges no entregats (també anomenats retornats)."
+"Gestioneu els informes de missatges no lliurats (també anomenats retornats)."
 
 #: ../web_tt2/admin.tt2:21
 #, fuzzy
@@ -343,21 +339,20 @@ msgstr "Operacions dràstiques"
 #: ../web_tt2/admin.tt2:33 ../web_tt2/admin_menu.tt2:117
 #: ../web_tt2/admin_menu.tt2:119
 msgid "Restore List"
-msgstr "Restaura llista"
+msgstr "Restaura la llista"
 
 #. (list)
 #: ../web_tt2/admin.tt2:33
-#, fuzzy
 msgid "Are you sure you wish to restore list %1?"
-msgstr "Esteu segur que voleu restaurar la llista %1 ?"
+msgstr "Esteu segur que voleu restaurar la llista %1?"
 
 #: ../web_tt2/admin.tt2:33
 msgid ""
 "This list is currently closed. Clicking this button will make it active "
 "again."
 msgstr ""
-"Aquesta llista està actualment tancada. Clicant aquest botó tornarà a estar "
-"activa"
+"Aquesta llista està actualment tancada. Clicant en aquest botó tornarà a "
+"estar activa."
 
 #: ../web_tt2/admin.tt2:36 ../web_tt2/admin_menu.tt2:122
 #: ../web_tt2/admin_menu.tt2:124
@@ -367,7 +362,7 @@ msgstr "Elimina la llista"
 #. (list)
 #: ../web_tt2/admin.tt2:36
 msgid "Are you sure you wish to close list %1?"
-msgstr "Esteu segur que voleu tancar la llista %1 ?"
+msgstr "Esteu segur que voleu tancar la llista %1?"
 
 #: ../web_tt2/admin.tt2:36
 msgid ""
@@ -388,8 +383,8 @@ msgid ""
 "be relabeled according to the new name, including the mail aliases and the "
 "web archives."
 msgstr ""
-"Permet canviar el nom de la llista. Es tornarà a etiquetat tot al nou nom, "
-"incloent l'àlies de correu i els arxius web."
+"Permet canviar el nom de la llista. Es tornarà a etiquetar tot al nou nom, "
+"incloent-hi l'àlies de correu i els arxius web."
 
 #: ../web_tt2/admin.tt2:59 ../web_tt2/admin_menu.tt2:96
 #: ../web_tt2/admin_menu.tt2:98
@@ -406,17 +401,17 @@ msgstr "Elimina compartits"
 
 #. (listname)
 #: ../web_tt2/admin.tt2:63
-#, fuzzy
 msgid "Are you sure you wish to delete the shared documents for list %1?"
-msgstr "Segur que voleu eliminar l'espai de compartir documents?"
+msgstr ""
+"Esteu segur que voleu eliminar els documents compartits de la llista %1?"
 
 #: ../web_tt2/admin.tt2:63
 msgid ""
 "Closes the shared document web space. It can be restored using \"Restore "
 "shared\" button."
 msgstr ""
-"tanqueu l'espai de documents. Es pot restaurar amb la comanda \"Restaura "
-"documents\"."
+"Tanca l'espai de documents. Es pot restaurar amb el botó \"Restaura "
+"compartits\"."
 
 #: ../web_tt2/admin.tt2:67
 msgid "Restore Shared"
@@ -424,7 +419,7 @@ msgstr "Restaura compartits"
 
 #: ../web_tt2/admin.tt2:67
 msgid "Restores the previously closed shared document web space."
-msgstr "restaura l'espai web de documents compartits prèviament tancats."
+msgstr "Restaura l'espai web de documents compartits prèviament tancats."
 
 #. (count)
 #: ../web_tt2/active_lists.tt2:17 ../web_tt2/active_lists.tt2:5
@@ -447,19 +442,17 @@ msgid "List name"
 msgstr "Nom de la llista"
 
 #: ../web_tt2/active_lists.tt2:20 ../web_tt2/get_inactive_lists.tt2:11
-#, fuzzy
 msgid "Number of messages"
-msgstr "màxim nombre de missatges del resum"
+msgstr "Nombre de missatges"
 
 #: ../web_tt2/active_lists.tt2:21
-#, fuzzy
 msgid "Average per day"
 msgstr "Mitjana per dia"
 
 #: ../web_tt2/active_lists.tt2:22 ../web_tt2/get_inactive_lists.tt2:6
 #: ../web_tt2/get_latest_lists.tt2:6 ../web_tt2/latest_lists.tt2:21
 msgid "Creation date"
-msgstr "Data creació"
+msgstr "Data de creació"
 
 #: ../web_tt2/active_lists.tt2:23 ../web_tt2/arcsearch_form.tt2:48
 #: ../web_tt2/get_inactive_lists.tt2:9 ../web_tt2/get_latest_lists.tt2:8
@@ -478,7 +471,7 @@ msgstr "correu2@dom2 Nom2"
 
 #: ../web_tt2/add_request.tt2:12
 msgid "Add subscribers"
-msgstr "Afegir subscriptors"
+msgstr "Afegeix subscriptors"
 
 #: ../web_tt2/add_request.tt2:13 ../web_tt2/editsubscriber.tt2:62
 #: ../web_tt2/review.tt2:106 ../web_tt2/review.tt2:140
@@ -488,7 +481,7 @@ msgstr "silenciós"
 
 #: ../web_tt2/admin_menu.tt2:4
 msgid "List Administration Panel"
-msgstr "Panell d'administració"
+msgstr "Tauler d'administració"
 
 #: ../web_tt2/admin_menu.tt2:10 ../web_tt2/admin_menu.tt2:16
 msgid "Subscribers"
@@ -497,7 +490,7 @@ msgstr "Subscriptors"
 #: ../web_tt2/admin_menu.tt2:24 ../web_tt2/admin_menu.tt2:29
 #: ../web_tt2/lists.tt2:36 ../web_tt2/nav.tt2:64
 msgid "Edit List Config"
-msgstr "Edita llista de configuració"
+msgstr "Edita la llista de configuració"
 
 #: ../web_tt2/admin_menu.tt2:52 ../web_tt2/admin_menu.tt2:58
 #: ../web_tt2/lists.tt2:37 ../web_tt2/nav.tt2:67
@@ -507,7 +500,7 @@ msgstr "Personalitza"
 #: ../web_tt2/admin_menu.tt2:67 ../web_tt2/admin_menu.tt2:73
 #: ../web_tt2/nav.tt2:77
 msgid "Manage Archives"
-msgstr "Gestió arxius"
+msgstr "Gestió d'arxius"
 
 #: ../web_tt2/admin_menu.tt2:81 ../web_tt2/admin_menu.tt2:87
 #: ../web_tt2/lists.tt2:42 ../web_tt2/nav.tt2:101 ../web_tt2/nav.tt2:81
@@ -516,14 +509,14 @@ msgid "Bounces"
 msgstr "Retornats"
 
 #: ../web_tt2/admin_menu.tt2:102
+#, fuzzy
 msgid "Restore shared"
-msgstr "Restaura documents"
+msgstr "Restaura els documents compartits"
 
 #. (list)
 #: ../web_tt2/admin_menu.tt2:122 ../web_tt2/admin_menu.tt2:124
-#, fuzzy
 msgid "Are you sure you wish to close %1 list?"
-msgstr "Esteu segur que voleu tancar la llista %1 ?"
+msgstr "Esteu segur que voleu tancar la llista %1?"
 
 #: ../web_tt2/admin_menu.tt2:139
 msgid "List Definition"
@@ -531,7 +524,7 @@ msgstr "Definició de la llista"
 
 #: ../web_tt2/admin_menu.tt2:143
 msgid "Sending/Receiving"
-msgstr "Enviar/Rebre"
+msgstr "Enviament/Recepció"
 
 #: ../web_tt2/admin_menu.tt2:147 ../web_tt2/edit_list_request.tt2:13
 #: ../web_tt2/nav.tt2:97
@@ -545,7 +538,7 @@ msgstr "Arxius"
 
 #: ../web_tt2/admin_menu.tt2:155
 msgid "Bounce Settings"
-msgstr "Paràmetres retornats"
+msgstr "Paràmetres dels retornats"
 
 #: ../web_tt2/admin_menu.tt2:160 ../web_tt2/edit_list_request.tt2:17
 #: ../web_tt2/nav.tt2:107
@@ -554,7 +547,7 @@ msgstr "Varis"
 
 #: ../web_tt2/admin_menu.tt2:164
 msgid "Data Source"
-msgstr "Font de dades"
+msgstr "Font de les dades"
 
 #: ../web_tt2/admin_menu.tt2:172
 msgid "Attribute optionnal/required"
@@ -579,23 +572,22 @@ msgstr "Gestió de l'arxiu"
 #: ../web_tt2/picture_upload.tt2:21 ../web_tt2/pref.tt2:4
 #: ../web_tt2/rename_list_request.tt2:3 ../web_tt2/review.tt2:5
 #: ../web_tt2/reviewbouncing.tt2:3 ../web_tt2/suboptions.tt2:20
-#: ../web_tt2/subscriber_table.tt2:108
+#: ../web_tt2/subscriber_table.tt2:106
 msgid "Open in a new window"
-msgstr "Obra en una nova finestra"
+msgstr "Obre en una nova finestra"
 
 #: ../web_tt2/arc_manage.tt2:6
 msgid ""
 "Select below Archives months you want to delete or download (ZiP format):"
-msgstr ""
-"Seleccioneu els mesos que voleu eliminar o descarregar (comprimit en ZIP):"
+msgstr "Seleccioneu els mesos que voleu eliminar o baixar (comprimit en ZIP):"
 
 #: ../web_tt2/arc_manage.tt2:12
 msgid "Archive Selection:"
-msgstr "Arxius seleccionats:"
+msgstr "Arxius mensuals seleccionats:"
 
 #: ../web_tt2/arc_manage.tt2:23
 msgid "DownLoad ZipFile"
-msgstr "Descàrrega fitxer ZIP"
+msgstr "Baixa el fitxer ZIP"
 
 #: ../web_tt2/arc_manage.tt2:24
 msgid "Delete Selected Month(s)"
@@ -607,18 +599,19 @@ msgstr "Esteu segur que voleu eliminar els arxius seleccionats?"
 
 #: ../web_tt2/arc_manage.tt2:24
 msgid "Do you want to DownLoad a Zip of the selected Archives?"
-msgstr "Voleu descarregar un fitxer comprimit amb els arxius seleccionats?"
+msgstr "Voleu baixar un fitxer ZIP amb els arxius seleccionats?"
 
 #: ../web_tt2/arc_protect.tt2:7
 msgid "I am not a spammer"
-msgstr "No es tracta de correu brossa"
+msgstr "No sóc un emissor de correu brossa"
 
 #: ../web_tt2/arc_protect.tt2:11
+#, fuzzy
 msgid ""
 "This button aims at protecting mailing lists archives against Spam Harvester."
 msgstr ""
-"Aquest boto protegeix els arxius de possibles mals usos per generar correu "
-"brossa."
+"Aquest botó ajuda a protegir els arxius de les llistes de correu contra "
+"possibles mals usos per generar correu brossa."
 
 #: ../web_tt2/arc.tt2:4 ../web_tt2/arcsearch_form.tt2:3
 msgid "List archive"
@@ -626,12 +619,11 @@ msgstr "Arxiu de la llista"
 
 #: ../web_tt2/arcsearch_form.tt2:4
 msgid "Advanced archive search"
-msgstr "Arxiu de cerca avançada"
+msgstr "Cerca avançada d'arxius"
 
 #: ../web_tt2/arcsearch.tt2:7 ../web_tt2/arcsearch_form.tt2:12
-#, fuzzy
 msgid "Search field:"
-msgstr "Camp de cerca :"
+msgstr "Camp de cerca:"
 
 #: ../src/etc/mhonarc-ressources.tt2:52 ../web_tt2/arcsearch_form.tt2:16
 #: ../web_tt2/review.tt2:89 ../web_tt2/reviewbouncing.tt2:13
@@ -639,9 +631,8 @@ msgid "Search"
 msgstr "Cerca"
 
 #: ../web_tt2/arcsearch_form.tt2:19
-#, fuzzy
 msgid "Search:"
-msgstr "Cerca"
+msgstr "Cerca:"
 
 #: ../web_tt2/arcsearch_form.tt2:20
 msgid "this sentence"
@@ -658,7 +649,7 @@ msgstr "una d'aquestes paraules"
 #: ../web_tt2/arcsearch_form.tt2:25
 #, fuzzy
 msgid "Prefer:"
-msgstr "Preferiblement"
+msgstr "Preferiblement:"
 
 #: ../web_tt2/arcsearch_form.tt2:26
 msgid "newest messages"
@@ -669,22 +660,20 @@ msgid "oldest messages"
 msgstr "missatges més antics"
 
 #: ../web_tt2/arcsearch_form.tt2:30
-#, fuzzy
 msgid "Case:"
-msgstr "Cas"
+msgstr "Distingeix entre majúscules i minúscules:"
 
 #: ../web_tt2/arcsearch_form.tt2:31
 msgid "insensitive"
-msgstr "insensible"
+msgstr "No distingeix majúscules de minúscules"
 
 #: ../web_tt2/arcsearch_form.tt2:32
 msgid "sensitive"
-msgstr "sensible"
+msgstr "Distingeix entre majúscules i minúscules"
 
 #: ../web_tt2/arcsearch_form.tt2:35
-#, fuzzy
 msgid "Check:"
-msgstr "Comprova"
+msgstr "Comprova:"
 
 #: ../web_tt2/arcsearch_form.tt2:36
 msgid "part of word"
@@ -697,7 +686,7 @@ msgstr "paraula sencera"
 #: ../web_tt2/arcsearch_form.tt2:40
 #, fuzzy
 msgid "Layout:"
-msgstr "Format"
+msgstr "Format:"
 
 #: ../web_tt2/arcsearch_form.tt2:41 ../web_tt2/arcsearch_form.tt2:42
 #: ../web_tt2/arcsearch_form.tt2:43
@@ -705,9 +694,8 @@ msgid "results by page"
 msgstr "resultats per pàgina"
 
 #: ../web_tt2/arcsearch_form.tt2:46
-#, fuzzy
 msgid "Search area:"
-msgstr "Àrea de búsqueda"
+msgstr "Àrea de cerca:"
 
 #: ../web_tt2/arcsearch_form.tt2:47
 msgid "Sender"
@@ -730,13 +718,12 @@ msgstr "Camp de cerca estès"
 
 #: ../web_tt2/arcsearch.tt2:4
 msgid "Result of your search in the archive"
-msgstr "Resultat de la cerca"
+msgstr "Resultat de la cerca en els arxius"
 
 #. (key_word)
 #: ../web_tt2/arcsearch.tt2:13
-#, fuzzy
 msgid "Parameters of these search make on <strong> &quot;%1&quot;:</strong>"
-msgstr "Patrons de cerca vàlids en <strong>&quot;%1&quot;</strong> casos.  "
+msgstr "Patrons de la cerca realitzada en <strong> &quot;%1&quot;:</strong>  "
 
 #: ../web_tt2/arcsearch.tt2:17
 msgid "(This sentence,"
@@ -752,11 +739,11 @@ msgstr "(Cadascuna d'aquestes paraules,"
 
 #: ../web_tt2/arcsearch.tt2:25
 msgid "case insensitive"
-msgstr "cas insensible"
+msgstr "no distingeix majúscules"
 
 #: ../web_tt2/arcsearch.tt2:27
 msgid "case sensitive"
-msgstr "cas sensible"
+msgstr "distingeix majúscules"
 
 #: ../web_tt2/arcsearch.tt2:31
 msgid "and checking on part of word)"
@@ -782,17 +769,17 @@ msgstr "%1 accessos al cos del missatge"
 #. (subj_count)
 #: ../web_tt2/arcsearch.tt2:61
 msgid "%1 hits on message Subject field"
-msgstr "%1 accessos al assumpte del missatge"
+msgstr "%1 coincidències amb l'assumpte del missatge"
 
 #. (from_count)
 #: ../web_tt2/arcsearch.tt2:65
 msgid " %1 hits on message From field"
-msgstr "%1 accessos al remitent del missatge"
+msgstr "%1 coincidències amb el remitent del missatge"
 
 #. (date_count)
 #: ../web_tt2/arcsearch.tt2:69
 msgid "%1 hits on message Date field"
-msgstr "%1 accessos a la data del missatge"
+msgstr "%1 coincidències amb la data del missatge"
 
 #: ../web_tt2/arcsearch.tt2:111
 msgid "Continue search"
@@ -813,18 +800,17 @@ msgstr ""
 #. (archive_name)
 #: ../web_tt2/arcsearch.tt2:122
 msgid "Return to archive %1"
-msgstr "Torna al arxiu %1"
+msgstr "Torna a l'arxiu %1"
 
 #: ../web_tt2/auto_signoff.tt2:1
-#, fuzzy
 msgid "Unsubscription request"
-msgstr "No hi ha peticions per donar-se d'alta (subscripció)"
+msgstr "Petició de baixa en la subscripció"
 
 #. (signing_off_email,list)
 #: ../web_tt2/auto_signoff.tt2:2
-#, fuzzy
 msgid "You clicked a link to unsubscribe the address %1 from list %2."
-msgstr "Has sol·licitat donar-se de baixa de la llista %1"
+msgstr ""
+"Heu clicat un enllaç per donar-vos de baixa de l'adreça %1 a la llista %2. "
 
 #. (list)
 #: ../web_tt2/auto_signoff.tt2:3
@@ -832,23 +818,23 @@ msgid ""
 "A confirmation was just sent to this address. By clicking the link it "
 "contains, you will be definitively unsubscribed from list %1"
 msgstr ""
+"S'acaba d'enviar una confirmació a aquesta adreça. Fent clic en l'enllaç que "
+"conté us donareu definitivament de baixa de la llista %1 "
 
 #: ../web_tt2/blacklist.tt2:4
 msgid "Blacklist management"
 msgstr "Gestió de la llista negra"
 
 #: ../web_tt2/blacklist.tt2:8
-#, fuzzy
 msgid ""
 "Operation requested by users which email is listed in the blacklist file are "
 "rejected. The\n"
 "blacklist is in use for the following operation:"
 msgstr ""
-"Les operacions dels usuaris de la llista negra no són acceptades. La "
-"operació responsable és la següent "
+"No s'accepten les operacions sol·licitades pels usuaris de la llista negra. "
+"La llista negra està en ús per a la següent operació: "
 
 #: ../web_tt2/blacklist.tt2:10
-#, fuzzy
 msgid "Syntax:"
 msgstr "Sintaxi : "
 
@@ -861,13 +847,12 @@ msgid "char # introduce a comment"
 msgstr "el caràcter # precedeix un comentari"
 
 #: ../web_tt2/blacklist.tt2:14
-#, fuzzy
 msgid ""
 "char * match any string. Example: \"*@spammer-domain.com\" match any sender "
 "from that exact domain"
 msgstr ""
-"el caràcter * significa qualsevol cadena de caràcters. Exemple : \"*@spammer-"
-"domain.com\" simbolitza qualsevol adreça d'aquest domini."
+"el caràcter * coincideix amb qualsevol cadena. Exemple: \"*@spammer-domain."
+"com\" correspon a qualsevol usuari d'aquest domini."
 
 #: ../web_tt2/blacklist.tt2:15
 msgid "only one char * is autorized in a line"
@@ -875,104 +860,99 @@ msgstr "només podeu fer servir un * per línia"
 
 #: ../web_tt2/blacklist.tt2:20
 msgid "The current blacklist is empty"
-msgstr "La llista negra està buida"
+msgstr "La llista negra és buida"
 
 #. (rows)
 #: ../web_tt2/blacklist.tt2:22
 msgid "The current blacklist contains %1 line(s)"
-msgstr "La llista negra conté %1 línies"
+msgstr "La llista negra actual conté %1 línies"
 
 #: ../web_tt2/blacklist.tt2:38 ../web_tt2/dump_scenario.tt2:37
 #: ../web_tt2/edit_template.tt2:37
 msgid "save"
-msgstr "guarda"
+msgstr "Desa"
 
 #: ../web_tt2/blacklist.tt2:40 ../web_tt2/edit_template.tt2:40
 msgid "Template saved"
-msgstr "Plantilla guardada"
+msgstr "Plantilla desada"
 
 #: ../web_tt2/change_email_request.tt2:3
 msgid ""
 "Changing your email address is a sensitive operation so we need to verify "
 "your email."
 msgstr ""
-"Canviar la teva adreça de correu és una operació sensible i requereix una "
-"verificació."
+"Canviar la vostra adreça de correu és una operació sensible i requereix que "
+"la verifiquem."
 
 #. (new_email)
 #: ../web_tt2/change_email_request.tt2:4
-#, fuzzy
 msgid ""
 "To this end we have sent you an email to this address: %1 with a validation "
 "link."
 msgstr ""
-"Per finalitzar el procediment de verificació hem enviat un missatge de "
-"correu a l'adreça: %1 amb una URL de validació."
+"Per això, hem enviat un missatge de correu a l'adreça: %1 amb un enllaç de "
+"validació."
 
 #: ../web_tt2/change_email_request.tt2:5
 msgid "You shoukd check your mailbox now."
-msgstr "Ha de comprovar la seva bústia de correu ara."
+msgstr "Heu de comprovar la vostra bústia de correu."
 
 #: ../web_tt2/change_email.tt2:3
 msgid "You will receive a n email, with a confirmation link."
-msgstr "Rebrà un correu electrònic amb un enllaç de confirmació."
+msgstr "Rebreu un correu electrònic amb un enllaç de confirmació."
 
 #: ../web_tt2/change_email.tt2:4
 msgid ""
 "To confirm your email address change, go to your email account and click on "
 "the provided link"
 msgstr ""
-"Per confirmar el canvi d'adreça electrònica, si us plau, entreu a la vostra "
-"bústia de correu i seleccioneu a l'enllaç que apareix."
+"Per confirmar el canvi d'adreça electrònica, entreu a la vostra bústia de "
+"correu i feu clic en l'enllaç que hi apareix."
 
 #: ../web_tt2/choosepasswd.tt2:4
 msgid ""
 "You need to choose a password for your WWSympa environment.\n"
 "You will need this password to perform privileged operations."
 msgstr ""
-"Necessita seleccionar una contrasenya per la interfície web.\n"
-"Necessitarà aquesta contrasenya per realitzar les operacions restringides."
+"Cal que trieu una contrasenya per a la interfície web.\n"
+"Necessitareu aquesta contrasenya per a realitzar les operacions restringides."
 
 #: ../web_tt2/choosepasswd.tt2:11 ../web_tt2/pref.tt2:41
-#, fuzzy
 msgid "New password:"
-msgstr "Nova contrasenya :"
+msgstr "Nova contrasenya:"
 
 #: ../web_tt2/choosepasswd.tt2:12
-#, fuzzy
 msgid "New password again:"
-msgstr "Repeteix la nova contrasenya :"
+msgstr "Repetiu la nova contrasenya:"
 
 #: ../web_tt2/choosepasswd.tt2:13 ../web_tt2/picture_upload.tt2:13
 #: ../web_tt2/pref.tt2:20 ../web_tt2/pref.tt2:43
 msgid "Submit"
-msgstr "Acceptar"
+msgstr "Accepta"
 
 #: ../web_tt2/close_list.tt2:4
 msgid ""
 "list has been closed. Its subscribers have been deleted from\n"
 "the subscriber database. The list is no longer public on the site."
 msgstr ""
-"la llista està clausurada. Els seus subscriptors s'han eliminta\n"
-" de la base de dades. La llista ja no consta entre les llistes públiques. "
+"la llista està clausurada. Els seus subscriptors s'han eliminat\n"
+"de la base de dades. La llista ja no consta entre les llistes públiques. "
 
 #: ../web_tt2/close_list.tt2:7
 msgid "List aliases have been removed."
-msgstr "Àlies de la llista eliminats."
+msgstr "S'han eliminat els àlies de la llista."
 
 #: ../web_tt2/close_list.tt2:9
 msgid "You should remove list aliases manually"
-msgstr "Haurà d'eliminar els àlies de la llista manualment"
+msgstr "Haureu d'eliminar els àlies de la llista manualment"
 
 #: ../web_tt2/compose_mail.tt2:5
-#, fuzzy
 msgid "Sending a message to the list"
-msgstr "Enviant un missatge a la llista"
+msgstr "S'està enviant un missatge a la llista"
 
 #: ../web_tt2/compose_mail.tt2:12
-#, fuzzy
 msgid "Sending an html page to the list "
-msgstr "Enviant un missatge a la llista"
+msgstr "S'està enviant una pàgina html a la llista"
 
 #. (user.email)
 #. (from)
@@ -989,17 +969,15 @@ msgstr "A: %1"
 #: ../web_tt2/install_pending_list.tt2:14
 #: ../web_tt2/set_pending_list_request.tt2:8
 msgid "Subject:"
-msgstr "Tema:"
+msgstr "Assumpte:"
 
 #: ../web_tt2/compose_mail.tt2:26
-#, fuzzy
 msgid "Send to selected receipient"
-msgstr "Assumpte de la llista"
+msgstr "Envia als destinataris seleccionats"
 
 #: ../web_tt2/compose_mail.tt2:27
-#, fuzzy
 msgid "Send to me"
-msgstr "Missatge recordatori"
+msgstr "Envia'm el missatge"
 
 #: ../web_tt2/compose_mail.tt2:47 ../web_tt2/modindex.tt2:50
 #: ../web_tt2/viewmod.tt2:32
@@ -1007,45 +985,53 @@ msgid "This list is configured to require topic(s)."
 msgstr "El tema és obligatori en aquesta llista."
 
 #: ../web_tt2/compose_mail.tt2:49
-#, fuzzy
 msgid "Please select one or more topic(s) that corresponds to your message:"
-msgstr "Seleccioni un o més temes que corresponguin amb el teu missatge :"
+msgstr "Seleccioni un o més temes que corresponguin amb el vostre missatge:"
 
 #: ../web_tt2/compose_mail.tt2:64
 msgid "Messages customization: use the template syntax:"
-msgstr ""
+msgstr "Personalització dels missatges. Utilitza la sintaxi de les plantilles:"
 
 #: ../web_tt2/compose_mail.tt2:65
+#, fuzzy
 msgid "Below are some examples of TT2 parameters usable in messages."
 msgstr ""
+"A sota hi ha uns quants exemples de paràmetres TT2 que es poden emprar en "
+"missatges."
 
 #: ../web_tt2/compose_mail.tt2:67
-#, fuzzy
 msgid ": the listname; always available."
-msgstr "No hi ha cap llista disponible."
+msgstr ": el nom de la llista; sempre disponible."
 
 #: ../web_tt2/compose_mail.tt2:68
+#, fuzzy
 msgid ": the name of the host the list is intalled on; always available."
 msgstr ""
+": el nom de l'amfitrió on la llista es troba instal·lada; sempre disponible."
 
 #: ../web_tt2/compose_mail.tt2:69
-#, fuzzy
 msgid ": the user email; always available."
-msgstr "No hi ha cap llista disponible."
+msgstr ": l'adreça electrònica de l'usuari; sempre disponible."
 
 #: ../web_tt2/compose_mail.tt2:70
 msgid ": the user name associated to her email; always available."
 msgstr ""
+": el nom d'usuari associat a la seva adreça electrònica; sempre disponible."
 
 #: ../web_tt2/compose_mail.tt2:71
+#, fuzzy
 msgid ": the - human readable - user's subscription date; always available."
-msgstr ""
+msgstr ": la data de subscripció de l'usuari; sempre disponible."
 
 #: ../web_tt2/compose_mail.tt2:72
+#, fuzzy
 msgid ""
 ": can be anything you like; available if you defined a user custom attribute "
 "named \"title\" (see the list configuration, section \"Miscellaneous\")."
 msgstr ""
+": pot ser qualsevol que us agradi; disponible si vau definir un atribut "
+"d'usuari personalitzat anomenat \"títol\" (vegeu la configuració de la "
+"llista, secció \"Miscellaneous\")."
 
 #: ../web_tt2/compose_mail.tt2:73
 msgid ""
@@ -1058,6 +1044,8 @@ msgid ""
 ": can be anything you like; available if you defined a user custom attribute "
 "named \"organization\"."
 msgstr ""
+": Pot ser el que vulgueu; disponible si vau definir un atribut d'usuari "
+"anomenat \"organització\"."
 
 #: ../web_tt2/compose_mail.tt2:78
 #, fuzzy
@@ -1073,9 +1061,8 @@ msgid "Input template"
 msgstr "Plantilla d'entrada"
 
 #: ../web_tt2/copy_template.tt2:8
-#, fuzzy
 msgid "Name: "
-msgstr "Nom :"
+msgstr "Nom:"
 
 #: ../web_tt2/copy_template.tt2:10 ../web_tt2/copy_template.tt2:17
 #: ../web_tt2/copy_template.tt2:9 ../web_tt2/view_template.tt2:10
@@ -1114,9 +1101,8 @@ msgid "default"
 msgstr "per defecte"
 
 #: ../web_tt2/copy_template.tt2:31
-#, fuzzy
 msgid "Enter list name: "
-msgstr "Nom de la llista :"
+msgstr "Introduïu el nom de la llista:"
 
 #: ../web_tt2/copy_template.tt2:43 ../web_tt2/d_properties.tt2:36
 msgid "Apply"
@@ -1127,23 +1113,22 @@ msgid "Copy an existing list."
 msgstr "Còpia una llista existent."
 
 #: ../web_tt2/create_list_request.tt2:9
-#, fuzzy
 msgid ""
 "You can create a list, using an existing list as a template; the list "
 "configuration of the source list will be copied to create the new one. Note "
 "that neither list members, nor archives or shared documents are duplicated. "
 "The source lists you can use are limited to lists you own."
 msgstr ""
-"Pot crear una llista utilitzant una llista com una plantilla; l'origen de la "
-"configuració de la llista serà copiada per a la creació de la nova. Noti que "
-"ni els membres de la llista, ni arxius o documents compartits serán "
-"duplicats. Les llistes de la font que vostè pot utilitzar són limitades amb "
-"llistes que vostè posseix."
+"Podeu crear una llista utilitzant una llista com una plantilla; es copiarà "
+"l'origen de la configuració de la llista per a la creació de la nova. Noteu "
+"que no es duplicaran els membres de la llista, ni els arxius o els documents "
+"compartits. Les llistes que podeu utilitzar com a origen són únicament les "
+"que us pertenyen."
 
 #: ../web_tt2/create_list_request.tt2:10 ../web_tt2/create_list_request.tt2:29
 msgid ""
 "After the list is created, you will be able to adjust it's configuration."
-msgstr "Després de crear la llista, s'haurà d'ajustar la seva configuració"
+msgstr "Després de crear la llista podreu ajustar-ne la configuració."
 
 #: ../web_tt2/create_list_request.tt2:18 ../web_tt2/rename_list_request.tt2:8
 msgid "New list name:"
@@ -1151,7 +1136,7 @@ msgstr "Nou nom de la llista:"
 
 #: ../web_tt2/create_list_request.tt2:20
 msgid "copy list configuration"
-msgstr "Còpia la configuració de la llista"
+msgstr "Copia la configuració de la llista"
 
 #: ../web_tt2/create_list_request.tt2:26 ../web_tt2/nav.tt2:6
 msgid "Create a list using a template"
@@ -1163,14 +1148,13 @@ msgid ""
 "choose a list template that will preset most of the list parameters "
 "according to the list usage you plan. "
 msgstr ""
-"Pot demanar la creació d'una nova llista amb el següent formulara. Podrà "
-"seleccionar una plantilla de llista que preestableix la majoria dels "
-"paràmetres de la llista que necessita"
+"Podeu demanar la creació d'una nova llista amb el formulari següent. Trieu "
+"una plantilla de llista que disposi dels màxims paràmetres que s'adeqüin a "
+"les vostres necessitats."
 
 #: ../web_tt2/create_list_request.tt2:33
-#, fuzzy
 msgid "the list name; be careful, not its address!"
-msgstr "El nom de la llista ; compte, no la seva adreça."
+msgstr "El nom de la llista; compte, no l'adreça d'aquesta!"
 
 #: ../web_tt2/create_list_request.tt2:34
 msgid "List name:"
@@ -1178,7 +1162,7 @@ msgstr "Nom de la llista:"
 
 #: ../web_tt2/create_list_request.tt2:38
 msgid "You are the privileged owner of this list"
-msgstr "Té privilegis de propietari per aquesta llista"
+msgstr "Teniu privilegis de propietari per aquesta llista"
 
 #: ../web_tt2/create_list_request.tt2:39
 msgid "Owner:"
@@ -1189,13 +1173,12 @@ msgid ""
 "The list type is a set of parameters' profile. Parameters will be editable, "
 "once the list created"
 msgstr ""
-"El tipus de llista és un conjunt de paràmetres. Podreu modificar els "
+"El tipus de llista és un conjunt de paràmetres. Podeu modificar els "
 "paràmetres un cop creada la llista"
 
 #: ../web_tt2/create_list_request.tt2:43
-#, fuzzy
 msgid "List type:"
-msgstr "Tipus de llista :"
+msgstr "Tipus de llista:"
 
 #: ../web_tt2/create_list_request.tt2:68
 msgid "The list's subject"
@@ -1211,7 +1194,7 @@ msgstr "Temes:"
 
 #: ../web_tt2/create_list_request.tt2:76
 msgid "--Select a topic--"
-msgstr "--Selecciona un tema--"
+msgstr "--Seleccioneu un tema--"
 
 #: ../web_tt2/create_list_request.tt2:89 ../web_tt2/javascript.tt2:101
 msgid "Other"
@@ -1231,11 +1214,12 @@ msgstr "Tramet la petició de creació de llista"
 
 #: ../web_tt2/create_list.tt2:6
 msgid "Your list is created."
-msgstr "La seva llista s'ha creat correctament."
+msgstr "La vostra llista s'ha creat correctament."
 
 #: ../web_tt2/create_list.tt2:7
+#, fuzzy
 msgid "You can configure it via the admin button beside."
-msgstr "Pot configurar-ho amb el botó d'administració"
+msgstr "Podeu configurar-ho amb el botó d'administració"
 
 #: ../web_tt2/create_list.tt2:10 ../web_tt2/install_pending_list.tt2:26
 msgid "Aliases have been installed."
@@ -1247,7 +1231,8 @@ msgid ""
 "configuration using the admin button but the list will be unusable until the "
 "listmaster validates it."
 msgstr ""
-"La seva petició de llista s'ha registrat correctament. Ara la pot modificar\n"
+"La vostra petició de llista s'ha registrat correctament. Ara la podeu "
+"modificar\n"
 "fent servir el botó d'administració, però no estarà activa fins que "
 "l'administrador la validi."
 
@@ -1267,14 +1252,13 @@ msgstr "Control d'accés al document %1"
 #: ../web_tt2/d_properties.tt2:15 ../web_tt2/d_read.tt2:38
 #, fuzzy
 msgid "Owner: %1"
-msgstr "Propietari : %1"
+msgstr "Propietari: %1"
 
 #. (doc_date)
 #: ../web_tt2/d_control.tt2:10 ../web_tt2/d_editfile.tt2:18
 #: ../web_tt2/d_properties.tt2:16 ../web_tt2/d_read.tt2:39
-#, fuzzy
 msgid "Last update: %1"
-msgstr "Última actualització : %1"
+msgstr "Darrera actualització: %1"
 
 #. (doc_title)
 #. (desc)
@@ -1282,7 +1266,7 @@ msgstr "Última actualització : %1"
 #: ../web_tt2/d_properties.tt2:17 ../web_tt2/d_read.tt2:41
 #, fuzzy
 msgid "Description: %1"
-msgstr "Descripció : %1"
+msgstr "Descripció: %1"
 
 #: ../web_tt2/d_control.tt2:17
 msgid "Read access"
@@ -1293,6 +1277,7 @@ msgid "Edit access"
 msgstr "Permís d'edició"
 
 #: ../web_tt2/d_control.tt2:37
+#, fuzzy
 msgid "change access"
 msgstr "Permís de canvi"
 
@@ -1313,7 +1298,7 @@ msgstr "Edició dels preferits"
 #. (visible_path)
 #: ../web_tt2/d_editfile.tt2:14
 msgid "Edition of the file %1"
-msgstr "Edició del arxiu %1"
+msgstr "Edició de l'arxiu %1"
 
 #: ../web_tt2/d_editfile.tt2:30
 msgid "Bookmark URL"
@@ -1321,8 +1306,9 @@ msgstr "URL preferida"
 
 #. (visible_path)
 #: ../web_tt2/d_editfile.tt2:33
+#, fuzzy
 msgid "Replace the file %1 with your file"
-msgstr "Canviï el fitxer %1 pel seu fitxer"
+msgstr "Canviï el fitxer %1 pel vostre fitxer"
 
 #: ../web_tt2/d_editfile.tt2:38 ../web_tt2/edit_list_request.tt2:421
 #: ../web_tt2/editsubscriber.tt2:60 ../web_tt2/suboptions.tt2:65
@@ -1340,19 +1326,21 @@ msgid "Edit the file %1"
 msgstr "Edita el fitxer %1"
 
 #: ../web_tt2/d_install_shared.tt2:10
-#, fuzzy
 msgid ""
 "already exist(s), do you want to confirm the install and erase the old file"
 "(s) or cancel the install?"
 msgstr ""
-"Ja existeix, voleu confirmar la instal·lació i eliminar els fitxers antics?"
+"Ja hi ha un fitxer amb el mateix nom. Voleu confirmar la instal·lació i "
+"eliminar-ne la versió antiga o voleu cancel·lar la instal·lació?"
 
 #: ../web_tt2/d_install_shared.tt2:12
+#, fuzzy
 msgid "Confirm"
 msgstr "Confirmar"
 
 #: ../web_tt2/d_install_shared.tt2:13 ../web_tt2/d_upload.tt2:16
 #: ../web_tt2/manage_template.tt2:68
+#, fuzzy
 msgid "Cancel"
 msgstr "Cancel·lar"
 
@@ -1384,12 +1372,12 @@ msgstr "Descripció del fitxer '%1'"
 #. (fname)
 #: ../web_tt2/d_properties.tt2:47
 msgid "Rename directory %1"
-msgstr "Canvia el nom al directori %1"
+msgstr "Canvia el nom del directori %1"
 
 #. (fname)
 #: ../web_tt2/d_properties.tt2:49
 msgid "Rename file %1"
-msgstr "Canvia el nom al fitxer %1"
+msgstr "Canvia el nom del fitxer %1"
 
 #: ../web_tt2/d_properties.tt2:58 ../web_tt2/d_upload.tt2:12
 msgid "Rename"
@@ -1409,15 +1397,14 @@ msgstr "Llistat de la carpeta"
 
 #. (visible_path)
 #: ../web_tt2/d_read.tt2:27
-#, fuzzy
 msgid "Do you really want to delete %1?"
-msgstr "Esteu segur que voleu eliminar %1 ?"
+msgstr "Esteu segur que voleu eliminar %1?"
 
 #: ../web_tt2/d_read.tt2:116 ../web_tt2/d_read.tt2:118
 #: ../web_tt2/d_read.tt2:253 ../web_tt2/d_read.tt2:255
 #: ../web_tt2/d_read.tt2:27 ../web_tt2/search_user.tt2:56
 msgid "delete"
-msgstr "Eliminar"
+msgstr "Elimina"
 
 #: ../web_tt2/d_read.tt2:141 ../web_tt2/d_read.tt2:143
 #: ../web_tt2/d_read.tt2:277 ../web_tt2/d_read.tt2:279
@@ -1446,25 +1433,25 @@ msgid "Size (Kb)"
 msgstr "Mida (Kb)"
 
 #: ../web_tt2/d_read.tt2:69 ../web_tt2/d_read.tt2:71
-#: ../web_tt2/latest_d_read.tt2:18 ../web_tt2/subscriber_table.tt2:61
+#: ../web_tt2/latest_d_read.tt2:18 ../web_tt2/subscriber_table.tt2:59
 msgid "Last update"
-msgstr "Última actualització"
+msgstr "Darrera actualització"
 
 #: ../web_tt2/d_read.tt2:75 ../web_tt2/editfile.tt2:30
-#: ../web_tt2/editfile.tt2:31 ../web_tt2/editfile.tt2:36
-#: ../web_tt2/editfile.tt2:37 ../web_tt2/editfile.tt2:38
-#: ../web_tt2/editfile.tt2:40 ../web_tt2/editfile.tt2:45
-#: ../web_tt2/editfile.tt2:46 ../web_tt2/editfile.tt2:50
-#: ../web_tt2/editfile.tt2:51 ../web_tt2/manage_template.tt2:35
+#: ../web_tt2/editfile.tt2:31 ../web_tt2/editfile.tt2:35
+#: ../web_tt2/editfile.tt2:36 ../web_tt2/editfile.tt2:37
+#: ../web_tt2/editfile.tt2:39 ../web_tt2/editfile.tt2:44
+#: ../web_tt2/editfile.tt2:45 ../web_tt2/editfile.tt2:49
+#: ../web_tt2/editfile.tt2:50 ../web_tt2/manage_template.tt2:35
 #: ../web_tt2/manage_template.tt2:56 ../web_tt2/serveradmin.tt2:149
 #: ../web_tt2/serveradmin.tt2:162
 msgid "Edit"
-msgstr "Editar"
+msgstr "Edita"
 
 #: ../web_tt2/d_read.tt2:76 ../web_tt2/d_upload.tt2:7
 #: ../web_tt2/manage_template.tt2:38 ../web_tt2/picture_upload.tt2:14
 msgid "Delete"
-msgstr "Eliminar"
+msgstr "Elimina"
 
 #: ../web_tt2/d_read.tt2:77
 msgid "Access"
@@ -1480,7 +1467,7 @@ msgstr "Moderació"
 
 #: ../web_tt2/d_read.tt2:87
 msgid "Empty folder"
-msgstr "Carpeta buïda"
+msgstr "Carpeta buida"
 
 #: ../web_tt2/d_read.tt2:103 ../web_tt2/d_read.tt2:218
 #: ../web_tt2/latest_d_read.tt2:42
@@ -1489,9 +1476,8 @@ msgstr "Desconegut"
 
 #. (visible_path,s.doc)
 #: ../web_tt2/d_read.tt2:116 ../web_tt2/d_read.tt2:118
-#, fuzzy
 msgid "Do you really want to delete %1%2?"
-msgstr "Esteu segur que voleu eliminar %1%2 ?"
+msgstr "Esteu segur que voleu eliminar %1%2?"
 
 #: ../web_tt2/d_read.tt2:211
 msgid "to moderate"
@@ -1505,9 +1491,8 @@ msgstr "edita"
 
 #. (visible_path,f.doc,f.size)
 #: ../web_tt2/d_read.tt2:253 ../web_tt2/d_read.tt2:255
-#, fuzzy
 msgid "Do you really want to delete %1%2 (%3 Kb)?"
-msgstr "Esteu segur que voleu eliminar %1%2 (%3 Kb) ?"
+msgstr "Esteu segur que voleu eliminar %1%2 (%3 Kb)?"
 
 #: ../web_tt2/d_read.tt2:290
 msgid "moderate"
@@ -1516,11 +1501,11 @@ msgstr "moderació"
 #. (visible_path)
 #: ../web_tt2/d_read.tt2:314
 msgid "Create a new folder inside folder %1"
-msgstr "Crea una nova carpeta dins %1"
+msgstr "Crea una nova carpeta dins la carpeta %1"
 
 #: ../web_tt2/d_read.tt2:316
 msgid "Create a new folder inside root folder"
-msgstr "Crea una nova carpeta a l'arrel"
+msgstr "Crea una nova carpeta a la carpeta arrel"
 
 #: ../web_tt2/d_read.tt2:319
 msgid "Folder name"
@@ -1540,7 +1525,7 @@ msgstr "Nom del fitxer"
 
 #: ../web_tt2/d_read.tt2:349
 msgid "Add a bookmark"
-msgstr "Afegir un preferit"
+msgstr "Afegeix un preferit"
 
 #: ../web_tt2/d_read.tt2:350
 msgid "title"
@@ -1552,16 +1537,16 @@ msgstr "URL"
 
 #: ../web_tt2/d_read.tt2:352 ../web_tt2/review.tt2:73
 msgid "Add"
-msgstr "Afegir"
+msgstr "Afegeix"
 
 #. (visible_path)
 #: ../web_tt2/d_read.tt2:366
 msgid "Upload a file inside folder %1"
-msgstr "Càrrega un fitxer dins la carpeta %1"
+msgstr "Penja un fitxer dins la carpeta %1"
 
 #: ../web_tt2/d_read.tt2:368
 msgid "Upload a file inside folder SHARED"
-msgstr "Càrrega un fitxer dins la carpeta COMPARTITS"
+msgstr "Penja un fitxer dins la carpeta COMPARTITS"
 
 #. (visible_path)
 #: ../web_tt2/d_read.tt2:385
@@ -1570,19 +1555,21 @@ msgstr "Descomprimeix un fitxer dins el directori %1"
 
 #: ../web_tt2/d_read.tt2:387
 msgid "Unzip a file inside the folder SHARED"
-msgstr "Descomprimeix un fitxer dins el directori de COMPARTITS"
+msgstr "Descomprimeix un fitxer dins el directori COMPARTITS"
 
 #: ../web_tt2/dump_scenario.tt2:6
 msgid "scenario is created but not loaded in the list config"
-msgstr "L'escenari es crea però no es carrega en la configuració de la llista"
+msgstr ""
+"S'ha creat l'escenari, però no es carrega en la configuració de la llista"
 
 #: ../web_tt2/dump_scenario.tt2:8
 msgid ""
 "new scenario is created but not loaded in the list config. Edit list config "
 "if you need to apply it for that list"
 msgstr ""
-"El nou escenari es crea però no es carrega en la configuració de la llista. "
-"Editeu la configuració de la llista si voleu aplicar-lo en aquesta llista."
+"S'ha creat el nou escenari, però no es carrega en la configuració de la "
+"llista. Editeu la configuració de la llista si voleu aplicar-lo en aquesta "
+"llista."
 
 #: ../web_tt2/dump_scenario.tt2:10
 msgid "new scenario is equal to previous one. Nothing done."
@@ -1610,7 +1597,7 @@ msgstr "llista %1"
 #: ../web_tt2/dump_scenario.tt2:36
 #, fuzzy
 msgid "scenario name:"
-msgstr "nom de l'escenari :"
+msgstr "nom de l'escenari:"
 
 #. (shortname)
 #: ../web_tt2/d_upload.tt2:2
@@ -1619,143 +1606,168 @@ msgstr "el fitxer %1 ja existeix"
 
 #. (shortname)
 #: ../web_tt2/d_upload.tt2:6
-#, fuzzy
 msgid "Do you want to delete the old file %1?"
-msgstr "Esteu segur que voleu eliminar el fitxer %1 ?"
+msgstr "Esteu segur que voleu eliminar el fitxer %1?"
 
 #. (shortname)
 #: ../web_tt2/d_upload.tt2:9
-#, fuzzy
 msgid "Do you want to rename your file %1?"
-msgstr "Esteu segur que voleu canviar el nom al fitxer %1 ?"
+msgstr "Esteu segur que voleu canviar el nom al fitxer %1?"
 
 #: ../web_tt2/d_upload.tt2:15
-#, fuzzy
 msgid "Do you want to cancel the upload?"
-msgstr "Esteu segur que voleu cancel·lar la transferència ?"
+msgstr "Esteu segur que voleu cancel·lar la transferència?"
 
 #: ../web_tt2/edit_attributes.tt2:4 ../web_tt2/subindex.tt2:14
 msgid "Additional information"
 msgstr "Informació addicional "
 
 #: ../web_tt2/edit_attributes.tt2:7
-#, fuzzy
 msgid "[% k.name %]:"
-msgstr "[% k.name %] :"
+msgstr "[% k.name %]:"
 
 #: ../web_tt2/edit_attributes.tt2:24
-#, fuzzy
 msgid "*: Required element"
-msgstr "Element obligatori"
+msgstr "*: Element obligatori"
 
 #: ../web_tt2/edit_config.tt2:2
 #, fuzzy
 msgid "Edit robot config"
-msgstr "Edita llista de configuració"
+msgstr "Edita la llista de configuració"
 
 #: ../web_tt2/edit_config.tt2:35 ../web_tt2/serveradmin.tt2:213
 msgid "Set"
-msgstr ""
+msgstr "Defineix"
 
 #: ../web_tt2/editfile.tt2:4
 msgid "Edit list templates"
-msgstr "Modificar les plantilles"
+msgstr "Modifica la llista de les plantilles"
 
 #: ../web_tt2/editfile.tt2:15
 msgid "Save"
-msgstr "Guardar"
+msgstr "Desa"
 
 #: ../web_tt2/editfile.tt2:23
-#, fuzzy
 msgid "You can edit several messages/files associated with your list:"
-msgstr "Pot editar els missatges i fitxer associats a la seva llista :"
+msgstr ""
+"Podeu editar diversos missatges i fitxers associats a la vostra llista:"
 
 #: ../web_tt2/editfile.tt2:28
 msgid "HTML pages"
-msgstr "Planes HTML"
+msgstr "Pàgines HTML"
 
 #: ../web_tt2/editfile.tt2:30
 msgid ""
 "List homepage: HTML text to describe the list. It is printed on the right-"
 "hand side of the main list page. (default for this is the list description)"
 msgstr ""
+"Pàgina d'inici de la llista: text d'HTML per descriure la llista. És imprès "
+"a la banda dreta de la pàgina principal de la llista. (Per defecte és la "
+"descripció de la llista)"
 
-#: ../web_tt2/editfile.tt2:32
+#: ../web_tt2/editfile.tt2:31
+#, fuzzy
 msgid ""
-"List description: This text is sent as an answer to the mail command\n"
-"INFO. It can also be included in the <em>Welcome message</em>."
+"List description: This text is sent as an answer to the mail command INFO. "
+"It can also be included in the <em>Welcome message</em>."
 msgstr ""
+"Descripció de la llista: Aquest text s'envia com una resposta a una ordre de "
+"correu\n"
+"INFO. També pot ser inclòs en el <em>Missatge de benvinguda</em>."
 
-#: ../web_tt2/editfile.tt2:34
+#: ../web_tt2/editfile.tt2:33
 msgid "Automatic messages"
-msgstr "missatges automàtics"
+msgstr "Missatges automàtics"
 
-#: ../web_tt2/editfile.tt2:36
+#: ../web_tt2/editfile.tt2:35
 msgid ""
 "Welcome message: This message is sent to new subscribers. It can be a full "
 "MIME structured message (only for MIME gurus)."
 msgstr ""
+"Missatge de benvinguda: Aquest missatge s'envia als abonats nous. Pot ser un "
+"missatge estructurat en MIME (només per MIME gurus)."
 
-#: ../web_tt2/editfile.tt2:37
+#: ../web_tt2/editfile.tt2:36
 msgid ""
 "Rejection message: when a message is rejected by list editor, a notification "
 "can be sent to the original author. You may prepare various rejection "
 "messages."
 msgstr ""
+"Missatge de rebuig: quan un missatge és refusat per l'editor de la llista, "
+"es pot enviar una notificació a l'autor original. Podeu preparar diversos "
+"missatges de rebuig."
 
-#: ../web_tt2/editfile.tt2:39
+#: ../web_tt2/editfile.tt2:38
+#, fuzzy
 msgid ""
 "Remind message: This message is sent to each subscriber\n"
 "when using the command  REMIND. It's very useful to help people who are "
 "confused about their own subscription emails or people who are not able to "
 "unsubscribe themselves."
 msgstr ""
+"Missatge de recordatori: Aquest missatge s'envia a cada sunbscriptor\n"
+"quan s'utilitza l'ordre RECORDA. És molt útil per a ajudar persones que no "
+"recorden els seus correus electrònics de subscripció o persones que no són "
+"capaces de donar-se de baixa."
 
-#: ../web_tt2/editfile.tt2:41
+#: ../web_tt2/editfile.tt2:40
 msgid ""
 "Subscribing invitation message: sent to a person if someone  \n"
 "uses the INVITE command to invite someone to subscribe."
 msgstr ""
+"Missatge d'invitació a la subscripció: missatge enviat a una persona si "
+"algú  \n"
+"utilitza l'ordre CONVIDA per convidar algú a subscriure-s'hi."
 
-#: ../web_tt2/editfile.tt2:43
+#: ../web_tt2/editfile.tt2:42
 msgid "Added in distributed messages"
 msgstr "Afegit en missatges distribuïts."
 
-#: ../web_tt2/editfile.tt2:45
+#: ../web_tt2/editfile.tt2:44
+#, fuzzy
 msgid ""
 "Message footer: If this file is not empty, it is added as a MIME attachment "
 "at the end of each message distributed to the list."
 msgstr ""
+"Peu del missatge: Si aquest fitxer no és buit, s'afegeix com a MIME adjunt "
+"al final de cada missatge distribuït a la llista."
 
-#: ../web_tt2/editfile.tt2:46
+#: ../web_tt2/editfile.tt2:45
 msgid ""
 "Message header: If this file is not empty, it is added as a MIME attachment "
 "at the beginning of each message distributed to the list."
 msgstr ""
+"Encapçalament del missatge: Si aquest fitxer no és buit, s'afegeix com a "
+"MIME adjunt al principi de cada missatge distribuït a la llista."
 
-#: ../web_tt2/editfile.tt2:48
+#: ../web_tt2/editfile.tt2:47
 msgid "More"
 msgstr "Més"
 
-#: ../web_tt2/editfile.tt2:50
+#: ../web_tt2/editfile.tt2:49
 msgid "Unsubscribe message: This message is sent when users leave the list."
 msgstr ""
+"Missatge de baixa: Aquest missatge s'envia als usuaris quan aquests es donen "
+"de baixa de la llista."
 
-#: ../web_tt2/editfile.tt2:52
+#: ../web_tt2/editfile.tt2:51
+#, fuzzy
 msgid ""
 "Deletion message: This message is sent to users when you\n"
 "remove them from the list using the DEL command (unless you hit the Quiet "
 "button)."
 msgstr ""
+"Missatge de supressió: Aquest missatge s'envia als usuaris que \n"
+"traieu de la llista utilitzant l'ordre DEL (llevat que hàgiu premut el botó "
+"Quiet)."
 
 #: ../web_tt2/edit_list_request.tt2:4
 msgid "Configuring the list"
-msgstr "Configurant la llista"
+msgstr "Configura la llista"
 
 #: ../web_tt2/edit_list_request.tt2:8
-#, fuzzy
 msgid "You can choose below a subset of parameters to edit:"
-msgstr "Pot seleccionar el conjunt de paràmetres a editar :"
+msgstr "Podeu seleccionar a sota el conjunt de paràmetres a editar:"
 
 #: ../web_tt2/edit_list_request.tt2:11 ../web_tt2/nav.tt2:95
 msgid "List definition"
@@ -1787,46 +1799,40 @@ msgstr "Font de l'escenari"
 #: ../web_tt2/editsubscriber.tt2:55 ../web_tt2/error.tt2:104
 #: ../web_tt2/rss.tt2:4 ../web_tt2/subindex.tt2:39
 msgid ":"
-msgstr ""
+msgstr ":"
 
 #: ../web_tt2/editsubscriber.tt2:5
 msgid "Subscriber information"
 msgstr "Informació del subscriptor"
 
 #: ../web_tt2/editsubscriber.tt2:10 ../web_tt2/pref.tt2:9
-#, fuzzy
 msgid "Email:"
-msgstr "Adreça electrònica :"
+msgstr "Adreça electrònica:"
 
 #: ../web_tt2/editsubscriber.tt2:12 ../web_tt2/pref.tt2:10
 #: ../web_tt2/suboptions.tt2:8
-#, fuzzy
 msgid "Name:"
-msgstr "Nom : "
+msgstr "Nom: "
 
 #: ../web_tt2/editsubscriber.tt2:18
-#, fuzzy
 msgid "Subscribed since:"
-msgstr "Inscrit des de :"
+msgstr "Inscrit des de:"
 
 #: ../web_tt2/editsubscriber.tt2:19 ../web_tt2/suboptions.tt2:11
 msgid "Last update:"
-msgstr "Darrera actualització"
+msgstr "Darrera actualització:"
 
 #: ../web_tt2/editsubscriber.tt2:20
-#, fuzzy
 msgid "Receiving:"
-msgstr "Rebent :"
+msgstr "Recepció:"
 
 #: ../web_tt2/editsubscriber.tt2:27 ../web_tt2/suboptions.tt2:56
-#, fuzzy
 msgid "Visibility:"
-msgstr "Visibilitat :"
+msgstr "Visibilitat:"
 
 #: ../web_tt2/editsubscriber.tt2:34 ../web_tt2/pref.tt2:11
-#, fuzzy
 msgid "Language:"
-msgstr "Idioma :"
+msgstr "Llengua:"
 
 #: ../web_tt2/editsubscriber.tt2:36
 #, fuzzy
@@ -1835,19 +1841,20 @@ msgstr "Imatge :"
 
 #: ../web_tt2/editsubscriber.tt2:41
 msgid "Changing your picture for this list"
-msgstr "Canviï la seva imatge per aquesta llista"
+msgstr "Canvieu la vostra imatge per a aquesta llista"
 
 #: ../web_tt2/editsubscriber.tt2:61
 msgid "Unsubscribe the User"
-msgstr "Donar de baixa l'usuari"
+msgstr "Dóna de baixa l'usuari"
 
 #: ../web_tt2/editsubscriber.tt2:67
+#, fuzzy
 msgid "Bouncing address"
-msgstr "Adreces refusant missatges"
+msgstr "Adreça que refusa missatges"
 
 #: ../web_tt2/editsubscriber.tt2:71
 msgid "Address detected via VERP technology"
-msgstr "Adreces detectades amb la tecnologia VERP"
+msgstr "Adreça detectada amb la tecnologia VERP"
 
 #: ../web_tt2/editsubscriber.tt2:73
 #, fuzzy
@@ -1855,14 +1862,12 @@ msgid "Status:"
 msgstr "Estat :"
 
 #: ../web_tt2/editsubscriber.tt2:74
-#, fuzzy
 msgid "Bounce count:"
-msgstr "Número de retornats :"
+msgstr "Nombre de retornats:"
 
 #: ../web_tt2/editsubscriber.tt2:75
-#, fuzzy
 msgid "Period:"
-msgstr "Període :"
+msgstr "Període:"
 
 #. (current_subscriber.first_bounce,current_subscriber.last_bounce)
 #: ../web_tt2/editsubscriber.tt2:75
@@ -1883,24 +1888,20 @@ msgid "Template edition system"
 msgstr "Edició de la plantilla de sistema"
 
 #: ../web_tt2/edit_template.tt2:6
-#, fuzzy
 msgid "Template name:"
-msgstr "Nom de la plantilla"
+msgstr "Nom de la plantilla:"
 
 #: ../web_tt2/edit_template.tt2:7
-#, fuzzy
 msgid "Type:"
-msgstr "Tipus"
+msgstr "Tipus:"
 
 #: ../web_tt2/edit_template.tt2:8
-#, fuzzy
 msgid "Path:"
-msgstr "Camí"
+msgstr "Camí:"
 
 #: ../web_tt2/edit_template.tt2:9
-#, fuzzy
 msgid "Scope:"
-msgstr "Àmbit"
+msgstr "Àmbit:"
 
 #. (list,robot)
 #: ../web_tt2/edit_template.tt2:10
@@ -1925,17 +1926,16 @@ msgstr ""
 "robot està personalitzat"
 
 #: ../web_tt2/edit_template.tt2:19
-#, fuzzy
 msgid "language: "
-msgstr "idioma :"
+msgstr "llengua:"
 
 #: ../web_tt2/edit_template.tt2:19
 msgid ""
 "(This template is the default for all languages unless it is redefined for a "
 "specific language.)"
 msgstr ""
-"(Aquesta plantilla és la predeterminada per tots els idiomes excepte si "
-"estan personalitzats)"
+"(Aquesta plantilla és la predeterminada per totes les llengües excepte si "
+"estan personalitzades)"
 
 #. (i_err.action)
 #: ../web_tt2/error.tt2:9
@@ -1954,19 +1954,19 @@ msgstr "Els arxius de %1 no estan disponibles"
 
 #: ../mail_tt2/listmaster_notification.tt2:338 ../web_tt2/error.tt2:12
 msgid "Unable to load list topics."
-msgstr "Impossible carregar la llista de temes."
+msgstr "És impossible carregar la llista de temes."
 
 #: ../mail_tt2/listmaster_notification.tt2:339 ../web_tt2/error.tt2:13
 msgid "Unable to load create_list templates."
-msgstr "Impossible carregar les plantilles create_list ."
+msgstr "És Impossible carregar les plantilles create_list."
 
 #: ../web_tt2/error.tt2:14
 msgid "Failed to inlude members"
-msgstr "Error al incloure els membres"
+msgstr "S'ha produït un error en incloure els membres"
 
 #: ../web_tt2/error.tt2:15
 msgid "Failed to include list admins"
-msgstr "Error al incloure la llista d'administradors"
+msgstr "S'ha produït un error en incloure la llista d'administradors"
 
 #: ../web_tt2/error.tt2:16
 msgid "No owner is defined for the list"
@@ -1975,37 +1975,38 @@ msgstr "La llista no té cap propietari assignat"
 #. (i_err.listname)
 #: ../web_tt2/error.tt2:17
 msgid "The exportation failed for list '%1'"
-msgstr "La exportació de la llista '%1' ha fallat."
+msgstr "L'exportació de la llista '%1' ha fallat."
 
 #. (name)
 #: ../mail_tt2/listmaster_notification.tt2:352 ../web_tt2/error.tt2:18
 msgid "Cannot unzip file '%1'."
-msgstr "Impossible descomprimir el fitxer '%1'."
+msgstr "No és possible descomprimir el fitxer '%1'."
 
 #. (i_err.key)
 #: ../web_tt2/error.tt2:19
 msgid "Unable to access the message authenticated with key %1"
-msgstr "Impossible accedir al missatge autentificat amb la clau %1"
+msgstr "No és possible accedir al missatge autentificat amb la clau %1"
 
 #: ../web_tt2/error.tt2:20
 msgid "Failed to get your email address from the authentication service."
 msgstr ""
-"Agafar l'adreça de correu electrònic des del servei d'autenticació ha fallat."
+"No s'ha pogut agafar l'adreça de correu electrònic des del servei "
+"d'autenticació."
 
 #. (i_err.key)
 #. (zipfile)
 #: ../mail_tt2/listmaster_notification.tt2:360 ../web_tt2/error.tt2:21
 msgid "File not found."
-msgstr "Fitxer no localitzat."
+msgstr "No s'ha trobat el fitxer."
 
 #: ../web_tt2/error.tt2:22
 msgid "Database error."
-msgstr "Error a la base de dades."
+msgstr "Hi ha un error a la base de dades."
 
 #. (i_err.key)
 #: ../web_tt2/error.tt2:23
 msgid "Failed to update database."
-msgstr "Error en actualitzar la base de dades."
+msgstr "No s'ha pogut actualitzar la base de dades."
 
 #. (i_err.key)
 #: ../web_tt2/error.tt2:24
@@ -2226,14 +2227,14 @@ msgstr "Aquesta llista no té cap missatge retornat"
 
 #: ../web_tt2/error.tt2:84
 msgid "No parameter was edited"
-msgstr "No ha estat modificat cap paràmetre."
+msgstr "No s'ha modificat cap paràmetre "
 
 #. (u_err.email)
 #: ../web_tt2/error.tt2:85
 msgid "Config file has been modified by %1. Cannot apply your changes"
 msgstr ""
-"El fitxer de configuració ha estat modificat per %1. Els seus canvis no es "
-"poden efectuar."
+"El fitxer de configuració ha estat modificat per %1. Els vostres canvis no "
+"es poden aplicar."
 
 #: ../web_tt2/error.tt2:86
 msgid "Topic \"other\" is a reserved word"
@@ -2242,7 +2243,7 @@ msgstr "El tema \"altres\" és una paraula reservada"
 #. (u_err.p_name)
 #: ../web_tt2/error.tt2:87
 msgid "Parameter '%1' is mandatory. Ignoring deletion."
-msgstr "El paràmetre '%1' és obligatori. Eliminació ignorada."
+msgstr "El paràmetre '%1' és obligatori. Aquest no s'ha elimat."
 
 #. (u_err.param)
 #: ../web_tt2/error.tt2:88
@@ -2251,9 +2252,8 @@ msgstr "El paràmetre '%1' ha de tenir valors"
 
 #. (u_err.param,u_err.val)
 #: ../web_tt2/error.tt2:89
-#, fuzzy
 msgid "Parameter '%1' has got wrong value: '%2'"
-msgstr "El paràmetre '%1' té el valor '%2' incorrecte."
+msgstr "El paràmetre '%1' té un valor incorrecte: '%2'"
 
 #. (u_err.listname)
 #: ../web_tt2/error.tt2:90
@@ -2267,9 +2267,8 @@ msgstr "La llista '%1' no està tancada"
 
 #. (u_err.bad_listname)
 #: ../web_tt2/error.tt2:92
-#, fuzzy
 msgid "'%1': bad listname"
-msgstr "'%1' : nom de llista incorrecte"
+msgstr "'%1': nom de llista incorrecte"
 
 #. (u_err.new_listname)
 #: ../web_tt2/error.tt2:93
@@ -2295,9 +2294,8 @@ msgstr "%1 : Fitxer o carpeta inexistent"
 
 #. (u_err.path)
 #: ../web_tt2/error.tt2:97
-#, fuzzy
 msgid "Unable to read %1: empty document"
-msgstr "Impossible llegir %1 : document buit"
+msgstr "Impossible llegir %1: document buit"
 
 #: ../web_tt2/error.tt2:98
 msgid "There is no shared documents"
@@ -2313,7 +2311,7 @@ msgstr "La carpeta compartida no pot tenir cap descripció"
 
 #: ../web_tt2/error.tt2:101
 msgid "No description specified"
-msgstr "Cap descripció feta"
+msgstr "No s'ha especificat cap descripció"
 
 #. (u_err.path)
 #: ../web_tt2/error.tt2:102
@@ -2326,32 +2324,27 @@ msgstr "Les dades del disc han canviat. Els canvis no es poden aplicar."
 
 #. (u_err.name)
 #: ../web_tt2/error.tt2:104
-#, fuzzy
 msgid "%1: incorrect name"
-msgstr "%1 : nom incorrete"
+msgstr "%1: nom incorrete"
 
 #: ../web_tt2/error.tt2:105
-#, fuzzy
 msgid "Failed: your content is empty"
-msgstr "Error : el contingut no pot estar buit"
+msgstr "Error: el contingut és buit"
 
 #. (u_err.path)
 #: ../web_tt2/error.tt2:106
-#, fuzzy
 msgid "Cannot overwrite file %1:"
-msgstr "El fitxer %1 no es pot sobrescriure"
+msgstr "El fitxer %1 no es pot sobreescriure"
 
 #. (u_err.path)
 #: ../web_tt2/error.tt2:107
-#, fuzzy
 msgid "A directory named '%1' already exists:"
 msgstr "La carpeta '%1' ja existeix"
 
 #. (u_err.name)
 #: ../web_tt2/error.tt2:108
-#, fuzzy
 msgid "This is an already existing document: '%1'"
-msgstr "Aquest document ja existeix : '%1'"
+msgstr "Aquest document ja existeix: '%1'"
 
 #: ../web_tt2/error.tt2:109
 msgid "No name specified"
@@ -2370,29 +2363,26 @@ msgstr "El fitxer %1 no es pot carregar."
 #. (u_err.dir)
 #: ../web_tt2/error.tt2:112
 msgid "You're not authorized to upload an INDEX.HTML in %1"
-msgstr "No tens permís per carregar el fitxer INDEX.HTML a %1"
+msgstr "No teniu permís per carregar el fitxer INDEX.HTML a %1"
 
 #: ../web_tt2/error.tt2:113
 msgid "The upload failed, try it again"
-msgstr "Error al carregar el fitxer. Torni a intentar-ho."
+msgstr "Error en carregar el fitxer. Torneu a intentar-ho."
 
 #. (u_err.name,u_err.reason)
 #: ../web_tt2/error.tt2:114
-#, fuzzy
 msgid "Directory %1 and its contents could not be copied: %2"
-msgstr "No s'ha pogut copiar la carpeta %1 i el seu contingut :"
+msgstr "No s'ha pogut copiar la carpeta %1 i el seu contingut: %2"
 
 #. (u_err.name,u_err.reason)
 #: ../web_tt2/error.tt2:115
-#, fuzzy
 msgid "File %1 was not copied: %2 "
-msgstr "El fitxer %1 no s'ha copiat : %2"
+msgstr "El fitxer %1 no s'ha copiat: %2"
 
 #. (u_err.directory)
 #: ../web_tt2/error.tt2:116
-#, fuzzy
 msgid "Failed: %1 not empty"
-msgstr "Error : %1 no està buit"
+msgstr "Error: %1 no és buit"
 
 #: ../web_tt2/error.tt2:117
 msgid "No certificate for this list"
@@ -2404,7 +2394,7 @@ msgstr "Aquesta llista no té cap tema "
 
 #: ../web_tt2/error.tt2:119
 msgid "Tag message with topic is required for this list"
-msgstr "Etiquetar els missatges amb un tema és obligatori en aquesta llista"
+msgstr "Cal etiquetar els missatges amb un tema en aquesta llista"
 
 #. (u_err.email)
 #: ../web_tt2/error.tt2:120
@@ -2413,7 +2403,7 @@ msgstr "Cap entrada a nom de '%1'"
 
 #: ../web_tt2/error.tt2:121
 msgid "Please select archive months"
-msgstr "Seleccioni els mesos dels arxius "
+msgstr "Seleccioneu els mesos dels arxius "
 
 #: ../web_tt2/error.tt2:122
 msgid "No SOAP service"
@@ -2426,7 +2416,7 @@ msgstr "Error d'autenticació "
 #. (u_err.status)
 #: ../web_tt2/error.tt2:124
 msgid "Service unavailable because list status is '%1'"
-msgstr ""
+msgstr "Servei no disponible perquè l'estatus de la llista és '%1'"
 
 #. (u_err.argument)
 #: ../web_tt2/error.tt2:125
@@ -2441,7 +2431,7 @@ msgstr "No es pot eliminar aquest fitxer '%1'"
 #. (u_err.filename)
 #: ../web_tt2/error.tt2:127
 msgid "Invalid filename: '%1'"
-msgstr "Invàlid nom de fitxer: '%1'"
+msgstr "Nom invàlid de fitxer: '%1'"
 
 #. (u_err.listname)
 #: ../web_tt2/error.tt2:128
@@ -2449,7 +2439,7 @@ msgid ""
 "Failed to update member email in list '%1', list owner has been notified."
 msgstr ""
 "Error en actualitzar l'adreça de correu electrònic dels membres a la llista "
-"'%1', el propietari de la llista ha estat notificat."
+"'%1'. El propietari de la llista n'ha estat informat."
 
 #. (u_err.listname)
 #: ../web_tt2/error.tt2:129
@@ -2457,7 +2447,7 @@ msgid ""
 "Failed to update admin email in list '%1', list owner has been notified."
 msgstr ""
 "Error en actualitzar l'adreça de correu electrònic de l'administrador a la "
-"llista '%1', el propietari de la llista ha estat notificat."
+"llista '%1'. El propietari de la llista n'ha estat informat."
 
 #. (auth.action)
 #: ../web_tt2/error.tt2:138
@@ -2471,8 +2461,8 @@ msgid ""
 "Could not change your subscription address for the list '%1' \n"
 "     because your new address is not allowed to subscribe/unsubscribe:"
 msgstr ""
-"Impossible modificar la seva adreça de subscripció a la llista '%1' \n"
-"perquè no té suficients permisos :"
+"No s'ha pogut modificar la vostra adreça de subscripció a la llista '%1' \n"
+"perquè no teniu prou permisos:"
 
 #: ../web_tt2/get_closed_lists.tt2:6 ../web_tt2/get_closed_lists.tt2:7
 #: ../web_tt2/serveradmin.tt2:10
@@ -2519,9 +2509,8 @@ msgid "Listname"
 msgstr "Nom de la llista"
 
 #: ../web_tt2/get_inactive_lists.tt2:10
-#, fuzzy
 msgid "Number of subscribers"
-msgstr "moderat per subscriptors"
+msgstr "Nombre de subscriptors"
 
 #: ../web_tt2/get_inactive_lists.tt2:12
 #, fuzzy
@@ -2534,9 +2523,8 @@ msgid "Creator"
 msgstr "Crea"
 
 #: ../web_tt2/get_inactive_lists.tt2:15
-#, fuzzy
 msgid "Editors"
-msgstr "Editor"
+msgstr "Editors"
 
 #: ../web_tt2/get_inactive_lists.tt2:29
 #, fuzzy
@@ -2563,7 +2551,6 @@ msgstr "Informacions privades"
 
 #: ../web_tt2/install_pending_list.tt2:11 ../web_tt2/scenario_test.tt2:13
 #: ../web_tt2/set_pending_list_request.tt2:7
-#, fuzzy
 msgid "Listname:"
 msgstr "Nom de la llista:"
 
@@ -2589,127 +2576,115 @@ msgstr "data"
 
 #: ../web_tt2/javascript.tt2:838
 msgid "January"
-msgstr ""
+msgstr "Gener"
 
 #: ../web_tt2/javascript.tt2:838
 msgid "February"
-msgstr ""
+msgstr "Febrer"
 
 #: ../web_tt2/javascript.tt2:838
-#, fuzzy
 msgid "March"
-msgstr "Cerca"
+msgstr "Març"
 
 #: ../web_tt2/javascript.tt2:838
-#, fuzzy
 msgid "April"
-msgstr "perfil"
+msgstr "Abril"
 
 #: ../web_tt2/javascript.tt2:838
 msgid "May"
-msgstr ""
+msgstr "Maig"
 
 #: ../web_tt2/javascript.tt2:838
 msgid "June"
-msgstr ""
+msgstr "Juny"
 
 #: ../web_tt2/javascript.tt2:838
 msgid "July"
-msgstr ""
+msgstr "Juliol"
 
 #: ../web_tt2/javascript.tt2:838
 msgid "August"
-msgstr ""
+msgstr "Agost"
 
 #: ../web_tt2/javascript.tt2:838
-#, fuzzy
 msgid "September"
-msgstr "Membres de la llista"
+msgstr "Setembre"
 
 #: ../web_tt2/javascript.tt2:838
-#, fuzzy
 msgid "October"
-msgstr "Altres"
+msgstr "Octubre"
 
 #: ../web_tt2/javascript.tt2:838
-#, fuzzy
 msgid "November"
-msgstr "Membres de la llista"
+msgstr "Novembre"
 
 #: ../web_tt2/javascript.tt2:838
-#, fuzzy
 msgid "December"
-msgstr "Membres de la llista"
+msgstr "Desembre"
 
 #: ../web_tt2/javascript.tt2:839
 msgid "Su"
-msgstr ""
+msgstr "Dg."
 
 #: ../web_tt2/javascript.tt2:839
-#, fuzzy
 msgid "Mo"
-msgstr "Més"
+msgstr "Dl."
 
 #: ../web_tt2/javascript.tt2:839
 msgid "Tu"
-msgstr ""
+msgstr "Dt."
 
 #: ../web_tt2/javascript.tt2:839
 msgid "We"
-msgstr ""
+msgstr "Dc."
 
 #: ../web_tt2/javascript.tt2:839
 msgid "Th"
-msgstr ""
+msgstr "Dj."
 
 #: ../web_tt2/javascript.tt2:839
-#, fuzzy
 msgid "Fr"
-msgstr "Des de"
+msgstr "Dv."
 
 #: ../web_tt2/javascript.tt2:839
-#, fuzzy
 msgid "Sa"
-msgstr "Guardar"
+msgstr "Ds."
 
 #: ../web_tt2/javascript.tt2:840
 msgid "Sunday"
-msgstr ""
+msgstr "Diumenge"
 
 #: ../web_tt2/javascript.tt2:840
-#, fuzzy
 msgid "Monday"
-msgstr "Cos"
+msgstr "Dilluns"
 
 #: ../web_tt2/javascript.tt2:840
 msgid "Tuesday"
-msgstr ""
+msgstr "Dimarts"
 
 #: ../web_tt2/javascript.tt2:840
 msgid "Wednesday"
-msgstr ""
+msgstr "Dimecres"
 
 #: ../web_tt2/javascript.tt2:840
 msgid "Thursday"
-msgstr ""
+msgstr "Dijous"
 
 #: ../web_tt2/javascript.tt2:840
 msgid "Friday"
-msgstr ""
+msgstr "Divendres"
 
 #: ../web_tt2/javascript.tt2:840
-#, fuzzy
 msgid "Saturday"
-msgstr "Cos"
+msgstr "Dissabte"
 
 #: ../web_tt2/javascript.tt2:841
 msgid "Calendar"
-msgstr ""
+msgstr "Calendari"
 
 #: ../web_tt2/javascript.tt2:842
-#, fuzzy
 msgid "today"
-msgstr "Cos"
+msgstr "Avui"
 
 #. (+cpt)
 #: ../web_tt2/javascript.tt2:1056
@@ -2780,11 +2755,11 @@ msgstr "%1 coincidències"
 #. (email)
 #: ../web_tt2/lists.tt2:9
 msgid "<strong>%1</strong> is subscribed to the following mailing lists"
-msgstr "<strong>%1</strong> està inscrit a les següents llistes"
+msgstr "<strong>%1</strong> està inscrit a les llistes següents"
 
 #: ../web_tt2/lists.tt2:38 ../web_tt2/nav.tt2:69
 msgid "Manage Subscribers"
-msgstr "Gestió subscriptors"
+msgstr "Gestió de subscriptors"
 
 #: ../web_tt2/lists.tt2:40 ../web_tt2/nav.tt2:73 ../web_tt2/review.tt2:42
 msgid "Blacklist"
@@ -2798,26 +2773,27 @@ msgstr "Registre"
 #. (user.email)
 #: ../web_tt2/lists.tt2:62
 msgid "No subscriptions with address <strong>%1</strong>!"
-msgstr "Cap subscripció amb l'adreça <strong>%1</strong>!"
+msgstr "No hi ha cap subscripció amb l'adreça <strong>%1</strong>!"
 
 #: ../web_tt2/loginbanner.tt2:18
 #, fuzzy
 msgid "To login, select your organization authentication server below:"
-msgstr "Seleccioneu el servidor d'autenticació "
+msgstr ""
+"Per autenticar-vos, seleccioneu el servidor d'autenticació entre els "
+"següents:"
 
 #: ../web_tt2/loginbanner.tt2:24
+#, fuzzy
 msgid "Go"
-msgstr "Anar"
+msgstr "Vés"
 
 #: ../web_tt2/loginbanner.tt2:39
-#, fuzzy
 msgid "email address:"
-msgstr "adreça electrònica"
+msgstr "adreça electrònica:"
 
 #: ../web_tt2/loginbanner.tt2:41
-#, fuzzy
 msgid "password:"
-msgstr "contrasenya"
+msgstr "contrasenya:"
 
 #: ../web_tt2/loginbanner.tt2:43
 msgid "Login"
@@ -2835,9 +2811,10 @@ msgstr "Primer inici de sessió?"
 #: ../web_tt2/loginbanner.tt2:56
 #, fuzzy
 msgid "Lost password?"
-msgstr "Oblit de contrasenya?"
+msgstr "Heu oblidat la vostra contrasenya?"
 
 #: ../web_tt2/loginrequest.tt2:4
+#, fuzzy
 msgid ""
 "In order to perform a privileged operation (one that requires your email "
 "address), you need to login."
@@ -4813,22 +4790,22 @@ msgstr "Imatge"
 msgid "Reception"
 msgstr "Recepció"
 
-#: ../web_tt2/subscriber_table.tt2:46 ../web_tt2/subscriber_table.tt2:49
+#: ../web_tt2/subscriber_table.tt2:45 ../web_tt2/subscriber_table.tt2:48
 msgid "Sources"
 msgstr "Fonts"
 
-#: ../web_tt2/subscriber_table.tt2:55 ../web_tt2/subscriber_table.tt2:58
+#: ../web_tt2/subscriber_table.tt2:53 ../web_tt2/subscriber_table.tt2:56
 #: ../web_tt2/viewlogs.tt2:124
 #, fuzzy
 msgid "Sub date"
 msgstr "Data"
 
-#: ../web_tt2/subscriber_table.tt2:91
+#: ../web_tt2/subscriber_table.tt2:89
 msgid "bouncing"
 msgstr "retornats"
 
 #. (u.email)
-#: ../web_tt2/subscriber_table.tt2:108
+#: ../web_tt2/subscriber_table.tt2:106
 msgid "%1's picture"
 msgstr "%1 imatge(s)"
 
@@ -5040,7 +5017,7 @@ msgstr "Cerca per període: "
 #. (date_to_formated)
 #. This entry is a date/time format
 #. Check the strftime manpage for format details : http://docs.freebsd.org/info/gawk/gawk.info.Time_Functions.html
-#: ../web_tt2/viewlogs.tt2:113 ../wwsympa/wwsympa.fcgi.in:16239
+#: ../web_tt2/viewlogs.tt2:113 ../wwsympa/wwsympa.fcgi.in:16175
 msgid "%d %b %Y %H:%M:%S"
 msgstr "%d %b %Y %H:%M:%S"
 
@@ -5755,7 +5732,7 @@ msgid "%1 Digest %2"
 msgstr "%1 resum %2"
 
 #: ../mail_tt2/digest.tt2:10 ../mail_tt2/digest_plain.tt2:9
-#: ../mail_tt2/get_archive.tt2:9 ../src/lib/List.pm:2801
+#: ../mail_tt2/get_archive.tt2:9 ../src/lib/List.pm:2735
 msgid "Table of contents:"
 msgstr "Taula de continguts:"
 
@@ -8838,14 +8815,14 @@ msgstr ""
 
 #. This entry is a date/time format
 #. Check the strftime manpage for format details : http://docs.freebsd.org/info/gawk/gawk.info.Time_Functions.html
-#: ../src/lib/Bulk.pm:387
+#: ../src/lib/Bulk.pm:390
 #, fuzzy
 msgid "%d %b %Y  %H:%M"
 msgstr "%d %b %y  %H:%M"
 
 #. This entry is a date/time format
 #. Check the strftime manpage for format details : http://docs.freebsd.org/info/gawk/gawk.info.Time_Functions.html
-#: ../src/lib/Commands.pm:963 ../wwsympa/wwsympa.fcgi.in:9835
+#: ../src/lib/Commands.pm:963 ../wwsympa/wwsympa.fcgi.in:9776
 msgid "%A"
 msgstr "%A"
 
@@ -8863,7 +8840,7 @@ msgstr "Error en la línia %d : %s"
 #. Check the strftime manpage for format details : http://docs.freebsd.org/info/gawk/gawk.info.Time_Functions.html
 #: ../src/lib/Family.pm:2591 ../src/lib/Family.pm:388 ../src/lib/Family.pm:665
 #: ../src/lib/List.pm:1894 ../wwsympa/Auth.pm:459
-#: ../wwsympa/wwsympa.fcgi.in:1067 ../wwsympa/wwsympa.fcgi.in:2870
+#: ../wwsympa/wwsympa.fcgi.in:1067 ../wwsympa/wwsympa.fcgi.in:2869
 msgid "%d %b %Y at %H:%M:%S"
 msgstr "%d %b %Y at %H:%M:%S"
 
@@ -9421,7 +9398,7 @@ msgstr "Qui pot desubscriure's"
 msgid "Last update of config"
 msgstr "Darrera actualització de la configuració"
 
-#: ../src/lib/List.pm:1404
+#: ../src/lib/List.pm:1403
 msgid "User data source"
 msgstr "Origen de les dades d'usuari"
 
@@ -9577,31 +9554,31 @@ msgstr "Qui pot actualitzar la configuració"
 
 #. This entry is a date/time format
 #. Check the strftime manpage for format details : http://docs.freebsd.org/info/gawk/gawk.info.Time_Functions.html
-#: ../src/lib/List.pm:2919
+#: ../src/lib/List.pm:2853
 msgid "%a, %d %b %Y %H:%M:%S"
 msgstr "%a, %d %b %Y %H:%M:%S"
 
 #. This entry is a date/time format
 #. Check the strftime manpage for format details : http://docs.freebsd.org/info/gawk/gawk.info.Time_Functions.html
-#: ../src/lib/List.pm:2920
+#: ../src/lib/List.pm:2854
 msgid "%a, %d %b %Y"
 msgstr "%a, %d %b %Y"
 
 #. This entry is a date/time format
 #. Check the strftime manpage for format details : http://docs.freebsd.org/info/gawk/gawk.info.Time_Functions.html
-#: ../src/lib/List.pm:3111 ../src/lib/List.pm:3112 ../src/lib/List.pm:3116
-#: ../wwsympa/wwsympa.fcgi.in:11017 ../wwsympa/wwsympa.fcgi.in:11086
-#: ../wwsympa/wwsympa.fcgi.in:11288 ../wwsympa/wwsympa.fcgi.in:11635
-#: ../wwsympa/wwsympa.fcgi.in:15086 ../wwsympa/wwsympa.fcgi.in:15093
-#: ../wwsympa/wwsympa.fcgi.in:15811 ../wwsympa/wwsympa.fcgi.in:16589
-#: ../wwsympa/wwsympa.fcgi.in:16590 ../wwsympa/wwsympa.fcgi.in:4280
-#: ../wwsympa/wwsympa.fcgi.in:4338 ../wwsympa/wwsympa.fcgi.in:4909
-#: ../wwsympa/wwsympa.fcgi.in:4910 ../wwsympa/wwsympa.fcgi.in:6432
-#: ../wwsympa/wwsympa.fcgi.in:7451 ../wwsympa/wwsympa.fcgi.in:7994
-#: ../wwsympa/wwsympa.fcgi.in:8041 ../wwsympa/wwsympa.fcgi.in:8043
-#: ../wwsympa/wwsympa.fcgi.in:8519 ../wwsympa/wwsympa.fcgi.in:8520
-#: ../wwsympa/wwsympa.fcgi.in:8554 ../wwsympa/wwsympa.fcgi.in:8555
-#: ../wwsympa/wwsympa.fcgi.in:8734 ../wwsympa/wwsympa.fcgi.in:8735
+#: ../src/lib/List.pm:3045 ../src/lib/List.pm:3046 ../src/lib/List.pm:3050
+#: ../wwsympa/wwsympa.fcgi.in:10953 ../wwsympa/wwsympa.fcgi.in:11022
+#: ../wwsympa/wwsympa.fcgi.in:11224 ../wwsympa/wwsympa.fcgi.in:11571
+#: ../wwsympa/wwsympa.fcgi.in:15022 ../wwsympa/wwsympa.fcgi.in:15029
+#: ../wwsympa/wwsympa.fcgi.in:15747 ../wwsympa/wwsympa.fcgi.in:16540
+#: ../wwsympa/wwsympa.fcgi.in:16541 ../wwsympa/wwsympa.fcgi.in:4278
+#: ../wwsympa/wwsympa.fcgi.in:4331 ../wwsympa/wwsympa.fcgi.in:4902
+#: ../wwsympa/wwsympa.fcgi.in:4903 ../wwsympa/wwsympa.fcgi.in:6425
+#: ../wwsympa/wwsympa.fcgi.in:7448 ../wwsympa/wwsympa.fcgi.in:7988
+#: ../wwsympa/wwsympa.fcgi.in:8035 ../wwsympa/wwsympa.fcgi.in:8037
+#: ../wwsympa/wwsympa.fcgi.in:8513 ../wwsympa/wwsympa.fcgi.in:8514
+#: ../wwsympa/wwsympa.fcgi.in:8548 ../wwsympa/wwsympa.fcgi.in:8549
+#: ../wwsympa/wwsympa.fcgi.in:8728 ../wwsympa/wwsympa.fcgi.in:8729
 msgid "%d %b %Y"
 msgstr "%d %b %Y"
 
@@ -9745,34 +9722,34 @@ msgstr "%H:%M:%S"
 #. This entry is a date/time format
 #. Check the strftime manpage for format details : http://docs.freebsd.org/info/gawk/gawk.info.Time_Functions.html
 #: ../wwsympa/SympaSession.pm:436 ../wwsympa/SympaSession.pm:437
-#: ../wwsympa/wwsympa.fcgi.in:11869 ../wwsympa/wwsympa.fcgi.in:12002
-#: ../wwsympa/wwsympa.fcgi.in:14315 ../wwsympa/wwsympa.fcgi.in:7948
+#: ../wwsympa/wwsympa.fcgi.in:11805 ../wwsympa/wwsympa.fcgi.in:11938
+#: ../wwsympa/wwsympa.fcgi.in:14251 ../wwsympa/wwsympa.fcgi.in:7945
 msgid "%d %b %y  %H:%M"
 msgstr "%d %b %y  %H:%M"
 
-#: ../wwsympa/wwsympa.fcgi.in:15268
+#: ../wwsympa/wwsympa.fcgi.in:15204
 #, fuzzy
 msgid "Your unsubscription request to list %s was sent to the list owner."
 msgstr "La teva petició s'ha redireccionat al propietari de la llista"
 
-#: ../wwsympa/wwsympa.fcgi.in:15270
+#: ../wwsympa/wwsympa.fcgi.in:15206
 #, fuzzy
 msgid "You were successfully unsubscribed from list %s."
 msgstr "Has sol·licitat donar-se de baixa de la llista %1"
 
-#: ../wwsympa/wwsympa.fcgi.in:15274
+#: ../wwsympa/wwsympa.fcgi.in:15210
 msgid ""
 "Unsubscription from list %s denied: Unsubscription from this list is closed."
 msgstr ""
 
-#: ../wwsympa/wwsympa.fcgi.in:15276
+#: ../wwsympa/wwsympa.fcgi.in:15212
 #, fuzzy
 msgid "Unsubscription from list %s failed."
 msgstr "Dona'm de baixa de la llista %1"
 
 #. This entry is a date/time format
 #. Check the strftime manpage for format details : http://docs.freebsd.org/info/gawk/gawk.info.Time_Functions.html
-#: ../wwsympa/wwsympa.fcgi.in:16184 ../wwsympa/wwsympa.fcgi.in:16185
+#: ../wwsympa/wwsympa.fcgi.in:16120 ../wwsympa/wwsympa.fcgi.in:16121
 #, fuzzy
 msgid "%Y-%m-%d-%H-%M-%S"
 msgstr "%Y/%m/%d/%H/%M/%S"
@@ -9927,31 +9904,8 @@ msgstr "sense correu (útil per vacances)"
 msgid "you do not receive your own posts"
 msgstr "No pot rebre els seus propis missatges"
 
-#: ../web_tt2/list_menu.tt2:10
-msgid ""
-"You <span style=\"font-weight: bold; font-size: 10px\">are</span> subscribed"
-msgstr ""
-
-#: ../web_tt2/list_menu.tt2:21
-msgid ""
-"You <span style=\"font-weight: bold; font-size: 10px\">are not</span> "
-"subscribed"
-msgstr ""
-
-#: ../web_tt2/compose_mail.tt2:79
-msgid "Select the source of your HTML newsletter"
-msgstr ""
-
-#: ../web_tt2/compose_mail.tt2:82
-msgid "Send the page from the following URL:"
-msgstr ""
-
-#: ../web_tt2/compose_mail.tt2:85
-msgid "OR"
-msgstr ""
-
-#: ../web_tt2/compose_mail.tt2:87
-msgid "<strong>Send an HTML file from your computer:"
+#: ../web_tt2/list_menu.tt2:69
+msgid "OpenSocial"
 msgstr ""
 
 #. (k.name)
@@ -9959,17 +9913,24 @@ msgstr ""
 msgid "%1:"
 msgstr ""
 
-#: ../web_tt2/error.tt2:54
+#: ../web_tt2/error.tt2:55
 msgid ""
 "You didn't define the web page you want to use to create your newsletter. "
 "Please specify either an URL or a file to upload."
 msgstr ""
 
-#: ../web_tt2/error.tt2:55 ../web_tt2/error.tt2:56
+#: ../web_tt2/error.tt2:56 ../web_tt2/error.tt2:57
 msgid ""
 "You specified both an URL and a file to upload. Sympa can't choose which one "
 "to send. Please fill the form with one of them only. A web page OR a file to "
 "upload."
+msgstr ""
+
+#. (base_url,path_cgi,u_err.oauth_provider)
+#: ../web_tt2/error.tt2:134
+msgid ""
+"Failed to include members from VOOT group, use the following link to check "
+"the OAuth status : <a href=\"%1%2/oauth_check/%3\">%1%2/oauth_check/%3</a>"
 msgstr ""
 
 #: ../web_tt2/modform.tt2:49
@@ -9991,6 +9952,48 @@ msgstr ""
 #. (user_with_errors.value)
 #: ../web_tt2/news.tt2:35
 msgid " %1 error(s)"
+msgstr ""
+
+#: ../web_tt2/oauth_authorize.tt2:4
+msgid "OAuth authorize"
+msgstr ""
+
+#: ../web_tt2/oauth_authorize.tt2:13
+msgid "Don't authorize"
+msgstr ""
+
+#: ../web_tt2/oauth_check.tt2:4
+msgid "OAuth check"
+msgstr ""
+
+#: ../web_tt2/oauth_check.tt2:10
+msgid "Got new access token, everything is alright."
+msgstr ""
+
+#: ../web_tt2/oauth_check.tt2:15
+msgid ""
+"Unable to check, provider may not be available or access token may be "
+"outdated and failed to be get new one."
+msgstr ""
+
+#: ../web_tt2/oauth_check.tt2:18
+msgid "Unable to load consumer, configuration may be erroneous."
+msgstr ""
+
+#: ../web_tt2/select_voot_groups_request.tt2:6
+msgid ""
+"Hereafter is the list of the groups you accepted to share with Sympa. Select "
+"which group you want members to be included in your list."
+msgstr ""
+
+#: ../web_tt2/select_voot_provider_request.tt2:4
+msgid "Select VOOT provider"
+msgstr ""
+
+#: ../web_tt2/select_voot_provider_request.tt2:6
+msgid ""
+"Hereafter is the list of VOOT providers that share group information with "
+"Sympa. Select which provider you want to use your groups from."
 msgstr ""
 
 #: ../web_tt2/skinsedit.tt2:107
@@ -10023,6 +10026,20 @@ msgstr ""
 msgid ""
 "Sympa could not include subscribers to list %1 because the maximum number of "
 "users was reached for this list. This limit is defined to %2."
+msgstr ""
+
+#. (consumer_name,oauth_provider)
+#: ../mail_tt2/message_report.tt2:96
+msgid "Your OAuth token used by consumer %1 may have expired."
+msgstr ""
+
+#. (consumer_name,oauth_provider,conf.wwsympa_url)
+#: ../mail_tt2/message_report.tt2:105
+msgid ""
+"Sympa failed to retreive data using %1 consumer, this may be because your "
+"access token for OAuth provider %2 is out of date.\n"
+"\n"
+"Visit  %3/oauth_check/%2 to check the token state and renew it if necessary."
 msgstr ""
 
 #: ../mail_tt2/moderate.tt2:23
@@ -10665,39 +10682,43 @@ msgid ""
 "page"
 msgstr ""
 
-#: ../src/lib/Conf.pm:967
+#: ../src/lib/Conf.pm:966
 msgid "Conf::load_nrcpt_by_domain(): Error at line %d: %s"
 msgstr ""
 
-#: ../src/lib/List.pm:441
+#: ../src/lib/List.pm:443
 msgid "tracking message by delivery status notification"
 msgstr ""
 
-#: ../src/lib/List.pm:446
+#: ../src/lib/List.pm:448
 msgid "tracking message by message delivery notification"
 msgstr ""
 
-#: ../src/lib/List.pm:457
+#: ../src/lib/List.pm:459
 msgid "Tracking datas are removed after this number of days"
 msgstr ""
 
-#: ../src/lib/List.pm:6443
+#: ../src/lib/List.pm:1119
+msgid "group"
+msgstr ""
+
+#: ../src/lib/List.pm:6484
 msgid "Attempt to exceed the max number of members (%s) for this list."
 msgstr ""
 
-#: ../src/lib/List.pm:6446
+#: ../src/lib/List.pm:6487
 msgid "Attempts to add some users in database failed."
 msgstr ""
 
-#: ../src/lib/List.pm:6448
+#: ../src/lib/List.pm:6489
 msgid "Added %s users out of %s required."
 msgstr ""
 
-#: ../wwsympa/wwsympa.fcgi.in:16244
+#: ../wwsympa/wwsympa.fcgi.in:16506
 msgid "Mail sending"
 msgstr ""
 
-#: ../wwsympa/wwsympa.fcgi.in:16247
+#: ../wwsympa/wwsympa.fcgi.in:16509
 msgid "Users deleted by admin"
 msgstr ""
 
@@ -10725,9 +10746,44 @@ msgstr ""
 msgid "Log intensity"
 msgstr ""
 
+#~ msgid ""
+#~ "List description: This text is sent as an answer to the mail command\n"
+#~ "INFO. It can also be included in the <em>Welcome message</em>."
+#~ msgstr ""
+#~ "Descripció de la llista: Aquest text s'envia com una resposta a una ordre "
+#~ "de correu\n"
+#~ "INFO. També pot ser inclòs en el <em>Missatge de benvinguda</em>."
+
+#~ msgid ""
+#~ "You <span style=\"font-weight: bold; font-size: 10px\">are</span> "
+#~ "subscribed"
+#~ msgstr ""
+#~ "<span style=\"font-weight: bold; font-size: 10px\">Hi esteu</span> "
+#~ "subscrit"
+
+#~ msgid ""
+#~ "You <span style=\"font-weight: bold; font-size: 10px\">are not</span> "
+#~ "subscribed"
+#~ msgstr ""
+#~ "<span style=\"font-weight: bold; font-size: 10px\">No hi esteu</span> "
+#~ "subscrit"
+
 #, fuzzy
 #~ msgid "Statistics"
-#~ msgstr "Estat"
+#~ msgstr "Estadística"
+
+#~ msgid "Select the source of your HTML newsletter"
+#~ msgstr "Seleccioneu la font del vostre butlletí HTML"
+
+#~ msgid "Send the page from the following URL:"
+#~ msgstr "Envia la pàgina des de l'URL següent:"
+
+#~ msgid "OR"
+#~ msgstr "OR"
+
+#, fuzzy
+#~ msgid "<strong>Send an HTML file from your computer:"
+#~ msgstr "<strong>Envieu un fitxer HTML del vostre ordinador:"
 
 #, fuzzy
 #~ msgid "parameter name"
@@ -10798,8 +10854,32 @@ msgstr ""
 #~ msgstr "Llista %1 / %2"
 
 #, fuzzy
+#~ msgid "Authorize %1 ?"
+#~ msgstr "Autor"
+
+#, fuzzy
+#~ msgid "Authorize"
+#~ msgstr "Autor"
+
+#, fuzzy
+#~ msgid "Everything is alright."
+#~ msgstr "Qualsevol cosa sobre aquesta llista:"
+
+#, fuzzy
+#~ msgid "Unknown provider."
+#~ msgstr "Desconegut"
+
+#, fuzzy
 #~ msgid "Add quietly"
 #~ msgstr "silenciós"
+
+#, fuzzy
+#~ msgid "Select group"
+#~ msgstr "--Seleccioneu un tema--"
+
+#, fuzzy
+#~ msgid "Set as source"
+#~ msgstr "les dades d'origen"
 
 #, fuzzy
 #~ msgid "List %1 statistics"
@@ -11005,6 +11085,18 @@ msgstr ""
 #, fuzzy
 #~ msgid "Message tracking feature"
 #~ msgstr "Marcatge de missatges"
+
+#, fuzzy
+#~ msgid "user"
+#~ msgstr "Usuaris"
+
+#, fuzzy
+#~ msgid "provider"
+#~ msgstr "perfil"
+
+#, fuzzy
+#~ msgid "VOOT group inclusion"
+#~ msgstr "consulta d'inclusió SQL"
 
 #, fuzzy
 #~ msgid "Maximum number of list members"
@@ -11469,9 +11561,6 @@ msgstr ""
 
 #~ msgid "To access your personal environment, you need to login first"
 #~ msgstr "Per accedir al seu entorn persona, necessita iniciar sessió primer"
-
-#~ msgid "Everything about this list:"
-#~ msgstr "Qualsevol cosa sobre aquesta llista:"
 
 #~ msgid "daily delete logs older than 3 months"
 #~ msgstr "Eliminar diariament els logs més antics de tres mesos"
@@ -12063,3 +12152,6 @@ msgstr ""
 #, fuzzy
 #~ msgid "login"
 #~ msgstr "Entrada"
+
+#~ msgid "Everything about this list:"
+#~ msgstr "Qualsevol cosa sobre aquesta llista:"

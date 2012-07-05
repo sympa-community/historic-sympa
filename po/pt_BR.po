@@ -104,7 +104,7 @@ msgstr "Início"
 #: ../web_tt2/modindex.tt2:192 ../web_tt2/modindex.tt2:9 ../web_tt2/pref.tt2:4
 #: ../web_tt2/rename_list_request.tt2:3 ../web_tt2/review.tt2:5
 #: ../web_tt2/reviewbouncing.tt2:3 ../web_tt2/suboptions.tt2:21
-#: ../web_tt2/suspend_request.tt2:64
+#: ../web_tt2/suspend_request.tt2:5
 msgid "Help"
 msgstr "Ajuda"
 
@@ -570,7 +570,7 @@ msgstr "Gerenciamento de Arquivo"
 #: ../web_tt2/picture_upload.tt2:21 ../web_tt2/pref.tt2:4
 #: ../web_tt2/rename_list_request.tt2:3 ../web_tt2/review.tt2:5
 #: ../web_tt2/reviewbouncing.tt2:3 ../web_tt2/suboptions.tt2:20
-#: ../web_tt2/subscriber_table.tt2:108
+#: ../web_tt2/subscriber_table.tt2:106
 msgid "Open in a new window"
 msgstr "Abrir em nova janela"
 
@@ -1419,16 +1419,16 @@ msgid "Size (Kb)"
 msgstr "Tamanho (Kb)"
 
 #: ../web_tt2/d_read.tt2:69 ../web_tt2/d_read.tt2:71
-#: ../web_tt2/latest_d_read.tt2:18 ../web_tt2/subscriber_table.tt2:61
+#: ../web_tt2/latest_d_read.tt2:18 ../web_tt2/subscriber_table.tt2:59
 msgid "Last update"
 msgstr "Última atualização"
 
 #: ../web_tt2/d_read.tt2:75 ../web_tt2/editfile.tt2:30
-#: ../web_tt2/editfile.tt2:31 ../web_tt2/editfile.tt2:36
-#: ../web_tt2/editfile.tt2:37 ../web_tt2/editfile.tt2:38
-#: ../web_tt2/editfile.tt2:40 ../web_tt2/editfile.tt2:45
-#: ../web_tt2/editfile.tt2:46 ../web_tt2/editfile.tt2:50
-#: ../web_tt2/editfile.tt2:51 ../web_tt2/manage_template.tt2:35
+#: ../web_tt2/editfile.tt2:31 ../web_tt2/editfile.tt2:35
+#: ../web_tt2/editfile.tt2:36 ../web_tt2/editfile.tt2:37
+#: ../web_tt2/editfile.tt2:39 ../web_tt2/editfile.tt2:44
+#: ../web_tt2/editfile.tt2:45 ../web_tt2/editfile.tt2:49
+#: ../web_tt2/editfile.tt2:50 ../web_tt2/manage_template.tt2:35
 #: ../web_tt2/manage_template.tt2:56 ../web_tt2/serveradmin.tt2:149
 #: ../web_tt2/serveradmin.tt2:162
 msgid "Edit"
@@ -1644,20 +1644,21 @@ msgstr ""
 "Página inicial da lista: Texto HTML para descrever a lista. Aparece no lado "
 "direito da página principal da lista. (por padrão, é a descrição da lista)"
 
-#: ../web_tt2/editfile.tt2:32
+#: ../web_tt2/editfile.tt2:31
+#, fuzzy
 msgid ""
-"List description: This text is sent as an answer to the mail command\n"
-"INFO. It can also be included in the <em>Welcome message</em>."
+"List description: This text is sent as an answer to the mail command INFO. "
+"It can also be included in the <em>Welcome message</em>."
 msgstr ""
 "Descrição da lista: este texto é enviado como resposta para o comando de e-"
 "mail\n"
 "INFO. Também pode ser incluído na <em>Welcome message</em>."
 
-#: ../web_tt2/editfile.tt2:34
+#: ../web_tt2/editfile.tt2:33
 msgid "Automatic messages"
 msgstr "Mensagens automáticas"
 
-#: ../web_tt2/editfile.tt2:36
+#: ../web_tt2/editfile.tt2:35
 msgid ""
 "Welcome message: This message is sent to new subscribers. It can be a full "
 "MIME structured message (only for MIME gurus)."
@@ -1665,7 +1666,7 @@ msgstr ""
 "Mensagem de boas vindas: Esta mensagem é enviada para novos membros da "
 "lista. Pode ser uma mensagem estruturada em MIME (apenas para gurus em MIME)."
 
-#: ../web_tt2/editfile.tt2:37
+#: ../web_tt2/editfile.tt2:36
 msgid ""
 "Rejection message: when a message is rejected by list editor, a notification "
 "can be sent to the original author. You may prepare various rejection "
@@ -1675,7 +1676,7 @@ msgstr ""
 "uma notificação pode ser enviada para o autor original. Você pode preparar "
 "várias mensagens de rejeição."
 
-#: ../web_tt2/editfile.tt2:39
+#: ../web_tt2/editfile.tt2:38
 msgid ""
 "Remind message: This message is sent to each subscriber\n"
 "when using the command  REMIND. It's very useful to help people who are "
@@ -1687,7 +1688,7 @@ msgstr ""
 "sobre seus próprios emails inscritos ou pessoas que não conseguem cancelar "
 "sua inscrição."
 
-#: ../web_tt2/editfile.tt2:41
+#: ../web_tt2/editfile.tt2:40
 msgid ""
 "Subscribing invitation message: sent to a person if someone  \n"
 "uses the INVITE command to invite someone to subscribe."
@@ -1695,11 +1696,11 @@ msgstr ""
 "Mensagem de convite para inscrição: é enviada para pessoas se alguém \n"
 "usa o comando INVITE para convidar alguém para participar da lista."
 
-#: ../web_tt2/editfile.tt2:43
+#: ../web_tt2/editfile.tt2:42
 msgid "Added in distributed messages"
 msgstr "Adicionado às mensagens distribuidas"
 
-#: ../web_tt2/editfile.tt2:45
+#: ../web_tt2/editfile.tt2:44
 msgid ""
 "Message footer: If this file is not empty, it is added as a MIME attachment "
 "at the end of each message distributed to the list."
@@ -1708,7 +1709,7 @@ msgstr ""
 "adicionado como um anexo MIME no fim de cada mensagem distribuída para a "
 "lista."
 
-#: ../web_tt2/editfile.tt2:46
+#: ../web_tt2/editfile.tt2:45
 msgid ""
 "Message header: If this file is not empty, it is added as a MIME attachment "
 "at the beginning of each message distributed to the list."
@@ -1716,17 +1717,17 @@ msgstr ""
 "Cabeçalho da mensagem: se este arquivo não estiver vazio, será adicionado "
 "como um anexo MIME no início de cada mensagem distribuída para a lista."
 
-#: ../web_tt2/editfile.tt2:48
+#: ../web_tt2/editfile.tt2:47
 msgid "More"
 msgstr "Mais"
 
-#: ../web_tt2/editfile.tt2:50
+#: ../web_tt2/editfile.tt2:49
 msgid "Unsubscribe message: This message is sent when users leave the list."
 msgstr ""
 "Mensagem de cancelamento de inscrição: esta mensagem é enviada quando "
 "usuários deixam a lista."
 
-#: ../web_tt2/editfile.tt2:52
+#: ../web_tt2/editfile.tt2:51
 msgid ""
 "Deletion message: This message is sent to users when you\n"
 "remove them from the list using the DEL command (unless you hit the Quiet "
@@ -4614,21 +4615,21 @@ msgstr "Imagem"
 msgid "Reception"
 msgstr "Recepção"
 
-#: ../web_tt2/subscriber_table.tt2:46 ../web_tt2/subscriber_table.tt2:49
+#: ../web_tt2/subscriber_table.tt2:45 ../web_tt2/subscriber_table.tt2:48
 msgid "Sources"
 msgstr "Fontes"
 
-#: ../web_tt2/subscriber_table.tt2:55 ../web_tt2/subscriber_table.tt2:58
+#: ../web_tt2/subscriber_table.tt2:53 ../web_tt2/subscriber_table.tt2:56
 #: ../web_tt2/viewlogs.tt2:124
 msgid "Sub date"
 msgstr ""
 
-#: ../web_tt2/subscriber_table.tt2:91
+#: ../web_tt2/subscriber_table.tt2:89
 msgid "bouncing"
 msgstr "retornando"
 
 #. (u.email)
-#: ../web_tt2/subscriber_table.tt2:108
+#: ../web_tt2/subscriber_table.tt2:106
 msgid "%1's picture"
 msgstr "Avatar de %1"
 
@@ -4837,7 +4838,7 @@ msgstr "Procurar período:"
 #. (date_to_formated)
 #. This entry is a date/time format
 #. Check the strftime manpage for format details : http://docs.freebsd.org/info/gawk/gawk.info.Time_Functions.html
-#: ../web_tt2/viewlogs.tt2:113 ../wwsympa/wwsympa.fcgi.in:16239
+#: ../web_tt2/viewlogs.tt2:113 ../wwsympa/wwsympa.fcgi.in:16175
 msgid "%d %b %Y %H:%M:%S"
 msgstr "%d %b %Y %H:%M:%S"
 
@@ -5516,7 +5517,7 @@ msgid "%1 Digest %2"
 msgstr "Sumário de %2 da lista %1"
 
 #: ../mail_tt2/digest.tt2:10 ../mail_tt2/digest_plain.tt2:9
-#: ../mail_tt2/get_archive.tt2:9 ../src/lib/List.pm:2801
+#: ../mail_tt2/get_archive.tt2:9 ../src/lib/List.pm:2735
 msgid "Table of contents:"
 msgstr "Tabela de conteúdo:"
 
@@ -8507,14 +8508,14 @@ msgstr ""
 
 #. This entry is a date/time format
 #. Check the strftime manpage for format details : http://docs.freebsd.org/info/gawk/gawk.info.Time_Functions.html
-#: ../src/lib/Bulk.pm:387
+#: ../src/lib/Bulk.pm:390
 #, fuzzy
 msgid "%d %b %Y  %H:%M"
 msgstr "%d %b %Y %H:%M"
 
 #. This entry is a date/time format
 #. Check the strftime manpage for format details : http://docs.freebsd.org/info/gawk/gawk.info.Time_Functions.html
-#: ../src/lib/Commands.pm:963 ../wwsympa/wwsympa.fcgi.in:9835
+#: ../src/lib/Commands.pm:963 ../wwsympa/wwsympa.fcgi.in:9776
 msgid "%A"
 msgstr "%A"
 
@@ -8532,7 +8533,7 @@ msgstr "Erro na linha %d : %s"
 #. Check the strftime manpage for format details : http://docs.freebsd.org/info/gawk/gawk.info.Time_Functions.html
 #: ../src/lib/Family.pm:2591 ../src/lib/Family.pm:388 ../src/lib/Family.pm:665
 #: ../src/lib/List.pm:1894 ../wwsympa/Auth.pm:459
-#: ../wwsympa/wwsympa.fcgi.in:1067 ../wwsympa/wwsympa.fcgi.in:2870
+#: ../wwsympa/wwsympa.fcgi.in:1067 ../wwsympa/wwsympa.fcgi.in:2869
 msgid "%d %b %Y at %H:%M:%S"
 msgstr "%d %b %Y às %H:%M:%S"
 
@@ -9086,7 +9087,7 @@ msgstr "Quem pode cancelar a inscrição"
 msgid "Last update of config"
 msgstr "Última atualização da configuração"
 
-#: ../src/lib/List.pm:1404
+#: ../src/lib/List.pm:1403
 msgid "User data source"
 msgstr "Fonte de dados do usuário"
 
@@ -9242,31 +9243,31 @@ msgstr "quem atualizou a configuração"
 
 #. This entry is a date/time format
 #. Check the strftime manpage for format details : http://docs.freebsd.org/info/gawk/gawk.info.Time_Functions.html
-#: ../src/lib/List.pm:2919
+#: ../src/lib/List.pm:2853
 msgid "%a, %d %b %Y %H:%M:%S"
 msgstr "%a, %d %b %Y %H:%M:%S"
 
 #. This entry is a date/time format
 #. Check the strftime manpage for format details : http://docs.freebsd.org/info/gawk/gawk.info.Time_Functions.html
-#: ../src/lib/List.pm:2920
+#: ../src/lib/List.pm:2854
 msgid "%a, %d %b %Y"
 msgstr "%a, %d/%b/%Y"
 
 #. This entry is a date/time format
 #. Check the strftime manpage for format details : http://docs.freebsd.org/info/gawk/gawk.info.Time_Functions.html
-#: ../src/lib/List.pm:3111 ../src/lib/List.pm:3112 ../src/lib/List.pm:3116
-#: ../wwsympa/wwsympa.fcgi.in:11017 ../wwsympa/wwsympa.fcgi.in:11086
-#: ../wwsympa/wwsympa.fcgi.in:11288 ../wwsympa/wwsympa.fcgi.in:11635
-#: ../wwsympa/wwsympa.fcgi.in:15086 ../wwsympa/wwsympa.fcgi.in:15093
-#: ../wwsympa/wwsympa.fcgi.in:15811 ../wwsympa/wwsympa.fcgi.in:16589
-#: ../wwsympa/wwsympa.fcgi.in:16590 ../wwsympa/wwsympa.fcgi.in:4280
-#: ../wwsympa/wwsympa.fcgi.in:4338 ../wwsympa/wwsympa.fcgi.in:4909
-#: ../wwsympa/wwsympa.fcgi.in:4910 ../wwsympa/wwsympa.fcgi.in:6432
-#: ../wwsympa/wwsympa.fcgi.in:7451 ../wwsympa/wwsympa.fcgi.in:7994
-#: ../wwsympa/wwsympa.fcgi.in:8041 ../wwsympa/wwsympa.fcgi.in:8043
-#: ../wwsympa/wwsympa.fcgi.in:8519 ../wwsympa/wwsympa.fcgi.in:8520
-#: ../wwsympa/wwsympa.fcgi.in:8554 ../wwsympa/wwsympa.fcgi.in:8555
-#: ../wwsympa/wwsympa.fcgi.in:8734 ../wwsympa/wwsympa.fcgi.in:8735
+#: ../src/lib/List.pm:3045 ../src/lib/List.pm:3046 ../src/lib/List.pm:3050
+#: ../wwsympa/wwsympa.fcgi.in:10953 ../wwsympa/wwsympa.fcgi.in:11022
+#: ../wwsympa/wwsympa.fcgi.in:11224 ../wwsympa/wwsympa.fcgi.in:11571
+#: ../wwsympa/wwsympa.fcgi.in:15022 ../wwsympa/wwsympa.fcgi.in:15029
+#: ../wwsympa/wwsympa.fcgi.in:15747 ../wwsympa/wwsympa.fcgi.in:16540
+#: ../wwsympa/wwsympa.fcgi.in:16541 ../wwsympa/wwsympa.fcgi.in:4278
+#: ../wwsympa/wwsympa.fcgi.in:4331 ../wwsympa/wwsympa.fcgi.in:4902
+#: ../wwsympa/wwsympa.fcgi.in:4903 ../wwsympa/wwsympa.fcgi.in:6425
+#: ../wwsympa/wwsympa.fcgi.in:7448 ../wwsympa/wwsympa.fcgi.in:7988
+#: ../wwsympa/wwsympa.fcgi.in:8035 ../wwsympa/wwsympa.fcgi.in:8037
+#: ../wwsympa/wwsympa.fcgi.in:8513 ../wwsympa/wwsympa.fcgi.in:8514
+#: ../wwsympa/wwsympa.fcgi.in:8548 ../wwsympa/wwsympa.fcgi.in:8549
+#: ../wwsympa/wwsympa.fcgi.in:8728 ../wwsympa/wwsympa.fcgi.in:8729
 msgid "%d %b %Y"
 msgstr "%d/%b/%Y"
 
@@ -9412,34 +9413,34 @@ msgstr "%H:%M:%S"
 #. This entry is a date/time format
 #. Check the strftime manpage for format details : http://docs.freebsd.org/info/gawk/gawk.info.Time_Functions.html
 #: ../wwsympa/SympaSession.pm:436 ../wwsympa/SympaSession.pm:437
-#: ../wwsympa/wwsympa.fcgi.in:11869 ../wwsympa/wwsympa.fcgi.in:12002
-#: ../wwsympa/wwsympa.fcgi.in:14315 ../wwsympa/wwsympa.fcgi.in:7948
+#: ../wwsympa/wwsympa.fcgi.in:11805 ../wwsympa/wwsympa.fcgi.in:11938
+#: ../wwsympa/wwsympa.fcgi.in:14251 ../wwsympa/wwsympa.fcgi.in:7945
 msgid "%d %b %y  %H:%M"
 msgstr "%d %b %y  %H:%M"
 
-#: ../wwsympa/wwsympa.fcgi.in:15268
+#: ../wwsympa/wwsympa.fcgi.in:15204
 #, fuzzy
 msgid "Your unsubscription request to list %s was sent to the list owner."
 msgstr "Sua assinatura à lista %s foi removida."
 
-#: ../wwsympa/wwsympa.fcgi.in:15270
+#: ../wwsympa/wwsympa.fcgi.in:15206
 #, fuzzy
 msgid "You were successfully unsubscribed from list %s."
 msgstr "Você solicitou cancelamento da inscrição na lista '%1'."
 
-#: ../wwsympa/wwsympa.fcgi.in:15274
+#: ../wwsympa/wwsympa.fcgi.in:15210
 msgid ""
 "Unsubscription from list %s denied: Unsubscription from this list is closed."
 msgstr ""
 
-#: ../wwsympa/wwsympa.fcgi.in:15276
+#: ../wwsympa/wwsympa.fcgi.in:15212
 #, fuzzy
 msgid "Unsubscription from list %s failed."
 msgstr "Eu cancelei a inscrição na lista '%1'"
 
 #. This entry is a date/time format
 #. Check the strftime manpage for format details : http://docs.freebsd.org/info/gawk/gawk.info.Time_Functions.html
-#: ../wwsympa/wwsympa.fcgi.in:16184 ../wwsympa/wwsympa.fcgi.in:16185
+#: ../wwsympa/wwsympa.fcgi.in:16120 ../wwsympa/wwsympa.fcgi.in:16121
 msgid "%Y-%m-%d-%H-%M-%S"
 msgstr "%v-%T"
 
@@ -9604,6 +9605,10 @@ msgid ""
 "subscribed"
 msgstr ""
 
+#: ../web_tt2/list_menu.tt2:69
+msgid "OpenSocial"
+msgstr ""
+
 #: ../web_tt2/compose_mail.tt2:79
 msgid "Select the source of your HTML newsletter"
 msgstr ""
@@ -9625,17 +9630,24 @@ msgstr ""
 msgid "%1:"
 msgstr ""
 
-#: ../web_tt2/error.tt2:54
+#: ../web_tt2/error.tt2:55
 msgid ""
 "You didn't define the web page you want to use to create your newsletter. "
 "Please specify either an URL or a file to upload."
 msgstr ""
 
-#: ../web_tt2/error.tt2:55 ../web_tt2/error.tt2:56
+#: ../web_tt2/error.tt2:56 ../web_tt2/error.tt2:57
 msgid ""
 "You specified both an URL and a file to upload. Sympa can't choose which one "
 "to send. Please fill the form with one of them only. A web page OR a file to "
 "upload."
+msgstr ""
+
+#. (base_url,path_cgi,u_err.oauth_provider)
+#: ../web_tt2/error.tt2:134
+msgid ""
+"Failed to include members from VOOT group, use the following link to check "
+"the OAuth status : <a href=\"%1%2/oauth_check/%3\">%1%2/oauth_check/%3</a>"
 msgstr ""
 
 #: ../web_tt2/modform.tt2:49
@@ -9657,6 +9669,48 @@ msgstr ""
 #. (user_with_errors.value)
 #: ../web_tt2/news.tt2:35
 msgid " %1 error(s)"
+msgstr ""
+
+#: ../web_tt2/oauth_authorize.tt2:4
+msgid "OAuth authorize"
+msgstr ""
+
+#: ../web_tt2/oauth_authorize.tt2:13
+msgid "Don't authorize"
+msgstr ""
+
+#: ../web_tt2/oauth_check.tt2:4
+msgid "OAuth check"
+msgstr ""
+
+#: ../web_tt2/oauth_check.tt2:10
+msgid "Got new access token, everything is alright."
+msgstr ""
+
+#: ../web_tt2/oauth_check.tt2:15
+msgid ""
+"Unable to check, provider may not be available or access token may be "
+"outdated and failed to be get new one."
+msgstr ""
+
+#: ../web_tt2/oauth_check.tt2:18
+msgid "Unable to load consumer, configuration may be erroneous."
+msgstr ""
+
+#: ../web_tt2/select_voot_groups_request.tt2:6
+msgid ""
+"Hereafter is the list of the groups you accepted to share with Sympa. Select "
+"which group you want members to be included in your list."
+msgstr ""
+
+#: ../web_tt2/select_voot_provider_request.tt2:4
+msgid "Select VOOT provider"
+msgstr ""
+
+#: ../web_tt2/select_voot_provider_request.tt2:6
+msgid ""
+"Hereafter is the list of VOOT providers that share group information with "
+"Sympa. Select which provider you want to use your groups from."
 msgstr ""
 
 #: ../web_tt2/skinsedit.tt2:107
@@ -9689,6 +9743,20 @@ msgstr ""
 msgid ""
 "Sympa could not include subscribers to list %1 because the maximum number of "
 "users was reached for this list. This limit is defined to %2."
+msgstr ""
+
+#. (consumer_name,oauth_provider)
+#: ../mail_tt2/message_report.tt2:96
+msgid "Your OAuth token used by consumer %1 may have expired."
+msgstr ""
+
+#. (consumer_name,oauth_provider,conf.wwsympa_url)
+#: ../mail_tt2/message_report.tt2:105
+msgid ""
+"Sympa failed to retreive data using %1 consumer, this may be because your "
+"access token for OAuth provider %2 is out of date.\n"
+"\n"
+"Visit  %3/oauth_check/%2 to check the token state and renew it if necessary."
 msgstr ""
 
 #: ../mail_tt2/moderate.tt2:23
@@ -10331,39 +10399,43 @@ msgid ""
 "page"
 msgstr ""
 
-#: ../src/lib/Conf.pm:967
+#: ../src/lib/Conf.pm:966
 msgid "Conf::load_nrcpt_by_domain(): Error at line %d: %s"
 msgstr ""
 
-#: ../src/lib/List.pm:441
+#: ../src/lib/List.pm:443
 msgid "tracking message by delivery status notification"
 msgstr ""
 
-#: ../src/lib/List.pm:446
+#: ../src/lib/List.pm:448
 msgid "tracking message by message delivery notification"
 msgstr ""
 
-#: ../src/lib/List.pm:457
+#: ../src/lib/List.pm:459
 msgid "Tracking datas are removed after this number of days"
 msgstr ""
 
-#: ../src/lib/List.pm:6443
+#: ../src/lib/List.pm:1119
+msgid "group"
+msgstr ""
+
+#: ../src/lib/List.pm:6484
 msgid "Attempt to exceed the max number of members (%s) for this list."
 msgstr ""
 
-#: ../src/lib/List.pm:6446
+#: ../src/lib/List.pm:6487
 msgid "Attempts to add some users in database failed."
 msgstr ""
 
-#: ../src/lib/List.pm:6448
+#: ../src/lib/List.pm:6489
 msgid "Added %s users out of %s required."
 msgstr ""
 
-#: ../wwsympa/wwsympa.fcgi.in:16244
+#: ../wwsympa/wwsympa.fcgi.in:16506
 msgid "Mail sending"
 msgstr ""
 
-#: ../wwsympa/wwsympa.fcgi.in:16247
+#: ../wwsympa/wwsympa.fcgi.in:16509
 msgid "Users deleted by admin"
 msgstr ""
 
@@ -10390,6 +10462,14 @@ msgstr ""
 #: ../src/lib/confdef.pm:260
 msgid "Log intensity"
 msgstr ""
+
+#~ msgid ""
+#~ "List description: This text is sent as an answer to the mail command\n"
+#~ "INFO. It can also be included in the <em>Welcome message</em>."
+#~ msgstr ""
+#~ "Descrição da lista: este texto é enviado como resposta para o comando de "
+#~ "e-mail\n"
+#~ "INFO. Também pode ser incluído na <em>Welcome message</em>."
 
 #~ msgid "Statistics"
 #~ msgstr "Estatísticas"
@@ -10460,8 +10540,32 @@ msgstr ""
 #~ msgstr "Lista %1 / %2"
 
 #, fuzzy
+#~ msgid "Authorize %1 ?"
+#~ msgstr "Autor"
+
+#, fuzzy
+#~ msgid "Authorize"
+#~ msgstr "Autor"
+
+#, fuzzy
+#~ msgid "Everything is alright."
+#~ msgstr "Tudo sobre esta lista :"
+
+#, fuzzy
+#~ msgid "Unknown provider."
+#~ msgstr "Erro desconhecido."
+
+#, fuzzy
 #~ msgid "Add quietly"
 #~ msgstr "silencioso"
+
+#, fuzzy
+#~ msgid "Select group"
+#~ msgstr "--Selecione uma categoria--"
+
+#, fuzzy
+#~ msgid "Set as source"
+#~ msgstr "a fonte de dados"
 
 #, fuzzy
 #~ msgid "List %1 statistics"
@@ -10665,6 +10769,18 @@ msgstr ""
 #, fuzzy
 #~ msgid "Message tracking feature"
 #~ msgstr "Identificação da mensagem"
+
+#, fuzzy
+#~ msgid "user"
+#~ msgstr "Usuárias"
+
+#, fuzzy
+#~ msgid "provider"
+#~ msgstr "perfil"
+
+#, fuzzy
+#~ msgid "VOOT group inclusion"
+#~ msgstr "Inclusão de consulta SQL"
 
 #, fuzzy
 #~ msgid "Maximum number of list members"
@@ -11315,9 +11431,6 @@ msgstr ""
 
 #~ msgid "To access your personal environment, you need to login first"
 #~ msgstr "Para acessar seu ambiente pessoal, você precisa iniciar uma sessão"
-
-#~ msgid "Everything about this list:"
-#~ msgstr "Tudo sobre esta lista :"
 
 #~ msgid "daily delete logs older than 3 months"
 #~ msgstr "Remover registros com mais de 3 meses"
@@ -12788,3 +12901,6 @@ msgstr ""
 
 #~ msgid "Your subscription to list %s has been removed."
 #~ msgstr "Sua assinatura à lista %s foi removida."
+
+#~ msgid "Everything about this list:"
+#~ msgstr "Tudo sobre esta lista :"

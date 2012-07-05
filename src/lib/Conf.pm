@@ -68,6 +68,7 @@ my %old_params = (
     msgcat                 => 'localedir',
     queueexpire            => '',
     clean_delay_queueother => '',
+    dkim_header_list => '',
     web_recode_to          => 'filesystem_encoding',
 );
 
@@ -1559,7 +1560,8 @@ sub load_generic_conf_file {
 		}
 		
 		unless ($paragraph[$i] =~ /^\s*$key\s+($structure{$pname}{'format'}{$key}{'format'})\s*$/i) {
-		    printf STDERR "Bad entry '%s' in paragraph '%s' in %s\n", $paragraph[$i], $key, $pname, $config_file;
+		    chomp($paragraph[$i]);
+		    printf STDERR 'Bad entry "%s" for key "%s", paragraph "%s" in file "%s"\n', $paragraph[$i], $key, $pname, $config_file;
 		    return undef if $on_error eq 'abort';
 		    next;
 		}
@@ -1608,7 +1610,8 @@ sub load_generic_conf_file {
 	    }
 
 	    unless ($paragraph[0] =~ /^\s*$pname\s+($structure{$pname}{'format'})\s*$/i) {
-		printf STDERR "Bad entry '%s' in %s\n", $paragraph[0], $config_file ;
+		chomp($paragraph[0]);
+		printf STDERR 'Bad entry "%s" in %s\n', $paragraph[0], $config_file ;
 		return undef if $on_error eq 'abort';
 		next;
 	    }

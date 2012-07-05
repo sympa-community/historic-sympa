@@ -293,8 +293,7 @@ while (!$end) {
 		    $messageasstring = &tools::dkim_sign($messageasstring,{'dkim_d'=>           $message_from_spool->{'dkim_d'},
 									   'dkim_i'=>           $message_from_spool->{'dkim_i'},
 									   'dkim_selector'=>    $message_from_spool->{'dkim_selector'},
-									   'dkim_privatekey' => $message_from_spool->{'dkim_privatekey'},
-									   'dkim_header_list' =>$message_from_spool->{'dkim_header_list'} } );
+									   'dkim_privatekey' => $message_from_spool->{'dkim_privatekey'}, } );
 		}		
 		*SMTP = &mail::smtpto($return_path, \$rcpt, $bulk->{'robot'});
 		# Message with customized data
@@ -310,8 +309,7 @@ while (!$end) {
 		$messageasstring_init = &tools::dkim_sign($messageasstring_init,{'dkim_d'=>           $message_from_spool->{'dkim_d'},
 										 'dkim_i'=>           $message_from_spool->{'dkim_i'},
 										 'dkim_selector'=>    $message_from_spool->{'dkim_selector'},
-										 'dkim_privatekey' => $message_from_spool->{'dkim_privatekey'},
-										 'dkim_header_list' =>$message_from_spool->{'dkim_header_list'} } );
+										 'dkim_privatekey' => $message_from_spool->{'dkim_privatekey'}, } );
 	    }
 	    *SMTP = &mail::smtpto($bulk->{'returnpath'}, \@rcpts, $bulk->{'robot'});		
 	    print SMTP $messageasstring_init;

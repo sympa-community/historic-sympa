@@ -53,9 +53,9 @@ function hideError()
 	 {
 	     my_form.zip.value = "1";
 	 }
-	 }else{
-	return false;[% list %]
-	}
+      } else {
+	 return false;
+      }
   }	
 
   // To confirm a form submition

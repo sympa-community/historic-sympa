@@ -12,8 +12,8 @@ msgstr ""
 "Project-Id-Version: Sympa-6.1.4, 6.2a.6\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2002-07-16 17:27+0800\n"
-"PO-Revision-Date: 2012-01-06 14:34+0100\n"
-"Last-Translator: shirayuki <shirayuking@gmail.com>\n"
+"PO-Revision-Date: 2012-05-10 03:52+0200\n"
+"Last-Translator: IKEDA Soji <hatuka@nezumi.nu>\n"
 "Language-Team: 日本語\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -33,8 +33,8 @@ msgid ""
 "archive, list moderation, list configuration."
 msgstr ""
 "このサーバではあなたのメーリング リスト環境にアクセスできます。このウェブ "
-"ページから、購読オプション、購読解除、アーカイブ、リストのモデレーション、リ"
-"ストの設定を行えます。"
+"ページから、読者登録のオプション、登録解除、投稿保管庫、リストのモデレーショ"
+"ン、リストの設定へ行けます。"
 
 #: ../web_tt2/home.tt2:7
 msgid "Mailing lists categories"
@@ -104,7 +104,7 @@ msgstr "ホーム"
 #: ../web_tt2/modindex.tt2:192 ../web_tt2/modindex.tt2:9 ../web_tt2/pref.tt2:4
 #: ../web_tt2/rename_list_request.tt2:3 ../web_tt2/review.tt2:5
 #: ../web_tt2/reviewbouncing.tt2:3 ../web_tt2/suboptions.tt2:21
-#: ../web_tt2/suspend_request.tt2:64
+#: ../web_tt2/suspend_request.tt2:5
 msgid "Help"
 msgstr "ヘルプ"
 
@@ -160,26 +160,26 @@ msgstr "ご利用になれるメーリング リストはありません。"
 
 #: ../web_tt2/list_menu.tt2:11
 msgid "Subscriber Options"
-msgstr "購読者のオプション"
+msgstr "読者登録のオプション"
 
 #. (list)
 #: ../web_tt2/list_menu.tt2:15
 msgid "Do you really want to unsubscribe from list %1?"
-msgstr "本当に %1 メーリング リストの購読解除をしてよいのですか。"
+msgstr "本当に %1 メーリング リストの登録解除をしてよいのですか。"
 
 #: ../web_tt2/list_menu.tt2:15 ../web_tt2/list_menu.tt2:25
 #: ../web_tt2/suspend_request.tt2:57
 msgid "Unsubscribe"
-msgstr "購読解除"
+msgstr "登録解除"
 
 #. (list)
 #: ../web_tt2/list_menu.tt2:20
 msgid "Do you really want to subscribe to list %1?"
-msgstr "本当に %1 メーリング リストを購読してよいのですか。"
+msgstr "本当に %1 メーリング リストに読者登録してよいのですか。"
 
 #: ../web_tt2/list_menu.tt2:20 ../web_tt2/subrequest.tt2:68
 msgid "Subscribe"
-msgstr "購読"
+msgstr "読者登録"
 
 #: ../web_tt2/list_menu.tt2:31
 msgid "Info"
@@ -205,11 +205,11 @@ msgstr "文書"
 
 #: ../web_tt2/list_menu.tt2:50
 msgid "Subscriptions"
-msgstr "購読"
+msgstr "読者登録"
 
 #: ../web_tt2/list_menu.tt2:61 ../web_tt2/list_menu.tt2:63
 msgid "Archive"
-msgstr "アーカイブ"
+msgstr "投稿保管庫"
 
 #: ../web_tt2/list_menu.tt2:69 ../web_tt2/list_menu.tt2:71
 msgid "Post"
@@ -292,7 +292,7 @@ msgstr "読者管理:"
 msgid ""
 "Allows you to add or delete list subscribers, moderate subscriptions and so "
 "on."
-msgstr "リストの読者の追加、削除、購読のモデレーションなどができます。"
+msgstr "リストの読者の追加、削除、読者登録のモデレーションなどができます。"
 
 #: ../web_tt2/admin.tt2:12
 msgid "Blacklist:"
@@ -304,11 +304,11 @@ msgstr "このリストでブラックリストに入れるアドレスを操作
 
 #: ../web_tt2/admin.tt2:15
 msgid "Manage archives:"
-msgstr "アーカイブを管理:"
+msgstr "投稿保管庫を管理: "
 
 #: ../web_tt2/admin.tt2:15
 msgid "Allows you to download and delete list archives."
-msgstr "リストのアーカイブをダウンロードしたり削除したりできます。"
+msgstr "リストの投稿保管庫をダウンロードしたり削除したりできます。"
 
 #: ../web_tt2/admin.tt2:18
 msgid "Bounces:"
@@ -374,8 +374,8 @@ msgid ""
 "be relabeled according to the new name, including the mail aliases and the "
 "web archives."
 msgstr ""
-"このリストの名前を変更できます。リストに関係するすべて (メール エイリアスや"
-"ウェブ アーカイブを含む) が、新しい名前に変更されます。"
+"このリストの名前を変更できます。リストに関係するすべて (メール エイリアスや投"
+"稿保管庫のアドレスを含む) が、新しい名前に変更されます。"
 
 #: ../web_tt2/admin.tt2:59 ../web_tt2/admin_menu.tt2:96
 #: ../web_tt2/admin_menu.tt2:98
@@ -491,7 +491,7 @@ msgstr "メッセージ設定"
 #: ../web_tt2/admin_menu.tt2:67 ../web_tt2/admin_menu.tt2:73
 #: ../web_tt2/nav.tt2:77
 msgid "Manage Archives"
-msgstr "アーカイブを管理"
+msgstr "投稿保管庫を管理"
 
 #: ../web_tt2/admin_menu.tt2:81 ../web_tt2/admin_menu.tt2:87
 #: ../web_tt2/lists.tt2:42 ../web_tt2/nav.tt2:101 ../web_tt2/nav.tt2:81
@@ -524,7 +524,7 @@ msgstr "権限"
 #: ../web_tt2/admin_menu.tt2:151 ../web_tt2/edit_list_request.tt2:14
 #: ../web_tt2/nav.tt2:19 ../web_tt2/nav.tt2:99 ../web_tt2/serveradmin.tt2:109
 msgid "Archives"
-msgstr "アーカイブ"
+msgstr "投稿保管庫"
 
 #: ../web_tt2/admin_menu.tt2:155
 msgid "Bounce Settings"
@@ -546,7 +546,7 @@ msgstr "任意/必須の属性"
 
 #: ../web_tt2/arc_manage.tt2:4
 msgid "Archive Management"
-msgstr "アーカイブを管理"
+msgstr "投稿保管庫を管理"
 
 #: ../web_tt2/arc.tt2:4 ../web_tt2/arc_manage.tt2:4
 #: ../web_tt2/arcsearch_form.tt2:4 ../web_tt2/compose_mail.tt2:12
@@ -563,7 +563,7 @@ msgstr "アーカイブを管理"
 #: ../web_tt2/picture_upload.tt2:21 ../web_tt2/pref.tt2:4
 #: ../web_tt2/rename_list_request.tt2:3 ../web_tt2/review.tt2:5
 #: ../web_tt2/reviewbouncing.tt2:3 ../web_tt2/suboptions.tt2:20
-#: ../web_tt2/subscriber_table.tt2:108
+#: ../web_tt2/subscriber_table.tt2:106
 msgid "Open in a new window"
 msgstr "別ウィンドウで開く"
 
@@ -574,7 +574,7 @@ msgstr "削除またはダウンロード (ZIP形式) したい月を選択し�
 
 #: ../web_tt2/arc_manage.tt2:12
 msgid "Archive Selection:"
-msgstr "アーカイブを選択:"
+msgstr "投稿保管庫を選択: "
 
 #: ../web_tt2/arc_manage.tt2:23
 msgid "DownLoad ZipFile"
@@ -586,11 +586,11 @@ msgstr "選択した月を削除"
 
 #: ../web_tt2/arc_manage.tt2:24
 msgid "Do you really want to delete Selected Archives?"
-msgstr "選択されたアーカイブを本当に削除しますか?"
+msgstr "本当に、選択した投稿保管庫を削除しますか。"
 
 #: ../web_tt2/arc_manage.tt2:24
 msgid "Do you want to DownLoad a Zip of the selected Archives?"
-msgstr "選択されたアーカイブの ZIP をダウンロードしますか?"
+msgstr "選択した投稿保管庫の ZIP ファイルをダウンロードしますか。"
 
 #: ../web_tt2/arc_protect.tt2:7
 msgid "I am not a spammer"
@@ -601,11 +601,11 @@ msgid ""
 "This button aims at protecting mailing lists archives against Spam Harvester."
 msgstr ""
 "このボタンは、スパム送信用にメール アドレスを収集するソフトウェアからメーリン"
-"グ リストのアーカイブを保護することを目的としています。"
+"グ リストの投稿保管庫を保護することを目的としています。"
 
 #: ../web_tt2/arc.tt2:4 ../web_tt2/arcsearch_form.tt2:3
 msgid "List archive"
-msgstr "リストのアーカイブ"
+msgstr "リストの投稿保管庫"
 
 #: ../web_tt2/arcsearch_form.tt2:4
 msgid "Advanced archive search"
@@ -705,7 +705,7 @@ msgstr "探す範囲を拡げる:"
 
 #: ../web_tt2/arcsearch.tt2:4
 msgid "Result of your search in the archive"
-msgstr "アーカイブ内の検索結果"
+msgstr "投稿保管庫内を検索した結果"
 
 #. (key_word)
 #: ../web_tt2/arcsearch.tt2:13
@@ -787,17 +787,17 @@ msgstr ""
 #. (archive_name)
 #: ../web_tt2/arcsearch.tt2:122
 msgid "Return to archive %1"
-msgstr "アーカイブ %1 に戻る"
+msgstr "%1 の投稿保管庫へ戻る"
 
 #: ../web_tt2/auto_signoff.tt2:1
 msgid "Unsubscription request"
-msgstr "購読解除申込"
+msgstr "登録解除申込"
 
 #. (signing_off_email,list)
 #: ../web_tt2/auto_signoff.tt2:2
 msgid "You clicked a link to unsubscribe the address %1 from list %2."
 msgstr ""
-"%2 メーリング リストでのメール アドレス %1 の購読解除をするリンクをクリックし"
+"%2 メーリング リストでのメール アドレス %1 の登録解除をするリンクをクリックし"
 "ましたね。"
 
 #. (list)
@@ -807,7 +807,7 @@ msgid ""
 "contains, you will be definitively unsubscribed from list %1"
 msgstr ""
 "確認のメッセージはこのメール アドレスにしか送っていません。そこに書いてあった"
-"リンクをクリックすると、あなたは %1 メーリング リストを購読解除をされることに"
+"リンクをクリックすると、あなたは %1 メーリング リストを登録解除をされることに"
 "なります。"
 
 #: ../web_tt2/blacklist.tt2:4
@@ -1002,7 +1002,7 @@ msgstr ": そのメール アドレスの人の名前。"
 
 #: ../web_tt2/compose_mail.tt2:71
 msgid ": the - human readable - user's subscription date; always available."
-msgstr ": 購読の日付。"
+msgstr ": 読者登録した日付 (年月日)。"
 
 #: ../web_tt2/compose_mail.tt2:72
 msgid ""
@@ -1097,7 +1097,7 @@ msgid ""
 "The source lists you can use are limited to lists you own."
 msgstr ""
 "既にあるリストを雛形にして別のリストを作成できます。新しくできたリストには、"
-"もとのリストの設定が複写されます。ただし、リストのメンバ、アーカイブ、共有文"
+"もとのリストの設定が複写されます。ただし、リストのメンバ、投稿保管庫、共有文"
 "書は複製しません。もとのリストに使えるのは、自分がオーナーになっているリスト"
 "だけです。"
 
@@ -1402,16 +1402,16 @@ msgid "Size (Kb)"
 msgstr "大きさ (キロバイト)"
 
 #: ../web_tt2/d_read.tt2:69 ../web_tt2/d_read.tt2:71
-#: ../web_tt2/latest_d_read.tt2:18 ../web_tt2/subscriber_table.tt2:61
+#: ../web_tt2/latest_d_read.tt2:18 ../web_tt2/subscriber_table.tt2:59
 msgid "Last update"
 msgstr "最終更新"
 
 #: ../web_tt2/d_read.tt2:75 ../web_tt2/editfile.tt2:30
-#: ../web_tt2/editfile.tt2:31 ../web_tt2/editfile.tt2:36
-#: ../web_tt2/editfile.tt2:37 ../web_tt2/editfile.tt2:38
-#: ../web_tt2/editfile.tt2:40 ../web_tt2/editfile.tt2:45
-#: ../web_tt2/editfile.tt2:46 ../web_tt2/editfile.tt2:50
-#: ../web_tt2/editfile.tt2:51 ../web_tt2/manage_template.tt2:35
+#: ../web_tt2/editfile.tt2:31 ../web_tt2/editfile.tt2:35
+#: ../web_tt2/editfile.tt2:36 ../web_tt2/editfile.tt2:37
+#: ../web_tt2/editfile.tt2:39 ../web_tt2/editfile.tt2:44
+#: ../web_tt2/editfile.tt2:45 ../web_tt2/editfile.tt2:49
+#: ../web_tt2/editfile.tt2:50 ../web_tt2/manage_template.tt2:35
 #: ../web_tt2/manage_template.tt2:56 ../web_tt2/serveradmin.tt2:149
 #: ../web_tt2/serveradmin.tt2:162
 msgid "Edit"
@@ -1629,20 +1629,20 @@ msgstr ""
 "ジの右側に表示されます (なければ、かわりに下のリストの説明が入ります)。"
 
 # dumplicate of web_help.po
-#: ../web_tt2/editfile.tt2:32
+#: ../web_tt2/editfile.tt2:31
 msgid ""
-"List description: This text is sent as an answer to the mail command\n"
-"INFO. It can also be included in the <em>Welcome message</em>."
+"List description: This text is sent as an answer to the mail command INFO. "
+"It can also be included in the <em>Welcome message</em>."
 msgstr ""
 "リストの説明: このテキストを INFO コマンドに対する返信として送ります。また、"
 "<em>歓迎メッセージ</em>にもこのテキストが入ります。"
 
-#: ../web_tt2/editfile.tt2:34
+#: ../web_tt2/editfile.tt2:33
 msgid "Automatic messages"
 msgstr "自動送信されるメッセージ"
 
 # dumplicate of web_help.po
-#: ../web_tt2/editfile.tt2:36
+#: ../web_tt2/editfile.tt2:35
 msgid ""
 "Welcome message: This message is sent to new subscribers. It can be a full "
 "MIME structured message (only for MIME gurus)."
@@ -1650,7 +1650,7 @@ msgstr ""
 "歓迎メッセージ: 登録された読者に送るメッセージ。MIME の複雑なメッセージを書く"
 "こともできます (MIME の知識に精通している人なら)。"
 
-#: ../web_tt2/editfile.tt2:37
+#: ../web_tt2/editfile.tt2:36
 msgid ""
 "Rejection message: when a message is rejected by list editor, a notification "
 "can be sent to the original author. You may prepare various rejection "
@@ -1660,7 +1660,7 @@ msgstr ""
 "書いた人に知らせることができます。いろいろな拒否メッセージを用意しておけま"
 "す。"
 
-#: ../web_tt2/editfile.tt2:39
+#: ../web_tt2/editfile.tt2:38
 msgid ""
 "Remind message: This message is sent to each subscriber\n"
 "when using the command  REMIND. It's very useful to help people who are "
@@ -1669,23 +1669,23 @@ msgid ""
 msgstr ""
 "登録確認メッセージ: REMIND コマンドを使うと、このメッセージを全読者に送れま"
 "す。\n"
-"購読しているメール アドレスがわからなくなった人や、自分で購読解除ができない人"
-"に便利です。"
+"読者登録しているメール アドレスがわからなくなった人や、自分で登録解除ができな"
+"い人に便利です。"
 
-#: ../web_tt2/editfile.tt2:41
+#: ../web_tt2/editfile.tt2:40
 msgid ""
 "Subscribing invitation message: sent to a person if someone  \n"
 "uses the INVITE command to invite someone to subscribe."
 msgstr ""
-"購読に招待するメッセージ: 誰かが INVITE コマンドを使って購読に招待すると、招"
-"待される人にこのメッセージを送ります。"
+"読者登録に招待するメッセージ: 誰かが INVITE コマンドを使って読者登録に招待す"
+"ると、招待される人にこのメッセージを送ります。"
 
-#: ../web_tt2/editfile.tt2:43
+#: ../web_tt2/editfile.tt2:42
 msgid "Added in distributed messages"
 msgstr "配信するメッセージに追加するもの"
 
 # duplicate of web_help.po
-#: ../web_tt2/editfile.tt2:45
+#: ../web_tt2/editfile.tt2:44
 msgid ""
 "Message footer: If this file is not empty, it is added as a MIME attachment "
 "at the end of each message distributed to the list."
@@ -1693,7 +1693,7 @@ msgstr ""
 "メッセージの後付け: このテキストが空でなければ、リストに配信するすべてのメッ"
 "セージの最後にMIMEのパートとして追加します。"
 
-#: ../web_tt2/editfile.tt2:46
+#: ../web_tt2/editfile.tt2:45
 msgid ""
 "Message header: If this file is not empty, it is added as a MIME attachment "
 "at the beginning of each message distributed to the list."
@@ -1701,17 +1701,17 @@ msgstr ""
 "メッセージの前付け: このテキストが空でなければ、リストで配信するすべてのメッ"
 "セージの先頭にMIME のパートとして追加します。"
 
-#: ../web_tt2/editfile.tt2:48
+#: ../web_tt2/editfile.tt2:47
 msgid "More"
 msgstr "その他"
 
-#: ../web_tt2/editfile.tt2:50
+#: ../web_tt2/editfile.tt2:49
 msgid "Unsubscribe message: This message is sent when users leave the list."
 msgstr ""
-"購読解除メッセージ: 誰かが購読解除したときに、その人にこのメッセージを送りま"
+"登録解除メッセージ: 誰かが登録解除したときに、その人にこのメッセージを送りま"
 "す。"
 
-#: ../web_tt2/editfile.tt2:52
+#: ../web_tt2/editfile.tt2:51
 msgid ""
 "Deletion message: This message is sent to users when you\n"
 "remove them from the list using the DEL command (unless you hit the Quiet "
@@ -1776,7 +1776,7 @@ msgstr "名前:"
 
 #: ../web_tt2/editsubscriber.tt2:18
 msgid "Subscribed since:"
-msgstr "購読日:"
+msgstr "読者登録した日:"
 
 #: ../web_tt2/editsubscriber.tt2:19 ../web_tt2/suboptions.tt2:11
 msgid "Last update:"
@@ -1804,7 +1804,7 @@ msgstr "このリストでのピクチャを変更"
 
 #: ../web_tt2/editsubscriber.tt2:61
 msgid "Unsubscribe the User"
-msgstr "この人を購読解除"
+msgstr "この人を登録解除"
 
 #: ../web_tt2/editsubscriber.tt2:67
 msgid "Bouncing address"
@@ -1907,7 +1907,7 @@ msgstr "'%1' という月はありません"
 #. (i_err.year_month)
 #: ../web_tt2/error.tt2:11
 msgid "Archives from %1 are not accessible"
-msgstr "%1 からのアーカイブはアクセスできません"
+msgstr "%1 の投稿保管庫にはアクセスできません"
 
 #: ../mail_tt2/listmaster_notification.tt2:338 ../web_tt2/error.tt2:12
 msgid "Unable to load list topics."
@@ -2093,12 +2093,12 @@ msgstr "フィルタがありません"
 #. (u_err.email)
 #: ../web_tt2/error.tt2:65
 msgid "Not subscribed: %1"
-msgstr "このアドレスでは購読していません: %1"
+msgstr "このアドレスでは読者登録していません: %1"
 
 #. (u_err.list)
 #: ../web_tt2/error.tt2:66
 msgid "You are not subscribed to list %1"
-msgstr "%1 メーリング リストには購読していません"
+msgstr "%1 メーリング リストには読者登録していません"
 
 #: ../web_tt2/error.tt2:68
 msgid "Check the additional information"
@@ -2117,12 +2117,12 @@ msgstr "%1: このファイルは変更できません"
 #. (u_err.list)
 #: ../web_tt2/error.tt2:71
 msgid "You are already subscribed to the list %1"
-msgstr "すでに %1 メーリング リストを購読しています"
+msgstr "すでに %1 メーリング リストに読者登録しています"
 
 #. (u_err.email,u_err.list)
 #: ../web_tt2/error.tt2:72
 msgid "%1 is already subscribed to the list %2"
-msgstr "%1 はすでに %2 メーリング リストを購読しています"
+msgstr "%1 はすでに %2 メーリング リストに読者登録しています"
 
 #: ../web_tt2/error.tt2:73
 msgid "Please provide your password"
@@ -2158,7 +2158,7 @@ msgstr "このリストではメッセージにトピックの印をつけなけ
 
 #: ../web_tt2/error.tt2:80
 msgid "Archives are empty for this list"
-msgstr "このリストのアーカイブは空です"
+msgstr "このリストの投稿保管庫は空です"
 
 #: ../web_tt2/error.tt2:81
 msgid "You did not select an action to perform"
@@ -2348,7 +2348,7 @@ msgstr "「%1」のエントリはありません"
 
 #: ../web_tt2/error.tt2:121
 msgid "Please select archive months"
-msgstr "アーカイブの月を選択してください"
+msgstr "投稿保管庫の月を選択してください"
 
 #: ../web_tt2/error.tt2:122
 msgid "No SOAP service"
@@ -2407,7 +2407,7 @@ msgid ""
 msgstr ""
 "この %1 メーリング リストでの、あなたの登録アドレスを変えることができませんで"
 "した。\n"
-"     新しいほうのアドレスが、購読/購読解除できないものであるためです:"
+"     新しいほうのアドレスが、読者登録/登録解除できないものであるためです:"
 
 #: ../web_tt2/get_closed_lists.tt2:6 ../web_tt2/get_closed_lists.tt2:7
 #: ../web_tt2/serveradmin.tt2:10
@@ -2696,7 +2696,7 @@ msgstr "%1 件見つかりました"
 #. (email)
 #: ../web_tt2/lists.tt2:9
 msgid "<strong>%1</strong> is subscribed to the following mailing lists"
-msgstr "<strong>%1</strong> は以下のメーリング リストを購読しています"
+msgstr "<strong>%1</strong> は以下のメーリング リストに読者登録しています"
 
 #: ../web_tt2/lists.tt2:38 ../web_tt2/nav.tt2:69
 msgid "Manage Subscribers"
@@ -2715,8 +2715,8 @@ msgstr "運用記録"
 #: ../web_tt2/lists.tt2:62
 msgid "No subscriptions with address <strong>%1</strong>!"
 msgstr ""
-"<strong>%1</strong> というアドレスで購読しているメーリング リストはありません"
-"ね"
+"<strong>%1</strong> というアドレスで読者登録しているメーリング リストはありま"
+"せんね"
 
 #: ../web_tt2/loginbanner.tt2:18
 msgid "To login, select your organization authentication server below:"
@@ -3547,7 +3547,7 @@ msgstr "メール アドレスが条件に近い読者 (%1名)"
 
 #: ../web_tt2/review.tt2:137
 msgid "Do you really want to unsubscribe ALL selected subscribers?"
-msgstr "本当に*すべての*メーリング リストの購読解除をしてよいのですか。"
+msgstr "本当に*すべての*メーリング リストの登録解除をしてよいのですか。"
 
 #: ../web_tt2/review.tt2:145
 msgid "Excluded users"
@@ -3717,12 +3717,12 @@ msgstr "人の検索結果:"
 #. (email)
 #: ../web_tt2/search_user.tt2:5
 msgid "<strong>%1</strong> is subscribed to the following mailing lists:"
-msgstr "<strong>%1</strong> は以下のメーリング リストを購読しています。"
+msgstr "<strong>%1</strong> は以下のメーリング リストに読者登録しています。"
 
 #. (email)
 #: ../web_tt2/search_user.tt2:8
 msgid "Lists which %1 is subscribed "
-msgstr "%1 が購読しているリスト"
+msgstr "%1 が読者登録しているリスト"
 
 #: ../web_tt2/search_user.tt2:11
 msgid "role"
@@ -3852,17 +3852,21 @@ msgstr ""
 msgid "change identity as: "
 msgstr "この人になる: "
 
+# 言葉補う
 #: ../web_tt2/serveradmin.tt2:111
 msgid "Rebuild HTML archives using \"arctxt\" directories as input."
-msgstr "ディレクトリ \"arctxt\" 入力として HTML アーカイブを再構築します。"
+msgstr ""
+"「arctxt」ディレクトリに保存したメッセージをもとに、HTML の投稿保管庫ページを"
+"再構築します。"
 
 #: ../web_tt2/serveradmin.tt2:114
 msgid "listname: "
 msgstr "リスト名: "
 
+# 「ページ」補う
 #: ../web_tt2/serveradmin.tt2:114
 msgid "Rebuild archive"
-msgstr "アーカイブを再構築"
+msgstr "投稿保管庫ページを再構築"
 
 #: ../web_tt2/serveradmin.tt2:115
 msgid "Rebuild all"
@@ -4038,8 +4042,8 @@ msgstr ""
 "下の一覧にある人はリスト登録から除外します。ご注意いただきたいのですが、これ"
 "はブラックリスト機能とは違います。除外は、外部データソースによるリスト登録の"
 "ときだけ意味を持ちます。除外された人は、外部データソースから取り込まれること"
-"になっていたとしても購読解除ができ (リストのオーナーが削除することもでき) ま"
-"す。この人たちは、通常の購読解除や削除のの際に除外テーブルに入り、購読や追加"
+"になっていたとしても登録解除ができ (リストのオーナーが削除することもでき) ま"
+"す。この人たちは、通常の登録解除や削除のの際に除外テーブルに入り、登録や追加"
 "の際に除外テーブルから抜けます。"
 
 #: ../web_tt2/show_exclude.tt2:28
@@ -4053,7 +4057,7 @@ msgstr "セッション一覧"
 #. (list)
 #: ../web_tt2/sigrequest.tt2:4
 msgid "You asked to be unsubscribed  from list %1"
-msgstr "あなたは %1 メーリング リストの購読解除を申し込みました。"
+msgstr "あなたは %1 メーリング リストの登録解除を申し込みました。"
 
 #: ../web_tt2/sigrequest.tt2:5
 msgid ""
@@ -4064,20 +4068,20 @@ msgstr "申込を確認するため、下のボタンをクリックしてくだ
 #. (list)
 #: ../web_tt2/sigrequest.tt2:12
 msgid "I unsubscribe from list %1"
-msgstr "%1 メーリング リストの購読解除をする"
+msgstr "%1 メーリング リストの登録解除をする"
 
 #. (list,email)
 #: ../web_tt2/sigrequest.tt2:18
 msgid "You are not subscribed to list %1 with e-mail address %2"
-msgstr "%1 メーリング リストにはメール アドレス %2 では購読していません"
+msgstr "%1 メーリング リストにはメール アドレス %2 では読者登録していません"
 
 #: ../web_tt2/sigrequest.tt2:21
 msgid ""
 "You might have subscribed with another address.\n"
 "      Please contact the list owner to help you unsubscribe:"
 msgstr ""
-"他のメール アドレスで購読したのかもしれません。\n"
-"      リストのオーナーに連絡して購読解除の方法をお尋ねください:"
+"他のメール アドレスで読者登録したのかもしれません。\n"
+"      リストのオーナーに連絡して登録解除の方法をお尋ねください:"
 
 #. (list)
 #: ../web_tt2/sigrequest.tt2:25
@@ -4088,7 +4092,7 @@ msgid ""
 "inside; please provide your email address below to receive this validation "
 "link."
 msgstr ""
-"%1 リストの購読解除申込を承認する前に、あなたが本人であることを確認する必要が"
+"%1 リストの登録解除申込を承認する前に、あなたが本人であることを確認する必要が"
 "あります。アカウントを持っていればログインしてください。持っていなければアカ"
 "ウントを作成してください。<br/>どちらもうまくできないようなら、確認用のリンク"
 "の入ったメールを送りますので、下の欄にあなたのメール アドレスを入れてくださ"
@@ -4463,15 +4467,15 @@ msgstr "共有文書ディレクトリの容量:"
 
 #: ../web_tt2/stats.tt2:3
 msgid "Web archives size:"
-msgstr "ウェブ アーカイブ サイズ:"
+msgstr "ウェブ投稿保管庫の容量: "
 
 #: ../web_tt2/subindex.tt2:4 ../web_tt2/subindex.tt2:8
 msgid "Listing subscription to moderate"
-msgstr "モデレーションを待っている購読の一覧"
+msgstr "モデレーションを待っている読者登録の一覧"
 
 #: ../web_tt2/subindex.tt2:52
 msgid "No subscription requests"
-msgstr "購読申込はありません"
+msgstr "読者登録申込はありません"
 
 #: ../web_tt2/subindex.tt2:58
 msgid "Add selected addresses"
@@ -4483,19 +4487,20 @@ msgstr "選択したアドレスを拒否"
 
 #: ../web_tt2/suboptions.tt2:4
 msgid "Your list options"
-msgstr "購読の設定"
+msgstr "読者登録のオプション"
 
 #: ../web_tt2/suboptions.tt2:10
 msgid "You are subscribed since"
-msgstr "購読日"
+msgstr "読者登録した日"
 
 #: ../web_tt2/suboptions.tt2:13
 msgid "Receiving mode:"
 msgstr "受け取りモード:"
 
+# 「特定の」補う
 #: ../web_tt2/suboptions.tt2:25
 msgid "Topic subscription:"
-msgstr "トピックへの購読:"
+msgstr "特定のトピックだけ読者登録:"
 
 #: ../web_tt2/suboptions.tt2:37 ../web_tt2/suboptions.tt2:39
 msgid "Other (messages not tagged) "
@@ -4503,7 +4508,7 @@ msgstr "その他 (トピックの印のないメッセージ) "
 
 #: ../web_tt2/suboptions.tt2:46
 msgid "Disable topics subscription"
-msgstr "トピックへの購読をやめる"
+msgstr "トピックの読者登録をやめる"
 
 #: ../web_tt2/suboptions.tt2:51
 msgid "Only possible for direct reception modes."
@@ -4512,7 +4517,7 @@ msgstr "「直接受け取る」(normal) 受け取りモードのときだけで
 #. (list)
 #: ../web_tt2/subrequest.tt2:28 ../web_tt2/subrequest.tt2:7
 msgid "You requested a subscription to list %1"
-msgstr "あなたは %1 メーリング リストへの購読を申し込みました"
+msgstr "あなたは %1 メーリング リストへの読者登録を申し込みました"
 
 #: ../web_tt2/subrequest.tt2:8
 msgid "To confirm your request, please click the button below:"
@@ -4521,7 +4526,7 @@ msgstr "申込を確認するため、下のボタンをクリックしてくだ
 #. (list)
 #: ../web_tt2/subrequest.tt2:9
 msgid "You want to subscribe to list %1"
-msgstr "%1 メーリング リストを購読しようとしています"
+msgstr "%1 メーリング リストに読者登録しようとしています"
 
 #: ../web_tt2/subrequest.tt2:10
 msgid "Please fill in the form below and then click the validation button"
@@ -4530,7 +4535,7 @@ msgstr "下の欄に必要事項を入力して、確認ボタンをクリック
 #. (list)
 #: ../web_tt2/subrequest.tt2:22
 msgid "I subscribe to list %1"
-msgstr "%1 メーリング リストを購読する"
+msgstr "%1 メーリング リストに読者登録する"
 
 #: ../web_tt2/subrequest.tt2:31
 msgid ""
@@ -4549,7 +4554,8 @@ msgid ""
 "your subscription to list %1."
 msgstr ""
 "メールボックスの新着メッセージを確認してください。それに書いてあるリンクをク"
-"リックしてください。これで、%1 メーリング リストへの購読申込を確認できます。"
+"リックしてください。これで、%1 メーリング リストへの読者登録申込を確認できま"
+"す。"
 
 #: ../web_tt2/subrequest.tt2:38
 msgid "Your e-mail address"
@@ -4561,8 +4567,8 @@ msgid ""
 "To confirm your subscription to list %1, please enter\n"
 "        your password below"
 msgstr ""
-"%1 メーリング リストへのあなたの購読申込を確認するため、下の欄にあなたのパス"
-"ワードを入力してください"
+"%1 メーリング リストへのあなたの読者登録申込を確認するため、下の欄にあなたの"
+"パスワードを入力してください"
 
 #: ../web_tt2/subrequest.tt2:53
 msgid ", in addition to the personnal informations requested."
@@ -4583,7 +4589,7 @@ msgstr "パスワードが分からない"
 #. (list)
 #: ../web_tt2/subrequest.tt2:75
 msgid "You are already subscribed to list %1"
-msgstr "すでに %1 メーリング リストを購読しています"
+msgstr "すでに %1 メーリング リストに読者登録しています"
 
 #: ../web_tt2/subscriber_table.tt2:4
 msgid "List members"
@@ -4601,21 +4607,21 @@ msgstr "ピクチャ"
 msgid "Reception"
 msgstr "受け取りかた"
 
-#: ../web_tt2/subscriber_table.tt2:46 ../web_tt2/subscriber_table.tt2:49
+#: ../web_tt2/subscriber_table.tt2:45 ../web_tt2/subscriber_table.tt2:48
 msgid "Sources"
 msgstr "ソース"
 
-#: ../web_tt2/subscriber_table.tt2:55 ../web_tt2/subscriber_table.tt2:58
+#: ../web_tt2/subscriber_table.tt2:53 ../web_tt2/subscriber_table.tt2:56
 #: ../web_tt2/viewlogs.tt2:124
 msgid "Sub date"
-msgstr "購読日"
+msgstr "読者登録日"
 
-#: ../web_tt2/subscriber_table.tt2:91
+#: ../web_tt2/subscriber_table.tt2:89
 msgid "bouncing"
 msgstr "配送エラー"
 
 #. (u.email)
-#: ../web_tt2/subscriber_table.tt2:108
+#: ../web_tt2/subscriber_table.tt2:106
 msgid "%1's picture"
 msgstr "%1 のピクチャ"
 
@@ -4635,9 +4641,10 @@ msgstr "から"
 msgid "indefinite end date"
 msgstr "期限なし"
 
+# 「リスト」補う
 #: ../web_tt2/suspend_request.tt2:33
 msgid "No subscription."
-msgstr "購読がありません。"
+msgstr "読者登録しているリストはありません。"
 
 #: ../web_tt2/suspend_request.tt2:37
 msgid "Toogle selection"
@@ -4669,7 +4676,7 @@ msgstr "受け取りを再開"
 
 #: ../web_tt2/suspend_request.tt2:55
 msgid "Unsubscribe selected lists"
-msgstr "選択したリストの購読を解除"
+msgstr "選択したリストの読者登録を解除"
 
 #: ../web_tt2/ticket.tt2:4
 msgid "The link you used is unvalid"
@@ -4814,7 +4821,7 @@ msgstr "検索する期間:"
 #. (date_to_formated)
 #. This entry is a date/time format
 #. Check the strftime manpage for format details : http://docs.freebsd.org/info/gawk/gawk.info.Time_Functions.html
-#: ../web_tt2/viewlogs.tt2:113 ../wwsympa/wwsympa.fcgi.in:16239
+#: ../web_tt2/viewlogs.tt2:113 ../wwsympa/wwsympa.fcgi.in:16175
 msgid "%d %b %Y %H:%M:%S"
 msgstr "%Y年%m月%d日 %H:%M:%S"
 
@@ -4916,12 +4923,12 @@ msgstr ""
 
 #: ../mail_tt2/authorization_reject.tt2:5
 msgid "Web archives are closed."
-msgstr "ウェブ アーカイブは閉鎖中です。"
+msgstr "ウェブの投稿保管庫は閉鎖中です。"
 
 #: ../mail_tt2/authorization_reject.tt2:8
 msgid "Web archives are restricted to list subscribers and local domain users."
 msgstr ""
-"ウェブ アーカイブの中を見られるのは、リストの読者とローカル ドメインのユーザ"
+"ウェブの投稿保管庫の中を見られるのは、リストの読者とローカル ドメインのユーザ"
 "だけです。"
 
 #: ../mail_tt2/authorization_reject.tt2:104
@@ -4941,20 +4948,20 @@ msgid ""
 "either use that other email address or update your list membership with the "
 "new email address."
 msgstr ""
-"リストにほかのメール アドレスで購読しているのなら、そのメール アドレスを使っ"
-"てログインするか、または購読のアドレスを変えてください。"
+"リストにほかのメール アドレスで読者登録しているのなら、そのメール アドレスを"
+"使ってログインするか、または読者登録するメール アドレスを変えてください。"
 
 #: ../mail_tt2/authorization_reject.tt2:12
 msgid "Web archives are restricted to listmaster."
-msgstr "ウェブ アーカイブの中を見られるのは、リスト システム管理者だけです。"
+msgstr "ウェブの投稿保管庫の中を見られるのは、リスト システム管理者だけです。"
 
 #: ../mail_tt2/authorization_reject.tt2:15
 msgid "Web archives are restricted to list owners."
-msgstr "ウェブ アーカイブの中を見られるのは、リストのオーナーだけです。"
+msgstr "ウェブの投稿保管庫の中を見られるのは、リストのオーナーだけです。"
 
 #: ../mail_tt2/authorization_reject.tt2:18
 msgid "Web archives are restricted to list subscribers."
-msgstr "ウェブ アーカイブの中を見られるのは、リストの読者だけです。"
+msgstr "ウェブの投稿保管庫の中を見られるのは、リストの読者だけです。"
 
 #: ../mail_tt2/authorization_reject.tt2:22
 msgid "Adding a user to the list is restricted to list owners."
@@ -5109,15 +5116,15 @@ msgstr ""
 
 #: ../mail_tt2/authorization_reject.tt2:131
 msgid "You are not allowed to subscribe to this list."
-msgstr "このリストへの購読は受け付けられません。"
+msgstr "このリストへの読者登録は受け付けられません。"
 
 #: ../mail_tt2/authorization_reject.tt2:134
 msgid "Subscription to this list is restricted to local domain users."
-msgstr "このリストを購読できるのは、ローカル ドメインのユーザだけです。"
+msgstr "このリストに読者登録できるのは、ローカル ドメインのユーザだけです。"
 
 #: ../mail_tt2/authorization_reject.tt2:137
 msgid "Subscription to this list requires S/MIME signature."
-msgstr "このリストを購読するには、S/MIME 署名が要ります。"
+msgstr "このリストに読者登録するには、S/MIME 署名が要ります。"
 
 #: ../mail_tt2/authorization_reject.tt2:140
 msgid "Topics visibility is restricted to listmaster."
@@ -5129,12 +5136,12 @@ msgstr "トピックを見ることができるのは、ログインした人だ
 
 #: ../mail_tt2/authorization_reject.tt2:146
 msgid "It is not possible to unsubscribe from this list."
-msgstr "このリストを購読解除することはできません。"
+msgstr "このリストを登録解除することはできません。"
 
 #: ../mail_tt2/authorization_reject.tt2:149
 msgid "List is private: You can not read the archives."
 msgstr ""
-"リストは非公開です: あなたは ウェブ アーカイブの中を見ることができません。"
+"リストは非公開です: あなたは ウェブの投稿保管庫の中を見ることができません。"
 
 #: ../mail_tt2/authorization_reject.tt2:152
 msgid "List is private: You can not browse available files."
@@ -5218,7 +5225,7 @@ msgstr "あなたはこの操作を実施できません。"
 #. (list.name)
 #: ../mail_tt2/bye.tt2:2
 msgid "Unsubscribed from %1"
-msgstr "%1 を購読解除しました"
+msgstr "%1 を登録解除しました"
 
 #. (user.email,list.name,list.host)
 #: ../mail_tt2/bye.tt2:4
@@ -5286,9 +5293,9 @@ msgid ""
 "owners for approval. You will receive a notification when you have\n"
 "been subscribed (or unsubscribed) to the list."
 msgstr ""
-"あなたが送った購読や購読解除申込を、リストのオーナーに回送しました。オーナー"
-"の承認が必要だからです。リストへの購読 (あるいはリストからの購読解除) ができ"
-"たら、メールでお知らせします。"
+"あなたが送った読者登録や登録解除の申込を、リストのオーナーに回送しました。"
+"オーナーの承認が必要だからです。リストへの読者登録 (あるいはリストからの登録"
+"解除) ができたら、メールでお知らせします。"
 
 #. (notice.email,notice.listname)
 #: ../mail_tt2/command_report.tt2:31
@@ -5308,7 +5315,7 @@ msgstr "%1 を %2 メーリング リストに招待しました。"
 #. (notice.total,notice.listname)
 #: ../mail_tt2/command_report.tt2:40
 msgid "Subscription reminder sent to each of %1 %2 subscribers."
-msgstr "%2 メーリング リストの読者 %1 名に、購読確認を送りました。"
+msgstr "%2 メーリング リストの読者 %1 名に、読者登録確認を送りました。"
 
 #. (notice.count)
 #: ../mail_tt2/command_report.tt2:43
@@ -5391,7 +5398,7 @@ msgid ""
 "you subscribed from a different e-mail address ?"
 msgstr ""
 "%1 というメール アドレスは、%2 メーリング リストにありませんでした。もしかし"
-"て、別のメール アドレスで購読しているということはないですか。"
+"て、別のメール アドレスで読者登録しているということはないですか。"
 
 #. (u_err.email,u_err.listname)
 #: ../mail_tt2/command_report.tt2:114
@@ -5414,7 +5421,7 @@ msgstr "リスト %1 では次の受け取りモードだけを選べます: %2"
 
 #: ../mail_tt2/command_report.tt2:124
 msgid "This list archive is empty."
-msgstr "このリストのアーカイブは空です。"
+msgstr "このリストの投稿保管庫は空です。"
 
 #: ../mail_tt2/command_report.tt2:127
 msgid "Required file does not exist."
@@ -5428,7 +5435,7 @@ msgstr "%1 メーリング リストには読者がいません。"
 #. (u_err.email,u_err.listname)
 #: ../mail_tt2/command_report.tt2:133
 msgid "The User '%1' is already subscriber of list '%2'."
-msgstr "%1 はすでに %2 メーリング リストを購読されています。"
+msgstr "%1 はすでに %2 メーリング リストに読者登録しています。"
 
 #. (u_err.command)
 #: ../mail_tt2/command_report.tt2:138
@@ -5476,7 +5483,7 @@ msgid "%1 Digest %2"
 msgstr "%1 - %2のまとめ読み"
 
 #: ../mail_tt2/digest.tt2:10 ../mail_tt2/digest_plain.tt2:9
-#: ../mail_tt2/get_archive.tt2:9 ../src/lib/List.pm:2801
+#: ../mail_tt2/get_archive.tt2:9 ../src/lib/List.pm:2735
 msgid "Table of contents:"
 msgstr "目次:"
 
@@ -5534,16 +5541,16 @@ msgid ""
 "because you didn't confirm your subscription."
 msgstr ""
 "あなたのアドレス (%1) を、メーリング リスト %2@%3 から削除しました。\n"
-"あなたが購読の確認をしていなかったためです。"
+"あなたが読者登録の確認をしていなかったためです。"
 
 #: ../mail_tt2/expire_deletion.tt2:8 ../mail_tt2/removed.tt2:8
 msgid "You can subscribe again:"
-msgstr "また購読することもできます:"
+msgstr "また読者登録することもできます:"
 
 #. (list.name)
 #: ../mail_tt2/expire_warning1.tt2:2 ../mail_tt2/expire_warning2.tt2:2
 msgid "resubscription to %1"
-msgstr "%1 を購読しなおす"
+msgstr "%1 に読者登録しなおす"
 
 #. (list.name,list.host,user.email)
 #: ../mail_tt2/expire_warning1.tt2:4 ../mail_tt2/expire_warning2.tt2:4
@@ -5561,31 +5568,31 @@ msgstr "このリストの案内はこちら: "
 #: ../mail_tt2/expire_warning1.tt2:8 ../mail_tt2/expire_warning2.tt2:8
 #: ../mail_tt2/remind.tt2:8
 msgid "Unsubscription:"
-msgstr "購読解除するには:"
+msgstr "登録解除するには:"
 
 #. (list.name)
 #: ../mail_tt2/get_archive.tt2:3
 msgid "Archive of %1, file %2"
-msgstr "%1 のアーカイブ、ファイル %2"
+msgstr "%1 の投稿保管庫、ファイル %2"
 
 #: ../mail_tt2/global_remind.tt2:2 ../src/lib/Commands.pm:1628
 msgid "Subscription summary"
-msgstr "購読の概要"
+msgstr "読者登録の概要"
 
 #. (user.email)
 #: ../mail_tt2/global_remind.tt2:4
 msgid "Summary of your subscription (using the e-mail %1)."
-msgstr "購読の概要 (メール アドレス %1 によるもの)。"
+msgstr "読者登録の概要 (メール アドレス %1 によるもの)。"
 
 #: ../mail_tt2/global_remind.tt2:5
 msgid "If you want to unsubscribe from some list, please save this mail."
 msgstr ""
-"購読解除したいリストがあるのでしたら、このメールを取っておいてください。"
+"登録解除したいリストがあるのでしたら、このメールを取っておいてください。"
 
 #: ../mail_tt2/global_remind.tt2:7
 msgid "For each list here is a mail address to use if you want to unsubscribe."
 msgstr ""
-"以下に、購読解除をしたいときに使うメール アドレスをリストごとに挙げます。"
+"以下に、登録解除をしたいときに使うメール アドレスをリストごとに挙げます。"
 
 #: ../mail_tt2/helpfile.tt2:2 ../src/lib/Commands.pm:196
 #: ../src/lib/Commands.pm:213
@@ -5605,8 +5612,8 @@ msgid ""
 "SYMPA is an electronic mailing-list manager that automates list management "
 "functions such as subscriptions, moderation, and archive management."
 msgstr ""
-"Sympa (シンパ) はメーリング リスト マネージャです。購読、モデレーション、アー"
-"カイブ管理などのリスト管理機能を自動化します。"
+"Sympa (サンパ) はメーリング リスト マネージャです。読者登録、モデレーション、"
+"投稿保管庫の管理などのリスト管理機能を自動化します。"
 
 #. (conf.sympa)
 #: ../mail_tt2/helpfile.tt2:12
@@ -5630,33 +5637,37 @@ msgstr "お使いになれるコマンドは以下のとおりです:"
 
 #: ../mail_tt2/helpfile.tt2:18
 msgid "HELp                        * This help file"
-msgstr "HELp                        * このヘルプ ファイル"
+msgstr "HELp                                * このヘルプ ファイル"
 
 #: ../mail_tt2/helpfile.tt2:19
 msgid "INFO <list>                 * Information about a list"
-msgstr "INFO <リスト>               * <リスト> メーリング リストの案内を取得"
+msgstr ""
+"INFO <リスト>                       * <リスト> メーリング リストの案内を取得"
 
 #: ../mail_tt2/helpfile.tt2:20
 msgid "LISts                       * Directory of lists managed on this node"
-msgstr "LISts                       * このサイトで管理しているリストの一覧"
+msgstr ""
+"LISts                               * このサイトで管理しているリストの一覧"
 
 #: ../mail_tt2/helpfile.tt2:21
 msgid "REView <list>               * Displays the subscribers to <list>"
 msgstr ""
-"REView <リスト>             * <リスト> メーリング リストの読者一覧を取得"
+"REView <リスト>                     * <リスト> メーリング リストの読者一覧を"
+"取得"
 
 #: ../mail_tt2/helpfile.tt2:22
 msgid ""
 "WHICH                       * Displays which lists you are subscribed to"
-msgstr "WHICH                       * あなたが購読しているリストを表示"
+msgstr ""
+"WHICH                               * あなたが読者登録しているリストを表示"
 
 #: ../mail_tt2/helpfile.tt2:23
 msgid ""
 "SUBscribe <list> <name>     * To subscribe or to confirm a subscription to "
 "<list>."
 msgstr ""
-"SUBscribe <リスト> <名前>   * <リスト> メーリング リストに対する購読申込、も"
-"しくは購読申込の確認"
+"SUBscribe <リスト> <名前>           * <リスト> メーリング リストに対する読者"
+"登録申込、または申込の確認。"
 
 #: ../mail_tt2/helpfile.tt2:25
 msgid ""
@@ -5664,97 +5675,102 @@ msgid ""
 "address, useful if different from your \"From:\" address."
 msgstr ""
 "UNSubscribe <リスト> <メール>\n"
-"                             * <リスト> を抜ける。<メール> はつけなくてもかま"
-"いませんが、\"From:\" アドレスと異なる場合はつけると便利です。"
+"                                     * <リスト> を抜ける。<メール> はつけなく"
+"てもかまいませんが、\"From:\" アドレスと異なる場合はつけると便利です。"
 
 #: ../mail_tt2/helpfile.tt2:26
 msgid "UNSubscribe * <EMAIL>       * To quit all lists."
-msgstr "UNSubscribe * <メール>      * すべてのリストの購読解除"
+msgstr "UNSubscribe * <メール>              * すべてのリストの登録解除"
 
 #: ../mail_tt2/helpfile.tt2:28
 msgid ""
 "SET <list>|* NOMAIL         * To suspend the message reception for <list>"
 msgstr ""
-"SET <リスト>|* NOMAIL       * <リスト> メーリング リストからのメッセージの受"
-"け取りを休止"
+"SET <リスト>|* NOMAIL               * <リスト> メーリング リストからのメッ"
+"セージの受け取りを休止"
 
 #: ../mail_tt2/helpfile.tt2:29
 msgid "SET <list>|* DIGEST         * Message reception in compilation mode"
 msgstr ""
-"SET <リスト>|* DIGEST       * メッセージをまとめて受け取り (まとめ読み)"
+"SET <リスト>|* DIGEST               * メッセージをまとめて受け取り (まとめ読"
+"み)"
 
 #: ../mail_tt2/helpfile.tt2:30
 msgid ""
 "SET <list|*> DIGESTPLAIN    * Message reception in compilation mode, sent as "
 "a plain text email with all attachments"
 msgstr ""
-"SET <リスト|*> DIGESTPLAIN  * メッセージをまとめて受け取り (まとめ読み)。ただ"
-"し、プレーン テキストのみで送信"
+"SET <リスト|*> DIGESTPLAIN          * メッセージをまとめて受け取り (まとめ読"
+"み)。ただし、プレーン テキストのみで送信"
 
 #: ../mail_tt2/helpfile.tt2:31
 msgid "SET <list>|* SUMMARY        * Receiving the message index only"
-msgstr "SET <リスト>|* SUMMARY      * メッセージの一覧のみを受け取り"
+msgstr "SET <リスト>|* SUMMARY              * メッセージの一覧のみを受け取り"
 
 #: ../mail_tt2/helpfile.tt2:32
 msgid "SET <list>|* NOTICE         * Receiving message subject only"
-msgstr "SET <リスト>|* NOTICE       * メッセージの件名のみを受け取り"
+msgstr "SET <リスト>|* NOTICE               * メッセージの件名のみを受け取り"
 
 #: ../mail_tt2/helpfile.tt2:33
 msgid "SET <list>|* MAIL           * <list> reception in normal mode"
 msgstr ""
-"SET <リスト>|* MAIL         * <リスト> メーリング リストからのメッセージを一"
-"通ずつ受け取り"
+"SET <リスト>|* MAIL                 * <リスト> メーリング リストからのメッ"
+"セージを一通ずつ受け取り"
 
 #: ../mail_tt2/helpfile.tt2:34
 msgid ""
 "SET <list>|* CONCEAL        * To become unlisted (hidden subscriber address)"
 msgstr ""
-"SET <リスト>|* CONCEAL      * <リスト> メーリング リストの読者一覧に表示しな"
-"いようにする (読者のメール アドレスを隠す)"
+"SET <リスト>|* CONCEAL              * <リスト> メーリング リストの読者一覧に"
+"表示しないようにする (読者のメール アドレスを隠す)"
 
 #: ../mail_tt2/helpfile.tt2:35
 msgid "SET <list>|* NOCONCEAL      * Subscriber address visible via REView"
 msgstr ""
-"SET <リスト>|* NOCONCEAL    * 読者一覧にメール アドレスを表示するようにする"
+"SET <リスト>|* NOCONCEAL            * 読者一覧にメール アドレスを表示するよう"
+"にする"
 
+# 「にある」補う
 #: ../mail_tt2/helpfile.tt2:38
 msgid "INDex <list>                * <list> archive file list"
-msgstr "INDex <リスト>              * <リスト> アーカイブ ファイルの一覧"
+msgstr ""
+"INDex <リスト>                      * <リスト> の投稿保管庫にあるファイルの一"
+"覧"
 
 #: ../mail_tt2/helpfile.tt2:39
 msgid "GET <list> <file>           * To get <file> of <list> archive"
 msgstr ""
-"GET <リスト> <ファイル>     * メーリング リスト <リスト> のアーカイブから <"
-"ファイル> を取得"
+"GET <リスト> <ファイル>             * メーリング リスト <リスト> の投稿保管庫"
+"から <ファイル> を取得"
 
 #: ../mail_tt2/helpfile.tt2:40
 msgid ""
 "LAST <list>                 * Used to received the last message from <list>"
 msgstr ""
-"LAST <リスト>               * <リスト> メーリング リストの最新メッセージを取"
-"得"
+"LAST <リスト>                       * <リスト> メーリング リストの最新メッ"
+"セージを取得"
 
 #: ../mail_tt2/helpfile.tt2:41
 msgid "INVITE <list> <email>       * Invite <email> for subscription in <list>"
 msgstr ""
-"INVITE <リスト> <メール>    * <メール> を <リスト> メーリング リストを購読す"
-"るよう招待する"
+"INVITE <リスト> <メール>            * <メール> を <リスト> メーリング リスト"
+"に読者登録するよう招待する"
 
 #: ../mail_tt2/helpfile.tt2:42
 msgid ""
 "CONFIRM <key>               * Confirmation for sending a message (depending "
 "on the list configuration)"
 msgstr ""
-"CONFIRM <キー>              * メッセージ送信を確認 (リストの設定によっては必"
-"要)"
+"CONFIRM <キー>                      * メッセージ送信を確認 (リストの設定に"
+"よっては必要)"
 
 #: ../mail_tt2/helpfile.tt2:43
 msgid ""
 "QUIT                        * Indicates the end of the commands (to ignore a "
 "signature)"
 msgstr ""
-"QUIT                        * コマンド終了を示す (後に署名が付いていても無視"
-"します)"
+"QUIT                                * コマンド終了を示す (後に署名が付いてい"
+"ても無視します)"
 
 #: ../mail_tt2/helpfile.tt2:47
 msgid ""
@@ -5765,41 +5781,44 @@ msgstr "以下のコマンドは、リストのオーナーやモデレータだ
 msgid "ADD <list> user@host Full name  * To add a user to a list"
 msgstr ""
 "ADD <リスト> 電子@メール 名前\n"
-"                             * リストに人を追加"
+"                                     * リストに人を追加"
 
 #: ../mail_tt2/helpfile.tt2:50
 msgid "DEL <list> user@host            * To delete a user from a list"
-msgstr "DEL <リスト> 電子@メール    * リストから人を削除"
+msgstr "DEL <リスト> 電子@メール            * リストから人を削除"
 
 #: ../mail_tt2/helpfile.tt2:51
 msgid "STATS <list>                    * To consult the statistics for <list>"
 msgstr ""
-"STATS <リスト>              * <リスト> メーリング リストの統計情報を取得"
+"STATS <リスト>                      * <リスト> メーリング リストの統計情報を"
+"取得"
 
 #: ../mail_tt2/helpfile.tt2:53
 msgid ""
 "REMIND <list>                   * Send a reminder message to each subscriber "
 "(this is a way to inform anyone what is his real subscribing email)."
 msgstr ""
-"REMIND <リスト>             * 読者ひとりひとりに登録確認メッセージを送信する "
-"(これで、どんな電子ールアドレスで購読しているかを、だれにでも知らせることがで"
-"きます)。"
+"REMIND <リスト>                     * 読者ひとりひとりに登録確認メッセージを"
+"送信する (これで、どんな電子ールアドレスで読者登録しているかを、全員に知らせ"
+"ることができます)。"
 
 #: ../mail_tt2/helpfile.tt2:57
 msgid "DISTribute <list> <key>        * Moderation: to validate a message"
-msgstr "DISTribute <リスト> <キー>     * モデレーション: メッセージを承認する"
+msgstr ""
+"DISTribute <リスト> <キー>             * モデレーション: メッセージを承認する"
 
 #: ../mail_tt2/helpfile.tt2:58
 msgid "REJect <list> <key>            * Moderation: to reject a message"
-msgstr "REJect <リスト> <キー>         * モデレーション: メッセージを拒否する"
+msgstr ""
+"REJect <リスト> <キー>                 * モデレーション: メッセージを拒否する"
 
 #: ../mail_tt2/helpfile.tt2:59
 msgid ""
 "MODINDEX <list>                 * Moderation: to view the list of messages "
 "to moderate"
 msgstr ""
-"MODINDEX <リスト>               * モデレーション: モデレーションしなければな"
-"らないメッセージの一覧を取り寄せ"
+"MODINDEX <リスト>                       * モデレーション: モデレーションしな"
+"ければならないメッセージの一覧を取り寄せ"
 
 # 仮訳です。
 #: ../mail_tt2/helpfile.tt2:62
@@ -5809,7 +5828,7 @@ msgstr "使用しているソフトウェア: Sympa"
 #. (list.name)
 #: ../mail_tt2/index_archive.tt2:2
 msgid "Archives index of list %1"
-msgstr "メーリング リスト %1 のアーカイブの目次"
+msgstr "メーリング リスト %1 投稿保管庫の目次"
 
 #. (list.name)
 #: ../mail_tt2/info_report.tt2:2
@@ -5839,12 +5858,12 @@ msgstr "モデレータ         : %1"
 #. (subscribe)
 #: ../mail_tt2/info_report.tt2:17
 msgid "Subscription      : %1"
-msgstr "購読           : %1"
+msgstr "読者登録           : %1"
 
 #. (unsubscribe)
 #: ../mail_tt2/info_report.tt2:18
 msgid "Unsubscription    : %1"
-msgstr "購読解除           : %1"
+msgstr "登録解除           : %1"
 
 #. (send)
 #: ../mail_tt2/info_report.tt2:19
@@ -5895,7 +5914,7 @@ msgstr ""
 
 #: ../mail_tt2/invite.tt2:7
 msgid "To subscribe just hit the following link:"
-msgstr "購読は、次のリンクをクリックするだけでできます:"
+msgstr "読者登録は、次のリンクをクリックするだけでできます:"
 
 #. (conf.sympa,subject)
 #: ../mail_tt2/invite.tt2:10
@@ -5905,8 +5924,8 @@ msgstr "あるいは、%1 宛てに、「sub %2」という件名でメッセー
 #: ../mail_tt2/invite.tt2:12
 msgid "If you don't want to subscribe just ignore this message."
 msgstr ""
-"購読したいと思われないのでしたら、このメッセージは無視してくださってかまいま"
-"せん。"
+"読者登録したいと思われないのでしたら、このメッセージは無視してくださってかま"
+"いません。"
 
 #. (list.name)
 #. (new_listname)
@@ -6577,22 +6596,22 @@ msgstr ": 「%1」は読めません。"
 #. (arc_file,list.name,path)
 #: ../mail_tt2/listmaster_notification.tt2:329
 msgid "Unable to find archive '%1' for list '%2'"
-msgstr "リスト '%2' にアーカイブ '%1' が見つかりません"
+msgstr "リスト「%2」に投稿保管庫「%1」が見つかりません"
 
 #. (list.name)
 #: ../mail_tt2/listmaster_notification.tt2:330
 msgid "Unable to find archive for list '%1'"
-msgstr "リスト '%1' にアーカイブが見つかりません"
+msgstr "リスト「%1」の投稿保管庫は見つかりません"
 
 #: ../mail_tt2/listmaster_notification.tt2:331
 msgid "Unable to send archive: no message id found."
-msgstr "アーカイブを送信できません: メッセージ ID が見つかりません。"
+msgstr "投稿保管庫のファイルを送信できません。メッセージ ID が見つかりません。"
 
 #. (msgid)
 #: ../mail_tt2/listmaster_notification.tt2:332
 msgid "No message found in archives matching Message-ID '%1'."
 msgstr ""
-"アーカイブ内にメッセージ ID '%1' に一致するメッセージが見つかりません。"
+"投稿保管庫内にメッセージ ID「%1」に一致するメッセージが見つかりません。"
 
 #. (list.name)
 #: ../mail_tt2/listmaster_notification.tt2:333
@@ -6701,12 +6720,12 @@ msgstr ""
 #. (sub)
 #: ../mail_tt2/listmaster_notification.tt2:357
 msgid "Unable to delete subscription request for user '%1'."
-msgstr "「%1」の購読解除申込を削除できません。"
+msgstr "「%1」の登録解除申込を削除できません。"
 
 #. (file)
 #: ../mail_tt2/listmaster_notification.tt2:358
 msgid "Unable to add file '%1' to archives."
-msgstr "ファイル '%1' をアーカイブに追加できません。"
+msgstr "ファイル「%1」を投稿保管庫に追加できません。"
 
 #. (zipfile)
 #: ../mail_tt2/listmaster_notification.tt2:359
@@ -6740,7 +6759,7 @@ msgstr "%1 がシステムエラーに遭いました"
 #. (list.name)
 #: ../mail_tt2/listowner_notification.tt2:4
 msgid "List %1 archive quota exceeded"
-msgstr "リスト %1 のアーカイブのクオータを超えました"
+msgstr "リスト %1 の投稿保管庫は容量制限を超えました"
 
 #. (list.name,list.host,size,conf.host,conf.listmaster_email)
 #: ../mail_tt2/listowner_notification.tt2:8
@@ -6749,20 +6768,23 @@ msgid ""
 "Total size used for %1@%2 archive is %3 Bytes. Messages\n"
 "are no longer being web-archived. Please contact %5@%4. "
 msgstr ""
-"%1 のアーカイブのクオータを超えました。\n"
-"%1@%2 のアーカイブの合計サイズは %3 バイトです。\n"
-"これ以上アーカイブにメッセージを入れることはできません。\n"
-"%5@%4 に連絡してください。"
+"%1 の投稿保管庫は容量制限を超えました。\n"
+"%1@%2 の投稿保管庫の合計サイズは %3 バイトです。\n"
+"これ以上投稿保管庫にメッセージを入れることはできません。%5@%4 に連絡してくだ"
+"さい。"
 
+# 「容量制限の」補う
 #. (list.name,rate)
 #: ../mail_tt2/listowner_notification.tt2:11
 msgid "List \"%1\" warning: archive %2% full"
-msgstr "メーリング リスト \"%1\" の警告: アーカイブは %2% 使用しています"
+msgstr ""
+"メーリング リスト「%1」の警告: 投稿保管庫は容量制限の %2% を使用しています"
 
+# 「利用可能な」補う
 #. (rate2,list.name,list.host,rate)
 #: ../mail_tt2/listowner_notification.tt2:13
 msgid "%2@%3 archives use %4% of allowed disk quota."
-msgstr "%2@%3 のアーカイブはディスク クオータの %4% を使用しています。"
+msgstr "%2@%3 の投稿保管庫は利用可能な容量のうち %4% を使用しています。"
 
 #. (list.name,size)
 #: ../mail_tt2/listowner_notification.tt2:14
@@ -6772,7 +6794,9 @@ msgstr "%1@ で使っている容量は %2 バイトです。"
 #. (conf.host,conf.listmaster_email)
 #: ../mail_tt2/listowner_notification.tt2:16
 msgid "Messages are still archived but you should contact %2@%1"
-msgstr "まだメッセージをアーカイブに保管できますが、%2@%1 に連絡してください"
+msgstr ""
+"いまのところメッセージを投稿保管庫に保管できまていますが、%2@%1 に連絡してく"
+"ださい"
 
 #. (list.name)
 #: ../mail_tt2/listowner_notification.tt2:19
@@ -6801,9 +6825,9 @@ msgid ""
 "You may help this person looking for similar email in subscriber list using "
 "the following link :"
 msgstr ""
-"注意: %1 %2 は %3 の購読解除ができませんでした。アドレスがリストになかったた"
-"めです。次のリンクを使えば、読者一覧から似たメール アドレスを探してこの人を助"
-"けてあげることができるかもしれません。"
+"注意: %2 <%1> は %3 の登録解除ができませんでした。アドレスがリストになかった"
+"ためです。次のリンクを使えば、読者一覧から似たメール アドレスを探してこの人を"
+"助けてあげることができるかもしれません。"
 
 #. (list.name)
 #: ../mail_tt2/listowner_notification.tt2:33
@@ -6860,7 +6884,7 @@ msgstr ""
 #. (list.name)
 #: ../mail_tt2/listowner_notification.tt2:63
 msgid "Subscription request to list %1"
-msgstr "%1 メーリング リストへの購読申込"
+msgstr "%1 メーリング リストへの読者登録申込"
 
 #. (list.name)-)
 #: ../mail_tt2/listowner_notification.tt2:68
@@ -6874,8 +6898,8 @@ msgstr ""
 "%1 メーリング リストのオーナーさんへ\n"
 " \n"
 "ある人から、あなたがオーナーをしているリストに読者として追加してほしいとの申"
-"し出がありました。保留中の購読申込を見て処理するには、下記のリンクをクリック"
-"してください: "
+"し出がありました。保留中の読者登録申込を見て処理するには、下記のリンクをク"
+"リックしてください: "
 
 #. (replyto)
 #: ../mail_tt2/listowner_notification.tt2:72
@@ -6883,8 +6907,8 @@ msgid ""
 "If prefered, you can accept this subscription request sending an email to %1 "
 "with the following subject:"
 msgstr ""
-"問題なければ、%1 宛てに、下記の件名でメールを送って購読申込を受け付けてくださ"
-"い:"
+"問題なければ、%1 宛てに、下記の件名でメールを送って読者登録申込を受け付けてく"
+"ださい:"
 
 #: ../mail_tt2/listowner_notification.tt2:76
 msgid "That can be done using this mailto link:"
@@ -6897,7 +6921,7 @@ msgstr "この人が入力した情報は以下のとおりです: "
 #. (list.name)
 #: ../mail_tt2/listowner_notification.tt2:86
 msgid "UNsubscription request from list %1"
-msgstr "%1 メーリング リストの購読解除申込"
+msgstr "%1 メーリング リストの登録解除申込"
 
 #. (list.name)-)
 #: ../mail_tt2/listowner_notification.tt2:91
@@ -7305,13 +7329,14 @@ msgstr "%1 メーリング リストの利用目的をご確認ください:"
 #. (list.name)
 #: ../mail_tt2/remind.tt2:2
 msgid "Reminder of your subscription to %1"
-msgstr "%1 メーリング リスト購読確認"
+msgstr "%1 メーリング リスト読者登録確認"
 
 #. (list.name,list.host,user.email,user.password)
 #: ../mail_tt2/remind.tt2:4
 msgid "Your are subscriber of list %1@%2 with  email %3"
 msgstr ""
-"あなたは、メーリング リスト %1@%2 に、メール アドレス %3 で購読しています。"
+"あなたは、メーリング リスト %1@%2 に、メール アドレス %3 で読者登録していま"
+"す。"
 
 #. (user.email,list.name,list.host)
 #: ../mail_tt2/removed.tt2:6
@@ -7351,8 +7376,8 @@ msgid ""
 "You requested a subscription reminder to be sent to each subscriber of list %"
 "1"
 msgstr ""
-"あなたは %1 メーリング リストの読者ひとりひとりに、購読確認を送るよう申し込ん"
-"でいます"
+"あなたは %1 メーリング リストの読者ひとりひとりに、読者登録確認を送るよう申し"
+"込んでいます"
 
 #. (-)
 #: ../mail_tt2/request_auth.tt2:24
@@ -7360,8 +7385,8 @@ msgid ""
 "You requested a subscription reminder to be sent to each subscriber of list "
 "'*'"
 msgstr ""
-"あなたは、すべてのメーリング リストの読者ひとりひとりに、購読確認を送るよう申"
-"し込んでいます"
+"あなたは、すべてのメーリング リストの読者ひとりひとりに、読者登録確認を送るよ"
+"う申し込んでいます"
 
 #. (conf.sympa,command)-)
 #: ../mail_tt2/request_auth.tt2:35
@@ -7428,17 +7453,17 @@ msgstr ""
 #. (conf.sympa)
 #: ../mail_tt2/send_auth.tt2:19
 msgid "Or send a message to %1 with the following subject:\n"
-msgstr "あるいは、%1@%2 宛てに、次の件名でメッセージを送ってください:\n"
+msgstr "あるいは、%1 宛てに、次の件名でメッセージを送ってください:\n"
 
 #. (conf.title,list)
 #: ../mail_tt2/sendpasswd.tt2:4
 msgid "%1 / subscribing to %2"
-msgstr "%1 / %2 への購読"
+msgstr "%1 / %2 への読者登録"
 
 #. (conf.title,list)
 #: ../mail_tt2/sendpasswd.tt2:6
 msgid "%1 / unsubscribing from %2"
-msgstr "%1 / %2 の購読解除"
+msgstr "%1 / %2 の登録解除"
 
 #. (conf.title)
 #: ../mail_tt2/sendpasswd.tt2:8 ../mail_tt2/sendssopasswd.tt2:3
@@ -7451,27 +7476,27 @@ msgid ""
 "Someone, probably you, requested to subscribe to list %1@%2. (This request "
 "came from host %3)."
 msgstr ""
-"だれか (おそらくあなた) が、%1@%2 メーリング リストに、購読を申し込みました "
-"(申込送信元ホストは %3)。"
+"だれか (おそらくあなた) が、%1@%2 メーリング リストに、読者登録を申し込みまし"
+"た (申込送信元ホストは %3)。"
 
 #: ../mail_tt2/sendpasswd.tt2:14
 msgid ""
 "You may ignore this subscription request or click on the following link in "
 "order to confirm it "
 msgstr ""
-"購読したくなければ、このメッセージは無視してください。購読したければ、次のリ"
-"ンクをクリックして確認をしてください "
+"読者登録したくなければ、このメッセージは無視してください。読者登録したけれ"
+"ば、次のリンクをクリックして確認をしてください "
 
 #. (list)
 #: ../mail_tt2/sendpasswd.tt2:17
 msgid "You asked to be unsubscribed from %1 mailing list."
-msgstr "あなたは %1 メーリング リストの購読解除を申し込みました。"
+msgstr "あなたは %1 メーリング リストの登録解除を申し込みました。"
 
 #: ../mail_tt2/sendpasswd.tt2:19
 msgid ""
 "To unsubscribe from the list, you need to provide the following password"
 msgstr ""
-"リストの購読解除をするために、以下のパスワードを入力する必要があります。"
+"リストの登録解除をするために、以下のパスワードを入力する必要があります。"
 
 #. (newuser.password)
 #: ../mail_tt2/sendpasswd.tt2:21
@@ -7564,7 +7589,7 @@ msgid ""
 msgstr ""
 "あなたのメール アドレス %2 へ %1 メーリング リストから送られるメッセージに対"
 "して、 %3 から現在まで、配送不能報告が発生しています。\n"
-"この問題が続くようであれば、あなたはリストを自動的を購読解除されます。"
+"この問題が続くようであれば、あなたはリストを自動的を登録解除されます。"
 
 #: ../mail_tt2/user_notification.tt2:10
 msgid "You can contact list owner:"
@@ -7592,7 +7617,7 @@ msgid ""
 "To update your topics subscription, go to the following page:\n"
 "%1"
 msgstr ""
-"トピックへの購読を更新するには、次のページへ行ってください:\n"
+"トピックへの読者登録を更新するには、次のページへ行ってください:\n"
 "%1"
 
 #. (list.name)
@@ -7637,7 +7662,7 @@ msgstr ""
 #. (list.name)
 #: ../mail_tt2/user_notification.tt2:47
 msgid "Unsubscribing from list %1"
-msgstr "%1 メーリング リストの購読解除"
+msgstr "%1 メーリング リストの登録解除"
 
 #. (list.name,ip)
 #: ../mail_tt2/user_notification.tt2:51
@@ -7646,7 +7671,7 @@ msgid ""
 "This query was issued from the IP number '%2'.\n"
 "To confirm and get removed from the list, please click the link below: "
 msgstr ""
-"だれか (おそらくあなた) から、メーリング リスト '%1' の購読解除の申込がありま"
+"だれか (おそらくあなた) から、メーリング リスト '%1' の登録解除の申込がありま"
 "した。申込は、IP アドレス '%2' から発信されています。解除するには確認が必要で"
 "す。次のリンクをクリックしてください: "
 
@@ -7656,7 +7681,7 @@ msgid ""
 "You have requested to removed from list %1. To confirm and get removed from "
 "the list, please click the link below: "
 msgstr ""
-"%1 メーリング リストからの購読解除の申込がありました。確認して解除するため"
+"%1 メーリング リストからの登録解除の申込がありました。確認して解除するため"
 "に、以下のリンクをクリックしてください: "
 
 #. (list.name)
@@ -7672,7 +7697,7 @@ msgstr "%1@%2 メーリング リストへようこそ"
 #. (user.email)
 #: ../mail_tt2/welcome.tt2:5
 msgid "Your subscription email is %1"
-msgstr "購読したメール アドレスは %1 です"
+msgstr "読者登録したメール アドレスは %1 です"
 
 #: ../mail_tt2/welcome.tt2:13
 msgid "General informations about mailing lists:"
@@ -7684,7 +7709,7 @@ msgstr "コマンドの結果"
 
 #: ../mail_tt2/which.tt2:4
 msgid "Here are the lists you are currently subscribed to:"
-msgstr "あなたが現在購読しているリストは次のとおり:"
+msgstr "あなたが現在読者登録しているリストは次のとおり:"
 
 #: ../mail_tt2/which.tt2:10
 msgid "Lists you are owner of:"
@@ -8019,7 +8044,7 @@ msgstr "X-Spam-Statusヘッダを調べる"
 
 #: ../src/etc/scenari/subscribe.auth:1 ../src/etc/scenari/subscribe.authdkim:1
 msgid "subscription request confirmed"
-msgstr "購読申込には確認が必要"
+msgstr "読者登録申込には確認が必要"
 
 #: ../src/etc/scenari/subscribe.auth_notify:1
 msgid "need authentication (notification is sent to owners)"
@@ -8042,7 +8067,7 @@ msgstr "DKIM署名が正しくなければ本人確認が必要。その後オ�
 
 #: ../src/etc/scenari/subscribe.closed:1
 msgid "subscribe is impossible"
-msgstr "購読はできない"
+msgstr "読者登録はできない"
 
 #: ../src/etc/scenari/subscribe.intranetorowner:1
 msgid "local domain users or owner approval"
@@ -8156,7 +8181,7 @@ msgstr "%Y年%m月"
 # * 仮訳です。
 #: ../src/etc/mhonarc-ressources.tt2:86
 msgid "Archive powered by"
-msgstr "アーカイブに使用しているソフトウェア:"
+msgstr "投稿保管庫に使用しているソフトウェア:"
 
 #: ../src/etc/mhonarc-ressources.tt2:182 ../src/etc/mhonarc-ressources.tt2:294
 #: ../src/etc/mhonarc-ressources.tt2:407 ../src/etc/mhonarc-ressources.tt2:411
@@ -8200,7 +8225,7 @@ msgstr "&lt;以下はおそらく返信&gt;"
 
 #: ../src/etc/mhonarc-ressources.tt2:349
 msgid "<em>Message not available</em>"
-msgstr "<em>表示できなかいメッセージ</em>"
+msgstr "<em>メッセージ抜け</em>"
 
 #: ../src/etc/mhonarc-ressources.tt2:447
 msgid "picture"
@@ -8284,9 +8309,10 @@ msgstr ""
 "毎日、sympa.conf の one_time_ticket_table_ttl パラメータの期間を過ぎたチケッ"
 "トを削除"
 
+# cf. src/task_manager.pl.in::purge_orphan_bounces()
 #: ../src/etc/global_task_models/purge_orphan_bounces.monthly.task:1
 msgid "delete monthly bounces for unsubscribed addresses"
-msgstr "毎月、購読解除したメール アドレスが配送エラーを起こしたら削除"
+msgstr "毎月、登録解除されたメール アドレスに対する配送エラーを削除"
 
 #: ../src/etc/global_task_models/purge_session_table.daily.task:1
 msgid ""
@@ -8306,7 +8332,7 @@ msgstr "毎月、ユーザ テーブル内で利用者登録のないエント�
 
 #: ../src/etc/list_task_models/expire.yearly.task:1
 msgid "expiration routine run yearly"
-msgstr "毎年、購読期限切れ処理を実行"
+msgstr "毎年、読者登録期限切れ処理を実行"
 
 #: ../src/etc/list_task_models/remind.2month.task:1
 msgid "remind message sent to subscribers every 2 month"
@@ -8330,7 +8356,7 @@ msgstr "公開される議論用"
 
 #: ../src/etc/create_list_templates/discussion_list/comment.tt2:2
 msgid "public archives"
-msgstr "公開アーカイブ"
+msgstr "投稿保管庫は公開"
 
 #: ../src/etc/create_list_templates/discussion_list/comment.tt2:3
 #: ../src/etc/create_list_templates/private_working_group/comment.tt2:3
@@ -8348,12 +8374,12 @@ msgstr "誰でも投稿できる"
 #: ../src/etc/create_list_templates/hotline/comment.tt2:4
 #: ../src/etc/create_list_templates/private_working_group/comment.tt2:4
 msgid "private archives"
-msgstr "非公開アーカイブ"
+msgstr "投稿保管庫は非公開"
 
 #: ../src/etc/create_list_templates/hotline/comment.tt2:5
 #: ../src/etc/create_list_templates/private_working_group/comment.tt2:5
 msgid "controlled subscription"
-msgstr "購読にはログインが必要"
+msgstr "読者登録を制限"
 
 #: ../src/etc/create_list_templates/html-news-letter/comment.tt2:1
 msgid ""
@@ -8395,17 +8421,19 @@ msgstr "ウェブ上のフォーラム"
 msgid ""
 "Messages can either be read via email (subscription) or\n"
 "via the web (web archives)"
-msgstr "メッセージはメール (購読) でもウェブ (ウェブ アーカイブ) でも読めます"
+msgstr ""
+"メッセージはメール (読者登録する) でもウェブ (投稿保管庫ページを閲覧) でも読"
+"める"
 
 #. This entry is a date/time format
 #. Check the strftime manpage for format details : http://docs.freebsd.org/info/gawk/gawk.info.Time_Functions.html
-#: ../src/lib/Bulk.pm:387
+#: ../src/lib/Bulk.pm:390
 msgid "%d %b %Y  %H:%M"
 msgstr "%Y/%m/%d %H:%M"
 
 #. This entry is a date/time format
 #. Check the strftime manpage for format details : http://docs.freebsd.org/info/gawk/gawk.info.Time_Functions.html
-#: ../src/lib/Commands.pm:963 ../wwsympa/wwsympa.fcgi.in:9835
+#: ../src/lib/Commands.pm:963 ../wwsympa/wwsympa.fcgi.in:9776
 msgid "%A"
 msgstr "%a"
 
@@ -8421,7 +8449,7 @@ msgstr "間違いがあります (%d 行目): %s"
 #. Check the strftime manpage for format details : http://docs.freebsd.org/info/gawk/gawk.info.Time_Functions.html
 #: ../src/lib/Family.pm:2591 ../src/lib/Family.pm:388 ../src/lib/Family.pm:665
 #: ../src/lib/List.pm:1894 ../wwsympa/Auth.pm:459
-#: ../wwsympa/wwsympa.fcgi.in:1067 ../wwsympa/wwsympa.fcgi.in:2870
+#: ../wwsympa/wwsympa.fcgi.in:1067 ../wwsympa/wwsympa.fcgi.in:2869
 msgid "%d %b %Y at %H:%M:%S"
 msgstr "%Y年%m月%d日%H時%M分%S秒"
 
@@ -8447,11 +8475,11 @@ msgstr "アクセス権限"
 
 #: ../src/lib/List.pm:344
 msgid "Text archives"
-msgstr "テキスト アーカイブ"
+msgstr "テキスト投稿保管庫"
 
 #: ../src/lib/List.pm:349
 msgid "Archive encrypted mails as cleartext"
-msgstr "暗号化メールを平文でアーカイブに保管"
+msgstr "暗号化メールを平文で投稿保管庫に保管"
 
 #: ../src/lib/List.pm:1162 ../src/lib/List.pm:1202 ../src/lib/List.pm:356
 #: ../src/lib/List.pm:532 ../src/lib/List.pm:659 ../src/lib/List.pm:694
@@ -8634,7 +8662,7 @@ msgstr "非公開メモ"
 
 #: ../src/lib/List.pm:709
 msgid "Periodical subscription expiration task"
-msgstr "定期的な購読期限切れタスク"
+msgstr "定期的な読者登録期限切れタスク"
 
 #: ../src/lib/List.pm:720
 msgid "Attachment type"
@@ -8886,7 +8914,7 @@ msgstr "登録確認処理を開始できるのは"
 
 #: ../src/lib/List.pm:1238
 msgid "Return-path of the REMIND command"
-msgstr "購読確認の送信元"
+msgstr "読者登録確認の送信元"
 
 #: ../src/lib/List.pm:1262 ../src/lib/List.pm:1282
 msgid "Reply address"
@@ -8950,7 +8978,7 @@ msgstr "リストの件名"
 
 #: ../src/lib/List.pm:1359
 msgid "Who can subscribe to the list"
-msgstr "リストへ購読をできるのは"
+msgstr "リストに読者登録できるのは"
 
 #: ../src/lib/List.pm:1365
 msgid "Topics for the list"
@@ -8962,13 +8990,13 @@ msgstr "読み込みタイムアウト"
 
 #: ../src/lib/List.pm:1376
 msgid "Who can unsubscribe"
-msgstr "購読解除をできるのは"
+msgstr "登録解除できるのは"
 
 #: ../src/lib/List.pm:1397
 msgid "Last update of config"
 msgstr "設定の最終更新"
 
-#: ../src/lib/List.pm:1404
+#: ../src/lib/List.pm:1403
 msgid "User data source"
 msgstr "ユーザデータソース"
 
@@ -8988,11 +9016,11 @@ msgstr "リストの見えかた"
 
 #: ../src/lib/List.pm:1438
 msgid "Maximum number of month archived"
-msgstr "アーカイブに保管する最大月数"
+msgstr "投稿保管庫に保管する最大月数"
 
 #: ../src/lib/List.pm:1443
 msgid "Web archives"
-msgstr "ウェブ アーカイブ"
+msgstr "ウェブ投稿保管庫"
 
 #: ../src/lib/List.pm:1449
 msgid "Welcome return-path"
@@ -9099,7 +9127,7 @@ msgstr "オーナーを外部データソースで決める"
 
 #: ../src/lib/List.pm:1242
 msgid "Periodical subscription reminder task"
-msgstr "購読確認の定期発送タスク"
+msgstr "読者登録確認の定期発送タスク"
 
 #: ../src/lib/List.pm:1247
 msgid "Incoming SMTP header fields to be removed"
@@ -9119,31 +9147,31 @@ msgstr "設定の最終更新者"
 
 #. This entry is a date/time format
 #. Check the strftime manpage for format details : http://docs.freebsd.org/info/gawk/gawk.info.Time_Functions.html
-#: ../src/lib/List.pm:2919
+#: ../src/lib/List.pm:2853
 msgid "%a, %d %b %Y %H:%M:%S"
 msgstr "%Y年%m月%d日(%a) %H:%M:%S"
 
 #. This entry is a date/time format
 #. Check the strftime manpage for format details : http://docs.freebsd.org/info/gawk/gawk.info.Time_Functions.html
-#: ../src/lib/List.pm:2920
+#: ../src/lib/List.pm:2854
 msgid "%a, %d %b %Y"
 msgstr "%Y年%m月%d日(%a)"
 
 #. This entry is a date/time format
 #. Check the strftime manpage for format details : http://docs.freebsd.org/info/gawk/gawk.info.Time_Functions.html
-#: ../src/lib/List.pm:3111 ../src/lib/List.pm:3112 ../src/lib/List.pm:3116
-#: ../wwsympa/wwsympa.fcgi.in:11017 ../wwsympa/wwsympa.fcgi.in:11086
-#: ../wwsympa/wwsympa.fcgi.in:11288 ../wwsympa/wwsympa.fcgi.in:11635
-#: ../wwsympa/wwsympa.fcgi.in:15086 ../wwsympa/wwsympa.fcgi.in:15093
-#: ../wwsympa/wwsympa.fcgi.in:15811 ../wwsympa/wwsympa.fcgi.in:16589
-#: ../wwsympa/wwsympa.fcgi.in:16590 ../wwsympa/wwsympa.fcgi.in:4280
-#: ../wwsympa/wwsympa.fcgi.in:4338 ../wwsympa/wwsympa.fcgi.in:4909
-#: ../wwsympa/wwsympa.fcgi.in:4910 ../wwsympa/wwsympa.fcgi.in:6432
-#: ../wwsympa/wwsympa.fcgi.in:7451 ../wwsympa/wwsympa.fcgi.in:7994
-#: ../wwsympa/wwsympa.fcgi.in:8041 ../wwsympa/wwsympa.fcgi.in:8043
-#: ../wwsympa/wwsympa.fcgi.in:8519 ../wwsympa/wwsympa.fcgi.in:8520
-#: ../wwsympa/wwsympa.fcgi.in:8554 ../wwsympa/wwsympa.fcgi.in:8555
-#: ../wwsympa/wwsympa.fcgi.in:8734 ../wwsympa/wwsympa.fcgi.in:8735
+#: ../src/lib/List.pm:3045 ../src/lib/List.pm:3046 ../src/lib/List.pm:3050
+#: ../wwsympa/wwsympa.fcgi.in:10953 ../wwsympa/wwsympa.fcgi.in:11022
+#: ../wwsympa/wwsympa.fcgi.in:11224 ../wwsympa/wwsympa.fcgi.in:11571
+#: ../wwsympa/wwsympa.fcgi.in:15022 ../wwsympa/wwsympa.fcgi.in:15029
+#: ../wwsympa/wwsympa.fcgi.in:15747 ../wwsympa/wwsympa.fcgi.in:16540
+#: ../wwsympa/wwsympa.fcgi.in:16541 ../wwsympa/wwsympa.fcgi.in:4278
+#: ../wwsympa/wwsympa.fcgi.in:4331 ../wwsympa/wwsympa.fcgi.in:4902
+#: ../wwsympa/wwsympa.fcgi.in:4903 ../wwsympa/wwsympa.fcgi.in:6425
+#: ../wwsympa/wwsympa.fcgi.in:7448 ../wwsympa/wwsympa.fcgi.in:7988
+#: ../wwsympa/wwsympa.fcgi.in:8035 ../wwsympa/wwsympa.fcgi.in:8037
+#: ../wwsympa/wwsympa.fcgi.in:8513 ../wwsympa/wwsympa.fcgi.in:8514
+#: ../wwsympa/wwsympa.fcgi.in:8548 ../wwsympa/wwsympa.fcgi.in:8549
+#: ../wwsympa/wwsympa.fcgi.in:8728 ../wwsympa/wwsympa.fcgi.in:8729
 msgid "%d %b %Y"
 msgstr "%Y年%m月%d日"
 
@@ -9280,33 +9308,33 @@ msgstr "%H:%M:%S"
 #. This entry is a date/time format
 #. Check the strftime manpage for format details : http://docs.freebsd.org/info/gawk/gawk.info.Time_Functions.html
 #: ../wwsympa/SympaSession.pm:436 ../wwsympa/SympaSession.pm:437
-#: ../wwsympa/wwsympa.fcgi.in:11869 ../wwsympa/wwsympa.fcgi.in:12002
-#: ../wwsympa/wwsympa.fcgi.in:14315 ../wwsympa/wwsympa.fcgi.in:7948
+#: ../wwsympa/wwsympa.fcgi.in:11805 ../wwsympa/wwsympa.fcgi.in:11938
+#: ../wwsympa/wwsympa.fcgi.in:14251 ../wwsympa/wwsympa.fcgi.in:7945
 msgid "%d %b %y  %H:%M"
 msgstr "%y/%m/%d %H:%M"
 
-#: ../wwsympa/wwsympa.fcgi.in:15268
+#: ../wwsympa/wwsympa.fcgi.in:15204
 msgid "Your unsubscription request to list %s was sent to the list owner."
-msgstr "%s メーリング リストからの購読解除申込をリストのオーナーに回送しました"
+msgstr "%s メーリング リストからの登録解除申込をリストのオーナーに回送しました"
 
-#: ../wwsympa/wwsympa.fcgi.in:15270
+#: ../wwsympa/wwsympa.fcgi.in:15206
 msgid "You were successfully unsubscribed from list %s."
-msgstr "あなたは %1 メーリング リストから購読解除されました。"
+msgstr "あなたは %1 メーリング リストから登録解除されました。"
 
-#: ../wwsympa/wwsympa.fcgi.in:15274
+#: ../wwsympa/wwsympa.fcgi.in:15210
 msgid ""
 "Unsubscription from list %s denied: Unsubscription from this list is closed."
 msgstr ""
-"%s メーリング リストからの購読解除は認められませんでした。このリストは購読解"
+"%s メーリング リストからの登録解除は認められませんでした。このリストは登録解"
 "除ができません。"
 
-#: ../wwsympa/wwsympa.fcgi.in:15276
+#: ../wwsympa/wwsympa.fcgi.in:15212
 msgid "Unsubscription from list %s failed."
-msgstr "%1 メーリング リストからの購読解除が失敗しました。"
+msgstr "%1 メーリング リストからの登録解除が失敗しました。"
 
 #. This entry is a date/time format
 #. Check the strftime manpage for format details : http://docs.freebsd.org/info/gawk/gawk.info.Time_Functions.html
-#: ../wwsympa/wwsympa.fcgi.in:16184 ../wwsympa/wwsympa.fcgi.in:16185
+#: ../wwsympa/wwsympa.fcgi.in:16120 ../wwsympa/wwsympa.fcgi.in:16121
 msgid "%Y-%m-%d-%H-%M-%S"
 msgstr "%Y-%m-%d-%H-%M-%S"
 
@@ -9352,7 +9380,7 @@ msgstr "歓迎メッセージ"
 
 #: ../wwsympa/wwslib.pm:55
 msgid "unsubscribe message"
-msgstr "購読解除メッセージ"
+msgstr "登録解除メッセージ"
 
 #: ../wwsympa/wwslib.pm:56
 msgid "deletion message"
@@ -9376,7 +9404,7 @@ msgstr "モデレータが拒否したときのメッセージ"
 
 #: ../wwsympa/wwslib.pm:61
 msgid "subscribing invitation message"
-msgstr "購読に招待するときのメッセージ"
+msgstr "読者登録に招待するときのメッセージ"
 
 #: ../wwsympa/wwslib.pm:62
 msgid "help file"
@@ -9458,9 +9486,1059 @@ msgstr "受け取らない (休暇のときに便利)"
 msgid "you do not receive your own posts"
 msgstr "自分が投稿したものは受け取らない"
 
+#. (k.name)
+#: ../web_tt2/edit_attributes.tt2:7
+msgid "%1:"
+msgstr ""
+
+#: ../web_tt2/stats.tt2:16 ../web_tt2/stats.tt2:22
+msgid "[% o.title %]"
+msgstr ""
+
+#: ../src/sympa_wizard.pl.in:249
+msgid "%s [%s] : "
+msgstr ""
+
+# dumplicate of web_help.po
+#~ msgid ""
+#~ "List description: This text is sent as an answer to the mail command\n"
+#~ "INFO. It can also be included in the <em>Welcome message</em>."
+#~ msgstr ""
+#~ "リストの説明: このテキストを INFO コマンドに対する返信として送ります。ま"
+#~ "た、<em>歓迎メッセージ</em>にもこのテキストが入ります。"
+
+#~ msgid ""
+#~ "You <span style=\"font-weight: bold; font-size: 10px\">are</span> "
+#~ "subscribed"
+#~ msgstr ""
+#~ "<span style=\"font-weight: bold; font-size: 10px\">読者登録中</span>"
+
+#~ msgid ""
+#~ "You <span style=\"font-weight: bold; font-size: 10px\">are not</span> "
+#~ "subscribed"
+#~ msgstr ""
+#~ "<span style=\"font-weight: bold; font-size: 10px\">読者登録していません</"
+#~ "span>"
+
+#~ msgid "Statistics"
+#~ msgstr "統計"
+
+# 仮訳です。nezumi
+#~ msgid "OpenSocial"
+#~ msgstr "SNS認証"
+
+#~ msgid "Select the source of your HTML newsletter"
+#~ msgstr "HTMLニューズレターとして送るファイル"
+
+#~ msgid "Send the page from the following URL:"
+#~ msgstr "次のURLのページを送る: "
+
+#~ msgid "OR"
+#~ msgstr "あるいは"
+
+#~ msgid "<strong>Send an HTML file from your computer:"
+#~ msgstr "<strong>自分のコンピュータにあるHTMLファイルを送る: "
+
+#~ msgid "parameter name"
+#~ msgstr "パラメータ名"
+
+#~ msgid "apply to"
+#~ msgstr "適用先"
+
+#~ msgid "main conf"
+#~ msgstr "基本設定"
+
+#~ msgid "Failed to include members"
+#~ msgstr "メンバを加えるのに失敗しました"
+
+#~ msgid ""
+#~ "You didn't define the web page you want to use to create your newsletter. "
+#~ "Please specify either an URL or a file to upload."
+#~ msgstr ""
+#~ "ニューズレターにするウェブページが決まっていません。URLまたはアップロード"
+#~ "するファイルを指定してください。"
+
+#~ msgid ""
+#~ "You specified both an URL and a file to upload. Sympa can't choose which "
+#~ "one to send. Please fill the form with one of them only. A web page OR a "
+#~ "file to upload."
+#~ msgstr ""
+#~ "URLとアップロードするファイルの両方を指定しています。どちらを送ればいいの"
+#~ "かはSympaには決められません。ウェブページかファイルか、どちらか一方だけを"
+#~ "入力してください。"
+
+#~ msgid ""
+#~ "Failed to include members from VOOT group, use the following link to "
+#~ "check the OAuth status : <a href=\"%1%2/oauth_check/%3\">%1%2/oauth_check/"
+#~ "%3</a>"
+#~ msgstr ""
+#~ "VOOTグループから読者を取り込むことができませんでした。次のページでOAuthの"
+#~ "状態を確認してください。<a href=\"%1%2/oauth_check/%3\">%1%2/oauth_check/%"
+#~ "3</a>"
+
+#~ msgid "You must select a topic"
+#~ msgstr "分野を選択してください"
+
+#~ msgid "Rejecting message"
+#~ msgstr "拒否メッセージ"
+
+#~ msgid "Choose notification "
+#~ msgstr "通知を選ぶ"
+
+#~ msgid "No notification"
+#~ msgstr "通知しない"
+
+#~ msgid "Report message as undetected spam "
+#~ msgstr "このメッセージを未知のスパムとして報告"
+
+#~ msgid "Add sender to blacklist"
+#~ msgstr "送信者をブラックリストに追加"
+
+#~ msgid ""
+#~ "You should rejet spams quietly because the sender of a spam is often "
+#~ "spoofed, if you really want to send this notification, please confirm "
+#~ msgstr ""
+#~ "スパムは送信者を騙っていることがありますから、知らせずに拒否すべきでしょ"
+#~ "う。本当にこの通知を送りたいのなら、確認を選んでください。"
+
+#~ msgid "loading message..."
+#~ msgstr "メッセージを読み込み中……"
+
+#~ msgid "Administration Tasks"
+#~ msgstr "運営作業"
+
+#~ msgid "The following items are waiting for your validation"
+#~ msgstr "確認待ちの案件"
+
+#~ msgid "List %1:"
+#~ msgstr "%1 メーリング リスト: "
+
+#~ msgid "%1 document(s)"
+#~ msgstr "共有文書 %1 件"
+
+#~ msgid "%1 subscription request(s)"
+#~ msgstr "読者登録申込 %1 件"
+
+#~ msgid "User Errors"
+#~ msgstr "問題が起きている人"
+
+#~ msgid ""
+#~ "We received error reports while trying to send you messages. Some of them "
+#~ "may have been lost."
+#~ msgstr ""
+#~ "あなたにメッセージを送った際に配送失敗通知が届いています。あなたは、一部の"
+#~ "メッセージを受け取れていないかもしれません。"
+
+#~ msgid " List %1: "
+#~ msgstr "%1 メーリング リスト: "
+
+#~ msgid " %1 error(s)"
+#~ msgstr " 失敗 %1 回"
+
+#~ msgid "OAuth authorize"
+#~ msgstr "OAuthによる認可"
+
+#~ msgid "Authorize %1 ?"
+#~ msgstr "%1 の認可または不認可"
+
+#~ msgid "Authorize"
+#~ msgstr "認可"
+
+#~ msgid "Don't authorize"
+#~ msgstr "認可しない"
+
+#~ msgid "OAuth check"
+#~ msgstr "OAuthによる検証"
+
+#~ msgid "Got new access token, everything is alright."
+#~ msgstr "新規アクセストークンを取得。問題なし。"
+
+#~ msgid "Everything is alright."
+#~ msgstr "問題なし。"
+
+#~ msgid ""
+#~ "Unable to check, provider may not be available or access token may be "
+#~ "outdated and failed to be get new one."
+#~ msgstr ""
+#~ "検証できませんでした。プロバイダが稼動していない、アクセストークンの期限が"
+#~ "切れている、などの原因で、新規アクセストークンを取得できませんでした。"
+
+#~ msgid "Unable to load consumer, configuration may be erroneous."
+#~ msgstr ""
+#~ "コンシューマを読み込めませんでした。設定が間違っているのかもしれません。"
+
+#~ msgid "Unknown provider."
+#~ msgstr "そのようなプロバイダは知りません。"
+
+#~ msgid "Add quietly"
+#~ msgstr "知らせずに追加"
+
+#~ msgid "Select group"
+#~ msgstr "--グループを選択してください--"
+
+#~ msgid ""
+#~ "Hereafter is the list of the groups you accepted to share with Sympa. "
+#~ "Select which group you want members to be included in your list."
+#~ msgstr ""
+#~ "ここに挙げるのは、Sympaで共有することを認められているVOOTグループの一覧で"
+#~ "す。あなたのリストの読者が入っていてほしいグループを選んでください。"
+
+#~ msgid "Set as source"
+#~ msgstr "ソースに設定"
+
+#~ msgid "Select VOOT provider"
+#~ msgstr "VOOTプロバイダを選ぶ"
+
+#~ msgid ""
+#~ "Hereafter is the list of VOOT providers that share group information with "
+#~ "Sympa. Select which provider you want to use your groups from."
+#~ msgstr ""
+#~ "ここに挙げるのは、Sympaでグループ情報を共有することを認められているVOOTプ"
+#~ "ロバイダの一覧です。あなたが使いたいグループのプロバイダを選んでください。"
+
+#~ msgid "Background color for the news area of the home page."
+#~ msgstr "ホームページのお知らせ領域での背景色。"
+
+#~ msgid "List %1 statistics"
+#~ msgstr "%1 メーリング リストの統計"
+
+#~ msgid "This page displays overall informations regarding the list activity"
+#~ msgstr ""
+#~ "このページでは、リストの全体的な稼働状況についての情報を掲載しています。"
+
+#~ msgid "Shared document directory size: %1 kB"
+#~ msgstr "共有文書ディレクトリの使用量: %1 kB"
+
+#~ msgid "Web archives size: %1 kB"
+#~ msgstr "ウェブ投稿保管庫の使用量: %1 kB"
+
+#~ msgid "No operation recorded in this field yet."
+#~ msgstr "この項目は未集計です。"
+
+#~ msgid "Message tracking"
+#~ msgstr "メッセージの追跡"
+
+#~ msgid "Message from %1 %2 for list %3 "
+#~ msgstr "%1 <%2> 発、%3 メーリングリスト宛てのメッセージ"
+
+#~ msgid "Distribution ended at"
+#~ msgstr "最終配送先"
+
+#~ msgid "Recipient Email"
+#~ msgstr "宛先の電子メールアドレス"
+
+#~ msgid "Reception Option"
+#~ msgstr "受け取りかた"
+
+#~ msgid "Delivery status"
+#~ msgstr "配送状況"
+
+#~ msgid "Notification Date"
+#~ msgstr "通知日"
+
+#~ msgid "Notification"
+#~ msgstr "通知"
+
+#~ msgid "Limit of users count reached for list %1"
+#~ msgstr "%1 メーリング リストの読者数が限度に達しました"
+
+#~ msgid ""
+#~ "Sympa could not include subscribers to list %1 because the maximum number "
+#~ "of users was reached for this list. This limit is defined to %2."
+#~ msgstr ""
+#~ "Sympaは %1 メーリングリストに読者を取り込めませんでした。リストの読者数が"
+#~ "上限に達したためです。上限は %2 名と決められています。"
+
+#~ msgid "Your OAuth token used by consumer %1 may have expired."
+#~ msgstr ""
+#~ "コンシューマ %1 が使っているあなたの OAuth トークンは有効期限が切れていま"
+#~ "す。"
+
+#~ msgid ""
+#~ "Sympa failed to retreive data using %1 consumer, this may be because your "
+#~ "access token for OAuth provider %2 is out of date.\n"
+#~ "\n"
+#~ "Visit  %3/oauth_check/%2 to check the token state and renew it if "
+#~ "necessary."
+#~ msgstr ""
+#~ "Sympaは %1 コンシューマを使ってのデータ取得に失敗しました。おそらく、"
+#~ "OAuth プロバイダ %2 でのあなたのアクセストークンが期限切れになっているため"
+#~ "でしょう。\n"
+#~ "\n"
+#~ "%3/oauth_check/%2 へ行ってトークンを確認してください。必要ならトークンを更"
+#~ "新してください。"
+
+#~ msgid ""
+#~ "This mailing list is configured to require topics; that's probably why "
+#~ "this message went through the moderation process."
+#~ msgstr ""
+#~ "このリストでは、メッセージひとつひとつにトピックがなければいけないように設"
+#~ "定してあります。このメッセージがモデレーション処理に回されたのはそのためで"
+#~ "しょう。"
+
 #~ msgid ""
 #~ "Because the new message is suspected to be a spam it is not attached to "
 #~ "this one. You must use the web interface to reject or validate it."
 #~ msgstr ""
 #~ "届いたメッセージはスパムの疑いがあるため、ここには添付してありません。拒否"
 #~ "したり受け付けたりするには、ウェブインタフェースを使ってください。"
+
+#~ msgid "Incorrect parameter definition: %s\n"
+#~ msgstr "パラメータ定義がおかしいです。%s\n"
+
+#~ msgid "%d.%b.%Y-%H.%M.%S"
+#~ msgstr "%Y-%m-%d-%H-%M-%S"
+
+#~ msgid "Unable to rename %s : %s"
+#~ msgstr "%s メーリング リストを移動できません。%s"
+
+#~ msgid "Unable to open %s : %s"
+#~ msgstr "「%s」を開けません。%s"
+
+#~ msgid ""
+#~ "%s and %s have been updated.\n"
+#~ "Previous versions have been saved as %s and %s.\n"
+#~ msgstr ""
+#~ "%s と %s を更新しました。\n"
+#~ "前のバージョンは %s および %s として保存してあります。\n"
+
+#~ msgid "Site customization"
+#~ msgstr "サイト設定"
+
+#~ msgid "Main robot hostname"
+#~ msgstr "基本ロボットのホスト名"
+
+#~ msgid "Local part of sympa email address"
+#~ msgstr "Sympaの電子メール アドレスのローカル部"
+
+#~ msgid "Effective address will be [EMAIL]@[HOST]"
+#~ msgstr "実際のアドレスは [email]@[host] になります"
+
+#~ msgid "Gecos for service mail sent by Sympa itself"
+#~ msgstr "Sympa自身が送るサービスメッセージの差出人名"
+
+#~ msgid "This parameter is used in mail_tt2 files"
+#~ msgstr "このパラメータはメール用テンプレートファイル (mail_tt2) で使います"
+
+#~ msgid "Listmasters email list comma separated"
+#~ msgstr ""
+#~ "リストシステム管理者の実際の電子メールアドレス (複数の場合はカンマで区切"
+#~ "る)"
+
+#~ msgid ""
+#~ "Sympa will associate listmaster privileges to these email addresses (mail "
+#~ "and web interfaces). Some error reports may also be sent to these "
+#~ "addresses."
+#~ msgstr ""
+#~ "Sympaはこの電子メールアドレスに (電子メールインタフェースとウェブインタ"
+#~ "フェースの両方で) リストシステム管理者権限を与えます。このアドレスにはエ"
+#~ "ラー報告なども届くことがあります。"
+
+#~ msgid "Local part of listmaster email address"
+#~ msgstr "リストシステム管理者の電子メール アドレスのローカル部"
+
+#~ msgid "URL of main Web page"
+#~ msgstr "メインページのURL"
+
+#~ msgid ""
+#~ "Directory for storing static contents (CSS, members pictures, "
+#~ "documentation) directly delivered by Apache"
+#~ msgstr ""
+#~ "静的コンテンツ (CSS、読者のピクチャ、ヘルプ) を格納するディレクトリ。HTTP"
+#~ "サーバが直にアクセスします"
+
+#~ msgid "URL mapped with the static_content_path directory defined above"
+#~ msgstr "上で決めた static_content_path のディレクトリに対応する URL"
+
+#~ msgid "Secret used by Sympa to make MD5 fingerprint in web cookies secure"
+#~ msgstr "Sympaがウェブのクッキーを安全にするために使うダイジェストの種"
+
+#~ msgid "Should not be changed ! May invalid all user password"
+#~ msgstr ""
+#~ "一旦設定したら、変更してはなりません。利用者のパスワードが使えなくなります"
+
+#~ msgid "Who is able to create lists"
+#~ msgstr "リストを作成できるのは"
+
+#~ msgid ""
+#~ "This parameter is a scenario, check sympa documentation about scenarios "
+#~ "if you want to define one"
+#~ msgstr ""
+#~ "このパラメータはシナリオです。あらたなシナリオを定義するには、Sympaの文書"
+#~ "でシナリオについて調べてください"
+
+#~ msgid ""
+#~ "Used to define a custom parameter for your server. Do not forget the "
+#~ "semicolon between the param name and the param value."
+#~ msgstr ""
+#~ "サーバごとのカスタムパラメータを定義するのに使います。パラメータの名前と値"
+#~ "の間にセミコロンを入れるのを忘れないように。"
+
+#~ msgid "Directories"
+#~ msgstr "ディレクトリ"
+
+#~ msgid "Directory containing mailing lists subdirectories"
+#~ msgstr "メーリングリストごとのサブディレクトリが入るディレクトリ"
+
+#~ msgid ""
+#~ "Directory for configuration files; it also contains scenari/ and "
+#~ "templates/ directories"
+#~ msgstr ""
+#~ "設定ファイルのディレクトリ。scenari/ ディレクトリと templates/ ディレクト"
+#~ "リもここに置かれます。"
+
+#~ msgid "System related"
+#~ msgstr "システム関連"
+
+#~ msgid "Syslog facility for sympa"
+#~ msgstr "Sympa用のsyslogファシリティ"
+
+#~ msgid "Do not forget to edit syslog.conf"
+#~ msgstr "Syslogの設定変更を忘れずに"
+
+#~ msgid "Log verbosity"
+#~ msgstr "ログの詳細度"
+
+#~ msgid "0: normal, 2,3,4: for debug"
+#~ msgstr "0 (通常)、2、3、4 (デバッグ用)"
+
+#~ msgid "Communication mode with syslogd (unix | inet)"
+#~ msgstr "Syslogdとの通信方式 (unix|inet)"
+
+#~ msgid "File containing Sympa PID while running"
+#~ msgstr "Sympaの動作中にPIDを格納しておくファイル"
+
+#~ msgid ""
+#~ "Sympa also locks this file to ensure that it is not running more than "
+#~ "once. Caution: user sympa need to write access without special privilege."
+#~ msgstr ""
+#~ "Sympaはまた、複数起動を防ぐためにこのファイルをロックします。注意: ユーザ "
+#~ "sympa が特別な権限なしにこのファイルに書き込めるようになっている必要があり"
+#~ "ます。"
+
+#~ msgid "Umask used for file creation by Sympa"
+#~ msgstr "Sympaがファイルを作成するときに使うumask"
+
+#~ msgid "Sending related"
+#~ msgstr "送受信関連"
+
+#~ msgid ""
+#~ "Max. number of Sendmail processes (launched by Sympa) running "
+#~ "simultaneously"
+#~ msgstr "Sendmailプロセス (Sympaが起動するもの) の同時実行数上限"
+
+#~ msgid ""
+#~ "Proposed value is quite low, you can rise it up to 100, 200 or even 300 "
+#~ "with powerfull systems."
+#~ msgstr ""
+#~ "初期値はかなり低めにしてあります。100、200と増やしてもかまいません。パワー"
+#~ "のあるシステムなら300くらいにしてもかまいません。"
+
+#~ msgid ""
+#~ "comma separated list of operations for which blacklist filter is applied"
+#~ msgstr "ブラックリストが適用される操作 (複数あるときは「,」で区切る)"
+
+#~ msgid "Setting this parameter to \"none\" will hide the blacklist feature"
+#~ msgstr ""
+#~ "このパラメータを「none」に設定すると、ブラックリスト機能は画面に出なくなり"
+#~ "ます"
+
+#~ msgid ""
+#~ "If set, when a list editor report a spam, this external script is run by "
+#~ "wwsympa or sympa, the spam is sent into script stdin"
+#~ msgstr ""
+#~ "設定すると、リストのモデレータがスパムを報告したときに、WWSympaやSympaがこ"
+#~ "のスクリプトを起動し、スパムの内容をスクリプトの標準入力に送ります"
+
+#~ msgid ""
+#~ "Default maximum size (in bytes) for messages (can be re-defined for each "
+#~ "list)"
+#~ msgstr "メッセージの最大長の初期値 (バイト)。リストごとに再定義できます"
+
+#~ msgid ""
+#~ "Maximum number of recipients per call to Sendmail. The nrcpt_by_domain."
+#~ "conf file allows a different tuning per destination domain."
+#~ msgstr ""
+#~ "Sendmailの呼び出しごとの受信者数の上限。nrcpt_by_domain.conf 設定ファイル"
+#~ "を使えば、宛先ドメインごとにこの値を調整できます。"
+
+#~ msgid "Max. number of different domains per call to Sendmail"
+#~ msgstr "Sendmailの呼び出しごとの宛先ドメイン数の上限"
+
+#~ msgid "Path to the MTA (sendmail, postfix, exim or qmail)"
+#~ msgstr "MTA (Sendmail、Postfix、exim、qmail) のパス"
+
+#~ msgid ""
+#~ "should point to a sendmail-compatible binary (eg: a binary named "
+#~ "\"sendmail\" is distributed with Postfix)"
+#~ msgstr ""
+#~ "Sendmail互換のバイナリを指していなければなりません。たとえばPostfixでは"
+#~ "「sendmail」という名前のバイナリが配布されています"
+
+#~ msgid "Specify which rfc2369 mailing list headers to add"
+#~ msgstr "RFC 2369のメーリングリストヘッダを付加するかどうかを指定"
+
+#~ msgid "Specify header fields to be removed before message distribution"
+#~ msgstr "メッセージ配送前に取り除くヘッダフィールドを指定"
+
+#~ msgid "Reject mail from automates (crontab, etc) sent to a list?"
+#~ msgstr ""
+#~ "自動処理 (cronジョブなど) によってリストへ送られるメールを拒否するか"
+
+#~ msgid ""
+#~ "SMTP server to which Sympa verify if alias with the same name as the list "
+#~ "to be created"
+#~ msgstr ""
+#~ "Sympaが、作成しようとしているリストと同じ名前のエイリアスがないか確認する"
+#~ "ために問い合わせるSMTPサーバ"
+
+#~ msgid ""
+#~ "Default value is real FQDN of host. Set [HOST]:[PORT] to specify non-"
+#~ "standard port."
+#~ msgstr ""
+#~ "初期値はホスト自身の実FQDNです。非標準のポート番号を指定するには「ホスト:"
+#~ "ポート」を設定します。"
+
+#~ msgid "SMTP HELO (EHLO) parameter used for alias verification"
+#~ msgstr "エイリアス確認に使うSMTP HELO (EHLO) パラメータ"
+
+#~ msgid "Default value is the host part of list_check_smtp parameter."
+#~ msgstr "初期値はlist_check_smtpパラメータのホスト部です。"
+
+#~ msgid "Bulk mailer"
+#~ msgstr "メール一括送信機能"
+
+#~ msgid "Default priority for a packet to be sent by bulk."
+#~ msgstr "bulkデーモンでパケットを送信する際の優先度の初期値。"
+
+#~ msgid ""
+#~ "Minimum number of packets in database before the bulk forks to increase "
+#~ "sending rate"
+#~ msgstr ""
+#~ "bulkデーモンがforkして配送頻度を上げるには、データベースに最低何個のパケッ"
+#~ "トがあればよいか"
+
+#~ msgid "Max number of bulks that will run on the same server"
+#~ msgstr "ひとつのサーバで実行できるbulkデーモンの数の上限"
+
+#~ msgid ""
+#~ "The number of seconds a slave bulk will remain running without processing "
+#~ "a message before it spontaneously dies."
+#~ msgstr ""
+#~ "bulkデーモンのサブデーモンがメッセージを処理せずに実行を続けられる時間 "
+#~ "(秒)。これを過ぎると終了します。"
+
+#~ msgid ""
+#~ "The number of seconds a bulk sleeps between starting a new loop if it "
+#~ "didn't find a message to send."
+#~ msgstr ""
+#~ "bulkデーモンが、処理するメッセージがなかったときに、次のループを開始するま"
+#~ "でに待つ時間 (秒)。"
+
+#~ msgid "Keep it small if you want your server to be reactive."
+#~ msgstr "サーバの反応をよくしたければ、小さい値にしておきます。"
+
+#~ msgid ""
+#~ "Number of seconds a master bulk waits between two packets number checks."
+#~ msgstr "bulkデーモンのマスタデーモンが、パケット数を調べる間隔 (秒)。"
+
+#~ msgid ""
+#~ "Keep it small if you expect brutal increases in the message sending load."
+#~ msgstr "メッセージ配送の負荷が激増しそうなら、小さい値にしておきます。"
+
+#~ msgid "Quotas"
+#~ msgstr "容量制限"
+
+#~ msgid "Default disk quota for shared repository"
+#~ msgstr "共有文書置き場の容量制限の初期値"
+
+#~ msgid "Spool related"
+#~ msgstr "キュー関連"
+
+#~ msgid "Directory containing various specialized spools"
+#~ msgstr "さまざまな用途のキューが置かれるディレクトリ"
+
+#~ msgid "All spool are created at runtime by sympa.pl"
+#~ msgstr "キューはすべて、sympa.plの実行時に作成されます。"
+
+#~ msgid "Directory for incoming spool"
+#~ msgstr "メッセージ受け付け用キューのディレクトリ"
+
+#~ msgid "Directory for moderation spool"
+#~ msgstr "モデレーション用キューのディレクトリ"
+
+#~ msgid "Directory for digest spool"
+#~ msgstr "まとめ読み用キューのディレクトリ"
+
+#~ msgid "Directory for authentication spool"
+#~ msgstr "認証キューのディレクトリ"
+
+#~ msgid "Directory for outgoing spool"
+#~ msgstr "メッセージ送出用キューのディレクトリ"
+
+#~ msgid "Directory for topic spool"
+#~ msgstr "トピック用キューのディレクトリ"
+
+#~ msgid "Directory for bounce incoming spool"
+#~ msgstr "バウンス受け付け用キューのディレクトリ"
+
+#~ msgid "Directory for task spool"
+#~ msgstr "タスク用キューのディレクトリ"
+
+#~ msgid "Directory for automatic list creation spool"
+#~ msgstr "リスト自動作成用キューのディレクトリ"
+
+#~ msgid "Temporary directory used by OpenSSL and antivirus plugins"
+#~ msgstr "OpenSSLやウィルス検査プラグインの一時ファイル用ディレクトリ"
+
+#~ msgid "Must not be 0."
+#~ msgstr "0にはできません。"
+
+#~ msgid "Internationalization related"
+#~ msgstr "国際化関連"
+
+#~ msgid ""
+#~ "Directory containing available NLS catalogues (Message "
+#~ "internationalization)"
+#~ msgstr "メッセージ国際化用カタログが置かれるディレクトリ"
+
+#~ msgid "Supported languages"
+#~ msgstr "対応言語"
+
+#~ msgid ""
+#~ "This is the set of language that will be proposed to your users for the "
+#~ "Sympa GUI. Don't select a language if you don't have the proper locale "
+#~ "packages installed."
+#~ msgstr ""
+#~ "SympaのGUIでユーザに選んでもらう言語 (複数可) です。適切なカタログをインス"
+#~ "トールしていない言語は選ばないでください。"
+
+#~ msgid "Default language (one of supported languages)"
+#~ msgstr "言語の初期値 (対応言語のうちのどれか)"
+
+#~ msgid "This is the default language used by Sympa"
+#~ msgstr "Sympaが使う言語の初期値です。"
+
+#~ msgid "Bounce related"
+#~ msgstr "配送エラー処理関連"
+
+#~ msgid "Welcome message return-path ( unique | owner )"
+#~ msgstr "歓迎メッセージの配送エラー返送先 ( unique | owner )"
+
+#~ msgid "If set to unique, new subcriber is removed if welcome message bounce"
+#~ msgstr ""
+#~ "「unique」に設定した場合、新規に登録した読者への歓迎メッセージがバウンスす"
+#~ "ると、その読者は削除されます。"
+
+#~ msgid "Remind message return-path ( unique | owner )"
+#~ msgstr "読者登録確認メッセージの配送エラー返送先 ( unique | owner )"
+
+#~ msgid ""
+#~ "If set to unique, subcriber is removed if remind message bounce, use with "
+#~ "care"
+#~ msgstr ""
+#~ "「unique」に設定した場合、読者登録確認メッセージがバウンスすると、その読者"
+#~ "は削除されます。注意してお使いください。"
+
+#~ msgid "Task name for expiration of old bounces"
+#~ msgstr "古いバウンスを消去するタスクの名前"
+
+#~ msgid "Bouncing email rate for warn list owner"
+#~ msgstr "配送エラー率がこれを超えたらオーナーに警告"
+
+#~ msgid "Bouncing email rate for halt the list (not implemented)"
+#~ msgstr "配送エラー率がこれを超えたらリストを停止 (未実装)"
+
+#~ msgid "Not yet used in current version, Default is 50"
+#~ msgstr "現在のバージョンでは使いません。初期値は50 (%)。"
+
+#~ msgid "Tuning"
+#~ msgstr "パフォーマンスチューニング"
+
+#~ msgid ""
+#~ "Use of binary version of the list config structure on disk (none | "
+#~ "binary_file)"
+#~ msgstr "リスト設定をバイナリファイルとして保存するか (none | binary_file)"
+
+#~ msgid ""
+#~ "Set this parameter to \"binary_file\" if you manage a big amount of lists "
+#~ "(1000+); it should make the web interface startup faster"
+#~ msgstr ""
+#~ "大量のリスト (1000以上) を管理するときは、このパラメータを「binary_file」"
+#~ "に設定してください。ウェブインタフェースの起動が速くなります。"
+
+#~ msgid "flock | nfs"
+#~ msgstr "( flock | nfs )"
+
+#~ msgid "Sympa commands priority"
+#~ msgstr "Sympaメールコマンドの優先度"
+
+#~ msgid "Default priority for list messages"
+#~ msgstr "リスト メッセージの優先度の初期値"
+
+#~ msgid "Database related"
+#~ msgstr "データベース関連"
+
+#~ msgid "Type of the database (mysql|Pg|Oracle|Sybase|SQLite)"
+#~ msgstr "データベースの種類 (mysql|Pg|Oracle|Sybase|SQLite)"
+
+#~ msgid "Be careful to the case"
+#~ msgstr "大文字小文字を区別します。"
+
+#~ msgid "Name of the database"
+#~ msgstr "データベース名"
+
+#~ msgid "With SQLite, the name of the DB corresponds to the DB file"
+#~ msgstr "SQLiteでは、データベース名はデータベースファイルの名前になります。"
+
+#~ msgid "Hostname of the database server"
+#~ msgstr "テータベースサーバのホスト名"
+
+#~ msgid "Port of the database server"
+#~ msgstr "テータベースサーバのポート番号"
+
+#~ msgid "User for the database connection"
+#~ msgstr "データベース接続のユーザ名"
+
+#~ msgid "Password for the database connection"
+#~ msgstr "データベース接続のパスワード"
+
+#~ msgid ""
+#~ "What ever you use a password or not, you must protect the SQL server (is "
+#~ "it not a public internet service ?)"
+#~ msgstr ""
+#~ "パスワードを使うかどうかにかかわらず、SQLサーバへのアクセスは制限してくだ"
+#~ "さい (サービスをインターネットに公開してしまっていませんか)。"
+
+#~ msgid "Environment variables setting for database"
+#~ msgstr "データベースの環境変数設定"
+
+#~ msgid "This is useful for defining ORACLE_HOME "
+#~ msgstr "OracleでORACLE_HOMEを定義するのに使えます。"
+
+#~ msgid "Database private extention to subscriber table"
+#~ msgstr "subscriberテーブルでのデータベース独自拡張"
+
+#~ msgid "You need to extend the database format with these fields"
+#~ msgstr ""
+#~ "ここに記述したフィールドは、自分でデータベースに追加する必要があります。"
+
+#~ msgid "Database private extention to user table"
+#~ msgstr "userテーブルでのデータベース独自拡張"
+
+#~ msgid "Number of months that elapse before a log is expired"
+#~ msgstr "運用記録を消去するまでの月数"
+
+#~ msgid ""
+#~ "Default timeout between two scheduled synchronizations of list members "
+#~ "with data sources."
+#~ msgstr "リスト読者のデータソース自動同期のタイムアウトの初期値"
+
+#~ msgid ""
+#~ "Default timeout between two action-triggered synchronizations of list "
+#~ "members with data sources."
+#~ msgstr "リスト読者のデータソース変更時の同期のタイムアウトの初期値"
+
+#~ msgid ""
+#~ "Default timeout while performing a fetch for an include_sql_query sync"
+#~ msgstr "include_sql_query による同期実行時の取得タイムアウト初期値"
+
+#~ msgid "Loop prevention"
+#~ msgstr "メールループ防止"
+
+#~ msgid "S/MIME configuration"
+#~ msgstr "S/MIME の設定"
+
+#~ msgid "Path to OpenSSL"
+#~ msgstr "OpenSSLのパス"
+
+#~ msgid "Sympa recognizes S/MIME if OpenSSL is installed"
+#~ msgstr "Sympaは、OpenSSLがインストールされていればS/MIMEを認識します。"
+
+#~ msgid "Directory containing trusted CA certificates"
+#~ msgstr "信頼できる認証局の証明書が置かれるディレクトリ"
+
+#~ msgid "File containing bundled trusted CA certificates"
+#~ msgstr "信頼できる認証局の証明書を含むファイル"
+
+#~ msgid "Password used to crypt lists private keys"
+#~ msgstr "リストの秘密鍵の暗号化パスワード"
+
+#~ msgid ""
+#~ "Insert a DKIM signature to message from the robot, from the list or both"
+#~ msgstr ""
+#~ "DKIM署名を付けるメッセージ。ロボットが送信するもの、リストで配信されるも"
+#~ "の、両方"
+
+#~ msgid ""
+#~ "Type of message that is added a DKIM signature before distribution to "
+#~ "subscribers. Possible values are \"none\", \"any\" or a list of the "
+#~ "following keywords: \"md5_authenticated_messages\", "
+#~ "\"smime_authenticated_messages\", \"dkim_authenticated_messages\", "
+#~ "\"editor_validated_messages\"."
+#~ msgstr ""
+#~ "読者へ配送する前にDKIM署名を付加するメッセージの種類。選べる値は「none」か"
+#~ "「any」か、次のキーワードのリスト (カンマ区切り) です。"
+#~ "「md5_authenticated_messages」、「smime_authenticated_messages」、"
+#~ "「dkim_authenticated_messages」、「editor_validated_messages」。"
+
+#~ msgid "Location of the file where DKIM private key is stored"
+#~ msgstr "DKIMの秘密鍵が入ったファイルの場所"
+
+#~ msgid ""
+#~ "The \"d=\" tag as defined in rfc 4871, default is virtual host domain name"
+#~ msgstr "RFC 4871で定義する「d=」タグ。初期値はカソウホストのドメイン名"
+
+#~ msgid "The selector"
+#~ msgstr "セレクタ"
+
+#~ msgid "The \"i=\" tag as defined in rfc 4871, default is null"
+#~ msgstr "RFC 4871で定義する「i=」タグ。初期値は空"
+
+#~ msgid "List of headers to be included into the message for signature"
+#~ msgstr "メッセージで署名の対象とするヘッダの一覧"
+
+#~ msgid "Antivirus plug-in"
+#~ msgstr "ウィルス検出プラグイン"
+
+#~ msgid "Path to the antivirus scanner engine"
+#~ msgstr "ウィルススキャナエンジンのパス"
+
+#~ msgid ""
+#~ "supported antivirus: McAfee/uvscan, Fsecure/fsav, Sophos, AVP and Trend "
+#~ "Micro/VirusWall"
+#~ msgstr ""
+#~ "対応しているウィルス検出ソフトウェアは、McAfee/uvscan、Fsecure/fsav、"
+#~ "Sophos、AVP、Trend Micro/VirusWall"
+
+#~ msgid "Antivirus plugin command argument"
+#~ msgstr "ウィルス検出ソフトウェアのコマンドライン引数"
+
+#~ msgid "Tag based spam filtering"
+#~ msgstr "タグ付けによるスパム排除"
+
+#~ msgid ""
+#~ "If a spam filter (like spamassassin or j-chkmail) add a smtp headers to "
+#~ "tag spams, name of this header (example X-Spam-Status)"
+#~ msgstr ""
+#~ "スパムフィルタ (SpamAssassinやj-chkmailなど) がスパムを検出したことを示す"
+#~ "メッセージヘッダを追加しているのであれば、そのヘッダの名前 (たとえば「X-"
+#~ "Spam-Status」)。"
+
+#~ msgid ""
+#~ "Regexp applied on this header to verify message is a spam (example Yes)"
+#~ msgstr ""
+#~ "そのヘッダでメッセージがスパムかどうか確認する正規表現 (たとえば「Yes」)。"
+
+#~ msgid ""
+#~ "Regexp applied on this header to verify message is NOT a spam (example No)"
+#~ msgstr ""
+#~ "そのヘッダでメッセージがスパム*ではない*かどうか確認する正規表現 (たとえば"
+#~ "「No」)。"
+
+#~ msgid "wwsympa.conf parameters"
+#~ msgstr "wwsympa.conf のパラメータ"
+
+#~ msgid "Directory for storing HTML archives"
+#~ msgstr "HTML投稿保管庫のディレクトリ"
+
+#~ msgid "Better if not in a critical partition"
+#~ msgstr "重要な情報のあるパーティションにしないほうがいいでしょう。"
+
+#~ msgid ""
+#~ "Default index organization when entering the web archive: either threaded "
+#~ "or in chronological order"
+#~ msgstr ""
+#~ "ウェブアーカイブに入ったときのインデックスの構成。スレッドか時系列か"
+
+#~ msgid "File containing archived PID while running"
+#~ msgstr "archivedデーモンの動作中にPIDを格納するファイル"
+
+#~ msgid "Directory for storing bounces"
+#~ msgstr "配送エラーメッセージを格納するディレクトリ"
+
+#~ msgid "File containing bounced PID while running"
+#~ msgstr "bouncedデーモンの動作中にPIDを格納するファイル"
+
+#~ msgid "HTTP cookies lifetime"
+#~ msgstr "HTTPクッキーの寿命"
+
+#~ msgid "HTTP cookies validity domain"
+#~ msgstr "HTTPクッキーの有効ドメイン"
+
+#~ msgid ""
+#~ "Activates a custom archiver to use instead of MHonArc. The value of this "
+#~ "parameter is the absolute path on the file system to the script of the "
+#~ "custom archiver."
+#~ msgstr ""
+#~ "MHonArcの代わりにカスタム投稿保管ソフトウェアを使うようにする。パラメータ"
+#~ "の値はカスタム投稿保管ソフトウェアのファイルシステム上での絶対パス。"
+
+#~ msgid "Type of main Web page ( lists | home )"
+#~ msgstr "ホームページの種類 ( lists | home )"
+
+#~ msgid "Syslog facility for wwsympa, archived and bounced"
+#~ msgstr "WWSympa、archivedデーモン、bouncedデーモンのsyslogファシリティ"
+
+#~ msgid "Default is to use previously defined sympa log facility."
+#~ msgstr "初期値は、先に決めたSympaのファシリティと同じ。"
+
+#~ msgid "Path to MHonArc mail2html plugin"
+#~ msgstr "メール-HTML変換をするMHonArcのパス"
+
+#~ msgid "This is required for HTML mail archiving"
+#~ msgstr "HTMLの投稿保管庫に必要です。"
+
+#~ msgid "Password case (insensitive | sensitive)"
+#~ msgstr "パスワードの大文字小文字を区別するか (insensitive | sensitive)"
+
+#~ msgid "Title of main Web page"
+#~ msgstr "メインページの表題"
+
+#~ msgid "Is fast_cgi module for Apache (or Roxen) installed (0 | 1)"
+#~ msgstr ""
+#~ "Apache (やRoxen) 用のFastCGIモジュールがインストールされているか (0 | 1)"
+
+#~ msgid "This module provide much faster web interface"
+#~ msgstr "このモジュールを使うとウェブインタフェースが非常に高速になります。"
+
+#~ msgid "Virtual host specific parameters"
+#~ msgstr "仮想ロボット固有のパラメータ"
+
+#~ msgid "URL of a virtual host"
+#~ msgstr "仮想ホストのURL"
+
+#~ msgid ""
+#~ "Default limit for the number of subscribers per list (0 means no limit)"
+#~ msgstr "リストあたりの読者数上限の初期値 (0で無制限)"
+
+#~ msgid ""
+#~ "If set to \"on\", users will be able to post messages in HTML using a "
+#~ "javascript WYSIWYG editor."
+#~ msgstr ""
+#~ "「on」に設定すると、利用者がJavaScriptのWYSIWYGエディタを使ってHTMLでメッ"
+#~ "セージを投稿できるようになります。"
+
+#~ msgid "Path to the javascript file making the WYSIWYG HTML editor available"
+#~ msgstr "WYSIWYG HTMLエディタを有効にするためのJavaScriptファイルのパス"
+
+#~ msgid ""
+#~ "Javascript excerpt that enables and configures the WYSIWYG HTML editor."
+#~ msgstr "WYSIWYG HTMLエディタを有効にし、設定するJavaScriptコード。"
+
+#~ msgid ""
+#~ "When using LDAP authentication, if the identifier provided by the user "
+#~ "was a valid email, if this parameter is set to false, then the provided "
+#~ "email will be used to authenticate the user. Otherwise, use of the first "
+#~ "email returned by the LDAP server will be used."
+#~ msgstr ""
+#~ "LDAP認証を使っているときに利用者が提示したIDが電子メールアドレスの形式だっ"
+#~ "た場合、このパラメータを偽に設定すると、その電子メールアドレスが利用者の認"
+#~ "証に使われます。真に設定すると、LDAPサーバが返した電子メールアドレス (複数"
+#~ "あれば最初のもの) が使われます。"
+
+#~ msgid "If set to \"on\", enables support of legacy character set"
+#~ msgstr "「on」に設定すると、従来キャラクタセット対応を有効にする"
+
+#~ msgid ""
+#~ "In some language environments, legacy encoding (character set) is "
+#~ "preferred for e-mail messages: for example iso-2022-jp in Japanese "
+#~ "language."
+#~ msgstr ""
+#~ "言語によっては、電子メールメッセージで従来文字コード (キャラクタセット) を"
+#~ "使うほうが望ましいです (たとえば日本語でのISO-2022-JP)。"
+
+#~ msgid "Directory for subscription spool"
+#~ msgstr "読者登録用キューのディレクトリ"
+
+#~ msgid ""
+#~ "Default number of lines of the array displaying users in the review page"
+#~ msgstr "読者一覧ページで表示する利用者の列ごとの数の初期値"
+
+#~ msgid ""
+#~ "Messages are supposed to be filtered by an antispam that add one more "
+#~ "headers to messages. This parameter is used to select a special scenario "
+#~ "in order to decide the message spam status: ham, spam or unsure. This "
+#~ "parameter replace antispam_tag_header_name, "
+#~ "antispam_tag_header_spam_regexp and antispam_tag_header_ham_regexp."
+#~ msgstr ""
+#~ "メッセージがスパム排除ソフトウェアで処理されており、そのソフトウェアがある"
+#~ "ヘッダを追加するとします。このパラメータを使って、メッセージがスパムかどう"
+#~ "かの状態 (「ham」、「spam」、「unsure」) を決定する特別なシナリオを選択し"
+#~ "ます。このパラメータは次のパラメータを置き換えます。"
+#~ "antispam_tag_header_name、antispam_tag_header_spam_regexp、"
+#~ "antispam_tag_header_ham_regexp。"
+
+#~ msgid "Directory containing user certificates"
+#~ msgstr "利用者の証明書が置かれるディレクトリ"
+
+#~ msgid "File containing task_manager PID while running"
+#~ msgstr "task_managerデーモンの実行中にPIDを保存するファイル"
+
+#~ msgid ""
+#~ "Default number of lines of the array displaying the log entries in the "
+#~ "logs page"
+#~ msgstr "運用記録ページで表示するログの行数の初期値"
+
+#~ msgid "Conf::load_nrcpt_by_domain(): Error at line %d: %s"
+#~ msgstr "Conf::load_nrcpt_by_domain(): 間違いがあります (%d行目): %s"
+
+#~ msgid "tracking message by delivery status notification"
+#~ msgstr "配送状況通知によるメッセージの追跡"
+
+#~ msgid "tracking message by message delivery notification"
+#~ msgstr "メッセージ開封通知によるメッセージの追跡"
+
+#~ msgid "who can view message tracking"
+#~ msgstr "メッセージを追跡できるのは"
+
+#~ msgid "Tracking datas are removed after this number of days"
+#~ msgstr "追跡データはこの日数が経つと削除する"
+
+#~ msgid "Message tracking feature"
+#~ msgstr "メッセージ追跡機能"
+
+#~ msgid "user"
+#~ msgstr "人"
+
+#~ msgid "provider"
+#~ msgstr "プロバイダ"
+
+#~ msgid "group"
+#~ msgstr "グループ"
+
+#~ msgid "VOOT group inclusion"
+#~ msgstr "VOOTグループの取り込み"
+
+#~ msgid "Maximum number of list members"
+#~ msgstr "読者数の上限"
+
+#~ msgid "list members"
+#~ msgstr "リストの読者"
+
+#~ msgid "Attempt to exceed the max number of members (%s) for this list."
+#~ msgstr "このリストの読者数上限 (%s) を超えてしまいます。"
+
+#~ msgid "Attempts to add some users in database failed."
+#~ msgstr "一部の人をデータベースに追加できませんでした。"
+
+#~ msgid "Added %s users out of %s required."
+#~ msgstr "%2$s 名のうち、実際に追加できたのは %1$s 名です。"
+
+#~ msgid "Unable to add user %s in list %s : %s"
+#~ msgstr "%s を %s メーリングリストに追加できませんでした。%s"
+
+#~ msgid "Unable to add users in list %s : %s"
+#~ msgstr "%s メーリング リストに人を追加できません。%s"
+
+#~ msgid "Mail sending"
+#~ msgstr "メール送信"
+
+#~ msgid "Subscription additions"
+#~ msgstr "読者登録"
+
+#~ msgid "Unsubscription"
+#~ msgstr "登録解除"
+
+#~ msgid "Users deleted by admin"
+#~ msgstr "オーナーが削除した人"

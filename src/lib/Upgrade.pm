@@ -703,7 +703,7 @@ sub upgrade {
 		}
 		
    }	
-   if (&tools::lower_version($previous_version, '6.1.9')) {
+   if (&tools::lower_version($previous_version, '6.1.11')) {
        ## Exclusion table was not robot-enabled.
        &Log::do_log('notice','fixing robot column of exclusion table.');
 	my $statement = "SELECT * FROM exclusion_table"; 
@@ -740,6 +740,13 @@ sub upgrade {
 	    }else {
 		&Log::do_log('err',"Exclusion robot could not be guessed for user '%s' in list '%s'. Either this user is no longer subscribed to the list or the list appear in more than one robot (or the query to the database failed). Here is the list of robots in which this list name appears: '%s'",$data->{'user_exclusion'},$data->{'list_exclusion'},@valid_robot_candidates);
 	    }
+	}
+	## Caching all lists config subset to database
+	&Log::do_log('notice','Caching all lists config subset to database');
+	&List::_flush_list_db();
+	my $all_lists = &List::get_lists('*', { 'use_files' => 1 });
+	foreach my $list (@$all_lists) {
+	    $list->_update_list_db;
 	}
    }
 
@@ -853,12 +860,22 @@ sub probe_db {
 						       'dkim_selector_bulkspool' => 'varchar(50)',
 						       'dkim_d_bulkspool' => 'varchar(50)',
 						       'dkim_i_bulkspool' => 'varchar(100)',
-						       'dkim_header_list_bulkspool' => 'varchar(500)',
 						   },
 				 'conf_table' => {'robot_conf' => 'varchar(80)',
 						  'label_conf' => 'varchar(80)',
-						  'value_conf' => 'varchar(300)'}
-			     },
+						  'value_conf' => 'varchar(300)'},
+                  'list_table' => {'name_list'=>'varchar(100)',
+                                    'path_list'=>'varchar(100)',
+                                    'robot_list'=>'varchar(100)',
+                                    'status_list'=>"enum('open','closed','pending','error_config','family_closed')",
+                                    'creation_email_list'=>'varchar(100)',
+                                    'creation_epoch_list'=>'datetime',
+                                    'subject_list'=>'varchar(100)',
+                                    'web_archive_list'=>'tinyint(1)',
+                                    'topics_list'=>'varchar(100)',
+                                    'editors_list'=>'varchar(100)',
+                                    'owners_list'=>'varchar(100)'}
+                              },
 		     'SQLite' => {'user_table' => {'email_user' => 'text',
 						   'gecos_user' => 'text',
 						   'password_user' => 'text',
@@ -885,7 +902,7 @@ sub probe_db {
 							 'bounce_score_subscriber' => 'integer',
 							 'bounce_address_subscriber' => 'text',
 							 'custom_attribute_subscriber' => 'text',
-							 'suspend_subscriber' => "boolean",
+							 'suspend_subscriber' => 'numeric',
 							 'suspend_start_date_subscriber' => 'integer',
 							 'suspend_end_date_subscriber' => 'integer'},
 				  'admin_table' => {'list_admin' => 'text',
@@ -947,8 +964,8 @@ sub probe_db {
 							 'returnpath_bulkmailer' => 'text',
 							 'robot_bulkmailer' => 'text',
 							 'listname_bulkmailer' => 'text',
-							 'verp_bulkmailer' => 'integer',
-							 'merge_bulkmailer' => 'integer',
+							 'verp_bulkmailer' => 'numeric',
+							 'merge_bulkmailer' => 'numeric',
 							 'priority_message_bulkmailer' => 'integer',
 							 'priority_packet_bulkmailer' => 'integer',
 							 'reception_date_bulkmailer' => 'integer',
@@ -957,15 +974,26 @@ sub probe_db {
 				  'bulkspool_table' => {'messagekey_bulkspool' => 'text',
 							'messageid_bulkspool' => 'text',
 							'message_bulkspool' => 'text',
-							'lock_bulkspool' => 'integer',
-							'dkim_privatekey_bulkspool' => 'varchar(1000)',
-							'dkim_selector_bulkspool' => 'varchar(50)',
-							'dkim_d_bulkspool' => 'varchar(50)',
-							'dkim_i_bulkspool' => 'varchar(100)',
-							'dkim_header_list_bulkspool' => 'varchar(500)'},
+							'lock_bulkspool' => 'numeric',
+							'dkim_privatekey_bulkspool' => 'text',
+							'dkim_selector_bulkspool' => 'text',
+							'dkim_d_bulkspool' => 'text',
+							'dkim_i_bulkspool' => 'text',},
 				  'conf_table' => {'robot_conf' => 'text',
 						   'label_conf' => 'text',
-						   'value_conf' => 'text'}});
+						   'value_conf' => 'text'},
+                  'list_table' => {'name_list' => 'text',
+                                    'path_list' => 'text',
+                                    'robot_list' => 'text',
+                                    'status_list' => 'text',
+                                    'creation_email_list' => 'text',
+                                    'creation_epoch_list' => 'numeric',
+                                    'subject_list' => 'text',
+                                    'web_archive_list' => 'numeric',
+                                    'topics_list' => 'text',
+                                    'editors_list' => 'text',
+                                    'owners_list' => 'text'}
+});
 
     my %not_null = ('email_user' => 1,
 		    'list_subscriber' => 1,
@@ -993,6 +1021,8 @@ sub probe_db {
 		    'messagekey_bulkmailer' => 1,
 		    'packetid_bulkmailer' => 1,
 		    'messagekey_bulkspool' => 1,
+		    'name_list'=>1,
+		    'robot_list'=>1,
 		    );
     
     my %primary = ('user_table' => ['email_user'],
@@ -1005,7 +1035,8 @@ sub probe_db {
 		   'one_time_ticket_table' => ['ticket_one_time_ticket'],
 		   'bulkmailer_table' => ['messagekey_bulkmailer','packetid_bulkmailer'],
 		   'bulkspool_table' => ['messagekey_bulkspool'],
-		   'conf_table' => ['robot_conf','label_conf']
+		   'conf_table' => ['robot_conf','label_conf'],
+		   'list_table'=> ['name_list','robot_list']
 		   );
 
     ## List the required INDEXES
@@ -1065,7 +1096,7 @@ sub probe_db {
 		$found = 1 if ($t1 eq $t2);
 	    }
 	    unless ($found) {
-		unless ($dbh->do("CREATE TABLE $t1 (temporary INT)")) {
+		unless ($dbh->do("CREATE TABLE $t1 (temporary INT) DEFAULT CHARACTER SET utf8")) {
 		    &do_log('err', 'Could not create table %s in database %s : %s', $t1, $Conf::Conf{'db_name'}, $dbh->errstr);
 		    next;
 		}
@@ -1709,7 +1740,7 @@ sub md5_encode_password {
 	## Updating Db
 	my $escaped_email =  $user->{'email_user'};
 	$escaped_email =~ s/\'/''/g;
-	my $statement = sprintf "UPDATE user_table SET password_user='%s' WHERE (email_user='%s')", &tools::md5_fingerprint($clear_password), $escaped_email ;
+	my $statement = sprintf "UPDATE user_table SET password_user='%s' WHERE (email_user='%s')", &Auth::password_fingerprint($clear_password), $escaped_email ;
 	
 	unless ($dbh->do($statement)) {
 	    do_log('err','Unable to execute SQL statement "%s" : %s', $statement, $dbh->errstr);

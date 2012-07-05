@@ -169,6 +169,7 @@ sub remove {
     my $statement = sprintf "DELETE FROM bulkmailer_table WHERE packetid_bulkmailer = %s AND messagekey_bulkmailer = %s",$dbh->quote($packetid),$dbh->quote($messagekey),;
     unless ($dbh and $dbh->ping) {
 	return undef unless &List::db_connect();
+	$dbh = &List::db_get_handler();
     }	   
     return ($dbh->do($statement));
 }
@@ -181,6 +182,7 @@ sub messageasstring {
     
     unless ($dbh and $dbh->ping) {
 	return undef unless &List::db_connect();
+	$dbh = &List::db_get_handler();
     }
     unless ($sth = $dbh->prepare($statement)) {
 	do_log('err','Unable to prepare SQL statement : %s', $dbh->errstr);
@@ -210,10 +212,11 @@ sub message_from_spool {
     my $messagekey = shift;
     &do_log('debug', '(messagekey : %s)',$messagekey);
     
-    my $statement = sprintf "SELECT message_bulkspool AS message, messageid_bulkspool AS messageid, dkim_d_bulkspool AS  dkim_d,  dkim_i_bulkspool AS  dkim_i, dkim_privatekey_bulkspool AS dkim_privatekey, dkim_selector_bulkspool AS dkim_selector,dkim_header_list_bulkspool AS dkim_header_list FROM bulkspool_table WHERE messagekey_bulkspool = %s",$dbh->quote($messagekey);
+    my $statement = sprintf "SELECT message_bulkspool AS message, messageid_bulkspool AS messageid, dkim_d_bulkspool AS  dkim_d,  dkim_i_bulkspool AS  dkim_i, dkim_privatekey_bulkspool AS dkim_privatekey, dkim_selector_bulkspool AS dkim_selector FROM bulkspool_table WHERE messagekey_bulkspool = %s",$dbh->quote($messagekey);
 
     unless ($dbh and $dbh->ping) {
 	return undef unless &List::db_connect();
+	$dbh = &List::db_get_handler();
     }
     unless ($sth = $dbh->prepare($statement)) {
 	do_log('err','Unable to prepare SQL statement : %s', $dbh->errstr);
@@ -232,8 +235,7 @@ sub message_from_spool {
 	    'dkim_d' => $message_from_spool->{'dkim_d'},
 	    'dkim_i' => $message_from_spool->{'dkim_i'},
 	    'dkim_selector' => $message_from_spool->{'dkim_selector'},
-	    'dkim_privatekey' => $message_from_spool->{'dkim_privatekey'},
-	    'dkim_header_list' => $message_from_spool->{'dkim_header_list'}});
+	    'dkim_privatekey' => $message_from_spool->{'dkim_privatekey'},});
 
 }
 
@@ -432,6 +434,7 @@ sub store {
     
     unless ($dbh and $dbh->ping) {
 	return undef unless &List::db_connect();
+	$dbh = &List::db_get_handler();
     }
     
     $msg = MIME::Base64::encode($msg);
@@ -469,9 +472,9 @@ sub store {
 	
 	# if message is not found in bulkspool_table store it
 	if ($message_already_on_spool == 0) {
-	    my $statement      = sprintf "INSERT INTO bulkspool_table (messagekey_bulkspool, messageid_bulkspool, message_bulkspool, lock_bulkspool, dkim_d_bulkspool,dkim_i_bulkspool,dkim_selector_bulkspool, dkim_privatekey_bulkspool,dkim_header_list_bulkspool) VALUES (%s, %s, %s, 1, %s, %s, %s ,%s ,%s)",$dbh->quote($messagekey),$dbh->quote($msg_id),$dbh->quote($msg),$dbh->quote($dkim->{d}), $dbh->quote($dkim->{i}),$dbh->quote($dkim->{selector}),$dbh->quote($dkim->{private_key}), $dbh->quote($dkim->{header_list}); 
+	    my $statement      = sprintf "INSERT INTO bulkspool_table (messagekey_bulkspool, messageid_bulkspool, message_bulkspool, lock_bulkspool, dkim_d_bulkspool,dkim_i_bulkspool,dkim_selector_bulkspool, dkim_privatekey_bulkspool) VALUES (%s, %s, %s, 1, %s, %s, %s ,%s)",$dbh->quote($messagekey),$dbh->quote($msg_id),$dbh->quote($msg),$dbh->quote($dkim->{d}), $dbh->quote($dkim->{i}),$dbh->quote($dkim->{selector}),$dbh->quote($dkim->{private_key}); 
 
-	    my $statementtrace = sprintf "INSERT INTO bulkspool_table (messagekey_bulkspool, messageid_bulkspool, message_bulkspool, lock_bulkspool, dkim_d_bulkspool, dkim_i_bulkspool, dkim_selector_bulkspool, dkim_privatekey_bulkspool, dkim_header_list_bulkspool) VALUES (%s, %s, %s, 1, %s ,%s ,%s, %s, %s)",$dbh->quote($messagekey),$dbh->quote($msg_id),$dbh->quote(substr($msg, 0, 100)), $dbh->quote($dkim->{d}), $dbh->quote($dkim->{i}),$dbh->quote($dkim->{selector}),$dbh->quote(substr($dkim->{private_key},0,30)), $dbh->quote($dkim->{header_list});  
+	    my $statementtrace = sprintf "INSERT INTO bulkspool_table (messagekey_bulkspool, messageid_bulkspool, message_bulkspool, lock_bulkspool, dkim_d_bulkspool, dkim_i_bulkspool, dkim_selector_bulkspool, dkim_privatekey_bulkspool) VALUES (%s, %s, %s, 1, %s ,%s ,%s, %s)",$dbh->quote($messagekey),$dbh->quote($msg_id),$dbh->quote(substr($msg, 0, 100)), $dbh->quote($dkim->{d}), $dbh->quote($dkim->{i}),$dbh->quote($dkim->{selector}),$dbh->quote(substr($dkim->{private_key},0,30));  
 	    # do_log('debug',"insert : $statement_trace");
 
 		unless ($dbh->do($statement)) {
@@ -557,6 +560,7 @@ sub purge_bulkspool {
 
     unless ($dbh and $dbh->ping) {
 	return undef unless &List::db_connect();
+	$dbh = &List::db_get_handler();
     }
     my $statement = "SELECT messagekey_bulkspool AS messagekey FROM bulkspool_table LEFT JOIN bulkmailer_table ON messagekey_bulkspool = messagekey_bulkmailer WHERE messagekey_bulkmailer IS NULL AND lock_bulkspool = 0";
     unless ($sth = $dbh->prepare($statement)) {
@@ -592,6 +596,7 @@ sub remove_bulkspool_message {
 
     unless ($dbh and $dbh->ping) {
 	return undef unless &List::db_connect();
+	$dbh = &List::db_get_handler();
     }
 
     my $statement = sprintf "DELETE FROM %s WHERE %s = '%s'",$table,$key,$messagekey;
@@ -637,6 +642,7 @@ sub store_test {
 
     unless ($dbh and $dbh->ping) {
 	return undef unless &List::db_connect();
+	$dbh = &List::db_get_handler();
     }
     
     $priority_message = 9;
@@ -688,6 +694,7 @@ sub get_remaining_packets_count {
 
     unless ($dbh and $dbh->ping) {
 	return undef unless &List::db_connect();
+	$dbh = &List::db_get_handler();
     }
 
     my $statement = "SELECT COUNT(*) FROM bulkmailer_table";

@@ -17,8 +17,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: sympa-es\n"
 "POT-Creation-Date: 2002-07-16 17:27+0800\n"
-"PO-Revision-Date: 2012-01-02 11:35+0200\n"
-"Last-Translator: Alfonso Marin <amm44@alu.um.es>\n"
+"PO-Revision-Date: 2012-04-12 02:08+0200\n"
+"Last-Translator: Anonymous Pootle User\n"
 "Language-Team: Español <sympa-users@sympa.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -112,7 +112,7 @@ msgstr "Portada"
 #: ../web_tt2/modindex.tt2:192 ../web_tt2/modindex.tt2:9 ../web_tt2/pref.tt2:4
 #: ../web_tt2/rename_list_request.tt2:3 ../web_tt2/review.tt2:5
 #: ../web_tt2/reviewbouncing.tt2:3 ../web_tt2/suboptions.tt2:21
-#: ../web_tt2/suspend_request.tt2:64
+#: ../web_tt2/suspend_request.tt2:5
 msgid "Help"
 msgstr "Ayuda"
 
@@ -583,7 +583,7 @@ msgstr "Gestión de archivos"
 #: ../web_tt2/picture_upload.tt2:21 ../web_tt2/pref.tt2:4
 #: ../web_tt2/rename_list_request.tt2:3 ../web_tt2/review.tt2:5
 #: ../web_tt2/reviewbouncing.tt2:3 ../web_tt2/suboptions.tt2:20
-#: ../web_tt2/subscriber_table.tt2:108
+#: ../web_tt2/subscriber_table.tt2:106
 msgid "Open in a new window"
 msgstr "Abrir en una nueva ventana"
 
@@ -1435,16 +1435,16 @@ msgid "Size (Kb)"
 msgstr "Tamaño (Kb)"
 
 #: ../web_tt2/d_read.tt2:69 ../web_tt2/d_read.tt2:71
-#: ../web_tt2/latest_d_read.tt2:18 ../web_tt2/subscriber_table.tt2:61
+#: ../web_tt2/latest_d_read.tt2:18 ../web_tt2/subscriber_table.tt2:59
 msgid "Last update"
 msgstr "Última actualización"
 
 #: ../web_tt2/d_read.tt2:75 ../web_tt2/editfile.tt2:30
-#: ../web_tt2/editfile.tt2:31 ../web_tt2/editfile.tt2:36
-#: ../web_tt2/editfile.tt2:37 ../web_tt2/editfile.tt2:38
-#: ../web_tt2/editfile.tt2:40 ../web_tt2/editfile.tt2:45
-#: ../web_tt2/editfile.tt2:46 ../web_tt2/editfile.tt2:50
-#: ../web_tt2/editfile.tt2:51 ../web_tt2/manage_template.tt2:35
+#: ../web_tt2/editfile.tt2:31 ../web_tt2/editfile.tt2:35
+#: ../web_tt2/editfile.tt2:36 ../web_tt2/editfile.tt2:37
+#: ../web_tt2/editfile.tt2:39 ../web_tt2/editfile.tt2:44
+#: ../web_tt2/editfile.tt2:45 ../web_tt2/editfile.tt2:49
+#: ../web_tt2/editfile.tt2:50 ../web_tt2/manage_template.tt2:35
 #: ../web_tt2/manage_template.tt2:56 ../web_tt2/serveradmin.tt2:149
 #: ../web_tt2/serveradmin.tt2:162
 msgid "Edit"
@@ -1665,19 +1665,20 @@ msgstr ""
 "impreso en el lado derecho de la página principal de la lista. )por defecto, "
 "es la descripción de la lista)"
 
-#: ../web_tt2/editfile.tt2:32
+#: ../web_tt2/editfile.tt2:31
+#, fuzzy
 msgid ""
-"List description: This text is sent as an answer to the mail command\n"
-"INFO. It can also be included in the <em>Welcome message</em>."
+"List description: This text is sent as an answer to the mail command INFO. "
+"It can also be included in the <em>Welcome message</em>."
 msgstr ""
 "Descripción de la lista: Este texto se envía como respuesta a un comando\n"
 "INFO. También puede ser incluído en el <em>Mensaje de Bienvenida</em>."
 
-#: ../web_tt2/editfile.tt2:34
+#: ../web_tt2/editfile.tt2:33
 msgid "Automatic messages"
 msgstr "Mensajes automáticos"
 
-#: ../web_tt2/editfile.tt2:36
+#: ../web_tt2/editfile.tt2:35
 msgid ""
 "Welcome message: This message is sent to new subscribers. It can be a full "
 "MIME structured message (only for MIME gurus)."
@@ -1685,7 +1686,7 @@ msgstr ""
 "Mensaje de Bienvenida: Este mensaje se envía a los nuevos suscriptores. "
 "Puede ser un mensaje estructurado en MIME (sólo para gurúes de MIME)"
 
-#: ../web_tt2/editfile.tt2:37
+#: ../web_tt2/editfile.tt2:36
 msgid ""
 "Rejection message: when a message is rejected by list editor, a notification "
 "can be sent to the original author. You may prepare various rejection "
@@ -1695,7 +1696,7 @@ msgstr ""
 "lista, puede ser enviado una notificación al autor. Puedes preparar varios "
 "mensajes de rechazo."
 
-#: ../web_tt2/editfile.tt2:39
+#: ../web_tt2/editfile.tt2:38
 msgid ""
 "Remind message: This message is sent to each subscriber\n"
 "when using the command  REMIND. It's very useful to help people who are "
@@ -1710,7 +1711,7 @@ msgstr ""
 "a darse de baja\n"
 "de la lista cuando ya no recuerda su dirección de suscripción."
 
-#: ../web_tt2/editfile.tt2:41
+#: ../web_tt2/editfile.tt2:40
 msgid ""
 "Subscribing invitation message: sent to a person if someone  \n"
 "uses the INVITE command to invite someone to subscribe."
@@ -1719,11 +1720,11 @@ msgstr ""
 "comando \n"
 "<CODE>INVITE [nombre de lista]</CODE>."
 
-#: ../web_tt2/editfile.tt2:43
+#: ../web_tt2/editfile.tt2:42
 msgid "Added in distributed messages"
 msgstr "Agregado a los mensajes enviados"
 
-#: ../web_tt2/editfile.tt2:45
+#: ../web_tt2/editfile.tt2:44
 msgid ""
 "Message footer: If this file is not empty, it is added as a MIME attachment "
 "at the end of each message distributed to the list."
@@ -1731,7 +1732,7 @@ msgstr ""
 "Pié de fin de mensaje: Si no está vacío, este archivo se adjunta al fin de "
 "cada mensaje enviado por la lista."
 
-#: ../web_tt2/editfile.tt2:46
+#: ../web_tt2/editfile.tt2:45
 msgid ""
 "Message header: If this file is not empty, it is added as a MIME attachment "
 "at the beginning of each message distributed to the list."
@@ -1739,17 +1740,17 @@ msgstr ""
 "Encabezado de mensaje: Si este archivo no está vacío, es agregado como un "
 "adjunto MIME al inicio de cada mensaje enviado a través de la lista."
 
-#: ../web_tt2/editfile.tt2:48
+#: ../web_tt2/editfile.tt2:47
 msgid "More"
 msgstr "Otros"
 
-#: ../web_tt2/editfile.tt2:50
+#: ../web_tt2/editfile.tt2:49
 msgid "Unsubscribe message: This message is sent when users leave the list."
 msgstr ""
 "Mensaje de de-suscripción: Enviado a las personas que se dan de baja de la "
 "lista."
 
-#: ../web_tt2/editfile.tt2:52
+#: ../web_tt2/editfile.tt2:51
 msgid ""
 "Deletion message: This message is sent to users when you\n"
 "remove them from the list using the DEL command (unless you hit the Quiet "
@@ -4671,21 +4672,21 @@ msgstr "Avatar"
 msgid "Reception"
 msgstr "Recepción"
 
-#: ../web_tt2/subscriber_table.tt2:46 ../web_tt2/subscriber_table.tt2:49
+#: ../web_tt2/subscriber_table.tt2:45 ../web_tt2/subscriber_table.tt2:48
 msgid "Sources"
 msgstr "Fuentes"
 
-#: ../web_tt2/subscriber_table.tt2:55 ../web_tt2/subscriber_table.tt2:58
+#: ../web_tt2/subscriber_table.tt2:53 ../web_tt2/subscriber_table.tt2:56
 #: ../web_tt2/viewlogs.tt2:124
 msgid "Sub date"
 msgstr "Suscrito desde"
 
-#: ../web_tt2/subscriber_table.tt2:91
+#: ../web_tt2/subscriber_table.tt2:89
 msgid "bouncing"
 msgstr "en error"
 
 #. (u.email)
-#: ../web_tt2/subscriber_table.tt2:108
+#: ../web_tt2/subscriber_table.tt2:106
 msgid "%1's picture"
 msgstr "Avatar de %1"
 
@@ -4882,7 +4883,7 @@ msgstr "Período explorado:"
 #. (date_to_formated)
 #. This entry is a date/time format
 #. Check the strftime manpage for format details : http://docs.freebsd.org/info/gawk/gawk.info.Time_Functions.html
-#: ../web_tt2/viewlogs.tt2:113 ../wwsympa/wwsympa.fcgi.in:16239
+#: ../web_tt2/viewlogs.tt2:113 ../wwsympa/wwsympa.fcgi.in:16175
 msgid "%d %b %Y %H:%M:%S"
 msgstr "%d %b %Y %H:%M:%S"
 
@@ -5559,7 +5560,7 @@ msgid "%1 Digest %2"
 msgstr "Compilación del %2, lista %1 "
 
 #: ../mail_tt2/digest.tt2:10 ../mail_tt2/digest_plain.tt2:9
-#: ../mail_tt2/get_archive.tt2:9 ../src/lib/List.pm:2801
+#: ../mail_tt2/get_archive.tt2:9 ../src/lib/List.pm:2735
 msgid "Table of contents:"
 msgstr "Tabla de contenido:"
 
@@ -6087,7 +6088,7 @@ msgstr "No hay base de datos"
 #. (db_name)
 #: ../mail_tt2/listmaster_notification.tt2:32
 msgid "Cannot connect to database %1, still trying..."
-msgstr "Imposible conectarse a la base de datos %1, se sighe intentando..."
+msgstr "Imposible conectarse a la base de datos %1, se sigue intentando..."
 
 #. (db_type)
 #: ../mail_tt2/listmaster_notification.tt2:36
@@ -7559,7 +7560,7 @@ msgid ""
 "order to confirm it "
 msgstr ""
 "Puedes ignorar esta solicitud, o visitar el enlace a continuación para "
-"confirmar tu pedido."
+"confirmar tu solicitud."
 
 #. (list)
 #: ../mail_tt2/sendpasswd.tt2:17
@@ -8518,13 +8519,13 @@ msgstr ""
 
 #. This entry is a date/time format
 #. Check the strftime manpage for format details : http://docs.freebsd.org/info/gawk/gawk.info.Time_Functions.html
-#: ../src/lib/Bulk.pm:387
+#: ../src/lib/Bulk.pm:390
 msgid "%d %b %Y  %H:%M"
 msgstr "%d %b %Y  %H:%M"
 
 #. This entry is a date/time format
 #. Check the strftime manpage for format details : http://docs.freebsd.org/info/gawk/gawk.info.Time_Functions.html
-#: ../src/lib/Commands.pm:963 ../wwsympa/wwsympa.fcgi.in:9835
+#: ../src/lib/Commands.pm:963 ../wwsympa/wwsympa.fcgi.in:9776
 msgid "%A"
 msgstr "%A"
 
@@ -8540,7 +8541,7 @@ msgstr "Error línea %d: %s"
 #. Check the strftime manpage for format details : http://docs.freebsd.org/info/gawk/gawk.info.Time_Functions.html
 #: ../src/lib/Family.pm:2591 ../src/lib/Family.pm:388 ../src/lib/Family.pm:665
 #: ../src/lib/List.pm:1894 ../wwsympa/Auth.pm:459
-#: ../wwsympa/wwsympa.fcgi.in:1067 ../wwsympa/wwsympa.fcgi.in:2870
+#: ../wwsympa/wwsympa.fcgi.in:1067 ../wwsympa/wwsympa.fcgi.in:2869
 msgid "%d %b %Y at %H:%M:%S"
 msgstr "%d %b %Y en %H:%M:%S"
 
@@ -9096,7 +9097,7 @@ msgstr "Quién puede dar de baja"
 msgid "Last update of config"
 msgstr "Última actualización de la configuración"
 
-#: ../src/lib/List.pm:1404
+#: ../src/lib/List.pm:1403
 msgid "User data source"
 msgstr "Fuente de datos de los usuarios"
 
@@ -9243,31 +9244,31 @@ msgstr "quién actualizó la configuración"
 
 #. This entry is a date/time format
 #. Check the strftime manpage for format details : http://docs.freebsd.org/info/gawk/gawk.info.Time_Functions.html
-#: ../src/lib/List.pm:2919
+#: ../src/lib/List.pm:2853
 msgid "%a, %d %b %Y %H:%M:%S"
 msgstr "%a, %d/%b/%Y %H:%M:%S"
 
 #. This entry is a date/time format
 #. Check the strftime manpage for format details : http://docs.freebsd.org/info/gawk/gawk.info.Time_Functions.html
-#: ../src/lib/List.pm:2920
+#: ../src/lib/List.pm:2854
 msgid "%a, %d %b %Y"
 msgstr "%a, %d/%b/%Y"
 
 #. This entry is a date/time format
 #. Check the strftime manpage for format details : http://docs.freebsd.org/info/gawk/gawk.info.Time_Functions.html
-#: ../src/lib/List.pm:3111 ../src/lib/List.pm:3112 ../src/lib/List.pm:3116
-#: ../wwsympa/wwsympa.fcgi.in:11017 ../wwsympa/wwsympa.fcgi.in:11086
-#: ../wwsympa/wwsympa.fcgi.in:11288 ../wwsympa/wwsympa.fcgi.in:11635
-#: ../wwsympa/wwsympa.fcgi.in:15086 ../wwsympa/wwsympa.fcgi.in:15093
-#: ../wwsympa/wwsympa.fcgi.in:15811 ../wwsympa/wwsympa.fcgi.in:16589
-#: ../wwsympa/wwsympa.fcgi.in:16590 ../wwsympa/wwsympa.fcgi.in:4280
-#: ../wwsympa/wwsympa.fcgi.in:4338 ../wwsympa/wwsympa.fcgi.in:4909
-#: ../wwsympa/wwsympa.fcgi.in:4910 ../wwsympa/wwsympa.fcgi.in:6432
-#: ../wwsympa/wwsympa.fcgi.in:7451 ../wwsympa/wwsympa.fcgi.in:7994
-#: ../wwsympa/wwsympa.fcgi.in:8041 ../wwsympa/wwsympa.fcgi.in:8043
-#: ../wwsympa/wwsympa.fcgi.in:8519 ../wwsympa/wwsympa.fcgi.in:8520
-#: ../wwsympa/wwsympa.fcgi.in:8554 ../wwsympa/wwsympa.fcgi.in:8555
-#: ../wwsympa/wwsympa.fcgi.in:8734 ../wwsympa/wwsympa.fcgi.in:8735
+#: ../src/lib/List.pm:3045 ../src/lib/List.pm:3046 ../src/lib/List.pm:3050
+#: ../wwsympa/wwsympa.fcgi.in:10953 ../wwsympa/wwsympa.fcgi.in:11022
+#: ../wwsympa/wwsympa.fcgi.in:11224 ../wwsympa/wwsympa.fcgi.in:11571
+#: ../wwsympa/wwsympa.fcgi.in:15022 ../wwsympa/wwsympa.fcgi.in:15029
+#: ../wwsympa/wwsympa.fcgi.in:15747 ../wwsympa/wwsympa.fcgi.in:16540
+#: ../wwsympa/wwsympa.fcgi.in:16541 ../wwsympa/wwsympa.fcgi.in:4278
+#: ../wwsympa/wwsympa.fcgi.in:4331 ../wwsympa/wwsympa.fcgi.in:4902
+#: ../wwsympa/wwsympa.fcgi.in:4903 ../wwsympa/wwsympa.fcgi.in:6425
+#: ../wwsympa/wwsympa.fcgi.in:7448 ../wwsympa/wwsympa.fcgi.in:7988
+#: ../wwsympa/wwsympa.fcgi.in:8035 ../wwsympa/wwsympa.fcgi.in:8037
+#: ../wwsympa/wwsympa.fcgi.in:8513 ../wwsympa/wwsympa.fcgi.in:8514
+#: ../wwsympa/wwsympa.fcgi.in:8548 ../wwsympa/wwsympa.fcgi.in:8549
+#: ../wwsympa/wwsympa.fcgi.in:8728 ../wwsympa/wwsympa.fcgi.in:8729
 msgid "%d %b %Y"
 msgstr "%d/%b/%Y"
 
@@ -9406,35 +9407,35 @@ msgstr "%H:%M:%S"
 #. This entry is a date/time format
 #. Check the strftime manpage for format details : http://docs.freebsd.org/info/gawk/gawk.info.Time_Functions.html
 #: ../wwsympa/SympaSession.pm:436 ../wwsympa/SympaSession.pm:437
-#: ../wwsympa/wwsympa.fcgi.in:11869 ../wwsympa/wwsympa.fcgi.in:12002
-#: ../wwsympa/wwsympa.fcgi.in:14315 ../wwsympa/wwsympa.fcgi.in:7948
+#: ../wwsympa/wwsympa.fcgi.in:11805 ../wwsympa/wwsympa.fcgi.in:11938
+#: ../wwsympa/wwsympa.fcgi.in:14251 ../wwsympa/wwsympa.fcgi.in:7945
 msgid "%d %b %y  %H:%M"
 msgstr "%d %b %y    %H:%M"
 
-#: ../wwsympa/wwsympa.fcgi.in:15268
+#: ../wwsympa/wwsympa.fcgi.in:15204
 msgid "Your unsubscription request to list %s was sent to the list owner."
 msgstr ""
 "Tu solicitud de darte de baja de la lista %s fue enviada al propietario de "
 "ésta. "
 
-#: ../wwsympa/wwsympa.fcgi.in:15270
+#: ../wwsympa/wwsympa.fcgi.in:15206
 msgid "You were successfully unsubscribed from list %s."
 msgstr "Fuiste dado de baja correctamente de la lista de correo %s."
 
-#: ../wwsympa/wwsympa.fcgi.in:15274
+#: ../wwsympa/wwsympa.fcgi.in:15210
 msgid ""
 "Unsubscription from list %s denied: Unsubscription from this list is closed."
 msgstr ""
 "Tu solicitud de darte de baja de la lista %s fracasó: no está permitido "
 "darse de baja de esa lista. "
 
-#: ../wwsympa/wwsympa.fcgi.in:15276
+#: ../wwsympa/wwsympa.fcgi.in:15212
 msgid "Unsubscription from list %s failed."
 msgstr "No se ha podido darte de baja de la lista %s."
 
 #. This entry is a date/time format
 #. Check the strftime manpage for format details : http://docs.freebsd.org/info/gawk/gawk.info.Time_Functions.html
-#: ../wwsympa/wwsympa.fcgi.in:16184 ../wwsympa/wwsympa.fcgi.in:16185
+#: ../wwsympa/wwsympa.fcgi.in:16120 ../wwsympa/wwsympa.fcgi.in:16121
 msgid "%Y-%m-%d-%H-%M-%S"
 msgstr "%d/%m/%Y/%H/%M/%S"
 
@@ -9585,6 +9586,73 @@ msgstr "interrumpir la recepción de mensajes (útil para las vacaciones)"
 #: ../wwsympa/wwslib.pm:37
 msgid "you do not receive your own posts"
 msgstr "No recibir mis propios mensajes"
+
+#: ../web_tt2/list_menu.tt2:69
+msgid "OpenSocial"
+msgstr ""
+
+#. (base_url,path_cgi,u_err.oauth_provider)
+#: ../web_tt2/error.tt2:134
+msgid ""
+"Failed to include members from VOOT group, use the following link to check "
+"the OAuth status : <a href=\"%1%2/oauth_check/%3\">%1%2/oauth_check/%3</a>"
+msgstr ""
+
+#: ../web_tt2/oauth_authorize.tt2:4
+msgid "OAuth authorize"
+msgstr ""
+
+#: ../web_tt2/oauth_authorize.tt2:13
+msgid "Don't authorize"
+msgstr ""
+
+#: ../web_tt2/oauth_check.tt2:4
+msgid "OAuth check"
+msgstr ""
+
+#: ../web_tt2/oauth_check.tt2:10
+msgid "Got new access token, everything is alright."
+msgstr ""
+
+#: ../web_tt2/oauth_check.tt2:15
+msgid ""
+"Unable to check, provider may not be available or access token may be "
+"outdated and failed to be get new one."
+msgstr ""
+
+#: ../web_tt2/oauth_check.tt2:18
+msgid "Unable to load consumer, configuration may be erroneous."
+msgstr ""
+
+#: ../web_tt2/select_voot_groups_request.tt2:6
+msgid ""
+"Hereafter is the list of the groups you accepted to share with Sympa. Select "
+"which group you want members to be included in your list."
+msgstr ""
+
+#: ../web_tt2/select_voot_provider_request.tt2:4
+msgid "Select VOOT provider"
+msgstr ""
+
+#: ../web_tt2/select_voot_provider_request.tt2:6
+msgid ""
+"Hereafter is the list of VOOT providers that share group information with "
+"Sympa. Select which provider you want to use your groups from."
+msgstr ""
+
+#. (consumer_name,oauth_provider)
+#: ../mail_tt2/message_report.tt2:96
+msgid "Your OAuth token used by consumer %1 may have expired."
+msgstr ""
+
+#. (consumer_name,oauth_provider,conf.wwsympa_url)
+#: ../mail_tt2/message_report.tt2:105
+msgid ""
+"Sympa failed to retreive data using %1 consumer, this may be because your "
+"access token for OAuth provider %2 is out of date.\n"
+"\n"
+"Visit  %3/oauth_check/%2 to check the token state and renew it if necessary."
+msgstr ""
 
 #: ../src/lib/confdef.pm:661
 msgid "All spool are created at runtime by sympa.pl"
@@ -9965,27 +10033,31 @@ msgid ""
 "page"
 msgstr ""
 
-#: ../src/lib/Conf.pm:967
+#: ../src/lib/Conf.pm:966
 msgid "Conf::load_nrcpt_by_domain(): Error at line %d: %s"
 msgstr ""
 
-#: ../src/lib/List.pm:441
+#: ../src/lib/List.pm:443
 msgid "tracking message by delivery status notification"
 msgstr ""
 
-#: ../src/lib/List.pm:446
+#: ../src/lib/List.pm:448
 msgid "tracking message by message delivery notification"
 msgstr ""
 
-#: ../src/lib/List.pm:457
+#: ../src/lib/List.pm:459
 msgid "Tracking datas are removed after this number of days"
 msgstr ""
 
-#: ../src/lib/List.pm:6443
+#: ../src/lib/List.pm:1119
+msgid "group"
+msgstr ""
+
+#: ../src/lib/List.pm:6484
 msgid "Attempt to exceed the max number of members (%s) for this list."
 msgstr ""
 
-#: ../src/lib/List.pm:6446
+#: ../src/lib/List.pm:6487
 msgid "Attempts to add some users in database failed."
 msgstr ""
 
@@ -9994,215 +10066,11 @@ msgid "Plugin"
 msgstr ""
 
 #~ msgid ""
-#~ "Because the new message is suspected to be a spam it is not attached to "
-#~ "this one. You must use the web interface to reject or validate it."
+#~ "List description: This text is sent as an answer to the mail command\n"
+#~ "INFO. It can also be included in the <em>Welcome message</em>."
 #~ msgstr ""
-#~ "Debido a que el nuevo mensaje es sospechoso de spam, no será adjuntado a "
-#~ "este. Debe utilizar la interfaz web para rechazarlo o validarlo."
-
-#~ msgid "Secret used by Sympa to make MD5 fingerprint in web cookies secure"
-#~ msgstr ""
-#~ "Secreto utilizado por Sympa para generar la huella MD5 en las cookies "
-#~ "seguras de web"
-
-#~ msgid "Should not be changed ! May invalid all user password"
-#~ msgstr ""
-#~ "No debe ser modificada! Puede invalidar todas las contraseñas de usuario"
-
-#~ msgid ""
-#~ "This parameter is a scenario, check sympa documentation about scenarios "
-#~ "if you want to define one"
-#~ msgstr ""
-#~ "Este parámetro es un escenario, chequea la documentación sympa sobre "
-#~ "escenarios si quieres definir uno"
-
-#~ msgid ""
-#~ "Used to define a custom parameter for your server. Do not forget the "
-#~ "semicolon between the param name and the param value."
-#~ msgstr ""
-#~ "Utilizado para definir parámetros por defecto en tu servidor. No te "
-#~ "olvides del punto y coma entre el nombre y el valor del parámetro."
-
-#~ msgid "Directory containing mailing lists subdirectories"
-#~ msgstr "Carpeta que contiene las subcarpetas de las listas de correo"
-
-#~ msgid ""
-#~ "Directory for configuration files; it also contains scenari/ and "
-#~ "templates/ directories"
-#~ msgstr ""
-#~ "Carpeta para los archivos de configuración; también contiene las carpetas "
-#~ "scenari/ y templates/"
-
-#~ msgid "Syslog facility for sympa"
-#~ msgstr "Funcionalidad Syslog para sympa"
-
-#~ msgid "Log verbosity"
-#~ msgstr "Verbosidad del registro"
-
-#~ msgid "0: normal, 2,3,4: for debug"
-#~ msgstr "0: normal, 2, 3,4: para debbugeo"
-
-#~ msgid "Communication mode with syslogd (unix | inet)"
-#~ msgstr "Modo de comunicación con syslogd (unix | inet)"
-
-#~ msgid "File containing Sympa PID while running"
-#~ msgstr "Archivo conteniendo el PID de Sympa mientras está ejecutándose"
-
-#~ msgid ""
-#~ "Sympa also locks this file to ensure that it is not running more than "
-#~ "once. Caution: user sympa need to write access without special privilege."
-#~ msgstr ""
-#~ "Sympa también bloquea esto para asegurarse que no corre más de una vez. "
-#~ "Precaución: el usuario sympa necesita acceso de escritura sin privilegio "
-#~ "especial. "
-
-#~ msgid "Umask used for file creation by Sympa"
-#~ msgstr "Umask para la creación de archivos por Sympa"
-
-#~ msgid ""
-#~ "Max. number of Sendmail processes (launched by Sympa) running "
-#~ "simultaneously"
-#~ msgstr ""
-#~ "Número máx. de procesos Sendmail (lanzados por Sympa) corriendo "
-#~ "simultáneamente"
-
-#~ msgid ""
-#~ "Proposed value is quite low, you can rise it up to 100, 200 or even 300 "
-#~ "with powerfull systems."
-#~ msgstr ""
-#~ "El valor propuesto es un poco bajo, puedes aumentarlo hasta 100, 200 e "
-#~ "incluso 300 para sistemas poderosos."
-
-#~ msgid ""
-#~ "comma separated list of operations for which blacklist filter is applied"
-#~ msgstr ""
-#~ "lista separada por coma, de las operaciones para las cuales el filtro de "
-#~ "lista negra se aplica"
-
-#~ msgid "Setting this parameter to \"none\" will hide the blacklist feature"
-#~ msgstr ""
-#~ "Colocando este parámetro en \"nada\" hará esconder la funcionalidad de "
-#~ "lista negra"
-
-#~ msgid ""
-#~ "If set, when a list editor report a spam, this external script is run by "
-#~ "wwsympa or sympa, the spam is sent into script stdin"
-#~ msgstr ""
-#~ "Si se establece, cuando un editor de la lista notifica un spam, este "
-#~ "script externo lo ejecuta wwsympa o sympa, el spam se envía a la entrada "
-#~ "estandar del script"
-
-#~ msgid ""
-#~ "Default maximum size (in bytes) for messages (can be re-defined for each "
-#~ "list)"
-#~ msgstr ""
-#~ "Tamaño máximo predefinido (en bytes) de los mensajes (puede redefinirse "
-#~ "en cada lista)"
-
-#~ msgid ""
-#~ "Maximum number of recipients per call to Sendmail. The nrcpt_by_domain."
-#~ "conf file allows a different tuning per destination domain."
-#~ msgstr ""
-#~ "Máximo de destinatarios por cada invocación hecha a Sendmail. El fichero "
-#~ "nrcpt_by_domain.conf permite establecer un número diferente por dominio "
-#~ "de destino."
-
-#~ msgid "Max. number of different domains per call to Sendmail"
-#~ msgstr "Máximo número de dominios diferentes por invocación de Sendmail."
-
-#~ msgid "Path to the MTA (sendmail, postfix, exim or qmail)"
-#~ msgstr ""
-#~ "Ruta de acceso al servidor de envío (o MTA; sendmail, postfix, exim o "
-#~ "qmail)."
-
-#~ msgid ""
-#~ "should point to a sendmail-compatible binary (eg: a binary named "
-#~ "\"sendmail\" is distributed with Postfix)"
-#~ msgstr ""
-#~ "Debería apuntar a un ejecutable complatible con sendmail. Por ejemplo, un "
-#~ "ejecutable llamado \"sendmail\" se distribuye con Postfix."
-
-#~ msgid "Specify which rfc2369 mailing list headers to add"
-#~ msgstr ""
-#~ "Especificar qué cabeceras rfc2369 (cabeceras para listas de correo) hay "
-#~ "que añadir."
-
-#~ msgid "Reject mail from automates (crontab, etc) sent to a list?"
-#~ msgstr "¿Se rechaza correo automatizado (crontab, etc) enviado a la lista?"
-
-#, fuzzy
-#~ msgid ""
-#~ "SMTP server to which Sympa verify if alias with the same name as the list "
-#~ "to be created"
-#~ msgstr ""
-#~ "Servidor SMTP en el que Sympa verifica si un alias con el mismo nombre "
-#~ "que la lista se creará."
-
-#~ msgid ""
-#~ "Default value is real FQDN of host. Set [HOST]:[PORT] to specify non-"
-#~ "standard port."
-#~ msgstr ""
-#~ "El valor predeterminado es el FQDN real del equipo (del host). Ponga "
-#~ "[HOST]:[PORT] para especificar un puerto diferente del estándar."
-
-#~ msgid "SMTP HELO (EHLO) parameter used for alias verification"
-#~ msgstr ""
-#~ "Parámetro HELO (EHLO), de SMTP, que se usará para la verificación de un "
-#~ "alias"
-
-#~ msgid "Default value is the host part of list_check_smtp parameter."
-#~ msgstr ""
-#~ "El valor predeterminado es la parte correspondiente a el host (al equipo) "
-#~ "del parámetro list_check_smtp."
-
-#~ msgid "Default priority for a packet to be sent by bulk."
-#~ msgstr "Prioridad predeterminada de un paquete enviado mediante bulk."
-
-#~ msgid ""
-#~ "Minimum number of packets in database before the bulk forks to increase "
-#~ "sending rate"
-#~ msgstr ""
-#~ "Número mínimo de paquetes en base de datos antes de que el proceso bulk "
-#~ "cree nuevos procesos para incremental el ratio de envío"
-
-#~ msgid "Max number of bulks that will run on the same server"
-#~ msgstr ""
-#~ "Número máximo de procesos bulk que se ejecutarán en el mismo servidor"
-
-#~ msgid ""
-#~ "The number of seconds a slave bulk will remain running without processing "
-#~ "a message before it spontaneously dies."
-#~ msgstr ""
-#~ "El número de segundos que un proceso hijo bulk permanecerá ejectuándose "
-#~ "sin procesar ningún mensaje antes de morir espontáneamente."
-
-#~ msgid ""
-#~ "The number of seconds a bulk sleeps between starting a new loop if it "
-#~ "didn't find a message to send."
-#~ msgstr ""
-#~ "El número de segundos que un proceso bulk duerme entre ejecuciones si no "
-#~ "encontró ningun mensaje a enviar."
-
-#~ msgid "Keep it small if you want your server to be reactive."
-#~ msgstr "Permanece pequeño si quieres que el servidor se reactive."
-
-#~ msgid ""
-#~ "Number of seconds a master bulk waits between two packets number checks."
-#~ msgstr ""
-#~ "Número de segundos que un proceso bulk master espera entre dos chequeos "
-#~ "de números de paquete."
-
-#~ msgid ""
-#~ "Keep it small if you expect brutal increases in the message sending load."
-#~ msgstr ""
-#~ "Mantener bajo si esperas un incremento brutal en la carga de envío de "
-#~ "mensajes."
-
-#~ msgid "Default disk quota for shared repository"
-#~ msgstr "Cuota de disco por defecto para el repositorio compartido"
-
-#~ msgid "Directory containing various specialized spools"
-#~ msgstr "Directorio contenedor de varias colas especializadas"
+#~ "Descripción de la lista: Este texto se envía como respuesta a un comando\n"
+#~ "INFO. También puede ser incluído en el <em>Mensaje de Bienvenida</em>."
 
 #~ msgid ""
 #~ "You <span style=\"font-weight: bold; font-size: 10px\">are</span> "
@@ -10217,9 +10085,8 @@ msgstr ""
 #~ "<span style=\"font-weight: bold; font-size: 10px\">No estás</span> "
 #~ "suscrito/a"
 
-#, fuzzy
 #~ msgid "Statistics"
-#~ msgstr "Status"
+#~ msgstr "Estadísticas"
 
 #~ msgid "Select the source of your HTML newsletter"
 #~ msgstr "Seleccionar la fuente de tu boletín de noticias HTML"
@@ -10343,8 +10210,32 @@ msgstr ""
 #~ msgstr " %1 error(es)"
 
 #, fuzzy
+#~ msgid "Authorize %1 ?"
+#~ msgstr "Autor/a"
+
+#, fuzzy
+#~ msgid "Authorize"
+#~ msgstr "Autor/a"
+
+#, fuzzy
+#~ msgid "Everything is alright."
+#~ msgstr "Todo acerca de esta lista:"
+
+#, fuzzy
+#~ msgid "Unknown provider."
+#~ msgstr "Error desconocido."
+
+#, fuzzy
 #~ msgid "Add quietly"
 #~ msgstr "sin avisar"
+
+#, fuzzy
+#~ msgid "Select group"
+#~ msgstr "--Seleccione una categoría--"
+
+#, fuzzy
+#~ msgid "Set as source"
+#~ msgstr "la fuente de datos"
 
 #~ msgid "Background color for the news area of the home page."
 #~ msgstr "Color de fondo para el área de noticias de la portada."
@@ -10418,6 +10309,13 @@ msgstr ""
 #~ "This mailing list is configured to require topics; that's probably why "
 #~ "this message went through the moderation process."
 #~ msgstr "Esta lista está configurada para requerir tema(s) en cada mensaje."
+
+#~ msgid ""
+#~ "Because the new message is suspected to be a spam it is not attached to "
+#~ "this one. You must use the web interface to reject or validate it."
+#~ msgstr ""
+#~ "Debido a que el nuevo mensaje es sospechoso de spam, no será adjuntado a "
+#~ "este. Debe utilizar la interfaz web para rechazarlo o validarlo."
 
 #~ msgid "%s [%s] : "
 #~ msgstr "%s [%s] : "
@@ -10496,25 +10394,152 @@ msgstr ""
 #~ msgstr ""
 #~ "URL asociada a la carpeta static_content_path que acabamos de definir"
 
+#~ msgid "Secret used by Sympa to make MD5 fingerprint in web cookies secure"
+#~ msgstr ""
+#~ "Secreto utilizado por Sympa para generar la huella MD5 en las cookies "
+#~ "seguras de web"
+
+#~ msgid "Should not be changed ! May invalid all user password"
+#~ msgstr ""
+#~ "No debe ser modificada! Puede invalidar todas las contraseñas de usuario"
+
 #, fuzzy
 #~ msgid "Who is able to create lists"
 #~ msgstr "Imposible crear la lista."
+
+#~ msgid ""
+#~ "This parameter is a scenario, check sympa documentation about scenarios "
+#~ "if you want to define one"
+#~ msgstr ""
+#~ "Este parámetro es un escenario, chequea la documentación sympa sobre "
+#~ "escenarios si quieres definir uno"
+
+#~ msgid ""
+#~ "Used to define a custom parameter for your server. Do not forget the "
+#~ "semicolon between the param name and the param value."
+#~ msgstr ""
+#~ "Utilizado para definir parámetros por defecto en tu servidor. No te "
+#~ "olvides del punto y coma entre el nombre y el valor del parámetro."
 
 #, fuzzy
 #~ msgid "Directories"
 #~ msgstr "Carpeta"
 
+#~ msgid "Directory containing mailing lists subdirectories"
+#~ msgstr "Carpeta que contiene las subcarpetas de las listas de correo"
+
+#~ msgid ""
+#~ "Directory for configuration files; it also contains scenari/ and "
+#~ "templates/ directories"
+#~ msgstr ""
+#~ "Carpeta para los archivos de configuración; también contiene las carpetas "
+#~ "scenari/ y templates/"
+
 #, fuzzy
 #~ msgid "System related"
 #~ msgstr "Los modelos"
+
+#~ msgid "Syslog facility for sympa"
+#~ msgstr "Funcionalidad Syslog para sympa"
 
 #, fuzzy
 #~ msgid "Do not forget to edit syslog.conf"
 #~ msgstr "formato incorrecto de edit_list.conf"
 
+#~ msgid "Log verbosity"
+#~ msgstr "Verbosidad del registro"
+
+#~ msgid "0: normal, 2,3,4: for debug"
+#~ msgstr "0: normal, 2, 3,4: para debbugeo"
+
+#~ msgid "Communication mode with syslogd (unix | inet)"
+#~ msgstr "Modo de comunicación con syslogd (unix | inet)"
+
+#~ msgid "File containing Sympa PID while running"
+#~ msgstr "Archivo conteniendo el PID de Sympa mientras está ejecutándose"
+
+#~ msgid ""
+#~ "Sympa also locks this file to ensure that it is not running more than "
+#~ "once. Caution: user sympa need to write access without special privilege."
+#~ msgstr ""
+#~ "Sympa también bloquea esto para asegurarse que no corre más de una vez. "
+#~ "Precaución: el usuario sympa necesita acceso de escritura sin privilegio "
+#~ "especial. "
+
+#~ msgid "Umask used for file creation by Sympa"
+#~ msgstr "Umask para la creación de archivos por Sympa"
+
 #, fuzzy
 #~ msgid "Sending related"
 #~ msgstr "Listas pendientes"
+
+#~ msgid ""
+#~ "Max. number of Sendmail processes (launched by Sympa) running "
+#~ "simultaneously"
+#~ msgstr ""
+#~ "Número máx. de procesos Sendmail (lanzados por Sympa) corriendo "
+#~ "simultáneamente"
+
+#~ msgid ""
+#~ "Proposed value is quite low, you can rise it up to 100, 200 or even 300 "
+#~ "with powerfull systems."
+#~ msgstr ""
+#~ "El valor propuesto es un poco bajo, puedes aumentarlo hasta 100, 200 e "
+#~ "incluso 300 para sistemas poderosos."
+
+#~ msgid ""
+#~ "comma separated list of operations for which blacklist filter is applied"
+#~ msgstr ""
+#~ "lista separada por coma, de las operaciones para las cuales el filtro de "
+#~ "lista negra se aplica"
+
+#~ msgid "Setting this parameter to \"none\" will hide the blacklist feature"
+#~ msgstr ""
+#~ "Colocando este parámetro en \"nada\" hará esconder la funcionalidad de "
+#~ "lista negra"
+
+#~ msgid ""
+#~ "If set, when a list editor report a spam, this external script is run by "
+#~ "wwsympa or sympa, the spam is sent into script stdin"
+#~ msgstr ""
+#~ "Si se establece, cuando un editor de la lista notifica un spam, este "
+#~ "script externo lo ejecuta wwsympa o sympa, el spam se envía a la entrada "
+#~ "estandar del script"
+
+#~ msgid ""
+#~ "Default maximum size (in bytes) for messages (can be re-defined for each "
+#~ "list)"
+#~ msgstr ""
+#~ "Tamaño máximo predefinido (en bytes) de los mensajes (puede redefinirse "
+#~ "en cada lista)"
+
+#~ msgid ""
+#~ "Maximum number of recipients per call to Sendmail. The nrcpt_by_domain."
+#~ "conf file allows a different tuning per destination domain."
+#~ msgstr ""
+#~ "Máximo de destinatarios por cada invocación hecha a Sendmail. El fichero "
+#~ "nrcpt_by_domain.conf permite establecer un número diferente por dominio "
+#~ "de destino."
+
+#~ msgid "Max. number of different domains per call to Sendmail"
+#~ msgstr "Máximo número de dominios diferentes por invocación de Sendmail."
+
+#~ msgid "Path to the MTA (sendmail, postfix, exim or qmail)"
+#~ msgstr ""
+#~ "Ruta de acceso al servidor de envío (o MTA; sendmail, postfix, exim o "
+#~ "qmail)."
+
+#~ msgid ""
+#~ "should point to a sendmail-compatible binary (eg: a binary named "
+#~ "\"sendmail\" is distributed with Postfix)"
+#~ msgstr ""
+#~ "Debería apuntar a un ejecutable complatible con sendmail. Por ejemplo, un "
+#~ "ejecutable llamado \"sendmail\" se distribuye con Postfix."
+
+#~ msgid "Specify which rfc2369 mailing list headers to add"
+#~ msgstr ""
+#~ "Especificar qué cabeceras rfc2369 (cabeceras para listas de correo) hay "
+#~ "que añadir."
 
 #, fuzzy
 #~ msgid "Specify header fields to be removed before message distribution"
@@ -10522,17 +10547,94 @@ msgstr ""
 #~ "Plazo máximo a partir de una sincronización antes que ésta sea provocada "
 #~ "por el envío de un mensaje"
 
+#~ msgid "Reject mail from automates (crontab, etc) sent to a list?"
+#~ msgstr "¿Se rechaza correo automatizado (crontab, etc) enviado a la lista?"
+
+#, fuzzy
+#~ msgid ""
+#~ "SMTP server to which Sympa verify if alias with the same name as the list "
+#~ "to be created"
+#~ msgstr ""
+#~ "Servidor SMTP en el que Sympa verifica si un alias con el mismo nombre "
+#~ "que la lista se creará."
+
+#~ msgid ""
+#~ "Default value is real FQDN of host. Set [HOST]:[PORT] to specify non-"
+#~ "standard port."
+#~ msgstr ""
+#~ "El valor predeterminado es el FQDN real del equipo (del host). Ponga "
+#~ "[HOST]:[PORT] para especificar un puerto diferente del estándar."
+
+#~ msgid "SMTP HELO (EHLO) parameter used for alias verification"
+#~ msgstr ""
+#~ "Parámetro HELO (EHLO), de SMTP, que se usará para la verificación de un "
+#~ "alias"
+
+#~ msgid "Default value is the host part of list_check_smtp parameter."
+#~ msgstr ""
+#~ "El valor predeterminado es la parte correspondiente a el host (al equipo) "
+#~ "del parámetro list_check_smtp."
+
 #, fuzzy
 #~ msgid "Bulk mailer"
 #~ msgstr "Error del manejador de correo en masa"
+
+#~ msgid "Default priority for a packet to be sent by bulk."
+#~ msgstr "Prioridad predeterminada de un paquete enviado mediante bulk."
+
+#~ msgid ""
+#~ "Minimum number of packets in database before the bulk forks to increase "
+#~ "sending rate"
+#~ msgstr ""
+#~ "Número mínimo de paquetes en base de datos antes de que el proceso bulk "
+#~ "cree nuevos procesos para incremental el ratio de envío"
+
+#~ msgid "Max number of bulks that will run on the same server"
+#~ msgstr ""
+#~ "Número máximo de procesos bulk que se ejecutarán en el mismo servidor"
+
+#~ msgid ""
+#~ "The number of seconds a slave bulk will remain running without processing "
+#~ "a message before it spontaneously dies."
+#~ msgstr ""
+#~ "El número de segundos que un proceso hijo bulk permanecerá ejectuándose "
+#~ "sin procesar ningún mensaje antes de morir espontáneamente."
+
+#~ msgid ""
+#~ "The number of seconds a bulk sleeps between starting a new loop if it "
+#~ "didn't find a message to send."
+#~ msgstr ""
+#~ "El número de segundos que un proceso bulk duerme entre ejecuciones si no "
+#~ "encontró ningun mensaje a enviar."
+
+#~ msgid "Keep it small if you want your server to be reactive."
+#~ msgstr "Permanece pequeño si quieres que el servidor se reactive."
+
+#~ msgid ""
+#~ "Number of seconds a master bulk waits between two packets number checks."
+#~ msgstr ""
+#~ "Número de segundos que un proceso bulk master espera entre dos chequeos "
+#~ "de números de paquete."
+
+#~ msgid ""
+#~ "Keep it small if you expect brutal increases in the message sending load."
+#~ msgstr ""
+#~ "Mantener bajo si esperas un incremento brutal en la carga de envío de "
+#~ "mensajes."
 
 #, fuzzy
 #~ msgid "Quotas"
 #~ msgstr "cuota"
 
+#~ msgid "Default disk quota for shared repository"
+#~ msgstr "Cuota de disco por defecto para el repositorio compartido"
+
 #, fuzzy
 #~ msgid "Spool related"
 #~ msgstr "Los modelos"
+
+#~ msgid "Directory containing various specialized spools"
+#~ msgstr "Directorio contenedor de varias colas especializadas"
 
 #, fuzzy
 #~ msgid "Directory for moderation spool"
@@ -10644,6 +10746,18 @@ msgstr ""
 #, fuzzy
 #~ msgid "Message tracking feature"
 #~ msgstr "marcando mensajes"
+
+#, fuzzy
+#~ msgid "user"
+#~ msgstr "Usuarios"
+
+#, fuzzy
+#~ msgid "provider"
+#~ msgstr "perfil"
+
+#, fuzzy
+#~ msgid "VOOT group inclusion"
+#~ msgstr "Inclusión de una consulta SQL"
 
 #, fuzzy
 #~ msgid "Maximum number of list members"
