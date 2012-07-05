@@ -738,7 +738,7 @@ sub upgrade {
 		    &Log::do_log('err','Unable to execute SQL statement "%s" : %s', $statement, $dbh->errstr);
 		}
 	    }else {
-		&Log::do_log('err',"Exclusion robot could not be guessed for user '%s' in list '%s'. Either this user is no longer subscribed to the list or the list appear in more than one robot (or the query to the database failed). Here is the list of robots in which this list name appears: '%s'",$data->{'list_exclusion'},$data->{'user_exclusion'},@valid_robot_candidates);
+		&Log::do_log('err',"Exclusion robot could not be guessed for user '%s' in list '%s'. Either this user is no longer subscribed to the list or the list appear in more than one robot (or the query to the database failed). Here is the list of robots in which this list name appears: '%s'",$data->{'user_exclusion'},$data->{'list_exclusion'},@valid_robot_candidates);
 	    }
 	}
 	## Caching all lists config subset to database
@@ -803,6 +803,7 @@ sub probe_db {
 						   'profile_admin' => "enum('privileged','normal')"},
 				 'exclusion_table' => {'list_exclusion' => 'varchar(50)',
 						       'robot_exclusion' => 'varchar(50)',
+						       'family_exclusion' => 'varchar(50)',
 						       'user_exclusion' => 'varchar(100)',
 						       'date_exclusion' => 'int(11)'},
 				 'netidmap_table' => {'netid_netidmap' => 'varchar(100)',
@@ -920,6 +921,7 @@ sub probe_db {
 						    'profile_admin' => 'text'},
 				  'exclusion_table' => {'list_exclusion' => 'text',
 							'user_exclusion' => 'text',
+							'family_exclusion' => 'text',
 							'robot_exclusion' => 'text',
 							'date_exclusion' => 'integer'},
 				  'netidmap_table' => {'netid_netidmap' => 'text',
@@ -1003,7 +1005,6 @@ sub probe_db {
 		    'user_admin' => 1,
 		    'role_admin' => 1,
 		    'date_admin' => 1,
-		    'list_exclusion' => 1,
 		    'user_exclusion' => 1,
 		    'robot_exclusion' => 1,
 		    'netid_netidmap' => 1,

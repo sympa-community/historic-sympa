@@ -4975,7 +4975,8 @@ sub insert_delete_exclusion {
     my $list = shift;
     my $robot = shift;
     my $action = shift;
-    &do_log('info', 'List::insert_delete_exclusion("%s", "%s", "%s", "%s")', $email, $list, $robot, $action);
+    my $family = shift;
+    &do_log('info', 'List::insert_delete_exclusion("%s", "%s", "%s", "%s", "%s")', $email, $list, $robot, $action, $family);
     
 	my $r = 1;
     ## Check database connection
@@ -4994,9 +4995,13 @@ sub insert_delete_exclusion {
 	my $user = &get_subscriber_no_object($options);
 	my $date = time;
 
-	if ($user->{'included'} eq '1') {
-	    ## Insert : list, user and date
-	    $statement = sprintf "INSERT INTO exclusion_table (list_exclusion, robot_exclusion, user_exclusion, date_exclusion) VALUES (%s, %s, %s, %s)", $dbh->quote($list), $dbh->quote($robot), $dbh->quote($email), $dbh->quote($date);
+	if ($user->{'included'} eq '1' or defined $family) {
+	    ## Insert : family or list, user and date
+	    if (defined $family) {
+		$statement = sprintf "INSERT INTO exclusion_table (list_exclusion, family_exclusion, robot_exclusion, user_exclusion, date_exclusion) VALUES (%s, %s, %s, %s, %s)", $dbh->quote($list), $dbh->quote($family), $dbh->quote($robot), $dbh->quote($email), $dbh->quote($date);
+	    }else{
+		$statement = sprintf "INSERT INTO exclusion_table (list_exclusion, robot_exclusion, user_exclusion, date_exclusion) VALUES (%s, %s, %s, %s)", $dbh->quote($list), $dbh->quote($robot), $dbh->quote($email), $dbh->quote($date);
+	    }
 	    
 	    unless ($dbh->do($statement)) {
 		&do_log('err','Unable to execute SQL statement "%s" : %s', $statement, $dbh->errstr);
@@ -5019,7 +5024,11 @@ sub insert_delete_exclusion {
 	foreach my $users (@users_excluded) {
 	    if($email eq $users){
 		## Delete : list, user and date
-		$statement = sprintf "DELETE FROM exclusion_table WHERE (list_exclusion = %s AND robot_exclusion = %s AND user_exclusion = %s)",	$dbh->quote($list), $dbh->quote($robot), $dbh->quote($email);
+		if (defined $family) {
+		    $statement = sprintf "DELETE FROM exclusion_table WHERE (family_exclusion = %s AND robot_exclusion = %s AND user_exclusion = %s)",	$dbh->quote($family), $dbh->quote($robot), $dbh->quote($email);
+		}else{
+		    $statement = sprintf "DELETE FROM exclusion_table WHERE (list_exclusion = %s AND robot_exclusion = %s AND user_exclusion = %s)",	$dbh->quote($list), $dbh->quote($robot), $dbh->quote($email);
+		}
 
 		unless ($r = $dbh->do($statement)) {
 		    &do_log('err','Unable to execute SQL statement "%s" : %s', $statement, $dbh->errstr);
@@ -5048,15 +5057,27 @@ sub get_exclusion {
     my  $name= shift;
     my  $robot= shift;
     &do_log('debug2', 'List::get_exclusion(%s@%s)', $name,$robot);
-   
+    
     ## Check database connection
     unless ($dbh and $dbh->ping) {
 	return undef unless &db_connect();
     }
+
+    my $list = new List($name, $robot);
+    unless (defined $list) {
+	&Log::do_log('err','List %s@%s does not exist', $name,$robot);
+	return undef;
+    }
     ## the query return the email and the date in a hash
-    my $statement = sprintf "SELECT user_exclusion AS email, date_exclusion AS date FROM exclusion_table WHERE list_exclusion = %s AND robot_exclusion=%s", 
-    $dbh->quote($name),$dbh->quote($robot); 
-  
+    my $statement;
+    if (defined $list->{'admin'}{'family_name'} && $list->{'admin'}{'family_name'} ne '') {
+	$statement = sprintf "SELECT user_exclusion AS email, date_exclusion AS date FROM exclusion_table WHERE (list_exclusion = %s OR family_exclusion = %s) AND robot_exclusion=%s", 
+	$dbh->quote($name),$dbh->quote($list->{'admin'}{'family_name'}),$dbh->quote($robot);
+    }else{
+	$statement = sprintf "SELECT user_exclusion AS email, date_exclusion AS date FROM exclusion_table WHERE list_exclusion = %s AND robot_exclusion=%s", 
+	$dbh->quote($name),$dbh->quote($robot);
+    }
+ 
     push @sth_stack, $sth;
     unless ($sth = $dbh->prepare($statement)) {
 	&do_log('err','Unable to prepare SQL statement : %s', $dbh->errstr);
@@ -9143,6 +9164,17 @@ sub sync_include {
     my @add_tab;
     $users_added = 0;
     foreach my $email (keys %{$new_subscribers}) {
+	my $compare = 0;
+	foreach my $sub_exclu (@subscriber_exclusion){
+	    if ($email eq $sub_exclu){
+		$compare = 1;
+		last;
+	    }
+	}
+	if($compare == 1){
+	    delete $new_subscribers->{$email};
+	    next;
+	}
 	if (defined($old_subscribers{$email}) ) {
 
 	    if ($old_subscribers{$email}{'included'}) {
@@ -9174,19 +9206,6 @@ sub sync_include {
 
 	    ## Add new included user
 	}else {
-	    my $compare = 0;
-	    foreach my $sub_exclu (@subscriber_exclusion){
-		unless ($compare eq '1'){
-		    if ($email eq $sub_exclu){
-			$compare = 1;
-		    }else{
-			next;
-		    }
-		}
-	    }
-	    if($compare eq '1'){
-		next;
-	    }
 	    &do_log('debug3', 'List:sync_include: adding %s to list %s', $email, $name);
 	    my $u = $new_subscribers->{$email};
 	    $u->{'included'} = 1;
