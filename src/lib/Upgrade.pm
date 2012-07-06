@@ -1257,6 +1257,7 @@ sub probe_db {
 		    ## To prevent "Cannot add a NOT NULL column with default value NULL" errors
 		    if ($not_null{$f}) {
 			$options .= 'NOT NULL';
+			$options .= ((grep { $_ eq $db_struct{$Conf::Conf{'db_type'}}{$t}{$f} } ( 'integer', 'real' ))? ' DEFAULT 0' : ' DEFAULT ""' ) if $Conf::Conf{'db_type'} eq 'SQLite';
 		    }
 		    
 		    unless ($dbh->do("ALTER TABLE $t ADD $f $db_struct{$Conf::Conf{'db_type'}}{$t}{$f} $options")) {
