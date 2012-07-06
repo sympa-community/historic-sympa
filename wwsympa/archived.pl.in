@@ -267,10 +267,9 @@ while (!$end) {
 		        do_log('err',"unable to load new message $arcpath/arctxt/$message");
 			next;
 		   }
-		   my $messagesender = $new_message->{'sender'};
-		   lc($messagesender);
+		   my $messagesender = lc($new_message->{'sender'});
 
-		   unless ($sender == $messagesender) {
+		   unless ($sender eq $messagesender) {
 		       &do_log('err', 'remove command by unauthorized sender');
 		       return undef;
 		   }

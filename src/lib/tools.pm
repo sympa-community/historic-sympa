@@ -3044,7 +3044,7 @@ sub dump_html_var2 {
 	    }    
 	    $html .= '</ul>';
 	}else {
-	    $html .= "<li>'%s'"."</li>", ref($var);
+	    $html .= sprintf "<li>'%s'</li>", ref($var);
 	}
     }else{
 	if (defined $var) {

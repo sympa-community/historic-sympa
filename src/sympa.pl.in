@@ -2235,7 +2235,7 @@ sub SendDigest{
  	my ($listname, $listrobot) = split /\@/, $listaddress;
  	my $list = new List ($listname, $listrobot);
 	unless ($list) {
-	    &do_log('info', 'Unknown list %s, (robot %s), deleting digest file %s', $filename,$listname, $listrobot )
+	    &do_log('info', 'Unknown list %s, (robot %s), deleting digest file %s', $filename, $listname, $listrobot);
 	    &Log::db_log({'robot' => $listrobot,'list' => $list->{'name'},'action' => 'SendDigest','parameters' => "$filename",'target_email' => '','msg_id' => '','status' => 'error','error_type' => 'unknown_list','user_email' => '','client' => $ip,'daemon' => $daemon_name});
 	    unlink $filename;
 	    return undef;
