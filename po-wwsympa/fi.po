@@ -16,46 +16,45 @@
 # This file is distributed under the same license as the PACKAGE package.
 # FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
 #
-#, fuzzy
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "POT-Creation-Date: 2007-11-13 14:50+0200\n"
-"PO-Revision-Date: 2007-01-24 17:56+0100\n"
-"Last-Translator: Timo Porjamo <mailadm@csc.fi>\n"
+"PO-Revision-Date: 2012-05-19 16:43+0200\n"
+"Last-Translator: Jyri-Petteri Paloposki <jyri-petteri.paloposki@iki.fi>\n"
 "Language-Team: Finnish\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"#-#-#-#-#  blank_web_help_fi.po (sympa)  #-#-#-#-#\n"
+"Language: fi\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"#-#-#-#-#  tmp_web_help_fi.po (PACKAGE VERSION)  #-#-#-#-#\n"
-"X-Generator: Pootle 0.10.1\n"
+"X-Generator: Pootle 2.1.2\n"
 
 #: ../web_tt2/help.tt2:11
 msgid "Subscriber, moderator and owner documentation"
-msgstr ""
+msgstr "Tilaajan, hallinnoijan ja omistajan ohjeet"
 
 #: ../web_tt2/help.tt2:13
 msgid "In this documentation, you will find:"
-msgstr ""
+msgstr "Tästä ohjeesta löydät:"
 
 #. (path_cgi)
 #: ../web_tt2/help.tt2:15
 msgid ""
 "a <a href=\"%1/help/introduction\">general introduction</a> to mailing lists;"
 msgstr ""
+"<a href=\"%1/help/introduction\">yleiskatsauksen</a> postituslistoihin;"
 
 #. (path_cgi)
 #: ../web_tt2/help.tt2:16
 msgid "a <a href=\"%1/help/user\">user guide</a> about the use of Sympa;"
-msgstr ""
+msgstr "<a href=\"%1/help/user\">käyttäjäoppaan</a> Sympan käytöstä;"
 
 #. (path_cgi)
 #: ../web_tt2/help.tt2:17
 msgid ""
 "an <a href=\"%1/help/admin\">administrator guide</a> about the use of Sympa."
-msgstr ""
+msgstr "<a href=\"%1/help/admin\">ylläpitäjän oppaan</a> Sympan käytöstä."
 
 #. (path_cgi)
 #: ../web_tt2/help.tt2:20
@@ -64,6 +63,8 @@ msgid ""
 "href=\"%1/help/introduction#features\">available features</a> in the mailing "
 "list management software Sympa."
 msgstr ""
+"Jos haluat löytää tietyn ominaisuuden, tarkista <a href=\"%1/help/"
+"introduction#features\">käytettävissä olevien toimintojen listaa</a>."
 
 #. (path_cgi)
 #: ../web_tt2/help.tt2:21
@@ -73,14 +74,18 @@ msgid ""
 "to the <a href=\"%1/help/faqadmin\">administrators <acronym title="
 "\"Frequently asked questions\">FAQ</acronym></a>."
 msgstr ""
+"Jos kohtaat ongelmia, lue <a href=\"%1/help/faquser\">käyttäjien <acronym "
+"title=\"Usein kysytyt kysymykset\">UKK</acronym></a> tai <a href=\"%1/help/"
+"faqadmin\">ylläpitäjien <acronym title=\"Usein kysytyt kysymykset\">UKK</"
+"acronym></a>."
 
 #: ../web_tt2/help_introduction.tt2:3
 msgid "Mailing lists - General introduction"
-msgstr ""
+msgstr "Postituslistat – yleiskatsaus"
 
 #: ../web_tt2/help_introduction.tt2:5
 msgid "What is a mailing list?"
-msgstr ""
+msgstr "Mikä on postituslista?"
 
 #: ../web_tt2/help_introduction.tt2:6
 msgid ""
@@ -91,10 +96,15 @@ msgid ""
 "send messages, to reply to them or to read them without contributing (i.e. "
 "to \"lurk\")."
 msgstr ""
+"Postituslista on <strong>jakelulista joka mahdollistaa sähköpostin "
+"automaattisen jakelun vastaanottajaryhmälle listan sähköpostiosoitteen "
+"kautta</strong>: jokainen tilaajan listalle lähettämä viesti jaetaan "
+"kaikille muille tilaajille. Ollessasi tilaajana postituslistalla, voit "
+"lähettää viestejä, vastata niihin ja lukea ne reagoimatta niihin."
 
 #: ../web_tt2/help_introduction.tt2:7
 msgid "Special cases:</strong>"
-msgstr ""
+msgstr "Erityistapaukset:</strong>"
 
 #: ../web_tt2/help_introduction.tt2:9
 msgid ""
@@ -102,6 +112,9 @@ msgid ""
 "subscribed to it. However, you need to be subscribed to a list to receive "
 "its messages."
 msgstr ""
+"Joissain tapauksissa on mahdollista lähettää viestejä postituslistalle ilman "
+"että olet listan tilaajana. Sinun tulee kuitenkin olla listan tilaajana "
+"jotta voit vastaanottaa listan viestejä."
 
 #: ../web_tt2/help_introduction.tt2:10
 msgid ""
@@ -110,6 +123,9 @@ msgid ""
 "used to transmit information from a unique sender to a large number of "
 "recipients."
 msgstr ""
+"On joskus mahdotonta lähettää listalle viestejä vaikka olisit listan "
+"tilaajana: Näin on esimerkiksi ilmoituslistojen kohdalla, joita käytetään "
+"jakamaan tietoa yhdeltä käyttäjältä suurille määrille vastaanottajia."
 
 #: ../web_tt2/help_introduction.tt2:13
 msgid "Interest of mailing lists"
@@ -521,18 +537,15 @@ msgstr ""
 
 #: ../web_tt2/help_introduction.tt2:117
 msgid ""
-"In most mailing list services, subscribers receive a '<a target=\"_blank\" "
-"title=\"Example of subscribers charter (French)\" href=\"http://listes.cru."
-"fr/cnil/charte.abonne.html\">List subscribers charter</a>' on subscription. "
-"Then they are obliged to respect all the rules contained in that charter."
+"In most mailing list services, subscribers receive a List subscribers "
+"charter on subscription. Then they are obliged to respect all the rules "
+"contained in that charter."
 msgstr ""
 
 #: ../web_tt2/help_introduction.tt2:118
 msgid ""
-"If available, list owners and moderators have to conform to the <a target="
-"\"_blank\" title=\"Example of charter aimed at owners and moderators (French)"
-"\" href=\"http://listes.cru.fr/cnil/charte.proprio.html\">Owner and "
-"moderator charter</a>."
+"If available, list owners and moderators have to conform to the Owner and "
+"moderator charter."
 msgstr ""
 
 #: ../web_tt2/help_introduction.tt2:119
@@ -888,10 +901,11 @@ msgstr ""
 
 #. (path_cgi)
 #: ../web_tt2/help_user.tt2:83
+#, fuzzy
 msgid ""
 "<a href=\"%1/help/suspend\">suspend or resume</a> your subscription of each "
 "list;"
-msgstr ""
+msgstr "<a href=\"%1/help/user\">käyttäjäoppaan</a> Sympan käytöstä;"
 
 #: ../web_tt2/help_user.tt2:84
 msgid "<a href=\"#unsubscribe\">unsubscribe</a> from the list."

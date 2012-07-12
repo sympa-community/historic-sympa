@@ -641,10 +641,9 @@ msgstr ""
 #: ../web_tt2/help_introduction.tt2:117
 #, fuzzy
 msgid ""
-"In most mailing list services, subscribers receive a '<a target=\"_blank\" "
-"title=\"Example of subscribers charter (French)\" href=\"http://listes.cru."
-"fr/cnil/charte.abonne.html\">List subscribers charter</a>' on subscription. "
-"Then they are obliged to respect all the rules contained in that charter."
+"In most mailing list services, subscribers receive a List subscribers "
+"charter on subscription. Then they are obliged to respect all the rules "
+"contained in that charter."
 msgstr ""
 "Bei den meisten Mailinglistendiensten erhalten Nutzer bei der Anmeldung eine "
 "<a target=\"_blank\" title=\"Beispiel 'Nutzungsbedingungen' (französisch)\" "
@@ -654,15 +653,9 @@ msgstr ""
 
 #: ../web_tt2/help_introduction.tt2:118
 msgid ""
-"If available, list owners and moderators have to conform to the <a target="
-"\"_blank\" title=\"Example of charter aimed at owners and moderators (French)"
-"\" href=\"http://listes.cru.fr/cnil/charte.proprio.html\">Owner and "
-"moderator charter</a>."
+"If available, list owners and moderators have to conform to the Owner and "
+"moderator charter."
 msgstr ""
-"Falls verfügbar, müssen Listeneigentümer und -moderatoren sich an die <a "
-"target=\"_blank\" title=\"Beispiel einer Eigentümer- und Moderatorencharta "
-"(französisch)\" href=\"http://listes.cru.fr/cnil/charte.proprio.html"
-"\">Eigentümer- und Moderatorencharta</a> halten."
 
 #: ../web_tt2/help_introduction.tt2:119
 msgid ""
@@ -1644,8 +1637,10 @@ msgstr ""
 "\"><strong>Dokumentation zum Bereich für gemeinsame Dokumente.</strong></a>"
 
 #: ../web_tt2/help_user.tt2:164
+#, fuzzy
 msgid "Suspending or resuming your subscription of each list"
 msgstr ""
+"ein <a href=\"%1/help/user\">Benutzerhandbuch</a> zur Verwendung von Sympa;"
 
 #. (path_cgi)
 #: ../web_tt2/help_user.tt2:165
@@ -7357,10 +7352,11 @@ msgid "How does the suspension work?"
 msgstr ""
 
 #: ../web_tt2/help_suspend.tt2:6
+#, fuzzy
 msgid ""
 "In order to <strong>suspend your subscription</strong> to one or more lists, "
 "follow these steps:"
-msgstr ""
+msgstr "<strong>Datum des Abonnements</strong> der Liste;"
 
 #: ../web_tt2/help_suspend.tt2:8
 msgid ""
@@ -7552,3 +7548,14 @@ msgstr ""
 #~ "Textdatei oder relationalen Datenbank gespeichert werden oder von "
 #~ "verschiedenen externen Quellen inkludiert werden (Listen, Klartextdatei, "
 #~ "Ergebnis einer Abfrage)."
+
+#~ msgid ""
+#~ "If available, list owners and moderators have to conform to the <a target="
+#~ "\"_blank\" title=\"Example of charter aimed at owners and moderators "
+#~ "(French)\" href=\"http://listes.cru.fr/cnil/charte.proprio.html\">Owner "
+#~ "and moderator charter</a>."
+#~ msgstr ""
+#~ "Falls verfügbar, müssen Listeneigentümer und -moderatoren sich an die <a "
+#~ "target=\"_blank\" title=\"Beispiel einer Eigentümer- und "
+#~ "Moderatorencharta (französisch)\" href=\"http://listes.cru.fr/cnil/charte."
+#~ "proprio.html\">Eigentümer- und Moderatorencharta</a> halten."
