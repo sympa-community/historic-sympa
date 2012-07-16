@@ -1561,7 +1561,8 @@ sub new {
     }
 
     my $status ;
-    if ($list_of_lists{$robot}{$name}){
+    ## If list already in memory and not previously purged by another process
+    if ($list_of_lists{$robot}{$name} and -d $list_of_lists{$robot}{$name}{'dir'}){
 	# use the current list in memory and update it
 	$list=$list_of_lists{$robot}{$name};
 	
@@ -12119,6 +12120,17 @@ sub purge {
 	&tools::remove_dir($arc_dir.'/'.$self->get_list_id());
 	&tools::remove_dir($self->get_bounce_dir());
     }
+    
+    ## Clean list table if needed
+    if ($Conf::Conf{'db_list_cache'} eq 'on') {
+		my $statement = sprintf 'DELETE FROM list_table WHERE name_list = %s AND robot_list = %s', $dbh->quote($self->{'name'}), $dbh->quote($self->{'domain'});
+		unless ($dbh->do($statement)) {
+			&do_log('err', 'Cannot remove list %s (robot %s) from table', $self->{'name'}, $self->{'domain'});
+		}
+	}
+    
+    ## Clean memory cache
+    delete $list_of_lists{$self->{'domain'}}{$self->{'name'}};
 
     &tools::remove_dir($self->{'dir'});
     
