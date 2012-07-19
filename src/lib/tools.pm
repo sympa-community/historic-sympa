@@ -63,6 +63,8 @@ my %regexp = ('email' => '([\w\-\_\.\/\+\=\'\&]+|\".*\")\@[\w\-]+(\.[\w\-]+)+',
 	      'task' => '\w+',
 	      'datasource' => '[\w-]+',
 	      'uid' => '[\w\-\.\+]+',
+	      're' => '(?i)(?:AW|(?:\xD0\x9D|\xD0\xBD)(?:\xD0\x90|\xD0\xB0)|Re|Rif|SV|VS)\s*:',
+	      # ( de | ru etc. | en, la etc. | it | da, sv | fi ).
 	      );
 
 my %openssl_errors = (1 => 'an error occurred parsing the command options',
