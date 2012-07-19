@@ -7825,16 +7825,25 @@ sub do_remove_arc {
      $search->archive_name ($in{'archive_name'});
 
      unless (defined($in{'directories'})) {
-	 # by default search in current month and in the previous none empty one
+	# by default search in current month and in the previous non-empty one
+	my $archive_name = $in{'archive_name'} || '';
+	$archive_name = POSIX::strftime '%Y-%m', localtime(time)
+	    unless $archive_name =~ /^\d{4}-\d{2}$/;
+	my @directories = ();
+
 	 my $search_base = $wwsconf->{'arc_path'}.'/'.$list->get_list_id();
 	 opendir ARC, "$search_base";
 	 foreach my $dir (sort {$b cmp $a} grep(!/^\./,readdir ARC)) {
 	     if ($dir =~ /^(\d{4})-(\d{2})$/) {
-		 push @{$param->{'yyyymm'}}, $dir;
+		if ($archive_name) {
+		    push @directories, $dir if $dir le $archive_name;
+		    $archive_name = '' if $dir lt $archive_name;
+		}
+		push @{$param->{'yyyymm'}}, $dir;
 	     }
 	 }
 	 closedir ARC;
-	 $in{'directories'} = join "\0",@{$param->{'yyyymm'}} ;
+	$in{'directories'} = join "\0", @directories;
      }
 
      if (defined($in{'directories'})) {
