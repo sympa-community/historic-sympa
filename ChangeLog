@@ -1,4 +1,149 @@
 ------------------------------------------------------------------------
+r7498 | sympa-authors | 2012-07-20 16:02:51 +0200 (ven 20 jui 2012) | 1 ligne
+Chemins modifiés :
+   M /branches/sympa-6.1-branch/ChangeLog
+   M /branches/sympa-6.1-branch/po/ar.po
+   M /branches/sympa-6.1-branch/po/bg.po
+   M /branches/sympa-6.1-branch/po/br.po
+   M /branches/sympa-6.1-branch/po/ca.po
+   M /branches/sympa-6.1-branch/po/cs.po
+   M /branches/sympa-6.1-branch/po/de.po
+   M /branches/sympa-6.1-branch/po/el.po
+   M /branches/sympa-6.1-branch/po/en_US.po
+   M /branches/sympa-6.1-branch/po/es.po
+   M /branches/sympa-6.1-branch/po/et.po
+   M /branches/sympa-6.1-branch/po/eu.po
+   M /branches/sympa-6.1-branch/po/fi.po
+   M /branches/sympa-6.1-branch/po/fr.po
+   M /branches/sympa-6.1-branch/po/gl.po
+   M /branches/sympa-6.1-branch/po/hu.po
+   M /branches/sympa-6.1-branch/po/id.po
+   M /branches/sympa-6.1-branch/po/it.po
+   M /branches/sympa-6.1-branch/po/ja.po
+   M /branches/sympa-6.1-branch/po/ko.po
+   M /branches/sympa-6.1-branch/po/la.po
+   M /branches/sympa-6.1-branch/po/ml.po
+   M /branches/sympa-6.1-branch/po/nb_NO.po
+   M /branches/sympa-6.1-branch/po/nl.po
+   M /branches/sympa-6.1-branch/po/oc.po
+   M /branches/sympa-6.1-branch/po/pl.po
+   M /branches/sympa-6.1-branch/po/pt.po
+   M /branches/sympa-6.1-branch/po/pt_BR.po
+   M /branches/sympa-6.1-branch/po/ro.po
+   M /branches/sympa-6.1-branch/po/ru.po
+   M /branches/sympa-6.1-branch/po/sv.po
+   M /branches/sympa-6.1-branch/po/tr.po
+   M /branches/sympa-6.1-branch/po/vi.po
+   M /branches/sympa-6.1-branch/po/zh_CN.po
+   M /branches/sympa-6.1-branch/po/zh_TW.po
+   M /branches/sympa-6.1-branch/po-wwsympa/ar.po
+   M /branches/sympa-6.1-branch/po-wwsympa/bg.po
+   M /branches/sympa-6.1-branch/po-wwsympa/br.po
+   M /branches/sympa-6.1-branch/po-wwsympa/cs.po
+   M /branches/sympa-6.1-branch/po-wwsympa/de.po
+   M /branches/sympa-6.1-branch/po-wwsympa/el.po
+   M /branches/sympa-6.1-branch/po-wwsympa/en_US.po
+   M /branches/sympa-6.1-branch/po-wwsympa/es.po
+   M /branches/sympa-6.1-branch/po-wwsympa/et.po
+   M /branches/sympa-6.1-branch/po-wwsympa/eu.po
+   M /branches/sympa-6.1-branch/po-wwsympa/fi.po
+   M /branches/sympa-6.1-branch/po-wwsympa/fr.po
+   M /branches/sympa-6.1-branch/po-wwsympa/hu.po
+   M /branches/sympa-6.1-branch/po-wwsympa/id.po
+   M /branches/sympa-6.1-branch/po-wwsympa/it.po
+   M /branches/sympa-6.1-branch/po-wwsympa/ja.po
+   M /branches/sympa-6.1-branch/po-wwsympa/nb_NO.po
+   M /branches/sympa-6.1-branch/po-wwsympa/nl.po
+   M /branches/sympa-6.1-branch/po-wwsympa/oc.po
+   M /branches/sympa-6.1-branch/po-wwsympa/pl.po
+   M /branches/sympa-6.1-branch/po-wwsympa/pt.po
+   M /branches/sympa-6.1-branch/po-wwsympa/pt_BR.po
+   M /branches/sympa-6.1-branch/po-wwsympa/ro.po
+   M /branches/sympa-6.1-branch/po-wwsympa/ru.po
+   M /branches/sympa-6.1-branch/po-wwsympa/sv.po
+   M /branches/sympa-6.1-branch/po-wwsympa/tr.po
+   M /branches/sympa-6.1-branch/po-wwsympa/vi.po
+   M /branches/sympa-6.1-branch/po-wwsympa/zh_CN.po
+
+[-feature]Committing latest translations from Pootle
+------------------------------------------------------------------------
+r7490 | sikeda | 2012-07-19 12:07:15 +0200 (jeu 19 jui 2012) | 5 lignes
+Chemins modifiés :
+   M /branches/sympa-6.1-branch/web_tt2/help_admin.tt2
+   M /branches/sympa-6.1-branch/web_tt2/help_introduction.tt2
+   M /branches/sympa-6.1-branch/web_tt2/help_listconfig.tt2
+   M /branches/sympa-6.1-branch/web_tt2/serveradmin.tt2
+
+[change] Some fixes on help ---
+- web_tt2/help_listconfig.tt2: Removed non-existing visibility scenari (private and semipublic).
+- web_tt2/serveradmin.tt2: changed link to translation FAQ.
+- web_tt2/help_introduction.tt2, web_tt2/help_admin.tt2: Removed dead links to example of charters.
+
+------------------------------------------------------------------------
+r7489 | sikeda | 2012-07-19 11:41:50 +0200 (jeu 19 jui 2012) | 2 lignes
+Chemins modifiés :
+   M /branches/sympa-6.1-branch/wwsympa/wwsympa.fcgi.in
+
+[feature] By default, arcsearch (simple) searches in current month and in the previous non-empty one.
+
+------------------------------------------------------------------------
+r7488 | sikeda | 2012-07-19 07:07:50 +0200 (jeu 19 jui 2012) | 5 lignes
+Chemins modifiés :
+   M /branches/sympa-6.1-branch/src/lib/List.pm
+   M /branches/sympa-6.1-branch/src/lib/tools.pm
+   M /branches/sympa-6.1-branch/src/sympa.pl.in
+
+[feature] Revived "Re:" munging.  cf. Feature Request #1044.
+- Supports "Re:" and its equivalents: "AW:" (de); "?\208?\157?\208?\144:" (ru etc.); "Re:" (en, la etc.); "Rif:" (it); "SV:" (da, sv); "VS:" (fi).  Additionally, command in subject with them can be recognized.
+- Multiple "Re:" and its equivalents in case of "Subject: AW: Re: quelque chose" will be truncated .
+- custom_subject will be placed at beginning of subject in case of "Subject: Another was Re: [list] Something".
+
+------------------------------------------------------------------------
+r7480 | etiennemeleard | 2012-07-17 11:54:30 +0200 (mar 17 jui 2012) | 2 lignes
+Chemins modifiés :
+   M /branches/sympa-6.1-branch/src/lib/admin.pm
+
+[bug][#8425][Reported by Steve Shipway] List table was not populated upon command line list creation.
+
+------------------------------------------------------------------------
+r7479 | sikeda | 2012-07-17 07:50:31 +0200 (mar 17 jui 2012) | 2 lignes
+Chemins modifiés :
+   M /branches/sympa-6.1-branch/soap/sympasoap.pm
+
+[*bug][#7733][Submitted by A. Bernstein, Electric Embers] SOAP 'add' function resets subscriber's password
+
+------------------------------------------------------------------------
+r7478 | etiennemeleard | 2012-07-16 18:22:22 +0200 (lun 16 jui 2012) | 2 lignes
+Chemins modifiés :
+   M /branches/sympa-6.1-branch/wwsympa/wwsympa.fcgi.in
+
+[bug] Fixed list log search date regexp to accept dashes and removed admin notice if no list logs found (which can occur if no match).
+
+------------------------------------------------------------------------
+r7477 | etiennemeleard | 2012-07-16 18:13:16 +0200 (lun 16 jui 2012) | 2 lignes
+Chemins modifiés :
+   M /branches/sympa-6.1-branch/web_tt2/javascript.tt2
+   M /branches/sympa-6.1-branch/web_tt2/nav.tt2
+   M /branches/sympa-6.1-branch/web_tt2/viewlogs.tt2
+   M /branches/sympa-6.1-branch/wwsympa/wwsympa.fcgi.in
+
+[bug][#1254][Reported by Olivier Duval] List logs page did not behave as expected, sorting failed and selecting a message to trace ended with a javascript error.
+
+------------------------------------------------------------------------
+r7476 | etiennemeleard | 2012-07-16 15:42:41 +0200 (lun 16 jui 2012) | 2 lignes
+Chemins modifiés :
+   M /branches/sympa-6.1-branch/web_tt2/css.tt2
+
+[bug][#1130][Reported by Serge Aumont] Blockquote HTML tag had no margin, thus citation blocks in web archives were not always highlighted.
+
+------------------------------------------------------------------------
+r7475 | etiennemeleard | 2012-07-16 15:16:44 +0200 (lun 16 jui 2012) | 2 lignes
+Chemins modifiés :
+   M /branches/sympa-6.1-branch/src/lib/List.pm
+
+[bug][#1031][Reported by Emmanuel Eyer] Lists remained in memory cache after purge in processes, so if a new list was created with the same name it "inherited" some outdated parameters, especially param_constraint entries when using list famillies. Also the list table was not purged.
+
+------------------------------------------------------------------------
 r7469 | sympa-authors | 2012-07-12 14:42:13 +0200 (jeu 12 jui 2012) | 1 ligne
 Chemins modifiés :
    M /branches/sympa-6.1-branch/po/ar.po

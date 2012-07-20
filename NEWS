@@ -3,6 +3,71 @@
 
 (See Changelog file for the full changes log)
 
+6.1.12		July 20, 2012
+
+  Features:
+
+	[7489] wwsympa/wwsympa.fcgi.in:  By default, arcsearch (simple)
+	searches in current month and in the previous non-empty one.
+
+	[7488] src/lib/List.pm, src/lib/tools.pm, src/sympa.pl.in:  Revived
+	"Re:" munging.	cf. Feature Request #1044.
+	- Supports "Re:" and its equivalents: "AW:" (de);
+	"?\208?\157?\208?\144:" (ru etc.); "Re:" (en, la etc.); "Rif:" (it);
+	"SV:" (da, sv); "VS:" (fi).  Additionally, command in subject with them
+	can be recognized.
+	- Multiple "Re:" and its equivalents in case of "Subject: AW: Re:
+	quelque chose" will be truncated .
+	- custom_subject will be placed at beginning of subject in case of
+	"Subject: Another was Re: [list] Something".
+
+	[7448] mail_tt2/user_notification.tt2, src/etc/Makefile.am,
+	src/etc/scenari/automatic_list_creation.family_owner:7447),
+	src/lib/Conf.pm, src/lib/Family.pm, src/lib/List.pm,
+	src/lib/Scenario.pm, src/lib/Upgrade.pm, src/lib/admin.pm,
+	src/lib/confdef.pm, src/sympa.pl.in, web_tt2/Makefile.am,
+	web_tt2/automatic_lists.tt2:7447),
+	web_tt2/automatic_lists_management_request.tt2:7447),
+	web_tt2/automatic_lists_request.tt2:7447),
+	web_tt2/family_signoff.tt2:7447),
+	web_tt2/family_signoff_request.tt2:7447),
+	web_tt2/family_signoff_request2.tt2:7447), web_tt2/menu.tt2,
+	wwsympa/wwsympa.fcgi.in: [Requested and funded by the CNRS] Automatic
+	lists can now be manipulated through the sympa web interface, in a
+	"user friendly" form. This is merely a web layer around the general
+	autmatic lists feature. This feature is fully documented here:
+	https://www.sympa.org/manual_6.2/user_friendly_autolists
+	Additionnally, it is now possible to unsubscribe to all the lists of a
+	given family in two clicks.
+
+
+
+  Changes:
+
+	[7490] web_tt2/help_admin.tt2, web_tt2/help_introduction.tt2,
+	web_tt2/help_listconfig.tt2, web_tt2/serveradmin.tt2:  Some fixes on
+	help ---
+	- web_tt2/help_listconfig.tt2: Removed non-existing visibility scenari
+	(private and semipublic).
+	- web_tt2/serveradmin.tt2: changed link to translation FAQ.
+	- web_tt2/help_introduction.tt2, web_tt2/help_admin.tt2: Removed dead
+	links to example of charters.
+
+	[7367] src/lib/Upgrade.pm:  Removing mandatory NOT NULL references from
+	most of the fields in list_table table
+
+  Bug fixes:
+
+	[7480] src/lib/admin.pm: [#8425][Reported by Steve Shipway] List table
+	was not populated upon command line list creation.
+
+*****	[7479] soap/sympasoap.pm: [#7733][Submitted by A. Bernstein, Electric
+*****	Embers] SOAP 'add' function resets subscriber's password
+
+	[7478] wwsympa/wwsympa.fcgi.in:  Fixed list log search date regexp to
+	accept dashes and removed admin notice if no list logs found (which can
+	occur if no match).
+
 6.1.11		May 11, 2012
 
   Bug fixes:

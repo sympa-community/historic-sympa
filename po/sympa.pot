@@ -593,7 +593,7 @@ msgstr ""
 msgid "Sender"
 msgstr ""
 
-#: ../web_tt2/arcsearch_form.tt2:49 ../web_tt2/latest_arc.tt2:19 ../web_tt2/modindex.tt2:152 ../web_tt2/modindex.tt2:68 ../web_tt2/subindex.tt2:13 ../web_tt2/viewlogs.tt2:127
+#: ../web_tt2/arcsearch_form.tt2:49 ../web_tt2/latest_arc.tt2:19 ../web_tt2/modindex.tt2:152 ../web_tt2/modindex.tt2:68 ../web_tt2/subindex.tt2:13 ../web_tt2/viewlogs.tt2:126
 msgid "Date"
 msgstr ""
 
@@ -2234,132 +2234,132 @@ msgstr ""
 msgid "on %1"
 msgstr ""
 
-#: ../web_tt2/javascript.tt2:833
+#: ../web_tt2/javascript.tt2:844
 msgid "Start date"
 msgstr ""
 
-#: ../web_tt2/javascript.tt2:834
+#: ../web_tt2/javascript.tt2:845
 msgid "End date"
 msgstr ""
 
-#: ../web_tt2/javascript.tt2:838
+#: ../web_tt2/javascript.tt2:849
 msgid "January"
 msgstr ""
 
-#: ../web_tt2/javascript.tt2:838
+#: ../web_tt2/javascript.tt2:849
 msgid "February"
 msgstr ""
 
-#: ../web_tt2/javascript.tt2:838
+#: ../web_tt2/javascript.tt2:849
 msgid "March"
 msgstr ""
 
-#: ../web_tt2/javascript.tt2:838
+#: ../web_tt2/javascript.tt2:849
 msgid "April"
 msgstr ""
 
-#: ../web_tt2/javascript.tt2:838
+#: ../web_tt2/javascript.tt2:849
 msgid "May"
 msgstr ""
 
-#: ../web_tt2/javascript.tt2:838
+#: ../web_tt2/javascript.tt2:849
 msgid "June"
 msgstr ""
 
-#: ../web_tt2/javascript.tt2:838
+#: ../web_tt2/javascript.tt2:849
 msgid "July"
 msgstr ""
 
-#: ../web_tt2/javascript.tt2:838
+#: ../web_tt2/javascript.tt2:849
 msgid "August"
 msgstr ""
 
-#: ../web_tt2/javascript.tt2:838
+#: ../web_tt2/javascript.tt2:849
 msgid "September"
 msgstr ""
 
-#: ../web_tt2/javascript.tt2:838
+#: ../web_tt2/javascript.tt2:849
 msgid "October"
 msgstr ""
 
-#: ../web_tt2/javascript.tt2:838
+#: ../web_tt2/javascript.tt2:849
 msgid "November"
 msgstr ""
 
-#: ../web_tt2/javascript.tt2:838
+#: ../web_tt2/javascript.tt2:849
 msgid "December"
 msgstr ""
 
-#: ../web_tt2/javascript.tt2:839
+#: ../web_tt2/javascript.tt2:850
 msgid "Su"
 msgstr ""
 
-#: ../web_tt2/javascript.tt2:839
+#: ../web_tt2/javascript.tt2:850
 msgid "Mo"
 msgstr ""
 
-#: ../web_tt2/javascript.tt2:839
+#: ../web_tt2/javascript.tt2:850
 msgid "Tu"
 msgstr ""
 
-#: ../web_tt2/javascript.tt2:839
+#: ../web_tt2/javascript.tt2:850
 msgid "We"
 msgstr ""
 
-#: ../web_tt2/javascript.tt2:839
+#: ../web_tt2/javascript.tt2:850
 msgid "Th"
 msgstr ""
 
-#: ../web_tt2/javascript.tt2:839
+#: ../web_tt2/javascript.tt2:850
 msgid "Fr"
 msgstr ""
 
-#: ../web_tt2/javascript.tt2:839
+#: ../web_tt2/javascript.tt2:850
 msgid "Sa"
 msgstr ""
 
-#: ../web_tt2/javascript.tt2:840
+#: ../web_tt2/javascript.tt2:851
 msgid "Sunday"
 msgstr ""
 
-#: ../web_tt2/javascript.tt2:840
+#: ../web_tt2/javascript.tt2:851
 msgid "Monday"
 msgstr ""
 
-#: ../web_tt2/javascript.tt2:840
+#: ../web_tt2/javascript.tt2:851
 msgid "Tuesday"
 msgstr ""
 
-#: ../web_tt2/javascript.tt2:840
+#: ../web_tt2/javascript.tt2:851
 msgid "Wednesday"
 msgstr ""
 
-#: ../web_tt2/javascript.tt2:840
+#: ../web_tt2/javascript.tt2:851
 msgid "Thursday"
 msgstr ""
 
-#: ../web_tt2/javascript.tt2:840
+#: ../web_tt2/javascript.tt2:851
 msgid "Friday"
 msgstr ""
 
-#: ../web_tt2/javascript.tt2:840
+#: ../web_tt2/javascript.tt2:851
 msgid "Saturday"
 msgstr ""
 
-#: ../web_tt2/javascript.tt2:841
+#: ../web_tt2/javascript.tt2:852
 msgid "Calendar"
 msgstr ""
 
-#: ../web_tt2/javascript.tt2:842
+#: ../web_tt2/javascript.tt2:853
 msgid "today"
 msgstr ""
 
-#: ../web_tt2/javascript.tt2:1056
+#: ../web_tt2/javascript.tt2:1067
 #. (+cpt)
 msgid "microcal"
 msgstr ""
 
-#: ../web_tt2/javascript.tt2:1096
+#: ../web_tt2/javascript.tt2:1107
 msgid "\"+src.id+\"_cal"
 msgstr ""
 
@@ -3099,7 +3099,7 @@ msgstr ""
 msgid "Table which display family lists"
 msgstr ""
 
-#: ../web_tt2/review_family.tt2:6 ../web_tt2/viewlogs.tt2:157
+#: ../web_tt2/review_family.tt2:6 ../web_tt2/viewlogs.tt2:156
 msgid "Status"
 msgstr ""
 
@@ -4039,7 +4039,7 @@ msgstr ""
 msgid "Sources"
 msgstr ""
 
-#: ../web_tt2/subscriber_table.tt2:53 ../web_tt2/subscriber_table.tt2:56 ../web_tt2/viewlogs.tt2:124
+#: ../web_tt2/subscriber_table.tt2:53 ../web_tt2/subscriber_table.tt2:56 ../web_tt2/viewlogs.tt2:123
 msgid "Sub date"
 msgstr ""
 
@@ -4229,7 +4229,7 @@ msgstr ""
 msgid "Search period: "
 msgstr ""
 
-#: ../web_tt2/viewlogs.tt2:113 ../wwsympa/wwsympa.fcgi.in:16264
+#: ../web_tt2/viewlogs.tt2:113 ../wwsympa/wwsympa.fcgi.in:16239
 #. (date_from_formated)
 #. (date_to_formated)
 #. This entry is a date/time format
@@ -4237,57 +4237,57 @@ msgstr ""
 msgid "%d %b %Y %H:%M:%S"
 msgstr ""
 
-#: ../web_tt2/viewlogs.tt2:114
+#: ../web_tt2/viewlogs.tt2:115
 #. (list)
 msgid "Research was carried out in list <strong>%1</strong>."
 msgstr ""
 
 #: ../web_tt2/viewlogs.tt2:117
-#. (rows_nb)
+#. (total_results)
 msgid "%1 results"
 msgstr ""
 
-#: ../web_tt2/viewlogs.tt2:132
+#: ../web_tt2/viewlogs.tt2:131
 msgid "List"
 msgstr ""
 
-#: ../web_tt2/viewlogs.tt2:137 ../web_tt2/viewlogs.tt2:140
+#: ../web_tt2/viewlogs.tt2:136 ../web_tt2/viewlogs.tt2:139
 msgid "Action"
 msgstr ""
 
-#: ../web_tt2/viewlogs.tt2:145
+#: ../web_tt2/viewlogs.tt2:144
 msgid "Parameters"
 msgstr ""
 
-#: ../web_tt2/viewlogs.tt2:149
+#: ../web_tt2/viewlogs.tt2:148
 msgid "Target Email"
 msgstr ""
 
-#: ../web_tt2/viewlogs.tt2:153
+#: ../web_tt2/viewlogs.tt2:152
 msgid "Message ID"
 msgstr ""
 
-#: ../web_tt2/viewlogs.tt2:161
+#: ../web_tt2/viewlogs.tt2:160
 msgid "Error type"
 msgstr ""
 
-#: ../web_tt2/viewlogs.tt2:166 ../web_tt2/viewlogs.tt2:169
+#: ../web_tt2/viewlogs.tt2:165 ../web_tt2/viewlogs.tt2:168
 msgid "User Email"
 msgstr ""
 
-#: ../web_tt2/viewlogs.tt2:175
+#: ../web_tt2/viewlogs.tt2:174
 msgid "User IP"
 msgstr ""
 
-#: ../web_tt2/viewlogs.tt2:180
+#: ../web_tt2/viewlogs.tt2:179
 msgid "Service"
 msgstr ""
 
-#: ../web_tt2/viewlogs.tt2:214
+#: ../web_tt2/viewlogs.tt2:213
 msgid "view other events related to this message id."
 msgstr ""
 
-#: ../web_tt2/viewlogs.tt2:214
+#: ../web_tt2/viewlogs.tt2:213
 msgid "Other events"
 msgstr ""
 
@@ -4811,7 +4811,7 @@ msgstr ""
 msgid "%1 Digest %2"
 msgstr ""
 
-#: ../mail_tt2/digest.tt2:10 ../mail_tt2/digest_plain.tt2:9 ../mail_tt2/get_archive.tt2:9 ../src/lib/List.pm:2736
+#: ../mail_tt2/digest.tt2:10 ../mail_tt2/digest_plain.tt2:9 ../mail_tt2/get_archive.tt2:9 ../src/lib/List.pm:2743
 msgid "Table of contents:"
 msgstr ""
 
@@ -7278,7 +7278,7 @@ msgstr ""
 msgid "%d %b %Y  %H:%M"
 msgstr ""
 
-#: ../src/lib/Commands.pm:963 ../wwsympa/wwsympa.fcgi.in:9869
+#: ../src/lib/Commands.pm:963 ../wwsympa/wwsympa.fcgi.in:9878
 #. This entry is a date/time format
 #. Check the strftime manpage for format details : http://docs.freebsd.org/info/gawk/gawk.info.Time_Functions.html
 msgid "%A"
@@ -7293,7 +7293,7 @@ msgstr ""
 msgid "Error at line %d: %s"
 msgstr ""
 
-#: ../src/lib/Family.pm:2598 ../src/lib/Family.pm:395 ../src/lib/Family.pm:672 ../src/lib/List.pm:1895 ../wwsympa/Auth.pm:459 ../wwsympa/wwsympa.fcgi.in:1090 ../wwsympa/wwsympa.fcgi.in:2636 ../wwsympa/wwsympa.fcgi.in:2911 ../wwsympa/wwsympa.fcgi.in:2922 ../wwsympa/wwsympa.fcgi.in:3043
+#: ../src/lib/Family.pm:2598 ../src/lib/Family.pm:395 ../src/lib/Family.pm:672 ../src/lib/List.pm:1896 ../wwsympa/Auth.pm:459 ../wwsympa/wwsympa.fcgi.in:1090 ../wwsympa/wwsympa.fcgi.in:2636 ../wwsympa/wwsympa.fcgi.in:2911 ../wwsympa/wwsympa.fcgi.in:2922 ../wwsympa/wwsympa.fcgi.in:3043
 #. This entry is a date/time format
 #. Check the strftime manpage for format details : http://docs.freebsd.org/info/gawk/gawk.info.Time_Functions.html
 msgid "%d %b %Y at %H:%M:%S"
@@ -7979,19 +7979,19 @@ msgstr ""
 msgid "who updated the config"
 msgstr ""
 
-#: ../src/lib/List.pm:2851
+#: ../src/lib/List.pm:2858
 #. This entry is a date/time format
 #. Check the strftime manpage for format details : http://docs.freebsd.org/info/gawk/gawk.info.Time_Functions.html
 msgid "%a, %d %b %Y %H:%M:%S"
 msgstr ""
 
-#: ../src/lib/List.pm:2852
+#: ../src/lib/List.pm:2859
 #. This entry is a date/time format
 #. Check the strftime manpage for format details : http://docs.freebsd.org/info/gawk/gawk.info.Time_Functions.html
 msgid "%a, %d %b %Y"
 msgstr ""
 
-#: ../src/lib/List.pm:3043 ../src/lib/List.pm:3044 ../src/lib/List.pm:3048 ../wwsympa/wwsympa.fcgi.in:11046 ../wwsympa/wwsympa.fcgi.in:11115 ../wwsympa/wwsympa.fcgi.in:11317 ../wwsympa/wwsympa.fcgi.in:11664 ../wwsympa/wwsympa.fcgi.in:15115 ../wwsympa/wwsympa.fcgi.in:15122 ../wwsympa/wwsympa.fcgi.in:15836 ../wwsympa/wwsympa.fcgi.in:16629 ../wwsympa/wwsympa.fcgi.in:16630 ../wwsympa/wwsympa.fcgi.in:4322 ../wwsympa/wwsympa.fcgi.in:4375 ../wwsympa/wwsympa.fcgi.in:4946 ../wwsympa/wwsympa.fcgi.in:4947 ../wwsympa/wwsympa.fcgi.in:6512 ../wwsympa/wwsympa.fcgi.in:7534 ../wwsympa/wwsympa.fcgi.in:8079 ../wwsympa/wwsympa.fcgi.in:8126 ../wwsympa/wwsympa.fcgi.in:8128 ../wwsympa/wwsympa.fcgi.in:8606 ../wwsympa/wwsympa.fcgi.in:8607 ../wwsympa/wwsympa.fcgi.in:8641 ../wwsympa/wwsympa.fcgi.in:8642 ../wwsympa/wwsympa.fcgi.in:8821 ../wwsympa/wwsympa.fcgi.in:8822
+#: ../src/lib/List.pm:3050 ../src/lib/List.pm:3051 ../src/lib/List.pm:3055 ../wwsympa/wwsympa.fcgi.in:11055 ../wwsympa/wwsympa.fcgi.in:11124 ../wwsympa/wwsympa.fcgi.in:11326 ../wwsympa/wwsympa.fcgi.in:11673 ../wwsympa/wwsympa.fcgi.in:15124 ../wwsympa/wwsympa.fcgi.in:15131 ../wwsympa/wwsympa.fcgi.in:15845 ../wwsympa/wwsympa.fcgi.in:16621 ../wwsympa/wwsympa.fcgi.in:16622 ../wwsympa/wwsympa.fcgi.in:4322 ../wwsympa/wwsympa.fcgi.in:4375 ../wwsympa/wwsympa.fcgi.in:4946 ../wwsympa/wwsympa.fcgi.in:4947 ../wwsympa/wwsympa.fcgi.in:6512 ../wwsympa/wwsympa.fcgi.in:7534 ../wwsympa/wwsympa.fcgi.in:8088 ../wwsympa/wwsympa.fcgi.in:8135 ../wwsympa/wwsympa.fcgi.in:8137 ../wwsympa/wwsympa.fcgi.in:8615 ../wwsympa/wwsympa.fcgi.in:8616 ../wwsympa/wwsympa.fcgi.in:8650 ../wwsympa/wwsympa.fcgi.in:8651 ../wwsympa/wwsympa.fcgi.in:8830 ../wwsympa/wwsympa.fcgi.in:8831
 #. This entry is a date/time format
 #. Check the strftime manpage for format details : http://docs.freebsd.org/info/gawk/gawk.info.Time_Functions.html
 msgid "%d %b %Y"
@@ -8103,29 +8103,29 @@ msgstr ""
 msgid "%H:%M:%S"
 msgstr ""
 
-#: ../wwsympa/SympaSession.pm:436 ../wwsympa/SympaSession.pm:437 ../wwsympa/wwsympa.fcgi.in:11898 ../wwsympa/wwsympa.fcgi.in:12031 ../wwsympa/wwsympa.fcgi.in:14344 ../wwsympa/wwsympa.fcgi.in:8036
+#: ../wwsympa/SympaSession.pm:436 ../wwsympa/SympaSession.pm:437 ../wwsympa/wwsympa.fcgi.in:11907 ../wwsympa/wwsympa.fcgi.in:12040 ../wwsympa/wwsympa.fcgi.in:14353 ../wwsympa/wwsympa.fcgi.in:8045
 #. This entry is a date/time format
 #. Check the strftime manpage for format details : http://docs.freebsd.org/info/gawk/gawk.info.Time_Functions.html
 msgid "%d %b %y  %H:%M"
 msgstr ""
 
-#: ../wwsympa/wwsympa.fcgi.in:15297
+#: ../wwsympa/wwsympa.fcgi.in:15306
 msgid "Your unsubscription request to list %s was sent to the list owner."
 msgstr ""
 
-#: ../wwsympa/wwsympa.fcgi.in:15299
+#: ../wwsympa/wwsympa.fcgi.in:15308
 msgid "You were successfully unsubscribed from list %s."
 msgstr ""
 
-#: ../wwsympa/wwsympa.fcgi.in:15303
+#: ../wwsympa/wwsympa.fcgi.in:15312
 msgid "Unsubscription from list %s denied: Unsubscription from this list is closed."
 msgstr ""
 
-#: ../wwsympa/wwsympa.fcgi.in:15305
+#: ../wwsympa/wwsympa.fcgi.in:15314
 msgid "Unsubscription from list %s failed."
 msgstr ""
 
-#: ../wwsympa/wwsympa.fcgi.in:16209 ../wwsympa/wwsympa.fcgi.in:16210
+#: ../wwsympa/wwsympa.fcgi.in:16221 ../wwsympa/wwsympa.fcgi.in:16222
 #. This entry is a date/time format
 #. Check the strftime manpage for format details : http://docs.freebsd.org/info/gawk/gawk.info.Time_Functions.html
 msgid "%Y-%m-%d-%H-%M-%S"
