@@ -3,7 +3,7 @@
 
 (See Changelog file for the full changes log)
 
-6.1.12		July 20, 2012
+6.1.13		July 20, 2012
 
   Features:
 
@@ -67,6 +67,10 @@
 	[7478] wwsympa/wwsympa.fcgi.in:  Fixed list log search date regexp to
 	accept dashes and removed admin notice if no list logs found (which can
 	occur if no match).
+
+6.1.12		July 20, 2012
+
+	Cacelled due to errors in the packaging.
 
 6.1.11		May 11, 2012
 
