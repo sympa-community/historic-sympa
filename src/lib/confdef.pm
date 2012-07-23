@@ -496,6 +496,7 @@ our @params = (
         query   => 'Defines the name of the family the automatic lists are based on.', 
         file    => 'sympa.conf',
         optional => '1',
+        vhost   => '1',
     },
     {
         name    => 'automatic_list_prefix',

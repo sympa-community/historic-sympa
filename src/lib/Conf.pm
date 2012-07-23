@@ -622,6 +622,10 @@ sub load_robots {
 		    my @parameter = split '=', $family_parameter;
 		    $family{$parameter[0]} = $parameter[1];
 		}
+		$family{'escaped_prefix_separator'} = $family{'prefix_separator'};
+		$family{'escaped_prefix_separator'} =~ s/([+*?.])/\\$1/g;
+		$family{'escaped_classes_separator'} = $family{'classes_separator'};
+		$family{'escaped_classes_separator'} =~ s/([+*?.])/\\$1/g;
 		$families_description{$family{'name'}} = \%family;
 		$families_description{$family{'name'}}{'description'} = &load_automatic_lists_description($robot,$family{'name'});
 	    }
