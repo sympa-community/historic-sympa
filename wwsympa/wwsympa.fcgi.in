@@ -4216,7 +4216,6 @@ sub do_renewpasswd {
      $param->{'review_page_size'} = $size;
      
      unless ($param->{'total'}) {
-	 &report::reject_report_web('user','no_subscriber',{},$param->{'action'},$list);
 	 &wwslog('info','do_review: no subscriber');
 	 # &List::db_log('wwsympa',$param->{'user'}{'email'},$param->{'auth_method'},$ip,'review',$param->{'list'},$robot,'','no subscriber');
 	 return 1;
