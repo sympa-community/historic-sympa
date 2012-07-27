@@ -12,13 +12,13 @@ msgstr ""
 "Project-Id-Version: Sympa-6.1.4, 6.2a.6\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2002-07-16 17:27+0800\n"
-"PO-Revision-Date: 2012-07-20 04:10+0200\n"
+"PO-Revision-Date: 2012-07-24 09:13+0200\n"
 "Last-Translator: IKEDA Soji <hatuka@nezumi.nu>\n"
 "Language-Team: 日本語\n"
+"Language: ja\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Language: ja\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
 "X-Generator: Pootle 2.1.5\n"
 
@@ -563,7 +563,7 @@ msgstr "投稿保管庫を管理"
 #: ../web_tt2/picture_upload.tt2:21 ../web_tt2/pref.tt2:4
 #: ../web_tt2/rename_list_request.tt2:3 ../web_tt2/review.tt2:5
 #: ../web_tt2/reviewbouncing.tt2:3 ../web_tt2/suboptions.tt2:20
-#: ../web_tt2/subscriber_table.tt2:118
+#: ../web_tt2/subscriber_table.tt2:106
 msgid "Open in a new window"
 msgstr "別ウィンドウで開く"
 
@@ -1122,10 +1122,8 @@ msgid ""
 "that neither list members, nor archives or shared documents are duplicated. "
 "The source lists you can use are limited to lists you own."
 msgstr ""
-"既にあるリストを雛形にして別のリストを作成できます。新しくできたリストには、"
-"もとのリストの設定が複写されます。ただし、リストのメンバ、投稿保管庫、共有文"
-"書は複製しません。もとのリストに使えるのは、自分がオーナーになっているリスト"
-"だけです。"
+"既にあるリストを雛形にして別のリストを作成できます。新しくできたリストには、もとのリストの設定が複写されます。ただし、リストの読者、投稿保管庫、共有文書"
+"は複製しません。もとのリストに使えるのは、自分がオーナーになっているリストだけです。"
 
 #: ../web_tt2/create_list_request.tt2:10 ../web_tt2/create_list_request.tt2:29
 msgid ""
@@ -1428,7 +1426,7 @@ msgid "Size (Kb)"
 msgstr "大きさ (キロバイト)"
 
 #: ../web_tt2/d_read.tt2:69 ../web_tt2/d_read.tt2:71
-#: ../web_tt2/latest_d_read.tt2:18 ../web_tt2/subscriber_table.tt2:66
+#: ../web_tt2/latest_d_read.tt2:18 ../web_tt2/subscriber_table.tt2:59
 msgid "Last update"
 msgstr "最終更新"
 
@@ -1945,11 +1943,11 @@ msgstr "リスト作成テンプレートを読み取れません。"
 
 #: ../web_tt2/error.tt2:14
 msgid "Failed to inlude members"
-msgstr "メンバを加えるのに失敗しました"
+msgstr "読者の取り込みに失敗しました"
 
 #: ../web_tt2/error.tt2:15
 msgid "Failed to include list admins"
-msgstr "リスト管理者を加えるのに失敗しました"
+msgstr "リスト管理者の取り込みに失敗しました"
 
 #: ../web_tt2/error.tt2:16
 msgid "No owner is defined for the list"
@@ -2103,7 +2101,7 @@ msgstr ""
 msgid "The period is too long (%1 days)"
 msgstr "期間が長すぎます (%1日間)"
 
-#: ../web_tt2/error.tt2:61 ../web_tt2/subscriber_table.tt2:170
+#: ../web_tt2/error.tt2:61
 msgid "List has no subscribers"
 msgstr "リストに読者がいません"
 
@@ -2408,9 +2406,7 @@ msgstr "「%1」というファイル名は使えません"
 #: ../web_tt2/error.tt2:128
 msgid ""
 "Failed to update member email in list '%1', list owner has been notified."
-msgstr ""
-"「%1」メーリング リストのメンバメール アドレスの更新に失敗しました。リスト"
-"オーナーに知らせました。"
+msgstr "「%1」メーリング リストの読者メール アドレスの更新に失敗しました。リストオーナーに知らせました。"
 
 #. (u_err.listname)
 #: ../web_tt2/error.tt2:129
@@ -2478,7 +2474,7 @@ msgstr "閉鎖中のリスト"
 #: ../web_tt2/modindex.tt2:64 ../web_tt2/review.tt2:138
 #: ../web_tt2/reviewbouncing.tt2:131 ../web_tt2/reviewbouncing.tt2:60
 #: ../web_tt2/subindex.tt2:10 ../web_tt2/subindex.tt2:57
-#: ../web_tt2/subscriber_table.tt2:9
+#: ../web_tt2/subscriber_table.tt2:7
 msgid "Toggle Selection"
 msgstr "選択を逆転"
 
@@ -2725,7 +2721,7 @@ msgid "Most recent documents for this list "
 msgstr " このリストの最新の共有文書 "
 
 #: ../web_tt2/latest_d_read.tt2:19 ../web_tt2/subindex.tt2:12
-#: ../web_tt2/subscriber_table.tt2:39 ../web_tt2/subscriber_table.tt2:42
+#: ../web_tt2/subscriber_table.tt2:33 ../web_tt2/subscriber_table.tt2:36
 msgid "Name"
 msgstr "名前"
 
@@ -3499,7 +3495,7 @@ msgstr "リストの配送エラーを表示する表"
 
 #: ../web_tt2/review.tt2:148 ../web_tt2/reviewbouncing.tt2:61
 #: ../web_tt2/show_exclude.tt2:15 ../web_tt2/subindex.tt2:11
-#: ../web_tt2/subscriber_table.tt2:15 ../web_tt2/subscriber_table.tt2:18
+#: ../web_tt2/subscriber_table.tt2:12 ../web_tt2/subscriber_table.tt2:15
 #: ../web_tt2/viewlogs.tt2:54 ../web_tt2/viewlogs.tt2:63
 msgid "Email"
 msgstr "メール"
@@ -3572,7 +3568,7 @@ msgstr "除外"
 
 #: ../web_tt2/review.tt2:56
 msgid "Synchronize members with data sources"
-msgstr "データソースとメンバー情報の同期"
+msgstr "データソースと読者情報の同期"
 
 #: ../web_tt2/review.tt2:62
 msgid "Remind all"
@@ -4653,33 +4649,33 @@ msgstr "すでに %1 メーリング リストに読者登録しています"
 msgid "List members"
 msgstr "読者一覧"
 
-#: ../web_tt2/subscriber_table.tt2:23 ../web_tt2/subscriber_table.tt2:26
+#: ../web_tt2/subscriber_table.tt2:20 ../web_tt2/subscriber_table.tt2:23
 msgid "Domain"
 msgstr "区分"
 
-#: ../web_tt2/subscriber_table.tt2:32
+#: ../web_tt2/subscriber_table.tt2:28
 msgid "Picture"
 msgstr "ピクチャ"
 
-#: ../web_tt2/subscriber_table.tt2:48 ../web_tt2/suspend_request.tt2:12
+#: ../web_tt2/subscriber_table.tt2:41 ../web_tt2/suspend_request.tt2:12
 msgid "Reception"
 msgstr "受け取りかた"
 
-#: ../web_tt2/subscriber_table.tt2:52 ../web_tt2/subscriber_table.tt2:55
+#: ../web_tt2/subscriber_table.tt2:45 ../web_tt2/subscriber_table.tt2:48
 msgid "Sources"
 msgstr "ソース"
 
-#: ../web_tt2/subscriber_table.tt2:60 ../web_tt2/subscriber_table.tt2:63
+#: ../web_tt2/subscriber_table.tt2:53 ../web_tt2/subscriber_table.tt2:56
 #: ../web_tt2/viewlogs.tt2:123
 msgid "Sub date"
 msgstr "読者登録日"
 
-#: ../web_tt2/subscriber_table.tt2:101
+#: ../web_tt2/subscriber_table.tt2:89
 msgid "bouncing"
 msgstr "配送エラー"
 
 #. (u.email)
-#: ../web_tt2/subscriber_table.tt2:118
+#: ../web_tt2/subscriber_table.tt2:106
 msgid "%1's picture"
 msgstr "%1 のピクチャ"
 
@@ -4879,7 +4875,7 @@ msgstr "検索する期間:"
 #. (date_to_formated)
 #. This entry is a date/time format
 #. Check the strftime manpage for format details : http://docs.freebsd.org/info/gawk/gawk.info.Time_Functions.html
-#: ../web_tt2/viewlogs.tt2:113 ../wwsympa/wwsympa.fcgi.in:16248
+#: ../web_tt2/viewlogs.tt2:113 ../wwsympa/wwsympa.fcgi.in:16239
 msgid "%d %b %Y %H:%M:%S"
 msgstr "%Y年%m月%d日 %H:%M:%S"
 
@@ -5541,7 +5537,7 @@ msgid "%1 Digest %2"
 msgstr "%1 - %2のまとめ読み"
 
 #: ../mail_tt2/digest.tt2:10 ../mail_tt2/digest_plain.tt2:9
-#: ../mail_tt2/get_archive.tt2:9 ../src/lib/List.pm:2747
+#: ../mail_tt2/get_archive.tt2:9 ../src/lib/List.pm:2743
 msgid "Table of contents:"
 msgstr "目次:"
 
@@ -6709,7 +6705,7 @@ msgstr "リストを読み直しできません。"
 #. (list.name)
 #: ../mail_tt2/listmaster_notification.tt2:342
 msgid "Failed to inlude members for list '%1'"
-msgstr "リスト「%1」にメンバを入れられません"
+msgstr "リスト「%1」に読者を入れられません"
 
 #. (list.name)
 #: ../mail_tt2/listmaster_notification.tt2:343
@@ -8139,6 +8135,7 @@ msgid "public list multipart messages are rejected"
 msgstr "公開リスト。マルチパートのメッセージは拒否"
 
 #: ../src/etc/scenari/spam_status.x-spam-status:1
+#: ../src/etc/scenari/spam_status.x-spam-status~:1
 msgid "test x-spam-status  header"
 msgstr "X-Spam-Statusヘッダを調べる"
 
@@ -8448,7 +8445,7 @@ msgstr "毎年、登録確認を読者に送る"
 
 #: ../src/etc/list_task_models/sync_include.ttl.task:1
 msgid "Update of list members based on the TTL"
-msgstr "TTL に基いたリストのメンバ更新"
+msgstr "TTL に基いたリスト読者の更新"
 
 #: ../src/etc/create_list_templates/discussion_list/comment.tt2:1
 msgid "Public discussion mailing list"
@@ -8533,7 +8530,7 @@ msgstr "%Y/%m/%d %H:%M"
 
 #. This entry is a date/time format
 #. Check the strftime manpage for format details : http://docs.freebsd.org/info/gawk/gawk.info.Time_Functions.html
-#: ../src/lib/Commands.pm:963 ../wwsympa/wwsympa.fcgi.in:9887
+#: ../src/lib/Commands.pm:963 ../wwsympa/wwsympa.fcgi.in:9878
 msgid "%A"
 msgstr "%a"
 
@@ -8549,9 +8546,9 @@ msgstr "間違いがあります (%d 行目): %s"
 #. Check the strftime manpage for format details : http://docs.freebsd.org/info/gawk/gawk.info.Time_Functions.html
 #: ../src/lib/Family.pm:2598 ../src/lib/Family.pm:395 ../src/lib/Family.pm:672
 #: ../src/lib/List.pm:1896 ../wwsympa/Auth.pm:459
-#: ../wwsympa/wwsympa.fcgi.in:1090 ../wwsympa/wwsympa.fcgi.in:2646
-#: ../wwsympa/wwsympa.fcgi.in:2921 ../wwsympa/wwsympa.fcgi.in:2932
-#: ../wwsympa/wwsympa.fcgi.in:3053
+#: ../wwsympa/wwsympa.fcgi.in:1090 ../wwsympa/wwsympa.fcgi.in:2636
+#: ../wwsympa/wwsympa.fcgi.in:2911 ../wwsympa/wwsympa.fcgi.in:2922
+#: ../wwsympa/wwsympa.fcgi.in:3043
 msgid "%d %b %Y at %H:%M:%S"
 msgstr "%Y年%m月%d日%H時%M分%S秒"
 
@@ -9130,7 +9127,7 @@ msgstr "歓迎メッセージの送信元"
 
 #: ../src/lib/List.pm:1455
 msgid "percentage of list members in VERP mode"
-msgstr "リストのメンバへ配送するメッセージのうち、VERP 方式で送るものの割合"
+msgstr "リストの読者へ配送するメッセージのうち、VERP 方式で送るものの割合"
 
 #: ../src/lib/List.pm:365 ../src/lib/List.pm:372
 msgid "%"
@@ -9249,31 +9246,31 @@ msgstr "設定の最終更新者"
 
 #. This entry is a date/time format
 #. Check the strftime manpage for format details : http://docs.freebsd.org/info/gawk/gawk.info.Time_Functions.html
-#: ../src/lib/List.pm:2862
+#: ../src/lib/List.pm:2858
 msgid "%a, %d %b %Y %H:%M:%S"
 msgstr "%Y年%m月%d日(%a) %H:%M:%S"
 
 #. This entry is a date/time format
 #. Check the strftime manpage for format details : http://docs.freebsd.org/info/gawk/gawk.info.Time_Functions.html
-#: ../src/lib/List.pm:2863
+#: ../src/lib/List.pm:2859
 msgid "%a, %d %b %Y"
 msgstr "%Y年%m月%d日(%a)"
 
 #. This entry is a date/time format
 #. Check the strftime manpage for format details : http://docs.freebsd.org/info/gawk/gawk.info.Time_Functions.html
-#: ../src/lib/List.pm:3054 ../src/lib/List.pm:3055 ../src/lib/List.pm:3059
-#: ../wwsympa/wwsympa.fcgi.in:11064 ../wwsympa/wwsympa.fcgi.in:11133
-#: ../wwsympa/wwsympa.fcgi.in:11335 ../wwsympa/wwsympa.fcgi.in:11682
-#: ../wwsympa/wwsympa.fcgi.in:15133 ../wwsympa/wwsympa.fcgi.in:15140
-#: ../wwsympa/wwsympa.fcgi.in:15854 ../wwsympa/wwsympa.fcgi.in:16630
-#: ../wwsympa/wwsympa.fcgi.in:16631 ../wwsympa/wwsympa.fcgi.in:4331
-#: ../wwsympa/wwsympa.fcgi.in:4384 ../wwsympa/wwsympa.fcgi.in:4955
-#: ../wwsympa/wwsympa.fcgi.in:4956 ../wwsympa/wwsympa.fcgi.in:6521
-#: ../wwsympa/wwsympa.fcgi.in:7543 ../wwsympa/wwsympa.fcgi.in:8097
-#: ../wwsympa/wwsympa.fcgi.in:8144 ../wwsympa/wwsympa.fcgi.in:8146
-#: ../wwsympa/wwsympa.fcgi.in:8624 ../wwsympa/wwsympa.fcgi.in:8625
-#: ../wwsympa/wwsympa.fcgi.in:8659 ../wwsympa/wwsympa.fcgi.in:8660
-#: ../wwsympa/wwsympa.fcgi.in:8839 ../wwsympa/wwsympa.fcgi.in:8840
+#: ../src/lib/List.pm:3050 ../src/lib/List.pm:3051 ../src/lib/List.pm:3055
+#: ../wwsympa/wwsympa.fcgi.in:11055 ../wwsympa/wwsympa.fcgi.in:11124
+#: ../wwsympa/wwsympa.fcgi.in:11326 ../wwsympa/wwsympa.fcgi.in:11673
+#: ../wwsympa/wwsympa.fcgi.in:15124 ../wwsympa/wwsympa.fcgi.in:15131
+#: ../wwsympa/wwsympa.fcgi.in:15845 ../wwsympa/wwsympa.fcgi.in:16621
+#: ../wwsympa/wwsympa.fcgi.in:16622 ../wwsympa/wwsympa.fcgi.in:4322
+#: ../wwsympa/wwsympa.fcgi.in:4375 ../wwsympa/wwsympa.fcgi.in:4946
+#: ../wwsympa/wwsympa.fcgi.in:4947 ../wwsympa/wwsympa.fcgi.in:6512
+#: ../wwsympa/wwsympa.fcgi.in:7534 ../wwsympa/wwsympa.fcgi.in:8088
+#: ../wwsympa/wwsympa.fcgi.in:8135 ../wwsympa/wwsympa.fcgi.in:8137
+#: ../wwsympa/wwsympa.fcgi.in:8615 ../wwsympa/wwsympa.fcgi.in:8616
+#: ../wwsympa/wwsympa.fcgi.in:8650 ../wwsympa/wwsympa.fcgi.in:8651
+#: ../wwsympa/wwsympa.fcgi.in:8830 ../wwsympa/wwsympa.fcgi.in:8831
 msgid "%d %b %Y"
 msgstr "%Y年%m月%d日"
 
@@ -9410,33 +9407,33 @@ msgstr "%H:%M:%S"
 #. This entry is a date/time format
 #. Check the strftime manpage for format details : http://docs.freebsd.org/info/gawk/gawk.info.Time_Functions.html
 #: ../wwsympa/SympaSession.pm:436 ../wwsympa/SympaSession.pm:437
-#: ../wwsympa/wwsympa.fcgi.in:11916 ../wwsympa/wwsympa.fcgi.in:12049
-#: ../wwsympa/wwsympa.fcgi.in:14362 ../wwsympa/wwsympa.fcgi.in:8054
+#: ../wwsympa/wwsympa.fcgi.in:11907 ../wwsympa/wwsympa.fcgi.in:12040
+#: ../wwsympa/wwsympa.fcgi.in:14353 ../wwsympa/wwsympa.fcgi.in:8045
 msgid "%d %b %y  %H:%M"
 msgstr "%y/%m/%d %H:%M"
 
-#: ../wwsympa/wwsympa.fcgi.in:15315
+#: ../wwsympa/wwsympa.fcgi.in:15306
 msgid "Your unsubscription request to list %s was sent to the list owner."
 msgstr "%s メーリング リストからの登録解除申込をリストのオーナーに回送しました"
 
-#: ../wwsympa/wwsympa.fcgi.in:15317
+#: ../wwsympa/wwsympa.fcgi.in:15308
 msgid "You were successfully unsubscribed from list %s."
 msgstr "あなたは %1 メーリング リストから登録解除されました。"
 
-#: ../wwsympa/wwsympa.fcgi.in:15321
+#: ../wwsympa/wwsympa.fcgi.in:15312
 msgid ""
 "Unsubscription from list %s denied: Unsubscription from this list is closed."
 msgstr ""
 "%s メーリング リストからの登録解除は認められませんでした。このリストは登録解"
 "除ができません。"
 
-#: ../wwsympa/wwsympa.fcgi.in:15323
+#: ../wwsympa/wwsympa.fcgi.in:15314
 msgid "Unsubscription from list %s failed."
 msgstr "%1 メーリング リストからの登録解除が失敗しました。"
 
 #. This entry is a date/time format
 #. Check the strftime manpage for format details : http://docs.freebsd.org/info/gawk/gawk.info.Time_Functions.html
-#: ../wwsympa/wwsympa.fcgi.in:16230 ../wwsympa/wwsympa.fcgi.in:16231
+#: ../wwsympa/wwsympa.fcgi.in:16221 ../wwsympa/wwsympa.fcgi.in:16222
 msgid "%Y-%m-%d-%H-%M-%S"
 msgstr "%Y-%m-%d-%H-%M-%S"
 

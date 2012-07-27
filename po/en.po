@@ -7,15 +7,15 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "POT-Creation-Date: 2002-07-16 17:27+0800\n"
-"PO-Revision-Date: 2012-04-18 00:58+0200\n"
-"Last-Translator: Anonymous Pootle User\n"
+"PO-Revision-Date: 2012-07-27 08:58+0200\n"
+"Last-Translator: Julian <julian-sym@d-and-j.net>\n"
 "Language-Team: English <LL@li.org>\n"
+"Language: en_US\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Language: en\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Pootle 2.1.2\n"
+"X-Generator: Pootle 2.1.5\n"
 
 #: ../web_tt2/home.tt2:2
 msgid "Mailing lists server"
@@ -582,7 +582,7 @@ msgstr "Archive Management"
 #: ../web_tt2/picture_upload.tt2:21 ../web_tt2/pref.tt2:4
 #: ../web_tt2/rename_list_request.tt2:3 ../web_tt2/review.tt2:5
 #: ../web_tt2/reviewbouncing.tt2:3 ../web_tt2/suboptions.tt2:20
-#: ../web_tt2/subscriber_table.tt2:118
+#: ../web_tt2/subscriber_table.tt2:106
 msgid "Open in a new window"
 msgstr "Open in a new window"
 
@@ -812,30 +812,29 @@ msgid "Return to archive %1"
 msgstr "Return to archive %1"
 
 #: ../web_tt2/automatic_lists_management_request.tt2:3
-#, fuzzy
 msgid "Automatic lists management"
-msgstr "Blacklist management"
+msgstr "Automatic lists management"
 
 #. (automatic_lists_description.family_name)
 #: ../web_tt2/automatic_lists_management_request.tt2:4
 msgid "The automatic lists are based on the $1 family"
-msgstr ""
+msgstr "The automatic lists are based on the $1 family"
 
 #: ../web_tt2/automatic_lists_request.tt2:4
 msgid ""
 "In this form, you will be able to create and / or access lists created on "
 "the basis of parameters you will defined."
 msgstr ""
+"In this form, you will be able to create and/or access lists created on the "
+"basis of parameters you will define."
 
 #: ../web_tt2/automatic_lists_request.tt2:13
-#, fuzzy
 msgid "Go to list"
-msgstr "to list"
+msgstr "Go to list"
 
 #: ../web_tt2/automatic_lists.tt2:3
-#, fuzzy
 msgid "Automatic lists result"
-msgstr "Automatic messages"
+msgstr "Automatic lists result"
 
 #: ../web_tt2/auto_signoff.tt2:1
 msgid "Unsubscription request"
@@ -1475,7 +1474,7 @@ msgid "Size (Kb)"
 msgstr "Size (Kb)"
 
 #: ../web_tt2/d_read.tt2:69 ../web_tt2/d_read.tt2:71
-#: ../web_tt2/latest_d_read.tt2:18 ../web_tt2/subscriber_table.tt2:66
+#: ../web_tt2/latest_d_read.tt2:18 ../web_tt2/subscriber_table.tt2:59
 msgid "Last update"
 msgstr "Last update"
 
@@ -1713,13 +1712,12 @@ msgstr ""
 
 # rtb
 #: ../web_tt2/editfile.tt2:30
-#, fuzzy
 msgid ""
 "List description: This text is sent as an answer to the mail command INFO. "
 "It can also be included in the <em>Welcome message</em>."
 msgstr ""
-"List description: This text is sent as an answer to the mail command\n"
-"INFO. It can also be included in the"
+"List description: This text is sent as an answer to the mail command INFO. "
+"It can also be included in the <em>Welcome message</em>."
 
 #: ../web_tt2/editfile.tt2:32
 msgid "Automatic messages"
@@ -2017,10 +2015,10 @@ msgstr "Unable to load list topics."
 msgid "Unable to load create_list templates."
 msgstr "Unable to load create_list templates."
 
+# typo in original
 #: ../web_tt2/error.tt2:14
-#, fuzzy
 msgid "Failed to inlude members"
-msgstr "Failed to populate list members"
+msgstr "Failed to include members"
 
 #: ../web_tt2/error.tt2:15
 msgid "Failed to include list admins"
@@ -2182,7 +2180,7 @@ msgstr ""
 msgid "The period is too long (%1 days)"
 msgstr "The period is too long (%1 days)"
 
-#: ../web_tt2/error.tt2:61 ../web_tt2/subscriber_table.tt2:170
+#: ../web_tt2/error.tt2:61
 msgid "List has no subscribers"
 msgstr "List has no subscribers"
 
@@ -2524,37 +2522,33 @@ msgstr ""
 "     because your new address is not allowed to subscribe/unsubscribe:"
 
 #: ../web_tt2/family_signoff.tt2:1 ../web_tt2/family_signoff_request2.tt2:1
-#, fuzzy
 msgid "Global unsubscription"
-msgstr "No subscription."
+msgstr "Global unsubscription"
 
 #. (signing_off_email,family)
 #: ../web_tt2/family_signoff.tt2:2 ../web_tt2/family_signoff_request2.tt2:2
-#, fuzzy
 msgid "You successfully unsubscribed the address %1 from family %2."
-msgstr "You clicked a link to unsubscribe the address %1 from list %2."
+msgstr "You successfully unsubscribed the address %1 from family %2."
 
 #: ../web_tt2/family_signoff_request.tt2:1
-#, fuzzy
 msgid "Global unsubscription request"
-msgstr "No subscription requests"
+msgstr "Global unsubscription request"
 
 #. (signing_off_email,family)
 #: ../web_tt2/family_signoff_request.tt2:2
-#, fuzzy
 msgid "You clicked a link to unsubscribe the address %1 from family %2."
-msgstr "You clicked a link to unsubscribe the address %1 from list %2."
+msgstr "You clicked a link to unsubscribe the address %1 from family %2."
 
 #. (family)
 #: ../web_tt2/family_signoff_request.tt2:3
-#, fuzzy
 msgid ""
 "A confirmation was just sent to this address. By clicking the link it "
 "contains, you will be definitively unsubscribed from all the lists from "
 "family %1"
 msgstr ""
 "A confirmation was just sent to this address. By clicking the link it "
-"contains, you will be unsubscribed from list %1"
+"contains, you will be completely unsubscribed from all the lists from family "
+"%1"
 
 #: ../web_tt2/get_closed_lists.tt2:6 ../web_tt2/get_closed_lists.tt2:7
 #: ../web_tt2/serveradmin.tt2:10
@@ -2567,7 +2561,7 @@ msgstr "Closed lists"
 #: ../web_tt2/modindex.tt2:64 ../web_tt2/review.tt2:138
 #: ../web_tt2/reviewbouncing.tt2:131 ../web_tt2/reviewbouncing.tt2:60
 #: ../web_tt2/subindex.tt2:10 ../web_tt2/subindex.tt2:57
-#: ../web_tt2/subscriber_table.tt2:9
+#: ../web_tt2/subscriber_table.tt2:7
 msgid "Toggle Selection"
 msgstr "Toggle Selection"
 
@@ -2601,7 +2595,6 @@ msgid "Listname"
 msgstr "Listname"
 
 #: ../web_tt2/get_inactive_lists.tt2:10
-#, fuzzy
 msgid "Number of subscribers"
 msgstr "Number of subscribers"
 
@@ -2610,12 +2603,10 @@ msgid "Send scenario"
 msgstr "Sender scenario"
 
 #: ../web_tt2/get_inactive_lists.tt2:13
-#, fuzzy
 msgid "Creator"
 msgstr "Creator"
 
 #: ../web_tt2/get_inactive_lists.tt2:15
-#, fuzzy
 msgid "Editors"
 msgstr "Editors"
 
@@ -2816,7 +2807,7 @@ msgid "Most recent documents for this list "
 msgstr "Most recent documents for this list "
 
 #: ../web_tt2/latest_d_read.tt2:19 ../web_tt2/subindex.tt2:12
-#: ../web_tt2/subscriber_table.tt2:39 ../web_tt2/subscriber_table.tt2:42
+#: ../web_tt2/subscriber_table.tt2:33 ../web_tt2/subscriber_table.tt2:36
 msgid "Name"
 msgstr "Name"
 
@@ -3100,9 +3091,8 @@ msgid "Reject without notification "
 msgstr "Reject without notification "
 
 #: ../web_tt2/modindex.tt2:41
-#, fuzzy
 msgid "Add to blacklist"
-msgstr "Add sender to blacklist"
+msgstr "Add to blacklist"
 
 # rtb
 #: ../web_tt2/modindex.tt2:52
@@ -3608,7 +3598,7 @@ msgstr "Table to display list bounces"
 
 #: ../web_tt2/review.tt2:148 ../web_tt2/reviewbouncing.tt2:61
 #: ../web_tt2/show_exclude.tt2:15 ../web_tt2/subindex.tt2:11
-#: ../web_tt2/subscriber_table.tt2:15 ../web_tt2/subscriber_table.tt2:18
+#: ../web_tt2/subscriber_table.tt2:12 ../web_tt2/subscriber_table.tt2:15
 #: ../web_tt2/viewlogs.tt2:54 ../web_tt2/viewlogs.tt2:63
 msgid "Email"
 msgstr "Email"
@@ -3943,16 +3933,15 @@ msgstr "The following virtual robots are running on this server:"
 
 #: ../web_tt2/serveradmin.tt2:27
 msgid "Sympa URL:"
-msgstr ""
+msgstr "Sympa URL:"
 
 #: ../web_tt2/serveradmin.tt2:27
 msgid "Mail domain:"
-msgstr ""
+msgstr "Mail domain:"
 
 #: ../web_tt2/serveradmin.tt2:27
-#, fuzzy
 msgid "Listmaster(s):"
-msgstr "Listmaster"
+msgstr "Listmaster(s):"
 
 #: ../web_tt2/serveradmin.tt2:30
 msgid "No Virtual Robot defined on this server"
@@ -4653,22 +4642,18 @@ msgstr "Send me a confirmation password"
 
 #. (init_email)
 #: ../web_tt2/sso_login.tt2:32
-#, fuzzy
 msgid ""
 "A confirmation password has been sent to your email address %1.<br />Please "
 "check your e-mail box for the message containing the confirmation link."
 msgstr ""
 "A confirmation password has been sent to your email address %1.<br />Please "
-"check your e-mail box for the message containing the confirmation password "
-"needed below."
+"check your email inbox for the message containing the confirmation link."
 
 #: ../web_tt2/stats.tt2:2
-#, fuzzy
 msgid "Shared document directory size:"
 msgstr "Shared document directory size:"
 
 #: ../web_tt2/stats.tt2:3
-#, fuzzy
 msgid "Web archives size:"
 msgstr "Web archives size:"
 
@@ -4799,33 +4784,33 @@ msgstr "You are already subscribed to list %1"
 msgid "List members"
 msgstr "List members"
 
-#: ../web_tt2/subscriber_table.tt2:23 ../web_tt2/subscriber_table.tt2:26
+#: ../web_tt2/subscriber_table.tt2:20 ../web_tt2/subscriber_table.tt2:23
 msgid "Domain"
 msgstr "Domain"
 
-#: ../web_tt2/subscriber_table.tt2:32
+#: ../web_tt2/subscriber_table.tt2:28
 msgid "Picture"
 msgstr "Picture"
 
-#: ../web_tt2/subscriber_table.tt2:48 ../web_tt2/suspend_request.tt2:12
+#: ../web_tt2/subscriber_table.tt2:41 ../web_tt2/suspend_request.tt2:12
 msgid "Reception"
 msgstr "Reception"
 
-#: ../web_tt2/subscriber_table.tt2:52 ../web_tt2/subscriber_table.tt2:55
+#: ../web_tt2/subscriber_table.tt2:45 ../web_tt2/subscriber_table.tt2:48
 msgid "Sources"
 msgstr "Sources"
 
-#: ../web_tt2/subscriber_table.tt2:60 ../web_tt2/subscriber_table.tt2:63
+#: ../web_tt2/subscriber_table.tt2:53 ../web_tt2/subscriber_table.tt2:56
 #: ../web_tt2/viewlogs.tt2:123
 msgid "Sub date"
 msgstr "Sub date"
 
-#: ../web_tt2/subscriber_table.tt2:101
+#: ../web_tt2/subscriber_table.tt2:89
 msgid "bouncing"
 msgstr "bouncing"
 
 #. (u.email)
-#: ../web_tt2/subscriber_table.tt2:118
+#: ../web_tt2/subscriber_table.tt2:106
 msgid "%1's picture"
 msgstr "%1's picture"
 
@@ -5026,7 +5011,7 @@ msgstr "Search period: "
 #. (date_to_formated)
 #. This entry is a date/time format
 #. Check the strftime manpage for format details : http://docs.freebsd.org/info/gawk/gawk.info.Time_Functions.html
-#: ../web_tt2/viewlogs.tt2:113 ../wwsympa/wwsympa.fcgi.in:16248
+#: ../web_tt2/viewlogs.tt2:113 ../wwsympa/wwsympa.fcgi.in:16239
 msgid "%d %b %Y %H:%M:%S"
 msgstr "%d %b %Y %H:%M:%S"
 
@@ -5085,9 +5070,8 @@ msgid "Other events"
 msgstr "Other events"
 
 #: ../web_tt2/viewmod.tt2:17
-#, fuzzy
 msgid "Default rejection message"
-msgstr "Server default rejection message"
+msgstr "Default rejection message"
 
 #: ../web_tt2/viewmod.tt2:18
 msgid "Do Not Notify"
@@ -5709,7 +5693,7 @@ msgid "%1 Digest %2"
 msgstr "%1 Digest %2"
 
 #: ../mail_tt2/digest.tt2:10 ../mail_tt2/digest_plain.tt2:9
-#: ../mail_tt2/get_archive.tt2:9 ../src/lib/List.pm:2747
+#: ../mail_tt2/get_archive.tt2:9 ../src/lib/List.pm:2743
 msgid "Table of contents:"
 msgstr "Table of contents:"
 
@@ -6252,12 +6236,10 @@ msgstr ""
 "from CPAN."
 
 #: ../mail_tt2/listmaster_notification.tt2:42
-#, fuzzy
 msgid "Previous process crashed"
 msgstr "Previous process crashed"
 
 #: ../mail_tt2/listmaster_notification.tt2:44
-#, fuzzy
 msgid "Previous process has died unexpectedly."
 msgstr "Previous process has died unexpectedly."
 
@@ -6661,10 +6643,11 @@ msgstr "Listmaster: internal server error "
 msgid " User %1 has encountered an internal server error"
 msgstr " User %1 has encountered an internal server error"
 
+# typo in original
 #. (error)
 #: ../mail_tt2/listmaster_notification.tt2:293
 msgid "The following error occurred whila managing bounces: %&"
-msgstr ""
+msgstr "The following error occurred while managing bounces: %&"
 
 #: ../mail_tt2/listmaster_notification.tt2:302
 #: ../mail_tt2/listmaster_notification.tt2:373
@@ -7373,6 +7356,12 @@ msgid ""
 "before being sent over email, the final size of an attachment is often "
 "significantly larger that the original file."
 msgstr ""
+"Your message could not be sent because its size (%1 kB) was over the maximum "
+"size (%2 kB) allowed on this list.\n"
+"\n"
+"Note: Because binary files have to be encoded in less-efficient ASCII format "
+"before being sent over email, the final size of an attachment is often "
+"significantly larger that the original file."
 
 #. (listname)
 #: ../mail_tt2/message_report.tt2:59
@@ -7772,16 +7761,14 @@ msgid "Help on Sympa: %1%2"
 msgstr "Help on Sympa: %1%2"
 
 #: ../mail_tt2/sendssopasswd.tt2:6
-#, fuzzy
 msgid ""
 "To complete your account setup actions you need to confirm that you have \n"
 "supplied a working email address.  Please follow the link below to complete "
 "your account configuration."
 msgstr ""
-"To complete your account setup actions you need to confirm that you have \n"
-"supplied a working email address.  Please enter the following email and "
-"password\n"
-"in the setup wizard to complete your account configuration."
+"To complete your account setup actions, you need to confirm that you have \n"
+"supplied a working email address.  Please follow the link below to complete "
+"your account configuration."
 
 #. (list.name)
 #: ../mail_tt2/stats_report.tt2:4
@@ -7924,55 +7911,53 @@ msgstr "Unsubscribing from list %1"
 # rtb
 #. (list.name,ip)
 #: ../mail_tt2/user_notification.tt2:51
-#, fuzzy
 msgid ""
 "Somebody (probably you) requested to unsubscribe you from list %1.\n"
 "This query was issued from the IP number '%2'.\n"
 "To confirm and get removed from the list, please click the link below: "
 msgstr ""
-"You have requested to change your subscriber email address. To confirm your "
-"new email address with the SYMPA server, please click on the URL:"
+"Somebody (probably you) requested to unsubscribe you from list %1.\n"
+"This query was issued from the IP address %2.\n"
+"To confirm and be removed from the list, please click the link below: "
 
 # rtb
 #. (list.name)
 #: ../mail_tt2/user_notification.tt2:53
-#, fuzzy
 msgid ""
 "You have requested to be removed from list %1. To confirm and get removed "
 "from the list, please click the link below: "
 msgstr ""
-"You have requested to change your subscriber email address. To confirm your "
-"new email address with the SYMPA server, please click on the URL:"
+"You have requested to be removed from list %1. To confirm and be removed "
+"from the list, please click the link below: "
 
 #. (family)
 #: ../mail_tt2/user_notification.tt2:58
-#, fuzzy
 msgid "Unsubscribing from family %1"
-msgstr "Unsubscribing from list %1"
+msgstr "Unsubscribing from family %1"
 
 # rtb
 #. (family,ip)
 #: ../mail_tt2/user_notification.tt2:62
-#, fuzzy
 msgid ""
 "Somebody (probably you) requested to unsubscribe you from family %1.\n"
 "This query was issued from the IP number '%2'.\n"
 "To confirm and get removed from all the lists of this family, please click "
 "the link below: "
 msgstr ""
-"You have requested to change your subscriber email address. To confirm your "
-"new email address with the SYMPA server, please click on the URL:"
+"Somebody (probably you) requested to unsubscribe you from family %1.\n"
+"This query was issued from the IP address %2.\n"
+"To confirm and be removed from all the lists of this family, please click "
+"the link below: "
 
 # rtb
 #. (family)
 #: ../mail_tt2/user_notification.tt2:64
-#, fuzzy
 msgid ""
 "You have requested to be removed from family %1. To confirm and get removed "
 "from all the lists of this family, please click the link below: "
 msgstr ""
-"You have requested to change your subscriber email address. To confirm your "
-"new email address with the SYMPA server, please click on the URL:"
+"You have requested to be removed from family %1. To confirm and be removed "
+"from all the lists of this family, please click the link below: "
 
 #. (list.name)
 #: ../mail_tt2/welcome.tt2:2
@@ -8141,9 +8126,8 @@ msgid "add performed by owner does not need authentication (notification)"
 msgstr "add performed by owner does not need authentication (notification)"
 
 #: ../src/etc/scenari/automatic_list_creation.family_owner:1
-#, fuzzy
 msgid "Restricted to people subscribed to the list of family owners."
-msgstr "restricted to subscribers or local domain users"
+msgstr "Restricted to people subscribed to the list of family owners."
 
 #: ../src/etc/scenari/automatic_list_creation.listmaster:1
 #: ../src/etc/scenari/create_list.listmaster:1
@@ -8340,8 +8324,9 @@ msgid "public list multipart messages are rejected"
 msgstr "public list multipart messages are rejected"
 
 #: ../src/etc/scenari/spam_status.x-spam-status:1
+#: ../src/etc/scenari/spam_status.x-spam-status~:1
 msgid "test x-spam-status  header"
-msgstr ""
+msgstr "test x-spam-status  header"
 
 #: ../src/etc/scenari/subscribe.auth:1 ../src/etc/scenari/subscribe.authdkim:1
 msgid "subscription request confirmed"
@@ -8744,7 +8729,7 @@ msgstr "%d %b %Y  %H:%M"
 
 #. This entry is a date/time format
 #. Check the strftime manpage for format details : http://docs.freebsd.org/info/gawk/gawk.info.Time_Functions.html
-#: ../src/lib/Commands.pm:963 ../wwsympa/wwsympa.fcgi.in:9887
+#: ../src/lib/Commands.pm:963 ../wwsympa/wwsympa.fcgi.in:9878
 msgid "%A"
 msgstr "%A"
 
@@ -8762,9 +8747,9 @@ msgstr "Error at line %d: %s"
 #. Check the strftime manpage for format details : http://docs.freebsd.org/info/gawk/gawk.info.Time_Functions.html
 #: ../src/lib/Family.pm:2598 ../src/lib/Family.pm:395 ../src/lib/Family.pm:672
 #: ../src/lib/List.pm:1896 ../wwsympa/Auth.pm:459
-#: ../wwsympa/wwsympa.fcgi.in:1090 ../wwsympa/wwsympa.fcgi.in:2646
-#: ../wwsympa/wwsympa.fcgi.in:2921 ../wwsympa/wwsympa.fcgi.in:2932
-#: ../wwsympa/wwsympa.fcgi.in:3053
+#: ../wwsympa/wwsympa.fcgi.in:1090 ../wwsympa/wwsympa.fcgi.in:2636
+#: ../wwsympa/wwsympa.fcgi.in:2911 ../wwsympa/wwsympa.fcgi.in:2922
+#: ../wwsympa/wwsympa.fcgi.in:3043
 msgid "%d %b %Y at %H:%M:%S"
 msgstr "%d %b %Y at %H:%M:%S"
 
@@ -8851,12 +8836,11 @@ msgstr "epoch date"
 
 #: ../src/lib/List.pm:442
 msgid "human readable"
-msgstr ""
+msgstr "human readable"
 
 #: ../src/lib/List.pm:447
-#, fuzzy
 msgid "who created the list"
-msgstr "who updated the config"
+msgstr "who created the list"
 
 #: ../src/lib/List.pm:451
 msgid "Creation of the list"
@@ -9224,7 +9208,7 @@ msgstr "Priority"
 
 #: ../src/lib/List.pm:1230
 msgid "Reject mail from automates (crontab, etc)?"
-msgstr ""
+msgstr "Reject mail from automatic processes (crontab, etc)?"
 
 #: ../src/lib/List.pm:1234
 msgid "Who can start a remind process"
@@ -9288,7 +9272,7 @@ msgstr "Status of the list"
 
 #: ../src/lib/List.pm:1350
 msgid "Timeout for fetch of include_sql_query"
-msgstr ""
+msgstr "Timeout for fetch of include_sql_query"
 
 #: ../src/lib/List.pm:1356
 msgid "Subject of the list"
@@ -9461,31 +9445,31 @@ msgstr "who updated the config"
 
 #. This entry is a date/time format
 #. Check the strftime manpage for format details : http://docs.freebsd.org/info/gawk/gawk.info.Time_Functions.html
-#: ../src/lib/List.pm:2862
+#: ../src/lib/List.pm:2858
 msgid "%a, %d %b %Y %H:%M:%S"
 msgstr "%a, %d %b %Y %H:%M:%S"
 
 #. This entry is a date/time format
 #. Check the strftime manpage for format details : http://docs.freebsd.org/info/gawk/gawk.info.Time_Functions.html
-#: ../src/lib/List.pm:2863
+#: ../src/lib/List.pm:2859
 msgid "%a, %d %b %Y"
 msgstr "%a, %d %b %Y"
 
 #. This entry is a date/time format
 #. Check the strftime manpage for format details : http://docs.freebsd.org/info/gawk/gawk.info.Time_Functions.html
-#: ../src/lib/List.pm:3054 ../src/lib/List.pm:3055 ../src/lib/List.pm:3059
-#: ../wwsympa/wwsympa.fcgi.in:11064 ../wwsympa/wwsympa.fcgi.in:11133
-#: ../wwsympa/wwsympa.fcgi.in:11335 ../wwsympa/wwsympa.fcgi.in:11682
-#: ../wwsympa/wwsympa.fcgi.in:15133 ../wwsympa/wwsympa.fcgi.in:15140
-#: ../wwsympa/wwsympa.fcgi.in:15854 ../wwsympa/wwsympa.fcgi.in:16630
-#: ../wwsympa/wwsympa.fcgi.in:16631 ../wwsympa/wwsympa.fcgi.in:4331
-#: ../wwsympa/wwsympa.fcgi.in:4384 ../wwsympa/wwsympa.fcgi.in:4955
-#: ../wwsympa/wwsympa.fcgi.in:4956 ../wwsympa/wwsympa.fcgi.in:6521
-#: ../wwsympa/wwsympa.fcgi.in:7543 ../wwsympa/wwsympa.fcgi.in:8097
-#: ../wwsympa/wwsympa.fcgi.in:8144 ../wwsympa/wwsympa.fcgi.in:8146
-#: ../wwsympa/wwsympa.fcgi.in:8624 ../wwsympa/wwsympa.fcgi.in:8625
-#: ../wwsympa/wwsympa.fcgi.in:8659 ../wwsympa/wwsympa.fcgi.in:8660
-#: ../wwsympa/wwsympa.fcgi.in:8839 ../wwsympa/wwsympa.fcgi.in:8840
+#: ../src/lib/List.pm:3050 ../src/lib/List.pm:3051 ../src/lib/List.pm:3055
+#: ../wwsympa/wwsympa.fcgi.in:11055 ../wwsympa/wwsympa.fcgi.in:11124
+#: ../wwsympa/wwsympa.fcgi.in:11326 ../wwsympa/wwsympa.fcgi.in:11673
+#: ../wwsympa/wwsympa.fcgi.in:15124 ../wwsympa/wwsympa.fcgi.in:15131
+#: ../wwsympa/wwsympa.fcgi.in:15845 ../wwsympa/wwsympa.fcgi.in:16621
+#: ../wwsympa/wwsympa.fcgi.in:16622 ../wwsympa/wwsympa.fcgi.in:4322
+#: ../wwsympa/wwsympa.fcgi.in:4375 ../wwsympa/wwsympa.fcgi.in:4946
+#: ../wwsympa/wwsympa.fcgi.in:4947 ../wwsympa/wwsympa.fcgi.in:6512
+#: ../wwsympa/wwsympa.fcgi.in:7534 ../wwsympa/wwsympa.fcgi.in:8088
+#: ../wwsympa/wwsympa.fcgi.in:8135 ../wwsympa/wwsympa.fcgi.in:8137
+#: ../wwsympa/wwsympa.fcgi.in:8615 ../wwsympa/wwsympa.fcgi.in:8616
+#: ../wwsympa/wwsympa.fcgi.in:8650 ../wwsympa/wwsympa.fcgi.in:8651
+#: ../wwsympa/wwsympa.fcgi.in:8830 ../wwsympa/wwsympa.fcgi.in:8831
 msgid "%d %b %Y"
 msgstr "%d %b %Y"
 
@@ -9502,9 +9486,8 @@ msgstr ""
 "for variable %s.\n"
 
 #: ../src/lib/mail.pm:829
-#, fuzzy
 msgid "Unable to create a channel in smtpto: %s"
-msgstr "Unable to create a channel in smtpto: %m"
+msgstr "Unable to create a channel in smtpto: %s"
 
 #: ../src/lib/PlainDigest.pm:180
 msgid ""
@@ -9515,9 +9498,8 @@ msgstr ""
 "\n"
 
 #: ../src/lib/PlainDigest.pm:184
-#, fuzzy
 msgid "[Unknown]"
-msgstr "Unknown"
+msgstr "[Unknown]"
 
 #: ../src/lib/PlainDigest.pm:206
 msgid ""
@@ -9531,29 +9513,25 @@ msgstr ""
 
 # rtb
 #: ../src/lib/PlainDigest.pm:208
-#, fuzzy
 msgid "Date: %s\n"
-msgstr "Date: %1"
+msgstr "Date: %s\n"
 
 #: ../src/lib/PlainDigest.pm:209
-#, fuzzy
 msgid "From: %s\n"
-msgstr "From: %1"
+msgstr "From: %s\n"
 
 #: ../src/lib/PlainDigest.pm:210
-#, fuzzy
 msgid "To: %s\n"
-msgstr "To: %1"
+msgstr "To: %s\n"
 
 #: ../src/lib/PlainDigest.pm:211
 msgid "Cc: %s\n"
-msgstr ""
+msgstr "Cc: %s\n"
 
 # rtb
 #: ../src/lib/PlainDigest.pm:212
-#, fuzzy
 msgid "Subject: %s\n"
-msgstr "Subject: %1"
+msgstr "Subject: %s\n"
 
 #: ../src/lib/PlainDigest.pm:218
 msgid ""
@@ -9564,13 +9542,12 @@ msgstr ""
 "\n"
 
 #: ../src/lib/PlainDigest.pm:240 ../src/lib/PlainDigest.pm:293
-#, fuzzy
 msgid ""
 "** Warning: Message part using unrecognised character set %s\n"
 "    Some characters may be lost or incorrect **\n"
 "\n"
 msgstr ""
-"** Warning: Message part originally used character set %s\n"
+"** Warning: A message part is using unrecognised character set %s\n"
 "    Some characters may be lost or incorrect **\n"
 "\n"
 
@@ -9591,11 +9568,12 @@ msgstr ""
 "-----Delivery Status Report-----\n"
 
 #: ../src/lib/PlainDigest.pm:265
-#, fuzzy
 msgid ""
 "\n"
 "-----End of Delivery Status Report-----\n"
-msgstr "-----End of Delivery Status Report-----\n"
+msgstr ""
+"\n"
+"-----End of Delivery Status Report-----\n"
 
 #: ../src/lib/PlainDigest.pm:275 ../src/lib/PlainDigest.pm:304
 msgid ""
@@ -9630,34 +9608,32 @@ msgstr "%H:%M:%S"
 #. This entry is a date/time format
 #. Check the strftime manpage for format details : http://docs.freebsd.org/info/gawk/gawk.info.Time_Functions.html
 #: ../wwsympa/SympaSession.pm:436 ../wwsympa/SympaSession.pm:437
-#: ../wwsympa/wwsympa.fcgi.in:11916 ../wwsympa/wwsympa.fcgi.in:12049
-#: ../wwsympa/wwsympa.fcgi.in:14362 ../wwsympa/wwsympa.fcgi.in:8054
+#: ../wwsympa/wwsympa.fcgi.in:11907 ../wwsympa/wwsympa.fcgi.in:12040
+#: ../wwsympa/wwsympa.fcgi.in:14353 ../wwsympa/wwsympa.fcgi.in:8045
 msgid "%d %b %y  %H:%M"
 msgstr "%d %b %y  %H:%M"
 
-#: ../wwsympa/wwsympa.fcgi.in:15315
-#, fuzzy
+#: ../wwsympa/wwsympa.fcgi.in:15306
 msgid "Your unsubscription request to list %s was sent to the list owner."
-msgstr "Your request has been forwarded to the list owner"
+msgstr "Your unsubscription request to list %s has been sent to the list owner."
 
-#: ../wwsympa/wwsympa.fcgi.in:15317
-#, fuzzy
+#: ../wwsympa/wwsympa.fcgi.in:15308
 msgid "You were successfully unsubscribed from list %s."
-msgstr "You asked to be unsubscribed  from list %1"
+msgstr "You have been successfully unsubscribed from list %s."
 
-#: ../wwsympa/wwsympa.fcgi.in:15321
+#: ../wwsympa/wwsympa.fcgi.in:15312
 msgid ""
 "Unsubscription from list %s denied: Unsubscription from this list is closed."
 msgstr ""
+"Unsubscription from list %s denied: Unsubscription from this list is closed."
 
-#: ../wwsympa/wwsympa.fcgi.in:15323
-#, fuzzy
+#: ../wwsympa/wwsympa.fcgi.in:15314
 msgid "Unsubscription from list %s failed."
-msgstr "Unsubscribing from list %1"
+msgstr "Unsubscription from list %s failed."
 
 #. This entry is a date/time format
 #. Check the strftime manpage for format details : http://docs.freebsd.org/info/gawk/gawk.info.Time_Functions.html
-#: ../wwsympa/wwsympa.fcgi.in:16230 ../wwsympa/wwsympa.fcgi.in:16231
+#: ../wwsympa/wwsympa.fcgi.in:16221 ../wwsympa/wwsympa.fcgi.in:16222
 msgid "%Y-%m-%d-%H-%M-%S"
 msgstr "%Y-%m-%d-%H-%M-%S"
 
@@ -9690,9 +9666,8 @@ msgid "1 week"
 msgstr "1 week"
 
 #: ../wwsympa/wwslib.pm:48
-#, fuzzy
 msgid "30 days"
-msgstr "days"
+msgstr "30 days"
 
 #: ../wwsympa/wwslib.pm:50
 msgid "listed in the list review page"

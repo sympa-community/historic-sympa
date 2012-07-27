@@ -7,13 +7,13 @@ msgstr ""
 "Project-Id-Version: Sympa\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2002-07-16 17:27+0800\n"
-"PO-Revision-Date: 2012-07-19 11:13+0200\n"
+"PO-Revision-Date: 2012-07-24 13:51+0200\n"
 "Last-Translator: robescolano <robescolano@gmail.com>\n"
 "Language-Team: Català <projectek2@upcnet.es>\n"
+"Language: ca\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Language: ca\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "X-Generator: Pootle 2.1.5\n"
 
@@ -571,7 +571,7 @@ msgstr "Gestió de l'arxiu"
 #: ../web_tt2/picture_upload.tt2:21 ../web_tt2/pref.tt2:4
 #: ../web_tt2/rename_list_request.tt2:3 ../web_tt2/review.tt2:5
 #: ../web_tt2/reviewbouncing.tt2:3 ../web_tt2/suboptions.tt2:20
-#: ../web_tt2/subscriber_table.tt2:118
+#: ../web_tt2/subscriber_table.tt2:106
 msgid "Open in a new window"
 msgstr "Obre en una nova finestra"
 
@@ -1458,7 +1458,7 @@ msgid "Size (Kb)"
 msgstr "Mida (Kb)"
 
 #: ../web_tt2/d_read.tt2:69 ../web_tt2/d_read.tt2:71
-#: ../web_tt2/latest_d_read.tt2:18 ../web_tt2/subscriber_table.tt2:66
+#: ../web_tt2/latest_d_read.tt2:18 ../web_tt2/subscriber_table.tt2:59
 msgid "Last update"
 msgstr "Darrera actualització"
 
@@ -2151,7 +2151,7 @@ msgstr ""
 msgid "The period is too long (%1 days)"
 msgstr "El període és massa llarg (%1 dies)"
 
-#: ../web_tt2/error.tt2:61 ../web_tt2/subscriber_table.tt2:170
+#: ../web_tt2/error.tt2:61
 msgid "List has no subscribers"
 msgstr "La llista no té cap subscriptor"
 
@@ -2532,7 +2532,7 @@ msgstr "Llistes tancades"
 #: ../web_tt2/modindex.tt2:64 ../web_tt2/review.tt2:138
 #: ../web_tt2/reviewbouncing.tt2:131 ../web_tt2/reviewbouncing.tt2:60
 #: ../web_tt2/subindex.tt2:10 ../web_tt2/subindex.tt2:57
-#: ../web_tt2/subscriber_table.tt2:9
+#: ../web_tt2/subscriber_table.tt2:7
 msgid "Toggle Selection"
 msgstr "Commutar la selecció"
 
@@ -2780,7 +2780,7 @@ msgid "Most recent documents for this list "
 msgstr "Els últims documents d'aquesta llista"
 
 #: ../web_tt2/latest_d_read.tt2:19 ../web_tt2/subindex.tt2:12
-#: ../web_tt2/subscriber_table.tt2:39 ../web_tt2/subscriber_table.tt2:42
+#: ../web_tt2/subscriber_table.tt2:33 ../web_tt2/subscriber_table.tt2:36
 msgid "Name"
 msgstr "Nom"
 
@@ -3475,50 +3475,45 @@ msgid "Request first password"
 msgstr "Torneu a introduir la nova contrasenya :"
 
 #: ../web_tt2/renewpasswd.tt2:33
-#, fuzzy
 msgid "Request new password"
-msgstr "Torneu a introduir la nova contrasenya :"
+msgstr "Sol·liciteu una nova contrasenya"
 
 #: ../web_tt2/requestpasswd.tt2:4
-#, fuzzy
 msgid "Message sent"
-msgstr "Missatge"
+msgstr "Missatge enviat"
 
 #: ../web_tt2/requestpasswd.tt2:6
 msgid ""
 "We've sent you an email that will allow you choose your password. Please "
 "check your mailbox."
 msgstr ""
-"Li hem enviat un missatge que li autoritza a escollir la seva contrasenya. "
-"Si us pla comprovi la seva bústia de correu."
+"Us hem enviat un missatge que us permet definir la vostra contrasenya. "
+"Comproveu la bústia de correu."
 
 #: ../web_tt2/requestpasswd.tt2:10
 msgid "We were not able to send you a validation message."
-msgstr "No hem pogut enviar-li un missatge de validació."
+msgstr "No hem pogut enviar-vos un missatge de validació."
 
 #: ../web_tt2/requestpasswd.tt2:14
-#, fuzzy
 msgid ""
 "Internal error: could not build a validation link, please contact the "
 "service administrator"
 msgstr ""
-" Error intern: no es pot construir un enllaç de validació, si us plau posis "
-"en contacte amb l'administrador del servei"
+" Error intern: no es pot crear un enllaç de validació. Poseu-vos en contacte "
+"amb l'administrador del servei."
 
 #: ../web_tt2/requestpasswd.tt2:18
-#, fuzzy
 msgid "Unkown error."
-msgstr "Desconegut"
+msgstr "S'ha produït un error desconegut."
 
 #: ../web_tt2/request_topic.tt2:5
 msgid "This list is configured to require topic(s) foreach message."
 msgstr "Aquesta llista requereix que cada missatge tingui un tema assignat."
 
 #: ../web_tt2/request_topic.tt2:7 ../web_tt2/viewmod.tt2:33
-#, fuzzy
 msgid ""
 "Please select one or more topic(s) that corresponds to your message below:"
-msgstr "Seleccioneu un o més temes que corresponguin al teu missatge :"
+msgstr "Seleccioneu un o més temes que corresponguin al vostre missatge:"
 
 #: ../web_tt2/request_topic.tt2:15 ../web_tt2/request_topic.tt2:17
 msgid "Tag this mail"
@@ -3526,25 +3521,22 @@ msgstr "Etiqueta aquest missatge"
 
 #. (date)
 #: ../web_tt2/request_topic.tt2:29
-#, fuzzy
 msgid "Date: %1"
-msgstr "Data : %1"
+msgstr "Data: %1"
 
 #. (subject)
 #: ../web_tt2/request_topic.tt2:31
-#, fuzzy
 msgid "Subject: %1"
-msgstr "Assumpte :"
+msgstr "Assumpte: %1"
 
 #: ../web_tt2/reviewbouncing.tt2:3
-#, fuzzy
 msgid "Manage bouncing list members"
-msgstr "Gestió subscriptors"
+msgstr "Gestió de subscriptors amb errors"
 
 #: ../web_tt2/review.tt2:46 ../web_tt2/review.tt2:48
 #: ../web_tt2/reviewbouncing.tt2:6
 msgid "Dump"
-msgstr "buidatge"
+msgstr "Buidatge"
 
 #: ../web_tt2/reviewbouncing.tt2:19
 msgid "Remind all subscribers"
@@ -3556,8 +3548,7 @@ msgid ""
 "Do you really want to send a subscription reminder message to the %1 "
 "subscribers?"
 msgstr ""
-"Esteu segur que voleu enviar un missatge recordatori a tots els subscriptors "
-"de %1 ?"
+"Esteu segur que voleu enviar un missatge recordatori als %1 subscriptors?"
 
 #: ../web_tt2/review.tt2:126 ../web_tt2/review.tt2:27
 #: ../web_tt2/reviewbouncing.tt2:115 ../web_tt2/reviewbouncing.tt2:44
@@ -3574,7 +3565,7 @@ msgstr "pàgina %1 / %2"
 #: ../web_tt2/reviewbouncing.tt2:121 ../web_tt2/reviewbouncing.tt2:50
 #: ../web_tt2/viewlogs.tt2:37
 msgid "Next page"
-msgstr "Següent pàgina"
+msgstr "Pàgina següent"
 
 #: ../web_tt2/reviewbouncing.tt2:58
 msgid "Table which display list bounces"
@@ -3582,7 +3573,7 @@ msgstr "Taula que mostra els retornats"
 
 #: ../web_tt2/review.tt2:148 ../web_tt2/reviewbouncing.tt2:61
 #: ../web_tt2/show_exclude.tt2:15 ../web_tt2/subindex.tt2:11
-#: ../web_tt2/subscriber_table.tt2:15 ../web_tt2/subscriber_table.tt2:18
+#: ../web_tt2/subscriber_table.tt2:12 ../web_tt2/subscriber_table.tt2:15
 #: ../web_tt2/viewlogs.tt2:54 ../web_tt2/viewlogs.tt2:63
 msgid "Email"
 msgstr "Adreça electrònica"
@@ -3590,31 +3581,28 @@ msgstr "Adreça electrònica"
 #: ../web_tt2/reviewbouncing.tt2:62
 #, fuzzy
 msgid "Bounce score"
-msgstr "puntuació retornats"
+msgstr "Índex de retornats"
 
 #: ../web_tt2/reviewbouncing.tt2:63
 msgid "Details"
 msgstr "Detalls"
 
 #: ../web_tt2/reviewbouncing.tt2:66
-#, fuzzy
 msgid "# of bounces"
-msgstr "retornats"
+msgstr "# de retornats"
 
 #: ../web_tt2/reviewbouncing.tt2:67
-#, fuzzy
 msgid "First bounce"
-msgstr "Visualitza l'últim retornat"
+msgstr "Primer retornat"
 
 #: ../web_tt2/reviewbouncing.tt2:68
-#, fuzzy
 msgid "Last bounce"
-msgstr "Visualitza l'últim retornat"
+msgstr "Últim retornat"
 
 #: ../web_tt2/reviewbouncing.tt2:95
 #, fuzzy
 msgid "no score"
-msgstr "puntuació retornats"
+msgstr "sense avaluació"
 
 #: ../web_tt2/review.tt2:105 ../web_tt2/review.tt2:139
 #: ../web_tt2/reviewbouncing.tt2:126
@@ -3623,11 +3611,12 @@ msgstr "Elimina les adreces seleccionades"
 
 #: ../web_tt2/reviewbouncing.tt2:128
 msgid "Reset errors for selected users"
-msgstr "Inicialitza errors dels usuaris seleccionats"
+msgstr "Anul·la els errors dels usuaris seleccionats"
 
 #: ../web_tt2/review_family.tt2:4
+#, fuzzy
 msgid "Table which display family lists"
-msgstr "Taula que mostra les families"
+msgstr "Taula que mostra les families de llistes"
 
 #: ../web_tt2/review_family.tt2:6 ../web_tt2/viewlogs.tt2:156
 msgid "Status"
@@ -3636,12 +3625,11 @@ msgstr "Estat"
 #: ../web_tt2/review_family.tt2:8
 #, fuzzy
 msgid "Instantiation date"
-msgstr "Data d'instanciació"
+msgstr "Data de creació"
 
 #: ../web_tt2/review.tt2:5
-#, fuzzy
 msgid "Manage list members"
-msgstr "noves llistes"
+msgstr "Gestió dels membres de la llista"
 
 #: ../web_tt2/review.tt2:12 ../web_tt2/viewlogs.tt2:8
 msgid "Page size"
@@ -3657,8 +3645,9 @@ msgid "Pending subscriptions"
 msgstr "Subscripcions pendents"
 
 #: ../web_tt2/review.tt2:50
+#, fuzzy
 msgid "Exclude"
-msgstr ""
+msgstr "Exclou"
 
 #: ../web_tt2/review.tt2:56
 msgid "Synchronize members with data sources"
@@ -3666,52 +3655,51 @@ msgstr "Sincronitza els membres amb les fonts de dades"
 
 #: ../web_tt2/review.tt2:62
 msgid "Remind all"
-msgstr "Recordatori a tothom"
+msgstr "Envia un recordatori a tothom"
 
 #: ../web_tt2/review.tt2:71
 msgid "Add an user: "
-msgstr "Afegir un usuari:"
+msgstr "Afegeix un usuari:"
 
 #: ../web_tt2/review.tt2:75
-#, fuzzy
 msgid "Multiple add"
-msgstr "Afegir-ne molts"
+msgstr "Afegeix-ne molts"
 
 #: ../web_tt2/review.tt2:87
-#, fuzzy
 msgid "Search user by e-mail: "
-msgstr "Búsqueda per adreça electrònica"
+msgstr "Cerca un usuari per adreça electrònica"
 
 #: ../web_tt2/review.tt2:88
 msgid "Search user by email"
-msgstr "Búsqueda per adreça electrònica"
+msgstr "Cerca un usuari per adreça electrònica"
 
 #: ../web_tt2/review.tt2:93
 msgid "Selection too wide, can not show selection"
-msgstr "Selecció massa gran, no es possible mostrar-la."
+msgstr "La selecció és massa gran i no es pot  mostrar"
 
 #. (similar_subscribers_occurence)
 #: ../web_tt2/review.tt2:117
 msgid " Other similar subscriber's email(s) (%1)"
-msgstr ""
+msgstr "Altres adreces de subscriptors semblants (%1)"
 
 #: ../web_tt2/review.tt2:137
 msgid "Do you really want to unsubscribe ALL selected subscribers?"
-msgstr "Esteu segur que voleu donar de baixa a TOTS els seleccionats?"
+msgstr ""
+"Esteu segur que voleu donar de baixa a TOTS els subscriptors seleccionats?"
 
 #: ../web_tt2/review.tt2:145
 msgid "Excluded users"
-msgstr ""
+msgstr "Usuaris exclosos"
 
 #: ../web_tt2/review.tt2:146 ../web_tt2/show_exclude.tt2:13
 #, fuzzy
 msgid "List of exclude"
-msgstr "Llistat de la carpeta"
+msgstr "Llista d'exclosos"
 
 #: ../web_tt2/review.tt2:149 ../web_tt2/show_exclude.tt2:16
 #, fuzzy
 msgid "Since"
-msgstr "Mida"
+msgstr "Des de"
 
 #: ../web_tt2/rss_request.tt2:5
 msgid "RSS channel"
@@ -3728,12 +3716,11 @@ msgstr ""
 #: ../web_tt2/rss_request.tt2:12
 #, fuzzy
 msgid "Limit the number of responses:"
-msgstr "Limita el nombre de respostes"
+msgstr "Limita el nombre de respostes:"
 
 #: ../web_tt2/rss_request.tt2:19
-#, fuzzy
 msgid "Limit the number of days used for the selection:"
-msgstr "Limita el nombre de dies usats per la selecció"
+msgstr "Limita el nombre de dies usats per la selecció:"
 
 #: ../web_tt2/rss_request.tt2:31
 msgid "Update RSS URL"
@@ -3742,26 +3729,23 @@ msgstr "Actualitza la URL RSS"
 #: ../web_tt2/rss_request.tt2:43
 #, fuzzy
 msgid "latest arc:"
-msgstr "últim arc"
+msgstr "últims missatges arxivats:"
 
 #: ../web_tt2/rss_request.tt2:48
-#, fuzzy
 msgid "latest document:"
-msgstr "últim document"
+msgstr "últim document:"
 
 #: ../web_tt2/rss_request.tt2:53
-#, fuzzy
 msgid "active lists:"
-msgstr "llistes actives"
+msgstr "llistes actives:"
 
 #: ../web_tt2/rss_request.tt2:58
-#, fuzzy
 msgid "latest lists:"
-msgstr "ultimes llistes"
+msgstr "últimes llistes:"
 
 #: ../web_tt2/rss.tt2:15 ../web_tt2/rss.tt2:5
 msgid "Server error"
-msgstr "Error del servidor"
+msgstr "S'ha produït un error en el servidor"
 
 #: ../web_tt2/rss.tt2:6
 msgid " new lists "
@@ -3840,59 +3824,52 @@ msgstr "Preferit %1"
 #: ../web_tt2/scenario_test.tt2:3
 #, fuzzy
 msgid "Scenario test module"
-msgstr "Mòdul de test d'escenari"
+msgstr "Mòdul de prova d'escenari"
 
 #: ../web_tt2/scenario_test.tt2:7
 #, fuzzy
 msgid "Scenario name:"
-msgstr "Nom de l'escenari"
+msgstr "Nom de l'escenari:"
 
 #: ../web_tt2/scenario_test.tt2:19
 #, fuzzy
 msgid "sender email:"
-msgstr "Adreça remitent"
+msgstr "Adreça del remitent:"
 
 #: ../web_tt2/scenario_test.tt2:22
-#, fuzzy
 msgid "Related email:"
-msgstr "Adreces relacionades"
+msgstr "Adreces relacionades:"
 
 #: ../web_tt2/scenario_test.tt2:25
-#, fuzzy
 msgid "Remote IP address:"
 msgstr "Direcció IP remota"
 
 #: ../web_tt2/scenario_test.tt2:28
-#, fuzzy
 msgid "Remote host:"
-msgstr "Ordinador remot"
+msgstr "Ordinador remot:"
 
 #: ../web_tt2/scenario_test.tt2:31
-#, fuzzy
 msgid "Auth method:"
-msgstr "Mètode d'autenticació"
+msgstr "Mètode d'autenticació:"
 
 #: ../web_tt2/scenario_test.tt2:38
 #, fuzzy
 msgid "get matched rule"
-msgstr "regles concordants"
+msgstr "mostra la regla coincident"
 
 #: ../web_tt2/search_user.tt2:3
-#, fuzzy
 msgid "User search result:"
-msgstr "utilitzar per defecte"
+msgstr "Resultat de la cerca per usuari:"
 
 #. (email)
 #: ../web_tt2/search_user.tt2:5
-#, fuzzy
 msgid "<strong>%1</strong> is subscribed to the following mailing lists:"
-msgstr "<strong>%1</strong> està inscrit a les següents llistes"
+msgstr "<strong>%1</strong> està inscrit a les llistes següents:"
 
 #. (email)
 #: ../web_tt2/search_user.tt2:8
-#, fuzzy
 msgid "Lists which %1 is subscribed "
-msgstr "Llistes on %1 està subscrit. "
+msgstr "Llistes a les quals %1 està subscrit. "
 
 #: ../web_tt2/search_user.tt2:11
 msgid "role"
@@ -3911,9 +3888,8 @@ msgid "bounce"
 msgstr "retornats"
 
 #: ../web_tt2/search_user.tt2:35
-#, fuzzy
 msgid "member"
-msgstr "Membres de la llista"
+msgstr "membre"
 
 #: ../web_tt2/search_user.tt2:36
 msgid "owner"
@@ -3924,41 +3900,37 @@ msgid "editor"
 msgstr "editor"
 
 #: ../web_tt2/serveradmin.tt2:7
-#, fuzzy
 msgid "Manage lists"
-msgstr "noves llistes"
+msgstr "Gestió de llistes"
 
 #: ../web_tt2/serveradmin.tt2:12
-#, fuzzy
 msgid "Consult lists"
-msgstr "Llistes clausuardes"
+msgstr "Consulta les llistes"
 
 #: ../web_tt2/serveradmin.tt2:14
-#, fuzzy
 msgid "Lists sorted by creation date"
-msgstr "Llista pendent d'activació"
+msgstr "Llistes ordenades per data de creació"
 
 #: ../web_tt2/serveradmin.tt2:15
 msgid "Lists sorted by last message date"
 msgstr "Llista ordenada per la data del darrer missatge"
 
 #: ../web_tt2/serveradmin.tt2:25
-#, fuzzy
 msgid "The following virtual robots are running on this server:"
-msgstr "En aquest servidor estan funcionant els següents robots virtuals :"
+msgstr "Els següents robots virtuals estan funcionant en aquest servidor:"
 
 #: ../web_tt2/serveradmin.tt2:27
 msgid "Sympa URL:"
-msgstr ""
+msgstr "URL de Sympa:"
 
 #: ../web_tt2/serveradmin.tt2:27
 msgid "Mail domain:"
-msgstr ""
+msgstr "Domini de correu:"
 
 #: ../web_tt2/serveradmin.tt2:27
 #, fuzzy
 msgid "Listmaster(s):"
-msgstr "administrador"
+msgstr "Listmaster(s):"
 
 #: ../web_tt2/serveradmin.tt2:30
 msgid "No Virtual Robot defined on this server"
@@ -3966,11 +3938,11 @@ msgstr "No hi ha cap robot virtual funcionant."
 
 #: ../web_tt2/serveradmin.tt2:46
 msgid "Review lists from this family"
-msgstr "Revisa llistes d'aquesta família "
+msgstr "Revisa les llistes d'aquesta família "
 
 #: ../web_tt2/serveradmin.tt2:60
 msgid "Search User"
-msgstr "Busca usuari"
+msgstr "Cerca d'usuari"
 
 #: ../web_tt2/serveradmin.tt2:69
 msgid "Delay for active sessions (minutes)"
@@ -3982,12 +3954,11 @@ msgstr "Mostra només els usuaris connectats"
 
 #: ../web_tt2/serveradmin.tt2:73
 msgid "Show sessions"
-msgstr "Mostra sessions"
+msgstr "Mostra les sessions"
 
 #: ../web_tt2/serveradmin.tt2:79
-#, fuzzy
 msgid "You can change your users email address here:"
-msgstr "Canviant la seva adreça electrònica"
+msgstr "Podeu modificar ací la vostra adreça de correu:"
 
 #: ../web_tt2/serveradmin.tt2:81
 msgid ""
@@ -3995,17 +3966,15 @@ msgid ""
 "will also apply to his ownerships if he is owner of some lists."
 msgstr ""
 "El canvi d'adreça de correu s'aplica a les subscripcions de la persona, i "
-"també al seu paper de propietari o propietària de moderador/a de llistes."
+"també al vostre paper de propietari/ària i de moderador/a de llistes."
 
 #: ../web_tt2/serveradmin.tt2:86
-#, fuzzy
 msgid "Current user email address: "
-msgstr "Un altre adreça electrònica :"
+msgstr "Actual adreça electrònica:"
 
 #: ../web_tt2/serveradmin.tt2:88
-#, fuzzy
 msgid "New user email address: "
-msgstr "Nova adreça electrònica :"
+msgstr "Nova adreça electrònica:"
 
 #: ../web_tt2/serveradmin.tt2:90
 msgid "Update user memberships"
@@ -4022,14 +3991,14 @@ msgid ""
 "may be usefull when providing assistance or to test users privileges. The "
 "new identity is attached to the current session"
 msgstr ""
-"Com a administrador, pots alterar la teva identitat i actuar com a un altre "
-"usuari. Aquesta opció és útil per donar assistència a l'usuari o provar nous "
-"usuaris."
+"Com a administrador, podeu alterar la vostra identitat i actuar com un altre "
+"usuari. Aquesta opció és útil per a donar assistència a l'usuari o provar "
+"nous usuaris."
 
 #: ../web_tt2/serveradmin.tt2:101
 #, fuzzy
 msgid "change identity as: "
-msgstr "canvia la identitat per :"
+msgstr "canvia la identitat per:"
 
 #: ../web_tt2/serveradmin.tt2:111
 msgid "Rebuild HTML archives using \"arctxt\" directories as input."
@@ -4038,22 +4007,20 @@ msgstr ""
 "entrada."
 
 #: ../web_tt2/serveradmin.tt2:114
-#, fuzzy
 msgid "listname: "
-msgstr "nom de la llista :"
+msgstr "nom de la llista:"
 
 #: ../web_tt2/serveradmin.tt2:114
 msgid "Rebuild archive"
-msgstr "Reconstruir l'arxiu"
+msgstr "Reconstrueix l'arxiu"
 
 #: ../web_tt2/serveradmin.tt2:115
 msgid "Rebuild all"
-msgstr "Reconstruir-ho tot"
+msgstr "Reconstrueix-ho tot"
 
 #: ../web_tt2/serveradmin.tt2:115
-#, fuzzy
 msgid "  May take a lot of CPU time,  be careful!"
-msgstr "Aquesta operació requereix força temps de CPU."
+msgstr "Aquesta operació pot requerir força temps de CPU."
 
 #: ../web_tt2/serveradmin.tt2:125
 msgid ""
@@ -4061,34 +4028,35 @@ msgid ""
 "current session. On a production server, this allow to keep logs rather "
 "small and to test some features with the maximum log level. "
 msgstr ""
-"Pots incrementar el nivell de registre només per la sessió actual. Aquesta "
-"opció permet mantenir els registres habituals més petits, i provar noves "
-"opcions amb el nivell màxim de registre temporalment."
+"Podeu incrementar el nivell de registre només per a la sessió actual. "
+"Aquesta opció permet mantenir els registres habituals més petits, i provar "
+"noves opcions amb el nivell màxim de registre temporalment."
 
 #: ../web_tt2/serveradmin.tt2:129
 #, fuzzy
 msgid "Log level:"
-msgstr "Nivell de registre"
+msgstr "Nivell de registre:"
 
 #: ../web_tt2/serveradmin.tt2:135
+#, fuzzy
 msgid "Set log level"
 msgstr "Modifica el nivell de registre"
 
 #: ../web_tt2/serveradmin.tt2:145
 msgid "Setting defaults list templates"
-msgstr "Modificar les plantilles predeterminades"
+msgstr "Modifica les plantilles predeterminades"
 
 #: ../web_tt2/serveradmin.tt2:158
 msgid "Setting site templates"
-msgstr "Modificar les plantilles"
+msgstr "Modifica les plantilles"
 
 #: ../web_tt2/serveradmin.tt2:166
 msgid "view translations"
-msgstr "Visualitzar les traduccions"
+msgstr "Visualitza les traduccions"
 
 #: ../web_tt2/serveradmin.tt2:167
 msgid "Customize templates"
-msgstr "Personalitzar les plantilles"
+msgstr "Personalitza les plantilles"
 
 #: ../web_tt2/serveradmin.tt2:172
 #, fuzzy
@@ -4097,8 +4065,8 @@ msgid ""
 "can be processed by the tt2 parser.This button is for controlling tt2 vars "
 "dump feature:"
 msgstr ""
-"Quan es personalitzen les plantilles web, és important conèixer les "
-"variables que poden ser referides. Aquest botó controla les variables tt2 :"
+"Quan es personalitzen les plantilles web de Sympa, cal saber les variables "
+"que poden ser processats pel tt2. Aquest botó controla les variables tt2 :"
 
 #: ../web_tt2/serveradmin.tt2:175
 #, fuzzy
@@ -4115,9 +4083,8 @@ msgid "Skins administration page"
 msgstr "Administrador d'aparença"
 
 #: ../web_tt2/serveradmin.tt2:192
-#, fuzzy
 msgid "View main config"
-msgstr "Edita llista de configuració"
+msgstr "Mostra la configuració principal"
 
 #: ../web_tt2/serveradmin.tt2:231
 msgid ""
@@ -4132,18 +4099,16 @@ msgstr ""
 "fitxer PO que pot ser gestionat amb les eines estàndard GNU gettext."
 
 #: ../web_tt2/serveradmin.tt2:234
-#, fuzzy
 msgid ""
 "Check our translation FAQ if you wish to translate Sympa GUI in your native "
 "language: "
 msgstr ""
-"Dóna una ullada a la PMF sobre traducció si vols traduir la GUI de Sympa al "
-"teu idioma :"
+"Feu una ullada a les PMF sobre traducció si voleu traduir la GUI de Sympa al "
+"vostre idioma:"
 
 #: ../web_tt2/serveradmin.tt2:241
-#, fuzzy
 msgid "You can submit a problem or request a new feature: "
-msgstr "Pot notificar un error o una petició de nova funció :"
+msgstr "Podeu notificar un error o una petició de nova funció:"
 
 #. (process_id,loop_count,start_time)
 #: ../web_tt2/serveradmin.tt2:249
@@ -4151,14 +4116,12 @@ msgid "This FastCGI process (%1) has served %2 pages since %3."
 msgstr "Aquest procés FastCGI (%1) ha servit %2 pàgines des de %3."
 
 #: ../web_tt2/setlang.tt2:9
-#, fuzzy
 msgid "Language selection"
-msgstr "Communtar la selecció"
+msgstr "Selecciona l'idioma"
 
 #: ../web_tt2/setlang.tt2:17
-#, fuzzy
 msgid "Validate your language selection"
-msgstr "Communtar la selecció"
+msgstr "Valida l'idioma seleccionat"
 
 #: ../web_tt2/setlang.tt2:17
 #, fuzzy
@@ -4176,9 +4139,8 @@ msgid "Close it"
 msgstr "Tanca'l"
 
 #: ../web_tt2/set_pending_list_request.tt2:24
-#, fuzzy
 msgid "Install it"
-msgstr "Instala'l"
+msgstr "Instal·la'l"
 
 #: ../web_tt2/set_pending_list_request.tt2:26 ../web_tt2/subrequest.tt2:43
 msgid "submit"
@@ -4189,9 +4151,8 @@ msgid "notify owner"
 msgstr "notifica el propietari"
 
 #: ../web_tt2/set_pending_list_request.tt2:36
-#, fuzzy
 msgid "Information file:"
-msgstr "Fitxer d'informació"
+msgstr "Fitxer d'informació:"
 
 #: ../web_tt2/set_pending_list_request.tt2:52
 msgid "Configuration file"
@@ -4219,9 +4180,10 @@ msgstr "Mida de la clau criptogràfica"
 
 #: ../web_tt2/show_exclude.tt2:3
 msgid "Show the exclusion table"
-msgstr ""
+msgstr "Mostra la taula d'exclusió"
 
 #: ../web_tt2/show_exclude.tt2:10
+#, fuzzy
 msgid ""
 "Users listed below are excluded from the list. Beware, that this feature is "
 "different from the blacklist. Exclusion makes sense\n"
@@ -4231,11 +4193,20 @@ msgid ""
 "exclusion table, through the standard unsubscribe/delete functions. \n"
 "They get off the exclusion table with the standard subscribe/add functions."
 msgstr ""
+"Els usuaris següents estan exclosos de la llista. Cal aclarir que la llista "
+"d'exclusió no és una llista negra. L'exclusió té sentit\n"
+"quan la llista prové d'una font de dades externa. Gràcies a l'exclusió, un "
+"usuari pot donar-se de baixa (o ser suprimit pel propietari) i fins i tot "
+"ser \n"
+" inclòs mitjançant una font de dades externa. Els usuaris s'afegeixen a la "
+"llista d'exclusió a través de les funcionalitats habituals de baixa o de "
+"supressió d'usuaris.\n"
+"Aquests poden desaparèixer d'aquesta taula d'exclusió a través de les "
+"funcions habituals de subscripció."
 
 #: ../web_tt2/show_exclude.tt2:28
-#, fuzzy
 msgid "No user excluded."
-msgstr "Llistat de la carpeta"
+msgstr "Cap subscriptor n'està exclòs."
 
 #: ../web_tt2/show_sessions.tt2:2
 msgid "Sessions list"
@@ -4244,35 +4215,34 @@ msgstr "Llista de sessions"
 #. (list)
 #: ../web_tt2/sigrequest.tt2:4
 msgid "You asked to be unsubscribed  from list %1"
-msgstr "Has sol·licitat donar-se de baixa de la llista %1"
+msgstr "Heu sol·licitat donar-vos de baixa de la llista %1"
 
 #: ../web_tt2/sigrequest.tt2:5
-#, fuzzy
 msgid ""
 "To confirm\n"
 "      your request, please click the button below:"
 msgstr ""
 "Per confirmar \n"
-"la seva petició, premi el següent botó :"
+"la vostra petició, premeu el botó següent:"
 
 #. (list)
 #: ../web_tt2/sigrequest.tt2:12
 msgid "I unsubscribe from list %1"
-msgstr "Dona'm de baixa de la llista %1"
+msgstr "Dóna'm de baixa de la llista %1"
 
 #. (list,email)
 #: ../web_tt2/sigrequest.tt2:18
 msgid "You are not subscribed to list %1 with e-mail address %2"
-msgstr "No està inscrit a la llista %1 amb l'adreça %2"
+msgstr "No esteu inscrit a la llista %1 amb l'adreça %2"
 
 #: ../web_tt2/sigrequest.tt2:21
-#, fuzzy
 msgid ""
 "You might have subscribed with another address.\n"
 "      Please contact the list owner to help you unsubscribe:"
 msgstr ""
-"Es deu haver subscrit amb una altre adreça electrònica.\n"
-"Contacti amb el propietari de la llista per tramitar correctament la baixa :"
+"Potser us hi heu subscrit amb una altra adreça electrònica.\n"
+"Contacteu amb el propietari de la llista per tramitar-ne correctament la "
+"baixa:"
 
 #. (list)
 #: ../web_tt2/sigrequest.tt2:25
@@ -4284,11 +4254,11 @@ msgid ""
 "inside; please provide your email address below to receive this validation "
 "link."
 msgstr ""
-"Necessitem comprovar la seva identitat abans de la peticíó de validació de "
-"donar-se de baixa (desubcriure's) de la llista %1. Si disposa d'un compte "
-"d'usuari haurà d'iniciar sessió o crear un compte<br/>Altrament podem enviar-"
-"li un missatge amb l'enllaç de validació dins ; si us plau notifiqui la seva "
-"adreça de correu a sota i rebrà aquest enllaç de validació."
+"Cal comprovar la vostra identitat abans de validar la vostra sol·licitud de "
+"baixa de la llista %1. Si disposeu d'un compte d'usuari haureu d'iniciar "
+"sessió o crear un compte. <br/>Altrament, podem enviar-vos un missatge amb "
+"l'enllaç de validació. Introduïu a continuació la vostra adreça de correu i "
+"rebreu aquest enllaç de validació."
 
 #: ../web_tt2/sigrequest.tt2:33
 msgid "Send me a validation link"
@@ -4299,15 +4269,15 @@ msgid ""
 "We've sent you an email including a validation link. You should check your "
 "mailbox to read this email and use this validation link."
 msgstr ""
-"Li hem enviat un missatge amb l'enllaç de validació. Hauria de comprovar la "
-"seva bústia de correu  per llegir aquest missatge i utilitzar l'enllaç de "
-"validació."
+"Us hem enviat un missatge amb l'enllaç de validació. Comproveu la vostra "
+"bústia de correu i feu clic en l'enllaç de validació."
 
 #: ../web_tt2/skinsedit.tt2:5
 msgid "Cascading Style Sheet"
-msgstr "Fulla d'estils CSS"
+msgstr "Full d'estil en cascada (CSS)"
 
 #: ../web_tt2/skinsedit.tt2:8
+#, fuzzy
 msgid ""
 "When not using css_url parameters, sympa deliver a dynamic CSS which is "
 "created using a template name css.tt2. Usually this template is comming from "
@@ -4320,25 +4290,24 @@ msgid ""
 "starting a new sympa version, css_path and css_url should not point to the "
 "same directory ."
 msgstr ""
-"Quan no utilitzi els paràmetres css_url, sympa enviarà un CSS dinàmic que es "
-"crearà utilitzant una nom de plantilla css.tt2. Habitualment aquesta "
-"plantilla començarà amb Distribució tar Sympa. Utilitzant aquest CSS no és "
-"una bona solució perquè per cada clic, el servidor fcgi de Sympa realitzarà "
-"una petició. Si utilitza els paràmetres css_utl la plana d'estils "
-"s'enviararà pel seu servidor http. Quan vostè instal·la una nova versió de "
-"Sympa i comença per primera vegada, els diferents fitxers CSS seran "
-"instal·lats al directori especificat pel paràmetre css_path. Per tant si vol "
-"preservar algun espai de personalitzable començant per sobreescriure quan "
-"començi una nova versió de sympa, el css_path i css_url no poden estar al "
-"mateix directori ."
+"Quan no utilitzeu els paràmetres css_url, Sympa proporciona un CSS dinàmic "
+"que es crea utilitzant un nom de plantilla css.tt2. Habitualment aquesta "
+"plantilla començarà amb Distribució tar Sympa. Utilitzar aquest CSS no és "
+"una bona solució perquè el servidor fcgi de Sympa farà una petició per cada "
+"clic. Si utilitzeu els paràmetres css_utl, el full d'estils s'enviarà a "
+"través del servidor http. Quan instal·leu una nova versió de Sympa i aquest "
+"s'inicia per primera vegada, els diferents fitxers CSS s'instal·len al "
+"directori especificat pel paràmetre css_path. Per tant, si voleu preservar "
+"algun espai personalitzable, el css_path i css_url no poden apuntar al "
+"mateix directori."
 
 #: ../web_tt2/skinsedit.tt2:12
 msgid ""
 "static css installation succeed. Reload the current page and/or check sympa "
 "logs  to be sure that static css a really in use."
 msgstr ""
-"Instal·lació estàtica del CSS realitzada. Refresca el navegador i/o verifica "
-"el registre del sympa per assegurar que el procés ha estat satisfactori."
+"Els CSS estàtics s'han instal·lat. Refresqueu el navegador o verifiqueu el "
+"registre del sympa per assegurar-vos que els CSS s'apliquen."
 
 #: ../web_tt2/skinsedit.tt2:16
 msgid "The css_path parameter is defined, value is"
@@ -4350,7 +4319,7 @@ msgstr "el paràmetre css_url està definit com a"
 
 #: ../web_tt2/skinsedit.tt2:25
 msgid "install static css"
-msgstr "Instal·lar CSS estàtic"
+msgstr "Instal·la els CSS estàtics"
 
 #. (cssurl)
 #: ../web_tt2/skinsedit.tt2:31
@@ -4363,18 +4332,19 @@ msgid ""
 "css are stored (current value is <a target=\"test\" href=\"%1\">%1</a>)."
 msgstr ""
 "Actualment css_path no està definit. <strong>Cal editar el fitxer robot.conf "
-"i configurar el fitxer correctament</stong> (en cas de no fer servir robot "
-"virtual, el fitxer sympa.conf). Configurant aquest paràmetre et permet fer "
+"i configurar-lo correctament</stong> (o el fitxer sympa.conf, en cas de no "
+"fer servir robot virtual). Configurar aquest paràmetre us permet de fer "
 "servir aquesta pàgina per instal·lar el CSS de forma estàtica i <strong>que "
-"sympa funcioni més ràpid</strong>. No oblidi de configurar el paràmetre "
-"css_url per tal de que apunti al directori on es guarden els fitxers CSS (el "
-"seu valor actualment és <a target=\"test\" href=\"test\" href=\"%1\">%1</a>)."
+"sympa funcioni més ràpidament</strong>. No oblideu de configurar el "
+"paràmetre css_url per tal que apunti al directori on es troben els fitxers "
+"CSS (el seu valor actual és <a target=\"test\" href=\"test\" href=\"%1\">%1</a>)."
 
 #: ../web_tt2/skinsedit.tt2:35
 msgid "Colors"
 msgstr "Colors"
 
 #: ../web_tt2/skinsedit.tt2:38
+#, fuzzy
 msgid ""
 "If you are not using css_path and css_url parameters, colors are defined in "
 "the robot.conf configuration file. Otherwise, colors are defined in the "
@@ -4382,12 +4352,12 @@ msgid ""
 "following color editor. When finished, you may copy the result a new CCS "
 "static file. The target is specified by css_path parameter."
 msgstr ""
-"Si no està utilitzant paràmetres css_path i css_url, els colors estan "
-"definits en el fitxer de configuració robot.conf. Altrament, colors estan "
-"definits en el CSS estàtic. Els colors poden ser canviats a la seva sessió "
-"utilitzant el següent editor de color. Quan hagi finalitzat, pot copiar el "
-"resultat en un nou fitxer CCS estàtic. L'objectiu és especificat pel "
-"paràmetre css_path."
+"Si no utilitzeu els paràmetres css_path i css_url, els colors estan definits "
+"en el fitxer de configuració robot.conf. Altrament, els colors estan "
+"definits en el CSS estàtic. Els colors es poden canviar a la vostra sessió "
+"utilitzant el següent editor de color. Quan hàgiu finalitzat, podeu copiar "
+"el resultat en un nou fitxer CCS estàtic. S'especifica la ubicació d'aquest "
+"fitxer mitjançant el paràmetre css_path."
 
 #: ../web_tt2/skinsedit.tt2:41
 msgid ""
@@ -4396,6 +4366,9 @@ msgid ""
 "file is comming from Sympa distribution so your CSS customization may be "
 "erased when doing this."
 msgstr ""
+"Alerta!: el fitxer CSS és reemplaçat a partir del model css.tt2. En general, "
+"aquest model prové de la distribució de Sympa; per tant, podeu esborrar la "
+"vostra configuració personal si feu aquesta acció."
 
 #: ../web_tt2/skinsedit.tt2:45
 #, fuzzy
@@ -4821,34 +4794,34 @@ msgstr "Ja esteu subscrit a la llista %1"
 msgid "List members"
 msgstr "Membres de la llista"
 
-#: ../web_tt2/subscriber_table.tt2:23 ../web_tt2/subscriber_table.tt2:26
+#: ../web_tt2/subscriber_table.tt2:20 ../web_tt2/subscriber_table.tt2:23
 msgid "Domain"
 msgstr "Domini"
 
-#: ../web_tt2/subscriber_table.tt2:32
+#: ../web_tt2/subscriber_table.tt2:28
 msgid "Picture"
 msgstr "Imatge"
 
-#: ../web_tt2/subscriber_table.tt2:48 ../web_tt2/suspend_request.tt2:12
+#: ../web_tt2/subscriber_table.tt2:41 ../web_tt2/suspend_request.tt2:12
 msgid "Reception"
 msgstr "Recepció"
 
-#: ../web_tt2/subscriber_table.tt2:52 ../web_tt2/subscriber_table.tt2:55
+#: ../web_tt2/subscriber_table.tt2:45 ../web_tt2/subscriber_table.tt2:48
 msgid "Sources"
 msgstr "Fonts"
 
-#: ../web_tt2/subscriber_table.tt2:60 ../web_tt2/subscriber_table.tt2:63
+#: ../web_tt2/subscriber_table.tt2:53 ../web_tt2/subscriber_table.tt2:56
 #: ../web_tt2/viewlogs.tt2:123
 #, fuzzy
 msgid "Sub date"
 msgstr "Data"
 
-#: ../web_tt2/subscriber_table.tt2:101
+#: ../web_tt2/subscriber_table.tt2:89
 msgid "bouncing"
 msgstr "retornats"
 
 #. (u.email)
-#: ../web_tt2/subscriber_table.tt2:118
+#: ../web_tt2/subscriber_table.tt2:106
 msgid "%1's picture"
 msgstr "%1 imatge(s)"
 
@@ -5060,7 +5033,7 @@ msgstr "Cerca per període: "
 #. (date_to_formated)
 #. This entry is a date/time format
 #. Check the strftime manpage for format details : http://docs.freebsd.org/info/gawk/gawk.info.Time_Functions.html
-#: ../web_tt2/viewlogs.tt2:113 ../wwsympa/wwsympa.fcgi.in:16248
+#: ../web_tt2/viewlogs.tt2:113 ../wwsympa/wwsympa.fcgi.in:16239
 msgid "%d %b %Y %H:%M:%S"
 msgstr "%d %b %Y %H:%M:%S"
 
@@ -5775,7 +5748,7 @@ msgid "%1 Digest %2"
 msgstr "%1 resum %2"
 
 #: ../mail_tt2/digest.tt2:10 ../mail_tt2/digest_plain.tt2:9
-#: ../mail_tt2/get_archive.tt2:9 ../src/lib/List.pm:2747
+#: ../mail_tt2/get_archive.tt2:9 ../src/lib/List.pm:2743
 msgid "Table of contents:"
 msgstr "Taula de continguts:"
 
@@ -8492,6 +8465,7 @@ msgid "public list multipart messages are rejected"
 msgstr "llista pública, els missatges multipart no estan permesos "
 
 #: ../src/etc/scenari/spam_status.x-spam-status:1
+#: ../src/etc/scenari/spam_status.x-spam-status~:1
 msgid "test x-spam-status  header"
 msgstr ""
 
@@ -8900,7 +8874,7 @@ msgstr "%d %b %y  %H:%M"
 
 #. This entry is a date/time format
 #. Check the strftime manpage for format details : http://docs.freebsd.org/info/gawk/gawk.info.Time_Functions.html
-#: ../src/lib/Commands.pm:963 ../wwsympa/wwsympa.fcgi.in:9887
+#: ../src/lib/Commands.pm:963 ../wwsympa/wwsympa.fcgi.in:9878
 msgid "%A"
 msgstr "%A"
 
@@ -8918,9 +8892,9 @@ msgstr "Error en la línia %d : %s"
 #. Check the strftime manpage for format details : http://docs.freebsd.org/info/gawk/gawk.info.Time_Functions.html
 #: ../src/lib/Family.pm:2598 ../src/lib/Family.pm:395 ../src/lib/Family.pm:672
 #: ../src/lib/List.pm:1896 ../wwsympa/Auth.pm:459
-#: ../wwsympa/wwsympa.fcgi.in:1090 ../wwsympa/wwsympa.fcgi.in:2646
-#: ../wwsympa/wwsympa.fcgi.in:2921 ../wwsympa/wwsympa.fcgi.in:2932
-#: ../wwsympa/wwsympa.fcgi.in:3053
+#: ../wwsympa/wwsympa.fcgi.in:1090 ../wwsympa/wwsympa.fcgi.in:2636
+#: ../wwsympa/wwsympa.fcgi.in:2911 ../wwsympa/wwsympa.fcgi.in:2922
+#: ../wwsympa/wwsympa.fcgi.in:3043
 msgid "%d %b %Y at %H:%M:%S"
 msgstr "%d %b %Y at %H:%M:%S"
 
@@ -9635,31 +9609,31 @@ msgstr "Qui pot actualitzar la configuració"
 
 #. This entry is a date/time format
 #. Check the strftime manpage for format details : http://docs.freebsd.org/info/gawk/gawk.info.Time_Functions.html
-#: ../src/lib/List.pm:2862
+#: ../src/lib/List.pm:2858
 msgid "%a, %d %b %Y %H:%M:%S"
 msgstr "%a, %d %b %Y %H:%M:%S"
 
 #. This entry is a date/time format
 #. Check the strftime manpage for format details : http://docs.freebsd.org/info/gawk/gawk.info.Time_Functions.html
-#: ../src/lib/List.pm:2863
+#: ../src/lib/List.pm:2859
 msgid "%a, %d %b %Y"
 msgstr "%a, %d %b %Y"
 
 #. This entry is a date/time format
 #. Check the strftime manpage for format details : http://docs.freebsd.org/info/gawk/gawk.info.Time_Functions.html
-#: ../src/lib/List.pm:3054 ../src/lib/List.pm:3055 ../src/lib/List.pm:3059
-#: ../wwsympa/wwsympa.fcgi.in:11064 ../wwsympa/wwsympa.fcgi.in:11133
-#: ../wwsympa/wwsympa.fcgi.in:11335 ../wwsympa/wwsympa.fcgi.in:11682
-#: ../wwsympa/wwsympa.fcgi.in:15133 ../wwsympa/wwsympa.fcgi.in:15140
-#: ../wwsympa/wwsympa.fcgi.in:15854 ../wwsympa/wwsympa.fcgi.in:16630
-#: ../wwsympa/wwsympa.fcgi.in:16631 ../wwsympa/wwsympa.fcgi.in:4331
-#: ../wwsympa/wwsympa.fcgi.in:4384 ../wwsympa/wwsympa.fcgi.in:4955
-#: ../wwsympa/wwsympa.fcgi.in:4956 ../wwsympa/wwsympa.fcgi.in:6521
-#: ../wwsympa/wwsympa.fcgi.in:7543 ../wwsympa/wwsympa.fcgi.in:8097
-#: ../wwsympa/wwsympa.fcgi.in:8144 ../wwsympa/wwsympa.fcgi.in:8146
-#: ../wwsympa/wwsympa.fcgi.in:8624 ../wwsympa/wwsympa.fcgi.in:8625
-#: ../wwsympa/wwsympa.fcgi.in:8659 ../wwsympa/wwsympa.fcgi.in:8660
-#: ../wwsympa/wwsympa.fcgi.in:8839 ../wwsympa/wwsympa.fcgi.in:8840
+#: ../src/lib/List.pm:3050 ../src/lib/List.pm:3051 ../src/lib/List.pm:3055
+#: ../wwsympa/wwsympa.fcgi.in:11055 ../wwsympa/wwsympa.fcgi.in:11124
+#: ../wwsympa/wwsympa.fcgi.in:11326 ../wwsympa/wwsympa.fcgi.in:11673
+#: ../wwsympa/wwsympa.fcgi.in:15124 ../wwsympa/wwsympa.fcgi.in:15131
+#: ../wwsympa/wwsympa.fcgi.in:15845 ../wwsympa/wwsympa.fcgi.in:16621
+#: ../wwsympa/wwsympa.fcgi.in:16622 ../wwsympa/wwsympa.fcgi.in:4322
+#: ../wwsympa/wwsympa.fcgi.in:4375 ../wwsympa/wwsympa.fcgi.in:4946
+#: ../wwsympa/wwsympa.fcgi.in:4947 ../wwsympa/wwsympa.fcgi.in:6512
+#: ../wwsympa/wwsympa.fcgi.in:7534 ../wwsympa/wwsympa.fcgi.in:8088
+#: ../wwsympa/wwsympa.fcgi.in:8135 ../wwsympa/wwsympa.fcgi.in:8137
+#: ../wwsympa/wwsympa.fcgi.in:8615 ../wwsympa/wwsympa.fcgi.in:8616
+#: ../wwsympa/wwsympa.fcgi.in:8650 ../wwsympa/wwsympa.fcgi.in:8651
+#: ../wwsympa/wwsympa.fcgi.in:8830 ../wwsympa/wwsympa.fcgi.in:8831
 msgid "%d %b %Y"
 msgstr "%d %b %Y"
 
@@ -9804,36 +9778,36 @@ msgstr "%H:%M:%S"
 #. This entry is a date/time format
 #. Check the strftime manpage for format details : http://docs.freebsd.org/info/gawk/gawk.info.Time_Functions.html
 #: ../wwsympa/SympaSession.pm:436 ../wwsympa/SympaSession.pm:437
-#: ../wwsympa/wwsympa.fcgi.in:11916 ../wwsympa/wwsympa.fcgi.in:12049
-#: ../wwsympa/wwsympa.fcgi.in:14362 ../wwsympa/wwsympa.fcgi.in:8054
+#: ../wwsympa/wwsympa.fcgi.in:11907 ../wwsympa/wwsympa.fcgi.in:12040
+#: ../wwsympa/wwsympa.fcgi.in:14353 ../wwsympa/wwsympa.fcgi.in:8045
 msgid "%d %b %y  %H:%M"
 msgstr "%d %b %y  %H:%M"
 
-#: ../wwsympa/wwsympa.fcgi.in:15315
+#: ../wwsympa/wwsympa.fcgi.in:15306
 #, fuzzy
 msgid "Your unsubscription request to list %s was sent to the list owner."
 msgstr "La teva petició s'ha redireccionat al propietari de la llista"
 
-#: ../wwsympa/wwsympa.fcgi.in:15317
+#: ../wwsympa/wwsympa.fcgi.in:15308
 #, fuzzy
 msgid "You were successfully unsubscribed from list %s."
 msgstr "Has sol·licitat donar-se de baixa de la llista %1"
 
-#: ../wwsympa/wwsympa.fcgi.in:15321
+#: ../wwsympa/wwsympa.fcgi.in:15312
 msgid ""
 "Unsubscription from list %s denied: Unsubscription from this list is closed."
 msgstr ""
 "Denegada la desubscripció de la llista %s: La desubscripció a aquesta llista "
 "està tancada"
 
-#: ../wwsympa/wwsympa.fcgi.in:15323
+#: ../wwsympa/wwsympa.fcgi.in:15314
 #, fuzzy
 msgid "Unsubscription from list %s failed."
 msgstr "Dona'm de baixa de la llista %1"
 
 #. This entry is a date/time format
 #. Check the strftime manpage for format details : http://docs.freebsd.org/info/gawk/gawk.info.Time_Functions.html
-#: ../wwsympa/wwsympa.fcgi.in:16230 ../wwsympa/wwsympa.fcgi.in:16231
+#: ../wwsympa/wwsympa.fcgi.in:16221 ../wwsympa/wwsympa.fcgi.in:16222
 #, fuzzy
 msgid "%Y-%m-%d-%H-%M-%S"
 msgstr "%Y/%m/%d/%H/%M/%S"
