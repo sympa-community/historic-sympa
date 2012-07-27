@@ -10,10 +10,10 @@ msgstr ""
 "PO-Revision-Date: 2012-07-27 13:25+0200\n"
 "Last-Translator: David Verdin <david.verdin@cru.fr>\n"
 "Language-Team: Català <projectek2@upcnet.es>\n"
-"Language: ca\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+"Language: ca\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "X-Generator: Pootle 2.1.5\n"
 
@@ -571,7 +571,7 @@ msgstr "Gestió de l'arxiu"
 #: ../web_tt2/picture_upload.tt2:21 ../web_tt2/pref.tt2:4
 #: ../web_tt2/rename_list_request.tt2:3 ../web_tt2/review.tt2:5
 #: ../web_tt2/reviewbouncing.tt2:3 ../web_tt2/suboptions.tt2:20
-#: ../web_tt2/subscriber_table.tt2:106
+#: ../web_tt2/subscriber_table.tt2:118
 msgid "Open in a new window"
 msgstr "Obre en una nova finestra"
 
@@ -1458,7 +1458,7 @@ msgid "Size (Kb)"
 msgstr "Mida (Kb)"
 
 #: ../web_tt2/d_read.tt2:69 ../web_tt2/d_read.tt2:71
-#: ../web_tt2/latest_d_read.tt2:18 ../web_tt2/subscriber_table.tt2:59
+#: ../web_tt2/latest_d_read.tt2:18 ../web_tt2/subscriber_table.tt2:66
 msgid "Last update"
 msgstr "Darrera actualització"
 
@@ -2151,7 +2151,7 @@ msgstr ""
 msgid "The period is too long (%1 days)"
 msgstr "El període és massa llarg (%1 dies)"
 
-#: ../web_tt2/error.tt2:61
+#: ../web_tt2/error.tt2:61 ../web_tt2/subscriber_table.tt2:170
 msgid "List has no subscribers"
 msgstr "La llista no té cap subscriptor"
 
@@ -2532,7 +2532,7 @@ msgstr "Llistes tancades"
 #: ../web_tt2/modindex.tt2:64 ../web_tt2/review.tt2:138
 #: ../web_tt2/reviewbouncing.tt2:131 ../web_tt2/reviewbouncing.tt2:60
 #: ../web_tt2/subindex.tt2:10 ../web_tt2/subindex.tt2:57
-#: ../web_tt2/subscriber_table.tt2:7
+#: ../web_tt2/subscriber_table.tt2:9
 msgid "Toggle Selection"
 msgstr "Commutar la selecció"
 
@@ -2780,7 +2780,7 @@ msgid "Most recent documents for this list "
 msgstr "Els últims documents d'aquesta llista"
 
 #: ../web_tt2/latest_d_read.tt2:19 ../web_tt2/subindex.tt2:12
-#: ../web_tt2/subscriber_table.tt2:33 ../web_tt2/subscriber_table.tt2:36
+#: ../web_tt2/subscriber_table.tt2:39 ../web_tt2/subscriber_table.tt2:42
 msgid "Name"
 msgstr "Nom"
 
@@ -3573,7 +3573,7 @@ msgstr "Taula que mostra els retornats"
 
 #: ../web_tt2/review.tt2:148 ../web_tt2/reviewbouncing.tt2:61
 #: ../web_tt2/show_exclude.tt2:15 ../web_tt2/subindex.tt2:11
-#: ../web_tt2/subscriber_table.tt2:12 ../web_tt2/subscriber_table.tt2:15
+#: ../web_tt2/subscriber_table.tt2:15 ../web_tt2/subscriber_table.tt2:18
 #: ../web_tt2/viewlogs.tt2:54 ../web_tt2/viewlogs.tt2:63
 msgid "Email"
 msgstr "Adreça electrònica"
@@ -4337,7 +4337,8 @@ msgstr ""
 "servir aquesta pàgina per instal·lar el CSS de forma estàtica i <strong>que "
 "sympa funcioni més ràpidament</strong>. No oblideu de configurar el "
 "paràmetre css_url per tal que apunti al directori on es troben els fitxers "
-"CSS (el seu valor actual és <a target=\"test\" href=\"test\" href=\"%1\">%1</a>)."
+"CSS (el seu valor actual és <a target=\"test\" href=\"test\" href=\"%1\">%1</"
+"a>)."
 
 #: ../web_tt2/skinsedit.tt2:35
 msgid "Colors"
@@ -4795,34 +4796,34 @@ msgstr "Ja esteu subscrit a la llista %1"
 msgid "List members"
 msgstr "Membres de la llista"
 
-#: ../web_tt2/subscriber_table.tt2:20 ../web_tt2/subscriber_table.tt2:23
+#: ../web_tt2/subscriber_table.tt2:23 ../web_tt2/subscriber_table.tt2:26
 msgid "Domain"
 msgstr "Domini"
 
-#: ../web_tt2/subscriber_table.tt2:28
+#: ../web_tt2/subscriber_table.tt2:32
 msgid "Picture"
 msgstr "Imatge"
 
-#: ../web_tt2/subscriber_table.tt2:41 ../web_tt2/suspend_request.tt2:12
+#: ../web_tt2/subscriber_table.tt2:48 ../web_tt2/suspend_request.tt2:12
 msgid "Reception"
 msgstr "Recepció"
 
-#: ../web_tt2/subscriber_table.tt2:45 ../web_tt2/subscriber_table.tt2:48
+#: ../web_tt2/subscriber_table.tt2:52 ../web_tt2/subscriber_table.tt2:55
 msgid "Sources"
 msgstr "Fonts"
 
-#: ../web_tt2/subscriber_table.tt2:53 ../web_tt2/subscriber_table.tt2:56
+#: ../web_tt2/subscriber_table.tt2:60 ../web_tt2/subscriber_table.tt2:63
 #: ../web_tt2/viewlogs.tt2:123
 #, fuzzy
 msgid "Sub date"
 msgstr "Data"
 
-#: ../web_tt2/subscriber_table.tt2:89
+#: ../web_tt2/subscriber_table.tt2:101
 msgid "bouncing"
 msgstr "retornats"
 
 #. (u.email)
-#: ../web_tt2/subscriber_table.tt2:106
+#: ../web_tt2/subscriber_table.tt2:118
 msgid "%1's picture"
 msgstr "%1 imatge(s)"
 
@@ -5034,7 +5035,7 @@ msgstr "Cerca per període: "
 #. (date_to_formated)
 #. This entry is a date/time format
 #. Check the strftime manpage for format details : http://docs.freebsd.org/info/gawk/gawk.info.Time_Functions.html
-#: ../web_tt2/viewlogs.tt2:113 ../wwsympa/wwsympa.fcgi.in:16239
+#: ../web_tt2/viewlogs.tt2:113 ../wwsympa/wwsympa.fcgi.in:16248
 msgid "%d %b %Y %H:%M:%S"
 msgstr "%d %b %Y %H:%M:%S"
 
@@ -5749,7 +5750,7 @@ msgid "%1 Digest %2"
 msgstr "%1 resum %2"
 
 #: ../mail_tt2/digest.tt2:10 ../mail_tt2/digest_plain.tt2:9
-#: ../mail_tt2/get_archive.tt2:9 ../src/lib/List.pm:2743
+#: ../mail_tt2/get_archive.tt2:9 ../src/lib/List.pm:2747
 msgid "Table of contents:"
 msgstr "Taula de continguts:"
 
@@ -8466,7 +8467,6 @@ msgid "public list multipart messages are rejected"
 msgstr "llista pública, els missatges multipart no estan permesos "
 
 #: ../src/etc/scenari/spam_status.x-spam-status:1
-#: ../src/etc/scenari/spam_status.x-spam-status~:1
 msgid "test x-spam-status  header"
 msgstr ""
 
@@ -8875,7 +8875,7 @@ msgstr "%d %b %y  %H:%M"
 
 #. This entry is a date/time format
 #. Check the strftime manpage for format details : http://docs.freebsd.org/info/gawk/gawk.info.Time_Functions.html
-#: ../src/lib/Commands.pm:963 ../wwsympa/wwsympa.fcgi.in:9878
+#: ../src/lib/Commands.pm:963 ../wwsympa/wwsympa.fcgi.in:9887
 msgid "%A"
 msgstr "%A"
 
@@ -8893,9 +8893,9 @@ msgstr "Error en la línia %d : %s"
 #. Check the strftime manpage for format details : http://docs.freebsd.org/info/gawk/gawk.info.Time_Functions.html
 #: ../src/lib/Family.pm:2598 ../src/lib/Family.pm:395 ../src/lib/Family.pm:672
 #: ../src/lib/List.pm:1896 ../wwsympa/Auth.pm:459
-#: ../wwsympa/wwsympa.fcgi.in:1090 ../wwsympa/wwsympa.fcgi.in:2636
-#: ../wwsympa/wwsympa.fcgi.in:2911 ../wwsympa/wwsympa.fcgi.in:2922
-#: ../wwsympa/wwsympa.fcgi.in:3043
+#: ../wwsympa/wwsympa.fcgi.in:1090 ../wwsympa/wwsympa.fcgi.in:2646
+#: ../wwsympa/wwsympa.fcgi.in:2921 ../wwsympa/wwsympa.fcgi.in:2932
+#: ../wwsympa/wwsympa.fcgi.in:3053
 msgid "%d %b %Y at %H:%M:%S"
 msgstr "%d %b %Y at %H:%M:%S"
 
@@ -9610,31 +9610,31 @@ msgstr "Qui pot actualitzar la configuració"
 
 #. This entry is a date/time format
 #. Check the strftime manpage for format details : http://docs.freebsd.org/info/gawk/gawk.info.Time_Functions.html
-#: ../src/lib/List.pm:2858
+#: ../src/lib/List.pm:2862
 msgid "%a, %d %b %Y %H:%M:%S"
 msgstr "%a, %d %b %Y %H:%M:%S"
 
 #. This entry is a date/time format
 #. Check the strftime manpage for format details : http://docs.freebsd.org/info/gawk/gawk.info.Time_Functions.html
-#: ../src/lib/List.pm:2859
+#: ../src/lib/List.pm:2863
 msgid "%a, %d %b %Y"
 msgstr "%a, %d %b %Y"
 
 #. This entry is a date/time format
 #. Check the strftime manpage for format details : http://docs.freebsd.org/info/gawk/gawk.info.Time_Functions.html
-#: ../src/lib/List.pm:3050 ../src/lib/List.pm:3051 ../src/lib/List.pm:3055
-#: ../wwsympa/wwsympa.fcgi.in:11055 ../wwsympa/wwsympa.fcgi.in:11124
-#: ../wwsympa/wwsympa.fcgi.in:11326 ../wwsympa/wwsympa.fcgi.in:11673
-#: ../wwsympa/wwsympa.fcgi.in:15124 ../wwsympa/wwsympa.fcgi.in:15131
-#: ../wwsympa/wwsympa.fcgi.in:15845 ../wwsympa/wwsympa.fcgi.in:16621
-#: ../wwsympa/wwsympa.fcgi.in:16622 ../wwsympa/wwsympa.fcgi.in:4322
-#: ../wwsympa/wwsympa.fcgi.in:4375 ../wwsympa/wwsympa.fcgi.in:4946
-#: ../wwsympa/wwsympa.fcgi.in:4947 ../wwsympa/wwsympa.fcgi.in:6512
-#: ../wwsympa/wwsympa.fcgi.in:7534 ../wwsympa/wwsympa.fcgi.in:8088
-#: ../wwsympa/wwsympa.fcgi.in:8135 ../wwsympa/wwsympa.fcgi.in:8137
-#: ../wwsympa/wwsympa.fcgi.in:8615 ../wwsympa/wwsympa.fcgi.in:8616
-#: ../wwsympa/wwsympa.fcgi.in:8650 ../wwsympa/wwsympa.fcgi.in:8651
-#: ../wwsympa/wwsympa.fcgi.in:8830 ../wwsympa/wwsympa.fcgi.in:8831
+#: ../src/lib/List.pm:3054 ../src/lib/List.pm:3055 ../src/lib/List.pm:3059
+#: ../wwsympa/wwsympa.fcgi.in:11064 ../wwsympa/wwsympa.fcgi.in:11133
+#: ../wwsympa/wwsympa.fcgi.in:11335 ../wwsympa/wwsympa.fcgi.in:11682
+#: ../wwsympa/wwsympa.fcgi.in:15133 ../wwsympa/wwsympa.fcgi.in:15140
+#: ../wwsympa/wwsympa.fcgi.in:15854 ../wwsympa/wwsympa.fcgi.in:16630
+#: ../wwsympa/wwsympa.fcgi.in:16631 ../wwsympa/wwsympa.fcgi.in:4331
+#: ../wwsympa/wwsympa.fcgi.in:4384 ../wwsympa/wwsympa.fcgi.in:4955
+#: ../wwsympa/wwsympa.fcgi.in:4956 ../wwsympa/wwsympa.fcgi.in:6521
+#: ../wwsympa/wwsympa.fcgi.in:7543 ../wwsympa/wwsympa.fcgi.in:8097
+#: ../wwsympa/wwsympa.fcgi.in:8144 ../wwsympa/wwsympa.fcgi.in:8146
+#: ../wwsympa/wwsympa.fcgi.in:8624 ../wwsympa/wwsympa.fcgi.in:8625
+#: ../wwsympa/wwsympa.fcgi.in:8659 ../wwsympa/wwsympa.fcgi.in:8660
+#: ../wwsympa/wwsympa.fcgi.in:8839 ../wwsympa/wwsympa.fcgi.in:8840
 msgid "%d %b %Y"
 msgstr "%d %b %Y"
 
@@ -9779,36 +9779,36 @@ msgstr "%H:%M:%S"
 #. This entry is a date/time format
 #. Check the strftime manpage for format details : http://docs.freebsd.org/info/gawk/gawk.info.Time_Functions.html
 #: ../wwsympa/SympaSession.pm:436 ../wwsympa/SympaSession.pm:437
-#: ../wwsympa/wwsympa.fcgi.in:11907 ../wwsympa/wwsympa.fcgi.in:12040
-#: ../wwsympa/wwsympa.fcgi.in:14353 ../wwsympa/wwsympa.fcgi.in:8045
+#: ../wwsympa/wwsympa.fcgi.in:11916 ../wwsympa/wwsympa.fcgi.in:12049
+#: ../wwsympa/wwsympa.fcgi.in:14362 ../wwsympa/wwsympa.fcgi.in:8054
 msgid "%d %b %y  %H:%M"
 msgstr "%d %b %y  %H:%M"
 
-#: ../wwsympa/wwsympa.fcgi.in:15306
+#: ../wwsympa/wwsympa.fcgi.in:15315
 #, fuzzy
 msgid "Your unsubscription request to list %s was sent to the list owner."
 msgstr "La teva petició s'ha redireccionat al propietari de la llista"
 
-#: ../wwsympa/wwsympa.fcgi.in:15308
+#: ../wwsympa/wwsympa.fcgi.in:15317
 #, fuzzy
 msgid "You were successfully unsubscribed from list %s."
 msgstr "Has sol·licitat donar-se de baixa de la llista %1"
 
-#: ../wwsympa/wwsympa.fcgi.in:15312
+#: ../wwsympa/wwsympa.fcgi.in:15321
 msgid ""
 "Unsubscription from list %s denied: Unsubscription from this list is closed."
 msgstr ""
 "Denegada la desubscripció de la llista %s: La desubscripció a aquesta llista "
 "està tancada"
 
-#: ../wwsympa/wwsympa.fcgi.in:15314
+#: ../wwsympa/wwsympa.fcgi.in:15323
 #, fuzzy
 msgid "Unsubscription from list %s failed."
 msgstr "Dona'm de baixa de la llista %1"
 
 #. This entry is a date/time format
 #. Check the strftime manpage for format details : http://docs.freebsd.org/info/gawk/gawk.info.Time_Functions.html
-#: ../wwsympa/wwsympa.fcgi.in:16221 ../wwsympa/wwsympa.fcgi.in:16222
+#: ../wwsympa/wwsympa.fcgi.in:16230 ../wwsympa/wwsympa.fcgi.in:16231
 #, fuzzy
 msgid "%Y-%m-%d-%H-%M-%S"
 msgstr "%Y/%m/%d/%H/%M/%S"
