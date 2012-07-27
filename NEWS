@@ -3,6 +3,48 @@
 
 (See Changelog file for the full changes log)
 
+6.1.14		July 27, 2012
+
+  Features:
+
+	[7511] src/lib/tt2.pm, wwsympa/wwsympa.fcgi.in:  Now WWSympa responds
+	with "404 Not Found" status code, instead of sending notification to
+	listmaster, if any random pages under /sympa/help/ are requested.
+	Added new option 'has_header' for tt2::parse_tt2() to prepend newline
+	to page body so that TT2 parse error can be handled before all HTTP
+	headers have been sent.
+
+
+
+  Changes:
+
+	[7529] po/LINGUAS, po/Makefile.in.in, po/ar.po, po/bg.po, po/br.po,
+	po/ca.po, po/cs.po, po/de.po, po/el.po, po/en.po, po/en_US.po,
+	po/es.po, po/et.po, po/eu.po, po/fi.po, po/fr.po, po/gl.po, po/hu.po,
+	po/id.po, po/it.po, po/ja.po, po/ko.po, po/la.po, po/ml.po,
+	po/nb_NO.po, po/nl.po, po/oc.po, po/pl.po, po/pt.po, po/pt_BR.po,
+	po/ro.po, po/ru.po, po/sv.po, po/sympa.pot, po/tr.po, po/vi.po,
+	po/zh_CN.po, po/zh_TW.po, po-wwsympa/LINGUAS, po-wwsympa/en.po,
+	po-wwsympa/en_US.po, src/lib/Language.pm, src/lib/confdef.pm,
+	src/lib/mail.pm, wwsympa/wwsympa.fcgi.in:  Now the English locale is
+	the - more general - 'en' instead of 'en_US', saving people the need to
+	install the en_Us if they don't use it.
+
+  Bug fixes:
+
+	[7526] web_tt2/subscriber_table.tt2, wwsympa/wwsympa.fcgi.in:
+	[#6931][Reported by D. Pritts, Internet2] On the review page for the
+	list without any subscribers, a message "ERROR (review) - List has no
+	subscribers" is shown.	It is not an error.
+
+	[7523] src/etc/script/create_db.Oracle, src/etc/script/create_db.Pg,
+	src/etc/script/create_db.SQLite, src/etc/script/create_db.Sybase,
+	src/etc/script/create_db.mysql:  Updating database creation scripts
+	with correct indexes definition.
+
+	[7509] src/lib/Conf.pm, src/lib/confdef.pm:  User friendly automatic
+	lists were not robot-enabled. Fixed.
+
 6.1.13		July 20, 2012
 
   Features:
@@ -36,8 +78,8 @@
 	lists can now be manipulated through the sympa web interface, in a
 	"user friendly" form. This is merely a web layer around the general
 	autmatic lists feature. This feature is fully documented here:
-	https://www.sympa.org/manual_6.2/user_friendly_autolists
-	Additionnally, it is now possible to unsubscribe to all the lists of a
+	https://www.sympa.org/manual/list-families#user-friendly_automatic_lists
+	Additionnally, it is now possible to unsubscribe from all the lists of a
 	given family in two clicks.
 
 
