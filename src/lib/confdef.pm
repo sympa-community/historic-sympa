@@ -547,8 +547,8 @@ our @params = (
     { title => 'Internationalization' },
     {
         name    => 'lang',
-        default => 'en_US',
-        query   => 'Default lang (ca | cs | de | el | es | et_EE | en_US | fr | fi | hu | it | ja_JP | ko | nl | nb_NO | oc | pl | pt_BR | ru | sv | tr | vi | zh_CN | zh_TW)',
+        default => 'en',
+        query   => 'Default lang (ca | cs | de | el | es | et_EE | en | fr | fi | hu | it | ja_JP | ko | nl | nb_NO | oc | pl | pt_BR | ru | sv | tr | vi | zh_CN | zh_TW)',
 	vhost   => '1',
         file    => 'sympa.conf',
         edit    => '1',
@@ -556,7 +556,7 @@ our @params = (
     },
     {
         name    => 'supported_lang',
-        default => 'ca,cs,de,el,es,et_EE,en_US,fr,fi,hu,it,ja_JP,ko,nl,nb_NO,oc,pl,pt_BR,ru,sv,tr,vi,zh_CN,zh_TW',
+        default => 'ca,cs,de,el,es,et_EE,en,fr,fi,hu,it,ja_JP,ko,nl,nb_NO,oc,pl,pt_BR,ru,sv,tr,vi,zh_CN,zh_TW',
         query   => 'Supported languages',
 	vhost   => '1',
         file    => 'sympa.conf',

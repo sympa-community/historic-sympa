@@ -1,10 +1,10 @@
-# #-#-#-#-#  blank_web_help_en_US.po (sympa)  #-#-#-#-#
+# #-#-#-#-#  blank_web_help_en.po (sympa)  #-#-#-#-#
 # Sympa online help internationalisation.
 # Copyright (C) 2007
 # This file is distributed under the same license as Sympa.
 # FIRST AUTHOR <david.verdin@cru.fr>, 2007.
 #
-# #-#-#-#-#  tmp_web_help_en_US.po (PACKAGE VERSION)  #-#-#-#-#
+# #-#-#-#-#  tmp_web_help_en.po (PACKAGE VERSION)  #-#-#-#-#
 # SOME DESCRIPTIVE TITLE.
 # Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
 # This file is distributed under the same license as the PACKAGE package.
@@ -20,7 +20,7 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Language: en_US\n"
+"Language: en\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "X-Generator: Pootle 2.1.2\n"
 
