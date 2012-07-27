@@ -51,7 +51,7 @@ my $default_lang = 'en';
 my %language_equiv = ( 'zh_CN' => 'cn',
 		       'zh_TW' => 'tw',
 		       'cs'    => 'cz',
-		       'en' => 'us',
+		       'en_US' => 'us',
 		       );
 
 ## Supported languages are defined by 'supported_lang' sympa.conf parameter
@@ -64,6 +64,7 @@ my %lang2locale = ('ar' => 'ar_SY',
 		   'cs' => 'cs_CZ',
 		   'de' => 'de_DE',
 		   'us' => 'en_US',
+		   'en' => 'en_US',
 		   'el' => 'el_GR',
 		   'es' => 'es_ES',
 		   'et' => 'et_EE',
