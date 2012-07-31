@@ -5024,6 +5024,16 @@ sub do_subrequest {
 	    $param->{'status'} = 'notauth_noemail';
 	    return 1;
 	}
+	## valid email address?
+	unless (&tools::valid_email($in{'email'})) {
+	    &report::reject_report_web('user','incorrect_email',{'email' => $in{'email'}},$param->{'action'},$list);
+	    &wwslog('info','do_subrequest: incorrect email %s', $in{'email'});
+	    &web_db_log({'target_email' => $in{'email'},
+			 'status' => 'error',
+			 'error_type' => 'incorrect_email'});
+	    $param->{'status'} = 'notauth_noemail';
+	    return 1;
+	}
 	## Subscriber ?
 	if ($list->is_user($in{'email'})) {
 	    $param->{'status'} = 'notauth_subscriber';
@@ -5312,8 +5322,15 @@ sub unsubscribe {
      unless ($in{'email'}) {
 	 return 1;
      }
-
-     
+     ## valid email address?
+     unless (&tools::valid_email($in{'email'})) {
+	&report::reject_report_web('user','incorrect_email',{'email' => $in{'email'}},$param->{'action'},$list);
+	&wwslog('info','do_sigrequest: incorrect email %s', $in{'email'});
+	&web_db_log({'target_email' => $in{'email'},
+		    'status' => 'error',
+		    'error_type' => 'incorrect_email'});
+	return 1;
+     }
      if ($list->is_user($in{'email'})) {
 
        my $ticket = &Auth::create_one_time_ticket($in{'email'},$robot,'signoff/'.$list->{'name'},$ip);
