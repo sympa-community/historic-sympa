@@ -930,7 +930,7 @@ my %full_db_struct = (
 	'order' => 13,
 	'doc' => 'FIXME',
     },
-    'conf_tables' => {
+    'conf_table' => {
 	'fields' => {
 	    'robot_conf' => {
 		'struct'=> 'varchar(80)',
