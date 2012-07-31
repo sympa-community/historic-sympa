@@ -3520,7 +3520,7 @@ sub distribute_msg {
 sub send_msg_digest {
     my $self = shift;
     my $messagekey = shift;
-    do_log('debug',"send_msg_disgest(%s)",$messagekey);
+   &Log::do_log('debug',"send_msg_disgest(%s)",$messagekey);
 
     # fetch and lock message. 
     my $digestspool = new Sympaspool ('digest');
@@ -4069,7 +4069,7 @@ sub send_msg {
 	    my $subject = $message->{'msg'}->head->get('Subject');
 	    my $sender = $message->{'msg'}->head->get('From');
 	    unless ($self->send_file('x509-user-cert-missing', $user->{'email'}, $robot, {'mail' => {'subject' => $subject, 'sender' => $sender}, 'auto_submitted' => 'auto-generated'})) {
-	        &do_log('notice',"Unable to send template 'x509-user-cert-missing' to $user->{'email'}");
+	        &Log::do_log('notice',"Unable to send template 'x509-user-cert-missing' to $user->{'email'}");
 	    }
 	}else{
 	    if ($user->{'bounce_score'}) {
@@ -4353,7 +4353,7 @@ sub send_to_editor {
    my($self, $method, $message) = @_;
    my $msg = $message->{'msg'};
    my $encrypt = 'smime_crypted' if ($message->{'smime_crypted'}); 
-   do_log('debug', "List::send_to_editor, messagekey: $message->{'messagekey'}, method : $method, encrypt : $encrypt");
+  &Log::do_log('debug', "List::send_to_editor, messagekey: $message->{'messagekey'}, method : $method, encrypt : $encrypt");
 
    my($i, @rcpt);
    my $admin = $self->{'admin'};
@@ -5341,7 +5341,7 @@ sub _append_parts {
 
 	    my $io = $part->bodyhandle->open('w');
 	    unless (defined $io) {
-		&do_log('err', "List::add_parts: Failed to save message : $!");
+		&Log::do_log('err', "List::add_parts: Failed to save message : $!");
 		return undef;
 	    }
 	    $io->print($header_msg);
@@ -7658,7 +7658,7 @@ sub archive_ls {
 ## Archive 
 sub archive_msg {
     my($self, $message ) = @_;
-    do_log('debug', 'List::archive_msg for %s',$self->{'name'});
+   &Log::do_log('debug', 'List::archive_msg for %s',$self->{'name'});
 
     if ($self->is_archived()){
 	
@@ -7670,15 +7670,15 @@ sub archive_msg {
 	
 	if (($Conf::Conf{'ignore_x_no_archive_header_feature'} ne 'on') && (($message->{'msg'}->head->get('X-no-archive') =~ /yes/i) || ($message->{'msg'}->head->get('Restrict') =~ /no\-external\-archive/i))) {
 	    ## ignoring message with a no-archive flag	    
-	    do_log('info',"Do not archive message with no-archive flag for list %s",$self->get_list_id());
+	   &Log::do_log('info',"Do not archive message with no-archive flag for list %s",$self->get_list_id());
 	}else{
 	    my $spoolarchive = new Sympaspool ('archive');
 	    unless ($message->{'messagekey'}) {
-		do_log('err', "could not store message in archive spool, messagekey missing");
+	&Log::do_log('err', "could not store message in archive spool, messagekey missing");
 		return undef;
 	    }
 	    unless ($spoolarchive->store($msgtostore,{'robot'=>$self->{'robot'},'list'=>$self->{'name'}})){
-		do_log('err', "could not store message in archive spool, unkown reason");
+	&Log::do_log('err', "could not store message in archive spool, unkown reason");
 		return undef;
 	    }
 	}
@@ -7709,7 +7709,7 @@ sub get_nextdigest {
     my $self = shift;
     my $date = shift;   # the date epoch as stored in the spool database
 
-    do_log('debug3', 'List::get_nextdigest (list = %s)',$self->{'name'});
+   &Log::do_log('debug3', 'List::get_nextdigest (list = %s)',$self->{'name'});
 
     my $digest = $self->{'admin'}{'digest'};
 
@@ -10113,7 +10113,7 @@ sub _compare_addresses {
 sub store_digest {
 
     my($self,$message) = @_;
-    do_log('debug', 'List::store_digest (list= %s)',$self->{'name'});
+   &Log::do_log('debug', 'List::store_digest (list= %s)',$self->{'name'});
     my $separator = &tools::get_separator();  
 
     my @now  = localtime(time);
@@ -10136,12 +10136,12 @@ sub store_digest {
     if ($current_digest) {
 	# update does not modify the date field, this is needed in order to send digest when needed.
 	unless ($digestspool->update({'messagekey'=>$current_digest->{'messagekey'}},{'message'=>$message_as_string,'messagelock'=>'NULL'})){
-	    do_log('err',"could not update digest adding this message (digest spool entry key %s)",$current_digest->{'messagekey'});
+	   &Log::do_log('err',"could not update digest adding this message (digest spool entry key %s)",$current_digest->{'messagekey'});
 	    return undef;
 	}
     }else{
 	unless ($digestspool->store($message_as_string,{'list'=>$self->{'name'},'robot'=>$self->{'robot'}})){
-	    do_log('err',"could not store message in digest spool messafge digestkey %s",$current_digest->{'messagekey'})	;
+	   &Log::do_log('err',"could not store message in digest spool messafge digestkey %s",$current_digest->{'messagekey'})	;
 	    return undef;
 	}
     }
@@ -11740,12 +11740,12 @@ sub tag_topic {
 sub load_msg_topic {
     my ($self,$msg_id,$robot) = @_;
 
-    &do_log('debug','List::load_msg_topic(%s,%s)',$self->{'name'},$msg_id);    
+    &Log::do_log('debug','List::load_msg_topic(%s,%s)',$self->{'name'},$msg_id);    
     my  $topicspool = new Sympaspool('topic');
 
     my $topics_from_spool = $topicspool->get_message({'listname' =>$self->{'name'},'robot' => $robot, 'messageid' => $msg_id});
     unless ($topics_from_spool) {
-	&do_log('debug','No topic define ; unable to find topic for message %s / list  %s', $msg_id,$self->{'name'});
+	&Log::do_log('debug','No topic define ; unable to find topic for message %s / list  %s', $msg_id,$self->{'name'});
 	return undef;
     }
     
@@ -11766,7 +11766,7 @@ sub load_msg_topic {
 		if ($value =~ /^(editor|sender|auto)$/) {
 		    $info{'method'} = $value;
 		}else {
-		    &do_log('err','List::load_msg_topic(%s,%s): syntax error in record %s@%s : %s', $$self->{'name'},$robot,$msg_id);
+		    &Log::do_log('err','List::load_msg_topic(%s,%s): syntax error in record %s@%s : %s', $$self->{'name'},$robot,$msg_id);
 		    return undef;
 		}
 	    }
@@ -12016,7 +12016,7 @@ sub store_subscription_request {
     my $subscription_request_spool = new Sympaspool ('subscribe');
     
     if ($subscription_request_spool->get_content({'selector' =>{'list'=> $self->{'name'},'robot'=> $self->{'robot'},'sender'=>$email},'selection'=>'count'}) != 0) {
-	&do_log('notice', 'Subscription already requested by %s', $email);
+	&Log::do_log('notice', 'Subscription already requested by %s', $email);
 	return undef;
     }else{
 	my $subrequest = sprintf "$gecos||$custom_attr\n";
@@ -12041,7 +12041,7 @@ sub get_subscription_requests {
 	if ($subrequest->{'messageasstring'} =~ /(.*)\|\|.*$/) {
 	    $gecos = $1; $customattributes = $subrequest->{'messageasstring'} ; $customattributes =~ s/^.*\|\|// ; 
 	}else{
-	    &do_log('err', "Failed to parse subscription request %s",$subrequest->{'messagekey'});
+	    &Log::do_log('err', "Failed to parse subscription request %s",$subrequest->{'messagekey'});
 	    next;
 	}
 	my $user_entry = $self->get_list_member($email, probe => 1);
@@ -12049,7 +12049,7 @@ sub get_subscription_requests {
 	if ( defined($user_entry) && ($user_entry->{'subscribed'} == 1)) {
 	    &Log::do_log('err','User %s is subscribed to %s already. Deleting subscription request.', $email, $self->{'name'});
 	    unless ($subscription_request_spool->remove_message({'list'=> $self->{'name'},'robot'=> $self->{'robot'},'sender'=>$email})) {
-		&do_log('err', 'Could not delete subrequest %s for list %s@%s from %s', $subrequest->{'messagekey'},$self->{'name'},$self->{'robot'},$subrequest->{'sender'});
+		&Log::do_log('err', 'Could not delete subrequest %s for list %s@%s from %s', $subrequest->{'messagekey'},$self->{'name'},$self->{'robot'},$subrequest->{'sender'});
 	    }
 	    next;
 	}
@@ -12313,7 +12313,7 @@ sub purge {
     ## Clean list table if needed
     if ($Conf::Conf{'db_list_cache'} eq 'on') {
 	unless (&SDM::do_query('DELETE FROM list_table WHERE name_list = %s AND robot_list = %s', &SDM::quote($self->{'name'}), &SDM::quote($self->{'domain'}))) {
-	    &do_log('err', 'Cannot remove list %s (robot %s) from table', $self->{'name'}, $self->{'domain'});
+	    &Log::do_log('err', 'Cannot remove list %s (robot %s) from table', $self->{'name'}, $self->{'domain'});
 	}
     }
     

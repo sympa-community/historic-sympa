@@ -346,13 +346,8 @@ my %full_db_struct = (
 		'doc'=>'DKIM parameter stored for bulk daemon because bulk ignore list parameters, DKIM i signature parameter',
 		'order'=>38,
 	    },
-	    'dkim_header_list_spool' => {
-		'struct'=> 'varchar(500)',
-		'doc'=>'DKIM parameter stored for bulk daemon because bulk ignore list parameters, the list of headers included in signature',
-		'order'=>39,
-	    },
 	},
-	'doc'=>'This table is created in version 6.3. It replace most of spools on file system forclustering purpose',
+	'doc'=>'This table is created in version 6.2. It replace most of spools on file system for clustering purpose',
 	'order'=>3,	    
     },
     'bulkmailer_table' => {

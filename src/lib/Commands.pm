@@ -2021,7 +2021,7 @@ sub distribute {
 	$message_in_spool = $validatedspool->get_message({'list'=>$list->{'name'},'robot'=>$robot,'authkey'=>$key});
     }
     unless ($message_in_spool) {
-	&do_log('err', 'Commands::distribute(): Unable to find message for %s with key %s', $name, $key);
+	&Log::do_log('err', 'Commands::distribute(): Unable to find message for %s with key %s', $name, $key);
 	&report::reject_report_msg('user','unfound_message',$sender,{'listname' => $name,'key'=> $key},$robot,'',$list);
 	return 'msg_not_found';
 	
@@ -2057,7 +2057,7 @@ sub distribute {
     unless ($numsmtp) {
 	&Log::do_log('info', 'Message for %s from %s accepted but all subscribers use digest,nomail or summary',$which, $sender);
     } 
-    &do_log('info', 'Message for %s from %s accepted (%d seconds, %d sessions, %d subscribers), message-id=%s, size=%d', $which, $sender, time - $start_time, $numsmtp, $list->get_total(), $hdr->get('Message-Id'), $bytes);
+    &Log::do_log('info', 'Message for %s from %s accepted (%d seconds, %d sessions, %d subscribers), message-id=%s, size=%d', $which, $sender, time - $start_time, $numsmtp, $list->get_total(), $hdr->get('Message-Id'), $bytes);
     
     unless ($quiet) {
 	unless (&report::notice_report_msg('message_distributed',$sender,{'key' => $key,'message' => $message},$robot,$list)) {
@@ -2065,7 +2065,7 @@ sub distribute {
 	}
     }
     
-    &do_log('info', 'DISTRIBUTE %s %s from %s accepted (%d seconds)', $name, $key, $sender, time-$time_command);
+    &Log::do_log('info', 'DISTRIBUTE %s %s from %s accepted (%d seconds)', $name, $key, $sender, time-$time_command);
     
     return 1;
 }
@@ -2203,17 +2203,17 @@ sub confirm {
 					'apply_dkim_signature'=>$apply_dkim_signature);
 	
 	unless (defined $numsmtp) {
-	    &do_log('err','Commands::confirm(): Unable to send message to list %s', $list->{'name'});
+	    &Log::do_log('err','Commands::confirm(): Unable to send message to list %s', $list->{'name'});
 	    &report::reject_report_msg('intern','',$sender,{'msg_id' => $msgid,'message' => $message},$robot,$msg_string,$list);
 	    return undef;
 	}
 	
 	unless ($quiet || ($action =~ /quiet/i )) {
 	    unless (&report::notice_report_msg('message_confirmed',$sender,{'key' => $key,'message' => $message},$robot,$list)) {
-		&do_log('notice',"Commands::confirm(): Unable to send template 'message_report', entry 'message_distributed' to $sender");
+		&Log::do_log('notice',"Commands::confirm(): Unable to send template 'message_report', entry 'message_distributed' to $sender");
 	    }
 	}
-	&do_log('info', 'CONFIRM %s from %s for list %s accepted (%d seconds)', $key, $sender, $list->{'name'}, time-$time_command);
+	&Log::do_log('info', 'CONFIRM %s from %s for list %s accepted (%d seconds)', $key, $sender, $list->{'name'}, time-$time_command);
 
 	$spool->remove({'authkey'=>$key});
 	
@@ -2270,7 +2270,7 @@ sub reject {
     }
     my $message = new Message({'message_in_spool'=> $message_in_spool});
     unless ($message_) {
-	&do_log('err', 'Could not parse spool message %s %s from %s refused, auth failed', $which, $key, $sender);
+	&Log::do_log('err', 'Could not parse spool message %s %s from %s refused, auth failed', $which, $key, $sender);
 	&report::reject_report_msg('user','unfound_message',$sender,{'key'=> $key},$robot,'',$list);
 	return 'wrong_auth';
     }

@@ -845,7 +845,7 @@ sub remove_invalid_dkim_signature {
 	    return $msg_as_string ;
 	}
 	$entity->head->delete('DKIM-Signature');
-	do_log('debug',"removing invalide dkim signature header");
+&Log::do_log('debug',"removing invalide dkim signature header");
 	return $entity->head->as_string."\n".$body_as_string;
     }else{
 	return ($msg_as_string); # sgnature is valid.
@@ -1340,7 +1340,7 @@ sub smime_decrypt {
     my $list = shift ; ## the recipient of the msg
     my $from = $msg->head->get('from');
 
-    &do_log('debug2', 'tools::smime_decrypt message msg from %s,%s', $from, $list->{'name'});
+    &Log::do_log('debug2', 'tools::smime_decrypt message msg from %s,%s', $from, $list->{'name'});
 
     ## an empty "list" parameter means mail to sympa@, listmaster@...
     my $dir = $list->{'dir'};

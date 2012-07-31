@@ -754,14 +754,14 @@ sub upgrade {
 	    my $spooldir = $Conf::Conf{$spoolparameter};
 	    
 	    unless (-d $spooldir){
-		do_log('info',"Could not perform migration of spool %s because it is not a directory", $spoolparameter);
+		&Log::do_log('info',"Could not perform migration of spool %s because it is not a directory", $spoolparameter);
 		next;
 	    }
-	    do_log('notice',"Performing upgrade for spool  %s ",$spooldir);
+	    &Log::do_log('notice',"Performing upgrade for spool  %s ",$spooldir);
 
 	    my $spool = new Sympaspool($spools_def{$spoolparameter});
 	    if (!opendir(DIR, $spooldir)) {
-		fatal_err("Can't open dir %s: %m", $spooldir); ## No return.
+		&Log::fatal_err("Can't open dir %s: %m", $spooldir); ## No return.
 	    }
 	    my @qfile = sort tools::by_date grep (!/^\./,readdir(DIR));
 	    closedir(DIR);
@@ -779,9 +779,9 @@ sub upgrade {
 		my ($listname, $robot);	
 		my %meta ;
 
-		do_log('notice'," spool : $spooldir, fichier $filename");
+		&Log::do_log('notice'," spool : $spooldir, fichier $filename");
 		if (-d $spooldir.'/'.$filename){
-		    do_log('notice',"%s/%s est un répertoire",$spooldir,$filename);
+		    &Log::do_log('notice',"%s/%s est un répertoire",$spooldir,$filename);
 		    next;
 		}				
 
@@ -805,7 +805,7 @@ sub upgrade {
 		}elsif ($spoolparameter eq 'queuesubscribe'){
 		    my $match = 0;		    
 		    foreach my $robot (keys %{$Conf::Conf{'robots'}}) {
-			do_log('notice',"robot : $robot");
+			&Log::do_log('notice',"robot : $robot");
 			if ($filename =~ /^([^@]*)\@$robot\.(.*)$/){
 			    $listname = $1;
 			    $robot = $2;
@@ -862,7 +862,7 @@ sub upgrade {
 		$meta{'priority'} = 1 unless $meta{'priority'};
 		
 		unless (open FILE, $spooldir.'/'.$filename) {
-		    &do_log('err', 'Cannot open message file %s : %s',  $filename, $!);
+		    &Log::do_log('err', 'Cannot open message file %s : %s',  $filename, $!);
 		    return undef;
 		}
 		my $messageasstring;
@@ -873,7 +873,7 @@ sub upgrade {
 		
 		my $messagekey = $spool->store($messageasstring,\%meta);
 		unless($messagekey) {
-		    do_log('err',"Could not load message %s/%s in db spool",$spooldir, $filename);
+		    &Log::do_log('err',"Could not load message %s/%s in db spool",$spooldir, $filename);
 		    next;
 		}
 
@@ -882,20 +882,20 @@ sub upgrade {
 		my $source = $spooldir.'/'.$filename;
 		my $goal = $spooldir.'/copy_by_upgrade_process/'.$filename;
 
-		do_log('notice','source %s, goal %s',$source,$goal);
+		&Log::do_log('notice','source %s, goal %s',$source,$goal);
 		# unless (&File::Copy::copy($spooldir.'/'.$filename, $spooldir.'/copy_by_upgrade_process/'.$filename)) {
 		unless (&File::Copy::copy($source, $goal)) {
-		    &do_log('err', 'Could not rename %s to %s: %s', $source,$goal, $!);
+		    &Log::do_log('err', 'Could not rename %s to %s: %s', $source,$goal, $!);
 		    exit;
 		}
 		
 		unless (unlink ($spooldir.'/'.$filename)) {
-		    do_log('err',"Could not unlink message %s/%s . Exiting",$spooldir, $filename);
+		    &Log::do_log('err',"Could not unlink message %s/%s . Exiting",$spooldir, $filename);
 		}
 		$performed .= ','.$filename;
 	    } 	    
-	    do_log('info',"Upgrade process for spool %s : ignored files %s",$spooldir,$ignored);
-	    do_log('info',"Upgrade process for spool %s : performed files %s",$spooldir,$performed);
+	    &Log::do_log('info',"Upgrade process for spool %s : ignored files %s",$spooldir,$ignored);
+	    &Log::do_log('info',"Upgrade process for spool %s : performed files %s",$spooldir,$performed);
 	}	
     }
     return 1;

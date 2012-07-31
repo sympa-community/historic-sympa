@@ -246,12 +246,12 @@ sub load_html_message {
 
 sub clean_archive_directory{
     my $params = shift;
-    &do_log('debug',"Cleaning archives for directory '%s'.",$params->{'arc_root'}.'/'.$params->{'dir_to_rebuild'});
+    &Log::do_log('debug',"Cleaning archives for directory '%s'.",$params->{'arc_root'}.'/'.$params->{'dir_to_rebuild'});
     my $answer;
     $answer->{'dir_to_rebuild'} = $params->{'arc_root'}.'/'.$params->{'dir_to_rebuild'};
     $answer->{'cleaned_dir'} = $Conf::Conf{'tmpdir'}.'/'.$params->{'dir_to_rebuild'};
     unless(my $number_of_copies = &tools::copy_dir($answer->{'dir_to_rebuild'},$answer->{'cleaned_dir'})){
-	&do_log('err',"Unable to create a temporary directory where to store files for HTML escaping (%s). Cancelling.",$number_of_copies);
+	&Log::do_log('err',"Unable to create a temporary directory where to store files for HTML escaping (%s). Cancelling.",$number_of_copies);
 	return undef;
     }
     if(opendir ARCDIR,$answer->{'cleaned_dir'}){
@@ -263,11 +263,11 @@ sub clean_archive_directory{
 	}
 	closedir DIR;
 	if ($files_left_uncleaned) {
-	    &do_log('err',"HTML cleaning failed for %s files in the directory %s.",$files_left_uncleaned,$answer->{'dir_to_rebuild'});
+	    &Log::do_log('err',"HTML cleaning failed for %s files in the directory %s.",$files_left_uncleaned,$answer->{'dir_to_rebuild'});
 	}
 	$answer->{'dir_to_rebuild'} = $answer->{'cleaned_dir'};
     }else{
-	&do_log('err','Unable to open directory %s: %s',$answer->{'dir_to_rebuild'},$!);
+	&Log::do_log('err','Unable to open directory %s: %s',$answer->{'dir_to_rebuild'},$!);
 	&tools::del_dir($answer->{'cleaned_dir'});
 	return undef;
     }
@@ -276,7 +276,7 @@ sub clean_archive_directory{
 
 sub clean_archived_message{
     my $params = shift;
-    &do_log('debug',"Cleaning HTML parts of a message input %s , output  %s ",$params->{'input'},$params->{'output'});
+    &Log::do_log('debug',"Cleaning HTML parts of a message input %s , output  %s ",$params->{'input'},$params->{'output'});
 
     my $input = $params->{'input'};
     my $output = $params->{'output'};
@@ -288,15 +288,15 @@ sub clean_archived_message{
 		print TMP $msg->{'msg'}->as_string;
 		close TMP;
 	    }else{
-		&do_log('err','Unable to create a tmp file to write clean HTML to file %s',$output);
+		&Log::do_log('err','Unable to create a tmp file to write clean HTML to file %s',$output);
 		return undef;
 	    }
 	}else{
-	    &do_log('err','HTML cleaning in file %s failed.',$output);
+	    &Log::do_log('err','HTML cleaning in file %s failed.',$output);
 	    return undef;
 	}
     }else{
-	&do_log('err','Unable to create a Message object with file %s',$input);
+	&Log::do_log('err','Unable to create a Message object with file %s',$input);
 	exit;
 	return undef;
     }
@@ -330,7 +330,7 @@ sub convert_single_msg_2_html {
 
     my $pwd = getcwd;  #  mhonarc require du change workdir so this proc must retore it    
     unless (open(OUT, ">$msg_file")) {
-	do_log('notice', 'Could Not open %s', $msg_file);
+&Log::do_log('notice', 'Could Not open %s', $msg_file);
 	return undef;
     }
     printf OUT $msg_as_string ;
@@ -338,19 +338,19 @@ sub convert_single_msg_2_html {
 
     unless (-d $destination_dir) {
 	unless (&tools::mkdir_all($destination_dir, 0777)) {
-	    &do_log('err','Unable to create %s', $destination_dir);
+	    &Log::do_log('err','Unable to create %s', $destination_dir);
 	    return undef;
 	}
     }
     my $mhonarc_ressources = &tools::get_filename('etc',{},'mhonarc-ressources.tt2', $robot,$list);
     
     unless ($mhonarc_ressources) {
-	do_log('notice',"Cannot find any MhOnArc ressource file");
+&Log::do_log('notice',"Cannot find any MhOnArc ressource file");
 	return undef;
     }
     ## generate HTML
     unless (chdir $destination_dir) {
-	do_log('err',"Could not change working directory to %s",$destination_dir);
+&Log::do_log('err',"Could not change working directory to %s",$destination_dir);
     }
     my $tracepwd = getcwd ;
 
@@ -359,7 +359,7 @@ sub convert_single_msg_2_html {
     my $base_url = &Conf::get_robot_conf($robot, 'wwsympa_url');
     #open ARCMOD, "$mhonarc  -single --outdir .. -rcfile $mhonarc_ressources -definevars listname=$listname -definevars hostname=$host -attachmenturl=$attachement_url $msg_file |";
     #open MSG, ">msg00000.html";
-    #&do_log('debug', "$mhonarc  --outdir .. -single -rcfile $mhonarc_ressources -definevars listname=$listname -definevars hostname=$host $msg_file");
+    #&Log::do_log('debug', "$mhonarc  --outdir .. -single -rcfile $mhonarc_ressources -definevars listname=$listname -definevars hostname=$host $msg_file");
     #print MSG <ARCMOD>;
     #close MSG;
     #close ARCMOD;

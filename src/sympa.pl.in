@@ -293,7 +293,7 @@ if ($signal ne 'hup') {
 	# start the main sympa.pl daemon
 
 
-	&do_log('debug', "Starting server $0");
+	&Log::do_log('debug', "Starting server $0");
 	if ((my $child_pid = fork) != 0) {
 	    &Log::do_log('info', "Server started $0 pid $child_pid");
 	    &Log::do_log('debug', "$0 server started, pid $child_pid, exiting from initial process");
@@ -1015,7 +1015,7 @@ while (!$signal) {
     }
     my $listname = $message_in_spool->{'list'};
     my $robot = $message_in_spool->{'robot'};
-    &do_log('debug', "Processing message # %s for list = %s robot = %s reception_date = %s", $message_in_spool->{'messagekey'},$listname,$robot,$message_in_spool->{'date'}) ;
+    &Log::do_log('debug', "Processing message # %s for list = %s robot = %s reception_date = %s", $message_in_spool->{'messagekey'},$listname,$robot,$message_in_spool->{'date'}) ;
 
     if ($main::options{'mail'} != 1) {
 	$main::options{'mail'} = $robot if (&Conf::get_robot_conf($robot, 'log_smtp'));
@@ -1111,7 +1111,7 @@ sub sighup {
 ##############################################################
 sub process_message {
     my $message_in_spool = shift;
-    &do_log('debug', 'process_message()');
+    &Log::do_log('debug', 'process_message()');
 
     my ($listname, $robot);    my $status;
     
@@ -1228,7 +1228,7 @@ sub process_message {
 						    'automatic_listname'=>$listname });
 	    my $r_action;
 	    unless (defined $result) {
-		&do_log('err', 'sympa::Process_message(): message (%s) ignored because unable to evaluate scenario "automatic_list_creation" for list %s',  $hdr->get('Message-Id'),$listname);
+		&Log::do_log('err', 'sympa::Process_message(): message (%s) ignored because unable to evaluate scenario "automatic_list_creation" for list %s',  $hdr->get('Message-Id'),$listname);
 		&report::reject_report_msg('intern','Message ignored because scenario "automatic_list_creation" cannot be evaluated',$sender,
 					   {'msg_id' => $hdr->get('Message-Id'),'message' => $message}, $robot,$message->{'msg_as_string'});
 		&List::send_notify_to_listmaster('automatic_list_creation_failed',$robot,["Failed to process message"]);
@@ -1238,7 +1238,7 @@ sub process_message {
             }
             $list = new List ($listname, $robot);
             unless (defined $list) {
-                &do_log('err', 'sympa::Process_message() : dynamic list %s could not be created',$listname);
+                &Log::do_log('err', 'sympa::Process_message() : dynamic list %s could not be created',$listname);
                 &report::reject_report_msg('user','list_unknown',$sender,{'listname' => $listname, 'list'=>{'name'=>$listname},'message' => $message},$robot,$message->{'msg'}->as_string,'');
 		&List::send_notify_to_listmaster('automatic_list_creation_failed',$robot,["Failed to process $file."]);
 		return undef;
@@ -1790,7 +1790,7 @@ sub DoMessage{
 	$msgid_table{$list->get_list_id()}{$messageid} = time if ($messageid);
 	
 	unless (defined($numsmtp)) {
-	    &do_log('err','sympa::DoMessage(): Unable to send message to list %s', $listname);
+	    &Log::do_log('err','sympa::DoMessage(): Unable to send message to list %s', $listname);
 	    &report::reject_report_msg('intern','',$sender,{'msg_id' => $messageid,'message' => $message},$robot,$msg_string,$list);
 	    &Log::db_log({'robot' => $robot,'list' => $list->{'name'},'action' => 'DoMessage','parameters' => "$which,$messageid,$robot",'target_email' => '','msg_id' => $messageid,'status' => 'error','error_type' => 'internal','user_email' => $sender,'client' => $ip,'daemon' => $daemon_name});
 	    return undef;

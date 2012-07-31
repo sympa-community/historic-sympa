@@ -74,10 +74,10 @@ my ($dbh, $sth, $db_connected, @sth_stack, $use_db);
 sub new {
     my($pkg, $spoolname, $selection_status) = @_;
     my $spool={};
-    do_log('debug2', 'Spool::new(%s)', $spoolname);
+   &Log::do_log('debug2', 'Spool::new(%s)', $spoolname);
     
     unless ($spoolname =~ /^(auth)|(bounce)|(digest)|(bulk)|(expire)|(mod)|(msg)|(archive)|(automatic)|(subscribe)|(topic)|(validated)|(task)$/){
-	do_log('err','internal error unknown spool %s',$spoolname);
+&Log::do_log('err','internal error unknown spool %s',$spoolname);
 	return undef;
     }
     $spool->{'spoolname'} = $spoolname;
@@ -189,7 +189,7 @@ sub next {
     my $self = shift;
     my $selector = shift;
 
-    &do_log('debug', 'Spool::next(%s,%s)',$self->{'spoolname'},$self->{'selection_status'});
+    &Log::do_log('debug', 'Spool::next(%s,%s)',$self->{'spoolname'},$self->{'selection_status'});
     
     my $sql_where = _sqlselector($selector);
 
@@ -218,12 +218,12 @@ sub next {
     $sth = pop @sth_stack;
 
     unless ($message->{'message'}){
-	do_log('err',"INTERNAL Could not find message previouly locked");
+&Log::do_log('err',"INTERNAL Could not find message previouly locked");
 	return undef;
     }
     $message->{'messageasstring'} = MIME::Base64::decode($message->{'message'});
     unless ($message->{'messageasstring'}){
-	do_log('err',"Could not decode %s",$message->{'message'});
+&Log::do_log('err',"Could not decode %s",$message->{'message'});
 	return undef;
     }
     return $message  ;
@@ -238,7 +238,7 @@ sub get_message {
     my $selector = shift;
 
 
-    &do_log('debug', "Spool::get_message($self->{'spoolname'},messagekey = $selector->{'messagekey'}, listname = $selector->{'listname'},robot = $selector->{'robot'})");
+    &Log::do_log('debug', "Spool::get_message($self->{'spoolname'},messagekey = $selector->{'messagekey'}, listname = $selector->{'listname'},robot = $selector->{'robot'})");
     
 
     my $sqlselector = '';
@@ -246,7 +246,7 @@ sub get_message {
 
     foreach my $field (keys %$selector){
 #	unless (defined %{$db_struct{'mysql'}{'spool_table'}{$field.'_spool'}}) {
-#	    do_log ('err',"internal error : invalid selector field $field locking for message in spool_table");
+#	   &Log::do_log ('err',"internal error : invalid selector field $field locking for message in spool_table");
 #	    return undef;
 #	} 
 
@@ -282,7 +282,7 @@ sub unlock_message {
     my $self = shift;
     my $messagekey = shift;
 
-    &do_log('debug', 'Spool::unlock_message(%s,%s)',$self->{'spoolname'}, $messagekey);
+    &Log::do_log('debug', 'Spool::unlock_message(%s,%s)',$self->{'spoolname'}, $messagekey);
     return ( $self->update({'messagekey' => $messagekey},
 			   {'messagelock' => 'NULL'}));
 }
@@ -296,7 +296,7 @@ sub update {
     my $selector = shift;
     my $values = shift;
 
-    &do_log('debug', "Spool::update($self->{'spoolname'}, list = $selector->{'list'}, robot = $selector->{'robot'}, messagekey = $selector->{'messagekey'}");
+    &Log::do_log('debug', "Spool::update($self->{'spoolname'}, list = $selector->{'list'}, robot = $selector->{'robot'}, messagekey = $selector->{'messagekey'}");
 
     my $where = _sqlselector($selector);
 
@@ -333,17 +333,17 @@ sub update {
     }
 
     unless ($set) {
-	do_log('err',"No value to update"); return undef;
+&Log::do_log('err',"No value to update"); return undef;
     }
     unless ($where) {
-	do_log('err',"No selector for an update"); return undef;
+&Log::do_log('err',"No selector for an update"); return undef;
     }
 
     ## Updating Db
     my $statement = sprintf "UPDATE spool_table SET %s WHERE (%s)", $set,$where ;
 
     unless (&SDM::do_query($statement)) {
-	do_log('err','Unable to execute SQL statement "%s" : %s', $statement, $dbh->errstr);
+&Log::do_log('err','Unable to execute SQL statement "%s" : %s', $statement, $dbh->errstr);
 	return undef;
     }    
     return 1;
@@ -361,7 +361,7 @@ sub store {
     my $sender = $metadata->{'sender'};
     $sender |= '';
 
-    do_log('debug',"Spool::store ($self->{'spoolname'},$self->{'selection_status'}, <message_asstring> ,list : $metadata->{'list'},robot : $metadata->{'robot'} , date: $metadata->{'date'}), lock : $locked");
+   &Log::do_log('debug',"Spool::store ($self->{'spoolname'},$self->{'selection_status'}, <message_asstring> ,list : $metadata->{'list'},robot : $metadata->{'robot'} , date: $metadata->{'date'}), lock : $locked");
 
     my $b64msg = MIME::Base64::encode($message_asstring);
 
@@ -390,7 +390,7 @@ sub store {
     $metadata->{'message_status'} = 'ok';
 
     my $insertpart1; my $insertpart2;
-    foreach my $meta ('list','robot','message_status','priority','date','type','subject','sender','messageid','size','headerdate','spam_status','dkim_header_list','dkim_privatekey','dkim_d','dkim_i','dkim_selector','create_list_if_needed','task_label','task_date','task_model','task_object') {
+    foreach my $meta ('list','robot','message_status','priority','date','type','subject','sender','messageid','size','headerdate','spam_status','dkim_privatekey','dkim_d','dkim_i','dkim_selector','create_list_if_needed','task_label','task_date','task_model','task_object') {
 	$insertpart1 = $insertpart1. ', '.$meta.'_spool';
 	$insertpart2 = $insertpart2. ', '.&SDM::quote($metadata->{$meta});   
     }
@@ -403,7 +403,7 @@ sub store {
 
     $statement = sprintf "SELECT messagekey_spool as messagekey FROM spool_table WHERE messagelock_spool = %s AND date_spool = %s",&SDM::quote($lock),&SDM::quote($metadata->{'date'});
     $sth = &SDM::do_query ($statement);
-    # this query return the autoinc primary key as result of this insert
+    # this query returns the autoinc primary key as result of this insert
 
     my $inserted_message = $sth->fetchrow_hashref('NAME_lc');
     my $messagekey = $inserted_message->{'messagekey'};
@@ -427,11 +427,11 @@ sub remove_message {
     my $robot = $selector->{'robot'};
     my $messagekey = $selector->{'messagekey'};
     my $listname = $selector->{'listname'};
-    do_log('debug',"remove_message ($self->{'spoolname'},$listname,$robot,$messagekey)");
+   &Log::do_log('debug',"remove_message ($self->{'spoolname'},$listname,$robot,$messagekey)");
     
     ## search if this message is already in spool database : mailfile may perform multiple submission of exactly the same message 
     unless ($self->get_message($selector)){
-		do_log('err',"message not in spool"); 
+	&Log::do_log('err',"message not in spool"); 
 		return undef;
     }
     
@@ -460,7 +460,7 @@ sub clean {
     my $bad =  $filter->{'bad'};
     
 
-    &do_log('debug', 'Spool::clean(%s,$delay)',$self->{'spoolname'},$delay);
+    &Log::do_log('debug', 'Spool::clean(%s,$delay)',$self->{'spoolname'},$delay);
     my $spoolname = $self->{'spoolname'};
     return undef unless $spoolname;
     return undef unless $delay;
@@ -477,7 +477,7 @@ sub clean {
     push @sth_stack, $sth;
     &SDM::do_query($sqlquery);
     $sth-> finish;
-    do_log('debug',"%s entries older than %s days removed from spool %s" ,$sth->rows,$delay,$self->{'spoolname'});
+   &Log::do_log('debug',"%s entries older than %s days removed from spool %s" ,$sth->rows,$delay,$self->{'spoolname'});
     $sth = pop @sth_stack;
     return 1;
 }
@@ -493,7 +493,7 @@ sub store_test {
     my $barmax = $size_increment*$steps*($steps+1)/2;
     my $even_part = $barmax/$steps;
     
-    &do_log('debug', 'Spool::store_test()');
+    &Log::do_log('debug', 'Spool::store_test()');
 
     print "maxtest: $maxtest\n";
     print "barmax: $barmax\n";
@@ -522,7 +522,7 @@ sub store_test {
 	}
 	my $messagekey = &Spool::_get_messagekey($msg);
 	unless ( $testing->remove_message({'messagekey'=>$messagekey,'listname'=>'notalist','robot'=>'notarobot'}) ) {
-	    &do_log('err','Unable to remove test message (key = %s) from spool_table',$messagekey);	    
+	    &Log::do_log('err','Unable to remove test message (key = %s) from spool_table',$messagekey);	    
 	}
 	$total += $z*$size_increment;
         $progress->message(sprintf ".........[OK. Done in %.2f sec]", time() - $time);

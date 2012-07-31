@@ -211,7 +211,7 @@ while (!$end) {
 	$robot ||= &List::search_list_among_robots($listname);
 	
 	unless ($bounce->{'messageasstring'}) {
-	    do_log ('notice',"Ignoring bounce where messagekey = %s  because empty",$bounce->{'messagekey'});
+	   &Log::do_log ('notice',"Ignoring bounce where messagekey = %s  because empty",$bounce->{'messagekey'});
 	    $spool->update({'messagekey' => $bounce->{'messagekey'}},{"message_status" => 'bad','messagelock'=> 'NULL'});
 	}
 	
@@ -356,7 +356,7 @@ while (!$end) {
 			#if ( ($line =~ /original\-envelope\-id\:\s*(.+)/i) && (!$distribution_id) ) {
 			#    $distribution_id = $1;
 			#    chomp $distribution_id;
-			#    do_log ('debug2',"1 - Original Envelope-id Detected, value : %s", $distribution_id);
+			#   &Log::do_log ('debug2',"1 - Original Envelope-id Detected, value : %s", $distribution_id);
 			#}
 			if ($line =~ /arrival\-date\:\s*(.+)/i) {
 			    $arrival_date = $1;
@@ -586,7 +586,7 @@ while (!$end) {
 		}elsif( $feedback_type =~ /opt-out/ && (defined $original_rcpt)){
 		    @lists = &List::get_which($original_rcpt,$robot,'member');
 		}else {
-		    &do_log('notice','Ignoring Feedback Report (bounce where messagekey=%s) : Nothing to do for this feedback type.(feedback_type:%s, original_rcpt:%s, listname:%s)',$bounce->{'messagekey'}, $feedback_type, $original_rcpt, $listname );		
+		    &Log::do_log('notice','Ignoring Feedback Report (bounce where messagekey=%s) : Nothing to do for this feedback type.(feedback_type:%s, original_rcpt:%s, listname:%s)',$bounce->{'messagekey'}, $feedback_type, $original_rcpt, $listname );		
 		    $spool->update({'messagekey' => $bounce->{'messagekey'}},{"message_status" => 'bad','messagelock'=> 'NULL'});
 		}
 		    foreach my $list (@lists){

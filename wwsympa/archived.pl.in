@@ -195,24 +195,24 @@ while (!$end) {
 
     my @orders = split(/\n/,$item->{'messageasstring'} );
     
-    do_log(trace,"orders[0] %s ",$orders[0] );
+   &Log::do_log(trace,"orders[0] %s ",$orders[0] );
 
     if ($orders[0] =~ /^rebuild\s*$/ ) {
-	&do_log('debug',"rebuild found ");
+	&Log::do_log('debug',"rebuild found ");
 	if ($item->{'list'} && $item->{'robot'}) {	
 	    &rebuild($item->{'list'}.'@'.$item->{'robot'});
 	    $spoolarchive->remove_message({'messagekey'=>$item->{'messagekey'}});
 	}else{
-	    do_log('err',"unable to rebuild archive for unkown list/robot.Move to bad");
+	   &Log::do_log('err',"unable to rebuild archive for unkown list/robot.Move to bad");
 	    $spoolarchive->update({'messagekey'=>$item->{'messagekey'}},{'message_status'=>'bad','message_diag'=>'unable to rebuild archive for unkown list','lock'=>'NULL'});
 	    next;
 	}
     }elsif($orders[0]  =~ /^remove\.(\d\d\d\d\-\d\d)\.\d+$/ ) {
 	my $yyyymm = $1;
 	shift @orders
-	&do_log('debug',"removed found ");
+	&Log::do_log('debug',"removed found ");
 	unless($item->{'list'} && $item->{'robot'}){
-	    do_log('err',"unable to remove messages from archive for unkown list/robot.Move to bad");
+	   &Log::do_log('err',"unable to remove messages from archive for unkown list/robot.Move to bad");
 	    $spoolarchive->update({'messagekey'=>$item->{'messagekey'}},{'message_status'=>'bad','message_diag'=>'unable to remove messages from archive, list name missing','lock'=>'NULL'});
 	    next;
 	}
@@ -221,21 +221,21 @@ while (!$end) {
 	my $arclistdir = $listadress.'.'.$yyyymm;
 	my $arcpath = "$wwsconf->{'arc_path'}/$listadress/$yyyymm";
 	
-	do_log('debug',"start remove process :listadress :'$listadress' arclistdir '$arclistdir' arcpath '$arcpath'  yyyymm '$yyyymm'");
+&Log::do_log('debug',"start remove process :listadress :'$listadress' arclistdir '$arclistdir' arcpath '$arcpath'  yyyymm '$yyyymm'");
 	    
 	my $list;
 	unless ($list = new List ($listadress)) {
-	    do_log('err',"remove : unknown list $listadress");
+	   &Log::do_log('err',"remove : unknown list $listadress");
 	    $spoolarchive->update({'messagekey'=>$item->{'messagekey'}},{'message_status'=>'bad','message_diag'=>'unable to remove messages from archive for unkown list','lock'=>'NULL'});
 	    next;
 	}
-	do_log('debug',"remove found : for $arclistdir");
+&Log::do_log('debug',"remove found : for $arclistdir");
 	
 	my $email_regexp = &tools::get_regexp('email');
 
 	foreach my $order (@orders) { 
 	    unless($order =~ /(.*)\|\|($email_regexp)/){
-		do_log ('err',"Ignoring remove_order $order not recognized format");   
+	&Log::do_log ('err',"Ignoring remove_order $order not recognized format");   
 		next;
 	    }
 	    my $msgid = $1;
@@ -243,13 +243,13 @@ while (!$end) {
 	    
 	    chomp 	$msgid ;
 	    if ($msgid =~ /NO-ID-FOUND\.mhonarc\.org/) {
-		do_log('err','remove_arc: no message id found');
+	&Log::do_log('err','remove_arc: no message id found');
 		next;
 	    } 
 	    
 	    my $message ;
 	    unless ($message = &Archive::search_msgid("$arcpath/arctxt",$msgid)){
-		do_log('err','No message with message-id %s found in %s/arctxt',$msgid,$arcpath);
+	&Log::do_log('err','No message with message-id %s found in %s/arctxt',$msgid,$arcpath);
 		next;
 	    }
 	    
@@ -258,13 +258,13 @@ while (!$end) {
 		
 		my $new_message;
 		unless ($new_message = new Message({'file'=>"$arcpath/arctxt/$message",'noxsympato'=>'noxsympato'})) {
-		    do_log('err',"unable to load new message $arcpath/arctxt/$message");
+		   &Log::do_log('err',"unable to load new message $arcpath/arctxt/$message");
 		    next;
 		}
 		my $messagesender = lc($new_message->{'sender'});
 		
 		unless ($sender == $messagesender) {
-		    &do_log('err', 'remove command by unauthorized sender');
+		    &Log::do_log('err', 'remove command by unauthorized sender');
 		    return undef;
 		}
 	    }
@@ -276,19 +276,19 @@ while (!$end) {
 	    
 	    unless (-d "$arcpath/deleted"){
 		unless (mkdir ("$arcpath/deleted",0777)) {
-		    do_log('info',"remove_arc: unable to create $arcpath/deleted : $!");
+		   &Log::do_log('info',"remove_arc: unable to create $arcpath/deleted : $!");
 		    last;
 		}
 	    }
 	    
 	    unless (rename ("$arcpath/arctxt/$message","$arcpath/deleted/$message")) {
-		do_log('info',"remove_arc: unable to rename message $arcpath/arctxt/$message");
+	&Log::do_log('info',"remove_arc: unable to rename message $arcpath/arctxt/$message");
 		next;
 	    }
 	    
 	    # remove directory if empty arctxt
 	    unless (opendir (DIR,"$arcpath/arctxt")) {
-		do_log('info',"remove_arc: unable to open dir $arcpath/arctxt");
+	&Log::do_log('info',"remove_arc: unable to open dir $arcpath/arctxt");
 		next;
 	    }
 	    my @files = grep(/^\d+$/, readdir( DIR ));
@@ -299,16 +299,16 @@ while (!$end) {
 	}
 	$spoolarchive->remove_message({'messagekey'=>$item->{'messagekey'}});
     }else{
-	do_log('notice',"Archiving message %s for list %s@%s",$item->{'messagekey'},$item->{'list'},$item->{'robot'});
+&Log::do_log('notice',"Archiving message %s for list %s@%s",$item->{'messagekey'},$item->{'list'},$item->{'robot'});
 	unless (mail2arc ($item)) {
 	    $spoolarchive->update({'messagekey'=>$item->{'messagekey'}},{'message_status'=>'bad','message_diag'=>'unable to rebuild archive for unkown list','lockdate'=>'NULL'});
-	    &do_log('err',"archiving_failed for message %s",$item->{'messagekey'});
+	    &Log::do_log('err',"archiving_failed for message %s",$item->{'messagekey'});
 	    unless (&List::send_notify_to_listmaster('archiving_failed',$item->{'robot'})) {
-		&do_log('notice',"Unable to send notify 'archiving_failed' to listmaster");
+		&Log::do_log('notice',"Unable to send notify 'archiving_failed' to listmaster");
 	    }
 	}
 	unless ($spoolarchive->remove_message({'messagekey'=>$item->{'messagekey'}})){
-	    do_log ('err',"Couldn't remove message in archive spool %s . exiting to prevent infinite loop",$item->{'messagekey'});
+	   &Log::do_log ('err',"Couldn't remove message in archive spool %s . exiting to prevent infinite loop",$item->{'messagekey'});
 	    last;
 	}
     }
@@ -406,7 +406,7 @@ sub remove {
     my $msgid = shift;
     my $robot = shift;
 
-    do_log ('debug',"remove ($adrlist, $msgid)");
+   &Log::do_log ('debug',"remove ($adrlist, $msgid)");
     my $arc ;
 
     if ($adrlist =~ /^(.*)\.(\d{4}-\d{2})$/) {
@@ -721,7 +721,7 @@ sub mail2arc {
     if ($txtdate =~ /(\d\d\d\d)\-(\d\d)\-(\d\d)\s*(\d\d)\:(\d\d)/){
 	$yyyy = $1; $mm = $2; $dd = $3; $hh = $4; $min = $5; $ss = $6;
     }else{
-	do_log('err',"could not scan date");
+&Log::do_log('err',"could not scan date");
 	return undef;
     }
 
@@ -731,7 +731,7 @@ sub mail2arc {
     my $arcpath = &Conf::get_robot_conf($list->{'domain'},'arc_path');
 
     unless (defined $list) {
-	&do_log('err', 'Unknown list %s@%s', $listname, $robot);
+	&Log::do_log('err', 'Unknown list %s@%s', $listname, $robot);
 	return undef;
     }
 
@@ -743,7 +743,7 @@ sub mail2arc {
 	&unset_hidden_mode();
     } 
 
-    do_log('debug',"mail2arc  for %s yyyy:$yyyy, mm:$mm dd:$dd hh:$hh min$min ss:$ss", $list->get_list_id());
+   &Log::do_log('debug',"mail2arc  for %s yyyy:$yyyy, mm:$mm dd:$dd hh:$hh min$min ss:$ss", $list->get_list_id());
     #    chdir($wwsconf->{'arc_path'});
 
 
@@ -844,18 +844,18 @@ sub mail2arc {
 	# prepare a temporary file with clean message content (htlm parts are cleaned) 
 	my $safe = &Archive::clean_archived_message({'input'=>$file,'output' => $output });
 	unless ($safe) {
-	    do_log('err',"Could not clean message, ignoring message");
+	   &Log::do_log('err',"Could not clean message, ignoring message");
 	    next;
 	}
 
 	my $mhonarc_ressources = &tools::get_filename('etc',{},'mhonarc-ressources.tt2',$list->{'domain'}, $list);
 	
-	do_log ('debug',"calling $wwsconf->{'mhonarc'} for list %s", $list->get_list_id() ) ;
+&Log::do_log ('debug',"calling $wwsconf->{'mhonarc'} for list %s", $list->get_list_id() ) ;
 	
 	# call mhonarc on cleaned message source to make clean htlm view of message
 	my $cmd = "$wwsconf->{'mhonarc'} -add -modifybodyaddresses -addressmodifycode \'$ENV{'M2H_ADDRESSMODIFYCODE'}\'  -rcfile $mhonarc_ressources -outdir $monthdir  -definevars \"listname='$listname' hostname=$robot yyyy=$yyyy mois=$mm yyyymm=$yyyy-$mm wdir=$wwsconf->{'arc_path'} base=$Conf{'wwsympa_url'}/arc tag=$tag\" -umask $Conf{'umask'} < $output";
 	
-	do_log('debug',"System call : %s",$cmd);
+&Log::do_log('debug',"System call : %s",$cmd);
 	
 	my $exitcode = system($cmd);
 	$exitcode = $exitcode / 256;

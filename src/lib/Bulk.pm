@@ -415,7 +415,7 @@ sub store {
 	if ($message->{'messagekey'}) {
 	    # move message to spool bulk and keep it locked
 	    $bulkspool->update({'messagekey'=>$message->{'messagekey'}},{'messagelock'=>$lock,'spoolname'=>'bulk','message' => $msg});
-	    do_log('debug',"moved message to spool bulk");
+	   &Log::do_log('debug',"moved message to spool bulk");
 	}else{
 	    $message->{'messagekey'} = $bulkspool->store($msg,
 							 {'dkim_d'=>$dkim->{d},
@@ -425,7 +425,7 @@ sub store {
 							  'dkim_header_list'=>$dkim->{header_list}},
 							 $lock);
 	    unless($message->{'messagekey'}) {
-		do_log('err',"could not store message in spool distribute, message lost ?");
+	&Log::do_log('err',"could not store message in spool distribute, message lost ?");
 		return undef;
 	    }
 	}

@@ -78,7 +78,7 @@ sub remove {
     my $self = shift;
 
     unless ($taskspool->remove_message({'messagekey'=>$self->{'messagekey'}})){
-	&do_log('err', 'Unable to remove task (mesasgekey = %s)', $self->{'meqssagekey'});
+	&Log::do_log('err', 'Unable to remove task (mesasgekey = %s)', $self->{'meqssagekey'});
 	return undef;
     }
 }

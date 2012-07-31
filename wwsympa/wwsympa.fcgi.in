@@ -3128,7 +3128,7 @@ sub do_ticket {
 
 
  ## Login WWSympa
- sub do_login {
+ sub& do_login {
      &wwslog('info', 'do_login(%s)', $in{'email'});
      my $user;
      my $next_action;     
@@ -3452,7 +3452,7 @@ sub do_sso_login {
 		$in{'email'} = $email;
 		
 		#
-		# Check input parameters and verify ticket for email, stolen from &Log::do_login
+		# Check input parameters and verify ticket for email, stolen from & do_login
 		#
 		unless ($in{'email'}) {
 		    &report::reject_report_web('user','no_email',{},$param->{'action'});
@@ -3735,7 +3735,7 @@ sub do_sso_login_succeeded {
  }
 
  ## send back login form
- sub do_loginrequest {
+ sub& do_loginrequest {
      &wwslog('info','do_loginrequest');
 
      if ($param->{'user'}{'email'}) {
@@ -5320,7 +5320,7 @@ sub do_family_signoff_request {
 	'ip' => $ip,
     };
     unless (&List::send_global_file('user_notification', $in{'email'}, $robot, $tt2_param)) {
-	&do_log('notice',"Unable to send template 'user_notification' to $in{'email'}");
+	&Log::do_log('notice',"Unable to send template 'user_notification' to $in{'email'}");
 	return undef;
     }
     $param->{'signing_off_email'} = $in {'email'};
@@ -17145,12 +17145,12 @@ sub do_viewspool_message_dump {
     
 
     unless (open(OUT, ">$param->{'msg_file'}")) {
-	do_log('notice', 'Could Not open %s', $param->{'msg_file'});
+	&Log::do_log('notice', 'Could Not open %s', $param->{'msg_file'});
 	return undef;
     }
     printf OUT  @messages[0]->{'messageasstring'};
     if (close(OUT)) {
-	do_log('info',"message (messagekey = %s) flushed in file %s",$messagekey,$param->{'msg_file'});
+	&Log::do_log('info',"message (messagekey = %s) flushed in file %s",$messagekey,$param->{'msg_file'});
     }
     return 1;
 }
@@ -17202,7 +17202,7 @@ sub do_viewspool_message_mv {
     my $newstatus = $in{'new_status'};
 
 
-    do_log('info',"move message %s from spool %s status %s to spool %s with status %s",$messagekey,$spoolname,$status,$newspool,$newstatus);
+   &Log::do_log('info',"move message %s from spool %s status %s to spool %s with status %s",$messagekey,$spoolname,$status,$newspool,$newstatus);
 
 
     $param->{'messagekey'} = $messagekey;
@@ -17242,7 +17242,7 @@ sub do_viewspool_message_mv {
 	&wwslog('info','do_viewspool_message : could not move message to spool %s, status %s',$newspool,$newstatus);
 	return;		
     }
-    do_log('debug2',"message %s moved to spool %s with status %s",$messagekey,$newspool,$newstatus);
+   &Log::do_log('debug2',"message %s moved to spool %s with status %s",$messagekey,$newspool,$newstatus);
     $param->{'moved'} = 1;
     return 1;
 }
