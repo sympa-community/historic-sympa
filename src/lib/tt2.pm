@@ -128,7 +128,7 @@ sub maketext {
 
     ## Strangely the path is sometimes empty...
     ## TODO : investigate
-#    &do_log('notice', "PATH: $path ; $template_name");
+#    &Log::do_log('notice', "PATH: $path ; $template_name");
 
     ## Sample code to dump the STASH
     # my $s = $stash->_dump();    
@@ -209,6 +209,7 @@ sub get_error {
 sub parse_tt2 {
     my ($data, $template, $output, $include_path, $options) = @_;
     $include_path ||= [Sympa::Constants::DEFAULTDIR];
+    $options ||= {};
 
     ## Add directories that may have been added
     push @{$include_path}, @other_include_path;
@@ -252,13 +253,20 @@ sub parse_tt2 {
 	$config->{'ABSOLUTE'} = 1;
 	$allow_absolute = 0;
     }
+    if ($options->{'has_header'}) { # body is separated by an empty line.
+	if (ref $template) {
+	    $template = \("\n" . $$template);
+	} else {
+	    $template = \"\n[% PROCESS $template %]";
+	}
+    }
 
     my $tt2 = Template->new($config) or die "Template error: ".Template->error();
 
     unless ($tt2->process($template, $data, $output)) {
 	$last_error = $tt2->error();
-	&do_log('err', 'Failed to parse %s : %s', $template, $tt2->error());
-	&do_log('err', 'Looking for TT2 files in %s', join(',',@{$include_path}));
+	&Log::do_log('err', 'Failed to parse %s : %s', $template, $tt2->error());
+	&Log::do_log('err', 'Looking for TT2 files in %s', join(',',@{$include_path}));
 
 
 	return undef;

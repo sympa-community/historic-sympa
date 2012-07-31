@@ -105,7 +105,7 @@ sub is_autoinc {
     &Log::do_log('debug','Checking whether field %s.%s is autoincremental',$param->{'field'},$param->{'table'});
     my $sth;
     unless ($sth = $self->do_query("SHOW FIELDS FROM `%s` WHERE Extra ='auto_increment' and Field = '%s'",$param->{'table'},$param->{'field'})) {
-	do_log('err','Unable to gather autoincrement field named %s for table %s',$param->{'field'},$param->{'table'});
+	&Log::do_log('err','Unable to gather autoincrement field named %s for table %s',$param->{'field'},$param->{'table'});
 	return undef;
     }	    
     my $ref = $sth->fetchrow_hashref('NAME_lc') ;
@@ -123,7 +123,7 @@ sub set_autoinc {
     my $param = shift;
     &Log::do_log('debug','Setting field %s.%s as autoincremental',$param->{'field'},$param->{'table'});
     unless ($self->do_query("ALTER TABLE `%s` CHANGE `%s` `%s` BIGINT( 20 ) NOT NULL AUTO_INCREMENT",$param->{'table'},$param->{'field'},$param->{'field'})) {
-	do_log('err','Unable to set field %s in table %s as autoincrement',$param->{'field'},$param->{'table'});
+	&Log::do_log('err','Unable to set field %s in table %s as autoincrement',$param->{'field'},$param->{'table'});
 	return undef;
     }
     return 1;
@@ -160,7 +160,7 @@ sub add_table {
     my $self = shift;
     my $param = shift;
     &Log::do_log('debug','Adding table %s to database %s',$param->{'table'},$self->{'db_name'});
-    unless ($self->do_query("CREATE TABLE %s (temporary INT)",$param->{'table'})) {
+    unless ($self->do_query("CREATE TABLE %s (temporary INT) DEFAULT CHARACTER SET utf8",$param->{'table'})) {
 	&Log::do_log('err', 'Could not create table %s in database %s', $param->{'table'}, $self->{'db_name'});
 	return undef;
     }

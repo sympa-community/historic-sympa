@@ -32,7 +32,7 @@ use List;
 
 
 our @ISA = qw(Exporter);
-our @EXPORT = qw(fatal_err do_log do_openlog $log_level %levels);
+our @EXPORT = qw($log_level %levels);
 
 my ($log_facility, $log_socket_type, $log_service,$sth,@sth_stack,$rows_nb);
 # When logs are not available, period of time to wait before sending another warning to listmaster.
@@ -54,6 +54,12 @@ our %levels = (
 
 our $last_date_aggregation;
 
+##sub import {
+	##my @call = caller(1);
+	##printf "Import from $call[3]\n";
+	##Log->export_to_level(1, @_);
+##}
+##
 sub fatal_err {
     my $m  = shift;
     my $errno  = $!;
@@ -94,18 +100,39 @@ sub do_log {
     my $errno = $!;
 
     ## Do not display variables which are references.
-    foreach my $i (0..$#param) {
-        if (ref($param[$i])){
-            $param[$i] = ref($param[$i])
-        }
+    foreach my $p (@param) {
+	unless (defined $p) {
+	    $p = ''; # prevent 'Use of uninitialized value' warning
+	} elsif (ref $p) {
+	    $p = ref $p;
+	}
     }
 
-    ## Determine calling function and parameters
-    my @call = caller(1);
-    ## wwslog already adds this information
-    unless ($call[3] =~ /wwslog$/) {
-        $message = $call[3] . '() ' . $message if ($call[3]);
+    ## Determine calling function
+    my $caller_string;
+   
+    ## If in 'err' level, build a stack trace
+    if ($level eq 'err'){
+	my $go_back = 1;
+	my @calls;
+	while (my @call = caller($go_back)) {
+		unshift @calls, $call[3].'#'.$call[2];
+		$go_back++;
+	}
+	
+	$caller_string = join(' > ',@calls);
+    }else {
+	my @call = caller(1);
+	
+	## If called via wwslog, go one step ahead
+	if ($call[3] =~ /wwslog$/) {
+		my @call = caller(2);
+	}
+	
+	$caller_string = $call[3].'()';
     }
+    
+    $message = $caller_string. ' ' . $message if ($caller_string);
 
     ## Add facility to log entry
     $message = $level.' '.$message;
@@ -282,6 +309,9 @@ sub db_stat_log{
     my $id = $date.$random;
     my $read = 0; 
 
+    if (ref($list) =~ /List/i) {
+	$list = $list->{'name'};
+    }
     if($list =~ /(.+)\@(.+)/) {#remove the robot name of the list name
 	$list = $1;
 	unless($robot) {
@@ -932,8 +962,7 @@ sub deal_data {
 sub update_subscriber_msg_send {
 
     my ($mail, $list, $robot, $counter) = @_;
-    Log::do_log('debug2','%s,%s,%s,%s',$mail, $list, $robot, $counter);
-    Log::do_log('trace','%s,%s,%s,%s',$mail, $list, $robot, $counter);
+    &Log::do_log('debug2','%s,%s,%s,%s',$mail, $list, $robot, $counter);
 
     unless ($sth = &SDM::do_query("SELECT number_messages_subscriber from subscriber_table WHERE (robot_subscriber = '%s' AND list_subscriber = '%s' AND user_subscriber = '%s')", $robot, $list, $mail)){
 	&do_log('err','Unable to retrieve message count for user %s, list %s@%s',$mail, $list, $robot);

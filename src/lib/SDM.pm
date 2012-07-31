@@ -64,13 +64,9 @@ sub do_query {
     my $query = shift;
     my @params = @_;
     my $sth;
-    unless (&check_db_connect) {
-	&Log::do_log('err', 'Unable to get a connection to the Sympa database');
-	return undef;
-    }
 
     unless ($sth = $db_source->do_query($query,@params)) {
-	do_log('err','SQL query failed to execute in the Sympa database');
+	&Log::do_log('err','SQL query failed to execute in the Sympa database');
 	return undef;
     }
 
@@ -81,13 +77,9 @@ sub do_prepared_query {
     my $query = shift;
     my @params = @_;
     my $sth;
-    unless (&check_db_connect) {
-	&Log::do_log('err', 'Unable to get a connection to the Sympa database');
-	return undef;
-    }
 
     unless ($sth = $db_source->do_prepared_query($query,@params)) {
-	do_log('err','SQL query failed to execute in the Sympa database');
+	&Log::do_log('err','SQL query failed to execute in the Sympa database');
 	return undef;
     }
 
@@ -211,7 +203,6 @@ sub probe_db {
     foreach my $t (@tables) {
 	$real_struct{$t} = $db_source->get_fields({'table'=>$t});
     }
-   
     ## Check tables structure if we could get it
     ## Only performed with mysql , Pg and SQLite
     if (%real_struct) {
@@ -222,7 +213,7 @@ sub probe_db {
 		return undef;
 	    }
 	    unless (&check_fields({'table' => $t,'report' => \@report,'real_struct' => \%real_struct})) {
-		&Log::do_log('err', "Unable to check the valifity of fields definition for table %s. Aborting.", $t);
+		&Log::do_log('err', "Unable to check the validity of fields definition for table %s. Aborting.", $t);
 		return undef;
 	    }
 	    ## Remove temporary DB field
@@ -372,6 +363,7 @@ sub check_primary_key {
     my $param = shift;
     my $t = $param->{'table'};
     my $report_ref = $param->{'report'};
+    &Log::do_log('debug','Checking primary key for table %s',$t);
 
     my $list_of_keys = join ',',@{$primary{$t}};
     my $key_as_string = "$t [$list_of_keys]";
@@ -382,7 +374,7 @@ sub check_primary_key {
 	my $list_of_keys = join ',',@{$primary{$t}};
 	my $key_as_string = "$t [$list_of_keys]";
 	if ($should_update->{'empty'}) {
-	    &Log::do_log('debug',"Primary key %s is missing. Adding it.",$key_as_string);
+	    &Log::do_log('notice',"Primary key %s is missing. Adding it.",$key_as_string);
 	    ## Add primary key
 	    my $rep = undef;
 	    if ($rep = $db_source->set_primary_key({'table'=>$t,'fields'=>$primary{$t}})) {
@@ -397,7 +389,7 @@ sub check_primary_key {
 		push @{$report_ref}, $rep;
 	    }
 	    ## Add primary key
-	    my $rep = undef;
+	    $rep = undef;
 	    if ($rep = $db_source->set_primary_key({'table'=>$t,'fields'=>$primary{$t}})) {
 		push @{$report_ref}, $rep;
 	    }
@@ -410,7 +402,7 @@ sub check_primary_key {
 	    push @{$report_ref}, $rep;
 	}
 	## Add primary key
-	my $rep = undef;
+	$rep = undef;
 	if ($rep = $db_source->set_primary_key({'table'=>$t,'fields'=>$primary{$t}})) {
 	    push @{$report_ref}, $rep;
 	}
@@ -426,10 +418,12 @@ sub check_indexes {
     ## drop previous index if this index is not a primary key and was defined by a previous Sympa version
     my %index_columns = %{$db_source->get_indexes({'table' => $t})};
     foreach my $idx ( keys %index_columns ) {
+	&Log::do_log('debug','Found index %s',$idx);
 	## Remove the index if obsolete.
 	foreach my $known_index ( @former_indexes ) {
 	    if ( $idx eq $known_index ) {
-		if (my $rep = $db_source->unset_index({'table'=>$t})) {
+		&Log::do_log('notice','Removing obsolete index %s',$idx);
+		if (my $rep = $db_source->unset_index({'table'=>$t,'index'=>$idx})) {
 		    push @{$report_ref}, $rep;
 		}
 		last;
@@ -441,6 +435,7 @@ sub check_indexes {
     foreach my $idx (keys %{$indexes{$t}}){ 
 	## Add indexes
 	unless ($index_columns{$idx}) {
+	    &Log::do_log('notice','Index %s on table %s does not exist. Adding it.',$idx,$t);
 	    if (my $rep = $db_source->set_index({'table'=>$t, 'index_name'=> $idx, 'fields'=>$indexes{$t}{$idx}})) {
 		push @{$report_ref}, $rep;
 	    }
@@ -448,11 +443,11 @@ sub check_indexes {
 	my $index_check = $db_source->check_key({'table'=>$t,'key_name'=>$idx,'expected_keys'=>$indexes{$t}{$idx}});
 	if ($index_check){
 	    my $list_of_fields = join ',',@{$indexes{$t}{$idx}};
-	    my $index_as_string = "$t [$list_of_fields]";
+	    my $index_as_string = "$idx: $t [$list_of_fields]";
 	    if ($index_check->{'empty'}) {
 		## Add index
 		my $rep = undef;
-		&Log::do_log('debug',"Index %s is missing. Adding it.",$index_as_string);
+		&Log::do_log('notice',"Index %s is missing. Adding it.",$index_as_string);
 		if ($rep = $db_source->set_index({'table'=>$t, 'index_name'=> $idx, 'fields'=>$indexes{$t}{$idx}})) {
 		    push @{$report_ref}, $rep;
 		}
@@ -460,12 +455,13 @@ sub check_indexes {
 		&Log::do_log('debug',"Existing index correct (%s) nothing to change",$index_as_string);
 	    }else{
 		## drop previous index
+		&Log::do_log('notice',"Index %s has not the right structure. Changing it.",$index_as_string);
 		my $rep = undef;
 		if ($rep = $db_source->unset_index({'table'=>$t, 'index'=> $idx})) {
 		    push @{$report_ref}, $rep;
 		}
 		## Add index
-		my $rep = undef;
+		$rep = undef;
 		if ($rep = $db_source->set_index({'table'=>$t, 'index_name'=> $idx, 'fields'=>$indexes{$t}{$idx}})) {
 		    push @{$report_ref}, $rep;
 		}
@@ -478,7 +474,7 @@ sub check_indexes {
 		push @{$report_ref}, $rep;
 	    }
 	    ## Add index
-	    my $rep = undef;
+	    $rep = undef;
 	    if ($rep = $db_source->set_index({'table'=>$t, 'index_name'=> $idx,'fields'=>$indexes{$t}{$idx}})) {
 		push @{$report_ref}, $rep;
 	    }
@@ -495,7 +491,7 @@ sub data_structure_uptodate {
 
      if (-f $version_file) {
 	 unless (open VFILE, $version_file) {
-	     do_log('err', "Unable to open %s : %s", $version_file, $!);
+	     &Log::do_log('err', "Unable to open %s : %s", $version_file, $!);
 	     return undef;
 	 }
 	 while (<VFILE>) {
@@ -542,31 +538,43 @@ sub check_db_field_type {
 
 sub quote {
     my $param = shift;
-    if(&check_db_connect()) {
+    if (defined $db_source) {
 	return $db_source->quote($param);
     }else{
-	&Log::do_log('err', 'Unable to get a handle to Sympa database');
-	return undef;
+	if(&check_db_connect()) {
+	    return $db_source->quote($param);
+	}else{
+	    &Log::do_log('err', 'Unable to get a handle to Sympa database');
+	    return undef;
+	}
     }
 }
 
 sub get_substring_clause {
     my $param = shift;
-    if(&check_db_connect()) {
+    if (defined $db_source) {
 	return $db_source->get_substring_clause($param);
-    }else{
-	&Log::do_log('err', 'Unable to get a handle to Sympa database');
-	return undef;
+     }else{
+	if(&check_db_connect()) {
+	    return $db_source->get_substring_clause($param);
+	}else{
+	    &Log::do_log('err', 'Unable to get a handle to Sympa database');
+	    return undef;
+	}
     }
 }
 
 sub get_limit_clause {
     my $param = shift;
-    if(&check_db_connect()) {
+    if (defined $db_source) {
 	return ' '.$db_source->get_limit_clause($param).' ';
     }else{
-	&Log::do_log('err', 'Unable to get a handle to Sympa database');
-	return undef;
+	if(&check_db_connect()) {
+	    return ' '.$db_source->get_limit_clause($param).' ';
+	}else{
+	    &Log::do_log('err', 'Unable to get a handle to Sympa database');
+	    return undef;
+	}
     }
 }
 
@@ -577,7 +585,16 @@ sub get_limit_clause {
 ##
 sub get_canonical_write_date {
     my $param = shift;
-    return $db_source->get_canonical_write_date($param);
+    if (defined $db_source) {
+	return $db_source->get_canonical_write_date($param);
+    }else{
+	if(&check_db_connect()) {
+	    return $db_source->get_canonical_write_date($param);
+	}else{
+	    &Log::do_log('err', 'Unable to get a handle to Sympa database');
+	    return undef;
+	}
+    }
 }
 
 ## Returns a character string corresponding to the expression to use in 
@@ -587,7 +604,16 @@ sub get_canonical_write_date {
 ##
 sub get_canonical_read_date {
     my $param = shift;
-    return $db_source->get_canonical_read_date($param);
+    if (defined $db_source) {
+	return $db_source->get_canonical_read_date($param);
+    }else{
+	if(&check_db_connect()) {
+	    return $db_source->get_canonical_read_date($param);
+	}else{
+	    &Log::do_log('err', 'Unable to get a handle to Sympa database');
+	    return undef;
+	}
+    }
 }
 
 return 1;

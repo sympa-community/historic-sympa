@@ -23,12 +23,14 @@ package Archive;
 
 use strict;
 use Cwd;
+use Encode qw(decode_utf8 encode_utf8);
+use HTML::Entities qw(decode_entities);
+
 use Log;
 
 my $serial_number = 0; # incremented on each archived mail
 
 ## RCS identification.
-
 
 ## Does the real job : stores the message given as an argument into
 ## the indicated directory.
@@ -36,7 +38,7 @@ my $serial_number = 0; # incremented on each archived mail
 sub store_last {
     my($list, $msg) = @_;
     
-    do_log ('debug2','archive::store ()');
+    &Log::do_log ('debug2','archive::store ()');
     
     my($filename, $newfile);
     
@@ -64,18 +66,18 @@ sub store_last {
 sub list {
     my $name = shift;
 
-    &do_log ('debug',"archive::list($name)");
+    &Log::do_log ('debug',"archive::list($name)");
 
     my($filename, $newfile);
     my(@l, $i);
     
     unless (-d "$name") {
-	&do_log ('warning',"archive::list($name) failed, no directory $name");
+	&Log::do_log ('warning',"archive::list($name) failed, no directory $name");
 #      @l = ($msg::no_archives_available);
       return @l;
   }
     unless (opendir(DIR, "$name")) {
-	&do_log ('warning',"archive::list($name) failed, cannot open directory $name");
+	&Log::do_log ('warning',"archive::list($name) failed, cannot open directory $name");
 #	@l = ($msg::no_archives_available);
 	return @l;
     }
@@ -93,10 +95,10 @@ sub scan_dir_archive {
     
     my($dir, $month) = @_;
     
-    &do_log ('info',"archive::scan_dir_archive($dir, $month)");
+    &Log::do_log ('info',"archive::scan_dir_archive($dir, $month)");
 
     unless (opendir (DIR, "$dir/$month/arctxt")){
-	&do_log ('info',"archive::scan_dir_archive($dir, $month): unable to open dir $dir/$month/arctxt");
+	&Log::do_log ('info',"archive::scan_dir_archive($dir, $month): unable to open dir $dir/$month/arctxt");
 	return undef;
     }
     
@@ -104,32 +106,27 @@ sub scan_dir_archive {
     my $i = 0 ;
     foreach my $file (sort readdir(DIR)) {
 	next unless ($file =~ /^\d+$/);
-	&do_log ('debug',"archive::scan_dir_archive($dir, $month): start parsing message $dir/$month/arctxt/$file");
+	&Log::do_log ('debug',"archive::scan_dir_archive($dir, $month): start parsing message $dir/$month/arctxt/$file");
 
 	my $mail = new Message({'file'=>"$dir/$month/arctxt/$file",'noxsympato'=>'noxsympato'});
 	unless (defined $mail) {
-	    &do_log('err', 'Unable to create Message object %s', $file);
+	    &Log::do_log('err', 'Unable to create Message object %s', $file);
 	    return undef;
 	}
 	
-	&do_log('debug',"MAIL object : $mail");
+	&Log::do_log('debug',"MAIL object : $mail");
 
 	$i++;
 	my $msg = {};
 	$msg->{'id'} = $i;
 
-	$msg->{'subject'} = &MIME::EncWords::decode_mimewords($mail->{'msg'}->head->get('Subject'), Charset=>'utf8');
-	chomp $msg->{'subject'};
+	$msg->{'subject'} = &tools::decode_header($mail, 'Subject');
+	$msg->{'from'} = &tools::decode_header($mail, 'From');
+	$msg->{'date'} = &tools::decode_header($mail, 'Date');
 
-	$msg->{'from'} = &MIME::EncWords::decode_mimewords($mail->{'msg'}->head->get('From'), Charset=>'utf8');
-	chomp $msg->{'from'};    	        	
-        
-	$msg->{'date'} = &MIME::EncWords::decode_mimewords($mail->{'msg'}->head->get('Date'), Charset=>'utf8');
-	chomp $msg->{'date'};
-	
 	$msg->{'full_msg'} = $mail->{'msg'}->as_string;
 
-	&do_log('debug','Archive::scan_dir_archive adding message %s in archive to send', $msg->{'subject'});
+	&Log::do_log('debug','Archive::scan_dir_archive adding message %s in archive to send', $msg->{'subject'});
 
 	push @{$all_msg}, $msg ;
     }
@@ -154,18 +151,18 @@ sub search_msgid {
     
     my($dir, $msgid) = @_;
     
-    &do_log ('info',"archive::search_msgid($dir, $msgid)");
+    &Log::do_log ('info',"archive::search_msgid($dir, $msgid)");
 
     
     if ($msgid =~ /NO-ID-FOUND\.mhonarc\.org/) {
-	&do_log('err','remove_arc: no message id found');return undef;
+	&Log::do_log('err','remove_arc: no message id found');return undef;
     } 
     unless ($dir =~ /\d\d\d\d\-\d\d\/arctxt/) {
-	&do_log ('err',"archive::search_msgid : dir $dir look unproper");
+	&Log::do_log ('err',"archive::search_msgid : dir $dir look unproper");
 	return undef;
     }
     unless (opendir (ARC, "$dir")){
-	&do_log ('err',"archive::scan_dir_archive($dir, $msgid): unable to open dir $dir");
+	&Log::do_log ('err',"archive::scan_dir_archive($dir, $msgid): unable to open dir $dir");
 	return undef;
     }
     chomp $msgid ;
@@ -203,7 +200,7 @@ sub last_path {
     
     my $list = shift;
 
-    &do_log('debug', 'Archived::last_path(%s)', $list->{'name'});
+    &Log::do_log('debug', 'Archived::last_path(%s)', $list->{'name'});
 
     return undef unless ($list->is_archived());
     my $file = $list->{'dir'}.'/archives/last_message';
@@ -218,11 +215,11 @@ sub last_path {
 sub load_html_message {
     my %parameters = @_;
 
-    &do_log ('debug2',$parameters{'file_path'});
+    &Log::do_log ('debug2',$parameters{'file_path'});
     my %metadata;
 
     unless (open ARC, $parameters{'file_path'}) {
-	&do_log('err', "Failed to load message '%s' : $!", $parameters{'file_path'});
+	&Log::do_log('err', "Failed to load message '%s' : $!", $parameters{'file_path'});
 	return undef;
     }
 
@@ -231,6 +228,7 @@ sub load_html_message {
 
 	if (/^<!--(\S+): (.*) -->$/) {
 	    my ($key, $value) = ($1, $2);
+	    $value = encode_utf8(decode_entities(decode_utf8($value)));
 	    if ($key eq 'X-From-R13') {
 		$metadata{'X-From'} = $value;
 		$metadata{'X-From'} =~ tr/N-Z[@A-Mn-za-m/@A-Z[a-z/; ## Mhonarc protection of email addresses

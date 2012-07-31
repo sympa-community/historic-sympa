@@ -31,6 +31,7 @@ use Conf;
 use Log;
 use Sympa::Constants;
 use SDM;
+use Data::Dumper;
 
 ## Return the previous Sympa version, ie the one listed in data_structure.version
 sub get_previous_version {
@@ -347,7 +348,7 @@ sub upgrade {
 		&Log::do_log('notice','Updating subscribed field of the subscriber table...');
 		my $rows = $dbh->do($statement);
 		unless (defined $rows) {
-		    &fatal_err("Unable to execute SQL statement %s : %s", $statement, $dbh->errstr);	    
+		    &Log::fatal_err("Unable to execute SQL statement %s : %s", $statement, $dbh->errstr);	    
 		}
 		&Log::do_log('notice','%d rows have been updated', $rows);
 				
@@ -642,7 +643,8 @@ sub upgrade {
 	foreach my $subdir (sort grep (!/^\.+$/,readdir(BOUNCEDIR))) {
 	  my $other_dir = &Conf::get_robot_conf($Conf::Conf{'domain'}, 'bounce_path').'/'.$subdir.'/OTHER';
 	  if (-d $other_dir) {
-	    &tools::remove_dir($other_dir) & &Log::do_log('notice', "Directory $other_dir removed");
+	    &tools::remove_dir($other_dir);
+	    &Log::do_log('notice', "Directory $other_dir removed");
 	  }
 	}
 	
@@ -707,6 +709,44 @@ sub upgrade {
 			  'queueauth' => 'auth',
 			  'queueoutgoing' => 'archive',
 			  'queuetask' => 'task');
+   if (&tools::lower_version($previous_version, '6.1.11')) {
+       ## Exclusion table was not robot-enabled.
+       &Log::do_log('notice','fixing robot column of exclusion table.');
+       my $sth;
+	unless ($sth = &SDM::do_query("SELECT * FROM exclusion_table")) {
+	    &Log::do_log('err','Unable to gather informations from the exclusions table.');
+	}
+	my @robots = &List::get_robots();
+	while (my $data = $sth->fetchrow_hashref){
+	    next if (defined $data->{'robot_exclusion'} && $data->{'robot_exclusion'} ne '');
+	    ## Guessing right robot for each exclusion.
+	    my $valid_robot = '';
+	    my @valid_robot_candidates;
+	    foreach my $robot (@robots) {
+		if (my $list = new List($data->{'list_exclusion'},$robot)) {
+		    if ($list->is_list_member($data->{'user_exclusion'})) {
+			push @valid_robot_candidates,$robot;
+		    }
+		}
+	    }
+	    if ($#valid_robot_candidates == 0) {
+		$valid_robot = $valid_robot_candidates[0];
+		my $sth;
+		unless ($sth = &SDM::do_query("UPDATE exclusion_table SET robot_exclusion = %s WHERE list_exclusion=%s AND user_exclusion=%s", &SDM::quote($valid_robot),&SDM::quote($data->{'list_exclusion'}),&SDM::quote($data->{'user_exclusion'}))) {
+		    &Log::do_log('err','Unable to update entry (%s,%s) in exclusions table (trying to add robot %s)',$data->{'list_exclusion'},$data->{'user_exclusion'},$valid_robot);
+		}
+	    }else {
+		&Log::do_log('err',"Exclusion robot could not be guessed for user '%s' in list '%s'. Either this user is no longer subscribed to the list or the list appears in more than one robot (or the query to the database failed). Here is the list of robots in which this list name appears: '%s'",$data->{'user_exclusion'},$data->{'list_exclusion'},@valid_robot_candidates);
+	    }
+	}
+	## Caching all lists config subset to database
+	&Log::do_log('notice','Caching all lists config subset to database');
+	&List::_flush_list_db();
+	my $all_lists = &List::get_lists('*', { 'use_files' => 1 });
+	foreach my $list (@$all_lists) {
+	    $list->_update_list_db;
+	}
+   }
 
 	foreach my $spoolparameter (keys %spools_def ){
 	    next if ($spoolparameter eq 'queuetask'); # task is to be done later
@@ -717,7 +757,7 @@ sub upgrade {
 		do_log('info',"Could not perform migration of spool %s because it is not a directory", $spoolparameter);
 		next;
 	    }
-	    do_log('trace',"Performing upgrade for spool  %s ",$spooldir);
+	    do_log('notice',"Performing upgrade for spool  %s ",$spooldir);
 
 	    my $spool = new Sympaspool($spools_def{$spoolparameter});
 	    if (!opendir(DIR, $spooldir)) {
@@ -739,9 +779,9 @@ sub upgrade {
 		my ($listname, $robot);	
 		my %meta ;
 
-		do_log('trace'," spool : $spooldir, fichier $filename");
+		do_log('notice'," spool : $spooldir, fichier $filename");
 		if (-d $spooldir.'/'.$filename){
-		    do_log('trace',"%s/%s est un répertoire",$spooldir,$filename);
+		    do_log('notice',"%s/%s est un répertoire",$spooldir,$filename);
 		    next;
 		}				
 
@@ -765,7 +805,7 @@ sub upgrade {
 		}elsif ($spoolparameter eq 'queuesubscribe'){
 		    my $match = 0;		    
 		    foreach my $robot (keys %{$Conf::Conf{'robots'}}) {
-			do_log('trace',"robot : $robot");
+			do_log('notice',"robot : $robot");
 			if ($filename =~ /^([^@]*)\@$robot\.(.*)$/){
 			    $listname = $1;
 			    $robot = $2;
@@ -842,7 +882,7 @@ sub upgrade {
 		my $source = $spooldir.'/'.$filename;
 		my $goal = $spooldir.'/copy_by_upgrade_process/'.$filename;
 
-		do_log('trace','source %s, goal %s',$source,$goal);
+		do_log('notice','source %s, goal %s',$source,$goal);
 		# unless (&File::Copy::copy($spooldir.'/'.$filename, $spooldir.'/copy_by_upgrade_process/'.$filename)) {
 		unless (&File::Copy::copy($source, $goal)) {
 		    &do_log('err', 'Could not rename %s to %s: %s', $source,$goal, $!);
@@ -1026,7 +1066,7 @@ sub md5_encode_password {
 	## Updating Db
 	my $escaped_email =  $user->{'email_user'};
 	$escaped_email =~ s/\'/''/g;
-	my $statement = sprintf "UPDATE user_table SET password_user='%s' WHERE (email_user='%s')", &tools::md5_fingerprint($clear_password), $escaped_email ;
+	my $statement = sprintf "UPDATE user_table SET password_user='%s' WHERE (email_user='%s')", &Auth::password_fingerprint($clear_password), $escaped_email ;
 	
 	unless ($dbh->do($statement)) {
 	    &Log::do_log('err','Unable to execute SQL statement "%s" : %s', $statement, $dbh->errstr);

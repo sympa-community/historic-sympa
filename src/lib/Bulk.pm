@@ -96,7 +96,7 @@ sub next {
     }
 
     # Select the most prioritary packet to lock.
-    unless ($sth = &SDM::do_query( "SELECT %s messagekey_bulkmailer AS messagekey, packetid_bulkmailer AS packetid FROM bulkmailer_table WHERE lock_bulkmailer IS NULL AND delivery_date_bulkmailer <= %d %s %s", $limit_sybase, time(), $limit_oracle, $order)) {
+    unless ($sth = &SDM::do_prepared_query( sprintf("SELECT %s messagekey_bulkmailer AS messagekey, packetid_bulkmailer AS packetid FROM bulkmailer_table WHERE lock_bulkmailer IS NULL AND delivery_date_bulkmailer <= ? %s %s",$limit_sybase, $limit_oracle, $order), int(time()))) {
 	&Log::do_log('err','Unable to get the most prioritary packet from database');
 	return undef;
     }
@@ -140,7 +140,7 @@ sub next {
 sub remove {
     my $messagekey = shift;
     my $packetid= shift;
-    #
+
     &Log::do_log('debug', "Bulk::remove(%s,%s)",$messagekey,$packetid);
 
     unless ($sth = &SDM::do_query( "DELETE FROM bulkmailer_table WHERE packetid_bulkmailer = %s AND messagekey_bulkmailer = %s",&SDM::quote($packetid),&SDM::quote($messagekey))) {
@@ -179,7 +179,7 @@ sub message_from_spool {
     my $messagekey = shift;
     &Log::do_log('debug', '(messagekey : %s)',$messagekey);
     
-    unless ($sth = &SDM::do_query( "SELECT message_bulkspool AS message, messageid_bulkspool AS messageid, dkim_d_bulkspool AS  dkim_d,  dkim_i_bulkspool AS  dkim_i, dkim_privatekey_bulkspool AS dkim_privatekey, dkim_selector_bulkspool AS dkim_selector,dkim_header_list_bulkspool AS dkim_header_list FROM bulkspool_table WHERE messagekey_bulkspool = %s",&SDM::quote($messagekey))) {
+    unless ($sth = &SDM::do_query( "SELECT message_bulkspool AS message, messageid_bulkspool AS messageid, dkim_d_bulkspool AS  dkim_d,  dkim_i_bulkspool AS  dkim_i, dkim_privatekey_bulkspool AS dkim_privatekey, dkim_selector_bulkspool AS dkim_selector FROM bulkspool_table WHERE messagekey_bulkspool = %s",&SDM::quote($messagekey))) {
 	&Log::do_log('err','Unable to retrieve message %s full data from database', $messagekey);
 	return undef;
     }
@@ -192,8 +192,7 @@ sub message_from_spool {
 	    'dkim_d' => $message_from_spool->{'dkim_d'},
 	    'dkim_i' => $message_from_spool->{'dkim_i'},
 	    'dkim_selector' => $message_from_spool->{'dkim_selector'},
-	    'dkim_privatekey' => $message_from_spool->{'dkim_privatekey'},
-	    'dkim_header_list' => $message_from_spool->{'dkim_header_list'}});
+	    'dkim_privatekey' => $message_from_spool->{'dkim_privatekey'},});
 
 }
 
@@ -471,6 +470,9 @@ sub store {
 	}
 	my $packetid =  &tools::md5_fingerprint($rcptasstring);
 	my $packet_already_exist;
+	if (ref($listname) =~ /List/i) {
+	    $listname = $listname->{'name'};
+	}
 	if ($message_already_on_spool) {
 	    ## search if this packet is already in spool database : mailfile may perform multiple submission of exactly the same message 
 	    unless ($sth = &SDM::do_query( "SELECT count(*) FROM bulkmailer_table WHERE ( messagekey_bulkmailer = %s AND  packetid_bulkmailer = %s)", &SDM::quote($message->{'messagekey'}),&SDM::quote($packetid))) {
@@ -493,6 +495,7 @@ sub store {
 	$packet_rank++;
     }
     $bulkspool->unlock_message($message->{'messagekey'});
+    return 1;
 }
 
 ## remove file that are not referenced by any packet
@@ -523,7 +526,7 @@ sub remove_bulkspool_message {
     my $table = $spool.'_table';
     my $key = 'messagekey_'.$spool ;
 
-    unless (&SDM::do_query( "DELETE FROM %s WHERE %s = '%s'",$table,$key,$messagekey)) {
+    unless (&SDM::do_query( "DELETE FROM %s WHERE %s = %s",$table,$key,&SDM::quote($messagekey))) {
 	&Log::do_log('err','Unable to delete %s %s from %s',$table,$key,$messagekey);
 	return undef;
     }
@@ -536,12 +539,13 @@ sub get_remaining_packets_count {
 
     my $m_count = 0;
 
-    unless ($sth = &SDM::do_query( "SELECT COUNT(*) FROM bulkmailer_table")) {
+    unless ($sth = &SDM::do_prepared_query( "SELECT COUNT(*) FROM bulkmailer_table WHERE lock_bulkmailer IS NULL")) {
 	&Log::do_log('err','Unable to count remaining packets in bulkmailer_table');
 	return undef;
     }
 
     my @result = $sth->fetchrow_array();
+    
     return $result[0];
 }
 

@@ -1173,6 +1173,10 @@ a.ArcMenuLinksSortInactive {
                        padding:0.5em;
                        }
 
+.block blockquote {
+	margin: 16px 40px;
+}
+
 h1.block,
 h2.block,
 h3.block,
@@ -1292,7 +1296,13 @@ h7 strong {
 	    display:none;
             }
 
+#ErrorMsg a {
+	color: [% color_4 %]!important;
+}
 
+#ErrorMsg a:hover {
+	color: [% color_5 %]!important;
+}
 
 #ErrorMsg .MainMenuLinks { 
                            color:[% color_4 %];

@@ -46,7 +46,7 @@ sub set_spool {
 sub new {
     my($pkg,$task_in_spool) = @_;
     my $task;
-    &do_log('debug2', 'Task::new  messagekey = %s',$task_in_spool->{'messagekey'});
+    &Log::do_log('debug2', 'Task::new  messagekey = %s',$task_in_spool->{'messagekey'});
     
     my $listname_regexp = &tools::get_regexp('listname');
     my $host_regexp = &tools::get_regexp('host');

@@ -32,11 +32,7 @@ use tools;
 use tt2;
 use Exporter;
 use Data::Dumper;
-use DBManipulatorMySQL;
-use DBManipulatorOracle;
-use DBManipulatorPostgres;
-use DBManipulatorSQLite;
-use DBManipulatorSybase;
+use Datasource;
 
 our @ISA = qw(Exporter);
 our @EXPORT = qw(%date_format);
@@ -54,47 +50,54 @@ sub new {
     my $param = shift;
     my $self = $param;
     &Log::do_log('debug',"Creating new SQLSource object for RDBMS '%s'",$param->{'db_type'});
-    ## Casting the object with the right DBManipulator<RDBMS> class according to
-    ## the parameters. It's repetitive code because it is hard to use variables
-    ## with "require" pragma and @ISA decalarations. Later, maybe...
+    my $actualclass;
+    our @ISA = qw(Datasource);
     if ($param->{'db_type'} =~ /^mysql$/i) {
 	unless ( eval "require DBManipulatorMySQL" ){
 	    &Log::do_log('err',"Unable to use DBManipulatorMySQL module: $@");
 	    return undef;
 	}
 	require DBManipulatorMySQL;
-	our @ISA = qw(DBManipulatorMySQL);
+	$actualclass = "DBManipulatorMySQL";
     }elsif ($param->{'db_type'} =~ /^sqlite$/i) {
 	unless ( eval "require DBManipulatorSQLite" ){
 	    &Log::do_log('err',"Unable to use DBManipulatorSQLite module");
 	    return undef;
 	}
 	require DBManipulatorSQLite;
-	our @ISA = qw(DBManipulatorSQLite);
+	
+	$actualclass = "DBManipulatorSQLite";
     }elsif ($param->{'db_type'} =~ /^pg$/i) {
 	unless ( eval "require DBManipulatorPostgres" ){
 	    &Log::do_log('err',"Unable to use DBManipulatorPostgres module");
 	    return undef;
 	}
 	require DBManipulatorPostgres;
-	our @ISA = qw(DBManipulatorPostgres);
+	
+	$actualclass = "DBManipulatorPostgres";
     }elsif ($param->{'db_type'} =~ /^oracle$/i) {
 	unless ( eval "require DBManipulatorOracle" ){
 	    &Log::do_log('err',"Unable to use DBManipulatorOracle module");
 	    return undef;
 	}
 	require DBManipulatorOracle;
-	our @ISA = qw(DBManipulatorOracle);
+	
+	$actualclass = "DBManipulatorOracle";
     }elsif ($param->{'db_type'} =~ /^sybase$/i) {
 	unless ( eval "require DBManipulatorSybase" ){
 	    &Log::do_log('err',"Unable to use DBManipulatorSybase module");
 	    return undef;
 	}
 	require DBManipulatorSybase;
-	our @ISA = qw(DBManipulatorSybase);
+	
+	$actualclass = "DBManipulatorSybase";
     }else {
-	&Log::do_log('err','Unknown RDBMS type "%s"',$param->{'db_type'});
-	return undef;
+	## We don't have a DB Manipulator for this RDBMS
+	## It might be an SQL source used to include list members/owners
+	## like CSV
+	require DBManipulatorDefault;
+	
+	$actualclass = "DBManipulatorDefault";
     }
     $self = $pkg->SUPER::new($param);
     
@@ -109,7 +112,7 @@ sub new {
     }
     require DBI;
 
-    bless $self, $pkg;
+    bless $self, $actualclass;
     return $self;
 }
 
@@ -146,14 +149,14 @@ sub establish_connection {
     ## Do we have db_xxx required parameters
     foreach my $db_param ('db_type','db_name') {
 	unless ($self->{$db_param}) {
-	    do_log('info','Missing parameter %s for DBI connection', $db_param);
+	    &Log::do_log('info','Missing parameter %s for DBI connection', $db_param);
 	    return undef;
 	}
 	## SQLite just need a db_name
 	unless ($self->{'db_type'} eq 'SQLite') {
 	    foreach my $db_param ('db_host','db_user') {
 		unless ($self->{$db_param}) {
-		    do_log('info','Missing parameter %s for DBI connection', $db_param);
+		    &Log::do_log('info','Missing parameter %s for DBI connection', $db_param);
 		    return undef;
 		}
 	    }
@@ -162,7 +165,7 @@ sub establish_connection {
     
     ## Check if DBD is installed
     unless (eval "require DBD::$self->{'db_type'}") {
-	do_log('err',"No Database Driver installed for $self->{'db_type'} ; you should download and install DBD::$self->{'db_type'} from CPAN");
+	&Log::do_log('err',"No Database Driver installed for $self->{'db_type'} ; you should download and install DBD::$self->{'db_type'} from CPAN");
 	&List::send_notify_to_listmaster('missing_dbd', $Conf::Conf{'domain'},{'db_type' => $self->{'db_type'}});
 	return undef;
     }
@@ -185,7 +188,7 @@ sub establish_connection {
 	defined $db_connections{$self->{'connect_string'}}{'dbh'} && 
 	$db_connections{$self->{'connect_string'}}{'dbh'}->ping()) {
       
-      &do_log('debug', "Use previous connection");
+      &Log::do_log('debug', "Use previous connection");
       $self->{'dbh'} = $db_connections{$self->{'connect_string'}}{'dbh'};
       return $db_connections{$self->{'connect_string'}}{'dbh'};
 
@@ -200,45 +203,42 @@ sub establish_connection {
 	}
       }
       
-      unless ($self->{'dbh'} = DBI->connect($self->{'connect_string'}, $self->{'db_user'}, $self->{'db_passwd'})) {
-    	
-	## Notify listmaster if warn option was set
-	## Unless the 'failed' status was set earlier
-	if ($self->{'reconnect_options'}{'warn'}) {
-	  unless (defined $db_connections{$self->{'connect_string'}} &&
-		  $db_connections{$self->{'connect_string'}}{'status'} eq 'failed') { 
-
-	    unless (&List::send_notify_to_listmaster('no_db', $Conf::Conf{'domain'},{})) {
-	      &do_log('err',"Unable to send notify 'no_db' to listmaster");
+      $self->{'dbh'} = eval {DBI->connect($self->{'connect_string'}, $self->{'db_user'}, $self->{'db_passwd'})} ;
+      unless (defined $self->{'dbh'}) {
+	    ## Notify listmaster if warn option was set
+	    ## Unless the 'failed' status was set earlier
+	    if ($self->{'reconnect_options'}{'warn'}) {
+		unless (defined $db_connections{$self->{'connect_string'}} &&
+		    $db_connections{$self->{'connect_string'}}{'status'} eq 'failed') { 
+    
+		    unless (&List::send_notify_to_listmaster('no_db', $Conf::Conf{'domain'},{})) {
+			&Log::do_log('err',"Unable to send notify 'no_db' to listmaster");
+		    }
+		}
 	    }
-	  }
-	}
-	
-	if ($self->{'reconnect_options'}{'keep_trying'}) {
-	  &do_log('err','Can\'t connect to Database %s as %s, still trying...', $self->{'connect_string'}, $self->{'db_user'});
-	} else{
-	  do_log('err','Can\'t connect to Database %s as %s', $self->{'connect_string'}, $self->{'db_user'});
-	  $db_connections{$self->{'connect_string'}}{'status'} = 'failed';
-	  $db_connections{$self->{'connect_string'}}{'first_try'} ||= time;
-	  return undef;
-	}
-	
-	## Loop until connect works
-	my $sleep_delay = 60;
-	while (1) {
-	  sleep $sleep_delay;
-	  $self->{'dbh'} = DBI->connect($self->{'connect_string'}, $self->{'db_user'}, $self->{'db_passwd'});
-	  last if ($self->{'dbh'} && $self->{'dbh'}->ping());
-	  $sleep_delay += 10;
-	}
-	
-	if ($self->{'reconnect_options'}{'warn'}) {
-	  do_log('notice','Connection to Database %s restored.', $self->{'connect_string'});
-	  unless (&send_notify_to_listmaster('db_restored', $Conf::Conf{'domain'},{})) {
-	    &do_log('notice',"Unable to send notify 'db_restored' to listmaster");
-	  }
-	}
-	
+	    if ($self->{'reconnect_options'}{'keep_trying'}) {
+		&Log::do_log('err','Can\'t connect to Database %s as %s, still trying...', $self->{'connect_string'}, $self->{'db_user'});
+	    } else{
+		&Log::do_log('err','Can\'t connect to Database %s as %s', $self->{'connect_string'}, $self->{'db_user'});
+		$db_connections{$self->{'connect_string'}}{'status'} = 'failed';
+		$db_connections{$self->{'connect_string'}}{'first_try'} ||= time;
+		return undef;
+	    }
+	    ## Loop until connect works
+	    my $sleep_delay = 60;
+	    while (1) {
+		sleep $sleep_delay;
+		eval {$self->{'dbh'} = DBI->connect($self->{'connect_string'}, $self->{'db_user'}, $self->{'db_passwd'})};
+		last if ($self->{'dbh'} && $self->{'dbh'}->ping());
+		$sleep_delay += 10;
+	    }
+	    
+	    if ($self->{'reconnect_options'}{'warn'}) {
+	    &Log::do_log('notice','Connection to Database %s restored.', $self->{'connect_string'});
+		unless (&List::send_notify_to_listmaster('db_restored', $Conf::Conf{'domain'},{})) {
+		    &Log::do_log('notice',"Unable to send notify 'db_restored' to listmaster");
+		}
+	    }
       }
       
       if ($self->{'db_type'} eq 'Pg') { # Configure Postgres to use ISO format dates
@@ -284,23 +284,47 @@ sub do_query {
     my $query = shift;
     my @params = @_;
 
-    unless($self->connect()) {
-	&Log::do_log('err', 'Unable to get a handle to %s database',$self->{'db_name'});
-	return undef;
-    }
     my $statement = sprintf $query, @params;
 
     &Log::do_log('debug', "Will perform query '%s'",$statement);
     unless ($self->{'sth'} = $self->{'dbh'}->prepare($statement)) {
-	my $trace_statement = sprintf $query, @{$self->prepare_query_log_values(@params)};
-	&Log::do_log('err','Unable to prepare SQL statement %s : %s', $trace_statement, $self->{'dbh'}->errstr);
-	return undef;
+	# Check connection to database in case it would be the cause of the problem.
+	unless($self->connect()) {
+	    &Log::do_log('err', 'Unable to get a handle to %s database',$self->{'db_name'});
+	    return undef;
+	}else {
+	    unless ($self->{'sth'} = $self->{'dbh'}->prepare($statement)) {
+		my $trace_statement = sprintf $query, @{$self->prepare_query_log_values(@params)};
+		&Log::do_log('err','Unable to prepare SQL statement %s : %s', $trace_statement, $self->{'dbh'}->errstr);
+		return undef;
+	    }
+	}
     }
-    
     unless ($self->{'sth'}->execute) {
-	my $trace_statement = sprintf $query, @{$self->prepare_query_log_values(@params)};
-	&Log::do_log('err','Unable to execute SQL statement "%s" : %s', $trace_statement, $self->{'dbh'}->errstr);
-	return undef;
+	# Check connection to database in case it would be the cause of the problem.
+	unless($self->connect()) {
+	    &Log::do_log('err', 'Unable to get a handle to %s database',$self->{'db_name'});
+	    return undef;
+	}else {
+	    unless ($self->{'sth'} = $self->{'dbh'}->prepare($statement)) {
+		# Check connection to database in case it would be the cause of the problem.
+		unless($self->connect()) {
+		    &Log::do_log('err', 'Unable to get a handle to %s database',$self->{'db_name'});
+		    return undef;
+		}else {
+		    unless ($self->{'sth'} = $self->{'dbh'}->prepare($statement)) {
+			my $trace_statement = sprintf $query, @{$self->prepare_query_log_values(@params)};
+			&Log::do_log('err','Unable to prepare SQL statement %s : %s', $trace_statement, $self->{'dbh'}->errstr);
+			return undef;
+		    }
+		}
+	    }
+	    unless ($self->{'sth'}->execute) {
+		my $trace_statement = sprintf $query, @{$self->prepare_query_log_values(@params)};
+		&Log::do_log('err','Unable to execute SQL statement "%s" : %s', $trace_statement, $self->{'dbh'}->errstr);
+		return undef;
+	    }
+	}
     }
 
     return $self->{'sth'};
@@ -311,22 +335,51 @@ sub do_prepared_query {
     my $query = shift;
     my @params = @_;
 
-    unless($self->connect()) {
-	&Log::do_log('err', 'Unable to get a handle to %s database',$self->{'db_name'});
-	return undef;
+    my $sth;
+
+    unless ($self->{'cached_prepared_statements'}{$query}) {
+	&Log::do_log('debug3','Did not find prepared statement for %s. Doing it.',$query);
+	unless ($sth = $self->{'dbh'}->prepare($query)) {
+	    unless($self->connect()) {
+		&Log::do_log('err', 'Unable to get a handle to %s database',$self->{'db_name'});
+		return undef;
+	    }else {
+		unless ($sth = $self->{'dbh'}->prepare($query)) {
+		    &Log::do_log('err','Unable to prepare SQL statement : %s', $self->{'dbh'}->errstr);
+		    return undef;
+		}
+	    }
+	}
+	$self->{'cached_prepared_statements'}{$query} = $sth;
+    }else {
+	&Log::do_log('debug3','Reusing prepared statement for %s',$query);
+    }	
+    unless ($self->{'cached_prepared_statements'}{$query}->execute(@params)) {
+	# Check database connection in case it would be the cause of the problem.
+	unless($self->connect()) {
+	    &Log::do_log('err', 'Unable to get a handle to %s database',$self->{'db_name'});
+	    return undef;
+	}else {
+	    unless ($sth = $self->{'dbh'}->prepare($query)) {
+		unless($self->connect()) {
+		    &Log::do_log('err', 'Unable to get a handle to %s database',$self->{'db_name'});
+		    return undef;
+		}else {
+		    unless ($sth = $self->{'dbh'}->prepare($query)) {
+			&Log::do_log('err','Unable to prepare SQL statement : %s', $self->{'dbh'}->errstr);
+			return undef;
+		    }
+		}
+	    }
+	    $self->{'cached_prepared_statements'}{$query} = $sth;
+	    unless ($self->{'cached_prepared_statements'}{$query}->execute(@params)) {
+		&Log::do_log('err','Unable to execute SQL statement "%s" : %s', $query, $self->{'dbh'}->errstr);
+		return undef;
+	    }
+	}
     }
 
-    unless ($self->{'sth'} = $self->{'dbh'}->prepare($query)) {
-	do_log('err','Unable to prepare SQL statement : %s', $self->{'dbh'}->errstr);
-	return undef;
-    }
-    
-    unless ($self->{'sth'}->execute(@params)) {
-	do_log('err','Unable to execute SQL statement "%s" : %s', $query, $self->{'dbh'}->errstr);
-	return undef;
-    }
-
-    return $self->{'sth'};
+    return $self->{'cached_prepared_statements'}{$query};
 }
 
 sub prepare_query_log_values {
@@ -360,10 +413,10 @@ sub fetch {
 	return $status;
     };
     if ( $@ eq "TIMEOUT\n" ) {
-	do_log('err','Fetch timeout on remote SQL database');
+	&Log::do_log('err','Fetch timeout on remote SQL database');
         return undef;
     }elsif ($@) {
-	do_log('err','Fetch failed on remote SQL database');
+	&Log::do_log('err','Fetch failed on remote SQL database');
     return undef;
     }
 
@@ -378,7 +431,7 @@ sub disconnect {
 }
 
 sub create_db {
-    &do_log('debug3', 'List::create_db()');    
+    &Log::do_log('debug3', 'List::create_db()');    
     return 1;
 }
 

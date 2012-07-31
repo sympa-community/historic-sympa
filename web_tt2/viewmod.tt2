@@ -1,5 +1,5 @@
 <!-- $Id$ -->
-<h1> tttt</h1>
+<h1>Moderation</h1>
 [% TRY %]
 
  [% PROCESS 'msg00000.html' %]
@@ -8,7 +8,4 @@
    ERROR! Type: [% error.type %]
           Info: [% error.info %]
 [% END %]
-
-
-
 <!-- end viewmod.tt2 -->
