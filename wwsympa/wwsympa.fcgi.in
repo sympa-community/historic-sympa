@@ -3941,20 +3941,30 @@ sub do_renewpasswd {
 	     $list_info->{'is_subscriber'} = 1;
 	 }
 
-	 ## no topic ; List all lists
-
+	 ## Filter lists by topic.
+	 ## topic argument 'topicsless' or 'other' means 'lists with topic
+	 ## "other" or without topics'.
+	 ## no topic argument; List all lists
 	 if (! $in{'topic'}) {
 	     $param->{'which'}{$list->{'name'}} = $list_info;
 	 }elsif ($list->{'admin'}{'topics'}) {
 	     foreach my $topic (@{$list->{'admin'}{'topics'}}) {
 		 my @tree = split '/', $topic;
 
+		if (($in{'topic'} eq 'other' and ! $in{'subtopic'}) or
+		    $in{'topic'} eq 'topicsless') {
+		    $param->{'which'}{$list->{'name'}} = $list_info
+			if $tree[0] eq 'other' and ! $tree[1];
+		    next;
+		}
+
 		 next if (($in{'topic'}) && ($tree[0] ne $in{'topic'}));
 		 next if (($in{'subtopic'}) && ($tree[1] ne $in{'subtopic'}));
 
 		 $param->{'which'}{$list->{'name'}} = $list_info;
 	     }
-	 }elsif ($in{'topic'} eq 'topicsless') {
+	 } elsif (($in{'topic'} eq 'other' and ! $in{'subtopic'}) or
+		  $in{'topic'} eq 'topicsless') {
 	     $param->{'which'}{$list->{'name'}} = $list_info;
 	 }
      }
