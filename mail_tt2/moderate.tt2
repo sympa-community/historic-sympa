@@ -23,8 +23,8 @@ Content-Disposition: inline
 [% conf.wwsympa_url %]/viewmod/[% list.name %]/[% modkey %]
 [%- ELSE -%]
 [%- IF spam_status == 'spam' -%]
-Because the new message is suspected to be a spam it is not attached to this one. You must use
-the web interface to reject or validate it.
+[%|loc%]Because the new message is suspected to be a spam it is not attached to this one. You must use
+the web interface to reject or validate it.[%END%]
 [%- ELSE -%]	
 [%|loc(list.name)%]To distribute the attached message in list %1:[%END%]
 <[% FILTER escape_url %]mailto:[%conf.sympa%]?subject=DISTRIBUTE [%list.name%] [%modkey%][% END %]>
