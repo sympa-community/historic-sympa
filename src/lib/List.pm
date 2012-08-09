@@ -5849,7 +5849,7 @@ sub get_first_user {
 # OUT : HASH data storing custome attributes.
 sub parseCustomAttribute {
 	my $xmldoc = shift ;
-	return undef if ($xmldoc eq '') ;
+	return undef if ! defined $xmldoc or $xmldoc eq '';
 
 	my $parser = XML::LibXML->new();
 	my $tree;
@@ -5862,7 +5862,7 @@ sub parseCustomAttribute {
 	}
 
 	unless (defined $tree) {
-	    &do_log('err', "Failed to parse XML data");
+	    &do_log('err', "Failed to parse XML data: %s", $@);
 	    return undef;
 	}
 
@@ -11936,7 +11936,7 @@ sub delete_subscription_request {
     closedir SPOOL;
     
     unless ($removed_file > 0) {
-	&do_log('err', 'No pending subscription was found for users %s', join(',',@list_of_email));
+	&do_log('debug2', 'No pending subscription was found for users %s', join(',',@list_of_email));
 	return undef;
     }
 
