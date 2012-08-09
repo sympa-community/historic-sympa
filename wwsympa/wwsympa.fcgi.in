@@ -8295,46 +8295,6 @@ sub do_set_pending_list_request {
      return 1;
  }
 
- ## check if the requested list exists already using smtp 'rcpt to'
- sub list_check_smtp {
-     my $list = shift;
-     my $conf = '';
-     my $smtp;
-     my (@suf, @addresses);
-
-     my $smtp_relay = $Conf{'robots'}{$robot}{'list_check_smtp'} || $Conf{'list_check_smtp'};
-     my $suffixes = $Conf{'robots'}{$robot}{'list_check_suffixes'} || $Conf{'list_check_suffixes'};
-     return 0 
-	 unless ($smtp_relay && $suffixes);
-     my $domain = &Conf::get_robot_conf($robot, 'host');
-     &wwslog('debug2', 'list_check_smtp(%s)',$in{'listname'});
-     @suf = split(/,/,$suffixes);
-     return 0 if ! @suf;
-     for(@suf) {
-	 push @addresses, $list."-$_\@".$domain;
-     }
-     push @addresses,"$list\@" . $domain;
-
-     unless (eval "require Net::SMTP") {
-	 wwslog ('err',"Unable to use Net library, Net::SMTP required, install it (CPAN) first");
-	 return undef;
-     }
-     require Net::SMTP;
-
-     if( $smtp = Net::SMTP->new($smtp_relay,
-				Hello => $smtp_relay,
-				Timeout => 30) ) {
-	 $smtp->mail('');
-	 for(@addresses) {
-		 $conf = $smtp->to($_);
-		 last if $conf;
-	 }
-	 $smtp->quit();
-	 return $conf;
-    }
-    return undef;
- }
-
 =pod 
 
 =head2 sub do_create_list
