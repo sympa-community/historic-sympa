@@ -11415,7 +11415,7 @@ sub compute_topic {
 	    my $charset = $part->head->mime_attr("Content-Type.Charset");
 	    $charset = MIME::Charset->new($charset);
 	    if (defined $part->bodyhandle) {
-		my $body = $msg->bodyhandle->as_string();
+		my $body = $part->bodyhandle->as_string();
 		my $converted;
 		eval {
 		    $converted = $charset->decode($body);
