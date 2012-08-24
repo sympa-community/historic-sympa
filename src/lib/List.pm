@@ -4479,7 +4479,7 @@ sub add_parts {
 		$msg->make_multipart unless $msg->is_multipart;
 		my $header_part = build MIME::Entity Path        => $header,
 		Type        => "text/plain",
-		Filename    => "message-header.txt",
+		Filename    => undef,
 		Encoding    => "8bit",
 		Charset     => "UTF-8";
 		$msg->add_part($header_part, 0);
@@ -4498,7 +4498,7 @@ sub add_parts {
 		$msg->make_multipart unless $msg->is_multipart;
 		$msg->attach(Path        => $footer,
 			     Type        => "text/plain",
-			     Filename    => "message-footer.txt",
+			     Filename    => undef,
 			     Encoding    => "8bit",
 			     Charset     => "UTF-8"
 			     );
