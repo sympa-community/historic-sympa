@@ -4468,18 +4468,23 @@ sub add_parts {
 	
 	if ($header and -s $header) {
 	    if ($header =~ /\.mime$/) {
-		
-		my $header_part = $parser->parse_in($header);    
-		$msg->make_multipart unless $msg->is_multipart;
-		$msg->add_part($header_part, 0); ## Add AS FIRST PART (0)
-		
-		## text/plain header
+		my $header_part;
+		eval { $header_part = $parser->parse_in($header); };
+		if ($@) {
+		    &Log::do_log('err', 'Failed to parse MIME data %s: %s',
+				 $header, $parser->last_error);
+		} else {
+		    $msg->make_multipart unless $msg->is_multipart;
+		    $msg->add_part($header_part, 0); ## Add AS FIRST PART (0)
+		}
+	    ## text/plain header
 	    }else {
 		
 		$msg->make_multipart unless $msg->is_multipart;
 		my $header_part = build MIME::Entity Path        => $header,
 		Type        => "text/plain",
 		Filename    => undef,
+		'X-Mailer'  => undef,
 		Encoding    => "8bit",
 		Charset     => "UTF-8";
 		$msg->add_part($header_part, 0);
@@ -4487,18 +4492,23 @@ sub add_parts {
 	}
 	if ($footer and -s $footer) {
 	    if ($footer =~ /\.mime$/) {
-		
-		my $footer_part = $parser->parse_in($footer);    
-		$msg->make_multipart unless $msg->is_multipart;
-		$msg->add_part($footer_part);
-		
-		## text/plain footer
+		my $footer_part;
+		eval { $footer_part = $parser->parse_in($footer); };
+		if ($@) {
+		    &Log::do_log('err', 'Failed to parse MIME data %s: %s',
+				 $footer, $parser->last_error);
+		} else {
+		    $msg->make_multipart unless $msg->is_multipart;
+		    $msg->add_part($footer_part);
+		}
+	    ## text/plain footer
 	    }else {
 		
 		$msg->make_multipart unless $msg->is_multipart;
 		$msg->attach(Path        => $footer,
 			     Type        => "text/plain",
 			     Filename    => undef,
+			     'X-Mailer'  => undef,
 			     Encoding    => "8bit",
 			     Charset     => "UTF-8"
 			     );
