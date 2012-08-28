@@ -8032,9 +8032,6 @@ sub do_remove_arc {
      foreach my $w (@words) {
 	$w = &tools::escape_regexp($w);
 	$w =~ s,/,\\/,g;
-	# Mhonarc escapes some characters : '-' (&#45;) and '&' (&#38;)
-	$w =~ s/\&/\&\#38\;/g;
-	$w =~ s/\-/\&\#45\;/g;
      }
      $search->words (\@words);
 
