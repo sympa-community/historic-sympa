@@ -1168,9 +1168,7 @@ my $birthday = time ;
     }
 
      $param->{'session'} = $session->as_hashref();
-     open TMP, ">/tmp/param_session_dump"; print TMP &Dumper ($param->{'session'}); close TMP;
-     open TMP, ">/tmp/session_dump"; print TMP &Dumper ($session); close TMP;
-     
+
      &Log::set_log_level($session->{'log_level'}) if ($session->{'log_level'});
      $param->{'restore_email'} = $session->{'restore_email'};
      $param->{'dumpvars'} = $session->{'dumpvars'};
@@ -7070,6 +7068,7 @@ sub do_viewmod {
      }
 
      $param->{'file'} = $in{'file'};
+     $param->{'complete'} = gettext($wwslib::filenames{$in{'file'}}{'gettext_id'});
 
      my $subdir = '';
      if ($in{'file'} =~ /\.tt2$/) {
