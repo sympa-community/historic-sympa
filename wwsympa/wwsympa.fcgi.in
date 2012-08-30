@@ -2955,11 +2955,11 @@ sub do_ticket {
 	 $next_action = $in{'previous_action'};
 	 $in{'list'} = $in{'previous_list'};
      }else {
-	 $next_action = 'home';
+	$next_action = &Conf::get_robot_conf($robot, 'default_home');
      }
-      # never return to login or logout when login.
-      $next_action = 'home' if ($in{'next_action'} eq 'login') ;
-      $next_action = 'home' if ($in{'next_action'} eq 'logout') ;
+    # never return to login or logout when login.
+    $next_action = &Conf::get_robot_conf($robot, 'default_home')
+	if $in{'next_action'} =~ /^(login|logout)$/;
 
      if ($param->{'user'}{'email'}) {
 	 &report::reject_report_web('user','already_login',{'email' => $param->{'user'}{'email'}},$param->{'action'},'');
@@ -2983,7 +2983,8 @@ sub do_ticket {
 		      'target_email' => $in{'email'},
 		      'status' => 'error',
 		      'error_type' => "no_email"});		      
-	 return $in{'previous_action'} || 'home';
+	 return $in{'previous_action'} ||
+		&Conf::get_robot_conf($robot, 'default_home');
      }
 
      $session->{'unauthenticated_email'} = $param->{'unauthenticated_email'} = $in{'email'};
@@ -3137,8 +3138,8 @@ sub do_sso_login {
 	&wwslog('err','do_login: user %s already logged in', $param->{'user'}{'email'});
 	&web_db_log({'parameters' => $in{'auth_service_name'},
 		     'status' => 'error',
-		     'error_type' => "already_login"});		      
-	return 'home';
+		     'error_type' => "already_login"});
+	return &Conf::get_robot_conf($robot, 'default_home');
     }
     
     
@@ -3325,8 +3326,8 @@ sub do_sso_login {
 			&web_db_log({'parameters' => $in{'auth_service_name'},
 				     'target_email' => $in{'email'},
 				     'status' => 'error',
-				     'error_type' => 'internal'});		      
-			return 'home';
+				     'error_type' => 'internal'});
+			return &Conf::get_robot_conf($robot, 'default_home');
 		    }
 		    
 		}else {
@@ -3670,7 +3671,7 @@ sub do_redirect {
 	 $param->{'referer'} = &tools::escape_chars($in{'previous_list'});
      }
 
-     return 'home';
+    return &Conf::get_robot_conf($robot, 'default_home');
  }
 
 sub sendssopasswd {
@@ -5071,7 +5072,7 @@ sub do_subrequest {
 sub do_auto_signoff {
      &wwslog('info', 'do_auto_signoff');
      ## If the URL isn't valid, then go to home page. No need to guide the user: this function is supposed to be used by clicking on autocreated URL only.
-     return 'home' unless $in{'email'};
+     return &Conf::get_robot_conf($robot, 'default_home') unless $in{'email'};
 
      ## If unsubscribe is forbidden, reject the request. Other
 
@@ -5114,7 +5115,7 @@ sub do_auto_signoff {
 	 return undef;
        }
    }else{
-       return 'home';
+	return &Conf::get_robot_conf($robot, 'default_home');
    }
      $param->{'signing_off_email'} = $in {'email'};
      ## If OK, return the page displaying the informations to the user.
@@ -5124,7 +5125,7 @@ sub do_auto_signoff {
 sub do_family_signoff_request {
     &wwslog('info', 'do_family_signoff_request');
     ## If the URL isn't valid, then go to home page. No need to guide the user: this function is supposed to be used by clicking on autocreated URL only.
-    return 'home' unless $in{'email'};
+    return &Conf::get_robot_conf($robot, 'default_home') unless $in{'email'};
 
     my $ticket = &Auth::create_one_time_ticket($in{'email'},$robot,'family_signoff/'.$in{'family'}.'/'.$in{'email'},$ip);
 
@@ -5231,7 +5232,7 @@ sub do_family_signoff {
     }else{
 	&report::reject_report_web($result{'category_error'},$result{'reason_error'},{%{$result{'reason_error'}},'list'=>$list->{'name'}},$param->{'action'},$list);
     }
-    return 'home';
+    return &Conf::get_robot_conf($robot, 'default_home');
  }
 
 ## Unsubscribe current user from a list.
@@ -15779,7 +15780,7 @@ sub do_compose_mail {
        return $in{'previous_action'};
      }
 
-     return 'home';
+     return &Conf::get_robot_conf($robot, 'default_home');
  }
  ## Function do_attach
  sub do_attach {
