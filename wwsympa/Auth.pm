@@ -411,7 +411,7 @@ sub create_one_time_ticket {
 	return undef unless &List::db_connect();
     }
     
-    my $statement = sprintf "INSERT INTO one_time_ticket_table (ticket_one_time_ticket, robot_one_time_ticket, email_one_time_ticket, date_one_time_ticket, data_one_time_ticket, remote_addr_one_time_ticket, status_one_time_ticket) VALUES ('%s','%s','%s','%s','%s','%s','%s')",$ticket,$robot,$email,time,$data_string,$remote_addr,'open';
+    my $statement = sprintf "INSERT INTO one_time_ticket_table (ticket_one_time_ticket, robot_one_time_ticket, email_one_time_ticket, date_one_time_ticket, data_one_time_ticket, remote_addr_one_time_ticket, status_one_time_ticket) VALUES (%s, %s, %s, %d, %s, %s, %s)",$dbh->quote($ticket),$dbh->quote($robot),$dbh->quote($email),time,$dbh->quote($data_string),$dbh->quote($remote_addr),$dbh->quote('open');
 
     unless ($dbh->do($statement)) {
 	do_log('err','Unable to insert in table one_time_ticket_table while executing SQL statement "%s" : %s', $statement, $dbh->errstr);
@@ -436,7 +436,7 @@ sub get_one_time_ticket {
 	return return {'result'=>'error'} unless &List::db_connect();
     }
     my $statement;
-    $statement = sprintf "SELECT ticket_one_time_ticket AS ticket, robot_one_time_ticket AS robot, email_one_time_ticket AS email, date_one_time_ticket AS \"date\", data_one_time_ticket AS data, remote_addr_one_time_ticket AS remote_addr, status_one_time_ticket as status FROM one_time_ticket_table WHERE ticket_one_time_ticket = '%s' ", $ticket_number;
+    $statement = sprintf "SELECT ticket_one_time_ticket AS ticket, robot_one_time_ticket AS robot, email_one_time_ticket AS email, date_one_time_ticket AS \"date\", data_one_time_ticket AS data, remote_addr_one_time_ticket AS remote_addr, status_one_time_ticket as status FROM one_time_ticket_table WHERE ticket_one_time_ticket = %s ", $dbh->quote($ticket_number);
     
     unless ($sth = $dbh->prepare($statement)) {
 	do_log('err','Auth::get_one_time_ticket: Unable to prepare SQL statement : %s', $dbh->errstr);
@@ -468,7 +468,7 @@ sub get_one_time_ticket {
     }else{
 	$result = 'success';
     }
-    $statement = sprintf "UPDATE one_time_ticket_table SET status_one_time_ticket = '%s' WHERE (ticket_one_time_ticket='%s')", $addr, $ticket_number;
+    $statement = sprintf "UPDATE one_time_ticket_table SET status_one_time_ticket = %s WHERE ticket_one_time_ticket = %s", $dbh->quote($addr), $dbh->quote($ticket_number);
     
     unless ($dbh->do($statement)) {
     	do_log('err','Auth::get_one_time_ticket  Unable to execute SQL statement "%s" : %s', $statement, $dbh->errstr);
