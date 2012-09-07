@@ -201,6 +201,11 @@ sub create_list_old{
 	}
     }    
 
+    if ($param->{'listname'} eq &Conf::get_robot_conf($robot,'email')) {
+	&do_log('err','admin::create_list : incorrect listname %s matches one of service aliases', $param->{'listname'});
+	return undef;
+    }
+
     ## Check listname on SMTP server
     my $res = &list_check_smtp($param->{'listname'}, $robot);
     unless (defined $res) {
@@ -410,6 +415,10 @@ sub create_list{
 	    return undef;
 	}
     }    
+    if ($param->{'listname'} eq &Conf::get_robot_conf($robot,'email')) {
+	&do_log('err','admin::create_list : incorrect listname %s matches one of service aliases', $param->{'listname'});
+	return undef;
+    }
 
     ## Check listname on SMTP server
     my $res = &list_check_smtp($param->{'listname'}, $robot);
