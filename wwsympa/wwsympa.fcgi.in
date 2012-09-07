@@ -8387,7 +8387,7 @@ Creates a list using a list template
 		      'list' => $in{'listname'},
 		      'status' => 'error',
 		      'error_type' => 'authorization'});	     
-	 return undef;
+	 return 'home';
 
      ## If the action is reserved to listmaster, note that it will have to be moderated
      }elsif ($param->{'create_action'} =~ /listmaster/i) {
@@ -8405,7 +8405,7 @@ Creates a list using a list template
 		      'list' => $in{'listname'},
 		      'status' => 'error',
 		      'error_type' => 'internal'});	     
-	 return undef;
+	 return 'create_list_request';
      }
 
      ## 'other' topic means no topic
@@ -8435,7 +8435,7 @@ Creates a list using a list template
 		       'list' => $in{'listname'},
 		       'status' => 'error',
 		       'error_type' => 'user'});
-	  return undef
+	  return 'create_list_request';
       }
      my $resul = &admin::create_list_old($parameters,$in{'template'},$robot,"web");
      unless(defined $resul) {
@@ -8445,7 +8445,7 @@ Creates a list using a list template
 		      'list' => $in{'listname'},
 		      'status' => 'error',
 		      'error_type' => 'internal'});	     
-	 return undef
+	 return 'create_list_request';
      }
      
      ## Create list object
@@ -8466,7 +8466,7 @@ Creates a list using a list template
      unless (defined $list) {
        &wwslog('info',"failed to create list object for list '%s'",$in{'listname'});
        &report::reject_report_web('intern','create_list',{},$param->{'action'},'',$param->{'user'}{'email'},$robot);
-       return undef;
+       return 'create_list_request';
      }
 
      if ($param->{'create_action'} =~ /notify/) {
