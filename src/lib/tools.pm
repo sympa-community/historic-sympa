@@ -885,7 +885,7 @@ sub dkim_sign {
     close(MSGDUMP);
 
     unless (eval "require Mail::DKIM::Signer") {
-	&Log::do_log('err', "Failed to load Mail::DKIM::signer perl module, ignoring DKIM signature");
+	&Log::do_log('err', "Failed to load Mail::DKIM::Signer perl module, ignoring DKIM signature");
 	return ($msg_as_string); 
     }
     unless (eval "require Mail::DKIM::TextWrap") {
@@ -1339,7 +1339,7 @@ sub smime_decrypt {
     my $list = shift ; ## the recipient of the msg
     my $from = $msg->head->get('from');
 
-    &do_log('debug2', 'tools::smime_decrypt message msg from %s,%s', $from, $list->{'name'});
+    &Log::do_log('debug2', 'tools::smime_decrypt message msg from %s,%s', $from, $list->{'name'});
 
     ## an empty "list" parameter means mail to sympa@, listmaster@...
     my $dir = $list->{'dir'};
