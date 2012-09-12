@@ -42,7 +42,11 @@
 <!-- <link rel="alternative stylesheet" href="[% css_url %]/fullPage.css" type="text/css" media="screen" title="View Full Page" />     -->
 <!-- <link rel="alternative stylesheet" href="[% css_url %]/print-preview.css" type="text/css" media="screen" title="Print Preview" /> -->
 
+[% IF conf.favicon_url %]
+<link rel="shortcut icon" href="[% conf.favicon_url %]" />
+[% ELSE %]
 <link rel="shortcut icon" href="[% icons_url %]/favicon_sympa.png" />
+[% END %]
 
 [% PROCESS javascript.tt2 %]
 
@@ -80,6 +84,7 @@
   </div> <!-- end div Header -->
   <!-- <div class="contenant" id="contenu"> --> <!-- To hide Menus -->&nbsp;
   <div id="Menus"><!-- Start Menus -->&nbsp;
+
 	
     [% PROCESS menu_search.tt2 %]
     [% PROCESS list_menu.tt2 IF list %]
@@ -102,7 +107,7 @@
 
         <div class="ContentBlock">
          [% PROCESS notice.tt2 IF notices %]
-	 [% IF action == 'edit_list_request' %]<br /><br />[% END %]
+	 [% IF action == 'edit_list_request' || action == 'editfile' %]<br /><br />[% END %]
          [% PROCESS "${action}.tt2" IF action %]
        </div><!-- End div ContentBlock -->
       <div class="top"><a href="#top" title="Top of Page"><img src="[% icons_url %]/top.png" alt="Top of page" /></a></div>

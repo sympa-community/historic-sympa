@@ -1,10 +1,10 @@
 <!-- $Id: edit_attributes.tt2 $ -->
-[% IF list_conf.custom_attribute.size > 0 %]
+[% IF list_conf.custom_attribute && list_conf.custom_attribute.size > 0 %]
 <div class="block">
 <i>[%|loc%]Additional information[%END%]</i>
 <table>
 [% FOREACH k IN list_conf.custom_attribute %]
-<tr><td  class="text_right"><label for="custom_attribute.[% k.id %]">[%|loc%][% k.name %]:[% END %]<br/>
+<tr><td  class="text_right"><label for="custom_attribute.[% k.id %]">[%|loc(k.name)%]%1:[% END %]<br/>
 <i>[% k.comment %]</i>
 </label></td><td>
 [% SET m = subscriber.custom_attribute.item(k.id).value %]

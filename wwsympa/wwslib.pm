@@ -133,29 +133,18 @@ sub load_config {
     ## Old params
     my %old_param = ('alias_manager' => 'No more used, using '.$Conf{'alias_manager'},
 		     'wws_path' => 'No more used',
-		     'icons_url' => 'No more used. Using static_content/icons instead.');
+		     'icons_url' => 'No more used. Using static_content/icons instead.',
+		     'robots' => 'Not used anymore. Robots are fully described in their respective robot.conf file.',
+		     );
+
+    my %default_conf = ();
 
     ## Valid params
-    my %default_conf = (arc_path => '/home/httpd/html/arc',
-			archive_default_index => 'thrd',
-			archived_pidfile => Sympa::Constants::PIDDIR . '/archived.pid',
-			bounce_path => '/var/bounce',
-			bounced_pidfile => Sympa::Constants::PIDDIR . '/bounced.pid',
-			cookie_domain => 'localhost',
-			cookie_expire => 0,
-			custom_archiver => '',
-			mhonarc => '/usr/bin/mhonarc',
-			review_page_size => 25,
-			viewlogs_page_size => 25,
-			task_manager_pidfile => Sympa::Constants::PIDDIR . '/task_manager.pid',
-			title => 'Mailing Lists Service',
-			use_fast_cgi => 1,
-			default_home => 'home',
-			log_facility => '',
-			robots => '',
-			password_case => 'sensitive',
-			htmlarea_url => '',
-			);
+    foreach my $key (keys %Conf::params) {
+	if (defined $Conf::params{$key}{'file'} && $Conf::params{$key}{'file'} eq 'wwsympa.conf') {
+	    $default_conf{$key} = $Conf::params{$key}{'default'};
+	}
+    }
 
     my $conf = \%default_conf;
 
@@ -195,14 +184,6 @@ sub load_config {
     if ($conf->{'mhonarc'} && (! -x $conf->{'mhonarc'})) {
 	&Log::do_log('err',"MHonArc is not installed or %s is not executable.", $conf->{'mhonarc'});
     }
-
-    # robots <robot_domain>,<http_host>,<robot title>(|<robot_domain>,<http_host>,<robot title>)+
-    foreach my $robot (split /\|/, $conf->{'robots'}) {
-	my ($domain,$host,$title) = split /\,/, $robot  ;
-	$conf->{'robot_domain'}{$host} = $domain;
-	$conf->{'robot_title'}{$domain} = $title;
-    }
-    
 
     return $conf;
 }
@@ -300,15 +281,15 @@ sub init_passwd {
     
     my ($passwd, $user);
     
-    if (&List::is_user_db($email)) {
-	$user = &List::get_user_db($email);
+    if (&List::is_global_user($email)) {
+	$user = &List::get_global_user($email);
 	
 	$passwd = $user->{'password'};
 	
 	unless ($passwd) {
 	    $passwd = &new_passwd();
 	    
-	    unless ( &List::update_user_db($email,
+	    unless ( &List::update_global_user($email,
 					   {'password' => $passwd,
 					    'lang' => $user->{'lang'} || $data->{'lang'}} )) {
 		&report::reject_report_web('intern','update_user_db_failed',{'user'=>$email},'','',$email,$robot);
@@ -318,7 +299,7 @@ sub init_passwd {
 	}
     }else {
 	$passwd = &new_passwd();
-	unless ( &List::add_user_db({'email' => $email,
+	unless ( &List::add_global_user({'email' => $email,
 				     'password' => $passwd,
 				     'lang' => $data->{'lang'},
 				     'gecos' => $data->{'gecos'}})) {
@@ -349,5 +330,25 @@ sub get_my_url {
     return ($return_url);
 }
 
+# Uploade source file to the destination on the server
+sub upload_file_to_server {
+    my $param = shift;
+    &Log::do_log('debug',"Uploading file from field %s to destination %s",$param->{'file_field'},$param->{'destination'});
+    my $fh;
+    unless ($fh = $param->{'query'}->upload($param->{'file_field'})) {
+	&Log::do_log('debug',"Cannot upload file from field $param->{'file_field'}");
+	return undef;
+    }	
+ 
+    unless (open FILE, ">:bytes", $param->{'destination'}) {
+	&Log::do_log('debug',"Cannot open file $param->{'destination'} : $!");
+	return undef;
+    }
+    while (<$fh>) {
+	print FILE;
+    }
+    close FILE;
+    return 1;
+}
 
 1;

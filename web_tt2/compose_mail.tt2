@@ -6,7 +6,7 @@
 	<br />
 [% END %]
 
-<form class="noborder" action="[% path_cgi %]" method="post" name="compose_mail">
+<form class="noborder" action="[% path_cgi %]" method="post" name="compose_mail" enctype="multipart/form-data">
 
 [% IF subaction == "html_news_letter" %]
 	<h2>[%|loc%]Sending an html page to the list [%END%] <a class="input" href="[% path_cgi %]/nomenu/help/sendmsg" title="[%|loc%]Open in a new window[%END%]" onclick="window.open('','wws_help','toolbar=no,location=no,directories=no,status=no,menubar=no,scrollbars=yes,resizable=yes,copyhistory=no,width=400,height=200')" target="wws_help">[%|loc%]Help[%END%]</a></h3>
@@ -58,7 +58,7 @@
 	[% IF !subaction %]
 		[% balise_email = '['_'%'_' user.email '_'%'_']' %]
 		[% balise_fingerprint = '['_'%'_' user.fingerprint '_'%'_']' %]
-  		<textarea name="body" cols="80" rows="25"></textarea>
+  		<textarea name="body" cols="80" rows="25">[% body %]</textarea>
 		<br />
 		<br />
 		<b>[%|loc%]Messages customization: use the template syntax:[%END%] <a href="http://www.tt2.org">TT2</a></b><br />
@@ -75,8 +75,17 @@
 		</ul>
 	[%  END %]
 	[% IF subaction == "html_news_letter" %]
-   		<label for="url">[%|loc%]URL:[%END%] <input id="url" type="text" size="45" name="url" value="[% url %]" /></label>	
-	<br /><br />
+		
+		<h3>[%|loc%]Select the source of your HTML newsletter[%END%]</h3>
+		<br/>
+		
+		<label for="url"><strong>[%|loc%]Send the page from the following URL:[%END%] </strong></label>
+		<input id="url" type="text" size="55" name="url" value="[% url %]" /><br/>
+		
+		<p><strong>[%|loc%]OR[%END%]</strong></p>
+		
+		<label for="uploaded_file">[%|loc%]<strong>Send an HTML file from your computer:[%END%] </strong></label>
+		<input id="uploaded_file" type="file" size="45" name="uploaded_file"/>
 	[%  END %]
     </fieldset>
 </form>

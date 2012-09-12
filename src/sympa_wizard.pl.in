@@ -20,7 +20,7 @@
 =head1 NAME
 
 sympa_wizard.pl - help perform sympa initial setup
-
+    
 =head1 SYNOPSIS
 
 =over
@@ -61,6 +61,7 @@ use POSIX qw(strftime);
 use English qw(-no_match_vars);
 use Getopt::Long;
 use Pod::Usage;
+use Sys::Hostname qw(hostname);
 use Sympa::Constants;
 
 ## sympa configuration files
@@ -90,6 +91,17 @@ exit 0;
 
 sub create_configuration {
     use confdef;
+
+    eval {
+	require Conf;
+	require tools;
+    };
+    if ($@) {
+	*{Language::gettext} = sub { shift };
+	*{tools::wrap_text} = sub { "$_[1]$_[0]\n" };
+    } else {
+	Language::SetLang('');
+    }
 
     my $conf;
     if ($options{create} eq 'sympa.conf') {
@@ -122,7 +134,8 @@ sub create_configuration {
     foreach my $param (@confdef::params) {
 
         if ($param->{'title'}) {
-            printf NEWF "###\\\\\\\\ %s ////###\n\n", $param->{'title'};
+            printf NEWF "###\\\\\\\\ %s ////###\n\n",
+                        Language::gettext($param->{'title'});
             next;
         }
 
@@ -130,17 +143,19 @@ sub create_configuration {
 
         next unless (defined $param->{'default'} || defined $param->{'sample'});
 
-        printf NEWF "## %s\n", $param->{'query'}
+        print NEWF tools::wrap_text(Language::gettext($param->{'query'}),
+                                    '## ', '## ')
             if (defined $param->{'query'});
 
-        printf NEWF "## %s\n", $param->{'advice'}
+        print NEWF tools::wrap_text(Language::gettext($param->{'advice'}),
+                                    '## ', '## ')
             if (defined $param->{'advice'});
 
-        printf NEWF "%s\t%s\n\n", $param->{'name'}, $param->{'default'}
-            if (defined $param->{'default'});
-
-        printf NEWF "#%s\t%s\n\n", $param->{'name'}, $param->{'sample'}
-            if (defined $param->{'sample'});
+        if (defined $param->{'sample'}) {
+            printf NEWF "#%s\t%s\n\n", $param->{'name'}, $param->{'sample'};
+        } elsif (defined $param->{'default'}) {
+            printf NEWF "%s\t%s\n\n", $param->{'name'}, $param->{'default'};
+        }
     }
 
     close NEWF;
@@ -148,21 +163,48 @@ sub create_configuration {
 }
 
 sub edit_configuration {
-    require Conf;
+    require confdef;
+    # complement required fields.
+    foreach my $param (@confdef::params) {
+        if ($param->{'name'} eq 'domain') {
+            $param->{'default'} = hostname();
+        } elsif ($param->{'name'} eq 'wwsympa_url') {
+            $param->{'default'} = sprintf 'http://%s/sympa', hostname();
+        }
+    }
+    eval {
+        require Conf;
+        require tools;
+    };
+    if ($@) {
+        die "Installation of Sympa has not been completed.\nRun sympa_wizard.pl --check\n";
+    }
 
     my $new_wwsympa_conf = '/tmp/wwsympa.conf';
     my $new_sympa_conf = '/tmp/sympa.conf';
     my $wwsconf = {};
     my $somechange = 0;
 
+    my $rep;
+    print "Does your console support UTF-8 (if you are not sure, hit [Enter])? [y/N] : ";
+    $rep = <STDIN>;
+    chomp $rep;
+    if (lc $rep eq 'y') {
+        my $lang = $ENV{'LANGUAGE'} || $ENV{'LC_ALL'} || $ENV{'LANG'} || '';
+        $lang =~ s/\..*//;
+        Language::SetLang($lang);
+    } else {
+	Language::SetLang('en_US');
+    }
+
     ## Load config 
     unless ($wwsconf = wwslib::load_config($wwsympa_conf)) {
-        die("Unable to load config file $wwsympa_conf");
+	&Log::fatal_err("Unable to load sympa configuration, file $wwsympa_conf or one of the vhost robot.conf files contain errors. Exiting.");  
     }
 
     ## Load sympa config (but not using database)
     unless (Conf::load( $sympa_conf,'nodb')) {
-        die("Unable to load sympa config file $sympa_conf");
+	&Log::fatal_err("Unable to load sympa configuration, file $sympa_conf or one of the vhost robot.conf files contain errors. Exiting.");  
     }
 
     my (@new_wwsympa_conf, @new_sympa_conf);
@@ -172,14 +214,14 @@ sub edit_configuration {
         my $desc;
 
         if ($param->{'title'}) {
-            my $title = $param->{'title'};
-            printf "\n\n** $title **\n";
+            my $title = Language::gettext($param->{'title'});
+            print "\n\n** $title **\n";
 
             ## write to conf file
             push @new_wwsympa_conf,
-                sprintf "###\\\\\\\\ %s ////###\n\n", $param->{'title'};
+                sprintf "###\\\\\\\\ %s ////###\n\n", $title;
             push @new_sympa_conf,
-                sprintf "###\\\\\\\\ %s ////###\n\n", $param->{'title'};
+                sprintf "###\\\\\\\\ %s ////###\n\n", $title;
 
             next;
         }    
@@ -187,7 +229,9 @@ sub edit_configuration {
         my $file = $param->{'file'} ;
         my $name = $param->{'name'} ; 
         my $query = $param->{'query'} ;
+        $query = Language::gettext($query) if $query;
         my $advice = $param->{'advice'} ;
+        $advice = Language::gettext($advice) if $advice;
         my $sample = $param->{'sample'} ;
         my $current_value ;
         if ($file eq 'wwsympa.conf') {	
@@ -199,8 +243,10 @@ sub edit_configuration {
         }
         my $new_value;
         if ($param->{'edit'} eq '1') {
-            printf "... $advice\n" unless ($advice eq '') ;
-            printf "$name: $query \[$current_value\] : ";
+            print "\n";
+            print tools::wrap_text($query, '* ', '  ');
+            print tools::wrap_text($advice, '  ... ', '  ') if $advice;
+            printf(Language::gettext('%s [%s] : '), $name, $current_value);
             $new_value = <STDIN> ;
             chomp $new_value;
         }
@@ -222,56 +268,62 @@ sub edit_configuration {
         }elsif ($file eq 'sympa.conf') {
             $desc = \@new_sympa_conf;
         }else{
-            printf STDERR "incorrect parameter $name definition \n";
+            printf STDERR gettext("Incorrect parameter definition: %s\n"),
+                          $file;
         }
 
         if ($new_value eq '') {
             next unless $sample;
 
-            push @{$desc}, sprintf "## $query\n";
+            push @{$desc}, tools::wrap_text($query, '## ', '## ');
 
             unless ($advice eq '') {
-                push @{$desc}, sprintf "## $advice\n";
+                push @{$desc}, tools::wrap_text($advice, '## ', '## ');
             }
 
-            push @{$desc}, sprintf "# $name\t$sample\n\n";
+            push @{$desc}, "# $name\t$sample\n\n";
         }else {
-            push @{$desc}, sprintf "## $query\n";
+            push @{$desc}, tools::wrap_text($query, '## ', '## ');
             unless ($advice eq '') {
-                push @{$desc}, sprintf "## $advice\n";
+                push @{$desc}, tools::wrap_text($advice, '## ', '## ');
             }
 
             if ($current_value ne $new_value) {
-                push @{$desc}, sprintf "# was $name $current_value\n";
+                push @{$desc}, "# was $name $current_value\n";
                 $somechange = 1;
             }
 
-            push @{$desc}, sprintf "$name\t$new_value\n\n";
+            push @{$desc}, "$name\t$new_value\n\n";
         }
     }
 
     if ($somechange) {
 
-        my $date = strftime("%d.%b.%Y-%H.%M.%S", localtime(time));
+        my $date = Language::gettext_strftime("%d.%b.%Y-%H.%M.%S",
+                                              localtime(time));
 
         ## Keep old config files
         unless (rename $wwsympa_conf, $wwsympa_conf.'.'.$date) {
-            warn "Unable to rename $wwsympa_conf : $!";
+            warn sprintf(Language::gettext("Unable to rename %s : %s"),
+                         $wwsympa_conf, $!);
         }
 
         unless (rename $sympa_conf, $sympa_conf.'.'.$date) {
-            warn "Unable to rename $sympa_conf : $!";
+            warn sprintf(Language::gettext("Unable to rename %s : %s"),
+                         $sympa_conf, $!);
         }
 
         ## Write new config files
         unless (open (WWSYMPA,"> $wwsympa_conf")){
-            die "unable to open $wwsympa_conf : $!";
+            die sprintf(Language::gettext("Unable to open %s : %s"),
+                        $wwsympa_conf, $!);
         };
 
         my $umask = umask 037;
         unless (open (SYMPA,"> $sympa_conf")){
             umask $umask;
-            die "unable to open $sympa_conf : $!";
+            die sprintf(Language::gettext("Unable to open %s : %s"),
+                        $sympa_conf, $!);
         };
         umask $umask;
         chown [getpwnam(Sympa::Constants::USER)]->[2], [getgrnam(Sympa::Constants::GROUP)]->[2], $sympa_conf;
@@ -282,7 +334,7 @@ sub edit_configuration {
         close SYMPA;
         close WWSYMPA;
 
-        printf "$sympa_conf and $wwsympa_conf have been updated.\nPrevious versions have been saved as $sympa_conf.$date and $wwsympa_conf.$date\n";
+        printf Language::gettext("%s and %s have been updated.\nPrevious versions have been saved as %s and %s.\n"), $sympa_conf, $wwsympa_conf, "$sympa_conf.$date", "$wwsympa_conf.$date";
     }
 }
 
@@ -360,6 +412,12 @@ sub check_cpan {
 					  mandatory => 1,
 					  usage => 'used to compute MD5 digests for passwords, etc',
 					 },
+			'Email::Simple' => {
+					    required_version =>'2.100',
+					    package_name => 'Email-Simple',
+					    mandatory => 1, 
+					    usage => 'Used for email tracking',
+					   },
 			'Encode' => {
 				     package_name => 'Encode',
 				     mandatory => 1,
@@ -406,6 +464,11 @@ sub check_cpan {
 					      required_version =>'0.90',
 					      package_name => 'IO-Socket-SSL',
 					      usage => 'required when including members of a remote list',
+					     },
+			'JSON::XS' => {
+					      required_version =>'2.32',
+					      package_name => 'JSON-XS',
+					      usage => 'required when using the VOOT protocol',
 					     },
 			'Locale::TextDomain' => {
 						 package_name => 'libintl-perl',
@@ -469,9 +532,20 @@ sub check_cpan {
 					package_name => 'libnet',
 					usage => 'this is required if you set \'list_check_smtp\' sympa.conf parameter, used to check existing aliases before mailing list creation.',
 				       },
+			'OAuth::Lite' => {
+					package_name => 'OAuth-Lite',
+					required_version =>'1.31', 
+					usage => 'This is required if you want to use the VOOT protocol.',
+				       },
 			'perl' => {
 				   required_version =>'5.008',
 				  },
+			'Proc::ProcessTable' => {
+				       package_name => 'Proc-ProcessTable',
+				       required_version =>'0.44', 
+				       mandatory => 1,
+				       usage => 'Used by the bulk.pl daemon to check the number of slave bulks running.',
+				      },
 			'SOAP::Lite' => {
 					 required_version =>'0.712',
 					 package_name => 'SOAP-Lite',
@@ -540,7 +614,9 @@ Strike return key to continue...
         'CGI::Fast' => 'CGI',
         'Net::SMTP' => 'libnet',
         'IO::Socket::SSL' => 'IO-Socket-SSL',
+        'JSON::XS' => 'JSON-XS',
         'Net::SSLeay' => 'NET-SSLeay',
+        'OAuth::Lite' => 'OAuth-Lite',
         'Bundle::LWP' => 'LWP',
         'SOAP::Lite' => 'SOAP-Lite',
         'File::NFSLock' => 'File-NFSLock',
@@ -557,12 +633,14 @@ Strike return key to continue...
         'DBD::Oracle' => 'Oracle database driver, required if you connect to a Oracle database.',
         'DBD::Sybase' => 'Sybase database driver, required if you connect to a Sybase database.',
         'DBD::SQLite' => 'SQLite database driver, required if you connect to a SQLite database.',
+        'JSON::XS' => 'Required to use the VOOT protocol.',
         'Net::LDAP' =>   'required to query LDAP directories. Sympa can do LDAP-based authentication ; it can also build mailing lists with LDAP-extracted members.',
         'CGI::Fast' => 'WWSympa, Sympa\'s web interface can run as a FastCGI (ie: a persistent CGI). If you install this module, you will also need to install the associated mod_fastcgi for Apache.',
         'Crypt::CipherSaber' => 'this module provides reversible encryption of user passwords in the database.usefull only when updating from old version with password reversible encryption.',
         'Archive::Zip ' => 'this module provides zip/unzip for archive and shared document download/upload',
         'FCGI' => 'WSympa, Sympa\'s web interface can run as a FastCGI (ie: a persistent CGI). If you install this module, you will also need to install the associated mod_fastcgi for Apache.',
         'Net::SMTP' => 'this is required if you set \'list_check_smtp\' sympa.conf parameter, used to check existing aliases before mailing list creation.',
+        'OAuth::Lite' => 'This it required if you want to use the VOOT protocol.',
         'IO::Socket::SSL' => 'required by CAS (single sign-on) and the \'include_remote_sympa_list\' feature that includes members of a list on a remote server, using X509 authentication',
         'Net::SSLeay' => 'required by the \'include_remote_sympa_list\' feature that includes members of a list on a remote server, using X509 authentication',
         'Bundle::LWP' => 'required by the \'include_remote_sympa_list\' feature that includes members of a list on a remote server, using X509 authentication',
@@ -636,8 +714,6 @@ sub check_modules {
 	  }else {
            
 	    $vs = "$mod" . "::VERSION";
-	    
-	    $v;
 	    {
 	      no strict 'refs';
 	      $v = $$vs;
@@ -686,7 +762,7 @@ sub install_module {
     unless ($options->{'force'}) {
         printf "-> Usage of this module: %s\n", $cpan_modules->{$module}{usage} if ($cpan_modules->{$module}{usage});
         printf "-> Prerequisites: %s\n", $cpan_modules->{$module}{prerequisites} if ($cpan_modules->{$module}{prerequisites});
-	printf "-> Install module $module ? [$default]";
+	print "-> Install module $module ? [$default]";
         my $answer = <STDIN>; chomp $answer;
         $answer ||= $default;
         return unless ($answer =~ /^y$/i);

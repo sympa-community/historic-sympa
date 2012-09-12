@@ -23,6 +23,7 @@ webtemplate_DATA = active_lists.tt2 \
 		   add_request.tt2 \
 		   admin_menu.tt2 \
 		   admin.tt2 \
+		   ajax.tt2 \
 		   arc_manage.tt2 \
 		   arc_protect.tt2 \
 		   arcsearch_form.tt2 \
@@ -58,6 +59,10 @@ webtemplate_DATA = active_lists.tt2 \
 		   edit_config.tt2 \
 		   editfile.tt2 \
 		   edit_list_request.tt2 \
+		   oauth_check.tt2 \
+		   oauth_authorize.tt2 \
+		   select_voot_provider_request.tt2 \
+		   select_voot_groups_request.tt2 \
 		   editsubscriber.tt2 \
 		   edit_template.tt2 \
 		   error.tt2 \
@@ -67,6 +72,7 @@ webtemplate_DATA = active_lists.tt2 \
 		   get_closed_lists.tt2 \
 		   get_inactive_lists.tt2 \
 		   get_latest_lists.tt2 \
+		   get_biggest_lists.tt2 \
 		   get_pending_lists.tt2 \
 		   help_admin.tt2 \
 		   help_arc.tt2 \
@@ -107,7 +113,9 @@ webtemplate_DATA = active_lists.tt2 \
 		   menu.tt2 \
 		   menu_search.tt2 \
 		   modindex.tt2 \
+		   modform.tt2 \
 		   nav.tt2 \
+		   news.tt2 \
 		   notice.tt2 \
 		   picture_upload.tt2 \
 		   pref.tt2 \
@@ -140,6 +148,7 @@ webtemplate_DATA = active_lists.tt2 \
 		   suspend_request.tt2 \
 		   ticket.tt2 \
 		   title.tt2 \
+		   tracking.tt2 \
 		   tt2_error.tt2 \
 		   viewbounce.tt2 \
 		   viewlogs.tt2 \

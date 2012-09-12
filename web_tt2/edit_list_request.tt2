@@ -14,6 +14,7 @@
     <li><a href="[% path_cgi %]/edit_list_request/[% list %]/archives" >[%|loc%]Archives[%END%]</a></li>
     <li><a href="[% path_cgi %]/edit_list_request/[% list %]/bounces" >[%|loc%]Bounce management[%END%]</a></li>
     <li><a href="[% path_cgi %]/edit_list_request/[% list %]/data_source" >[%|loc%]Data sources setup[%END%]</a></li>
+    <li><a href="[% path_cgi %]/editfile/[% list %]">[%|loc%]Customizing[%END%]</a></li>
     <li><a href="[% path_cgi %]/edit_list_request/[% list %]/other" >[%|loc%]Miscellaneous[%END%]</a></li>
   </ul>
 [% ELSE %]
@@ -21,7 +22,7 @@
   <fieldset>
     <input type="hidden" name="serial" value="[% serial %]" />
         [% FOREACH p = param %]
-
+		<a name="[% p.name %]"></a>
         [% IF p.may_edit != 'hidden' %]
 
           [% IF p.changed == '1' %]

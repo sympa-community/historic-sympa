@@ -20,8 +20,8 @@
 # Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
 
 AC_PREREQ(2.60)
-AC_INIT(sympa, 6.1.14, sympa-authors@cru.fr)
-AM_INIT_AUTOMAKE([foreign -Wall -Werror])
+AC_INIT(sympa, 6.2a.28, sympa-authors@cru.fr)
+AM_INIT_AUTOMAKE([foreign -Wall -Werror 1.9 tar-pax])
 m4_ifdef([AM_SILENT_RULES], [AM_SILENT_RULES([yes])])
 AM_PO_SUBDIRS
 
@@ -319,15 +319,6 @@ AC_ARG_WITH(
     [scriptdir="$withval"]
 )
 
-AC_ARG_WITH(
-    staticdir,
-    AS_HELP_STRING(
-	[--with-staticdir=DIR],
-	[static data @<:@PREFIX/static_content@:>@]
-    ),
-    [staticdir="$withval"]
-)
-
 CONFIG=$confdir/sympa.conf
 AC_SUBST(CONFIG)
 WWSCONFIG=$confdir/wwsympa.conf
@@ -512,6 +503,7 @@ AC_CONFIG_FILES([
     src/Makefile
     src/etc/Makefile
     src/etc/script/Makefile
+    src/etc/script/js/Makefile
     src/lib/Makefile
     soap/Makefile
     doc/Makefile

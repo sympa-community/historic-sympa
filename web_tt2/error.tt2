@@ -6,12 +6,12 @@
 [%#### INTERN  ERROR -%]
 [%###################-%]
 [% FOREACH i_err = intern_errors %]
-[%|loc(i_err.action)%]INTERNAL SERVER ERROR (%1)[%END-%] - 
+  [%|loc(i_err.action)%]INTERNAL SERVER ERROR (%1)[%END-%] - 
   [% IF i_err.msg == 'month_not_found' %][%|loc(i_err.month)%]Unable to find month '%1'[%END%]
   [% ELSIF i_err.msg == 'inaccessible_archive' %][%|loc(i_err.year_month)%]Archives from %1 are not accessible[%END%]
   [% ELSIF i_err.msg == 'unable_to_load_list_of_topics' %][%|loc%]Unable to load list topics.[%END%]
   [% ELSIF i_err.msg == 'unable_to_load_create_list_templates' %][%|loc%]Unable to load create_list templates.[%END%]
-  [% ELSIF i_err.msg == 'sync_include_failed' %][%|loc%]Failed to inlude members[%END%] 
+  [% ELSIF i_err.msg == 'sync_include_failed' %][%|loc%]Failed to include members[%END%] 
   [% ELSIF i_err.msg == 'sync_include_admin_failed' %][%|loc%]Failed to include list admins[%END%] 
   [% ELSIF i_err.msg == 'no_owner_defined' %][%|loc%]No owner is defined for the list[%END%] 
   [% ELSIF i_err.msg == 'exportation_failed' %][%|loc(i_err.listname)%]The exportation failed for list '%1'[%END%] 
@@ -23,24 +23,25 @@
   [% ELSIF i_err.msg == 'db_update_failed' %][%|loc(i_err.key)%]Failed to update database.[%END%]
   [% ELSIF i_err.msg == 'file_update_failed' %][%|loc(i_err.key)%]Failed to update a file.[%END%]
   [% ELSIF i_err.msg == 'create_list' %][%|loc(i_err.listname)%]Failed creating list '%1'. The list might already exist or listname might include forbidden characters.[%END%]
-
 [% END %]
+<br />
 	
 [% END %]
+
 [%###################-%]
 [%#### SYSTEM  ERROR -%]
 [%###################-%]
 [% FOREACH s_err = system_errors %]
-[%|loc(s_err.action)%]SYSTEM ERROR (%1)[%END-%]   
-  [% IF s_err.msg == 'a' %]
-  [% END %]
-	
+  [%|loc(s_err.action)%]SYSTEM ERROR (%1)[%END-%]   
+  [% IF s_err.msg == 'a' %][% END %]
+  <br />
 [% END %]
+
 [%###################-%]
 [%#### USER  ERROR   -%]
 [%###################-%]
 [% FOREACH u_err = user_errors %]
-[%|loc(u_err.action)%]ERROR (%1) [%END-%] -    
+  [%|loc(u_err.action)%]ERROR (%1) [%END-%] -    
   [% IF u_err.msg == 'wrong_param' %][%|loc()%]Wrong parameters[%END%]
   [% ELSIF u_err.msg == 'unknown_action' %][%|loc()%]Unknown action[%END%]
   [% ELSIF u_err.msg == 'syntax_errors' %][%|loc(u_err.params)%]Syntax errors with the following parameters: %1[%END%]
@@ -51,6 +52,9 @@
   [% ELSIF u_err.msg == 'passwd_reminder_not_allowed' %][%|loc%]You can not get a password reminder; probably because your password is managed outside Sympa (Single Sign-On system or LDAP directory).[%END%]
   [% ELSIF u_err.msg == 'no_email' %][%|loc%]Please provide email address[%END%]
   [% ELSIF u_err.msg == 'missing_arg' %][%|loc(u_err.argument)%]Missing argument %1[%END%]
+  [% ELSIF u_err.msg == 'missing_post_source' %][%|loc()%]You didn't define the web page you want to use to create your newsletter. Please specify either an URL or a file to upload.[%END%]
+  [% ELSIF u_err.msg == 'two_post_sources_defined' %][%|loc()%]You specified both an URL and a file to upload. Sympa can't choose which one to send. Please fill the form with one of them only. A web page OR a file to upload.[%END%]
+  [% ELSIF u_err.msg == 'unable_to_parse' %][%|loc()%]You specified both an URL and a file to upload. Sympa can't choose which one to send. Please fill the form with one of them only. A web page OR a file to upload.[%END%]
   [% ELSIF u_err.msg == 'wrong_value' %][%|loc(u_err.argument)%]Wrong value for parameter %1[%END%]
   [% ELSIF u_err.msg == 'no_user' %][%|loc%]You need to login[%END%]
   [% ELSIF u_err.msg == 'incorrect_email' %][%|loc(u_err.email)%]Address "%1" is incorrect[%END%]
@@ -127,22 +131,24 @@
   [% ELSIF u_err.msg == 'invalid_filename' %][%|loc(u_err.filename)%]Invalid filename: '%1'[%END%]
   [% ELSIF u_err.msg == 'change_member_email_failed_included' %][%|loc(u_err.listname)%]Failed to update member email in list '%1', list owner has been notified.[%END%]
   [% ELSIF u_err.msg == 'change_admin_email_failed_included' %][%|loc(u_err.listname)%]Failed to update admin email in list '%1', list owner has been notified.[%END%]
-  [% ELSIF u_err.msg %][%u_err.msg%]
+  [% ELSIF u_err.msg == 'sync_include_voot_failed' %][%|loc(base_url,path_cgi,u_err.oauth_provider)%]Failed to include members from VOOT group, use the following link to check the OAuth status : <a href="%1%2/oauth_check/%3">%1%2/oauth_check/%3</a>[%END%] 
+ [% ELSIF u_err.msg %][%u_err.msg%]
   [% END %]
-	
+  <br />
 [% END %]
+
 [%#####################-%]
 [%# AUTHORIZATION ERROR-%]
 [%#####################-%]
 [% FOREACH auth = auth_rejects %]
-[%|loc(auth.action)%]AUTHORIZATION REJECT (%1)[%END-%]   
+  [%|loc(auth.action)%]AUTHORIZATION REJECT (%1)[%END-%]   
   [% IF auth.change_email_failed %][%|loc(auth.listname)%]Could not change your subscription address for the list '%1' 
      because your new address is not allowed to subscribe/unsubscribe:[%END%][% END %]
   [% SET reason = auth.msg -%] 
   [% IF reason == 'edit_right' %][% SET role = auth.role -%][% SET right = auth.right -%][% END -%] 	 
   [% PROCESS authorization_reject.tt2 -%]	
   [% IF auth.login %]<br />[%|loc%]You need to login[%END%][% END %]
-
+  <br />
 [% END %]
 
 <form >
