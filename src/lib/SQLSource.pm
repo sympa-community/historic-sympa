@@ -172,7 +172,7 @@ sub connect {
     my $dbh;
     {
 	local $@; # # protect existing $@
-	eval {$dbh = DBI->connect($connect_string, $param->{'db_user'}, $param->{'db_passwd'})};
+	eval {$dbh = DBI->connect($connect_string, $param->{'db_user'}, $param->{'db_passwd'}, { PrintError => 0 })};
 	unless ($dbh) {
 	    ## Notify listmaster if warn option was set
 	    ## Unless the 'failed' status was set earlier
@@ -197,7 +197,7 @@ sub connect {
 	    my $sleep_delay = 60;
 	    while (1) {
 		sleep $sleep_delay;
-		eval {$dbh = DBI->connect($connect_string, $param->{'db_user'}, $param->{'db_passwd'})};
+		eval {$dbh = DBI->connect($connect_string, $param->{'db_user'}, $param->{'db_passwd'}, { PrintError => 0 })};
 		last if ($dbh && $dbh->ping());
 		$sleep_delay += 10;
 	    }
