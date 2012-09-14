@@ -4018,7 +4018,7 @@ sub send_msg {
 	my $user_data = &get_list_member_no_object($options);
 	## test to know if the rcpt suspended her subscription for this list
 	## if yes, don't send the message
-	if ($user_data->{'suspend'} eq '1'){
+	if (defined $user_data && $user_data->{'suspend'} eq '1'){
 	    if(($user_data->{'startdate'} <= time) && ((time <= $user_data->{'enddate'}) || (!$user_data->{'enddate'}))){
 		push @tabrcpt_nomail_verp, $user->{'email'}; next;
 	    }elsif(($user_data->{'enddate'} < time) && ($user_data->{'enddate'})){
@@ -4722,14 +4722,14 @@ sub archive_send_last {
 #       
 ###################################################### 
 sub send_notify_to_listmaster {
-	my ($operation, $robot, $data, $checkstack) = @_;
+	my ($operation, $robot, $data, $checkstack, $purge) = @_;
 	
-	if($checkstack) {
+	if($checkstack or $purge) {
 		foreach my $robot (keys %List::listmaster_messages_stack) {
 			foreach my $operation (keys %{$List::listmaster_messages_stack{$robot}}) {
 				my $first_age = time - $List::listmaster_messages_stack{$robot}{$operation}{'first'};
 				my $last_age = time - $List::listmaster_messages_stack{$robot}{$operation}{'last'};
-				next unless(($last_age > 30) or ($first_age > 60)); # not old enough to send and first not too old
+				next unless($purge or ($last_age > 30) or ($first_age > 60)); # not old enough to send and first not too old
 				next unless($List::listmaster_messages_stack{$robot}{$operation}{'messages'});
 				
 				my %messages = %{$List::listmaster_messages_stack{$robot}{$operation}{'messages'}};
@@ -4755,9 +4755,10 @@ sub send_notify_to_listmaster {
 						return undef;
 					}
 				}
+				
+				&Log::do_log('info', 'cleaning stacked notifications');
+				delete $List::listmaster_messages_stack{$robot}{$operation};
 			}
-			
-			delete $List::listmaster_messages_stack{$robot};
 		}
 		return 1;
 	}
@@ -4770,15 +4771,13 @@ sub send_notify_to_listmaster {
 		$stack = 1;
 	}
 	
-	unless($operation eq 'logs_failed') {
-		&Log::do_log('debug2', 'List::send_notify_to_listmaster(%s,%s )', $operation, $robot );
+	unless(defined $operation) {
+		&Log::do_log('err','List::send_notify_to_listmaster(%s) : missing incoming parameter "$operation"');
+		return undef;
 	}
 	
 	unless($operation eq 'logs_failed') {
-		unless(defined $operation) {
-			&Log::do_log('err','List::send_notify_to_listmaster(%s) : missing incoming parameter "$operation"');
-			return undef;
-		}
+		&Log::do_log('debug2', 'List::send_notify_to_listmaster(%s,%s )', $operation, $robot );
 		unless (defined $robot) {
 			&Log::do_log('err','List::send_notify_to_listmaster(%s) : missing incoming parameter "$robot"');
 			return undef;
@@ -4848,10 +4847,10 @@ sub send_notify_to_listmaster {
 	
 	if(($operation eq 'request_list_creation') or ($operation eq 'request_list_renaming')) {
 		foreach my $email (split (/\,/, $listmaster)) {
-			my $cdata = &dup_var($data);
+			my $cdata = &tools::dup_var($data);
 			$cdata->{'one_time_ticket'} = &Auth::create_one_time_ticket($email,$robot,'get_pending_lists',$cdata->{'ip'});
 			push @tosend, {
-				email => $listmaster,
+				email => $email,
 				data => $cdata
 			};
 		}
@@ -5259,18 +5258,23 @@ sub add_parts {
 	
 	if ($header and -s $header) {
 	    if ($header =~ /\.mime$/) {
-		
-		my $header_part = $parser->parse_in($header);    
-		$msg->make_multipart unless $msg->is_multipart;
-		$msg->add_part($header_part, 0); ## Add AS FIRST PART (0)
-		
-		## text/plain header
+		my $header_part;
+		eval { $header_part = $parser->parse_in($header); };
+		if ($@) {
+		    &Log::do_log('err', 'Failed to parse MIME data %s: %s',
+				 $header, $parser->last_error);
+		} else {
+		    $msg->make_multipart unless $msg->is_multipart;
+		    $msg->add_part($header_part, 0); ## Add AS FIRST PART (0)
+		}
+	    ## text/plain header
 	    }else {
 		
 		$msg->make_multipart unless $msg->is_multipart;
 		my $header_part = build MIME::Entity Path        => $header,
 		Type        => "text/plain",
-		Filename    => "message-header.txt",
+		Filename    => undef,
+		'X-Mailer'  => undef,
 		Encoding    => "8bit",
 		Charset     => "UTF-8";
 		$msg->add_part($header_part, 0);
@@ -5278,18 +5282,23 @@ sub add_parts {
 	}
 	if ($footer and -s $footer) {
 	    if ($footer =~ /\.mime$/) {
-		
-		my $footer_part = $parser->parse_in($footer);    
-		$msg->make_multipart unless $msg->is_multipart;
-		$msg->add_part($footer_part);
-		
-		## text/plain footer
+		my $footer_part;
+		eval { $footer_part = $parser->parse_in($footer); };
+		if ($@) {
+		    &Log::do_log('err', 'Failed to parse MIME data %s: %s',
+				 $footer, $parser->last_error);
+		} else {
+		    $msg->make_multipart unless $msg->is_multipart;
+		    $msg->add_part($footer_part);
+		}
+	    ## text/plain footer
 	    }else {
 		
 		$msg->make_multipart unless $msg->is_multipart;
 		$msg->attach(Path        => $footer,
 			     Type        => "text/plain",
-			     Filename    => "message-footer.txt",
+			     Filename    => undef,
+			     'X-Mailer'  => undef,
 			     Encoding    => "8bit",
 			     Charset     => "UTF-8"
 			     );
@@ -6279,7 +6288,7 @@ sub get_first_list_member {
 # OUT : HASH data storing custome attributes.
 sub parseCustomAttribute {
 	my $xmldoc = shift ;
-	return undef if ($xmldoc eq '') ;
+	return undef if ! defined $xmldoc or $xmldoc eq '';
 
 	my $parser = XML::LibXML->new();
 	my $tree;
@@ -6292,7 +6301,7 @@ sub parseCustomAttribute {
 	}
 
 	unless (defined $tree) {
-	    &Log::do_log('err', "Failed to parse XML data");
+	    &Log::do_log('err', "Failed to parse XML data: %s", $@);
 	    return undef;
 	}
 
@@ -11654,7 +11663,7 @@ sub compute_topic {
 	    my $charset = $part->head->mime_attr("Content-Type.Charset");
 	    $charset = MIME::Charset->new($charset);
 	    if (defined $part->bodyhandle) {
-		my $body = $msg->bodyhandle->as_string();
+		my $body = $part->bodyhandle->as_string();
 		my $converted;
 		eval {
 		    $converted = $charset->decode($body);
@@ -12091,7 +12100,7 @@ sub delete_subscription_request {
     }
 
     unless ($removed > 0) {
-	&Log::do_log('err', 'No pending subscription was found for users %s', join(',',@list_of_email));
+	&Log::do_log('debug2', 'No pending subscription was found for users %s', join(',',@list_of_email));
 	return undef;
     }
     return 1;

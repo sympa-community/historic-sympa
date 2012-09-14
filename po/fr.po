@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "POT-Creation-Date: 2002-07-16 17:27+0800\n"
-"PO-Revision-Date: 2012-07-20 14:01+0200\n"
+"PO-Revision-Date: 2012-09-11 13:17+0200\n"
 "Last-Translator: David Verdin <david.verdin@cru.fr>\n"
 "Language-Team: Français\n"
 "MIME-Version: 1.0\n"
@@ -31,11 +31,16 @@ msgstr ""
 msgid "Mailing lists categories"
 msgstr "Catégories de liste"
 
-#: ../web_tt2/home.tt2:23
+# nlsref 15,10
+#: ../web_tt2/home.tt2:34 ../web_tt2/menu.tt2:16
+msgid "List of lists"
+msgstr "Liste des listes"
+
+#: ../web_tt2/home.tt2:42
 msgid "Others"
 msgstr "Autres"
 
-#: ../web_tt2/home.tt2:48
+#: ../web_tt2/home.tt2:70
 msgid "RSS news"
 msgstr "Nouveautés RSS"
 
@@ -73,26 +78,21 @@ msgstr "Création de liste"
 msgid "Sympa admin"
 msgstr "Admin Sympa"
 
-# nlsref 15,10
-#: ../web_tt2/menu.tt2:16
-msgid "List of lists"
-msgstr "Liste des listes"
-
 #: ../web_tt2/menu.tt2:19
 msgid "Home"
 msgstr "Accueil"
 
 #: ../web_tt2/arc.tt2:4 ../web_tt2/arc_manage.tt2:4
 #: ../web_tt2/arcsearch_form.tt2:4 ../web_tt2/compose_mail.tt2:12
-#: ../web_tt2/compose_mail.tt2:5 ../web_tt2/create_list_request.tt2:26
-#: ../web_tt2/create_list_request.tt2:33 ../web_tt2/create_list_request.tt2:38
-#: ../web_tt2/create_list_request.tt2:42 ../web_tt2/create_list_request.tt2:68
-#: ../web_tt2/create_list_request.tt2:73 ../web_tt2/create_list_request.tt2:97
+#: ../web_tt2/compose_mail.tt2:5 ../web_tt2/create_list_request.tt2:117
+#: ../web_tt2/create_list_request.tt2:26 ../web_tt2/create_list_request.tt2:33
+#: ../web_tt2/create_list_request.tt2:38 ../web_tt2/create_list_request.tt2:42
+#: ../web_tt2/create_list_request.tt2:68 ../web_tt2/create_list_request.tt2:88
 #: ../web_tt2/d_control.tt2:5 ../web_tt2/d_editfile.tt2:12
 #: ../web_tt2/d_editfile.tt2:14 ../web_tt2/d_properties.tt2:10
 #: ../web_tt2/d_properties.tt2:6 ../web_tt2/d_properties.tt2:8
 #: ../web_tt2/d_read.tt2:22 ../web_tt2/d_read.tt2:47
-#: ../web_tt2/edit_list_request.tt2:39 ../web_tt2/edit_list_request.tt2:4
+#: ../web_tt2/edit_list_request.tt2:4 ../web_tt2/edit_list_request.tt2:40
 #: ../web_tt2/editfile.tt2:4 ../web_tt2/menu.tt2:22
 #: ../web_tt2/modindex.tt2:145 ../web_tt2/modindex.tt2:6 ../web_tt2/pref.tt2:4
 #: ../web_tt2/rename_list_request.tt2:3 ../web_tt2/review.tt2:5
@@ -105,7 +105,7 @@ msgstr "Aide"
 msgid "Restore identity"
 msgstr "Restaurer l'identité"
 
-#: ../mail_tt2/listmaster_groupednotifications.tt2:2
+#: ../mail_tt2/listmaster_groupednotifications.tt2:5
 #: ../mail_tt2/listmaster_notification.tt2:2 ../web_tt2/login_menu.tt2:13
 msgid "Listmaster"
 msgstr "listmaster"
@@ -246,39 +246,45 @@ msgstr "Documents partagés"
 msgid "Review members"
 msgstr "Voir les abonnés"
 
-#: ../web_tt2/list_panel.tt2:7
+#: ../web_tt2/list_panel.tt2:8
 msgid "Closed list"
 msgstr "Liste fermée"
 
-#: ../web_tt2/list_panel.tt2:9
+#: ../web_tt2/list_panel.tt2:10
 msgid "List not yet activated"
 msgstr "Cette liste n'a pas été activée."
 
-#: ../web_tt2/list_panel.tt2:13 ../web_tt2/list_panel.tt2:15
+#: ../web_tt2/list_panel.tt2:14
 msgid "Subscribers:"
 msgstr "Abonnés :"
 
+#: ../web_tt2/list_panel.tt2:17
+msgid "(review)"
+msgstr "(voir les abonnés)"
+
 # nlsref 1,3
-#: ../web_tt2/list_panel.tt2:25
+#: ../web_tt2/list_panel.tt2:24
 msgid "Error rate:"
 msgstr "Taux d'erreurs : "
 
 #: ../web_tt2/get_inactive_lists.tt2:14 ../web_tt2/list_panel.tt2:31
-#: ../web_tt2/list_panel.tt2:33
 msgid "Owners"
 msgstr "Propriétaires"
 
+#: ../web_tt2/list_panel.tt2:40 ../web_tt2/list_panel.tt2:61
+msgid "(edit)"
+msgstr "(éditer)"
+
 # nlsref 16,26
-#: ../src/lib/List.pm:432 ../web_tt2/list_panel.tt2:42
-#: ../web_tt2/list_panel.tt2:45
+#: ../src/lib/List.pm:432 ../web_tt2/list_panel.tt2:46
 msgid "Moderators"
 msgstr "Modérateurs"
 
-#: ../web_tt2/list_panel.tt2:59
+#: ../web_tt2/list_panel.tt2:68
 msgid "Load certificate"
 msgstr "Charger le certificat"
 
-#: ../web_tt2/list_panel.tt2:61 ../web_tt2/list_panel.tt2:63
+#: ../web_tt2/list_panel.tt2:74 ../web_tt2/list_panel.tt2:76
 msgid "Contact owners"
 msgstr "Contacter le propriétaire"
 
@@ -499,7 +505,7 @@ msgstr "Ajout d'abonnés"
 
 #: ../web_tt2/add_request.tt2:13 ../web_tt2/editsubscriber.tt2:62
 #: ../web_tt2/review.tt2:111 ../web_tt2/review.tt2:145
-#: ../web_tt2/reviewbouncing.tt2:127
+#: ../web_tt2/reviewbouncing.tt2:127 ../web_tt2/search_user.tt2:56
 msgid "quiet"
 msgstr "sans prévenir"
 
@@ -518,17 +524,18 @@ msgid "Edit List Config"
 msgstr "Configurer la liste"
 
 #: ../web_tt2/admin_menu.tt2:52 ../web_tt2/admin_menu.tt2:58
-#: ../web_tt2/lists.tt2:38 ../web_tt2/nav.tt2:67
+#: ../web_tt2/edit_list_request.tt2:17 ../web_tt2/lists.tt2:38
+#: ../web_tt2/nav.tt2:105
 msgid "Customizing"
 msgstr "Personnaliser"
 
 #: ../web_tt2/admin_menu.tt2:67 ../web_tt2/admin_menu.tt2:73
-#: ../web_tt2/nav.tt2:77
+#: ../web_tt2/nav.tt2:75
 msgid "Manage Archives"
 msgstr "Gérer les archives"
 
 #: ../web_tt2/admin_menu.tt2:81 ../web_tt2/admin_menu.tt2:87
-#: ../web_tt2/lists.tt2:43 ../web_tt2/nav.tt2:101 ../web_tt2/nav.tt2:81
+#: ../web_tt2/lists.tt2:43 ../web_tt2/nav.tt2:79 ../web_tt2/nav.tt2:99
 #: ../web_tt2/review.tt2:44
 msgid "Bounces"
 msgstr "Gestion des erreurs"
@@ -551,12 +558,12 @@ msgid "Sending/Receiving"
 msgstr "Diffusion/Réception"
 
 #: ../web_tt2/admin_menu.tt2:147 ../web_tt2/edit_list_request.tt2:13
-#: ../web_tt2/nav.tt2:97
+#: ../web_tt2/nav.tt2:95
 msgid "Privileges"
 msgstr "Droits d'accès"
 
 #: ../web_tt2/admin_menu.tt2:151 ../web_tt2/edit_list_request.tt2:14
-#: ../web_tt2/nav.tt2:19 ../web_tt2/nav.tt2:99 ../web_tt2/serveradmin.tt2:110
+#: ../web_tt2/nav.tt2:19 ../web_tt2/nav.tt2:97 ../web_tt2/serveradmin.tt2:110
 msgid "Archives"
 msgstr "Les archives"
 
@@ -564,7 +571,7 @@ msgstr "Les archives"
 msgid "Bounce Settings"
 msgstr "Gestion des erreurs"
 
-#: ../web_tt2/admin_menu.tt2:160 ../web_tt2/edit_list_request.tt2:17
+#: ../web_tt2/admin_menu.tt2:160 ../web_tt2/edit_list_request.tt2:18
 #: ../web_tt2/nav.tt2:107
 msgid "Miscellaneous"
 msgstr "Divers"
@@ -590,7 +597,7 @@ msgstr "Gestion des archives"
 #: ../web_tt2/d_properties.tt2:6 ../web_tt2/d_properties.tt2:8
 #: ../web_tt2/d_read.tt2:171 ../web_tt2/d_read.tt2:173
 #: ../web_tt2/d_read.tt2:179 ../web_tt2/d_read.tt2:22 ../web_tt2/d_read.tt2:47
-#: ../web_tt2/edit_list_request.tt2:39 ../web_tt2/edit_list_request.tt2:4
+#: ../web_tt2/edit_list_request.tt2:4 ../web_tt2/edit_list_request.tt2:40
 #: ../web_tt2/editfile.tt2:4 ../web_tt2/editsubscriber.tt2:37
 #: ../web_tt2/latest_d_read.tt2:29 ../web_tt2/latest_d_read.tt2:32
 #: ../web_tt2/modindex.tt2:145 ../web_tt2/modindex.tt2:6
@@ -1154,6 +1161,7 @@ msgid "site"
 msgstr "site"
 
 #: ../web_tt2/copy_template.tt2:20 ../web_tt2/ls_templates.tt2:42
+#: ../web_tt2/show_sessions.tt2:3
 msgid "robot"
 msgstr "robot"
 
@@ -1162,7 +1170,7 @@ msgid "list"
 msgstr "liste"
 
 #: ../web_tt2/copy_template.tt2:25 ../web_tt2/edit_config.tt2:17
-#: ../web_tt2/edit_list_request.tt2:410
+#: ../web_tt2/edit_list_request.tt2:411
 msgid "default"
 msgstr "défaut"
 
@@ -1251,31 +1259,31 @@ msgstr "Type de liste :"
 msgid "The list's subject"
 msgstr "L'object de la liste"
 
-#: ../web_tt2/create_list_request.tt2:73
+#: ../web_tt2/create_list_request.tt2:88
 msgid "List classification in the directory"
 msgstr "Classement de liste dans l'annuaire"
 
-#: ../web_tt2/create_list_request.tt2:74
+#: ../web_tt2/create_list_request.tt2:89
 msgid "Topics:"
 msgstr "Catégories :"
 
-#: ../web_tt2/create_list_request.tt2:76
+#: ../web_tt2/create_list_request.tt2:91
 msgid "--Select a topic--"
 msgstr "--Choisir une catégorie--"
 
-#: ../web_tt2/create_list_request.tt2:93
+#: ../web_tt2/create_list_request.tt2:111
 msgid "Other"
 msgstr "Autre"
 
-#: ../web_tt2/create_list_request.tt2:97
+#: ../web_tt2/create_list_request.tt2:117
 msgid "A few lines describing the list"
 msgstr "La liste en quelques lignes"
 
-#: ../web_tt2/create_list_request.tt2:98
+#: ../web_tt2/create_list_request.tt2:118
 msgid "Description:"
 msgstr "Description :"
 
-#: ../web_tt2/create_list_request.tt2:101
+#: ../web_tt2/create_list_request.tt2:121
 msgid "Submit your creation request"
 msgstr "Envoyer votre demande de création"
 
@@ -1372,7 +1380,7 @@ msgstr "URL du signet"
 msgid "Replace the file %1 with your file"
 msgstr "Remplacer le fichier %1 par votre fichier"
 
-#: ../web_tt2/d_editfile.tt2:38 ../web_tt2/edit_list_request.tt2:421
+#: ../web_tt2/d_editfile.tt2:38 ../web_tt2/edit_list_request.tt2:422
 #: ../web_tt2/editsubscriber.tt2:60 ../web_tt2/suboptions.tt2:65
 msgid "Update"
 msgstr "Mise à jour"
@@ -1383,7 +1391,9 @@ msgid "Publish"
 msgstr "Publier"
 
 #. (visible_path)
-#: ../web_tt2/d_editfile.tt2:58
+#. (complete)
+#. (file)
+#: ../web_tt2/d_editfile.tt2:58 ../web_tt2/editfile.tt2:9
 msgid "Edit the file %1"
 msgstr "Edition du fichier %1"
 
@@ -1464,7 +1474,7 @@ msgstr "Voulez-vous vraiment supprimer %1 ?"
 
 #: ../web_tt2/d_read.tt2:116 ../web_tt2/d_read.tt2:118
 #: ../web_tt2/d_read.tt2:253 ../web_tt2/d_read.tt2:255
-#: ../web_tt2/d_read.tt2:27 ../web_tt2/search_user.tt2:56
+#: ../web_tt2/d_read.tt2:27 ../web_tt2/search_user.tt2:55
 msgid "delete"
 msgstr "supprimer"
 
@@ -1499,14 +1509,14 @@ msgstr "Taille (Ko)"
 msgid "Last update"
 msgstr "Mise à jour"
 
-#: ../web_tt2/d_read.tt2:75 ../web_tt2/editfile.tt2:29
-#: ../web_tt2/editfile.tt2:30 ../web_tt2/editfile.tt2:34
-#: ../web_tt2/editfile.tt2:35 ../web_tt2/editfile.tt2:36
-#: ../web_tt2/editfile.tt2:38 ../web_tt2/editfile.tt2:43
-#: ../web_tt2/editfile.tt2:44 ../web_tt2/editfile.tt2:48
-#: ../web_tt2/editfile.tt2:49 ../web_tt2/manage_template.tt2:35
-#: ../web_tt2/manage_template.tt2:56 ../web_tt2/serveradmin.tt2:150
-#: ../web_tt2/serveradmin.tt2:163
+#: ../web_tt2/d_read.tt2:75 ../web_tt2/editfile.tt2:31
+#: ../web_tt2/editfile.tt2:34 ../web_tt2/editfile.tt2:47
+#: ../web_tt2/editfile.tt2:50 ../web_tt2/editfile.tt2:53
+#: ../web_tt2/editfile.tt2:57 ../web_tt2/editfile.tt2:69
+#: ../web_tt2/editfile.tt2:72 ../web_tt2/editfile.tt2:84
+#: ../web_tt2/editfile.tt2:87 ../web_tt2/editfile.tt2:91
+#: ../web_tt2/manage_template.tt2:35 ../web_tt2/manage_template.tt2:56
+#: ../web_tt2/serveradmin.tt2:150 ../web_tt2/serveradmin.tt2:163
 msgid "Edit"
 msgstr "Editer"
 
@@ -1724,21 +1734,21 @@ msgstr "config principale"
 msgid "Edit list templates"
 msgstr "Editer les modèles de liste"
 
-#: ../web_tt2/editfile.tt2:14
+#: ../web_tt2/editfile.tt2:15
 msgid "Save"
 msgstr "Sauvegarder"
 
-#: ../web_tt2/editfile.tt2:22
+#: ../web_tt2/editfile.tt2:23
 msgid "You can edit several messages/files associated with your list:"
 msgstr ""
 "Vous pouvez éditer ci-dessous les messages de services et d'autres fichiers "
 "associés à votre liste :"
 
-#: ../web_tt2/editfile.tt2:27
+#: ../web_tt2/editfile.tt2:28
 msgid "HTML pages"
 msgstr "Pages HTML"
 
-#: ../web_tt2/editfile.tt2:29
+#: ../web_tt2/editfile.tt2:31
 msgid ""
 "List homepage: HTML text to describe the list. It is printed on the right-"
 "hand side of the main list page. (default for this is the list description)"
@@ -1747,7 +1757,7 @@ msgstr ""
 "S'affiche en partie droite de la page de la liste (prend pour défaut la "
 "description de la liste)."
 
-#: ../web_tt2/editfile.tt2:30
+#: ../web_tt2/editfile.tt2:34
 msgid ""
 "List description: This text is sent as an answer to the mail command INFO. "
 "It can also be included in the <em>Welcome message</em>."
@@ -1756,11 +1766,11 @@ msgstr ""
 "<code>INFO [nom de liste]</code>.\n"
 "Il est aussi inclus dans le <em>message de bienvenue</em>."
 
-#: ../web_tt2/editfile.tt2:32
+#: ../web_tt2/editfile.tt2:44
 msgid "Automatic messages"
 msgstr "Messages automatiques"
 
-#: ../web_tt2/editfile.tt2:34
+#: ../web_tt2/editfile.tt2:47
 msgid ""
 "Welcome message: This message is sent to new subscribers. It can be a full "
 "MIME structured message (only for MIME gurus)."
@@ -1769,7 +1779,7 @@ msgstr ""
 "Vous pouvez utiliser un message MIME structuré (réservé aux experts du "
 "format MIME)."
 
-#: ../web_tt2/editfile.tt2:35
+#: ../web_tt2/editfile.tt2:50
 msgid ""
 "Rejection message: when a message is rejected by list editor, a notification "
 "can be sent to the original author. You may prepare various rejection "
@@ -1779,7 +1789,7 @@ msgstr ""
 "notification peut être envoyée à son auteur. Vous pouvez préparer plusieurs "
 "messages de rejet types."
 
-#: ../web_tt2/editfile.tt2:37
+#: ../web_tt2/editfile.tt2:54
 msgid ""
 "Remind message: This message is sent to each subscriber\n"
 "when using the command  REMIND. It's very useful to help people who are "
@@ -1794,7 +1804,7 @@ msgstr ""
 "se désabonner\n"
 "au cas où celles-ci ne connaissent plus leur adresse d'abonnement."
 
-#: ../web_tt2/editfile.tt2:39
+#: ../web_tt2/editfile.tt2:58
 msgid ""
 "Subscribing invitation message: sent to a person if someone  \n"
 "uses the INVITE command to invite someone to subscribe."
@@ -1803,11 +1813,11 @@ msgstr ""
 "<CODE>INVITE [nom de liste]</CODE>."
 
 # nlsref 16,68
-#: ../web_tt2/editfile.tt2:41
+#: ../web_tt2/editfile.tt2:66
 msgid "Added in distributed messages"
 msgstr "Ajouts aux messages diffusés"
 
-#: ../web_tt2/editfile.tt2:43
+#: ../web_tt2/editfile.tt2:69
 msgid ""
 "Message footer: If this file is not empty, it is added as a MIME attachment "
 "at the end of each message distributed to the list."
@@ -1815,7 +1825,7 @@ msgstr ""
 "Attachement de fin de message : Si non vide, ce fichier est attaché à la fin "
 "de chaque message diffusé dans la liste."
 
-#: ../web_tt2/editfile.tt2:44
+#: ../web_tt2/editfile.tt2:72
 msgid ""
 "Message header: If this file is not empty, it is added as a MIME attachment "
 "at the beginning of each message distributed to the list."
@@ -1823,17 +1833,17 @@ msgstr ""
 "Attachement de début de message : Si non vide, ce fichier est attaché au "
 "début de chaque message diffusé dans la liste."
 
-#: ../web_tt2/editfile.tt2:46
+#: ../web_tt2/editfile.tt2:81
 msgid "More"
 msgstr "Autres"
 
-#: ../web_tt2/editfile.tt2:48
+#: ../web_tt2/editfile.tt2:84
 msgid "Unsubscribe message: This message is sent when users leave the list."
 msgstr ""
 "Message de désabonnement : Envoyé aux personnes qui se désabonnent de la "
 "liste."
 
-#: ../web_tt2/editfile.tt2:50
+#: ../web_tt2/editfile.tt2:88
 msgid ""
 "Deletion message: This message is sent to users when you\n"
 "remove them from the list using the DEL command (unless you hit the Quiet "
@@ -1842,6 +1852,14 @@ msgstr ""
 "Message de suppression : Envoyé aux personnes supprimées de la liste des "
 "abonnés\n"
 "par le propriétaire de la liste ou via le module de gestion des erreurs."
+
+#: ../web_tt2/editfile.tt2:91
+msgid ""
+"Virus infection message: This message is sent to the sender of a message in "
+"which a virus was found."
+msgstr ""
+"Message de détection de virus : Envoyé à l'expéditeur du message dans lequel "
+"un virus a été trouvé."
 
 # nlsref 16,12
 #: ../web_tt2/edit_list_request.tt2:4
@@ -1853,11 +1871,11 @@ msgid "You can choose below a subset of parameters to edit:"
 msgstr ""
 "Vous pouvez éditer ci-dessous un sous-ensemble des paramètres de la liste :"
 
-#: ../web_tt2/edit_list_request.tt2:11 ../web_tt2/nav.tt2:95
+#: ../web_tt2/edit_list_request.tt2:11 ../web_tt2/nav.tt2:93
 msgid "List definition"
 msgstr "Définition de la liste"
 
-#: ../web_tt2/edit_list_request.tt2:12 ../web_tt2/nav.tt2:96
+#: ../web_tt2/edit_list_request.tt2:12 ../web_tt2/nav.tt2:94
 msgid "Sending/receiving setup"
 msgstr "Diffusion/réception"
 
@@ -1866,11 +1884,11 @@ msgstr "Diffusion/réception"
 msgid "Bounce management"
 msgstr "Gestion des erreurs"
 
-#: ../web_tt2/edit_list_request.tt2:16 ../web_tt2/nav.tt2:103
+#: ../web_tt2/edit_list_request.tt2:16 ../web_tt2/nav.tt2:101
 msgid "Data sources setup"
 msgstr "Définition des sources de données"
 
-#: ../web_tt2/edit_list_request.tt2:36
+#: ../web_tt2/edit_list_request.tt2:37
 msgid "scenario source"
 msgstr "code source du scénario"
 
@@ -1878,9 +1896,9 @@ msgstr "code source du scénario"
 #: ../mail_tt2/listmaster_notification.tt2:306
 #: ../mail_tt2/listmaster_notification.tt2:377
 #: ../mail_tt2/listowner_notification.tt2:81 ../mail_tt2/lists.tt2:7
-#: ../mail_tt2/summary.tt2:4 ../web_tt2/edit_list_request.tt2:102
-#: ../web_tt2/edit_list_request.tt2:104 ../web_tt2/edit_list_request.tt2:260
-#: ../web_tt2/edit_list_request.tt2:262 ../web_tt2/editsubscriber.tt2:47
+#: ../mail_tt2/summary.tt2:4 ../web_tt2/edit_list_request.tt2:103
+#: ../web_tt2/edit_list_request.tt2:105 ../web_tt2/edit_list_request.tt2:261
+#: ../web_tt2/edit_list_request.tt2:263 ../web_tt2/editsubscriber.tt2:47
 #: ../web_tt2/editsubscriber.tt2:55 ../web_tt2/error.tt2:108
 #: ../web_tt2/rss.tt2:4 ../web_tt2/subindex.tt2:39
 msgid ":"
@@ -2885,15 +2903,15 @@ msgstr "%1 occurrence(s) trouvée(s)"
 msgid "<strong>%1</strong> is subscribed to the following mailing lists"
 msgstr "<strong>%1</strong> est abonné aux listes suivantes"
 
-#: ../web_tt2/lists.tt2:39 ../web_tt2/nav.tt2:69
+#: ../web_tt2/lists.tt2:39 ../web_tt2/nav.tt2:67
 msgid "Manage Subscribers"
 msgstr "Gérer les abonnés"
 
-#: ../web_tt2/lists.tt2:41 ../web_tt2/nav.tt2:73 ../web_tt2/review.tt2:42
+#: ../web_tt2/lists.tt2:41 ../web_tt2/nav.tt2:71 ../web_tt2/review.tt2:42
 msgid "Blacklist"
 msgstr "Liste noire"
 
-#: ../web_tt2/lists.tt2:45 ../web_tt2/nav.tt2:21 ../web_tt2/nav.tt2:85
+#: ../web_tt2/lists.tt2:45 ../web_tt2/nav.tt2:21 ../web_tt2/nav.tt2:83
 #: ../web_tt2/serveradmin.tt2:124
 msgid "Logs"
 msgstr "Journaux"
@@ -3258,7 +3276,7 @@ msgstr "Traduire Sympa"
 msgid "Submitting a bug, a feature request"
 msgstr "Soumettre un problème, une demande de fonctionnalité"
 
-#: ../src/lib/confdef.pm:1173 ../web_tt2/nav.tt2:105
+#: ../src/lib/confdef.pm:1189 ../web_tt2/nav.tt2:103
 msgid "DKIM"
 msgstr "DKIM"
 
@@ -4457,6 +4475,27 @@ msgstr "Aucun abonné exclu."
 msgid "Sessions list"
 msgstr "Liste des sessions"
 
+#: ../web_tt2/show_sessions.tt2:3
+msgid "last hit date"
+msgstr "Date de dernier accès"
+
+#: ../web_tt2/show_sessions.tt2:3
+msgid "start date"
+msgstr "Date de début"
+
+# nlsref 16,1
+#: ../web_tt2/show_sessions.tt2:3
+msgid "hit count"
+msgstr "Nombre d'accès"
+
+#: ../web_tt2/show_sessions.tt2:3
+msgid "remote address"
+msgstr "Adresse distante"
+
+#: ../web_tt2/show_sessions.tt2:3
+msgid "User email"
+msgstr "Adresse de l'utilisateur"
+
 #. (list)
 #: ../web_tt2/sigrequest.tt2:4
 msgid "You asked to be unsubscribed  from list %1"
@@ -5076,6 +5115,10 @@ msgstr "en erreur"
 msgid "%1's picture"
 msgstr "Avatar de %1"
 
+#: ../web_tt2/subscriber_table.tt2:137 ../web_tt2/subscriber_table.tt2:139
+msgid "subscribed"
+msgstr "abonné"
+
 #: ../web_tt2/suspend_request.tt2:13
 msgid "Suspended"
 msgstr "Suspendu"
@@ -5305,7 +5348,7 @@ msgstr "Période explorée :"
 #. (date_to_formated)
 #. This entry is a date/time format
 #. Check the strftime manpage for format details : http://docs.freebsd.org/info/gawk/gawk.info.Time_Functions.html
-#: ../web_tt2/viewlogs.tt2:113 ../wwsympa/wwsympa.fcgi.in:16997
+#: ../web_tt2/viewlogs.tt2:113 ../wwsympa/wwsympa.fcgi.in:16994
 msgid "%d %b %Y %H:%M:%S"
 msgstr "%d %b %Y %H:%M:%S"
 
@@ -6523,15 +6566,15 @@ msgid "Moderators List %1 / %2"
 msgstr "Modérateurs de la liste %1 / %2"
 
 #. (notification_messages.size,operation)
-#: ../mail_tt2/listmaster_groupednotifications.tt2:3
+#: ../mail_tt2/listmaster_groupednotifications.tt2:6
 msgid "You have %1 \"%2\" tagged notifications"
-msgstr ""
+msgstr "Vous avez %1 notifications de type \"%2\""
 
 #. (notification_messages.size,operation)
-#: ../mail_tt2/listmaster_groupednotifications.tt2:10
+#: ../mail_tt2/listmaster_groupednotifications.tt2:13
 msgid ""
 "%1 \"%2\" tagged notifications adressed to you are attached to this message."
-msgstr ""
+msgstr "%1 notifications de type \"%2\" sont jointes à ce message."
 
 #. (list.name,list.host,email)
 #: ../mail_tt2/listmaster_notification.tt2:4
@@ -9160,7 +9203,7 @@ msgstr "%d %b %Y  %H:%M"
 
 #. This entry is a date/time format
 #. Check the strftime manpage for format details : http://docs.freebsd.org/info/gawk/gawk.info.Time_Functions.html
-#: ../src/lib/Commands.pm:966 ../wwsympa/wwsympa.fcgi.in:10613
+#: ../src/lib/Commands.pm:966 ../wwsympa/wwsympa.fcgi.in:10606
 msgid "%A"
 msgstr "%A"
 
@@ -9229,7 +9272,7 @@ msgid "Secret used by Sympa to make MD5 fingerprint in web cookies secure"
 msgstr ""
 "Secret employé par Sympa pour calculer l'empreinte MD5 dans les cookies web"
 
-#: ../src/lib/confdef.pm:1365 ../src/lib/confdef.pm:355
+#: ../src/lib/confdef.pm:1381 ../src/lib/confdef.pm:355
 msgid "Should not be changed ! May invalid all user password"
 msgstr "Ne pas changer ! Cela pourrait invalider tous les mots de passe !"
 
@@ -9311,265 +9354,11 @@ msgstr ""
 msgid "Umask used for file creation by Sympa"
 msgstr "Umask utilisé pour la création de fichier par Sympa"
 
-#: ../src/lib/confdef.pm:444
-msgid "Sending related"
-msgstr "Configuration liée à l'envoi de messages"
+#: ../src/lib/confdef.pm:451 ../src/lib/confdef.pm:845
+msgid "This is the default language used by Sympa"
+msgstr "Ceci est la langue par défaut utilisée par Sympa"
 
-#: ../src/lib/confdef.pm:453
-msgid ""
-"Max. number of Sendmail processes (launched by Sympa) running simultaneously"
-msgstr ""
-"Nombre maximum de processus sendmail (lancés par Sympa) exécutés "
-"simultanément"
-
-#: ../src/lib/confdef.pm:455
-msgid ""
-"Proposed value is quite low, you can rise it up to 100, 200 or even 300 with "
-"powerfull systems."
-msgstr ""
-"La valeur proposée est assez faible ; vous pouvez la monter à 100, 200 voire "
-"300 sur des systèmes puissants"
-
-#: ../src/lib/confdef.pm:497
-msgid ""
-"comma separated list of operations for which blacklist filter is applied"
-msgstr ""
-"listes des opérations pour lesquelles une liste noire est employée, séparées "
-"par des virgules"
-
-#: ../src/lib/confdef.pm:502
-msgid "Setting this parameter to \"none\" will hide the blacklist feature"
-msgstr ""
-"Donner la valeur 'none' à ce paramètre dissimulera la fonctionnalité de "
-"liste noire"
-
-#: ../src/lib/confdef.pm:507
-msgid ""
-"If set, when a list editor report a spam, this external script is run by "
-"wwsympa or sympa, the spam is sent into script stdin"
-msgstr ""
-"Ce paramètre prend pour valeur le chemin vers un script ; S'il est défini, "
-"quand un modérateur reporte un spam, ce script externe sera exécuté par "
-"sympa ou wwsympa, avec le contenu du spam envoyé dans STDIN"
-
-#: ../src/lib/confdef.pm:513
-msgid ""
-"Default maximum size (in bytes) for messages (can be re-defined for each "
-"list)"
-msgstr ""
-"Taille maximum des messages (en octets). Peut être redéfini pour chaque "
-"liste."
-
-#: ../src/lib/confdef.pm:530
-msgid ""
-"Maximum number of recipients per call to Sendmail. The nrcpt_by_domain.conf "
-"file allows a different tuning per destination domain."
-msgstr ""
-"Nombre maximum de destinataires par appel à sendmail. Le fichier "
-"nrcpt_by_domain.cong permet de définir un réglage spécifique pour chaque "
-"domaine de destination."
-
-#: ../src/lib/confdef.pm:536
-msgid "Max. number of different domains per call to Sendmail"
-msgstr "Nombre maximum de domaines différents par appel à sendmail"
-
-#: ../src/lib/confdef.pm:546
-msgid "Whether or not to cache lists in the database"
-msgstr "Cacher ou non les listes dans la base de données"
-
-#: ../src/lib/confdef.pm:552
-msgid "Path to the MTA (sendmail, postfix, exim or qmail)"
-msgstr "Chemin vers le MTA (sendmail, postfix, exim ou qmail)"
-
-#: ../src/lib/confdef.pm:555
-msgid ""
-"should point to a sendmail-compatible binary (eg: a binary named \"sendmail"
-"\" is distributed with Postfix)"
-msgstr ""
-"Devrait pointer vers un exécutable compatible sendmail (par ex : un binaire "
-"nommé \"sendmail\" est distribué par postfix)"
-
-#: ../src/lib/confdef.pm:567
-msgid "Specify which rfc2369 mailing list headers to add"
-msgstr ""
-"Spécifie quels entêtes de mailing list (de la RFC 2369) doivent être ajoutés"
-
-# nlsref 15,4
-#: ../src/lib/confdef.pm:573
-msgid "Specify header fields to be removed before message distribution"
-msgstr ""
-"Spécifie quels entêtes doivent être supprimés des messages avant leur "
-"distribution"
-
-#: ../src/lib/confdef.pm:583
-msgid "Reject mail from automates (crontab, etc) sent to a list?"
-msgstr ""
-"Rejeter les mails générés automatiquement (crontab, etc.) envoyés à une "
-"liste ?"
-
-#: ../src/lib/confdef.pm:598
-msgid ""
-"SMTP server to which Sympa verify if alias with the same name as the list to "
-"be created"
-msgstr ""
-"Si ce paramètre est défini avec l'adresse d'un serveur SMTP, Sympa vérifiera "
-"si l'alias d'une liste dont la création a été demandée existe sur ce serveur."
-
-#: ../src/lib/confdef.pm:600
-msgid ""
-"Default value is real FQDN of host. Set [HOST]:[PORT] to specify non-"
-"standard port."
-msgstr ""
-"La valeur par défaut est le nom de domaine complètement qualifié (FQDN) de "
-"l'hôte. Spécifiez la valeur [HOST]:[PORT] pour utiliser un port spécifique."
-
-#: ../src/lib/confdef.pm:610
-msgid "SMTP HELO (EHLO) parameter used for alias verification"
-msgstr "Paramètre SMTP HELO (EHLO) utilisé pour la vérification des alias"
-
-#: ../src/lib/confdef.pm:612
-msgid "Default value is the host part of list_check_smtp parameter."
-msgstr ""
-"La valeur par défaut est la partie domaine du paramètre list_check_smtp"
-
-#: ../src/lib/confdef.pm:619
-msgid "Bulk mailer"
-msgstr "Configuration du bulk mailer"
-
-#: ../src/lib/confdef.pm:628
-msgid "Default priority for a packet to be sent by bulk."
-msgstr "Priorité par défaut des paquets expédiés par le bulkmailer."
-
-#: ../src/lib/confdef.pm:635
-msgid ""
-"Minimum number of packets in database before the bulk forks to increase "
-"sending rate"
-msgstr ""
-"Nombre minimum de paquets dans la base de données à atteindre pour que le "
-"bulkmailer se multiplie pour augmenter la cadence d'expédition"
-
-#: ../src/lib/confdef.pm:642
-msgid "Max number of bulks that will run on the same server"
-msgstr "Nombre maximum de processus bulk pouvant tourner sur le même serveur"
-
-#: ../src/lib/confdef.pm:649
-msgid ""
-"The number of seconds a slave bulk will remain running without processing a "
-"message before it spontaneously dies."
-msgstr ""
-"La durée en secondes pendant laquelle un bulk esclave tournera sans avoir de "
-"messages à expédier avant de mourir."
-
-#: ../src/lib/confdef.pm:656
-msgid ""
-"The number of seconds a bulk sleeps between starting a new loop if it didn't "
-"find a message to send."
-msgstr ""
-"La durée, en secondes, pendant laquelle un processus bulk attend avant de "
-"commencer une nouvelle boucle s'il n'a pas trouvé de message à envoyer"
-
-#: ../src/lib/confdef.pm:658
-msgid "Keep it small if you want your server to be reactive."
-msgstr ""
-"Garder cette valeur petite si vous voulez que votre service soit réactif"
-
-#: ../src/lib/confdef.pm:663
-msgid ""
-"Number of seconds a master bulk waits between two packets number checks."
-msgstr ""
-"La durée, en secondes, pendant laquelle un bulk maître attend entre deux "
-"vérifications du nombre de paquets à envoyer"
-
-#: ../src/lib/confdef.pm:665
-msgid ""
-"Keep it small if you expect brutal increases in the message sending load."
-msgstr ""
-"Gardez cette valeur faible si vous vous attendez à des pics d'activité "
-"brutaux."
-
-# nlsref 16,203
-#: ../src/lib/confdef.pm:668
-msgid "Quotas"
-msgstr "Configuration des quotas"
-
-#: ../src/lib/confdef.pm:673
-msgid "Default disk quota for shared repository"
-msgstr "Quota par défaut des répertoires de documents partagés"
-
-#: ../src/lib/confdef.pm:682
-msgid "Spool related"
-msgstr "Configuration des spools"
-
-#: ../src/lib/confdef.pm:687
-msgid "Directory containing various specialized spools"
-msgstr "Répertoire contenant les divers spools spécialisés de Sympa"
-
-#: ../src/lib/confdef.pm:689
-msgid "All spool are created at runtime by sympa.pl"
-msgstr "Tous les spools sont créés lors de l'exécution de sympa.pl"
-
-#: ../src/lib/confdef.pm:694
-msgid "Directory for incoming spool"
-msgstr "Répertoire du spool des messages entrants"
-
-#: ../src/lib/confdef.pm:713
-msgid "Directory for moderation spool"
-msgstr "Répertoire du spool de modération"
-
-# nlsref 15,10
-#: ../src/lib/confdef.pm:719
-msgid "Directory for digest spool"
-msgstr "Répertoire du spool de constitution des digests"
-
-#: ../src/lib/confdef.pm:725
-msgid "Directory for authentication spool"
-msgstr "Répertoire du spool d'authentification"
-
-#: ../src/lib/confdef.pm:731
-msgid "Directory for outgoing spool"
-msgstr "Répertoire du spool d'archivage"
-
-# nlsref 15,10
-#: ../src/lib/confdef.pm:737
-msgid "Directory for topic spool"
-msgstr "Répertoire du spool des messages en attente de marquage par un topic"
-
-#: ../src/lib/confdef.pm:743
-msgid "Directory for bounce incoming spool"
-msgstr "Répertoire du spool de gestion des erreurs"
-
-# nlsref 15,10
-#: ../src/lib/confdef.pm:749
-msgid "Directory for task spool"
-msgstr "Répertoire du spool des tâches"
-
-#: ../src/lib/confdef.pm:755
-msgid "Directory for automatic list creation spool"
-msgstr "Répertoire du spool des listes automatiques"
-
-#: ../src/lib/confdef.pm:761
-msgid "Temporary directory used by OpenSSL and antivirus plugins"
-msgstr "Répertoire temporaire employé par openSSL et les plugins antivirus"
-
-#: ../src/lib/confdef.pm:766
-msgid "Must not be 0."
-msgstr "Ne doit pas valoir 0"
-
-# nlsref 16,33
-#: ../src/lib/confdef.pm:805
-msgid "Internationalization related"
-msgstr "Configuration de l'internationalisation"
-
-#: ../src/lib/confdef.pm:810
-msgid ""
-"Directory containing available NLS catalogues (Message internationalization)"
-msgstr "Répertoire contenant les les catalogues d'internationalisation"
-
-#: ../src/lib/confdef.pm:816
-msgid "Supported languages"
-msgstr "Langues supportées"
-
-#: ../src/lib/confdef.pm:820
+#: ../src/lib/confdef.pm:460 ../src/lib/confdef.pm:836
 msgid ""
 "This is the set of language that will be proposed to your users for the "
 "Sympa GUI. Don't select a language if you don't have the proper locale "
@@ -9579,33 +9368,287 @@ msgstr ""
 "GUI de Sympa. Ne sélectionnez pas un langage si vous n'avez pas la locale "
 "d'installée"
 
-#: ../src/lib/confdef.pm:825
+#: ../src/lib/confdef.pm:462
+msgid "Sending related"
+msgstr "Configuration liée à l'envoi de messages"
+
+#: ../src/lib/confdef.pm:466
+msgid "Path to the MTA (sendmail, postfix, exim or qmail)"
+msgstr "Chemin vers le MTA (sendmail, postfix, exim ou qmail)"
+
+#: ../src/lib/confdef.pm:469
+msgid ""
+"should point to a sendmail-compatible binary (eg: a binary named \"sendmail"
+"\" is distributed with Postfix)"
+msgstr ""
+"Devrait pointer vers un exécutable compatible sendmail (par ex : un binaire "
+"nommé \"sendmail\" est distribué par postfix)"
+
+#: ../src/lib/confdef.pm:482
+msgid ""
+"Max. number of Sendmail processes (launched by Sympa) running simultaneously"
+msgstr ""
+"Nombre maximum de processus sendmail (lancés par Sympa) exécutés "
+"simultanément"
+
+#: ../src/lib/confdef.pm:484
+msgid ""
+"Proposed value is quite low, you can rise it up to 100, 200 or even 300 with "
+"powerfull systems."
+msgstr ""
+"La valeur proposée est assez faible ; vous pouvez la monter à 100, 200 voire "
+"300 sur des systèmes puissants"
+
+#: ../src/lib/confdef.pm:526
+msgid ""
+"comma separated list of operations for which blacklist filter is applied"
+msgstr ""
+"listes des opérations pour lesquelles une liste noire est employée, séparées "
+"par des virgules"
+
+#: ../src/lib/confdef.pm:531
+msgid "Setting this parameter to \"none\" will hide the blacklist feature"
+msgstr ""
+"Donner la valeur 'none' à ce paramètre dissimulera la fonctionnalité de "
+"liste noire"
+
+#: ../src/lib/confdef.pm:536
+msgid ""
+"If set, when a list editor report a spam, this external script is run by "
+"wwsympa or sympa, the spam is sent into script stdin"
+msgstr ""
+"Ce paramètre prend pour valeur le chemin vers un script ; S'il est défini, "
+"quand un modérateur reporte un spam, ce script externe sera exécuté par "
+"sympa ou wwsympa, avec le contenu du spam envoyé dans STDIN"
+
+#: ../src/lib/confdef.pm:542
+msgid ""
+"Default maximum size (in bytes) for messages (can be re-defined for each "
+"list)"
+msgstr ""
+"Taille maximum des messages (en octets). Peut être redéfini pour chaque "
+"liste."
+
+#: ../src/lib/confdef.pm:559
+msgid ""
+"Maximum number of recipients per call to Sendmail. The nrcpt_by_domain.conf "
+"file allows a different tuning per destination domain."
+msgstr ""
+"Nombre maximum de destinataires par appel à sendmail. Le fichier "
+"nrcpt_by_domain.cong permet de définir un réglage spécifique pour chaque "
+"domaine de destination."
+
+#: ../src/lib/confdef.pm:565
+msgid "Max. number of different domains per call to Sendmail"
+msgstr "Nombre maximum de domaines différents par appel à sendmail"
+
+#: ../src/lib/confdef.pm:575
+msgid "Whether or not to cache lists in the database"
+msgstr "Cacher ou non les listes dans la base de données"
+
+#: ../src/lib/confdef.pm:583
+msgid "Specify which rfc2369 mailing list headers to add"
+msgstr ""
+"Spécifie quels entêtes de mailing list (de la RFC 2369) doivent être ajoutés"
+
+# nlsref 15,4
+#: ../src/lib/confdef.pm:589
+msgid "Specify header fields to be removed before message distribution"
+msgstr ""
+"Spécifie quels entêtes doivent être supprimés des messages avant leur "
+"distribution"
+
+#: ../src/lib/confdef.pm:599
+msgid "Reject mail from automates (crontab, etc) sent to a list?"
+msgstr ""
+"Rejeter les mails générés automatiquement (crontab, etc.) envoyés à une "
+"liste ?"
+
+#: ../src/lib/confdef.pm:614
+msgid ""
+"SMTP server to which Sympa verify if alias with the same name as the list to "
+"be created"
+msgstr ""
+"Si ce paramètre est défini avec l'adresse d'un serveur SMTP, Sympa vérifiera "
+"si l'alias d'une liste dont la création a été demandée existe sur ce serveur."
+
+#: ../src/lib/confdef.pm:616
+msgid ""
+"Default value is real FQDN of host. Set [HOST]:[PORT] to specify non-"
+"standard port."
+msgstr ""
+"La valeur par défaut est le nom de domaine complètement qualifié (FQDN) de "
+"l'hôte. Spécifiez la valeur [HOST]:[PORT] pour utiliser un port spécifique."
+
+#: ../src/lib/confdef.pm:626
+msgid "SMTP HELO (EHLO) parameter used for alias verification"
+msgstr "Paramètre SMTP HELO (EHLO) utilisé pour la vérification des alias"
+
+#: ../src/lib/confdef.pm:628
+msgid "Default value is the host part of list_check_smtp parameter."
+msgstr ""
+"La valeur par défaut est la partie domaine du paramètre list_check_smtp"
+
+#: ../src/lib/confdef.pm:635
+msgid "Bulk mailer"
+msgstr "Configuration du bulk mailer"
+
+#: ../src/lib/confdef.pm:644
+msgid "Default priority for a packet to be sent by bulk."
+msgstr "Priorité par défaut des paquets expédiés par le bulkmailer."
+
+#: ../src/lib/confdef.pm:651
+msgid ""
+"Minimum number of packets in database before the bulk forks to increase "
+"sending rate"
+msgstr ""
+"Nombre minimum de paquets dans la base de données à atteindre pour que le "
+"bulkmailer se multiplie pour augmenter la cadence d'expédition"
+
+#: ../src/lib/confdef.pm:658
+msgid "Max number of bulks that will run on the same server"
+msgstr "Nombre maximum de processus bulk pouvant tourner sur le même serveur"
+
+#: ../src/lib/confdef.pm:665
+msgid ""
+"The number of seconds a slave bulk will remain running without processing a "
+"message before it spontaneously dies."
+msgstr ""
+"La durée en secondes pendant laquelle un bulk esclave tournera sans avoir de "
+"messages à expédier avant de mourir."
+
+#: ../src/lib/confdef.pm:672
+msgid ""
+"The number of seconds a bulk sleeps between starting a new loop if it didn't "
+"find a message to send."
+msgstr ""
+"La durée, en secondes, pendant laquelle un processus bulk attend avant de "
+"commencer une nouvelle boucle s'il n'a pas trouvé de message à envoyer"
+
+#: ../src/lib/confdef.pm:674
+msgid "Keep it small if you want your server to be reactive."
+msgstr ""
+"Garder cette valeur petite si vous voulez que votre service soit réactif"
+
+#: ../src/lib/confdef.pm:679
+msgid ""
+"Number of seconds a master bulk waits between two packets number checks."
+msgstr ""
+"La durée, en secondes, pendant laquelle un bulk maître attend entre deux "
+"vérifications du nombre de paquets à envoyer"
+
+#: ../src/lib/confdef.pm:681
+msgid ""
+"Keep it small if you expect brutal increases in the message sending load."
+msgstr ""
+"Gardez cette valeur faible si vous vous attendez à des pics d'activité "
+"brutaux."
+
+# nlsref 16,203
+#: ../src/lib/confdef.pm:684
+msgid "Quotas"
+msgstr "Configuration des quotas"
+
+#: ../src/lib/confdef.pm:689
+msgid "Default disk quota for shared repository"
+msgstr "Quota par défaut des répertoires de documents partagés"
+
+#: ../src/lib/confdef.pm:698
+msgid "Spool related"
+msgstr "Configuration des spools"
+
+#: ../src/lib/confdef.pm:703
+msgid "Directory containing various specialized spools"
+msgstr "Répertoire contenant les divers spools spécialisés de Sympa"
+
+#: ../src/lib/confdef.pm:705
+msgid "All spool are created at runtime by sympa.pl"
+msgstr "Tous les spools sont créés lors de l'exécution de sympa.pl"
+
+#: ../src/lib/confdef.pm:710
+msgid "Directory for incoming spool"
+msgstr "Répertoire du spool des messages entrants"
+
+#: ../src/lib/confdef.pm:729
+msgid "Directory for moderation spool"
+msgstr "Répertoire du spool de modération"
+
+# nlsref 15,10
+#: ../src/lib/confdef.pm:735
+msgid "Directory for digest spool"
+msgstr "Répertoire du spool de constitution des digests"
+
+#: ../src/lib/confdef.pm:741
+msgid "Directory for authentication spool"
+msgstr "Répertoire du spool d'authentification"
+
+#: ../src/lib/confdef.pm:747
+msgid "Directory for outgoing spool"
+msgstr "Répertoire du spool d'archivage"
+
+# nlsref 15,10
+#: ../src/lib/confdef.pm:753
+msgid "Directory for topic spool"
+msgstr "Répertoire du spool des messages en attente de marquage par un topic"
+
+#: ../src/lib/confdef.pm:759
+msgid "Directory for bounce incoming spool"
+msgstr "Répertoire du spool de gestion des erreurs"
+
+# nlsref 15,10
+#: ../src/lib/confdef.pm:765
+msgid "Directory for task spool"
+msgstr "Répertoire du spool des tâches"
+
+#: ../src/lib/confdef.pm:771
+msgid "Directory for automatic list creation spool"
+msgstr "Répertoire du spool des listes automatiques"
+
+#: ../src/lib/confdef.pm:777
+msgid "Temporary directory used by OpenSSL and antivirus plugins"
+msgstr "Répertoire temporaire employé par openSSL et les plugins antivirus"
+
+#: ../src/lib/confdef.pm:782
+msgid "Must not be 0."
+msgstr "Ne doit pas valoir 0"
+
+# nlsref 16,33
+#: ../src/lib/confdef.pm:821
+msgid "Internationalization related"
+msgstr "Configuration de l'internationalisation"
+
+#: ../src/lib/confdef.pm:826
+msgid ""
+"Directory containing available NLS catalogues (Message internationalization)"
+msgstr "Répertoire contenant les les catalogues d'internationalisation"
+
+#: ../src/lib/confdef.pm:832
+msgid "Supported languages"
+msgstr "Langues supportées"
+
+#: ../src/lib/confdef.pm:841
 msgid "Default language (one of supported languages)"
 msgstr "Langue par défault (une des langues supportées)"
 
-#: ../src/lib/confdef.pm:829
-msgid "This is the default language used by Sympa"
-msgstr "Ceci est la langue par défaut utilisée par Sympa"
-
-#: ../src/lib/confdef.pm:836
+#: ../src/lib/confdef.pm:852
 msgid "Bounce related"
 msgstr "Relatif à la gestion des erreurs."
 
-#: ../src/lib/confdef.pm:846
+#: ../src/lib/confdef.pm:862
 msgid "Welcome message return-path ( unique | owner )"
 msgstr "Adresse de retour du message de bienvenue ( unique | propriétaire )"
 
-#: ../src/lib/confdef.pm:848
+#: ../src/lib/confdef.pm:864
 msgid "If set to unique, new subcriber is removed if welcome message bounce"
 msgstr ""
 "Si réglé sur unique, le nouvel inscrit est supprimé si le message de "
 "bienvenue revient"
 
-#: ../src/lib/confdef.pm:853
+#: ../src/lib/confdef.pm:869
 msgid "Remind message return-path ( unique | owner )"
 msgstr "Adresse de retour des rappels (unique | propriétaire )"
 
-#: ../src/lib/confdef.pm:855
+#: ../src/lib/confdef.pm:871
 msgid ""
 "If set to unique, subcriber is removed if remind message bounce, use with "
 "care"
@@ -9613,27 +9656,27 @@ msgstr ""
 "Si réglé sur unique, l'abonné est supprimé si le message de rappel revient "
 "en erreur"
 
-#: ../src/lib/confdef.pm:864
+#: ../src/lib/confdef.pm:880
 msgid "Task name for expiration of old bounces"
 msgstr "Nom de la tâche pour l'expiration des anciens rebonds"
 
-#: ../src/lib/confdef.pm:908
+#: ../src/lib/confdef.pm:924
 msgid "Bouncing email rate for warn list owner"
 msgstr "Taux d'erreurs avant de prévenir le propriétaire"
 
-#: ../src/lib/confdef.pm:915
+#: ../src/lib/confdef.pm:931
 msgid "Bouncing email rate for halt the list (not implemented)"
 msgstr "Taux d'erreurs avant d'arrêter la liste (pas implémenté)"
 
-#: ../src/lib/confdef.pm:917
+#: ../src/lib/confdef.pm:933
 msgid "Not yet used in current version, Default is 50"
 msgstr "Pas encore utilisé dans cette version, par défaut à 50."
 
-#: ../src/lib/confdef.pm:932
+#: ../src/lib/confdef.pm:948
 msgid "Tuning"
 msgstr "Personnalisation"
 
-#: ../src/lib/confdef.pm:937
+#: ../src/lib/confdef.pm:953
 msgid ""
 "Use of binary version of the list config structure on disk (none | "
 "binary_file)"
@@ -9641,7 +9684,7 @@ msgstr ""
 "Utilisation de la version binaire de la liste de configuration de la "
 "structure sur le disque (non | fichier_binaire)"
 
-#: ../src/lib/confdef.pm:940
+#: ../src/lib/confdef.pm:956
 msgid ""
 "Set this parameter to \"binary_file\" if you manage a big amount of lists "
 "(1000+); it should make the web interface startup faster"
@@ -9649,58 +9692,58 @@ msgstr ""
 "Mettre ce paramètre à \"binary_file\" si vous gérez une grande quantité de "
 "listes (1 000+); ça devrait accélérer le démarrage de l'interface web"
 
-#: ../src/lib/confdef.pm:945
+#: ../src/lib/confdef.pm:961
 msgid "flock | nfs"
 msgstr "flock | nfs"
 
-#: ../src/lib/confdef.pm:949
+#: ../src/lib/confdef.pm:965
 msgid "Sympa commands priority"
 msgstr "Priorité des commandes Sympa"
 
 # nlsref 15,7
-#: ../src/lib/confdef.pm:965
+#: ../src/lib/confdef.pm:981
 msgid "Default priority for list messages"
 msgstr "Priorité par défaut pour les messages de listes"
 
-#: ../src/lib/confdef.pm:970
+#: ../src/lib/confdef.pm:986
 msgid "Database related"
 msgstr "Base de données"
 
-#: ../src/lib/confdef.pm:979
+#: ../src/lib/confdef.pm:995
 msgid "Type of the database (mysql|Pg|Oracle|Sybase|SQLite)"
 msgstr "Type de la base de données (mysql|Pg|Oracle|Sybase|SQLite)"
 
-#: ../src/lib/confdef.pm:982
+#: ../src/lib/confdef.pm:998
 msgid "Be careful to the case"
 msgstr "Attention à la case"
 
-#: ../src/lib/confdef.pm:987
+#: ../src/lib/confdef.pm:1003
 msgid "Name of the database"
 msgstr "Nom de la base de données"
 
-#: ../src/lib/confdef.pm:990
+#: ../src/lib/confdef.pm:1006
 msgid "With SQLite, the name of the DB corresponds to the DB file"
 msgstr "Avec SQLite, le nom de la BDD correspond au fichier de la BDD"
 
-#: ../src/lib/confdef.pm:996
+#: ../src/lib/confdef.pm:1012
 msgid "Hostname of the database server"
 msgstr "Nom du serveur de la base de données"
 
-#: ../src/lib/confdef.pm:1003
+#: ../src/lib/confdef.pm:1019
 msgid "Port of the database server"
 msgstr "Port du serveur de la base de données"
 
 # nlsref 16,148
-#: ../src/lib/confdef.pm:1011
+#: ../src/lib/confdef.pm:1027
 msgid "User for the database connection"
 msgstr "utilisateur pour la connexion à la base de données"
 
 # nlsref 16,148
-#: ../src/lib/confdef.pm:1019
+#: ../src/lib/confdef.pm:1035
 msgid "Password for the database connection"
 msgstr "Mot de passe pour la connexion à la base de données."
 
-#: ../src/lib/confdef.pm:1022
+#: ../src/lib/confdef.pm:1038
 msgid ""
 "What ever you use a password or not, you must protect the SQL server (is it "
 "not a public internet service ?)"
@@ -9709,31 +9752,31 @@ msgstr ""
 "SQL (qui n'est pas un service internet ?)"
 
 # nlsref 16,148
-#: ../src/lib/confdef.pm:1034
+#: ../src/lib/confdef.pm:1050
 msgid "Environment variables setting for database"
 msgstr "variable d'environnement pour la connexion à la base de données"
 
-#: ../src/lib/confdef.pm:1036
+#: ../src/lib/confdef.pm:1052
 msgid "This is useful for defining ORACLE_HOME "
 msgstr "C'est utile pour définir ORACLE_HOME"
 
-#: ../src/lib/confdef.pm:1042
+#: ../src/lib/confdef.pm:1058
 msgid "Database private extention to subscriber table"
 msgstr "Extension de la table d'abonnés de la base de données."
 
-#: ../src/lib/confdef.pm:1044 ../src/lib/confdef.pm:1052
+#: ../src/lib/confdef.pm:1060 ../src/lib/confdef.pm:1068
 msgid "You need to extend the database format with these fields"
 msgstr "Vous devez ajouter ces champs à la base de données"
 
-#: ../src/lib/confdef.pm:1050
+#: ../src/lib/confdef.pm:1066
 msgid "Database private extention to user table"
 msgstr "Extension privée de la table des utilisateurs dans la base de donnée"
 
-#: ../src/lib/confdef.pm:1069
+#: ../src/lib/confdef.pm:1085
 msgid "Number of months that elapse before a log is expired"
 msgstr "Nombre de mois avant expiration de la journalisation"
 
-#: ../src/lib/confdef.pm:1091
+#: ../src/lib/confdef.pm:1107
 msgid ""
 "Default timeout between two scheduled synchronizations of list members with "
 "data sources."
@@ -9741,7 +9784,7 @@ msgstr ""
 "Délai par défaut entre deux synchronisations automatiques de la liste des "
 "membres avec les sources de données."
 
-#: ../src/lib/confdef.pm:1097
+#: ../src/lib/confdef.pm:1113
 msgid ""
 "Default timeout between two action-triggered synchronizations of list "
 "members with data sources."
@@ -9750,46 +9793,46 @@ msgstr ""
 "actions de l'utilisateur) de la liste des membres avec les sources de "
 "données."
 
-#: ../src/lib/confdef.pm:1103
+#: ../src/lib/confdef.pm:1119
 msgid "Default timeout while performing a fetch for an include_sql_query sync"
 msgstr "Délai d'attente pour la récolte des données par include_sql_query"
 
-#: ../src/lib/confdef.pm:1108
+#: ../src/lib/confdef.pm:1124
 msgid "Loop prevention"
 msgstr "Protection contre les boucles"
 
-#: ../src/lib/confdef.pm:1136
+#: ../src/lib/confdef.pm:1152
 msgid "S/MIME configuration"
 msgstr "Configuration S/MIME"
 
-#: ../src/lib/confdef.pm:1141
+#: ../src/lib/confdef.pm:1157
 msgid "Path to OpenSSL"
 msgstr "Chemin vers OpenSSL"
 
-#: ../src/lib/confdef.pm:1144
+#: ../src/lib/confdef.pm:1160
 msgid "Sympa recognizes S/MIME if OpenSSL is installed"
 msgstr "Sympa reconnaît le S/MIME si OpenSSL est installé"
 
-#: ../src/lib/confdef.pm:1151
+#: ../src/lib/confdef.pm:1167
 msgid "Directory containing trusted CA certificates"
 msgstr "Repertoire contenant les AC de confiance"
 
-#: ../src/lib/confdef.pm:1159
+#: ../src/lib/confdef.pm:1175
 msgid "File containing bundled trusted CA certificates"
 msgstr "Fichier contenant les AC de confiance"
 
-#: ../src/lib/confdef.pm:1167
+#: ../src/lib/confdef.pm:1183
 msgid "Password used to crypt lists private keys"
 msgstr "Mot de passe utilisé pour chiffrer les clés privées des listes"
 
-#: ../src/lib/confdef.pm:1184
+#: ../src/lib/confdef.pm:1200
 msgid ""
 "Insert a DKIM signature to message from the robot, from the list or both"
 msgstr ""
 "Insérer une signature DKIM aux messages de service, aux messages de listes "
 "ou aux deux."
 
-#: ../src/lib/confdef.pm:1191
+#: ../src/lib/confdef.pm:1207
 msgid ""
 "Type of message that is added a DKIM signature before distribution to "
 "subscribers. Possible values are \"none\", \"any\" or a list of the "
@@ -9804,34 +9847,34 @@ msgstr ""
 "\"dkim_authenticated_messages\",\"editor_validated_messages\"(authentifiés "
 "par un modérateur)."
 
-#: ../src/lib/confdef.pm:1198
+#: ../src/lib/confdef.pm:1214
 msgid "Location of the file where DKIM private key is stored"
 msgstr "Chemin de stockage des clés privées DKIM"
 
-#: ../src/lib/confdef.pm:1205
+#: ../src/lib/confdef.pm:1221
 msgid ""
 "The \"d=\" tag as defined in rfc 4871, default is virtual host domain name"
 msgstr ""
 "La balise \"d=\" telles que définie par la RFC 4871. La valeur  par défaut "
 "est le nom de domaine."
 
-#: ../src/lib/confdef.pm:1212
+#: ../src/lib/confdef.pm:1228
 msgid "The selector"
 msgstr "Le sélecteur"
 
-#: ../src/lib/confdef.pm:1219
+#: ../src/lib/confdef.pm:1235
 msgid "The \"i=\" tag as defined in rfc 4871, default is null"
 msgstr "La balise \"i=\" telles que définie par la RFC 4871. vide par défaut."
 
-#: ../src/lib/confdef.pm:1223
+#: ../src/lib/confdef.pm:1239
 msgid "Antivirus plug-in"
 msgstr "Plugin antivirus"
 
-#: ../src/lib/confdef.pm:1229
+#: ../src/lib/confdef.pm:1245
 msgid "Path to the antivirus scanner engine"
 msgstr "Chemin vers le moteur antivirus."
 
-#: ../src/lib/confdef.pm:1232
+#: ../src/lib/confdef.pm:1248
 msgid ""
 "supported antivirus: McAfee/uvscan, Fsecure/fsav, Sophos, AVP and Trend "
 "Micro/VirusWall"
@@ -9839,15 +9882,15 @@ msgstr ""
 "Antivirus supportés: McAfee/uvscan, Fsecure/fsav, Sophos, AVP and Trend "
 "Micro/VirusWall"
 
-#: ../src/lib/confdef.pm:1238
+#: ../src/lib/confdef.pm:1254
 msgid "Antivirus plugin command argument"
 msgstr "Arguments de la ligne de commande de l'antivirus."
 
-#: ../src/lib/confdef.pm:1247
+#: ../src/lib/confdef.pm:1263
 msgid "Tag based spam filtering"
 msgstr "Filtrage du spam fondé sur des tags."
 
-#: ../src/lib/confdef.pm:1257
+#: ../src/lib/confdef.pm:1273
 msgid ""
 "If a spam filter (like spamassassin or j-chkmail) add a smtp headers to tag "
 "spams, name of this header (example X-Spam-Status)"
@@ -9855,32 +9898,32 @@ msgstr ""
 "Si l'anti-spam (comme spamassassin ou j-chkmail) place une entête smtp pour "
 "identifier les indésirables, nom de cet entête (exemple: X-Spam-Status)"
 
-#: ../src/lib/confdef.pm:1265
+#: ../src/lib/confdef.pm:1281
 msgid "Regexp applied on this header to verify message is a spam (example Yes)"
 msgstr ""
 "Expression rationelle appliquée sur cet entête pour identifier le message "
 "comme indésirable (exemple: Yes)"
 
-#: ../src/lib/confdef.pm:1273
+#: ../src/lib/confdef.pm:1289
 msgid ""
 "Regexp applied on this header to verify message is NOT a spam (example No)"
 msgstr ""
 "Expression rationelle appliquée sur cet entête pour identifier le message "
 "comme ACCEPTABLE (exemple: No)"
 
-#: ../src/lib/confdef.pm:1279
+#: ../src/lib/confdef.pm:1295
 msgid "wwsympa.conf parameters"
 msgstr "paramètres de wwsympa.conf"
 
-#: ../src/lib/confdef.pm:1284
+#: ../src/lib/confdef.pm:1300
 msgid "Directory for storing HTML archives"
 msgstr "Répertoire de stockage des archives HTML"
 
-#: ../src/lib/confdef.pm:1287 ../src/lib/confdef.pm:1308
+#: ../src/lib/confdef.pm:1303 ../src/lib/confdef.pm:1324
 msgid "Better if not in a critical partition"
 msgstr "Il est conseillé de ne pas employer une partition critique."
 
-#: ../src/lib/confdef.pm:1293
+#: ../src/lib/confdef.pm:1309
 msgid ""
 "Default index organization when entering the web archive: either threaded or "
 "in chronological order"
@@ -9888,27 +9931,27 @@ msgstr ""
 "Ordre d'affichage par défaut des archives web: par discussion (threaded) ou "
 "ordre chronologique (chronological)"
 
-#: ../src/lib/confdef.pm:1300
+#: ../src/lib/confdef.pm:1316
 msgid "File containing archived PID while running"
 msgstr "Fichier contenant le PID du démon archived quand il est lancé"
 
-#: ../src/lib/confdef.pm:1306
+#: ../src/lib/confdef.pm:1322
 msgid "Directory for storing bounces"
 msgstr "Répertoire de stockage des retours en erreur"
 
-#: ../src/lib/confdef.pm:1313
+#: ../src/lib/confdef.pm:1329
 msgid "File containing bounced PID while running"
 msgstr "Fichier contenant le PID du démon bounced quand il est lancé"
 
-#: ../src/lib/confdef.pm:1319
+#: ../src/lib/confdef.pm:1335
 msgid "HTTP cookies lifetime"
 msgstr "Durée de vie des cookies HTTP"
 
-#: ../src/lib/confdef.pm:1325
+#: ../src/lib/confdef.pm:1341
 msgid "HTTP cookies validity domain"
 msgstr "Domaine pour lequel les cookies HTTP sont valides"
 
-#: ../src/lib/confdef.pm:1332
+#: ../src/lib/confdef.pm:1348
 msgid ""
 "Activates a custom archiver to use instead of MHonArc. The value of this "
 "parameter is the absolute path on the file system to the script of the "
@@ -9917,62 +9960,62 @@ msgstr ""
 "Active un archiveur différent de MHonArc. La valeur de ce paramètre est le "
 "chemin absolu du script à utiliser."
 
-#: ../src/lib/confdef.pm:1339
+#: ../src/lib/confdef.pm:1355
 msgid "Type of main Web page ( lists | home )"
 msgstr ""
 "Type de page d'accueil ( \"lists\"(listes) | \"home\"(page d'accueil) )"
 
-#: ../src/lib/confdef.pm:1347
+#: ../src/lib/confdef.pm:1363
 msgid "Syslog facility for wwsympa, archived and bounced"
 msgstr "Facilité syslog pour wwsympa, archived et bounced."
 
-#: ../src/lib/confdef.pm:1350
+#: ../src/lib/confdef.pm:1366
 msgid "Default is to use previously defined sympa log facility."
 msgstr ""
 "La valeur par défaut est celle préalablement définie pour la facilité des "
 "logs de sympa.pl"
 
-#: ../src/lib/confdef.pm:1355
+#: ../src/lib/confdef.pm:1371
 msgid "Path to MHonArc mail2html plugin"
 msgstr "Chemin absolu vers le plugin mail2html de MHonArc."
 
-#: ../src/lib/confdef.pm:1358
+#: ../src/lib/confdef.pm:1374
 msgid "This is required for HTML mail archiving"
 msgstr "Requis pour l'archivage HTML des messages"
 
-#: ../src/lib/confdef.pm:1363
+#: ../src/lib/confdef.pm:1379
 msgid "Password case (insensitive | sensitive)"
 msgstr ""
 "Sensibilité à la casse des mots de passe ( \"insensitive\"(non) | \"sensitive"
 "\"(oui) )"
 
-#: ../src/lib/confdef.pm:1370
+#: ../src/lib/confdef.pm:1386
 msgid "Title of main Web page"
 msgstr "Titre de la page d'accueil"
 
-#: ../src/lib/confdef.pm:1378
+#: ../src/lib/confdef.pm:1394
 msgid "Is fast_cgi module for Apache (or Roxen) installed (0 | 1)"
 msgstr ""
 "Est-ce-que le module fast_cgi d'Apache (ou Roxen) est installé ( 0 | 1 )"
 
-#: ../src/lib/confdef.pm:1381
+#: ../src/lib/confdef.pm:1397
 msgid "This module provide much faster web interface"
 msgstr "Ce module fournit une interface beaucoup plus rapide"
 
-#: ../src/lib/confdef.pm:1384
+#: ../src/lib/confdef.pm:1400
 msgid "Virtual host specific parameters"
 msgstr "Paramètres spécifiques à l'Hôte Virtuel (VirtualHost)"
 
-#: ../src/lib/confdef.pm:1388
+#: ../src/lib/confdef.pm:1404
 msgid "URL of a virtual host"
 msgstr "URL d'un hôte virtuel"
 
-#: ../src/lib/confdef.pm:1419
+#: ../src/lib/confdef.pm:1435
 msgid "Default limit for the number of subscribers per list (0 means no limit)"
 msgstr ""
 "Limite par défaut du nombre d'abonnés par liste (0 signifie aucune limite)"
 
-#: ../src/lib/confdef.pm:1439
+#: ../src/lib/confdef.pm:1455
 msgid ""
 "If set to \"on\", users will be able to post messages in HTML using a "
 "javascript WYSIWYG editor."
@@ -9980,15 +10023,15 @@ msgstr ""
 "Si ce paramètre est à \"on\", les utilisateurs auront accès à un éditeur "
 "riche en javascript (WYSIWYG) pour poster des messages HTML"
 
-#: ../src/lib/confdef.pm:1447
+#: ../src/lib/confdef.pm:1463
 msgid "Path to the javascript file making the WYSIWYG HTML editor available"
 msgstr "Chemin du fichier javascript donnant accès à l'éditeur riche"
 
-#: ../src/lib/confdef.pm:1454
+#: ../src/lib/confdef.pm:1470
 msgid "Javascript excerpt that enables and configures the WYSIWYG HTML editor."
 msgstr "Fragment javascript qui active et configure un éditeur HTML WYSIWYG."
 
-#: ../src/lib/confdef.pm:1486
+#: ../src/lib/confdef.pm:1502
 msgid ""
 "When using LDAP authentication, if the identifier provided by the user was a "
 "valid email, if this parameter is set to false, then the provided email will "
@@ -10000,11 +10043,11 @@ msgstr ""
 "sera utilisée pour l'authentiification. Sinon (\"true\"), la première "
 "adresse retourné par le serveur LDAP sera utilisé."
 
-#: ../src/lib/confdef.pm:1493
+#: ../src/lib/confdef.pm:1509
 msgid "If set to \"on\", enables support of legacy character set"
 msgstr "Si \"on\", active le support des anciennes tables de caractères"
 
-#: ../src/lib/confdef.pm:1495
+#: ../src/lib/confdef.pm:1511
 msgid ""
 "In some language environments, legacy encoding (character set) is preferred "
 "for e-mail messages: for example iso-2022-jp in Japanese language."
@@ -10012,18 +10055,18 @@ msgstr ""
 "Pour certaines langues, les anciennes tables de caractères sont préférables "
 "pour encoder les messages: par exemple iso-2022-jp pour le japonais"
 
-#: ../src/lib/confdef.pm:1529
+#: ../src/lib/confdef.pm:1545
 msgid "Directory for subscription spool"
 msgstr "Répertoire du spool d'abonnements en attente de modération"
 
-#: ../src/lib/confdef.pm:1534
+#: ../src/lib/confdef.pm:1550
 msgid ""
 "Default number of lines of the array displaying users in the review page"
 msgstr ""
 "Nombre de lignes à afficher par défaut pour le tableau des utilisateurs dans "
 "la page \"review\""
 
-#: ../src/lib/confdef.pm:1546
+#: ../src/lib/confdef.pm:1562
 msgid ""
 "Messages are supposed to be filtered by an antispam that add one more "
 "headers to messages. This parameter is used to select a special scenario in "
@@ -10037,15 +10080,15 @@ msgstr ""
 "spam : ham, spam ou unsure. Ce paramètre remplace antispam_tag_header_name, "
 "antispam_tag_header_spam_regexp et antispam_tag_header_ham_regexp."
 
-#: ../src/lib/confdef.pm:1554
+#: ../src/lib/confdef.pm:1570
 msgid "Directory containing user certificates"
 msgstr "Répertoire contenant les certificats utilisateurs"
 
-#: ../src/lib/confdef.pm:1560
+#: ../src/lib/confdef.pm:1576
 msgid "File containing task_manager PID while running"
 msgstr "Fichier contenant le PID du task_manager en cours d’exécution"
 
-#: ../src/lib/confdef.pm:1565
+#: ../src/lib/confdef.pm:1581
 msgid ""
 "Default number of lines of the array displaying the log entries in the logs "
 "page"
@@ -10065,9 +10108,9 @@ msgstr "Erreur ligne %d : %s\n"
 #. Check the strftime manpage for format details : http://docs.freebsd.org/info/gawk/gawk.info.Time_Functions.html
 #: ../src/lib/Family.pm:2642 ../src/lib/Family.pm:397 ../src/lib/Family.pm:674
 #: ../src/lib/List.pm:2675 ../wwsympa/Auth.pm:435
-#: ../wwsympa/wwsympa.fcgi.in:1195 ../wwsympa/wwsympa.fcgi.in:2807
-#: ../wwsympa/wwsympa.fcgi.in:3081 ../wwsympa/wwsympa.fcgi.in:3094
-#: ../wwsympa/wwsympa.fcgi.in:3215
+#: ../wwsympa/wwsympa.fcgi.in:1191 ../wwsympa/wwsympa.fcgi.in:2805
+#: ../wwsympa/wwsympa.fcgi.in:3079 ../wwsympa/wwsympa.fcgi.in:3092
+#: ../wwsympa/wwsympa.fcgi.in:3214
 msgid "%d %b %Y at %H:%M:%S"
 msgstr "%d %b %Y at %H:%M:%S"
 
@@ -10971,34 +11014,34 @@ msgstr "%a, %d %b %Y"
 #. This entry is a date/time format
 #. Check the strftime manpage for format details : http://docs.freebsd.org/info/gawk/gawk.info.Time_Functions.html
 #: ../src/lib/List.pm:3853 ../src/lib/List.pm:3854 ../src/lib/List.pm:3858
-#: ../wwsympa/wwsympa.fcgi.in:11811 ../wwsympa/wwsympa.fcgi.in:11880
-#: ../wwsympa/wwsympa.fcgi.in:12082 ../wwsympa/wwsympa.fcgi.in:12429
-#: ../wwsympa/wwsympa.fcgi.in:15815 ../wwsympa/wwsympa.fcgi.in:15822
-#: ../wwsympa/wwsympa.fcgi.in:16558 ../wwsympa/wwsympa.fcgi.in:16608
-#: ../wwsympa/wwsympa.fcgi.in:17378 ../wwsympa/wwsympa.fcgi.in:17379
-#: ../wwsympa/wwsympa.fcgi.in:4496 ../wwsympa/wwsympa.fcgi.in:4551
-#: ../wwsympa/wwsympa.fcgi.in:5135 ../wwsympa/wwsympa.fcgi.in:5136
-#: ../wwsympa/wwsympa.fcgi.in:6692 ../wwsympa/wwsympa.fcgi.in:7828
-#: ../wwsympa/wwsympa.fcgi.in:8453 ../wwsympa/wwsympa.fcgi.in:8500
-#: ../wwsympa/wwsympa.fcgi.in:8502 ../wwsympa/wwsympa.fcgi.in:8532
-#: ../wwsympa/wwsympa.fcgi.in:9054 ../wwsympa/wwsympa.fcgi.in:9055
-#: ../wwsympa/wwsympa.fcgi.in:9089 ../wwsympa/wwsympa.fcgi.in:9090
-#: ../wwsympa/wwsympa.fcgi.in:9269 ../wwsympa/wwsympa.fcgi.in:9270
+#: ../wwsympa/wwsympa.fcgi.in:11808 ../wwsympa/wwsympa.fcgi.in:11877
+#: ../wwsympa/wwsympa.fcgi.in:12079 ../wwsympa/wwsympa.fcgi.in:12426
+#: ../wwsympa/wwsympa.fcgi.in:15812 ../wwsympa/wwsympa.fcgi.in:15819
+#: ../wwsympa/wwsympa.fcgi.in:16555 ../wwsympa/wwsympa.fcgi.in:16605
+#: ../wwsympa/wwsympa.fcgi.in:17375 ../wwsympa/wwsympa.fcgi.in:17376
+#: ../wwsympa/wwsympa.fcgi.in:4510 ../wwsympa/wwsympa.fcgi.in:4565
+#: ../wwsympa/wwsympa.fcgi.in:5149 ../wwsympa/wwsympa.fcgi.in:5150
+#: ../wwsympa/wwsympa.fcgi.in:6728 ../wwsympa/wwsympa.fcgi.in:7865
+#: ../wwsympa/wwsympa.fcgi.in:8487 ../wwsympa/wwsympa.fcgi.in:8534
+#: ../wwsympa/wwsympa.fcgi.in:8536 ../wwsympa/wwsympa.fcgi.in:8566
+#: ../wwsympa/wwsympa.fcgi.in:9047 ../wwsympa/wwsympa.fcgi.in:9048
+#: ../wwsympa/wwsympa.fcgi.in:9082 ../wwsympa/wwsympa.fcgi.in:9083
+#: ../wwsympa/wwsympa.fcgi.in:9262 ../wwsympa/wwsympa.fcgi.in:9263
 msgid "%d %b %Y"
 msgstr "%d %b %Y"
 
-#: ../src/lib/List.pm:7328
+#: ../src/lib/List.pm:7337
 msgid "Attempt to exceed the max number of members (%s) for this list."
 msgstr ""
 "Tentative d'ajout d'un abonné au-delà du nombre d'abonnés autorisés pour "
 "cette liste."
 
-#: ../src/lib/List.pm:7331
+#: ../src/lib/List.pm:7340
 msgid "Attempts to add some users in database failed."
 msgstr ""
 "Des tentatives d'ajout d'utilisateurs dans la base de données ont échoué"
 
-#: ../src/lib/List.pm:7333
+#: ../src/lib/List.pm:7342
 msgid "Added %s users out of %s required."
 msgstr "% abonnés ont été ajoutés sur %s demandés."
 
@@ -11018,7 +11061,7 @@ msgstr ""
 "valeur pour la variable %s.\n"
 
 # nlsref 11,2
-#: ../src/lib/mail.pm:941
+#: ../src/lib/mail.pm:949
 msgid "Unable to create a channel in smtpto: %s"
 msgstr "Impossible de créer un canal dans smtpto: %s"
 
@@ -11132,67 +11175,67 @@ msgstr "(date inconnue)"
 
 #. This entry is a date/time format
 #. Check the strftime manpage for format details : http://docs.freebsd.org/info/gawk/gawk.info.Time_Functions.html
-#: ../wwsympa/wwsympa.fcgi.in:1196
+#: ../wwsympa/wwsympa.fcgi.in:1192
 msgid "%H:%M:%S"
 msgstr "%H:%M:%S"
 
-#: ../wwsympa/wwsympa.fcgi.in:5030
+#: ../wwsympa/wwsympa.fcgi.in:5044
 msgid "Unable to add user %s in list %s : %s"
 msgstr "Impossible d'ajouter l'utilisateur %s à la liste %s : %s"
 
 # nlsref 6,2
-#: ../wwsympa/wwsympa.fcgi.in:6417
+#: ../wwsympa/wwsympa.fcgi.in:6453
 msgid "Unable to add users in list %s : %s"
 msgstr "Impossible d'ajouter des utilisateurs dans la liste %s : %s"
 
 #. This entry is a date/time format
 #. Check the strftime manpage for format details : http://docs.freebsd.org/info/gawk/gawk.info.Time_Functions.html
 #: ../wwsympa/SympaSession.pm:355 ../wwsympa/SympaSession.pm:356
-#: ../wwsympa/wwsympa.fcgi.in:12663 ../wwsympa/wwsympa.fcgi.in:12796
-#: ../wwsympa/wwsympa.fcgi.in:15139 ../wwsympa/wwsympa.fcgi.in:8410
+#: ../wwsympa/wwsympa.fcgi.in:12660 ../wwsympa/wwsympa.fcgi.in:12793
+#: ../wwsympa/wwsympa.fcgi.in:15136 ../wwsympa/wwsympa.fcgi.in:8444
 msgid "%d %b %y  %H:%M"
 msgstr "%d %b %y  %H:%M"
 
-#: ../wwsympa/wwsympa.fcgi.in:15997
+#: ../wwsympa/wwsympa.fcgi.in:15994
 msgid "Your unsubscription request to list %s was sent to the list owner."
 msgstr ""
 "Votre demande de désabonnement de la liste %s a été soumise à son "
 "gestionnaire."
 
-#: ../wwsympa/wwsympa.fcgi.in:15999
+#: ../wwsympa/wwsympa.fcgi.in:15996
 msgid "You were successfully unsubscribed from list %s."
 msgstr "Vous avez été désabonné(e) de la liste %s."
 
-#: ../wwsympa/wwsympa.fcgi.in:16003
+#: ../wwsympa/wwsympa.fcgi.in:16000
 msgid ""
 "Unsubscription from list %s denied: Unsubscription from this list is closed."
 msgstr ""
 "Votre demande de désabonnement de la liste %s a échoué : le désabonnement de "
 "cette liste est interdit."
 
-#: ../wwsympa/wwsympa.fcgi.in:16005
+#: ../wwsympa/wwsympa.fcgi.in:16002
 msgid "Unsubscription from list %s failed."
 msgstr "Un désabonnement de la liste %s a échoué."
 
-#: ../wwsympa/wwsympa.fcgi.in:16597
+#: ../wwsympa/wwsympa.fcgi.in:16594
 msgid "Mail sending"
 msgstr "Expédition de messages"
 
-#: ../wwsympa/wwsympa.fcgi.in:16598
+#: ../wwsympa/wwsympa.fcgi.in:16595
 msgid "Subscription additions"
 msgstr "Ajout d'abonnements"
 
-#: ../wwsympa/wwsympa.fcgi.in:16599
+#: ../wwsympa/wwsympa.fcgi.in:16596
 msgid "Unsubscription"
 msgstr "Désabonnement"
 
-#: ../wwsympa/wwsympa.fcgi.in:16600
+#: ../wwsympa/wwsympa.fcgi.in:16597
 msgid "Users deleted by admin"
 msgstr "Utilisateur supprimé par l'administrateur"
 
 #. This entry is a date/time format
 #. Check the strftime manpage for format details : http://docs.freebsd.org/info/gawk/gawk.info.Time_Functions.html
-#: ../wwsympa/wwsympa.fcgi.in:16979 ../wwsympa/wwsympa.fcgi.in:16980
+#: ../wwsympa/wwsympa.fcgi.in:16976 ../wwsympa/wwsympa.fcgi.in:16977
 msgid "%Y-%m-%d-%H-%M-%S"
 msgstr "%d/%m/%Y/%H/%M/%S"
 
