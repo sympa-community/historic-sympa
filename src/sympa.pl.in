@@ -280,7 +280,7 @@ if (&Conf::get_robot_conf('*','voot_feature') eq 'on') {
     }
     require VOOTConsumer;
 }else {
-    &Log::do_log('err','Sympa is configured to use VOOT but the required modules are not accessible.');
+#XXX    &Log::do_log('err','Sympa is configured to use VOOT but the required modules are not accessible.');
 }
 
 if ($signal ne 'hup') {
