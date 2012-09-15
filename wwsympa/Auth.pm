@@ -402,7 +402,7 @@ sub create_one_time_ticket {
     my $date = time;
     my $sth;
     
-    unless (&SDM::do_query("INSERT INTO one_time_ticket_table (ticket_one_time_ticket, robot_one_time_ticket, email_one_time_ticket, date_one_time_ticket, data_one_time_ticket, remote_addr_one_time_ticket, status_one_time_ticket) VALUES (%s, %s, %s, %d, %s, %s, %s)",&SDM::quote($ticket),&SDM::quote($robot),&SDM::quote($email),time,&SDM::quote($data_string),&SDM::quote($remote_addr),&SDM::quote('open')))) {
+    unless (&SDM::do_query("INSERT INTO one_time_ticket_table (ticket_one_time_ticket, robot_one_time_ticket, email_one_time_ticket, date_one_time_ticket, data_one_time_ticket, remote_addr_one_time_ticket, status_one_time_ticket) VALUES (%s, %s, %s, %d, %s, %s, %s)",&SDM::quote($ticket),&SDM::quote($robot),&SDM::quote($email),time,&SDM::quote($data_string),&SDM::quote($remote_addr),&SDM::quote('open'))) {
 	&Log::do_log('err','Unable to insert new one time ticket for user %s, robot %s in the database',$email,$robot);
 	return undef;
     }   
