@@ -36,6 +36,7 @@ use Encode::MIME::Header;
 use Text::LineFold;
 use MIME::Lite::HTML;
 use Proc::ProcessTable;
+use if (5.008 < $] && $] < 5.016), qw(Unicode::CaseFold fc);
 
 use Conf;
 use Language;
@@ -4054,6 +4055,24 @@ sub decode_header {
 	$val = MIME::EncWords::decode_mimewords($val, Charset => 'UTF-8');
 	chomp $val;
 	return $val;
+    }
+}
+
+#*******************************************
+## Function : foldcase
+## Description : returns "fold-case" string suitable for case-insensitive match.
+### IN : str
+##*******************************************
+sub foldcase {
+    my $str = shift;
+    return '' unless defined $str and length $str;
+
+    if ($] <= 5.008) {
+	# Perl 5.8.0 does not support Unicode::CaseFold. Use lc() instead.
+	return Encode::encode_utf8(lc(Encode::decode_utf8($str)));
+    } else {
+	# later supports it. Perl 5.16.0 and later have built-in fc().
+	return Encode::encode_utf8(fc(Encode::decode_utf8($str)));
     }
 }
 
