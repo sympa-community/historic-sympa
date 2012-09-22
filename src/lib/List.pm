@@ -49,6 +49,8 @@ use Fcntl qw(LOCK_SH LOCK_EX LOCK_NB LOCK_UN);
 
 =head1 CONSTRUCTOR
 
+=over 4
+
 =item new( [PHRASE] )
 
  List->new();
@@ -227,6 +229,8 @@ the statistics. OPTION can be 'text' or 'array'.
 
 Print the list information to the given file descriptor, or the
 currently selected descriptor.
+
+=back
 
 =cut
 
@@ -12591,7 +12595,7 @@ sub remove_aliases {
     }
     
     system ("$alias_manager del $self->{'name'} $self->{'admin'}{'host'}");
-    my $status = $? / 256;
+    my $status = $? >> 8;
     unless ($status == 0) {
 	&Log::do_log('err','Failed to remove aliases ; status %d : %s', $status, $!);
 	return undef;
@@ -12848,6 +12852,59 @@ sub _flush_list_db
 	&Log::do_log('err','Unable to flush lists table');
 	return undef;
     }	
+}
+
+=head1 ACCESSORS
+
+=over 4
+
+=item C<$list-E<gt>>E<lt>config parameterE<gt>
+
+=item C<$list-E<gt>>E<lt>config parameterE<gt>C<( VALUE )>
+
+Get or set list config parameter.
+For example C<$list-E<gt>subject> returns "subject" parameter of the list,
+and C<$list-E<gt>subject("foo")> also changes it.
+Basic list profiles "name", "domain", "mtime" and so on are read-only.
+
+=back
+
+=cut
+
+our $AUTOLOAD;
+sub AUTOLOAD {
+    $AUTOLOAD =~ m/^(.*)::(.*)/;
+    return 1 if $2 eq 'DESTROY';
+
+    my $attr = $2;
+    if (ref $_[0] and $::pinfo{$attr}) {
+	## getter/setter for list config.
+	no strict "refs";
+	*{$AUTOLOAD} = sub {
+	    my $self = shift;
+	    unless (defined $self->{'admin'}) {
+		croak "Can't call method \"$attr\" on uninitialized " .
+		      (ref $self) . " object";
+	    } elsif (scalar @_) {
+		$self->{'admin'}{$attr} = shift;
+	    } else {
+		$self->{'admin'}{$attr};
+	    }
+	};
+    } elsif (ref $_[0] and defined $_[0]->{$attr}) {
+	## getter for list attributes.
+	no strict "refs";
+	*{$AUTOLOAD} = sub {
+	    if (scalar @_ > 1) {
+		croak "Can't modify \"$attr\" attribute";
+	    } else {
+		shift->{$attr};
+	    }
+	};
+    } else {
+	croak "Can't locate object method \"$2\" via package \"$1\"";
+    }
+    goto &$AUTOLOAD;
 }
 
 ###### END of the List package ######
