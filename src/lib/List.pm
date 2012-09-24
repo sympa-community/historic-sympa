@@ -51,7 +51,7 @@ use Fcntl qw(LOCK_SH LOCK_EX LOCK_NB LOCK_UN);
 
 =over 4
 
-=item new( [PHRASE] )
+=item new( NAME, [ ROBOT, [ OPTIONS ] ] )
 
  List->new();
 
@@ -59,19 +59,80 @@ Creates a new object which will be used for a list and
 eventually loads the list if a name is given. Returns
 a List object.
 
+=over 4
+
+=item NAME
+
+Name of list.
+
+=item ROBOT
+
+Name of robot.
+
+=item OPTIONS
+
+Optional hashref.  See load().
+
+=back
+
 =back
 
 =head1 METHODS
 
 =over 4
 
-=item load ( LIST )
+=item load ( NAME, [ ROBOT, [ OPTIONS ] ] )
 
 Loads the indicated list into the object.
 
-=item save ( LIST )
+=over 4
+
+=item NAME
+
+Name of list.
+
+=item ROBOT
+
+Name of robot.
+
+=item OPTIONS
+
+Optional hashref.  
+
+=over 4
+
+=begin comment
+
+=item C<'first_access' =E<gt> TRUE>
+
+Initialize List object (maybe it is blessed hashref).
+
+=end comment
+
+=item C<'just_try' =E<gt> TRUE>
+
+Won't really load list to object.
+
+=item C<'reload_config' =E<gt> TRUE>
+
+Force reload config.  Cache won't be used anyway.
+
+=item C<'skip_sync_admin' =E<gt> TRUE>
+
+Won't synchronize owner/editor.
+
+=item C<'force_sync_admin' =E<gt> TRUE>
+
+Force synchronizing owner/editor.
+
+=back
+
+=back
+
+=item save_config ( EMAIL )
 
 Saves the indicated list object to the disk files.
+EMAIL is the user performing save.
 
 =item savestats ()
 
@@ -83,6 +144,7 @@ Updates the stats, argument is number of bytes, returns the next
 sequence number. Does nothing if no stats.
 
 =item send_sub_to_owner ( WHO, COMMENT )
+
 Send a message to the list owners telling that someone
 wanted to subscribe to the list.
 
@@ -122,10 +184,11 @@ Returns an array with the Reply-To values.
 
 Returns a default option of the list for subscription.
 
-=item get_total ()
+=item get_real_total ()
 
 Returns the number of subscribers to the list.
-
+Older name is get_total().  Current version won't use cache anymore.
+Use total() to get cached number.
 
 =item get_global_user ( USER )
 
@@ -252,7 +315,6 @@ use MIME::Parser;
 use Message;
 use Family;
 use PlainDigest;
-
 
 ## Database and SQL statement handlers
 my ($sth, @sth_stack);
@@ -2304,7 +2366,7 @@ our %listmaster_messages_stack;
 ## Creates an object.
 sub new {
     my($pkg, $name, $robot, $options) = @_;
-    my $list={};
+    my $list;
     &Log::do_log('debug2', 'List::new(%s, %s, %s)', $name, $robot, join('/',keys %$options));
     
     ## Allow robot in the name
@@ -2348,15 +2410,11 @@ sub new {
     if ($list_of_lists{$robot}{$name} and -d $list_of_lists{$robot}{$name}{'dir'}){
 	# use the current list in memory and update it
 	$list=$list_of_lists{$robot}{$name};
-	
-	$status = $list->load($name, $robot, $options);
     }else{
 	# create a new object list
-	bless $list, $pkg;
-
-	$options->{'first_access'} = 1;
-	$status = $list->load($name, $robot, $options);
+	$list = bless { } => $pkg;
     }   
+    $status = $list->load($name, $robot, $options);
     unless (defined $status) {
 	return undef;
     }
@@ -2369,9 +2427,7 @@ sub new {
 	unless (defined $list->sync_include_admin()) {
 	    &Log::do_log('err','List::new() : sync_include_admin_failed') unless ($options->{'just_try'});
 	}
-	if ($list->get_nb_owners() < 1 &&
-	    $list->{'admin'}{'status'} ne 'error_config') {
-	    &Log::do_log('err', 'The list "%s" has got no owner defined',$list->{'name'}) ;
+	if ($list->get_nb_owners() < 1) {
 	    $list->set_status_error_config('no_owner_defined',$list->{'name'});
 	}
     }
@@ -2407,15 +2463,15 @@ sub set_status_error_config {
     my ($self, $message, @param) = @_;
     &Log::do_log('debug3', 'List::set_status_error_config');
 
-    unless ($self->{'admin'}{'status'} eq 'error_config'){
-	$self->{'admin'}{'status'} = 'error_config';
+    unless ($self->admin and $self->status eq 'error_config') {
+	$self->status('error_config');
 
-	my $host = &Conf::get_robot_conf($self->{'robot'}, 'host');
+	##my $host = &Conf::get_robot_conf($self->{'robot'}, 'host');
 	## No more save config in error...
 	#$self->save_config("listmaster\@$host");
 	#$self->savestats();
-	&Log::do_log('err', 'The list "%s" is set in status error_config',$self->{'name'});
-	unless (&List::send_notify_to_listmaster($message, $self->{'domain'},\@param)) {
+	&Log::do_log('err', 'The list "%s" is set in status error_config: %s(%s)', $self->get_list_id, $message, join(', ', @param));
+	unless (&List::send_notify_to_listmaster($message, $self->domain, \@param)) {
 	    &Log::do_log('notice',"Unable to send notify '$message' to listmaster");
 	};
     }
@@ -2465,7 +2521,7 @@ sub savestats {
     }   
 
    _save_stats_file("$dir/stats", $self->{'stats'}, $self->{'total'}, $self->{'last_sync'}, $self->{'last_sync_admin_user'});
-    
+
     ## Release the lock
     unless ($lock->unlock()) {
 	return undef;
@@ -2483,25 +2539,26 @@ sub increment_msg_count {
     &Log::do_log('debug2', "List::increment_msg_count($self->{'name'})");
    
     ## Be sure the list has been loaded.
-    my $name = $self->{'name'};
-    my $file = "$self->{'dir'}/msg_count";
-    
-    my %count ; 
-    if (open(MSG_COUNT, $file)) {	
+    my $name = $self->name;
+    my $file = $self->dir . '/msg_count';
+    my $time = time;
+
+    my %count;
+    if (open(MSG_COUNT, $file)) {
 	while (<MSG_COUNT>){
 	    if ($_ =~ /^(\d+)\s(\d+)$/) {
-		$count{$1} = $2;	
+		$count{$1} = $2;
 	    }
 	}
 	close MSG_COUNT ;
     }
-    my $today = int(time / 86400);
+    my $today = int($time / 86400);
     if ($count{$today}) {
 	$count{$today}++;
     }else{
 	$count{$today} = 1;
     }
-    
+
     unless (open(MSG_COUNT, ">$file.$$")) {
 	&Log::do_log('err', "Unable to create '%s.%s' : %s", $file,$$, $!);
 	return undef;
@@ -2515,6 +2572,7 @@ sub increment_msg_count {
 	&Log::do_log('err', "Unable to write '%s' : %s", $file, $!);
 	return undef;
     }
+
     return 1;
 }
 
@@ -2574,16 +2632,17 @@ sub update_stats {
     my($self, $bytes) = @_;
     &Log::do_log('debug2', 'List::update_stats(%d)', $bytes);
 
-    my $stats = $self->{'stats'};
-    $stats->[0]++;
-    $stats->[1] += $self->{'total'};
-    $stats->[2] += $bytes;
-    $stats->[3] += $bytes * $self->{'total'};
+    my @stats = (@{$self->stats});
+    $stats[0]++;			# messsages sent
+    $stats[1] += $self->total;		# total messages sent
+    $stats[2] += $bytes;		# octets sent
+    $stats[3] += $bytes * $self->total; # total octets sent
+    $self->{'stats'} = \@stats;
 
     ## Update 'msg_count' file, used for bounces management
     $self->increment_msg_count();
 
-    return $stats->[0];
+    return $stats[0];
 }
 
 ## Extract a set of rcpt for which verp must be use from a rcpt_tab.
@@ -2684,27 +2743,11 @@ sub save_config {
 	$lock->unlock();
 	return undef;
     }
-    
+
+    $lock->unlock();
+
     ## Also update the binary version of the data structure
-    if (&Conf::get_robot_conf($self->{'robot'}, 'cache_list_config') eq 'binary_file') {
-	eval {&Storable::store($self->{'admin'},"$self->{'dir'}/config.bin")};
-	if ($@) {
-	    &Log::do_log('err', 'Failed to save the binary config %s. error: %s', "$self->{'dir'}/config.bin",$@);
-	}
-    }
-
-#    $self->{'mtime'}[0] = (stat("$list->{'dir'}/config"))[9];
-    
-    ## Release the lock
-    unless ($lock->unlock()) {
-	return undef;
-    }
-
-    if ($SDM::use_db) {
-        unless (&_update_list_db) {
-            &Log::do_log('err', "Unable to update list_table");
-        }
-    }
+    $self->list_cache_update_admin;
 
     return 1;
 }
@@ -2712,12 +2755,13 @@ sub save_config {
 ## Loads the administrative data for a list
 sub load {
     my ($self, $name, $robot, $options) = @_;
-    &Log::do_log('debug2', 'List::load(%s, %s, %s)', $name, $robot, join('/',keys %$options));
+    &Log::do_log('debug2', 'List::load(%s, %s, %s)',
+		 $name, $robot, join('/',keys %$options));
     
     my $users;
 
     ## Set of initializations ; only performed when the config is first loaded
-    if ($options->{'first_access'}) {
+    unless ($self->{'name'} and $self->{'domain'} and $self->{'dir'}) {
 
 	## Search robot if none was provided
 	unless ($robot) {
@@ -2752,6 +2796,11 @@ sub load {
 	$self->{'name'}  = $name ;
     }
 
+    unless ($self->{'name'} eq $name) {
+	&Log::do_log('err', 'Bug in logic.  Ask developer');
+	return undef;
+    }
+
     unless ((-d $self->{'dir'}) && (-f "$self->{'dir'}/config")) {
 	&Log::do_log('debug2', 'Missing directory (%s) or config file for %s', $self->{'dir'}, $name) unless ($options->{'just_try'});
 	return undef ;
@@ -2761,99 +2810,51 @@ sub load {
     ($m1, $m2, $m3) = @{$self->{'mtime'}} if (defined $self->{'mtime'});
 
     my $time_config = (stat("$self->{'dir'}/config"))[9];
-    my $time_config_bin = (stat("$self->{'dir'}/config.bin"))[9];
-    my $time_subscribers; 
     my $time_stats = (stat("$self->{'dir'}/stats"))[9];
-    my $config_reloaded = 0;
-    my $admin;
-    
-    if (&Conf::get_robot_conf($self->{'domain'}, 'cache_list_config') eq 'binary_file' &&
-	$time_config_bin > $self->{'mtime'}->[0] &&
-	$time_config <= $time_config_bin &&
-	! $options->{'reload_config'}) { 
+    my $admin = undef;
+    my $cached;
 
-	## Get a shared lock on config file first 
-	my $lock = new Lock ($self->{'dir'}.'/config');
-	unless (defined $lock) {
-	    &Log::do_log('err','Could not create new lock');
-	    return undef;
-	}
-	$lock->set_timeout(5); 
-	unless ($lock->lock('read')) {
-	    return undef;
-	}
+    if (! $options->{'reload_config'} and
+	defined ($cached = $self->list_cache_fetch($m1, $time_config))) {
+        &Log::do_log('debug3', 'got config for %s from serialized data',
+		     $self->get_list_id);
 
-	## Load a binary version of the data structure
-	## unless config is more recent than config.bin
-	eval {$admin = &Storable::retrieve("$self->{'dir'}/config.bin")};
-	if ($@) {
-	    &Log::do_log('err', 'Failed to load the binary config %s, error: %s', "$self->{'dir'}/config.bin",$@);
-	    $lock->unlock();
-	    return undef;
-	}	    
-
-	$config_reloaded = 1;
-	$m1 = $time_config_bin;
-	$lock->unlock();
-
-    }elsif ($self->{'name'} ne $name || $time_config > $self->{'mtime'}->[0] ||
-	    $options->{'reload_config'}) {	
-	$admin = _load_list_config_file($self->{'dir'}, $self->{'domain'}, 'config');
-
-	## Get a shared lock on config file first 
-	my $lock = new Lock ($self->{'dir'}.'/config');
-	unless (defined $lock) {
-	    &Log::do_log('err','Could not create new lock');
-	    return undef;
-	}
-	$lock->set_timeout(5); 
-	unless ($lock->lock('write')) {
-	    return undef;
-	}
-
-	## update the binary version of the data structure
-	if (&Conf::get_robot_conf($self->{'domain'}, 'cache_list_config') eq 'binary_file') {
-	    eval {&Storable::store($admin,"$self->{'dir'}/config.bin")};
-	    if ($@) {
-		&Log::do_log('err', 'Failed to save the binary config %s. error: %s', "$self->{'dir'}/config.bin",$@);
-	    }
-	}
-
-	$config_reloaded = 1;
+	$m1 = $cached->{'epoch'};
+	$self->{'admin'} = $admin = $cached->{'admin'};
+	$self->{'total'} = $cached->{'total'} if defined $cached->{'total'};
+    } elsif ($time_config > $m1) {
+	$admin = &_load_list_config_file($self->{'dir'}, $self->{'domain'}, 'config');
  	unless (defined $admin) {
- 	    &Log::do_log('err', 'Impossible to load list config file for list % set in status error_config',$self->{'name'});
  	    $self->set_status_error_config('load_admin_file_error',$self->{'name'});
-	    $lock->unlock();
+	    $self->list_cache_purge;
  	    return undef;	    
  	}
 
 	$m1 = $time_config;
-	$lock->unlock();
-    }
-    
-    ## If config was reloaded...
-    if ($admin) {
- 	$self->{'admin'} = $admin;
- 	
+	$self->{'admin'} = $admin;
+	&Log::do_log('debug3', 'got config for %s@%s from file',
+		     $name, $robot);
+
  	## check param_constraint.conf if belongs to a family and the config has been loaded
  	if (defined $admin->{'family_name'} && ($admin->{'status'} ne 'error_config')) {
  	    my $family;
  	    unless ($family = $self->get_family()) {
- 		&Log::do_log('err', 'Impossible to get list %s family : %s. The list is set in status error_config',$self->{'name'},$self->{'admin'}{'family_name'});
  		$self->set_status_error_config('no_list_family',$self->{'name'}, $admin->{'family_name'});
+		$self->list_cache_purge;
 		return undef;
- 	    }  
- 	    my $error = $family->check_param_constraint($self);
- 	    unless($error) {
- 		&Log::do_log('err', 'Impossible to check parameters constraint for list % set in status error_config',$self->{'name'});
+	    }
+
+	    my $error = $family->check_param_constraint($self);
+	    unless ($error) {
  		$self->set_status_error_config('no_check_rules_family',$self->{'name'}, $family->{'name'});
- 	    }
-	    if (ref($error) eq 'ARRAY') {
- 		&Log::do_log('err', 'The list "%s" does not respect the rules from its family %s',$self->{'name'}, $family->{'name'});
+	    } elsif (ref $error eq 'ARRAY') {
  		$self->set_status_error_config('no_respect_rules_family',$self->{'name'}, $family->{'name'});
  	    }
  	}
-     } 
+
+	# config was reloaded.  Update cache too.
+	$self->list_cache_update_admin;
+    }
 
     $self->{'as_x509_cert'} = 1  if ((-r "$self->{'dir'}/cert.pem") || (-r "$self->{'dir'}/cert.pem.enc"));
 
@@ -2863,15 +2864,15 @@ sub load {
 	($stats, $total, $self->{'last_sync'}, $self->{'last_sync_admin_user'}) = _load_stats_file("$self->{'dir'}/stats");
 	$m3 = $time_stats;
 
-	$self->{'stats'} = $stats if (defined $stats);	
-	$self->{'total'} = $total if (defined $total);	
+	$self->{'stats'} = $stats if defined $stats;	
+	$self->total($total) if defined $total;
     }
     
     $self->{'users'} = $users->{'users'} if ($users);
     $self->{'ref'}   = $users->{'ref'} if ($users);
     
     if ($users && defined($users->{'total'})) {
-	$self->{'total'} = $users->{'total'};
+	$self->total($users->{'total'});
     }
 
     ## We have updated %users, Total may have changed
@@ -2879,10 +2880,10 @@ sub load {
 	$self->savestats();
     }
 
-    $self->{'mtime'} = [ $m1, $m2, $m3];
+    $self->{'mtime'} = [ $m1, $m2, $m3 ];
 
     $list_of_lists{$self->{'domain'}}{$name} = $self;
-    return $config_reloaded;
+    return $admin ? 1 : 0;
 }
 
 ## Return a list of hash's owners and their param
@@ -3988,7 +3989,7 @@ sub send_msg {
     my $name = $self->{'name'};
     my $robot = $self->{'domain'};
     my $admin = $self->{'admin'};
-    my $total = $self->get_total('nocache');
+    my $total = $self->get_real_total;
     my $sender_line = $hdr->get('From');
     my @sender_hdr = Mail::Address->parse($sender_line);
     my %sender_hash;
@@ -5568,7 +5569,7 @@ sub delete_list_member {
 	$total--;
     }
 
-    $self->{'total'} += $total;
+    $self->total($self->total + $total);
     $self->savestats();
     &delete_list_member_picture($self,shift(@u));
     return (-1 * $total);
@@ -5656,17 +5657,27 @@ sub get_default_user_options {
 }
 
 ## Returns the number of subscribers to the list
-sub get_total {
+## not using cache.
+sub get_real_total {
     my $self = shift;
-    my $name = $self->{'name'};
-    my $option = shift;
-    &Log::do_log('debug3','List::get_total(%s)', $name);
+    &Log::do_log('debug3','List::get_real_total(%s)', $self->get_list_id);
 
-    if ($option eq 'nocache') {
-	$self->{'total'} = $self->_load_total_db($option);
+    push @sth_stack, $sth;
+
+    ## Query the Database
+    unless ($sth = &SDM::do_prepared_query('SELECT count(*) FROM subscriber_table WHERE list_subscriber = ? AND robot_subscriber = ?',
+					   $self->name, $self->domain)) {
+	&Log::do_log('debug','Unable to get subscriber count for list %s',
+		     $self->get_list_id);
+	pop @sth_stack;
+	return undef;
     }
-    
-    return $self->{'total'};
+    my $total = $sth->fetchrow;
+    $sth->finish();
+
+    pop @sth_stack;
+
+    return $self->total($total);
 }
 
 ## Returns a hash for a given user
@@ -6397,11 +6408,8 @@ sub get_first_list_member {
     
     ## If no offset (for LIMIT) was used, update total of subscribers
     unless ($offset) {
-		my $total = $self->_load_total_db('nocache');
-		if ($total != $self->{'total'}) {
-			$self->{'total'} = $total;
-			$self->savestats();
-		}
+	$self->savestats()
+	    unless $self->total == $self->get_real_total;
     }
     
     return $user;
@@ -7246,7 +7254,7 @@ sub add_list_member {
     $self->{'add_outcome'}{'remaining_members_to_add'} = $self->{'add_outcome'}{'expected_number_of_added_users'};
     
     my $subscriptions = $self->get_subscription_requests();
-    my $current_list_members_count = $self->get_total();
+    my $current_list_members_count = $self->total;
 
     foreach my $new_user (@new_users) {
 	my $who = &tools::clean_email($new_user->{'email'});
@@ -7328,7 +7336,7 @@ sub add_list_member {
 	$current_list_members_count++;
     }
 
-    $self->{'total'} += $self->{'add_outcome'}{'added_members'};
+    $self->total($self->total + $self->{'add_outcome'}{'added_members'});
     $self->savestats();
     $self->_create_add_error_string() if ($self->{'add_outcome'}{'errors'});
     return 1;
@@ -7409,51 +7417,7 @@ sub add_list_admin {
     return $total;
 }
 
-## Update subscribers and admin users (used while renaming a list)
-sub rename_list_db {
-    my($self, $new_listname, $new_robot) = @_;
-    &Log::do_log('debug', 'List::rename_list_db(%s,%s,%s)', $self->{'name'},$new_listname, $new_robot);
-
-    my $statement_subscriber;
-    my $statement_admin;
-    my $statement_list_cache;
-    
-    unless(&SDM::do_query("UPDATE subscriber_table SET list_subscriber=%s, robot_subscriber=%s WHERE (list_subscriber=%s AND robot_subscriber=%s)", 
-    &SDM::quote($new_listname), 
-    &SDM::quote($new_robot),
-    &SDM::quote($self->{'name'}),
-    &SDM::quote($self->{'domain'}))){
-	&Log::do_log('err','Unable to rename list %s@%s to %s@%s in the database', $self->{'name'},$self->{'domain'},$new_listname,$new_robot);
-	next;
-    }
-    
-    &Log::do_log('debug', 'List::rename_list_db statement : %s',  $statement_subscriber );
-
-    # admin_table is "alive" only in case include2
-    unless(&SDM::do_query("UPDATE admin_table SET list_admin=%s, robot_admin=%s WHERE (list_admin=%s AND robot_admin=%s)", 
-    &SDM::quote($new_listname), 
-    &SDM::quote($new_robot),
-    &SDM::quote($self->{'name'}),
-    &SDM::quote($self->{'domain'}))){
-	&Log::do_log('err','Unable to change admins in database while renaming list %s@%s to %s@%s', $self->{'name'},$self->{'domain'},$new_listname,$new_robot);
-	next;
-    }
-    &Log::do_log('debug', 'List::rename_list_db statement : %s',  $statement_admin );
-    
-    if ($SDM::use_db) {
-	unless (&SDM::do_query("UPDATE list_table SET name_list=%s, robot_list=%s WHERE (name_list=%s AND robot_list=%s)",
-	    &SDM::quote($new_listname),
-	    &SDM::quote($new_robot),
-	    &SDM::quote($self->{'name'}),
-	    &SDM::quote($self->{'domain'}))) {
-		&Log::do_log('err',"Unable to rename list in database");
-		return undef;
-	    }	
-    }
-
-    return 1;
-}
-
+#XXX sub rename_list_db
 
 ## Is the user listmaster
 sub is_listmaster {
@@ -8254,29 +8218,6 @@ sub _include_users_list {
     return $total ;
 }
 
-## include a lists owners lists privileged_owners or lists_editors.
-sub _include_users_admin {
-    my ($users, $selection, $role, $default_user_options,$tied) = @_;
-#   il faut préparer une liste de hash avec le nom de liste, le nom de robot, le répertoire de la liset pour appeler
-#    load_admin_file décommanter le include_admin
-    my $lists;
-    
-    unless ($role eq 'listmaster') {
-	
-	if ($selection =~ /^\*\@(\S+)$/) {
-	    $lists = &get_lists($1);
-	    my $robot = $1;
-	}else{
-	    $selection =~ /^(\S+)@(\S+)$/ ;
-	    $lists->[0] = $1;
-	}
-	
-	foreach my $list (@$lists) {
-	    #my $admin = _load_list_config_file($dir, $domain, 'config');
-	}
-    }
-}
-    
 sub _include_users_file {
     my ($users, $filename, $default_user_options,$tied) = @_;
     &Log::do_log('debug2', 'List::_include_users_file(%s)', $filename);
@@ -9821,7 +9762,7 @@ sub sync_include {
     }
 
     ## Get and save total of subscribers
-    $self->{'total'} = $self->_load_total_db('nocache');
+    $self->get_real_total;
     $self->{'last_sync'} = time;
     $self->savestats();
     $self->sync_include_ca($option eq 'purge');
@@ -10156,36 +10097,6 @@ sub _inclusion_loop {
     return undef;
 }
 
-sub _load_total_db {
-    my $self = shift;
-    my $option = shift;
-    &Log::do_log('debug2', 'List::_load_total_db(%s)', $self->{'name'});
-
-    ## Use session cache
-    if (($option ne 'nocache') && (defined $list_cache{'load_total_db'}{$self->{'domain'}}{$self->{'name'}})) {
-	return $list_cache{'load_total_db'}{$self->{'domain'}}{$self->{'name'}};
-    }
-
-    push @sth_stack, $sth;
-
-    ## Query the Database
-    unless ($sth = &SDM::do_query( "SELECT count(*) FROM subscriber_table WHERE (list_subscriber = %s AND robot_subscriber = %s)", &SDM::quote($self->{'name'}), &SDM::quote($self->{'domain'}))) {
-	&Log::do_log('debug','Unable to get subscriber count for list %s@%s',$self->{'name'},$self->{'domain'});
-	return undef;
-    }
-    
-    my $total = $sth->fetchrow;
-
-    $sth->finish();
-
-    $sth = pop @sth_stack;
-
-    ## Set session cache
-    $list_cache{'load_total_db'}{$self->{'domain'}}{$self->{'name'}} = $total;
-
-    return $total;
-}
-
 ## Writes to disk the stats data for a list.
 sub _save_stats_file {
     my $file = shift;
@@ -10287,152 +10198,605 @@ sub store_digest {
     utime $oldtime,$oldtime,$filename   unless($newfile);
 }
 
-## List of lists hosted a robot
-## Returns a ref to an array of List objects
+=over 4
+
+=item get_lists( [ ROBOT, [ OPTIONS, [ REQUESTED_LISTS ] ] ] )
+
+I<Function>.
+List of lists hosted a robot
+
+=over 4
+
+=item ROBOT
+
+Name of robot or C<'*'> (default).
+
+=item OPTIONS
+
+A hashref including options passed to List->new() (see load()) and any of
+following pairs:
+
+=over 4
+
+=item C<'filter_query' =E<gt> [ KEYS =E<gt> VALS, ... ]>
+
+Filter with list profiles.  When any of items specified by KEYS
+(separated by C<"|">) have any of values specified by VALS (ditto),
+condition by that pair is satisfied.
+KEYS prefixed by C<"!"> mean negated condition.
+Only lists satisfying all conditions of query are returned.
+Currently available keys and values are:
+
+=over 4
+
+=item 'creation' => EPOCH
+
+=item 'creation<' => EPOCH
+
+=item 'creation>' => EPOCH
+
+Creation date is equal to, earlier than or later than the date (epoch).
+
+=item 'member' => EMAIL
+
+=item 'owner' => EMAIL
+
+=item 'editor' => EMAIL
+
+XXX @todo doc
+
+=item 'name' => STRING
+
+=item 'name%' => STRING
+
+=item '%name%' => STRING
+
+Exact, prefixed or subsctring match against list name,
+case-insensitive.
+
+=item 'status' => STATUS
+
+Status of list.  One of 'open', 'closed', 'pending',
+'error_config' and 'family_closed'.
+
+=item 'subject' => STRING
+
+=item 'subject%' => STRING
+
+=item '%subject%' => STRING
+
+Exact, prefixed or subsctring match against list subject,
+case-insensitive (case folding is Unicode-aware).
+
+=item 'topics' => TOPIC
+
+Exact match against any of list topics.
+'others' or 'topicsless' means no topics.
+
+=item 'update' => EPOCH
+
+=item 'update<' => EPOCH
+
+=item 'update>' => EPOCH
+
+Date of last update is equal to, earlier than or later than the date (epoch).
+
+=begin comment
+
+=item 'web_archive' => ( 1 | 0 )
+
+Whether Web archive of the list is available.  1 or 0.
+
+=end comment
+
+=back
+
+=item C<'order' =E<gt> [ KEY, ... ]>
+
+Subordinate sort key(s).  The results are sorted primarily by robot names
+then by other key(s).  Keys prefixed by C<"-"> mean descendent ordering.
+Available keys are:
+
+=over 4
+
+=item C<'creation'>
+
+FIXME @todo doc
+
+=item C<'name'>
+
+List name, case-insensitive.  It is the default.
+
+=item C<'total'>
+
+Estimated number of subscribers.
+
+=item C<'update'>
+
+FIXME @todo doc
+
+=back
+
+=back
+
+=item REQUESTED_LISTS
+
+Arrayref to name of requested lists, if any.
+
+=back
+
+Returns a ref to an array of List objects.
+
+=back
+
+=cut
+
 sub get_lists {
     my $robot_context = shift || '*';
     my $options = shift || {};
     my $requested_lists = shift; ## Optional parameter to load only a subset of all lists
-    my $use_files;
-    my $cond_perl;
-    my $cond_sql;
 
-    my(@lists, $l,@robots);
-    &Log::do_log('debug2', 'List::get_lists(%s)',$robot_context);
+    my(@lists, @robots);
+    &Log::do_log('debug2', 'List::get_lists(%s, {%s}, %s)',
+		 $robot_context, join('/', keys %$options),
+		 $requested_lists ? '[...]' : '');
 
-    # Determin if files are used instead of list_table DB cache.
-    if ($Conf::Conf{'db_list_cache'} ne 'on' or defined $requested_lists) {
-	$use_files = 1;
-    } else {
-	$use_files = $options->{'use_files'};
-    }
+    $options->{'reload_config'} = 1 if $options->{'use_files'}; # For compat.
 
     # Build query: Perl expression for files and SQL expression for list_table.
+    my $cond_perl = undef;
+    my $cond_sql = undef;
+    my $which_role = undef;
+    my $which_user = undef;
     my @query = (@{$options->{'filter_query'} || []});
     my @clause_perl = ();
     my @clause_sql = ();
     while (1 < scalar @query) {
         my @expr_perl = ();
         my @expr_sql = ();
-        my @keys = split /[|]/, shift @query;
-        my @vals = split /[|]/, shift @query;
+
+	my $keys = shift @query;
+	next unless defined $keys and $keys =~ /\S/;
+	$keys =~ s/^(!?)\s*//;
+	my $negate = $1;
+	my @keys = split /[|]/, $keys;
+
+	my $vals = shift @query;
+	next unless defined $vals and length $vals; # spaces are allowed
+	my @vals = split /[|]/, $vals;
 
         foreach my $k (@keys) {
             next unless $k =~ /\S/;
-            $k =~ s/^\s+//;
-            $k =~ s/\s+$//;
+
+	    my $c = undef;
+	    my ($b, $a) = ('', '');
+	    $b = $1 if $k =~ s/^(%)//;
+	    $a = $1 if $k =~ s/(%)$//;
+	    if ($b or $a) {
+		unless ($a) {
+		    $c = '%s eq "%s"';
+		} elsif ($b) {
+		    $c = 'index(%s, "%s") >= 0';
+		} else {
+		    $c = 'index(%s, "%s") == 0';
+		}
+	    } elsif ($k =~ s/\s*([<>])\s*$//) {
+		$c = '%s '.$1.' %s';
+	    }
 
             foreach my $v (@vals) {
-                if ($k eq 'web_archive') {
-                    push @expr_perl, sprintf '&is_web_archived($list) == %d',
-                                             ($v+0 ? 1 : 0);
-                } elsif ($k =~ /^(name|robot)$/) {
-                    push @expr_perl, sprintf '$list->{"%s"} eq "%s"',
-                                             quotemeta $k, quotemeta $v;
-                } elsif ($k =~ /^(status|subject)$/) {
-                    push @expr_perl, sprintf '$list->{"admin"}{"%s"} eq "%s"',
-                                             quotemeta $k, quotemeta $v;
+		if ($k =~ /^(member|owner|editor)$/) {
+		    if (defined $which_role) {
+			&Log::do_log('err', "bug in logic. Ask developer");
+			return undef;
+		    }
+		    $which_role = $k;
+		    $which_user = $v;
+		    next;
+		}
+
+		## Perl expressions
+		if ($k eq 'creation' or $k eq 'update') {
+		    push @expr_perl,
+			 sprintf(($c ? $c : '%s == %s'),
+				 sprintf('$list->%s->{"date_epoch"}',
+					$k),
+				$v);
+##		} elsif ($k eq 'web_archive') {
+##		    push @expr_perl,
+##			 sprintf('%s$list->is_web_archived',
+##		    		 ($v+0 ? '' : '! '));
+                } elsif ($k eq 'name') {
+		    my $ve = lc $v;
+		    $ve =~ s/([^ \w\x80-\xFF])/\\$1/g;
+		    push @expr_perl,
+		         sprintf(($c ? $c : '%s eq "%s"'),
+				 '$list->name', $ve);
+                } elsif ($k eq 'status') {
+		    my $ve = lc $v;
+		    $ve =~ s/([^ \w\x80-\xFF])/\\$1/g;
+		    push @expr_perl,
+			 sprintf('$list->status eq "%s"', $ve);
+		} elsif ($k eq 'subject') {
+		    my $ve = tools::foldcase($v);
+		    $ve =~ s/([^ \w\x80-\xFF])/\\$1/g;
+		    push @expr_perl,
+			 sprintf(($c ? $c : '%s eq "%s"'),
+				 'tools::foldcase($list->subject)', $ve);
+		} elsif ($k eq 'topics') {
+		    my $ve = lc $v;
+		    if ($ve eq 'others' or $ve eq 'topicsless') {
+			push @expr_perl,
+			     '! scalar(grep { $_ ne "others" } @{$list->topics || []})';
+		    } else {
+			$ve =~ s/([^ \w\x80-\xFF])/\\$1/g;
+			push @expr_perl,
+			     sprintf('scalar(grep { $_ eq "%s" } @{$list->topics || []})',
+				     $ve);
+		    }
                 } else {
                     &Log::do_log('err', "bug in logic. Ask developer");
                     return undef;
                 }
-                if ($k eq 'web_archive') {
-                    push @expr_sql, sprintf 'web_archive_list = %d',
-                                            ($v+0 ? 1 : 0);
+
+		## SQL expressions
+		if ($k eq 'creation' or $k eq 'update') {
+		    push @expr_sql,
+			 sprintf('%s_epoch_list %s %s',
+				 $k, ($c ? $c : '='), $v);
+##		} elsif ($k eq 'web_archive') {
+##                    push @expr_sql,
+##			 sprintf('web_archive_list = %d', ($v+0 ? 1 : 0));
+		} elsif ($k eq 'topics') {
+		    my $ve = lc $v;
+		    if ($ve eq 'others' or $ve eq 'topicsless') {
+			push @expr_sql,
+			    '(topics_list = "" OR topics_list = ",," OR topics_list = ",others,")';
+		    } else {
+			$ve = &SDM::quote($ve);
+			$ve =~ s/^["'](.*)['"]$/$1/;
+			$ve =~ s/([%_])/\\$1/g;
+			push @expr_sql,
+			     sprintf('topics_list LIKE "%%,%s,%%"', $ve);
+		    }
+		} elsif ($a or $b) {
+		    my $ve = tools::foldcase($v);
+		    $ve = &SDM::quote($ve);
+		    $ve =~ s/^["'](.*)['"]$/$1/;
+		    $ve =~ s/([%_])/\\$1/g;
+		    push @expr_sql,
+			 sprintf('%s_list LIKE "%s"',
+				 (($k eq 'subject') ? 'searchkey' : $k),
+				 "$b$ve$a");
                 } else {
-                    push @expr_sql, sprintf '%s_list = %s',
-                                            $k, &SDM::quote($v);
+                    push @expr_sql,
+			 sprintf('%s_list = %s',
+				 (($k eq 'subject') ? 'searchkey' : $k),
+				 &SDM::quote($v));
                 }
             }
         }
         if (scalar @expr_perl) {
-            push @clause_perl, join ' || ', @expr_perl;
-            push @clause_sql, join ' OR ', @expr_sql;
+            push @clause_perl, ($negate ? '! ' : '') .
+			       '(' . join(' || ', @expr_perl) . ')';
+            push @clause_sql, ($negate ? 'NOT ' : '') .
+			      '(' . join(' OR ', @expr_sql) . ')';
         }
     }
     if (scalar @clause_perl) {
-        $cond_perl = join ' && ', map { "($_)" } @clause_perl;
-        $cond_sql = join ' AND ', map { "($_)" } @clause_sql;
-        &Log::do_log('debug2', 'query %s; %s', $cond_perl, $cond_sql);
+        $cond_perl = join ' && ', @clause_perl;
+        $cond_sql = join ' AND ', @clause_sql;
+        &Log::do_log('debug2', 'filter_query %s; %s', $cond_perl, $cond_sql);
     } else {
         $cond_perl = undef;
         $cond_sql = undef;
     }
 
-    if ($robot_context eq '*') {
-	@robots = &get_robots ;
-    }else{
-	push @robots, $robot_context ;
+    ## Sort order
+    my $order_perl;
+    my $order_sql;
+    my $keys = $options->{'order'} || [ ];
+    my @keys_perl = ();
+    my @keys_sql = ();
+    foreach my $key (@{$keys}) {
+	my $desc = ($key =~ s/^\s*-\s*//i);
+
+	if ($key eq 'creation' or $key eq 'update') {
+	    if ($desc) {
+		push @keys_perl,
+		     sprintf '$b->%s->{"date_epoch"} <=> $a->%s->{"date_epoch"}', $key, $key;
+	    } else {
+		push @keys_perl,
+		     sprintf '$a->%s->{"date_epoch"} <=> $b->%s->{"date_epoch"}', $key, $key;
+	    }
+	} elsif ($key eq 'name') {
+	    if ($desc) {
+		push @keys_perl, '$b->name cmp $a->name';
+	    } else {
+		push @keys_perl, '$a->name cmp $b->name';
+	    }
+	} elsif ($key eq 'total') {
+	    if ($desc) {
+		push @keys_perl,
+		     sprintf '$b->total <=> $a->total';
+	    } else {
+		push @keys_perl,
+		     sprintf '$a->total <=> $b->total';
+	    }
+	} else {
+	    &Log::do_log('err', 'bug in logic.  Ask developer');
+	    return undef;
+	}
+
+	if ($key eq 'creation' or $key eq 'update') {
+	    push @keys_sql,
+		 sprintf '%s_epoch_list%s', $key, ($desc ? ' DESC' : '');
+	} else {
+	    push @keys_sql,
+		 sprintf '%s_list%s', $key, ($desc ? ' DESC' : '');
+	}
     }
-    
+    $order_perl = join(' or ', @keys_perl) || undef;
+    push @keys_sql, 'name_list'
+	unless scalar grep { $_ =~ /name_list/ } @keys_sql;
+    $order_sql = join(', ', @keys_sql);
+    &Log::do_log('debug2', 'order %s; %s', $order_perl, $order_sql);
+
+
+    if ($robot_context eq '*') {
+	@robots = sort &get_robots;
+    } else {
+	@robots = ($robot_context);
+    }
     foreach my $robot (@robots) {
-	## Check cache first
-	if (defined $list_cache{'get_lists'}{$robot}) {
-	    if (defined $cond_perl) {
+	## Load only requested lists if $requested_list is set
+	## otherwise load all lists
+	my %requested_lists = ();
+	if (defined $requested_lists) {
+	    my $robot_re = $robot;
+	    $robot_re =~ s/(\W)/\\$1/g;
+	    %requested_lists =
+		map { ($_ => 1) }
+		    grep { index($_, '@') < 0 or s/\@${robot_re}$// }
+			 sort @{$requested_lists};
+	    ## none requested on this robot.
+	    next unless %requested_lists; # foreach my $robot
+	}
+
+	## Check on-memory cache first
+	## except when non-default order is specified.
+	if (! defined $which_role and
+	    defined $list_cache{'get_lists'}{$robot} and
+	    ! defined $order_perl) {
+	    ## filter list if required.
+	    if (defined $cond_perl or %requested_lists) {
 		foreach my $list (@{$list_cache{'get_lists'}{$robot}}) {
-		    next unless eval $cond_perl;
+		    if (%requested_lists) {
+			next unless $requested_lists{$list->{'name'}};
+		    }
+		    if (defined $cond_perl) {
+			next unless eval $cond_perl;
+		    }
 		    push @lists, $list;
 		}
 	    } else {
 		push @lists, @{$list_cache{'get_lists'}{$robot}};
 	    }
-	} else {
-	    my $robot_dir =  $Conf::Conf{'home'}.'/'.$robot ;
-	    $robot_dir = $Conf::Conf{'home'}  unless ((-d $robot_dir) || ($robot ne $Conf::Conf{'domain'}));
-	    
-	    unless (-d $robot_dir) {
-		&Log::do_log('err',"unknown robot $robot, Unable to open $robot_dir");
-		return undef ;
-	    }
-	    
-	    ## Load only requested lists if $requested_list is set
-	    ## otherwise load all lists
-	    my @files;
-	    if (defined($requested_lists)){
-		@files = sort @{$requested_lists};
-	    } elsif ($use_files) {
-		unless (opendir(DIR, $robot_dir)) {
-		    &Log::do_log('err',"Unable to open $robot_dir");
+
+	    next; # foreach my $robot
+	}
+
+	## check existence of robot directory
+	my $robot_dir =  $Conf::Conf{'home'}.'/'.$robot;
+	$robot_dir = $Conf::Conf{'home'}
+	    unless -d $robot_dir or $robot ne $Conf::Conf{'domain'};
+	unless (-d $robot_dir) {
+	    &Log::do_log('err', 'unknown robot %s, Unable to open %s',
+			 $robot, $robot_dir);
+	    return undef ;
+	}
+
+	## Files are used instead of list_table DB cache.
+
+	if (&Conf::get_robot_conf($robot, 'cache_list_config') ne 'database' or
+	    $options->{'reload_config'}) {
+	    ## filter by role
+	    if (defined $which_role) {
+		my %r = ();
+
+		push @sth_stack, $sth;
+
+		if ($which_role eq 'member') {
+		    $sth = &SDM::do_prepared_query('SELECT list_subscriber FROM subscriber_table WHERE robot_subscriber = ? AND user_subscriber = ?',
+						   $robot, $which_user);
+		} else {
+		    $sth = &SDM::do_prepared_query('SELECT list_admin FROM admin_table WHERE robot_admin = ? AND user_admin = ? AND role_admin = ?',
+						   $robot, $which_user,
+						   $which_role);
+		}
+		unless ($sth) {
+		    pop @sth_stack;
+		    &Log::do_log('err', 'failed to get lists with user %s as %s from database: %s', $which_user, $which_role, $@);
 		    return undef;
 		}
-		@files = sort readdir(DIR);
-		closedir DIR;
-	    } else {
-		# get list names from list cache table
-		my $where = sprintf 'robot_list = %s', &SDM::quote($robot);  
-		if (defined $cond_sql) {
-		    $where .= " AND $cond_sql";
+		my @row;
+		while (@row = $sth->fetchrow_array) {
+		    my $listname = $row[0];
+		    if (%requested_lists) {
+			next unless $requested_lists{$listname};
+		    }
+		    $r{$listname} = 1;
 		}
-		my $files = &get_lists_db($where);
-		@files = @{$files};
+		$sth->finish;
+
+		pop @sth_stack;
+
+		# none found
+		next unless %r; # foreach my $robot
+		%requested_lists = %r;
 	    }
 
-	    foreach my $l (@files) {
-		next if (($l =~ /^\./o) || (! -d "$robot_dir/$l") || (! -f "$robot_dir/$l/config"));
-		
-		my $list = new List ($l, $robot, $options);
-		
-		next unless (defined $list);
+	    ## If entire lists on a robot are requested,
+	    ## check orphan entries on cache.
+	    my %orphan = ();
+	    if (! %requested_lists and $options->{'reload_config'}) {
+		push @sth_stack, $sth;
 
-		if ($use_files and defined $cond_perl) {
+		unless ($sth = &SDM::do_prepared_query('SELECT name_list FROM list_table WHERE robot_list = ?',
+						       $robot)) {
+		    pop @sth_stack;
+		    &Log::do_log('err', 'Failed to get lists from database');
+		    return undef;
+		}
+		my @row;
+		while (@row = $sth->fetchrow_array) {
+		    $orphan{$row[0]} = 1;
+		}
+		$sth->finish;
+
+		pop @sth_stack;
+	    }
+
+	    unless (opendir(DIR, $robot_dir)) {
+		&Log::do_log('err', 'Unable to open %s', $robot_dir);
+		return undef;
+	    }
+	    my @l = ();
+	    foreach my $listname (sort readdir(DIR)) {
+		next if $listname =~ /^\.+$/;
+		next unless -d "$robot_dir/$listname";
+		next unless -f "$robot_dir/$listname/config";
+
+		## filter list by requested_lists (and role).
+		if (%requested_lists) {
+		    next unless $requested_lists{$listname};
+		}
+		## create object
+		my $list = new List($listname, $robot, $options);
+		unless (defined $list) {
+##		    delete $list_cache{'get_lists'}{$robot}
+##			unless %requested_lists;
+##		    return undef;
+		    next;
+		}
+		## Add list to memory cache
+		unless (%requested_lists) {
+		    push @{$list_cache{'get_lists'}{$robot}}, $list;
+		    ## not orphan entry
+		    delete $orphan{$listname};
+		}
+
+		## filter by condition
+		if (defined $cond_perl) {
 		    next unless eval $cond_perl;
 		}
-		
-		push @lists, $list;
-		
-		## Also feed the cache
-		## Unless we only loaded a subset of all lists ($requested_lists parameter used)
-		unless (defined $requested_lists or defined $cond_perl) {
-		    push @{$list_cache{'get_lists'}{$robot}}, $list;
-		}
-		
+
+		push @l, $list;
 	    }
+	    closedir DIR;
+
+	    ## sort
+	    if ($order_perl) {
+		eval 'use sort "stable"';
+		push @lists, sort { eval $order_perl } @l;
+		eval 'use sort "defaults"';
+	    } else {
+		push @lists, @l;
+	    }
+
+	    ## clear orphan cache entries in list_table.
+	    if ($options->{'reload_config'} and %orphan) {
+		foreach my $name (keys %orphan) {
+		    &Log::do_log('notice', 'Clearing orphan list cache on list_table: %s@%s',
+				 $name, $robot);
+		    &SDM::do_prepared_query('DELETE from list_table WHERE name_list = ? AND robot_list = ?',
+					    $name, $robot);
+		}
+	    }
+
+	    next; # foreach my $robot
+	}
+
+	## Use list_table DB cache.
+
+	my $table;
+	my $cond;
+	if (! defined $which_role) {
+	    $table = 'list_table';
+	    $cond = '';
+	} elsif ($which_role eq 'member') {
+	    $table = 'list_table, subscriber_table';
+	    $cond = 'robot_list = robot_subscriber AND name_list = list_subscriber AND ';
+	} else {
+	    $table = 'list_table, admin_table';
+	    $cond = sprintf 'robot_list = robot_admin AND name_list = list_admin AND role_admin = %s AND ',
+			    &SDM::quote($which_role);
+	}
+
+	push @sth_stack, $sth;
+	if (defined $cond_sql) {
+	    $sth = &SDM::do_query(sprintf 'SELECT name_list AS name FROM %s WHERE %s robot_list = %s AND %s ORDER BY %s',
+					  $table, $cond, &SDM::quote($robot),
+					  $cond_sql, $order_sql);
+	} else {
+	    $sth = &SDM::do_prepared_query(sprintf('SELECT name_list AS name FROM %s WHERE %s robot_list = ? ORDER BY %s',
+						   $table, $cond, $order_sql),
+					   $robot);
+	}
+	unless ($sth) {
+	    pop @sth_stack;
+	    &Log::do_log('err', 'Failed to get lists from %s', $table);
+	    return undef;
+	}
+	my $list;
+	my $l;
+	my @l = ();
+	while ($l = $sth->fetchrow_hashref('NAME_lc')) {
+	    ## filter by requested_lists
+	    if (%requested_lists) {
+		next unless $requested_lists{$l->{'name'}};
+	    }
+	    push @l, $l;
+	}
+	$sth->finish;
+	pop @sth_stack;
+
+	foreach my $l (@l) {
+	    ## renew object on memory.
+	    ## If list already in memory and
+	    ## not previously purged by another process
+	    if ($list_of_lists{$robot}{$l->{'name'}} and
+		-d $list_of_lists{$robot}{$l->{'name'}}{'dir'}) {
+		# use the current list in memory and update it
+		$list = $list_of_lists{$robot}{$l->{'name'}};
+	    } else {
+		# create a new object list
+		$list = bless { } => __PACKAGE__;
+	    }
+	    next unless defined $list->load($l->{'name'}, $robot, $options);
+
+	    ## add to cache
+	    push @{$list_cache{'get_lists'}{$robot}}, $list
+		unless defined $which_role or defined $cond_sql or
+		       %requested_lists or defined $order_perl;
+
+	    push @lists, $list;
 	}
     }
     return \@lists;
 }
 
-## List of robots hosted by Sympa
+=over 4
+
+=item get_robots()
+
+I<Function>.
+List of robots hosted by Sympa
+
+=back
+
+=cut
+
 sub get_robots {
 
     my(@robots, $r);
@@ -12561,9 +12925,10 @@ sub purge {
     }
     
     ## Clean list table if needed
-    if ($Conf::Conf{'db_list_cache'} eq 'on') {
-	unless (&SDM::do_query('DELETE FROM list_table WHERE name_list = %s AND robot_list = %s', &SDM::quote($self->{'name'}), &SDM::quote($self->{'domain'}))) {
-	    &do_log('err', 'Cannot remove list %s (robot %s) from table', $self->{'name'}, $self->{'domain'});
+    if ($Conf::get_robot_conf{$self->domain, 'cache_list_config'} eq 'database') {
+	unless (defined $self->list_cache_purge) {
+	    &do_log('err', 'Cannot remove list %s from table',
+		    $self->get_list_id);
 	}
     }
     
@@ -12725,6 +13090,7 @@ sub get_list_address {
 sub get_list_id {
     my $self = shift;
 
+    ## DO NOT use accessors since $self may not have been fully initialized.
     return $self->{'name'}.'@'.$self->{'domain'};
 }
  
@@ -12740,119 +13106,7 @@ sub get_data {
     return $res;
 }
 
-## Support for list config caching in database
-sub get_lists_db {
-    my $where = shift || '';
-    &Log::do_log('debug2', 'List::get_lists_db(%s)', $where);
-
-    unless ($SDM::use_db) {
-       &Log::do_log('info', 'Sympa not setup to use DBI');
-       return undef;
-    }
-
-    my $statement = 'SELECT name_list FROM list_table';
-    $statement .= " WHERE $where" if $where;
-
-    my ($l, @lists);
-
-    unless ($sth = &SDM::do_query($statement)) {
-	&Log::do_log('err',"Unable to gather the list of lists from lists table");
-	return undef;
-    }	
-    push @sth_stack, $sth;
-    while ($l = $sth->fetchrow_hashref) {
-       my $name = $l->{'name_list'};
-       push @lists, $name;
-    }  
-    $sth = pop @sth_stack;
-
-    return \@lists;
-}
-
-sub _update_list_db
-{
-    my ($self) = shift;
-    my @admins;
-    my $i;
-    my $adm_txt;
-    my $ed_txt;
-
-    my $name = $self->{'name'};
-    my $subject = $self->{'admin'}{'subject'} || '';
-    my $status = $self->{'admin'}{'status'};
-    my $robot = $self->{'admin'}{'host'};
-    my $web_archive  = &is_web_archived($self) || 0; 
-    my $topics = '';
-    if ($self->{'admin'}{'topics'}) {
-       $topics = join(',',@{$self->{'admin'}{'topics'}});
-    }
-    
-    foreach $i (@{$self->{'admin'}{'owner'}}) {
-       if (ref($i->{'email'})) {
-           push(@admins, @{$i->{'email'}});
-       } elsif ($i->{'email'}) {
-           push(@admins, $i->{'email'});
-       }
-    }
-    $adm_txt = join(',',@admins) || '';
-
-    undef @admins;
-    foreach $i (@{$self->{'admin'}{'editor'}}) {
-       if (ref($i->{'email'})) {
-           push(@admins, @{$i->{'email'}});
-       } elsif ($i->{'email'}) {
-           push(@admins, $i->{'email'});
-       }
-    }
-    $ed_txt = join(',',@admins) || '';
-    
-    my $sth = &SDM::do_query('SELECT name_list FROM list_table WHERE name_list = %s', &SDM::quote($name));
-    if($sth->fetch) {
-		unless(&SDM::do_query('UPDATE list_table SET status_list = %s, name_list = %s, robot_list = %s, subject_list = %s, web_archive_list = %d, topics_list = %s, owners_list = %s, editors_list = %s WHERE robot_list = %s AND name_list = %s',
-			     &SDM::quote($status), &SDM::quote($name),
-			     &SDM::quote($robot), &SDM::quote($subject),
-			     ($web_archive ? 1 : 0), &SDM::quote($topics),
-			     &SDM::quote($adm_txt),&SDM::quote($ed_txt),
-			     &SDM::quote($robot), &SDM::quote($name)
-		)) {
-			&Log::do_log('err','Unable to update list %s@%s in database', $name,$robot);
-			return undef;
-		}
-	}else{
-		unless(&SDM::do_query('INSERT INTO list_table (status_list, name_list, robot_list, subject_list, web_archive_list, topics_list, owners_list, editors_list) VALUES (%s, %s, %s, %s, %d, %s, %s, %s)',
-			 &SDM::quote($status), &SDM::quote($name),
-			 &SDM::quote($robot), &SDM::quote($subject),
-			 ($web_archive ? 1 : 0), &SDM::quote($topics),
-			 &SDM::quote($adm_txt), &SDM::quote($ed_txt)
-		)) {
-			&Log::do_log('err','Unable to insert list %s@%s in database', $name,$robot);
-			return undef;
-		}
-	}
-	
-	return 1;
-}
-
-sub _flush_list_db
-{
-    my ($listname) = shift;
-    my $statement;
-    unless ($listname) {
-	if ($Conf::Conf{'db_type'} eq 'SQLite') {
-	    # SQLite does not have TRUNCATE TABLE.
-	    $statement = "DELETE FROM list_table";
-	} else {
-	    $statement =  "TRUNCATE TABLE list_table";
-	}
-    } else {
-        $statement = "DELETE FROM list_table WHERE name_list = %s";
-    } 
-
-    unless ($sth = &SDM::do_query($statement, &SDM::quote($listname))) {
-	&Log::do_log('err','Unable to flush lists table');
-	return undef;
-    }	
-}
+################################################
 
 =head1 ACCESSORS
 
@@ -12865,20 +13119,29 @@ sub _flush_list_db
 Get or set list config parameter.
 For example C<$list-E<gt>subject> returns "subject" parameter of the list,
 and C<$list-E<gt>subject("foo")> also changes it.
-Basic list profiles "name", "domain", "mtime" and so on are read-only.
+Basic list profiles "name", "domain", "dir" and so on are read-only.
 
 =back
 
 =cut
 
 our $AUTOLOAD;
+
+sub DESTROY;
+
 sub AUTOLOAD {
     $AUTOLOAD =~ m/^(.*)::(.*)/;
-    return 1 if $2 eq 'DESTROY';
 
     my $attr = $2;
-    if (ref $_[0] and $::pinfo{$attr}) {
-	## getter/setter for list config.
+    if (ref $_[0] and grep { $_ eq $attr } qw(name domain dir admin stats)) {
+	## getter for list attributes.
+	no strict "refs";
+	*{$AUTOLOAD} = sub {
+	    croak "Can't modify \"$attr\" attribute" if scalar @_ > 1;
+	    shift->{$attr};
+	};
+    } elsif (ref $_[0] and $::pinfo{$attr}) {
+	## getter/setter for list parameters.
 	no strict "refs";
 	*{$AUTOLOAD} = sub {
 	    my $self = shift;
@@ -12891,15 +13154,15 @@ sub AUTOLOAD {
 		$self->{'admin'}{$attr};
 	    }
 	};
-    } elsif (ref $_[0] and defined $_[0]->{$attr}) {
-	## getter for list attributes.
+    } elsif (ref $_[0] and index($attr, '_') != 0 and defined $_[0]->{$attr}) {
+	## getter for unknwon list attributes.
+	## XXX This code would be removed later.
+	&Log::do_log('err', 'Unconcerned object method "%s" via package "%s".  Though it may not be fatal, you might want to report it developer',
+		     $2, $1);
 	no strict "refs";
 	*{$AUTOLOAD} = sub {
-	    if (scalar @_ > 1) {
-		croak "Can't modify \"$attr\" attribute";
-	    } else {
-		shift->{$attr};
-	    }
+	    croak "Can't modify \"$attr\" attribute" if scalar @_ > 1;
+	    shift->{$attr};
 	};
     } else {
 	croak "Can't locate object method \"$2\" via package \"$1\"";
@@ -12907,7 +13170,230 @@ sub AUTOLOAD {
     goto &$AUTOLOAD;
 }
 
+## total ( [ NUMBER ] )
+## Override of accessor: gets cached value; updates both memory and database
+## cache.  Use get_real_total() to get value without cache.
+sub total {
+    my $self = shift;
+    if (scalar @_) {
+	my $total = shift;
+	unless (defined $self->{'total'} and $self->{'total'} == $total) {
+	    $self->{'total'} = $total;
+	    $self->list_cache_update_total($total);
+	}
+    }
+    return $self->{'total'};
+}
+
 ###### END of the List package ######
+
+############################################################################
+##                       LIST CACHE FUNCTIONS                             ##
+############################################################################
+
+##package ListCache;
+##
+##sub new {
+##    my $pkg = shift;
+##    my $list = shift;
+##    bless { 'list' => $list } => $pkg;
+##}
+
+sub list_cache_fetch {
+    my $self = shift;
+    my $m1 = shift;
+    my $time_config = shift;
+    my $name = $self->name;
+    my $robot = $self->domain;
+
+    my $cache_list_config = &Conf::get_robot_conf($robot, 'cache_list_config');
+    my $admin;
+    my $time_config_bin;
+
+    if ($cache_list_config eq 'database') {
+	my $l;
+	push @sth_stack, $sth;
+
+	unless ($sth = &SDM::do_prepared_query('SELECT cache_epoch_list AS epoch, total_list AS total, config_list AS admin FROM list_table WHERE name_list = ? AND robot_list = ? AND cache_epoch_list > ? AND ? <= cache_epoch_list',
+					       $name, $robot,
+					       $m1, $time_config) and
+		$sth->rows) {
+	    pop @sth_stack;
+	    return undef;
+	}
+	$l = $sth->fetchrow_hashref('NAME_lc');
+	$sth->finish;
+
+	pop @sth_stack;
+
+	eval { $admin = &Storable::thaw($l->{'admin'}) };
+	if ($@) {
+	    &Log::do_log('err', 'Unable to deserialize binary config of %s: %s', $self->get_list_id, $@);
+	    return undef;
+	}
+
+	return { 'epoch' => $l->{'epoch'},
+		 'total' => $l->{'total'},
+		 'admin' => $admin };
+    } elsif ($cache_list_config eq 'binary_file' and
+	     ($time_config_bin = (stat($self->dir.'/config.bin'))[9]) > $m1 and
+	     $time_config <= $time_config_bin) {
+	## Get a shared lock on config file first 
+	my $lock = new Lock ($self->dir.'/config');
+	unless (defined $lock) {
+	    &Log::do_log('err','Could not create new lock');
+	    return undef;
+	}
+	$lock->set_timeout(5); 
+	unless ($lock->lock('read')) {
+	    &Log::do_log('err','Could not create new lock');
+	    return undef;
+	}
+
+	## Load a binary version of the data structure
+	## unless config is more recent than config.bin
+	eval { $admin = &Storable::retrieve($self->dir.'/config.bin') };
+	if ($@) {
+	    &Log::do_log('err', 'Unable to deserialize config.bin of %s: $@', $self->get_list_id, $@);
+	    $lock->unlock();
+	    return undef;
+	}
+
+	$lock->unlock();
+
+	$self->get_real_total;
+	return { 'epoch' => $time_config_bin,
+		 'total' => $self->total,
+		 'admin' => $admin };
+    }
+    return undef;
+}
+
+
+## Update list cache.
+sub list_cache_update_admin
+{
+    my ($self) = shift;
+    my $cache_list_config = &Conf::get_robot_conf($self->{'domain'},
+						  'cache_list_config');
+
+    if ($cache_list_config eq 'binary_file') {
+	## Get a shared lock on config file first
+	my $lock = new Lock ($self->{'dir'}.'/config');
+	unless (defined $lock) {
+	    &Log::do_log('err','Could not create new lock');
+	    return undef;
+	}
+	$lock->set_timeout(5);
+	unless ($lock->lock('write')) {
+	    return undef;
+	}
+
+	eval {&Storable::store($self->{'admin'}, "$self->{'dir'}/config.bin")};
+	if ($@) {
+	    &Log::do_log('err', 'Failed to save the binary config %s. error: %s', "$self->{'dir'}/config.bin",$@);
+	    $lock->unlock;
+	    return undef;
+	}
+
+	$lock->unlock;
+
+	return 1;
+    }
+
+    return 1 unless $cache_list_config eq 'database';
+
+    my $config;
+
+    my $name = $self->{'name'};
+    my $searchkey = tools::foldcase($self->{'admin'}{'subject'});
+    my $status = $self->{'admin'}{'status'};
+    my $robot = $self->{'admin'}{'host'};
+    my $web_archive  = $self->is_web_archived ? 1 : 0; 
+    my $topics =
+	',' . join(',' ,@{$self->{'admin'}{'topics'} || []}) . ',';
+
+    my $creation_epoch = $self->{'admin'}{'creation'}{'date_epoch'};
+    my $creation_email = $self->{'admin'}{'creation'}{'email'};
+    my $update_epoch = $self->{'admin'}{'update'}{'date_epoch'};
+    my $update_email = $self->{'admin'}{'update'}{'email'};
+##    my $latest_instantiation_epoch =
+##	$self->{'admin'}{'latest_instantiation'}{'date_epoch'};
+##    my $latest_instantiation_email =
+##	$self->{'admin'}{'latest_instantiation'}{'email'};
+
+    eval { $config = Storable::nfreeze($self->{'admin'}); };
+    if ($@) {
+	&Log::do_log('err', 'Failed to save the config to database. error: %s', $@);
+	return undef;
+    }
+
+    push @sth_stack, $sth;
+    unless($sth = &SDM::do_prepared_query('UPDATE list_table SET status_list = ?, name_list = ?, robot_list = ?, creation_epoch_list = ?, creation_email_list = ?, update_epoch_list = ?, update_email_list = ?, searchkey_list = ?, web_archive_list = ?, topics_list = ?, cache_epoch_list = ?, config_list = ? WHERE robot_list = ? AND name_list = ?',
+					  $status, $name, $robot,
+					  $creation_epoch, $creation_email,
+					  $update_epoch, $update_email,
+					  $searchkey, $web_archive, $topics,
+					  time, $config,
+					  $robot, $name) and $sth->rows or
+	   $sth = &SDM::do_prepared_query('INSERT INTO list_table (status_list, name_list, robot_list, creation_epoch_list, creation_email_list, update_epoch_list, update_email_list, searchkey_list, web_archive_list, topics_list, cache_epoch_list, config_list) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)',
+					  $status, $name, $robot,
+					  $creation_epoch, $creation_email,
+					  $update_epoch, $update_email,
+					  $searchkey, $web_archive, $topics,
+					  time, $config) and $sth->rows) {
+	&Log::do_log('err','Unable to insert list %s@%s in database', $name, $robot);
+	pop @sth_stack;
+	return undef;
+    }
+    pop @sth_stack;
+    return 1;
+}
+
+sub list_cache_update_total {
+    my $self = shift;
+    my $cache_list_config = &Conf::get_robot_conf($self->domain,
+						  'cache_list_config');
+
+    if ($cache_list_config eq 'database') {
+	if (&SDM::do_prepared_query('UPDATE list_table SET total_list = ? WHERE name_list = ? AND robot_list = ?',
+				    $self->total,
+				    $self->name, $self->domain)) {
+	    &Log::do_log('err', 'Canot update subscriber count of list %s on database cache',
+			 $self->get_list_id);
+	}
+    }
+}
+
+sub list_cache_purge {
+    my $self = shift;
+
+    my $cache_list_config = &Conf::get_robot_conf($self->domain,
+						 'cache_list_config');
+    if ($cache_list_config eq 'binary_file' and -e $self->dir.'/config.bin') {
+        ## Get a shared lock on config file first
+	my $lock = new Lock ($self->dir.'/config');
+	unless (defined $lock) {
+	    &Log::do_log('err','Could not create new lock');
+	    return undef;
+	}
+	$lock->set_timeout(5);
+	unless ($lock->lock('write')) {
+	    return undef;
+	}
+
+	unlink($self->dir.'/config.bin');
+
+	$lock->unlock;
+    }
+
+    return 1 unless $cache_list_config eq 'database';
+
+    return defined &SDM::do_prepared_query('DELETE from list_table WHERE name_list = ? AND robot_list = ?',
+					   $self->name, $self->domain);
+}
+
+###### END of the ListCache package ######
 
 ## This package handles Sympa virtual robots
 ## It should :

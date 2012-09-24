@@ -950,10 +950,10 @@ our @params = (
     {
         'name'     => 'cache_list_config',
         'default'  => 'none',
-        'query'    => gettext('Use of binary version of the list config structure on disk (none | binary_file)'),
+        'query'    => gettext('Use of binary version of the list config structure on disk (none | binary_file | database)'),
         'file'     => 'sympa.conf',
         'edit'     => '1',
-        'advice'   => gettext('Set this parameter to "binary_file" if you manage a big amount of lists (1000+); it should make the web interface startup faster'),
+        'advice'   => gettext('Set this parameter to "binary_file" or "database" if you manage a big amount of lists (1000+); it should make the web interface startup faster'),
     },
     {
         'name'     => 'lock_method',

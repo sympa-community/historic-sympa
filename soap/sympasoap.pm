@@ -774,7 +774,7 @@ sub add {
 	}
     }
     
-    &Log::do_log('info', 'ADD %s %s from %s accepted (%d subscribers)', $list->{'name'}, $email, $sender, $list->get_total() );
+    &Log::do_log('info', 'ADD %s %s from %s accepted (%d subscribers)', $list->{'name'}, $email, $sender, $list->total);
     if ($action =~ /notify/i) {
 	unless ($list->send_notify_to_owner('notice',{'who' => $email, 
 						      'gecos' => $gecos,
@@ -884,7 +884,7 @@ sub del {
     }
     
     
-    &Log::do_log('info', 'DEL %s %s from %s accepted (%d subscribers)', $listname, $email, $sender,  $list->get_total() );
+    &Log::do_log('info', 'DEL %s %s from %s accepted (%d subscribers)', $listname, $email, $sender, $list->total);
     if ($action =~ /notify/i) {
 	unless ($list->send_notify_to_owner('notice',{'who' => $email, 
 						      'gecos' => "", 

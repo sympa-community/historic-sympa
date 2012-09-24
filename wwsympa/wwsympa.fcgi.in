@@ -2606,7 +2606,7 @@ Use it to create a List object and initialize output parameters.
 
 =item * List::get_subscription_request_count
 
-=item * List::get_total
+=item * List::get_real_total
 
 =item * List::get_total_bouncing
 
@@ -2677,9 +2677,9 @@ Use it to create a List object and initialize output parameters.
  	
 	## Get the total number of subscribers to the list.
 	if (defined $param->{'total'}) {
-	    $param->{'total'} = $list->get_total();
+	    $param->{'total'} = $list->total;
 	}else {
-	    $param->{'total'} = $list->get_total('nocache');
+	    $param->{'total'} = $list->get_real_total;
 	}
 
 	## Check if the current list has a public key X.509 certificate.
@@ -2987,7 +2987,7 @@ Use it to create a List object and initialize output parameters.
 	 $r_action = $result->{'action'} if (ref($result) eq 'HASH');
 
 	 $param->{'may_suboptions'} = 1;
-	 $param->{'total'} = $list->get_total();
+	 $param->{'total'} = $list->total;
 	 $param->{'may_review'} = 1 if ($r_action =~ /do_it/);
 	 $param->{'list_status'} = $list->{'admin'}{'status'};
 
@@ -4078,7 +4078,21 @@ sub do_renewpasswd {
 	 }
      }
 
-     my $all_lists = &List::get_lists($robot);
+    ## Filter lists by topic.
+    ## topic argument 'topicsless' or 'other' means 'lists with topic
+    ## "other" or without topics'.
+    ## no topic argument; List all lists
+    my $options = {};
+    if ($in{'topic'}) {
+	if ($in{'subtopic'}) {
+	    $options->{'filter_query'} =
+		[ 'topics' => "$in{'topic'}/$in{'subtopic'}" ];
+	} else {
+	    $options->{'filter_query'} = [ 'topics' => $in{'topic'} ];
+	}
+    }
+    my $all_lists = &List::get_lists($robot, $options);
+
      foreach my $list ( @$all_lists ) {
 
 	 my $sender = $param->{'user'}{'email'} || 'nobody';
@@ -4110,40 +4124,14 @@ sub do_renewpasswd {
 	     $list_info->{'is_subscriber'} = 1;
 	 }
 
-	 ## Filter lists by topic.
-	 ## topic argument 'topicsless' or 'other' means 'lists with topic
-	 ## "other" or without topics'.
-	 ## no topic argument; List all lists
-	 if (! $in{'topic'}) {
-	     $param->{'which'}{$list->{'name'}} = $list_info;
-	 }elsif ($list->{'admin'}{'topics'}) {
-	     foreach my $topic (@{$list->{'admin'}{'topics'}}) {
-		 my @tree = split '/', $topic;
-
-		if (($in{'topic'} eq 'other' and ! $in{'subtopic'}) or
-		    $in{'topic'} eq 'topicsless') {
-		    $param->{'which'}{$list->{'name'}} = $list_info
-			if $tree[0] eq 'other' and ! $tree[1];
-		    next;
-		}
-
-		 next if (($in{'topic'}) && ($tree[0] ne $in{'topic'}));
-		 next if (($in{'subtopic'}) && ($tree[1] ne $in{'subtopic'}));
-
-		 $param->{'which'}{$list->{'name'}} = $list_info;
-	     }
-	 } elsif (($in{'topic'} eq 'other' and ! $in{'subtopic'}) or
-		  $in{'topic'} eq 'topicsless') {
-	     $param->{'which'}{$list->{'name'}} = $list_info;
-	 }
+	$param->{'which'}{$list->name} = $list_info;
+	if ($list->name =~ /^([a-z])/){
+	    push @{$param->{'orderedlist'}{$1}}, $list->name;
+	} else {
+	    push @{$param->{'orderedlist'}{'others'}}, $list->name;
+	}
      }
-     foreach my $listname (sort keys %{$param->{'which'}}) {
-         if ($listname =~ /^([a-z])/){
-	     push @{$param->{'orderedlist'}{$1}}, $listname ;
-	 }else{
-             push @{$param->{'orderedlist'}{'others'}}, $listname ;
-	 }
-     }
+
      return 1;
  }
 
@@ -4361,7 +4349,7 @@ sub do_renewpasswd {
      }
 
      print "Content-type: text/plain\n\n";
-     print $list->get_total()."\n";
+     print $list->total ."\n";
 
      $param->{'bypass'} = 'extreme';
 
@@ -8490,19 +8478,15 @@ sub do_remove_arc {
      ## Checking families and other virtual hosts.
      &get_server_details();
 
-     my @unordered_lists;
-     my $all_lists = &List::get_lists($robot);
-     foreach my $list ( @$all_lists ) {
-
-	 push @unordered_lists, {'name' => $list->{'name'},
-				 'subject' => $list->{'admin'}{'subject'},
-				 'creation_date' => $list->{'admin'}{'creation'}{'date_epoch'}};
-     }
-
-     foreach my $l (sort {$b->{'creation_date'} <=> $a->{'creation_date'}} @unordered_lists) {
-	 push @{$param->{'latest_lists'}}, $l;
-	 $l->{'creation_date'} = gettext_strftime "%d %b %Y", localtime($l->{'creation_date'});
-     }
+    my $all_lists = &List::get_lists($robot, { 'order' => [ '-creation' ] });
+    foreach my $list (@{$all_lists}) {
+	my $epoch = $list->creation->{'date_epoch'};
+	push @{$param->{'latest_lists'}},
+	     { 'name' => $list->name,
+	       'subject' => $list->subject,
+	       'creation_date' => (gettext_strftime "%d %b %Y", localtime $epoch)
+	     };
+    }
 
      return 1;
  }
@@ -8517,14 +8501,9 @@ sub do_get_inactive_lists {
      &get_server_details();
 
      my @unordered_lists;
-     my $all_lists = &List::get_lists($robot);
+     my $all_lists = &List::get_lists($robot,
+	{ 'filter_query' => [ '!status' => 'closed|family_closed' ] });
      foreach my $list ( @$all_lists ) {
-
-	 ## skip closed lists
-	 if ($list->{'admin'}{'status'} eq 'closed') {
-	     next;
-	 }
-
 	 my $last_message = 0;
 
 	 if (open COUNT, $list->{'dir'}.'/msg_count') {
@@ -8544,7 +8523,7 @@ sub do_get_inactive_lists {
 	    'send_scenario' =>$list->{'admin'}{'send'}{'name'},
 	    'owners' => join(", ", map {$_->{'email'}} @{$list->{'admin'}{'owner'}}),
 	    'editors' => join(", ", map {$_->{'email'}} @{$list->{'admin'}{'editor'}}),
-	    'subscribers_count' =>  $list->get_total('nocache'),
+	    'subscribers_count' =>  $list->get_real_total,
 	    'subject' => $list->{'admin'}{'subject'},
 	    'msg_count' => $list->get_msg_count(),
 	    'last_message_epoch' => $last_message,
@@ -8575,7 +8554,7 @@ sub do_get_inactive_lists {
 			'name' => $list->{'name'},
 			'subject' => $list->{'admin'}{'subject'},
 			'creation_date' => $list->{'admin'}{'creation'}{'date_epoch'},
-			'subscribers' => $list->get_total
+			'subscribers' => $list->total
 		};
 	}
 	
@@ -9367,6 +9346,7 @@ sub do_home {
  sub do_rebuildallarc {
      &wwslog('info', 'do_rebuildallarc');
 
+    #FIXME: past archives should be rebuilt even if archiving is disabled.
      my $all_lists = &List::get_lists($robot);
      foreach my $list ( @$all_lists ) {
 	 next unless (defined $list->{'admin'}{'web_archive'});
@@ -9697,34 +9677,21 @@ sub do_select_voot_groups {
  sub do_search_list {
      &wwslog('info', 'do_search_list(%s)', $in{'filter'});
 
-     unless ($in{'filter'}) {
+     unless (defined $in{'filter'} and length $in{'filter'}) {
 	 &report::reject_report_web('user','no_filter',{},$param->{'action'});
 	 &wwslog('info','do_search_list: no filter');
-	 return undef;
-     }elsif ($in{'filter'} =~ /[<>\\\*\$]/) {
-	 &report::reject_report_web('user','syntax_errors',{'params' => 'filter'},$param->{'action'});
-	 &wwslog('err','do_search_list: syntax error');
 	 return undef;
      }
 
     ## Search key
     $param->{'filter'} = $in{'filter'};
-    my $searchkey = undef;
-    $searchkey = tools::foldcase($param->{'filter'})
-	if defined $param->{'filter'} and length $param->{'filter'};
 
      ## Members list
      my $record = 0;
-     my $all_lists = &List::get_lists($robot);
+    my $all_lists = &List::get_lists($robot,
+	{ 'filter_query' => [ '%name%|%subject%' => $param->{'filter'} ] });
      foreach my $list ( @$all_lists ) {
-	 my $is_admin;
-	 ## Search filter
-	my $subj = undef;
-	$subj = tools::foldcase($list->{'admin'}{'subject'})
-	    if defined $list->{'admin'}{'subject'};
-	next unless index($list->{'name'}, $searchkey) >= 0 or
-		    (defined $subj and index($subj, $searchkey) >= 0);
-
+	my $is_admin = 0;
 	 my $result = $list->check_list_authz('visibility',$param->{'auth_method'},
 					      {'sender' => $param->{'user'}{'email'}, 
 					       'remote_host' => $param->{'remote_host'},
@@ -9744,15 +9711,13 @@ sub do_select_voot_groups {
 					       'subject' => $list->{'admin'}{'subject'},
 					       'admin' => $is_admin,
 					       'export' => 'no'};
+	if ($list->name =~ /^([a-z])/){
+	    push @{$param->{'orderedlist'}{$1}}, $list->name;
+	} else {
+	    push @{$param->{'orderedlist'}{'others'}}, $list->name;
+	}
      }
      $param->{'occurrence'} = $record;
-     foreach my $listname (sort keys %{$param->{'which'}}) {
-         if ($listname =~ /^([a-z])/){
-	     push @{$param->{'orderedlist'}{$1}}, $listname ;
-	 }else{
-             push @{$param->{'orderedlist'}{'others'}}, $listname ;
-	 }
-     }
 
      return 1;
  }

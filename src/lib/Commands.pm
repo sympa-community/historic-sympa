@@ -636,7 +636,7 @@ sub review {
 	    }
 	} while ($user = $list->get_next_list_member());
 	unless ($list->send_file('review', $sender, $robot, {'users' => \@users, 
-							     'total' => $list->get_total(),
+							     'total' => $list->total,
 							     'subject' => "REVIEW $listname",
 							     'auto_submitted' => 'auto-replied'})) {
 	    &Log::do_log('notice',"Unable to send template 'review' to $sender");
@@ -865,7 +865,7 @@ sub subscribe {
 	}
 
 	}
-	&Log::do_log('info', 'SUB %s from %s accepted (%d seconds, %d subscribers)', $which, $sender, time-$time_command, $list->get_total());
+	&Log::do_log('info', 'SUB %s from %s accepted (%d seconds, %d subscribers)', $which, $sender, time - $time_command, $list->total);
 	
 	return 1;
     }
@@ -1167,7 +1167,7 @@ sub signoff {
 	    }
 	}
 
-	&Log::do_log('info', 'SIG %s from %s accepted (%d seconds, %d subscribers)', $which, $email, time-$time_command, $list->get_total() );
+	&Log::do_log('info', 'SIG %s from %s accepted (%d seconds, %d subscribers)', $which, $email, time - $time_command, $list->total);
 	
 	return 1;	    
     }
@@ -1302,7 +1302,7 @@ sub add {
 	    }
 	}
 
-	&Log::do_log('info', 'ADD %s %s from %s accepted (%d seconds, %d subscribers)', $which, $email, $sender, time-$time_command, $list->get_total() );
+	&Log::do_log('info', 'ADD %s %s from %s accepted (%d seconds, %d subscribers)', $which, $email, $sender, time - $time_command, $list->total);
 	if ($action =~ /notify/i) {
 	    unless ($list->send_notify_to_owner('notice',{'who' => $email, 
 							  'gecos' => $comment,
@@ -1438,7 +1438,7 @@ sub invite {
 		    &report::reject_report_cmd('intern',"Unable to send template 'invite' to $email",{'listname'=> $which},$cmd_line,$sender,$robot);
 		    return undef;
 		}
-		&Log::do_log('info', 'INVITE %s %s from %s accepted, auth requested (%d seconds, %d subscribers)', $which, $email, $sender, time-$time_command, $list->get_total());
+		&Log::do_log('info', 'INVITE %s %s from %s accepted, auth requested (%d seconds, %d subscribers)', $which, $email, $sender, time - $time_command, $list->total);
 		&report::notice_report_cmd('invite',{'email'=> $email, 'listname' => $which},$cmd_line); 
 
 	    }elsif ($action !~ /reject/i) {
@@ -1450,11 +1450,11 @@ sub invite {
 		    &report::reject_report_cmd('intern',"Unable to send template 'invite' to $email",{'listname'=> $which},$cmd_line,$sender,$robot);
 		    return undef;
 		}
-		&Log::do_log('info', 'INVITE %s %s from %s accepted,  (%d seconds, %d subscribers)', $which, $email, $sender, time-$time_command, $list->get_total() );
+		&Log::do_log('info', 'INVITE %s %s from %s accepted,  (%d seconds, %d subscribers)', $which, $email, $sender, time - $time_command, $list->total);
 		&report::notice_report_cmd('invite',{'email'=> $email, 'listname' => $which},$cmd_line); 
 		
 	    }elsif ($action =~ /reject/i) {
-		&Log::do_log('info', 'INVITE %s %s from %s refused, not allowed (%d seconds, %d subscribers)', $which, $email, $sender, time-$time_command, $list->get_total() );
+		&Log::do_log('info', 'INVITE %s %s from %s refused, not allowed (%d seconds, %d subscribers)', $which, $email, $sender, time - $time_command, $list->total);
 		if (defined $result->{'tt2'}) {
 		    unless ($list->send_file($result->{'tt2'}, $sender, $robot, {})) {
 			&Log::do_log('notice',"Unable to send template '$tpl' to $sender");
@@ -1825,7 +1825,7 @@ sub del {
 	    }
 	}
 	&report::notice_report_cmd('removed',{'email'=> $who, 'listname' => $which},$cmd_line);  
-	&Log::do_log('info', 'DEL %s %s from %s accepted (%d seconds, %d subscribers)', $which, $who, $sender, time-$time_command, $list->get_total() );
+	&Log::do_log('info', 'DEL %s %s from %s accepted (%d seconds, %d subscribers)', $which, $who, $sender, time - $time_command, $list->total);
 	if ($action =~ /notify/i) {
 	    unless ($list->send_notify_to_owner('notice',{'who' => $who, 
 					 'gecos' => "", 
@@ -2063,7 +2063,7 @@ sub distribute {
 	unless ($numsmtp) {
 	    &Log::do_log('info', 'Message for %s from %s accepted but all subscribers use digest,nomail or summary',$which, $sender);
 	} 
-	&Log::do_log('info', 'Message for %s from %s accepted (%d seconds, %d sessions, %d subscribers), message-id=%s, size=%d', $which, $sender, time - $start_time, $numsmtp, $list->get_total(), $msg_id, $bytes);
+	&Log::do_log('info', 'Message for %s from %s accepted (%d seconds, %d sessions, %d subscribers), message-id=%s, size=%d', $which, $sender, time - $start_time, $numsmtp, $list->total, $msg_id, $bytes);
 
 	unless ($quiet) {
 	    unless (&report::notice_report_msg('message_distributed',$sender,{'key' => $key,'message' => $message},$robot,$list)) {

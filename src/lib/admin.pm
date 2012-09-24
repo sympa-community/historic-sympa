@@ -832,10 +832,25 @@ sub rename_list{
 	     }
 	 }
 	 
-	 # if subscribtion are stored in database rewrite the database
-	 &List::rename_list_db($list, $param{'new_listname'},
-			       $param{'new_robot'});
-     }
+	# if subscribtion are stored in database rewrite the database
+	unless (&SDM::do_prepared_query('UPDATE subscriber_table SET list_subscriber = ?, robot_subscriber = ? WHERE list_subscriber = ? AND robot_subscriber = ?', 
+					$param{'new_listname'},
+					$param{'new_robot'},
+					$list->name, $list->domain)) {
+	    &Log::do_log('err','Unable to rename list %s to %s@%s in the database', $list->get_list_id, $param{'new_listname'}, $param{'new_robot'});
+	    return 'internal';
+	}
+	unless (&SDM::do_prepared_query('UPDATE admin_table SET list_admin = ?, robot_admin = ? WHERE list_admin = ? AND robot_admin = ?', 
+					$param{'new_listname'}, 
+					$param{'new_robot'},
+					$list->name, $list->domain)) {
+	    &Log::do_log('err','Unable to change admins in database while renaming list %s to %s@%s', $list->get_list_id, $param{'new_listname'}, $param{'new_robot'});
+	    return 'internal';
+	}
+
+	# clear old list cache on database if any
+	$list->_purge_list_cache;
+    }
      ## Move stats
     unless (&SDM::do_query("UPDATE stat_table SET list_stat=%s, robot_stat=%s WHERE (list_stat = %s AND robot_stat = %s )", 
     &SDM::quote($param{'new_listname'}), 

@@ -337,6 +337,8 @@ sub do_prepared_query {
 
     my $sth;
 
+    &Log::do_log('debug', "Will perform query '%s'", $query);
+
     unless ($self->{'cached_prepared_statements'}{$query}) {
 	&Log::do_log('debug3','Did not find prepared statement for %s. Doing it.',$query);
 	unless ($sth = $self->{'dbh'}->prepare($query)) {

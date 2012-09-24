@@ -109,12 +109,11 @@ Options:
                                          : modify the existing list installed under the robot_name robot and that 
                                            belongs to family_name family. The new description is in the file.xml
    --purge_list=listname\@robot          : remove a list no backup is possible
-   --reload_list_config --list=mylist\@mydom  : recreates all config.bin files. You should run this command if you edit 
-                                                authorization scenarios. The list parameter is optional.
+   --reload_list_config [--list=mylist\@mydom] [--robot=mydom]
+                                         : recreates all config.bin files. You should run this command if you edit authorization scenarios. The list and robot parameters are optional.
    --rename_list=listname\@robot --new_listname=newlistname --new_listrobot=newrobot : renames a list or move it to another virtual robot
    --service=process_command|process_message|process_creation  : process dedicated to messages distribution, commands or to automatic lists creation (default three of them)
    --sync_include=listname\@robot        : trigger the list members update
-   --sync_list_db [--list=listname]      : syncs filesystem list configs to the database cache of list configs, optionally sync an individual list if specified.
    --test_database_message_buffer        : test the database message buffer size
    --upgrade [--from=X] [--to=Y]             : runs Sympa maintenance script to upgrade from version X to version Y
    --upgrade_shared  --[listname=X] --[robot=Y] : rename files in shared.
@@ -132,7 +131,7 @@ unless (&GetOptions(\%main::options, 'dump=s', 'debug|d', ,'log_level=s','foregr
             'lang|l=s', 'mail|m', 'keepcopy|k=s', 'help', 'version', 'import=s','make_alias_file','lowercase','sync_list_db','md5_encode_password',
 		    'close_list=s','rename_list=s','new_listname=s','new_listrobot=s','purge_list=s','create_list','instantiate_family=s',
 		    'robot=s','add_list=s','modify_list=s','close_family=s','md5_digest=s','change_user_email','current_email=s','new_email=s',
-		    'input_file=s','sync_include=s','upgrade','upgrade_shared','from=s','to=s','reload_list_config','list=s','quiet','close_unknown','test_database_message_buffer','conf_2_db')) {
+		    'input_file=s','sync_include=s','upgrade','upgrade_shared','from=s','to=s','reload_list_config','list=s','quiet','close_unknown','test_database_message_buffer','conf_2_db','export_list')) {
     &Log::fatal_err("Unknown options.");
 }
 
@@ -897,18 +896,23 @@ if ($main::options{'dump'}) {
     exit 0;
 
 }elsif ($main::options{'reload_list_config'}) {
+    my $listname = $main::options{'list'};
+    my $robot = $main::options{'robot'} || '';
+    $listname = '' unless defined $listname;
+    if ($listname =~ s/\@(.+)$//) {
+	$robot = $1;
+    }
 
-    if ($main::options{'list'}) {
-
-	&Log::do_log('notice', "Loading list $main::options{'list'}...");
-	my $list = new List ($main::options{'list'}, '', {'reload_config' => 1});
+    if (length $listname) {
+	&Log::do_log('notice', "Loading list $listname...");
+	my $list = new List($listname, $robot, { 'reload_config' => 1 });
 	unless (defined $list) {
-	    print STDERR "Error : incorrect list name '$main::options{'list'}'\n";
+	    print STDERR "Error : incorrect list name '$listname'\n";
 	    exit 1;
 	}
-    }else {
-	&Log::do_log('notice', "Loading ALL lists...");
-	my $all_lists = &List::get_lists('*',{'reload_config' => 1});
+    } else {
+	&Log::do_log('notice', 'Loading ALL lists...');
+	&List::get_lists($robot, { 'reload_config' => 1 });
     }
 
     exit 0;
@@ -991,24 +995,16 @@ elsif ($main::options{'close_family'}) {
 }
 ##########################################
 elsif ($main::options{'sync_list_db'}) {       
-    unless ($Conf{'db_list_cache'} eq 'on') {
-       print STDOUT "\nSympa not configured to use database list caching \n";
-       exit 1;
-    }
-    my $listname = $main::options{'list'} || '';
-    if (length($listname) > 1) {
-	my $list = new List ($listname); 
-	unless (defined $list) {
-	    print STDOUT "\nList '$listname' does not exist. \n";
-	    exit 1;
-	}
-	$list->_update_list_db;
-    } else {
-        &List::_flush_list_db();
-        my $all_lists = &List::get_lists('*', { 'use_files' => 1 });
-        foreach my $list (@$all_lists) {
-           $list->_update_list_db;
-        }
+    print STDERR "--sync_list_db was deprecated.  Use --reload_list_config.\n";
+    exit 1;
+}
+##########################################
+elsif ($main::options{'export_list'}) {
+    my $robot = $main::options{'robot'} || '*';
+    my $all_lists = List::get_lists($robot);
+    exit 1 unless defined $all_lists;
+    foreach my $list (@$all_lists) {
+	printf "%s\n", $list->{'name'};
     }
     exit 0;
 }
@@ -1519,7 +1515,7 @@ sub DoFile {
 		}
                 return undef;
             }
-            unless ($list->get_total() > 0) {
+            unless ($list->total > 0) {
 		&Log::do_log('err', 'sympa::DoFile() : Dynamic list %s from %s family has ZERO subscribers',$listname, $dyn_list_family);
 		&report::reject_report_msg('user','list_unknown',$sender,{'listname' => $listname, 'list'=>{'name'=>$listname, 'host'=>$robot},'message' => $message},$robot,$message->{'msg'}->as_string,'');
 		&Log::db_log({'robot' => $robot,'list' => $listname,'action' => 'DoFile','parameters' => "$file",'target_email' => "",'msg_id' => $msg_id, 'status' => 'error','error_type' => 'list_unknown','user_email' => $sender,'client' => $ip,'daemon' => $daemon_name});
@@ -1534,7 +1530,7 @@ sub DoFile {
 		}
                 return undef;
             }
-            &Log::do_log('info', 'Successfully create list %s with %s subscribers', $listname, $list->get_total());
+            &Log::do_log('info', 'Successfully create list %s with %s subscribers', $listname, $list->total);
         }
     } 
 
@@ -1995,7 +1991,7 @@ sub DoMessage{
 		&Log::db_log({'robot' => $robot,'list' => $list->{'name'},'action' => 'DoMessage','parameters' => "$which,$messageid,$robot",'target_email' => '','msg_id' => $messageid,'status' => 'error','error_type' => 'internal','user_email' => $sender,'client' => $ip,'daemon' => $daemon_name});
 		return undef;
 	    }
-	    &Log::do_log('info', 'Message for %s from %s accepted (%d seconds, %d sessions, %d subscribers), message-id=%s, size=%d', $listname, $sender,  time - $start_time, $numsmtp, $list->get_total(),$messageid, $message->{'size'});
+	    &Log::do_log('info', 'Message for %s from %s accepted (%d seconds, %d sessions, %d subscribers), message-id=%s, size=%d', $listname, $sender,  time - $start_time, $numsmtp, $list->total, $messageid, $message->{'size'});
 	    
 		return 1;
 
