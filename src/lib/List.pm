@@ -1627,7 +1627,7 @@ sub set_status_error_config {
     unless ($self->{'admin'}{'status'} eq 'error_config'){
 	$self->{'admin'}{'status'} = 'error_config';
 
-	my $host = &Conf::get_robot_conf($self->{'robot'}, 'host');
+	#my $host = &Conf::get_robot_conf($self->{'robot'}, 'host');
 	## No more save config in error...
 	#$self->save_config("listmaster\@$host");
 	#$self->savestats();
@@ -3229,7 +3229,7 @@ sub send_msg {
 	    my $options;
 	    $options->{'email'} = $user->{'email'};
 	    $options->{'name'} = $name;
-	    $options->{'domain'} = $host;
+	    $options->{'domain'} = $robot;
 	    my $user_data = &get_subscriber_no_object($options);
 	    ## test to know if the rcpt suspended her subscription for this list
 	    ## if yes, don't send the message
@@ -3238,7 +3238,7 @@ sub send_msg {
 		    next;
 		}elsif(($user_data->{'enddate'} < time) && ($user_data->{'enddate'})){
 		    ## If end date is < time, update the BDD by deleting the suspending's data
-		    &restore_suspended_subscription($user->{'email'},$name,$host);
+		    &restore_suspended_subscription($user->{'email'}, $name, $robot);
 		}
 	    }
 	    if ($user->{'reception'} =~ /^(digest|digestplain|summary|nomail)$/i) {
@@ -12357,7 +12357,7 @@ sub _update_list_db
     my $name = $self->{'name'};
     my $subject = $self->{'admin'}{'subject'} || '';
     my $status = $self->{'admin'}{'status'};
-    my $robot = $self->{'admin'}{'host'};
+    my $robot = $self->{'domain'};
     my $web_archive  = &is_web_archived($self) || 0; 
     my $topics = '';
     if ($self->{'admin'}{'topics'}) {
