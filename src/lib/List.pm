@@ -2410,7 +2410,7 @@ sub set_status_error_config {
     unless ($self->{'admin'}{'status'} eq 'error_config'){
 	$self->{'admin'}{'status'} = 'error_config';
 
-	my $host = &Conf::get_robot_conf($self->{'robot'}, 'host');
+	#my $host = &Conf::get_robot_conf($self->{'robot'}, 'host');
 	## No more save config in error...
 	#$self->save_config("listmaster\@$host");
 	#$self->savestats();
@@ -4014,7 +4014,7 @@ sub send_msg {
 	my $options;
 	$options->{'email'} = $user->{'email'};
 	$options->{'name'} = $name;
-	$options->{'domain'} = $host;
+	$options->{'domain'} = $robot;
 	my $user_data = &get_list_member_no_object($options);
 	## test to know if the rcpt suspended her subscription for this list
 	## if yes, don't send the message
@@ -4023,7 +4023,7 @@ sub send_msg {
 		push @tabrcpt_nomail_verp, $user->{'email'}; next;
 	    }elsif(($user_data->{'enddate'} < time) && ($user_data->{'enddate'})){
 		## If end date is < time, update the BDD by deleting the suspending's data
-		&restore_suspended_subscription($user->{'email'},$name,$host);
+		&restore_suspended_subscription($user->{'email'}, $name, $robot);
 	    }
 	}
 	if ($user->{'reception'} eq 'digestplain') { # digest digestplain, nomail and summary reception option are initialized for tracking feature only
@@ -4434,7 +4434,7 @@ sub send_to_editor {
        unless ($param->{'one_time_ticket'} = &Auth::create_one_time_ticket($recipient,$robot,'modindex/'.$name,'mail')){
 	   &Log::do_log('notice',"Unable to create one_time_ticket for $recipient, service modindex/$name");
        }else{
-	   &Log::do_log('notice',"ticket : $param->{'one_time_ticket'}");
+	   &Log::do_log('debug',"ticket $param->{'one_time_ticket'} created");
        }
        &tt2::allow_absolute_path();
        $param->{'auto_submitted'} = 'auto-forwarded';
@@ -5856,7 +5856,7 @@ sub get_list_member {
 	return undef;
     }else {
 	unless ($user) {
-	    &Log::do_log('info','User %s was not found in the subscribers of list %s@%s.',$email,$self->{'name'},$self->{'domain'});
+	    &Log::do_log('debug','User %s was not found in the subscribers of list %s@%s.',$email,$self->{'name'},$self->{'domain'});
 	    return undef;
 	}else{
 		$user->{'reception'} = $self->{'admin'}{'default_user_options'}{'reception'}
@@ -6103,6 +6103,9 @@ sub get_list_member_no_object {
 	if ($error) {
 	    &Log::do_log('err',"An error occured while fetching the data from the database.");
 	    return undef;
+	}else{
+	    &Log::do_log('debug2',"No user with the email %s is subscribed to list %s@%s",$email,$name,$options->{'domain'});
+	    return 0;
 	}
     }
  
@@ -12539,7 +12542,7 @@ sub _update_list_db
     my $name = $self->{'name'};
     my $subject = $self->{'admin'}{'subject'} || '';
     my $status = $self->{'admin'}{'status'};
-    my $robot = $self->{'admin'}{'host'};
+    my $robot = $self->{'domain'};
     my $web_archive  = &is_web_archived($self) || 0; 
     my $topics = '';
     if ($self->{'admin'}{'topics'}) {
