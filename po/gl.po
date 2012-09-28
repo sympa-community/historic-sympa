@@ -10314,57 +10314,6 @@ msgstr ""
 msgid "you do not receive your own posts"
 msgstr ""
 
-#: ../web_tt2/modindex.tt2:128
-msgid "Toggle spams"
-msgstr ""
-
-#: ../web_tt2/stats.tt2:2
-msgid "Shared document directory size:"
-msgstr ""
-
-#: ../web_tt2/stats.tt2:3
-msgid "Web archives size:"
-msgstr ""
-
-#: ../mail_tt2/listmaster_notification.tt2:42
-msgid "Previous process crashed"
-msgstr ""
-
-#: ../mail_tt2/listmaster_notification.tt2:44
-msgid "Previous process has died unexpectedly."
-msgstr ""
-
-#. (list.name,msg_from)
-#: ../mail_tt2/moderate.tt2:3
-msgid "Article to be tagged for list %1 from %2"
-msgstr ""
-
-#. (list.name)
-#: ../mail_tt2/moderate.tt2:21
-msgid ""
-"To tag the message in list %1 for the appropriate topic, please use the "
-"following link:"
-msgstr ""
-
-#: ../src/lib/Conf.pm:460
-msgid "Error at line %d: %s"
-msgstr ""
-
-#. (list.name)
-#: ../mail_tt2/user_notification.tt2:53
-msgid ""
-"You have requested to removed from list %1. To confirm and get removed from "
-"the list, please click the link below: "
-msgstr ""
-
-#: ../src/lib/confdef.pm:1197
-msgid "List of headers to be included into the message for signature"
-msgstr ""
-
-#: ../src/lib/mail.pm:922
-msgid "Unable to create a channel in smtpto: %m"
-msgstr ""
-
 #~ msgid "URL:"
 #~ msgstr "URL:"
 

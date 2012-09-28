@@ -203,10 +203,11 @@ my %full_db_struct = (
     'spool_table' => {
 	'fields' => {
 	    'messagekey_spool' => {
-		'struct'=> 'varchar(33)',
+		'struct'=> 'bigint(20)',
 		'doc'=>'primary key',
 		'primary'=>1,
 		'not_null'=>1,
+		'autoincrement'=>1,
 		'order'=>1,
 	    },
 	    'spoolname_spool'=> {
@@ -1222,7 +1223,7 @@ sub not_null {
     my %db_struct = &db_struct() ;
     foreach my $table ( keys %full_db_struct  ) {
 	foreach my $field  ( keys %{ $full_db_struct{$table}{'fields'}  }) {
-	    $not_null{'$field'} = $full_db_struct{$table}{'fields'}{'not_null'}; 
+	    $not_null{'$field'} = $full_db_struct{$table}{'fields'}{$field}{'not_null'}; 
 	}
     }
     return %not_null;
@@ -1234,7 +1235,7 @@ sub autoincrement {
     my %db_struct = &db_struct() ;
     foreach my $table ( keys %full_db_struct  ) {		
 	foreach my $field  ( keys %{ $full_db_struct{$table}{'fields'}  }) {
-	    $autoincrement{$table} = $field if ($full_db_struct{$table}{'fields'}{'autoincrement'}); 
+	    $autoincrement{$table} = $field if ($full_db_struct{$table}{'fields'}{$field}{'autoincrement'}); 
 	}
     }
     return %autoincrement;

@@ -195,7 +195,7 @@ while (!$end) {
 
     my @orders = split(/\n/,$item->{'messageasstring'} );
     
-   &Log::do_log(trace,"orders[0] %s ",$orders[0] );
+   &Log::do_log('debug',"orders[0] %s ",$orders[0] );
 
     if ($orders[0] =~ /^rebuild\s*$/ ) {
 	&Log::do_log('debug',"rebuild found ");
@@ -724,7 +724,7 @@ sub mail2arc {
     if ($txtdate =~ /(\d\d\d\d)\-(\d\d)\-(\d\d)\s*(\d\d)\:(\d\d)/){
 	$yyyy = $1; $mm = $2; $dd = $3; $hh = $4; $min = $5; $ss = $6;
     }else{
-&Log::do_log('err',"could not scan date");
+	&Log::do_log('err',"could not scan date");
 	return undef;
     }
 
@@ -833,7 +833,7 @@ sub mail2arc {
 	    close IDX;
 	}else{
 	    ## recreate index file if needed and update it
-	    $newfile = $index = &create_idx($monthdir) + 1;
+	    $newfile = &create_idx($monthdir) + 1;
 	}
 
 	# savee arctxt dump of original message.
@@ -853,19 +853,16 @@ sub mail2arc {
 
 	my $mhonarc_ressources = &tools::get_filename('etc',{},'mhonarc-ressources.tt2',$list->{'domain'}, $list);
 	
-&Log::do_log ('debug',"calling $wwsconf->{'mhonarc'} for list %s", $list->get_list_id() ) ;
+	&Log::do_log ('debug',"calling $wwsconf->{'mhonarc'} for list %s", $list->get_list_id() ) ;
 	
 	# call mhonarc on cleaned message source to make clean htlm view of message
 	my $cmd = "$wwsconf->{'mhonarc'} -add -modifybodyaddresses -addressmodifycode \'$ENV{'M2H_ADDRESSMODIFYCODE'}\'  -rcfile $mhonarc_ressources -outdir $monthdir  -definevars \"listname='$listname' hostname=$robot yyyy=$yyyy mois=$mm yyyymm=$yyyy-$mm wdir=$wwsconf->{'arc_path'} base=$Conf{'wwsympa_url'}/arc tag=$tag\" -umask $Conf{'umask'} < $output";
 	
-&Log::do_log('debug',"System call : %s",$cmd);
+	&Log::do_log('debug',"System call : %s",$cmd);
 	
 	my $exitcode = system($cmd);
 	$exitcode = $exitcode / 256;
 	
-	# Delete temporary file containing escaped HTML.
-	if ($cleaned_file && -f $cleaned_file) {unlink $cleaned_file;}
-
 	## Remove lock if required
 	if ($exitcode == 75) {
 	    &Log::do_log('notice', 'Removing lock directory %s', $monthdir.'/.mhonarc.lck');

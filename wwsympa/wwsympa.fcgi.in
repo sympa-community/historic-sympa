@@ -1817,7 +1817,7 @@ my $birthday = time ;
 
 
  ## Write to log
- sub wwslog {
+sub wwslog {
      my $facility = shift;
 
      # do not log if log level if too high regarding the log requested by user 
@@ -1902,7 +1902,7 @@ sub web_db_stat_log {
 
 ####################################	
 
- sub new_loop {
+sub new_loop {
      $loop++;
      my $query;
 
@@ -2653,7 +2653,7 @@ Use it to create a List object and initialize output parameters.
 =cut 
 
  ## Analysis of incoming parameters
- sub check_param_in {
+sub check_param_in {
      &wwslog('debug2', 'check_param_in');
 
      ## Lowercase list name
@@ -2824,7 +2824,7 @@ Use it to create a List object and initialize output parameters.
  }
 
  ## Prepare outgoing params
- sub check_param_out {
+sub check_param_out {
      &wwslog('debug2', 'check_param_out');
 
      $param->{'loop_count'} = $loop_count;
@@ -3131,7 +3131,7 @@ sub do_ticket {
 
 
  ## Login WWSympa
- sub& do_login {
+sub do_login {
      &wwslog('info', 'do_login(%s)', $in{'email'});
      my $user;
      my $next_action;     
@@ -3666,7 +3666,7 @@ sub do_sso_login_succeeded {
     }
 }
 
- sub is_ldap_user {
+sub is_ldap_user {
      my $auth = shift; ## User email or UID
      &wwslog('debug2',"is_ldap_user ($auth)");
 
@@ -3739,7 +3739,7 @@ sub do_sso_login_succeeded {
  }
 
  ## send back login form
- sub& do_loginrequest {
+sub do_loginrequest {
      &wwslog('info','do_loginrequest');
 
      if ($param->{'user'}{'email'}) {
@@ -3766,7 +3766,7 @@ sub do_sso_login_succeeded {
  }
 
  ## Help / about WWSympa
- sub do_help {
+sub do_help {
      &wwslog('info','do_help(%s)', $in{'help_topic'});
 
      ## Contextual help
@@ -3808,7 +3808,7 @@ sub do_redirect {
 }
 
  ## Logout from WWSympa
- sub do_logout {
+sub do_logout {
      &wwslog('info','do_logout(%s)', $param->{'user'}{'email'});
 
      delete $param->{'user'};
@@ -3984,7 +3984,7 @@ sub do_renewpasswd {
 # OUT : 'renewpasswd' |  1 | 'loginrequest' | undef
 #
 ####################################################
- sub do_requestpasswd {
+sub do_requestpasswd {
      &wwslog('info', 'do_requestpasswd(%s)', $in{'email'}); 
      my ($passwd, $user);
 
@@ -4040,7 +4040,7 @@ sub do_renewpasswd {
 
  ## Which list the user is subscribed to 
  ## TODO (pour listmaster, toutes les listes)
- sub do_which {
+sub do_which {
      my $which = {};
 
      &wwslog('info', 'do_which');
@@ -4087,7 +4087,7 @@ sub do_renewpasswd {
  }
 
  ## The list of list
- sub do_lists {
+sub do_lists {
      my @lists;
      &wwslog('info', 'do_lists(%s,%s)', $in{'topic'}, $in{'subtopic'});
 
@@ -4174,7 +4174,7 @@ sub do_renewpasswd {
  }
 
  ## The list of latest created lists
- sub do_latest_lists {
+sub do_latest_lists {
      &wwslog('info', "do_latest_lists($in{'for'}, $in{'count'},$in{'topic'}, $in{'subtopic'})");
 
      unless (&do_lists()) {
@@ -4234,7 +4234,7 @@ sub do_renewpasswd {
 
 
  ## The list of the most active lists
- sub do_active_lists {
+sub do_active_lists {
      &wwslog('info', "do_active_lists($in{'for'}, $in{'count'},$in{'topic'}, $in{'subtopic'})");
 
      unless (&do_lists()) {
@@ -4310,7 +4310,7 @@ sub do_renewpasswd {
      return 1;
  }
 
- sub count_total_msg_since {
+sub count_total_msg_since {
      my $oldest_day = shift;
      my $count = shift;
 
@@ -4325,7 +4325,7 @@ sub do_renewpasswd {
  }
 
  ## List information page
- sub do_info {
+sub do_info {
      &wwslog('info', 'do_info');
 
      ## Access control    
@@ -4378,7 +4378,7 @@ sub do_renewpasswd {
 
 
  ## List subcriber count page
- sub do_subscriber_count {
+sub do_subscriber_count {
      &wwslog('info', 'do_subscriber_count');
 
      unless (&do_info()) {
@@ -4396,7 +4396,7 @@ sub do_renewpasswd {
 
 
  ## Subscribers' list
- sub do_review {
+sub do_review {
      &wwslog('info', 'do_review(%s)', $in{'page'});
      my $record;
      my @users;
@@ -4649,7 +4649,7 @@ sub do_pref {
  }
 
  ## Set the initial password
- sub do_choosepasswd {
+sub do_choosepasswd {
      &wwslog('info', 'do_choosepasswd');
 
      if($session->{'auth'} eq 'ldap'){
@@ -4694,7 +4694,7 @@ sub do_pref {
 #
 # OUT :'loginrequest'|'info' | undef
 
- sub do_set {
+sub do_set {
      &wwslog('info', 'do_set(%s, %s)', $in{'reception'}, $in{'visibility'});
 
      my ($reception, $visibility) = ($in{'reception'}, $in{'visibility'});
@@ -4889,7 +4889,7 @@ sub check_custom_attribute {
 
 
  ## Update of user preferences
- sub do_setpref {
+sub do_setpref {
      &wwslog('info', 'do_setpref');
      my $changes = {};
 
@@ -4939,7 +4939,7 @@ sub check_custom_attribute {
  }
 
  ## Prendre en compte les défauts
- sub do_viewfile {
+sub do_viewfile {
      &wwslog('info', 'do_viewfile');
 
      unless (defined $wwslib::filenames{$in{'file'}}) {
@@ -5392,7 +5392,7 @@ sub do_family_signoff {
 #
 ####################################################
  ## Unsubscribe from list
- sub do_signoff {
+sub do_signoff {
      &wwslog('info', 'do_signoff');
 
 
@@ -5518,7 +5518,7 @@ sub unsubscribe {
 }
 
  ## Unsubscription request (user not authenticated)
- sub do_sigrequest {
+sub do_sigrequest {
      &wwslog('info', 'do_sigrequest(%s)', $in{'email'});
 
      ## If user is authenticated then redirect him to the signoff action but 
@@ -5564,7 +5564,7 @@ sub unsubscribe {
 
 
  ## Update of password
- sub do_setpasswd {
+sub do_setpasswd {
      &wwslog('info', 'do_setpasswd');
      my $user;
 
@@ -5620,7 +5620,7 @@ sub unsubscribe {
  }
 
  ## List admin page
- sub do_admin {
+sub do_admin {
      &wwslog('info', 'do_admin');
 
      ## Messages edition
@@ -5643,7 +5643,7 @@ sub unsubscribe {
  }
 
  ## Server admin page
- sub do_serveradmin {
+sub do_serveradmin {
      &wwslog('info', 'do_serveradmin');
 
      my $f;
@@ -6328,7 +6328,7 @@ sub do_skinsedit {
 }
 
  ## Multiple add
- sub do_add_request {
+sub do_add_request {
      &wwslog('info', 'do_add_request(%s)', $in{'email'});
 
      ## Access control
@@ -6350,7 +6350,7 @@ sub do_skinsedit {
 #      | undef
 ####################################################
 ## TODO: vérifier validité email
- sub do_add {
+sub do_add {
      &wwslog('info', 'do_add(%s)', $in{'email'}||$in{'pending_email'});
      my $subscriptions = $list->get_subscription_requests();
      
@@ -6517,7 +6517,7 @@ sub do_skinsedit {
 #
 ####################################################
  ## TODO: vérifier validité email
- sub do_del {
+sub do_del {
      &wwslog('info', 'do_del()');
 
      $in{'email'} = &tools::unescape_chars($in{'email'});
@@ -6627,7 +6627,7 @@ sub do_skinsedit {
 # OUT : 'loginrequest' | 'admin' | '1' | undef
 #
 ####################################################### 
- sub do_modindex {
+sub do_modindex {
      &wwslog('info', 'do_modindex');
      my $msg;
      my $doc;
@@ -6744,7 +6744,7 @@ sub do_skinsedit {
  }
 
 ### installation of moderated documents of shared
- sub do_d_install_shared {
+sub do_d_install_shared {
      &wwslog('info', 'do_d_install_shared(%s)', $in{'id'});
 
      if ($in{'mode_cancel'}) {
@@ -6868,7 +6868,7 @@ sub do_skinsedit {
  }
 
 ### reject moderated documents of shared
- sub do_d_reject_shared {
+sub do_d_reject_shared {
      &wwslog('info', 'do_d_reject_shared(%s)', $in{'id'});
   
      my $shareddir =  $list->{'dir'}.'/shared';
@@ -6943,7 +6943,7 @@ sub do_skinsedit {
 # OUT : 'loginrequest' | 'modindex' | undef
 #      
 ####################################################
- sub do_reject {
+sub do_reject {
 
      # toggle selection javascript have a distinction of spam and ham base on the checkbox name . It is not useful here so join id list and idspam list. 
      $in{'id'} .= ','.$in{'idspam'} if ($in{'idspam'});
@@ -7071,7 +7071,7 @@ sub do_skinsedit {
 # OUT : 'loginrequest' | 'modindex' | undef
 #      
 ###################################################### 
- sub do_distribute {
+sub do_distribute {
 
      $in{'id'} .= ','.$in{'idspam'} if ( $in{'idspam'});
      $in{'id'} =~ s/^,//;
@@ -7231,7 +7231,7 @@ sub do_viewmod {
 ## No list -> sympa files (helpfile,...)
 ## TODO : upload
 ## TODO : edit family file ???
- sub do_editfile {
+sub do_editfile {
      &wwslog('info', 'do_editfile(%s)', $in{'file'});
 
      $param->{'subtitle'} = sprintf $param->{'subtitle'}, $in{'file'};
@@ -7371,7 +7371,7 @@ sub do_viewmod {
 #####################################################################################
 
  ## Saving of list files
- sub do_savefile {
+sub do_savefile {
      &wwslog('info', 'do_savefile(%s)', $in{'file'});
 
      $param->{'subtitle'} = sprintf $param->{'subtitle'}, $in{'file'};
@@ -7651,7 +7651,7 @@ sub do_arc {
 }
 
  ## Access to latest web archives
- sub do_latest_arc {
+sub do_latest_arc {
      &wwslog('info', 'do_latest_arc(%s,%s,%s)', $in{'list'}, $in{'for'}, $in{'count'});
 
      ## Access control
@@ -7908,7 +7908,7 @@ sub do_remove_arc {
 # OUT : 'arc' | 1 | undef
 #
 #################################################### 
- sub do_send_me {
+sub do_send_me {
      &wwslog('info', 'do_send_me(%s, %s, %s, %s', $in{'list'}, $in{'yyyy'}, $in{'month'}, $in{'msgid'});
 
      if (! $in{'msgid'} || 
@@ -7981,7 +7981,7 @@ sub do_remove_arc {
 # OUT : 'arc' | 1 | undef
 #
 #################################################### 
- sub do_view_source   {
+sub do_view_source   {
      &wwslog('info', 'do_view_source(%s, %s, %s, %s', $in{'list'}, $in{'yyyy'}, $in{'month'}, $in{'msgid'});
 
 
@@ -8058,7 +8058,7 @@ sub do_remove_arc {
 # OUT : 'arc' | 1 | undef
 #
 #################################################### 
- sub do_tracking   {
+sub do_tracking   {
      &wwslog('info', 'do_tracking(%s, %s, %s, %s', $in{'list'}, $in{'yyyy'}, $in{'month'}, $in{'msgid'});
 
      ## Access control     
@@ -8114,7 +8114,7 @@ sub do_remove_arc {
  }
 
  ## Output an initial form to search in web archives
- sub do_arcsearch_form {
+sub do_arcsearch_form {
      &wwslog('info', 'do_arcsearch_form(%s)', $param->{'list'});
 
      ## Access control
@@ -8136,7 +8136,7 @@ sub do_remove_arc {
  }
 
  ## Search in web archives
- sub do_arcsearch {
+sub do_arcsearch {
      &wwslog('info', 'do_arcsearch(%s)', $param->{'list'});
 
      ## Access control
@@ -8273,7 +8273,7 @@ sub do_remove_arc {
  }
 
  ## Search message-id in web archives
- sub do_arcsearch_id {
+sub do_arcsearch_id {
      &wwslog('info', 'do_arcsearch_id(%s,%s,%s)', $param->{'list'},$in{'archive_name'},$in{'msgid'});
 
      ## Access control
@@ -8351,7 +8351,7 @@ sub do_remove_arc {
  }
 
  # get pendings lists
- sub do_get_pending_lists {
+sub do_get_pending_lists {
 
      &wwslog('info', 'get_pending_lists');
 
@@ -8370,7 +8370,7 @@ sub do_remove_arc {
  }
 
  # get closed lists
- sub do_get_closed_lists {
+sub do_get_closed_lists {
 
      &wwslog('info', 'get_closed_lists');
 
@@ -8388,7 +8388,7 @@ sub do_remove_arc {
  }
 
  # get ordered latest lists
- sub do_get_latest_lists {
+sub do_get_latest_lists {
 
      &wwslog('info', 'get_latest_lists');
 
@@ -8467,7 +8467,7 @@ sub do_get_inactive_lists {
  }
 
  # get ordered biggest lists
- sub do_get_biggest_lists {
+sub do_get_biggest_lists {
 	&wwslog('info', 'get_biggest_lists');
 	
 	## Checking families and other virtual hosts.
@@ -8515,7 +8515,7 @@ sub do_set_pending_list_request {
  }
 
  ## show a list parameters
- sub do_install_pending_list {
+sub do_install_pending_list {
      &wwslog('info', 'do_install_pending_list(%s,%s,%s)',$in{'list'},$in{'status'},$in{'notify'});
 
      unless ($in{'status'} && (($in{'status'} eq 'open') || ($in{'status'} eq 'closed'))) {
@@ -8659,7 +8659,7 @@ Creates a list using a list template
 =cut 
 
 ## create a liste using a list template. 
- sub do_create_list {
+sub do_create_list {
 
      &wwslog('info', 'do_create_list(%s,%s,%s)',$in{'listname'},$in{'subject'},$in{'template'});
 
@@ -8848,7 +8848,7 @@ Sends back the list creation edition form.
 =cut 
 
  ## Return the creation form
- sub do_create_list_request {
+sub do_create_list_request {
      &wwslog('info', 'do_create_list_request()');
 
      my $result = &Scenario::request_action('create_list',$param->{'auth_method'},$robot,
@@ -8952,7 +8952,7 @@ sub do_home {
 
 }
 
- sub do_editsubscriber {
+sub do_editsubscriber {
      &wwslog('info', 'do_editsubscriber(%s)', $in{'email'});
 
      my $subscriber;
@@ -9053,7 +9053,7 @@ sub do_home {
      return 1;
  }
 
- sub do_viewbounce {
+sub do_viewbounce {
      &wwslog('info', 'do_viewbounce(%s)', $in{'email'});
 
      my $escaped_email = &tools::escape_chars($in{'email'});
@@ -9072,7 +9072,7 @@ sub do_home {
  }
 
  ## some help for listmaster and developpers
- sub do_scenario_test {
+sub do_scenario_test {
      &wwslog('info', 'do_scenario_test');
 
      ## List available scenarii
@@ -9126,7 +9126,7 @@ sub do_home {
  }
 
  ## Bouncing addresses review
- sub do_reviewbouncing {
+sub do_reviewbouncing {
      &wwslog('info', 'do_reviewbouncing(%s)', $in{'page'});
      my $size = $in{'size'} || $wwsconf->{'review_page_size'};
 
@@ -9201,7 +9201,7 @@ sub do_home {
      return 1;
  }
 
- sub do_resetbounce {
+sub do_resetbounce {
      &wwslog('info', 'do_resetbounce()');
 
      $in{'email'} = &tools::unescape_chars($in{'email'});
@@ -9245,7 +9245,7 @@ sub do_home {
  }
 
  ## Rebuild an archive using arctxt/
- sub do_rebuildarc {
+sub do_rebuildarc {
      &wwslog('info', 'do_rebuildarc(%s, %s)', $param->{'list'}, $in{'month'});
      
      my $spoolarchive = new Sympaspool('archive');
@@ -9602,14 +9602,14 @@ sub do_select_voot_groups {
 }
 
  ## Search among lists
- sub do_edit_attributes {
+sub do_edit_attributes {
      &wwslog('info', 'do_edit_attributes(%s)', $in{'filter'});
      
      return 1;
  }     
  
  ## Search among lists
- sub do_search_list {
+sub do_search_list {
      &wwslog('info', 'do_search_list(%s)', $in{'filter'});
 
      unless ($in{'filter'}) {
@@ -10207,7 +10207,7 @@ sub do_edit_list {
 
  ## Shift tokens to get a reference to the desired 
  ## entry in $var (recursive)
- sub _shift_var {
+sub _shift_var {
      my ($i, $var, @tokens) = @_;
      &wwslog('debug3','shift_var(%s,%s,%s)',$i, $var, join('.',@tokens));
      my $newvar;
@@ -10295,7 +10295,7 @@ Sends back the list config edition form.
 =cut 
 
  ## Send back the list config edition form
- sub do_edit_list_request {
+sub do_edit_list_request {
      &wwslog('info', 'do_edit_list_request(%s)', $in{'group'});
 
      if ($in{'group'}) {
@@ -10614,7 +10614,7 @@ Returns a reference to a hash containing the data used to edit the parameter (of
 
 =cut
 
- sub _prepare_data {
+sub _prepare_data {
     my ($name, $struct,$data,$may_edit,$family,$main_p) = @_;
     #    &wwslog('debug2', '_prepare_data(%s, %s)', $name, $data);
     # $family and $main_p (recursive call) are optionnal
@@ -10858,7 +10858,7 @@ sub _restrict_values {
 }
 
  ## NOT USED anymore (expect chinese)
- sub do_close_list_request {
+sub do_close_list_request {
      &wwslog('info', 'do_close_list_request()');
 
      if ($list->{'admin'}{'status'} eq 'closed') {
@@ -10872,7 +10872,7 @@ sub _restrict_values {
 
 
  # in order to rename a list you must be list owner and you must be allowed to create new list
- sub do_rename_list_request {
+sub do_rename_list_request {
      &wwslog('info', 'do_rename_list_request()');
 
      my $result = &Scenario::request_action ('create_list',$param->{'auth_method'},$robot,
@@ -11036,7 +11036,7 @@ sub do_purge_list {
      return 'get_closed_lists';
  }
 
- sub do_close_list {
+sub do_close_list {
      &wwslog('info', "do_close_list($list->{'name'})");
 
      if ($list->{'admin'}{'status'} eq 'closed') {
@@ -11070,7 +11070,7 @@ sub do_purge_list {
 
  }
 
- sub do_restore_list {
+sub do_restore_list {
      &wwslog('info', 'do_restore_list()');
 
 
@@ -11116,7 +11116,7 @@ sub do_purge_list {
  }
 
 
- sub get_desc_file {
+sub get_desc_file {
      my $file = shift;
      my $ligne;
      my %hash;
@@ -11173,14 +11173,14 @@ sub do_purge_list {
  }
 
 
- sub show_cert {
+sub show_cert {
      return 1;
  }
 
  ## Function synchronize
  ## Return true if the file in parameter can be overwrited
  ## false if it has changes since the parameter date_epoch
- sub synchronize {
+sub synchronize {
      # args : 'path' , 'date_epoch'
      my $path = shift;
      my $date_epoch = shift;
@@ -11211,7 +11211,7 @@ sub do_purge_list {
  #                        control A)
 
 
- sub d_access_control {
+sub d_access_control {
      # Arguments:
      # (\%mode,$path)
      # if mode->{'read'} control access only for read
@@ -11484,7 +11484,7 @@ sub merge_edit{
 
 
  # create the root shared document
- sub do_d_admin {
+sub do_d_admin {
      &wwslog('info', 'do_d_admin(%s,%s)', $in{'list'}, $in{'d_admin'});
 
      my %mode;
@@ -11578,7 +11578,7 @@ sub merge_edit{
 
  # Function which sorts a hash of documents
  # Sort by various parameters
- sub by_order {
+sub by_order {
      my $order = shift;
      my $hash = shift;
      # $order = 'order_by_size'/'order_by_doc'/'order_by_author'/'order_by_date'
@@ -12173,7 +12173,7 @@ sub select_my_files {
 
  ## Useful function to get off the slash at the end of the path
  ## at its end
- sub no_slash_end {
+sub no_slash_end {
      my $path = shift;
 
      ## supress ending '/'
@@ -12290,7 +12290,7 @@ sub do_latest_d_read {
  }
 
 ##  browse a directory recursively and return documents younger than $oldest_day
- sub directory_browsing {
+sub directory_browsing {
      my ($dir,$oldest_day,$may_control) = @_;
      &wwslog('debug2',"directory_browsing($dir,$oldest_day)");
      
@@ -12464,7 +12464,7 @@ sub do_latest_d_read {
  #               edit a file
  #*******************************************
 
- sub do_d_editfile {
+sub do_d_editfile {
      &wwslog('info', 'do_d_editfile(%s)', $in{'path'});
 
      # Variables
@@ -12607,7 +12607,7 @@ sub do_latest_d_read {
  #               change a file properties 
  #*******************************************
 
- sub do_d_properties {
+sub do_d_properties {
      &wwslog('info', 'do_d_properties(%s)', $in{'path'});
 
      # Variables
@@ -12740,7 +12740,7 @@ sub do_latest_d_read {
  #               the file
  #******************************************
 
- sub do_d_describe {
+sub do_d_describe {
      &wwslog('info', 'do_d_describe(%s)', $in{'path'});
 
      # Variables
@@ -13105,7 +13105,7 @@ sub do_d_savefile {
  #               uploaded file
  #******************************************
 
- sub do_d_overwrite {
+sub do_d_overwrite {
      &wwslog('info', 'do_d_overwrite(%s)', $in{'path'});
 
      # Variables
@@ -13311,7 +13311,7 @@ sub do_d_savefile {
  #               uploaded file
 #******************************************
 
- sub do_d_upload {
+sub do_d_upload {
      # Parameters of the uploaded file (from d_read.tt2)
      my $fn = $in{'uploaded_file'};
 
@@ -13891,7 +13891,7 @@ sub creation_desc_file {
  #               from an uploaded zip file
  #******************************************
 
- sub do_d_unzip {
+sub do_d_unzip {
      # Parameters of the uploaded file (from d_read.tt2)
      my $fn = $in{'unzipped_file'};
 
@@ -14504,7 +14504,7 @@ sub d_test_existing_and_rights {
  #               (file or directory)
  #******************************************
 
- sub do_d_delete {
+sub do_d_delete {
      &wwslog('info', 'do_d_delete(%s)', $in{'path'});
 
      #useful variables
@@ -14627,7 +14627,7 @@ sub d_test_existing_and_rights {
  #               (file or directory)
  #******************************************
 
- sub do_d_rename {
+sub do_d_rename {
      &wwslog('info', 'do_d_rename(%s)', $in{'path'});
 
      #useful variables
@@ -14763,7 +14763,7 @@ sub d_test_existing_and_rights {
  # Function : do_d_create_dir
  # Description : Creates a new file / directory
  #******************************************
- sub do_d_create_dir {
+sub do_d_create_dir {
      &wwslog('info', 'do_d_create_dir(%s)', $in{'name_doc'});
 
      #useful variables
@@ -14974,7 +14974,7 @@ sub d_test_existing_and_rights {
  #               to edit access for a doc
  #*******************************************
 
- sub do_d_control {
+sub do_d_control {
      &wwslog('info', "do_d_control $in{'path'}");
 
      # Variables
@@ -15118,7 +15118,7 @@ sub d_test_existing_and_rights {
  #               the file
  #******************************************
 
- sub do_d_change_access {
+sub do_d_change_access {
      &wwslog('info', 'do_d_change_access(%s)', $in{'path'});
 
      # Variables
@@ -15233,7 +15233,7 @@ sub d_test_existing_and_rights {
 
  }	
 
- sub do_d_set_owner {
+sub do_d_set_owner {
      &wwslog('info', 'do_d_set_owner(%s)', $in{'path'});
 
      # Variables
@@ -15375,7 +15375,7 @@ sub d_test_existing_and_rights {
  }
 
  ## Protecting archives from Email Sniffers
- sub do_arc_protect {
+sub do_arc_protect {
      &wwslog('info', 'do_arc_protect()');
 
      return 1;
@@ -15391,7 +15391,7 @@ sub d_test_existing_and_rights {
 # OUT : 'loginrequest' | 'admin' | undef
 #
 #####################################################
- sub do_remind {
+sub do_remind {
      &wwslog('info', 'do_remind()');
 
      ## Access control
@@ -15443,7 +15443,7 @@ sub d_test_existing_and_rights {
  }
 
  ## Load list certificat
- sub do_load_cert {
+sub do_load_cert {
      &wwslog('info','do_load_cert(%s)', $param->{'list'});
 
      my @cert = $list->get_cert('der');
@@ -16191,7 +16191,7 @@ sub do_send_mail {
 # OUT : '1' | 'loginrequest' | undef
 #
 ####################################################
- sub do_request_topic {
+sub do_request_topic {
      &wwslog('info', 'do_request_topic(%s)', $in{'authkey'});
 
      unless ($list->is_there_msg_topic()) {
@@ -16255,7 +16255,7 @@ sub do_send_mail {
 # OUT : 'loginrequest' | 'info' | undef
 #
 ####################################################
- sub do_tag_topic_by_sender {
+sub do_tag_topic_by_sender {
      &wwslog('info', 'do_tag_topic_by_sender');
 
      my $parser;
@@ -16326,7 +16326,7 @@ sub do_send_mail {
 
 
 
- sub do_search_user {
+sub do_search_user {
      &wwslog('info', 'do_search_user');
 
      if ($in{'email'} =~ /[<>\\\*\$]/) {
@@ -16379,7 +16379,7 @@ sub do_send_mail {
  }
 
  ## Set language
- sub do_set_lang {
+sub do_set_lang {
      &wwslog('info', 'do_set_lang(%s)', $in{'lang'});
 
      $session->{'lang'} = $in{'lang'} ;
@@ -16415,7 +16415,7 @@ sub do_send_mail {
      return &Conf::get_robot_conf($robot, 'default_home');
  }
  ## Function do_attach
- sub do_attach {
+sub do_attach {
      &wwslog('info', 'do_attach(%s,%s)', $in{'dir'},$in{'file'});
 
 
@@ -16462,7 +16462,7 @@ sub do_send_mail {
      return 1;
  }
 
- sub do_subindex {
+sub do_subindex {
      &wwslog('info', 'do_subindex');
 
      my $subscriptions = $list->get_subscription_requests();
@@ -16475,7 +16475,7 @@ sub do_send_mail {
      return 1;
  }
 
- sub do_ignoresub {
+sub do_ignoresub {
      &wwslog('info', 'do_ignoresub');
 
      my @users;
@@ -16727,7 +16727,7 @@ sub do_dump_scenario {
 }
 
  ## Subscribers' list
- sub do_dump {
+sub do_dump {
      &wwslog('info', "do_dump($param->{'list'})");
 
      ## Whatever the action return, it must never send a complex html page

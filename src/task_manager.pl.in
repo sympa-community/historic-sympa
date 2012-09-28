@@ -277,7 +277,7 @@ while (!$end) {
 
     my %used_models; # models for which a task exists
     foreach my $model (&Task::get_used_models) {
-	do_log('debug2',"model used $model");
+	&Log::do_log('debug2',"model used $model");
 	$used_models{$model} = 1;
     }
 
@@ -286,7 +286,7 @@ while (!$end) {
 			'execution_date' => 'execution_date');
     ## global tasks
     foreach my $key (keys %global_models) {	
-	do_log('debug2',"global_model : $key");
+	&Log::do_log('debug2',"global_model : $key");
 	unless ($used_models{$global_models{$key}}) {
 	    if ($Conf{$key}) { 
 		my %data = %default_data; # hash of datas necessary to the creation of tasks
@@ -298,10 +298,10 @@ while (!$end) {
     
     ## list tasks
     foreach my $robot (keys %{$Conf{'robots'}}) {
-	do_log('debug3',"creating list task : current bot  is $robot");
+	&Log::do_log('debug3',"creating list task : current bot  is $robot");
 	my $all_lists = &List::get_lists($robot);
 	foreach my $list ( @$all_lists ) {
-	    do_log('debug3',"creating list task : current list  is $list->{'name'}");
+	    &Log::do_log('debug3',"creating list task : current list  is $list->{'name'}");
 	    my %data = %default_data;
 	
 	    $data{'list'} = {'name' => $list->{'name'},
@@ -314,7 +314,7 @@ while (!$end) {
 	    foreach my $model (&Task::get_used_models($list->get_list_id())) {		
 		$used_list_models{$model} = 1; 
 	    }	    
-	    do_log('debug3',"creating list task using models");my $tt= 0;
+	    &Log::do_log('debug3',"creating list task using models");my $tt= 0;
 
 	    foreach my $model (@list_models) {
 		unless ($used_list_models{$model}) {
@@ -325,7 +325,7 @@ while (!$end) {
 				     ($list->{'admin'}{'status'} eq 'open'));
 
 			create ($current_date, 'INIT', $model, 'ttl', \%data);
-			do_log('debug3',"sync_include task ceration done");$tt++;
+			&Log::do_log('debug3',"sync_include task ceration done");$tt++;
 			
 		    }elsif (defined $list->{'admin'}{$model_task_parameter} && 
 			    defined $list->{'admin'}{$model_task_parameter}{'name'} &&
@@ -478,7 +478,7 @@ sub create {
     #my $dump = &Dumper($task_as_string); open (DUMP,">>/tmp/dumper"); printf DUMP 'DUMP\n%s',$dump ; close DUMP; 
     #my $dump = &Dumper(\%meta); open (DUMP,">>/tmp/dumper"); printf DUMP '%s\n',$dump ; close DUMP; 
 
-    &do_log ('debug3', "task creation done  date: $date label: $label model: $model  model_choice: $model_choice, Rdata :$Rdata");
+    &Log::do_log ('debug3', "task creation done  date: $date label: $label model: $model  model_choice: $model_choice, Rdata :$Rdata");
     $taskspool->store($task_as_string,\%meta);
     return 1;
 }
@@ -709,7 +709,6 @@ sub execute {
     my $lnb = 0; # line number
 
     &Log::do_log('notice', 'Running task id = %s, line %d with vars %s)', $task->{'messagekey'}, $lnb, join('/',  %vars));
-    &Log::do_log('execute', 'Running task id = %s, line %d with vars %s)', $task->{'messagekey'}, $lnb, join('/',  %vars));
 
     my $label = $task->{'label'};
     return undef if ($label eq 'ERROR');
