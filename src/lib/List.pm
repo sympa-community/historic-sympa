@@ -101,14 +101,6 @@ Optional hashref.
 
 =over 4
 
-=begin comment
-
-=item C<'first_access' =E<gt> TRUE>
-
-Initialize List object (maybe it is blessed hashref).
-
-=end comment
-
 =item C<'just_try' =E<gt> TRUE>
 
 Won't really load list to object.
@@ -2365,10 +2357,14 @@ our %listmaster_messages_stack;
 
 ## Creates an object.
 sub new {
+    &Log::do_log('debug2', '(%s, %s, %s, %s)', @_);
+
+    ## NOTICE: Don't use accessors like "$self->dir" but "$self->{'dir'}",
+    ## since the object has not been fully initialized yet.
+
     my($pkg, $name, $robot, $options) = @_;
     my $list;
-    &Log::do_log('debug2', 'List::new(%s, %s, %s)', $name, $robot, join('/',keys %$options));
-    
+
     ## Allow robot in the name
     if ($name =~ /\@/) {
 	my @parts = split /\@/, $name;
@@ -2460,39 +2456,41 @@ sub search_list_among_robots {
 
 ## set the list in status error_config and send a notify to listmaster
 sub set_status_error_config {
+    &Log::do_log('debug2', '(%s, %s, ...', @_);
+
     my ($self, $message, @param) = @_;
-    &Log::do_log('debug3', 'List::set_status_error_config');
 
     unless ($self->admin and $self->status eq 'error_config') {
 	$self->status('error_config');
 
-	##my $host = &Conf::get_robot_conf($self->{'robot'}, 'host');
+	#my $host = &Conf::get_robot_conf($self->domain, 'host');
 	## No more save config in error...
 	#$self->save_config("listmaster\@$host");
 	#$self->savestats();
-	&Log::do_log('err', 'The list "%s" is set in status error_config: %s(%s)', $self->get_list_id, $message, join(', ', @param));
+	&Log::do_log('err', 'The list %s is set in status error_config: %s(%s)', $self, $message, join(', ', @param));
 	unless (&List::send_notify_to_listmaster($message, $self->domain, \@param)) {
-	    &Log::do_log('notice',"Unable to send notify '$message' to listmaster");
+	    &Log::do_log('notice', 'Unable to send notify "%s" to listmaster', $message);
 	};
     }
 }
 
 ## set the list in status family_closed and send a notify to owners
 sub set_status_family_closed {
+    &Log::do_log('debug2', '(%s, %s, ...)', @_);
+
     my ($self, $message, @param) = @_;
-    &Log::do_log('debug2', 'List::set_status_family_closed');
-    
-    unless ($self->{'admin'}{'status'} eq 'family_closed'){
+
+    unless ($self->status eq 'family_closed'){
 	
-	my $host = &Conf::get_robot_conf($self->{'robot'}, 'host');	
+	my $host = &Conf::get_robot_conf($self->domain, 'host');	
 	
 	unless ($self->close_list("listmaster\@$host",'family_closed')) {
-	    &Log::do_log('err','Impossible to set the list %s in status family_closed');
+	    &Log::do_log('err', 'Impossible to set the list %s in status family_closed', $self);
 	    return undef;
 	}
-	&Log::do_log('info', 'The list "%s" is set in status family_closed',$self->{'name'});
+	&Log::do_log('info', 'The list %s is set in status family_closed', $self);
 	unless ($self->send_notify_to_owner($message,\@param)){
-	    &Log::do_log('err','Impossible to send notify to owner informing status family_closed for the list %s',$self->{'name'});
+	    &Log::do_log('err','Impossible to send notify to owner informing status family_closed for the list %s', $self);
 	}
 # messages : close_list
     }
@@ -2754,10 +2752,13 @@ sub save_config {
 
 ## Loads the administrative data for a list
 sub load {
+    &Log::do_log('debug2', '(%s, %s, %s, %s)', @_);
+
+    ## NOTICE: Don't use accessors like "$self->dir" but "$self->{'dir'}",
+    ## since the object has not been fully initialized yet.
+
     my ($self, $name, $robot, $options) = @_;
-    &Log::do_log('debug2', 'List::load(%s, %s, %s)',
-		 $name, $robot, join('/',keys %$options));
-    
+
     my $users;
 
     ## Set of initializations ; only performed when the config is first loaded
@@ -3986,9 +3987,9 @@ sub send_msg {
     &Log::do_log('debug2', 'List::send_msg(filname = %s, smime_crypted = %s,apply_dkim_signature = %s )', $message->{'filename'}, $message->{'smime_crypted'},$apply_dkim_signature);
     my $hdr = $message->{'msg'}->head;
     my $original_message_id = $hdr->get('Message-Id');
-    my $name = $self->{'name'};
-    my $robot = $self->{'domain'};
-    my $admin = $self->{'admin'};
+    my $name = $self->name;
+    my $robot = $self->domain;
+    #my $admin = $self->admin;
     my $total = $self->get_real_total;
     my $sender_line = $hdr->get('From');
     my @sender_hdr = Mail::Address->parse($sender_line);
@@ -4009,14 +4010,14 @@ sub send_msg {
 
     ## Bounce rate
     my $rate = $self->get_total_bouncing() * 100 / $total;
-    if ($rate > $self->{'admin'}{'bounce'}{'warn_rate'}) {
+    if ($rate > $self->bounce->{'warn_rate'}) {
 	unless ($self->send_notify_to_owner('bounce_rate',{'rate' => $rate})) {
-	    &Log::do_log('notice',"Unable to send notify 'bounce_rate' to $self->{'name'} listowner");
+	    &Log::do_log('notice', 'Unable to send notify "bounce_rate" to %s listowner', $self);
 	}
     }
  
     ## Who is the enveloppe sender?
-    my $host = $self->{'admin'}{'host'};
+    my $host = $self->host;
     my $from = $name.&Conf::get_robot_conf($robot, 'return_path_suffix').'@'.$host;
 
     # separate subscribers depending on user reception option and also if verp a dicovered some bounce for them.
@@ -4040,7 +4041,7 @@ sub send_msg {
 	my $options;
 	$options->{'email'} = $user->{'email'};
 	$options->{'name'} = $name;
-	$options->{'domain'} = $host;
+	$options->{'domain'} = $robot;
 	my $user_data = &get_list_member_no_object($options);
 	## test to know if the rcpt suspended her subscription for this list
 	## if yes, don't send the message
@@ -4049,7 +4050,7 @@ sub send_msg {
 		push @tabrcpt_nomail_verp, $user->{'email'}; next;
 	    }elsif(($user_data->{'enddate'} < time) && ($user_data->{'enddate'})){
 		## If end date is < time, update the BDD by deleting the suspending's data
-		&restore_suspended_subscription($user->{'email'},$name,$host);
+		&restore_suspended_subscription($user->{'email'}, $name, $robot);
 	    }
 	}
 	if ($user->{'reception'} eq 'digestplain') { # digest digestplain, nomail and summary reception option are initialized for tracking feature only
@@ -4117,10 +4118,10 @@ sub send_msg {
     my $nbr_verp = 0;
 
     # prepare verp parameter
-    my $verp_rate =  $self->{'admin'}{'verp_rate'};
+    my $verp_rate =  $self->verp_rate;
     $verp_rate = '100%' if (($apply_tracking eq 'dsn')||($apply_tracking eq 'mdn')); # force verp if tracking is requested.  
 
-    my $xsequence =  $self->{'stats'}->[0] ;
+    my $xsequence = $self->stats->[0] ;
     my $tags_to_use;
 
     # Define messages which can be tagged as first or last according to the verp rate.
@@ -4137,7 +4138,7 @@ sub send_msg {
     my $dkim_parameters ;
     # prepare dkim parameters
     if ($apply_dkim_signature eq 'on') {
-	$dkim_parameters = &tools::get_dkim_parameters({'robot'=>$self->{'domain'}, 'listname'=>$self->{'name'}});
+	$dkim_parameters = &tools::get_dkim_parameters({ 'robot' => $self->domain, 'listname' => $self->name });
     }
     ## Storing the not empty subscribers' arrays into a hash.
     my $available_rcpt;
@@ -4237,7 +4238,7 @@ sub send_msg {
 	}elsif($array_name eq 'tabrcpt_url'){
 	    my $url_msg = $saved_msg->dup; 
 	    
-	    my $expl = $self->{'dir'}.'/urlized';
+	    my $expl = $self->dir . '/urlized';
 	    
 	    unless ((-d $expl) ||( mkdir $expl, 0775)) {
 		&Log::do_log('err', "Unable to create urlize directory $expl");
@@ -4325,10 +4326,10 @@ sub send_msg {
 
 	if (($apply_tracking eq 'dsn')||($apply_tracking eq 'mdn')){
 	    $verp = $apply_tracking ;
-	    &tracking::db_init_notification_table('listname'=> $self->{'name'},
-						  'robot'=> $robot,
+	    &tracking::db_init_notification_table('listname' => $self->name,
+						  'robot' => $robot,
 						  'msgid' => $original_message_id, # what ever the message is transformed because of the reception option, tracking use the original message id
-						  'rcpt'=> \@verp_selected_tabrcpt, 
+						  'rcpt' => \@verp_selected_tabrcpt, 
 						  'reception_option' => $reception_option,
 						  );
 	    
@@ -8940,12 +8941,12 @@ sub _include_users_sql {
 
 ## Loads the list of subscribers from an external include source
 sub _load_list_members_from_include {
+    &Log::do_log('debug2', '(%s, %s)', @_);
+
     my $self = shift;
     my $old_subs = shift;
-    my $name = $self->{'name'}; 
-    my $admin = $self->{'admin'};
-    my $dir = $self->{'dir'};
-    &Log::do_log('debug2', 'List::_load_users_include for list %s',$name);
+    my $name = $self->name; 
+    my $dir = $self->dir;
     my (%users, $depend_on, $ref);
     my $total = 0;
     my @errors;
@@ -8956,7 +8957,7 @@ sub _load_list_members_from_include {
     foreach my $type ('include_list','include_remote_sympa_list','include_file','include_ldap_query','include_ldap_2level_query','include_sql_query','include_remote_file', 'include_voot_group') {
 	last unless (defined $total);
 	    
-	foreach my $tmp_incl (@{$admin->{$type}}) {
+	foreach my $tmp_incl (@{$self->admin->{$type}}) {
 	    my $included;
 	    my $source_is_new = 1;
         ## Work with a copy of admin hash branch to avoid including temporary variables into the actual admin hash.[bug #3182]
@@ -8972,7 +8973,7 @@ sub _load_list_members_from_include {
 			my $source = new SQLSource($incl);
 			if ($source->is_allowed_to_sync() || $source_is_new) {
 				&Log::do_log('debug', 'is_new %d, syncing', $source_is_new);
-				$included = _include_users_sql(\%users, $source_id, $source, $admin->{'default_user_options'}, 'untied', $admin->{'sql_fetch_timeout'});
+				$included = _include_users_sql(\%users, $source_id, $source, $self->default_user_options, 'untied', $self->sql_fetch_timeout);
 				unless (defined $included){
 					push @errors, {'type' => $type, 'name' => $incl->{'name'}};
 				}
@@ -8989,7 +8990,7 @@ sub _load_list_members_from_include {
 	    }elsif ($type eq 'include_ldap_query') {
 			my $source = new LDAPSource($incl);
 			if ($source->is_allowed_to_sync() || $source_is_new) {
-				$included = _include_users_ldap(\%users, $source_id, $source, $admin->{'default_user_options'});
+				$included = _include_users_ldap(\%users, $source_id, $source, $self->default_user_options);
 				unless (defined $included){
 					push @errors, {'type' => $type, 'name' => $incl->{'name'}};
 				}
@@ -9006,7 +9007,7 @@ sub _load_list_members_from_include {
 		}elsif ($type eq 'include_ldap_2level_query') {
 			my $source = new LDAPSource($incl);
 			if ($source->is_allowed_to_sync() || $source_is_new) {
-				my $result = _include_users_ldap_2level(\%users,$source_id, $source, $admin->{'default_user_options'});
+				my $result = _include_users_ldap_2level(\%users,$source_id, $source, $self->default_user_options);
 				if (defined $result) {
 					$included = $result->{'total'};
 					if (defined $result->{'errors'}){
@@ -9028,7 +9029,7 @@ sub _load_list_members_from_include {
 				$included = 0;
 			}
 	    }elsif ($type eq 'include_remote_sympa_list') {
-		$included = $self->_include_users_remote_sympa_list(\%users, $incl, $dir,$admin->{'domain'},$admin->{'default_user_options'});
+		$included = $self->_include_users_remote_sympa_list(\%users, $incl, $dir, $self->domain, $self->default_user_options);
 		unless (defined $included){
 		    push @errors, {'type' => $type, 'name' => $incl->{'name'}};
 		}
@@ -9038,23 +9039,23 @@ sub _load_list_members_from_include {
 		    &Log::do_log('err','loop detection in list inclusion : could not include again %s in %s',$incl,$name);
 		}else{
 		    $depend_on->{$incl} = 1;
-		    $included = _include_users_list (\%users, $incl, $self->{'domain'}, $admin->{'default_user_options'});
+		    $included = _include_users_list (\%users, $incl, $self->domain, $self->default_user_options);
 		    unless (defined $included){
 			push @errors, {'type' => $type, 'name' => $incl};
 		    }
 		}
 	    }elsif ($type eq 'include_file') {
-		$included = _include_users_file (\%users, $incl, $admin->{'default_user_options'});
+		$included = _include_users_file (\%users, $incl, $self->default_user_options);
 		unless (defined $included){
 		    push @errors, {'type' => $type, 'name' => $incl};
 		}
 	    }elsif ($type eq 'include_remote_file') {
-		$included = _include_users_remote_file (\%users, $incl, $admin->{'default_user_options'});
+		$included = _include_users_remote_file (\%users, $incl, $self->default_user_options);
 		unless (defined $included){
 		    push @errors, {'type' => $type, 'name' => $incl->{'name'}};
 		}
 	    }elsif ($type eq 'include_voot_group') {
-		$included = _include_users_voot_group(\%users, $incl, $admin->{'default_user_options'});
+		$included = _include_users_voot_group(\%users, $incl, $self->default_user_options);
 		unless (defined $included){
 		    push @errors, {'type' => $type, 'name' => $incl->{'name'}};
 		}
@@ -9077,18 +9078,18 @@ sub _load_list_members_from_include {
 
 ## Loads the list of admin users from an external include source
 sub _load_list_admin_from_include {
+    &Log::do_log('debug2', '(%s, %s)', @_);
+
     my $self = shift;
     my $role = shift;
-    my $name = $self->{'name'};
-   
-    &Log::do_log('debug2', '(%s) for list %s',$role, $name); 
+    my $name = $self->name;
 
     my (%admin_users, $depend_on, $ref);
     my $total = 0;
-    my $list_admin = $self->{'admin'};
-    my $dir = $self->{'dir'};
+    my $list_admin = $self->admin;
+    my $dir = $self->dir;
 
-    foreach my $entry (@{$list_admin->{$role."_include"}}) {
+    foreach my $entry (@{$self->admin->{$role . '_include'}}) {
     
 	next unless (defined $entry); 
 
@@ -9098,7 +9099,7 @@ sub _load_list_admin_from_include {
 	$option{'profile'} = $entry->{'profile'} if (defined $entry->{'profile'} && ($role eq 'owner'));
 	
 
-      	my $include_file = &tools::get_filename('etc',{},"data_sources/$entry->{'source'}\.incl",$self->{'domain'},$self);
+      	my $include_file = &tools::get_filename('etc', {}, "data_sources/$entry->{'source'}\.incl", $self->domain, $self);
 
         unless (defined $include_file){
 	    &Log::do_log('err', 'the file %s.incl doesn\'t exist',$entry->{'source'});
@@ -9118,7 +9119,7 @@ sub _load_list_admin_from_include {
 	    my $include_path = $include_file;
 	    if ($include_path =~ s/$name$//) {
 		$parsing{'include_path'} = $include_path;
-		$include_admin_user = &_load_include_admin_user_file($self->{'domain'},$include_path,\%parsing);	
+		$include_admin_user = &_load_include_admin_user_file($self->domain, $include_path, \%parsing);	
 	    } else {
 		&Log::do_log('err', 'errors to get path of the the file %s.incl',$entry->{'source'});
 		return undef;
@@ -9126,7 +9127,7 @@ sub _load_list_admin_from_include {
 	    
 	    
 	} else {
-	    $include_admin_user = &_load_include_admin_user_file($self->{'domain'},$include_file);
+	    $include_admin_user = &_load_include_admin_user_file($self->domain, $include_file);
 	}
 	foreach my $type ('include_list','include_remote_sympa_list','include_file','include_ldap_query','include_ldap_2level_query','include_sql_query','include_remote_file', 'include_voot_group') {
 	    last unless (defined $total);
@@ -9141,7 +9142,7 @@ sub _load_list_admin_from_include {
 		## does it need to define a 'default_admin_user_option'?
 		if ($type eq 'include_sql_query') {
 		    my $source = new SQLSource($incl);
-		    $included = _include_users_sql(\%admin_users, $incl,$source,\%option, 'untied', $list_admin->{'sql_fetch_timeout'}); 
+		    $included = _include_users_sql(\%admin_users, $incl,$source,\%option, 'untied', $self->sql_fetch_timeout); 
 		}elsif ($type eq 'include_ldap_query') {
 		    my $source = new LDAPSource($incl);
 		    $included = _include_users_ldap(\%admin_users, $incl,$source,\%option); 
@@ -9157,14 +9158,14 @@ sub _load_list_admin_from_include {
 			$included = undef;
 		    }
 		}elsif ($type eq 'include_remote_sympa_list') {
-		    $included = $self->_include_users_remote_sympa_list(\%admin_users, $incl, $dir,$list_admin->{'domain'},\%option);
+		    $included = $self->_include_users_remote_sympa_list(\%admin_users, $incl, $dir, $self->domain, \%option);
 		}elsif ($type eq 'include_list') {
 		    $depend_on->{$name} = 1 ;
 		    if (&_inclusion_loop ($name,$incl,$depend_on)) {
 			&Log::do_log('err','loop detection in list inclusion : could not include again %s in %s',$incl,$name);
 		    }else{
 			$depend_on->{$incl} = 1;
-			$included = _include_users_list (\%admin_users, $incl, $self->{'domain'}, \%option);
+			$included = _include_users_list (\%admin_users, $incl, $self->domain, \%option);
 		    }
 		}elsif ($type eq 'include_file') {
 		    $included = _include_users_file (\%admin_users, $incl, \%option);
@@ -9194,9 +9195,10 @@ sub _load_list_admin_from_include {
 
 # Load an include admin user file (xx.incl)
 sub _load_include_admin_user_file {
+    &Log::do_log('debug2', '(%s, %s, %s)', @_);
+
     my ($robot, $file, $parsing) = @_;
-    &Log::do_log('debug2', 'List::_load_include_admin_user_file(%s,%s)',$robot, $file); 
-    
+
     my %include;
     my (@paragraphs);
     
@@ -9398,7 +9400,7 @@ sub get_list_of_sources_id {
 
 sub sync_include_ca {
 	my $self = shift;
-	my $admin = $self->{'admin'};
+	#my $admin = $self->admin;
 	my $purge = shift;
 	my %users;
 	my %changed;
@@ -9412,7 +9414,7 @@ sub sync_include_ca {
 	}
 	
 	foreach my $type ('include_sql_ca') {
-		foreach my $tmp_incl (@{$admin->{$type}}) {
+		foreach my $tmp_incl (@{$self->admin->{$type}}) {
 			## Work with a copy of admin hash branch to avoid including temporary variables into the actual admin hash.[bug #3182]
 			my $incl = &tools::dup_var($tmp_incl);
 			my $source = undef;
@@ -9461,13 +9463,13 @@ sub sync_include_ca {
 ### Purge synced custom attributes from user records, only keep user writable ones
 sub purge_ca {
 	my $self = shift;
-	my $admin = $self->{'admin'};
+	#my $admin = $self->admin;
 	my %userattributes;
 	my %users;
 	
 	&Log::do_log('debug', 'purge CA');
 	
-	foreach my $attr (@{$admin->{'custom_attribute'}}) {
+	foreach my $attr (@{$self->custom_attribute}) {
 		$userattributes{$attr->{'id'}} = 1;
 	}
 	
@@ -10332,14 +10334,13 @@ Returns a ref to an array of List objects.
 =cut
 
 sub get_lists {
+    &Log::do_log('debug2', '(%s, %s, %s)', @_);
+
     my $robot_context = shift || '*';
     my $options = shift || {};
     my $requested_lists = shift; ## Optional parameter to load only a subset of all lists
 
     my(@lists, @robots);
-    &Log::do_log('debug2', 'List::get_lists(%s, {%s}, %s)',
-		 $robot_context, join('/', keys %$options),
-		 $requested_lists ? '[...]' : '');
 
     $options->{'reload_config'} = 1 if $options->{'use_files'}; # For compat.
 
@@ -12541,8 +12542,8 @@ sub _urlize_part {
 }
 
 sub store_subscription_request {
+    &Log::do_log('debug2', '(%s, %s, %s, %s)', @_);
     my ($self, $email, $gecos, $custom_attr) = @_;
-    &Log::do_log('debug2', '(%s, %s, %s)', $self->{'name'}, $email, $gecos, $custom_attr);
 
     my $filename = $Conf::Conf{'queuesubscribe'}.'/'.$self->get_list_id().'.'.time.'.'.int(rand(1000));
 
@@ -12554,7 +12555,7 @@ sub store_subscription_request {
     my @req_files = sort grep (!/^\.+$/,readdir(SUBSPOOL));
     closedir SUBSPOOL;
 
-    my $listaddr = $self->{'name'}.'@'.$self->{'domain'};
+    my $listaddr = $self->get_list_id();
 
     foreach my $file (@req_files) {
 	next unless ($file =~ /$listaddr\..*/) ;
@@ -12949,7 +12950,7 @@ sub remove_aliases {
     my $self = shift;
 
     return undef 
-	unless ($self && ($list_of_lists{$self->{'domain'}}{$self->{'name'}})
+	unless ($self && ($list_of_lists{$self->domain}{$self->name})
 		&& ($Conf::Conf{'sendmail_aliases'} !~ /^none$/i));
     
     my $alias_manager = $Conf::Conf{'alias_manager'};
@@ -12959,14 +12960,14 @@ sub remove_aliases {
 	return undef;
     }
     
-    system ("$alias_manager del $self->{'name'} $self->{'admin'}{'host'}");
+    system (sprintf '%s del %s %s', $alias_manager, $self->name, $self->host);
     my $status = $? >> 8;
     unless ($status == 0) {
 	&Log::do_log('err','Failed to remove aliases ; status %d : %s', $status, $!);
 	return undef;
     }
     
-    &Log::do_log('info','Aliases for list %s removed successfully', $self->{'name'});
+    &Log::do_log('info', 'Aliases for list %s removed successfully', $self);
     
     return 1;
 }
@@ -13121,6 +13122,10 @@ For example C<$list-E<gt>subject> returns "subject" parameter of the list,
 and C<$list-E<gt>subject("foo")> also changes it.
 Basic list profiles "name", "domain", "dir" and so on are read-only.
 
+Some accessors have a bit confusing names: $list->host() gets/sets 'host'
+list parameter, not its robot name; $list->update() that gets/sets 'update'
+list parameter (actually hashref) won't update the list object itself.
+
 =back
 
 =cut
@@ -13274,12 +13279,12 @@ sub list_cache_fetch {
 sub list_cache_update_admin
 {
     my ($self) = shift;
-    my $cache_list_config = &Conf::get_robot_conf($self->{'domain'},
+    my $cache_list_config = &Conf::get_robot_conf($self->domain,
 						  'cache_list_config');
 
     if ($cache_list_config eq 'binary_file') {
 	## Get a shared lock on config file first
-	my $lock = new Lock ($self->{'dir'}.'/config');
+	my $lock = new Lock ($self->dir . '/config');
 	unless (defined $lock) {
 	    &Log::do_log('err','Could not create new lock');
 	    return undef;
@@ -13289,9 +13294,9 @@ sub list_cache_update_admin
 	    return undef;
 	}
 
-	eval {&Storable::store($self->{'admin'}, "$self->{'dir'}/config.bin")};
+	eval {&Storable::store($self->admin, $self->dir . '/config.bin')};
 	if ($@) {
-	    &Log::do_log('err', 'Failed to save the binary config %s. error: %s', "$self->{'dir'}/config.bin",$@);
+	    &Log::do_log('err', 'Failed to save the binary config %s. error: %s', $self->dir . '/config.bin', $@);
 	    $lock->unlock;
 	    return undef;
 	}
@@ -13305,24 +13310,24 @@ sub list_cache_update_admin
 
     my $config;
 
-    my $name = $self->{'name'};
-    my $searchkey = tools::foldcase($self->{'admin'}{'subject'});
-    my $status = $self->{'admin'}{'status'};
-    my $robot = $self->{'admin'}{'host'};
+    my $name = $self->name;
+    my $searchkey = tools::foldcase($self->subject);
+    my $status = $self->status;
+    my $robot = $self->domain;
     my $web_archive  = $self->is_web_archived ? 1 : 0; 
     my $topics =
-	',' . join(',' ,@{$self->{'admin'}{'topics'} || []}) . ',';
+	',' . join(',' ,@{$self->topics || []}) . ',';
 
-    my $creation_epoch = $self->{'admin'}{'creation'}{'date_epoch'};
-    my $creation_email = $self->{'admin'}{'creation'}{'email'};
-    my $update_epoch = $self->{'admin'}{'update'}{'date_epoch'};
-    my $update_email = $self->{'admin'}{'update'}{'email'};
+    my $creation_epoch = $self->creation->{'date_epoch'};
+    my $creation_email = $self->creation->{'email'};
+    my $update_epoch = $self->update->{'date_epoch'};
+    my $update_email = $self->update->{'email'};
 ##    my $latest_instantiation_epoch =
-##	$self->{'admin'}{'latest_instantiation'}{'date_epoch'};
+##	$self->latest_instantiation->{'date_epoch'};
 ##    my $latest_instantiation_email =
-##	$self->{'admin'}{'latest_instantiation'}{'email'};
+##	$self->latest_instantiation->{'email'};
 
-    eval { $config = Storable::nfreeze($self->{'admin'}); };
+    eval { $config = Storable::nfreeze($self->admin); };
     if ($@) {
 	&Log::do_log('err', 'Failed to save the config to database. error: %s', $@);
 	return undef;

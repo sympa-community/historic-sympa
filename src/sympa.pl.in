@@ -1506,12 +1506,8 @@ sub DoFile {
 		&Log::db_log({'robot' => $robot,'list' => $listname,'action' => 'DoFile','parameters' => "$file",'target_email' => "",'msg_id' => $msg_id, 'status' => 'error','error_type' => 'dyn_cant_sync','user_email' => $sender,'client' => $ip,'daemon' => $daemon_name});
 		# purge the unwanted empty automatic list
 		if ($Conf{'automatic_list_removal'} =~ /if_empty/i) {
-		    $list->close_list(); $list->purge(); # verifier pour tt ce bloc si supprime bien tout
-		    # but what about list_of_lists ?
-		    if (exists $List::list_of_lists{$list->{'domain'}}{$list->{'name'}}) { # test à virer si ok
-		      delete $List::list_of_lists{$list->{'domain'}}{$list->{'name'}};
-		      &Log::do_log('err', 'la liste a été trouvée dans la list_of_lists',$listname, $dyn_list_family);
-		    }
+		    $list->close_list();
+		    $list->purge(); # verifier pour tt ce bloc si supprime bien tout
 		}
                 return undef;
             }
@@ -1521,12 +1517,8 @@ sub DoFile {
 		&Log::db_log({'robot' => $robot,'list' => $listname,'action' => 'DoFile','parameters' => "$file",'target_email' => "",'msg_id' => $msg_id, 'status' => 'error','error_type' => 'list_unknown','user_email' => $sender,'client' => $ip,'daemon' => $daemon_name});
 		# purge the unwanted empty automatic list
 		if ($Conf{'automatic_list_removal'} =~ /if_empty/i) {
-		    $list->close_list(); $list->purge(); # verifier pour tt ce bloc si supprime bien tout
-		    # but what about list_of_lists ?
-		    if (exists $List::list_of_lists{$list->{'domain'}}{$list->{'name'}}) { # test à virer si ok
-		      delete $List::list_of_lists{$list->{'domain'}}{$list->{'name'}};
-		      &Log::do_log('err', 'la liste a été trouvée dans la list_of_lists',$listname, $dyn_list_family);
-		    }
+		    $list->close_list();
+		    $list->purge(); # verifier pour tt ce bloc si supprime bien tout
 		}
                 return undef;
             }

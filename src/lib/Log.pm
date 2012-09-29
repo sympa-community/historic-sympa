@@ -95,16 +95,28 @@ sub do_log {
     return if ($levels{$level} > $log_level);
 
     my $message = shift;
-    my @param = @_;
+    my @param = ();
 
     my $errno = $!;
 
     ## Do not display variables which are references.
-    foreach my $p (@param) {
+    my @n = ($message =~ /(%[^%])/g);
+    for (my $i = 0; $i < scalar @n; $i++) {
+	my $p = $_[$i];
 	unless (defined $p) {
-	    $p = ''; # prevent 'Use of uninitialized value' warning
+	    push @param, ''; # prevent 'Use of uninitialized value' warning
 	} elsif (ref $p) {
-	    $p = ref $p;
+	    if (ref $p eq 'ARRAY') {
+		push @param, '[...]';
+	    } elsif (ref $p eq 'HASH') {
+		push @param, sprintf('{%s}', join('/', keys %{$p}));
+	    } elsif (ref $p eq 'List') {
+		push @param, sprintf('List(%s)', $p->get_list_id);
+	    } else {
+		push @param, ref $p;
+	    }
+	} else {
+	    push @param, $p;
 	}
     }
 
