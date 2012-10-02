@@ -3289,8 +3289,8 @@ sub distribute_msg {
     &Log::do_log('debug2', 'List::distribute_msg(%s, %s, %s, %s, %s, %s, apply_dkim_signature=%s)', $self->{'name'}, $message->{'msg'}, $message->{'size'}, $message->{'filename'}, $message->{'smime_crypted'}, $apply_dkim_signature );
 
     my $hdr = $message->{'msg'}->head;
-    my ($name, $host) = ($self->{'name'}, $self->{'admin'}{'host'});
-    my $robot = $self->{'domain'};
+    my ($name, $host) = ($self->name, $self->host);
+    my $robot = $self->domain;
 
     ## Update the stats, and returns the new X-Sequence, if any.
     my $sequence = $self->update_stats($message->{'size'});
@@ -3309,20 +3309,19 @@ sub distribute_msg {
     }
 
     ## Hide the sender if the list is anonymoused
-    if ( $self->{'admin'}{'anonymous_sender'} ) {
-
+    if ($self->anonymous_sender) {
 	foreach my $field (@{$Conf::Conf{'anonymous_header_fields'}}) {
 	    $hdr->delete($field);
 	}
-	
-	$hdr->add('From',"$self->{'admin'}{'anonymous_sender'}");
-	my $new_id = "$self->{'name'}.$sequence\@anonymous";
+
+	$hdr->add('From', $self->anonymous_sender);
+	my $new_id = $self->name . '.' . $sequence . '@anonymous';
 	$hdr->add('Message-id',"<$new_id>");
 	
 	# rename msg_topic filename
 	if ($info_msg_topic) {
 	    my $queuetopic = &Conf::get_robot_conf($robot, 'queuetopic');
-	    my $listname = "$self->{'name'}\@$robot";
+	    my $listname = $self->get_list_id();
 	    rename("$queuetopic/$info_msg_topic->{'filename'}","$queuetopic/$listname.$new_id");
 	    $info_msg_topic->{'filename'} = "$listname.$new_id";
 	}
@@ -3331,17 +3330,17 @@ sub distribute_msg {
     }
     
     ## Add Custom Subject
-    if ($self->{'admin'}{'custom_subject'}) {
+    if ($self->custom_subject) {
 	my $subject_field = $message->{'decoded_subject'};
 	$subject_field =~ s/^\s*(.*)\s*$/$1/; ## Remove leading and trailing blanks
 	
 	## Search previous subject tagging in Subject
-	my $custom_subject = $self->{'admin'}{'custom_subject'};
+	my $custom_subject = $self->custom_subject;
 
 	## tag_regexp will be used to remove the custom subject if it is already present in the message subject.
 	## Remember that the value of custom_subject can be "dude number [%list.sequence"%]" whereas the actual
 	## subject will contain "dude number 42".
-	my $list_name_escaped = $self->{'name'};
+	my $list_name_escaped = $self->name;
 	$list_name_escaped =~ s/(\W)/\\$1/g;
 	my $tag_regexp = $custom_subject;
 	$tag_regexp =~ s/([^\w\s\x80-\xFF])/\\$1/g;  ## cleanup, just in case dangerous chars were left
@@ -3353,8 +3352,8 @@ sub distribute_msg {
 	## Add subject tag
 	$message->{'msg'}->head->delete('Subject');
 	my $parsed_tag;
-	&tt2::parse_tt2({'list' => {'name' => $self->{'name'},
-				    'sequence' => $self->{'stats'}->[0]
+	&tt2::parse_tt2({'list' => {'name' => $self->name,
+				    'sequence' => $self->stats->[0]
 				    }},
 			[$custom_subject], \$parsed_tag);
 
@@ -3399,60 +3398,65 @@ sub distribute_msg {
     ## Prepare tracking if list config allow it
     my $apply_tracking = 'off';
     
-    $apply_tracking = 'dsn' if ($self->{'admin'}{'tracking'}{'delivery_status_notification'} eq 'on');
-    $apply_tracking = 'mdn' if ($self->{'admin'}{'tracking'}{'message_delivery_notification'} eq 'on');
-    $apply_tracking = 'mdn' if (($self->{'admin'}{'tracking'}{'message_delivery_notification'}  eq 'on_demand') && ($hdr->get('Disposition-Notification-To')));
+    $apply_tracking = 'dsn'
+	if $self->tracking->{'delivery_status_notification'} eq 'on';
+    $apply_tracking = 'mdn'
+	if $self->tracking->{'message_delivery_notification'} eq 'on';
+    $apply_tracking = 'mdn'
+	if $self->tracking->{'message_delivery_notification'} eq 'on_demand'
+	   and $hdr->get('Disposition-Notification-To';
 
     if ($apply_tracking ne 'off'){
 	$hdr->delete('Disposition-Notification-To'); # remove notification request becuse a new one will be inserted if needed
     }
     
     ## Remove unwanted headers if present.
-    if ($self->{'admin'}{'remove_headers'}) {
-        foreach my $field (@{$self->{'admin'}{'remove_headers'}}) {
+    if ($self->remove_headers) {
+        foreach my $field (@{$self->remove_headers}) {
             $hdr->delete($field);
         }
     }
 
     ## Archives
     my $msgtostore = $message->{'msg'};
-    if (($message->{'smime_crypted'} eq 'smime_crypted') &&
-	($self->{admin}{archive_crypted_msg} eq 'original')) {
+    if ($message->{'smime_crypted'} eq 'smime_crypted' and
+	$self->archive_crypted_msg eq 'original') {
 	$msgtostore = $message->{'orig_msg'};
     }
     $self->archive_msg($msgtostore);
     
     ## Change the reply-to header if necessary. 
-    if ($self->{'admin'}{'reply_to_header'}) {
-	unless ($hdr->get('Reply-To') && ($self->{'admin'}{'reply_to_header'}{'apply'} ne 'forced')) {
+    if ($self->reply_to_header) {
+	unless ($hdr->get('Reply-To') and
+		$self->reply_to_header->{'apply'} ne 'forced') {
 	    my $reply;
-	    
+
 	    $hdr->delete('Reply-To');
-	    
-	    if ($self->{'admin'}{'reply_to_header'}{'value'} eq 'list') {
-		$reply = "$name\@$host";
-	    }elsif ($self->{'admin'}{'reply_to_header'}{'value'} eq 'sender') {
+
+	    if ($self->reply_to_header->{'value'} eq 'list') {
+		$reply = $self->get_list_address();
+	    } elsif ($self->reply_to_header->{'value'} eq 'sender') {
 		$reply = $hdr->get('From');
-	    }elsif ($self->{'admin'}{'reply_to_header'}{'value'} eq 'all') {
-		$reply = "$name\@$host,".$hdr->get('From');
-	    }elsif ($self->{'admin'}{'reply_to_header'}{'value'} eq 'other_email') {
-		$reply = $self->{'admin'}{'reply_to_header'}{'other_email'};
+	    } elsif ($self->reply_to_header->{'value'} eq 'all') {
+		$reply = $self->get_list_address() . ',' . $hdr->get('From');
+	    } elsif ($self->reply_to_header->{'value'} eq 'other_email') {
+		$reply = $self->reply_to_header->{'other_email'};
 	    }
-	    
-	    $hdr->add('Reply-To',$reply) if $reply;
+
+	    $hdr->add('Reply-To', $reply) if $reply;
 	}
     }
     
     ## Add useful headers
-    $hdr->add('X-Loop', "$name\@$host");
+    $hdr->add('X-Loop', $self->get_list_address());
     $hdr->add('X-Sequence', $sequence);
-    $hdr->add('Errors-to', $name.&Conf::get_robot_conf($robot, 'return_path_suffix').'@'.$host);
+    $hdr->add('Errors-to', $self->get_list_address('return_path'));
     $hdr->add('Precedence', 'list');
     $hdr->add('Precedence', 'bulk');
-    $hdr->add('Sender', "$self->{'name'}-request\@$self->{'admin'}{'host'}"); # The Sender: header should be add at least for DKIM compatibility
+    $hdr->add('Sender', $self->get_list_address('owner')); # The Sender: header should be add at least for DKIM compatibility
     $hdr->add('X-no-archive', 'yes');
-    foreach my $i (@{$self->{'admin'}{'custom_header'}}) {
-	$hdr->add($1, $2) if ($i=~/^([\S\-\:]*)\s(.*)$/);
+    foreach my $i (@{$self->custom_header}) {
+	$hdr->add($1, $2) if $i =~ /^([\S\-\:]*)\s(.*)$/;
     }
     
     ## Add RFC 2919 header field
@@ -3460,40 +3464,22 @@ sub distribute_msg {
 	&Log::do_log('notice', 'Found List-Id: %s', $hdr->get('List-Id'));
 	$hdr->delete('List-ID');
     }
-    $hdr->add('List-Id', sprintf ('<%s.%s>', $self->{'name'}, $self->{'admin'}{'host'}));
-    
+    $self->add_list_header($hdr, 'id');
+
     ## Add RFC 2369 header fields
-    foreach my $field (@{$self->{'admin'}{'rfc2369_header_fields'}}) {
-	if ($field eq 'help') {
-	    $hdr->add('List-Help', sprintf ('<mailto:%s@%s?subject=help>', &Conf::get_robot_conf($robot, 'email'), &Conf::get_robot_conf($robot, 'host')));
-	}elsif ($field eq 'unsubscribe') {
-	    $hdr->add('List-Unsubscribe', sprintf ('<mailto:%s@%s?subject=unsubscribe%%20%s>', &Conf::get_robot_conf($robot, 'email'), &Conf::get_robot_conf($robot, 'host'), $self->{'name'}));
-	}elsif ($field eq 'subscribe') {
-	    $hdr->add('List-Subscribe', sprintf ('<mailto:%s@%s?subject=subscribe%%20%s>', &Conf::get_robot_conf($robot, 'email'), &Conf::get_robot_conf($robot, 'host'), $self->{'name'}));
-	}elsif ($field eq 'post') {
-	    $hdr->add('List-Post', sprintf ('<mailto:%s@%s>', $self->{'name'}, $self->{'admin'}{'host'}));
-	}elsif ($field eq 'owner') {
-	    $hdr->add('List-Owner', sprintf ('<mailto:%s-request@%s>', $self->{'name'}, $self->{'admin'}{'host'}));
-	}elsif ($field eq 'archive') {
-	    if (&Conf::get_robot_conf($robot, 'wwsympa_url') and $self->is_web_archived()) {
-		$hdr->add('List-Archive', sprintf ('<%s/arc/%s>', &Conf::get_robot_conf($robot, 'wwsympa_url'), $self->{'name'}));
-	    }
+    foreach my $field (@{$::pinfo{'rfc2369_header_fields'}->{'format'}}) {
+	if (scalar grep { $_ eq $field } @{$self->rfc2369_header_fields}) {
+	    $self->add_list_header($hdr, $field);
 	}
     }
 
     ## Add RFC5064 Archived-At SMTP header field
-    if (&Conf::get_robot_conf($robot, 'wwsympa_url') and $self->is_web_archived()) {
-	my @now = localtime(time);
-	my $yyyy = sprintf '%04d', 1900+$now[5];
-	my $mm = sprintf '%02d', $now[4]+1;
-	my $archived_msg_url = sprintf "%s/arcsearch_id/%s/%s-%s/%s", &Conf::get_robot_conf($robot, 'wwsympa_url'), $self->{'name'}, $yyyy, $mm, &tools::clean_msg_id($hdr->get('Message-Id'));	
-	$hdr->add('Archived-At', '<'.$archived_msg_url.'>');
-     }
+    $self->add_list_header($hdr, 'archived_at');
 
     ## Remove outgoing header fileds
     ## Useful to remove some header fields that Sympa has set
-    if ($self->{'admin'}{'remove_outgoing_headers'}) {
-        foreach my $field (@{$self->{'admin'}{'remove_outgoing_headers'}}) {
+    if ($self->remove_outgoing_headers) {
+        foreach my $field (@{$self->remove_outgoing_headers}) {
             $hdr->delete($field);
         }
     }   
@@ -3543,7 +3529,7 @@ sub send_msg_digest {
  	$filename = $Conf::Conf{'queuedigest'}.'/'.$self->get_list_id();
     }
     
-    my $param = {'replyto' => "$self->{'name'}-request\@$self->{'admin'}{'host'}",
+    my $param = {'replyto' => $self->get_list_address('owner');
 		 'to' => $self->get_list_address(),
 		 'table_of_content' => sprintf(gettext("Table of contents:")),
 		 'boundary1' => '----------=_'.&tools::get_message_id($robot),
@@ -3870,18 +3856,14 @@ sub send_file {
 	}
 	
 	## Unique return-path VERP
-	if ((($self->{'admin'}{'welcome_return_path'} eq 'unique') && ($tpl eq 'welcome')) ||
-	    (($self->{'admin'}{'remind_return_path'} eq 'unique') && ($tpl eq 'remind')))  {
-	    my $escapercpt = $who ;
-	    $escapercpt =~ s/\@/\=\=a\=\=/;
-	    $data->{'return_path'} = "$Conf::Conf{'bounce_email_prefix'}+$escapercpt\=\=$name";
-	    $data->{'return_path'} .= '==w' if ($tpl eq 'welcome');
-	    $data->{'return_path'} .= '==r' if ($tpl eq 'remind');
-	    $data->{'return_path'} .= "\@$self->{'domain'}";
+	if ($self->welcome_return_path eq 'unique' and $tpl eq 'welcome') {
+	    $data->{'return_path'} = $self->get_bounce_address($who, 'w');
+	} elsif ($self->remind_return_path eq 'unique' and $tpl eq 'remind') {
+	    $data->{'return_path'} = $self->get_bounce_address($who, 'r');
 	}
     }
 
-    $data->{'return_path'} ||= $name.&Conf::get_robot_conf($robot, 'return_path_suffix').'@'.$self->{'admin'}{'host'};
+    $data->{'return_path'} ||= $self->get_list_address('return_path');
 
     ## Lang
     $data->{'lang'} = $data->{'user'}{'lang'} || $self->{'admin'}{'lang'} || &Conf::get_robot_conf($robot, 'lang');
@@ -3937,10 +3919,10 @@ sub send_file {
     # . a list should have several certificats and use if possible a certificat
     #   issued by the same CA as the receipient CA if it exists 
     if ($sign_mode eq 'smime') {
-	$data->{'fromlist'} = "$name\@$data->{'list'}{'host'}";
-	$data->{'replyto'} = "$name"."-request\@$data->{'list'}{'host'}";
+	$data->{'fromlist'} = $self->get_list_address();
+	$data->{'replyto'} = $self->get_list_address('owner');
     }else{
-	$data->{'fromlist'} = "$name"."-request\@$data->{'list'}{'host'}";
+	$data->{'fromlist'} = $self->get_list_address('owner');
     }
 
     $data->{'from'} = $data->{'fromlist'} unless ($data->{'from'});
@@ -4018,7 +4000,7 @@ sub send_msg {
  
     ## Who is the enveloppe sender?
     my $host = $self->host;
-    my $from = $name.&Conf::get_robot_conf($robot, 'return_path_suffix').'@'.$host;
+    my $from = $self->get_list_address('return_path');
 
     # separate subscribers depending on user reception option and also if verp a dicovered some bounce for them.
     my (@tabrcpt, @tabrcpt_notice, @tabrcpt_txt, @tabrcpt_html, @tabrcpt_url, @tabrcpt_verp, @tabrcpt_notice_verp, @tabrcpt_txt_verp, @tabrcpt_html_verp, @tabrcpt_url_verp, @tabrcpt_digestplain, @tabrcpt_digest, @tabrcpt_summary, @tabrcpt_nomail, @tabrcpt_digestplain_verp, @tabrcpt_digest_verp, @tabrcpt_summary_verp, @tabrcpt_nomail_verp );
@@ -5111,24 +5093,23 @@ sub delete_list_member_picture {
     
     my $fullfilename = undef;
     my $filename = &tools::md5_fingerprint($email);
-    my $name = $self->{'name'};
-    my $robot = $self->{'domain'};
-    
+
+    my $file = &Conf::get_robot_conf($self->domain, 'pictures_path') . '/' .
+	       $self->get_list_id() . '/' . $filename;
     foreach my $ext ('.gif','.jpg','.jpeg','.png') {
-  	if(-f &Conf::get_robot_conf($robot,'pictures_path').'/'.$name.'@'.$robot.'/'.$filename.$ext) {
-  	    my $file = &Conf::get_robot_conf($robot,'pictures_path').'/'.$name.'@'.$robot.'/'.$filename.$ext;
-  	    $fullfilename = $file;
+	if (-f $file . $ext) {
+  	    $fullfilename = $file . $ext;
   	    last;
   	} 	
     }
     
     if (defined $fullfilename) {
 	unless(unlink($fullfilename)) {
-	    &Log::do_log('err', 'Failed to delete '.$fullfilename);
+	    &Log::do_log('err', 'Failed to delete %s', $fullfilename);
 	    return undef;  
 	}
 
-	&Log::do_log('notice', 'File deleted successfull '.$fullfilename);
+	&Log::do_log('notice', 'File deleted successfull: %s', $fullfilename);
     }
 
     return 1;
@@ -6984,7 +6965,7 @@ sub update_list_member {
     ## Rename picture on disk if user email changed
     if ($values->{'email'}) {
 	my $file_name = &tools::md5_fingerprint($who);
-	my $picture_file_path = &Conf::get_robot_conf($self->{'domain'},'pictures_path').'/'.$self->{'name'}.'@'.$self->{'domain'};
+	my $picture_file_path = &Conf::get_robot_conf($self->domain, 'pictures_path') . '/' . $self->get_list_id();
 
 	foreach my $extension ('gif','png','jpg','jpeg') {
 	    if (-f $picture_file_path.'/'.$file_name.'.'.$extension) {
@@ -13080,19 +13061,153 @@ sub get_bounce_dir {
     return $root_dir.'/'.$self->get_list_id();
 }
 
-## Return the list email address
+=over 4
+
+=item get_list_address ( [ TYPE ] )
+
+Return the list email address of type TYPE: posting address (default),
+"owner", "editor" or (non-VERP) "return_path".
+
+=back
+
+=cut
+
 sub get_list_address {
     my $self = shift;
+    my $type = shift || '';
 
-    return $self->{'name'}.'@'.$self->{'admin'}{'host'};
+    unless ($type) {
+	return $self->name . '@' . $self->host;
+    } elsif ($type eq 'owner') {
+	return $self->name . '-request' . '@' . $self->host;
+    } elsif ($type eq 'editor') {
+	return $self->name . '-editor' . '@' . $self->host;
+    } elsif ($type eq 'return_path') {
+	return $self->name .
+	       &Conf::get_robot_conf($self->domain, 'return_path_suffix') .
+	       '@' . $self->host;
+    }
+    &Log::do_log('err', 'Unknown type of list address "%s".  Ask developer',
+		 $type);
+    return undef;
 }
 
-## Return the list ID, different from the list address (uses the robot name)
+=over 4
+
+=item get_bounce_address ( WHO, [ OPTS, ... ] )
+
+Return the VERP address of the list for the user WHO.
+
+FIXME: VERP addresses have the name of originating robot, not mail host.
+
+=back
+
+=cut
+
+sub get_bounce_address {
+    my $self = shift;
+    my $who = shift;
+    my @opts = @_;
+
+    my $escwho = $who;
+    $escwho =~ s/\@/==a==/;
+
+    return sprintf('%s+%s@%s',
+		   $Conf::Conf{'bounce_email_prefix'},
+		   join('==', $escwho, $self->name, @opts),
+		   $self->domain);
+}
+
+=over 4
+
+=item get_list_id ( )
+
+Return the list ID, different from the list address (uses the robot name)
+
+=back
+
+=cut
+
 sub get_list_id {
     my $self = shift;
 
     ## DO NOT use accessors since $self may not have been fully initialized.
-    return $self->{'name'}.'@'.$self->{'domain'};
+    return $self->{'name'} . '@' . $self->{'domain'};
+}
+
+=over 4
+
+=item add_list_header ( HEADER_OBJ, FIELD )
+
+FIXME @todo doc
+
+=back
+
+=cut
+
+sub add_list_header {
+    my $self = shift;
+    my $hdr = shift;
+    my $field = shift;
+    my $robot = $self->domain;
+
+    if ($field eq 'id') {
+	$hdr->add('List-Id',
+		  sprintf('<%s.%s>', $self->name, $self->host));
+    } elsif ($field eq 'help') {
+	$hdr->add('List-Help',
+		  sprintf('<mailto:%s@%s?subject=help>',
+			  &Conf::get_robot_conf($robot, 'email'),
+			  &Conf::get_robot_conf($robot, 'host')));
+    } elsif ($field eq 'unsubscribe') {
+	$hdr->add('List-Unsubscribe',
+		  sprintf('<mailto:%s@%s?subject=unsubscribe%%20%s>',
+			  &Conf::get_robot_conf($robot, 'email'),
+			  &Conf::get_robot_conf($robot, 'host'),
+			  $self->name));
+    } elsif ($field eq 'subscribe') {
+	$hdr->add('List-Subscribe',
+		  sprintf('<mailto:%s@%s?subject=subscribe%%20%s>',
+			  &Conf::get_robot_conf($robot, 'email'),
+			  &Conf::get_robot_conf($robot, 'host'),
+			  $self->name));
+    } elsif ($field eq 'post') {
+	$hdr->add('List-Post',
+		  sprintf('<mailto:%s>', $self->get_list_address()));
+    } elsif ($field eq 'owner') {
+	$hdr->add('List-Owner',
+		  sprintf('<mailto:%s>', $self->get_list_address('owner')));
+    } elsif ($field eq 'archive') {
+	if (&Conf::get_robot_conf($robot, 'wwsympa_url') and
+	    $self->is_web_archived()) {
+	    $hdr->add('List-Archive',
+		      sprintf ('<%s/arc/%s>',
+			       &Conf::get_robot_conf($robot, 'wwsympa_url'),
+			       $self->name));
+	} else {
+	    return 0;
+	}
+    } elsif ($field eq 'archived_at') {
+	if (&Conf::get_robot_conf($robot, 'wwsympa_url') and
+	    $self->is_web_archived()) {
+	    my @now = localtime(time);
+	    my $yyyy = sprintf '%04d', 1900+$now[5];
+	    my $mm = sprintf '%02d', $now[4]+1;
+	    my $archived_msg_url =
+		sprintf '%s/arcsearch_id/%s/%s-%s/%s',
+			&Conf::get_robot_conf($robot, 'wwsympa_url'),
+			$self->name, $yyyy, $mm,
+			&tools::clean_msg_id($hdr->get('Message-Id'));
+	    $hdr->add('Archived-At', '<'.$archived_msg_url.'>');
+	} else {
+	    return 0;
+	}
+    } else {
+	&Log::do_log('err', 'Unknown field "%s".  Ask developer', $field);
+	return undef;
+    }
+
+    return 1;
 }
  
 ##connect to stat_counter_table and extract data.
