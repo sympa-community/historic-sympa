@@ -364,8 +364,10 @@ sub store {
    &Log::do_log('debug',"Spool::store ($self->{'spoolname'},$self->{'selection_status'}, <message_asstring> ,list : $metadata->{'list'},robot : $metadata->{'robot'} , date: $metadata->{'date'}), lock : $locked");
 
     my $b64msg = MIME::Base64::encode($message_asstring);
-
-    my $message = new Message({'messageasstring'=>$message_asstring});
+    my $message;
+    if ($self->{'spoolname'} ne 'task') {
+	$message = new Message({'messageasstring'=>$message_asstring});
+    }
     
     if($message) {
 	$metadata->{'spam_status'} = $message->{'spam_status'};
