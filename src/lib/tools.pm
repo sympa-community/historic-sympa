@@ -2600,7 +2600,7 @@ sub write_pid {
 	user  => Sympa::Constants::USER,
 	group => Sympa::Constants::GROUP,
     )) {
-	&fatal_err('Unable to set rights on %s. Exiting.', $Conf::Conf{'db_name'});
+	&Log::fatal_err('Unable to set rights on %s. Exiting.', $Conf::Conf{'db_name'});
     }
 
     my @pids;
@@ -2608,11 +2608,11 @@ sub write_pid {
     # Lock pid file
     my $lock = new Lock ($pidfile);
     unless (defined $lock) {
-	&fatal_err('Lock could not be created. Exiting.');
+	&Log::fatal_err('Lock could not be created. Exiting.');
     }
     $lock->set_timeout(5); 
     unless ($lock->lock('write')) {
-	&fatal_err('Unable to lock %s file in write mode. Exiting.',$pidfile);
+	&Log::fatal_err('Unable to lock %s file in write mode. Exiting.',$pidfile);
     }
     ## If pidfile exists, read the PIDs
     if(-f $pidfile) {
@@ -2629,7 +2629,7 @@ sub write_pid {
 	unless(open(PIDFILE, '> '.$pidfile)) {
 	    ## Unlock pid file
 	    $lock->unlock();
-	    &fatal_err('Could not open %s, exiting: %s', $pidfile,$!);
+	    &Log::fatal_err('Could not open %s, exiting: %s', $pidfile,$!);
 	}
 	## Print other pids + this one
 	push(@pids, $pid);
@@ -2640,7 +2640,7 @@ sub write_pid {
 	unless(open(PIDFILE, '+>> '.$pidfile)) {
 	    ## Unlock pid file
 	    $lock->unlock();
-	    &fatal_err('Could not open %s, exiting: %s', $pidfile);
+	    &Log::fatal_err('Could not open %s, exiting: %s', $pidfile);
 	}
 	## The previous process died suddenly, without pidfile cleanup
 	## Send a notice to listmaster with STDERR of the previous process
