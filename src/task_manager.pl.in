@@ -277,7 +277,6 @@ while (!$end) {
 
     my %used_models; # models for which a task exists
     foreach my $model (&Task::get_used_models) {
-	&Log::do_log('debug2',"model used $model");
 	$used_models{$model} = 1;
     }
 
@@ -313,7 +312,7 @@ while (!$end) {
 	    }	    
 	    foreach my $model (&Task::get_used_models($list->get_list_id())) {		
 		$used_list_models{$model} = 1; 
-	    }	    
+	    }
 	    &Log::do_log('debug3',"creating list task using models");my $tt= 0;
 
 	    foreach my $model (@list_models) {
@@ -357,7 +356,7 @@ while (!$end) {
 	    
 	    ## Skip closed lists
 	    unless (defined $list && ($list->{'admin'}{'status'} eq 'open')) {
-		&Log::do_log('notice','Removing task messageid = %s', $task->{'messagekey'});
+		&Log::do_log('notice','Removing task %s, label %s (messageid = %s) because list %s is closed', $task->{'model'}, $task->{'label'}, $task->{'messagekey'},$task->{'id'});
 		$task->remove;
 		next;
 	    }
@@ -365,14 +364,14 @@ while (!$end) {
 	    ## Skip if parameter is not defined
 	    if ( $task->{'model'} eq 'sync_include') {
 		unless ($list->{'admin'}{'status'} eq 'open') {
-		    &Log::do_log('notice','Removing task messageid = %s', $task->{'messagekey'});
+		    &Log::do_log('notice','Removing task %s, label %s (messageid = %s) because list %s is closed', $task->{'model'}, $task->{'label'}, $task->{'messagekey'},$task->{'id'});
 		    $task->remove;
 		    next;
 		}
 	    }else {
 		unless (defined $list->{'admin'}{$task->{'model'}} && 
 			defined $list->{'admin'}{$task->{'model'}}{'name'}) {
-		    &Log::do_log('notice','Removing task messageid = %s', $task->{'messagekey'});
+		    &Log::do_log('notice','Removing task %s, label %s (messageid = %s) because it is not defined in list %s configuration', $task->{'model'}, $task->{'label'}, $task->{'messagekey'},$task->{'id'});
 		    $task->remove;
 		    next;
 		}		
@@ -750,12 +749,12 @@ sub execute {
     } 
 
     unless (defined $status) {
-	&Log::do_log('err', 'Error while processing task (messagekey=%s), removing it', $task->{'messagekey'});
+	&Log::do_log('err', 'Error while processing task %s - %s (%s)  (messagekey=%s), removing it', $task->{'model'}, $task->{'label'},$task->{'id'}, $task->{'messagekey'});
 	$task->remove;
 	return undef;
     }
     unless ($status >= 0) {
-	&Log::do_log('notice', 'The task %s is now useless. Removing it (messagekey=%s)', $task->{'messagekey'});
+	&Log::do_log('notice', 'The task %s - %s (%s) is now useless. Removing it (messagekey=%s)', $task->{'model'}, $task->{'label'},$task->{'id'}, $task->{'messagekey'});
 	$task->remove;
     }
 
