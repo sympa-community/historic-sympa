@@ -2481,9 +2481,7 @@ sub set_status_family_closed {
     my ($self, $message, @param) = @_;
 
     unless ($self->status eq 'family_closed'){
-	
 	my $host = &Conf::get_robot_conf($self->domain, 'host');	
-	
 	unless ($self->close_list("listmaster\@$host",'family_closed')) {
 	    &Log::do_log('err', 'Impossible to set the list %s in status family_closed', $self);
 	    return undef;
