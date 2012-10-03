@@ -2410,7 +2410,7 @@ sub set_status_error_config {
     unless ($self->{'admin'}{'status'} eq 'error_config'){
 	$self->{'admin'}{'status'} = 'error_config';
 
-	#my $host = &Conf::get_robot_conf($self->{'robot'}, 'host');
+	#my $host = &Conf::get_robot_conf($self->{'domain'}, 'host');
 	## No more save config in error...
 	#$self->save_config("listmaster\@$host");
 	#$self->savestats();
@@ -2428,7 +2428,7 @@ sub set_status_family_closed {
     
     unless ($self->{'admin'}{'status'} eq 'family_closed'){
 	
-	my $host = &Conf::get_robot_conf($self->{'robot'}, 'host');	
+	my $host = &Conf::get_robot_conf($self->{'domain'}, 'host');	
 	
 	unless ($self->close_list("listmaster\@$host",'family_closed')) {
 	    &Log::do_log('err','Impossible to set the list %s in status family_closed');
@@ -2686,7 +2686,7 @@ sub save_config {
     }
     
     ## Also update the binary version of the data structure
-    if (&Conf::get_robot_conf($self->{'robot'}, 'cache_list_config') eq 'binary_file') {
+    if (&Conf::get_robot_conf($self->{'domain'}, 'cache_list_config') eq 'binary_file') {
 	eval {&Storable::store($self->{'admin'},"$self->{'dir'}/config.bin")};
 	if ($@) {
 	    &Log::do_log('err', 'Failed to save the binary config %s. error: %s', "$self->{'dir'}/config.bin",$@);
@@ -8964,7 +8964,7 @@ sub _load_list_members_from_include {
 				$included = 0;
 			}
 	    }elsif ($type eq 'include_remote_sympa_list') {
-		$included = $self->_include_users_remote_sympa_list(\%users, $incl, $dir,$admin->{'domain'},$admin->{'default_user_options'});
+		$included = $self->_include_users_remote_sympa_list(\%users, $incl, $dir,$self->{'domain'},$admin->{'default_user_options'});
 		unless (defined $included){
 		    push @errors, {'type' => $type, 'name' => $incl->{'name'}};
 		}
@@ -9093,7 +9093,7 @@ sub _load_list_admin_from_include {
 			$included = undef;
 		    }
 		}elsif ($type eq 'include_remote_sympa_list') {
-		    $included = $self->_include_users_remote_sympa_list(\%admin_users, $incl, $dir,$list_admin->{'domain'},\%option);
+		    $included = $self->_include_users_remote_sympa_list(\%admin_users, $incl, $dir,$self->{'domain'},\%option);
 		}elsif ($type eq 'include_list') {
 		    $depend_on->{$name} = 1 ;
 		    if (&_inclusion_loop ($name,$incl,$depend_on)) {
@@ -12356,8 +12356,8 @@ sub remove_aliases {
 	return undef;
     }
     
-    system ("$alias_manager del $self->{'name'} $self->{'admin'}{'host'}");
-    my $status = $? / 256;
+    system (sprintf '%s del %s %s', $alias_manager, $self->{'name'}, $self->{'admin'}{'host'});
+    my $status = $? >> 8;
     unless ($status == 0) {
 	&Log::do_log('err','Failed to remove aliases ; status %d : %s', $status, $!);
 	return undef;
