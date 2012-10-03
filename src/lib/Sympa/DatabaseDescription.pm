@@ -467,7 +467,7 @@ my %full_db_struct = (
 	    'date_exclusion' => {
 		'struct'=> 'int(11)',
 		'doc'=>'',
-		'order' => 4,
+		'order' => 5,
 	    },
 	},
 	'doc'=>'exclusion table is used in order to manage unsubscription for subsceriber inclued from an external data source',
