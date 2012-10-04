@@ -3,6 +3,56 @@
 
 (See Changelog file for the full changes log)
 
+6.1.15		October 04, 2012
+
+  Changes:
+
+	[7577] wwsympa/wwsympa.fcgi.in:  When an error occurs when creating a
+	list through the web interface, the user stays on the list creation
+	page with her previously filled list description still present.
+
+	[7576] src/lib/admin.pm:  Now Sympa prevents users from creating a list
+	whose local part of email address would be the local part used by sympa
+	for mail commands.
+
+  Bug fixes:
+
+	[7643] wwsympa/archived.pl.in:	When a user achieved to request a
+	message deletion from archives without having the proper rights,
+	archived.pl crashed because a return undef was then used outside a
+	function context. Fixed by replacing it by a "next".
+
+	[7619] src/lib/List.pm:  'host' list parameter were used to determine
+	robots.
+	(Correction might be incomplete...)
+
+*****	[7603] src/lib/Config_XML.pm, src/lib/Family.pm, src/lib/admin.pm: 
+*****	Encoding issues on list creation.
+*****	- If list template config.tt2 contains non-ASCII strings, they are
+*****	double-encoded.
+*****	- If list creation XML contains non-ASCII strings, they are
+*****	double-encoded.
+*****	Note: Now Config_XML::getHash() returns encoded values, not
+*****	utf8-flagged values.  So '>:utf8' layer should not be used.
+
+	[7573] wwsympa/Auth.pm, wwsympa/wwsympa.fcgi.in: [Reported by R.
+	Tassoni, National Library of Australia] Requests for new password with
+	email address containing an apostrophe, SQL queries fail.
+
+	[7564] wwsympa/wwsympa.fcgi.in: [#6956] Uploading file is refused if
+	any disallowed characters appear in its directory part.
+	Relaxed regexps to allow any characters before / or \.
+
+	[7563] wwsympa/wwsympa.fcgi.in: [#8462][Reported by S. Thomas]
+	arcsearch_id can not find message if Message-ID contains a hyphen ("-")
+
+	[7561] src/lib/List.pm: [#8456][Submitted by P Vandry] message headers
+	and footers should not have filenames.
+
+	[7560] src/lib/List.pm: [#8458][Reported by K. Clair] sympa.pl
+	distribute dies if $msg->bodyhandle is undefined.
+	Corrected typo in List.pm.
+
 6.1.14		July 27, 2012
 
   Features:
