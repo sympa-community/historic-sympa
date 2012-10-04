@@ -1,13 +1,13 @@
 msgid ""
 msgstr ""
 "POT-Creation-Date: 2002-07-16 17:27+0800\n"
-"PO-Revision-Date: 2012-09-11 13:17+0200\n"
+"PO-Revision-Date: 2012-10-04 16:17+0200\n"
 "Last-Translator: David Verdin <david.verdin@cru.fr>\n"
 "Language-Team: Français\n"
+"Language: fr\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Language: fr\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
 "X-Generator: Pootle 2.1.5\n"
 "Projct-Id-Version: fr\n"
@@ -7604,15 +7604,14 @@ msgstr ""
 "consultez la page suivante :"
 
 #: ../mail_tt2/moderate.tt2:27
-#, fuzzy
 msgid ""
 "Because the new message is suspected to be a spam it is not attached to this "
 "one. You must use\n"
 "the web interface to reject or validate it."
 msgstr ""
 "Le message à modérer étant soupçonné d'être un spam, il n'est pas mise en "
-"pièce jointe de celui-ci. Vous devez utiliser l'interface web si vous "
-"désirez le lire avant de le rejeter ou de l'accepter."
+"pièce jointe de celui-ci.Vous devez utiliser l'interface web si vous désirez "
+"le lire avant de le rejeter ou de l'accepter."
 
 #. (list.name)
 #: ../mail_tt2/moderate.tt2:29
