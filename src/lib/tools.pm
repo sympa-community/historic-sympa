@@ -2250,10 +2250,10 @@ sub get_filename {
     
     if (ref($object) eq 'List') {
  	$list = $object;
- 	if ($list->{'admin'}{'family_name'}) {
- 	    unless ($family = $list->get_family()) {
- 		&Log::do_log('err', 'Impossible to get list %s family : %s. The list is set in status error_config',$list->{'name'},$list->{'admin'}{'family_name'});
- 		$list->set_status_error_config('no_list_family',$list->{'name'}, $list->{'admin'}{'family_name'});
+ 	if ($list->family_name) {
+ 	    unless ($family = $list->family) {
+ 		&Log::do_log('err', 'Impossible to get list %s family : %s. The list is set in status error_config', $list->name, $list->family_name);
+ 		$list->set_status_error_config('no_list_family', $list->name, $list->family_name);
  		return undef;
  	    }  
  	}
@@ -2357,9 +2357,9 @@ sub make_tt2_include_path {
 	$path_etcdir = "$Conf::Conf{'etc'}/".$dir;
 	$path_robot = "$Conf::Conf{'etc'}/".$robot.'/'.$dir if (lc($robot) ne lc($Conf::Conf{'domain'}));
 	if (ref($list) eq 'List'){
-	    $path_list = $list->{'dir'}.'/'.$dir;
-	    if (defined $list->{'admin'}{'family_name'}) {
-		my $family = $list->get_family();
+	    $path_list = $list->dir . '/' . $dir;
+	    if (defined $list->family_name) {
+		my $family = $list->family;
 	        $path_family = $family->{'dir'}.'/'.$dir;
 	    }
 	} 
@@ -2368,9 +2368,9 @@ sub make_tt2_include_path {
 	$path_etcdir = "$Conf::Conf{'etc'}";
 	$path_robot = "$Conf::Conf{'etc'}/".$robot if (lc($robot) ne lc($Conf::Conf{'domain'}));
 	if (ref($list) eq 'List') {
-	    $path_list = $list->{'dir'} ;
-	    if (defined $list->{'admin'}{'family_name'}) {
-		my $family = $list->get_family();
+	    $path_list = $list->dir;
+	    if (defined $list->family_name) {
+		my $family = $list->family;
 	        $path_family = $family->{'dir'};
 	    }
 	}

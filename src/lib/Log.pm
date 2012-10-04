@@ -111,7 +111,7 @@ sub do_log {
 	    } elsif (ref $p eq 'HASH') {
 		push @param, sprintf('{%s}', join('/', keys %{$p}));
 	    } elsif (ref $p eq 'List') {
-		push @param, sprintf('List(%s)', $p->get_list_id);
+		push @param, sprintf('List <%s>', $p->get_list_id);
 	    } else {
 		push @param, ref $p;
 	    }

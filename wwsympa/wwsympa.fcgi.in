@@ -1598,23 +1598,22 @@ my $birthday = time ;
 						       'remote_addr' => $param->{'remote_addr'}});
 		 next unless (ref($result) eq 'HASH' && $result->{'action'} eq 'do_it');
 
-		 my $l = $list->{'name'};
-		 $param->{'which_info'}{$l}{'subject'} = $list->{'admin'}{'subject'};
-		 $param->{'which_info'}{$l}{'host'} = $list->{'admin'}{'host'};
+		 my $l = $list->name;
+		 $param->{'which_info'}{$l}{'subject'} = $list->subject;
+		 $param->{'which_info'}{$l}{'host'} = $list->host;
 		 $param->{'which_info'}{$l}{'info'} = 1;
 	     }
 	     foreach my $list (@{$param->{'get_which_owner'}}) {
-		 my $l = $list->{'name'};
-		 $param->{'which_info'}{$l}{'subject'} = $list->{'admin'}{'subject'};
-		 $param->{'which_info'}{$l}{'host'} = $list->{'admin'}{'host'};
+		 my $l = $list->name;
+		 $param->{'which_info'}{$l}{'subject'} = $list->subject;
+		 $param->{'which_info'}{$l}{'host'} = $list->host;
 		 $param->{'which_info'}{$l}{'info'} = 1;
 		 $param->{'which_info'}{$l}{'admin'} = 1;
 	     }
 	     foreach my $list (@{$param->{'get_which_editor'}}) {
-		 my $l = $list->{'name'};
-
-		 $param->{'which_info'}{$l}{'subject'} = $list->{'admin'}{'subject'};
-		 $param->{'which_info'}{$l}{'host'} = $list->{'admin'}{'host'};
+		 my $l = $list->name;
+		 $param->{'which_info'}{$l}{'subject'} = $list->subject;
+		 $param->{'which_info'}{$l}{'host'} = $list->host;
 		 $param->{'which_info'}{$l}{'info'} = 1;
 		 $param->{'which_info'}{$l}{'admin'} = 1;
 	     }
@@ -4023,23 +4022,21 @@ sub do_renewpasswd {
      $param->{'get_which'} = undef ;
      $param->{'which'} = undef ;
 
-     foreach my $role ('member','owner','editor') {
-
-	 foreach my $list ( &List::get_which($param->{'user'}{'email'}, $robot, $role) ){ 	    
-	     my $l = $list->{'name'};
-
-	     my $result = $list->check_list_authz('visibility', $param->{'auth_method'},
-						  {'sender' =>$param->{'user'}{'email'} ,
+    foreach my $role ('member', 'owner', 'editor') {
+	foreach my $list (&List::get_which($param->{'user'}{'email'}, $robot, $role)) {
+	    my $l = $list->name;
+	    my $result = $list->check_list_authz('visibility', $param->{'auth_method'},
+						 { 'sender' => $param->{'user'}{'email'},
 						   'remote_host' => $param->{'remote_host'},
-						   'remote_addr' => $param->{'remote_addr'}});
-	     
+						   'remote_addr' => $param->{'remote_addr'} });
+
 	     my $r_action;
-	     $r_action = $result->{'action'} if (ref($result) eq 'HASH');
-	     
+	     $r_action = $result->{'action'} if ref($result) eq 'HASH';
+
 	     next unless ($r_action =~ /do_it/);
 
-	     $param->{'which'}{$l}{'subject'} = $list->{'admin'}{'subject'};
-	     $param->{'which'}{$l}{'host'} = $list->{'admin'}{'host'};
+	     $param->{'which'}{$l}{'subject'} = $list->subject;
+	     $param->{'which'}{$l}{'host'} = $list->host;
 
 	     if ($role eq 'member') {
 		 push @{$param->{'get_which'}}, $list;
@@ -4051,11 +4048,9 @@ sub do_renewpasswd {
 
 	     ## For compatibility concerns (3.0)
 	     ## To be deleted one of these day
-	     $param->{$role}{$l}{'subject'} = $list->{'admin'}{'subject'};
-	     $param->{$role}{$l}{'host'} = $list->{'admin'}{'host'};
-
+	     $param->{$role}{$l}{'subject'} = $list->subject;
+	     $param->{$role}{$l}{'host'} = $list->host;
 	 }
-
      }
      return 1;
  }
@@ -5341,7 +5336,9 @@ sub do_family_signoff {
 	&wwslog('err','do_signoff: user %s tried to unsubscribe address %s from family %s',$session->{'email'}, $in{'email'},$in {'family'});
 	return undef;
     }
-    unless (List::insert_delete_exclusion($in{'email'},&SympaSession::get_random(),$robot,'insert',$in{'family'})) {
+
+    my $family = new Family($param->{'family'}, $robot);
+    unless ($family->insert_delete_exclusion($in{'email'}, 'insert')) {
 	&report::reject_report_web('user','cannot_do_signoff');
 	&wwslog('err','do_signoff: Unsubscription of address %s from family %s failed.',$in{'email'},$in {'family'});
 	return undef;
@@ -9727,8 +9724,8 @@ sub do_edit_list {
     
     ## Check if the list belong to a family.
     my $family;
-    if (defined $list->{'admin'}{'family_name'}) {
-	unless ($family = $list->get_family()) {
+    if (defined $list->family_name) {
+	unless ($family = $list->family) {
 	    &report::reject_report_web('intern','unable_get_family',{},$param->{'action'},$list,$param->{'user'}{'email'},$robot);	
 	    &wwslog('info','do_edit_list : impossible to get list %s\'s family',$list->{'name'});
 	    &web_db_log({'status' => 'error',
@@ -10479,7 +10476,7 @@ Prepares config data to be sent in the edition form. Adds to the parameters arra
 
 =item * List::by_order
 
-=item * List::get_family
+=item * List::family
 
 =item * List::load_topics
 
@@ -10506,12 +10503,12 @@ sub _prepare_edit_form {
     my $is_form_editable = '0';
 
     ## If the list belongs to a family, check if the said family can be retrieved.
-    if (defined $list_config->{'family_name'}) {
-	unless ($family = $list->get_family()) {
+    if (defined $list->family_name) {
+	unless ($family = $list->family) {
 	    &report::reject_report_web('intern','unable_get_family',{},$param->{'action'},$list,$param->{'user'}{'email'},$robot);
-	    &wwslog('info','_prepare_edit_form : impossible to get list %s\'s family',$list->{'name'});
+	    &wwslog('info','_prepare_edit_form : impossible to get list %s\'s family',$list->name);
 	    return undef;
-	}          
+	}
     }
 
     ## For each parameter defined in List.pm, retrieve and prepare for editing
@@ -11140,7 +11137,7 @@ sub do_purge_list {
 	 &web_db_log({'status' => 'error',
 		      'error_type' => 'no_subscribers'});
      }
-     my @users = &List::_load_users_file("$list->{'dir'}/subscribers.closed.dump");
+     my @users = &List::_load_list_members_file("$list->{'dir'}/subscribers.closed.dump");
      ## Insert users in database
      foreach my $user (@users) {
 	 $list->add_user($user);
@@ -15788,7 +15785,7 @@ sub do_suspend_request {
 	my $member_info = $list->get_list_member($param->{'user'}{'email'});
 	if(($member_info->{'enddate'} < time) && ($member_info->{'enddate'})){
 	    ## If end date is < time, update the BDD by deleting the suspending's data
-	    &List::restore_suspended_subscription($param->{'user'}{'email'},$list->{'name'},$list->{'domain'});
+	    $list->restore_suspended_subscription($param->{'user'}{'email'});
 	}
 	my $final_start_date = gettext_strftime "%d %b %Y", localtime($member_info->{'startdate'});
 	my $final_end_date;
@@ -15929,13 +15926,15 @@ sub do_suspend_request_action {
 	}
 	
 	## Suspend subscription
-	foreach my $list (@list_selected){
-	    unless(&List::suspend_subscription($param->{'user'}{'email'}, $list, $data, $robot)){
+	foreach my $line (@list_selected){
+	    my $list = new List($line, $robot);
+	    next unless $list;
+	    unless ($list->suspend_subscription($param->{'user'}{'email'}, $data)) {
 		&wwslog('info','Can\'t do List suspend_subscription');
 		return 'suspend_request';
 	    }
 	}
-	
+
 	&report::notice_report_web('performed',{},$in{'sub_action'});
     }
     ## Restore suspended subscription
@@ -15944,7 +15943,9 @@ sub do_suspend_request_action {
 	# to renew membership lists selected
 	@lists = split /\0/, $in{'listname'};
 	foreach my $line (@lists) {
-	    &List::restore_suspended_subscription($param->{'user'}{'email'}, $line, $robot); 
+	    my $list = new List($line, $robot);
+	    next unless $list;
+	    $list->restore_suspended_subscription($param->{'user'}{'email'});
 	}
 
 	if($lists[0] eq ''){
@@ -16401,38 +16402,35 @@ sub do_send_mail {
 	 return undef;
      }
 
-     foreach my $role ('member','owner','editor') {
-	 foreach my $list ( &List::get_which($in{'email'},$robot, $role) ) {
-	     my $l = $list->{'name'};
+    foreach my $role ('member', 'owner', 'editor') {
+	foreach my $list (&List::get_which($in{'email'}, $robot, $role)) {
+	    next unless defined $list;
 
-	     next unless (defined $list);
-	     $param->{'which'}{$l}{'subject'} = $list->{'admin'}{'subject'};
-	     $param->{'which'}{$l}{'host'} = $list->{'admin'}{'host'};
+	    my $l = $list->name;
+	    $param->{'which'}{$l}{'subject'} = $list->subject;
+	    $param->{'which'}{$l}{'host'} = $list->host;
 
-	     # show the requestor role not the requested one
-	     if ( ($list->am_i('owner',$param->{'user'}{'email'}) || $list->am_i('editor',$param->{'user'}{'email'})) ) {
-		 $param->{'which'}{$l}{'admin'} = 1;
-	     }
+	    # show the requestor role not the requested one
+	    if (($list->am_i('owner', $param->{'user'}{'email'}) || $list->am_i('editor', $param->{'user'}{'email'}))) {
+		$param->{'which'}{$l}{'admin'} = 1;
+	    }
 
-	     if ($role eq 'member') {
-		 $param->{'which'}{$l}{'is_member'} = 1;
-		 $param->{'which'}{$l}{'reception'} = $list->{'user'}{'reception'};
-		 $param->{'which'}{$l}{'include_source'} = $list->{'user'}{'include_source'};
-		 $param->{'which'}{$l}{'bounce'} = $list->{'user'}{'bounce'} ;
-		 $param->{'which'}{$l}{'topic'} = $list->{'user'}{'topic'} ; 
-		 $param->{'which'}{$l}{'included'} =  $list->{'user'}{'included'} if ($list->{'user'}{'included'} == 1)  ;
-		 $param->{'which'}{$l}{'subscribed'} = $list->{'user'}{'subscribed'} if ($list->{'user'}{'subscribed'} == 1);
-		 my $un = $list->{'user'}{'subscribed'};
-#		 $param->{'which'}{$l}{'subscribed'} = 1;
+	    if ($role eq 'member') {
+		my @u = (%{$list->user('member', $in{'email'})});
+		$param->{'which'}{$l} = { @u };
+		$param->{'which'}{$l}{'is_member'} = 1;
+		$param->{'which'}{$l}{'include_source'} =
+		    $param->{'which'}{$l}{'id'}; # compat. (<=6.1.x)
+		$param->{'which'}{$l}{'topic'} =
+		    $param->{'which'}{$l}{'topics'}; # compat. (<=6.1.x)
+	    } elsif  ($role eq 'owner') {
+		$param->{'which'}{$l}{'is_owner'} = 1;
+	    } elsif  ($role eq 'editor') {
+		$param->{'which'}{$l}{'is_editor'} = 1;
+	    }
+	}
+    }
 
-	     }elsif  ($role eq 'owner') {
-		 $param->{'which'}{$l}{'is_owner'} = 1;
-	     }elsif  ($role eq 'editor') {
-		 $param->{'which'}{$l}{'is_editor'} = 1;
-	     }
-	 }
-     }
-     
      $param->{'email'} = $in{'email'};
 
      unless (defined $param->{'which'}) {

@@ -1658,6 +1658,7 @@ Returns a ref to a hash whose keys are this family's lists' names. They are asso
 =over 
 
 =item * I<$self>, the Family object
+
 =back 
 
 =head3 Return 
@@ -2921,6 +2922,38 @@ sub is_allowed_to_create_automatic_lists {
     
     return 1;
 }
+
+## Handle exclusion table for family
+sub insert_delete_exclusion {
+    &Log::do_log('debug2', '(%s, %s, %s)', @_);
+    my $self = shift;
+    my $email = shift;
+    my $action = shift;
+
+    my $name = $self->{'name'};
+    my $robot = $self->{'robot'};
+
+    if ($action eq 'insert') {
+	##FXIME: Check if user belong to any list of family
+	my $date = time;
+
+	## Insert: family, user and date
+	unless (&SDM::do_query('INSERT INTO exclusion_table (list_exclusion, family_exclusion, robot_exclusion, user_exclusion, date_exclusion) VALUES (%s, %s, %s, %s, %s)', &SDM::quote(':'), &SDM::quote($name), &SDM::quote($robot), &SDM::quote($email), &SDM::quote($date))) {
+	    &Log::do_log('err','Unable to exclude user %s from family %s@%s', $email, $name, $robot);
+	    return undef;
+	}
+	return 1;
+    } elsif ($action eq 'delete') {
+	##FIXME: Not implemented yet.
+	return undef;
+    } else {
+	&Log::do_log('err', 'Unknown action %s', $action);
+	return undef;
+    }
+   
+    return 1;
+}
+
 =pod 
 
 =head1 AUTHORS 
