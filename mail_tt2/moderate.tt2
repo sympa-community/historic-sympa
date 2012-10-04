@@ -46,4 +46,3 @@ X-Sympa-Attach: Yes
 --[% boundary %]--
 [%- END -%]
 [% END -%]
-[% END -%]
