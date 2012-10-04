@@ -27,11 +27,15 @@ msgstr ""
 msgid "Mailing lists categories"
 msgstr ""
 
-#: ../web_tt2/home.tt2:17
+#: ../web_tt2/home.tt2:28 ../web_tt2/menu.tt2:16
+msgid "List of lists"
+msgstr ""
+
+#: ../web_tt2/home.tt2:36
 msgid "Others"
 msgstr ""
 
-#: ../web_tt2/home.tt2:42
+#: ../web_tt2/home.tt2:64
 msgid "RSS news"
 msgstr ""
 
@@ -68,15 +72,11 @@ msgstr ""
 msgid "Sympa admin"
 msgstr ""
 
-#: ../web_tt2/menu.tt2:16
-msgid "List of lists"
-msgstr ""
-
 #: ../web_tt2/menu.tt2:19
 msgid "Home"
 msgstr ""
 
-#: ../web_tt2/arc.tt2:4 ../web_tt2/arc_manage.tt2:4 ../web_tt2/arcsearch_form.tt2:4 ../web_tt2/compose_mail.tt2:12 ../web_tt2/compose_mail.tt2:5 ../web_tt2/create_list_request.tt2:26 ../web_tt2/create_list_request.tt2:33 ../web_tt2/create_list_request.tt2:38 ../web_tt2/create_list_request.tt2:42 ../web_tt2/create_list_request.tt2:68 ../web_tt2/create_list_request.tt2:73 ../web_tt2/create_list_request.tt2:93 ../web_tt2/d_control.tt2:5 ../web_tt2/d_editfile.tt2:12 ../web_tt2/d_editfile.tt2:14 ../web_tt2/d_properties.tt2:10 ../web_tt2/d_properties.tt2:6 ../web_tt2/d_properties.tt2:8 ../web_tt2/d_read.tt2:22 ../web_tt2/d_read.tt2:47 ../web_tt2/edit_list_request.tt2:39 ../web_tt2/edit_list_request.tt2:4 ../web_tt2/editfile.tt2:4 ../web_tt2/menu.tt2:22 ../web_tt2/modindex.tt2:192 ../web_tt2/modindex.tt2:9 ../web_tt2/pref.tt2:4 ../web_tt2/rename_list_request.tt2:3 ../web_tt2/review.tt2:5 ../web_tt2/reviewbouncing.tt2:3 ../web_tt2/suboptions.tt2:21 ../web_tt2/suspend_request.tt2:5
+#: ../web_tt2/arc.tt2:4 ../web_tt2/arc_manage.tt2:4 ../web_tt2/arcsearch_form.tt2:4 ../web_tt2/compose_mail.tt2:12 ../web_tt2/compose_mail.tt2:5 ../web_tt2/create_list_request.tt2:113 ../web_tt2/create_list_request.tt2:26 ../web_tt2/create_list_request.tt2:33 ../web_tt2/create_list_request.tt2:38 ../web_tt2/create_list_request.tt2:42 ../web_tt2/create_list_request.tt2:68 ../web_tt2/create_list_request.tt2:88 ../web_tt2/d_control.tt2:5 ../web_tt2/d_editfile.tt2:12 ../web_tt2/d_editfile.tt2:14 ../web_tt2/d_properties.tt2:10 ../web_tt2/d_properties.tt2:6 ../web_tt2/d_properties.tt2:8 ../web_tt2/d_read.tt2:22 ../web_tt2/d_read.tt2:47 ../web_tt2/edit_list_request.tt2:39 ../web_tt2/edit_list_request.tt2:4 ../web_tt2/editfile.tt2:4 ../web_tt2/menu.tt2:22 ../web_tt2/modindex.tt2:192 ../web_tt2/modindex.tt2:9 ../web_tt2/pref.tt2:4 ../web_tt2/rename_list_request.tt2:3 ../web_tt2/review.tt2:5 ../web_tt2/reviewbouncing.tt2:3 ../web_tt2/suboptions.tt2:21 ../web_tt2/suspend_request.tt2:5
 msgid "Help"
 msgstr ""
 
@@ -400,7 +400,7 @@ msgstr ""
 msgid "Add subscribers"
 msgstr ""
 
-#: ../web_tt2/add_request.tt2:13 ../web_tt2/editsubscriber.tt2:62 ../web_tt2/review.tt2:106 ../web_tt2/review.tt2:140 ../web_tt2/review.tt2:74 ../web_tt2/reviewbouncing.tt2:127
+#: ../web_tt2/add_request.tt2:13 ../web_tt2/editsubscriber.tt2:62 ../web_tt2/review.tt2:106 ../web_tt2/review.tt2:140 ../web_tt2/review.tt2:74 ../web_tt2/reviewbouncing.tt2:127 ../web_tt2/search_user.tt2:56
 msgid "quiet"
 msgstr ""
 
@@ -937,7 +937,7 @@ msgstr ""
 msgid "site"
 msgstr ""
 
-#: ../web_tt2/copy_template.tt2:20 ../web_tt2/ls_templates.tt2:42
+#: ../web_tt2/copy_template.tt2:20 ../web_tt2/ls_templates.tt2:42 ../web_tt2/show_sessions.tt2:3
 msgid "robot"
 msgstr ""
 
@@ -1013,31 +1013,31 @@ msgstr ""
 msgid "The list's subject"
 msgstr ""
 
-#: ../web_tt2/create_list_request.tt2:73
+#: ../web_tt2/create_list_request.tt2:88
 msgid "List classification in the directory"
 msgstr ""
 
-#: ../web_tt2/create_list_request.tt2:74
+#: ../web_tt2/create_list_request.tt2:89
 msgid "Topics:"
 msgstr ""
 
-#: ../web_tt2/create_list_request.tt2:76
+#: ../web_tt2/create_list_request.tt2:91
 msgid "--Select a topic--"
 msgstr ""
 
-#: ../web_tt2/create_list_request.tt2:89 ../web_tt2/javascript.tt2:101
+#: ../web_tt2/create_list_request.tt2:107 ../web_tt2/javascript.tt2:101
 msgid "Other"
 msgstr ""
 
-#: ../web_tt2/create_list_request.tt2:93
+#: ../web_tt2/create_list_request.tt2:113
 msgid "A few lines describing the list"
 msgstr ""
 
-#: ../web_tt2/create_list_request.tt2:94
+#: ../web_tt2/create_list_request.tt2:114
 msgid "Description:"
 msgstr ""
 
-#: ../web_tt2/create_list_request.tt2:97
+#: ../web_tt2/create_list_request.tt2:117
 msgid "Submit your creation request"
 msgstr ""
 
@@ -1133,8 +1133,10 @@ msgstr ""
 msgid "Publish"
 msgstr ""
 
-#: ../web_tt2/d_editfile.tt2:58
+#: ../web_tt2/d_editfile.tt2:58 ../web_tt2/editfile.tt2:9
 #. (visible_path)
+#. (complete)
+#. (file)
 msgid "Edit the file %1"
 msgstr ""
 
@@ -1206,7 +1208,7 @@ msgstr ""
 msgid "Do you really want to delete %1?"
 msgstr ""
 
-#: ../web_tt2/d_read.tt2:116 ../web_tt2/d_read.tt2:118 ../web_tt2/d_read.tt2:253 ../web_tt2/d_read.tt2:255 ../web_tt2/d_read.tt2:27 ../web_tt2/search_user.tt2:56
+#: ../web_tt2/d_read.tt2:116 ../web_tt2/d_read.tt2:118 ../web_tt2/d_read.tt2:253 ../web_tt2/d_read.tt2:255 ../web_tt2/d_read.tt2:27 ../web_tt2/search_user.tt2:55
 msgid "delete"
 msgstr ""
 
@@ -1234,7 +1236,7 @@ msgstr ""
 msgid "Last update"
 msgstr ""
 
-#: ../web_tt2/d_read.tt2:75 ../web_tt2/editfile.tt2:29 ../web_tt2/editfile.tt2:30 ../web_tt2/editfile.tt2:34 ../web_tt2/editfile.tt2:35 ../web_tt2/editfile.tt2:36 ../web_tt2/editfile.tt2:38 ../web_tt2/editfile.tt2:43 ../web_tt2/editfile.tt2:44 ../web_tt2/editfile.tt2:48 ../web_tt2/editfile.tt2:49 ../web_tt2/manage_template.tt2:35 ../web_tt2/manage_template.tt2:56 ../web_tt2/serveradmin.tt2:149 ../web_tt2/serveradmin.tt2:162
+#: ../web_tt2/d_read.tt2:75 ../web_tt2/editfile.tt2:31 ../web_tt2/editfile.tt2:34 ../web_tt2/editfile.tt2:47 ../web_tt2/editfile.tt2:50 ../web_tt2/editfile.tt2:53 ../web_tt2/editfile.tt2:57 ../web_tt2/editfile.tt2:69 ../web_tt2/editfile.tt2:72 ../web_tt2/editfile.tt2:84 ../web_tt2/editfile.tt2:87 ../web_tt2/editfile.tt2:91 ../web_tt2/manage_template.tt2:35 ../web_tt2/manage_template.tt2:56 ../web_tt2/serveradmin.tt2:149 ../web_tt2/serveradmin.tt2:162
 msgid "Edit"
 msgstr ""
 
@@ -1420,74 +1422,78 @@ msgstr ""
 msgid "Edit list templates"
 msgstr ""
 
-#: ../web_tt2/editfile.tt2:14
+#: ../web_tt2/editfile.tt2:15
 msgid "Save"
 msgstr ""
 
-#: ../web_tt2/editfile.tt2:22
+#: ../web_tt2/editfile.tt2:23
 msgid "You can edit several messages/files associated with your list:"
 msgstr ""
 
-#: ../web_tt2/editfile.tt2:27
+#: ../web_tt2/editfile.tt2:28
 msgid "HTML pages"
 msgstr ""
 
-#: ../web_tt2/editfile.tt2:29
+#: ../web_tt2/editfile.tt2:31
 msgid "List homepage: HTML text to describe the list. It is printed on the right-hand side of the main list page. (default for this is the list description)"
 msgstr ""
 
-#: ../web_tt2/editfile.tt2:30
+#: ../web_tt2/editfile.tt2:34
 msgid "List description: This text is sent as an answer to the mail command INFO. It can also be included in the <em>Welcome message</em>."
 msgstr ""
 
-#: ../web_tt2/editfile.tt2:32
+#: ../web_tt2/editfile.tt2:44
 msgid "Automatic messages"
 msgstr ""
 
-#: ../web_tt2/editfile.tt2:34
+#: ../web_tt2/editfile.tt2:47
 msgid "Welcome message: This message is sent to new subscribers. It can be a full MIME structured message (only for MIME gurus)."
 msgstr ""
 
-#: ../web_tt2/editfile.tt2:35
+#: ../web_tt2/editfile.tt2:50
 msgid "Rejection message: when a message is rejected by list editor, a notification can be sent to the original author. You may prepare various rejection messages."
 msgstr ""
 
-#: ../web_tt2/editfile.tt2:37
+#: ../web_tt2/editfile.tt2:54
 msgid ""
 "Remind message: This message is sent to each subscriber\n"
 "when using the command  REMIND. It's very useful to help people who are confused about their own subscription emails or people who are not able to unsubscribe themselves."
 msgstr ""
 
-#: ../web_tt2/editfile.tt2:39
+#: ../web_tt2/editfile.tt2:58
 msgid ""
 "Subscribing invitation message: sent to a person if someone  \n"
 "uses the INVITE command to invite someone to subscribe."
 msgstr ""
 
-#: ../web_tt2/editfile.tt2:41
+#: ../web_tt2/editfile.tt2:66
 msgid "Added in distributed messages"
 msgstr ""
 
-#: ../web_tt2/editfile.tt2:43
+#: ../web_tt2/editfile.tt2:69
 msgid "Message footer: If this file is not empty, it is added as a MIME attachment at the end of each message distributed to the list."
 msgstr ""
 
-#: ../web_tt2/editfile.tt2:44
+#: ../web_tt2/editfile.tt2:72
 msgid "Message header: If this file is not empty, it is added as a MIME attachment at the beginning of each message distributed to the list."
 msgstr ""
 
-#: ../web_tt2/editfile.tt2:46
+#: ../web_tt2/editfile.tt2:81
 msgid "More"
 msgstr ""
 
-#: ../web_tt2/editfile.tt2:48
+#: ../web_tt2/editfile.tt2:84
 msgid "Unsubscribe message: This message is sent when users leave the list."
 msgstr ""
 
-#: ../web_tt2/editfile.tt2:50
+#: ../web_tt2/editfile.tt2:88
 msgid ""
 "Deletion message: This message is sent to users when you\n"
 "remove them from the list using the DEL command (unless you hit the Quiet button)."
+msgstr ""
+
+#: ../web_tt2/editfile.tt2:91
+msgid "Virus infection message: This message is sent to the sender of a message in which a virus was found."
 msgstr ""
 
 #: ../web_tt2/edit_list_request.tt2:4
@@ -3617,6 +3623,26 @@ msgstr ""
 msgid "Sessions list"
 msgstr ""
 
+#: ../web_tt2/show_sessions.tt2:3
+msgid "last hit date"
+msgstr ""
+
+#: ../web_tt2/show_sessions.tt2:3
+msgid "start date"
+msgstr ""
+
+#: ../web_tt2/show_sessions.tt2:3
+msgid "hit count"
+msgstr ""
+
+#: ../web_tt2/show_sessions.tt2:3
+msgid "remote address"
+msgstr ""
+
+#: ../web_tt2/show_sessions.tt2:3
+msgid "User email"
+msgstr ""
+
 #: ../web_tt2/sigrequest.tt2:4
 #. (list)
 msgid "You asked to be unsubscribed  from list %1"
@@ -4052,6 +4078,10 @@ msgstr ""
 msgid "%1's picture"
 msgstr ""
 
+#: ../web_tt2/subscriber_table.tt2:137 ../web_tt2/subscriber_table.tt2:139
+msgid "subscribed"
+msgstr ""
+
 #: ../web_tt2/suspend_request.tt2:13
 msgid "Suspended"
 msgstr ""
@@ -4229,7 +4259,7 @@ msgstr ""
 msgid "Search period: "
 msgstr ""
 
-#: ../web_tt2/viewlogs.tt2:113 ../wwsympa/wwsympa.fcgi.in:16248
+#: ../web_tt2/viewlogs.tt2:113 ../wwsympa/wwsympa.fcgi.in:16244
 #. (date_from_formated)
 #. (date_to_formated)
 #. This entry is a date/time format
@@ -6261,6 +6291,12 @@ msgstr ""
 msgid "To tag the message in list %1 for the appropriate topic, please use the following link:"
 msgstr ""
 
+#: ../mail_tt2/moderate.tt2:27
+msgid ""
+"Because the new message is suspected to be a spam it is not attached to this one. You must use\n"
+"the web interface to reject or validate it."
+msgstr ""
+
 #: ../mail_tt2/moderate.tt2:29
 #. (list.name)
 msgid "To distribute the attached message in list %1:"
@@ -7278,7 +7314,7 @@ msgstr ""
 msgid "%d %b %Y  %H:%M"
 msgstr ""
 
-#: ../src/lib/Commands.pm:963 ../wwsympa/wwsympa.fcgi.in:9887
+#: ../src/lib/Commands.pm:963 ../wwsympa/wwsympa.fcgi.in:9883
 #. This entry is a date/time format
 #. Check the strftime manpage for format details : http://docs.freebsd.org/info/gawk/gawk.info.Time_Functions.html
 msgid "%A"
@@ -7293,7 +7329,7 @@ msgstr ""
 msgid "Error at line %d: %s"
 msgstr ""
 
-#: ../src/lib/Family.pm:2598 ../src/lib/Family.pm:395 ../src/lib/Family.pm:672 ../src/lib/List.pm:1896 ../wwsympa/Auth.pm:459 ../wwsympa/wwsympa.fcgi.in:1090 ../wwsympa/wwsympa.fcgi.in:2646 ../wwsympa/wwsympa.fcgi.in:2921 ../wwsympa/wwsympa.fcgi.in:2932 ../wwsympa/wwsympa.fcgi.in:3053
+#: ../src/lib/Family.pm:2598 ../src/lib/Family.pm:395 ../src/lib/Family.pm:672 ../src/lib/List.pm:1896 ../wwsympa/Auth.pm:459 ../wwsympa/wwsympa.fcgi.in:1090 ../wwsympa/wwsympa.fcgi.in:2646 ../wwsympa/wwsympa.fcgi.in:2921 ../wwsympa/wwsympa.fcgi.in:2932 ../wwsympa/wwsympa.fcgi.in:3054
 #. This entry is a date/time format
 #. Check the strftime manpage for format details : http://docs.freebsd.org/info/gawk/gawk.info.Time_Functions.html
 msgid "%d %b %Y at %H:%M:%S"
@@ -7991,7 +8027,7 @@ msgstr ""
 msgid "%a, %d %b %Y"
 msgstr ""
 
-#: ../src/lib/List.pm:3054 ../src/lib/List.pm:3055 ../src/lib/List.pm:3059 ../wwsympa/wwsympa.fcgi.in:11064 ../wwsympa/wwsympa.fcgi.in:11133 ../wwsympa/wwsympa.fcgi.in:11335 ../wwsympa/wwsympa.fcgi.in:11682 ../wwsympa/wwsympa.fcgi.in:15133 ../wwsympa/wwsympa.fcgi.in:15140 ../wwsympa/wwsympa.fcgi.in:15854 ../wwsympa/wwsympa.fcgi.in:16630 ../wwsympa/wwsympa.fcgi.in:16631 ../wwsympa/wwsympa.fcgi.in:4331 ../wwsympa/wwsympa.fcgi.in:4384 ../wwsympa/wwsympa.fcgi.in:4955 ../wwsympa/wwsympa.fcgi.in:4956 ../wwsympa/wwsympa.fcgi.in:6521 ../wwsympa/wwsympa.fcgi.in:7543 ../wwsympa/wwsympa.fcgi.in:8097 ../wwsympa/wwsympa.fcgi.in:8144 ../wwsympa/wwsympa.fcgi.in:8146 ../wwsympa/wwsympa.fcgi.in:8624 ../wwsympa/wwsympa.fcgi.in:8625 ../wwsympa/wwsympa.fcgi.in:8659 ../wwsympa/wwsympa.fcgi.in:8660 ../wwsympa/wwsympa.fcgi.in:8839 ../wwsympa/wwsympa.fcgi.in:8840
+#: ../src/lib/List.pm:3054 ../src/lib/List.pm:3055 ../src/lib/List.pm:3059 ../wwsympa/wwsympa.fcgi.in:11060 ../wwsympa/wwsympa.fcgi.in:11129 ../wwsympa/wwsympa.fcgi.in:11331 ../wwsympa/wwsympa.fcgi.in:11678 ../wwsympa/wwsympa.fcgi.in:15129 ../wwsympa/wwsympa.fcgi.in:15136 ../wwsympa/wwsympa.fcgi.in:15850 ../wwsympa/wwsympa.fcgi.in:16626 ../wwsympa/wwsympa.fcgi.in:16627 ../wwsympa/wwsympa.fcgi.in:4347 ../wwsympa/wwsympa.fcgi.in:4400 ../wwsympa/wwsympa.fcgi.in:4971 ../wwsympa/wwsympa.fcgi.in:4972 ../wwsympa/wwsympa.fcgi.in:6559 ../wwsympa/wwsympa.fcgi.in:7582 ../wwsympa/wwsympa.fcgi.in:8133 ../wwsympa/wwsympa.fcgi.in:8180 ../wwsympa/wwsympa.fcgi.in:8182 ../wwsympa/wwsympa.fcgi.in:8620 ../wwsympa/wwsympa.fcgi.in:8621 ../wwsympa/wwsympa.fcgi.in:8655 ../wwsympa/wwsympa.fcgi.in:8656 ../wwsympa/wwsympa.fcgi.in:8835 ../wwsympa/wwsympa.fcgi.in:8836
 #. This entry is a date/time format
 #. Check the strftime manpage for format details : http://docs.freebsd.org/info/gawk/gawk.info.Time_Functions.html
 msgid "%d %b %Y"
@@ -8005,7 +8041,7 @@ msgid ""
 "for variable %s.\n"
 msgstr ""
 
-#: ../src/lib/mail.pm:829
+#: ../src/lib/mail.pm:837
 msgid "Unable to create a channel in smtpto: %s"
 msgstr ""
 
@@ -8103,29 +8139,29 @@ msgstr ""
 msgid "%H:%M:%S"
 msgstr ""
 
-#: ../wwsympa/SympaSession.pm:436 ../wwsympa/SympaSession.pm:437 ../wwsympa/wwsympa.fcgi.in:11916 ../wwsympa/wwsympa.fcgi.in:12049 ../wwsympa/wwsympa.fcgi.in:14362 ../wwsympa/wwsympa.fcgi.in:8054
+#: ../wwsympa/SympaSession.pm:436 ../wwsympa/SympaSession.pm:437 ../wwsympa/wwsympa.fcgi.in:11912 ../wwsympa/wwsympa.fcgi.in:12045 ../wwsympa/wwsympa.fcgi.in:14358 ../wwsympa/wwsympa.fcgi.in:8090
 #. This entry is a date/time format
 #. Check the strftime manpage for format details : http://docs.freebsd.org/info/gawk/gawk.info.Time_Functions.html
 msgid "%d %b %y  %H:%M"
 msgstr ""
 
-#: ../wwsympa/wwsympa.fcgi.in:15315
+#: ../wwsympa/wwsympa.fcgi.in:15311
 msgid "Your unsubscription request to list %s was sent to the list owner."
 msgstr ""
 
-#: ../wwsympa/wwsympa.fcgi.in:15317
+#: ../wwsympa/wwsympa.fcgi.in:15313
 msgid "You were successfully unsubscribed from list %s."
 msgstr ""
 
-#: ../wwsympa/wwsympa.fcgi.in:15321
+#: ../wwsympa/wwsympa.fcgi.in:15317
 msgid "Unsubscription from list %s denied: Unsubscription from this list is closed."
 msgstr ""
 
-#: ../wwsympa/wwsympa.fcgi.in:15323
+#: ../wwsympa/wwsympa.fcgi.in:15319
 msgid "Unsubscription from list %s failed."
 msgstr ""
 
-#: ../wwsympa/wwsympa.fcgi.in:16230 ../wwsympa/wwsympa.fcgi.in:16231
+#: ../wwsympa/wwsympa.fcgi.in:16226 ../wwsympa/wwsympa.fcgi.in:16227
 #. This entry is a date/time format
 #. Check the strftime manpage for format details : http://docs.freebsd.org/info/gawk/gawk.info.Time_Functions.html
 msgid "%Y-%m-%d-%H-%M-%S"
