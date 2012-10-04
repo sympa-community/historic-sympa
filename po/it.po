@@ -10253,15 +10253,6 @@ msgid ""
 "%1 \"%2\" tagged notifications adressed to you are attached to this message."
 msgstr ""
 
-#: ../mail_tt2/moderate.tt2:23
-msgid ""
-"Because the new message is suspected to be a spam it is not attached to this "
-"one. You must use the web interface to reject or validate it."
-msgstr ""
-"Poiché il nuovo messaggio è sospetto di spam non è stato allegato al "
-"presente messaggio. Devi usare l'interfaccia web per convalidarlo o "
-"rifiutarlo."
-
 #: ../src/lib/confdef.pm:575
 msgid "Whether or not to cache lists in the database"
 msgstr ""
@@ -10269,6 +10260,14 @@ msgstr ""
 #: ../src/lib/List.pm:1707 ../src/lib/List.pm:1871 ../src/lib/List.pm:1954
 msgid "Name of email entry"
 msgstr ""
+
+#~ msgid ""
+#~ "Because the new message is suspected to be a spam it is not attached to "
+#~ "this one. You must use the web interface to reject or validate it."
+#~ msgstr ""
+#~ "Poiché il nuovo messaggio è sospetto di spam non è stato allegato al "
+#~ "presente messaggio. Devi usare l'interfaccia web per convalidarlo o "
+#~ "rifiutarlo."
 
 #~ msgid ""
 #~ "You <span style=\"font-weight: bold; font-size: 10px\">are</span> "

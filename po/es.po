@@ -9756,14 +9756,6 @@ msgid ""
 "%1 \"%2\" tagged notifications adressed to you are attached to this message."
 msgstr ""
 
-#: ../mail_tt2/moderate.tt2:23
-msgid ""
-"Because the new message is suspected to be a spam it is not attached to this "
-"one. You must use the web interface to reject or validate it."
-msgstr ""
-"Debido a que el nuevo mensaje es sospechoso de spam, no será adjuntado a "
-"este. Debe utilizar la interfaz web para rechazarlo o validarlo."
-
 #: ../src/lib/confdef.pm:871
 msgid ""
 "If set to unique, subcriber is removed if remind message bounce, use with "
@@ -10118,6 +10110,13 @@ msgstr ""
 #: ../src/lib/confdef.pm:662
 msgid "Plugin"
 msgstr ""
+
+#~ msgid ""
+#~ "Because the new message is suspected to be a spam it is not attached to "
+#~ "this one. You must use the web interface to reject or validate it."
+#~ msgstr ""
+#~ "Debido a que el nuevo mensaje es sospechoso de spam, no será adjuntado a "
+#~ "este. Debe utilizar la interfaz web para rechazarlo o validarlo."
 
 #~ msgid ""
 #~ "You <span style=\"font-weight: bold; font-size: 10px\">are</span> "

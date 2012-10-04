@@ -9661,18 +9661,17 @@ msgid ""
 "%1 \"%2\" tagged notifications adressed to you are attached to this message."
 msgstr ""
 
-#: ../mail_tt2/moderate.tt2:23
-msgid ""
-"Because the new message is suspected to be a spam it is not attached to this "
-"one. You must use the web interface to reject or validate it."
-msgstr ""
-"届いたメッセージはスパムの疑いがあるため、ここには添付してありません。拒否し"
-"たり受け付けたりするには、ウェブインタフェースを使ってください。"
-
 #: ../src/lib/List.pm:1334 ../src/lib/List.pm:1486 ../src/lib/List.pm:1563
 #: ../src/lib/List.pm:1719 ../src/lib/List.pm:1877 ../src/lib/List.pm:1960
 msgid "Time ranges when inclusion is not allowed"
 msgstr ""
+
+#~ msgid ""
+#~ "Because the new message is suspected to be a spam it is not attached to "
+#~ "this one. You must use the web interface to reject or validate it."
+#~ msgstr ""
+#~ "届いたメッセージはスパムの疑いがあるため、ここには添付してありません。拒否"
+#~ "したり受け付けたりするには、ウェブインタフェースを使ってください。"
 
 #~ msgid ""
 #~ "You <span style=\"font-weight: bold; font-size: 10px\">are</span> "

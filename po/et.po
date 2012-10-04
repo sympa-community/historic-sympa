@@ -9898,14 +9898,6 @@ msgid ""
 "Visit  %3/oauth_check/%2 to check the token state and renew it if necessary."
 msgstr ""
 
-#: ../mail_tt2/moderate.tt2:23
-msgid ""
-"Because the new message is suspected to be a spam it is not attached to this "
-"one. You must use the web interface to reject or validate it."
-msgstr ""
-"Kuna uus kiri võib olla rämpspost, siis seda ei lisatud sellele kirjale. Te "
-"peate kasutama veebilehte kirja kinnitamiseks või tagasilükkamiseks."
-
 #: ../src/lib/confdef.pm:451 ../src/lib/confdef.pm:845
 msgid "This is the default language used by Sympa"
 msgstr ""
@@ -10367,6 +10359,13 @@ msgstr ""
 #: ../src/lib/List.pm:7342
 msgid "Added %s users out of %s required."
 msgstr ""
+
+#~ msgid ""
+#~ "Because the new message is suspected to be a spam it is not attached to "
+#~ "this one. You must use the web interface to reject or validate it."
+#~ msgstr ""
+#~ "Kuna uus kiri võib olla rämpspost, siis seda ei lisatud sellele kirjale. "
+#~ "Te peate kasutama veebilehte kirja kinnitamiseks või tagasilükkamiseks."
 
 #~ msgid ""
 #~ "You <span style=\"font-weight: bold; font-size: 10px\">are</span> "

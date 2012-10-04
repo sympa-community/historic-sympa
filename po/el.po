@@ -9756,13 +9756,13 @@ msgstr "κανένα μήνυμα (χρήσιμο για περίοδο διακ
 msgid "you do not receive your own posts"
 msgstr "δεν θα λαμβάνετε τα δικά σας μηνύματα"
 
-#: ../mail_tt2/moderate.tt2:23
-msgid ""
-"Because the new message is suspected to be a spam it is not attached to this "
-"one. You must use the web interface to reject or validate it."
-msgstr ""
-"Επειδή το νέο μήνυμα μπορεί να είναι spam δεν προστέθηκε σε αυτό. Πρέπει να "
-"χρησιμοποιήσετε το περιβάλλον web για να το απορρίψετε ή να το εγκρίνετε."
+#~ msgid ""
+#~ "Because the new message is suspected to be a spam it is not attached to "
+#~ "this one. You must use the web interface to reject or validate it."
+#~ msgstr ""
+#~ "Επειδή το νέο μήνυμα μπορεί να είναι spam δεν προστέθηκε σε αυτό. Πρέπει "
+#~ "να χρησιμοποιήσετε το περιβάλλον web για να το απορρίψετε ή να το "
+#~ "εγκρίνετε."
 
 #~ msgid ""
 #~ "You <span style=\"font-weight: bold; font-size: 10px\">are</span> "
