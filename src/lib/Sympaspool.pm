@@ -469,7 +469,7 @@ sub clean {
     
     my $freshness_date = time - ($delay * 60 * 60 * 24);
 
-    my $sqlquery = "DELETE FROM 'spool_table' WHERE spoolname_spool ='$spoolname' AND date_spool < '$freshness_date' ";
+    my $sqlquery = sprintf "DELETE FROM spool_table WHERE spoolname_spool = %s AND date_spool < %s ",&SDM::quote($spoolname),&SDM::quote($freshness_date);
     if ($bad) {	
 	$sqlquery  = 	$sqlquery . " AND bad_spool IS NOTNULL ";
     }else{
@@ -573,9 +573,9 @@ sub _selectfields{
 
 #######################
 # Internal to ease SQL
-# return a SQL WHERE substring in ordder to select choosen fields from spool table 
-# selector is a hash where key is a column name and value is column value espected.**** 
-#   **** value can be prefixed with <,>,>=,<=, in that case the default comparator operator (=) is changed, I known this is dirty but I'am lazy :-(
+# return a SQL WHERE substring in order to select chosen fields from the spool table 
+# selector is a hash where key is a column name and value is column value expected.**** 
+#   **** value can be prefixed with <,>,>=,<=, in that case the default comparator operator (=) is changed, I known this is dirty but I'm lazy :-(
 sub _sqlselector {
 	
     my $selector = shift; 
