@@ -98,7 +98,7 @@ msgstr "Домашняя страница"
 #: ../web_tt2/d_editfile.tt2:14 ../web_tt2/d_properties.tt2:10
 #: ../web_tt2/d_properties.tt2:6 ../web_tt2/d_properties.tt2:8
 #: ../web_tt2/d_read.tt2:22 ../web_tt2/d_read.tt2:47
-#: ../web_tt2/edit_list_request.tt2:4 ../web_tt2/edit_list_request.tt2:40
+#: ../web_tt2/edit_list_request.tt2:4 ../web_tt2/edit_list_request.tt2:41
 #: ../web_tt2/editfile.tt2:4 ../web_tt2/menu.tt2:22
 #: ../web_tt2/modindex.tt2:145 ../web_tt2/modindex.tt2:6 ../web_tt2/pref.tt2:4
 #: ../web_tt2/rename_list_request.tt2:3 ../web_tt2/review.tt2:5
@@ -308,18 +308,10 @@ msgstr ""
 "полномочий."
 
 #: ../web_tt2/admin.tt2:9
-msgid "Customizing: "
-msgstr "Настройка: "
-
-#: ../web_tt2/admin.tt2:9
-msgid "Editing of various files and messages attached to your list."
-msgstr "Редактирование различных файлов и сообщений в списке рассылки."
-
-#: ../web_tt2/admin.tt2:10
 msgid "Manage subscribers:"
 msgstr "Управление подписчиками:"
 
-#: ../web_tt2/admin.tt2:10
+#: ../web_tt2/admin.tt2:9
 msgid ""
 "Allows you to add or delete list subscribers, moderate subscriptions and so "
 "on."
@@ -327,72 +319,72 @@ msgstr ""
 "Позволяет вам добавлять или удалять подписчиков рассылки, модерировать "
 "подписки и т. п."
 
-#: ../web_tt2/admin.tt2:12
+#: ../web_tt2/admin.tt2:11
 msgid "Blacklist:"
 msgstr "Чёрный список:"
 
-#: ../web_tt2/admin.tt2:12
+#: ../web_tt2/admin.tt2:11
 msgid "Handles the set of black-listed mail addresses for this list."
 msgstr ""
 "Обрабатывает набор адресов, внесённых в чёрный список для этой рассылки."
 
-#: ../web_tt2/admin.tt2:15
+#: ../web_tt2/admin.tt2:14
 msgid "Manage archives:"
 msgstr "Управление архивами:"
 
-#: ../web_tt2/admin.tt2:15
+#: ../web_tt2/admin.tt2:14
 msgid "Allows you to download and delete list archives."
 msgstr "Позволяет вам загружать и удалять архивы рассылки."
 
-#: ../web_tt2/admin.tt2:18
+#: ../web_tt2/admin.tt2:17
 msgid "Bounces:"
 msgstr "Возвращено сообщений:"
 
-#: ../web_tt2/admin.tt2:18
+#: ../web_tt2/admin.tt2:17
 msgid "Manages non-delivery reports (also called bounces)."
 msgstr ""
 "Управление отчётами о недоставке сообщений (возвращающимися сообщениями)"
 
-#: ../web_tt2/admin.tt2:21
+#: ../web_tt2/admin.tt2:20
 msgid "Logs:"
 msgstr "Журналы:"
 
-#: ../web_tt2/admin.tt2:21
+#: ../web_tt2/admin.tt2:20
 msgid "A tool for exploring the list logs."
 msgstr "Инструмент для работы с журналами рассылки."
 
-#: ../web_tt2/admin.tt2:26
+#: ../web_tt2/admin.tt2:25
 msgid "Drastic operations"
 msgstr "Серьёзные операции"
 
-#: ../web_tt2/admin.tt2:33 ../web_tt2/admin_menu.tt2:117
+#: ../web_tt2/admin.tt2:32 ../web_tt2/admin_menu.tt2:117
 #: ../web_tt2/admin_menu.tt2:119
 msgid "Restore List"
 msgstr "Восстановить рассылку"
 
 #. (list)
-#: ../web_tt2/admin.tt2:33
+#: ../web_tt2/admin.tt2:32
 msgid "Are you sure you wish to restore list %1?"
 msgstr "Вы уверены, что хотите восстановить рассылку %1?"
 
-#: ../web_tt2/admin.tt2:33
+#: ../web_tt2/admin.tt2:32
 msgid ""
 "This list is currently closed. Clicking this button will make it active "
 "again."
 msgstr ""
 "Эта рассылка сейчас закрыта. Щелчок по этой кнопке снова сделает её активной."
 
-#: ../web_tt2/admin.tt2:36 ../web_tt2/admin_menu.tt2:122
+#: ../web_tt2/admin.tt2:35 ../web_tt2/admin_menu.tt2:122
 #: ../web_tt2/admin_menu.tt2:124
 msgid "Remove List"
 msgstr "Удалить рассылку"
 
 #. (list)
-#: ../web_tt2/admin.tt2:36
+#: ../web_tt2/admin.tt2:35
 msgid "Are you sure you wish to close list %1?"
 msgstr "Вы уверены, что хотите закрыть рассылку %1?"
 
-#: ../web_tt2/admin.tt2:36
+#: ../web_tt2/admin.tt2:35
 msgid ""
 "Completely removes the current list. Listmaster privileges are required to "
 "restore a list."
@@ -400,12 +392,12 @@ msgstr ""
 "Полностью удаляет данный список рассылки. Чтобы восстановить рассылку, "
 "необходимы полномочия глобального администратора."
 
-#: ../web_tt2/admin.tt2:46 ../web_tt2/admin_menu.tt2:129
+#: ../web_tt2/admin.tt2:45 ../web_tt2/admin_menu.tt2:129
 #: ../web_tt2/admin_menu.tt2:131
 msgid "Rename List"
 msgstr "Переименовать рассылку"
 
-#: ../web_tt2/admin.tt2:46
+#: ../web_tt2/admin.tt2:45
 msgid ""
 "Allows you to change this list's name. Everything related to the list will "
 "be relabeled according to the new name, including the mail aliases and the "
@@ -415,25 +407,25 @@ msgstr ""
 "перемаркировано в соответствии с новым названием, включая почтовые алиасы и "
 "web-архивы."
 
-#: ../web_tt2/admin.tt2:59 ../web_tt2/admin_menu.tt2:96
+#: ../web_tt2/admin.tt2:58 ../web_tt2/admin_menu.tt2:96
 #: ../web_tt2/admin_menu.tt2:98
 msgid "Create Shared"
 msgstr "Создать общее пространство"
 
-#: ../web_tt2/admin.tt2:59
+#: ../web_tt2/admin.tt2:58
 msgid "Initializes the shared document web space."
 msgstr "Инициализирует WEB-пространство для общих документов."
 
-#: ../web_tt2/admin.tt2:63 ../web_tt2/admin_menu.tt2:105
+#: ../web_tt2/admin.tt2:62 ../web_tt2/admin_menu.tt2:105
 msgid "Delete Shared"
 msgstr "Удалить общее пространство"
 
 #. (listname)
-#: ../web_tt2/admin.tt2:63
+#: ../web_tt2/admin.tt2:62
 msgid "Are you sure you wish to delete the shared documents for list %1?"
 msgstr "Вы уверены, что хотите удалить общие документы для списка рассылки %1?"
 
-#: ../web_tt2/admin.tt2:63
+#: ../web_tt2/admin.tt2:62
 msgid ""
 "Closes the shared document web space. It can be restored using \"Restore "
 "shared\" button."
@@ -441,11 +433,11 @@ msgstr ""
 "Закрывает WEB-пространство для общих документов. Оно может быть "
 "восстановлено кнопкой \"Восстановить общее пространство\"."
 
-#: ../web_tt2/admin.tt2:67
+#: ../web_tt2/admin.tt2:66
 msgid "Restore Shared"
 msgstr "Восстановить общее пространство"
 
-#: ../web_tt2/admin.tt2:67
+#: ../web_tt2/admin.tt2:66
 msgid "Restores the previously closed shared document web space."
 msgstr "Восстанавливает ранее закрытое WEB-пространство для общих документов."
 
@@ -504,7 +496,7 @@ msgid "Add subscribers"
 msgstr "Добавить подписчиков"
 
 #: ../web_tt2/add_request.tt2:13 ../web_tt2/editsubscriber.tt2:62
-#: ../web_tt2/review.tt2:121 ../web_tt2/review.tt2:163
+#: ../web_tt2/review.tt2:125 ../web_tt2/review.tt2:167
 #: ../web_tt2/reviewbouncing.tt2:127 ../web_tt2/search_user.tt2:56
 msgid "quiet"
 msgstr "без подтверждений и сообщений"
@@ -524,8 +516,7 @@ msgid "Edit List Config"
 msgstr "Редактировать конфигурацию списка рассылки"
 
 #: ../web_tt2/admin_menu.tt2:52 ../web_tt2/admin_menu.tt2:58
-#: ../web_tt2/edit_list_request.tt2:17 ../web_tt2/lists.tt2:38
-#: ../web_tt2/nav.tt2:105
+#: ../web_tt2/lists.tt2:38
 msgid "Customizing"
 msgstr "Настройка"
 
@@ -571,8 +562,8 @@ msgstr "Архивы"
 msgid "Bounce Settings"
 msgstr "Настройки для возвращаемых сообщений"
 
-#: ../web_tt2/admin_menu.tt2:160 ../web_tt2/edit_list_request.tt2:18
-#: ../web_tt2/nav.tt2:107
+#: ../web_tt2/admin_menu.tt2:160 ../web_tt2/edit_list_request.tt2:19
+#: ../web_tt2/nav.tt2:109
 msgid "Miscellaneous"
 msgstr "Прочее"
 
@@ -596,7 +587,7 @@ msgstr "Управление архивами"
 #: ../web_tt2/d_properties.tt2:6 ../web_tt2/d_properties.tt2:8
 #: ../web_tt2/d_read.tt2:171 ../web_tt2/d_read.tt2:173
 #: ../web_tt2/d_read.tt2:179 ../web_tt2/d_read.tt2:22 ../web_tt2/d_read.tt2:47
-#: ../web_tt2/edit_list_request.tt2:4 ../web_tt2/edit_list_request.tt2:40
+#: ../web_tt2/edit_list_request.tt2:4 ../web_tt2/edit_list_request.tt2:41
 #: ../web_tt2/editfile.tt2:4 ../web_tt2/editsubscriber.tt2:37
 #: ../web_tt2/latest_d_read.tt2:29 ../web_tt2/latest_d_read.tt2:32
 #: ../web_tt2/modindex.tt2:145 ../web_tt2/modindex.tt2:6
@@ -658,7 +649,7 @@ msgid "Search field:"
 msgstr "Поле поиска:"
 
 #: ../src/etc/mhonarc-ressources.tt2:52 ../web_tt2/arcsearch_form.tt2:16
-#: ../web_tt2/review.tt2:65 ../web_tt2/reviewbouncing.tt2:13
+#: ../web_tt2/review.tt2:69 ../web_tt2/reviewbouncing.tt2:13
 msgid "Search"
 msgstr "Поиск"
 
@@ -1163,7 +1154,7 @@ msgid "list"
 msgstr "рассылка"
 
 #: ../web_tt2/copy_template.tt2:25 ../web_tt2/edit_config.tt2:17
-#: ../web_tt2/edit_list_request.tt2:411
+#: ../web_tt2/edit_list_request.tt2:412
 msgid "default"
 msgstr "по умолчанию"
 
@@ -1372,7 +1363,7 @@ msgstr "URL закладки"
 msgid "Replace the file %1 with your file"
 msgstr "Замените файл %1 Вашим файлом"
 
-#: ../web_tt2/d_editfile.tt2:38 ../web_tt2/edit_list_request.tt2:422
+#: ../web_tt2/d_editfile.tt2:38 ../web_tt2/edit_list_request.tt2:423
 #: ../web_tt2/editsubscriber.tt2:60 ../web_tt2/suboptions.tt2:65
 msgid "Update"
 msgstr "Обновить"
@@ -1499,14 +1490,15 @@ msgstr "Размер (Кб)"
 msgid "Last update"
 msgstr "Последнее обновление"
 
-#: ../web_tt2/d_read.tt2:75 ../web_tt2/editfile.tt2:31
-#: ../web_tt2/editfile.tt2:34 ../web_tt2/editfile.tt2:47
-#: ../web_tt2/editfile.tt2:50 ../web_tt2/editfile.tt2:53
-#: ../web_tt2/editfile.tt2:57 ../web_tt2/editfile.tt2:69
-#: ../web_tt2/editfile.tt2:72 ../web_tt2/editfile.tt2:84
-#: ../web_tt2/editfile.tt2:87 ../web_tt2/editfile.tt2:91
-#: ../web_tt2/manage_template.tt2:35 ../web_tt2/manage_template.tt2:56
-#: ../web_tt2/serveradmin.tt2:150 ../web_tt2/serveradmin.tt2:163
+#: ../web_tt2/d_read.tt2:75 ../web_tt2/editfile.tt2:35
+#: ../web_tt2/editfile.tt2:38 ../web_tt2/editfile.tt2:51
+#: ../web_tt2/editfile.tt2:54 ../web_tt2/editfile.tt2:57
+#: ../web_tt2/editfile.tt2:61 ../web_tt2/editfile.tt2:73
+#: ../web_tt2/editfile.tt2:76 ../web_tt2/editfile.tt2:88
+#: ../web_tt2/editfile.tt2:91 ../web_tt2/editfile.tt2:95
+#: ../web_tt2/info.tt2:12 ../web_tt2/manage_template.tt2:35
+#: ../web_tt2/manage_template.tt2:56 ../web_tt2/serveradmin.tt2:150
+#: ../web_tt2/serveradmin.tt2:163
 msgid "Edit"
 msgstr "Редактировать"
 
@@ -1597,7 +1589,7 @@ msgstr "название"
 msgid "URL"
 msgstr "URL"
 
-#: ../web_tt2/d_read.tt2:352 ../web_tt2/review.tt2:50
+#: ../web_tt2/d_read.tt2:352 ../web_tt2/review.tt2:54
 msgid "Add"
 msgstr "Добавить"
 
@@ -1720,21 +1712,21 @@ msgstr "Просмотр основной конфигурации"
 msgid "Edit list templates"
 msgstr "Редактировать шаблоны рассылки"
 
-#: ../web_tt2/editfile.tt2:15
+#: ../web_tt2/editfile.tt2:16
 msgid "Save"
 msgstr "Сохранить"
 
-#: ../web_tt2/editfile.tt2:23
+#: ../web_tt2/editfile.tt2:27
 msgid "You can edit several messages/files associated with your list:"
 msgstr ""
 "Вы можете редактировать шаблоны некоторых сообщений/файлов, связанных с "
 "Вашей рассылкой: "
 
-#: ../web_tt2/editfile.tt2:28
+#: ../web_tt2/editfile.tt2:32
 msgid "HTML pages"
 msgstr "HTML-страницы"
 
-#: ../web_tt2/editfile.tt2:31
+#: ../web_tt2/editfile.tt2:35
 msgid ""
 "List homepage: HTML text to describe the list. It is printed on the right-"
 "hand side of the main list page. (default for this is the list description)"
@@ -1743,7 +1735,7 @@ msgstr ""
 "рассылки. Он печатается в правой части главной страницы. (по умолчанию, если "
 "этот файл пуст, выводится описание списка рассылки)"
 
-#: ../web_tt2/editfile.tt2:34
+#: ../web_tt2/editfile.tt2:38
 #, fuzzy
 msgid ""
 "List description: This text is sent as an answer to the mail command INFO. "
@@ -1753,11 +1745,11 @@ msgstr ""
 "команду INFO, переданную по почте. Он также включается в <em>Приветственное "
 "сообщение</em>."
 
-#: ../web_tt2/editfile.tt2:44
+#: ../web_tt2/editfile.tt2:48
 msgid "Automatic messages"
 msgstr "Автоматические сообщения"
 
-#: ../web_tt2/editfile.tt2:47
+#: ../web_tt2/editfile.tt2:51
 msgid ""
 "Welcome message: This message is sent to new subscribers. It can be a full "
 "MIME structured message (only for MIME gurus)."
@@ -1765,7 +1757,7 @@ msgstr ""
 "Приветственное сообщение: это сообщение отправляется новым подписчикам. "
 "Может полностью соответствовать стандарту MIME (только для гуру MIME)."
 
-#: ../web_tt2/editfile.tt2:50
+#: ../web_tt2/editfile.tt2:54
 msgid ""
 "Rejection message: when a message is rejected by list editor, a notification "
 "can be sent to the original author. You may prepare various rejection "
@@ -1774,7 +1766,7 @@ msgstr ""
 "Сообщение об отклонении: в случае, если письмо отброшено редактором, автору "
 "отправляется уведомление. Вы можете подготовить различные варианты сообщения."
 
-#: ../web_tt2/editfile.tt2:54
+#: ../web_tt2/editfile.tt2:58
 msgid ""
 "Remind message: This message is sent to each subscriber\n"
 "when using the command  REMIND. It's very useful to help people who are "
@@ -1785,7 +1777,7 @@ msgstr ""
 "использовании команды REMIND. Эта процедура очень полезна в качестве помощи "
 "тем, кто забросил свою подписку или просто не знает, как отписаться."
 
-#: ../web_tt2/editfile.tt2:58
+#: ../web_tt2/editfile.tt2:62
 msgid ""
 "Subscribing invitation message: sent to a person if someone  \n"
 "uses the INVITE command to invite someone to subscribe."
@@ -1794,11 +1786,11 @@ msgstr ""
 "воспользовался командой INVITE для приглашения присоединиться к списку "
 "рассылки."
 
-#: ../web_tt2/editfile.tt2:66
+#: ../web_tt2/editfile.tt2:70
 msgid "Added in distributed messages"
 msgstr "Добавлено в распространяемые сообщения"
 
-#: ../web_tt2/editfile.tt2:69
+#: ../web_tt2/editfile.tt2:73
 msgid ""
 "Message footer: If this file is not empty, it is added as a MIME attachment "
 "at the end of each message distributed to the list."
@@ -1806,7 +1798,7 @@ msgstr ""
 "'Подвал' сообщения: если этот файл не пуст, то он добавляется как MIME-"
 "вложение в конец каждого сообщения, рассылаемого через список рассылки."
 
-#: ../web_tt2/editfile.tt2:72
+#: ../web_tt2/editfile.tt2:76
 msgid ""
 "Message header: If this file is not empty, it is added as a MIME attachment "
 "at the beginning of each message distributed to the list."
@@ -1814,17 +1806,17 @@ msgstr ""
 "Заголовок сообщения: если этот файл не пуст, то он добавляется как MIME-"
 "вложение к началу каждого сообщения, рассылаемого через список рассылки."
 
-#: ../web_tt2/editfile.tt2:81
+#: ../web_tt2/editfile.tt2:85
 msgid "More"
 msgstr "Больше"
 
-#: ../web_tt2/editfile.tt2:84
+#: ../web_tt2/editfile.tt2:88
 msgid "Unsubscribe message: This message is sent when users leave the list."
 msgstr ""
 "Сообщение об отписывании: это сообщение отправляется пользователю, когда он "
 "выходит из списка рассылки."
 
-#: ../web_tt2/editfile.tt2:88
+#: ../web_tt2/editfile.tt2:92
 msgid ""
 "Deletion message: This message is sent to users when you\n"
 "remove them from the list using the DEL command (unless you hit the Quiet "
@@ -1834,7 +1826,7 @@ msgstr ""
 " которых Вы удалили из списка рассылки, используя команду DEL (если при этом "
 "не поставили галочку 'Без подтверждений и сообщений')."
 
-#: ../web_tt2/editfile.tt2:91
+#: ../web_tt2/editfile.tt2:95
 #, fuzzy
 msgid ""
 "Virus infection message: This message is sent to the sender of a message in "
@@ -1867,7 +1859,17 @@ msgstr "Обработка возвращаемых писем"
 msgid "Data sources setup"
 msgstr "Настройка источников данных"
 
-#: ../web_tt2/edit_list_request.tt2:37
+#: ../web_tt2/edit_list_request.tt2:17 ../web_tt2/nav.tt2:105
+#, fuzzy
+msgid "List description/homepage"
+msgstr "описание списка рассылки"
+
+#: ../web_tt2/edit_list_request.tt2:18 ../web_tt2/nav.tt2:107
+#, fuzzy
+msgid "Message templates"
+msgstr "Название сообщения"
+
+#: ../web_tt2/edit_list_request.tt2:38
 msgid "scenario source"
 msgstr "источник сценария"
 
@@ -1875,9 +1877,9 @@ msgstr "источник сценария"
 #: ../mail_tt2/listmaster_notification.tt2:306
 #: ../mail_tt2/listmaster_notification.tt2:377
 #: ../mail_tt2/listowner_notification.tt2:81 ../mail_tt2/lists.tt2:7
-#: ../mail_tt2/summary.tt2:4 ../web_tt2/edit_list_request.tt2:103
-#: ../web_tt2/edit_list_request.tt2:105 ../web_tt2/edit_list_request.tt2:261
-#: ../web_tt2/edit_list_request.tt2:263 ../web_tt2/editsubscriber.tt2:47
+#: ../mail_tt2/summary.tt2:4 ../web_tt2/edit_list_request.tt2:104
+#: ../web_tt2/edit_list_request.tt2:106 ../web_tt2/edit_list_request.tt2:262
+#: ../web_tt2/edit_list_request.tt2:264 ../web_tt2/editsubscriber.tt2:47
 #: ../web_tt2/editsubscriber.tt2:55 ../web_tt2/error.tt2:108
 #: ../web_tt2/rss.tt2:4 ../web_tt2/subindex.tt2:39
 msgid ":"
@@ -2603,7 +2605,7 @@ msgstr "Закрытые рассылки"
 
 #: ../src/etc/mhonarc-ressources.tt2:212 ../src/etc/mhonarc-ressources.tt2:328
 #: ../web_tt2/get_closed_lists.tt2:29 ../web_tt2/get_closed_lists.tt2:9
-#: ../web_tt2/modindex.tt2:135 ../web_tt2/review.tt2:161
+#: ../web_tt2/modindex.tt2:135 ../web_tt2/review.tt2:165
 #: ../web_tt2/reviewbouncing.tt2:131 ../web_tt2/reviewbouncing.tt2:60
 #: ../web_tt2/subindex.tt2:10 ../web_tt2/subindex.tt2:57
 #: ../web_tt2/subscriber_table.tt2:9
@@ -2855,7 +2857,7 @@ msgid " The latest lists of this robot"
 msgstr " Последние рассылки этого робота"
 
 #. (occurrence)
-#: ../web_tt2/lists.tt2:7 ../web_tt2/review.tt2:125
+#: ../web_tt2/lists.tt2:7 ../web_tt2/review.tt2:129
 msgid "%1 occurrence(s) found"
 msgstr "найдено совпадений : %1"
 
@@ -3227,11 +3229,11 @@ msgstr "Рассказать об ошибке, запросить функци�
 msgid "DKIM"
 msgstr "DKIM"
 
-#: ../web_tt2/nav.tt2:117
+#: ../web_tt2/nav.tt2:119
 msgid "Send a message"
 msgstr "Отправить сообщение"
 
-#: ../web_tt2/nav.tt2:119
+#: ../web_tt2/nav.tt2:121
 msgid "Send an html page"
 msgstr "Отправить HTML-страничку"
 
@@ -3703,7 +3705,7 @@ msgstr ""
 "Вы действительно хотите отправить сообщение с напоминанием о подписке %1 "
 "пользователям? "
 
-#: ../web_tt2/review.tt2:103 ../web_tt2/review.tt2:143
+#: ../web_tt2/review.tt2:107 ../web_tt2/review.tt2:147
 #: ../web_tt2/reviewbouncing.tt2:115 ../web_tt2/reviewbouncing.tt2:44
 #: ../web_tt2/viewlogs.tt2:31
 msgid "Previous page"
@@ -3714,7 +3716,7 @@ msgstr "Предыдущая страница"
 msgid "page %1 / %2"
 msgstr "страница %1 / %2"
 
-#: ../web_tt2/review.tt2:113 ../web_tt2/review.tt2:153
+#: ../web_tt2/review.tt2:117 ../web_tt2/review.tt2:157
 #: ../web_tt2/reviewbouncing.tt2:121 ../web_tt2/reviewbouncing.tt2:50
 #: ../web_tt2/viewlogs.tt2:37
 msgid "Next page"
@@ -3724,7 +3726,7 @@ msgstr "Следующая страница"
 msgid "Table which display list bounces"
 msgstr "Таблица, в которой показаны ошибки рассылки"
 
-#: ../web_tt2/review.tt2:172 ../web_tt2/reviewbouncing.tt2:61
+#: ../web_tt2/review.tt2:176 ../web_tt2/reviewbouncing.tt2:61
 #: ../web_tt2/show_exclude.tt2:15 ../web_tt2/subindex.tt2:11
 #: ../web_tt2/subscriber_table.tt2:15 ../web_tt2/subscriber_table.tt2:18
 #: ../web_tt2/viewlogs.tt2:54 ../web_tt2/viewlogs.tt2:63
@@ -3755,7 +3757,7 @@ msgstr "Последнее возвращённое письмо"
 msgid "no score"
 msgstr "не начислено"
 
-#: ../web_tt2/review.tt2:120 ../web_tt2/review.tt2:162
+#: ../web_tt2/review.tt2:124 ../web_tt2/review.tt2:166
 #: ../web_tt2/reviewbouncing.tt2:126
 msgid "Delete selected email addresses"
 msgstr "Удалить выбранные электронные адреса"
@@ -3798,64 +3800,69 @@ msgstr "Исключить"
 
 #: ../web_tt2/review.tt2:38
 #, fuzzy
+msgid "Edit message templates"
+msgstr "Редактировать шаблоны рассылки"
+
+#: ../web_tt2/review.tt2:42
+#, fuzzy
 msgid "<strong>Last update:"
 msgstr "Последнее обновление: "
 
-#: ../web_tt2/review.tt2:48
+#: ../web_tt2/review.tt2:52
 msgid "Add an user: "
 msgstr "Добавить пользователя:"
 
-#: ../web_tt2/review.tt2:52
+#: ../web_tt2/review.tt2:56
 msgid "Add quietly"
 msgstr "без подтверждений и сообщений"
 
-#: ../web_tt2/review.tt2:53
+#: ../web_tt2/review.tt2:57
 msgid "Multiple add"
 msgstr "Добавить несколько"
 
-#: ../web_tt2/review.tt2:63
+#: ../web_tt2/review.tt2:67
 msgid "Search user by e-mail: "
 msgstr "Поиск пользователя по электронному адресу:"
 
-#: ../web_tt2/review.tt2:64
+#: ../web_tt2/review.tt2:68
 msgid "Search user by email"
 msgstr "Поиск пользователя по электронному адресу"
 
-#: ../web_tt2/review.tt2:67
+#: ../web_tt2/review.tt2:71
 msgid "Searches are limited to 50 results, except when using a @domain mask."
 msgstr ""
 
-#: ../web_tt2/review.tt2:71
+#: ../web_tt2/review.tt2:75
 msgid "Selection too wide, can not show selection"
 msgstr "Выборка слишком широка, невозможно отобразить выборку."
 
-#: ../web_tt2/review.tt2:87 ../web_tt2/viewlogs.tt2:8
+#: ../web_tt2/review.tt2:91 ../web_tt2/viewlogs.tt2:8
 msgid "Page size"
 msgstr "Размер страницы"
 
-#: ../web_tt2/review.tt2:108 ../web_tt2/review.tt2:148
+#: ../web_tt2/review.tt2:112 ../web_tt2/review.tt2:152
 #: ../web_tt2/viewlogs.tt2:34
 msgid "page"
 msgstr "страница"
 
 #. (similar_subscribers_occurence)
-#: ../web_tt2/review.tt2:133
+#: ../web_tt2/review.tt2:137
 msgid " Other similar subscriber's email(s) (%1)"
 msgstr "Другие похожие почтовые адреса подписчика (%1)"
 
-#: ../web_tt2/review.tt2:160
+#: ../web_tt2/review.tt2:164
 msgid "Do you really want to unsubscribe ALL selected subscribers?"
 msgstr "Вы действительно хотитте отписать ВСЕХ выделенных подписчиков? "
 
-#: ../web_tt2/review.tt2:169
+#: ../web_tt2/review.tt2:173
 msgid "Excluded users"
 msgstr "Исключить пользователей"
 
-#: ../web_tt2/review.tt2:170 ../web_tt2/show_exclude.tt2:13
+#: ../web_tt2/review.tt2:174 ../web_tt2/show_exclude.tt2:13
 msgid "List of exclude"
 msgstr "Список исключений"
 
-#: ../web_tt2/review.tt2:173 ../web_tt2/show_exclude.tt2:16
+#: ../web_tt2/review.tt2:177 ../web_tt2/show_exclude.tt2:16
 msgid "Since"
 msgstr "Начиная с "
 
@@ -11086,6 +11093,13 @@ msgstr "без писем (полезно для отпускников)"
 msgid "you do not receive your own posts"
 msgstr "Вы не получаете свои же письма"
 
+#: ../mail_tt2/moderate.tt2:27
+msgid ""
+"Because the new message is suspected to be a spam it is not attached to this "
+"one. You must use\n"
+"the web interface to reject or validate it."
+msgstr ""
+
 #: ../src/lib/confdef.pm:43
 msgid "Directories and file location"
 msgstr ""
@@ -11093,6 +11107,12 @@ msgstr ""
 #: ../src/lib/confdef.pm:234
 msgid "Syslog"
 msgstr ""
+
+#~ msgid "Customizing: "
+#~ msgstr "Настройка: "
+
+#~ msgid "Editing of various files and messages attached to your list."
+#~ msgstr "Редактирование различных файлов и сообщений в списке рассылки."
 
 #~ msgid "URL:"
 #~ msgstr "URL:"

@@ -94,7 +94,7 @@ msgstr "Inici"
 #: ../web_tt2/d_editfile.tt2:14 ../web_tt2/d_properties.tt2:10
 #: ../web_tt2/d_properties.tt2:6 ../web_tt2/d_properties.tt2:8
 #: ../web_tt2/d_read.tt2:22 ../web_tt2/d_read.tt2:47
-#: ../web_tt2/edit_list_request.tt2:4 ../web_tt2/edit_list_request.tt2:40
+#: ../web_tt2/edit_list_request.tt2:4 ../web_tt2/edit_list_request.tt2:41
 #: ../web_tt2/editfile.tt2:4 ../web_tt2/menu.tt2:22
 #: ../web_tt2/modindex.tt2:145 ../web_tt2/modindex.tt2:6 ../web_tt2/pref.tt2:4
 #: ../web_tt2/rename_list_request.tt2:3 ../web_tt2/review.tt2:5
@@ -310,18 +310,10 @@ msgstr ""
 "privilegis. "
 
 #: ../web_tt2/admin.tt2:9
-msgid "Customizing: "
-msgstr "Personalitza:"
-
-#: ../web_tt2/admin.tt2:9
-msgid "Editing of various files and messages attached to your list."
-msgstr "Editeu diversos fitxers i missatges relacionats a la vostra llista."
-
-#: ../web_tt2/admin.tt2:10
 msgid "Manage subscribers:"
 msgstr "Gestió de subscriptors:"
 
-#: ../web_tt2/admin.tt2:10
+#: ../web_tt2/admin.tt2:9
 msgid ""
 "Allows you to add or delete list subscribers, moderate subscriptions and so "
 "on."
@@ -329,57 +321,57 @@ msgstr ""
 "Permet afegir o eliminar subscriptors de la llista, moderar subscripcions, "
 "etc."
 
-#: ../web_tt2/admin.tt2:12
+#: ../web_tt2/admin.tt2:11
 msgid "Blacklist:"
 msgstr "Llista negra:"
 
-#: ../web_tt2/admin.tt2:12
+#: ../web_tt2/admin.tt2:11
 msgid "Handles the set of black-listed mail addresses for this list."
 msgstr "Gestiona el conjunt d'adreces de la lista negra per a aquesta lista."
 
-#: ../web_tt2/admin.tt2:15
+#: ../web_tt2/admin.tt2:14
 #, fuzzy
 msgid "Manage archives:"
 msgstr "Gestió d'arxius"
 
-#: ../web_tt2/admin.tt2:15
+#: ../web_tt2/admin.tt2:14
 msgid "Allows you to download and delete list archives."
 msgstr "Permet baixar i eliminar llistes d'arxius."
 
-#: ../web_tt2/admin.tt2:18
+#: ../web_tt2/admin.tt2:17
 #, fuzzy
 msgid "Bounces:"
 msgstr "Retornats"
 
-#: ../web_tt2/admin.tt2:18
+#: ../web_tt2/admin.tt2:17
 msgid "Manages non-delivery reports (also called bounces)."
 msgstr ""
 "Gestioneu els informes de missatges no lliurats (també anomenats retornats)."
 
-#: ../web_tt2/admin.tt2:21
+#: ../web_tt2/admin.tt2:20
 #, fuzzy
 msgid "Logs:"
 msgstr "Registre"
 
-#: ../web_tt2/admin.tt2:21
+#: ../web_tt2/admin.tt2:20
 msgid "A tool for exploring the list logs."
 msgstr "Una eina per explorar els logs de les llistes"
 
-#: ../web_tt2/admin.tt2:26
+#: ../web_tt2/admin.tt2:25
 msgid "Drastic operations"
 msgstr "Operacions dràstiques"
 
-#: ../web_tt2/admin.tt2:33 ../web_tt2/admin_menu.tt2:117
+#: ../web_tt2/admin.tt2:32 ../web_tt2/admin_menu.tt2:117
 #: ../web_tt2/admin_menu.tt2:119
 msgid "Restore List"
 msgstr "Restaura la llista"
 
 #. (list)
-#: ../web_tt2/admin.tt2:33
+#: ../web_tt2/admin.tt2:32
 msgid "Are you sure you wish to restore list %1?"
 msgstr "Esteu segur que voleu restaurar la llista %1?"
 
-#: ../web_tt2/admin.tt2:33
+#: ../web_tt2/admin.tt2:32
 msgid ""
 "This list is currently closed. Clicking this button will make it active "
 "again."
@@ -387,17 +379,17 @@ msgstr ""
 "Aquesta llista està actualment tancada. Clicant en aquest botó tornarà a "
 "estar activa."
 
-#: ../web_tt2/admin.tt2:36 ../web_tt2/admin_menu.tt2:122
+#: ../web_tt2/admin.tt2:35 ../web_tt2/admin_menu.tt2:122
 #: ../web_tt2/admin_menu.tt2:124
 msgid "Remove List"
 msgstr "Elimina la llista"
 
 #. (list)
-#: ../web_tt2/admin.tt2:36
+#: ../web_tt2/admin.tt2:35
 msgid "Are you sure you wish to close list %1?"
 msgstr "Esteu segur que voleu tancar la llista %1?"
 
-#: ../web_tt2/admin.tt2:36
+#: ../web_tt2/admin.tt2:35
 msgid ""
 "Completely removes the current list. Listmaster privileges are required to "
 "restore a list."
@@ -405,12 +397,12 @@ msgstr ""
 "Elimina definitivament la llista actual. Només l'administrador podrà "
 "restaurar una llista."
 
-#: ../web_tt2/admin.tt2:46 ../web_tt2/admin_menu.tt2:129
+#: ../web_tt2/admin.tt2:45 ../web_tt2/admin_menu.tt2:129
 #: ../web_tt2/admin_menu.tt2:131
 msgid "Rename List"
 msgstr "Canvia el nom a la llista"
 
-#: ../web_tt2/admin.tt2:46
+#: ../web_tt2/admin.tt2:45
 msgid ""
 "Allows you to change this list's name. Everything related to the list will "
 "be relabeled according to the new name, including the mail aliases and the "
@@ -419,26 +411,26 @@ msgstr ""
 "Permet canviar el nom de la llista. Es tornarà a etiquetar tot al nou nom, "
 "incloent-hi l'àlies de correu i els arxius web."
 
-#: ../web_tt2/admin.tt2:59 ../web_tt2/admin_menu.tt2:96
+#: ../web_tt2/admin.tt2:58 ../web_tt2/admin_menu.tt2:96
 #: ../web_tt2/admin_menu.tt2:98
 msgid "Create Shared"
 msgstr "Crea compartits"
 
-#: ../web_tt2/admin.tt2:59
+#: ../web_tt2/admin.tt2:58
 msgid "Initializes the shared document web space."
 msgstr "inicialitza l'espai web de compartició de documents."
 
-#: ../web_tt2/admin.tt2:63 ../web_tt2/admin_menu.tt2:105
+#: ../web_tt2/admin.tt2:62 ../web_tt2/admin_menu.tt2:105
 msgid "Delete Shared"
 msgstr "Elimina compartits"
 
 #. (listname)
-#: ../web_tt2/admin.tt2:63
+#: ../web_tt2/admin.tt2:62
 msgid "Are you sure you wish to delete the shared documents for list %1?"
 msgstr ""
 "Esteu segur que voleu eliminar els documents compartits de la llista %1?"
 
-#: ../web_tt2/admin.tt2:63
+#: ../web_tt2/admin.tt2:62
 msgid ""
 "Closes the shared document web space. It can be restored using \"Restore "
 "shared\" button."
@@ -446,11 +438,11 @@ msgstr ""
 "Tanca l'espai de documents. Es pot restaurar amb el botó \"Restaura "
 "compartits\"."
 
-#: ../web_tt2/admin.tt2:67
+#: ../web_tt2/admin.tt2:66
 msgid "Restore Shared"
 msgstr "Restaura compartits"
 
-#: ../web_tt2/admin.tt2:67
+#: ../web_tt2/admin.tt2:66
 msgid "Restores the previously closed shared document web space."
 msgstr "Restaura l'espai web de documents compartits prèviament tancats."
 
@@ -509,7 +501,7 @@ msgid "Add subscribers"
 msgstr "Afegeix subscriptors"
 
 #: ../web_tt2/add_request.tt2:13 ../web_tt2/editsubscriber.tt2:62
-#: ../web_tt2/review.tt2:121 ../web_tt2/review.tt2:163
+#: ../web_tt2/review.tt2:125 ../web_tt2/review.tt2:167
 #: ../web_tt2/reviewbouncing.tt2:127 ../web_tt2/search_user.tt2:56
 msgid "quiet"
 msgstr "silenciós"
@@ -529,8 +521,7 @@ msgid "Edit List Config"
 msgstr "Edita la llista de configuració"
 
 #: ../web_tt2/admin_menu.tt2:52 ../web_tt2/admin_menu.tt2:58
-#: ../web_tt2/edit_list_request.tt2:17 ../web_tt2/lists.tt2:38
-#: ../web_tt2/nav.tt2:105
+#: ../web_tt2/lists.tt2:38
 msgid "Customizing"
 msgstr "Personalitza"
 
@@ -577,8 +568,8 @@ msgstr "Arxius"
 msgid "Bounce Settings"
 msgstr "Paràmetres dels retornats"
 
-#: ../web_tt2/admin_menu.tt2:160 ../web_tt2/edit_list_request.tt2:18
-#: ../web_tt2/nav.tt2:107
+#: ../web_tt2/admin_menu.tt2:160 ../web_tt2/edit_list_request.tt2:19
+#: ../web_tt2/nav.tt2:109
 msgid "Miscellaneous"
 msgstr "Varis"
 
@@ -602,7 +593,7 @@ msgstr "Gestió de l'arxiu"
 #: ../web_tt2/d_properties.tt2:6 ../web_tt2/d_properties.tt2:8
 #: ../web_tt2/d_read.tt2:171 ../web_tt2/d_read.tt2:173
 #: ../web_tt2/d_read.tt2:179 ../web_tt2/d_read.tt2:22 ../web_tt2/d_read.tt2:47
-#: ../web_tt2/edit_list_request.tt2:4 ../web_tt2/edit_list_request.tt2:40
+#: ../web_tt2/edit_list_request.tt2:4 ../web_tt2/edit_list_request.tt2:41
 #: ../web_tt2/editfile.tt2:4 ../web_tt2/editsubscriber.tt2:37
 #: ../web_tt2/latest_d_read.tt2:29 ../web_tt2/latest_d_read.tt2:32
 #: ../web_tt2/modindex.tt2:145 ../web_tt2/modindex.tt2:6
@@ -663,7 +654,7 @@ msgid "Search field:"
 msgstr "Camp de cerca:"
 
 #: ../src/etc/mhonarc-ressources.tt2:52 ../web_tt2/arcsearch_form.tt2:16
-#: ../web_tt2/review.tt2:65 ../web_tt2/reviewbouncing.tt2:13
+#: ../web_tt2/review.tt2:69 ../web_tt2/reviewbouncing.tt2:13
 msgid "Search"
 msgstr "Cerca"
 
@@ -1173,7 +1164,7 @@ msgid "list"
 msgstr "llista"
 
 #: ../web_tt2/copy_template.tt2:25 ../web_tt2/edit_config.tt2:17
-#: ../web_tt2/edit_list_request.tt2:411
+#: ../web_tt2/edit_list_request.tt2:412
 msgid "default"
 msgstr "per defecte"
 
@@ -1387,7 +1378,7 @@ msgstr "URL preferida"
 msgid "Replace the file %1 with your file"
 msgstr "Canviï el fitxer %1 pel vostre fitxer"
 
-#: ../web_tt2/d_editfile.tt2:38 ../web_tt2/edit_list_request.tt2:422
+#: ../web_tt2/d_editfile.tt2:38 ../web_tt2/edit_list_request.tt2:423
 #: ../web_tt2/editsubscriber.tt2:60 ../web_tt2/suboptions.tt2:65
 msgid "Update"
 msgstr "Actualitza"
@@ -1516,14 +1507,15 @@ msgstr "Mida (Kb)"
 msgid "Last update"
 msgstr "Darrera actualització"
 
-#: ../web_tt2/d_read.tt2:75 ../web_tt2/editfile.tt2:31
-#: ../web_tt2/editfile.tt2:34 ../web_tt2/editfile.tt2:47
-#: ../web_tt2/editfile.tt2:50 ../web_tt2/editfile.tt2:53
-#: ../web_tt2/editfile.tt2:57 ../web_tt2/editfile.tt2:69
-#: ../web_tt2/editfile.tt2:72 ../web_tt2/editfile.tt2:84
-#: ../web_tt2/editfile.tt2:87 ../web_tt2/editfile.tt2:91
-#: ../web_tt2/manage_template.tt2:35 ../web_tt2/manage_template.tt2:56
-#: ../web_tt2/serveradmin.tt2:150 ../web_tt2/serveradmin.tt2:163
+#: ../web_tt2/d_read.tt2:75 ../web_tt2/editfile.tt2:35
+#: ../web_tt2/editfile.tt2:38 ../web_tt2/editfile.tt2:51
+#: ../web_tt2/editfile.tt2:54 ../web_tt2/editfile.tt2:57
+#: ../web_tt2/editfile.tt2:61 ../web_tt2/editfile.tt2:73
+#: ../web_tt2/editfile.tt2:76 ../web_tt2/editfile.tt2:88
+#: ../web_tt2/editfile.tt2:91 ../web_tt2/editfile.tt2:95
+#: ../web_tt2/info.tt2:12 ../web_tt2/manage_template.tt2:35
+#: ../web_tt2/manage_template.tt2:56 ../web_tt2/serveradmin.tt2:150
+#: ../web_tt2/serveradmin.tt2:163
 msgid "Edit"
 msgstr "Edita"
 
@@ -1614,7 +1606,7 @@ msgstr "Títol"
 msgid "URL"
 msgstr "URL"
 
-#: ../web_tt2/d_read.tt2:352 ../web_tt2/review.tt2:50
+#: ../web_tt2/d_read.tt2:352 ../web_tt2/review.tt2:54
 msgid "Add"
 msgstr "Afegeix"
 
@@ -1742,20 +1734,20 @@ msgstr "Edita llista de configuració"
 msgid "Edit list templates"
 msgstr "Modifica la llista de les plantilles"
 
-#: ../web_tt2/editfile.tt2:15
+#: ../web_tt2/editfile.tt2:16
 msgid "Save"
 msgstr "Desa"
 
-#: ../web_tt2/editfile.tt2:23
+#: ../web_tt2/editfile.tt2:27
 msgid "You can edit several messages/files associated with your list:"
 msgstr ""
 "Podeu editar diversos missatges i fitxers associats a la vostra llista:"
 
-#: ../web_tt2/editfile.tt2:28
+#: ../web_tt2/editfile.tt2:32
 msgid "HTML pages"
 msgstr "Pàgines HTML"
 
-#: ../web_tt2/editfile.tt2:31
+#: ../web_tt2/editfile.tt2:35
 msgid ""
 "List homepage: HTML text to describe the list. It is printed on the right-"
 "hand side of the main list page. (default for this is the list description)"
@@ -1764,7 +1756,7 @@ msgstr ""
 "a la banda dreta de la pàgina principal de la llista. (Per defecte és la "
 "descripció de la llista)"
 
-#: ../web_tt2/editfile.tt2:34
+#: ../web_tt2/editfile.tt2:38
 #, fuzzy
 msgid ""
 "List description: This text is sent as an answer to the mail command INFO. "
@@ -1774,11 +1766,11 @@ msgstr ""
 "correu\n"
 "INFO. També pot ser inclòs en el <em>Missatge de benvinguda</em>."
 
-#: ../web_tt2/editfile.tt2:44
+#: ../web_tt2/editfile.tt2:48
 msgid "Automatic messages"
 msgstr "Missatges automàtics"
 
-#: ../web_tt2/editfile.tt2:47
+#: ../web_tt2/editfile.tt2:51
 msgid ""
 "Welcome message: This message is sent to new subscribers. It can be a full "
 "MIME structured message (only for MIME gurus)."
@@ -1786,7 +1778,7 @@ msgstr ""
 "Missatge de benvinguda: Aquest missatge s'envia als abonats nous. Pot ser un "
 "missatge estructurat en MIME (només per MIME gurus)."
 
-#: ../web_tt2/editfile.tt2:50
+#: ../web_tt2/editfile.tt2:54
 msgid ""
 "Rejection message: when a message is rejected by list editor, a notification "
 "can be sent to the original author. You may prepare various rejection "
@@ -1796,7 +1788,7 @@ msgstr ""
 "es pot enviar una notificació a l'autor original. Podeu preparar diversos "
 "missatges de rebuig."
 
-#: ../web_tt2/editfile.tt2:54
+#: ../web_tt2/editfile.tt2:58
 #, fuzzy
 msgid ""
 "Remind message: This message is sent to each subscriber\n"
@@ -1809,7 +1801,7 @@ msgstr ""
 "recorden els seus correus electrònics de subscripció o persones que no són "
 "capaces de donar-se de baixa."
 
-#: ../web_tt2/editfile.tt2:58
+#: ../web_tt2/editfile.tt2:62
 msgid ""
 "Subscribing invitation message: sent to a person if someone  \n"
 "uses the INVITE command to invite someone to subscribe."
@@ -1818,11 +1810,11 @@ msgstr ""
 "algú  \n"
 "utilitza l'ordre CONVIDA per convidar algú a subscriure-s'hi."
 
-#: ../web_tt2/editfile.tt2:66
+#: ../web_tt2/editfile.tt2:70
 msgid "Added in distributed messages"
 msgstr "Afegit en missatges distribuïts."
 
-#: ../web_tt2/editfile.tt2:69
+#: ../web_tt2/editfile.tt2:73
 #, fuzzy
 msgid ""
 "Message footer: If this file is not empty, it is added as a MIME attachment "
@@ -1831,7 +1823,7 @@ msgstr ""
 "Peu del missatge: Si aquest fitxer no és buit, s'afegeix com a MIME adjunt "
 "al final de cada missatge distribuït a la llista."
 
-#: ../web_tt2/editfile.tt2:72
+#: ../web_tt2/editfile.tt2:76
 msgid ""
 "Message header: If this file is not empty, it is added as a MIME attachment "
 "at the beginning of each message distributed to the list."
@@ -1839,17 +1831,17 @@ msgstr ""
 "Encapçalament del missatge: Si aquest fitxer no és buit, s'afegeix com a "
 "MIME adjunt al principi de cada missatge distribuït a la llista."
 
-#: ../web_tt2/editfile.tt2:81
+#: ../web_tt2/editfile.tt2:85
 msgid "More"
 msgstr "Més"
 
-#: ../web_tt2/editfile.tt2:84
+#: ../web_tt2/editfile.tt2:88
 msgid "Unsubscribe message: This message is sent when users leave the list."
 msgstr ""
 "Missatge de baixa: Aquest missatge s'envia als usuaris quan aquests es donen "
 "de baixa de la llista."
 
-#: ../web_tt2/editfile.tt2:88
+#: ../web_tt2/editfile.tt2:92
 #, fuzzy
 msgid ""
 "Deletion message: This message is sent to users when you\n"
@@ -1860,7 +1852,7 @@ msgstr ""
 "traieu de la llista utilitzant l'ordre DEL (llevat que hàgiu premut el botó "
 "Quiet)."
 
-#: ../web_tt2/editfile.tt2:91
+#: ../web_tt2/editfile.tt2:95
 #, fuzzy
 msgid ""
 "Virus infection message: This message is sent to the sender of a message in "
@@ -1893,7 +1885,17 @@ msgstr "Gestió de retornats"
 msgid "Data sources setup"
 msgstr "Configuració dels orígens de dades"
 
-#: ../web_tt2/edit_list_request.tt2:37
+#: ../web_tt2/edit_list_request.tt2:17 ../web_tt2/nav.tt2:105
+#, fuzzy
+msgid "List description/homepage"
+msgstr "Descripció llista"
+
+#: ../web_tt2/edit_list_request.tt2:18 ../web_tt2/nav.tt2:107
+#, fuzzy
+msgid "Message templates"
+msgstr "nom del missatge"
+
+#: ../web_tt2/edit_list_request.tt2:38
 msgid "scenario source"
 msgstr "Font de l'escenari"
 
@@ -1901,9 +1903,9 @@ msgstr "Font de l'escenari"
 #: ../mail_tt2/listmaster_notification.tt2:306
 #: ../mail_tt2/listmaster_notification.tt2:377
 #: ../mail_tt2/listowner_notification.tt2:81 ../mail_tt2/lists.tt2:7
-#: ../mail_tt2/summary.tt2:4 ../web_tt2/edit_list_request.tt2:103
-#: ../web_tt2/edit_list_request.tt2:105 ../web_tt2/edit_list_request.tt2:261
-#: ../web_tt2/edit_list_request.tt2:263 ../web_tt2/editsubscriber.tt2:47
+#: ../mail_tt2/summary.tt2:4 ../web_tt2/edit_list_request.tt2:104
+#: ../web_tt2/edit_list_request.tt2:106 ../web_tt2/edit_list_request.tt2:262
+#: ../web_tt2/edit_list_request.tt2:264 ../web_tt2/editsubscriber.tt2:47
 #: ../web_tt2/editsubscriber.tt2:55 ../web_tt2/error.tt2:108
 #: ../web_tt2/rss.tt2:4 ../web_tt2/subindex.tt2:39
 msgid ":"
@@ -2643,7 +2645,7 @@ msgstr "Llistes tancades"
 
 #: ../src/etc/mhonarc-ressources.tt2:212 ../src/etc/mhonarc-ressources.tt2:328
 #: ../web_tt2/get_closed_lists.tt2:29 ../web_tt2/get_closed_lists.tt2:9
-#: ../web_tt2/modindex.tt2:135 ../web_tt2/review.tt2:161
+#: ../web_tt2/modindex.tt2:135 ../web_tt2/review.tt2:165
 #: ../web_tt2/reviewbouncing.tt2:131 ../web_tt2/reviewbouncing.tt2:60
 #: ../web_tt2/subindex.tt2:10 ../web_tt2/subindex.tt2:57
 #: ../web_tt2/subscriber_table.tt2:9
@@ -2897,7 +2899,7 @@ msgid " The latest lists of this robot"
 msgstr "Últimes llistes d'aquest robot"
 
 #. (occurrence)
-#: ../web_tt2/lists.tt2:7 ../web_tt2/review.tt2:125
+#: ../web_tt2/lists.tt2:7 ../web_tt2/review.tt2:129
 msgid "%1 occurrence(s) found"
 msgstr "%1 coincidències"
 
@@ -3274,11 +3276,11 @@ msgstr "Notifica un error, o una petició de nova funcionalitat"
 msgid "DKIM"
 msgstr "DKIM"
 
-#: ../web_tt2/nav.tt2:117
+#: ../web_tt2/nav.tt2:119
 msgid "Send a message"
 msgstr "Envia un missatge"
 
-#: ../web_tt2/nav.tt2:119
+#: ../web_tt2/nav.tt2:121
 msgid "Send an html page"
 msgstr "Envia una pàgina html"
 
@@ -3764,7 +3766,7 @@ msgid ""
 msgstr ""
 "Esteu segur que voleu enviar un missatge recordatori als %1 subscriptors?"
 
-#: ../web_tt2/review.tt2:103 ../web_tt2/review.tt2:143
+#: ../web_tt2/review.tt2:107 ../web_tt2/review.tt2:147
 #: ../web_tt2/reviewbouncing.tt2:115 ../web_tt2/reviewbouncing.tt2:44
 #: ../web_tt2/viewlogs.tt2:31
 msgid "Previous page"
@@ -3775,7 +3777,7 @@ msgstr "Pàgina anterior"
 msgid "page %1 / %2"
 msgstr "pàgina %1 / %2"
 
-#: ../web_tt2/review.tt2:113 ../web_tt2/review.tt2:153
+#: ../web_tt2/review.tt2:117 ../web_tt2/review.tt2:157
 #: ../web_tt2/reviewbouncing.tt2:121 ../web_tt2/reviewbouncing.tt2:50
 #: ../web_tt2/viewlogs.tt2:37
 msgid "Next page"
@@ -3785,7 +3787,7 @@ msgstr "Pàgina següent"
 msgid "Table which display list bounces"
 msgstr "Taula que mostra els retornats"
 
-#: ../web_tt2/review.tt2:172 ../web_tt2/reviewbouncing.tt2:61
+#: ../web_tt2/review.tt2:176 ../web_tt2/reviewbouncing.tt2:61
 #: ../web_tt2/show_exclude.tt2:15 ../web_tt2/subindex.tt2:11
 #: ../web_tt2/subscriber_table.tt2:15 ../web_tt2/subscriber_table.tt2:18
 #: ../web_tt2/viewlogs.tt2:54 ../web_tt2/viewlogs.tt2:63
@@ -3818,7 +3820,7 @@ msgstr "Últim retornat"
 msgid "no score"
 msgstr "sense avaluació"
 
-#: ../web_tt2/review.tt2:120 ../web_tt2/review.tt2:162
+#: ../web_tt2/review.tt2:124 ../web_tt2/review.tt2:166
 #: ../web_tt2/reviewbouncing.tt2:126
 msgid "Delete selected email addresses"
 msgstr "Elimina les adreces seleccionades"
@@ -3864,67 +3866,72 @@ msgstr "Exclou"
 
 #: ../web_tt2/review.tt2:38
 #, fuzzy
+msgid "Edit message templates"
+msgstr "Modifica la llista de les plantilles"
+
+#: ../web_tt2/review.tt2:42
+#, fuzzy
 msgid "<strong>Last update:"
 msgstr "Darrera actualització:"
 
-#: ../web_tt2/review.tt2:48
+#: ../web_tt2/review.tt2:52
 msgid "Add an user: "
 msgstr "Afegeix un usuari:"
 
-#: ../web_tt2/review.tt2:52
+#: ../web_tt2/review.tt2:56
 #, fuzzy
 msgid "Add quietly"
 msgstr "silenciós"
 
-#: ../web_tt2/review.tt2:53
+#: ../web_tt2/review.tt2:57
 msgid "Multiple add"
 msgstr "Afegeix-ne molts"
 
-#: ../web_tt2/review.tt2:63
+#: ../web_tt2/review.tt2:67
 msgid "Search user by e-mail: "
 msgstr "Cerca un usuari per adreça electrònica"
 
-#: ../web_tt2/review.tt2:64
+#: ../web_tt2/review.tt2:68
 msgid "Search user by email"
 msgstr "Cerca un usuari per adreça electrònica"
 
-#: ../web_tt2/review.tt2:67
+#: ../web_tt2/review.tt2:71
 msgid "Searches are limited to 50 results, except when using a @domain mask."
 msgstr ""
 
-#: ../web_tt2/review.tt2:71
+#: ../web_tt2/review.tt2:75
 msgid "Selection too wide, can not show selection"
 msgstr "La selecció és massa gran i no es pot  mostrar"
 
-#: ../web_tt2/review.tt2:87 ../web_tt2/viewlogs.tt2:8
+#: ../web_tt2/review.tt2:91 ../web_tt2/viewlogs.tt2:8
 msgid "Page size"
 msgstr "Mida de la pàgina"
 
-#: ../web_tt2/review.tt2:108 ../web_tt2/review.tt2:148
+#: ../web_tt2/review.tt2:112 ../web_tt2/review.tt2:152
 #: ../web_tt2/viewlogs.tt2:34
 msgid "page"
 msgstr "pàgina"
 
 #. (similar_subscribers_occurence)
-#: ../web_tt2/review.tt2:133
+#: ../web_tt2/review.tt2:137
 msgid " Other similar subscriber's email(s) (%1)"
 msgstr "Altres adreces de subscriptors semblants (%1)"
 
-#: ../web_tt2/review.tt2:160
+#: ../web_tt2/review.tt2:164
 msgid "Do you really want to unsubscribe ALL selected subscribers?"
 msgstr ""
 "Esteu segur que voleu donar de baixa a TOTS els subscriptors seleccionats?"
 
-#: ../web_tt2/review.tt2:169
+#: ../web_tt2/review.tt2:173
 msgid "Excluded users"
 msgstr "Usuaris exclosos"
 
-#: ../web_tt2/review.tt2:170 ../web_tt2/show_exclude.tt2:13
+#: ../web_tt2/review.tt2:174 ../web_tt2/show_exclude.tt2:13
 #, fuzzy
 msgid "List of exclude"
 msgstr "Llista d'exclosos"
 
-#: ../web_tt2/review.tt2:173 ../web_tt2/show_exclude.tt2:16
+#: ../web_tt2/review.tt2:177 ../web_tt2/show_exclude.tt2:16
 #, fuzzy
 msgid "Since"
 msgstr "Des de"
@@ -11309,6 +11316,13 @@ msgstr ""
 msgid "\"+src.id+\"_cal"
 msgstr ""
 
+#: ../mail_tt2/moderate.tt2:27
+msgid ""
+"Because the new message is suspected to be a spam it is not attached to this "
+"one. You must use\n"
+"the web interface to reject or validate it."
+msgstr ""
+
 #: ../src/lib/confdef.pm:1197
 msgid "List of headers to be included into the message for signature"
 msgstr ""
@@ -11336,6 +11350,12 @@ msgstr ""
 #: ../src/lib/confdef.pm:260
 msgid "Log intensity"
 msgstr ""
+
+#~ msgid "Customizing: "
+#~ msgstr "Personalitza:"
+
+#~ msgid "Editing of various files and messages attached to your list."
+#~ msgstr "Editeu diversos fitxers i missatges relacionats a la vostra llista."
 
 #, fuzzy
 #~ msgid "URL:"

@@ -99,7 +99,7 @@ msgstr "Início"
 #: ../web_tt2/d_editfile.tt2:14 ../web_tt2/d_properties.tt2:10
 #: ../web_tt2/d_properties.tt2:6 ../web_tt2/d_properties.tt2:8
 #: ../web_tt2/d_read.tt2:22 ../web_tt2/d_read.tt2:47
-#: ../web_tt2/edit_list_request.tt2:4 ../web_tt2/edit_list_request.tt2:40
+#: ../web_tt2/edit_list_request.tt2:4 ../web_tt2/edit_list_request.tt2:41
 #: ../web_tt2/editfile.tt2:4 ../web_tt2/menu.tt2:22
 #: ../web_tt2/modindex.tt2:145 ../web_tt2/modindex.tt2:6 ../web_tt2/pref.tt2:4
 #: ../web_tt2/rename_list_request.tt2:3 ../web_tt2/review.tt2:5
@@ -312,18 +312,10 @@ msgstr ""
 "da lista que você pode modificar dependem dos seus privilégios."
 
 #: ../web_tt2/admin.tt2:9
-msgid "Customizing: "
-msgstr "Personalizar: "
-
-#: ../web_tt2/admin.tt2:9
-msgid "Editing of various files and messages attached to your list."
-msgstr "Edição de vários arquivos e mensagens anexados à sua lista."
-
-#: ../web_tt2/admin.tt2:10
 msgid "Manage subscribers:"
 msgstr "Gerenciar assinantes:"
 
-#: ../web_tt2/admin.tt2:10
+#: ../web_tt2/admin.tt2:9
 msgid ""
 "Allows you to add or delete list subscribers, moderate subscriptions and so "
 "on."
@@ -331,71 +323,71 @@ msgstr ""
 "Permite que você adicione ou exclua assinantes, moderar assinaturas, entre "
 "outros."
 
-#: ../web_tt2/admin.tt2:12
+#: ../web_tt2/admin.tt2:11
 msgid "Blacklist:"
 msgstr "Lista negra:"
 
-#: ../web_tt2/admin.tt2:12
+#: ../web_tt2/admin.tt2:11
 msgid "Handles the set of black-listed mail addresses for this list."
 msgstr "Lida com o conjunto de emails indesejados para esta lista."
 
-#: ../web_tt2/admin.tt2:15
+#: ../web_tt2/admin.tt2:14
 msgid "Manage archives:"
 msgstr "Gerenciar arquivos:"
 
-#: ../web_tt2/admin.tt2:15
+#: ../web_tt2/admin.tt2:14
 msgid "Allows you to download and delete list archives."
 msgstr "Permite que você baixe e exclua arquivo da lista."
 
-#: ../web_tt2/admin.tt2:18
+#: ../web_tt2/admin.tt2:17
 msgid "Bounces:"
 msgstr "Retornos de mensagem:"
 
-#: ../web_tt2/admin.tt2:18
+#: ../web_tt2/admin.tt2:17
 msgid "Manages non-delivery reports (also called bounces)."
 msgstr ""
 "Gerenciar relatórios de não-entrega (também chamados de retornos de "
 "mensagem)."
 
-#: ../web_tt2/admin.tt2:21
+#: ../web_tt2/admin.tt2:20
 msgid "Logs:"
 msgstr "Registros:"
 
-#: ../web_tt2/admin.tt2:21
+#: ../web_tt2/admin.tt2:20
 msgid "A tool for exploring the list logs."
 msgstr "Uma ferramenta para explorar os logs da lista."
 
-#: ../web_tt2/admin.tt2:26
+#: ../web_tt2/admin.tt2:25
 msgid "Drastic operations"
 msgstr "Operações drásticas"
 
-#: ../web_tt2/admin.tt2:33 ../web_tt2/admin_menu.tt2:117
+#: ../web_tt2/admin.tt2:32 ../web_tt2/admin_menu.tt2:117
 #: ../web_tt2/admin_menu.tt2:119
 msgid "Restore List"
 msgstr "Restaurar Lista"
 
 #. (list)
-#: ../web_tt2/admin.tt2:33
+#: ../web_tt2/admin.tt2:32
 msgid "Are you sure you wish to restore list %1?"
 msgstr "Você tem certeza que quer restaurar a lista %1?"
 
-#: ../web_tt2/admin.tt2:33
+#: ../web_tt2/admin.tt2:32
 msgid ""
 "This list is currently closed. Clicking this button will make it active "
 "again."
 msgstr "Esta lista está fechada. Clique neste botão para reativá-la."
 
-#: ../web_tt2/admin.tt2:36 ../web_tt2/admin_menu.tt2:122
+#: ../web_tt2/admin.tt2:35 ../web_tt2/admin_menu.tt2:122
 #: ../web_tt2/admin_menu.tt2:124
 msgid "Remove List"
 msgstr "Remover lista"
 
 #. (list)
-#: ../web_tt2/admin.tt2:36
+#: ../web_tt2/admin.tt2:35
 msgid "Are you sure you wish to close list %1?"
 msgstr "Você tem certeza que quer fechar a lista %1?"
 
-#: ../web_tt2/admin.tt2:36
+#: ../web_tt2/admin.tt2:35
 msgid ""
 "Completely removes the current list. Listmaster privileges are required to "
 "restore a list."
@@ -403,12 +395,12 @@ msgstr ""
 "Remove completamente a lista atual. É necessário ter privilégios de "
 "administrador feral de listas para restaurar uma lista."
 
-#: ../web_tt2/admin.tt2:46 ../web_tt2/admin_menu.tt2:129
+#: ../web_tt2/admin.tt2:45 ../web_tt2/admin_menu.tt2:129
 #: ../web_tt2/admin_menu.tt2:131
 msgid "Rename List"
 msgstr "Renomear Lista"
 
-#: ../web_tt2/admin.tt2:46
+#: ../web_tt2/admin.tt2:45
 msgid ""
 "Allows you to change this list's name. Everything related to the list will "
 "be relabeled according to the new name, including the mail aliases and the "
@@ -417,27 +409,27 @@ msgstr ""
 "Permite mudar o nome desta lista. Todas as informações relacionadas serão "
 "atualizadas com o novo nome, incluindo os arquivos web e os alias de email."
 
-#: ../web_tt2/admin.tt2:59 ../web_tt2/admin_menu.tt2:96
+#: ../web_tt2/admin.tt2:58 ../web_tt2/admin_menu.tt2:96
 #: ../web_tt2/admin_menu.tt2:98
 msgid "Create Shared"
 msgstr "Criar Compartilhado"
 
-#: ../web_tt2/admin.tt2:59
+#: ../web_tt2/admin.tt2:58
 msgid "Initializes the shared document web space."
 msgstr "Cria um espaço para compartilhar documentos na web."
 
-#: ../web_tt2/admin.tt2:63 ../web_tt2/admin_menu.tt2:105
+#: ../web_tt2/admin.tt2:62 ../web_tt2/admin_menu.tt2:105
 msgid "Delete Shared"
 msgstr "Remover Compartilhado"
 
 #. (listname)
-#: ../web_tt2/admin.tt2:63
+#: ../web_tt2/admin.tt2:62
 msgid "Are you sure you wish to delete the shared documents for list %1?"
 msgstr ""
 "Você tem certeza que quer remover os documentos compartilhados para a lista %"
 "1?"
 
-#: ../web_tt2/admin.tt2:63
+#: ../web_tt2/admin.tt2:62
 msgid ""
 "Closes the shared document web space. It can be restored using \"Restore "
 "shared\" button."
@@ -445,11 +437,11 @@ msgstr ""
 "Desabilita esta função. Pode ser revertido usando o botão \"Restaurar "
 "compartilhado\"."
 
-#: ../web_tt2/admin.tt2:67
+#: ../web_tt2/admin.tt2:66
 msgid "Restore Shared"
 msgstr "Restaurar Compartilhado"
 
-#: ../web_tt2/admin.tt2:67
+#: ../web_tt2/admin.tt2:66
 msgid "Restores the previously closed shared document web space."
 msgstr ""
 "Restaura o espaço de compartilhamento de documentos fechado anteriormente."
@@ -509,7 +501,7 @@ msgid "Add subscribers"
 msgstr "Adicionar assinantes"
 
 #: ../web_tt2/add_request.tt2:13 ../web_tt2/editsubscriber.tt2:62
-#: ../web_tt2/review.tt2:121 ../web_tt2/review.tt2:163
+#: ../web_tt2/review.tt2:125 ../web_tt2/review.tt2:167
 #: ../web_tt2/reviewbouncing.tt2:127 ../web_tt2/search_user.tt2:56
 msgid "quiet"
 msgstr "Sem notificação"
@@ -529,8 +521,7 @@ msgid "Edit List Config"
 msgstr "Configurar a Lista"
 
 #: ../web_tt2/admin_menu.tt2:52 ../web_tt2/admin_menu.tt2:58
-#: ../web_tt2/edit_list_request.tt2:17 ../web_tt2/lists.tt2:38
-#: ../web_tt2/nav.tt2:105
+#: ../web_tt2/lists.tt2:38
 msgid "Customizing"
 msgstr "Personalizar"
 
@@ -576,8 +567,8 @@ msgstr "Arquivos"
 msgid "Bounce Settings"
 msgstr "Configuração de Retornos de mensagem"
 
-#: ../web_tt2/admin_menu.tt2:160 ../web_tt2/edit_list_request.tt2:18
-#: ../web_tt2/nav.tt2:107
+#: ../web_tt2/admin_menu.tt2:160 ../web_tt2/edit_list_request.tt2:19
+#: ../web_tt2/nav.tt2:109
 msgid "Miscellaneous"
 msgstr "Outras opções"
 
@@ -601,7 +592,7 @@ msgstr "Gerenciamento de Arquivo"
 #: ../web_tt2/d_properties.tt2:6 ../web_tt2/d_properties.tt2:8
 #: ../web_tt2/d_read.tt2:171 ../web_tt2/d_read.tt2:173
 #: ../web_tt2/d_read.tt2:179 ../web_tt2/d_read.tt2:22 ../web_tt2/d_read.tt2:47
-#: ../web_tt2/edit_list_request.tt2:4 ../web_tt2/edit_list_request.tt2:40
+#: ../web_tt2/edit_list_request.tt2:4 ../web_tt2/edit_list_request.tt2:41
 #: ../web_tt2/editfile.tt2:4 ../web_tt2/editsubscriber.tt2:37
 #: ../web_tt2/latest_d_read.tt2:29 ../web_tt2/latest_d_read.tt2:32
 #: ../web_tt2/modindex.tt2:145 ../web_tt2/modindex.tt2:6
@@ -662,7 +653,7 @@ msgid "Search field:"
 msgstr "Campo de procura:"
 
 #: ../src/etc/mhonarc-ressources.tt2:52 ../web_tt2/arcsearch_form.tt2:16
-#: ../web_tt2/review.tt2:65 ../web_tt2/reviewbouncing.tt2:13
+#: ../web_tt2/review.tt2:69 ../web_tt2/reviewbouncing.tt2:13
 msgid "Search"
 msgstr "Procura"
 
@@ -1166,7 +1157,7 @@ msgid "list"
 msgstr "lista"
 
 #: ../web_tt2/copy_template.tt2:25 ../web_tt2/edit_config.tt2:17
-#: ../web_tt2/edit_list_request.tt2:411
+#: ../web_tt2/edit_list_request.tt2:412
 msgid "default"
 msgstr "padrão"
 
@@ -1374,7 +1365,7 @@ msgstr "URL do favorito"
 msgid "Replace the file %1 with your file"
 msgstr "Substituir o arquivo %1 com o seu arquivo"
 
-#: ../web_tt2/d_editfile.tt2:38 ../web_tt2/edit_list_request.tt2:422
+#: ../web_tt2/d_editfile.tt2:38 ../web_tt2/edit_list_request.tt2:423
 #: ../web_tt2/editsubscriber.tt2:60 ../web_tt2/suboptions.tt2:65
 msgid "Update"
 msgstr "Atualizar"
@@ -1502,14 +1493,15 @@ msgstr "Tamanho (Kb)"
 msgid "Last update"
 msgstr "Última atualização"
 
-#: ../web_tt2/d_read.tt2:75 ../web_tt2/editfile.tt2:31
-#: ../web_tt2/editfile.tt2:34 ../web_tt2/editfile.tt2:47
-#: ../web_tt2/editfile.tt2:50 ../web_tt2/editfile.tt2:53
-#: ../web_tt2/editfile.tt2:57 ../web_tt2/editfile.tt2:69
-#: ../web_tt2/editfile.tt2:72 ../web_tt2/editfile.tt2:84
-#: ../web_tt2/editfile.tt2:87 ../web_tt2/editfile.tt2:91
-#: ../web_tt2/manage_template.tt2:35 ../web_tt2/manage_template.tt2:56
-#: ../web_tt2/serveradmin.tt2:150 ../web_tt2/serveradmin.tt2:163
+#: ../web_tt2/d_read.tt2:75 ../web_tt2/editfile.tt2:35
+#: ../web_tt2/editfile.tt2:38 ../web_tt2/editfile.tt2:51
+#: ../web_tt2/editfile.tt2:54 ../web_tt2/editfile.tt2:57
+#: ../web_tt2/editfile.tt2:61 ../web_tt2/editfile.tt2:73
+#: ../web_tt2/editfile.tt2:76 ../web_tt2/editfile.tt2:88
+#: ../web_tt2/editfile.tt2:91 ../web_tt2/editfile.tt2:95
+#: ../web_tt2/info.tt2:12 ../web_tt2/manage_template.tt2:35
+#: ../web_tt2/manage_template.tt2:56 ../web_tt2/serveradmin.tt2:150
+#: ../web_tt2/serveradmin.tt2:163
 msgid "Edit"
 msgstr "Editar"
 
@@ -1600,7 +1592,7 @@ msgstr "título"
 msgid "URL"
 msgstr "URL"
 
-#: ../web_tt2/d_read.tt2:352 ../web_tt2/review.tt2:50
+#: ../web_tt2/d_read.tt2:352 ../web_tt2/review.tt2:54
 msgid "Add"
 msgstr "Adicionar"
 
@@ -1723,19 +1715,19 @@ msgstr "Configurar a Lista"
 msgid "Edit list templates"
 msgstr "Editar os modelos de listas"
 
-#: ../web_tt2/editfile.tt2:15
+#: ../web_tt2/editfile.tt2:16
 msgid "Save"
 msgstr "Salvar"
 
-#: ../web_tt2/editfile.tt2:23
+#: ../web_tt2/editfile.tt2:27
 msgid "You can edit several messages/files associated with your list:"
 msgstr "Você pode editar diversas mensagens e arquivos associados à sua lista:"
 
-#: ../web_tt2/editfile.tt2:28
+#: ../web_tt2/editfile.tt2:32
 msgid "HTML pages"
 msgstr "Páginas HTML"
 
-#: ../web_tt2/editfile.tt2:31
+#: ../web_tt2/editfile.tt2:35
 msgid ""
 "List homepage: HTML text to describe the list. It is printed on the right-"
 "hand side of the main list page. (default for this is the list description)"
@@ -1743,7 +1735,7 @@ msgstr ""
 "Página inicial da lista: Texto HTML para descrever a lista. Aparece no lado "
 "direito da página principal da lista. (por padrão, é a descrição da lista)"
 
-#: ../web_tt2/editfile.tt2:34
+#: ../web_tt2/editfile.tt2:38
 msgid ""
 "List description: This text is sent as an answer to the mail command INFO. "
 "It can also be included in the <em>Welcome message</em>."
@@ -1751,11 +1743,11 @@ msgstr ""
 "Descrição da lista: este texto é enviado como resposta para o comando INFO. "
 "O mesmo também pode ser incluido na <em>Mensagem de boas-vindas</em>."
 
-#: ../web_tt2/editfile.tt2:44
+#: ../web_tt2/editfile.tt2:48
 msgid "Automatic messages"
 msgstr "Mensagens automáticas"
 
-#: ../web_tt2/editfile.tt2:47
+#: ../web_tt2/editfile.tt2:51
 msgid ""
 "Welcome message: This message is sent to new subscribers. It can be a full "
 "MIME structured message (only for MIME gurus)."
@@ -1763,7 +1755,7 @@ msgstr ""
 "Mensagem de boas vindas: Esta mensagem é enviada para novos membros da "
 "lista. Pode ser uma mensagem estruturada em MIME (apenas para gurus em MIME)."
 
-#: ../web_tt2/editfile.tt2:50
+#: ../web_tt2/editfile.tt2:54
 msgid ""
 "Rejection message: when a message is rejected by list editor, a notification "
 "can be sent to the original author. You may prepare various rejection "
@@ -1773,7 +1765,7 @@ msgstr ""
 "uma notificação pode ser enviada para o autor original. Você pode preparar "
 "várias mensagens de rejeição."
 
-#: ../web_tt2/editfile.tt2:54
+#: ../web_tt2/editfile.tt2:58
 msgid ""
 "Remind message: This message is sent to each subscriber\n"
 "when using the command  REMIND. It's very useful to help people who are "
@@ -1785,7 +1777,7 @@ msgstr ""
 "sobre seus próprios emails inscritos ou pessoas que não conseguem cancelar "
 "sua inscrição."
 
-#: ../web_tt2/editfile.tt2:58
+#: ../web_tt2/editfile.tt2:62
 msgid ""
 "Subscribing invitation message: sent to a person if someone  \n"
 "uses the INVITE command to invite someone to subscribe."
@@ -1793,11 +1785,11 @@ msgstr ""
 "Mensagem de convite para inscrição: é enviada para pessoas se alguém \n"
 "usa o comando INVITE para convidar alguém para participar da lista."
 
-#: ../web_tt2/editfile.tt2:66
+#: ../web_tt2/editfile.tt2:70
 msgid "Added in distributed messages"
 msgstr "Adicionado às mensagens distribuidas"
 
-#: ../web_tt2/editfile.tt2:69
+#: ../web_tt2/editfile.tt2:73
 msgid ""
 "Message footer: If this file is not empty, it is added as a MIME attachment "
 "at the end of each message distributed to the list."
@@ -1806,7 +1798,7 @@ msgstr ""
 "adicionado como um anexo MIME no fim de cada mensagem distribuída para a "
 "lista."
 
-#: ../web_tt2/editfile.tt2:72
+#: ../web_tt2/editfile.tt2:76
 msgid ""
 "Message header: If this file is not empty, it is added as a MIME attachment "
 "at the beginning of each message distributed to the list."
@@ -1814,17 +1806,17 @@ msgstr ""
 "Cabeçalho da mensagem: se este arquivo não estiver vazio, será adicionado "
 "como um anexo MIME no início de cada mensagem distribuída para a lista."
 
-#: ../web_tt2/editfile.tt2:81
+#: ../web_tt2/editfile.tt2:85
 msgid "More"
 msgstr "Mais"
 
-#: ../web_tt2/editfile.tt2:84
+#: ../web_tt2/editfile.tt2:88
 msgid "Unsubscribe message: This message is sent when users leave the list."
 msgstr ""
 "Mensagem de cancelamento de inscrição: esta mensagem é enviada quando "
 "usuários deixam a lista."
 
-#: ../web_tt2/editfile.tt2:88
+#: ../web_tt2/editfile.tt2:92
 msgid ""
 "Deletion message: This message is sent to users when you\n"
 "remove them from the list using the DEL command (unless you hit the Quiet "
@@ -1834,7 +1826,7 @@ msgstr ""
 "os remove da lista usando o comando DEL (a menos que você selecione a opção "
 "Quiet, para remoção em silêncio)."
 
-#: ../web_tt2/editfile.tt2:91
+#: ../web_tt2/editfile.tt2:95
 #, fuzzy
 msgid ""
 "Virus infection message: This message is sent to the sender of a message in "
@@ -1867,7 +1859,17 @@ msgstr "Gerenciamento de retornos"
 msgid "Data sources setup"
 msgstr "Configuração das fontes de dados"
 
-#: ../web_tt2/edit_list_request.tt2:37
+#: ../web_tt2/edit_list_request.tt2:17 ../web_tt2/nav.tt2:105
+#, fuzzy
+msgid "List description/homepage"
+msgstr "descrição da lista"
+
+#: ../web_tt2/edit_list_request.tt2:18 ../web_tt2/nav.tt2:107
+#, fuzzy
+msgid "Message templates"
+msgstr "Nome da mensagem"
+
+#: ../web_tt2/edit_list_request.tt2:38
 msgid "scenario source"
 msgstr "fonte do cenário"
 
@@ -1875,9 +1877,9 @@ msgstr "fonte do cenário"
 #: ../mail_tt2/listmaster_notification.tt2:306
 #: ../mail_tt2/listmaster_notification.tt2:377
 #: ../mail_tt2/listowner_notification.tt2:81 ../mail_tt2/lists.tt2:7
-#: ../mail_tt2/summary.tt2:4 ../web_tt2/edit_list_request.tt2:103
-#: ../web_tt2/edit_list_request.tt2:105 ../web_tt2/edit_list_request.tt2:261
-#: ../web_tt2/edit_list_request.tt2:263 ../web_tt2/editsubscriber.tt2:47
+#: ../mail_tt2/summary.tt2:4 ../web_tt2/edit_list_request.tt2:104
+#: ../web_tt2/edit_list_request.tt2:106 ../web_tt2/edit_list_request.tt2:262
+#: ../web_tt2/edit_list_request.tt2:264 ../web_tt2/editsubscriber.tt2:47
 #: ../web_tt2/editsubscriber.tt2:55 ../web_tt2/error.tt2:108
 #: ../web_tt2/rss.tt2:4 ../web_tt2/subindex.tt2:39
 msgid ":"
@@ -2604,7 +2606,7 @@ msgstr "Listas fechadas"
 
 #: ../src/etc/mhonarc-ressources.tt2:212 ../src/etc/mhonarc-ressources.tt2:328
 #: ../web_tt2/get_closed_lists.tt2:29 ../web_tt2/get_closed_lists.tt2:9
-#: ../web_tt2/modindex.tt2:135 ../web_tt2/review.tt2:161
+#: ../web_tt2/modindex.tt2:135 ../web_tt2/review.tt2:165
 #: ../web_tt2/reviewbouncing.tt2:131 ../web_tt2/reviewbouncing.tt2:60
 #: ../web_tt2/subindex.tt2:10 ../web_tt2/subindex.tt2:57
 #: ../web_tt2/subscriber_table.tt2:9
@@ -2857,7 +2859,7 @@ msgstr " As últimas listas deste robô"
 
 # portuguese need more brackets to make it plural
 #. (occurrence)
-#: ../web_tt2/lists.tt2:7 ../web_tt2/review.tt2:125
+#: ../web_tt2/lists.tt2:7 ../web_tt2/review.tt2:129
 msgid "%1 occurrence(s) found"
 msgstr "%1 ocorrência(s) encontrada(s)"
 
@@ -3232,11 +3234,11 @@ msgstr "Enviar um erro ou uma sugestão de melhoria"
 msgid "DKIM"
 msgstr "DKIM"
 
-#: ../web_tt2/nav.tt2:117
+#: ../web_tt2/nav.tt2:119
 msgid "Send a message"
 msgstr "Enviar uma mensagem"
 
-#: ../web_tt2/nav.tt2:119
+#: ../web_tt2/nav.tt2:121
 msgid "Send an html page"
 msgstr "Enviar uma página html"
 
@@ -3719,7 +3721,7 @@ msgid ""
 msgstr ""
 "Tem certeza que deseja enviar um lembrete de inscrição para os %1 assinantes?"
 
-#: ../web_tt2/review.tt2:103 ../web_tt2/review.tt2:143
+#: ../web_tt2/review.tt2:107 ../web_tt2/review.tt2:147
 #: ../web_tt2/reviewbouncing.tt2:115 ../web_tt2/reviewbouncing.tt2:44
 #: ../web_tt2/viewlogs.tt2:31
 msgid "Previous page"
@@ -3730,7 +3732,7 @@ msgstr "Página anterior"
 msgid "page %1 / %2"
 msgstr "página %1 / %2"
 
-#: ../web_tt2/review.tt2:113 ../web_tt2/review.tt2:153
+#: ../web_tt2/review.tt2:117 ../web_tt2/review.tt2:157
 #: ../web_tt2/reviewbouncing.tt2:121 ../web_tt2/reviewbouncing.tt2:50
 #: ../web_tt2/viewlogs.tt2:37
 msgid "Next page"
@@ -3740,7 +3742,7 @@ msgstr "Próxima página"
 msgid "Table which display list bounces"
 msgstr "Tabela que mostra assinantes com erros de retorno de mensagem"
 
-#: ../web_tt2/review.tt2:172 ../web_tt2/reviewbouncing.tt2:61
+#: ../web_tt2/review.tt2:176 ../web_tt2/reviewbouncing.tt2:61
 #: ../web_tt2/show_exclude.tt2:15 ../web_tt2/subindex.tt2:11
 #: ../web_tt2/subscriber_table.tt2:15 ../web_tt2/subscriber_table.tt2:18
 #: ../web_tt2/viewlogs.tt2:54 ../web_tt2/viewlogs.tt2:63
@@ -3771,7 +3773,7 @@ msgstr "Último retorno de mensagem"
 msgid "no score"
 msgstr "sem contagem"
 
-#: ../web_tt2/review.tt2:120 ../web_tt2/review.tt2:162
+#: ../web_tt2/review.tt2:124 ../web_tt2/review.tt2:166
 #: ../web_tt2/reviewbouncing.tt2:126
 msgid "Delete selected email addresses"
 msgstr "Excluir os endereços de e-mail selecionados"
@@ -3814,70 +3816,75 @@ msgstr "Excluir"
 
 #: ../web_tt2/review.tt2:38
 #, fuzzy
+msgid "Edit message templates"
+msgstr "Editar os modelos de listas"
+
+#: ../web_tt2/review.tt2:42
+#, fuzzy
 msgid "<strong>Last update:"
 msgstr "Última atualização:"
 
-#: ../web_tt2/review.tt2:48
+#: ../web_tt2/review.tt2:52
 msgid "Add an user: "
 msgstr "Adicionar um usuário: "
 
-#: ../web_tt2/review.tt2:52
+#: ../web_tt2/review.tt2:56
 #, fuzzy
 msgid "Add quietly"
 msgstr "silencioso"
 
-#: ../web_tt2/review.tt2:53
+#: ../web_tt2/review.tt2:57
 msgid "Multiple add"
 msgstr "Inscrever vários"
 
-#: ../web_tt2/review.tt2:63
+#: ../web_tt2/review.tt2:67
 msgid "Search user by e-mail: "
 msgstr "Procurar usuário por email: "
 
-#: ../web_tt2/review.tt2:64
+#: ../web_tt2/review.tt2:68
 msgid "Search user by email"
 msgstr "Procurar usuário por email"
 
-#: ../web_tt2/review.tt2:67
+#: ../web_tt2/review.tt2:71
 msgid "Searches are limited to 50 results, except when using a @domain mask."
 msgstr ""
 "Buscas estão limitadas em 50 resultados, exceto quando usa-se uma máscara de "
 "@domínio."
 
-#: ../web_tt2/review.tt2:71
+#: ../web_tt2/review.tt2:75
 msgid "Selection too wide, can not show selection"
 msgstr "Seleção muito extensa, não pode ser exibida"
 
-#: ../web_tt2/review.tt2:87 ../web_tt2/viewlogs.tt2:8
+#: ../web_tt2/review.tt2:91 ../web_tt2/viewlogs.tt2:8
 msgid "Page size"
 msgstr "Tamanho da página"
 
-#: ../web_tt2/review.tt2:108 ../web_tt2/review.tt2:148
+#: ../web_tt2/review.tt2:112 ../web_tt2/review.tt2:152
 #: ../web_tt2/viewlogs.tt2:34
 msgid "page"
 msgstr "página"
 
 # more brackets to make plural in portuguese
 #. (similar_subscribers_occurence)
-#: ../web_tt2/review.tt2:133
+#: ../web_tt2/review.tt2:137
 msgid " Other similar subscriber's email(s) (%1)"
 msgstr " Outro(s) email(s) de assinante parecidos (%1)"
 
-#: ../web_tt2/review.tt2:160
+#: ../web_tt2/review.tt2:164
 msgid "Do you really want to unsubscribe ALL selected subscribers?"
 msgstr ""
 "Tem certeza que cancelar a inscrição na lista de TODOS os assinantes "
 "selecionados?"
 
-#: ../web_tt2/review.tt2:169
+#: ../web_tt2/review.tt2:173
 msgid "Excluded users"
 msgstr "Usuários excluídos"
 
-#: ../web_tt2/review.tt2:170 ../web_tt2/show_exclude.tt2:13
+#: ../web_tt2/review.tt2:174 ../web_tt2/show_exclude.tt2:13
 msgid "List of exclude"
 msgstr "Lista de exclusão"
 
-#: ../web_tt2/review.tt2:173 ../web_tt2/show_exclude.tt2:16
+#: ../web_tt2/review.tt2:177 ../web_tt2/show_exclude.tt2:16
 msgid "Since"
 msgstr "Desde"
 
@@ -11111,6 +11118,12 @@ msgstr "sem correio (útil em caso de férias)"
 msgid "you do not receive your own posts"
 msgstr "você não recebe suas próprias mensagens"
 
+#~ msgid "Customizing: "
+#~ msgstr "Personalizar: "
+
+#~ msgid "Editing of various files and messages attached to your list."
+#~ msgstr "Edição de vários arquivos e mensagens anexados à sua lista."
+
 #~ msgid "URL:"
 #~ msgstr "URL:"
 
@@ -11172,6 +11185,16 @@ msgstr "você não recebe suas próprias mensagens"
 #~ msgstr ""
 #~ "Para marcar a mensagem na lista %1 para o tópico pertinente, por favor "
 #~ "use a seguinte URL:"
+
+#, fuzzy
+#~ msgid ""
+#~ "Because the new message is suspected to be a spam it is not attached to "
+#~ "this one. You must use\n"
+#~ "the web interface to reject or validate it."
+#~ msgstr ""
+#~ "Em decorrência da nova mensagem ser suspeita de conter SPAM, ela não "
+#~ "encontra-se anexada a este e-mail. É necessário utilizar a interface WEB "
+#~ "para rejeitá-la ou aceitá-la."
 
 #~ msgid "Error at line %d: %s"
 #~ msgstr "Erro na linha %d: %s"

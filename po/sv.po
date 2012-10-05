@@ -97,7 +97,7 @@ msgstr "Hem"
 #: ../web_tt2/d_editfile.tt2:14 ../web_tt2/d_properties.tt2:10
 #: ../web_tt2/d_properties.tt2:6 ../web_tt2/d_properties.tt2:8
 #: ../web_tt2/d_read.tt2:22 ../web_tt2/d_read.tt2:47
-#: ../web_tt2/edit_list_request.tt2:4 ../web_tt2/edit_list_request.tt2:40
+#: ../web_tt2/edit_list_request.tt2:4 ../web_tt2/edit_list_request.tt2:41
 #: ../web_tt2/editfile.tt2:4 ../web_tt2/menu.tt2:22
 #: ../web_tt2/modindex.tt2:145 ../web_tt2/modindex.tt2:6 ../web_tt2/pref.tt2:4
 #: ../web_tt2/rename_list_request.tt2:3 ../web_tt2/review.tt2:5
@@ -309,18 +309,10 @@ msgstr ""
 "du kan ändra beror på vilka rättigheter du har."
 
 #: ../web_tt2/admin.tt2:9
-msgid "Customizing: "
-msgstr "Anpassning: "
-
-#: ../web_tt2/admin.tt2:9
-msgid "Editing of various files and messages attached to your list."
-msgstr "Redigering av diverse filer och meddelanden kopplade till din lista."
-
-#: ../web_tt2/admin.tt2:10
 msgid "Manage subscribers:"
 msgstr "Hantera prenumeranter:"
 
-#: ../web_tt2/admin.tt2:10
+#: ../web_tt2/admin.tt2:9
 msgid ""
 "Allows you to add or delete list subscribers, moderate subscriptions and so "
 "on."
@@ -328,54 +320,54 @@ msgstr ""
 "Låter dig lägga till eller ta bort prenumeranter, moderera prenumerationer "
 "och så vidare."
 
-#: ../web_tt2/admin.tt2:12
+#: ../web_tt2/admin.tt2:11
 msgid "Blacklist:"
 msgstr "Svartlista:"
 
-#: ../web_tt2/admin.tt2:12
+#: ../web_tt2/admin.tt2:11
 msgid "Handles the set of black-listed mail addresses for this list."
 msgstr "Hanterar svartlistade e-postadresser för denna lista."
 
-#: ../web_tt2/admin.tt2:15
+#: ../web_tt2/admin.tt2:14
 msgid "Manage archives:"
 msgstr "Hantera arkiv:"
 
-#: ../web_tt2/admin.tt2:15
+#: ../web_tt2/admin.tt2:14
 msgid "Allows you to download and delete list archives."
 msgstr "Låter dig ladda ner och ta bort arkiv."
 
-#: ../web_tt2/admin.tt2:18
+#: ../web_tt2/admin.tt2:17
 msgid "Bounces:"
 msgstr "Studsar:"
 
-#: ../web_tt2/admin.tt2:18
+#: ../web_tt2/admin.tt2:17
 msgid "Manages non-delivery reports (also called bounces)."
 msgstr ""
 "Hantera rapporter om e-post som inte har kunnat levereras (s.k. studsar)."
 
-#: ../web_tt2/admin.tt2:21
+#: ../web_tt2/admin.tt2:20
 msgid "Logs:"
 msgstr "Loggar:"
 
-#: ../web_tt2/admin.tt2:21
+#: ../web_tt2/admin.tt2:20
 msgid "A tool for exploring the list logs."
 msgstr "Ett verktyg för att titta i listloggarna."
 
-#: ../web_tt2/admin.tt2:26
+#: ../web_tt2/admin.tt2:25
 msgid "Drastic operations"
 msgstr "Drastiska åtgärder"
 
-#: ../web_tt2/admin.tt2:33 ../web_tt2/admin_menu.tt2:117
+#: ../web_tt2/admin.tt2:32 ../web_tt2/admin_menu.tt2:117
 #: ../web_tt2/admin_menu.tt2:119
 msgid "Restore List"
 msgstr "Återskapa listan"
 
 #. (list)
-#: ../web_tt2/admin.tt2:33
+#: ../web_tt2/admin.tt2:32
 msgid "Are you sure you wish to restore list %1?"
 msgstr "Är du säker att du vill stänga listan %1?"
 
-#: ../web_tt2/admin.tt2:33
+#: ../web_tt2/admin.tt2:32
 msgid ""
 "This list is currently closed. Clicking this button will make it active "
 "again."
@@ -383,17 +375,17 @@ msgstr ""
 "Listan är stängd för närvarande. Klickar du på denna knapp återaktiveras den "
 "igen."
 
-#: ../web_tt2/admin.tt2:36 ../web_tt2/admin_menu.tt2:122
+#: ../web_tt2/admin.tt2:35 ../web_tt2/admin_menu.tt2:122
 #: ../web_tt2/admin_menu.tt2:124
 msgid "Remove List"
 msgstr "Ta bort lista"
 
 #. (list)
-#: ../web_tt2/admin.tt2:36
+#: ../web_tt2/admin.tt2:35
 msgid "Are you sure you wish to close list %1?"
 msgstr "Är du säker att du vill stänga listan %1?"
 
-#: ../web_tt2/admin.tt2:36
+#: ../web_tt2/admin.tt2:35
 msgid ""
 "Completely removes the current list. Listmaster privileges are required to "
 "restore a list."
@@ -401,12 +393,12 @@ msgstr ""
 "Raderar den här listan helt. Listmästarrättigheter krävs för att återställa "
 "en lista."
 
-#: ../web_tt2/admin.tt2:46 ../web_tt2/admin_menu.tt2:129
+#: ../web_tt2/admin.tt2:45 ../web_tt2/admin_menu.tt2:129
 #: ../web_tt2/admin_menu.tt2:131
 msgid "Rename List"
 msgstr "Byt namn på lista"
 
-#: ../web_tt2/admin.tt2:46
+#: ../web_tt2/admin.tt2:45
 msgid ""
 "Allows you to change this list's name. Everything related to the list will "
 "be relabeled according to the new name, including the mail aliases and the "
@@ -415,25 +407,25 @@ msgstr ""
 "Låter dig ändra listans namn. Allt som har anknytning till listan byter till "
 "det nya namnet, inklusive e-postalias och webbarkiven."
 
-#: ../web_tt2/admin.tt2:59 ../web_tt2/admin_menu.tt2:96
+#: ../web_tt2/admin.tt2:58 ../web_tt2/admin_menu.tt2:96
 #: ../web_tt2/admin_menu.tt2:98
 msgid "Create Shared"
 msgstr "Skapa delad"
 
-#: ../web_tt2/admin.tt2:59
+#: ../web_tt2/admin.tt2:58
 msgid "Initializes the shared document web space."
 msgstr "Upprättar den delade dokumentwebbplatsen."
 
-#: ../web_tt2/admin.tt2:63 ../web_tt2/admin_menu.tt2:105
+#: ../web_tt2/admin.tt2:62 ../web_tt2/admin_menu.tt2:105
 msgid "Delete Shared"
 msgstr "Radera delat utrymme"
 
 #. (listname)
-#: ../web_tt2/admin.tt2:63
+#: ../web_tt2/admin.tt2:62
 msgid "Are you sure you wish to delete the shared documents for list %1?"
 msgstr "Är du säker att du önskar radera de delade dokumenten för listan %1?"
 
-#: ../web_tt2/admin.tt2:63
+#: ../web_tt2/admin.tt2:62
 msgid ""
 "Closes the shared document web space. It can be restored using \"Restore "
 "shared\" button."
@@ -441,11 +433,11 @@ msgstr ""
 "Stänger det delade dokumentutrymmet. Det kan återställas med \"Återställ "
 "delat utrymme\"-knappen"
 
-#: ../web_tt2/admin.tt2:67
+#: ../web_tt2/admin.tt2:66
 msgid "Restore Shared"
 msgstr "Återställ delat utrymme"
 
-#: ../web_tt2/admin.tt2:67
+#: ../web_tt2/admin.tt2:66
 msgid "Restores the previously closed shared document web space."
 msgstr "Återställer det tidigare delade dokumentutrymmet."
 
@@ -504,7 +496,7 @@ msgid "Add subscribers"
 msgstr "Lägg till prenumeranter"
 
 #: ../web_tt2/add_request.tt2:13 ../web_tt2/editsubscriber.tt2:62
-#: ../web_tt2/review.tt2:121 ../web_tt2/review.tt2:163
+#: ../web_tt2/review.tt2:125 ../web_tt2/review.tt2:167
 #: ../web_tt2/reviewbouncing.tt2:127 ../web_tt2/search_user.tt2:56
 msgid "quiet"
 msgstr "tyst"
@@ -524,8 +516,7 @@ msgid "Edit List Config"
 msgstr "Redigera listkonfiguration"
 
 #: ../web_tt2/admin_menu.tt2:52 ../web_tt2/admin_menu.tt2:58
-#: ../web_tt2/edit_list_request.tt2:17 ../web_tt2/lists.tt2:38
-#: ../web_tt2/nav.tt2:105
+#: ../web_tt2/lists.tt2:38
 msgid "Customizing"
 msgstr "Anpassning"
 
@@ -571,8 +562,8 @@ msgstr "Arkiv"
 msgid "Bounce Settings"
 msgstr "Studsinställningar"
 
-#: ../web_tt2/admin_menu.tt2:160 ../web_tt2/edit_list_request.tt2:18
-#: ../web_tt2/nav.tt2:107
+#: ../web_tt2/admin_menu.tt2:160 ../web_tt2/edit_list_request.tt2:19
+#: ../web_tt2/nav.tt2:109
 msgid "Miscellaneous"
 msgstr "Allmänt"
 
@@ -596,7 +587,7 @@ msgstr "Arkivhantering"
 #: ../web_tt2/d_properties.tt2:6 ../web_tt2/d_properties.tt2:8
 #: ../web_tt2/d_read.tt2:171 ../web_tt2/d_read.tt2:173
 #: ../web_tt2/d_read.tt2:179 ../web_tt2/d_read.tt2:22 ../web_tt2/d_read.tt2:47
-#: ../web_tt2/edit_list_request.tt2:4 ../web_tt2/edit_list_request.tt2:40
+#: ../web_tt2/edit_list_request.tt2:4 ../web_tt2/edit_list_request.tt2:41
 #: ../web_tt2/editfile.tt2:4 ../web_tt2/editsubscriber.tt2:37
 #: ../web_tt2/latest_d_read.tt2:29 ../web_tt2/latest_d_read.tt2:32
 #: ../web_tt2/modindex.tt2:145 ../web_tt2/modindex.tt2:6
@@ -656,7 +647,7 @@ msgid "Search field:"
 msgstr "Sökfält :"
 
 #: ../src/etc/mhonarc-ressources.tt2:52 ../web_tt2/arcsearch_form.tt2:16
-#: ../web_tt2/review.tt2:65 ../web_tt2/reviewbouncing.tt2:13
+#: ../web_tt2/review.tt2:69 ../web_tt2/reviewbouncing.tt2:13
 msgid "Search"
 msgstr "Sök"
 
@@ -1156,7 +1147,7 @@ msgid "list"
 msgstr "lista"
 
 #: ../web_tt2/copy_template.tt2:25 ../web_tt2/edit_config.tt2:17
-#: ../web_tt2/edit_list_request.tt2:411
+#: ../web_tt2/edit_list_request.tt2:412
 msgid "default"
 msgstr "standard"
 
@@ -1363,7 +1354,7 @@ msgstr "Bokmärke URL"
 msgid "Replace the file %1 with your file"
 msgstr "Ersätt filen %1 med din fil"
 
-#: ../web_tt2/d_editfile.tt2:38 ../web_tt2/edit_list_request.tt2:422
+#: ../web_tt2/d_editfile.tt2:38 ../web_tt2/edit_list_request.tt2:423
 #: ../web_tt2/editsubscriber.tt2:60 ../web_tt2/suboptions.tt2:65
 msgid "Update"
 msgstr "Uppdatera"
@@ -1490,14 +1481,15 @@ msgstr "Storlek (Kb)"
 msgid "Last update"
 msgstr "Senaste uppdateringen"
 
-#: ../web_tt2/d_read.tt2:75 ../web_tt2/editfile.tt2:31
-#: ../web_tt2/editfile.tt2:34 ../web_tt2/editfile.tt2:47
-#: ../web_tt2/editfile.tt2:50 ../web_tt2/editfile.tt2:53
-#: ../web_tt2/editfile.tt2:57 ../web_tt2/editfile.tt2:69
-#: ../web_tt2/editfile.tt2:72 ../web_tt2/editfile.tt2:84
-#: ../web_tt2/editfile.tt2:87 ../web_tt2/editfile.tt2:91
-#: ../web_tt2/manage_template.tt2:35 ../web_tt2/manage_template.tt2:56
-#: ../web_tt2/serveradmin.tt2:150 ../web_tt2/serveradmin.tt2:163
+#: ../web_tt2/d_read.tt2:75 ../web_tt2/editfile.tt2:35
+#: ../web_tt2/editfile.tt2:38 ../web_tt2/editfile.tt2:51
+#: ../web_tt2/editfile.tt2:54 ../web_tt2/editfile.tt2:57
+#: ../web_tt2/editfile.tt2:61 ../web_tt2/editfile.tt2:73
+#: ../web_tt2/editfile.tt2:76 ../web_tt2/editfile.tt2:88
+#: ../web_tt2/editfile.tt2:91 ../web_tt2/editfile.tt2:95
+#: ../web_tt2/info.tt2:12 ../web_tt2/manage_template.tt2:35
+#: ../web_tt2/manage_template.tt2:56 ../web_tt2/serveradmin.tt2:150
+#: ../web_tt2/serveradmin.tt2:163
 msgid "Edit"
 msgstr "Redigera"
 
@@ -1588,7 +1580,7 @@ msgstr "titel"
 msgid "URL"
 msgstr "URL"
 
-#: ../web_tt2/d_read.tt2:352 ../web_tt2/review.tt2:50
+#: ../web_tt2/d_read.tt2:352 ../web_tt2/review.tt2:54
 msgid "Add"
 msgstr "Lägg till"
 
@@ -1711,19 +1703,19 @@ msgstr "Visa huvudkonfiguration"
 msgid "Edit list templates"
 msgstr "Redigera listmallar"
 
-#: ../web_tt2/editfile.tt2:15
+#: ../web_tt2/editfile.tt2:16
 msgid "Save"
 msgstr "Spara"
 
-#: ../web_tt2/editfile.tt2:23
+#: ../web_tt2/editfile.tt2:27
 msgid "You can edit several messages/files associated with your list:"
 msgstr "Du kan redigera flera meddelanden/filer som är knytna till din lista:"
 
-#: ../web_tt2/editfile.tt2:28
+#: ../web_tt2/editfile.tt2:32
 msgid "HTML pages"
 msgstr "HTML-sidor"
 
-#: ../web_tt2/editfile.tt2:31
+#: ../web_tt2/editfile.tt2:35
 msgid ""
 "List homepage: HTML text to describe the list. It is printed on the right-"
 "hand side of the main list page. (default for this is the list description)"
@@ -1731,7 +1723,7 @@ msgstr ""
 "Listhemsida: HTML-text för att beskriva sidan. Den visas på högersidan av "
 "listans huvudsida. (Standard för detta är listbeskrivningen)"
 
-#: ../web_tt2/editfile.tt2:34
+#: ../web_tt2/editfile.tt2:38
 #, fuzzy
 msgid ""
 "List description: This text is sent as an answer to the mail command INFO. "
@@ -1740,11 +1732,11 @@ msgstr ""
 "Listbeskrivning : Denna text skickas som svar till kommandot\n"
 "INFO. Den kan också inkluderas i <em>Välomstmeddelandet</em>."
 
-#: ../web_tt2/editfile.tt2:44
+#: ../web_tt2/editfile.tt2:48
 msgid "Automatic messages"
 msgstr "Automatiska meddelanden"
 
-#: ../web_tt2/editfile.tt2:47
+#: ../web_tt2/editfile.tt2:51
 msgid ""
 "Welcome message: This message is sent to new subscribers. It can be a full "
 "MIME structured message (only for MIME gurus)."
@@ -1752,7 +1744,7 @@ msgstr ""
 "Välkomstmeddelande: Detta meddelande skickas till nya prenumeranter. Det kan "
 "vara ett komplett MIME-strukturerat meddelande (bara för MIME-guruer)."
 
-#: ../web_tt2/editfile.tt2:50
+#: ../web_tt2/editfile.tt2:54
 msgid ""
 "Rejection message: when a message is rejected by list editor, a notification "
 "can be sent to the original author. You may prepare various rejection "
@@ -1762,7 +1754,7 @@ msgstr ""
 "notifiering skickas till ursprungsförfattaren. Du kan förbereda olika "
 "avslagsmeddelanden."
 
-#: ../web_tt2/editfile.tt2:54
+#: ../web_tt2/editfile.tt2:58
 msgid ""
 "Remind message: This message is sent to each subscriber\n"
 "when using the command  REMIND. It's very useful to help people who are "
@@ -1774,7 +1766,7 @@ msgstr ""
 "som är förvirrade kring prenumerationse-post eller personer som inte kan "
 "avsluta sina prenumerationer själva."
 
-#: ../web_tt2/editfile.tt2:58
+#: ../web_tt2/editfile.tt2:62
 msgid ""
 "Subscribing invitation message: sent to a person if someone  \n"
 "uses the INVITE command to invite someone to subscribe."
@@ -1782,11 +1774,11 @@ msgstr ""
 "Prenumerationsinbjudningsmeddelande: skickas till en person om någon "
 "använder INVITE-kommandot för att bjuda in någon att prenumerera."
 
-#: ../web_tt2/editfile.tt2:66
+#: ../web_tt2/editfile.tt2:70
 msgid "Added in distributed messages"
 msgstr "Tillagt i distribuerade meddelanden"
 
-#: ../web_tt2/editfile.tt2:69
+#: ../web_tt2/editfile.tt2:73
 msgid ""
 "Message footer: If this file is not empty, it is added as a MIME attachment "
 "at the end of each message distributed to the list."
@@ -1794,7 +1786,7 @@ msgstr ""
 "Meddelandefot: Om den här filen inte är tom läggs den till som en MIME-"
 "bilaga efter meddelandet för varje brev som distribueras till listan."
 
-#: ../web_tt2/editfile.tt2:72
+#: ../web_tt2/editfile.tt2:76
 msgid ""
 "Message header: If this file is not empty, it is added as a MIME attachment "
 "at the beginning of each message distributed to the list."
@@ -1802,16 +1794,16 @@ msgstr ""
 "Meddelandehuvud: Om den här filen inte är tom läggs den till som en MIME-"
 "bilaga innan meddelandet för varje brev som distribueras till listan."
 
-#: ../web_tt2/editfile.tt2:81
+#: ../web_tt2/editfile.tt2:85
 msgid "More"
 msgstr "Mera"
 
-#: ../web_tt2/editfile.tt2:84
+#: ../web_tt2/editfile.tt2:88
 msgid "Unsubscribe message: This message is sent when users leave the list."
 msgstr ""
 "Avslutningsmeddelande: Detta meddelande skickas när användare lämnar listan."
 
-#: ../web_tt2/editfile.tt2:88
+#: ../web_tt2/editfile.tt2:92
 msgid ""
 "Deletion message: This message is sent to users when you\n"
 "remove them from the list using the DEL command (unless you hit the Quiet "
@@ -1821,7 +1813,7 @@ msgstr ""
 "tar bort dem från listan med DEL-kommandot (om du inte väljer tyst "
 "borttagning)."
 
-#: ../web_tt2/editfile.tt2:91
+#: ../web_tt2/editfile.tt2:95
 #, fuzzy
 msgid ""
 "Virus infection message: This message is sent to the sender of a message in "
@@ -1853,7 +1845,17 @@ msgstr "Studshantering"
 msgid "Data sources setup"
 msgstr "Inställningar för datakällor"
 
-#: ../web_tt2/edit_list_request.tt2:37
+#: ../web_tt2/edit_list_request.tt2:17 ../web_tt2/nav.tt2:105
+#, fuzzy
+msgid "List description/homepage"
+msgstr "listbeskrivning"
+
+#: ../web_tt2/edit_list_request.tt2:18 ../web_tt2/nav.tt2:107
+#, fuzzy
+msgid "Message templates"
+msgstr "Meddelandenamn"
+
+#: ../web_tt2/edit_list_request.tt2:38
 msgid "scenario source"
 msgstr "källa för scenario"
 
@@ -1861,9 +1863,9 @@ msgstr "källa för scenario"
 #: ../mail_tt2/listmaster_notification.tt2:306
 #: ../mail_tt2/listmaster_notification.tt2:377
 #: ../mail_tt2/listowner_notification.tt2:81 ../mail_tt2/lists.tt2:7
-#: ../mail_tt2/summary.tt2:4 ../web_tt2/edit_list_request.tt2:103
-#: ../web_tt2/edit_list_request.tt2:105 ../web_tt2/edit_list_request.tt2:261
-#: ../web_tt2/edit_list_request.tt2:263 ../web_tt2/editsubscriber.tt2:47
+#: ../mail_tt2/summary.tt2:4 ../web_tt2/edit_list_request.tt2:104
+#: ../web_tt2/edit_list_request.tt2:106 ../web_tt2/edit_list_request.tt2:262
+#: ../web_tt2/edit_list_request.tt2:264 ../web_tt2/editsubscriber.tt2:47
 #: ../web_tt2/editsubscriber.tt2:55 ../web_tt2/error.tt2:108
 #: ../web_tt2/rss.tt2:4 ../web_tt2/subindex.tt2:39
 msgid ":"
@@ -2588,7 +2590,7 @@ msgstr "Stängda listor"
 
 #: ../src/etc/mhonarc-ressources.tt2:212 ../src/etc/mhonarc-ressources.tt2:328
 #: ../web_tt2/get_closed_lists.tt2:29 ../web_tt2/get_closed_lists.tt2:9
-#: ../web_tt2/modindex.tt2:135 ../web_tt2/review.tt2:161
+#: ../web_tt2/modindex.tt2:135 ../web_tt2/review.tt2:165
 #: ../web_tt2/reviewbouncing.tt2:131 ../web_tt2/reviewbouncing.tt2:60
 #: ../web_tt2/subindex.tt2:10 ../web_tt2/subindex.tt2:57
 #: ../web_tt2/subscriber_table.tt2:9
@@ -2840,7 +2842,7 @@ msgid " The latest lists of this robot"
 msgstr " De senaste listorna för denna robot"
 
 #. (occurrence)
-#: ../web_tt2/lists.tt2:7 ../web_tt2/review.tt2:125
+#: ../web_tt2/lists.tt2:7 ../web_tt2/review.tt2:129
 msgid "%1 occurrence(s) found"
 msgstr "%1 händelse(r) hittades"
 
@@ -3210,11 +3212,11 @@ msgstr "Skicka in en felrapport eller förbättringsförslag"
 msgid "DKIM"
 msgstr "DKIM"
 
-#: ../web_tt2/nav.tt2:117
+#: ../web_tt2/nav.tt2:119
 msgid "Send a message"
 msgstr "Skicka ett meddelande"
 
-#: ../web_tt2/nav.tt2:119
+#: ../web_tt2/nav.tt2:121
 msgid "Send an html page"
 msgstr "Skicka en HTML-sida"
 
@@ -3683,7 +3685,7 @@ msgstr ""
 "Vill du verkligen skicka ett påminnelsemeddelande för prenumerationen till %"
 "1-prenumeranterna?"
 
-#: ../web_tt2/review.tt2:103 ../web_tt2/review.tt2:143
+#: ../web_tt2/review.tt2:107 ../web_tt2/review.tt2:147
 #: ../web_tt2/reviewbouncing.tt2:115 ../web_tt2/reviewbouncing.tt2:44
 #: ../web_tt2/viewlogs.tt2:31
 msgid "Previous page"
@@ -3694,7 +3696,7 @@ msgstr "Föregående sida"
 msgid "page %1 / %2"
 msgstr "sida %1 / %2"
 
-#: ../web_tt2/review.tt2:113 ../web_tt2/review.tt2:153
+#: ../web_tt2/review.tt2:117 ../web_tt2/review.tt2:157
 #: ../web_tt2/reviewbouncing.tt2:121 ../web_tt2/reviewbouncing.tt2:50
 #: ../web_tt2/viewlogs.tt2:37
 msgid "Next page"
@@ -3704,7 +3706,7 @@ msgstr "Nästa sida"
 msgid "Table which display list bounces"
 msgstr "Tabell som visar liststudsar"
 
-#: ../web_tt2/review.tt2:172 ../web_tt2/reviewbouncing.tt2:61
+#: ../web_tt2/review.tt2:176 ../web_tt2/reviewbouncing.tt2:61
 #: ../web_tt2/show_exclude.tt2:15 ../web_tt2/subindex.tt2:11
 #: ../web_tt2/subscriber_table.tt2:15 ../web_tt2/subscriber_table.tt2:18
 #: ../web_tt2/viewlogs.tt2:54 ../web_tt2/viewlogs.tt2:63
@@ -3735,7 +3737,7 @@ msgstr "Sista studs"
 msgid "no score"
 msgstr "ingen poäng"
 
-#: ../web_tt2/review.tt2:120 ../web_tt2/review.tt2:162
+#: ../web_tt2/review.tt2:124 ../web_tt2/review.tt2:166
 #: ../web_tt2/reviewbouncing.tt2:126
 msgid "Delete selected email addresses"
 msgstr "Ta bort valda e-postadresser"
@@ -3778,66 +3780,71 @@ msgstr "Uteslutna"
 
 #: ../web_tt2/review.tt2:38
 #, fuzzy
+msgid "Edit message templates"
+msgstr "Redigera listmallar"
+
+#: ../web_tt2/review.tt2:42
+#, fuzzy
 msgid "<strong>Last update:"
 msgstr "Senast uppdaterad:"
 
-#: ../web_tt2/review.tt2:48
+#: ../web_tt2/review.tt2:52
 msgid "Add an user: "
 msgstr "Lägg till en användare: "
 
-#: ../web_tt2/review.tt2:52
+#: ../web_tt2/review.tt2:56
 #, fuzzy
 msgid "Add quietly"
 msgstr "tyst"
 
-#: ../web_tt2/review.tt2:53
+#: ../web_tt2/review.tt2:57
 msgid "Multiple add"
 msgstr "Lägg till flera"
 
-#: ../web_tt2/review.tt2:63
+#: ../web_tt2/review.tt2:67
 msgid "Search user by e-mail: "
 msgstr "Sök användare efter e-postadress: "
 
-#: ../web_tt2/review.tt2:64
+#: ../web_tt2/review.tt2:68
 msgid "Search user by email"
 msgstr "Sök användare efter e-postadress"
 
-#: ../web_tt2/review.tt2:67
+#: ../web_tt2/review.tt2:71
 msgid "Searches are limited to 50 results, except when using a @domain mask."
 msgstr ""
 
-#: ../web_tt2/review.tt2:71
+#: ../web_tt2/review.tt2:75
 msgid "Selection too wide, can not show selection"
 msgstr "För brett sökvillkor, kan inte visa urval"
 
-#: ../web_tt2/review.tt2:87 ../web_tt2/viewlogs.tt2:8
+#: ../web_tt2/review.tt2:91 ../web_tt2/viewlogs.tt2:8
 msgid "Page size"
 msgstr "Sidstorlek"
 
-#: ../web_tt2/review.tt2:108 ../web_tt2/review.tt2:148
+#: ../web_tt2/review.tt2:112 ../web_tt2/review.tt2:152
 #: ../web_tt2/viewlogs.tt2:34
 msgid "page"
 msgstr "sida"
 
 #. (similar_subscribers_occurence)
-#: ../web_tt2/review.tt2:133
+#: ../web_tt2/review.tt2:137
 msgid " Other similar subscriber's email(s) (%1)"
 msgstr " Andra liknande prenumeranters e-post (%1)"
 
-#: ../web_tt2/review.tt2:160
+#: ../web_tt2/review.tt2:164
 msgid "Do you really want to unsubscribe ALL selected subscribers?"
 msgstr ""
 "Vill du verkligen avsluta prenumerationen för ALLA valda prenumeranter?"
 
-#: ../web_tt2/review.tt2:169
+#: ../web_tt2/review.tt2:173
 msgid "Excluded users"
 msgstr "Uteslutna användare"
 
-#: ../web_tt2/review.tt2:170 ../web_tt2/show_exclude.tt2:13
+#: ../web_tt2/review.tt2:174 ../web_tt2/show_exclude.tt2:13
 msgid "List of exclude"
 msgstr "Lista över uteslutna"
 
-#: ../web_tt2/review.tt2:173 ../web_tt2/show_exclude.tt2:16
+#: ../web_tt2/review.tt2:177 ../web_tt2/show_exclude.tt2:16
 msgid "Since"
 msgstr "Sedan"
 
@@ -10907,6 +10914,13 @@ msgstr "ingen e-post (användbar för semestrar)"
 msgid "you do not receive your own posts"
 msgstr "dina egna postningar skickas inte till dig"
 
+#: ../mail_tt2/moderate.tt2:27
+msgid ""
+"Because the new message is suspected to be a spam it is not attached to this "
+"one. You must use\n"
+"the web interface to reject or validate it."
+msgstr ""
+
 #: ../web_tt2/edit_config.tt2:7
 msgid "[%confparam.title%]"
 msgstr ""
@@ -10930,6 +10944,13 @@ msgstr ""
 #: ../src/lib/confdef.pm:260
 msgid "Log intensity"
 msgstr ""
+
+#~ msgid "Customizing: "
+#~ msgstr "Anpassning: "
+
+#~ msgid "Editing of various files and messages attached to your list."
+#~ msgstr ""
+#~ "Redigering av diverse filer och meddelanden kopplade till din lista."
 
 #~ msgid "URL:"
 #~ msgstr "URL:"

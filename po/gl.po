@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2002-07-16 17:27+0800\n"
-"PO-Revision-Date: 2012-08-28 12:16+0200\n"
+"PO-Revision-Date: 2012-09-25 14:36+0200\n"
 "Last-Translator: xesusmosquera <xesusmosquera@hotmail.com>\n"
 "Language-Team: Galego\n"
 "MIME-Version: 1.0\n"
@@ -95,7 +95,7 @@ msgstr "Inicio"
 #: ../web_tt2/d_editfile.tt2:14 ../web_tt2/d_properties.tt2:10
 #: ../web_tt2/d_properties.tt2:6 ../web_tt2/d_properties.tt2:8
 #: ../web_tt2/d_read.tt2:22 ../web_tt2/d_read.tt2:47
-#: ../web_tt2/edit_list_request.tt2:4 ../web_tt2/edit_list_request.tt2:40
+#: ../web_tt2/edit_list_request.tt2:4 ../web_tt2/edit_list_request.tt2:41
 #: ../web_tt2/editfile.tt2:4 ../web_tt2/menu.tt2:22
 #: ../web_tt2/modindex.tt2:145 ../web_tt2/modindex.tt2:6 ../web_tt2/pref.tt2:4
 #: ../web_tt2/rename_list_request.tt2:3 ../web_tt2/review.tt2:5
@@ -303,18 +303,10 @@ msgstr ""
 "lista, o cal vai depender dos privilexios que tiver."
 
 #: ../web_tt2/admin.tt2:9
-msgid "Customizing: "
-msgstr "Personalizar:"
-
-#: ../web_tt2/admin.tt2:9
-msgid "Editing of various files and messages attached to your list."
-msgstr ""
-
-#: ../web_tt2/admin.tt2:10
 msgid "Manage subscribers:"
 msgstr "Xestionar subscritores:"
 
-#: ../web_tt2/admin.tt2:10
+#: ../web_tt2/admin.tt2:9
 msgid ""
 "Allows you to add or delete list subscribers, moderate subscriptions and so "
 "on."
@@ -322,69 +314,69 @@ msgstr ""
 "Permite engadir ou eliminar subscritores da lista, moderar subscricións "
 "entre outras cousas."
 
-#: ../web_tt2/admin.tt2:12
+#: ../web_tt2/admin.tt2:11
 msgid "Blacklist:"
 msgstr "Lista negra:"
 
-#: ../web_tt2/admin.tt2:12
+#: ../web_tt2/admin.tt2:11
 msgid "Handles the set of black-listed mail addresses for this list."
 msgstr ""
 
-#: ../web_tt2/admin.tt2:15
+#: ../web_tt2/admin.tt2:14
 msgid "Manage archives:"
 msgstr "Xestionar arquivos:"
 
-#: ../web_tt2/admin.tt2:15
+#: ../web_tt2/admin.tt2:14
 msgid "Allows you to download and delete list archives."
 msgstr "Permite descargar e eliminar ficheiros da lista:"
 
-#: ../web_tt2/admin.tt2:18
+#: ../web_tt2/admin.tt2:17
 msgid "Bounces:"
 msgstr "Devolucións:"
 
-#: ../web_tt2/admin.tt2:18
+#: ../web_tt2/admin.tt2:17
 msgid "Manages non-delivery reports (also called bounces)."
 msgstr ""
 
-#: ../web_tt2/admin.tt2:21
+#: ../web_tt2/admin.tt2:20
 msgid "Logs:"
 msgstr "Rexistros (logs):"
 
-#: ../web_tt2/admin.tt2:21
+#: ../web_tt2/admin.tt2:20
 msgid "A tool for exploring the list logs."
 msgstr "Unha ferramenta para explorar os rexistros (logs) da lista"
 
-#: ../web_tt2/admin.tt2:26
+#: ../web_tt2/admin.tt2:25
 msgid "Drastic operations"
 msgstr "Operacións críticas"
 
-#: ../web_tt2/admin.tt2:33 ../web_tt2/admin_menu.tt2:117
+#: ../web_tt2/admin.tt2:32 ../web_tt2/admin_menu.tt2:117
 #: ../web_tt2/admin_menu.tt2:119
 msgid "Restore List"
 msgstr "Restaurar lista"
 
 #. (list)
-#: ../web_tt2/admin.tt2:33
+#: ../web_tt2/admin.tt2:32
 msgid "Are you sure you wish to restore list %1?"
 msgstr "Ten a certeza de que desexa restaurar a lista %1?"
 
-#: ../web_tt2/admin.tt2:33
+#: ../web_tt2/admin.tt2:32
 msgid ""
 "This list is currently closed. Clicking this button will make it active "
 "again."
 msgstr "Esta lista está fechada. Prema nesta botón para tornala activa."
 
-#: ../web_tt2/admin.tt2:36 ../web_tt2/admin_menu.tt2:122
+#: ../web_tt2/admin.tt2:35 ../web_tt2/admin_menu.tt2:122
 #: ../web_tt2/admin_menu.tt2:124
 msgid "Remove List"
 msgstr "Eliminar lista"
 
 #. (list)
-#: ../web_tt2/admin.tt2:36
+#: ../web_tt2/admin.tt2:35
 msgid "Are you sure you wish to close list %1?"
 msgstr "Ten a certeza de que desexa pechar a lista %1?"
 
-#: ../web_tt2/admin.tt2:36
+#: ../web_tt2/admin.tt2:35
 msgid ""
 "Completely removes the current list. Listmaster privileges are required to "
 "restore a list."
@@ -392,12 +384,12 @@ msgstr ""
 "Elimina completamente a lista actual. Só un administrador (listmaster) "
 "poderá restaurala."
 
-#: ../web_tt2/admin.tt2:46 ../web_tt2/admin_menu.tt2:129
+#: ../web_tt2/admin.tt2:45 ../web_tt2/admin_menu.tt2:129
 #: ../web_tt2/admin_menu.tt2:131
 msgid "Rename List"
 msgstr "Renomear lista"
 
-#: ../web_tt2/admin.tt2:46
+#: ../web_tt2/admin.tt2:45
 msgid ""
 "Allows you to change this list's name. Everything related to the list will "
 "be relabeled according to the new name, including the mail aliases and the "
@@ -407,35 +399,35 @@ msgstr ""
 "relacionadas con ela serán actualizadas ao novo nome, incluídos os alcumes "
 "de correo e os arquivos web."
 
-#: ../web_tt2/admin.tt2:59 ../web_tt2/admin_menu.tt2:96
+#: ../web_tt2/admin.tt2:58 ../web_tt2/admin_menu.tt2:96
 #: ../web_tt2/admin_menu.tt2:98
 msgid "Create Shared"
 msgstr ""
 
-#: ../web_tt2/admin.tt2:59
+#: ../web_tt2/admin.tt2:58
 msgid "Initializes the shared document web space."
 msgstr ""
 
-#: ../web_tt2/admin.tt2:63 ../web_tt2/admin_menu.tt2:105
+#: ../web_tt2/admin.tt2:62 ../web_tt2/admin_menu.tt2:105
 msgid "Delete Shared"
 msgstr ""
 
 #. (listname)
-#: ../web_tt2/admin.tt2:63
+#: ../web_tt2/admin.tt2:62
 msgid "Are you sure you wish to delete the shared documents for list %1?"
 msgstr ""
 
-#: ../web_tt2/admin.tt2:63
+#: ../web_tt2/admin.tt2:62
 msgid ""
 "Closes the shared document web space. It can be restored using \"Restore "
 "shared\" button."
 msgstr ""
 
-#: ../web_tt2/admin.tt2:67
+#: ../web_tt2/admin.tt2:66
 msgid "Restore Shared"
 msgstr ""
 
-#: ../web_tt2/admin.tt2:67
+#: ../web_tt2/admin.tt2:66
 msgid "Restores the previously closed shared document web space."
 msgstr ""
 
@@ -495,7 +487,7 @@ msgid "Add subscribers"
 msgstr "Engadir subscritores"
 
 #: ../web_tt2/add_request.tt2:13 ../web_tt2/editsubscriber.tt2:62
-#: ../web_tt2/review.tt2:121 ../web_tt2/review.tt2:163
+#: ../web_tt2/review.tt2:125 ../web_tt2/review.tt2:167
 #: ../web_tt2/reviewbouncing.tt2:127 ../web_tt2/search_user.tt2:56
 msgid "quiet"
 msgstr ""
@@ -515,8 +507,7 @@ msgid "Edit List Config"
 msgstr "Configurar a lista"
 
 #: ../web_tt2/admin_menu.tt2:52 ../web_tt2/admin_menu.tt2:58
-#: ../web_tt2/edit_list_request.tt2:17 ../web_tt2/lists.tt2:38
-#: ../web_tt2/nav.tt2:105
+#: ../web_tt2/lists.tt2:38
 msgid "Customizing"
 msgstr "Personalizar"
 
@@ -562,8 +553,8 @@ msgstr "Arquivos"
 msgid "Bounce Settings"
 msgstr "Configuración das devolucións"
 
-#: ../web_tt2/admin_menu.tt2:160 ../web_tt2/edit_list_request.tt2:18
-#: ../web_tt2/nav.tt2:107
+#: ../web_tt2/admin_menu.tt2:160 ../web_tt2/edit_list_request.tt2:19
+#: ../web_tt2/nav.tt2:109
 msgid "Miscellaneous"
 msgstr "Varios"
 
@@ -587,7 +578,7 @@ msgstr "Xestión do arquivo"
 #: ../web_tt2/d_properties.tt2:6 ../web_tt2/d_properties.tt2:8
 #: ../web_tt2/d_read.tt2:171 ../web_tt2/d_read.tt2:173
 #: ../web_tt2/d_read.tt2:179 ../web_tt2/d_read.tt2:22 ../web_tt2/d_read.tt2:47
-#: ../web_tt2/edit_list_request.tt2:4 ../web_tt2/edit_list_request.tt2:40
+#: ../web_tt2/edit_list_request.tt2:4 ../web_tt2/edit_list_request.tt2:41
 #: ../web_tt2/editfile.tt2:4 ../web_tt2/editsubscriber.tt2:37
 #: ../web_tt2/latest_d_read.tt2:29 ../web_tt2/latest_d_read.tt2:32
 #: ../web_tt2/modindex.tt2:145 ../web_tt2/modindex.tt2:6
@@ -648,7 +639,7 @@ msgid "Search field:"
 msgstr "Campo de procura:"
 
 #: ../src/etc/mhonarc-ressources.tt2:52 ../web_tt2/arcsearch_form.tt2:16
-#: ../web_tt2/review.tt2:65 ../web_tt2/reviewbouncing.tt2:13
+#: ../web_tt2/review.tt2:69 ../web_tt2/reviewbouncing.tt2:13
 msgid "Search"
 msgstr "Procurar"
 
@@ -1146,7 +1137,7 @@ msgid "list"
 msgstr "lista"
 
 #: ../web_tt2/copy_template.tt2:25 ../web_tt2/edit_config.tt2:17
-#: ../web_tt2/edit_list_request.tt2:411
+#: ../web_tt2/edit_list_request.tt2:412
 msgid "default"
 msgstr "predeterminado"
 
@@ -1350,7 +1341,7 @@ msgstr "URL do marcador"
 msgid "Replace the file %1 with your file"
 msgstr "Substituír o ficheiro %1 polo seu"
 
-#: ../web_tt2/d_editfile.tt2:38 ../web_tt2/edit_list_request.tt2:422
+#: ../web_tt2/d_editfile.tt2:38 ../web_tt2/edit_list_request.tt2:423
 #: ../web_tt2/editsubscriber.tt2:60 ../web_tt2/suboptions.tt2:65
 msgid "Update"
 msgstr "Actualizar"
@@ -1475,14 +1466,15 @@ msgstr "Tamaño (kb)"
 msgid "Last update"
 msgstr "Última actualización"
 
-#: ../web_tt2/d_read.tt2:75 ../web_tt2/editfile.tt2:31
-#: ../web_tt2/editfile.tt2:34 ../web_tt2/editfile.tt2:47
-#: ../web_tt2/editfile.tt2:50 ../web_tt2/editfile.tt2:53
-#: ../web_tt2/editfile.tt2:57 ../web_tt2/editfile.tt2:69
-#: ../web_tt2/editfile.tt2:72 ../web_tt2/editfile.tt2:84
-#: ../web_tt2/editfile.tt2:87 ../web_tt2/editfile.tt2:91
-#: ../web_tt2/manage_template.tt2:35 ../web_tt2/manage_template.tt2:56
-#: ../web_tt2/serveradmin.tt2:150 ../web_tt2/serveradmin.tt2:163
+#: ../web_tt2/d_read.tt2:75 ../web_tt2/editfile.tt2:35
+#: ../web_tt2/editfile.tt2:38 ../web_tt2/editfile.tt2:51
+#: ../web_tt2/editfile.tt2:54 ../web_tt2/editfile.tt2:57
+#: ../web_tt2/editfile.tt2:61 ../web_tt2/editfile.tt2:73
+#: ../web_tt2/editfile.tt2:76 ../web_tt2/editfile.tt2:88
+#: ../web_tt2/editfile.tt2:91 ../web_tt2/editfile.tt2:95
+#: ../web_tt2/info.tt2:12 ../web_tt2/manage_template.tt2:35
+#: ../web_tt2/manage_template.tt2:56 ../web_tt2/serveradmin.tt2:150
+#: ../web_tt2/serveradmin.tt2:163
 msgid "Edit"
 msgstr "Editar"
 
@@ -1573,7 +1565,7 @@ msgstr "título"
 msgid "URL"
 msgstr "URL"
 
-#: ../web_tt2/d_read.tt2:352 ../web_tt2/review.tt2:50
+#: ../web_tt2/d_read.tt2:352 ../web_tt2/review.tt2:54
 msgid "Add"
 msgstr "Engadir"
 
@@ -1692,19 +1684,19 @@ msgstr ""
 msgid "Edit list templates"
 msgstr ""
 
-#: ../web_tt2/editfile.tt2:15
+#: ../web_tt2/editfile.tt2:16
 msgid "Save"
 msgstr "Gardar"
 
-#: ../web_tt2/editfile.tt2:23
+#: ../web_tt2/editfile.tt2:27
 msgid "You can edit several messages/files associated with your list:"
 msgstr ""
 
-#: ../web_tt2/editfile.tt2:28
+#: ../web_tt2/editfile.tt2:32
 msgid "HTML pages"
 msgstr "Páxinas HTML"
 
-#: ../web_tt2/editfile.tt2:31
+#: ../web_tt2/editfile.tt2:35
 msgid ""
 "List homepage: HTML text to describe the list. It is printed on the right-"
 "hand side of the main list page. (default for this is the list description)"
@@ -1712,7 +1704,7 @@ msgstr ""
 "Páxina de inicio da lista: texto HTML para describir a lista. Aparece no "
 "lado dereito da páxina principal (por defecto é a descrición da lista)"
 
-#: ../web_tt2/editfile.tt2:34
+#: ../web_tt2/editfile.tt2:38
 msgid ""
 "List description: This text is sent as an answer to the mail command INFO. "
 "It can also be included in the <em>Welcome message</em>."
@@ -1720,11 +1712,11 @@ msgstr ""
 "Descrición da lista: este texto envíase como resposta ao comando INFO. Tamén "
 "se pode incluír na <em>mensaxe de benvida</em>."
 
-#: ../web_tt2/editfile.tt2:44
+#: ../web_tt2/editfile.tt2:48
 msgid "Automatic messages"
 msgstr "Mensaxes automáticas"
 
-#: ../web_tt2/editfile.tt2:47
+#: ../web_tt2/editfile.tt2:51
 msgid ""
 "Welcome message: This message is sent to new subscribers. It can be a full "
 "MIME structured message (only for MIME gurus)."
@@ -1732,7 +1724,7 @@ msgstr ""
 "Mensaxe de benvida: esta mensaxe enviáselles aos subscritores novos. Pode "
 "ser unha mensaxe estruturada en MIME (só para gurús do MIME)."
 
-#: ../web_tt2/editfile.tt2:50
+#: ../web_tt2/editfile.tt2:54
 msgid ""
 "Rejection message: when a message is rejected by list editor, a notification "
 "can be sent to the original author. You may prepare various rejection "
@@ -1742,7 +1734,7 @@ msgstr ""
 "lista, pódeselle enviar unha notificación ao seu autor ou autora. Pode "
 "preparar varias mensaxes de rexeitamento."
 
-#: ../web_tt2/editfile.tt2:54
+#: ../web_tt2/editfile.tt2:58
 msgid ""
 "Remind message: This message is sent to each subscriber\n"
 "when using the command  REMIND. It's very useful to help people who are "
@@ -1750,7 +1742,7 @@ msgid ""
 "unsubscribe themselves."
 msgstr ""
 
-#: ../web_tt2/editfile.tt2:58
+#: ../web_tt2/editfile.tt2:62
 msgid ""
 "Subscribing invitation message: sent to a person if someone  \n"
 "uses the INVITE command to invite someone to subscribe."
@@ -1759,11 +1751,11 @@ msgstr ""
 "persoa a través do comando \n"
 "INVITE co fin de que se subscriba."
 
-#: ../web_tt2/editfile.tt2:66
+#: ../web_tt2/editfile.tt2:70
 msgid "Added in distributed messages"
 msgstr "Engadido ás mensaxes enviadas"
 
-#: ../web_tt2/editfile.tt2:69
+#: ../web_tt2/editfile.tt2:73
 msgid ""
 "Message footer: If this file is not empty, it is added as a MIME attachment "
 "at the end of each message distributed to the list."
@@ -1771,7 +1763,7 @@ msgstr ""
 "Nota ao pé da mensaxe: se non está baleiro este ficheiro, engádese como un "
 "anexo MIME ao final de cada mensaxe enviada a través da lista."
 
-#: ../web_tt2/editfile.tt2:72
+#: ../web_tt2/editfile.tt2:76
 msgid ""
 "Message header: If this file is not empty, it is added as a MIME attachment "
 "at the beginning of each message distributed to the list."
@@ -1779,17 +1771,17 @@ msgstr ""
 "Cabeceira da mensaxe: se non está baleiro este ficheiro, engádese como un "
 "anexo MIME no comezo de cada mensaxe enviada a través da lista."
 
-#: ../web_tt2/editfile.tt2:81
+#: ../web_tt2/editfile.tt2:85
 msgid "More"
 msgstr "Máis"
 
-#: ../web_tt2/editfile.tt2:84
+#: ../web_tt2/editfile.tt2:88
 msgid "Unsubscribe message: This message is sent when users leave the list."
 msgstr ""
 "Mensaxe de baixa na subscrición: esta mensaxe envíaselles aos usuarios cando "
 "estes abandonan a lista."
 
-#: ../web_tt2/editfile.tt2:88
+#: ../web_tt2/editfile.tt2:92
 #, fuzzy
 msgid ""
 "Deletion message: This message is sent to users when you\n"
@@ -1800,7 +1792,7 @@ msgstr ""
 "os elimina da lista co comando DEL (a non ser que empregue o botón quiet "
 "para os eliminar en silencio)."
 
-#: ../web_tt2/editfile.tt2:91
+#: ../web_tt2/editfile.tt2:95
 #, fuzzy
 msgid ""
 "Virus infection message: This message is sent to the sender of a message in "
@@ -1833,7 +1825,17 @@ msgstr "Xestión das devolucións"
 msgid "Data sources setup"
 msgstr "Definición das fontes de datos"
 
-#: ../web_tt2/edit_list_request.tt2:37
+#: ../web_tt2/edit_list_request.tt2:17 ../web_tt2/nav.tt2:105
+#, fuzzy
+msgid "List description/homepage"
+msgstr "Lista de mensaxes de rexeitamento"
+
+#: ../web_tt2/edit_list_request.tt2:18 ../web_tt2/nav.tt2:107
+#, fuzzy
+msgid "Message templates"
+msgstr "Nome da mensaxe"
+
+#: ../web_tt2/edit_list_request.tt2:38
 msgid "scenario source"
 msgstr ""
 
@@ -1841,9 +1843,9 @@ msgstr ""
 #: ../mail_tt2/listmaster_notification.tt2:306
 #: ../mail_tt2/listmaster_notification.tt2:377
 #: ../mail_tt2/listowner_notification.tt2:81 ../mail_tt2/lists.tt2:7
-#: ../mail_tt2/summary.tt2:4 ../web_tt2/edit_list_request.tt2:103
-#: ../web_tt2/edit_list_request.tt2:105 ../web_tt2/edit_list_request.tt2:261
-#: ../web_tt2/edit_list_request.tt2:263 ../web_tt2/editsubscriber.tt2:47
+#: ../mail_tt2/summary.tt2:4 ../web_tt2/edit_list_request.tt2:104
+#: ../web_tt2/edit_list_request.tt2:106 ../web_tt2/edit_list_request.tt2:262
+#: ../web_tt2/edit_list_request.tt2:264 ../web_tt2/editsubscriber.tt2:47
 #: ../web_tt2/editsubscriber.tt2:55 ../web_tt2/error.tt2:108
 #: ../web_tt2/rss.tt2:4 ../web_tt2/subindex.tt2:39
 #, fuzzy
@@ -2565,7 +2567,7 @@ msgstr "Listas pechadas"
 
 #: ../src/etc/mhonarc-ressources.tt2:212 ../src/etc/mhonarc-ressources.tt2:328
 #: ../web_tt2/get_closed_lists.tt2:29 ../web_tt2/get_closed_lists.tt2:9
-#: ../web_tt2/modindex.tt2:135 ../web_tt2/review.tt2:161
+#: ../web_tt2/modindex.tt2:135 ../web_tt2/review.tt2:165
 #: ../web_tt2/reviewbouncing.tt2:131 ../web_tt2/reviewbouncing.tt2:60
 #: ../web_tt2/subindex.tt2:10 ../web_tt2/subindex.tt2:57
 #: ../web_tt2/subscriber_table.tt2:9
@@ -2817,7 +2819,7 @@ msgid " The latest lists of this robot"
 msgstr "As últimas listas creadas"
 
 #. (occurrence)
-#: ../web_tt2/lists.tt2:7 ../web_tt2/review.tt2:125
+#: ../web_tt2/lists.tt2:7 ../web_tt2/review.tt2:129
 msgid "%1 occurrence(s) found"
 msgstr "%1 ocorrencia(s) atopada(s)"
 
@@ -3168,11 +3170,11 @@ msgstr "Enviar un erro (bug) ou unha suxestión de mellora"
 msgid "DKIM"
 msgstr "DKIM"
 
-#: ../web_tt2/nav.tt2:117
+#: ../web_tt2/nav.tt2:119
 msgid "Send a message"
 msgstr "Enviar unha mensaxe"
 
-#: ../web_tt2/nav.tt2:119
+#: ../web_tt2/nav.tt2:121
 msgid "Send an html page"
 msgstr "Enviar unha páxina HTML"
 
@@ -3631,7 +3633,7 @@ msgid ""
 msgstr ""
 "Realmente quere enviar un recordatorio de subscrición aos %1 subscritores?"
 
-#: ../web_tt2/review.tt2:103 ../web_tt2/review.tt2:143
+#: ../web_tt2/review.tt2:107 ../web_tt2/review.tt2:147
 #: ../web_tt2/reviewbouncing.tt2:115 ../web_tt2/reviewbouncing.tt2:44
 #: ../web_tt2/viewlogs.tt2:31
 msgid "Previous page"
@@ -3642,7 +3644,7 @@ msgstr "Páxina anterior"
 msgid "page %1 / %2"
 msgstr "páxina %1 / %2"
 
-#: ../web_tt2/review.tt2:113 ../web_tt2/review.tt2:153
+#: ../web_tt2/review.tt2:117 ../web_tt2/review.tt2:157
 #: ../web_tt2/reviewbouncing.tt2:121 ../web_tt2/reviewbouncing.tt2:50
 #: ../web_tt2/viewlogs.tt2:37
 msgid "Next page"
@@ -3652,7 +3654,7 @@ msgstr "Páxina seguinte"
 msgid "Table which display list bounces"
 msgstr "Táboa que mostra a lista de devolucións"
 
-#: ../web_tt2/review.tt2:172 ../web_tt2/reviewbouncing.tt2:61
+#: ../web_tt2/review.tt2:176 ../web_tt2/reviewbouncing.tt2:61
 #: ../web_tt2/show_exclude.tt2:15 ../web_tt2/subindex.tt2:11
 #: ../web_tt2/subscriber_table.tt2:15 ../web_tt2/subscriber_table.tt2:18
 #: ../web_tt2/viewlogs.tt2:54 ../web_tt2/viewlogs.tt2:63
@@ -3683,7 +3685,7 @@ msgstr "Última devolución ou rebote"
 msgid "no score"
 msgstr ""
 
-#: ../web_tt2/review.tt2:120 ../web_tt2/review.tt2:162
+#: ../web_tt2/review.tt2:124 ../web_tt2/review.tt2:166
 #: ../web_tt2/reviewbouncing.tt2:126
 msgid "Delete selected email addresses"
 msgstr "Eliminar os enderezos seleccionados"
@@ -3725,64 +3727,69 @@ msgid "Exclude"
 msgstr "Excluír"
 
 #: ../web_tt2/review.tt2:38
+#, fuzzy
+msgid "Edit message templates"
+msgstr "Lista de mensaxes para moderar"
+
+#: ../web_tt2/review.tt2:42
 msgid "<strong>Last update:"
 msgstr ""
 
-#: ../web_tt2/review.tt2:48
+#: ../web_tt2/review.tt2:52
 msgid "Add an user: "
 msgstr "Engadir un usuario:"
 
-#: ../web_tt2/review.tt2:52
+#: ../web_tt2/review.tt2:56
 msgid "Add quietly"
 msgstr ""
 
-#: ../web_tt2/review.tt2:53
+#: ../web_tt2/review.tt2:57
 msgid "Multiple add"
 msgstr ""
 
-#: ../web_tt2/review.tt2:63
+#: ../web_tt2/review.tt2:67
 msgid "Search user by e-mail: "
 msgstr "Procurar usuario por correo electrónico:"
 
-#: ../web_tt2/review.tt2:64
+#: ../web_tt2/review.tt2:68
 msgid "Search user by email"
 msgstr "Procurar usuario por correo electrónico"
 
-#: ../web_tt2/review.tt2:67
+#: ../web_tt2/review.tt2:71
 msgid "Searches are limited to 50 results, except when using a @domain mask."
 msgstr ""
 
-#: ../web_tt2/review.tt2:71
+#: ../web_tt2/review.tt2:75
 msgid "Selection too wide, can not show selection"
 msgstr "Selección moi extensa, polo que non se pode mostrar."
 
-#: ../web_tt2/review.tt2:87 ../web_tt2/viewlogs.tt2:8
+#: ../web_tt2/review.tt2:91 ../web_tt2/viewlogs.tt2:8
 msgid "Page size"
 msgstr "Tamaño da páxina"
 
-#: ../web_tt2/review.tt2:108 ../web_tt2/review.tt2:148
+#: ../web_tt2/review.tt2:112 ../web_tt2/review.tt2:152
 #: ../web_tt2/viewlogs.tt2:34
 msgid "page"
 msgstr "páxina"
 
 #. (similar_subscribers_occurence)
-#: ../web_tt2/review.tt2:133
+#: ../web_tt2/review.tt2:137
 msgid " Other similar subscriber's email(s) (%1)"
 msgstr "Outros enderezos de subscrición semellantes (%1)"
 
-#: ../web_tt2/review.tt2:160
+#: ../web_tt2/review.tt2:164
 msgid "Do you really want to unsubscribe ALL selected subscribers?"
 msgstr "Realmente quere dar de baixa a TODOS os subscritores seleccionados?"
 
-#: ../web_tt2/review.tt2:169
+#: ../web_tt2/review.tt2:173
 msgid "Excluded users"
 msgstr "Usuarios excluídos"
 
-#: ../web_tt2/review.tt2:170 ../web_tt2/show_exclude.tt2:13
+#: ../web_tt2/review.tt2:174 ../web_tt2/show_exclude.tt2:13
 msgid "List of exclude"
 msgstr "Lista de exclusión"
 
-#: ../web_tt2/review.tt2:173 ../web_tt2/show_exclude.tt2:16
+#: ../web_tt2/review.tt2:177 ../web_tt2/show_exclude.tt2:16
 msgid "Since"
 msgstr "Desde"
 
@@ -3914,41 +3921,41 @@ msgstr ""
 
 #: ../web_tt2/scenario_test.tt2:19
 msgid "sender email:"
-msgstr ""
+msgstr "enderezo do remitente:"
 
 #: ../web_tt2/scenario_test.tt2:22
 msgid "Related email:"
-msgstr ""
+msgstr "Enderezo relacionado:"
 
 #: ../web_tt2/scenario_test.tt2:25
 msgid "Remote IP address:"
-msgstr ""
+msgstr "Enderezo IP remoto:"
 
 #: ../web_tt2/scenario_test.tt2:28
 msgid "Remote host:"
-msgstr ""
+msgstr "Servidor (host) remoto:"
 
 #: ../web_tt2/scenario_test.tt2:31
 msgid "Auth method:"
-msgstr ""
+msgstr "Método de autenticación:"
 
 #: ../web_tt2/scenario_test.tt2:38
 msgid "get matched rule"
-msgstr ""
+msgstr "obter a regra aplicada"
 
 #: ../web_tt2/search_user.tt2:3
 msgid "User search result:"
-msgstr ""
+msgstr "Resultado da procura por usuario:"
 
 #. (email)
 #: ../web_tt2/search_user.tt2:5
 msgid "<strong>%1</strong> is subscribed to the following mailing lists:"
-msgstr ""
+msgstr "<strong>%1</strong> está subscrito/a ás seguintes listas de correo:"
 
 #. (email)
 #: ../web_tt2/search_user.tt2:8
 msgid "Lists which %1 is subscribed "
-msgstr ""
+msgstr "Listas das cales %1 é membro "
 
 #: ../web_tt2/search_user.tt2:11
 msgid "role"
@@ -3956,7 +3963,7 @@ msgstr ""
 
 #: ../web_tt2/search_user.tt2:13
 msgid "reception"
-msgstr ""
+msgstr "recepción"
 
 #: ../web_tt2/search_user.tt2:15
 msgid "topics"
@@ -3968,11 +3975,11 @@ msgstr ""
 
 #: ../web_tt2/search_user.tt2:35
 msgid "member"
-msgstr ""
+msgstr "membro"
 
 #: ../web_tt2/search_user.tt2:36
 msgid "owner"
-msgstr ""
+msgstr "propietario"
 
 #: ../web_tt2/search_user.tt2:37
 msgid "editor"
@@ -3980,7 +3987,7 @@ msgstr ""
 
 #: ../web_tt2/select_voot_groups_request.tt2:4
 msgid "Select group"
-msgstr ""
+msgstr "Seleccionar grupo"
 
 #: ../web_tt2/select_voot_groups_request.tt2:6
 msgid ""
@@ -3990,45 +3997,47 @@ msgstr ""
 
 #: ../web_tt2/select_voot_groups_request.tt2:20
 msgid "Set as source"
-msgstr ""
+msgstr "Definir unha fonte"
 
 #: ../web_tt2/select_voot_provider_request.tt2:4
 msgid "Select VOOT provider"
-msgstr ""
+msgstr "Seleccionar provedor VOOT"
 
 #: ../web_tt2/select_voot_provider_request.tt2:6
 msgid ""
 "Hereafter is the list of VOOT providers that share group information with "
 "Sympa. Select which provider you want to use your groups from."
 msgstr ""
+"Velaquí unha listaxe de provedores VOOT que comparten informacións de grupo "
+"con Sympa. Seleccione o provedor cuxos grupos desexa empregar."
 
 #: ../web_tt2/serveradmin.tt2:7
 msgid "Manage lists"
-msgstr ""
+msgstr "Xestionar listas"
 
 #: ../web_tt2/serveradmin.tt2:12
 msgid "Consult lists"
-msgstr ""
+msgstr "Consultar listas"
 
 #: ../web_tt2/serveradmin.tt2:14
 msgid "Lists sorted by creation date"
-msgstr ""
+msgstr "Listas ordenadas por orde de creación"
 
 #: ../web_tt2/serveradmin.tt2:15
 msgid "Lists sorted by last message date"
-msgstr ""
+msgstr "Listas ordenadas pola data da última mensaxe"
 
 #: ../web_tt2/serveradmin.tt2:16
 msgid "Lists sorted by subscriber count"
-msgstr ""
+msgstr "Listas ordenadas pola conta de subscritor"
 
 #: ../web_tt2/serveradmin.tt2:26
 msgid "The following virtual robots are running on this server:"
-msgstr ""
+msgstr "Os seguintes robots virtuais están a ser executados neste servidor."
 
 #: ../web_tt2/serveradmin.tt2:28
 msgid "Sympa URL:"
-msgstr ""
+msgstr "URL de Sympa:"
 
 #: ../web_tt2/serveradmin.tt2:28
 msgid "Mail domain:"
@@ -4036,11 +4045,11 @@ msgstr ""
 
 #: ../web_tt2/serveradmin.tt2:28
 msgid "Listmaster(s):"
-msgstr ""
+msgstr "Administrador(es) da lista:"
 
 #: ../web_tt2/serveradmin.tt2:31
 msgid "No Virtual Robot defined on this server"
-msgstr ""
+msgstr "Non hai ningún robot virtual funcionando neste servidor."
 
 #: ../web_tt2/serveradmin.tt2:47
 msgid "Review lists from this family"
@@ -4048,37 +4057,39 @@ msgstr ""
 
 #: ../web_tt2/serveradmin.tt2:61
 msgid "Search User"
-msgstr ""
+msgstr "Procurar usuario"
 
 #: ../web_tt2/serveradmin.tt2:70
 msgid "Delay for active sessions (minutes)"
-msgstr ""
+msgstr "Mostrar as sesións activas desde hai (minutos):"
 
 #: ../web_tt2/serveradmin.tt2:72
 msgid "Show only connected users"
-msgstr ""
+msgstr "Mostrar só os usuarios conectados"
 
 #: ../web_tt2/serveradmin.tt2:74
 msgid "Show sessions"
-msgstr ""
+msgstr "Mostrar as sesións"
 
 #: ../web_tt2/serveradmin.tt2:80
 msgid "You can change your users email address here:"
-msgstr ""
+msgstr "Pode mudar o seu enderezo electrónico aquí:"
 
 #: ../web_tt2/serveradmin.tt2:82
 msgid ""
 "Changing a user's email address will apply the change his memberships but it "
 "will also apply to his ownerships if he is owner of some lists."
 msgstr ""
+"O cambio de enderezo electrónico aplicarase ás subscricións da persoa mais "
+"tamén ao seu papel de propietario/a e de moderador/a."
 
 #: ../web_tt2/serveradmin.tt2:87
 msgid "Current user email address: "
-msgstr ""
+msgstr "Enderezo electrónico actual do usuario: "
 
 #: ../web_tt2/serveradmin.tt2:89
 msgid "New user email address: "
-msgstr ""
+msgstr "Novo enderezo electrónico do usuario: "
 
 #: ../web_tt2/serveradmin.tt2:91
 msgid "Update user memberships"
@@ -4086,7 +4097,7 @@ msgstr ""
 
 #: ../web_tt2/serveradmin.tt2:96
 msgid "Change identity"
-msgstr ""
+msgstr "Mudar de identidade"
 
 #: ../web_tt2/serveradmin.tt2:98
 msgid ""
@@ -4094,18 +4105,23 @@ msgid ""
 "may be usefull when providing assistance or to test users privileges. The "
 "new identity is attached to the current session"
 msgstr ""
+"Como administrador da lista pode modificar a súa identidade e actuar como "
+"outra persoa. Iso pode resultar útil ao facilitar asistencia ou para testar "
+"os privilexios de usuario. A nova identidade fica ligada á sesión en curso."
 
 #: ../web_tt2/serveradmin.tt2:102
 msgid "change identity as: "
-msgstr ""
+msgstr "mudar a identidade para:"
 
 #: ../web_tt2/serveradmin.tt2:112
 msgid "Rebuild HTML archives using \"arctxt\" directories as input."
 msgstr ""
+"Reconstruír os ficheiros HTML empregando os directorios \"arctxt\" como "
+"entrada."
 
 #: ../web_tt2/serveradmin.tt2:115
 msgid "listname: "
-msgstr ""
+msgstr "nome da lista:"
 
 #: ../web_tt2/serveradmin.tt2:115
 msgid "Rebuild archive"
@@ -4113,11 +4129,11 @@ msgstr ""
 
 #: ../web_tt2/serveradmin.tt2:116
 msgid "Rebuild all"
-msgstr ""
+msgstr "Reconstruír todo"
 
 #: ../web_tt2/serveradmin.tt2:116
 msgid "  May take a lot of CPU time,  be careful!"
-msgstr ""
+msgstr "    Esta operación pode precisar moita CPU,     teña tino!"
 
 #: ../web_tt2/serveradmin.tt2:126
 msgid ""
@@ -4128,15 +4144,15 @@ msgstr ""
 
 #: ../web_tt2/serveradmin.tt2:130
 msgid "Log level:"
-msgstr ""
+msgstr "Nivel de rexistro (log):"
 
 #: ../web_tt2/serveradmin.tt2:136
 msgid "Set log level"
-msgstr ""
+msgstr "Definir o nivel de rexistro (log)"
 
 #: ../web_tt2/serveradmin.tt2:146
 msgid "Setting defaults list templates"
-msgstr ""
+msgstr "Configuración dos modelos de listas predeterminados"
 
 #: ../web_tt2/serveradmin.tt2:159
 msgid "Setting site templates"
@@ -4144,11 +4160,11 @@ msgstr ""
 
 #: ../web_tt2/serveradmin.tt2:167
 msgid "view translations"
-msgstr ""
+msgstr "ver traducións"
 
 #: ../web_tt2/serveradmin.tt2:168
 msgid "Customize templates"
-msgstr ""
+msgstr "Personalizar modelos"
 
 #: ../web_tt2/serveradmin.tt2:173
 msgid ""
@@ -4156,6 +4172,9 @@ msgid ""
 "can be processed by the tt2 parser.This button is for controlling tt2 vars "
 "dump feature:"
 msgstr ""
+"Cando se personaliza a interface web de Sympa é útil saber cales son os "
+"parámetros dispoñibles para o procesador TT2. Este botón controla a "
+"funcionalidade destes:"
 
 #: ../web_tt2/serveradmin.tt2:176
 msgid "Unset template vars dump"
@@ -4198,32 +4217,32 @@ msgstr ""
 
 #: ../web_tt2/setlang.tt2:9
 msgid "Language selection"
-msgstr ""
+msgstr "Selección de idioma"
 
 #: ../web_tt2/setlang.tt2:17
 msgid "Validate your language selection"
-msgstr ""
+msgstr "Validar o idioma seleccionado"
 
 #: ../web_tt2/setlang.tt2:17
 msgid "Set language"
-msgstr ""
+msgstr "Escoller idioma"
 
 #. (list_request_date)
 #: ../web_tt2/set_pending_list_request.tt2:10
 msgid " on %1"
-msgstr ""
+msgstr " o %1"
 
 #: ../web_tt2/set_pending_list_request.tt2:23
 msgid "Close it"
-msgstr ""
+msgstr "Pechar"
 
 #: ../web_tt2/set_pending_list_request.tt2:24
 msgid "Install it"
-msgstr ""
+msgstr "Instalar"
 
 #: ../web_tt2/set_pending_list_request.tt2:26 ../web_tt2/subrequest.tt2:43
 msgid "submit"
-msgstr ""
+msgstr "enviar"
 
 #: ../web_tt2/set_pending_list_request.tt2:27
 msgid "notify owner"
@@ -4231,27 +4250,27 @@ msgstr ""
 
 #: ../web_tt2/set_pending_list_request.tt2:36
 msgid "Information file:"
-msgstr ""
+msgstr "Ficheiro de información:"
 
 #: ../web_tt2/set_pending_list_request.tt2:52
 msgid "Configuration file"
-msgstr ""
+msgstr "Ficheiro de configuración"
 
 #: ../web_tt2/show_cert.tt2:6
 msgid "HTTPS authentication information"
-msgstr ""
+msgstr "Información de autenticación HTTPS"
 
 #: ../web_tt2/show_cert.tt2:7
 msgid "User certificate belong to"
-msgstr ""
+msgstr "O certificado de usuario pertence a"
 
 #: ../web_tt2/show_cert.tt2:8
 msgid "Certificate expiration date"
-msgstr ""
+msgstr "O certificado caduca o"
 
 #: ../web_tt2/show_cert.tt2:9
 msgid "Certificate issuer"
-msgstr ""
+msgstr "Certificado emitido por"
 
 #: ../web_tt2/show_cert.tt2:10
 msgid "Cipher key size used"
@@ -4274,11 +4293,11 @@ msgstr ""
 
 #: ../web_tt2/show_exclude.tt2:28
 msgid "No user excluded."
-msgstr ""
+msgstr "Ningún usuario foi excluído."
 
 #: ../web_tt2/show_sessions.tt2:2
 msgid "Sessions list"
-msgstr ""
+msgstr "Lista de sesións"
 
 #: ../web_tt2/show_sessions.tt2:3
 #, fuzzy
@@ -4307,29 +4326,34 @@ msgstr "Modo usuario"
 #. (list)
 #: ../web_tt2/sigrequest.tt2:4
 msgid "You asked to be unsubscribed  from list %1"
-msgstr ""
+msgstr "Solicitou darse de baixa da lista %1"
 
 #: ../web_tt2/sigrequest.tt2:5
 msgid ""
 "To confirm\n"
 "      your request, please click the button below:"
 msgstr ""
+"Para confirmar\n"
+"      a súa petición, prema no botón de embaixo:"
 
 #. (list)
 #: ../web_tt2/sigrequest.tt2:12
 msgid "I unsubscribe from list %1"
-msgstr ""
+msgstr "Doume de baixa da lista %1"
 
 #. (list,email)
 #: ../web_tt2/sigrequest.tt2:18
 msgid "You are not subscribed to list %1 with e-mail address %2"
-msgstr ""
+msgstr "Non está subscrito/a na lista %1 co enderezo de correo %2"
 
 #: ../web_tt2/sigrequest.tt2:21
 msgid ""
 "You might have subscribed with another address.\n"
 "      Please contact the list owner to help you unsubscribe:"
 msgstr ""
+"Debe estar subscrito/a con outro enderezo. \n"
+"      Por favor, contacte co propietario da lista para obter axuda sobre "
+"como darse de baixa:"
 
 #. (list)
 #: ../web_tt2/sigrequest.tt2:25
@@ -10313,6 +10337,10 @@ msgstr ""
 msgid "you do not receive your own posts"
 msgstr ""
 
+#: ../web_tt2/admin.tt2:9
+msgid "Editing of various files and messages attached to your list."
+msgstr ""
+
 #: ../web_tt2/modindex.tt2:128
 msgid "Toggle spams"
 msgstr ""
@@ -10345,6 +10373,13 @@ msgid ""
 "following link:"
 msgstr ""
 
+#: ../mail_tt2/moderate.tt2:27
+msgid ""
+"Because the new message is suspected to be a spam it is not attached to this "
+"one. You must use\n"
+"the web interface to reject or validate it."
+msgstr ""
+
 #: ../src/lib/Conf.pm:460
 msgid "Error at line %d: %s"
 msgstr ""
@@ -10363,6 +10398,9 @@ msgstr ""
 #: ../src/lib/mail.pm:922
 msgid "Unable to create a channel in smtpto: %m"
 msgstr ""
+
+#~ msgid "Customizing: "
+#~ msgstr "Personalizar:"
 
 #~ msgid "URL:"
 #~ msgstr "URL:"

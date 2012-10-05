@@ -89,7 +89,7 @@ msgstr "主页"
 #: ../web_tt2/d_editfile.tt2:14 ../web_tt2/d_properties.tt2:10
 #: ../web_tt2/d_properties.tt2:6 ../web_tt2/d_properties.tt2:8
 #: ../web_tt2/d_read.tt2:22 ../web_tt2/d_read.tt2:47
-#: ../web_tt2/edit_list_request.tt2:4 ../web_tt2/edit_list_request.tt2:40
+#: ../web_tt2/edit_list_request.tt2:4 ../web_tt2/edit_list_request.tt2:41
 #: ../web_tt2/editfile.tt2:4 ../web_tt2/menu.tt2:22
 #: ../web_tt2/modindex.tt2:145 ../web_tt2/modindex.tt2:6 ../web_tt2/pref.tt2:4
 #: ../web_tt2/rename_list_request.tt2:3 ../web_tt2/review.tt2:5
@@ -307,97 +307,87 @@ msgstr ""
 
 #: ../web_tt2/admin.tt2:9
 #, fuzzy
-msgid "Customizing: "
-msgstr "自定义"
-
-#: ../web_tt2/admin.tt2:9
-#, fuzzy
-msgid "Editing of various files and messages attached to your list."
-msgstr "<strong>自定义</strong>：编辑邮件列表中附带的各种文件和邮件。"
-
-#: ../web_tt2/admin.tt2:10
-#, fuzzy
 msgid "Manage subscribers:"
 msgstr "处理订阅者"
 
-#: ../web_tt2/admin.tt2:10
+#: ../web_tt2/admin.tt2:9
 msgid ""
 "Allows you to add or delete list subscribers, moderate subscriptions and so "
 "on."
 msgstr "允许您增加或删除订阅者、修改订阅等等。"
 
-#: ../web_tt2/admin.tt2:12
+#: ../web_tt2/admin.tt2:11
 #, fuzzy
 msgid "Blacklist:"
 msgstr "黑名单"
 
-#: ../web_tt2/admin.tt2:12
+#: ../web_tt2/admin.tt2:11
 msgid "Handles the set of black-listed mail addresses for this list."
 msgstr "处理本邮件列表中被列入黑名单的邮件地址清单。"
 
-#: ../web_tt2/admin.tt2:15
+#: ../web_tt2/admin.tt2:14
 #, fuzzy
 msgid "Manage archives:"
 msgstr "处理归档"
 
-#: ../web_tt2/admin.tt2:15
+#: ../web_tt2/admin.tt2:14
 #, fuzzy
 msgid "Allows you to download and delete list archives."
 msgstr "<strong>归档管理</strong>：允许您下载和删除邮件列表归档。"
 
-#: ../web_tt2/admin.tt2:18
+#: ../web_tt2/admin.tt2:17
 #, fuzzy
 msgid "Bounces:"
 msgstr "退信"
 
-#: ../web_tt2/admin.tt2:18
+#: ../web_tt2/admin.tt2:17
 #, fuzzy
 msgid "Manages non-delivery reports (also called bounces)."
 msgstr "<strong>退信</strong>：管理未送达报告（也叫退信）。"
 
-#: ../web_tt2/admin.tt2:21
+#: ../web_tt2/admin.tt2:20
 #, fuzzy
 msgid "Logs:"
 msgstr "日志"
 
-#: ../web_tt2/admin.tt2:21
+#: ../web_tt2/admin.tt2:20
 msgid "A tool for exploring the list logs."
 msgstr "一个用来浏览日志信息的工具。"
 
-#: ../web_tt2/admin.tt2:26
+#: ../web_tt2/admin.tt2:25
 #, fuzzy
 msgid "Drastic operations"
 msgstr "不公开的信息"
 
-#: ../web_tt2/admin.tt2:33 ../web_tt2/admin_menu.tt2:117
+#: ../web_tt2/admin.tt2:32 ../web_tt2/admin_menu.tt2:117
 #: ../web_tt2/admin_menu.tt2:119
 msgid "Restore List"
 msgstr "恢复邮件列表"
 
 #. (list)
-#: ../web_tt2/admin.tt2:33
+#: ../web_tt2/admin.tt2:32
 #, fuzzy
 msgid "Are you sure you wish to restore list %1?"
 msgstr "您确定要关闭%1邮件列表吗？"
 
-#: ../web_tt2/admin.tt2:33
+#: ../web_tt2/admin.tt2:32
 msgid ""
 "This list is currently closed. Clicking this button will make it active "
 "again."
 msgstr "该邮件列表当前已关闭。点击此按钮将再次激活它。"
 
-#: ../web_tt2/admin.tt2:36 ../web_tt2/admin_menu.tt2:122
+#: ../web_tt2/admin.tt2:35 ../web_tt2/admin_menu.tt2:122
 #: ../web_tt2/admin_menu.tt2:124
 msgid "Remove List"
 msgstr "删除此列表"
 
 #. (list)
-#: ../web_tt2/admin.tt2:36
+#: ../web_tt2/admin.tt2:35
 #, fuzzy
 msgid "Are you sure you wish to close list %1?"
 msgstr "您确定要关闭%1邮件列表吗？"
 
-#: ../web_tt2/admin.tt2:36
+#: ../web_tt2/admin.tt2:35
 #, fuzzy
 msgid ""
 "Completely removes the current list. Listmaster privileges are required to "
@@ -406,12 +396,12 @@ msgstr ""
 "<strong>删除邮件列表</strong>：完全删除当前邮件列表。需要管理员特权来恢复邮件"
 "列表。"
 
-#: ../web_tt2/admin.tt2:46 ../web_tt2/admin_menu.tt2:129
+#: ../web_tt2/admin.tt2:45 ../web_tt2/admin_menu.tt2:129
 #: ../web_tt2/admin_menu.tt2:131
 msgid "Rename List"
 msgstr "给邮件列表改名"
 
-#: ../web_tt2/admin.tt2:46
+#: ../web_tt2/admin.tt2:45
 msgid ""
 "Allows you to change this list's name. Everything related to the list will "
 "be relabeled according to the new name, including the mail aliases and the "
@@ -420,39 +410,39 @@ msgstr ""
 "允许您修改该邮件列表的名字。所有与该列表相关的信息，包括邮件别名以及Web存档"
 "等，将用新的名称重新标记。"
 
-#: ../web_tt2/admin.tt2:59 ../web_tt2/admin_menu.tt2:96
+#: ../web_tt2/admin.tt2:58 ../web_tt2/admin_menu.tt2:96
 #: ../web_tt2/admin_menu.tt2:98
 msgid "Create Shared"
 msgstr "创建共享"
 
-#: ../web_tt2/admin.tt2:59
+#: ../web_tt2/admin.tt2:58
 #, fuzzy
 msgid "Initializes the shared document web space."
 msgstr "<strong>创建共享</strong>：初始化共享文档的网页空间。"
 
-#: ../web_tt2/admin.tt2:63 ../web_tt2/admin_menu.tt2:105
+#: ../web_tt2/admin.tt2:62 ../web_tt2/admin_menu.tt2:105
 msgid "Delete Shared"
 msgstr "删除共享"
 
 #. (listname)
-#: ../web_tt2/admin.tt2:63
+#: ../web_tt2/admin.tt2:62
 #, fuzzy
 msgid "Are you sure you wish to delete the shared documents for list %1?"
 msgstr "您确定要删除共享文档吗？"
 
-#: ../web_tt2/admin.tt2:63
+#: ../web_tt2/admin.tt2:62
 #, fuzzy
 msgid ""
 "Closes the shared document web space. It can be restored using \"Restore "
 "shared\" button."
 msgstr "<strong>取消共享</strong>：关闭共享。可使用＂恢复共享＂按钮恢复。"
 
-#: ../web_tt2/admin.tt2:67
+#: ../web_tt2/admin.tt2:66
 #, fuzzy
 msgid "Restore Shared"
 msgstr "恢复共享"
 
-#: ../web_tt2/admin.tt2:67
+#: ../web_tt2/admin.tt2:66
 #, fuzzy
 msgid "Restores the previously closed shared document web space."
 msgstr "<strong>创建共享</strong>：初始化共享文档的网页空间。"
@@ -514,7 +504,7 @@ msgid "Add subscribers"
 msgstr "添加订阅者"
 
 #: ../web_tt2/add_request.tt2:13 ../web_tt2/editsubscriber.tt2:62
-#: ../web_tt2/review.tt2:121 ../web_tt2/review.tt2:163
+#: ../web_tt2/review.tt2:125 ../web_tt2/review.tt2:167
 #: ../web_tt2/reviewbouncing.tt2:127 ../web_tt2/search_user.tt2:56
 msgid "quiet"
 msgstr "不通知"
@@ -534,8 +524,7 @@ msgid "Edit List Config"
 msgstr "编辑邮件列表配置"
 
 #: ../web_tt2/admin_menu.tt2:52 ../web_tt2/admin_menu.tt2:58
-#: ../web_tt2/edit_list_request.tt2:17 ../web_tt2/lists.tt2:38
-#: ../web_tt2/nav.tt2:105
+#: ../web_tt2/lists.tt2:38
 msgid "Customizing"
 msgstr "自定义"
 
@@ -582,8 +571,8 @@ msgstr "归档"
 msgid "Bounce Settings"
 msgstr "退信配置"
 
-#: ../web_tt2/admin_menu.tt2:160 ../web_tt2/edit_list_request.tt2:18
-#: ../web_tt2/nav.tt2:107
+#: ../web_tt2/admin_menu.tt2:160 ../web_tt2/edit_list_request.tt2:19
+#: ../web_tt2/nav.tt2:109
 msgid "Miscellaneous"
 msgstr "其它"
 
@@ -607,7 +596,7 @@ msgstr "归档管理"
 #: ../web_tt2/d_properties.tt2:6 ../web_tt2/d_properties.tt2:8
 #: ../web_tt2/d_read.tt2:171 ../web_tt2/d_read.tt2:173
 #: ../web_tt2/d_read.tt2:179 ../web_tt2/d_read.tt2:22 ../web_tt2/d_read.tt2:47
-#: ../web_tt2/edit_list_request.tt2:4 ../web_tt2/edit_list_request.tt2:40
+#: ../web_tt2/edit_list_request.tt2:4 ../web_tt2/edit_list_request.tt2:41
 #: ../web_tt2/editfile.tt2:4 ../web_tt2/editsubscriber.tt2:37
 #: ../web_tt2/latest_d_read.tt2:29 ../web_tt2/latest_d_read.tt2:32
 #: ../web_tt2/modindex.tt2:145 ../web_tt2/modindex.tt2:6
@@ -668,7 +657,7 @@ msgid "Search field:"
 msgstr "查找字段："
 
 #: ../src/etc/mhonarc-ressources.tt2:52 ../web_tt2/arcsearch_form.tt2:16
-#: ../web_tt2/review.tt2:65 ../web_tt2/reviewbouncing.tt2:13
+#: ../web_tt2/review.tt2:69 ../web_tt2/reviewbouncing.tt2:13
 msgid "Search"
 msgstr "查找"
 
@@ -1179,7 +1168,7 @@ msgid "list"
 msgstr "邮件列表"
 
 #: ../web_tt2/copy_template.tt2:25 ../web_tt2/edit_config.tt2:17
-#: ../web_tt2/edit_list_request.tt2:411
+#: ../web_tt2/edit_list_request.tt2:412
 msgid "default"
 msgstr "缺省"
 
@@ -1384,7 +1373,7 @@ msgstr "书签网址"
 msgid "Replace the file %1 with your file"
 msgstr "用您的文件取代文件 %1"
 
-#: ../web_tt2/d_editfile.tt2:38 ../web_tt2/edit_list_request.tt2:422
+#: ../web_tt2/d_editfile.tt2:38 ../web_tt2/edit_list_request.tt2:423
 #: ../web_tt2/editsubscriber.tt2:60 ../web_tt2/suboptions.tt2:65
 msgid "Update"
 msgstr "更新"
@@ -1511,14 +1500,15 @@ msgstr "大小（KB）"
 msgid "Last update"
 msgstr "最近更新"
 
-#: ../web_tt2/d_read.tt2:75 ../web_tt2/editfile.tt2:31
-#: ../web_tt2/editfile.tt2:34 ../web_tt2/editfile.tt2:47
-#: ../web_tt2/editfile.tt2:50 ../web_tt2/editfile.tt2:53
-#: ../web_tt2/editfile.tt2:57 ../web_tt2/editfile.tt2:69
-#: ../web_tt2/editfile.tt2:72 ../web_tt2/editfile.tt2:84
-#: ../web_tt2/editfile.tt2:87 ../web_tt2/editfile.tt2:91
-#: ../web_tt2/manage_template.tt2:35 ../web_tt2/manage_template.tt2:56
-#: ../web_tt2/serveradmin.tt2:150 ../web_tt2/serveradmin.tt2:163
+#: ../web_tt2/d_read.tt2:75 ../web_tt2/editfile.tt2:35
+#: ../web_tt2/editfile.tt2:38 ../web_tt2/editfile.tt2:51
+#: ../web_tt2/editfile.tt2:54 ../web_tt2/editfile.tt2:57
+#: ../web_tt2/editfile.tt2:61 ../web_tt2/editfile.tt2:73
+#: ../web_tt2/editfile.tt2:76 ../web_tt2/editfile.tt2:88
+#: ../web_tt2/editfile.tt2:91 ../web_tt2/editfile.tt2:95
+#: ../web_tt2/info.tt2:12 ../web_tt2/manage_template.tt2:35
+#: ../web_tt2/manage_template.tt2:56 ../web_tt2/serveradmin.tt2:150
+#: ../web_tt2/serveradmin.tt2:163
 msgid "Edit"
 msgstr "编辑"
 
@@ -1611,7 +1601,7 @@ msgstr "标题"
 msgid "URL"
 msgstr "URL"
 
-#: ../web_tt2/d_read.tt2:352 ../web_tt2/review.tt2:50
+#: ../web_tt2/d_read.tt2:352 ../web_tt2/review.tt2:54
 msgid "Add"
 msgstr "新增"
 
@@ -1742,20 +1732,20 @@ msgstr "编辑邮件列表配置"
 msgid "Edit list templates"
 msgstr "邮件列表别名模板"
 
-#: ../web_tt2/editfile.tt2:15
+#: ../web_tt2/editfile.tt2:16
 msgid "Save"
 msgstr "保存"
 
-#: ../web_tt2/editfile.tt2:23
+#: ../web_tt2/editfile.tt2:27
 #, fuzzy
 msgid "You can edit several messages/files associated with your list:"
 msgstr "您能编辑与邮件列表相关几个邮件／文件："
 
-#: ../web_tt2/editfile.tt2:28
+#: ../web_tt2/editfile.tt2:32
 msgid "HTML pages"
 msgstr ""
 
-#: ../web_tt2/editfile.tt2:31
+#: ../web_tt2/editfile.tt2:35
 #, fuzzy
 msgid ""
 "List homepage: HTML text to describe the list. It is printed on the right-"
@@ -1764,19 +1754,19 @@ msgstr ""
 "邮件列表主页：描述邮件列表的HTML文本。\n"
 "它打印在主要邮件列表页的右边。（缺省是邮件列表描述）"
 
-#: ../web_tt2/editfile.tt2:34
+#: ../web_tt2/editfile.tt2:38
 #, fuzzy
 msgid ""
 "List description: This text is sent as an answer to the mail command INFO. "
 "It can also be included in the <em>Welcome message</em>."
 msgstr "邮件列表描述：该文本作为邮件命令INFO的答复发送。它也可能包含于"
 
-#: ../web_tt2/editfile.tt2:44
+#: ../web_tt2/editfile.tt2:48
 #, fuzzy
 msgid "Automatic messages"
 msgstr "最老的邮件"
 
-#: ../web_tt2/editfile.tt2:47
+#: ../web_tt2/editfile.tt2:51
 #, fuzzy
 msgid ""
 "Welcome message: This message is sent to new subscribers. It can be a full "
@@ -1785,14 +1775,14 @@ msgstr ""
 "欢迎邮件：这则邮件是发送给新的订阅者。它可以是\n"
 "一则充分的MIME结构的邮件（仅对MIME专家）。"
 
-#: ../web_tt2/editfile.tt2:50
+#: ../web_tt2/editfile.tt2:54
 msgid ""
 "Rejection message: when a message is rejected by list editor, a notification "
 "can be sent to the original author. You may prepare various rejection "
 "messages."
 msgstr ""
 
-#: ../web_tt2/editfile.tt2:54
+#: ../web_tt2/editfile.tt2:58
 #, fuzzy
 msgid ""
 "Remind message: This message is sent to each subscriber\n"
@@ -1805,7 +1795,7 @@ msgstr ""
 "不是很清楚和不能自行退订的人们是非常\n"
 "有用的。"
 
-#: ../web_tt2/editfile.tt2:58
+#: ../web_tt2/editfile.tt2:62
 #, fuzzy
 msgid ""
 "Subscribing invitation message: sent to a person if someone  \n"
@@ -1814,12 +1804,12 @@ msgstr ""
 "订阅邀请邮件：如果某人使用INVITE命令\n"
 "邀请某人订阅，则发送到此人。"
 
-#: ../web_tt2/editfile.tt2:66
+#: ../web_tt2/editfile.tt2:70
 #, fuzzy
 msgid "Added in distributed messages"
 msgstr "发送信息"
 
-#: ../web_tt2/editfile.tt2:69
+#: ../web_tt2/editfile.tt2:73
 #, fuzzy
 msgid ""
 "Message footer: If this file is not empty, it is added as a MIME attachment "
@@ -1828,7 +1818,7 @@ msgstr ""
 "邮件头信息：如果这个文件不是空的，它作为MIME\n"
 "附加在每则邮件的开头被分发到邮件列表。"
 
-#: ../web_tt2/editfile.tt2:72
+#: ../web_tt2/editfile.tt2:76
 #, fuzzy
 msgid ""
 "Message header: If this file is not empty, it is added as a MIME attachment "
@@ -1837,19 +1827,19 @@ msgstr ""
 "邮件头信息：如果这个文件不是空的，它作为MIME\n"
 "附加在每则邮件的开头被分发到邮件列表。"
 
-#: ../web_tt2/editfile.tt2:81
+#: ../web_tt2/editfile.tt2:85
 #, fuzzy
 msgid "More"
 msgstr "监管"
 
-#: ../web_tt2/editfile.tt2:84
+#: ../web_tt2/editfile.tt2:88
 #, fuzzy
 msgid "Unsubscribe message: This message is sent when users leave the list."
 msgstr ""
 "退订邮件：当用户离开邮件列表时，用退订命令\n"
 "发送这则邮件。"
 
-#: ../web_tt2/editfile.tt2:88
+#: ../web_tt2/editfile.tt2:92
 #, fuzzy
 msgid ""
 "Deletion message: This message is sent to users when you\n"
@@ -1860,7 +1850,7 @@ msgstr ""
 "这则邮件将发送到他们。\n"
 "除非您击中不通知按钮。"
 
-#: ../web_tt2/editfile.tt2:91
+#: ../web_tt2/editfile.tt2:95
 #, fuzzy
 msgid ""
 "Virus infection message: This message is sent to the sender of a message in "
@@ -1895,7 +1885,17 @@ msgstr "退信管理"
 msgid "Data sources setup"
 msgstr "数据来源设定"
 
-#: ../web_tt2/edit_list_request.tt2:37
+#: ../web_tt2/edit_list_request.tt2:17 ../web_tt2/nav.tt2:105
+#, fuzzy
+msgid "List description/homepage"
+msgstr "邮件列表描述"
+
+#: ../web_tt2/edit_list_request.tt2:18 ../web_tt2/nav.tt2:107
+#, fuzzy
+msgid "Message templates"
+msgstr "邮件主题名称"
+
+#: ../web_tt2/edit_list_request.tt2:38
 msgid "scenario source"
 msgstr "情景来源"
 
@@ -1903,9 +1903,9 @@ msgstr "情景来源"
 #: ../mail_tt2/listmaster_notification.tt2:306
 #: ../mail_tt2/listmaster_notification.tt2:377
 #: ../mail_tt2/listowner_notification.tt2:81 ../mail_tt2/lists.tt2:7
-#: ../mail_tt2/summary.tt2:4 ../web_tt2/edit_list_request.tt2:103
-#: ../web_tt2/edit_list_request.tt2:105 ../web_tt2/edit_list_request.tt2:261
-#: ../web_tt2/edit_list_request.tt2:263 ../web_tt2/editsubscriber.tt2:47
+#: ../mail_tt2/summary.tt2:4 ../web_tt2/edit_list_request.tt2:104
+#: ../web_tt2/edit_list_request.tt2:106 ../web_tt2/edit_list_request.tt2:262
+#: ../web_tt2/edit_list_request.tt2:264 ../web_tt2/editsubscriber.tt2:47
 #: ../web_tt2/editsubscriber.tt2:55 ../web_tt2/error.tt2:108
 #: ../web_tt2/rss.tt2:4 ../web_tt2/subindex.tt2:39
 msgid ":"
@@ -2652,7 +2652,7 @@ msgstr "关闭的邮件列表"
 
 #: ../src/etc/mhonarc-ressources.tt2:212 ../src/etc/mhonarc-ressources.tt2:328
 #: ../web_tt2/get_closed_lists.tt2:29 ../web_tt2/get_closed_lists.tt2:9
-#: ../web_tt2/modindex.tt2:135 ../web_tt2/review.tt2:161
+#: ../web_tt2/modindex.tt2:135 ../web_tt2/review.tt2:165
 #: ../web_tt2/reviewbouncing.tt2:131 ../web_tt2/reviewbouncing.tt2:60
 #: ../web_tt2/subindex.tt2:10 ../web_tt2/subindex.tt2:57
 #: ../web_tt2/subscriber_table.tt2:9
@@ -2926,7 +2926,7 @@ msgid " The latest lists of this robot"
 msgstr "这个邮件系统最新的邮件列表"
 
 #. (occurrence)
-#: ../web_tt2/lists.tt2:7 ../web_tt2/review.tt2:125
+#: ../web_tt2/lists.tt2:7 ../web_tt2/review.tt2:129
 msgid "%1 occurrence(s) found"
 msgstr "找到了%1个结果"
 
@@ -3314,12 +3314,12 @@ msgstr "提交bug，特征请求"
 msgid "DKIM"
 msgstr ""
 
-#: ../web_tt2/nav.tt2:117
+#: ../web_tt2/nav.tt2:119
 #, fuzzy
 msgid "Send a message"
 msgstr "提醒邮件"
 
-#: ../web_tt2/nav.tt2:119
+#: ../web_tt2/nav.tt2:121
 msgid "Send an html page"
 msgstr ""
 
@@ -3788,7 +3788,7 @@ msgid ""
 "subscribers?"
 msgstr "确定要发送订阅提醒邮件到%1订阅者吗？"
 
-#: ../web_tt2/review.tt2:103 ../web_tt2/review.tt2:143
+#: ../web_tt2/review.tt2:107 ../web_tt2/review.tt2:147
 #: ../web_tt2/reviewbouncing.tt2:115 ../web_tt2/reviewbouncing.tt2:44
 #: ../web_tt2/viewlogs.tt2:31
 msgid "Previous page"
@@ -3799,7 +3799,7 @@ msgstr "前页"
 msgid "page %1 / %2"
 msgstr "第%1页 共%2页"
 
-#: ../web_tt2/review.tt2:113 ../web_tt2/review.tt2:153
+#: ../web_tt2/review.tt2:117 ../web_tt2/review.tt2:157
 #: ../web_tt2/reviewbouncing.tt2:121 ../web_tt2/reviewbouncing.tt2:50
 #: ../web_tt2/viewlogs.tt2:37
 msgid "Next page"
@@ -3809,7 +3809,7 @@ msgstr "下页"
 msgid "Table which display list bounces"
 msgstr "显示邮件列表退信的表"
 
-#: ../web_tt2/review.tt2:172 ../web_tt2/reviewbouncing.tt2:61
+#: ../web_tt2/review.tt2:176 ../web_tt2/reviewbouncing.tt2:61
 #: ../web_tt2/show_exclude.tt2:15 ../web_tt2/subindex.tt2:11
 #: ../web_tt2/subscriber_table.tt2:15 ../web_tt2/subscriber_table.tt2:18
 #: ../web_tt2/viewlogs.tt2:54 ../web_tt2/viewlogs.tt2:63
@@ -3846,7 +3846,7 @@ msgstr "查看上一封退信"
 msgid "no score"
 msgstr "退信的比分"
 
-#: ../web_tt2/review.tt2:120 ../web_tt2/review.tt2:162
+#: ../web_tt2/review.tt2:124 ../web_tt2/review.tt2:166
 #: ../web_tt2/reviewbouncing.tt2:126
 msgid "Delete selected email addresses"
 msgstr "删除选中的邮件地址"
@@ -3890,66 +3890,71 @@ msgstr ""
 
 #: ../web_tt2/review.tt2:38
 #, fuzzy
+msgid "Edit message templates"
+msgstr "邮件列表别名模板"
+
+#: ../web_tt2/review.tt2:42
+#, fuzzy
 msgid "<strong>Last update:"
 msgstr "最近更新："
 
-#: ../web_tt2/review.tt2:48
+#: ../web_tt2/review.tt2:52
 msgid "Add an user: "
 msgstr "添加一个用户"
 
-#: ../web_tt2/review.tt2:52
+#: ../web_tt2/review.tt2:56
 #, fuzzy
 msgid "Add quietly"
 msgstr "不通知"
 
-#: ../web_tt2/review.tt2:53
+#: ../web_tt2/review.tt2:57
 msgid "Multiple add"
 msgstr "批量添加"
 
-#: ../web_tt2/review.tt2:63
+#: ../web_tt2/review.tt2:67
 msgid "Search user by e-mail: "
 msgstr "根据邮件查找用户"
 
-#: ../web_tt2/review.tt2:64
+#: ../web_tt2/review.tt2:68
 msgid "Search user by email"
 msgstr "根据邮件查找用户"
 
-#: ../web_tt2/review.tt2:67
+#: ../web_tt2/review.tt2:71
 msgid "Searches are limited to 50 results, except when using a @domain mask."
 msgstr ""
 
-#: ../web_tt2/review.tt2:71
+#: ../web_tt2/review.tt2:75
 msgid "Selection too wide, can not show selection"
 msgstr "选项范围太宽，无法显示选项"
 
-#: ../web_tt2/review.tt2:87 ../web_tt2/viewlogs.tt2:8
+#: ../web_tt2/review.tt2:91 ../web_tt2/viewlogs.tt2:8
 msgid "Page size"
 msgstr "页面大小"
 
-#: ../web_tt2/review.tt2:108 ../web_tt2/review.tt2:148
+#: ../web_tt2/review.tt2:112 ../web_tt2/review.tt2:152
 #: ../web_tt2/viewlogs.tt2:34
 msgid "page"
 msgstr "页"
 
 #. (similar_subscribers_occurence)
-#: ../web_tt2/review.tt2:133
+#: ../web_tt2/review.tt2:137
 msgid " Other similar subscriber's email(s) (%1)"
 msgstr ""
 
-#: ../web_tt2/review.tt2:160
+#: ../web_tt2/review.tt2:164
 msgid "Do you really want to unsubscribe ALL selected subscribers?"
 msgstr "确定要退订所有选中的订阅者吗？"
 
-#: ../web_tt2/review.tt2:169
+#: ../web_tt2/review.tt2:173
 msgid "Excluded users"
 msgstr ""
 
-#: ../web_tt2/review.tt2:170 ../web_tt2/show_exclude.tt2:13
+#: ../web_tt2/review.tt2:174 ../web_tt2/show_exclude.tt2:13
 #, fuzzy
 msgid "List of exclude"
 msgstr "文件夹目录"
 
-#: ../web_tt2/review.tt2:173 ../web_tt2/show_exclude.tt2:16
+#: ../web_tt2/review.tt2:177 ../web_tt2/show_exclude.tt2:16
 #, fuzzy
 msgid "Since"
 msgstr "大小"
@@ -11009,6 +11014,13 @@ msgstr ""
 msgid "Toggle spams"
 msgstr ""
 
+#: ../mail_tt2/moderate.tt2:27
+msgid ""
+"Because the new message is suspected to be a spam it is not attached to this "
+"one. You must use\n"
+"the web interface to reject or validate it."
+msgstr ""
+
 #. (list.name)
 #: ../mail_tt2/user_notification.tt2:53
 msgid ""
@@ -11043,6 +11055,14 @@ msgstr ""
 #: ../src/lib/confdef.pm:260
 msgid "Log intensity"
 msgstr ""
+
+#, fuzzy
+#~ msgid "Customizing: "
+#~ msgstr "自定义"
+
+#, fuzzy
+#~ msgid "Editing of various files and messages attached to your list."
+#~ msgstr "<strong>自定义</strong>：编辑邮件列表中附带的各种文件和邮件。"
 
 #, fuzzy
 #~ msgid "URL:"
