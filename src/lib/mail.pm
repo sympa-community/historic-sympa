@@ -21,6 +21,8 @@
 
 package mail;
 
+use strict;
+
 use Carp;
 use Data::Dumper;
 use Exporter;
@@ -37,12 +39,8 @@ use List;
 use Sympa::Constants;
 use tools;
 
-@ISA = qw(Exporter);
-@EXPORT = qw(mail_file mail_message mail_forward set_send_spool);
-
-use strict;
-
-#use strict;
+our @ISA = qw(Exporter);
+our @EXPORT = qw(mail_file mail_message mail_forward set_send_spool);
 
 ## RCS identification.
 #my $id = '@(#)$Id$';
