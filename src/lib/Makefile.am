@@ -13,6 +13,13 @@ nobase_modules_DATA = admin.pm Archive.pm Bulk.pm Commands.pm confdef.pm \
 		      OAuthConsumer.pm VOOTConsumer.pm OAuthProvider.pm \
 		      VOOTProvider.pm
 
+# wwwsympa
+nobase_modules_DATA += wwslib.pm cookielib.pm Bounce.pm Marc.pm Auth.pm \
+		      Marc/Search.pm SharedDocument.pm SympaSession.pm
+
+# soap
+nobase_modules_DATA = sympasoap.pm SympaTransport.pm
+
 EXTRA_DIST = Sympa/Constants.pm.in $(nobase_modules_DATA)
 CLEANFILES = Sympa/Constants.pm
 

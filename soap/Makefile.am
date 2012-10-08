@@ -27,8 +27,6 @@ sympa_soap_server_wrapper_fcgi_CPPFLAGS = \
 
 script_SCRIPTS = sympa_soap_client.pl
 
-modules_DATA = sympasoap.pm SympaTransport.pm
-
 default_DATA = sympa.wsdl
 
 EXTRA_DIST = $(default_DATA) $(modules_DATA) \
