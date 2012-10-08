@@ -24,16 +24,16 @@ package LDAPSource;
 
 use strict;
 
-use Exporter;
-use Datasource;
 use Carp;
+use Data::Dumper;
+use Exporter;
 
+use Conf;
+use Datasource;
+use List;
+use Log;
 use tools;
 use tt2;
-use Conf;
-use Log;
-use List;
-use Data::Dumper;
 
 our @ISA = qw(Datasource Exporter);
 our @EXPORT = qw(%date_format);

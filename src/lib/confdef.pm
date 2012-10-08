@@ -24,6 +24,7 @@ package confdef;
 use strict "vars";
 
 use Sympa::Constants;
+
 sub gettext { shift } # to mark i18n'ed messages.
 
 ## This defines the parameters to be edited :

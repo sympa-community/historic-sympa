@@ -25,13 +25,13 @@ package Task;
 use strict;
 
 use Carp;
-
-use List;
-use Conf;
-use Log;
-use tools;
-use Sympaspool;
 use Data::Dumper;
+
+use Conf;
+use List;
+use Log;
+use Sympaspool;
+use tools;
 
 my @task_list;
 my %task_by_list;

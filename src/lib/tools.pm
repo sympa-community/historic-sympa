@@ -23,26 +23,26 @@ package tools;
 
 use strict;
 
-use Time::Local;
-use File::Find;
 use Digest::MD5;
-use HTML::StripScripts::Parser;
-use File::Copy::Recursive;
-use POSIX qw(strftime mkfifo strtod);
-use Sys::Hostname;
-use Mail::Header;
 use Encode::Guess; ## Usefull when encoding should be guessed
 use Encode::MIME::Header;
-use Text::LineFold;
+use File::Copy::Recursive;
+use File::Find;
+use HTML::StripScripts::Parser;
+use Mail::Header;
 use MIME::Lite::HTML;
+use POSIX qw(strftime mkfifo strtod);
 use Proc::ProcessTable;
+use Sys::Hostname;
+use Text::LineFold;
+use Time::Local;
 
 use Conf;
 use Language;
 use Log;
-use Sympa::Constants;
 use Message;
 use SDM;
+use Sympa::Constants;
 
 ## RCS identification.
 #my $id = '@(#)$Id$';

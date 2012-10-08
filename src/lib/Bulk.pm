@@ -20,42 +20,41 @@
 package Bulk;
 
 use strict;
+use constant MAX => 100_000;
 
+use Carp;
+use Data::Dumper;
 use Encode;
 use Fcntl qw(LOCK_SH LOCK_EX LOCK_NB LOCK_UN);
-use Carp;
 use IO::Scalar;
-use Storable;
-use Data::Dumper;
 use Mail::Header;
 use Mail::Address;
-use Time::HiRes qw(time);
-use Time::Local;
 use MIME::Entity;
 use MIME::EncWords;
 use MIME::WordDecoder;
 use MIME::Parser;
 use MIME::Base64;
-use Term::ProgressBar;
-use URI::Escape;
-use constant MAX => 100_000;
+use Storable;
 use Sys::Hostname;
+use Term::ProgressBar;
+use Time::HiRes qw(time);
+use Time::Local;
+use URI::Escape;
 
-
-use Lock;
-use Task;
+use Conf;
 use Fetch;
-use WebAgent;
+use Language;
+use Ldap;
+use List;
+use Lock;
+use Log;
+use mail;
+use Message;
+use SDM;
+use Task;
 use tools;
 use tt2;
-use Language;
-use Log;
-use Conf;
-use mail;
-use Ldap;
-use Message;
-use List;
-use SDM;
+use WebAgent;
 
 ## Database and SQL statement handlers
 my $sth;

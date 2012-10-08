@@ -28,11 +28,11 @@ use strict;
 use CGI::Util;
 use MIME::EncWords; 
 
-use Template;
-use Log;
 use Language;
+use Log;
 use Sympa::Constants;
 use Sympa::Template::Compat;
+use Template;
 
 my $current_lang;
 my $last_error;

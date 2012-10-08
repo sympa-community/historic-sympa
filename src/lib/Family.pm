@@ -35,18 +35,17 @@ package Family;
 
 use strict;
 
+use File::Copy;
+use Term::ProgressBar;
 use XML::LibXML;
 
-use List;
-use Conf;
-use Language;
-use Log;
 use admin;
+use Conf;
 use Config_XML;
-use File::Copy;
+use Language;
+use List;
+use Log;
 use Sympa::Constants;
-
-use Term::ProgressBar;
 
 my %list_of_families;
 my @uncompellable_param = ('msg_topic.keywords','owner_include.source_parameters', 'editor_include.source_parameters');

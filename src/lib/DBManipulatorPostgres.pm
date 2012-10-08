@@ -22,12 +22,12 @@
 package DBManipulatorPostgres;
 
 use strict;
+
 use Data::Dumper;
 
 use Carp;
-use Log;
-
 use DBManipulatorDefault;
+use Log;
 
 our @ISA = qw(DBManipulatorDefault);
 

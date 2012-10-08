@@ -37,16 +37,13 @@ package OAuthConsumer;
 
 use strict;
 
+use Data::Dumper;
 use OAuth::Lite::Consumer;
 
-use Data::Dumper;
-
-#use List;
 use Auth;
-use tools;
-#use tt2;
 use Conf;
 use Log;
+use tools;
 
 =pod 
 

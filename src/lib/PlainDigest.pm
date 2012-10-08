@@ -78,7 +78,6 @@
  
  package PlainDigest;
 
- @ISA = qw(MIME::Entity);
  use Mail::Internet;
  use Mail::Address;
  use MIME::Parser;
@@ -86,8 +85,11 @@
  use MIME::Charset;
  use HTML::TreeBuilder;
  use HTML::FormatText;
+
  use Language;
  use tools;
+
+ @ISA = qw(MIME::Entity);
  
  sub plain_body_as_string {
  

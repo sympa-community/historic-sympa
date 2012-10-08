@@ -36,16 +36,13 @@ package VOOTProvider;
 
 use strict;
 
-use OAuthProvider;
-
-use JSON::XS;
 use Data::Dumper;
+use OAuthProvider;
+use JSON::XS;
 
-#use List;
-use tools;
-#use tt2;
 use Conf;
 use Log;
+use tools;
 
 =pod 
 

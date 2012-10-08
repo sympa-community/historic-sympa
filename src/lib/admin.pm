@@ -35,14 +35,15 @@ package admin;
 
 use strict;
 
-use List;
-use Conf;
-use Language;
-use Log;
-use tools;
-use Sympa::Constants;
 use File::Copy;
 use Data::Dumper;
+
+use Conf;
+use Language;
+use List;
+use Log;
+use Sympa::Constants;
+use tools;
 
 =pod 
 

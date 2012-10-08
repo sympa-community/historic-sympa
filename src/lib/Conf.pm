@@ -25,19 +25,19 @@ package Conf;
 
 use strict "vars";
 
-use Exporter;
 use Carp;
+use Data::Dumper;
+use Exporter;
 use Storable;
 
+use confdef;
 use List;
-use SDM;
 use Log;
 use Language;
-use wwslib;
-use confdef;
-use tools;
+use SDM;
 use Sympa::Constants;
-use Data::Dumper;
+use tools;
+use wwslib;
 
 our @ISA = qw(Exporter);
 our @EXPORT = qw(%params %Conf DAEMON_MESSAGE DAEMON_COMMAND DAEMON_CREATION DAEMON_ALL);

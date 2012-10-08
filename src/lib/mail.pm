@@ -21,24 +21,24 @@
 
 package mail;
 
-require Exporter;
 use Carp;
-@ISA = qw(Exporter);
-@EXPORT = qw(mail_file mail_message mail_forward set_send_spool);
-
-#use strict;
 use Data::Dumper;
-use POSIX;
-use Time::Local;
+require Exporter;
 use MIME::Charset;
 use MIME::Tools;
+use POSIX;
+use Time::Local;
+
+use Bulk;
 use Conf;
 use Log;
 use Language;
 use List;
-use Bulk;
-use tools;
 use Sympa::Constants;
+use tools;
+
+@ISA = qw(Exporter);
+@EXPORT = qw(mail_file mail_message mail_forward set_send_spool);
 
 use strict;
 

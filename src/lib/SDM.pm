@@ -25,19 +25,18 @@ package SDM;
 use strict;
 
 use Carp;
+use Data::Dumper;
 use Exporter;
 
 use Conf;
-use Log;
 use List;
-use Sympa::Constants;
+use Log;
 use SQLSource;
-use Data::Dumper;
+use Sympa::Constants;
+use Sympa::DatabaseDescription;
 
 our @ISA;
 our $AUTOLOAD;
-
-use Sympa::DatabaseDescription;
 
 # db structure description has moved in Sympa/Constant.pm 
 my %db_struct = &Sympa::DatabaseDescription::db_struct();

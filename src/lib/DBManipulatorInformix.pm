@@ -24,9 +24,8 @@ package DBManipulatorInformix;
 use strict;
 
 use Carp;
-use Log;
-
 use DefaultDBManipulator;
+use Log;
 
 our @ISA = qw(DefaultDBManipulator);
 

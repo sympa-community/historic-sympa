@@ -23,10 +23,10 @@ package Language;
 
 use strict;
 
-use Exporter;
 use Carp;
-use POSIX qw(setlocale strftime);
+use Exporter;
 use Locale::Messages qw (:locale_h :libintl_h !gettext);
+use POSIX qw(setlocale strftime);
 
 use Log;
 use Sympa::Constants;

@@ -25,11 +25,11 @@ use strict;
 
 use Net::Netmask;
 
-use tools;
+use Conf;
 use List;
 use Log;
-use Conf;
 use Sympa::Constants;
+use tools;
 
 my %all_scenarios;
 my %persistent_cache;

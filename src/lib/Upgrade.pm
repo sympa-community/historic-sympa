@@ -25,13 +25,13 @@ package Upgrade;
 use strict;
 
 use Carp;
+use Data::Dumper;
 use POSIX qw(strftime);
 
 use Conf;
 use Log;
-use Sympa::Constants;
 use SDM;
-use Data::Dumper;
+use Sympa::Constants;
 
 ## Return the previous Sympa version, ie the one listed in data_structure.version
 sub get_previous_version {

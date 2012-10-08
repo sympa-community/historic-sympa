@@ -25,8 +25,9 @@ package Datasource;
 use strict;
 
 use Carp;
-use Log;
 use Data::Dumper;
+
+use Log;
 
 ############################################################
 #  constructor

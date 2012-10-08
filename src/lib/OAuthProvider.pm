@@ -37,17 +37,14 @@ package OAuthProvider;
 
 use strict;
 
+use Data::Dumper;
 use OAuth::Lite::ServerUtil;
 use URI::Escape;
 
-use Data::Dumper;
-
-#use List;
 use Auth;
-use tools;
-#use tt2;
 use Conf;
 use Log;
+use tools;
 
 =pod 
 

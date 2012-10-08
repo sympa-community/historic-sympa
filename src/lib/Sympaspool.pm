@@ -22,53 +22,48 @@
 package Sympaspool;
 
 use strict;
-use POSIX;
-use Sys::Hostname;
-use Datasource;
-use SQLSource qw(create_db %date_format);
-use Upgrade;
-use Lock;
-use Task;
-use Scenario;
-use Fetch;
-use WebAgent;
-use Exporter;
-require Encode;
-
-use tt2;
-use Sympa::Constants;
-use Sympa::DatabaseDescription;
-
-our @ISA = qw(Exporter);
-
-use Fcntl qw(LOCK_SH LOCK_EX LOCK_NB LOCK_UN);
-
 
 use Carp;
-
+use Data::Dumper;
+require Encode;
+use Exporter;
 use IO::Scalar;
-use Storable;
+use Fcntl qw(LOCK_SH LOCK_EX LOCK_NB LOCK_UN);
 use Mail::Header;
-use Archive;
-use Language;
-use SDM;
-use Log;
-use Conf;
-use mail;
-use Ldap;
-use Time::Local;
 use MIME::Entity;
 use MIME::EncWords;
 use MIME::Parser;
-use Data::Dumper;
-use Message;
-use Family;
-use PlainDigest;
+use POSIX;
+use Storable;
+use Sys::Hostname;
+use Time::Local;
 
+use Archive;
+use Conf;
+use Datasource;
+use Family;
+use Fetch;
+use Language;
+use Ldap;
+use Lock;
+use Log;
+use mail;
+use Message;
+use PlainDigest;
+use Scenario;
+use SDM;
+use SQLSource qw(create_db %date_format);
+use Sympa::Constants;
+use Sympa::DatabaseDescription;
+use Task;
+use tt2;
+use Upgrade;
+use WebAgent;
+
+our @ISA = qw(Exporter);
 
 ## Database and SQL statement handlers
 my ($dbh, $sth, $db_connected, @sth_stack, $use_db);
-
 
 ## Creates an object.
 sub new {

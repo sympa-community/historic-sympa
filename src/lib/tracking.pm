@@ -25,8 +25,9 @@ use strict;
 
 use CGI;
 use Email::Simple;
-use Log;
 use MIME::Base64;
+
+use Log;
 use SDM;
 
 ##############################################

@@ -21,7 +21,13 @@
 package List;
 
 use strict;
+
+use Data::Dumper;
+# xxxxxxx faut-il virer encode ? Faut en faire un use ? 
+require Encode;
+use Exporter;
 use POSIX;
+
 use SQLSource;
 use Datasource;
 use LDAPSource;
@@ -33,16 +39,11 @@ use Task;
 use Scenario;
 use Fetch;
 use WebAgent;
-use Exporter;
 use Sympaspool;
 use Archive;
-# xxxxxxx faut-il virer encode ? Faut en faire un use ? 
-require Encode;
-
 use VOOTConsumer;
 use tt2;
 use Sympa::Constants;
-use Data::Dumper;
 
 our @ISA = qw(Exporter);
 our @EXPORT = qw(%list_of_lists);
