@@ -25,7 +25,6 @@ use strict;
 
 use Carp;
 require Encode;
-use Exporter;
 use IO::Scalar;
 use Fcntl qw(LOCK_SH LOCK_EX LOCK_NB LOCK_UN);
 use Mail::Header;
@@ -58,8 +57,6 @@ use Task;
 use tt2;
 use Upgrade;
 use WebAgent;
-
-our @ISA = qw(Exporter);
 
 ## Database and SQL statement handlers
 my ($dbh, $sth, $db_connected, @sth_stack, $use_db);

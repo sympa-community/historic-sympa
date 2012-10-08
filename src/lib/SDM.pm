@@ -25,7 +25,6 @@ package SDM;
 use strict;
 
 use Carp;
-use Exporter;
 
 use Conf;
 use List;
@@ -34,7 +33,6 @@ use SQLSource;
 use Sympa::Constants;
 use Sympa::DatabaseDescription;
 
-our @ISA;
 our $AUTOLOAD;
 
 # db structure description has moved in Sympa/Constant.pm 
