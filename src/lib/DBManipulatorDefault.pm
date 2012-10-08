@@ -26,7 +26,6 @@ use strict;
 
 use SQLSource;
 
-use Carp;
 use Log;
 
 our @ISA = qw(SQLSource);

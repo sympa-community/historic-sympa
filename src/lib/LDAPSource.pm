@@ -24,7 +24,6 @@ package LDAPSource;
 
 use strict;
 
-use Carp;
 use Exporter;
 
 use Conf;

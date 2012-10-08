@@ -23,7 +23,6 @@ package Log;
 
 use strict "vars";
 
-use Carp;
 use Encode;
 use Exporter;
 use POSIX qw(mktime);

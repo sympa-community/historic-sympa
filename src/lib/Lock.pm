@@ -24,7 +24,6 @@ package Lock;
 
 use strict;
 
-use Carp;
 use Fcntl qw(LOCK_SH LOCK_EX LOCK_NB LOCK_UN);
 use FileHandle;
 

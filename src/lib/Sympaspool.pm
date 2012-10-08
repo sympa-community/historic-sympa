@@ -23,7 +23,6 @@ package Sympaspool;
 
 use strict;
 
-use Carp;
 require Encode;
 use IO::Scalar;
 use Fcntl qw(LOCK_SH LOCK_EX LOCK_NB LOCK_UN);

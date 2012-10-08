@@ -232,8 +232,6 @@ currently selected descriptor.
 
 =cut
 
-use Carp;
-
 use IO::Scalar;
 use Storable;
 use Mail::Header;

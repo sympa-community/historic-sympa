@@ -36,7 +36,6 @@ package Message;
 
 use strict;
 
-use Carp;
 use Mail::Header;
 use Mail::Address;
 use MIME::Entity;

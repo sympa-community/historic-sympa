@@ -23,7 +23,6 @@ package Language;
 
 use strict;
 
-use Carp;
 use Exporter;
 use Locale::Messages qw (:locale_h :libintl_h !gettext);
 use POSIX qw(setlocale strftime);

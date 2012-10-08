@@ -25,7 +25,6 @@ package Conf;
 
 use strict "vars";
 
-use Carp;
 use Exporter;
 use Storable;
 

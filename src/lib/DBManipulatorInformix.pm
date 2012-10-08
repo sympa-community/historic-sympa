@@ -23,7 +23,6 @@ package DBManipulatorInformix;
 
 use strict;
 
-use Carp;
 use DefaultDBManipulator;
 use Log;
 

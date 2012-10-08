@@ -22,7 +22,6 @@ package Bulk;
 use strict;
 use constant MAX => 100_000;
 
-use Carp;
 use Encode;
 use Fcntl qw(LOCK_SH LOCK_EX LOCK_NB LOCK_UN);
 use IO::Scalar;

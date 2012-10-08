@@ -24,8 +24,6 @@ package Task;
 
 use strict;
 
-use Carp;
-
 use Conf;
 use List;
 use Log;

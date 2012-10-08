@@ -24,8 +24,6 @@ package Datasource;
 
 use strict;
 
-use Carp;
-
 use Log;
 
 ############################################################

@@ -24,7 +24,6 @@ package SQLSource;
 
 use strict;
 
-use Carp;
 use Exporter;
 
 use Conf;

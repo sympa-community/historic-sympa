@@ -24,8 +24,6 @@ package SDM;
 
 use strict;
 
-use Carp;
-
 use Conf;
 use List;
 use Log;

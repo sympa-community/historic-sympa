@@ -24,7 +24,6 @@ package Upgrade;
 
 use strict;
 
-use Carp;
 use POSIX qw(strftime);
 
 use Conf;
