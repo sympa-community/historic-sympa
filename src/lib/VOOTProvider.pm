@@ -36,7 +36,6 @@ package VOOTProvider;
 
 use strict;
 
-use Data::Dumper;
 use OAuthProvider;
 use JSON::XS;
 

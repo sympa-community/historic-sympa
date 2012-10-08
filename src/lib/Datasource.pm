@@ -25,7 +25,6 @@ package Datasource;
 use strict;
 
 use Carp;
-use Data::Dumper;
 
 use Log;
 

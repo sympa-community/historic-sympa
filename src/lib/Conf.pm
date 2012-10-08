@@ -26,7 +26,6 @@ package Conf;
 use strict "vars";
 
 use Carp;
-use Data::Dumper;
 use Exporter;
 use Storable;
 

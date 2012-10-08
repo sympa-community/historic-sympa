@@ -24,7 +24,6 @@ package DBManipulatorDefault;
 
 use strict;
 
-use Data::Dumper;
 use SQLSource;
 
 use Carp;

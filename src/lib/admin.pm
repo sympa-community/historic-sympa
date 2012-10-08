@@ -36,7 +36,6 @@ package admin;
 use strict;
 
 use File::Copy;
-use Data::Dumper;
 
 use Conf;
 use Language;

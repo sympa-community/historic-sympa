@@ -22,7 +22,6 @@ package List;
 
 use strict;
 
-use Data::Dumper;
 # xxxxxxx faut-il virer encode ? Faut en faire un use ? 
 require Encode;
 use Exporter;
@@ -3924,6 +3923,7 @@ sub send_file {
 	$data->{'dkim'} = &tools::get_dkim_parameters({'robot' => $self->{'domain'}});
     } 
     $data->{'use_bulk'} = 1  unless ($data->{'alarm'}) ; # use verp excepted for alarms. We should make this configurable in order to support Sympa server on a machine without any MTA service
+          # use Data::Dumper;
 	  # my $dump = &Dumper($data); open (DUMP,">>/tmp/dumper2"); printf DUMP '----------------data \n%s',$dump ; close DUMP; 
     unless (&mail::mail_file($filename, $who, $data, $self->{'domain'})) {
 	&Log::do_log('err',"List::send_file, could not send template $filename to $who");

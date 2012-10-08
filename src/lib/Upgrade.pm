@@ -25,7 +25,6 @@ package Upgrade;
 use strict;
 
 use Carp;
-use Data::Dumper;
 use POSIX qw(strftime);
 
 use Conf;

@@ -37,7 +37,6 @@ package Message;
 use strict;
 
 use Carp;
-use Data::Dumper;
 use Mail::Header;
 use Mail::Address;
 use MIME::Entity;
@@ -170,6 +169,7 @@ sub new {
 	    $messageasstring = $messageasstring.$_;
 	}
 	close(FILE);
+        # use Data::Dumper;
 	# my $dump = &Dumper($messageasstring); open (DUMP,">>/tmp/dumper"); printf DUMP 'lecture du fichier \n%s',$dump ; close DUMP; 
     }
     if($messageasstring){

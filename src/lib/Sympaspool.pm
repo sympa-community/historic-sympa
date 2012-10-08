@@ -24,7 +24,6 @@ package Sympaspool;
 use strict;
 
 use Carp;
-use Data::Dumper;
 require Encode;
 use Exporter;
 use IO::Scalar;

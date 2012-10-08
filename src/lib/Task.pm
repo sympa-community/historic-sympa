@@ -25,7 +25,6 @@ package Task;
 use strict;
 
 use Carp;
-use Data::Dumper;
 
 use Conf;
 use List;

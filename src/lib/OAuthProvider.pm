@@ -37,7 +37,6 @@ package OAuthProvider;
 
 use strict;
 
-use Data::Dumper;
 use OAuth::Lite::ServerUtil;
 use URI::Escape;
 

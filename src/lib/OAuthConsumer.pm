@@ -37,7 +37,6 @@ package OAuthConsumer;
 
 use strict;
 
-use Data::Dumper;
 use OAuth::Lite::Consumer;
 
 use Auth;

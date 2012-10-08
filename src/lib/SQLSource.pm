@@ -25,7 +25,6 @@ package SQLSource;
 use strict;
 
 use Carp;
-use Data::Dumper;
 use Exporter;
 
 use Conf;
