@@ -23,7 +23,7 @@ package mail;
 
 use Carp;
 use Data::Dumper;
-require Exporter;
+use Exporter;
 use MIME::Charset;
 use MIME::Tools;
 use POSIX;
