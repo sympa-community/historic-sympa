@@ -25,29 +25,42 @@ use strict;
 # xxxxxxx faut-il virer encode ? Faut en faire un use ? 
 require Encode;
 use Exporter;
+use Fcntl qw(LOCK_SH LOCK_EX LOCK_NB LOCK_UN);
+use IO::Scalar;
+use Mail::Header;
+use MIME::Entity;
+use MIME::EncWords;
+use MIME::Parser;
 use POSIX;
+use Storable;
+use Time::Local;
 
-use SQLSource;
+use Archive;
+use Conf;
 use Datasource;
+use Family;
+use Fetch;
 use LDAPSource;
+use Language;
+use Ldap;
+use Lock;
+use Log;
+use mail;
+use Message;
+use PlainDigest;
+use Scenario;
 use SDM;
 use SQLSource qw(create_db);
-use Upgrade;
-use Lock;
-use Task;
-use Scenario;
-use Fetch;
-use WebAgent;
 use Sympaspool;
-use Archive;
-use VOOTConsumer;
-use tt2;
 use Sympa::Constants;
+use Task;
+use tt2;
+use Upgrade;
+use VOOTConsumer;
+use WebAgent;
 
 our @ISA = qw(Exporter);
 our @EXPORT = qw(%list_of_lists);
-
-use Fcntl qw(LOCK_SH LOCK_EX LOCK_NB LOCK_UN);
 
 =head1 CONSTRUCTOR
 
@@ -231,24 +244,6 @@ Print the list information to the given file descriptor, or the
 currently selected descriptor.
 
 =cut
-
-use IO::Scalar;
-use Storable;
-use Mail::Header;
-use Archive;
-use Language;
-use Log;
-use Conf;
-use mail;
-use Ldap;
-use Time::Local;
-use MIME::Entity;
-use MIME::EncWords;
-use MIME::Parser;
-use Message;
-use Family;
-use PlainDigest;
-
 
 ## Database and SQL statement handlers
 my ($sth, @sth_stack);
