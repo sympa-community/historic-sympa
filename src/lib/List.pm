@@ -5898,9 +5898,8 @@ sub find_list_member_by_pattern_no_object {
 
     push @sth_stack, $sth;
 
-    ## Additional subscriber fields
-    unless ($sth = SDM::do_query(sprintf('SELECT %s FROM subscriber_table WHERE user_subscriber LIKE %s AND list_subscriber = %s AND robot_subscriber = %s', 
-					 &_list_member_cols),
+    unless ($sth = SDM::do_query('SELECT %s FROM subscriber_table WHERE user_subscriber LIKE %s AND list_subscriber = %s AND robot_subscriber = %s', 
+				 &_list_member_cols,
 				 &SDM::quote($email_pattern), 
 				 &SDM::quote($name),
 				 &SDM::quote($options->domain))) {
@@ -10242,12 +10241,8 @@ sub get_lists {
 		}
 		## create object
 		my $list = new List($listname, $robot, $options);
-		unless (defined $list) {
-##		    delete $list_cache{'get_lists'}{$robot}
-##			unless %requested_lists;
-##		    return undef;
-		    next;
-		}
+		next unless defined $list;
+
 		## Add list to memory cache
 		unless (%requested_lists) {
 		    push @{$list_cache{'get_lists'}{$robot}}, $list;
@@ -10308,10 +10303,10 @@ sub get_lists {
 
 	push @sth_stack, $sth;
 	if (defined $cond_sql) {
-	    $sth = &SDM::do_query(sprintf 'SELECT name_list AS name%s FROM %s WHERE %s robot_list = %s AND %s ORDER BY %s',
-					  $cols, $table, $cond,
-					  &SDM::quote($robot),
-					  $cond_sql, $order_sql);
+	    $sth = &SDM::do_query('SELECT name_list AS name%s FROM %s WHERE %s robot_list = %s AND %s ORDER BY %s',
+				  $cols, $table, $cond,
+				  &SDM::quote($robot),
+				  $cond_sql, $order_sql);
 	} else {
 	    $sth = &SDM::do_prepared_query(sprintf('SELECT name_list AS name%s FROM %s WHERE %s robot_list = ? ORDER BY %s',
 						   $cols, $table, $cond,
