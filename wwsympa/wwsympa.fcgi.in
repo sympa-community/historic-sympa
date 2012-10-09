@@ -2670,7 +2670,7 @@ sub check_param_in {
 	 }
 
 	 ## Set lang to list lang
-	 &Language::SetLang($list->{'admin'}{'lang'});
+	 &Language::SetLang($list->lang);
      }
 
      ## listmaster has owner and editor privileges for the list
@@ -2687,13 +2687,13 @@ sub check_param_in {
 	}
 
 	## Gather list configuration informations for further output.
-	$param->{'list'} = $in{'list'};
-	$param->{'subtitle'} = $list->{'admin'}{'subject'};
-	$param->{'subscribe'} = $list->{'admin'}{'subscribe'}{'name'};
-	$param->{'send'} = $list->{'admin'}{'send'}{'title'}{$param->{'lang'}};
+	$param->{'list'} = $list->name;
+	$param->{'subtitle'} = $list->subject;
+	$param->{'subscribe'} = $list->subscribe->{'name'};
+	$param->{'send'} = $list->send->{'title'}{$param->{'lang'}}; #FIXME
 
 	# Pictures are not available unless it is configured for the list and the robot
- 	if ($list->{'admin'}{'pictures_feature'} eq 'off') {
+ 	if ($list->pictures_feature eq 'off') {
  	    $param->{'pictures_display'} = undef;
  	}
  	else {
@@ -2708,10 +2708,10 @@ sub check_param_in {
 	}
 
 	## Check if the current list has a public key X.509 certificate.
-	$param->{'list_as_x509_cert'} = $list->{'as_x509_cert'};
+	$param->{'list_as_x509_cert'} = $list->as_x509_cert;
 
 	## Stores to output the whole list's admin configuration.
-	$param->{'listconf'} = $list->{'admin'};
+	$param->{'listconf'} = $list->admin;
 
 	## If an user is logged in, checks this user's privileges.
 	if ($param->{'user'}{'email'}) {

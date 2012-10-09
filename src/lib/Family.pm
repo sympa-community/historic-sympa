@@ -385,7 +385,7 @@ sub add_list {
 	    
     # config_changes
     unless (open FILE, '>', "$list->{'dir'}/config_changes") {
-	$list->set_status_error_config('error_copy_file',$list->{'name'},$self->{'name'});
+	$list->set_status_error_config('error_copy_file', $self->{'name'});
 	push @{$return->{'string_info'}}, "Impossible to create file $list->{'dir'}/config_changes : $!, the list is set in status error_config";
     }
     close FILE;
@@ -405,20 +405,22 @@ sub add_list {
     $self->{'state'} = 'no_check';
     
     unless (defined $error) {
-	$list->set_status_error_config('no_check_rules_family',$list->{'name'},$self->{'name'});
+	$list->set_status_error_config('no_check_rules_family',
+				       $self->{'name'});
 	push @{$return->{'string_error'}}, "Impossible to check parameters constraint, see logs for more informations. The list is set in status error_config";
 	return $return;
     }
     
     if (ref($error) eq 'ARRAY') {
-	$list->set_status_error_config('no_respect_rules_family',$list->{'name'},$self->{'name'});
+	$list->set_status_error_config('no_respect_rules_family',
+				       $self->{'name'});
 	push @{$return->{'string_info'}}, "The list does not respect the family rules : ".join(", ",@{$error});
     }
     
     ## copy files in the list directory : xml file
     unless ( ref($data) eq "HASH" ) {
     unless ($self->_copy_files($list->{'dir'},"_new_list.xml")) {
-	$list->set_status_error_config('error_copy_file',$list->{'name'},$self->{'name'});
+	$list->set_status_error_config('error_copy_file', $self->{'name'});
 	push @{$return->{'string_info'}}, "Impossible to copy the xml file in the list directory, the list is set in status error_config.";
     }
     }
@@ -568,7 +570,7 @@ sub modify_list {
     unless (defined $custom) {
 	&Log::do_log('err','impossible to get list %s customizing',$list->{'name'});
 	push @{$return->{'string_error'}}, "Error during updating list $list->{'name'}, the list is set in status error_config."; 
-	$list->set_status_error_config('modify_list_family',$list->{'name'},$self->{'name'});
+	$list->set_status_error_config('modify_list_family', $self->{'name'});
 	return $return;
     }
     my $config_changes = $custom->{'config_changes'}; 
@@ -579,7 +581,7 @@ sub modify_list {
     unless (defined $result) {
 	&Log::do_log('err','No object list resulting from updating list %s',$list->{'name'});
 	push @{$return->{'string_error'}}, "Error during updating list $list->{'name'}, the list is set in status error_config."; 
-	$list->set_status_error_config('modify_list_family',$list->{'name'},$self->{'name'});
+	$list->set_status_error_config('modify_list_family', $self->{'name'});
 	return $return;
     }
     $list = $result;
@@ -657,7 +659,7 @@ sub modify_list {
     }
 
     unless (open FILE, '>', "$list->{'dir'}/config_changes") {
-	$list->set_status_error_config('error_copy_file',$list->{'name'},$self->{'name'});
+	$list->set_status_error_config('error_copy_file', $self->{'name'});
 	push @{$return->{'string_info'}}, "Impossible to create file $list->{'dir'}/config_changes : $!, the list is set in status error_config.";
     }
     close FILE;
@@ -682,20 +684,22 @@ sub modify_list {
     $self->{'state'} = 'no_check';
     
     unless (defined $error) {
-	$list->set_status_error_config('no_check_rules_family',$list->{'name'},$self->{'name'});
+	$list->set_status_error_config('no_check_rules_family',
+				       $self->{'name'});
 	push @{$return->{'string_error'}}, "Impossible to check parameters constraint, see logs for more informations. The list is set in status error_config";
 	return $return;
     }
     
     if (ref($error) eq 'ARRAY') {
-	$list->set_status_error_config('no_respect_rules_family',$list->{'name'},$self->{'name'});
+	$list->set_status_error_config('no_respect_rules_family',
+				       $self->{'name'});
 	push @{$return->{'string_info'}}, "The list does not respect the family rules : ".join(", ",@{$error});
     }
     
     ## copy files in the list directory : xml file
 
     unless ($self->_copy_files($list->{'dir'},"_mod_list.xml")) {
-	$list->set_status_error_config('error_copy_file',$list->{'name'},$self->{'name'});
+	$list->set_status_error_config('error_copy_file', $self->{'name'});
 	push @{$return->{'string_info'}}, "Impossible to copy the xml file in the list directory, the list is set in status error_config.";
     }
 
@@ -920,7 +924,8 @@ sub instantiate {
 	unless (defined $config->createHash()) {
 	    push (@{$self->{'errors'}{'create_hash'}},"$self->{'dir'}/$listname.xml");
 	    if ($list) {
- 		$list->set_status_error_config('instantiation_family',$list->{'name'},$self->{'name'});
+ 		$list->set_status_error_config('instantiation_family',
+					       $self->{'name'});
  	    }
 	    next;
 	} 
@@ -950,7 +955,8 @@ sub instantiate {
 	    my $result = $self->_update_existing_list($list,$hash_list);
 	    unless (defined $result) {
 		push (@{$self->{'errors'}{'update_list'}},$list->{'name'});
-		$list->set_status_error_config('instantiation_family',$list->{'name'},$self->{'name'});
+		$list->set_status_error_config('instantiation_family',
+					       $self->{'name'});
 		next;
 	    }
 	    $list = $result;
@@ -982,7 +988,8 @@ sub instantiate {
 	    unless (open FILE, '>', "$list->{'dir'}/config_changes") {
 		&Log::do_log('err','Family::instantiate : impossible to create file %s/config_changes : %s',$list->{'dir'},$!);
 		push (@{$self->{'generated_lists'}{'file_error'}},$list->{'name'});
-		$list->set_status_error_config('error_copy_file',$list->{'name'},$self->{'name'});
+		$list->set_status_error_config('error_copy_file',
+					       $self->{'name'});
 	    }
 	    close FILE;
 	}
@@ -1057,7 +1064,8 @@ sub instantiate {
 	    close $xml_fh;
 	    unless (defined $config->createHash()) {
 		push (@{$self->{'errors'}{'create_hash'}},"$list->{'dir'}/instance.xml");
-		$list->set_status_error_config('instantiation_family',$list->{'name'},$self->{'name'});
+		$list->set_status_error_config('instantiation_family',
+					       $self->{'name'});
 		next;
 	    } 
 	    my $hash_list = $config->getHash();
@@ -1065,7 +1073,8 @@ sub instantiate {
 	    my $result = $self->_update_existing_list($list,$hash_list);
 	    unless (defined $result) {
 		push (@{$self->{'errors'}{'update_list'}},$list->{'name'});
-		$list->set_status_error_config('instantiation_family',$list->{'name'},$self->{'name'});
+		$list->set_status_error_config('instantiation_family',
+					       $self->{'name'});
 		next;
 	    }
 	    $list = $result;
@@ -2292,7 +2301,7 @@ sub _update_existing_list {
     unless (open FILE, '>', "$list->{'dir'}/config_changes") {
 	&Log::do_log('err','impossible to open file %s/config_changes : %s',$list->{'dir'},$!);
 	push (@{$self->{'generated_lists'}{'file_error'}},$list->{'name'});
-	$list->set_status_error_config('error_copy_file',$list->{'name'},$self->{'name'});
+	$list->set_status_error_config('error_copy_file', $self->{'name'});
     }
     close FILE;
 
@@ -2652,19 +2661,22 @@ sub _end_update_list {
 
     unless (defined $error) {
 	&Log::do_log('err', 'Impossible to check parameters constraint, it happens on list %s. It is set in status error_config',$list->{'name'});
-	$list->set_status_error_config('no_check_rules_family',$list->{'name'},$self->{'name'});
+	$list->set_status_error_config('no_check_rules_family',
+				       $self->{'name'});
 	return undef;
     }
     if (ref($error) eq 'ARRAY') {
 	$self->{'generated_lists'}{'constraint_error'}{$list->{'name'}} = join(", ",@{$error});
-	$list->set_status_error_config('no_respect_rules_family',$list->{'name'},$self->{'name'});
+	$list->set_status_error_config('no_respect_rules_family',
+				       $self->{'name'});
     }
     
     ## copy files in the list directory
     if ($xml_file) { # copying the xml file
 	unless ($self->_copy_files($list->{'dir'},"$list->{'name'}.xml")) {
 	    push (@{$self->{'generated_lists'}{'file_error'}},$list->{'name'});
-	    $list->set_status_error_config('error_copy_file',$list->{'name'},$self->{'name'});
+	    $list->set_status_error_config('error_copy_file',
+					   $self->{'name'});
 	}
     }
 
@@ -2938,7 +2950,8 @@ sub insert_delete_exclusion {
 	my $date = time;
 
 	## Insert: family, user and date
-	unless (&SDM::do_query('INSERT INTO exclusion_table (list_exclusion, family_exclusion, robot_exclusion, user_exclusion, date_exclusion) VALUES (%s, %s, %s, %s, %s)', &SDM::quote(':'), &SDM::quote($name), &SDM::quote($robot), &SDM::quote($email), &SDM::quote($date))) {
+	## Add dummy list_exclusion column to satisfy constraint.
+	unless (&SDM::do_query('INSERT INTO exclusion_table (list_exclusion, family_exclusion, robot_exclusion, user_exclusion, date_exclusion) VALUES (%s, %s, %s, %s, %s)', &SDM::quote('family:' . $name), &SDM::quote($name), &SDM::quote($robot), &SDM::quote($email), &SDM::quote($date))) {
 	    &Log::do_log('err','Unable to exclude user %s from family %s@%s', $email, $name, $robot);
 	    return undef;
 	}

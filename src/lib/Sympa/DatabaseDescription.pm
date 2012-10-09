@@ -1094,93 +1094,73 @@ my %full_db_struct = (
     },
     'list_table' => {
 	'fields' => {
-	    ## Primary keys
+	    ## Identification
 	    'name_list'=> => {
 		'struct' => 'varchar(100)',
-		'doc' => 'FIXME',
+		'doc' => 'Name of the list',
 		'order' => 1,
 		'primary'=>1,
 		'not_null'=>1,
 	    },
 	    'robot_list' => {
 		'struct' => 'varchar(100)',
-		'doc' => 'FIXME',
+		'doc' => 'Robot (domain) the list belongs to',
 		'order' => 2,
 		'primary'=>1,
 		'not_null'=>1,
 	    },
 	    ## basic profile
-##	    'path_list' => {
-##		'struct' => 'varchar(100)',
-##		'doc' => 'FIXME',
-##		'order' => 3,
-##	    },
 	    'status_list' => {
 		'struct' => "enum('open','closed','pending','error_config','family_closed')",
-		'doc' => 'FIXME',
-		'order' => 4,
+		'doc' => 'Status of the list',
+		'order' => 3,
 	    },
 	    'creation_email_list' => {
 		'struct' => 'varchar(100)',
-		'doc' => 'FIXME',
-		'order' => 5,
+		'doc' => 'Email of user who created the list',
+		'order' => 4,
 	    },
 	    'creation_epoch_list' => {
-		'struct' => 'datetime',
-		'doc' => 'FIXME',
-		'order' => 6,
+		'struct' => 'int(11)',
+		'doc' => 'UNIX time when the list was created',
+		'order' => 5,
 	    },
 	    'update_email_list' => {
 		'struct' => 'varchar(100)',
-		'doc' => 'FIXME',
-		'order' => 12,
+		'doc' => 'Email of user who updated the list',
+		'order' => 6,
 	    },
 	    'update_epoch_list' => {
-		'struct' => 'datetime',
-		'doc' => 'FIXME',
-		'order' => 13,
+		'struct' => 'int(11)',
+		'doc' => 'UNIX time when the list was updated',
+		'order' => 7,
 	    },
-##	    'subject_list' => {
-##		'struct' => 'varchar(100)',
-##		'doc' => 'FIXME',
-##		'order' => 7,
-##	    },
 	    ## Other indices to help searching lists
 	    'searchkey_list' => {
 		'struct' => 'varchar(255)',
-		'doc' => 'Case-folded list subject to help search',
-		'order' => 14,
+		'doc' => 'Case-folded list subject to help searching',
+		'order' => 10,
 	    },
 	    'web_archive_list' => {
 		'struct' => 'tinyint(1)',
-		'doc' => 'FIXME',
-		'order' => 8,
+		'doc' => 'If the list has archives',
+		'order' => 11,
 	    },
 	    'topics_list' => {
 		'struct' => 'varchar(255)',
-		'doc' => 'Topics of list, separated and enclosed by comma',
-		'order' => 9,
+		'doc' => 'Topics of the list, separated and enclosed by commas',
+		'order' => 12,
 	    },
-##	    'editors_list' => {
-##		'struct' => 'varchar(100)',
-##		'doc' => 'FIXME',
-##		'order' => 10,
-##	    },
-##	    'owners_list' => {
-##		'struct' => 'varchar(100)',
-##		'doc' => 'FIXME',
-##		'order' => 11,
-##	    },
 	    ## total cache
 	    'total_list' => {
 		'struct' => 'int(7)',
 		'doc' => 'Estimated number of subscribers',
-		'order' => 15,
+		'order' => 90,
 	    },
 	    ## cache management
 	    'cache_epoch_list' => {
 		'struct' => 'int(11)',
-		'doc' => 'Date (epoch) of cache entry',
+		'doc' => 'UNIX time of cache entry',
 		'order' => 98,
 	    },
 	    ## admin cache
@@ -1190,7 +1170,7 @@ my %full_db_struct = (
 		'order' => 99,
 	    },
 	},
-	'doc' => 'FIXME',
+	'doc' => 'The list_table holds cached list config and some items to help searching lists.',
 	'order' => 18,
     },
 );

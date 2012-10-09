@@ -2425,10 +2425,11 @@ sub new {
 
 	## Update admin_table
 	unless (defined $list->sync_include_admin()) {
-	    &Log::do_log('err','List::new() : sync_include_admin_failed') unless ($options->{'just_try'});
+	    &Log::do_log('err', 'sync_include_admin for list %s failed', $list)
+		unless $options->{'just_try'};
 	}
 	if ($list->get_nb_owners() < 1) {
-	    $list->set_status_error_config('no_owner_defined',$list->{'name'});
+	    $list->set_status_error_config('no_owner_defined');
 	}
     }
 
@@ -2472,7 +2473,7 @@ sub set_status_error_config {
 	#$self->save_config("listmaster\@$host");
 	#$self->savestats();
 	&Log::do_log('err', 'The list %s is set in status error_config: %s(%s)', $self, $message, join(', ', @param));
-	unless (&List::send_notify_to_listmaster($message, $self->domain, \@param)) {
+	unless (&List::send_notify_to_listmaster($message, $self->domain, [$self->name, @param])) {
 	    &Log::do_log('notice', 'Unable to send notify "%s" to listmaster', $message);
 	};
     }
@@ -2520,7 +2521,7 @@ sub savestats {
 	return undef;
     }   
 
-   _save_stats_file("$dir/stats", $self->{'stats'}, $self->{'total'}, $self->{'last_sync'}, $self->{'last_sync_admin_user'});
+    $self->_save_stats_file();
 
     ## Release the lock
     unless ($lock->unlock()) {
@@ -2763,7 +2764,6 @@ sub load {
 
     ## Set of initializations ; only performed when the config is first loaded
     unless ($self->{'name'} and $self->{'domain'} and $self->{'dir'}) {
-
 	## Search robot if none was provided
 	unless ($robot) {
 	    foreach my $r (keys %{$Conf::Conf{'robots'}}) {
@@ -2790,66 +2790,73 @@ sub load {
 	    return undef ;
 	}
 	
-	$self->{'domain'} = $robot ;
-
-	# default list host is robot domain
-	$self->{'admin'}{'host'} ||= $self->{'domain'};
-	$self->{'name'}  = $name ;
+	$self->{'domain'} = $robot;
+	$self->{'name'} = $name;
     }
 
-    unless ($self->{'name'} eq $name) {
+    unless ($self->{'name'} eq $name and $self->{'domain'} eq $robot) {
 	&Log::do_log('err', 'Bug in logic.  Ask developer');
 	return undef;
     }
 
-    unless ((-d $self->{'dir'}) && (-f "$self->{'dir'}/config")) {
-	&Log::do_log('debug2', 'Missing directory (%s) or config file for %s', $self->{'dir'}, $name) unless ($options->{'just_try'});
-	return undef ;
+    unless (-d $self->{'dir'} and -f $self->{'dir'} . '/config') {
+	&Log::do_log('debug3', 'Missing directory (%s) or config file for %s',
+		     $self->{'dir'}, $self)
+	    unless $options->{'just_try'};
+	return undef;
     }
 
+    ## Last modification of list config ($m1), subscribers ($m2) and stats
+    ## ($m3) on memory cache.  $m2 is no longer used.
     my ($m1, $m2, $m3) = (0, 0, 0);
-    ($m1, $m2, $m3) = @{$self->{'mtime'}} if (defined $self->{'mtime'});
+    ($m1, $m2, $m3) = @{$self->{'mtime'}} if defined $self->{'mtime'};
 
     my $time_config = (stat("$self->{'dir'}/config"))[9];
     my $time_stats = (stat("$self->{'dir'}/stats"))[9];
     my $admin = undef;
     my $cached;
 
+    ## Load list config
     if (! $options->{'reload_config'} and
-	defined ($cached = $self->list_cache_fetch($m1, $time_config))) {
-        &Log::do_log('debug3', 'got config for %s from serialized data',
-		     $self->get_list_id);
-
+	$m1 and $time_config and $time_config <= $m1) {
+	&Log::do_log('debug3', 'config for %s on memory is up-to-date',
+		     $self);
+    } elsif (! $options->{'reload_config'} and
+	     defined ($cached = $self->list_cache_fetch($m1, $time_config))) {
 	$m1 = $cached->{'epoch'};
 	$self->{'admin'} = $admin = $cached->{'admin'};
 	$self->{'total'} = $cached->{'total'} if defined $cached->{'total'};
-    } elsif ($time_config > $m1) {
-	$admin = &_load_list_config_file($self->{'dir'}, $self->{'domain'}, 'config');
+	&Log::do_log('debug3', 'got config for %s from serialized data',
+		     $self);
+    } elsif ($options->{'reload_config'} or $time_config > $m1) {
+	$admin = &_load_list_config_file($self->{'dir'}, $robot, 'config');
  	unless (defined $admin) {
- 	    $self->set_status_error_config('load_admin_file_error',$self->{'name'});
+ 	    $self->set_status_error_config('load_admin_file_error');
 	    $self->list_cache_purge;
  	    return undef;	    
  	}
-
 	$m1 = $time_config;
 	$self->{'admin'} = $admin;
-	&Log::do_log('debug3', 'got config for %s@%s from file',
-		     $name, $robot);
+	&Log::do_log('debug3', 'got config for %s from file', $self);
 
- 	## check param_constraint.conf if belongs to a family and the config has been loaded
- 	if (defined $admin->{'family_name'} && ($admin->{'status'} ne 'error_config')) {
+ 	## check param_constraint.conf if belongs to a family and
+ 	## the config has been loaded
+ 	if (defined $self->family_name and $self->status ne 'error_config') {
  	    my $family;
  	    unless ($family = $self->family) {
- 		$self->set_status_error_config('no_list_family', $self->{'name'}, $admin->{'family_name'});
+ 		$self->set_status_error_config('no_list_family',
+					       $self->family_name);
 		$self->list_cache_purge;
 		return undef;
 	    }
 
 	    my $error = $family->check_param_constraint($self);
 	    unless ($error) {
- 		$self->set_status_error_config('no_check_rules_family',$self->{'name'}, $family->{'name'});
+ 		$self->set_status_error_config('no_check_rules_family',
+					       $family->{'name'});
 	    } elsif (ref $error eq 'ARRAY') {
- 		$self->set_status_error_config('no_respect_rules_family',$self->{'name'}, $family->{'name'});
+ 		$self->set_status_error_config('no_respect_rules_family',
+					       $family->{'name'});
  	    }
  	}
 
@@ -2857,26 +2864,19 @@ sub load {
 	$self->list_cache_update_admin;
     }
 
-    $self->{'as_x509_cert'} = 1  if ((-r "$self->{'dir'}/cert.pem") || (-r "$self->{'dir'}/cert.pem.enc"));
+    ## Check if the current list has a public key X.509 certificate.
+    $self->{'as_x509_cert'} =
+	(-r $self->{'dir'}.'/cert.pem' || -r $self->{'dir'}.'/cert.pem.enc') ?
+	1 : 0;
 
-   ## Load stats file if first new() or stats file changed
-    my ($stats, $total);
-    if (! $self->{'mtime'}[2] || ($time_stats > $self->{'mtime'}[2])) {
-	($stats, $total, $self->{'last_sync'}, $self->{'last_sync_admin_user'}) = _load_stats_file("$self->{'dir'}/stats");
+    ## Load stats file if first new() or stats file changed
+    if ($time_stats > $m3) {
+	$self->_load_stats_file();
 	$m3 = $time_stats;
-
-	$self->{'stats'} = $stats if defined $stats;	
-	$self->total($total) if defined $total;
-    }
-
-    ## We have updated %users, Total may have changed
-    if ($m2 > $self->{'mtime'}[1]) {
-	$self->savestats();
     }
 
     $self->{'mtime'} = [ $m1, $m2, $m3 ];
-
-    $list_of_lists{$self->{'domain'}}{$name} = $self;
+    $list_of_lists{$robot}{$name} = $self;
     return $admin ? 1 : 0;
 }
 
@@ -5652,7 +5652,7 @@ sub insert_delete_exclusion {
 
 	if ($user->{'included'} eq '1') {
 	    ## Insert : list, user and date
-	    unless (&SDM::do_query('INSERT INTO exclusion_table (list_exclusion, family_exclusion, robot_exclusion, user_exclusion, date_exclusion) VALUES (%s, %s, %s, %s, %s)', &SDM::quote($name), &SDM::quote(':'), &SDM::quote($robot), &SDM::quote($email), &SDM::quote($date))) {
+	    unless (&SDM::do_query('INSERT INTO exclusion_table (list_exclusion, robot_exclusion, user_exclusion, date_exclusion) VALUES (%s, %s, %s, %s)', &SDM::quote($name), &SDM::quote($robot), &SDM::quote($email), &SDM::quote($date))) {
 		&Log::do_log('err','Unable to exclude user %s from list %s', $email, $self);
 		return undef;
 	    }
@@ -7566,8 +7566,12 @@ sub load_data_sources_list {
 
 ## Loads the statistics information
 sub _load_stats_file {
-    my $file = shift;
-    &Log::do_log('debug3', 'List::_load_stats_file(%s)', $file);
+    my $self = shift;
+
+    croak "Invalid parameter: $self" unless ref $self; #prototype changed (6.2)
+
+    my $file = $self->dir . '/stats';
+    &Log::do_log('debug3', '(%s, file=%s)', $self, $file);
 
    ## Create the initial stats array.
    my ($stats, $total, $last_sync, $last_sync_admin_user);
@@ -7593,8 +7597,10 @@ sub _load_stats_file {
        $last_sync_admin_user = 0;
    }
 
-   ## Return the array.
-   return ($stats, $total, $last_sync, $last_sync_admin_user);
+    $self->{'last_sync'} = $last_sync;
+    $self->{'last_sync_admin_user'} = $last_sync_admin_user;
+    $self->{'stats'} = $stats if defined $stats;
+    $self->total($total) if defined $total;
 }
 
 ## Loads the list of subscribers.
@@ -9664,20 +9670,24 @@ sub _inclusion_loop {
 
 ## Writes to disk the stats data for a list.
 sub _save_stats_file {
-    my $file = shift;
-    my $stats = shift;
-    my $total = shift;
-    my $last_sync = shift;
-    my $last_sync_admin_user = shift;
-    
-    unless (defined $stats && ref ($stats) eq 'ARRAY') {
-	&Log::do_log('err', 'List_save_stats_file() : incorrect parameter');
+    my $self = shift;
+
+    croak "Invalid parameter: $self" unless ref $self; #prototype changed (6.2)
+
+    my $file = $self->dir . '/stats';
+    my $stats = $self->stats;
+    my $total = $self->total;
+    my $last_sync = $self->{'last_sync'};
+    my $last_sync_admin_user = $self->{'last_sync_admin_user'};
+
+    unless (defined $stats and ref $stats eq 'ARRAY') {
+	&Log::do_log('err', 'incorrect parameter: %s', $self);
 	return undef;
     }
 
-    &Log::do_log('debug2', 'List::_save_stats_file(%s, %d, %d, %d)', $file, $total,$last_sync,$last_sync_admin_user );
-    my $untainted_filename = sprintf ("%s",$file);
-    open(L, "> $untainted_filename") || return undef;
+    &Log::do_log('debug3', '(file=%s, total=%s, last_sync=%s, last_sync_admin_user=%s)', $file, $total,$last_sync,$last_sync_admin_user);
+    my $untainted_filename = sprintf("%s", $file); #XXX required?
+    open(L, '>', $untainted_filename) || return undef;
     printf L "%d %.0f %.0f %.0f %d %d %d\n", @{$stats}, $total, $last_sync, $last_sync_admin_user;
     close(L);
 }
@@ -12195,31 +12205,32 @@ sub remove_task {
 
 ## Close the list (remove from DB, remove aliases, change status to 'closed' or 'family_closed')
 sub close_list {
+    &Log::do_log('debug2', '(%s, %s, %s)', @_);
     my ($self, $email, $status) = @_;
 
     return undef 
-	unless ($self && ($list_of_lists{$self->{'domain'}}{$self->{'name'}}));
+	unless $self and $list_of_lists{$self->domain}{$self->name};
     
     ## If list is included by another list, then it cannot be removed
     ## TODO : we should also check owner_include and editor_include, but a bit more tricky
     my $all_lists = get_lists('*');
     foreach my $list (@{$all_lists}) {
-	    my $included_lists = $list->{'admin'}{'include_list'};
-	    next unless (defined $included_lists);
-	    
-	    foreach my $included_list_name (@{$included_lists}) {
+	my $included_lists = $list->include_list;
+	next unless defined $included_lists;
 
-		if ($included_list_name eq $self->get_list_id() ||
-		($included_list_name eq $self->{'name'} && $list->{'domain'} eq $self->{'domain'})) {
-			&Log::do_log('err','List %s is included by list %s : cannot close it', $self->get_list_id(), $list->get_list_id());
-			return undef;
-		}
+	foreach my $included_list_name (@{$included_lists}) {
+	    if ($included_list_name eq $self->get_list_id() or
+		($included_list_name eq $self->name and
+		 $list->domain eq $self->domain)) {
+		&Log::do_log('err','List %s is included by list %s : cannot close it', $self, $list);
+		return undef;
 	    }
+	}
     }
     
     ## Dump subscribers, unless list is already closed
-    unless ($self->{'admin'}{'status'} eq 'closed') {
-	$self->_save_list_members_file("$self->{'dir'}/subscribers.closed.dump");
+    unless ($self->status eq 'closed') {
+	$self->_save_list_members_file($self->dir.'/subscribers.closed.dump');
     }
 
     ## Delete users
@@ -12239,12 +12250,12 @@ sub close_list {
     }
 
     ## Change status & save config
-    $self->{'admin'}{'status'} = 'closed';
+    $self->status('closed');
 
     if (defined $status) {
  	foreach my $s ('family_closed','closed') {
  	    if ($status eq $s) {
- 		$self->{'admin'}{'status'} = $status;
+ 		$self->status($status);
  		last;
  	    }
  	}
@@ -12258,10 +12269,11 @@ sub close_list {
     $self->remove_aliases();   
 
     #log in stat_table to make staistics
-    &Log::db_stat_log({'robot' => $self->{'domain'}, 'list' => $self->{'name'}, 'operation' => 'close_list','parameter' => '', 
-		       'mail' => $email, 'client' => '', 'daemon' => 'damon_name'});
-		       
-    
+    &Log::db_stat_log({'robot' => $self->domain, 'list' => $self->name,
+		       'operation' => 'close_list', 'parameter' => '',
+		       'mail' => $email, 'client' => '',
+		       'daemon' => 'damon_name'}); #FIXME: unknown daemon
+
     return 1;
 }
 
@@ -12637,7 +12649,8 @@ sub AUTOLOAD {
     $AUTOLOAD =~ m/^(.*)::(.*)/;
 
     my $attr = $2;
-    if (ref $_[0] and grep { $_ eq $attr } qw(name domain dir admin stats)) {
+    if (ref $_[0] and
+	grep { $_ eq $attr } qw(name domain dir admin stats as_x509_cert)) {
 	## getter for list attributes.
 	no strict "refs";
 	*{$AUTOLOAD} = sub {
@@ -13008,11 +13021,11 @@ sub list_cache_update_total {
 						  'cache_list_config');
 
     if ($cache_list_config eq 'database') {
-	if (&SDM::do_prepared_query('UPDATE list_table SET total_list = ? WHERE name_list = ? AND robot_list = ?',
-				    $self->total,
-				    $self->name, $self->domain)) {
+	unless (&SDM::do_prepared_query('UPDATE list_table SET total_list = ? WHERE name_list = ? AND robot_list = ?',
+					$self->{'total'},
+					$self->name, $self->domain)) {
 	    &Log::do_log('err', 'Canot update subscriber count of list %s on database cache',
-			 $self->get_list_id);
+			 $self);
 	}
     }
 }

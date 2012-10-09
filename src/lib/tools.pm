@@ -2263,8 +2263,9 @@ sub get_filename {
  	$list = $object;
  	if ($list->family_name) {
  	    unless ($family = $list->family) {
- 		&Log::do_log('err', 'Impossible to get list %s family : %s. The list is set in status error_config', $list->name, $list->family_name);
- 		$list->set_status_error_config('no_list_family', $list->name, $list->family_name);
+ 		&Log::do_log('err', 'Impossible to get list %s family : %s. The list is set in status error_config', $list, $list->family_name);
+ 		$list->set_status_error_config('no_list_family',
+					       $list->family_name);
  		return undef;
  	    }  
  	}
