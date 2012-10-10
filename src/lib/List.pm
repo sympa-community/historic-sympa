@@ -5481,40 +5481,39 @@ sub get_real_total {
 					   $self->name, $self->domain)) {
 	&Log::do_log('debug','Unable to get subscriber count for list %s',
 		     $self);
-	pop @sth_stack;
+	$sth = pop @sth_stack;
 	return undef;
     }
     my $total = $sth->fetchrow;
     $sth->finish();
 
-    pop @sth_stack;
+    $sth = pop @sth_stack;
 
     return $self->total($total);
 }
 
 ## Returns a hash for a given user
 sub get_global_user {
+    &Log::do_log('debug2', '(%s)', @_);
     my $who = &tools::clean_email(shift);
-    &Log::do_log('debug2', '(%s)', $who);
 
     ## Additional subscriber fields
-    my $additional;
+    my $additional = '';
     if ($Conf::Conf{'db_additional_user_fields'}) {
-	$additional = ',' . $Conf::Conf{'db_additional_user_fields'};
+	$additional = ', ' . $Conf::Conf{'db_additional_user_fields'};
     }
 
-    
     push @sth_stack, $sth;
 
-    $sth = &SDM::do_query("SELECT email_user AS email, gecos_user AS gecos, password_user AS password, cookie_delay_user AS cookie_delay, lang_user AS lang %s, attributes_user AS attributes, data_user AS data, last_login_date_user AS last_login_date, wrong_login_count_user AS wrong_login_count, last_login_host_user AS last_login_host FROM user_table WHERE email_user = %s ", $additional, &SDM::quote($who));
-    
-    unless (defined $sth) {
-	&Log::do_log('err','Failed to prepare SQL query');
+    unless ($sth = &SDM::do_prepared_query(sprintf('SELECT email_user AS email, gecos_user AS gecos, password_user AS password, cookie_delay_user AS cookie_delay, lang_user AS lang, attributes_user AS attributes, data_user AS data, last_login_date_user AS last_login_date, wrong_login_count_user AS wrong_login_count, last_login_host_user AS last_login_host%s FROM user_table WHERE email_user = ?',
+						   $additional),
+					   $who)) {
+	&Log::do_log('err', 'Failed to prepare SQL query');
+	$sth = pop @sth_stack;
 	return undef;
     }
-   
+
     my $user = $sth->fetchrow_hashref('NAME_lc');
- 
     $sth->finish();
 
     $sth = pop @sth_stack;
@@ -5544,21 +5543,21 @@ sub get_global_user {
 
 ## Returns an array of all users in User table hash for a given user
 sub get_all_global_user {
-    &Log::do_log('debug2', '');
+    &Log::do_log('debug2', '()');
 
     my @users;
-    my $sth;
+
     push @sth_stack, $sth;
-    
-    unless ($sth = &SDM::do_query("SELECT email_user FROM user_table")) {
+
+    unless ($sth = &SDM::do_prepared_query('SELECT email_user FROM user_table')) {
 	&Log::do_log('err','Unable to gather all users in DB');
+	$sth = pop @sth_stack;
 	return undef;
     }
-    
+
     while (my $email = ($sth->fetchrow_array)[0]) {
 	push @users, $email;
     }
- 
     $sth->finish();
 
     $sth = pop @sth_stack;
@@ -5659,7 +5658,7 @@ sub insert_delete_exclusion {
 	}
     } elsif ($action eq 'delete') {
 	## If $email is in exclusion_table, delete it.
-	my $data_excluded = &get_exclusion($name, $robot);
+	my $data_excluded = $self->get_exclusion();
 	my @users_excluded;
 
 	my $key =0;
@@ -5696,38 +5695,36 @@ sub insert_delete_exclusion {
 #                     * %data_exclu->{'date'}->[]                    # 
 ######################################################################
 sub get_exclusion {
-    
-    my  $name= shift;
-    my  $robot= shift;
-    &Log::do_log('debug2', 'List::get_exclusion(%s@%s)', $name,$robot);
+    &Log::do_log('debug2', '(%s)', @_);
+    my $self = shift;
 
-    my $list = new List($name, $robot);
-    unless (defined $list) {
-	&Log::do_log('err','List %s@%s does not exist', $name,$robot);
-	return undef;
-    }
+    croak "Invalid parameter: $self" unless ref $self; #prototype changed (6.2)
 
-    if (defined $list->{'admin'}{'family_name'} && $list->{'admin'}{'family_name'} ne '') {
+    my $name = $self->name;
+    my $robot = $self->domain;
+
+    push @sth_stack, $sth;
+
+    if (defined $self->family_name and $self->family_name ne '') {
 	unless ($sth = &SDM::do_query("SELECT user_exclusion AS email, date_exclusion AS date FROM exclusion_table WHERE (list_exclusion = %s OR family_exclusion = %s) AND robot_exclusion=%s", 
-				      &SDM::quote($name),&SDM::quote($list->{'admin'}{'family_name'}), &SDM::quote($robot))) {
+				      &SDM::quote($name), &SDM::quote($self->family_name), &SDM::quote($robot))) {
 	    &Log::do_log('err','Unable to retrieve excluded users for list %s@%s',$name, $robot);
+	    $sth = pop @sth_stack;
 	    return undef;
 	}
-    }else{
+    } else {
 	unless ($sth = &SDM::do_query("SELECT user_exclusion AS email, date_exclusion AS date FROM exclusion_table WHERE list_exclusion = %s AND robot_exclusion=%s", 
 				      &SDM::quote($name), &SDM::quote($robot))) {
 	    &Log::do_log('err','Unable to retrieve excluded users for list %s@%s',$name, $robot);
+	    $sth = pop @sth_stack;
 	    return undef;
 	}
     }
- 
-    push @sth_stack, $sth;
-
 
     my @users;
     my @date;
     my $data;
-    while ($data = $sth->fetchrow_hashref){
+    while ($data = $sth->fetchrow_hashref) {
 	push @users, $data->{'email'};
 	push @date, $data->{'date'};
     }
@@ -5735,12 +5732,12 @@ sub get_exclusion {
     my $data_exclu = {"emails" => \@users,
 		      "date"   => \@date
 		      };
-    
     $sth->finish();
+
     $sth = pop @sth_stack;
-   
+
     unless($data_exclu){
-	&Log::do_log('err','Unable to retrieve information from database for list %s@%s', $name,$robot);
+	&Log::do_log('err','Unable to retrieve information from database for list %s', $self);
 	return undef;
     }
     return $data_exclu;
@@ -5889,11 +5886,8 @@ sub get_ressembling_list_members_no_object {
 
 sub find_list_member_by_pattern_no_object {
     my $options = shift;
-
     my $name = $options->{'name'};
-    
     my $email_pattern = &tools::clean_email($options->{'email_pattern'});
-    
     my @ressembling_users;
 
     push @sth_stack, $sth;
@@ -5904,6 +5898,7 @@ sub find_list_member_by_pattern_no_object {
 				 &SDM::quote($name),
 				 &SDM::quote($options->domain))) {
 	&Log::do_log('err','Unable to gather informations corresponding to pattern %s for list %s@%s',$email_pattern,$name,$options->{'domain'});
+	$sth = pop @sth_stack;
 	return undef;
     }
     
@@ -5930,7 +5925,7 @@ sub find_list_member_by_pattern_no_object {
 sub _list_member_cols {
     my $additional = '';
     if ($Conf::Conf{'db_additional_subscriber_fields'}) {
-	$additional = ',' . $Conf::Conf{'db_additional_subscriber_fields'};
+	$additional = ', ' . $Conf::Conf{'db_additional_subscriber_fields'};
     }
     return sprintf 'user_subscriber AS email, comment_subscriber AS gecos, bounce_subscriber AS bounce, bounce_score_subscriber AS bounce_score, bounce_address_subscriber AS bounce_address, reception_subscriber AS reception, topics_subscriber AS topics, visibility_subscriber AS visibility, %s AS date, %s AS update_date, subscribed_subscriber AS subscribed, included_subscriber AS included, include_sources_subscriber AS id, custom_attribute_subscriber AS custom_attribute, suspend_subscriber AS suspend, suspend_start_date_subscriber AS startdate, suspend_end_date_subscriber AS enddate%s',
 		   &SDM::get_canonical_read_date('date_subscriber'),
@@ -5980,8 +5975,6 @@ sub get_first_list_member {
     
     my $name = $self->{'name'};
     my $statement;
-    
-    push @sth_stack, $sth;
 
     ## SQL regexp
     my $selection;
@@ -6019,15 +6012,17 @@ sub get_first_list_member {
     }elsif ($sortby eq 'name') {
 	$statement .= ' ORDER BY gecos';
     } 
-    push @sth_stack, $sth;
-    
+
     ## LIMIT clause
     if (defined($rows) and defined($offset)) {
 	$statement .= &SDM::get_limit_clause({'rows_count'=>$rows,'offset'=>$offset});
     }
-    
+
+    push @sth_stack, $sth;
+
     unless ($sth = SDM::do_query($statement)) {
 	&Log::do_log('err','Unable to get members of list %s@%s', $name, $self->{'domain'});
+	$sth = pop @sth_stack;
 	return undef;
     }
     
@@ -6148,8 +6143,7 @@ sub get_first_list_admin {
 	$selection = sprintf " AND (user_admin LIKE %s OR comment_admin LIKE %s)"
 	    ,&SDM::quote($sql_regexp), &SDM::quote($sql_regexp);
     }
-    push @sth_stack, $sth;	    
-    
+
     $statement = sprintf 'SELECT %s FROM admin_table WHERE list_admin = %s AND robot_admin = %s %s AND role_admin = %s', 
 			 &_list_admin_cols,
 			 &SDM::quote($name), 
@@ -6181,8 +6175,11 @@ sub get_first_list_admin {
 	$statement .= &SDM::get_substring_clause({'rows_count'=>$rows,'offset'=>$offset});
     }
 
+    push @sth_stack, $sth;
+
     unless ($sth = &SDM::do_query($statement)) {
 	&Log::do_log('err','Unable to get admins having role %s for list %s@%s', $role,$name,$self->{'domain'});
+	$sth = pop @sth_stack;
 	return undef;
     }
     
@@ -6291,9 +6288,6 @@ sub get_next_list_admin {
     return $admin_user;
 }
 
-
-
-
 ## Returns the first bouncing user
 sub get_first_bouncing_list_member {
     my $self = shift;
@@ -6312,12 +6306,6 @@ sub get_first_bouncing_list_member {
     }
 
     my $name = $self->{'name'};
-    
-    ## Additional subscriber fields
-    my $additional;
-    if ($Conf::Conf{'db_additional_subscriber_fields'}) {
-	$additional = ',' . $Conf::Conf{'db_additional_subscriber_fields'};
-    }
 
     push @sth_stack, $sth;
 
@@ -6326,6 +6314,7 @@ sub get_first_bouncing_list_member {
 				 &SDM::quote($name),
 				 &SDM::quote($self->domain))) {
 	&Log::do_log('err','Unable to get bouncing users %s@%s',$name,$self->{'domain'});
+	$sth = pop @sth_stack;
 	return undef;
     }
 
@@ -6412,6 +6401,7 @@ sub get_total_bouncing {
     ## Query the Database
     unless ($sth = &SDM::do_query( "SELECT count(*) FROM subscriber_table WHERE (list_subscriber = %s  AND robot_subscriber = %s AND bounce_subscriber is not NULL)", &SDM::quote($name), &SDM::quote($self->{'domain'}))) {
 	&Log::do_log('err','Unable to gather bouncing subscribers count for list %s@%s',$name,$self->{'domain'});
+	$sth = pop @sth_stack;
 	return undef;
     }
     
@@ -6435,8 +6425,9 @@ sub is_global_user {
 
    ## Query the Database
    unless($sth = &SDM::do_query("SELECT count(*) FROM user_table WHERE email_user = %s", &SDM::quote($who))) {
-       &Log::do_log('err','Unable to check whether user %s is in the user table.');
-       return undef;
+	&Log::do_log('err','Unable to check whether user %s is in the user table.');
+	$sth = pop @sth_stack;
+	return undef;
    }
    
    my $is_user = $sth->fetchrow();
@@ -6561,16 +6552,16 @@ sub update_list_member {
 	    }
 	}
 	next unless @set_list;
-	
+
 	## Update field
 	if ($table eq 'user_table') {
-	    unless ($sth = &SDM::do_query("UPDATE %s SET %s WHERE (email_user=%s)", $table, join(',', @set_list), &SDM::quote($who))) {
+	    unless (&SDM::do_query("UPDATE %s SET %s WHERE (email_user=%s)", $table, join(',', @set_list), &SDM::quote($who))) {
 		&Log::do_log('err','Could not update informations for user %s in table %s',$who,$table);
 		return undef;
 	    }
 	}elsif ($table eq 'subscriber_table') {
 	    if ($who eq '*') {
-		unless ($sth = &SDM::do_query("UPDATE %s SET %s WHERE (list_subscriber=%s AND robot_subscriber = %s)", 
+		unless (&SDM::do_query("UPDATE %s SET %s WHERE (list_subscriber=%s AND robot_subscriber = %s)", 
 		$table, 
 		join(',', @set_list), 
 		&SDM::quote($name), 
@@ -6579,7 +6570,7 @@ sub update_list_member {
 		    return undef;
 		}	
 	    }else {
-		unless ($sth = &SDM::do_query("UPDATE %s SET %s WHERE (user_subscriber=%s AND list_subscriber=%s AND robot_subscriber = %s)", 
+		unless (&SDM::do_query("UPDATE %s SET %s WHERE (user_subscriber=%s AND list_subscriber=%s AND robot_subscriber = %s)", 
 		$table, 
 		join(',', @set_list), 
 		&SDM::quote($who), 
@@ -9169,7 +9160,7 @@ sub sync_include {
 	my @subscriber_exclusion;
 
 	## Gathering a list of emails for a the list in 'exclusion_table'
-	$data_exclu = &get_exclusion($name,$self->{'domain'});
+	$data_exclu = $self->get_exclusion();
 
 	my $key =0;
 	while ($data_exclu->{'emails'}->[$key]){
@@ -10183,8 +10174,8 @@ sub get_lists {
 						   $which_role);
 		}
 		unless ($sth) {
-		    pop @sth_stack;
 		    &Log::do_log('err', 'failed to get lists with user %s as %s from database: %s', $which_user, $which_role, $@);
+		    $sth = pop @sth_stack;
 		    return undef;
 		}
 		my @row;
@@ -10197,7 +10188,7 @@ sub get_lists {
 		}
 		$sth->finish;
 
-		pop @sth_stack;
+		$sth = pop @sth_stack;
 
 		# none found
 		next unless %r; # foreach my $robot
@@ -10212,8 +10203,8 @@ sub get_lists {
 
 		unless ($sth = &SDM::do_prepared_query('SELECT name_list FROM list_table WHERE robot_list = ?',
 						       $robot)) {
-		    pop @sth_stack;
 		    &Log::do_log('err', 'Failed to get lists from database');
+		    $sth = pop @sth_stack;
 		    return undef;
 		}
 		my @row;
@@ -10222,7 +10213,7 @@ sub get_lists {
 		}
 		$sth->finish;
 
-		pop @sth_stack;
+		$sth = pop @sth_stack;
 	    }
 
 	    unless (opendir(DIR, $robot_dir)) {
@@ -10302,6 +10293,7 @@ sub get_lists {
 	}
 
 	push @sth_stack, $sth;
+
 	if (defined $cond_sql) {
 	    $sth = &SDM::do_query('SELECT name_list AS name%s FROM %s WHERE %s robot_list = %s AND %s ORDER BY %s',
 				  $cols, $table, $cond,
@@ -10314,8 +10306,8 @@ sub get_lists {
 					   $robot);
 	}
 	unless ($sth) {
-	    pop @sth_stack;
 	    &Log::do_log('err', 'Failed to get lists from %s', $table);
+	    $sth = pop @sth_stack;
 	    return undef;
 	}
 	my $list;
@@ -10329,7 +10321,8 @@ sub get_lists {
 	    push @l, $l;
 	}
 	$sth->finish;
-	pop @sth_stack;
+
+	$sth = pop @sth_stack;
 
 	foreach my $l (@l) {
 	    ## renew object on memory.
@@ -10408,11 +10401,11 @@ sub get_netidtoemail_db {
 
     unless ($sth = &SDM::do_query( "SELECT email_netidmap FROM netidmap_table WHERE netid_netidmap = %s and serviceid_netidmap = %s and robot_netidmap = %s", &SDM::quote($netid), &SDM::quote($idpname), &SDM::quote($robot))) {
 	&Log::do_log('err','Unable to get email address from netidmap_table for id %s, service %s, robot %s', $netid, $idpname, $robot);
+	$sth = pop @sth_stack;
 	return undef;
     }
 
     $email = $sth->fetchrow;
-
     $sth->finish();
 
     $sth = pop @sth_stack;
@@ -12878,13 +12871,13 @@ sub list_cache_fetch {
 					       $name, $robot,
 					       $m1, $time_config) and
 		$sth->rows) {
-	    pop @sth_stack;
+	    $sth = pop @sth_stack;
 	    return undef;
 	}
 	$l = $sth->fetchrow_hashref('NAME_lc');
 	$sth->finish;
 
-	pop @sth_stack;
+	$sth = pop @sth_stack;
 
 	eval { $admin = &Storable::thaw($l->{'admin'}) };
 	if ($@) {
@@ -12989,6 +12982,7 @@ sub list_cache_update_admin
     }
 
     push @sth_stack, $sth;
+
     unless($sth = &SDM::do_prepared_query('UPDATE list_table SET status_list = ?, name_list = ?, robot_list = ?, creation_epoch_list = ?, creation_email_list = ?, update_epoch_list = ?, update_email_list = ?, searchkey_list = ?, web_archive_list = ?, topics_list = ?, cache_epoch_list = ?, config_list = ? WHERE robot_list = ? AND name_list = ?',
 					  $status, $name, $robot,
 					  $creation_epoch, $creation_email,
@@ -13003,10 +12997,12 @@ sub list_cache_update_admin
 					  $searchkey, $web_archive, $topics,
 					  time, $config) and $sth->rows) {
 	&Log::do_log('err','Unable to insert list %s@%s in database', $name, $robot);
-	pop @sth_stack;
+	$sth = pop @sth_stack;
 	return undef;
     }
-    pop @sth_stack;
+
+    $sth = pop @sth_stack;
+
     return 1;
 }
 

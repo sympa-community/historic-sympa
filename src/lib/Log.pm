@@ -91,6 +91,11 @@ sub fatal_err {
 sub do_log {
     my $level = shift;
 
+    unless (defined $levels{$level}) {
+	&do_log('err', 'Invalid $level: "%s"', $level);
+	$level = 'info';
+    }
+
     # do not log if log level if too high regarding the log requested by user 
     return if ($levels{$level} > $log_level);
 
