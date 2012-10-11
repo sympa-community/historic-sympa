@@ -284,6 +284,9 @@ sub do_query {
     my $query = shift;
     my @params = @_;
 
+    $query =~ s/\n\s*/ /g; # normalize newlines
+    $query =~ s/^\s+//;
+    $query =~ s/\s+$//;
     my $statement = sprintf $query, @params;
 
     &Log::do_log('debug', "Will perform query '%s'",$statement);
@@ -337,6 +340,9 @@ sub do_prepared_query {
 
     my $sth;
 
+    $query =~ s/\n\s*/ /g; # normalize newlines
+    $query =~ s/^\s+//;
+    $query =~ s/\s+$//;
     &Log::do_log('debug', "Will perform query '%s'", $query);
 
     unless ($self->{'cached_prepared_statements'}{$query}) {
