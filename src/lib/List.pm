@@ -4366,7 +4366,7 @@ sub send_to_editor {
 	       return undef;
 	   }
 	   $param->{'msg'} = $cryptedmsg;
-       } else {
+       }else{
 	   $param->{'msg'} = $msg;
        }
        # create a one time ticket that will be used as un md5 URL credential
