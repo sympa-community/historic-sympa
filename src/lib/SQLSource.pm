@@ -336,7 +336,26 @@ sub do_query {
 sub do_prepared_query {
     my $self = shift;
     my $query = shift;
-    my @params = @_;
+    my @params = ();
+    my %types = ();
+
+    ## get binding types and parameters
+    my $i = 0;
+    while (scalar @_) {
+	my $p = shift;
+	if (ref $p eq 'HASH') {
+	    # a hashref { sql_type => SQL_type } etc.
+	    $types{$i} = $p;
+	    push @params, shift;
+	} elsif (ref $p) {
+	    &Log::do_log('err', 'unexpected %s object.  Ask developer',
+			 ref $p);
+	    return undef;
+	} else {
+	    push @params, $p;
+	}
+	$i++;
+    }
 
     my $sth;
 
@@ -345,7 +364,9 @@ sub do_prepared_query {
     $query =~ s/\s+$//;
     &Log::do_log('debug', "Will perform query '%s'", $query);
 
-    unless ($self->{'cached_prepared_statements'}{$query}) {
+    if ($self->{'cached_prepared_statements'}{$query}) {
+	$sth = $self->{'cached_prepared_statements'}{$query};
+    } else {
 	&Log::do_log('debug3','Did not find prepared statement for %s. Doing it.',$query);
 	unless ($sth = $self->{'dbh'}->prepare($query)) {
 	    unless($self->connect()) {
@@ -358,11 +379,16 @@ sub do_prepared_query {
 		}
 	    }
 	}
+
+	## bind parameters with special types
+	## this may be done only once when handle is prepared.
+	foreach my $i (sort keys %types) {
+	    $sth->bind_param($i + 1, $params[$i], $types{$i});
+	}
+
 	$self->{'cached_prepared_statements'}{$query} = $sth;
-    }else {
-	&Log::do_log('debug3','Reusing prepared statement for %s',$query);
     }	
-    unless ($self->{'cached_prepared_statements'}{$query}->execute(@params)) {
+    unless ($sth->execute(@params)) {
 	# Check database connection in case it would be the cause of the problem.
 	unless($self->connect()) {
 	    &Log::do_log('err', 'Unable to get a handle to %s database',$self->{'db_name'});
@@ -379,15 +405,22 @@ sub do_prepared_query {
 		    }
 		}
 	    }
+
+	    ## bind parameters with special types
+	    ## this may be done only once when handle is prepared.
+	    foreach my $i (sort keys %types) {
+		$sth->bind_param($i + 1, $params[$i], $types{$i});
+	    }
+
 	    $self->{'cached_prepared_statements'}{$query} = $sth;
-	    unless ($self->{'cached_prepared_statements'}{$query}->execute(@params)) {
+	    unless ($sth->execute(@params)) {
 		&Log::do_log('err','Unable to execute SQL statement "%s" : %s', $query, $self->{'dbh'}->errstr);
 		return undef;
 	    }
 	}
     }
 
-    return $self->{'cached_prepared_statements'}{$query};
+    return $sth;
 }
 
 sub prepare_query_log_values {

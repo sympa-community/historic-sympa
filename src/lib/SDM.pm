@@ -579,4 +579,12 @@ sub get_canonical_read_date {
     }
 }
 
-return 1;
+## bound parameters for do_prepared_query().
+## returns an array ( { sql_type => SQL_type }, value ),
+## single scalar or empty array.
+##
+sub AS_BLOB {
+    return $db_source->AS_BLOB(@_);
+}
+
+1;

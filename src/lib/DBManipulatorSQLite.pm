@@ -450,4 +450,11 @@ sub set_index {
     return $report;
 }
 
-return 1;
+## For BLOB types.
+sub AS_BLOB {
+    return ( { TYPE => DBI::SQL_BLOB() } => $_[1] )
+	if scalar @_ > 1;
+    return ();
+}
+
+1;

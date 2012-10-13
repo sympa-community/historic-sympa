@@ -497,4 +497,11 @@ sub set_index {
     return $report;
 }
 
-return 1;
+## For BLOB types.
+sub AS_BLOB {
+    return ( { 'pg_type' => DBD::Pg::PG_BYTEA() } => $_[1] )
+	if scalar @_ > 1;
+    return ();
+}
+
+1;

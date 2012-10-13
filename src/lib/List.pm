@@ -12867,10 +12867,14 @@ sub list_cache_fetch {
 	my $l;
 	push @sth_stack, $sth;
 
-	unless ($sth = &SDM::do_prepared_query('SELECT cache_epoch_list AS epoch, total_list AS total, config_list AS admin FROM list_table WHERE name_list = ? AND robot_list = ? AND cache_epoch_list > ? AND ? <= cache_epoch_list',
-					       $name, $robot,
-					       $m1, $time_config) and
-		$sth->rows) {
+	unless ($sth = &SDM::do_prepared_query(
+	    q{SELECT cache_epoch_list AS epoch, total_list AS total,
+		     config_list AS admin
+	      FROM list_table
+	      WHERE name_list = ? AND robot_list = ? AND
+		    cache_epoch_list > ? AND ? <= cache_epoch_list},
+	    $name, $robot, $m1, $time_config
+	) and $sth->rows) {
 	    $sth = pop @sth_stack;
 	    return undef;
 	}
@@ -12879,9 +12883,12 @@ sub list_cache_fetch {
 
 	$sth = pop @sth_stack;
 
+	return undef unless $l;
+
 	eval { $admin = &Storable::thaw($l->{'admin'}) };
-	if ($@) {
-	    &Log::do_log('err', 'Unable to deserialize binary config of %s: %s', $self->get_list_id, $@);
+	if ($@ or ! defined $admin) {
+	    &Log::do_log('err', 'Unable to deserialize binary config of %s: %s',
+			 $self, $@ || 'possible format error');
 	    return undef;
 	}
 
@@ -12906,8 +12913,9 @@ sub list_cache_fetch {
 	## Load a binary version of the data structure
 	## unless config is more recent than config.bin
 	eval { $admin = &Storable::retrieve($self->dir.'/config.bin') };
-	if ($@) {
-	    &Log::do_log('err', 'Unable to deserialize config.bin of %s: $@', $self->get_list_id, $@);
+	if ($@ or ! defined $admin) {
+	    &Log::do_log('err', 'Unable to deserialize config.bin of %s: $@',
+			 $self, $@ || 'possible format error');
 	    $lock->unlock();
 	    return undef;
 	}
@@ -12981,22 +12989,42 @@ sub list_cache_update_admin
 	return undef;
     }
 
+    my $time = time;
+
     push @sth_stack, $sth;
 
-    unless($sth = &SDM::do_prepared_query('UPDATE list_table SET status_list = ?, name_list = ?, robot_list = ?, creation_epoch_list = ?, creation_email_list = ?, update_epoch_list = ?, update_email_list = ?, searchkey_list = ?, web_archive_list = ?, topics_list = ?, cache_epoch_list = ?, config_list = ? WHERE robot_list = ? AND name_list = ?',
-					  $status, $name, $robot,
-					  $creation_epoch, $creation_email,
-					  $update_epoch, $update_email,
-					  $searchkey, $web_archive, $topics,
-					  time, $config,
-					  $robot, $name) and $sth->rows or
-	   $sth = &SDM::do_prepared_query('INSERT INTO list_table (status_list, name_list, robot_list, creation_epoch_list, creation_email_list, update_epoch_list, update_email_list, searchkey_list, web_archive_list, topics_list, cache_epoch_list, config_list) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)',
-					  $status, $name, $robot,
-					  $creation_epoch, $creation_email,
-					  $update_epoch, $update_email,
-					  $searchkey, $web_archive, $topics,
-					  time, $config) and $sth->rows) {
-	&Log::do_log('err','Unable to insert list %s@%s in database', $name, $robot);
+    ## update database cache
+    ## try INSERT then UPDATE
+    unless($sth = &SDM::do_prepared_query(
+	q{UPDATE list_table
+	  SET status_list = ?, name_list = ?, robot_list = ?,
+	      creation_epoch_list = ?, creation_email_list = ?,
+	      update_epoch_list = ?, update_email_list = ?,
+	      searchkey_list = ?, web_archive_list = ?, topics_list = ?,
+	      cache_epoch_list = ?, config_list = ?
+	  WHERE robot_list = ? AND name_list = ?},
+	$status, $name, $robot,
+	$creation_epoch, $creation_email,
+	$update_epoch, $update_email,
+	$searchkey, $web_archive, $topics,
+	$time, SDM::AS_BLOB($config),
+	$robot, $name
+    ) and $sth->rows or
+    $sth = &SDM::do_prepared_query(
+	q{INSERT INTO list_table
+	  (status_list, name_list, robot_list,
+	   creation_epoch_list, creation_email_list,
+	   update_epoch_list, update_email_list,
+	   searchkey_list, web_archive_list, topics_list,
+	   cache_epoch_list, config_list)
+	  VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)},
+	$status, $name, $robot,
+	$creation_epoch, $creation_email,
+	$update_epoch, $update_email,
+	$searchkey, $web_archive, $topics,
+	$time, SDM::AS_BLOB($config)
+    ) and $sth->rows) {
+	&Log::do_log('err','Unable to insert list %s in database', $self);
 	$sth = pop @sth_stack;
 	return undef;
     }
@@ -13012,9 +13040,12 @@ sub list_cache_update_total {
 						  'cache_list_config');
 
     if ($cache_list_config eq 'database') {
-	unless (&SDM::do_prepared_query('UPDATE list_table SET total_list = ? WHERE name_list = ? AND robot_list = ?',
-					$self->{'total'},
-					$self->name, $self->domain)) {
+	unless (&SDM::do_prepared_query(
+	    q{UPDATE list_table
+	      SET total_list = ?
+	      WHERE name_list = ? AND robot_list = ?},
+	    $self->{'total'}, $self->name, $self->domain
+	)) {
 	    &Log::do_log('err', 'Canot update subscriber count of list %s on database cache',
 			 $self);
 	}

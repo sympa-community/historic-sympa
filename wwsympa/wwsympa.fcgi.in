@@ -8444,22 +8444,16 @@ sub do_get_biggest_lists {
 	## Checking families and other virtual hosts.
 	&get_server_details();
 	
-	my @unordered_lists;
-	my $all_lists = &List::get_lists($robot);
-	foreach my $list (@$all_lists) {
-		push @unordered_lists, {
-			'name' => $list->{'name'},
-			'subject' => $list->{'admin'}{'subject'},
-			'creation_date' => $list->{'admin'}{'creation'}{'date_epoch'},
-			'subscribers' => $list->total
-		};
-	}
-	
-	foreach my $l (sort {$b->{'subscribers'} <=> $a->{'subscribers'}} @unordered_lists) {
-		$l->{'creation_date'} = gettext_strftime "%d %b %Y", localtime($l->{'creation_date'});
-		push @{$param->{'biggest_lists'}}, $l;
-	}
-	
+	my $all_lists = &List::get_lists($robot, { 'order' => [ '-total' ] });
+	$param->{'biggest_lists'} = [
+	    map { {
+		'name' => $_->name,
+		'subject' => $_->subject,
+		'creation_date' => (gettext_strftime "%d %b %Y", localtime $_->creation->{'date_epoch'}),
+		'subscribers' => $_->total
+	    }; } @{$all_lists || []}
+	];
+
 	return 1;
 }
 
