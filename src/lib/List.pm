@@ -3720,7 +3720,7 @@ sub send_global_file {
     }
     
     unless ($data->{'user'}{'password'}) {
-	$data->{'user'}{'password'} = &tools::tmp_passwd($who);
+	$data->{'user'}{'password'} = &tools::tmp_passwd($who, $Conf::Conf{'cookie'});
     }
 
     ## Lang
@@ -3833,7 +3833,7 @@ sub send_file {
 	}
 	
 	unless ($data->{'user'}{'password'}) {
-	    $data->{'user'}{'password'} = &tools::tmp_passwd($who);
+	    $data->{'user'}{'password'} = &tools::tmp_passwd($who, $Conf::Conf{'cookie'});
 	}
 	
 	## Unique return-path VERP
@@ -5574,7 +5574,7 @@ sub get_global_user {
     if (defined $user) {
 	## decrypt password
 	if ($user->{'password'}) {
-	    $user->{'password'} = &tools::decrypt_password($user->{'password'});
+	    $user->{'password'} = &tools::decrypt_password($user->{'password'}, $Conf::Conf{'cookie'});
 	}
 
 	## Turn user_attributes into a hash
@@ -7147,7 +7147,7 @@ sub add_list_member {
 	
 	## Crypt password if it was not crypted
 	unless ($new_user->{'password'} =~ /^crypt/) {
-		$new_user->{'password'} = &tools::crypt_password($new_user->{'password'});
+		$new_user->{'password'} = &tools::crypt_password($new_user->{'password'}, $Conf::Conf{'cookie'});
 	}
 	
 	$list_cache{'is_list_member'}{$self->{'domain'}}{$name}{$who} = undef;

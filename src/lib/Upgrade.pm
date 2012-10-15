@@ -1054,7 +1054,7 @@ sub md5_encode_password {
 	next if ($user->{'password_user'} =~ /^$/);
 
 	if ($user->{'password_user'} =~ /^crypt.(.*)$/) {
-	    $clear_password = &tools::decrypt_password($user->{'password_user'});
+	    $clear_password = &tools::decrypt_password($user->{'password_user'}, $Conf::Conf{'cookie'});
 	}else{ ## Old style cleartext passwords
 	    $clear_password = $user->{'password_user'};
 	}

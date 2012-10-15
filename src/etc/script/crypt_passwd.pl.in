@@ -31,6 +31,7 @@ unless (require Crypt::CipherSaber) {
 
 require tools;
 
+use Conf;
 use List;
 use SDM;
 use Log;
@@ -59,7 +60,7 @@ while ($user = $sth->fetchrow_hashref('NAME_lc')) {
 
     printf "\n%s", $user->{'email_user'};
 
-    my $crypted_password = &tools::crypt_password($user->{'password_user'});
+    my $crypted_password = &tools::crypt_password($user->{'password_user'}, $Conf::Conf{'cookie'});
 
     printf " => %s", $crypted_password;
 

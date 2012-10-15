@@ -845,7 +845,7 @@ sub subscribe {
 	    my $u = &List::get_global_user($sender);
 	    
 	    &List::update_global_user($sender, {'lang' => $u->{'lang'} || $list->{'admin'}{'lang'},
-					    'password' => $u->{'password'} || &tools::tmp_passwd($sender)
+					    'password' => $u->{'password'} || &tools::tmp_passwd($sender, $Conf::Conf{'cookie'})
 					    });
 	}
 	
@@ -1291,7 +1291,7 @@ sub add {
 	    my $u = &List::get_global_user($email);
 	    
 	    &List::update_global_user($email, {'lang' => $u->{'lang'} || $list->{'admin'}{'lang'},
-					   'password' => $u->{'password'} || &tools::tmp_passwd($email)
+					   'password' => $u->{'password'} || &tools::tmp_passwd($email, $Conf::Conf{'cookie'})
 					    });
 	}
 	

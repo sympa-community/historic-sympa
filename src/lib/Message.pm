@@ -293,7 +293,7 @@ sub new {
 	my $chksum = $hdr->get('X-Sympa-Checksum'); chomp $chksum;
 	my $rcpt = $hdr->get('X-Sympa-To'); chomp $rcpt;
 
-	if ($chksum eq &tools::sympa_checksum($rcpt)) {
+	if ($chksum eq &tools::sympa_checksum($rcpt, $Conf::Conf{'cookie'})) {
 	    $message->{'md5_check'} = 1 ;
 	}else{
 	    &Log::do_log('err',"incorrect X-Sympa-Checksum header");	

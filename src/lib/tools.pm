@@ -942,18 +942,21 @@ sub unescape_html {
 
 sub tmp_passwd {
     my $email = shift;
+    my $cookie = shift;
 
-    return ('init'.substr(Digest::MD5::md5_hex(join('/', $Conf::Conf{'cookie'}, $email)), -8)) ;
+    return ('init'.substr(Digest::MD5::md5_hex(join('/', $cookie, $email)), -8)) ;
 }
 
 # Check sum used to authenticate communication from wwsympa to sympa
 sub sympa_checksum {
     my $rcpt = shift;
-    return (substr(Digest::MD5::md5_hex(join('/', $Conf::Conf{'cookie'}, $rcpt)), -10)) ;
+    my $cookie = shift;
+    return (substr(Digest::MD5::md5_hex(join('/', $cookie, $rcpt)), -10)) ;
 }
 
 # create a cipher
 sub ciphersaber_installed {
+    my $cookie = shift;
 
     my $is_installed;
     foreach my $dir (@INC) {
@@ -965,7 +968,7 @@ sub ciphersaber_installed {
 
     if ($is_installed) {
 	require Crypt::CipherSaber;
-	$cipher = Crypt::CipherSaber->new($Conf::Conf{'cookie'});
+	$cipher = Crypt::CipherSaber->new($cookie);
     }else{
 	$cipher = 'no_cipher';
     }
@@ -1018,9 +1021,10 @@ sub cookie_changed {
 ## encrypt a password
 sub crypt_password {
     my $inpasswd = shift ;
+    my $cookie = shift;
 
     unless (defined($cipher)){
-	$cipher = ciphersaber_installed();
+	$cipher = ciphersaber_installed($cookie);
     }
     return $inpasswd if ($cipher eq 'no_cipher') ;
     return ("crypt.".&MIME::Base64::encode($cipher->encrypt ($inpasswd))) ;
@@ -1029,13 +1033,14 @@ sub crypt_password {
 ## decrypt a password
 sub decrypt_password {
     my $inpasswd = shift ;
-    Log::do_log('debug2', 'tools::decrypt_password (%s)', $inpasswd);
+    my $cookie = shift;
+    Log::do_log('debug2', 'tools::decrypt_password (%s,%s)', $inpasswd, $cookie);
 
     return $inpasswd unless ($inpasswd =~ /^crypt\.(.*)$/) ;
     $inpasswd = $1;
 
     unless (defined($cipher)){
-	$cipher = ciphersaber_installed();
+	$cipher = ciphersaber_installed($cookie);
     }
     if ($cipher eq 'no_cipher') {
 	&Log::do_log('info','password seems crypted while CipherSaber is not installed !');

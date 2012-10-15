@@ -1061,7 +1061,7 @@ unless (&Upgrade::data_structure_uptodate()) {
     &Log::do_log('err',"Web interface set to maintenance mode ; you should run sympa.pl --upgrade");
 }
 
-&tools::ciphersaber_installed();
+&tools::ciphersaber_installed($Conf::Conf{'cookie'});
 
 our %changed_params;
 

@@ -721,7 +721,7 @@ sub sending {
 	}
 	printf TMP "X-Sympa-To: %s\n", $all_rcpt;
 	printf TMP "X-Sympa-From: %s\n", $from;
-	printf TMP "X-Sympa-Checksum: %s\n", &tools::sympa_checksum($all_rcpt);
+	printf TMP "X-Sympa-Checksum: %s\n", &tools::sympa_checksum($all_rcpt, $Conf::Conf{'cookie'});
 
 	print TMP $message->{'msg_as_string'} ;
 	close TMP;
@@ -893,7 +893,7 @@ sub send_in_spool {
 
     printf TMP "X-Sympa-To: %s\n", $all_rcpt;
     printf TMP "X-Sympa-From: %s\n", $XSympaFrom;
-    printf TMP "X-Sympa-Checksum: %s\n", &tools::sympa_checksum($all_rcpt);
+    printf TMP "X-Sympa-Checksum: %s\n", &tools::sympa_checksum($all_rcpt, $Conf::Conf{'cookie'});
     
     my $return;
     $return->{'filename'} = $sympa_file;     
