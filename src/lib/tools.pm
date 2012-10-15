@@ -1159,23 +1159,27 @@ sub split_mail {
 
 sub virus_infected {
     my $mail = shift ;
+    my $path = shift;
+    my $args = shift;
+    my $tmpdir = shift;
+    my $domain = shift;
 
     my $file = int(rand(time)) ; # in, version previous from db spools, $file was the filename of the message 
     &Log::do_log('debug2', 'Scan virus in %s', $file);
     
-    unless ($Conf::Conf{'antivirus_path'} ) {
+    unless ($path) {
         &Log::do_log('debug', 'Sympa not configured to scan virus in message');
 	return 0;
     }
     my @name = split(/\//,$file);
-    my $work_dir = $Conf::Conf{'tmpdir'}.'/antivirus';
+    my $work_dir = $tmpdir.'/antivirus';
     
     unless ((-d $work_dir) ||( mkdir $work_dir, 0755)) {
 	&Log::do_log('err', "Unable to create tmp antivirus directory $work_dir");
 	return undef;
     }
 
-    $work_dir = $Conf::Conf{'tmpdir'}.'/antivirus/'.$name[$#name];
+    $work_dir = $tmpdir.'/antivirus/'.$name[$#name];
     
     unless ( (-d $work_dir) || mkdir ($work_dir, 0755)) {
 	&Log::do_log('err', "Unable to create tmp antivirus directory $work_dir");
@@ -1195,15 +1199,15 @@ sub virus_infected {
     my $result;
 
     ## McAfee
-    if ($Conf::Conf{'antivirus_path'} =~  /\/uvscan$/) {
+    if ($path =~  /\/uvscan$/) {
 
 	# impossible to look for viruses with no option set
-	unless ($Conf::Conf{'antivirus_args'}) {
+	unless ($args) {
 	    &Log::do_log('err', "Missing 'antivirus_args' in sympa.conf");
 	    return undef;
 	}
     
-	open (ANTIVIR,"$Conf::Conf{'antivirus_path'} $Conf::Conf{'antivirus_args'} $work_dir |") ; 
+	open (ANTIVIR,"$path $args $work_dir |") ; 
 		
 	while (<ANTIVIR>) {
 	    $result .= $_; chomp $result;
@@ -1231,9 +1235,9 @@ sub virus_infected {
 	    if ($status != 0 && $status != 12 && $status != 13 && $status != 19);
 
     ## Trend Micro
-    }elsif ($Conf::Conf{'antivirus_path'} =~  /\/vscan$/) {
+    }elsif ($path =~  /\/vscan$/) {
 
-	open (ANTIVIR,"$Conf::Conf{'antivirus_path'} $Conf::Conf{'antivirus_args'} $work_dir |") ; 
+	open (ANTIVIR,"$path $args $work_dir |") ; 
 		
 	while (<ANTIVIR>) {
 	    if (/Found virus (\S+) /i){
@@ -1250,16 +1254,16 @@ sub virus_infected {
 	}
 
     ## F-Secure
-    } elsif($Conf::Conf{'antivirus_path'} =~  /\/fsav$/) {
+    } elsif($path =~  /\/fsav$/) {
 	my $dbdir=$` ;
 
 	# impossible to look for viruses with no option set
-	unless ($Conf::Conf{'antivirus_args'}) {
+	unless ($args) {
 	    &Log::do_log('err', "Missing 'antivirus_args' in sympa.conf");
 	    return undef;
 	}
 
-	open (ANTIVIR,"$Conf::Conf{'antivirus_path'} --databasedirectory $dbdir $Conf::Conf{'antivirus_args'} $work_dir |") ;
+	open (ANTIVIR,"$path --databasedirectory $dbdir $args $work_dir |") ;
 
 	while (<ANTIVIR>) {
 
@@ -1276,11 +1280,11 @@ sub virus_infected {
         if (( $status == 3) and not($virusfound)) { 
 	    $virusfound = "unknown";
 	}    
-    }elsif($Conf::Conf{'antivirus_path'} =~ /f-prot\.sh$/) {
+    }elsif($path =~ /f-prot\.sh$/) {
 
         &Log::do_log('debug2', 'f-prot is running');    
 
-        open (ANTIVIR,"$Conf::Conf{'antivirus_path'} $Conf::Conf{'antivirus_args'} $work_dir |") ;
+        open (ANTIVIR,"$path $args $work_dir |") ;
         
         while (<ANTIVIR>) {
         
@@ -1299,15 +1303,15 @@ sub virus_infected {
         if (( $status == 3) and not($virusfound)) { 
             $virusfound = "unknown";
         }    
-    }elsif ($Conf::Conf{'antivirus_path'} =~ /kavscanner/) {
+    }elsif ($path =~ /kavscanner/) {
 
 	# impossible to look for viruses with no option set
-	unless ($Conf::Conf{'antivirus_args'}) {
+	unless ($args) {
 	    &Log::do_log('err', "Missing 'antivirus_args' in sympa.conf");
 	    return undef;
 	}
     
-	open (ANTIVIR,"$Conf::Conf{'antivirus_path'} $Conf::Conf{'antivirus_args'} $work_dir |") ; 
+	open (ANTIVIR,"$path $args $work_dir |") ; 
 		
 	while (<ANTIVIR>) {
 	    if (/infected:\s+(.*)/){
@@ -1327,15 +1331,15 @@ sub virus_infected {
 	}
 
         ## Sophos Antivirus... by liuk@publinet.it
-    }elsif ($Conf::Conf{'antivirus_path'} =~ /\/sweep$/) {
+    }elsif ($path =~ /\/sweep$/) {
 	
         # impossible to look for viruses with no option set
-	unless ($Conf::Conf{'antivirus_args'}) {
+	unless ($args) {
 	    &Log::do_log('err', "Missing 'antivirus_args' in sympa.conf");
 	    return undef;
 	}
     
-        open (ANTIVIR,"$Conf::Conf{'antivirus_path'} $Conf::Conf{'antivirus_args'} $work_dir |") ;
+        open (ANTIVIR,"$path $args $work_dir |") ;
 	
 	while (<ANTIVIR>) {
 	    if (/Virus\s+(.*)/) {
@@ -1352,9 +1356,9 @@ sub virus_infected {
 	}
 
 	## Clam antivirus
-    }elsif ($Conf::Conf{'antivirus_path'} =~ /\/clamd?scan$/) {
+    }elsif ($path =~ /\/clamd?scan$/) {
 	
-        open (ANTIVIR,"$Conf::Conf{'antivirus_path'} $Conf::Conf{'antivirus_args'} $work_dir |") ;
+        open (ANTIVIR,"$path $args $work_dir |") ;
 	
 	my $result;
 	while (<ANTIVIR>) {
@@ -1379,7 +1383,7 @@ sub virus_infected {
 
     ## Error while running antivir, notify listmaster
     if ($error_msg) {
-	unless (&List::send_notify_to_listmaster('virus_scan_failed', $Conf::Conf{'domain'},
+	unless (&List::send_notify_to_listmaster('virus_scan_failed', $domain,
 						 {'filename' => $file,
 						  'error_msg' => $error_msg})) {
 	    &Log::do_log('notice',"Unable to send notify 'virus_scan_failed' to listmaster");

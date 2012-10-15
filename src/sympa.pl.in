@@ -1295,7 +1295,13 @@ sub process_message {
     }
 	
     #  anti-virus
-    my $rc= &tools::virus_infected($message->{'msg'});
+    my $rc= &tools::virus_infected(
+        $message->{'msg'},
+        $Conf::Conf{'antivirus_path'},
+        $Conf::Conf{'antivirus_args'},
+        $Conf::Conf{'tmpdir'},
+        $Conf::Conf{'domain'}
+    );
     if ($rc) {
 	if ( &Conf::get_robot_conf($robot,'antivirus_notify') eq 'sender') {
 	    unless (&List::send_global_file('your_infected_msg', $sender, $robot, {'virus_name' => $rc,
