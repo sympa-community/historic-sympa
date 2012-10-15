@@ -156,7 +156,7 @@ sub make_pictures_url {
     my $url;
     my $filename = pictures_filename('email' => $parameters{'email'}, 'list' => $parameters{'list'}, 'path' => $parameters{'path'});
     if($filename) {
- 	$url =  $parameters{'url'}.$listname.'@'.$robot.'/'.&pictures_filename('email' => $parameters{'email'}, 'list' => $parameters{'list'}, 'path' => $parameters{'path'});
+ 	$url =  $parameters{'url'}.$listname.'@'.$robot.'/'.$filename;
     }
     else {
  	$url = undef;
