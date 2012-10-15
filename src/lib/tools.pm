@@ -441,7 +441,7 @@ sub load_create_list_conf {
 	if (/^\s*(\S+)\s+(read|hidden)\s*$/i) {
 	    $conf->{$1} = lc($2);
 	}else{
-	    &Log::do_log ('info', 'unknown parameter in %s  (Ignored) %s', "$Conf::Conf{'etc'}/create_list.conf",$_ );
+	    &Log::do_log ('info', 'unknown parameter in %s  (Ignored) %s', $file,$_ );
 	    next;
 	}
     }
