@@ -25,11 +25,10 @@ use strict;
 
 use Digest::MD5;
 use Encode::Guess; ## Usefull when encoding should be guessed
-use Encode::MIME::Header;
 use File::Copy::Recursive;
 use File::Find;
 use HTML::StripScripts::Parser;
-use Mail::Header;
+use MIME::EncWords;
 use MIME::Lite::HTML;
 use POSIX qw(strftime mkfifo strtod);
 use Proc::ProcessTable;
