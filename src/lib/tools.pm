@@ -1881,7 +1881,7 @@ sub write_pid {
 	user  => Sympa::Constants::USER,
 	group => Sympa::Constants::GROUP,
     )) {
-	&Log::fatal_err('Unable to set rights on %s. Exiting.', $Conf::Conf{'db_name'});
+	&Log::fatal_err('Unable to set rights on %s. Exiting.', $piddir);
     }
 
     my @pids;
