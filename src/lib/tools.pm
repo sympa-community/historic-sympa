@@ -153,15 +153,9 @@ sub make_pictures_url {
 
     my ($listname, $robot) = ($parameters{'list'}{'name'}, $parameters{'list'}{'domain'});
 
-    my $url;
     my $filename = pictures_filename('email' => $parameters{'email'}, 'list' => $parameters{'list'}, 'path' => $parameters{'path'});
-    if($filename) {
- 	$url =  $parameters{'url'}.$listname.'@'.$robot.'/'.$filename;
-    }
-    else {
- 	$url = undef;
-    }
-    return $url;
+    return $filename ?
+ 	$parameters{'url'}.$listname.'@'.$robot.'/'.$filename : undef;
 }
 
 ## Returns sanitized version (using StripScripts) of the string provided as argument.
