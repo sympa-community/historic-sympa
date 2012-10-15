@@ -1757,7 +1757,7 @@ my $birthday = time ;
  	 }
 
 	 my $lang = &Language::Lang2Locale($param->{'lang'});
-	 my $tt2_include_path = &tools::make_tt2_include_path($robot,'web_tt2',$lang,$list,$Conf::Conf{'etc'});
+	 my $tt2_include_path = &tools::make_tt2_include_path($robot,'web_tt2',$lang,$list,$Conf::Conf{'etc'},$Conf::Conf{'viewmaildir'},$Conf::Conf{'domain'});
 	 
  	 unless (&tt2::parse_tt2($param,'rss.tt2' ,\*STDOUT, $tt2_include_path, {})) {
  	     my $error = &tt2::get_error();
@@ -1782,7 +1782,7 @@ my $birthday = time ;
  	 }
 
 	 my $lang = &Language::Lang2Locale($param->{'lang'});
-	 my $tt2_include_path = &tools::make_tt2_include_path($robot,'web_tt2',$lang,$list,$Conf::Conf{'etc'});
+	 my $tt2_include_path = &tools::make_tt2_include_path($robot,'web_tt2',$lang,$list,$Conf::Conf{'etc'},$Conf::Conf{'viewmaildir'},$Conf::Conf{'domain'});
 	 
  	 unless (&tt2::parse_tt2($param,'ajax.tt2' ,\*STDOUT, $tt2_include_path, {})) {
  	     my $error = &tt2::get_error();
@@ -2536,7 +2536,7 @@ sub send_html {
     }
     
     my $lang = &Language::Lang2Locale($param->{'lang'});
-    my $tt2_include_path = &tools::make_tt2_include_path($robot,'web_tt2',$lang,$list,$Conf::Conf{'etc'});
+    my $tt2_include_path = &tools::make_tt2_include_path($robot,'web_tt2',$lang,$list,$Conf::Conf{'etc'},$Conf::Conf{'viewmaildir'},$Conf::Conf{'domain'});
     
     # XSS escaping applied to all outgoing parameters.
     my $param_copy = &tools::dup_var($param); ## Escape parameters on a copy to avoid altering usefull data.
@@ -5986,7 +5986,7 @@ sub do_manage_template {
 	$escaped_template_path =~ s/\s/_/g ;
 	$param->{'template_path'} = &tools::get_template_path('mail',$robot,'list', ,'reject_'.$escaped_template_path.'.tt2','',$list,$Conf::Conf{'etc'});
     }
-    my $tt2_include_path = &tools::make_tt2_include_path($robot,'mail_tt2','',$list,$Conf::Conf{'etc'});
+    my $tt2_include_path = &tools::make_tt2_include_path($robot,'mail_tt2','',$list,$Conf::Conf{'etc'},$Conf::Conf{'viewmaildir'},$Conf::Conf{'domain'});
     my $default_file = &tools::find_file('reject.tt2',@{$tt2_include_path});
 
 
@@ -6260,7 +6260,7 @@ sub do_skinsedit {
     if (($in{'subaction'} eq 'install')||($in{'installcss'})) {
 
 	my $lang = &Language::Lang2Locale($param->{'lang'});
-	my $tt2_include_path = &tools::make_tt2_include_path($robot,'web_tt2',$lang,'',$Conf::Conf{'etc'});
+	my $tt2_include_path = &tools::make_tt2_include_path($robot,'web_tt2',$lang,'',$Conf::Conf{'etc'},$Conf::Conf{'viewmaildir'},$Conf::Conf{'domain'});
 
 	my $date= time;
 	my $style_file;
@@ -17435,7 +17435,7 @@ sub do_css {
     $param->{'css'} = $in{'file'}; 
 
     my $lang = &Language::Lang2Locale($param->{'lang'});
-    my $tt2_include_path = &tools::make_tt2_include_path($robot,'web_tt2',$lang,'',$Conf::Conf{'etc'});
+    my $tt2_include_path = &tools::make_tt2_include_path($robot,'web_tt2',$lang,'',$Conf::Conf{'etc'},$Conf::Conf{'viewmaildir'},$Conf::Conf{'domain'});
 
     unless (&tt2::parse_tt2($param,'css.tt2' ,\*STDOUT, $tt2_include_path)) {
 	my $error = &tt2::get_error();

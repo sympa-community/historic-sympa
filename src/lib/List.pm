@@ -3728,7 +3728,7 @@ sub send_global_file {
 
     ## What file 
     my $lang = &Language::Lang2Locale($data->{'lang'});
-    my $tt2_include_path = &tools::make_tt2_include_path($robot,'mail_tt2',$lang,'',$Conf::Conf{'etc'});
+    my $tt2_include_path = &tools::make_tt2_include_path($robot,'mail_tt2',$lang,'',$Conf::Conf{'etc'},$Conf::Conf{'viewmaildir'},$Conf::Conf{'domain'});
 
     foreach my $d (@{$tt2_include_path}) {
 	&tt2::add_include_path($d);
@@ -3863,7 +3863,7 @@ sub send_file {
     
     ## What file   
     my $lang = &Language::Lang2Locale($data->{'lang'});
-    my $tt2_include_path = &tools::make_tt2_include_path($robot,'mail_tt2',$lang,$self,$Conf::Conf{'etc'});
+    my $tt2_include_path = &tools::make_tt2_include_path($robot,'mail_tt2',$lang,$self,$Conf::Conf{'etc'},$Conf::Conf{'viewmaildir'},$Conf::Conf{'domain'});
 
     push @{$tt2_include_path},$self->{'dir'};             ## list directory to get the 'info' file
     push @{$tt2_include_path},$self->{'dir'}.'/archives'; ## list archives to include the last message
@@ -12002,7 +12002,7 @@ sub _urlize_part {
     my $lang = &Language::GetLang();
     my $charset = &Language::GetCharset();
 
-    my $tt2_include_path = &tools::make_tt2_include_path($robot,'mail_tt2',$lang,$list,$Conf::Conf{'etc'});
+    my $tt2_include_path = &tools::make_tt2_include_path($robot,'mail_tt2',$lang,$list,$Conf::Conf{'etc'},$Conf::Conf{'viewmaildir'},$Conf::Conf{'domain'});
 
     &tt2::parse_tt2({'file_name' => $file_name,
 		     'file_url'  => $file_url,

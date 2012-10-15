@@ -583,7 +583,7 @@ sub checkfiles {
     }
 
     ## Set TT2 path
-    my $tt2_include_path = &tools::make_tt2_include_path($robot,'web_tt2','','',$Conf{'etc'});
+    my $tt2_include_path = &tools::make_tt2_include_path($robot,'web_tt2','','',$Conf{'etc'}, $Conf{'viewmaildir'}, $Conf{'domain'});
 
     ## Create directory if required
     unless (-d $dir) {

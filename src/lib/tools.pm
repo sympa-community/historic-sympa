@@ -1632,7 +1632,7 @@ sub get_filename {
 #
 ######################################################
 sub make_tt2_include_path {
-    my ($robot,$dir,$lang,$list,$basedir) = @_;
+    my ($robot,$dir,$lang,$list,$basedir,$viewmaildir,$domain) = @_;
 
     my $listname;
     if (ref $list eq 'List') {
@@ -1640,7 +1640,7 @@ sub make_tt2_include_path {
     } else {
 	$listname = $list;
     }
-    &Log::do_log('debug3', 'tools::make_tt2_include_path(%s,%s,%s,%s,%s)', $robot, $dir, $lang, $listname, $basedir);
+    &Log::do_log('debug3', 'tools::make_tt2_include_path(%s,%s,%s,%s,%s,%s,%s)', $robot, $dir, $lang, $listname, $basedir,$viewmaildir,$domain);
 
     my @include_path;
 
@@ -1653,7 +1653,7 @@ sub make_tt2_include_path {
     if ($dir) {
 	$path_etcbindir = Sympa::Constants::DEFAULTDIR . "/$dir";
 	$path_etcdir = "$basedir/".$dir;
-	$path_robot = "$basedir/".$robot.'/'.$dir if (lc($robot) ne lc($Conf::Conf{'domain'}));
+	$path_robot = "$basedir/".$robot.'/'.$dir if (lc($robot) ne lc($domain));
 	if (ref($list) eq 'List'){
 	    $path_list = $list->{'dir'}.'/'.$dir;
 	    if (defined $list->{'admin'}{'family_name'}) {
@@ -1664,7 +1664,7 @@ sub make_tt2_include_path {
     }else {
 	$path_etcbindir = Sympa::Constants::DEFAULTDIR;
 	$path_etcdir = $basedir;
-	$path_robot = "$basedir/".$robot if (lc($robot) ne lc($Conf::Conf{'domain'}));
+	$path_robot = "$basedir/".$robot if (lc($robot) ne lc($domain));
 	if (ref($list) eq 'List') {
 	    $path_list = $list->{'dir'} ;
 	    if (defined $list->{'admin'}{'family_name'}) {
@@ -1708,7 +1708,7 @@ sub make_tt2_include_path {
 	}
     }
 
-    unshift @include_path,$Conf::Conf{'viewmaildir'};
+    unshift @include_path,$viewmaildir;
     return \@include_path;
 
 }

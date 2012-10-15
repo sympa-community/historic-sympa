@@ -270,7 +270,7 @@ sub create_list_old{
     $param->{'creation_email'} = "listmaster\@$host" unless ($param->{'creation_email'});
     $param->{'status'} = 'open'  unless ($param->{'status'});
        
-    my $tt2_include_path = &tools::make_tt2_include_path($robot,'create_list_templates/'.$template,'','',$Conf::Conf{'etc'});
+    my $tt2_include_path = &tools::make_tt2_include_path($robot,'create_list_templates/'.$template,'','',$Conf::Conf{'etc'},$Conf::Conf{'viewmaildir'},$Conf::Conf{'domain'});
 
     ## Lock config before openning the config file
     my $lock = new Lock ($list_dir.'/config');
