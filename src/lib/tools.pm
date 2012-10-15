@@ -107,7 +107,7 @@ sub set_file_rights {
     }
     if ($param{'mode'}){
 	unless (chmod($param{'mode'}, $param{'file'})){
-	    &Log::do_log('err', "Can't change rights of file %s: %s",$Conf::Conf{'db_name'}, $!);
+	    &Log::do_log('err', "Can't change rights of file %s: %s",$param{'file'}, $!);
 	    return undef;
 	}
     }
