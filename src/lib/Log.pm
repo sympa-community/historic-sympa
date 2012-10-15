@@ -28,8 +28,6 @@ use Exporter;
 use POSIX qw(mktime);
 use Sys::Syslog;
 
-use List;
-
 our @ISA = qw(Exporter);
 our @EXPORT = qw($log_level %levels);
 
@@ -62,6 +60,8 @@ our $last_date_aggregation;
 sub fatal_err {
     my $m  = shift;
     my $errno  = $!;
+
+    require List;
     
     eval {
 	syslog('err', $m, @_);
@@ -153,6 +153,7 @@ sub do_log {
 
     if ($@ && ($warning_date < time - $warning_timeout)) {
         $warning_date = time + $warning_timeout;
+        require List;
         &List::send_notify_to_listmaster(
             'logs_failed', $Conf::Conf{'domain'}, [$@]
         );
@@ -192,6 +193,7 @@ sub do_connect {
     eval {openlog("$log_service\[$$\]", 'ndelay,nofatal', $log_facility)};
     if($@ && ($warning_date < time - $warning_timeout)) {
 	$warning_date = time + $warning_timeout;
+        require List;
 	unless(&List::send_notify_to_listmaster('logs_failed', $Conf::Conf{'domain'}, [$@])) {
 	    print STDERR "No logs available, can't send warning message";
 	}
