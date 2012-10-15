@@ -425,7 +425,7 @@ SDM::db_disconnect;
 }
 &Log::do_log('notice', 'spooler exited normally due to signal');
 my $file = $Conf{'pidfile_spooler'};
-&tools::remove_pid($file, $$);
+&tools::remove_pid($file, $$, undef, $Conf::Conf{'tmpdir'});
 
 exit(0);
 }

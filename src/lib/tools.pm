@@ -1801,7 +1801,7 @@ sub dump_encoding {
 
 ## Remove PID file and STDERR output
 sub remove_pid {
-	my ($pidfile, $pid, $options) = @_;
+	my ($pidfile, $pid, $options, $tmpdir) = @_;
 	
 	## If in multi_process mode (bulk.pl for instance can have child processes)
 	## Then the pidfile contains a list of space-separated PIDs on a single line
@@ -1840,7 +1840,7 @@ sub remove_pid {
 			&Log::do_log('err', "Failed to remove $pidfile: %s", $!);
 			return undef;
 		}
-		my $err_file = $Conf::Conf{'tmpdir'}.'/'.$pid.'.stderr';
+		my $err_file = $tmpdir.'/'.$pid.'.stderr';
 		if(-f $err_file) {
 			unless(unlink $err_file) {
 				&Log::do_log('err', "Failed to remove $err_file: %s", $!);
@@ -1967,13 +1967,13 @@ sub direct_stderr_to_file {
     my %data = @_;
     ## Error output is stored in a file with PID-based name
     ## Usefull if process crashes
-    open(STDERR, '>>', $Conf::Conf{'tmpdir'}.'/'.$data{'pid'}.'.stderr');
+    open(STDERR, '>>', $data{'tmpdir'}.'/'.$data{'pid'}.'.stderr');
     unless(&tools::set_file_rights(
-	file => $Conf::Conf{'tmpdir'}.'/'.$data{'pid'}.'.stderr',
+	file => $data{'tmpdir'}.'/'.$data{'pid'}.'.stderr',
 	user  => Sympa::Constants::USER,
 	group => Sympa::Constants::GROUP,
     )) {
-	&Log::do_log('err','Unable to set rights on %s', $Conf::Conf{'tmpdir'}.'/'.$data{'pid'}.'.stderr');
+	&Log::do_log('err','Unable to set rights on %s', $data{'tmpdir'}.'/'.$data{'pid'}.'.stderr');
 	return undef;
     }
     return 1;
@@ -1983,7 +1983,7 @@ sub direct_stderr_to_file {
 sub send_crash_report {
     my %data = @_;
     &Log::do_log('debug','Sending crash report for process %s',$data{'pid'}),
-    my $err_file = $Conf::Conf{'tmpdir'}.'/'.$data{'pid'}.'.stderr';
+    my $err_file = $data{'tmpdir'}.'/'.$data{'pid'}.'.stderr';
     my (@err_output, $err_date);
     if(-f $err_file) {
 	open(ERR, $err_file);
@@ -1991,7 +1991,7 @@ sub send_crash_report {
 	close ERR;
 	$err_date = strftime("%d %b %Y  %H:%M", localtime((stat($err_file))[9]));
     }
-    &List::send_notify_to_listmaster('crash', $Conf::Conf{'domain'}, {'crashed_process' => $data{'pname'}, 'crash_err' => \@err_output, 'crash_date' => $err_date, 'pid' => $data{'pid'}});
+    &List::send_notify_to_listmaster('crash', $data{'domain'}, {'crashed_process' => $data{'pname'}, 'crash_err' => \@err_output, 'crash_date' => $err_date, 'pid' => $data{'pid'}});
 }
 
 sub get_message_id {

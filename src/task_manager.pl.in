@@ -121,7 +121,7 @@ my $options;
 $options->{'stderr_to_tty'} = 1 if ($main::options{'foreground'});
 &tools::write_pid($wwsconf->{'task_manager_pidfile'}, $$, $options);
 unless ($options->{'stderr_to_tty'}) {
-    &tools::direct_stderr_to_file(('pid' => $$));
+    &tools::direct_stderr_to_file(('tmpdir' => $Conf::Conf{'tmpdir'}, 'pid' => $$));
 }
 
 
@@ -390,7 +390,7 @@ while (!$end) {
 &List::send_notify_to_listmaster(undef, undef, undef, undef, 1); # Purge grouped notifications
 
 &Log::do_log ('notice', 'task_manager exited normally due to signal'); 
-&tools::remove_pid($wwsconf->{'task_manager_pidfile'}, $$);
+&tools::remove_pid($wwsconf->{'task_manager_pidfile'}, $$, undef, $Conf::Conf{'tmpdir'});
 
 exit(0);
 
