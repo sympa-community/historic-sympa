@@ -40,14 +40,6 @@ use Language;
 use Log;
 use Sympa::Constants;
 
-our @ISA = qw(Exporter);
-our @EXPORT = qw(
-    get_dkim_parameters
-    dkim_verifier
-    remove_invalid_dkim_signature
-    dkim_sign
-);
-
 ## RCS identification.
 #my $id = '@(#)$Id$';
 
