@@ -23,10 +23,10 @@ package DBManipulatorInformix;
 
 use strict;
 
-use DefaultDBManipulator;
+use DBManipulatorDefault;
 use Log;
 
-our @ISA = qw(DefaultDBManipulator);
+our @ISA = qw(DBManipulatorDefault);
 
 sub build_connect_string{
     my $self = shift;
