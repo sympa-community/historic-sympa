@@ -23,6 +23,7 @@ package Tools::DKIM;
 
 use strict;
 
+use Exporter;
 use Mail::DKIM::Verifier;
 use Mail::DKIM::Signer;
 use MIME::Parser;
@@ -31,6 +32,14 @@ use Conf;
 use List;
 use Log;
 use Message;
+
+our @ISA = qw(Exporter);
+our @EXPORT = qw(
+    get_dkim_parameters
+    dkim_verifier
+    remove_invalid_dkim_signature
+    dkim_sign
+);
 
 sub get_dkim_parameters {
 
