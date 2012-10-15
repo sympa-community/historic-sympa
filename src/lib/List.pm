@@ -54,6 +54,7 @@ use SQLSource qw(create_db);
 use Sympaspool;
 use Sympa::Constants;
 use Task;
+use Tools::DKIM;
 use tt2;
 use Upgrade;
 use VOOTConsumer;
@@ -3752,7 +3753,7 @@ sub send_global_file {
     $data->{'boundary'} = '----------=_'.&tools::get_message_id($robot) unless ($data->{'boundary'});
 
     if ((&Conf::get_robot_conf($robot, 'dkim_feature') eq 'on')&&(&Conf::get_robot_conf($robot, 'dkim_add_signature_to')=~/robot/)){
-	$data->{'dkim'} = &tools::get_dkim_parameters({'robot' => $robot});
+	$data->{'dkim'} = Tools::DKIM::get_dkim_parameters({'robot' => $robot});
     }
     
     $data->{'use_bulk'} = 1  unless ($data->{'alarm'}) ; # use verp excepted for alarms. We should make this configurable in order to support Sympa server on a machine without any MTA service
@@ -3913,7 +3914,7 @@ sub send_file {
     $data->{'sign_mode'} = $sign_mode;
     
     if ((&Conf::get_robot_conf($self->{'domain'}, 'dkim_feature') eq 'on')&&(&Conf::get_robot_conf($self->{'domain'}, 'dkim_add_signature_to')=~/robot/)){
-	$data->{'dkim'} = &tools::get_dkim_parameters({'robot' => $self->{'domain'}});
+	$data->{'dkim'} = Tools::DKIM::get_dkim_parameters({'robot' => $self->{'domain'}});
     } 
     $data->{'use_bulk'} = 1  unless ($data->{'alarm'}) ; # use verp excepted for alarms. We should make this configurable in order to support Sympa server on a machine without any MTA service
           # use Data::Dumper;
@@ -4105,7 +4106,7 @@ sub send_msg {
     my $dkim_parameters ;
     # prepare dkim parameters
     if ($apply_dkim_signature eq 'on') {
-	$dkim_parameters = &tools::get_dkim_parameters({'robot'=>$self->{'domain'}, 'listname'=>$self->{'name'}});
+	$dkim_parameters = Tools::DKIM::get_dkim_parameters({'robot'=>$self->{'domain'}, 'listname'=>$self->{'name'}});
     }
     ## Storing the not empty subscribers' arrays into a hash.
     my $available_rcpt;

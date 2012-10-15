@@ -46,6 +46,7 @@ use Conf;
 use List;
 use Log;
 use tools;
+use Tools::DKIM;
 use tt2;
 
 =pod 
@@ -282,7 +283,7 @@ sub new {
 	}
 	# verify DKIM signature
 	if (&Conf::get_robot_conf($robot, 'dkim_feature') eq 'on'){
-	    $message->{'dkim_pass'} = &tools::dkim_verifier($message->{'msg_as_string'});
+	    $message->{'dkim_pass'} = Tools::DKIM::dkim_verifier($message->{'msg_as_string'});
 	}
     }
         
