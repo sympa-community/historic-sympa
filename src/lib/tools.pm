@@ -319,7 +319,7 @@ sub safefork {
 #
 ###################################################### 
 sub checkcommand {
-   my($msg, $sender, $robot) = @_;
+   my($msg, $sender, $robot, $regexp) = @_;
 
    my($avoid, $i);
 
@@ -331,7 +331,7 @@ sub checkcommand {
    &Log::do_log('debug3', 'tools::checkcommand(msg->head->get(subject): %s,%s)', $subject, $sender);
 
    if ($subject) {
-       if ($Conf::Conf{'misaddressed_commands_regexp'} && ($subject =~ /^$Conf::Conf{'misaddressed_commands_regexp'}\b/im)) {
+       if ($regexp && ($subject =~ /^$regexp\b/im)) {
 	   return 1;
        }
    }
@@ -339,7 +339,7 @@ sub checkcommand {
    return 0 if ($#{$msg->body} >= 5);  ## More than 5 lines in the text.
 
    foreach $i (@{$msg->body}) {
-       if ($Conf::Conf{'misaddressed_commands_regexp'} && ($i =~ /^$Conf::Conf{'misaddressed_commands_regexp'}\b/im)) {
+       if ($regexp && ($i =~ /^$regexp\b/im)) {
 	   return 1;
        }
 
