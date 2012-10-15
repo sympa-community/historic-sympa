@@ -64,7 +64,7 @@ sub new {
 
 #   passive_session are session not stored in the database, they are used for crawler bots and action such as css, wsdl, ajax and rss
     
-    if (&tools::is_a_crawler($robot,{'user_agent_string' => $ENV{'HTTP_USER_AGENT'}})) {
+    if (is_a_crawler($robot,{'user_agent_string' => $ENV{'HTTP_USER_AGENT'}})) {
 	$session->{'is_a_crawler'} = 1;
 	$session->{'passive_session'} = 1;
     }
@@ -453,6 +453,16 @@ sub is_anonymous {
     }else{
 	return 0;
     }
+}
+
+# input user agent string and IP. return 1 if suspected to be a crawler.
+# initial version based on rawlers_dtection.conf file only
+# later : use Session table to identify those who create a lot of sessions 
+sub is_a_crawler {
+    my $robot = shift;
+    my $context = shift;
+
+    return $Conf::Conf{'crawlers_detection'}{'user_agent_string'}{$context->{'user_agent_string'}};
 }
 
 1;

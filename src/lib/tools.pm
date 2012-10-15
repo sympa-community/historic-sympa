@@ -1858,22 +1858,6 @@ sub remove_pid {
 	return 1;
 }
 
-# input user agent string and IP. return 1 if suspected to be a crawler.
-# initial version based on rawlers_dtection.conf file only
-# later : use Session table to identify those who create a lot of sessions 
-sub is_a_crawler {
-
-    my $robot = shift;
-    my $context = shift;
-
-#    if ($Conf::Conf{$robot}{'crawlers_detection'}) {
-#	return ($Conf::Conf{$robot}{'crawlers_detection'}{'user_agent_string'}{$context->{'user_agent_string'}});
-#    }
-
-    # open (TMP, ">> /tmp/dump1"); print TMP "dump de la conf dans is_a_crawler : \n"; &tools::dump_var($Conf::Conf{'crawlers_detection'}, 0,\*TMP);     close TMP;
-    return $Conf::Conf{'crawlers_detection'}{'user_agent_string'}{$context->{'user_agent_string'}};
-}
-
 sub write_pid {
     my ($pidfile, $pid, $options) = @_;
 
