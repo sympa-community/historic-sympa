@@ -126,7 +126,7 @@ sub _create_xss_parser {
 # Function : pictures_filename
 # Description : return the type of a pictures
 #               according to the user
-## IN : email, list
+## IN : email, list, path
 #*******************************************
 sub pictures_filename {
     my %parameters = @_;
@@ -137,7 +137,7 @@ sub pictures_filename {
     my $filetype;
     my $filename = undef;
     foreach my $ext ('.gif','.jpg','.jpeg','.png') {
- 	if (-f &Conf::get_robot_conf($robot,'pictures_path').'/'.$listname.'@'.$robot.'/'.$login.$ext) {
+ 	if (-f $parameters{'path'}.'/'.$listname.'@'.$robot.'/'.$login.$ext) {
  	    my $file = $login.$ext;
  	    $filename = $file;
  	    last;
@@ -147,15 +147,15 @@ sub pictures_filename {
 }
 
 ## Creation of pictures url
-## IN : email, list
+## IN : url, email, list, path
 sub make_pictures_url {
     my %parameters = @_;
 
     my ($listname, $robot) = ($parameters{'list'}{'name'}, $parameters{'list'}{'domain'});
 
     my $url;
-    if(&pictures_filename('email' => $parameters{'email'}, 'list' => $parameters{'list'})) {
- 	$url =  &Conf::get_robot_conf($robot, 'pictures_url').$listname.'@'.$robot.'/'.&pictures_filename('email' => $parameters{'email'}, 'list' => $parameters{'list'});
+    if(&pictures_filename('email' => $parameters{'email'}, 'list' => $parameters{'list'}, 'path' => $parameters{'path'})) {
+ 	$url =  $parameters{'url'}.$listname.'@'.$robot.'/'.&pictures_filename('email' => $parameters{'email'}, 'list' => $parameters{'list'}, 'path' => $parameters{'path'});
     }
     else {
  	$url = undef;
