@@ -154,7 +154,8 @@ sub make_pictures_url {
     my ($listname, $robot) = ($parameters{'list'}{'name'}, $parameters{'list'}{'domain'});
 
     my $url;
-    if(&pictures_filename('email' => $parameters{'email'}, 'list' => $parameters{'list'}, 'path' => $parameters{'path'})) {
+    my $filename = pictures_filename('email' => $parameters{'email'}, 'list' => $parameters{'list'}, 'path' => $parameters{'path'});
+    if($filename) {
  	$url =  $parameters{'url'}.$listname.'@'.$robot.'/'.&pictures_filename('email' => $parameters{'email'}, 'list' => $parameters{'list'}, 'path' => $parameters{'path'});
     }
     else {
