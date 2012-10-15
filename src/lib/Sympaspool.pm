@@ -522,8 +522,8 @@ sub clean {
     }
     
     push @sth_stack, $sth;
-    &SDM::do_query($sqlquery);
-    $sth-> finish;
+    $sth = &SDM::do_query('%s', $sqlquery);
+    $sth->finish;
    &Log::do_log('debug',"%s entries older than %s days removed from spool %s" ,$sth->rows,$delay,$self->{'spoolname'});
     $sth = pop @sth_stack;
     return 1;

@@ -120,8 +120,8 @@ sub GetSupportedLanguages {
 
 ## Keep the previous lang ; can be restored with PopLang
 sub PushLang {
+    &Log::do_log('debug2', '(%s)', @_);
     my $locale = shift;
-    &Log::do_log('debug', 'Language::PushLang(%s)', $locale);
 
     push @previous_locale, $current_locale;
     &SetLang($locale);
@@ -130,7 +130,7 @@ sub PushLang {
 }
 
 sub PopLang {
-    &Log::do_log('debug', '');
+    &Log::do_log('debug2', '()');
 
     my $locale = pop @previous_locale;
     &SetLang($locale);
@@ -140,8 +140,8 @@ sub PopLang {
 
 sub SetLang {
 ###########
+    &Log::do_log('debug2', '(%s)', @_);
     my $locale = shift;
-    &Log::do_log('debug2', 'Language::SetLang(%s)', $locale);
 
     my $lang = $locale || $default_lang;## Use default_lang if an empty parameter
 

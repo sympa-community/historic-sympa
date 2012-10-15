@@ -1236,14 +1236,15 @@ sub db_struct {
 	  $trans_syb =~ s/^mediumblob/long binary/g;
 #Sqlite		
 	  $trans_sq =~ s/^varchar.*/text/g;
-	  $trans_sq =~ s/^int\(1\).*/numeric/g;
+	  $trans_sq =~ s/^.*int\(1\).*/numeric/g;
 	  $trans_sq =~ s/^int.*/integer/g;
 	  $trans_sq =~ s/^tinyint.*/integer/g;
 	  $trans_sq =~ s/^bigint.*/integer/g;
 	  $trans_sq =~ s/^smallint.*/integer/g;
+	  $trans_sq =~ s/^longtext.*/text/g;
 	  $trans_sq =~ s/^datetime.*/numeric/g;
 	  $trans_sq =~ s/^enum.*/text/g;	 
-	  $trans_sq =~ s/^mediumblob/blob/g;
+	  $trans_sq =~ s/^mediumblob/none/g;
 
 	  $db_struct{'mysql'}{$table}{$field} = $trans;
 	  $db_struct{'Pg'}{$table}{$field} = $trans_pg;

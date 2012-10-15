@@ -10477,7 +10477,7 @@ sub get_which {
 	{ 'filter_query' => [ $role => $email,
 			      '! status' => 'closed|family_closed' ] });
 
-    return @$all_lists;
+    return @{$all_lists || []};
 }
 
 ## return total of messages awaiting moderation
