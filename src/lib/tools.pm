@@ -1955,7 +1955,7 @@ sub write_pid {
     )) {
 	## Unlock pid file
 	$lock->unlock();
-	&Log::fatal_err('Unable to set rights on %s', $Conf::Conf{'db_name'});
+	&Log::fatal_err('Unable to set rights on %s', $pidfile);
     }
     ## Unlock pid file
     $lock->unlock();
