@@ -39,7 +39,6 @@ use Time::Local;
 
 use Language;
 use Log;
-use SDM;
 use Sympa::Constants;
 
 ## RCS identification.
@@ -2686,13 +2685,9 @@ sub get_fingerprint {
     
     my $email = shift;
     my $fingerprint = shift;
-    my $random;
+    my $random = shift;
     my $random_email;
      
-    unless($random = &get_db_random()){ # si un random existe : get_db_random
-	$random = &init_db_random(); # sinon init_db_random
-    }
- 
     $random_email = ($random.$email);
  
     if( $fingerprint ) { #si on veut vérifier le fingerprint dans l'url
@@ -2734,57 +2729,6 @@ sub md5_fingerprint {
     $digestmd5->reset;
     $digestmd5->add($input_string);
     return (unpack("H*", $digestmd5->digest));
-}
-
-############################################################
-#  get_db_random                                           #
-############################################################
-#  This function returns $random                           #
-#  which is stored in the database                         #
-#                                                          #  
-# IN : -                                                   #
-#                                                          #
-# OUT : $random : the random stored in the database        #
-#     | undef                                              #
-#                                                          #
-############################################################
-sub get_db_random {
-    
-    my $sth;
-    unless ($sth = &SDM::do_query("SELECT random FROM fingerprint_table")) {
-	&Log::do_log('err','Unable to retrieve random value from fingerprint_table');
-	return undef;
-    }
-    my $random = $sth->fetchrow_hashref('NAME_lc');
-
-    return $random;
-
-}
-
-############################################################
-#  init_db_random                                          #
-############################################################
-#  This function initializes $random used in               #
-#  get_fingerprint if there is no value in the database    #
-#                                                          #  
-# IN : -                                                   #
-#                                                          #
-# OUT : $random : the random initialized in the database   #
-#     | undef                                              #
-#                                                          #
-############################################################
-sub init_db_random {
-
-    my $range = 89999999999999999999;
-    my $minimum = 10000000000000000000;
-
-    my $random = int(rand($range)) + $minimum;
-
-    unless (&SDM::do_query('INSERT INTO fingerprint_table VALUES (%d)', $random)) {
-		&Log::do_log('err','Unable to set random value in fingerprint_table');
-		return undef;
-    }
-    return $random;
 }
 
 sub get_separator {

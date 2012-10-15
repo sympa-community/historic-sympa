@@ -343,7 +343,9 @@ sub merge_data {
     $user->{'friendly_date'} = gettext_strftime("%d %b %Y  %H:%M", localtime($user->{'date'}));
 
     # this method as been removed because some users may forward authentication link
-    # $user->{'fingerprint'} = &tools::get_fingerprint($rcpt);
+    # my $random = get_db_random();
+    # $random = init_db_random() unless $random;
+    # $user->{'fingerprint'} = get_fingerprint($rcpt);
 
     $data->{'user'} = $user;
     $data->{'robot'} = $robot;
@@ -556,6 +558,55 @@ sub there_is_too_much_remaining_packets {
     }else{
 	return 0;
     }
+}
+
+############################################################
+#  This function returns $random                           #
+#  which is stored in the database                         #
+#                                                          #  
+# IN : -                                                   #
+#                                                          #
+# OUT : $random : the random stored in the database        #
+#     | undef                                              #
+#                                                          #
+############################################################
+sub get_db_random {
+    
+    my $sth;
+    unless ($sth = &SDM::do_query("SELECT random FROM fingerprint_table")) {
+	&Log::do_log('err','Unable to retrieve random value from fingerprint_table');
+	return undef;
+    }
+    my $random = $sth->fetchrow_hashref('NAME_lc');
+
+    return $random;
+
+}
+
+############################################################
+#  init_db_random                                          #
+############################################################
+#  This function initializes $random used in               #
+#  get_fingerprint if there is no value in the database    #
+#                                                          #  
+# IN : -                                                   #
+#                                                          #
+# OUT : $random : the random initialized in the database   #
+#     | undef                                              #
+#                                                          #
+############################################################
+sub init_db_random {
+
+    my $range = 89999999999999999999;
+    my $minimum = 10000000000000000000;
+
+    my $random = int(rand($range)) + $minimum;
+
+    unless (&SDM::do_query('INSERT INTO fingerprint_table VALUES (%d)', $random)) {
+		&Log::do_log('err','Unable to set random value in fingerprint_table');
+		return undef;
+    }
+    return $random;
 }
 
 ## Packages must return true.
