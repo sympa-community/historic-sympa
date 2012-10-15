@@ -115,7 +115,7 @@ sub _create_xss_parser {
 						AllowSrc        => 1,
 						Rules => {
 						    '*' => {
-							src => '^http://'.&Conf::get_robot_conf($parameters{'robot'},'http_host'),
+							src => '^http://'. $parameters{'host'},
 						    },
 						},
 					    });
@@ -166,14 +166,14 @@ sub make_pictures_url {
 ## Returns sanitized version (using StripScripts) of the string provided as argument.
 sub sanitize_html {
     my %parameters = @_;
-    &Log::do_log('debug3','tools::sanitize_html(%s,%s)',$parameters{'string'},$parameters{'robot'});
+    &Log::do_log('debug3','tools::sanitize_html(%s,%s,%s)',$parameters{'string'},$parameters{'robot'},$parameters{'host'});
 
     unless (defined $parameters{'string'}) {
 	&Log::do_log('err',"No string provided.");
 	return undef;
     }
 
-    my $hss = &_create_xss_parser('robot' => $parameters{'robot'});
+    my $hss = &_create_xss_parser('robot' => $parameters{'robot'}, 'host' => $parameters{'host'});
     unless (defined $hss) {
 	&Log::do_log('err',"Can't create StripScript parser.");
 	return undef;
@@ -185,14 +185,14 @@ sub sanitize_html {
 ## Returns sanitized version (using StripScripts) of the content of the file whose path is provided as argument.
 sub sanitize_html_file {
     my %parameters = @_;
-    &Log::do_log('debug3','tools::sanitize_html_file(%s)',$parameters{'robot'});
+    &Log::do_log('debug3','tools::sanitize_html_file(%s,%s)',$parameters{'robot'},$parameters{'host'});
 
     unless (defined $parameters{'file'}) {
 	&Log::do_log('err',"No path to file provided.");
 	return undef;
     }
 
-    my $hss = &_create_xss_parser('robot' => $parameters{'robot'});
+    my $hss = &_create_xss_parser('robot' => $parameters{'robot'}, 'host' => $parameters{'host'});
     unless (defined $hss) {
 	&Log::do_log('err',"Can't create StripScript parser.");
 	return undef;

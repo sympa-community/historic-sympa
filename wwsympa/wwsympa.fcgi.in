@@ -2111,6 +2111,7 @@ sub get_parameters {
 	 if ($pname eq 'content' && $in{'action'} eq 'd_savefile' && $in{'path'} =~ $list->{'dir'}.'/shared' && lc($in{'path'}) =~ /\.html?/) {
 	     my $tmpparam = $in{$p};
 	     $tmpparam = &tools::sanitize_html('robot' => $robot,
+	                                       'host' => Conf::get_robot_conf($robot,'http_host'),
 					       'string' => $in{$p});
 	     if (defined $tmpparam) {
 		 $in{$p} = $tmpparam;
@@ -2357,6 +2358,7 @@ sub get_parameters_old {
 	 if ($pname eq 'content' && $in{'action'} eq 'd_savefile' && $in{'path'} =~ $list->{'dir'}.'/shared' && lc($in{'path'}) =~ /\.html?/) {
 	     my $tmpparam = $in{$p};
 	     $tmpparam = &tools::sanitize_html('robot' => $robot,
+	                                       'host'  => Conf::get_robot_conf($robot,'http_host'),
 					       'string' => $in{$p});
 	     if (defined $tmpparam) {
 		 $in{$p} = $tmpparam;
@@ -13854,6 +13856,7 @@ sub creation_shared_file {
     ## XSS Protection for HTML files.
     if (lc($fname) =~ /\.html?/) {
 	my $sanitized_file = &tools::sanitize_html_file('robot' => $robot,
+	                                                'host' => Conf::get_robot_conf($robot,'http_host'),
 							'file' => "$shareddir/$path/$fname");
 	if (defined $sanitized_file) {
 	    open HTMLFILE,  ">:bytes", "$shareddir/$path/$fname";
@@ -14426,6 +14429,7 @@ sub d_copy_file {
 	## XSS Protection for HTML files.
 	if (lc($fname) =~ /\.html?/) {
 	    my $sanitized_file = &tools::sanitize_html_file('robot' => $robot,
+	                                                    'host'  => Conf::get_robot_conf($robot,'http_host'),
 							    'file' => "$dest_dir/$fname");
 	    if (defined $sanitized_file) {
 		open HTMLFILE,  ">:bytes", "$dest_dir/$fname";

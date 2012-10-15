@@ -538,7 +538,11 @@ sub fix_html_part {
 	    $body = $cset->encode($body);
 	}
 
-	my $filtered_body = &tools::sanitize_html('string' => $body, 'robot'=> $robot);
+	my $filtered_body = &tools::sanitize_html(
+            'string' => $body,
+            'robot'=> $robot,
+            'host' => Conf::get_robot_conf($robot,'http_host')
+        );
 
 	my $io = $bodyh->open("w");
 	unless (defined $io) {
