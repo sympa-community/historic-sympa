@@ -37,7 +37,6 @@ use Sys::Hostname;
 use Text::LineFold;
 use Time::Local;
 
-use Conf;
 use Language;
 use Log;
 use SDM;
