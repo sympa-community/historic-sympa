@@ -153,7 +153,7 @@ sub make_pictures_url {
 
     my ($listname, $robot) = ($parameters{'list'}{'name'}, $parameters{'list'}{'domain'});
 
-    my $filename = pictures_filename('email' => $parameters{'email'}, 'list' => $parameters{'list'}, 'path' => $parameters{'path'});
+    my $filename = pictures_filename(%parameters);
     return $filename ?
  	$parameters{'url'}.$listname.'@'.$robot.'/'.$filename : undef;
 }
