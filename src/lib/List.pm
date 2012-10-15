@@ -55,6 +55,7 @@ use Sympaspool;
 use Sympa::Constants;
 use Task;
 use Tools::DKIM;
+use Tools::SMIME;
 use tt2;
 use Upgrade;
 use VOOTConsumer;
@@ -4414,7 +4415,7 @@ sub send_to_editor {
    foreach my $recipient (@rcpt) {
        if ($encrypt eq 'smime_crypted') {	       
 	   ## is $msg->body_as_string respect base64 number of char per line ??
-	   my $cryptedmsg = &tools::smime_encrypt($msg->head, $msg->body_as_string, $recipient); 
+	   my $cryptedmsg = Tools::SMIME::smime_encrypt($msg->head, $msg->body_as_string, $recipient); 
 	   unless ($cryptedmsg) {
 	       &Log::do_log('notice', 'Failed encrypted message for moderator');
 	       #  send a generic error message : X509 cert missing
@@ -11041,7 +11042,7 @@ sub get_cert {
     # it will have the respective cert attached anyways.
     # (the problem is that netscape, opera and IE can't only
     # read the first cert in a file)
-    my($certs,$keys) = tools::smime_find_keys($self->{dir},'encrypt');
+    my($certs,$keys) = Tools::SMIME::smime_find_keys($self->{dir},'encrypt');
 
     my @cert;
     if ($format eq 'pem') {

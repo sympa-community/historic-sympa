@@ -37,6 +37,7 @@ use Language;
 use List;
 use Sympa::Constants;
 use tools;
+use Tools::SMIME;
 
 our @ISA = qw(Exporter);
 our @EXPORT = qw(mail_file mail_message mail_forward set_send_spool);
@@ -574,7 +575,7 @@ sub sendto {
 		    &Log::do_log('err',"incorrect call for encrypt with incorrect number of recipient"); 
 		    return undef;
 		}
-		unless ($message->{'msg_as_string'} = &tools::smime_encrypt ($msg_header, $msg_body, $email)){
+		unless ($message->{'msg_as_string'} = Tools::SMIME::smime_encrypt ($msg_header, $msg_body, $email)){
     		    &Log::do_log('err',"Failed to encrypt message"); 
 		    return undef;
                 }	
@@ -660,7 +661,7 @@ sub sending {
     my $signed_msg; # if signing
 
     if ($sign_mode eq 'smime') {
-	if ($signed_msg = &tools::smime_sign($message->{'msg'},$listname, $robot)) {
+	if ($signed_msg = Tools::SMIME::smime_sign($message->{'msg'},$listname, $robot)) {
 	    $message->{'msg'} = $signed_msg->dup;
 	}else{
 	    &Log::do_log('notice', 'mail::sending : unable to sign message from %s', $listname);

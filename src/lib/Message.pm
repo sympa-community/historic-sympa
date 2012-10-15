@@ -47,6 +47,7 @@ use List;
 use Log;
 use tools;
 use Tools::DKIM;
+use Tools::SMIME;
 use tt2;
 
 =pod 
@@ -305,7 +306,7 @@ sub new {
 	## Decrypt messages
 	if (($hdr->get('Content-Type') =~ /application\/(x-)?pkcs7-mime/i) &&
 	    ($hdr->get('Content-Type') !~ /signed-data/)){
-	    my ($dec, $dec_as_string) = &tools::smime_decrypt ($message->{'msg'}, $message->{'list'});
+	    my ($dec, $dec_as_string) = Tools::SMIME::smime_decrypt ($message->{'msg'}, $message->{'list'});
 	    
 	    unless (defined $dec) {
 		&Log::do_log('debug', "Message %s could not be decrypted", $file);
@@ -324,7 +325,7 @@ sub new {
 	## Check S/MIME signatures
 	if ($hdr->get('Content-Type') =~ /multipart\/signed|application\/(x-)?pkcs7-mime/i) {
 	    $message->{'protected'} = 1; ## Messages that should not be altered (no footer)
-	    my $signed = &tools::smime_sign_check ($message);
+	    my $signed = Tools::SMIME::smime_sign_check ($message);
 	    if ($signed->{'body'}) {
 		$message->{'smime_signed'} = 1;
 		$message->{'smime_subject'} = $signed->{'subject'};
