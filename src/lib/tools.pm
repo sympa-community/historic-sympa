@@ -355,13 +355,14 @@ sub checkcommand {
 sub load_edit_list_conf {
     my $robot = shift;
     my $list = shift;
-    &Log::do_log('debug2', 'tools::load_edit_list_conf (%s)',$robot);
+    my $basedir = shift;
+    &Log::do_log('debug2', 'tools::load_edit_list_conf (%s, %s, %s)',$robot, $list, $basedir);
 
     my $file;
     my $conf ;
     
     return undef 
-	unless ($file = &tools::get_filename('etc',{},'edit_list.conf',$robot,$list));
+	unless ($file = &tools::get_filename('etc',{},'edit_list.conf',$robot,$list,$basedir));
 
     unless (open (FILE, $file)) {
 	&Log::do_log('info','Unable to open config file %s', $file);
@@ -389,7 +390,7 @@ sub load_edit_list_conf {
 		$conf->{$param}{$r} = $priv;
 	    }
 	}else{
-	    &Log::do_log ('info', 'unknown parameter in %s  (Ignored) %s', "$Conf::Conf{'etc'}/edit_list.conf",$_ );
+	    &Log::do_log ('info', 'unknown parameter in %s  (Ignored) %s', "$basedir/edit_list.conf",$_ );
 	    next;
 	}
     }
@@ -408,11 +409,12 @@ sub load_edit_list_conf {
 ## return a hash from the edit_list_conf file
 sub load_create_list_conf {
     my $robot = shift;
+    my $basedir = shift;
 
     my $file;
     my $conf ;
     
-    $file = &tools::get_filename('etc',{}, 'create_list.conf', $robot);
+    $file = &tools::get_filename('etc',{}, 'create_list.conf', $robot,undef,$basedir);
     unless ($file) {
 	&Log::do_log('info', 'unable to read %s', Sympa::Constants::DEFAULTDIR . '/create_list.conf');
 	return undef;
@@ -453,6 +455,7 @@ sub _add_topic {
 
 sub get_list_list_tpl {
     my $robot = shift;
+    my $directory = shift;
 
     my $list_conf;
     my $list_templates ;
@@ -462,8 +465,8 @@ sub get_list_list_tpl {
     
     foreach my $dir (
         Sympa::Constants::DEFAULTDIR . '/create_list_templates',
-        "$Conf::Conf{'etc'}/create_list_templates",
-        "$Conf::Conf{'etc'}/$robot/create_list_templates"
+        "$directory/create_list_templates",
+        "$directory/$robot/create_list_templates"
     ) {
 	if (opendir(DIR, $dir)) {
 	    foreach my $template ( sort grep (!/^\./,readdir(DIR))) {
@@ -614,6 +617,7 @@ sub get_templates_list {
     my $robot = shift;
     my $list = shift;
     my $options = shift;
+    my $basedir = shift;
 
     my $listdir;
 
@@ -623,8 +627,8 @@ sub get_templates_list {
     }
 
     my $distrib_dir = Sympa::Constants::DEFAULTDIR . '/'.$type.'_tt2';
-    my $site_dir = $Conf::Conf{'etc'}.'/'.$type.'_tt2';
-    my $robot_dir = $Conf::Conf{'etc'}.'/'.$robot.'/'.$type.'_tt2';
+    my $site_dir = $basedir.'/'.$type.'_tt2';
+    my $robot_dir = $basedir.'/'.$robot.'/'.$type.'_tt2';
 
     my @try;
 
@@ -683,6 +687,7 @@ sub get_template_path {
     my $tpl = shift;
     my $lang = shift || 'default';
     my $list = shift;
+    my $basedir = shift;
 
     &Log::do_log('debug', "get_templates_path ($type,$robot,$scope,$tpl,$lang,%s)", $list->{'name'});
 
@@ -696,9 +701,9 @@ sub get_template_path {
     }
 
     my $distrib_dir = Sympa::Constants::DEFAULTDIR . '/'.$type.'_tt2';
-    my $site_dir = $Conf::Conf{'etc'}.'/'.$type.'_tt2';
+    my $site_dir = $basedir.'/'.$type.'_tt2';
     $site_dir .= '/'.$lang unless ($lang eq 'default');
-    my $robot_dir = $Conf::Conf{'etc'}.'/'.$robot.'/'.$type.'_tt2';
+    my $robot_dir = $basedir.'/'.$robot.'/'.$type.'_tt2';
     $robot_dir .= '/'.$lang unless ($lang eq 'default');    
 
     if ($scope eq 'list')  {
@@ -977,10 +982,12 @@ sub ciphersaber_installed {
 # create a cipher
 sub cookie_changed {
     my $current=shift;
+    my $basedir = shift;
+
     my $changed = 1 ;
-    if (-f "$Conf::Conf{'etc'}/cookies.history") {
-	unless (open COOK, "$Conf::Conf{'etc'}/cookies.history") {
-	    &Log::do_log('err', "Unable to read $Conf::Conf{'etc'}/cookies.history") ;
+    if (-f "$basedir/cookies.history") {
+	unless (open COOK, "$basedir/cookies.history") {
+	    &Log::do_log('err', "Unable to read $basedir/cookies.history") ;
 	    return undef ; 
 	}
 	my $oldcook = <COOK>;
@@ -994,8 +1001,8 @@ sub cookie_changed {
 	    $changed = 0;
 #	}else{
 #	    push @cookies, $current ;
-#	    unless (open COOK, ">$Conf::Conf{'etc'}/cookies.history") {
-#		&Log::do_log('err', "Unable to create $Conf::Conf{'etc'}/cookies.history") ;
+#	    unless (open COOK, ">$basedir/cookies.history") {
+#		&Log::do_log('err', "Unable to create $basedir/cookies.history") ;
 #		return undef ; 
 #	    }
 #	    printf COOK "%s",join(" ",@cookies) ;
@@ -1005,13 +1012,13 @@ sub cookie_changed {
 	return $changed ;
     }else{
 	my $umask = umask 037;
-	unless (open COOK, ">$Conf::Conf{'etc'}/cookies.history") {
+	unless (open COOK, ">$basedir/cookies.history") {
 	    umask $umask;
-	    &Log::do_log('err', "Unable to create $Conf::Conf{'etc'}/cookies.history") ;
+	    &Log::do_log('err', "Unable to create $basedir/cookies.history") ;
 	    return undef ; 
 	}
 	umask $umask;
-	chown [getpwnam(Sympa::Constants::USER)]->[2], [getgrnam(Sympa::Constants::GROUP)]->[2], "$Conf::Conf{'etc'}/cookies.history";
+	chown [getpwnam(Sympa::Constants::USER)]->[2], [getgrnam(Sympa::Constants::GROUP)]->[2], "$basedir/cookies.history";
 	print COOK "$current ";
 	close COOK;
 	return(0);
@@ -1533,10 +1540,10 @@ sub duration_conv {
 ## Look for a file in the list > robot > server > default locations
 ## Possible values for $options : order=all
 sub get_filename {
-    my ($type, $options, $name, $robot, $object) = @_;
+    my ($type, $options, $name, $robot, $object,$basedir) = @_;
     my $list;
     my $family;
-    &Log::do_log('debug3','tools::get_filename(%s,%s,%s,%s,%s)', $type,  join('/',keys %$options), $name, $robot, $object->{'name'});
+    &Log::do_log('debug3','tools::get_filename(%s,%s,%s,%s,%s,%s)', $type,  join('/',keys %$options), $name, $robot, $object->{'name'},$basedir);
 
     
     if (ref($object) eq 'List') {
@@ -1561,16 +1568,16 @@ sub get_filename {
 	    $default_name = $1.'.tt2';
 	    
 	    @try = (
-            $Conf::Conf{'etc'} . "/$robot/$name",
-		    $Conf::Conf{'etc'} . "/$robot/$default_name",
-		    $Conf::Conf{'etc'} . "/$name",
-		    $Conf::Conf{'etc'} . "/$default_name",
+            $basedir . "/$robot/$name",
+		    $basedir . "/$robot/$default_name",
+		    $basedir . "/$name",
+		    $basedir . "/$default_name",
 		    Sympa::Constants::DEFAULTDIR . "/$name",
 		    Sympa::Constants::DEFAULTDIR . "/$default_name");
 	}else {
 	    @try = (
-            $Conf::Conf{'etc'} . "/$robot/$name",
-		    $Conf::Conf{'etc'} . "/$name",
+            $basedir . "/$robot/$name",
+		    $basedir . "/$name",
 		    Sympa::Constants::DEFAULTDIR . "/$name"
         );
 	}
@@ -1625,7 +1632,7 @@ sub get_filename {
 #
 ######################################################
 sub make_tt2_include_path {
-    my ($robot,$dir,$lang,$list) = @_;
+    my ($robot,$dir,$lang,$list,$basedir) = @_;
 
     my $listname;
     if (ref $list eq 'List') {
@@ -1633,7 +1640,7 @@ sub make_tt2_include_path {
     } else {
 	$listname = $list;
     }
-    &Log::do_log('debug3', 'tools::make_tt2_include_path(%s,%s,%s,%s)', $robot, $dir, $lang, $listname);
+    &Log::do_log('debug3', 'tools::make_tt2_include_path(%s,%s,%s,%s,%s)', $robot, $dir, $lang, $listname, $basedir);
 
     my @include_path;
 
@@ -1645,8 +1652,8 @@ sub make_tt2_include_path {
 
     if ($dir) {
 	$path_etcbindir = Sympa::Constants::DEFAULTDIR . "/$dir";
-	$path_etcdir = "$Conf::Conf{'etc'}/".$dir;
-	$path_robot = "$Conf::Conf{'etc'}/".$robot.'/'.$dir if (lc($robot) ne lc($Conf::Conf{'domain'}));
+	$path_etcdir = "$basedir/".$dir;
+	$path_robot = "$basedir/".$robot.'/'.$dir if (lc($robot) ne lc($Conf::Conf{'domain'}));
 	if (ref($list) eq 'List'){
 	    $path_list = $list->{'dir'}.'/'.$dir;
 	    if (defined $list->{'admin'}{'family_name'}) {
@@ -1656,8 +1663,8 @@ sub make_tt2_include_path {
 	} 
     }else {
 	$path_etcbindir = Sympa::Constants::DEFAULTDIR;
-	$path_etcdir = "$Conf::Conf{'etc'}";
-	$path_robot = "$Conf::Conf{'etc'}/".$robot if (lc($robot) ne lc($Conf::Conf{'domain'}));
+	$path_etcdir = $basedir;
+	$path_robot = "$basedir/".$robot if (lc($robot) ne lc($Conf::Conf{'domain'}));
 	if (ref($list) eq 'List') {
 	    $path_list = $list->{'dir'} ;
 	    if (defined $list->{'admin'}{'family_name'}) {

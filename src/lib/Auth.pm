@@ -174,7 +174,7 @@ sub ldap_authentication {
      &Log::do_log('debug2','Auth::ldap_authentication(%s,%s,%s)', $auth,'****',$whichfilter);
      &Log::do_log('debug3','Password used: %s',$pwd);
 
-     unless (&tools::get_filename('etc',{},'auth.conf', $robot)) {
+     unless (&tools::get_filename('etc',{},'auth.conf', $robot, undef, $Conf::Conf{'etc'})) {
 	 return undef;
      }
 

@@ -228,7 +228,7 @@ sub create_list_old{
 
 
     ## Check the template supposed to be used exist.
-    my $template_file = &tools::get_filename('etc',{},'create_list_templates/'.$template.'/config.tt2', $robot);
+    my $template_file = &tools::get_filename('etc',{},'create_list_templates/'.$template.'/config.tt2', $robot, undef, $Conf::Conf{'etc'});
     unless (defined $template_file) {
 	&Log::do_log('err', 'no template %s found',$template);
 	return undef;
@@ -270,7 +270,7 @@ sub create_list_old{
     $param->{'creation_email'} = "listmaster\@$host" unless ($param->{'creation_email'});
     $param->{'status'} = 'open'  unless ($param->{'status'});
        
-    my $tt2_include_path = &tools::make_tt2_include_path($robot,'create_list_templates/'.$template,'','');
+    my $tt2_include_path = &tools::make_tt2_include_path($robot,'create_list_templates/'.$template,'','',$Conf::Conf{'etc'});
 
     ## Lock config before openning the config file
     my $lock = new Lock ($list_dir.'/config');
@@ -436,7 +436,7 @@ sub create_list{
     }
 
     ## template file
-    my $template_file = &tools::get_filename('etc',{},'config.tt2', $robot,$family);
+    my $template_file = &tools::get_filename('etc',{},'config.tt2', $robot,$family, $Conf::Conf{'etc'});
     unless (defined $template_file) {
 	&Log::do_log('err', 'admin::create_list : no config template from family %s@%s',$family->{'name'},$robot);
 	return undef;
@@ -517,7 +517,7 @@ sub create_list{
 
     ## Create associated files if a template was given.
     for my $file ('message.footer','message.header','message.footer.mime','message.header.mime','info') {
-	my $template_file = &tools::get_filename('etc',{},$file.".tt2", $robot,$family);
+	my $template_file = &tools::get_filename('etc',{},$file.".tt2", $robot,$family, $Conf::Conf{'etc'});
 	if (defined $template_file) {
 	    my $file_content;
 	    my $tt_result = &tt2::parse_tt2($param, $file.".tt2", \$file_content, [$family->{'dir'}]);
@@ -611,7 +611,7 @@ sub update_list{
     }
 
     ## template file
-    my $template_file = &tools::get_filename('etc',{}, 'config.tt2', $robot,$family);
+    my $template_file = &tools::get_filename('etc',{}, 'config.tt2', $robot,$family, $Conf::Conf{'etc'});
     unless (defined $template_file) {
 	&Log::do_log('err', 'admin::update_list : no config template from family %s@%s',$family->{'name'},$robot);
 	return undef;

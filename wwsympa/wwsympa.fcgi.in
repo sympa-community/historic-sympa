@@ -1757,7 +1757,7 @@ my $birthday = time ;
  	 }
 
 	 my $lang = &Language::Lang2Locale($param->{'lang'});
-	 my $tt2_include_path = &tools::make_tt2_include_path($robot,'web_tt2',$lang,$list);
+	 my $tt2_include_path = &tools::make_tt2_include_path($robot,'web_tt2',$lang,$list,$Conf::Conf{'etc'});
 	 
  	 unless (&tt2::parse_tt2($param,'rss.tt2' ,\*STDOUT, $tt2_include_path, {})) {
  	     my $error = &tt2::get_error();
@@ -1782,7 +1782,7 @@ my $birthday = time ;
  	 }
 
 	 my $lang = &Language::Lang2Locale($param->{'lang'});
-	 my $tt2_include_path = &tools::make_tt2_include_path($robot,'web_tt2',$lang,$list);
+	 my $tt2_include_path = &tools::make_tt2_include_path($robot,'web_tt2',$lang,$list,$Conf::Conf{'etc'});
 	 
  	 unless (&tt2::parse_tt2($param,'ajax.tt2' ,\*STDOUT, $tt2_include_path, {})) {
  	     my $error = &tt2::get_error();
@@ -2536,7 +2536,7 @@ sub send_html {
     }
     
     my $lang = &Language::Lang2Locale($param->{'lang'});
-    my $tt2_include_path = &tools::make_tt2_include_path($robot,'web_tt2',$lang,$list);
+    my $tt2_include_path = &tools::make_tt2_include_path($robot,'web_tt2',$lang,$list,$Conf::Conf{'etc'});
     
     # XSS escaping applied to all outgoing parameters.
     my $param_copy = &tools::dup_var($param); ## Escape parameters on a copy to avoid altering usefull data.
@@ -3672,7 +3672,7 @@ sub is_ldap_user {
      my $auth = shift; ## User email or UID
      &wwslog('debug2',"is_ldap_user ($auth)");
 
-     unless (&tools::get_filename('etc',{}, 'auth.conf', $robot)) {
+     unless (&tools::get_filename('etc',{}, 'auth.conf', $robot, undef, $Conf::Conf{'etc'})) {
 	 return undef;
      }
 
@@ -5798,9 +5798,9 @@ sub do_ls_templates  {
     $in{'webormail'} ||= 'web';
     
     if (defined $list) {
-	$param->{'templates'} = &tools::get_templates_list($in{'webormail'},$robot,$list);
+	$param->{'templates'} = &tools::get_templates_list($in{'webormail'},$robot,$list,undef,$Conf::Conf{'etc'});
     }else{
-	$param->{'templates'} = &tools::get_templates_list($in{'webormail'},$robot, undef);
+	$param->{'templates'} = &tools::get_templates_list($in{'webormail'},$robot, undef,undef,$Conf::Conf{'etc'});
     }
     
     ## List of lang per type
@@ -5840,9 +5840,9 @@ sub do_remove_template {
     my $template_path ;
 
     if ($in{'scope'} eq 'list') { 
-	$template_path = &tools::get_template_path($in{'webormail'},$robot,'list',$in{'template_name'},$in{'tpl_lang'},$list);
+	$template_path = &tools::get_template_path($in{'webormail'},$robot,'list',$in{'template_name'},$in{'tpl_lang'},$list,$Conf::Conf{'etc'});
     }else{
-	$template_path = &tools::get_template_path($in{'webormail'},$robot,$in{'scope'},$in{'template_name'},$in{'tpl_lang'});
+	$template_path = &tools::get_template_path($in{'webormail'},$robot,$in{'scope'},$in{'template_name'},$in{'tpl_lang'},undef,$Conf::Conf{'etc'});
     }
         
     my $template_old_path = &tools::shift_file($template_path,10);
@@ -5874,9 +5874,9 @@ sub do_view_template {
     my $template_path ;
  
     if ($in{'scope'} eq 'list') { 
-	$template_path = &tools::get_template_path($in{'webormail'},$robot,'list',$in{'template_name'},$in{'tpl_lang'},$list);
+	$template_path = &tools::get_template_path($in{'webormail'},$robot,'list',$in{'template_name'},$in{'tpl_lang'},$list,$Conf::Conf{'etc'});
     }else{
-	$template_path = &tools::get_template_path($in{'webormail'},$robot,$in{'scope'},$in{'template_name'},$in{'tpl_lang'});
+	$template_path = &tools::get_template_path($in{'webormail'},$robot,$in{'scope'},$in{'template_name'},$in{'tpl_lang'},undef,$Conf::Conf{'etc'});
     }
 
     unless (open (TPL,$template_path)) {
@@ -5927,7 +5927,7 @@ sub do_copy_template {
 		return undef;
 	    }
 	    
-	    $param->{'template_path_out'} = &tools::get_template_path($in{'webormail'},$robot,$in{'scope_out'},$in{'template_name_out'},$in{'tpl_lang_out'},$list_out);
+	    $param->{'template_path_out'} = &tools::get_template_path($in{'webormail'},$robot,$in{'scope_out'},$in{'template_name_out'},$in{'tpl_lang_out'},$list_out,$Conf::Conf{'etc'});
 	}else{
 	    &report::reject_report_web('user','missing_arg',{'argument' => 'list'},$param->{'action'});
 	    &wwslog('err','do_copy_template: missing parameter webormail');
@@ -5937,7 +5937,7 @@ sub do_copy_template {
 	    return 1;
 	}
     }else{
-	$param->{'template_path_out'} = &tools::get_template_path($in{'webormail'},$robot,$in{'scope_out'},$in{'template_name_out'},$in{'tpl_lang_out'});
+	$param->{'template_path_out'} = &tools::get_template_path($in{'webormail'},$robot,$in{'scope_out'},$in{'template_name_out'},$in{'tpl_lang_out'},$Conf::Conf{'etc'});
     }
     
     unless (&tools::mk_parent_dir($param->{'template_path_out'})) {
@@ -5984,9 +5984,9 @@ sub do_manage_template {
     if  ($in{'message_template'}) {		
 	my $escaped_template_path = $in{'message_template'};
 	$escaped_template_path =~ s/\s/_/g ;
-	$param->{'template_path'} = &tools::get_template_path('mail',$robot,'list', ,'reject_'.$escaped_template_path.'.tt2','',$list);
+	$param->{'template_path'} = &tools::get_template_path('mail',$robot,'list', ,'reject_'.$escaped_template_path.'.tt2','',$list,$Conf::Conf{'etc'});
     }
-    my $tt2_include_path = &tools::make_tt2_include_path($robot,'mail_tt2','',$list);
+    my $tt2_include_path = &tools::make_tt2_include_path($robot,'mail_tt2','',$list,$Conf::Conf{'etc'});
     my $default_file = &tools::find_file('reject.tt2',@{$tt2_include_path});
 
 
@@ -6023,7 +6023,7 @@ sub do_manage_template {
 	    return undef;  
 	}
 	my $escaped_template_path = $in{'new_template_name'};$escaped_template_path =~ s/\s/_/g ;
-	my $new_template_path = &tools::get_template_path('mail',$robot,'list', ,'reject_'.$escaped_template_path.'.tt2','',$list);
+	my $new_template_path = &tools::get_template_path('mail',$robot,'list', ,'reject_'.$escaped_template_path.'.tt2','',$list,$Conf::Conf{'etc'});
 
 	if (-f $new_template_path) {
 	    &report::reject_report_web('intern','template already exist',{'path' => $new_template_path},$param->{'action'},'',$param->{'user'}{'email'},$robot);
@@ -6040,9 +6040,9 @@ sub do_manage_template {
 	    return undef;
 	}	
 
-	my $default_file =  &tools::get_template_path('mail',$robot,'robot', ,'reject.tt2','',$list);
-	$default_file = &tools::get_template_path('mail',$robot,'site', ,'reject.tt2','',$list) unless (-f $default_file);
-	$default_file = &tools::get_template_path('mail',$robot,'distrib', ,'reject.tt2','',$list)unless (-f $default_file);
+	my $default_file =  &tools::get_template_path('mail',$robot,'robot', ,'reject.tt2','',$list,$Conf::Conf{'etc'});
+	$default_file = &tools::get_template_path('mail',$robot,'site', ,'reject.tt2','',$list,$Conf::Conf{'etc'}) unless (-f $default_file);
+	$default_file = &tools::get_template_path('mail',$robot,'distrib', ,'reject.tt2','',$list,$Conf::Conf{'etc'})unless (-f $default_file);
 
 	unless(open (DEFAULT, $default_file)){
 	    &report::reject_report_web('intern','cannot_open_file',{'path' => $default_file},$param->{'action'},'',$param->{'user'}{'email'},$robot);
@@ -6111,7 +6111,7 @@ sub do_manage_template {
 	&report::notice_report_web('performed',{},$in{'subaction'});
     }
     ## Build the list of available templates
-    my $available_files = &tools::get_templates_list('mail','',$list, {'ignore_global' => 1});
+    my $available_files = &tools::get_templates_list('mail','',$list, {'ignore_global' => 1},$Conf::Conf{'etc'});
     foreach $file (keys %$available_files) { 
 	if ($file eq 'reject.tt2') {
 	    my $base = $list->{'dir'}.'/mail_tt2/';
@@ -6170,7 +6170,7 @@ sub do_edit_template  {
     }
     if ($in{'scope'} eq 'list') { 
 	if ($in{'list'}) {
-	    $param->{'template_path'} = &tools::get_template_path($in{'webormail'},$robot,$in{'scope'},$in{'template_name'},$in{'tpl_lang'},$list);
+	    $param->{'template_path'} = &tools::get_template_path($in{'webormail'},$robot,$in{'scope'},$in{'template_name'},$in{'tpl_lang'},$list,$Conf::Conf{'etc'});
 	}else{
 	    &report::reject_report_web('user','listname_needed',{},$param->{'action'});
 	    &wwslog('info',"edit_template : no output lisname while output scope is list");
@@ -6180,7 +6180,7 @@ sub do_edit_template  {
 	    return undef;
 	}
     }else {
-	$param->{'template_path'} = &tools::get_template_path($in{'webormail'},$robot,$in{'scope'},$in{'template_name'},$in{'tpl_lang'});
+	$param->{'template_path'} = &tools::get_template_path($in{'webormail'},$robot,$in{'scope'},$in{'template_name'},$in{'tpl_lang'},$Conf::Conf{'etc'});
     }
     
     unless (open (TPLOUT,'>'.$param->{'template_path'})) {
@@ -6260,7 +6260,7 @@ sub do_skinsedit {
     if (($in{'subaction'} eq 'install')||($in{'installcss'})) {
 
 	my $lang = &Language::Lang2Locale($param->{'lang'});
-	my $tt2_include_path = &tools::make_tt2_include_path($robot,'web_tt2',$lang,'');
+	my $tt2_include_path = &tools::make_tt2_include_path($robot,'web_tt2',$lang,'',$Conf::Conf{'etc'});
 
 	my $date= time;
 	my $style_file;
@@ -6664,7 +6664,7 @@ sub do_modindex {
 	 $param->{'topic_required'} = $list->is_msg_topic_tagging_required();
      }
 
-     my $available_files = &tools::get_templates_list('mail','',$list, {'ignore_global' => 1});
+     my $available_files = &tools::get_templates_list('mail','',$list, {'ignore_global' => 1},$Conf::Conf{'etc'});
      foreach my $file (keys %$available_files) {
 
 	 if ($file eq 'reject.tt2') {
@@ -7185,7 +7185,7 @@ sub do_viewmod {
      my $msg;
 
 
-     my $available_files = &tools::get_templates_list('mail','',$list, {'ignore_global' => 1});
+     my $available_files = &tools::get_templates_list('mail','',$list, {'ignore_global' => 1},$Conf::Conf{'etc'});
      foreach my $file (keys %$available_files) {
 	 next unless($file =~ /^reject_/);
 	 $file =~ s/^reject_//;
@@ -7299,7 +7299,7 @@ sub do_editfile {
 	 #$file =~ s/\.tpl$/\.$list->{'admin'}{'lang'}\.tpl/;
 
 	 ## Look for the template
-	 $param->{'filepath'} = &tools::get_filename('etc',{},$subdir.$file,$robot, $list);
+	 $param->{'filepath'} = &tools::get_filename('etc',{},$subdir.$file,$robot, $list, $Conf::Conf{'etc'});
 
 	 ## There might be no matching file if default template not provided with Sympa
 	 if (defined $param->{'filepath'}) {
@@ -7326,7 +7326,7 @@ sub do_editfile {
 	 ## Default for 'homepage' is 'info'
 	 if (($in{'file'} eq 'homepage') &&
 	     ! $param->{'filepath'}) {
-	     $param->{'filepath'} = &tools::get_filename('etc',{},$subdir.'info',$robot, $list);
+	     $param->{'filepath'} = &tools::get_filename('etc',{},$subdir.'info',$robot, $list, $Conf::Conf{'etc'});
 	 }
      }else {
 	 unless (&List::is_listmaster($param->{'user'}{'email'},$robot)) {
@@ -7342,12 +7342,12 @@ sub do_editfile {
 
 	 ## Look for the template
 	 if ($file eq 'list_aliases.tt2') {
-	     $param->{'filepath'} = &tools::get_filename('etc',{},$file,$robot,$list);
+	     $param->{'filepath'} = &tools::get_filename('etc',{},$file,$robot,$list,$Conf::Conf{'etc'});
 	 }else {
 	     #my $lang = &Conf::get_robot_conf($robot, 'lang');
 	     #$file =~ s/\.tpl$/\.$lang\.tpl/;
 
-	     $param->{'filepath'} = &tools::get_filename('etc',{},$subdir.$file,$robot,$list);
+	     $param->{'filepath'} = &tools::get_filename('etc',{},$subdir.$file,$robot,$list,$Conf::Conf{'etc'});
 	 }
      }
 
@@ -8895,7 +8895,7 @@ sub do_create_list_request {
 		}
 	}
 
-     unless ($param->{'list_list_tpl'} = &tools::get_list_list_tpl($robot)) {
+     unless ($param->{'list_list_tpl'} = &tools::get_list_list_tpl($robot, $Conf::Conf{'etc'})) {
 	 &report::reject_report_web('intern','unable_to_load_create_list_templates',{},$param->{'action'},'',$param->{'user'}{'email'},$robot);
      }	
 
@@ -17435,7 +17435,7 @@ sub do_css {
     $param->{'css'} = $in{'file'}; 
 
     my $lang = &Language::Lang2Locale($param->{'lang'});
-    my $tt2_include_path = &tools::make_tt2_include_path($robot,'web_tt2',$lang,'');
+    my $tt2_include_path = &tools::make_tt2_include_path($robot,'web_tt2',$lang,'',$Conf::Conf{'etc'});
 
     unless (&tt2::parse_tt2($param,'css.tt2' ,\*STDOUT, $tt2_include_path)) {
 	my $error = &tt2::get_error();
@@ -17471,7 +17471,7 @@ sub do_rss_request {
 sub do_wsdl {
   
     &wwslog('info', "do_wsdl ()");
-    my $sympawsdl = &tools::get_filename('etc',{}, 'sympa.wsdl', $robot);
+    my $sympawsdl = &tools::get_filename('etc',{}, 'sympa.wsdl', $robot, undef, $Conf::Conf{'etc'});
 
     unless (-r $sympawsdl){
       	&report::reject_report_web('intern','err_404',{},$param->{'action'});
@@ -17554,7 +17554,7 @@ sub _ca_get_file {
 	my $robot = shift;
 	my $list = shift;
 	
-	my $file = &tools::get_filename('etc', {}, 'custom_actions/'.$custom_action, $robot, $list);
+	my $file = &tools::get_filename('etc', {}, 'custom_actions/'.$custom_action, $robot, $list, $Conf::Conf{'etc'});
 	return undef unless($file);
 	
 	&_ca_add_file_path_to_tt2_include_path($file);

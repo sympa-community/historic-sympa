@@ -583,7 +583,7 @@ sub checkfiles {
     }
 
     ## Set TT2 path
-    my $tt2_include_path = &tools::make_tt2_include_path($robot,'web_tt2','','');
+    my $tt2_include_path = &tools::make_tt2_include_path($robot,'web_tt2','','',$Conf{'etc'});
 
     ## Create directory if required
     unless (-d $dir) {
@@ -597,7 +597,7 @@ sub checkfiles {
     foreach my $css ('style.css','print.css','fullPage.css','print-preview.css') {
 
         $param->{'css'} = $css;
-        my $css_tt2_path = &tools::get_filename('etc',{}, 'web_tt2/css.tt2', $robot, undef);
+        my $css_tt2_path = &tools::get_filename('etc',{}, 'web_tt2/css.tt2', $robot, undef, $Conf{'etc'});
         
         ## Update the CSS if it is missing or if a new css.tt2 was installed
         if (! -f $dir.'/'.$css ||

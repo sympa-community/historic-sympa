@@ -221,7 +221,7 @@ unless (Conf::load($config_file)) {
 
 &tools::ciphersaber_installed($Conf::Conf{'cookie'});
 
-if (&tools::cookie_changed($Conf{'cookie'})) {
+if (&tools::cookie_changed($Conf{'cookie'}, $Conf::Conf{'etc'})) {
      &Log::fatal_err("sympa.conf/cookie parameter has changed. You may have severe inconsitencies into password storage. Restore previous cookie or write some tool to re-encrypt password in database and check spools contents (look at $Conf{'etc'}/cookies.history file)");
 }
 

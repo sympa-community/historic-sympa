@@ -1129,7 +1129,7 @@ sub search{
     
     if ($filter_file =~ /\.sql$/) {
  
-	my $file = &tools::get_filename('etc',{},"search_filters/$filter_file", $robot, $list);
+	my $file = &tools::get_filename('etc',{},"search_filters/$filter_file", $robot, $list, $Conf::Conf{'etc'});
 	
         my $timeout = 3600;
         my ($sql_conf, $tsth);
@@ -1213,7 +1213,7 @@ sub search{
  
      }elsif ($filter_file =~ /\.ldap$/) {	
 	## Determine full path of the filter file
-	my $file = &tools::get_filename('etc',{},"search_filters/$filter_file", $robot, $list);
+	my $file = &tools::get_filename('etc',{},"search_filters/$filter_file", $robot, $list, $Conf::Conf{'etc'});
 	
 	unless ($file) {
 	    &Log::do_log('err', 'Could not find search filter %s', $filter_file);
@@ -1298,7 +1298,7 @@ sub search{
 
     }elsif($filter_file =~ /\.txt$/){ 
 	# &Log::do_log('info', 'List::search: eval %s', $filter_file);
-	my @files = &tools::get_filename('etc',{'order'=>'all'},"search_filters/$filter_file", $robot, $list); 
+	my @files = &tools::get_filename('etc',{'order'=>'all'},"search_filters/$filter_file", $robot, $list, $Conf::Conf{'etc'}); 
 
 	## Raise an error except for blacklist.txt
 	unless (@files) {
@@ -1349,8 +1349,8 @@ sub verify_custom {
         }
 
     	# use this if your want per list customization (be sure you know what you are doing)
-	#my $file = &tools::get_filename('etc',{},"custom_conditions/${condition}.pm", $robot, $list);
-	my $file = &tools::get_filename('etc',{},"custom_conditions/${condition}.pm", $robot);
+	#my $file = &tools::get_filename('etc',{},"custom_conditions/${condition}.pm", $robot, $list, $Conf::Conf{'etc'});
+	my $file = &tools::get_filename('etc',{},"custom_conditions/${condition}.pm", $robot, undef, $Conf::Conf{'etc'});
 	unless ($file) {
 	    &Log::do_log('err', 'No module found for %s custom condition', $condition);
 	    return undef;

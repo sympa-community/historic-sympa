@@ -343,7 +343,7 @@ sub convert_single_msg_2_html {
 	    return undef;
 	}
     }
-    my $mhonarc_ressources = &tools::get_filename('etc',{},'mhonarc-ressources.tt2', $robot,$list);
+    my $mhonarc_ressources = &tools::get_filename('etc',{},'mhonarc-ressources.tt2', $robot,$list,$Conf::Conf{'etc'});
     
     unless ($mhonarc_ressources) {
 &Log::do_log('notice',"Cannot find any MhOnArc ressource file");

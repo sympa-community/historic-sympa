@@ -3728,7 +3728,7 @@ sub send_global_file {
 
     ## What file 
     my $lang = &Language::Lang2Locale($data->{'lang'});
-    my $tt2_include_path = &tools::make_tt2_include_path($robot,'mail_tt2',$lang,'');
+    my $tt2_include_path = &tools::make_tt2_include_path($robot,'mail_tt2',$lang,'',$Conf::Conf{'etc'});
 
     foreach my $d (@{$tt2_include_path}) {
 	&tt2::add_include_path($d);
@@ -3863,7 +3863,7 @@ sub send_file {
     
     ## What file   
     my $lang = &Language::Lang2Locale($data->{'lang'});
-    my $tt2_include_path = &tools::make_tt2_include_path($robot,'mail_tt2',$lang,$self);
+    my $tt2_include_path = &tools::make_tt2_include_path($robot,'mail_tt2',$lang,$self,$Conf::Conf{'etc'});
 
     push @{$tt2_include_path},$self->{'dir'};             ## list directory to get the 'info' file
     push @{$tt2_include_path},$self->{'dir'}.'/archives'; ## list archives to include the last message
@@ -7479,10 +7479,10 @@ sub may_edit {
     my $edit_conf;
 
     # Load edit_list.conf: track by file, not domain (file may come from server, robot, family or list context)
-    my $edit_conf_file = &tools::get_filename('etc',{},'edit_list.conf',$self->{'domain'},$self); 
+    my $edit_conf_file = &tools::get_filename('etc',{},'edit_list.conf',$self->{'domain'},$self, $Conf::Conf{'etc'}); 
     if (! $edit_list_conf{$edit_conf_file} || ((stat($edit_conf_file))[9] > $mtime{'edit_list_conf'}{$edit_conf_file})) {
 
-        $edit_conf = $edit_list_conf{$edit_conf_file} = &tools::load_edit_list_conf($self->{'domain'}, $self);
+        $edit_conf = $edit_list_conf{$edit_conf_file} = &tools::load_edit_list_conf($self->{'domain'}, $self, $Conf::Conf{'etc'});
 	$mtime{'edit_list_conf'}{$edit_conf_file} = time;
     }else {
         $edit_conf = $edit_list_conf{$edit_conf_file};
@@ -7543,7 +7543,7 @@ sub may_create_parameter {
     if ( &is_listmaster($who,$robot)) {
 	return 1;
     }
-    my $edit_conf = &tools::load_edit_list_conf($robot,$self);
+    my $edit_conf = &tools::load_edit_list_conf($robot,$self,$Conf::Conf{'etc'});
     $edit_conf->{$parameter} ||= $edit_conf->{'default'};
     if (! $edit_conf->{$parameter}) {
 	&Log::do_log('notice','tools::load_edit_list_conf privilege for parameter $parameter undefined');
@@ -7995,8 +7995,8 @@ sub _include_users_remote_sympa_list {
 	$cert_file = $dir.'/cert.pem';
 	$key_file = $dir.'/private_key';
     }elsif($cert eq 'robot') {
-	$cert_file = &tools::get_filename('etc',{},'cert.pem',$robot,$self);
-	$key_file =  &tools::get_filename('etc',{},'private_key',$robot,$self);
+	$cert_file = &tools::get_filename('etc',{},'cert.pem',$robot,$self, $Conf::Conf{'etc'});
+	$key_file =  &tools::get_filename('etc',{},'private_key',$robot,$self, $Conf::Conf{'etc'});
     }
     unless ((-r $cert_file) && ( -r $key_file)) {
 	&Log::do_log('err', 'Include remote list https://%s:%s/%s using cert %s, unable to open %s or %s', $host, $port, $path, $cert,$cert_file,$key_file);
@@ -9030,7 +9030,7 @@ sub _load_list_admin_from_include {
 	$option{'profile'} = $entry->{'profile'} if (defined $entry->{'profile'} && ($role eq 'owner'));
 	
 
-      	my $include_file = &tools::get_filename('etc',{},"data_sources/$entry->{'source'}\.incl",$self->{'domain'},$self);
+      	my $include_file = &tools::get_filename('etc',{},"data_sources/$entry->{'source'}\.incl",$self->{'domain'},$self, $Conf::Conf{'etc'});
 
         unless (defined $include_file){
 	    &Log::do_log('err', 'the file %s.incl doesn\'t exist',$entry->{'source'});
@@ -10655,7 +10655,7 @@ sub load_topics {
     my $robot = shift ;
     &Log::do_log('debug2', 'List::load_topics(%s)',$robot);
 
-    my $conf_file = &tools::get_filename('etc',{},'topics.conf',$robot);
+    my $conf_file = &tools::get_filename('etc',{},'topics.conf',$robot, undef, $Conf::Conf{'etc'});
 
     unless ($conf_file) {
 	&Log::do_log('err','No topics.conf defined');
@@ -12002,7 +12002,7 @@ sub _urlize_part {
     my $lang = &Language::GetLang();
     my $charset = &Language::GetCharset();
 
-    my $tt2_include_path = &tools::make_tt2_include_path($robot,'mail_tt2',$lang,$list);
+    my $tt2_include_path = &tools::make_tt2_include_path($robot,'mail_tt2',$lang,$list,$Conf::Conf{'etc'});
 
     &tt2::parse_tt2({'file_name' => $file_name,
 		     'file_url'  => $file_url,
