@@ -284,12 +284,14 @@ sub do_query {
     my $query = shift;
     my @params = @_;
 
-    $query =~ s/\n\s*/ /g; # normalize newlines
     $query =~ s/^\s+//;
     $query =~ s/\s+$//;
     my $statement = sprintf $query, @params;
 
-    &Log::do_log('debug', "Will perform query '%s'",$statement);
+    my $s = $statement;
+    $s =~ s/\n\s*/ /g;
+    &Log::do_log('debug3', "Will perform query '%s'", $s);
+
     unless ($self->{'sth'} = $self->{'dbh'}->prepare($statement)) {
 	# Check connection to database in case it would be the cause of the problem.
 	unless($self->connect()) {
@@ -359,10 +361,10 @@ sub do_prepared_query {
 
     my $sth;
 
-    $query =~ s/\n\s*/ /g; # normalize newlines
     $query =~ s/^\s+//;
     $query =~ s/\s+$//;
-    &Log::do_log('debug', "Will perform query '%s'", $query);
+    $query =~ s/\n\s*/ /g;
+    &Log::do_log('debug3', "Will perform query '%s'", $query);
 
     if ($self->{'cached_prepared_statements'}{$query}) {
 	$sth = $self->{'cached_prepared_statements'}{$query};

@@ -552,6 +552,78 @@ sub set_index {
     return $report;
 }
 
+############################################################################
+## Overridden methods
+############################################################################
+
+## To prevent "database is locked" error, acquire "immediate" lock
+## by each query.  All queries including "SELECT" need to lock in this
+## manner.
+
+sub do_query {
+    my $self = shift;
+    my $sth;
+    my $rc;
+
+    ## acquire "immediate" lock
+    unless ($self->{'dbh'}->do(q{BEGIN IMMEDIATE TRANSACTION})) {
+	&Log::do_log('err', 'Could not lock database: (%s) %s',
+		     $self->{'dbh'}->err, $self->{'dbh'}->errstr);
+	return undef;
+    }
+
+    ## do query
+    $sth = $self->SUPER::do_query(@_);
+
+    ## release lock
+    eval {
+	if ($sth) {
+	    $rc = $self->{'dbh'}->do(q{COMMIT});
+	} else {
+	    $rc = $self->{'dbh'}->do(q{ROLLBACK});
+	}
+    };
+    if ($@ or ! $rc) {
+	&Log::do_log('err', 'Could not unlock database: %s',
+		     $@ || $self->{'dbh'}->errstr);
+	return undef;
+    }
+
+    return $sth;
+}
+
+sub do_prepared_query {
+    my $self = shift;
+    my $sth;
+    my $rc;
+
+    ## acquire "immediate" lock
+    unless ($self->{'dbh'}->do(q{BEGIN IMMEDIATE TRANSACTION})) {
+	&Log::do_log('err', 'Could not lock database: (%s) %s',
+		     $self->{'dbh'}->err, $self->{'dbh'}->errstr);
+	return undef;
+    }
+
+    ## do query
+    $sth = $self->SUPER::do_prepared_query(@_);
+
+    ## release lock
+    eval {
+	if ($sth) {
+	    $rc = $self->{'dbh'}->do(q{COMMIT});
+	} else {
+	    $rc = $self->{'dbh'}->do(q{ROLLBACK});
+	}
+    };
+    if ($@ or ! $rc) {
+	&Log::do_log('err', 'Could not unlock database: %s',
+		     $@ || $self->{'dbh'}->errstr);
+	return undef;
+    }
+
+    return $sth;
+}
+
 ## For BLOB types.
 sub AS_BLOB {
     return ( { TYPE => DBI::SQL_BLOB() } => $_[1] )
