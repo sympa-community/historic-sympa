@@ -51,7 +51,7 @@ our %date_format = (
 # OUT: Nothing
 sub build_connect_string{
     my $self = shift;
-    $self->{'connect_string'} = "DBI:SQLite:dbname=$self->{'db_name'}";
+    $self->{'connect_string'} = "DBI:SQLite(sqlite_use_immediate_transaction=>1):dbname=$self->{'db_name'}";
 }
 
 ## Returns an SQL clause to be inserted in a query.
@@ -565,8 +565,11 @@ sub do_query {
     my $sth;
     my $rc;
 
+    my $need_lock =
+	($_[0] =~ /^\s*(ALTER|CREATE|DELETE|DROP|INSERT|REINDEX|REPLACE|UPDATE)\b/i);
+
     ## acquire "immediate" lock
-    unless ($self->{'dbh'}->do(q{BEGIN IMMEDIATE TRANSACTION})) {
+    unless (! $need_lock or $self->{'dbh'}->begin_work) {
 	&Log::do_log('err', 'Could not lock database: (%s) %s',
 		     $self->{'dbh'}->err, $self->{'dbh'}->errstr);
 	return undef;
@@ -576,16 +579,18 @@ sub do_query {
     $sth = $self->SUPER::do_query(@_);
 
     ## release lock
+    return $sth unless $need_lock;
     eval {
 	if ($sth) {
-	    $rc = $self->{'dbh'}->do(q{COMMIT});
+	    $rc = $self->{'dbh'}->commit;
 	} else {
-	    $rc = $self->{'dbh'}->do(q{ROLLBACK});
+	    $rc = $self->{'dbh'}->rollback;
 	}
     };
     if ($@ or ! $rc) {
 	&Log::do_log('err', 'Could not unlock database: %s',
-		     $@ || $self->{'dbh'}->errstr);
+		     $@ || sprintf('(%s) %s', $self->{'dbh'}->err,
+				   $self->{'dbh'}->errstr));
 	return undef;
     }
 
@@ -597,8 +602,11 @@ sub do_prepared_query {
     my $sth;
     my $rc;
 
+    my $need_lock =
+	($_[0] =~ /^\s*(ALTER|CREATE|DELETE|DROP|INSERT|REINDEX|REPLACE|UPDATE)\b/i);
+
     ## acquire "immediate" lock
-    unless ($self->{'dbh'}->do(q{BEGIN IMMEDIATE TRANSACTION})) {
+    unless (! $need_lock or $self->{'dbh'}->begin_work) {
 	&Log::do_log('err', 'Could not lock database: (%s) %s',
 		     $self->{'dbh'}->err, $self->{'dbh'}->errstr);
 	return undef;
@@ -608,16 +616,18 @@ sub do_prepared_query {
     $sth = $self->SUPER::do_prepared_query(@_);
 
     ## release lock
+    return $sth unless $need_lock;
     eval {
 	if ($sth) {
-	    $rc = $self->{'dbh'}->do(q{COMMIT});
+	    $rc = $self->{'dbh'}->commit;
 	} else {
-	    $rc = $self->{'dbh'}->do(q{ROLLBACK});
+	    $rc = $self->{'dbh'}->rollback;
 	}
     };
     if ($@ or ! $rc) {
 	&Log::do_log('err', 'Could not unlock database: %s',
-		     $@ || $self->{'dbh'}->errstr);
+		     $@ || sprintf('(%s) %s', $self->{'dbh'}->err,
+				   $self->{'dbh'}->errstr));
 	return undef;
     }
 
