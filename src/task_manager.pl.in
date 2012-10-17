@@ -155,6 +155,9 @@ unless (chdir($Conf{'home'})) {
 
 my $pinfo = &List::_apply_defaults();
 
+## Generate traceback if crashed.
+$SIG{'__DIE__'} = \&tools::crash_handler;
+
 ## Catch SIGTERM, in order to exit cleanly, whenever possible.
 $SIG{'TERM'} = 'sigterm';
 my $end = 0;

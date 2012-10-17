@@ -45,7 +45,7 @@ Subject: [% FILTER qencode %][%|loc(crashed_process)%]Previous process %1 crashe
 [%|loc(crash_date)%]Date of crash: %1[%END%]
 [%|loc%]Errors:[%END%]
 
-[% FOREACH err IN crash_err%]
+[% FOREACH err IN crash_err -%]
 [% err %]
 [% END %]
 

@@ -1125,10 +1125,10 @@ my $birthday = time ;
 	 &Log::do_log('notice',"Data structure seem updated, setting OFF maintenance mode");
      }
 
+    ## Generate traceback if crashed.
+    $SIG{'__DIE__'} = \&crash_handler;
+
      ## Get params in a hash
- #    foreach ($query->param) {
- #      $in{$_} = $query->param($_);
- #    }
      %in = $query->Vars;
 
      foreach my $k (keys %::changed_params) {
@@ -1901,6 +1901,35 @@ sub web_db_stat_log {
 
 ####################################	
 
+sub crash_handler {
+    return if $^S;
+
+    my $msg = $_[0]; chomp $msg;
+    print STDERR "DIED: $msg";
+    &wwslog('err', 'DIED: %s', $msg);
+    eval { &List::send_notify_to_listmaster(undef, undef, undef, undef, 1); };
+    Sys::Syslog::closelog(); # flush log
+    &Log::set_log_level(-1); # disable log
+
+    my @calls;
+    my @f;
+    $_[0] =~ /.+ at (.+?) line (\d+)\.\n$/s;
+    @calls = ( { 'filename' => $1, 'line' => $2 } );
+    for (my $i = 1; @f = caller($i); $i++) {
+	$calls[0]->{'subroutine'} = $f[3];
+	unshift @calls, { 'filename' => $f[1], 'line' => $f[2] };
+    }
+    $calls[0]->{'subroutine'} = '(top-level)';
+
+    $param->{'traceback'} = \@calls;
+    $param->{'error_message'} = $msg;
+    $param->{'main_title'} ||= &Conf::get_robot_conf($robot || '*', 'title');
+    $param->{'last_action'} = $param->{'action'};
+    $param->{'action'} = 'crash';
+    &send_html('crash.tt2');
+    exit 0;
+}
+
 sub new_loop {
      $loop++;
      my $query;
@@ -2549,7 +2578,7 @@ sub send_html {
 	    &Log::do_log('err','Failed to sanitize $param in host %s', $robot);
 	}
     }
-    
+
     unless (&tt2::parse_tt2($param_copy,$tt2_file , \*STDOUT,
 	    $tt2_include_path, { 'has_header' => 1 })) {
 	my $error = &tt2::get_error();

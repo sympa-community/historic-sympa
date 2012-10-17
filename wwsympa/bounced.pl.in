@@ -185,6 +185,8 @@ my $pinfo = &List::_apply_defaults();
 
 &Log::do_log('notice', "bounced Started");
 
+## Generate traceback if crashed.
+$SIG{'__DIE__'} = \&tools::crash_handler;
 
 ## Catch SIGTERM, in order to exit cleanly, whenever possible.
 $SIG{'TERM'} = 'sigterm';

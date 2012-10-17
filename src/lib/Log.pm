@@ -132,11 +132,18 @@ sub do_log {
     if ($level eq 'err'){
 	my $go_back = 1;
 	my @calls;
-	while (my @call = caller($go_back)) {
-		unshift @calls, $call[3].'#'.$call[2];
-		$go_back++;
+
+	my @f = caller($go_back);
+	if ($f[3] =~ /wwslog$/) { ## If called via wwslog, go one step ahead
+	    @f = caller(++$go_back);
 	}
-	
+	@calls = ('#'.$f[2]);
+	while (@f = caller(++$go_back)) {
+	    $calls[0] = $f[3].$calls[0];
+	    unshift @calls, '#'.$f[2];
+	}
+	$calls[0] = '(top-level)'.$calls[0];
+
 	$caller_string = join(' > ',@calls);
     }else {
 	my @call = caller(1);

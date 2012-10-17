@@ -2707,8 +2707,8 @@ sub send_crash_report {
     my $err_file = $Conf::Conf{'tmpdir'}.'/'.$data{'pid'}.'.stderr';
     my (@err_output, $err_date);
     if(-f $err_file) {
-	open(ERR, $err_file);
-	@err_output = <ERR>;
+	open ERR, '<', $err_file;
+	@err_output = map { chomp $_; $_; } <ERR>;
 	close ERR;
 	$err_date = strftime("%d %b %Y  %H:%M", localtime((stat($err_file))[9]));
     }
@@ -4088,6 +4088,34 @@ sub foldcase {
     }
 }
 
-sub fix_children {
+#*******************************************
+### Function : crash_handler
+### Description : Handler for $SIG{__DIE__} to generate traceback.
+### IN : error message
+### OUT : none.  This function exits with status 255 or (if invoked from
+### inside eval) simply returns.
+###*******************************************
+sub crash_handler {
+    return if $^S; # invoked from inside eval.
+
+    my @calls;
+    my @f;
+    $_[0] =~ /.+ at (.+? line \d+\.)\n$/s;
+    @calls = ($1);
+    for (my $i = 1; @f = caller($i); $i++) {
+	$calls[0] = "In $f[3] at $calls[0]";
+	unshift @calls, "$f[1] line $f[2].";
+    }
+    $calls[0] = "In (top-level) at $calls[0]";
+
+    my $msg = $_[0]; chomp $msg;
+    &Log::do_log('err', 'DIED: %s', $msg);
+    Sys::Syslog::closelog(); # flush log
+
+    print STDERR join "\n", "DIED: $msg", @calls;
+    print STDERR "\n";
+    exit 255;
 }
+
+
 1;
