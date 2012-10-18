@@ -19,13 +19,15 @@
 # along with this program; if not, write to the Free Software
 # Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
 
-## Copyright 1999 Comité Réseaux des Universités
+## Copyright 1999 ComitÃ© RÃ©seaux des UniversitÃ©s
 ## web interface to Sympa mailing lists manager
 ## Sympa: http://www.sympa.org/
 ## Authors :
 ##           Serge Aumont <sa AT cru.fr>
-##           Olivier Salaün <os AT cru.fr>
+##           Olivier SalaÃ¼n <os AT cru.fr>
 =pod 
+
+=encoding utf-8
 
 =head1 NAME
 
@@ -1911,6 +1913,7 @@ sub crash_handler {
     Sys::Syslog::closelog(); # flush log
     &Log::set_log_level(-1); # disable log
 
+    ## gather traceback information
     my @calls;
     my @f;
     $_[0] =~ /.+ at (.+?) line (\d+)\.\n$/s;
@@ -1919,14 +1922,15 @@ sub crash_handler {
 	$calls[0]->{'subroutine'} = $f[3];
 	unshift @calls, { 'filename' => $f[1], 'line' => $f[2] };
     }
-    $calls[0]->{'subroutine'} = '(top-level)';
+    $calls[0]->{'subroutine'} = gettext("(top-level)");
 
     $param->{'traceback'} = \@calls;
     $param->{'error_message'} = $msg;
     $param->{'main_title'} ||= &Conf::get_robot_conf($robot || '*', 'title');
     $param->{'last_action'} = $param->{'action'};
     $param->{'action'} = 'crash';
-    &send_html('crash.tt2');
+    eval { &send_html('crash.tt2'); };
+    print "\n\n"; # when tt2 failed to parse
     exit 0;
 }
 
@@ -2196,7 +2200,7 @@ sub get_parameters {
 		     $tokens[$i] = &tools::qencode_filename($tokens[$i]);
 		 }
 		 $in{$p} = join '/', @tokens;
-		 ## Sympa's URI escaping subroutine (tools::escape_chars()) replaces '/' with %A5 ('¥' character)
+		 ## Sympa's URI escaping subroutine (tools::escape_chars()) replaces '/' with %A5 ('Â¥' character)
 		 ## This should be transformed into a '/' again
 
 	     }elsif ($filtering_action eq 'unescape_html') {
@@ -2427,7 +2431,7 @@ sub get_parameters_old {
 		     $tokens[$i] = &tools::qencode_filename($tokens[$i]);
 		 }
 		 $in{$p} = join '/', @tokens;
-		 ## Sympa's URI escaping subroutine (tools::escape_chars()) replaces '/' with %A5 ('¥' character)
+		 ## Sympa's URI escaping subroutine (tools::escape_chars()) replaces '/' with %A5 ('Â¥' character)
 		 ## This should be transformed into a '/' again
 
 	     }elsif ($filtering{$in{'action'}}{$p} eq 'fix_escape_uri') {
@@ -2577,6 +2581,11 @@ sub send_html {
 	{
 	    &Log::do_log('err','Failed to sanitize $param in host %s', $robot);
 	}
+    }
+
+    if ($param->{'action'} eq 'crash') {
+	print "Status: 503 Service Unavailable\n";
+	print "Retry-After: 300\n";
     }
 
     unless (&tt2::parse_tt2($param_copy,$tt2_file , \*STDOUT,
@@ -4955,7 +4964,7 @@ sub do_setpref {
      }
  }
 
- ## Prendre en compte les défauts
+ ## Prendre en compte les dÃ©fauts
 sub do_viewfile {
      &wwslog('info', 'do_viewfile');
 
@@ -6368,7 +6377,7 @@ sub do_add_request {
 #      | ($in{'previous_action'} || 'review')
 #      | undef
 ####################################################
-## TODO: vérifier validité email
+## TODO: vÃ©rifier validitÃ© email
 sub do_add {
      &wwslog('info', 'do_add(%s)', $in{'email'}||$in{'pending_email'});
      my $subscriptions = $list->get_subscription_requests();
@@ -6536,7 +6545,7 @@ sub do_add {
 #      | ($in{'previous_action'} || 'review') | undef
 #
 ####################################################
- ## TODO: vérifier validité email
+ ## TODO: vÃ©rifier validitÃ© email
 sub do_del {
      &wwslog('info', 'do_del()');
 
@@ -7651,7 +7660,7 @@ sub do_arc {
     $param->{'archive_name'} = $in{'month'};
  
 
-    #test pour différentier les action d'un robot et d'un simple abonné
+    #test pour diffÃ©rentier les action d'un robot et d'un simple abonnÃ©
     
     &web_db_stat_log({'robot' => $robot, 'liste' => $list->{'name'}, 'operation' => $param->{'action'}, 'parameter' => "",
 	'mail' => $param->{'user'}{'email'}, 'client' => $ip, 'daemon' => $daemon_name});

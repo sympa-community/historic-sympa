@@ -679,7 +679,7 @@ my %full_db_struct = (
 	    },
 	    'error_type_logs' => {
 		'struct'=> 'varchar(150)',
-		'doc'=>'name of the error string – if any – issued by the subroutine',
+		'doc'=>'name of the error string (if any) issued by the subroutine',
 		'order'=>11,
 	    },
 	    'client_logs' => {

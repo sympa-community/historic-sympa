@@ -22,6 +22,8 @@
 
 =pod 
 
+=encoding utf-8
+
 =head1 NAME 
 
 I<Message.pm> - mail message embedding for internal use in Sympa
@@ -329,7 +331,7 @@ sub new {
 		$message->{'smime_subject'} = $signed->{'subject'};
 		&Log::do_log('debug', "message %s is signed, signature is checked", $file);
 	    }
-	    ## Il faudrait traiter les cas d'erreur (0 différent de undef)
+	    ## Il faudrait traiter les cas d'erreur (0 diffÃ©rent de undef)
 	}
     }
     ## TOPICS
@@ -570,7 +572,7 @@ sub get_body_from_msg_as_string {
 
 =item * Serge Aumont <sa AT cru.fr> 
 
-=item * Olivier Salaün <os AT cru.fr> 
+=item * Olivier SalaE<0xfc>n <os AT cru.fr> 
 
 =back 
 

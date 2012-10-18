@@ -49,6 +49,8 @@ our @EXPORT = qw(%list_of_lists);
 
 use Fcntl qw(LOCK_SH LOCK_EX LOCK_NB LOCK_UN);
 
+=encoding utf-8
+
 =head1 CONSTRUCTOR
 
 =over 4
@@ -10918,7 +10920,7 @@ sub _save_list_param {
     }else {
 	if (($::pinfo{$key}{'occurrence'} =~ /n$/)
 	    && $::pinfo{$key}{'split_char'}) {
-	    ################" avant de debugger do_edit_list qui crée des nouvelles entrées vides
+	    ################" avant de debugger do_edit_list qui crÃ©e des nouvelles entrÃ©es vides
  	    my $string = join($::pinfo{$key}{'split_char'}, @{$p});
  	    $string =~ s/\,\s*$//;
 	    

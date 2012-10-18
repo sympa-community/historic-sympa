@@ -4098,6 +4098,12 @@ sub foldcase {
 sub crash_handler {
     return if $^S; # invoked from inside eval.
 
+    my $msg = $_[0]; chomp $msg;
+    &Log::do_log('err', 'DIED: %s', $msg);
+    eval { &List::send_notify_to_listmaster(undef, undef, undef, undef, 1); };
+    Sys::Syslog::closelog(); # flush log
+
+    ## gather traceback information
     my @calls;
     my @f;
     $_[0] =~ /.+ at (.+? line \d+\.)\n$/s;
@@ -4107,10 +4113,6 @@ sub crash_handler {
 	unshift @calls, "$f[1] line $f[2].";
     }
     $calls[0] = "In (top-level) at $calls[0]";
-
-    my $msg = $_[0]; chomp $msg;
-    &Log::do_log('err', 'DIED: %s', $msg);
-    Sys::Syslog::closelog(); # flush log
 
     print STDERR join "\n", "DIED: $msg", @calls;
     print STDERR "\n";

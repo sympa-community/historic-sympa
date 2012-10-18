@@ -179,7 +179,7 @@ sub help {
 
     &Log::do_log('debug', 'Commands::help to robot %s',$robot);
 
-    # sa ne prends pas en compte la structure des répertoires par lang.
+    # sa ne prends pas en compte la structure des rÃ©pertoires par lang.
     # we should make this utilize Template's chain of responsibility
     if ((-r "$etc/mail_tt2/helpfile.tt2")||("$etc/$robot/mail_tt2/helpfile.tt2")) {
   

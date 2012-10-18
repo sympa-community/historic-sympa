@@ -36,13 +36,15 @@
 
 <body>
 
+[% PROCESS login_menu.tt2 %]
+
 <div id="Canvas">
   <div id="Header">
     [% PROCESS title.tt2 %]
     [% PROCESS menu.tt2 %]
   </div> <!-- end div Header -->
 
-  <div id="Stretcher">
+  <div id="Stretcher">&nbsp;<br />
      <div id="Paint">
         <div class="ContentBlock">
 
@@ -69,5 +71,5 @@
 
   [% PROCESS footer.tt2 %]
 </body>
-<!-- end exception.tt2 -->
+<!-- end crash.tt2 -->
 </html>

@@ -1,7 +1,7 @@
 #!--PERL--
 # bounced.pl - This script runs as a daemon ; it does the incoming 
 # non-delivery reports analysis and storage
-# RCS Identication ; $Revision$ ; $Date$ 
+# RCS Identication ; $Revision$ ; $Date$
 #
 # Sympa - SYsteme de Multi-Postage Automatique
 # Copyright (c) 1997, 1998, 1999, 2000, 2001 Comite Reseau des Universites
@@ -55,7 +55,7 @@ my %equiv = ( "user unknown" => '5.1.1',
 	      "receiver not found" => '5.1.1',
 	      "the recipient name is not recognized" => '5.1.1',
 	      "sorry, no mailbox here by that name" => '5.1.1',
-	      "utilisateur non recensé dans le carnet d'adresses public" => '5.1.1',
+	      "utilisateur non recens\xE9 dans le carnet d'adresses public" => '5.1.1',
 	      "unknown address" => '5.1.1',
 	      "unknown user" => '5.1.1',
 	      "550" => '5.1.1',
@@ -660,8 +660,8 @@ while (!$end) {
 	    
 	    my $adr_count;
 	    ## Bouncing addresses
-	    # Voir si pas mettre un test conditionnel sur le status code pour detecter les dsn positifs et ne pas fausser les statistiques de l'abonné.
-	    # Peut être possibilité de lancer la maj des tables pour chaque recipient ici a condition d'avoir approfondi le parsing en amont.
+	    # Voir si pas mettre un test conditionnel sur le status code pour detecter les dsn positifs et ne pas fausser les statistiques de l'abonnÃ©.
+	    # Peut Ãªtre possibilitÃ© de lancer la maj des tables pour chaque recipient ici a condition d'avoir approfondi le parsing en amont.
 	    while (my ($rcpt, $status) = each %hash) {
 		$adr_count++;
 		my $bouncefor = $who;
