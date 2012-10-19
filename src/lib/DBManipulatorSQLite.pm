@@ -24,6 +24,7 @@ package DBManipulatorSQLite;
 use strict;
 use Data::Dumper;
 
+use version;
 use Carp;
 use Log;
 
@@ -114,7 +115,7 @@ sub is_autoinc {
     my $type = $self->_get_field_type($table, $field);
     return undef unless $type;
     return $type =~ /\bAUTOINCREMENT\b/i or
-	   $type =~ /\binteger PRIMARY KEY\b/i;
+	   $type =~ /^integer\s+PRIMARY\s+KEY\b/i;
 }
 
 # Defines the field as an autoincrement field
@@ -137,7 +138,7 @@ sub set_autoinc {
 
     my $r;
     my $pk;
-    if ($type =~ /\bintegeri\s+PRIMARY\s+KEY\b/i) {
+    if ($type =~ /^integer\s+PRIMARY\s+KEY\b/i) {
 	## INTEGER PRIMARY KEY is auto-increment.
 	return 1;
     } elsif ($type =~ /\bPRIMARY\s+KEY\b/i) {
@@ -251,20 +252,21 @@ sub update_field {
     my $param = shift;
     my $table = $param->{'table'};
     my $field = $param->{'field'};
+    my $type = $param->{'type'};
     my $options = '';
     if ($param->{'notnull'}) {
-	$options .= ' NOT NULL ';
+	$options .= ' NOT NULL';
     }
     my $report;
 
     &Log::do_log('debug', 'Updating field %s in table %s (%s%s)',
-		 $field, $table, $param->{'type'}, $options);
+		 $field, $table, $type, $options);
     my $r = $self->_update_table($table,
 				 qr(\b$field\s[^,]+),
-				 "$field\t$param->{'type'}$options");
+				 "$field\t$type$options");
     unless (defined $r) {
 	&Log::do_log('err', 'Could not update field %s in table %s (%s%s)',
-		     $field, $table, $param->{'type'}, $options);
+		     $field, $table, $type, $options);
 	return undef;
     }
     $report = $r;
@@ -291,9 +293,10 @@ sub add_field {
     my $param = shift;
     my $table = $param->{'table'};
     my $field = $param->{'field'};
+    my $type = $param->{'type'};
 
     &Log::do_log('debug','Adding field %s in table %s (%s, %s, %s, %s)',
-		 $field, $table, $param->{'type'}, $param->{'notnull'},
+		 $field, $table, $type, $param->{'notnull'},
 		 $param->{'autoinc'}, $param->{'primary'});
     my $options = '';
     # To prevent "Cannot add a NOT NULL column with default value NULL" errors
@@ -312,7 +315,7 @@ sub add_field {
     if ($param->{'primary'}) {
 	$report = $self->_update_table($table,
 				       qr{[(]\s*},
-				       "(\n\t $field\t$param->{'type'}$options,\n\t ");
+				       "(\n\t $field\t$type$options,\n\t ");
 	unless (defined $report) {
 	    &Log::do_log('err', 'Could not add field %s to table %s in database %s', $field, $table, $self->{'db_name'});
 	    return undef;
@@ -320,18 +323,25 @@ sub add_field {
     } else { 
 	unless ($self->do_query(
 	    q{ALTER TABLE %s ADD %s %s%s},
-	    $table, $field, $param->{'type'}, $options
+	    $table, $field, $type, $options
 	)) {
 	    &Log::do_log('err', 'Could not add field %s to table %s in database %s', $field, $table, $self->{'db_name'});
 	    return undef;
+	}
+	if ($self->_vernum <= 3.001003) {
+	    unless ($self->do_query(q{VACUUM})) {
+		&Log::do_log('err', 'Could not vacuum database %s',
+			     $self->{'db_name'});
+		return undef;
+	    }
 	}
     }
 
     $report .= "\n" if $report;
     $report .= sprintf 'Field %s added to table %s (%s%s)',
-		       $field, $table, $param->{'type'}, $options;
+		       $field, $table, $type, $options;
     &Log::do_log('info', 'Field %s added to table %s (%s%s)',
-		 $field, $table, $param->{'type'}, $options);
+		 $field, $table, $type, $options);
 
     return $report;
 }
@@ -644,6 +654,12 @@ sub AS_BLOB {
 ############################################################################
 ## private methods
 ############################################################################
+
+## get numified version of SQLite
+sub _vernum {
+    my $self = shift;
+    return version->new('v' . $self->{'dbh'}->{'sqlite_version'})->numify;
+}
 
 ## get raw type of column
 sub _get_field_type {

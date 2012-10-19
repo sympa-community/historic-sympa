@@ -294,8 +294,8 @@ sub create_required_lists_tasks {
 	foreach my $list ( @$all_lists ) {
 	    &Log::do_log('debug3',"creating list task : current list  is $list->{'name'}");
 	    my %data = %{$param->{'data'}};
-	    $data{'list'} = {'name' => $list->{'name'},
-			     'robot' => $list->{'domain'}};
+	    $data{'list'} = { 'name' => $list->name,
+			      'robot' => $list->domain };
 	    
 	    my %used_list_models; # stores which models already have a task 
 	    foreach (@list_models) { 
@@ -345,8 +345,13 @@ sub create {
 
     $Rdata->{'list'}{'ttl'} ;#= $list->{'admin'}{'ttl'};
     if (defined $Rdata->{'list'}) { 
-	$self->{'list'} = $Rdata->{'list'}{'name'};
-	$self->{'domain'} = $Rdata->{'list'}{'robot'};
+	if (ref $Rdata->{'list'}) {
+	    $self->{'list'} = $Rdata->{'list'}->name;
+	    $self->{'domain'} = $Rdata->{'list'}->domain;
+	} else {
+	    $self->{'list'} = $Rdata->{'list'}{'name'};
+	    $self->{'domain'} = $Rdata->{'list'}{'robot'};
+	}
 	$self->{'object'} = 'list';
     }
     else {

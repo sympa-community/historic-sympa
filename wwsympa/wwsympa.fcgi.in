@@ -9253,7 +9253,7 @@ sub do_rebuildarc {
      
      my $spoolarchive = new Sympaspool('archive');
 
-     unless (     $spoolarchive->store('rebuild',{'list'=>$list->{'name'},'robot'=>$list->{'robot'}} )){
+     unless ($spoolarchive->store('rebuild', { 'list' => $list->name, 'robot' => $list->domain })) {
 	 &report::reject_report_web('intern','cannot_store_rebuild_order',{},$param->{'action'},$list,$param->{'user'}{'email'},$robot);
 	 &wwslog('info','do_rebuildarc: cannot store rebuild order for list %s',$list->{'name'});
 	 &web_db_log({'parameters' => $in{'month'},
@@ -9284,7 +9284,7 @@ sub do_rebuildallarc {
     foreach my $list ( @$all_lists ) {
 	next unless (defined $list->web_archive);
 
-	unless ($spoolarchive->store('rebuild',{'list'=>$list->{'name'},'robot'=>$list->{'robot'} } )){
+	unless ($spoolarchive->store('rebuild', { 'list' => $list->name, 'robot' => $list->domain })) {
 	    &report::reject_report_web('intern','cannot_store_rebuild_order',{},$param->{'action'},$list,$param->{'user'}{'email'},$robot);
 	    &wwslog('info','do_rebuildarc: cannot store rebuild order for list %s',$list->{'name'});
 	    &web_db_log({'parameters' => $in{'month'},

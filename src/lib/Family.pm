@@ -1643,13 +1643,13 @@ Returns a ref to an array whose values are the family lists' names.
 # OUT : -\@list_of_list 
 #########################################    
 sub get_family_lists {
+    &Log::do_log('debug2', '(%s)', @_);
     my $self = shift;
     my @list_of_lists;
-    &Log::do_log('debug2','Family::get_family_lists(%s)',$self->{'name'});
 
     my $all_lists = &List::get_lists($self->{'robot'});
     foreach my $list ( @$all_lists ) {
-	if ((defined $list->{'admin'}{'family_name'}) && ($list->{'admin'}{'family_name'} eq $self->{'name'})) {
+	if (defined $list->family_name and $list->family_name eq $self->{'name'}) {
 	    push (@list_of_lists, $list);
 	}
     }
@@ -1699,17 +1699,9 @@ Returns a ref to a hash whose keys are this family's lists' names. They are asso
 # OUT : -\%list_of_list 
 #########################################    
 sub get_hash_family_lists {
+    &Log::do_log('debug2', '(%s)', @_);
     my $self = shift;
-    my %list_of_lists;
-    &Log::do_log('debug2','Family::get_hash_family_lists(%s)',$self->{'name'});
-
-    my $all_lists = &List::get_lists($self->{'robot'});
-    foreach my $list ( @$all_lists ) {
-	if ((defined $list->{'admin'}{'family_name'}) && ($list->{'admin'}{'family_name'} eq $self->{'name'})) {
-	    $list_of_lists{$list->{'name'}} = 1;
-	}
-    }
-    return \%list_of_lists;
+    return { ( map { $_->name => $_ } $self->get_family_lists ) };
 }
 
 =pod 

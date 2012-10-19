@@ -320,9 +320,9 @@ sub convert_single_msg_2_html {
     my $listname =''; my $msg_file;
     my $host = $robot;
     if ($list) {
-	$host = $list->{'admin'}{'host'};
-	$robot = $list->{'robot'};
-	$listname = $list->{'name'};
+	$host = $list->host;
+	$robot = $list->domain;
+	$listname = $list->name;
 	$msg_file = &Conf::get_robot_conf($robot, 'tmpdir').'/'.$list->get_list_id().'_'.$$;
     }else{
 	$msg_file = &Conf::get_robot_conf($robot, 'tmpdir').'/'.$messagekey.'_'.$$;

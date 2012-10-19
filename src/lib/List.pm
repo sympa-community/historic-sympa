@@ -26,7 +26,7 @@ use SQLSource;
 use Datasource;
 use LDAPSource;
 use SDM;
-use SQLSource qw(create_db);
+use Robot;
 use Upgrade;
 use Lock;
 use Task;
@@ -316,6 +316,7 @@ use PlainDigest;
 my ($sth, @sth_stack);
 
 my %list_cache;
+my %list_cache_filled = ();
 
 ## DB fields with numeric type
 ## We should not do quote() for these while inserting data
@@ -2366,7 +2367,10 @@ sub new {
     ## NOTICE: Don't use accessors like "$self->dir" but "$self->{'dir'}",
     ## since the object has not been fully initialized yet.
 
-    my($pkg, $name, $robot, $options) = @_;
+    my $pkg = shift;
+    my $name = shift;
+    my $robot = shift;
+    my $options = shift || {};
     my $list;
 
     ## Allow robot in the name
@@ -2383,10 +2387,6 @@ sub new {
 	&Log::do_log('err', 'Missing robot parameter, cannot create list object for %s',  $name) unless ($options->{'just_try'});
 	return undef;
     }
-
-    $list->{'robot'} = $robot;
-
-    $options = {} unless (defined $options);
 
     ## Only process the list if the name is valid.
     my $listname_regexp = &tools::get_regexp('listname');
@@ -2409,9 +2409,10 @@ sub new {
 
     my $status ;
     ## If list already in memory and not previously purged by another process
-    if ($list_of_lists{$robot}{$name} and -d $list_of_lists{$robot}{$name}{'dir'}){
+    if ($list_of_lists{$robot}{$name} and
+	-d $list_of_lists{$robot}{$name}{'dir'}) {
 	# use the current list in memory and update it
-	$list=$list_of_lists{$robot}{$name};
+	$list = $list_of_lists{$robot}{$name};
     }else{
 	# create a new object list
 	$list = bless { } => $pkg;
@@ -3866,7 +3867,7 @@ sub send_file {
     $data->{'sign_mode'} = $sign_mode;
     
     if ((&Conf::get_robot_conf($self->{'domain'}, 'dkim_feature') eq 'on')&&(&Conf::get_robot_conf($self->{'domain'}, 'dkim_add_signature_to')=~/robot/)){
-	$data->{'dkim'} = &tools::get_dkim_parameters({'robot' => $self->{'domain'}});
+	$data->{'dkim'} = &tools::get_dkim_parameters({ 'robot' => $self->domain });
     } 
     $data->{'use_bulk'} = 1  unless ($data->{'alarm'}) ; # use verp excepted for alarms. We should make this configurable in order to support Sympa server on a machine without any MTA service
 	  # my $dump = &Dumper($data); open (DUMP,">>/tmp/dumper2"); printf DUMP '----------------data \n%s',$dump ; close DUMP; 
@@ -7332,7 +7333,7 @@ sub archive_msg {
 	&Log::do_log('err', "could not store message in archive spool, messagekey missing");
 		return undef;
 	    }
-	    unless ($spoolarchive->store($msgtostore,{'robot'=>$self->{'robot'},'list'=>$self->{'name'}})){
+	    unless ($spoolarchive->store($msgtostore,{ 'robot' => $self->domain,'list' => $self->name })){
 	&Log::do_log('err', "could not store message in archive spool, unkown reason");
 		return undef;
 	    }
@@ -9732,7 +9733,7 @@ sub store_digest {
     my @now  = localtime(time);
 
     my $digestspool = new Sympaspool('digest');
-    my $current_digest = $digestspool->next({'list'=>$self->{'name'},'robot'=>$self->{'robot'}}); # remember that spool->next lock the selected message if any
+    my $current_digest = $digestspool->next({ 'list' => $self->name, 'robot'=>$self->domain }); # remember that spool->next lock the selected message if any
     my $message_as_string;
 
     if($current_digest) {
@@ -9753,7 +9754,7 @@ sub store_digest {
 	    return undef;
 	}
     }else{
-	unless ($digestspool->store($message_as_string,{'list'=>$self->{'name'},'robot'=>$self->{'robot'}})){
+	unless ($digestspool->store($message_as_string, { 'list'=>$self->name, 'robot' => $self->domain })){
 	   &Log::do_log('err',"could not store message in digest spool messafge digestkey %s",$current_digest->{'messagekey'})	;
 	    return undef;
 	}
@@ -9783,7 +9784,7 @@ following pairs:
 =item C<'filter_query' =E<gt> [ KEYS =E<gt> VALS, ... ]>
 
 Filter with list profiles.  When any of items specified by KEYS
-(separated by C<"|">) have any of values specified by VALS (ditto),
+(separated by C<"|">) have any of values specified by VALS,
 condition by that pair is satisfied.
 KEYS prefixed by C<"!"> mean negated condition.
 Only lists satisfying all conditions of query are returned.
@@ -9816,7 +9817,7 @@ XXX @todo doc
 Exact, prefixed or subsctring match against list name,
 case-insensitive.
 
-=item 'status' => STATUS
+=item 'status' => "STATUS|..."
 
 Status of list.  One of 'open', 'closed', 'pending',
 'error_config' and 'family_closed'.
@@ -9830,7 +9831,7 @@ Status of list.  One of 'open', 'closed', 'pending',
 Exact, prefixed or subsctring match against list subject,
 case-insensitive (case folding is Unicode-aware).
 
-=item 'topics' => TOPIC
+=item 'topics' => "TOPIC|..."
 
 Exact match against any of list topics.
 'others' or 'topicsless' means no topics.
@@ -9945,17 +9946,54 @@ sub get_lists {
 		$c = '%s '.$1.' %s';
 	    }
 
-            foreach my $v (@vals) {
-		if ($k =~ /^(member|owner|editor)$/) {
-		    if (defined $which_role) {
-			&Log::do_log('err', "bug in logic. Ask developer");
-			return undef;
-		    }
-		    $which_role = $k;
-		    $which_user = $v;
-		    next;
+	    ## query with single key and single value
+
+	    if ($k =~ /^(member|owner|editor)$/) {
+		if (defined $which_role) {
+		    &Log::do_log('err', "bug in logic. Ask developer");
+		    return undef;
+		}
+		$which_role = $k;
+		$which_user = $vals;
+		next;
+	    }
+
+	    ## query with single value
+
+	    if ($k eq 'name' or $k eq 'subject') {
+		my ($vl, $ve, $key_perl, $key_sql);
+		if ($k eq 'name') {
+		    $key_perl = '$list->name';
+		    $key_sql = 'name_list';
+		    $vl = lc $vals;
+		} else {
+		    $key_perl = 'tools::foldcase($list->subject)';
+		    $key_sql = 'searchkey_list';
+		    $vl = tools::foldcase($vals);
 		}
 
+		## Perl expression
+		$ve = $vl;
+		$ve =~ s/([^ \w\x80-\xFF])/\\$1/g;
+		push @expr_perl,
+		     sprintf(($c ? $c : '%s eq "%s"'), $key_perl, $ve);
+
+		## SQL expression
+		if ($a or $b) {
+		    $ve = &SDM::quote($vl);
+		    $ve =~ s/^["'](.*)['"]$/$1/;
+		    $ve =~ s/([%_])/\\$1/g;
+		    push @expr_sql,
+			 sprintf("%s LIKE '%s'", $key_sql, "$b$ve$a");
+                } else {
+                    push @expr_sql,
+			 sprintf('%s = %s', $key_sql, &SDM::quote($vl));
+		}
+
+		next;
+	    }
+
+	    foreach my $v (@vals) {
 		## Perl expressions
 		if ($k eq 'creation' or $k eq 'update') {
 		    push @expr_perl,
@@ -9967,23 +10005,11 @@ sub get_lists {
 ##		    push @expr_perl,
 ##			 sprintf('%s$list->is_web_archived',
 ##		    		 ($v+0 ? '' : '! '));
-                } elsif ($k eq 'name') {
-		    my $ve = lc $v;
-		    $ve =~ s/([^ \w\x80-\xFF])/\\$1/g;
-		    push @expr_perl,
-		         sprintf(($c ? $c : '%s eq "%s"'),
-				 '$list->name', $ve);
                 } elsif ($k eq 'status') {
 		    my $ve = lc $v;
 		    $ve =~ s/([^ \w\x80-\xFF])/\\$1/g;
 		    push @expr_perl,
 			 sprintf('$list->status eq "%s"', $ve);
-		} elsif ($k eq 'subject') {
-		    my $ve = tools::foldcase($v);
-		    $ve =~ s/([^ \w\x80-\xFF])/\\$1/g;
-		    push @expr_perl,
-			 sprintf(($c ? $c : '%s eq "%s"'),
-				 'tools::foldcase($list->subject)', $ve);
 		} elsif ($k eq 'topics') {
 		    my $ve = lc $v;
 		    if ($ve eq 'others' or $ve eq 'topicsless') {
@@ -10008,32 +10034,20 @@ sub get_lists {
 ##		} elsif ($k eq 'web_archive') {
 ##                    push @expr_sql,
 ##			 sprintf('web_archive_list = %d', ($v+0 ? 1 : 0));
+		} elsif ($k eq 'status') {
+                    push @expr_sql,
+			 sprintf('%s_list = %s', $k, &SDM::quote($v));
 		} elsif ($k eq 'topics') {
 		    my $ve = lc $v;
 		    if ($ve eq 'others' or $ve eq 'topicsless') {
-			push @expr_sql,
-			    '(topics_list = "" OR topics_list = ",," OR topics_list = ",others,")';
+			push @expr_sql,	"topics_list = ''";
 		    } else {
 			$ve = &SDM::quote($ve);
 			$ve =~ s/^["'](.*)['"]$/$1/;
 			$ve =~ s/([%_])/\\$1/g;
 			push @expr_sql,
-			     sprintf('topics_list LIKE "%%,%s,%%"', $ve);
+			     sprintf("topics_list LIKE '%%,%s,%%'", $ve);
 		    }
-		} elsif ($a or $b) {
-		    my $ve = tools::foldcase($v);
-		    $ve = &SDM::quote($ve);
-		    $ve =~ s/^["'](.*)['"]$/$1/;
-		    $ve =~ s/([%_])/\\$1/g;
-		    push @expr_sql,
-			 sprintf('%s_list LIKE "%s"',
-				 (($k eq 'subject') ? 'searchkey' : $k),
-				 "$b$ve$a");
-                } else {
-                    push @expr_sql,
-			 sprintf('%s_list = %s',
-				 (($k eq 'subject') ? 'searchkey' : $k),
-				 &SDM::quote($v));
                 }
             }
         }
@@ -10125,23 +10139,33 @@ sub get_lists {
 	}
 
 	## Check on-memory cache first
-	## except when non-default order is specified.
-	if (! defined $which_role and
-	    defined $list_cache{'get_lists'}{$robot} and
-	    ! defined $order_perl) {
+	if (! defined $which_role and $list_cache_filled{$robot}) {
 	    ## filter list if required.
+	    my @l = ();
 	    if (defined $cond_perl or %requested_lists) {
-		foreach my $list (@{$list_cache{'get_lists'}{$robot}}) {
+		my @all_lists = map { $list_of_lists{$robot}{$_} }
+				    sort keys %{$list_of_lists{$robot}};
+
+		foreach my $list (@all_lists) {
 		    if (%requested_lists) {
 			next unless $requested_lists{$list->{'name'}};
 		    }
 		    if (defined $cond_perl) {
 			next unless eval $cond_perl;
 		    }
-		    push @lists, $list;
+		    push @l, $list;
 		}
 	    } else {
-		push @lists, @{$list_cache{'get_lists'}{$robot}};
+		push @l, @all_lists;
+	    }
+
+	    ## sort
+	    if ($order_perl) {
+		use sort "stable";
+		push @lists, sort { eval $order_perl } @l;
+		use sort "defaults";
+	    } else {
+		push @lists, @l;
 	    }
 
 	    next; # foreach my $robot
@@ -10236,12 +10260,8 @@ sub get_lists {
 		my $list = new List($listname, $robot, $options);
 		next unless defined $list;
 
-		## Add list to memory cache
-		unless (%requested_lists) {
-		    push @{$list_cache{'get_lists'}{$robot}}, $list;
-		    ## not orphan entry
-		    delete $orphan{$listname};
-		}
+		## not orphan entry
+		delete $orphan{$listname};
 
 		## filter by condition
 		if (defined $cond_perl) {
@@ -10251,6 +10271,9 @@ sub get_lists {
 		push @l, $list;
 	    }
 	    closedir DIR;
+
+	    ## All lists are in memory cache
+	    $list_cache_filled{$robot} = 1 unless %requested_lists;
 
 	    ## sort
 	    if ($order_perl) {
@@ -10346,13 +10369,12 @@ sub get_lists {
 		$list->user($which_role, $which_user, $l);
 	    }
 
-	    ## add to cache
-	    push @{$list_cache{'get_lists'}{$robot}}, $list
-		unless defined $which_role or defined $cond_sql or
-		       %requested_lists or defined $order_perl;
-
 	    push @lists, $list;
 	}
+
+	$list_cache_filled{$robot} = 1
+	    unless defined $which_role or defined $cond_sql or
+		   %requested_lists;
     }
     return \@lists;
 }
@@ -10488,7 +10510,7 @@ sub get_mod_spool_size {
     &Log::do_log('debug3', 'List::get_mod_spool_size()');    
 
     my $spool = new Sympaspool('mod');
-    my $count =  $spool->get_content({'selector' =>{'list'=> $self->{'name'},'robot'=> $self->{'robot'} },
+    my $count =  $spool->get_content({ 'selector' => { 'list' => $self->name, 'robot' => $self->domain },
 				      'selection'=>'count'});
     
     if ($count) {
@@ -11690,7 +11712,7 @@ sub tag_topic {
     $topic_item .= sprintf  "METHOD  $method\n";
     my $topicspool = new Sympaspool ('topic');
     
-    return ($topicspool->store($topic_item,{'list'=>$self->{'name'},'robot'=> $self->{'domain'},'messageid'=>$msg_id}));
+    return ($topicspool->store($topic_item,{ 'list' => $self->name, 'robot' => $self->domain, 'messageid' => $msg_id }));
 }
 
 
@@ -11719,7 +11741,7 @@ sub load_msg_topic {
     &Log::do_log('debug','List::load_msg_topic(%s,%s)',$self->{'name'},$msg_id);    
     my  $topicspool = new Sympaspool('topic');
 
-    my $topics_from_spool = $topicspool->get_message({'listname' =>$self->{'name'},'robot' => $robot, 'messageid' => $msg_id});
+    my $topics_from_spool = $topicspool->get_message({'listname' => $self->name, 'robot' => $robot, 'messageid' => $msg_id});
     unless ($topics_from_spool) {
 	&Log::do_log('debug','No topic define ; unable to find topic for message %s / list  %s', $msg_id,$self->{'name'});
 	return undef;
@@ -11991,12 +12013,12 @@ sub store_subscription_request {
 
     my $subscription_request_spool = new Sympaspool ('subscribe');
     
-    if ($subscription_request_spool->get_content({'selector' =>{'list'=> $self->{'name'},'robot'=> $self->{'robot'},'sender'=>$email},'selection'=>'count'}) != 0) {
+    if ($subscription_request_spool->get_content({ 'selector' =>{ 'list' => $self->name, 'robot' => $self->domain, 'sender'=>$email },'selection'=>'count' }) != 0) {
 	&Log::do_log('notice', 'Subscription already requested by %s', $email);
 	return undef;
     }else{
 	my $subrequest = sprintf "$gecos||$custom_attr\n";
-	$subscription_request_spool->store($subrequest,{'list'=>$self->{'name'},'robot'=> $self->{'robot'},'sender'=>$email });
+	$subscription_request_spool->store($subrequest,{'list' => $self->name, 'robot' => $self->domain, 'sender' => $email });
     }
     return 1;
 } 
@@ -12008,9 +12030,9 @@ sub get_subscription_requests {
     my %subscriptions;
 
     my $subscription_request_spool = new Sympaspool ('subscribe');
-    my @subrequests = $subscription_request_spool->get_content({'selector' =>{'list'=> $self->{'name'},'robot'=> $self->{'robot'}},'selection'=>'*'});
+    my @subrequests = $subscription_request_spool->get_content({ 'selector' =>{ 'list' => $self->name, 'robot' => $self->domain }, 'selection'=>'*' });
 
-    foreach my $subrequest ( $subscription_request_spool->get_content({'selector' =>{'list'=> $self->{'name'},'robot'=> $self->{'robot'}},'selection'=>'*'})) {
+    foreach my $subrequest ( $subscription_request_spool->get_content({ 'selector' => { 'list' => $self->name, 'robot' => $self->domain }, 'selection'=>'*' })) {
 
 	my $email = $subrequest->{'sender'};
 	my $gecos; my $customattributes;
@@ -12024,8 +12046,8 @@ sub get_subscription_requests {
 	 
 	if ( defined($user_entry) && ($user_entry->{'subscribed'} == 1)) {
 	    &Log::do_log('err','User %s is subscribed to %s already. Deleting subscription request.', $email, $self->{'name'});
-	    unless ($subscription_request_spool->remove_message({'list'=> $self->{'name'},'robot'=> $self->{'robot'},'sender'=>$email})) {
-		&Log::do_log('err', 'Could not delete subrequest %s for list %s@%s from %s', $subrequest->{'messagekey'},$self->{'name'},$self->{'robot'},$subrequest->{'sender'});
+	    unless ($subscription_request_spool->remove_message({ 'list' => $self->name, 'robot' => $self->domain, 'sender' => $email })) {
+		&Log::do_log('err', 'Could not delete subrequest %s for list %s@%s from %s', $subrequest->{'messagekey'}, $self->name, $self->domain, $subrequest->{'sender'});
 	    }
 	    next;
 	}
@@ -12051,7 +12073,7 @@ sub get_subscription_request_count {
     my ($self) = shift;
 
     my $subscription_request_spool = new Sympaspool ('subscribe');    
-    return $subscription_request_spool->get_content({'selector' =>{'list'=> $self->{'name'},'robot'=> $self->{'robot'}},'selection'=>'count'});
+    return $subscription_request_spool->get_content({ 'selector' => { 'list' => $self->name, 'robot' => $self->domain }, 'selection'=>'count' });
 } 
 
 
@@ -12063,7 +12085,7 @@ sub delete_subscription_request {
 
     my $removed = 0;
     foreach my $email (@list_of_email) {
-	$removed++ if  $subscription_request_spool->remove_message({'list'=> $self->{'name'},'robot'=> $self->{'robot'},'sender'=>$email}) ;	
+	$removed++ if  $subscription_request_spool->remove_message({ 'list' => $self->name, 'robot' => $self->domain, 'sender' => $email });	
     }
 
     unless ($removed > 0) {
@@ -12258,10 +12280,10 @@ sub close_list {
     $self->remove_aliases();   
 
     #log in stat_table to make staistics
-    &Log::db_stat_log({'robot' => $self->domain, 'list' => $self->name,
+    &Log::db_stat_log({ 'robot' => $self->domain, 'list' => $self->name,
 		       'operation' => 'close_list', 'parameter' => '',
 		       'mail' => $email, 'client' => '',
-		       'daemon' => 'damon_name'}); #FIXME: unknown daemon
+		       'daemon' => 'damon_name' }); #FIXME: unknown daemon
 
     return 1;
 }
@@ -12301,8 +12323,8 @@ sub purge {
     &tools::remove_dir($self->{'dir'});
 
     #log ind stat table to make statistics
-    &Log::db_stat_log({'robot' => $self->{'domain'}, 'list' => $self->{'name'}, 'operation' => 'purge list', 'parameter' => '',
-		       'mail' => $email, 'client' => '', 'daemon' => 'daemon_name'});
+    &Log::db_stat_log({ 'robot' => $self->domain, 'list' => $self->name, 'operation' => 'purge list', 'parameter' => '',
+		       'mail' => $email, 'client' => '', 'daemon' => 'daemon_name' });
     
     return 1;
 }
@@ -12681,7 +12703,7 @@ sub AUTOLOAD {
 =item family
 
 I<Getter>.
-Gets family the list is belonging to, or undef.
+Gets Family object the list is belonging to, or undef.
 
 =back
 
@@ -12698,6 +12720,28 @@ sub family {
     }
 
     return $self->{'family'};
+}
+
+=over 4
+
+=item robot
+
+I<Getter>.
+Gets Robot object the list is belonging to.  Returns undef on error.
+
+=back
+
+=cut
+
+sub robot {
+    my $self = shift;
+    return undef unless $self->domain;
+
+    unless (ref $self->{'robot'}) {
+	$self->{'robot'} = new Robot($self->domain);
+    }
+
+    return $self->{'robot'};
 }
 
 =over 4
@@ -12972,8 +13016,9 @@ sub list_cache_update_admin
     my $status = $self->status;
     my $robot = $self->domain;
     my $web_archive  = $self->is_web_archived ? 1 : 0; 
-    my $topics =
-	',' . join(',' ,@{$self->topics || []}) . ',';
+    my $topics = join(',',
+		      grep { $_ and $_ ne 'others' } @{$self->topics || []});
+    $topics = ",$topics," if length $topics;
 
     my $creation_epoch = $self->creation->{'date_epoch'};
     my $creation_email = $self->creation->{'email'};
@@ -13082,57 +13127,6 @@ sub list_cache_purge {
 }
 
 ###### END of the ListCache package ######
-
-## This package handles Sympa virtual robots
-## It should :
-##   * provide access to global conf parameters,
-##   * deliver the list of lists
-##   * determine the current robot, given a host
-package Robot;
-
-use Conf;
-
-## Constructor of a Robot instance
-sub new {
-    my($pkg, $name) = @_;
-
-    my $robot = {'name' => $name};
-    &Log::do_log('debug2', '');
-    
-    unless (defined $name && $Conf::Conf{'robots'}{$name}) {
-	&Log::do_log('err',"Unknown robot '$name'");
-	return undef;
-    }
-
-    ## The default robot
-    if ($name eq $Conf::Conf{'domain'}) {
-	$robot->{'home'} = $Conf::Conf{'home'};
-    }else {
-	$robot->{'home'} = $Conf::Conf{'home'}.'/'.$name;
-	unless (-d $robot->{'home'}) {
-	    &Log::do_log('err', "Missing directory '$robot->{'home'}' for robot '$name'");
-	    return undef;
-	}
-    }
-
-    ## Initialize internal list cache
-    undef %list_cache;
-
-    # create a new Robot object
-    bless $robot, $pkg;
-
-    return $robot;
-}
-
-## load all lists belonging to this robot
-sub get_lists {
-    my $self = shift;
-
-    return &List::get_lists($self->{'name'});
-}
-
-
-###### END of the Robot package ######
 
 ## Packages must return true.
 1;
