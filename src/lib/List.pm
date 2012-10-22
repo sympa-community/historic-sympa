@@ -53,6 +53,7 @@ use SDM;
 use SQLSource qw(create_db);
 use Sympaspool;
 use Sympa::Constants;
+use Sympa::Tools::Data;
 use Task;
 use Tools::DKIM;
 use Tools::SMIME;
@@ -3709,7 +3710,7 @@ sub send_global_file {
     my($tpl, $who, $robot, $context, $options) = @_;
     &Log::do_log('debug2', 'List::send_global_file(%s, %s, %s)', $tpl, $who, $robot);
 
-    my $data = &tools::dup_var($context);
+    my $data = &Sympa::Tools::Data::dup_var($context);
 
     unless ($data->{'user'}) {
 	$data->{'user'} = &get_global_user($who) unless ($options->{'skip_db'});
@@ -3808,7 +3809,7 @@ sub send_file {
     my $name = $self->{'name'};
     my $sign_mode;
 
-    my $data = &tools::dup_var($context);
+    my $data = &Sympa::Tools::Data::dup_var($context);
 
     ## Any recipients
     if ((ref ($who) && ($#{$who} < 0)) ||
@@ -4642,7 +4643,7 @@ sub archive_send {
    $param->{'boundary2'} = &tools::get_message_id($self->{'domain'});
    $param->{'from'} = &Conf::get_robot_conf($self->{'domain'},'sympa');
 
-#    open TMP2, ">/tmp/digdump"; &tools::dump_var($param, 0, \*TMP2); close TMP2;
+#    open TMP2, ">/tmp/digdump"; &Sympa::Tools::Data::dump_var($param, 0, \*TMP2); close TMP2;
 $param->{'auto_submitted'} = 'auto-replied';
    unless ($self->send_file('get_archive',$who,$self->{'domain'},$param)) {
 	   &Log::do_log('notice',"Unable to send template 'archive_send' to $who");
@@ -4696,7 +4697,7 @@ sub archive_send_last {
    $param->{'boundary2'} = &tools::get_message_id($self->{'domain'});
    $param->{'from'} = &Conf::get_robot_conf($self->{'domain'},'sympa');
    $param->{'auto_submitted'} = 'auto-replied';
-#    open TMP2, ">/tmp/digdump"; &tools::dump_var($param, 0, \*TMP2); close TMP2;
+#    open TMP2, ">/tmp/digdump"; &Sympa::Tools::Data::dump_var($param, 0, \*TMP2); close TMP2;
 
    unless ($self->send_file('get_archive',$who,$self->{'domain'},$param)) {
 	   &Log::do_log('notice',"Unable to send template 'archive_send' to $who");
@@ -4849,7 +4850,7 @@ sub send_notify_to_listmaster {
 	
 	if(($operation eq 'request_list_creation') or ($operation eq 'request_list_renaming')) {
 		foreach my $email (split (/\,/, $listmaster)) {
-			my $cdata = &tools::dup_var($data);
+			my $cdata = &Sympa::Tools::Data::dup_var($data);
 			$cdata->{'one_time_ticket'} = &Auth::create_one_time_ticket($email,$robot,'get_pending_lists',$cdata->{'ip'});
 			push @tosend, {
 				email => $email,
@@ -5592,7 +5593,7 @@ sub get_global_user {
 	}    
 	## Turn data_user into a hash
 	 if ($user->{'data'}) {
-	     my %prefs = &tools::string_2_hash($user->{'data'});
+	     my %prefs = &Sympa::Tools::Data::string_2_hash($user->{'data'});
 	     $user->{'prefs'} = \%prefs;
 	 }
     }
@@ -7813,7 +7814,7 @@ sub load_scenario_list {
     }
 
     ## Return a copy of the data to prevent unwanted changes in the central scenario data structure
-    return &tools::dup_var(\%list_of_scenario);
+    return &Sympa::Tools::Data::dup_var(\%list_of_scenario);
 }
 
 sub load_task_list {
@@ -8898,7 +8899,7 @@ sub _load_list_members_from_include {
 	    my $included;
 	    my $source_is_new = 1;
         ## Work with a copy of admin hash branch to avoid including temporary variables into the actual admin hash.[bug #3182]
-	    my $incl = &tools::dup_var($tmp_incl);
+	    my $incl = &Sympa::Tools::Data::dup_var($tmp_incl);
 		my $source_id = Datasource::_get_datasource_id($tmp_incl);
 		if (defined $old_subs->{$source_id}) {
 			$source_is_new = 0;
@@ -9073,7 +9074,7 @@ sub _load_list_admin_from_include {
 		my $included;
 		
 		## Work with a copy of admin hash branch to avoid including temporary variables into the actual admin hash.[bug #3182]
-		my $incl = &tools::dup_var($tmp_incl);
+		my $incl = &Sympa::Tools::Data::dup_var($tmp_incl);
 
 		## get the list of admin users
 		## does it need to define a 'default_admin_user_option'?
@@ -9352,7 +9353,7 @@ sub sync_include_ca {
 	foreach my $type ('include_sql_ca') {
 		foreach my $tmp_incl (@{$admin->{$type}}) {
 			## Work with a copy of admin hash branch to avoid including temporary variables into the actual admin hash.[bug #3182]
-			my $incl = &tools::dup_var($tmp_incl);
+			my $incl = &Sympa::Tools::Data::dup_var($tmp_incl);
 			my $source = undef;
 			my $srcca = undef;
 			if ($type eq 'include_sql_ca') {
@@ -11642,7 +11643,7 @@ sub compute_topic {
     # getting keywords
     foreach my $topic (@{$self->{'admin'}{'msg_topic'}}) {
 
-	my $list_keyw = &tools::get_array_from_splitted_string($topic->{'keywords'});
+	my $list_keyw = &Sympa::Tools::Data::get_array_from_splitted_string($topic->{'keywords'});
 
 	foreach my $keyw (@{$list_keyw}) {
 	    $keywords{$keyw} = $topic->{'name'}
@@ -11824,14 +11825,14 @@ sub modifying_msg_topic_for_list_members(){
 	push @new_msg_topic_name,$msg_topic->{'name'};
     }
 
-    my $msg_topic_changes = &tools::diff_on_arrays(\@old_msg_topic_name,\@new_msg_topic_name);
+    my $msg_topic_changes = &Sympa::Tools::Data::diff_on_arrays(\@old_msg_topic_name,\@new_msg_topic_name);
 
     if ($#{$msg_topic_changes->{'deleted'}} >= 0) {
 	
 	for (my $subscriber=$self->get_first_list_member(); $subscriber; $subscriber=$self->get_next_list_member()) {
 	    
 	    if ($subscriber->{'reception'} eq 'mail') {
-		my $topics = &tools::diff_on_arrays($msg_topic_changes->{'deleted'},&tools::get_array_from_splitted_string($subscriber->{'topics'}));
+		my $topics = &Sympa::Tools::Data::diff_on_arrays($msg_topic_changes->{'deleted'},&Sympa::Tools::Data::get_array_from_splitted_string($subscriber->{'topics'}));
 		
 		if ($#{$topics->{'intersection'}} >= 0) {
 		    my $wwsympa_url = &Conf::get_robot_conf($self->{'domain'}, 'wwsympa_url');
@@ -11878,7 +11879,7 @@ sub select_list_members_for_topic {
     my $msg_topics;
 
     if ($string_topic) {
-	$msg_topics = &tools::get_array_from_splitted_string($string_topic);
+	$msg_topics = &Sympa::Tools::Data::get_array_from_splitted_string($string_topic);
     }
 
     foreach my $user (@$subscribers) {
@@ -11894,15 +11895,15 @@ sub select_list_members_for_topic {
 	    push @selected_users,$user;
 	    next;
 	}
-	my $user_topics = &tools::get_array_from_splitted_string($info_user->{'topics'});
+	my $user_topics = &Sympa::Tools::Data::get_array_from_splitted_string($info_user->{'topics'});
 
 	if ($string_topic) {
-	    my $result = &tools::diff_on_arrays($msg_topics,$user_topics);
+	    my $result = &Sympa::Tools::Data::diff_on_arrays($msg_topics,$user_topics);
 	    if ($#{$result->{'intersection'}} >=0 ) {
 		push @selected_users,$user;
 	    }
 	}else {
-	    my $result = &tools::diff_on_arrays(['other'],$user_topics);
+	    my $result = &Sympa::Tools::Data::diff_on_arrays(['other'],$user_topics);
 	    if ($#{$result->{'intersection'}} >=0 ) {
 		push @selected_users,$user;
 	    }

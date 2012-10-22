@@ -41,6 +41,7 @@ use File::Copy;
 use tools;
 use tt2;
 use Sympa::Constants;
+use Sympa::Tools::Data;
 
 
 my ($reponse, @ret, $val, %fault);
@@ -300,7 +301,7 @@ sub print_result {
 	}else {
 	    @ret = $r->result;
 	}
-	&tools::dump_var(\@ret, 0, \*STDOUT);
+	&Sympa::Tools::Data::dump_var(\@ret, 0, \*STDOUT);
     }
 
     return 1;

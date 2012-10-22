@@ -34,6 +34,7 @@ use Log;
 use SDM;
 use SympaSession;
 use Sympa::Tools::Time;
+use Sympa::Tools::Data;
 
 # this structure is used to define which session attributes are stored in a dedicated database col where others are compiled in col 'data_session'
 my %challenge_hard_attributes = ('id_challenge' => 1, 'date' => 1, 'robot'  => 1,'email' => 1, 'list' => 1);
@@ -93,7 +94,7 @@ sub load {
     }
     my $challenge_datas;
 
-    my %datas= &tools::string_2_hash($challenge->{'data'});
+    my %datas= &Sympa::Tools::Data::string_2_hash($challenge->{'data'});
     foreach my $key (keys %datas) {$challenge_datas->{$key} = $datas{$key};} 
 
     $challenge_datas->{'id_challenge'} = $challenge->{'id_challenge'};

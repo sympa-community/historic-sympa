@@ -30,6 +30,7 @@ use List;
 use Log;
 use Sympa::Constants;
 use Sympa::Tools::Time;
+use Sympa::Tools::Data;
 use tools;
 
 my %all_scenarios;
@@ -1093,7 +1094,7 @@ sub verify {
 	if (ref($args[0])) {
 	    foreach my $arg (@{$args[0]}) {
 		&Log::do_log('debug3', 'ARG: %s', $arg);
-		    if (&tools::smart_lessthan($arg, $args[1])){
+		    if (&Sympa::Tools::Data::smart_lessthan($arg, $args[1])){
 			if ($log_it == 1) {
 			    &Log::do_log('info',"'%s' is less than '%s' (rule %s)",$arg, $args[1],$condition);
 			}
@@ -1101,7 +1102,7 @@ sub verify {
 		    }
 	    }
 	}else {
-	    if (&tools::smart_lessthan($args[0], $args[1])) {
+	    if (&Sympa::Tools::Data::smart_lessthan($args[0], $args[1])) {
 		if ($log_it == 1) {
 		    &Log::do_log('info',"'%s' is less than '%s' (rule %s)",$args[0], $args[1],$condition);
 		}
@@ -1262,7 +1263,7 @@ sub search{
 	}
 	
 	my $ldap;
-	my $param = &tools::dup_var(\%ldap_conf);
+	my $param = &Sympa::Tools::Data::dup_var(\%ldap_conf);
 	my $ds = new LDAPSource($param);
 	    
 	unless (defined $ds && ($ldap = $ds->connect())) {
@@ -1378,7 +1379,7 @@ sub verify_custom {
 
 sub dump_all_scenarios {
     open TMP, ">/tmp/all_scenarios";
-    &tools::dump_var(\%all_scenarios, 0, \*TMP);
+    &Sympa::Tools::Data::dump_var(\%all_scenarios, 0, \*TMP);
     close TMP;
 }
 

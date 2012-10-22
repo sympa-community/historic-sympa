@@ -30,6 +30,7 @@ use Conf;
 use Log;
 use SDM;
 use Sympa::Constants;
+use Sympa::Tools::Data;
 
 ## Return the previous Sympa version, ie the one listed in data_structure.version
 sub get_previous_version {
@@ -78,7 +79,7 @@ sub upgrade {
 
     &Log::do_log('notice', 'Upgrade::upgrade(%s, %s)', $previous_version, $new_version);
     
-    if (&tools::lower_version($new_version, $previous_version)) {
+    if (&Sympa::Tools::Data::lower_version($new_version, $previous_version)) {
 	&Log::do_log('notice', 'Installing  older version of Sympa ; no upgrade operation is required');
 	return 1;
     }
@@ -99,7 +100,7 @@ sub upgrade {
     }
 
     ## Migration to tt2
-    if (&tools::lower_version($previous_version, '4.2b')) {
+    if (&Sympa::Tools::Data::lower_version($previous_version, '4.2b')) {
 
 	&Log::do_log('notice','Migrating templates to TT2 format...');	
 	
@@ -127,7 +128,7 @@ sub upgrade {
     }
     
     ## Initializing the new admin_table
-    if (&tools::lower_version($previous_version, '4.2b.4')) {
+    if (&Sympa::Tools::Data::lower_version($previous_version, '4.2b.4')) {
 	&Log::do_log('notice','Initializing the new admin_table...');
 	my $all_lists = &List::get_lists('*');
 	foreach my $list ( @$all_lists ) {
@@ -136,7 +137,7 @@ sub upgrade {
     }
 
     ## Move old-style web templates out of the include_path
-    if (&tools::lower_version($previous_version, '5.0.1')) {
+    if (&Sympa::Tools::Data::lower_version($previous_version, '5.0.1')) {
 	&Log::do_log('notice','Old web templates HTML structure is not compliant with latest ones.');
 	&Log::do_log('notice','Moving old-style web templates out of the include_path...');
 
@@ -189,7 +190,7 @@ sub upgrade {
 
 
     ## Clean buggy list config files
-    if (&tools::lower_version($previous_version, '5.1b')) {
+    if (&Sympa::Tools::Data::lower_version($previous_version, '5.1b')) {
 	&Log::do_log('notice','Cleaning buggy list config files...');
 	my $all_lists = &List::get_lists('*');
 	foreach my $list ( @$all_lists ) {
@@ -198,7 +199,7 @@ sub upgrade {
     }
 
     ## Fix a bug in Sympa 5.1
-    if (&tools::lower_version($previous_version, '5.1.2')) {
+    if (&Sympa::Tools::Data::lower_version($previous_version, '5.1.2')) {
 	&Log::do_log('notice','Rename archives/log. files...');
 	my $all_lists = &List::get_lists('*');
 	foreach my $list ( @$all_lists ) {
@@ -209,7 +210,7 @@ sub upgrade {
 	}
     }
 
-    if (&tools::lower_version($previous_version, '5.2a.1')) {
+    if (&Sympa::Tools::Data::lower_version($previous_version, '5.2a.1')) {
 
 	## Fill the robot_subscriber and robot_admin fields in DB
 	&Log::do_log('notice','Updating the new robot_subscriber and robot_admin  Db fields...');
@@ -279,7 +280,7 @@ sub upgrade {
     }
 
     ## DB fields of enum type have been changed to int
-    if (&tools::lower_version($previous_version, '5.2a.1')) {
+    if (&Sympa::Tools::Data::lower_version($previous_version, '5.2a.1')) {
 	
 	if (&SDM::use_db & $Conf::Conf{'db_type'} eq 'mysql') {
 	    my %check = ('subscribed_subscriber' => 'subscriber_table',
@@ -355,7 +356,7 @@ sub upgrade {
     }
 
     ## Rename bounce sub-directories
-    if (&tools::lower_version($previous_version, '5.2a.1')) {
+    if (&Sympa::Tools::Data::lower_version($previous_version, '5.2a.1')) {
 
 	&Log::do_log('notice','Renaming bounce sub-directories adding list domain...');
 	
@@ -395,7 +396,7 @@ sub upgrade {
     }
 
     ## Update lists config using 'include_list'
-    if (&tools::lower_version($previous_version, '5.2a.1')) {
+    if (&Sympa::Tools::Data::lower_version($previous_version, '5.2a.1')) {
 	
 	&Log::do_log('notice','Update lists config using include_list parameter...');
 
@@ -422,7 +423,7 @@ sub upgrade {
     }
 
     ## New mhonarc ressource file with utf-8 recoding
-    if (&tools::lower_version($previous_version, '5.3a.6')) {
+    if (&Sympa::Tools::Data::lower_version($previous_version, '5.3a.6')) {
 	
 	&Log::do_log('notice','Looking for customized mhonarc-ressources.tt2 files...');
 	foreach my $vr (keys %{$Conf::Conf{'robots'}}) {
@@ -461,7 +462,7 @@ sub upgrade {
 
     ## Changed shared documents name encoding
     ## They are Q-encoded therefore easier to store on any filesystem with any encoding
-    if (&tools::lower_version($previous_version, '5.3a.8')) {
+    if (&Sympa::Tools::Data::lower_version($previous_version, '5.3a.8')) {
 	&Log::do_log('notice','Q-Encoding web documents filenames...');
 
 	my $all_lists = &List::get_lists('*');
@@ -486,7 +487,7 @@ sub upgrade {
 
     ## We now support UTF-8 only for custom templates, config files, headers and footers, info files
     ## + web_tt2, scenari, create_list_templatee, families
-    if (&tools::lower_version($previous_version, '5.3b.3')) {
+    if (&Sympa::Tools::Data::lower_version($previous_version, '5.3b.3')) {
 	&Log::do_log('notice','Encoding all custom files to UTF-8...');
 
 	my (@directories, @files);
@@ -587,7 +588,7 @@ sub upgrade {
 
     ## giving up subscribers flat files ; moving subscribers to the DB
     ## Also giving up old 'database' mode
-    if (&tools::lower_version($previous_version, '5.4a.1')) {
+    if (&Sympa::Tools::Data::lower_version($previous_version, '5.4a.1')) {
 	
 	&Log::do_log('notice','Looking for lists with user_data_source parameter set to file or database...');
 
@@ -632,7 +633,7 @@ sub upgrade {
 	}
     }
     
-    if (&tools::lower_version($previous_version, '5.5a.1')) {
+    if (&Sympa::Tools::Data::lower_version($previous_version, '5.5a.1')) {
 
       ## Remove OTHER/ subdirectories in bounces
       &Log::do_log('notice', "Removing obsolete OTHER/ bounce directories");
@@ -654,7 +655,7 @@ sub upgrade {
 
    }
 
-   if (&tools::lower_version($previous_version, '6.1b.5')) {
+   if (&Sympa::Tools::Data::lower_version($previous_version, '6.1b.5')) {
 		## Encoding of shared documents was not consistent with recent versions of MIME::Encode
 		## MIME::EncWords::encode_mimewords() used to encode characters -!*+/ 
 		## Now these characters are preserved, according to RFC 2047 section 5 
@@ -694,7 +695,7 @@ sub upgrade {
 		}
 		
    }		
-    if (&tools::lower_version($previous_version, '6.3a')) {
+    if (&Sympa::Tools::Data::lower_version($previous_version, '6.3a')) {
 	# move spools from file to database.
 	my %spools_def = ('queue' =>  'msg',
 			  'bouncequeue' => 'bounce',
@@ -707,7 +708,7 @@ sub upgrade {
 			  'queueauth' => 'auth',
 			  'queueoutgoing' => 'archive',
 			  'queuetask' => 'task');
-   if (&tools::lower_version($previous_version, '6.1.11')) {
+   if (&Sympa::Tools::Data::lower_version($previous_version, '6.1.11')) {
        ## Exclusion table was not robot-enabled.
        &Log::do_log('notice','fixing robot column of exclusion table.');
        my $sth;

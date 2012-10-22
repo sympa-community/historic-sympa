@@ -30,6 +30,7 @@ use POSIX;
 use tools;
 use List;
 use Log;
+use Sympa::Tools::Data;
 
 ## Creates a new object
 sub new {
@@ -237,7 +238,7 @@ sub dump {
     my $self = shift;
     my $fd = shift;
 
-    &tools::dump_var($self, 0, $fd);
+    &Sympa::Tools::Data::dump_var($self, 0, $fd);
 
 }
 

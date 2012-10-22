@@ -1070,7 +1070,7 @@ sub load_trusted_application {
     # print STDERR "load_trusted_applications $config_file ($robot)\n";
 
     return undef unless  (-r $config_file);
-    # open TMP, ">/tmp/dump1";&tools::dump_var(&load_generic_conf_file($config_file,\%trusted_applications);, 0,\*TMP);close TMP;
+    # open TMP, ">/tmp/dump1";&Sympa::Tools::Data::dump_var(&load_generic_conf_file($config_file,\%trusted_applications);, 0,\*TMP);close TMP;
     return (&load_generic_conf_file($config_file,\%trusted_applications));
 
 }

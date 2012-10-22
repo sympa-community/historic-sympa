@@ -31,6 +31,7 @@ use Time::Local;
 use Conf;
 use Log;
 use Sympa::Tools::Time;
+use Sympa::Tools::Data;
 
 # this structure is used to define which session attributes are stored in a dedicated database col where others are compiled in col 'data_session'
 my %session_hard_attributes = ('id_session' => 1, 
@@ -138,7 +139,7 @@ sub load {
 	return 'not_found';
     }
     
-    my %datas= &tools::string_2_hash($session->{'data'});
+    my %datas= &Sympa::Tools::Data::string_2_hash($session->{'data'});
     foreach my $key (keys %datas) {$self->{$key} = $datas{$key};} 
 
     $self->{'id_session'} = $session->{'id_session'};
@@ -168,7 +169,7 @@ sub store {
 	next unless ($var);
 	$hash{$var} = $self->{$var};
     }
-    my $data_string = &tools::hash_2_string (\%hash);
+    my $data_string = &Sympa::Tools::Data::hash_2_string (\%hash);
 
     ## If this is a new session, then perform an INSERT
     if ($self->{'new_session'}) {
@@ -205,7 +206,7 @@ sub renew {
 	next unless ($var);
 	$hash{$var} = $self->{$var};
     }
-    my $data_string = &tools::hash_2_string (\%hash);
+    my $data_string = &Sympa::Tools::Data::hash_2_string (\%hash);
 
     ## Renew the session ID in order to prevent session hijacking
     my $new_id = &get_random();
