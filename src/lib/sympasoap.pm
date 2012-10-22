@@ -12,16 +12,6 @@
 # along with this program; if not, write to the Free Software
 # Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
 
-package SOAP::XMLSchema1999::Serializer;
-
-#sub as_listType {
-#    my $self = shift;
-#    my($value, $name, $type, $attr) = @_;
-#    return [$name, $attr, $value];
-##    return [$name, {'xsi:type' => 'sympaType:listType', %$attr}, $value];
-#}
-
-
 package sympasoap;
 
 use strict "vars";
