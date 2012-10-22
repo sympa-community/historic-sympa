@@ -42,6 +42,7 @@ use Language;
 use List;
 use Log;
 use Sympa::Constants;
+use Sympa::Tools::File;
 use tools;
 
 =pod 
@@ -985,7 +986,7 @@ sub clone_list_as_empty {
     chmod 0775, $new_dir;
     foreach my $subdir ('etc','web_tt2','mail_tt2','data_sources' ) {
 	if (-d $new_dir.'/'.$subdir) {
-	    unless (&tools::copy_dir($list->{'dir'}.'/'.$subdir, $new_dir.'/'.$subdir)) {
+	    unless (&Sympa::Tools::File::copy_dir($list->{'dir'}.'/'.$subdir, $new_dir.'/'.$subdir)) {
 		&Log::do_log('err','Admin::clone_list_as_empty :  failed to copy_directory %s : %s',$new_dir.'/'.$subdir, $!);
 		return undef;
 	    }

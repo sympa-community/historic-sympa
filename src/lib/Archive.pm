@@ -28,6 +28,7 @@ use Encode qw(decode_utf8 encode_utf8);
 use HTML::Entities qw(decode_entities);
 
 use Log;
+use Sympa::Tools::File;
 
 my $serial_number = 0; # incremented on each archived mail
 
@@ -251,7 +252,7 @@ sub clean_archive_directory{
     my $answer;
     $answer->{'dir_to_rebuild'} = $params->{'arc_root'}.'/'.$params->{'dir_to_rebuild'};
     $answer->{'cleaned_dir'} = $Conf::Conf{'tmpdir'}.'/'.$params->{'dir_to_rebuild'};
-    unless(my $number_of_copies = &tools::copy_dir($answer->{'dir_to_rebuild'},$answer->{'cleaned_dir'})){
+    unless(my $number_of_copies = &Sympa::Tools::File::copy_dir($answer->{'dir_to_rebuild'},$answer->{'cleaned_dir'})){
 	&Log::do_log('err',"Unable to create a temporary directory where to store files for HTML escaping (%s). Cancelling.",$number_of_copies);
 	return undef;
     }
@@ -269,7 +270,7 @@ sub clean_archive_directory{
 	$answer->{'dir_to_rebuild'} = $answer->{'cleaned_dir'};
     }else{
 	&Log::do_log('err','Unable to open directory %s: %s',$answer->{'dir_to_rebuild'},$!);
-	&tools::del_dir($answer->{'cleaned_dir'});
+	&Sympa::Tools::File::del_dir($answer->{'cleaned_dir'});
 	return undef;
     }
     return $answer;
@@ -338,7 +339,7 @@ sub convert_single_msg_2_html {
     close(OUT);
 
     unless (-d $destination_dir) {
-	unless (&tools::mkdir_all($destination_dir, 0777)) {
+	unless (&Sympa::Tools::File::mkdir_all($destination_dir, 0777)) {
 	    &Log::do_log('err','Unable to create %s', $destination_dir);
 	    return undef;
 	}

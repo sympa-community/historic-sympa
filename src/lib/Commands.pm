@@ -37,6 +37,7 @@ use List;
 use Message;
 use report;
 use Sympa::Constants;
+use Sympa::Tools::File;
 use tools;
 
 our @ISA = qw(Exporter);
@@ -2306,7 +2307,7 @@ sub reject {
     }
     
     &Log::do_log('info', 'REJECT %s %s from %s accepted (%d seconds)', $name, $sender, $key, time-$time_command);
-    &tools::remove_dir ( $Conf::Conf{'viewmail_dir'}.'/mod/'.$list->get_list_id().'/'.$key);
+    &Sympa::Tools::File::remove_dir ( $Conf::Conf{'viewmail_dir'}.'/mod/'.$list->get_list_id().'/'.$key);
     
     $modspool->remove({'list'=>$list->{'name'},'robot'=>$robot,'authkey'=>$key});
 

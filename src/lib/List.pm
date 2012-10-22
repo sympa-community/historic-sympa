@@ -54,6 +54,7 @@ use SQLSource qw(create_db);
 use Sympaspool;
 use Sympa::Constants;
 use Sympa::Tools::Data;
+use Sympa::Tools::File;
 use Task;
 use Tools::DKIM;
 use Tools::SMIME;
@@ -3736,7 +3737,7 @@ sub send_global_file {
     }
 
     my @path = &tt2::get_include_path();
-    my $filename = &tools::find_file($tpl.'.tt2',@path);
+    my $filename = &Sympa::Tools::File::find_file($tpl.'.tt2',@path);
  
     unless (defined $filename) {
 	&Log::do_log('err','Could not find template %s.tt2 in %s', $tpl, join(':',@path));
@@ -3884,7 +3885,7 @@ sub send_file {
     }
 
     my @path = &tt2::get_include_path();
-    my $filename = &tools::find_file($tpl.'.tt2',@path);
+    my $filename = &Sympa::Tools::File::find_file($tpl.'.tt2',@path);
     
     unless (defined $filename) {
 	&Log::do_log('err','Could not find template %s.tt2 in %s', $tpl, join(':',@path));
@@ -12116,14 +12117,14 @@ sub delete_subscription_request {
 sub get_shared_size {
     my $self = shift;
 
-    return tools::get_dir_size("$self->{'dir'}/shared");
+    return Sympa::Tools::File::get_dir_size("$self->{'dir'}/shared");
 }
 
 sub get_arc_size {
     my $self = shift;
     my $dir = shift;
 
-    return tools::get_dir_size($dir.'/'.$self->get_list_id());
+    return Sympa::Tools::File::get_dir_size($dir.'/'.$self->get_list_id());
 }
 
 # return the date epoch for next delivery planified for a list
@@ -12321,8 +12322,8 @@ sub purge {
 
     if ($self->{'name'}) {
 	my $arc_dir = &Conf::get_robot_conf($self->{'domain'},'arc_path');
-	&tools::remove_dir($arc_dir.'/'.$self->get_list_id());
-	&tools::remove_dir($self->get_bounce_dir());
+	&Sympa::Tools::File::remove_dir($arc_dir.'/'.$self->get_list_id());
+	&Sympa::Tools::File::remove_dir($self->get_bounce_dir());
     }
     
     ## Clean list table if needed
@@ -12335,7 +12336,7 @@ sub purge {
     ## Clean memory cache
     delete $list_of_lists{$self->{'domain'}}{$self->{'name'}};
 
-    &tools::remove_dir($self->{'dir'});
+    &Sympa::Tools::File::remove_dir($self->{'dir'});
 
     #log ind stat table to make statistics
     &Log::db_stat_log({'robot' => $self->{'domain'}, 'list' => $self->{'name'}, 'operation' => 'purge list', 'parameter' => '',

@@ -34,6 +34,7 @@ use Log;
 use Language;
 use SDM;
 use Sympa::Constants;
+use Sympa::Tools::File;
 use tools;
 use wwslib;
 
@@ -420,7 +421,7 @@ sub checkfiles_as_root {
     print ALIASES "## You should edit your sendmail.mc or sendmail.cf file to declare it\n";
     close ALIASES;
     &Log::do_log('notice', "Created missing file %s", $Conf{'sendmail_aliases'});
-    unless (&tools::set_file_rights(file => $Conf{'sendmail_aliases'},
+    unless (&Sympa::Tools::File::set_file_rights(file => $Conf{'sendmail_aliases'},
                     user  => Sympa::Constants::USER,
                     group => Sympa::Constants::GROUP,
                     mode  => 0644,
@@ -442,7 +443,7 @@ sub checkfiles_as_root {
         $config_err++;
         }
 
-        unless (&tools::set_file_rights(file => $dir,
+        unless (&Sympa::Tools::File::set_file_rights(file => $dir,
                         user  => Sympa::Constants::USER,
                         group => Sympa::Constants::GROUP,
                         ))
@@ -477,7 +478,7 @@ sub checkfiles {
         &Log::do_log('err', 'Unable to create spool %s', $Conf{$qdir});
         $config_err++;
         }
-            unless (&tools::set_file_rights(
+            unless (&Sympa::Tools::File::set_file_rights(
                     file  => $Conf{$qdir},
                     user  => Sympa::Constants::USER,
                     group => Sympa::Constants::GROUP,
@@ -497,7 +498,7 @@ sub checkfiles {
         &Log::do_log('err', 'Unable to create spool %s', $subdir);
         $config_err++;
         }
-            unless (&tools::set_file_rights(
+            unless (&Sympa::Tools::File::set_file_rights(
                     file  => $subdir,
                     user  => Sympa::Constants::USER,
                     group => Sympa::Constants::GROUP,
@@ -587,7 +588,7 @@ sub checkfiles {
 
     ## Create directory if required
     unless (-d $dir) {
-        unless ( &tools::mkdir_all($dir, 0755)) {
+        unless ( &Sympa::Tools::File::mkdir_all($dir, 0755)) {
         &List::send_notify_to_listmaster('cannot_mkdir',  $robot, ["Could not create directory $dir: $!"]);
         &Log::do_log('err','Failed to create directory %s',$dir);
         return undef;
@@ -1858,7 +1859,7 @@ sub _save_config_hash_to_binary {
 
 sub _source_has_not_changed {
     my $param = shift;
-    my $is_older = &tools::a_is_older_than_b({'a_file' => $param->{'config_file'},'b_file' => $param->{'config_file'}.$binary_file_extension,});
+    my $is_older = &Sympa::Tools::File::a_is_older_than_b({'a_file' => $param->{'config_file'},'b_file' => $param->{'config_file'}.$binary_file_extension,});
     return 1 if(defined $is_older && $is_older == 1);
     return 0;
 }

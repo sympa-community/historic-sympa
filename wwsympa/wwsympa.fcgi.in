@@ -5846,7 +5846,7 @@ sub do_remove_template {
 	$template_path = &tools::get_template_path($in{'webormail'},$robot,$in{'scope'},$in{'template_name'},$in{'tpl_lang'},undef,$Conf::Conf{'etc'});
     }
         
-    my $template_old_path = &tools::shift_file($template_path,10);
+    my $template_old_path = &Sympa::Tools::File::shift_file($template_path,10);
     unless ($template_old_path) {
 	&report::reject_report_web('intern','remove_failed',{'path'=>$template_path},$param->{'action'},$list,$param->{'user'}{'email'},$robot);
 	&wwslog('info',"remove_template: could not remove $template_path");
@@ -5941,7 +5941,7 @@ sub do_copy_template {
 	$param->{'template_path_out'} = &tools::get_template_path($in{'webormail'},$robot,$in{'scope_out'},$in{'template_name_out'},$in{'tpl_lang_out'},$Conf::Conf{'etc'});
     }
     
-    unless (&tools::mk_parent_dir($param->{'template_path_out'})) {
+    unless (&Sympa::Tools::File::mk_parent_dir($param->{'template_path_out'})) {
       &report::reject_report_web('intern','cannot_open_file',{'path' => $param->{'template_path_out'}},$param->{'action'},'',$param->{'user'}{'email'},$robot);
       &wwslog('err',"can't create parent directory for %s : %s", $param->{'template_path_out'}, $!);
       &web_db_log({'parameters' => $param->{'template_name_out'},
@@ -5988,12 +5988,12 @@ sub do_manage_template {
 	$param->{'template_path'} = &tools::get_template_path('mail',$robot,'list', ,'reject_'.$escaped_template_path.'.tt2','',$list,$Conf::Conf{'etc'});
     }
     my $tt2_include_path = &tools::make_tt2_include_path($robot,'mail_tt2','',$list,$Conf::Conf{'etc'},$Conf::Conf{'viewmaildir'},$Conf::Conf{'domain'});
-    my $default_file = &tools::find_file('reject.tt2',@{$tt2_include_path});
+    my $default_file = &Sympa::Tools::File::find_file('reject.tt2',@{$tt2_include_path});
 
 
     if ($in{'subaction'} eq 'save') {
 	## create the parent directory if it doesn't already exist
-	unless (&tools::mk_parent_dir($param->{'template_path'})) {
+	unless (&Sympa::Tools::File::mk_parent_dir($param->{'template_path'})) {
 	    &report::reject_report_web('intern','cannot_open_file',{'path' => $param->{'template_path'}},$param->{'action'},'',$param->{'user'}{'email'},$robot);
 	    &wwslog('err',"can't create parent directory for %s : %s", $param->{'template_path'}, $!);
 	    &web_db_log({'parameters' => $param->{'template_name'},
@@ -6031,7 +6031,7 @@ sub do_manage_template {
 	    return undef;  
 	}
 	## create the parent directory if it doesn't already exist
-	unless (&tools::mk_parent_dir($new_template_path)) {
+	unless (&Sympa::Tools::File::mk_parent_dir($new_template_path)) {
 
 	    &report::reject_report_web('intern','cannot_open_file',{'path' => $param->{'template_path'}},$param->{'action'},'',$param->{'user'}{'email'},$robot);
 	    &wwslog('err',"can't create parent directory for %s : %s", $param->{'template_path'}, $!);
@@ -7147,7 +7147,7 @@ sub do_distribute {
 
 	 }
 	 # clean html view of the message
-	 &tools::remove_dir ( $Conf::Conf{'viewmail_dir'}.'/mod/'.$list->get_list_id().'/'.$id);	
+	 &Sympa::Tools::File::remove_dir ( $Conf::Conf{'viewmail_dir'}.'/mod/'.$list->get_list_id().'/'.$id);	
      }
 
      $data->{'not_auto_submitted'} = 1;
@@ -13804,7 +13804,7 @@ sub creation_picture_file {
     unless(-d $root_dir.'/'.$path) {
  	&wwslog('notice',"creation_picture_file : Create dir $root_dir/$path/");
  	
- 	unless (&tools::mkdir_all($root_dir.'/'.$path, 0755)){
+ 	unless (&Sympa::Tools::File::mkdir_all($root_dir.'/'.$path, 0755)){
  	    &wwslog('err',"creation_picture_file : Unable to create dir $root_dir/$path/");
  	    return undef;
  	}
@@ -14044,7 +14044,7 @@ sub do_d_unzip {
      }
 
      ## remove tmp directories and files
-#     &tools::remove_dir($zip_abs_dir);
+#     &Sympa::Tools::File::remove_dir($zip_abs_dir);
      
      $in{'list'} = $listname;
   
@@ -17419,8 +17419,8 @@ sub do_arc_delete {
 	push(@abs_dirs ,&Conf::get_robot_conf($robot, 'arc_path').'/'.$list->get_list_id().'/'.$dir);
     }
 
-    unless (tools::remove_dir(@abs_dirs)) {
-	&wwslog('info','Error while Calling tools::remove_dir');
+    unless (Sympa::Tools::File::remove_dir(@abs_dirs)) {
+	&wwslog('info','Error while Calling Sympa::Tools::File::remove_dir');
     }
     
     &report::notice_report_web('performed',{},$param->{'action'});

@@ -29,6 +29,7 @@ use FileHandle;
 
 use Conf;
 use Log;
+use Sympa::Tools::File;
 
 my %list_of_locks;
 my $default_timeout = 60 * 20; ## After this period a lock can be stolen
@@ -51,7 +52,7 @@ sub new {
 	close $fh;
    }
     
-    unless(&tools::set_file_rights(
+    unless(&Sympa::Tools::File::set_file_rights(
 	file => $lock_filename,
 	user  => Sympa::Constants::USER,
 	group => Sympa::Constants::GROUP,

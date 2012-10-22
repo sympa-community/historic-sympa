@@ -31,6 +31,7 @@ use Log;
 use SDM;
 use Sympa::Constants;
 use Sympa::Tools::Data;
+use Sympa::Tools::File;
 
 ## Return the previous Sympa version, ie the one listed in data_structure.version
 sub get_previous_version {
@@ -642,7 +643,7 @@ sub upgrade {
 	foreach my $subdir (sort grep (!/^\.+$/,readdir(BOUNCEDIR))) {
 	  my $other_dir = &Conf::get_robot_conf($Conf::Conf{'domain'}, 'bounce_path').'/'.$subdir.'/OTHER';
 	  if (-d $other_dir) {
-	    &tools::remove_dir($other_dir);
+	    &Sympa::Tools::File::remove_dir($other_dir);
 	    &Log::do_log('notice', "Directory $other_dir removed");
 	  }
 	}
@@ -667,7 +668,7 @@ sub upgrade {
 				&Log::do_log('notice','  Processing list %s...', $list->get_list_address());
 
 				my @all_files;
-				&tools::list_dir($list->{'dir'}, \@all_files, 'utf-8');
+				&Sympa::Tools::File::list_dir($list->{'dir'}, \@all_files, 'utf-8');
 				
 				my $count;
 				foreach my $f_struct (reverse @all_files) {
@@ -996,7 +997,7 @@ sub to_utf8 {
 	}
 	print TEMPLATE $text;
 	close TEMPLATE;
-	unless (&tools::set_file_rights(file => $file,
+	unless (&Sympa::Tools::File::set_file_rights(file => $file,
 					user =>  Sympa::Constants::USER,
 					group => Sympa::Constants::GROUP,
 					mode =>  0644,

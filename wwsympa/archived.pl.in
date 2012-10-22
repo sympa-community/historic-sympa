@@ -57,6 +57,7 @@ use tt2;
 use tools;
 use Sympa::Constants;
 use Sympa::Tools::Time;
+use Sympa::Tools::File;
 
 my $daemon_name = &Log::set_daemon($0);
 my $ip = $ENV{'REMOTE_HOST'};
@@ -273,7 +274,7 @@ while (!$end) {
 	    &remove($arclistdir,$msgid);
 	    
 	    my $url_dir = $list->{'dir'}.'/urlized/'.$msgid;
-	    &tools::remove_dir ($url_dir);
+	    &Sympa::Tools::File::remove_dir ($url_dir);
 	    
 	    unless (-d "$arcpath/deleted"){
 		unless (mkdir ("$arcpath/deleted",0777)) {
@@ -295,7 +296,7 @@ while (!$end) {
 	    my @files = grep(/^\d+$/, readdir( DIR ));
 	    closedir (DIR);
 	    if ($#files == -1) {
-		&tools::remove_dir ($arcpath); 
+		&Sympa::Tools::File::remove_dir ($arcpath); 
 	    }
 	}
 	$spoolarchive->remove_message({'messagekey'=>$item->{'messagekey'}});
@@ -472,7 +473,7 @@ Rebuilds archives for the list the name of which is given in the argument $adrli
 
 =item * tools::get_filename
 
-=item * tools::remove_dir
+=item * Sympa::Tools::File::remove_dir
 
 =back 
 
@@ -530,7 +531,7 @@ sub rebuild {
 	    close (DIR);
 	    if ($#files == -1) { 
 		&Log::do_log('notice', "Removing empty directory $arcdir");
-		&tools::remove_dir ($arcdir);
+		&Sympa::Tools::File::remove_dir ($arcdir);
 		next ;	 
 	    } 
 
@@ -567,7 +568,7 @@ sub rebuild {
 
 	# Delete temporary directory containing files with escaped HTML.
 	if ($arcs_dir && -d $arcs_dir->{'cleaned_dir'}) {
-	    &tools::del_dir($arcs_dir->{'cleaned_dir'});
+	    &Sympa::Tools::File::del_dir($arcs_dir->{'cleaned_dir'});
 	}
 	
 	## Remove lock if required
@@ -625,7 +626,7 @@ sub rebuild {
 
 	    # Delete temporary directory containing files with escaped HTML.
 	    if ($arcs_dir && -d $arcs_dir->{'cleaned_dir'}) {
-		&tools::del_dir($arcs_dir->{'cleaned_dir'});
+		&Sympa::Tools::File::del_dir($arcs_dir->{'cleaned_dir'});
 	    }
 
 	    ## Remove lock if required
@@ -707,7 +708,7 @@ Archives one message into one list archives directory.
 
 =item * tools::get_filename
 
-=item * tools::remove_dir
+=item * Sympa::Tools::File::remove_dir
 
 =back 
 
@@ -808,7 +809,7 @@ sub mail2arc {
 		    my $i = 0 ;
 		    while ( $nb_month >  $list->{'admin'}{'web_archive'}{'max_month'}) {
 			&Log::do_log('info',"removing  $arcpath/%s/$archives[$i]", $list->get_list_id());
-			&tools::remove_dir ($arcpath.'/'.$list->get_list_id().'/'.$archives[$i]);
+			&Sympa::Tools::File::remove_dir ($arcpath.'/'.$list->get_list_id().'/'.$archives[$i]);
 			$i ++; $nb_month --;		    
 		    }
 		}
@@ -1079,7 +1080,7 @@ sub directory_check {
 	    &Log::do_log('err','Unable to create directory %s',$dir);
 	    return undef;
 	}
-	unless (&tools::set_file_rights(file => $dir,
+	unless (&Sympa::Tools::File::set_file_rights(file => $dir,
 					 user  => Sympa::Constants::USER,
 					 group => Sympa::Constants::GROUP,
 					 mode  => 0775,
