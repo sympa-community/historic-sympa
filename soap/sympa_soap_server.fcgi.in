@@ -15,8 +15,8 @@ use Language;
 use List;
 use Log;
 use mail;
-use sympasoap;
 use Sympa::Constants;
+use Sympa::SOAP;
 use SympaTransport;
 use tt2;
 
@@ -79,7 +79,7 @@ foreach my $list (@$all_lists){
 my $server = SOAP::Transport::HTTP::FCGI::Sympa->new(); 
 
 #$server->dispatch_with({'urn:Sympa' => 'sympasoap'});
-$server->dispatch_to('--modulesdir--','sympasoap');
+$server->dispatch_to('--modulesdir--','Sympa::SOAP');
 
 $server->handle($birthday);
 
