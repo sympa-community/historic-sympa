@@ -51,7 +51,6 @@ use Sympa::Tools::Daemon;
 use SympaSession;
 use Sympaspool;
 use tracking;
-use tt2;
 
 ## Internal tuning
 # delay between each read of the digestqueue

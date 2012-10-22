@@ -54,7 +54,6 @@ use Sympa::Constants;
 use Sympa::DatabaseDescription;
 use Sympa::Tools::Time;
 use Task;
-use tt2;
 use Upgrade;
 use WebAgent;
 

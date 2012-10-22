@@ -29,7 +29,6 @@ use List;
 use Log;
 use Sympa::Constants;
 use Sympa::Tools::File;
-use tt2;
 use wwslib;
 
 $wwsympa_conf_file = Sympa::Constants::WWSCONFIG;

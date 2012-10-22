@@ -48,7 +48,6 @@ use Sympa::Tools;
 use Sympa::Tools::Daemon;
 use SympaSession;
 use Sympaspool;
-use tt2;
 use tracking;
 
 # durty global variables
