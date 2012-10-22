@@ -58,6 +58,7 @@ use tools;
 use Sympa::Constants;
 use Sympa::Tools::Time;
 use Sympa::Tools::File;
+use Sympa::Tools::Daemon;
 
 my $daemon_name = &Log::set_daemon($0);
 my $ip = $ENV{'REMOTE_HOST'};
@@ -119,9 +120,9 @@ my $options;
 $options->{'stderr_to_tty'} = 1 if ($main::options{'foreground'});
 
 ## Create and write the pidfile
-&tools::write_pid($wwsconf->{'archived_pidfile'}, $$, $options);
+&Sympa::Tools::Daemon::write_pid($wwsconf->{'archived_pidfile'}, $$, $options);
 unless ($options->{'stderr_to_tty'}) {
-    &tools::direct_stderr_to_file(('tmpdir' => $Conf::Conf{'tmpdir'}, 'pid' => $$));
+    &Sympa::Tools::Daemon::direct_stderr_to_file(('tmpdir' => $Conf::Conf{'tmpdir'}, 'pid' => $$));
 }
 
 # setting log_level using conf unless it is set by calling option
@@ -319,7 +320,7 @@ while (!$end) {
 &List::send_notify_to_listmaster(undef, undef, undef, undef, 1); # Purge grouped notifications
 
 &Log::do_log('notice', 'archived exited normally due to signal');
-&tools::remove_pid($wwsconf->{'archived_pidfile'}, $$, undef, $Conf::Conf{'tmpdir'});
+&Sympa::Tools::Daemon::remove_pid($wwsconf->{'archived_pidfile'}, $$, undef, $Conf::Conf{'tmpdir'});
 
 exit(0);
 

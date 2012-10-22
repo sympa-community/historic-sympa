@@ -44,6 +44,7 @@ use Message;
 use report;
 use SDM;
 use Sympa::Constants;
+use Sympa::Tools::Daemon;
 use SympaSession;
 use Sympaspool;
 use tools;
@@ -309,9 +310,9 @@ if ($signal ne 'hup') {
 	## If process is running in foreground, don't write STDERR to a dedicated file
 	my $options;
 	$options->{'stderr_to_tty'} = 1 if ($main::options{'foreground'});
-	&tools::write_pid($file, $$, $options);
+	&Sympa::Tools::Daemon::write_pid($file, $$, $options);
 	unless ($options->{'stderr_to_tty'}) {
-	    &tools::direct_stderr_to_file(('tmpdir' => $Conf::Conf{'tmpdir'}, 'pid' => $$));
+	    &Sympa::Tools::Daemon::direct_stderr_to_file(('tmpdir' => $Conf::Conf{'tmpdir'}, 'pid' => $$));
 	}
     }	
 
@@ -1047,7 +1048,7 @@ SDM::db_disconnect;
 
 &Log::do_log('notice', 'Sympa exited normally due to signal');
 my $file = $Conf{'pidfile'};
-&tools::remove_pid($file, $$, undef, $Conf::Conf{'tmpdir'});
+&Sympa::Tools::Daemon::remove_pid($file, $$, undef, $Conf::Conf{'tmpdir'});
 
 exit(0);
 

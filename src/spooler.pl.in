@@ -46,6 +46,7 @@ use report;
 use SDM;
 use SQLSource;
 use Sympa::Constants;
+use Sympa::Tools::Daemon;
 use SympaSession;
 use Sympaspool;
 use tools;
@@ -220,7 +221,7 @@ if ($signal ne 'hup') {
 	    my $options;
 	    $options->{'stderr_to_tty'} = 1 if ($main::options{'foreground'});
 	    $options->{'multiple_process'} = 1 ;
-	    &tools::write_pid($file, $$, $options);
+	    &Sympa::Tools::Daemon::write_pid($file, $$, $options);
 	}	
 	
 	
@@ -423,7 +424,7 @@ SDM::db_disconnect;
 }
 &Log::do_log('notice', 'spooler exited normally due to signal');
 my $file = $Conf{'pidfile_spooler'};
-&tools::remove_pid($file, $$, undef, $Conf::Conf{'tmpdir'});
+&Sympa::Tools::Daemon::remove_pid($file, $$, undef, $Conf::Conf{'tmpdir'});
 
 exit(0);
 }
