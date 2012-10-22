@@ -37,7 +37,6 @@ use Log;
 use mail;
 use Message;
 use report;
-use SympaSession;
 use Sympa::Constants;
 use Sympa::Tools;
 use Sympa::Tools::Data;
