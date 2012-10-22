@@ -386,7 +386,7 @@ sub update {
     my $statement = sprintf "UPDATE spool_table SET %s WHERE (%s)", $set,$where ;
 
     unless (&SDM::do_query($statement)) {
-&Log::do_log('err','Unable to execute SQL statement "%s" : %s', $statement, $dbh->errstr);
+	&Log::do_log('err', 'Unable to execute SQL statement "%s"', $statement);
 	return undef;
     }    
     return 1;

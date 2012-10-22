@@ -5,6 +5,7 @@
 ##   * determine the current robot, given a host
 package Robot;
 
+use Carp qw(croak);
 use Conf;
 
 our %list_of_robots = ();

@@ -4101,6 +4101,7 @@ sub crash_handler {
     my $msg = $_[0]; chomp $msg;
     &Log::do_log('err', 'DIED: %s', $msg);
     eval { &List::send_notify_to_listmaster(undef, undef, undef, undef, 1); };
+    eval { &SDM::db_disconnect; }; # unlock database
     Sys::Syslog::closelog(); # flush log
 
     ## gather traceback information

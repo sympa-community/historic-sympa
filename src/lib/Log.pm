@@ -40,7 +40,7 @@ my $warning_timeout = 600;
 # Date of the last time a message was sent to warn the listmaster that the logs are unavailable.
 my $warning_date = 0;
 
-our $log_level = 0;
+our $log_level = undef;
 
 our %levels = (
     err    => 0,
@@ -97,7 +97,8 @@ sub do_log {
     }
 
     # do not log if log level if too high regarding the log requested by user 
-    return if ($levels{$level} > $log_level);
+    return if defined $log_level and $levels{$level} > $log_level;
+    return if ! defined $log_level and $levels{$level} > 0;
 
     my $message = shift;
     my @param = ();
@@ -128,8 +129,9 @@ sub do_log {
     ## Determine calling function
     my $caller_string;
    
-    ## If in 'err' level, build a stack trace
-    if ($level eq 'err'){
+    ## If in 'err' level, build a stack trace,
+    ## except if syslog has not been setup yet.
+    if (defined $log_level and $level eq 'err'){
 	my $go_back = 1;
 	my @calls;
 
@@ -169,6 +171,16 @@ sub do_log {
         $level = 'debug';
     }
 
+    ## Output to STDERR if needed
+    if (! defined $log_level or
+	($main::options{'foreground'} and $main::options{'log_to_stderr'}) or
+	($main::options{'foreground'} and $main::options{'batch'} and
+	 $level eq 'err')) {
+	$message =~ s/%m/$errno/g;
+	printf STDERR "$message\n", @param;
+    }
+
+    return unless defined $log_level;
     eval {
         unless (syslog($level, $message, @param)) {
             &do_connect();
@@ -181,17 +193,7 @@ sub do_log {
         &List::send_notify_to_listmaster(
             'logs_failed', $Conf::Conf{'domain'}, [$@]
         );
-    };
-
-    if ($main::options{'foreground'}) {
-        if (
-            $main::options{'log_to_stderr'} ||
-            ($main::options{'batch'} && $level eq 'err')
-        ) {
-            $message =~ s/%m/$errno/g;
-            printf STDERR "$message\n", @param;
-        }
-    }    
+    }
 }
 
 

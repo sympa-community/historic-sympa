@@ -3057,7 +3057,7 @@ sub update_config_changes {
 ## return a hash of config_changes file
 sub _load_config_changes_file {
     my $self = shift;
-    &Log::do_log('debug3', 'List::_load_config_changes_file(%s)', $self->{'name'});
+    ##&Log::do_log('debug3', 'List::_load_config_changes_file(%s)', $self->{'name'});
 
     my $config_changes = {};
 
@@ -3096,7 +3096,7 @@ sub _load_config_changes_file {
 ## save config_changes file in the list directory
 sub _save_config_changes_file {
     my $self = shift;
-    &Log::do_log('debug3', 'List::_save_config_changes_file(%s)', $self->{'name'});
+    ##&Log::do_log('debug3', 'List::_save_config_changes_file(%s)', $self->{'name'});
 
     unless ($self->{'admin'}{'family_name'}) {
 	&Log::do_log('err', 'List::_save_config_changes_file(%s) is called but there is no family_name for this list.',$self->{'name'});
@@ -10142,13 +10142,12 @@ sub get_lists {
 	if (! defined $which_role and $list_cache_filled{$robot}) {
 	    ## filter list if required.
 	    my @l = ();
+	    my @all_lists = map { $list_of_lists{$robot}{$_} }
+				sort keys %{$list_of_lists{$robot}};
 	    if (defined $cond_perl or %requested_lists) {
-		my @all_lists = map { $list_of_lists{$robot}{$_} }
-				    sort keys %{$list_of_lists{$robot}};
-
 		foreach my $list (@all_lists) {
 		    if (%requested_lists) {
-			next unless $requested_lists{$list->{'name'}};
+			next unless $requested_lists{$list->name};
 		    }
 		    if (defined $cond_perl) {
 			next unless eval $cond_perl;
@@ -10900,7 +10899,7 @@ sub _apply_defaults {
 ## Save a parameter
 sub _save_list_param {
     my ($key, $p, $defaults, $fd) = @_;
-    &Log::do_log('debug3', '_save_list_param(%s)', $key);
+    ##&Log::do_log('debug3', '_save_list_param(%s)', $key);
 
     ## Ignore default value
     return 1 if ($defaults == 1);
@@ -10962,7 +10961,7 @@ sub _save_list_param {
 ## Load a single line
 sub _load_list_param {
     my ($robot,$key, $value, $p, $directory) = @_;
-    &Log::do_log('debug3','_load_list_param(%s,\'%s\',\'%s\')', $robot,$key, $value);
+    ##&Log::do_log('debug3','_load_list_param(%s,\'%s\',\'%s\')', $robot,$key, $value);
     
     ## Empty value
     if ($value =~ /^\s*$/) {
@@ -12064,7 +12063,6 @@ sub get_subscription_requests {
 	}
 	$subscriptions{$email}{'date'} = $subrequest->{'date'};
     }
-    closedir SPOOL;
 
     return \%subscriptions;
 } 

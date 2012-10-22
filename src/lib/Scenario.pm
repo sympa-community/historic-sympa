@@ -38,9 +38,9 @@ my %persistent_cache;
 ## Supported parameters : function, robot, name, directory, file_path, options
 ## Output object has the following entries : name, file_path, rules, date, title, struct, data
 sub new {
-   my($pkg, @args) = @_;
+    &Log::do_log('debug2', '(%s, ...)', @_);
+    my($pkg, @args) = @_;
     my %parameters = @args;
-    &Log::do_log('debug2', '');
  
     my $scenario = {};
 
@@ -79,7 +79,7 @@ sub new {
 		$scenario->{'file_path'} = $tmp_path;
 		last;
 	    }else {
-		&Log::do_log('debug','Unable to read file %s',$tmp_path);
+		##&Log::do_log('debug','Unable to read file %s',$tmp_path);
 	    }
 	}
     }
@@ -150,9 +150,9 @@ sub new {
 
 ## Parse scenario rules
 sub _parse_scenario {
+    &Log::do_log('debug3', '(%s, %s, %s, ...)', @_);
     my ($function, $robot, $scenario_name, $paragraph, $directory ) = @_;
-    &Log::do_log('debug2', "($function, $scenario_name, $robot)");
-    
+
     my $structure = {};
     $structure->{'name'} = $scenario_name ;
     my @scenario;

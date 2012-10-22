@@ -343,7 +343,7 @@ sub create {
     $self->{'model_choice'}  = $param->{'model_choice'};
     my $Rdata         = $param->{'data'};
 
-    $Rdata->{'list'}{'ttl'} ;#= $list->{'admin'}{'ttl'};
+    ##$Rdata->{'list'}{'ttl'} = $list->{'admin'}{'ttl'};
     if (defined $Rdata->{'list'}) { 
 	if (ref $Rdata->{'list'}) {
 	    $self->{'list'} = $Rdata->{'list'}->name;

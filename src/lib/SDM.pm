@@ -120,9 +120,8 @@ sub check_db_connect {
 
 ## Connect to Database
 sub connect_sympa_database {
+    &Log::do_log('debug2', '(%s)', @_);
     my $option = shift;
-
-    &Log::do_log('debug', 'Connecting to Sympa database');
 
     ## We keep trying to connect if this is the first attempt
     ## Unless in a web context, because we can't afford long response time on the web interface
@@ -142,14 +141,15 @@ sub connect_sympa_database {
 	&Log::do_log('err', 'Unable to connect to the Sympa database');
 	return undef;
     }
-    &Log::do_log('debug2','Connected to Database %s',&Conf::get_robot_conf('*','db_name'));
+    &Log::do_log('debug3','Connected to Database %s',
+		 &Conf::get_robot_conf('*','db_name'));
 
     return 1;
 }
 
 ## Disconnect from Database
 sub db_disconnect {
-    &Log::do_log('debug', 'Disconnecting from Sympa database');
+    &Log::do_log('debug2', '()');
 
     unless ($db_source->{'dbh'}->disconnect()) {
 	&Log::do_log('err','Can\'t disconnect from Database %s : %s',&Conf::get_robot_conf('*','db_name'), $db_source->{'dbh'}->errstr);
