@@ -24,9 +24,9 @@ package cookielib;
 
 use strict "vars";
 
+use CGI::Cookie;
 use Digest::MD5;
 use POSIX;
-use CGI::Cookie;
 
 use Log;
 

@@ -22,19 +22,18 @@
 # Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
 
 use lib '--modulesdir--';
-use wwslib;
+
+use Conf;
+use List;
+use Log;
+use SDM;
 use Sympa::Constants;
+use Sympa::Tools;
+use wwslib;
 
 unless (require Crypt::CipherSaber) {
     die "Crypt::CipherSaber not installed ; cannot crypt passwords";
 }
-
-use Sympa::Tools;
-
-use Conf;
-use List;
-use SDM;
-use Log;
 
 ## Load sympa config
 &Conf::load(Sympa::Constants::CONFIG) || die 'config_error';

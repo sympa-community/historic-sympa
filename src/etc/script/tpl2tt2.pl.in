@@ -22,18 +22,19 @@
 # Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
 
 use lib '--modulesdir--';
-use wwslib;
+
 use Conf;
 use Language;
-use tt2;
+use List;
+use Log;
 use Sympa::Constants;
 use Sympa::Tools::File;
+use tt2;
+use wwslib;
 
 $wwsympa_conf_file = Sympa::Constants::WWSCONFIG;
 $sympa_conf_file = Sympa::Constants::CONFIG;
 
-use List;
-use Log;
 
 my %options;
 

@@ -37,28 +37,26 @@ This script must be run along with sympa. It regularly checks the 'outgoing' spo
 
 =cut 
 
-use lib '--modulesdir--';
 use strict;
+use lib '--modulesdir--';
 
-use List;
-use Message;
-use Conf;
-use Log;
-use Commands;
-#use Getopt::Std;
 use Getopt::Long;
-use Language;
 use Digest::MD5;
 
-use wwslib;
+use Commands;
+use Conf;
+use Language;
+use List;
+use Log;
 use mail;
-
-use tt2;
+use Message;
 use Sympa::Constants;
 use Sympa::Tools;
 use Sympa::Tools::Time;
 use Sympa::Tools::File;
 use Sympa::Tools::Daemon;
+use tt2;
+use wwslib;
 
 my $daemon_name = &Log::set_daemon($0);
 my $ip = $ENV{'REMOTE_HOST'};

@@ -25,14 +25,15 @@
 
 
 use strict;
-
 use lib '--modulesdir--';
+
 use Getopt::Long;
+
+use Conf;
+use List;
 use Sympa::Constants;
 
 my $sympa_conf_file = Sympa::Constants::CONFIG;
-use Conf;
-use List;
 
 ## Load sympa config
 unless (&Conf::load($sympa_conf_file)) {

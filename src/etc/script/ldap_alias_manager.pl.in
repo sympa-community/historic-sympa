@@ -15,19 +15,20 @@
 #Purpose: It has the ability to add/remove list aliases in an LDAP directory
 # You should edit all the --defaultdir--/ldap_alias_manager.conf to use your own LDAP directory
 
-$ENV{'PATH'} = '';
 
-## Load Sympa.conf
 use strict;
 use lib '--modulesdir--';
-use Conf;
-use POSIX;
-require tools;
-require tt2;
-use Sympa::Constants;
 
 use Net::LDAP;
 use Net::LDAPS;
+use POSIX;
+
+use Conf;
+use Sympa::Constants;
+use Sympa::Tools;
+use tt2;
+
+$ENV{'PATH'} = '';
 
 unless (Conf::load(Sympa::Constants::CONFIG)) {
    print gettext("The configuration file contains errors.\n");

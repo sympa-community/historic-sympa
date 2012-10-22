@@ -37,50 +37,42 @@ This fcgi script completely handles all aspects of the Sympa web interface
 
 =cut 
 
+use strict 'vars';
 use lib '--modulesdir--';
+#use open ':utf8'; ## Default is to consider files utf8 
 
-use Getopt::Long;
 use Archive::Zip;
 use Data::Dumper;
-  
-use strict 'vars';
+use Getopt::Long;
+use Mail::Header;
+use Mail::Address;
 use Time::Local;
-use Data::Dumper;
 
-## Sympa API
-use List;
-use mail;
+use Commands;
 use Conf;
 use confdef;
-use Commands;
-use Language;
-use Log;
-use Auth;
+use cookielib;
 use admin;
-use SharedDocument;
-use report;
-use SympaSession;
+use Auth;
+use Language;
+use List;
 use Log;
-use time_utils;
+use mail;
+use OAuthProvider;
+use OAuthConsumer;
+use report;
+use SharedDocument;
+use Sympaspool;
+use SympaSession;
 use Sympa::Constants;
 use Sympa::Tools;
 use Sympa::Tools::Data;
-use wwslib;
-use cookielib;
-use tt2;
-#use DateTime;
+use time_utils;
 use tracking;
-use Sympaspool;
-
-#use open ':utf8'; ## Default is to consider files utf8 
-
-use Mail::Header;
-use Mail::Address;
-
-use OAuthProvider;
-use OAuthConsumer;
+use tt2;
 use VOOTProvider;
 use VOOTConsumer;
+use wwslib;
 
 my $crypt_openssl_x509_ok;
 BEGIN {

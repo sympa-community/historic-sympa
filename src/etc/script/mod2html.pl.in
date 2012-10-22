@@ -5,6 +5,7 @@
 ## This script will create all missing HTML files in the moderation spool
 
 use lib '--modulesdir--';
+
 use Conf; # to load Sympa conf which is needed by List.pm
 use List;
 use Log; # if you want to get logs of List.pm

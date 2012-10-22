@@ -29,14 +29,14 @@ use strict "vars";
 use Exporter;
 use HTTP::Cookies;
 
+use Auth;
+use Conf;
+use Language;
+use Log;
+use Sympa::Tools;
+
 my @ISA = ('Exporter');
 my @EXPORT = ();
-
-use Conf;
-use Log;
-use Auth;
-use Language;
-use Sympa::Tools;
 
 ## Define types of SOAP type listType
 my %types = ('listType' => {'listAddress' => 'string',

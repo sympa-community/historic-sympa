@@ -15,34 +15,33 @@
 # Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
 
 use strict;
-#use SOAP::Lite +trace;
-use SOAP::Lite;
-use HTTP::Cookies;
-use URI;
-use Getopt::Long;
-
 use lib '--modulesdir--';
-# use Conf;
+
+use File::Copy;
+use Getopt::Long;
+use HTTP::Cookies;
+use MIME::QuotedPrint;
+use SOAP::Lite;
+#use SOAP::Lite +trace;
+use URI;
+
+use admin;
+use Auth;
 use Commands;
 use Conf;
-use Auth;
-use SympaSession;
-use Language;
-use Log;
-use mail;
-use MIME::QuotedPrint;
-use List;
-use Message;
-use admin;
 use Config_XML;
 use Family;
+use Language;
+use List;
+use Log;
+use mail;
+use Message;
 use report;
-use File::Copy;
-use Sympa::Tools;
-use tt2;
+use SympaSession;
 use Sympa::Constants;
+use Sympa::Tools;
 use Sympa::Tools::Data;
-
+use tt2;
 
 my ($reponse, @ret, $val, %fault);
 

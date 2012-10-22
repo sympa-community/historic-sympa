@@ -1,32 +1,24 @@
 #! --PERL--
 
-
-use SOAP::Lite;
-
-# Use this line for more debug facility
-#use SOAP::Lite +trace;
-use SOAP::Transport::HTTP;
-
+use strict;
 use lib '--modulesdir--';
 
-## Defines SOAP::Transport::HTTP::FCGI::Sympa with a modified handle()
-use SympaTransport;
-
 use Getopt::Long;
-use strict;
+use SOAP::Lite;
+#use SOAP::Lite +trace;
+## Defines SOAP::Transport::HTTP::FCGI::Sympa with a modified handle()
+use SOAP::Transport::HTTP;
 
-## Sympa API
-use tt2;
-use List;
-use mail;
 use Conf;
-use Log;
+use cookielib;
 use Language;
+use List;
+use Log;
+use mail;
 use sympasoap;
 use Sympa::Constants;
-
-## WWSympa librairies
-use cookielib;
+use SympaTransport;
+use tt2;
 
 my $birthday = time ;
 

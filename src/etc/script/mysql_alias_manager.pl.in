@@ -5,18 +5,18 @@
 ## To make sympa use this script, you should install it as /home/sympa/bin/alias_manager.pl
 ## You should edit all the $mysql_xxx below to use your own mysql database
 
-$ENV{'PATH'} = '';
-
-## Load Sympa.conf
 use strict;
 use lib '--modulesdir--';
-use Conf;
-use POSIX;
-require tt2;
-use Sympa::Constants;
-use Sympa::Tools;
 
 use DBI;
+use POSIX;
+
+use Conf;
+use Sympa::Constants;
+use Sympa::Tools;
+use tt2;
+
+$ENV{'PATH'} = '';
 
 unless (Conf::load(Sympa::Constants::CONFIG)) {
    print gettext("The configuration file contains errors.\n");
