@@ -1785,9 +1785,9 @@ sub DoMessage{
     if ($action =~ /^do_it/) {
 
 	my $apply_dkim_signature = 'off';
-	$apply_dkim_signature = 'on' if &Sympa::Tools::is_in_array($list->{'admin'}{'dkim_signature_apply_on'},'any');
-	$apply_dkim_signature = 'on' if (&Sympa::Tools::is_in_array($list->{'admin'}{'dkim_signature_apply_on'},'smime_authenticated_messages') && ($is_signed->{'body'}));
-	$apply_dkim_signature = 'on' if &Sympa::Tools::is_in_array($list->{'admin'}{'dkim_signature_apply_on'},'dkim_authenticated_messages');
+	$apply_dkim_signature = 'on' if &Sympa::Tools::Data::is_in_array($list->{'admin'}{'dkim_signature_apply_on'},'any');
+	$apply_dkim_signature = 'on' if (&Sympa::Tools::Data::is_in_array($list->{'admin'}{'dkim_signature_apply_on'},'smime_authenticated_messages') && ($is_signed->{'body'}));
+	$apply_dkim_signature = 'on' if &Sympa::Tools::Data::is_in_array($list->{'admin'}{'dkim_signature_apply_on'},'dkim_authenticated_messages');
 	
 	my $numsmtp;
 	eval { $numsmtp =$list->distribute_msg('message'=> $message,

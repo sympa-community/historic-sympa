@@ -1883,7 +1883,7 @@ sub _get_config_file_name {
 
 sub _create_robot_like_config_for_main_robot {
     return if (defined $Conf::Conf{'robots'}{$Conf::Conf{'domain'}});
-    my $main_conf_no_robots = &Sympa::Tools::dup_var(\%Conf);
+    my $main_conf_no_robots = &Sympa::Tools::Data::dup_var(\%Conf);
     delete $main_conf_no_robots->{'robots'};
     &_remove_unvalid_robot_entry({'config_hash' => $main_conf_no_robots, 'quiet' => 1 });
     $Conf{'robots'}{$Conf{'domain'}} = $main_conf_no_robots;

@@ -2045,8 +2045,8 @@ sub distribute {
     ## Distribute the message
     my $numsmtp;
     my $apply_dkim_signature = 'off';
-    $apply_dkim_signature = 'on' if &Sympa::Tools::is_in_array($list->{'admin'}{'dkim_signature_apply_on'},'any');
-    $apply_dkim_signature = 'on' if &Sympa::Tools::is_in_array($list->{'admin'}{'dkim_signature_apply_on'},'editor_validated_messages');
+    $apply_dkim_signature = 'on' if &Sympa::Tools::Data::is_in_array($list->{'admin'}{'dkim_signature_apply_on'},'any');
+    $apply_dkim_signature = 'on' if &Sympa::Tools::Data::is_in_array($list->{'admin'}{'dkim_signature_apply_on'},'editor_validated_messages');
 
     $numsmtp =$list->distribute_msg('message'=> $message,
 				    'apply_dkim_signature'=>$apply_dkim_signature);
@@ -2197,8 +2197,8 @@ sub confirm {
 	## Distribute the message
 	my $numsmtp;
 	my $apply_dkim_signature = 'off'; 
-	$apply_dkim_signature = 'on' if &Sympa::Tools::is_in_array($list->{'admin'}{'dkim_signature_apply_on'},'any');
-	$apply_dkim_signature = 'on' if &Sympa::Tools::is_in_array($list->{'admin'}{'dkim_signature_apply_on'},'md5_authenticated_messages');
+	$apply_dkim_signature = 'on' if &Sympa::Tools::Data::is_in_array($list->{'admin'}{'dkim_signature_apply_on'},'any');
+	$apply_dkim_signature = 'on' if &Sympa::Tools::Data::is_in_array($list->{'admin'}{'dkim_signature_apply_on'},'md5_authenticated_messages');
 	
 	$numsmtp =$list->distribute_msg('message'=> $message,
 					'apply_dkim_signature'=>$apply_dkim_signature);
