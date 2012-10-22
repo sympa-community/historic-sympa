@@ -28,7 +28,6 @@ use Mail::DKIM::Verifier;
 use Mail::DKIM::Signer;
 use MIME::Parser;
 
-use Conf;
 use List;
 use Log;
 use Message;
@@ -42,7 +41,6 @@ our @EXPORT = qw(
 );
 
 sub get_dkim_parameters {
-
     my $params = shift;
 
     my $robot = $params->{'robot'};
@@ -70,13 +68,13 @@ sub get_dkim_parameters {
 	$keyfile = $list->{'admin'}{'dkim_parameters'}{'private_key_path'};
     }else{
 	# in robot context
-	$data->{'d'} = &Conf::get_robot_conf($robot, 'dkim_signer_domain');
-	$data->{'i'} = &Conf::get_robot_conf($robot, 'dkim_signer_identity');
-	$data->{'selector'} = &Conf::get_robot_conf($robot, 'dkim_selector');
-	$keyfile = &Conf::get_robot_conf($robot, 'dkim_private_key_path');
+	$data->{'d'} = $params->{'signer_domain'};
+	$data->{'i'} = $params->{'signer_identity'};
+	$data->{'selector'} = $params->{'selector'};
+	$keyfile = $params->{'keyfile'};
     }
     unless (open (KEY, $keyfile)) {
-	&Log::do_log('err',"Could not read dkim private key %s",&Conf::get_robot_conf($robot, 'dkim_signer_selector'));
+	&Log::do_log('err',"Could not read dkim private key %s",$keyfile);
 	return undef;
     }
     while (<KEY>){
@@ -90,6 +88,7 @@ sub get_dkim_parameters {
 # input a msg as string, output the dkim status
 sub dkim_verifier {
     my $msg_as_string = shift;
+    my $tmpdir = shift;
     my $dkim;
 
     &Log::do_log('debug',"dkim verifier");
@@ -103,7 +102,7 @@ sub dkim_verifier {
 	return undef;
     }
    
-    my $temporary_file = $Conf::Conf{'tmpdir'}."/dkim.".$$ ;  
+    my $temporary_file = $tmpdir."/dkim.".$$ ;  
     if (!open(MSGDUMP,"> $temporary_file")) {
 	&Log::do_log('err', 'Can\'t store message in file %s', $temporary_file);
 	return undef;
@@ -140,10 +139,11 @@ sub dkim_verifier {
 
 # input a msg as string, output idem without signature if invalid
 sub remove_invalid_dkim_signature {
+    my ($tmpdir) = @_;
     &Log::do_log('debug',"removing invalide dkim signature");
     my $msg_as_string = shift;
 
-    unless (dkim_verifier($msg_as_string)){
+    unless (dkim_verifier($msg_as_string, $tmpdir)){
 	my $body_as_string = &Message::get_body_from_msg_as_string ($msg_as_string);
 
 	my $parser = new MIME::Parser;
@@ -166,6 +166,7 @@ sub dkim_sign {
     # in case of any error, this proc MUST return $msg_as_string NOT undef ; this would cause Sympa to send empty mail 
     my $msg_as_string = shift;
     my $data = shift;
+    my $tmpdir = shift;
     my $dkim_d = $data->{'dkim_d'};    
     my $dkim_i = $data->{'dkim_i'};
     my $dkim_selector = $data->{'dkim_selector'};
@@ -186,7 +187,7 @@ sub dkim_sign {
 	return $msg_as_string;
     }
     
-    my $temporary_keyfile = $Conf::Conf{'tmpdir'}."/dkimkey.".$$ ;  
+    my $temporary_keyfile = $tmpdir."/dkimkey.".$$ ;  
     if (!open(MSGDUMP,"> $temporary_keyfile")) {
 	&Log::do_log('err', 'Can\'t store key in file %s', $temporary_keyfile);
 	return $msg_as_string;
@@ -225,7 +226,7 @@ sub dkim_sign {
 	&Log::do_log('err', 'Can\'t create Mail::DKIM::Signer');
 	return ($msg_as_string); 
     }    
-    my $temporary_file = $Conf::Conf{'tmpdir'}."/dkim.".$$ ;  
+    my $temporary_file = $tmpdir."/dkim.".$$ ;  
     if (!open(MSGDUMP,"> $temporary_file")) {
 	&Log::do_log('err', 'Can\'t store message in file %s', $temporary_file);
 	return ($msg_as_string); 

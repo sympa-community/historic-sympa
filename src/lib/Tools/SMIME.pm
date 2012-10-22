@@ -26,7 +26,6 @@ use strict;
 use Exporter;
 use MIME::Parser;
 
-use Conf;
 use List;
 use Log;
 use tools;
@@ -53,16 +52,19 @@ sub smime_sign {
     my $in_msg = shift;
     my $list = shift;
     my $robot = shift;
+    my $tmpdir = shift;
+    my $key_passwd = shift;
+    my $openssl = shift;
 
-    &Log::do_log('debug2', 'Tools::SMIME::smime_sign (%s,%s)',$in_msg,$list);
+    &Log::do_log('debug2', 'Tools::SMIME::smime_sign (%s,%s,%s,%s)',$in_msg,$list,$robot,$tmpdir);
 
     my $self = new List($list, $robot);
     my($cert, $key) = &smime_find_keys($self->{dir}, 'sign');
-    my $temporary_file = $Conf::Conf{'tmpdir'}."/".$self->get_list_id().".".$$ ;    
-    my $temporary_pwd = $Conf::Conf{'tmpdir'}.'/pass.'.$$;
+    my $temporary_file = $tmpdir."/".$self->get_list_id().".".$$ ;    
+    my $temporary_pwd = $tmpdir.'/pass.'.$$;
 
     my ($signed_msg,$pass_option );
-    $pass_option = "-passin file:$temporary_pwd" if ($Conf::Conf{'key_passwd'} ne '') ;
+    $pass_option = "-passin file:$temporary_pwd" if ($key_passwd ne '') ;
 
     ## Keep a set of header fields ONLY
     ## OpenSSL only needs content type & encoding to generate a multipart/signed msg
@@ -81,23 +83,23 @@ sub smime_sign {
     $dup_msg->print(\*MSGDUMP);
     close(MSGDUMP);
 
-    if ($Conf::Conf{'key_passwd'} ne '') {
+    if ($key_passwd ne '') {
 	unless ( mkfifo($temporary_pwd,0600)) {
 	    &Log::do_log('notice', 'Unable to make fifo for %s',$temporary_pwd);
 	}
     }
-    &Log::do_log('debug', "$Conf::Conf{'openssl'} smime -sign -rand $Conf::Conf{'tmpdir'}"."/rand -signer $cert $pass_option -inkey $key -in $temporary_file");    
-    unless (open (NEWMSG,"$Conf::Conf{'openssl'} smime -sign  -rand $Conf::Conf{'tmpdir'}"."/rand -signer $cert $pass_option -inkey $key -in $temporary_file |")) {
+    &Log::do_log('debug', "$openssl smime -sign -rand $tmpdir/rand -signer $cert $pass_option -inkey $key -in $temporary_file");    
+    unless (open (NEWMSG, "$openssl smime -sign -rand $tmpdir/rand -signer $cert $pass_option -inkey $key -in $temporary_file |")) {
     	&Log::do_log('notice', 'Cannot sign message (open pipe)');
 	return undef;
     }
 
-    if ($Conf::Conf{'key_passwd'} ne '') {
+    if ($key_passwd ne '') {
 	unless (open (FIFO,"> $temporary_pwd")) {
 	    &Log::do_log('notice', 'Unable to open fifo for %s', $temporary_pwd);
 	}
 
-	print FIFO $Conf::Conf{'key_passwd'};
+	print FIFO $key_passwd;
 	close FIFO;
 	unlink ($temporary_pwd);
     }
@@ -144,6 +146,11 @@ sub smime_sign {
 
 sub smime_sign_check {
     my $message = shift;
+    my $tmpdir = shift;
+    my $cafile = shift;
+    my $capath = shift;
+    my $openssl = shift;
+    my $ssl_cert_dir = shift;
 
     my $sender = $message->{'sender'};
 
@@ -158,13 +165,13 @@ sub smime_sign_check {
     ## first step is the msg signing OK ; /tmp/sympa-smime.$$ is created
     ## to store the signer certificat for step two. I known, that's durty.
 
-    my $temporary_file = $Conf::Conf{'tmpdir'}."/".'smime-sender.'.$$ ;
+    my $temporary_file = $tmpdir."/".'smime-sender.'.$$ ;
     my $trusted_ca_options = '';
-    $trusted_ca_options = "-CAfile $Conf::Conf{'cafile'} " if ($Conf::Conf{'cafile'});
-    $trusted_ca_options .= "-CApath $Conf::Conf{'capath'} " if ($Conf::Conf{'capath'});
-    &Log::do_log('debug', "$Conf::Conf{'openssl'} smime -verify  $trusted_ca_options -signer  $temporary_file");
+    $trusted_ca_options = "-CAfile $cafile " if ($cafile);
+    $trusted_ca_options .= "-CApath $capath " if ($capath);
+    &Log::do_log('debug', "$openssl smime -verify  $trusted_ca_options -signer  $temporary_file");
 
-    unless (open (MSGDUMP, "| $Conf::Conf{'openssl'} smime -verify  $trusted_ca_options -signer $temporary_file > /dev/null")) {
+    unless (open (MSGDUMP, "| $openssl smime -verify  $trusted_ca_options -signer $temporary_file > /dev/null")) {
 
 	&Log::do_log('err', "unable to verify smime signature from $sender $verify");
 	return undef ;
@@ -194,7 +201,7 @@ sub smime_sign_check {
     }
     ## second step is the message signer match the sender
     ## a better analyse should be performed to extract the signer email. 
-    my $signer = smime_parse_cert({file => $temporary_file});
+    my $signer = smime_parse_cert({tmpdir => $tmpdir, file => $temporary_file, openssl => $openssl});
 
     unless ($signer->{'email'}{lc($sender)}) {
 	unlink($temporary_file) unless ($main::options{'debug'}) ;
@@ -204,11 +211,11 @@ sub smime_sign_check {
 
     &Log::do_log('debug', "S/MIME signed message, signature checked and sender match signer(%s)", join(',', keys %{$signer->{'email'}}));
     ## store the signer certificat
-    unless (-d $Conf::Conf{'ssl_cert_dir'}) {
-	if ( mkdir ($Conf::Conf{'ssl_cert_dir'}, 0775)) {
-	    &Log::do_log('info', "creating spool $Conf::Conf{'ssl_cert_dir'}");
+    unless (-d $ssl_cert_dir) {
+	if ( mkdir ($ssl_cert_dir, 0775)) {
+	    &Log::do_log('info', "creating spool $ssl_cert_dir");
 	}else{
-	    &Log::do_log('err', "Unable to create user certificat directory $Conf::Conf{'ssl_cert_dir'}");
+	    &Log::do_log('err', "Unable to create user certificat directory $ssl_cert_dir");
 	}
     }
 
@@ -219,17 +226,17 @@ sub smime_sign_check {
     ## are also included), and look at the purpose:
     ## "S/MIME signing : Yes/No"
     ## "S/MIME encryption : Yes/No"
-    my $certbundle = "$Conf::Conf{tmpdir}/certbundle.$$";
-    my $tmpcert = "$Conf::Conf{tmpdir}/cert.$$";
+    my $certbundle = "$tmpdir/certbundle.$$";
+    my $tmpcert = "$tmpdir/cert.$$";
     my $nparts = $message->{msg}->parts;
     my $extracted = 0;
     &Log::do_log('debug2', "smime_sign_check: parsing $nparts parts");
     if($nparts == 0) { # could be opaque signing...
-	$extracted +=&smime_extract_certs($message->{msg}, $certbundle);
+	$extracted +=&smime_extract_certs($message->{msg}, $certbundle, $openssl);
     } else {
 	for (my $i = 0; $i < $nparts; $i++) {
 	    my $part = $message->{msg}->parts($i);
-	    $extracted += &smime_extract_certs($part, $certbundle);
+	    $extracted += &smime_extract_certs($part, $certbundle, $openssl);
 	    last if $extracted;
 	}
     }
@@ -258,7 +265,7 @@ sub smime_sign_check {
 	    }
 	    print CERT $workcert;
 	    close(CERT);
-	    my($parsed) = &smime_parse_cert({file => $tmpcert});
+	    my($parsed) = &smime_parse_cert({tmpdir => $tmpdir, file => $tmpcert, openssl => $openssl});
 	    unless($parsed) {
 		&Log::do_log('err', 'No result from smime_parse_cert');
 		return undef;
@@ -293,7 +300,7 @@ sub smime_sign_check {
     ## or a pair of single-purpose. save them, as email@addr if combined,
     ## or as email@addr@sign / email@addr@enc for split certs.
     foreach my $c (keys %certs) {
-	my $fn = "$Conf::Conf{ssl_cert_dir}/" . &escape_chars(lc($sender));
+	my $fn = "$ssl_cert_dir/" . &escape_chars(lc($sender));
 	if ($c ne 'both') {
 	    unlink($fn); # just in case there's an old cert left...
 	    $fn .= "\@$c";
@@ -329,6 +336,9 @@ sub smime_encrypt {
     my $msg_body = shift;
     my $email = shift ;
     my $list = shift ;
+    my $tmpdir = shift ;
+    my $ssl_cert_dir = shift ;
+    my $openssl = shift ;
 
     my $usercert;
     my $dummy;
@@ -340,7 +350,7 @@ sub smime_encrypt {
 	my $self = new List($email);
 	($usercert, $dummy) = smime_find_keys($self->{dir}, 'encrypt');
     }else{
-	my $base = "$Conf::Conf{'ssl_cert_dir'}/".&tools::escape_chars($email);
+	my $base = "$ssl_cert_dir/".&tools::escape_chars($email);
 	if(-f "$base\@enc") {
 	    $usercert = "$base\@enc";
 	} else {
@@ -348,12 +358,12 @@ sub smime_encrypt {
 	}
     }
     if (-r $usercert) {
-	my $temporary_file = $Conf::Conf{'tmpdir'}."/".$email.".".$$ ;
+	my $temporary_file = $tmpdir."/".$email.".".$$ ;
 
 	## encrypt the incomming message parse it.
-        &Log::do_log ('debug3', "Tools::SMIME::smime_encrypt : $Conf::Conf{'openssl'} smime -encrypt -out $temporary_file -des3 $usercert");
+        &Log::do_log ('debug3', "Tools::SMIME::smime_encrypt : $openssl smime -encrypt -out $temporary_file -des3 $usercert");
 
-	if (!open(MSGDUMP, "| $Conf::Conf{'openssl'} smime -encrypt -out $temporary_file -des3 $usercert")) {
+	if (!open(MSGDUMP, "| $openssl smime -encrypt -out $temporary_file -des3 $usercert")) {
 	    &Log::do_log('info', 'Can\'t encrypt message for recipient %s', $email);
 	}
 ## don't; cf RFC2633 3.1. netscape 4.7 at least can't parse encrypted stuff
@@ -426,6 +436,10 @@ unlink ($temporary_file) unless ($main::options{'debug'}) ;
 sub smime_decrypt {
     my $msg = shift;
     my $list = shift ; ## the recipient of the msg
+    my $tmpdir = shift;
+    my $home = shift;
+    my $key_passwd = shift;
+    my $openssl = shift;
     my $from = $msg->head->get('from');
 
     &Log::do_log('debug2', 'Tools::SMIME::smime_decrypt message msg from %s,%s', $from, $list->{'name'});
@@ -433,7 +447,7 @@ sub smime_decrypt {
     ## an empty "list" parameter means mail to sympa@, listmaster@...
     my $dir = $list->{'dir'};
     unless ($dir) {
-	$dir = $Conf::Conf{home} . '/sympa';
+	$dir = $home . '/sympa';
     }
     my ($certs,$keys) = smime_find_keys($dir, 'decrypt');
     unless (defined $certs && @$certs) {
@@ -441,8 +455,8 @@ sub smime_decrypt {
 	return undef;
     }
 
-    my $temporary_file = $Conf::Conf{'tmpdir'}."/".$list->get_list_id().".".$$ ;
-    my $temporary_pwd = $Conf::Conf{'tmpdir'}.'/pass.'.$$;
+    my $temporary_file = $tmpdir."/".$list->get_list_id().".".$$ ;
+    my $temporary_pwd = $tmpdir.'/pass.'.$$;
 
     ## dump the incomming message.
     if (!open(MSGDUMP,"> $temporary_file")) {
@@ -452,7 +466,7 @@ sub smime_decrypt {
     close(MSGDUMP);
     
     my ($decryptedmsg, $pass_option, $msg_as_string);
-    if ($Conf::Conf{'key_passwd'} ne '') {
+    if ($key_passwd ne '') {
 	# if password is define in sympa.conf pass the password to OpenSSL using
 	$pass_option = "-passin file:$temporary_pwd";	
     }
@@ -461,22 +475,22 @@ sub smime_decrypt {
     while (my $certfile = shift @$certs) {
 	my $keyfile = shift @$keys;
 	&Log::do_log('debug', "Trying decrypt with $certfile, $keyfile");
-	if ($Conf::Conf{'key_passwd'} ne '') {
+	if ($key_passwd ne '') {
 	    unless (mkfifo($temporary_pwd,0600)) {
 		&Log::do_log('err', 'Unable to make fifo for %s', $temporary_pwd);
 		return undef;
 	    }
 	}
 
-	&Log::do_log('debug',"$Conf::Conf{'openssl'} smime -decrypt -in $temporary_file -recip $certfile -inkey $keyfile $pass_option");
-	open (NEWMSG, "$Conf::Conf{'openssl'} smime -decrypt -in $temporary_file -recip $certfile -inkey $keyfile $pass_option |");
+	&Log::do_log('debug',"$openssl smime -decrypt -in $temporary_file -recip $certfile -inkey $keyfile $pass_option");
+	open (NEWMSG, "$openssl smime -decrypt -in $temporary_file -recip $certfile -inkey $keyfile $pass_option |");
 
-	if ($Conf::Conf{'key_passwd'} ne '') {
+	if ($key_passwd ne '') {
 	    unless (open (FIFO,"> $temporary_pwd")) {
 		&Log::do_log('notice', 'Unable to open fifo for %s', $temporary_pwd);
 		return undef;
 	    }
-	    print FIFO $Conf::Conf{'key_passwd'};
+	    print FIFO $key_passwd;
 	    close FIFO;
 	    unlink ($temporary_pwd);
 	}
@@ -638,8 +652,8 @@ sub smime_parse_cert {
     }
 
     ## Extract information from cert
-    my ($tmpfile) = $Conf::Conf{'tmpdir'}."/parse_cert.$$";
-    unless (open(PSC, "| $Conf::Conf{openssl} x509 -email -subject -purpose -noout > $tmpfile")) {
+    my ($tmpfile) = $arg->{tmpdir}."/parse_cert.$$";
+    unless (open(PSC, "| $arg->{openssl} x509 -email -subject -purpose -noout > $tmpfile")) {
 	&Log::do_log('err', "smime_parse_cert: open |openssl: $!");
 	return undef;
     }
@@ -693,11 +707,11 @@ sub smime_parse_cert {
 }
 
 sub smime_extract_certs {
-    my($mime, $outfile) = @_;
+    my($mime, $outfile, $openssl) = @_;
     &Log::do_log('debug2', "Tools::SMIME::smime_extract_certs(%s)",$mime->mime_type);
 
     if ($mime->mime_type =~ /application\/(x-)?pkcs7-/) {
-	unless (open(MSGDUMP, "| $Conf::Conf{openssl} pkcs7 -print_certs ".
+	unless (open(MSGDUMP, "| $openssl pkcs7 -print_certs ".
 		     "-inform der > $outfile")) {
 	    &Log::do_log('err', "unable to run openssl pkcs7: $!");
 	    return 0;

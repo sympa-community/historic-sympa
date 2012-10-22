@@ -355,13 +355,13 @@ while (!$end) {
 		}
 
 		if (&Conf::get_robot_conf($bulk->{'robot'}, 'dkim_feature') eq 'on'){
-		    $messageasstring = remove_invalid_dkim_signature($messageasstring );
+		    $messageasstring = remove_invalid_dkim_signature($messageasstring, $Conf::Conf{'tmpdir'});
 		}
 		if ($message_from_spool->{'dkim_d'}){ # apply dkim signature AFTER any other message transformation.
 		    $messageasstring = dkim_sign($messageasstring,{'dkim_d'=>           $message_from_spool->{'dkim_d'},
 									   'dkim_i'=>           $message_from_spool->{'dkim_i'},
 									   'dkim_selector'=>    $message_from_spool->{'dkim_selector'},
-									   'dkim_privatekey' => $message_from_spool->{'dkim_privatekey'}, } );
+									   'dkim_privatekey' => $message_from_spool->{'dkim_privatekey'}, }, $Conf::Conf{'tmpdir'});
 		}
 
 		# &trace_smime($messageasstring,'dkim');
@@ -373,14 +373,14 @@ while (!$end) {
 	    }
 	}else{ # message dont needs personalization, they can be sent by packet
             if (&Conf::get_robot_conf($bulk->{'robot'}, 'dkim_feature') eq 'on'){
-		$messageasstring_init = remove_invalid_dkim_signature($messageasstring_init );
+		$messageasstring_init = remove_invalid_dkim_signature($messageasstring_init, $Conf::Conf{'tmpdir'});
 	    }
 	    # Initial message
 	    if ($message_from_spool->{'dkim_d'}){
 		$messageasstring_init = dkim_sign($messageasstring_init,{'dkim_d'=>           $message_from_spool->{'dkim_d'},
 										 'dkim_i'=>           $message_from_spool->{'dkim_i'},
 										 'dkim_selector'=>    $message_from_spool->{'dkim_selector'},
-										 'dkim_privatekey' => $message_from_spool->{'dkim_privatekey'}, } );
+										 'dkim_privatekey' => $message_from_spool->{'dkim_privatekey'}, }, $Conf::Conf{'tmpdir'} );
 	    }
 
 	    # &trace_smime($messageasstring_init,'dkim 2');

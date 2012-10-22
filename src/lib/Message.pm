@@ -284,7 +284,7 @@ sub new {
 	}
 	# verify DKIM signature
 	if (&Conf::get_robot_conf($robot, 'dkim_feature') eq 'on'){
-	    $message->{'dkim_pass'} = dkim_verifier($message->{'msg_as_string'});
+	    $message->{'dkim_pass'} = dkim_verifier($message->{'msg_as_string'}, $Conf::Conf{'tmpdir'});
 	}
     }
         
@@ -306,7 +306,7 @@ sub new {
 	## Decrypt messages
 	if (($hdr->get('Content-Type') =~ /application\/(x-)?pkcs7-mime/i) &&
 	    ($hdr->get('Content-Type') !~ /signed-data/)){
-	    my ($dec, $dec_as_string) = smime_decrypt ($message->{'msg'}, $message->{'list'});
+	    my ($dec, $dec_as_string) = smime_decrypt ($message->{'msg'}, $message->{'list'}, $Conf::Conf{'tmpdir'}, $Conf::Conf{'home'}, $Conf::Conf{'key_passwd'}, $Conf::Conf{'openssl'});
 	    
 	    unless (defined $dec) {
 		&Log::do_log('debug', "Message %s could not be decrypted", $file);
@@ -325,7 +325,7 @@ sub new {
 	## Check S/MIME signatures
 	if ($hdr->get('Content-Type') =~ /multipart\/signed|application\/(x-)?pkcs7-mime/i) {
 	    $message->{'protected'} = 1; ## Messages that should not be altered (no footer)
-	    my $signed = smime_sign_check ($message);
+	    my $signed = smime_sign_check ($message, $Conf::Conf{'tmpdir'},$Conf::Conf{'cafile'},$Conf::Conf{'capath'}, $Conf::Conf{'openssl'}, $Conf::Conf{'ssl_cert_dir'});
 	    if ($signed->{'body'}) {
 		$message->{'smime_signed'} = 1;
 		$message->{'smime_subject'} = $signed->{'subject'};

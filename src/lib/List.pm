@@ -3754,7 +3754,13 @@ sub send_global_file {
     $data->{'boundary'} = '----------=_'.&tools::get_message_id($robot) unless ($data->{'boundary'});
 
     if ((&Conf::get_robot_conf($robot, 'dkim_feature') eq 'on')&&(&Conf::get_robot_conf($robot, 'dkim_add_signature_to')=~/robot/)){
-	$data->{'dkim'} = get_dkim_parameters({'robot' => $robot});
+	$data->{'dkim'} = get_dkim_parameters({
+            'robot'           => $robot,
+            'signer_domain'   => Conf::get_robot_conf($robot, 'dkim_signer_domain'),
+            'signer_identity' => Conf::get_robot_conf($robot, 'dkim_signer_identity'),
+            'selector'        => Conf::get_robot_conf($robot, 'dkim_selector'),
+            'keyfile'         => Conf::get_robot_conf($robot, 'dkim_private_key_path')
+        });
     }
     
     $data->{'use_bulk'} = 1  unless ($data->{'alarm'}) ; # use verp excepted for alarms. We should make this configurable in order to support Sympa server on a machine without any MTA service
@@ -4415,7 +4421,7 @@ sub send_to_editor {
    foreach my $recipient (@rcpt) {
        if ($encrypt eq 'smime_crypted') {	       
 	   ## is $msg->body_as_string respect base64 number of char per line ??
-	   my $cryptedmsg = smime_encrypt($msg->head, $msg->body_as_string, $recipient); 
+	   my $cryptedmsg = smime_encrypt($msg->head, $msg->body_as_string, $recipient,undef, $Conf::Conf{'tmpdir'}, $Conf::Conf{'ssl_cert_dir'}, $Conf::Conf{'openssl'}); 
 	   unless ($cryptedmsg) {
 	       &Log::do_log('notice', 'Failed encrypted message for moderator');
 	       #  send a generic error message : X509 cert missing
