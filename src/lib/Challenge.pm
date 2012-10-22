@@ -126,7 +126,7 @@ sub store {
 	next unless ($var);
 	$hash{$var} = $challenge->{$var};
     }
-    my $data_string = &Sympa::Tools::hash_2_string (\%hash);
+    my $data_string = &Sympa::Tools::Data::hash_2_string (\%hash);
     my $sth;
 
     unless(&SDM::do_query("INSERT INTO challenge_table (id_challenge, date_challenge, robot_challenge, email_challenge, data_challenge) VALUES ('%s','%s','%s','%s','%s'')",$challenge->{'id_challenge'},$challenge->{'date'},$challenge->{'robot'},$challenge->{'email'},$data_string)) {
