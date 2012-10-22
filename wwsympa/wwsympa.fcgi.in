@@ -63,8 +63,8 @@ use OAuthConsumer;
 use report;
 use SharedDocument;
 use Sympaspool;
-use SympaSession;
 use Sympa::Constants;
+use Sympa::Session;
 use Sympa::Tools;
 use Sympa::Tools::Data;
 use Sympa::TT2;
@@ -1267,7 +1267,7 @@ my $birthday = time ;
      
      &wwslog('info', "parameter css_url '%s' seems strange, it must be the url of a directory not a css file", $param->{'css_url'}) if ($param->{'css_url'} =~ /\.css$/);
 
-     $session = new SympaSession ($robot,{'cookie'=>&SympaSession::get_session_cookie($ENV{'HTTP_COOKIE'}),
+     $session = new Sympa::Session ($robot,{'cookie'=>&Sympa::Session::get_session_cookie($ENV{'HTTP_COOKIE'}),
 					  'action'=>$in{'action'},
 					  'rss'=>$rss, 'ajax' => $ajax});
 
@@ -1275,7 +1275,7 @@ my $birthday = time ;
      unless (defined $session) {
 	 &List::send_notify_to_listmaster('failed_to_create_web_session', $robot);
 	 &wwslog('info','Failed to create session');
-	 $session->{'email'}= 'nobody'; $session->{'id_session'} = &SympaSession::get_random();
+	 $session->{'email'}= 'nobody'; $session->{'id_session'} = &Sympa::Session::get_random();
      }
      
      # Retreive oauth_token from session if it exists and if we have a (newly) identified user
@@ -5369,7 +5369,7 @@ sub do_family_signoff {
 	&wwslog('err','do_signoff: user %s tried to unsubscribe address %s from family %s',$session->{'email'}, $in{'email'},$in {'family'});
 	return undef;
     }
-    unless (List::insert_delete_exclusion($in{'email'},&SympaSession::get_random(),$robot,'insert',$in{'family'})) {
+    unless (List::insert_delete_exclusion($in{'email'},&Sympa::Session::get_random(),$robot,'insert',$in{'family'})) {
 	&report::reject_report_web('user','cannot_do_signoff');
 	&wwslog('err','do_signoff: Unsubscription of address %s from family %s failed.',$in{'email'},$in {'family'});
 	return undef;
@@ -5743,7 +5743,7 @@ sub do_show_sessions {
 
     $in{'session_delay'} = 10 unless ($in{'session_delay'});
     my $delay = 60 * $in{'session_delay'};
-    $param->{'sessions'} = &SympaSession::list_sessions($delay,$robot,$in{'connected_only'});        
+    $param->{'sessions'} = &Sympa::Session::list_sessions($delay,$robot,$in{'connected_only'});        
     return '1';
 }
 

@@ -19,7 +19,7 @@
 # Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
 
 
-package SympaSession;
+package Sympa::Session;
 
 use strict ;
 
@@ -81,7 +81,7 @@ sub new {
 	}
 	if ($status eq 'not_found') {
 	    &Log::do_log('info',"SympaSession::new ignoring unknown session cookie '$cookie'" ); # start a new session (may ne a fake cookie)
-	    return (new SympaSession ($robot));
+	    return (new Sympa::Session ($robot));
 	}
 	# checking if the client host is unchanged during the session brake sessions when using multiple proxy with
         # load balancing (round robin, etc). This check is removed until we introduce some other method

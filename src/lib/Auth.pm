@@ -30,6 +30,7 @@ use List;
 use Log;
 use report;
 use SDM;
+use Sympa::Session;
 
 ## return the password finger print (this proc allow futur replacement of md5 by sha1 or ....)
 sub password_fingerprint{
@@ -396,7 +397,7 @@ sub create_one_time_ticket {
     my $data_string = shift;
     my $remote_addr = shift; ## Value may be 'mail' if the IP address is not known
 
-    my $ticket = &SympaSession::get_random();
+    my $ticket = &Sympa::Session::get_random();
     &Log::do_log('info', 'Auth::create_one_time_ticket(%s,%s,%s,%s) value = %s',$email,$robot,$data_string,$remote_addr,$ticket);
 
     my $date = time;

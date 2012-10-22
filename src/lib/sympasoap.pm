@@ -33,6 +33,7 @@ use Auth;
 use Conf;
 use Language;
 use Log;
+use Sympa::Session;
 use Sympa::Tools;
 use Sympa::TT2;
 
@@ -178,8 +179,8 @@ sub login {
 	    ->faultdetail("Incorrect password for user $email or bad login");
     } 
 
-    ## Create SympaSession object
-    my $session = new SympaSession($robot, {'cookie' => $ENV{'SESSION_ID'}});
+    ## Create Sympa::Session object
+    my $session = new Sympa::Session($robot, {'cookie' => $ENV{'SESSION_ID'}});
     $ENV{'USER_EMAIL'} = $email;
     $session->{'email'} = $email;
     $session->store();
@@ -253,8 +254,8 @@ sub casLogin {
 	    ->faultdetail("Could not get email address from LDAP directory");
     }
 
-    ## Create SympaSession object
-    my $session = new SympaSession($robot, {'cookie' => $ENV{'SESSION_ID'}});
+    ## Create Sympa::Session object
+    my $session = new Sympa::Session($robot, {'cookie' => $ENV{'SESSION_ID'}});
     $ENV{'USER_EMAIL'} = $email;
     $session->{'email'} = $email;
     $session->store();
@@ -284,7 +285,7 @@ sub authenticateAndRun {
     
 
     ## Provided email is not trusted, we fetch the user email from the session_table instead
-    my $session = new SympaSession($ENV{'SYMPA_ROBOT'},{'cookie' => $session_id});
+    my $session = new Sympa::Session($ENV{'SYMPA_ROBOT'},{'cookie' => $session_id});
     $email = $session->{'email'} if (defined $session);
     unless ($email or ($email eq 'unkown')  ) {
       &Log::do_log('err', "Failed to authenticate user with session ID $session_id");
@@ -312,7 +313,7 @@ sub getUserEmailByCookie {
 	  ->faultdetail('Use : <cookie>');
     }
     
-    my $session = new SympaSession($ENV{'SYMPA_ROBOT'}, {'cookie' => $cookie});
+    my $session = new Sympa::Session($ENV{'SYMPA_ROBOT'}, {'cookie' => $cookie});
     
     
     unless (defined $session && ($session->{'email'} ne 'unkown')  ) {

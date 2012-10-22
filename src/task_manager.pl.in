@@ -39,10 +39,10 @@ use mail;
 use Scenario;
 use SDM;
 use Sympa::Constants;
+use Sympa::Session;
 use Sympa::Tools;
 use Sympa::Tools::Time;
 use Sympa::Tools::Daemon;
-use SympaSession;
 use Sympaspool;
 use Task;
 use tracking;
@@ -1126,9 +1126,9 @@ sub purge_logs_table {
 sub purge_session_table {    
 
     &Log::do_log('info','task_manager::purge_session_table()');
-    my $removed = &SympaSession::purge_old_sessions('*');
+    my $removed = &Sympa::Session::purge_old_sessions('*');
     unless(defined $removed) {
-	&Log::do_log('err','&SympaSession::purge_old_sessions(): Failed to remove old sessions');
+	&Log::do_log('err','&Sympa::Session::purge_old_sessions(): Failed to remove old sessions');
 	return undef;
     }
     &Log::do_log('notice','purge_session_table(): %s row removed in session_table',$removed);
@@ -1161,9 +1161,9 @@ sub purge_tables {
 sub purge_one_time_ticket_table {    
 
     &Log::do_log('info','task_manager::purge_one_time_ticket_table()');
-    my $removed = &SympaSession::purge_old_tickets('*');
+    my $removed = &Sympa::Session::purge_old_tickets('*');
     unless(defined $removed) {
-	&Log::do_log('err','&SympaSession::purge_old_tickets(): Failed to remove old tickets');
+	&Log::do_log('err','&Sympa::Session::purge_old_tickets(): Failed to remove old tickets');
 	return undef;
     }
     &Log::do_log('notice','purge_one_time_ticket_table(): %s row removed in one_time_ticket_table',$removed);
