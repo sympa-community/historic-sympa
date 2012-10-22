@@ -36,6 +36,7 @@ use Conf;
 use Log;
 use Auth;
 use Language;
+use Sympa::Tools;
 
 ## Define types of SOAP type listType
 my %types = ('listType' => {'listAddress' => 'string',
@@ -755,7 +756,7 @@ sub add {
 	$u->{'email'} = $email;
 	$u->{'gecos'} = $gecos || $u2->{'gecos'};
 	$u->{'date'} = $u->{'update_date'} = time;
-	$u->{'password'} = $u2->{'password'} || &tools::tmp_passwd($email, $Conf::Conf{'cookie'}) ;
+	$u->{'password'} = $u2->{'password'} || &Sympa::Tools::tmp_passwd($email, $Conf::Conf{'cookie'}) ;
 	$u->{'lang'} = $u2->{'lang'} || $list->{'admin'}{'lang'};
 
 	$list->add_list_member($u);
@@ -1528,7 +1529,7 @@ sub get_reason_string {
 
     my $data = {'reason' => $reason };
     my $string;
-    my $tt2_include_path =  &tools::make_tt2_include_path($robot,'mail_tt2','','',$Conf::Conf{'etc'},$Conf::Conf{'viewmaildir'},$Conf::Conf{'domain'});
+    my $tt2_include_path =  &Sympa::Tools::make_tt2_include_path($robot,'mail_tt2','','',$Conf::Conf{'etc'},$Conf::Conf{'viewmaildir'},$Conf::Conf{'domain'});
 
     unless (&tt2::parse_tt2($data,'authorization_reject.tt2' ,\$string, $tt2_include_path)) {
 	my $error = &tt2::get_error();

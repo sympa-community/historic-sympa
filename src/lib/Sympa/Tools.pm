@@ -19,7 +19,7 @@
 # along with this program; if not, write to the Free Software
 # Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
 
-package tools;
+package Sympa::Tools;
 
 use strict;
 
@@ -324,7 +324,7 @@ sub load_edit_list_conf {
     my $conf ;
     
     return undef 
-	unless ($file = &tools::get_filename('etc',{},'edit_list.conf',$robot,$list,$basedir));
+	unless ($file = get_filename('etc',{},'edit_list.conf',$robot,$list,$basedir));
 
     unless (open (FILE, $file)) {
 	&Log::do_log('info','Unable to open config file %s', $file);
@@ -376,7 +376,7 @@ sub load_create_list_conf {
     my $file;
     my $conf ;
     
-    $file = &tools::get_filename('etc',{}, 'create_list.conf', $robot,undef,$basedir);
+    $file = get_filename('etc',{}, 'create_list.conf', $robot,undef,$basedir);
     unless ($file) {
 	&Log::do_log('info', 'unable to read %s', Sympa::Constants::DEFAULTDIR . '/create_list.conf');
 	return undef;
@@ -1423,7 +1423,7 @@ sub qencode_hierarchy {
 	Encode::from_to($new_filename, $encoding, 'utf8') if $encoding;
     
 	## Q-encode filename to escape chars with accents
-	$new_filename = &tools::qencode_filename($new_filename);
+	$new_filename = qencode_filename($new_filename);
     
 	my $orig_f = $f_struct->{'directory'}.'/'.$f_struct->{'filename'};
 	my $new_f = $f_struct->{'directory'}.'/'.$new_filename;

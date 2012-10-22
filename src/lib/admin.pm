@@ -42,8 +42,8 @@ use Language;
 use List;
 use Log;
 use Sympa::Constants;
+use Sympa::Tools;
 use Sympa::Tools::File;
-use tools;
 
 =pod 
 
@@ -189,7 +189,7 @@ sub create_list_old{
    
     ## check listname
     $param->{'listname'} = lc ($param->{'listname'});
-    my $listname_regexp = &tools::get_regexp('listname');
+    my $listname_regexp = &Sympa::Tools::get_regexp('listname');
 
     unless ($param->{'listname'} =~ /^$listname_regexp$/i) {
 	&Log::do_log('err','admin::create_list_old : incorrect listname %s', $param->{'listname'});
@@ -229,7 +229,7 @@ sub create_list_old{
 
 
     ## Check the template supposed to be used exist.
-    my $template_file = &tools::get_filename('etc',{},'create_list_templates/'.$template.'/config.tt2', $robot, undef, $Conf::Conf{'etc'});
+    my $template_file = &Sympa::Tools::get_filename('etc',{},'create_list_templates/'.$template.'/config.tt2', $robot, undef, $Conf::Conf{'etc'});
     unless (defined $template_file) {
 	&Log::do_log('err', 'no template %s found',$template);
 	return undef;
@@ -271,7 +271,7 @@ sub create_list_old{
     $param->{'creation_email'} = "listmaster\@$host" unless ($param->{'creation_email'});
     $param->{'status'} = 'open'  unless ($param->{'status'});
        
-    my $tt2_include_path = &tools::make_tt2_include_path($robot,'create_list_templates/'.$template,'','',$Conf::Conf{'etc'},$Conf::Conf{'viewmaildir'},$Conf::Conf{'domain'});
+    my $tt2_include_path = &Sympa::Tools::make_tt2_include_path($robot,'create_list_templates/'.$template,'','',$Conf::Conf{'etc'},$Conf::Conf{'viewmaildir'},$Conf::Conf{'domain'});
 
     ## Lock config before openning the config file
     my $lock = new Lock ($list_dir.'/config');
@@ -401,7 +401,7 @@ sub create_list{
    
     ## check listname
     $param->{'listname'} = lc ($param->{'listname'});
-    my $listname_regexp = &tools::get_regexp('listname');
+    my $listname_regexp = &Sympa::Tools::get_regexp('listname');
 
     unless ($param->{'listname'} =~ /^$listname_regexp$/i) {
 	&Log::do_log('err','admin::create_list : incorrect listname %s', $param->{'listname'});
@@ -437,7 +437,7 @@ sub create_list{
     }
 
     ## template file
-    my $template_file = &tools::get_filename('etc',{},'config.tt2', $robot,$family, $Conf::Conf{'etc'});
+    my $template_file = &Sympa::Tools::get_filename('etc',{},'config.tt2', $robot,$family, $Conf::Conf{'etc'});
     unless (defined $template_file) {
 	&Log::do_log('err', 'admin::create_list : no config template from family %s@%s',$family->{'name'},$robot);
 	return undef;
@@ -518,7 +518,7 @@ sub create_list{
 
     ## Create associated files if a template was given.
     for my $file ('message.footer','message.header','message.footer.mime','message.header.mime','info') {
-	my $template_file = &tools::get_filename('etc',{},$file.".tt2", $robot,$family, $Conf::Conf{'etc'});
+	my $template_file = &Sympa::Tools::get_filename('etc',{},$file.".tt2", $robot,$family, $Conf::Conf{'etc'});
 	if (defined $template_file) {
 	    my $file_content;
 	    my $tt_result = &tt2::parse_tt2($param, $file.".tt2", \$file_content, [$family->{'dir'}]);
@@ -612,7 +612,7 @@ sub update_list{
     }
 
     ## template file
-    my $template_file = &tools::get_filename('etc',{}, 'config.tt2', $robot,$family, $Conf::Conf{'etc'});
+    my $template_file = &Sympa::Tools::get_filename('etc',{}, 'config.tt2', $robot,$family, $Conf::Conf{'etc'});
     unless (defined $template_file) {
 	&Log::do_log('err', 'admin::update_list : no config template from family %s@%s',$family->{'name'},$robot);
 	return undef;
@@ -713,7 +713,7 @@ sub rename_list{
 
     # check new listname syntax
     my $new_listname = lc ($param{'new_listname'});
-    my $listname_regexp = &tools::get_regexp('listname');
+    my $listname_regexp = &Sympa::Tools::get_regexp('listname');
     
     unless ($new_listname =~ /^$listname_regexp$/i) {
       &Log::do_log('err','incorrect listname %s', $new_listname);
@@ -917,7 +917,7 @@ sub rename_list{
 		 }
 		 
 		 ## Change X-Sympa-To
-		 &tools::change_x_sympa_to("$Conf::Conf{$spool}/$newfile", "$param{'new_listname'}\@$param{'new_robot'}");
+		 &Sympa::Tools::change_x_sympa_to("$Conf::Conf{$spool}/$newfile", "$param{'new_listname'}\@$param{'new_robot'}");
 	     }
 	     
 	     close DIR;

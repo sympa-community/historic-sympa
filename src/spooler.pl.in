@@ -46,10 +46,10 @@ use report;
 use SDM;
 use SQLSource;
 use Sympa::Constants;
+use Sympa::Tools;
 use Sympa::Tools::Daemon;
 use SympaSession;
 use Sympaspool;
-use tools;
 use tracking;
 use tt2;
 

@@ -42,7 +42,7 @@ use OAuth::Lite::Consumer;
 use Auth;
 use Conf;
 use Log;
-use tools;
+use Sympa::Tools;
 
 =pod 
 

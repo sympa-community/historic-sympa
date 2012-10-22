@@ -36,8 +36,8 @@ use Log;
 use Language;
 use List;
 use Sympa::Constants;
+use Sympa::Tools;
 use Sympa::Tools::SMIME;
-use tools;
 
 our @ISA = qw(Exporter);
 our @EXPORT = qw(mail_file mail_message mail_forward set_send_spool);
@@ -721,7 +721,7 @@ sub sending {
 	}
 	printf TMP "X-Sympa-To: %s\n", $all_rcpt;
 	printf TMP "X-Sympa-From: %s\n", $from;
-	printf TMP "X-Sympa-Checksum: %s\n", &tools::sympa_checksum($all_rcpt, $Conf::Conf{'cookie'});
+	printf TMP "X-Sympa-Checksum: %s\n", &Sympa::Tools::sympa_checksum($all_rcpt, $Conf::Conf{'cookie'});
 
 	print TMP $message->{'msg_as_string'} ;
 	close TMP;
@@ -803,7 +803,7 @@ sub smtpto {
    if (!pipe(IN, OUT)) {
        &Log::fatal_err(sprintf gettext("Unable to create a channel in smtpto: %s"), "$!"); ## No return
    }
-   $pid = &tools::safefork();
+   $pid = &Sympa::Tools::safefork();
    $pid{$pid} = 0;
        
    my $sendmail = &Conf::get_robot_conf($robot, 'sendmail');
@@ -893,7 +893,7 @@ sub send_in_spool {
 
     printf TMP "X-Sympa-To: %s\n", $all_rcpt;
     printf TMP "X-Sympa-From: %s\n", $XSympaFrom;
-    printf TMP "X-Sympa-Checksum: %s\n", &tools::sympa_checksum($all_rcpt, $Conf::Conf{'cookie'});
+    printf TMP "X-Sympa-Checksum: %s\n", &Sympa::Tools::sympa_checksum($all_rcpt, $Conf::Conf{'cookie'});
     
     my $return;
     $return->{'filename'} = $sympa_file;     
@@ -1031,7 +1031,7 @@ sub fix_part($$$$) {
 	    $head->delete('X-Sympa-NoWrap');
 	} elsif ($eff_type eq 'text/plain' and
 		 lc($head->mime_attr('Content-type.Format')||'') ne 'flowed') {
-	    $wrap = &tools::wrap_text($body);
+	    $wrap = &Sympa::Tools::wrap_text($body);
 	}
 	my $charset = $head->mime_attr("Content-Type.Charset") || $defcharset;
 

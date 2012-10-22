@@ -46,7 +46,7 @@ use Getopt::Long;
 use POSIX;
 
 use tt2;
-use tools;
+use Sympa::Tools;
 use Sympa::Constants;
 use Sympa::Tools::Daemon;
 use tracking;
@@ -543,7 +543,7 @@ while (!$end) {
 			if ($line =~ /Version\:\s*(.*)/i) {
 			    $version = $1;
 			}
-		    my $email_regexp = &tools::get_regexp('email');
+		    my $email_regexp = &Sympa::Tools::get_regexp('email');
 			if ($line =~ /Original\-Rcpt\-To\:\s*($email_regexp)\s*$/i) {
 			    $original_rcpt = $1;
 			    chomp $original_rcpt;
@@ -677,7 +677,7 @@ while (!$end) {
 		    &store_bounce ($bounce_dir,$bounce->{'messageasstring'},$who);
 		    &update_subscriber_bounce_history($list, 'unknown', $who); # status is undefined 
 		}else{          # no VERP and no rcpt recognized		
-		    my $escaped_from = &tools::escape_chars($from);
+		    my $escaped_from = &Sympa::Tools::escape_chars($from);
 		    &Log::do_log('info', 'error: no address found in message from %s for list %s',$from, $list->{'name'});
 		    $spool->update({'messagekey' => $bounce->{'messagekey'}},{"message_status" => 'bad','messagelock'=> 'NULL'});
 		    next;
@@ -723,7 +723,7 @@ sub store_bounce {
 
     my $queue = $Conf{'queuebounce'};
 
-    my $filename = &tools::escape_chars($rcpt);    
+    my $filename = &Sympa::Tools::escape_chars($rcpt);    
     
     unless (open ARC, ">$bounce_dir/$filename") {
 	&Log::do_log('notice', "Unable to write $bounce_dir/$filename");

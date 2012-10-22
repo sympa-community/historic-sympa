@@ -476,7 +476,7 @@ sub upgrade {
 		&Language::SetLang($list->{'admin'}{'lang'});
 		my $list_encoding = &Language::GetCharset();
 
-		my $count = &tools::qencode_hierarchy($list->{'dir'}.'/shared', $list_encoding);
+		my $count = &Sympa::Tools::qencode_hierarchy($list->{'dir'}.'/shared', $list_encoding);
 
 		if ($count) {
 		    &Log::do_log('notice', 'List %s : %d filenames has been changed', $list->{'name'}, $count);
@@ -675,7 +675,7 @@ sub upgrade {
 					my $new_filename = $f_struct->{'filename'};
 					
 					## Decode and re-encode filename
-					$new_filename = &tools::qencode_filename(&tools::qdecode_filename($new_filename));
+					$new_filename = &Sympa::Tools::qencode_filename(&Sympa::Tools::qdecode_filename($new_filename));
 					
 					if ($new_filename ne $f_struct->{'filename'}) {
 						## Rename file
@@ -1056,7 +1056,7 @@ sub md5_encode_password {
 	next if ($user->{'password_user'} =~ /^$/);
 
 	if ($user->{'password_user'} =~ /^crypt.(.*)$/) {
-	    $clear_password = &tools::decrypt_password($user->{'password_user'}, $Conf::Conf{'cookie'});
+	    $clear_password = &Sympa::Tools::decrypt_password($user->{'password_user'}, $Conf::Conf{'cookie'});
 	}else{ ## Old style cleartext passwords
 	    $clear_password = $user->{'password_user'};
 	}

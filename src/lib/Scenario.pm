@@ -29,9 +29,9 @@ use Conf;
 use List;
 use Log;
 use Sympa::Constants;
+use Sympa::Tools;
 use Sympa::Tools::Time;
 use Sympa::Tools::Data;
-use tools;
 
 my %all_scenarios;
 my %persistent_cache;
@@ -72,7 +72,7 @@ sub new {
 	($parameters{'function'}, $parameters{'name'}) = ($1, $2);
 
     }else {
-	## We can't use &tools::get_filename() because we don't have a List object yet ; it's being constructed
+	## We can't use &Sympa::Tools::get_filename() because we don't have a List object yet ; it's being constructed
 	my @dirs = ($Conf::Conf{'etc'}.'/'.$parameters{'robot'}, $Conf::Conf{'etc'}, Sympa::Constants::DEFAULTDIR);
 	unshift @dirs, $parameters{'directory'} if (defined $parameters{'directory'});
 	foreach my $dir (@dirs) {
@@ -1131,7 +1131,7 @@ sub search{
     
     if ($filter_file =~ /\.sql$/) {
  
-	my $file = &tools::get_filename('etc',{},"search_filters/$filter_file", $robot, $list, $Conf::Conf{'etc'});
+	my $file = &Sympa::Tools::get_filename('etc',{},"search_filters/$filter_file", $robot, $list, $Conf::Conf{'etc'});
 	
         my $timeout = 3600;
         my ($sql_conf, $tsth);
@@ -1215,7 +1215,7 @@ sub search{
  
      }elsif ($filter_file =~ /\.ldap$/) {	
 	## Determine full path of the filter file
-	my $file = &tools::get_filename('etc',{},"search_filters/$filter_file", $robot, $list, $Conf::Conf{'etc'});
+	my $file = &Sympa::Tools::get_filename('etc',{},"search_filters/$filter_file", $robot, $list, $Conf::Conf{'etc'});
 	
 	unless ($file) {
 	    &Log::do_log('err', 'Could not find search filter %s', $filter_file);
@@ -1300,7 +1300,7 @@ sub search{
 
     }elsif($filter_file =~ /\.txt$/){ 
 	# &Log::do_log('info', 'List::search: eval %s', $filter_file);
-	my @files = &tools::get_filename('etc',{'order'=>'all'},"search_filters/$filter_file", $robot, $list, $Conf::Conf{'etc'}); 
+	my @files = &Sympa::Tools::get_filename('etc',{'order'=>'all'},"search_filters/$filter_file", $robot, $list, $Conf::Conf{'etc'}); 
 
 	## Raise an error except for blacklist.txt
 	unless (@files) {
@@ -1351,8 +1351,8 @@ sub verify_custom {
         }
 
     	# use this if your want per list customization (be sure you know what you are doing)
-	#my $file = &tools::get_filename('etc',{},"custom_conditions/${condition}.pm", $robot, $list, $Conf::Conf{'etc'});
-	my $file = &tools::get_filename('etc',{},"custom_conditions/${condition}.pm", $robot, undef, $Conf::Conf{'etc'});
+	#my $file = &Sympa::Tools::get_filename('etc',{},"custom_conditions/${condition}.pm", $robot, $list, $Conf::Conf{'etc'});
+	my $file = &Sympa::Tools::get_filename('etc',{},"custom_conditions/${condition}.pm", $robot, undef, $Conf::Conf{'etc'});
 	unless ($file) {
 	    &Log::do_log('err', 'No module found for %s custom condition', $condition);
 	    return undef;

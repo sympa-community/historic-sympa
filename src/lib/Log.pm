@@ -238,12 +238,12 @@ sub db_log {
     my $list = $arg->{'list'};
     my $robot = $arg->{'robot'};
     my $action = $arg->{'action'};
-    my $parameters = &tools::clean_msg_id($arg->{'parameters'});
+    my $parameters = &Sympa::Tools::clean_msg_id($arg->{'parameters'});
     my $target_email = $arg->{'target_email'};
-    my $msg_id = &tools::clean_msg_id($arg->{'msg_id'});
+    my $msg_id = &Sympa::Tools::clean_msg_id($arg->{'msg_id'});
     my $status = $arg->{'status'};
     my $error_type = $arg->{'error_type'};
-    my $user_email = &tools::clean_msg_id($arg->{'user_email'});
+    my $user_email = &Sympa::Tools::clean_msg_id($arg->{'user_email'});
     my $client = $arg->{'client'};
     my $daemon = $arg->{'daemon'};
     my $date=time;

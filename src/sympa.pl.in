@@ -44,10 +44,10 @@ use Message;
 use report;
 use SDM;
 use Sympa::Constants;
+use Sympa::Tools;
 use Sympa::Tools::Daemon;
 use SympaSession;
 use Sympaspool;
-use tools;
 use tt2;
 use tracking;
 
@@ -218,9 +218,9 @@ unless (Conf::load($config_file)) {
 ## Apply defaults to %List::pinfo
 &List::_apply_defaults();
 
-&tools::ciphersaber_installed($Conf::Conf{'cookie'});
+&Sympa::Tools::ciphersaber_installed($Conf::Conf{'cookie'});
 
-if (&tools::cookie_changed($Conf{'cookie'}, $Conf::Conf{'etc'})) {
+if (&Sympa::Tools::cookie_changed($Conf{'cookie'}, $Conf::Conf{'etc'})) {
      &Log::fatal_err("sympa.conf/cookie parameter has changed. You may have severe inconsitencies into password storage. Restore previous cookie or write some tool to re-encrypt password in database and check spools contents (look at $Conf{'etc'}/cookies.history file)");
 }
 
@@ -397,7 +397,7 @@ if ($main::options{'dump'}) {
     
     exit 0;
 }elsif ($main::options{'md5_digest'}) {
-    my $md5 = &tools::md5_fingerprint($main::options{'md5_digest'});
+    my $md5 = &Sympa::Tools::md5_fingerprint($main::options{'md5_digest'});
     printf "md5 digest : $md5 \n";
     
     exit 0;
@@ -811,7 +811,7 @@ if ($main::options{'dump'}) {
 	&Language::SetLang($list->{'admin'}{'lang'});
 	my $list_encoding = &Language::GetCharset();
 	
-	my $count = &tools::qencode_hierarchy($list->{'dir'}.'/shared', $list_encoding);
+	my $count = &Sympa::Tools::qencode_hierarchy($list->{'dir'}.'/shared', $list_encoding);
 	
 	if ($count) {
 	    &Log::do_log('notice', 'List %s : %d filenames has been changed', $list->{'name'}, $count);
@@ -996,7 +996,7 @@ while (!$signal) {
 	$queuesubscribe->clean({'delay'=> $Conf{'clean_delay_queuesubscribe'}});
 	my $queueautomatic = new Sympaspool('automatic');
 	$queueautomatic->clean({'delay'=> $Conf{'clean_delay_queueautomatic'}});
-	&tools::CleanDir($Conf{'tmpdir'}, $Conf{'clean_delay_tmpdir'}); # this is not a message spool
+	&Sympa::Tools::CleanDir($Conf{'tmpdir'}, $Conf{'clean_delay_tmpdir'}); # this is not a message spool
     }	    				          
     ## Cleanup in-memory msgid table, only in a while
     if (time > $latest_msgid_table_cleanup + $Conf{'msgid_table_cleanup_frequency'}) {
@@ -1294,7 +1294,7 @@ sub process_message {
     }
 	
     #  anti-virus
-    my $rc= &tools::virus_infected(
+    my $rc= &Sympa::Tools::virus_infected(
         $message->{'msg'},
         $Conf::Conf{'antivirus_path'},
         $Conf::Conf{'antivirus_args'},
@@ -1693,7 +1693,7 @@ sub DoMessage{
     # Reject messages with commands
     if ( &Conf::get_robot_conf($robot,'misaddressed_commands') =~ /reject/i) {
 	## Check the message for commands and catch them.
-	if (&tools::checkcommand($message->{'msg'}, $sender, $robot,$Conf::Conf{'misaddressed_commands_regexp'})) {
+	if (&Sympa::Tools::checkcommand($message->{'msg'}, $sender, $robot,$Conf::Conf{'misaddressed_commands_regexp'})) {
 	    &Log::do_log('err', 'sympa::DoMessage(): Found command in message, ignoring message');
 	    &report::reject_report_msg('user','routing_error',$sender,{'message' => $message},$robot,$msg_string,$list);
 	    &Log::db_log({'robot' => $robot,'list' => $list->{'name'},'action' => 'DoMessage','parameters' => "$which,$messageid,$robot",'target_email' => '','msg_id' => $messageid,'status' => 'error','error_type' => 'routing_error','user_email' => $sender,'client' => $ip,'daemon' => $daemon_name});
@@ -1785,9 +1785,9 @@ sub DoMessage{
     if ($action =~ /^do_it/) {
 
 	my $apply_dkim_signature = 'off';
-	$apply_dkim_signature = 'on' if &tools::is_in_array($list->{'admin'}{'dkim_signature_apply_on'},'any');
-	$apply_dkim_signature = 'on' if (&tools::is_in_array($list->{'admin'}{'dkim_signature_apply_on'},'smime_authenticated_messages') && ($is_signed->{'body'}));
-	$apply_dkim_signature = 'on' if &tools::is_in_array($list->{'admin'}{'dkim_signature_apply_on'},'dkim_authenticated_messages');
+	$apply_dkim_signature = 'on' if &Sympa::Tools::is_in_array($list->{'admin'}{'dkim_signature_apply_on'},'any');
+	$apply_dkim_signature = 'on' if (&Sympa::Tools::is_in_array($list->{'admin'}{'dkim_signature_apply_on'},'smime_authenticated_messages') && ($is_signed->{'body'}));
+	$apply_dkim_signature = 'on' if &Sympa::Tools::is_in_array($list->{'admin'}{'dkim_signature_apply_on'},'dkim_authenticated_messages');
 	
 	my $numsmtp;
 	eval { $numsmtp =$list->distribute_msg('message'=> $message,
@@ -1963,7 +1963,7 @@ sub DoCommand {
 
     ## Make multipart singlepart
     if ($msg->is_multipart()) {
-	my $status = &tools::as_singlepart($msg, 'text/plain');
+	my $status = &Sympa::Tools::as_singlepart($msg, 'text/plain');
 
 	unless (defined $status) {
 	    &Log::do_log('err', 'Could not change multipart to singlepart');

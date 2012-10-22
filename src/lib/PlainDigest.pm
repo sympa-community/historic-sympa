@@ -87,7 +87,7 @@
  use HTML::FormatText;
 
  use Language;
- use tools;
+ use Sympa::Tools;
 
  @ISA = qw(MIME::Entity);
  
@@ -102,7 +102,7 @@
   # clean up after ourselves
   $topent->purge;
 
-  return &tools::wrap_text($outstring, '', '');
+  return &Sympa::Tools::wrap_text($outstring, '', '');
  }
 
  sub _do_toplevel {
@@ -213,7 +213,7 @@
   $headers .= sprintf(gettext("Cc: %s\n"), $cc) if $cc;
   $headers .= sprintf(gettext("Subject: %s\n"),$subject ) if $subject;
   $headers .= "\n";
-  $outstring .= &tools::wrap_text($headers, '', '    ');
+  $outstring .= &Sympa::Tools::wrap_text($headers, '', '    ');
   
   _do_toplevel ($msgent);
   

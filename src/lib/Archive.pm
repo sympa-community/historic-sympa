@@ -122,9 +122,9 @@ sub scan_dir_archive {
 	my $msg = {};
 	$msg->{'id'} = $i;
 
-	$msg->{'subject'} = &tools::decode_header($mail, 'Subject');
-	$msg->{'from'} = &tools::decode_header($mail, 'From');
-	$msg->{'date'} = &tools::decode_header($mail, 'Date');
+	$msg->{'subject'} = &Sympa::Tools::decode_header($mail, 'Subject');
+	$msg->{'from'} = &Sympa::Tools::decode_header($mail, 'From');
+	$msg->{'date'} = &Sympa::Tools::decode_header($mail, 'Date');
 
 	$msg->{'full_msg'} = $mail->{'msg'}->as_string;
 
@@ -344,7 +344,7 @@ sub convert_single_msg_2_html {
 	    return undef;
 	}
     }
-    my $mhonarc_ressources = &tools::get_filename('etc',{},'mhonarc-ressources.tt2', $robot,$list,$Conf::Conf{'etc'});
+    my $mhonarc_ressources = &Sympa::Tools::get_filename('etc',{},'mhonarc-ressources.tt2', $robot,$list,$Conf::Conf{'etc'});
     
     unless ($mhonarc_ressources) {
 &Log::do_log('notice',"Cannot find any MhOnArc ressource file");

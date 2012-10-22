@@ -38,9 +38,9 @@ sub password_fingerprint{
 
     my $pwd = shift;
     if(&Conf::get_robot_conf('*','password_case') eq 'insensitive') {
-	return &tools::md5_fingerprint(lc($pwd));
+	return &Sympa::Tools::md5_fingerprint(lc($pwd));
     }else{
-	return &tools::md5_fingerprint($pwd);
+	return &Sympa::Tools::md5_fingerprint($pwd);
     }    
 }
 
@@ -54,7 +54,7 @@ sub password_fingerprint{
 
      my ($canonic, $user);
 
-     if( &tools::valid_email($auth)) {
+     if( &Sympa::Tools::valid_email($auth)) {
 	 return &authentication($robot, $auth,$pwd);
      }else{
 	 ## This is an UID
@@ -163,7 +163,7 @@ sub authentication {
     &Log::do_log('err','authentication: incorrect password for user %s', $email);
 
     $param->{'init_email'} = $email;
-    $param->{'escaped_init_email'} = &tools::escape_chars($email);
+    $param->{'escaped_init_email'} = &Sympa::Tools::escape_chars($email);
     return undef;
 }
 
@@ -174,7 +174,7 @@ sub ldap_authentication {
      &Log::do_log('debug2','Auth::ldap_authentication(%s,%s,%s)', $auth,'****',$whichfilter);
      &Log::do_log('debug3','Password used: %s',$pwd);
 
-     unless (&tools::get_filename('etc',{},'auth.conf', $robot, undef, $Conf::Conf{'etc'})) {
+     unless (&Sympa::Tools::get_filename('etc',{},'auth.conf', $robot, undef, $Conf::Conf{'etc'})) {
 	 return undef;
      }
 
@@ -283,7 +283,7 @@ sub ldap_authentication {
      &Log::do_log('debug3',"canonic: $canonic_email[0]");
      ## If the identifier provided was a valid email, return the provided email.
      ## Otherwise, return the canonical email guessed after the login.
-     if( &tools::valid_email($auth) && !&Conf::get_robot_conf($robot,'ldap_force_canonical_email')) {
+     if( &Sympa::Tools::valid_email($auth) && !&Conf::get_robot_conf($robot,'ldap_force_canonical_email')) {
 	 return ($auth);
      }else{
 	 return lc($canonic_email[0]);
@@ -357,7 +357,7 @@ sub remote_app_check_password {
     my ($trusted_application_name,$password,$robot) = @_;
     &Log::do_log('debug','Auth::remote_app_check_password (%s,%s)',$trusted_application_name,$robot);
     
-    my $md5 = &tools::md5_fingerprint($password);
+    my $md5 = &Sympa::Tools::md5_fingerprint($password);
     
     my $vars;
     # seach entry for trusted_application in Conf

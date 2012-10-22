@@ -34,8 +34,8 @@ use Log;
 use Language;
 use SDM;
 use Sympa::Constants;
+use Sympa::Tools;
 use Sympa::Tools::File;
-use tools;
 use wwslib;
 
 our @ISA = qw(Exporter);
@@ -584,7 +584,7 @@ sub checkfiles {
     }
 
     ## Set TT2 path
-    my $tt2_include_path = &tools::make_tt2_include_path($robot,'web_tt2','','',$Conf{'etc'}, $Conf{'viewmaildir'}, $Conf{'domain'});
+    my $tt2_include_path = &Sympa::Tools::make_tt2_include_path($robot,'web_tt2','','',$Conf{'etc'}, $Conf{'viewmaildir'}, $Conf{'domain'});
 
     ## Create directory if required
     unless (-d $dir) {
@@ -598,7 +598,7 @@ sub checkfiles {
     foreach my $css ('style.css','print.css','fullPage.css','print-preview.css') {
 
         $param->{'css'} = $css;
-        my $css_tt2_path = &tools::get_filename('etc',{}, 'web_tt2/css.tt2', $robot, undef, $Conf{'etc'});
+        my $css_tt2_path = &Sympa::Tools::get_filename('etc',{}, 'web_tt2/css.tt2', $robot, undef, $Conf{'etc'});
         
         ## Update the CSS if it is missing or if a new css.tt2 was installed
         if (! -f $dir.'/'.$css ||
@@ -1713,7 +1713,7 @@ sub _set_listmasters_entry{
         my @emails_provided = split(/,/, $param->{'config_hash'}{'listmaster'});
         $number_of_email_provided = $#emails_provided+1;
         foreach my $lismaster_address (@emails_provided){
-            if (&tools::valid_email($lismaster_address)) {
+            if (&Sympa::Tools::valid_email($lismaster_address)) {
                 push @{$param->{'config_hash'}{'listmasters'}}, $lismaster_address;
                 $number_of_valid_email++;
             }else{
@@ -1883,7 +1883,7 @@ sub _get_config_file_name {
 
 sub _create_robot_like_config_for_main_robot {
     return if (defined $Conf::Conf{'robots'}{$Conf::Conf{'domain'}});
-    my $main_conf_no_robots = &tools::dup_var(\%Conf);
+    my $main_conf_no_robots = &Sympa::Tools::dup_var(\%Conf);
     delete $main_conf_no_robots->{'robots'};
     &_remove_unvalid_robot_entry({'config_hash' => $main_conf_no_robots, 'quiet' => 1 });
     $Conf{'robots'}{$Conf{'domain'}} = $main_conf_no_robots;

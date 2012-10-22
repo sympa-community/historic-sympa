@@ -9,6 +9,7 @@ use Conf; # to load Sympa conf which is needed by List.pm
 use List;
 use Log; # if you want to get logs of List.pm
 use Sympa::Constants;
+use Sympa::Tools;
 
 unless (Conf::load(Sympa::Constants::CONFIG)) {
     die "Can't load Sympa configuration file";
@@ -67,7 +68,7 @@ foreach $msg ( sort grep(!/^\./, readdir SPOOL )) {
 	unless (mkdir ($tmp_dir, 0777)) {
 	    die "May not create $tmp_dir";
 	}
-	my $mhonarc_ressources = &tools::get_filename('etc',{},'mhonarc-ressources.tt2', $robot, $self, $Conf::Conf{'etc'});
+	my $mhonarc_ressources = &Sympa::Tools::get_filename('etc',{},'mhonarc-ressources.tt2', $robot, $self, $Conf::Conf{'etc'});
 	unless ($mhonarc_ressources) {
 	    die "Cannot find any MhOnArc ressource file";
 	}

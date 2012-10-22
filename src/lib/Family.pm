@@ -216,7 +216,7 @@ sub new {
     bless $self, $class;
     $list_of_families{$robot}{$name} = $self;
 
-    my $family_name_regexp = &tools::get_regexp('family_name');
+    my $family_name_regexp = &Sympa::Tools::get_regexp('family_name');
 
     ## family name
     unless ($name && ($name =~ /^$family_name_regexp$/io) ) {

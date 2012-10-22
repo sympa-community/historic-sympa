@@ -38,7 +38,7 @@ use Config_XML;
 use Family;
 use report;
 use File::Copy;
-use tools;
+use Sympa::Tools;
 use tt2;
 use Sympa::Constants;
 use Sympa::Tools::Data;

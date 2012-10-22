@@ -30,7 +30,7 @@ use Conf;
 use Datasource;
 use List;
 use Log;
-use tools;
+use Sympa::Tools;
 use tt2;
 
 our @ISA = qw(Datasource Exporter);

@@ -37,8 +37,8 @@ use List;
 use Message;
 use report;
 use Sympa::Constants;
+use Sympa::Tools;
 use Sympa::Tools::File;
-use tools;
 
 our @ISA = qw(Exporter);
 our @EXPORT_OK = qw($sender);
@@ -846,7 +846,7 @@ sub subscribe {
 	    my $u = &List::get_global_user($sender);
 	    
 	    &List::update_global_user($sender, {'lang' => $u->{'lang'} || $list->{'admin'}{'lang'},
-					    'password' => $u->{'password'} || &tools::tmp_passwd($sender, $Conf::Conf{'cookie'})
+					    'password' => $u->{'password'} || &Sympa::Tools::tmp_passwd($sender, $Conf::Conf{'cookie'})
 					    });
 	}
 	
@@ -1202,7 +1202,7 @@ sub add {
 
     &Log::do_log('debug', 'Commands::add(%s,%s,%s,%s)', $what,$robot, $sign_mod, $message);
 
-    my $email_regexp = &tools::get_regexp('email');    
+    my $email_regexp = &Sympa::Tools::get_regexp('email');    
 
     $what =~ /^(\S+)\s+($email_regexp)(\s+(.+))?\s*$/;
     my($which, $email, $comment) = ($1, $2, $6);
@@ -1292,7 +1292,7 @@ sub add {
 	    my $u = &List::get_global_user($email);
 	    
 	    &List::update_global_user($email, {'lang' => $u->{'lang'} || $list->{'admin'}{'lang'},
-					   'password' => $u->{'password'} || &tools::tmp_passwd($email, $Conf::Conf{'cookie'})
+					   'password' => $u->{'password'} || &Sympa::Tools::tmp_passwd($email, $Conf::Conf{'cookie'})
 					    });
 	}
 	
@@ -1733,7 +1733,7 @@ sub del {
 
     &Log::do_log('debug', 'Commands::del(%s,%s,%s,%s)', $what,$robot,$sign_mod,$message);
 
-    my $email_regexp = &tools::get_regexp('email');    
+    my $email_regexp = &Sympa::Tools::get_regexp('email');    
 
     $what =~ /^(\S+)\s+($email_regexp)\s*/;
     my($which, $who) = ($1, $2);
@@ -2045,8 +2045,8 @@ sub distribute {
     ## Distribute the message
     my $numsmtp;
     my $apply_dkim_signature = 'off';
-    $apply_dkim_signature = 'on' if &tools::is_in_array($list->{'admin'}{'dkim_signature_apply_on'},'any');
-    $apply_dkim_signature = 'on' if &tools::is_in_array($list->{'admin'}{'dkim_signature_apply_on'},'editor_validated_messages');
+    $apply_dkim_signature = 'on' if &Sympa::Tools::is_in_array($list->{'admin'}{'dkim_signature_apply_on'},'any');
+    $apply_dkim_signature = 'on' if &Sympa::Tools::is_in_array($list->{'admin'}{'dkim_signature_apply_on'},'editor_validated_messages');
 
     $numsmtp =$list->distribute_msg('message'=> $message,
 				    'apply_dkim_signature'=>$apply_dkim_signature);
@@ -2197,8 +2197,8 @@ sub confirm {
 	## Distribute the message
 	my $numsmtp;
 	my $apply_dkim_signature = 'off'; 
-	$apply_dkim_signature = 'on' if &tools::is_in_array($list->{'admin'}{'dkim_signature_apply_on'},'any');
-	$apply_dkim_signature = 'on' if &tools::is_in_array($list->{'admin'}{'dkim_signature_apply_on'},'md5_authenticated_messages');
+	$apply_dkim_signature = 'on' if &Sympa::Tools::is_in_array($list->{'admin'}{'dkim_signature_apply_on'},'any');
+	$apply_dkim_signature = 'on' if &Sympa::Tools::is_in_array($list->{'admin'}{'dkim_signature_apply_on'},'md5_authenticated_messages');
 	
 	$numsmtp =$list->distribute_msg('message'=> $message,
 					'apply_dkim_signature'=>$apply_dkim_signature);
@@ -2285,7 +2285,7 @@ sub reject {
     unless  ($#sender_hdr == -1) {
 	my $rejected_sender = $sender_hdr[0]->address;
 	my %context;
-	$context{'subject'} = &tools::decode_header($message, 'Subject');
+	$context{'subject'} = &Sympa::Tools::decode_header($message, 'Subject');
 	$context{'rejected_by'} = $sender;
 	$context{'editor_msg_body'} = $editor_msg->{'msg'}->body_as_string if ($editor_msg) ;
 	

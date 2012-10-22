@@ -28,7 +28,7 @@ use Conf;
 use List;
 use Log;
 use Sympaspool;
-use tools;
+use Sympa::Tools;
 
 my @task_list;
 my %task_by_list;
@@ -46,8 +46,8 @@ sub new {
     my $task;
     &Log::do_log('debug2', 'Task::new  messagekey = %s',$task_in_spool->{'messagekey'});
     
-    my $listname_regexp = &tools::get_regexp('listname');
-    my $host_regexp = &tools::get_regexp('host');
+    my $listname_regexp = &Sympa::Tools::get_regexp('listname');
+    my $host_regexp = &Sympa::Tools::get_regexp('host');
     
     $task->{'messagekey'} = $task_in_spool->{'messagekey'};    
     $task->{'taskasstring'} = $task_in_spool->{'messageasstring'};    

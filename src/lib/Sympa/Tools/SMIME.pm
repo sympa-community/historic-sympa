@@ -28,7 +28,7 @@ use MIME::Parser;
 
 use List;
 use Log;
-use tools;
+use Sympa::Tools;
 
 our @ISA = qw(Exporter);
 our @EXPORT = qw(
@@ -350,7 +350,7 @@ sub smime_encrypt {
 	my $self = new List($email);
 	($usercert, $dummy) = smime_find_keys($self->{dir}, 'encrypt');
     }else{
-	my $base = "$ssl_cert_dir/".&tools::escape_chars($email);
+	my $base = "$ssl_cert_dir/".&Sympa::Tools::escape_chars($email);
 	if(-f "$base\@enc") {
 	    $usercert = "$base\@enc";
 	} else {

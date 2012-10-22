@@ -27,9 +27,9 @@ use strict;
 use Carp;
 use POSIX;
 
-use tools;
 use List;
 use Log;
+use Sympa::Tools;
 use Sympa::Tools::Data;
 
 ## Creates a new object
@@ -49,7 +49,7 @@ sub new {
     $document->{'root_path'} = $list->{'dir'}.'/shared';
 
     $document->{'path'} = &main::no_slash_end($path);
-    $document->{'escaped_path'} = &tools::escape_chars($document->{'path'}, '/');
+    $document->{'escaped_path'} = &Sympa::Tools::escape_chars($document->{'path'}, '/');
 
     ### Document isn't a description file
     if ($document->{'path'} =~ /\.desc/) {
@@ -103,7 +103,7 @@ sub new {
 	$document->{'visible_filename'} = $1;
     }
 
-    $document->{'escaped_filename'} =  &tools::escape_chars($document->{'filename'});
+    $document->{'escaped_filename'} =  &Sympa::Tools::escape_chars($document->{'filename'});
 
     ## Father dir
     if ($document->{'path'} =~ /^(([^\/]*\/)*)([^\/]+)$/) {
@@ -111,7 +111,7 @@ sub new {
     }else {
 	$document->{'father_path'} = '';
     }
-    $document->{'escaped_father_path'} = &tools::escape_chars($document->{'father_path'}, '/');
+    $document->{'escaped_father_path'} = &Sympa::Tools::escape_chars($document->{'father_path'}, '/');
     
 
     ### File, directory or URL ?
@@ -152,7 +152,7 @@ sub new {
 	my %desc_hash = &main::get_desc_file($desc_file);
 	$document->{'owner'} = $desc_hash{'email'};
 	    $document->{'title'} = $desc_hash{'title'};
-	$document->{'escaped_title'} = &tools::escape_html($document->{'title'});
+	$document->{'escaped_title'} = &Sympa::Tools::escape_html($document->{'title'});
 	
 	# Author
 	if ($desc_hash{'email'}) {

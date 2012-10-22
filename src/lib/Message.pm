@@ -45,7 +45,7 @@ use MIME::Parser;
 use Conf;
 use List;
 use Log;
-use tools;
+use Sympa::Tools;
 use Sympa::Tools::DKIM;
 use Sympa::Tools::SMIME;
 use tt2;
@@ -204,7 +204,7 @@ sub new {
     }
     $message->{'sender'} = lc($sender_hdr[0]->address);
 
-    unless (&tools::valid_email($message->{'sender'})) {
+    unless (&Sympa::Tools::valid_email($message->{'sender'})) {
 	&Log::do_log('err', "Invalid From: field '%s'", $message->{'sender'});
 	return undef;
     }
@@ -293,7 +293,7 @@ sub new {
 	my $chksum = $hdr->get('X-Sympa-Checksum'); chomp $chksum;
 	my $rcpt = $hdr->get('X-Sympa-To'); chomp $rcpt;
 
-	if ($chksum eq &tools::sympa_checksum($rcpt, $Conf::Conf{'cookie'})) {
+	if ($chksum eq &Sympa::Tools::sympa_checksum($rcpt, $Conf::Conf{'cookie'})) {
 	    $message->{'md5_check'} = 1 ;
 	}else{
 	    &Log::do_log('err',"incorrect X-Sympa-Checksum header");	
@@ -538,7 +538,7 @@ sub fix_html_part {
 	    $body = $cset->encode($body);
 	}
 
-	my $filtered_body = &tools::sanitize_html(
+	my $filtered_body = &Sympa::Tools::sanitize_html(
             'string' => $body,
             'robot'=> $robot,
             'host' => Conf::get_robot_conf($robot,'http_host')

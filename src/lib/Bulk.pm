@@ -49,8 +49,8 @@ use Log;
 use mail;
 use Message;
 use SDM;
+use Sympa::Tools;
 use Task;
-use tools;
 use tt2;
 use WebAgent;
 
@@ -77,7 +77,7 @@ sub next {
     &Log::do_log('debug', 'Bulk::next');
 
     # lock next packet
-    my $lock = &tools::get_lockname();
+    my $lock = &Sympa::Tools::get_lockname();
 
     my $order;
     my $limit_oracle='';
@@ -305,7 +305,7 @@ sub merge_msg {
 #  personalized to bulk.pl                                 #
 #  It uses the method &tt2::parse_tt2                      #
 #  It uses the method &List::get_list_member_no_object     #
-#  It uses the method &tools::get_fingerprint              #
+#  It uses the method &Sympa::Tools::get_fingerprint              #
 #                                                          #
 # IN : - rcpt : the receipient email                       #
 #      - listname : the name of the list                   #
@@ -467,7 +467,7 @@ sub store {
 	}else{
 	    $rcptasstring  = $packet;
 	}
-	my $packetid =  &tools::md5_fingerprint($rcptasstring);
+	my $packetid =  &Sympa::Tools::md5_fingerprint($rcptasstring);
 	my $packet_already_exist;
 	if (ref($listname) =~ /List/i) {
 	    $listname = $listname->{'name'};

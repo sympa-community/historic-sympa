@@ -41,7 +41,7 @@ use JSON::XS;
 
 use Conf;
 use Log;
-use tools;
+use Sympa::Tools;
 
 =pod 
 

@@ -29,7 +29,7 @@ unless (require Crypt::CipherSaber) {
     die "Crypt::CipherSaber not installed ; cannot crypt passwords";
 }
 
-require tools;
+use Sympa::Tools;
 
 use Conf;
 use List;
@@ -60,7 +60,7 @@ while ($user = $sth->fetchrow_hashref('NAME_lc')) {
 
     printf "\n%s", $user->{'email_user'};
 
-    my $crypted_password = &tools::crypt_password($user->{'password_user'}, $Conf::Conf{'cookie'});
+    my $crypted_password = &Sympa::Tools::crypt_password($user->{'password_user'}, $Conf::Conf{'cookie'});
 
     printf " => %s", $crypted_password;
 
