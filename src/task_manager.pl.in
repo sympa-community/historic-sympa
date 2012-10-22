@@ -27,7 +27,6 @@
 use lib '--modulesdir--';
 use strict "vars";
 
-use Data::Dumper;
 use Digest::MD5;
 use Getopt::Long;
 use Time::Local;
@@ -475,6 +474,7 @@ sub create {
 	$meta{'object'}= '_global' ;
     }
 
+    #use Data::Dumper;
     #my $dump = &Dumper($task_as_string); open (DUMP,">>/tmp/dumper"); printf DUMP 'DUMP\n%s',$dump ; close DUMP; 
     #my $dump = &Dumper(\%meta); open (DUMP,">>/tmp/dumper"); printf DUMP '%s\n',$dump ; close DUMP; 
 

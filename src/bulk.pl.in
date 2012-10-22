@@ -41,7 +41,6 @@ use strict;
 use lib '--modulesdir--';
 
 use Getopt::Long;
-use Data::Dumper;
 
 use Bulk;
 use Commands;
@@ -282,6 +281,7 @@ while (!$end) {
 			
 	    $messageasstring_init = $message_from_spool->{'messageasstring'};
 	    
+            #use Data::Dumper;
 	    #my $dump = &Dumper($messageasstring_init); open (DUMP,">>/tmp/dumper"); printf DUMP 'messageasstring recup par bulk \n%s',$dump ; close DUMP; 
 	    # &trace_smime($messageasstring_init,'initial');
 
