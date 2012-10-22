@@ -31,7 +31,6 @@ use Datasource;
 use List;
 use Log;
 use Sympa::Tools;
-use tt2;
 
 our @ISA = qw(Datasource Exporter);
 our @EXPORT = qw(%date_format);

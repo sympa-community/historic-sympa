@@ -57,8 +57,8 @@ use Sympa::Tools::Data;
 use Sympa::Tools::DKIM;
 use Sympa::Tools::File;
 use Sympa::Tools::SMIME;
+use Sympa::TT2;
 use Task;
-use tt2;
 use Upgrade;
 use VOOTConsumer;
 use WebAgent;
@@ -3343,7 +3343,7 @@ sub distribute_msg {
 	## Add subject tag
 	$message->{'msg'}->head->delete('Subject');
 	my $parsed_tag;
-	&tt2::parse_tt2({'list' => {'name' => $self->{'name'},
+	&Sympa::TT2::parse_tt2({'list' => {'name' => $self->{'name'},
 				    'sequence' => $self->{'stats'}->[0]
 				    }},
 			[$custom_subject], \$parsed_tag);
@@ -3733,10 +3733,10 @@ sub send_global_file {
     my $tt2_include_path = &Sympa::Tools::make_tt2_include_path($robot,'mail_tt2',$lang,'',$Conf::Conf{'etc'},$Conf::Conf{'viewmaildir'},$Conf::Conf{'domain'});
 
     foreach my $d (@{$tt2_include_path}) {
-	&tt2::add_include_path($d);
+	&Sympa::TT2::add_include_path($d);
     }
 
-    my @path = &tt2::get_include_path();
+    my @path = &Sympa::TT2::get_include_path();
     my $filename = &Sympa::Tools::File::find_file($tpl.'.tt2',@path);
  
     unless (defined $filename) {
@@ -3877,14 +3877,14 @@ sub send_file {
     push @{$tt2_include_path},$self->{'dir'}.'/archives'; ## list archives to include the last message
 
     foreach my $d (@{$tt2_include_path}) {
-	&tt2::add_include_path($d);
+	&Sympa::TT2::add_include_path($d);
     }
 
     foreach my $p ('email','email_gecos','host','sympa','request','listmaster','wwsympa_url','title','listmaster_email') {
 	$data->{'conf'}{$p} = &Conf::get_robot_conf($robot, $p);
     }
 
-    my @path = &tt2::get_include_path();
+    my @path = &Sympa::TT2::get_include_path();
     my $filename = &Sympa::Tools::File::find_file($tpl.'.tt2',@path);
     
     unless (defined $filename) {
@@ -4440,7 +4440,7 @@ sub send_to_editor {
        }else{
 	   &Log::do_log('debug',"ticket $param->{'one_time_ticket'} created");
        }
-       &tt2::allow_absolute_path();
+       &Sympa::TT2::allow_absolute_path();
        $param->{'auto_submitted'} = 'auto-forwarded';
 
        unless ($self->send_file('moderate', $recipient, $self->{'domain'}, $param)) {
@@ -4502,7 +4502,7 @@ sub send_auth {
        $param->{'request_topic'} = 1;
    }
 
-   &tt2::allow_absolute_path();
+   &Sympa::TT2::allow_absolute_path();
    $param->{'auto_submitted'} = 'auto-replied';
    unless ($self->send_file('send_auth',$sender,$robot,$param)) {
        &Log::do_log('notice',"Unable to send template 'send_auth' to $sender");
@@ -4587,7 +4587,7 @@ sub request_auth {
 	    $data->{'type'} = 'invite';
 	}
 
-	$data->{'command_escaped'} = &tt2::escape_url($data->{'command'});
+	$data->{'command_escaped'} = &Sympa::TT2::escape_url($data->{'command'});
 	$data->{'auto_submitted'} = 'auto-replied';
 	unless ($self->send_file('request_auth',$email,$robot,$data)) {
 	    &Log::do_log('notice',"Unable to send template 'request_auth' to $email");
@@ -4598,7 +4598,7 @@ sub request_auth {
 	if ($cmd eq 'remind'){
 	    my $keyauth = &List::compute_auth('',$cmd);
 	    $data->{'command'} = "auth $keyauth $cmd *";
-	    $data->{'command_escaped'} = &tt2::escape_url($data->{'command'});
+	    $data->{'command_escaped'} = &Sympa::TT2::escape_url($data->{'command'});
 	    $data->{'type'} = 'remind';
 	    
 	}
@@ -4846,7 +4846,7 @@ sub send_notify_to_listmaster {
 	if($operation eq 'loop_command') {
 		## Loop detected in Sympa
 		$data->{'boundary'} = '----------=_'.&Sympa::Tools::get_message_id($robot);
-		&tt2::allow_absolute_path();
+		&Sympa::TT2::allow_absolute_path();
 	}
 	
 	if(($operation eq 'request_list_creation') or ($operation eq 'request_list_renaming')) {
@@ -9146,7 +9146,7 @@ sub _load_include_admin_user_file {
         my $vars = {'param' => \@data};
 	my $output = '';
 	
-	unless (&tt2::parse_tt2($vars,$parsing->{'template'},\$output,[$parsing->{'include_path'}])) {
+	unless (&Sympa::TT2::parse_tt2($vars,$parsing->{'template'},\$output,[$parsing->{'include_path'}])) {
 	    &Log::do_log('err', 'Failed to parse %s', $parsing->{'template'});
 	    return undef;
 	}
@@ -12012,7 +12012,7 @@ sub _urlize_part {
 
     my $tt2_include_path = &Sympa::Tools::make_tt2_include_path($robot,'mail_tt2',$lang,$list,$Conf::Conf{'etc'},$Conf::Conf{'viewmaildir'},$Conf::Conf{'domain'});
 
-    &tt2::parse_tt2({'file_name' => $file_name,
+    &Sympa::TT2::parse_tt2({'file_name' => $file_name,
 		     'file_url'  => $file_url,
 		     'file_size' => $size ,
 		     'charset' => $charset},

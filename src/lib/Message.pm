@@ -48,7 +48,6 @@ use Log;
 use Sympa::Tools;
 use Sympa::Tools::DKIM;
 use Sympa::Tools::SMIME;
-use tt2;
 
 =pod 
 

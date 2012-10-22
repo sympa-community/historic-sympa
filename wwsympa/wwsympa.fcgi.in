@@ -67,9 +67,9 @@ use SympaSession;
 use Sympa::Constants;
 use Sympa::Tools;
 use Sympa::Tools::Data;
+use Sympa::TT2;
 use time_utils;
 use tracking;
-use tt2;
 use VOOTProvider;
 use VOOTConsumer;
 use wwslib;
@@ -1752,8 +1752,8 @@ my $birthday = time ;
 	 my $lang = &Language::Lang2Locale($param->{'lang'});
 	 my $tt2_include_path = &Sympa::Tools::make_tt2_include_path($robot,'web_tt2',$lang,$list,$Conf::Conf{'etc'},$Conf::Conf{'viewmaildir'},$Conf::Conf{'domain'});
 	 
- 	 unless (&tt2::parse_tt2($param,'rss.tt2' ,\*STDOUT, $tt2_include_path, {})) {
- 	     my $error = &tt2::get_error();
+ 	 unless (&Sympa::TT2::parse_tt2($param,'rss.tt2' ,\*STDOUT, $tt2_include_path, {})) {
+ 	     my $error = &Sympa::TT2::get_error();
  	     $param->{'tt2_error'} = $error;
  	     unless (&List::send_notify_to_listmaster('web_tt2_error', $robot, [$error])) {
  		 &wwslog('notice','Unable to send notify "web_tt2_error" to listmaster');
@@ -1777,8 +1777,8 @@ my $birthday = time ;
 	 my $lang = &Language::Lang2Locale($param->{'lang'});
 	 my $tt2_include_path = &Sympa::Tools::make_tt2_include_path($robot,'web_tt2',$lang,$list,$Conf::Conf{'etc'},$Conf::Conf{'viewmaildir'},$Conf::Conf{'domain'});
 	 
- 	 unless (&tt2::parse_tt2($param,'ajax.tt2' ,\*STDOUT, $tt2_include_path, {})) {
- 	     my $error = &tt2::get_error();
+ 	 unless (&Sympa::TT2::parse_tt2($param,'ajax.tt2' ,\*STDOUT, $tt2_include_path, {})) {
+ 	     my $error = &Sympa::TT2::get_error();
  	     $param->{'tt2_error'} = $error;
  	     unless (&List::send_notify_to_listmaster('web_tt2_error', $robot, [$error])) {
  		 &wwslog('notice','Unable to send notify "web_tt2_error" to listmaster');
@@ -2546,9 +2546,9 @@ sub send_html {
 	}
     }
     
-    unless (&tt2::parse_tt2($param_copy,$tt2_file , \*STDOUT,
+    unless (&Sympa::TT2::parse_tt2($param_copy,$tt2_file , \*STDOUT,
 	    $tt2_include_path, { 'has_header' => 1 })) {
-	my $error = &tt2::get_error();
+	my $error = &Sympa::TT2::get_error();
 	$param->{'tt2_error'} = $error;
 	$param_copy->{'tt2_error'} = $error;
 
@@ -2560,7 +2560,7 @@ sub send_html {
 	    &List::send_notify_to_listmaster('web_tt2_error', $robot, [$error]);
 	}
 
-	&tt2::parse_tt2($param_copy,'tt2_error.tt2' , \*STDOUT,
+	&Sympa::TT2::parse_tt2($param_copy,'tt2_error.tt2' , \*STDOUT,
 			$tt2_include_path, { 'has_header' => 1 });
     }
 }
@@ -4366,7 +4366,7 @@ sub do_info {
 	 $param->{'info_content'} =~ s/\n/\<br\/\>/g;
      }
 
-     &tt2::add_include_path($list->{'dir'});
+     &Sympa::TT2::add_include_path($list->{'dir'});
 
      return 1;
  }
@@ -6303,8 +6303,8 @@ sub do_skinsedit {
 		&wwslog('err','skinsedit : can\'t open file (write) %s',$css_file);
 		return undef;
 	    }
-	    unless (&tt2::parse_tt2($param,'css.tt2' ,\*CSS, $tt2_include_path)) {
-		my $error = &tt2::get_error();
+	    unless (&Sympa::TT2::parse_tt2($param,'css.tt2' ,\*CSS, $tt2_include_path)) {
+		my $error = &Sympa::TT2::get_error();
 		$param->{'tt2_error'} = $error;
 		&List::send_notify_to_listmaster('web_tt2_error', $robot,[$error]);
 		&wwslog('info', "do_skinsedit : error while installing $css_file");
@@ -7201,7 +7201,7 @@ sub do_viewmod {
 	 $param->{'file'} = $html_dir.'/'.$in{'file'};
 	 $param->{'bypass'} = 1; 
      }else {
-	 &tt2::add_include_path($html_dir) ;
+	 &Sympa::TT2::add_include_path($html_dir) ;
      }
 
      $param->{'base'} = sprintf "%s/viewmod/%s/%s/", &Conf::get_robot_conf($robot, 'wwsympa_url'), $param->{'list'}, $in{'id'};     
@@ -7354,7 +7354,7 @@ sub do_editfile {
      }
      &web_db_log({'parameters' => $in{'file'},
 		  'status' => 'success'});
-     &tt2::allow_absolute_path();
+     &Sympa::TT2::allow_absolute_path();
 
      return 1;
  }
@@ -7615,7 +7615,7 @@ sub do_arc {
 	## It allows to set the appropriate utf8 binmode on the FH
 	open $param->{'file_handle'}, "<", $arc_file_path;
 	
-	&tt2::add_include_path($arc_month_path);
+	&Sympa::TT2::add_include_path($arc_month_path);
     }else {
 	
 	if ($in{'arc_file'} =~ /\.(\w+)$/) {
@@ -8504,7 +8504,7 @@ sub do_set_pending_list_request {
      $param->{'list_serial'} = $list->{'admin'}{'serial'};
      $param->{'list_status'} = $list->{'admin'}{'status'};
 
-     &tt2::add_include_path($list->{'dir'});
+     &Sympa::TT2::add_include_path($list->{'dir'});
 
      return 1;
  }
@@ -8834,7 +8834,7 @@ Sends back the list creation edition form.
 
 =item * tools::get_list_list_tpl
 
-=item * tt2::allow_absolute_path
+=item * Sympa::TT2::allow_absolute_path
 
 =item * report::reject_report_web
 
@@ -8892,7 +8892,7 @@ sub do_create_list_request {
 	 &report::reject_report_web('intern','unable_to_load_create_list_templates',{},$param->{'action'},'',$param->{'user'}{'email'},$robot);
      }	
 
-     &tt2::allow_absolute_path();
+     &Sympa::TT2::allow_absolute_path();
 
      foreach my $template (keys %{$param->{'list_list_tpl'}}){
 	 $param->{'tpl_count'} ++ ;
@@ -9061,7 +9061,7 @@ sub do_viewbounce {
 	 return undef;
      }
 
-     &tt2::allow_absolute_path();
+     &Sympa::TT2::allow_absolute_path();
 
      return 1;
  }
@@ -12586,7 +12586,7 @@ sub do_d_editfile {
      ## parameters of the current directory
      $param->{'doc_date'} =  gettext_strftime "%d %b %y  %H:%M", localtime($info[9]);
 
-     &tt2::allow_absolute_path();
+     &Sympa::TT2::allow_absolute_path();
 
      $param->{'father_icon'} = $icon_table{'father'};
 
@@ -12719,7 +12719,7 @@ sub do_d_properties {
      ## parameters of the current directory
      $param->{'doc_date'} = gettext_strftime "%d %b %y  %H:%M", localtime($info[9]);
 
-     &tt2::allow_absolute_path();
+     &Sympa::TT2::allow_absolute_path();
 
      $param->{'father_icon'} = $icon_table{'father'};
 
@@ -17430,8 +17430,8 @@ sub do_css {
     my $lang = &Language::Lang2Locale($param->{'lang'});
     my $tt2_include_path = &Sympa::Tools::make_tt2_include_path($robot,'web_tt2',$lang,'',$Conf::Conf{'etc'},$Conf::Conf{'viewmaildir'},$Conf::Conf{'domain'});
 
-    unless (&tt2::parse_tt2($param,'css.tt2' ,\*STDOUT, $tt2_include_path)) {
-	my $error = &tt2::get_error();
+    unless (&Sympa::TT2::parse_tt2($param,'css.tt2' ,\*STDOUT, $tt2_include_path)) {
+	my $error = &Sympa::TT2::get_error();
 	$param->{'tt2_error'} = $error;
 	&List::send_notify_to_listmaster('web_tt2_error', $robot, [$error]);
 	&wwslog('info', "do_css/$in{'file'} : error");
@@ -17488,7 +17488,7 @@ sub do_wsdl {
     my $wsdl_path = $sympawsdl;
     $wsdl_path =~ s/\/sympa.wsdl//;
 
-    &tt2::parse_tt2($param, 'sympa.wsdl' , \*STDOUT, [$wsdl_path]);
+    &Sympa::TT2::parse_tt2($param, 'sympa.wsdl' , \*STDOUT, [$wsdl_path]);
     
 #    unless (open (WSDL,$sympawsdl)) {
 # 	&error_message('404');
@@ -17559,7 +17559,7 @@ sub _ca_get_file {
 sub _ca_add_file_path_to_tt2_include_path {
 	my $file = shift;
 	$file =~ s/\/[^\/]+$//;
-	tt2::add_include_path($file);
+	Sympa::TT2::add_include_path($file);
 }
 
 # Process custom action

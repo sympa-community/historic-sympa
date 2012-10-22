@@ -21,7 +21,7 @@
 # TT2 adapter for sympa's template system - Chia-liang Kao <clkao@clkao.org>
 # usage: replace require 'parser.pl' in wwwsympa and other .pl
 
-package tt2;
+package Sympa::TT2;
 
 use strict;
 
@@ -232,11 +232,11 @@ sub parse_tt2 {
 	
 	FILTERS => {
 	    unescape => \&CGI::Util::unescape,
-	    l => [\&tt2::maketext, 1],
-	    loc => [\&tt2::maketext, 1],
-	    helploc => [\&tt2::maketext, 1],
-	    locdt => [\&tt2::locdatetime, 1],
-	    wrap => [\&tt2::wrap, 1],
+	    l => [\&maketext, 1],
+	    loc => [\&maketext, 1],
+	    helploc => [\&maketext, 1],
+	    locdt => [\&locdatetime, 1],
+	    wrap => [\&wrap, 1],
 	    qencode => [\&qencode, 0],
  	    escape_xml => [\&escape_xml, 0],
 	    escape_url => [\&escape_url, 0],

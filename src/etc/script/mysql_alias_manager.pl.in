@@ -14,7 +14,7 @@ use POSIX;
 use Conf;
 use Sympa::Constants;
 use Sympa::Tools;
-use tt2;
+use Sympa::TT2;
 
 $ENV{'PATH'} = '';
 
@@ -58,7 +58,7 @@ my @aliases ;
 my $tt2_include_path = &Sympa::Tools::make_tt2_include_path($domain,'',,,$Conf::Conf{'etc'},$Conf::Conf{'viewmaildir'},$Conf::Conf{'domain'});
 
 my $aliases_dump;
-&tt2::parse_tt2 (\%data, 'list_aliases.tt2',\$aliases_dump, $tt2_include_path);
+&Sympa::TT2::parse_tt2 (\%data, 'list_aliases.tt2',\$aliases_dump, $tt2_include_path);
 
 @aliases = split /\n/, $aliases_dump;
 

@@ -50,8 +50,8 @@ use mail;
 use Message;
 use SDM;
 use Sympa::Tools;
+use Sympa::TT2;
 use Task;
-use tt2;
 use WebAgent;
 
 ## Database and SQL statement handlers
@@ -303,7 +303,7 @@ sub merge_msg {
 #  This function retrieves the customized data of the      #
 #  users then parse the message. It returns the message    #
 #  personalized to bulk.pl                                 #
-#  It uses the method &tt2::parse_tt2                      #
+#  It uses the method &Sympa::TT2::parse_tt2                      #
 #  It uses the method &List::get_list_member_no_object     #
 #  It uses the method &Sympa::Tools::get_fingerprint              #
 #                                                          #
@@ -352,7 +352,7 @@ sub merge_data {
     $data->{'listname'} = $listname;
 
     # Parse the TT2 in the message : replace the tags and the parameters by the corresponding values
-    unless (&tt2::parse_tt2($data,\$body, $message_output, '', $options)) {
+    unless (&Sympa::TT2::parse_tt2($data,\$body, $message_output, '', $options)) {
 	&Log::do_log('err','Unable to parse body : "%s"', \$body);
 	return undef;
     }
