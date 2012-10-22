@@ -56,6 +56,7 @@ use mail;
 use tt2;
 use tools;
 use Sympa::Constants;
+use Sympa::Tools::Time;
 
 my $daemon_name = &Log::set_daemon($0);
 my $ip = $ENV{'REMOTE_HOST'};
@@ -720,7 +721,7 @@ sub mail2arc {
     my $listname = $message_in_spool->{'list'};
     my $robot = $message_in_spool->{'robot'};
     my ($yyyy, $mm, $dd, $hh, $min, $ss) = @_;
-    my $txtdate = &tools::epoch2yyyymmjj_hhmmss ($message_in_spool->{'date'});
+    my $txtdate = &Sympa::Tools::Time::epoch2yyyymmjj_hhmmss ($message_in_spool->{'date'});
     if ($txtdate =~ /(\d\d\d\d)\-(\d\d)\-(\d\d)\s*(\d\d)\:(\d\d)/){
 	$yyyy = $1; $mm = $2; $dd = $3; $hh = $4; $min = $5; $ss = $6;
     }else{
