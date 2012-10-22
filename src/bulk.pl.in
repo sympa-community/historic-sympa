@@ -37,23 +37,23 @@ This script must be run along with sympa. It regularly checks the bulkmailer_tab
 
 =cut 
 
+use strict;
 use lib '--modulesdir--';
 
-use strict;
-
-use Conf;
-use Log;
-use Commands;
 use Getopt::Long;
 use Data::Dumper;
-use mail;
+
 use Bulk;
+use Commands;
+use Conf;
 use List;
+use Log;
+use mail;
+use Sympa::Constants;
+use Sympaspool;
 use tools;
 use Tools::DKIM;
 use tracking;
-use Sympa::Constants;
-use Sympaspool;
 
 my $daemon_name = &Log::set_daemon($0);
 my $date_of_last_activity = time();

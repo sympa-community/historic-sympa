@@ -32,11 +32,13 @@ $ENV{'PATH'} = '';
 ## Load Sympa.conf
 use strict;
 use lib '--modulesdir--';
-use Conf;
+
 use POSIX;
+
+use Conf;
+use Sympa::Constants;
 use tools;
 use tt2;
-use Sympa::Constants;
 
 my $sympa_conf_file = Sympa::Constants::CONFIG;
 unless (Conf::load($sympa_conf_file)) {

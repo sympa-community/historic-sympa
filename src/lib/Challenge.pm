@@ -24,15 +24,15 @@ package Challenge;
 use strict;
 no strict "vars";
 
+use CGI::Cookie;
 use Digest::MD5;
 use POSIX;
-use CGI::Cookie;
 use Time::Local;
 
-use Log;
 use Conf;
-use SympaSession;
+use Log;
 use SDM;
+use SympaSession;
 
 # this structure is used to define which session attributes are stored in a dedicated database col where others are compiled in col 'data_session'
 my %challenge_hard_attributes = ('id_challenge' => 1, 'date' => 1, 'robot'  => 1,'email' => 1, 'list' => 1);

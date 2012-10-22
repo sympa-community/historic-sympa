@@ -24,10 +24,10 @@ package Auth;
 
 use Digest::MD5;
 
-use Language;
-use Log;
 use Conf;
+use Language;
 use List;
+use Log;
 use report;
 use SDM;
 

@@ -22,35 +22,34 @@
 # Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
 
 use strict;
-use Data::Dumper;
 use lib '--modulesdir--';
-#use Getopt::Std;
-use Getopt::Long;
 
-use Mail::Address;
+use Data::Dumper;
+use File::Copy;
 use File::Path;
+use Getopt::Long;
+use Mail::Address;
+use MIME::QuotedPrint;
 
+use admin;
+use Auth;
 use Commands;
 use Conf;
-use Auth;
-use SympaSession;
-use Language;
-use Log;
-use mail;
-use MIME::QuotedPrint;
-use List;
-use Message;
-use admin;
 use Config_XML;
 use Family;
+use Language;
+use List;
+use Log;
+use mail;
+use Message;
 use report;
-use File::Copy;
+use SDM;
+use Sympa::Constants;
+use SympaSession;
+use Sympaspool;
 use tools;
 use tt2;
-use Sympa::Constants;
 use tracking;
-use Sympaspool;
-use SDM;
 
 # durty global variables
 my $is_signed = {}; 

@@ -22,38 +22,36 @@
 # Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
 
 use strict;
-
 use lib '--modulesdir--';
-#use Getopt::Std;
-use Getopt::Long;
 
 use Data::Dumper;
-use Mail::Address;
+use File::Copy;
 use File::Path;
+use Getopt::Long;
+use Mail::Address;
+use MIME::QuotedPrint;
 
+use admin;
+use Auth;
 use Commands;
 use Conf;
-use Auth;
-use SympaSession;
+use Config_XML;
+use Family;
 use Language;
 use Log;
 use Lock;
-use mail;
-use MIME::QuotedPrint;
 use List;
+use mail;
 use Message;
-use admin;
-use Config_XML;
-use Family;
 use report;
-use File::Copy;
-use tools;
-use tt2;
-use Sympa::Constants;
-use tracking;
-use Sympaspool;
 use SDM;
 use SQLSource;
+use Sympa::Constants;
+use SympaSession;
+use Sympaspool;
+use tools;
+use tracking;
+use tt2;
 
 ## Internal tuning
 # delay between each read of the digestqueue

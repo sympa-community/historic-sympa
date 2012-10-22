@@ -26,26 +26,27 @@
 
 use lib '--modulesdir--';
 use strict "vars";
-use Data::Dumper;
 
-use Task;
-use List;
-use Conf;
-use Log;
+use Data::Dumper;
+use Digest::MD5;
 use Getopt::Long;
 use Time::Local;
-use Digest::MD5;
+
+use Bulk;
+use Conf;
+use List;
+use Log;
+use mail;
 use Scenario;
+use SDM;
+use Sympa::Constants;
 use SympaSession;
 use Sympaspool;
-use tracking;
-use Bulk;
-use mail;
-use wwslib;
-use tt2;
+use Task;
 use tools;
-use Sympa::Constants;
-use SDM;
+use tracking;
+use tt2;
+use wwslib;
 
 my $opt_d;
 my $opt_F;

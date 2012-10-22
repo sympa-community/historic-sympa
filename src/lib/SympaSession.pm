@@ -23,13 +23,13 @@ package SympaSession;
 
 use strict ;
 
+use CGI::Cookie;
 use Digest::MD5;
 use POSIX;
-use CGI::Cookie;
 use Time::Local;
 
-use Log;
 use Conf;
+use Log;
 
 # this structure is used to define which session attributes are stored in a dedicated database col where others are compiled in col 'data_session'
 my %session_hard_attributes = ('id_session' => 1, 

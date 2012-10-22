@@ -55,13 +55,15 @@ Display usage instructions
 
 =cut
 
-use lib '--modulesdir--';
 use strict;
-use POSIX qw(strftime);
+use lib '--modulesdir--';
+
 use English qw(-no_match_vars);
 use Getopt::Long;
 use Pod::Usage;
+use POSIX qw(strftime);
 use Sys::Hostname qw(hostname);
+
 use Sympa::Constants;
 
 ## sympa configuration files

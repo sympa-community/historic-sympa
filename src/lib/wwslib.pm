@@ -21,8 +21,8 @@
 
 package wwslib;
 
-use Log;
 use Conf;
+use Log;
 use Sympa::Constants;
 
 %reception_mode = ('mail' => {'gettext_id' => 'standard (direct reception)'},
