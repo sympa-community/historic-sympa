@@ -33,6 +33,7 @@ use Conf;
 use Log;
 use SDM;
 use SympaSession;
+use Sympa::Tools::Time;
 
 # this structure is used to define which session attributes are stored in a dedicated database col where others are compiled in col 'data_session'
 my %challenge_hard_attributes = ('id_challenge' => 1, 'date' => 1, 'robot'  => 1,'email' => 1, 'list' => 1);
@@ -106,7 +107,7 @@ sub load {
 	return undef;
     }
 
-    return ('expired') if (time - $challenge_datas->{'date'} >= &tools::duration_conv($Conf{'challenge_table_ttl'}));
+    return ('expired') if (time - $challenge_datas->{'date'} >= &Sympa::Tools::Time::duration_conv($Conf{'challenge_table_ttl'}));
     return ($challenge_datas);
 }
 

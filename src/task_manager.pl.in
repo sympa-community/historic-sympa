@@ -39,6 +39,7 @@ use mail;
 use Scenario;
 use SDM;
 use Sympa::Constants;
+use Sympa::Tools::Time;
 use SympaSession;
 use Sympaspool;
 use Task;
@@ -261,7 +262,7 @@ foreach (keys %asgn_commands) {
 while (!$end) {
 
     my $current_date = time; # current epoch date
-    my $rep = &tools::adate ($current_date);
+    my $rep = &Sympa::Tools::Time::adate ($current_date);
 
 
     ## Empty cache of the List.pm module
@@ -885,7 +886,7 @@ sub next_cmd {
     my ($task, $Rarguments, $context) = @_;
     
     my @tab = @{$Rarguments};
-    my $date = &tools::epoch_conv ($tab[0], $task->{'date'}); # conversion of the date argument into epoch format
+    my $date = &Sympa::Tools::Time::epoch_conv ($tab[0], $task->{'date'}); # conversion of the date argument into epoch format
     my $label = $tab[1];
 
     &Log::do_log ('notice', "line $context->{'line_number'} of $task->{'model'} : next ($date, $label)");
@@ -934,7 +935,7 @@ sub next_cmd {
 	return undef;
     }
 
-    my $human_date = &tools::adate ($date);
+    my $human_date = &Sympa::Tools::Time::adate ($date);
 
     unless ($task->remove) {
 	error ($task->{'messagekey'}, "error in next command : unable to remove task");
@@ -956,7 +957,7 @@ sub select_subs {
     &Log::do_log ('debug2', "line $context->{'line_number'} : select_subs ($condition)");
     $condition =~ /(\w+)\(([^\)]*)\)/;
     if ($2) { # conversion of the date argument into epoch format
-	my $date = &tools::epoch_conv ($2, $task->{'date'});
+	my $date = &Sympa::Tools::Time::epoch_conv ($2, $task->{'date'});
         $condition = "$1($date)";
     }  
  
@@ -1353,7 +1354,7 @@ sub purge_orphan_bounces {
      my $execution_date = $task->{'date'};
      my @tab = @{$Rarguments};
      my $template = $tab[0];
-     my $limit = &tools::duration_conv ($tab[1], $execution_date);
+     my $limit = &Sympa::Tools::Time::duration_conv ($tab[1], $execution_date);
 
      &Log::do_log ('notice', "line $context->{'line_number'} : chk_cert_expiration (@{$Rarguments})");
 
@@ -1384,7 +1385,7 @@ sub purge_orphan_bounces {
 	 my @date = (0, 0, 0, $2, $months{$1}, $3 - 1900);
 	 $date =~ s/notAfter=//;
 	 my $expiration_date = timegm (@date); # epoch expiration date
-	 my $rep = &tools::adate ($expiration_date);
+	 my $rep = &Sympa::Tools::Time::adate ($expiration_date);
 
 	 # no near expiration nor expiration processing
 	 if ($expiration_date > $limit) { 
@@ -1432,7 +1433,7 @@ sub purge_orphan_bounces {
 
 	     $id =~ s/subject= //;
 	     &Log::do_log ('notice', "id : $id");
-	     $tpl_context{'expiration_date'} = &tools::adate ($expiration_date);
+	     $tpl_context{'expiration_date'} = &Sympa::Tools::Time::adate ($expiration_date);
 	     $tpl_context{'certificate_id'} = $id;
 	     $tpl_context{'auto_submitted'} = 'auto-generated';
 	     
@@ -1454,7 +1455,7 @@ sub purge_orphan_bounces {
      my ($task, $Rarguments, $context) = @_;
 
      my @tab = @{$Rarguments};
-     my $limit = &tools::epoch_conv ($tab[1], $task->{'date'});
+     my $limit = &Sympa::Tools::Time::epoch_conv ($tab[1], $task->{'date'});
      my $CA_file = "$Conf{'home'}/$tab[0]"; # file where CA urls are stored ;
      &Log::do_log ('notice', "line $context->{'line_number'} : update_crl (@tab)");
 
@@ -1507,7 +1508,7 @@ sub purge_orphan_bounces {
 	 $date =~ /nextUpdate=(\w+)\s*(\d+)\s(\d\d)\:(\d\d)\:\d\d\s(\d+).+/;
 	 my @date = (0, $4, $3 - 1, $2, $months{$1}, $5 - 1900);
 	 my $expiration_date = timegm (@date); # epoch expiration date
-	 my $rep = &tools::adate ($expiration_date);
+	 my $rep = &Sympa::Tools::Time::adate ($expiration_date);
 
 	 ## check if the crl is soon expired or expired
 	 #my $file_date = $task->{'date'} - (-M $file) * 24 * 60 * 60; # last modification date

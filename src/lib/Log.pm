@@ -28,6 +28,8 @@ use Exporter;
 use POSIX qw(mktime);
 use Sys::Syslog;
 
+use Sympa::Tools::Time;
+
 our @ISA = qw(Exporter);
 our @EXPORT = qw($log_level %levels);
 
@@ -1000,7 +1002,7 @@ sub agregate_daily_data {
     my $first_date = $param->{'first_date'} || time;
     my $last_date = $param->{'last_date'} || time;
     foreach my $begin_date (sort keys %{$param->{'hourly_data'}}) {
-	my $reftime = tools::get_midnight_time($begin_date);
+	my $reftime = Sympa::Tools::Time::get_midnight_time($begin_date);
 	unless (defined $param->{'first_date'}) {
 	    $first_date = $reftime if ($reftime < $first_date);
 	}

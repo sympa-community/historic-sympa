@@ -29,6 +29,7 @@ use Conf;
 use List;
 use Log;
 use Sympa::Constants;
+use Sympa::Tools::Time;
 use tools;
 
 my %all_scenarios;
@@ -854,8 +855,8 @@ sub verify {
     if ($condition_key =~ /^(older|newer)$/) {
 	 
 	$negation *= -1 if ($condition_key eq 'newer');
- 	my $arg0 = &tools::epoch_conv($args[0]);
- 	my $arg1 = &tools::epoch_conv($args[1]);
+ 	my $arg0 = &Sympa::Tools::Time::epoch_conv($args[0]);
+ 	my $arg1 = &Sympa::Tools::Time::epoch_conv($args[1]);
  
 	&Log::do_log('debug3', '%s(%d, %d)', $condition_key, $arg0, $arg1);
  	if ($arg0 <= $arg1 ) {

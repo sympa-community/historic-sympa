@@ -52,6 +52,7 @@ use SDM;
 use SQLSource qw(create_db %date_format);
 use Sympa::Constants;
 use Sympa::DatabaseDescription;
+use Sympa::Tools::Time;
 use Task;
 use tt2;
 use Upgrade;
@@ -157,8 +158,8 @@ sub get_content {
     }else{
 	my @messages;
 	while (my $message = $sth->fetchrow_hashref('NAME_lc')) {
-	    $message->{'date_asstring'} = &tools::epoch2yyyymmjj_hhmmss($message->{'date'});
-	    $message->{'lockdate_asstring'} = &tools::epoch2yyyymmjj_hhmmss($message->{'lockdate'});
+	    $message->{'date_asstring'} = &Sympa::Tools::Time::epoch2yyyymmjj_hhmmss($message->{'date'});
+	    $message->{'lockdate_asstring'} = &Sympa::Tools::Time::epoch2yyyymmjj_hhmmss($message->{'lockdate'});
 	    $message->{'messageasstring'} = MIME::Base64::decode($message->{'message'}) if ($message->{'message'}) ;
 	    $message->{'listname'} = $message->{'list'}; # duplicated because "list" is a tt2 method that convert a string to an array of chars so you can't test  [% IF  message.list %] because it is always defined!!!
 	    $message->{'status'} = $self->{'selection_status'}; 
