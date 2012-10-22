@@ -36,8 +36,8 @@ use Log;
 use Language;
 use List;
 use Sympa::Constants;
+use Sympa::Tools::SMIME;
 use tools;
-use Tools::SMIME;
 
 our @ISA = qw(Exporter);
 our @EXPORT = qw(mail_file mail_message mail_forward set_send_spool);

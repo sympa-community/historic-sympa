@@ -50,9 +50,9 @@ use Log;
 use mail;
 use Sympa::Constants;
 use Sympa::Tools::Daemon;
+use Sympa::Tools::DKIM;
 use Sympaspool;
 use tools;
-use Tools::DKIM;
 use tracking;
 
 my $daemon_name = &Log::set_daemon($0);

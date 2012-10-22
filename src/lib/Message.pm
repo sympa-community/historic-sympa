@@ -46,8 +46,8 @@ use Conf;
 use List;
 use Log;
 use tools;
-use Tools::DKIM;
-use Tools::SMIME;
+use Sympa::Tools::DKIM;
+use Sympa::Tools::SMIME;
 use tt2;
 
 =pod 
