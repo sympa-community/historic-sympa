@@ -48,7 +48,6 @@ use SQLSource;
 use Sympa::Constants;
 use Sympa::Tools;
 use Sympa::Tools::Daemon;
-use SympaSession;
 use Sympaspool;
 use tracking;
 

@@ -32,7 +32,6 @@ use Time::Local;
 use Conf;
 use Log;
 use SDM;
-use SympaSession;
 use Sympa::Tools::Time;
 use Sympa::Tools::Data;
 
