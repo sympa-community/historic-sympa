@@ -247,7 +247,7 @@ unless ($main::options{'upgrade'} || $main::options{'help'}) {
 }
 
 
-if (&Conf::get_robot_conf('*','voot_feature') eq 'on') {
+if (Conf->voot_feature eq 'on') {
     unless ( eval "require OAuthProvider" ){
 	&Log::fatal_err("VOOT feature is on, but Sympa was Unable to load OAuthProvider module: $@");
 	return undef;

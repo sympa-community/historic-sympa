@@ -74,7 +74,7 @@ my %equiv = ( "user unknown" => '5.1.1',
 
 
 use Bounce;
-use wwslib;
+##XXXuse wwslib;
 
 #getopts('dF');
 ## Check options
@@ -102,7 +102,7 @@ my $ip = $ENV{'REMOTE_HOST'};
 my $wwsconf = {};
 
 # Load WWSympa configuration
-unless ($wwsconf = &wwslib::load_config($wwsympa_conf)) {
+unless ($wwsconf = &Conf::load_wwsconf($wwsympa_conf)) {
     print STDERR 'unable to load config file';
     exit;
 }

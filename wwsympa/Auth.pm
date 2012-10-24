@@ -37,7 +37,7 @@ sub password_fingerprint{
     &Log::do_log('debug', 'Auth::password_fingerprint');
 
     my $pwd = shift;
-    if(&Conf::get_robot_conf('*','password_case') eq 'insensitive') {
+    if(Conf->password_case eq 'insensitive') {
 	return &tools::md5_fingerprint(lc($pwd));
     }else{
 	return &tools::md5_fingerprint($pwd);

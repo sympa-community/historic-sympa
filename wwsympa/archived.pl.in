@@ -50,7 +50,7 @@ use Getopt::Long;
 use Language;
 use Digest::MD5;
 
-use wwslib;
+##XXXuse wwslib;
 use mail;
 
 use tt2;
@@ -81,7 +81,7 @@ my $sympa_conf_file = Sympa::Constants::CONFIG;
 my $wwsconf = {};
 
 # Load WWSympa configuration
-unless ($wwsconf = &wwslib::load_config($wwsympa_conf)) {
+unless ($wwsconf = &Conf::load_wwsconf($wwsympa_conf)) {
     print STDERR 'unable to load config file';
     exit -1;
 }
@@ -211,7 +211,7 @@ while (!$end) {
 	}
     }elsif($orders[0]  =~ /^remove\.(\d\d\d\d\-\d\d)\.\d+$/ ) {
 	my $yyyymm = $1;
-	shift @orders
+	shift @orders;
 	&Log::do_log('debug',"removed found ");
 	unless($item->{'list'} && $item->{'robot'}){
 	   &Log::do_log('err',"unable to remove messages from archive for unkown list/robot.Move to bad");

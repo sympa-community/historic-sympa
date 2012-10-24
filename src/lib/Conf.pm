@@ -33,7 +33,7 @@ use List;
 use SDM;
 use Log;
 use Language;
-use wwslib;
+#XXXuse wwslib;
 use confdef;
 use tools;
 use Sympa::Constants;
@@ -41,6 +41,16 @@ use Data::Dumper;
 
 our @ISA = qw(Exporter);
 our @EXPORT = qw(%params %Conf DAEMON_MESSAGE DAEMON_COMMAND DAEMON_CREATION DAEMON_ALL);
+
+=head1 NAME
+
+Conf - Sympa configuration
+
+=head1 DESCRIPTION
+
+=head2 CONSTANTS AND EXPORTED VARIABLES
+
+=cut
 
 sub DAEMON_MESSAGE {1};
 sub DAEMON_COMMAND {2};
@@ -112,8 +122,12 @@ my %trusted_applications = ('trusted_application' => {
 my $binary_file_extension = ".bin";
 
 
-my $wwsconf = &wwslib::load_config(Sympa::Constants::WWSCONFIG);
+our $wwsconf = &load_wwsconf(Sympa::Constants::WWSCONFIG);
 our %Conf = ();
+
+=head2 FUNCTIONS
+
+=cut
 
 ## Loads and parses the configuration file. Reports errors if any.
 # do not try to load database values if $no_db is set ;
@@ -1909,6 +1923,176 @@ sub _get_parameters_names_by_category {
         }
     }
     return $param_by_categories;
+}
+
+=over 4
+
+=item load_wwsconf ( FILE )
+
+Load WWSympa configuration file.
+
+=back
+
+=cut
+
+sub load_wwsconf {
+    my $file = shift;
+
+    ## Old params
+    my %old_param = ('alias_manager' => 'No more used, using '.$Conf{'alias_manager'},
+		     'wws_path' => 'No more used',
+		     'icons_url' => 'No more used. Using static_content/icons instead.',
+		     'robots' => 'Not used anymore. Robots are fully described in their respective robot.conf file.',
+		     );
+
+    my %default_conf = ();
+
+    ## Valid params
+    foreach my $key (keys %Conf::params) {
+	if (defined $Conf::params{$key}{'file'} && $Conf::params{$key}{'file'} eq 'wwsympa.conf') {
+	    $default_conf{$key} = $Conf::params{$key}{'default'};
+	}
+    }
+
+    my $conf = \%default_conf;
+
+    unless (open (FILE, $file)) {
+	&Log::do_log('err',"load_config: unable to open $file");
+	return undef;
+    }
+    
+    while (<FILE>) {
+	next if /^\s*\#/;
+
+	if (/^\s*(\S+)\s+(.+)$/i) {
+	    my ($k, $v) = ($1, $2);
+	    $v =~ s/\s*$//;
+	    if (defined ($conf->{$k})) {
+		$conf->{$k} = $v;
+	    }elsif (defined $old_param{$k}) {
+		&Log::do_log('err',"Parameter %s in %s no more supported : %s", $k, $file, $old_param{$k});
+	    }else {
+		&Log::do_log('err',"Unknown parameter %s in %s", $k, $file);
+	    }
+	}
+	next;
+    }
+    
+    close FILE;
+
+    ## Check binaries and directories
+    if ($conf->{'arc_path'} && (! -d $conf->{'arc_path'})) {
+	&Log::do_log('err',"No web archives directory: %s\n", $conf->{'arc_path'});
+    }
+
+    if ($conf->{'bounce_path'} && (! -d $conf->{'bounce_path'})) {
+	&Log::do_log('err',"Missing directory '%s' (defined by 'bounce_path' parameter)", $conf->{'bounce_path'});
+    }
+
+    if ($conf->{'mhonarc'} && (! -x $conf->{'mhonarc'})) {
+	&Log::do_log('err',"MHonArc is not installed or %s is not executable.", $conf->{'mhonarc'});
+    }
+
+    $wwsconf = $conf;
+    return $wwsconf;
+}
+
+############################################################################
+## Class Methods
+############################################################################
+
+=head2 CLASS METHODS
+
+=over 4
+
+=item E<lt>config parameterE<gt>
+
+I<Getters>.
+Gets global or default config parameters.
+For example: C<Conf-E<gt>syslog> returns "syslog" global parameter;
+C<Conf-E<gt>domain> returns default "domain" parameter.
+
+Some parameters may be vary by each robot from default value given by these
+methods.  Use C<$robot-E<gt>>E<lt>config parameterE<gt> accessors instead.
+See L<Robot/ACCESSORS>.
+
+=item locale2charset
+
+=item sympa
+
+I<Getters>.
+Gets config parameters for internal use.
+
+=back
+
+=cut
+
+our $AUTOLOAD;
+
+sub DESTROY;
+
+sub AUTOLOAD {
+    $AUTOLOAD =~ m/^(.*)::(.*)/;
+
+    my $attr = $2;
+    if (scalar grep { $_ eq $attr } qw(locale2charset sympa)) {
+	## getter for internal config parameters.
+	no strict "refs";
+	*{$AUTOLOAD} = sub {
+	    my $pkg = shift;
+	    croak "Can't call method \"$attr\" on uninitialized $pkg class"
+		unless %Conf;
+	    croak "Can't modify \"$attr\" attribute"
+		if scalar @_ > 1;
+	    $Conf{$attr};
+	};
+    } elsif (scalar grep { ! defined $_->{'title'} and $_->{'name'} eq $attr }
+			 @confdef::params) {
+	## getter for global or default config parameters.
+	no strict "refs";
+	*{$AUTOLOAD} = sub {
+	    my $pkg = shift;
+	    croak "Can't call method \"$attr\" on uninitialized $pkg class"
+		unless %Conf;
+	    croak "Can't modify \"$attr\" attribute"
+		if scalar @_ > 1;
+	    if (defined $Conf{$attr}) { #FIXME: use exists?
+		$Conf{$attr};
+	    } elsif (defined $wwsconf->{$attr}) { #FIXME
+		$wwsconf->{$attr};
+	    } else {
+		undef;
+	    }
+	};
+    } else {
+	croak "Can't locate object method \"$2\" via package \"$1\"";
+    }
+    goto &$AUTOLOAD;
+}
+
+=over 4
+
+=item listmasters
+
+I<Getter>.
+Gets default listmasters.
+In array context, returns array of default listmasters.
+In scalar context, returns arrayref to them.
+
+=back
+
+=cut
+
+sub listmasters {
+    my $pkg = shift;
+    croak "Can't call method \"listmasters\" on uninitialized $pkg class"
+	unless %Conf;
+    croak "Can't modify \"listmasters\" attribute" if scalar @_ > 1;
+    if (wantarray) {
+	return @{$Conf{'listmasters'} || []};
+    } else {
+	return $Conf{'listmasters'};
+    }
 }
 
 ## Packages must return true.

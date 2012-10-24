@@ -198,7 +198,7 @@ sub edit_configuration {
     }
 
     ## Load config 
-    unless ($wwsconf = wwslib::load_config($wwsympa_conf)) {
+    unless ($wwsconf = Conf::load_wwsconf($wwsympa_conf)) {
 	&Log::fatal_err("Unable to load sympa configuration, file $wwsympa_conf or one of the vhost robot.conf files contain errors. Exiting.");  
     }
 

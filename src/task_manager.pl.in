@@ -37,7 +37,7 @@ use SDM;
 use Sympa::Constants;
 use Task;
 use tools;
-use wwslib;
+##XXXuse wwslib;
 
 my $opt_d;
 my $opt_F;
@@ -65,7 +65,7 @@ my $wwsconf = {};
 my $adrlist = {};
 
 # Load WWSympa configuration
-unless ($wwsconf = &wwslib::load_config($wwsympa_conf)) {
+unless ($wwsconf = &Conf::load_wwsconf($wwsympa_conf)) {
     &Log::fatal_err("Unable to load sympa configuration, file $wwsympa_conf or one of the vhost robot.conf files contain errors. Exiting.");  
 }
 

@@ -130,7 +130,7 @@ $wwsconf->{'log_facility'}||= $Conf{'syslog'};
 &Log::do_openlog($wwsconf->{'log_facility'}, $Conf{'log_socket_type'}, 'wwsympa');
 
 ## Load config 
-unless ($wwsconf = &wwslib::load_config($conf_file)) {
+unless ($wwsconf = &Conf::load_wwsconf($conf_file)) {
     &Log::fatal_err("Unable to load sympa configuration, file $conf_file or one of the vhost robot.conf files contain errors. Exiting.");  
 }
 
@@ -143,7 +143,7 @@ if ($wwsconf->{'use_fast_cgi'}) {
 }
 my $mime_types = &wwslib::load_mime_types();
 
-if (&Conf::get_robot_conf('*','voot_feature') eq 'on') {
+if (Conf->voot_feature eq 'on') {
     unless ( eval "require OAuthProvider" ){
 	&Log::fatal_err("VOOT feature is on, but Sympa was Unable to load OAuthProvider module: $@");
 	return undef;
@@ -1927,7 +1927,7 @@ sub crash_handler {
 
     $param->{'traceback'} = \@calls;
     $param->{'error_message'} = $msg;
-    $param->{'main_title'} ||= &Conf::get_robot_conf($robot || '*', 'title');
+    $param->{'main_title'} ||= &Conf::get_robot_conf($robot, 'title');
     $param->{'last_action'} = $param->{'action'};
     $param->{'action'} = 'crash';
     eval { &send_html('crash.tt2'); };
@@ -17080,7 +17080,7 @@ sub do_viewspool_message {
 	}
     }
 
-    $param->{'spool_message_asstring'} = @messages[0]->{'messageasstring'};
+    $param->{'spool_message_asstring'} = $messages[0]->{'messageasstring'};
     return 1;
 
     # the following code is not executed because of a bug. It should be able to disply message as html....
@@ -17154,7 +17154,7 @@ sub do_viewspool_message_dump {
 	&Log::do_log('notice', 'Could Not open %s', $param->{'msg_file'});
 	return undef;
     }
-    printf OUT  @messages[0]->{'messageasstring'};
+    printf OUT  $messages[0]->{'messageasstring'};
     if (close(OUT)) {
 	&Log::do_log('info',"message (messagekey = %s) flushed in file %s",$messagekey,$param->{'msg_file'});
     }

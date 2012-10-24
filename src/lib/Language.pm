@@ -195,8 +195,7 @@ sub SetLang {
 
     $current_lang = $lang;
     $current_locale = $locale;
-    my $locale2charset = &Conf::get_robot_conf('', 'locale2charset');
-    $current_charset = $locale2charset->{$locale} || 'utf-8';
+    $current_charset = Conf->locale2charset->{$locale} || 'utf-8';
 
     return $locale;
 }#SetLang

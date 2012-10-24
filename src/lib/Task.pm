@@ -187,7 +187,7 @@ sub remove {
 sub list_tasks {
 
     &Log::do_log('debug',"Listing all tasks");
-    my $spool_task = &Conf::get_robot_conf('*','queuetask');
+    my $spool_task = Conf->queuetask;
     ## Reset the list of tasks
     undef @task_list;
     undef %task_by_list;
@@ -1383,7 +1383,7 @@ sub purge_orphan_bounces {
 
      my ($task, $Rarguments, $context) = @_;
 
-    my $cert_dir = &Conf::get_robot_conf('*','ssl_cert_dir');
+    my $cert_dir = Conf->ssl_cert_dir;
      my $execution_date = $task->{'date'};
      my @tab = @{$Rarguments};
      my $template = $tab[0];
