@@ -94,7 +94,13 @@ sub get_limit_clause {
 sub get_formatted_date {
     my $self = shift;
     my $param = shift;
-    return $param->{'target'};
+    &Log::do_log('debug3','Building SQL date formatting');
+    if (lc($param->{'mode'}) eq 'read' or lc($param->{'mode'}) eq 'write') {
+	return $param->{'target'};
+    }else {
+	&Log::do_log('err',"Unknown date format mode %s", $param->{'mode'});
+	return undef;
+    }
 }
 
 # Checks whether a field is an autoincrement field or not.
@@ -109,7 +115,7 @@ sub is_autoinc {
     my $table = $param->{'table'};
     my $field = $param->{'field'};
 
-    &Log::do_log('debug','Checking whether field %s.%s is autoincremental',
+    &Log::do_log('debug3','Checking whether field %s.%s is autoincremental',
 		 $table, $field);
 
     my $type = $self->_get_field_type($table, $field);
@@ -130,7 +136,7 @@ sub set_autoinc {
     my $table = $param->{'table'};
     my $field = $param->{'field'};
 
-    &Log::do_log('debug','Setting field %s.%s as autoincremental',
+    &Log::do_log('debug3','Setting field %s.%s as autoincremental',
 		 $table, $field);
 
     my $type = $self->_get_field_type($table, $field);
@@ -158,7 +164,7 @@ sub set_autoinc {
     }
 
     unless ($r) {
-	&Log::do_log('err','Unable to set field %s in table %s as autoincrement', $field, $table);
+	&Log::do_log('err','Unable to set field %s in table %s as autoincremental', $field, $table);
 	return undef;
     }
     return 1;
@@ -193,7 +199,7 @@ sub get_tables {
 sub add_table {
     my $self = shift;
     my $param = shift;
-    &Log::do_log('debug','Adding table %s to database %s',$param->{'table'},$self->{'db_name'});
+    &Log::do_log('debug3','Adding table %s to database %s',$param->{'table'},$self->{'db_name'});
     unless ($self->do_query("CREATE TABLE %s (temporary INT)",$param->{'table'})) {
 	&Log::do_log('err', 'Could not create table %s in database %s', $param->{'table'}, $self->{'db_name'});
 	return undef;
@@ -259,7 +265,7 @@ sub update_field {
     }
     my $report;
 
-    &Log::do_log('debug', 'Updating field %s in table %s (%s%s)',
+    &Log::do_log('debug3', 'Updating field %s in table %s (%s%s)',
 		 $field, $table, $type, $options);
     my $r = $self->_update_table($table,
 				 qr(\b$field\s[^,]+),
@@ -295,9 +301,6 @@ sub add_field {
     my $field = $param->{'field'};
     my $type = $param->{'type'};
 
-    &Log::do_log('debug','Adding field %s in table %s (%s, %s, %s, %s)',
-		 $field, $table, $type, $param->{'notnull'},
-		 $param->{'autoinc'}, $param->{'primary'});
     my $options = '';
     # To prevent "Cannot add a NOT NULL column with default value NULL" errors
     if ($param->{'primary'}) {
@@ -309,6 +312,8 @@ sub add_field {
     if ( $param->{'notnull'}) {
 	$options .= ' NOT NULL';
     }
+    &Log::do_log('debug3','Adding field %s in table %s (%s%s)',
+		 $field, $table, $type, $options);
 
     my $report = '';
 
@@ -358,9 +363,7 @@ sub delete_field {
     my $param = shift;
     my $table = $param->{'table'};
     my $field = $param->{'field'};
-
-    &Log::do_log('debug','Deleting field %s from table %s',
-		 $field, $table);
+    &Log::do_log('debug3','Deleting field %s from table %s', $field, $table);
 
     ## SQLite does not support removal of columns
 
@@ -380,7 +383,7 @@ sub get_primary_key {
     my $self = shift;
     my $param = shift;
     my $table = $param->{'table'};
-    &Log::do_log('debug','Getting primary key for table %s', $table);
+    &Log::do_log('debug3','Getting primary key for table %s', $table);
 
     my %found_keys = ();
 
@@ -413,8 +416,8 @@ sub unset_primary_key {
     my $param = shift;
     my $table = $param->{'table'};
     my $report;
+    &Log::do_log('debug3', 'Removing primary key from table %s', $table);
 
-    &Log::do_log('debug', 'Removing primary key from table %s', $table);
     my $r = $self->_update_table($table,
 				 qr{,\s*PRIMARY\s+KEY\s+[(][^)]+[)]},
 				 '');
@@ -444,9 +447,9 @@ sub set_primary_key {
     my $table = $param->{'table'};
     my $fields = join ',',@{$param->{'fields'}};
     my $report;
-
-    &Log::do_log('debug', 'Setting primary key for table %s (%s)',
+    &Log::do_log('debug3', 'Setting primary key for table %s (%s)',
 		 $table, $fields);
+
     my $r = $self->_update_table($table,
 				 qr{\s*[)]\s*$},
 				 ",\n\t PRIMARY KEY ($fields)\n )");
@@ -474,7 +477,7 @@ sub set_primary_key {
 sub get_indexes {
     my $self = shift;
     my $param = shift;
-    &Log::do_log('debug','Looking for indexes in %s',$param->{'table'});
+    &Log::do_log('debug3','Looking for indexes in %s',$param->{'table'});
 
     my %found_indexes;
     my $sth;
@@ -519,7 +522,7 @@ sub get_indexes {
 sub unset_index {
     my $self = shift;
     my $param = shift;
-    &Log::do_log('debug','Removing index %s from table %s',$param->{'index'},$param->{'table'});
+    &Log::do_log('debug3','Removing index %s from table %s',$param->{'index'},$param->{'table'});
 
     my $sth;
     unless ($sth = $self->do_query(
@@ -549,7 +552,7 @@ sub set_index {
 
     my $sth;
     my $fields = join ',',@{$param->{'fields'}};
-    &Log::do_log('debug', 'Setting index %s for table %s using fields %s', $param->{'index_name'},$param->{'table'}, $fields);
+    &Log::do_log('debug3', 'Setting index %s for table %s using fields %s', $param->{'index_name'},$param->{'table'}, $fields);
     unless ($sth = $self->do_query(
 	q{CREATE INDEX %s ON %s (%s)},
 	$param->{'index_name'}, $param->{'table'}, $fields
