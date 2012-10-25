@@ -2358,8 +2358,6 @@ use DB_File;
 
 $DB_BTREE->{compare} = \&_compare_addresses;
 
-our %listmaster_messages_stack;
-
 ## Creates an object.
 sub new {
     &Log::do_log('debug2', '(%s, %s, %s, %s)', @_);
@@ -3662,68 +3660,11 @@ sub send_msg_digest {
 #       
 ####################################################
 sub send_global_file {
-    my($tpl, $who, $robot, $context, $options) = @_;
-    &Log::do_log('debug2', 'List::send_global_file(%s, %s, %s)', $tpl, $who, $robot);
-
-    my $data = &tools::dup_var($context);
-
-    unless ($data->{'user'}) {
-	$data->{'user'} = &get_global_user($who) unless ($options->{'skip_db'});
-	$data->{'user'}{'email'} = $who unless (defined $data->{'user'});;
-    }
-    unless ($data->{'user'}{'lang'}) {
-	$data->{'user'}{'lang'} = $Language::default_lang;
-    }
-    
-    unless ($data->{'user'}{'password'}) {
-	$data->{'user'}{'password'} = &tools::tmp_passwd($who);
-    }
-
-    ## Lang
-    $data->{'lang'} = $data->{'lang'} || $data->{'user'}{'lang'} || &Conf::get_robot_conf($robot, 'lang');
-
-    ## What file 
-    my $lang = &Language::Lang2Locale($data->{'lang'});
-    my $tt2_include_path = &tools::make_tt2_include_path($robot,'mail_tt2',$lang,'');
-
-    foreach my $d (@{$tt2_include_path}) {
-	&tt2::add_include_path($d);
-    }
-
-    my @path = &tt2::get_include_path();
-    my $filename = &tools::find_file($tpl.'.tt2',@path);
- 
-    unless (defined $filename) {
-	&Log::do_log('err','Could not find template %s.tt2 in %s', $tpl, join(':',@path));
-	return undef;
-    }
-
-    foreach my $p ('email','email_gecos','host','sympa','request','listmaster','wwsympa_url','title','listmaster_email') {
-	$data->{'conf'}{$p} = &Conf::get_robot_conf($robot, $p);
-    }
-
-    $data->{'sender'} = $who;
-    $data->{'conf'}{'version'} = $main::Version;
-    $data->{'from'} = "$data->{'conf'}{'email'}\@$data->{'conf'}{'host'}" unless ($data->{'from'});
-    $data->{'robot_domain'} = $robot;
-    $data->{'return_path'} = &Conf::get_robot_conf($robot, 'request');
-    $data->{'boundary'} = '----------=_'.&tools::get_message_id($robot) unless ($data->{'boundary'});
-
-    if ((&Conf::get_robot_conf($robot, 'dkim_feature') eq 'on')&&(&Conf::get_robot_conf($robot, 'dkim_add_signature_to')=~/robot/)){
-	$data->{'dkim'} = &tools::get_dkim_parameters({'robot' => $robot});
-    }
-    
-    $data->{'use_bulk'} = 1  unless ($data->{'alarm'}) ; # use verp excepted for alarms. We should make this configurable in order to support Sympa server on a machine without any MTA service
-    
-    my $r = &mail::mail_file($filename, $who, $data, $robot, $options->{'parse_and_return'});
-    return $r if($options->{'parse_and_return'});
-    
-    unless ($r) {
-	&Log::do_log('err',"List::send_global_file, could not send template $filename to $who");
-	return undef;
-    }
-
-    return 1;
+    ## OBSOLETED. Use Robot::send_global_file().
+    my $tpl = shift;
+    my $who = shift;
+    my $robot = shift;
+    return Robot->new($robot)->send_global_file($tpl, $who, @_);
 }
 
 ####################################################
@@ -4665,161 +4606,10 @@ sub archive_send_last {
 #       
 ###################################################### 
 sub send_notify_to_listmaster {
-	my ($operation, $robot, $data, $checkstack, $purge) = @_;
-	
-	if($checkstack or $purge) {
-		foreach my $robot (keys %List::listmaster_messages_stack) {
-			foreach my $operation (keys %{$List::listmaster_messages_stack{$robot}}) {
-				my $first_age = time - $List::listmaster_messages_stack{$robot}{$operation}{'first'};
-				my $last_age = time - $List::listmaster_messages_stack{$robot}{$operation}{'last'};
-				next unless($purge or ($last_age > 30) or ($first_age > 60)); # not old enough to send and first not too old
-				next unless($List::listmaster_messages_stack{$robot}{$operation}{'messages'});
-				
-				my %messages = %{$List::listmaster_messages_stack{$robot}{$operation}{'messages'}};
-				&Log::do_log('info', 'got messages about "%s" (%s)', $operation, join(', ', keys %messages));
-				
-				##### bulk send
-				foreach my $email (keys %messages) {
-					my $param = {
-						to => $email,
-						auto_submitted => 'auto-generated',
-						alarm => 1,
-						operation => $operation,
-						notification_messages => $messages{$email},
-						boundary => '----------=_'.&tools::get_message_id($robot)
-					};
-					
-					my $options = {};
-					$options->{'skip_db'} = 1 if(($operation eq 'no_db') || ($operation eq 'db_restored'));
-					
-					&Log::do_log('info', 'send messages to %s', $email);
-					unless(&send_global_file('listmaster_groupednotifications', $email, $robot, $param, $options)) {
-						&Log::do_log('notice',"Unable to send template 'listmaster_notification' to $email") unless($operation eq 'logs_failed');
-						return undef;
-					}
-				}
-				
-				&Log::do_log('info', 'cleaning stacked notifications');
-				delete $List::listmaster_messages_stack{$robot}{$operation};
-			}
-		}
-		return 1;
-	}
-	
-	my $stack = 0;
-	$List::listmaster_messages_stack{$robot}{$operation}{'first'} = time unless($List::listmaster_messages_stack{$robot}{$operation}{'first'});
-	$List::listmaster_messages_stack{$robot}{$operation}{'counter'}++;
-	$List::listmaster_messages_stack{$robot}{$operation}{'last'} = time;
-	if($List::listmaster_messages_stack{$robot}{$operation}{'counter'} > 3) { # stack if too much messages w/ same code
-		$stack = 1;
-	}
-	
-	unless(defined $operation) {
-		&Log::do_log('err','List::send_notify_to_listmaster(%s) : missing incoming parameter "$operation"');
-		return undef;
-	}
-	
-	unless($operation eq 'logs_failed') {
-		&Log::do_log('debug2', 'List::send_notify_to_listmaster(%s,%s )', $operation, $robot );
-		unless (defined $robot) {
-			&Log::do_log('err','List::send_notify_to_listmaster(%s) : missing incoming parameter "$robot"');
-			return undef;
-		}
-	}
-	
-	my $host = &Conf::get_robot_conf($robot, 'host');
-	my $listmaster = &Conf::get_robot_conf($robot, 'listmaster');
-	my $to = "$Conf::Conf{'listmaster_email'}\@$host";
-	my $options = {}; ## options for send_global_file()
-	
-	if((ref($data) ne 'HASH') and (ref($data) ne 'ARRAY')) {
-		&Log::do_log('err','List::send_notify_to_listmaster(%s,%s) : error on incoming parameter "$param", it must be a ref on HASH or a ref on ARRAY', $operation, $robot ) unless($operation eq 'logs_failed');
-		return undef;
-	}
-	
-	if(ref($data) ne 'HASH') {
-		my $d = {};
-		for my $i(0..$#{$data}) {
-			$d->{"param$i"} = $data->[$i];
-		}
-		$data = $d;
-	}
-	
-	$data->{'to'} = $to;
-	$data->{'type'} = $operation;
-	$data->{'auto_submitted'} = 'auto-generated';
-	$data->{'alarm'} = 1;
-	
-	if($data->{'list'} && ref($data->{'list'}) eq 'List') {
-		my $list = $data->{'list'};
-		$data->{'list'} = {
-			'name' => $list->{'name'},
-			'host' => $list->{'domain'},
-			'subject' => $list->{'admin'}{'subject'},
-		};
-	}
-	
-	my @tosend;
-	
-	if($operation eq 'automatic_bounce_management') {
-		## Automatic action done on bouncing adresses
-		delete $data->{'alarm'};
-		my $list = new List ($data->{'list'}{'name'}, $robot);
-		unless(defined $list) {
-			&Log::do_log('err','Parameter %s is not a valid list', $data->{'list'}{'name'});
-			return undef;
-		}
-		unless($list->send_file('listmaster_notification',$listmaster, $robot, $data, $options)) {
-			&Log::do_log('notice',"Unable to send template 'listmaster_notification' to $listmaster");
-			return undef;
-		}
-		return 1;
-	}
-	
-	if(($operation eq 'no_db') || ($operation eq 'db_restored')) {
-		## No DataBase |  DataBase restored
-		$data->{'db_name'} = &Conf::get_robot_conf($robot, 'db_name');  
-		$options->{'skip_db'} = 1; ## Skip DB access because DB is not accessible
-	}
-	
-	if($operation eq 'loop_command') {
-		## Loop detected in Sympa
-		$data->{'boundary'} = '----------=_'.&tools::get_message_id($robot);
-		&tt2::allow_absolute_path();
-	}
-	
-	if(($operation eq 'request_list_creation') or ($operation eq 'request_list_renaming')) {
-		foreach my $email (split (/\,/, $listmaster)) {
-			my $cdata = &tools::dup_var($data);
-			$cdata->{'one_time_ticket'} = &Auth::create_one_time_ticket($email,$robot,'get_pending_lists',$cdata->{'ip'});
-			push @tosend, {
-				email => $email,
-				data => $cdata
-			};
-		}
-	}else{
-		push @tosend, {
-			email => $listmaster,
-			data => $data
-		};
-	}
-	
-	foreach my $ts (@tosend) {
-		$options->{'parse_and_return'} = 1 if($stack);
-		my $r = &send_global_file('listmaster_notification', $ts->{'email'}, $robot, $ts->{'data'}, $options);
-		if($stack) {
-			&Log::do_log('info', 'stacking message about "%s" for %s (%s)', $operation, $ts->{'email'}, $robot);
-			push @{$List::listmaster_messages_stack{$robot}{$operation}{'messages'}{$ts->{'email'}}}, $r;
-			return 1;
-		}
-		
-		unless($r) {
-			&Log::do_log('notice',"Unable to send template 'listmaster_notification' to $listmaster") unless($operation eq 'logs_failed');
-			return undef;
-		}
-	}
-	
-	return 1;
+    ## OBSOLETED. Use Robot::send_notify_to_listmaster.
+    my $operation = shift;
+    my $robot = shift;
+    return Robot->new($robot)->send_notify_to_listmaster($operation, @_);
 }
 
 
@@ -7028,23 +6818,11 @@ sub add_list_admin {
 #XXX sub rename_list_db
 
 ## Is the user listmaster
+## OBSOLETED: Use Robot::is_listmaster().
 sub is_listmaster {
     my $who = shift;
     my $robot = shift;
-
-    $who =~ y/A-Z/a-z/;
-
-    return 0 unless ($who);
-
-    foreach my $listmaster (@{&Conf::get_robot_conf($robot,'listmasters')}){
-	return 1 if (lc($listmaster) eq lc($who));
-    }
-	
-    foreach my $listmaster (Conf->listmasters) {
-	return 1 if (lc($listmaster) eq lc($who));
-    }    
-
-    return 0;
+    return Robot->new($robot)->is_listmaster($who);
 }
 
 ## Does the user have a particular function in the list?
@@ -10378,37 +10156,11 @@ sub get_lists {
     return \@lists;
 }
 
-=over 4
-
-=item get_robots()
-
-I<Function>.
-List of robots hosted by Sympa
-
-=back
-
-=cut
-
+## OBSOLETED: Use Robot::get_robots().
 sub get_robots {
-
-    my(@robots, $r);
-    &Log::do_log('debug2', 'List::get_robots()');
-
-    unless (opendir(DIR, $Conf::Conf{'etc'})) {
-	&Log::do_log('err',"Unable to open $Conf::Conf{'etc'}");
-	return undef;
-    }
-    my $use_default_robot = 1 ;
-    foreach $r (sort readdir(DIR)) {
-	next unless (($r !~ /^\./o) && (-d "$Conf::Conf{'home'}/$r"));
-	next unless (-r "$Conf::Conf{'etc'}/$r/robot.conf");
-	push @robots, $r;
-	undef $use_default_robot if ($r eq $Conf::Conf{'domain'});
-    }
-    closedir DIR;
-
-    push @robots, $Conf::Conf{'domain'} if ($use_default_robot);
-    return @robots ;
+    my $robots = Robot::get_robots();
+    return undef unless $robots;
+    return map { $_->domain } @{Robot::get_robots()};
 }
 
 ## get idp xref to locally validated email address

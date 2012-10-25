@@ -116,7 +116,7 @@ my $ajax;
 my $session;
 
 ## Load sympa config
-unless (&Conf::load( $sympa_conf_file )) {
+unless (defined Conf::load() and defined Rebot::get_robots()) {
     &Log::fatal_err("Unable to load sympa configuration, file $sympa_conf_file or one of the vhost robot.conf files contain errors. Exiting.");  
 }
 

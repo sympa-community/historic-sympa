@@ -29,7 +29,7 @@ use Exporter;
 use Carp;
 use Storable;
 
-use List;
+#XXXuse List;
 use SDM;
 use Log;
 use Language;
@@ -133,86 +133,20 @@ our %Conf = ();
 # do not try to load database values if $no_db is set ;
 # do not change gloval hash %Conf if $return_result  is set ;
 # we known that's dirty, this proc should be rewritten without this global var %Conf
+#
+# NOTE: To load entire robots config, use
+#       "Robot::get_robots('force_reload' => 1)".
 sub load {
     my $config_file = shift;
     my $no_db = shift;
     my $return_result = shift;
-    my $force_reload;
 
-    my $config_err = 0;
-    my %line_numbered_config;
-
-    if(_source_has_not_changed({'config_file' => $config_file}) && !$return_result) {
-        ##printf "Conf::load(): File %s has not changed since the last cache. Using cache.\n",$config_file;
-        if (my $tmp_conf = _load_binary_cache({'config_file' => $config_file.$binary_file_extension})){
-            %Conf = %{$tmp_conf};
-            $force_reload = 1; # Will force the robot.conf reloading, as sympa.conf is the default.
-        }else{
-            &Log::do_log('debug3', 'Binary config file loading failed while loading source file "%s"', $config_file);
-        }
-    }else{
-        printf "Conf::load(): File %s has changed since the last cache. Loading file.\n",$config_file;
-        $force_reload = 1; # Will force the robot.conf reloading, as sympa.conf is the default.
-        ## Loading the Sympa main config file.
-        if(my $config_loading_result = &_load_config_file_to_hash({'path_to_config_file' => $config_file})) {
-            %line_numbered_config = %{$config_loading_result->{'numbered_config'}};
-            %Conf = %{$config_loading_result->{'config'}};
-            $config_err = $config_loading_result->{'errors'};
-        }else{
-            &Log::do_log('err', 'Unable to load %s. Aborting', $config_file);
-            return undef;
-        }
-        # Returning the config file content if this is what has been asked.
-        return (\%line_numbered_config) if ($return_result);
-
-        # Users may define parameters with a typo or other errors. Check that the parameters
-        # we found in the config file are all well defined Sympa parameters.
-        $config_err += &_detect_unknown_parameters_in_config(
-                                {
-                                    'config_hash' => \%Conf,
-                                    'config_file_line_numbering_reference' => \%line_numbered_config,
-                                });
-    
-        # Some parameter values are hardcoded. In that case, ignore what was
-        #  set in the config file and simply use the hardcoded value.
-        %Ignored_Conf = %{&_set_hardcoded_parameter_values({'config_hash' => \%Conf,})};
-
-        &_set_listmasters_entry({'config_hash' => \%Conf, 'main_config' => 1});
-    
-        ## Some parameters must have a value specifically defined in the config. If not, it is an error.
-        $config_err += &_detect_missing_mandatory_parameters({'config_hash' => \%Conf,'file_to_check' => $config_file});
-
-        # Some parameters need special treatments to get their final values.
-        &_infer_server_specific_parameter_values({'config_hash' => \%Conf,});
-        
-        &_infer_robot_parameter_values({'config_hash' => \%Conf});
-
-        if ($config_err) {
-            &Log::do_log('err', 'Errors while parsing main config file %s',
-			 $config_file);
-            return undef;
-        }
-
-        &_store_source_file_name({'config_hash' => \%Conf,'config_file' => $config_file});
-        &_save_config_hash_to_binary({'config_hash' => \%Conf,});
-    }
-
-    if (my $missing_modules_count = &_check_cpan_modules_required_by_config({'config_hash' => \%Conf,})){
-        &Log::do_log('err', 'Warning: %d required modules are missing.',
-		     $missing_modules_count);
-    }
-
-    &_replace_file_value_by_db_value({'config_hash' => \%Conf}) unless($no_db);
-    &_load_server_specific_secondary_config_files({'config_hash' => \%Conf,});
-    &_load_robot_secondary_config_files({'config_hash' => \%Conf});
-
-    ## Load robot.conf files
-    unless (&load_robots({'config_hash' => \%Conf, 'no_db' => $no_db, 'force_reload' => $force_reload})){
-        &Log::do_log('err', 'Unable to load robots');
-        return undef;
-    }
-    ##use Data::Dumper; open TMP, ">/tmp/dump_conf"; print TMP &Dumper(\%Conf); close TMP;
-    ##&_create_robot_like_config_for_main_robot();
+    my $result = load_robot_conf({ 'robot' => '*',
+				   'config_file' => $config_file,
+				   'no_db' => $no_db,
+				   'return_result' => $return_result });
+    return undef unless defined $result;
+    return $result if $return_result;
     return 1;
 }
 
@@ -228,20 +162,18 @@ sub load_robots {
     }else {
         @robots = @{$robots_list_ref};
     }
-    unless ($#robots > -1) {
+    unless (scalar @robots) {
         return 1;
     }
     my $exiting = 0;
     foreach my $robot (@robots) {
-        my $robot_config_file = "$Conf{'etc'}/$robot/robot.conf";
-        my $robot_conf = undef;
-        unless ($robot_conf = &_load_single_robot_config({'robot' => $robot, 'no_db' => $param->{'no_db'}, 'force_reload' => $param->{'force_reload'}})) {
+	my $config_file = "$Conf{'etc'}/$robot/robot.conf";
+	unless (defined &load_robot_conf({ %$param,
+					   'config_file' => $config_file,
+					   'robot' => $robot })) {
             &Log::do_log('err', 'The config for robot %s contain errors: it could not be correctly loaded.', $robot);
             $exiting = 1;
-        }else{
-            $param->{'config_hash'}{'robots'}{$robot} = $robot_conf;
         }
-        &_check_double_url_usage({'config_hash' => $param->{'config_hash'}{'robots'}{$robot}});
     }
     return undef if ($exiting);
     return 1;
@@ -375,7 +307,8 @@ sub conf_2_db {
     my @conf_parameters = @confdef::params ;
 
     # store in database robots parameters.
-    my $robots_conf = &load_robots ; #load only parameters that are in a robot.conf file (do not apply defaults). 
+    #load only parameters that are in a robot.conf file (do not apply defaults). 
+    &load_robots;
 
     unless (opendir DIR,$Conf{'etc'} ) {
         &Log::do_log('err', 'Unable to open directory %s for virtual robots config', $Conf{'etc'});
@@ -386,9 +319,10 @@ sub conf_2_db {
         next unless (-d "$Conf{'etc'}/$robot");
         next unless (-f "$Conf{'etc'}/$robot/robot.conf");
         
-        my $config;
-        if(my $result_of_config_loading = _load_config_file_to_hash({'path_to_config_file' => $Conf{'etc'}.'/'.$robot.'/robot.conf'})){
-            $config = $result_of_config_loading->{'config'};
+	my $config;
+	my $result;
+	if ($result = &_load_config_file_to_hash({'config_file' => $Conf{'etc'}.'/'.$robot.'/robot.conf'})){
+            $config = $result->{'config'};
         }
         &_remove_unvalid_robot_entry($config);
         
@@ -469,10 +403,13 @@ sub checkfiles_as_root {
     return 1 ;
 }
 
+my $send_notify_func;
+
 ## Check a few files
 sub checkfiles {
+    $send_notify_func = shift || undef;
     my $config_err = 0;
-    
+
     foreach my $p ('sendmail','openssl','antivirus_path') {
     next unless $Conf{$p};
     
@@ -489,7 +426,7 @@ sub checkfiles {
         unless ( mkdir ($Conf{$qdir}, 0775)) {
         &Log::do_log('err', 'Unable to create spool %s', $Conf{$qdir});
         $config_err++;
-        }
+    }
             unless (&tools::set_file_rights(
                     file  => $Conf{$qdir},
                     user  => Sympa::Constants::USER,
@@ -525,9 +462,7 @@ sub checkfiles {
     if (defined $Conf{'cafile'} && $Conf{'cafile'}) {
     unless (-f $Conf{'cafile'} && -r $Conf{'cafile'}) {
         &Log::do_log('err', 'Cannot access cafile %s', $Conf{'cafile'});
-        unless (&List::send_notify_to_listmaster('cannot_access_cafile', $Conf{'domain'}, [$Conf{'cafile'}])) {
-        &Log::do_log('err', 'Unable to send notify "cannot access cafile" to listmaster');    
-        }
+	_send_notify('*', 'cannot_access_cafile', $Conf{'cafile'});
         $config_err++;
     }
     }
@@ -535,9 +470,7 @@ sub checkfiles {
     if (defined $Conf{'capath'} && $Conf{'capath'}) {
     unless (-d $Conf{'capath'} && -x $Conf{'capath'}) {
         &Log::do_log('err', 'Cannot access capath %s', $Conf{'capath'});
-        unless (&List::send_notify_to_listmaster('cannot_access_capath', $Conf{'domain'}, [$Conf{'capath'}])) {
-        &Log::do_log('err', 'Unable to send notify "cannot access capath" to listmaster');    
-        }
+	_send_notify('*', 'cannot_access_capath', $Conf{'capath'});
         $config_err++;
     }
     }
@@ -545,9 +478,8 @@ sub checkfiles {
     ## queuebounce and bounce_path pointing to the same directory
     if ($Conf{'queuebounce'} eq $wwsconf->{'bounce_path'}) {
     &Log::do_log('err', 'Error in config: queuebounce and bounce_path parameters pointing to the same directory (%s)', $Conf{'queuebounce'});
-    unless (&List::send_notify_to_listmaster('queuebounce_and_bounce_path_are_the_same', $Conf{'domain'}, [$Conf{'queuebounce'}])) {
-        &Log::do_log('err', 'Unable to send notify "queuebounce_and_bounce_path_are_the_same" to listmaster');    
-    }
+    _send_notify('*', 'queuebounce_and_bounce_path_are_the_same',
+		 $Conf{'queuebounce'});
     $config_err++;
     }
 
@@ -600,11 +532,12 @@ sub checkfiles {
 
     ## Create directory if required
     unless (-d $dir) {
-        unless ( &tools::mkdir_all($dir, 0755)) {
-        &List::send_notify_to_listmaster('cannot_mkdir',  $robot, ["Could not create directory $dir: $!"]);
-        &Log::do_log('err','Failed to create directory %s',$dir);
-        return undef;
-        }
+	unless (&tools::mkdir_all($dir, 0755)) {
+	    my $msg = "Failed to create directory $dir: $!";
+	    &Log::do_log('err', '%s', $msg);
+	    _send_notify($robot, 'cannot_mkdir', $msg);
+	    return undef;
+	}
     }
 
     foreach my $css ('style.css','print.css','fullPage.css','print-preview.css') {
@@ -615,21 +548,22 @@ sub checkfiles {
         ## Update the CSS if it is missing or if a new css.tt2 was installed
         if (! -f $dir.'/'.$css ||
         (stat($css_tt2_path))[9] > (stat($dir.'/'.$css))[9]) {
-        &Log::do_log('notice',"TT2 file $css_tt2_path has changed; updating static CSS file $dir/$css ; previous file renamed");
+        &Log::do_log('notice', 'TT2 file %s has changed; updating static CSS file %s/%s ; previous file renamed', $css_tt2_path, $dir, $css);
         
         ## Keep copy of previous file
         rename $dir.'/'.$css, $dir.'/'.$css.'.'.time;
 
-        unless (open (CSS,">$dir/$css")) {
-            &List::send_notify_to_listmaster('cannot_open_file',  $robot, ["Could not open file $dir/$css: $!"]);
-            &Log::do_log('err','Failed to open (write) file %s',$dir.'/'.$css);
-            return undef;
-        }
+	unless (open CSS, '>', "$dir/$css") {
+	    my $msg = "Could not open (write) file $dir/$css: $!";
+	    _send_notify($robot, 'cannot_open_file', $msg);
+	    &Log::do_log('err', '%s', $msg);
+	    return undef;
+	}
         
         unless (&tt2::parse_tt2($param,'css.tt2' ,\*CSS, $tt2_include_path)) {
             my $error = &tt2::get_error();
             $param->{'tt2_error'} = $error;
-            &List::send_notify_to_listmaster('web_tt2_error', $robot, [$error]);
+	    _send_notify($robot, 'web_tt2_error', $error);
             &Log::do_log('err', 'Error while installing %s/%s', $dir, $css);
         }
 
@@ -643,8 +577,9 @@ sub checkfiles {
     }
     }
     if ($css_updated) {
-    ## Notify main listmaster
-    &List::send_notify_to_listmaster('css_updated',  $Conf{'domain'}, ["Static CSS files have been updated ; check log file for details"]);
+	## Notify main listmaster
+	_send_notify('*', 'css_updated',
+		     "Static CSS files have been updated ; check log file for details");
     }
 
 
@@ -1350,10 +1285,11 @@ sub _load_config_file_to_hash {
     my $result;
     $result->{'errors'} = 0;
     my $line_num = 0;
+    my $config_file = $param->{'config_file'};
+
     ## Open the configuration file or return and read the lines.
-    unless (open(IN, $param->{'path_to_config_file'})) {
-        &Log::do_log('err', 'Unable to open %s: %s',
-		     $param->{'path_to_config_file'}, $!);
+    unless (open IN, '<', $config_file) {
+        &Log::do_log('err', 'Unable to open %s: %s', $config_file, $!);
         return undef;
     }
     while (<IN>) {
@@ -1389,11 +1325,11 @@ sub _load_config_file_to_hash {
             }
         } else {
             &Log::do_log('err', gettext('Error at %s line %d: %s'),
-			 $param->{'path_to_config_file'}, $line_num, $_);
+			 $config_file, $line_num, $_);
             $result->{'errors'}++;
         }
     }
-    close(IN);
+    close IN;
     return $result;
 }
 
@@ -1671,59 +1607,132 @@ sub _dump_non_robot_parameters {
     }
 }
 
-sub _load_single_robot_config{
-    my $param = shift;
-    my $robot = $param->{'robot'};
-    my $robot_conf;
-    
-   my $config_err;
-    my $config_file = "$Conf{'etc'}/$robot/robot.conf";
-    my $force_reload = $param->{'force_reload'};
-    if(!$force_reload && &_source_has_not_changed({'config_file' => $config_file})) {
-        $force_reload = 0;
-    }
-    if(!$force_reload) {
-        printf "Conf::_load_single_robot_config(): File %s has not changed since the last cache. Using cache.\n",$config_file;
-        unless (-r $config_file) {
-            &Log::do_log('err', 'No read access on %s', $config_file);
-            &List::send_notify_to_listmaster('cannot_access_robot_conf',$Conf{'domain'}, ["No read access on $config_file. you should change privileges on this file to activate this virtual host. "]);
-            return undef;
-        }
-         unless ($robot_conf = _load_binary_cache({'config_file' => $config_file.$binary_file_extension})){
-            &Log::do_log('debug3', 'Binary config file loading failed. Loading source file "%s"', $config_file);
-            $force_reload = 1;
-        }
-    }
-    if($force_reload){
-        if(my $config_loading_result = &_load_config_file_to_hash({'path_to_config_file' => $config_file})) {
-            $robot_conf = $config_loading_result->{'config'};
-            $config_err = $config_loading_result->{'errors'};
-        }else{
-            &Log::do_log('err', 'Unable to load %s. Aborting', $config_file);
-            return undef;
-        }
-        
-        # Remove entries which are not supposed to be defined at the robot level.
-        &_dump_non_robot_parameters({'config_hash' => $robot_conf, 'robot' => $robot});
-        
-        ## Default for 'host' is the domain
-        $robot_conf->{'host'} ||= $robot;
-        $robot_conf->{'robot_name'} ||= $robot;
+sub load_robot_conf {
+    my $param = shift || {};
 
-        &_set_listmasters_entry({'config_hash' => $robot_conf});
-    
-        &_infer_robot_parameter_values({'config_hash' => $robot_conf});
-        
-        &_store_source_file_name({'config_hash' => $robot_conf,'config_file' => $config_file});
-        &_save_config_hash_to_binary({'config_hash' => $robot_conf,'source_file' => $config_file});
-        return undef if ($config_err);
+    my $robot = $param->{'robot'};
+    unless (defined $robot and length $robot) {
+	$robot = '*';
     }
-    &_replace_file_value_by_db_value({'config_hash' => $robot_conf}) unless $param->{'no_db'};
-    &_load_robot_secondary_config_files({'config_hash' => $robot_conf});
-    return $robot_conf;
+    my $config_file = $param->{'config_file'};
+    unless ($config_file) {
+	if ($robot eq '*') {
+	    $config_file = Sympa::Constants::CONFIG;
+	} else {
+	    $config_file = $Conf{'etc'} . '/' . $robot . '/robot.conf';
+	}
+    }
+    my $force_reload = $param->{'force_reload'};
+    my $return_result = $param->{'return_result'};
+
+    my $config_err = 0;
+    my %line_numbered_config;
+    my $conf = undef;
+
+    unless (-r $config_file) {
+	&Log::do_log('err', 'No read access on %s', $config_file);
+	return undef;
+    }
+
+    my $result;
+    if (! $force_reload and ! $return_result and
+	$conf = _load_binary_cache({ 'config_file' => $config_file })) {
+	&Log::do_log('debug3', 'got %s from serialized data',
+		     ($robot ne '*') ? "config for robot $robot" : 'main conf');
+    } elsif (
+	$result = &_load_config_file_to_hash({ 'config_file' => $config_file })
+    ) {
+	$conf = $result->{'config'};
+	&Log::do_log('debug3', 'got %s from file',
+		     ($robot ne '*') ? "config for robot $robot" : 'main conf');
+
+	%line_numbered_config = %{$result->{'numbered_config'}};
+	$config_err = $result->{'errors'};
+
+	# Returning the config file content if this is what has been asked.
+	return \%line_numbered_config if $return_result;
+
+	# Users may define parameters with a typo or other errors.
+	# Check that the parameters we found in the config file are all well
+	# defined Sympa parameters.
+	$config_err += &_detect_unknown_parameters_in_config(
+	    {
+		'config_hash' => $conf,
+		'config_file_line_numbering_reference' => \%line_numbered_config,
+	    });
+
+	if ($robot eq '*') {
+	    # Some parameter values are hardcoded. In that case, ignore what
+	    # was set in the config file and simply use the hardcoded value.
+	    %Ignored_Conf =
+		%{&_set_hardcoded_parameter_values({ 'config_hash' => $conf })};
+	} else {
+	    # Remove entries which are not supposed to be defined at the
+	    # robot level.
+	    &_dump_non_robot_parameters({ 'config_hash' => $conf,
+					  'robot' => $robot });
+	    ## Default for 'host' is the domain
+	    ##FIXME
+	    $conf->{'host'} ||= $robot;
+	    $conf->{'robot_name'} ||= $robot;
+	}
+
+        &set_listmasters_entry({ 'config_hash' => $conf, 'robot' => $robot });
+
+	if ($robot eq '*') {
+	    ## Some parameters must have a value specifically defined in the
+	    ## config. If not, it is an error.
+	    $config_err += &_detect_missing_mandatory_parameters({ 'config_hash' => $conf, 'file_to_check' => $config_file });
+
+	    # Some parameters need special treatments to get their final values.
+	    &_infer_server_specific_parameter_values({ 'config_hash' => $conf });
+	}
+
+	&_infer_robot_parameter_values({ 'config_hash' => $conf });
+
+        if ($config_err) {
+	    &Log::do_log('err', 'Errors while parsing main config file %s',
+			 $config_file);
+	    return undef;
+	}
+
+        &_store_source_file_name({ 'config_hash' => $conf, 'config_file' => $config_file });
+        &_save_config_hash_to_binary({ 'config_hash' => $conf, 'source_file' => $config_file });
+    } else {
+	&Log::do_log('err', 'Unable to load %s. Aborting', $config_file);
+	return undef;
+    }
+
+    if ($robot eq '*') {
+	my $count;
+	if ($count = &_check_cpan_modules_required_by_config({ 'config_hash' => $conf })) {
+	    &Log::do_log('err', 'Warning: %d required modules are missing.',
+			 $count);
+	}
+    }
+
+    &_replace_file_value_by_db_value({ 'config_hash' => $conf, 'robot' => $robot })
+	unless $param->{'no_db'};
+    if ($robot eq '*') {
+	&_load_server_specific_secondary_config_files({ 'config_hash' => $conf });
+    }
+    &_load_robot_secondary_config_files({ 'config_hash' => $conf });
+
+    unless ($robot eq '*') {
+	&_check_double_url_usage({ 'config_hash' => $conf });
+    }
+
+    ## Load config
+    if ($robot eq '*') {
+	%Conf = %{$conf};
+    } else {
+	$Conf{'robots'} ||= {};
+	$Conf{'robots'}{$robot} = $conf;
+    }
+    return 1;
 }
 
-sub _set_listmasters_entry{
+sub set_listmasters_entry{
     my $param = shift;
     my $number_of_valid_email = 0;
     my $number_of_email_provided = 0;
@@ -1731,7 +1740,7 @@ sub _set_listmasters_entry{
     if (defined $param->{'config_hash'}{'listmaster'} && $param->{'config_hash'}{'listmaster'} !~ /^\s*$/) {
         $param->{'config_hash'}{'listmaster'} =~ s/\s//g;
         my @emails_provided = split(/,/, $param->{'config_hash'}{'listmaster'});
-        $number_of_email_provided = $#emails_provided+1;
+	$number_of_email_provided = scalar @emails_provided;
         foreach my $lismaster_address (@emails_provided){
             if (&tools::valid_email($lismaster_address)) {
                 push @{$param->{'config_hash'}{'listmasters'}}, $lismaster_address;
@@ -1740,15 +1749,13 @@ sub _set_listmasters_entry{
                 &Log::do_log('err', 'Robot %s config: Listmaster address "%s" is not a valid email', $param->{'config_hash'}{'host'}, $lismaster_address);
             }
         }
-    }else{
-        if ($param->{'main_config'}) {
+    } elsif ($param->{'robot'} eq '*') {
 			&Log::do_log('err', 'Robot %s config: No listmaster defined. This is the main config. It MUST define at least one listmaster. Stopping here.', $param->{'config_hash'}{'domain'});
 			return undef;
-		}else{
+    } else {
 			$param->{'config_hash'}{'listmasters'} = $Conf{'listmasters'};
 			$param->{'config_hash'}{'listmaster'} = $Conf{'listmaster'};
-			$number_of_valid_email = $#{$param->{'config_hash'}{'listmasters'}};
-		}
+			$number_of_valid_email = scalar @{$param->{'config_hash'}{'listmasters'}};
     }
     if ($number_of_email_provided > $number_of_valid_email){
         &Log::do_log('err', 'Robot %s config: All the listmasters addresses found were not valid. Out of %s addresses provided, %s only are valid email addresses.', $param->{'config_hash'}{'host'}, $number_of_email_provided, $number_of_valid_email);
@@ -1789,9 +1796,7 @@ sub _parse_custom_robot_parameters {
 
 sub _replace_file_value_by_db_value {
     my $param = shift;
-    my $robot = $param->{'config_hash'}{'robot_name'};
-    # The name of the default robot is "*" in the database.
-    $robot = '*' if ($param->{'config_hash'}{'robot_name'} eq '');
+    my $robot = $param->{'robot'};
     foreach my $label (keys %db_storable_parameters) {
         next unless ($robot ne '*' && $valid_robot_key_words{$label} == 1);
         my $value = &get_db_conf($robot, $label);
@@ -1844,7 +1849,12 @@ sub _load_binary_cache {
     my $param = shift;
     my $result = undef;
 
-    my $lock = new Lock ($param->{'config_file'});
+    my $config_file = $param->{'config_file'};
+    return undef
+	unless _source_has_not_changed({'config_file' => $config_file});
+    my $config_bin = $config_file . $binary_file_extension;
+
+    my $lock = new Lock ($config_bin);
     unless (defined $lock) {
         &Log::do_log('err','Could not create new lock');
         return undef;
@@ -1855,11 +1865,11 @@ sub _load_binary_cache {
     }   
     
     eval {
-        $result = &Storable::retrieve($param->{'config_file'});
+        $result = &Storable::retrieve($config_bin);
     };
-    if ($@) {
+    if ($@ or ! $result) {
         &Log::do_log('err', 'Failed to load the binary config %s. error: %s',
-		     $param->{'config_file'}, $@);
+		     $config_bin, $@ || 'possible format error');
         unless ($lock->unlock()) {
             return undef;
         }
@@ -1923,6 +1933,19 @@ sub _get_parameters_names_by_category {
         }
     }
     return $param_by_categories;
+}
+
+sub _send_notify {
+    my $robot = shift;
+    my $operation = shift;
+    unless (ref $send_notify_func and
+	    &{$send_notify_func}($robot, $operation, [@_])) {
+	&Log::do_log('err', 'Unable to send notify "%s" to %s',
+		     $operation,
+		     ($robot and length $robot and $robot ne '*') ?
+		     "listmaster of robot $robot" : 'main listmaster'
+	);
+    }
 }
 
 =over 4
@@ -2018,6 +2041,8 @@ See L<Robot/ACCESSORS>.
 
 =item locale2charset
 
+=item robots
+
 =item sympa
 
 I<Getters>.
@@ -2035,7 +2060,7 @@ sub AUTOLOAD {
     $AUTOLOAD =~ m/^(.*)::(.*)/;
 
     my $attr = $2;
-    if (scalar grep { $_ eq $attr } qw(locale2charset sympa)) {
+    if (scalar grep { $_ eq $attr } qw(locale2charset robots sympa)) {
 	## getter for internal config parameters.
 	no strict "refs";
 	*{$AUTOLOAD} = sub {

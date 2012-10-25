@@ -185,7 +185,8 @@ while ($signal ne 'term') { #as long as a SIGTERM is not received }
 my $config_file = $main::options{'config'} || Sympa::Constants::CONFIG;
 
 ## Load configuration file. Ignoring database config for now: it avoids trying to load a database that could not exist yet.
-unless (Conf::load($config_file,1)) {
+unless (defined Conf::load($config_file, 1) and
+	defined Robot::get_robots('force_reload' => 1)) {
    &Log::fatal_err("Unable to load sympa configuration, file $config_file or one of the vhost robot.conf files contain errors. Exiting.");  
 }
 
@@ -209,7 +210,7 @@ if ($Conf{'db_name'} and $Conf{'db_type'}) {
 }
 
 ## Now trying to load full config (including database)
-unless (Conf::load($config_file)) {
+unless (defined Conf::load($config_file) and defined Robot::get_robots()) {
    &Log::fatal_err("Configuration file $config_file has errors.");
    
 }
@@ -339,7 +340,7 @@ if ($signal ne 'hup') {
     $signal = '0';
 }
 
-unless (&Conf::checkfiles()) {
+unless (&Conf::checkfiles(\&Robot::send_notify_to_listmaster)) {
     fatal_err("Missing files. Aborting.");
 }
 

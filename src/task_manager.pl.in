@@ -71,7 +71,7 @@ unless ($wwsconf = &Conf::load_wwsconf($wwsympa_conf)) {
 }
 
 # Load sympa.conf
-unless (Conf::load($sympa_conf_file)) {
+unless (defined Conf::load() and defined Robot::get_robots()) {
     &Log::fatal_err("Unable to load sympa configuration, file $sympa_conf_file or one of the vhost robot.conf files contain errors. Exiting.");  
 }
 
@@ -86,7 +86,7 @@ unless (&Upgrade::data_structure_uptodate()) {
 }
 
 ## Check for several files.
-unless (&Conf::checkfiles()) {
+unless (&Conf::checkfiles(\&Robot::send_notify_to_listmaster)) {
     &Log::fatal_err("Missing files. Aborting.");
     ## No return.                                         
 }
