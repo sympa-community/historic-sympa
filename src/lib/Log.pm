@@ -118,6 +118,8 @@ sub do_log {
 		push @param, sprintf('{%s}', join('/', keys %{$p}));
 	    } elsif (ref $p eq 'List') {
 		push @param, sprintf('List <%s>', $p->get_list_id);
+	    } elsif ($p->can('get_id')) {
+		push @param, sprintf('%s <%s>', ref $p, $p->get_id);
 	    } else {
 		push @param, ref $p;
 	    }

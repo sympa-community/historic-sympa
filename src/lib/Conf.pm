@@ -122,20 +122,28 @@ my %trusted_applications = ('trusted_application' => {
 my $binary_file_extension = ".bin";
 
 
-our $wwsconf = &load_wwsconf(Sympa::Constants::WWSCONFIG);
+our $wwsconf;
 our %Conf = ();
 
 =head2 FUNCTIONS
 
+=over 4
+
+=item load ( [ CONFIG_FILE ], [ NO_DB ], [ RETURN_RESULT ] )
+
+Loads and parses the configuration file.  Reports errors if any.
+
+do not try to load database values if NO_DB is set;
+do not change gloval hash %Conf if RETURN_RESULT is set;
+
+##we known that's dirty, this proc should be rewritten without this global var %Conf
+
+NOTE: To load entire robots config, use C<Robot::get_robots('force_reload' =E<gt> 1)>.
+
+=back
+
 =cut
 
-## Loads and parses the configuration file. Reports errors if any.
-# do not try to load database values if $no_db is set ;
-# do not change gloval hash %Conf if $return_result  is set ;
-# we known that's dirty, this proc should be rewritten without this global var %Conf
-#
-# NOTE: To load entire robots config, use
-#       "Robot::get_robots('force_reload' => 1)".
 sub load {
     my $config_file = shift;
     my $no_db = shift;
@@ -189,13 +197,73 @@ sub get_robot_conf {
         }
     }
     ## default
-    return $Conf{$param} || $wwsconf->{$param};
+    return $Conf{$param};
+}
+
+=over 4
+
+=item get_sympa_conf
+
+Gets path name of main config file.
+Path name is taken from:
+
+=over 4
+
+=item 1
+
+C<--config> command line option
+
+=item 2
+
+C<SYMPA_CONFIG> environment variable 
+
+=item 3
+
+built-in default
+
+=back
+
+=back
+
+=cut
+
+sub get_sympa_conf {
+    return $main::options{'config'}
+	if %main::options and defined $main::options{'config'};
+    return $ENV{'SYMPA_CONFIG'} || Sympa::Constants::CONFIG;
+}
+
+=over 4
+
+=item get_wwsympa_conf
+
+Gets path name of wwsympa.conf file.
+Path name is taken from:
+
+=over 4
+
+=item 1
+
+C<SYMPA_WWSCONFIG> environment variable
+
+=item 2
+
+built-in default
+
+=back
+
+=back
+
+=cut
+
+sub get_wwsympa_conf {
+    return $ENV{'SYMPA_WWSCONFIG'} || Sympa::Constants::WWSCONFIG;
 }
 
 # deletes all the *.conf.bin files.
 sub delete_binaries {
     &Log::do_log('debug2', '()');
-    my @files = (Sympa::Constants::CONFIG,Sympa::Constants::WWSCONFIG);
+    my @files = (get_sympa_conf(), get_wwsympa_conf());
     foreach my $robot (@{&get_robots_list()}) {
         push @files, "$Conf{'etc'}/$robot/robot.conf";
     }
@@ -302,7 +370,7 @@ sub set_robot_conf  {
 # Store configs to database
 sub conf_2_db {
     &Log::do_log('debug2', '(%s)', @_);
-    my $config_file = shift;
+    my $config_file = shift || get_sympa_conf();
 
     my @conf_parameters = @confdef::params ;
 
@@ -1445,6 +1513,11 @@ sub _infer_server_specific_parameter_values {
 
 sub _load_server_specific_secondary_config_files {
     my $param = shift;
+
+    ## As several parameters prefer to wwsympa.conf, overwrite them of
+    ## sympa.conf.
+    _load_wwsconf($param);
+
     ## Load charset.conf file if necessary.
     if($param->{'config_hash'}{'legacy_character_support_feature'} eq 'on'){
         $param->{'config_hash'}{'locale2charset'} = &load_charset ();
@@ -1617,7 +1690,7 @@ sub load_robot_conf {
     my $config_file = $param->{'config_file'};
     unless ($config_file) {
 	if ($robot eq '*') {
-	    $config_file = Sympa::Constants::CONFIG;
+	    $config_file = get_sympa_conf();
 	} else {
 	    $config_file = $Conf{'etc'} . '/' . $robot . '/robot.conf';
 	}
@@ -1677,7 +1750,7 @@ sub load_robot_conf {
 	    $conf->{'robot_name'} ||= $robot;
 	}
 
-        &set_listmasters_entry({ 'config_hash' => $conf, 'robot' => $robot });
+        &_set_listmasters_entry({ 'config_hash' => $conf, 'robot' => $robot });
 
 	if ($robot eq '*') {
 	    ## Some parameters must have a value specifically defined in the
@@ -1732,7 +1805,7 @@ sub load_robot_conf {
     return 1;
 }
 
-sub set_listmasters_entry{
+sub _set_listmasters_entry{
     my $param = shift;
     my $number_of_valid_email = 0;
     my $number_of_email_provided = 0;
@@ -1948,21 +2021,17 @@ sub _send_notify {
     }
 }
 
-=over 4
+## Load WWSympa configuration file.
+sub _load_wwsconf {
+    my $param = shift;
+    my $config_hash = $param->{'config_hash'};
+    my $config_file = get_wwsympa_conf();
 
-=item load_wwsconf ( FILE )
-
-Load WWSympa configuration file.
-
-=back
-
-=cut
-
-sub load_wwsconf {
-    my $file = shift;
+    return 0 unless -f $config_file; # this file is optional.
 
     ## Old params
-    my %old_param = ('alias_manager' => 'No more used, using '.$Conf{'alias_manager'},
+    my %old_param = ('alias_manager' => 'No more used, using ' .
+					$config_hash->{'alias_manager'},
 		     'wws_path' => 'No more used',
 		     'icons_url' => 'No more used. Using static_content/icons instead.',
 		     'robots' => 'Not used anymore. Robots are fully described in their respective robot.conf file.',
@@ -1971,37 +2040,44 @@ sub load_wwsconf {
     my %default_conf = ();
 
     ## Valid params
-    foreach my $key (keys %Conf::params) {
-	if (defined $Conf::params{$key}{'file'} && $Conf::params{$key}{'file'} eq 'wwsympa.conf') {
-	    $default_conf{$key} = $Conf::params{$key}{'default'};
+    foreach my $key (keys %params) {
+	if (defined $params{$key}{'file'} and
+	    $params{$key}{'file'} eq 'wwsympa.conf') {
+	    $default_conf{$key} = $params{$key}{'default'};
 	}
     }
 
     my $conf = \%default_conf;
 
-    unless (open (FILE, $file)) {
-	&Log::do_log('err',"load_config: unable to open $file");
+    my $fh;
+    unless (open $fh, '<', $config_file) {
+	&Log::do_log('err', 'unable to open %s', $config_file);
 	return undef;
     }
     
-    while (<FILE>) {
+    while (<$fh>) {
 	next if /^\s*\#/;
 
 	if (/^\s*(\S+)\s+(.+)$/i) {
 	    my ($k, $v) = ($1, $2);
 	    $v =~ s/\s*$//;
-	    if (defined ($conf->{$k})) {
+	    if (defined ($conf->{$k})) { #FIXME: Might "exists" be used?
 		$conf->{$k} = $v;
 	    }elsif (defined $old_param{$k}) {
-		&Log::do_log('err',"Parameter %s in %s no more supported : %s", $k, $file, $old_param{$k});
+		&Log::do_log(
+		    'err', 'Parameter %s in %s no more supported : %s',
+		    $k, $config_file, $old_param{$k}
+		);
 	    }else {
-		&Log::do_log('err',"Unknown parameter %s in %s", $k, $file);
+		&Log::do_log(
+		    'err', 'Unknown parameter %s in %s', $k, $config_file
+		);
 	    }
 	}
 	next;
     }
     
-    close FILE;
+    close $fh;
 
     ## Check binaries and directories
     if ($conf->{'arc_path'} && (! -d $conf->{'arc_path'})) {
@@ -2016,8 +2092,13 @@ sub load_wwsconf {
 	&Log::do_log('err',"MHonArc is not installed or %s is not executable.", $conf->{'mhonarc'});
     }
 
+    ## set default
+    $conf->{'log_facility'} ||= $config_hash->{'syslog'};
+
+    foreach my $k (keys %$conf) {
+	$config_hash->{$k} = $conf->{$k};
+    }
     $wwsconf = $conf;
-    return $wwsconf;
 }
 
 ############################################################################
@@ -2060,7 +2141,10 @@ sub AUTOLOAD {
     $AUTOLOAD =~ m/^(.*)::(.*)/;
 
     my $attr = $2;
-    if (scalar grep { $_ eq $attr } qw(locale2charset robots sympa)) {
+    if (scalar grep { $_ eq $attr }
+		    qw(locale2charset robots sympa) or
+	scalar grep { ! defined $_->{'title'} and $_->{'name'} eq $attr }
+		    @confdef::params) {
 	## getter for internal config parameters.
 	no strict "refs";
 	*{$AUTOLOAD} = sub {
@@ -2070,24 +2154,6 @@ sub AUTOLOAD {
 	    croak "Can't modify \"$attr\" attribute"
 		if scalar @_ > 1;
 	    $Conf{$attr};
-	};
-    } elsif (scalar grep { ! defined $_->{'title'} and $_->{'name'} eq $attr }
-			 @confdef::params) {
-	## getter for global or default config parameters.
-	no strict "refs";
-	*{$AUTOLOAD} = sub {
-	    my $pkg = shift;
-	    croak "Can't call method \"$attr\" on uninitialized $pkg class"
-		unless %Conf;
-	    croak "Can't modify \"$attr\" attribute"
-		if scalar @_ > 1;
-	    if (defined $Conf{$attr}) { #FIXME: use exists?
-		$Conf{$attr};
-	    } elsif (defined $wwsconf->{$attr}) { #FIXME
-		$wwsconf->{$attr};
-	    } else {
-		undef;
-	    }
 	};
     } else {
 	croak "Can't locate object method \"$2\" via package \"$1\"";

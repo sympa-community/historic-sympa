@@ -98,7 +98,8 @@ sub load {
     my $name = shift;
     my $options = shift || {};
 
-    $name = '*' unless defined $name and length $name;
+    $name = Conf->domain
+	unless defined $name and length $name and $name ne '*';
 
     ## load global config if needed
     &Conf::load() unless %Conf::Conf;
@@ -106,15 +107,11 @@ sub load {
     unless ($self->{'name'} and $self->{'etc'}) {
 	my $vhost_etc = Conf->etc . '/' . $name;
 
-	if ($name eq '*') {
-	    ## robot of main conf
-	    $self->{'etc'} = Conf->etc;
-	} elsif (-f $vhost_etc . '/robot.conf') {
+	if (-f $vhost_etc . '/robot.conf') {
 	    ## virtual robot, even if its domain is same as that of main conf
 	    $self->{'etc'} = $vhost_etc;
 	} elsif ($name eq Conf->domain) {
 	    ## robot of main conf
-	    $name = '*';
 	    $self->{'etc'} = Conf->etc;
 	} else {
 	    &Log::do_log(
@@ -132,7 +129,7 @@ sub load {
         return undef;
     }
 
-    unless ($self->{'name'} eq '*') {
+    unless ($self->{'etc'} eq Conf->etc) {
 	## the robot uses per-robot config
 	my $config_file = $self->{'etc'} . '/robot.conf';
 
@@ -162,6 +159,7 @@ sub load {
 	    &Log::do_log('err', 'Robot name "%s" is not same as domain "%s"',
 			 $name, $self->domain);
 	    delete Conf->robots->{$self->domain};
+	    delete $list_of_robots{$name};
 	    return undef;
 	}
     }
@@ -188,6 +186,21 @@ sub load {
 
 =over 4
 
+=item get_id
+
+Get unique name of robot.
+
+=back
+
+=cut
+
+sub get_id {
+    ## DO NOT use accessors since $self may not have been fully initialized.
+    shift->{'name'};
+}
+
+=over 4
+
 =item is_listmaster ( WHO )
 
 Is the user listmaster
@@ -198,26 +211,14 @@ Is the user listmaster
 
 sub is_listmaster {
     my $self = shift;
-    my $who = shift;
+    my $who = tools::clean_email(shift || '');
+    return 0 unless $who;
 
-    ## For compatibility: $robot may be either object or string.
-    my $robot;
-    if (ref $self) {
-	$robot = $self->domain;
-    } else {
-	$robot = $self;
+    foreach my $listmaster (($self->listmasters,)) {
+	return 1 if $listmaster eq $who;
     }
-
-    $who =~ y/A-Z/a-z/;
-
-    return 0 unless ($who);
-
-    foreach my $listmaster (@{&Conf::get_robot_conf($robot,'listmasters')}){
-	return 1 if (lc($listmaster) eq lc($who));
-    }
-	
     foreach my $listmaster ((Conf->listmasters,)) {
-	return 1 if (lc($listmaster) eq lc($who));
+	return 1 if $listmaster eq $who;
     }    
 
     return 0;
@@ -254,6 +255,7 @@ OUT : 1 | undef
 =cut
 
 sub send_global_file {
+    &Log::do_log('debug2', '(%s, %s, %s, ...)', @_);
     my $self = shift;
     my $tpl = shift;
     my $who = shift;
@@ -267,13 +269,10 @@ sub send_global_file {
 	$robot = $self;
     }
 
-    &Log::do_log('debug2', 'List::send_global_file(%s, %s, %s)',
-	$tpl, $who, $robot);
-
     my $data = &tools::dup_var($context);
 
     unless ($data->{'user'}) {
-	$data->{'user'} = &get_global_user($who)
+	$data->{'user'} = &List::get_global_user($who)
 	    unless ($options->{'skip_db'});
 	$data->{'user'}{'email'} = $who unless (defined $data->{'user'});
     }
@@ -343,8 +342,9 @@ sub send_global_file {
     return $r if ($options->{'parse_and_return'});
 
     unless ($r) {
-	&Log::do_log('err',
-	    "List::send_global_file, could not send template $filename to $who"
+	&Log::do_log(
+	    'err', 'Could not send template "%s" to %s',
+	    $filename, $who
 	);
 	return undef;
     }
@@ -371,6 +371,7 @@ OUT : 1 | undef
 =cut
 
 sub send_notify_to_listmaster {
+    &Log::do_log('debug2', '(%s, %s, ...)', @_);
     my $self = shift;
     my ($operation, $data, $checkstack, $purge) = @_;
 
@@ -453,19 +454,13 @@ sub send_notify_to_listmaster {
     }
 
     unless (defined $operation) {
-	&Log::do_log('err',
-	    'List::send_notify_to_listmaster(%s) : missing incoming parameter "$operation"'
-	);
+	&Log::do_log('err', 'Missing incoming parameter "$operation"');
 	return undef;
     }
 
     unless ($operation eq 'logs_failed') {
-	&Log::do_log('debug2', 'List::send_notify_to_listmaster(%s,%s )',
-	    $operation, $robot);
 	unless (defined $robot) {
-	    &Log::do_log('err',
-		'List::send_notify_to_listmaster(%s) : missing incoming parameter "$robot"'
-	    );
+	    &Log::do_log('err', 'Missing incoming parameter "$robot"');
 	    return undef;
 	}
     }
@@ -475,13 +470,9 @@ sub send_notify_to_listmaster {
     my $to         = "$Conf::Conf{'listmaster_email'}\@$host";
     my $options = {};    ## options for send_global_file()
 
-    if ((ref($data) ne 'HASH') and (ref($data) ne 'ARRAY')) {
-	&Log::do_log(
-	    'err',
-	    'List::send_notify_to_listmaster(%s,%s) : error on incoming parameter "$param", it must be a ref on HASH or a ref on ARRAY',
-	    $operation,
-	    $robot
-	) unless ($operation eq 'logs_failed');
+    unless (ref $data eq 'HASH' or ref $data eq 'ARRAY') {
+	&Log::do_log('err', 'Error on incoming parameter "$data", it must be a ref on HASH or a ref on ARRAY')
+	    unless $operation eq 'logs_failed';
 	return undef;
     }
 
@@ -500,10 +491,11 @@ sub send_notify_to_listmaster {
 
     if ($data->{'list'} && ref($data->{'list'}) eq 'List') {
 	my $list = $data->{'list'};
+	$data->{'list_object'} = $list;
 	$data->{'list'} = {
-	    'name'    => $list->{'name'},
-	    'host'    => $list->{'domain'},
-	    'subject' => $list->{'admin'}{'subject'},
+	    'name'    => $list->name,
+	    'host'    => $list->domain, #FIXME: robot name or mail hostname?
+	    'subject' => $list->subject,
 	};
     }
 
@@ -512,13 +504,9 @@ sub send_notify_to_listmaster {
     if ($operation eq 'automatic_bounce_management') {
 	## Automatic action done on bouncing adresses
 	delete $data->{'alarm'};
-	my $list = new List($data->{'list'}{'name'}, $robot);
-	unless (defined $list) {
-	    &Log::do_log(
-		'err',
-		'Parameter %s is not a valid list',
-		$data->{'list'}{'name'}
-	    );
+	my $list = $data->{'list_object'};
+	unless (defined $list and ref $list eq 'List') {
+	    &Log::do_log( 'err', 'Parameter %s is not a valid list', $list);
 	    return undef;
 	}
 	unless (
@@ -528,7 +516,8 @@ sub send_notify_to_listmaster {
 	    )
 	    ) {
 	    &Log::do_log('notice',
-		"Unable to send template 'listmaster_notification' to $listmaster"
+		'Unable to send template "listmaster_notification" to %s',
+		$listmaster
 	    );
 	    return undef;
 	}
@@ -638,19 +627,26 @@ sub AUTOLOAD {
 	    shift->{$attr};
 	};
     } elsif (ref $_[0] and
-	     (@p = grep { ! defined $_->{'title'} and $_->{'name'} eq $attr }
-			@confdef::params)) {
+	     grep { ! defined $_->{'title'} and $_->{'name'} eq $attr }
+		  @confdef::params) {
 	## getters for robot parameters.
 	no strict "refs";
 	*{$AUTOLOAD} = sub {
 	    my $self = shift;
-	    unless ($self->{'name'} eq '*' or
+	    unless ($self->{'etc'} eq Conf->etc or
 		    defined Conf->robots->{$self->{'name'}}) {
 		croak "Can't call method \"$attr\" on uninitialized " .
 		    (ref $self) . " object";
 	    }
 	    croak "Can't modify \"$attr\" attribute" if scalar @_;
-	    &Conf::get_robot_conf($self->{'name'}, $attr);
+	    if (defined Conf->robots and
+		defined Conf->robots->{$self->{'name'}} and
+		defined Conf->robots->{$self->{'name'}}{$attr}) {
+		##FIXME: Might "exists" be used?
+		Conf->robots->{$self->{'name'}}{$attr};
+	    } else {
+		$Conf::Conf{$attr};
+	    }
 	};
     } else {
 	croak "Can't locate object method \"$2\" via package \"$1\"";
@@ -675,9 +671,9 @@ sub listmasters {
     my $self = shift;
     croak "Can't modify \"listmasters\" attribute" if scalar @_;
     if (wantarray) {
-	@{$Conf::Conf{'robots'}{$self->name}{'listmasters'} || []};
+	@{$Conf::Conf{'robots'}{$self->domain}{'listmasters'} || []};
     } else {
-	$Conf::Conf{'robots'}{$self->name}{'listmasters'};
+	$Conf::Conf{'robots'}{$self->domain}{'listmasters'};
     }
 }
 
@@ -696,7 +692,7 @@ Returns arrayref of Robot objects.
 =cut
 
 sub get_robots {
-    &Log::do_log('debug2', '(%s, ...)', @_);
+    &Log::do_log('debug2', '(...)');
     my %options = @_;
     my $robot;
     my @robots = ();
@@ -735,11 +731,13 @@ sub get_robots {
 	    return undef;
 	}
 	push @robots, $robot;
+	delete $orphan{$robot->domain};
     }
 
     foreach my $domain (keys %orphan) {
 	&Log::do_log('debug3', 'removing orphan robot %s', $orphan{$domain});
-	delete Conf->robots->{$domain} if Conf->robots;
+	delete Conf->robots->{$domain} if defined Conf->robots;
+	delete $list_of_robots{$name};
     }
 
     return \@robots;

@@ -96,16 +96,6 @@ BEGIN {
 ## WWSympa librairies
 my %options;
 
-## Configuration
-my $wwsconf = {};
-
-## Change to your wwsympa.conf location
-my $conf_file = Sympa::Constants::WWSCONFIG;
-my $sympa_conf_file = Sympa::Constants::CONFIG;
-
-
-
-
 my $loop = 0;
 my $list;
 my $param = {};
@@ -117,26 +107,22 @@ my $session;
 
 ## Load sympa config
 unless (defined Conf::load() and defined Rebot::get_robots()) {
-    &Log::fatal_err("Unable to load sympa configuration, file $sympa_conf_file or one of the vhost robot.conf files contain errors. Exiting.");  
+    Log::fatal_err(
+	'Unable to load sympa configuration, file %s or one of the virtual host robot.conf files contain errors. Exiting.',
+	Conf::get_sympa_conf()
+    );  
 }
 
-&Log::set_log_level($Conf{'log_level'}) if ($Conf{'log_level'});
+Log::set_log_level(Conf->log_level);
 
 my $daemon_name = &Log::set_daemon($0);
 
 ## Open log
-$wwsconf->{'log_facility'}||= $Conf{'syslog'};
+Log::do_openlog(Conf->log_facility, Conf->log_socket_type, 'wwsympa');
 
-&Log::do_openlog($wwsconf->{'log_facility'}, $Conf{'log_socket_type'}, 'wwsympa');
+&mail::set_send_spool(Conf->queue);
 
-## Load config 
-unless ($wwsconf = &Conf::load_wwsconf($conf_file)) {
-    &Log::fatal_err("Unable to load sympa configuration, file $conf_file or one of the vhost robot.conf files contain errors. Exiting.");  
-}
-
-&mail::set_send_spool($Conf{'queue'});
-
-if ($wwsconf->{'use_fast_cgi'}) {
+if (Conf->use_fast_cgi) {
     require CGI::Fast;
 }else {
     require CGI;
@@ -1212,7 +1198,7 @@ my $birthday = time ;
      $param->{'use_passwd'} = $Conf{'use_passwd'}{$robot};
      $param->{'use_sso'} = 1 if ($param->{'sso_number'});
      $param->{'authentication_info_url'} = $Conf{'authentication_info_url'}{$robot}; 
-     $param->{'wwsconf'} = $wwsconf;
+     $param->{'wwsconf'} = &Conf::_load_wwsconf; #FIXME: no longer used?
 
      $param->{'path_cgi'} = $ENV{'SCRIPT_NAME'};
      $param->{'path_cgi'} =~ s/\/\//\//g; ## Replace '//' with '/' because it would break navigation     
@@ -1443,7 +1429,7 @@ my $birthday = time ;
 	     ## For the parser to display an empty field instead of [xxx]
 	     $param->{'user'}{'gecos'} ||= '';
 	     unless (defined $param->{'user'}{'cookie_delay'}) {
-		 $param->{'user'}{'cookie_delay'} = $wwsconf->{'cookie_expire'};
+		 $param->{'user'}{'cookie_delay'} = Conf->cookie_expire;
 	     }
 	     
 	     ## Skip get_which if either in a list context or accessing the CSS
@@ -1472,8 +1458,8 @@ my $birthday = time ;
      $param->{'remote_addr'} = $ENV{'REMOTE_ADDR'} ;
      $param->{'remote_host'} = $ENV{'REMOTE_HOST'};
      $param->{'http_user_agent'} = $ENV{'HTTP_USER_AGENT'};
-     $param->{'htmlarea_url'} = $wwsconf->{'htmlarea_url'} ;
-     # if ($wwsconf->{'export_topics'} =~ /all/i);
+     $param->{'htmlarea_url'} = Conf->htmlarea_url ;
+     # if (Conf->export_topics =~ /all/i);
 
      if ($in{'action'} eq 'css') {
 	 &do_css();
@@ -1598,7 +1584,7 @@ my $birthday = time ;
 
 	 my $delay = $param->{'user'}{'cookie_delay'};
 	 unless (defined $delay) {
-	     $delay = $wwsconf->{'cookie_expire'};
+	     $delay = Conf->cookie_expire;
 	 }
 		 
 	 if ($delay == 0) {
@@ -1939,7 +1925,7 @@ sub new_loop {
      $loop++;
      my $query;
 
-     if ($wwsconf->{'use_fast_cgi'}) {
+     if (Conf->use_fast_cgi) {
 	 $query = new CGI::Fast;
 	 $loop_count++;
      }else {	
@@ -4438,7 +4424,7 @@ sub do_review {
 	     &List::update_global_user($param->{'user'}{'email'},{data=>&tools::hash_2_string($param->{'user'}{'prefs'})}) ;
 	 }
      }else{
-	 $size = $param->{'user'}{'prefs'}{'review_page_size'} || $session->{'review_page_size'} || $wwsconf->{'review_page_size'};
+	 $size = $param->{'user'}{'prefs'}{'review_page_size'} || $session->{'review_page_size'} || Conf->review_page_size;
      }
      $param->{'review_page_size'} = $size;
      
@@ -7514,9 +7500,8 @@ sub do_savefile {
 sub do_arc {
     &wwslog('info', 'do_arc(%s, %s)', $in{'month'}, $in{'arc_file'});
     my $latest;
-    
-    my $index = $session->{'arc_mode'} ;
-    unless ($index) {$index = $wwsconf->{'archive_default_index'};}
+
+    my $index = $session->{'arc_mode'} || Conf->archive_default_index;
 
     ## Clean arc_file
     if ($in{'arc_file'} eq '/') {
@@ -9132,7 +9117,7 @@ sub do_scenario_test {
  ## Bouncing addresses review
 sub do_reviewbouncing {
      &wwslog('info', 'do_reviewbouncing(%s)', $in{'page'});
-     my $size = $in{'size'} || $wwsconf->{'review_page_size'};
+     my $size = $in{'size'} || Conf->review_page_size;
 
      ## Owner
      $param->{'page'} = $in{'page'} || 1;
@@ -12545,9 +12530,8 @@ sub do_d_editfile {
      } else {
 	 $param->{'textfile'} = 0;
      }
-     $param->{'use_htmlarea'} = '1' if (($wwsconf->{'htmlarea_url'}) and ($param->{'textfile'}) and ($path =~ /\.html?/));
-
-
+    $param->{'use_htmlarea'} = '1'
+	if Conf->htmlarea_url and $param->{'textfile'} and $path =~ /\.html?/;
 
      #Current directory
      if ($path =~ /^(([^\/]*\/)*)([^\/]+)(\/?)$/) {
@@ -12677,9 +12661,8 @@ sub do_d_properties {
      } else {
 	 $param->{'textfile'} = 0;
      }
-     $param->{'use_htmlarea'} = '1' if (($wwsconf->{'htmlarea_url'}) and ($param->{'textfile'}) and ($path =~ /\.html?/));
-
-
+    $param->{'use_htmlarea'} = '1'
+	if Conf->htmlarea_url and $param->{'textfile'} and $path =~ /\.html?/;
 
      #Current directory
      if ($path =~ /^(([^\/]*\/)*)([^\/]+)(\/?)$/) {
@@ -16872,7 +16855,7 @@ sub do_viewlogs {
 	&wwslog('info', 'do_viewlogs(%s)', $in{'page'});
 	
 	$param->{'page'} = int($in{'page'}) || 1;
-	$param->{'size'} = int($in{'size'}) || $wwsconf->{'viewlogs_page_size'};
+	$param->{'size'} = int($in{'size'}) || Conf->viewlogs_page_size;
 	$param->{'sortby'} = $in{'sortby'} || 'email';
 	
 	$param->{'total_results'} = 0;
