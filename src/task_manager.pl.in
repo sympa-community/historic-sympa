@@ -62,14 +62,14 @@ my $Version = '0.1';
 my $adrlist = {};
 
 # Load sympa.conf
-unless (defined Conf::load() and defined Robot::get_robots()) {
+unless (defined Site->load() and defined Robot::get_robots()) {
     Log::fatal_err(
 	'Unable to load sympa configuration, file %s or one of the virtual host robot.conf files contain errors. Exiting.',
 	Conf::get_sympa_conf()
     );
 }
 
-&Log::do_openlog(Conf->log_facility, Conf->log_socket_type, 'task_manager');
+&Log::do_openlog(Site->log_facility, Site->log_socket_type, 'task_manager');
 
 # setting log_level using conf unless it is set by calling option
 if ($main::options{'log_level'}) {
@@ -79,10 +79,10 @@ if ($main::options{'log_level'}) {
 	$main::options{'log_level'}
     );
 } else {
-    Log::set_log_level(Conf->log_level);
+    Log::set_log_level(Site->log_level);
     Log::do_log(
 	'info', 'Configuration file read, default log level %s',
-	Conf->log_level
+	Site->log_level
     );
 }
 
@@ -97,7 +97,7 @@ unless (&Upgrade::data_structure_uptodate()) {
 }
 
 ## Check for several files.
-unless (&Conf::checkfiles(\&Robot::send_notify_to_listmaster)) {
+unless (&Conf::checkfiles()) {
     &Log::fatal_err("Missing files. Aborting.");
     ## No return.                                         
 }
@@ -123,7 +123,7 @@ unless ($main::options{'debug'} || $main::options{'foreground'}) {
 ## If process is running in foreground, don't write STDERR to a dedicated file
 my $options;
 $options->{'stderr_to_tty'} = 1 if ($main::options{'foreground'});
-&tools::write_pid(Conf->task_manager_pidfile, $$, $options);
+&tools::write_pid(Site->task_manager_pidfile, $$, $options);
 unless ($options->{'stderr_to_tty'}) {
     &tools::direct_stderr_to_file(('pid' => $$));
 }
@@ -211,7 +211,7 @@ sub sigterm {
 &List::send_notify_to_listmaster(undef, undef, undef, undef, 1); # Purge grouped notifications
 
 &Log::do_log ('notice', 'task_manager exited normally due to signal'); 
-&tools::remove_pid(Conf->task_manager_pidfile, $$);
+&tools::remove_pid(Site->task_manager_pidfile, $$);
 
 exit(0);
 

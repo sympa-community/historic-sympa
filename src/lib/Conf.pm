@@ -37,6 +37,7 @@ use Language;
 use confdef;
 use tools;
 use Sympa::Constants;
+use User;
 use Data::Dumper;
 
 our @ISA = qw(Exporter);
@@ -127,36 +128,7 @@ our %Conf = ();
 
 =head2 FUNCTIONS
 
-=over 4
-
-=item load ( [ CONFIG_FILE ], [ NO_DB ], [ RETURN_RESULT ] )
-
-Loads and parses the configuration file.  Reports errors if any.
-
-do not try to load database values if NO_DB is set;
-do not change gloval hash %Conf if RETURN_RESULT is set;
-
-##we known that's dirty, this proc should be rewritten without this global var %Conf
-
-NOTE: To load entire robots config, use C<Robot::get_robots('force_reload' =E<gt> 1)>.
-
-=back
-
 =cut
-
-sub load {
-    my $config_file = shift;
-    my $no_db = shift;
-    my $return_result = shift;
-
-    my $result = load_robot_conf({ 'robot' => '*',
-				   'config_file' => $config_file,
-				   'no_db' => $no_db,
-				   'return_result' => $return_result });
-    return undef unless defined $result;
-    return $result if $return_result;
-    return 1;
-}
 
 ## load each virtual robots configuration files
 sub load_robots {
@@ -409,8 +381,9 @@ sub conf_2_db {
     
     ## Load configuration file. Ignoring database config and get result
     my $global_conf;
-    unless ($global_conf= Conf::load($config_file,1,'return_result')) {
-    &Log::fatal_err("Configuration file $config_file has errors.");  
+    unless ($global_conf = Site->load('no_db' => 1, 'return_result' => 1)) {
+	&Log::fatal_err('Configuration file %s has errors.',
+	    get_sympa_conf());  
     }
     
     for my $i ( 0 .. $#conf_parameters ) {
@@ -471,11 +444,8 @@ sub checkfiles_as_root {
     return 1 ;
 }
 
-my $send_notify_func;
-
 ## Check a few files
 sub checkfiles {
-    $send_notify_func = shift || undef;
     my $config_err = 0;
 
     foreach my $p ('sendmail','openssl','antivirus_path') {
@@ -530,7 +500,7 @@ sub checkfiles {
     if (defined $Conf{'cafile'} && $Conf{'cafile'}) {
     unless (-f $Conf{'cafile'} && -r $Conf{'cafile'}) {
         &Log::do_log('err', 'Cannot access cafile %s', $Conf{'cafile'});
-	_send_notify('*', 'cannot_access_cafile', $Conf{'cafile'});
+	Site->send_notify_to_listmaster('cannot_access_cafile', $Conf{'cafile'});
         $config_err++;
     }
     }
@@ -538,7 +508,7 @@ sub checkfiles {
     if (defined $Conf{'capath'} && $Conf{'capath'}) {
     unless (-d $Conf{'capath'} && -x $Conf{'capath'}) {
         &Log::do_log('err', 'Cannot access capath %s', $Conf{'capath'});
-	_send_notify('*', 'cannot_access_capath', $Conf{'capath'});
+	Site->send_notify_to_listmaster('cannot_access_capath', $Conf{'capath'});
         $config_err++;
     }
     }
@@ -546,14 +516,15 @@ sub checkfiles {
     ## queuebounce and bounce_path pointing to the same directory
     if ($Conf{'queuebounce'} eq $wwsconf->{'bounce_path'}) {
     &Log::do_log('err', 'Error in config: queuebounce and bounce_path parameters pointing to the same directory (%s)', $Conf{'queuebounce'});
-    _send_notify('*', 'queuebounce_and_bounce_path_are_the_same',
+    Site->send_notify_to_listmaster('queuebounce_and_bounce_path_are_the_same',
 		 $Conf{'queuebounce'});
     $config_err++;
     }
 
     #  create pictures dir if usefull for each robot
-    foreach my $robot (keys %{$Conf{'robots'}}) {
-    my $dir = &get_robot_conf($robot, 'static_content_path');
+    foreach my $robot_id (keys %{$Conf{'robots'}}) {
+	my $robot = Robot->new($robot_id);
+	my $dir = $robot->static_content_path;
     if ($dir ne '' && -d $dir) {
         unless (-f $dir.'/index.html'){
         unless(open (FF, ">$dir".'/index.html')) {
@@ -563,8 +534,8 @@ sub checkfiles {
         }
         
         # create picture dir
-        if ( &get_robot_conf($robot, 'pictures_feature') eq 'on') {
-        my $pictures_dir = &get_robot_conf($robot, 'pictures_path');
+        if ($robot->pictures_feature eq 'on') {
+        my $pictures_dir = $robot->pictures_path;
         unless (-d $pictures_dir){
             unless (mkdir ($pictures_dir, 0775)) {
             &Log::do_log('err', 'Unable to create directory %s',$pictures_dir);
@@ -586,24 +557,26 @@ sub checkfiles {
 
     # create or update static CSS files
     my $css_updated = undef;
-    foreach my $robot (keys %{$Conf{'robots'}}) {
-    my $dir = &get_robot_conf($robot, 'css_path');
+    foreach my $robot_id (keys %{$Conf{'robots'}}) {
+	my $robot = Robot->new($robot_id);
+	my $dir = $robot->css_path;
     
     ## Get colors for parsing
     my $param = {};
     foreach my $p (%params) {
-        $param->{$p} = &Conf::get_robot_conf($robot, $p) if (($p =~ /_color$/)|| ($p =~ /color_/));
+	$param->{$p} = get_robot_conf($robot_id, $p)
+	    if $p =~ /_color$/ or $p =~ /color_/;
     }
 
     ## Set TT2 path
-    my $tt2_include_path = &tools::make_tt2_include_path($robot,'web_tt2','','');
+    my $tt2_include_path = &tools::make_tt2_include_path($robot_id,'web_tt2','','');
 
     ## Create directory if required
     unless (-d $dir) {
 	unless (&tools::mkdir_all($dir, 0755)) {
 	    my $msg = "Failed to create directory $dir: $!";
 	    &Log::do_log('err', '%s', $msg);
-	    _send_notify($robot, 'cannot_mkdir', $msg);
+	    $robot->send_notify_to_listmaster('cannot_mkdir', $msg);
 	    return undef;
 	}
     }
@@ -611,7 +584,7 @@ sub checkfiles {
     foreach my $css ('style.css','print.css','fullPage.css','print-preview.css') {
 
         $param->{'css'} = $css;
-        my $css_tt2_path = &tools::get_filename('etc',{}, 'web_tt2/css.tt2', $robot, undef);
+        my $css_tt2_path = &tools::get_filename('etc',{}, 'web_tt2/css.tt2', $robot_id, undef);
         
         ## Update the CSS if it is missing or if a new css.tt2 was installed
         if (! -f $dir.'/'.$css ||
@@ -623,7 +596,7 @@ sub checkfiles {
 
 	unless (open CSS, '>', "$dir/$css") {
 	    my $msg = "Could not open (write) file $dir/$css: $!";
-	    _send_notify($robot, 'cannot_open_file', $msg);
+	    $robot->send_notify_to_listmaster('cannot_open_file', $msg);
 	    &Log::do_log('err', '%s', $msg);
 	    return undef;
 	}
@@ -631,7 +604,7 @@ sub checkfiles {
         unless (&tt2::parse_tt2($param,'css.tt2' ,\*CSS, $tt2_include_path)) {
             my $error = &tt2::get_error();
             $param->{'tt2_error'} = $error;
-	    _send_notify($robot, 'web_tt2_error', $error);
+	    $robot->send_notify_to_listmaster('web_tt2_error', $error);
             &Log::do_log('err', 'Error while installing %s/%s', $dir, $css);
         }
 
@@ -646,7 +619,7 @@ sub checkfiles {
     }
     if ($css_updated) {
 	## Notify main listmaster
-	_send_notify('*', 'css_updated',
+	Site->send_notify_to_listmaster('css_updated',
 		     "Static CSS files have been updated ; check log file for details");
     }
 
@@ -1847,7 +1820,8 @@ sub _check_double_url_usage{
     }
 
     ## Warn listmaster if another virtual host is defined with the same host+path
-    if (defined $Conf{'robot_by_http_host'}{$host}{$path}) {
+    if (defined $Conf{'robot_by_http_host'}{$host}{$path} and
+	$Conf{'robot_by_http_host'}{$host}{$path} ne $param->{'config_hash'}{'robot_name'}) {
       &Log::do_log('err', 'Error: two virtual hosts (%s and %s) are mapped via a single URL "%s%s"', $Conf{'robot_by_http_host'}{$host}{$path}, $param->{'config_hash'}{'robot_name'}, $host, $path);
     }
 
@@ -2008,19 +1982,6 @@ sub _get_parameters_names_by_category {
     return $param_by_categories;
 }
 
-sub _send_notify {
-    my $robot = shift;
-    my $operation = shift;
-    unless (ref $send_notify_func and
-	    &{$send_notify_func}($robot, $operation, [@_])) {
-	&Log::do_log('err', 'Unable to send notify "%s" to %s',
-		     $operation,
-		     ($robot and length $robot and $robot ne '*') ?
-		     "listmaster of robot $robot" : 'main listmaster'
-	);
-    }
-}
-
 ## Load WWSympa configuration file.
 sub _load_wwsconf {
     my $param = shift;
@@ -2099,91 +2060,6 @@ sub _load_wwsconf {
 	$config_hash->{$k} = $conf->{$k};
     }
     $wwsconf = $conf;
-}
-
-############################################################################
-## Class Methods
-############################################################################
-
-=head2 CLASS METHODS
-
-=over 4
-
-=item E<lt>config parameterE<gt>
-
-I<Getters>.
-Gets global or default config parameters.
-For example: C<Conf-E<gt>syslog> returns "syslog" global parameter;
-C<Conf-E<gt>domain> returns default "domain" parameter.
-
-Some parameters may be vary by each robot from default value given by these
-methods.  Use C<$robot-E<gt>>E<lt>config parameterE<gt> accessors instead.
-See L<Robot/ACCESSORS>.
-
-=item locale2charset
-
-=item robots
-
-=item sympa
-
-I<Getters>.
-Gets config parameters for internal use.
-
-=back
-
-=cut
-
-our $AUTOLOAD;
-
-sub DESTROY;
-
-sub AUTOLOAD {
-    $AUTOLOAD =~ m/^(.*)::(.*)/;
-
-    my $attr = $2;
-    if (scalar grep { $_ eq $attr }
-		    qw(locale2charset robots sympa) or
-	scalar grep { ! defined $_->{'title'} and $_->{'name'} eq $attr }
-		    @confdef::params) {
-	## getter for internal config parameters.
-	no strict "refs";
-	*{$AUTOLOAD} = sub {
-	    my $pkg = shift;
-	    croak "Can't call method \"$attr\" on uninitialized $pkg class"
-		unless %Conf;
-	    croak "Can't modify \"$attr\" attribute"
-		if scalar @_ > 1;
-	    $Conf{$attr};
-	};
-    } else {
-	croak "Can't locate object method \"$2\" via package \"$1\"";
-    }
-    goto &$AUTOLOAD;
-}
-
-=over 4
-
-=item listmasters
-
-I<Getter>.
-Gets default listmasters.
-In array context, returns array of default listmasters.
-In scalar context, returns arrayref to them.
-
-=back
-
-=cut
-
-sub listmasters {
-    my $pkg = shift;
-    croak "Can't call method \"listmasters\" on uninitialized $pkg class"
-	unless %Conf;
-    croak "Can't modify \"listmasters\" attribute" if scalar @_ > 1;
-    if (wantarray) {
-	return @{$Conf{'listmasters'} || []};
-    } else {
-	return $Conf{'listmasters'};
-    }
 }
 
 ## Packages must return true.

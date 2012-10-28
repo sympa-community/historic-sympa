@@ -74,7 +74,7 @@ sub set_spool {
 sub list_tasks {
 
     &Log::do_log('debug',"Listing all tasks");
-    my $spool_task = Conf->queuetask;
+    my $spool_task = Site->queuetask;
     ## Reset the list of tasks
     undef @task_list;
     undef %task_by_list;

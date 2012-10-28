@@ -553,7 +553,7 @@ sub get_remaining_packets_count {
 sub there_is_too_much_remaining_packets {
     &Log::do_log('debug3', 'there_is_too_much_remaining_packets');
     my $remaining_packets = &get_remaining_packets_count();
-    if ($remaining_packets > Conf->bulk_fork_threshold) {
+    if ($remaining_packets > Site->bulk_fork_threshold) {
 	return $remaining_packets;
     }else{
 	return 0;

@@ -60,7 +60,7 @@ our @params = (
         'advice'   => gettext('Effective address will be [EMAIL]@[HOST]'),
     },
     {
-        'name'     => 'email_',
+        'name'     => 'email_gecos',
         'default'  => 'SYMPA',
         'query'    => gettext('Gecos for service mail sent by Sympa itself'),
         'vhost'    => '1',

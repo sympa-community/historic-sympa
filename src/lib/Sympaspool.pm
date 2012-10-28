@@ -159,9 +159,14 @@ sub get_content {
     }
 
     push @sth_stack, $sth;
-    $sth = &SDM::do_query($statement);
+    unless ($sth = &SDM::do_query($statement)) {
+	$sth = pop @sth_stack;
+	return undef;
+    }
     if($selection eq 'count') {
 	my @result = $sth->fetchrow_array();
+	$sth->finish;
+	$sth = pop @sth_stack;
 	return $result[0];
     }else{
 	my @messages;

@@ -75,18 +75,18 @@ $main::options{'foreground'} = 1 if ($main::options{'debug'});
 $main::options{'log_to_stderr'} = 1 if ($main::options{'debug'} || $main::options{'foreground'});
 
 # Load sympa.conf
-unless (defined Conf::load() and defined Robot::get_robots()) {
+unless (defined Site->load() and defined Robot::get_robots()) {
     Log::fatal_err(
 	'Unable to load sympa configuration, file %s or one of the virtual host robot.conf files contain errors. Exiting.',
 	Conf::get_sympa_conf()
     );
 }
 
-&Log::do_openlog(Conf->syslog, Conf->log_socket_type, 'bulk');
+&Log::do_openlog(Site->syslog, Site->log_socket_type, 'bulk');
 
 ## Check database connectivity
 unless (&SDM::check_db_connect()) {
-    &Log::fatal_err('Database %s defined in sympa.conf has not the right structure or is unreachable.', Conf->db_name);
+    &Log::fatal_err('Database %s defined in sympa.conf has not the right structure or is unreachable.', Site->db_name);
 }
 
 # setting log_level using conf unless it is set by calling option
@@ -97,10 +97,10 @@ if ($main::options{'log_level'}) {
 	$main::options{'log_level'}
     ); 
 }else{
-    &Log::set_log_level(Conf->log_level);
+    &Log::set_log_level(Site->log_level);
     &Log::do_log(
 	'info', 'Configuration file read, default log level %s',
-	Conf->log_level
+	Site->log_level
     ); 
 }
 

@@ -195,7 +195,7 @@ sub SetLang {
 
     $current_lang = $lang;
     $current_locale = $locale;
-    $current_charset = Conf->locale2charset->{$locale} || 'utf-8';
+    $current_charset = Site->locale2charset->{$locale} || 'utf-8';
 
     return $locale;
 }#SetLang

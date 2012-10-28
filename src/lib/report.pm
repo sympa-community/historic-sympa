@@ -98,7 +98,7 @@ sub reject_report_msg {
      }
 
     if (ref($list) eq "List") {
-	unless ($list->send_file('message_report',$user,$robot,$param)) {
+	unless ($list->send_file('message_report', $user, $param)) {
 	    &Log::do_log('notice',"report::reject_report_msg(): Unable to send template 'message_report' to '$user'");
 	}
     } else {
@@ -211,7 +211,7 @@ sub notice_report_msg {
      }
 
     if (ref($list) eq "List") {
-	unless ($list->send_file('message_report',$user,$robot,$param)) {
+	unless ($list->send_file('message_report', $user, $param)) {
 	    &Log::do_log('notice',"report::notice_report_msg(): Unable to send template 'message_report' to '$user'");
 	}
     } else {

@@ -357,7 +357,7 @@ sub send_msg {
     } else {
 		my $list = $task->{'list_object'};
 		foreach my $email (keys %{$self->{'variables'}{$var}}) {
-			unless ($list->send_file ($template, $email, $list->{'domain'}, $self->{'variables'}{$var}{$email}))  {
+			unless ($list->send_file ($template, $email, $self->{'variables'}{$var}{$email}))  {
 				&Log::do_log ('notice', "Unable to send template $template to $email");
 				$self->error ({'task' => $task, 'type' => 'execution', 'message' => "Unable to send template $template to $email"});
 				return undef;
@@ -563,7 +563,7 @@ sub exec_cmd {
 			($? & 127), ($? & 128) ? 'with' : 'without';
 		}
 		else {
-			$message = "Child exited with value %d", $? >> 8;
+			$message = sprintf 'Child exited with value %d', $? >> 8;
 		}
 		$self->error ({'task' => $task, 'type' => 'execution', 'message' => $message});
 		return undef;
@@ -843,7 +843,7 @@ sub purge_orphan_bounces {
 
      my ($self,$task) = @_;
 
-    my $cert_dir = Conf->ssl_cert_dir;
+    my $cert_dir = Site->ssl_cert_dir;
      my $execution_date = $task->{'date'};
      my @tab = @{$self->{'Rarguments'}};
      my $template = $tab[0];

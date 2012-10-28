@@ -96,14 +96,14 @@ my $daemon_name = &Log::set_daemon($0);
 my $ip = $ENV{'REMOTE_HOST'};
 
 # Load sympa.conf
-unless (defined Conf::load() and defined Robot::get_robots()) {
+unless (defined Site->load() and defined Robot::get_robots()) {
     Log::fatal_err(
 	'Unable to load sympa configuration, file %s has errors.',
 	Conf::get_sympa_conf()
     );
 }
 
-##unshift @INC, Conf->wws_path;
+##unshift @INC, Site->wws_path;
 
 ## Check databse connectivity
 unless (&SDM::check_db_connect()) {
@@ -133,7 +133,7 @@ my $options;
 $options->{'stderr_to_tty'} = 1 if ($main::options{'foreground'});
 
 ## Create and write the pidfile
-&tools::write_pid(Conf->bounced_pidfile, $$, $options);
+&tools::write_pid(Site->bounced_pidfile, $$, $options);
 unless ($options->{'stderr_to_tty'}) {
     &tools::direct_stderr_to_file(('pid' => $$));
 }
@@ -145,14 +145,14 @@ if ($main::options{'log_level'}) {
 	$main::options{'log_level'}
     ); 
 } else {
-    Log::set_log_level(Conf->log_level);
+    Log::set_log_level(Site->log_level);
     Log::do_log(
 	'info', 'Configuration file read, default log level %s',
-	Conf->log_level
+	Site->log_level
     ); 
 }
 
-&Log::do_openlog(Conf->log_facility, Conf->log_socket_type, 'bounced');
+&Log::do_openlog(Site->log_facility, Site->log_socket_type, 'bounced');
 
 ## Set the UserID & GroupID for the process
 $( = $) = (getgrnam(Sympa::Constants::GROUP))[2];
@@ -168,10 +168,10 @@ unless (($( == (getgrnam(Sympa::Constants::GROUP))[2]) && ($< == (getpwnam(Sympa
 }
 
 ## Sets the UMASK
-umask(oct(Conf->umask));
+umask(oct(Site->umask));
 
 ## Change to list root
-unless (chdir(Conf->home)) {
+unless (chdir(Site->home)) {
     &Log::do_log('info', 'Unable to change directory');
     exit (-1);
 }
@@ -697,7 +697,7 @@ while (!$end) {
 &List::send_notify_to_listmaster(undef, undef, undef, undef, 1); # Purge grouped notifications
 
 &Log::do_log('notice', 'bounced exited normally due to signal');
-&tools::remove_pid(Conf->bounced_pidfile, $$);
+&tools::remove_pid(Site->bounced_pidfile, $$);
 
 exit(0);
 

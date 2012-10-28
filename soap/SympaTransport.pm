@@ -55,7 +55,7 @@ sub response {
     if (my $response = $_[0]) {
 	if (defined $ENV{'SESSION_ID'}) {
 	    my $expire =
-		$main::param->{'user'}{'cookie_delay'} || Conf->cookie_expire;
+		$main::param->{'user'}{'cookie_delay'} || Site->cookie_expire;
 	    my $cookie = &cookielib::set_cookie_soap($ENV{'SESSION_ID'}, $ENV{'SERVER_NAME'}, $expire);
 	
 	    $response->headers->push_header('Set-Cookie2' => $cookie);

@@ -15,7 +15,8 @@
 # MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 # GNU General Public License for more details.
 #
-# You should have received a copy of the GNU General Public License# along with this program; if not, write to the Free Software
+# You should have received a copy of the GNU General Public License
+# along with this program; if not, write to the Free Software
 # Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
 
 package List;
@@ -152,9 +153,9 @@ Send a Mail::Internet type object to the editor (for approval).
 
 Sends the Mail::Internet message to the list.
 
-=item send_file ( FILE, USER, GECOS )
+=item send_file ( FILE, USERS, PARAM )
 
-Sends the file to the USER. FILE may only be welcome for now.
+Sends the file to the USER.
 
 =item delete_list_member ( ARRAY )
 
@@ -185,11 +186,6 @@ Returns a default option of the list for subscription.
 Returns the number of subscribers to the list.
 Older name is get_total().  Current version won't use cache anymore.
 Use total() to get cached number.
-
-=item get_global_user ( USER )
-
-Returns a hash with the information regarding the indicated
-user.
 
 =item get_list_member ( USER )
 
@@ -301,7 +297,7 @@ use Mail::Header;
 use Archive;
 use Language;
 use Log;
-use Conf;
+#XXXuse Conf;
 use mail;
 use Ldap;
 use Time::Local;
@@ -3606,7 +3602,7 @@ sub send_msg_digest {
 	## Prepare Digest
 	if (@tabrcpt) {
 	    ## Send digest
-	    unless ($self->send_file('digest', \@tabrcpt, $robot, $param)) {
+	    unless ($self->send_file('digest', \@tabrcpt, $param)) {
 		&Log::do_log('notice',"Unable to send template 'digest' to $self->{'name'} list subscribers");
 	    }
 	}    
@@ -3614,14 +3610,14 @@ sub send_msg_digest {
 	## Prepare Plain Text Digest
 	if (@tabrcptplain) {
 	    ## Send digest-plain
-	    unless ($self->send_file('digest_plain', \@tabrcptplain, $robot, $param)) {
+	    unless ($self->send_file('digest_plain', \@tabrcptplain, $param)) {
 		&Log::do_log('notice',"Unable to send template 'digest_plain' to $self->{'name'} list subscribers");
 	    }
 	}    	
 	
 	## send summary
 	if (@tabrcptsummary) {
-	    unless ($self->send_file('summary', \@tabrcptsummary, $robot, $param)) {
+	    unless ($self->send_file('summary', \@tabrcptsummary, $param)) {
 		&Log::do_log('notice',"Unable to send template 'summary' to $self->{'name'} list subscribers");
 	    }
 	}
@@ -3660,11 +3656,15 @@ sub send_msg_digest {
 #       
 ####################################################
 sub send_global_file {
-    ## OBSOLETED. Use Robot::send_global_file().
+    ## OBSOLETED: Use $list->robot->send_file() or Site->send_file().
     my $tpl = shift;
     my $who = shift;
     my $robot = shift;
-    return Robot->new($robot)->send_global_file($tpl, $who, @_);
+    if (! $robot or $robot eq '*') {
+	return Site->send_file($tpl, $who, @_);
+    } else {
+	return Robot->new($robot)->send_file($tpl, $who, @_);
+    }
 }
 
 ####################################################
@@ -3681,7 +3681,6 @@ sub send_global_file {
 #      -$tpl (+): template file name (file.tt2),
 #         without tt2 extension
 #      -$who (+): SCALAR |ref(ARRAY) - recipient(s)
-#      -$robot (+): robot
 #      -$context : ref(HASH) - for the $data set up 
 #         to parse file tt2, keys can be :
 #         -user : ref(HASH), keys can be :
@@ -3693,131 +3692,7 @@ sub send_global_file {
 # OUT : 1 | undef
 ####################################################
 sub send_file {
-    my($self, $tpl, $who, $robot, $context) = @_;
-    &Log::do_log('debug2', 'List::send_file(%s, %s, %s)', $tpl, $who, $robot);
-
-    my $name = $self->{'name'};
-    my $sign_mode;
-
-    my $data = &tools::dup_var($context);
-
-    ## Any recipients
-    if ((ref ($who) && ($#{$who} < 0)) ||
-	(!ref ($who) && ($who eq ''))) {
-	&Log::do_log('err', 'No recipient for sending %s', $tpl);
-	return undef;
-    }
-    
-    ## Unless multiple recipients
-    unless (ref ($who)) {
-	unless ($data->{'user'}) {
-	    unless ($data->{'user'} = &get_global_user($who)) {
-		$data->{'user'}{'email'} = $who;
-		$data->{'user'}{'lang'} = $self->{'admin'}{'lang'};
-	    }
-	}
-	
-	$data->{'subscriber'} = $self->get_list_member($who);
-	
-	if ($data->{'subscriber'}) {
-	    $data->{'subscriber'}{'date'} = gettext_strftime "%d %b %Y", localtime($data->{'subscriber'}{'date'});
-	    $data->{'subscriber'}{'update_date'} = gettext_strftime "%d %b %Y", localtime($data->{'subscriber'}{'update_date'});
-	    if ($data->{'subscriber'}{'bounce'}) {
-		$data->{'subscriber'}{'bounce'} =~ /^(\d+)\s+(\d+)\s+(\d+)(\s+(.*))?$/;
-		
-		$data->{'subscriber'}{'first_bounce'} = gettext_strftime "%d %b %Y", localtime($1);
-	    }
-	}
-	
-	unless ($data->{'user'}{'password'}) {
-	    $data->{'user'}{'password'} = &tools::tmp_passwd($who);
-	}
-	
-	## Unique return-path VERP
-	if ($self->welcome_return_path eq 'unique' and $tpl eq 'welcome') {
-	    $data->{'return_path'} = $self->get_bounce_address($who, 'w');
-	} elsif ($self->remind_return_path eq 'unique' and $tpl eq 'remind') {
-	    $data->{'return_path'} = $self->get_bounce_address($who, 'r');
-	}
-    }
-
-    $data->{'return_path'} ||= $self->get_list_address('return_path');
-
-    ## Lang
-    $data->{'lang'} = $data->{'user'}{'lang'} || $self->{'admin'}{'lang'} || &Conf::get_robot_conf($robot, 'lang');
-
-    ## Trying to use custom_vars
-    if (defined $self->{'admin'}{'custom_vars'}) {
-	$data->{'custom_vars'} = {};
-	foreach my $var (@{$self->{'admin'}{'custom_vars'}}) {
- 	    $data->{'custom_vars'}{$var->{'name'}} = $var->{'value'};
-	}
-    }
-    
-    ## What file   
-    my $lang = &Language::Lang2Locale($data->{'lang'});
-    my $tt2_include_path = &tools::make_tt2_include_path($robot,'mail_tt2',$lang,$self);
-
-    push @{$tt2_include_path},$self->{'dir'};             ## list directory to get the 'info' file
-    push @{$tt2_include_path},$self->{'dir'}.'/archives'; ## list archives to include the last message
-
-    foreach my $d (@{$tt2_include_path}) {
-	&tt2::add_include_path($d);
-    }
-
-    foreach my $p ('email','email_gecos','host','sympa','request','listmaster','wwsympa_url','title','listmaster_email') {
-	$data->{'conf'}{$p} = &Conf::get_robot_conf($robot, $p);
-    }
-
-    my @path = &tt2::get_include_path();
-    my $filename = &tools::find_file($tpl.'.tt2',@path);
-    
-    unless (defined $filename) {
-	&Log::do_log('err','Could not find template %s.tt2 in %s', $tpl, join(':',@path));
-	return undef;
-    }
-
-    $data->{'sender'} ||= $who;
-    $data->{'list'}{'lang'} = $self->{'admin'}{'lang'};
-    $data->{'list'}{'name'} = $name;
-    $data->{'list'}{'domain'} = $data->{'robot_domain'} = $robot;
-    $data->{'list'}{'host'} = $self->{'admin'}{'host'};
-    $data->{'list'}{'subject'} = $self->{'admin'}{'subject'};
-    $data->{'list'}{'owner'} = $self->get_owners();
-    $data->{'list'}{'dir'} = $self->{'dir'};
-
-    ## Sign mode
-    if ($Conf::Conf{'openssl'} &&
-	(-r $self->{'dir'}.'/cert.pem') && (-r $self->{'dir'}.'/private_key')) {
-	$sign_mode = 'smime';
-    }
-
-    # if the list have it's private_key and cert sign the message
-    # . used only for the welcome message, could be usefull in other case? 
-    # . a list should have several certificats and use if possible a certificat
-    #   issued by the same CA as the receipient CA if it exists 
-    if ($sign_mode eq 'smime') {
-	$data->{'fromlist'} = $self->get_list_address();
-	$data->{'replyto'} = $self->get_list_address('owner');
-    }else{
-	$data->{'fromlist'} = $self->get_list_address('owner');
-    }
-
-    $data->{'from'} = $data->{'fromlist'} unless ($data->{'from'});
-    $data->{'boundary'} = '----------=_'.&tools::get_message_id($robot) unless ($data->{'boundary'});
-    $data->{'sign_mode'} = $sign_mode;
-    
-    if ((&Conf::get_robot_conf($self->{'domain'}, 'dkim_feature') eq 'on')&&(&Conf::get_robot_conf($self->{'domain'}, 'dkim_add_signature_to')=~/robot/)){
-	$data->{'dkim'} = &tools::get_dkim_parameters({ 'robot' => $self->domain });
-    } 
-    $data->{'use_bulk'} = 1  unless ($data->{'alarm'}) ; # use verp excepted for alarms. We should make this configurable in order to support Sympa server on a machine without any MTA service
-	  # my $dump = &Dumper($data); open (DUMP,">>/tmp/dumper2"); printf DUMP '----------------data \n%s',$dump ; close DUMP; 
-    unless (&mail::mail_file($filename, $who, $data, $self->{'domain'})) {
-	&Log::do_log('err',"List::send_file, could not send template $filename to $who");
-	return undef;
-    }
-
-    return 1;
+    return Conf::send_file(@_);
 }
 
 ####################################################
@@ -3952,7 +3827,7 @@ sub send_msg {
        	    ## Missing User certificate
 	    my $subject = $message->{'msg'}->head->get('Subject');
 	    my $sender = $message->{'msg'}->head->get('From');
-	    unless ($self->send_file('x509-user-cert-missing', $user->{'email'}, $robot, {'mail' => {'subject' => $subject, 'sender' => $sender}, 'auto_submitted' => 'auto-generated'})) {
+	    unless ($self->send_file('x509-user-cert-missing', $user->{'email'}, {'mail' => {'subject' => $subject, 'sender' => $sender}, 'auto_submitted' => 'auto-generated'})) {
 	        &Log::do_log('notice',"Unable to send template 'x509-user-cert-missing' to $user->{'email'}");
 	    }
 	}else{
@@ -4323,7 +4198,7 @@ sub send_to_editor {
        &tt2::allow_absolute_path();
        $param->{'auto_submitted'} = 'auto-forwarded';
 
-       unless ($self->send_file('moderate', $recipient, $self->{'domain'}, $param)) {
+       unless ($self->send_file('moderate', $recipient, $param)) {
 	   &Log::do_log('notice',"Unable to send template 'moderate' to $recipient");
 	   return undef;
        }
@@ -4384,7 +4259,7 @@ sub send_auth {
 
    &tt2::allow_absolute_path();
    $param->{'auto_submitted'} = 'auto-replied';
-   unless ($self->send_file('send_auth',$sender,$robot,$param)) {
+   unless ($self->send_file('send_auth', $sender, $param)) {
        &Log::do_log('notice',"Unable to send template 'send_auth' to $sender");
        return undef;
    }
@@ -4469,7 +4344,7 @@ sub request_auth {
 
 	$data->{'command_escaped'} = &tt2::escape_url($data->{'command'});
 	$data->{'auto_submitted'} = 'auto-replied';
-	unless ($self->send_file('request_auth',$email,$robot,$data)) {
+	unless ($self->send_file('request_auth', $email, $data)) {
 	    &Log::do_log('notice',"Unable to send template 'request_auth' to $email");
 	    return undef;
 	}
@@ -4526,7 +4401,7 @@ sub archive_send {
 
 #    open TMP2, ">/tmp/digdump"; &tools::dump_var($param, 0, \*TMP2); close TMP2;
 $param->{'auto_submitted'} = 'auto-replied';
-   unless ($self->send_file('get_archive',$who,$self->{'domain'},$param)) {
+   unless ($self->send_file('get_archive', $who, $param)) {
 	   &Log::do_log('notice',"Unable to send template 'archive_send' to $who");
 	   return undef;
        }
@@ -4580,7 +4455,7 @@ sub archive_send_last {
    $param->{'auto_submitted'} = 'auto-replied';
 #    open TMP2, ">/tmp/digdump"; &tools::dump_var($param, 0, \*TMP2); close TMP2;
 
-   unless ($self->send_file('get_archive',$who,$self->{'domain'},$param)) {
+   unless ($self->send_file('get_archive', $who, $param)) {
 	   &Log::do_log('notice',"Unable to send template 'archive_send' to $who");
 	   return undef;
        }
@@ -4606,10 +4481,15 @@ sub archive_send_last {
 #       
 ###################################################### 
 sub send_notify_to_listmaster {
-    ## OBSOLETED. Use Robot::send_notify_to_listmaster.
+    ## OBSOLETED. Use $robot->send_notify_to_listmaster() (to normal
+    ## listmaster) or Site->send_notify_to_listmaster() (to super listmaster).
     my $operation = shift;
     my $robot = shift;
-    return Robot->new($robot)->send_notify_to_listmaster($operation, @_);
+    if (! $robot or $robot eq '*') {
+	return Site->send_notify_to_listmaster($operation, @_);
+    } else {
+	return Robot->new($robot)->send_notify_to_listmaster($operation, @_);
+    }
 }
 
 
@@ -4659,7 +4539,7 @@ sub send_notify_to_owner {
 	    $param->{'escaped_who'} =~ s/\s/\%20/g;
 	    foreach my $owner (@to) {
 		$param->{'one_time_ticket'} = &Auth::create_one_time_ticket($owner,$robot,'search/'.$self->{'name'}.'/'.$param->{'escaped_who'},$param->{'ip'});
-		unless ($self->send_file('listowner_notification',[$owner], $robot,$param)) {
+		unless ($self->send_file('listowner_notification', [$owner], $param)) {
 		    &Log::do_log('notice',"Unable to send template 'listowner_notification' to $self->{'name'} list owner $owner");		    
 		}
 	    }
@@ -4670,7 +4550,7 @@ sub send_notify_to_owner {
 	    $param->{'escaped_who'} =~ s/\s/\%20/g;
 	    foreach my $owner (@to) {
 		$param->{'one_time_ticket'} = &Auth::create_one_time_ticket($owner,$robot,'subindex/'.$self->{'name'},$param->{'ip'});
-		unless ($self->send_file('listowner_notification',[$owner], $robot,$param)) {
+		unless ($self->send_file('listowner_notification', [$owner], $param)) {
 		    &Log::do_log('notice',"Unable to send template 'listowner_notification' to $self->{'name'} list owner $owner");		    
 		}
 	    }
@@ -4683,7 +4563,7 @@ sub send_notify_to_owner {
 	    }elsif ($operation eq 'bounce_rate') {
 		$param->{'rate'} = int ($param->{'rate'} * 10) / 10;
 	    }
-	    unless ($self->send_file('listowner_notification',\@to, $robot,$param)) {
+	    unless ($self->send_file('listowner_notification', \@to, $param)) {
 		&Log::do_log('notice',"Unable to send template 'listowner_notification' to $self->{'name'} list owner");
 		return undef;
 	    }
@@ -4697,7 +4577,7 @@ sub send_notify_to_owner {
 	for my $i(0..$#{$param}) {
 		$data->{"param$i"} = $param->[$i];
  	}
- 	unless ($self->send_file('listowner_notification', \@to, $robot, $data)) {
+ 	unless ($self->send_file('listowner_notification', \@to, $data)) {
 	    &Log::do_log('notice',"Unable to send template 'listowner_notification' to $self->{'name'} list owner");
 	    return undef;
 	}
@@ -4780,7 +4660,7 @@ sub send_notify_to_editor {
 	$param->{'to'} =join(',', @to);
 	$param->{'type'} = $operation;
 
-	unless ($self->send_file('listeditor_notification',\@to, $robot,$param)) {
+	unless ($self->send_file('listeditor_notification', \@to, $param)) {
 	    &Log::do_log('notice',"Unable to send template 'listeditor_notification' to $self->{'name'} list editor");
 	    return undef;
 	}
@@ -4793,7 +4673,7 @@ sub send_notify_to_editor {
 	foreach my $i(0..$#{$param}) {
 	    $data->{"param$i"} = $param->[$i];
  	}
- 	unless ($self->send_file('listeditor_notification', \@to, $robot, $data)) {
+ 	unless ($self->send_file('listeditor_notification', \@to, $data)) {
 	    &Log::do_log('notice',"Unable to send template 'listeditor_notification' to $self->{'name'} list editor");
 	    return undef;
 	}	
@@ -4846,7 +4726,7 @@ sub send_notify_to_user{
 	if ($operation eq 'auto_notify_bouncers') {	
 	}
 	
- 	unless ($self->send_file('user_notification',$user,$robot,$param)) {
+ 	unless ($self->send_file('user_notification', $user, $param)) {
 	    &Log::do_log('notice',"Unable to send template 'user_notification' to $user");
 	    return undef;
 	}
@@ -4859,7 +4739,7 @@ sub send_notify_to_user{
 	for my $i(0..$#{$param}) {
 	    $data->{"param$i"} = $param->[$i];
  	}
- 	unless ($self->send_file('user_notification',$user,$robot,$data)) {
+ 	unless ($self->send_file('user_notification', $user, $data)) {
 	    &Log::do_log('notice',"Unable to send template 'user_notification' to $user");
 	    return undef;
 	}	
@@ -5113,23 +4993,8 @@ sub _append_parts {
 
 ## Delete a user in the user_table
 sub delete_global_user {
-    my @users = @_;
-    
-    &Log::do_log('debug2', '');
-    
-    return undef unless ($#users >= 0);
-    
-    foreach my $who (@users) {
-	$who = &tools::clean_email($who);
-	## Update field
-	
-	unless (&SDM::do_query("DELETE FROM user_table WHERE (email_user =%s)", &SDM::quote($who))) {
-	    &Log::do_log('err','Unable to delete user %s', $who);
-	    next;
-	}
-    }
-
-    return $#users + 1;
+    ## OBSOLATED: Use User::delete_global_user() or $user->expire();
+    return User::delete_global_user(@_);
 }
 
 ## Delete the indicate list member 
@@ -5287,75 +5152,14 @@ sub get_real_total {
 
 ## Returns a hash for a given user
 sub get_global_user {
-    &Log::do_log('debug2', '(%s)', @_);
-    my $who = &tools::clean_email(shift);
-
-    ## Additional subscriber fields
-    my $additional = '';
-    if ($Conf::Conf{'db_additional_user_fields'}) {
-	$additional = ', ' . $Conf::Conf{'db_additional_user_fields'};
-    }
-
-    push @sth_stack, $sth;
-
-    unless ($sth = &SDM::do_prepared_query(sprintf('SELECT email_user AS email, gecos_user AS gecos, password_user AS password, cookie_delay_user AS cookie_delay, lang_user AS lang, attributes_user AS attributes, data_user AS data, last_login_date_user AS last_login_date, wrong_login_count_user AS wrong_login_count, last_login_host_user AS last_login_host%s FROM user_table WHERE email_user = ?',
-						   $additional),
-					   $who)) {
-	&Log::do_log('err', 'Failed to prepare SQL query');
-	$sth = pop @sth_stack;
-	return undef;
-    }
-
-    my $user = $sth->fetchrow_hashref('NAME_lc');
-    $sth->finish();
-
-    $sth = pop @sth_stack;
-
-    if (defined $user) {
-	## decrypt password
-	if ($user->{'password'}) {
-	    $user->{'password'} = &tools::decrypt_password($user->{'password'});
-	}
-
-	## Turn user_attributes into a hash
-	my $attributes = $user->{'attributes'};
-	$user->{'attributes'} = undef;
-	foreach my $attr (split (/\;/, $attributes)) {
-	    my ($key, $value) = split (/\=/, $attr);
-	    $user->{'attributes'}{$key} = $value;
-	}    
-	## Turn data_user into a hash
-	 if ($user->{'data'}) {
-	     my %prefs = &tools::string_2_hash($user->{'data'});
-	     $user->{'prefs'} = \%prefs;
-	 }
-    }
-
-    return $user;
+    ## OBSOLETED: Use User::get_global_user() or User->new().
+    return User::get_global_user(@_);
 }
 
 ## Returns an array of all users in User table hash for a given user
 sub get_all_global_user {
-    &Log::do_log('debug2', '()');
-
-    my @users;
-
-    push @sth_stack, $sth;
-
-    unless ($sth = &SDM::do_prepared_query('SELECT email_user FROM user_table')) {
-	&Log::do_log('err','Unable to gather all users in DB');
-	$sth = pop @sth_stack;
-	return undef;
-    }
-
-    while (my $email = ($sth->fetchrow_array)[0]) {
-	push @users, $email;
-    }
-    $sth->finish();
-
-    $sth = pop @sth_stack;
-
-    return @users;
+    ## OBSOLETED: Use User::get_all_global_user() or User::get_users().
+    return User::get_all_global_user(@_);
 }
 
 ######################################################################
@@ -6209,26 +6013,8 @@ sub get_total_bouncing {
 
 ## Is the person in user table (db only)
 sub is_global_user {
-   my $who = &tools::clean_email(pop);
-   &Log::do_log('debug3', '(%s)', $who);
-
-   return undef unless ($who);
-   
-   push @sth_stack, $sth;
-
-   ## Query the Database
-   unless($sth = &SDM::do_query("SELECT count(*) FROM user_table WHERE email_user = %s", &SDM::quote($who))) {
-	&Log::do_log('err','Unable to check whether user %s is in the user table.');
-	$sth = pop @sth_stack;
-	return undef;
-   }
-   
-   my $is_user = $sth->fetchrow();
-   $sth->finish();
-   
-   $sth = pop @sth_stack;
-
-   return $is_user;
+   ## OBSOLETED: Use User::is_global_user().
+   return User::is_global_user(@_);
 }
 
 ## Is the indicated person a subscriber to the list?
@@ -6526,118 +6312,14 @@ sub update_list_admin {
 
 ## Sets new values for the given user in the Database
 sub update_global_user {
-    my($who, $values) = @_;
-    &Log::do_log('debug', '(%s)', $who);
-
-    $who = &tools::clean_email($who);
-
-    ## use md5 fingerprint to store password   
-    $values->{'password'} = &Auth::password_fingerprint($values->{'password'}) if ($values->{'password'});
-
-    my ($field, $value);
-    
-    my ($user, $statement, $table);
-    
-    ## mapping between var and field names
-    my %map_field = ( gecos => 'gecos_user',
-		      password => 'password_user',
-		      cookie_delay => 'cookie_delay_user',
-		      lang => 'lang_user',
-		      attributes => 'attributes_user',
-		      email => 'email_user',
-		      data => 'data_user',
-		      last_login_date => 'last_login_date_user',
-		      last_login_host => 'last_login_host_user',
-		      wrong_login_count => 'wrong_login_count_user'
-		      );
-    
-    ## Update each table
-    my @set_list;
-
-    while (($field, $value) = each %{$values}) {
-	unless ($map_field{$field}) {
-	    &Log::do_log('error',"unkown field $field in map_field internal error");
-	    next;
-	};
-	my $set;
-	
-	if ($numeric_field{$map_field{$field}})  {
-	    $value ||= 0; ## Can't have a null value
-	    $set = sprintf '%s=%s', $map_field{$field}, $value;
-	}else { 
-	    $set = sprintf '%s=%s', $map_field{$field}, &SDM::quote($value);
-	}
-	push @set_list, $set;
-    }
-    
-    return undef unless @set_list;
-    
-    ## Update field
-
-    unless ($sth = &SDM::do_query("UPDATE user_table SET %s WHERE (email_user=%s)"
-	    , join(',', @set_list), &SDM::quote($who))) {
-	&Log::do_log('err','Could not update informations for user %s in user_table',$who);
-	return undef;
-    }
-    
-    return 1;
+    ## OBSOLETED: Use User::update_global_user() or $user->save().
+    return User::update_global_user(@_);
 }
 
 ## Adds a user to the user_table
 sub add_global_user {
-    my($values) = @_;
-    &Log::do_log('debug2', '');
-
-    my ($field, $value);
-    my ($user, $statement, $table);
-    
-    ## encrypt password   
-    $values->{'password'} = &Auth::password_fingerprint($values->{'password'}) if ($values->{'password'});
-    
-    return undef unless (my $who = &tools::clean_email($values->{'email'}));
-    
-    return undef if (is_global_user($who));
-    
-    ## mapping between var and field names
-    my %map_field = ( email => 'email_user',
-		      gecos => 'gecos_user',
-		      custom_attribute => 'custom_attribute',
-		      password => 'password_user',
-		      cookie_delay => 'cookie_delay_user',
-		      lang => 'lang_user',
-		      attributes => 'attributes_user'
-		      );
-    
-    ## Update each table
-    my (@insert_field, @insert_value);
-    while (($field, $value) = each %{$values}) {
-	
-	next unless ($map_field{$field});
-	
-	my $insert;
-	if ($numeric_field{$map_field{$field}}) {
-	    $value ||= 0; ## Can't have a null value
-	    $insert = $value;
-	}else {
-	    $insert = sprintf "%s", &SDM::quote($value);
-	}
-	push @insert_value, $insert;
-	push @insert_field, $map_field{$field}
-    }
-    
-    unless (@insert_field) {
-	&Log::do_log('err','The fields (%s) do not correspond to anything in the database',join (',',keys(%{$values})));
-	return undef;
-    }
-    
-    ## Update field
-    unless($sth = &SDM::do_query("INSERT INTO user_table (%s) VALUES (%s)"
-	, join(',', @insert_field), join(',', @insert_value))) {
-	    &Log::do_log('err','Unable to add user %s to the DB table user_table', $values->{'email'});
-	    return undef;
-	}
-    
-    return 1;
+    ## OBSOLETED: Use User::add_global_user() or $user->save().
+    return User::add_global_user(@_);
 }
 
 ## Adds a list member ; no overwrite.
@@ -8993,7 +8675,7 @@ sub sync_include {
 					$users_removed++;
 					## Send notification if the list config authorizes it only.
 					if ($self->{'admin'}{'inclusion_notification_feature'} eq 'on') {
-						unless ($self->send_file('removed', $email, $self->{'domain'},{})) {
+						unless ($self->send_file('removed', $email)) {
 							&Log::do_log('err',"Unable to send template 'removed' to $email");
 						}
 					}
@@ -9084,7 +8766,7 @@ sub sync_include {
 				$users_added++;
 				## Send notification if the list config authorizes it only.
 				if ($self->{'admin'}{'inclusion_notification_feature'} eq 'on') {
-					unless ($self->send_file('welcome', $u->{'email'}, $self->{'domain'},{})) {
+					unless ($self->send_file('welcome', $u->{'email'})) {
 						&Log::do_log('err',"Unable to send template 'welcome' to $u->{'email'}");
 					}
 				}

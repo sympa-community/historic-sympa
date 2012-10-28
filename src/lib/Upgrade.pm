@@ -503,8 +503,8 @@ sub upgrade {
 	foreach my $f (
 	    Conf::get_sympa_conf(),
 	    Conf::get_wwsympa_conf(),
-	    Conf->etc . '/topics.conf',
-	    Conf->etc . '/auth.conf'
+	    Site->etc . '/topics.conf',
+	    Site->etc . '/auth.conf'
 	) {
 	    if (-f $f) {
 		push @files, [$f, $Conf::Conf{'lang'}];

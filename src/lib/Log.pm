@@ -404,7 +404,7 @@ sub db_stat_counter_log {
 
 # delete logs in RDBMS
 sub db_log_del {
-    my $exp = Conf->logs_expiration_period;
+    my $exp = Site->logs_expiration_period;
     my $date = time - ($exp * 30 * 24 * 60 * 60);
 
     unless(&SDM::do_query( "DELETE FROM logs_table WHERE (logs_table.date_logs <= %s)", &SDM::quote($date))) {
@@ -568,7 +568,7 @@ sub aggregate_data {
     my $aggregated_data; # the hash containing aggregated data that the sub deal_data will return.
     
     unless ($sth = &SDM::do_query("SELECT * FROM stat_table WHERE (date_stat BETWEEN '%s' AND '%s') AND (read_stat = 0)", $begin_date, $end_date)) {
-	&do_log('err','Unable to retrieve stat entries between date % and date %s', $begin_date, $end_date);
+	&do_log('err','Unable to retrieve stat entries between date %s and date %s', $begin_date, $end_date);
 	return undef;
     }
 
@@ -580,7 +580,7 @@ sub aggregate_data {
     
     #the line is read, so update the read_stat from 0 to 1
     unless ($sth = &SDM::do_query( "UPDATE stat_table SET read_stat = 1 WHERE (date_stat BETWEEN '%s' AND '%s')", $begin_date, $end_date)) {
-	&do_log('err','Unable to set stat entries between date % and date %s as read', $begin_date, $end_date);
+	&do_log('err','Unable to set stat entries between date %s and date %s as read', $begin_date, $end_date);
 	return undef;
     }
     

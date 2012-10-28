@@ -106,30 +106,30 @@ my $ajax;
 my $session;
 
 ## Load sympa config
-unless (defined Conf::load() and defined Rebot::get_robots()) {
+unless (defined Site->load() and defined Rebot::get_robots()) {
     Log::fatal_err(
 	'Unable to load sympa configuration, file %s or one of the virtual host robot.conf files contain errors. Exiting.',
 	Conf::get_sympa_conf()
     );  
 }
 
-Log::set_log_level(Conf->log_level);
+Log::set_log_level(Site->log_level);
 
 my $daemon_name = &Log::set_daemon($0);
 
 ## Open log
-Log::do_openlog(Conf->log_facility, Conf->log_socket_type, 'wwsympa');
+Log::do_openlog(Site->log_facility, Site->log_socket_type, 'wwsympa');
 
-&mail::set_send_spool(Conf->queue);
+&mail::set_send_spool(Site->queue);
 
-if (Conf->use_fast_cgi) {
+if (Site->use_fast_cgi) {
     require CGI::Fast;
 }else {
     require CGI;
 }
 my $mime_types = &wwslib::load_mime_types();
 
-if (Conf->voot_feature eq 'on') {
+if (Site->voot_feature eq 'on') {
     unless ( eval "require OAuthProvider" ){
 	&Log::fatal_err("VOOT feature is on, but Sympa was Unable to load OAuthProvider module: $@");
 	return undef;
@@ -1429,7 +1429,7 @@ my $birthday = time ;
 	     ## For the parser to display an empty field instead of [xxx]
 	     $param->{'user'}{'gecos'} ||= '';
 	     unless (defined $param->{'user'}{'cookie_delay'}) {
-		 $param->{'user'}{'cookie_delay'} = Conf->cookie_expire;
+		 $param->{'user'}{'cookie_delay'} = Site->cookie_expire;
 	     }
 	     
 	     ## Skip get_which if either in a list context or accessing the CSS
@@ -1458,8 +1458,8 @@ my $birthday = time ;
      $param->{'remote_addr'} = $ENV{'REMOTE_ADDR'} ;
      $param->{'remote_host'} = $ENV{'REMOTE_HOST'};
      $param->{'http_user_agent'} = $ENV{'HTTP_USER_AGENT'};
-     $param->{'htmlarea_url'} = Conf->htmlarea_url ;
-     # if (Conf->export_topics =~ /all/i);
+     $param->{'htmlarea_url'} = Site->htmlarea_url ;
+     # if (Site->export_topics =~ /all/i);
 
      if ($in{'action'} eq 'css') {
 	 &do_css();
@@ -1584,7 +1584,7 @@ my $birthday = time ;
 
 	 my $delay = $param->{'user'}{'cookie_delay'};
 	 unless (defined $delay) {
-	     $delay = Conf->cookie_expire;
+	     $delay = Site->cookie_expire;
 	 }
 		 
 	 if ($delay == 0) {
@@ -1925,7 +1925,7 @@ sub new_loop {
      $loop++;
      my $query;
 
-     if (Conf->use_fast_cgi) {
+     if (Site->use_fast_cgi) {
 	 $query = new CGI::Fast;
 	 $loop_count++;
      }else {	
@@ -4424,7 +4424,7 @@ sub do_review {
 	     &List::update_global_user($param->{'user'}{'email'},{data=>&tools::hash_2_string($param->{'user'}{'prefs'})}) ;
 	 }
      }else{
-	 $size = $param->{'user'}{'prefs'}{'review_page_size'} || $session->{'review_page_size'} || Conf->review_page_size;
+	 $size = $param->{'user'}{'prefs'}{'review_page_size'} || $session->{'review_page_size'} || Site->review_page_size;
      }
      $param->{'review_page_size'} = $size;
      
@@ -5093,7 +5093,7 @@ sub do_subscribe {
 	    }
 	    
 	    unless ($sub_is =~ /quiet/i ) {
-		unless ($list->send_file('welcome', $param->{'user'}{'email'}, $robot,{})) {
+		unless ($list->send_file('welcome', $param->{'user'}{'email'})) {
 		    &wwslog('notice',"Unable to send template 'welcome' to $param->{'user'}{'email'}");
 		}
 	    }
@@ -5522,7 +5522,7 @@ sub unsubscribe {
 	 ## perform which to update your_subscribtions cookie ;
 	 @{$param->{'get_which'}} = &List::get_which($authenticated_email_address,$robot,'member') ; 
 
-	 unless ($list->send_file('bye', $authenticated_email_address, $robot, {})) {
+	 unless ($list->send_file('bye', $authenticated_email_address)) {
 	     &wwslog('notice',"Unable to send template 'bye' to $authenticated_email_address");
 	 }
      }
@@ -6483,7 +6483,7 @@ sub do_add {
 	 push @added_users, $email; ## List only email addresses ; used later to remove pending subrequests
 	 
 	 unless ($in{'quiet'} || $add_is =~ /quiet/i) {
-	     unless ($list->send_file('welcome', $email, $robot,{})) {
+	     unless ($list->send_file('welcome', $email)) {
 		 &wwslog('err',"Unable to send template 'welcome' to $email");
 	     }
 	 }
@@ -6599,7 +6599,7 @@ sub do_del {
 	 &wwslog('info','do_del: subscriber %s deleted from list %s', $email, $param->{'list'});
 
 	 unless ($in{'quiet'}) {
-	     unless ($list->send_file('removed', $email, $robot,{})) {
+	     unless ($list->send_file('removed', $email)) {
 		 &wwslog('notice',"Unable to send template 'removed' to $email");
 	     }
 	 }
@@ -6872,7 +6872,7 @@ sub do_d_install_shared {
 	     }
 	     
 	     my $sender = $desc_hash{'email'};
-	     unless ($list->send_file('d_install_shared', $sender, $robot, \%context)) {
+	     unless ($list->send_file('d_install_shared', $sender, \%context)) {
  		 &wwslog('notice',"Unable to send template 'd_install_shared' to $sender");
  	     }	     
 	 } 
@@ -6915,7 +6915,7 @@ sub do_d_reject_shared {
 	     }
 	     $sender = $desc_hash{'email'};
 	     
- 	     unless ($list->send_file('d_reject_shared', $sender, $robot, \%context)) {
+ 	     unless ($list->send_file('d_reject_shared', $sender, \%context)) {
  		 &wwslog('notice',"Unable to send template 'd_reject_shared' to $sender");
  	     }
 	 }
@@ -7004,7 +7004,7 @@ sub do_reject {
 		     $context{'subject'} = &tools::decode_header($message_in_spool->{'subject'});
 		     $context{'rejected_by'} = $param->{'user'}{'email'};
 		     $context{'template_used'} = $in{'message_template'};
-		     unless ($list->send_file($in{'message_template'}, $rejected_sender, $robot, \%context)) {
+		     unless ($list->send_file($in{'message_template'}, $rejected_sender, \%context)) {
 			 &wwslog('notice',"Unable to send template $in{'message_template'} to $rejected_sender");
 		     }
 		 }		 
@@ -7501,7 +7501,7 @@ sub do_arc {
     &wwslog('info', 'do_arc(%s, %s)', $in{'month'}, $in{'arc_file'});
     my $latest;
 
-    my $index = $session->{'arc_mode'} || Conf->archive_default_index;
+    my $index = $session->{'arc_mode'} || Site->archive_default_index;
 
     ## Clean arc_file
     if ($in{'arc_file'} eq '/') {
@@ -8560,11 +8560,11 @@ sub do_install_pending_list {
      my @listmasters = split /\s*,\s*/,
 			     &Conf::get_robot_conf($robot, 'listmaster');
      if ($in{'status'} eq 'open') {
-	 unless ($list->send_file('list_created', \@listmasters, $robot, {})) {
+	 unless ($list->send_file('list_created', \@listmasters)) {
 	     &wwslog('notice',"Unable to send template 'list_created' to listmaster");
 	 }
      }elsif ($in{'status'} eq 'closed') {
-	 unless ($list->send_file('list_rejected', \@listmasters, $robot, {})) {
+	 unless ($list->send_file('list_rejected', \@listmasters)) {
 	     &wwslog('notice',"Unable to send template 'list_rejected' to listmaster");
 	 }
      }
@@ -8575,11 +8575,11 @@ sub do_install_pending_list {
 	     ## Notify all listowners, even if reception is nomail
 	     next unless ($i->{'email'});
 	     if ($in{'status'} eq 'open') {
-		 unless ($list->send_file('list_created', $i->{'email'}, $robot,{})) {
+		 unless ($list->send_file('list_created', $i->{'email'})) {
 		     &wwslog('notice',"Unable to send template 'list_created' to $i->{'email'}");
 		 }
 	     }elsif ($in{'status'} eq 'closed') {
-		 unless ($list->send_file('list_rejected', $i->{'email'}, $robot,{})) {
+		 unless ($list->send_file('list_rejected', $i->{'email'})) {
 		     &wwslog('notice',"Unable to send template 'list_rejected' to $i->{'email'}");
 		 }
 	     }
@@ -9117,7 +9117,7 @@ sub do_scenario_test {
  ## Bouncing addresses review
 sub do_reviewbouncing {
      &wwslog('info', 'do_reviewbouncing(%s)', $in{'page'});
-     my $size = $in{'size'} || Conf->review_page_size;
+     my $size = $in{'size'} || Site->review_page_size;
 
      ## Owner
      $param->{'page'} = $in{'page'} || 1;
@@ -12531,7 +12531,7 @@ sub do_d_editfile {
 	 $param->{'textfile'} = 0;
      }
     $param->{'use_htmlarea'} = '1'
-	if Conf->htmlarea_url and $param->{'textfile'} and $path =~ /\.html?/;
+	if Site->htmlarea_url and $param->{'textfile'} and $path =~ /\.html?/;
 
      #Current directory
      if ($path =~ /^(([^\/]*\/)*)([^\/]+)(\/?)$/) {
@@ -12662,7 +12662,7 @@ sub do_d_properties {
 	 $param->{'textfile'} = 0;
      }
     $param->{'use_htmlarea'} = '1'
-	if Conf->htmlarea_url and $param->{'textfile'} and $path =~ /\.html?/;
+	if Site->htmlarea_url and $param->{'textfile'} and $path =~ /\.html?/;
 
      #Current directory
      if ($path =~ /^(([^\/]*\/)*)([^\/]+)(\/?)$/) {
@@ -16855,7 +16855,7 @@ sub do_viewlogs {
 	&wwslog('info', 'do_viewlogs(%s)', $in{'page'});
 	
 	$param->{'page'} = int($in{'page'}) || 1;
-	$param->{'size'} = int($in{'size'}) || Conf->viewlogs_page_size;
+	$param->{'size'} = int($in{'size'}) || Site->viewlogs_page_size;
 	$param->{'sortby'} = $in{'sortby'} || 'email';
 	
 	$param->{'total_results'} = 0;
