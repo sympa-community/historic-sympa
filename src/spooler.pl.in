@@ -41,14 +41,12 @@ use Lock;
 use List;
 use mail;
 use Message;
-use report;
 use SDM;
 use SQLSource;
 use Sympa::Constants;
 use Sympa::Spool;
 use Sympa::Tools;
 use Sympa::Tools::Daemon;
-use tracking;
 
 ## Internal tuning
 # delay between each read of the digestqueue
