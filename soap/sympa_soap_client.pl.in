@@ -25,7 +25,6 @@ use SOAP::Lite;
 #use SOAP::Lite +trace;
 use URI;
 
-use Auth;
 use Commands;
 use Family;
 use Language;

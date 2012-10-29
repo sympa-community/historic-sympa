@@ -40,7 +40,6 @@ use strict;
 use OAuth::Lite::ServerUtil;
 use URI::Escape;
 
-use Auth;
 use Log;
 use Sympa::Conf;
 use Sympa::Tools;
