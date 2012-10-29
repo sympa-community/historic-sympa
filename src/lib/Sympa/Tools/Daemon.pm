@@ -26,6 +26,7 @@ use strict;
 use Proc::ProcessTable;
 use Sys::Hostname;
 
+use Lock;
 use Log;
 use Sympa::Tools::File;
 
