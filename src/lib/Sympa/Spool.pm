@@ -44,7 +44,6 @@ use Language;
 use Ldap;
 use Lock;
 use Log;
-use mail;
 use Message;
 use PlainDigest;
 use Scenario;

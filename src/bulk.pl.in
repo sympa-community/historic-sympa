@@ -47,8 +47,8 @@ use Commands;
 use Conf;
 use List;
 use Log;
-use mail;
 use Sympa::Constants;
+use Sympa::Mail;
 use Sympa::Spool;
 use Sympa::Tools;
 use Sympa::Tools::Daemon;
@@ -367,7 +367,7 @@ while (!$end) {
 
 		# &trace_smime($messageasstring,'dkim');
 
-		*SMTP = &mail::smtpto($return_path, \$rcpt, $bulk->{'robot'},$notification_id);
+		*SMTP = &Sympa::Mail::smtpto($return_path, \$rcpt, $bulk->{'robot'},$notification_id);
 		# Message with customized data
 		print SMTP $messageasstring;
 		close SMTP;
@@ -386,7 +386,7 @@ while (!$end) {
 
 	    # &trace_smime($messageasstring_init,'dkim 2');
 	    
-	    *SMTP = &mail::smtpto($bulk->{'returnpath'}, \@rcpts, $bulk->{'robot'});		
+	    *SMTP = &Sympa::Mail::smtpto($bulk->{'returnpath'}, \@rcpts, $bulk->{'robot'});		
 	    print SMTP $messageasstring_init;
 	    close SMTP;
 	}
@@ -411,7 +411,7 @@ while (!$end) {
 	## Sleep for a while if bulk_mailer DB table is empty
 	sleep $Conf::Conf{'bulk_sleep'}; 
     }
-    &mail::reaper;
+    &Sympa::Mail::reaper;
 
     
 }

@@ -46,7 +46,6 @@ use Ldap;
 use List;
 use Lock;
 use Log;
-use mail;
 use Message;
 use SDM;
 use Sympa::Spool;
