@@ -52,7 +52,6 @@ use Time::Local;
 use Commands;
 use Conf;
 use confdef;
-use cookielib;
 use Auth;
 use Language;
 use List;
@@ -68,6 +67,7 @@ use Sympa::Spool;
 use Sympa::Constants;
 use Sympa::Session;
 use Sympa::Tools;
+use Sympa::Tools::Cookie;
 use Sympa::Tools::Data;
 use Sympa::Tools::Time;
 use Sympa::TT2;
@@ -1424,7 +1424,7 @@ my $birthday = time ;
 	 
 	 ##Cookie extern : sympa_altemails
 	 ## !!
-	 $param->{'alt_emails'} = &cookielib::check_cookie_extern($ENV{'HTTP_COOKIE'},$Conf{'cookie'},$param->{'user'}{'email'});
+	 $param->{'alt_emails'} = &Sympa::Tools::Cookie::check_cookie_extern($ENV{'HTTP_COOKIE'},$Conf{'cookie'},$param->{'user'}{'email'});
 	 
 	 if ($param->{'user'}{'email'}) {
 #         $param->{'auth'} = $param->{'alt_emails'}{$param->{'user'}{'email'}} || 'classic';
@@ -1655,13 +1655,13 @@ my $birthday = time ;
 		 }  
 		 
 		 unless ($number == 0) {
-		     unless(&cookielib::set_cookie_extern($Conf{'cookie'},$param->{'cookie_domain'},%{$param->{'alt_emails'}})){
+		     unless(&Sympa::Tools::Cookie::set_cookie_extern($Conf{'cookie'},$param->{'cookie_domain'},%{$param->{'alt_emails'}})){
 			 &wwslog('notice', 'Could not set HTTP cookie for external_auth');
 		     }
 		 }
 	     }
 	 } #elsif ($ENV{'HTTP_COOKIE'} =~ /sympauser\=/){
-	  #   &cookielib::set_cookie('unknown', $Conf{'cookie'}, $param->{'cookie_domain'}, 'now');
+	  #   &Sympa::Tools::Cookie::set_cookie('unknown', $Conf{'cookie'}, $param->{'cookie_domain'}, 'now');
 	  #}
      }
 	 
@@ -3251,7 +3251,7 @@ sub do_login {
 
 
      unless($param->{'alt_emails'}{$email}){
-	 unless(&cookielib::set_cookie_extern($Conf{'cookie'},$param->{'cookie_domain'},%{$param->{'alt_emails'}})){
+	 unless(&Sympa::Tools::Cookie::set_cookie_extern($Conf{'cookie'},$param->{'cookie_domain'},%{$param->{'alt_emails'}})){
 	     &wwslog('notice', 'Could not set HTTP cookie for external_auth');
 	     &web_db_log({'parameters' => "$Conf{'cookie'},$param->{'cookie_domain'},%{$param->{'alt_emails'}}",
 			  'target_email' => $in{'email'},
@@ -3812,7 +3812,7 @@ sub do_logout {
      $session->{'email'} = 'nobody' ;
 
      # no reason to alter the lang because user perform logout
-     # $param->{'lang'} = $param->{'cookie_lang'} = &cookielib::check_lang_cookie($ENV{'HTTP_COOKIE'}) || $list->{'admin'}{'lang'} || &Conf::get_robot_conf($robot, 'lang');
+     # $param->{'lang'} = $param->{'cookie_lang'} = &Sympa::Tools::Cookie::check_lang_cookie($ENV{'HTTP_COOKIE'}) || $list->{'admin'}{'lang'} || &Conf::get_robot_conf($robot, 'lang');
 
      if (defined $session->{'cas_server'} && (defined $Conf{'auth_services'}{$robot}[$session->{'cas_server'}])) {
 	 # this user was logged using CAS

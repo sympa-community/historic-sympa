@@ -24,6 +24,7 @@ package wwslib;
 use Conf;
 use Log;
 use Sympa::Constants;
+use Sympa::Tools::Cookie;
 
 %reception_mode = ('mail' => {'gettext_id' => 'standard (direct reception)'},
 		   'digest' => {'gettext_id' => 'digest MIME format'},
@@ -248,7 +249,7 @@ sub get_email_from_cookie {
 	&Log::do_log('info', ' cookie undefined, authentication failure');
     }
 
-    ($email, $auth) = &cookielib::check_cookie ($cookie, $secret);
+    ($email, $auth) = &Sympa::Tools::Cookie::check_cookie ($cookie, $secret);
     unless ( $email) {
 	&report::reject_report_web('user','auth_failed',{},'');
 	&Log::do_log('info', 'get_email_from_cookie: auth failed for user %s', $email);
