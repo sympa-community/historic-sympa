@@ -19,16 +19,16 @@
 # along with this program; if not, write to the Free Softwarec
 # Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
 
-package DBManipulatorOracle;
+package Sympa::Datasource::SQL::Oracle;
 
 use strict;
 
 use Data::Dumper;
 
-use DBManipulatorDefault;
 use Log;
+use Sympa::Datasource::SQL::Default;
 
-our @ISA = qw(DBManipulatorDefault);
+our @ISA = qw(Sympa::Datasource::SQL::Default);
 
 #######################################################
 ####### Beginning the RDBMS-specific code. ############

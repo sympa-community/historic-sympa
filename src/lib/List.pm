@@ -8810,8 +8810,8 @@ sub _include_users_sql {
 
     &Log::do_log('debug','List::_include_users_sql()');
     
-    unless (ref($source) =~ /DBManipulator/) {
-	&Log::do_log('err','source object has not a DBManipulator type : %s',$source);
+    unless (ref($source) =~ /Sympa::Datasource::SQL::/) {
+	&Log::do_log('err','source object has not a Sympa::Datasource::SQL type : %s',$source);
         return undef;
     }
 

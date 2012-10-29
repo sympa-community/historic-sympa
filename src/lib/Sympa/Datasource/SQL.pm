@@ -50,51 +50,51 @@ sub new {
     &Log::do_log('debug',"Creating new SQLSource object for RDBMS '%s'",$param->{'db_type'});
     my $actualclass;
     if ($param->{'db_type'} =~ /^mysql$/i) {
-	unless ( eval "require DBManipulatorMySQL" ){
-	    &Log::do_log('err',"Unable to use DBManipulatorMySQL module: $@");
+	unless ( eval "require Sympa::Datasource::SQL::MySQL" ){
+	    &Log::do_log('err',"Unable to use Sympa::Datasource::SQL::MySQL module: $@");
 	    return undef;
 	}
-	require DBManipulatorMySQL;
-	$actualclass = "DBManipulatorMySQL";
+	require Sympa::Datasource::SQL::MySQL;
+	$actualclass = "Sympa::Datasource::SQL::MySQL";
     }elsif ($param->{'db_type'} =~ /^sqlite$/i) {
-	unless ( eval "require DBManipulatorSQLite" ){
-	    &Log::do_log('err',"Unable to use DBManipulatorSQLite module");
+	unless ( eval "require Sympa::Datasource::SQL::SQLite" ){
+	    &Log::do_log('err',"Unable to use Sympa::Datasource::SQL::SQLite module");
 	    return undef;
 	}
-	require DBManipulatorSQLite;
+	require Sympa::Datasource::SQL::SQLite;
 	
-	$actualclass = "DBManipulatorSQLite";
+	$actualclass = "Sympa::Datasource::SQL::SQLite";
     }elsif ($param->{'db_type'} =~ /^pg$/i) {
-	unless ( eval "require DBManipulatorPostgres" ){
-	    &Log::do_log('err',"Unable to use DBManipulatorPostgres module");
+	unless ( eval "require Sympa::Datasource::SQL::Postgres" ){
+	    &Log::do_log('err',"Unable to use Sympa::Datasource::SQL::Postgres module");
 	    return undef;
 	}
-	require DBManipulatorPostgres;
+	require Sympa::Datasource::SQL::Postgres;
 	
-	$actualclass = "DBManipulatorPostgres";
+	$actualclass = "Sympa::Datasource::SQL::Postgres";
     }elsif ($param->{'db_type'} =~ /^oracle$/i) {
-	unless ( eval "require DBManipulatorOracle" ){
-	    &Log::do_log('err',"Unable to use DBManipulatorOracle module");
+	unless ( eval "require Sympa::Datasource::SQL::Oracle" ){
+	    &Log::do_log('err',"Unable to use Sympa::Datasource::SQL::Oracle module");
 	    return undef;
 	}
-	require DBManipulatorOracle;
+	require Sympa::Datasource::SQL::Oracle;
 	
-	$actualclass = "DBManipulatorOracle";
+	$actualclass = "Sympa::Datasource::SQL::Oracle";
     }elsif ($param->{'db_type'} =~ /^sybase$/i) {
-	unless ( eval "require DBManipulatorSybase" ){
-	    &Log::do_log('err',"Unable to use DBManipulatorSybase module");
+	unless ( eval "require Sympa::Datasource::SQL::Sybase" ){
+	    &Log::do_log('err',"Unable to use Sympa::Datasource::SQL::Sybase module");
 	    return undef;
 	}
-	require DBManipulatorSybase;
+	require Sympa::Datasource::SQL::Sybase;
 	
-	$actualclass = "DBManipulatorSybase";
+	$actualclass = "Sympa::Datasource::SQL::Sybase";
     }else {
 	## We don't have a DB Manipulator for this RDBMS
 	## It might be an SQL source used to include list members/owners
 	## like CSV
-	require DBManipulatorDefault;
+	require Sympa::Datasource::SQL::Default;
 	
-	$actualclass = "DBManipulatorDefault";
+	$actualclass = "Sympa::Datasource::SQL::Default";
     }
     $self = $pkg->SUPER::new($param);
     

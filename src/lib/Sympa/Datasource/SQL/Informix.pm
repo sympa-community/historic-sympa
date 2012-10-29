@@ -19,14 +19,14 @@
 # along with this program; if not, write to the Free Software
 # Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
 
-package DBManipulatorInformix;
+package Sympa::Datasource::SQL::Informix;
 
 use strict;
 
-use DBManipulatorDefault;
+use Sympa::Datasource::SQL::Default;
 use Log;
 
-our @ISA = qw(DBManipulatorDefault);
+our @ISA = qw(Sympa::Datasource::SQL::Default);
 
 sub build_connect_string{
     my $self = shift;

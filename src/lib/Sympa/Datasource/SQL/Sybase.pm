@@ -1,4 +1,4 @@
-# DBManipulatorMySQL.pm - This module contains the code specific to using a MySQL server.
+# DBManipulatorSybase.pm - This module contains the code specific to using a Sybase server.
 #<!-- RCS Identication ; $Revision: 7016 $ --> 
 #
 # Sympa - SYsteme de Multi-Postage Automatique
@@ -16,56 +16,62 @@
 # GNU General Public License for more details.
 #
 # You should have received a copy of the GNU General Public License
-# along with this program; if not, write to the Free Software
+# along with this program; if not, write to the Free Softwarec
 # Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
 
-package DBManipulatorMySQL;
+package Sympa::Datasource::SQL::Sybase;
 
 use strict;
 
 use Data::Dumper;
 
-use DBManipulatorDefault;
 use Log;
+use Sympa::Datasource::SQL::Default;
 
-our @ISA = qw(DBManipulatorDefault);
+our @ISA = qw(Sympa::Datasource::SQL::Default);
+
+#######################################################
+####### Beginning the RDBMS-specific code. ############
+#######################################################
+
+our %date_format = (
+		   'read' => {
+		       'Sybase' => 'datediff(second, \'01/01/1970\',%s)',
+		       },
+		   'write' => {
+		       'Sybase' => 'dateadd(second,%s,\'01/01/1970\')',
+		       }
+	       );
 
 # Builds the string to be used by the DBI to connect to the database.
 #
 # IN: Nothing
 #
 # OUT: Nothing
-sub build_connect_string {
+sub build_connect_string{
     my $self = shift;
-    &Log::do_log('debug','Building connection string to database %s',$self->{'db_name'});
-    $self->{'connect_string'} = "DBI:$self->{'db_type'}:$self->{'db_name'}:$self->{'db_host'}";
+    $self->{'connect_string'} = "DBI:Sybase:database=$self->{'db_name'};server=$self->{'db_host'}";
 }
 
-# Returns an SQL clause to be inserted in a query.
-# This clause will compute a substring of max length
-# $param->{'substring_length'} starting from the first character equal
-# to $param->{'separator'} found in the value of field $param->{'source_field'}.
+## Returns an SQL clause to be inserted in a query.
+## This clause will compute a substring of max length
+## $param->{'substring_length'} starting from the first character equal
+## to $param->{'separator'} found in the value of field $param->{'source_field'}.
 sub get_substring_clause {
     my $self = shift;
     my $param = shift;
-    &Log::do_log('debug','Building substring caluse');
-    return "REVERSE(SUBSTRING(".$param->{'source_field'}." FROM position('".$param->{'separator'}."' IN ".$param->{'source_field'}.") FOR ".$param->{'substring_length'}."))";
+    return "substring(".$param->{'source_field'}.",charindex('".$param->{'separator'}."',".$param->{'source_field'}.")+1,".$param->{'substring_length'}.")";
 }
 
-# Returns an SQL clause to be inserted in a query.
-# This clause will limit the number of records returned by the query to
-# $param->{'rows_count'}. If $param->{'offset'} is provided, an offset of
-# $param->{'offset'} rows is done from the first record before selecting
-# the rows to return.
+## Returns an SQL clause to be inserted in a query.
+## This clause will limit the number of records returned by the query to
+## $param->{'rows_count'}. If $param->{'offset'} is provided, an offset of
+## $param->{'offset'} rows is done from the first record before selecting
+## the rows to return.
 sub get_limit_clause {
     my $self = shift;
     my $param = shift;
-    &Log::do_log('debug','Building limit 1 caluse');
-    if ($param->{'offset'}) {
-	return "LIMIT ".$param->{'offset'}.",".$param->{'rows_count'};
-    }else{
-	return "LIMIT ".$param->{'rows_count'};
-    }
+    return "";
 }
 
 # Returns a character string corresponding to the expression to use in a query
@@ -120,14 +126,14 @@ sub is_autoinc {
 sub set_autoinc {
     my $self = shift;
     my $param = shift;
-    my $field_type = defined ($param->{'field_type'}) ? $param->{'field_type'} : 'BIGINT( 20 )';
     &Log::do_log('debug','Setting field %s.%s as autoincremental',$param->{'field'},$param->{'table'});
-    unless ($self->do_query("ALTER TABLE `%s` CHANGE `%s` `%s` %s NOT NULL AUTO_INCREMENT",$param->{'table'},$param->{'field'},$param->{'field'},$field_type)) {
+    unless ($self->do_query("ALTER TABLE `%s` CHANGE `%s` `%s` BIGINT( 20 ) NOT NULL AUTO_INCREMENT",$param->{'table'},$param->{'field'},$param->{'field'})) {
 	&Log::do_log('err','Unable to set field %s in table %s as autoincrement',$param->{'field'},$param->{'table'});
 	return undef;
     }
     return 1;
 }
+
 
 # Returns the list of the tables in the database.
 # Returns undef if something goes wrong.
@@ -135,20 +141,16 @@ sub set_autoinc {
 # OUT: a ref to an array containing the list of the tables names in the database, undef if something went wrong
 sub get_tables {
     my $self = shift;
-    &Log::do_log('debug','Retrieving all tables in database %s',$self->{'db_name'});
     my @raw_tables;
-    my @result;
-    unless (@raw_tables = $self->{'dbh'}->tables()) {
+    my $sth;
+    unless ($sth = $self->do_query("SELECT name FROM %s..sysobjects WHERE type='U'",$self->{'db_name'})) {
 	&Log::do_log('err','Unable to retrieve the list of tables from database %s',$self->{'db_name'});
 	return undef;
     }
-    
-    foreach my $t (@raw_tables) {
-	$t =~ s/^\`[^\`]+\`\.//;# Clean table names that would look like `databaseName`.`tableName` (mysql)
-	$t =~ s/^\`(.+)\`$/$1/;# Clean table names that could be surrounded by `` (recent DBD::mysql release)
-	push @result, $t;
+    while (my $table= $sth->fetchrow()) {
+	push @raw_tables, lc ($table);   	
     }
-    return \@result;
+    return \@raw_tables;
 }
 
 # Adds a table to the database
@@ -160,7 +162,7 @@ sub add_table {
     my $self = shift;
     my $param = shift;
     &Log::do_log('debug','Adding table %s to database %s',$param->{'table'},$self->{'db_name'});
-    unless ($self->do_query("CREATE TABLE %s (temporary INT) DEFAULT CHARACTER SET utf8",$param->{'table'})) {
+    unless ($self->do_query("CREATE TABLE %s (temporary INT)",$param->{'table'})) {
 	&Log::do_log('err', 'Could not create table %s in database %s', $param->{'table'}, $self->{'db_name'});
 	return undef;
     }
