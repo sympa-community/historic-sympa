@@ -47,7 +47,6 @@ use Sympa::Constants;
 use Sympa::Spool;
 use Sympa::Tools;
 use Sympa::Tools::Daemon;
-use tracking;
 
 # durty global variables
 my $is_signed = {}; 
