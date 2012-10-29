@@ -64,7 +64,7 @@ use Pod::Usage;
 use POSIX qw(strftime);
 use Sys::Hostname qw(hostname);
 
-use confdef;
+use Sympa::Configuration::Definition;
 use Sympa::Constants;
 
 ## sympa configuration files
@@ -133,7 +133,7 @@ sub create_configuration {
 #EOF
     }
 
-    foreach my $param (@confdef::params) {
+    foreach my $param (@Sympa::Configuration::Definition::params) {
 
         if ($param->{'title'}) {
             printf NEWF "###\\\\\\\\ %s ////###\n\n",
@@ -165,9 +165,9 @@ sub create_configuration {
 }
 
 sub edit_configuration {
-    require confdef;
+    require Sympa::Configuration::Definition;
     # complement required fields.
-    foreach my $param (@confdef::params) {
+    foreach my $param (@Sympa::Configuration::Definition::params) {
         if ($param->{'name'} eq 'domain') {
             $param->{'default'} = hostname();
         } elsif ($param->{'name'} eq 'wwsympa_url') {
@@ -212,7 +212,7 @@ sub edit_configuration {
     my (@new_wwsympa_conf, @new_sympa_conf);
 
     ## Edition mode
-    foreach my $param (@confdef::params) {
+    foreach my $param (@Sympa::Configuration::Definition::params) {
         my $desc;
 
         if ($param->{'title'}) {

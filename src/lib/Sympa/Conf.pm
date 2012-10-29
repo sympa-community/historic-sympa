@@ -28,11 +28,11 @@ use strict "vars";
 use Exporter;
 use Storable;
 
-use confdef;
 use List;
 use Log;
 use Language;
 use SDM;
+use Sympa::Configuration::Definition;
 use Sympa::Constants;
 use Sympa::Tools;
 use Sympa::Tools::File;
@@ -53,13 +53,13 @@ my $sth;
 our %params =
     map  { $_->{name} => $_ }
     grep { $_->{name} }
-    @confdef::params;
+    @Sympa::Configuration::Definition::params;
 
 # valid virtual host parameters, keyed by parameter name
 my %valid_robot_key_words;
 my %db_storable_parameters;
 my %optional_key_words;
-foreach my $hash(@confdef::params){
+foreach my $hash(@Sympa::Configuration::Definition::params){
     $valid_robot_key_words{$hash->{'name'}} = 1 if ($hash->{'vhost'});    
     $db_storable_parameters{$hash->{'name'}} = 1 if (defined($hash->{'db'}) and $hash->{'db'} ne 'none');
     $optional_key_words{$hash->{'name'}} = 1 if ($hash->{'optional'}); 
@@ -281,7 +281,7 @@ sub get_robots_list {
 }
 
 ## Returns a hash containing the values of all the parameters of the group
-## (as defined in confdef.pm) whose name is given as argument, in the context
+## (as defined in Sympa::Configuration::Definition.pm) whose name is given as argument, in the context
 ## of the robot given as argument.
 sub get_parameters_group {
     my ($robot, $group) = @_;
@@ -359,7 +359,7 @@ sub conf_2_db {
     my $config_file = shift;
     &Log::do_log('info',"conf_2_db");
 
-    my @conf_parameters = @confdef::params ;
+    my @conf_parameters = @Sympa::Configuration::Definition::params ;
 
     # store in database robots parameters.
     my $robots_conf = &load_robots ; #load only parameters that are in a robot.conf file (do not apply defaults). 
@@ -1893,7 +1893,7 @@ sub _create_robot_like_config_for_main_robot {
 sub _get_parameters_names_by_category {
     my $param_by_categories;
     my $current_category;
-    foreach my $entry (@confdef::params) {
+    foreach my $entry (@Sympa::Configuration::Definition::params) {
         if ($entry->{'title'}) {
             $current_category = $entry->{'title'};
         }else{

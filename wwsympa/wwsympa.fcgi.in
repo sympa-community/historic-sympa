@@ -50,7 +50,6 @@ use MIME::Parser;
 use Time::Local;
 
 use Commands;
-use confdef;
 use Auth;
 use Language;
 use List;
@@ -61,6 +60,7 @@ use OAuthConsumer;
 use SharedDocument;
 use Sympa::Admin;
 use Sympa::Conf;
+use Sympa::Configuration::Definition;
 use Sympa::Constants;
 use Sympa::Mail;
 use Sympa::Report;
@@ -5671,7 +5671,7 @@ sub do_serveradmin {
 
 sub do_edit_config {
 
-    my @editable_params = @confdef::params ;
+    my @editable_params = @Sympa::Configuration::Definition::params ;
 
     &get_server_details;
 
