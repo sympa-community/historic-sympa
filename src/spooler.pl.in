@@ -32,7 +32,6 @@ use MIME::QuotedPrint;
 
 use Auth;
 use Commands;
-use Config_XML;
 use Family;
 use Language;
 use Log;
