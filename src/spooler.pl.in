@@ -46,9 +46,9 @@ use report;
 use SDM;
 use SQLSource;
 use Sympa::Constants;
+use Sympa::Spool;
 use Sympa::Tools;
 use Sympa::Tools::Daemon;
-use Sympaspool;
 use tracking;
 
 ## Internal tuning
@@ -281,8 +281,8 @@ $SIG{'PIPE'} = 'IGNORE'; ## Ignore SIGPIPE ; prevents sympa.pl from dying
 
 my @qfile;
 
-my $msgspool = new Sympaspool('msg');
-my $bouncespool = new Sympaspool('bounce');
+my $msgspool = new Sympa::Spool('msg');
+my $bouncespool = new Sympa::Spool('bounce');
 
 ## This is the main loop : look for files in the directory, handles
 ## them, sleeps a while and continues the good job.

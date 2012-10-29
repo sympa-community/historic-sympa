@@ -51,7 +51,7 @@ use PlainDigest;
 use Scenario;
 use SDM;
 use SQLSource qw(create_db);
-use Sympaspool;
+use Sympa::Spool;
 use Sympa::Constants;
 use Sympa::Tools::Data;
 use Sympa::Tools::DKIM;
@@ -3313,7 +3313,7 @@ sub distribute_msg {
 	
 	# rename update topic content id of the message
 	if ($info_msg_topic) {
-	    my $topicspool = new Sympaspool ('topic');	    
+	    my $topicspool = new Sympa::Spool ('topic');	    
 	    $topicspool->update({'list' => $self->{'name'},'robot' => $robot},'messagekey' => $info_msg_topic->{'messagekey'},{'messageid'=>$new_id});	
 	}
 	## TODO remove S/MIME and PGP signature if any
@@ -3519,7 +3519,7 @@ sub send_msg_digest {
    &Log::do_log('debug',"send_msg_disgest(%s)",$messagekey);
 
     # fetch and lock message. 
-    my $digestspool = new Sympaspool ('digest');
+    my $digestspool = new Sympa::Spool ('digest');
 
     my $message_in_spool = $digestspool->next({'messagekey'=>$messagekey});
 
@@ -4374,7 +4374,7 @@ sub send_to_editor {
    
    if ($method eq 'md5'){  
        # move message to spool  mod
-       my $spoolmod = new Sympaspool('mod');
+       my $spoolmod = new Sympa::Spool('mod');
        $spoolmod->update({'messagekey' => $message->{'messagekey'}},{"authkey" => $modkey,'messagelock'=> 'NULL'});
 
        # prepare html view of this message
@@ -4491,7 +4491,7 @@ sub send_auth {
    my $authkey = Digest::MD5::md5_hex(join('/', $self->get_cookie(),$messageid));
    chomp $authkey;
   
-   my $spool = new Sympaspool('auth');
+   my $spool = new Sympa::Spool('auth');
    $spool->update({'messagekey' => $message->{'messagekey'}},{"spoolname" => 'auth','authkey'=> $authkey, 'messagelock'=> 'NULL'});
    my $param = {'authkey' => $authkey,
 		'boundary' => "----------------- Message-Id: \<$messageid\>",
@@ -7687,7 +7687,7 @@ sub archive_msg {
 	    ## ignoring message with a no-archive flag	    
 	   &Log::do_log('info',"Do not archive message with no-archive flag for list %s",$self->get_list_id());
 	}else{
-	    my $spoolarchive = new Sympaspool ('archive');
+	    my $spoolarchive = new Sympa::Spool ('archive');
 	    unless ($message->{'messagekey'}) {
 	&Log::do_log('err', "could not store message in archive spool, messagekey missing");
 		return undef;
@@ -10134,7 +10134,7 @@ sub store_digest {
 
     my @now  = localtime(time);
 
-    my $digestspool = new Sympaspool('digest');
+    my $digestspool = new Sympa::Spool('digest');
     my $current_digest = $digestspool->next({'list'=>$self->{'name'},'robot'=>$self->{'robot'}}); # remember that spool->next lock the selected message if any
     my $message_as_string;
 
@@ -10526,7 +10526,7 @@ sub get_mod_spool_size {
     my $self = shift;
     &Log::do_log('debug3', 'List::get_mod_spool_size()');    
 
-    my $spool = new Sympaspool('mod');
+    my $spool = new Sympa::Spool('mod');
     my $count =  $spool->get_content({'selector' =>{'list'=> $self->{'name'},'robot'=> $self->{'robot'} },
 				      'selection'=>'count'});
     
@@ -11728,7 +11728,7 @@ sub tag_topic {
 
     my $topic_item =  sprintf  "TOPIC   $topic_list\n";
     $topic_item .= sprintf  "METHOD  $method\n";
-    my $topicspool = new Sympaspool ('topic');
+    my $topicspool = new Sympa::Spool ('topic');
     
     return ($topicspool->store($topic_item,{'list'=>$self->{'name'},'robot'=> $self->{'domain'},'messageid'=>$msg_id}));
 }
@@ -11757,7 +11757,7 @@ sub load_msg_topic {
     my ($self,$msg_id,$robot) = @_;
 
     &Log::do_log('debug','List::load_msg_topic(%s,%s)',$self->{'name'},$msg_id);    
-    my  $topicspool = new Sympaspool('topic');
+    my  $topicspool = new Sympa::Spool('topic');
 
     my $topics_from_spool = $topicspool->get_message({'listname' =>$self->{'name'},'robot' => $robot, 'messageid' => $msg_id});
     unless ($topics_from_spool) {
@@ -12029,7 +12029,7 @@ sub store_subscription_request {
     my ($self, $email, $gecos, $custom_attr) = @_;
     &Log::do_log('debug2', '(%s, %s, %s)', $self->{'name'}, $email, $gecos, $custom_attr);
 
-    my $subscription_request_spool = new Sympaspool ('subscribe');
+    my $subscription_request_spool = new Sympa::Spool ('subscribe');
     
     if ($subscription_request_spool->get_content({'selector' =>{'list'=> $self->{'name'},'robot'=> $self->{'robot'},'sender'=>$email},'selection'=>'count'}) != 0) {
 	&Log::do_log('notice', 'Subscription already requested by %s', $email);
@@ -12047,7 +12047,7 @@ sub get_subscription_requests {
 
     my %subscriptions;
 
-    my $subscription_request_spool = new Sympaspool ('subscribe');
+    my $subscription_request_spool = new Sympa::Spool ('subscribe');
     my @subrequests = $subscription_request_spool->get_content({'selector' =>{'list'=> $self->{'name'},'robot'=> $self->{'robot'}},'selection'=>'*'});
 
     foreach my $subrequest ( $subscription_request_spool->get_content({'selector' =>{'list'=> $self->{'name'},'robot'=> $self->{'robot'}},'selection'=>'*'})) {
@@ -12090,7 +12090,7 @@ sub get_subscription_requests {
 sub get_subscription_request_count {
     my ($self) = shift;
 
-    my $subscription_request_spool = new Sympaspool ('subscribe');    
+    my $subscription_request_spool = new Sympa::Spool ('subscribe');    
     return $subscription_request_spool->get_content({'selector' =>{'list'=> $self->{'name'},'robot'=> $self->{'robot'}},'selection'=>'count'});
 } 
 
@@ -12099,7 +12099,7 @@ sub delete_subscription_request {
     my ($self, @list_of_email) = @_;
     &Log::do_log('debug2', 'List::delete_subscription_request(%s, %s)', $self->{'name'}, join(',',@list_of_email));
 
-    my $subscription_request_spool = new Sympaspool ('subscribe');
+    my $subscription_request_spool = new Sympa::Spool ('subscribe');
 
     my $removed = 0;
     foreach my $email (@list_of_email) {

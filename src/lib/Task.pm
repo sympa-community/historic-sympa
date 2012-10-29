@@ -27,7 +27,7 @@ use strict;
 use Conf;
 use List;
 use Log;
-use Sympaspool;
+use Sympa::Spool;
 use Sympa::Tools;
 
 my @task_list;
@@ -37,7 +37,7 @@ my %task_by_model;
 my $taskspool ;
 
 sub set_spool {
-    $taskspool = new Sympaspool('task');
+    $taskspool = new Sympa::Spool('task');
 }
 
 ## Creates a new Task object
@@ -92,7 +92,7 @@ sub list_tasks {
     undef %task_by_model;
 
     # fetch all task
-    my $taskspool = new Sympaspool ('task');
+    my $taskspool = new Sympa::Spool ('task');
     my @tasks = $taskspool->get_content({'selector'=>{}});
 
     ## Create Task objects

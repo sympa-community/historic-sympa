@@ -40,10 +40,10 @@ use Scenario;
 use SDM;
 use Sympa::Constants;
 use Sympa::Session;
+use Sympa::Spool;
 use Sympa::Tools;
 use Sympa::Tools::Time;
 use Sympa::Tools::Daemon;
-use Sympaspool;
 use Task;
 use tracking;
 use wwslib;
@@ -462,7 +462,7 @@ sub create {
 	return undef;
     }
     # task is accetable, store it in spool
-    my $taskspool = new Sympaspool('task');
+    my $taskspool = new Sympa::Spool('task');
     my %meta;
     $meta{'task_date'}=$date;
     $meta{'task_label'}=$label;

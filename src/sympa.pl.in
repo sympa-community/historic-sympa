@@ -44,9 +44,9 @@ use Message;
 use report;
 use SDM;
 use Sympa::Constants;
+use Sympa::Spool;
 use Sympa::Tools;
 use Sympa::Tools::Daemon;
-use Sympaspool;
 use tracking;
 
 # durty global variables
@@ -592,7 +592,7 @@ if ($main::options{'dump'}) {
 }elsif ($main::options{'test_database_message_buffer'}) {
     my $size = 0;   
     printf "Sympa is going to store messages bigger and bigger to test the limit with its database. This may be very long \n";
-    $size = &Sympaspool::store_test(21000); ## will test message until a 21 Mo message.
+    $size = &Sympa::Spool::store_test(21000); ## will test message until a 21 Mo message.
     if ($size == 21000) {
 	printf "The maximum message size ($size Ko) testing was successful \n";
     }else{
@@ -957,7 +957,7 @@ my $index_cleanqueue = 0;
 my @qfile;
 
 my $spoolname = 'msg';
-my $spool = new Sympaspool ($spoolname);
+my $spool = new Sympa::Spool ($spoolname);
 ## This is the main loop : look for files in the directory, handles
 ## them, sleeps a while and continues the good job.
 while (!$signal) {
@@ -978,21 +978,21 @@ while (!$signal) {
     if ($index_cleanqueue++ >= 1000){
 	$index_cleanqueue=0;
 	
-	my $msg_bad = new Sympaspool('msg','bad'); 
+	my $msg_bad = new Sympa::Spool('msg','bad'); 
 	$msg_bad->clean({'delay'=>$Conf{'clean_delay_queue'}});
-	my $archive_bad = new Sympaspool('archive','bad'); 
+	my $archive_bad = new Sympa::Spool('archive','bad'); 
 	$archive_bad->clean({'delay'=>$Conf{'clean_delay_queueoutgoing'}});
-	my $queuebounce_bad = new Sympaspool('bounce','bad'); 
+	my $queuebounce_bad = new Sympa::Spool('bounce','bad'); 
 	$queuebounce_bad->clean({'delay'=>$Conf{'clean_delay_queuebounce'}});
-	my $queuemod = new Sympaspool('mod');
+	my $queuemod = new Sympa::Spool('mod');
 	$queuemod->clean({'delay'=> $Conf{'clean_delay_queuemod'}});
-	my $queueauth = new Sympaspool('auth');
+	my $queueauth = new Sympa::Spool('auth');
 	$queueauth->clean({'delay'=> $Conf{'clean_delay_queueauth'}});
-	my $queuetopic = new Sympaspool('topic');
+	my $queuetopic = new Sympa::Spool('topic');
 	$queuetopic->clean({'delay'=> $Conf{'clean_delay_queuetopic'}});
-	my $queuesubscribe = new Sympaspool('subscribe');
+	my $queuesubscribe = new Sympa::Spool('subscribe');
 	$queuesubscribe->clean({'delay'=> $Conf{'clean_delay_queuesubscribe'}});
-	my $queueautomatic = new Sympaspool('automatic');
+	my $queueautomatic = new Sympa::Spool('automatic');
 	$queueautomatic->clean({'delay'=> $Conf{'clean_delay_queueautomatic'}});
 	&Sympa::Tools::CleanDir($Conf{'tmpdir'}, $Conf{'clean_delay_tmpdir'}); # this is not a message spool
     }	    				          
@@ -2067,7 +2067,7 @@ sub DoCommand {
 sub SendDigest{
     &Log::do_log('debug', 'SendDigest()');
 
-    my $digestspool = new Sympaspool('digest');
+    my $digestspool = new Sympa::Spool('digest');
 
     foreach my $digest ($digestspool->get_content({'selection'=>'messagekey,list,robot,date'})){
  	my $list = new List ($digest->{'list'}, $digest->{'robot'});

@@ -51,6 +51,7 @@ use Log;
 use mail;
 use Message;
 use Sympa::Constants;
+use Sympa::Spool;
 use Sympa::Tools;
 use Sympa::Tools::Time;
 use Sympa::Tools::File;
@@ -183,7 +184,7 @@ $Language::default_lang = $Conf{'lang'};
 $SIG{'TERM'} = 'sigterm';
 my $end = 0;
 
-my $spoolarchive = new Sympaspool ('archive');
+my $spoolarchive = new Sympa::Spool ('archive');
 
 ## infinite loop scanning the queue (unless a sig TERM is received
 while (!$end) {

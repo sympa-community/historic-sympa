@@ -27,9 +27,10 @@ use strict;
 use Fcntl qw(LOCK_SH LOCK_EX LOCK_NB LOCK_UN);
 use FileHandle;
 
-use Conf;
+#use Conf;
 use Log;
 use Sympa::Tools::File;
+use Sympa::Constants;
 
 my %list_of_locks;
 my $default_timeout = 60 * 20; ## After this period a lock can be stolen

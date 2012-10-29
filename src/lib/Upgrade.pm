@@ -30,6 +30,7 @@ use Conf;
 use Log;
 use SDM;
 use Sympa::Constants;
+use Sympa::Spool;
 use Sympa::Tools::Data;
 use Sympa::Tools::File;
 
@@ -759,7 +760,7 @@ sub upgrade {
 	    }
 	    &Log::do_log('notice',"Performing upgrade for spool  %s ",$spooldir);
 
-	    my $spool = new Sympaspool($spools_def{$spoolparameter});
+	    my $spool = new Sympa::Spool($spools_def{$spoolparameter});
 	    if (!opendir(DIR, $spooldir)) {
 		&Log::fatal_err("Can't open dir %s: %m", $spooldir); ## No return.
 	    }

@@ -49,10 +49,10 @@ use List;
 use Log;
 use mail;
 use Sympa::Constants;
+use Sympa::Spool;
 use Sympa::Tools;
 use Sympa::Tools::Daemon;
 use Sympa::Tools::DKIM;
-use Sympaspool;
 use tracking;
 
 my $daemon_name = &Log::set_daemon($0);
@@ -172,7 +172,7 @@ $options->{'multiple_process'} = 1;
 $Conf::Conf{'maxsmtp'} = int($Conf::Conf{'maxsmtp'}/$Conf::Conf{'bulk_max_count'});
 
 
-my $spool = new Sympaspool('bulk');
+my $spool = new Sympa::Spool('bulk');
 
 while (!$end) {
     &List::init_list_cache();

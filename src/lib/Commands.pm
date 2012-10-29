@@ -37,6 +37,7 @@ use List;
 use Message;
 use report;
 use Sympa::Constants;
+use Sympa::Spool;
 use Sympa::Tools;
 use Sympa::Tools::File;
 
@@ -2012,13 +2013,13 @@ sub distribute {
 
     #read the moderation queue and purge it
 
-    my $modspool = new Sympaspool ('mod');
+    my $modspool = new Sympa::Spool ('mod');
     my $name = $list->{'name'};
 
     my $message_in_spool = $modspool->get_message({'list'=>$list->{'name'},'robot'=>$robot,'authkey'=>$key});
     unless ($message_in_spool) {
 	## if the message has been accepted via WWSympa, it's in spool 'validated' 
-	$validatedspool = new Sympaspool ('validated');
+	$validatedspool = new Sympa::Spool ('validated');
 	$message_in_spool = $validatedspool->get_message({'list'=>$list->{'name'},'robot'=>$robot,'authkey'=>$key});
     }
     unless ($message_in_spool) {
@@ -2095,7 +2096,7 @@ sub confirm {
     my $key = $1; chomp $key;
     my $start_time = time; # get the time at the beginning
 
-    my $spool = new Sympaspool ('auth');
+    my $spool = new Sympa::Spool ('auth');
 
     my $messageinspool = $spool->get_message({'authkey'=>$key});
 
@@ -2261,7 +2262,7 @@ sub reject {
 
     my $name = "$list->{'name'}";
 
-    my $modspool = new Sympaspool('mod');
+    my $modspool = new Sympa::Spool('mod');
     my $message_in_spool = $modspool->get_message({'list'=>$list->{'name'},'robot'=>$robot,'authkey'=>$key});
 
     unless ($message_in_spool) {

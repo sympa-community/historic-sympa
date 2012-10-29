@@ -43,8 +43,9 @@ use Conf;
 use List;
 use Log;
 use mail;
-use Sympa::Tools;
 use Sympa::Constants;
+use Sympa::Spool;
+use Sympa::Tools;
 use Sympa::Tools::Daemon;
 use tracking;
 use tt2;
@@ -189,7 +190,7 @@ my $pinfo = &List::_apply_defaults();
 $SIG{'TERM'} = 'sigterm';
 my $end = 0;
 
-my $spool = new Sympaspool('bounce');
+my $spool = new Sympa::Spool('bounce');
 
 
 &Log::do_log('debug','starting infinite loop');
