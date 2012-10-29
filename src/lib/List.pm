@@ -51,8 +51,9 @@ use PlainDigest;
 use Scenario;
 use SDM;
 use SQLSource qw(create_db);
-use Sympa::Spool;
 use Sympa::Constants;
+use Sympa::Report;
+use Sympa::Spool;
 use Sympa::Tools::Data;
 use Sympa::Tools::DKIM;
 use Sympa::Tools::File;
@@ -9483,7 +9484,7 @@ sub sync_include {
 					$cfg = $p if($p->{'name'} eq $e->{'name'});
 				}
 				next unless(defined $cfg);
-				&report::reject_report_web(
+				&Sympa::Report::reject_report_web(
 					'user',
 					'sync_include_voot_failed',
 					{
@@ -9494,7 +9495,7 @@ sub sync_include {
 					$cfg->{'user'},
 					$self->{'name'}
 				);
-				&report::reject_report_msg(
+				&Sympa::Report::reject_report_msg(
 					'oauth',
 					'sync_include_voot_failed',
 					$cfg->{'user'},

@@ -28,8 +28,8 @@ use Conf;
 use Language;
 use List;
 use Log;
-use report;
 use SDM;
+use Sympa::Report;
 use Sympa::Session;
 
 ## return the password finger print (this proc allow futur replacement of md5 by sha1 or ....)
@@ -77,7 +77,7 @@ sub password_fingerprint{
 		 };
 	     
 	 }else{
-	     &report::reject_report_web('user','incorrect_passwd',{}) unless ($ENV{'SYMPA_SOAP'});
+	     &Sympa::Report::reject_report_web('user','incorrect_passwd',{}) unless ($ENV{'SYMPA_SOAP'});
 	     &Log::do_log('err', "Incorrect Ldap password");
 	     return undef;
 	 }
@@ -122,7 +122,7 @@ sub authentication {
     if ($user->{'wrong_login_count'} > &Conf::get_robot_conf($robot, 'max_wrong_password')){
 	# too many wrong login attemp
 	&List::update_global_user($email,{wrong_login_count => $user->{'wrong_login_count'}+1}) ;
-	&report::reject_report_web('user','too_many_wrong_login',{}) unless ($ENV{'SYMPA_SOAP'});
+	&Sympa::Report::reject_report_web('user','too_many_wrong_login',{}) unless ($ENV{'SYMPA_SOAP'});
 	&Log::do_log('err','login is blocked : too many wrong password submission for %s', $email);
 	return undef;
     }
@@ -160,7 +160,7 @@ sub authentication {
     # increment wrong login count.
     &List::update_global_user($email,{wrong_login_count =>$user->{'wrong_login_count'}+1}) ;
 
-    &report::reject_report_web('user','incorrect_passwd',{}) unless ($ENV{'SYMPA_SOAP'});
+    &Sympa::Report::reject_report_web('user','incorrect_passwd',{}) unless ($ENV{'SYMPA_SOAP'});
     &Log::do_log('err','authentication: incorrect password for user %s', $email);
 
     $param->{'init_email'} = $email;
