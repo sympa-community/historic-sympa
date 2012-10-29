@@ -70,8 +70,8 @@ use Sympa::Tools;
 use Sympa::Tools::Cookie;
 use Sympa::Tools::Data;
 use Sympa::Tools::Time;
+use Sympa::Tracking;
 use Sympa::TT2;
-use tracking;
 use VOOTProvider;
 use VOOTConsumer;
 use wwslib;
@@ -7873,7 +7873,7 @@ sub do_remove_arc {
 	chomp $msgid ;	
 	$removeorder .= sprintf "%s||%s\n",$msgid,$param->{'user'}{'email'} ;
 	# Removing tracking should be done by archived.
-	&tracking::remove_message_by_id($msgid, $in{'list'},$robot);
+	&Sympa::Tracking::remove_message_by_id($msgid, $in{'list'},$robot);
     }
     my $spoolarchive = new Sympa::Spool('archive');
     $spoolarchive->store($removeorder,{'list'=>$in{'list'},'robot'=>$robot});
@@ -8099,7 +8099,7 @@ sub do_tracking   {
      $param->{'msgid'} = $in{'msgid'} ;
      $param->{'listname'} = $in{'list'};
 
-     unless($param->{'tracking_info'} = &tracking::get_recipients_status($in{'msgid'}, $in{'list'},$robot)){
+     unless($param->{'tracking_info'} = &Sympa::Tracking::get_recipients_status($in{'msgid'}, $in{'list'},$robot)){
          &report::reject_report_web('intern','could_not_get_tracking_info',{},$param->{'action'},$list,$param->{'user'}{'email'},$robot);
          &wwslog('err',"could not get tracking info for message_id $in{'msgid'} and list $in{'list'}");
          $param->{'status'} = 'could_not_get_tracking_info';

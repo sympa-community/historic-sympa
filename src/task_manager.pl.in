@@ -44,8 +44,8 @@ use Sympa::Spool;
 use Sympa::Tools;
 use Sympa::Tools::Time;
 use Sympa::Tools::Daemon;
+use Sympa::Tracking;
 use Task;
-use tracking;
 use wwslib;
 
 my $opt_d;
@@ -1149,7 +1149,7 @@ sub purge_tables {
     foreach my $robot (keys %{$Conf{'robots'}}) {
 	my $all_lists = &List::get_lists($robot);
 	foreach my $list ( @$all_lists ) {
-	    $removed += &tracking::remove_message_by_period($list->{'admin'}{'tracking'}{'retention_period'},$list->{'name'},$robot);   
+	    $removed += &Sympa::Tracking::remove_message_by_period($list->{'admin'}{'tracking'}{'retention_period'},$list->{'name'},$robot);   
 	}
     }
     &Log::do_log('notice', "%s rows removed in tracking table",$removed);

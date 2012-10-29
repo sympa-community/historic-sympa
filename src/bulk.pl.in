@@ -53,7 +53,7 @@ use Sympa::Spool;
 use Sympa::Tools;
 use Sympa::Tools::Daemon;
 use Sympa::Tools::DKIM;
-use tracking;
+use Sympa::Tracking;
 
 my $daemon_name = &Log::set_daemon($0);
 my $date_of_last_activity = time();
@@ -333,7 +333,7 @@ while (!$end) {
 		
 		if(($bulk->{'tracking'} eq 'dsn')||($bulk->{'tracking'} eq 'mdn')){ # tracking by MDN required tracking by DSN to
 		    my $msgid = $entity->head->get('Message-Id'); chomp $msgid;		    
-		    $notification_id = &tracking::find_notification_id_by_message($rcpt, $msgid, $listname,$robot);
+		    $notification_id = &Sympa::Tracking::find_notification_id_by_message($rcpt, $msgid, $listname,$robot);
 		    $return_path = $Conf::Conf{'bounce_email_prefix'}.'+'.$escaped_rcpt.'=='.$listname.'=='.$notification_id.'@'.$robot;
 		    $entity->head->replace('Disposition-Notification-To',$return_path) if ($bulk->{'tracking'} eq 'mdn') ;
 		    if (($message->{'protected'})||($message->{'smime_crypted'})){

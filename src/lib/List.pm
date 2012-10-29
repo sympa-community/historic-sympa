@@ -57,6 +57,7 @@ use Sympa::Tools::Data;
 use Sympa::Tools::DKIM;
 use Sympa::Tools::File;
 use Sympa::Tools::SMIME;
+use Sympa::Tracking;
 use Sympa::TT2;
 use Task;
 use Upgrade;
@@ -4302,7 +4303,7 @@ sub send_msg {
 
 	if (($apply_tracking eq 'dsn')||($apply_tracking eq 'mdn')){
 	    $verp = $apply_tracking ;
-	    &tracking::db_init_notification_table('listname'=> $self->{'name'},
+	    &Sympa::Tracking::db_init_notification_table('listname'=> $self->{'name'},
 						  'robot'=> $robot,
 						  'msgid' => $original_message_id, # what ever the message is transformed because of the reception option, tracking use the original message id
 						  'rcpt'=> \@verp_selected_tabrcpt, 
