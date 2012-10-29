@@ -47,7 +47,6 @@ use Commands;
 use Language;
 use List;
 use Log;
-use mail;
 use Message;
 use Sympa::Conf;
 use Sympa::Constants;

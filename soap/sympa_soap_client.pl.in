@@ -33,7 +33,6 @@ use Family;
 use Language;
 use List;
 use Log;
-use mail;
 use Message;
 use report;
 use Sympa::Constants;

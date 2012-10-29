@@ -41,7 +41,6 @@ use POSIX;
 
 use List;
 use Log;
-use mail;
 use Sympa::Conf;
 use Sympa::Constants;
 use Sympa::Spool;
