@@ -37,7 +37,6 @@ use Time::Local;
 
 use Archive;
 use Family;
-use Fetch;
 use Language;
 use Ldap;
 use Lock;
