@@ -51,7 +51,6 @@ use Sympa::DatabaseDescription;
 use Sympa::Tools::Time;
 use Task;
 use Upgrade;
-use WebAgent;
 
 ## Database and SQL statement handlers
 my ($dbh, $sth, $db_connected, @sth_stack, $use_db);
