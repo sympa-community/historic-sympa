@@ -60,9 +60,9 @@ use Sympa::Tools::File;
 use Sympa::Tools::SMIME;
 use Sympa::Tracking;
 use Sympa::TT2;
+use Sympa::WebAgent;
 use Task;
 use Upgrade;
-use WebAgent;
 
 our @ISA = qw(Exporter);
 our @EXPORT = qw(%list_of_lists);
@@ -8250,14 +8250,14 @@ sub _include_users_remote_file {
     my $total = 0;
     my $id = Sympa::Datasource::_get_datasource_id($param);
 
-    ## WebAgent package is part of Fetch.pm and inherites from LWP::UserAgent
+    ## Sympa::WebAgent package is part of Fetch.pm and inherites from LWP::UserAgent
 
-    my $fetch = WebAgent->new (agent => 'Sympa/'. Sympa::Constants::VERSION);
+    my $fetch = Sympa::WebAgent->new (agent => 'Sympa/'. Sympa::Constants::VERSION);
 
     my $req = HTTP::Request->new(GET => $url);
     
     if (defined $param->{'user'} && defined $param->{'passwd'}) {
-	&WebAgent::set_basic_credentials($param->{'user'},$param->{'passwd'});
+	&Sympa::WebAgent::set_basic_credentials($param->{'user'},$param->{'passwd'});
     }
 
     my $res = $fetch->request($req);  
@@ -8336,7 +8336,7 @@ sub _include_users_remote_file {
     }
 
     ## Reset http credentials
-    &WebAgent::set_basic_credentials('','');
+    &Sympa::WebAgent::set_basic_credentials('','');
 
     &Log::do_log('info',"include %d users from remote file %s",$total,$url);
     return $total ;
