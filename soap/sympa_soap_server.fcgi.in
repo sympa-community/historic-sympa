@@ -10,7 +10,6 @@ use SOAP::Lite;
 use SOAP::Transport::HTTP;
 
 use Conf;
-use cookielib;
 use Language;
 use List;
 use Log;
