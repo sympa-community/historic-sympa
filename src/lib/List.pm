@@ -60,7 +60,6 @@ use Sympa::Tools::SMIME;
 use Sympa::TT2;
 use Task;
 use Upgrade;
-use VOOTConsumer;
 use WebAgent;
 
 our @ISA = qw(Exporter);
@@ -8349,6 +8348,7 @@ sub _include_users_voot_group {
 
 	my $id = Datasource::_get_datasource_id($param);
 	
+	require VOOTConsumer;
 	my $consumer = new VOOTConsumer(
 		user => $param->{'user'},
 		provider => $param->{'provider'}
