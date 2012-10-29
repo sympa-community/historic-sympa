@@ -39,12 +39,12 @@ use File::Copy;
 use Term::ProgressBar;
 use XML::LibXML;
 
-use Config_XML;
 use Language;
 use List;
 use Log;
 use Sympa::Admin;
 use Sympa::Conf;
+use Sympa::Configuration::XML;
 use Sympa::Constants;
 
 my %list_of_families;
@@ -353,7 +353,7 @@ sub add_list {
 	
 	# get list data
 	open (FIC, '<:raw', "$self->{'dir'}/_new_list.xml");
-	my $config = new Config_XML(\*FIC);
+	my $config = new Sympa::Configuration::XML(\*FIC);
 	close FIC;
 	unless (defined $config->createHash()) {
 	    push @{$return->{'string_error'}}, "Error in representation data with these xml data";
@@ -467,11 +467,11 @@ Adds a list to the family.
 
 =item * Sympa::Conf::get_robot_conf
 
-=item * Config_XML::new
+=item * Sympa::Configuration::XML::new
 
-=item * Config_XML::createHash
+=item * Sympa::Configuration::XML::createHash
 
-=item * Config_XML::getHash
+=item * Sympa::Configuration::XML::getHash
 
 =item * Family::_copy_files
 
@@ -535,7 +535,7 @@ sub modify_list {
 
     # get list data
     open (FIC, '<:raw', "$self->{'dir'}/_mod_list.xml");
-    my $config = new Config_XML(\*FIC);
+    my $config = new Sympa::Configuration::XML(\*FIC);
     close FIC;
     unless (defined $config->createHash()) {
 	push @{$return->{'string_error'}}, "Error in representation data with these xml data";
@@ -831,11 +831,11 @@ Creates family lists or updates them if they exist already.
 
 =item * Sympa::Admincreate_list
 
-=item * Config_XML::createHash
+=item * Sympa::Configuration::XML::createHash
 
-=item * Config_XML::getHash
+=item * Sympa::Configuration::XML::getHash
 
-=item * Config_XML::new
+=item * Sympa::Configuration::XML::new
 
 =item * Family::_end_update_list
 
@@ -911,10 +911,10 @@ sub instantiate {
 
 	my $list = new List($listname, $self->{'robot'});
 	
-        ## get data from list XML file. Stored into $config (class Config_XML).
+        ## get data from list XML file. Stored into $config (class Sympa::Configuration::XML).
 	my $xml_fh;
 	open $xml_fh, '<:raw', "$self->{'dir'}"."/".$listname.".xml";
-	my $config = new Config_XML($xml_fh);
+	my $config = new Sympa::Configuration::XML($xml_fh);
 	close $xml_fh;
 	unless (defined $config->createHash()) {
 	    push (@{$self->{'errors'}{'create_hash'}},"$self->{'dir'}/$listname.xml");
@@ -1052,7 +1052,7 @@ sub instantiate {
 	    ## get data from list xml file
 	    my $xml_fh;
 	    open $xml_fh, '<:raw', "$list->{'dir'}/instance.xml";
-	    my $config = new Config_XML($xml_fh);
+	    my $config = new Sympa::Configuration::XML($xml_fh);
 	    close $xml_fh;
 	    unless (defined $config->createHash()) {
 		push (@{$self->{'errors'}{'create_hash'}},"$list->{'dir'}/instance.xml");

@@ -32,7 +32,6 @@ use MIME::QuotedPrint;
 
 use Auth;
 use Commands;
-use Config_XML;
 use Family;
 use Language;
 use List;
@@ -41,6 +40,7 @@ use Message;
 use SDM;
 use Sympa::Admin;
 use Sympa::Conf;
+use Sympa::Configuration::XML;
 use Sympa::Constants;
 use Sympa::Mail;
 use Sympa::Report;
@@ -622,7 +622,7 @@ if ($main::options{'dump'}) {
  	exit 1;	
     }
     
-    my $config = new Config_XML(\*INFILE);
+    my $config = new Sympa::Configuration::XML(\*INFILE);
     unless (defined $config->createHash()) {
  	print STDERR "Error in representation data with these xml data\n";
  	exit 1;
