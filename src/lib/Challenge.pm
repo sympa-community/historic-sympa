@@ -29,7 +29,7 @@ use Digest::MD5;
 use POSIX;
 use Time::Local;
 
-use Conf;
+use Sympa::Conf;
 use Log;
 use SDM;
 use Sympa::Tools::Time;
