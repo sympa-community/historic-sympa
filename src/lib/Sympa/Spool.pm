@@ -36,7 +36,6 @@ use Sys::Hostname;
 use Time::Local;
 
 use Archive;
-use Conf;
 use Datasource;
 use Family;
 use Fetch;
