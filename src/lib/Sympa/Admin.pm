@@ -1,5 +1,5 @@
 # admin.pm - This module includes administrative function for the lists
-# RCS Identication ; $Revision$ ; $Date$ 
+# RCS Identication ; $Revision: 7781 $ ; $Date: 2012-10-22 17:40:42 +0200 (lun. 22 oct. 2012) $ 
 #
 # Sympa - SYsteme de Multi-Postage Automatique
 # Copyright (c) 1997, 1998, 1999, 2000, 2001 Comite Reseau des Universites
@@ -31,7 +31,7 @@ Central module for creating and editing lists.
 
 =cut 
 
-package admin;
+package Sympa::Admin;
 
 use strict;
 
