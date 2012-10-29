@@ -36,7 +36,6 @@ use Storable;
 use Time::Local;
 
 use Archive;
-use Datasource;
 use Family;
 use Fetch;
 use LDAPSource;
@@ -51,6 +50,7 @@ use SDM;
 use SQLSource qw(create_db);
 use Sympa::Conf;
 use Sympa::Constants;
+use Sympa::Datasource;
 use Sympa::Mail;
 use Sympa::Report;
 use Sympa::Spool;
@@ -7989,7 +7989,7 @@ sub _include_users_remote_sympa_list {
     my $path = $param->{'path'};
     my $cert = $param->{'cert'} || 'list';
 
-    my $id = Datasource::_get_datasource_id($param);
+    my $id = Sympa::Datasource::_get_datasource_id($param);
 
     &Log::do_log('debug', 'List::_include_users_remote_sympa_list(%s) https://%s:%s/%s using cert %s,', $self->{'name'}, $host, $port, $path, $cert);
     
@@ -8100,7 +8100,7 @@ sub _include_users_list {
 	return undef;
     }
     
-    my $id = Datasource::_get_datasource_id($includelistname);
+    my $id = Sympa::Datasource::_get_datasource_id($includelistname);
 
     for (my $user = $includelist->get_first_list_member(); $user; $user = $includelist->get_next_list_member()) {
 	my %u;
@@ -8171,7 +8171,7 @@ sub _include_users_file {
     }
     &Log::do_log('debug2','including file %s' , $filename);
 
-    my $id = Datasource::_get_datasource_id($filename);
+    my $id = Sympa::Datasource::_get_datasource_id($filename);
     my $lines = 0;
     my $emails_found = 0;
     my $email_regexp = &Sympa::Tools::get_regexp('email');
@@ -8248,7 +8248,7 @@ sub _include_users_remote_file {
     &Log::do_log('debug', "List::_include_users_remote_file($url)");
 
     my $total = 0;
-    my $id = Datasource::_get_datasource_id($param);
+    my $id = Sympa::Datasource::_get_datasource_id($param);
 
     ## WebAgent package is part of Fetch.pm and inherites from LWP::UserAgent
 
@@ -8348,7 +8348,7 @@ sub _include_users_voot_group {
 
 	&Log::do_log('debug', "List::_include_users_voot_group(%s, %s, %s)", $param->{'user'}, $param->{'provider'}, $param->{'group'});
 
-	my $id = Datasource::_get_datasource_id($param);
+	my $id = Sympa::Datasource::_get_datasource_id($param);
 	
 	require VOOTConsumer;
 	my $consumer = new VOOTConsumer(
@@ -8903,7 +8903,7 @@ sub _load_list_members_from_include {
 	    my $source_is_new = 1;
         ## Work with a copy of admin hash branch to avoid including temporary variables into the actual admin hash.[bug #3182]
 	    my $incl = &Sympa::Tools::Data::dup_var($tmp_incl);
-		my $source_id = Datasource::_get_datasource_id($tmp_incl);
+		my $source_id = Sympa::Datasource::_get_datasource_id($tmp_incl);
 		if (defined $old_subs->{$source_id}) {
 			$source_is_new = 0;
 		}
@@ -12173,7 +12173,7 @@ sub search_datasource {
 	
 	## Go through sources
 	foreach my $s (@{$self->{'admin'}{$p}}) {
-	    if (&Datasource::_get_datasource_id($s) eq $id) {
+	    if (&Sympa::Datasource::_get_datasource_id($s) eq $id) {
 		return {'type' => $p, 'def' => $s};
 	    }
 	}

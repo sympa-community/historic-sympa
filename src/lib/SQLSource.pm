@@ -27,7 +27,7 @@ use strict;
 use Exporter;
 
 use Sympa::Conf;
-use Datasource;
+use Sympa::Datasource;
 use Log;
 use List;
 use Sympa::Tools;
@@ -49,7 +49,7 @@ sub new {
     my $self = $param;
     &Log::do_log('debug',"Creating new SQLSource object for RDBMS '%s'",$param->{'db_type'});
     my $actualclass;
-    our @ISA = qw(Datasource);
+    our @ISA = qw(Sympa::Datasource);
     if ($param->{'db_type'} =~ /^mysql$/i) {
 	unless ( eval "require DBManipulatorMySQL" ){
 	    &Log::do_log('err',"Unable to use DBManipulatorMySQL module: $@");

@@ -26,12 +26,12 @@ use strict;
 
 use Exporter;
 
-use Datasource;
+use Sympa::Datasource;
 use List;
 use Log;
 use Sympa::Tools;
 
-our @ISA = qw(Datasource Exporter);
+our @ISA = qw(Sympa::Datasource Exporter);
 our @EXPORT = qw(%date_format);
 our @EXPORT_OK = qw(connect query disconnect fetch ping quote set_fetch_timeout);
 

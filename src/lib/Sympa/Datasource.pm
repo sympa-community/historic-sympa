@@ -20,7 +20,7 @@
 # along with this program; if not, write to the Free Software
 # Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
 
-package Datasource;
+package Sympa::Datasource;
 
 use strict;
 
@@ -54,7 +54,7 @@ sub new {
 sub _get_datasource_id {
     my ($source) = shift;
 	&Log::do_log('debug2',"Getting datasource id for source '%s'",$source);
-    if (ref($source) eq 'Datasource') {
+    if (ref($source) eq 'Sympa::Datasource') {
     	$source = shift;
     }
 
