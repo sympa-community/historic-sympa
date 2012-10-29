@@ -30,7 +30,6 @@ use Getopt::Long;
 use Mail::Address;
 use MIME::QuotedPrint;
 
-use admin;
 use Auth;
 use Commands;
 use Conf;
