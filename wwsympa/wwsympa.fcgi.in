@@ -67,8 +67,8 @@ use Sympa::Constants;
 use Sympa::Session;
 use Sympa::Tools;
 use Sympa::Tools::Data;
+use Sympa::Tools::Time;
 use Sympa::TT2;
-use time_utils;
 use tracking;
 use VOOTProvider;
 use VOOTConsumer;
@@ -7785,7 +7785,7 @@ sub do_latest_arc {
 		     next;
 		 }
 
-		 my @array_date = &time_utils::parse_date($date);
+		 my @array_date = &Sympa::Tools::Time::parse_date($date);
 
 		 $msg_info{'date_smtp'} = $date;
 		 $msg_info{'date_epoch'} = &get_timelocal_from_date(@array_date[1..$#array_date]);
