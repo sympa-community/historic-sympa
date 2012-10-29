@@ -6,13 +6,13 @@
 
 use lib '--modulesdir--';
 
-use Conf; # to load Sympa conf which is needed by List.pm
 use List;
 use Log; # if you want to get logs of List.pm
+use Sympa::Conf;
 use Sympa::Constants;
 use Sympa::Tools;
 
-unless (Conf::load(Sympa::Constants::CONFIG)) {
+unless (Sympa::Conf::load(Sympa::Constants::CONFIG)) {
     die "Can't load Sympa configuration file";
 }
 &Log::do_openlog($Conf{'syslog'}, $Conf{'log_socket_type'}, 'sympa');
@@ -69,14 +69,14 @@ foreach $msg ( sort grep(!/^\./, readdir SPOOL )) {
 	unless (mkdir ($tmp_dir, 0777)) {
 	    die "May not create $tmp_dir";
 	}
-	my $mhonarc_ressources = &Sympa::Tools::get_filename('etc',{},'mhonarc-ressources.tt2', $robot, $self, $Conf::Conf{'etc'});
+	my $mhonarc_ressources = &Sympa::Tools::get_filename('etc',{},'mhonarc-ressources.tt2', $robot, $self, $Sympa::Conf::Conf{'etc'});
 	unless ($mhonarc_ressources) {
 	    die "Cannot find any MhOnArc ressource file";
 	}
 	
 	## generate HTML
 	chdir $tmp_dir;
-	my $mhonarc = &Conf::get_robot_conf($robot, 'mhonarc');
+	my $mhonarc = &Sympa::Conf::get_robot_conf($robot, 'mhonarc');
 	open ARCMOD, "$mhonarc  -single -rcfile $mhonarc_ressources -definevars listname=$name -definevars hostname=$host $modqueue/$name\_$modkey|";
 	open MSG, ">msg00000.html";
 	print MSG <ARCMOD>;

@@ -40,7 +40,7 @@ use strict;
 use OAuthConsumer;
 use JSON::XS;
 
-use Conf;
+use Sympa::Conf;
 use Log;
 use Sympa::Tools;
 
@@ -363,7 +363,7 @@ sub _get_config_for {
 	my $provider = shift;
 	&Log::do_log('debug2', 'VOOTConsumer::_get_config_for(%s)', $provider);
 	
-	my $file = $Conf::Conf{'etc'}.'/voot.conf';
+	my $file = $Sympa::Conf::Conf{'etc'}.'/voot.conf';
 	return undef unless (-f $file);
 	
 	open(my $fh, '<', $file) or return undef;
@@ -419,7 +419,7 @@ sub getProviders {
 	
 	my $list = {};
 	
-	my $file = $Conf::Conf{'etc'}.'/voot.conf';
+	my $file = $Sympa::Conf::Conf{'etc'}.'/voot.conf';
 	return $list unless (-f $file);
 	
 	open(my $fh, '<', $file) or return $list;

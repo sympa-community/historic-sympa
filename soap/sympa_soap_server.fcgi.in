@@ -9,10 +9,10 @@ use SOAP::Lite;
 ## Defines SOAP::Transport::HTTP::FCGI::Sympa with a modified handle()
 use SOAP::Transport::HTTP;
 
-use Conf;
 use Language;
 use List;
 use Log;
+use Sympa::Conf;
 use Sympa::Constants;
 use Sympa::Mail;
 use Sympa::SOAP;
@@ -33,7 +33,7 @@ unless ($wwsconf = &wwslib::load_config($conf_file)) {
 }
 
 ## Load sympa config
-unless (&Conf::load($sympa_conf_file)) {
+unless (&Sympa::Conf::load($sympa_conf_file)) {
     &Log::fatal_err("Unable to load sympa configuration, file $sympa_conf_file or one of the vhost robot.conf files contain errors. Exiting.");  
 }
 

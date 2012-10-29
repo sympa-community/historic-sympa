@@ -39,10 +39,10 @@ use FileHandle;
 use Getopt::Long;
 use POSIX;
 
-use Conf;
 use List;
 use Log;
 use mail;
+use Sympa::Conf;
 use Sympa::Constants;
 use Sympa::Spool;
 use Sympa::Tools;
@@ -107,7 +107,7 @@ unless ($wwsconf = &wwslib::load_config($wwsympa_conf)) {
 }
 
 # Load sympa.conf
-unless (Conf::load($sympa_conf_file)) {
+unless (Sympa::Conf::load($sympa_conf_file)) {
     &Log::fatal_err("Unable to load sympa configuration, file $sympa_conf_file has errors.");
 }
 
@@ -144,7 +144,7 @@ $options->{'stderr_to_tty'} = 1 if ($main::options{'foreground'});
 ## Create and write the pidfile
 &Sympa::Tools::Daemon::write_pid($wwsconf->{'bounced_pidfile'}, $$, $options);
 unless ($options->{'stderr_to_tty'}) {
-    &Sympa::Tools::Daemon::direct_stderr_to_file((tmpdir => $Conf::Conf{'tmpdir'}, 'pid' => $$));
+    &Sympa::Tools::Daemon::direct_stderr_to_file((tmpdir => $Sympa::Conf::Conf{'tmpdir'}, 'pid' => $$));
 }
 
 if ($main::options{'log_level'}) {
@@ -699,7 +699,7 @@ while (!$end) {
 &List::send_notify_to_listmaster(undef, undef, undef, undef, 1); # Purge grouped notifications
 
 &Log::do_log('notice', 'bounced exited normally due to signal');
-&Sympa::Tools::Daemon::remove_pid($wwsconf->{'bounced_pidfile'}, $$, undef, $Conf::Conf{'tmpdir'});
+&Sympa::Tools::Daemon::remove_pid($wwsconf->{'bounced_pidfile'}, $$, undef, $Sympa::Conf::Conf{'tmpdir'});
 
 exit(0);
 

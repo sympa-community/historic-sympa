@@ -26,7 +26,7 @@ use strict;
 
 use POSIX qw(strftime);
 
-use Conf;
+use Sympa::Conf;
 use Log;
 use SDM;
 use Sympa::Constants;
@@ -36,7 +36,7 @@ use Sympa::Tools::File;
 
 ## Return the previous Sympa version, ie the one listed in data_structure.version
 sub get_previous_version {
-    my $version_file = "$Conf::Conf{'etc'}/data_structure.version";
+    my $version_file = "$Sympa::Conf::Conf{'etc'}/data_structure.version";
     my $previous_version;
     
     if (-f $version_file) {
@@ -60,11 +60,11 @@ sub get_previous_version {
 }
 
 sub update_version {
-    my $version_file = "$Conf::Conf{'etc'}/data_structure.version";
+    my $version_file = "$Sympa::Conf::Conf{'etc'}/data_structure.version";
 
     ## Saving current version if required
     unless (open VFILE, ">$version_file") {
-	&Log::do_log('err', "Unable to write %s ; sympa.pl needs write access on %s directory : %s", $version_file, $Conf::Conf{'etc'}, $!);
+	&Log::do_log('err', "Unable to write %s ; sympa.pl needs write access on %s directory : %s", $version_file, $Sympa::Conf::Conf{'etc'}, $!);
 	return undef;
     }
     printf VFILE "# This file is automatically created by sympa.pl after installation\n# Unless you know what you are doing, you should not modify it\n";
@@ -87,7 +87,7 @@ sub upgrade {
     }
 
     ## Always update config.bin files while upgrading
-    &Conf::delete_binaries();
+    &Sympa::Conf::delete_binaries();
 
     ## Always update config.bin files while upgrading
     ## This is especially useful for character encoding reasons
@@ -118,7 +118,7 @@ sub upgrade {
 	foreach my $list ( @$all_lists ) {
 
 	    next unless (defined $list->{'admin'}{'web_archive'});
-	    my $file = $Conf::Conf{'queueoutgoing'}.'/.rebuild.'.$list->get_list_id();
+	    my $file = $Sympa::Conf::Conf{'queueoutgoing'}.'/.rebuild.'.$list->get_list_id();
 	    
 	    unless (open REBUILD, ">$file") {
 		&Log::do_log('err','Cannot create %s', $file);
@@ -145,15 +145,15 @@ sub upgrade {
 
 	my @directories;
 
-	if (-d "$Conf::Conf{'etc'}/web_tt2") {
-	    push @directories, "$Conf::Conf{'etc'}/web_tt2";
+	if (-d "$Sympa::Conf::Conf{'etc'}/web_tt2") {
+	    push @directories, "$Sympa::Conf::Conf{'etc'}/web_tt2";
 	}
 
 	## Go through Virtual Robots
-	foreach my $vr (keys %{$Conf::Conf{'robots'}}) {
+	foreach my $vr (keys %{$Sympa::Conf::Conf{'robots'}}) {
 
-	    if (-d "$Conf::Conf{'etc'}/$vr/web_tt2") {
-		push @directories, "$Conf::Conf{'etc'}/$vr/web_tt2";
+	    if (-d "$Sympa::Conf::Conf{'etc'}/$vr/web_tt2") {
+		push @directories, "$Sympa::Conf::Conf{'etc'}/$vr/web_tt2";
 	    }
 	}
 
@@ -217,7 +217,7 @@ sub upgrade {
 	## Fill the robot_subscriber and robot_admin fields in DB
 	&Log::do_log('notice','Updating the new robot_subscriber and robot_admin  Db fields...');
 
-	foreach my $r (keys %{$Conf::Conf{'robots'}}) {
+	foreach my $r (keys %{$Sympa::Conf::Conf{'robots'}}) {
 	    my $all_lists = &List::get_lists($r, {'skip_sync_admin' => 1});
 	    foreach my $list ( @$all_lists ) {
 		
@@ -229,7 +229,7 @@ sub upgrade {
 		    $table,
 		    &SDM::quote($list->{'name'}))) {
 			&Log::do_log('err','Unable to fille the robot_admin and robot_subscriber fields in database for robot %s.',$r);
-			&List::send_notify_to_listmaster('upgrade_failed', $Conf::Conf{'domain'},{'error' => $SDM::db_source->{'db_handler'}->errstr});
+			&List::send_notify_to_listmaster('upgrade_failed', $Sympa::Conf::Conf{'domain'},{'error' => $SDM::db_source->{'db_handler'}->errstr});
 			return undef;
 		    }
 		}
@@ -242,7 +242,7 @@ sub upgrade {
 	## Rename web archive directories using 'domain' instead of 'host'
 	&Log::do_log('notice','Renaming web archive directories with the list domain...');
 	
-	my $root_dir = &Conf::get_robot_conf($Conf::Conf{'domain'},'arc_path');
+	my $root_dir = &Sympa::Conf::get_robot_conf($Conf::Conf{'domain'},'arc_path');
 	unless (opendir ARCDIR, $root_dir) {
 	    &Log::do_log('err',"Unable to open $root_dir : $!");
 	    return undef;
@@ -284,7 +284,7 @@ sub upgrade {
     ## DB fields of enum type have been changed to int
     if (&Sympa::Tools::Data::lower_version($previous_version, '5.2a.1')) {
 	
-	if (&SDM::use_db & $Conf::Conf{'db_type'} eq 'mysql') {
+	if (&SDM::use_db & $Sympa::Conf::Conf{'db_type'} eq 'mysql') {
 	    my %check = ('subscribed_subscriber' => 'subscriber_table',
 			 'included_subscriber' => 'subscriber_table',
 			 'subscribed_admin' => 'admin_table',
@@ -362,7 +362,7 @@ sub upgrade {
 
 	&Log::do_log('notice','Renaming bounce sub-directories adding list domain...');
 	
-	my $root_dir = &Conf::get_robot_conf($Conf::Conf{'domain'},'bounce_path');
+	my $root_dir = &Sympa::Conf::get_robot_conf($Conf::Conf{'domain'},'bounce_path');
 	unless (opendir BOUNCEDIR, $root_dir) {
 	    &Log::do_log('err',"Unable to open $root_dir : $!");
 	    return undef;
@@ -428,10 +428,10 @@ sub upgrade {
     if (&Sympa::Tools::Data::lower_version($previous_version, '5.3a.6')) {
 	
 	&Log::do_log('notice','Looking for customized mhonarc-ressources.tt2 files...');
-	foreach my $vr (keys %{$Conf::Conf{'robots'}}) {
-	    my $etc_dir = $Conf::Conf{'etc'};
+	foreach my $vr (keys %{$Sympa::Conf::Conf{'robots'}}) {
+	    my $etc_dir = $Sympa::Conf::Conf{'etc'};
 
-	    if ($vr ne $Conf::Conf{'domain'}) {
+	    if ($vr ne $Sympa::Conf::Conf{'domain'}) {
 		$etc_dir .= '/'.$vr;
 	    }
 
@@ -439,7 +439,7 @@ sub upgrade {
 		my $new_filename = $etc_dir.'/mhonarc-ressources.tt2'.'.'.time;
 		rename $etc_dir.'/mhonarc-ressources.tt2', $new_filename;
 		&Log::do_log('notice', "Custom %s file has been backed up as %s", $etc_dir.'/mhonarc-ressources.tt2', $new_filename);
-		&List::send_notify_to_listmaster('file_removed',$Conf::Conf{'domain'},
+		&List::send_notify_to_listmaster('file_removed',$Sympa::Conf::Conf{'domain'},
 						 [$etc_dir.'/mhonarc-ressources.tt2', $new_filename]);
 	    }
 	}
@@ -450,7 +450,7 @@ sub upgrade {
 	foreach my $list ( @$all_lists ) {
 
 	    next unless (defined $list->{'admin'}{'web_archive'});
-	    my $file = $Conf::Conf{'queueoutgoing'}.'/.rebuild.'.$list->get_list_id();
+	    my $file = $Sympa::Conf::Conf{'queueoutgoing'}.'/.rebuild.'.$list->get_list_id();
 	    
 	    unless (open REBUILD, ">$file") {
 		&Log::do_log('err','Cannot create %s', $file);
@@ -496,33 +496,33 @@ sub upgrade {
 
 	## Site level
 	foreach my $type ('mail_tt2','web_tt2','scenari','create_list_templates','families') {
-	    if (-d $Conf::Conf{'etc'}.'/'.$type) {
-		push @directories, [$Conf::Conf{'etc'}.'/'.$type, $Conf::Conf{'lang'}];
+	    if (-d $Sympa::Conf::Conf{'etc'}.'/'.$type) {
+		push @directories, [$Sympa::Conf::Conf{'etc'}.'/'.$type, $Conf::Conf{'lang'}];
 	    }
 	}
 
 	foreach my $f (
         Sympa::Constants::CONFIG,
         Sympa::Constants::WWSCONFIG,
-        $Conf::Conf{'etc'}.'/'.'topics.conf',
-        $Conf::Conf{'etc'}.'/'.'auth.conf'
+        $Sympa::Conf::Conf{'etc'}.'/'.'topics.conf',
+        $Sympa::Conf::Conf{'etc'}.'/'.'auth.conf'
     ) {
 	    if (-f $f) {
-		push @files, [$f, $Conf::Conf{'lang'}];
+		push @files, [$f, $Sympa::Conf::Conf{'lang'}];
 	    }
 	}
 
 	## Go through Virtual Robots
-	foreach my $vr (keys %{$Conf::Conf{'robots'}}) {
+	foreach my $vr (keys %{$Sympa::Conf::Conf{'robots'}}) {
 	    foreach my $type ('mail_tt2','web_tt2','scenari','create_list_templates','families') {
-		if (-d $Conf::Conf{'etc'}.'/'.$vr.'/'.$type) {
-		    push @directories, [$Conf::Conf{'etc'}.'/'.$vr.'/'.$type, &Conf::get_robot_conf($vr, 'lang')];
+		if (-d $Sympa::Conf::Conf{'etc'}.'/'.$vr.'/'.$type) {
+		    push @directories, [$Sympa::Conf::Conf{'etc'}.'/'.$vr.'/'.$type, &Conf::get_robot_conf($vr, 'lang')];
 		}
 	    }
 
 	    foreach my $f ('robot.conf','topics.conf','auth.conf') {
-		if (-f $Conf::Conf{'etc'}.'/'.$vr.'/'.$f) {
-		    push @files, [$Conf::Conf{'etc'}.'/'.$vr.'/'.$f, $Conf::Conf{'lang'}];
+		if (-f $Sympa::Conf::Conf{'etc'}.'/'.$vr.'/'.$f) {
+		    push @files, [$Sympa::Conf::Conf{'etc'}.'/'.$vr.'/'.$f, $Conf::Conf{'lang'}];
 		}
 	    }
 	}
@@ -562,7 +562,7 @@ sub upgrade {
 	    }elsif ($d =~ /(create_list_templates|families)$/) {
 		foreach my $subdir (grep(/^\w+$/, readdir DIR)) {
 		    if (-d "$d/$subdir") {
-			push @directories, ["$d/$subdir", $Conf::Conf{'lang'}];
+			push @directories, ["$d/$subdir", $Sympa::Conf::Conf{'lang'}];
 		    }
 		}
 		closedir DIR;
@@ -639,10 +639,10 @@ sub upgrade {
 
       ## Remove OTHER/ subdirectories in bounces
       &Log::do_log('notice', "Removing obsolete OTHER/ bounce directories");
-      if (opendir BOUNCEDIR, &Conf::get_robot_conf($Conf::Conf{'domain'}, 'bounce_path')) {
+      if (opendir BOUNCEDIR, &Sympa::Conf::get_robot_conf($Conf::Conf{'domain'}, 'bounce_path')) {
 	
 	foreach my $subdir (sort grep (!/^\.+$/,readdir(BOUNCEDIR))) {
-	  my $other_dir = &Conf::get_robot_conf($Conf::Conf{'domain'}, 'bounce_path').'/'.$subdir.'/OTHER';
+	  my $other_dir = &Sympa::Conf::get_robot_conf($Conf::Conf{'domain'}, 'bounce_path').'/'.$subdir.'/OTHER';
 	  if (-d $other_dir) {
 	    &Sympa::Tools::File::remove_dir($other_dir);
 	    &Log::do_log('notice', "Directory $other_dir removed");
@@ -652,7 +652,7 @@ sub upgrade {
 	close BOUNCEDIR;
  
       }else {
-	&Log::do_log('err', "Failed to open directory $Conf::Conf{'queuebounce'} : $!");	
+	&Log::do_log('err', "Failed to open directory $Sympa::Conf::Conf{'queuebounce'} : $!");	
       }
 
    }
@@ -752,7 +752,7 @@ sub upgrade {
 	foreach my $spoolparameter (keys %spools_def ){
 	    next if ($spoolparameter eq 'queuetask'); # task is to be done later
 	    
-	    my $spooldir = $Conf::Conf{$spoolparameter};
+	    my $spooldir = $Sympa::Conf::Conf{$spoolparameter};
 	    
 	    unless (-d $spooldir){
 		&Log::do_log('info',"Could not perform migration of spool %s because it is not a directory", $spoolparameter);
@@ -805,7 +805,7 @@ sub upgrade {
 		    $meta{'date'} = (stat($spooldir.'/'.$filename))[9];
 		}elsif ($spoolparameter eq 'queuesubscribe'){
 		    my $match = 0;		    
-		    foreach my $robot (keys %{$Conf::Conf{'robots'}}) {
+		    foreach my $robot (keys %{$Sympa::Conf::Conf{'robots'}}) {
 			&Log::do_log('notice',"robot : $robot");
 			if ($filename =~ /^([^@]*)\@$robot\.(.*)$/){
 			    $listname = $1;
@@ -826,23 +826,23 @@ sub upgrade {
 		    $meta{'date'} = $2;
 		    
 		    if ($spoolparameter eq 'queue') {
-			my $list_check_regexp = &Conf::get_robot_conf($robot,'list_check_regexp');
+			my $list_check_regexp = &Sympa::Conf::get_robot_conf($robot,'list_check_regexp');
 			if ($listname =~ /^(\S+)-($list_check_regexp)$/) {
 			    ($listname, $type) = ($1, $2);
 			    $meta{'type'} = $type if $type;
 
-			    my $email = &Conf::get_robot_conf($robot, 'email');	
+			    my $email = &Sympa::Conf::get_robot_conf($robot, 'email');	
 			    
 			    my $priority;
 			    
-			    if ($listname eq $Conf::Conf{'listmaster_email'}) {
+			    if ($listname eq $Sympa::Conf::Conf{'listmaster_email'}) {
 				$priority = 0;
 			    }elsif ($type eq 'request') {
-				$priority = &Conf::get_robot_conf($robot, 'request_priority');
+				$priority = &Sympa::Conf::get_robot_conf($robot, 'request_priority');
 			    }elsif ($type eq 'owner') {
-				$priority = &Conf::get_robot_conf($robot, 'owner_priority');
-			    }elsif ($listname =~ /^(sympa|$email)(\@$Conf::Conf{'host'})?$/i) {	
-				$priority = &Conf::get_robot_conf($robot,'sympa_priority');
+				$priority = &Sympa::Conf::get_robot_conf($robot, 'owner_priority');
+			    }elsif ($listname =~ /^(sympa|$email)(\@$Sympa::Conf::Conf{'host'})?$/i) {	
+				$priority = &Sympa::Conf::get_robot_conf($robot,'sympa_priority');
 				$listname ='';
 			    }
 			    $meta{'priority'} = $priority;
@@ -855,7 +855,7 @@ sub upgrade {
 		if ($robot) {
 		    $robot=lc($robot);
 		}else{
-		    $robot = lc(&Conf::get_robot_conf($robot, 'host'));
+		    $robot = lc(&Sympa::Conf::get_robot_conf($robot, 'host'));
 		}
 
 		$meta{'robot'} = $robot if $robot;
@@ -932,8 +932,8 @@ sub to_utf8 {
 
 	## If filesystem_encoding is set, files are supposed to be encoded according to it
 	my $charset;
-	if ((defined $Conf::Conf::Ignored_Conf{'filesystem_encoding'})&($Conf::Conf::Ignored_Conf{'filesystem_encoding'} ne 'utf-8')) {
-	    $charset = $Conf::Conf::Ignored_Conf{'filesystem_encoding'};
+	if ((defined $Sympa::Conf::Conf::Ignored_Conf{'filesystem_encoding'})&($Conf::Conf::Ignored_Conf{'filesystem_encoding'} ne 'utf-8')) {
+	    $charset = $Sympa::Conf::Conf::Ignored_Conf{'filesystem_encoding'};
 	}else {	    
 	    &Language::PushLang($lang);
 	    $charset = &Language::GetCharset;
@@ -1004,7 +1004,7 @@ sub to_utf8 {
 					mode =>  0644,
 					))
 	{
-	    &Log::do_log('err','Unable to set rights on %s',$Conf::Conf{'db_name'});
+	    &Log::do_log('err','Unable to set rights on %s',$Sympa::Conf::Conf{'db_name'});
 	    next;
 	}
 	&Log::do_log('notice','Modified file %s ; original file kept as %s', $file, $file.'@'.$date);
@@ -1057,7 +1057,7 @@ sub md5_encode_password {
 	next if ($user->{'password_user'} =~ /^$/);
 
 	if ($user->{'password_user'} =~ /^crypt.(.*)$/) {
-	    $clear_password = &Sympa::Tools::decrypt_password($user->{'password_user'}, $Conf::Conf{'cookie'});
+	    $clear_password = &Sympa::Tools::decrypt_password($user->{'password_user'}, $Sympa::Conf::Conf{'cookie'});
 	}else{ ## Old style cleartext passwords
 	    $clear_password = $user->{'password_user'};
 	}

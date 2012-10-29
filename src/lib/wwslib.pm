@@ -21,8 +21,8 @@
 
 package wwslib;
 
-use Conf;
 use Log;
+use Sympa::Conf;
 use Sympa::Constants;
 use Sympa::Tools::Cookie;
 
@@ -141,9 +141,9 @@ sub load_config {
     my %default_conf = ();
 
     ## Valid params
-    foreach my $key (keys %Conf::params) {
-	if (defined $Conf::params{$key}{'file'} && $Conf::params{$key}{'file'} eq 'wwsympa.conf') {
-	    $default_conf{$key} = $Conf::params{$key}{'default'};
+    foreach my $key (keys %Sympa::Conf::params) {
+	if (defined $Sympa::Conf::params{$key}{'file'} && $Conf::params{$key}{'file'} eq 'wwsympa.conf') {
+	    $default_conf{$key} = $Sympa::Conf::params{$key}{'default'};
 	}
     }
 

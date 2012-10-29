@@ -29,14 +29,14 @@ use lib '--modulesdir--';
 
 use Getopt::Long;
 
-use Conf;
 use List;
+use Sympa::Conf;
 use Sympa::Constants;
 
 my $sympa_conf_file = Sympa::Constants::CONFIG;
 
 ## Load sympa config
-unless (&Conf::load($sympa_conf_file)) {
+unless (&Sympa::Conf::load($sympa_conf_file)) {
     die 'config_error';
 }
 

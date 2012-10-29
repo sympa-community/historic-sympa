@@ -36,7 +36,6 @@ use Storable;
 use Time::Local;
 
 use Archive;
-use Conf;
 use Datasource;
 use Family;
 use Fetch;
@@ -50,6 +49,7 @@ use PlainDigest;
 use Scenario;
 use SDM;
 use SQLSource qw(create_db);
+use Sympa::Conf;
 use Sympa::Constants;
 use Sympa::Mail;
 use Sympa::Report;
@@ -2333,7 +2333,7 @@ sub new {
     $name =~ tr/A-Z/a-z/;
     
     ## Reject listnames with reserved list suffixes
-    my $regx = &Conf::get_robot_conf($robot,'list_check_regexp');
+    my $regx = &Sympa::Conf::get_robot_conf($robot,'list_check_regexp');
     if ( $regx ) {
 	if ($name =~ /^(\S+)-($regx)$/) {
 	    &Log::do_log('err', 'Incorrect name: listname "%s" matches one of service aliases',  $name) unless ($options->{'just_try'});
@@ -2387,12 +2387,12 @@ sub search_list_among_robots {
     }
     
     ## Search in default robot
-    if (-d $Conf::Conf{'home'}.'/'.$listname) {
- 	return $Conf::Conf{'domain'};
+    if (-d $Sympa::Conf::Conf{'home'}.'/'.$listname) {
+ 	return $Sympa::Conf::Conf{'domain'};
     }
     
-     foreach my $r (keys %{$Conf::Conf{'robots'}}) {
-	 if (-d $Conf::Conf{'home'}.'/'.$r.'/'.$listname) {
+     foreach my $r (keys %{$Sympa::Conf::Conf{'robots'}}) {
+	 if (-d $Sympa::Conf::Conf{'home'}.'/'.$r.'/'.$listname) {
 	     return $r;
 	 }
      }
@@ -2408,7 +2408,7 @@ sub set_status_error_config {
     unless ($self->{'admin'}{'status'} eq 'error_config'){
 	$self->{'admin'}{'status'} = 'error_config';
 
-	#my $host = &Conf::get_robot_conf($self->{'domain'}, 'host');
+	#my $host = &Sympa::Conf::get_robot_conf($self->{'domain'}, 'host');
 	## No more save config in error...
 	#$self->save_config("listmaster\@$host");
 	#$self->savestats();
@@ -2426,7 +2426,7 @@ sub set_status_family_closed {
     
     unless ($self->{'admin'}{'status'} eq 'family_closed'){
 	
-	my $host = &Conf::get_robot_conf($self->{'domain'}, 'host');	
+	my $host = &Sympa::Conf::get_robot_conf($self->{'domain'}, 'host');	
 	
 	unless ($self->close_list("listmaster\@$host",'family_closed')) {
 	    &Log::do_log('err','Impossible to set the list %s in status family_closed');
@@ -2684,7 +2684,7 @@ sub save_config {
     }
     
     ## Also update the binary version of the data structure
-    if (&Conf::get_robot_conf($self->{'domain'}, 'cache_list_config') eq 'binary_file') {
+    if (&Sympa::Conf::get_robot_conf($self->{'domain'}, 'cache_list_config') eq 'binary_file') {
 	eval {&Storable::store($self->{'admin'},"$self->{'dir'}/config.bin")};
 	if ($@) {
 	    &Log::do_log('err', 'Failed to save the binary config %s. error: %s', "$self->{'dir'}/config.bin",$@);
@@ -2719,8 +2719,8 @@ sub load {
 
 	## Search robot if none was provided
 	unless ($robot) {
-	    foreach my $r (keys %{$Conf::Conf{'robots'}}) {
-		if (-d "$Conf::Conf{'home'}/$r/$name") {
+	    foreach my $r (keys %{$Sympa::Conf::Conf{'robots'}}) {
+		if (-d "$Sympa::Conf::Conf{'home'}/$r/$name") {
 		    $robot=$r;
 		    last;
 		}
@@ -2728,16 +2728,16 @@ sub load {
 	    
 	    ## Try default robot
 	    unless ($robot) {
-		if (-d "$Conf::Conf{'home'}/$name") {
-		    $robot = $Conf::Conf{'domain'};
+		if (-d "$Sympa::Conf::Conf{'home'}/$name") {
+		    $robot = $Sympa::Conf::Conf{'domain'};
 		}
 	    }
 	}
 	
-	if ($robot && (-d "$Conf::Conf{'home'}/$robot")) {
-	    $self->{'dir'} = "$Conf::Conf{'home'}/$robot/$name";
-	}elsif (lc($robot) eq lc($Conf::Conf{'domain'})) {
-	    $self->{'dir'} = "$Conf::Conf{'home'}/$name";
+	if ($robot && (-d "$Sympa::Conf::Conf{'home'}/$robot")) {
+	    $self->{'dir'} = "$Sympa::Conf::Conf{'home'}/$robot/$name";
+	}elsif (lc($robot) eq lc($Sympa::Conf::Conf{'domain'})) {
+	    $self->{'dir'} = "$Sympa::Conf::Conf{'home'}/$name";
 	}else {
 	    &Log::do_log('err', 'No such robot (virtual domain) %s', $robot) unless ($options->{'just_try'});
 	    return undef ;
@@ -2765,7 +2765,7 @@ sub load {
     my $config_reloaded = 0;
     my $admin;
     
-    if (&Conf::get_robot_conf($self->{'domain'}, 'cache_list_config') eq 'binary_file' &&
+    if (&Sympa::Conf::get_robot_conf($self->{'domain'}, 'cache_list_config') eq 'binary_file' &&
 	$time_config_bin > $self->{'mtime'}->[0] &&
 	$time_config <= $time_config_bin &&
 	! $options->{'reload_config'}) { 
@@ -2810,7 +2810,7 @@ sub load {
 	}
 
 	## update the binary version of the data structure
-	if (&Conf::get_robot_conf($self->{'domain'}, 'cache_list_config') eq 'binary_file') {
+	if (&Sympa::Conf::get_robot_conf($self->{'domain'}, 'cache_list_config') eq 'binary_file') {
 	    eval {&Storable::store($admin,"$self->{'dir'}/config.bin")};
 	    if ($@) {
 		&Log::do_log('err', 'Failed to save the binary config %s. error: %s', "$self->{'dir'}/config.bin",$@);
@@ -3306,7 +3306,7 @@ sub distribute_msg {
 
     ## Hide the sender if the list is anonymoused
     if ( $self->{'admin'}{'anonymous_sender'} ) {
-	foreach my $field (@{$Conf::Conf{'anonymous_header_fields'}}) {
+	foreach my $field (@{$Sympa::Conf::Conf{'anonymous_header_fields'}}) {
 	    $hdr->delete($field);
 	}
 	$hdr->add('From',"$self->{'admin'}{'anonymous_sender'}");
@@ -3434,7 +3434,7 @@ sub distribute_msg {
     $hdr->add('X-Loop', "$name\@$host");
     $message->{'msg'}->head->add('X-Loop', "$name\@$host");
     $hdr->add('X-Sequence', $sequence);
-    $hdr->add('Errors-to', $name.&Conf::get_robot_conf($robot, 'return_path_suffix').'@'.$host);
+    $hdr->add('Errors-to', $name.&Sympa::Conf::get_robot_conf($robot, 'return_path_suffix').'@'.$host);
     $hdr->add('Precedence', 'list');
     $hdr->add('Precedence', 'bulk');
     $hdr->add('Sender', "$self->{'name'}-request\@$self->{'admin'}{'host'}"); # The Sender: header should be add at least for DKIM compatibility
@@ -3453,28 +3453,28 @@ sub distribute_msg {
     ## Add RFC 2369 header fields
     foreach my $field (@{$self->{'admin'}{'rfc2369_header_fields'}}) {
 	if ($field eq 'help') {
-	    $hdr->add('List-Help', sprintf ('<mailto:%s@%s?subject=help>', &Conf::get_robot_conf($robot, 'email'), &Conf::get_robot_conf($robot, 'host')));
+	    $hdr->add('List-Help', sprintf ('<mailto:%s@%s?subject=help>', &Sympa::Conf::get_robot_conf($robot, 'email'), &Conf::get_robot_conf($robot, 'host')));
 	}elsif ($field eq 'unsubscribe') {
-	    $hdr->add('List-Unsubscribe', sprintf ('<mailto:%s@%s?subject=unsubscribe%%20%s>', &Conf::get_robot_conf($robot, 'email'), &Conf::get_robot_conf($robot, 'host'), $self->{'name'}));
+	    $hdr->add('List-Unsubscribe', sprintf ('<mailto:%s@%s?subject=unsubscribe%%20%s>', &Sympa::Conf::get_robot_conf($robot, 'email'), &Conf::get_robot_conf($robot, 'host'), $self->{'name'}));
 	}elsif ($field eq 'subscribe') {
-	    $hdr->add('List-Subscribe', sprintf ('<mailto:%s@%s?subject=subscribe%%20%s>', &Conf::get_robot_conf($robot, 'email'), &Conf::get_robot_conf($robot, 'host'), $self->{'name'}));
+	    $hdr->add('List-Subscribe', sprintf ('<mailto:%s@%s?subject=subscribe%%20%s>', &Sympa::Conf::get_robot_conf($robot, 'email'), &Conf::get_robot_conf($robot, 'host'), $self->{'name'}));
 	}elsif ($field eq 'post') {
 	    $hdr->add('List-Post', sprintf ('<mailto:%s@%s>', $self->{'name'}, $self->{'admin'}{'host'}));
 	}elsif ($field eq 'owner') {
 	    $hdr->add('List-Owner', sprintf ('<mailto:%s-request@%s>', $self->{'name'}, $self->{'admin'}{'host'}));
 	}elsif ($field eq 'archive') {
-	    if (&Conf::get_robot_conf($robot, 'wwsympa_url') and $self->is_web_archived()) {
-		$hdr->add('List-Archive', sprintf ('<%s/arc/%s>', &Conf::get_robot_conf($robot, 'wwsympa_url'), $self->{'name'}));
+	    if (&Sympa::Conf::get_robot_conf($robot, 'wwsympa_url') and $self->is_web_archived()) {
+		$hdr->add('List-Archive', sprintf ('<%s/arc/%s>', &Sympa::Conf::get_robot_conf($robot, 'wwsympa_url'), $self->{'name'}));
 	    }
 	}
     }
 
     ## Add RFC5064 Archived-At SMTP header field
-    if (&Conf::get_robot_conf($robot, 'wwsympa_url') and $self->is_web_archived()) {
+    if (&Sympa::Conf::get_robot_conf($robot, 'wwsympa_url') and $self->is_web_archived()) {
 	my @now = localtime(time);
 	my $yyyy = sprintf '%04d', 1900+$now[5];
 	my $mm = sprintf '%02d', $now[4]+1;
-	my $archived_msg_url = sprintf "%s/arcsearch_id/%s/%s-%s/%s", &Conf::get_robot_conf($robot, 'wwsympa_url'), $self->{'name'}, $yyyy, $mm, &Sympa::Tools::clean_msg_id($hdr->get('Message-Id'));	
+	my $archived_msg_url = sprintf "%s/arcsearch_id/%s/%s-%s/%s", &Sympa::Conf::get_robot_conf($robot, 'wwsympa_url'), $self->{'name'}, $yyyy, $mm, &Sympa::Tools::clean_msg_id($hdr->get('Message-Id'));	
 	$hdr->add('Archived-At', '<'.$archived_msg_url.'>');
      }
 
@@ -3587,7 +3587,7 @@ sub send_msg_digest {
 	$parser->output_to_core(1);
 	$parser->extract_uuencode(1);  
 	$parser->extract_nested_messages(1);
-	#   $parser->output_dir($Conf::Conf{'spool'} ."/tmp");    
+	#   $parser->output_dir($Sympa::Conf::Conf{'spool'} ."/tmp");    
 	my $mail = $parser->parse_data($message_as_string);
 	next unless (defined $mail);
 	push @list_of_mail, $mail;
@@ -3723,15 +3723,15 @@ sub send_global_file {
     }
     
     unless ($data->{'user'}{'password'}) {
-	$data->{'user'}{'password'} = &Sympa::Tools::tmp_passwd($who, $Conf::Conf{'cookie'});
+	$data->{'user'}{'password'} = &Sympa::Tools::tmp_passwd($who, $Sympa::Conf::Conf{'cookie'});
     }
 
     ## Lang
-    $data->{'lang'} = $data->{'lang'} || $data->{'user'}{'lang'} || &Conf::get_robot_conf($robot, 'lang');
+    $data->{'lang'} = $data->{'lang'} || $data->{'user'}{'lang'} || &Sympa::Conf::get_robot_conf($robot, 'lang');
 
     ## What file 
     my $lang = &Language::Lang2Locale($data->{'lang'});
-    my $tt2_include_path = &Sympa::Tools::make_tt2_include_path($robot,'mail_tt2',$lang,'',$Conf::Conf{'etc'},$Conf::Conf{'viewmaildir'},$Conf::Conf{'domain'});
+    my $tt2_include_path = &Sympa::Tools::make_tt2_include_path($robot,'mail_tt2',$lang,'',$Sympa::Conf::Conf{'etc'},$Conf::Conf{'viewmaildir'},$Conf::Conf{'domain'});
 
     foreach my $d (@{$tt2_include_path}) {
 	&Sympa::TT2::add_include_path($d);
@@ -3746,23 +3746,23 @@ sub send_global_file {
     }
 
     foreach my $p ('email','email_gecos','host','sympa','request','listmaster','wwsympa_url','title','listmaster_email') {
-	$data->{'conf'}{$p} = &Conf::get_robot_conf($robot, $p);
+	$data->{'conf'}{$p} = &Sympa::Conf::get_robot_conf($robot, $p);
     }
 
     $data->{'sender'} = $who;
     $data->{'conf'}{'version'} = $main::Version;
     $data->{'from'} = "$data->{'conf'}{'email'}\@$data->{'conf'}{'host'}" unless ($data->{'from'});
     $data->{'robot_domain'} = $robot;
-    $data->{'return_path'} = &Conf::get_robot_conf($robot, 'request');
+    $data->{'return_path'} = &Sympa::Conf::get_robot_conf($robot, 'request');
     $data->{'boundary'} = '----------=_'.&Sympa::Tools::get_message_id($robot) unless ($data->{'boundary'});
 
-    if ((&Conf::get_robot_conf($robot, 'dkim_feature') eq 'on')&&(&Conf::get_robot_conf($robot, 'dkim_add_signature_to')=~/robot/)){
+    if ((&Sympa::Conf::get_robot_conf($robot, 'dkim_feature') eq 'on')&&(&Conf::get_robot_conf($robot, 'dkim_add_signature_to')=~/robot/)){
 	$data->{'dkim'} = get_dkim_parameters({
             'robot'           => $robot,
-            'signer_domain'   => Conf::get_robot_conf($robot, 'dkim_signer_domain'),
-            'signer_identity' => Conf::get_robot_conf($robot, 'dkim_signer_identity'),
-            'selector'        => Conf::get_robot_conf($robot, 'dkim_selector'),
-            'keyfile'         => Conf::get_robot_conf($robot, 'dkim_private_key_path')
+            'signer_domain'   => Sympa::Conf::get_robot_conf($robot, 'dkim_signer_domain'),
+            'signer_identity' => Sympa::Conf::get_robot_conf($robot, 'dkim_signer_identity'),
+            'selector'        => Sympa::Conf::get_robot_conf($robot, 'dkim_selector'),
+            'keyfile'         => Sympa::Conf::get_robot_conf($robot, 'dkim_private_key_path')
         });
     }
     
@@ -3842,7 +3842,7 @@ sub send_file {
 	}
 	
 	unless ($data->{'user'}{'password'}) {
-	    $data->{'user'}{'password'} = &Sympa::Tools::tmp_passwd($who, $Conf::Conf{'cookie'});
+	    $data->{'user'}{'password'} = &Sympa::Tools::tmp_passwd($who, $Sympa::Conf::Conf{'cookie'});
 	}
 	
 	## Unique return-path VERP
@@ -3850,17 +3850,17 @@ sub send_file {
 	    (($self->{'admin'}{'remind_return_path'} eq 'unique') && ($tpl eq 'remind')))  {
 	    my $escapercpt = $who ;
 	    $escapercpt =~ s/\@/\=\=a\=\=/;
-	    $data->{'return_path'} = "$Conf::Conf{'bounce_email_prefix'}+$escapercpt\=\=$name";
+	    $data->{'return_path'} = "$Sympa::Conf::Conf{'bounce_email_prefix'}+$escapercpt\=\=$name";
 	    $data->{'return_path'} .= '==w' if ($tpl eq 'welcome');
 	    $data->{'return_path'} .= '==r' if ($tpl eq 'remind');
 	    $data->{'return_path'} .= "\@$self->{'domain'}";
 	}
     }
 
-    $data->{'return_path'} ||= $name.&Conf::get_robot_conf($robot, 'return_path_suffix').'@'.$self->{'admin'}{'host'};
+    $data->{'return_path'} ||= $name.&Sympa::Conf::get_robot_conf($robot, 'return_path_suffix').'@'.$self->{'admin'}{'host'};
 
     ## Lang
-    $data->{'lang'} = $data->{'user'}{'lang'} || $self->{'admin'}{'lang'} || &Conf::get_robot_conf($robot, 'lang');
+    $data->{'lang'} = $data->{'user'}{'lang'} || $self->{'admin'}{'lang'} || &Sympa::Conf::get_robot_conf($robot, 'lang');
 
     ## Trying to use custom_vars
     if (defined $self->{'admin'}{'custom_vars'}) {
@@ -3872,7 +3872,7 @@ sub send_file {
     
     ## What file   
     my $lang = &Language::Lang2Locale($data->{'lang'});
-    my $tt2_include_path = &Sympa::Tools::make_tt2_include_path($robot,'mail_tt2',$lang,$self,$Conf::Conf{'etc'},$Conf::Conf{'viewmaildir'},$Conf::Conf{'domain'});
+    my $tt2_include_path = &Sympa::Tools::make_tt2_include_path($robot,'mail_tt2',$lang,$self,$Sympa::Conf::Conf{'etc'},$Conf::Conf{'viewmaildir'},$Conf::Conf{'domain'});
 
     push @{$tt2_include_path},$self->{'dir'};             ## list directory to get the 'info' file
     push @{$tt2_include_path},$self->{'dir'}.'/archives'; ## list archives to include the last message
@@ -3882,7 +3882,7 @@ sub send_file {
     }
 
     foreach my $p ('email','email_gecos','host','sympa','request','listmaster','wwsympa_url','title','listmaster_email') {
-	$data->{'conf'}{$p} = &Conf::get_robot_conf($robot, $p);
+	$data->{'conf'}{$p} = &Sympa::Conf::get_robot_conf($robot, $p);
     }
 
     my @path = &Sympa::TT2::get_include_path();
@@ -3903,7 +3903,7 @@ sub send_file {
     $data->{'list'}{'dir'} = $self->{'dir'};
 
     ## Sign mode
-    if ($Conf::Conf{'openssl'} &&
+    if ($Sympa::Conf::Conf{'openssl'} &&
 	(-r $self->{'dir'}.'/cert.pem') && (-r $self->{'dir'}.'/private_key')) {
 	$sign_mode = 'smime';
     }
@@ -3923,7 +3923,7 @@ sub send_file {
     $data->{'boundary'} = '----------=_'.&Sympa::Tools::get_message_id($robot) unless ($data->{'boundary'});
     $data->{'sign_mode'} = $sign_mode;
     
-    if ((&Conf::get_robot_conf($self->{'domain'}, 'dkim_feature') eq 'on')&&(&Conf::get_robot_conf($self->{'domain'}, 'dkim_add_signature_to')=~/robot/)){
+    if ((&Sympa::Conf::get_robot_conf($self->{'domain'}, 'dkim_feature') eq 'on')&&(&Conf::get_robot_conf($self->{'domain'}, 'dkim_add_signature_to')=~/robot/)){
 	$data->{'dkim'} = get_dkim_parameters({'robot' => $self->{'domain'}});
     } 
     $data->{'use_bulk'} = 1  unless ($data->{'alarm'}) ; # use verp excepted for alarms. We should make this configurable in order to support Sympa server on a machine without any MTA service
@@ -3996,7 +3996,7 @@ sub send_msg {
  
     ## Who is the enveloppe sender?
     my $host = $self->{'admin'}{'host'};
-    my $from = $name.&Conf::get_robot_conf($robot, 'return_path_suffix').'@'.$host;
+    my $from = $name.&Sympa::Conf::get_robot_conf($robot, 'return_path_suffix').'@'.$host;
 
     # separate subscribers depending on user reception option and also if verp a dicovered some bounce for them.
     my (@tabrcpt, @tabrcpt_notice, @tabrcpt_txt, @tabrcpt_html, @tabrcpt_url, @tabrcpt_verp, @tabrcpt_notice_verp, @tabrcpt_txt_verp, @tabrcpt_html_verp, @tabrcpt_url_verp, @tabrcpt_digestplain, @tabrcpt_digest, @tabrcpt_summary, @tabrcpt_nomail, @tabrcpt_digestplain_verp, @tabrcpt_digest_verp, @tabrcpt_summary_verp, @tabrcpt_nomail_verp );
@@ -4068,8 +4068,8 @@ sub send_msg {
 	        push @tabrcpt_url, $user->{'email'};
 	    }
 	} elsif ($message->{'smime_crypted'} && 
-      	     (! -r $Conf::Conf{'ssl_cert_dir'}.'/'.&Sympa::Tools::escape_chars($user->{'email'}) &&
-       	      ! -r $Conf::Conf{'ssl_cert_dir'}.'/'.&Sympa::Tools::escape_chars($user->{'email'}.'@enc' ))) {
+      	     (! -r $Sympa::Conf::Conf{'ssl_cert_dir'}.'/'.&Sympa::Tools::escape_chars($user->{'email'}) &&
+       	      ! -r $Sympa::Conf::Conf{'ssl_cert_dir'}.'/'.&Sympa::Tools::escape_chars($user->{'email'}.'@enc' ))) {
        	    ## Missing User certificate
 	    my $subject = $message->{'msg'}->head->get('Subject');
 	    my $sender = $message->{'msg'}->head->get('From');
@@ -4238,7 +4238,7 @@ sub send_msg {
 	    my @parts = ();
 	    my $i = 0;
 	    foreach my $part ($url_msg->parts()) {
-		my $entity = &_urlize_part($part, $self, $dir1, $i, $mime_types,  &Conf::get_robot_conf($robot, 'wwsympa_url'));
+		my $entity = &_urlize_part($part, $self, $dir1, $i, $mime_types,  &Sympa::Conf::get_robot_conf($robot, 'wwsympa_url'));
 		if (defined $entity) {
 		    push @parts, $entity;
 		} else {
@@ -4380,7 +4380,7 @@ sub send_to_editor {
        $spoolmod->update({'messagekey' => $message->{'messagekey'}},{"authkey" => $modkey,'messagelock'=> 'NULL'});
 
        # prepare html view of this message
-       my $destination_dir  = $Conf::Conf{'viewmail_dir'}.'/mod/'.$self->get_list_id().'/'.$modkey;
+       my $destination_dir  = $Sympa::Conf::Conf{'viewmail_dir'}.'/mod/'.$self->get_list_id().'/'.$modkey;
        &Archive::convert_single_msg_2_html ({'msg_as_string'=>$message->{'msg_as_string'},
 					     'destination_dir'=>$destination_dir,
 					     'attachement_url' => "viewmod/$name/$modkey",
@@ -4424,7 +4424,7 @@ sub send_to_editor {
    foreach my $recipient (@rcpt) {
        if ($encrypt eq 'smime_crypted') {	       
 	   ## is $msg->body_as_string respect base64 number of char per line ??
-	   my $cryptedmsg = smime_encrypt($msg->head, $msg->body_as_string, $recipient,undef, $Conf::Conf{'tmpdir'}, $Conf::Conf{'ssl_cert_dir'}, $Conf::Conf{'openssl'}); 
+	   my $cryptedmsg = smime_encrypt($msg->head, $msg->body_as_string, $recipient,undef, $Sympa::Conf::Conf{'tmpdir'}, $Conf::Conf{'ssl_cert_dir'}, $Conf::Conf{'openssl'}); 
 	   unless ($cryptedmsg) {
 	       &Log::do_log('notice', 'Failed encrypted message for moderator');
 	       #  send a generic error message : X509 cert missing
@@ -4482,7 +4482,7 @@ sub send_auth {
    my $name = $self->{'name'};
    my $host = $admin->{'host'};
    my $robot = $self->{'domain'};
-   my $authqueue = $Conf::Conf{'queueauth'};
+   my $authqueue = $Sympa::Conf::Conf{'queueauth'};
    return undef unless ($name && $admin);
   
 
@@ -4633,7 +4633,7 @@ sub archive_send {
 
    return unless ($self->is_archived());
        
-   my $dir = &Conf::get_robot_conf($self->{'domain'},'arc_path').'/'.$self->get_list_id();
+   my $dir = &Sympa::Conf::get_robot_conf($self->{'domain'},'arc_path').'/'.$self->get_list_id();
    my $msg_list = Archive::scan_dir_archive($dir, $file);
 
    my $subject = 'File '.$self->{'name'}.' '.$file ;
@@ -4643,7 +4643,7 @@ sub archive_send {
 
    $param->{'boundary1'} = &Sympa::Tools::get_message_id($self->{'domain'});
    $param->{'boundary2'} = &Sympa::Tools::get_message_id($self->{'domain'});
-   $param->{'from'} = &Conf::get_robot_conf($self->{'domain'},'sympa');
+   $param->{'from'} = &Sympa::Conf::get_robot_conf($self->{'domain'},'sympa');
 
 #    open TMP2, ">/tmp/digdump"; &Sympa::Tools::Data::dump_var($param, 0, \*TMP2); close TMP2;
 $param->{'auto_submitted'} = 'auto-replied';
@@ -4697,7 +4697,7 @@ sub archive_send_last {
 
    $param->{'boundary1'} = &Sympa::Tools::get_message_id($self->{'domain'});
    $param->{'boundary2'} = &Sympa::Tools::get_message_id($self->{'domain'});
-   $param->{'from'} = &Conf::get_robot_conf($self->{'domain'},'sympa');
+   $param->{'from'} = &Sympa::Conf::get_robot_conf($self->{'domain'},'sympa');
    $param->{'auto_submitted'} = 'auto-replied';
 #    open TMP2, ">/tmp/digdump"; &Sympa::Tools::Data::dump_var($param, 0, \*TMP2); close TMP2;
 
@@ -4789,9 +4789,9 @@ sub send_notify_to_listmaster {
 		}
 	}
 	
-	my $host = &Conf::get_robot_conf($robot, 'host');
-	my $listmaster = &Conf::get_robot_conf($robot, 'listmaster');
-	my $to = "$Conf::Conf{'listmaster_email'}\@$host";
+	my $host = &Sympa::Conf::get_robot_conf($robot, 'host');
+	my $listmaster = &Sympa::Conf::get_robot_conf($robot, 'listmaster');
+	my $to = "$Sympa::Conf::Conf{'listmaster_email'}\@$host";
 	my $options = {}; ## options for send_global_file()
 	
 	if((ref($data) ne 'HASH') and (ref($data) ne 'ARRAY')) {
@@ -4840,7 +4840,7 @@ sub send_notify_to_listmaster {
 	
 	if(($operation eq 'no_db') || ($operation eq 'db_restored')) {
 		## No DataBase |  DataBase restored
-		$data->{'db_name'} = &Conf::get_robot_conf($robot, 'db_name');  
+		$data->{'db_name'} = &Sympa::Conf::get_robot_conf($robot, 'db_name');  
 		$options->{'skip_db'} = 1; ## Skip DB access because DB is not accessible
 	}
 	
@@ -4910,7 +4910,7 @@ sub send_notify_to_owner {
 
     unless (@to) {
 	&Log::do_log('notice', 'No owner defined or all of them use nomail option in list %s ; using listmasters as default', $self->{'name'} );
-	@to = split /,/, &Conf::get_robot_conf($robot, 'listmaster');
+	@to = split /,/, &Sympa::Conf::get_robot_conf($robot, 'listmaster');
     }
     unless (defined $operation) {
 	&Log::do_log('err','List::send_notify_to_owner(%s) : missing incoming parameter "$operation"', $self->{'name'});
@@ -4950,7 +4950,7 @@ sub send_notify_to_owner {
 	    if ($operation eq 'sigrequest') {
 		$param->{'escaped_who'} = $param->{'who'};
 		$param->{'escaped_who'} =~ s/\s/\%20/g;
-		$param->{'sympa'} = &Conf::get_robot_conf($self->{'domain'}, 'sympa');
+		$param->{'sympa'} = &Sympa::Conf::get_robot_conf($self->{'domain'}, 'sympa');
 		
 	    }elsif ($operation eq 'bounce_rate') {
 		$param->{'rate'} = int ($param->{'rate'} * 10) / 10;
@@ -4997,8 +4997,8 @@ sub delete_list_member_picture {
     my $robot = $self->{'domain'};
     
     foreach my $ext ('.gif','.jpg','.jpeg','.png') {
-  	if(-f &Conf::get_robot_conf($robot,'pictures_path').'/'.$name.'@'.$robot.'/'.$filename.$ext) {
-  	    my $file = &Conf::get_robot_conf($robot,'pictures_path').'/'.$name.'@'.$robot.'/'.$filename.$ext;
+  	if(-f &Sympa::Conf::get_robot_conf($robot,'pictures_path').'/'.$name.'@'.$robot.'/'.$filename.$ext) {
+  	    my $file = &Sympa::Conf::get_robot_conf($robot,'pictures_path').'/'.$name.'@'.$robot.'/'.$filename.$ext;
   	    $fullfilename = $file;
   	    last;
   	} 	
@@ -5174,9 +5174,9 @@ sub compute_auth {
 
     if ($self){
 	$listname = $self->{'name'};
-        $cookie = $self->get_cookie() || $Conf::Conf{'cookie'};
+        $cookie = $self->get_cookie() || $Sympa::Conf::Conf{'cookie'};
     }else {
-	$cookie = $Conf::Conf{'cookie'};
+	$cookie = $Sympa::Conf::Conf{'cookie'};
     }
     
     $key = substr(Digest::MD5::md5_hex(join('/', $cookie, $listname, $email, $cmd)), -8) ;
@@ -5195,8 +5195,8 @@ sub add_parts {
     my ($header, $headermime);
     foreach my $file ("$listdir/message.header", 
 		      "$listdir/message.header.mime",
-		      "$Conf::Conf{'etc'}/mail_tt2/message.header", 
-		      "$Conf::Conf{'etc'}/mail_tt2/message.header.mime") {
+		      "$Sympa::Conf::Conf{'etc'}/mail_tt2/message.header", 
+		      "$Sympa::Conf::Conf{'etc'}/mail_tt2/message.header.mime") {
 	if (-f $file) {
 	    unless (-r $file) {
 		&Log::do_log('notice', 'Cannot read %s', $file);
@@ -5210,8 +5210,8 @@ sub add_parts {
     my ($footer, $footermime);
     foreach my $file ("$listdir/message.footer", 
 		      "$listdir/message.footer.mime",
-		      "$Conf::Conf{'etc'}/mail_tt2/message.footer", 
-		      "$Conf::Conf{'etc'}/mail_tt2/message.footer.mime") {
+		      "$Sympa::Conf::Conf{'etc'}/mail_tt2/message.footer", 
+		      "$Sympa::Conf::Conf{'etc'}/mail_tt2/message.footer.mime") {
 	if (-f $file) {
 	    unless (-r $file) {
 		&Log::do_log('notice', 'Cannot read %s', $file);
@@ -5560,8 +5560,8 @@ sub get_global_user {
 
     ## Additional subscriber fields
     my $additional;
-    if ($Conf::Conf{'db_additional_user_fields'}) {
-	$additional = ',' . $Conf::Conf{'db_additional_user_fields'};
+    if ($Sympa::Conf::Conf{'db_additional_user_fields'}) {
+	$additional = ',' . $Sympa::Conf::Conf{'db_additional_user_fields'};
     }
 
     
@@ -5583,7 +5583,7 @@ sub get_global_user {
     if (defined $user) {
 	## decrypt password
 	if ($user->{'password'}) {
-	    $user->{'password'} = &Sympa::Tools::decrypt_password($user->{'password'}, $Conf::Conf{'cookie'});
+	    $user->{'password'} = &Sympa::Tools::decrypt_password($user->{'password'}, $Sympa::Conf::Conf{'cookie'});
 	}
 
 	## Turn user_attributes into a hash
@@ -6016,8 +6016,8 @@ sub find_list_member_by_pattern_no_object {
 
     ## Additional subscriber fields
     my $additional;
-    if ($Conf::Conf{'db_additional_subscriber_fields'}) {
-	$additional = ',' . $Conf::Conf{'db_additional_subscriber_fields'};
+    if ($Sympa::Conf::Conf{'db_additional_subscriber_fields'}) {
+	$additional = ',' . $Sympa::Conf::Conf{'db_additional_subscriber_fields'};
     }
     unless ($sth = SDM::do_query("SELECT user_subscriber AS email, comment_subscriber AS gecos, bounce_subscriber AS bounce, bounce_score_subscriber AS bounce_score, bounce_address_subscriber AS bounce_address, reception_subscriber AS reception,  topics_subscriber AS topics, visibility_subscriber AS visibility, %s AS date, %s AS update_date, subscribed_subscriber AS subscribed, included_subscriber AS included, include_sources_subscriber AS id, custom_attribute_subscriber AS custom_attribute, suspend_subscriber AS suspend, suspend_start_date_subscriber AS startdate, suspend_end_date_subscriber AS enddate %s FROM subscriber_table WHERE (user_subscriber LIKE %s AND list_subscriber = %s AND robot_subscriber = %s)", 
     &SDM::get_canonical_read_date('date_subscriber'), 
@@ -6080,8 +6080,8 @@ sub get_list_member_no_object {
 
     ## Additional subscriber fields
     my $additional;
-    if ($Conf::Conf{'db_additional_subscriber_fields'}) {
-	$additional = ',' . $Conf::Conf{'db_additional_subscriber_fields'};
+    if ($Sympa::Conf::Conf{'db_additional_subscriber_fields'}) {
+	$additional = ',' . $Sympa::Conf::Conf{'db_additional_subscriber_fields'};
     }
     unless ($sth = SDM::do_query( "SELECT user_subscriber AS email, comment_subscriber AS gecos, bounce_subscriber AS bounce, bounce_score_subscriber AS bounce_score, bounce_address_subscriber AS bounce_address, reception_subscriber AS reception,  topics_subscriber AS topics, visibility_subscriber AS visibility, %s AS date, %s AS update_date, subscribed_subscriber AS subscribed, included_subscriber AS included, include_sources_subscriber AS id, custom_attribute_subscriber AS custom_attribute, suspend_subscriber AS suspend, suspend_start_date_subscriber AS startdate, suspend_end_date_subscriber AS enddate, number_messages_subscriber AS number_messages %s FROM subscriber_table WHERE (user_subscriber = %s AND list_subscriber = %s AND robot_subscriber = %s)", 
     &SDM::get_canonical_read_date('date_subscriber'), 
@@ -6207,8 +6207,8 @@ sub get_first_list_member {
     
     ## Additional subscriber fields
     my $additional;
-    if ($Conf::Conf{'db_additional_subscriber_fields'}) {
-	$additional = ',' . $Conf::Conf{'db_additional_subscriber_fields'};
+    if ($Sympa::Conf::Conf{'db_additional_subscriber_fields'}) {
+	$additional = ',' . $Sympa::Conf::Conf{'db_additional_subscriber_fields'};
     }
     
     $statement = sprintf "SELECT user_subscriber AS email, comment_subscriber AS gecos, reception_subscriber AS reception, topics_subscriber AS topics, visibility_subscriber AS visibility, bounce_subscriber AS bounce, bounce_score_subscriber AS bounce_score, bounce_address_subscriber AS bounce_address,  %s AS date, %s AS update_date, subscribed_subscriber AS subscribed, included_subscriber AS included, include_sources_subscriber AS id, custom_attribute_subscriber AS custom_attribute, suspend_subscriber AS suspend, suspend_start_date_subscriber AS startdate, suspend_end_date_subscriber AS enddate %s FROM subscriber_table WHERE (list_subscriber = %s AND robot_subscriber = %s %s)", 
@@ -6549,8 +6549,8 @@ sub get_first_bouncing_list_member {
     
     ## Additional subscriber fields
     my $additional;
-    if ($Conf::Conf{'db_additional_subscriber_fields'}) {
-	$additional = ',' . $Conf::Conf{'db_additional_subscriber_fields'};
+    if ($Sympa::Conf::Conf{'db_additional_subscriber_fields'}) {
+	$additional = ',' . $Sympa::Conf::Conf{'db_additional_subscriber_fields'};
     }
 
     push @sth_stack, $sth;
@@ -6772,25 +6772,25 @@ sub update_list_member {
 		      );
     
     ## additional DB fields
-    if (defined $Conf::Conf{'db_additional_subscriber_fields'}) {
-	foreach my $f (split ',', $Conf::Conf{'db_additional_subscriber_fields'}) {
+    if (defined $Sympa::Conf::Conf{'db_additional_subscriber_fields'}) {
+	foreach my $f (split ',', $Sympa::Conf::Conf{'db_additional_subscriber_fields'}) {
 	    $map_table{$f} = 'subscriber_table';
 	    $map_field{$f} = $f;
 	}
     }
     
-    if (defined $Conf::Conf{'db_additional_user_fields'}) {
-	foreach my $f (split ',', $Conf::Conf{'db_additional_user_fields'}) {
+    if (defined $Sympa::Conf::Conf{'db_additional_user_fields'}) {
+	foreach my $f (split ',', $Sympa::Conf::Conf{'db_additional_user_fields'}) {
 	    $map_table{$f} = 'user_table';
 	    $map_field{$f} = $f;
 	}
     }
     
-    &Log::do_log('debug2', " custom_attribute id: $Conf::Conf{'custom_attribute'}");
+    &Log::do_log('debug2', " custom_attribute id: $Sympa::Conf::Conf{'custom_attribute'}");
     ## custom attributes
-    if (defined $Conf::Conf{'custom_attribute'}){
-	foreach my $f (sort keys %{$Conf::Conf{'custom_attribute'}}){
-	    &Log::do_log('debug2', "custom_attribute id: $Conf::Conf{'custom_attribute'}{id} name: $Conf::Conf{'custom_attribute'}{name} type: $Conf::Conf{'custom_attribute'}{type} ");
+    if (defined $Sympa::Conf::Conf{'custom_attribute'}){
+	foreach my $f (sort keys %{$Sympa::Conf::Conf{'custom_attribute'}}){
+	    &Log::do_log('debug2', "custom_attribute id: $Sympa::Conf::Conf{'custom_attribute'}{id} name: $Conf::Conf{'custom_attribute'}{name} type: $Conf::Conf{'custom_attribute'}{type} ");
 	    	
 	}
     }
@@ -6810,7 +6810,7 @@ sub update_list_member {
 		if ($field eq 'date' || $field eq 'update_date') {
 		    $value = &SDM::get_canonical_write_date($value);
 		}elsif ($value eq 'NULL'){ ## get_null_value?
-		    if ($Conf::Conf{'db_type'} eq 'mysql') {
+		    if ($Sympa::Conf::Conf{'db_type'} eq 'mysql') {
 			$value = '\N';
 		    }
 		}else {
@@ -6859,7 +6859,7 @@ sub update_list_member {
     ## Rename picture on disk if user email changed
     if ($values->{'email'}) {
 	my $file_name = &Sympa::Tools::md5_fingerprint($who);
-	my $picture_file_path = &Conf::get_robot_conf($self->{'domain'},'pictures_path').'/'.$self->{'name'}.'@'.$self->{'domain'};
+	my $picture_file_path = &Sympa::Conf::get_robot_conf($self->{'domain'},'pictures_path').'/'.$self->{'name'}.'@'.$self->{'domain'};
 
 	foreach my $extension ('gif','png','jpg','jpeg') {
 	    if (-f $picture_file_path.'/'.$file_name.'.'.$extension) {
@@ -6922,8 +6922,8 @@ sub update_list_admin {
 		      );
 #### ??
     ## additional DB fields
-#    if (defined $Conf::Conf{'db_additional_user_fields'}) {
-#	foreach my $f (split ',', $Conf::Conf{'db_additional_user_fields'}) {
+#    if (defined $Sympa::Conf::Conf{'db_additional_user_fields'}) {
+#	foreach my $f (split ',', $Sympa::Conf::Conf{'db_additional_user_fields'}) {
 #	    $map_table{$f} = 'user_table';
 #	    $map_field{$f} = $f;
 #	}
@@ -6944,7 +6944,7 @@ sub update_list_admin {
 		if ($field eq 'date' || $field eq 'update_date') {
 		    $value = &SDM::get_canonical_write_date($value);
 		}elsif ($value eq 'NULL'){ #get_null_value?
-		    if ($Conf::Conf{'db_type'} eq 'mysql') {
+		    if ($Sympa::Conf::Conf{'db_type'} eq 'mysql') {
 			$value = '\N';
 		    }
 		}else {
@@ -7156,7 +7156,7 @@ sub add_list_member {
 	
 	## Crypt password if it was not crypted
 	unless ($new_user->{'password'} =~ /^crypt/) {
-		$new_user->{'password'} = &Sympa::Tools::crypt_password($new_user->{'password'}, $Conf::Conf{'cookie'});
+		$new_user->{'password'} = &Sympa::Tools::crypt_password($new_user->{'password'}, $Sympa::Conf::Conf{'cookie'});
 	}
 	
 	$list_cache{'is_list_member'}{$self->{'domain'}}{$name}{$who} = undef;
@@ -7348,11 +7348,11 @@ sub is_listmaster {
 
     return 0 unless ($who);
 
-    foreach my $listmaster (@{&Conf::get_robot_conf($robot,'listmasters')}){
+    foreach my $listmaster (@{&Sympa::Conf::get_robot_conf($robot,'listmasters')}){
 	return 1 if (lc($listmaster) eq lc($who));
     }
 	
-    foreach my $listmaster (@{&Conf::get_robot_conf('*','listmasters')}){
+    foreach my $listmaster (@{&Sympa::Conf::get_robot_conf('*','listmasters')}){
 	return 1 if (lc($listmaster) eq lc($who));
     }    
 
@@ -7488,10 +7488,10 @@ sub may_edit {
     my $edit_conf;
 
     # Load edit_list.conf: track by file, not domain (file may come from server, robot, family or list context)
-    my $edit_conf_file = &Sympa::Tools::get_filename('etc',{},'edit_list.conf',$self->{'domain'},$self, $Conf::Conf{'etc'}); 
+    my $edit_conf_file = &Sympa::Tools::get_filename('etc',{},'edit_list.conf',$self->{'domain'},$self, $Sympa::Conf::Conf{'etc'}); 
     if (! $edit_list_conf{$edit_conf_file} || ((stat($edit_conf_file))[9] > $mtime{'edit_list_conf'}{$edit_conf_file})) {
 
-        $edit_conf = $edit_list_conf{$edit_conf_file} = &Sympa::Tools::load_edit_list_conf($self->{'domain'}, $self, $Conf::Conf{'etc'});
+        $edit_conf = $edit_list_conf{$edit_conf_file} = &Sympa::Tools::load_edit_list_conf($self->{'domain'}, $self, $Sympa::Conf::Conf{'etc'});
 	$mtime{'edit_list_conf'}{$edit_conf_file} = time;
     }else {
         $edit_conf = $edit_list_conf{$edit_conf_file};
@@ -7552,7 +7552,7 @@ sub may_create_parameter {
     if ( &is_listmaster($who,$robot)) {
 	return 1;
     }
-    my $edit_conf = &Sympa::Tools::load_edit_list_conf($robot,$self,$Conf::Conf{'etc'});
+    my $edit_conf = &Sympa::Tools::load_edit_list_conf($robot,$self,$Sympa::Conf::Conf{'etc'});
     $edit_conf->{$parameter} ||= $edit_conf->{'default'};
     if (! $edit_conf->{$parameter}) {
 	&Log::do_log('notice','tools::load_edit_list_conf privilege for parameter $parameter undefined');
@@ -7656,7 +7656,7 @@ sub archive_exist {
    &Log::do_log('debug', 'List::archive_exist (%s)', $file);
 
    return undef unless ($self->is_archived());
-   my $dir = &Conf::get_robot_conf($self->{'domain'},'arc_path').'/'.$self->get_list_id();
+   my $dir = &Sympa::Conf::get_robot_conf($self->{'domain'},'arc_path').'/'.$self->get_list_id();
    Archive::exist($dir, $file);
 
 }
@@ -7667,7 +7667,7 @@ sub archive_ls {
    my $self = shift;
    &Log::do_log('debug2', 'List::archive_ls');
 
-   my $dir = &Conf::get_robot_conf($self->{'domain'},'arc_path').'/'.$self->get_list_id();
+   my $dir = &Sympa::Conf::get_robot_conf($self->{'domain'},'arc_path').'/'.$self->get_list_id();
 
    Archive::list($dir) if ($self->is_archived());
 }
@@ -7685,7 +7685,7 @@ sub archive_msg {
 	}
 #	Archive::store_last($self, $msgtostore) ;
 	
-	if (($Conf::Conf{'ignore_x_no_archive_header_feature'} ne 'on') && (($message->{'msg'}->head->get('X-no-archive') =~ /yes/i) || ($message->{'msg'}->head->get('Restrict') =~ /no\-external\-archive/i))) {
+	if (($Sympa::Conf::Conf{'ignore_x_no_archive_header_feature'} ne 'on') && (($message->{'msg'}->head->get('X-no-archive') =~ /yes/i) || ($message->{'msg'}->head->get('Restrict') =~ /no\-external\-archive/i))) {
 	    ## ignoring message with a no-archive flag	    
 	   &Log::do_log('info',"Do not archive message with no-archive flag for list %s",$self->get_list_id());
 	}else{
@@ -7773,8 +7773,8 @@ sub load_scenario_list {
 
     foreach my $dir (
         "$directory/scenari",
-        "$Conf::Conf{'etc'}/$robot/scenari",
-        "$Conf::Conf{'etc'}/scenari",
+        "$Sympa::Conf::Conf{'etc'}/$robot/scenari",
+        "$Sympa::Conf::Conf{'etc'}/scenari",
         Sympa::Constants::DEFAULTDIR . '/scenari'
     ) {
 	next unless (-d $dir);
@@ -7828,8 +7828,8 @@ sub load_task_list {
     
     foreach my $dir (
         "$directory/list_task_models",
-        "$Conf::Conf{'etc'}/$robot/list_task_models",
-        "$Conf::Conf{'etc'}/list_task_models",
+        "$Sympa::Conf::Conf{'etc'}/$robot/list_task_models",
+        "$Sympa::Conf::Conf{'etc'}/list_task_models",
         Sympa::Constants::DEFAULTDIR . '/list_task_models'
     ) {
 
@@ -7895,8 +7895,8 @@ sub load_data_sources_list {
 
     foreach my $dir (
         "$directory/data_sources",
-        "$Conf::Conf{'etc'}/$robot/data_sources",
-        "$Conf::Conf{'etc'}/data_sources",
+        "$Sympa::Conf::Conf{'etc'}/$robot/data_sources",
+        "$Sympa::Conf::Conf{'etc'}/data_sources",
         Sympa::Constants::DEFAULTDIR . '/data_sources'
     ) {
 
@@ -8004,8 +8004,8 @@ sub _include_users_remote_sympa_list {
 	$cert_file = $dir.'/cert.pem';
 	$key_file = $dir.'/private_key';
     }elsif($cert eq 'robot') {
-	$cert_file = &Sympa::Tools::get_filename('etc',{},'cert.pem',$robot,$self, $Conf::Conf{'etc'});
-	$key_file =  &Sympa::Tools::get_filename('etc',{},'private_key',$robot,$self, $Conf::Conf{'etc'});
+	$cert_file = &Sympa::Tools::get_filename('etc',{},'cert.pem',$robot,$self, $Sympa::Conf::Conf{'etc'});
+	$key_file =  &Sympa::Tools::get_filename('etc',{},'private_key',$robot,$self, $Sympa::Conf::Conf{'etc'});
     }
     unless ((-r $cert_file) && ( -r $key_file)) {
 	&Log::do_log('err', 'Include remote list https://%s:%s/%s using cert %s, unable to open %s or %s', $host, $port, $path, $cert,$cert_file,$key_file);
@@ -8018,9 +8018,9 @@ sub _include_users_remote_sympa_list {
     my $email ;
 
 
-    foreach my $line ( &Fetch::get_https($host,$port,$path,$cert_file,$key_file,{'key_passwd' => $Conf::Conf{'key_passwd'},
-                                                                               'cafile'    => $Conf::Conf{'cafile'},
-                                                                               'capath' => $Conf::Conf{'capath'}})
+    foreach my $line ( &Fetch::get_https($host,$port,$path,$cert_file,$key_file,{'key_passwd' => $Sympa::Conf::Conf{'key_passwd'},
+                                                                               'cafile'    => $Sympa::Conf::Conf{'cafile'},
+                                                                               'capath' => $Sympa::Conf::Conf{'capath'}})
 		){	
 	chomp $line;
 
@@ -9040,7 +9040,7 @@ sub _load_list_admin_from_include {
 	$option{'profile'} = $entry->{'profile'} if (defined $entry->{'profile'} && ($role eq 'owner'));
 	
 
-      	my $include_file = &Sympa::Tools::get_filename('etc',{},"data_sources/$entry->{'source'}\.incl",$self->{'domain'},$self, $Conf::Conf{'etc'});
+      	my $include_file = &Sympa::Tools::get_filename('etc',{},"data_sources/$entry->{'source'}\.incl",$self->{'domain'},$self, $Sympa::Conf::Conf{'etc'});
 
         unless (defined $include_file){
 	    &Log::do_log('err', 'the file %s.incl doesn\'t exist',$entry->{'source'});
@@ -10179,7 +10179,7 @@ sub get_lists {
     &Log::do_log('debug2', 'List::get_lists(%s)',$robot_context);
 
     # Determin if files are used instead of list_table DB cache.
-    if ($Conf::Conf{'db_list_cache'} ne 'on' or defined $requested_lists) {
+    if ($Sympa::Conf::Conf{'db_list_cache'} ne 'on' or defined $requested_lists) {
 	$use_files = 1;
     } else {
 	$use_files = $options->{'use_files'};
@@ -10255,8 +10255,8 @@ sub get_lists {
 		push @lists, @{$list_cache{'get_lists'}{$robot}};
 	    }
 	} else {
-	    my $robot_dir =  $Conf::Conf{'home'}.'/'.$robot ;
-	    $robot_dir = $Conf::Conf{'home'}  unless ((-d $robot_dir) || ($robot ne $Conf::Conf{'domain'}));
+	    my $robot_dir =  $Sympa::Conf::Conf{'home'}.'/'.$robot ;
+	    $robot_dir = $Sympa::Conf::Conf{'home'}  unless ((-d $robot_dir) || ($robot ne $Conf::Conf{'domain'}));
 	    
 	    unless (-d $robot_dir) {
 		&Log::do_log('err',"unknown robot $robot, Unable to open $robot_dir");
@@ -10316,20 +10316,20 @@ sub get_robots {
     my(@robots, $r);
     &Log::do_log('debug2', 'List::get_robots()');
 
-    unless (opendir(DIR, $Conf::Conf{'etc'})) {
-	&Log::do_log('err',"Unable to open $Conf::Conf{'etc'}");
+    unless (opendir(DIR, $Sympa::Conf::Conf{'etc'})) {
+	&Log::do_log('err',"Unable to open $Sympa::Conf::Conf{'etc'}");
 	return undef;
     }
     my $use_default_robot = 1 ;
     foreach $r (sort readdir(DIR)) {
-	next unless (($r !~ /^\./o) && (-d "$Conf::Conf{'home'}/$r"));
-	next unless (-r "$Conf::Conf{'etc'}/$r/robot.conf");
+	next unless (($r !~ /^\./o) && (-d "$Sympa::Conf::Conf{'home'}/$r"));
+	next unless (-r "$Sympa::Conf::Conf{'etc'}/$r/robot.conf");
 	push @robots, $r;
-	undef $use_default_robot if ($r eq $Conf::Conf{'domain'});
+	undef $use_default_robot if ($r eq $Sympa::Conf::Conf{'domain'});
     }
     closedir DIR;
 
-    push @robots, $Conf::Conf{'domain'} if ($use_default_robot);
+    push @robots, $Sympa::Conf::Conf{'domain'} if ($use_default_robot);
     return @robots ;
 }
 
@@ -10665,7 +10665,7 @@ sub load_topics {
     my $robot = shift ;
     &Log::do_log('debug2', 'List::load_topics(%s)',$robot);
 
-    my $conf_file = &Sympa::Tools::get_filename('etc',{},'topics.conf',$robot, undef, $Conf::Conf{'etc'});
+    my $conf_file = &Sympa::Tools::get_filename('etc',{},'topics.conf',$robot, undef, $Sympa::Conf::Conf{'etc'});
 
     unless ($conf_file) {
 	&Log::do_log('err','No topics.conf defined');
@@ -10694,7 +10694,7 @@ sub load_topics {
 	my $index = 0;
 	my (@raugh_data, $topic);
 	while (<FILE>) {
-	    Encode::from_to($_, $Conf::Conf{'filesystem_encoding'}, 'utf8');
+	    Encode::from_to($_, $Sympa::Conf::Conf{'filesystem_encoding'}, 'utf8');
 	    if (/^([\-\w\/]+)\s*$/) {
 		$index++;
 		$topic = {'name' => $1,
@@ -10722,7 +10722,7 @@ sub load_topics {
 	$mtime{'topics'}{$robot} = (stat($conf_file))[9];
 
 	unless ($#raugh_data > -1) {
-	    &Log::do_log('notice', 'No topic defined in %s/topics.conf', $Conf::Conf{'etc'});
+	    &Log::do_log('notice', 'No topic defined in %s/topics.conf', $Sympa::Conf::Conf{'etc'});
 	    return undef;
 	}
 
@@ -10996,7 +10996,7 @@ sub _load_list_param {
 
     ## Search configuration file
     if (ref($value) && defined $value->{'conf'}) {
-	$value = &Conf::get_robot_conf($robot, $value->{'conf'});
+	$value = &Sympa::Conf::get_robot_conf($robot, $value->{'conf'});
     }
 
     ## Synonyms
@@ -11077,8 +11077,8 @@ sub get_cert {
 	}
 	close CERT ;
     }elsif ($format eq 'der') {
-	unless (open CERT, "$Conf::Conf{'openssl'} x509 -in $certs -outform DER|") {
-	    &Log::do_log('err', "$Conf::Conf{'openssl'} x509 -in $certs -outform DER|");
+	unless (open CERT, "$Sympa::Conf::Conf{'openssl'} x509 -in $certs -outform DER|") {
+	    &Log::do_log('err', "$Sympa::Conf::Conf{'openssl'} x509 -in $certs -outform DER|");
 	    &Log::do_log('err', "List::get_cert(): Unable to open get $certs in DER format: $!");
 	    return undef;
 	}
@@ -11838,7 +11838,7 @@ sub modifying_msg_topic_for_list_members(){
 		my $topics = &Sympa::Tools::Data::diff_on_arrays($msg_topic_changes->{'deleted'},&Sympa::Tools::Data::get_array_from_splitted_string($subscriber->{'topics'}));
 		
 		if ($#{$topics->{'intersection'}} >= 0) {
-		    my $wwsympa_url = &Conf::get_robot_conf($self->{'domain'}, 'wwsympa_url');
+		    my $wwsympa_url = &Sympa::Conf::get_robot_conf($self->{'domain'}, 'wwsympa_url');
 		    unless ($self->send_notify_to_user('deleted_msg_topics',$subscriber->{'email'},
 						       {'del_topics' => $topics->{'intersection'},
 							'url' => $wwsympa_url.'/suboptions/'.$self->{'name'}})) {
@@ -11953,7 +11953,7 @@ sub _urlize_part {
           $message->head->replace('Content-Type', $content_type);
           my @parts = $message->parts();
           foreach my $i (0..$#parts) {
-              my $entity = &_urlize_part ($message->parts ($i), $list, $dir, $i, $mime_types,  &Conf::get_robot_conf($robot, 'wwsympa_url')) ;
+              my $entity = &_urlize_part ($message->parts ($i), $list, $dir, $i, $mime_types,  &Sympa::Conf::get_robot_conf($robot, 'wwsympa_url')) ;
               if (defined $entity) {
                 $parts[$i] = $entity;
               }
@@ -11994,7 +11994,7 @@ sub _urlize_part {
     my $size = (-s $file);
 
     ## Only URLize files with a moderate size
-    if ($size < $Conf::Conf{'urlize_min_size'}) {
+    if ($size < $Sympa::Conf::Conf{'urlize_min_size'}) {
 	unlink "$expl/$dir/$filename";
 	return undef;
     }
@@ -12012,7 +12012,7 @@ sub _urlize_part {
     my $lang = &Language::GetLang();
     my $charset = &Language::GetCharset();
 
-    my $tt2_include_path = &Sympa::Tools::make_tt2_include_path($robot,'mail_tt2',$lang,$list,$Conf::Conf{'etc'},$Conf::Conf{'viewmaildir'},$Conf::Conf{'domain'});
+    my $tt2_include_path = &Sympa::Tools::make_tt2_include_path($robot,'mail_tt2',$lang,$list,$Sympa::Conf::Conf{'etc'},$Conf::Conf{'viewmaildir'},$Conf::Conf{'domain'});
 
     &Sympa::TT2::parse_tt2({'file_name' => $file_name,
 		     'file_url'  => $file_url,
@@ -12214,8 +12214,8 @@ sub remove_task {
     my $self = shift;
     my $task = shift;
 
-    unless (opendir(DIR, $Conf::Conf{'queuetask'})) {
-	&Log::do_log ('err', "error : can't open dir %s: %s", $Conf::Conf{'queuetask'}, $!);
+    unless (opendir(DIR, $Sympa::Conf::Conf{'queuetask'})) {
+	&Log::do_log ('err', "error : can't open dir %s: %s", $Sympa::Conf::Conf{'queuetask'}, $!);
 	return undef;
     }
     my @tasks = grep !/^\.\.?$/, readdir DIR;
@@ -12223,7 +12223,7 @@ sub remove_task {
 
     foreach my $task_file (@tasks) {
 	if ($task_file =~ /^(\d+)\.\w*\.$task\.$self->{'name'}\@$self->{'domain'}$/) {
-	    unless (unlink("$Conf::Conf{'queuetask'}/$task_file")) {
+	    unless (unlink("$Sympa::Conf::Conf{'queuetask'}/$task_file")) {
 		&Log::do_log('err', 'Unable to remove task file %s : %s', $task_file, $!);
 		return undef;
 	    }
@@ -12314,7 +12314,7 @@ sub purge {
 	unless ($self && ($list_of_lists{$self->{'domain'}}{$self->{'name'}}));
     
     ## Remove tasks for this list
-    &Task::list_tasks($Conf::Conf{'queuetask'});
+    &Task::list_tasks($Sympa::Conf::Conf{'queuetask'});
     foreach my $task (&Task::get_tasks_by_list($self->get_list_id())) {
 	unlink $task->{'filepath'};
     }
@@ -12323,13 +12323,13 @@ sub purge {
     $self->close_list();
 
     if ($self->{'name'}) {
-	my $arc_dir = &Conf::get_robot_conf($self->{'domain'},'arc_path');
+	my $arc_dir = &Sympa::Conf::get_robot_conf($self->{'domain'},'arc_path');
 	&Sympa::Tools::File::remove_dir($arc_dir.'/'.$self->get_list_id());
 	&Sympa::Tools::File::remove_dir($self->get_bounce_dir());
     }
     
     ## Clean list table if needed
-    if ($Conf::Conf{'db_list_cache'} eq 'on') {
+    if ($Sympa::Conf::Conf{'db_list_cache'} eq 'on') {
 	unless (&SDM::do_query('DELETE FROM list_table WHERE name_list = %s AND robot_list = %s', &SDM::quote($self->{'name'}), &SDM::quote($self->{'domain'}))) {
 	    &Log::do_log('err', 'Cannot remove list %s (robot %s) from table', $self->{'name'}, $self->{'domain'});
 	}
@@ -12353,9 +12353,9 @@ sub remove_aliases {
 
     return undef 
 	unless ($self && ($list_of_lists{$self->{'domain'}}{$self->{'name'}})
-		&& ($Conf::Conf{'sendmail_aliases'} !~ /^none$/i));
+		&& ($Sympa::Conf::Conf{'sendmail_aliases'} !~ /^none$/i));
     
-    my $alias_manager = $Conf::Conf{'alias_manager'};
+    my $alias_manager = $Sympa::Conf::Conf{'alias_manager'};
     
     unless (-x $alias_manager) {
 	&Log::do_log('err','Cannot run alias_manager %s', $alias_manager);
@@ -12452,7 +12452,7 @@ sub move_message {
     my ($self, $file, $queue) = @_;
     &Log::do_log('debug2', "List::move_message($file, $self->{'name'}, $queue)");
 
-    my $dir = $queue || $Conf::Conf{'queuedistribute'};    
+    my $dir = $queue || $Sympa::Conf::Conf{'queuedistribute'};    
     my $filename = $self->get_list_id().'.'.time.'.'.int(rand(999));
 
     unless (open OUT, ">$dir/T.$filename") {
@@ -12477,7 +12477,7 @@ sub move_message {
 sub get_bounce_dir {
     my $self = shift;
 
-    my $root_dir = &Conf::get_robot_conf($self->{'domain'}, 'bounce_path');
+    my $root_dir = &Sympa::Conf::get_robot_conf($self->{'domain'}, 'bounce_path');
     
     return $root_dir.'/'.$self->get_list_id();
 }
@@ -12606,7 +12606,7 @@ sub _flush_list_db
     my ($listname) = shift;
     my $statement;
     unless ($listname) {
-	if ($Conf::Conf{'db_type'} eq 'SQLite') {
+	if ($Sympa::Conf::Conf{'db_type'} eq 'SQLite') {
 	    # SQLite does not have TRUNCATE TABLE.
 	    $statement = "DELETE FROM list_table";
 	} else {
@@ -12631,7 +12631,7 @@ sub _flush_list_db
 ##   * determine the current robot, given a host
 package Robot;
 
-use Conf;
+use Sympa::Conf;
 
 ## Constructor of a Robot instance
 sub new {
@@ -12640,16 +12640,16 @@ sub new {
     my $robot = {'name' => $name};
     &Log::do_log('debug2', '');
     
-    unless (defined $name && $Conf::Conf{'robots'}{$name}) {
+    unless (defined $name && $Sympa::Conf::Conf{'robots'}{$name}) {
 	&Log::do_log('err',"Unknown robot '$name'");
 	return undef;
     }
 
     ## The default robot
-    if ($name eq $Conf::Conf{'domain'}) {
-	$robot->{'home'} = $Conf::Conf{'home'};
+    if ($name eq $Sympa::Conf::Conf{'domain'}) {
+	$robot->{'home'} = $Sympa::Conf::Conf{'home'};
     }else {
-	$robot->{'home'} = $Conf::Conf{'home'}.'/'.$name;
+	$robot->{'home'} = $Sympa::Conf::Conf{'home'}.'/'.$name;
 	unless (-d $robot->{'home'}) {
 	    &Log::do_log('err', "Missing directory '$robot->{'home'}' for robot '$name'");
 	    return undef;

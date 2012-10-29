@@ -21,7 +21,7 @@
 
 ## This module handles the configuration file for Sympa.
 
-package Conf;
+package Sympa::Conf;
 
 use strict "vars";
 

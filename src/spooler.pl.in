@@ -32,7 +32,6 @@ use MIME::QuotedPrint;
 
 use Auth;
 use Commands;
-use Conf;
 use Config_XML;
 use Family;
 use Language;
@@ -42,6 +41,7 @@ use List;
 use Message;
 use SDM;
 use SQLSource;
+use Sympa::Conf;
 use Sympa::Constants;
 use Sympa::Spool;
 use Sympa::Tools;
@@ -104,7 +104,7 @@ while ($signal ne 'term') { #as long as a SIGTERM is not received }
 my $config_file = $main::options{'config'} || Sympa::Constants::CONFIG;
 
 ## Load configuration file. Ignoring database config for now: it avoids trying to load a database that could not exist yet.
-unless (Conf::load($config_file,1)) {
+unless (Sympa::Conf::load($config_file,1)) {
    &fatal_err("Configuration file $config_file has errors.");  
 }
 
@@ -129,7 +129,7 @@ if ($Conf{'db_name'} and $Conf{'db_type'}) {
 }
 
 ## Now trying to load full config (including database)
-unless (Conf::load($config_file)) {
+unless (Sympa::Conf::load($config_file)) {
    &Log::fatal_err("Configuration file $config_file has errors.");
    
 }
@@ -145,7 +145,7 @@ if (!chdir($Conf{'home'})) {
 }
 
 ## Check for several files.
-unless (&Conf::checkfiles_as_root()) {
+unless (&Sympa::Conf::checkfiles_as_root()) {
    &Log::fatal_err("output checkfiles_as_root : Missing files. Aborting.");
    ## No return.
 }
@@ -245,7 +245,7 @@ if ($signal ne 'hup') {
 ## Check for several files.
 ## Prevent that 2 processes perform checks at the same time...
 if ($main::daemon_usage == DAEMON_ALL) {
-    unless (&Conf::checkfiles()) {
+    unless (&Sympa::Conf::checkfiles()) {
 	&Log::fatal_err("Missing files. Aborting.");
 	## No return.
     }
@@ -344,33 +344,33 @@ while (!$signal) {
 	if ($robot) {
 	    $robot=lc($robot);
 	}else{
-	    $robot = lc(&Conf::get_robot_conf($robot, 'host'));
+	    $robot = lc(&Sympa::Conf::get_robot_conf($robot, 'host'));
 	}
 
-	my $list_check_regexp = &Conf::get_robot_conf($robot,'list_check_regexp');
+	my $list_check_regexp = &Sympa::Conf::get_robot_conf($robot,'list_check_regexp');
 
 	if ($listname =~ /^(\S+)-($list_check_regexp)$/) {
 	    ($listname, $type) = ($1, $2);
 	}
-	my $email = &Conf::get_robot_conf($robot, 'email');	
+	my $email = &Sympa::Conf::get_robot_conf($robot, 'email');	
 
 	my $priority;
 
 	if ($listname eq $Conf{'listmaster_email'}) {
 	    $priority = 0;
 	}elsif ($type eq 'request') {
-	    $priority = &Conf::get_robot_conf($robot, 'request_priority');
+	    $priority = &Sympa::Conf::get_robot_conf($robot, 'request_priority');
 	}elsif ($type eq 'owner') {
-	    $priority = &Conf::get_robot_conf($robot, 'owner_priority');
+	    $priority = &Sympa::Conf::get_robot_conf($robot, 'owner_priority');
 	}elsif ($listname =~ /^(sympa|$email)(\@$Conf{'host'})?$/i) {	
-	    $priority = &Conf::get_robot_conf($robot,'sympa_priority');
+	    $priority = &Sympa::Conf::get_robot_conf($robot,'sympa_priority');
 	    $listname ='';
 	}
 	my $list =  new List ($listname, $robot, {'just_try' => 1});
 	if ($list) {
 	    $priority = $list->{'admin'}{'priority'};
 	}else {
-	    $priority = &Conf::get_robot_conf($robot, 'default_list_priority');
+	    $priority = &Sympa::Conf::get_robot_conf($robot, 'default_list_priority');
 	}
 
 	$meta{'robot'} = $robot if $robot;
@@ -407,7 +407,7 @@ while (!$signal) {
     } 
 
     unless ($filename) {
-	sleep(&Conf::get_robot_conf($robot, 'sleep'));
+	sleep(&Sympa::Conf::get_robot_conf($robot, 'sleep'));
 	next;
     }
 }
@@ -418,7 +418,7 @@ SDM::db_disconnect;
 }
 &Log::do_log('notice', 'spooler exited normally due to signal');
 my $file = $Conf{'pidfile_spooler'};
-&Sympa::Tools::Daemon::remove_pid($file, $$, undef, $Conf::Conf{'tmpdir'});
+&Sympa::Tools::Daemon::remove_pid($file, $$, undef, $Sympa::Conf::Conf{'tmpdir'});
 
 exit(0);
 }

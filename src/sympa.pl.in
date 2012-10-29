@@ -32,7 +32,6 @@ use MIME::QuotedPrint;
 
 use Auth;
 use Commands;
-use Conf;
 use Config_XML;
 use Family;
 use Language;
@@ -41,6 +40,7 @@ use Log;
 use Message;
 use SDM;
 use Sympa::Admin;
+use Sympa::Conf;
 use Sympa::Constants;
 use Sympa::Mail;
 use Sympa::Report;
@@ -183,7 +183,7 @@ while ($signal ne 'term') { #as long as a SIGTERM is not received }
 my $config_file = $main::options{'config'} || Sympa::Constants::CONFIG;
 
 ## Load configuration file. Ignoring database config for now: it avoids trying to load a database that could not exist yet.
-unless (Conf::load($config_file,1)) {
+unless (Sympa::Conf::load($config_file,1)) {
    &Log::fatal_err("Unable to load sympa configuration, file $config_file or one of the vhost robot.conf files contain errors. Exiting.");  
 }
 
@@ -207,7 +207,7 @@ if ($Conf{'db_name'} and $Conf{'db_type'}) {
 }
 
 ## Now trying to load full config (including database)
-unless (Conf::load($config_file)) {
+unless (Sympa::Conf::load($config_file)) {
    &Log::fatal_err("Configuration file $config_file has errors.");
    
 }
@@ -215,9 +215,9 @@ unless (Conf::load($config_file)) {
 ## Apply defaults to %List::pinfo
 &List::_apply_defaults();
 
-&Sympa::Tools::ciphersaber_installed($Conf::Conf{'cookie'});
+&Sympa::Tools::ciphersaber_installed($Sympa::Conf::Conf{'cookie'});
 
-if (&Sympa::Tools::cookie_changed($Conf{'cookie'}, $Conf::Conf{'etc'})) {
+if (&Sympa::Tools::cookie_changed($Conf{'cookie'}, $Sympa::Conf::Conf{'etc'})) {
      &Log::fatal_err("sympa.conf/cookie parameter has changed. You may have severe inconsitencies into password storage. Restore previous cookie or write some tool to re-encrypt password in database and check spools contents (look at $Conf{'etc'}/cookies.history file)");
 }
 
@@ -232,7 +232,7 @@ if (!chdir($Conf{'home'})) {
 }
 
 ## Check for several files.
-unless (&Conf::checkfiles_as_root()) {
+unless (&Sympa::Conf::checkfiles_as_root()) {
    &Log::fatal_err("output checkfiles_as_root : Missing files. Aborting.");
    ## No return.
 }
@@ -245,7 +245,7 @@ unless ($main::options{'upgrade'} || $main::options{'help'}) {
 }
 
 
-if (&Conf::get_robot_conf('*','voot_feature') eq 'on') {
+if (&Sympa::Conf::get_robot_conf('*','voot_feature') eq 'on') {
     unless ( eval "require OAuthProvider" ){
 	&Log::fatal_err("VOOT feature is on, but Sympa was Unable to load OAuthProvider module: $@");
 	return undef;
@@ -309,7 +309,7 @@ if ($signal ne 'hup') {
 	$options->{'stderr_to_tty'} = 1 if ($main::options{'foreground'});
 	&Sympa::Tools::Daemon::write_pid($file, $$, $options);
 	unless ($options->{'stderr_to_tty'}) {
-	    &Sympa::Tools::Daemon::direct_stderr_to_file(('tmpdir' => $Conf::Conf{'tmpdir'}, 'pid' => $$));
+	    &Sympa::Tools::Daemon::direct_stderr_to_file(('tmpdir' => $Sympa::Conf::Conf{'tmpdir'}, 'pid' => $$));
 	}
     }	
 
@@ -337,7 +337,7 @@ if ($signal ne 'hup') {
     $signal = '0';
 }
 
-unless (&Conf::checkfiles()) {
+unless (&Sympa::Conf::checkfiles()) {
     fatal_err("Missing files. Aborting.");
 }
 
@@ -504,7 +504,7 @@ if ($main::options{'dump'}) {
 	exit 1;
     }
 
-    foreach my $robot (keys %{$Conf::Conf{'robots'}}) {
+    foreach my $robot (keys %{$Sympa::Conf::Conf{'robots'}}) {
 	
 	printf STDOUT "Doing processing for virtual robot %s...\n", $robot;
 	my ($status, $failed_for) = &Sympa::Admin::change_user_email(current_email => $main::options{'current_email'}, 
@@ -602,7 +602,7 @@ if ($main::options{'dump'}) {
 }elsif ($main::options{'conf_2_db'}) {
    
     printf "Sympa is going to store $config_file in database conf_table. This operation do NOT remove original files\n";
-    if ( Conf::conf_2_db($config_file) ) {
+    if ( Sympa::Conf::conf_2_db($config_file) ) {
 	printf "Done";
     }else{
 	printf "an error occur";
@@ -1014,11 +1014,11 @@ while (!$signal) {
     &Log::do_log('debug', "Processing message # %s for list = %s robot = %s reception_date = %s", $message_in_spool->{'messagekey'},$listname,$robot,$message_in_spool->{'date'}) ;
 
     if ($main::options{'mail'} != 1) {
-	$main::options{'mail'} = $robot if (&Conf::get_robot_conf($robot, 'log_smtp'));
+	$main::options{'mail'} = $robot if (&Sympa::Conf::get_robot_conf($robot, 'log_smtp'));
     }
 
     ## Set NLS default lang for current message
-    $Language::default_lang = $main::options{'lang'} || &Conf::get_robot_conf($robot, 'lang');
+    $Language::default_lang = $main::options{'lang'} || &Sympa::Conf::get_robot_conf($robot, 'lang');
 	
     my $status = &process_message($message_in_spool);
         
@@ -1045,7 +1045,7 @@ SDM::db_disconnect;
 
 &Log::do_log('notice', 'Sympa exited normally due to signal');
 my $file = $Conf{'pidfile'};
-&Sympa::Tools::Daemon::remove_pid($file, $$, undef, $Conf::Conf{'tmpdir'});
+&Sympa::Tools::Daemon::remove_pid($file, $$, undef, $Sympa::Conf::Conf{'tmpdir'});
 
 exit(0);
 
@@ -1134,7 +1134,7 @@ sub process_message {
     $robot ||= $Conf{'host'};
     
     my $type;
-    my $list_check_regexp = &Conf::get_robot_conf($robot,'list_check_regexp');
+    my $list_check_regexp = &Sympa::Conf::get_robot_conf($robot,'list_check_regexp');
     if ($listname =~ /^(\S+)-($list_check_regexp)$/) {
 	($listname, $type) = ($1, $2);
     }
@@ -1142,14 +1142,14 @@ sub process_message {
     if ( $message->{'md5_check'} ) { 
 	# message contain a valid checksum, it comes from wwsympa, so
         #  mail it without other proceding unless it is for a valid list
-	return (&DoSendMessage ($message,$robot)) unless(&Conf::valid_robot($robot, {'just_try' => 1})) ;
+	return (&DoSendMessage ($message,$robot)) unless(&Sympa::Conf::valid_robot($robot, {'just_try' => 1})) ;
 	return (&DoSendMessage ($message,$robot)) unless( new List ($listname, $robot, {'just_try' => 1}));	    	    
     }
 
     # setting log_level using conf unless it is set by calling option
     unless ($main::options{'log_level'}) {
-	&Log::set_log_level(&Conf::get_robot_conf($robot,'log_level'));
-	&Log::do_log('debug', "Setting log level with $robot configuration (or sympa.conf) : %d", &Conf::get_robot_conf($robot,'log_level')); 
+	&Log::set_log_level(&Sympa::Conf::get_robot_conf($robot,'log_level'));
+	&Log::do_log('debug', "Setting log level with $robot configuration (or sympa.conf) : %d", &Sympa::Conf::get_robot_conf($robot,'log_level')); 
     }
     
     ## Ignoring messages with no sender
@@ -1179,11 +1179,11 @@ sub process_message {
     $hdr->delete('X-Sympa-Family');
 
     my $list_address;
-    my $conf_email = &Conf::get_robot_conf($robot, 'email');
-    my $conf_host = &Conf::get_robot_conf($robot, 'host');
+    my $conf_email = &Sympa::Conf::get_robot_conf($robot, 'email');
+    my $conf_host = &Sympa::Conf::get_robot_conf($robot, 'host');
 
         ## Unknown robot
-    unless (&Conf::valid_robot($robot)) {
+    unless (&Sympa::Conf::valid_robot($robot)) {
 	&Log::do_log('err', 'sympa::process_message() : robot %s does not exist',$robot);
 	&Sympa::Report::reject_report_msg('user','list_unknown',$sender,{'listname' => $listname,'message' => $message},$robot,$message->{'msg_as_string'},'');
 	&Log::db_log({'robot' => $robot,'list' => $listname,'action' => 'process_message','target_email' => "",'msg_id' => $hdr->get('Message-ID'),'status' => 'error','error_type' => 'unknown_robot','user_email' => $sender,'client' => $ip,'daemon' => $daemon_name});
@@ -1250,7 +1250,7 @@ sub process_message {
     if ($list->{'admin'}{'reject_mail_from_automates_feature'} eq 'on') {
 		my $conf_loop_prevention_regex;
 		$conf_loop_prevention_regex = $list->{'admin'}{'loop_prevention_regex'};
-		$conf_loop_prevention_regex ||= &Conf::get_robot_conf($robot, 'loop_prevention_regex');
+		$conf_loop_prevention_regex ||= &Sympa::Conf::get_robot_conf($robot, 'loop_prevention_regex');
 		if ($sender =~ /^($conf_loop_prevention_regex)(\@|$)/mio) {
 			&Log::do_log('err','Ignoring message which would cause a loop, sent by %s; matches loop_prevention_regex', $sender);
 			return undef;
@@ -1293,13 +1293,13 @@ sub process_message {
     #  anti-virus
     my $rc= &Sympa::Tools::virus_infected(
         $message->{'msg'},
-        $Conf::Conf{'antivirus_path'},
-        $Conf::Conf{'antivirus_args'},
-        $Conf::Conf{'tmpdir'},
-        $Conf::Conf{'domain'}
+        $Sympa::Conf::Conf{'antivirus_path'},
+        $Sympa::Conf::Conf{'antivirus_args'},
+        $Sympa::Conf::Conf{'tmpdir'},
+        $Sympa::Conf::Conf{'domain'}
     );
     if ($rc) {
-	if ( &Conf::get_robot_conf($robot,'antivirus_notify') eq 'sender') {
+	if ( &Sympa::Conf::get_robot_conf($robot,'antivirus_notify') eq 'sender') {
 	    unless (&List::send_global_file('your_infected_msg', $sender, $robot, {'virus_name' => $rc,
 										   'recipient' => $list_address,
 										   'lang' => $Language::default_lang,
@@ -1387,19 +1387,19 @@ sub process_message {
 	$loop_info{$sender}{'count'}++;
 	
 	## Sampling delay 
-	if ((time - $loop_info{$sender}{'date_init'}) < &Conf::get_robot_conf($robot, 'loop_command_sampling_delay')) {
+	if ((time - $loop_info{$sender}{'date_init'}) < &Sympa::Conf::get_robot_conf($robot, 'loop_command_sampling_delay')) {
 
 	    ## Notify listmaster of first rejection
-	    if ($loop_info{$sender}{'count'} ==  &Conf::get_robot_conf($robot, 'loop_command_max')) {
+	    if ($loop_info{$sender}{'count'} ==  &Sympa::Conf::get_robot_conf($robot, 'loop_command_max')) {
 		## Notify listmaster
-		unless (&List::send_notify_to_listmaster('loop_command',  &Conf::get_robot_conf($robot, 'domain'),
+		unless (&List::send_notify_to_listmaster('loop_command',  &Sympa::Conf::get_robot_conf($robot, 'domain'),
 							 {'msg' => $file})) {
 		    &Log::do_log('notice',"Unable to send notify 'loop_command' to listmaster");
 		}
 	    }
 	    
 	    ## Too many reports sent => message skipped !!
-	    if ($loop_info{$sender}{'count'} >=  &Conf::get_robot_conf($robot, 'loop_command_max')) {
+	    if ($loop_info{$sender}{'count'} >=  &Sympa::Conf::get_robot_conf($robot, 'loop_command_max')) {
 		&Log::do_log('err', 'Ignoring message which would cause a loop, %d messages sent to %s; loop_command_max exceeded', $loop_info{$sender}{'count'}, $sender);
 		
 		return undef;
@@ -1409,7 +1409,7 @@ sub process_message {
 	    $loop_info{$sender}{'date_init'} = time;
 
 	    ## We apply Decrease factor if a loop occured
-	    $loop_info{$sender}{'count'} *=  &Conf::get_robot_conf($robot,'loop_command_decrease_factor');
+	    $loop_info{$sender}{'count'} *=  &Sympa::Conf::get_robot_conf($robot,'loop_command_decrease_factor');
 	}
 
 	## Send the reply message
@@ -1510,12 +1510,12 @@ sub DoForward {
 
     if ($function eq 'listmaster') {
 	$recepient=$Conf{'listmaster_email'};
-	$host = &Conf::get_robot_conf($robot, 'host');
+	$host = &Sympa::Conf::get_robot_conf($robot, 'host');
 	$priority = 0;
     }else {
 	unless ($list = new List ($name, $robot)) {
 	    &Log::do_log('notice', "Message for %s-%s ignored, unknown list %s (Message-id: %s)",$name, $function, $name,$messageid);
-	    my $sympa_email = &Conf::get_robot_conf($robot, 'sympa');
+	    my $sympa_email = &Sympa::Conf::get_robot_conf($robot, 'sympa');
 	    unless (&List::send_global_file('list_unknown', $sender, $robot,
 					    {'list' => $name,
 					     'date' => &POSIX::strftime("%d %b %Y  %H:%M", localtime(time)),
@@ -1543,7 +1543,7 @@ sub DoForward {
     $hdr->delete('X-Sympa-Family');
 
     if ($function eq "listmaster") {
-	my $listmasters = &Conf::get_robot_conf($robot, 'listmasters');
+	my $listmasters = &Sympa::Conf::get_robot_conf($robot, 'listmasters');
 	@rcpt = @{$listmasters};
 	&Log::do_log('notice', 'Warning : no listmaster defined in sympa.conf') 
 	    unless (@rcpt);
@@ -1599,7 +1599,7 @@ sub DoForward {
     
     # my $msg_copy = $msg->dup;
     $message->{'msg'} = $msg;    
-    unless (&Sympa::Mail::mail_forward($message,&Conf::get_robot_conf($robot, 'request'),\@rcpt,$robot)) {
+    unless (&Sympa::Mail::mail_forward($message,&Sympa::Conf::get_robot_conf($robot, 'request'),\@rcpt,$robot)) {
 	&Log::do_log('err',"Impossible to forward mail for $name-$function  ");
 	my $string = sprintf 'Impossible to forward a message for %s-%s',$name,$function;
 	&Sympa::Report::reject_report_msg('intern',$string,$sender,
@@ -1656,7 +1656,7 @@ sub DoMessage{
 	    ## List unknown
 	    unless ($list) {
 		&Log::do_log('notice', 'Unknown list %s', $listname);
-		my $sympa_email = &Conf::get_robot_conf($robot, 'sympa');
+		my $sympa_email = &Sympa::Conf::get_robot_conf($robot, 'sympa');
 		
 		unless (&List::send_global_file('list_unknown', $sender, $robot,
 						{'list' => $which,
@@ -1688,9 +1688,9 @@ sub DoMessage{
     }
 	
     # Reject messages with commands
-    if ( &Conf::get_robot_conf($robot,'misaddressed_commands') =~ /reject/i) {
+    if ( &Sympa::Conf::get_robot_conf($robot,'misaddressed_commands') =~ /reject/i) {
 	## Check the message for commands and catch them.
-	if (&Sympa::Tools::checkcommand($message->{'msg'}, $sender, $robot,$Conf::Conf{'misaddressed_commands_regexp'})) {
+	if (&Sympa::Tools::checkcommand($message->{'msg'}, $sender, $robot,$Sympa::Conf::Conf{'misaddressed_commands_regexp'})) {
 	    &Log::do_log('err', 'sympa::DoMessage(): Found command in message, ignoring message');
 	    &Sympa::Report::reject_report_msg('user','routing_error',$sender,{'message' => $message},$robot,$msg_string,$list);
 	    &Log::db_log({'robot' => $robot,'list' => $list->{'name'},'action' => 'DoMessage','parameters' => "$which,$messageid,$robot",'target_email' => '','msg_id' => $messageid,'status' => 'error','error_type' => 'routing_error','user_email' => $sender,'client' => $ip,'daemon' => $daemon_name});
@@ -1708,7 +1708,7 @@ sub DoMessage{
     
 
     ## Check if the message is too large
-    # my $max_size = $list->get_max_size() ||  &Conf::get_robot_conf($robot,'max_size');
+    # my $max_size = $list->get_max_size() ||  &Sympa::Conf::get_robot_conf($robot,'max_size');
     my $max_size = $list->get_max_size();
 
     if ($max_size && $message->{'size'} > $max_size) {

@@ -30,11 +30,11 @@ use Fcntl;
 use MIME::EncWords;
 use Time::Local;
 
-use Conf;
 use Language;
 use Log;
 use List;
 use Message;
+use Sympa::Conf;
 use Sympa::Constants;
 use Sympa::Report;
 use Sympa::Spool;
@@ -176,8 +176,8 @@ sub help {
     shift;
     my $robot=shift;
 
-    my $sympa = &Conf::get_robot_conf($robot, 'sympa');
-    my $etc =  &Conf::get_robot_conf($robot, 'etc');
+    my $sympa = &Sympa::Conf::get_robot_conf($robot, 'sympa');
+    my $etc =  &Sympa::Conf::get_robot_conf($robot, 'etc');
 
     &Log::do_log('debug', 'Commands::help to robot %s',$robot);
 
@@ -248,8 +248,8 @@ sub lists {
     my $sign_mod = shift;
     my $message = shift;
 
-    my $sympa = &Conf::get_robot_conf($robot, 'sympa');
-    my $host = &Conf::get_robot_conf($robot, 'host');
+    my $sympa = &Sympa::Conf::get_robot_conf($robot, 'sympa');
+    my $host = &Sympa::Conf::get_robot_conf($robot, 'host');
 
     &Log::do_log('debug', 'Commands::lists for robot %s, sign_mod %, message %s', $robot,$sign_mod , $message);
 
@@ -451,7 +451,7 @@ sub last {
     my $which = shift;
     my $robot = shift;
 
-    my $sympa = &Conf::get_robot_conf($robot, 'sympa');
+    my $sympa = &Sympa::Conf::get_robot_conf($robot, 'sympa');
 
     &Log::do_log('debug', 'Commands::last(%s, %s)', $which, $robot);
 
@@ -562,7 +562,7 @@ sub review {
     my $message = shift ;
 
     &Log::do_log('debug', 'Commands::review(%s,%s,%s)', $listname,$robot,$sign_mod );
-    my $sympa = &Conf::get_robot_conf($robot, 'sympa');
+    my $sympa = &Sympa::Conf::get_robot_conf($robot, 'sympa');
 
     my $user;
     my $list = new List ($listname, $robot);
@@ -785,7 +785,7 @@ sub subscribe {
 	## Send a notice to the owners.
 	unless ($list->send_notify_to_owner('subrequest',{'who' => $sender,
 				     'keyauth' => $list->compute_auth($sender,'add'),
-				     'replyto' => &Conf::get_robot_conf($robot, 'sympa'),
+				     'replyto' => &Sympa::Conf::get_robot_conf($robot, 'sympa'),
 							  'gecos' => $comment})) {
 	    &Log::do_log('info',"Unable to send notify 'subrequest' to $list->{'name'} list owner");
 	    &Sympa::Report::reject_report_cmd('intern',"Unable to send subrequest to $list->{'name'} list owner",{'listname'=> $list->{'name'}},$cmd_line,$sender,$robot);
@@ -847,7 +847,7 @@ sub subscribe {
 	    my $u = &List::get_global_user($sender);
 	    
 	    &List::update_global_user($sender, {'lang' => $u->{'lang'} || $list->{'admin'}{'lang'},
-					    'password' => $u->{'password'} || &Sympa::Tools::tmp_passwd($sender, $Conf::Conf{'cookie'})
+					    'password' => $u->{'password'} || &Sympa::Tools::tmp_passwd($sender, $Sympa::Conf::Conf{'cookie'})
 					    });
 	}
 	
@@ -900,7 +900,7 @@ sub info {
 
     &Log::do_log('debug', 'Commands::info(%s,%s, %s, %s)', $listname,$robot, $sign_mod, $message);
 
-    my $sympa = &Conf::get_robot_conf($robot, 'sympa');
+    my $sympa = &Sympa::Conf::get_robot_conf($robot, 'sympa');
 
     my $list = new List ($listname, $robot);
     unless ($list) {
@@ -972,7 +972,7 @@ sub info {
 
 	$data->{'available_reception_mode'} = $list->available_reception_mode();
 
-	my $wwsympa_url = &Conf::get_robot_conf($robot, 'wwsympa_url');
+	my $wwsympa_url = &Sympa::Conf::get_robot_conf($robot, 'wwsympa_url');
 	$data->{'url'} = $wwsympa_url.'/info/'.$list->{'name'};
 
 	unless ($list->send_file('info_report', $sender, $robot, $data)){
@@ -1015,7 +1015,7 @@ sub signoff {
     &Log::do_log('debug', 'Commands::signoff(%s,%s, %s, %s)', $which,$robot, $sign_mod, $message);
 
     my ($l,$list,$auth_method);
-    my $host = &Conf::get_robot_conf($robot, 'host');
+    my $host = &Sympa::Conf::get_robot_conf($robot, 'host');
 
     ## $email is defined if command is "unsubscribe <listname> <e-mail>"    
     unless ($which =~ /^(\*|[\w\.\-]+)(\@$host)?(\s+(.+))?$/) {
@@ -1293,7 +1293,7 @@ sub add {
 	    my $u = &List::get_global_user($email);
 	    
 	    &List::update_global_user($email, {'lang' => $u->{'lang'} || $list->{'admin'}{'lang'},
-					   'password' => $u->{'password'} || &Sympa::Tools::tmp_passwd($email, $Conf::Conf{'cookie'})
+					   'password' => $u->{'password'} || &Sympa::Tools::tmp_passwd($email, $Sympa::Conf::Conf{'cookie'})
 					    });
 	}
 	
@@ -1346,7 +1346,7 @@ sub invite {
 
     &Log::do_log('debug', 'Commands::invite(%s,%s,%s,%s)', $what, $robot, $sign_mod, $message);
 
-    my $sympa = &Conf::get_robot_conf($robot, 'sympa');
+    my $sympa = &Sympa::Conf::get_robot_conf($robot, 'sympa');
 
     $what =~ /^(\S+)\s+(\S+)(\s+(.+))?\s*$/;
     my($which, $email, $comment) = ($1, $2, $4);
@@ -1500,7 +1500,7 @@ sub remind {
 
     &Log::do_log('debug', 'Commands::remind(%s,%s,%s,%s)', $which,$robot,$sign_mod,$message);
 
-    my $host = &Conf::get_robot_conf($robot, 'host');
+    my $host = &Sympa::Conf::get_robot_conf($robot, 'host');
     
     my %context;
     
@@ -2247,7 +2247,7 @@ sub reject {
     $what =~ /^(\S+)\s+(.+)\s*$/;
     my($which, $key) = ($1, $2);
     $which =~ y/A-Z/a-z/;
-    my $modqueue = &Conf::get_robot_conf($robot,'queuemod');
+    my $modqueue = &Sympa::Conf::get_robot_conf($robot,'queuemod');
     ## Load the list if not already done, and reject the
     ## subscription if this list is unknown to us.
     my $list = new List ($which, $robot);
@@ -2308,7 +2308,7 @@ sub reject {
     }
     
     &Log::do_log('info', 'REJECT %s %s from %s accepted (%d seconds)', $name, $sender, $key, time-$time_command);
-    &Sympa::Tools::File::remove_dir ( $Conf::Conf{'viewmail_dir'}.'/mod/'.$list->get_list_id().'/'.$key);
+    &Sympa::Tools::File::remove_dir ( $Sympa::Conf::Conf{'viewmail_dir'}.'/mod/'.$list->get_list_id().'/'.$key);
     
     $modspool->remove({'list'=>$list->{'name'},'robot'=>$robot,'authkey'=>$key});
 
@@ -2345,7 +2345,7 @@ sub modindex {
 
     &Language::SetLang($list->{'admin'}{'lang'});
 
-    my $modqueue = &Conf::get_robot_conf($robot,'queuemod');
+    my $modqueue = &Sympa::Conf::get_robot_conf($robot,'queuemod');
     
     my $i;
     
@@ -2373,7 +2373,7 @@ sub modindex {
 	    if (exists $curlist->{'admin'}{'clean_delay_queuemod'}){
 		$moddelay = $curlist->{'admin'}{'clean_delay_queuemod'}
 	    }else{
-		$moddelay = &Conf::get_robot_conf($robot,'clean_delay_queuemod');
+		$moddelay = &Sympa::Conf::get_robot_conf($robot,'clean_delay_queuemod');
 	    }
 	    
 	    if ((stat "$modqueue/$i")[9] < (time -  $moddelay*86400) ){

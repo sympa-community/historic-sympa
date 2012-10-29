@@ -39,7 +39,6 @@ use Time::HiRes qw(time);
 use Time::Local;
 use URI::Escape;
 
-use Conf;
 use Fetch;
 use Language;
 use Ldap;
@@ -48,6 +47,7 @@ use Lock;
 use Log;
 use Message;
 use SDM;
+use Sympa::Conf;
 use Sympa::Spool;
 use Sympa::Tools;
 use Sympa::TT2;
@@ -84,11 +84,11 @@ sub next {
     my $limit_sybase='';
 	## Only the first record found is locked, thanks to the "LIMIT 1" clause
     $order = 'ORDER BY priority_message_bulkmailer ASC, priority_packet_bulkmailer ASC, reception_date_bulkmailer ASC, verp_bulkmailer ASC';
-    if (lc($Conf::Conf{'db_type'}) eq 'mysql' || lc($Conf::Conf{'db_type'}) eq 'Pg' || lc($Conf::Conf{'db_type'}) eq 'SQLite'){
+    if (lc($Sympa::Conf::Conf{'db_type'}) eq 'mysql' || lc($Conf::Conf{'db_type'}) eq 'Pg' || lc($Conf::Conf{'db_type'}) eq 'SQLite'){
 	$order.=' LIMIT 1';
-    }elsif (lc($Conf::Conf{'db_type'}) eq 'Oracle'){
+    }elsif (lc($Sympa::Conf::Conf{'db_type'}) eq 'Oracle'){
 	$limit_oracle = 'AND rownum<=1';
-    }elsif (lc($Conf::Conf{'db_type'}) eq 'Sybase'){
+    }elsif (lc($Sympa::Conf::Conf{'db_type'}) eq 'Sybase'){
 	$limit_sybase = 'TOP 1';
     }
 
@@ -385,8 +385,8 @@ sub store {
     &Log::do_log('debug', 'Bulk::store(<msg>,<rcpts>,from = %s,robot = %s,listname= %s,priority_message = %s, delivery_date= %s,verp = %s, tracking = %s, merge = %s, dkim: d= %s i=%s, last: %s)',$from,$robot,$listname,$priority_message,$delivery_date,$verp,$tracking, $merge,$dkim->{'d'},$dkim->{'i'},$tag_as_last);
 
 
-    $priority_message = &Conf::get_robot_conf($robot,'sympa_priority') unless ($priority_message);
-    $priority_packet = &Conf::get_robot_conf($robot,'sympa_packet_priority') unless ($priority_packet);
+    $priority_message = &Sympa::Conf::get_robot_conf($robot,'sympa_priority') unless ($priority_message);
+    $priority_packet = &Sympa::Conf::get_robot_conf($robot,'sympa_packet_priority') unless ($priority_packet);
     
     #creation of a MIME entity to extract the real sender of a message
     my $parser = MIME::Parser->new();
@@ -553,7 +553,7 @@ sub get_remaining_packets_count {
 sub there_is_too_much_remaining_packets {
     &Log::do_log('debug3', 'there_is_too_much_remaining_packets');
     my $remaining_packets = &get_remaining_packets_count();
-    if ($remaining_packets > &Conf::get_robot_conf('*','bulk_fork_threshold')) {
+    if ($remaining_packets > &Sympa::Conf::get_robot_conf('*','bulk_fork_threshold')) {
 	return $remaining_packets;
     }else{
 	return 0;

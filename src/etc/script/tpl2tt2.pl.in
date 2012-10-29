@@ -23,10 +23,10 @@
 
 use lib '--modulesdir--';
 
-use Conf;
 use Language;
 use List;
 use Log;
+use Sympa::Conf;
 use Sympa::Constants;
 use Sympa::Tools::File;
 use wwslib;
@@ -54,7 +54,7 @@ unless ($wwsconf = &wwslib::load_config($wwsympa_conf_file)) {
 }
 
 ## Load sympa config
-unless (&Conf::load($sympa_conf_file)) {
+unless (&Sympa::Conf::load($sympa_conf_file)) {
     die 'config_error';
 }
 
@@ -85,47 +85,47 @@ my @directories;
 my @templates;
 
 ## Search in main robot
-if (-d $Conf::Conf{'etc'}) {
-    push @directories, $Conf::Conf{'etc'};
+if (-d $Sympa::Conf::Conf{'etc'}) {
+    push @directories, $Sympa::Conf::Conf{'etc'};
 }
-if (-d "$Conf::Conf{'etc'}/templates") {
-    push @directories, "$Conf::Conf{'etc'}/templates";
+if (-d "$Sympa::Conf::Conf{'etc'}/templates") {
+    push @directories, "$Sympa::Conf::Conf{'etc'}/templates";
 }
-if (-d "$Conf::Conf{'etc'}/wws_templates") {
-    push @directories, "$Conf::Conf{'etc'}/wws_templates";
+if (-d "$Sympa::Conf::Conf{'etc'}/wws_templates") {
+    push @directories, "$Sympa::Conf::Conf{'etc'}/wws_templates";
 }
-if (-f "$Conf::Conf{'etc'}/mhonarc-ressources") {
-    push @templates, "$Conf::Conf{'etc'}/mhonarc-ressources";
+if (-f "$Sympa::Conf::Conf{'etc'}/mhonarc-ressources") {
+    push @templates, "$Sympa::Conf::Conf{'etc'}/mhonarc-ressources";
 }
 
 ## Create_list_templates
-if (-d $Conf::Conf{'etc'}.'/create_list_templates') {
-    foreach my $dir (<$Conf::Conf{'etc'}/create_list_templates/*>) {
+if (-d $Sympa::Conf::Conf{'etc'}.'/create_list_templates') {
+    foreach my $dir (<$Sympa::Conf::Conf{'etc'}/create_list_templates/*>) {
 	next unless (-d $dir);
 	push @directories, $dir;       
     }
 }
 
 ## Go through Virtual Robots
-foreach my $vr (keys %{$Conf::Conf{'robots'}}) {
+foreach my $vr (keys %{$Sympa::Conf::Conf{'robots'}}) {
     ## Search in etc/
-    if ( -d "$Conf::Conf{'etc'}/$vr") {
-	push @directories, "$Conf::Conf{'etc'}/$vr";
+    if ( -d "$Sympa::Conf::Conf{'etc'}/$vr") {
+	push @directories, "$Sympa::Conf::Conf{'etc'}/$vr";
     }
 
-    if (-d "$Conf::Conf{'etc'}/$vr/templates") {
-	push @directories, "$Conf::Conf{'etc'}/$vr/templates";
+    if (-d "$Sympa::Conf::Conf{'etc'}/$vr/templates") {
+	push @directories, "$Sympa::Conf::Conf{'etc'}/$vr/templates";
     }
-    if (-d "$Conf::Conf{'etc'}/$vr/wws_templates") {
-	push @directories, "$Conf::Conf{'etc'}/$vr/wws_templates";
+    if (-d "$Sympa::Conf::Conf{'etc'}/$vr/wws_templates") {
+	push @directories, "$Sympa::Conf::Conf{'etc'}/$vr/wws_templates";
     }
-    if (-f "$Conf::Conf{'etc'}/$vr/mhonarc-ressources") {
-	push @templates, "$Conf::Conf{'etc'}/$vr/mhonarc-ressources";
+    if (-f "$Sympa::Conf::Conf{'etc'}/$vr/mhonarc-ressources") {
+	push @templates, "$Sympa::Conf::Conf{'etc'}/$vr/mhonarc-ressources";
     }
 
     ## Create_list_templates
-    if (-d $Conf::Conf{'etc'}.'/'.$vr.'/create_list_templates') {
-	foreach my $dir (<$Conf::Conf{'etc'}/$vr/create_list_templates/*>) {
+    if (-d $Sympa::Conf::Conf{'etc'}.'/'.$vr.'/create_list_templates') {
+	foreach my $dir (<$Sympa::Conf::Conf{'etc'}/$vr/create_list_templates/*>) {
 	    next unless (-d $dir);
 	    push @directories, $dir;       
 	}

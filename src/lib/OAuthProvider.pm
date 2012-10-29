@@ -41,8 +41,8 @@ use OAuth::Lite::ServerUtil;
 use URI::Escape;
 
 use Auth;
-use Conf;
 use Log;
+use Sympa::Conf;
 use Sympa::Tools;
 
 =pod 
@@ -762,7 +762,7 @@ sub _getConsumerConfigFor {
 	
 	&Log::do_log('debug2', 'OAuthProvider::_getConsumerConfig(%s)', $key);
 	
-	my $file = $Conf::Conf{'etc'}.'/oauth_provider.conf';
+	my $file = $Sympa::Conf::Conf{'etc'}.'/oauth_provider.conf';
 	return undef unless (-f $file);
 	
 	my $c = {};

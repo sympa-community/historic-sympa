@@ -24,7 +24,6 @@ package Task;
 
 use strict;
 
-use Conf;
 use List;
 use Log;
 use Sympa::Spool;

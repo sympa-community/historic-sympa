@@ -24,11 +24,11 @@ package Auth;
 
 use Digest::MD5;
 
-use Conf;
 use Language;
 use List;
 use Log;
 use SDM;
+use Sympa::Conf;
 use Sympa::Report;
 use Sympa::Session;
 
@@ -38,7 +38,7 @@ sub password_fingerprint{
     &Log::do_log('debug', 'Auth::password_fingerprint');
 
     my $pwd = shift;
-    if(&Conf::get_robot_conf('*','password_case') eq 'insensitive') {
+    if(&Sympa::Conf::get_robot_conf('*','password_case') eq 'insensitive') {
 	return &Sympa::Tools::md5_fingerprint(lc($pwd));
     }else{
 	return &Sympa::Tools::md5_fingerprint($pwd);
@@ -119,7 +119,7 @@ sub authentication {
 	$user->{'password'} = '';
     }
     
-    if ($user->{'wrong_login_count'} > &Conf::get_robot_conf($robot, 'max_wrong_password')){
+    if ($user->{'wrong_login_count'} > &Sympa::Conf::get_robot_conf($robot, 'max_wrong_password')){
 	# too many wrong login attemp
 	&List::update_global_user($email,{wrong_login_count => $user->{'wrong_login_count'}+1}) ;
 	&Sympa::Report::reject_report_web('user','too_many_wrong_login',{}) unless ($ENV{'SYMPA_SOAP'});
@@ -175,7 +175,7 @@ sub ldap_authentication {
      &Log::do_log('debug2','Auth::ldap_authentication(%s,%s,%s)', $auth,'****',$whichfilter);
      &Log::do_log('debug3','Password used: %s',$pwd);
 
-     unless (&Sympa::Tools::get_filename('etc',{},'auth.conf', $robot, undef, $Conf::Conf{'etc'})) {
+     unless (&Sympa::Tools::get_filename('etc',{},'auth.conf', $robot, undef, $Sympa::Conf::Conf{'etc'})) {
 	 return undef;
      }
 
@@ -284,7 +284,7 @@ sub ldap_authentication {
      &Log::do_log('debug3',"canonic: $canonic_email[0]");
      ## If the identifier provided was a valid email, return the provided email.
      ## Otherwise, return the canonical email guessed after the login.
-     if( &Sympa::Tools::valid_email($auth) && !&Conf::get_robot_conf($robot,'ldap_force_canonical_email')) {
+     if( &Sympa::Tools::valid_email($auth) && !&Sympa::Conf::get_robot_conf($robot,'ldap_force_canonical_email')) {
 	 return ($auth);
      }else{
 	 return lc($canonic_email[0]);
@@ -365,7 +365,7 @@ sub remote_app_check_password {
     my @trusted_apps ;
     
     # select trusted_apps from robot context or sympa context
-    @trusted_apps = @{&Conf::get_robot_conf($robot,'trusted_applications')};
+    @trusted_apps = @{&Sympa::Conf::get_robot_conf($robot,'trusted_applications')};
     
     foreach my $application (@trusted_apps){
 	

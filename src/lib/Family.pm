@@ -39,12 +39,12 @@ use File::Copy;
 use Term::ProgressBar;
 use XML::LibXML;
 
-use Conf;
 use Config_XML;
 use Language;
 use List;
 use Log;
 use Sympa::Admin;
+use Sympa::Conf;
 use Sympa::Constants;
 
 my %list_of_families;
@@ -108,8 +108,8 @@ sub get_available_families {
 
     foreach my $dir (
         Sympa::Constants::DEFAULTDIR . "/families",
-        $Conf::Conf{'etc'}           . "/families",
-        $Conf::Conf{'etc'}           . "/$robot/families"
+        $Sympa::Conf::Conf{'etc'}           . "/families",
+        $Sympa::Conf::Conf{'etc'}           . "/$robot/families"
      ) {
 	next unless (-d $dir);
 
@@ -231,7 +231,7 @@ sub new {
     $self->{'robot'} = $robot;
 
     ## Adding configuration related to automatic lists.
-    my $all_families_config = &Conf::get_robot_conf($robot,'automatic_list_families');
+    my $all_families_config = &Sympa::Conf::get_robot_conf($robot,'automatic_list_families');
     my $family_config = $all_families_config->{$name};
     foreach my $key (keys %{$family_config}) {
 	$self->{$key} = $family_config->{$key};
@@ -294,7 +294,7 @@ Adds a list to the family. List description can be passed either through a hash 
 
 =item * Sympa::Admincreate_list
 
-=item * Conf::get_robot_conf
+=item * Sympa::Conf::get_robot_conf
 
 =item * Family::_copy_files
 
@@ -389,7 +389,7 @@ sub add_list {
     }
     close FILE;
  
-    my $host = &Conf::get_robot_conf($self->{'robot'}, 'host');
+    my $host = &Sympa::Conf::get_robot_conf($self->{'robot'}, 'host');
 
     # info parameters
     $list->{'admin'}{'latest_instantiation'}{'email'} = "listmaster\@$host";
@@ -465,7 +465,7 @@ Adds a list to the family.
 
 =item * Sympa::Adminupdate_list
 
-=item * Conf::get_robot_conf
+=item * Sympa::Conf::get_robot_conf
 
 =item * Config_XML::new
 
@@ -667,7 +667,7 @@ sub modify_list {
     $list->update_config_changes('file',\@kept_files);
 
 
-    my $host = &Conf::get_robot_conf($self->{'robot'}, 'host');
+    my $host = &Sympa::Conf::get_robot_conf($self->{'robot'}, 'host');
 
     $list->{'admin'}{'latest_instantiation'}{'email'} = "listmaster\@$host";
     $list->{'admin'}{'latest_instantiation'}{'date'} = gettext_strftime "%d %b %Y at %H:%M:%S", localtime(time);
@@ -902,8 +902,8 @@ sub instantiate {
 	});
 	$progress->max_update_rate(1);
 	my $next_update = 0;
-    my $aliasmanager_output_file = $Conf::Conf{'tmpdir'}.'/aliasmanager.stdout.'.$$;
-    my $output_file = $Conf::Conf{'tmpdir'}.'/instantiate_family.stdout.'.$$;
+    my $aliasmanager_output_file = $Sympa::Conf::Conf{'tmpdir'}.'/aliasmanager.stdout.'.$$;
+    my $output_file = $Sympa::Conf::Conf{'tmpdir'}.'/instantiate_family.stdout.'.$$;
 	my $output = '';
                                          
     ## EACH FAMILY LIST
@@ -1817,8 +1817,8 @@ sub _get_directory {
     &Log::do_log('debug3','Family::_get_directory(%s)',$name);
 
     my @try = (
-        $Conf::Conf{'etc'}           . "/$robot/families",
-        $Conf::Conf{'etc'}           . "/families",
+        $Sympa::Conf::Conf{'etc'}           . "/$robot/families",
+        $Sympa::Conf::Conf{'etc'}           . "/families",
 	    Sympa::Constants::DEFAULTDIR . "/families"
     );
 
@@ -2603,7 +2603,7 @@ Finishes to generate a list in a family context (for a new or an already existin
 
 =over 
 
-=item * Conf::get_robot_conf
+=item * Sympa::Conf::get_robot_conf
 
 =item * Family::_copy_files
 
@@ -2636,7 +2636,7 @@ sub _end_update_list {
     my ($self,$list,$xml_file) = @_;
     &Log::do_log('debug3','Family::_end_update_list(%s,%s)',$self->{'name'},$list->{'name'});
     
-    my $host = &Conf::get_robot_conf($self->{'robot'}, 'host');
+    my $host = &Sympa::Conf::get_robot_conf($self->{'robot'}, 'host');
     $list->{'admin'}{'latest_instantiation'}{'email'} = "listmaster\@$host";
     $list->{'admin'}{'latest_instantiation'}{'date'} = gettext_strftime "%d %b %Y at %H:%M:%S", localtime(time);
     $list->{'admin'}{'latest_instantiation'}{'date_epoch'} = time;

@@ -28,7 +28,7 @@ use Digest::MD5;
 use POSIX;
 use Time::Local;
 
-use Conf;
+use Sympa::Conf;
 use Log;
 use Sympa::Tools::Time;
 use Sympa::Tools::Data;
@@ -464,7 +464,7 @@ sub is_a_crawler {
     my $robot = shift;
     my $context = shift;
 
-    return $Conf::Conf{'crawlers_detection'}{'user_agent_string'}{$context->{'user_agent_string'}};
+    return $Sympa::Conf::Conf{'crawlers_detection'}{'user_agent_string'}{$context->{'user_agent_string'}};
 }
 
 1;

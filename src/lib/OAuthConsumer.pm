@@ -40,7 +40,6 @@ use strict;
 use OAuth::Lite::Consumer;
 
 use Auth;
-use Conf;
 use Log;
 use Sympa::Tools;
 
