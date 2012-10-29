@@ -25,8 +25,6 @@ use strict "vars";
 
 use Exporter;
 
-use Conf;
-
 our @ISA = qw(Exporter);
 our @EXPORT = qw(%Ldap);
 

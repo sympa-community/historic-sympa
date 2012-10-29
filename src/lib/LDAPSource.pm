@@ -26,7 +26,6 @@ use strict;
 
 use Exporter;
 
-use Conf;
 use Datasource;
 use List;
 use Log;
