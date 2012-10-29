@@ -26,9 +26,9 @@ use strict;
 use Encode::Guess;
 use File::Copy::Recursive;
 use File::Find;
-use POSIX qw(strftime);
 
 use Log;
+use Sympa::Constants;
 
 ## Sets owner and/or access rights on a file.
 sub set_file_rights {

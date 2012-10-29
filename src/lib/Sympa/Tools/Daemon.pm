@@ -27,7 +27,6 @@ use Proc::ProcessTable;
 use Sys::Hostname;
 
 use Log;
-use Lock;
 use Sympa::Tools::File;
 
 ## Remove PID file and STDERR output
