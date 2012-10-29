@@ -39,12 +39,12 @@ use File::Copy;
 use Term::ProgressBar;
 use XML::LibXML;
 
-use admin;
 use Conf;
 use Config_XML;
 use Language;
 use List;
 use Log;
+use Sympa::Admin;
 use Sympa::Constants;
 
 my %list_of_families;
@@ -292,7 +292,7 @@ Adds a list to the family. List description can be passed either through a hash 
 
 =over 
 
-=item * admin::create_list
+=item * Sympa::Admincreate_list
 
 =item * Conf::get_robot_conf
 
@@ -364,7 +364,7 @@ sub add_list {
     }
  
     #list creation
-    my $result = &admin::create_list($hash_list->{'config'},$self,$self->{'robot'}, $abort_on_error);
+    my $result = &Sympa::Admin::create_list($hash_list->{'config'},$self,$self->{'robot'}, $abort_on_error);
     unless (defined $result) {
 	push @{$return->{'string_error'}}, "Error during list creation, see logs for more informations";
 	return $return;
@@ -463,7 +463,7 @@ Adds a list to the family.
 
 =over 
 
-=item * admin::update_list
+=item * Sympa::Adminupdate_list
 
 =item * Conf::get_robot_conf
 
@@ -574,7 +574,7 @@ sub modify_list {
     my $old_status = $list->{'admin'}{'status'};
 
     ## list config family updating
-    my $result = &admin::update_list($list,$hash_list->{'config'},$self,$self->{'robot'});
+    my $result = &Sympa::Admin::update_list($list,$hash_list->{'config'},$self,$self->{'robot'});
     unless (defined $result) {
 	&Log::do_log('err','No object list resulting from updating list %s',$list->{'name'});
 	push @{$return->{'string_error'}}, "Error during updating list $list->{'name'}, the list is set in status error_config."; 
@@ -829,7 +829,7 @@ Creates family lists or updates them if they exist already.
 
 =over 
 
-=item * admin::create_list
+=item * Sympa::Admincreate_list
 
 =item * Config_XML::createHash
 
@@ -958,7 +958,7 @@ sub instantiate {
 	} else{
 
 	    ## Create the list
-	    my $result = &admin::create_list($hash_list->{'config'},$self,$self->{'robot'});
+	    my $result = &Sympa::Admin::create_list($hash_list->{'config'},$self,$self->{'robot'});
 	    unless (defined $result) {
 		push (@{$self->{'errors'}{'create_list'}}, $hash_list->{'config'}{'listname'});
 		next;
@@ -2206,7 +2206,7 @@ sub _update_existing_list {
 
 
     ## list config family updating
-    my $result = &admin::update_list($list,$hash_list->{'config'},$self,$self->{'robot'});
+    my $result = &Sympa::Admin::update_list($list,$hash_list->{'config'},$self,$self->{'robot'});
     unless (defined $result) {
 	&Log::do_log('err','No object list resulting from updating list %s',$list->{'name'});
 	return undef;
@@ -2485,9 +2485,9 @@ Sets changes (loads the users, installs or removes the aliases); deals with the 
 
 =over 
 
-=item * admin::install_aliases
+=item * Sympa::Admininstall_aliases
 
-=item * admin::remove_aliases
+=item * Sympa::Adminremove_aliases
 
 =item * List::add_list_member
 
@@ -2530,14 +2530,14 @@ sub _set_status_changes {
     if ($list->{'admin'}{'status'} eq 'open') {
 	unless ($old_status eq 'open') {
 	    $result->{'install_remove'} = 'install'; 
-	    $result->{'aliases'} = &admin::install_aliases($list,$self->{'robot'});
+	    $result->{'aliases'} = &Sympa::Admin::install_aliases($list,$self->{'robot'});
 	}
     }
 
     if (($list->{'admin'}{'status'} eq 'pending') && 
 	(($old_status eq 'open') || ($old_status eq 'error_config'))) {
 	$result->{'install_remove'} = 'remove'; 
-	$result->{'aliases'} = &admin::remove_aliases($list,$self->{'robot'});
+	$result->{'aliases'} = &Sympa::Admin::remove_aliases($list,$self->{'robot'});
     }
     
 ##    ## subscribers
