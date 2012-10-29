@@ -18,9 +18,9 @@ use strict "vars";
 
 use HTTP::Cookies;
 
-use Auth;
 use Language;
 use Log;
+use Sympa::Auth;
 use Sympa::Conf;
 use Sympa::Session;
 use Sympa::Tools;
@@ -156,7 +156,7 @@ sub login {
     $ENV{'SYMPA_SOAP'} = 1;
 
     &Log::do_log('debug', 'call check_auth(%s,%s)',$robot,$email);
-    my $user = &Auth::check_auth($robot,$email,$passwd);
+    my $user = &Sympa::Auth::check_auth($robot,$email,$passwd);
 
     unless($user){
 	&Log::do_log('notice', "SOAP : login authentication failed");
@@ -233,7 +233,7 @@ sub casLogin {
     } 
 
     ## Now fetch email attribute from LDAP
-    unless ($email = &Auth::get_email_by_net_id($robot, $cas_id, {'uid' => $user})) {
+    unless ($email = &Sympa::Auth::get_email_by_net_id($robot, $cas_id, {'uid' => $user})) {
 	&Log::do_log('err','Could not get email address from LDAP for user %s', $user);
 	die SOAP::Fault->faultcode('Server')
 	    ->faultstring('Authentification failed')
@@ -329,7 +329,7 @@ sub authenticateRemoteAppAndRun {
 	    ->faultstring('Incorrect number of parameters')
 	    ->faultdetail('Use : <appname> <apppassword> <vars> <service>');
     }
-    my $proxy_vars = &Auth::remote_app_check_password($appname, $apppassword, $robot);
+    my $proxy_vars = &Sympa::Auth::remote_app_check_password($appname, $apppassword, $robot);
         
     unless (defined $proxy_vars) {
 	&Log::do_log('notice', "authenticateRemoteAppAndRun(): authentication failed");

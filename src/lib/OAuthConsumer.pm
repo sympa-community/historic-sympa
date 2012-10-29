@@ -39,7 +39,7 @@ use strict;
 
 use OAuth::Lite::Consumer;
 
-use Auth;
+use Sympa::Auth;
 use Log;
 use Sympa::Tools;
 
@@ -325,7 +325,7 @@ sub triggerFlow {
 	my $self = shift;
 	&Log::do_log('debug2', 'OAuthConsumer::triggerFlow(%s, %s)', $self->{'user'}, $self->{'consumer_type'}.':'.$self->{'provider'});
 	
-	my $ticket = &Auth::create_one_time_ticket(
+	my $ticket = &Sympa::Auth::create_one_time_ticket(
 		$self->{'user'},
 		$self->{'robot'},
 		$self->{'here_path'},
