@@ -24,11 +24,11 @@ package DBManipulatorDefault;
 
 use strict;
 
-use SQLSource;
+use Sympa::Datasource::SQL;
 
 use Log;
 
-our @ISA = qw(SQLSource);
+our @ISA = qw(Sympa::Datasource::SQL);
 
 ############################
 #### Section containing generic functions          #

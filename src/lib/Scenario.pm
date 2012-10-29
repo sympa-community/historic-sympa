@@ -29,6 +29,7 @@ use List;
 use Log;
 use Sympa::Conf;
 use Sympa::Constants;
+use Sympa::Datasource::SQL;
 use Sympa::Datasource::LDAP;
 use Sympa::Tools;
 use Sympa::Tools::Time;
@@ -1185,7 +1186,7 @@ sub search{
             return $persistent_cache{'named_filter'}{$filter_file}{$filter}{'value'};
         }
 	
-	my $ds = new SQLSource($sql_conf->{'sql_named_filter_query'});
+	my $ds = new Sympa::Datasource::SQL($sql_conf->{'sql_named_filter_query'});
 	unless (defined $ds && $ds->connect() && $ds->ping) {
             &Log::do_log('notice','Unable to connect to the SQL server %s:%d',$sql_conf->{'db_host'}, $sql_conf->{'db_port'});
             return undef;

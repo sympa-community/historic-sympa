@@ -20,7 +20,7 @@
 # along with this program; if not, write to the Free Software
 # Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
 
-package SQLSource;
+package Sympa::Datasource::SQL;
 
 use strict;
 
@@ -32,7 +32,7 @@ use Log;
 use List;
 use Sympa::Tools;
 
-our @ISA = qw(Exporter);
+our @ISA = qw(Sympa::Datasource Exporter);
 our @EXPORT = qw(%date_format);
 our @EXPORT_OK = qw(connect query disconnect fetch create_db ping quote set_fetch_timeout);
 
@@ -49,7 +49,6 @@ sub new {
     my $self = $param;
     &Log::do_log('debug',"Creating new SQLSource object for RDBMS '%s'",$param->{'db_type'});
     my $actualclass;
-    our @ISA = qw(Sympa::Datasource);
     if ($param->{'db_type'} =~ /^mysql$/i) {
 	unless ( eval "require DBManipulatorMySQL" ){
 	    &Log::do_log('err',"Unable to use DBManipulatorMySQL module: $@");

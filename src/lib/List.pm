@@ -46,10 +46,10 @@ use Message;
 use PlainDigest;
 use Scenario;
 use SDM;
-use SQLSource qw(create_db);
 use Sympa::Conf;
 use Sympa::Constants;
 use Sympa::Datasource;
+use Sympa::Datasource::SQL;
 use Sympa::Datasource::LDAP;
 use Sympa::Mail;
 use Sympa::Report;
@@ -8911,7 +8911,7 @@ sub _load_list_members_from_include {
 	    ## Verify if we can syncronize sources. If it's allowed OR there are new sources, we update the list, and can add subscribers.
 		## Else if we can't syncronize sources. We make an array with excluded sources.
 	    if ($type eq 'include_sql_query') {
-			my $source = new SQLSource($incl);
+			my $source = new Sympa::Datasource::SQL($incl);
 			if ($source->is_allowed_to_sync() || $source_is_new) {
 				&Log::do_log('debug', 'is_new %d, syncing', $source_is_new);
 				$included = _include_users_sql(\%users, $source_id, $source, $admin->{'default_user_options'}, 'untied', $admin->{'sql_fetch_timeout'});
@@ -9082,7 +9082,7 @@ sub _load_list_admin_from_include {
 		## get the list of admin users
 		## does it need to define a 'default_admin_user_option'?
 		if ($type eq 'include_sql_query') {
-		    my $source = new SQLSource($incl);
+		    my $source = new Sympa::Datasource::SQL($incl);
 		    $included = _include_users_sql(\%admin_users, $incl,$source,\%option, 'untied', $list_admin->{'sql_fetch_timeout'}); 
 		}elsif ($type eq 'include_ldap_query') {
 		    my $source = new Sympa::Datasource::LDAP($incl);
@@ -9360,7 +9360,7 @@ sub sync_include_ca {
 			my $source = undef;
 			my $srcca = undef;
 			if ($type eq 'include_sql_ca') {
-				$source = new SQLSource($incl);
+				$source = new Sympa::Datasource::SQL($incl);
 			}elsif(($type eq 'include_ldap_ca') or ($type eq 'include_ldap_2level_ca')) {
 				$source = new Sympa::Datasource::LDAP($incl);
 			}

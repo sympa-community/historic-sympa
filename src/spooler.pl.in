@@ -39,7 +39,6 @@ use Lock;
 use List;
 use Message;
 use SDM;
-use SQLSource;
 use Sympa::Conf;
 use Sympa::Constants;
 use Sympa::Spool;

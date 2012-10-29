@@ -46,7 +46,6 @@ use Message;
 use PlainDigest;
 use Scenario;
 use SDM;
-use SQLSource qw(create_db %date_format);
 use Sympa::Constants;
 use Sympa::DatabaseDescription;
 use Sympa::Tools::Time;
