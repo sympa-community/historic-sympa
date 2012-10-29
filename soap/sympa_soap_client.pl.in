@@ -25,7 +25,6 @@ use SOAP::Lite;
 #use SOAP::Lite +trace;
 use URI;
 
-use admin;
 use Auth;
 use Commands;
 use Config_XML;
@@ -34,7 +33,6 @@ use Language;
 use List;
 use Log;
 use Message;
-use report;
 use Sympa::Constants;
 use Sympa::Tools;
 use Sympa::Tools::Data;
