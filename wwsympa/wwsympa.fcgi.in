@@ -62,6 +62,7 @@ use Sympa::Admin;
 use Sympa::Conf;
 use Sympa::Configuration::Definition;
 use Sympa::Constants;
+use Sympa::Datasource::LDAP;
 use Sympa::Mail;
 use Sympa::Report;
 use Sympa::Session;
@@ -3697,7 +3698,7 @@ sub is_ldap_user {
 	 next unless ($auth =~ /$ldap->{'regexp'}/i);
 
 	 my $param = &Sympa::Tools::dup_var($ldap);
-	 my $ds = new LDAPSource($param);
+	 my $ds = new Sympa::Datasource::LDAP($param);
 
 	 unless (defined $ds && ($ldap_anonymous = $ds->connect())) {
 	     &Log::do_log('err',"Unable to connect to the LDAP server '%s'", $ldap->{'ldap_host'});

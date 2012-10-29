@@ -29,6 +29,7 @@ use List;
 use Log;
 use Sympa::Conf;
 use Sympa::Constants;
+use Sympa::Datasource::LDAP;
 use Sympa::Tools;
 use Sympa::Tools::Time;
 use Sympa::Tools::Data;
@@ -1264,7 +1265,7 @@ sub search{
 	
 	my $ldap;
 	my $param = &Sympa::Tools::Data::dup_var(\%ldap_conf);
-	my $ds = new LDAPSource($param);
+	my $ds = new Sympa::Datasource::LDAP($param);
 	    
 	unless (defined $ds && ($ldap = $ds->connect())) {
 	    &Log::do_log('err',"Unable to connect to the LDAP server '%s'", $param->{'ldap_host'});

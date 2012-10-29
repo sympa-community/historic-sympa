@@ -29,6 +29,7 @@ use List;
 use Log;
 use SDM;
 use Sympa::Conf;
+use Sympa::Datasource::LDAP;
 use Sympa::Report;
 use Sympa::Session;
 
@@ -200,7 +201,7 @@ sub ldap_authentication {
      
      ## bind in order to have the user's DN
      my $param = &Sympa::Tools::Data::dup_var($ldap);
-     my $ds = new LDAPSource($param);
+     my $ds = new Sympa::Datasource::LDAP($param);
      
      unless (defined $ds && ($ldap_anonymous = $ds->connect())) {
        &Log::do_log('err',"Unable to connect to the LDAP server '%s'", $ldap->{'host'});
@@ -231,7 +232,7 @@ sub ldap_authentication {
      $param->{'ldap_bind_dn'} = $DN[0];
      $param->{'ldap_bind_password'} = $pwd;
      
-     $ds = new LDAPSource($param);
+     $ds = new Sympa::Datasource::LDAP($param);
      
      unless (defined $ds && ($ldap_passwd = $ds->connect())) {
        &Log::do_log('err',"Unable to connect to the LDAP server '%s'", $param->{'host'});
@@ -315,7 +316,7 @@ sub get_email_by_net_id {
     my $ldap = @{$Conf{'auth_services'}{$robot}}[$auth_id];
 
     my $param = &Sympa::Tools::Data::dup_var($ldap);
-    my $ds = new LDAPSource($param);
+    my $ds = new Sympa::Datasource::LDAP($param);
     my $ldap_anonymous;
     
     unless (defined $ds && ($ldap_anonymous = $ds->connect())) {
