@@ -28,7 +28,6 @@ use URI;
 use admin;
 use Auth;
 use Commands;
-use Conf;
 use Config_XML;
 use Family;
 use Language;
