@@ -37,7 +37,6 @@ use Time::Local;
 
 use Archive;
 use Family;
-use Fetch;
 use Language;
 use Ldap;
 use Lock;
@@ -51,6 +50,7 @@ use Sympa::Constants;
 use Sympa::Datasource;
 use Sympa::Datasource::SQL;
 use Sympa::Datasource::LDAP;
+use Sympa::Fetch;
 use Sympa::Mail;
 use Sympa::Report;
 use Sympa::Spool;
@@ -8018,7 +8018,7 @@ sub _include_users_remote_sympa_list {
     my $email ;
 
 
-    foreach my $line ( &Fetch::get_https($host,$port,$path,$cert_file,$key_file,{'key_passwd' => $Sympa::Conf::Conf{'key_passwd'},
+    foreach my $line ( &Sympa::Fetch::get_https($host,$port,$path,$cert_file,$key_file,{'key_passwd' => $Sympa::Conf::Conf{'key_passwd'},
                                                                                'cafile'    => $Sympa::Conf::Conf{'cafile'},
                                                                                'capath' => $Sympa::Conf::Conf{'capath'}})
 		){	
