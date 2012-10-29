@@ -66,8 +66,7 @@ our @params = (
         'vhost'    => '1',
         'edit'     => '1',
         'file'     => 'sympa.conf',
-        'advice'   => gettext('This parameter is used in mail_tt2 files'),
-        'optional' => '1',
+        'advice'   => gettext('This parameter is used for display name in the "From:" header'),
     },
     {
         'name'     => 'listmaster',

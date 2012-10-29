@@ -73,7 +73,7 @@ sub load {
 
 =item send_file                              
 
-Send a site-global (not relative to a list or a robot) message to a user.
+Send a site-global (not relative to a list or a robot) message to user(s).
 Find the tt2 file according to $tpl, set up 
 $data for the next parsing (with $context and
 configuration)
@@ -150,11 +150,7 @@ sub send_file {
 	    }
 	}
 	unless ($data->{'user'}{'lang'}) {
-	    if (ref $self eq 'List') {
-		$data->{'user'}{'lang'} = $self->lang;
-	    } else {
-		$data->{'user'}{'lang'} = $Language::default_lang;
-	    }
+	    $data->{'user'}{'lang'} = $self->lang || 'en';
 	}
 
 	if (ref $self eq 'List') {
@@ -182,8 +178,8 @@ sub send_file {
 
 	if (ref $self eq 'List') {
 	    ## Unique return-path VERP
-	    if ($self->welcome_return_path eq 'unique' and $tpl eq 'welcome')
-	    {
+	    if ($self->welcome_return_path eq 'unique' and
+		$tpl eq 'welcome') {
 		$data->{'return_path'} = $self->get_bounce_address($who, 'w');
 	    } elsif ($self->remind_return_path eq 'unique' and
 		$tpl eq 'remind') {
@@ -281,9 +277,8 @@ sub send_file {
 	}
 	$data->{'from'} = $data->{'fromlist'} unless $data->{'from'};
     } else {
-	$data->{'from'} = $self->email . '@' . $self->host
-	    unless $data->{'from'};
-	$data->{'return_path'}  = $self->request;
+	$data->{'from'} ||= $self->sympa;
+	$data->{'return_path'} = $self->request;
     }
 
     $data->{'boundary'} = '----------=_' . &tools::get_message_id($robot_id)

@@ -24,7 +24,7 @@ my %numeric_field = ('cookie_delay_user' => 1,
 
 =over 4
 
-=item new ( EMAIL, [ VALUES ] )
+=item new ( EMAIL, [ KEY => VAL, ... ] )
 
 XXX @todo doc
 
@@ -34,22 +34,18 @@ XXX @todo doc
 
 sub new {
     my $pkg = shift;
-    my $who = shift || undef;
+    my $who = tools::clean_email(shift || '');
     my %values = @_;
     my $self;
     return undef unless $who;
 
     if (! ($self = get_global_user($who))) {
-	$who = tools::clean_email($who);
-	if (scalar grep { $_ ne 'lang' } keys %values) {
-	    add_global_user({ %values, 'email' => $who });
-	    $self = { %values, 'email' => $who };
-	} else {
-	    $self = {
-		'email' => $who,
-		'lang' => ($values{'lang'} || Site->lang),
-	    };
+	## unauthenticated user would not be added to database.
+	if (scalar grep { $_ ne 'lang' and $_ ne 'email' } keys %values) {
+	    $values{'email'} = $who;
+	    add_global_user(\%values);
 	}
+	$self = \%values;
     }
 
     bless $self => $pkg;

@@ -3670,7 +3670,7 @@ sub send_global_file {
 ####################################################
 # send_file                              
 ####################################################
-#  Send a message to a user, relative to a list.
+#  Send a message to user(s), relative to a list.
 #  Find the tt2 file according to $tpl, set up 
 #  $data for the next parsing (with $context and
 #  configuration)
@@ -3692,7 +3692,7 @@ sub send_global_file {
 # OUT : 1 | undef
 ####################################################
 sub send_file {
-    return Conf::send_file(@_);
+    return Site::send_file(@_);
 }
 
 ####################################################
@@ -4481,7 +4481,7 @@ sub archive_send_last {
 #       
 ###################################################### 
 sub send_notify_to_listmaster {
-    ## OBSOLETED. Use $robot->send_notify_to_listmaster() (to normal
+    ## OBSOLETED. Use $list->robot->send_notify_to_listmaster() (to normal
     ## listmaster) or Site->send_notify_to_listmaster() (to super listmaster).
     my $operation = shift;
     my $robot = shift;
@@ -4993,7 +4993,7 @@ sub _append_parts {
 
 ## Delete a user in the user_table
 sub delete_global_user {
-    ## OBSOLATED: Use User::delete_global_user() or $user->expire();
+    ## OBSOLETED: Use User::delete_global_user() or $user->expire();
     return User::delete_global_user(@_);
 }
 

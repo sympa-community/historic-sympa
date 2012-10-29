@@ -228,8 +228,8 @@ sub is_listmaster {
 
 =item send_file ( ... )
 
-Send a global (not relative to a list)
-message to a user.
+Send a global (not relative to a list, but relative to a robot)
+message to user(s).
 Find the tt2 file according to $tpl, set up
 $data for the next parsing (with $context and
 configuration )
@@ -260,7 +260,7 @@ OUT : 1 | undef
 
 =item send_notify_to_listmaster ( OPERATION, DATA, CHECKSTACK, PURGE )
 
-Sends a notice to listmaster by parsing
+Sends a notice to normal listmaster by parsing
 listmaster_notification.tt2 template
 
 IN :
