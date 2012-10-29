@@ -1,4 +1,4 @@
-package SOAP::Transport::HTTP::FCGI::Sympa;
+package Sympa::Transport;
 
 use strict;
 use vars qw(@ISA);
