@@ -39,7 +39,6 @@ use strict;
 use OAuthProvider;
 use JSON::XS;
 
-use Conf;
 use Log;
 use Sympa::Tools;
 
