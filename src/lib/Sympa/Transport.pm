@@ -7,8 +7,6 @@ use Sympa::Session;
 use SOAP::Transport::HTTP;
 @ISA = qw(SOAP::Transport::HTTP::FCGI);
 
-1;
-
 sub request {
     my $self = shift;
     
@@ -85,3 +83,5 @@ sub handle ($$) {
     }
     return undef;
 }
+
+1;
