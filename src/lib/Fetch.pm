@@ -25,6 +25,8 @@ package Fetch;
 
 use Log;
 
+use Sympa::Conf;
+
 # request a document using https, return status and content
 sub get_https{
 	my $host = shift;
@@ -115,9 +117,9 @@ sub get_https2{
 	my $ssl_data= shift;
 
 	my $trusted_ca_file = $ssl_data->{'cafile'};
-	$trusted_ca_file ||= $Conf::Conf{'cafile'};
+	$trusted_ca_file ||= $Sympa::Conf::Conf{'cafile'};
 	my $trusted_ca_path = $ssl_data->{'capath'};
-	$trusted_ca_path ||= $Conf::Conf{'capath'};
+	$trusted_ca_path ||= $Sympa::Conf::Conf{'capath'};
 
 	&Log::do_log ('debug','Fetch::get_https2 (%s,%s,%s,%s,%s)',$host,$port,$path,$trusted_ca_file,$trusted_ca_path );
 

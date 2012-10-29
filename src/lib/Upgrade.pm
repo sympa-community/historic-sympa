@@ -242,7 +242,7 @@ sub upgrade {
 	## Rename web archive directories using 'domain' instead of 'host'
 	&Log::do_log('notice','Renaming web archive directories with the list domain...');
 	
-	my $root_dir = &Sympa::Conf::get_robot_conf($Conf::Conf{'domain'},'arc_path');
+	my $root_dir = &Sympa::Conf::get_robot_conf($Sympa::Conf::Conf{'domain'},'arc_path');
 	unless (opendir ARCDIR, $root_dir) {
 	    &Log::do_log('err',"Unable to open $root_dir : $!");
 	    return undef;
@@ -362,7 +362,7 @@ sub upgrade {
 
 	&Log::do_log('notice','Renaming bounce sub-directories adding list domain...');
 	
-	my $root_dir = &Sympa::Conf::get_robot_conf($Conf::Conf{'domain'},'bounce_path');
+	my $root_dir = &Sympa::Conf::get_robot_conf($Sympa::Conf::Conf{'domain'},'bounce_path');
 	unless (opendir BOUNCEDIR, $root_dir) {
 	    &Log::do_log('err',"Unable to open $root_dir : $!");
 	    return undef;
@@ -497,7 +497,7 @@ sub upgrade {
 	## Site level
 	foreach my $type ('mail_tt2','web_tt2','scenari','create_list_templates','families') {
 	    if (-d $Sympa::Conf::Conf{'etc'}.'/'.$type) {
-		push @directories, [$Sympa::Conf::Conf{'etc'}.'/'.$type, $Conf::Conf{'lang'}];
+		push @directories, [$Sympa::Conf::Conf{'etc'}.'/'.$type, $Sympa::Conf::Conf{'lang'}];
 	    }
 	}
 
@@ -516,13 +516,13 @@ sub upgrade {
 	foreach my $vr (keys %{$Sympa::Conf::Conf{'robots'}}) {
 	    foreach my $type ('mail_tt2','web_tt2','scenari','create_list_templates','families') {
 		if (-d $Sympa::Conf::Conf{'etc'}.'/'.$vr.'/'.$type) {
-		    push @directories, [$Sympa::Conf::Conf{'etc'}.'/'.$vr.'/'.$type, &Conf::get_robot_conf($vr, 'lang')];
+		    push @directories, [$Sympa::Conf::Conf{'etc'}.'/'.$vr.'/'.$type, &Sympa::Conf::get_robot_conf($vr, 'lang')];
 		}
 	    }
 
 	    foreach my $f ('robot.conf','topics.conf','auth.conf') {
 		if (-f $Sympa::Conf::Conf{'etc'}.'/'.$vr.'/'.$f) {
-		    push @files, [$Sympa::Conf::Conf{'etc'}.'/'.$vr.'/'.$f, $Conf::Conf{'lang'}];
+		    push @files, [$Sympa::Conf::Conf{'etc'}.'/'.$vr.'/'.$f, $Sympa::Conf::Conf{'lang'}];
 		}
 	    }
 	}
@@ -639,10 +639,10 @@ sub upgrade {
 
       ## Remove OTHER/ subdirectories in bounces
       &Log::do_log('notice', "Removing obsolete OTHER/ bounce directories");
-      if (opendir BOUNCEDIR, &Sympa::Conf::get_robot_conf($Conf::Conf{'domain'}, 'bounce_path')) {
+      if (opendir BOUNCEDIR, &Sympa::Conf::get_robot_conf($Sympa::Conf::Conf{'domain'}, 'bounce_path')) {
 	
 	foreach my $subdir (sort grep (!/^\.+$/,readdir(BOUNCEDIR))) {
-	  my $other_dir = &Sympa::Conf::get_robot_conf($Conf::Conf{'domain'}, 'bounce_path').'/'.$subdir.'/OTHER';
+	  my $other_dir = &Sympa::Conf::get_robot_conf($Sympa::Conf::Conf{'domain'}, 'bounce_path').'/'.$subdir.'/OTHER';
 	  if (-d $other_dir) {
 	    &Sympa::Tools::File::remove_dir($other_dir);
 	    &Log::do_log('notice', "Directory $other_dir removed");
@@ -932,7 +932,7 @@ sub to_utf8 {
 
 	## If filesystem_encoding is set, files are supposed to be encoded according to it
 	my $charset;
-	if ((defined $Sympa::Conf::Conf::Ignored_Conf{'filesystem_encoding'})&($Conf::Conf::Ignored_Conf{'filesystem_encoding'} ne 'utf-8')) {
+	if ((defined $Sympa::Conf::Conf::Ignored_Conf{'filesystem_encoding'})&($Sympa::Conf::Conf::Ignored_Conf{'filesystem_encoding'} ne 'utf-8')) {
 	    $charset = $Sympa::Conf::Conf::Ignored_Conf{'filesystem_encoding'};
 	}else {	    
 	    &Language::PushLang($lang);

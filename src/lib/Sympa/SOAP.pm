@@ -1517,7 +1517,7 @@ sub get_reason_string {
 
     my $data = {'reason' => $reason };
     my $string;
-    my $tt2_include_path =  &Sympa::Tools::make_tt2_include_path($robot,'mail_tt2','','',$Sympa::Conf::Conf{'etc'},$Conf::Conf{'viewmaildir'},$Conf::Conf{'domain'});
+    my $tt2_include_path =  &Sympa::Tools::make_tt2_include_path($robot,'mail_tt2','','',$Sympa::Conf::Conf{'etc'},$Sympa::Conf::Conf{'viewmaildir'},$Sympa::Conf::Conf{'domain'});
 
     unless (&Sympa::TT2parse_tt2($data,'authorization_reject.tt2' ,\$string, $tt2_include_path)) {
 	my $error = &Sympa::TT2get_error();

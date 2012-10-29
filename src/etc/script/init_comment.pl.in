@@ -23,6 +23,7 @@
 
 use lib '--modulesdir--';
 use wwslib;
+use Sympa::Conf;
 use Sympa::Constants;
 
 use List;
@@ -30,9 +31,9 @@ use SDM;
 use Log;
 
 ## Load sympa config
-&Conf::load(Sympa::Constants::CONFIG) || die 'config_error';
+&Sympa::Conf::load(Sympa::Constants::CONFIG) || die 'config_error';
 
-chdir $Conf::Conf{'home'};
+chdir $Sympa::Conf::Conf{'home'};
 
 &SDM::db_connect() || die "Can't connect to database";
 

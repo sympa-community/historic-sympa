@@ -3453,11 +3453,11 @@ sub distribute_msg {
     ## Add RFC 2369 header fields
     foreach my $field (@{$self->{'admin'}{'rfc2369_header_fields'}}) {
 	if ($field eq 'help') {
-	    $hdr->add('List-Help', sprintf ('<mailto:%s@%s?subject=help>', &Sympa::Conf::get_robot_conf($robot, 'email'), &Conf::get_robot_conf($robot, 'host')));
+	    $hdr->add('List-Help', sprintf ('<mailto:%s@%s?subject=help>', &Sympa::Conf::get_robot_conf($robot, 'email'), &Sympa::Conf::get_robot_conf($robot, 'host')));
 	}elsif ($field eq 'unsubscribe') {
-	    $hdr->add('List-Unsubscribe', sprintf ('<mailto:%s@%s?subject=unsubscribe%%20%s>', &Sympa::Conf::get_robot_conf($robot, 'email'), &Conf::get_robot_conf($robot, 'host'), $self->{'name'}));
+	    $hdr->add('List-Unsubscribe', sprintf ('<mailto:%s@%s?subject=unsubscribe%%20%s>', &Sympa::Conf::get_robot_conf($robot, 'email'), &Sympa::Conf::get_robot_conf($robot, 'host'), $self->{'name'}));
 	}elsif ($field eq 'subscribe') {
-	    $hdr->add('List-Subscribe', sprintf ('<mailto:%s@%s?subject=subscribe%%20%s>', &Sympa::Conf::get_robot_conf($robot, 'email'), &Conf::get_robot_conf($robot, 'host'), $self->{'name'}));
+	    $hdr->add('List-Subscribe', sprintf ('<mailto:%s@%s?subject=subscribe%%20%s>', &Sympa::Conf::get_robot_conf($robot, 'email'), &Sympa::Conf::get_robot_conf($robot, 'host'), $self->{'name'}));
 	}elsif ($field eq 'post') {
 	    $hdr->add('List-Post', sprintf ('<mailto:%s@%s>', $self->{'name'}, $self->{'admin'}{'host'}));
 	}elsif ($field eq 'owner') {
@@ -3731,7 +3731,7 @@ sub send_global_file {
 
     ## What file 
     my $lang = &Language::Lang2Locale($data->{'lang'});
-    my $tt2_include_path = &Sympa::Tools::make_tt2_include_path($robot,'mail_tt2',$lang,'',$Sympa::Conf::Conf{'etc'},$Conf::Conf{'viewmaildir'},$Conf::Conf{'domain'});
+    my $tt2_include_path = &Sympa::Tools::make_tt2_include_path($robot,'mail_tt2',$lang,'',$Sympa::Conf::Conf{'etc'},$Sympa::Conf::Conf{'viewmaildir'},$Sympa::Conf::Conf{'domain'});
 
     foreach my $d (@{$tt2_include_path}) {
 	&Sympa::TT2::add_include_path($d);
@@ -3756,7 +3756,7 @@ sub send_global_file {
     $data->{'return_path'} = &Sympa::Conf::get_robot_conf($robot, 'request');
     $data->{'boundary'} = '----------=_'.&Sympa::Tools::get_message_id($robot) unless ($data->{'boundary'});
 
-    if ((&Sympa::Conf::get_robot_conf($robot, 'dkim_feature') eq 'on')&&(&Conf::get_robot_conf($robot, 'dkim_add_signature_to')=~/robot/)){
+    if ((&Sympa::Conf::get_robot_conf($robot, 'dkim_feature') eq 'on')&&(&Sympa::Conf::get_robot_conf($robot, 'dkim_add_signature_to')=~/robot/)){
 	$data->{'dkim'} = get_dkim_parameters({
             'robot'           => $robot,
             'signer_domain'   => Sympa::Conf::get_robot_conf($robot, 'dkim_signer_domain'),
@@ -3872,7 +3872,7 @@ sub send_file {
     
     ## What file   
     my $lang = &Language::Lang2Locale($data->{'lang'});
-    my $tt2_include_path = &Sympa::Tools::make_tt2_include_path($robot,'mail_tt2',$lang,$self,$Sympa::Conf::Conf{'etc'},$Conf::Conf{'viewmaildir'},$Conf::Conf{'domain'});
+    my $tt2_include_path = &Sympa::Tools::make_tt2_include_path($robot,'mail_tt2',$lang,$self,$Sympa::Conf::Conf{'etc'},$Sympa::Conf::Conf{'viewmaildir'},$Sympa::Conf::Conf{'domain'});
 
     push @{$tt2_include_path},$self->{'dir'};             ## list directory to get the 'info' file
     push @{$tt2_include_path},$self->{'dir'}.'/archives'; ## list archives to include the last message
@@ -3923,7 +3923,7 @@ sub send_file {
     $data->{'boundary'} = '----------=_'.&Sympa::Tools::get_message_id($robot) unless ($data->{'boundary'});
     $data->{'sign_mode'} = $sign_mode;
     
-    if ((&Sympa::Conf::get_robot_conf($self->{'domain'}, 'dkim_feature') eq 'on')&&(&Conf::get_robot_conf($self->{'domain'}, 'dkim_add_signature_to')=~/robot/)){
+    if ((&Sympa::Conf::get_robot_conf($self->{'domain'}, 'dkim_feature') eq 'on')&&(&Sympa::Conf::get_robot_conf($self->{'domain'}, 'dkim_add_signature_to')=~/robot/)){
 	$data->{'dkim'} = get_dkim_parameters({'robot' => $self->{'domain'}});
     } 
     $data->{'use_bulk'} = 1  unless ($data->{'alarm'}) ; # use verp excepted for alarms. We should make this configurable in order to support Sympa server on a machine without any MTA service
@@ -4424,7 +4424,7 @@ sub send_to_editor {
    foreach my $recipient (@rcpt) {
        if ($encrypt eq 'smime_crypted') {	       
 	   ## is $msg->body_as_string respect base64 number of char per line ??
-	   my $cryptedmsg = smime_encrypt($msg->head, $msg->body_as_string, $recipient,undef, $Sympa::Conf::Conf{'tmpdir'}, $Conf::Conf{'ssl_cert_dir'}, $Conf::Conf{'openssl'}); 
+	   my $cryptedmsg = smime_encrypt($msg->head, $msg->body_as_string, $recipient,undef, $Sympa::Conf::Conf{'tmpdir'}, $Sympa::Conf::Conf{'ssl_cert_dir'}, $Sympa::Conf::Conf{'openssl'}); 
 	   unless ($cryptedmsg) {
 	       &Log::do_log('notice', 'Failed encrypted message for moderator');
 	       #  send a generic error message : X509 cert missing
@@ -6790,7 +6790,7 @@ sub update_list_member {
     ## custom attributes
     if (defined $Sympa::Conf::Conf{'custom_attribute'}){
 	foreach my $f (sort keys %{$Sympa::Conf::Conf{'custom_attribute'}}){
-	    &Log::do_log('debug2', "custom_attribute id: $Sympa::Conf::Conf{'custom_attribute'}{id} name: $Conf::Conf{'custom_attribute'}{name} type: $Conf::Conf{'custom_attribute'}{type} ");
+	    &Log::do_log('debug2', "custom_attribute id: $Sympa::Conf::Conf{'custom_attribute'}{id} name: $Sympa::Conf::Conf{'custom_attribute'}{name} type: $Sympa::Conf::Conf{'custom_attribute'}{type} ");
 	    	
 	}
     }
@@ -10256,7 +10256,7 @@ sub get_lists {
 	    }
 	} else {
 	    my $robot_dir =  $Sympa::Conf::Conf{'home'}.'/'.$robot ;
-	    $robot_dir = $Sympa::Conf::Conf{'home'}  unless ((-d $robot_dir) || ($robot ne $Conf::Conf{'domain'}));
+	    $robot_dir = $Sympa::Conf::Conf{'home'}  unless ((-d $robot_dir) || ($robot ne $Sympa::Conf::Conf{'domain'}));
 	    
 	    unless (-d $robot_dir) {
 		&Log::do_log('err',"unknown robot $robot, Unable to open $robot_dir");
@@ -12012,7 +12012,7 @@ sub _urlize_part {
     my $lang = &Language::GetLang();
     my $charset = &Language::GetCharset();
 
-    my $tt2_include_path = &Sympa::Tools::make_tt2_include_path($robot,'mail_tt2',$lang,$list,$Sympa::Conf::Conf{'etc'},$Conf::Conf{'viewmaildir'},$Conf::Conf{'domain'});
+    my $tt2_include_path = &Sympa::Tools::make_tt2_include_path($robot,'mail_tt2',$lang,$list,$Sympa::Conf::Conf{'etc'},$Sympa::Conf::Conf{'viewmaildir'},$Sympa::Conf::Conf{'domain'});
 
     &Sympa::TT2::parse_tt2({'file_name' => $file_name,
 		     'file_url'  => $file_url,

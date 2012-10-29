@@ -272,7 +272,7 @@ sub create_list_old{
     $param->{'creation_email'} = "listmaster\@$host" unless ($param->{'creation_email'});
     $param->{'status'} = 'open'  unless ($param->{'status'});
        
-    my $tt2_include_path = &Sympa::Tools::make_tt2_include_path($robot,'create_list_templates/'.$template,'','',$Sympa::Conf::Conf{'etc'},$Conf::Conf{'viewmaildir'},$Conf::Conf{'domain'});
+    my $tt2_include_path = &Sympa::Tools::make_tt2_include_path($robot,'create_list_templates/'.$template,'','',$Sympa::Conf::Conf{'etc'},$Sympa::Conf::Conf{'viewmaildir'},$Sympa::Conf::Conf{'domain'});
 
     ## Lock config before openning the config file
     my $lock = new Lock ($list_dir.'/config');
@@ -912,8 +912,8 @@ sub rename_list{
 		 }
 		 
 		 ## Rename file
-		 unless (move "$Sympa::Conf::Conf{$spool}/$file", "$Conf::Conf{$spool}/$newfile") {
-		     &Log::do_log('err', "Unable to rename %s to %s : %s", "$Sympa::Conf::Conf{$spool}/$newfile", "$Conf::Conf{$spool}/$newfile", $!);
+		 unless (move "$Sympa::Conf::Conf{$spool}/$file", "$Sympa::Conf::Conf{$spool}/$newfile") {
+		     &Log::do_log('err', "Unable to rename %s to %s : %s", "$Sympa::Conf::Conf{$spool}/$newfile", "$Sympa::Conf::Conf{$spool}/$newfile", $!);
 		     next;
 		 }
 		 
@@ -925,13 +925,13 @@ sub rename_list{
 	 } 
 	 ## Digest spool
 	 if (-f "$Sympa::Conf::Conf{'queuedigest'}/$old_listname") {
-	     unless (move "$Sympa::Conf::Conf{'queuedigest'}/$old_listname", "$Conf::Conf{'queuedigest'}/$param{'new_listname'}") {
-		 &Log::do_log('err', "Unable to rename %s to %s : %s", "$Sympa::Conf::Conf{'queuedigest'}/$old_listname", "$Conf::Conf{'queuedigest'}/$param{'new_listname'}", $!);
+	     unless (move "$Sympa::Conf::Conf{'queuedigest'}/$old_listname", "$Sympa::Conf::Conf{'queuedigest'}/$param{'new_listname'}") {
+		 &Log::do_log('err', "Unable to rename %s to %s : %s", "$Sympa::Conf::Conf{'queuedigest'}/$old_listname", "$Sympa::Conf::Conf{'queuedigest'}/$param{'new_listname'}", $!);
 		 next;
 	     }
 	 }elsif (-f "$Sympa::Conf::Conf{'queuedigest'}/$old_listname\@$robot") {
-	     unless (move "$Sympa::Conf::Conf{'queuedigest'}/$old_listname\@$robot", "$Conf::Conf{'queuedigest'}/$param{'new_listname'}\@$param{'new_robot'}") {
-		 &Log::do_log('err', "Unable to rename %s to %s : %s", "$Sympa::Conf::Conf{'queuedigest'}/$old_listname\@$robot", "$Conf::Conf{'queuedigest'}/$param{'new_listname'}\@$param{'new_robot'}", $!);
+	     unless (move "$Sympa::Conf::Conf{'queuedigest'}/$old_listname\@$robot", "$Sympa::Conf::Conf{'queuedigest'}/$param{'new_listname'}\@$param{'new_robot'}") {
+		 &Log::do_log('err', "Unable to rename %s to %s : %s", "$Sympa::Conf::Conf{'queuedigest'}/$old_listname\@$robot", "$Sympa::Conf::Conf{'queuedigest'}/$param{'new_listname'}\@$param{'new_robot'}", $!);
 		 next;
 	     }
 	 }     

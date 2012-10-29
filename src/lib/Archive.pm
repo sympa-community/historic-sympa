@@ -28,6 +28,7 @@ use Encode qw(decode_utf8 encode_utf8);
 use HTML::Entities qw(decode_entities);
 
 use Log;
+use Sympa::Conf;
 use Sympa::Tools::File;
 
 my $serial_number = 0; # incremented on each archived mail
@@ -251,7 +252,7 @@ sub clean_archive_directory{
     &Log::do_log('debug',"Cleaning archives for directory '%s'.",$params->{'arc_root'}.'/'.$params->{'dir_to_rebuild'});
     my $answer;
     $answer->{'dir_to_rebuild'} = $params->{'arc_root'}.'/'.$params->{'dir_to_rebuild'};
-    $answer->{'cleaned_dir'} = $Conf::Conf{'tmpdir'}.'/'.$params->{'dir_to_rebuild'};
+    $answer->{'cleaned_dir'} = $Sympa::Conf::Conf{'tmpdir'}.'/'.$params->{'dir_to_rebuild'};
     unless(my $number_of_copies = &Sympa::Tools::File::copy_dir($answer->{'dir_to_rebuild'},$answer->{'cleaned_dir'})){
 	&Log::do_log('err',"Unable to create a temporary directory where to store files for HTML escaping (%s). Cancelling.",$number_of_copies);
 	return undef;
@@ -325,9 +326,9 @@ sub convert_single_msg_2_html {
 	$host = $list->{'admin'}{'host'};
 	$robot = $list->{'robot'};
 	$listname = $list->{'name'};
-	$msg_file = &Conf::get_robot_conf($robot, 'tmpdir').'/'.$list->get_list_id().'_'.$$;
+	$msg_file = &Sympa::Conf::get_robot_conf($robot, 'tmpdir').'/'.$list->get_list_id().'_'.$$;
     }else{
-	$msg_file = &Conf::get_robot_conf($robot, 'tmpdir').'/'.$messagekey.'_'.$$;
+	$msg_file = &Sympa::Conf::get_robot_conf($robot, 'tmpdir').'/'.$messagekey.'_'.$$;
     }
 
     my $pwd = getcwd;  #  mhonarc require du change workdir so this proc must retore it    
@@ -344,7 +345,7 @@ sub convert_single_msg_2_html {
 	    return undef;
 	}
     }
-    my $mhonarc_ressources = &Sympa::Tools::get_filename('etc',{},'mhonarc-ressources.tt2', $robot,$list,$Conf::Conf{'etc'});
+    my $mhonarc_ressources = &Sympa::Tools::get_filename('etc',{},'mhonarc-ressources.tt2', $robot,$list,$Sympa::Conf::Conf{'etc'});
     
     unless ($mhonarc_ressources) {
 &Log::do_log('notice',"Cannot find any MhOnArc ressource file");
@@ -357,8 +358,8 @@ sub convert_single_msg_2_html {
     my $tracepwd = getcwd ;
 
 
-    my $mhonarc = &Conf::get_robot_conf($robot, 'mhonarc');
-    my $base_url = &Conf::get_robot_conf($robot, 'wwsympa_url');
+    my $mhonarc = &Sympa::Conf::get_robot_conf($robot, 'mhonarc');
+    my $base_url = &Sympa::Conf::get_robot_conf($robot, 'wwsympa_url');
     #open ARCMOD, "$mhonarc  -single --outdir .. -rcfile $mhonarc_ressources -definevars listname=$listname -definevars hostname=$host -attachmenturl=$attachement_url $msg_file |";
     #open MSG, ">msg00000.html";
     #&Log::do_log('debug', "$mhonarc  --outdir .. -single -rcfile $mhonarc_ressources -definevars listname=$listname -definevars hostname=$host $msg_file");

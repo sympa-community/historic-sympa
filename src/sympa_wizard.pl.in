@@ -64,6 +64,7 @@ use Pod::Usage;
 use POSIX qw(strftime);
 use Sys::Hostname qw(hostname);
 
+use Sympa::Conf;
 use Sympa::Configuration::Definition;
 use Sympa::Constants;
 
@@ -205,7 +206,7 @@ sub edit_configuration {
     }
 
     ## Load sympa config (but not using database)
-    unless (Conf::load( $sympa_conf,'nodb')) {
+    unless (Sympa::Conf::load( $sympa_conf,'nodb')) {
 	&Log::fatal_err("Unable to load sympa configuration, file $sympa_conf or one of the vhost robot.conf files contain errors. Exiting.");  
     }
 
@@ -239,7 +240,7 @@ sub edit_configuration {
         if ($file eq 'wwsympa.conf') {	
             $current_value = $wwsconf->{$name} ;
         } elsif ($file eq 'sympa.conf') {
-            $current_value = $Conf::Conf{$name}; 
+            $current_value = $Sympa::Conf::Conf{$name}; 
         } else {
             next;
         }

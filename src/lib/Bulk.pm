@@ -84,7 +84,7 @@ sub next {
     my $limit_sybase='';
 	## Only the first record found is locked, thanks to the "LIMIT 1" clause
     $order = 'ORDER BY priority_message_bulkmailer ASC, priority_packet_bulkmailer ASC, reception_date_bulkmailer ASC, verp_bulkmailer ASC';
-    if (lc($Sympa::Conf::Conf{'db_type'}) eq 'mysql' || lc($Conf::Conf{'db_type'}) eq 'Pg' || lc($Conf::Conf{'db_type'}) eq 'SQLite'){
+    if (lc($Sympa::Conf::Conf{'db_type'}) eq 'mysql' || lc($Sympa::Conf::Conf{'db_type'}) eq 'Pg' || lc($Sympa::Conf::Conf{'db_type'}) eq 'SQLite'){
 	$order.=' LIMIT 1';
     }elsif (lc($Sympa::Conf::Conf{'db_type'}) eq 'Oracle'){
 	$limit_oracle = 'AND rownum<=1';

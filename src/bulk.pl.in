@@ -87,7 +87,7 @@ unless (&SDM::check_db_connect()) {
     &Log::fatal_err('Database %s defined in sympa.conf has not the right structure or is unreachable.', $Sympa::Conf::Conf{'db_name'});
 }
 
-&Log::do_openlog($Sympa::Conf::Conf{'syslog'}, $Conf::Conf{'log_socket_type'}, 'bulk');
+&Log::do_openlog($Sympa::Conf::Conf{'syslog'}, $Sympa::Conf::Conf{'log_socket_type'}, 'bulk');
 
 # setting log_level using conf unless it is set by calling option
 if ($main::options{'log_level'}) {
@@ -115,7 +115,7 @@ unless ($main::options{'debug'} || $main::options{'foreground'}) {
        exit(0);
    }
 }
-&Log::do_openlog($Sympa::Conf::Conf{'syslog'}, $Conf::Conf{'log_socket_type'}, 'bulk');
+&Log::do_openlog($Sympa::Conf::Conf{'syslog'}, $Sympa::Conf::Conf{'log_socket_type'}, 'bulk');
 ## If process is running in foreground, don't write STDERR to a dedicated file
 my $options;
 $options->{'stderr_to_tty'} = 1 if ($main::options{'foreground'});
@@ -169,7 +169,7 @@ my $last_check_date = 0;
 my %created_children;
 
 $options->{'multiple_process'} = 1;
-$Sympa::Conf::Conf{'maxsmtp'} = int($Conf::Conf{'maxsmtp'}/$Conf::Conf{'bulk_max_count'});
+$Sympa::Conf::Conf{'maxsmtp'} = int($Sympa::Conf::Conf{'maxsmtp'}/$Sympa::Conf::Conf{'bulk_max_count'});
 
 
 my $spool = new Sympa::Spool('bulk');
@@ -207,8 +207,8 @@ while (!$end) {
 			&Log::do_log('err','The %s child exists in the pid file but is no longer running. Removing it and notyfying listmaster.',$fpid);
 			my $pname = $0;
 			$pname =~ s/.*\/(\w+)/$1/;
-			&Sympa::Tools::Daemon::send_crash_report(('tmpdir' => $Sympa::Conf::Conf{'tmpdir'}, 'pid'=>$fpid,'pname'=>$pname, domain => $Conf::Conf{'domain'}));
-			&Sympa::Tools::Daemon::remove_pid($Sympa::Conf::Conf{'pidfile_bulk'}, $fpid, $options, $Conf::Conf{'tmpdir'});
+			&Sympa::Tools::Daemon::send_crash_report(('tmpdir' => $Sympa::Conf::Conf{'tmpdir'}, 'pid'=>$fpid,'pname'=>$pname, domain => $Sympa::Conf::Conf{'domain'}));
+			&Sympa::Tools::Daemon::remove_pid($Sympa::Conf::Conf{'pidfile_bulk'}, $fpid, $options, $Sympa::Conf::Conf{'tmpdir'});
 			delete $dead_children{$fpid};
 			push @dc, $fpid;
 		    }
@@ -245,7 +245,7 @@ while (!$end) {
 			    &Sympa::Tools::Daemon::direct_stderr_to_file(('tmpdir' => $Sympa::Conf::Conf{'tmpdir'}, 'pid' => $$));
 			    $date_of_last_activity = time();
 			    $main::daemon_usage = 'DAEMON_SLAVE'; # automatic lists creation
-			    &Log::do_openlog($Sympa::Conf::Conf{'syslog'}, $Conf::Conf{'log_socket_type'}, 'bulk');
+			    &Log::do_openlog($Sympa::Conf::Conf{'syslog'}, $Sympa::Conf::Conf{'log_socket_type'}, 'bulk');
 			    &Log::do_log('info', "Bulk slave daemon started with pid %s", $$);
 			    last;
 			}
@@ -419,7 +419,7 @@ while (!$end) {
 &List::send_notify_to_listmaster(undef, undef, undef, undef, 1); # Purge grouped notifications
 
 &Log::do_log('notice', 'bulk.pl exited normally due to signal');
-&Sympa::Tools::Daemon::remove_pid($Sympa::Conf::Conf{'pidfile_bulk'}, $$, $options, $Conf::Conf{'tmpdir'});
+&Sympa::Tools::Daemon::remove_pid($Sympa::Conf::Conf{'pidfile_bulk'}, $$, $options, $Sympa::Conf::Conf{'tmpdir'});
 
 exit(0);
 
@@ -438,8 +438,8 @@ sub trace_smime {
     my $where = shift;
 
     my $trusted_ca_options = '';
-    $trusted_ca_options = "-CAfile $Sympa::Conf::Conf{'cafile'} " if ($Conf::Conf{'cafile'});
-    $trusted_ca_options .= "-CApath $Sympa::Conf::Conf{'capath'} " if ($Conf::Conf{'capath'});
+    $trusted_ca_options = "-CAfile $Sympa::Conf::Conf{'cafile'} " if ($Sympa::Conf::Conf{'cafile'});
+    $trusted_ca_options .= "-CApath $Sympa::Conf::Conf{'capath'} " if ($Sympa::Conf::Conf{'capath'});
     
     unless (open (MSGDUMP, "| $Sympa::Conf::Conf{'openssl'} smime -verify  $trusted_ca_options > /dev/null")) {	
 	&Log::do_log('err', "unable to verify smime signature");
