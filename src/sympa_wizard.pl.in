@@ -64,6 +64,7 @@ use Pod::Usage;
 use POSIX qw(strftime);
 use Sys::Hostname qw(hostname);
 
+use confdef;
 use Sympa::Constants;
 
 ## sympa configuration files
@@ -92,7 +93,6 @@ if ($options{help}) {
 exit 0;
 
 sub create_configuration {
-    use confdef;
 
     eval {
 	require Conf;

@@ -22,6 +22,7 @@
 # Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
 
 use Getopt::Long;
+use Net::LDAP;
 
 my %opt;
 unless (&GetOptions(\%opt, 'host=s', 'suffix=s', 'filter=s','attrs=s', 'ssl=s', 'scope=s')) {
@@ -48,7 +49,6 @@ if ($opt{'ssl'} eq 'on') {
 
     $ldap=Net::LDAPS->new($opt{'host'},%arg) or print "connect impossible\n";
 }else {
-    use Net::LDAP;
     $ldap=Net::LDAP->new($opt{'host'},%arg) or print "connect impossible\n";
 }
 

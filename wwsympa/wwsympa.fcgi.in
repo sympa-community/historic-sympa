@@ -46,6 +46,7 @@ use Data::Dumper;
 use Getopt::Long;
 use Mail::Header;
 use Mail::Address;
+use MIME::Parser;
 use Time::Local;
 
 use Commands;
@@ -58,6 +59,7 @@ use Language;
 use List;
 use Log;
 use mail;
+use Marc::Search;
 use OAuthProvider;
 use OAuthConsumer;
 use report;
@@ -7723,7 +7725,6 @@ sub do_latest_arc {
 	     if ($arc =~ /^(\d)+$/) {
 		 my %msg_info;
 
-                 use MIME::Parser;
 		 my $parser = new MIME::Parser;
 		 $parser->output_to_core(1);
 		 
@@ -7739,7 +7740,6 @@ sub do_latest_arc {
 		     next;
 		 }
 
-		 use Mail::Header;
 		 my $hdr = $message->head;
 		 
 		 unless (defined $hdr) {
@@ -8137,8 +8137,6 @@ sub do_arcsearch {
      ## Access control
      return undef unless (defined &check_authz('do_arcsearch', 'web_archive.access'));
 
-     use Marc::Search;
-
      my $search = new Marc::Search;
      $search->search_base (&Conf::get_robot_conf($robot, 'arc_path') . '/' . $list->get_list_id());
      $search->base_href (&Conf::get_robot_conf($robot, 'wwsympa_url') . '/arc/' . $param->{'list'});
@@ -8274,7 +8272,6 @@ sub do_arcsearch_id {
      ## Access control
      return undef unless (defined &check_authz('do_arcsearch_id', 'web_archive.access'));
 
-     use Marc::Search;
 
      my $search = new Marc::Search;
      $search->search_base (&Conf::get_robot_conf($robot, 'arc_path') . '/' . $list->get_list_id());
