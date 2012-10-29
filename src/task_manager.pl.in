@@ -35,10 +35,10 @@ use Bulk;
 use Conf;
 use List;
 use Log;
-use mail;
 use Scenario;
 use SDM;
 use Sympa::Constants;
+use Sympa::Mail;
 use Sympa::Session;
 use Sympa::Spool;
 use Sympa::Tools;
@@ -385,7 +385,7 @@ while (!$end) {
     #$end = 1;
 
     ## Free zombie sendmail processes
-    &mail::reaper;
+    &Sympa::Mail::reaper;
 }
 
 &List::send_notify_to_listmaster(undef, undef, undef, undef, 1); # Purge grouped notifications

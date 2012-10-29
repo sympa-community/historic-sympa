@@ -45,13 +45,13 @@ use Language;
 use Ldap;
 use Lock;
 use Log;
-use mail;
 use Message;
 use PlainDigest;
 use Scenario;
 use SDM;
 use SQLSource qw(create_db);
 use Sympa::Constants;
+use Sympa::Mail;
 use Sympa::Report;
 use Sympa::Spool;
 use Sympa::Tools::Data;
@@ -3768,7 +3768,7 @@ sub send_global_file {
     
     $data->{'use_bulk'} = 1  unless ($data->{'alarm'}) ; # use verp excepted for alarms. We should make this configurable in order to support Sympa server on a machine without any MTA service
     
-    my $r = &mail::mail_file($filename, $who, $data, $robot, $options->{'parse_and_return'});
+    my $r = &Sympa::Mail::mail_file($filename, $who, $data, $robot, $options->{'parse_and_return'});
     return $r if($options->{'parse_and_return'});
     
     unless ($r) {
@@ -3929,7 +3929,7 @@ sub send_file {
     $data->{'use_bulk'} = 1  unless ($data->{'alarm'}) ; # use verp excepted for alarms. We should make this configurable in order to support Sympa server on a machine without any MTA service
           # use Data::Dumper;
 	  # my $dump = &Dumper($data); open (DUMP,">>/tmp/dumper2"); printf DUMP '----------------data \n%s',$dump ; close DUMP; 
-    unless (&mail::mail_file($filename, $who, $data, $self->{'domain'})) {
+    unless (&Sympa::Mail::mail_file($filename, $who, $data, $self->{'domain'})) {
 	&Log::do_log('err',"List::send_file, could not send template $filename to $who");
 	return undef;
     }
@@ -4287,7 +4287,7 @@ sub send_msg {
 	my @verp_selected_tabrcpt = &extract_verp_rcpt($verp_rate, $xsequence,\@selected_tabrcpt, \@possible_verptabrcpt);
 	my $verp= 'off';
 
-	my $result = &mail::mail_message('message'=>$new_message, 
+	my $result = &Sympa::Mail::mail_message('message'=>$new_message, 
 					 'rcpt'=> \@selected_tabrcpt, 
 					 'list'=>$self, 
 					 'verp' => $verp,					 
@@ -4318,7 +4318,7 @@ sub send_msg {
 	next if  ($array_name =~ /^tabrcpt_((nomail)|(summary)|(digest)|(digestplain))(_verp)?/);
 	
 	## prepare VERP sending.
-	$result = &mail::mail_message('message'=> $new_message, 
+	$result = &Sympa::Mail::mail_message('message'=> $new_message, 
 				      'rcpt'=> \@verp_selected_tabrcpt, 
 				      'list'=> $self,
 				      'verp' => $verp,

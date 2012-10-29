@@ -56,13 +56,13 @@ use Auth;
 use Language;
 use List;
 use Log;
-use mail;
 use Marc::Search;
 use OAuthProvider;
 use OAuthConsumer;
 use SharedDocument;
 use Sympa::Admin;
 use Sympa::Constants;
+use Sympa::Mail;
 use Sympa::Report;
 use Sympa::Session;
 use Sympa::Spool;
@@ -127,7 +127,7 @@ unless ($wwsconf = &wwslib::load_config($conf_file)) {
     &Log::fatal_err("Unable to load sympa configuration, file $conf_file or one of the vhost robot.conf files contain errors. Exiting.");  
 }
 
-&mail::set_send_spool($Conf{'queue'});
+&Sympa::Mail::set_send_spool($Conf{'queue'});
 
 if ($wwsconf->{'use_fast_cgi'}) {
     require CGI::Fast;
@@ -7145,7 +7145,7 @@ sub do_distribute {
      }
 
      $data->{'not_auto_submitted'} = 1;
-     unless (&mail::mail_file('',&Conf::get_robot_conf($robot, 'sympa'), $data, $robot)) {
+     unless (&Sympa::Mail::mail_file('',&Conf::get_robot_conf($robot, 'sympa'), $data, $robot)) {
 	 &Sympa::Report::reject_report_web('intern','cannot_send_distribute',{'from' => $param->{'user'}{'email'},'listname'=>$list->{'name'}},
 				    $param->{'action'},$list,$param->{'user'}{'email'},$robot);
 	 &wwslog('err','do_distribute: failed to send message for list %s, id %s', $list->{'name'},$in{'id'});
@@ -7896,7 +7896,7 @@ sub do_remove_arc {
 ####################################################
 #  Sends a web archive message to a 
 #  requesting user
-#  It uses mail::mail_forward() to do it.
+#  It uses Sympa::Mail::mail_forward() to do it.
 # 
 # IN : -
 #
@@ -7947,7 +7947,7 @@ sub do_send_me {
 	     &wwslog('info', 'do_send_me : could not read file %s',"$arcpath/arctxt/$msgfile");
 	     return undef;
 	 }
-	 unless (&mail::mail_forward($message,&Conf::get_robot_conf($robot, 'sympa'),\$param->{'user'}{'email'},$robot)) {
+	 unless (&Sympa::Mail::mail_forward($message,&Conf::get_robot_conf($robot, 'sympa'),\$param->{'user'}{'email'},$robot)) {
 	     $param->{'status'} = 'message_err';
 	     &wwslog('err',"do_send_me : impossible to send archive file to %s",$param->{'user'}{'email'});
 	     return undef;
@@ -15423,7 +15423,7 @@ sub do_remind {
 		 'body' => $mail_command};
 
      $data->{'not_auto_submitted'} = 1;
-     unless (&mail::mail_file('',&Conf::get_robot_conf($robot, 'sympa'),$data,$robot)) {
+     unless (&Sympa::Mail::mail_file('',&Conf::get_robot_conf($robot, 'sympa'),$data,$robot)) {
 	 &Sympa::Report::reject_report_web('intern','cannot_send_remind',{'from' => $param->{'user'}{'email'},'listname'=>$list->{'name'}},
 				    $param->{'action'},$list,$param->{'user'}{'email'},$robot);
 	 &wwslog('err','do_remind: failed to send message for command REMIND');
@@ -16003,7 +16003,7 @@ sub do_compose_mail {
 ####################################################
 #  Sends a message to a list by the Web interface
 #  or an html page getting its url.
-#  It uses mail::mail_file() to do it.
+#  It uses Sympa::Mail::mail_file() to do it.
 # 
 # IN : -
 #
@@ -16154,7 +16154,7 @@ sub do_send_mail {
     $data->{'headers'}{'In-Reply-To'} = $in{'in_reply_to'} if (($in{'in_reply_to'}) && $in{'in_reply_to'} ne '<>');
     $data->{'not_auto_submitted'} = 1;
     $data->{'not_a_list'} = 1 if($in{'sub_action'} eq 'sendmailtome');
-    unless (&mail::mail_file('', $to, $data, $robot)) {
+    unless (&Sympa::Mail::mail_file('', $to, $data, $robot)) {
 	&Sympa::Report::reject_report_web('intern','cannot_send_mail',{'from' => $param->{'user'}{'email'},'listname'=>$list->{'name'}},
 				   $param->{'action'},$list,$param->{'user'}{'email'},$robot);
 	&wwslog('err','do_send_mail: failed to send message for $to list');
@@ -16307,7 +16307,7 @@ sub do_tag_topic_by_sender {
      $data->{'not_auto_submitted'} = 1;
 
 
-     unless (&mail::mail_file('',&Conf::get_robot_conf($robot, 'sympa'),$data,$robot)) {
+     unless (&Sympa::Mail::mail_file('',&Conf::get_robot_conf($robot, 'sympa'),$data,$robot)) {
 	 &Sympa::Report::reject_report_web('intern','cannot_send_mail',{'from' => $param->{'user'}{'email'},'listname'=>$list->{'name'}},
 				    $param->{'action'},$list,$param->{'user'}{'email'},$robot);
 	 &wwslog('err','do_tag_topic_by_sender: failed to send message for list %s@%s authenticated by key %s',$listname,$robot,$in{'authkey'} );

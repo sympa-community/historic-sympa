@@ -39,7 +39,6 @@ use Language;
 use Log;
 use Lock;
 use List;
-use mail;
 use Message;
 use SDM;
 use SQLSource;

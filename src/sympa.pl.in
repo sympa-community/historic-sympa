@@ -38,11 +38,11 @@ use Family;
 use Language;
 use List;
 use Log;
-use mail;
 use Message;
 use SDM;
 use Sympa::Admin;
 use Sympa::Constants;
+use Sympa::Mail;
 use Sympa::Report;
 use Sympa::Spool;
 use Sympa::Tools;
@@ -1001,7 +1001,7 @@ while (!$signal) {
 	$latest_msgid_table_cleanup = time;
     }
     
-    &mail::reaper; # finish terminated process
+    &Sympa::Mail::reaper; # finish terminated process
     
     my $message_in_spool = $spool->next;
     
@@ -1459,7 +1459,7 @@ sub DoSendMessage {
     ## Multiple recepients
     my @rcpts = split /,/,$rcpt; #/
    
-    unless (&mail::mail_forward($message,$from,\@rcpts,$robot)) {
+    unless (&Sympa::Mail::mail_forward($message,$from,\@rcpts,$robot)) {
 	&Log::do_log('err',"sympa::DoSendMessage(): Impossible to forward mail from $from");
 	&Sympa::Report::reject_report_msg('intern','Impossible to forward a message pushed in spool by another process than sympa.pl.',$sender,
 			  {'msg_id' => $msg_id,'message' => $message->{'msg'}},$robot,$string,'');
@@ -1599,7 +1599,7 @@ sub DoForward {
     
     # my $msg_copy = $msg->dup;
     $message->{'msg'} = $msg;    
-    unless (&mail::mail_forward($message,&Conf::get_robot_conf($robot, 'request'),\@rcpt,$robot)) {
+    unless (&Sympa::Mail::mail_forward($message,&Conf::get_robot_conf($robot, 'request'),\@rcpt,$robot)) {
 	&Log::do_log('err',"Impossible to forward mail for $name-$function  ");
 	my $string = sprintf 'Impossible to forward a message for %s-%s',$name,$function;
 	&Sympa::Report::reject_report_msg('intern',$string,$sender,
