@@ -2,9 +2,11 @@ package Sympa::Transport;
 
 use strict;
 use vars qw(@ISA);
-use Sympa::Session;
 
 use SOAP::Transport::HTTP;
+
+use Sympa::Session;
+
 @ISA = qw(SOAP::Transport::HTTP::FCGI);
 
 sub request {
