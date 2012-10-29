@@ -71,6 +71,53 @@ sub load {
 
 =over 4
 
+=item send_dsn ( SENDER, LISTNAME, MSG_OBJECT, [ STATUS, [ DIAG ] ] )
+
+Send delivery status notification (DSN) to SENDER.
+
+=back
+
+=cut
+
+sub send_dsn {
+    my $self = shift;
+    my ($sender, $listname, $msg, $status, $diag) = @_;
+
+    my $host = $self->host;
+    Language::PushLang('en');
+    my $date = POSIX::strftime("%a, %d %b %Y %H:%M:%S +0000", gmtime time);
+    Language::PopLang();
+
+    my $head;
+    if (ref $msg eq 'Message') {
+	$head = $msg->{'msg'}->head;
+    } elsif (ref $msg eq 'MIME::Entity') {
+	$head = $msg->head;
+    } elsif (ref $msg eq 'MIME::Head' or ref $msg eq 'Mail::Header') {
+	$head = $msg;
+    }
+
+    unless (
+	$self->send_file(
+	    'list_unknown',
+	    $sender,
+	    {   'list'            => "$listname\@$host",
+		'to'              => $sender,
+		'date'            => $date,
+		'header'          => $head->as_string(),
+		'auto_submitted'  => 'auto-replied',
+		'status'          => ($status || '5.1.1'),
+		'diagnostic_code' => ($diag || 'List unknown'),
+		'return_path'     => '<>'
+	    },
+	)
+	) {
+	&Log::do_log('err', 'Unable to send DSN to %s', $sender);
+    }
+}
+
+=over 4
+
 =item send_file                              
 
 Send a site-global (not relative to a list or a robot) message to user(s).
@@ -188,9 +235,6 @@ sub send_file {
 	}
     }
 
-    $data->{'return_path'} ||= $self->get_list_address('return_path')
-	if ref $self eq 'List';
-
     ## Lang
     if (ref $self eq 'List') {
 	$data->{'lang'} = $data->{'user'}{'lang'} || $self->lang ||
@@ -276,9 +320,12 @@ sub send_file {
 	    $data->{'fromlist'} = $self->get_list_address('owner');
 	}
 	$data->{'from'} = $data->{'fromlist'} unless $data->{'from'};
+	$data->{'return_path'} ||= $self->get_list_address('return_path');
     } else {
 	$data->{'from'} ||= $self->sympa;
-	$data->{'return_path'} = $self->request;
+	unless ($data->{'return_path'} and $data->{'return_path'} eq '<>') {
+	    $data->{'return_path'} = $self->request;
+	}
     }
 
     $data->{'boundary'} = '----------=_' . &tools::get_message_id($robot_id)

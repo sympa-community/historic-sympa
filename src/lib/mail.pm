@@ -819,7 +819,8 @@ sub smtpto {
 
        close(OUT);
        open(STDIN, "<&IN");
-      
+
+	$from = '' if $from eq '<>'; # null sender
        if (! ref($rcpt)) {
 	   exec $sendmail, split(/\s+/,$sendmail_args),'-f', $from, $rcpt;
        }elsif (ref($rcpt) eq 'SCALAR') {
@@ -831,7 +832,7 @@ sub smtpto {
 	exit 1; ## Should never get there.
        }
    if ($main::options{'mail'}) {
-       $str = "safefork: $sendmail $sendmail_args -f $from ";
+       $str = "safefork: $sendmail $sendmail_args -f '$from' ";
        if (! ref($rcpt)) {
 	   $str .= $rcpt;
        }elsif (ref($rcpt) eq 'SCALAR') {
@@ -839,7 +840,7 @@ sub smtpto {
        }else {
 	   $str .= join(' ', @$rcpt);
        }
-       &Log::do_log('notice', $str);
+       &Log::do_log('notice', '%s', $str);
    }
    unless (close(IN)){
        &Log::do_log('err',"mail::smtpto: could not close safefork" );
