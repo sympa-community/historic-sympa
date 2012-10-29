@@ -48,7 +48,6 @@ use Sympa::Spool;
 use Sympa::Tools;
 use Sympa::Tools::Daemon;
 use Sympa::Tracking;
-use tt2;
 
 ## Equivalents relative to RFC 1893
 my %equiv = ( "user unknown" => '5.1.1',

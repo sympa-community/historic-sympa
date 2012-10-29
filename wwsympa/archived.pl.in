@@ -56,7 +56,6 @@ use Sympa::Tools;
 use Sympa::Tools::Time;
 use Sympa::Tools::File;
 use Sympa::Tools::Daemon;
-use tt2;
 use wwslib;
 
 my $daemon_name = &Log::set_daemon($0);

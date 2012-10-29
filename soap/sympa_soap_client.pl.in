@@ -40,7 +40,6 @@ use report;
 use Sympa::Constants;
 use Sympa::Tools;
 use Sympa::Tools::Data;
-use tt2;
 
 my ($reponse, @ret, $val, %fault);
 

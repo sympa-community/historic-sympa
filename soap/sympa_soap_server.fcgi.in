@@ -17,7 +17,6 @@ use Sympa::Constants;
 use Sympa::Mail;
 use Sympa::SOAP;
 use Sympa::Transport;
-use tt2;
 
 my $birthday = time ;
 
