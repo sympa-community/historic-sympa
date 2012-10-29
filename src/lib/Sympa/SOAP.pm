@@ -16,7 +16,6 @@ package Sympa::SOAP;
 
 use strict "vars";
 
-use Exporter;
 use HTTP::Cookies;
 
 use Auth;
@@ -26,9 +25,6 @@ use Log;
 use Sympa::Session;
 use Sympa::Tools;
 use Sympa::TT2;
-
-my @ISA = ('Exporter');
-my @EXPORT = ();
 
 ## Define types of SOAP type listType
 my %types = ('listType' => {'listAddress' => 'string',
