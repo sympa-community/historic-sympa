@@ -14,7 +14,7 @@ use Conf;
 use Language;
 use User;
 
-our @ISA = qw(Exporter);
+our @ISA    = qw(Exporter);
 our @EXPORT = qw(%list_of_robots);
 
 =head1 NAME
@@ -69,7 +69,7 @@ sub load {
 	    return undef;
 	}
 	$opts{'config_file'} = $self->{'etc'} . '/robot.conf';
-	$opts{'robot'} = $self->{'name'};
+	$opts{'robot'}       = $self->{'name'};
     } elsif ($self eq __PACKAGE__) {
 	$opts{'config_file'} ||= Conf::get_sympa_conf();
 	$opts{'robot'} = '*';
@@ -220,8 +220,8 @@ sub request_auth {
     $data->{'command_escaped'} = &tt2::escape_url($data->{'command'});
     $data->{'auto_submitted'}  = 'auto-replied';
     unless ($self->send_file('request_auth', $email, $data)) {
-	&Log::do_log('notice',
-	    'Unable to send template "request_auth" to %s', $email);
+	&Log::do_log('notice', 'Unable to send template "request_auth" to %s',
+	    $email);
 	return undef;
     }
 
@@ -251,11 +251,11 @@ by parsing dsn.tt2 template.
 =cut
 
 sub send_dsn {
-    my $self = shift;
+    my $self    = shift;
     my $message = shift;
-    my $param = shift || {};
-    my $status = shift;
-    my $diag = shift || '';
+    my $param   = shift || {};
+    my $status  = shift;
+    my $diag    = shift || '';
 
     unless (ref $message and ref $message eq 'Message') {
 	&Log::do_log('err', 'object %s is not Message', $message);
@@ -263,10 +263,10 @@ sub send_dsn {
     }
 
     my $sender;
-    if (defined ($sender = $message->{'envsender'})) {
+    if (defined($sender = $message->{'envsender'})) {
 	## Won't reply to message with null envelope sender.
 	return 0 if $sender eq '<>';
-    } elsif (! defined($sender = $message->{'sender'})) {
+    } elsif (!defined($sender = $message->{'sender'})) {
 	&Log::do_log('err', 'no sender found');
 	return undef;
     }
@@ -291,27 +291,36 @@ sub send_dsn {
     ## http://www.iana.org/assignments/smtp-enhanced-status-codes/
     ## They should be modified to fit in Sympa.
     $diag ||= {
+
 	# success
 	'2.1.5' => 'Destination address valid',
+
 	# no available family, dynamic list creation failed, etc.
 	'4.2.1' => 'Mailbox disabled, not accepting messages',
+
 	# no subscribers in dynamic list
 	'4.2.4' => 'Mailing list expansion problem',
+
 	# unknown list address
 	'5.1.1' => 'Bad destination mailbox address',
+
 	# unknown robot
 	'5.1.2' => 'Bad destination system address',
+
 	# too large
 	'5.2.3' => 'Message length exceeds administrative limit',
+
 	# loop detected
 	'5.4.6' => 'Routing loop detected',
+
 	# virus found
 	'5.7.0' => 'Other or undefined security status',
-    }->{$status} || 'Other undefined Status';
+	}->{$status} ||
+	'Other undefined Status';
     ## Delivery result, "failed" or "delivered".
     my $action = (index($status, '2') == 0) ? 'delivered' : 'failed';
 
-    my $header = $message->{'msg'}->head->as_string;;
+    my $header = $message->{'msg'}->head->as_string;
 
     Language::PushLang('en');
     my $date = POSIX::strftime("%a, %d %b %Y %H:%M:%S +0000", gmtime time);
@@ -320,7 +329,7 @@ sub send_dsn {
     unless (
 	$self->send_file(
 	    'dsn', $sender,
-	    {	%$param,
+	    {   %$param,
 		'recipient'       => $recipient,
 		'to'              => $sender,
 		'date'            => $date,
@@ -388,24 +397,24 @@ OUT : 1 | undef
 
 sub send_file {
     &Log::do_log('debug2', '(%s, %s, %s, ...)', @_);
-    my $self = shift;
-    my $tpl  = shift;
-    my $who  = shift;
+    my $self    = shift;
+    my $tpl     = shift;
+    my $who     = shift;
     my $context = shift || {};
     my $options = shift || {};
 
     my ($robot, $list, $robot_id);
     if (ref $self and ref $self eq 'List') {
-	$robot = $self->robot;
-	$list = $self;
+	$robot    = $self->robot;
+	$list     = $self;
 	$robot_id = $self->robot->name;
     } elsif (ref $self and ref $self eq 'Robot') {
-	$robot = $self;
-	$list = '';
+	$robot    = $self;
+	$list     = '';
 	$robot_id = $self->name;
     } elsif ($self eq __PACKAGE__) {
-	$robot = $self;
-	$list = '';
+	$robot    = $self;
+	$list     = '';
 	$robot_id = '*';
     } else {
 	croak 'bug in logic.  Ask developer';
@@ -415,8 +424,10 @@ sub send_file {
 
     ## Any recipients
     if (!defined $who or
-	ref $who and !scalar @$who or
-	!ref $who and !length $who) {
+	ref $who and
+	!scalar @$who or
+	!ref $who and
+	!length $who) {
 	&Log::do_log('err', 'No recipient for sending %s', $tpl);
 	return undef;
     }
@@ -428,7 +439,7 @@ sub send_file {
 	unless ($data->{'user'}) {
 	    if ($options->{'skip_db'}) {
 		$data->{'user'} =
-		    bless { 'email' => $who, 'lang' => $lang } => 'User';
+		    bless {'email' => $who, 'lang' => $lang} => 'User';
 	    } else {
 		$data->{'user'} = User->new($who, 'lang' => $lang);
 	    }
@@ -471,7 +482,8 @@ sub send_file {
 
     ## Lang
     if (ref $self eq 'List') {
-	$data->{'lang'} = $data->{'user'}{'lang'} || $self->lang ||
+	$data->{'lang'} = $data->{'user'}{'lang'} ||
+	    $self->lang ||
 	    $robot->lang;
     } else {
 	$data->{'lang'} = $data->{'user'}{'lang'} || $robot->lang;
@@ -512,14 +524,14 @@ sub send_file {
     }
 
     $data->{'conf'} ||= {};
-    $data->{'conf'}{'email'} = $robot->email;
-    $data->{'conf'}{'email_gecos'} = $robot->email_gecos;
-    $data->{'conf'}{'host'} = $robot->host;
-    $data->{'conf'}{'sympa'} = $robot->sympa;
-    $data->{'conf'}{'request'} = $robot->request;
-    $data->{'conf'}{'listmaster'} = $robot->listmaster;
-    $data->{'conf'}{'wwsympa_url'} = $robot->wwsympa_url;
-    $data->{'conf'}{'title'} = $robot->title;
+    $data->{'conf'}{'email'}            = $robot->email;
+    $data->{'conf'}{'email_gecos'}      = $robot->email_gecos;
+    $data->{'conf'}{'host'}             = $robot->host;
+    $data->{'conf'}{'sympa'}            = $robot->sympa;
+    $data->{'conf'}{'request'}          = $robot->request;
+    $data->{'conf'}{'listmaster'}       = $robot->listmaster;
+    $data->{'conf'}{'wwsympa_url'}      = $robot->wwsympa_url;
+    $data->{'conf'}{'title'}            = $robot->title;
     $data->{'conf'}{'listmaster_email'} = $robot->listmaster_email;
 
     $data->{'sender'} ||= $who;
@@ -527,9 +539,9 @@ sub send_file {
     $data->{'conf'}{'version'} = $main::Version;
     $data->{'robot_domain'} = $robot_id;
     if (ref $self eq 'List') {
-	$data->{'list'}{'lang'}   = $self->lang;
-	$data->{'list'}{'name'}   = $self->name;
-	$data->{'list'}{'domain'} = $self->domain;
+	$data->{'list'}{'lang'}    = $self->lang;
+	$data->{'list'}{'name'}    = $self->name;
+	$data->{'list'}{'domain'}  = $self->domain;
 	$data->{'list'}{'host'}    = $self->host;
 	$data->{'list'}{'subject'} = $self->subject;
 	$data->{'list'}{'owner'}   = $self->get_owners();
@@ -538,7 +550,8 @@ sub send_file {
 	## Sign mode
 	my $sign_mode;
 	if (Site->openssl and
-	    -r $self->dir . '/cert.pem' and -r $self->dir . '/private_key') {
+	    -r $self->dir . '/cert.pem' and
+	    -r $self->dir . '/private_key') {
 	    $sign_mode = 'smime';
 	}
 	$data->{'sign_mode'} = $sign_mode;
@@ -565,7 +578,7 @@ sub send_file {
     $data->{'boundary'} = '----------=_' . &tools::get_message_id($robot_id)
 	unless ($data->{'boundary'});
 
-    my $dkim_feature = $robot->dkim_feature;
+    my $dkim_feature          = $robot->dkim_feature;
     my $dkim_add_signature_to = $robot->dkim_add_signature_to;
     if ($dkim_feature eq 'on' and $dkim_add_signature_to =~ /robot/) {
 	$data->{'dkim'} = &tools::get_dkim_parameters({'robot' => $robot_id});
@@ -575,7 +588,8 @@ sub send_file {
     # order to support Sympa server on a machine without any MTA service
     $data->{'use_bulk'} = 1
 	unless ($data->{'alarm'});
-    my $r = &mail::mail_file($filename, $who, $data, $robot_id,
+    my $r =
+	&mail::mail_file($filename, $who, $data, $robot_id,
 	$options->{'parse_and_return'});
     return $r if $options->{'parse_and_return'};
 
@@ -640,7 +654,7 @@ sub send_notify_to_listmaster {
     if ($checkstack or $purge) {
 	foreach my $robot_id (keys %listmaster_messages_stack) {
 	    my $robot;
-	    if (! $robot_id or $robot_id eq '*') {
+	    if (!$robot_id or $robot_id eq '*') {
 		$robot = __PACKAGE__;
 	    } else {
 		$robot = Robot->new($robot_id);
@@ -847,8 +861,8 @@ sub send_notify_to_listmaster {
 	unless ($r) {
 	    &Log::do_log('notice',
 		'Unable to send template "listmaster_notification" to %s',
-		$listmaster
-	    ) unless $operation eq 'logs_failed';
+		$listmaster)
+		unless $operation eq 'logs_failed';
 	    return undef;
 	}
     }
@@ -897,10 +911,11 @@ sub AUTOLOAD {
 
     my $attr = $2;
     if (scalar grep { $_ eq $attr }
-		    qw(locale2charset pictures_path request sympa
-		       robot_by_http_host) or
-	scalar grep { ! defined $_->{'title'} and $_->{'name'} eq $attr }
-		    @confdef::params) {
+	qw(locale2charset pictures_path request sympa
+	robot_by_http_host) or
+	scalar grep { !defined $_->{'title'} and $_->{'name'} eq $attr }
+	@confdef::params
+	) {
 	## getter for internal config parameters.
 	no strict "refs";
 	*{$AUTOLOAD} = sub {

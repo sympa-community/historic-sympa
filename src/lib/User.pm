@@ -12,23 +12,25 @@ use Carp qw(croak);
 my ($sth, @sth_stack);
 
 ## mapping between var and field names
-my %map_field = ( gecos => 'gecos_user',
-		  password => 'password_user',
-		  cookie_delay => 'cookie_delay_user',
-		  lang => 'lang_user',
-		  attributes => 'attributes_user',
-		  email => 'email_user',
-		  data => 'data_user',
-		  last_login_date => 'last_login_date_user',
-		  last_login_host => 'last_login_host_user',
-		  wrong_login_count => 'wrong_login_count_user'
-    );
+my %map_field = (
+    gecos             => 'gecos_user',
+    password          => 'password_user',
+    cookie_delay      => 'cookie_delay_user',
+    lang              => 'lang_user',
+    attributes        => 'attributes_user',
+    email             => 'email_user',
+    data              => 'data_user',
+    last_login_date   => 'last_login_date_user',
+    last_login_host   => 'last_login_host_user',
+    wrong_login_count => 'wrong_login_count_user'
+);
 
 ## DB fields with numeric type
 ## We should not do quote() for these while inserting data
-my %numeric_field = ('cookie_delay_user' => 1,
-                     'wrong_login_count_user' => 1,
-    );
+my %numeric_field = (
+    'cookie_delay_user'      => 1,
+    'wrong_login_count_user' => 1,
+);
 
 =encoding utf-8
 
@@ -51,13 +53,13 @@ XXX @todo doc
 =cut
 
 sub new {
-    my $pkg = shift;
-    my $who = tools::clean_email(shift || '');
+    my $pkg    = shift;
+    my $who    = tools::clean_email(shift || '');
     my %values = @_;
     my $self;
     return undef unless $who;
 
-    if (! ($self = get_global_user($who))) {
+    if (!($self = get_global_user($who))) {
 	## unauthenticated user would not be added to database.
 	if (scalar grep { $_ ne 'lang' and $_ ne 'email' } keys %values) {
 	    $values{'email'} = $who;
@@ -84,7 +86,7 @@ XXX
 =cut
 
 sub expire {
-    croak()
+    croak();
 }
 
 =over 4
@@ -113,7 +115,7 @@ XXX
 =cut
 
 sub save {
-    croak()
+    croak();
 }
 
 =head3 ACCESSORS
@@ -144,31 +146,31 @@ sub AUTOLOAD {
 
     my $attr = $2;
     if (scalar grep { $_ eq $attr } qw(email)) {
-        ## getter for user attribute.
-        no strict "refs";
-        *{$AUTOLOAD} = sub {
-            my $self = shift;
+	## getter for user attribute.
+	no strict "refs";
+	*{$AUTOLOAD} = sub {
+	    my $self = shift;
 	    croak "Can't call method \"$attr\" on uninitialized " .
 		ref($self) . " object"
 		unless $self->{'email'};
-            croak "Can't modify \"$attr\" attribute"
-                if scalar @_ > 1;
-            $self->{$attr};
-        };
+	    croak "Can't modify \"$attr\" attribute"
+		if scalar @_ > 1;
+	    $self->{$attr};
+	};
     } elsif (exists $map_field{$attr}) {
-        ## getter/setter for user attributes.
-        no strict "refs";
-        *{$AUTOLOAD} = sub {
-            my $self = shift;
-            croak "Can't call method \"$attr\" on uninitialized " .
+	## getter/setter for user attributes.
+	no strict "refs";
+	*{$AUTOLOAD} = sub {
+	    my $self = shift;
+	    croak "Can't call method \"$attr\" on uninitialized " .
 		ref($self) . " object"
-                unless $self->{'email'};
+		unless $self->{'email'};
 	    $self->{$attr} = shift
-                if scalar @_ > 1;
-            $self->{$attr};
-        };
+		if scalar @_ > 1;
+	    $self->{$attr};
+	};
     } else {
-        croak "Can't locate object method \"$2\" via package \"$1\"";
+	croak "Can't locate object method \"$2\" via package \"$1\"";
     }
     goto &$AUTOLOAD;
 }
@@ -184,7 +186,7 @@ sub AUTOLOAD {
 =cut
 
 sub get_users {
-    croak()
+    croak();
 }
 
 ############################################################################
@@ -194,19 +196,20 @@ sub get_users {
 ## Delete a user in the user_table
 sub delete_global_user {
     my @users = @_;
-    
+
     &Log::do_log('debug2', '');
-    
+
     return undef unless ($#users >= 0);
-    
+
     foreach my $who (@users) {
 	$who = &tools::clean_email($who);
 	## Update field
-	
-	unless (&SDM::do_prepared_query(
-	    q{DELETE FROM user_table WHERE email_user = ?}, $who
-	)
-	) {
+
+	unless (
+	    &SDM::do_prepared_query(
+		q{DELETE FROM user_table WHERE email_user = ?}, $who
+	    )
+	    ) {
 	    &Log::do_log('err', 'Unable to delete user %s', $who);
 	    next;
 	}
@@ -214,7 +217,6 @@ sub delete_global_user {
 
     return $#users + 1;
 }
-
 
 ## Returns a hash for a given user
 sub get_global_user {
@@ -229,9 +231,14 @@ sub get_global_user {
 
     push @sth_stack, $sth;
 
-    unless ($sth = &SDM::do_prepared_query(sprintf('SELECT email_user AS email, gecos_user AS gecos, password_user AS password, cookie_delay_user AS cookie_delay, lang_user AS lang, attributes_user AS attributes, data_user AS data, last_login_date_user AS last_login_date, wrong_login_count_user AS wrong_login_count, last_login_host_user AS last_login_host%s FROM user_table WHERE email_user = ?',
-						   $additional),
-					   $who)) {
+    unless (
+	$sth = &SDM::do_prepared_query(
+	    sprintf(
+		'SELECT email_user AS email, gecos_user AS gecos, password_user AS password, cookie_delay_user AS cookie_delay, lang_user AS lang, attributes_user AS attributes, data_user AS data, last_login_date_user AS last_login_date, wrong_login_count_user AS wrong_login_count, last_login_host_user AS last_login_host%s FROM user_table WHERE email_user = ?',
+		$additional),
+	    $who
+	)
+	) {
 	&Log::do_log('err', 'Failed to prepare SQL query');
 	$sth = pop @sth_stack;
 	return undef;
@@ -245,21 +252,22 @@ sub get_global_user {
     if (defined $user) {
 	## decrypt password
 	if ($user->{'password'}) {
-	    $user->{'password'} = &tools::decrypt_password($user->{'password'});
+	    $user->{'password'} =
+		&tools::decrypt_password($user->{'password'});
 	}
 
 	## Turn user_attributes into a hash
 	my $attributes = $user->{'attributes'};
 	$user->{'attributes'} = undef;
-	foreach my $attr (split (/\;/, $attributes)) {
-	    my ($key, $value) = split (/\=/, $attr);
+	foreach my $attr (split(/\;/, $attributes)) {
+	    my ($key, $value) = split(/\=/, $attr);
 	    $user->{'attributes'}{$key} = $value;
-	}    
+	}
 	## Turn data_user into a hash
-	 if ($user->{'data'}) {
-	     my %prefs = &tools::string_2_hash($user->{'data'});
-	     $user->{'prefs'} = \%prefs;
-	 }
+	if ($user->{'data'}) {
+	    my %prefs = &tools::string_2_hash($user->{'data'});
+	    $user->{'prefs'} = \%prefs;
+	}
     }
 
     return $user;
@@ -273,8 +281,9 @@ sub get_all_global_user {
 
     push @sth_stack, $sth;
 
-    unless ($sth = &SDM::do_prepared_query('SELECT email_user FROM user_table')) {
-	&Log::do_log('err','Unable to gather all users in DB');
+    unless ($sth =
+	&SDM::do_prepared_query('SELECT email_user FROM user_table')) {
+	&Log::do_log('err', 'Unable to gather all users in DB');
 	$sth = pop @sth_stack;
 	return undef;
     }
@@ -291,117 +300,143 @@ sub get_all_global_user {
 
 ## Is the person in user table (db only)
 sub is_global_user {
-   my $who = &tools::clean_email(pop);
-   &Log::do_log('debug3', '(%s)', $who);
+    my $who = &tools::clean_email(pop);
+    &Log::do_log('debug3', '(%s)', $who);
 
-   return undef unless ($who);
-   
-   push @sth_stack, $sth;
+    return undef unless ($who);
 
-   ## Query the Database
-   unless($sth = &SDM::do_query("SELECT count(*) FROM user_table WHERE email_user = %s", &SDM::quote($who))) {
-	&Log::do_log('err','Unable to check whether user %s is in the user table.');
+    push @sth_stack, $sth;
+
+    ## Query the Database
+    unless (
+	$sth = &SDM::do_query(
+	    "SELECT count(*) FROM user_table WHERE email_user = %s",
+	    &SDM::quote($who)
+	)
+	) {
+	&Log::do_log('err',
+	    'Unable to check whether user %s is in the user table.');
 	$sth = pop @sth_stack;
 	return undef;
-   }
-   
-   my $is_user = $sth->fetchrow();
-   $sth->finish();
-   
-   $sth = pop @sth_stack;
+    }
 
-   return $is_user;
+    my $is_user = $sth->fetchrow();
+    $sth->finish();
+
+    $sth = pop @sth_stack;
+
+    return $is_user;
 }
 
 ## Sets new values for the given user in the Database
 sub update_global_user {
-    my($who, $values) = @_;
+    my ($who, $values) = @_;
     &Log::do_log('debug', '(%s)', $who);
 
     $who = &tools::clean_email($who);
 
-    ## use md5 fingerprint to store password   
-    $values->{'password'} = &Auth::password_fingerprint($values->{'password'}) if ($values->{'password'});
+    ## use md5 fingerprint to store password
+    $values->{'password'} = &Auth::password_fingerprint($values->{'password'})
+	if ($values->{'password'});
 
     my ($field, $value);
-    
+
     my ($user, $statement, $table);
-    
+
     ## Update each table
     my @set_list;
 
     while (($field, $value) = each %{$values}) {
 	unless ($map_field{$field}) {
-	    &Log::do_log('error',"unkown field $field in map_field internal error");
+	    &Log::do_log('error',
+		"unkown field $field in map_field internal error");
 	    next;
-	};
+	}
 	my $set;
-	
-	if ($numeric_field{$map_field{$field}})  {
-	    $value ||= 0; ## Can't have a null value
+
+	if ($numeric_field{$map_field{$field}}) {
+	    $value ||= 0;    ## Can't have a null value
 	    $set = sprintf '%s=%s', $map_field{$field}, $value;
-	}else { 
+	} else {
 	    $set = sprintf '%s=%s', $map_field{$field}, &SDM::quote($value);
 	}
 	push @set_list, $set;
     }
-    
+
     return undef unless @set_list;
-    
+
     ## Update field
 
-    unless ($sth = &SDM::do_query("UPDATE user_table SET %s WHERE (email_user=%s)"
-	    , join(',', @set_list), &SDM::quote($who))) {
-	&Log::do_log('err','Could not update informations for user %s in user_table',$who);
+    unless (
+	$sth = &SDM::do_query(
+	    "UPDATE user_table SET %s WHERE (email_user=%s)",
+	    join(',', @set_list),
+	    &SDM::quote($who)
+	)
+	) {
+	&Log::do_log('err',
+	    'Could not update informations for user %s in user_table', $who);
 	return undef;
     }
-    
+
     return 1;
 }
 
 ## Adds a user to the user_table
 sub add_global_user {
-    my($values) = @_;
+    my ($values) = @_;
     &Log::do_log('debug2', '');
 
     my ($field, $value);
     my ($user, $statement, $table);
-    
-    ## encrypt password   
-    $values->{'password'} = &Auth::password_fingerprint($values->{'password'}) if ($values->{'password'});
-    
+
+    ## encrypt password
+    $values->{'password'} = &Auth::password_fingerprint($values->{'password'})
+	if ($values->{'password'});
+
     return undef unless (my $who = &tools::clean_email($values->{'email'}));
     return undef if (is_global_user($who));
 
     ## Update each table
     my (@insert_field, @insert_value);
     while (($field, $value) = each %{$values}) {
-	
+
 	next unless ($map_field{$field});
-	
+
 	my $insert;
 	if ($numeric_field{$map_field{$field}}) {
-	    $value ||= 0; ## Can't have a null value
+	    $value ||= 0;    ## Can't have a null value
 	    $insert = $value;
-	}else {
+	} else {
 	    $insert = sprintf "%s", &SDM::quote($value);
 	}
 	push @insert_value, $insert;
-	push @insert_field, $map_field{$field}
+	push @insert_field, $map_field{$field};
     }
-    
+
     unless (@insert_field) {
-	&Log::do_log('err','The fields (%s) do not correspond to anything in the database',join (',',keys(%{$values})));
+	&Log::do_log(
+	    'err',
+	    'The fields (%s) do not correspond to anything in the database',
+	    join(',', keys(%{$values}))
+	);
 	return undef;
     }
-    
+
     ## Update field
-    unless($sth = &SDM::do_query("INSERT INTO user_table (%s) VALUES (%s)"
-	, join(',', @insert_field), join(',', @insert_value))) {
-	    &Log::do_log('err','Unable to add user %s to the DB table user_table', $values->{'email'});
-	    return undef;
-	}
-    
+    unless (
+	$sth = &SDM::do_query(
+	    "INSERT INTO user_table (%s) VALUES (%s)",
+	    join(',', @insert_field),
+	    join(',', @insert_value)
+	)
+	) {
+	&Log::do_log('err',
+	    'Unable to add user %s to the DB table user_table',
+	    $values->{'email'});
+	return undef;
+    }
+
     return 1;
 }
 

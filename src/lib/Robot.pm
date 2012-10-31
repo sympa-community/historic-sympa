@@ -14,8 +14,8 @@ our @ISA = qw(Site);
 ## Croak if Robot object is used where robot name shall be used.
 ## It may be removed when refactoring has finished.
 use overload
-    'bool' => sub { 1 },
-    '""' => sub { croak "object Robot <$_[0]->{'name'}> is not a string"; };
+    'bool' => sub {1},
+    '""'   => sub { croak "object Robot <$_[0]->{'name'}> is not a string"; };
 
 =encoding utf-8
 
@@ -41,25 +41,28 @@ Returns a Robot object, or undef on errors.
 ## Constructor of a Robot instance
 sub new {
     &Log::do_log('debug2', '(%s, %s, ...)', @_);
-    my $pkg = shift;
-    my $name = shift;
+    my $pkg     = shift;
+    my $name    = shift;
     my @options = @_;
 
     $name = '*' unless defined $name and length $name;
 
     ## load global config if needed
     Site->load(@options)
-	if ! $Site::is_initialized or $options{'force_reload'};
+	if !$Site::is_initialized or
+	    $options{'force_reload'};
 
     my $robot;
     ## If robot already in memory
     if ($list_of_robots{$name}) {
+
 	# use the current robot in memory and update it
 	$robot = $list_of_robots{$name};
     } else {
+
 	# create a new object robot
-	$robot = bless { } => $pkg;
-    } 
+	$robot = bless {} => $pkg;
+    }
     my $status = $robot->load($name, @options);
     unless (defined $status) {
 	delete Site->robots->{$name} if defined Site->robots;
@@ -68,7 +71,7 @@ sub new {
     }
 
     ## Initialize internal list cache
-    undef %list_cache; #FIXME
+    undef %list_cache;    #FIXME
 
     return $robot;
 }
@@ -99,16 +102,19 @@ See also L<Site/load>.
 =cut
 
 sub load {
-    my $self = shift;
-    my $name = shift;
+    my $self    = shift;
+    my $name    = shift;
     my @options = @_;
 
     $name = Site->domain
-	unless defined $name and length $name and $name ne '*';
+	unless defined $name and
+	    length $name and
+	    $name ne '*';
 
     ## load global config if needed
     Site->load(@options)
-	if ! $Site::is_initialized or $options{'force_reload'};
+	if !$Site::is_initialized or
+	    $options{'force_reload'};
 
     unless ($self->{'name'} and $self->{'etc'}) {
 	my $vhost_etc = Site->etc . '/' . $name;
@@ -120,10 +126,8 @@ sub load {
 	    ## robot of main conf
 	    $self->{'etc'} = Site->etc;
 	} else {
-	    &Log::do_log(
-		'err', 'Unknown robot "%s": config directory was not found',
-		$name
-	    );
+	    &Log::do_log('err',
+		'Unknown robot "%s": config directory was not found', $name);
 	    return undef;
 	}
 
@@ -131,8 +135,8 @@ sub load {
     }
 
     unless ($self->{'name'} eq $name) {
-        &Log::do_log('err', 'Bug in logic.  Ask developer');
-        return undef;
+	&Log::do_log('err', 'Bug in logic.  Ask developer');
+	return undef;
     }
 
     unless ($self->{'etc'} eq Site->etc) {
@@ -143,9 +147,10 @@ sub load {
 	    &Log::do_log('err', 'No read access on %s', $config_file);
 	    Site->send_notify_to_listmaster(
 		'cannot_access_robot_conf',
-		["No read access on $config_file. you should change privileges on this file to activate this virtual host. "]
+		[   "No read access on $config_file. you should change privileges on this file to activate this virtual host. "
+		]
 	    );
-            return undef;
+	    return undef;
 	}
 
 	unless (defined $self->SUPER::load(@options)) {
@@ -161,7 +166,7 @@ sub load {
 	## for config & home directories, though.
 	unless ($self->domain eq $name) {
 	    &Log::do_log('err', 'Robot name "%s" is not same as domain "%s"',
-			 $name, $self->domain);
+		$name, $self->domain);
 	    delete Site->robots->{$self->domain};
 	    delete $list_of_robots{$name};
 	    return undef;
@@ -176,10 +181,8 @@ sub load {
 	} elsif ($self->domain eq Site->domain) {
 	    $self->{'home'} = Site->home;
 	} else {
-	    &Log::do_log(
-		'err', 'Unknown robot "%s": home directory was not found',
-		$name
-	    );
+	    &Log::do_log('err',
+		'Unknown robot "%s": home directory was not found', $name);
 	    return undef;
 	}
     }
@@ -223,7 +226,7 @@ sub is_listmaster {
     }
     foreach my $listmaster ((Site->listmasters,)) {
 	return 1 if $listmaster eq $who;
-    }    
+    }
 
     return 0;
 }
@@ -312,23 +315,26 @@ sub AUTOLOAD {
 	};
     } elsif (
 	ref $_[0] and
-	    grep { $_ eq $attr }
-		 qw(pictures_path request sympa) or
+	grep {
+	    $_ eq $attr
+	} qw(pictures_path request sympa) or
 	ref $_[0] and
-	    grep { ! defined $_->{'title'} and $_->{'name'} eq $attr }
-		 @confdef::params
-    ) {
+	grep
+	{
+	    !defined $_->{'title'} and $_->{'name'} eq $attr
+	} @confdef::params
+	) {
 	## getters for robot parameters.
 	no strict "refs";
 	*{$AUTOLOAD} = sub {
 	    my $self = shift;
 	    unless ($self->{'etc'} eq Site->etc or
-		    defined Site->robots->{$self->{'domain'}}) {
+		defined Site->robots->{$self->{'domain'}}) {
 		croak "Can't call method \"$attr\" on uninitialized " .
 		    (ref $self) . " object";
 	    }
 	    croak "Can't modify \"$attr\" attribute" if scalar @_;
-	    if ($self->{'etc'} ne Site->etc and 
+	    if ($self->{'etc'} ne Site->etc and
 		defined Site->robots->{$self->{'domain'}}{$attr}) {
 		##FIXME: Might "exists" be used?
 		Site->robots->{$self->{'domain'}}{$attr};
@@ -392,15 +398,16 @@ sub get_robots {
 
     ## load global config if needed
     Site->load(@options)
-	if ! $Site::is_initialized or $options{'force_reload'};
+	if !$Site::is_initialized or
+	    $options{'force_reload'};
 
     ## get all robots
     %orphan = map { $_ => 1 } keys %{Site->robots || {}};
 
     unless (opendir $dir, Site->etc) {
 	&Log::do_log('err',
-		     'Unable to open directory %s for virtual robots config',
-		     Site->etc);
+	    'Unable to open directory %s for virtual robots config',
+	    Site->etc);
 	return undef;
     }
     foreach my $name (readdir $dir) {
