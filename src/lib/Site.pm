@@ -82,7 +82,7 @@ sub load {
     return $result if $opts{'return_result'};
 
     ## Site configuration was successfully initialized.
-    $is_initialized = 1 if $self eq __PACKAGE__;
+    $is_initialized = 1 if ! ref $self and $self eq __PACKAGE__;
 
     return 1;
 }
@@ -911,8 +911,8 @@ sub AUTOLOAD {
 
     my $attr = $2;
     if (scalar grep { $_ eq $attr }
-	qw(locale2charset pictures_path request sympa
-	robot_by_http_host) or
+	qw(locale2charset pictures_path request robots robot_by_http_host
+	   sympa) or
 	scalar grep { !defined $_->{'title'} and $_->{'name'} eq $attr }
 	@confdef::params
 	) {

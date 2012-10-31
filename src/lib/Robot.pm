@@ -329,15 +329,15 @@ sub AUTOLOAD {
 	*{$AUTOLOAD} = sub {
 	    my $self = shift;
 	    unless ($self->{'etc'} eq Site->etc or
-		defined Site->robots->{$self->{'domain'}}) {
+		defined Site->robots->{$self->{'name'}}) {
 		croak "Can't call method \"$attr\" on uninitialized " .
 		    (ref $self) . " object";
 	    }
 	    croak "Can't modify \"$attr\" attribute" if scalar @_;
 	    if ($self->{'etc'} ne Site->etc and
-		defined Site->robots->{$self->{'domain'}}{$attr}) {
+		defined Site->robots->{$self->{'name'}}{$attr}) {
 		##FIXME: Might "exists" be used?
-		Site->robots->{$self->{'domain'}}{$attr};
+		Site->robots->{$self->{'name'}}{$attr};
 	    } else {
 		Site->$attr;
 	    }

@@ -431,7 +431,9 @@ sub store {
 	$last_stored_message_key = $message->{'messagekey'};
 	
 	#log in stat_table to make statistics...
-	unless($message_sender =~ /($robot)\@/) { #ignore messages sent by robot
+	#FIXME: use OO instead of robot name.
+	my $robot_domain = ($robot eq '*') ? Site->domain : $robot;
+	unless($message_sender =~ /($robot_domain)\@/) { #ignore messages sent by robot
 	    unless ($message_sender =~ /($listname)-request/) { #ignore messages of requests			
 		&Log::db_stat_log({'robot' => $robot, 'list' => $listname, 'operation' => 'send_mail', 'parameter' => length($msg),
 				   'mail' => $message_sender, 'client' => '', 'daemon' => 'sympa.pl'});
