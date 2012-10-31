@@ -1146,7 +1146,7 @@ my $birthday = time ;
      $robot = $Conf{'host'} unless $robot;
 
      ## Create Robot object
-     $robot_object = new Robot $robot;
+     $robot_object = Robot->new($robot);
 
      ## Default robot
      if ($robot eq $Conf{'host'}) {
@@ -3951,7 +3951,7 @@ sub sendssopasswd {
     $param->{'init_passwd'} = 1 
 	if ($param->{'user'}{'password'} =~ /^init/);
     
-    &List::send_global_file('sendssopasswd', $email, $robot, $param);
+    $robot_object->send_file('sendssopasswd', $email, $param);
     
     
     $param->{'email'} = $email;
@@ -4048,7 +4048,7 @@ sub do_requestpasswd {
      }
      if ($param->{'one_time_ticket'}) {
 	 $param->{'login_error'}='ticket_sent';
-	 unless (&List::send_global_file('sendpasswd', $in{'email'}, $robot, $param)) {
+	 unless ($robot_object->send_file('sendpasswd', $in{'email'}, $param)) {
 	     &wwslog('notice',"Unable to send template 'sendpasswd' to $in{'email'}");
 	     $param->{'login_error'}='unable_to_send_ticket';
 	 }
@@ -5286,7 +5286,7 @@ sub do_subrequest {
 	    $param->{'newuser'}{'escaped_email'} =
 		&tools::escape_chars($param->{'newuser'}{'email'});
 	}
-	unless (&List::send_global_file('sendpasswd', $in{'email'}, $robot, $param)) {
+	unless ($robot_object->send_file('sendpasswd', $in{'email'}, $param)) {
 	  &wwslog('notice',"Unable to send template 'sendpasswd' to $in{'email'}");
 	  $param->{'login_error'}='unable_to_send_ticket';
 	}
@@ -5339,7 +5339,7 @@ sub do_auto_signoff {
 	   'context' => 'auto_signoff',
 	   'ip' => $ip,
        };
-       unless (&List::send_global_file('user_notification', $in{'email'}, $robot, $tt2_param)) {
+       unless ($robot_object->send_file('user_notification', $in{'email'}, $tt2_param)) {
 	 &Log::do_log('notice',"Unable to send template 'user_notification' to $in{'email'}");
 	 return undef;
        }
@@ -5366,7 +5366,7 @@ sub do_family_signoff_request {
 	'context' => 'family_signoff',
 	'ip' => $ip,
     };
-    unless (&List::send_global_file('user_notification', $in{'email'}, $robot, $tt2_param)) {
+    unless ($robot_object->send_file('user_notification', $in{'email'}, $tt2_param)) {
 	&Log::do_log('notice',"Unable to send template 'user_notification' to $in{'email'}");
 	return undef;
     }
@@ -5563,7 +5563,7 @@ sub do_sigrequest {
 			'list' => $list,
 			'one_time_ticket' => $ticket,
 			'email' => $in{'email'}};
-       unless (&List::send_global_file('user_notification', $in{'email'}, $robot, $tt2_param)) {
+       unless ($robot_object->send_file('user_notification', $in{'email'}, $tt2_param)) {
 	 &Log::do_log('notice',"Unable to send template 'user_notification' to $in{'email'}");
 	 return undef;
        }
@@ -15573,7 +15573,7 @@ sub do_change_email_request {
 		     'one_time_ticket' => $param->{'one_time_ticket'},
 		     'to' => $in{'new_email'},
 		 };
-    unless (&List::send_global_file('user_notification', $in{'new_email'}, $robot, $tt2_param)) {
+    unless ($robot_object->send_file('user_notification', $in{'new_email'}, $tt2_param)) {
 	&Log::do_log('notice',"Unable to send template 'user_notification' to $in{'new_email'}");
 	return undef;
     }

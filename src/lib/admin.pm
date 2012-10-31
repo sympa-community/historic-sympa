@@ -36,12 +36,13 @@ package admin;
 use strict;
 
 use List;
-use Conf;
+#use Conf; # already load in List.
 use Language;
 use Log;
 use tools;
 use Sympa::Constants;
 use File::Copy;
+
 use Data::Dumper;
 
 =pod 

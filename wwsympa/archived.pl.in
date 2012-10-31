@@ -142,8 +142,8 @@ unless (($( == (getgrnam(Sympa::Constants::GROUP))[2]) && ($< == (getpwnam(Sympa
 ## Sets the UMASK
 umask(oct($Conf{'umask'}));
 
-foreach my $robot (@{&Conf::get_robots_list()}) {
-    my $arc_dir = &Conf::get_robot_conf($robot,'arc_path');
+foreach my $robot (@{Robot::get_robots()}) {
+    my $arc_dir = $robot->arc_path;
     ## Create arc_path if required
     if ($arc_dir) {
 	unless (&directory_check($arc_dir)) {

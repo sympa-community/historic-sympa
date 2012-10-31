@@ -21,15 +21,15 @@
 
 package Log;
 
-use strict "vars";
+#XXXuse strict "vars";
+use strict;
 
 use Exporter;
 use Sys::Syslog;
 use Carp;
 use POSIX qw(mktime);
 use Encode;
-use List;
-
+#XXXuse List; # no longer used
 
 our @ISA = qw(Exporter);
 our @EXPORT = qw($log_level %levels);
@@ -70,7 +70,7 @@ sub fatal_err {
     };
     if($@ && ($warning_date < time - $warning_timeout)) {
 	$warning_date = time + $warning_timeout;
-	unless(&List::send_notify_to_listmaster('logs_failed', $Conf::Conf{'domain'}, [$@])) {
+	unless(Site->send_notify_to_listmaster('logs_failed', [$@])) {
 	    print STDERR "No logs available, can't send warning message";
 	}
     };
@@ -79,7 +79,7 @@ sub fatal_err {
     my $full_msg = sprintf $m,@_;
 
     ## Notify listmaster
-    unless (&List::send_notify_to_listmaster('sympa_died', $Conf::Conf{'domain'}, [$full_msg])) {
+    unless (Site->send_notify_to_listmaster('sympa_died', [$full_msg])) {
 	&do_log('err',"Unable to send notify 'sympa died' to listmaster");
     }
 
@@ -116,8 +116,6 @@ sub do_log {
 		push @param, '[...]';
 	    } elsif (ref $p eq 'HASH') {
 		push @param, sprintf('{%s}', join('/', keys %{$p}));
-	    } elsif (ref $p eq 'List') {
-		push @param, sprintf('List <%s>', $p->get_list_id);
 	    } elsif ($p->can('get_id')) {
 		push @param, sprintf('%s <%s>', ref $p, $p->get_id);
 	    } else {
@@ -192,9 +190,7 @@ sub do_log {
 
     if ($@ && ($warning_date < time - $warning_timeout)) {
         $warning_date = time + $warning_timeout;
-        &List::send_notify_to_listmaster(
-            'logs_failed', $Conf::Conf{'domain'}, [$@]
-        );
+        Site->send_notify_to_listmaster('logs_failed', [$@]);
     }
 }
 
@@ -221,7 +217,7 @@ sub do_connect {
     eval {openlog("$log_service\[$$\]", 'ndelay,nofatal', $log_facility)};
     if($@ && ($warning_date < time - $warning_timeout)) {
 	$warning_date = time + $warning_timeout;
-	unless(&List::send_notify_to_listmaster('logs_failed', $Conf::Conf{'domain'}, [$@])) {
+	unless(Site->send_notify_to_listmaster('logs_failed', [$@])) {
 	    print STDERR "No logs available, can't send warning message";
 	}
     };
@@ -338,7 +334,7 @@ sub db_stat_log{
     my $read = 0; 
 
     if (ref($list) =~ /List/i) {
-	$list = $list->{'name'};
+	$list = $list->get_id;
     }
     if($list =~ /(.+)\@(.+)/) {#remove the robot name of the list name
 	$list = $1;

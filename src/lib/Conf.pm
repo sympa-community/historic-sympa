@@ -23,21 +23,22 @@
 
 package Conf;
 
-use strict "vars";
+#XXXuse strict "vars";
+use strict;
 
 use Exporter;
 use Carp;
 use Storable;
 
-#XXXuse List;
+#use List; # no longer used
 use SDM;
 use Log;
 use Language;
-#XXXuse wwslib;
+#use wwslib; # no longer used
 use confdef;
 use tools;
-use Sympa::Constants;
-use User;
+#use Sympa::Constants; # already load in confdef.
+
 use Data::Dumper;
 
 our @ISA = qw(Exporter);

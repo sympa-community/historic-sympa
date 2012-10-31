@@ -27,9 +27,9 @@ use strict;
 use Carp;
 use Exporter;
 
-use Conf;
+#use Conf; # SDM is used in Conf
 use Log;
-use List;
+#use List; # no longer used
 use Sympa::Constants;
 use SQLSource;
 use Data::Dumper;
@@ -253,11 +253,10 @@ sub probe_db {
     }
     
     ## Used by List subroutines to check that the DB is available
-    $List::use_db = 1;
+    $Site::use_db = 1;
 
     ## Notify listmaster
-    &List::send_notify_to_listmaster('db_struct_updated', Site->domain,
-				     {'report' => \@report})
+    Site->send_notify_to_listmaster('db_struct_updated', {'report' => \@report})
 	if scalar @report;
 
     return 1;

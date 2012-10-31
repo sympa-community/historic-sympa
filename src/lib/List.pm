@@ -156,6 +156,7 @@ Sends the Mail::Internet message to the list.
 =item send_file ( FILE, USERS, PARAM )
 
 Sends the file to the USER.
+See L<Site/send_file>.
 
 =item delete_list_member ( ARRAY )
 
@@ -3656,15 +3657,7 @@ sub send_msg_digest {
 #       
 ####################################################
 sub send_global_file {
-    ## OBSOLETED: Use $list->robot->send_file() or Site->send_file().
-    my $tpl = shift;
-    my $who = shift;
-    my $robot = shift;
-    if (! $robot or $robot eq '*') {
-	return Site->send_file($tpl, $who, @_);
-    } else {
-	return Robot->new($robot)->send_file($tpl, $who, @_);
-    }
+    croak 'DEPRECATED: Use $list->robot->send_file() or Site->send_file()';
 }
 
 ####################################################
@@ -4267,105 +4260,19 @@ sub send_auth {
    return $authkey;
 }
 
-####################################################
-# request_auth                              
-####################################################
-# sends an authentification request for a requested 
-# command .
-# 
-#  
-# IN : -$self : ref(List) if is present
-#      -$email(+) : recepient (the personn who asked 
-#                   for the command)
-#      -$cmd : -signoff|subscribe|add|del|remind if $self
-#              -remind else
-#      -$robot(+) : robot
-#      -@param : 0 : used if $cmd = subscribe|add|del|invite
-#                1 : used if $cmd = add 
-#
-# OUT : 1 | undef
-#
-####################################################
+=over 4
+
+=item request_auth
+
+Sends an authentification request for a requested command .
+See L<Site/request_auth>.
+
+=back
+
+=cut
+
 sub request_auth {
-    &Log::do_log('debug2', 'List::request_auth(%s, %s, %s, %s)', @_);
-    my $first_param = shift;
-    my ($self, $email, $cmd, $robot, @param);
-
-    if (ref($first_param) eq 'List') {
-	$self = $first_param;
-	$email= shift;
-    }else {
-	$email = $first_param;
-    }
-    $cmd = shift;
-    $robot = shift;
-    @param = @_;
-    &Log::do_log('debug3', 'List::request_auth() List : %s,$email: %s cmd : %s',$self->{'name'},$email,$cmd);
-
-    
-    my $keyauth;
-    my $data = {'to' => $email};
-
-
-    if (ref($self) eq 'List') {
-	my $listname = $self->{'name'};
-	$data->{'list_context'} = 1;
-
-	if ($cmd =~ /signoff$/){
-	    $keyauth = $self->compute_auth ($email, 'signoff');
-	    $data->{'command'} = "auth $keyauth $cmd $listname $email";
-	    $data->{'type'} = 'signoff';
-	    
-	}elsif ($cmd =~ /subscribe$/){
-	    $keyauth = $self->compute_auth ($email, 'subscribe');
-	    $data->{'command'} = "auth $keyauth $cmd $listname $param[0]";
-	    $data->{'type'} = 'subscribe';
-
-	}elsif ($cmd =~ /add$/){
-	    $keyauth = $self->compute_auth ($param[0],'add');
-	    $data->{'command'} = "auth $keyauth $cmd $listname $param[0] $param[1]";
-	    $data->{'type'} = 'add';
-	    
-	}elsif ($cmd =~ /del$/){
-	    my $keyauth = $self->compute_auth($param[0], 'del');
-	    $data->{'command'} = "auth $keyauth $cmd $listname $param[0]";
-	    $data->{'type'} = 'del';
-
-	}elsif ($cmd eq 'remind'){
-	    my $keyauth = $self->compute_auth('','remind');
-	    $data->{'command'} = "auth $keyauth $cmd $listname";
-	    $data->{'type'} = 'remind';
-	
-	}elsif ($cmd eq 'invite'){
-	    my $keyauth = $self->compute_auth($param[0],'invite');
-	    $data->{'command'} = "auth $keyauth $cmd $listname $param[0]";
-	    $data->{'type'} = 'invite';
-	}
-
-	$data->{'command_escaped'} = &tt2::escape_url($data->{'command'});
-	$data->{'auto_submitted'} = 'auto-replied';
-	unless ($self->send_file('request_auth', $email, $data)) {
-	    &Log::do_log('notice',"Unable to send template 'request_auth' to $email");
-	    return undef;
-	}
-
-    }else {
-	if ($cmd eq 'remind'){
-	    my $keyauth = &List::compute_auth('',$cmd);
-	    $data->{'command'} = "auth $keyauth $cmd *";
-	    $data->{'command_escaped'} = &tt2::escape_url($data->{'command'});
-	    $data->{'type'} = 'remind';
-	    
-	}
-	$data->{'auto_submitted'} = 'auto-replied';
-	unless (&send_global_file('request_auth',$email,$robot,$data)) {
-	    &Log::do_log('notice',"Unable to send template 'request_auth' to $email");
-	    return undef;
-	}
-    }
-
-
-    return 1;
+    return Site::request_auth(@_);
 }
 
 
@@ -4757,40 +4664,20 @@ sub send_notify_to_user{
 #                                                                         #
 ################### END functions for sending messages ####################
 
+=over 4
 
+=item compute_auth
 
-## genererate a md5 checksum using private cookie and parameters
+Genererate a md5 checksum using private cookie and parameters
+See L<Site/compute_auth>.
+
+=back
+
+=cut
+
 sub compute_auth {
-    &Log::do_log('debug3', 'List::compute_auth(%s, %s, %s)', @_);
-
-    my $first_param = shift;
-    my ($self, $email, $cmd);
-    
-    if (ref($first_param) eq 'List') {
-	$self = $first_param;
-	$email= shift;
-    }else {
-	$email = $email;
-    }
-    $cmd = shift;
-
-    $email =~ y/[A-Z]/[a-z]/;
-    $cmd =~ y/[A-Z]/[a-z]/;
-
-    my ($cookie, $key, $listname) ;
-
-    if ($self){
-	$listname = $self->{'name'};
-        $cookie = $self->get_cookie() || $Conf::Conf{'cookie'};
-    }else {
-	$cookie = $Conf::Conf{'cookie'};
-    }
-    
-    $key = substr(Digest::MD5::md5_hex(join('/', $cookie, $listname, $email, $cmd)), -8) ;
-
-    return $key;
+    return Site::compute_auth(@_);
 }
-
 
 ## Add footer/header to a message
 sub add_parts {
@@ -6373,14 +6260,18 @@ sub add_list_member {
 	
 	unless ($new_user->{'included'}) {
 	    ## Is the email in user table?
-	    if (! is_global_user($who)) {
-		## Insert in User Table
-		unless(&SDM::do_query("INSERT INTO user_table (email_user, gecos_user, lang_user, password_user) VALUES (%s,%s,%s,%s)",&SDM::quote($who), &SDM::quote($new_user->{'gecos'}), &SDM::quote($new_user->{'lang'}), &SDM::quote($new_user->{'password'}))){
-		    &Log::do_log('err','Unable to add user %s to user_table.', $who);
-		    $self->{'add_outcome'}{'errors'}{'unable_to_add_to_database'} = 1;
-		    next;
-		}
-		}
+	    ## Insert in User Table
+	    unless (User->new(
+		$who, 'gecos' => $new_user->{'gecos'},
+		'lang' => $new_user->{'lang'},
+		'password' => $new_user->{'password'}
+	    )) {
+		&Log::do_log(
+		    'err', 'Unable to add user %s to user_table.', $who
+		);
+		$self->{'add_outcome'}{'errors'}{'unable_to_add_to_database'} = 1;
+		next;
+	    }
 	}	    
 	
 	$new_user->{'subscribed'} ||= 0;
@@ -6460,12 +6351,15 @@ sub add_list_admin {
 	    
 	unless ($new_admin_user->{'included'}) {
 	    ## Is the email in user table?
-	    if (! is_global_user($who)) {
-		## Insert in User Table
-		unless(&SDM::do_query("INSERT INTO user_table (email_user, gecos_user, lang_user, password_user) VALUES (%s,%s,%s,%s)",&SDM::quote($who), &SDM::quote($new_admin_user->{'gecos'}), &SDM::quote($new_admin_user->{'lang'}), &SDM::quote($new_admin_user->{'password'}))){
-		    &Log::do_log('err','Unable to add admin %s to user_table', $who);
-		    next;
-		}
+	    ## Insert in User Table
+	    unless (User->new(
+		$who, 'gecos' => $new_admin_user->{'gecos'},
+		'lang' => $new_admin_user->{'lang'},
+		'password' => $new_admin_user->{'password'}
+	    )) {
+		&Log::do_log(
+		    'err', 'Unable to add admin %s to user_table', $who);
+		next;
 	    }
 	}	    
 
@@ -11490,10 +11384,10 @@ sub get_subscription_requests {
 	$subscriptions{$email} = {'gecos' => $gecos,
 				  'custom_attribute' => $xml};
 	unless($subscriptions{$email}{'gecos'}) {
-		my $user = get_global_user($email);
-		if ($user->{'gecos'}) {
-			$subscriptions{$email}{'gecos'} = $user->{'gecos'};
-		}
+	    my $user = User->new($email);
+	    if ($user->gecos) {
+		$subscriptions{$email}{'gecos'} = $user->gecos;
+	    }
 	}
 	$subscriptions{$email}{'date'} = $subrequest->{'date'};
     }
@@ -11955,7 +11849,7 @@ sub get_bounce_address {
 
 =over 4
 
-=item get_list_id ( )
+=item get_id ( )
 
 Return the list ID, different from the list address (uses the robot name)
 
@@ -11963,7 +11857,7 @@ Return the list ID, different from the list address (uses the robot name)
 
 =cut
 
-sub get_list_id {
+sub get_id {
     my $self = shift;
 
     ## DO NOT use accessors since $self may not have been fully initialized.
@@ -11971,6 +11865,9 @@ sub get_list_id {
     return '' unless $self->{'name'} and $self->{'domain'};
     return $self->{'name'} . '@' . $self->{'domain'};
 }
+
+## OBSOLETED: use get_id()
+sub get_list_id { shift->get_id }
 
 =over 4
 

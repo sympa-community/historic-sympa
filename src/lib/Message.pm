@@ -45,7 +45,9 @@ use MIME::Entity;
 use MIME::EncWords;
 use MIME::Parser;
 
-use List;
+#use List;
+##The line above was removed to avoid dependency loop.
+##"use List" MUST precede to "use Message".
 use tools;
 use tt2;
 use Conf;
@@ -179,8 +181,29 @@ sub new {
 	}else{
 	    $msg = $parser->parse_data(\$messageasstring);
 	}
+
+	# get envelope sender
+	my $from_ = undef;
+	if (ref $messageasstring) {
+	    if (ref $messageasstring eq 'ARRAY' and
+		$messageasstring->[0] =~ /^From (\S+)/) {
+		$from_ = $1;
+	    } elsif ($$messageasstring =~ /^From (\S+)/) {
+		$from_ = $1;
+	    }
+	} elsif ($messageasstring =~ /^From (\S+)/) {
+	    $from_ = $1;
+	}
+	if (defined $from_) {
+	    if ($from_ =~ /<>/) {
+		$from_ = '<>';
+	    } else {
+		$from_ = tools::clean_email($from_);
+	    }
+	    $message->{'envsender'} = $from_ if $from_;
+	}
     }  
-     
+
     unless ($msg){
 	&Log::do_log('err',"could not parse message"); 
 	return undef;

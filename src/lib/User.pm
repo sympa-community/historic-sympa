@@ -2,23 +2,41 @@
 package User;
 
 use strict;
+use warnings;
 use Exporter;
+use Carp qw(croak);
 
-use Auth;
+#use Site; # this module is used in Site and inheriting classeses.
 
 ## Database and SQL statement handlers
 my ($sth, @sth_stack);
 
+## mapping between var and field names
+my %map_field = ( gecos => 'gecos_user',
+		  password => 'password_user',
+		  cookie_delay => 'cookie_delay_user',
+		  lang => 'lang_user',
+		  attributes => 'attributes_user',
+		  email => 'email_user',
+		  data => 'data_user',
+		  last_login_date => 'last_login_date_user',
+		  last_login_host => 'last_login_host_user',
+		  wrong_login_count => 'wrong_login_count_user'
+    );
+
 ## DB fields with numeric type
 ## We should not do quote() for these while inserting data
 my %numeric_field = ('cookie_delay_user' => 1,
-                     'bounce_score_subscriber' => 1,
-                     'subscribed_subscriber' => 1,
-                     'included_subscriber' => 1,
-                     'subscribed_admin' => 1,
-                     'included_admin' => 1,
-                     'wrong_login_count' => 1,
+                     'wrong_login_count_user' => 1,
     );
+
+=encoding utf-8
+
+=head1 NAME
+
+User - Any of Identified Users on Sympa
+
+=head1 DESCRIPTION
 
 =head2 CONSTRUCTOR
 
@@ -43,7 +61,9 @@ sub new {
 	## unauthenticated user would not be added to database.
 	if (scalar grep { $_ ne 'lang' and $_ ne 'email' } keys %values) {
 	    $values{'email'} = $who;
-	    add_global_user(\%values);
+	    unless (defined add_global_user(\%values)) {
+		return undef;
+	    }
 	}
 	$self = \%values;
     }
@@ -55,7 +75,7 @@ sub new {
 
 =over 4
 
-=item del
+=item expire
 
 XXX
 
@@ -65,6 +85,21 @@ XXX
 
 sub expire {
     croak()
+}
+
+=over 4
+
+=item get_id
+
+XXX
+
+=back
+
+=cut
+
+sub get_id {
+    ## DO NOT use accessors since $self may not have been fully initialized.
+    shift->{'email'} || '';
 }
 
 =over 4
@@ -85,13 +120,58 @@ sub save {
 
 =over 4
 
-...
+=item E<lt>attributeE<gt>
+
+=item E<lt>attributeE<gt>C<( VALUE )>
+
+I<Getters/Setters>.
+Get or set user attributes.
+For example C<$user-E<gt>gecos> returns "gecos" parameter of the user,
+and C<$user-E<gt>gecos("foo")> also changes it.
+Basic user profile "email" have only getter,
+so it is read-only.
 
 =back
 
 =cut
 
+our $AUTOLOAD;
 
+sub DESTROY;
+
+sub AUTOLOAD {
+    $AUTOLOAD =~ m/^(.*)::(.*)/;
+
+    my $attr = $2;
+    if (scalar grep { $_ eq $attr } qw(email)) {
+        ## getter for user attribute.
+        no strict "refs";
+        *{$AUTOLOAD} = sub {
+            my $self = shift;
+	    croak "Can't call method \"$attr\" on uninitialized " .
+		ref($self) . " object"
+		unless $self->{'email'};
+            croak "Can't modify \"$attr\" attribute"
+                if scalar @_ > 1;
+            $self->{$attr};
+        };
+    } elsif (exists $map_field{$attr}) {
+        ## getter/setter for user attributes.
+        no strict "refs";
+        *{$AUTOLOAD} = sub {
+            my $self = shift;
+            croak "Can't call method \"$attr\" on uninitialized " .
+		ref($self) . " object"
+                unless $self->{'email'};
+	    $self->{$attr} = shift
+                if scalar @_ > 1;
+            $self->{$attr};
+        };
+    } else {
+        croak "Can't locate object method \"$2\" via package \"$1\"";
+    }
+    goto &$AUTOLOAD;
+}
 
 =head2 FUNCTIONS
 
@@ -123,8 +203,11 @@ sub delete_global_user {
 	$who = &tools::clean_email($who);
 	## Update field
 	
-	unless (&SDM::do_query("DELETE FROM user_table WHERE (email_user =%s)", &SDM::quote($who))) {
-	    &Log::do_log('err','Unable to delete user %s', $who);
+	unless (&SDM::do_prepared_query(
+	    q{DELETE FROM user_table WHERE email_user = ?}, $who
+	)
+	) {
+	    &Log::do_log('err', 'Unable to delete user %s', $who);
 	    next;
 	}
     }
@@ -140,8 +223,8 @@ sub get_global_user {
 
     ## Additional subscriber fields
     my $additional = '';
-    if ($Conf::Conf{'db_additional_user_fields'}) {
-	$additional = ', ' . $Conf::Conf{'db_additional_user_fields'};
+    if (Site->db_additional_user_fields) {
+	$additional = ', ' . Site->db_additional_user_fields;
     }
 
     push @sth_stack, $sth;
@@ -244,19 +327,6 @@ sub update_global_user {
     
     my ($user, $statement, $table);
     
-    ## mapping between var and field names
-    my %map_field = ( gecos => 'gecos_user',
-		      password => 'password_user',
-		      cookie_delay => 'cookie_delay_user',
-		      lang => 'lang_user',
-		      attributes => 'attributes_user',
-		      email => 'email_user',
-		      data => 'data_user',
-		      last_login_date => 'last_login_date_user',
-		      last_login_host => 'last_login_host_user',
-		      wrong_login_count => 'wrong_login_count_user'
-		      );
-    
     ## Update each table
     my @set_list;
 
@@ -301,19 +371,8 @@ sub add_global_user {
     $values->{'password'} = &Auth::password_fingerprint($values->{'password'}) if ($values->{'password'});
     
     return undef unless (my $who = &tools::clean_email($values->{'email'}));
-    
     return undef if (is_global_user($who));
-    
-    ## mapping between var and field names
-    my %map_field = ( email => 'email_user',
-		      gecos => 'gecos_user',
-		      custom_attribute => 'custom_attribute',
-		      password => 'password_user',
-		      cookie_delay => 'cookie_delay_user',
-		      lang => 'lang_user',
-		      attributes => 'attributes_user'
-		      );
-    
+
     ## Update each table
     my (@insert_field, @insert_value);
     while (($field, $value) = each %{$values}) {

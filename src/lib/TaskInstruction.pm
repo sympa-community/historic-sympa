@@ -346,7 +346,7 @@ sub send_msg {
 
     if ($task->{'object'} eq '_global') {
 		foreach my $email (keys %{$self->{'variables'}{$var}}) {
-			unless (&List::send_global_file ($template, $email, ,'',$self->{'variables'}{$var}{$email}) ) {
+			unless (Site->send_file($template, $email, $self->{'variables'}{$var}{$email}) ) {
 				&Log::do_log ('notice', "Unable to send template $template to $email");
 				$self->error ({'task' => $task, 'type' => 'execution', 'message' => "Unable to send template $template to $email"});
 				return undef;
@@ -932,7 +932,7 @@ sub purge_orphan_bounces {
 			 $tpl_context{'expiration_date'} = &tools::adate ($expiration_date);
 			 $tpl_context{'certificate_id'} = $id;
 			 $tpl_context{'auto_submitted'} = 'auto-generated';
-			 unless (&List::send_global_file ($template, $_,'', \%tpl_context)) {
+			 unless (Site->send_file($template, $_, \%tpl_context)) {
 				 $self->error ({'task' => $task, 'type' => 'execution', 'message' => "Unable to send template $template to $_"});
 			 }
 			 &Log::do_log ('notice', "--> $_ certificate soon expired ($date), user warned");

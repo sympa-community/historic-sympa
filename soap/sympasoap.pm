@@ -1290,7 +1290,7 @@ sub subscribe {
   }
   if ($action =~ /request_auth/i) {
       my $cmd = 'subscribe';
-      $list->request_auth ($sender, $cmd, $robot, $gecos );
+	$list->request_auth($sender, $cmd, $gecos);
       &Log::do_log('info', 'SOAP subscribe :  %s from %s, auth requested',$listname,$sender);
       return SOAP::Data->name('result')->type('boolean')->value(1);
   }
@@ -1334,7 +1334,7 @@ sub subscribe {
 		      unless $list->add_list_member($u);
       }
       
-      if ($List::use_db) {
+      if ($Site::use_db) {
 	  my $u = &List::get_global_user($sender);
 	  
 	  &List::update_global_user($sender, {'lang' => $u->{'lang'} || $list->{'admin'}{'lang'}

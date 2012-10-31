@@ -460,7 +460,7 @@ if ($main::options{'dump'}) {
     exit 0;
 }elsif ($main::options{'md5_encode_password'}) {
 
-    unless ($List::use_db) {
+    unless ($Site::use_db) {
 	&Log::fatal_err("You don't have a database setup, can't lowercase email addresses");
     }
     
@@ -471,7 +471,7 @@ if ($main::options{'dump'}) {
     
 }elsif ($main::options{'lowercase'}) {
     
-    unless ($List::use_db) {
+    unless ($Site::use_db) {
 	&Log::fatal_err("You don't have a database setup, can't lowercase email addresses");
     }
 
@@ -979,7 +979,7 @@ while (!$signal) {
     &Language::SetLang($Language::default_lang);
 
     &List::init_list_cache();
-	&List::send_notify_to_listmaster(undef, undef, undef, 1); # Process grouped notifications
+	Site->send_notify_to_listmaster(undef, undef, undef, 1); # Process grouped notifications
 	
     ## Scan queuedigest it should be performed by task manager !
     if ($index_queuedigest++ >=$digestsleep){
@@ -1048,7 +1048,8 @@ while (!$signal) {
 	}	
 } ## END of infinite loop
 
-&List::send_notify_to_listmaster(undef, undef, undef, undef, 1); # Purge grouped notifications
+# Purge grouped notifications
+Site->send_notify_to_listmaster(undef, undef, undef, 1);
 
 ## Dump of User files in DB
 #List::dump();
@@ -1197,14 +1198,15 @@ sub process_message {
     my $conf_email = &Conf::get_robot_conf($robot, 'email');
     my $conf_host = &Conf::get_robot_conf($robot, 'host');
 
-        ## Unknown robot
-    unless (&Conf::valid_robot($robot)) {
-	&Log::do_log('err', 'sympa::process_message() : robot %s does not exist',$robot);
-	&report::reject_report_msg('user','list_unknown',$sender,{'listname' => $listname,'message' => $message},$robot,$message->{'msg_as_string'},'');
+    my $robot_object;
+    ## Unknown robot
+    unless ($robot_object = Robot->new($robot)) {
+	&Log::do_log('err', 'robot %s does not exist', $robot);
+	Site->send_dsn($message, {'recipient' => $rcpt}, '5.1.2');
 	&Log::db_log({'robot' => $robot,'list' => $listname,'action' => 'process_message','target_email' => "",'msg_id' => $hdr->get('Message-ID'),'status' => 'error','error_type' => 'unknown_robot','user_email' => $sender,'client' => $ip,'daemon' => $daemon_name});
 	return undef;
     }
-    
+
     my ($list, $host, $name);   
     if ($listname =~ /^(sympa|$Conf{'listmaster_email'}|$conf_email)(\@$conf_host)?$/i) {
 	$host = $conf_host;
@@ -1214,8 +1216,10 @@ sub process_message {
 	$list = new List ($listname, $robot);
 	unless (defined $list) {
 	    unless ($dyn_list_family) {
-		&Log::do_log('err', 'sympa::Process_message() : list %s does not exist',$listname);
-		&report::reject_report_msg('user','list_unknown',$sender,{'listname' => $listname,'message' => $message},$robot,$message->{'msg_as_string'},'');
+		&Log::do_log('err', 'list %s does not exist',$listname);
+		$robot_object->send_dsn(
+		    $message, {'listname' => $listname}, '5.1.1'
+		);
 		&Log::db_log({'robot' => $robot,'list' => $listname,'action' => 'Process_message','target_email' => "",'msg_id' => $hdr->get('Message-ID'),'status' => 'error','error_type' => 'unknown_list','user_email' => $sender,'client' => $ip,'daemon' => $daemon_name});
 		return undef;
 	    }
@@ -1223,9 +1227,17 @@ sub process_message {
 	    ## Automatic creation of a mailing list, based on a family
             my $dyn_family;
             unless ($dyn_family = new Family($dyn_list_family,$robot)) {
-                &Log::do_log('err', "Failed to process message: family $dyn_list_family does not exist, impossible to create the dynamic list.");
-		&List::send_notify_to_listmaster('automatic_list_creation_failed',$robot,["Failed to process message : family $dyn_list_family does not exist, impossible to create the dynamic list."]);
-		&report::reject_report_msg('user','list_unknown',$sender,{'listname' => $listname,'message' => $message},$robot,$message->{'msg_as_string'},'');
+                &Log::do_log(
+		    'err',
+		    "Failed to process message: family $dyn_list_family does not exist, impossible to create the dynamic list."
+		);
+		$robot_object->send_notify_to_listmaster(
+		    'automatic_list_creation_failed',
+		    "Failed to process message : family $dyn_list_family does not exist, impossible to create the dynamic list."
+		);
+		$robot_object->send_dsn(
+		    $message, {'listname' => $listname}, '5.1.1'
+		);
 		return undef;
             }
             
@@ -1240,19 +1252,38 @@ sub process_message {
 						    'automatic_listname'=>$listname });
 	    my $r_action;
 	    unless (defined $result) {
-		&Log::do_log('err', 'sympa::Process_message(): message (%s) ignored because unable to evaluate scenario "automatic_list_creation" for list %s',  $hdr->get('Message-Id'),$listname);
-		&report::reject_report_msg('intern','Message ignored because scenario "automatic_list_creation" cannot be evaluated',$sender,
-					   {'msg_id' => $hdr->get('Message-Id'),'message' => $message}, $robot,$message->{'msg_as_string'});
-		&List::send_notify_to_listmaster('automatic_list_creation_failed',$robot,["Failed to process message"]);
+		&Log::do_log(
+		    'err', 'message (%s) ignored because unable to evaluate scenario "automatic_list_creation" for list %s',
+		    $hdr->get('Message-Id'), $listname
+		);
+		&report::reject_report_msg(
+		    'intern',
+		    'Message ignored because scenario "automatic_list_creation" cannot be evaluated',
+		    $sender,
+		    {'msg_id' => $hdr->get('Message-Id'), 'message' => $message},
+		    $robot, $message->{'msg_as_string'}
+		);
+		$robot_object->send_notify_to_listmaster(
+		    'automatic_list_creation_failed',
+		    "Failed to process message"
+		);
 		&Log::db_log({'robot' => $robot,'list' => $listname,'action' => 'Process_message',
 			      'parameters' => $hdr->get('Message-Id').",$robot",'target_email' => '','msg_id' => hdr->get('Message-Id'),'status' => 'error','error_type' => 'internal','user_email' => $sender,'client' => $ip,'daemon' => $daemon_name});
 		return undef ;
             }
             $list = new List ($listname, $robot);
             unless (defined $list) {
-                &Log::do_log('err', 'sympa::Process_message() : dynamic list %s could not be created',$listname);
-                &report::reject_report_msg('user','list_unknown',$sender,{'listname' => $listname, 'list'=>{'name'=>$listname},'message' => $message},$robot,$message->{'msg'}->as_string,'');
-		&List::send_notify_to_listmaster('automatic_list_creation_failed',$robot,["Failed to process $file."]);
+                &Log::do_log(
+		    'err', 'dynamic list %s could not be created',
+		    $listname
+		);
+		$robot_object->send_dsn(
+		    $message, {'listname' => $listname}, '4.2.1'
+		);
+		$robot_object->send_notify_to_listmaster(
+		    'automatic_list_creation_failed',
+		    "Failed to process $file."
+		);
 		return undef;
             }
 	    $dyn_just_created = 1;
@@ -1308,11 +1339,14 @@ sub process_message {
     #  anti-virus
     my $rc= &tools::virus_infected($message->{'msg'});
     if ($rc) {
-	if ( &Conf::get_robot_conf($robot,'antivirus_notify') eq 'sender') {
-	    unless (&List::send_global_file('your_infected_msg', $sender, $robot, {'virus_name' => $rc,
-										   'recipient' => $list_address,
-										   'lang' => $Language::default_lang,
-										   'auto_submitted' => 'auto-replied'})) {
+	if ($robot_object->antivirus_notify eq 'sender') {
+	    unless ($robot_object->send_file(
+		'your_infected_msg', $sender,
+		{'virus_name' => $rc,
+		'recipient' => $list_address,
+		'lang' => ($robot_object->lang || 'en'),
+		'auto_submitted' => 'auto-replied'}
+	    )) {
 		&Log::do_log('notice',"Unable to send template 'your infected_msg' to $sender");
 	    }
 	}
@@ -1321,8 +1355,11 @@ sub process_message {
 	return undef;
 
     }elsif (! defined($rc)) {
- 	unless (&List::send_notify_to_listmaster('antivirus_failed',$robot,["Could not scan message; The message has been saved as BAD."])) {
- 	    &Log::do_log('notice',"Unable to send notify 'antivirus_failed' to listmaster");
+ 	unless ($robot_object->send_notify_to_listmaster(
+	    'antivirus_failed',
+	    "Could not scan message; The message has been saved as BAD."
+	)) {
+ 	    &Log::do_log('notice', 'Unable to send notify "antivirus_failed" to listmaster');
  	}
 
 	return undef;
@@ -1331,8 +1368,14 @@ sub process_message {
     if ($Conf{'automatic_list_feature'} eq 'on')  {
         if ($dyn_list_family && $dyn_just_created) {
             unless (defined $list->sync_include()) {
-		&Log::do_log('err', 'sympa::Process_message() : Failed to synchronize list members of dynamic list %s from %s family',$listname, $dyn_list_family);
-		&report::reject_report_msg('user','dyn_cant_create',$sender,{'listname' => $listname,'message' => $message},$robot,$message->{'msg_as_string'},'');
+		&Log::do_log(
+		    'err', 'Failed to synchronize list members of dynamic list %s from %s family',
+		     $listname, $dyn_list_family
+		);
+		$robot_object->send_dsn(
+		    $message, {'listname' => $listname}, '4.2.1'
+		);
+		#FIXME: Notify listmaster?
 		&Log::db_log({'robot' => $robot,'list' => $listname,'action' => 'Process_message','target_email' => "",'msg_id' => $hdr->get('Message-ID'),'status' => 'error','error_type' => 'dyn_cant_sync','user_email' => $sender,'client' => $ip,'daemon' => $daemon_name});
 		# purge the unwanted empty automatic list
 		if ($Conf{'automatic_list_removal'} =~ /if_empty/i) {
@@ -1342,8 +1385,12 @@ sub process_message {
                 return undef;
             }
             unless ($list->total > 0) {
-		&Log::do_log('err', 'sympa::Process_message() : Dynamic list %s from %s family has ZERO subscribers',$listname, $dyn_list_family);
-		&report::reject_report_msg('user','list_unknown',$sender,{'listname' => $listname, 'list'=>{'name'=>$listname, 'host'=>$robot},'message' => $message},$robot,$message->{'msg_as_string'},'');
+		&Log::do_log(
+		    'err',
+		    'Dynamic list %s from %s family has ZERO subscribers',
+		    $list, $dyn_list_family
+		);
+		$list->send_dsn($message, {}, '4.2.4');
 		&Log::db_log({'robot' => $robot,'list' => $listname,'action' => 'Process_message','target_email' => "",'msg_id' => $hdr->get('Message-ID'),'status' => 'error','error_type' => 'list_unknown','user_email' => $sender,'client' => $ip,'daemon' => $daemon_name});
 		# purge the unwanted empty automatic list
 		if ($Conf{'automatic_list_removal'} =~ /if_empty/i) {
@@ -1393,9 +1440,13 @@ sub process_message {
 	    ## Notify listmaster of first rejection
 	    if ($loop_info{$sender}{'count'} ==  &Conf::get_robot_conf($robot, 'loop_command_max')) {
 		## Notify listmaster
-		unless (&List::send_notify_to_listmaster('loop_command',  &Conf::get_robot_conf($robot, 'domain'),
-							 {'msg' => $file})) {
-		    &Log::do_log('notice',"Unable to send notify 'loop_command' to listmaster");
+		unless ($robot_object->send_notify_to_listmaster(
+		    'loop_command', {'msg' => $file}
+		)) {
+		    &Log::do_log(
+			'notice',
+			'Unable to send notify "loop_command" to listmaster'
+		    );
 		}
 	    }
 	    
@@ -1491,8 +1542,11 @@ sub DoSendMessage {
 #
 ############################################################
 sub DoForward {
+    &Log::do_log('debug2', '(%s, %s, %s, ...)', @_);
     my($name, $function, $robot, $message) = @_;
     &Log::do_log('debug', 'DoForward(%s, %s)', $name, $function);
+
+    my $robot_object = Robot->new($robot);
 
     my $msg = $message->{'msg'};
     my $hdr = $msg->head;
@@ -1515,17 +1569,14 @@ sub DoForward {
 	$priority = 0;
     }else {
 	unless ($list = new List ($name, $robot)) {
-	    &Log::do_log('notice', "Message for %s-%s ignored, unknown list %s (Message-id: %s)",$name, $function, $name,$messageid);
-	    my $sympa_email = &Conf::get_robot_conf($robot, 'sympa');
-	    unless (&List::send_global_file('list_unknown', $sender, $robot,
-					    {'list' => $name,
-					     'date' => &POSIX::strftime("%d %b %Y  %H:%M", localtime(time)),
-					     'boundary' => $sympa_email.time,
-					     'header' => $hdr->as_string(),
-					     'auto_submitted' => 'auto-replied'
-					     })) {
-		&Log::do_log('notice',"Unable to send template 'list_unknown' to $sender");
-	    }
+	    &Log::do_log(
+		'notice',
+		'Message for %s-%s ignored, unknown list %s (Message-id: %s)',
+		$name, $function, $name, $messageid
+	    );
+	    $robot_object->send_dsn(
+		$message, {'listname' => $name}, '5.1.1'
+	    );
 	    return undef;
 	}
 	
@@ -1636,6 +1687,7 @@ sub DoMessage{
     my($which, $message, $robot) = @_;
     &Log::do_log('debug', 'DoMessage(%s, %s, %s, msg from %s, %s, %s)', $which, $message->{'msg'}, $robot, $message->{'sender'}, $message->{'size'},  $message->{'smime_crypted'});
 
+    my $robot_object = Robot->new($robot);
     
     ## List and host.
 	    my($listname, $host) = split(/[@\s]+/, $which);
@@ -1648,29 +1700,17 @@ sub DoMessage{
 	    my $msg_string = $msg->as_string;
 	    
 	    my $sender = $message->{'sender'};
-	    
 
+    my $list;
+    ## List unknown
+    unless ($list = List->new($listname, $robot)) {
+	&Log::do_log('notice', 'Unknown list %s', $listname);
+	$robot_object->send_dsn(
+	    $message, {'listname' => $listname}, '5.1.1'
+	);
+	return undef;
+    }
 
-	    ## Search for the list
-	    my $list = new List ($listname, $robot);
-	    
-	    ## List unknown
-	    unless ($list) {
-		&Log::do_log('notice', 'Unknown list %s', $listname);
-		my $sympa_email = &Conf::get_robot_conf($robot, 'sympa');
-		
-		unless (&List::send_global_file('list_unknown', $sender, $robot,
-						{'list' => $which,
-						 'date' => &POSIX::strftime("%d %b %Y  %H:%M", localtime(time)),
-						 'boundary' => $sympa_email.time,
-						 'header' => $hdr->as_string(),
-						 'auto_submitted' => 'auto-replied'
-						 })) {
-		    &Log::do_log('notice',"Unable to send template 'list_unknown' to $sender");
-		}
-		return undef;
-	    }
-	    
 	    ($listname, $host) = ($list->{'name'}, $list->{'admin'}{'host'});
 	    
 	    my $start_time = time;
@@ -1713,8 +1753,16 @@ sub DoMessage{
     my $max_size = $list->get_max_size();
 
     if ($max_size && $message->{'size'} > $max_size) {
-		&Log::do_log('info', 'sympa::DoMessage(): Message for %s from %s rejected because too large (%d > %d)', $listname, $sender, $message->{'size'}, $max_size);
-		&report::reject_report_msg('user','message_too_large',$sender,{'msg_size' => int($message->{'size'} / 1024),'max_size' => int($max_size / 1024)},$robot,'',$list);
+		&Log::do_log(
+		    'info', 'Message for %s from %s rejected because too large (%d > %d)',
+		    $listname, $sender, $message->{'size'}, $max_size
+		);
+		$list->send_dsn(
+		    $message,
+		    {   'msg_size' => int($message->{'size'} / 1024),
+			'max_size' => int($max_size / 1024) },
+		    '5.2.3'
+		);
 		&Log::db_log({'robot' => $robot,'list' => $list->{'name'},'action' => 'DoMessage','parameters' => "$which,$messageid,$robot",'target_email' => '','msg_id' => $messageid,'status' => 'error','error_type' => 'message_too_large','user_email' => $sender,'client' => $ip,'daemon' => $daemon_name});
 		return undef;
    }

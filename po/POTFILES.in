@@ -6,6 +6,7 @@ mail_tt2/certif_warning.tt2
 mail_tt2/command_report.tt2
 mail_tt2/digest_plain.tt2
 mail_tt2/digest.tt2
+mail_tt2/dsn.tt2
 mail_tt2/d_install_shared.tt2
 mail_tt2/d_reject_shared.tt2
 mail_tt2/expire_deletion.tt2
@@ -23,7 +24,6 @@ mail_tt2/listmaster_notification.tt2
 mail_tt2/listowner_notification.tt2
 mail_tt2/list_rejected.tt2
 mail_tt2/lists.tt2
-mail_tt2/list_unknown.tt2
 mail_tt2/message_report.tt2
 mail_tt2/moderate.tt2
 mail_tt2/modindex.tt2

@@ -48,7 +48,8 @@ sub new {
     $name = '*' unless defined $name and length $name;
 
     ## load global config if needed
-    Site->load(@options) unless %Conf::Conf;
+    Site->load(@options)
+	if ! $Site::is_initialized or $options{'force_reload'};
 
     my $robot;
     ## If robot already in memory
@@ -90,6 +91,9 @@ The name C<'*'> (it is the default) indicates default robot.
 
 =back
 
+Note: To load site default, use C<Site-E<gt>load()>.
+See also L<Site/load>.
+
 =back
 
 =cut
@@ -103,7 +107,8 @@ sub load {
 	unless defined $name and length $name and $name ne '*';
 
     ## load global config if needed
-    Site->load(@options) unless %Conf::Conf;
+    Site->load(@options)
+	if ! $Site::is_initialized or $options{'force_reload'};
 
     unless ($self->{'name'} and $self->{'etc'}) {
 	my $vhost_etc = Site->etc . '/' . $name;
@@ -136,8 +141,7 @@ sub load {
 
 	unless (-r $config_file) {
 	    &Log::do_log('err', 'No read access on %s', $config_file);
-	    send_notify_to_listmaster(
-		Site->domain,
+	    Site->send_notify_to_listmaster(
 		'cannot_access_robot_conf',
 		["No read access on $config_file. you should change privileges on this file to activate this virtual host. "]
 	    );
@@ -196,7 +200,7 @@ Get unique name of robot.
 
 sub get_id {
     ## DO NOT use accessors since $self may not have been fully initialized.
-    shift->{'name'};
+    shift->{'name'} || '';
 }
 
 =over 4
@@ -230,25 +234,9 @@ sub is_listmaster {
 
 Send a global (not relative to a list, but relative to a robot)
 message to user(s).
-Find the tt2 file according to $tpl, set up
-$data for the next parsing (with $context and
-configuration )
+See L<Site/send_file>.
 
-IN :
-      -$tpl (+): template file name (file.tt2),
-	without tt2 extension
-      -$who (+): SCALAR |ref(ARRAY) - recipient(s)
-      -$context : ref(HASH) - for the $data set up
-       to parse file tt2, keys can be :
-         -user : ref(HASH), keys can be :
-           -email
-           -lang
-           -password
-         -auto_submitted auto-generated|auto-replied|auto-forwarded
-         -...
-      -$options : ref(HASH) - options
-
-OUT : 1 | undef
+Note: List::send_global_file() was deprecated.
 
 =back
 
@@ -262,24 +250,15 @@ OUT : 1 | undef
 
 Sends a notice to normal listmaster by parsing
 listmaster_notification.tt2 template
+See L<Site/send_notify_to_listmaster>.
 
-IN :
-       -$operation (+): notification type
-       -$param(+) : ref(HASH) | ref(ARRAY)
-	values for template parsing
-
-OUT : 1 | undef
+Note: List::send_notify_to_listmaster() was deprecated.
 
 =back
 
 =cut
 
 ## Inherited from Site::send_notify_to_listmaster().
-
-## WITHDRAWN: use List::get_lists().
-##sub get_lists {
-##    return &List::get_lists(shift->domain);
-##}
 
 =head3 ACCESSORS
 
@@ -325,7 +304,7 @@ sub AUTOLOAD {
     my @p;
     if (ref $_[0] and
 	grep { $_ eq $attr } qw(etc home name)) {
-	## getter for list attributes.
+	## getters for robot attributes.
 	no strict "refs";
 	*{$AUTOLOAD} = sub {
 	    croak "Can't modify \"$attr\" attribute" if scalar @_ > 1;
@@ -344,18 +323,17 @@ sub AUTOLOAD {
 	*{$AUTOLOAD} = sub {
 	    my $self = shift;
 	    unless ($self->{'etc'} eq Site->etc or
-		    defined Site->robots->{$self->{'name'}}) {
+		    defined Site->robots->{$self->{'domain'}}) {
 		croak "Can't call method \"$attr\" on uninitialized " .
 		    (ref $self) . " object";
 	    }
 	    croak "Can't modify \"$attr\" attribute" if scalar @_;
-	    if (defined Site->robots and
-		defined Site->robots->{$self->{'name'}} and
-		defined Site->robots->{$self->{'name'}}{$attr}) {
+	    if ($self->{'etc'} ne Site->etc and 
+		defined Site->robots->{$self->{'domain'}}{$attr}) {
 		##FIXME: Might "exists" be used?
-		Site->robots->{$self->{'name'}}{$attr};
+		Site->robots->{$self->{'domain'}}{$attr};
 	    } else {
-		$Conf::Conf{$attr};
+		Site->$attr;
 	    }
 	};
     } else {
@@ -404,15 +382,19 @@ Returns arrayref of Robot objects.
 sub get_robots {
     &Log::do_log('debug2', '(...)');
     my @options = @_;
+
     my $robot;
     my @robots = ();
     my %orphan;
     my $got_default = 0;
     my $dir;
+    my $exiting = 0;
 
     ## load global config if needed
-    Site->load(@options) unless %Conf::Conf;
+    Site->load(@options)
+	if ! $Site::is_initialized or $options{'force_reload'};
 
+    ## get all robots
     %orphan = map { $_ => 1 } keys %{Site->robots || {}};
 
     unless (opendir $dir, Site->etc) {
@@ -428,26 +410,30 @@ sub get_robots {
 	next unless -f $vhost_etc . '/robot.conf';
 
 	unless ($robot = __PACKAGE__->new($name, @options)) {
-	    return undef;
+	    $exiting = 1;
+	    next;
+	} else {
+	    $got_default = 1 if $robot->domain eq Site->domain;
+	    push @robots, $robot;
+	    delete $orphan{$robot->domain};
 	}
-	$got_default = 1 if $robot->domain eq Site->domain;
-	push @robots, $robot;
-	delete $orphan{$robot->domain};
     }
     closedir $dir;
 
     unless ($got_default) {
 	unless ($robot = __PACKAGE__->new(Site->domain, @options)) {
-	    return undef;
+	    $exiting = 1;
+	} else {
+	    push @robots, $robot;
+	    delete $orphan{$robot->domain};
 	}
-	push @robots, $robot;
-	delete $orphan{$robot->domain};
     }
 
+    ## purge orphan robots
     foreach my $domain (keys %orphan) {
 	&Log::do_log('debug3', 'removing orphan robot %s', $orphan{$domain});
 	delete Site->robots->{$domain} if defined Site->robots;
-	delete $list_of_robots{$name};
+	delete $list_of_robots{$domain};
     }
 
     return \@robots;

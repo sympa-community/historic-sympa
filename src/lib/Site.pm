@@ -5,29 +5,41 @@
 
 package Site;
 
+use strict;
+use warnings;
 use Carp qw(croak);
 use Exporter;
 
 use Conf;
 use Language;
+use User;
 
 our @ISA = qw(Exporter);
 our @EXPORT = qw(%list_of_robots);
 
-our %list_of_robots = ();
-our %listmaster_messages_stack;
-
 =head1 NAME
 
-Site - Sympa site
+Site - Sympa Site
 
 =head1 DESCRIPTION
 
-=head2 CLASS METHODS
+=cut
+
+our $is_initialized;
+our $use_db;
+our %list_of_robots = ();
+our %listmaster_messages_stack;
+
+=head2 METHODS
 
 =over 4
 
 =item load ( OBJECT, [ OPT => VAL, ... ] )
+
+    # To load global config
+    Site->load();
+    # To load robot config
+    $robot->load();
 
 Loads and parses the configuration file.  Reports errors if any.
 
@@ -43,6 +55,11 @@ NOTE: To load entire robots config, use C<Robot::get_robots('force_reload' =E<gt
 =cut
 
 sub load {
+    &Log::do_log('debug2', '(%s, ...)', @_);
+
+    ## NOTICE: Don't use accessors like "$self->etc" but "$self->{'etc'}",
+    ## since the object has not been fully initialized yet.
+
     my $self = shift;
     my %opts = @_;
 
@@ -57,23 +74,177 @@ sub load {
 	$opts{'config_file'} ||= Conf::get_sympa_conf();
 	$opts{'robot'} = '*';
     } else {
-	&Log::do_log(
-	    'err', 'bug in logic.  Ask developer: Unknown object %s', $self
-	);
-	return undef;
+	croak 'bug in logic.  Ask developer';
     }
 
     my $result = Conf::load_robot_conf(\%opts);
     return undef unless defined $result;
     return $result if $opts{'return_result'};
+
+    ## Site configuration was successfully initialized.
+    $is_initialized = 1 if $self eq __PACKAGE__;
+
     return 1;
+}
+
+=head3 Handling the Authentication Token
+
+=over 4
+
+=item compute_auth
+
+    # To compute site-wide token
+    Site->compute_auth('user@dom.ain', 'remind');
+    # To cpmpute a token specific to a list
+    $list->compute_auth('user@dom.ain', 'subscribe');
+
+Genererate a md5 checksum using private cookie and parameters
+
+=back
+
+=cut
+
+sub compute_auth {
+    &Log::do_log('debug3', '(%s, %s, %s)', @_);
+    my $self  = shift;
+    my $email = lc(shift || '');
+    my $cmd   = lc(shift || '');
+
+    my ($cookie, $key, $listname);
+
+    if (ref $self and ref $self eq 'List') {
+	$listname = $self->name;
+    } elsif (ref $self and ref $self eq 'Robot') {
+	## Method excluded from inheritance chain
+	croak sprintf 'Can\'t locate object method "%s" via package "%s"',
+	    'compute_auth', ref $self;
+    } elsif ($self eq __PACKAGE__) {
+	$listname = '';
+    } else {
+	croak 'bug in logic.  Ask developer';
+    }
+    $cookie = $self->cookie;
+
+    $key = substr(
+	Digest::MD5::md5_hex(join('/', $cookie, $listname, $email, $cmd)),
+	-8);
+
+    return $key;
 }
 
 =over 4
 
-=item send_dsn ( SENDER, LISTNAME, MSG_OBJECT, [ STATUS, [ DIAG ] ] )
+=item request_auth
 
-Send delivery status notification (DSN) to SENDER.
+    # To send robot or site auth request
+    Site->request_auth('user@dom.ain', 'remind');
+    # To send auth request specific to a list
+    $list->request_auth('user@dom.ain', 'subscribe'):
+
+Sends an authentification request for a requested
+command.
+
+IN : 
+      -$self : ref(List) | ref(Robot)
+      -$email(+) : recepient (the personn who asked
+                   for the command)
+      -$cmd : -signoff|subscribe|add|del|remind if $self is List
+              -remind else
+      -@param : 0 : used if $cmd = subscribe|add|del|invite
+                1 : used if $cmd = add
+
+OUT : 1 | undef
+
+=back
+
+=cut
+
+sub request_auth {
+    &Log::do_log('debug2', '(%s, %s, %s)', @_);
+    my $self  = shift;
+    my $email = shift;
+    my $cmd   = shift;
+    my @param = @_;
+    my $keyauth;
+    my $data = {'to' => $email};
+
+    if (ref $self and ref $self eq 'List') {
+	my $listname = $self->name;
+	$data->{'list_context'} = 1;
+
+	if ($cmd =~ /signoff$/) {
+	    $keyauth = $self->compute_auth($email, 'signoff');
+	    $data->{'command'} = "auth $keyauth $cmd $listname $email";
+	    $data->{'type'}    = 'signoff';
+
+	} elsif ($cmd =~ /subscribe$/) {
+	    $keyauth = $self->compute_auth($email, 'subscribe');
+	    $data->{'command'} = "auth $keyauth $cmd $listname $param[0]";
+	    $data->{'type'}    = 'subscribe';
+
+	} elsif ($cmd =~ /add$/) {
+	    $keyauth = $self->compute_auth($param[0], 'add');
+	    $data->{'command'} =
+		"auth $keyauth $cmd $listname $param[0] $param[1]";
+	    $data->{'type'} = 'add';
+
+	} elsif ($cmd =~ /del$/) {
+	    my $keyauth = $self->compute_auth($param[0], 'del');
+	    $data->{'command'} = "auth $keyauth $cmd $listname $param[0]";
+	    $data->{'type'}    = 'del';
+
+	} elsif ($cmd eq 'remind') {
+	    my $keyauth = $self->compute_auth('', 'remind');
+	    $data->{'command'} = "auth $keyauth $cmd $listname";
+	    $data->{'type'}    = 'remind';
+
+	} elsif ($cmd eq 'invite') {
+	    my $keyauth = $self->compute_auth($param[0], 'invite');
+	    $data->{'command'} = "auth $keyauth $cmd $listname $param[0]";
+	    $data->{'type'}    = 'invite';
+	}
+    } elsif (ref $self and ref $self eq 'Robot') {
+	## Method excluded from inheritance chain
+	croak sprintf 'Can\'t locate object method "%s" via package "%s"',
+	    'request_auth', ref $self;
+    } elsif ($self eq __PACKAGE__) {
+	if ($cmd eq 'remind') {
+	    my $keyauth = $self->compute_auth('', $cmd);
+	    $data->{'command'} = "auth $keyauth $cmd *";
+	    $data->{'type'}    = 'remind';
+	}
+    } else {
+	croak 'bug in logic.  Ask developer';
+    }
+
+    $data->{'command_escaped'} = &tt2::escape_url($data->{'command'});
+    $data->{'auto_submitted'}  = 'auto-replied';
+    unless ($self->send_file('request_auth', $email, $data)) {
+	&Log::do_log('notice',
+	    'Unable to send template "request_auth" to %s', $email);
+	return undef;
+    }
+
+    return 1;
+}
+
+=head3 Sending Notifications
+
+=over 4
+
+=item send_dsn ( MESSAGE_OBJECT, [ OPTIONS, [ STATUS, [ DIAG ] ] ] )
+
+    # To send site-wide DSN
+    Site->send_dsn($message, {'recipient' => $rcpt},
+        '5.1.2', 'Unknown robot');
+    # To send DSN related to a robot
+    $robot->send_dsn($message, {'listname' => $name},
+        '5.1.1', 'Unknown list');
+    # To send DSN specific to a list
+    $list->send_dsn($message, {}, '2.1.5', 'Success');
+
+Sends a delivery status notification (DSN) to SENDER
+by parsing dsn.tt2 template.
 
 =back
 
@@ -81,51 +252,115 @@ Send delivery status notification (DSN) to SENDER.
 
 sub send_dsn {
     my $self = shift;
-    my ($sender, $listname, $msg, $status, $diag) = @_;
+    my $message = shift;
+    my $param = shift || {};
+    my $status = shift;
+    my $diag = shift || '';
 
-    my $host = $self->host;
+    unless (ref $message and ref $message eq 'Message') {
+	&Log::do_log('err', 'object %s is not Message', $message);
+	return undef;
+    }
+
+    my $sender;
+    if (defined ($sender = $message->{'envsender'})) {
+	## Won't reply to message with null envelope sender.
+	return 0 if $sender eq '<>';
+    } elsif (! defined($sender = $message->{'sender'})) {
+	&Log::do_log('err', 'no sender found');
+	return undef;
+    }
+
+    my $recipient = '';
+    if (ref $self and ref $self eq 'List') {
+	$recipient = $self->get_list_address;
+	$status ||= '5.1.1';
+    } elsif (ref $self and ref $self eq 'Robot') {
+	$recipient = $param->{'listname'} . '@' . $self->host
+	    if $param->{'listname'};
+	$recipient ||= $param->{'recipient'};
+	$status ||= '5.1.1';
+    } elsif ($self eq 'Site') {
+	$recipient = $param->{'recipient'};
+	$status ||= '5.1.2';
+    } else {
+	croak 'bug in logic.  Ask developer';
+    }
+
+    ## Default diagnostic messages taken from IANA registry:
+    ## http://www.iana.org/assignments/smtp-enhanced-status-codes/
+    ## They should be modified to fit in Sympa.
+    $diag ||= {
+	# success
+	'2.1.5' => 'Destination address valid',
+	# no available family, dynamic list creation failed, etc.
+	'4.2.1' => 'Mailbox disabled, not accepting messages',
+	# no subscribers in dynamic list
+	'4.2.4' => 'Mailing list expansion problem',
+	# unknown list address
+	'5.1.1' => 'Bad destination mailbox address',
+	# unknown robot
+	'5.1.2' => 'Bad destination system address',
+	# too large
+	'5.2.3' => 'Message length exceeds administrative limit',
+	# loop detected
+	'5.4.6' => 'Routing loop detected',
+	# virus found
+	'5.7.0' => 'Other or undefined security status',
+    }->{$status} || 'Other undefined Status';
+    ## Delivery result, "failed" or "delivered".
+    my $action = (index($status, '2') == 0) ? 'delivered' : 'failed';
+
+    my $header = $message->{'msg'}->head->as_string;;
+
     Language::PushLang('en');
     my $date = POSIX::strftime("%a, %d %b %Y %H:%M:%S +0000", gmtime time);
     Language::PopLang();
 
-    my $head;
-    if (ref $msg eq 'Message') {
-	$head = $msg->{'msg'}->head;
-    } elsif (ref $msg eq 'MIME::Entity') {
-	$head = $msg->head;
-    } elsif (ref $msg eq 'MIME::Head' or ref $msg eq 'Mail::Header') {
-	$head = $msg;
-    }
-
     unless (
 	$self->send_file(
-	    'list_unknown',
-	    $sender,
-	    {   'list'            => "$listname\@$host",
+	    'dsn', $sender,
+	    {	%$param,
+		'recipient'       => $recipient,
 		'to'              => $sender,
 		'date'            => $date,
-		'header'          => $head->as_string(),
+		'header'          => $header,
 		'auto_submitted'  => 'auto-replied',
-		'status'          => ($status || '5.1.1'),
-		'diagnostic_code' => ($diag || 'List unknown'),
+		'action'          => $action,
+		'status'          => $status,
+		'diagnostic_code' => $diag,
 		'return_path'     => '<>'
-	    },
+	    }
 	)
 	) {
 	&Log::do_log('err', 'Unable to send DSN to %s', $sender);
+	return undef;
     }
+
+    return 1;
 }
 
 =over 4
 
 =item send_file                              
 
-Send a site-global (not relative to a list or a robot) message to user(s).
+    # To send site-global (not relative to a list or a robot)
+    # message
+    Site->send_file($template, $who, ...);
+    # To send global (not relative to a list, but relative to a
+    # robot) message 
+    $robot->send_file($template, $who, ...);
+    # To send message relative to a list
+    $list->send_file($template, $who, ...);
+
+Send a message to user(s).
 Find the tt2 file according to $tpl, set up 
 $data for the next parsing (with $context and
 configuration)
 Message is signed if the list has a key and a 
 certificate
+
+Note: List::send_global_file() was deprecated.
 
 IN :
       -$self (+): ref(List) | ref(Robot) | ref(conf)
@@ -189,15 +424,14 @@ sub send_file {
     ## Unless multiple recipients
     unless (ref $who) {
 	$who = tools::clean_email($who);
+	my $lang = $self->lang || 'en';
 	unless ($data->{'user'}) {
 	    if ($options->{'skip_db'}) {
-		$data->{'user'} = bless { 'email' => $who } => 'User';
+		$data->{'user'} =
+		    bless { 'email' => $who, 'lang' => $lang } => 'User';
 	    } else {
-		$data->{'user'} = User->new($who);
+		$data->{'user'} = User->new($who, 'lang' => $lang);
 	    }
-	}
-	unless ($data->{'user'}{'lang'}) {
-	    $data->{'user'}{'lang'} = $self->lang || 'en';
 	}
 
 	if (ref $self eq 'List') {
@@ -358,8 +592,15 @@ sub send_file {
 
 =item send_notify_to_listmaster ( OPERATION, DATA, CHECKSTACK, PURGE )
 
-Sends a notice to super listmaster by parsing
+    # To send notify to super listmaster(s)
+    Site->send_notify_to_listmaster('css_updated', ...);
+    # To send notify to normal (per-robot) listmaster(s)
+    $robot->send_notify_to_listmaster('web_tt2_error', ...);
+
+Sends a notice to (super or normal) listmaster by parsing
 listmaster_notification.tt2 template
+
+Note: List::send_notify_to_listmaster() was deprecated.
 
 IN :
        -$operation (+): notification type
@@ -384,13 +625,16 @@ sub send_notify_to_listmaster {
     my $purge      = shift;
 
     my $robot_id;
-    if (ref $self and ref $self eq 'Robot') {
+    if (ref $self and ref $self eq 'List') {
+	## Method excluded from inheritance chain
+	croak sprintf 'Can\'t locate object method "%s" via package "%s"',
+	    'send_notify_to_listmaster', ref $self;
+    } elsif (ref $self and ref $self eq 'Robot') {
 	$robot_id = $self->name;
     } elsif ($self eq __PACKAGE__) {
 	$robot_id = '*';
     } else {
-	&Log::do_log('err', 'bug in logic.  Ask developer');
-	return undef;
+	croak 'bug in logic.  Ask developer';
     }
 
     if ($checkstack or $purge) {
@@ -653,7 +897,8 @@ sub AUTOLOAD {
 
     my $attr = $2;
     if (scalar grep { $_ eq $attr }
-		    qw(locale2charset pictures_path request robots sympa) or
+		    qw(locale2charset pictures_path request sympa
+		       robot_by_http_host) or
 	scalar grep { ! defined $_->{'title'} and $_->{'name'} eq $attr }
 		    @confdef::params) {
 	## getter for internal config parameters.
@@ -661,7 +906,7 @@ sub AUTOLOAD {
 	*{$AUTOLOAD} = sub {
 	    my $pkg = shift;
 	    croak "Can't call method \"$attr\" on uninitialized $pkg class"
-		unless %Conf::Conf;
+		unless $is_initialized;
 	    croak "Can't modify \"$attr\" attribute"
 		if scalar @_ > 1;
 	    $Conf::Conf{$attr};
@@ -688,7 +933,7 @@ In scalar context, returns arrayref to them.
 sub listmasters {
     my $pkg = shift;
     croak "Can't call method \"listmasters\" on uninitialized $pkg class"
-	unless %Conf::Conf;
+	unless $is_initialized;
     croak "Can't modify \"listmasters\" attribute" if scalar @_ > 1;
     if (wantarray) {
 	return @{$Conf::Conf{'listmasters'} || []};

@@ -28,11 +28,11 @@ use Exporter;
 use Datasource;
 use Carp;
 
-use tools;
-use tt2;
-use Conf;
+#use tools; # not used
+#use tt2; # not used
+#use Conf; # not used
 use Log;
-use List;
+#use List; # not used
 use Data::Dumper;
 
 our @ISA = qw(Datasource Exporter);
