@@ -228,7 +228,9 @@ sub upgrade {
 		    $table,
 		    &SDM::quote($list->{'name'}))) {
 			&Log::do_log('err','Unable to fille the robot_admin and robot_subscriber fields in database for robot %s.',$r);
-			&List::send_notify_to_listmaster('upgrade_failed', $Conf::Conf{'domain'},{'error' => $SDM::db_source->{'db_handler'}->errstr});
+			Site->send_notify_to_listmaster(
+			    'upgrade_failed',
+			    {'error' => $SDM::db_source->{'db_handler'}->errstr});
 			return undef;
 		    }
 		}
@@ -438,8 +440,9 @@ sub upgrade {
 		my $new_filename = $etc_dir.'/mhonarc-ressources.tt2'.'.'.time;
 		rename $etc_dir.'/mhonarc-ressources.tt2', $new_filename;
 		&Log::do_log('notice', "Custom %s file has been backed up as %s", $etc_dir.'/mhonarc-ressources.tt2', $new_filename);
-		&List::send_notify_to_listmaster('file_removed',$Conf::Conf{'domain'},
-						 [$etc_dir.'/mhonarc-ressources.tt2', $new_filename]);
+		Site->send_notify_to_listmaster(
+		    'file_removed',
+		    [$etc_dir.'/mhonarc-ressources.tt2', $new_filename]);
 	    }
 	}
 

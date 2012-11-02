@@ -702,7 +702,8 @@ sub sending {
 	
 	unless (defined $bulk_code) {
 	    &Log::do_log('err', 'Failed to store message for list %s', $listname);
-	    &List::send_notify_to_listmaster('bulk_error',  $robot, {'listname' => $listname});
+	    Robot->new($robot)->send_notify_to_listmaster(
+		'bulk_error',  {'listname' => $listname});
 	    return undef;
 	}
     }elsif(defined $send_spool) { # in context wwsympa.fcgi do not send message to reciepients but copy it to standard spool 

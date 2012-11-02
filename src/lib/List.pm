@@ -45,7 +45,7 @@ use tt2;
 use Sympa::Constants;
 use Data::Dumper;
 
-our @ISA = qw(Exporter);
+our @ISA = qw(Robot Exporter);
 our @EXPORT = qw(%list_of_lists);
 
 use Fcntl qw(LOCK_SH LOCK_EX LOCK_NB LOCK_UN);
@@ -2471,7 +2471,8 @@ sub set_status_error_config {
 	#$self->save_config("listmaster\@$host");
 	#$self->savestats();
 	&Log::do_log('err', 'The list %s is set in status error_config: %s(%s)', $self, $message, join(', ', @param));
-	unless (&List::send_notify_to_listmaster($message, $self->domain, [$self->name, @param])) {
+	unless ($self->robot->send_notify_to_listmaster(
+	    $message, [$self->name, @param])) {
 	    &Log::do_log('notice', 'Unable to send notify "%s" to listmaster', $message);
 	};
     }
@@ -3684,9 +3685,8 @@ sub send_global_file {
 #         -...
 # OUT : 1 | undef
 ####################################################
-sub send_file {
-    return Site::send_file(@_);
-}
+
+## Inherited from Site
 
 ####################################################
 # send_msg                              
@@ -4271,10 +4271,7 @@ See L<Site/request_auth>.
 
 =cut
 
-sub request_auth {
-    return Site::request_auth(@_);
-}
-
+## Inherited from Site.
 
 ####################################################
 # archive_send                              
@@ -4380,25 +4377,15 @@ sub archive_send_last {
 # listmaster_notification.tt2 template
 #  
 # IN : -$operation (+): notification type
-#      -$robot (+): robot
 #      -$param(+) : ref(HASH) | ref(ARRAY)
 #       values for template parsing
 #    
 # OUT : 1 | undef
 #       
 ###################################################### 
-sub send_notify_to_listmaster {
-    ## OBSOLETED. Use $list->robot->send_notify_to_listmaster() (to normal
-    ## listmaster) or Site->send_notify_to_listmaster() (to super listmaster).
-    my $operation = shift;
-    my $robot = shift;
-    if (! $robot or $robot eq '*') {
-	return Site->send_notify_to_listmaster($operation, @_);
-    } else {
-	return Robot->new($robot)->send_notify_to_listmaster($operation, @_);
-    }
-}
-
+##sub send_notify_to_listmaster {
+## OBSOLETED. Use $list->robot->send_notify_to_listmaster() (to normal
+## listmaster) or Site->send_notify_to_listmaster() (to super listmaster).
 
 ####################################################
 # send_notify_to_owner                              
@@ -8450,7 +8437,9 @@ sub sync_include {
 		if($#errors > -1) {
 			&Log::do_log('err', 'Errors occurred while synchronizing datasources for list %s', $name);
 			$errors_occurred = 1;
-			unless (&List::send_notify_to_listmaster('sync_include_failed', $self->{'domain'}, {'errors' => \@errors, 'listname' => $self->{'name'}})) {
+			unless ($self->robot->send_notify_to_listmaster(
+			    'sync_include_failed',
+			    {'errors' => \@errors, 'listname' => $self->name})) {
 			&Log::do_log('notice',"Unable to send notify 'sync_include_failed' to listmaster");
 			}
 			foreach my $e (@errors) {
@@ -8741,7 +8730,8 @@ sub sync_include_admin {
 	    ## Use DB cache instead
 	    unless (defined $new_admin_users_include) {
 		&Log::do_log('err', 'Could not get %ss from an include source for list %s', $role, $name);
-		unless (&List::send_notify_to_listmaster('sync_include_admin_failed', $self->{'domain'}, [$name])) {
+		unless ($self->robot->send_notify_to_listmaster(
+		    'sync_include_admin_failed', [$name])) {
 		    &Log::do_log('notice',"Unable to send notify 'sync_include_admmin_failed' to listmaster");
 		}
 		return undef;

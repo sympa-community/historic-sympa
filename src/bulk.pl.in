@@ -184,8 +184,9 @@ my $spool = new Sympaspool('bulk');
 
 while (!$end) {
     &List::init_list_cache();
-	&List::send_notify_to_listmaster(undef, undef, undef, 1); # Process grouped notifications
-	
+    # Process grouped notifications
+    Site->send_notify_to_listmaster(undef, undef, 1, undef);
+
     my $bulk;
     my $message_from_spool ;
 	
@@ -423,7 +424,8 @@ while (!$end) {
     
 }
 
-&List::send_notify_to_listmaster(undef, undef, undef, undef, 1); # Purge grouped notifications
+# Purge grouped notifications
+Site->send_notify_to_listmaster(undef, undef, undef, 1);
 
 &Log::do_log('notice', 'bulk.pl exited normally due to signal');
 &tools::remove_pid($Conf::Conf{'pidfile_bulk'}, $$, $options);

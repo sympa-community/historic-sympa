@@ -271,7 +271,7 @@ sub request_action {
 
     if ($log_it) {
 	if ($context->{'list_object'}) {
-	    $trace_scenario = 'scenario request '.$operation.' for list '.$context->{'list_object'}{'name'}.'@'.$robot.' :';
+	    $trace_scenario = 'scenario request '.$operation.' for list '.$context->{'list_object'}->name.'@'.$robot.' :';
 	    &Log::do_log('info','Will evaluate scenario %s for list %s@%s',$operation,$context->{'list_object'}{'name'},$robot);
 	}else{
 	    $trace_scenario = 'scenario request '.$operation.' for robot '.$robot.' :';
@@ -290,10 +290,12 @@ sub request_action {
 	
 	if ($#operations == 0) {
 	    ## Simple parameter
-	    $scenario_path = $list->{'admin'}{$operation}{'file_path'};
+	    $scenario_path = $list->$operation->{'file_path'};
 	}else{
 	    ## Structured parameter
-	    $scenario_path = $list->{'admin'}{$operations[0]}{$operations[1]}{'file_path'} if (defined $list->{'admin'}{$operations[0]});
+	    my $op = $operations[0];
+	    $scenario_path = $list->$op->{$operations[1]}{'file_path'}
+		if defined $list->$op;
 	}
 
 	## List parameter might not be defined (example : web_archive.access)
@@ -310,20 +312,20 @@ sub request_action {
 	}
 
 	## Prepares custom_vars in $context
-	if (defined $list->{'admin'}{'custom_vars'}) {
-	    foreach my $var (@{$list->{'admin'}{'custom_vars'}}) {
+	if (defined $list->custom_vars) {
+	    foreach my $var (@{$list->custom_vars || []}) {
 		$context->{'custom_vars'}{$var->{'name'}} = $var->{'value'};
 	    }
 	}
 	
 	## Create Scenario object
 	$scenario = new Scenario ('robot' => $robot, 
-				  'directory' => $list->{'dir'},
+				  'directory' => $list->dir,
 				  'file_path' => $scenario_path,
 				  'options' => $context->{'options'});
 
 	## pending/closed lists => send/visibility are closed
-	unless ($list->{'admin'}{'status'} eq 'open') {
+	unless ($list->status eq 'open') {
 	    if ($operation =~ /^(send|visibility)$/) {
 		my $return = {'action' => 'reject',
 			      'reason' => 'list-no-open',
@@ -342,7 +344,7 @@ sub request_action {
 	    
 	    # loading of the structure
 	    $scenario = new Scenario ('robot' => $robot, 
-				      'directory' => $list->{'dir'},
+				      'directory' => $list->dir,
 				      'function' => $operations[$#operations],
 				      'name' => $context->{'scenario'},
 				      'options' => $context->{'options'});
@@ -384,7 +386,8 @@ sub request_action {
 		 'robot' => $robot, 
 		 'name' => $operation.'.header',
 		 'options' => $context->{'options'});
-    $param{'directory'} = $context->{'list_object'}{'dir'} if (defined $context->{'list_object'});
+    $param{'directory'} = $context->{'list_object'}->dir
+	if defined $context->{'list_object'};
     my $include_scenario = new Scenario %param;
     if (defined $include_scenario) {
 	## Add rules at the beginning of the array
@@ -398,7 +401,7 @@ sub request_action {
 			 'robot' => $robot, 
 			 'name' => $include_file,
 			 'options' => $context->{'options'});
-	    $param{'directory'} = $context->{'list_object'}{'dir'} if (defined $context->{'list_object'});
+	    $param{'directory'} = $context->{'list_object'}->dir if defined $context->{'list_object'};
 	    my $include_scenario = new Scenario %param;
 	    if (defined $include_scenario) {
 		## Removes the include directive and replace it with included rules
@@ -443,7 +446,10 @@ sub request_action {
 			   };
 		    return $return;
 		}
-		unless (&List::send_notify_to_listmaster('error-performing-condition', $robot, [$context->{'listname'}."  ".$rule->{'condition'}] )) {
+		my $list = $context->{'list_object'};
+		unless ($list->robot->send_notify_to_listmaster(
+		    'error-performing-condition',
+		    [$context->{'listname'}."  ".$rule->{'condition'}] )) {
 		    &Log::do_log('notice',"Unable to send notify 'error-performing-condition' to listmaster");
 		}
 		return undef;

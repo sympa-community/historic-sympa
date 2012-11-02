@@ -220,7 +220,7 @@ sub create_required_lists_tasks {
 sub creation_error {
     my $message = shift;
     &Log::do_log('err',$message);
-    unless (&List::send_notify_to_listmaster ('Task creation error', $Conf::Conf{'domain'}, [$message])) {
+    unless (Site->send_notify_to_listmaster('Task creation error', $message)) {
 	&Log::do_log('notice','error while notifying listmaster about "Task creation error"');
     }
 }

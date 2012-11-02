@@ -2842,8 +2842,10 @@ sub _load_param_constraint_conf {
 	}
     }
     if ($error) {
-	unless (&List::send_notify_to_listmaster('param_constraint_conf_error', $self->{'robot'}, [$file])) {
-	    &Log::do_log('notice','the owner isn\'t informed from param constraint config errors on the %s family',$self->{'name'});
+	unless (Robot->new($self->{'robot'})->send_notify_to_listmaster(
+	    'param_constraint_conf_error', [$file])
+	) {
+	    &Log::do_log('notice', 'the owner isn\'t informed from param constraint config errors on the %s family',$self->{'name'});
 	}
     }
     close FILE;

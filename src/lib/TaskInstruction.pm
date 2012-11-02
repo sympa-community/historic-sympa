@@ -1148,7 +1148,7 @@ sub process_bouncers {
 						 'total' => $#{$bouncers[$level]} + 1};
 
 					if ($notification eq 'listmaster'){
-						unless(&List::send_notify_to_listmaster('automatic_bounce_management',$list->{'domain'},$param)){
+						unless($list->robot->send_notify_to_listmaster('automatic_bounce_management', $param)){
 							$self->error ({'task' => $task, 'type' => 'execution', 'message' => 'error while notifying listmaster'});
 						}
 				}elsif ($notification eq 'owner'){

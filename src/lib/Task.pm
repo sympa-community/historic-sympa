@@ -533,7 +533,7 @@ sub error_report {
     $self->{'human_date'} = &tools::adate($self->{'date'});
     $data->{'task'} = $self;
     &Log::do_log('err','Execution of task %s failed. sending detailed report to listmaster',$self->get_description);
-    unless (&List::send_notify_to_listmaster ('task_error', $Conf::Conf{'domain'}, $data)) {
+    unless (Site->send_notify_to_listmaster('task_error', $data)) {
 	&Log::do_log('notice','Error while notifying listmaster about errors in task %s',$self->get_description);
     }
 }

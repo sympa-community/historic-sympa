@@ -603,7 +603,9 @@ sub createList {
      
      ## notify listmaster
      if ($param->{'create_action'} =~ /notify/) {
-         if(&List::send_notify_to_listmaster('request_list_creation',$robot,{'list' => $list,'email' => $sender})) {
+         if($list->robot->send_notify_to_listmaster(
+		'request_list_creation',
+		{'list' => $list,'email' => $sender})) {
 	     &Log::do_log('info','notify listmaster for list creation');
 	 }else{
 	     &Log::do_log('notice',"Unable to send notify 'request_list_creation' to listmaster");
@@ -1532,7 +1534,8 @@ sub get_reason_string {
 
     unless (&tt2::parse_tt2($data,'authorization_reject.tt2' ,\$string, $tt2_include_path)) {
 	my $error = &tt2::get_error();
-	&List::send_notify_to_listmaster('web_tt2_error', $robot, [$error]);
+	Robot->new($robot)->send_notify_to_listmaster(
+	    'web_tt2_error', [$error]);
 	&Log::do_log('info', "get_reason_string : error parsing");
 	return '';
     }

@@ -402,13 +402,15 @@ sub load_edit_list_conf {
 		$conf->{$param}{$r} = $priv;
 	    }
 	}else{
-	    &Log::do_log ('info', 'unknown parameter in %s  (Ignored) %s', "$Conf::Conf{'etc'}/edit_list.conf",$_ );
+	    &Log::do_log ('info', 'unknown parameter in %s  (Ignored) %s',
+		Site->etc . '/edit_list.conf', $_);
 	    next;
 	}
     }
 
     if ($error_in_conf) {
-	unless (&List::send_notify_to_listmaster('edit_list_error', $robot, [$file])) {
+	unless (Robot->new($robot)->send_notify_to_listmaster(
+	    'edit_list_error', [$file])) {
 	    &Log::do_log('notice',"Unable to send notify 'edit_list_error' to listmaster");
 	}
     }
@@ -2103,7 +2105,7 @@ sub virus_infected {
 
     ## Error while running antivir, notify listmaster
     if ($error_msg) {
-	unless (&List::send_notify_to_listmaster('virus_scan_failed', $Conf::Conf{'domain'},
+	unless (Site->send_notify_to_listmaster('virus_scan_failed',
 						 {'filename' => $file,
 						  'error_msg' => $error_msg})) {
 	    &Log::do_log('notice',"Unable to send notify 'virus_scan_failed' to listmaster");
@@ -2712,7 +2714,8 @@ sub send_crash_report {
 	close ERR;
 	$err_date = strftime("%d %b %Y  %H:%M", localtime((stat($err_file))[9]));
     }
-    &List::send_notify_to_listmaster('crash', $Conf::Conf{'domain'}, {'crashed_process' => $data{'pname'}, 'crash_err' => \@err_output, 'crash_date' => $err_date, 'pid' => $data{'pid'}});
+    Site->send_notify_to_listmaster('crash',
+	{'crashed_process' => $data{'pname'}, 'crash_err' => \@err_output, 'crash_date' => $err_date, 'pid' => $data{'pid'}});
 }
 
 sub get_message_id {
@@ -3799,7 +3802,9 @@ sub save_to_bad {
     if (! -d $queue.'/bad') {
 	unless (mkdir $queue.'/bad', 0775) {
 	    &Log::do_log('notice','Unable to create %s/bad/ directory.',$queue);
-	    unless (&List::send_notify_to_listmaster('unable_to_create_dir',$hostname),{'dir' => "$queue/bad"}) {
+	    unless (Robot->new($hostname)->send_notify_to_listmaster(
+		'unable_to_create_dir', {'dir' => "$queue/bad"}
+	    )) {
 		&Log::do_log('notice',"Unable to send notify 'unable_to_create_dir' to listmaster");
 	    }
 	    return undef;
@@ -4095,7 +4100,7 @@ sub crash_handler {
 
     my $msg = $_[0]; chomp $msg;
     &Log::do_log('err', 'DIED: %s', $msg);
-    eval { &List::send_notify_to_listmaster(undef, undef, undef, undef, 1); };
+    eval { Site->send_notify_to_listmaster(undef, undef, undef, 1); };
     eval { &SDM::db_disconnect; }; # unlock database
     Sys::Syslog::closelog(); # flush log
 

@@ -793,8 +793,9 @@ sub rename_list{
 
     # set list status to pending if creation list is moderated
     if ($r_action =~ /listmaster/) {
-      $list->{'admin'}{'status'} = 'pending' ;
-      &List::send_notify_to_listmaster('request_list_renaming',$list->{'domain'}, 
+      $list->status('pending');
+      $list->robot->send_notify_to_listmaster(
+	'request_list_renaming',
 				       {'list' => $list,
 					'new_listname' => $param{'new_listname'},
 					'old_listname' => $old_listname,
@@ -1417,7 +1418,7 @@ sub change_user_email {
 	    my $admin_user = $list->get_list_admin($role, $in{'current_email'});
 	    if ($admin_user->{'included'}) {
 		## Notify listmaster
-		&List::send_notify_to_listmaster('failed_to_change_included_admin',$in{'robot'},{'list' => $list,
+		$list->robot->send_notify_to_listmaster('failed_to_change_included_admin', {'list' => $list,
 											   'current_email' => $in{'current_email'}, 
 											   'new_email' => $in{'new_email'},
 											   'datasource' => $list->get_datasource_name($admin_user->{'id'})});
@@ -1442,7 +1443,8 @@ sub change_user_email {
     }
     ## Notify listmasters that list owners/moderators email have changed
     if (keys %updated_lists) {
-	&List::send_notify_to_listmaster('listowner_email_changed',$in{'robot'}, 
+	Robot->new($in{'robot'})->send_notify_to_listmaster(
+	    'listowner_email_changed',
 					 {'previous_email' => $in{'current_email'},
 					  'new_email' => $in{'new_email'},
 					  'updated_lists' => keys %updated_lists})
