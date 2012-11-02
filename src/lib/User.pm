@@ -258,10 +258,16 @@ sub get_global_user {
 
 	## Turn user_attributes into a hash
 	my $attributes = $user->{'attributes'};
-	$user->{'attributes'} = undef;
-	foreach my $attr (split(/\;/, $attributes)) {
-	    my ($key, $value) = split(/\=/, $attr);
-	    $user->{'attributes'}{$key} = $value;
+	if (defined $attributes and length $attributes) {
+	    $user->{'attributes'} ||= {};
+	    foreach my $attr (split(/\;/, $attributes)) {
+		my ($key, $value) = split(/\=/, $attr);
+		$user->{'attributes'}{$key} = $value;
+	    }
+	    delete $user->{'attributes'}
+		unless scalar keys %{$user->{'attributes'}};
+	} else {
+	    delete $user->{'attributes'};
 	}
 	## Turn data_user into a hash
 	if ($user->{'data'}) {

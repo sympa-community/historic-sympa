@@ -110,8 +110,7 @@ local $main::daemon_usage;
 while ($signal ne 'term') { #as long as a SIGTERM is not received }
 
 ## Load configuration file. Ignoring database config for now: it avoids trying to load a database that could not exist yet.
-unless (defined Site->load('no_db' => 1) and
-	defined Robot::get_robots('force_reload' => 1)) {
+unless (defined Robot::get_robots('no_db' => 1, 'force_reload' => 1)) {
     &fatal_err('Configuration file %s has errors.', Conf::get_sympa_conf());  
 }
 

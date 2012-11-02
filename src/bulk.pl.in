@@ -75,7 +75,7 @@ $main::options{'foreground'} = 1 if ($main::options{'debug'});
 $main::options{'log_to_stderr'} = 1 if ($main::options{'debug'} || $main::options{'foreground'});
 
 # Load sympa.conf
-unless (defined Site->load() and defined Robot::get_robots()) {
+unless (defined Robot::get_robots()) {
     Log::fatal_err(
 	'Unable to load sympa configuration, file %s or one of the virtual host robot.conf files contain errors. Exiting.',
 	Conf::get_sympa_conf()

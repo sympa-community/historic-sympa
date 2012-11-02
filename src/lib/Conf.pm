@@ -38,6 +38,7 @@ use Language;
 use confdef;
 use tools;
 #use Sympa::Constants; # already load in confdef.
+use Lock; #FIXME: dependency loop between conf & Lock
 
 use Data::Dumper;
 

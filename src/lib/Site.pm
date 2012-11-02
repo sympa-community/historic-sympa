@@ -82,7 +82,7 @@ sub load {
     return $result if $opts{'return_result'};
 
     ## Site configuration was successfully initialized.
-    $is_initialized = 1 if ! ref $self and $self eq __PACKAGE__;
+    $is_initialized = 1 if !ref $self and $self eq __PACKAGE__;
 
     return 1;
 }
@@ -276,8 +276,15 @@ sub send_dsn {
 	$recipient = $self->get_list_address;
 	$status ||= '5.1.1';
     } elsif (ref $self and ref $self eq 'Robot') {
-	$recipient = $param->{'listname'} . '@' . $self->host
-	    if $param->{'listname'};
+	if ($param->{'listname'}) {
+	    if ($param->{'function'}) {
+		$recipient = sprintf '%s-%s@%s', $param->{'listname'},
+		    $param->{'function'}, $self->host;
+	    } else {
+		$recipient = sprintf '%s@%s', $param->{'listname'},
+		    $self->host;
+	    }
+	}
 	$recipient ||= $param->{'recipient'};
 	$status ||= '5.1.1';
     } elsif ($self eq 'Site') {
@@ -309,6 +316,9 @@ sub send_dsn {
 
 	# too large
 	'5.2.3' => 'Message length exceeds administrative limit',
+
+	# misconfigured family list
+	'5.3.5' => 'System incorrectly configured',
 
 	# loop detected
 	'5.4.6' => 'Routing loop detected',
@@ -912,7 +922,7 @@ sub AUTOLOAD {
     my $attr = $2;
     if (scalar grep { $_ eq $attr }
 	qw(locale2charset pictures_path request robots robot_by_http_host
-	   sympa) or
+	sympa) or
 	scalar grep { !defined $_->{'title'} and $_->{'name'} eq $attr }
 	@confdef::params
 	) {

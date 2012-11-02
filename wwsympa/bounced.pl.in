@@ -96,7 +96,7 @@ my $daemon_name = &Log::set_daemon($0);
 my $ip = $ENV{'REMOTE_HOST'};
 
 # Load sympa.conf
-unless (defined Site->load() and defined Robot::get_robots()) {
+unless (and defined Robot::get_robots()) {
     Log::fatal_err(
 	'Unable to load sympa configuration, file %s has errors.',
 	Conf::get_sympa_conf()

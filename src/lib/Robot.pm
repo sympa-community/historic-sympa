@@ -5,6 +5,8 @@
 ##   * determine the current robot, given a host
 package Robot;
 
+use strict;
+use warnings;
 use Carp qw(croak);
 
 use Site;
@@ -43,14 +45,15 @@ sub new {
     &Log::do_log('debug2', '(%s, %s, ...)', @_);
     my $pkg     = shift;
     my $name    = shift;
-    my @options = @_;
+    my %options = @_;
 
     $name = '*' unless defined $name and length $name;
 
     ## load global config if needed
-    Site->load(@options)
+    Site->load(%options)
 	if !$Site::is_initialized or
 	    $options{'force_reload'};
+    return undef unless $Site::is_initialized;
 
     my $robot;
     ## If robot already in memory
@@ -63,7 +66,7 @@ sub new {
 	# create a new object robot
 	$robot = bless {} => $pkg;
     }
-    my $status = $robot->load($name, @options);
+    my $status = $robot->load($name, %options);
     unless (defined $status) {
 	delete Site->robots->{$name} if defined Site->robots;
 	delete $list_of_robots{$name};
@@ -71,7 +74,7 @@ sub new {
     }
 
     ## Initialize internal list cache
-    undef %list_cache;    #FIXME
+##    undef %list_cache;    #FIXME
 
     return $robot;
 }
@@ -104,7 +107,7 @@ See also L<Site/load>.
 sub load {
     my $self    = shift;
     my $name    = shift;
-    my @options = @_;
+    my %options = @_;
 
     $name = Site->domain
 	unless defined $name and
@@ -112,9 +115,10 @@ sub load {
 	    $name ne '*';
 
     ## load global config if needed
-    Site->load(@options)
+    Site->load(%options)
 	if !$Site::is_initialized or
 	    $options{'force_reload'};
+    return undef unless $Site::is_initialized;
 
     unless ($self->{'name'} and $self->{'etc'}) {
 	my $vhost_etc = Site->etc . '/' . $name;
@@ -153,7 +157,7 @@ sub load {
 	    return undef;
 	}
 
-	unless (defined $self->SUPER::load(@options)) {
+	unless (defined $self->SUPER::load(%options)) {
 	    return undef;
 	}
 
@@ -387,7 +391,7 @@ Returns arrayref of Robot objects.
 
 sub get_robots {
     &Log::do_log('debug2', '(...)');
-    my @options = @_;
+    my %options = @_;
 
     my $robot;
     my @robots = ();
@@ -397,9 +401,10 @@ sub get_robots {
     my $exiting = 0;
 
     ## load global config if needed
-    Site->load(@options)
+    Site->load(%options)
 	if !$Site::is_initialized or
 	    $options{'force_reload'};
+    return undef unless $Site::is_initialized;
 
     ## get all robots
     %orphan = map { $_ => 1 } keys %{Site->robots || {}};
@@ -416,7 +421,9 @@ sub get_robots {
 	next unless -d $vhost_etc;
 	next unless -f $vhost_etc . '/robot.conf';
 
-	unless ($robot = __PACKAGE__->new($name, @options)) {
+	unless ($robot = __PACKAGE__->new($name, %options)) {
+	    closedir $dir;
+	    return undef;
 	    $exiting = 1;
 	    next;
 	} else {
@@ -428,7 +435,8 @@ sub get_robots {
     closedir $dir;
 
     unless ($got_default) {
-	unless ($robot = __PACKAGE__->new(Site->domain, @options)) {
+	unless ($robot = __PACKAGE__->new(Site->domain, %options)) {
+	    return undef;
 	    $exiting = 1;
 	} else {
 	    push @robots, $robot;
