@@ -164,12 +164,9 @@ unless (chdir($Conf{'home'})) {
 
 my $pinfo = &List::_apply_defaults();
 
-$Language::default_lang = $Conf{'lang'};
+$Language::default_lang = Site->lang || 'en';
 
 &Log::do_log('notice', "archived %s Started", Sympa::Constants::VERSION);
-
-## Generate traceback if crashed.
-$SIG{'__DIE__'} = \&tools::crash_handler;
 
 ## Catch SIGTERM, in order to exit cleanly, whenever possible.
 $SIG{'TERM'} = 'sigterm';
@@ -296,7 +293,12 @@ while (!$end) {
 	unless (mail2arc ($item)) {
 	    $spoolarchive->update({'messagekey'=>$item->{'messagekey'}},{'message_status'=>'bad','message_diag'=>'unable to rebuild archive for unkown list','lockdate'=>'NULL'});
 	    &Log::do_log('err',"archiving_failed for message %s",$item->{'messagekey'});
-	    unless (&List::send_notify_to_listmaster('archiving_failed',$item->{'robot'})) {
+	    unless ($item->{'robot_object'} and
+		    $item->{'robot_object'}->send_notify_to_listmaster(
+			'archiving_failed') or
+		    ! $item->{'robot_object'} and
+		    Site->send_notify_to_listmaster('archiving_failed')
+	    ) {
 		&Log::do_log('notice',"Unable to send notify 'archiving_failed' to listmaster");
 	    }
 	}
@@ -307,7 +309,8 @@ while (!$end) {
     }
 }
 
-&List::send_notify_to_listmaster(undef, undef, undef, undef, 1); # Purge grouped notifications
+# Purge grouped notifications
+Site->send_notify_to_listmaster(undef, undef, undef, 1);
 
 &Log::do_log('notice', 'archived exited normally due to signal');
 &tools::remove_pid(Site->archived_pidfile, $$);
@@ -410,7 +413,8 @@ sub remove {
         $arc = $2;
     }
 
-    &Log::do_log('notice',"Removing $msgid in list $adrlist section $2");
+    &Log::do_log('notice', 'Removing %s in list %s section %s',
+	$msgid, $adrlist, $arc);
 
     &Log::db_stat_log({'robot' => $robot, 'list' => $adrlist, 'operation' => 'remove archive', 'parameter' => '', 'mail' => 'test@cru.fr','client' => $ip, 'daemon' => $daemon_name});
 
@@ -715,8 +719,8 @@ sub mail2arc {
 
     my $message_in_spool = shift;
 
-    my $listname = $message_in_spool->{'list'};
-    my $robot = $message_in_spool->{'robot'};
+    my $list = $message_in_spool->{'list_object'};
+    my $robot = $message_in_spool->{'robot_object'};
     my ($yyyy, $mm, $dd, $hh, $min, $ss) = @_;
     my $txtdate = &tools::epoch2yyyymmjj_hhmmss ($message_in_spool->{'date'});
     if ($txtdate =~ /(\d\d\d\d)\-(\d\d)\-(\d\d)\s*(\d\d)\:(\d\d)/){
@@ -728,62 +732,73 @@ sub mail2arc {
 
     my $newfile;
 
-    my $list = new List($listname, $robot);
-    my $arcpath = &Conf::get_robot_conf($list->{'domain'},'arc_path');
+    my $arcpath = $robot->arc_path;
 
     unless (defined $list) {
-	&Log::do_log('err', 'Unknown list %s@%s', $listname, $robot);
+	&Log::do_log('err', 'Unknown list %s', $message_in_spool->{'list'});
 	return undef;
     }
 
-    my $tag = &get_tag($listname);
+    my $tag = &get_tag($list->name);
 
-    if (($list->{'admin'}{'web_archive_spam_protection'} ne 'none') && ($list->{'admin'}{'web_archive_spam_protection'} ne 'cookie')) {
+    if ($list->web_archive_spam_protection ne 'none' and
+	$list->web_archive_spam_protection ne 'cookie') {
 	&set_hidden_mode($tag);
     }else {
 	&unset_hidden_mode();
     } 
 
-   &Log::do_log('debug',"mail2arc  for %s yyyy:$yyyy, mm:$mm dd:$dd hh:$hh min$min ss:$ss", $list->get_list_id());
+   &Log::do_log('debug',"mail2arc  for %s yyyy:$yyyy, mm:$mm dd:$dd hh:$hh min$min ss:$ss", $list);
     #    chdir(Site->arc_path);
 
 
     if (Site->custom_archiver) {
-	my $file = $Conf::Conf{'tmpdir'}."/arc.".$listname.'@'.$robot.'.'.$message_in_spool->{'messagekey'} ;
+	my $file = Site->tmpdir . "/arc." . $list->get_id .
+	    $message_in_spool->{'messagekey'} ;
 	open (DUMP, "> $file");
 	printf DUMP $message_in_spool->{'messageasstring'};	
-	my $cmd = Site->custom_archiver . " --list=$listname\@$robot --file=$file";
+	my $cmd = sprintf '%s --list=%s --file=%s', Site->custom_archiver,
+	    $list->get_id, $file;
 	`$cmd`;
 	return 1;
     }else{
-	my $basedir = $arcpath.'/'.$list->get_list_id();
+	my $basedir = $arcpath . '/' . $list->get_id;
 	
 	if (! -d $basedir) {
 	    unless (mkdir $basedir, 0775) {
 		&Log::do_log('err', 'Cannot create directory %s', $basedir);
-		unless (&List::send_notify_to_listmaster('unable_to_create_dir',$robot,{'dir' => "$basedir"})) {
-		    &Log::do_log('notice',"Unable to send notify 'unable_to_create_dir' to listmaster");
+		unless ($robot->send_notify_to_listmaster(
+		    'unable_to_create_dir', {'dir' => "$basedir"}
+		)) {
+		    &Log::do_log('notice', 'Unable to send notify "unable_to_create_dir" to listmaster');
 		}
 	    }
-	    &Log::do_log('debug',"mkdir $basedir");
+	    &Log::do_log('debug', 'mkdir %s', $basedir);
 	}
 	
 	## Check quota
-	if ($list->{'admin'}{'web_archive'}{'quota'}) {
+	if ($list->web_archive->{'quota'}) {
 	    my $used = $list->get_arc_size("$arcpath") ;
 	    
-	    if ($used >= $list->{'admin'}{'web_archive'}{'quota'} * 1024){
-		&Log::do_log('err',"archived::mail2arc : web_arc Quota exceeded for list $list->{'name'}");
+	    if ($used >= $list->web_archive->{'quota'} * 1024){
+		&Log::do_log('err',
+		    'archived::mail2arc : web_arc Quota exceeded for list %s',
+		    $list);
 		unless ($list->send_notify_to_owner('arc_quota_exceeded',{'size' => $used})) {
-		    &Log::do_log('notice',"Unable to send notify 'arc_quota_exceeded' to $list->{'name'} owner");	
+		    &Log::do_log('notice',
+			'Unable to send notify "arc_quota_exceeded" to %s owner', $list);
 		}
 		return undef;
 	    }
-	    if ($used >= ($list->{'admin'}{'web_archive'}{'quota'} * 1024 * 0.95)){
-		&Log::do_log('err',"archived::mail2arc : web_arc Quota exceeded for list $list->{'name'}");
+	    if ($used >= ($list->web_archive->{'quota'} * 1024 * 0.95)){
+		&Log::do_log('err',
+		    'archived::mail2arc : web_arc Quota exceeded for list %s',
+		    $list);
 		unless ($list->send_notify_to_owner('arc_quota_95',{'size' => $used,
-								    'rate' => int($used * 100 / ($list->{'admin'}{'web_archive'}{'quota'} * 1024 ))})) {
-		    &Log::do_log('notice',"Unable to send notify 'arc_quota_95' to $list->{'name'} owner");	
+								    'rate' => int($used * 100 / ($list->web_archive->{'quota'} * 1024 ))})) {
+		    &Log::do_log('notice',
+			'Unable to send notify "arc_quota_95" to %s owner',
+			$list);	
 		}
 	    }
 	}
@@ -796,17 +811,19 @@ sub mail2arc {
 		return undef;
 	    }
 	    
-	    &Log::do_log('debug',"mkdir $arcpath/%s/$yyyy-$mm", $list->get_list_id());
+	    &Log::do_log('debug',"mkdir $arcpath/%s/$yyyy-$mm", $list->get_id);
 	    
-	    if ($list->{'admin'}{'web_archive'}{'max_month'}){ # maybe need to remove some old archive
-		if (opendir DIR,$arcpath.'/'.$list->get_list_id()) {
+	    if ($list->web_archive->{'max_month'}){
+		# maybe need to remove some old archive
+		if (opendir DIR,$arcpath.'/'.$list->get_id) {
 		    my @archives = (sort {$a cmp $b} grep (/^\d{4}-\d{2}/, readdir(DIR)));	
 		    closedir DIR;
 		    my $nb_month = $#archives + 1 ;
 		    my $i = 0 ;
-		    while ( $nb_month >  $list->{'admin'}{'web_archive'}{'max_month'}) {
-			&Log::do_log('info',"removing  $arcpath/%s/$archives[$i]", $list->get_list_id());
-			&tools::remove_dir ($arcpath.'/'.$list->get_list_id().'/'.$archives[$i]);
+		    while ( $nb_month >  $list->web_archive->{'max_month'}) {
+			&Log::do_log('info', 'removing  %s/%s/%s',
+			    $arcpath, $list->get_id, $archives[$i]);
+			&tools::remove_dir($arcpath.'/'.$list->get_id.'/'.$archives[$i]);
 			$i ++; $nb_month --;		    
 		    }
 		}
@@ -825,7 +842,7 @@ sub mail2arc {
 	
 	## fetch next message number in archive arctxt .
 	if( -f $monthdir."/index" ){
-	    open(IDX,"<$monthdir/index") || &Log::fatal_err("couldn't read index for $listname");
+	    open(IDX, '<', "$monthdir/index") or &Log::fatal_err("couldn't read index for %s", $list->name);
 	    $newfile = <IDX>;
 	    chomp($newfile);
 	    $newfile++;
@@ -850,17 +867,22 @@ sub mail2arc {
 	    next;
 	}
 
-	my $mhonarc_ressources = &tools::get_filename('etc',{},'mhonarc-ressources.tt2',$list->{'domain'}, $list);
+	my $mhonarc_ressources = &tools::get_filename('etc',{},'mhonarc-ressources.tt2',$list->domain, $list);
 	
-	&Log::do_log ('debug',"calling %s for list %s", Site->mhonarc, $list->get_list_id() ) ;
+	&Log::do_log ('debug',"calling %s for list %s", Site->mhonarc, $list);
 	
 	# call mhonarc on cleaned message source to make clean htlm view of message
-	my $cmd = Site->mhonarc . " -add -modifybodyaddresses -addressmodifycode \'$ENV{'M2H_ADDRESSMODIFYCODE'}\'  -rcfile $mhonarc_ressources -outdir $monthdir  -definevars \"listname='$listname' hostname=$robot yyyy=$yyyy mois=$mm yyyymm=$yyyy-$mm wdir=" . Site->arc_path . " base=$Conf{'wwsympa_url'}/arc tag=$tag\" -umask $Conf{'umask'} < $output";
+	my $cmd = sprintf
+	    '%s -add -modifybodyaddresses -addressmodifycode \'%s\' -rcfile %s -outdir %s -definevars "listname=\'%s\' hostname=%s yyyy=%s mois=%s yyyymm=%s-%s wdir=%s base=%s/arc tag=%s" -umask %s < %s',
+	    Site->mhonarc, $ENV{'M2H_ADDRESSMODIFYCODE'},
+	    $mhonarc_ressources, $monthdir, $list->name, $robot->domain,
+	    $yyyy, $mm, $yyyy, $mm, Site->arc_path, Site->wwsympa_url,
+	    $tag, Site->umask, $output;
 	
 	&Log::do_log('debug',"System call : %s",$cmd);
 	
 	my $exitcode = system($cmd);
-	$exitcode = $exitcode / 256;
+	$exitcode = $exitcode >> 8;
 	
 	## Remove lock if required
 	if ($exitcode == 75) {

@@ -957,9 +957,6 @@ if ($main::options{'keepcopy'}) {
     }
 }
 
-## Generate traceback if crashed.
-$SIG{'__DIE__'} = \&tools::crash_handler;
-
 ## Catch SIGTERM, in order to exit cleanly, whenever possible.
 $SIG{'TERM'} = 'sigterm';
 $SIG{'HUP'} = 'sighup';
@@ -978,7 +975,8 @@ while (!$signal) {
     &Language::SetLang($Language::default_lang);
 
     &List::init_list_cache();
-	Site->send_notify_to_listmaster(undef, undef, undef, 1); # Process grouped notifications
+    # Process grouped notifications
+    Site->send_notify_to_listmaster(undef, undef, 1, undef);
 	
     ## Scan queuedigest it should be performed by task manager !
     if ($index_queuedigest++ >=$digestsleep){

@@ -57,10 +57,10 @@ sub new {
 
     my $robot;
     ## If robot already in memory
-    if ($list_of_robots{$name}) {
+    if ($Site::list_of_robots{$name}) {
 
 	# use the current robot in memory and update it
-	$robot = $list_of_robots{$name};
+	$robot = $Site::list_of_robots{$name};
     } else {
 
 	# create a new object robot
@@ -69,7 +69,7 @@ sub new {
     my $status = $robot->load($name, %options);
     unless (defined $status) {
 	delete Site->robots->{$name} if defined Site->robots;
-	delete $list_of_robots{$name};
+	delete $Site::list_of_robots{$name};
 	return undef;
     }
 
@@ -172,7 +172,7 @@ sub load {
 	    &Log::do_log('err', 'Robot name "%s" is not same as domain "%s"',
 		$name, $self->domain);
 	    delete Site->robots->{$self->domain};
-	    delete $list_of_robots{$name};
+	    delete $Site::list_of_robots{$name};
 	    return undef;
 	}
     }
@@ -191,7 +191,7 @@ sub load {
 	}
     }
 
-    $list_of_robots{$name} = $self;
+    $Site::list_of_robots{$name} = $self;
     return 1;
 }
 
@@ -448,7 +448,7 @@ sub get_robots {
     foreach my $domain (keys %orphan) {
 	&Log::do_log('debug3', 'removing orphan robot %s', $orphan{$domain});
 	delete Site->robots->{$domain} if defined Site->robots;
-	delete $list_of_robots{$domain};
+	delete $Site::list_of_robots{$domain};
     }
 
     return \@robots;

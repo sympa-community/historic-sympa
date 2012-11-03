@@ -8,14 +8,10 @@ package Site;
 use strict;
 use warnings;
 use Carp qw(croak);
-use Exporter;
 
 use Conf;
 use Language;
 use User;
-
-our @ISA    = qw(Exporter);
-our @EXPORT = qw(%list_of_robots);
 
 =head1 NAME
 
@@ -546,7 +542,7 @@ sub send_file {
 
     $data->{'sender'} ||= $who;
 
-    $data->{'conf'}{'version'} = $main::Version;
+    $data->{'conf'}{'version'} = $main::Version if defined $main::Version;
     $data->{'robot_domain'} = $robot_id;
     if (ref $self eq 'List') {
 	$data->{'list'}{'lang'}    = $self->lang;
@@ -966,6 +962,24 @@ sub listmasters {
 	return $Conf::Conf{'listmasters'};
     }
 }
+
+=head3 Miscelaneous
+
+=over 4
+
+=item import
+
+XXX @todo doc
+
+=back
+
+=cut
+
+sub import {
+    ## register crash handler.
+    $SIG{'__DIE__'} = \&tools::crash_handler;
+}
+
 
 ## Packages must return true.
 1;

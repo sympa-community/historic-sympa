@@ -1086,7 +1086,8 @@ my $birthday = time ;
 
      ## Empty cache of the List.pm module
      &List::init_list_cache();
-     &List::send_notify_to_listmaster(undef, undef, undef, 1); # Process grouped notifications
+    # Process grouped notifications
+    Site->send_notify_to_listmaster(undef, undef, 1, undef);
 
      ## Check effective ID
      unless ($> eq (getpwnam(Sympa::Constants::USER))[2]) {
@@ -1268,7 +1269,8 @@ my $birthday = time ;
 
      undef $ENV{'HTTP_COOKIE'}; # Getting rid of the environment variable to make sure it won't be affected to another anonymous session.
      unless (defined $session) {
-	 &List::send_notify_to_listmaster('failed_to_create_web_session', $robot);
+	$robot_object->send_notify_to_listmaster(
+	    'failed_to_create_web_session');
 	 &wwslog('info','Failed to create session');
 	$session = new SympaSession($robot, {});
      }
@@ -1749,8 +1751,9 @@ my $birthday = time ;
  	 unless (&tt2::parse_tt2($param,'rss.tt2' ,\*STDOUT, $tt2_include_path, {})) {
  	     my $error = &tt2::get_error();
  	     $param->{'tt2_error'} = $error;
- 	     unless (&List::send_notify_to_listmaster('web_tt2_error', $robot, [$error])) {
- 		 &wwslog('notice','Unable to send notify "web_tt2_error" to listmaster');
+ 	     unless ($robot_object->send_notify_to_listmaster(
+		'web_tt2_error', [$error])) {
+ 		&wwslog('notice','Unable to send notify "web_tt2_error" to listmaster');
  	     }
  	 }
 
@@ -1774,7 +1777,8 @@ my $birthday = time ;
  	 unless (&tt2::parse_tt2($param,'ajax.tt2' ,\*STDOUT, $tt2_include_path, {})) {
  	     my $error = &tt2::get_error();
  	     $param->{'tt2_error'} = $error;
- 	     unless (&List::send_notify_to_listmaster('web_tt2_error', $robot, [$error])) {
+	    unless ($robot_object->send_notify_to_listmaster(
+		'web_tt2_error', [$error])) {
  		 &wwslog('notice','Unable to send notify "web_tt2_error" to listmaster');
  	     } 
 
@@ -1796,7 +1800,7 @@ my $birthday = time ;
 
  }
 
-&List::send_notify_to_listmaster(undef, undef, undef, undef, 1); # Purge grouped notifications
+Site->send_notify_to_listmaster(undef, undef, undef, 1); # Purge grouped notifications
 
 ##############################################################
  #-#\#|#/#-#\#|#/#-#\#|#/#-#\#|#/#-#\#|#/#-#\#|#/#-#\#|#/#-#\#|#/
@@ -1895,7 +1899,7 @@ sub crash_handler {
     my $msg = $_[0]; chomp $msg;
     print STDERR "DIED: $msg";
     &wwslog('err', 'DIED: %s', $msg);
-    eval { &List::send_notify_to_listmaster(undef, undef, undef, undef, 1); };
+    eval { Site->send_notify_to_listmaster(undef, undef, undef, 1); };
     eval { &SDM::db_disconnect; }; # unlock database
     Sys::Syslog::closelog(); # flush log
     &Log::set_log_level(-1); # disable log
@@ -2586,7 +2590,7 @@ sub send_html {
 	    # "Not Found" response for random help page.
 	    print "Status: 404 Not Found\n";
 	} else {
-	    &List::send_notify_to_listmaster('web_tt2_error', $robot, [$error]);
+	    $robot_object->send_notify_to_listmaster('web_tt2_error', [$error]);
 	}
 
 	&tt2::parse_tt2($param_copy,'tt2_error.tt2' , \*STDOUT,
@@ -6326,7 +6330,8 @@ sub do_skinsedit {
 	    unless (&tt2::parse_tt2($param,'css.tt2' ,\*CSS, $tt2_include_path)) {
 		my $error = &tt2::get_error();
 		$param->{'tt2_error'} = $error;
-		&List::send_notify_to_listmaster('web_tt2_error', $robot,[$error]);
+		$robot_object->send_notify_to_listmaster(
+		    'web_tt2_error', [$error]);
 		&wwslog('info', "do_skinsedit : error while installing $css_file");
 	    }
 	    close (CSS) ;
@@ -8769,7 +8774,7 @@ sub do_create_list {
      if ($param->{'create_action'} =~ /notify/) {
 	 &wwslog('info','notify listmaster');
 
-	 unless (&List::send_notify_to_listmaster('request_list_creation',$robot, 
+	 unless ($robot_object->send_notify_to_listmaster('request_list_creation',
 						  {'list' => $list,
 						   'email' => $param->{'user'}{'email'}})) {
 	     &wwslog('notice',"Unable to send notify 'request_list_creation' to listmaster");
@@ -17412,7 +17417,7 @@ sub do_css {
     unless (&tt2::parse_tt2($param,'css.tt2' ,\*STDOUT, $tt2_include_path)) {
 	my $error = &tt2::get_error();
 	$param->{'tt2_error'} = $error;
-	&List::send_notify_to_listmaster('web_tt2_error', $robot, [$error]);
+	$robot_object->send_notify_to_listmaster('web_tt2_error', [$error]);
 	&wwslog('info', "do_css/$in{'file'} : error");
     }
     
@@ -18059,7 +18064,7 @@ sub do_automatic_lists_request {
     my $family;
     unless ($family = new Family($in{'family'},$robot)) {
 	&wwslog('err', "Failed to instantiate family %s. This family does not exist.",$in{'family'});
-	&List::send_notify_to_listmaster('automatic_list_creation_failed',$robot,["Failed to instantiate family $in{'family'}. This family does not exist."]);
+	$robot_object->send_notify_to_listmaster('automatic_list_creation_failed', ["Failed to instantiate family $in{'family'}. This family does not exist."]);
 	return undef;
     }
     
@@ -18099,13 +18104,13 @@ sub do_automatic_lists {
 	## Automatic creation of a mailing list, based on a family
 	unless ($family = new Family($family_name,$robot)) {
 	    &Log::do_log('err', "Failed to create the dynamic list $listname: family $family_name does not exist.");
-	    &List::send_notify_to_listmaster('automatic_list_creation_failed',$robot,["Failed to create the dynamic list $listname: family $family_name does not exist."]);
+	    $robot_object->send_notify_to_listmaster('automatic_list_creation_failed', ["Failed to create the dynamic list $listname: family $family_name does not exist."]);
 	    return undef;
 	}
 	
 	unless ($list = $family->create_automatic_list(('listname' => $listname,'auth_level' => 'md5','sender'=>$session->{'email'}))) {
 	    &Log::do_log('err', "Failed to create the dynamic list $listname.");
-	    &List::send_notify_to_listmaster('automatic_list_creation_failed',$robot,["Failed to create the dynamic list $listname."]);
+	    $robot_object->send_notify_to_listmaster('automatic_list_creation_failed', ["Failed to create the dynamic list $listname."]);
 	    return undef;
 	}
     }

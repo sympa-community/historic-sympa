@@ -274,6 +274,22 @@ sub next {
 &Log::do_log('err',"Could not decode %s",$message->{'message'});
 	return undef;
     }
+
+    ## add objects
+    my $robot_id = $message->{'robot'};
+    my $listname = $message->{'list'};
+    my $robot;
+
+    if ($robot_id and $robot_id ne '*') {
+	$robot = Robot->new($robot_id);
+    }
+    if ($robot) {
+	if ($listname and length $listname) {
+	    $message->{'list_object'} = List->new($listname, $robot);
+	}
+	$message->{'robot_object'} = $robot;
+    }
+
     return $message;
 }
 

@@ -2343,7 +2343,6 @@ my %alias = ('reply-to' => 'reply_to',
 
 ## This is the generic hash which keeps all lists in memory.
 my %list_of_lists = ();
-my %list_of_robots = ();
 our %list_of_topics = ();
 my %edit_list_conf = ();
 
@@ -2375,8 +2374,14 @@ sub new {
 	$name = $parts[0];
     }
 
-    ## Look for the list if no robot was provided
-    $robot ||= &search_list_among_robots($name);
+    ## Compatibility: robot may be either object or name of robot.
+    unless (ref $robot) {
+	unless (defined $robot and length $robot and $robot ne '*') {
+	    ## Look for the list if no robot was provided
+	    $robot = &search_list_among_robots($name);
+	}
+	$robot = Robot->new($robot);
+    }
 
     unless ($robot) {
 	&Log::do_log('err', 'Missing robot parameter, cannot create list object for %s',  $name) unless ($options->{'just_try'});
@@ -2386,33 +2391,39 @@ sub new {
     ## Only process the list if the name is valid.
     my $listname_regexp = &tools::get_regexp('listname');
     unless ($name and ($name =~ /^($listname_regexp)$/io) ) {
-	&Log::do_log('err', 'Incorrect listname "%s"',  $name) unless ($options->{'just_try'});
+	&Log::do_log('err', 'Incorrect listname "%s"', $name)
+	    unless $options->{'just_try'};
 	return undef;
     }
     ## Lowercase the list name.
-    $name = $1;
-    $name =~ tr/A-Z/a-z/;
-    
+    $name = lc $1;
+
     ## Reject listnames with reserved list suffixes
-    my $regx = &Conf::get_robot_conf($robot,'list_check_regexp');
-    if ( $regx ) {
-	if ($name =~ /^(\S+)-($regx)$/) {
-	    &Log::do_log('err', 'Incorrect name: listname "%s" matches one of service aliases',  $name) unless ($options->{'just_try'});
+    my $regx = $robot->list_check_regexp;
+    if ($regx) {
+	my $result = eval { $name =~ /^(\S+)-($regx)$/; };
+	if ($@) {
+	    &Log::do_log('err', 'Incorrect list_check_regexp: %s', $@);
+	    return undef;
+	} elsif (! $result) {
+	    &Log::do_log('err',
+		'Incorrect name: listname "%s" matches one of service aliases',
+		$name) unless ($options->{'just_try'});
 	    return undef;
 	}
     }
 
     my $status ;
     ## If list already in memory and not previously purged by another process
-    if ($list_of_lists{$robot}{$name} and
-	-d $list_of_lists{$robot}{$name}{'dir'}) {
+    if ($list_of_lists{$robot->domain}{$name} and
+	-d $list_of_lists{$robot->domain}{$name}->dir) {
 	# use the current list in memory and update it
-	$list = $list_of_lists{$robot}{$name};
+	$list = $list_of_lists{$robot->domain}{$name};
     }else{
 	# create a new object list
 	$list = bless { } => $pkg;
     }   
-    $status = $list->load($name, $robot, $options);
+    $status = $list->load($name, $robot->domain, $options);
     unless (defined $status) {
 	return undef;
     }
@@ -2439,22 +2450,17 @@ sub search_list_among_robots {
     my $listname = shift;
     
     unless ($listname) {
- 	&Log::do_log('err', 'List::search_list_among_robots() : Missing list parameter');
+ 	&Log::do_log('err', 'Missing list parameter');
  	return undef;
     }
-    
-    ## Search in default robot
-    if (-d $Conf::Conf{'home'}.'/'.$listname) {
- 	return $Conf::Conf{'domain'};
+
+    foreach my $robot (@{Robot::get_robots() || []}) {
+	if (-d $robot->home . '/' . $listname) {
+	    return $robot->domain;
+	}
     }
-    
-     foreach my $r (keys %{$Conf::Conf{'robots'}}) {
-	 if (-d $Conf::Conf{'home'}.'/'.$r.'/'.$listname) {
-	     return $r;
-	 }
-     }
-    
-     return 0;
+
+    return 0;
 }
 
 ## set the list in status error_config and send a notify to listmaster
@@ -2761,39 +2767,34 @@ sub load {
 
     my ($self, $name, $robot, $options) = @_;
 
+    ## Compatibility: robot may be either object or name of robot.
+    unless (ref $robot) {
+	unless (defined $robot and length $robot and $robot ne '*') {
+	    ## Look for the list if no robot was provided
+	    $robot = &search_list_among_robots($name);
+	}
+	$robot = Robot->new($robot);
+    }
+
     ## Set of initializations ; only performed when the config is first loaded
     unless ($self->{'name'} and $self->{'domain'} and $self->{'dir'}) {
-	## Search robot if none was provided
-	unless ($robot) {
-	    foreach my $r (keys %{$Conf::Conf{'robots'}}) {
-		if (-d "$Conf::Conf{'home'}/$r/$name") {
-		    $robot=$r;
-		    last;
-		}
-	    }
-	    
-	    ## Try default robot
-	    unless ($robot) {
-		if (-d "$Conf::Conf{'home'}/$name") {
-		    $robot = $Conf::Conf{'domain'};
-		}
-	    }
+	if ($robot and -d $robot->home) {
+	    $self->{'dir'} = $robot->home . '/' . $name;
+	} elsif ($robot and $robot->domain eq Site->domain) {
+	    $self->{'dir'} = Site->home . '/' . $name;
+	} else {
+	    &Log::do_log('err', 'No such robot (virtual domain) %s', $robot)
+		unless ($options->{'just_try'});
+	    return undef;
 	}
-	
-	if ($robot && (-d "$Conf::Conf{'home'}/$robot")) {
-	    $self->{'dir'} = "$Conf::Conf{'home'}/$robot/$name";
-	}elsif (lc($robot) eq lc($Conf::Conf{'domain'})) {
-	    $self->{'dir'} = "$Conf::Conf{'home'}/$name";
-	}else {
-	    &Log::do_log('err', 'No such robot (virtual domain) %s', $robot) unless ($options->{'just_try'});
-	    return undef ;
-	}
-	
-	$self->{'domain'} = $robot;
+
+	$self->{'robot'} = $robot;
+	$self->{'domain'} = $robot->domain;
 	$self->{'name'} = $name;
     }
 
-    unless ($self->{'name'} eq $name and $self->{'domain'} eq $robot) {
+    unless ($self->{'name'} eq $name and
+	    $self->{'domain'} eq $robot->domain) {
 	&Log::do_log('err', 'Bug in logic.  Ask developer');
 	return undef;
     }
@@ -2828,7 +2829,8 @@ sub load {
 	&Log::do_log('debug3', 'got config for %s from serialized data',
 		     $self);
     } elsif ($options->{'reload_config'} or $time_config > $m1) {
-	$admin = &_load_list_config_file($self->{'dir'}, $robot, 'config');
+	$admin = &_load_list_config_file(
+	    $self->{'dir'}, $robot->domain, 'config');
  	unless (defined $admin) {
  	    $self->set_status_error_config('load_admin_file_error');
 	    $self->list_cache_purge;
@@ -2875,7 +2877,7 @@ sub load {
     }
 
     $self->{'mtime'} = [ $m1, $m2, $m3 ];
-    $list_of_lists{$robot}{$name} = $self;
+    $list_of_lists{$robot->domain}{$name} = $self;
     return $admin ? 1 : 0;
 }
 
@@ -4384,7 +4386,7 @@ sub archive_send_last {
 #       
 ###################################################### 
 ##sub send_notify_to_listmaster {
-## OBSOLETED. Use $list->robot->send_notify_to_listmaster() (to normal
+## DEPRECATED. Use $robot->send_notify_to_listmaster() (to normal
 ## listmaster) or Site->send_notify_to_listmaster() (to super listmaster).
 
 ####################################################
@@ -9697,7 +9699,7 @@ sub get_lists {
 	    ## If list already in memory and
 	    ## not previously purged by another process
 	    if ($list_of_lists{$robot}{$l->{'name'}} and
-		-d $list_of_lists{$robot}{$l->{'name'}}{'dir'}) {
+		-d $list_of_lists{$robot}{$l->{'name'}}->dir) {
 		# use the current list in memory and update it
 		$list = $list_of_lists{$robot}{$l->{'name'}};
 	    } else {

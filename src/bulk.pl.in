@@ -41,17 +41,17 @@ use lib '--modulesdir--';
 
 use strict;
 
-use Conf;
-use Log;
+#use Conf; # used in List
+#use Log; # used in Conf
 use Commands;
 use Getopt::Long;
 use Data::Dumper;
 use mail;
 use Bulk;
 use List;
-use tools;
+#use tools; # used in Conf
 use tracking;
-use Sympa::Constants;
+#use Sympa::Constants; # used in confdef, in Conf
 use Sympaspool;
 
 my $daemon_name = &Log::set_daemon($0);
@@ -157,9 +157,6 @@ unless (chdir($Conf::Conf{'home'})) {
 my $pinfo = &List::_apply_defaults();
 
 &Log::do_log('notice', "bulk.pl %s Started", Sympa::Constants::VERSION);
-
-## Generate traceback if crashed.
-$SIG{'__DIE__'} = \&tools::crash_handler;
 
 ## Catch SIGTERM, in order to exit cleanly, whenever possible.
 $SIG{'TERM'} = 'sigterm';
