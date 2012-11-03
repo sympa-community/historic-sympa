@@ -300,58 +300,9 @@ Gets config parameters for internal use.
 
 =cut
 
-our $AUTOLOAD;
+#XXour $AUTOLOAD;
 
 sub DESTROY;
-
-sub AUTOLOAD {
-    $AUTOLOAD =~ m/^(.*)::(.*)/;
-
-    my $attr = $2;
-    my @p;
-    if (ref $_[0] and
-	grep { $_ eq $attr } qw(etc home name)) {
-	## getters for robot attributes.
-	no strict "refs";
-	*{$AUTOLOAD} = sub {
-	    croak "Can't modify \"$attr\" attribute" if scalar @_ > 1;
-	    shift->{$attr};
-	};
-    } elsif (
-	ref $_[0] and
-	grep {
-	    $_ eq $attr
-	} qw(pictures_path request sympa) or
-	ref $_[0] and
-	grep
-	{
-	    !defined $_->{'title'} and $_->{'name'} eq $attr
-	} @confdef::params
-	) {
-	## getters for robot parameters.
-	no strict "refs";
-	*{$AUTOLOAD} = sub {
-	    my $self = shift;
-	    unless ($self->{'etc'} eq Site->etc or
-		defined Site->robots->{$self->{'name'}}) {
-		croak "Can't call method \"$attr\" on uninitialized " .
-		    (ref $self) . " object";
-	    }
-	    croak "Can't modify \"$attr\" attribute" if scalar @_;
-	    if ($self->{'etc'} ne Site->etc and
-		defined Site->robots->{$self->{'name'}}{$attr}) {
-		##FIXME: Might "exists" be used?
-		Site->robots->{$self->{'name'}}{$attr};
-	    } else {
-		Site->$attr;
-	    }
-	};
-    } else {
-	croak "Can't locate object method \"$2\" via package \"$1\"";
-    }
-
-    goto &$AUTOLOAD;
-}
 
 =over 4
 

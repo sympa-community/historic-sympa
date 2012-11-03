@@ -41,11 +41,10 @@ This fcgi script completely handles all aspects of the Sympa web interface
 
 use lib '--modulesdir--';
 
+use strict;
 use Getopt::Long;
-use Archive::Zip;
-use Data::Dumper;
-  
-use strict 'vars';
+use Archive::Zip qw(:ERROR_CODES);
+##XXXuse strict 'vars';
 use Time::Local;
 use Data::Dumper;
 
@@ -1522,6 +1521,8 @@ my $birthday = time ;
 
 	     ## Execute the action ## 
 	     if (defined $action) {
+		no strict "refs";
+
 	       $action = &{$comm{$action}}();
 	     }
 	     

@@ -914,27 +914,65 @@ sub DESTROY;
 
 sub AUTOLOAD {
     $AUTOLOAD =~ m/^(.*)::(.*)/;
-
     my $attr = $2;
-    if (scalar grep { $_ eq $attr }
-	qw(locale2charset pictures_path request robots robot_by_http_host
-	sympa) or
-	scalar grep { !defined $_->{'title'} and $_->{'name'} eq $attr }
-	@confdef::params
-	) {
-	## getter for internal config parameters.
-	no strict "refs";
-	*{$AUTOLOAD} = sub {
-	    my $pkg = shift;
-	    croak "Can't call method \"$attr\" on uninitialized $pkg class"
+
+    my $type = {};
+    ## getters for site/robot attributes.
+    $type->{'RobotAttribute'} =
+	scalar(grep { $_ eq $attr } qw(etc home name));
+    ## getters for site/robot parameters.
+    $type->{'RobotParameter'} =
+	scalar(grep { $_ eq $attr }
+	    qw(list_check_regexp pictures_path request sympa)) ||
+	scalar(grep { !defined $_->{'title'} and $_->{'name'} eq $attr }
+	    @confdef::params);
+    ## getters for site attributes.
+    $type->{'SiteAttribute'} =
+	scalar(grep { $_ eq $attr }
+	    qw(locale2charset robots robot_by_http_host));
+
+    croak "Can't locate object method \"$2\" via package \"$1\""
+	unless scalar keys %$type;
+
+    no strict "refs";
+    *{$AUTOLOAD} = sub {
+	my $self = shift;
+
+	if (ref $self and ref $self eq 'Robot') {
+	    if ($type->{'RobotAttribute'}) {
+		## getter for list attributes.
+		croak "Can't modify \"$attr\" attribute" if scalar @_ > 1;
+		return $self->{$attr};
+	    } elsif ($type->{'RobotParameter'}) {
+		## getters for robot parameters.
+		unless ($self->{'etc'} eq Site->etc or
+		    defined Site->robots->{$self->{'name'}}) {
+		    croak "Can't call method \"$attr\" on uninitialized " .
+			(ref $self) . " object";
+		}
+		croak "Can't modify \"$attr\" attribute" if scalar @_;
+		if ($self->{'etc'} ne Site->etc and
+		    defined Site->robots->{$self->{'name'}}{$attr}) {
+		    ##FIXME: Might "exists" be used?
+		    Site->robots->{$self->{'name'}}{$attr};
+		} else {
+		    Site->$attr;
+		}
+	    } else {
+		croak "Can't call method \"$attr\" on " . (ref $self) .
+		    " object";
+	    }
+	} elsif ($self eq 'Site') {
+	    ## getter for internal config parameters.
+	    croak "Can't call method \"$attr\" on uninitialized $self class"
 		unless $is_initialized;
 	    croak "Can't modify \"$attr\" attribute"
 		if scalar @_ > 1;
 	    $Conf::Conf{$attr};
-	};
-    } else {
-	croak "Can't locate object method \"$2\" via package \"$1\"";
-    }
+	} else {
+	    croak 'bug in logic.  Ask developer';
+	}
+    };
     goto &$AUTOLOAD;
 }
 
@@ -979,7 +1017,6 @@ sub import {
     ## register crash handler.
     $SIG{'__DIE__'} = \&tools::crash_handler;
 }
-
 
 ## Packages must return true.
 1;

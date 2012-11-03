@@ -133,6 +133,8 @@ sub parse {
 
     foreach $j (keys %comms) {
 	if ($i =~ /^($j)(\s+(.+))?\s*$/i) {
+	    no strict "refs";
+
 	    $time_command = time;
 	    my $args = $3;
 	    $args =~ s/^\s*//;

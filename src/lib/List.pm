@@ -45,7 +45,7 @@ use tt2;
 use Sympa::Constants;
 use Data::Dumper;
 
-our @ISA = qw(Robot Exporter);
+our @ISA = qw(Exporter);
 our @EXPORT = qw(%list_of_lists);
 
 use Fcntl qw(LOCK_SH LOCK_EX LOCK_NB LOCK_UN);
@@ -3633,6 +3633,20 @@ sub send_msg_digest {
 
 ###################   TEMPLATE SENDING  ###################################
 
+=over 4
+
+=item send_dsn
+
+Sends an delivery status notification (DSN).
+See L<Site/send_dsn>.
+
+=back
+
+=cut
+
+sub send_dsn {
+    return Site::send_dsn(@_);
+}
 
 ####################################################
 # send_global_file                              
@@ -3687,8 +3701,9 @@ sub send_global_file {
 #         -...
 # OUT : 1 | undef
 ####################################################
-
-## Inherited from Site
+sub send_file {
+    return Site::send_file(@_);
+}
 
 ####################################################
 # send_msg                              
@@ -4273,7 +4288,9 @@ See L<Site/request_auth>.
 
 =cut
 
-## Inherited from Site.
+sub request_auth {
+    return Site::request_auth(@_);
+}
 
 ####################################################
 # archive_send                              
