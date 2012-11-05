@@ -33,7 +33,6 @@ $wwsympa_conf_file = Sympa::Constants::WWSCONFIG;
 $sympa_conf_file = Sympa::Constants::CONFIG;
 
 use Sympa::List;
-use Log;
 use Getopt::Long;
 
 my %month_idx = qw(jan 1 

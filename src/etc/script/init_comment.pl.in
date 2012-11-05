@@ -27,8 +27,6 @@ use Sympa::Conf;
 use Sympa::Constants;
 use Sympa::SDM;
 
-use Log;
-
 ## Load sympa config
 &Sympa::Conf::load(Sympa::Constants::CONFIG) || die 'config_error';
 
