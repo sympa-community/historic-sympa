@@ -45,6 +45,7 @@ use Sympa::Constants;
 use Sympa::List;
 use Sympa::Spool;
 use Sympa::Tools;
+use Sympa::Tools::Bounce;
 use Sympa::Tools::Daemon;
 use Sympa::Tracking;
 
@@ -71,7 +72,6 @@ my %equiv = ( "user unknown" => '5.1.1',
 	      "User's Disk Quota Exceeded:" => '4.2.2');
 
 
-use Bounce;
 use wwslib;
 
 #getopts('dF');
