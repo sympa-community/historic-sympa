@@ -49,7 +49,6 @@ use Mail::Address;
 use MIME::Parser;
 use Time::Local;
 
-use Commands;
 use Marc::Search;
 use Sympa::Admin;
 use Sympa::Archive;
