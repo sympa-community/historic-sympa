@@ -39,7 +39,6 @@ use Time::HiRes qw(time);
 use Time::Local;
 use URI::Escape;
 
-use Message;
 use Sympa::Conf;
 use Sympa::Language;
 use Sympa::List;
