@@ -11,6 +11,7 @@ use Log; # if you want to get logs of List.pm
 use Sympa::Conf;
 use Sympa::Constants;
 use Sympa::Tools;
+use Sympa::Upgrade;
 
 unless (Sympa::Conf::load(Sympa::Constants::CONFIG)) {
     die "Can't load Sympa configuration file";
@@ -18,7 +19,7 @@ unless (Sympa::Conf::load(Sympa::Constants::CONFIG)) {
 &Log::do_openlog($Conf{'syslog'}, $Conf{'log_socket_type'}, 'sympa');
 
 if ($Conf{'db_name'} and $Conf{'db_type'}) {
-    unless (&Upgrade::probe_db()) {
+    unless (&Sympa::Upgrade::probe_db()) {
 	die "Sympa can't connect to database";
     }
 } #  to check availabity of Sympa database

@@ -26,6 +26,7 @@ use lib '--modulesdir--';
 use wwslib;
 use Sympa::Conf;
 use Sympa::Constants;
+use Sympa::Upgrade;
 
 $wwsympa_conf_file = Sympa::Constants::WWSCONFIG;
 $sympa_conf_file = Sympa::Constants::CONFIG;
@@ -94,7 +95,7 @@ unless (&Sympa::Conf::load($sympa_conf_file)) {
     die 'config_error';
 }
 
-&Upgrade::probe_db();
+&Sympa::Upgrade::probe_db();
 
 chdir $Sympa::Conf::Conf{'home'};
 

@@ -62,7 +62,6 @@ use Sympa::Tracking;
 use Sympa::TT2;
 use Sympa::WebAgent;
 use Task;
-use Upgrade;
 
 our @ISA = qw(Exporter);
 our @EXPORT = qw(%list_of_lists);

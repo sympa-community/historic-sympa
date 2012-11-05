@@ -43,6 +43,7 @@ use Sympa::Constants;
 use Sympa::Spool;
 use Sympa::Tools;
 use Sympa::Tools::Daemon;
+use Sympa::Upgrade;
 
 ## Internal tuning
 # delay between each read of the digestqueue
@@ -120,7 +121,7 @@ if ($main::options{'log_level'}) {
 
 ## Probe Db if defined
 if ($Conf{'db_name'} and $Conf{'db_type'}) {
-    unless (&Upgrade::probe_db()) {
+    unless (&Sympa::Upgrade::probe_db()) {
 	&Log::fatal_err('Database %s defined in sympa.conf has not the right structure or is unreachable. verify db_xxx parameters in sympa.conf', $Conf{'db_name'});
     }
 }
@@ -149,7 +150,7 @@ unless (&Sympa::Conf::checkfiles_as_root()) {
 
 ## Check that the data structure is uptodate
 unless ($main::options{'upgrade'} || $main::options{'help'}) {
-    unless (&Upgrade::data_structure_uptodate()) {
+    unless (&Sympa::Upgrade::data_structure_uptodate()) {
 	&Log::fatal_err("error : data structure was not updated ; you should run sympa.pl --upgrade to run the upgrade process.");
     }
 }
