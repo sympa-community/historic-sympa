@@ -35,7 +35,6 @@ use POSIX;
 use Storable;
 use Time::Local;
 
-use Ldap;
 use Lock;
 use Log;
 use Message;

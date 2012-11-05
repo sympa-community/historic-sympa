@@ -39,7 +39,6 @@ use Time::HiRes qw(time);
 use Time::Local;
 use URI::Escape;
 
-use Ldap;
 use Lock;
 use Log;
 use Message;

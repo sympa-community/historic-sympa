@@ -35,7 +35,6 @@ use Storable;
 use Sys::Hostname;
 use Time::Local;
 
-use Ldap;
 use Lock;
 use Log;
 use Message;
