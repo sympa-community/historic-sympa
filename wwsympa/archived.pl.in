@@ -44,10 +44,10 @@ use Getopt::Long;
 use Digest::MD5;
 
 use Commands;
-use Language;
 use Sympa::Archive;
 use Sympa::Conf;
 use Sympa::Constants;
+use Sympa::Language;
 use Sympa::List;
 use Sympa::Log;
 use Sympa::Message;
@@ -175,7 +175,7 @@ unless (chdir($Conf{'home'})) {
 
 my $pinfo = &Sympa::List::_apply_defaults();
 
-$Language::default_lang = $Conf{'lang'};
+$Sympa::Language::default_lang = $Conf{'lang'};
 
 &Sympa::Log::do_log('notice', "archived %s Started", Sympa::Constants::VERSION);
 
