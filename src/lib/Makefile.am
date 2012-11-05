@@ -1,24 +1,64 @@
-nobase_modules_DATA = admin.pm Archive.pm Bulk.pm Commands.pm confdef.pm \
-		      Conf.pm Config_XML.pm Family.pm Language.pm \
-		      List.pm Log.pm mail.pm Ldap.pm Upgrade.pm Lock.pm \
-		      Fetch.pm Message.pm Task.pm Datasource.pm SQLSource.pm \
-		      LDAPSource.pm Scenario.pm PlainDigest.pm report.pm \
-		      Sympaspool.pm tools.pm tt2.pm time_utils.pm Sympa/Constants.pm \
-		      Sympa/Template/Compat.pm Robot.pm WebAgent.pm \
-		      HTML/myFormatText.pm tracking.pm \
-		      Sympa/DatabaseDescription.pm SDM.pm \
-		      DBManipulatorMySQL.pm DBManipulatorSQLite.pm\
-		      DBManipulatorSybase.pm DBManipulatorOracle.pm \
-		      DBManipulatorPostgres.pm DBManipulatorDefault.pm \
-		      OAuthConsumer.pm VOOTConsumer.pm OAuthProvider.pm \
-		      VOOTProvider.pm
-
-# wwwsympa
-nobase_modules_DATA += wwslib.pm cookielib.pm Bounce.pm Marc.pm Auth.pm \
-		      Marc/Search.pm SharedDocument.pm SympaSession.pm
-
-# soap
-nobase_modules_DATA = sympasoap.pm SympaTransport.pm
+nobase_modules_DATA = Sympa/Admin.pm \
+		      Sympa/Archive.pm \
+		      Sympa/Auth.pm \
+		      Sympa/Bulk.pm \
+		      Sympa/Challenge.pm \
+		      Sympa/Commands.pm \
+		      Sympa/Conf.pm \
+		      Sympa/Configuration/XML.pm \
+		      Sympa/Configuration/Definition.pm \
+		      Sympa/Constants.pm \
+		      Sympa/DatabaseDescription.pm \
+		      Sympa/Datasource.pm \
+		      Sympa/Datasource/LDAP.pm \
+		      Sympa/Datasource/SQL.pm \
+		      Sympa/Datasource/SQL/Default.pm \
+		      Sympa/Datasource/SQL/Informix.pm \
+		      Sympa/Datasource/SQL/MySQL.pm \
+		      Sympa/Datasource/SQL/Oracle.pm \
+		      Sympa/Datasource/SQL/Postgres.pm \
+		      Sympa/Datasource/SQL/SQLite.pm \
+		      Sympa/Datasource/SQL/Sybase.pm \
+		      Sympa/Family.pm \
+		      Sympa/Fetch.pm \
+		      Sympa/HTML/FormatText.pm \
+		      Sympa/Language.pm \
+		      Sympa/Ldap.pm \
+		      Sympa/List.pm \
+		      Sympa/Lock.pm \
+		      Sympa/Log.pm \
+		      Sympa/Mail.pm \
+		      Sympa/Message.pm \
+		      Sympa/OAuth/Consumer.pm \
+		      Sympa/OAuth/Provider.pm \
+		      Sympa/PlainDigest.pm \
+		      Sympa/Report.pm \
+		      Sympa/Robot.pm \
+		      Sympa/Scenario.pm \
+		      Sympa/SDM.pm \
+		      Sympa/Session.pm \
+		      Sympa/SharedDocument.pm \
+		      Sympa/SOAP.pm \
+		      Sympa/Spool.pm \
+		      Sympa/Task.pm \
+		      Sympa/Template/Compat.pm \
+		      Sympa/Tools.pm \
+		      Sympa/Tools/Bounce.pm \
+		      Sympa/Tools/Cookie.pm \
+		      Sympa/Tools/Daemon.pm \
+		      Sympa/Tools/Data.pm \
+		      Sympa/Tools/DKIM.pm \
+		      Sympa/Tools/File.pm \
+		      Sympa/Tools/SMIME.pm \
+		      Sympa/Tools/Time.pm \
+		      Sympa/Tracking.pm \
+		      Sympa/Transport.pm \
+		      Sympa/TT2.pm \
+		      Sympa/Upgrade.pm \
+		      Sympa/VOOT/Consumer.pm \
+		      Sympa/VOOT/Provider.pm \
+		      Sympa/WebAgent.pm \
+		      Sympa/WWSympa.pm
 
 EXTRA_DIST = Sympa/Constants.pm.in $(nobase_modules_DATA)
 CLEANFILES = Sympa/Constants.pm
