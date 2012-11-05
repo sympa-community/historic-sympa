@@ -54,7 +54,6 @@ use Log;
 use Marc::Search;
 use OAuthProvider;
 use OAuthConsumer;
-use SharedDocument;
 use Sympa::Admin;
 use Sympa::Archive;
 use Sympa::Auth;
@@ -70,6 +69,7 @@ use Sympa::Report;
 use Sympa::Robot;
 use Sympa::Scenario;
 use Sympa::Session;
+use Sympa::SharedDocument;
 use Sympa::Spool;
 use Sympa::Tools;
 use Sympa::Tools::Cookie;
@@ -17788,7 +17788,7 @@ sub new_d_read {
      # current list / current shared directory
      my $list_name = $list->{'name'};
 
-     my $document = new SharedDocument ($list, $in{'path'}, $param);
+     my $document = new Sympa::SharedDocument ($list, $in{'path'}, $param);
 
      unless (defined $document) {
 	 &Sympa::Report::reject_report_web('intern','new_document_failed',{'path'=>$in{'path'}},$param->{'action'},$list,$param->{'user'}{'email'},$robot);
