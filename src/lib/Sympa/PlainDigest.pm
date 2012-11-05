@@ -1,97 +1,97 @@
- ###############################################################
- #                      PlainDigest                            #
- # version: 0.4.0rc6                                           #
- #                                                             #
- # PlainDigest provides an extension to the MIME::Entity       #
- # class that returns a plain text version of an email         #
- # message, suitable for use in plain text digests.            #
- #                                                             #
- # SYNOPSIS:                                                   #
- # (assuming an existing MIME::Entity object as $mail)         #
- #                                                             #
- # use PlainDigest;                                            #
- # $string = $mail->PlainDigest::plain_body_as_string(%opt);   #
- #                                                             #
- # where %opt is a hash of options, currently:                 #
- # use_lynx => [0|1]: use Lynx to process HTML rather than     #
- #                      cpan HTML::TreeBuilder and             #
- #                      HTML::FormatText modules               #
- #                                                             #
- # WHAT DOES IT DO?                                            #
- # Most attachments are stripped out and replaced with a       #
- # note that they've been stripped. text/plain parts are       #
- # retained.                                                   #
- #                                                             #
- # An attempt to convert text/html parts to plain text is made #
- # if there is no text/plain alternative.                      #
- #                                                             #
- # All messages are converted from their original character    #
- # set to UTF-8                                                #
- #                                                             #
- # Parts of type message/rfc822 are recursed                   #
- # through in the same way, with brief headers included.       #
- #                                                             #
- # Any line consisting only of 30 hyphens has the first        #
- # character changed to space (see RFC 1153). Lines are        #
- # wrapped at 80 characters.                                   #
- #                                                             #
- # BUGS                                                        #
- # Probably dozens of them, and possibly dependant on your     #
- # versions of Perl and MIME-Tools (on which it is very        #
- # reliant).                                                   #
- # Seems to ignore any text after a UUencoded attachment.      #
- #                                                             #
- # LICENSE                                                     #
- # Written by and (c) Chris Hastie 2004 - 2008                 #
- # This program is free software; you can redistribute it      #
- # and/or modify it under the terms of the GNU General Public  #
- # License as published by the Free Software Foundation; either#
- # version 2 of the License, or (at your option) any later     #
- # version.                                                    #
- #                                                             #
- # This program is distributed in the hope that it will be     #
- # useful,but WITHOUT ANY WARRANTY; without even the implied   #
- # warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR     #
- # PURPOSE. See the GNU General Public License for more details#
- #                                                             # 
- # You should have received a copy of the GNU General Public   #
- # License along with this program; if not, write to the Free  #
- # Software Foundation, Inc., 59 Temple Place - Suite 330,     #
- # Boston, MA 02111-1307, USA.                                 #
- #                                                             #
- #                                        Chris Hastie         #
- #                                                             #
- ###############################################################
- # Changes
- # 20080910
- # - don't bother trying to find path to lynx unless use_lynx is true
- # - anchor content-type test strings to end of string to avoid
- #    picking up malformed headers as per bug 3702
- # - local Text::Wrap variables
- # - moved repeated code to get charset into sub _getCharset
- # - added use of MIME::Charset to check charset aliases
- # 20100810 - S. Ikeda
- # - Remove dependency on Text::Wrap: use common utility tools::wrap_text().
- # - Use MIME::Charset OO to handle vendor-defined encodings.
- # - Use MIME::EncWords instead of MIME::WordDecoder.
- # - Now HTML::FormatText is mandatory.  Remove Lynx support.
+###############################################################
+#                      PlainDigest                            #
+# version: 0.4.0rc6                                           #
+#                                                             #
+# PlainDigest provides an extension to the MIME::Entity       #
+# class that returns a plain text version of an email         #
+# message, suitable for use in plain text digests.            #
+#                                                             #
+# SYNOPSIS:                                                   #
+# (assuming an existing MIME::Entity object as $mail)         #
+#                                                             #
+# use PlainDigest;                                            #
+# $string = $mail->PlainDigest::plain_body_as_string(%opt);   #
+#                                                             #
+# where %opt is a hash of options, currently:                 #
+# use_lynx => [0|1]: use Lynx to process HTML rather than     #
+#                      cpan HTML::TreeBuilder and             #
+#                      HTML::FormatText modules               #
+#                                                             #
+# WHAT DOES IT DO?                                            #
+# Most attachments are stripped out and replaced with a       #
+# note that they've been stripped. text/plain parts are       #
+# retained.                                                   #
+#                                                             #
+# An attempt to convert text/html parts to plain text is made #
+# if there is no text/plain alternative.                      #
+#                                                             #
+# All messages are converted from their original character    #
+# set to UTF-8                                                #
+#                                                             #
+# Parts of type message/rfc822 are recursed                   #
+# through in the same way, with brief headers included.       #
+#                                                             #
+# Any line consisting only of 30 hyphens has the first        #
+# character changed to space (see RFC 1153). Lines are        #
+# wrapped at 80 characters.                                   #
+#                                                             #
+# BUGS                                                        #
+# Probably dozens of them, and possibly dependant on your     #
+# versions of Perl and MIME-Tools (on which it is very        #
+# reliant).                                                   #
+# Seems to ignore any text after a UUencoded attachment.      #
+#                                                             #
+# LICENSE                                                     #
+# Written by and (c) Chris Hastie 2004 - 2008                 #
+# This program is free software; you can redistribute it      #
+# and/or modify it under the terms of the GNU General Public  #
+# License as published by the Free Software Foundation; either#
+# version 2 of the License, or (at your option) any later     #
+# version.                                                    #
+#                                                             #
+# This program is distributed in the hope that it will be     #
+# useful,but WITHOUT ANY WARRANTY; without even the implied   #
+# warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR     #
+# PURPOSE. See the GNU General Public License for more details#
+#                                                             # 
+# You should have received a copy of the GNU General Public   #
+# License along with this program; if not, write to the Free  #
+# Software Foundation, Inc., 59 Temple Place - Suite 330,     #
+# Boston, MA 02111-1307, USA.                                 #
+#                                                             #
+#                                        Chris Hastie         #
+#                                                             #
+###############################################################
+# Changes
+# 20080910
+# - don't bother trying to find path to lynx unless use_lynx is true
+# - anchor content-type test strings to end of string to avoid
+#    picking up malformed headers as per bug 3702
+# - local Text::Wrap variables
+# - moved repeated code to get charset into sub _getCharset
+# - added use of MIME::Charset to check charset aliases
+# 20100810 - S. Ikeda
+# - Remove dependency on Text::Wrap: use common utility tools::wrap_text().
+# - Use MIME::Charset OO to handle vendor-defined encodings.
+# - Use MIME::EncWords instead of MIME::WordDecoder.
+# - Now HTML::FormatText is mandatory.  Remove Lynx support.
  
- package Sympa::PlainDigest;
+package Sympa::PlainDigest;
 
- use Mail::Internet;
- use Mail::Address;
- use MIME::Parser;
- use MIME::EncWords;
- use MIME::Charset;
- use HTML::TreeBuilder;
- use HTML::FormatText;
+use Mail::Internet;
+use Mail::Address;
+use MIME::Parser;
+use MIME::EncWords;
+use MIME::Charset;
+use HTML::TreeBuilder;
+use HTML::FormatText;
 
- use Sympa::Language;
- use Sympa::Tools;
+use Sympa::Language;
+use Sympa::Tools;
 
- @ISA = qw(MIME::Entity);
+@ISA = qw(MIME::Entity);
  
- sub plain_body_as_string {
+sub plain_body_as_string {
  
   local $outstring = "";
   my ($topent, @paramlist) = @_;
@@ -103,9 +103,9 @@
   $topent->purge;
 
   return &Sympa::Tools::wrap_text($outstring, '', '');
- }
+}
 
- sub _do_toplevel {
+sub _do_toplevel {
  
   my $topent = shift;
   if ($topent->effective_type =~ /^text\/plain$/i || $topent->effective_type =~ /^text\/enriched/i) {
@@ -129,7 +129,7 @@
   return 1;
  }
  
- sub _do_multipart {
+sub _do_multipart {
 
   my $topent = shift;
 
@@ -172,9 +172,9 @@
   }
   return 1;
 
- }
+}
  
- sub _do_message {
+sub _do_message {
   my $topent = shift;
   my $msgent = $topent->parts(0);
 
@@ -219,9 +219,9 @@
   
   $outstring .= sprintf(gettext("-----End of original message from %s-----\n\n"), $name);
   return 1;
- }
+}
 
- sub _do_text_plain {
+sub _do_text_plain {
   my $entity = shift;    
 
   my $thispart = $entity->bodyhandle->as_string;
@@ -251,23 +251,23 @@
       
   $outstring .= $thispart;
   return 1;
- }
+}
 
- sub _do_other {
+sub _do_other {
   # just add a note that attachment was stripped.
   my $entity = shift;
   $outstring .= sprintf (gettext("\n[An attachment of type %s was included here]\n"), $entity->mime_type);
   return 1;
- }
+}
  
- sub _do_dsn {
+sub _do_dsn {
    my $entity = shift;
    $outstring .= sprintf (gettext("\n-----Delivery Status Report-----\n"));
    _do_text_plain ($entity);
    $outstring .= sprintf (gettext("\n-----End of Delivery Status Report-----\n"));
- }
+}
 
- sub _do_text_html {
+sub _do_text_html {
  # get a plain text representation of an HTML part
   my $entity = shift;
   my $text;
@@ -318,9 +318,9 @@
   $outstring .= $text;
 
   return 1;
- }
+}
 
- sub _hasTextPlain {
+sub _hasTextPlain {
    # tell if an entity has text/plain children
    my $topent = shift;
    my @subents = $topent->parts;
@@ -330,9 +330,9 @@
      }
    }
    return undef;
- }
+}
  
- sub _getCharset {
+sub _getCharset {
    my $entity = shift;
    
    my $charset = $entity->head->mime_attr('content-type.charset')?$entity->head->mime_attr('content-type.charset'):'us-ascii';
@@ -341,6 +341,6 @@
      
    # get charset object.
    return MIME::Charset->new($charset);
- }
+}
 
 1;
