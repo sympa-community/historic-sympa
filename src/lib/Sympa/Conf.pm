@@ -29,11 +29,11 @@ use Exporter;
 use Storable;
 
 use Log;
-use SDM;
 use Sympa::Configuration::Definition;
 use Sympa::Constants;
 use Sympa::Language;
 use Sympa::List;
+use Sympa::SDM;
 use Sympa::Tools;
 use Sympa::Tools::File;
 use Sympa::TT2;
@@ -303,7 +303,7 @@ sub get_db_conf  {
     $robot = '*' unless (-f $Conf{'etc'}.'/'.$robot.'/robot.conf') ;
     unless ($robot) {$robot = '*'};
 
-    unless ($sth = &SDM::do_query("SELECT value_conf AS value FROM conf_table WHERE (robot_conf =%s AND label_conf =%s)", &SDM::quote($robot),&SDM::quote($label))) {
+    unless ($sth = &Sympa::SDM::do_query("SELECT value_conf AS value FROM conf_table WHERE (robot_conf =%s AND label_conf =%s)", &Sympa::SDM::quote($robot),&Sympa::SDM::quote($label))) {
         &Log::do_log('err','Unable retrieve value of parameter %s for robot %s from the database', $label, $robot);
         return undef;
     }
@@ -332,7 +332,7 @@ sub set_robot_conf  {
     $robot = '*' ;
     }
 
-    unless ($sth = &SDM::do_query("SELECT count(*) FROM conf_table WHERE (robot_conf=%s AND label_conf =%s)", &SDM::quote($robot),&SDM::quote($label))) {
+    unless ($sth = &Sympa::SDM::do_query("SELECT count(*) FROM conf_table WHERE (robot_conf=%s AND label_conf =%s)", &Sympa::SDM::quote($robot),&Sympa::SDM::quote($label))) {
         &Log::do_log('err','Unable to check presence of parameter %s for robot %s in database', $label, $robot);
         return undef;
     }
@@ -341,12 +341,12 @@ sub set_robot_conf  {
     $sth->finish();
     
     if ($count == 0) {
-        unless ($sth = &SDM::do_query("INSERT INTO conf_table (robot_conf, label_conf, value_conf) VALUES (%s,%s,%s)",&SDM::quote($robot),&SDM::quote($label), &SDM::quote($value))) {
+        unless ($sth = &Sympa::SDM::do_query("INSERT INTO conf_table (robot_conf, label_conf, value_conf) VALUES (%s,%s,%s)",&Sympa::SDM::quote($robot),&Sympa::SDM::quote($label), &Sympa::SDM::quote($value))) {
             &Log::do_log('err','Unable add value %s for parameter %s in the robot %s DB conf', $value, $label, $robot);
             return undef;
         }
     }else{
-        unless ($sth = &SDM::do_query("UPDATE conf_table SET robot_conf=%s, label_conf=%s, value_conf=%s WHERE ( robot_conf  =%s AND label_conf =%s)",&SDM::quote($robot),&SDM::quote($label),&SDM::quote($value),&SDM::quote($robot),&SDM::quote($label))) {
+        unless ($sth = &Sympa::SDM::do_query("UPDATE conf_table SET robot_conf=%s, label_conf=%s, value_conf=%s WHERE ( robot_conf  =%s AND label_conf =%s)",&Sympa::SDM::quote($robot),&Sympa::SDM::quote($label),&Sympa::SDM::quote($value),&Sympa::SDM::quote($robot),&Sympa::SDM::quote($label))) {
             &Log::do_log('err','Unable set parameter %s value to %s in the robot %s DB conf', $label, $value, $robot);
             return undef;
         } 

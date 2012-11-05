@@ -69,6 +69,7 @@ use Sympa::Report;
 use Sympa::Robot;
 use Sympa::Scenario;
 use Sympa::Session;
+use Sympa::SDM;
 use Sympa::SharedDocument;
 use Sympa::Spool;
 use Sympa::Tools;
@@ -1049,7 +1050,7 @@ my %filtering = ('d_reject_shared' => {'id' => 'qencode'},
 $Sympa::Language::default_lang = $Conf{'lang'};	 
 
 ## Important to leave this there because it defined defaults for user_data_source
-&SDM::check_db_connect();
+&Sympa::SDM::check_db_connect();
 
 my $pinfo = &Sympa::List::_apply_defaults();
 
@@ -1114,7 +1115,7 @@ my $birthday = time ;
      $( = $); ## GID
 
 
-    unless (&SDM::check_db_connect()) {
+    unless (&Sympa::SDM::check_db_connect()) {
 	 &Sympa::Report::reject_report_web('system_quiet','no_database',{},'','');
 	 &Log::do_log('info','WWSympa requires a RDBMS to run');
      }

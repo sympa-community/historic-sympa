@@ -49,6 +49,7 @@ use Sympa::Constants;
 use Sympa::List;
 use Sympa::Mail;
 use Sympa::Spool;
+use Sympa::SDM;
 use Sympa::Tools;
 use Sympa::Tools::Daemon;
 use Sympa::Tools::DKIM;
@@ -82,7 +83,7 @@ unless (Sympa::Conf::load($sympa_conf_file)) {
 }
 
 ## Check database connectivity
-unless (&SDM::check_db_connect()) {
+unless (&Sympa::SDM::check_db_connect()) {
     &Log::fatal_err('Database %s defined in sympa.conf has not the right structure or is unreachable.', $Sympa::Conf::Conf{'db_name'});
 }
 
@@ -225,7 +226,7 @@ while (!$end) {
 		
 		## disconnect from database before fork
 		## to prevent DB handlers to be shared by different processes
-		my $dbh = &SDM::db_get_handler();
+		my $dbh = &Sympa::SDM::db_get_handler();
 		$dbh->disconnect; # when loading conf in database disconnect because of sharing dbh may crash bulk.pl
 		
 		if($Sympa::Conf::Conf{'bulk_max_count'} > 1) {

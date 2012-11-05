@@ -43,6 +43,7 @@ use Sympa::Constants;
 use Sympa::Language;
 use Sympa::List;
 use Sympa::Scenario;
+use Sympa::SDM;
 use Sympa::Tools;
 use Sympa::Tools::File;
 use Sympa::TT2;
@@ -840,21 +841,21 @@ sub rename_list{
 			       $param{'new_robot'});
      }
      ## Move stats
-    unless (&SDM::do_query("UPDATE stat_table SET list_stat=%s, robot_stat=%s WHERE (list_stat = %s AND robot_stat = %s )", 
-    &SDM::quote($param{'new_listname'}), 
-    &SDM::quote($param{'new_robot'}), 
-    &SDM::quote($list->{'name'}), 
-    &SDM::quote($robot)
+    unless (&Sympa::SDM::do_query("UPDATE stat_table SET list_stat=%s, robot_stat=%s WHERE (list_stat = %s AND robot_stat = %s )", 
+    &Sympa::SDM::quote($param{'new_listname'}), 
+    &Sympa::SDM::quote($param{'new_robot'}), 
+    &Sympa::SDM::quote($list->{'name'}), 
+    &Sympa::SDM::quote($robot)
     )) {
 	&Log::do_log('err','Unable to transfer stats from list %s@%s to list %s@%s',$param{'new_listname'}, $param{'new_robot'}, $list->{'name'}, $robot);
     }
 
      ## Move stat counters
-    unless (&SDM::do_query("UPDATE stat_counter_table SET list_counter=%s, robot_counter=%s WHERE (list_counter = %s AND robot_counter = %s )", 
-    &SDM::quote($param{'new_listname'}), 
-    &SDM::quote($param{'new_robot'}), 
-    &SDM::quote($list->{'name'}), 
-    &SDM::quote($robot)
+    unless (&Sympa::SDM::do_query("UPDATE stat_counter_table SET list_counter=%s, robot_counter=%s WHERE (list_counter = %s AND robot_counter = %s )", 
+    &Sympa::SDM::quote($param{'new_listname'}), 
+    &Sympa::SDM::quote($param{'new_robot'}), 
+    &Sympa::SDM::quote($list->{'name'}), 
+    &Sympa::SDM::quote($robot)
     )) {
 	&Log::do_log('err','Unable to transfer stat counter from list %s@%s to list %s@%s',$param{'new_listname'}, $param{'new_robot'}, $list->{'name'}, $robot);
     }

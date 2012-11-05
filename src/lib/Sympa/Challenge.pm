@@ -31,7 +31,7 @@ use Time::Local;
 
 use Sympa::Conf;
 use Log;
-use SDM;
+use Sympa::SDM;
 use Sympa::Tools::Time;
 use Sympa::Tools::Data;
 
@@ -81,7 +81,7 @@ sub load {
     
     my $sth;
 
-    unless($sth = &SDM::do_query("SELECT id_challenge AS id_challenge, date_challenge AS 'date', remote_addr_challenge AS remote_addr, robot_challenge AS robot, email_challenge AS email, data_challenge AS data, hit_challenge AS hit, start_date_challenge AS start_date FROM challenge_table WHERE id_challenge = %s", $cookie)) {
+    unless($sth = &Sympa::SDM::do_query("SELECT id_challenge AS id_challenge, date_challenge AS 'date', remote_addr_challenge AS remote_addr, robot_challenge AS robot, email_challenge AS email, data_challenge AS data, hit_challenge AS hit, start_date_challenge AS start_date FROM challenge_table WHERE id_challenge = %s", $cookie)) {
 	&Log::do_log('err','Unable to retrieve challenge %s from database',$cookie);
 	return undef;
     }
@@ -102,7 +102,7 @@ sub load {
     $challenge_datas->{'email'} = $challenge->{'email'};
 
     &Log::do_log('debug3', 'Challenge::load(): removing existing challenge del_statement = %s',$del_statement);	
-    unless(&SDM::do_query("DELETE FROM challenge_table WHERE (id_challenge=%s)",$id_challenge)) {
+    unless(&Sympa::SDM::do_query("DELETE FROM challenge_table WHERE (id_challenge=%s)",$id_challenge)) {
 	&Log::do_log('err','Unable to delete challenge %s from database',$id_challenge);
 	return undef;
     }
@@ -128,7 +128,7 @@ sub store {
     my $data_string = &Sympa::Tools::Data::hash_2_string (\%hash);
     my $sth;
 
-    unless(&SDM::do_query("INSERT INTO challenge_table (id_challenge, date_challenge, robot_challenge, email_challenge, data_challenge) VALUES ('%s','%s','%s','%s','%s'')",$challenge->{'id_challenge'},$challenge->{'date'},$challenge->{'robot'},$challenge->{'email'},$data_string)) {
+    unless(&Sympa::SDM::do_query("INSERT INTO challenge_table (id_challenge, date_challenge, robot_challenge, email_challenge, data_challenge) VALUES ('%s','%s','%s','%s','%s'')",$challenge->{'id_challenge'},$challenge->{'date'},$challenge->{'robot'},$challenge->{'email'},$data_string)) {
 	&Log::do_log('err','Unable to store challenge %s informations in database (robot: %s, user: %s)',$challenge->{'id_challenge'},$challenge->{'robot'},$challenge->{'email'});
 	return undef;
     }

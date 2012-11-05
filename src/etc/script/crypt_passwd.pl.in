@@ -24,9 +24,9 @@
 use lib '--modulesdir--';
 
 use Log;
-use SDM;
 use Sympa::Conf;
 use Sympa::Constants;
+use Sympa::SDM;
 use Sympa::Tools;
 use wwslib;
 
@@ -39,9 +39,9 @@ unless (require Crypt::CipherSaber) {
 
 chdir $Sympa::Conf::Conf{'home'};
 
-&SDM::db_connect() || die "Can't connect to database";
+&Sympa::SDM::db_connect() || die "Can't connect to database";
 
-my $dbh = &SDM::db_get_handler();
+my $dbh = &Sympa::SDM::db_get_handler();
 
 print "Searching uncrypted passwords\n";
 
@@ -73,6 +73,6 @@ while ($user = $sth->fetchrow_hashref('NAME_lc')) {
 $sth->finish();
 
 ## Disconnect from Database
-SDM::db_disconnect if ($SDM::dbh);
+Sympa::SDM::db_disconnect if ($Sympa::SDM::dbh);
 
 printf "Crypted %d passwords\n", $count;

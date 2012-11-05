@@ -43,6 +43,7 @@ use Log;
 use Sympa::Conf;
 use Sympa::Constants;
 use Sympa::List;
+use Sympa::SDM;
 use Sympa::Spool;
 use Sympa::Tools;
 use Sympa::Tools::Bounce;
@@ -114,7 +115,7 @@ unless (Sympa::Conf::load($sympa_conf_file)) {
 unshift @INC, $wwsconf->{'wws_path'};
 
 ## Check databse connectivity
-unless (&SDM::check_db_connect()) {
+unless (&Sympa::SDM::check_db_connect()) {
     &Log::fatal_err('Database %s defined in sympa.conf has not the right structure or is unreachable.', $Conf{'db_name'});
 }
 

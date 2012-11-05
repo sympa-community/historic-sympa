@@ -28,9 +28,9 @@ use POSIX qw(strftime);
 
 use Sympa::Conf;
 use Log;
-use SDM;
 use Sympa::Constants;
 use Sympa::Language;
+use Sympa::SDM;
 use Sympa::Spool;
 use Sympa::Tools::Data;
 use Sympa::Tools::File;
@@ -223,14 +223,14 @@ sub upgrade {
 	    foreach my $list ( @$all_lists ) {
 		
 		foreach my $table ('subscriber','admin') {
-		    unless (&SDM::do_query("UPDATE %s_table SET robot_%s=%s WHERE (list_%s=%s)",
+		    unless (&Sympa::SDM::do_query("UPDATE %s_table SET robot_%s=%s WHERE (list_%s=%s)",
 		    $table,
 		    $table,
-		    &SDM::quote($r),
+		    &Sympa::SDM::quote($r),
 		    $table,
-		    &SDM::quote($list->{'name'}))) {
+		    &Sympa::SDM::quote($list->{'name'}))) {
 			&Log::do_log('err','Unable to fille the robot_admin and robot_subscriber fields in database for robot %s.',$r);
-			&List::send_notify_to_listmaster('upgrade_failed', $Sympa::Conf::Conf{'domain'},{'error' => $SDM::db_source->{'db_handler'}->errstr});
+			&List::send_notify_to_listmaster('upgrade_failed', $Sympa::Conf::Conf{'domain'},{'error' => $Sympa::SDM::db_source->{'db_handler'}->errstr});
 			return undef;
 		    }
 		}
@@ -285,13 +285,13 @@ sub upgrade {
     ## DB fields of enum type have been changed to int
     if (&Sympa::Tools::Data::lower_version($previous_version, '5.2a.1')) {
 	
-	if (&SDM::use_db & $Sympa::Conf::Conf{'db_type'} eq 'mysql') {
+	if (&Sympa::SDM::use_db & $Sympa::Conf::Conf{'db_type'} eq 'mysql') {
 	    my %check = ('subscribed_subscriber' => 'subscriber_table',
 			 'included_subscriber' => 'subscriber_table',
 			 'subscribed_admin' => 'admin_table',
 			 'included_admin' => 'admin_table');
 	    
-    my $dbh = &SDM::db_get_handler();
+    my $dbh = &Sympa::SDM::db_get_handler();
 
 	    foreach my $field (keys %check) {
 
@@ -715,7 +715,7 @@ sub upgrade {
        ## Exclusion table was not robot-enabled.
        &Log::do_log('notice','fixing robot column of exclusion table.');
        my $sth;
-	unless ($sth = &SDM::do_query("SELECT * FROM exclusion_table")) {
+	unless ($sth = &Sympa::SDM::do_query("SELECT * FROM exclusion_table")) {
 	    &Log::do_log('err','Unable to gather informations from the exclusions table.');
 	}
 	my @robots = &List::get_robots();
@@ -734,7 +734,7 @@ sub upgrade {
 	    if ($#valid_robot_candidates == 0) {
 		$valid_robot = $valid_robot_candidates[0];
 		my $sth;
-		unless ($sth = &SDM::do_query("UPDATE exclusion_table SET robot_exclusion = %s WHERE list_exclusion=%s AND user_exclusion=%s", &SDM::quote($valid_robot),&SDM::quote($data->{'list_exclusion'}),&SDM::quote($data->{'user_exclusion'}))) {
+		unless ($sth = &Sympa::SDM::do_query("UPDATE exclusion_table SET robot_exclusion = %s WHERE list_exclusion=%s AND user_exclusion=%s", &Sympa::SDM::quote($valid_robot),&Sympa::SDM::quote($data->{'list_exclusion'}),&Sympa::SDM::quote($data->{'user_exclusion'}))) {
 		    &Log::do_log('err','Unable to update entry (%s,%s) in exclusions table (trying to add robot %s)',$data->{'list_exclusion'},$data->{'user_exclusion'},$valid_robot);
 		}
 	    }else {
@@ -904,11 +904,11 @@ sub upgrade {
 }
 
 sub probe_db {
-    &SDM::probe_db();
+    &Sympa::SDM::probe_db();
 }
 
 sub data_structure_uptodate {
-    &SDM::data_structure_uptodate();
+    &Sympa::SDM::data_structure_uptodate();
 }
 
 ## used to encode files to UTF-8
@@ -1029,7 +1029,7 @@ sub md5_encode_password {
 	return undef;
     }
 
-    my $dbh = &SDM::db_get_handler();
+    my $dbh = &Sympa::SDM::db_get_handler();
 
     my $sth;
     unless ($sth = $dbh->prepare("SELECT email_user,password_user from user_table")) {

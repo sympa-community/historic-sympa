@@ -42,6 +42,7 @@ use URI::Escape;
 
 use Log;
 use Sympa::Conf;
+use Sympa::SDM;
 use Sympa::Tools;
 
 =pod 
@@ -135,7 +136,7 @@ sub new {
 	$provider->{'util'}->support_signature_method('HMAC-SHA1');
 	$provider->{'util'}->allow_extra_params(qw/oauth_callback oauth_verifier/);
 	
-	unless(&SDM::do_query(
+	unless(&Sympa::SDM::do_query(
 		'DELETE FROM oauthprovider_sessions_table WHERE isaccess_oauthprovider IS NULL AND lasttime_oauthprovider<%d',
 		time - $provider->{'constants'}{'temporary_timeout'}
 	)) {
@@ -150,7 +151,7 @@ sub consumerFromToken {
 	my $token = shift;
 	
 	my $sth;
-	unless($sth = &SDM::do_prepared_query('SELECT consumer_oauthprovider AS consumer FROM oauthprovider_sessions_table WHERE token_oauthprovider=?', $token)) {
+	unless($sth = &Sympa::SDM::do_prepared_query('SELECT consumer_oauthprovider AS consumer FROM oauthprovider_sessions_table WHERE token_oauthprovider=?', $token)) {
 		&Log::do_log('err','Unable to load token data %s', $token);
 		return undef;
 	}
@@ -284,14 +285,14 @@ sub checkRequest {
 	
 	return 401 unless($timestamp > time - $self->{'constants'}{'old_request_timeout'});
 	
-	unless(&SDM::do_query('DELETE FROM oauthprovider_nonces_table WHERE time_oauthprovider<%d', time - $self->{'constants'}{'nonce_timeout'})) {
+	unless(&Sympa::SDM::do_query('DELETE FROM oauthprovider_nonces_table WHERE time_oauthprovider<%d', time - $self->{'constants'}{'nonce_timeout'})) {
 		&Log::do_log('err', 'Unable to clean nonce store in database');
 		return 401;
 	}
 	
 	if($checktoken) {
 		my $sth;
-		unless($sth = &SDM::do_prepared_query(
+		unless($sth = &Sympa::SDM::do_prepared_query(
 			'SELECT id_oauthprovider AS id FROM oauthprovider_sessions_table WHERE consumer_oauthprovider=? AND token_oauthprovider=?',
 			$self->{'consumer_key'},
 			$token
@@ -303,7 +304,7 @@ sub checkRequest {
 		if(my $data = $sth->fetchrow_hashref('NAME_lc')) {
 			my $id = $data->{'id'};
 			
-			unless($sth = &SDM::do_prepared_query(
+			unless($sth = &Sympa::SDM::do_prepared_query(
 				'SELECT nonce_oauthprovider AS nonce FROM oauthprovider_nonces_table WHERE id_oauthprovider=? AND nonce_oauthprovider=?',
 				$id,
 				$nonce
@@ -314,10 +315,10 @@ sub checkRequest {
 			
 			return 401 if($sth->fetchrow_hashref('NAME_lc')); # Already used nonce
 			
-			unless(&SDM::do_query(
+			unless(&Sympa::SDM::do_query(
 				'INSERT INTO oauthprovider_nonces_table(id_oauthprovider, nonce_oauthprovider, time_oauthprovider) VALUES (%d, %s, %d)',
 				$id,
-				&SDM::quote($nonce),
+				&Sympa::SDM::quote($nonce),
 				time
 			)) {
 				&Log::do_log('err', 'Unable to add nonce record %d %s in database', $id, $nonce);
@@ -329,7 +330,7 @@ sub checkRequest {
 	my $secret = '';
 	if($checktoken) {
 		my $sth;
-		unless($sth = &SDM::do_prepared_query('SELECT secret_oauthprovider AS secret FROM oauthprovider_sessions_table WHERE token_oauthprovider=?', $token)) {
+		unless($sth = &Sympa::SDM::do_prepared_query('SELECT secret_oauthprovider AS secret FROM oauthprovider_sessions_table WHERE token_oauthprovider=?', $token)) {
 			&Log::do_log('err','Unable to load token data %s', $token);
 			return undef;
 		}
@@ -393,14 +394,14 @@ sub generateTemporary {
 	my $token = &_generateRandomString(32); # 9x10^62 entropy ...
 	my $secret = &_generateRandomString(32); # may be sha1-ed or such ...
 	
-	unless(&SDM::do_query(
+	unless(&Sympa::SDM::do_query(
 		'INSERT INTO oauthprovider_sessions_table(token_oauthprovider, secret_oauthprovider, isaccess_oauthprovider, accessgranted_oauthprovider, consumer_oauthprovider, user_oauthprovider, firsttime_oauthprovider, lasttime_oauthprovider, verifier_oauthprovider, callback_oauthprovider) VALUES (%s, %s, NULL, NULL, %s, NULL, %d, %d, NULL, %s)',
-		&SDM::quote($token),
-		&SDM::quote($secret),
-		&SDM::quote($self->{'consumer_key'}),
+		&Sympa::SDM::quote($token),
+		&Sympa::SDM::quote($secret),
+		&Sympa::SDM::quote($self->{'consumer_key'}),
 		time,
 		time,
-		&SDM::quote($self->{'params'}{'oauth_callback'})
+		&Sympa::SDM::quote($self->{'params'}{'oauth_callback'})
 	)) {
 		&Log::do_log('err', 'Unable to add new token record %s %s in database', $token, $self->{'consumer_key'});
 		return undef;
@@ -460,7 +461,7 @@ sub getTemporary {
 	&Log::do_log('debug2', 'OAuthProvider::getTemporary(%s)', $param{'token'});
 	
 	my $sth;
-	unless($sth = &SDM::do_prepared_query(
+	unless($sth = &Sympa::SDM::do_prepared_query(
 		'SELECT id_oauthprovider AS id, token_oauthprovider AS token, secret_oauthprovider AS secret, firsttime_oauthprovider AS firsttime, lasttime_oauthprovider AS lasttime, callback_oauthprovider AS callback, verifier_oauthprovider AS verifier FROM oauthprovider_sessions_table WHERE isaccess_oauthprovider IS NULL AND consumer_oauthprovider=? AND token_oauthprovider=?', $self->{'consumer_key'}, $param{'token'})) {
 		&Log::do_log('err','Unable to load token data %s %s', $self->{'consumer_key'}, $param{'token'});
 		return undef;
@@ -523,23 +524,23 @@ sub generateVerifier {
 	
 	my $verifier = &_generateRandomString(32);
 	
-	unless(&SDM::do_query(
+	unless(&Sympa::SDM::do_query(
 		'DELETE FROM oauthprovider_sessions_table WHERE user_oauthprovider=%s AND consumer_oauthprovider=%s AND isaccess_oauthprovider=1',
-		&SDM::quote($param{'user'}),
-		&SDM::quote($self->{'consumer_key'})
+		&Sympa::SDM::quote($param{'user'}),
+		&Sympa::SDM::quote($self->{'consumer_key'})
 	)) {
-		&Log::do_log('err', 'Unable to delete other already granted access tokens for this user %s %s in database', &SDM::quote($param{'user'}), $self->{'consumer_key'});
+		&Log::do_log('err', 'Unable to delete other already granted access tokens for this user %s %s in database', &Sympa::SDM::quote($param{'user'}), $self->{'consumer_key'});
 		return undef;
 	}
 	
-	unless(&SDM::do_query(
+	unless(&Sympa::SDM::do_query(
 		'UPDATE oauthprovider_sessions_table SET verifier_oauthprovider=%s, user_oauthprovider=%s, accessgranted_oauthprovider=%d, lasttime_oauthprovider=%d WHERE isaccess_oauthprovider IS NULL AND consumer_oauthprovider=%s AND token_oauthprovider=%s',
-		&SDM::quote($verifier),
-		&SDM::quote($param{'user'}),
+		&Sympa::SDM::quote($verifier),
+		&Sympa::SDM::quote($param{'user'}),
 		$param{'granted'} ? 1 : 0,
 		time,
-		&SDM::quote($self->{'consumer_key'}),
-		&SDM::quote($param{'token'})
+		&Sympa::SDM::quote($self->{'consumer_key'}),
+		&Sympa::SDM::quote($param{'token'})
 	)) {
 		&Log::do_log('err', 'Unable to set token verifier %s %s in database', $tmp->{'token'}, $self->{'consumer_key'});
 		return undef;
@@ -603,15 +604,15 @@ sub generateAccess {
 	my $token = &_generateRandomString(32);
 	my $secret = &_generateRandomString(32);
 	
-	unless(&SDM::do_query(
+	unless(&Sympa::SDM::do_query(
 		'UPDATE oauthprovider_sessions_table SET token_oauthprovider=%s, secret_oauthprovider=%s, isaccess_oauthprovider=1, lasttime_oauthprovider=%d, verifier_oauthprovider=NULL, callback_oauthprovider=NULL WHERE token_oauthprovider=%s AND verifier_oauthprovider=%s',
-		&SDM::quote($token),
-		&SDM::quote($secret),
+		&Sympa::SDM::quote($token),
+		&Sympa::SDM::quote($secret),
 		time,
-		&SDM::quote($param{'token'}),
-		&SDM::quote($param{'verifier'})
+		&Sympa::SDM::quote($param{'token'}),
+		&Sympa::SDM::quote($param{'verifier'})
 	)) {
-		&Log::do_log('err', 'Unable to transform temporary token into access token record %s %s in database', &SDM::quote($tmp->{'token'}), $self->{'consumer_key'});
+		&Log::do_log('err', 'Unable to transform temporary token into access token record %s %s in database', &Sympa::SDM::quote($tmp->{'token'}), $self->{'consumer_key'});
 		return undef;
 	}
 	
@@ -665,7 +666,7 @@ sub getAccess {
 	&Log::do_log('debug2', 'OAuthProvider::getAccess(%s)', $param{'token'});
 	
 	my $sth;
-	unless($sth = &SDM::do_prepared_query(
+	unless($sth = &Sympa::SDM::do_prepared_query(
 		'SELECT token_oauthprovider AS token, secret_oauthprovider AS secret, lasttime_oauthprovider AS lasttime, user_oauthprovider AS user, accessgranted_oauthprovider AS accessgranted FROM oauthprovider_sessions_table WHERE isaccess_oauthprovider=1 AND consumer_oauthprovider=? AND token_oauthprovider=?', $self->{'consumer_key'}, $param{'token'})) {
 		&Log::do_log('err','Unable to load token data %s %s', $self->{'consumer_key'}, $param{'token'});
 		return undef;

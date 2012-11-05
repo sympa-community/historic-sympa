@@ -33,10 +33,10 @@ use MIME::QuotedPrint;
 use Log;
 use Lock;
 use Message;
-use SDM;
 use Sympa::Conf;
 use Sympa::Constants;
 use Sympa::List;
+use Sympa::SDM;
 use Sympa::Spool;
 use Sympa::Tools;
 use Sympa::Tools::Daemon;
@@ -408,7 +408,7 @@ while (!$signal) {
 }
 
 ## Disconnect from Database
-SDM::db_disconnect;
+Sympa::SDM::db_disconnect;
 
 }
 &Log::do_log('notice', 'spooler exited normally due to signal');

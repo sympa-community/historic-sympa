@@ -15,6 +15,7 @@ use Sympa::Conf;
 use Sympa::Constants;
 use Sympa::List;
 use Sympa::Mail;
+use Sympa::SDM;
 use Sympa::SOAP;
 use Sympa::Transport;
 
@@ -52,7 +53,7 @@ $wwsconf->{'log_facility'}||= $Conf{'syslog'};
 $< = $>; ## UID
 $( = $); ## GID
 
-unless (&SDM::check_db_connect()) {
+unless (&Sympa::SDM::check_db_connect()) {
     &Log::do_log('err','SOAP server requires a RDBMS to run');
 }
 
