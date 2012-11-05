@@ -25,8 +25,6 @@ use strict;
 
 use POSIX qw(strtod);
 
-use Log;
-
 ## This applies recursively to a data structure
 ## The transformation subroutine is passed as a ref
 sub recursive_transformation {
