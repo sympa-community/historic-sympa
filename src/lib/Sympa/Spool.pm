@@ -40,7 +40,6 @@ use Ldap;
 use Lock;
 use Log;
 use Message;
-use PlainDigest;
 use SDM;
 use Sympa::Constants;
 use Sympa::DatabaseDescription;

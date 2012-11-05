@@ -40,7 +40,6 @@ use Ldap;
 use Lock;
 use Log;
 use Message;
-use PlainDigest;
 use SDM;
 use Sympa::Archive;
 use Sympa::Conf;
@@ -51,6 +50,7 @@ use Sympa::Datasource::LDAP;
 use Sympa::Fetch;
 use Sympa::Language;
 use Sympa::Mail;
+use Sympa::PlainDigest;
 use Sympa::Report;
 use Sympa::Scenario;
 use Sympa::Spool;
@@ -3616,7 +3616,7 @@ sub send_msg_digest {
 	
 	$msg->{'full_msg'} = $mail->as_string;
 	$msg->{'body'} = $mail->body_as_string;
-	$msg->{'plain_body'} = $mail->PlainDigest::plain_body_as_string();
+	$msg->{'plain_body'} = $mail->Sympa::PlainDigest::plain_body_as_string();
 	#$msg->{'body'} = $mail->bodyhandle->as_string();
 	chomp $msg->{'from'};
 	$msg->{'month'} = &POSIX::strftime("%Y-%m", localtime(time)); ## Should be extracted from Date:
