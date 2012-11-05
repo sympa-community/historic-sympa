@@ -30,7 +30,6 @@ use File::Find;
 use HTML::StripScripts::Parser;
 use MIME::EncWords;
 use MIME::Lite::HTML;
-use POSIX qw(strftime mkfifo strtod);
 use Sys::Hostname;
 use Text::LineFold;
 

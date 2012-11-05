@@ -25,6 +25,7 @@ use strict;
 
 use Exporter;
 use MIME::Parser;
+use POSIX qw();
 
 use Sympa::List;
 use Sympa::Log;
@@ -84,7 +85,7 @@ sub smime_sign {
     close(MSGDUMP);
 
     if ($key_passwd ne '') {
-	unless ( mkfifo($temporary_pwd,0600)) {
+	unless ( POSIX::mkfifo($temporary_pwd,0600)) {
 	    &Sympa::Log::do_log('notice', 'Unable to make fifo for %s',$temporary_pwd);
 	}
     }
@@ -476,7 +477,7 @@ sub smime_decrypt {
 	my $keyfile = shift @$keys;
 	&Sympa::Log::do_log('debug', "Trying decrypt with $certfile, $keyfile");
 	if ($key_passwd ne '') {
-	    unless (mkfifo($temporary_pwd,0600)) {
+	    unless (POSIX::mkfifo($temporary_pwd,0600)) {
 		&Sympa::Log::do_log('err', 'Unable to make fifo for %s', $temporary_pwd);
 		return undef;
 	    }

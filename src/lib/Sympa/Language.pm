@@ -25,7 +25,7 @@ use strict;
 
 use Exporter;
 use Locale::Messages qw (:locale_h :libintl_h !gettext);
-use POSIX qw(setlocale strftime);
+use POSIX qw();
 
 #use Sympa::Conf; FIXME
 use Sympa::Constants;
@@ -173,7 +173,7 @@ sub SetLang {
 			 $locale,
 			 $lang
 			 ) {
-	    if (&setlocale($type, $try)) {
+	    if (&POSIX::setlocale($type, $try)) {
 		$success = 1;
 		last;
 	    }	
@@ -348,10 +348,10 @@ sub gettext {
 
 sub gettext_strftime {
     my $format = shift;
-    return strftime($format, @_) unless $current_charset;
+    return POSIX::strftime($format, @_) unless $current_charset;
 
     $format = gettext($format);
-    my $datestr = strftime($format, @_);
+    my $datestr = POSIX::strftime($format, @_);
     return $datestr;
 }
 

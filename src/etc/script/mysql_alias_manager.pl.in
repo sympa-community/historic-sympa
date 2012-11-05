@@ -9,7 +9,7 @@ use strict;
 use lib '--modulesdir--';
 
 use DBI;
-use POSIX;
+use POSIX qw();
 
 use Sympa::Conf;
 use Sympa::Constants;

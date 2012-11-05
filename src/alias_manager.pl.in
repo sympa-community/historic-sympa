@@ -33,7 +33,7 @@ $ENV{'PATH'} = '';
 use strict;
 use lib '--modulesdir--';
 
-use POSIX;
+use POSIX qw();
 
 use Sympa::Conf;
 use Sympa::Constants;

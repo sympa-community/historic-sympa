@@ -23,7 +23,7 @@ package Sympa::Tools::Data;
 
 use strict;
 
-use POSIX qw(strtod);
+use POSIX qw();
 
 ## This applies recursively to a data structure
 ## The transformation subroutine is passed as a ref
@@ -449,9 +449,9 @@ sub smart_lessthan {
     $stra =~ s/^\s+//; $stra =~ s/\s+$//;
     $strb =~ s/^\s+//; $strb =~ s/\s+$//;
     $! = 0;
-    my($numa, $unparsed) = strtod($stra);
+    my($numa, $unparsed) = POSIX::strtod($stra);
     my $numb;
-    $numb = strtod($strb)
+    $numb = POSIX::strtod($strb)
     	unless ($! || $unparsed !=0);
     if (($stra eq '') || ($strb eq '') || ($unparsed != 0) || $!) {
 	return $stra lt $strb;

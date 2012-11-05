@@ -23,7 +23,7 @@ package Sympa::Tools::Time;
 
 use strict;
 
-use POSIX qw(strftime);
+use POSIX qw();
 use Time::Local;
 
 use Sympa::Log;
@@ -56,7 +56,7 @@ sub epoch2yyyymmjj_hhmmss {
 
     my $epoch = $_[0];
     my @date = localtime ($epoch);
-    my $date = strftime ("%Y-%m-%d  %H:%M:%S", @date);
+    my $date = POSIX::strftime ("%Y-%m-%d  %H:%M:%S", @date);
     
     return $date;
 }
@@ -66,7 +66,7 @@ sub adate {
 
     my $epoch = $_[0];
     my @date = localtime ($epoch);
-    my $date = strftime ("%e %a %b %Y  %H h %M min %S s", @date);
+    my $date = POSIX::strftime ("%e %a %b %Y  %H h %M min %S s", @date);
     
     return $date;
 }

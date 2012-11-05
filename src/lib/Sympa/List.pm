@@ -31,7 +31,7 @@ use Mail::Header;
 use MIME::Entity;
 use MIME::EncWords;
 use MIME::Parser;
-use POSIX;
+use POSIX qw();
 use Storable;
 use Time::Local;
 

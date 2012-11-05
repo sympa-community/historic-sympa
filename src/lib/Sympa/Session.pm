@@ -25,7 +25,6 @@ use strict ;
 
 use CGI::Cookie;
 use Digest::MD5;
-use POSIX;
 use Time::Local;
 
 use Sympa::Conf;

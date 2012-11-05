@@ -27,7 +27,7 @@ use Data::Dumper;
 use Exporter;
 use MIME::Charset;
 use MIME::Tools;
-use POSIX;
+use POSIX qw();
 use Time::Local;
 
 use Sympa::Bulk;

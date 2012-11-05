@@ -37,7 +37,7 @@ use lib '--modulesdir--';
 
 use FileHandle;
 use Getopt::Long;
-use POSIX;
+use POSIX qw();
 
 use Sympa::Conf;
 use Sympa::Constants;

@@ -26,7 +26,7 @@ use strict;
 use Encode::Guess;
 use File::Copy::Recursive;
 use File::Find;
-use POSIX qw(strftime);
+use POSIX qw();
 
 use Sympa::Log;
 
@@ -153,7 +153,7 @@ sub shift_file {
     }
     
     my @date = localtime (time);
-    my $file_extention = strftime("%Y:%m:%d:%H:%M:%S", @date);
+    my $file_extention = POSIX::strftime("%Y:%m:%d:%H:%M:%S", @date);
     
     unless (rename ($file,$file.'.'.$file_extention)) {
 	&Sympa::Log::do_log('err', "shift_file : Cannot rename file $file to $file.$file_extention" );

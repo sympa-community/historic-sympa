@@ -29,6 +29,7 @@ use strict "vars";
 
 use Digest::MD5;
 use Getopt::Long;
+use POSIX qw();
 use Time::Local;
 
 use Sympa::Bulk;

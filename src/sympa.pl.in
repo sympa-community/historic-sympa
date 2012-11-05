@@ -29,6 +29,7 @@ use File::Path;
 use Getopt::Long;
 use Mail::Address;
 use MIME::QuotedPrint;
+use POSIX qw();
 
 use Sympa::Admin;
 use Sympa::Commands;

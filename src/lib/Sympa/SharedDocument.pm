@@ -4,7 +4,7 @@
 #
 # Sympa - SYsteme de Multi-Postage Automatique
 # Copyright (c) 1997, 1998, 1999, 2000, 2001 Comite Reseau des Universites
-# Copyright (c) 1997,1998, 1999 Institut Pasteur & Christophe Wolfhugel
+# Copyright (c) 1997,1998, 1999 Institut pasteur & Christophe Wolfhugel
 #
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -25,7 +25,7 @@ package Sympa::SharedDocument;
 use strict;
 
 use Carp;
-use POSIX;
+use POSIX qw();
 
 use Sympa::Log;
 use Sympa::Tools;

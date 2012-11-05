@@ -21,7 +21,7 @@ use lib '--modulesdir--';
 
 use Net::LDAP;
 use Net::LDAPS;
-use POSIX;
+use POSIX qw();
 
 use Sympa::Conf;
 use Sympa::Constants;

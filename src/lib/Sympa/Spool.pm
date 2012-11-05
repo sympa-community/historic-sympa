@@ -30,7 +30,6 @@ use Mail::Header;
 use MIME::Entity;
 use MIME::EncWords;
 use MIME::Parser;
-use POSIX;
 use Storable;
 use Sys::Hostname;
 use Time::Local;
