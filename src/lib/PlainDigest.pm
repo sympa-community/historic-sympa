@@ -342,20 +342,5 @@
    # get charset object.
    return MIME::Charset->new($charset);
  }
- 
- package HTML::myFormatText;
- 
- # This is a subclass of the HTML::FormatText object. 
- # This subclassing is done to allow internationalisation of some strings
- 
- @ISA = qw(HTML::FormatText);
-     
- use Sympa::Language;
- use strict;
 
- sub img_start   {
-  my($self,$node) = @_;
-  my $alt = Encode::encode_utf8($node->attr('alt'));
-  $self->out(  Encode::decode_utf8(defined($alt) ? sprintf(gettext("[ Image%s ]"), ":" . $alt) : sprintf(gettext("[Image%s]"),"")));
- }
-
+1;
