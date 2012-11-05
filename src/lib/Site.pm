@@ -295,7 +295,7 @@ sub get_etc_filename {
 	    }
 	}
     }
-    if ($options->{'order'} eq 'all') {
+    if ($options->{'order'} and $options->{'order'} eq 'all') {
 	return @result;
     }
 
@@ -400,7 +400,7 @@ sub _make_tt2_include_path {
 	my $path_etcdir;
 
 	if ($dir) {
-	    $path_etcbindir = Sympa::Constants::DEFAULTDIR . '/$dir';
+	    $path_etcbindir = Sympa::Constants::DEFAULTDIR . '/' . $dir;
 	    $path_etcdir    = Site->etc . '/' . $dir;
 	} else {
 	    $path_etcbindir = Sympa::Constants::DEFAULTDIR;
@@ -712,8 +712,7 @@ sub send_file {
 
     ## What file
     my $lang = &Language::Lang2Locale($data->{'lang'});
-    my $tt2_include_path =
-	&tools::make_tt2_include_path($robot_id, 'mail_tt2', $lang, $list);
+    my $tt2_include_path = $self->make_tt2_include_path('mail_tt2', $lang);
     if (ref $self eq 'List') {
 	## list directory to get the 'info' file
 	push @{$tt2_include_path}, $self->dir;

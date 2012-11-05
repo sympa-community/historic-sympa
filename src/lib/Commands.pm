@@ -136,8 +136,10 @@ sub parse {
 
 	    $time_command = time;
 	    my $args = $3;
-	    $args =~ s/^\s*//;
-	    $args =~ s/\s*$//;
+	    if ($args) {
+		$args =~ s/^\s*//;
+		$args =~ s/\s*$//;
+	    }
 
 	    my $status;
 
