@@ -1,4 +1,4 @@
-package HTML::myFormatText;
+package Sympa::HTML::FormatText;
 
 # This is a subclass of the HTML::FormatText object. 
 # This subclassing is done to allow internationalisation of some strings
