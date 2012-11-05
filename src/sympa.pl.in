@@ -30,12 +30,12 @@ use Getopt::Long;
 use Mail::Address;
 use MIME::QuotedPrint;
 
-use Commands;
 use Family;
 use Log;
 use Message;
 use SDM;
 use Sympa::Admin;
+use Sympa::Commands;
 use Sympa::Conf;
 use Sympa::Configuration::XML;
 use Sympa::Constants;
@@ -1938,7 +1938,7 @@ sub DoCommand {
 	&Log::do_log('debug',"processing message for $1-$2");
 	my $auth_level ;
 	$auth_level = 'dkim' if $message->{'dkim_pass'}; # at this point $message->{'dkim_pass'} does not verify that Subject: is part of the signature. It SHOULD !
-	&Commands::parse($sender,$robot,"$2 $1",$auth_level ,$message);
+	&Sympa::Commands::parse($sender,$robot,"$2 $1",$auth_level ,$message);
 	&Log::db_log({'robot' => $robot,'list' => $rcpt,'action' => 'DoCommand','parameters' => "$rcpt,$robot,$message",'target_email' => '','msg_id' => $messageid,'status' => 'success','error_type' => '','user_email' => $sender,'client' => $ip,'daemon' => $daemon_name});
 	return 1; 
     }
@@ -1953,7 +1953,7 @@ sub DoCommand {
     my $auth_level = 'dkim' if ($message->{'dkim_pass'});
     $auth_level = $is_signed->{'subject'} if ($is_signed->{'subject'}) ;
 
-    $success ||= &Commands::parse($sender, $robot, $subject_field, $auth_level, $message) ;
+    $success ||= &Sympa::Commands::parse($sender, $robot, $subject_field, $auth_level, $message) ;
 
     unless ($success eq 'unknown_cmd') {
 	$cmd_found = 1;
@@ -2024,7 +2024,7 @@ sub DoCommand {
 	    
 	    $auth_level = 'dkim' if ($message->{'dkim_pass'});
 	    $auth_level = $is_signed->{'body'} if ($is_signed->{'body'}) ;
-	    $status = &Commands::parse($sender, $robot, $i, $auth_level, $message);
+	    $status = &Sympa::Commands::parse($sender, $robot, $i, $auth_level, $message);
 
 	    $cmd_found = 1; # if problem no_cmd_understood is sent here
 	    if ($status eq 'unknown_cmd') {
