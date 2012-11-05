@@ -57,6 +57,7 @@ use OAuthProvider;
 use OAuthConsumer;
 use SharedDocument;
 use Sympa::Admin;
+use Sympa::Archive;
 use Sympa::Auth;
 use Sympa::Conf;
 use Sympa::Configuration::Definition;
@@ -7610,7 +7611,7 @@ sub do_arc {
 	
 	if ($in{'arc_file'} =~ /^(msg\d+)\.html$/) {
 	    ## If the file is a message, load the metadata to find out who is the author of the message
-	    my $metadata = &Archive::load_html_message('file_path' => $arc_file_path);
+	    my $metadata = &Sympa::Archive::load_html_message('file_path' => $arc_file_path);
 	    $param->{'include_picture'} = &Sympa::Tools::make_pictures_url('url' => Sympa::Conf::get_robot_conf($robot, 'pictures_url'), 'email' => $metadata->{'X-From'}, 'list' => $list, 'path' => Sympa::Conf::get_robot_conf($robot,'pictures_path'));
 	    
 	    $param->{'subtitle'} = $metadata->{'X-Subject'};
@@ -17093,7 +17094,7 @@ sub do_viewspool_message {
     my $destination_dir = $Sympa::Conf::Conf{'viewmail_dir'}.'/spool/viewmail/'.$messagekey;
 
     unless (-d $destination_dir) {
-	&Archive::convert_single_msg_2_html ({'msg_as_string'=>$param->{'spool_message_asstring'},
+	&Sympa::Archive::convert_single_msg_2_html ({'msg_as_string'=>$param->{'spool_message_asstring'},
 					      'destination_dir'=>$destination_dir,
 					      'attachement_url'=>"viewspool_message/$messagekey",
 					      'list'=>$list,

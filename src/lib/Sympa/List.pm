@@ -35,7 +35,6 @@ use POSIX;
 use Storable;
 use Time::Local;
 
-use Archive;
 use Family;
 use Language;
 use Ldap;
@@ -44,6 +43,7 @@ use Log;
 use Message;
 use PlainDigest;
 use SDM;
+use Sympa::Archive;
 use Sympa::Conf;
 use Sympa::Constants;
 use Sympa::Datasource;
@@ -4380,7 +4380,7 @@ sub send_to_editor {
 
        # prepare html view of this message
        my $destination_dir  = $Sympa::Conf::Conf{'viewmail_dir'}.'/mod/'.$self->get_list_id().'/'.$modkey;
-       &Archive::convert_single_msg_2_html ({'msg_as_string'=>$message->{'msg_as_string'},
+       &Sympa::Archive::convert_single_msg_2_html ({'msg_as_string'=>$message->{'msg_as_string'},
 					     'destination_dir'=>$destination_dir,
 					     'attachement_url' => "viewmod/$name/$modkey",
 					     'list'=>$self} );
@@ -4633,7 +4633,7 @@ sub archive_send {
    return unless ($self->is_archived());
        
    my $dir = &Sympa::Conf::get_robot_conf($self->{'domain'},'arc_path').'/'.$self->get_list_id();
-   my $msg_list = Archive::scan_dir_archive($dir, $file);
+   my $msg_list = Sympa::Archive::scan_dir_archive($dir, $file);
 
    my $subject = 'File '.$self->{'name'}.' '.$file ;
    my $param = {'to' => $who,
@@ -7656,7 +7656,7 @@ sub archive_exist {
 
    return undef unless ($self->is_archived());
    my $dir = &Sympa::Conf::get_robot_conf($self->{'domain'},'arc_path').'/'.$self->get_list_id();
-   Archive::exist($dir, $file);
+   Sympa::Archive::exist($dir, $file);
 
 }
 
@@ -7668,7 +7668,7 @@ sub archive_ls {
 
    my $dir = &Sympa::Conf::get_robot_conf($self->{'domain'},'arc_path').'/'.$self->get_list_id();
 
-   Archive::list($dir) if ($self->is_archived());
+   Sympa::Archive::list($dir) if ($self->is_archived());
 }
 
 ## Archive 
@@ -7682,7 +7682,7 @@ sub archive_msg {
 	if (($message->{'smime_crypted'} eq 'smime_crypted') && ($self->{admin}{archive_crypted_msg} eq 'original')) {
 	    $msgtostore = $message->{'orig_msg'}->as_string;
 	}
-#	Archive::store_last($self, $msgtostore) ;
+#	Sympa::Archive::store_last($self, $msgtostore) ;
 	
 	if (($Sympa::Conf::Conf{'ignore_x_no_archive_header_feature'} ne 'on') && (($message->{'msg'}->head->get('X-no-archive') =~ /yes/i) || ($message->{'msg'}->head->get('Restrict') =~ /no\-external\-archive/i))) {
 	    ## ignoring message with a no-archive flag	    

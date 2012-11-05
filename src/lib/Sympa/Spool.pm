@@ -35,7 +35,6 @@ use Storable;
 use Sys::Hostname;
 use Time::Local;
 
-use Archive;
 use Family;
 use Language;
 use Ldap;

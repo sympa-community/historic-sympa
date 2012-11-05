@@ -33,6 +33,7 @@ use Time::Local;
 use Language;
 use Log;
 use Message;
+use Sympa::Archive;
 use Sympa::Conf;
 use Sympa::Constants;
 use Sympa::List;
@@ -471,7 +472,7 @@ sub last {
 	return 'no_archive';
     }
     my $file;
-    unless ($file = &Archive::last_path($list)) {
+    unless ($file = &Sympa::Archive::last_path($list)) {
 	&Sympa::Report::reject_report_cmd('user','no_required_file',{},$cmd_line);
  	&Log::do_log('info', 'LAST %s from %s refused, archive file %s not found', $which,  $sender, $file);
 	return 'no_archive';
