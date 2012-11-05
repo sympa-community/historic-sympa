@@ -33,7 +33,7 @@ handles token retrieving as well as database storage.
 
 =cut 
 
-package OAuthConsumer;
+package Sympa::OAuth::Consumer;
 
 use strict;
 

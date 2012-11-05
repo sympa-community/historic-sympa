@@ -33,7 +33,7 @@ handles database storage and provides helpers.
 
 =cut 
 
-package OAuthProvider;
+package Sympa::OAuth::Provider;
 
 use strict;
 

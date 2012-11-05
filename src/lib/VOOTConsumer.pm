@@ -37,11 +37,11 @@ package VOOTConsumer;
 
 use strict;
 
-use OAuthConsumer;
 use JSON::XS;
 
 use Sympa::Conf;
 use Sympa::Log;
+use Sympa::OAuth::Consumer;
 use Sympa::Tools;
 
 =pod 
@@ -104,7 +104,7 @@ sub new {
 	$consumer->{'user'} = $param{'user'};
 	$consumer->{'provider'} = $param{'provider'};
 	
-	$consumer->{'oauth_consumer'} = new OAuthConsumer(
+	$consumer->{'oauth_consumer'} = new Sympa::OAuth::Consumer(
 		user => $param{'user'},
 		provider => 'voot:'.$param{'provider'},
 		consumer_key => $consumer->{'conf'}{'oauth.ConsumerKey'},

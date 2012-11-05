@@ -36,10 +36,10 @@ package VOOTProvider;
 
 use strict;
 
-use OAuthProvider;
 use JSON::XS;
 
 use Sympa::Log;
+use Sympa::OAuth::Provider;
 use Sympa::Tools;
 
 =pod 
@@ -105,7 +105,7 @@ sub new {
 	&Sympa::Log::do_log('debug2', 'OAuthProvider::new()');
 	
 	my $provider = {
-		oauth_provider => new OAuthProvider(
+		oauth_provider => new Sympa::OAuth::Provider(
 			method => $param{'method'},
 			url => $param{'url'},
 			authorization_header => $param{'authorization_header'},

@@ -247,16 +247,16 @@ unless ($main::options{'upgrade'} || $main::options{'help'}) {
 
 
 if (&Sympa::Conf::get_robot_conf('*','voot_feature') eq 'on') {
-    unless ( eval "require OAuthProvider" ){
-	&Sympa::Log::fatal_err("VOOT feature is on, but Sympa was Unable to load OAuthProvider module: $@");
+    unless ( eval "require Sympa::OAuth::Provider" ){
+	&Sympa::Log::fatal_err("VOOT feature is on, but Sympa was Unable to load Sympa::OAuth::Provider module: $@");
 	return undef;
     }
-    require OAuthProvider;
-    unless ( eval "require OAuthConsumer" ){
-	&Sympa::Log::fatal_err("VOOT feature is on, but Sympa was Unable to load OAuthConsumer module: $@");
+    require Sympa::OAuth::Provider;
+    unless ( eval "require Sympa::OAuth::Consumer" ){
+	&Sympa::Log::fatal_err("VOOT feature is on, but Sympa was Unable to load Sympa::OAuth::Consumer module: $@");
 	return undef;
     }
-    require OAuthConsumer;
+    require Sympa::OAuth::Consumer;
     unless ( eval "require VOOTProvider" ){
 	&Sympa::Log::fatal_err("VOOT feature is on, but Sympa was Unable to load VOOTProvider module: $@");
 	return undef;

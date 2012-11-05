@@ -51,8 +51,6 @@ use Time::Local;
 
 use Commands;
 use Marc::Search;
-use OAuthProvider;
-use OAuthConsumer;
 use Sympa::Admin;
 use Sympa::Archive;
 use Sympa::Auth;
@@ -66,6 +64,8 @@ use Sympa::List;
 use Sympa::Log;
 use Sympa::Mail;
 use Sympa::Message;
+use Sympa::OAuth::Consumer;
+use Sympa::OAuth::Provider;
 use Sympa::Report;
 use Sympa::Robot;
 use Sympa::Scenario;
@@ -144,16 +144,16 @@ if ($wwsconf->{'use_fast_cgi'}) {
 my $mime_types = &Sympa::WWSympa::load_mime_types();
 
 if (&Sympa::Conf::get_robot_conf('*','voot_feature') eq 'on') {
-    unless ( eval "require OAuthProvider" ){
-	&Sympa::Log::fatal_err("VOOT feature is on, but Sympa was Unable to load OAuthProvider module: $@");
+    unless ( eval "require Sympa::OAuth::Provider" ){
+	&Sympa::Log::fatal_err("VOOT feature is on, but Sympa was Unable to load Sympa::OAuth::Provider module: $@");
 	return undef;
     }
-    require OAuthProvider;
-    unless ( eval "require OAuthConsumer" ){
-	&Sympa::Log::fatal_err("VOOT feature is on, but Sympa was Unable to load OAuthConsumer module: $@");
+    require Sympa::OAuth::Provider;
+    unless ( eval "require Sympa::OAuth::Consumer" ){
+	&Sympa::Log::fatal_err("VOOT feature is on, but Sympa was Unable to load Sympa::OAuth::Consumer module: $@");
 	return undef;
     }
-    require OAuthConsumer;
+    require Sympa::OAuth::Consumer;
     unless ( eval "require VOOTProvider" ){
 	&Sympa::Log::fatal_err("VOOT feature is on, but Sympa was Unable to load VOOTProvider module: $@");
 	return undef;
@@ -9318,7 +9318,7 @@ sub do_oauth_temporary {
 	#   RewriteRule ^ - [e=HTTP_AUTHORIZATION:%1,L]
 	#   SetHandler fcgid-script
 	# </Location>
-	my $provider = new OAuthProvider(
+	my $provider = new Sympa::OAuth::Provider(
 		method => $ENV{'REQUEST_METHOD'},
 		url => $param->{'base_url'}.$param->{'path_cgi'}.'/oauth_temporary',
 		authorization_header => $ENV{'HTTP_AUTHORIZATION'},
@@ -9344,7 +9344,7 @@ sub do_oauth_authorize {
 	
 	$param->{'oauth_token'} = $in{'oauth_token'};
 	
-	my $key = &OAuthProvider::consumerFromToken($in{'oauth_token'});
+	my $key = &Sympa::OAuth::Provider::consumerFromToken($in{'oauth_token'});
 	return undef unless($key);
 	
 	$param->{'consumer_key'} = $key;
@@ -9356,7 +9356,7 @@ sub do_oauth_authorize {
 		|| $in{'oauth_authorize_verifier'} eq ''
 		|| $session->{'oauth_authorize_verifier'} ne $in{'oauth_authorize_verifier'}
 	) {
-		$session->{'oauth_authorize_verifier'} = &OAuthProvider::_generateRandomString(32);
+		$session->{'oauth_authorize_verifier'} = &Sympa::OAuth::Provider::_generateRandomString(32);
 		$param->{'oauth_authorize_verifier'} = $session->{'oauth_authorize_verifier'};
 		
 		return 1;
@@ -9364,7 +9364,7 @@ sub do_oauth_authorize {
 	
 	delete $session->{'oauth_authorize_verifier'};
 	
-	my $provider = new OAuthProvider(
+	my $provider = new Sympa::OAuth::Provider(
 		method => $ENV{'REQUEST_METHOD'},
 		request_parameters => {
 			oauth_token => $in{'oauth_token'},
@@ -9392,7 +9392,7 @@ sub do_oauth_access {
 	&wwslog('info', 'do_oauth_access()');
 	$param->{'bypass'} = 'extreme';
 	
-	my $provider = new OAuthProvider(
+	my $provider = new Sympa::OAuth::Provider(
 		method => $ENV{'REQUEST_METHOD'},
 		url => $param->{'base_url'}.$param->{'path_cgi'}.'/oauth_access',
 		authorization_header => $ENV{'HTTP_AUTHORIZATION'},
