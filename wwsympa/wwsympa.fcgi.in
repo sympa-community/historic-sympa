@@ -65,6 +65,7 @@ use Sympa::Constants;
 use Sympa::Datasource::LDAP;
 use Sympa::Mail;
 use Sympa::Report;
+use Sympa::Robot;
 use Sympa::Session;
 use Sympa::Spool;
 use Sympa::Tools;
@@ -1154,7 +1155,7 @@ my $birthday = time ;
      $robot = $Conf{'host'} unless $robot;
 
      ## Create Robot object
-     $robot_object = new Robot $robot;
+     $robot_object = new Sympa::Robot $robot;
 
      ## Default robot
      if ($robot eq $Conf{'host'}) {

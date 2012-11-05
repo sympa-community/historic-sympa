@@ -3,7 +3,7 @@
 ##   * provide access to global conf parameters,
 ##   * deliver the list of lists
 ##   * determine the current robot, given a host
-package Robot;
+package Sympa::Robot;
 
 use Sympa::Conf;
 
