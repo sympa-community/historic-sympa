@@ -41,7 +41,6 @@ use Sympa::Log;
 use Sympa::Message;
 use Sympa::SDM;
 use Sympa::Tools::Time;
-use Task;
 
 ## Database and SQL statement handlers
 my ($dbh, $sth, $db_connected, @sth_stack, $use_db);

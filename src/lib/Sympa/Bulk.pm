@@ -47,7 +47,6 @@ use Sympa::SDM;
 use Sympa::Spool;
 use Sympa::Tools;
 use Sympa::TT2;
-use Task;
 
 ## Database and SQL statement handlers
 my $sth;
