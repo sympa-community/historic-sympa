@@ -3,7 +3,6 @@
 use strict;
 use lib '--modulesdir--';
 
-use Getopt::Long;
 use SOAP::Lite;
 #use SOAP::Lite +trace;
 ## Defines SOAP::Transport::HTTP::FCGI::Sympa with a modified handle()

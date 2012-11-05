@@ -43,7 +43,6 @@ use lib '--modulesdir--';
 
 use Archive::Zip;
 use Data::Dumper;
-use Getopt::Long;
 use Mail::Header;
 use Mail::Address;
 use MIME::Parser;
