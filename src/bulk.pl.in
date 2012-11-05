@@ -42,9 +42,9 @@ use lib '--modulesdir--';
 
 use Getopt::Long;
 
-use Bulk;
 use Commands;
 use Log;
+use Sympa::Bulk;
 use Sympa::Conf;
 use Sympa::Constants;
 use Sympa::List;
@@ -222,7 +222,7 @@ while (!$end) {
 		$pids_in_pfile = [$$];
 	    }
 	    ## Start new processes if there remain at least 'bulk_fork_threshold' packets to send in the bulkmailer_table table
-	    if((my $r_packets = &Bulk::there_is_too_much_remaining_packets()) && ($#remaining_children+1 < $Sympa::Conf::Conf{'bulk_max_count'}) ){
+	    if((my $r_packets = &Sympa::Bulk::there_is_too_much_remaining_packets()) && ($#remaining_children+1 < $Sympa::Conf::Conf{'bulk_max_count'}) ){
 		
 		## disconnect from database before fork
 		## to prevent DB handlers to be shared by different processes
@@ -258,14 +258,14 @@ while (!$end) {
     ## If a child bulk process is running for long enough, stop it (if the number of remaining packets to send is reasonnable).
     if (($main::daemon_usage eq 'DAEMON_SLAVE') && 
 		(time() - $date_of_last_activity > $Sympa::Conf::Conf{'bulk_lazytime'}) && 
-		!(my $r_packets = &Bulk::there_is_too_much_remaining_packets())){
+		!(my $r_packets = &Sympa::Bulk::there_is_too_much_remaining_packets())){
 		&Log::do_log('info', "Process %s didn't send any message since %s seconds, exiting.", $$, $Sympa::Conf::Conf{'bulk_lazytime'});
 		last;
     }
 	
 	## Go through the bulk_mailer table and process messages
 
-    if ($bulk = Bulk::next()) {
+    if ($bulk = Sympa::Bulk::next()) {
 	if ($bulk->{'messagekey'} ne $messagekey) {
 	    # current packet is not related to the same message as the previous packet
             # so it is needed to fetch the new message from message_table 
@@ -288,7 +288,7 @@ while (!$end) {
 
 	    unless ( $messageasstring_init ) {
 		&Log::do_log('err',"internal error : current packet (messagekey= %s) contains a ref to a null message",$bulk->{'messagekey'});
-		unless (&Bulk::remove($bulk->{'messagekey'},$bulk->{'packetid'})) {
+		unless (&Sympa::Bulk::remove($bulk->{'messagekey'},$bulk->{'packetid'})) {
 		    &Log::do_log('err',"failed to remove processed packet '%s', messagekey '%s'", $bulk->{'messagekey'},$bulk->{'packetid'});
 		}
 	    }
@@ -347,8 +347,8 @@ while (!$end) {
 		    $return_path = $Sympa::Conf::Conf{'bounce_email_prefix'}.'+'.$escaped_rcpt.'=='.$listname.'@'.$robot; 
 		}
 		if (($bulk->{'merge'}) && !($message->{'protected'})) {
-		    unless(&Bulk::merge_msg ($entity, $rcpt, $bulk, $data)){
-			&Log::do_log('err', 'Erreur d appel &Bulk::merge_msg');
+		    unless(&Sympa::Bulk::merge_msg ($entity, $rcpt, $bulk, $data)){
+			&Log::do_log('err', 'Erreur d appel &Sympa::Bulk::merge_msg');
 		    }		    
 		    $messageasstring = $entity->as_string;		
 		}else{
@@ -392,7 +392,7 @@ while (!$end) {
 	}
 	
 	## Remove packet once it has been processed
-	unless (&Bulk::remove($bulk->{'messagekey'},$bulk->{'packetid'})) {
+	unless (&Sympa::Bulk::remove($bulk->{'messagekey'},$bulk->{'packetid'})) {
 	    &Log::do_log('err',"failed to remove processed packet '%s', messagekey '%s'", $bulk->{'messagekey'},$bulk->{'packetid'});
 	}
 

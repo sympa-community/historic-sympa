@@ -17,7 +17,7 @@
 # You should have received a copy of the GNU General Public License# along with this program; if not, write to the Free Software
 # Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
 
-package Bulk;
+package Sympa::Bulk;
 
 use strict;
 use constant MAX => 100_000;
@@ -506,7 +506,7 @@ sub purge_bulkspool {
 
     my $count = 0;
     while (my $key = $sth->fetchrow_hashref('NAME_lc')) {	
-	if ( &Bulk::remove_bulkspool_message('bulkspool',$key->{'messagekey'}) ) {
+	if ( &remove_bulkspool_message('bulkspool',$key->{'messagekey'}) ) {
 	    $count++;
 	}else{
 	    &Log::do_log('err','Unable to remove message (key = %s) from bulkspool_table',$key->{'messagekey'});	    

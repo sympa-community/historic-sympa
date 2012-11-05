@@ -31,9 +31,9 @@ use Digest::MD5;
 use Getopt::Long;
 use Time::Local;
 
-use Bulk;
 use Log;
 use SDM;
+use Sympa::Bulk;
 use Sympa::Conf;
 use Sympa::Constants;
 use Sympa::List;
@@ -1140,7 +1140,7 @@ sub purge_session_table {
 sub purge_tables {    
 
     &Log::do_log('info','task_manager::purge_tables()');
-    my $removed = &Bulk::purge_bulkspool();
+    my $removed = &Sympa::Bulk::purge_bulkspool();
     unless(defined $removed) {
 	&Log::do_log('err','Failed to purge bulkspool');
     }

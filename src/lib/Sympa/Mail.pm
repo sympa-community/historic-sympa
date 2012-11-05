@@ -30,9 +30,9 @@ use MIME::Tools;
 use POSIX;
 use Time::Local;
 
-use Bulk;
 use Log;
 use Language;
+use Sympa::Bulk;
 use Sympa::Conf;
 use Sympa::Constants;
 use Sympa::List;
@@ -682,7 +682,7 @@ sub sending {
     
     if ($use_bulk){ # in that case use bulk tables to prepare message distribution 
 
-	my $bulk_code = &Bulk::store('message' => $message,
+	my $bulk_code = &Sympa::Bulk::store('message' => $message,
 				     'rcpts' => $rcpt,
 				     'from' => $from,
 				     'robot' => $robot,
