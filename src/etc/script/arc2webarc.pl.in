@@ -23,10 +23,11 @@
 # Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
 
 use lib '--modulesdir--';
-use wwslib;
+
 use Sympa::Conf;
 use Sympa::Constants;
 use Sympa::Upgrade;
+use Sympa::WWSympa;
 
 $wwsympa_conf_file = Sympa::Constants::WWSCONFIG;
 $sympa_conf_file = Sympa::Constants::CONFIG;
@@ -86,7 +87,7 @@ unless ([getpwuid $<]->[0] eq Sympa::Constants::USER) {
 my $wwsconf = {};
 
 ## Load config 
-unless ($wwsconf = &wwslib::load_config($wwsympa_conf_file)) {
+unless ($wwsconf = &Sympa::WWSympa::load_config($wwsympa_conf_file)) {
     die 'unable to load config file';
 }
 

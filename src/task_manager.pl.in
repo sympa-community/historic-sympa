@@ -45,9 +45,9 @@ use Sympa::Tools;
 use Sympa::Tools::Time;
 use Sympa::Tools::Daemon;
 use Sympa::Tracking;
-use Sympa::Upgrade;
 use Sympa::Task;
-use wwslib;
+use Sympa::Upgrade;
+use Sympa::WWSympa;
 
 my $opt_d;
 my $opt_F;
@@ -75,7 +75,7 @@ my $wwsconf = {};
 my $adrlist = {};
 
 # Load WWSympa configuration
-unless ($wwsconf = &wwslib::load_config($wwsympa_conf)) {
+unless ($wwsconf = &Sympa::WWSympa::load_config($wwsympa_conf)) {
     &Sympa::Sympa::Log::fatal_err("Unable to load sympa configuration, file $wwsympa_conf or one of the vhost robot.conf files contain errors. Exiting.");  
 }
 

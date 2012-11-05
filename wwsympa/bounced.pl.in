@@ -50,6 +50,7 @@ use Sympa::Tools;
 use Sympa::Tools::Bounce;
 use Sympa::Tools::Daemon;
 use Sympa::Tracking;
+use Sympa::WWSympa;
 
 ## Equivalents relative to RFC 1893
 my %equiv = ( "user unknown" => '5.1.1',
@@ -73,8 +74,6 @@ my %equiv = ( "user unknown" => '5.1.1',
 	      "insufficient system storage" => '4.2.2',
 	      "User's Disk Quota Exceeded:" => '4.2.2');
 
-
-use wwslib;
 
 #getopts('dF');
 ## Check options
@@ -102,7 +101,7 @@ my $ip = $ENV{'REMOTE_HOST'};
 my $wwsconf = {};
 
 # Load WWSympa configuration
-unless ($wwsconf = &wwslib::load_config($wwsympa_conf)) {
+unless ($wwsconf = &Sympa::WWSympa::load_config($wwsympa_conf)) {
     print STDERR 'unable to load config file';
     exit;
 }

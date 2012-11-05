@@ -57,7 +57,7 @@ use Sympa::Tools;
 use Sympa::Tools::Time;
 use Sympa::Tools::File;
 use Sympa::Tools::Daemon;
-use wwslib;
+use Sympa::WWSympa;
 
 my $daemon_name = &Sympa::Log::set_daemon($0);
 my $ip = $ENV{'REMOTE_HOST'};
@@ -83,7 +83,7 @@ my $sympa_conf_file = Sympa::Constants::CONFIG;
 my $wwsconf = {};
 
 # Load WWSympa configuration
-unless ($wwsconf = &wwslib::load_config($wwsympa_conf)) {
+unless ($wwsconf = &Sympa::WWSympa::load_config($wwsympa_conf)) {
     print STDERR 'unable to load config file';
     exit -1;
 }

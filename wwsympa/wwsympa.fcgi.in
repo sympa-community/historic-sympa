@@ -79,9 +79,9 @@ use Sympa::Tools::Data;
 use Sympa::Tools::Time;
 use Sympa::Tracking;
 use Sympa::TT2;
+use Sympa::WWSympa;
 use VOOTProvider;
 use VOOTConsumer;
-use wwslib;
 
 my $crypt_openssl_x509_ok;
 BEGIN {
@@ -130,7 +130,7 @@ $wwsconf->{'log_facility'}||= $Conf{'syslog'};
 &Sympa::Log::do_openlog($wwsconf->{'log_facility'}, $Conf{'log_socket_type'}, 'wwsympa');
 
 ## Load config 
-unless ($wwsconf = &wwslib::load_config($conf_file)) {
+unless ($wwsconf = &Sympa::WWSympa::load_config($conf_file)) {
     &Sympa::Log::fatal_err("Unable to load sympa configuration, file $conf_file or one of the vhost robot.conf files contain errors. Exiting.");  
 }
 
@@ -141,7 +141,7 @@ if ($wwsconf->{'use_fast_cgi'}) {
 }else {
     require CGI;
 }
-my $mime_types = &wwslib::load_mime_types();
+my $mime_types = &Sympa::WWSympa::load_mime_types();
 
 if (&Sympa::Conf::get_robot_conf('*','voot_feature') eq 'on') {
     unless ( eval "require OAuthProvider" ){
@@ -1372,7 +1372,7 @@ my $birthday = time ;
 		 my $ticket = $in{'ticket'};
 		 my $cas_server = $Conf{'auth_services'}{$robot}[$cas_id]{'cas_server'};
 		 
-		 my $service_url = &wwslib::get_my_url();
+		 my $service_url = &Sympa::WWSympa::get_my_url();
 		 $service_url =~ s/(\?|&)ticket\=.+$//; 
 
 		 my $net_id = $cas_server->validateST($service_url, $ticket);
@@ -1406,7 +1406,7 @@ my $birthday = time ;
 		     
 		     # before redirect update the list of already checked cas server to prevent loop
 		     my $cas_server = $auth_service->{'cas_server'};
-		     my $return_url = &wwslib::get_my_url();
+		     my $return_url = &Sympa::WWSympa::get_my_url();
 		     
 		     ## Append the current CAS server ID to the list of checked CAS servers
 		     $session->{'checked_cas'} .= $Conf{'cas_id'}{$robot}{$auth_service->{'auth_service_name'}};
@@ -2997,7 +2997,7 @@ sub check_param_out {
 	    ## Keep track of the 'referer' parameter
 	    if ($ENV{'REQUEST_METHOD'} eq 'GET' &&
 		! $auth_action{$in{'action'}} ) {
-		$param->{'referer'} = &Sympa::Tools::escape_chars(&wwslib::get_my_url());
+		$param->{'referer'} = &Sympa::Tools::escape_chars(&Sympa::WWSympa::get_my_url());
 	    }else {
 		## Keep the previous value of the referer
 		$param->{'referer'} = $in{'referer'};
@@ -3826,7 +3826,7 @@ sub do_logout {
 	 my $cas_server = $Conf{'auth_services'}{$robot}[$session->{'cas_server'}]{'cas_server'};
 
 	 $in{'action'} = 'redirect';
-	 my $return_url = &wwslib::get_my_url();
+	 my $return_url = &Sympa::WWSympa::get_my_url();
 	 $return_url =~ s/\/logout//;
 	 
 	 $param->{'redirect_to'} = $cas_server->getServerLogoutURL($return_url);
@@ -4631,11 +4631,11 @@ sub do_pref {
 
      ## Find nearest expiration period
      my $selected = 0;
-     foreach my $p (sort {$b <=> $a} keys %wwslib::cookie_period) {
+     foreach my $p (sort {$b <=> $a} keys %Sympa::WWSympa::cookie_period) {
 	 my $entry = {'value' => $p};
 
 	 ## Set description from NLS
-	 $entry->{'desc'} = sprintf gettext($wwslib::cookie_period{$p}{'gettext_id'});
+	 $entry->{'desc'} = sprintf gettext($Sympa::WWSympa::cookie_period{$p}{'gettext_id'});
 
 	 ## Choose nearest delay
 	 if ((! $selected) && $param->{'user'}{'cookie_delay'} >= $p) {
@@ -4946,7 +4946,7 @@ sub do_setpref {
 sub do_viewfile {
      &wwslog('info', 'do_viewfile');
 
-     unless (defined $wwslib::filenames{$in{'file'}}) {
+     unless (defined $Sympa::WWSympa::filenames{$in{'file'}}) {
 	 &Sympa::Report::reject_report_web('user','file_not_editable',{'file' => $in{'file'}},$param->{'action'});
 	 &wwslog('info','do_viewfile: file %s not editable', $in{'file'});
 	 return undef;
@@ -5179,9 +5179,9 @@ sub do_suboptions {
     $s->{'date'} = gettext_strftime "%d %b %Y", localtime($s->{'date'});
     $s->{'update_date'} = gettext_strftime "%d %b %Y", localtime($s->{'update_date'});
     
-    foreach $m (keys %wwslib::reception_mode) {
+    foreach $m (keys %Sympa::WWSympa::reception_mode) {
 	if ($list->is_available_reception_mode($m)) {
-	    $param->{'reception'}{$m}{'description'} = sprintf(gettext($wwslib::reception_mode{$m}->{'gettext_id'}));
+	    $param->{'reception'}{$m}{'description'} = sprintf(gettext($Sympa::WWSympa::reception_mode{$m}->{'gettext_id'}));
 	    if ($s->{'reception'} eq $m) {
 		$param->{'reception'}{$m}{'selected'} = 'selected="selected"';
 		if ($m =~ /^(mail|notice|not_me|txt|html|urlize)$/i) {
@@ -5193,8 +5193,8 @@ sub do_suboptions {
 	}
     }
     
-    foreach $m (keys %wwslib::visibility_mode) {
-	$param->{'visibility'}{$m}{'description'} = sprintf(gettext($wwslib::visibility_mode{$m}->{'gettext_id'}));
+    foreach $m (keys %Sympa::WWSympa::visibility_mode) {
+	$param->{'visibility'}{$m}{'description'} = sprintf(gettext($Sympa::WWSympa::visibility_mode{$m}->{'gettext_id'}));
 	if ($s->{'visibility'} eq $m) {
 	    $param->{'visibility'}{$m}{'selected'} = 'selected="selected"';
 	}else {
@@ -5630,8 +5630,8 @@ sub do_admin {
      ## Messages edition
      foreach my $f ('info','homepage','welcome.tt2','bye.tt2','removed.tt2','message.footer','message.header','remind.tt2','invite.tt2','reject.tt2') {
 	 next unless ($list->may_edit($f, $param->{'user'}{'email'}) eq 'write');
-	 if ($wwslib::filenames{$f}{'gettext_id'}) {
-	     $param->{'files'}{$f}{'complete'} = gettext($wwslib::filenames{$f}{'gettext_id'});
+	 if ($Sympa::WWSympa::filenames{$f}{'gettext_id'}) {
+	     $param->{'files'}{$f}{'complete'} = gettext($Sympa::WWSympa::filenames{$f}{'gettext_id'});
 	 }else {
 	     $param->{'files'}{$f}{'complete'} = $f;
 	 }
@@ -5654,8 +5654,8 @@ sub do_serveradmin {
 
      ## Lists Default files
      foreach my $f ('welcome.tt2','bye.tt2','removed.tt2','message.footer','message.header','remind.tt2','invite.tt2','reject.tt2','your_infected_msg.tt2') {
-	 if ($wwslib::filenames{$f}{'gettext_id'}){
-	     $param->{'lists_default_files'}{$f}{'complete'} = gettext($wwslib::filenames{$f}{'gettext_id'});
+	 if ($Sympa::WWSympa::filenames{$f}{'gettext_id'}){
+	     $param->{'lists_default_files'}{$f}{'complete'} = gettext($Sympa::WWSympa::filenames{$f}{'gettext_id'});
 	 }else {
 	     $param->{'lists_default_files'}{$f}{'complete'} = $f;
 	 }
@@ -5667,7 +5667,7 @@ sub do_serveradmin {
 
      ## Server files
      foreach my $f ('helpfile.tt2','lists.tt2','global_remind.tt2','summary.tt2','create_list_request.tt2','list_created.tt2','list_aliases.tt2') {
-	 $param->{'server_files'}{$f}{'complete'} = gettext($wwslib::filenames{$f}{'gettext_id'});
+	 $param->{'server_files'}{$f}{'complete'} = gettext($Sympa::WWSympa::filenames{$f}{'gettext_id'});
 	 $param->{'server_files'}{$f}{'selected'} = '';
      }
      $param->{'server_files'}{'helpfile.tt2'}{'selected'} = 'selected="selected"';
@@ -7255,8 +7255,8 @@ sub do_editfile {
 			my $filename_for_auth = $f;
 			$filename_for_auth = 'info.file' if($filename_for_auth eq 'info');
 			next unless($list->may_edit($filename_for_auth, $param->{'user'}{'email'}) eq 'write');
-			if($wwslib::filenames{$f}{'gettext_id'}) {
-				$param->{'files'}{$f}{'complete'} = gettext($wwslib::filenames{$f}{'gettext_id'});
+			if($Sympa::WWSympa::filenames{$f}{'gettext_id'}) {
+				$param->{'files'}{$f}{'complete'} = gettext($Sympa::WWSympa::filenames{$f}{'gettext_id'});
 			}else {
 				$param->{'files'}{$f}{'complete'} = $f;
 			}
@@ -7265,7 +7265,7 @@ sub do_editfile {
 		return 1;
 	}
 	
-     unless (defined $wwslib::filenames{$in{'file'}}) {
+     unless (defined $Sympa::WWSympa::filenames{$in{'file'}}) {
 	 &Sympa::Report::reject_report_web('user','file_not_editable',{'file' => $in{'file'}},$param->{'action'});
 	 &wwslog('err','do_editfile: file %s not editable', $in{'file'});
 	 &web_db_log({'parameters' => $in{'file'},
@@ -7275,7 +7275,7 @@ sub do_editfile {
      }
 
      $param->{'file'} = $in{'file'};
-     $param->{'complete'} = gettext($wwslib::filenames{$in{'file'}}{'gettext_id'});
+     $param->{'complete'} = gettext($Sympa::WWSympa::filenames{$in{'file'}}{'gettext_id'});
 
      my $subdir = '';
      if ($in{'file'} =~ /\.tt2$/) {
@@ -8979,9 +8979,9 @@ sub do_editsubscriber {
      my $user = &Sympa::List::get_global_user($in{'email'});
      $param->{'current_subscriber'}{'lang'} = &Sympa::Language::GetLangName($user->{'lang'});
 
-     foreach my $m (keys %wwslib::reception_mode) {		
+     foreach my $m (keys %Sympa::WWSympa::reception_mode) {		
        if ($list->is_available_reception_mode($m)) {
-	 $param->{'reception'}{$m}{'description'} = sprintf(gettext($wwslib::reception_mode{$m}->{'gettext_id'}));
+	 $param->{'reception'}{$m}{'description'} = sprintf(gettext($Sympa::WWSympa::reception_mode{$m}->{'gettext_id'}));
 	 if ($param->{'current_subscriber'}{'reception'} eq $m) {
 	     $param->{'reception'}{$m}{'selected'} = 'selected="selected"';
 	 }else {
@@ -8990,8 +8990,8 @@ sub do_editsubscriber {
        }
      }
 
-     foreach my $m (keys %wwslib::visibility_mode) {
-	 $param->{'visibility'}{$m}{'description'} = sprintf(gettext($wwslib::visibility_mode{$m}->{'gettext_id'}));
+     foreach my $m (keys %Sympa::WWSympa::visibility_mode) {
+	 $param->{'visibility'}{$m}{'description'} = sprintf(gettext($Sympa::WWSympa::visibility_mode{$m}->{'gettext_id'}));
 	 if ($param->{'current_subscriber'}{'visibility'} eq $m) {
 	     $param->{'visibility'}{$m}{'selected'} = 'selected="selected"';
 	 }else {
@@ -9007,7 +9007,7 @@ sub do_editsubscriber {
 	 $param->{'current_subscriber'}{'bounce_count'} = $bounce[2];
 	 if ($bounce[3] =~ /^(\d+\.(\d+\.\d+))$/) {
 	    $subscriber->{'bounce_code'} = $1;
-	    $subscriber->{'bounce_status'} = $wwslib::bounce_status{$2};
+	    $subscriber->{'bounce_status'} = $Sympa::WWSympa::bounce_status{$2};
 	 }	
 
 	 $param->{'previous_action'} = $in{'previous_action'};
@@ -13839,7 +13839,7 @@ sub creation_shared_file {
  	}
 
     }
-    unless(&wwslib::upload_file_to_server({
+    unless(&Sympa::WWSympa::upload_file_to_server({
 				    'query' => $query,
 				    'file_field' => 'uploaded_file',
 				    'destination' => "$shareddir/$path/$fname",
@@ -15756,9 +15756,9 @@ sub do_suspend_request {
 
 	$member_info->{'reception'} ||= 'mail';
 	$member_info->{'visibility'} ||= 'noconceal';
-	foreach my $mode (keys %wwslib::reception_mode) {
+	foreach my $mode (keys %Sympa::WWSympa::reception_mode) {
 	    if ($list->is_available_reception_mode($mode)) {
-		$param->{'reception'}{$list->{'name'}}{$mode}{'description'} = sprintf(gettext($wwslib::reception_mode{$mode}->{'gettext_id'}));
+		$param->{'reception'}{$list->{'name'}}{$mode}{'description'} = sprintf(gettext($Sympa::WWSympa::reception_mode{$mode}->{'gettext_id'}));
 		if ($member_info->{'reception'} eq $mode) {
 		    $param->{'reception'}{$list->{'name'}}{$mode}{'selected'} = 'selected="selected"';
 		}else {
@@ -16109,7 +16109,7 @@ sub do_send_mail {
 	my $page_source = $in{'url'};
 	if ($in{'uploaded_file'} =~ /\S/) {
 	    $page_source = &Sympa::Conf::get_robot_conf($robot, 'tmpdir').'/'.$in{'uploaded_file'};
-	    unless(&wwslib::upload_file_to_server({
+	    unless(&Sympa::WWSympa::upload_file_to_server({
 		'query' => $query,
 		'file_field' => 'uploaded_file',
 		'destination' => $page_source,

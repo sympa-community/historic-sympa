@@ -38,7 +38,7 @@ use Sympa::SDM;
 use Sympa::Tools;
 use Sympa::Tools::File;
 use Sympa::TT2;
-use wwslib;
+use Sympa::WWSympa;
 
 our @ISA = qw(Exporter);
 our @EXPORT = qw(%params %Conf DAEMON_MESSAGE DAEMON_COMMAND DAEMON_CREATION DAEMON_ALL);
@@ -113,7 +113,7 @@ my %trusted_applications = ('trusted_application' => {
 my $binary_file_extension = ".bin";
 
 
-my $wwsconf = &wwslib::load_config(Sympa::Constants::WWSCONFIG);
+my $wwsconf = &Sympa::WWSympa::load_config(Sympa::Constants::WWSCONFIG);
 our %Conf = ();
 
 ## Loads and parses the configuration file. Reports errors if any.
