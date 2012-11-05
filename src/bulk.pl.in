@@ -42,7 +42,6 @@ use lib '--modulesdir--';
 
 use Getopt::Long;
 
-use Commands;
 use Log;
 use Sympa::Bulk;
 use Sympa::Conf;
